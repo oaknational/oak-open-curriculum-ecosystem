@@ -4,14 +4,14 @@
  * Tests that the router correctly applies or skips auth middleware
  * based on MCP method and resource/tool security metadata.
  *
- * Uses simple mocks injected as arguments - no complex mock setup.
+ * Uses `node-mocks-http` for Express Request/Response objects.
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { createMcpRouter } from './mcp-router.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
-import { createFakeExpressRequest, createFakeResponse } from './test-helpers/fakes.js';
+import { createMockExpressRequest, createMockExpressResponse } from './test-helpers/fakes.js';
 
 describe('createMcpRouter (Integration)', () => {
   let mockAuthMw: RequestHandler;
@@ -25,11 +25,15 @@ describe('createMcpRouter (Integration)', () => {
       next();
     });
     mockNext = vi.fn();
-    mockRes = createFakeResponse();
+    mockRes = createMockExpressResponse();
   });
 
-  function createMockRequest(body: unknown): Request {
-    return createFakeExpressRequest({ body });
+  function createMockRequest(body: {
+    method?: string;
+    params?: { name?: string; uri?: string };
+    [key: string]: unknown;
+  }): Request {
+    return createMockExpressRequest({ body });
   }
 
   describe('discovery methods (auth required per MCP 2025-11-25)', () => {
@@ -129,7 +133,6 @@ describe('createMcpRouter (Integration)', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({
         method: 'resources/read',
-        // params missing entirely
       });
 
       router(req, mockRes, mockNext);

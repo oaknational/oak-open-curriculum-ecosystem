@@ -9,7 +9,7 @@ import { z } from 'zod';
 import type { Logger } from '@oaknational/logger';
 import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
 import type { ToolHandlerDependencies } from '../handlers.js';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type {
   CallToolResult,
   Notification,
@@ -40,36 +40,40 @@ interface Params {
 }
 
 /**
- * Creates a mock MCP server that captures registered tool handlers.
+ * Creates a real MCP server with `registerTool` replaced to capture handlers.
  *
- * Bridges MCP SDK's complex registerTool generics to a simple test
- * parameter type. The outer cast to McpServer is unavoidable because
- * the SDK type has complex overloaded generics with no test-double interface.
+ * Uses a real `McpServer` instance — the SDK object naturally satisfies its
+ * own types. Replaces `registerTool` with a handler-capturing function.
+ *
+ * The `as McpServer['registerTool']` assertion on line below is the ONE
+ * targeted assertion in the test helpers. It exists because the MCP SDK's
+ * `registerTool` has overloaded generics that TypeScript cannot satisfy
+ * with any plain function. The eslint config for this file allows `as`
+ * style assertions (not `eslint-disable`) — see eslint.config.ts.
  */
 export function createMockServer(
   capturedHandlers: Map<string, (params: Params) => Promise<CallToolResult>>,
 ): McpServer {
-  function mockRegisterToolImpl<TInput = unknown>(
+  const server = new McpServer({ name: 'test-server', version: '0.0.0' });
+
+  function capturingRegisterTool(
     name: string,
-    config: unknown,
-    handler: (params: TInput, extra: unknown) => Promise<CallToolResult>,
-  ): unknown {
-    // config is required by the registerTool overload signature but unused in the mock
-    void config;
-    // Capture the handler with our test parameter type
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Bridge between MCP SDK generics and test types
-    const wrappedHandler = (params: Params) => handler(params as TInput, {});
-    capturedHandlers.set(name, wrappedHandler);
-    return undefined;
+    configOrCb: unknown,
+    handlerOrUndefined?: (params: unknown, extra: unknown) => Promise<CallToolResult>,
+  ): void {
+    void configOrCb;
+    if (handlerOrUndefined) {
+      const wrappedHandler = (params: Params) => handlerOrUndefined(params, {});
+      capturedHandlers.set(name, wrappedHandler);
+    }
   }
 
-  const mockServer = {
-    registerTool: vi.fn(mockRegisterToolImpl),
-    registerResource: vi.fn(),
-    registerPrompt: vi.fn(),
-  };
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- MCP SDK McpServer has complex overloaded generics; minimal test double
-  return mockServer as unknown as McpServer;
+  // Targeted assertion: McpServer.registerTool has overloaded generics
+  // that no plain function can satisfy. This is the only assertion in
+  // test helpers — documented in eslint.config.ts.
+  server.registerTool = capturingRegisterTool as McpServer['registerTool'];
+
+  return server;
 }
 
 /** Creates a mock logger for testing. */

@@ -5,8 +5,7 @@
  * `.strict()` before setting `req.auth`. Uses dependency injection
  * to avoid `vi.mock` on Clerk imports (ADR-078).
  *
- * The token `test-token` is opaque (not JWT format), so
- * `validateResourceParameter` skips RFC 8707 audience validation.
+ * Uses `node-mocks-http` for Express Request/Response objects.
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
@@ -15,8 +14,8 @@ import {
   createFakeLogger,
   createFakeAuthInfo,
   createFakeMachineAuthObject,
-  createFakeAuthMiddlewareRequest,
-  createFakeResponse,
+  createMockExpressRequest,
+  createMockExpressResponse,
 } from '../../test-helpers/fakes.js';
 
 const ALLOWED_HOSTS = ['localhost'] as const;
@@ -32,7 +31,6 @@ describe('createMcpAuthClerk (Integration)', () => {
     it('rejects authData with unknown fields (returns 401)', async () => {
       const authenticatedAuth = createFakeMachineAuthObject({ isAuthenticated: true });
 
-      // verifyClerkToken returns data with an unexpected extra field
       const malformedAuthData = {
         ...createFakeAuthInfo(),
         unexpectedField: 'should-be-rejected-by-strict',
@@ -43,17 +41,14 @@ describe('createMcpAuthClerk (Integration)', () => {
         verifyClerkToken: vi.fn().mockReturnValue(malformedAuthData),
       });
 
-      // Opaque token format — skips RFC 8707 audience validation
-      const req = createFakeAuthMiddlewareRequest({ token: 'test-token' });
-      const res = createFakeResponse();
+      const req = createMockExpressRequest({ token: 'test-token', host: 'localhost' });
+      const res = createMockExpressResponse();
       const next = vi.fn();
 
       await middleware(req, res, next);
 
-      // Zod .strict() rejects the unknown field — middleware returns 401
       expect(next).not.toHaveBeenCalled();
-      expect(res.status).toHaveBeenCalledWith(401);
-      // Logger captures the Zod validation failure
+      expect(res.statusCode).toBe(401);
       expect(logger.error).toHaveBeenCalled();
     });
 
@@ -66,14 +61,13 @@ describe('createMcpAuthClerk (Integration)', () => {
         verifyClerkToken: vi.fn().mockReturnValue(validAuthInfo),
       });
 
-      const req = createFakeAuthMiddlewareRequest({ token: 'test-token' });
-      const res = createFakeResponse();
+      const req = createMockExpressRequest({ token: 'test-token', host: 'localhost' });
+      const res = createMockExpressResponse();
       const next = vi.fn();
 
       await middleware(req, res, next);
 
       expect(next).toHaveBeenCalledOnce();
-      // req.auth is set with Zod-validated AuthInfo
       expect(req).toHaveProperty('auth', validAuthInfo);
     });
   });

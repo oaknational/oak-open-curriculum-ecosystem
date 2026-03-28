@@ -19,6 +19,11 @@ import type { TokenVerifier } from './types.js';
 // Side-effect import: the MCP SDK's bearerAuth module augments Express
 // Request with `auth?: AuthInfo` via declaration merging. Importing the
 // type triggers the augmentation so `req.auth = authData` type-checks.
+// FRAGILITY: This depends on the SDK's internal module path. If the SDK
+// moves this module, `req.auth` assignment will fail type-check. Fix by
+// updating the import path to match the new SDK structure, or by adding
+// a local declaration merge if the SDK removes the augmentation entirely.
+// Pinned to @modelcontextprotocol/sdk@1.28.0.
 import type {} from '@modelcontextprotocol/sdk/server/auth/middleware/bearerAuth.js';
 import { getPRMUrl } from './get-prm-url.js';
 import { getMcpResourceUrl } from './get-mcp-resource-url.js';

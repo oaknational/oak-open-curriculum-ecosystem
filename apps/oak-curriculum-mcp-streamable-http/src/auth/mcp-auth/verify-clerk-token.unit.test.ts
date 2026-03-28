@@ -6,18 +6,58 @@
  * and `check-mcp-client-auth.ts` (outside this module) depend on the same
  * library function. Any behavioural drift caught here protects both call sites.
  *
- * Originally written for the hand-rolled implementation, now retained as
- * conformance tests per ADR-142 to detect library behaviour changes.
+ * Tests for "missing field" edge cases (null clientId, null scopes, null userId)
+ * construct raw objects to bypass Clerk's type contract intentionally. These
+ * prove defence-in-depth: verifyClerkToken handles runtime type violations
+ * gracefully even though Clerk's types say they cannot occur.
  *
  * **Version bump reminder**: When upgrading `@clerk/mcp-tools`, re-run these
- * tests and verify the `console.error` spy assertion still holds. See ADR-142
- * for the full re-evaluation checklist.
- *
+ * tests and verify the `console.error` spy assertion still holds. See ADR-142.
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { MachineAuthObject } from '@clerk/backend';
 import { verifyClerkToken } from '@clerk/mcp-tools/server';
 import { createFakeMachineAuthObject } from '../../test-helpers/fakes.js';
+
+/**
+ * Creates a raw authenticated machine object with deliberate type violations.
+ *
+ * Bypasses `createFakeMachineAuthObject` because the typed fake cannot
+ * produce null values or wrong tokenType on authenticated objects (Clerk's
+ * type forbids it). These raw objects test verifyClerkToken's runtime
+ * null handling and misconfiguration resilience.
+ *
+ * The `as MachineAuthObject<'oauth_token'>` assertion is intentional —
+ * the test is proving that the library handles type-violating inputs.
+ * The eslint config for this file allows `as` assertions (see eslint.config.ts).
+ */
+function createRawAuthObjectWithViolations(
+  overrides: Partial<{
+    userId: string | null;
+    clientId: string | null;
+    scopes: readonly string[] | null;
+    tokenType: string;
+  }>,
+): MachineAuthObject<'oauth_token'> {
+  return {
+    tokenType: overrides.tokenType ?? 'oauth_token',
+    id: 'auth_123',
+    subject: overrides.userId !== undefined ? overrides.userId : 'user',
+    scopes:
+      overrides.scopes !== undefined
+        ? overrides.scopes === null
+          ? null
+          : Array.from(overrides.scopes)
+        : [],
+    userId: overrides.userId !== undefined ? overrides.userId : 'user',
+    clientId: overrides.clientId !== undefined ? overrides.clientId : 'client',
+    getToken: (): Promise<string> => Promise.resolve('token'),
+    has: () => true,
+    debug: () => ({}),
+    isAuthenticated: true,
+  } as MachineAuthObject<'oauth_token'>;
+}
 
 describe('verifyClerkToken', () => {
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
@@ -31,12 +71,7 @@ describe('verifyClerkToken', () => {
   });
 
   it('should return undefined when auth is not authenticated', () => {
-    const auth = createFakeMachineAuthObject({
-      isAuthenticated: false,
-      userId: null,
-      clientId: null,
-      scopes: null,
-    });
+    const auth = createFakeMachineAuthObject({ isAuthenticated: false });
 
     const result = verifyClerkToken(auth, 'some-token');
 
@@ -45,7 +80,6 @@ describe('verifyClerkToken', () => {
 
   it('should return undefined when token is missing', () => {
     const auth = createFakeMachineAuthObject({
-      isAuthenticated: true,
       userId: 'user-456',
       clientId: 'client-123',
       scopes: ['mcp:invoke', 'mcp:read'],
@@ -56,54 +90,32 @@ describe('verifyClerkToken', () => {
     expect(result).toBeUndefined();
   });
 
-  it('should return undefined when tokenType is not oauth_token', () => {
-    // Deliberately wrong tokenType at runtime via factory override.
-    const auth = createFakeMachineAuthObject({
-      isAuthenticated: true,
-      userId: 'user-456',
-      clientId: 'client-123',
-      scopes: ['mcp:invoke', 'mcp:read'],
-      tokenType: 'session_token',
-    });
+  it('should throw when tokenType is not oauth_token (runtime type violation)', () => {
+    const auth = createRawAuthObjectWithViolations({ tokenType: 'session_token' });
 
     expect(() => {
       verifyClerkToken(auth, 'some-token');
     }).toThrow("the auth() function must be called with acceptsToken: 'oauth_token'");
   });
 
-  it('should return undefined when clientId is missing', () => {
-    const auth = createFakeMachineAuthObject({
-      isAuthenticated: true,
-      userId: 'user-456',
-      clientId: null,
-      scopes: ['mcp:invoke', 'mcp:read'],
-    });
+  it('should return undefined when clientId is null (runtime type violation)', () => {
+    const auth = createRawAuthObjectWithViolations({ clientId: null });
 
     const result = verifyClerkToken(auth, 'some-token');
 
     expect(result).toBeUndefined();
   });
 
-  it('should return undefined when scopes is missing', () => {
-    const auth = createFakeMachineAuthObject({
-      isAuthenticated: true,
-      userId: 'user-456',
-      clientId: 'client-123',
-      scopes: null,
-    });
+  it('should return undefined when scopes is null (runtime type violation)', () => {
+    const auth = createRawAuthObjectWithViolations({ scopes: null });
 
     const result = verifyClerkToken(auth, 'some-token');
 
     expect(result).toBeUndefined();
   });
 
-  it('should return undefined when userId is missing', () => {
-    const auth = createFakeMachineAuthObject({
-      isAuthenticated: true,
-      userId: null,
-      clientId: 'client-123',
-      scopes: ['mcp:invoke', 'mcp:read'],
-    });
+  it('should return undefined when userId is null (runtime type violation)', () => {
+    const auth = createRawAuthObjectWithViolations({ userId: null });
 
     const result = verifyClerkToken(auth, 'some-token');
 
@@ -112,7 +124,6 @@ describe('verifyClerkToken', () => {
 
   it('should return AuthInfo when all required fields are present and valid', () => {
     const auth = createFakeMachineAuthObject({
-      isAuthenticated: true,
       userId: 'user-456',
       clientId: 'client-123',
       scopes: ['mcp:invoke', 'mcp:read'],
@@ -132,7 +143,6 @@ describe('verifyClerkToken', () => {
 
   it('should preserve exact token and scope values', () => {
     const auth = createFakeMachineAuthObject({
-      isAuthenticated: true,
       userId: 'test-user',
       clientId: 'test-client',
       scopes: ['custom:scope', 'another:scope'],
@@ -149,7 +159,6 @@ describe('verifyClerkToken', () => {
 
   it('should not produce unexpected console.error output on the happy path', () => {
     const auth = createFakeMachineAuthObject({
-      isAuthenticated: true,
       userId: 'user-456',
       clientId: 'client-123',
       scopes: ['mcp:invoke'],

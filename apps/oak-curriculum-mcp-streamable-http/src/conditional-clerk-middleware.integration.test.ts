@@ -4,8 +4,8 @@ import { createConditionalClerkMiddleware } from './conditional-clerk-middleware
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 import {
   createFakeLogger,
-  createFakeExpressRequest,
-  createFakeResponse,
+  createMockExpressRequest,
+  createMockExpressResponse,
 } from './test-helpers/fakes.js';
 import type { Logger } from '@oaknational/logger';
 
@@ -36,7 +36,7 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
     mockLogger = createFakeLogger();
 
     mockNext = vi.fn();
-    mockRes = createFakeResponse();
+    mockRes = createMockExpressResponse();
   });
 
   describe('when clerkMiddleware is applied', () => {
@@ -218,6 +218,9 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
 /**
  * Creates a mock Express Request for testing.
  */
-function createMockRequest(path: string, body: unknown): Request {
-  return createFakeExpressRequest({ path, body, method: 'POST' });
+function createMockRequest(
+  path: string,
+  body: { method?: string; [key: string]: unknown } | undefined,
+): Request {
+  return createMockExpressRequest({ path, body: body ?? {}, method: 'POST' });
 }

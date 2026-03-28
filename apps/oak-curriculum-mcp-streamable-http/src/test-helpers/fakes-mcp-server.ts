@@ -1,42 +1,43 @@
 /**
  * MCP server and transport test fakes.
  *
- * Minimal implementations of MCP SDK types for handler integration tests.
- * These fakes satisfy the structural subset used by `createMcpHandler` —
- * full SDK types have many more required members.
+ * Returns narrow interfaces (`McpRequestServer`, `McpRequestTransport`) that
+ * the product code depends on — no type assertions needed because the fakes
+ * satisfy the interfaces structurally.
+ *
+ * @see ADR-078 Dependency Injection for Testability
  */
 
 import { vi } from 'vitest';
-import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { McpServerFactory, McpRequestContext } from '../mcp-request-context.js';
+import type {
+  McpRequestServer,
+  McpRequestTransport,
+  McpRequestContext,
+  McpServerFactory,
+} from '../mcp-request-context.js';
 
 /**
- * Minimal StreamableHTTPServerTransport fake for handler tests.
- * Only handleRequest is used by createMcpHandler.
+ * Minimal transport fake for handler tests.
+ * Satisfies `McpRequestTransport` structurally — only `handleRequest` and `close`.
  */
 export function createFakeStreamableTransport(
-  handleRequestImpl?: StreamableHTTPServerTransport['handleRequest'],
-): StreamableHTTPServerTransport {
-  const transport = {
+  handleRequestImpl?: McpRequestTransport['handleRequest'],
+): McpRequestTransport {
+  return {
     handleRequest: handleRequestImpl ?? vi.fn(),
     close: vi.fn(),
   };
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- MCP SDK transport type; minimal fake for handler tests
-  return transport as unknown as StreamableHTTPServerTransport;
 }
 
 /**
- * Minimal McpServer fake for handler integration tests.
- * Only connect() and close() are used by createMcpHandler.
+ * Minimal server fake for handler integration tests.
+ * Satisfies `McpRequestServer` structurally — only `connect` and `close`.
  */
-export function createFakeMcpServer(): McpServer {
-  const server = {
+export function createFakeMcpServer(): McpRequestServer {
+  return {
     connect: vi.fn(() => Promise.resolve()),
     close: vi.fn(),
   };
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- MCP SDK server type; minimal fake for handler tests
-  return server as unknown as McpServer;
 }
 
 /**
@@ -46,8 +47,8 @@ export function createFakeMcpServer(): McpServer {
  * what was called on them (e.g. transport.handleRequest args).
  */
 export function createFakeMcpServerFactory(
-  handleRequestImpl?: StreamableHTTPServerTransport['handleRequest'],
-): { factory: McpServerFactory; server: McpServer; transport: StreamableHTTPServerTransport } {
+  handleRequestImpl?: McpRequestTransport['handleRequest'],
+): { factory: McpServerFactory; server: McpRequestServer; transport: McpRequestTransport } {
   const server = createFakeMcpServer();
   const transport = createFakeStreamableTransport(handleRequestImpl);
   const context: McpRequestContext = { server, transport };

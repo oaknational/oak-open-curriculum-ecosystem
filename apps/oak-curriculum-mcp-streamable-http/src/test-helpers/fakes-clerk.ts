@@ -2,24 +2,31 @@
  * Clerk authentication test fakes.
  *
  * Creates `MachineAuthObject<'oauth_token'>` fakes for Clerk token
- * verification tests. Supports both authenticated and unauthenticated
- * states, and nullable field overrides for edge-case testing.
+ * verification tests. Satisfies the Clerk type contract structurally —
+ * no type assertions.
+ *
+ * For "missing field" tests (null userId, null scopes, etc.), use the
+ * unauthenticated variant or pass raw `unknown` objects to test boundary
+ * validation — do not construct type-violating authenticated objects.
  */
 
 import type { MachineAuthObject } from '@clerk/backend';
 
 /**
  * Creates a MachineAuthObject fake for Clerk token verification tests.
- * For "missing field" tests we return authenticated shape with nulls; Clerk type requires string.
+ *
+ * Returns an authenticated object with valid string fields, or an
+ * unauthenticated object with null fields. For tests that need invalid
+ * data (e.g. null clientId on an authenticated object), construct the
+ * object directly as `unknown` and bypass the type system — that IS
+ * what the test is proving (defence against runtime type violations).
  */
 export function createFakeMachineAuthObject(
   overrides: Partial<{
     isAuthenticated: boolean;
-    userId: string | null;
-    clientId: string | null;
-    scopes: readonly string[] | null;
-    /** Override tokenType for conformance tests that need wrong values at runtime. */
-    tokenType: string;
+    userId: string;
+    clientId: string;
+    scopes: readonly string[];
   }> = {},
 ): MachineAuthObject<'oauth_token'> {
   if (overrides.isAuthenticated === false) {
@@ -45,32 +52,25 @@ function createUnauthenticatedFakeMachineAuthObject(): MachineAuthObject<'oauth_
 
 function createAuthenticatedFakeMachineAuthObject(
   overrides: Partial<{
-    userId: string | null;
-    clientId: string | null;
-    scopes: readonly string[] | null;
+    userId: string;
+    clientId: string;
+    scopes: readonly string[];
     tokenType: string;
   }>,
 ): MachineAuthObject<'oauth_token'> {
-  const resolvedUserId = overrides.userId !== undefined ? overrides.userId : 'user';
-  const resolvedClientId = overrides.clientId !== undefined ? overrides.clientId : 'client';
-  const resolvedScopes = overrides.scopes !== undefined ? overrides.scopes : [];
-  const tokenType = overrides.tokenType ?? 'oauth_token';
-  const out = {
-    tokenType,
+  const userId = overrides.userId ?? 'user';
+  const clientId = overrides.clientId ?? 'client';
+  const scopes = overrides.scopes ?? [];
+  return {
+    tokenType: 'oauth_token',
     id: 'auth_123',
-    subject: resolvedUserId,
-    scopes: resolvedScopes === null ? null : Array.from(resolvedScopes),
-    userId: resolvedUserId,
-    clientId: resolvedClientId,
+    subject: userId,
+    scopes: Array.from(scopes),
+    userId,
+    clientId,
     getToken: (): Promise<string> => Promise.resolve('token'),
     has: () => true,
-    debug: () => ({
-      userId: overrides.userId,
-      clientId: overrides.clientId,
-      scopes: overrides.scopes,
-    }),
-    isAuthenticated: true as const,
+    debug: () => ({ userId, clientId, scopes }),
+    isAuthenticated: true,
   };
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Authenticated shape with nulls for "missing field" tests; Clerk type does not allow null
-  return out as MachineAuthObject<'oauth_token'>;
 }

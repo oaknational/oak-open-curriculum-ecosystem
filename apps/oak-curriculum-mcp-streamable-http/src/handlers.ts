@@ -10,16 +10,12 @@
  * registers each tool with its canonical projection config.
  */
 
-import type express from 'express';
-import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { Logger } from '@oaknational/logger';
-// Side-effect import: the MCP SDK's bearerAuth module augments Express
-// Request with `auth?: AuthInfo` via declaration merging.
-import type {} from '@modelcontextprotocol/sdk/server/auth/middleware/bearerAuth.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import type { McpServerFactory } from './mcp-request-context.js';
-import { extractCorrelationId, createChildLogger } from './logging/index.js';
+import { createChildLogger } from './logging/index.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
@@ -142,39 +138,69 @@ function extractMcpMethod(body: unknown): string | undefined {
 }
 
 /**
- * Express handler using per-request MCP server + transport (stateless pattern).
+ * Narrow request interface for `createMcpHandler`.
  *
- * Reads `req.auth` (set by `mcpAuth` middleware) natively via the
- * `IncomingMessage` narrowing — no bridging needed. The MCP SDK's
- * `StreamableHTTPServerTransport.handleRequest()` propagates `req.auth` as
- * `extra.authInfo` to tool callbacks. No Clerk imports — auth verification
- * happens once in the middleware, and the handler is pure composition.
+ * Contains only the properties the handler accesses. Express `Request`
+ * satisfies this structurally, so the handler can be used as middleware.
+ * Test fakes satisfy it too — plain objects, no assertions.
+ */
+export interface McpHandlerRequest {
+  /** HTTP headers. */
+  readonly headers: Record<string, string | readonly string[] | undefined>;
+  /** HTTP method (GET, POST, etc.). */
+  readonly method?: string;
+  /** URL path (e.g. '/mcp'). */
+  readonly path: string;
+  /** JSON-RPC request body (parsed by Express body-parser middleware). */
+  body: unknown;
+  /** Verified auth context, set by mcpAuth middleware. Mutable for cleanup. */
+  auth?: AuthInfo;
+}
+
+/**
+ * Narrow response interface for `createMcpHandler`.
+ *
+ * Contains only the properties the handler accesses. Express `Response`
+ * satisfies this structurally.
+ */
+export interface McpHandlerResponse {
+  /** HTTP status code. */
+  readonly statusCode: number;
+  /** Express locals — handler reads `correlationId` for logging. */
+  locals: { correlationId?: string; [key: string]: unknown };
+  /** Register event listeners (handler uses 'close' for cleanup). */
+  on(event: string, listener: (...args: unknown[]) => void): unknown;
+}
+
+/**
+ * Per-request MCP handler (stateless pattern).
+ *
+ * Auth flows natively via `req.auth` (set by `mcpAuth` middleware) →
+ * the MCP SDK transport propagates it as `extra.authInfo` to tool callbacks.
+ * Uses narrow request/response interfaces so test fakes satisfy the types
+ * structurally without assertions (ADR-078).
  *
  * @see ADR-112, MCP SDK simpleStatelessStreamableHttp.ts
  */
 export function createMcpHandler(
   mcpFactory: McpServerFactory,
   logger?: Logger,
-): (req: express.Request, res: express.Response) => Promise<void> {
-  return async (req: express.Request, res: express.Response) => {
-    const correlationId = extractCorrelationId(res);
-    const log = logger && correlationId ? createChildLogger(logger, correlationId) : undefined;
+): (req: McpHandlerRequest, res: McpHandlerResponse) => Promise<void> {
+  return async (req: McpHandlerRequest, res: McpHandlerResponse) => {
+    const correlationId: unknown = res.locals?.['correlationId'];
+    const log =
+      logger && typeof correlationId === 'string'
+        ? createChildLogger(logger, correlationId)
+        : undefined;
     const mcpMethod = extractMcpMethod(req.body);
     log?.debug('MCP request received', { method: req.method, path: req.path, mcpMethod });
 
-    // Create fresh server + transport for this request (stateless mode)
     const { server, transport } = mcpFactory();
     await server.connect(transport);
 
-    // req.auth is set by mcpAuth middleware (or undefined when auth is
-    // disabled via DANGEROUSLY_DISABLE_AUTH). The MCP SDK transport reads
-    // req.auth directly — no bridging needed.
-    const baseReq: IncomingMessage = req;
-    await transport.handleRequest(baseReq, res, req.body);
+    await transport.handleRequest(req, res, req.body);
 
     // Clean up per-request resources after the response completes.
-    // Uses Promise.allSettled so both close calls execute independently —
-    // if transport.close() rejects, server.close() still runs.
     // Defence-in-depth: clear auth data from the request object.
     res.on('close', () => {
       req.auth = undefined;

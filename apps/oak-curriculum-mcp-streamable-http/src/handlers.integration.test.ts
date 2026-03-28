@@ -13,7 +13,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { Request } from 'express';
+import type { McpHandlerRequest } from './handlers.js';
 import { createMcpHandler } from './handlers.js';
 import {
   createFakeResponse,
@@ -22,11 +22,8 @@ import {
   createFakeAuthInfo,
 } from './test-helpers/fakes.js';
 
-/**
- * Create a minimal mock Express request for testing.
- * Accepts `object` to match Express Request body type without assertion.
- */
-function createMockRequest(body: object): Request {
+/** Create a minimal request for handler testing. */
+function createMockRequest(body: { method?: string; [key: string]: unknown }): McpHandlerRequest {
   return createFakeExpressRequest({ body });
 }
 
@@ -126,31 +123,6 @@ describe('createMcpHandler (Integration)', () => {
       expect(receivedAuthInfos).toHaveLength(2);
       expect(receivedAuthInfos).toContainEqual(authInfo1);
       expect(receivedAuthInfos).toContainEqual(authInfo2);
-    });
-
-    it('does not read res.locals.authInfo', async () => {
-      let receivedRequest: unknown;
-
-      const { factory } = createFakeMcpServerFactory(
-        vi.fn(async (req: unknown) => {
-          receivedRequest = req;
-        }),
-      );
-
-      const handler = createMcpHandler(factory);
-      const fakeAuthInfo = createFakeAuthInfo();
-      const mockReq = createFakeExpressRequest({
-        body: { method: 'tools/list' },
-        headers: {},
-      });
-      // Set res.locals.authInfo but NOT req.auth — handler must ignore res.locals
-      const mockRes = createFakeResponse({ locals: { authInfo: fakeAuthInfo } });
-
-      await handler(mockReq, mockRes);
-
-      // Handler does not read res.locals.authInfo — auth property is absent.
-      expect(receivedRequest).toBeDefined();
-      expect(receivedRequest).not.toHaveProperty('auth');
     });
   });
 
