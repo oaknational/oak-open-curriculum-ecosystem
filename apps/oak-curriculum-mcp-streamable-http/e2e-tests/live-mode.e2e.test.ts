@@ -15,10 +15,10 @@ import {
 import {
   McpToolError,
   createUniversalToolExecutor,
+  generatedToolRegistry,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { err, ok } from '@oaknational/result';
-import { createDefaultRequestExecutor } from '../src/tool-executor-factory.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -30,11 +30,9 @@ interface CapturedCall {
 function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
   return {
     overrides: {
-      createRequestExecutor: (config) =>
-        createDefaultRequestExecutor({
-          ...config,
-          createClient: () => undefined,
-          executeToolCall: (name: unknown, args: unknown): Promise<ToolExecutionResult> => {
+      createRequestExecutor: (config) => {
+        const executor = createUniversalToolExecutor({
+          executeMcpTool: (name, args) => {
             captured.push({ tool: name, args });
             const data = [
               {
@@ -48,10 +46,16 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
                 canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
               },
             ];
-            return Promise.resolve(ok({ status: 200 as const, data }));
+            const result: ToolExecutionResult = ok({ status: 200 as const, data });
+            config.onToolExecution?.(name, result);
+            return Promise.resolve(result);
           },
-          createExecutor: createUniversalToolExecutor,
-        }),
+          searchRetrieval: config.searchRetrieval,
+          generatedTools: generatedToolRegistry,
+          createAssetDownloadUrl: config.createAssetDownloadUrl,
+        });
+        return executor;
+      },
     },
   };
 }
@@ -59,16 +63,21 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
 function createErrorOverrides(message: string): CreateLiveHttpAppOptions {
   return {
     overrides: {
-      createRequestExecutor: (config) =>
-        createDefaultRequestExecutor({
-          ...config,
-          createClient: () => undefined,
-          executeToolCall: (name: unknown): Promise<ToolExecutionResult> =>
-            Promise.resolve(
-              err(new McpToolError(message, String(name), { code: 'SIMULATED_ERROR' })),
-            ),
-          createExecutor: createUniversalToolExecutor,
-        }),
+      createRequestExecutor: (config) => {
+        const executor = createUniversalToolExecutor({
+          executeMcpTool: (name) => {
+            const result: ToolExecutionResult = err(
+              new McpToolError(message, String(name), { code: 'SIMULATED_ERROR' }),
+            );
+            config.onToolExecution?.(name, result);
+            return Promise.resolve(result);
+          },
+          searchRetrieval: config.searchRetrieval,
+          generatedTools: generatedToolRegistry,
+          createAssetDownloadUrl: config.createAssetDownloadUrl,
+        });
+        return executor;
+      },
     },
   };
 }

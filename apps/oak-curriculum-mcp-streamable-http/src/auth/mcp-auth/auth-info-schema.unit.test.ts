@@ -8,6 +8,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+import type { Request } from 'express';
 import { authInfoSchema } from './auth-info-schema.js';
 
 describe('authInfoSchema', () => {
@@ -54,5 +56,20 @@ describe('authInfoSchema', () => {
       scopes: 'not-array',
     });
     expect(result.success).toBe(false);
+  });
+
+  it('local Request.auth augmentation is compatible with SDK AuthInfo', () => {
+    // Compile-time check: if the SDK changes AuthInfo shape, this will
+    // fail type-check — catching drift between our local declare module
+    // augmentation in mcp-auth.ts and the SDK's actual type.
+    const authInfo: AuthInfo = {
+      token: 'test',
+      clientId: 'c',
+      scopes: ['s'],
+      extra: { userId: 'u' },
+    };
+    // Express Request.auth (from our local augmentation) accepts AuthInfo
+    const reqAuth: Request['auth'] = authInfo;
+    expect(reqAuth).toBe(authInfo);
   });
 });

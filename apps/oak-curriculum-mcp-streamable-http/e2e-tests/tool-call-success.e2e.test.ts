@@ -4,6 +4,7 @@ import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import {
   createUniversalToolExecutor,
+  generatedToolRegistry,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { ok } from '@oaknational/result';
@@ -15,7 +16,6 @@ import {
   parseToolSuccessPayload,
 } from './helpers/sse.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
-import { createDefaultRequestExecutor } from '../src/tool-executor-factory.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -26,11 +26,9 @@ interface CapturedCall {
 
 function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
   return {
-    createRequestExecutor: (config) =>
-      createDefaultRequestExecutor({
-        ...config,
-        createClient: () => undefined,
-        executeToolCall: (name: unknown, args: unknown): Promise<ToolExecutionResult> => {
+    createRequestExecutor: (config) => {
+      const executor = createUniversalToolExecutor({
+        executeMcpTool: (name, args) => {
           captured.push({ tool: name, args });
           const data = [
             {
@@ -44,10 +42,16 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
               canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
             },
           ];
-          return Promise.resolve(ok({ status: 200 as const, data }));
+          const result: ToolExecutionResult = ok({ status: 200 as const, data });
+          config.onToolExecution?.(name, result);
+          return Promise.resolve(result);
         },
-        createExecutor: createUniversalToolExecutor,
-      }),
+        searchRetrieval: config.searchRetrieval,
+        generatedTools: generatedToolRegistry,
+        createAssetDownloadUrl: config.createAssetDownloadUrl,
+      });
+      return executor;
+    },
   };
 }
 

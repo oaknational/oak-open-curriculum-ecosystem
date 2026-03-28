@@ -11,7 +11,7 @@ import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-t
 import type { RuntimeConfig } from './runtime-config.js';
 import { isAuthError, getAuthErrorType, getAuthErrorDescription } from './auth-error-detector.js';
 import { createAuthErrorResponse } from './auth-error-response.js';
-import type { ToolHandlerDependencies } from './handlers.js';
+import type { ToolHandlerDependencies } from './tool-handler-types.js';
 import { logValidationFailureIfPresent, logUpstreamErrorIfPresent } from './validation-logger.js';
 import { checkMcpClientAuth, type CheckMcpClientAuthDeps } from './check-mcp-client-auth.js';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';

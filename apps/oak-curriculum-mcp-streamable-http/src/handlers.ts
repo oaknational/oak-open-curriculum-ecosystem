@@ -31,23 +31,10 @@ import { registerAllResources, registerPrompts } from './register-resources.js';
 import {
   createDefaultRequestExecutor,
   createStubRequestExecutor,
-  type ToolExecutorFactoryConfig,
-  type UniversalToolExecutorFn,
 } from './tool-executor-factory.js';
+import type { ToolHandlerDependencies, ToolHandlerOverrides } from './tool-handler-types.js';
 
-/**
- * Dependencies for tool handler execution (3 members).
- *
- * `createRequestExecutor` replaces the previous 3 factory members. In tests,
- * it can be a simple `vi.fn(() => vi.fn())` — no factory-chain re-implementation.
- */
-export interface ToolHandlerDependencies {
-  readonly createRequestExecutor: (config: ToolExecutorFactoryConfig) => UniversalToolExecutorFn;
-  readonly getResourceUrl: () => string;
-  readonly searchRetrieval: SearchRetrievalService;
-}
-
-export type ToolHandlerOverrides = Partial<ToolHandlerDependencies>;
+export type { ToolHandlerDependencies, ToolHandlerOverrides } from './tool-handler-types.js';
 
 export interface RegisterHandlersOptions {
   readonly overrides?: ToolHandlerOverrides;

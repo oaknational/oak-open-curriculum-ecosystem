@@ -101,6 +101,9 @@ export function createDefaultRequestExecutor<TClient>(
   const executor = config.createExecutor({
     executeMcpTool: async (name, args) => {
       const execution = await config.executeToolCall(name, args, client);
+      // Callback must not throw — exceptions here bypass auth error capture
+      // in tool-handler-with-auth.ts. Callers are responsible for defensive
+      // code in the onToolExecution callback (null coalescing, type guards).
       config.onToolExecution?.(name, execution);
       return execution;
     },
@@ -112,12 +115,6 @@ export function createDefaultRequestExecutor<TClient>(
   return executor;
 }
 
-/**
- * Stub-mode configuration for {@link createStubRequestExecutor}.
- *
- * Takes the per-request config plus the SDK's `createExecutor` function
- * and a stub adapter that replaces real API calls.
- */
 /** Stub-mode configuration for {@link createStubRequestExecutor}. */
 export interface StubRequestExecutorConfig {
   readonly factoryConfig: ToolExecutorFactoryConfig;
@@ -142,8 +139,9 @@ export function createStubRequestExecutor(
 
   const executor = createExecutor({
     executeMcpTool: (name, args) => {
-      const execution = stubExecutor(name, args ?? {});
-      return execution.then((result) => {
+      // Promise.resolve normalises synchronous throws into rejections,
+      // preventing unhandled exceptions if the stub throws synchronously.
+      return Promise.resolve(stubExecutor(name, args ?? {})).then((result) => {
         factoryConfig.onToolExecution?.(name, result);
         return result;
       });

@@ -37,22 +37,16 @@ function createMockDependencies(
 
 /**
  * Extracts the first `mcp/www_authenticate` header string from a CallToolResult's `_meta`.
- * Uses runtime validation instead of type assertions.
+ * Uses `expect()` for clear failure messages with object snapshots.
  */
 function extractWwwAuthHeader(result: { _meta?: Record<string, unknown> }): string {
-  const meta = result._meta;
-  if (meta === undefined) {
-    throw new Error('Expected _meta to be defined');
-  }
-  const wwwAuth = meta['mcp/www_authenticate'];
-  if (!Array.isArray(wwwAuth) || wwwAuth.length === 0) {
-    throw new Error('Expected _meta["mcp/www_authenticate"] to be a non-empty array');
-  }
-  const first: unknown = wwwAuth[0];
-  if (typeof first !== 'string') {
-    throw new Error('Expected first www_authenticate header to be a string');
-  }
-  return first;
+  expect(result._meta).toBeDefined();
+  const wwwAuth: unknown = result._meta?.['mcp/www_authenticate'];
+  expect(Array.isArray(wwwAuth)).toBe(true);
+  const headers = wwwAuth as readonly unknown[];
+  expect(headers.length).toBeGreaterThan(0);
+  expect(typeof headers[0]).toBe('string');
+  return String(headers[0]);
 }
 
 const baseAuthEnabledEnv: AuthEnabledRuntimeConfig['env'] = {
