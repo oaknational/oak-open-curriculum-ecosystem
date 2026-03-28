@@ -172,16 +172,18 @@ export function assertAuthErrorResponse(
 ): void {
   expect(result.isError).toBe(true);
   expect(result.content.length).toBeGreaterThan(0);
-  expect(result.content[0]?.type).toBe('text');
-  expect(result.content[0] && 'text' in result.content[0] ? result.content[0].text : '').toContain(
+  const firstContent = result.content[0];
+  expect(firstContent).toBeDefined();
+  expect(firstContent?.type).toBe('text');
+  // CallToolResult content is a union — assert 'text' type then access .text
+  expect(firstContent && 'text' in firstContent ? firstContent.text : undefined).toContain(
     'Authentication Error',
   );
   const meta = result._meta;
   expect(meta).toBeDefined();
   const wwwAuth = meta?.['mcp/www_authenticate'];
-  expect(Array.isArray(wwwAuth)).toBe(true);
-  // Fail fast if _meta shape is wrong — do not silently skip assertions
   expect(wwwAuth).toBeDefined();
+  expect(Array.isArray(wwwAuth)).toBe(true);
   expect(Array.isArray(wwwAuth) && wwwAuth.length).toBeGreaterThan(0);
   expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(expectedErrorPattern);
 }

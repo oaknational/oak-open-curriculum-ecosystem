@@ -99,7 +99,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
   });
 
   describe('Error Response Structure', () => {
-    it('should include content array with user-friendly message and isError flag', async () => {
+    it('should include RFC 6750 compliant response with content, isError, and _meta', async () => {
       const overrides = createMockDeps(() =>
         Promise.resolve(createAuthErrorResult(401, 'Unauthorized')),
       );
@@ -109,35 +109,11 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
       const handler = getHandler(capturedHandlers, 'get-changelog');
       const result = await handler({});
 
-      expect(result.isError).toBe(true);
-      expect(result.content.length).toBeGreaterThan(0);
-      expect(result.content[0]?.type).toBe('text');
-      expect(
-        result.content[0] && 'text' in result.content[0] ? result.content[0].text : '',
-      ).toContain('Authentication Error');
-    });
+      // Shared helper validates isError, content, _meta shape, and Bearer pattern
+      assertAuthErrorResponse(result, /^Bearer.*resource_metadata=.*error=.*error_description=/);
 
-    it('should include RFC 6750 compliant WWW-Authenticate format in _meta', async () => {
-      const overrides = createMockDeps(() =>
-        Promise.resolve(createAuthErrorResult(401, 'Unauthorized')),
-      );
-
-      registerWithOverrides(overrides);
-
-      const handler = getHandler(capturedHandlers, 'get-changelog');
-      const result = await handler({});
-
-      const meta = result._meta;
-      expect(meta).toBeDefined();
-      const wwwAuth = meta?.['mcp/www_authenticate'];
-      expect(Array.isArray(wwwAuth)).toBe(true);
-      // Fail fast if _meta shape is wrong — do not silently skip assertions
-      expect(wwwAuth).toBeDefined();
-      expect(Array.isArray(wwwAuth) && wwwAuth.length).toBeGreaterThan(0);
-      expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(/^Bearer /);
-      expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(/resource_metadata=/);
-      expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(/error=/);
-      expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(/error_description=/);
+      // Additional RFC 6750 compliance: PRM URL in WWW-Authenticate header
+      const wwwAuth = result._meta?.['mcp/www_authenticate'];
       expect(Array.isArray(wwwAuth) && wwwAuth[0]).toContain(
         'https://test.example.com/.well-known/oauth-protected-resource',
       );

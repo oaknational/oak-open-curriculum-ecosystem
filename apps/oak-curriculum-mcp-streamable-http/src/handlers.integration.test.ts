@@ -37,7 +37,10 @@ describe('createMcpHandler (Integration)', () => {
       let receivedBody: unknown;
 
       const { factory } = createFakeMcpServerFactory(
-        vi.fn(async (_req: unknown, _res: unknown, body: unknown) => {
+        vi.fn(async (req: unknown, res: unknown, body: unknown) => {
+          // req and res are positional — only body is needed for this test
+          void req;
+          void res;
           receivedBody = body;
         }),
       );

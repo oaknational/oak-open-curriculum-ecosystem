@@ -56,7 +56,7 @@ function registerAndCapture() {
   return { server, registerToolSpy };
 }
 
-describe('tool registration uses SDK canonical projection', () => {
+describe('Tool Registration Uses SDK Canonical Projection (Integration)', () => {
   it('widget tools are registered with _meta.ui.resourceUri in config', () => {
     const { registerToolSpy } = registerAndCapture();
     const tools = listUniversalTools(generatedToolRegistry);
