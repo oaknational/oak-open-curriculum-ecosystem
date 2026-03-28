@@ -16,15 +16,19 @@
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
 import type { Logger } from '@oaknational/logger';
 import type { TokenVerifier } from './types.js';
-// Side-effect import: the MCP SDK's bearerAuth module augments Express
-// Request with `auth?: AuthInfo` via declaration merging. Importing the
-// type triggers the augmentation so `req.auth = authData` type-checks.
-// FRAGILITY: This depends on the SDK's internal module path. If the SDK
-// moves this module, `req.auth` assignment will fail type-check. Fix by
-// updating the import path to match the new SDK structure, or by adding
-// a local declaration merge if the SDK removes the augmentation entirely.
-// Pinned to @modelcontextprotocol/sdk@1.28.0.
-import type {} from '@modelcontextprotocol/sdk/server/auth/middleware/bearerAuth.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+
+// Local declaration merge: augments Express Request with `auth?: AuthInfo`.
+// Replaces the `import type {} from '.../bearerAuth.js'` side-effect import.
+// Both paths reach the SDK via the `"./*"` catch-all wildcard (not a named
+// export), but `server/auth/types.js` is a pure-type leaf file — less likely
+// to move than the middleware module. If the SDK promotes `AuthInfo` to a
+// named export, update this import path to match.
+declare module 'express-serve-static-core' {
+  interface Request {
+    auth?: AuthInfo;
+  }
+}
 import { getPRMUrl } from './get-prm-url.js';
 import { getMcpResourceUrl } from './get-mcp-resource-url.js';
 import { validateResourceParameter } from '../../resource-parameter-validator.js';

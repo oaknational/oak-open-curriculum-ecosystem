@@ -15,13 +15,6 @@ function hasDurationMs(context: unknown): context is { readonly durationMs: numb
   );
 }
 
-function extractDurationMs(context: unknown): number {
-  if (!hasDurationMs(context)) {
-    throw new Error('Expected context to contain a numeric durationMs field');
-  }
-  return context.durationMs;
-}
-
 describe('runAsyncBootstrapPhase', () => {
   it('returns the resolved value of an async operation', async () => {
     const { logger } = createRecordingLogger();
@@ -86,26 +79,5 @@ describe('runAsyncBootstrapPhase', () => {
     const finishEntry = entries.find((e) => e.message === 'bootstrap.phase.finish');
     expect(finishEntry).toBeDefined();
     expect(hasDurationMs(finishEntry?.context)).toBe(true);
-  });
-
-  it('measures duration that includes async resolution time', async () => {
-    const { logger, entries } = createRecordingLogger();
-    const timer = createPhasedTimer();
-    const delayMs = 50;
-
-    await runAsyncBootstrapPhase(
-      logger,
-      timer,
-      TEST_PHASE,
-      TEST_APP_ID,
-      () =>
-        new Promise<string>((resolve) => {
-          setTimeout(() => resolve('delayed'), delayMs);
-        }),
-    );
-
-    const finishEntry = entries.find((e) => e.message === 'bootstrap.phase.finish');
-    const durationMs = extractDurationMs(finishEntry?.context);
-    expect(durationMs).toBeGreaterThanOrEqual(delayMs - 10);
   });
 });

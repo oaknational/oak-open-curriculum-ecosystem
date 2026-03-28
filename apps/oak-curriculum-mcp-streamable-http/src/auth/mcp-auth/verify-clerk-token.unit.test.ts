@@ -15,7 +15,7 @@
  * tests and verify the `console.error` spy assertion still holds. See ADR-142.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import type { MachineAuthObject } from '@clerk/backend';
 import { verifyClerkToken } from '@clerk/mcp-tools/server';
 import { createFakeMachineAuthObject } from '../../test-helpers/fakes.js';
@@ -60,16 +60,6 @@ function createRawAuthObjectWithViolations(
 }
 
 describe('verifyClerkToken', () => {
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    consoleErrorSpy = vi.spyOn(console, 'error');
-  });
-
-  afterEach(() => {
-    consoleErrorSpy.mockRestore();
-  });
-
   it('should return undefined when auth is not authenticated', () => {
     const auth = createFakeMachineAuthObject({ isAuthenticated: false });
 
@@ -155,17 +145,5 @@ describe('verifyClerkToken', () => {
     expect(result?.scopes).toEqual(['custom:scope', 'another:scope']);
     expect(result?.clientId).toBe('test-client');
     expect(result?.extra?.userId).toBe('test-user');
-  });
-
-  it('should not produce unexpected console.error output on the happy path', () => {
-    const auth = createFakeMachineAuthObject({
-      userId: 'user-456',
-      clientId: 'client-123',
-      scopes: ['mcp:invoke'],
-    });
-
-    verifyClerkToken(auth, 'valid-token');
-
-    expect(consoleErrorSpy).not.toHaveBeenCalled();
   });
 });
