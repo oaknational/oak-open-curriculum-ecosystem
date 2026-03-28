@@ -1,3 +1,15 @@
+/**
+ * MCP handler factory and tool registration.
+ *
+ * Implements the stateless per-request pattern: each HTTP request creates a
+ * fresh `McpServer` + `StreamableHTTPServerTransport`, connects them, and
+ * delegates to `transport.handleRequest()`. Auth flows natively via `req.auth`
+ * (set by `mcpAuth` middleware) → `extra.authInfo` in tool callbacks.
+ *
+ * Tool registration iterates over the SDK's universal tool registry and
+ * registers each tool with its canonical projection config.
+ */
+
 import type express from 'express';
 import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';

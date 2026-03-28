@@ -54,6 +54,7 @@ export function createMockServer(
     config: unknown,
     handler: (params: TInput, extra: unknown) => Promise<CallToolResult>,
   ): unknown {
+    // config is required by the registerTool overload signature but unused in the mock
     void config;
     // Capture the handler with our test parameter type
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Bridge between MCP SDK generics and test types
@@ -179,10 +180,10 @@ export function assertAuthErrorResponse(
   expect(meta).toBeDefined();
   const wwwAuth = meta?.['mcp/www_authenticate'];
   expect(Array.isArray(wwwAuth)).toBe(true);
-  if (Array.isArray(wwwAuth)) {
-    expect(wwwAuth.length).toBeGreaterThan(0);
-    expect(wwwAuth[0]).toMatch(expectedErrorPattern);
-  }
+  // Fail fast if _meta shape is wrong — do not silently skip assertions
+  expect(wwwAuth).toBeDefined();
+  expect(Array.isArray(wwwAuth) && wwwAuth.length).toBeGreaterThan(0);
+  expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(expectedErrorPattern);
 }
 
 /** Zod schema for validating auth error log context. */

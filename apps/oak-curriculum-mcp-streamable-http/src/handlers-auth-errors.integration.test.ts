@@ -131,14 +131,16 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
       expect(meta).toBeDefined();
       const wwwAuth = meta?.['mcp/www_authenticate'];
       expect(Array.isArray(wwwAuth)).toBe(true);
-      if (Array.isArray(wwwAuth) && wwwAuth[0] !== undefined) {
-        const header = String(wwwAuth[0]);
-        expect(header).toMatch(/^Bearer /);
-        expect(header).toContain('resource_metadata=');
-        expect(header).toContain('error=');
-        expect(header).toContain('error_description=');
-        expect(header).toContain('https://test.example.com/.well-known/oauth-protected-resource');
-      }
+      // Fail fast if _meta shape is wrong — do not silently skip assertions
+      expect(wwwAuth).toBeDefined();
+      expect(Array.isArray(wwwAuth) && wwwAuth.length).toBeGreaterThan(0);
+      expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(/^Bearer /);
+      expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(/resource_metadata=/);
+      expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(/error=/);
+      expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(/error_description=/);
+      expect(Array.isArray(wwwAuth) && wwwAuth[0]).toContain(
+        'https://test.example.com/.well-known/oauth-protected-resource',
+      );
     });
   });
 });
