@@ -41,11 +41,14 @@ function createMockDependencies(
 function extractWwwAuthHeader(result: { _meta?: Record<string, unknown> }): string {
   expect(result._meta).toBeDefined();
   const wwwAuth: unknown = result._meta?.['mcp/www_authenticate'];
-  expect(Array.isArray(wwwAuth)).toBe(true);
-  const headers = wwwAuth as readonly unknown[];
-  expect(headers.length).toBeGreaterThan(0);
-  expect(typeof headers[0]).toBe('string');
-  return String(headers[0]);
+  if (!Array.isArray(wwwAuth) || wwwAuth.length === 0) {
+    throw new Error('Expected _meta["mcp/www_authenticate"] to be a non-empty array');
+  }
+  const first: unknown = wwwAuth[0];
+  if (typeof first !== 'string') {
+    throw new Error('Expected first www_authenticate header to be a string');
+  }
+  return first;
 }
 
 const baseAuthEnabledEnv: AuthEnabledRuntimeConfig['env'] = {
