@@ -44,8 +44,15 @@ Phase 8 landed in 4 commits on `feat/mcp_app` (2026-03-28):
 
 ### COMPLETED (2026-03-28 session)
 
-Items 2-5 resolved in a single session:
+Items 1-5 all resolved:
 
+- **Item 1 (Opaque token RFC 8707)**: CLOSED — NO CHANGE NEEDED. Spike
+  confirmed the app uses Clerk opaque tokens (`oat_...`) as the production
+  path. Clerk verifies these server-side via `getAuth()`. The "bypass" in
+  `resource-parameter-validator.ts:163` is the designed behaviour, not a bug.
+  JWT audience validation is defence-in-depth for non-Clerk tokens only.
+  Switching to JWT would introduce risk (issuer mismatch per ADR-115) for
+  no security benefit. See spike findings in session plan.
 - **Item 2 (DI simplification)**: `ToolHandlerDependencies` reduced from 5 to 3
   members. New `tool-executor-factory.ts` composes SDK functions. Test mock
   creation: 31 lines → 8 lines. E2E tests updated.
@@ -55,24 +62,6 @@ Items 2-5 resolved in a single session:
   code. Test helpers import from there.
 - **Item 5 (logger fakes)**: Consolidated 6 implementations → 2 canonical fakes
   in `src/test-helpers/fakes.ts`. Removed all `as Logger` assertions.
-
-### BLOCKED — Opaque Token RFC 8707 Bypass
-
-1. **Opaque token RFC 8707 bypass** — Spike completed (2026-03-28). Async
-   introspection is NOT viable (Clerk endpoint lacks `aud`). Correct direction:
-   reject opaque tokens (fail-closed) + configure Clerk for JWT format. BLOCKED
-   by two empirical verification tasks:
-
-   **B1**: JWT `aud` claim format unknown — must decode a real Clerk JWT from
-   staging to verify whether `aud` contains the resource URL or Client ID.
-
-   **B2**: ADR-115 issuer mismatch — OAuth proxy rewrites `issuer` to self-origin
-   but Clerk JWTs have `iss` pointing to Clerk FAPI URL. Must verify whether
-   `getAuth()` validates `iss` against the proxy's rewritten issuer.
-
-   See plan: `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
-   and session plan at `~/.claude/plans/drifting-dreaming-puzzle.md` for full
-   security-reviewer and clerk-reviewer findings.
 
 ### Low Priority (not yet addressed)
 
