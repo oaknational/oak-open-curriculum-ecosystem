@@ -22,3 +22,14 @@
  * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
 export const WIDGET_URI = "ui://widget/oak-json-viewer-local.html" as const;
+
+/**
+ * Tools that advertise a widget UI via `_meta.ui.resourceUri`.
+ *
+ * Only tools in this set have `_meta.ui` in their descriptors.
+ * All other tools have no widget UI — MCP clients will not render
+ * a widget for their results.
+ *
+ * @see code-generation/typegen/cross-domain-constants.ts - Source of truth
+ */
+export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set(["search","get-curriculum-model"]);

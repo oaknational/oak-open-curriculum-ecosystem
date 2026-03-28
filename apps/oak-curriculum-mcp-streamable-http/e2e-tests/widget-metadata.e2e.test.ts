@@ -12,7 +12,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { z } from 'zod/v4';
+import { z } from 'zod';
 import request from 'supertest';
 import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
@@ -119,7 +119,7 @@ async function callToolsList(app: Awaited<ReturnType<typeof createApp>>) {
 }
 
 describe('MCP Apps Widget Metadata E2E (ADR-141)', () => {
-  const aggregatedWidgetToolNames = ['search', 'fetch', 'get-curriculum-model'] satisfies string[];
+  const aggregatedWidgetToolNames = ['search', 'get-curriculum-model'] satisfies string[];
 
   describe('_meta.ui.resourceUri', () => {
     it.each(aggregatedWidgetToolNames)(
@@ -153,22 +153,23 @@ describe('MCP Apps Widget Metadata E2E (ADR-141)', () => {
     });
   });
 
-  describe('generated tools _meta in MCP response', () => {
-    const generatedToolNames = [
+  describe('non-widget tools omit _meta.ui in MCP response', () => {
+    const nonWidgetToolNames = [
       'get-subjects',
       'get-key-stages',
       'get-lessons-summary',
+      'fetch',
     ] satisfies string[];
 
-    it.each(generatedToolNames)(
-      'generated tool %s has _meta.ui.resourceUri in tools/list',
+    it.each(nonWidgetToolNames)(
+      'non-widget tool %s does not have _meta.ui in tools/list',
       async (toolName) => {
         const app = await createTestApp();
         const tools = await callToolsList(app);
 
         const tool = tools.find((t) => t.name === toolName);
         expect(tool).toBeDefined();
-        expect(tool?._meta?.ui?.resourceUri).toBe(WIDGET_URI);
+        expect(tool?._meta?.ui).toBeUndefined();
       },
     );
   });

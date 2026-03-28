@@ -1,12 +1,12 @@
 import type express from 'express';
 import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { Logger } from '@oaknational/logger';
-import { z } from 'zod';
-
 import type { RuntimeConfig } from './runtime-config.js';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { extractCorrelationId, createChildLogger } from './logging/index.js';
+import { authInfoSchema } from './auth-info-schema.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
@@ -53,30 +53,6 @@ function mergeOverrides(
     searchRetrieval: overrides.searchRetrieval ?? defaults.searchRetrieval,
   };
 }
-
-/**
- * Zod schema for the MCP SDK's AuthInfo type.
- *
- * Validates auth data read from `res.locals.authInfo` at the Express/MCP
- * boundary. Replaces a bare type assertion with runtime validation so that
- * malformed auth data is caught immediately rather than propagated silently.
- *
- * Uses `.loose()` to avoid stripping fields that future SDK versions might
- * add. The `resource` field validates `URL` instances per the SDK interface.
- * Verified: `@clerk/mcp-tools@0.3.1` `verifyClerkToken` never sets
- * `resource` (returns only token, clientId, scopes, extra). The field is
- * included for completeness and forward compatibility.
- */
-const authInfoSchema = z
-  .object({
-    token: z.string(),
-    clientId: z.string(),
-    scopes: z.array(z.string()),
-    expiresAt: z.number().optional(),
-    resource: z.instanceof(URL).optional(),
-    extra: z.record(z.string(), z.unknown()).optional(),
-  })
-  .loose();
 
 function buildToolHandlerDependencies(
   resourceUrl: string,
@@ -180,30 +156,45 @@ export function createMcpHandler(
     // Read verified AuthInfo from res.locals (set by mcpAuth middleware).
     // When auth is disabled (DANGEROUSLY_DISABLE_AUTH), middleware is skipped
     // and res.locals.authInfo is undefined — tools requiring auth will reject.
-    // Zod validates the boundary: malformed auth data throws immediately rather
-    // than propagating silently through the MCP SDK.
-    const authInfo =
-      res.locals.authInfo == null ? undefined : authInfoSchema.parse(res.locals.authInfo);
+    // Zod validates the boundary: malformed auth data is caught immediately
+    // and returns a structured HTTP 500 rather than propagating silently.
+    let authInfo: AuthInfo | undefined;
+    if (res.locals.authInfo != null) {
+      const parsed = authInfoSchema.safeParse(res.locals.authInfo);
+      if (!parsed.success) {
+        log?.error('Malformed authInfo at MCP boundary', {
+          issues: parsed.error.issues,
+        });
+        res.status(500).json({ error: 'Internal auth validation error' });
+        return;
+      }
+      authInfo = parsed.data;
+    }
 
-    // Bridge Express → MCP SDK: the SDK's handleRequest expects
-    // IncomingMessage & { auth?: AuthInfo }. Express.Request extends
-    // IncomingMessage; Object.assign sets auth without type assertions.
-    // NOTE: This mutates req in place (Object.assign returns the same object).
-    // This is intentional and safe in the per-request stateless architecture
-    // — no downstream handler reads this mutation.
+    // Bridge Express → MCP SDK: set req.auth for the transport.
+    //
+    // The SDK's handleRequest expects IncomingMessage & { auth?: AuthInfo }.
+    // Express.Request extends IncomingMessage but has no `auth` property at
+    // the type level (Clerk sets it at runtime via Object.assign, not via a
+    // global type augmentation). Object.assign adds `auth` cleanly — no
+    // type conflict, no overwrite of a declared property.
     const baseReq: IncomingMessage = req;
     const mcpRequest = Object.assign(baseReq, { auth: authInfo });
 
     await transport.handleRequest(mcpRequest, res, req.body);
 
-    // Clean up per-request resources after the response completes
+    // Clean up per-request resources after the response completes.
+    // Uses Promise.allSettled so both close calls execute independently —
+    // if transport.close() rejects, server.close() still runs.
     res.on('close', () => {
-      Promise.resolve()
-        .then(() => transport.close())
-        .then(() => server.close())
-        .catch((err: unknown) => {
-          logger?.error('MCP per-request cleanup failed', { error: err });
-        });
+      void Promise.allSettled([transport.close(), server.close()]).then((results) => {
+        for (const result of results) {
+          if (result.status === 'rejected') {
+            const error: unknown = result.reason;
+            log?.error('MCP per-request cleanup failed', { error });
+          }
+        }
+      });
     });
 
     log?.debug('MCP request completed', { statusCode: res.statusCode, mcpMethod });

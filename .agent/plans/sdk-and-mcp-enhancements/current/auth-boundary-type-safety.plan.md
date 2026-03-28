@@ -8,9 +8,15 @@ todos:
   - id: task-1-remove-global-augmentation
     content: "Task 1: Remove the global Express.Request augmentation for req.auth and fix all consumers."
     status: done
+  - id: task-1-remediation
+    content: "Task 1 remediation: Make auth optional in global augmentation, add explicit type annotation to Object.assign (9-reviewer finding A, 2026-03-28)."
+    status: pending
   - id: task-2-zod-validation-at-locals
     content: "Task 2: Add Zod validation at the res.locals.authInfo read site to replace the type assertion."
     status: done
+  - id: task-2-remediation
+    content: "Task 2 remediation: Replace .loose() with .strict(), use safeParse instead of parse, extract to shared module (9-reviewer findings B+D+E, 2026-03-28)."
+    status: pending
   - id: task-3-eslint-record-unknown
     content: "Task 3: Add ESLint rule to ban Record<string, unknown> in eslint-plugin-standards."
     status: done
@@ -19,8 +25,8 @@ isProject: false
 
 # Auth Boundary Type Safety
 
-**Last Updated**: 2026-03-27
-**Status**: Pending — three independent tasks
+**Last Updated**: 2026-03-28
+**Status**: Tasks 1-3 done; Task 1+2 remediations pending (Phase 7 findings A, B, D, E)
 **Scope**: Eliminate type assertions and enforcement gaps identified during
 Phase 6 of the MCP Runtime Boundary Simplification.
 
@@ -198,12 +204,43 @@ decisions as enforceable checks.
 
 ---
 
+## Remediation (2026-03-28)
+
+9-reviewer comprehensive pass found that Tasks 1 and 2 need refinement:
+
+### Task 1 Remediation (Finding A)
+
+The original Task 1 replaced `auth?: ClerkRequestAuth` with
+`auth: (options?: PendingSessionOptions) => AuthObject` (non-optional, using
+Clerk's official types directly). However, `handlers.ts:195` overwrites
+`req.auth` with `AuthInfo` via `Object.assign`. Making `auth` non-optional and
+a callable type creates a type-system lie: downstream code thinks `req.auth` is
+always a callable, but at runtime it's `AuthInfo | undefined` after mutation.
+
+**Fix**: Make `auth` optional again. Add explicit `IncomingMessage & { auth?:
+AuthInfo }` type annotation to the `Object.assign` result. This is tracked as
+finding A in the simplification plan Phase 7.
+
+### Task 2 Remediation (Findings B + D + E)
+
+The original Task 2 added `authInfoSchema.parse()` with Zod validation.
+Three refinements needed:
+
+1. **B**: Replace `.loose()` with `.strict()` — fail fast on unknown fields
+2. **D**: Use `safeParse` instead of `parse` — handle errors explicitly rather
+   than throwing unstructured ZodError
+3. **E**: Extract `authInfoSchema` to a shared `auth-info-schema.ts` module —
+   currently split across `handlers.ts` and `check-mcp-client-auth.ts`
+
+These are tracked as findings B, D, and E in the simplification plan Phase 7.
+
 ## Dependencies
 
 - All three tasks are independent of each other
 - Tasks 1 and 2 touch `handlers.ts` — if done in the same session, sequence
   Task 1 before Task 2 to avoid merge conflicts
 - Task 3 touches `packages/core/` — independent of the app layer
+- Task 1 and 2 remediations are part of Phase 7 of the simplification plan
 
 ## References
 

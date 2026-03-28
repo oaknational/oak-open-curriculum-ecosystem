@@ -127,7 +127,6 @@ export const getLessonsTranscript = {
     title: "Get Lessons Transcript",
   },
   _meta: {
-    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

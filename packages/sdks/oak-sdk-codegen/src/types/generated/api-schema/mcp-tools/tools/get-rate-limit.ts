@@ -114,7 +114,6 @@ export const getRateLimit = {
     title: "Get Rate Limit",
   },
   _meta: {
-    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'noauth' }],
   },
   validateOutput: (data: unknown) => {

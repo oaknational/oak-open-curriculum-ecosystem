@@ -210,6 +210,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 
 ## Detailed Documentation
 
+- [MCP primitives: intention and intended audience](docs/mcp-primitives-intention-and-audience.md) - Internal guide to tool/resource/prompt boundaries, control model, and UAT expectations
 - [Operational Debugging](docs/operational-debugging.md) — request tracing, timing, diagnostics, error debugging, production logging
 - [Widget Rendering](docs/widget-rendering.md) — widget dispatch, rendering architecture, and sandbox details
 

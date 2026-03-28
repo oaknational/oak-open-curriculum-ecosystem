@@ -20,7 +20,7 @@ Oak-specific variant of the upstream `convert-web-app` skill from `modelcontextp
 
 ## SDK (already installed)
 
-Installable package: `@modelcontextprotocol/ext-apps` `^1.3.1`
+Installable package: `@modelcontextprotocol/ext-apps` `^1.3.2`
 
 Server helpers imported from `@modelcontextprotocol/ext-apps/server`:
 

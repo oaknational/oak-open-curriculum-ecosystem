@@ -8,7 +8,7 @@ import {
   appendPrerequisiteGuidance,
   appendToolEnhancements,
 } from './tool-description.js';
-import { BASE_WIDGET_URI } from '../../cross-domain-constants.js';
+import { BASE_WIDGET_URI, WIDGET_TOOL_NAMES } from '../../cross-domain-constants.js';
 
 function buildExports({
   toolName,
@@ -149,14 +149,19 @@ function buildExports({
   lines.push(`    title: ${JSON.stringify(humanReadableTitle)},`);
   lines.push('  },');
   // MCP Apps standard _meta fields (ADR-141).
-  // All generated curriculum tools share the Oak JSON viewer widget, so
-  // ui.resourceUri is emitted unconditionally. Non-widget tools (e.g.
-  // download-asset) are handwritten aggregated definitions and do not
-  // pass through this emitter.
-  lines.push('  _meta: {');
-  lines.push(`    ui: { resourceUri: ${JSON.stringify(BASE_WIDGET_URI)} },`);
-  lines.push(`    securitySchemes: ${securitySchemesLiteral},`);
-  lines.push('  },');
+  // Only tools in WIDGET_TOOL_NAMES get ui.resourceUri — all others have
+  // _meta with securitySchemes only (no widget UI).
+  const isWidgetTool = WIDGET_TOOL_NAMES.has(toolName);
+  if (isWidgetTool) {
+    lines.push('  _meta: {');
+    lines.push(`    ui: { resourceUri: ${JSON.stringify(BASE_WIDGET_URI)} },`);
+    lines.push(`    securitySchemes: ${securitySchemesLiteral},`);
+    lines.push('  },');
+  } else {
+    lines.push('  _meta: {');
+    lines.push(`    securitySchemes: ${securitySchemesLiteral},`);
+    lines.push('  },');
+  }
   lines.push('  validateOutput: (data: unknown) => {');
   lines.push(
     '    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: z.ZodError["issues"] }[] = [];',

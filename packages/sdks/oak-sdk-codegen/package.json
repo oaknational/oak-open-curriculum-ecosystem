@@ -88,7 +88,7 @@
     "scan:sitemap": "tsx code-generation/sitemap-scanner.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/ext-apps": "^1.3.1",
+    "@modelcontextprotocol/ext-apps": "^1.3.2",
     "@modelcontextprotocol/sdk": "^1.28.0",
     "@oaknational/type-helpers": "workspace:*",
     "@zod/core": "^0.11.6",

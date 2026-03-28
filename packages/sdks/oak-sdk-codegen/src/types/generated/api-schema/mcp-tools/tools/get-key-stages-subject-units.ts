@@ -130,7 +130,6 @@ export const getKeyStagesSubjectUnits = {
     title: "Get Key Stages Subject Units",
   },
   _meta: {
-    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

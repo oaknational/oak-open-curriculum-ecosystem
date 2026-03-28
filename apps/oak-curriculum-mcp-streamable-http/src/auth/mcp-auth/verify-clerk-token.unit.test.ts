@@ -16,7 +16,6 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { MachineAuthObject } from '@clerk/backend';
 import { verifyClerkToken } from '@clerk/mcp-tools/server';
 import { createFakeMachineAuthObject } from '../../test-helpers/fakes.js';
 
@@ -24,7 +23,7 @@ describe('verifyClerkToken', () => {
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    consoleErrorSpy = vi.spyOn(console, 'error');
   });
 
   afterEach(() => {
@@ -58,16 +57,14 @@ describe('verifyClerkToken', () => {
   });
 
   it('should return undefined when tokenType is not oauth_token', () => {
-    // Deliberately wrong tokenType at runtime; TypeScript would reject at compile time.
-    const auth = {
-      ...createFakeMachineAuthObject({
-        isAuthenticated: true,
-        userId: 'user-456',
-        clientId: 'client-123',
-        scopes: ['mcp:invoke', 'mcp:read'],
-      }),
+    // Deliberately wrong tokenType at runtime via factory override.
+    const auth = createFakeMachineAuthObject({
+      isAuthenticated: true,
+      userId: 'user-456',
+      clientId: 'client-123',
+      scopes: ['mcp:invoke', 'mcp:read'],
       tokenType: 'session_token',
-    } as unknown as MachineAuthObject<'oauth_token'>;
+    });
 
     expect(() => {
       verifyClerkToken(auth, 'some-token');

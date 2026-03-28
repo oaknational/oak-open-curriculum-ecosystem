@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { listUniversalTools, generatedToolRegistry } from './universal-tools/index.js';
 import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 
 /**
  * Integration tests verifying universal tools have proper MCP annotations
@@ -114,29 +114,41 @@ describe('listUniversalTools annotations', () => {
   });
 });
 
-/** Non-widget tools have _meta for securitySchemes but no ui.resourceUri. */
-const NON_WIDGET_TOOLS = new Set(['download-asset']);
+// WIDGET_TOOL_NAMES imported from canonical source above.
 
 /**
  * Integration tests for MCP Apps standard _meta fields (ADR-141).
  *
- * Verifies that listUniversalTools() exposes _meta fields for BOTH
- * generated tools (from sdk-codegen) and aggregated tools.
+ * Verifies that listUniversalTools() exposes _meta.ui only for allowlisted
+ * widget tools, and that all other tools have no _meta.ui.
  */
 describe('listUniversalTools _meta integration', () => {
   it('widget tools have _meta.ui.resourceUri pointing to widget', () => {
     const tools = listUniversalTools(generatedToolRegistry);
-    const widgetTools = tools.filter((t) => !NON_WIDGET_TOOLS.has(t.name));
+    const widgetTools = tools.filter((t) => WIDGET_TOOL_NAMES.has(t.name));
 
+    expect(widgetTools.length).toBe(WIDGET_TOOL_NAMES.size);
     for (const tool of widgetTools) {
       expect(tool._meta?.ui?.resourceUri).toBe(WIDGET_URI);
+    }
+  });
+
+  it('non-widget tools do not have _meta.ui', () => {
+    const tools = listUniversalTools(generatedToolRegistry);
+    const nonWidgetTools = tools.filter((t) => !WIDGET_TOOL_NAMES.has(t.name));
+
+    expect(nonWidgetTools.length).toBeGreaterThan(0);
+    for (const tool of nonWidgetTools) {
+      expect(tool._meta?.ui).toBeUndefined();
     }
   });
 });
 
 /**
- * Verify generated tools specifically have _meta.
- * This catches the bug where listUniversalTools() didn't include _meta for generated tools.
+ * Verify generated tools have _meta with securitySchemes but no widget UI.
+ *
+ * Generated tools are not in the WIDGET_TOOL_NAMES allowlist, so they should
+ * have _meta.securitySchemes but no _meta.ui.
  */
 describe('generated tools _meta integration', () => {
   const aggregatedNameSet = new Set<string>(typeSafeKeys(AGGREGATED_TOOL_DEFS));
@@ -152,13 +164,13 @@ describe('generated tools _meta integration', () => {
     }
   });
 
-  it('at least one generated tool has _meta.ui.resourceUri and securitySchemes', () => {
+  it('generated tools have _meta.securitySchemes but no _meta.ui', () => {
     const tools = listUniversalTools(generatedToolRegistry);
     const generatedTools = tools.filter((t) => !aggregatedNameSet.has(t.name));
     const sampleTool = generatedTools[0];
 
     expect(sampleTool).toBeDefined();
-    expect(sampleTool._meta?.ui?.resourceUri).toBe(WIDGET_URI);
+    expect(sampleTool._meta?.ui).toBeUndefined();
     expect(sampleTool._meta?.securitySchemes).toBeDefined();
   });
 });

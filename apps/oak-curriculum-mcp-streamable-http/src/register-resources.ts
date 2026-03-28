@@ -8,6 +8,17 @@
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+
+/**
+ * Minimal server interface for resource registration.
+ *
+ * An interface (not a type alias) that narrows McpServer to the single
+ * method needed for resource registration. Avoids repeating
+ * `Pick<McpServer, 'registerResource'>` at every function signature.
+ */
+interface ResourceRegistrar {
+  registerResource: McpServer['registerResource'];
+}
 import { registerAppResource, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import {
   WIDGET_URI,
@@ -51,7 +62,7 @@ const WIDGET_CSP = {
  *
  * @param server - MCP server instance
  */
-export function registerWidgetResource(server: Pick<McpServer, 'registerResource'>): void {
+export function registerWidgetResource(server: ResourceRegistrar): void {
   registerAppResource(
     server,
     'oak-json-viewer',
@@ -88,7 +99,7 @@ export function registerWidgetResource(server: Pick<McpServer, 'registerResource
  *
  * @param server - MCP server instance
  */
-export function registerDocumentationResources(server: Pick<McpServer, 'registerResource'>): void {
+export function registerDocumentationResources(server: ResourceRegistrar): void {
   for (const resource of DOCUMENTATION_RESOURCES) {
     const { name, uri, ...metadata } = resource;
     server.registerResource(name, uri, metadata, () => {
@@ -107,7 +118,7 @@ export function registerDocumentationResources(server: Pick<McpServer, 'register
 }
 
 /** Registers the curriculum model as an MCP resource, complementing `get-curriculum-model`. */
-export function registerCurriculumModelResource(server: Pick<McpServer, 'registerResource'>): void {
+export function registerCurriculumModelResource(server: ResourceRegistrar): void {
   const { name, uri, ...metadata } = CURRICULUM_MODEL_RESOURCE;
   server.registerResource(name, uri, metadata, () => ({
     contents: [
@@ -121,9 +132,7 @@ export function registerCurriculumModelResource(server: Pick<McpServer, 'registe
 }
 
 /** Registers the prerequisite graph as an MCP resource, complementing `get-prerequisite-graph`. */
-export function registerPrerequisiteGraphResource(
-  server: Pick<McpServer, 'registerResource'>,
-): void {
+export function registerPrerequisiteGraphResource(server: ResourceRegistrar): void {
   const { name, uri, ...metadata } = PREREQUISITE_GRAPH_RESOURCE;
   server.registerResource(name, uri, metadata, () => ({
     contents: [
@@ -137,9 +146,7 @@ export function registerPrerequisiteGraphResource(
 }
 
 /** Registers thread progressions as an MCP resource, complementing `get-thread-progressions`. */
-export function registerThreadProgressionsResource(
-  server: Pick<McpServer, 'registerResource'>,
-): void {
+export function registerThreadProgressionsResource(server: ResourceRegistrar): void {
   const { name, uri, ...metadata } = THREAD_PROGRESSIONS_RESOURCE;
   server.registerResource(name, uri, metadata, () => ({
     contents: [
@@ -160,7 +167,7 @@ export function registerThreadProgressionsResource(
  *
  * @param server - MCP server instance
  */
-export function registerAllResources(server: Pick<McpServer, 'registerResource'>): void {
+export function registerAllResources(server: ResourceRegistrar): void {
   registerWidgetResource(server);
   registerDocumentationResources(server);
   registerCurriculumModelResource(server);

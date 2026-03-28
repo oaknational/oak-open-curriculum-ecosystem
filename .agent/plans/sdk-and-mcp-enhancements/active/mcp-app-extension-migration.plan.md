@@ -46,7 +46,7 @@ todos:
 
 ## Context
 
-Oak's MCP HTTP server (`apps/oak-curriculum-mcp-streamable-http/`) has its UI layer locked to ChatGPT. All 5 aggregated tools (search, fetch, browse-curriculum, explore-topic, get-curriculum-model) serve widgets via `window.openai.*` APIs and `text/html+skybridge` MIME — a ChatGPT-only surface. The `@modelcontextprotocol/ext-apps` package (^1.3.1) is declared in `package.json`. WS1 migrated SDK metadata keys; WS2 migrated the app runtime to use the SDK's server helpers (`registerAppResource`, `RESOURCE_MIME_TYPE`).
+Oak's MCP HTTP server (`apps/oak-curriculum-mcp-streamable-http/`) has its UI layer locked to ChatGPT. All 5 aggregated tools (search, fetch, browse-curriculum, explore-topic, get-curriculum-model) serve widgets via `window.openai.*` APIs and `text/html+skybridge` MIME — a ChatGPT-only surface. The `@modelcontextprotocol/ext-apps` package (^1.3.2) is declared in `package.json`. WS1 migrated SDK metadata keys; WS2 migrated the app runtime to use the SDK's server helpers (`registerAppResource`, `RESOURCE_MIME_TYPE`).
 
 **Governing ADR**: [ADR-141: MCP Apps Standard as Only UI Surface](../../../../docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md)
 
@@ -67,7 +67,7 @@ Oak's MCP HTTP server becomes a first-class MCP Apps server — one codebase, on
 ### Spec Status
 
 - SEP-1865 stable (2026-01-26). No breaking changes since publication.
-- ext-apps SDK: v1.3.1 (^1.3.1 in package.json).
+- ext-apps SDK: v1.3.2 (^1.3.2 in package.json).
 - Local research at `../mcp-apps-support.research.md` is fully current.
 
 ### MCP Specialist Answers (Key Technical Decisions)

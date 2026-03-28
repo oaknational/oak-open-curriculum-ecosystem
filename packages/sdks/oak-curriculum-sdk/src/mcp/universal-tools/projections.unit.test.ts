@@ -14,14 +14,13 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { listUniversalTools } from './list-tools.js';
 import type { GeneratedToolRegistry, ToolRegistryDescriptor } from './types.js';
 import { toRegistrationConfig, toProtocolEntry } from './projections.js';
 
-/** Tools that have no widget _meta.ui fields (no resourceUri). */
-const NON_WIDGET_TOOL_NAMES = new Set<string>(['download-asset']);
+// WIDGET_TOOL_NAMES imported from canonical source above.
 
 const sampleMcpToolName = 'get-key-stages-subject-lessons' as const satisfies ToolName;
 
@@ -93,13 +92,12 @@ describe('canonical descriptor projections', () => {
 
     it('non-widget tool registration config omits _meta.ui', () => {
       const tools = listUniversalTools(registry);
-      const downloadAsset = tools.find((t) => t.name === 'download-asset');
-      expect(downloadAsset).toBeDefined();
-      if (!downloadAsset) {
-        throw new Error('download-asset not found');
+      const nonWidgetTools = tools.filter((t) => !WIDGET_TOOL_NAMES.has(t.name));
+      expect(nonWidgetTools.length).toBeGreaterThan(0);
+      for (const tool of nonWidgetTools) {
+        const config = toRegistrationConfig(tool);
+        expect(config._meta?.ui).toBeUndefined();
       }
-      const config = toRegistrationConfig(downloadAsset);
-      expect(config._meta).toBeUndefined();
     });
   });
 
@@ -125,13 +123,13 @@ describe('canonical descriptor projections', () => {
       }
     });
 
-    it('non-widget tool protocol entry omits _meta', () => {
+    it('non-widget tool protocol entry omits _meta.ui', () => {
       const tools = listUniversalTools(registry);
-      const nonWidgetTools = tools.filter((t) => NON_WIDGET_TOOL_NAMES.has(t.name));
+      const nonWidgetTools = tools.filter((t) => !WIDGET_TOOL_NAMES.has(t.name));
       expect(nonWidgetTools.length).toBeGreaterThan(0);
       for (const tool of nonWidgetTools) {
         const entry = toProtocolEntry(tool);
-        expect(entry._meta).toBeUndefined();
+        expect(entry._meta?.ui).toBeUndefined();
       }
     });
   });

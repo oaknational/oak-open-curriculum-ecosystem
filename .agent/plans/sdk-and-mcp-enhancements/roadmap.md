@@ -61,7 +61,7 @@ isProject: false
 - **2026-03-05** (Claude reviewer takeover — all `claude.roadmap-review.md` recommendations applied):
   (1) Domain A marked complete — `mcp-apps-support.research.md` answers both validation questions with high confidence.
   (2) Reframing ADR added as the first pending executable todo (required before Domain C).
-  (3) `@modelcontextprotocol/ext-apps` `^1.3.1` is declared across all relevant workspaces — `registerAppTool`/`registerAppResource`/`getUiCapability` are now the canonical migration path for C4/C5/C6.
+  (3) `@modelcontextprotocol/ext-apps` `^1.3.2` is declared across all relevant workspaces — `registerAppTool`/`registerAppResource`/`getUiCapability` are now the canonical migration path for C4/C5/C6.
   (4) `_meta.ui.domain` analysis: only needed if the widget makes direct cross-origin `fetch()` calls; if all data flows through the MCP bridge, the field is not required — noted in C6.
   (5) Status header, Execution Order, Phase Details, Documentation Synchronisation Requirement, Gate-to-Domain mapping, and Related Documents sections added (template compliance).
   (6) Source URL list removed — superseded by research artefact reference.
@@ -250,7 +250,7 @@ Additional findings:
 - **Widget URI parity drift** (2026-02-23): local build emits `local` hash token instead of per-run hash; tracked in C9.
 
 **Research finding** (2026-03-05; high confidence):
-`@modelcontextprotocol/ext-apps` `^1.3.1` is declared across all relevant workspaces. The `ext-apps/server` submodule (`@modelcontextprotocol/ext-apps/server`) exports `registerAppTool`, `registerAppResource`, and `getUiCapability` — these are the canonical migration vehicle for C4, C5, and C6. `registerAppResource` defaults to `text/html;profile=mcp-app` automatically.
+`@modelcontextprotocol/ext-apps` `^1.3.2` is declared across all relevant workspaces. The `ext-apps/server` submodule (`@modelcontextprotocol/ext-apps/server`) exports `registerAppTool`, `registerAppResource`, and `getUiCapability` — these are the canonical migration vehicle for C4, C5, and C6. `registerAppResource` defaults to `text/html;profile=mcp-app` automatically.
 
 ---
 
@@ -621,7 +621,7 @@ rg -n "securitySchemes" apps/oak-curriculum-mcp-streamable-http/src/tool-auth-ch
 5. Public resource auth bypass remains constrained to ADR-057 and ADR-113 scope only.
 6. Generator-first/schema-first remains non-negotiable for SDK and MCP contract work.
 7. ChatGPT and Claude implement MCP Apps standard (confirmed 2026-03-05). Oak targets MCP-standard-only — no fallback to `text/html+skybridge` or OpenAI-specific metadata.
-8. `@modelcontextprotocol/ext-apps` `^1.3.1` is declared across all relevant workspaces. `registerAppTool`, `registerAppResource`, and `getUiCapability` are the migration vehicle.
+8. `@modelcontextprotocol/ext-apps` `^1.3.2` is declared across all relevant workspaces. `registerAppTool`, `registerAppResource`, and `getUiCapability` are the migration vehicle.
 9. ADR-115 proxy OAuth behaviour remains required and must stay operational throughout migration.
 
 ---

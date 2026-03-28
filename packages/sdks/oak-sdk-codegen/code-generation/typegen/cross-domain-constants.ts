@@ -33,3 +33,20 @@ function generateWidgetUriHash(isLocal: boolean): string {
  * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
 export const BASE_WIDGET_URI = `ui://widget/oak-json-viewer-${generateWidgetUriHash(isLocal)}.html`;
+
+/**
+ * Tools that should advertise a widget UI via `_meta.ui.resourceUri`.
+ *
+ * Only tools in this set emit `_meta.ui` in the codegen output and in
+ * aggregated definitions. All other tools have no widget UI — MCP clients
+ * will not attempt to render a widget for their results.
+ *
+ * Currently:
+ * - `search`: minimal Oak branding for search results
+ * - `get-curriculum-model`: minimal Oak branding for orientation output
+ *
+ * Future WS4 will add `user-search` with a full user-facing interface.
+ *
+ * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
+ */
+export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set(['search', 'get-curriculum-model']);

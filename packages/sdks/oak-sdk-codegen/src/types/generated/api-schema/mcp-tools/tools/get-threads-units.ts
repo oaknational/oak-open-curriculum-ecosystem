@@ -126,7 +126,6 @@ export const getThreadsUnits = {
     title: "Get Threads Units",
   },
   _meta: {
-    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

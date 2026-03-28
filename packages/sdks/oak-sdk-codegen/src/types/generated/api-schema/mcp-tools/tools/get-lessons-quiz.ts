@@ -127,7 +127,6 @@ export const getLessonsQuiz = {
     title: "Get Lessons Quiz",
   },
   _meta: {
-    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

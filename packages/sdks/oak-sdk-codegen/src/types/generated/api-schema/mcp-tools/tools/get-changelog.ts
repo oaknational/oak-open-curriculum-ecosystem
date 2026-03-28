@@ -114,7 +114,6 @@ export const getChangelog = {
     title: "Get Changelog",
   },
   _meta: {
-    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'noauth' }],
   },
   validateOutput: (data: unknown) => {

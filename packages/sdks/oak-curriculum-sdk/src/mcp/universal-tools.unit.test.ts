@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
 import { listUniversalTools } from './universal-tools/list-tools.js';
@@ -14,11 +14,8 @@ import type {
 
 const AGGREGATED_TOOL_NAMES_FROM_DEFS = typeSafeKeys(AGGREGATED_TOOL_DEFS);
 
-/** Tools that don't have widget _meta.ui fields (no resourceUri). */
-const NON_WIDGET_TOOLS: readonly string[] = ['download-asset'];
-const WIDGET_TOOL_NAMES = AGGREGATED_TOOL_NAMES_FROM_DEFS.filter(
-  (name) => !NON_WIDGET_TOOLS.includes(name),
-);
+/** Convert the canonical WIDGET_TOOL_NAMES set to an array for it.each(). */
+const widgetToolNamesArray = [...WIDGET_TOOL_NAMES];
 
 describe('AGGREGATED_TOOL_DEFS contains expected tools', () => {
   it('contains get-curriculum-model as the sole orientation tool', () => {
@@ -123,7 +120,7 @@ describe('isUniversalToolName', () => {
 });
 
 describe('aggregated tool _meta fields (widget tools)', () => {
-  it.each(WIDGET_TOOL_NAMES)('%s has _meta.ui.resourceUri pointing to widget', (toolName) => {
+  it.each(widgetToolNamesArray)('%s has _meta.ui.resourceUri pointing to widget', (toolName) => {
     const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
     expect(tool?._meta?.ui?.resourceUri).toBe(WIDGET_URI);

@@ -105,6 +105,15 @@ export function toProtocolEntry(tool: UniversalToolListEntry): {
   readonly annotations: ToolAnnotations | undefined;
   readonly _meta: ToolMeta | undefined;
 } {
+  // MCP spec requires inputSchema to be a JSON Schema object type.
+  // All Oak tools must have type: 'object' — fail fast if violated.
+  if (tool.inputSchema.type !== 'object') {
+    throw new TypeError(
+      `Tool ${tool.name} has inputSchema.type '${String(tool.inputSchema.type)}', ` +
+        `expected 'object'. MCP protocol requires object-type input schemas.`,
+    );
+  }
+
   return {
     name: tool.name,
     title: tool.annotations?.title ?? tool.name,

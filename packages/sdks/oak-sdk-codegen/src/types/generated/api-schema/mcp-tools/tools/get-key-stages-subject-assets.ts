@@ -144,7 +144,6 @@ export const getKeyStagesSubjectAssets = {
     title: "Get Key Stages Subject Assets",
   },
   _meta: {
-    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

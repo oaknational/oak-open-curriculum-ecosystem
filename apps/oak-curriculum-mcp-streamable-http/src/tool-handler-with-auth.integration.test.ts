@@ -375,3 +375,24 @@ describe('Tool Handler with Auth Integration', () => {
     });
   });
 });
+
+describe('explicit auth context propagation', () => {
+  it('returns auth error when authInfo is undefined for a protected tool', async () => {
+    const result = await handleToolWithAuthInterception({
+      tool: { name: 'get-key-stages' },
+      params: {},
+      deps: createMockDependencies(),
+      logger: createTestLogger(),
+      apiKey: 'test-key',
+      runtimeConfig: createMockRuntimeConfig(),
+      authInfo: undefined,
+    });
+
+    expect(result.isError).toBe(true);
+    expect(result.content).toBeDefined();
+    expect(result.content[0].type).toBe('text');
+    if (result.content[0].type === 'text') {
+      expect(result.content[0].text).toContain('login');
+    }
+  });
+});

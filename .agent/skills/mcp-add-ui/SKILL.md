@@ -20,7 +20,7 @@ Oak-specific variant of the upstream `add-app-to-server` skill from `modelcontex
 
 ## SDK (already installed)
 
-Installable package: `@modelcontextprotocol/ext-apps` `^1.3.1`
+Installable package: `@modelcontextprotocol/ext-apps` `^1.3.2`
 
 Server helpers imported from `@modelcontextprotocol/ext-apps/server`:
 

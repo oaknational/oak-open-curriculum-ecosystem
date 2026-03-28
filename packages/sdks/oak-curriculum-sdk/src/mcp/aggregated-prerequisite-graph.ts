@@ -19,7 +19,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { prerequisiteGraph } from '@oaknational/sdk-codegen/vocab-data';
 import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
@@ -75,9 +75,7 @@ Complements get-thread-progressions (learning paths) with prerequisite detail.`,
     title: 'Get Prerequisite Graph',
   },
 
-  _meta: {
-    ui: { resourceUri: WIDGET_URI },
-  },
+  _meta: undefined,
 } as const;
 
 /**

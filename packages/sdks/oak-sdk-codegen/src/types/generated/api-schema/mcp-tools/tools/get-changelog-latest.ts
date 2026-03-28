@@ -114,7 +114,6 @@ export const getChangelogLatest = {
     title: "Get Changelog Latest",
   },
   _meta: {
-    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'noauth' }],
   },
   validateOutput: (data: unknown) => {

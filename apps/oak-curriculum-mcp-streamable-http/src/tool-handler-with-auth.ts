@@ -39,10 +39,16 @@ export interface HandleToolOptions {
   readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
   /** Verified auth context from the ingress edge, or undefined if unauthenticated. */
   readonly authInfo?: AuthInfo;
+  /**
+   * Injected dependencies for checkMcpClientAuth.
+   * Defaults to real implementations (toolRequiresAuth, validateResourceParameter).
+   * Override in tests to inject fakes without vi.mock.
+   */
+  readonly checkAuthDeps?: CheckMcpClientAuthDeps;
 }
 
-/** Injected dependencies for checkMcpClientAuth — stable module-level wiring. */
-const checkAuthDeps: CheckMcpClientAuthDeps = {
+/** Default production wiring for checkMcpClientAuth dependencies. */
+const defaultCheckAuthDeps: CheckMcpClientAuthDeps = {
   toolRequiresAuth,
   validateResourceParameter,
 };
@@ -72,6 +78,7 @@ export async function handleToolWithAuthInterception(
     runtimeConfig,
     createAssetDownloadUrl,
     authInfo,
+    checkAuthDeps: injectedCheckAuthDeps,
   } = options;
 
   const authError = checkMcpClientAuth(
@@ -80,7 +87,7 @@ export async function handleToolWithAuthInterception(
     logger,
     runtimeConfig,
     authInfo,
-    checkAuthDeps,
+    injectedCheckAuthDeps ?? defaultCheckAuthDeps,
   );
   if (authError) {
     return authError;

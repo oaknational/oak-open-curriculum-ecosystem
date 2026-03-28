@@ -118,4 +118,29 @@ describe('Conditional Clerk keys (DANGEROUSLY_DISABLE_AUTH)', () => {
 
     expect(result.success).toBe(true);
   });
+
+  it('rejects DANGEROUSLY_DISABLE_AUTH=true in production', () => {
+    const result = HttpEnvSchema.safeParse({
+      ...withClerkKeys,
+      DANGEROUSLY_DISABLE_AUTH: 'true',
+      VERCEL_ENV: 'production',
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const paths = result.error.issues.map((i) => i.path.join('.'));
+      expect(paths).toContain('DANGEROUSLY_DISABLE_AUTH');
+    }
+  });
+
+  it('allows DANGEROUSLY_DISABLE_AUTH=true in preview and development', () => {
+    for (const env of ['preview', 'development'] as const) {
+      const result = HttpEnvSchema.safeParse({
+        ...baseEnv,
+        DANGEROUSLY_DISABLE_AUTH: 'true',
+        VERCEL_ENV: env,
+      });
+      expect(result.success).toBe(true);
+    }
+  });
 });

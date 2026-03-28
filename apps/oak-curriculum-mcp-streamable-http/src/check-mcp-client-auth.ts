@@ -35,7 +35,17 @@ export interface CheckMcpClientAuthDeps {
   ) => ResourceValidationResult;
 }
 
-/** Zod schema for safely accessing `AuthInfo.extra.userId`. */
+/**
+ * Zod schema for safely accessing `AuthInfo.extra.userId`.
+ *
+ * Uses `.loose()` to preserve unknown properties from `AuthInfo.extra`
+ * without rejecting them — the extra field is `Record<string, unknown>` by
+ * design, so unknown keys are expected but should not be stripped.
+ *
+ * Note: `.loose()` is the Zod v4 equivalent of `.passthrough()` in Zod v3.
+ *
+ * @see auth-info-schema.ts — shared schema for the full AuthInfo boundary
+ */
 const authInfoExtraSchema = z.object({ userId: z.string().optional() }).loose();
 
 /**

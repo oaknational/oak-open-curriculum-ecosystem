@@ -144,7 +144,6 @@ export const getKeyStagesSubjectQuestions = {
     title: "Get Key Stages Subject Questions",
   },
   _meta: {
-    ui: { resourceUri: "ui://widget/oak-json-viewer-local.html" },
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

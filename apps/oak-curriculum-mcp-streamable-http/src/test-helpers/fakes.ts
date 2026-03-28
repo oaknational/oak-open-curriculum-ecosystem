@@ -141,31 +141,17 @@ export function createFakeMachineAuthObject(
     userId: string | null;
     clientId: string | null;
     scopes: readonly string[] | null;
+    /** Override tokenType for conformance tests that need wrong values at runtime. */
+    tokenType: string;
   }> = {},
 ): MachineAuthObject<'oauth_token'> {
-  const isAuthenticated = overrides.isAuthenticated ?? true;
-  const userId = overrides.userId;
-  const clientId = overrides.clientId;
-  const scopes = overrides.scopes;
-  if (isAuthenticated) {
-    const resolvedUserId = userId !== undefined ? userId : 'user';
-    const resolvedClientId = clientId !== undefined ? clientId : 'client';
-    const resolvedScopes = scopes !== undefined ? scopes : [];
-    const out = {
-      tokenType: 'oauth_token' as const,
-      id: 'auth_123',
-      subject: resolvedUserId,
-      scopes: resolvedScopes === null ? null : Array.from(resolvedScopes),
-      userId: resolvedUserId,
-      clientId: resolvedClientId,
-      getToken: (): Promise<string> => Promise.resolve('token'),
-      has: () => true,
-      debug: () => ({ userId, clientId, scopes }),
-      isAuthenticated: true as const,
-    };
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Authenticated shape with nulls for "missing field" tests; Clerk type does not allow null
-    return out as MachineAuthObject<'oauth_token'>;
+  if (overrides.isAuthenticated === false) {
+    return createUnauthenticatedFakeMachineAuthObject();
   }
+  return createAuthenticatedFakeMachineAuthObject(overrides);
+}
+
+function createUnauthenticatedFakeMachineAuthObject(): MachineAuthObject<'oauth_token'> {
   return {
     tokenType: 'oauth_token',
     id: null,
@@ -178,6 +164,38 @@ export function createFakeMachineAuthObject(
     debug: () => ({}),
     isAuthenticated: false,
   };
+}
+
+function createAuthenticatedFakeMachineAuthObject(
+  overrides: Partial<{
+    userId: string | null;
+    clientId: string | null;
+    scopes: readonly string[] | null;
+    tokenType: string;
+  }>,
+): MachineAuthObject<'oauth_token'> {
+  const resolvedUserId = overrides.userId !== undefined ? overrides.userId : 'user';
+  const resolvedClientId = overrides.clientId !== undefined ? overrides.clientId : 'client';
+  const resolvedScopes = overrides.scopes !== undefined ? overrides.scopes : [];
+  const tokenType = overrides.tokenType ?? 'oauth_token';
+  const out = {
+    tokenType,
+    id: 'auth_123',
+    subject: resolvedUserId,
+    scopes: resolvedScopes === null ? null : Array.from(resolvedScopes),
+    userId: resolvedUserId,
+    clientId: resolvedClientId,
+    getToken: (): Promise<string> => Promise.resolve('token'),
+    has: () => true,
+    debug: () => ({
+      userId: overrides.userId,
+      clientId: overrides.clientId,
+      scopes: overrides.scopes,
+    }),
+    isAuthenticated: true as const,
+  };
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Authenticated shape with nulls for "missing field" tests; Clerk type does not allow null
+  return out as MachineAuthObject<'oauth_token'>;
 }
 
 /**
@@ -208,9 +226,7 @@ export function createFakeAuthInfo(overrides?: Partial<AuthInfo>): AuthInfo {
  * Express Request has many required members.
  */
 export function createFakeExpressRequest(
-  overrides: Partial<Pick<Request, 'headers' | 'method' | 'path' | 'body'>> & {
-    auth?: Request['auth'] | { readonly userId: string };
-  } = {},
+  overrides: Partial<Pick<Request, 'headers' | 'method' | 'path' | 'body'>> = {},
 ): Request {
   const req = {
     headers: overrides.headers ?? {},
@@ -218,7 +234,6 @@ export function createFakeExpressRequest(
     path: overrides.path ?? '/mcp',
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Express Request body is broadly typed; test fake accepts minimal shape
     body: overrides.body ?? {},
-    ...(overrides.auth === undefined ? {} : { auth: overrides.auth }),
   };
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Request has many required members; minimal fake for auth tests
   return req as unknown as Request;

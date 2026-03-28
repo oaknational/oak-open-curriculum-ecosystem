@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "MCP App Extension Migration — Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-03-27
+last_updated: 2026-03-28
 ---
 
 # MCP App Extension Migration — Session Continuation
@@ -53,16 +53,53 @@ rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|opena
 
 ## What To Do Next
 
-**The runtime boundary simplification plan is complete (all 6 phases).**
-**Auth boundary type safety is complete** (2026-03-27) — zero type assertions
-in `handlers.ts`, Zod validation at `res.locals.authInfo` boundary.
-The immediate next work is **WS3** (widget client migration to React + MCP
-Apps SDK). Resume the live spec research step above before starting WS3
-implementation.
+**Phase 8 (Eliminate `res.locals` auth bridge) is the immediate priority.**
 
-Read: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
+Phase 7 (items S, A-R) is complete (2026-03-28). During Phase 7, adversarial
+investigation of the `Object.assign(req, { auth })` bridge revealed that a
+false Express.Request global augmentation in `types.ts` was the root cause of
+the `res.locals` intermediary. The augmentation has been removed. Phase 8
+completes the simplification by moving auth storage from `res.locals` to
+`req.auth` — aligning with the MCP SDK's intended middleware pattern.
 
-**All simplification phases (0-6)** are **complete** (2026-03-27).
+Read the Phase 8 section:
+`.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
+
+### Phase 8 Summary
+
+**Design**: Change `mcpAuth` middleware to set `req.auth = authData` via
+`Object.assign` (matching both the MCP SDK's `requireBearerAuth` and Clerk's
+`clerkMiddleware` patterns). Delete the `res.locals` intermediary, the Zod
+validation bridge in the handler, and the `Object.assign` bridge. The handler
+reduces to pure MCP composition: create server, connect transport, handle
+request.
+
+**Status**: Design written, pending reviewer approval before implementation.
+
+### Phase 7 Completion Summary (2026-03-28)
+
+Items completed: S, A, B, C, D, E, F, G, H, I, J, L, M, N, O, P, Q, R (18).
+Deferred: K (E2E schemas not truly duplicated), T (design question for WS3/WS4).
+Dropped: U (user fixing upstream).
+
+Additionally during Phase 7:
+
+- Removed false Express.Request global augmentation (root cause of auth bridge)
+- Deleted dead `mock-clerk-middleware.ts` (never imported)
+- `WIDGET_TOOL_NAMES` now flows from canonical codegen source to all consumers
+
+### Post-Phase-7 Gate Baseline (2026-03-28)
+
+All 69 gates green. 669 tests, 165 E2E, 20 UI. 0 errors, 103 lint warnings
+(down from 105 baseline).
+
+### After Phase 8
+
+Phase 8 eliminates the `res.locals` auth bridge. Once complete, WS3 (widget
+client migration) is unblocked. Resume the live spec research step (top of
+this file) before starting WS3.
+
+**Simplification phases 0-7** are **complete** (2026-03-28). Phase 8 pending.
 
 - Phase 0: `verifyClerkToken` adopted from `@clerk/mcp-tools/server` (ADR-142).
   All five Express utilities SKIP'd.
@@ -139,8 +176,8 @@ propagated documentation. Key changes:
 
 - **WS1** (ADR + codegen contract): **complete** (2026-03-26)
 - **WS2** (app runtime migration): **complete** (2026-03-26). Child plan at `.agent/plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md` — reference only, not active work.
-- **Runtime boundary simplification**: **complete** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. All 6 phases done (2026-03-27).
-- **WS3** (widget client + branding): **next** — simplification plan complete, WS3 unblocked
+- **Runtime boundary simplification**: **Phase 8 pending** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-7 done (2026-03-28). Phase 8 (eliminate `res.locals` auth bridge) pending — design reviewed and approved.
+- **WS3** (widget client + branding): **next** — unblocked once Phase 8 lands
 - **WS4** (search UI for humans): **blocked by** WS3
 - **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` — Phases 0-2 can run independently, Phase 3 depends on simplification plan Phase 3
 
@@ -151,7 +188,7 @@ Child plans for WS3 and WS4 will be created when those streams become active.
 - **Hard cutover, no compatibility layers** — every change actively removes old coupling and replaces with MCP Apps standard. No dual-emit, no deprecated flat keys, no backward-compatible shims, no fallback wrappers. Principles: "NEVER create compatibility layers."
 - **No type aliases** — use SDK types directly, no local aliases. Principles: "Don't use type aliases, use good naming."
 - **React for all UI** — use `@modelcontextprotocol/ext-apps/react` hooks (`useApp`, `useHostStyles`, `useHostFonts`, `useDocumentTheme`). No plain HTML/JS/CSS. Keep it basic.
-- **ext-apps SDK v1.3.1** — `^1.3.1` in package.json. No breaking changes since 2026-01-26.
+- **ext-apps SDK v1.3.2** — `^1.3.2` in package.json. No breaking changes since 2026-01-26.
 - **WS1 complete** (2026-03-26) — zero `openai/` in `packages/sdks/`. ADR-141 governs.
 - **WS2 complete** (2026-03-26) — child plan at `.agent/plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md`. 10 specialist reviews completed across two rounds. All findings incorporated. Production code confirmed matching target state by 12-pass review (2026-03-26).
 

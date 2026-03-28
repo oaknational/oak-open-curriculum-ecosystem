@@ -7,7 +7,7 @@
 
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
-import { BASE_WIDGET_URI } from './cross-domain-constants.js';
+import { BASE_WIDGET_URI, WIDGET_TOOL_NAMES } from './cross-domain-constants.js';
 import type { Logger } from '@oaknational/logger';
 
 const OUTPUT_PATH = resolve(import.meta.dirname, '../../src/types/generated/widget-constants.ts');
@@ -37,6 +37,17 @@ function generateWidgetConstantsFile(): string {
  * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
 export const WIDGET_URI = ${JSON.stringify(BASE_WIDGET_URI)} as const;
+
+/**
+ * Tools that advertise a widget UI via \`_meta.ui.resourceUri\`.
+ *
+ * Only tools in this set have \`_meta.ui\` in their descriptors.
+ * All other tools have no widget UI — MCP clients will not render
+ * a widget for their results.
+ *
+ * @see code-generation/typegen/cross-domain-constants.ts - Source of truth
+ */
+export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set(${JSON.stringify([...WIDGET_TOOL_NAMES])});
 `;
 }
 

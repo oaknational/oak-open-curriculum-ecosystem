@@ -31,7 +31,7 @@ supported by ChatGPT, Claude, Claude Desktop, VS Code GitHub Copilot, Goose,
 Postman, and MCPJam. ChatGPT reads `_meta.ui.resourceUri` natively and
 maintains `openai/outputTemplate` only as a compatibility alias.
 
-The `@modelcontextprotocol/ext-apps` SDK (^1.3.1) is the migration target for
+The `@modelcontextprotocol/ext-apps` SDK (^1.3.2) is the migration target for
 Oak's MCP Apps rollout. Resource registration now imports
 `@modelcontextprotocol/ext-apps/server`; tool registration and the widget client
 bridge complete in later work streams.

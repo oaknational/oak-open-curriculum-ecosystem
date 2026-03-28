@@ -46,7 +46,7 @@ Grounded from the official API docs sitemap at `apps.extensions.modelcontextprot
   - `openai/widgetDomain` → `_meta.ui.domain`
   - `openai/widgetPrefersBorder` → `_meta.ui.prefersBorder`
   - `openai/widgetDescription` → **Not yet implemented in MCP** (drop entirely)
-- **No breaking changes** since v1.3.1. SDK installed matches spec.
+- **No breaking changes** since v1.3.2. SDK installed matches spec.
 
 ## Reviewer Findings Incorporated
 

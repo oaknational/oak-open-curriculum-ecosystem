@@ -28,3 +28,9 @@ When work in this repo produces an insight that:
 1. Would be valuable to engineers outside this project
 2. Challenges a common assumption or names a pattern that lacks a name
 3. Has been validated by real implementation, not just theory
+
+## Current Stubs
+
+- `check-driven-development.md` — TDD beyond test files using quality gates as RED signals
+- `the-practice-as-living-system.md` — Agentic engineering as a self-teaching system
+- `mcp-vs-cli--not-a-thing.md` — Why "MCP vs CLI" is a category error and what to compare instead

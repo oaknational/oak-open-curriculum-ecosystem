@@ -28,13 +28,19 @@ todos:
   - id: phase-6-refactor-gates-review
     content: "Phase 6 (REFACTOR): Delete superseded bridge code, propagate documentation, run the full quality gate chain, and complete the required reviewer passes."
     status: done
+  - id: phase-7-post-review-remediation
+    content: "Phase 7: Address all findings from the 9-reviewer comprehensive review (2026-03-28) — Tier 1-3 items A-R plus S."
+    status: done
+  - id: phase-8-eliminate-res-locals-bridge
+    content: "Phase 8: Eliminate the res.locals auth bridge — move auth storage from res.locals to req.auth, aligning with MCP SDK intended pattern."
+    status: pending
 isProject: false
 ---
 
 # MCP Runtime Boundary Simplification
 
-**Last Updated**: 2026-03-27
-**Status**: Complete — All 6 phases done
+**Last Updated**: 2026-03-28
+**Status**: Phases 0-7 complete — Phase 8 (eliminate `res.locals` bridge) pending
 **Scope**: Remove the two remaining app-owned MCP seams after WS2: the
 Express/Clerk ingress bridge and the hand-authored MCP tool exposure path.
 
@@ -713,6 +719,573 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 2. Docs record new ownership boundary ✓
 3. Full quality gate chain passes ✓
 4. Reviewer findings implemented or explicitly rejected ✓
+
+## Phase 7 — Post-Review Remediation (2026-03-28)
+
+**Status**: Complete (2026-03-28)
+**Source**: Comprehensive 9-reviewer pass (code, type, security, mcp, clerk,
+test, architecture-fred, architecture-wilma, architecture-barney). All findings
+are blocking per project rules.
+
+### Tier 0: Merge blocker (user-identified, 2026-03-28)
+
+#### S. Widget UI renders for every tool — should only render for specific tools
+
+**Flagged by**: User (manual testing in Claude client)
+
+**Problem**: The codegen emitter (`emit-index.ts:156-158`) unconditionally sets
+`_meta: { ui: { resourceUri: WIDGET_URI } }` on **every generated tool**.
+Aggregated tool definitions (`definitions.ts`) also set `_meta.ui` on all tools
+except `download-asset`. This means ~30+ tools all advertise a widget UI. The
+MCP client (Claude) sees `_meta.ui` on every tool result and renders the widget
+— producing a "flash of content that then collapses to an empty green bar" for
+every tool call.
+
+**The widget itself** (`aggregated-tool-widget.js`, `widget-file-generator.ts`)
+is a generic JSON viewer still using `window.openai` patterns — the WS3 React
+migration has not happened yet.
+
+**User-specified correct behaviour**:
+
+- `get-curriculum-model`: minimal branding only
+- `search`: minimal branding only
+- `user-search` (future WS4): full user-facing interface
+- **All other tools: NO widget UI** — no `_meta.ui` at all
+
+**Root cause**: The emitter unconditionally emits `_meta.ui` at
+`emit-index.ts:151-158` with the comment "All generated curriculum tools share
+the Oak JSON viewer widget". This was a WS2 decision that assumed every tool
+would eventually have a widget. The user has clarified this is wrong.
+
+**Fix** (spans SDK codegen + aggregated definitions + app resources):
+
+1. **Codegen**: Make `_meta.ui` emission conditional — only tools in an
+   explicit allowlist emit `_meta.ui.resourceUri`. The allowlist could be a
+   constant in `cross-domain-constants.ts` or passed as a generator parameter.
+2. **Aggregated definitions**: Remove `_meta.ui` from all aggregated tools
+   except those in the allowlist (currently: `search`,
+   `get-curriculum-model`).
+3. **Tests**: Update projection tests and E2E tests that assert widget
+   metadata on all tools.
+4. **Widget resource**: Keep `registerWidgetResource` — it still serves the
+   HTML for the tools that do have `_meta.ui`. But it should only be
+   referenced by the allowlisted tools.
+
+**Impact**: Without this fix, every tool call in any MCP client (Claude,
+Cursor, etc.) shows a broken/empty widget UI. This is a user-visible
+regression that blocks merge to `main`.
+
+**Files**: `emit-index.ts`, `definitions.ts`, `projections.unit.test.ts`,
+`handlers.integration.test.ts`, E2E test files
+
+**Sequencing**: Must be done BEFORE Tier 1 items — this is a merge blocker.
+
+---
+
+### Tier 1: High-confidence (flagged by 5+ reviewers)
+
+#### A. `req.auth` global augmentation + `Object.assign` mutation
+
+**Flagged by**: type-reviewer, security-reviewer, clerk-reviewer,
+architecture-wilma, code-reviewer
+
+**Problem**: `types.ts:47` declares `auth` as non-optional callable
+`(options?) => AuthObject`. `handlers.ts:195` overwrites with `AuthInfo` via
+`Object.assign`. TypeScript believes `req.auth` is always a callable Clerk
+accessor; at runtime it's `AuthInfo | undefined` after mutation. Any downstream
+`getAuth(req)` call after mutation would runtime-error with no compiler warning.
+
+**Fix**:
+
+1. Make `auth` optional in the global Express.Request augmentation
+2. Add explicit type annotation to `Object.assign` result:
+   `const mcpRequest: IncomingMessage & { auth?: AuthInfo } = Object.assign(baseReq, { auth: authInfo })`
+3. Consider `Object.create(req)` to avoid mutating the original request
+
+**Files**: `auth/mcp-auth/types.ts`, `handlers.ts`
+
+#### B. `.loose()` on `authInfoSchema`
+
+**Flagged by**: type-reviewer, security-reviewer, mcp-reviewer,
+architecture-wilma, architecture-barney
+
+**Problem**: `authInfoSchema` in `handlers.ts:70-79` uses `.loose()` which
+allows unknown properties through at the boundary. Violates
+strict-validation-at-boundary principle. Future SDK version drift would be
+silently accepted.
+
+**Fix**: Replace `.loose()` with `.strict()` (fail on unknown fields). If a
+future SDK version adds fields, the Zod parse fails fast — prompting an
+intentional schema update. Also replace `.loose()` with `.passthrough()` on
+`authInfoExtraSchema` in `check-mcp-client-auth.ts:39` for clarity.
+
+**Files**: `handlers.ts`, `check-mcp-client-auth.ts`
+
+#### C. `DANGEROUSLY_DISABLE_AUTH` production guard
+
+**Flagged by**: security-reviewer, architecture-wilma
+
+**Problem**: No enforcement that the flag cannot be set in production. If
+accidentally deployed with `DANGEROUSLY_DISABLE_AUTH=true` and
+`VERCEL_ENV=production`, all auth is silently bypassed.
+
+**Fix**: Add `superRefine` guard in `HttpEnvSchema` (in `env.ts`) that rejects
+`DANGEROUSLY_DISABLE_AUTH=true` when `VERCEL_ENV === 'production'`. This makes
+misconfiguration a hard startup failure.
+
+**Files**: `env.ts`
+
+### Tier 2: Solid (flagged by 2-3 reviewers)
+
+#### D. `authInfoSchema.parse()` throws unhandled ZodError
+
+**Flagged by**: security-reviewer, architecture-wilma, code-reviewer
+
+**Problem**: Malformed `res.locals.authInfo` throws `ZodError` — propagates as
+unstructured 500, potentially leaking internal validation details.
+
+**Fix**: Use `safeParse` with explicit error response. On failure, log at
+`error` level and return HTTP 500 with structured body. No stack traces to
+client.
+
+**Files**: `handlers.ts`
+
+#### E. `authInfoSchema` split across two files
+
+**Flagged by**: architecture-barney, type-reviewer
+
+**Problem**: `authInfoSchema` in `handlers.ts` and `authInfoExtraSchema` in
+`check-mcp-client-auth.ts` validate the same `AuthInfo` contract independently.
+If the shape changes, two files must be updated.
+
+**Fix**: Extract shared `authInfoSchema` into `auth-info-schema.ts`. Both
+`handlers.ts` and `check-mcp-client-auth.ts` import from there.
+
+**Files**: New `auth-info-schema.ts`, `handlers.ts`, `check-mcp-client-auth.ts`
+
+#### F. `checkAuthDeps` sealed at module level
+
+**Flagged by**: architecture-barney, code-reviewer
+
+**Problem**: `tool-handler-with-auth.ts` wires `CheckMcpClientAuthDeps` at
+module scope — DI benefit of `checkMcpClientAuth` doesn't propagate.
+`handleToolWithAuthInterception` can't be tested with fake auth deps without
+`vi.mock`.
+
+**Fix**: Surface `CheckMcpClientAuthDeps` as optional field on
+`HandleToolOptions`. Default to real implementations at the call site in
+`handlers.ts`.
+
+**Files**: `tool-handler-with-auth.ts`, `handlers.ts`
+
+#### G. Transport cleanup chain
+
+**Flagged by**: architecture-wilma
+
+**Problem**: If `transport.close()` rejects, `server.close()` never runs.
+Logger is optional — errors silently swallowed if logger undefined.
+
+**Fix**: Use `Promise.allSettled([transport.close(), server.close()])` or
+sequential with independent error handling. Always log errors unconditionally.
+
+**Files**: `handlers.ts`
+
+### Tier 3: Single-reviewer findings (valid, lower priority)
+
+#### H. `zod/v4` import in E2E test
+
+**Flagged by**: architecture-fred
+
+**Problem**: `widget-metadata.e2e.test.ts:15` imports `zod/v4`; all other
+files import `zod`. Risk of `instanceof` mismatch.
+
+**Fix**: Change to `import { z } from 'zod'` for consistency.
+
+**Files**: `e2e-tests/widget-metadata.e2e.test.ts`
+
+#### I. `vi.spyOn(console, 'error').mockImplementation()` in conformance test
+
+**Flagged by**: architecture-fred, test-reviewer
+
+**Problem**: Mutates global `console` object (ADR-078). The spy observation
+works without `mockImplementation`.
+
+**Fix**: Remove `mockImplementation()` — keep `vi.spyOn(console, 'error')`
+alone.
+
+**Files**: `auth/mcp-auth/verify-clerk-token.unit.test.ts`
+
+#### J. Type assertion in conformance test
+
+**Flagged by**: architecture-fred
+
+**Problem**: `as unknown as MachineAuthObject<'oauth_token'>` at line 70-71.
+Type assertions are forbidden.
+
+**Fix**: Extend `createFakeMachineAuthObject` to accept a `tokenType` override
+parameter, or use a loosened Zod schema to construct the invalid shape.
+
+**Files**: `auth/mcp-auth/verify-clerk-token.unit.test.ts`,
+`test-helpers/fakes.ts`
+
+#### K. Duplicated E2E Zod schemas for widget CSP metadata
+
+**Flagged by**: architecture-fred
+
+**Problem**: `widget-metadata.e2e.test.ts` and `widget-resource.e2e.test.ts`
+both define Zod schemas for the same MCP Apps UI metadata structure.
+
+**Fix**: Extract shared schemas into `e2e-tests/helpers/mcp-apps-schemas.ts`.
+
+**Files**: `e2e-tests/widget-metadata.e2e.test.ts`,
+`e2e-tests/widget-resource.e2e.test.ts`, new
+`e2e-tests/helpers/mcp-apps-schemas.ts`
+
+#### L. `ResourceRegistrar` inline Pick repeated 6x
+
+**Flagged by**: architecture-barney
+
+**Problem**: `Pick<McpServer, 'registerResource'>` repeated 6 times in
+`register-resources.ts` after deleting the type alias. DRY violation.
+
+**Fix**: Reintroduce as `interface ResourceRegistrar extends Pick<McpServer, 'registerResource'> {}`
+(an interface, not a type alias — compliant with the no-alias rule).
+
+**Files**: `register-resources.ts`
+
+#### M. `toProtocolEntry` missing `type: "object"` enforcement
+
+**Flagged by**: mcp-reviewer
+
+**Problem**: Bypasses the SDK's internal `type: "object"` enforcement on
+`ToolSchema.inputSchema`. If any tool descriptor has a non-object root schema,
+the `tools/list` response would be protocol-invalid.
+
+**Fix**: Add compile-time or runtime check that `tool.inputSchema.type ===
+'object'` in `toProtocolEntry`.
+
+**Files**: `projections.ts`
+
+#### N. Phase label in test describe block
+
+**Flagged by**: test-reviewer
+
+**Problem**: `handlers.integration.test.ts:159` — `'(Phase 2 RED)'` in
+describe block. Plan-phase markers should not be in committed test names.
+
+**Fix**: Rename to describe stable behaviour, e.g. `'tool registration uses
+SDK canonical projection'`.
+
+**Files**: `handlers.integration.test.ts`
+
+#### O. Misplaced test in `handlers.integration.test.ts`
+
+**Flagged by**: test-reviewer, code-reviewer
+
+**Problem**: `'explicit auth context propagation'` describe block (lines
+230-253) tests `handleToolWithAuthInterception`, not `handlers.ts`.
+
+**Fix**: Move to `tool-handler-with-auth.integration.test.ts`. Focus assertion
+on observable auth-error response content, not just `isError: true`.
+
+**Files**: `handlers.integration.test.ts`, new or existing
+`tool-handler-with-auth.integration.test.ts`
+
+#### P. Token prefix leaked to logs (10 chars)
+
+**Flagged by**: security-reviewer
+
+**Problem**: `resource-parameter-validator.ts:146-153` logs first 10 characters
+of token. Pre-existing but in scope.
+
+**Fix**: Reduce to 4-6 characters, or log only token format (e.g. `"jwt"` vs
+`"opaque"`).
+
+**Files**: `resource-parameter-validator.ts`
+
+#### Q. Opaque tokens pass RFC 8707 without resource binding
+
+**Flagged by**: security-reviewer
+
+**Problem**: Pre-existing. Opaque tokens unconditionally pass RFC 8707
+validation. Security assumption undocumented.
+
+**Fix**: Document the assumption that Clerk's `verifyClerkToken` performs
+resource binding for opaque tokens, or implement server-side resource binding
+verification.
+
+**Files**: `resource-parameter-validator.ts` (documentation)
+
+#### R. `getAuth` precondition undocumented
+
+**Flagged by**: clerk-reviewer
+
+**Problem**: `mcp-auth-clerk.ts:43` calls `getAuth(req)` which requires
+`clerkMiddleware()` upstream. Precondition undocumented.
+
+**Fix**: Add TSDoc `@requires` or `@precondition` note.
+
+**Files**: `auth/mcp-auth/mcp-auth-clerk.ts`
+
+#### T. `get-curriculum-model` conflates tool and prompt roles
+
+**Flagged by**: User evaluation (2026-03-28), verified against MCP spec
+
+**Problem**: `get-curriculum-model` does double-duty as both a data retrieval
+tool (domain model JSON) and a workflow prompt ("call this ONCE at conversation
+start", "tool guidance, categories, workflows, tips"). The MCP spec separates
+these: tools for data operations, prompts for workflow guidance. The server
+already registers 4 prompts (`find-lessons`, `lesson-planning`,
+`explore-curriculum`, `learning-progression`) but the primary onboarding
+workflow is embedded in a tool, not a prompt.
+
+**Impact**: Current MCP clients mostly only support tools well, so this works
+today. But as clients improve prompt support, the workflow guidance should
+live in a prompt. Also creates confusion about primitive boundaries.
+
+**Fix**: Design question for WS3/WS4 — consider extracting the workflow
+guidance portion of `get-curriculum-model` into an `onboard` or
+`get-started` prompt, keeping the tool focused on returning the domain model
+data.
+
+**Files**: Design-level — affects SDK aggregated tool + prompts
+
+#### U. `get-keywords` description claims frequency order but API returns alphabetical
+
+**Flagged by**: User evaluation (2026-03-28), verified against upstream API
+
+**Problem**: Tool description says "keywords are returned in order of
+frequency, with the most common keywords appearing first". Upstream API at
+`/api/v0/keywords?keyStage=ks3&subject=science` actually returns
+alphabetical order. Our code passes through the response faithfully — the
+mismatch is in the upstream OpenAPI spec documentation.
+
+**Verified**: Direct `curl` to upstream API confirms alphabetical. No sorting
+in our codegen or SDK code.
+
+**Fix**:
+
+1. Override the description at codegen time for `get-keywords` to say
+   "alphabetical order" (accurate to observed behaviour)
+2. Upstream issue already documented at
+   `.agent/plans/external/ooc-issues/keywords-ordering-mismatch.md`
+
+**Files**: `emit-index.ts` (description override mechanism) or upstream
+OpenAPI spec
+
+**Flagged by**: clerk-reviewer
+
+**Problem**: `mcp-auth-clerk.ts:43` calls `getAuth(req)` which requires
+`clerkMiddleware()` upstream. Precondition undocumented.
+
+**Fix**: Add TSDoc `@requires` or `@precondition` note.
+
+**Files**: `auth/mcp-auth/mcp-auth-clerk.ts`
+
+### Pre-Phase-7 Quality Gate Baseline (2026-03-28)
+
+Full sequential gate run — all 15 gates green:
+
+| Gate | Status | Notes |
+| ---- | ------ | ----- |
+| `sdk-codegen` | GREEN | 12/12 cached |
+| `build` | GREEN | 16/16 |
+| `type-check` | GREEN | 27/27 |
+| `doc-gen` | GREEN | 13/13 (3 warnings: stale glob in search-cli) |
+| `lint:fix` | GREEN | 0 errors, 105 warnings (`consistent-type-assertions` in test files) |
+| `format:root` | GREEN | |
+| `markdownlint:root` | GREEN | |
+| `subagents:check` | GREEN | 17 wrappers, 14 templates |
+| `portability:check` | GREEN | 26 rules, 40 adapters |
+| `test:root-scripts` | GREEN | 23 tests |
+| `test` | GREEN | 27/27 workspaces |
+| `test:e2e` | GREEN | 22/22 workspaces |
+| `test:ui` | GREEN | 20 Playwright tests |
+| `smoke:dev:stub` | GREEN | Smoke suite passed |
+| `practice:fitness` | PASS | All docs within soft ceilings |
+
+The 105 lint warnings are all `consistent-type-assertions` in test/spec files.
+Phase 7 items I, J, and the test helper consolidation should reduce this count.
+
+### Acceptance Criteria
+
+1. All Tier 1-3 items addressed (fixed or explicitly rejected with rationale)
+2. Zero new `eslint-disable` comments in production code
+3. Zero type assertions in production code
+4. Full quality gate chain passes (target: reduce 105 lint warnings)
+5. 9-reviewer re-review confirms no regressions
+
+### Recommended Sequencing
+
+0. **S** (Tier 0) — MERGE BLOCKER. Fix widget `_meta.ui` emission first.
+   Spans codegen + aggregated definitions + tests.
+1. **A + B + C** (Tier 1) — address next, highest reviewer confidence
+2. **D + E** — `safeParse` and schema extraction (related to A+B)
+3. **F + G** — DI propagation and cleanup chain
+4. **H + I + J + K** — quick test/E2E fixes
+5. **L + M + N + O** — structural cleanup
+6. **P + Q + R** — documentation and hardening
+
+### Implementation Notes
+
+- Items A, B, D, E all touch `handlers.ts` — sequence A before B before D+E
+  to avoid merge conflicts within a session.
+- Item F touches `tool-handler-with-auth.ts` and `handlers.ts` — sequence
+  after A+B+D+E.
+- Items H, I, J, K are independent test/E2E fixes — can be parallelised via
+  subagents.
+- Items L, M are SDK-layer changes — independent of app-layer items.
+- Items P, Q, R are documentation-only — can be done last.
+
+---
+
+## Phase 8 — Eliminate the `res.locals` auth bridge (2026-03-28)
+
+**Status**: Design reviewed — approved by code-reviewer and architecture-barney
+**Source**: Adversarial investigation of the `Object.assign(req, { auth })` bridge
+in `createMcpHandler` (2026-03-28). Triggered by user instinct that the
+manipulation felt wrong. Investigation revealed the root cause: a false
+Express.Request global augmentation in `types.ts` that declared `req.auth` as
+Clerk's callable type. Clerk does not actually declare a global augmentation —
+it uses `ExpressRequestWithAuth` as a standalone intersection type. Removing
+the false augmentation eliminated the type conflict. This phase completes the
+simplification by removing the `res.locals` intermediary entirely.
+
+### Problem
+
+The auth data flow has an unnecessary hop:
+
+```text
+mcpAuth middleware → res.locals.authInfo = AuthInfo
+handler → reads res.locals.authInfo → Zod validates → Object.assign(req, { auth }) → transport reads req.auth
+```
+
+The MCP SDK's intended pattern is simpler:
+
+```text
+auth middleware → req.auth = AuthInfo → transport reads req.auth
+```
+
+The `res.locals` intermediary existed because our (now-deleted) global
+augmentation declared `req.auth` as Clerk's callable, creating a type conflict
+with the SDK's `AuthInfo` data. With the augmentation removed, the conflict is
+gone.
+
+### Design: Move auth storage from `res.locals` to `req.auth`
+
+**Change `mcpAuth` middleware** (`mcp-auth.ts:205`):
+
+```typescript
+// BEFORE:
+res.locals.authInfo = authData;
+
+// AFTER:
+Object.assign(req, { auth: authData });
+```
+
+This aligns with both:
+
+- The MCP SDK's `requireBearerAuth` pattern (`bearerAuth.js:36`)
+- Clerk's own `clerkMiddleware` pattern (`index.mjs:191`)
+
+Both frameworks use `Object.assign(request, { auth: ... })` at runtime.
+
+**Simplify `createMcpHandler`** (`handlers.ts`):
+
+Remove the auth bridge. The handler retains `IncomingMessage` narrowing for
+type compatibility with `transport.handleRequest(req: IncomingMessage & { auth?: AuthInfo })`:
+
+```typescript
+const { server, transport } = mcpFactory();
+await server.connect(transport);
+const baseReq: IncomingMessage = req;
+await transport.handleRequest(baseReq, res, req.body);
+```
+
+The `const baseReq: IncomingMessage = req` narrowing is necessary because
+`transport.handleRequest` expects `IncomingMessage & { auth?: AuthInfo }`.
+Express `Request` extends `IncomingMessage`, so the assignment is safe. The
+middleware has already set `req.auth` via `Object.assign`, so the transport
+reads it natively.
+
+**Zod validation in `createMcpAuthClerk`** (resolved design decision):
+
+Zod validation of `authData` moves into `createMcpAuthClerk` (the
+Clerk-specific wrapper in `mcp-auth-clerk.ts`), NOT into generic `mcpAuth`.
+This preserves `mcpAuth`'s provider-agnosticism — it takes a generic
+`TokenVerifier` and has no knowledge of the `AuthInfo` schema shape. The
+Clerk-specific wrapper already knows it produces `AuthInfo` via
+`verifyClerkToken`, so co-locating the `.strict()` validation there is
+architecturally correct.
+
+**Relocate `auth-info-schema.ts`** to `src/auth/mcp-auth/auth-info-schema.ts`
+(co-located with `mcp-auth-clerk.ts`). Confirmed: `authInfoSchema` has exactly
+one runtime consumer (`handlers.ts`) which will no longer need it. The
+`check-mcp-client-auth.ts` file defines its own `authInfoExtraSchema`
+independently and is unaffected.
+
+**Update tests** — handler tests that set `res.locals.authInfo` change to use
+`Object.assign(req, { auth })` to match the middleware pattern. The concurrent
+isolation test adapts accordingly.
+
+### What this eliminates
+
+1. `res.locals.authInfo` as a transport mechanism (replaced by `req.auth`)
+2. `Object.assign` in `createMcpHandler` (middleware already set `req.auth`)
+3. Zod validation in the handler (moved to `createMcpAuthClerk`)
+4. The handler's knowledge of auth entirely — it becomes pure MCP composition
+5. The comment explaining why `Object.assign` exists
+6. `auth-info-schema.ts` import in `handlers.ts`
+
+### What this preserves
+
+1. `mcpAuth` still runs before the handler — 401 responses still work
+2. Zod validation still happens — in `createMcpAuthClerk`, at the point of
+   production, before setting `req.auth`
+3. The SDK transport still reads `req.auth` — the mechanism is unchanged
+4. The `DANGEROUSLY_DISABLE_AUTH` path still works — when auth is disabled,
+   the entire `mcpRouter` middleware chain (including `mcpAuth`) is replaced
+   by a no-auth route in `auth-routes.ts`. `req.auth` is never set, and the
+   transport receives `undefined`, which tools check via `checkMcpClientAuth`.
+   Confirmed: `auth-routes.ts` wires `mcpRouter` conditionally — when auth is
+   disabled, a separate route without `mcpAuth` is used.
+5. `mcpAuth`'s provider-agnosticism — generic `TokenVerifier`, no Zod dependency
+
+### Risk
+
+- Tests that mock `res.locals.authInfo` must change to test the `req.auth`
+  path instead. This is a test-only change.
+- The `IncomingMessage` narrowing in the handler (`const baseReq: IncomingMessage = req`)
+  is a type-level step that drops Express augmentations. This is intentional
+  and necessary — `transport.handleRequest` expects `IncomingMessage`, not
+  `Request`. Invoke `type-reviewer` during implementation to confirm.
+
+### Files affected
+
+- `src/auth/mcp-auth/mcp-auth.ts` — change line 205 (`res.locals` → `Object.assign`),
+  update TSDoc item 7 ("stores on `res.locals`" → "sets `req.auth`")
+- `src/auth/mcp-auth/mcp-auth-clerk.ts` — add Zod validation of `authData`
+  before returning from `verifyToken` callback, update TSDoc
+- `src/handlers.ts` — delete auth bridge code (lines 156-182), retain
+  `IncomingMessage` narrowing, remove `authInfoSchema` import
+- `src/auth-info-schema.ts` → relocate to `src/auth/mcp-auth/auth-info-schema.ts`
+- `src/auth-info-schema.unit.test.ts` → relocate alongside schema
+- `src/handlers.integration.test.ts` — update tests (`res.locals` → `req.auth`)
+- `src/handlers-auth-errors.integration.test.ts` — verify unaffected (uses
+  `registerHandlers` which is unchanged)
+
+### TDD approach
+
+1. RED: Write test asserting `createMcpAuthClerk` validates `authData` with
+   `.strict()` schema (rejects unknown fields)
+2. RED: Write test asserting `mcpAuth` sets `req.auth` (not `res.locals`)
+3. RED: Write handler test asserting transport receives `req.auth` without
+   the handler setting it (middleware already did)
+4. GREEN: Add Zod validation to `createMcpAuthClerk`, change `mcpAuth` line
+   205, simplify handler
+5. REFACTOR: Relocate schema, delete bridge code, update TSDoc
+
+---
 
 ## Success Criteria
 

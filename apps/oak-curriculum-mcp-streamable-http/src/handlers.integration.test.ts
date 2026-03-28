@@ -18,7 +18,6 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import type { Request } from 'express';
-import { ZodError } from 'zod';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import {
   listUniversalTools,
@@ -35,7 +34,6 @@ import {
   createFakeAuthInfo,
 } from './test-helpers/fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
-import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 
 /**
  * Create a minimal mock Express request for testing.
@@ -113,7 +111,34 @@ describe('createMcpHandler (Integration)', () => {
       expect(receivedRequest).toHaveProperty('auth', fakeAuthInfo);
     });
 
-    it('rejects malformed res.locals.authInfo with a Zod validation error', async () => {
+    it('does not leak auth between concurrent requests', async () => {
+      const receivedAuthInfos: unknown[] = [];
+
+      const { factory } = createFakeMcpServerFactory(
+        vi.fn(async (req: unknown) => {
+          const r = req as { auth?: unknown };
+          receivedAuthInfos.push(r.auth);
+        }),
+      );
+
+      const handler = createMcpHandler(factory);
+
+      const authInfo1 = createFakeAuthInfo({ token: 'token-1', clientId: 'client-1' });
+      const authInfo2 = createFakeAuthInfo({ token: 'token-2', clientId: 'client-2' });
+
+      const req1 = createFakeExpressRequest({ body: { method: 'tools/list' } });
+      const req2 = createFakeExpressRequest({ body: { method: 'tools/list' } });
+      const res1 = createFakeResponse({ locals: { authInfo: authInfo1 } });
+      const res2 = createFakeResponse({ locals: { authInfo: authInfo2 } });
+
+      await Promise.all([handler(req1, res1), handler(req2, res2)]);
+
+      expect(receivedAuthInfos).toHaveLength(2);
+      expect(receivedAuthInfos).toContainEqual(authInfo1);
+      expect(receivedAuthInfos).toContainEqual(authInfo2);
+    });
+
+    it('returns HTTP 500 for malformed res.locals.authInfo', async () => {
       const { factory } = createFakeMcpServerFactory(vi.fn(async () => undefined));
 
       const handler = createMcpHandler(factory);
@@ -126,7 +151,11 @@ describe('createMcpHandler (Integration)', () => {
         locals: { authInfo: { token: 123, clientId: 'c', scopes: 'not-array' } },
       });
 
-      await expect(handler(mockReq, mockRes)).rejects.toThrow(ZodError);
+      await handler(mockReq, mockRes);
+
+      // safeParse catches malformed data and returns structured error
+      expect(mockRes.status).toHaveBeenCalledWith(500);
+      expect(mockRes.json).toHaveBeenCalledWith({ error: 'Internal auth validation error' });
     });
   });
 
@@ -156,7 +185,7 @@ describe('createMcpHandler (Integration)', () => {
  *
  * @see .agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md — Phase 2
  */
-describe('tool registration via SDK projection (Phase 2 RED)', () => {
+describe('tool registration uses SDK canonical projection', () => {
   /**
    * Find the config (second argument) passed to registerTool for a given tool name.
    *
@@ -218,36 +247,5 @@ describe('tool registration via SDK projection (Phase 2 RED)', () => {
       const expectedConfig = toRegistrationConfig(tool);
       expect(actualConfig).toEqual(expectedConfig);
     }
-  });
-});
-
-/**
- * Tests for explicit auth context propagation.
- *
- * HandleToolOptions accepts an `authInfo` parameter so auth context flows
- * from the ingress edge through to checkMcpClientAuth without ambient state.
- */
-describe('explicit auth context propagation', () => {
-  it('HandleToolOptions accepts authInfo parameter', async () => {
-    const runtimeConfig = createMockRuntimeConfig();
-
-    const result = await handleToolWithAuthInterception({
-      tool: { name: 'get-key-stages' },
-      params: {},
-      deps: {
-        createClient: vi.fn(),
-        executeMcpTool: vi.fn(),
-        createExecutor: vi.fn(() => vi.fn()),
-        getResourceUrl: () => 'https://test.example.com/mcp',
-        searchRetrieval: createFakeSearchRetrieval(),
-      },
-      logger: createFakeLogger(),
-      apiKey: 'test-key',
-      runtimeConfig,
-      authInfo: undefined,
-    });
-
-    // When authInfo is undefined for a protected tool, expect an auth error
-    expect(result.isError).toBe(true);
   });
 });

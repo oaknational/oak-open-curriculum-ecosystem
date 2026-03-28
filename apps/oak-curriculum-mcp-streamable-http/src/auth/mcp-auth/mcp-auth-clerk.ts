@@ -24,6 +24,10 @@ import { verifyClerkToken } from '@clerk/mcp-tools/server';
  * **Key Behavior**: Runs BEFORE the MCP SDK, enabling HTTP 401 responses
  * per MCP spec. The SDK always returns HTTP 200, so auth must be checked first.
  *
+ * @requires `clerkMiddleware()` must be registered upstream in the Express
+ * middleware chain. `getAuth(req)` reads auth state set by Clerk's middleware —
+ * calling it without `clerkMiddleware()` upstream will throw.
+ *
  * @param logger - Logger for authentication events
  * @returns Express middleware that enforces Clerk OAuth authentication
  *
