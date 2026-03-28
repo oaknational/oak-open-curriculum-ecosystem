@@ -27,9 +27,5 @@ export function toNativeError(error: NormalizedError): Error {
     native.stack = error.stack;
   }
 
-  if (error.metadata) {
-    Object.assign(native, error.metadata);
-  }
-
   return native;
 }

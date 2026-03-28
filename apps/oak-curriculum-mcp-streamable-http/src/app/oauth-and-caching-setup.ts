@@ -37,12 +37,6 @@ function createNoCacheErrorMiddleware(): RequestHandler {
   };
 }
 
-type ProxyLogger = Pick<Logger, 'debug' | 'error' | 'info' | 'warn'>;
-
-function toProxyLogger(logger: Logger): ProxyLogger {
-  return logger;
-}
-
 /** Resolves upstream metadata, either from injection or a live Clerk fetch. */
 async function resolveUpstreamMetadata(
   runtimeConfig: RuntimeConfig,
@@ -112,9 +106,7 @@ function registerOAuthRoutes(
     appCounter,
     () => {
       log.info('OAuth proxy enabled', { upstreamBaseUrl });
-      app.use(
-        createOAuthProxyRoutes({ upstreamBaseUrl, logger: toProxyLogger(log), observability }),
-      );
+      app.use(createOAuthProxyRoutes({ upstreamBaseUrl, logger: log, observability }));
     },
     observability,
   );

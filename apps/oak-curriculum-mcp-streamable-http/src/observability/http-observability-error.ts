@@ -11,7 +11,7 @@ function describeConfigError(error: ObservabilityConfigError): string {
     case 'missing_sentry_dsn':
       return 'SENTRY_DSN is required when SENTRY_MODE=sentry';
     case 'invalid_sentry_dsn':
-      return `Invalid SENTRY_DSN value: ${error.value}`;
+      return 'Invalid SENTRY_DSN value';
     case 'invalid_traces_sample_rate':
       return `Invalid SENTRY_TRACES_SAMPLE_RATE value: ${error.value}`;
     case 'send_default_pii_forbidden':
