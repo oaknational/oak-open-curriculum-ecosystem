@@ -14,6 +14,7 @@ import { createSecurityHeadersMiddleware } from '../security-headers.js';
 import { createSecurityConfig } from '../security-config.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 import { runBootstrapPhase } from './bootstrap-helpers.js';
+import type { HttpObservability } from '../observability/http-observability.js';
 
 /**
  * Sets up security middleware for the Express application.
@@ -35,11 +36,17 @@ export function setupSecurityMiddleware(
   log: Logger,
   timer: PhasedTimer,
   appId: number,
+  observability?: Pick<HttpObservability, 'withSpan' | 'withSpanSync'>,
 ): { dnsRebindingMiddleware: RequestHandler; allowedHosts: readonly string[] } {
   const securityConfig = createSecurityConfig(runtimeConfig);
 
-  const corsMiddleware = runBootstrapPhase(log, timer, 'createCorsMiddleware', appId, () =>
-    createCorsMiddleware(securityConfig.mode),
+  const corsMiddleware = runBootstrapPhase(
+    log,
+    timer,
+    'createCorsMiddleware',
+    appId,
+    () => createCorsMiddleware(securityConfig.mode),
+    observability,
   );
 
   const dnsRebindingMiddleware = runBootstrapPhase(
@@ -48,15 +55,23 @@ export function setupSecurityMiddleware(
     'createDnsRebindingMiddleware',
     appId,
     () => dnsRebindingProtection(log, securityConfig.allowedHosts),
+    observability,
   );
 
   // Apply CORS globally to ALL routes
   app.use(corsMiddleware);
 
   // Security headers (CSP, X-Content-Type-Options, etc.) — safe for JSON, required for HTML
-  runBootstrapPhase(log, timer, 'createSecurityHeaders', appId, () => {
-    app.use(createSecurityHeadersMiddleware());
-  });
+  runBootstrapPhase(
+    log,
+    timer,
+    'createSecurityHeaders',
+    appId,
+    () => {
+      app.use(createSecurityHeadersMiddleware());
+    },
+    observability,
+  );
 
   return { dnsRebindingMiddleware, allowedHosts: securityConfig.allowedHosts };
 }

@@ -3,10 +3,14 @@
 This guide helps AI agents working on this codebase understand when and how to add, modify, and test logging functionality.
 
 **Last Updated**: 2026-03-28
-**Phase**: Phase 1 foundation complete locally; runtime adoption and evidence still in progress
-**Status Note**: This reflects the current local worktree on `feat/full-sentry-otel-support` above pushed checkpoint `ffff1867`; treat it as local session state until it is committed or otherwise checkpointed.
+**Phase**: Phase 1 foundation is complete; HTTP Phase 3 wiring is in the local stabilisation pass (test-strategy cleanup, lint-driven refactors, reviewer sweep, and repo-root gates) before Search CLI adoption resumes
+**Status Note**: The restart-cleared pushed baseline is `44d8d74d` on `feat/full-sentry-otel-support`; `ffff1867` remains the earlier Search CLI branch-hygiene checkpoint and does not count as observability adoption evidence.
 
 ## Overview
+
+The purpose of this logging guidance is operational clarity: Oak needs
+structured, redacted logs that help diagnose HTTP MCP server and Search CLI
+failures quickly without leaking secrets, payloads, or user-sensitive context.
 
 The Oak Open Curriculum Ecosystem uses `@oaknational/logger` for structured logging with the shared observability foundation:
 
@@ -14,7 +18,47 @@ The Oak Open Curriculum Ecosystem uses `@oaknational/logger` for structured logg
 - **Timing instrumentation**: Sub-millisecond precision with slow request warnings
 - **Error context enrichment**: Full debugging context in error scenarios
 
-All logging must follow these patterns and maintain the architectural constraints established in Phase 1 and Phase 2.
+All logging must follow these patterns and maintain the architectural
+constraints established in Phase 1 and Phase 2.
+
+## Current Observability Contract
+
+For the HTTP MCP server, `SENTRY_MODE` now defines three supported runtime
+contracts:
+
+- `off`: true kill switch. Keep stdout JSON only. Do not initialise Sentry, do
+  not add a Sentry sink, and do not emit outbound Sentry traffic.
+- `fixture`: keep stdout JSON and exercise the observability adapters locally
+  with no network. MCP observations and handled-error captures stay in local
+  fixture stores only.
+- `sentry`: keep stdout JSON and add live Sentry init, sink fan-out, handled
+  exceptions, and tracing.
+
+The HTTP capture boundary remains metadata-only:
+
+- `/mcp` request capture is sanitised down to route and method metadata only
+- request bodies, JSON-RPC envelopes, raw headers, cookies, tokens, auth codes,
+  and query strings must not be retained in Sentry events or breadcrumbs
+- MCP tool, resource, and prompt observations keep only safe metadata
+  (`kind`, `name`, `status`, `durationMs`, `traceId`, `spanId`, release, and
+  environment)
+
+Current HTTP manual spans should stay focused on operational checkpoints with
+safe attributes only:
+
+- bootstrap phases, including upstream metadata fetch
+- OAuth proxy upstream `register` and `token` calls
+- asset-download upstream fetch and stream lifecycle
+
+Handled-error capture is reserved for unexpected terminal boundaries such as
+bootstrap failure, listen failure, Express error middleware, MCP cleanup
+failure, OAuth timeout/network failure, and asset-download proxy failure.
+Expected validation, auth, and upstream-status branches should remain logs plus
+span status only.
+
+Flushes belong to process boundaries, not per-request teardown. The HTTP app
+flushes Sentry on bootstrap failure, server listen error, `SIGINT`, and
+`SIGTERM`.
 
 ## When to Add Logging
 

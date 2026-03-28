@@ -2,7 +2,7 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
-import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 import { ok } from '@oaknational/result';
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -42,8 +42,10 @@ describe('HTTP boundary argument validation', () => {
   }
 
   it('returns a descriptive validation error for plain string arguments', async () => {
+    const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
     const app = await createApp({
-      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+      runtimeConfig,
+      observability: createMockObservability(runtimeConfig),
     });
     const res = await request(app)
       .post('/mcp')
@@ -62,8 +64,10 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for JSON string arguments', async () => {
+    const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
     const app = await createApp({
-      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+      runtimeConfig,
+      observability: createMockObservability(runtimeConfig),
     });
     const res = await request(app)
       .post('/mcp')
@@ -82,8 +86,10 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for path-string arguments', async () => {
+    const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
     const app = await createApp({
-      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+      runtimeConfig,
+      observability: createMockObservability(runtimeConfig),
     });
     const res = await request(app)
       .post('/mcp')
@@ -127,9 +133,11 @@ describe('HTTP boundary argument validation', () => {
           }),
         ),
     };
+    const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
     const app = await createApp({
       toolHandlerOverrides: overrides,
-      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+      runtimeConfig,
+      observability: createMockObservability(runtimeConfig),
     });
     const res = await request(app)
       .post('/mcp')

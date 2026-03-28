@@ -129,6 +129,7 @@ export function createMockRuntimeConfig(): AuthEnabledRuntimeConfig {
       CLERK_SECRET_KEY: 'test-clerk-secret',
       ELASTICSEARCH_URL: 'http://fake-es:9200',
       ELASTICSEARCH_API_KEY: 'fake-api-key',
+      SENTRY_MODE: 'off',
     },
     useStubTools: false,
     dangerouslyDisableAuth: false,

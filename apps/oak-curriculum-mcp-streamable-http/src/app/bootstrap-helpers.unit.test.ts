@@ -1,9 +1,22 @@
 import { describe, it, expect } from 'vitest';
 import { createPhasedTimer, type Logger } from '@oaknational/logger';
-import { runAsyncBootstrapPhase, type BootstrapPhaseName } from './bootstrap-helpers.js';
+import {
+  runAsyncBootstrapPhase,
+  runBootstrapPhase,
+  type BootstrapPhaseName,
+} from './bootstrap-helpers.js';
+import type { HttpObservability, HttpSpanHandle } from '../observability/http-observability.js';
 
 const TEST_PHASE: BootstrapPhaseName = 'fetchUpstreamMetadata';
 const TEST_APP_ID = 1;
+const noopSpanHandle: HttpSpanHandle = {
+  setAttribute(): void {
+    // No-op in unit test.
+  },
+  setAttributes(): void {
+    // No-op in unit test.
+  },
+};
 
 interface LogEntry {
   readonly message: string;
@@ -108,5 +121,68 @@ describe('runAsyncBootstrapPhase', () => {
     const finishEntry = entries.find((e) => e.message === 'bootstrap.phase.finish');
     const context = finishEntry?.context as { durationMs?: number };
     expect(context.durationMs).toBeGreaterThanOrEqual(delayMs - 10);
+  });
+
+  it('wraps async bootstrap work in an observability span when provided', async () => {
+    const { log } = createRecordingLogger();
+    const timer = createPhasedTimer();
+    const spanCalls: {
+      readonly name: string;
+      readonly attributes?: Record<string, unknown>;
+    }[] = [];
+    const withSpan: HttpObservability['withSpan'] = async ({ name, attributes, run }) => {
+      spanCalls.push({ name, attributes });
+      return await run(noopSpanHandle);
+    };
+    const withSpanSync: HttpObservability['withSpanSync'] = ({ run }) => run(noopSpanHandle);
+
+    await runAsyncBootstrapPhase(log, timer, TEST_PHASE, TEST_APP_ID, () => Promise.resolve('ok'), {
+      withSpan,
+      withSpanSync,
+    });
+
+    const expectedAsyncAttrs: unknown = expect.objectContaining({
+      'oak.bootstrap.phase': 'fetchUpstreamMetadata',
+      'oak.bootstrap.app_id': TEST_APP_ID,
+    });
+    expect(spanCalls).toEqual([
+      expect.objectContaining({
+        name: 'oak.http.bootstrap.fetchUpstreamMetadata',
+        attributes: expectedAsyncAttrs,
+      }),
+    ]);
+  });
+});
+
+describe('runBootstrapPhase', () => {
+  it('wraps sync bootstrap work in an observability span when provided', () => {
+    const { log } = createRecordingLogger();
+    const timer = createPhasedTimer();
+    const spanCalls: {
+      readonly name: string;
+      readonly attributes?: Record<string, unknown>;
+    }[] = [];
+    const withSpan: HttpObservability['withSpan'] = async ({ run }) => await run(noopSpanHandle);
+    const withSpanSync: HttpObservability['withSpanSync'] = ({ name, attributes, run }) => {
+      spanCalls.push({ name, attributes });
+      return run(noopSpanHandle);
+    };
+
+    const result = runBootstrapPhase(log, timer, 'setupBaseMiddleware', TEST_APP_ID, () => 'done', {
+      withSpan,
+      withSpanSync,
+    });
+
+    expect(result).toBe('done');
+    const expectedSyncAttrs: unknown = expect.objectContaining({
+      'oak.bootstrap.phase': 'setupBaseMiddleware',
+      'oak.bootstrap.app_id': TEST_APP_ID,
+    });
+    expect(spanCalls).toEqual([
+      expect.objectContaining({
+        name: 'oak.http.bootstrap.setupBaseMiddleware',
+        attributes: expectedSyncAttrs,
+      }),
+    ]);
   });
 });

@@ -20,12 +20,41 @@
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { getPromptMessages } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import { wrapPromptHandler } from '@oaknational/sentry-mcp';
 import {
   findLessonsArgsSchema,
   lessonPlanningArgsSchema,
   exploreCurriculumArgsSchema,
   learningProgressionArgsSchema,
 } from './prompt-schemas.js';
+import type { HttpObservability } from './observability/http-observability.js';
+
+const PROMPT_REGISTRATIONS = [
+  {
+    name: 'find-lessons',
+    description:
+      'Find curriculum lessons on a specific topic. Searches across all subjects and key stages.',
+    argsSchema: findLessonsArgsSchema,
+  },
+  {
+    name: 'lesson-planning',
+    description:
+      'Gather materials for planning a lesson on a topic, including objectives and resources.',
+    argsSchema: lessonPlanningArgsSchema,
+  },
+  {
+    name: 'explore-curriculum',
+    description:
+      'Explore what Oak has on a topic across the whole curriculum. Searches lessons, units, and threads in parallel.',
+    argsSchema: exploreCurriculumArgsSchema,
+  },
+  {
+    name: 'learning-progression',
+    description:
+      'Understand how a concept builds across year groups by searching progression threads and mapping dependencies.',
+    argsSchema: learningProgressionArgsSchema,
+  },
+] as const;
 
 /**
  * Formats SDK prompt messages for MCP response structure.
@@ -63,44 +92,20 @@ function formatPromptResponse(
  * registerPrompts(server);
  * ```
  */
-export function registerPrompts(server: McpServer): void {
-  server.registerPrompt(
-    'find-lessons',
-    {
-      description:
-        'Find curriculum lessons on a specific topic. Searches across all subjects and key stages.',
-      argsSchema: findLessonsArgsSchema,
-    },
-    (args) => formatPromptResponse('find-lessons', args),
-  );
+export function registerPrompts(server: McpServer, observability?: HttpObservability): void {
+  const mcpObservation = observability?.createMcpObservationOptions();
 
-  server.registerPrompt(
-    'lesson-planning',
-    {
-      description:
-        'Gather materials for planning a lesson on a topic, including objectives and resources.',
-      argsSchema: lessonPlanningArgsSchema,
-    },
-    (args) => formatPromptResponse('lesson-planning', args),
-  );
+  for (const prompt of PROMPT_REGISTRATIONS) {
+    const handler = (args: Readonly<Record<string, string | undefined>>) =>
+      formatPromptResponse(prompt.name, args);
 
-  server.registerPrompt(
-    'explore-curriculum',
-    {
-      description:
-        'Explore what Oak has on a topic across the whole curriculum. Searches lessons, units, and threads in parallel.',
-      argsSchema: exploreCurriculumArgsSchema,
-    },
-    (args) => formatPromptResponse('explore-curriculum', args),
-  );
-
-  server.registerPrompt(
-    'learning-progression',
-    {
-      description:
-        'Understand how a concept builds across year groups by searching progression threads and mapping dependencies.',
-      argsSchema: learningProgressionArgsSchema,
-    },
-    (args) => formatPromptResponse('learning-progression', args),
-  );
+    server.registerPrompt(
+      prompt.name,
+      {
+        description: prompt.description,
+        argsSchema: prompt.argsSchema,
+      },
+      mcpObservation ? wrapPromptHandler(prompt.name, handler, mcpObservation) : handler,
+    );
+  }
 }

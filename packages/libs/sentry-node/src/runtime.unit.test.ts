@@ -10,7 +10,13 @@ import type {
   SentryConfigEnvironment,
   SentryNodeRuntime,
   SentryNodeSdk,
+  SentryPostRedactionHooks,
 } from './types.js';
+
+/** Sentry hook parameter types — derived from `NodeOptions` to avoid importing private types. */
+type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
+type SentryBreadcrumb = Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0];
+type SentryTransactionEvent = Parameters<NonNullable<NodeOptions['beforeSendTransaction']>>[0];
 
 interface FakeCaptureExceptionCall {
   readonly error: Error;
@@ -121,6 +127,20 @@ function getOnlyCall<T>(calls: readonly T[], message: string): T {
   return requireDefined(calls[0], message);
 }
 
+function getOnlyBeforeSendCall(calls: readonly SentryErrorEvent[]): SentryErrorEvent {
+  return getOnlyCall(calls, 'Expected the app-specific beforeSend hook to run once');
+}
+
+function getOnlyBeforeSendTransactionCall(
+  calls: readonly SentryTransactionEvent[],
+): SentryTransactionEvent {
+  return getOnlyCall(calls, 'Expected the app-specific beforeSendTransaction hook to run once');
+}
+
+function getOnlyBeforeBreadcrumbCall(calls: readonly SentryBreadcrumb[]): SentryBreadcrumb {
+  return getOnlyCall(calls, 'Expected the app-specific beforeBreadcrumb hook to run once');
+}
+
 function requireImmediateBeforeSendResult(
   value: ReturnType<NonNullable<NodeOptions['beforeSend']>>,
 ): Parameters<NonNullable<NodeOptions['beforeSend']>>[0] {
@@ -131,6 +151,74 @@ function requireImmediateBeforeSendResult(
   }
 
   return result;
+}
+
+function requireImmediateBeforeSendTransactionResult(
+  value: ReturnType<NonNullable<NodeOptions['beforeSendTransaction']>>,
+): SentryTransactionEvent {
+  const result = requireDefined(value, 'Expected beforeSendTransaction to keep the event');
+
+  if (isPromiseLike(result)) {
+    throw new Error('Expected beforeSendTransaction to return synchronously');
+  }
+
+  return result;
+}
+
+function requireImmediateBeforeBreadcrumbResult(
+  value: ReturnType<NonNullable<NodeOptions['beforeBreadcrumb']>>,
+): Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0] {
+  const result = requireDefined(value, 'Expected beforeBreadcrumb to keep the breadcrumb');
+
+  if (isPromiseLike(result)) {
+    throw new Error('Expected beforeBreadcrumb to return synchronously');
+  }
+
+  return result;
+}
+
+function decodeForAssertion(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function expectRedactedTransactionDetails(redactedTransaction: SentryTransactionEvent): void {
+  expect(redactedTransaction.request?.headers).toEqual({
+    authorization: '[REDACTED]',
+  });
+  expect(redactedTransaction.request?.url).toContain('/mcp');
+  expect(redactedTransaction.request?.url).not.toContain('abc123');
+  expect(
+    decodeForAssertion(
+      requireDefined(redactedTransaction.request?.url, 'Expected redacted request URL'),
+    ),
+  ).toContain('[REDACTED]');
+  expect(redactedTransaction.transaction).toContain('/mcp');
+  expect(redactedTransaction.transaction).not.toContain('abc123');
+  expect(
+    decodeForAssertion(
+      requireDefined(redactedTransaction.transaction, 'Expected redacted transaction name'),
+    ),
+  ).toContain('[REDACTED]');
+}
+
+function expectRedactedBreadcrumbDetails(
+  redactedBreadcrumb: Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0],
+): void {
+  expect(redactedBreadcrumb.category).toBe('http');
+  expect(redactedBreadcrumb.message).toContain('https://example.com/mcp');
+  expect(redactedBreadcrumb.message).not.toContain('abc123');
+  expect(decodeForAssertion(redactedBreadcrumb.message ?? '')).toContain('[REDACTED]');
+  expect(redactedBreadcrumb.data).toEqual({
+    authorization: '[REDACTED]',
+    requestBody: {
+      jsonrpc: '2.0',
+      method: 'tools/call',
+    },
+  });
 }
 
 function createConfig(input: SentryConfigEnvironment): ParsedSentryConfig {
@@ -189,6 +277,52 @@ function initialiseRuntime(config: ParsedSentryConfig, sdk?: SentryNodeSdk): Sen
       ...(sdk ? { sdk } : {}),
     }),
   );
+}
+
+function createPostRedactionHookFixture(): {
+  readonly postRedactionHooks: SentryPostRedactionHooks;
+  readonly captures: {
+    readonly beforeSendCalls: SentryErrorEvent[];
+    readonly beforeSendTransactionCalls: SentryTransactionEvent[];
+    readonly beforeBreadcrumbCalls: SentryBreadcrumb[];
+  };
+} {
+  const beforeSendCalls: SentryErrorEvent[] = [];
+  const beforeSendTransactionCalls: SentryTransactionEvent[] = [];
+  const beforeBreadcrumbCalls: SentryBreadcrumb[] = [];
+
+  return {
+    postRedactionHooks: {
+      beforeSend(event) {
+        beforeSendCalls.push(event);
+        return {
+          ...event,
+          request: {
+            method: event.request?.method ?? 'POST',
+            url: '/mcp',
+          },
+        };
+      },
+      beforeSendTransaction(event) {
+        beforeSendTransactionCalls.push(event);
+        return {
+          ...event,
+          transaction: '/mcp',
+        };
+      },
+      beforeBreadcrumb(breadcrumb) {
+        beforeBreadcrumbCalls.push(breadcrumb);
+        return {
+          ...breadcrumb,
+          data: {
+            method: typeof breadcrumb.data?.method === 'string' ? breadcrumb.data.method : 'POST',
+            route: '/mcp',
+          },
+        };
+      },
+    },
+    captures: { beforeSendCalls, beforeSendTransactionCalls, beforeBreadcrumbCalls },
+  };
 }
 
 describe('initialiseSentry', () => {
@@ -256,6 +390,14 @@ describe('initialiseSentry', () => {
       serviceName: 'oak-http',
     });
     const beforeSend = requireDefined(initOptions.beforeSend, 'Expected beforeSend hook');
+    const beforeSendTransaction = requireDefined(
+      initOptions.beforeSendTransaction,
+      'Expected beforeSendTransaction hook',
+    );
+    const beforeBreadcrumb = requireDefined(
+      initOptions.beforeBreadcrumb,
+      'Expected beforeBreadcrumb hook',
+    );
     const beforeSendLog = requireDefined(initOptions.beforeSendLog, 'Expected beforeSendLog hook');
     const redactedEvent = requireImmediateBeforeSendResult(
       beforeSend(
@@ -282,6 +424,34 @@ describe('initialiseSentry', () => {
         {},
       ),
     );
+    const redactedTransaction = requireImmediateBeforeSendTransactionResult(
+      beforeSendTransaction(
+        {
+          type: 'transaction',
+          request: {
+            headers: {
+              authorization: 'Bearer super-secret',
+            },
+            url: 'https://example.com/mcp?code=abc123',
+          },
+          transaction: 'POST /mcp?code=abc123',
+        },
+        {},
+      ),
+    );
+    const redactedBreadcrumb = requireImmediateBeforeBreadcrumbResult(
+      beforeBreadcrumb({
+        category: 'http',
+        message: 'POST https://example.com/mcp?code=abc123',
+        data: {
+          authorization: 'Bearer super-secret',
+          requestBody: {
+            jsonrpc: '2.0',
+            method: 'tools/call',
+          },
+        },
+      }),
+    );
     const redactedLog = requireDefined(
       beforeSendLog({
         level: 'error',
@@ -306,6 +476,117 @@ describe('initialiseSentry', () => {
     expect(redactedLog.message).toBe('Bearer [REDACTED]');
     expect(redactedLog.attributes).toEqual({
       apiKey: '[REDACTED]',
+    });
+    expectRedactedTransactionDetails(redactedTransaction);
+    expectRedactedBreadcrumbDetails(redactedBreadcrumb);
+  });
+
+  it('runs app-specific post-redaction hooks after shared redaction', () => {
+    const { postRedactionHooks, captures } = createPostRedactionHookFixture();
+    const initOptions = createSentryInitOptions(createLiveConfig(), {
+      serviceName: 'oak-http',
+      postRedactionHooks,
+    });
+    const beforeSend = requireDefined(initOptions.beforeSend, 'Expected beforeSend hook');
+    const beforeSendTransaction = requireDefined(
+      initOptions.beforeSendTransaction,
+      'Expected beforeSendTransaction hook',
+    );
+    const beforeBreadcrumb = requireDefined(
+      initOptions.beforeBreadcrumb,
+      'Expected beforeBreadcrumb hook',
+    );
+
+    const redactedEvent = requireImmediateBeforeSendResult(
+      beforeSend(
+        {
+          type: undefined,
+          request: {
+            method: 'POST',
+            url: 'https://example.com/mcp?code=abc123',
+            headers: {
+              authorization: 'Bearer super-secret',
+            },
+            data: {
+              jsonrpc: '2.0',
+              method: 'tools/call',
+              params: {
+                input: 'fractions',
+              },
+            },
+          },
+        },
+        {},
+      ),
+    );
+    const redactedTransaction = requireImmediateBeforeSendTransactionResult(
+      beforeSendTransaction(
+        {
+          type: 'transaction',
+          transaction: 'POST /mcp?code=abc123',
+        },
+        {},
+      ),
+    );
+    const redactedBreadcrumb = requireImmediateBeforeBreadcrumbResult(
+      beforeBreadcrumb({
+        category: 'http',
+        data: {
+          method: 'POST',
+          url: 'https://example.com/mcp?code=abc123',
+          body: {
+            jsonrpc: '2.0',
+            method: 'tools/call',
+          },
+        },
+      }),
+    );
+
+    const beforeSendCall = getOnlyBeforeSendCall(captures.beforeSendCalls);
+    expect(beforeSendCall.request).toEqual({
+      headers: {
+        authorization: '[REDACTED]',
+      },
+      data: {
+        jsonrpc: '2.0',
+        method: 'tools/call',
+        params: {
+          input: 'fractions',
+        },
+      },
+      method: 'POST',
+      url: 'https://example.com/mcp?code=%5BREDACTED%5D',
+    });
+    expect(redactedEvent.request).toEqual({
+      method: 'POST',
+      url: '/mcp',
+    });
+    const beforeSendTransactionCall = getOnlyBeforeSendTransactionCall(
+      captures.beforeSendTransactionCalls,
+    );
+    expect(beforeSendTransactionCall.transaction).toContain('/mcp');
+    expect(beforeSendTransactionCall.transaction).not.toContain('abc123');
+    expect(
+      decodeForAssertion(
+        requireDefined(
+          beforeSendTransactionCall.transaction,
+          'Expected the transaction hook to receive a name',
+        ),
+      ),
+    ).toContain('[REDACTED]');
+    expect(redactedTransaction.transaction).toBe('/mcp');
+    const beforeBreadcrumbCall = getOnlyBeforeBreadcrumbCall(captures.beforeBreadcrumbCalls);
+    expect(beforeBreadcrumbCall.data).toEqual({
+      method: 'POST',
+      url: 'https://example.com/mcp?code=%5BREDACTED%5D',
+      body: {
+        jsonrpc: '2.0',
+        method: 'tools/call',
+      },
+    });
+    expect(redactedBreadcrumb.data).toEqual({
+      method: 'POST',
+      route: '/mcp',
     });
   });
 

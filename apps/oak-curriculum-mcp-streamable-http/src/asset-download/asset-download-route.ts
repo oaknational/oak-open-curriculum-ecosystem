@@ -5,16 +5,17 @@
  * Oak API, streaming the binary response back to the user's browser.
  * No Clerk auth required — the HMAC signature IS the authentication.
  */
-import type { Express, RequestHandler, Request, Response } from 'express';
+import type { Express, RequestHandler, Request } from 'express';
 import { normalizeError } from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
-import { Readable } from 'node:stream';
 import {
   isAssetType,
   createDownloadSignature,
   validateDownloadSignature,
   deriveSigningSecret,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import type { HttpObservability } from '../observability/http-observability.js';
+import { proxyUpstreamAsset, type ValidatedParams } from './asset-proxy.js';
 
 /** Regex matching a 64-character lowercase hex string (SHA-256 output). */
 const HEX_SHA256_PATTERN = /^[a-f0-9]{64}$/;
@@ -38,13 +39,7 @@ export interface AssetDownloadRouteDeps {
   readonly logger: Logger;
   readonly fetch: typeof globalThis.fetch;
   readonly now: () => number;
-}
-
-interface ValidatedParams {
-  readonly lesson: string;
-  readonly type: string;
-  readonly sig: string;
-  readonly expiresAt: number;
+  readonly observability?: Pick<HttpObservability, 'captureHandledError' | 'withSpan'>;
 }
 
 function isNonEmptyString(value: unknown): value is string {
@@ -68,89 +63,6 @@ function validateRequestParams(req: Request): ValidatedParams | string {
     return 'Invalid exp parameter';
   }
   return { lesson, type, sig, expiresAt };
-}
-
-function forwardResponseHeaders(upstream: globalThis.Response, res: Response): void {
-  const contentType = upstream.headers.get('content-type');
-  const contentDisposition = upstream.headers.get('content-disposition');
-  const contentLength = upstream.headers.get('content-length');
-  if (contentType) {
-    res.setHeader('Content-Type', contentType);
-  }
-  if (contentDisposition) {
-    res.setHeader('Content-Disposition', contentDisposition);
-  }
-  if (contentLength) {
-    res.setHeader('Content-Length', contentLength);
-  }
-}
-
-/** Logs upstream errors classified by HTTP status for operational observability. */
-function logUpstreamError(
-  deps: AssetDownloadRouteDeps,
-  params: ValidatedParams,
-  status: number,
-): void {
-  const context = { lesson: params.lesson, type: params.type, status };
-  if (status === 401 || status === 403) {
-    deps.logger.error('asset-download.auth-error', context);
-  } else if (status === 404) {
-    deps.logger.warn('asset-download.not-found', context);
-  } else if (status >= 500) {
-    deps.logger.warn('asset-download.upstream-service-error', context);
-  } else {
-    deps.logger.warn('asset-download.upstream.error', context);
-  }
-}
-
-async function proxyUpstreamAsset(
-  params: ValidatedParams,
-  deps: AssetDownloadRouteDeps,
-  res: Response,
-): Promise<void> {
-  const url = `${deps.oakApiBaseUrl}/lessons/${encodeURIComponent(params.lesson)}/assets/${encodeURIComponent(params.type)}`;
-  const controller = new AbortController();
-  res.once('close', () => {
-    if (!res.writableEnded) {
-      controller.abort();
-    }
-  });
-
-  // Combine client-disconnect abort with a 30s upstream timeout guard (FD exhaustion defence)
-  const timeout = AbortSignal.timeout(30_000);
-  const combined = AbortSignal.any([controller.signal, timeout]);
-  const upstream = await deps.fetch(url, {
-    headers: { Authorization: `Bearer ${deps.oakApiKey}` },
-    redirect: 'follow',
-    signal: combined,
-  });
-
-  if (!upstream.ok) {
-    logUpstreamError(deps, params, upstream.status);
-    // Map all upstream errors to 502 — never forward internal API status codes to the client
-    res.status(502).json({ error: 'Upstream error' });
-    return;
-  }
-
-  forwardResponseHeaders(upstream, res);
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-
-  if (upstream.body) {
-    const readable = Readable.fromWeb(upstream.body);
-    readable.on('error', (error) => {
-      deps.logger.error('asset-download.stream.error', normalizeError(error));
-      if (!res.headersSent) {
-        res.status(502).json({ error: 'Download stream error' });
-      }
-      res.destroy();
-    });
-    res.on('error', (error) => {
-      deps.logger.error('asset-download.response.error', normalizeError(error));
-    });
-    readable.pipe(res);
-  } else {
-    res.status(502).json({ error: 'Upstream response has no body' });
-  }
 }
 
 /** Creates an Express request handler for the asset download proxy. */
@@ -182,6 +94,11 @@ export function createAssetDownloadRoute(deps: AssetDownloadRouteDeps): RequestH
       await proxyUpstreamAsset(validated, deps, res);
     } catch (error: unknown) {
       deps.logger.error('asset-download.proxy.error', normalizeError(error));
+      deps.observability?.captureHandledError(error, {
+        boundary: 'asset_download_proxy',
+        lesson: validated.lesson,
+        type: validated.type,
+      });
       if (!res.headersSent) {
         res.status(502).json({ error: 'Proxy error' });
       }
@@ -217,6 +134,7 @@ export function mountAssetDownloadProxy(
   oakApiKey: string,
   log: Logger,
   oakApiBaseUrl: string,
+  observability?: Pick<HttpObservability, 'captureHandledError' | 'withSpan'>,
 ): (lesson: string, type: string) => string {
   const signingSecret = deriveSigningSecret(oakApiKey);
   app.get(
@@ -229,6 +147,7 @@ export function mountAssetDownloadProxy(
       logger: log,
       fetch: globalThis.fetch,
       now: Date.now,
+      observability,
     }),
   );
   log.info('bootstrap.asset-download.route.mounted', { baseUrl });

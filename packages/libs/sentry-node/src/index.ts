@@ -27,5 +27,6 @@ export type {
   SentryNodeRuntime,
   SentryNodeSdk,
   SentryOffConfig,
+  SentryPostRedactionHooks,
   SentryReleaseSource,
 } from './types.js';

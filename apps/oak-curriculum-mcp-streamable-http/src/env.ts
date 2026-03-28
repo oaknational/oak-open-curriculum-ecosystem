@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { OakApiKeyEnvSchema, ElasticsearchEnvSchema, LoggingEnvSchema } from '@oaknational/env';
+import {
+  OakApiKeyEnvSchema,
+  ElasticsearchEnvSchema,
+  LoggingEnvSchema,
+  SentryEnvSchema,
+} from '@oaknational/env';
 
 const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
 
@@ -15,6 +20,7 @@ const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
  */
 const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
   .extend(LoggingEnvSchema.shape)
+  .extend(SentryEnvSchema.shape)
   .extend({
     CLERK_PUBLISHABLE_KEY: z.string().min(1).optional(),
     CLERK_SECRET_KEY: z.string().min(1).optional(),
@@ -68,7 +74,7 @@ export type AuthEnabledEnv = Env & {
 /** Environment with auth disabled — Clerk keys may be absent */
 export type AuthDisabledEnv = Env;
 
-export type Env = z.infer<typeof BaseEnvSchema>;
+export type Env = z.input<typeof BaseEnvSchema>;
 
 export function parseCsv(value: string | undefined): string[] | undefined {
   if (!value) {

@@ -8,7 +8,6 @@ import {
   LOG_LEVEL_KEY,
 } from '@oaknational/logger';
 import { createNodeStdoutSink } from '@oaknational/logger/node';
-import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import type { Logger, LogLevel } from '@oaknational/logger';
 
 import type { SmokeSuiteMode } from './smoke-assertions/types.js';
@@ -45,8 +44,8 @@ export function createRootLogger(mode: SmokeSuiteMode): Logger {
     minSeverity,
     resourceAttributes,
     context: { requestedMode: mode },
-    sinks: [createNodeStdoutSink()],
-    getActiveSpanContext: getActiveSpanContextSnapshot,
+    stdoutSink: createNodeStdoutSink(),
+    fileSink: null,
   });
 }
 

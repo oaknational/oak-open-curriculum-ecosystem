@@ -19,7 +19,7 @@ import {
   createNonAuthErrorResult,
   getHandler,
 } from './test-helpers/auth-error-test-helpers.js';
-import { createFakeSearchRetrieval } from './test-helpers/fakes.js';
+import { createFakeHttpObservability, createFakeSearchRetrieval } from './test-helpers/fakes.js';
 
 /**
  * Helper: Assert authentication error response structure
@@ -90,6 +90,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
     registerHandlers(mockServer, {
       runtimeConfig,
       logger: mockLogger,
+      observability: createFakeHttpObservability(),
       overrides,
       searchRetrieval: createFakeSearchRetrieval(),
     });

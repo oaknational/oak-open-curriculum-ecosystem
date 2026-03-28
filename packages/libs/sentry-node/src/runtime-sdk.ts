@@ -1,6 +1,7 @@
 import { captureException, captureMessage, flush, init, type NodeOptions } from '@sentry/node';
-import type { SentryLiveConfig, SentryNodeSdk } from './types.js';
+import type { SentryLiveConfig, SentryNodeSdk, SentryPostRedactionHooks } from './types.js';
 import {
+  redactSentryBreadcrumb,
   redactSentryEvent,
   redactSentryLog,
   redactSentrySpan,
@@ -10,13 +11,24 @@ import {
 export const DEFAULT_SENTRY_FLUSH_TIMEOUT_MS = 2_000;
 export const DEFAULT_TRACE_PROPAGATION_TARGETS: readonly string[] = Object.freeze([]);
 
-function createSentryHooks(): Pick<
+function createSentryHooks(
+  postRedactionHooks?: SentryPostRedactionHooks,
+): Pick<
   NodeOptions,
-  'beforeSend' | 'beforeSendLog' | 'beforeSendSpan' | 'beforeSendTransaction'
+  'beforeBreadcrumb' | 'beforeSend' | 'beforeSendLog' | 'beforeSendSpan' | 'beforeSendTransaction'
 > {
   return {
-    beforeSend(event) {
-      return redactSentryEvent(event);
+    beforeSend(event, hint) {
+      const redactedEvent = redactSentryEvent(event);
+      return postRedactionHooks?.beforeSend
+        ? postRedactionHooks.beforeSend(redactedEvent, hint)
+        : redactedEvent;
+    },
+    beforeBreadcrumb(breadcrumb, hint) {
+      const redactedBreadcrumb = redactSentryBreadcrumb(breadcrumb);
+      return postRedactionHooks?.beforeBreadcrumb
+        ? postRedactionHooks.beforeBreadcrumb(redactedBreadcrumb, hint)
+        : redactedBreadcrumb;
     },
     beforeSendLog(log) {
       return redactSentryLog(log);
@@ -24,15 +36,18 @@ function createSentryHooks(): Pick<
     beforeSendSpan(span) {
       return redactSentrySpan(span);
     },
-    beforeSendTransaction(event) {
-      return redactSentryTransaction(event);
+    beforeSendTransaction(event, hint) {
+      const redactedEvent = redactSentryTransaction(event);
+      return postRedactionHooks?.beforeSendTransaction
+        ? postRedactionHooks.beforeSendTransaction(redactedEvent, hint)
+        : redactedEvent;
     },
   };
 }
 
 export function createSentryInitOptions(
   config: SentryLiveConfig,
-  options: { readonly serviceName: string },
+  options: { readonly serviceName: string; readonly postRedactionHooks?: SentryPostRedactionHooks },
 ): NodeOptions {
   return {
     dsn: config.dsn,
@@ -50,7 +65,7 @@ export function createSentryInitOptions(
         release: config.release,
       },
     },
-    ...createSentryHooks(),
+    ...createSentryHooks(options.postRedactionHooks),
   };
 }
 

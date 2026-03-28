@@ -26,7 +26,7 @@ todos:
     status: completed
   - id: reviewer-plan-pass
     content: "Run the full reviewer pass over the refreshed plan and prompt before trusting them as the restart source of truth"
-    status: in_progress
+    status: completed
   - id: logger-foundation
     content: "Rewrite @oaknational/logger around a single LogSink[] model with explicit error overloads and active-span correlation"
     status: completed
@@ -40,7 +40,7 @@ todos:
     content: "Generalise header redaction into a shared telemetry redaction policy used by the logger and Sentry hooks"
     status: completed
   - id: http-adoption
-    content: "Adopt the foundation in oak-curriculum-mcp-streamable-http, including cold-start init, MCP wrapping, and targeted manual spans"
+    content: "Finish and green the HTTP MCP observability adoption in oak-curriculum-mcp-streamable-http, including cold-start init, MCP wrapping, targeted manual spans, reviewer findings, doc consolidation, and quality gates"
     status: pending
   - id: search-cli-adoption
     content: "Adopt the foundation in oak-search-cli with runtime-config-driven logger composition, command init, spans, and shutdown flush"
@@ -61,6 +61,22 @@ execution order, and restart guidance belong here.
 The paired operational prompt is intentionally thin and only points back here:
 [sentry-otel-foundation.prompt.md](../../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
 
+## Value Target
+
+This work is not "add Sentry because observability sounds useful". The value
+target is narrower and more operational:
+
+1. make the HTTP MCP server and Search CLI diagnosable during open public alpha
+   without guesswork,
+2. shorten time-to-diagnose when runtime regressions or support issues appear,
+   and
+3. do that without leaking MCP payloads, secrets, or other sensitive data into
+   telemetry.
+
+Phase 3 should be judged against that outcome. New wiring only counts if it
+improves supportability and release confidence while preserving the redaction
+and capture boundaries established in Phase 1 and Phase 2.
+
 ## Current Execution Snapshot (2026-03-28)
 
 ### Lane and state
@@ -69,21 +85,23 @@ The paired operational prompt is intentionally thin and only points back here:
   started.
 - Branch in use: `feat/full-sentry-otel-support`
 - Latest pushed checkpoint:
-  `ffff1867f96aef0aedbcd80a74e57b7cbd0e8da7`
-  (`fix(search-cli): defer env validation until command execution`)
-- Local worktree state on top of that checkpoint contains the blocker-clearance
-  slice plus the follow-up doc-coherence refresh that landed after the first
-  owner-requested rerun findings.
-  - this is local descendant state, not yet guaranteed branch state from a
-    fresh clone of `origin/feat/full-sentry-otel-support`
+  `44d8d74dd0f01c56096bebf2ff70779eb494203a`
+  (`fix(observability): clear phase 1 blocker bundle`)
+- The blocker-clearance slice plus the follow-up doc-coherence refresh are now
+  committed on `origin/feat/full-sentry-otel-support`.
+  - a fresh clone of the branch contains this state
+  - `ffff1867f96aef0aedbcd80a74e57b7cbd0e8da7`
+    (`fix(search-cli): defer env validation until command execution`) remains
+    the earlier branch-hygiene checkpoint and does not count as observability
+    adoption evidence
 - Governance, ADR, capability, and document-alignment work is complete.
 - The handover bundle hardening and known rerun-remediation fixes are complete
-  in the local worktree, but the clean owner-requested reviewer confirmation is
-  still pending capture in the checkpoint.
+  on the pushed branch, and the committed-state belt-and-braces handover
+  confirmation rerun is now recorded in the checkpoint.
 - The Phase 1 implementation pass for `@oaknational/logger`,
   `@oaknational/env`, `@oaknational/observability`, `@oaknational/sentry-node`,
   and `@oaknational/sentry-mcp` remains the foundation for the next phase.
-- The blocker-clearance slice remains the active local focus:
+- The blocker-clearance slice remains the active restart focus:
   - stale logger compatibility docs/examples were removed
   - `@oaknational/observability` now lives in `packages/core/observability`
   - layered library boundary rules replaced the sibling-lib allow-lists
@@ -109,17 +127,200 @@ The paired operational prompt is intentionally thin and only points back here:
   validation until command execution, restoring `--help`, unknown-command
   handling, and the Search CLI E2E path; that commit still counts as branch
   hygiene rather than observability adoption evidence.
-- Runtime adoption remains the intended next phase, but it stays paused until
-  the clean owner-requested handover confirmation rerun is recorded in the
-  checkpoint.
+- HTTP MCP adoption wiring is now complete in the working tree:
+  - process-start observability composition owns shared logger/Sentry setup
+  - stdout JSON remains the canonical local log surface in `off`, `fixture`,
+    and `sentry`
+  - `/mcp` request capture is sanitised to metadata-only route/method
+    information
+  - tool, resource, and prompt handlers are wrapped for metadata-only MCP
+    observations
+  - targeted manual spans now cover bootstrap phases, upstream metadata fetch,
+    OAuth proxy upstream calls, and asset-download fetch/stream work
+  - handled-error capture is limited to terminal unexpected boundaries
+  - bounded flush now runs only at process boundaries
+- The HTTP slice is not yet validation-green in the local worktree:
+  - `@oaknational/sentry-node`: `test` passes, but `type-check` and `lint`
+    are red in `src/runtime.unit.test.ts`
+  - `@oaknational/oak-curriculum-mcp-streamable-http`: `test` and `test:e2e`
+    fail on missing generated `oak-sdk-codegen/dist` module imports;
+    `type-check` and `lint` remain red in the startup seam, auth/logger
+    typing, and file-size/test-strategy hotspots
+- Runtime adoption remains active overall because the HTTP slice still needs
+  local cleanup, reviewer-backed follow-up, and green gate reruns; Search CLI
+  adoption is still pending, and the evidence/deployment slice is still
+  pending.
+- The owner-requested repo-root gate run has now completed against the current
+  local worktree:
+  - `@oaknational/sentry-node`
+    - `test`: pass
+    - `type-check`: fail in `src/runtime.unit.test.ts` because
+      `SentryErrorEvent` / `SentryBreadcrumb` aliases are still undeclared
+    - `lint`: fail in `src/runtime.unit.test.ts` with one
+      `max-statements` error and two `no-unsafe-assignment` errors
+  - `@oaknational/oak-curriculum-mcp-streamable-http`
+    - `test`: initial sandbox run hit `listen EPERM`; escalated rerun removed
+      the sandbox noise and still failed with 24 suite-load errors caused by
+      missing generated `oak-sdk-codegen/dist` module imports
+    - `test:e2e`: fail with 21 suite-load errors caused by the same missing
+      generated `oak-sdk-codegen/dist` modules
+    - `type-check`: fail in `src/server-runtime.unit.test.ts`,
+      `src/tool-auth-checker.ts`, and `src/validation-logger.ts`
+    - `lint`: fail with 107 errors / 126 warnings across the HTTP app and
+      tests, with the largest hotspots in `http-observability.ts`,
+      `oauth-and-caching-setup.ts`, `oauth-proxy-routes.ts`,
+      `asset-download-route.ts`, `application.ts`,
+      `check-mcp-client-auth*.ts`, and `server-runtime.unit.test.ts`
+  - Repo-root documentation hygiene gates
+    - `pnpm markdownlint:root`: pass
+    - `pnpm practice:fitness`: pass
+    - `git diff --check`: pass
+
+### Immediate local TODOs (2026-03-28)
+
+These are the live remaining actions for the current working tree, not future
+nice-to-haves:
+
+1. Keep the plan, prompt, checkpoint, and collection indexes truthful while the
+   local reviewer findings remain open.
+   - the HTTP adoption todo stays pending until the remaining reviewer issues
+     are fixed and the failing repo-root gates have green rerun evidence on
+     disk
+   - every reviewer-backed issue stays visible in the plan and prompt until it
+     is fixed or explicitly superseded
+2. The owner-requested deep doc consolidation pass via `jc-consolidate-docs`
+   is now complete.
+   - permanent docs were refreshed so the HTTP README no longer teaches the
+     removed demo-AS path
+   - the handover bundle now records the consolidation closure and the
+     remaining open reviewer findings
+   - `pnpm practice:fitness:informational` now passes again after trimming
+     `distilled.md` back to its line-count ceiling
+3. The full repo-root quality gate run is now complete and is the execution
+   baseline for the next fix pass.
+   - keep the gate failures recorded in this plan/checkpoint until they are
+     fixed or explicitly superseded by rerun evidence
+   - do not rerun the reviewer set yet; use the gate report plus the current
+     reviewer findings to drive the next code pass first
+4. Close the current correctness blockers in the local HTTP/Sentry worktree.
+   - restore `@oaknational/sentry-node` type-check by fixing the missing
+     `SentryErrorEvent` / `SentryBreadcrumb` aliases in
+     `packages/libs/sentry-node/src/runtime.unit.test.ts`
+   - restore the missing generated `oak-sdk-codegen/dist` module surface so the
+     HTTP app unit/integration/E2E suites can load again
+   - make `/mcp` sanitisation fail closed even when the route match comes from
+     `event.transaction` rather than `request.url`
+   - let the HTTP span abstraction represent non-throwing failure outcomes so
+     timeout/network/upstream-error branches are not recorded as successful
+     spans
+   - ensure Express error middleware and bootstrap failure paths really hit the
+     handled-error boundary promised by the docs
+5. Finish the HTTP test-strategy and packaging cleanup without widening scope
+   beyond Phase 3.
+   - remove/replace `vi.mock(...)` from
+     `apps/oak-curriculum-mcp-streamable-http/src/check-mcp-client-auth.unit.test.ts`
+   - make `server-runtime` tests prove the actual `startApp` / `createApp`
+     forwarding contract with simple DI fakes
+   - re-scope the observability composition suite so it proves app wiring and
+     behaviour without constraining exact intermediate object shapes
+   - add the direct `@sentry/node` dependency to the HTTP workspace if the app
+     keeps importing it directly
+6. Finish the HTTP lint-driven product refactors and stale-doc cleanup.
+   - split `http-observability.ts` into smaller focused modules
+   - extract size/complexity hotspots in `application.ts`,
+     `oauth-and-caching-setup.ts`, `oauth-proxy-routes.ts`,
+     `asset-download-route.ts`, `register-resources.ts`,
+     `register-prompts.ts`, and `logging/index.ts`
+7. The full implementation reviewer set has now run. Keep every finding in the
+   plan and prompt until it is either fixed or explicitly superseded:
+   - `sentry-reviewer`
+   - `mcp-reviewer`
+   - `security-reviewer`
+   - `config-reviewer`
+   - `test-reviewer`
+   - `code-reviewer`
+8. Resume Search CLI adoption only after the HTTP slice, reviewer set, doc
+   consolidation, and repo-root gate reruns are all green, or the plan is
+   deliberately revised.
+### Reviewer sweep status (2026-03-28, current local worktree)
+
+The full requested implementation reviewer set has now run against the current
+local HTTP Phase 3 worktree plus the refreshed handover docs.
+
+| Reviewer | Status | Summary |
+|---|---|---|
+| `mcp-reviewer` | clean | No MCP-facing regression found in the per-request transport lifecycle or the metadata-only observation wiring |
+| `config-reviewer` | findings | `@oaknational/sentry-node` currently fails local `type-check`; the HTTP app imports `@sentry/node` directly without declaring it; the docs had drifted from the real local validation state |
+| `test-reviewer` | findings | Testing-strategy violations remain in `check-mcp-client-auth.unit.test.ts`, the new startup seam test, the observability composition test, and the new Sentry-node redaction tests |
+| `code-reviewer` | findings | The local slice is not yet approvable because of the broken Sentry-node test file, missing bootstrap handled-error capture, stale plan status, and non-compliant tests |
+| `security-reviewer` | findings | `/mcp` sanitisation still fails open in one transaction-derived path; the handover docs had overstated local security cleanliness before this consolidation refresh |
+| `sentry-reviewer` | findings | Non-throwing failure spans are still marked OK, downstream Express async errors can bypass handled-error capture, bootstrap failures are flushed but not captured, and init order may miss auto-instrumentation |
+
+### Open reviewer issues to keep visible (2026-03-28)
+
+These are the current reviewer-backed blockers and hardening items for the
+local worktree. Keep them in the plan and prompt until they are fixed or
+explicitly superseded.
+
+1. **Critical** — `packages/libs/sentry-node/src/runtime.unit.test.ts` now
+   refers to `SentryErrorEvent` / `SentryBreadcrumb` without declaring them,
+   so `@oaknational/sentry-node` is currently local `type-check` red.
+2. **High** — `/mcp` request sanitisation still fails open when the `/mcp`
+   match comes from `event.transaction` and `event.request` lacks a matching
+   `url`; in that path raw headers/body data can survive into Sentry.
+3. **High** — the current HTTP span abstraction cannot represent
+   non-exception failure outcomes, so timeout/network/upstream-error branches
+   that return error responses/results are emitted as successful spans.
+4. **High** — the only custom Express error middleware is mounted before the
+   later security/OAuth/asset-download/`/mcp` route stack, leaving downstream
+   async route failures able to bypass the handled-error boundary promised for
+   Phase 3.
+5. **Important** — bootstrap failures are still flushed but not captured via
+   `observability.captureHandledError(...)`, even though the docs now describe
+   bootstrap failure as a handled-error boundary.
+6. **Important** — `apps/oak-curriculum-mcp-streamable-http/src/check-mcp-client-auth.unit.test.ts`
+   still uses `vi.mock(...)` for five collaborators and remains non-compliant
+   with the repo testing strategy and ADR-078.
+7. **Important** — `apps/oak-curriculum-mcp-streamable-http/src/observability/http-observability.unit.test.ts`
+   bypasses the product registration paths, asserts exact observation key sets,
+   and should be treated as integration coverage rather than a pure unit suite.
+8. **Important** — `apps/oak-curriculum-mcp-streamable-http/src/server-runtime.unit.test.ts`
+   still uses cast-heavy scaffolding and does not currently prove the main
+   `startApp` / `createApp({ runtimeConfig, observability })` forwarding
+   contract.
+9. **Important** — the HTTP workspace imports `@sentry/node` directly but does
+   not declare it as a direct dependency in
+   `apps/oak-curriculum-mcp-streamable-http/package.json`.
+10. **Important** — the handover docs must not describe the local HTTP slice
+    as clean or complete while these issues remain open. Keep the HTTP todo
+    pending until the remaining reviewer findings and the current gate failures
+    are both closed.
+11. **Medium** — the app still initialises Sentry only after importing the
+    entrypoint/application module graph, which may weaken automatic live-mode
+    HTTP/Express instrumentation.
+12. **Medium** — the new Sentry-node redaction tests remain too coupled to
+    intermediate payload shape and still need to prove the stable contract
+    without locking implementation details.
+
+Reviewer finding already closed during this doc-consolidation pass:
+
+1. `apps/oak-curriculum-mcp-streamable-http/README.md` no longer teaches the
+   removed `ENABLE_LOCAL_AS` / `LOCAL_AS_JWK` demo-AS troubleshooting path.
+
+Clean reviewer lane to preserve while refactoring:
+
+1. **`mcp-reviewer`** — no MCP protocol or per-request transport regression
+   was found in the current local diff. Keep the stateless Streamable HTTP
+   lifecycle and metadata-only MCP observation behaviour intact while fixing
+   the other issues.
 
 ### Phase 1 blocker bundle status (2026-03-28)
 
-The blocker bundle found in the 2026-03-27 reviewer pass is green again in the
-local worktree after the follow-up boundary/doc-coherence fixes from the first
-owner-requested handover rerun. Restart clearance still waits on recording a
-clean owner-requested reviewer rerun. The following items remain closed
-together unless later changes reopen them:
+The blocker bundle found in the 2026-03-27 reviewer pass is green on the
+pushed branch after the follow-up boundary/doc-coherence fixes from the first
+owner-requested handover rerun. Restart clearance is now recorded in the
+checkpoint after the committed-state belt-and-braces confirmation sweep. The
+following items remain closed together unless later changes reopen them:
 
 1. Workspace linting is restored via the corrected
    `@oaknational/eslint-plugin-standards` export map plus rebuilt local dist.
@@ -149,52 +350,60 @@ Additional same-slice hardening that also remains closed:
 ### Next session first actions
 
 Resume from the current `feat/full-sentry-otel-support` worktree. The latest
-pushed ancestor remains `ffff1867f96aef0aedbcd80a74e57b7cbd0e8da7`, and the
-local descendant state contains the blocker-clearance slice plus the
-follow-up doc-coherence refresh. Treat that as local worktree state, not
-branch state from a fresh clone. Then work in this order:
+pushed branch head is `44d8d74d`. The local worktree has significant
+remediation progress from the 2026-03-28 Claude Code session (see the
+companion remediation plan).
 
-1. Run and record the clean owner-requested handover confirmation rerun from
-   the current doc-consolidated worktree.
-   - prioritise the still-pending confirmations for
-     `docs-adr-reviewer`, `onboarding-reviewer`, and
-     `architecture-reviewer-barney`
-   - refresh the other architecture lenses too if you need a single
-     same-worktree reviewer stamp after this documentation refresh
-   - add any specialist lenses reopened by new findings, not by the already
-     fixed first-rerun issues
-2. Reconfirm the refreshed checkpoint and reviewer status before trusting the
-   restart bundle.
-3. Treat the Phase 1 blocker bundle as closed unless a new change reopens a
+**Start here**: [sentry-otel-remediation.plan.md](./sentry-otel-remediation.plan.md)
+
+The remediation plan is the authoritative guide for what to fix and in what
+order. It was produced by running 6 specialist reviewers against the full
+branch diff and correlating their findings with ground-truth gate failures.
+
+Then work in this order:
+
+0. Keep the value target in view: make the public-alpha HTTP MCP server and
+   Search CLI supportable with redacted, actionable telemetry rather than
+   adding observability plumbing for its own sake.
+1. **Finish Phase A** — the working tree has most gate blockers fixed but the
+   commit hasn't landed because the pre-commit hook requires all lint green.
+   The immediate next step is:
+   - Fix the missing `PhasedTimer` import in `application.ts` (1-line fix)
+   - Run `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`
+     to confirm zero errors
+   - Run `pnpm type-check && pnpm test` to confirm all green
+   - Commit with the pre-commit hook
+2. **Phase B** — Fix the 7 architectural issues (F8–F14 in the remediation
+   plan). The largest item is F10 (refactor `checkMcpClientAuth` for DI).
+3. **Phase C** — Security hardening (F15–F16).
+4. **Phase D** — Improvements (F17–F21).
+5. **Phase E** — Full `pnpm qg`, re-invoke reviewers, confirm all findings
+   addressed.
+6. Keep the reviewer findings above current. If a new finding appears, record
+   it in this plan and the paired prompt before continuing.
+6. Rerun the full implementation reviewer set only after substantive fixes land
+   or the handover state changes materially again.
+7. Continue with `apps/oak-search-cli` adoption only after the HTTP slice and
+   the repo-root validation/report step are complete.
+8. Treat the Phase 1 blocker bundle as closed unless a new change reopens a
    focused gate.
-4. Only once the checkpoint returns to restart-cleared status, start Phase 3
-   adoption in
-   `apps/oak-curriculum-mcp-streamable-http`:
-   - wire the shared logger and Sentry foundation at cold start
-   - keep stdout JSON as the canonical local log surface
-   - add the MCP wrapping and the targeted manual spans defined below
-5. Continue with `apps/oak-search-cli` adoption once the HTTP adoption slice is
-   ready or the execution order is deliberately revised.
-6. If any shared-package edit reopens the focused Phase 1 gates, stop and
+9. If any shared-package edit reopens the focused Phase 1 gates, stop and
    re-green them before continuing.
    - if the edit touched `packages/core/oak-eslint`, rebuild
      `@oaknational/eslint-plugin-standards` before rerunning consumer lint
      commands
-7. Keep the deprecated standalone stdio MCP workspace out of scope except for
+10. Keep the deprecated standalone stdio MCP workspace out of scope except for
    unavoidable compile-preserving compatibility edits.
 
-Preconditions not yet fully satisfied:
+Preconditions now satisfied for runtime adoption:
 
-1. The handover bundle is not yet cleared for restart in the review checkpoint.
+1. The handover bundle is cleared for restart in the review checkpoint.
 2. The active plan remains the implementation authority.
-3. The blocker bundle and affected validations are green locally, but the
-   clean owner-requested reviewer pass still needs to be recorded before
-   restart clearance.
+3. The blocker bundle and affected validations are green on the pushed branch,
+   and the clean owner-requested reviewer pass is now recorded in the
+   checkpoint.
 4. The `oak-search-cli` env-loading fix in `ffff1867` keeps the branch
    pushable and testable; it is not itself observability adoption evidence.
-5. A same-day reviewer rerun attempt after the latest documentation refresh did
-   not return substantive outputs before the sessions shut down; do not count
-   that attempt as clean confirmation.
 
 ### Authority and review state
 
@@ -397,12 +606,11 @@ Exit criteria:
 
 Next phase:
 
-1. Close the owner-requested handover rerun and record restart clearance.
-2. Then proceed to Phase 3 runtime adoption.
+1. Proceed to Phase 3 runtime adoption.
 
 ### Phase 1: RED shared contracts and regression harness
 
-Status: complete in the current local worktree on top of `ffff1867`.
+Status: complete on the current pushed branch at `44d8d74d`.
 
 Proofs now on disk:
 
@@ -436,7 +644,7 @@ Deterministic validation commands:
 
 ### Phase 2: GREEN shared foundation
 
-Status: complete in the current local worktree.
+Status: complete on the current pushed branch.
 
 Implement the shared packages and logger rewrite:
 
@@ -470,7 +678,9 @@ Deterministic validation commands:
 
 ### Phase 3: GREEN runtime adoption
 
-Status: ready to start.
+Status: in progress locally; core HTTP wiring has landed, but reviewer-backed
+stabilisation and gate work is still open before HTTP adoption can be marked
+done.
 
 Adopt the shared foundation in the in-scope runtimes only:
 
@@ -989,19 +1199,25 @@ If session context compresses again, re-ground from these files in order:
 
 ## Review Requirement
 
-Before trusting this plan/prompt pair as the execution baseline, run the
-handover reviewer pass requested by the project owner after any material bundle
-refresh. For the 2026-03-28 blocker-clearance refresh that set is:
+The 2026-03-28 committed-state refresh reran the following handover reviewer
+set, and the checkpoint records the clean result:
 
 1. code-reviewer
 2. docs-adr-reviewer
 3. onboarding-reviewer
 4. all four architecture reviewers
+5. config-reviewer
+6. security-reviewer
+
+That rerun was intentionally belt-and-braces: the committed-state refresh
+removes the stale local-only framing, and the broader reviewer set clears the
+remaining ambiguous pending lines in the checkpoint before restart clearance is
+recorded.
 
 If a later bundle refresh directly touches tests, types, config quality gates,
 security/privacy, MCP protocol behaviour, or Sentry/Otel implementation
-details, expand the reviewer set with the corresponding specialists before
-recording restart clearance.
+details, expand the reviewer set again with the corresponding specialists
+before recording restart clearance.
 
 Review-state authority is recorded in:
 [sentry-otel-foundation.review-checkpoint-2026-03-27.md](./sentry-otel-foundation.review-checkpoint-2026-03-27.md)

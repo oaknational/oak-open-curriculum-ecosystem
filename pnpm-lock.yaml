@@ -150,6 +150,9 @@ importers:
       '@oaknational/oak-search-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-search-sdk
+      '@oaknational/observability':
+        specifier: workspace:*
+        version: link:../../packages/core/observability
       '@oaknational/result':
         specifier: workspace:*
         version: link:../../packages/core/result
@@ -208,15 +211,27 @@ importers:
       '@oaknational/oak-search-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-search-sdk
+      '@oaknational/observability':
+        specifier: workspace:*
+        version: link:../../packages/core/observability
       '@oaknational/result':
         specifier: workspace:*
         version: link:../../packages/core/result
       '@oaknational/sdk-codegen':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-sdk-codegen
+      '@oaknational/sentry-mcp':
+        specifier: workspace:*
+        version: link:../../packages/libs/sentry-mcp
+      '@oaknational/sentry-node':
+        specifier: workspace:*
+        version: link:../../packages/libs/sentry-node
       '@oaknational/type-helpers':
         specifier: workspace:*
         version: link:../../packages/core/type-helpers
+      '@opentelemetry/api':
+        specifier: ^1.9.0
+        version: 1.9.0
       commander:
         specifier: ^14.0.3
         version: 14.0.3
@@ -305,6 +320,9 @@ importers:
       '@oaknational/oak-search-sdk':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-search-sdk
+      '@oaknational/observability':
+        specifier: workspace:*
+        version: link:../../packages/core/observability
       '@oaknational/result':
         specifier: workspace:*
         version: link:../../packages/core/result
@@ -641,6 +659,9 @@ importers:
       '@oaknational/result':
         specifier: workspace:*
         version: link:../../core/result
+      '@oaknational/type-helpers':
+        specifier: workspace:*
+        version: link:../../core/type-helpers
       '@sentry/node':
         specifier: 10.46.0
         version: 10.46.0

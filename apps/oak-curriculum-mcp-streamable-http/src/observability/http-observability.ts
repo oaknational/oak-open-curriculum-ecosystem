@@ -1,0 +1,207 @@
+import {
+  normalizeError,
+  sanitiseObject,
+  type LogContextInput,
+  type Logger,
+} from '@oaknational/logger';
+import { err, type Result } from '@oaknational/result';
+import {
+  createInMemoryMcpObservationRecorder,
+  type McpObservationOptions,
+  type McpObservationRecorder,
+  type McpObservationRuntime,
+} from '@oaknational/sentry-mcp';
+import {
+  createSentryConfig,
+  createSentryLogSink,
+  flushSentry,
+  initialiseSentry,
+  type FixtureSentryStore,
+  type SentryFlushError,
+  type SentryNodeRuntime,
+  type SentryNodeSdk,
+} from '@oaknational/sentry-node';
+import { trace, type Tracer } from '@opentelemetry/api';
+import type { WithActiveSpanOptions } from '@oaknational/observability';
+import type { HttpLoggerOptions } from '../logging/index.js';
+import { createHttpLogger } from '../logging/index.js';
+import type { RuntimeConfig } from '../runtime-config.js';
+import type { HttpObservabilityError } from './http-observability-error.js';
+import { describeHttpObservabilityError } from './http-observability-error.js';
+import type { HttpSpanOptions, HttpSyncSpanOptions, SpanFunctions } from './span-helpers.js';
+import { createSpanFunctions } from './span-helpers.js';
+import { createHttpPostRedactionHooks } from './sanitise-mcp-events.js';
+
+export type { HttpObservabilityError } from './http-observability-error.js';
+export { describeHttpObservabilityError } from './http-observability-error.js';
+export type { HttpSpanHandle, HttpSpanOptions, HttpSyncSpanOptions } from './span-helpers.js';
+
+const DEFAULT_HTTP_SERVICE_NAME = 'oak-curriculum-mcp-streamable-http';
+
+export interface CreateHttpObservabilityOptions {
+  readonly serviceName?: string;
+  readonly sentrySdk?: SentryNodeSdk;
+  readonly fixtureStore?: FixtureSentryStore;
+}
+
+export interface HttpObservability extends McpObservationRuntime {
+  readonly service: string;
+  readonly environment: string;
+  readonly release: string;
+  readonly tracer: Tracer | undefined;
+  readonly mcpRecorder: McpObservationRecorder;
+  readonly fixtureStore?: FixtureSentryStore;
+  createLogger(options?: HttpLoggerOptions): Logger;
+  createMcpObservationOptions(): Pick<
+    McpObservationOptions,
+    'environment' | 'recorder' | 'release' | 'runtime' | 'service' | 'tracer'
+  >;
+  withSpan<T>(options: HttpSpanOptions<T>): Promise<T>;
+  withSpanSync<T>(options: HttpSyncSpanOptions<T>): T;
+  captureHandledError(error: unknown, context?: LogContextInput): void;
+  flush(timeoutMs?: number): Promise<Result<void, SentryFlushError>>;
+}
+
+const noopMcpObservationRecorder: McpObservationRecorder = {
+  record(): void {
+    // Intentionally empty: off and live sentry mode do not keep an in-memory MCP transcript.
+  },
+};
+
+function createMcpRecorder(mode: SentryNodeRuntime['config']['mode']): McpObservationRecorder {
+  return mode === 'fixture' ? createInMemoryMcpObservationRecorder() : noopMcpObservationRecorder;
+}
+
+function createLoggerFactory(
+  runtimeConfig: RuntimeConfig,
+  sentryRuntime: SentryNodeRuntime,
+  getActiveSpanContext: SpanFunctions['getActiveSpanContext'],
+): HttpObservability['createLogger'] {
+  const sentrySink = createSentryLogSink(sentryRuntime);
+
+  return (loggerOptions) =>
+    createHttpLogger(runtimeConfig, {
+      ...loggerOptions,
+      additionalSinks: sentrySink
+        ? [sentrySink, ...(loggerOptions?.additionalSinks ?? [])]
+        : loggerOptions?.additionalSinks,
+      getActiveSpanContext,
+    });
+}
+
+interface BuildObservabilityParams {
+  readonly runtimeConfig: RuntimeConfig;
+  readonly sentryRuntime: SentryNodeRuntime;
+  readonly serviceName: string;
+  readonly environment: string;
+  readonly release: string;
+  readonly tracer: Tracer | undefined;
+  readonly mcpRecorder: McpObservationRecorder;
+}
+
+function buildObservabilityObject(params: BuildObservabilityParams): HttpObservability {
+  const { runtimeConfig, sentryRuntime, serviceName, environment, release, tracer, mcpRecorder } =
+    params;
+  const spanFunctions = createSpanFunctions(tracer);
+
+  const observability: HttpObservability = {
+    service: serviceName,
+    environment,
+    release,
+    tracer,
+    mcpRecorder,
+    fixtureStore: sentryRuntime.fixtureStore,
+    getActiveSpanContext: spanFunctions.getActiveSpanContext,
+    async withActiveSpan<T>(options: WithActiveSpanOptions<T>): Promise<T> {
+      return await spanFunctions.withSpan({
+        name: options.name,
+        attributes: options.attributes,
+        run: async () => await options.run(),
+      });
+    },
+    createLogger: createLoggerFactory(
+      runtimeConfig,
+      sentryRuntime,
+      spanFunctions.getActiveSpanContext,
+    ),
+    createMcpObservationOptions() {
+      return {
+        service: serviceName,
+        environment,
+        release,
+        recorder: mcpRecorder,
+        runtime: observability,
+        tracer,
+      };
+    },
+    withSpan: spanFunctions.withSpan,
+    withSpanSync: spanFunctions.withSpanSync,
+    captureHandledError(error, captureContext): void {
+      sentryRuntime.captureHandledError(
+        normalizeError(error),
+        sanitiseObject(captureContext) ?? undefined,
+      );
+    },
+    async flush(timeoutMs): Promise<Result<void, SentryFlushError>> {
+      return await flushSentry(sentryRuntime, timeoutMs);
+    },
+  };
+
+  return observability;
+}
+
+function resolveTracer(mode: string, serviceName: string, version: string): Tracer | undefined {
+  return mode === 'sentry' ? trace.getTracer(serviceName, version) : undefined;
+}
+
+export function createHttpObservability(
+  runtimeConfig: RuntimeConfig,
+  options?: CreateHttpObservabilityOptions,
+): Result<HttpObservability, HttpObservabilityError> {
+  const sentryConfigResult = createSentryConfig(runtimeConfig.env);
+
+  if (!sentryConfigResult.ok) {
+    return err(sentryConfigResult.error);
+  }
+
+  const sentryConfig = sentryConfigResult.value;
+  const serviceName = options?.serviceName ?? DEFAULT_HTTP_SERVICE_NAME;
+  const sentryRuntimeResult = initialiseSentry(sentryConfig, {
+    serviceName,
+    sdk: options?.sentrySdk,
+    fixtureStore: options?.fixtureStore,
+    postRedactionHooks: createHttpPostRedactionHooks(),
+  });
+
+  if (!sentryRuntimeResult.ok) {
+    return err(sentryRuntimeResult.error);
+  }
+
+  const tracer = resolveTracer(sentryConfig.mode, serviceName, runtimeConfig.version);
+
+  return {
+    ok: true,
+    value: buildObservabilityObject({
+      runtimeConfig,
+      sentryRuntime: sentryRuntimeResult.value,
+      serviceName,
+      environment: sentryConfig.environment,
+      release: sentryConfig.release,
+      tracer,
+      mcpRecorder: createMcpRecorder(sentryRuntimeResult.value.config.mode),
+    }),
+  };
+}
+
+export function createHttpObservabilityOrThrow(
+  runtimeConfig: RuntimeConfig,
+  options?: CreateHttpObservabilityOptions,
+): HttpObservability {
+  const result = createHttpObservability(runtimeConfig, options);
+
+  if (!result.ok) {
+    throw new Error(describeHttpObservabilityError(result.error));
+  }
+
+  return result.value;
+}

@@ -127,7 +127,12 @@ export function initialiseSentry(
   const sdk = options.sdk ?? defaultSentryNodeSdk;
 
   try {
-    sdk.init(createSentryInitOptions(config, { serviceName: options.serviceName }));
+    sdk.init(
+      createSentryInitOptions(config, {
+        serviceName: options.serviceName,
+        postRedactionHooks: options.postRedactionHooks,
+      }),
+    );
     return ok(createLiveRuntime(config, sdk, options.serviceName));
   } catch (error) {
     return err({

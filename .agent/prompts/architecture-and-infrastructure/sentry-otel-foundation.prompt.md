@@ -12,92 +12,86 @@ This is the operational handover for the active observability foundation work.
 Keep it thin. The active plan owns the facts; this prompt only tells a fresh
 session where to start.
 
-Stop here first: Phase 1 blocker clearance now exists locally on
-`feat/full-sentry-otel-support` on top of the pushed checkpoint `ffff1867`.
-The next session should record the clean owner-requested handover confirmation
-rerun from the active plan before resuming runtime adoption. The known
-first-rerun remediation is already landed locally. Do not re-open
-`logger-foundation`, and do not treat the bundle as restart-cleared until the
-checkpoint says so. This slice is still local worktree state above `ffff1867`;
-a fresh clone of `origin/feat/full-sentry-otel-support` will not contain it
-until it is committed or otherwise checkpointed.
+## Current State (end of 2026-03-28 remediation session)
 
----
+Branch: `feat/full-sentry-otel-support`. Pushed head: `44d8d74d`.
+
+A deep remediation session ran 6 specialist reviewers against the full branch
+diff, identified 21 findings across 4 priority tiers, and began fixing them.
+The remediation plan is now the authoritative next-step guide.
+
+**What was fixed** (in working tree, not yet committed):
+
+- `@oaknational/sentry-node` is fully green (type-check, lint, 20/20 tests)
+- HTTP app type-check is green, all 734 unit/integration tests pass, all 201
+  E2E tests pass
+- Most lint errors resolved: `http-observability.ts` split into 4 modules
+  (504→207 lines), 8 other files split/reduced, all `no-unsafe-assignment`
+  errors fixed, `Object.keys` replaced with `typeSafeKeys`
+- `server-runtime.unit.test.ts` completely rewritten: proper Logger overloads,
+  getters for mutable state, no `as` casts, correct `express()` fakes
+
+**What blocks the commit**: the pre-commit hook runs full lint. A missing
+`PhasedTimer` import in `application.ts` and possibly a few residual
+function-length violations remain. Fix these, then commit.
+
+**What remains after the commit** (Phases B–E in the remediation plan):
+
+- F8: Live log sink uses `captureMessage` instead of `Sentry.logger.*` API
+- F9: Undeclared transitive `@sentry/node` dependency
+- F10: `vi.mock()` ADR-078 violation (largest item — DI refactor)
+- F11: Signal race condition in server shutdown
+- F12: MCP wrapper error recording decoupling
+- F13: Span operation error suppression
+- F14: `vi.spyOn(process.stdout)` in tests
+- F15–F16: Security hardening (DSN in error messages, Object.assign ordering)
+- F17–F21: Improvements (per-test factories, DRY spans, dead code, fixture
+  clear, redaction keys)
 
 ## Read First
 
-1. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
-2. [sentry-otel-foundation.review-checkpoint-2026-03-27.md](../../plans/architecture-and-infrastructure/active/sentry-otel-foundation.review-checkpoint-2026-03-27.md)
-3. [observability-and-quality-metrics.plan.md](../../plans/architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md)
+1. **[sentry-otel-remediation.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-remediation.plan.md)** — Start here. 21 findings, 5 phases, prioritised execution sequence.
+2. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) — Main execution plan with full context.
+3. [sentry-otel-foundation.review-checkpoint-2026-03-27.md](../../plans/architecture-and-infrastructure/active/sentry-otel-foundation.review-checkpoint-2026-03-27.md) — Phase 1 review status.
 4. [ADR-141](../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
-5. [sentry-specialist-capability.plan.md](../../plans/agentic-engineering-enhancements/current/sentry-specialist-capability.plan.md)
-6. [testing-strategy.md](../../directives/testing-strategy.md)
-7. [schema-first-execution.md](../../directives/schema-first-execution.md)
-8. [AGENT.md](../../directives/AGENT.md)
-9. [principles.md](../../directives/principles.md)
+5. [testing-strategy.md](../../directives/testing-strategy.md)
+6. [AGENT.md](../../directives/AGENT.md)
 
 Primary code surfaces:
 
-- `packages/core/oak-eslint/src/rules/boundary.ts`
-- `packages/core/oak-eslint/src/rules/lib-boundary.unit.test.ts`
-- `packages/core/observability/src/redaction.ts`
-- `packages/libs/logger/README.md`
-- `docs/governance/logging-guidance.md`
-- `packages/libs/sentry-node/src/config.ts`
-- `apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts`
-- `apps/oak-search-cli/src/lib/logger.ts`
-
----
+- `packages/libs/sentry-node/src/` — all files
+- `packages/libs/sentry-mcp/src/` — wrappers and types
+- `packages/core/observability/src/` — redaction and span context
+- `apps/oak-curriculum-mcp-streamable-http/src/observability/` — split into 4 modules
+- `apps/oak-curriculum-mcp-streamable-http/src/server-runtime.ts` — lifecycle
+- `apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts` — logger factory
 
 ## Restart Sequence
 
-1. Open the review checkpoint first and confirm whether the bundle is already
-   restart-cleared or still awaiting clean handover confirmation.
-2. Re-read the active plan sections:
-   - `Current Execution Snapshot`
-   - `Phase 1 blocker bundle status (2026-03-28)`
-   - `Implementation reality after the initial Phase 1 pass`
-   - `Execution Phases`
-   - `Shared Contracts`
-   - `Runtime Acceptance Matrix`
-   - `Success Measures`
-   - `Restart Bundle`
-3. Resume from the current `feat/full-sentry-otel-support` worktree. The
-   latest pushed ancestor is `ffff1867`, and the local descendant state above
-   it contains the blocker-clearance slice. Treat that as local worktree state,
-   not branch state from a fresh clone.
-4. If the checkpoint is still not restart-cleared, run the clean
-   owner-requested handover confirmation rerun from the current worktree and
-   record the result there.
-5. Treat the Phase 1 blocker bundle as closed unless a new finding reopens the
-   focused gates.
-6. Only once the checkpoint is restart-cleared, start with Phase 3 HTTP
-   adoption in
-   `apps/oak-curriculum-mcp-streamable-http`.
-7. Continue with Search CLI adoption once the HTTP slice is ready or the
-   execution order is deliberately revised in the active plan.
-8. Keep the deprecated standalone stdio MCP workspace out of scope except for
-   unavoidable compile-preserving compatibility edits.
-9. If shared-package edits reopen any focused Phase 1 gate, stop and re-green
-   the foundation surface before continuing.
-   - if the change touched `packages/core/oak-eslint`, rebuild
-     `@oaknational/eslint-plugin-standards` before rerunning consumer lint
-     commands
-10. The `ffff1867` Search CLI env-loading fix remains branch hygiene, not
-   adoption evidence.
-11. A same-day rerun attempt after the latest documentation refresh shut down
-    without substantive reviewer output; do not count it as a clean pass.
-12. If the active plan, this prompt, or the restart sequence changes materially
-    again after this refresh, rerun the owner-requested handover reviewer pass
-    recorded in the checkpoint and expand it if the new scope touches more
-    specialist domains.
+1. Read the remediation plan first — it has the prioritised finding list and
+   the exact execution sequence.
+2. Fix the remaining Phase A blockers (missing import, any residual lint).
+3. Commit — the pre-commit hook will run full type-check + lint + test.
+4. Begin Phase B (architectural issues F8–F14).
+5. After Phase B, run Phase C (security), Phase D (improvements), Phase E
+   (full verification + reviewer re-run).
+6. Keep every finding visible until fixed or explicitly superseded.
+7. Continue with Search CLI adoption only after the HTTP slice is fully green.
 
----
+## Reviewer Matrix (from 2026-03-28 remediation session)
+
+| Reviewer | Verdict | Key Findings |
+|----------|---------|-------------|
+| code-reviewer | CHANGES REQUESTED | 6 critical (types, casts, for-in, file sizes) |
+| test-reviewer | CRITICAL VIOLATIONS | vi.mock ADR-078, value capture bug, global state |
+| architecture-reviewer-fred | ISSUES FOUND | transitive dep, 504-line file, span duplication |
+| architecture-reviewer-wilma | CRITICAL ISSUES | signal race, error suppression, recorder decoupling |
+| security-reviewer | LOW RISK | DSN in errors, Object.assign ordering |
+| sentry-reviewer | ISSUES FOUND | captureMessage vs logger.*, non-throwing spans |
 
 ## Authority Rule
 
-1. The active execution plan is the authority for implementation facts.
-2. The review checkpoint is the authority for handover review status.
-3. This prompt should be updated only when the restart sequence, pointer docs,
-   or entry-point framing changes.
-4. The napkin records session learnings; it must not become a duplicate plan.
+1. The remediation plan is the authority for what to fix and in what order.
+2. The main execution plan is the authority for full implementation context.
+3. The review checkpoint is the authority for handover review status.
+4. This prompt is an entry point only — it must not restate plan facts.

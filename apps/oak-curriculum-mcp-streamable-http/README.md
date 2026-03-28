@@ -47,6 +47,7 @@ export OAK_API_KEY=your_api_key
 export ELASTICSEARCH_URL=https://your-es-url
 export ELASTICSEARCH_API_KEY=your_es_api_key
 export DANGEROUSLY_DISABLE_AUTH=true
+export SENTRY_MODE=off
 export ALLOWED_HOSTS=localhost,127.0.0.1,::1
 ```
 
@@ -56,17 +57,59 @@ export ALLOWED_HOSTS=localhost,127.0.0.1,::1
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 ```
 
-3. List tools (dev token):
+3. List tools (auth disabled path shown above):
 
 ```bash
 curl -sS \
-  -H "Authorization: Bearer $REMOTE_MCP_DEV_TOKEN" \
   -H 'Content-Type: application/json' \
   -X POST http://localhost:3333/mcp \
   -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}'
 ```
 
+If you enable auth locally, repeat the same request with a valid Clerk-issued
+Bearer token instead of relying on the disabled-auth path above.
+
 Note: The server automatically adds the required `Accept: application/json, text/event-stream` header if missing, improving UX for simple curl commands and UI integrations.
+
+## Observability
+
+The HTTP server now uses a single app-level observability bundle created at
+process start. In every mode, stdout JSON remains the canonical local log
+surface.
+
+`SENTRY_MODE` controls the runtime behaviour:
+
+- `off` — default kill switch. No Sentry init, no Sentry sink, no outbound
+  delivery, and no in-memory MCP recorder.
+- `fixture` — no-network local verification mode. Stdout JSON is retained, and
+  MCP observations plus handled-error captures are recorded only in local
+  fixture stores used by tests and local validation.
+- `sentry` — live Sentry mode. Stdout JSON is still retained, and the app adds
+  the Sentry sink, live error capture, and tracing.
+
+The HTTP telemetry boundary is metadata-only:
+
+- generic `/mcp` request capture is reduced to safe method and route metadata
+- raw JSON-RPC envelopes, request bodies, query strings, cookies, and
+  authorisation headers are stripped before Sentry capture
+- MCP tool, resource, and prompt observations retain only kind, name, status,
+  duration, and trace identifiers
+
+The app also adds targeted manual spans for:
+
+- bootstrap phases, including upstream OAuth metadata fetch
+- OAuth proxy upstream `register` and `token` calls
+- asset-download upstream fetch and stream lifecycle
+
+Handled-error capture is reserved for unexpected terminal boundaries such as
+bootstrap failure, server listen failure, Express error middleware, MCP cleanup
+failure, OAuth upstream timeout/network failure, and asset-download proxy
+failure. Expected validation, auth, and upstream-status branches remain logs
+plus span status only.
+
+On shutdown and startup failure paths, the app performs bounded Sentry flushes
+at the process boundary: bootstrap failure, server listen error, `SIGINT`, and
+`SIGTERM`. Per-request MCP teardown never initialises or flushes Sentry.
 
 ## Vercel deployment
 
@@ -81,6 +124,10 @@ Note: The server automatically adds the required `Accept: application/json, text
   - `DANGEROUSLY_DISABLE_AUTH` — set to `true` to disable auth (makes Clerk keys optional)
   - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname; supports `*` wildcards). Applied consistently to OAuth metadata endpoints and `/mcp` auth challenge/resource URL generation.
   - `LOG_LEVEL` (default `info`, use `debug` for staging)
+  - `SENTRY_MODE` — `off` (default), `fixture`, or `sentry`
+  - `SENTRY_DSN` — required when `SENTRY_MODE=sentry`
+  - `SENTRY_RELEASE` — required when `SENTRY_MODE=sentry`
+  - `SENTRY_TRACES_SAMPLE_RATE` — optional numeric trace sample rate for live Sentry mode
   - `REMOTE_MCP_MODE` (default `stateless`, recommended for Vercel — see `docs/vercel-environment-config.md`)
 
 Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
@@ -159,10 +206,9 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 - 500 on `/.well-known/oauth-protected-resource` or `/mcp`:
   - Ensure Vercel framework is Express and the app default‑exports an Express instance (this repo does in `src/index.ts`).
   - Verify `ALLOWED_HOSTS` includes your alias host (e.g. `curriculum-mcp-alpha.oaknational.dev`).
-  - If using local demo AS, ensure `ENABLE_LOCAL_AS=true` and `LOCAL_AS_JWK` is present or allow the app to generate it.
-- 401 without `Authorization`: client must send a Bearer token; see OAuth metadata endpoint. For demo: enable `ENABLE_LOCAL_AS=true` and mint a short‑lived JWT.
+  - If auth is enabled, verify `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` are set and that Clerk metadata discovery succeeds at startup.
+- 401 without `Authorization`: the client must either follow the OAuth discovery flow or send a valid Clerk-issued Bearer token. For local smoke tests, either use a real Clerk token or set `DANGEROUSLY_DISABLE_AUTH=true` and retry without the `Authorization` header.
 - Host blocked: add host to `ALLOWED_HOSTS`
-- Dev local AS: set `ENABLE_LOCAL_AS=true` and provide `LOCAL_AS_JWK` or let the app generate one
 
 ## Search tools
 

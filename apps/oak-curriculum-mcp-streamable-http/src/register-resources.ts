@@ -7,28 +7,22 @@
  *
  */
 
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-
-/**
- * Minimal interface for resource registration. Used by tests with fakes.
- * McpServer satisfies this.
- */
-export type ResourceRegistrar = Pick<McpServer, 'registerResource'>;
-import {
-  DOCUMENTATION_RESOURCES,
-  getDocumentationContent,
-  CURRICULUM_MODEL_RESOURCE,
-  getCurriculumModelJson,
-  PREREQUISITE_GRAPH_RESOURCE,
-  getPrerequisiteGraphJson,
-  THREAD_PROGRESSIONS_RESOURCE,
-  getThreadProgressionsJson,
-} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import {
   getToolWidgetUri,
   AGGREGATED_TOOL_WIDGET_MIME_TYPE,
   AGGREGATED_TOOL_WIDGET_HTML,
 } from './aggregated-tool-widget.js';
+import {
+  registerCurriculumModelResource,
+  registerDocumentationResources,
+  registerPrerequisiteGraphResource,
+  registerThreadProgressionsResource,
+} from './register-json-resources.js';
+import {
+  maybeWrapResourceHandler,
+  type ResourceRegistrar,
+  type WidgetResourceOptions,
+} from './register-resource-helpers.js';
 
 /**
  * OpenAI Apps SDK Content Security Policy for the widget.
@@ -62,23 +56,6 @@ const WIDGET_CSP = {
  */
 const WIDGET_DESCRIPTION =
   'Oak Open Curriculum: you MUST use the get-curriculum-model tool before calling other tools in order to give relevant responses.';
-
-/**
- * Options for widget resource registration.
- *
- * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
- */
-export interface WidgetResourceOptions {
-  /**
-   * Dedicated origin for the widget sandbox, required for OpenAI app submission.
-   *
-   * ChatGPT renders the widget under `<domain>.web-sandbox.oaiusercontent.com`.
-   * Derived from the deployment URL at runtime (e.g. VERCEL_URL).
-   *
-   * @example "https://curriculum-mcp-alpha.oaknational.dev"
-   */
-  readonly widgetDomain?: string;
-}
 
 /**
  * Registers the Oak JSON viewer widget as an MCP resource.
@@ -116,93 +93,26 @@ export function registerWidgetResource(
       description: 'Oak-branded JSON viewer widget for tool output',
       mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
     },
-    () => ({
-      contents: [
-        {
-          uri: widgetUri,
-          mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
-          text: AGGREGATED_TOOL_WIDGET_HTML,
-          _meta: {
-            'openai/widgetCSP': WIDGET_CSP,
-            'openai/widgetPrefersBorder': true,
-            'openai/widgetDescription': WIDGET_DESCRIPTION,
-            ...(options?.widgetDomain ? { 'openai/widgetDomain': options.widgetDomain } : {}),
-          },
-        },
-      ],
-    }),
-  );
-}
-
-/**
- * Registers documentation resources for the "start here" experience.
- *
- * These markdown resources provide server-level documentation that MCP clients
- * can list via resources/list and read via resources/read. Content includes:
- * - Getting started guide
- * - Tool reference by category
- * - Common workflow guides
- *
- * @param server - MCP server instance
- */
-export function registerDocumentationResources(server: ResourceRegistrar): void {
-  for (const resource of DOCUMENTATION_RESOURCES) {
-    const { name, uri, ...metadata } = resource;
-    server.registerResource(name, uri, metadata, () => {
-      const content = getDocumentationContent(uri);
-      return {
+    maybeWrapResourceHandler(
+      'oak-json-viewer',
+      () => ({
         contents: [
           {
-            uri,
-            mimeType: resource.mimeType,
-            text: content ?? `# ${resource.title}\n\nContent not found.`,
+            uri: widgetUri,
+            mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
+            text: AGGREGATED_TOOL_WIDGET_HTML,
+            _meta: {
+              'openai/widgetCSP': WIDGET_CSP,
+              'openai/widgetPrefersBorder': true,
+              'openai/widgetDescription': WIDGET_DESCRIPTION,
+              ...(options?.widgetDomain ? { 'openai/widgetDomain': options.widgetDomain } : {}),
+            },
           },
         ],
-      };
-    });
-  }
-}
-
-/** Registers the curriculum model as an MCP resource, complementing `get-curriculum-model`. */
-export function registerCurriculumModelResource(server: ResourceRegistrar): void {
-  const { name, uri, ...metadata } = CURRICULUM_MODEL_RESOURCE;
-  server.registerResource(name, uri, metadata, () => ({
-    contents: [
-      {
-        uri,
-        mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
-        text: getCurriculumModelJson(),
-      },
-    ],
-  }));
-}
-
-/** Registers the prerequisite graph as an MCP resource, complementing `get-prerequisite-graph`. */
-export function registerPrerequisiteGraphResource(server: ResourceRegistrar): void {
-  const { name, uri, ...metadata } = PREREQUISITE_GRAPH_RESOURCE;
-  server.registerResource(name, uri, metadata, () => ({
-    contents: [
-      {
-        uri,
-        mimeType: PREREQUISITE_GRAPH_RESOURCE.mimeType,
-        text: getPrerequisiteGraphJson(),
-      },
-    ],
-  }));
-}
-
-/** Registers thread progressions as an MCP resource, complementing `get-thread-progressions`. */
-export function registerThreadProgressionsResource(server: ResourceRegistrar): void {
-  const { name, uri, ...metadata } = THREAD_PROGRESSIONS_RESOURCE;
-  server.registerResource(name, uri, metadata, () => ({
-    contents: [
-      {
-        uri,
-        mimeType: THREAD_PROGRESSIONS_RESOURCE.mimeType,
-        text: getThreadProgressionsJson(),
-      },
-    ],
-  }));
+      }),
+      options?.observability,
+    ),
+  );
 }
 
 /**
@@ -219,11 +129,18 @@ export function registerAllResources(
   options?: WidgetResourceOptions,
 ): void {
   registerWidgetResource(server, options);
-  registerDocumentationResources(server);
-  registerCurriculumModelResource(server);
-  registerPrerequisiteGraphResource(server);
-  registerThreadProgressionsResource(server);
+  registerDocumentationResources(server, options?.observability);
+  registerCurriculumModelResource(server, options?.observability);
+  registerPrerequisiteGraphResource(server, options?.observability);
+  registerThreadProgressionsResource(server, options?.observability);
 }
 
 // Re-export prompts registration for use in handlers
 export { registerPrompts } from './register-prompts.js';
+export type { ResourceRegistrar, WidgetResourceOptions } from './register-resource-helpers.js';
+export {
+  registerCurriculumModelResource,
+  registerDocumentationResources,
+  registerPrerequisiteGraphResource,
+  registerThreadProgressionsResource,
+} from './register-json-resources.js';

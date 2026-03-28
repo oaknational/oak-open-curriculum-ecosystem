@@ -8,7 +8,7 @@ overview: >
 todos:
   - id: sentry-foundation
     content: "Deliver the Sentry and OpenTelemetry foundation through the active child execution plan for the HTTP MCP server and Search CLI"
-    status: pending
+    status: in_progress
   - id: logging-standards
     content: "Converge on enforced structured logging, redaction, and trace-correlation standards"
     status: pending
@@ -35,6 +35,17 @@ Establish production-grade observability and systematic quality metrics tracking
 as a supportability foundation for Oak's public alpha and as an operational
 hardening layer for public beta.
 
+## Value Target
+
+The immediate value is practical, not ornamental:
+
+1. operators should be able to diagnose failures in the HTTP MCP server and
+   Search CLI quickly,
+2. releases should carry enough redacted evidence to support confident public
+   alpha operation, and
+3. observability must improve supportability without creating a new privacy or
+   payload-capture risk.
+
 ## Milestone Position
 
 This plan now spans two milestone responsibilities:
@@ -50,8 +61,10 @@ AI-augmented development increases change volume. Without systematic
 observability and quality metrics, the codebase can drift into "fast but
 fragile" without anyone noticing.
 
-The immediate risk is operational blindness in public alpha. The longer-term
-risk is losing visibility into maintainability trends as change volume rises.
+The immediate risk is operational blindness in public alpha: failures become
+hard to triage, support load compounds, and release confidence falls. The
+longer-term risk is losing visibility into maintainability trends as change
+volume rises.
 
 ## Scope
 
@@ -89,11 +102,11 @@ implementation, evidence, and deployment verification are actually complete.
   previous `stdoutSink` / `fileSink` model has been replaced by the coherent
   `readonly LogSink[]` fan-out contract
 - The active child plan now reflects the pushed Phase 1 foundation state on
-  `feat/full-sentry-otel-support` through `ffff1867` plus the current local
-  blocker-clearance and doc-coherence follow-up slice. Runtime adoption is the
-  next intended execution step once the clean handover confirmation rerun is
+  `feat/full-sentry-otel-support` through `44d8d74d`. Runtime adoption is the
+  active execution step now that the clean handover confirmation rerun is
   recorded in the checkpoint
-- No shared Sentry runtime integration is yet complete
+- No runtime adoption is complete yet in the HTTP MCP server or Search CLI,
+  so the public-alpha supportability value has not been realised yet
 - Shared telemetry redaction now exists in `@oaknational/observability`; live
   runtime adoption and evidence collection remain the unfinished steps
 - Quality metrics dashboards are not yet implemented

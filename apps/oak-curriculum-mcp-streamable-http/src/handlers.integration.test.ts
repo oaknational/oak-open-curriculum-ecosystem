@@ -16,8 +16,10 @@ import { describe, it, expect, vi } from 'vitest';
 import type { Request } from 'express';
 import { createMcpHandler } from './handlers.js';
 import { getRequestContext } from './request-context.js';
+import type { HttpObservability } from './observability/http-observability.js';
 import {
   createFakeResponse,
+  createFakeHttpObservability,
   createFakeMcpServerFactory,
   createFakeExpressRequest,
 } from './test-helpers/fakes.js';
@@ -30,6 +32,8 @@ function createMockRequest(body: unknown): Request {
 }
 
 describe('createMcpHandler (Integration)', () => {
+  const observability = createFakeHttpObservability();
+
   describe('request context propagation', () => {
     it('wraps transport.handleRequest with setRequestContext', async () => {
       let capturedContext: Request | undefined;
@@ -40,7 +44,7 @@ describe('createMcpHandler (Integration)', () => {
         }),
       );
 
-      const handler = createMcpHandler(factory);
+      const handler = createMcpHandler(factory, observability);
       const mockReq = createMockRequest({ method: 'tools/list' });
       const mockRes = createFakeResponse();
 
@@ -56,7 +60,7 @@ describe('createMcpHandler (Integration)', () => {
     it('context is unavailable outside handler execution', async () => {
       const { factory } = createFakeMcpServerFactory(vi.fn(async () => undefined));
 
-      const handler = createMcpHandler(factory);
+      const handler = createMcpHandler(factory, observability);
       const mockReq = createMockRequest({ method: 'tools/list' });
       const mockRes = createFakeResponse();
 
@@ -78,7 +82,7 @@ describe('createMcpHandler (Integration)', () => {
         }),
       );
 
-      const handler = createMcpHandler(factory);
+      const handler = createMcpHandler(factory, observability);
       const mockReq = createMockRequest(testBody);
       const mockRes = createFakeResponse();
 
@@ -96,7 +100,7 @@ describe('createMcpHandler (Integration)', () => {
         }),
       );
 
-      const handler = createMcpHandler(factory);
+      const handler = createMcpHandler(factory, observability);
       const mockReq = createFakeExpressRequest({
         body: { method: 'tools/list' },
         headers: {},
@@ -118,13 +122,61 @@ describe('createMcpHandler (Integration)', () => {
     it('connects server to transport before handling request', async () => {
       const { factory, server } = createFakeMcpServerFactory(vi.fn(async () => undefined));
 
-      const handler = createMcpHandler(factory);
+      const handler = createMcpHandler(factory, observability);
       const mockReq = createMockRequest({ method: 'tools/list' });
       const mockRes = createFakeResponse();
 
       await handler(mockReq, mockRes);
 
       expect(server.connect).toHaveBeenCalledOnce();
+    });
+
+    it('creates an active request span around transport.handleRequest', async () => {
+      const baseObservability = createFakeHttpObservability();
+      const spanCalls: {
+        readonly name: string;
+        readonly attributes?: Record<string, unknown>;
+      }[] = [];
+      let requestSpanActive = false;
+      let requestSpanWasActiveInsideHandler = false;
+      const withSpan: HttpObservability['withSpan'] = async (options) => {
+        spanCalls.push({ name: options.name, attributes: options.attributes });
+        requestSpanActive = true;
+
+        try {
+          return await baseObservability.withSpan(options);
+        } finally {
+          requestSpanActive = false;
+        }
+      };
+      const scopedObservability: HttpObservability = {
+        ...baseObservability,
+        withSpan,
+      };
+
+      const { factory } = createFakeMcpServerFactory(
+        vi.fn(async () => {
+          requestSpanWasActiveInsideHandler = requestSpanActive;
+        }),
+      );
+
+      const handler = createMcpHandler(factory, scopedObservability);
+      const mockReq = createMockRequest({ method: 'tools/list' });
+      const mockRes = createFakeResponse();
+
+      await handler(mockReq, mockRes);
+
+      expect(requestSpanWasActiveInsideHandler).toBe(true);
+      const expectedMcpAttrs: unknown = expect.objectContaining({
+        'http.method': 'POST',
+        'http.route': '/mcp',
+      });
+      expect(spanCalls).toEqual([
+        expect.objectContaining({
+          name: 'oak.http.request.mcp',
+          attributes: expectedMcpAttrs,
+        }),
+      ]);
     });
   });
 });

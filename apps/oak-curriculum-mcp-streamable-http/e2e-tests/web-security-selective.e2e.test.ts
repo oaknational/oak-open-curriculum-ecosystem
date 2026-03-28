@@ -2,6 +2,7 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { RuntimeConfig } from '../src/runtime-config.js';
+import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { createNoOpClerkMiddleware } from './helpers/test-config.js';
 
@@ -12,6 +13,7 @@ const mockRuntimeConfig: RuntimeConfig = {
     CLERK_SECRET_KEY: 'sk_test_mock',
     ELASTICSEARCH_URL: 'http://fake-es:9200',
     ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+    SENTRY_MODE: 'off',
     LOG_LEVEL: 'error',
     NODE_ENV: 'test',
   },
@@ -22,8 +24,10 @@ const mockRuntimeConfig: RuntimeConfig = {
 };
 
 async function createTestApp() {
+  const observability = createHttpObservabilityOrThrow(mockRuntimeConfig);
   return await createApp({
     runtimeConfig: mockRuntimeConfig,
+    observability,
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });

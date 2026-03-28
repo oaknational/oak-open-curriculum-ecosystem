@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { Request, Response, NextFunction } from 'express';
+import type { LogContextInput } from '@oaknational/logger';
 import { createAssetDownloadRoute, type AssetDownloadRouteDeps } from './asset-download-route.js';
+import type { HttpObservability } from '../observability/http-observability.js';
 
 const VALID_HEX_SIG = 'a'.repeat(64);
 function createStubLogger() {
@@ -24,6 +26,48 @@ function createStubDeps(overrides?: Partial<AssetDownloadRouteDeps>): AssetDownl
     fetch: vi.fn(),
     now: () => Date.now(),
     ...overrides,
+  };
+}
+
+interface ObservabilitySpy extends Pick<HttpObservability, 'captureHandledError' | 'withSpan'> {
+  readonly handledErrors: readonly {
+    readonly error: unknown;
+    readonly context?: LogContextInput;
+  }[];
+  readonly setAttribute: ReturnType<typeof vi.fn>;
+  readonly spanCalls: readonly {
+    readonly name: string;
+    readonly attributes?: Record<string, unknown>;
+  }[];
+}
+
+function createObservabilitySpy(): ObservabilitySpy {
+  const handledErrors: { readonly error: unknown; readonly context?: LogContextInput }[] = [];
+  const setAttribute = vi.fn<(name: string, value: unknown) => void>();
+  const spanCalls: {
+    readonly name: string;
+    readonly attributes?: Record<string, unknown>;
+  }[] = [];
+  const withSpan: HttpObservability['withSpan'] = async ({ name, attributes, run }) => {
+    spanCalls.push({ name, attributes });
+
+    return await run({
+      setAttribute,
+      setAttributes(): void {
+        // No-op in integration test.
+      },
+    });
+  };
+  const captureHandledError: HttpObservability['captureHandledError'] = (error, context) => {
+    handledErrors.push({ error, context });
+  };
+
+  return {
+    captureHandledError,
+    handledErrors,
+    setAttribute,
+    spanCalls,
+    withSpan,
   };
 }
 function createMockReqRes(params: Record<string, string>, query: Record<string, string>) {
@@ -175,6 +219,7 @@ describe('createAssetDownloadRoute — signature validation', () => {
 });
 describe('createAssetDownloadRoute — upstream proxy', () => {
   it('proxies a successful upstream response with correct headers', async () => {
+    const observability = createObservabilitySpy();
     const stubFetch = vi.fn().mockResolvedValue(
       createUpstreamResponse(200, 'file-content', {
         'content-type': 'application/pdf',
@@ -182,7 +227,7 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
         'content-length': '12',
       }),
     );
-    const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
+    const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch, observability }));
     const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
@@ -202,6 +247,29 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
     );
     expect(res.setHeader).toHaveBeenCalledWith('Content-Length', '12');
     expect(res.setHeader).toHaveBeenCalledWith('X-Content-Type-Options', 'nosniff');
+    const expectedFetchAttrs: unknown = expect.objectContaining({
+      'http.route': '/assets/download/:lesson/:type',
+      'oak.asset.type': 'worksheet',
+      'oak.upstream.host': 'test-api.example.com',
+    });
+    const expectedStreamAttrs: unknown = expect.objectContaining({
+      'http.route': '/assets/download/:lesson/:type',
+      'oak.asset.type': 'worksheet',
+      'oak.upstream.host': 'test-api.example.com',
+    });
+    expect(observability.spanCalls).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: 'oak.http.asset-download.fetch',
+          attributes: expectedFetchAttrs,
+        }),
+        expect.objectContaining({
+          name: 'oak.http.asset-download.stream',
+          attributes: expectedStreamAttrs,
+        }),
+      ]),
+    );
+    expect(observability.setAttribute).toHaveBeenCalledWith('oak.upstream.status', 200);
   });
 
   it('never calls next (handler is terminal)', async () => {
@@ -220,8 +288,9 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
   });
 
   it('maps non-2xx upstream responses to 502', async () => {
+    const observability = createObservabilitySpy();
     const stubFetch = vi.fn().mockResolvedValue(createUpstreamResponse(404, null));
-    const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
+    const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch, observability }));
     const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
@@ -229,11 +298,13 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
     await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(502);
     expect(res.json).toHaveBeenCalledWith({ error: 'Upstream error' });
+    expect(observability.handledErrors).toHaveLength(0);
   });
 
   it('returns 502 when upstream fetch throws', async () => {
+    const observability = createObservabilitySpy();
     const stubFetch = vi.fn().mockRejectedValue(new Error('network failure'));
-    const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
+    const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch, observability }));
     const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
@@ -241,11 +312,24 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
     await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(502);
     expect(res.json).toHaveBeenCalledWith({ error: 'Proxy error' });
+    const expectedProxyError: unknown = expect.any(Error);
+    const expectedProxyContext: unknown = expect.objectContaining({
+      boundary: 'asset_download_proxy',
+      lesson: 'my-lesson',
+      type: 'worksheet',
+    });
+    expect(observability.handledErrors).toEqual([
+      expect.objectContaining({
+        error: expectedProxyError,
+        context: expectedProxyContext,
+      }),
+    ]);
   });
 
   it('returns 502 when upstream response has no body', async () => {
+    const observability = createObservabilitySpy();
     const stubFetch = vi.fn().mockResolvedValue(createUpstreamResponse(200, null));
-    const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch }));
+    const handler = createAssetDownloadRoute(createStubDeps({ fetch: stubFetch, observability }));
     const { req, res, next } = createMockReqRes(
       { lesson: 'my-lesson', type: 'worksheet' },
       { sig: VALID_HEX_SIG, exp: '999999999999' },
@@ -253,6 +337,18 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
     await handler(req, res, next);
     expect(res.status).toHaveBeenCalledWith(502);
     expect(res.json).toHaveBeenCalledWith({ error: 'Upstream response has no body' });
+    const expectedNoBodyError: unknown = expect.any(Error);
+    const expectedNoBodyContext: unknown = expect.objectContaining({
+      boundary: 'asset_download_no_body',
+      lesson: 'my-lesson',
+      type: 'worksheet',
+    });
+    expect(observability.handledErrors).toEqual([
+      expect.objectContaining({
+        error: expectedNoBodyError,
+        context: expectedNoBodyContext,
+      }),
+    ]);
   });
 
   it('classifies upstream 401 as auth error in logs', async () => {

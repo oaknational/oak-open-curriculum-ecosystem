@@ -19,6 +19,8 @@ export interface BootstrapAppDeps<T> {
   readonly startApp: () => Promise<T>;
   /** Logger for recording startup failures. */
   readonly logger: { error(message: string, error?: unknown): void };
+  /** Optional async cleanup hook run before process exit on startup failure. */
+  readonly onStartupFailure?: (error: unknown) => Promise<void> | void;
   /** Process exit function — `process.exit` in production. */
   readonly exit: (code: number) => void;
 }
@@ -45,6 +47,7 @@ export async function bootstrapApp<T>(deps: BootstrapAppDeps<T>): Promise<T> {
     return await deps.startApp();
   } catch (startupError: unknown) {
     deps.logger.error('Application startup failed', normalizeError(startupError));
+    await deps.onStartupFailure?.(startupError);
     deps.exit(1);
     throw startupError;
   }

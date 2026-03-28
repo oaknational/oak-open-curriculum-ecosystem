@@ -5,16 +5,27 @@ import {
   buildResourceAttributes,
   logLevelToSeverityNumber,
   type Logger,
-  type ErrorContext,
+  type LogContextInput,
+  type LogSink,
 } from '@oaknational/logger';
 import { createNodeStdoutSink } from '@oaknational/logger/node';
-import { getActiveSpanContextSnapshot } from '@oaknational/observability';
+import {
+  getActiveSpanContextSnapshot,
+  type ActiveSpanContextSnapshot,
+} from '@oaknational/observability';
 import type { Request, Response, ErrorRequestHandler } from 'express';
 
 import type { RuntimeConfig } from '../runtime-config.js';
 
 export interface HttpLoggerOptions {
   readonly name?: string;
+  readonly context?: LogContextInput;
+  readonly additionalSinks?: readonly LogSink[];
+  readonly getActiveSpanContext?: () => ActiveSpanContextSnapshot | undefined;
+}
+
+export interface ErrorLoggerObservability {
+  captureHandledError(error: unknown, context?: LogContextInput): void;
 }
 
 /**
@@ -31,39 +42,41 @@ export interface HttpLoggerOptions {
  *
  * @public
  */
-export function createHttpLogger(config: RuntimeConfig, options?: HttpLoggerOptions): Logger {
-  const levelInput = config.env.LOG_LEVEL?.toUpperCase();
-  const level = parseLogLevel(levelInput, 'INFO');
-  const minSeverity = logLevelToSeverityNumber(level);
+function resolveLoggerOptions(options?: HttpLoggerOptions): {
+  readonly name: string;
+  readonly context: LogContextInput;
+  readonly additionalSinks: readonly LogSink[];
+  readonly getActiveSpanContext: () => ActiveSpanContextSnapshot | undefined;
+} {
+  const {
+    name = 'streamable-http',
+    context = {},
+    additionalSinks = [],
+    getActiveSpanContext = getActiveSpanContextSnapshot,
+  } = options ?? {};
+  return { name, context, additionalSinks, getActiveSpanContext };
+}
 
-  const serviceName = options?.name ?? 'streamable-http';
-  const resourceAttributes = buildResourceAttributes(config.env, serviceName, config.version);
+export function createHttpLogger(config: RuntimeConfig, options?: HttpLoggerOptions): Logger {
+  const level = parseLogLevel(config.env.LOG_LEVEL?.toUpperCase(), 'INFO');
+  const resolved = resolveLoggerOptions(options);
+  const resourceAttributes = buildResourceAttributes(config.env, resolved.name, config.version);
 
   return new UnifiedLogger({
-    minSeverity,
+    minSeverity: logLevelToSeverityNumber(level),
     resourceAttributes,
-    context: {},
-    sinks: [createNodeStdoutSink()],
-    getActiveSpanContext: getActiveSpanContextSnapshot,
+    context: resolved.context,
+    sinks: [createNodeStdoutSink(), ...resolved.additionalSinks],
+    getActiveSpanContext: resolved.getActiveSpanContext,
   });
 }
 
 /**
  * Creates a child logger with correlation ID in the context.
  *
- * The child logger inherits all configuration from the parent logger
- * and adds the correlation ID to the context for request tracing.
- *
  * @param parentLogger - Parent logger instance to inherit configuration from
  * @param correlationId - Correlation ID to include in log context
  * @returns Child logger with correlation ID in context
- *
- * @example
- * ```typescript
- * const logger = createHttpLogger(config);
- * const correlatedLogger = createChildLogger(logger, 'req_123456789_abc123');
- * correlatedLogger.info('Processing request'); // Logs include correlationId
- * ```
  *
  * @public
  */
@@ -83,90 +96,77 @@ export function createChildLogger(parentLogger: Logger, correlationId: string): 
  * @param res - Express Response object
  * @returns Correlation ID if present, undefined otherwise
  *
- * @example
- * ```typescript
- * const correlationId = extractCorrelationId(res);
- * if (correlationId) {
- *   const correlatedLogger = createChildLogger(logger, correlationId);
- *   // Use correlated logger
- * }
- * ```
- *
  * @public
  */
 export function extractCorrelationId(res: Response): string | undefined {
   return res.locals?.correlationId;
 }
 
+/** Builds the log context shared between observability capture and structured log. */
+function buildErrorLogContext(
+  correlationId: string | undefined,
+  duration: { formatted: string; ms: number } | undefined,
+  method: string,
+  requestPath: string,
+  statusCode: number,
+): LogContextInput {
+  return {
+    correlationId,
+    duration: duration?.formatted,
+    durationMs: duration?.ms,
+    method,
+    path: requestPath,
+    statusCode: statusCode || 500,
+  };
+}
+
 /**
  * Creates an enriched error logging middleware for Express.
  *
- * This middleware captures errors, enriches them with correlation IDs,
- * timing information, and request context, then logs them with full
- * debugging information.
- *
- * Features:
- * - Extracts correlation ID from res.locals.correlationId
- * - Extracts timing information from res.locals.timer
- * - Includes request method and path in error context
- * - Adds X-Correlation-ID to error response headers
- * - Logs enriched errors with full context
- * - Sends 500 response with error message
+ * Captures errors, enriches them with correlation IDs, timing information,
+ * and request context, then logs them with full debugging information.
  *
  * @param logger - Logger instance for error logging
  * @returns Express error request handler middleware
  *
- * @example
- * ```typescript
- * import express from 'express';
- * import { createEnrichedErrorLogger } from './logging/index.js';
- * import { createHttpLogger } from './logging/index.js';
- *
- * const app = express();
- * const logger = createHttpLogger(config);
- * app.use(createEnrichedErrorLogger(logger));
- * ```
- *
  * @public
  */
-export function createEnrichedErrorLogger(logger: Logger): ErrorRequestHandler {
+export function createEnrichedErrorLogger(
+  logger: Logger,
+  observability?: ErrorLoggerObservability,
+): ErrorRequestHandler {
   return (err: Error, req: Request, res: Response, next): void => {
-    // Extract correlation ID from res.locals
     const correlationId = res.locals.correlationId;
-
-    // Extract timer and calculate duration
     const timer = res.locals.timer;
     const duration = timer?.end();
 
-    // Build error context
-    const errorContext: ErrorContext = {
+    const enrichedError = enrichError(err, {
       correlationId,
       duration,
       requestMethod: req.method,
       requestPath: req.path,
-    };
-
-    // Enrich the error with context
-    const enrichedError = enrichError(err, errorContext);
-
-    // Log the enriched error
-    logger.error('Request error', {
-      message: enrichedError.message,
-      stack: enrichedError.stack,
-      correlationId,
-      duration: duration?.formatted,
-      durationMs: duration?.ms,
-      method: req.method,
-      path: req.path,
-      statusCode: res.statusCode || 500,
     });
 
-    // Ensure correlation ID is in response headers
+    const logContext = buildErrorLogContext(
+      correlationId,
+      duration,
+      req.method,
+      req.path,
+      res.statusCode,
+    );
+
+    observability?.captureHandledError(err, logContext);
+
+    logger.error('Request error', {
+      ...logContext,
+      message: enrichedError.message,
+      stack: enrichedError.stack,
+    });
+
     if (correlationId) {
       res.setHeader('X-Correlation-ID', correlationId);
     }
 
-    // Pass error to next middleware (must follow Express error handling pattern)
     next(err);
   };
 }

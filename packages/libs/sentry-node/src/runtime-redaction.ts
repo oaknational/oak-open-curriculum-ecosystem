@@ -1,4 +1,5 @@
 import type { Breadcrumb, Exception, NodeOptions, RequestEventData } from '@sentry/node';
+import { typeSafeEntries } from '@oaknational/type-helpers';
 import {
   redactJsonObject,
   redactStringRecord,
@@ -144,8 +145,7 @@ function redactContexts(
 
   const redacted: NonNullable<SentryErrorEvent['contexts']> = {};
 
-  for (const key in contexts) {
-    const context = contexts[key];
+  for (const [key, context] of typeSafeEntries(contexts)) {
     const redactedContext = redactJsonObject(context);
 
     if (redactedContext) {
@@ -187,8 +187,8 @@ function redactSpanAttributeValue(
 function redactSpanData(data: SentrySpanPayload['data']): SentrySpanPayload['data'] {
   const redacted: SentrySpanPayload['data'] = {};
 
-  for (const key in data) {
-    redacted[key] = redactSpanAttributeValue(key, data[key]);
+  for (const [key, value] of typeSafeEntries(data)) {
+    redacted[key] = redactSpanAttributeValue(key, value);
   }
 
   return redacted;
@@ -199,6 +199,10 @@ export function redactSentryEvent(event: SentryErrorEvent): SentryErrorEvent {
     ...event,
     ...redactCommonEventFields(event),
   };
+}
+
+export function redactSentryBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb {
+  return redactBreadcrumb(breadcrumb);
 }
 
 export function redactSentryTransaction(event: SentryTransactionEvent): SentryTransactionEvent {

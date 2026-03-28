@@ -145,10 +145,17 @@ export interface SentryNodeSdk {
   flush(timeoutMs?: number): Promise<boolean>;
 }
 
+export interface SentryPostRedactionHooks {
+  readonly beforeSend?: NodeOptions['beforeSend'];
+  readonly beforeSendTransaction?: NodeOptions['beforeSendTransaction'];
+  readonly beforeBreadcrumb?: NodeOptions['beforeBreadcrumb'];
+}
+
 export interface InitialiseSentryOptions {
   readonly serviceName: string;
   readonly sdk?: SentryNodeSdk;
   readonly fixtureStore?: FixtureSentryStore;
+  readonly postRedactionHooks?: SentryPostRedactionHooks;
 }
 
 export interface SentryNodeRuntime {

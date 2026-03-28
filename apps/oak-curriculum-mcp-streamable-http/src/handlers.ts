@@ -3,11 +3,13 @@ import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { normalizeError } from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
+import { wrapToolHandler } from '@oaknational/sentry-mcp';
 import { typeSafeGet, typeSafeHas } from '@oaknational/type-helpers';
 
 import type { RuntimeConfig } from './runtime-config.js';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { extractCorrelationId, createChildLogger } from './logging/index.js';
+import type { HttpObservability } from './observability/http-observability.js';
 import { setRequestContext } from './request-context.js';
 import {
   createOakPathBasedClient,
@@ -36,6 +38,7 @@ export interface RegisterHandlersOptions {
   readonly overrides?: ToolHandlerOverrides;
   readonly runtimeConfig: RuntimeConfig;
   readonly logger: Logger;
+  readonly observability: HttpObservability;
   readonly resourceUrl?: string;
   /** Pre-created search retrieval service (shared across per-request servers). */
   readonly searchRetrieval: SearchRetrievalService;
@@ -99,6 +102,7 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
   const stubExecutor = options.runtimeConfig.useStubTools
     ? createStubToolExecutionAdapter()
     : undefined;
+  const mcpObservation = options.observability.createMcpObservationOptions();
 
   for (const tool of listUniversalTools(generatedToolRegistry)) {
     // Use generated Zod schema directly when available (includes .describe() for MCP clients).
@@ -111,55 +115,43 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
       securitySchemes: tool.securitySchemes,
       annotations: tool.annotations,
     };
-    server.registerTool(tool.name, config, async (params: unknown) => {
-      return handleToolWithAuthInterception({
-        tool,
-        params,
-        deps,
-        stubExecutor,
-        logger: options.logger,
-        apiKey: options.runtimeConfig.env.OAK_API_KEY,
-        runtimeConfig: options.runtimeConfig,
-        createAssetDownloadUrl: options.createAssetDownloadUrl,
-      });
-    });
+    server.registerTool(
+      tool.name,
+      config,
+      wrapToolHandler(
+        tool.name,
+        async (params: unknown) => {
+          return handleToolWithAuthInterception({
+            tool,
+            params,
+            deps,
+            stubExecutor,
+            logger: options.logger,
+            apiKey: options.runtimeConfig.env.OAK_API_KEY,
+            runtimeConfig: options.runtimeConfig,
+            createAssetDownloadUrl: options.createAssetDownloadUrl,
+          });
+        },
+        mcpObservation,
+      ),
+    );
   }
 
-  registerAllResources(server, { widgetDomain: deriveWidgetDomain(options.runtimeConfig) });
-  registerPrompts(server);
+  registerAllResources(server, {
+    widgetDomain: deriveWidgetDomain(options.runtimeConfig),
+    observability: options.observability,
+  });
+  registerPrompts(server, options.observability);
 }
 
 /**
  * Adapts Express Request for MCP SDK transport by omitting Clerk's auth property.
  *
- * ## Type System Conflict
- *
- * We're bridging two incompatible library type systems:
- * - Clerk middleware adds callable `auth(options?)` to Express Request (globally)
- * - MCP SDK transport expects `IncomingMessage & { auth?: AuthInfo }`
- *
- * These `auth` property types are incompatible and neither library is under our control.
- *
- * ## Why This Approach
- *
- * 1. Express Request extends IncomingMessage (structurally compatible)
- * 2. We use AsyncLocalStorage for our auth flow, so MCP SDK doesn't need the auth property
- * 3. Omitting the auth property via Proxy avoids the type conflict
- * 4. At runtime, the Proxy delegates all IncomingMessage properties correctly
- *
- * ## Type Assertion Justification
- *
- * The final type assertion is necessary because:
- * - Proxy<T> is not assignable to T in TypeScript's type system
- * - We cannot construct a real IncomingMessage (it's a Node.js class)
- * - We cannot change Clerk or MCP SDK types
- * - Runtime behavior is safe: Proxy delegates to Express Request which IS an IncomingMessage
- *
- * This is a documented architectural bridge between incompatible library types,
- * not a shortcut to hide type errors in our code.
- *
- * @param req - Express request with Clerk auth
- * @returns Proxy behaving as IncomingMessage without Clerk auth property
+ * Clerk middleware adds a callable `auth(options?)` to Express Request globally,
+ * while MCP SDK expects `IncomingMessage & { auth?: AuthInfo }`. These are
+ * incompatible. We use AsyncLocalStorage for auth, so the MCP SDK does not need
+ * the auth property. The Proxy omits it, delegating all IncomingMessage
+ * properties correctly at runtime.
  */
 function createMcpRequest(req: express.Request): IncomingMessage {
   const incomingRequest: IncomingMessage = req;
@@ -207,6 +199,7 @@ function extractMcpMethod(body: unknown): string | undefined {
  */
 export function createMcpHandler(
   mcpFactory: McpServerFactory,
+  observability: HttpObservability,
   logger?: Logger,
 ): (req: express.Request, res: express.Response) => Promise<void> {
   return async (req: express.Request, res: express.Response) => {
@@ -220,18 +213,34 @@ export function createMcpHandler(
     await server.connect(transport);
     const mcpRequest = createMcpRequest(req);
 
-    await setRequestContext(req, async () => {
-      await transport.handleRequest(mcpRequest, res, req.body);
-    });
-
-    // Clean up per-request resources after the response completes
     res.on('close', () => {
       Promise.resolve()
         .then(() => transport.close())
         .then(() => server.close())
         .catch((err: unknown) => {
-          logger?.error('MCP per-request cleanup failed', normalizeError(err));
+          logger?.error('MCP per-request cleanup failed', normalizeError(err), {
+            method: req.method,
+            path: req.path,
+          });
+          observability.captureHandledError(err, {
+            boundary: 'mcp_cleanup',
+            method: req.method,
+            path: req.path,
+          });
         });
+    });
+
+    await observability.withSpan({
+      name: 'oak.http.request.mcp',
+      attributes: {
+        'http.method': req.method,
+        'http.route': req.path,
+      },
+      run: async () => {
+        await setRequestContext(req, async () => {
+          await transport.handleRequest(mcpRequest, res, req.body);
+        });
+      },
     });
 
     log?.debug('MCP request completed', { statusCode: res.statusCode, mcpMethod });

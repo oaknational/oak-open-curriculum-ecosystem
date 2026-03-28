@@ -13,11 +13,11 @@ See [active/README.md](active/README.md) for work in progress.
 
 | Priority | Plan | Milestone | Status |
 |----------|------|-----------|--------|
-| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | Active — pushed through `ffff1867`; local blocker-clearance and doc-coherence fixes are landed, and the clean owner-requested handover confirmation rerun is the remaining gate before runtime adoption resumes |
+| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | Active — `44d8d74d` remains the pushed restart-cleared source of truth; the current local focus is HTTP Phase 3 stabilisation (test-strategy cleanup, lint-driven refactors, reviewer sweep, doc consolidation, then repo-root gates) before Search CLI adoption resumes |
 
 Prompt entry:
 
-- [sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md) — restart from the current local blocker-clearance state, record the clean handover confirmation rerun, then resume runtime adoption only after the checkpoint returns to restart-cleared
+- [sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md) — restart from the current pushed blocker-clearance state at `44d8d74d`, then follow the live HTTP stabilisation TODOs in the active plan before resuming Search CLI adoption
 
 ## Queued Work (Current)
 

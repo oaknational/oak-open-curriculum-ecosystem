@@ -11,7 +11,7 @@ import {
   readFirstTextContent,
   parseToolSuccessPayload,
 } from './helpers/sse.js';
-import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -49,9 +49,11 @@ async function executeToolCall(): Promise<{
 }> {
   const captured: CapturedCall[] = [];
   const overrides = createStubOverrides(captured);
+  const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
   const app = await createApp({
     toolHandlerOverrides: overrides,
-    runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+    runtimeConfig,
+    observability: createMockObservability(runtimeConfig),
   });
   const response = await request(app)
     .post('/mcp')

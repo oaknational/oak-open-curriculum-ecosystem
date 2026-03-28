@@ -1,11 +1,14 @@
 # Architecture and Infrastructure — Active
 
 Active execution lives here. The Sentry + OpenTelemetry foundation is now in
-progress and is the immediate blocker for Open Public Alpha readiness.
+progress and is the immediate blocker for Open Public Alpha readiness because
+Oak needs actionable, redacted runtime diagnosis before the HTTP MCP server and
+Search CLI can be operated confidently in public alpha.
 
 | Plan | Scope | Status |
 |---|---|---|
-| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation for `@oaknational/logger`, the HTTP MCP server, and the Search CLI | Phase 1 foundation code and the follow-up Search CLI branch-stability fix are pushed on `feat/full-sentry-otel-support` (`ffff1867`); the local worktree now has the blocker-clearance and doc-coherence fixes landed, and the clean handover confirmation rerun is the remaining gate before runtime adoption resumes |
+| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation | Phase 3 HTTP adoption in progress; remediation session ran 6 reviewers, began Phase A fixes |
+| [sentry-otel-remediation.plan.md](./sentry-otel-remediation.plan.md) | Branch remediation: 21 findings, 5 phases | Phase A mostly done in working tree (F1–F7); Phases B–E pending |
 
 Prompt entry point:
 
