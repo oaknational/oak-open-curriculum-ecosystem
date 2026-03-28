@@ -16,6 +16,10 @@
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
 import type { Logger } from '@oaknational/logger';
 import type { TokenVerifier } from './types.js';
+// Side-effect import: the MCP SDK's bearerAuth module augments Express
+// Request with `auth?: AuthInfo` via declaration merging. Importing the
+// type triggers the augmentation so `req.auth = authData` type-checks.
+import type {} from '@modelcontextprotocol/sdk/server/auth/middleware/bearerAuth.js';
 import { getPRMUrl } from './get-prm-url.js';
 import { getMcpResourceUrl } from './get-mcp-resource-url.js';
 import { validateResourceParameter } from '../../resource-parameter-validator.js';
@@ -141,7 +145,7 @@ function handleAuthError(
  * 4. Returns 401 if token verification fails
  * 5. Validates JWT audience claim matches resource URL (RFC 8707)
  * 6. Returns 401 if audience validation fails
- * 7. Stores verified `AuthInfo` on `res.locals.authInfo` for the handler
+ * 7. Sets verified `AuthInfo` on `req.auth` for the MCP SDK transport
  * 8. Calls next() if all checks pass
  *
  * **RFC 8707 Compliance**: This middleware validates that the JWT's `aud`
@@ -159,7 +163,7 @@ function handleAuthError(
  * const auth = mcpAuth(async (token, req) => {
  *   // Custom token verification logic
  *   return verifyMyToken(token);
- * }, logger);
+ * }, logger, allowedHosts);
  * app.post('/mcp', auth, mcpHandler);
  * ```
  */
@@ -199,10 +203,10 @@ export function mcpAuth(
         return;
       }
 
-      // Store verified AuthInfo on res.locals for the MCP handler to read.
-      // This eliminates double verification — the handler reads res.locals.authInfo
-      // instead of re-calling getAuth + verifyClerkToken.
-      res.locals.authInfo = authData;
+      // Set verified AuthInfo on req.auth for the MCP SDK transport.
+      // Direct assignment matches the SDK's own requireBearerAuth pattern.
+      // The MCP SDK augments IncomingMessage with `auth?: AuthInfo`.
+      req.auth = authData;
 
       next();
     } catch (error) {

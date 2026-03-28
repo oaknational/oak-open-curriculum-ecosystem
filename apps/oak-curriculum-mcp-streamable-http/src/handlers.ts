@@ -1,12 +1,13 @@
 import type express from 'express';
 import type { IncomingMessage } from 'node:http';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { Logger } from '@oaknational/logger';
+// Side-effect import: the MCP SDK's bearerAuth module augments Express
+// Request with `auth?: AuthInfo` via declaration merging.
+import type {} from '@modelcontextprotocol/sdk/server/auth/middleware/bearerAuth.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { extractCorrelationId, createChildLogger } from './logging/index.js';
-import { authInfoSchema } from './auth-info-schema.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
@@ -131,9 +132,9 @@ function extractMcpMethod(body: unknown): string | undefined {
 /**
  * Express handler using per-request MCP server + transport (stateless pattern).
  *
- * Reads verified `AuthInfo` from `res.locals.authInfo` (set by `mcpAuth`
- * middleware) and sets it on `req.auth` so the MCP SDK's
- * `StreamableHTTPServerTransport.handleRequest()` propagates it as
+ * Reads `req.auth` (set by `mcpAuth` middleware) natively via the
+ * `IncomingMessage` narrowing — no bridging needed. The MCP SDK's
+ * `StreamableHTTPServerTransport.handleRequest()` propagates `req.auth` as
  * `extra.authInfo` to tool callbacks. No Clerk imports — auth verification
  * happens once in the middleware, and the handler is pure composition.
  *
@@ -153,40 +154,18 @@ export function createMcpHandler(
     const { server, transport } = mcpFactory();
     await server.connect(transport);
 
-    // Read verified AuthInfo from res.locals (set by mcpAuth middleware).
-    // When auth is disabled (DANGEROUSLY_DISABLE_AUTH), middleware is skipped
-    // and res.locals.authInfo is undefined — tools requiring auth will reject.
-    // Zod validates the boundary: malformed auth data is caught immediately
-    // and returns a structured HTTP 500 rather than propagating silently.
-    let authInfo: AuthInfo | undefined;
-    if (res.locals.authInfo != null) {
-      const parsed = authInfoSchema.safeParse(res.locals.authInfo);
-      if (!parsed.success) {
-        log?.error('Malformed authInfo at MCP boundary', {
-          issues: parsed.error.issues,
-        });
-        res.status(500).json({ error: 'Internal auth validation error' });
-        return;
-      }
-      authInfo = parsed.data;
-    }
-
-    // Bridge Express → MCP SDK: set req.auth for the transport.
-    //
-    // The SDK's handleRequest expects IncomingMessage & { auth?: AuthInfo }.
-    // Express.Request extends IncomingMessage but has no `auth` property at
-    // the type level (Clerk sets it at runtime via Object.assign, not via a
-    // global type augmentation). Object.assign adds `auth` cleanly — no
-    // type conflict, no overwrite of a declared property.
+    // req.auth is set by mcpAuth middleware (or undefined when auth is
+    // disabled via DANGEROUSLY_DISABLE_AUTH). The MCP SDK transport reads
+    // req.auth directly — no bridging needed.
     const baseReq: IncomingMessage = req;
-    const mcpRequest = Object.assign(baseReq, { auth: authInfo });
-
-    await transport.handleRequest(mcpRequest, res, req.body);
+    await transport.handleRequest(baseReq, res, req.body);
 
     // Clean up per-request resources after the response completes.
     // Uses Promise.allSettled so both close calls execute independently —
     // if transport.close() rejects, server.close() still runs.
+    // Defence-in-depth: clear auth data from the request object.
     res.on('close', () => {
+      req.auth = undefined;
       void Promise.allSettled([transport.close(), server.close()]).then((results) => {
         for (const result of results) {
           if (result.status === 'rejected') {

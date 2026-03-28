@@ -5,7 +5,7 @@
 
 import type { Request, Response } from 'express';
 import type { Logger } from '@oaknational/logger';
-import type { AuthInfo } from './types.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import { getMcpResourceUrl } from './get-mcp-resource-url.js';
 
 /**

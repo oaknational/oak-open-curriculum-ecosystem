@@ -53,53 +53,61 @@ rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|opena
 
 ## What To Do Next
 
-**Phase 8 (Eliminate `res.locals` auth bridge) is the immediate priority.**
+**Phase 8 is partially implemented — uncommitted. Fix lint errors, then commit.**
 
-Phase 7 (items S, A-R) is complete (2026-03-28). During Phase 7, adversarial
-investigation of the `Object.assign(req, { auth })` bridge revealed that a
-false Express.Request global augmentation in `types.ts` was the root cause of
-the `res.locals` intermediary. The augmentation has been removed. Phase 8
-completes the simplification by moving auth storage from `res.locals` to
-`req.auth` — aligning with the MCP SDK's intended middleware pattern.
-
-Read the Phase 8 section:
+Read the Phase 8 status section in the plan:
 `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`
 
-### Phase 8 Summary
+### Phase 8 Current State (2026-03-28)
 
-**Design**: Change `mcpAuth` middleware to set `req.auth = authData` via
-`Object.assign` (matching both the MCP SDK's `requireBearerAuth` and Clerk's
-`clerkMiddleware` patterns). Delete the `res.locals` intermediary, the Zod
-validation bridge in the handler, and the `Object.assign` bridge. The handler
-reduces to pure MCP composition: create server, connect transport, handle
-request.
+The core production changes are done and tests pass (674 tests, 65 files,
+0 type errors). Changes are **uncommitted** because lint errors block the
+pre-commit hook:
 
-**Status**: Design written, pending reviewer approval before implementation.
+1. `auth-error-test-helpers.ts` line 206: `as` cast on `context` from
+   `vi.mocked` — must restructure so the function doesn't need the cast
+2. `auth-error-test-helpers.ts`: 251 lines (limit 250) — split by
+   responsibility (assertion helpers vs factory helpers)
+3. `error-handling.integration.test.ts`: 275 lines (limit 250) — split by
+   responsibility (pre-existing, not caused by Phase 8)
 
-### Phase 7 Completion Summary (2026-03-28)
+**What went wrong in the previous session**: Attempted to fix `max-lines` by
+condensing TSDoc and adding `eslint-disable` comments. Both are forbidden.
+The correct approach per principles.md: split long files by responsibility
+using TDD. Type assertions are utterly forbidden — fix the underlying type
+architecture.
 
-Items completed: S, A, B, C, D, E, F, G, H, I, J, L, M, N, O, P, Q, R (18).
-Deferred: K (E2E schemas not truly duplicated), T (design question for WS3/WS4).
-Dropped: U (user fixing upstream).
+### What to do
 
-Additionally during Phase 7:
+1. `/jc-start-right-quick`
+2. Fix the three lint errors above (split files, eliminate `as` cast)
+3. Run ALL quality gates — confirm 0 errors
+4. Commit
+5. Update this prompt and the plan status
 
-- Removed false Express.Request global augmentation (root cause of auth bridge)
-- Deleted dead `mock-clerk-middleware.ts` (never imported)
-- `WIDGET_TOOL_NAMES` now flows from canonical codegen source to all consumers
+### Phase 8 Production Changes (done, uncommitted)
 
-### Post-Phase-7 Gate Baseline (2026-03-28)
+- `mcp-auth.ts:205`: `Object.assign(req, { auth: authData })` replaces
+  `res.locals.authInfo`
+- `mcp-auth-clerk.ts`: DI deps parameter (ADR-078) + Zod `.strict()`
+  validation of `verifyClerkToken` result
+- `handlers.ts`: deleted 17-line auth bridge, handler is pure composition
+- `auth-info-schema.ts`: relocated to `auth/mcp-auth/` (co-located with
+  its only consumer `mcp-auth-clerk.ts`)
+- `fakes.ts`: `createFakeAuthMiddlewareRequest` + `auth` field on
+  `createFakeExpressRequest`
 
-All 69 gates green. 669 tests, 165 E2E, 20 UI. 0 errors, 103 lint warnings
-(down from 105 baseline).
+4 specialist reviews completed (code-reviewer x3, type-reviewer). All
+production findings addressed. The remaining issues are in test helper
+infrastructure only.
 
 ### After Phase 8
 
-Phase 8 eliminates the `res.locals` auth bridge. Once complete, WS3 (widget
-client migration) is unblocked. Resume the live spec research step (top of
-this file) before starting WS3.
+Once committed, WS3 (widget client migration) is unblocked. Resume the
+live spec research step (top of this file) before starting WS3.
 
-**Simplification phases 0-7** are **complete** (2026-03-28). Phase 8 pending.
+**Simplification phases 0-7** are **complete** (2026-03-28). Phase 8
+partially implemented (2026-03-28).
 
 - Phase 0: `verifyClerkToken` adopted from `@clerk/mcp-tools/server` (ADR-142).
   All five Express utilities SKIP'd.
@@ -176,7 +184,7 @@ propagated documentation. Key changes:
 
 - **WS1** (ADR + codegen contract): **complete** (2026-03-26)
 - **WS2** (app runtime migration): **complete** (2026-03-26). Child plan at `.agent/plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md` — reference only, not active work.
-- **Runtime boundary simplification**: **Phase 8 pending** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-7 done (2026-03-28). Phase 8 (eliminate `res.locals` auth bridge) pending — design reviewed and approved.
+- **Runtime boundary simplification**: **Phase 8 partially implemented, uncommitted** — `.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md`. Phases 0-7 done (2026-03-28). Phase 8 production code done, lint errors in test helpers block commit (3 issues: `as` cast, two `max-lines` violations).
 - **WS3** (widget client + branding): **next** — unblocked once Phase 8 lands
 - **WS4** (search UI for humans): **blocked by** WS3
 - **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md` — Phases 0-2 can run independently, Phase 3 depends on simplification plan Phase 3

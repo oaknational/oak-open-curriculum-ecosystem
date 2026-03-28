@@ -122,6 +122,12 @@ function logAudienceValidation(
  * @param logger - Logger for validation details
  * @returns Validation result with details
  *
+ * @security Opaque tokens (e.g. Clerk's `oat_...`) bypass local audience
+ * validation because they have no inspectable claims. The function returns
+ * `{ valid: true }` for non-JWT tokens, relying on Clerk's upstream
+ * `verifyClerkToken()` to have performed resource binding. If a second
+ * OAuth provider is added, this code path must be re-evaluated.
+ *
  * @see https://www.rfc-editor.org/rfc/rfc8707.html
  *
  * @example
