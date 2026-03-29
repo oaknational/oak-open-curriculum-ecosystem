@@ -2,9 +2,9 @@
 
 This guide helps AI agents working on this codebase understand when and how to add, modify, and test logging functionality.
 
-**Last Updated**: 2026-03-28
-**Phase**: Phase 1 foundation is complete; HTTP Phase 3 wiring is in the local stabilisation pass (test-strategy cleanup, lint-driven refactors, reviewer sweep, and repo-root gates) before Search CLI adoption resumes
-**Status Note**: The restart-cleared pushed baseline is `44d8d74d` on `feat/full-sentry-otel-support`; `ffff1867` remains the earlier Search CLI branch-hygiene checkpoint and does not count as observability adoption evidence.
+**Last Updated**: 2026-03-29
+**Phase**: Phases 1-2 complete; HTTP Phase 3 adoption near-complete (19/21 remediation findings resolved, all gates green on `feat/full-sentry-otel-support`). Search CLI adoption pending after HTTP merge.
+**Branch**: `feat/full-sentry-otel-support` head `de232b20`
 
 ## Overview
 
