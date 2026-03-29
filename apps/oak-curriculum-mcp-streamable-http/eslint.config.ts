@@ -106,10 +106,12 @@ const config = defineConfig(
         'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
       },
     },
-    // MCP SDK registerTool has overloaded generics that TypeScript cannot
-    // satisfy with any mock function. This ONE test helper file uses a
-    // targeted assertion to assign a capturing implementation to the
-    // server.registerTool property. The assertion is documented in the file.
+    // Two irreducible assertion cases, each confirmed by type-reviewer:
+    // 1. auth-error-test-helpers.ts: McpServer.registerTool has overloaded
+    //    generics that no plain function can satisfy (SDK limitation).
+    // 2. verify-clerk-token.unit.test.ts: tests intentionally construct
+    //    type-violating objects (null where Clerk types say non-null) to
+    //    prove runtime resilience against malformed auth payloads.
     {
       files: [
         'src/test-helpers/auth-error-test-helpers.ts',

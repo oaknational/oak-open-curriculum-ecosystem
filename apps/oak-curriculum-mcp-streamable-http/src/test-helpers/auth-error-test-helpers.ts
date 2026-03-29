@@ -59,14 +59,15 @@ interface Params {
 /**
  * Creates a real MCP server with `registerTool` replaced to capture handlers.
  *
+ * @remarks
  * Uses a real `McpServer` instance — the SDK object naturally satisfies its
  * own types. Replaces `registerTool` with a handler-capturing function.
  *
- * The `as McpServer['registerTool']` assertion on line below is the ONE
- * targeted assertion in the test helpers. It exists because the MCP SDK's
- * `registerTool` has overloaded generics that TypeScript cannot satisfy
- * with any plain function. The eslint config for this file allows `as`
- * style assertions (not `eslint-disable`) — see eslint.config.ts.
+ * The `as McpServer['registerTool']` assertion is irreducible: the MCP
+ * SDK's `registerTool` has overloaded generics that TypeScript cannot
+ * satisfy with any plain function. This was confirmed by type-reviewer
+ * analysis. The eslint config for this file allows `as`-style assertions
+ * (see eslint.config.ts).
  */
 export function createMockServer(
   capturedHandlers: Map<string, (params: Params) => Promise<CallToolResult>>,
@@ -85,9 +86,8 @@ export function createMockServer(
     }
   }
 
-  // Targeted assertion: McpServer.registerTool has overloaded generics
-  // that no plain function can satisfy. This is the only assertion in
-  // test helpers — documented in eslint.config.ts.
+  // Irreducible assertion: McpServer.registerTool has overloaded generics
+  // that no plain function can satisfy. Confirmed by type-reviewer analysis.
   server.registerTool = capturingRegisterTool as McpServer['registerTool'];
 
   return server;

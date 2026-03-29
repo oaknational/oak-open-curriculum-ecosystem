@@ -1,16 +1,19 @@
-import { execFile } from 'child_process';
+/**
+ * Integration tests for the prerequisite graph JSON writer.
+ *
+ * @remarks
+ * Tests actual filesystem output: directory creation and file content.
+ * The runtime-loading test (child process) lives in the E2E tier at
+ * `e2e-tests/generators/write-json-graph-file.e2e.test.ts`.
+ */
 import { mkdtemp, readFile, rm } from 'fs/promises';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import { pathToFileURL } from 'url';
-import { promisify } from 'util';
 
 import { describe, expect, it } from 'vitest';
 
 import type { PrerequisiteGraph } from './prerequisite-graph-generator.js';
 import { writePrerequisiteGraphAsJson } from './write-json-graph-file.js';
-
-const execFileAsync = promisify(execFile);
 
 const sampleGraph = {
   version: '1.0.0',
@@ -89,71 +92,6 @@ describe('writePrerequisiteGraphAsJson', () => {
       expect(indexModule).toContain("import { createRequire } from 'node:module';");
       expect(indexModule).toContain('const require = createRequire(import.meta.url);');
       expect(indexModule).toContain("const data: JsonPrerequisiteGraph = require('./data.json');");
-    } finally {
-      await rm(tempDir, { recursive: true, force: true });
-    }
-  });
-
-  it('loads under plain Node ESM and restores explicit undefined years', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'oak-prerequisite-graph-runtime-'));
-
-    try {
-      const outputDir = await writePrerequisiteGraphAsJson(sampleGraph, tempDir);
-      const moduleUrl = pathToFileURL(join(outputDir, 'index.ts')).href;
-      const { stdout } = await execFileAsync(process.execPath, [
-        '--experimental-strip-types',
-        '--input-type=module',
-        '-e',
-        `import(${JSON.stringify(moduleUrl)}).then(({ prerequisiteGraph }) => {
-          const firstNode = prerequisiteGraph.nodes[0];
-          const firstEdge = prerequisiteGraph.edges[0];
-          console.log(JSON.stringify({
-            graph: prerequisiteGraph,
-            firstNodeHasYear: Object.prototype.hasOwnProperty.call(firstNode, 'year'),
-            firstNodeYearType: typeof firstNode.year,
-            firstEdgeRel: firstEdge?.rel,
-            firstEdgeSource: firstEdge?.source,
-          }));
-        });`,
-      ]);
-
-      const payload: unknown = JSON.parse(stdout);
-
-      expect(payload).toStrictEqual({
-        graph: {
-          version: '1.0.0',
-          generatedAt: '2026-03-29T12:00:00Z',
-          sourceVersion: 'test-v1',
-          stats: {
-            unitsWithPrerequisites: 1,
-            totalEdges: 1,
-            subjectsCovered: ['maths'],
-          },
-          nodes: [
-            {
-              unitSlug: 'fractions-all-years',
-              unitTitle: 'Fractions All Years',
-              subject: 'maths',
-              keyStage: 'ks2',
-              priorKnowledge: ['fractions-year-2'],
-              threadSlugs: ['number-fractions'],
-            },
-          ],
-          edges: [
-            {
-              from: 'fractions-year-2',
-              to: 'fractions-all-years',
-              rel: 'prerequisiteFor',
-              source: 'thread',
-            },
-          ],
-          seeAlso: 'get-prerequisite-graph',
-        },
-        firstNodeHasYear: true,
-        firstNodeYearType: 'undefined',
-        firstEdgeRel: 'prerequisiteFor',
-        firstEdgeSource: 'thread',
-      });
     } finally {
       await rm(tempDir, { recursive: true, force: true });
     }
