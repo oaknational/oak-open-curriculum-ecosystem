@@ -68,6 +68,26 @@ describe('no-eslint-disable', () => {
         code: '// @ts-expect-error some description\nconst x = 1;\nexport {};',
         errors: [{ messageId: 'tsDirectiveBanned' }],
       },
+      // ts-nocheck is banned (file-level suppression)
+      {
+        code: '// @ts-nocheck\nconst x = 1;\nexport {};',
+        errors: [{ messageId: 'tsDirectiveBanned' }],
+      },
+      // ts-ignore with approval marker is STILL banned — TS suppressions have NO exceptions
+      {
+        code: '// @ts-ignore -- JC: approved\nconst x = 1;\nexport {};',
+        errors: [{ messageId: 'tsDirectiveBanned' }],
+      },
+      // ts-expect-error with approval marker is STILL banned
+      {
+        code: '// @ts-expect-error -- JC: approved\nconst x = 1;\nexport {};',
+        errors: [{ messageId: 'tsDirectiveBanned' }],
+      },
+      // ts-nocheck with approval marker is STILL banned — completes the no-exceptions matrix
+      {
+        code: '// @ts-nocheck -- JC: approved\nconst x = 1;\nexport {};',
+        errors: [{ messageId: 'tsDirectiveBanned' }],
+      },
       // Multiple violations in one file
       {
         code: '/* eslint-disable no-console */\n// eslint-disable-next-line no-console\nexport {};',

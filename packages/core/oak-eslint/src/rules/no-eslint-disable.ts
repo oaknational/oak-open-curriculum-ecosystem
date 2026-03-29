@@ -9,9 +9,10 @@ import type { Rule } from 'eslint';
 const ESLINT_DISABLE_PATTERN = /eslint-disable(?!d)(?:-next-line|-line)?(?!\w)/u;
 
 /**
- * Pattern matching `@ts-ignore` or `@ts-expect-error` TypeScript suppression directives.
+ * Pattern matching TypeScript suppression directives: `@ts-ignore`,
+ * `@ts-expect-error`, and `@ts-nocheck`.
  */
-const TS_DIRECTIVE_PATTERN = /@ts-(?:ignore|expect-error)/u;
+const TS_DIRECTIVE_PATTERN = /@ts-(?:ignore|expect-error|nocheck)(?!\w)/u;
 
 /**
  * Case-insensitive pattern for the user-approval marker.
@@ -28,8 +29,9 @@ const APPROVAL_MARKER_PATTERN = /--\s*jc:/iu;
  * be tracked and remediated. Only the project owner may introduce new
  * suppressions by adding the approval prefix.
  *
- * `@ts-ignore` and `@ts-expect-error` are also banned unconditionally — there
- * is no exception for TypeScript suppression directives.
+ * `@ts-ignore`, `@ts-expect-error`, and `@ts-nocheck` are banned
+ * unconditionally — there is no exception for TypeScript suppression
+ * directives.
  *
  * `eslint-enable` comments are explicitly allowed; they undo prior disable
  * blocks and should not be restricted.
@@ -39,14 +41,14 @@ const noEslintDisableRule: Rule.RuleModule = {
     type: 'problem',
     docs: {
       description:
-        'Ban eslint-disable comments unless they carry the project-owner approval marker. Also bans @ts-ignore and @ts-expect-error unconditionally.',
+        'Ban eslint-disable comments unless they carry the project-owner approval marker. Also bans @ts-ignore, @ts-expect-error, and @ts-nocheck unconditionally.',
     },
     schema: [],
     messages: {
       eslintDisableBanned:
         'eslint-disable is banned. Fix the root cause. Only the project owner can approve exceptions.',
       tsDirectiveBanned:
-        '@ts-ignore and @ts-expect-error are banned. Fix the root cause — TypeScript suppression directives are never permitted.',
+        '@ts-ignore, @ts-expect-error, and @ts-nocheck are banned. Fix the root cause — TypeScript suppression directives are never permitted.',
     },
   },
 
