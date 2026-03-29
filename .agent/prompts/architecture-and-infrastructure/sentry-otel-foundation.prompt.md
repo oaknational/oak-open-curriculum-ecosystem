@@ -12,23 +12,19 @@ This is the operational handover for the active observability foundation work.
 Keep it thin. The active plan owns the facts; this prompt only tells a fresh
 session where to start.
 
-## Current State (end of 2026-03-29 remediation session)
+## Current State (2026-03-29)
 
-Branch: `feat/full-sentry-otel-support`. Head: `2f290c56`.
+Branch: `feat/full-sentry-otel-support`. Head: `1aeb7290`.
+13 commits ahead of main (333 files, ~19k insertions).
 
 Two remediation sessions (2026-03-28 and 2026-03-29) ran 6+3 specialist
-reviewers, identified 21 findings, and fixed 19 of them across 5 commits.
+reviewers, identified 21 findings, and fixed 19 of them. Smoke tests
+fixed and `pnpm check` passes (81/81 tasks including clean rebuild).
 
-**Committed** (5 new commits on the branch):
-
-- `de0d897d` — Phase A: all P0 gate blockers (F1-F7)
-- `583d39e3` — Phase B: architectural fixes F8-F14 (except F10)
-- `29e22956` — Phase C+D: security hardening (F15-F16) + improvements (F19, F21)
-- `e975e61c` — Phase D: remaining improvements (F17, F20)
-- `2f290c56` — Reviewer findings: boundary tightening, flat attributes, scoped counter
-
-**Gate status**: 79/79 turbo tasks pass (type-check, lint, test, test:e2e).
-Pre-existing portability check issue unrelated to this branch.
+**Gate status**: `pnpm check` green — 81/81 tasks (secrets scan, clean
+rebuild, sdk-codegen, build, type-check, doc-gen, lint, test, test:e2e,
+test:ui, smoke:dev:stub, subagents:check, portability:check, markdownlint,
+format).
 
 **What remains**:
 

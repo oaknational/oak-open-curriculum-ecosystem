@@ -82,25 +82,25 @@ and capture boundaries established in Phase 1 and Phase 2.
 ### Lane and state
 
 - Branch: `feat/full-sentry-otel-support`
-- Head: `de232b20` (10 commits ahead of main, 333 files, ~19k insertions)
+- Head: `1aeb7290` (13 commits ahead of main, 333 files, ~19k insertions)
 - Phases 0-2 complete (governance, shared contracts, shared foundation)
 - Phase 3 HTTP adoption: **near-complete** — 19/21 remediation findings
-  resolved, all turbo gates green (79/79 tasks), ready for PR review
+  resolved, `pnpm check` green (81/81 tasks), ready for PR review
 - Phase 3 Search CLI adoption: **pending** — blocked on HTTP merge
 - Phase 4 evidence/deployment: **pending**
 
 ### Quality gate status (2026-03-29)
 
-All turbo gates pass: `type-check`, `lint`, `test`, `test:e2e` across all
-workspaces (79/79 tasks). Pre-existing `portability:check` failure unrelated
-to this branch.
+`pnpm check` passes: 81/81 tasks (secrets scan, clean rebuild, sdk-codegen,
+build, type-check, doc-gen, lint, test, test:e2e, test:ui, smoke:dev:stub,
+subagents:check, portability:check, markdownlint, format).
 
 ### Remediation status
 
 The remediation plan ([sentry-otel-remediation.plan.md](./sentry-otel-remediation.plan.md))
 tracked 21 findings from 6 specialist reviewers. Status:
 
-- **19 resolved** across 5 commits (de0d897d → 2f290c56)
+- **19 resolved** across 8 commits (de0d897d → 1aeb7290)
 - **F10 reverted** — auth DI refactor (`vi.mock` in `checkMcpClientAuth`)
   is out of scope for the observability branch. Track separately.
 - **F18 deferred** — span helper DRY between `core/observability` and app;
