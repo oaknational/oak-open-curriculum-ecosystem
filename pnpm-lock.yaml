@@ -133,55 +133,6 @@ importers:
         specifier: workspace:*
         version: link:../packages/core/oak-eslint
 
-  apps/oak-curriculum-mcp-stdio:
-    dependencies:
-      '@elastic/elasticsearch':
-        specifier: ^9.3.4
-        version: 9.3.4
-      '@modelcontextprotocol/ext-apps':
-        specifier: ^1.3.2
-        version: 1.3.2(@modelcontextprotocol/sdk@1.28.0(zod@4.3.6))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.3.6)
-      '@modelcontextprotocol/sdk':
-        specifier: ^1.28.0
-        version: 1.28.0(zod@4.3.6)
-      '@oaknational/curriculum-sdk':
-        specifier: workspace:*
-        version: link:../../packages/sdks/oak-curriculum-sdk
-      '@oaknational/env':
-        specifier: workspace:*
-        version: link:../../packages/core/env
-      '@oaknational/env-resolution':
-        specifier: workspace:*
-        version: link:../../packages/libs/env-resolution
-      '@oaknational/logger':
-        specifier: workspace:*
-        version: link:../../packages/libs/logger
-      '@oaknational/oak-search-sdk':
-        specifier: workspace:*
-        version: link:../../packages/sdks/oak-search-sdk
-      '@oaknational/result':
-        specifier: workspace:*
-        version: link:../../packages/core/result
-      zod:
-        specifier: ^4.3.6
-        version: 4.3.6
-    devDependencies:
-      '@oaknational/eslint-plugin-standards':
-        specifier: workspace:*
-        version: link:../../packages/core/oak-eslint
-      '@types/node':
-        specifier: ^25.5.0
-        version: 25.5.0
-      tsx:
-        specifier: ^4.21.0
-        version: 4.21.0
-      typescript:
-        specifier: ^5
-        version: 5.9.3
-      vitest:
-        specifier: ^4.1.2
-        version: 4.1.2(@opentelemetry/api@1.9.1)(@types/node@25.5.0)(@vitest/ui@4.1.2)(jsdom@27.3.0)(vite@7.3.1(@types/node@25.5.0)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3))
-
   apps/oak-curriculum-mcp-streamable-http:
     dependencies:
       '@clerk/backend':

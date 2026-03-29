@@ -11,6 +11,7 @@ import type { ExtractedMisconception } from '../extractors/index.js';
 
 import {
   generateMisconceptionGraphData,
+  serializeMisconceptionGraph,
   type MisconceptionGraph,
   type MisconceptionNode,
 } from './misconception-graph-generator.js';
@@ -182,5 +183,16 @@ describe('MisconceptionGraph type', () => {
     expect(result.stats.subjectsCovered).toBeDefined();
     expect(Array.isArray(result.nodes)).toBe(true);
     expect(result.seeAlso).toBeDefined();
+  });
+});
+
+describe('serializeMisconceptionGraph', () => {
+  it('does not emit eslint-disable directives in generated output', () => {
+    const graph = generateMisconceptionGraphData([createMisconception()], '2025-12-26');
+
+    const serialized = serializeMisconceptionGraph(graph);
+
+    expect(serialized).toContain('export const misconceptionGraph: MisconceptionGraph = {');
+    expect(serialized).not.toContain('eslint-disable');
   });
 });

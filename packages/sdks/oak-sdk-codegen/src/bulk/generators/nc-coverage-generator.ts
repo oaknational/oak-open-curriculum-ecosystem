@@ -147,7 +147,6 @@ function escapeString(str: string): string {
  */
 export function serializeNCCoverageGraph(graph: NCCoverageGraph): string {
   const lines: string[] = [
-    '/* eslint-disable max-lines -- generated static data file */',
     '/**',
     ' * NC Coverage Graph — extracted from bulk download data.',
     ' *',

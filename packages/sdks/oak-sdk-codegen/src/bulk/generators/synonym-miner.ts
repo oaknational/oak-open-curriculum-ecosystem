@@ -196,7 +196,6 @@ export function generateMinedSynonyms(keywords: readonly ExtractedKeyword[]): Mi
  */
 export function serializeMinedSynonyms(data: MinedSynonymsData): string {
   const lines: string[] = [
-    '/* eslint-disable max-lines -- generated static synonym data file */',
     '/**',
     ' * Generated synonyms mined from curriculum keyword definitions.',
     ' *',
@@ -269,11 +268,10 @@ export async function writeMinedSynonymsFile(
   data: MinedSynonymsData,
   outputDir: string,
 ): Promise<string> {
-  const generatedDir = join(outputDir, 'generated');
-  await mkdir(generatedDir, { recursive: true });
+  await mkdir(outputDir, { recursive: true });
 
   const fileName = 'definition-synonyms.ts';
-  const filePath = join(generatedDir, fileName);
+  const filePath = join(outputDir, fileName);
   const content = serializeMinedSynonyms(data);
 
   await writeFile(filePath, content, 'utf-8');

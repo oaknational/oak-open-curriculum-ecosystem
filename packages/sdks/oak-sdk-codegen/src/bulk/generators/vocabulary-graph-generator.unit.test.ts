@@ -11,6 +11,7 @@ import type { ExtractedKeyword } from '../extractors/index.js';
 
 import {
   generateVocabularyGraphData,
+  serializeVocabularyGraph,
   type VocabularyGraph,
   type VocabularyNode,
 } from './vocabulary-graph-generator.js';
@@ -196,5 +197,16 @@ describe('VocabularyGraph type', () => {
     expect(result.stats.subjectsCovered).toBeDefined();
     expect(Array.isArray(result.nodes)).toBe(true);
     expect(result.seeAlso).toBeDefined();
+  });
+});
+
+describe('serializeVocabularyGraph', () => {
+  it('does not emit eslint-disable directives in generated output', () => {
+    const graph = generateVocabularyGraphData([createKeyword()], '2025-12-26');
+
+    const serialized = serializeVocabularyGraph(graph);
+
+    expect(serialized).toContain('export const vocabularyGraph: VocabularyGraph = {');
+    expect(serialized).not.toContain('eslint-disable');
   });
 });

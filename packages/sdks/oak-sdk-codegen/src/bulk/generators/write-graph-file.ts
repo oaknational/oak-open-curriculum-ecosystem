@@ -25,7 +25,6 @@ function escapeString(str: string): string {
  */
 function generateHeader(graph: ThreadProgressionGraph): readonly string[] {
   return [
-    '/* eslint-disable max-lines -- generated static data file */',
     '/**',
     ' * Thread Progression Graph — extracted from bulk download data.',
     ' *',
@@ -175,7 +174,6 @@ export async function writeThreadProgressionFile(
  */
 function generatePrerequisiteHeader(graph: PrerequisiteGraph): readonly string[] {
   return [
-    '/* eslint-disable max-lines -- generated static data file */',
     '/**',
     ' * Prerequisite Graph — extracted from bulk download data.',
     ' *',

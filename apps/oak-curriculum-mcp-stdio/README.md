@@ -26,9 +26,15 @@ pnpm -C apps/oak-curriculum-mcp-stdio build
 OAK_API_KEY=your_oak_api_key_here
 ```
 
-Use this only where an existing local MCP client setup still requires the legacy
-stdio workspace. See `.mcp.json` or `.cursor/mcp.json` for current local
-configuration examples.
+Use this only where a manual local MCP client setup still requires the legacy
+stdio workspace. The checked-in `.mcp.json` and `.cursor/mcp.json` now target
+the HTTP server, not this legacy workspace.
+
+This workspace is commented out of
+[`pnpm-workspace.yaml`](../../pnpm-workspace.yaml), so root `pnpm check`
+and root `pnpm --filter` commands do not include it. For intentional
+legacy maintenance, run commands from this directory or use
+`pnpm -C apps/oak-curriculum-mcp-stdio ...`.
 
 ## Architecture
 
@@ -77,7 +83,7 @@ npx @oaknational/oak-curriculum-mcp
 
 # Or clone and build locally
 pnpm install
-pnpm build
+pnpm -C apps/oak-curriculum-mcp-stdio build
 ```
 
 ## Configuration
@@ -109,7 +115,7 @@ Required variables: `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`.
 
 ## Testing
 
-- Run the suite with `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`.
+- Run the suite with `pnpm -C apps/oak-curriculum-mcp-stdio test`.
 - Tests spin up an in-memory STDIO transport using the generated stub executor (`src/app/test-helpers/create-stubbed-stdio-server.ts`), covering initialise/list, success, validation, and missing stub flows without additional configuration.
 
 ## Legacy development and support
@@ -118,22 +124,22 @@ Required variables: `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`.
 # Install dependencies
 pnpm install
 
-# Build & validate from repo root
-pnpm make && pnpm qg
+# Build the legacy workspace directly
+pnpm -C apps/oak-curriculum-mcp-stdio build
 
 # Run in development mode (stdio)
-pnpm dev
+pnpm -C apps/oak-curriculum-mcp-stdio dev
 
-# Run tests
-pnpm test
-
-# Build for production
-pnpm build
+# Run tests for the legacy workspace
+pnpm -C apps/oak-curriculum-mcp-stdio test
 ```
 
 No new feature work should be planned against this workspace. Limit changes here
 to transitional maintenance that is strictly necessary until the stdio entry
 point is consolidated into the HTTP workspace.
+
+Root `pnpm check` validates the maintained workspace graph and does not
+include this legacy workspace.
 
 ## How it works
 

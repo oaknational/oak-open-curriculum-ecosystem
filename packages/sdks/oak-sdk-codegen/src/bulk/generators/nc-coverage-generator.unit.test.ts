@@ -12,6 +12,7 @@ import type { ExtractedNCStatement } from '../extractors/index.js';
 
 import {
   generateNCCoverageGraphData,
+  serializeNCCoverageGraph,
   type NCCoverageGraph,
   type NCStatementNode,
 } from './nc-coverage-generator.js';
@@ -189,5 +190,16 @@ describe('NCCoverageGraph type', () => {
     expect(result.stats.subjectsCovered).toBeDefined();
     expect(Array.isArray(result.nodes)).toBe(true);
     expect(result.seeAlso).toBeDefined();
+  });
+});
+
+describe('serializeNCCoverageGraph', () => {
+  it('does not emit eslint-disable directives in generated output', () => {
+    const graph = generateNCCoverageGraphData([createNCStatement()], '2025-12-26');
+
+    const serialized = serializeNCCoverageGraph(graph);
+
+    expect(serialized).toContain('export const ncCoverageGraph: NCCoverageGraph = {');
+    expect(serialized).not.toContain('eslint-disable');
   });
 });

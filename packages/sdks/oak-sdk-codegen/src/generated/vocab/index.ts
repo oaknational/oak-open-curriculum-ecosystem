@@ -10,7 +10,13 @@
  */
 
 export { threadProgressionGraph } from './thread-progression-data.js';
-export { prerequisiteGraph } from './prerequisite-graph-data.js';
+export { prerequisiteGraph } from './prerequisite-graph/index.js';
+export type {
+  PrerequisiteEdge,
+  PrerequisiteGraph,
+  PrerequisiteGraphStats,
+  PrerequisiteNode,
+} from './prerequisite-graph/index.js';
 export { misconceptionGraph } from './misconception-graph-data.js';
 export { vocabularyGraph } from './vocabulary-graph-data.js';
 export { ncCoverageGraph } from './nc-coverage-graph-data.js';

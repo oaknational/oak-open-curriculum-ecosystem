@@ -10,7 +10,7 @@
  * - Units with their prior knowledge requirements
  * - prerequisiteFor edges derived from thread ordering
  *
- * @see prerequisite-graph-data.ts for the graph data structure
+ * @see @oaknational/sdk-codegen/vocab-data for the graph data export
  * @see aggregated-thread-progressions.ts for the companion thread graph
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */

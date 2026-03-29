@@ -150,7 +150,6 @@ function escapeString(str: string): string {
  */
 export function serializeVocabularyGraph(graph: VocabularyGraph): string {
   const lines: string[] = [
-    '/* eslint-disable max-lines -- generated static data file */',
     '/**',
     ' * Vocabulary Graph — extracted from bulk download data.',
     ' *',

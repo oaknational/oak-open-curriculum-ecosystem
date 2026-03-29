@@ -76,7 +76,7 @@
     "generate:zod": "tsx code-generation/zodgen.ts",
     "generate:bulk": "tsx code-generation/bulkgen.ts",
     "generate:clean": "rm -rf src/types/generated",
-    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json && node --experimental-strip-types code-generation/copy-json-assets.ts",
     "clean": "rm -rf dist .turbo src/types/generated",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "lint": "eslint .",

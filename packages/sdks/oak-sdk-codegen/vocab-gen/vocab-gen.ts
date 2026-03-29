@@ -33,10 +33,10 @@ import {
   writeMinedSynonymsFile,
   writeMisconceptionGraphFile,
   writeNCCoverageGraphFile,
-  writePrerequisiteGraphFile,
   writeThreadProgressionFile,
   writeVocabularyGraphFile,
-} from './generators/index.js';
+} from '../src/bulk.js';
+import { writePrerequisiteGraphAsJson } from '../src/bulk/generators/write-json-graph-file.js';
 import { readAllBulkFiles } from './lib/index.js';
 import { type BulkDataInput, processBulkData, type ProcessingResult } from './vocab-gen-core.js';
 import { type PipelineConfig, type PipelineResult } from './vocab-gen-config.js';
@@ -122,11 +122,11 @@ async function generateOutputFiles(
     result.extractedData.threads,
     sourceVersion,
   );
-  const prerequisiteFilePath = await writePrerequisiteGraphFile(
+  const prerequisiteDirPath = await writePrerequisiteGraphAsJson(
     prerequisiteGraph,
     config.outputPath,
   );
-  outputFiles.push(basename(prerequisiteFilePath));
+  outputFiles.push(basename(prerequisiteDirPath));
 
   // Generate analysis report (written to vocab-gen/reports in the SDK)
   const analysisReport = generateAnalysisReport(result.extractedData);

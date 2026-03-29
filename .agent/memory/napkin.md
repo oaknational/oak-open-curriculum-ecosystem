@@ -1,3 +1,27 @@
+## Session 2026-03-29 — Plan/prompt reduction for CI remediation workstream
+
+### What changed
+
+- Rewrote the active CI remediation plan to make it the single
+  authoritative source for scope, sequencing, risks, and validation.
+- Rewrote the session-continuation prompt to be operational only:
+  grounding, live git inspection, immediate priority, durable guidance.
+
+### Why
+
+- Both documents had drifted into stale, session-specific state
+  snapshots (hard-coded SHAs, uncommitted file inventories, stash
+  ordinals).
+- ADR-117 document hierarchy matters here: the prompt should not become
+  a second plan, and volatile git facts should be discovered live.
+
+### Durable guidance
+
+- Keep volatile branch state out of long-lived docs.
+- Use the plan as the authoritative workstream document.
+- Use the prompt as a short operational entry point that tells the next
+  session what to read and how to re-ground.
+
 ## Session 2026-03-29 — E2E failure analysis (`feat/mcp_app`)
 
 ### What was verified

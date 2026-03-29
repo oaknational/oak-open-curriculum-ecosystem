@@ -148,7 +148,6 @@ function escapeString(str: string): string {
  */
 export function serializeMisconceptionGraph(graph: MisconceptionGraph): string {
   const lines: string[] = [
-    '/* eslint-disable max-lines -- generated static data file */',
     '/**',
     ' * Misconception Graph — extracted from bulk download data.',
     ' *',

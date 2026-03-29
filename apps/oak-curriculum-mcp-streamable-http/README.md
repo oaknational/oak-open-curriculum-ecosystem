@@ -103,8 +103,11 @@ Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads 
 
 ## Cursor (legacy local stdio) configuration
 
-- Today, local stdio setups still point at the legacy stdio workspace via
-  `.mcp.json` / `.cursor/mcp.json`. Ensure the command path points to:
+The checked-in `.mcp.json` and `.cursor/mcp.json` now point at the HTTP
+server, not the legacy stdio workspace.
+
+If you still need a manual local stdio setup during the transition,
+point your client at:
 
 ```json
 {
