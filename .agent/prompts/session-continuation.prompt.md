@@ -14,10 +14,12 @@ last_updated: 2026-03-29
    `.agent/directives/principles.md` — these are authoritative and
    override any conflicting detail in this prompt.
 2. Find the current active plans in
-   `.agent/plans/architecture-and-infrastructure/active/`. There are two:
-   - `ci-consolidation-and-gate-parity.plan.md` — near completion, only
-     Phase 6 (documentation) remains
-   - `eslint-disable-remediation.plan.md` — the active remediation work
+   `.agent/plans/architecture-and-infrastructure/active/`. The primary
+   active plan is:
+   - `eslint-disable-remediation.plan.md` — remove ~64 remaining
+     eslint-disable directives by fixing root causes
+   The CI consolidation plan is complete (all 6 phases done) and ready
+   to archive after branch merge.
 3. Re-establish live branch state instead of trusting stale document
    snapshots:
 
@@ -42,13 +44,10 @@ git log --oneline --decorate origin/feat/mcp_app..HEAD
    generated data, logger, test fakes, authored code, miscellaneous.
    See `eslint-disable-remediation.plan.md` for the full inventory and
    execution order.
-2. **CI plan documentation** (Phase 6): update ADRs 065 and 086,
-   build-system docs, and testing strategy where the implemented
-   behaviour changed.
 
 ## Scope Boundaries (do NOT)
 
-- Do not reopen the completed CI consolidation (Phases 0-2, 4-5)
+- Do not reopen the completed CI consolidation (all phases done)
   unless fresh CI evidence proves a regression.
 - Do not modify widget deletion decisions (Phase 2 is settled).
 - Do not open new workstreams outside the active plans' scope.

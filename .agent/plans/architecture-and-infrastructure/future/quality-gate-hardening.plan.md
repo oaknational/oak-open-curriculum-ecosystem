@@ -55,8 +55,8 @@ This plan unifies all pending quality gate work into a single strategic brief to
 
 ### Not in Scope
 
-- Remediation of the ~101 eslint-disable comments (tracked in the active CI consolidation plan)
-- CI workflow changes (tracked in the active CI consolidation plan)
+- Remediation of the ~64 remaining eslint-disable comments (tracked in `eslint-disable-remediation.plan.md`)
+- CI workflow changes (completed in the CI consolidation plan)
 - New Playwright tests for the replacement widget (tracked separately)
 
 ## Dependencies and Sequencing
@@ -65,7 +65,7 @@ This plan unifies all pending quality gate work into a single strategic brief to
 |------------|-----------|-------|
 | Forbidden-comment test exemption | None | Can proceed immediately |
 | oak-eslint self-linting | Forbidden-comment exemption (if self-linting catches test file patterns) | Investigate circular dependency risk first |
-| `no-eslint-disable` promotion | Active CI plan Phase 3 (eslint-disable remediation) | Cannot promote until all comments are remediated |
+| `no-eslint-disable` promotion | `eslint-disable-remediation.plan.md` (extracted from CI plan) | Cannot promote until all comments are remediated |
 | knip | None | Independent — triage work only |
 | dependency-cruiser | None | Independent — triage work only |
 | max-files-per-dir | None | Independent — remediation may overlap with knip dead-code removal |
@@ -140,7 +140,8 @@ This plan unifies all pending quality gate work into a single strategic brief to
 
 ## Success Signals (Justifying Promotion to Current)
 
-- Active CI plan Phase 3 complete (eslint-disable remediation done)
+- eslint-disable remediation complete (`eslint-disable-remediation.plan.md`)
+- CI consolidation plan complete (Phases 0-6 done as of 2026-03-29)
 - Capacity for a focused sprint on quality gate work
 - No higher-priority feature or bug work blocking
 
@@ -154,8 +155,9 @@ This plan unifies all pending quality gate work into a single strategic brief to
 ## Promotion Trigger
 
 Promote to `current/` when:
-1. The active CI plan (Phases 3-6) is complete
-2. The branch is merged to `main`
+
+1. The eslint-disable remediation plan is complete (~64 remaining as of 2026-03-29)
+2. The `feat/mcp_app` branch is merged to `main`
 3. Team has capacity for a quality-gate sprint
 
 ## Absorbed Plans

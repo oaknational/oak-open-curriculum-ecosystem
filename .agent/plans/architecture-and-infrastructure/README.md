@@ -3,7 +3,7 @@
 Cross-cutting architecture, system quality, and observability plans.
 
 **Status**: 🔄 Active backlog (Milestone 2 and Milestone 3 work)
-**Last Updated**: 2026-03-04
+**Last Updated**: 2026-03-29
 
 ---
 
@@ -19,6 +19,8 @@ See [current/README.md](current/README.md) for the next-up queue.
 
 | Plan | Status | Description |
 |------|--------|-------------|
+| [`ci-consolidation-and-gate-parity.plan.md`](active/ci-consolidation-and-gate-parity.plan.md) | ✅ Complete | CI consolidation, ESLint rule, widget deletion, documentation. Ready to archive after branch merge. |
+| [`eslint-disable-remediation.plan.md`](active/eslint-disable-remediation.plan.md) | 🟢 In progress | Remove ~64 remaining eslint-disable comments by fixing root causes. Extracted from CI plan. |
 | [`static-analysis-tool-promotion.plan.md`](static-analysis-tool-promotion.plan.md) | Pending | Triage knip + dependency-cruiser findings, then promote to blocking QG |
 
 ## Documents

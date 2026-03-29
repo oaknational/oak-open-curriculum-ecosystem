@@ -109,11 +109,11 @@ packages/sdks/oak-sdk-codegen/            (simple directory, NOT a workspace)
 │   │       └── curriculum-property-graph.ts  (hand-authored)
 │   ├── generated/                        OUTPUT of graph-gen/ (build artefact)
 │   │   └── curriculum-graphs/
-│   │       ├── prerequisite-graph-data.ts
-│   │       ├── thread-progression-graph-data.ts
-│   │       ├── misconception-graph-data.ts
-│   │       ├── vocabulary-graph-data.ts
-│   │       ├── national-curriculum-coverage-graph-data.ts
+│   │       ├── prerequisite-graph/       JSON loader (data.json + types.ts + index.ts)
+│   │       ├── vocabulary-graph/         JSON loader
+│   │       ├── misconception-graph/      JSON loader
+│   │       ├── nc-coverage-graph/        JSON loader
+│   │       ├── thread-progression-data.ts  (as const — small enough)
 │   │       └── synonyms/
 │   ├── package.json
 │   └── eslint.config.ts
