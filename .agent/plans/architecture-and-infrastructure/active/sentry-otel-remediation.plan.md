@@ -6,7 +6,7 @@ overview: >
   and a prioritised 5-phase execution sequence to bring the branch to
   merge-ready state. Companion to the main execution plan.
 status: active
-last_updated: 2026-03-28
+last_updated: 2026-03-29
 parent_plan: ./sentry-otel-integration.execution.plan.md
 ---
 
@@ -23,43 +23,22 @@ defines a prioritised remediation sequence to bring the branch to merge-ready st
 **Branch**: `feat/full-sentry-otel-support` (4 commits ahead of `main`)
 **Date**: 2026-03-28
 
-## Session Progress (2026-03-28 remediation session)
+## Session Progress
 
-Phase A work began in this session. Current state of the working tree:
+### 2026-03-29 remediation session (continuation)
 
-### Completed in working tree (not yet committed — pre-commit hook requires all lint green)
+All phases completed and committed (5 commits). Specialist reviewers
+invoked at each phase gate: code-reviewer (Phase A, B), sentry-reviewer,
+architecture-reviewer-fred, test-reviewer (all on Phase B fixes).
 
-- **F1** DONE: Added `SentryErrorEvent`, `SentryBreadcrumb`, `SentryTransactionEvent` type
-  aliases to `sentry-node/runtime.unit.test.ts` — sentry-node type-check now green
-- **F2** DONE: Fixed `bootstrapAppCalls` value capture bug with getter — test now passes
-- **F3** DONE: Rewrote `ServerHarness` interface, `FakeLogger` with proper Logger overloads,
-  removed all `as` casts — HTTP app type-check now green
-- **F4** DONE: Replaced `for...in` with `typeSafeEntries` in `runtime-redaction.ts`, extracted
-  post-redaction hook fixture, added `@oaknational/type-helpers` dep — sentry-node lint now green
-- **F5** PARTIAL: Agents split `http-observability.ts` (504→207 lines, 4 new modules),
-  split 8 other oversized files (oauth-proxy-routes, oauth-and-caching-setup, application,
-  asset-download-route, logging/index, handlers, observability-fakes, runtime-config test).
-  Manual follow-up fixes applied to bootstrap-helpers (TSDoc trim), application.ts (extracted
-  pre/post auth phases), asset-proxy.ts (extracted helpers), logging/index.ts (extracted
-  options resolver), oauth-proxy-handlers.ts (extracted `runWithOptionalSpan`),
-  http-observability.unit.test.ts (compacted beforeEach/afterEach).
-  **Remaining**: `application.ts` has a missing `PhasedTimer` import (1-line fix), and a
-  final lint pass is needed to confirm zero errors remain.
-- **F6** DONE: All `no-unsafe-assignment` errors fixed across test files
-- **F7** DONE: `Object.keys` replaced with `typeSafeKeys`
+**19 of 21 findings resolved.** Remaining:
 
-### Blocking the commit
+- **F10**: Reverted — out-of-scope (auth DI refactor, not observability)
+- **F18**: Deferred — span DRY, different concerns
 
-The pre-commit hook runs `pnpm turbo run type-check lint test` across all packages.
-A missing `PhasedTimer` import in `application.ts` and potentially a few remaining
-function-length violations need fixing before the commit will pass.
+### 2026-03-28 remediation session (initial)
 
-### Not yet started
-
-- Phase B (architectural issues F8–F14)
-- Phase C (security hardening F15–F16)
-- Phase D (improvements F17–F21)
-- Phase E (final verification and reviewer re-run)
+Ran 6 specialist reviewers, identified 21 findings, began Phase A.
 
 ---
 
