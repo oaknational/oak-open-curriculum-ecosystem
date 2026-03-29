@@ -1,21 +1,10 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
+import { hasJsonRpcOrResultError, parseSseEnvelope } from './helpers/sse.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
-
-function parseFirstSseData(raw: string): unknown {
-  const line = raw
-    .split('\n')
-    .map((l) => l.trim())
-    .find((l) => l.startsWith('data: '));
-  if (!line) {
-    throw new Error('No data line found in SSE payload');
-  }
-  const json = line.replace(/^data: /, '');
-  return JSON.parse(json) as unknown;
-}
 
 function makeInvalidEnumBody() {
   return {
@@ -42,12 +31,7 @@ describe('HTTP /mcp enum validation failure', () => {
   it('returns error when enum value is invalid', async () => {
     const res = await post(makeInvalidEnumBody());
     expect(res.status).toBe(200);
-    const payload = parseFirstSseData(
-      typeof res.text === 'string' ? res.text : JSON.stringify({}),
-    ) as { error?: unknown; result?: { isError?: boolean } };
-    // MCP SDK returns either a JSON-RPC error or a result with isError: true
-    const hasJsonRpcError = typeof payload.error !== 'undefined';
-    const hasResultError = payload.result?.isError === true;
-    expect(hasJsonRpcError || hasResultError).toBe(true);
+    const envelope = parseSseEnvelope(typeof res.text === 'string' ? res.text : JSON.stringify({}));
+    expect(hasJsonRpcOrResultError(envelope)).toBe(true);
   });
 });

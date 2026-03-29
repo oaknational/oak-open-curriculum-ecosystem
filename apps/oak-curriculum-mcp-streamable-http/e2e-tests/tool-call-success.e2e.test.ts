@@ -5,31 +5,8 @@ import type { ToolHandlerOverrides } from '../src/handlers.js';
 import {
   createUniversalToolExecutor,
   generatedToolRegistry,
-  type SearchRetrievalService,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-
-/** Stub search retrieval — E2E tests exercise API tools, not search. */
-const stubSearchRetrieval: SearchRetrievalService = {
-  searchLessons: () => {
-    throw new Error('not implemented');
-  },
-  searchUnits: () => {
-    throw new Error('not implemented');
-  },
-  searchSequences: () => {
-    throw new Error('not implemented');
-  },
-  searchThreads: () => {
-    throw new Error('not implemented');
-  },
-  suggest: () => {
-    throw new Error('not implemented');
-  },
-  fetchSequenceFacets: () => {
-    throw new Error('not implemented');
-  },
-};
 import { ok } from '@oaknational/result';
 import {
   parseSseEnvelope,
@@ -38,6 +15,7 @@ import {
   readFirstTextContent,
   parseToolSuccessPayload,
 } from './helpers/sse.js';
+import { stubSearchRetrieval } from './helpers/stub-search-retrieval.js';
 import { createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';

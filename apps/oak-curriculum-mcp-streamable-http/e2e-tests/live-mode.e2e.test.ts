@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
+import { z } from 'zod';
 
 import {
   createLiveHttpApp,
@@ -16,32 +17,10 @@ import {
   McpToolError,
   createUniversalToolExecutor,
   generatedToolRegistry,
-  type SearchRetrievalService,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-
-/** Stub search retrieval — E2E tests exercise API tools, not search. */
-const stubSearchRetrieval: SearchRetrievalService = {
-  searchLessons: () => {
-    throw new Error('not implemented');
-  },
-  searchUnits: () => {
-    throw new Error('not implemented');
-  },
-  searchSequences: () => {
-    throw new Error('not implemented');
-  },
-  searchThreads: () => {
-    throw new Error('not implemented');
-  },
-  suggest: () => {
-    throw new Error('not implemented');
-  },
-  fetchSequenceFacets: () => {
-    throw new Error('not implemented');
-  },
-};
 import { err, ok } from '@oaknational/result';
+import { stubSearchRetrieval } from './helpers/stub-search-retrieval.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -49,6 +28,10 @@ interface CapturedCall {
   readonly tool: unknown;
   readonly args: unknown;
 }
+
+const ToolItemWithCanonicalUrlSchema = z.object({
+  canonicalUrl: z.string(),
+});
 
 function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
   return {
@@ -128,11 +111,11 @@ describe('Streamable HTTP server (live mode with overrides)', () => {
     expect(result.isError).not.toBe(true);
     const payload = parseToolSuccessPayload(result);
     expect(payload.status).toBe(200);
-    if (!Array.isArray(payload.data)) {
-      throw new Error('Expected array response from tool');
+    const first = z.array(ToolItemWithCanonicalUrlSchema).parse(payload.data)[0];
+    if (first === undefined) {
+      throw new Error('Expected at least one payload item');
     }
-    const first = payload.data[0] as { readonly canonicalUrl?: string } | undefined;
-    expect(first?.canonicalUrl).toContain('thenational.academy');
+    expect(first.canonicalUrl).toContain('thenational.academy');
   });
 
   it('propagates tool execution errors with the same SSE envelope structure', async () => {

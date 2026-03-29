@@ -1,3 +1,19 @@
+## Session 2026-03-29 — E2E failure analysis (`feat/mcp_app`)
+
+### What was verified
+
+- Applied `start-right-quick`; Practice Box is empty (`.agent/practice-core/incoming/` contains only `.gitkeep`).
+- Current local repro: `pnpm test:e2e` passes on `feat/mcp_app` (20/20 Turbo tasks successful).
+- Current branch CI status: latest `CI` run for `origin/feat/mcp_app` (`18e050dd`) is green.
+
+### Key finding
+
+- The recent failed CI runs on `feat/mcp_app` (`13e44690`, `c54707a5`, `7d3e2f8b`, `31d69461`, `87717762`, `07e2e14b`) did **not** fail in E2E; they failed in the lint step before tests ran.
+- The concrete E2E regression signal in this branch history is commit `4761550c` (`fix: e2e overrides must use SDK executor, not bypass it`).
+- Root cause: some E2E overrides returned raw MCP `content` directly, which bypassed `createUniversalToolExecutor` and therefore skipped `mapExecutionResult()` / `formatToolResponse()`.
+- Consequence: tests expecting the SDK-formatted tool response contract (summary text + structured JSON payload) would see the wrong shape.
+- Current correct pattern in the tests is to build overrides on top of `createUniversalToolExecutor`, preserving the same formatting pipeline used by production handlers.
+
 ## Session 2026-03-29 — CI consolidation, eslint-disable enforcement, widget test cleanup
 
 ### CI/Turbo analysis
