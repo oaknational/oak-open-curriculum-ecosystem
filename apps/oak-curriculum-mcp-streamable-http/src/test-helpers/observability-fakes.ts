@@ -12,15 +12,21 @@ import type {
 } from '../observability/http-observability.js';
 import { createFakeLogger } from './logger-fakes.js';
 
-let fakeSpanCounter = 0;
+function createSpanCounter(): () => number {
+  let counter = 0;
+  return () => {
+    counter += 1;
+    return counter;
+  };
+}
 
-function nextFakeSpanContext() {
+function nextFakeSpanContext(nextId: () => number) {
   const activeSpan = getActiveSpanContextSnapshot();
-  fakeSpanCounter += 1;
+  const id = nextId();
 
   return {
     traceId: activeSpan?.traceId ?? '0123456789abcdef0123456789abcdef',
-    spanId: fakeSpanCounter.toString(16).padStart(16, '0'),
+    spanId: id.toString(16).padStart(16, '0'),
     traceFlags: activeSpan?.traceFlags ?? 1,
     isRemote: false,
   } as const;
@@ -35,15 +41,12 @@ const noopSpanHandle: HttpSpanHandle = {
   },
 };
 
-async function withFakeActiveContext<T>(run: () => Promise<T> | T): Promise<T> {
-  const activeContext = trace.setSpan(
-    context.active(),
-    trace.wrapSpanContext(nextFakeSpanContext()),
-  );
-  return await context.with(activeContext, async () => await run());
+function createFakeActiveContext(nextId: () => number) {
+  return trace.setSpan(context.active(), trace.wrapSpanContext(nextFakeSpanContext(nextId)));
 }
 
 export function createFakeHttpObservability(): HttpObservability {
+  const nextId = createSpanCounter();
   const recorder = createInMemoryMcpObservationRecorder();
   const logger = createFakeLogger();
 
@@ -55,7 +58,7 @@ export function createFakeHttpObservability(): HttpObservability {
     mcpRecorder: recorder,
     getActiveSpanContext: getActiveSpanContextSnapshot,
     async withActiveSpan<T>(options: WithActiveSpanOptions<T>): Promise<T> {
-      return await withFakeActiveContext(async () => await options.run());
+      return await context.with(createFakeActiveContext(nextId), async () => await options.run());
     },
     createLogger() {
       return logger;
@@ -71,14 +74,13 @@ export function createFakeHttpObservability(): HttpObservability {
       };
     },
     async withSpan<T>(options: HttpSpanOptions<T>): Promise<T> {
-      return await withFakeActiveContext(async () => await options.run(noopSpanHandle));
+      return await context.with(
+        createFakeActiveContext(nextId),
+        async () => await options.run(noopSpanHandle),
+      );
     },
     withSpanSync<T>(options: HttpSyncSpanOptions<T>): T {
-      const activeContext = trace.setSpan(
-        context.active(),
-        trace.wrapSpanContext(nextFakeSpanContext()),
-      );
-      return context.with(activeContext, () => options.run(noopSpanHandle));
+      return context.with(createFakeActiveContext(nextId), () => options.run(noopSpanHandle));
     },
     captureHandledError() {
       // No-op in the default fake; tests can override this with a recording implementation.

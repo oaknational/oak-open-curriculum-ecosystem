@@ -104,16 +104,16 @@ interface BuildObservabilityParams {
   readonly stdoutSink?: LogSink;
 }
 
-function buildObservabilityObject(p: BuildObservabilityParams): HttpObservability {
-  const spanFunctions = createSpanFunctions(p.tracer);
+function buildObservabilityObject(params: BuildObservabilityParams): HttpObservability {
+  const spanFunctions = createSpanFunctions(params.tracer);
 
   const observability: HttpObservability = {
-    service: p.serviceName,
-    environment: p.environment,
-    release: p.release,
-    tracer: p.tracer,
-    mcpRecorder: p.mcpRecorder,
-    fixtureStore: p.sentryRuntime.fixtureStore,
+    service: params.serviceName,
+    environment: params.environment,
+    release: params.release,
+    tracer: params.tracer,
+    mcpRecorder: params.mcpRecorder,
+    fixtureStore: params.sentryRuntime.fixtureStore,
     getActiveSpanContext: spanFunctions.getActiveSpanContext,
     async withActiveSpan<T>(options: WithActiveSpanOptions<T>): Promise<T> {
       return await spanFunctions.withSpan({
@@ -123,31 +123,31 @@ function buildObservabilityObject(p: BuildObservabilityParams): HttpObservabilit
       });
     },
     createLogger: createLoggerFactory(
-      p.runtimeConfig,
-      p.sentryRuntime,
+      params.runtimeConfig,
+      params.sentryRuntime,
       spanFunctions.getActiveSpanContext,
-      p.stdoutSink,
+      params.stdoutSink,
     ),
     createMcpObservationOptions() {
       return {
-        service: p.serviceName,
-        environment: p.environment,
-        release: p.release,
-        recorder: p.mcpRecorder,
+        service: params.serviceName,
+        environment: params.environment,
+        release: params.release,
+        recorder: params.mcpRecorder,
         runtime: observability,
-        tracer: p.tracer,
+        tracer: params.tracer,
       };
     },
     withSpan: spanFunctions.withSpan,
     withSpanSync: spanFunctions.withSpanSync,
     captureHandledError(error, captureContext): void {
-      p.sentryRuntime.captureHandledError(
+      params.sentryRuntime.captureHandledError(
         normalizeError(error),
         sanitiseObject(captureContext) ?? undefined,
       );
     },
     async flush(timeoutMs): Promise<Result<void, SentryFlushError>> {
-      return await flushSentry(p.sentryRuntime, timeoutMs);
+      return await flushSentry(params.sentryRuntime, timeoutMs);
     },
   };
 

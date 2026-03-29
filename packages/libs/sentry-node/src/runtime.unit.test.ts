@@ -616,7 +616,11 @@ describe('initialiseSentry', () => {
         release: 'release-123',
         traceId: '0123456789abcdef0123456789abcdef',
         spanId: '0123456789abcdef',
-        line: '{"Body":"request failed"}',
+        'log.line': '{"Body":"request failed"}',
+        'otel.attributes.requestId': 'req-123',
+        'otel.resource.service.name': 'oak-http',
+        'otel.resource.service.version': '1.0.0',
+        'otel.resource.deployment.environment': 'test',
       }),
     );
     expect(sdk.captureMessage).not.toHaveBeenCalled();

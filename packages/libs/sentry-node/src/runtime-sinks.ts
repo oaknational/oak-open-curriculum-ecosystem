@@ -1,8 +1,9 @@
+import type { Log } from '@sentry/node';
 import type { LogEvent, LogSink } from '@oaknational/logger';
+import { typeSafeEntries } from '@oaknational/type-helpers';
 import type {
   FixtureSentryStore,
   ParsedSentryConfig,
-  SentryLogAttributes,
   SentryLiveConfig,
   SentryNodeSdk,
 } from './types.js';
@@ -58,15 +59,25 @@ export function createSentryTags(
   };
 }
 
-function createSentryLogExtra(event: LogEvent): {
-  readonly attributes: LogEvent['otelRecord']['Attributes'];
-  readonly resource: LogEvent['otelRecord']['Resource'];
-  readonly line: string;
-} {
+function flattenToSentryAttributes(
+  prefix: string,
+  entries: readonly (readonly [string, unknown])[],
+): NonNullable<Log['attributes']> {
+  const result: NonNullable<Log['attributes']> = {};
+  for (const [key, value] of entries) {
+    result[`${prefix}.${key}`] = typeof value === 'object' ? JSON.stringify(value) : value;
+  }
+  return result;
+}
+
+function createFlatSentryLogAttributes(event: LogEvent): NonNullable<Log['attributes']> {
+  const otelAttributes = event.otelRecord.Attributes;
+  const otelResource = event.otelRecord.Resource;
+
   return {
-    attributes: event.otelRecord.Attributes,
-    resource: event.otelRecord.Resource,
-    line: event.line.trimEnd(),
+    ...flattenToSentryAttributes('otel.attributes', typeSafeEntries(otelAttributes)),
+    ...flattenToSentryAttributes('otel.resource', typeSafeEntries(otelResource)),
+    'log.line': event.line.trimEnd(),
   };
 }
 
@@ -110,13 +121,12 @@ export function createLiveLogSink(
       const traceContext = getTraceContextFromEvent(event);
       const level = toSentryLoggerLevel(event.level);
       const tags = createSentryTags(config, serviceName, traceContext);
-      const extra = createSentryLogExtra(event);
-      const attributes: SentryLogAttributes = {
-        ...tags,
-        line: extra.line,
-      };
+      const flatAttributes = createFlatSentryLogAttributes(event);
 
-      sdk.logger[level](event.message, attributes);
+      sdk.logger[level](event.message, {
+        ...tags,
+        ...flatAttributes,
+      });
     },
   };
 }

@@ -1,4 +1,4 @@
-import type { CaptureContext, NodeOptions } from '@sentry/node';
+import type { CaptureContext, Log, NodeOptions } from '@sentry/node';
 import type { LogContext, LogEvent, LogSink, NormalizedError } from '@oaknational/logger';
 import type { Result } from '@oaknational/result';
 
@@ -139,15 +139,13 @@ export interface FixtureSentryStore {
   clear(): void;
 }
 
-export type SentryLogAttributes = Readonly<Record<string, string | number | boolean | undefined>>;
-
 export interface SentryLoggerSdk {
-  trace(message: string, attributes?: SentryLogAttributes): void;
-  debug(message: string, attributes?: SentryLogAttributes): void;
-  info(message: string, attributes?: SentryLogAttributes): void;
-  warn(message: string, attributes?: SentryLogAttributes): void;
-  error(message: string, attributes?: SentryLogAttributes): void;
-  fatal(message: string, attributes?: SentryLogAttributes): void;
+  trace(message: string, attributes?: Log['attributes']): void;
+  debug(message: string, attributes?: Log['attributes']): void;
+  info(message: string, attributes?: Log['attributes']): void;
+  warn(message: string, attributes?: Log['attributes']): void;
+  error(message: string, attributes?: Log['attributes']): void;
+  fatal(message: string, attributes?: Log['attributes']): void;
 }
 
 export interface SentryNodeSdk {
@@ -157,6 +155,12 @@ export interface SentryNodeSdk {
   flush(timeoutMs?: number): Promise<boolean>;
   readonly logger: SentryLoggerSdk;
 }
+
+export type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
+export type SentryTransactionEvent = Parameters<
+  NonNullable<NodeOptions['beforeSendTransaction']>
+>[0];
+export type SentryBreadcrumb = Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0];
 
 export interface SentryPostRedactionHooks {
   readonly beforeSend?: NodeOptions['beforeSend'];

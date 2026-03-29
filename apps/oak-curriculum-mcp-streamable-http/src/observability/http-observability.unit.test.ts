@@ -1,26 +1,27 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { LogSink } from '@oaknational/logger';
-import type { CaptureContext, NodeOptions } from '@oaknational/sentry-node';
 import { wrapPromptHandler, wrapResourceHandler, wrapToolHandler } from '@oaknational/sentry-mcp';
 import type { MergedMcpObservation } from '@oaknational/sentry-mcp';
 import {
   createFixtureSentryStore,
   type FixtureSentryLogCapture,
+  type SentryBreadcrumb,
+  type SentryErrorEvent,
   type SentryNodeSdk,
+  type SentryTransactionEvent,
 } from '@oaknational/sentry-node';
 import { typeSafeKeys } from '@oaknational/type-helpers';
 import type { AuthDisabledRuntimeConfig } from '../runtime-config.js';
 import { createHttpObservabilityOrThrow } from './http-observability.js';
 
 type RecorderWithObservations = { readonly observations: readonly MergedMcpObservation[] };
-type TypedMock<F extends (...args: never[]) => unknown> = ReturnType<typeof vi.fn<F>>;
 
 interface FakeSentrySdk {
   readonly sdk: SentryNodeSdk;
-  readonly init: TypedMock<(options: NodeOptions) => void>;
-  readonly captureException: TypedMock<(error: Error, context?: CaptureContext) => void>;
-  readonly captureMessage: TypedMock<(message: string, context?: CaptureContext) => void>;
-  readonly flush: TypedMock<(timeoutMs?: number) => Promise<boolean>>;
+  readonly init: ReturnType<typeof vi.fn<SentryNodeSdk['init']>>;
+  readonly captureException: ReturnType<typeof vi.fn<SentryNodeSdk['captureException']>>;
+  readonly captureMessage: ReturnType<typeof vi.fn<SentryNodeSdk['captureMessage']>>;
+  readonly flush: ReturnType<typeof vi.fn<SentryNodeSdk['flush']>>;
 }
 
 function createRuntimeConfig(
@@ -80,10 +81,10 @@ const noopLogger: SentryNodeSdk['logger'] = {
 };
 
 function createFakeSentrySdk(): FakeSentrySdk {
-  const init = vi.fn<(options: NodeOptions) => void>();
-  const captureException = vi.fn<(error: Error, context?: CaptureContext) => void>();
-  const captureMessage = vi.fn<(message: string, context?: CaptureContext) => void>();
-  const flush = vi.fn<(timeoutMs?: number) => Promise<boolean>>().mockResolvedValue(true);
+  const init = vi.fn<SentryNodeSdk['init']>();
+  const captureException = vi.fn<SentryNodeSdk['captureException']>();
+  const captureMessage = vi.fn<SentryNodeSdk['captureMessage']>();
+  const flush = vi.fn<SentryNodeSdk['flush']>().mockResolvedValue(true);
 
   return {
     sdk: {
@@ -100,7 +101,7 @@ function createFakeSentrySdk(): FakeSentrySdk {
   };
 }
 
-function getInitOptions(fakeSentrySdk: FakeSentrySdk): NodeOptions {
+function getInitOptions(fakeSentrySdk: FakeSentrySdk): Parameters<SentryNodeSdk['init']>[0] {
   const initOptions = fakeSentrySdk.init.mock.calls[0]?.[0];
 
   if (!initOptions) {
@@ -197,8 +198,8 @@ describe('createHttpObservability', () => {
           },
         },
         transaction: 'https://curriculum.example.com/mcp?code=secret',
-      } as unknown as Parameters<NonNullable<NodeOptions['beforeSend']>>[0],
-      {} as Parameters<NonNullable<NodeOptions['beforeSend']>>[1],
+      } as unknown as SentryErrorEvent,
+      {} as Parameters<NonNullable<Parameters<SentryNodeSdk['init']>[0]['beforeSend']>>[1],
     );
 
     expect(event).toEqual(
@@ -225,8 +226,10 @@ describe('createHttpObservability', () => {
           },
         },
         transaction: 'https://curriculum.example.com/mcp?state=secret',
-      } as unknown as Parameters<NonNullable<NodeOptions['beforeSendTransaction']>>[0],
-      {} as Parameters<NonNullable<NodeOptions['beforeSendTransaction']>>[1],
+      } as unknown as SentryTransactionEvent,
+      {} as Parameters<
+        NonNullable<Parameters<SentryNodeSdk['init']>[0]['beforeSendTransaction']>
+      >[1],
     );
 
     expect(transaction).toEqual(
@@ -253,8 +256,8 @@ describe('createHttpObservability', () => {
             method: 'tools/call',
           },
         },
-      } as Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0],
-      {} as Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[1],
+      } as SentryBreadcrumb,
+      {} as Parameters<NonNullable<Parameters<SentryNodeSdk['init']>[0]['beforeBreadcrumb']>>[1],
     );
 
     expect(breadcrumb).toEqual(

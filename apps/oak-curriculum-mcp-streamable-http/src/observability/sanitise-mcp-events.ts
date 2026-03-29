@@ -1,13 +1,13 @@
-import type { NodeOptions } from '@oaknational/sentry-node';
+import type {
+  SentryBreadcrumb,
+  SentryErrorEvent,
+  SentryPostRedactionHooks,
+  SentryTransactionEvent,
+} from '@oaknational/sentry-node';
 
-type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
-type SentryBreadcrumb = Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0];
 type SentryRequest = SentryErrorEvent['request'];
 
-export type HttpPostRedactionHooks = Pick<
-  NodeOptions,
-  'beforeBreadcrumb' | 'beforeSend' | 'beforeSendTransaction'
->;
+export type HttpPostRedactionHooks = SentryPostRedactionHooks;
 
 export function decodeUrlValue(value: string): string {
   try {
@@ -120,7 +120,7 @@ export function createHttpPostRedactionHooks(): HttpPostRedactionHooks {
     beforeSend(event: SentryErrorEvent) {
       return sanitizeMcpEvent(event);
     },
-    beforeSendTransaction(event: Parameters<NonNullable<NodeOptions['beforeSendTransaction']>>[0]) {
+    beforeSendTransaction(event: SentryTransactionEvent) {
       return sanitizeMcpEvent(event);
     },
     beforeBreadcrumb(breadcrumb: SentryBreadcrumb) {
