@@ -13,7 +13,7 @@ todos:
     status: done
   - id: phase-3-eslint-remediation
     content: "Phase 3: Remediate the remaining actionable eslint-disable and TS directive debt, led by the generated-data rollout."
-    status: pending
+    status: in-progress
   - id: phase-4-reporter-script
     content: "Phase 4: Create CI reporter script (TDD) — parses Turbo --summarize JSON, emits GitHub Step Summary and annotations."
     status: done
@@ -128,6 +128,18 @@ Before each substantial step:
 **Goal**: remove the remaining directive debt by fixing root causes, not
 relocating suppressions.
 
+**Primary packages**: `packages/sdks/oak-sdk-codegen/` (generators,
+generated data), `packages/sdks/oak-curriculum-sdk/` (consumer of
+generated data, aggregated graphs), `packages/libs/logger/` (sanitisation,
+error normalisation), `apps/oak-curriculum-mcp-streamable-http/` (DI
+fakes, config override), `apps/oak-search-cli/` (authored code
+complexity), `apps/oak-curriculum-mcp-stdio/` (DI fakes).
+
+**Note on vocab-gen types**: The vocab-gen pipeline generates types from
+bulk download data, not from the OpenAPI schema. The cardinal rule
+(`pnpm sdk-codegen`) governs OpenAPI-derived types only. The JSON loader
+pattern applies to bulk-data-derived graphs only.
+
 #### TDD mode for each category
 
 1. **RED**: add or adjust the smallest failing test that proves the
@@ -139,13 +151,16 @@ relocating suppressions.
 
 #### Execution order
 
-1. Extend the shipped JSON loader pattern across the remaining large
-   generated vocab datasets.
+1. Extract a generic JSON graph writer from the prerequisite-graph
+   implementation (DRY — the pattern must be reused across 5+ datasets,
+   not copy-pasted). Then extend across the remaining large generated
+   vocab datasets.
 2. Remove any generator output that still emits suppression strings.
 3. Move logger remediation ahead of broad fake cleanup.
 4. Clean the easy DI fake cases first, then extract the narrow
-   `McpToolRegistrar` seam in streamable-http and remove the related
-   config override.
+   `McpToolRegistrar` seam in `apps/oak-curriculum-mcp-streamable-http/`
+   (new file in `src/`) and remove the related config override in
+   `apps/oak-curriculum-mcp-streamable-http/eslint.config.ts`.
 5. Tackle authored-code `max-lines`, `max-lines-per-function`,
    `complexity`, and `max-statements` cases.
 6. Finish the `Object.*`, async callback, restricted-type, and TS
@@ -191,7 +206,13 @@ needed, inspect it explicitly first.
 #### Deterministic validation
 
 ```bash
-grep -r "eslint-disable" --include="*.ts" --include="*.mjs" --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=.turbo . | grep -v "node_modules" | grep -v "jc:" | grep -v "type-helpers/src/index.ts" | wc -l
+# Count remaining eslint-disable directives, excluding:
+#   - "jc:" = user-approval markers (only the project owner can add these)
+#   - type-helpers/src/index.ts = user-approved exceptions
+grep -r "eslint-disable" --include="*.ts" --include="*.mjs" \
+  --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=.turbo . \
+  | grep -v "node_modules" | grep -v "jc:" \
+  | grep -v "type-helpers/src/index.ts" | wc -l
 pnpm check
 ```
 
@@ -204,14 +225,19 @@ decisions, and keep the prompt concise.
 
 1. Update ADR-065 where CI consolidation changes documented gate
    surfaces or rationale.
-2. Update `docs/engineering/build-system.md` where the authoritative
+2. Update ADR-086: fix pipeline location (currently says
+   `oak-curriculum-sdk`, actual is `oak-sdk-codegen`), document JSON
+   loader as the canonical large-graph pattern (supersedes monolithic
+   typed-export approach).
+3. Update `docs/engineering/build-system.md` where the authoritative
    gate surface changed.
-3. Update `.agent/directives/testing-strategy.md` only where the
+4. Update `.agent/directives/testing-strategy.md` only where the
    implemented behaviour changed stable testing guidance.
-4. Update `.agent/directives/principles.md` only where the enforcement
+5. Update `.agent/directives/principles.md` only where the enforcement
    mechanism itself needs explicit documentation.
-5. Keep the session prompt short and make it point back to this plan
+6. Keep the session prompt short and make it point back to this plan
    for detail.
+7. Invoke `docs-adr-reviewer` after ADR updates.
 
 #### Acceptance criteria
 
@@ -249,3 +275,26 @@ decisions, and keep the prompt concise.
 - `.agent/directives/principles.md`
 - `.agent/directives/testing-strategy.md`
 - `.agent/directives/schema-first-execution.md`
+- `docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`
+
+---
+
+## Known Issues
+
+### Remaining from code review
+
+- `eslint.config.ts` override for `auth-error-test-helpers.ts` and
+  `verify-clerk-token.unit.test.ts` — type-reviewer analysis: the
+  `registerTool` overloaded generics case is irreducible via standard DI.
+  Options: (1) extract `McpToolRegistrar` narrow interface, (2) keep
+  config override. Decide during Phase 3 step 4.
+- `scripts/check-blocked-patterns.unit.test.ts` has IO-touching tests
+  (`loadBlockedPatterns`, `runPreToolUseGuard`) misclassified as unit
+  tests — split to `check-blocked-patterns.integration.test.ts`.
+- Root `vitest.config.ts` include glob (`scripts/**/*.test.ts`) is too
+  broad — tighten to `scripts/**/*.unit.test.ts` and
+  `scripts/**/*.integration.test.ts`.
+- Renderer files lost test coverage when widget tests were deleted —
+  new tests when the replacement widget ships.
+- Add TSDoc on inline `@oaknational` plugin registration in
+  `recommended.ts` noting consumers should NOT separately register.
