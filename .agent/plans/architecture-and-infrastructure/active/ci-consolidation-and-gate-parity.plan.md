@@ -22,16 +22,17 @@ todos:
     status: done
   - id: phase-6-documentation
     content: "Phase 6: Propagate the settled enforcement and CI decisions into permanent documentation."
-    status: pending
+    status: done
 ---
 
 # CI Consolidation, Gate Parity, and eslint-disable Remediation
 
 **Last Updated**: 2026-03-29
-**Status**: NEAR COMPLETION — CI consolidation, widget cleanup, ESLint
-rule creation, and partial eslint-disable remediation are complete. The
-remaining remediation work has been extracted to a dedicated plan.
-Documentation propagation (Phase 6) remains.
+**Status**: COMPLETE — all phases done. The one remaining known issue
+(renderer test coverage) is blocked on the replacement widget shipping.
+The eslint-disable remediation work was extracted to
+`eslint-disable-remediation.plan.md`. This plan can be archived once the
+branch merges to `main`.
 
 ## Document Role
 

@@ -162,17 +162,17 @@ The regex-mined file was archived to `.agent/archive/vocab-gen/`.
 
 ## Generated Curriculum Data (2025-12-27)
 
-The vocab-gen pipeline has generated 5 graph data files:
+The vocab-gen pipeline has generated 5 graph datasets:
 
-| File | Content | Size |
-|------|---------|------|
-| `thread-progression-data.ts` | 164 threads across 14 subjects | ~2K lines |
-| `prerequisite-graph-data.ts` | 1,601 units, 3,408 prerequisite edges | ~58K lines |
-| `vocabulary-graph-data.ts` | 13,349 terms with definitions | ~112K lines |
-| `misconception-graph-data.ts` | 12,777 misconceptions with responses | ~121K lines |
-| `nc-coverage-graph-data.ts` | NC statement coverage mapping | ~57K lines |
+| Dataset | Content | Format |
+|---------|---------|--------|
+| `thread-progression-data.ts` | 164 threads across 14 subjects | `as const` TS file |
+| `prerequisite-graph/` | 1,601 units, 3,408 prerequisite edges | JSON loader |
+| `vocabulary-graph/` | 13,452 terms with definitions | JSON loader |
+| `misconception-graph/` | 12,858 misconceptions with responses | JSON loader |
+| `nc-coverage-graph/` | 7,473 NC statement mappings | JSON loader |
 
-**Location**: `packages/sdks/oak-curriculum-sdk/src/mcp/`
+**Location**: `packages/sdks/oak-sdk-codegen/src/generated/vocab/`
 
 **MCP Tools Complete**:
 - `aggregated-thread-progressions.ts` — Thread progression queries
