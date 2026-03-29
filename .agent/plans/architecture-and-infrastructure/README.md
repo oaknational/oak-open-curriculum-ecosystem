@@ -3,7 +3,7 @@
 Cross-cutting architecture, system quality, and observability plans.
 
 **Status**: 🔄 Active backlog (Milestone 2 and Milestone 3 work)
-**Last Updated**: 2026-03-28
+**Last Updated**: 2026-03-29
 
 ---
 
@@ -13,11 +13,11 @@ See [active/README.md](active/README.md) for work in progress.
 
 | Priority | Plan | Milestone | Status |
 |----------|------|-----------|--------|
-| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | Active — `44d8d74d` remains the pushed restart-cleared source of truth; the current local focus is HTTP Phase 3 stabilisation (test-strategy cleanup, lint-driven refactors, reviewer sweep, doc consolidation, then repo-root gates) before Search CLI adoption resumes |
+| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | HTTP adoption near-complete (19/21 findings, all gates green on `feat/full-sentry-otel-support`); Search CLI + deployment pending |
 
 Prompt entry:
 
-- [sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md) — restart from the current pushed blocker-clearance state at `44d8d74d`, then follow the live HTTP stabilisation TODOs in the active plan before resuming Search CLI adoption
+- [sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
 
 ## Queued Work (Current)
 

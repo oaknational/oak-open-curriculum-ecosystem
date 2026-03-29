@@ -11,7 +11,7 @@ Current queued work for this collection.
 
 Active execution:
 
-- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — blocker-clearance and follow-up doc fixes are pushed on `feat/full-sentry-otel-support` at `44d8d74d`; the checkpoint is now restart-cleared, and HTTP adoption is the next action in the active plan so the public-alpha runtimes become supportable with redacted telemetry
+- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — HTTP adoption near-complete on `feat/full-sentry-otel-support`; Search CLI adoption next after merge
 
 Related strategic umbrella:
 

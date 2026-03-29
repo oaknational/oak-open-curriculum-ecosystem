@@ -188,7 +188,6 @@ enough for permanent documentation.
 
 | Symptom | Fix |
 |---------|-----|
-| Grep tool fails with cursorignore errors | Use `rg` in shell with `2>/dev/null` |
 | StrReplace fails on plan files | Unicode quotes (U+2019, U+201C/D) block matching |
 | Reviewer reports failures that seem wrong | Re-run specific gates to verify — reviewers may read stale output. Verify reviewer claims with `glob` or `ls` — they produce consistent false positives on files and repo names |
 | Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |
