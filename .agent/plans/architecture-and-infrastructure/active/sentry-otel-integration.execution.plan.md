@@ -82,7 +82,7 @@ and capture boundaries established in Phase 1 and Phase 2.
 ### Lane and state
 
 - Branch: `feat/full-sentry-otel-support`
-- Head: `1aeb7290` (13 commits ahead of main, 333 files, ~19k insertions)
+- Head: `308881a5` (16 commits ahead of main)
 - Phases 0-2 complete (governance, shared contracts, shared foundation)
 - Phase 3 HTTP adoption: **near-complete** — 19/21 remediation findings
   resolved, `pnpm check` green (81/81 tasks), ready for PR review
@@ -100,7 +100,8 @@ subagents:check, portability:check, markdownlint, format).
 The remediation plan ([sentry-otel-remediation.plan.md](./sentry-otel-remediation.plan.md))
 tracked 21 findings from 6 specialist reviewers. Status:
 
-- **19 resolved** across 8 commits (de0d897d → 1aeb7290)
+- **19 resolved** across 8 code commits (de0d897d → 1aeb7290), plus
+  operational docs (env examples, Vercel config, deployment runbook)
 - **F10 reverted** — auth DI refactor (`vi.mock` in `checkMcpClientAuth`)
   is out of scope for the observability branch. Track separately.
 - **F18 deferred** — span helper DRY between `core/observability` and app;

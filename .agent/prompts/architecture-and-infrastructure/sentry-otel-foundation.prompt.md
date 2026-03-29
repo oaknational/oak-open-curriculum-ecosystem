@@ -28,8 +28,7 @@ for the architectural decision.
 
 ## Current State (2026-03-29)
 
-Branch head: `1aeb7290`. 13 commits ahead of main (333 files, ~19k
-insertions).
+Branch head: `308881a5`. 16 commits ahead of main.
 
 **What was done** (summary of the 19 resolved remediation findings):
 
@@ -67,11 +66,21 @@ markdownlint, format).
 - **F18**: Span helper DRY opportunity — deferred (different concerns).
 - **PR review** before merge to main.
 
+**Operational documentation added**:
+
+- Per-app `.env.example` files with Sentry variables (HTTP app + search
+  CLI each have their own DSN placeholder)
+- Vercel environment config doc updated with Sentry optional variables
+- Deployment runbook at `docs/operations/sentry-deployment-runbook.md`
+  covering per-app DSN provisioning, source maps, alerting, rollback,
+  and a note on Vercel Log Drains as a future alternative
+
 **What comes after merge**:
 
 - Search CLI adoption (`apps/oak-search-cli`)
 - Deployment evidence bundle (release/source maps, alerting, MCP
-  Insights)
+  Insights) — the runbook describes the steps; CI automation is not
+  yet wired
 
 ## Read First
 
