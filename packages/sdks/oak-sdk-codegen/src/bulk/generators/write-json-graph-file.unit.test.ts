@@ -1,11 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
+import { serializeDatasetToJson } from './write-json-dataset.js';
 import type { PrerequisiteGraph } from './prerequisite-graph-generator.js';
-import {
-  generatePrerequisiteIndexModule,
-  generatePrerequisiteTypesModule,
-  serializePrerequisiteGraphToJson,
-} from './write-json-graph-file.js';
+import { prerequisiteGraphDescriptor } from './write-json-graph-file.js';
 
 const sampleGraph = {
   version: '1.0.0',
@@ -86,38 +83,38 @@ const expectedJsonGraph = {
   seeAlso: 'get-prerequisite-graph',
 };
 
-describe('serializePrerequisiteGraphToJson', () => {
+describe('serializeDatasetToJson with prerequisite graph', () => {
   it('produces valid JSON from the graph data', () => {
-    const json = serializePrerequisiteGraphToJson(sampleGraph);
+    const json = serializeDatasetToJson(sampleGraph);
     const parsed: unknown = JSON.parse(json);
 
     expect(parsed).toStrictEqual(expectedJsonGraph);
   });
 
   it('preserves special characters in titles without manual escaping', () => {
-    const json = serializePrerequisiteGraphToJson(sampleGraph);
+    const json = serializeDatasetToJson(sampleGraph);
 
     expect(json).toContain('"Fractions Year 3\'s"');
   });
 
   it('omits undefined fields so the loader can restore them explicitly', () => {
-    const json = serializePrerequisiteGraphToJson(sampleGraph);
+    const json = serializeDatasetToJson(sampleGraph);
     const parsed: unknown = JSON.parse(json);
 
     expect(parsed).toStrictEqual(expectedJsonGraph);
   });
 
   it('produces formatted JSON rather than a minified blob', () => {
-    const json = serializePrerequisiteGraphToJson(sampleGraph);
+    const json = serializeDatasetToJson(sampleGraph);
 
     expect(json).toContain('\n');
     expect(json.split('\n').length).toBeGreaterThan(5);
   });
 });
 
-describe('generatePrerequisiteTypesModule', () => {
-  it('generates a TypeScript module with interface definitions', () => {
-    const content = generatePrerequisiteTypesModule();
+describe('prerequisiteGraphDescriptor.typesModuleContent', () => {
+  it('contains the published prerequisite graph interfaces', () => {
+    const content = prerequisiteGraphDescriptor.typesModuleContent;
 
     expect(content).toContain('export interface PrerequisiteEdge');
     expect(content).toContain('export interface PrerequisiteNode');
@@ -126,7 +123,7 @@ describe('generatePrerequisiteTypesModule', () => {
   });
 
   it('preserves the published prerequisite graph contract', () => {
-    const content = generatePrerequisiteTypesModule();
+    const content = prerequisiteGraphDescriptor.typesModuleContent;
 
     expect(content).toContain("readonly rel: 'prerequisiteFor';");
     expect(content).toContain("readonly source: 'thread' | 'priorKnowledge';");
@@ -134,22 +131,22 @@ describe('generatePrerequisiteTypesModule', () => {
   });
 
   it('retains readonly structure for arrays and properties', () => {
-    const content = generatePrerequisiteTypesModule();
+    const content = prerequisiteGraphDescriptor.typesModuleContent;
 
     expect(content).toContain('readonly nodes: readonly PrerequisiteNode[];');
     expect(content).toContain('readonly threadSlugs: readonly string[];');
   });
 
   it('does not contain eslint-disable directives', () => {
-    const content = generatePrerequisiteTypesModule();
+    const content = prerequisiteGraphDescriptor.typesModuleContent;
 
     expect(content).not.toContain('eslint-disable');
   });
 });
 
-describe('generatePrerequisiteIndexModule', () => {
+describe('prerequisiteGraphDescriptor.indexModuleContent', () => {
   it('imports from types.js and data.json', () => {
-    const content = generatePrerequisiteIndexModule();
+    const content = prerequisiteGraphDescriptor.indexModuleContent;
 
     expect(content).toContain("from 'node:module'");
     expect(content).toContain("from './types.js'");
@@ -158,7 +155,7 @@ describe('generatePrerequisiteIndexModule', () => {
   });
 
   it('normalises JSON data into the published graph shape and re-exports the local types', () => {
-    const content = generatePrerequisiteIndexModule();
+    const content = prerequisiteGraphDescriptor.indexModuleContent;
 
     expect(content).toContain('function createPrerequisiteEdge');
     expect(content).toContain('function createPrerequisiteNode');
@@ -172,7 +169,7 @@ describe('generatePrerequisiteIndexModule', () => {
   });
 
   it('does not contain eslint-disable directives or type assertions', () => {
-    const content = generatePrerequisiteIndexModule();
+    const content = prerequisiteGraphDescriptor.indexModuleContent;
 
     expect(content).not.toContain('eslint-disable');
     expect(content).not.toMatch(/\bas\b/);

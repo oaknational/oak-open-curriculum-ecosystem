@@ -1,16 +1,13 @@
 /**
- * JSON-based prerequisite graph writer.
+ * Prerequisite graph JSON dataset descriptor and writer.
  *
  * @remarks
- * Produces a three-file output for the prerequisite graph:
- * - `data.json` — raw graph data
- * - `types.ts` — TypeScript interface definitions
- * - `index.ts` — typed loader that imports JSON and re-exports it
+ * Defines the prerequisite-graph-specific content for the three-file
+ * JSON dataset pattern (`data.json`, `types.ts`, `index.ts`) and
+ * delegates the mechanical write to {@link writeJsonDataset}.
  */
-import { mkdir, writeFile } from 'fs/promises';
-import { join } from 'path';
-
 import type { PrerequisiteGraph } from './prerequisite-graph-generator.js';
+import { writeJsonDataset, type JsonDatasetDescriptor } from './write-json-dataset.js';
 
 const prerequisiteTypesModuleLines: readonly string[] = [
   '/**',
@@ -174,32 +171,17 @@ const prerequisiteIndexModuleLines: readonly string[] = [
 ];
 
 /**
- * Serializes prerequisite graph data to formatted JSON.
+ * Prerequisite graph dataset descriptor.
  *
- * @param graph - Graph data to serialize
- * @returns Pretty-printed JSON string
+ * @remarks
+ * Provides the prerequisite-graph-specific types and loader content
+ * for the generic JSON dataset writer.
  */
-export function serializePrerequisiteGraphToJson(graph: PrerequisiteGraph): string {
-  return JSON.stringify(graph, null, 2);
-}
-
-/**
- * Generates the TypeScript types module for prerequisite graph JSON data.
- *
- * @returns TypeScript source for `types.ts`
- */
-export function generatePrerequisiteTypesModule(): string {
-  return prerequisiteTypesModuleLines.join('\n');
-}
-
-/**
- * Generates the typed loader module for prerequisite graph JSON data.
- *
- * @returns TypeScript source for `index.ts`
- */
-export function generatePrerequisiteIndexModule(): string {
-  return prerequisiteIndexModuleLines.join('\n');
-}
+export const prerequisiteGraphDescriptor: JsonDatasetDescriptor = {
+  directoryName: 'prerequisite-graph',
+  typesModuleContent: prerequisiteTypesModuleLines.join('\n'),
+  indexModuleContent: prerequisiteIndexModuleLines.join('\n'),
+};
 
 /**
  * Writes prerequisite graph output as JSON plus typed TypeScript modules.
@@ -212,14 +194,5 @@ export async function writePrerequisiteGraphAsJson(
   graph: PrerequisiteGraph,
   outputDir: string,
 ): Promise<string> {
-  const dirPath = join(outputDir, 'prerequisite-graph');
-  await mkdir(dirPath, { recursive: true });
-
-  await Promise.all([
-    writeFile(join(dirPath, 'data.json'), serializePrerequisiteGraphToJson(graph), 'utf-8'),
-    writeFile(join(dirPath, 'types.ts'), generatePrerequisiteTypesModule(), 'utf-8'),
-    writeFile(join(dirPath, 'index.ts'), generatePrerequisiteIndexModule(), 'utf-8'),
-  ]);
-
-  return dirPath;
+  return writeJsonDataset(prerequisiteGraphDescriptor, graph, outputDir);
 }

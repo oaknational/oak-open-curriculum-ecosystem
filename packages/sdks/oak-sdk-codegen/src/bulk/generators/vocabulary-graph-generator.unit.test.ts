@@ -201,12 +201,20 @@ describe('VocabularyGraph type', () => {
 });
 
 describe('serializeVocabularyGraph', () => {
+  it('produces valid JSON from graph data', () => {
+    const graph = generateVocabularyGraphData([createKeyword()], '2025-12-26');
+
+    const serialized = serializeVocabularyGraph(graph);
+    const parsed: unknown = JSON.parse(serialized);
+
+    expect(parsed).toStrictEqual(JSON.parse(JSON.stringify(graph)));
+  });
+
   it('does not emit eslint-disable directives in generated output', () => {
     const graph = generateVocabularyGraphData([createKeyword()], '2025-12-26');
 
     const serialized = serializeVocabularyGraph(graph);
 
-    expect(serialized).toContain('export const vocabularyGraph: VocabularyGraph = {');
     expect(serialized).not.toContain('eslint-disable');
   });
 });

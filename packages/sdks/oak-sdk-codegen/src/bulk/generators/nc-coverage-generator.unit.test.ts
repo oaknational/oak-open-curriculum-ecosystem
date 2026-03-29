@@ -194,12 +194,20 @@ describe('NCCoverageGraph type', () => {
 });
 
 describe('serializeNCCoverageGraph', () => {
+  it('produces valid JSON from graph data', () => {
+    const graph = generateNCCoverageGraphData([createNCStatement()], '2025-12-26');
+
+    const serialized = serializeNCCoverageGraph(graph);
+    const parsed: unknown = JSON.parse(serialized);
+
+    expect(parsed).toStrictEqual(JSON.parse(JSON.stringify(graph)));
+  });
+
   it('does not emit eslint-disable directives in generated output', () => {
     const graph = generateNCCoverageGraphData([createNCStatement()], '2025-12-26');
 
     const serialized = serializeNCCoverageGraph(graph);
 
-    expect(serialized).toContain('export const ncCoverageGraph: NCCoverageGraph = {');
     expect(serialized).not.toContain('eslint-disable');
   });
 });

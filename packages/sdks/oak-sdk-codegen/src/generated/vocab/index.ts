@@ -5,8 +5,8 @@
  * Each graph captures a different aspect of curriculum knowledge.
  *
  * @remarks
- * These are large static data files (some exceeding 1MB). Import only what
- * you need — do not import this entire module unless necessary.
+ * Large datasets use the JSON loader pattern (data.json + types.ts + index.ts).
+ * Import only what you need — do not import this entire module unless necessary.
  */
 
 export { threadProgressionGraph } from './thread-progression-data.js';
@@ -17,7 +17,22 @@ export type {
   PrerequisiteGraphStats,
   PrerequisiteNode,
 } from './prerequisite-graph/index.js';
-export { misconceptionGraph } from './misconception-graph-data.js';
-export { vocabularyGraph } from './vocabulary-graph-data.js';
-export { ncCoverageGraph } from './nc-coverage-graph-data.js';
+export { misconceptionGraph } from './misconception-graph/index.js';
+export type {
+  MisconceptionGraph,
+  MisconceptionGraphStats,
+  MisconceptionNode,
+} from './misconception-graph/index.js';
+export { vocabularyGraph } from './vocabulary-graph/index.js';
+export type {
+  VocabularyGraph,
+  VocabularyGraphStats,
+  VocabularyNode,
+} from './vocabulary-graph/index.js';
+export { ncCoverageGraph } from './nc-coverage-graph/index.js';
+export type {
+  NCCoverageGraph,
+  NCCoverageGraphStats,
+  NCStatementNode,
+} from './nc-coverage-graph/index.js';
 export { minedDefinitionSynonyms } from './synonyms/definition-synonyms.js';

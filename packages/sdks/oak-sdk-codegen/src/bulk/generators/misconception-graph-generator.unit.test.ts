@@ -187,12 +187,20 @@ describe('MisconceptionGraph type', () => {
 });
 
 describe('serializeMisconceptionGraph', () => {
+  it('produces valid JSON from graph data', () => {
+    const graph = generateMisconceptionGraphData([createMisconception()], '2025-12-26');
+
+    const serialized = serializeMisconceptionGraph(graph);
+    const parsed: unknown = JSON.parse(serialized);
+
+    expect(parsed).toStrictEqual(JSON.parse(JSON.stringify(graph)));
+  });
+
   it('does not emit eslint-disable directives in generated output', () => {
     const graph = generateMisconceptionGraphData([createMisconception()], '2025-12-26');
 
     const serialized = serializeMisconceptionGraph(graph);
 
-    expect(serialized).toContain('export const misconceptionGraph: MisconceptionGraph = {');
     expect(serialized).not.toContain('eslint-disable');
   });
 });
