@@ -1,28 +1,36 @@
 import type { ActiveSpanContextSnapshot, WithActiveSpanOptions } from '@oaknational/observability';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { createInMemoryMcpObservationRecorder } from './recorder.js';
 import type { McpObservationRuntime } from './types.js';
 import { wrapPromptHandler, wrapResourceHandler, wrapToolHandler } from './wrappers.js';
 
-const getActiveSpanContextSnapshotMock = vi.fn<() => ActiveSpanContextSnapshot | undefined>();
-const withActiveSpanMock = vi.fn((options: WithActiveSpanOptions<unknown>) => options);
+function createTestRuntime(): {
+  readonly runtime: McpObservationRuntime;
+  readonly getActiveSpanContextMock: ReturnType<
+    typeof vi.fn<() => ActiveSpanContextSnapshot | undefined>
+  >;
+  readonly withActiveSpanMock: ReturnType<typeof vi.fn>;
+} {
+  const getActiveSpanContextMock = vi.fn<() => ActiveSpanContextSnapshot | undefined>();
+  const withActiveSpanMock = vi.fn((options: WithActiveSpanOptions<unknown>) => options);
 
-const runtime: McpObservationRuntime = {
-  getActiveSpanContext: getActiveSpanContextSnapshotMock,
-  async withActiveSpan<T>(options: WithActiveSpanOptions<T>): Promise<T> {
-    withActiveSpanMock(options);
-    return await options.run();
-  },
-};
+  return {
+    getActiveSpanContextMock,
+    withActiveSpanMock,
+    runtime: {
+      getActiveSpanContext: getActiveSpanContextMock,
+      async withActiveSpan<T>(options: WithActiveSpanOptions<T>): Promise<T> {
+        withActiveSpanMock(options);
+        return await options.run();
+      },
+    },
+  };
+}
 
 describe('MCP observation wrappers', () => {
-  afterEach(() => {
-    getActiveSpanContextSnapshotMock.mockReset();
-    withActiveSpanMock.mockClear();
-  });
-
   it('records metadata-only tool observations on success', async () => {
+    const { runtime, withActiveSpanMock } = createTestRuntime();
     const recorder = createInMemoryMcpObservationRecorder();
     const handler = wrapToolHandler(
       'find-lessons',
@@ -64,6 +72,7 @@ describe('MCP observation wrappers', () => {
   });
 
   it('records resource errors and rethrows the original failure', async () => {
+    const { runtime } = createTestRuntime();
     const recorder = createInMemoryMcpObservationRecorder();
     const handler = wrapResourceHandler(
       'oak://docs/start-here',
@@ -98,6 +107,7 @@ describe('MCP observation wrappers', () => {
       },
       observations: [],
     };
+    const { runtime } = createTestRuntime();
     const handler = wrapToolHandler('find-lessons', async () => ({ result: 'ok' }), {
       service: 'oak-http',
       environment: 'test',
@@ -110,6 +120,7 @@ describe('MCP observation wrappers', () => {
   });
 
   it('still rethrows the original error when the recorder throws on failure', async () => {
+    const { runtime } = createTestRuntime();
     const throwingRecorder = {
       record: () => {
         throw new Error('recorder boom');
@@ -134,8 +145,9 @@ describe('MCP observation wrappers', () => {
   });
 
   it('records prompt metadata with trace correlation when a span is active', async () => {
+    const { runtime, getActiveSpanContextMock } = createTestRuntime();
     const recorder = createInMemoryMcpObservationRecorder();
-    getActiveSpanContextSnapshotMock.mockReturnValue({
+    getActiveSpanContextMock.mockReturnValue({
       traceId: '0123456789abcdef0123456789abcdef',
       spanId: '0123456789abcdef',
       traceFlags: 1,

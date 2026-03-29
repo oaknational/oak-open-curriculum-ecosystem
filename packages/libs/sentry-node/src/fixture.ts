@@ -8,5 +8,8 @@ export function createFixtureSentryStore(): FixtureSentryStore {
     push(capture): void {
       captures.push(capture);
     },
+    clear(): void {
+      captures.length = 0;
+    },
   };
 }

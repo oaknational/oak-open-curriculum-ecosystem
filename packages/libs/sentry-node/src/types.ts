@@ -136,6 +136,7 @@ export type FixtureSentryCapture = FixtureSentryLogCapture | FixtureSentryExcept
 export interface FixtureSentryStore {
   readonly captures: readonly FixtureSentryCapture[];
   push(capture: FixtureSentryCapture): void;
+  clear(): void;
 }
 
 export type SentryLogAttributes = Readonly<Record<string, string | number | boolean | undefined>>;
