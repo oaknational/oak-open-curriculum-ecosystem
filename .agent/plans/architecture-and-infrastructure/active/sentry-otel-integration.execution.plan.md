@@ -129,6 +129,22 @@ Two rounds of specialist reviews ran during the remediation sessions:
 | architecture-reviewer-fred | ISSUES FOUND | Removed NodeOptions/CaptureContext re-exports; narrowed boundary |
 | test-reviewer | PASS | DI patterns ADR-078 compliant |
 
+### What the remediation changed (summary)
+
+- **Type safety**: narrow Sentry type re-exports, `typeSafeEntries` /
+  `typeSafeKeys` migrations, `ServerHarness` + `FakeLogger` rewrites
+- **File splitting**: `http-observability.ts` 504→207 lines (4 modules);
+  8 other files split for lint compliance
+- **Sentry logger API**: `captureMessage` → `Sentry.logger.*` with
+  flat `otel.attributes.*` / `otel.resource.*` dot-prefixed keys
+- **Safety guards**: shutdown once-guard, `safeRecord`, `safeSpanOp`
+- **DI + test hygiene**: injectable `stdoutSink`, per-test factories,
+  scoped counters, removed `vi.spyOn(process.stdout)`
+- **Security**: DSN removed from errors, `Object.assign` metadata copy
+  removed, `dsn` in `FULLY_REDACTED_KEYS`
+- **Smoke tests**: fixed `UnifiedLogger` constructor and `createApp`
+  observability parameter
+
 ### Remaining items before merge
 
 1. **PR review** for merge to main
