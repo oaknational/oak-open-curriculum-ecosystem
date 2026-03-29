@@ -18,12 +18,19 @@ This reference lists the environment variables and platform settings required to
 
 ## Optional Environment Variables
 
-| Variable                   | Default Behaviour                                                                                 | Usage                                                                                    |
-| -------------------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `ALLOWED_HOSTS`            | Localhost allow-list, or all Vercel deployment URLs + localhost entries if any Vercel URL present | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
-| `REMOTE_MCP_MODE`          | `stateless` (recommended)                                                                         | See "MCP Transport Modes" section below for detailed explanation                         |
-| `LOG_LEVEL`                | `info`                                                                                            | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
-| `DANGEROUSLY_DISABLE_AUTH` | **Must remain unset/`false`**                                                                     | Local development only; never enable in Vercel environments                              |
+| Variable                    | Default Behaviour                                                                                 | Usage                                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ALLOWED_HOSTS`             | Localhost allow-list, or all Vercel deployment URLs + localhost entries if any Vercel URL present | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
+| `REMOTE_MCP_MODE`           | `stateless` (recommended)                                                                         | See "MCP Transport Modes" section below for detailed explanation                         |
+| `LOG_LEVEL`                 | `info`                                                                                            | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
+| `DANGEROUSLY_DISABLE_AUTH`  | **Must remain unset/`false`**                                                                     | Local development only; never enable in Vercel environments                              |
+| `SENTRY_MODE`               | `off`                                                                                             | Set to `sentry` for live error capture and tracing (requires DSN, release, sample rate)  |
+| `SENTRY_DSN`                | —                                                                                                 | Required when `SENTRY_MODE=sentry`; Sentry project DSN                                   |
+| `SENTRY_RELEASE`            | Falls back to `VERCEL_GIT_COMMIT_SHA`                                                             | Required for live mode; auto-resolved from Vercel's commit SHA when deployed             |
+| `SENTRY_TRACES_SAMPLE_RATE` | —                                                                                                 | Numeric 0.0–1.0; required for live mode                                                  |
+| `SENTRY_ENVIRONMENT`        | Falls back to `VERCEL_ENV` → `NODE_ENV`                                                           | Auto-resolved; override only if needed                                                   |
+| `SENTRY_ENABLE_LOGS`        | `true` when live                                                                                  | Enable Sentry structured logs via `Sentry.logger.*` API                                  |
+| `SENTRY_DEBUG`              | `false`                                                                                           | Enable Sentry SDK debug output                                                           |
 
 CORS is unconditionally permissive (all origins allowed). Security is enforced by OAuth authentication, not by origin restrictions. There are no CORS-related environment variables to configure.
 
