@@ -74,20 +74,47 @@ export const threadProgressionGraph = {
 export type ThreadProgressionGraph = typeof threadProgressionGraph;
 ```
 
-#### For large graphs (> 5,000 lines):
+#### For large graphs (> 5,000 lines): JSON loader pattern
+
+The canonical pattern for large datasets uses a three-file directory
+structure. This supersedes the earlier monolithic typed-export approach
+which embedded 100k+ line TypeScript data files in the source tree.
+
+```text
+vocabulary-graph/
+├── data.json    ← Raw JSON data (JSON.stringify, 2-space indent)
+├── types.ts     ← TypeScript interface definitions
+└── index.ts     ← Typed loader using createRequire
+```
+
+The loader uses `createRequire` to load JSON in ESM and re-exports
+typed data:
 
 ```typescript
-// Explicit interface types FIRST
-export interface PrerequisiteNode { ... }
-export interface PrerequisiteEdge { ... }
-export interface PrerequisiteGraph { ... }
+// index.ts
+import { createRequire } from 'node:module';
+import type { VocabularyGraph } from './types.js';
 
-// Typed export (NOT as const - exceeds TS serialization limits)
-export const prerequisiteGraph: PrerequisiteGraph = {
-  version: '1.0.0',
-  // ... data
-};
+const require = createRequire(import.meta.url);
+const data: VocabularyGraph = require('./data.json');
+
+export const vocabularyGraph: VocabularyGraph = data;
+export type { VocabularyGraph } from './types.js';
 ```
+
+When the dataset contains union-literal fields (e.g., `rel:
+'prerequisiteFor'`), the loader must include runtime validation to
+narrow the JSON strings to the published literal types. See
+`prerequisite-graph/index.ts` for the two-step validation pattern.
+
+The generic `writeJsonDataset` function in
+`packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.ts`
+handles the mechanical directory creation and three-file write. Each
+dataset provides its own `JsonDatasetDescriptor` with the types and
+loader content.
+
+Datasets using this pattern: prerequisite-graph, vocabulary-graph,
+misconception-graph, nc-coverage-graph.
 
 ### 3. Generator Specifications
 
@@ -159,19 +186,26 @@ Tools return full graph data in `structuredContent` for AI agent reasoning.
 
 **CRITICAL**: No new MCP tools until search optimisation is complete. The focus is on extracting and processing data for search improvement first.
 
-### 4. Pipeline Location
+### 5. Pipeline Location
 
-The `vocab-gen/` pipeline lives in the SDK alongside `code-generation/`:
+The `vocab-gen/` pipeline lives in `oak-sdk-codegen` alongside
+`code-generation/`:
 
 ```text
-packages/sdks/oak-curriculum-sdk/
+packages/sdks/oak-sdk-codegen/
 ├── code-generation/           ← Generates types from OpenAPI
-├── vocab-gen/          ← Generates graphs from bulk data
-│   ├── extractors/     ← Pure functions, one per data type
-│   └── generators/     ← Transform extracted data to graphs
-└── src/mcp/
-    ├── thread-progression-data.ts    ← Generated
-    └── prerequisite-graph-data.ts    ← Generated
+├── vocab-gen/                 ← Generates graphs from bulk data
+│   ├── lib/                   ← Bulk file reading
+│   └── vocab-gen-core.ts      ← Pipeline orchestrator
+├── src/bulk/
+│   ├── extractors/            ← Pure functions, one per data type
+│   └── generators/            ← Transform extracted data to graphs
+└── src/generated/vocab/
+    ├── thread-progression-data.ts    ← Generated (as const)
+    ├── prerequisite-graph/           ← Generated (JSON loader)
+    ├── vocabulary-graph/             ← Generated (JSON loader)
+    ├── misconception-graph/          ← Generated (JSON loader)
+    └── nc-coverage-graph/            ← Generated (JSON loader)
 ```
 
 ## Rationale
@@ -196,7 +230,8 @@ packages/sdks/oak-curriculum-sdk/
 ### Negative
 
 - Large graph exports lose some type inference benefits (no literal types for property values)
-- Two different patterns needed based on graph size (small uses `as const`, large uses explicit interfaces)
+- Two different patterns needed based on graph size (small uses `as const`, large uses JSON loader)
+- JSON data files must be copied to `dist/` during build (handled by `copy-json-assets.ts`)
 
 ### Neutral
 

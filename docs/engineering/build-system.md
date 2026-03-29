@@ -57,22 +57,24 @@ point in the development lifecycle. See
 [ADR-121](../architecture/architectural-decisions/121-quality-gate-surfaces.md)
 for the full decision record.
 
-| Check            | pre-commit | pre-push     | CI workflow     | pnpm qg | pnpm check        |
-| ---------------- | ---------- | ------------ | --------------- | ------- | ----------------- |
-| secrets:scan:all | --         | Yes          | Yes             | --      | Yes               |
-| clean            | --         | --           | --              | --      | Yes               |
-| sdk-codegen      | --         | Yes (turbo)  | Yes (via build) | --      | Yes               |
-| build            | --         | Yes          | Yes             | --      | Yes               |
-| format-check     | Yes        | Yes          | Yes             | Yes     | Yes (format:root) |
-| markdownlint     | Yes        | Yes          | Yes             | Yes     | Yes               |
-| subagents:check  | --         | --           | Yes             | Yes     | Yes               |
-| type-check       | Yes        | Yes          | Yes             | Yes     | Yes               |
-| lint             | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test             | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test:e2e         | --         | Yes (--only) | --              | Yes     | Yes               |
-| test:ui          | --         | --           | --              | Yes     | Yes               |
-| smoke:dev:stub   | --         | --           | --              | Yes     | Yes               |
-| doc-gen          | --         | --           | --              | --      | Yes               |
+| Check             | pre-commit | pre-push     | CI workflow     | pnpm qg | pnpm check        |
+| ----------------- | ---------- | ------------ | --------------- | ------- | ----------------- |
+| secrets:scan:all  | --         | Yes          | Yes             | --      | Yes               |
+| clean             | --         | --           | --              | --      | Yes               |
+| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | --      | Yes               |
+| build             | --         | Yes          | Yes             | --      | Yes               |
+| format-check      | Yes        | Yes          | Yes             | Yes     | Yes (format:root) |
+| markdownlint      | Yes        | Yes          | Yes             | Yes     | Yes               |
+| subagents:check   | --         | --           | Yes             | Yes     | Yes               |
+| portability:check | --         | --           | Yes             | Yes     | Yes               |
+| test:root-scripts | --         | --           | Yes             | Yes     | Yes               |
+| type-check        | Yes        | Yes          | Yes             | Yes     | Yes               |
+| lint              | Yes        | Yes          | Yes             | Yes     | Yes               |
+| test              | Yes        | Yes          | Yes             | Yes     | Yes               |
+| test:e2e          | --         | Yes (--only) | --              | Yes     | Yes               |
+| test:ui           | --         | --           | --              | Yes     | Yes               |
+| smoke:dev:stub    | --         | --           | --              | Yes     | Yes               |
+| doc-gen           | --         | --           | --              | --      | Yes               |
 
 **Key principle**: no check runs only in CI. Every CI check is reproducible
 locally via pre-push, `pnpm qg`, or `pnpm check`. See ADR-121 for the
@@ -106,7 +108,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
 Verifies the codebase passes all checks without modifications:
 
 ```bash
-pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && turbo run type-check lint test test:ui test:e2e smoke:dev:stub
+pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && pnpm portability:check && pnpm test:root-scripts && turbo run type-check lint test test:ui test:e2e smoke:dev:stub
 ```
 
 **Flow**:
@@ -115,6 +117,8 @@ pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check &
    - `format-check:root` - verify formatting
    - `markdownlint-check:root` - verify markdown
    - `subagents:check` - validate sub-agent wrapper/template standards
+   - `portability:check` - validate canonical/adaptor and hook parity
+   - `test:root-scripts` - repo-level script tests
 2. Single turbo run:
    - `type-check` - TypeScript validation
    - `lint` - ESLint (verify only, no --fix)
@@ -128,7 +132,7 @@ pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check &
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan:all && pnpm clean && turbo run sdk-codegen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root
+pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && turbo run sdk-codegen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root
 ```
 
 ### `pnpm test:all` - All test suites

@@ -87,25 +87,22 @@ decisions, and keep the prompt concise.
 
 ## Known Issues
 
-### Remaining from code review
+### Resolved (2026-03-29)
 
-- `eslint.config.ts` override for `auth-error-test-helpers.ts` and
-  `verify-clerk-token.unit.test.ts` — type-reviewer analysis: the
-  `registerTool` overloaded generics case is irreducible via standard DI.
-  Options: (1) extract `McpToolRegistrar` narrow interface, (2) keep
-  config override. **Now tracked in eslint-disable-remediation.plan.md**.
-- `scripts/check-blocked-patterns.unit.test.ts` has IO-touching tests
-  (`loadBlockedPatterns`, `runPreToolUseGuard`) misclassified as unit
-  tests — split to `check-blocked-patterns.integration.test.ts`.
-- Root `vitest.config.ts` include glob (`scripts/**/*.test.ts`) is too
-  broad — tighten to `scripts/**/*.unit.test.ts` and
-  `scripts/**/*.integration.test.ts`.
+- ~~check-blocked-patterns IO tests misclassified~~ — split to
+  `check-blocked-patterns.integration.test.ts`
+- ~~Root vitest.config.ts glob too broad~~ — tightened to
+  `*.unit.test.ts` + `*.integration.test.ts`
+- ~~TSDoc on plugin registration~~ — already present (lines 11-18)
+- ~~Child process in integration test~~ — moved to
+  `e2e-tests/generators/write-json-graph-file.e2e.test.ts`
+- ~~eslint.config.ts auth override~~ — irreducible (confirmed by
+  type-reviewer); improved documentation
+
+### Remaining
+
 - Renderer files lost test coverage when widget tests were deleted —
   new tests when the replacement widget ships.
-- Add TSDoc on inline `@oaknational` plugin registration in
-  `recommended.ts` noting consumers should NOT separately register.
-- `write-json-graph-file.integration.test.ts` spawns a child process
-  in an integration test — move to E2E tier per testing strategy.
 
 ## Non-Goals
 
