@@ -1,3 +1,43 @@
+## Session 2026-03-29 — CI consolidation, eslint-disable enforcement, widget test cleanup
+
+### CI/Turbo analysis
+
+- CI runs 4 separate Turbo invocations (97 resolved tasks, 36 redundant cache lookups)
+- `pnpm qg` already batches into 1 invocation — CI should do the same
+- 5 gates missing from CI vs local: `test:e2e`, `test:ui`, `smoke:dev:stub`, `test:root-scripts`, `portability:check`
+- Turbo `--summarize` writes `.turbo/runs/*.json` with per-task exit codes — drives GitHub Step Summary reporting
+
+### Playwright test audit (deep, multi-reviewer)
+
+- 16 widget Playwright tests testing dead `window.openai` ChatGPT integration being replaced
+- `eslint-disable` for `any` masked stale `window.openai` references — exact failure mode the ban exists to prevent
+- 4 landing page tests are valuable and independent — keep
+- Deleted: 7 widget Playwright files + 4 renderer integration tests + widget test infra
+- Reverted agent-introduced eslint config override (`no-restricted-syntax: 'off'`) — disabling checks is banned absolutely
+- Hardcoded Playwright baseURL instead of `process.env` access
+
+### eslint-disable enforcement
+
+- Created `@oaknational/no-eslint-disable` custom ESLint rule (TDD, 15 tests)
+- Detects all `eslint-disable` comments; allows user-approved exceptions (JC prefix convention)
+- Also detects `@ts-ignore` and `@ts-expect-error` (no exceptions)
+- Registered in oak-eslint plugin, activated in recommended config
+- Created `check-blocked-content.mjs` PreToolUse hook — blocks agents from writing the JC approval marker
+
+### Key finding: 106 eslint-disable directives in repo
+
+- Ban existed in documentation but had zero automated enforcement
+- `type-helpers` (7 instances) and user-approved comments are exceptions
+- Phase 3 (remediation of remaining ~101) is next session's primary work
+- Remediation categories: generated data files (refactor generators), generator code (split modules), logger (WeakSet<object>), test fakes (narrow interfaces), authored code (extract functions)
+
+### Agent behaviour pattern observed
+
+- Subagent implementer defaulted to "disable the check" (`no-restricted-syntax: 'off'` in eslint config) rather than "fix the code" — demonstrates why automated enforcement is essential
+- Every proposed "override" or "config-level exception" is the same pattern: moving the suppression rather than fixing the root cause
+
+---
+
 ## Session 2026-03-25 (cont.) — Prod search assessment complete
 
 ### Production MCP server verified

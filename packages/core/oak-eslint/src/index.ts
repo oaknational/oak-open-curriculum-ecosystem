@@ -1,4 +1,5 @@
 import { noExportTrivialTypeAliasesRule } from './rules/no-export-trivial-type-aliases.js';
+import { noEslintDisableRule } from './rules/no-eslint-disable.js';
 // import { boundaryRules } from './rules/boundary.js'; // We will need to wrap the boundary logic in a rule or config export
 
 /**
@@ -21,6 +22,7 @@ export {
 
 export const rules = {
   'no-export-trivial-type-aliases': noExportTrivialTypeAliasesRule,
+  'no-eslint-disable': noEslintDisableRule,
 };
 
 import { recommended } from './configs/recommended.js';

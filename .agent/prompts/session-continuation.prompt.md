@@ -95,9 +95,15 @@ to establish parity between local and CI lint results.
 - **WS1** (ADR + codegen contract): **complete** (2026-03-26)
 - **WS2** (app runtime migration): **complete** (2026-03-26)
 - **Runtime boundary simplification**: **ALL PHASES COMPLETE** (2026-03-28)
-- **WS3** (widget client + branding): **next** — NOW UNBLOCKED
+- **WS3** (widget client + branding): **next** — NOW UNBLOCKED. Note: widget Playwright tests + renderer integration tests deleted (2026-03-29) as part of CI remediation. New tests to be written TDD against replacement widget.
 - **WS4** (search UI for humans): **blocked by** WS3
 - **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md`
+
+## Parallel Active Work — CI and eslint-disable Remediation
+
+Active plan: `.agent/plans/architecture-and-infrastructure/active/ci-consolidation-and-gate-parity.plan.md`
+
+Phases 0-2 complete (2026-03-29). Next: Phase 3 (remediate ~101 eslint-disable comments), then Phases 4-6 (CI reporter, consolidation, documentation). The `@oaknational/no-eslint-disable` ESLint rule is live in the recommended config — it will report all unapproved eslint-disable comments as errors.
 
 ## Key Decisions (Settled)
 
