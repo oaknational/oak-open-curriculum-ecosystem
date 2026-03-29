@@ -1,4 +1,4 @@
-import type { Logger } from '@oaknational/logger';
+import { normalizeError, type Logger } from '@oaknational/logger';
 
 import { runSmokeAssertions, type SmokeContext } from './smoke-assertions/index.js';
 import type { SmokeSuiteMode } from './smoke-assertions/types.js';
@@ -36,7 +36,7 @@ export async function runSmokeSuite(options: SmokeSuiteOptions): Promise<void> {
     });
   } catch (error) {
     const failureLogger = prepared ? modeLogger : rootLogger;
-    failureLogger.error('Smoke suite failed', error, {
+    failureLogger.error('Smoke suite failed', normalizeError(error), {
       mode: options.mode,
       baseUrl: prepared?.baseUrl,
     });
