@@ -87,7 +87,7 @@ rationale behind each exclusion.
 Prepares the codebase by building, checking, and auto-fixing issues:
 
 ```bash
-pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check && pnpm markdownlint:root && pnpm format:root
+pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check && pnpm portability:check && pnpm practice:fitness:informational && pnpm markdownlint:root && pnpm format:root
 ```
 
 **Flow**:
@@ -100,6 +100,8 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
    - `lint:fix` - auto-fix linting issues
 3. Root-only fixes:
    - `subagents:check` - validate sub-agent wrapper/template standards
+   - `portability:check` - validate canonical/adaptor and hook parity
+   - `practice:fitness:informational` - soft-ceiling report (not a blocking gate)
    - `markdownlint:root` - fix markdown in root
    - `format:root` - format root files
 
