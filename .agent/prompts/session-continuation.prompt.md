@@ -1,109 +1,189 @@
 ---
 prompt_id: session-continuation
-title: "MCP App Extension Migration — Session Continuation"
+title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-03-28
+last_updated: 2026-03-29
 ---
 
-# MCP App Extension Migration — Session Continuation
+# Session Continuation
 
-## First Action: Live Spec Research
-
-Before any implementation, deeply research the latest MCP App Extension features.
-
-1. **Fetch the live spec and SDK docs** using WebFetch/WebSearch:
-   - <https://apps.extensions.modelcontextprotocol.io/api/sitemap.xml> — START HERE
-   - <https://modelcontextprotocol.io/extensions/apps/overview> — spec overview
-   - <https://modelcontextprotocol.io/extensions/apps/build> — build guide
-   - <https://github.com/modelcontextprotocol/ext-apps> — SDK source
-2. **Compare against the plan's "Research Findings" section**
-3. **Update the plan** if new features change the optimal approach
-4. **Invoke `mcp-reviewer`** with findings before proceeding
-
-## Quick Ground
+## Ground First
 
 1. Read `.agent/directives/AGENT.md` and `.agent/directives/principles.md`
-2. Read the broad plan: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
-3. Read the active child plan for the current work stream (see below)
+2. Read this prompt fully before acting
+3. Read the active plan: `.agent/plans/architecture-and-infrastructure/active/ci-consolidation-and-gate-parity.plan.md`
 
-## Where Are We?
+## Next Session Priorities (in order)
 
-**Runtime boundary simplification plan: ALL PHASES COMPLETE (0-8).**
+### 1. Commit and push the completed CI consolidation slice
 
-Phase 8 landed in 4 commits on `feat/mcp_app` (2026-03-28):
+Phases 4 and 5 are now implemented locally as one coherent CI change.
 
-- `6992e656` — Core: type-safe auth boundary, file splits, security hardening
-- `03bf000c` — Code-reviewer fixes: silent assertion paths, handlers.ts TSDoc
-- `76dfb730` — Test-reviewer fixes: underscore params, duplicated tests
-- `ea6bc42b` — Eliminate ALL eslint-disable from test helpers: narrow interfaces + node-mocks-http
+**Reporter implemented (TDD)**:
 
-**WS3 (widget client migration) is now unblocked.**
+- `scripts/ci-turbo-report.mjs`
+- `scripts/ci-turbo-report.unit.test.ts`
+- `scripts/ci-turbo-report.integration.test.ts`
 
-## Follow-Up Work Items (from Phase 8 reviews)
+The reporter:
 
-### COMPLETED (2026-03-28 session)
+- accepts an optional summary path or discovers the latest `.turbo/runs/*.json`
+- parses Turbo output into a typed internal shape
+- counts pass/fail from `tasks[].execution.exitCode`, not top-level
+  `execution.success`
+- writes markdown to stdout and GitHub annotations to stderr
+- tolerates missing `logFile` entries in task records
 
-Items 1-5 all resolved:
+**Workflow implemented** in `.github/workflows/ci.yml`:
 
-- **Item 1 (Opaque token RFC 8707)**: CLOSED — NO CHANGE NEEDED. Spike
-  confirmed the app uses Clerk opaque tokens (`oat_...`) as the production
-  path. Clerk verifies these server-side via `getAuth()`. The "bypass" in
-  `resource-parameter-validator.ts:163` is the designed behaviour, not a bug.
-  JWT audience validation is defence-in-depth for non-Clerk tokens only.
-  Switching to JWT would introduce risk (issuer mismatch per ADR-115) for
-  no security benefit. See spike findings in session plan.
-- **Item 2 (DI simplification)**: `ToolHandlerDependencies` reduced from 5 to 2
-  members. New `tool-executor-factory.ts` composes SDK functions.
-  `searchRetrieval` closed over at build time (not on the DI interface).
-  Test mock creation: 31 → 5 lines. Circular dependency broken via
-  `tool-handler-types.ts`. E2E test boundary fixed (no internal imports).
-- **Item 3 (CallToolResult)**: Removed `as CallToolResult` assertion (replaced
-  with `as const` on literal). Product code imports are architecturally correct.
-- **Item 4 (authLogContextSchema)**: Moved to `src/auth-log-context.ts` product
-  code. Test helpers import from there.
-- **Item 5 (logger fakes)**: Consolidated 6 implementations → 2 canonical fakes
-  in `src/test-helpers/fakes.ts`. Removed all `as Logger` assertions.
+- non-Turbo checks stay as separate steps
+- `pnpm exec playwright install --with-deps chromium` runs before any
+  possible `test:ui`
+- Turbo gates run in one batch via:
+  `pnpm exec turbo run build type-check lint test test:e2e test:ui smoke:dev:stub --summarize --log-order=grouped --continue`
+- final reporter step uses `if: always()` and appends to
+  `$GITHUB_STEP_SUMMARY`
 
-### Low Priority — RESOLVED (2026-03-28)
+**Local verification already green (2026-03-29)**:
 
-- **Item 6**: Deleted the `console.error` spy test — tested library side effects
-  via global spy (both prohibited). 8 conformance tests remain, covering the full
-  `verifyClerkToken` contract.
-- **Item 7**: Deleted the timing-dependent test — required `vi.useFakeTimers()`
-  (global state). Root cause: `createPhasedTimer` has no injectable clock. 5
-  tests remain, covering all other bootstrap phase behaviour.
-- **Item 8**: Replaced fragile `import type {} from '.../bearerAuth.js'` with a
-  local `declare module 'express-serve-static-core'` augmentation. Imports
-  `AuthInfo` from the SDK's types module (pure-type leaf, less fragile).
+- `pnpm format-check:root`
+- `pnpm markdownlint-check:root`
+- `pnpm subagents:check`
+- `pnpm portability:check`
+- `pnpm test:root-scripts`
+- `pnpm exec vitest run --config vitest.config.ts scripts/ci-turbo-report.unit.test.ts scripts/ci-turbo-report.integration.test.ts`
+- `pnpm exec turbo run type-check lint test test:ui test:e2e smoke:dev:stub --continue --summarize --log-order=grouped`
 
-### OPEN — CI lint/local lint parity
+Working tree now includes:
 
-CI lint fails on `feat/mcp_app` (PR #70) but lint passes locally. Root
-cause is environmental — likely turbo cache parity or ESLint config
-resolution differences between CI and local. The errors CI reports
-(`no-unsafe-assignment`, `no-unresolved`) are not reproducible locally.
-Previous CI runs passed because turbo replayed cached lint success from
-older commits.
+- `.github/workflows/ci.yml`
+- `scripts/ci-turbo-report.mjs`
+- `scripts/ci-turbo-report.unit.test.ts`
+- `scripts/ci-turbo-report.integration.test.ts`
+- this prompt
+- the active CI plan
 
-This is an infrastructure problem, not a code problem. The next session
-should investigate the CI workflow's lint step and turbo cache behaviour
-to establish parity between local and CI lint results.
+Create **one complete CI commit** from this slice, push it, then verify
+GitHub CI on the PR.
+
+### 2. Phase 3: eslint-disable remediation (~87 directives)
+
+Active plan: `.agent/plans/architecture-and-infrastructure/active/ci-consolidation-and-gate-parity.plan.md`
+— has the categorised inventory with approved remediation strategies.
+Also address the plan's "Known Issues from Code Review" section.
+
+Resume Phase 3 in this exact order:
+
+1. Collapse `packages/sdks/oak-sdk-codegen/vocab-gen/generators/` into
+   the bulk pipeline first.
+2. Remove generator emitters that write `eslint-disable` into generated
+   files before regenerating outputs.
+3. Define one shared generated-data contract:
+   `data.json` + `types.ts` + `index.ts`.
+4. Reimplement the prerequisite-graph loader TDD-first, using
+   `stash@{0}` as reference only.
+5. Roll the same JSON + typed loader pattern across the remaining large
+   generated datasets.
+6. Move logger remediation ahead of broad fake cleanup.
+7. Clean easy DI fake cases first, then extract a narrow
+   `McpToolRegistrar` interface in streamable-http and remove the
+   related config override.
+
+**Then scale the JSON data pattern** — proof of concept for prerequisite
+graph is stashed (`git stash list` — index 0 at time of writing:
+"WIP: prerequisite graph JSON proof of concept"). The pattern:
+generators produce `.json` data + `types.ts` interfaces + `index.ts`
+typed loader. JSON imports type-check against explicit interfaces
+without assertions (validated). Apply to all large generated data files
+(vocabulary-graph 107K, misconception-graph 103K, nc-coverage 52K,
+prerequisite-graph 18K, thread-progression 1.5K).
+
+JSON loader edge cases to handle:
+
+- `readonly` arrays in `types.ts` are advisory — JSON import produces
+  mutable arrays. If immutability is a correctness requirement, use
+  `Object.freeze` on the loaded data.
+- Literal-typed fields (e.g. `'prerequisiteFor'`) cannot be used in
+  interfaces backed by JSON imports — use `string` instead.
+- `types.ts` and the generator's runtime output must stay structurally
+  in sync. Add a `satisfies` check in generator tests to catch drift.
+
+**Then tackle the other categories** (each has test obligations — update
+or write tests FIRST before changing product code):
+
+- Logger: replace custom `json-sanitisation.ts` (292 lines, WeakSet,
+  Object.entries) with off-the-shelf stringify library + replacer.
+  Verify library signature is `(value: unknown) => string`, not `any`.
+  Error normalisation: accept `unknown`, narrow internally.
+  Existing logger tests anchor the RED phase.
+- Test fakes: narrow interfaces via DI (ADR-078). Specific files:
+  - `apps/oak-curriculum-mcp-stdio/src/test-helpers/fakes.ts` (3 casts)
+    — define `MinimalOakApiClient`, `MinimalMcpServer` (or
+    `McpToolRegistrar` for the `registerTool` overload problem)
+  - `packages/libs/logger/src/test-helpers/fakes.ts` (3 casts)
+    — define `MinimalRequest`, `MinimalResponse`
+  - `packages/sdks/oak-curriculum-sdk/src/test-helpers/fakes.ts` (1 cast)
+    — define minimal path-based client interface
+  - `apps/oak-curriculum-mcp-streamable-http/eslint.config.ts` override
+    — chosen path: extract `McpToolRegistrar` narrow interface and
+    remove the override, not keep it as the end state
+- Authored code: extract functions, split modules for max-lines/complexity.
+- Miscellaneous: `typeSafeEntries` for Object.\* (safe for closed types;
+  note: index-signature types widen literal keys), wrap async for
+  no-misused-promises, narrow types for no-restricted-types.
+- Promote `no-eslint-disable` from `warn` to `error` when count hits zero.
+- Also: `scripts/check-blocked-patterns.unit.test.ts` has IO-touching
+  tests misclassified as unit tests — split to integration test file.
+
+### 3. Phase 6: Documentation
+
+Update ADR-065, build-system.md quality gate surface table,
+testing-strategy.md (Playwright naming, test deletion criteria),
+principles.md (ESLint enforcement mechanism). Invoke `docs-adr-reviewer`.
+
+### 4. MCP App work continues
+
+WS3 (widget client migration) is unblocked but deferred behind the CI
+commit and the next eslint-remediation slice. Widget Playwright tests
+and renderer integration tests were deleted (2026-03-29) as dead code.
+New tests will be written TDD against the replacement widget. For MCP
+spec research, start with the MCP migration plan's "First Action"
+section after the higher-priority work is complete.
+
+---
+
+## Branch State
+
+Branch: `feat/mcp_app` at commit `88617d15`.
+Uncommitted:
+
+- `.github/workflows/ci.yml`
+- `scripts/ci-turbo-report.mjs`
+- `scripts/ci-turbo-report.unit.test.ts`
+- `scripts/ci-turbo-report.integration.test.ts`
+- `.agent/prompts/session-continuation.prompt.md`
+- `.agent/plans/architecture-and-infrastructure/active/ci-consolidation-and-gate-parity.plan.md`
+
+Stash 0: prerequisite graph JSON proof of concept.
+Treat it as **reference only**. Do not apply it wholesale.
+
+## Known Issues
+
+- CI lint/local lint parity issue (PR #70) should be resolved by the CI
+  consolidation. Local full-batch verification is green; confirm after
+  pushing. If CI still fails, investigate turbo cache and ESLint
+  resolution differences rather than changing product code first.
 
 ## Work Stream Status
 
 - **WS1** (ADR + codegen contract): **complete** (2026-03-26)
 - **WS2** (app runtime migration): **complete** (2026-03-26)
 - **Runtime boundary simplification**: **ALL PHASES COMPLETE** (2026-03-28)
-- **WS3** (widget client + branding): **next** — NOW UNBLOCKED. Note: widget Playwright tests + renderer integration tests deleted (2026-03-29) as part of CI remediation. New tests to be written TDD against replacement widget.
+- **WS3** (widget client + branding): **deferred** until the CI commit and
+  the next eslint-remediation slice are complete
 - **WS4** (search UI for humans): **blocked by** WS3
 - **Output schemas**: `.agent/plans/sdk-and-mcp-enhancements/current/output-schemas-for-mcp-tools.plan.md`
-
-## Parallel Active Work — CI and eslint-disable Remediation
-
-Active plan: `.agent/plans/architecture-and-infrastructure/active/ci-consolidation-and-gate-parity.plan.md`
-
-Phases 0-2 complete (2026-03-29). Next: Phase 3 (remediate ~101 eslint-disable comments), then Phases 4-6 (CI reporter, consolidation, documentation). The `@oaknational/no-eslint-disable` ESLint rule is live in the recommended config — it will report all unapproved eslint-disable comments as errors.
 
 ## Key Decisions (Settled)
 
@@ -111,11 +191,17 @@ Phases 0-2 complete (2026-03-29). Next: Phase 3 (remediate ~101 eslint-disable c
 - **No type aliases** — use SDK types directly
 - **React for all UI** — `@modelcontextprotocol/ext-apps/react` hooks
 - **ext-apps SDK v1.3.2**
-- **eslint-disable is BANNED** — eliminated all 9 from test helpers via:
-  - Narrow product interfaces (ADR-078): `McpRequestServer`, `McpRequestTransport`,
-    `McpHandlerRequest`, `McpHandlerResponse`
-  - Off-the-shelf library: `node-mocks-http` for Express middleware tests
-  - 2 targeted `as` assertions managed via eslint config override (not eslint-disable)
+- **eslint-disable is BANNED** — `@oaknational/no-eslint-disable` rule
+  enforces at `warn` (promotes to `error` after remediation)
+- **CI path** — one complete CI commit, not an intermediate partial
+  workflow commit
+- **Generated data → JSON + typed loader** — not TypeScript chunk splitting
+- **Vocab-gen → bulk pipeline** — consolidate before scaling
+- **Stash usage** — reference only, then reimplement TDD-first
+- **Streamable HTTP test seam** — extract a narrow `McpToolRegistrar`
+  interface rather than keeping the config override
+- **CI gate source of truth for this pass** — workflow-local gates, not
+  a new root `ci:check` script
 
 ## Rules
 
@@ -125,20 +211,31 @@ Phases 0-2 complete (2026-03-29). Next: Phase 3 (remediate ~101 eslint-disable c
 - No `as`, `any`, `!`, `Record<string, unknown>` — validate at boundaries
 - ALL reviewer findings are blocking — no exceptions
 - NEVER disable any checks — EVER, for ANY reason
-- Use `mcp-reviewer` before implementation decisions
+- Invoke code-reviewer + specialists after each piece of work
 - Use off-the-shelf libraries, not custom plumbing
 
 ## Key References
 
-- **ADR-141**: `docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md`
-- **ADR-142**: `docs/architecture/architectural-decisions/142-clerk-mcp-tools-adopt-or-explain.md`
-- Research: `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md`
+### CI and eslint-disable
+
+- Active CI plan: `.agent/plans/architecture-and-infrastructure/active/ci-consolidation-and-gate-parity.plan.md`
+- Quality gate hardening (future): `.agent/plans/architecture-and-infrastructure/future/quality-gate-hardening.plan.md`
+- CI workflow: `.github/workflows/ci.yml`
+- no-eslint-disable rule: `packages/core/oak-eslint/src/rules/no-eslint-disable.ts`
+- no-eslint-disable tests: `packages/core/oak-eslint/src/rules/no-eslint-disable.unit.test.ts`
+- ESLint recommended config (rule severity): `packages/core/oak-eslint/src/configs/recommended.ts`
+- Content hook + tests: `scripts/check-blocked-content.mjs`, `scripts/check-blocked-content.unit.test.ts`, `scripts/check-blocked-content.integration.test.ts`
+- Pattern hook (note: IO tests need splitting to integration file): `scripts/check-blocked-patterns.unit.test.ts`
+- Hook policy: `.agent/hooks/policy.json`
+
+### MCP App
+
+- MCP migration plan: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
+- ADR-141: `docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md`
 - MCP Apps spec: <https://modelcontextprotocol.io/extensions/apps/overview>
 
 ## Quality Gates
 
-After every change:
-
-```bash
-pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm test && pnpm test:e2e && pnpm format:root && pnpm markdownlint:root
-```
+Full verification: `pnpm check` (includes clean, build, all gates).
+Read-only check: `pnpm qg` (no build, no auto-fix).
+Auto-fix: `pnpm fix` (format, markdownlint, lint:fix).

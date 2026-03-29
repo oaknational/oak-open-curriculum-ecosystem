@@ -12,14 +12,14 @@ todos:
     content: "Phase 2: Delete dead widget Playwright tests and supporting infrastructure."
     status: done
   - id: phase-3-eslint-remediation
-    content: "Phase 3: Remediate all existing eslint-disable comments across the repo (~101 instances)."
+    content: "Phase 3: Remediate all existing eslint-disable comments across the repo (~87 actionable directives)."
     status: pending
   - id: phase-4-reporter-script
     content: "Phase 4: Create CI reporter script (TDD) — parses Turbo --summarize JSON, emits GitHub Step Summary and annotations."
-    status: pending
+    status: done
   - id: phase-5-ci-consolidation
     content: "Phase 5: Consolidate CI workflow — single Turbo invocation, add missing gates, wire reporter."
-    status: pending
+    status: done
   - id: phase-6-documentation
     content: "Phase 6: Documentation and validation — update ADR-065, build-system.md, quality gate surface table, testing strategy."
     status: pending
@@ -28,8 +28,36 @@ todos:
 # CI Consolidation, Gate Parity, and eslint-disable Remediation
 
 **Last Updated**: 2026-03-29
-**Status**: 🟢 IN PROGRESS — Phases 0-2 complete, Phase 3 (remediation) is next
-**Scope**: Three interconnected problems solved together: (1) remediate 111 eslint-disable comments and add automated enforcement, (2) delete dead widget tests, (3) consolidate CI into a single Turbo invocation with full gate parity.
+**Status**: 🟢 IN PROGRESS — Phases 0-2 and 4-5 are implemented locally and ready to commit as one CI slice; Phase 3 is next, Phase 6 remains
+**Scope**: Three interconnected problems solved together: (1) remediate ~87 actionable eslint-disable directives (of 111 total, excluding 8 user-approved type-helpers and rule source/test references) and add automated enforcement, (2) delete dead widget tests, (3) consolidate CI into a single Turbo invocation with full gate parity.
+
+---
+
+## Current Branch State (2026-03-29)
+
+- Branch: `feat/mcp_app` at commit `88617d15`
+- CI slice on disk:
+  - `.github/workflows/ci.yml`
+  - `scripts/ci-turbo-report.mjs`
+  - `scripts/ci-turbo-report.unit.test.ts`
+  - `scripts/ci-turbo-report.integration.test.ts`
+  - prompt/plan updates in `.agent/prompts/` and `.agent/plans/`
+- Stash strategy: `stash@{0}` ("WIP: prerequisite graph JSON proof of
+  concept") is reference-only. Do not apply it wholesale.
+- WS3 is unblocked but intentionally deferred behind the CI commit and
+  the first Phase 3 remediation slice.
+- This pass does not introduce a new root `ci:check` script. The
+  workflow-local gate list remains the source of truth.
+
+### Verified locally on 2026-03-29
+
+- `pnpm exec vitest run --config vitest.config.ts scripts/ci-turbo-report.unit.test.ts scripts/ci-turbo-report.integration.test.ts`
+- `pnpm format-check:root`
+- `pnpm markdownlint-check:root`
+- `pnpm subagents:check`
+- `pnpm portability:check`
+- `pnpm test:root-scripts`
+- `pnpm exec turbo run type-check lint test test:ui test:e2e smoke:dev:stub --continue --summarize --log-order=grouped`
 
 ---
 
@@ -62,24 +90,27 @@ This is not a documentation problem. It's a **tooling gap**. The `eslint-disable
 
 ---
 
-## eslint-disable Inventory (111 instances)
+## eslint-disable Inventory (updated 2026-03-29)
 
-### By category
+Fresh grep shows ~87 actionable directives (excluding 8 user-approved
+type-helpers instances and rule source/test references).
 
-| Category | Count | Correct fix |
+### By category (with approved remediation strategy)
+
+| Category | Count | Approved fix |
 |----------|-------|------------|
-| `max-lines` on **generated** data files | ~10 | Refactor generators to produce split output files |
-| `max-lines` on **generator** code | ~12 | Refactor generators into smaller modules |
-| `max-lines-per-function` on generators | ~7 | Extract functions |
-| `max-lines` / `max-lines-per-function` on authored code | ~8 | Refactor into smaller functions/modules |
-| `@typescript-eslint/no-restricted-types` (logger) | ~12 | `WeakSet<object>` and error normalisation — needs investigation |
-| `@typescript-eslint/consistent-type-assertions` (test fakes) | ~10 | Narrow fake interfaces, use DI |
-| `@typescript-eslint/consistent-type-assertions` (type-helpers) | 7 | **User-approved exceptions** (type-helpers package) |
-| `@typescript-eslint/no-explicit-any` (widget tests) | 5 | **Delete** (widget tests are dead) |
-| `no-restricted-syntax` / `no-restricted-properties` | ~10 | Refactor to use typed alternatives |
-| `complexity` / `max-statements` | ~8 | Extract smaller functions |
-| Code generators **emitting** eslint-disable | ~13 | Refactor generator output + generators |
-| `-- JC:` approved by user | varies | **Keep** — user-approved exceptions |
+| `max-lines` on **generated** data files | ~10 | **JSON + typed loader** — generators produce `.json` data + `types.ts` + `index.ts` loader |
+| `max-lines` on **generator** code | ~12 | Extract shared helpers, refactor into smaller modules |
+| `max-lines-per-function` / `complexity` on generators | ~9 | Extract functions |
+| `max-lines` / `max-lines-per-function` on authored code | ~8 | Extract functions, split modules |
+| `@typescript-eslint/no-restricted-types` (logger) | ~15 | **Off-the-shelf stringify library** replaces custom `json-sanitisation.ts`. Error normalisation accepts `unknown` and narrows internally |
+| `@typescript-eslint/consistent-type-assertions` (test fakes) | ~10 | **Narrow interfaces via DI** (ADR-078), no `as` |
+| `@typescript-eslint/consistent-type-assertions` (type-helpers) | 7 | **User-approved exceptions** (keep) |
+| `no-restricted-syntax` / `no-restricted-properties` | ~10 | `typeSafeEntries`/`typeSafeKeys`/`typeSafeValues` from type-helpers |
+| `complexity` / `max-statements` on authored code | ~8 | Extract smaller functions |
+| Code generators **emitting** eslint-disable | ~9 | Remove emit strings (JSON output doesn't need eslint-disable) |
+| `no-misused-promises` (integration tests) | 2 | Wrap async callbacks |
+| `@ts-expect-error` (type test) | 1 | Replace with `expectTypeOf` or conditional type |
 
 ### User-approved exceptions (not to be remediated)
 
@@ -269,15 +300,32 @@ pnpm type-check && pnpm lint && pnpm test
 
 This phase is the largest. Break into sub-tasks by workspace/package. Each sub-task: remove the `eslint-disable`, fix the underlying code, run quality gates.
 
-#### Sub-task categories (to be expanded during execution):
+#### Approved execution order
 
-1. **Generated data files (`max-lines`)** — refactor generators to produce split output
-2. **Generator code (`max-lines`, `max-lines-per-function`, `complexity`)** — refactor into smaller modules/functions
-3. **Logger (`no-restricted-types`)** — investigate `WeakSet<object>` pattern; find typed alternative
-4. **Test fakes (`consistent-type-assertions`)** — narrow fake interfaces, improve DI
-5. **Authored code (`max-lines-per-function`, `complexity`)** — extract functions
-6. **`no-restricted-properties` / `no-restricted-syntax`** — use typed alternatives (`typeSafeKeys` etc.)
-7. **Code generators emitting eslint-disable** — fix generator templates to not emit suppression
+1. Collapse `packages/sdks/oak-sdk-codegen/vocab-gen/generators/` into
+   the bulk pipeline first.
+2. Remove generator emitters that write `eslint-disable` into generated
+   files before regenerating outputs.
+3. Define one shared generated-data contract:
+   `data.json` + `types.ts` + `index.ts`.
+4. Reimplement the prerequisite-graph loader TDD-first, using
+   `stash@{0}` as reference only.
+5. Roll the same JSON + typed loader pattern across the remaining large
+   generated data files.
+6. Move logger remediation ahead of broad fake cleanup.
+7. Clean easy DI fake cases first, then extract a narrow
+   `McpToolRegistrar` interface in streamable-http and remove the
+   related config override.
+
+#### Sub-task categories (mapped to the approved order):
+
+1. **Generator consolidation** — collapse duplicated generator surfaces before scaling fixes
+2. **Generator emitters** — remove suppression strings before regenerating outputs
+3. **Generated data files (`max-lines`)** — move to the shared JSON + typed loader contract
+4. **Logger (`no-restricted-types`)** — replace the custom sanitisation path before broad fake cleanup
+5. **Test fakes (`consistent-type-assertions`)** — resolve easy DI cases first, then the `McpToolRegistrar` seam
+6. **Authored code (`max-lines-per-function`, `complexity`)** — extract functions and split modules
+7. **`no-restricted-properties` / `no-restricted-syntax`** — use typed alternatives (`typeSafeKeys` etc.)
 
 **Acceptance Criteria**:
 
@@ -300,18 +348,61 @@ pnpm build && pnpm type-check && pnpm lint && pnpm test
 
 ### Phase 4: Create CI Reporter Script (TDD) (45 min)
 
-(Unchanged from original plan — create `scripts/ci-turbo-report.mjs` using TDD.)
+Implemented locally on 2026-03-29 via TDD.
+
+**Delivered**:
+
+- `scripts/ci-turbo-report.mjs`
+- `scripts/ci-turbo-report.unit.test.ts`
+- `scripts/ci-turbo-report.integration.test.ts`
+- Exported functions:
+  - `parseTurboSummary`
+  - `formatSummaryTable`
+  - `formatAnnotations`
+  - `findLatestSummaryFile`
+  - `runCiTurboReport`
+
+**Behavioural notes confirmed against real Turbo output**:
+
+- The reporter accepts an optional summary path, otherwise finds the
+  latest `.turbo/runs/*.json`.
+- Pass/fail counts come from `tasks[].execution.exitCode`, not top-level
+  `execution.success`.
+- Real summaries can omit `logFile`; the reporter still emits failure
+  annotations without a `file=` attribute.
+- The reporter writes markdown to stdout and annotations/warnings to
+  stderr, and returns success so the summary step is best-effort.
+
+**Validation**:
+
+- Reporter tests: 15/15 passing
+- Manual run against a real summary JSON emitted markdown correctly
+- No `eslint-disable` comments added in script or tests
 
 ---
 
 ### Phase 5: Consolidate CI Workflow (30 min)
 
-Update `.github/workflows/ci.yml`:
+Implemented locally on 2026-03-29.
 
-1. Non-Turbo checks as separate steps (secrets, format-check, markdownlint-check, subagents:check, portability:check, test:root-scripts)
-2. Playwright browser installation: `npx playwright install --with-deps chromium`
-3. Single Turbo invocation: `turbo run build type-check lint test test:e2e test:ui smoke:dev:stub --summarize --log-order=grouped --continue`
-4. Reporter step with `if: always()`
+**Delivered in `.github/workflows/ci.yml`**:
+
+1. Non-Turbo checks as separate steps: secrets, `format-check:root`,
+   `markdownlint-check:root`, `subagents:check`, `portability:check`,
+   `test:root-scripts`
+2. Playwright browser installation before any `test:ui` execution:
+   `pnpm exec playwright install --with-deps chromium`
+3. Single Turbo invocation:
+   `pnpm exec turbo run build type-check lint test test:e2e test:ui smoke:dev:stub --summarize --log-order=grouped --continue`
+4. Final reporter step with `if: always()`:
+   `node scripts/ci-turbo-report.mjs >> "$GITHUB_STEP_SUMMARY"`
+
+**Validation**:
+
+- Full local Turbo batch passed: 69 successful tasks, 69 total
+- Root-level non-Turbo gates passed locally
+- `pnpm exec turbo` chosen intentionally because bare `turbo` is not
+  guaranteed on PATH in this repo
 
 ---
 
@@ -338,10 +429,11 @@ Update `.github/workflows/ci.yml`:
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| Phase 3 scope is very large (111 instances) | Certain | High time investment | Break into sub-tasks by workspace; use parallel agents for independent packages |
-| Generator refactoring is complex | Medium | Could take significant time | Start with the simplest cases; some generators may need architectural review |
-| Logger `WeakSet<object>` may have no typed alternative | Low | Blocks remediation | Investigate first; escalate to user if no clean solution exists |
-| Playwright `test:ui` may fail in CI without browser install | Certain | Blocks CI | `npx playwright install --with-deps chromium` is the proven solution |
+| Phase 3 scope is large (~87 actionable directives) | Certain | High time investment | Break into sub-tasks by category; vocab-gen consolidation first |
+| Generator refactoring is complex | Medium | Could take significant time | JSON + typed loader pattern validated; vocab-gen → bulk consolidation first |
+| Logger replacement library may have `any` in signature | Low | Reintroduces type hole | Verify library signature is `(value: unknown) => string` before adopting |
+| JSON loader `readonly` arrays are advisory only | Low | Silent mutability | Document in loader; use `Object.freeze` if immutability is a correctness requirement |
+| Playwright `test:ui` may fail in CI without browser install | Certain | Blocks CI | `pnpm exec playwright install --with-deps chromium` in CI workflow |
 
 ---
 
@@ -372,27 +464,20 @@ Update `.github/workflows/ci.yml`:
 
 ## Known Issues from Code Review (2026-03-29)
 
-Items identified by code-reviewer that need addressing:
+### Resolved (commit `88617d15`)
 
-### Phase 3 scope additions
+- ~~Add `@ts-nocheck` to `TS_DIRECTIVE_PATTERN`~~ — done, with `(?!\w)` word boundary
+- ~~Add test case: `@ts-ignore` with user-approval marker still invalid~~ — done (full matrix: ignore, expect-error, nocheck)
+- ~~`defaultOptions: []` removal~~ — was never present; `schema: []` is correct
+- ~~Named import over default export in test file~~ — already using named imports
+- ~~`check-blocked-content.mjs` needs unit tests~~ — done (unit + integration test pair)
 
-- Add `@ts-nocheck` to the `TS_DIRECTIVE_PATTERN` in `no-eslint-disable.ts` (currently only catches `@ts-ignore` and `@ts-expect-error`)
-- Add test case: `@ts-ignore` with user-approval marker should still be `invalid` (TypeScript suppressions have no exceptions)
-- Remove the `defaultOptions: []` from the rule (YAGNI)
-- Prefer named import over default export in test file
+### Remaining
 
-### Phase 3 remediation includes
-
-- `eslint.config.ts` type assertion override for `auth-error-test-helpers.ts` and `verify-clerk-token.unit.test.ts` — investigate type-safe alternatives (escalate to type-reviewer)
-
-### Test coverage
-
-- `scripts/check-blocked-content.mjs` needs unit tests (follow `check-blocked-patterns.unit.test.ts` pattern) — TDD is mandatory
-- Renderer files (`browse-renderer.ts`, `search-renderer.ts`, `explore-renderer.ts`) lost all test coverage when widget tests were deleted — new tests will be written when the replacement widget ships
-
-### Documentation
-
-- Add TSDoc comment on the inline `@oaknational` plugin registration in `recommended.ts` noting that consumers should NOT separately register the plugin
+- `eslint.config.ts` type assertion override for `auth-error-test-helpers.ts` and `verify-clerk-token.unit.test.ts` — chosen Phase 3 path is to extract a narrow `McpToolRegistrar` interface and remove the config override, not keep it as the end state.
+- `scripts/check-blocked-patterns.unit.test.ts` has IO-touching tests (`loadBlockedPatterns`, `runPreToolUseGuard`) misclassified as unit tests — split to `check-blocked-patterns.integration.test.ts`.
+- Renderer files (`browse-renderer.ts`, `search-renderer.ts`, `explore-renderer.ts`) lost all test coverage when widget tests were deleted — new tests will be written when the replacement widget ships.
+- Add TSDoc comment on the inline `@oaknational` plugin registration in `recommended.ts` noting that consumers should NOT separately register the plugin.
 
 ## Future Enhancements (Out of Scope)
 
