@@ -127,11 +127,6 @@ export const getLessonsSummary = {
     title: "Get Lessons Summary",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-local.html",
-    'openai/toolInvocation/invoking': "Fetching Get Lessons Summary…",
-    'openai/toolInvocation/invoked': "Get Lessons Summary loaded",
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

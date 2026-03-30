@@ -20,7 +20,7 @@ Oak-specific variant of the upstream `create-mcp-app` skill from `modelcontextpr
 
 ## SDK (already installed)
 
-Installable package: `@modelcontextprotocol/ext-apps` `^1.2.0`
+Installable package: `@modelcontextprotocol/ext-apps` `^1.3.2`
 
 Server helpers imported from `@modelcontextprotocol/ext-apps/server`:
 

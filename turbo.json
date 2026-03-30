@@ -50,19 +50,70 @@
       ]
     },
     "@oaknational/sdk-codegen#build": {
-      "dependsOn": ["^build", "sdk-codegen"]
+      "dependsOn": ["^build", "sdk-codegen"],
+      "cache": true,
+      "outputs": ["dist/**", ".tsup/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsup.config.ts",
+        "src/**/*.ts",
+        "!src/**/*.test.ts",
+        "!src/**/*.spec.ts"
+      ]
     },
     "@oaknational/sdk-codegen#test": {
-      "dependsOn": ["^build", "sdk-codegen"]
+      "dependsOn": ["^build", "sdk-codegen"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.ts",
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts"
+      ]
     },
     "@oaknational/sdk-codegen#type-check": {
-      "dependsOn": ["^build", "sdk-codegen"]
+      "dependsOn": ["^build", "sdk-codegen"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsconfig.lint.json",
+        "**/*.ts"
+      ]
     },
     "@oaknational/sdk-codegen#lint": {
-      "dependsOn": ["^build", "sdk-codegen"]
+      "dependsOn": ["^build", "sdk-codegen"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "**/*.ts"
+      ]
     },
     "@oaknational/sdk-codegen#lint:fix": {
-      "dependsOn": ["^build", "sdk-codegen"]
+      "dependsOn": ["^build", "sdk-codegen"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "**/*.ts"
+      ]
     },
     "clean": {
       "cache": false

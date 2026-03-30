@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/open-curriculum-ecosystem",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "description": "Oak National Academy MCP ecosystem - A collection of MCP servers, frameworks, libraries, and supporting services",
   "author": {
@@ -35,7 +35,7 @@
     "smoke:dev:stub": "LOG_LEVEL=debug turbo run smoke:dev:stub",
     "smoke:dev:live": "LOG_LEVEL=debug turbo run smoke:dev:live",
     "smoke:dev:live:auth": "LOG_LEVEL=debug turbo run smoke:dev:live:auth",
-    "test:all": "pnpm test && pnpm test:e2e && pnpm test:ui && pnpm smoke:dev:stub",
+    "test:all": "turbo run --continue test test:e2e test:ui smoke:dev:stub",
     "smoke:remote": "LOG_LEVEL=debug turbo run smoke:remote",
     "agent-tools:build": "pnpm --filter @oaknational/agent-tools build",
     "agent-tools:lint": "pnpm --filter @oaknational/agent-tools lint",
@@ -48,6 +48,10 @@
     "format-check:root": "prettier --check .",
     "markdownlint:root": "markdownlint --fix .",
     "markdownlint-check:root": "markdownlint .",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
+    "depcruise": "depcruise apps packages agent-tools",
+    "depcruise:report": "depcruise apps packages agent-tools --output-type dot > dependency-graph.dot",
     "shellcheck": "shellcheck scripts/*.sh apps/*/scripts/*.sh apps/*/smoke-tests/*.sh",
     "subagents:check": "node scripts/validate-subagents.mjs",
     "portability:check": "node scripts/validate-portability.mjs",
@@ -56,9 +60,9 @@
     "qa:oauth": "cd apps/oak-curriculum-mcp-streamable-http && LOG_LEVEL=debug node dist/index.js",
     "make": "pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check && pnpm portability:check && pnpm practice:fitness:informational && pnpm markdownlint:root && pnpm format:root",
     "qg": "pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && pnpm portability:check && pnpm test:root-scripts && turbo run type-check lint test test:ui test:e2e smoke:dev:stub",
-    "re-build": "pnpm clean && pnpm install && pnpm sdk-codegen && pnpm build",
+    "re-build": "pnpm clean && pnpm install && turbo run build",
     "fix": "pnpm format:root && pnpm markdownlint:root && pnpm lint:fix",
-    "check": "pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && turbo run sdk-codegen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root",
+    "check": "pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && turbo run build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root",
     "app:search": "pnpm run dev --filter=@oaknational/search-cli",
     "app:mcp": "pnpm run dev --filter=@oaknational/oak-curriculum-mcp-streamable-http",
     "prepare": "husky",
@@ -90,7 +94,7 @@
   "engines": {
     "node": "24.x"
   },
-  "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
   "license": "MIT",
   "pnpm": {
     "peerDependencyRules": {
@@ -102,17 +106,20 @@
       }
     },
     "overrides": {
-      "axios": "^1.13.5",
-      "sucrase": ">=3.35.1",
-      "js-yaml": ">=4.1.1",
-      "csstype": "^3.2.3",
-      "rollup": ">=4.59.0",
-      "qs": ">=6.14.2",
+      "axios": ">=1.13.5",
+      "brace-expansion": ">=5.0.5",
+      "csstype": ">=3.2.3",
+      "file-type": ">=21.3.2",
       "hono": ">=4.12.4",
-      "@hono/node-server": ">=1.19.10"
+      "@hono/node-server": ">=1.19.10",
+      "js-yaml": ">=4.1.1",
+      "picomatch": ">=4.0.4",
+      "qs": ">=6.14.2",
+      "rollup": ">=4.59.0",
+      "sucrase": ">=3.35.1"
     },
     "onlyBuiltDependencies": [
-      "@modelcontextprotocol/ext-apps",
+      "@clerk/shared",
       "core-js",
       "esbuild",
       "sharp",
@@ -120,8 +127,8 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.4.3",
-    "@commitlint/config-conventional": "^20.4.3",
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^10.0.1",
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@semantic-release/changelog": "^6.0.3",
@@ -129,18 +136,20 @@
     "@stryker-mutator/core": "^9.6.0",
     "@stryker-mutator/typescript-checker": "^9.6.0",
     "@stryker-mutator/vitest-runner": "^9.6.0",
-    "@types/node": "^25.3.5",
+    "@types/node": "^25.5.0",
     "@types/supertest": "^7.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.56.1",
-    "@typescript-eslint/parser": "^8.56.1",
-    "@vitest/coverage-v8": "^4.0.18",
+    "@typescript-eslint/eslint-plugin": "^8.57.2",
+    "@typescript-eslint/parser": "^8.57.2",
+    "@vitest/coverage-v8": "^4.1.2",
     "cloc": "2.6.0-cloc",
-    "eslint": "^10.0.2",
+    "dependency-cruiser": "^17.3.9",
+    "eslint": "^10.1.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
-    "eslint-plugin-import-x": "^4.16.1",
+    "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
+    "knip": "^6.0.6",
     "markdownlint-cli": "^0.48.0",
     "prettier": "^3.8.1",
     "semantic-release": "^25.0.3",
@@ -149,9 +158,9 @@
     "ts-morph": "^27.0.2",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
-    "turbo": "^2.8.14",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1",
-    "vitest": "^4.0.18"
+    "turbo": "^2.8.20",
+    "typescript": "^5",
+    "typescript-eslint": "^8.57.2",
+    "vitest": "^4.1.2"
   }
 }

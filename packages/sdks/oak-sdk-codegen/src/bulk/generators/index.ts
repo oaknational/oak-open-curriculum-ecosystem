@@ -26,7 +26,7 @@ export {
 export {
   generateMisconceptionGraphData,
   serializeMisconceptionGraph,
-  writeMisconceptionGraphFile,
+  writeMisconceptionGraphAsJson,
   type MisconceptionGraph,
   type MisconceptionGraphStats,
   type MisconceptionNode,
@@ -35,7 +35,7 @@ export {
 export {
   generateNCCoverageGraphData,
   serializeNCCoverageGraph,
-  writeNCCoverageGraphFile,
+  writeNCCoverageGraphAsJson,
   type NCCoverageGraph,
   type NCCoverageGraphStats,
   type NCStatementNode,
@@ -69,7 +69,7 @@ export {
 export {
   generateVocabularyGraphData,
   serializeVocabularyGraph,
-  writeVocabularyGraphFile,
+  writeVocabularyGraphAsJson,
   type VocabularyGraph,
   type VocabularyGraphStats,
   type VocabularyNode,
@@ -81,3 +81,11 @@ export {
   writePrerequisiteGraphFile,
   writeThreadProgressionFile,
 } from './write-graph-file.js';
+
+export { writePrerequisiteGraphAsJson } from './write-json-graph-file.js';
+
+export {
+  serializeDatasetToJson,
+  writeJsonDataset,
+  type JsonDatasetDescriptor,
+} from './write-json-dataset.js';

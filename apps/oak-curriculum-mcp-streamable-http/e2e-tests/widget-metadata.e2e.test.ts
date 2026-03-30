@@ -1,27 +1,24 @@
 /**
- * E2E tests for ChatGPT widget metadata in MCP tools.
+ * E2E tests for MCP Apps widget metadata in MCP tools (ADR-141).
  *
- * These tests verify that when an MCP client calls `tools/list`, aggregated tools
- * include the `_meta` fields required for ChatGPT widget integration:
- *
- * - `openai/outputTemplate`: URI of the widget resource to render tool output
- * - `openai/toolInvocation/invoking`: Status text shown while tool executes
- * - `openai/toolInvocation/invoked`: Status text shown after tool completes
- *
- * This proves the end-to-end behaviour: MCP clients receive widget metadata
- * that enables Oak-branded output rendering in ChatGPT.
+ * These tests verify the widget metadata mechanism: tools in
+ * WIDGET_TOOL_NAMES get `_meta.ui.resourceUri`, others do not.
+ * The tests derive from the canonical WIDGET_TOOL_NAMES set rather
+ * than hardcoding tool names, so they remain correct when the
+ * allowlist changes (including when it is temporarily empty).
  *
  * @see aggregated-tool-widget.ts for widget HTML
  * @see widget-resource.e2e.test.ts for widget resource availability
  */
 
 import { describe, it, expect } from 'vitest';
+import { z } from 'zod';
 import request from 'supertest';
 import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
-import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -38,28 +35,44 @@ const testEnv: NodeJS.ProcessEnv = {
   ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
 };
 
-interface JsonRpcEnvelope {
-  jsonrpc?: string;
-  id?: string | number;
-  result?: unknown;
-  error?: unknown;
-}
+/**
+ * Zod schemas for strict validation of MCP JSON-RPC responses at the
+ * external boundary. Data is `unknown` from `JSON.parse`; these schemas
+ * validate to the exact expected shape per ADR-141.
+ */
+const McpUiMetaSchema = z.object({
+  resourceUri: z.string(),
+});
 
-interface ToolMeta {
-  readonly 'openai/outputTemplate'?: string;
-  readonly 'openai/toolInvocation/invoking'?: string;
-  readonly 'openai/toolInvocation/invoked'?: string;
-  readonly 'openai/widgetAccessible'?: boolean;
-  readonly 'openai/visibility'?: 'public' | 'private';
-}
+const McpToolMetaSchema = z
+  .object({
+    ui: McpUiMetaSchema.optional(),
+    securitySchemes: z.array(z.object({ type: z.string() }).loose()).optional(),
+  })
+  .loose();
 
-interface McpToolWithMeta {
-  readonly name: string;
-  readonly description?: string;
-  readonly _meta?: ToolMeta;
-}
+const McpToolSchema = z
+  .object({
+    name: z.string(),
+    description: z.string().optional(),
+    _meta: McpToolMetaSchema.optional(),
+  })
+  .loose();
 
-function parseFirstSseData(raw: string): JsonRpcEnvelope {
+const ToolsListResultSchema = z.object({
+  jsonrpc: z.string(),
+  id: z.union([z.string(), z.number()]),
+  result: z
+    .object({
+      tools: z.array(McpToolSchema),
+    })
+    .loose(),
+});
+
+/**
+ * Extracts the first SSE `data:` line from a raw response.
+ */
+function extractSseDataLine(raw: string): string {
   const line = raw
     .split('\n')
     .map((l) => l.trim())
@@ -67,26 +80,7 @@ function parseFirstSseData(raw: string): JsonRpcEnvelope {
   if (!line) {
     throw new Error('No data line found in SSE payload');
   }
-  const json = line.replace(/^data: /, '');
-  const parsed: unknown = JSON.parse(json);
-  if (parsed && typeof parsed === 'object') {
-    return parsed as JsonRpcEnvelope;
-  }
-  throw new Error('Invalid SSE JSON');
-}
-
-function getToolsFromResult(payload: JsonRpcEnvelope): McpToolWithMeta[] {
-  const result = payload.result as { tools?: unknown[] } | undefined;
-  if (!result?.tools || !Array.isArray(result.tools)) {
-    return [];
-  }
-  return result.tools.filter(
-    (t): t is McpToolWithMeta => t !== null && typeof t === 'object' && 'name' in t,
-  );
-}
-
-function findToolByName(tools: McpToolWithMeta[], name: string): McpToolWithMeta | undefined {
-  return tools.find((t) => t.name === name);
+  return line.replace(/^data: /, '');
 }
 
 async function createTestApp() {
@@ -99,155 +93,61 @@ async function createTestApp() {
   return await createApp({ runtimeConfig, observability });
 }
 
-async function callToolsList(
-  app: Awaited<ReturnType<typeof createApp>>,
-): Promise<{ tools: McpToolWithMeta[]; status: number }> {
+async function callToolsList(app: Awaited<ReturnType<typeof createApp>>) {
   const res = await request(app)
     .post('/mcp')
     .set('Accept', ACCEPT)
     .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-  const payload = parseFirstSseData(res.text);
-  return { tools: getToolsFromResult(payload), status: res.status };
+  expect(res.status).toBe(200);
+  const json: unknown = JSON.parse(extractSseDataLine(res.text));
+  const parsed = ToolsListResultSchema.parse(json);
+  return parsed.result.tools;
 }
 
-describe('ChatGPT Widget Metadata E2E', () => {
-  /**
-   * Aggregated tool names that should have widget metadata.
-   */
-  const aggregatedToolNames = ['search', 'fetch', 'get-curriculum-model'] as const;
+describe('MCP Apps Widget Metadata E2E (ADR-141)', () => {
+  it('tools in WIDGET_TOOL_NAMES have _meta.ui.resourceUri, others do not', async () => {
+    const app = await createTestApp();
+    const tools = await callToolsList(app);
 
-  describe('openai/outputTemplate', () => {
-    it.each(aggregatedToolNames)(
-      '%s tool returns _meta with openai/outputTemplate in tools/list',
-      async (toolName) => {
-        const app = await createTestApp();
-        const { tools, status } = await callToolsList(app);
-        expect(status).toBe(200);
-
-        const tool = findToolByName(tools, toolName);
-        expect(tool).toBeDefined();
-        expect(tool?._meta).toBeDefined();
-        expect(tool?._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
-      },
-    );
-
-    it('outputTemplate URI matches a registered resource', async () => {
-      // Get the outputTemplate URI from tools/list
-      const toolsApp = await createTestApp();
-      const { tools } = await callToolsList(toolsApp);
-      const searchTool = findToolByName(tools, 'search');
-      const templateUri = searchTool?._meta?.['openai/outputTemplate'];
-      expect(templateUri).toBeDefined();
-
-      // Verify this URI exists in resources/list (same app, per-request transport)
-      const resourcesRes = await request(toolsApp)
-        .post('/mcp')
-        .set('Accept', ACCEPT)
-        .send({ jsonrpc: '2.0', id: '2', method: 'resources/list' });
-
-      const resourcesPayload = parseFirstSseData(resourcesRes.text);
-      const result = resourcesPayload.result as { resources?: { uri: string }[] } | undefined;
-      const resources = result?.resources ?? [];
-      const matchingResource = resources.find((r) => r.uri === templateUri);
-
-      expect(matchingResource).toBeDefined();
-    });
-  });
-
-  describe('openai/toolInvocation status text', () => {
-    it.each(aggregatedToolNames)(
-      '%s tool returns invoking status text in tools/list',
-      async (toolName) => {
-        const app = await createTestApp();
-        const { tools, status } = await callToolsList(app);
-        expect(status).toBe(200);
-
-        const tool = findToolByName(tools, toolName);
-        expect(tool?._meta?.['openai/toolInvocation/invoking']).toBeDefined();
-        expect(typeof tool?._meta?.['openai/toolInvocation/invoking']).toBe('string');
-        expect(tool?._meta?.['openai/toolInvocation/invoking']?.length).toBeGreaterThan(0);
-      },
-    );
-
-    it.each(aggregatedToolNames)(
-      '%s tool returns invoked status text in tools/list',
-      async (toolName) => {
-        const app = await createTestApp();
-        const { tools, status } = await callToolsList(app);
-        expect(status).toBe(200);
-
-        const tool = findToolByName(tools, toolName);
-        expect(tool?._meta?.['openai/toolInvocation/invoked']).toBeDefined();
-        expect(typeof tool?._meta?.['openai/toolInvocation/invoked']).toBe('string');
-        expect(tool?._meta?.['openai/toolInvocation/invoked']?.length).toBeGreaterThan(0);
-      },
-    );
-  });
-
-  describe('openai/widgetAccessible (enables widget tool calling)', () => {
-    const allToolNames = [
-      'search',
-      'fetch',
-      'get-curriculum-model',
-      'get-subjects',
-      'get-key-stages',
-    ] as const;
-
-    it.each(allToolNames)(
-      '%s tool has widgetAccessible set to true in tools/list',
-      async (toolName) => {
-        const app = await createTestApp();
-        const { tools, status } = await callToolsList(app);
-        expect(status).toBe(200);
-
-        const tool = findToolByName(tools, toolName);
-        expect(tool?._meta?.['openai/widgetAccessible']).toBe(true);
-      },
-    );
-
-    const NON_WIDGET_TOOLS = new Set(['download-asset']);
-
-    it('widget tools have widgetAccessible (universal coverage)', async () => {
-      const app = await createTestApp();
-      const { tools, status } = await callToolsList(app);
-      expect(status).toBe(200);
-
-      const widgetTools = tools.filter((t) => !NON_WIDGET_TOOLS.has(t.name));
-      for (const tool of widgetTools) {
-        expect(tool._meta?.['openai/widgetAccessible']).toBe(true);
+    for (const tool of tools) {
+      if (WIDGET_TOOL_NAMES.has(tool.name)) {
+        expect(tool._meta?.ui?.resourceUri, `${tool.name} should have widget URI`).toBe(WIDGET_URI);
+      } else {
+        expect(tool._meta?.ui, `${tool.name} should not have widget UI`).toBeUndefined();
       }
-    });
+    }
   });
 
-  describe('openai/visibility (tool visibility control)', () => {
-    it('ALL tools have visibility set to public', async () => {
-      const app = await createTestApp();
-      const { tools, status } = await callToolsList(app);
-      expect(status).toBe(200);
+  it('all widget URIs in tools/list correspond to registered resources', async () => {
+    const app = await createTestApp();
+    const tools = await callToolsList(app);
 
-      for (const tool of tools) {
-        expect(tool._meta?.['openai/visibility']).toBe('public');
-      }
+    const widgetUris = tools
+      .filter((t) => t._meta?.ui?.resourceUri !== undefined)
+      .map((t) => t._meta?.ui?.resourceUri);
+
+    if (widgetUris.length === 0) {
+      // No widget tools configured — test passes trivially
+      return;
+    }
+
+    const resourcesRes = await request(app)
+      .post('/mcp')
+      .set('Accept', ACCEPT)
+      .send({ jsonrpc: '2.0', id: '2', method: 'resources/list' });
+
+    const ResourcesListResultSchema = z.object({
+      jsonrpc: z.string(),
+      id: z.union([z.string(), z.number()]),
+      result: z.object({ resources: z.array(z.object({ uri: z.string() }).loose()) }).loose(),
     });
-  });
 
-  describe('generated tools _meta in MCP response', () => {
-    const generatedToolNames = ['get-subjects', 'get-key-stages', 'get-lessons-summary'] as const;
+    const resourcesJson: unknown = JSON.parse(extractSseDataLine(resourcesRes.text));
+    const resourcesParsed = ResourcesListResultSchema.parse(resourcesJson);
+    const registeredUris = resourcesParsed.result.resources.map((r) => r.uri);
 
-    it.each(generatedToolNames)(
-      'generated tool %s has complete _meta in tools/list',
-      async (toolName) => {
-        const app = await createTestApp();
-        const { tools, status } = await callToolsList(app);
-        expect(status).toBe(200);
-
-        const tool = findToolByName(tools, toolName);
-        expect(tool).toBeDefined();
-        expect(tool?._meta).toBeDefined();
-        expect(tool?._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
-        expect(tool?._meta?.['openai/widgetAccessible']).toBe(true);
-        expect(tool?._meta?.['openai/visibility']).toBe('public');
-      },
-    );
+    for (const uri of widgetUris) {
+      expect(registeredUris, `widget URI ${uri} should be a registered resource`).toContain(uri);
+    }
   });
 });

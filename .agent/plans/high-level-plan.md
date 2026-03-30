@@ -71,7 +71,7 @@ The next execution sequence is currently:
    (`strict_dynamic_mapping_exception` on `previous_version`), with salvage-first
    recovery and anti-recurrence guardrails now the active execution path.
 3. Implement
-   [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
+   [mcp-app-extension-migration.plan.md](sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md)
    and deploy that migration work.
 4. The first graph-enablement slice has now been promoted into
    [kg-alignment-audit.execution.plan.md](semantic-search/current/kg-alignment-audit.execution.plan.md).
@@ -172,7 +172,7 @@ Graph-augmented curriculum navigation begins to surface.
    - Validate stale search/index issues have cleared
 2. **Replace OpenAI app with MCP Apps infrastructure** (intention #3)
    - Canonical execution plan:
-     [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](sdk-and-mcp-enhancements/active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
+     [mcp-app-extension-migration.plan.md](sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md)
    - **Must include basic branding** for the MCP App (logo, colours,
      metadata visible in Claude Desktop / ChatGPT tool listings)
 3. **Knowledge graph alignment audit** (intention #4)

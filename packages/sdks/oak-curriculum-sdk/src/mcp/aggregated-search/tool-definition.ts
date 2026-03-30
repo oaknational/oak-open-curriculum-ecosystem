@@ -16,7 +16,7 @@ import {
   AGGREGATED_PREREQUISITE_GUIDANCE,
   PRIMARY_ORIENTATION_TOOL_NAME,
 } from '../prerequisite-guidance.js';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+// WIDGET_URI import removed while widget is disabled — re-add when re-enabling _meta.ui
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 import { SEARCH_SCOPES } from './types.js';
 
@@ -78,13 +78,8 @@ CROSS-TOOL WORKFLOWS:
     openWorldHint: false,
     title: 'Search Curriculum',
   },
-  _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Searching curriculum…',
-    'openai/toolInvocation/invoked': 'Search complete',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
-  },
+  // TEMPORARILY DISABLED: Widget UI disabled for merge to main.
+  // Re-enable: _meta: { ui: { resourceUri: WIDGET_URI } },
 } as const;
 
 /**

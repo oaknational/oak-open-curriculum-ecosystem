@@ -7,7 +7,7 @@
 
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
-import { BASE_WIDGET_URI } from './cross-domain-constants.js';
+import { BASE_WIDGET_URI, WIDGET_TOOL_NAMES } from './cross-domain-constants.js';
 import type { Logger } from '@oaknational/logger';
 
 const OUTPUT_PATH = resolve(import.meta.dirname, '../../src/types/generated/widget-constants.ts');
@@ -25,19 +25,29 @@ function generateWidgetConstantsFile(): string {
  * Base URI for the Oak JSON viewer widget resource.
  *
  * This widget renders tool output with Oak branding, logo, and styling.
- * All generated tools reference this URI in their \`_meta['openai/outputTemplate']\` field.
+ * All generated tools reference this URI in their \`_meta.ui.resourceUri\` field (ADR-141).
  *
  * **Cache-Busting Strategy**: The URI includes a hash generated at sdk-codegen time.
- * Each build produces a new hash, naturally busting ChatGPT's widget cache.
- * This aligns with OpenAI's best practice: "give the template a new URI".
+ * Each build produces a new hash, naturally busting the host widget cache.
  *
  * **Format**: \`ui://widget/oak-json-viewer-<hash>.html\`
  * **Example**: \`ui://widget/oak-json-viewer-abc12345.html\`
  *
  * @see code-generation/typegen/cross-domain-constants.ts - Source of truth
- * @see https://developers.openai.com/apps-sdk/build/mcp-server (OpenAI cache-busting guidance)
+ * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
 export const WIDGET_URI = ${JSON.stringify(BASE_WIDGET_URI)} as const;
+
+/**
+ * Tools that advertise a widget UI via \`_meta.ui.resourceUri\`.
+ *
+ * Only tools in this set have \`_meta.ui\` in their descriptors.
+ * All other tools have no widget UI — MCP clients will not render
+ * a widget for their results.
+ *
+ * @see code-generation/typegen/cross-domain-constants.ts - Source of truth
+ */
+export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set(${JSON.stringify([...WIDGET_TOOL_NAMES])});
 `;
 }
 

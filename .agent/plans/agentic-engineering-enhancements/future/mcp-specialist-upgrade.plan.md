@@ -1,6 +1,6 @@
 # MCP Specialist Upgrade — Strategic Plan
 
-**Status**: NOT STARTED
+**Status**: PARTIALLY COMPLETE (2026-03-25: situational rule created, live-spec-first doctrine added to template, ext-apps coverage already present. Remaining: dedicated skill at `.agent/skills/mcp-expert/SKILL.md`)
 **Domain**: Agentic Engineering Enhancements
 **Pattern**: [ADR-129 (Domain Specialist Capability Pattern)](../../../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md)
 

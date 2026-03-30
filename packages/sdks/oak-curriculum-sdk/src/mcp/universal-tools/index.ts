@@ -13,6 +13,7 @@
  * - `type-guards.ts` - Type predicates for tool name validation
  * - `zod-utils.ts` - Zod schema extraction utilities
  * - `list-tools.ts` - Tool listing for MCP registration
+ * - `projections.ts` - Registration and protocol projection functions
  * - `executor.ts` - Tool execution dispatch logic
  *
  * ## Usage
@@ -65,6 +66,9 @@ export { isZodObject, extractZodShape } from './zod-utils.js';
 
 // Tool listing
 export { listUniversalTools } from './list-tools.js';
+
+// Projection functions for tool registration and protocol exposure
+export { toRegistrationConfig, toProtocolEntry } from './projections.js';
 
 // Tool execution
 export { createUniversalToolExecutor, type UniversalToolExecutorDependencies } from './executor.js';

@@ -138,7 +138,7 @@ describe('add404ResponsesWhereExpected', () => {
           },
         },
       ]),
-    ).toThrowError(/Cannot add HTTP 404 response via add404ResponsesWhereExpected/);
+    ).toThrow(/Cannot add HTTP 404 response via add404ResponsesWhereExpected/);
   });
 
   it('throws when a configured path is missing from the schema', () => {
@@ -157,7 +157,7 @@ describe('add404ResponsesWhereExpected', () => {
           },
         },
       ]),
-    ).toThrowError(/was not found in the schema/);
+    ).toThrow(/was not found in the schema/);
   });
 
   it('passes through a schema with upstream 404 responses using the default list', () => {

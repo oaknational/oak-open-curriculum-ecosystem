@@ -2,7 +2,6 @@
  * Benchmark main logic with dependency injection.
  *
  * @see benchmark-lessons.ts - Production CLI (uses real ES)
- * @see benchmark-test-harness.ts - Test CLI (uses fake)
  * @see ADR-078 Dependency Injection for Testability
  */
 

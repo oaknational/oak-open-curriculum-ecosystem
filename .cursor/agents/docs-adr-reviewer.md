@@ -4,6 +4,7 @@ name: docs-adr-reviewer
 model: claude-4.6-opus-max-thinking
 description: Documentation and ADR quality specialist. Use proactively to review README/TSDoc/ADR completeness, accuracy, and drift after behaviour or architecture changes.
 readonly: true
+is_background: true
 ---
 
 # Docs and ADR Reviewer

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
 import { listUniversalTools } from './universal-tools/list-tools.js';
@@ -14,21 +14,10 @@ import type {
 
 const AGGREGATED_TOOL_NAMES_FROM_DEFS = typeSafeKeys(AGGREGATED_TOOL_DEFS);
 
-/** Tools that don't have widget _meta fields (no outputTemplate). */
-const NON_WIDGET_TOOLS: readonly string[] = ['download-asset'];
-const WIDGET_TOOL_NAMES = AGGREGATED_TOOL_NAMES_FROM_DEFS.filter(
-  (name) => !NON_WIDGET_TOOLS.includes(name),
-);
+/** Convert the canonical WIDGET_TOOL_NAMES set to an array for it.each(). */
+const widgetToolNamesArray = [...WIDGET_TOOL_NAMES];
 
-describe('AGGREGATED_TOOL_DEFS excludes replaced tools', () => {
-  it('does not contain get-ontology (replaced by get-curriculum-model)', () => {
-    expect(AGGREGATED_TOOL_NAMES_FROM_DEFS).not.toContain('get-ontology');
-  });
-
-  it('does not contain get-help (replaced by get-curriculum-model)', () => {
-    expect(AGGREGATED_TOOL_NAMES_FROM_DEFS).not.toContain('get-help');
-  });
-
+describe('AGGREGATED_TOOL_DEFS contains expected tools', () => {
   it('contains get-curriculum-model as the sole orientation tool', () => {
     expect(AGGREGATED_TOOL_NAMES_FROM_DEFS).toContain('get-curriculum-model');
   });
@@ -131,44 +120,10 @@ describe('isUniversalToolName', () => {
 });
 
 describe('aggregated tool _meta fields (widget tools)', () => {
-  it.each(WIDGET_TOOL_NAMES)('%s has openai/outputTemplate', (toolName) => {
+  it.each(widgetToolNamesArray)('%s has _meta.ui.resourceUri pointing to widget', (toolName) => {
     const tools = listUniversalTools(registry);
     const tool = tools.find((t) => t.name === toolName);
-    expect(tool?._meta?.['openai/outputTemplate']).toBe(WIDGET_URI);
-  });
-
-  it.each(WIDGET_TOOL_NAMES)('%s has openai/toolInvocation/invoking', (toolName) => {
-    const tools = listUniversalTools(registry);
-    const tool = tools.find((t) => t.name === toolName);
-    expect(tool?._meta?.['openai/toolInvocation/invoking']).toBeDefined();
-  });
-
-  it.each(WIDGET_TOOL_NAMES)('%s has openai/toolInvocation/invoked', (toolName) => {
-    const tools = listUniversalTools(registry);
-    const tool = tools.find((t) => t.name === toolName);
-    expect(tool?._meta?.['openai/toolInvocation/invoked']).toBeDefined();
-  });
-});
-
-describe('aggregated tool widgetAccessible and visibility (widget tools)', () => {
-  it.each(WIDGET_TOOL_NAMES)('%s has openai/widgetAccessible set to true', (toolName) => {
-    const tools = listUniversalTools(registry);
-    const tool = tools.find((t) => t.name === toolName);
-    expect(tool?._meta?.['openai/widgetAccessible']).toBe(true);
-  });
-
-  it.each(WIDGET_TOOL_NAMES)('%s has openai/visibility set to public', (toolName) => {
-    const tools = listUniversalTools(registry);
-    const tool = tools.find((t) => t.name === toolName);
-    expect(tool?._meta?.['openai/visibility']).toBe('public');
-  });
-});
-
-describe('download-asset _meta', () => {
-  it('has openai/visibility set to public', () => {
-    const tools = listUniversalTools(registry);
-    const tool = tools.find((t) => t.name === 'download-asset');
-    expect(tool?._meta?.['openai/visibility']).toBe('public');
+    expect(tool?._meta?.ui?.resourceUri).toBe(WIDGET_URI);
   });
 });
 

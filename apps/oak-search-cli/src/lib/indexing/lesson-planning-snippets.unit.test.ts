@@ -75,6 +75,6 @@ describe('selectLessonPlanningSnippet', () => {
         summary,
         transcript: 'First transcript sentence. Second transcript sentence with detail.',
       }),
-    ).toThrowError(/Lesson planning data missing/);
+    ).toThrow(/Lesson planning data missing/);
   });
 });

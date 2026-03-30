@@ -55,7 +55,7 @@ EXTRACTION (Exploratory) → PROCESSING (Value Creation) → OUTPUT (User-Facing
 
 ### 2. Graph Export Pattern
 
-All generated graphs follow the `knowledge-graph-data.ts` pattern with these requirements:
+All generated graphs follow a consistent pattern with these requirements:
 
 1. **Explicit interface types first** (not `typeof` derivation for large graphs)
 2. **Typed export** using `: InterfaceName` annotation
@@ -74,20 +74,47 @@ export const threadProgressionGraph = {
 export type ThreadProgressionGraph = typeof threadProgressionGraph;
 ```
 
-#### For large graphs (> 5,000 lines):
+#### For large graphs (> 5,000 lines): JSON loader pattern
+
+The canonical pattern for large datasets uses a three-file directory
+structure. This supersedes the earlier monolithic typed-export approach
+which embedded 100k+ line TypeScript data files in the source tree.
+
+```text
+vocabulary-graph/
+├── data.json    ← Raw JSON data (JSON.stringify, 2-space indent)
+├── types.ts     ← TypeScript interface definitions
+└── index.ts     ← Typed loader using createRequire
+```
+
+The loader uses `createRequire` to load JSON in ESM and re-exports
+typed data:
 
 ```typescript
-// Explicit interface types FIRST
-export interface PrerequisiteNode { ... }
-export interface PrerequisiteEdge { ... }
-export interface PrerequisiteGraph { ... }
+// index.ts
+import { createRequire } from 'node:module';
+import type { VocabularyGraph } from './types.js';
 
-// Typed export (NOT as const - exceeds TS serialization limits)
-export const prerequisiteGraph: PrerequisiteGraph = {
-  version: '1.0.0',
-  // ... data
-};
+const require = createRequire(import.meta.url);
+const data: VocabularyGraph = require('./data.json');
+
+export const vocabularyGraph: VocabularyGraph = data;
+export type { VocabularyGraph } from './types.js';
 ```
+
+When the dataset contains union-literal fields (e.g., `rel:
+'prerequisiteFor'`), the loader must include runtime validation to
+narrow the JSON strings to the published literal types. See
+`prerequisite-graph/index.ts` for the two-step validation pattern.
+
+The generic `writeJsonDataset` function in
+`packages/sdks/oak-sdk-codegen/src/bulk/generators/write-json-dataset.ts`
+handles the mechanical directory creation and three-file write. Each
+dataset provides its own `JsonDatasetDescriptor` with the types and
+loader content.
+
+Datasets using this pattern: prerequisite-graph, vocabulary-graph,
+misconception-graph, nc-coverage-graph.
 
 ### 3. Generator Specifications
 
@@ -110,47 +137,47 @@ Each generator serves specific user personas with measurable impact:
 | **Audiences** | Student, Teacher, Parent, AI Agent                                                                                                                                                 |
 | **User Need** | "What should I know before this?"                                                                                                                                                  |
 | **Impact**    | Enables learning path planning. Students identify gaps; teachers diagnose readiness; parents plan homeschool curricula; AI agents check prerequisites before recommending content. |
-| **Output**    | `prerequisite-graph-data.ts` (1601 units, 3408 edges)                                                                                                                              |
+| **Output**    | `prerequisite-graph/` (JSON loader; 1601 units, 3408 edges)                                                                                                                        |
 | **MCP Tool**  | `get-prerequisite-graph`                                                                                                                                                           |
 
-#### Misconception Graph Generator 📋 PLANNED
+#### Misconception Graph Generator ✅ COMPLETE
 
 | Aspect        | Details                                                                                                                             |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | **Audiences** | Teacher, AI Agent                                                                                                                   |
 | **User Need** | "What mistakes should I watch for?"                                                                                                 |
 | **Impact**    | Enables proactive error prevention. Teachers prepare for common mistakes; AI tutors detect and address misconceptions in real-time. |
-| **Output**    | `misconception-graph-data.ts` (estimated ~12K misconceptions)                                                                       |
+| **Output**    | `misconception-graph/` (JSON loader; 12,858 misconceptions)                                                                         |
 | **MCP Tool**  | `get-misconception-graph` (deferred until search optimisation complete)                                                             |
 
-#### Vocabulary Processor 📋 PLANNED
+#### Vocabulary Processor ✅ COMPLETE
 
 | Aspect        | Details                                                                                                                                                                        |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Audiences** | Student, Teacher, AI Agent                                                                                                                                                     |
 | **User Need** | "What does X mean?" "When is Y introduced?"                                                                                                                                    |
 | **Impact**    | Curated glossary enables clear definitions. Students get age-appropriate explanations; teachers know when terms are introduced; AI agents provide accurate vocabulary context. |
-| **Output**    | `vocabulary-graph-data.ts` (curated from 13K raw keywords)                                                                                                                     |
+| **Output**    | `vocabulary-graph/` (JSON loader; 13,452 terms across 20 subjects)                                                                                                             |
 | **MCP Tool**  | `get-vocabulary-graph` (deferred until search optimisation complete)                                                                                                           |
 
-#### Synonym Miner 📋 PLANNED
+#### Synonym Miner ✅ COMPLETE
 
 | Aspect        | Details                                                                                                                                                        |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Audiences** | AI Agent, Search System                                                                                                                                        |
 | **User Need** | "Find lessons about [synonym]"                                                                                                                                 |
 | **Impact**    | Enables query expansion for search. User queries match curriculum content even with different wording. Improves search recall without manual synonym curation. |
-| **Output**    | Enhanced `synonymsData` (target: 10x current 163 entries)                                                                                                      |
+| **Output**    | `synonyms/definition-synonyms.ts` (397 mined entries supplementing curated synonyms)                                                                           |
 | **MCP Tool**  | None (feeds into search directly)                                                                                                                              |
 
-#### NC Coverage Generator 📋 PLANNED
+#### NC Coverage Generator ✅ COMPLETE
 
 | Aspect        | Details                                                                                                                                                          |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Audiences** | School Leader, Curriculum Planner                                                                                                                                |
 | **User Need** | "Does this cover the NC?" "What NC gaps exist?"                                                                                                                  |
 | **Impact**    | Enables curriculum gap analysis. School leaders verify coverage; curriculum planners identify missing areas; MAT coordinators ensure consistency across schools. |
-| **Output**    | `nc-coverage-graph-data.ts` (mapping ~7K NC statements to units)                                                                                                 |
+| **Output**    | `nc-coverage-graph/` (JSON loader; 7,473 NC statements across units)                                                                                             |
 | **MCP Tool**  | `get-nc-coverage-graph` (deferred until search optimisation complete)                                                                                            |
 
 ### 4. MCP Tool Integration
@@ -159,19 +186,27 @@ Tools return full graph data in `structuredContent` for AI agent reasoning.
 
 **CRITICAL**: No new MCP tools until search optimisation is complete. The focus is on extracting and processing data for search improvement first.
 
-### 4. Pipeline Location
+### 5. Pipeline Location
 
-The `vocab-gen/` pipeline lives in the SDK alongside `code-generation/`:
+The `vocab-gen/` pipeline lives in `oak-sdk-codegen` alongside
+`code-generation/`:
 
 ```text
-packages/sdks/oak-curriculum-sdk/
+packages/sdks/oak-sdk-codegen/
 ├── code-generation/           ← Generates types from OpenAPI
-├── vocab-gen/          ← Generates graphs from bulk data
-│   ├── extractors/     ← Pure functions, one per data type
-│   └── generators/     ← Transform extracted data to graphs
-└── src/mcp/
-    ├── thread-progression-data.ts    ← Generated
-    └── prerequisite-graph-data.ts    ← Generated
+├── vocab-gen/                 ← Generates graphs from bulk data
+│   ├── lib/                   ← Bulk file reading
+│   ├── vocab-gen.ts           ← Pipeline entry point
+│   └── vocab-gen-core.ts      ← Data processing core
+├── src/bulk/
+│   ├── extractors/            ← Pure functions, one per data type
+│   └── generators/            ← Transform extracted data to graphs
+└── src/generated/vocab/
+    ├── thread-progression-data.ts    ← Generated (as const)
+    ├── prerequisite-graph/           ← Generated (JSON loader)
+    ├── vocabulary-graph/             ← Generated (JSON loader)
+    ├── misconception-graph/          ← Generated (JSON loader)
+    └── nc-coverage-graph/            ← Generated (JSON loader)
 ```
 
 ## Rationale
@@ -196,7 +231,8 @@ packages/sdks/oak-curriculum-sdk/
 ### Negative
 
 - Large graph exports lose some type inference benefits (no literal types for property values)
-- Two different patterns needed based on graph size (small uses `as const`, large uses explicit interfaces)
+- Two different patterns needed based on graph size (small uses `as const`, large uses JSON loader)
+- JSON data files must be copied to `dist/` during build (handled by `copy-json-assets.ts`)
 
 ### Neutral
 

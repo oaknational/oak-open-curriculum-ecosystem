@@ -154,7 +154,7 @@ See `packages/core/observability/src/redaction.ts` and
 
 ## Related Documentation
 
-- [ADR-141: Coherent Structured Fan-Out](../architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
+- [ADR-143: Coherent Structured Fan-Out](../architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
 - [Logging Guidance](../governance/logging-guidance.md)
 - [Vercel Environment Configuration](../../apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md)
 - [Production Debugging Runbook](./production-debugging-runbook.md)

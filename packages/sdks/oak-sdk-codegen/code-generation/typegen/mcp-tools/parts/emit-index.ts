@@ -8,7 +8,7 @@ import {
   appendPrerequisiteGuidance,
   appendToolEnhancements,
 } from './tool-description.js';
-import { BASE_WIDGET_URI } from '../../cross-domain-constants.js';
+import { BASE_WIDGET_URI, WIDGET_TOOL_NAMES } from '../../cross-domain-constants.js';
 
 function buildExports({
   toolName,
@@ -148,19 +148,20 @@ function buildExports({
   lines.push('    openWorldHint: false,');
   lines.push(`    title: ${JSON.stringify(humanReadableTitle)},`);
   lines.push('  },');
-  // OpenAI Apps SDK _meta fields for widget integration
-  lines.push('  _meta: {');
-  lines.push(`    'openai/outputTemplate': ${JSON.stringify(BASE_WIDGET_URI)},`);
-  lines.push(
-    `    'openai/toolInvocation/invoking': ${JSON.stringify(`Fetching ${humanReadableTitle}…`)},`,
-  );
-  lines.push(
-    `    'openai/toolInvocation/invoked': ${JSON.stringify(`${humanReadableTitle} loaded`)},`,
-  );
-  lines.push(`    'openai/widgetAccessible': true,`);
-  lines.push(`    'openai/visibility': 'public',`);
-  lines.push(`    securitySchemes: ${securitySchemesLiteral},`);
-  lines.push('  },');
+  // MCP Apps standard _meta fields (ADR-141).
+  // Only tools in WIDGET_TOOL_NAMES get ui.resourceUri — all others have
+  // _meta with securitySchemes only (no widget UI).
+  const isWidgetTool = WIDGET_TOOL_NAMES.has(toolName);
+  if (isWidgetTool) {
+    lines.push('  _meta: {');
+    lines.push(`    ui: { resourceUri: ${JSON.stringify(BASE_WIDGET_URI)} },`);
+    lines.push(`    securitySchemes: ${securitySchemesLiteral},`);
+    lines.push('  },');
+  } else {
+    lines.push('  _meta: {');
+    lines.push(`    securitySchemes: ${securitySchemesLiteral},`);
+    lines.push('  },');
+  }
   lines.push('  validateOutput: (data: unknown) => {');
   lines.push(
     '    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: z.ZodError["issues"] }[] = [];',

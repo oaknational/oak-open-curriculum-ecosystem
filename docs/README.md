@@ -72,5 +72,5 @@ For semantic search specific documentation:
 
 ## Additional Resources
 
-- [GO.md](../.agent/prompts/GO.md) - Grounding prompt for structured task execution (ACTION/REVIEW cadence)
+- [GO.md](../.agent/skills/go/shared/go.md) - Grounding prompt for structured task execution (ACTION/REVIEW cadence)
 - [SDK README](../packages/sdks/oak-curriculum-sdk/README.md) - SDK generation and exports

@@ -41,11 +41,7 @@ Do NOT use for:
     openWorldHint: false,
     title: 'Download Asset',
   },
-  _meta: {
-    'openai/toolInvocation/invoking': 'Generating download link…',
-    'openai/toolInvocation/invoked': 'Download link ready',
-    'openai/visibility': 'public',
-  },
+  _meta: undefined,
 } as const;
 
 /**

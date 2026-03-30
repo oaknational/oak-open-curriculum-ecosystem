@@ -72,9 +72,9 @@ export function dnsRebindingProtection(
  *
  * This is the correct posture for an OAuth-protected MCP server:
  * - Non-browser MCP clients (Claude Desktop, Cursor, VS Code) ignore CORS
- * - Browser-based MCP clients (ChatGPT web) need permissive CORS to connect
+ * - Browser-based MCP clients and MCP Apps hosts need permissive CORS to connect
  * - Auth is via OAuth Bearer tokens, not cookies — CORS adds no security
- * - Future MCP Apps render in iframes on different origins
+ * - MCP Apps can render in iframes on different origins
  *
  * @param mode - Transport mode; 'session' exposes the Mcp-Session-Id header
  */

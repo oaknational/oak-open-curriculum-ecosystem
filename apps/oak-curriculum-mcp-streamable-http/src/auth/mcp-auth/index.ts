@@ -11,6 +11,5 @@
 export { mcpAuth } from './mcp-auth.js';
 export { createMcpAuthClerk } from './mcp-auth-clerk.js';
 export { createAuthLogContext } from './auth-response-helpers.js';
-export { verifyClerkToken } from './verify-clerk-token.js';
-export type { AuthInfo, ClerkRequestAuth, MachineAuthObject, TokenVerifier } from './types.js';
+export type { TokenVerifier } from './types.js';
 export type { AuthLogContext } from './auth-response-helpers.js';

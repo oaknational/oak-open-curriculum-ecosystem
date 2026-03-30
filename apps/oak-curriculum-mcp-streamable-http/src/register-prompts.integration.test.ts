@@ -15,42 +15,24 @@ import express from 'express';
 import type { IncomingMessage } from 'http';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { typeSafeGet, typeSafeHas } from '@oaknational/type-helpers';
 import { z } from 'zod';
 
 /**
- * Creates a request suitable for MCP SDK transport.handleRequest().
+ * Bridges Express Request to the shape MCP SDK's transport.handleRequest() expects.
  *
  * The MCP SDK expects `IncomingMessage & { auth?: AuthInfo }`. Express Request
- * extends IncomingMessage, but Clerk middleware adds an incompatible `auth` property.
- * This proxy strips the auth property to avoid type conflicts.
+ * extends IncomingMessage, but Clerk middleware adds an incompatible `auth`
+ * property. This cast replaces Clerk's callable `auth` with `undefined`,
+ * matching the production pattern in `createMcpHandler`.
  *
- * This is a documented architectural bridge between incompatible library types,
- * not a shortcut to hide type errors in our code.
- *
- * @remarks This mirrors the pattern in handlers.ts createMcpRequest() for consistency.
  * @param req - Express request (may have Clerk auth)
- * @returns Proxy behaving as IncomingMessage without Clerk auth property
+ * @returns Request cast to IncomingMessage with auth set to undefined
  */
 function createMcpTestRequest(req: express.Request): IncomingMessage {
-  const incomingRequest: IncomingMessage = req;
-  return new Proxy(incomingRequest, {
-    get(target, prop): unknown {
-      if (prop === 'auth') {
-        return undefined;
-      }
-      if (typeof prop === 'string' && typeSafeHas(target, prop)) {
-        return typeSafeGet(target, prop);
-      }
-      return undefined;
-    },
-    has(target, prop) {
-      if (prop === 'auth') {
-        return false;
-      }
-      return prop in target;
-    },
-  });
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Bridging Clerk (callable auth) → MCP SDK (AuthInfo | undefined) at test boundary
+  const mcpRequest = req as unknown as IncomingMessage & { auth?: undefined };
+  mcpRequest.auth = undefined;
+  return mcpRequest;
 }
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';

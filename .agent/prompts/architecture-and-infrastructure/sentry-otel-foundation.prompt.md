@@ -23,7 +23,7 @@ manual spans, and a three-mode kill switch (`off`/`fixture`/`sentry`).
 All telemetry passes through a shared redaction barrier before leaving
 the process.
 
-See [ADR-141](../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
+See [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
 for the architectural decision.
 
 ## Current State (2026-03-30)
@@ -92,7 +92,7 @@ markdownlint, format).
 
 1. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) — main execution plan (phases, contracts, scope)
 2. [sentry-otel-remediation.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-remediation.plan.md) — 21 findings, resolution status
-3. [ADR-141](../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md) — architectural decision
+3. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md) — architectural decision
 
 Primary code surfaces:
 

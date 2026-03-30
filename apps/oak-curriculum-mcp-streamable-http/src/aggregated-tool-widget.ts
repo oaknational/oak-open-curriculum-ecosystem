@@ -1,42 +1,13 @@
 /**
- * Oak-branded widget for rendering aggregated tool output in ChatGPT.
+ * Oak-branded widget for rendering aggregated tool output.
  *
- * This HTML is served as an MCP resource with `text/html+skybridge` MIME type.
- * ChatGPT fetches this resource when a tool specifies it as `openai/outputTemplate`.
- *
- * The widget receives tool output via `window.openai.toolOutput` and renders it
- * with Oak brand styling, logo, and the Lexend font.
- *
- * @see https://developers.openai.com/apps-sdk/build/chatgpt-ui
+ * This HTML is served as an MCP Apps resource. The current client runtime still
+ * reads tool data through `window.openai.*`; WS3 migrates that bridge.
  */
 
 import { OAK_LOGO_SVG } from './oak-logo-svg.js';
 import { WIDGET_STYLES } from './widget-styles.js';
 import { WIDGET_SCRIPT } from './widget-script.js';
-import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
-
-/**
- * Returns the widget URI from the SDK.
- *
- * This is a simple passthrough that makes the widget URI
- * available to the HTTP server's resource registration.
- * The URI already includes a cache-busting hash generated
- * at sdk-codegen time.
- *
- * @returns Widget URI with embedded cache-busting hash
- * @example "ui://widget/oak-json-viewer-abc12345.html"
- */
-export function getToolWidgetUri(): string {
-  return WIDGET_URI;
-}
-
-/**
- * MIME type for ChatGPT widget resources.
- *
- * The `+skybridge` suffix tells ChatGPT to render this HTML in a sandbox
- * with the `window.openai` API available.
- */
-export const AGGREGATED_TOOL_WIDGET_MIME_TYPE = 'text/html+skybridge';
 
 /**
  * Oak-branded HTML widget for rendering tool output.
@@ -98,7 +69,7 @@ export function generateWidgetHtml(): string {
 /**
  * The complete widget HTML document.
  *
- * This is the HTML that gets served as a resource to ChatGPT.
+ * This is the HTML that gets served as the widget resource.
  * It includes embedded CSS and JavaScript for a self-contained widget.
  *
  * NOTE: Tool calling via window.openai.callTool() is implemented but disabled.

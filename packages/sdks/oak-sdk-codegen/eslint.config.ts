@@ -89,17 +89,10 @@ const config = defineConfig(
     },
   },
 
-  // Vocab-gen serializer functions exceed structural limits (12 violations
-  // across 6 files). Tests and new code are fully checked.
+  // The vocab-gen orchestrator still exceeds structural limits while the
+  // remaining pipeline consolidation is in progress.
   {
-    files: [
-      'vocab-gen/generators/analysis-report-generator.ts',
-      'vocab-gen/generators/misconception-graph-generator.ts',
-      'vocab-gen/generators/nc-coverage-generator.ts',
-      'vocab-gen/generators/synonym-miner.ts',
-      'vocab-gen/generators/vocabulary-graph-generator.ts',
-      'vocab-gen/vocab-gen.ts',
-    ],
+    files: ['vocab-gen/vocab-gen.ts'],
     rules: {
       'max-lines-per-function': 'off',
       'max-statements': 'off',

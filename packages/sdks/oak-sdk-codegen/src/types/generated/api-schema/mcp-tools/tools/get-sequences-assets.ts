@@ -143,11 +143,6 @@ export const getSequencesAssets = {
     title: "Get Sequences Assets",
   },
   _meta: {
-    'openai/outputTemplate': "ui://widget/oak-json-viewer-local.html",
-    'openai/toolInvocation/invoking': "Fetching Get Sequences Assets…",
-    'openai/toolInvocation/invoked': "Get Sequences Assets loaded",
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
     securitySchemes: [{ type: 'oauth2', scopes: ['email'] }],
   },
   validateOutput: (data: unknown) => {

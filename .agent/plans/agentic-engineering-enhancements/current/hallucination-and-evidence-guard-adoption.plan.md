@@ -118,7 +118,7 @@ Apply phase work explicitly to:
 
 - `.agent/skills/start-right-quick/shared/start-right.md`
 - `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
-- `.agent/prompts/gt-review.md`
+- `.agent/prompts/archive/gt-review.md`
 - `.agent/sub-agents/templates/code-reviewer.md`
 - `.agent/sub-agents/templates/architecture-reviewer.md`
 - `.agent/sub-agents/templates/test-reviewer.md`

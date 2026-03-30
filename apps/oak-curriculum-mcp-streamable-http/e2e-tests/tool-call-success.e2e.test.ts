@@ -1,8 +1,12 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
-import type { ToolExecutionResult } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
+import {
+  createUniversalToolExecutor,
+  generatedToolRegistry,
+  type ToolExecutionResult,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { ok } from '@oaknational/result';
 import {
   parseSseEnvelope,
@@ -11,6 +15,7 @@ import {
   readFirstTextContent,
   parseToolSuccessPayload,
 } from './helpers/sse.js';
+import { stubSearchRetrieval } from './helpers/stub-search-retrieval.js';
 import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
@@ -22,23 +27,31 @@ interface CapturedCall {
 
 function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
   return {
-    executeMcpTool: (name, args, client) => {
-      void client;
-      captured.push({ tool: name, args });
-      const data = [
-        {
-          slug: 'ks1',
-          title: 'Key Stage 1',
-          canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+    createRequestExecutor: (config) => {
+      const executor = createUniversalToolExecutor({
+        executeMcpTool: (name, args) => {
+          captured.push({ tool: name, args });
+          const data = [
+            {
+              slug: 'ks1',
+              title: 'Key Stage 1',
+              canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+            },
+            {
+              slug: 'ks2',
+              title: 'Key Stage 2',
+              canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+            },
+          ];
+          const result: ToolExecutionResult = ok({ status: 200 as const, data });
+          config.onToolExecution?.(name, result);
+          return Promise.resolve(result);
         },
-        {
-          slug: 'ks2',
-          title: 'Key Stage 2',
-          canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
-        },
-      ];
-      const result: ToolExecutionResult = ok({ status: 200, data });
-      return Promise.resolve(result);
+        searchRetrieval: stubSearchRetrieval,
+        generatedTools: generatedToolRegistry,
+        createAssetDownloadUrl: config.createAssetDownloadUrl,
+      });
+      return executor;
     },
   };
 }

@@ -44,6 +44,19 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
  * Otherwise, both `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` are required.
  */
 export const HttpEnvSchema = BaseEnvSchema.superRefine((data, ctx) => {
+  // Production safety: DANGEROUSLY_DISABLE_AUTH must NEVER be true in production.
+  // This makes misconfiguration a hard startup failure rather than a silent bypass.
+  if (data.DANGEROUSLY_DISABLE_AUTH === 'true' && data.VERCEL_ENV === 'production') {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['DANGEROUSLY_DISABLE_AUTH'],
+      message:
+        'DANGEROUSLY_DISABLE_AUTH cannot be true in production. ' +
+        'This flag is for local development only.',
+    });
+    return;
+  }
+
   if (data.DANGEROUSLY_DISABLE_AUTH === 'true') {
     return;
   }

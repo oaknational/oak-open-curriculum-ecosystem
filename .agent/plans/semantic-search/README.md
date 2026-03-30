@@ -1,16 +1,20 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-24
+**Last Updated**: 2026-03-25
 
 ## Start Here
 
-- Session entry: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+- Session entry: [semantic-search.prompt.md](../../prompts/semantic-search/archive/semantic-search.prompt.md)
 - Strategic sequence: [roadmap.md](roadmap.md)
 - Research index: [research-index.md](research-index.md)
 
 ## Active
 
-- [active/prod-search-assessment.execution.plan.md](active/prod-search-assessment.execution.plan.md) — verify F1/F2 fixes and search quality via prod MCP server after PR merge (⏳ pending deployment)
+No active plans. See [active/README.md](active/README.md).
+
+Recently archived:
+
+- [archive/completed/prod-search-assessment.execution.plan.md](archive/completed/prod-search-assessment.execution.plan.md) — F1/F2 verified in production (2026-03-25)
 
 ## Current Queue
 

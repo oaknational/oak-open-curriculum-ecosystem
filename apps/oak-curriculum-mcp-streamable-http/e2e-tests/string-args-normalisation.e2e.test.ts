@@ -2,43 +2,69 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
-import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
+import {
+  createUniversalToolExecutor,
+  generatedToolRegistry,
+  type ToolExecutionResult,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { ok } from '@oaknational/result';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
+import {
+  getContentArray,
+  parseJsonRpcResult,
+  parseSseEnvelope,
+  parseToolSuccessPayload,
+  readFirstTextContent,
+  readJsonRpcOrResultErrorText,
+} from './helpers/sse.js';
+import { stubSearchRetrieval } from './helpers/stub-search-retrieval.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
-describe('HTTP boundary argument validation', () => {
-  // No beforeEach needed for process.env mutation anymore!
+interface CapturedCall {
+  readonly tool: unknown;
+  readonly args: unknown;
+}
 
-  function parseSseDataLine(body: string): string {
-    const line = body
-      .split('\n')
-      .map((value) => value.trim())
-      .find((value) => value.startsWith('data: '));
-    if (!line) {
-      throw new Error('SSE payload missing data line');
-    }
-    return line.slice('data: '.length);
+describe('HTTP boundary argument validation', () => {
+  function extractErrorText(body: string): string {
+    return readJsonRpcOrResultErrorText(parseSseEnvelope(body));
   }
 
-  function extractErrorText(body: string): string {
-    const json = parseSseDataLine(body);
-    const envelope = JSON.parse(json) as {
-      readonly error?: { readonly message?: string };
-      readonly result?: {
-        readonly isError?: boolean;
-        readonly content?: readonly { readonly type?: string; readonly text?: string }[];
-      };
+  function createStructuredSuccessOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
+    return {
+      createRequestExecutor: (config) =>
+        createUniversalToolExecutor({
+          executeMcpTool: (name, args) => {
+            captured.push({ tool: name, args });
+            const result: ToolExecutionResult = ok({
+              status: 200 as const,
+              data: [
+                {
+                  lessonSlug: 'stub-lesson',
+                  lessonTitle: 'Stub Lesson',
+                  similarity: 0.75,
+                  units: [
+                    {
+                      unitSlug: 'stub-unit',
+                      unitTitle: 'Stub Unit',
+                      examBoardTitle: null,
+                      keyStageSlug: 'ks1',
+                      subjectSlug: 'english',
+                    },
+                  ],
+                  canonicalUrl: 'https://www.thenational.academy/teachers/lessons/stub-lesson',
+                },
+              ],
+            });
+            config.onToolExecution?.(name, result);
+            return Promise.resolve(result);
+          },
+          searchRetrieval: stubSearchRetrieval,
+          generatedTools: generatedToolRegistry,
+          createAssetDownloadUrl: config.createAssetDownloadUrl,
+        }),
     };
-    // MCP SDK returns either a JSON-RPC error or a result with isError: true
-    if (envelope.error?.message) {
-      return envelope.error.message;
-    }
-    if (!envelope.result?.isError) {
-      return '';
-    }
-    const textContent = envelope.result.content?.find((c) => c.type === 'text');
-    return textContent?.text ?? '';
   }
 
   it('returns a descriptive validation error for plain string arguments', async () => {
@@ -108,34 +134,10 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('accepts structured arguments that match the tool schema', async () => {
-    const overrides: ToolHandlerOverrides = {
-      executeMcpTool: () =>
-        Promise.resolve(
-          ok({
-            status: 200,
-            data: [
-              {
-                lessonSlug: 'stub-lesson',
-                lessonTitle: 'Stub Lesson',
-                similarity: 0.75,
-                units: [
-                  {
-                    unitSlug: 'stub-unit',
-                    unitTitle: 'Stub Unit',
-                    examBoardTitle: null,
-                    keyStageSlug: 'ks1',
-                    subjectSlug: 'english',
-                  },
-                ],
-                canonicalUrl: 'https://www.thenational.academy/teachers/lessons/stub-lesson',
-              },
-            ],
-          }),
-        ),
-    };
+    const captured: CapturedCall[] = [];
     const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
     const app = await createApp({
-      toolHandlerOverrides: overrides,
+      toolHandlerOverrides: createStructuredSuccessOverrides(captured),
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
     });
@@ -154,7 +156,22 @@ describe('HTTP boundary argument validation', () => {
       });
 
     expect(res.status).toBe(200);
-    const payload = extractErrorText(res.text);
-    expect(payload).toBe('');
+    expect(captured).toEqual([{ tool: 'get-lessons-quiz', args: { lesson: 'some-lesson' } }]);
+
+    const envelope = parseSseEnvelope(res.text);
+    const result = parseJsonRpcResult(envelope);
+    expect(result.isError).not.toBe(true);
+
+    const content = getContentArray(result);
+    expect(content).toHaveLength(2);
+    expect(readFirstTextContent(content)).toContain('Get Lessons Quiz');
+
+    const payload = parseToolSuccessPayload(result);
+    expect(payload.status).toBe(200);
+    if (!Array.isArray(payload.data)) {
+      throw new Error('Tool payload data must be an array');
+    }
+    expect(payload.data).toHaveLength(1);
+    expect(payload.data[0]).toHaveProperty('canonicalUrl');
   });
 });

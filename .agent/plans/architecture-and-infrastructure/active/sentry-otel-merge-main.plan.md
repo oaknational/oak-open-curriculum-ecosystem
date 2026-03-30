@@ -38,11 +38,11 @@ architectural direction — explicit DI over ambient state). Remove
 `request-context.ts` and its test. Adapt the branch's observability `withSpan`
 wrapper in `createMcpHandler` to work without `setRequestContext`.
 
-### Hazard 2: ADR-141 numbering collision
+### Hazard 2: ADR-143 numbering collision
 
-Both branches independently created ADR-141 for different decisions:
+Both branches independently created ADR-143 for different decisions:
 
-- **Branch**: `141-coherent-structured-fan-out-for-observability.md` — the
+- **Branch**: `143-coherent-structured-fan-out-for-observability.md` — the
   observability logger architecture
 - **Main**: `141-mcp-apps-standard-primary.md` — MCP Apps as only UI surface
 
@@ -352,14 +352,14 @@ Branch's `src/test-helpers/mcp-fakes.ts` imports `McpServer` and
 updating `mcp-fakes.ts` to use the narrow interfaces for ADR-078 consistency.
 Not a build blocker — can be deferred.
 
-#### 7d. Renumber ADR-141 to ADR-143 (Hazard 2)
+#### 7d. Renumber ADR-143 to ADR-143 (Hazard 2)
 
-Both branches created ADR-141 for different decisions. Main's ADR-141 (MCP
+Both branches created ADR-143 for different decisions. Main's ADR-143 (MCP
 Apps standard) and ADR-142 (Clerk mcp-tools) take priority as they are already
 merged. Renumber the branch's observability ADR:
 
-1. `git mv docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md`
-2. Update the ADR's own title and any internal "ADR-141" self-references
+1. `git mv docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md`
+2. Update the ADR's own title and any internal "ADR-143" self-references
 3. Update the ADR index (`docs/architecture/architectural-decisions/README.md`)
 4. Grep the repo for remaining references to the old number and path:
    - `.agent/plans/` (execution plan, prompt, remediation plans)
@@ -409,7 +409,7 @@ Invoke specialist reviewers on the merge result:
 | Observability wiring lost during merge | Medium | High | Characterisation tests catch it |
 | Auth flow broken (request-context removal) | Low | High | Main's DI tests + e2e tests catch it |
 | Type errors from mismatched interfaces | Medium | Medium | `pnpm type-check` catches it immediately |
-| ADR-141 numbering collision missed | High | Medium | Phase 7d renumbers explicitly |
+| ADR-143 numbering collision missed | High | Medium | Phase 7d renumbers explicitly |
 | `express-fakes.ts` breaks on deleted type | High | Medium | Phase 7b removes or rewrites it |
 | `handleToolWithAuthInterception` signature mismatch | Medium | Medium | Phase 4a documents the new signature |
 | Lockfile conflict causes dependency issues | Low | Medium | `pnpm install` regenerates cleanly |

@@ -4,6 +4,7 @@ name: mcp-reviewer
 model: gpt-5.4-xhigh
 description: MCP protocol specification and implementation expert. Use for MCP spec compliance reviews, tool or resource or prompt definition validation, transport/session pattern checks, MCP best-practice assessments, protocol questions, and OpenAI App to MCP Apps migration planning/review.
 readonly: true
+is_background: true
 ---
 
 # MCP Protocol Reviewer

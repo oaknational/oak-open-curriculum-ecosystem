@@ -4,6 +4,7 @@ name: config-reviewer
 model: default
 description: Expert at reviewing tooling configurations (ESLint, TypeScript, Vitest, Prettier, Turbo). Use proactively when changing configs, adding workspaces, or auditing quality gates. Invoke immediately after config file modifications.
 readonly: true
+is_background: true
 ---
 
 # Config Reviewer

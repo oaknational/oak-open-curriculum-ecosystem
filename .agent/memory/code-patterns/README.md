@@ -1,6 +1,6 @@
-# Code Patterns
+# Code and Process Patterns
 
-Abstract, reusable patterns proven by real implementation. Each pattern captures a principle that is too concrete for a rule but too abstract for source code.
+Abstract, reusable patterns proven by real implementation. Each pattern captures a principle that is too concrete for a rule but too abstract for source code. This includes both **code patterns** (how to structure implementations) and **process patterns** (how to approach engineering decisions).
 
 ## Barrier to Entry
 
@@ -21,7 +21,7 @@ Every pattern file has YAML frontmatter:
 ---
 name: "Human-readable pattern name"
 use_this_when: "One sentence: the situation where this pattern applies"
-category: type-safety | validation | architecture | testing | error-handling
+category: type-safety | validation | architecture | testing | error-handling | process
 proven_in: "file path where pattern was first applied or proven"
 proven_date: YYYY-MM-DD
 barrier:
@@ -60,3 +60,5 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Agentic Surface Separation** -- Use this when: designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters. → [agentic-surface-separation.md](agentic-surface-separation.md)
 - **README as Index** -- Use this when: a plan-directory README is growing to contain session instructions, outcome narratives, or design rationale that duplicates or replaces .plan.md content. → [readme-as-index.md](readme-as-index.md)
 - **Current Plan Promotion** -- Use this when: a review or planning pass has resolved "what comes next" and the repo needs a concrete next-session entry point rather than a mere intended future direction. → [current-plan-promotion.md](current-plan-promotion.md)
+- **Conformance Tests for Library Adoption** -- Use this when: replacing hand-rolled code with a library import and keeping existing unit tests as library contract guards. → [conformance-tests-for-library-adoption.md](conformance-tests-for-library-adoption.md)
+- **Source-First Adopt-or-Explain Evaluation** -- Use this when: evaluating whether an existing dependency's utilities should replace hand-rolled code. → [source-first-adopt-or-explain.md](source-first-adopt-or-explain.md)

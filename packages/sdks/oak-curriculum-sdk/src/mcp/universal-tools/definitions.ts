@@ -38,7 +38,15 @@ import {
  * - `explore-topic`: Explore a topic across lessons, units, and threads
  *
  * Annotations match generated tools: read-only, non-destructive, idempotent.
- * OpenAI Apps SDK _meta fields are included where defined.
+ *
+ * **`_meta` contract (ADR-141)**:
+ * - Widget tools (`search`, `get-curriculum-model`) declare
+ *   `_meta: { ui: { resourceUri: WIDGET_URI } }`.
+ * - All other aggregated tools declare `_meta: undefined` (no widget UI).
+ * - Aggregated tools do not include `_meta.securitySchemes` — that mirror
+ *   is emitted only by the generator for generated tools. Aggregated tools
+ *   expose `securitySchemes` at the top level of their definition.
+ * - The allowlist is defined in `WIDGET_TOOL_NAMES` (cross-domain-constants.ts).
  */
 export const AGGREGATED_TOOL_DEFS = {
   search: { ...SEARCH_TOOL_DEF, inputSchema: SEARCH_INPUT_SCHEMA },

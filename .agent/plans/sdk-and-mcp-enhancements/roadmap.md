@@ -22,8 +22,8 @@ todos:
     content: "Domain A source research: mcp-apps-support.research.md documents the MCP Apps standard, ChatGPT/Claude/Gemini compatibility matrix, CSP model, and SDK surfaces (dated 2026-03-05). Link health checked."
     status: completed
   - id: reframing-adr
-    content: "Write ADR: MCP Apps standard is primary; ChatGPT is one host; no separate OpenAI App; no host-specific adaptation layer in core Oak code. Required before Domain C implementation begins (Gate 2)."
-    status: pending
+    content: "ADR-141 accepted 2026-03-26: MCP Apps standard is primary; ChatGPT is one host; no separate OpenAI App; no host-specific adaptation layer in core Oak code. Gate 2 is now satisfied."
+    status: completed
   - id: domain-b-specialist-assessment
     content: "Gate 4: adopted and trialled the existing mcp-reviewer as the MCP Apps migration specialist of record, with the four Oak MCP Apps skills explicitly linked from the reviewer and the plans. Trial completed 2026-03-07."
     status: completed
@@ -31,7 +31,7 @@ todos:
     content: "Implement C8 auth metadata invariant hardening (build/test invariant + startup fail-fast guard with helpful errors + focused tests aligned with testing-strategy.md)."
     status: pending
   - id: domain-c-executable-plans
-    content: "After reframing ADR is written: create separate executable plans for each Domain C item (C1/C2 host-neutral enforcement, C5 tool metadata migration, C4/C6 MIME and resource metadata migration, C3/C10 widget migration). Each plan gets TDD phases and per-task acceptance criteria. Use ext-apps/server helpers (registerAppTool, registerAppResource) as the migration vehicle."
+    content: "Domain C execution is active via the umbrella migration plan plus queued follow-ups. Continue splitting remaining Domain C item groups into dedicated executable plans where additional independent workstreams are needed. Use ext-apps/server helpers (registerAppTool, registerAppResource) as the migration vehicle."
     status: pending
   - id: domain-d-feature-backlog
     content: "After Domain C critical items complete: define additive feature backlog with explicit dependency ordering and stop/go gates."
@@ -41,15 +41,17 @@ isProject: false
 
 # MCP Apps Standard Migration Plan
 
-**Status**: 🟢 Domain A complete · specialist alignment complete · ADR pending · Domain C not started
-**Last Updated**: 2026-03-07
+**Status**: 🟢 Domain A complete · specialist alignment complete · ADR accepted · Domain C active
+**Last Updated**: 2026-03-26
 
 ---
 
 ## Changelog
 
+- **2026-03-26** (architecture alignment after reviewer findings): ADR-141 is accepted and now clears the roadmap's former ADR gate language. The queued runtime-boundary follow-up is tightened around one canonical transport-neutral SDK descriptor surface, `registerAppTool()`-compatible registration for app-rendering tools, and one explicit auth boundary. `current/output-schemas-for-mcp-tools.plan.md` is now sequenced to consume that groundwork before transport exposure lands.
+- **2026-03-26** (post-WS2 follow-up planning): queued executable plan added at [current/mcp-runtime-boundary-simplification.plan.md](current/mcp-runtime-boundary-simplification.plan.md) for the two remaining runtime seams exposed by WS2: (1) app-owned `tools/list` / registration projection, and (2) the Express/Clerk to MCP ingress bridge. This plan is intentionally positioned as a post-WS2 architectural simplification step, adjacent to but separate from WS3 widget work.
 - **2026-03-07** (specialist and plan alignment):
-  (1) Active execution plan created at [active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md) so the migration has a plainly named entry point.
+  (1) Execution plan created at [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](archive/completed/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md) (now superseded by [mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)).
   (2) Domain B reframed around the existing `mcp-reviewer`; no duplicate MCP specialist profile will be created.
   (3) The Oak MCP Apps skill chain is now explicit in the specialist-review and migration-planning docs: `mcp-migrate-oai`, `mcp-create-app`, `mcp-add-ui`, and `mcp-convert-web`.
   (4) Gate 4 passed by trialling `mcp-reviewer` on the specialist/plan alignment changes.
@@ -59,7 +61,7 @@ isProject: false
 - **2026-03-05** (Claude reviewer takeover — all `claude.roadmap-review.md` recommendations applied):
   (1) Domain A marked complete — `mcp-apps-support.research.md` answers both validation questions with high confidence.
   (2) Reframing ADR added as the first pending executable todo (required before Domain C).
-  (3) `@modelcontextprotocol/ext-apps` `^1.2.0` is declared across all relevant workspaces — `registerAppTool`/`registerAppResource`/`getUiCapability` are now the canonical migration path for C4/C5/C6.
+  (3) `@modelcontextprotocol/ext-apps` `^1.3.2` is declared across all relevant workspaces — `registerAppTool`/`registerAppResource`/`getUiCapability` are now the canonical migration path for C4/C5/C6.
   (4) `_meta.ui.domain` analysis: only needed if the widget makes direct cross-origin `fetch()` calls; if all data flows through the MCP bridge, the field is not required — noted in C6.
   (5) Status header, Execution Order, Phase Details, Documentation Synchronisation Requirement, Gate-to-Domain mapping, and Related Documents sections added (template compliance).
   (6) Source URL list removed — superseded by research artefact reference.
@@ -97,7 +99,7 @@ This document is the **planning anchor** for the MCP Apps standard migration ser
 
 **Executable plans** for each domain are created separately (in `active/` or
 `current/`) when work on that domain begins. The current migration entry point
-is [active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md).
+is [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md).
 These plans own TDD phases, per-task acceptance criteria, and deterministic
 validation. Domain C item C8 is intentionally kept as a small roadmap task (not
 a standalone active plan); prior standalone draft retained for provenance in
@@ -138,7 +140,7 @@ Prior to this update the plan treated OpenAI-specific surface (metadata keys, MI
 - **No separate "OpenAI App" concept.** Oak does not build a separate OpenAI App; it builds an MCP server with MCP Apps widgets.
 - **No host-specific adaptation path.** `window.openai.*` and OpenAI-specific metadata are removed from core surfaces as part of migration.
 
-> **ADR required** (todo: `reframing-adr`): this decision is binding and must be captured as a formal ADR before Domain C implementation begins. The decision is already made and reflected throughout this document; the ADR codifies it as the architectural source of truth.
+> **ADR-141 accepted**: this decision is binding and is now codified at [docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md](../../../docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md). It is the architectural source of truth for the MCP Apps primary stance and clears the former Domain C ADR gate.
 
 ---
 
@@ -167,8 +169,8 @@ Non-negotiables:
 ```text
 Domain A: Research                ✅ COMPLETE (mcp-apps-support.research.md)
 Domain B: MCP specialist adoption ✅ COMPLETE (Gate 4 passed)
-  reframing-adr                   ⏳ PENDING (required before C; Gate 2)
-Domain C: Refactoring backlog     ⏳ BLOCKED on A complete + ADR written
+  reframing-adr                   ✅ COMPLETE (ADR-141 accepted; Gate 2 passed)
+Domain C: Refactoring backlog     ▶ ACTIVE (umbrella + queued executable plans)
   C8: Auth invariant hardening    ⏳ PENDING (independent; can run now)
 Domain D: Feature backlog         ⏳ BLOCKED on C critical items
 ```
@@ -180,7 +182,9 @@ That plan ran independently of the Domain A-D migration sequence.
 Parallel MCP contract work is also tracked separately at
 [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md).
 That plan improves MCP `outputSchema` truthfulness across the tool surface and
-can progress independently of the Domain A-D migration sequence.
+can begin schema work independently, but its transport-exposure phase depends on
+the canonical descriptor groundwork in
+[current/mcp-runtime-boundary-simplification.plan.md](current/mcp-runtime-boundary-simplification.plan.md).
 
 ---
 
@@ -201,18 +205,21 @@ can progress independently of the Domain A-D migration sequence.
   recorded on 2026-03-07.
 - **Dependencies**: none; can run in parallel with ADR writing.
 
-### Reframing ADR (PENDING — blocks Domain C)
+### Reframing ADR (COMPLETE)
 
-- **Done when**: ADR written, accepted, cross-referenced in roadmap and relevant implementation plans.
+- **Done when**: ✅ ADR-141 is written, accepted, and cross-referenced in roadmap and relevant implementation plans.
 - **Dependencies**: Domain A ✅
 
-### Domain C — Refactoring Backlog (BLOCKED)
+### Domain C — Refactoring Backlog (ACTIVE)
 
-- **Executable plans**: one per C-item group, promoted from the active umbrella
-  plan [active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
-  when ADR is accepted.
+- **Executable plans**: active umbrella plan
+  [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
+  plus queued/current follow-ups such as
+  [current/mcp-runtime-boundary-simplification.plan.md](current/mcp-runtime-boundary-simplification.plan.md)
+  and
+  [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md).
 - **Done when**: all C-items complete, all quality gates pass, no OpenAI-specific surface remains in core paths.
-- **Dependencies**: Domain A ✅, reframing ADR required.
+- **Dependencies**: Domain A ✅, ADR-141 ✅
 
 ### Domain D — Feature Backlog (BLOCKED)
 
@@ -243,7 +250,7 @@ Additional findings:
 - **Widget URI parity drift** (2026-02-23): local build emits `local` hash token instead of per-run hash; tracked in C9.
 
 **Research finding** (2026-03-05; high confidence):
-`@modelcontextprotocol/ext-apps` `^1.2.0` is declared across all relevant workspaces. The `ext-apps/server` submodule (`@modelcontextprotocol/ext-apps/server`) exports `registerAppTool`, `registerAppResource`, and `getUiCapability` — these are the canonical migration vehicle for C4, C5, and C6. `registerAppResource` defaults to `text/html;profile=mcp-app` automatically.
+`@modelcontextprotocol/ext-apps` `^1.3.2` is declared across all relevant workspaces. The `ext-apps/server` submodule (`@modelcontextprotocol/ext-apps/server`) exports `registerAppTool`, `registerAppResource`, and `getUiCapability` — these are the canonical migration vehicle for C4, C5, and C6. `registerAppResource` defaults to `text/html;profile=mcp-app` automatically.
 
 ---
 
@@ -490,6 +497,7 @@ Gate 2 — ADR matrix complete:
 - Stop if any required ADR is missing or has no owner/action/gate.
 - Stop if reframing ADR is not accepted.
 - Go when all required ADR rows are present with evidence and planned action, and reframing ADR is accepted.
+- **Current status**: ✅ PASSED — ADR-141 accepted and cross-referenced on 2026-03-26.
 
 Gate 3 — Pre-merge prerequisite complete:
 
@@ -613,7 +621,7 @@ rg -n "securitySchemes" apps/oak-curriculum-mcp-streamable-http/src/tool-auth-ch
 5. Public resource auth bypass remains constrained to ADR-057 and ADR-113 scope only.
 6. Generator-first/schema-first remains non-negotiable for SDK and MCP contract work.
 7. ChatGPT and Claude implement MCP Apps standard (confirmed 2026-03-05). Oak targets MCP-standard-only — no fallback to `text/html+skybridge` or OpenAI-specific metadata.
-8. `@modelcontextprotocol/ext-apps` `^1.2.0` is declared across all relevant workspaces. `registerAppTool`, `registerAppResource`, and `getUiCapability` are the migration vehicle.
+8. `@modelcontextprotocol/ext-apps` `^1.3.2` is declared across all relevant workspaces. `registerAppTool`, `registerAppResource`, and `getUiCapability` are the migration vehicle.
 9. ADR-115 proxy OAuth behaviour remains required and must stay operational throughout migration.
 
 ---
@@ -621,8 +629,9 @@ rg -n "securitySchemes" apps/oak-curriculum-mcp-streamable-http/src/tool-auth-ch
 ## Related Documents
 
 - [mcp-apps-support.research.md](mcp-apps-support.research.md) — Domain A research artefact (ChatGPT/Claude/Gemini compatibility matrix, CSP model, SDK surfaces)
-- [active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md) — Active execution entry point for the OpenAI App to MCP Apps replacement work
-- [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md) — Current MCP contract plan for truthful `outputSchema` exposure across generated and aggregated tools
+- [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md) — Primary session-anchor plan for MCP Apps migration (WS1–WS4)
+- [current/mcp-runtime-boundary-simplification.plan.md](current/mcp-runtime-boundary-simplification.plan.md) — Queued post-WS2 architecture cleanup: establish one canonical transport-neutral SDK descriptor surface, keep app-rendering registration on the `registerAppTool()` helper boundary, and replace the Express/Clerk ingress bridge with one explicit auth boundary
+- [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md) — Current MCP contract plan for truthful `outputSchema` exposure across generated and aggregated tools; its transport-exposure phase depends on the canonical descriptor groundwork in the boundary-simplification plan
 - [archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md) — ✅ Complete (archived 2026-03-11). Deploy-safe snagging plan for oak-preview MCP issues.
 - [archive/concept-preservation-and-supersession-map.md](archive/concept-preservation-and-supersession-map.md) — Legacy concept ingestion map
 - [archive/auth-safety-correction.plan.md](archive/auth-safety-correction.plan.md) — Archived auth safety plan (superseded by C8; retained for provenance)

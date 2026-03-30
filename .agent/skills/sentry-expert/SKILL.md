@@ -82,7 +82,7 @@ Before planning or implementation, consult live official documentation:
 | `docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md` | Existing logging foundation |
 | `docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md` | DI rules for sinks and adapters |
 | `docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md` | Runtime scope boundary |
-| `docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md` | Chosen architecture for this phase |
+| `docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md` | Chosen architecture for this phase |
 | `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md` | Current implementation plan |
 
 ### Consult-If-Relevant

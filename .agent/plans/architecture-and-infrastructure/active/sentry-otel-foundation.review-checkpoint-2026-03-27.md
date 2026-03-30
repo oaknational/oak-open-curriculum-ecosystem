@@ -15,7 +15,7 @@ This checkpoint records review status for the active **handover bundle**:
 9. `.agent/memory/napkin.md`
 10. `docs/architecture/architectural-decisions/041-workspace-structure-option-a.md`
 11. `docs/architecture/architectural-decisions/117-plan-templates-and-components.md`
-12. `docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md`
+12. `docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md`
 
 This file is authoritative for whether the handover bundle can be trusted after
 session compression. It is not the later runtime-adoption code review record.

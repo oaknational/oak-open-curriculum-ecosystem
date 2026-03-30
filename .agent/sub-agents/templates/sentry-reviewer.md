@@ -107,7 +107,7 @@ Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
 | `docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md` | Existing logging foundation |
 | `docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md` | DI expectations for sinks, adapters, and init helpers |
 | `docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md` | Runtime scope boundary |
-| `docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md` | Chosen observability foundation |
+| `docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md` | Chosen observability foundation |
 | `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md` | Current implementation intent and success criteria |
 
 ### Consult-If-Relevant

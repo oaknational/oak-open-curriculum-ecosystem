@@ -85,6 +85,7 @@ function formatPromptResponse(
  * - Message generation delegated to the SDK's `getPromptMessages()`
  *
  * @param server - MCP server instance
+ * @param observability - Optional observability for prompt handler tracing
  *
  * @example
  * ```typescript
@@ -92,7 +93,12 @@ function formatPromptResponse(
  * registerPrompts(server);
  * ```
  */
-export function registerPrompts(server: McpServer, observability?: HttpObservability): void {
+/** Narrow interface — only `registerPrompt` is used. */
+interface PromptRegistrar {
+  readonly registerPrompt: McpServer['registerPrompt'];
+}
+
+export function registerPrompts(server: PromptRegistrar, observability?: HttpObservability): void {
   const mcpObservation = observability?.createMcpObservationOptions();
 
   for (const prompt of PROMPT_REGISTRATIONS) {

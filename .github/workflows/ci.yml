@@ -49,9 +49,7 @@ jobs:
               detect --redact=100 --source /src --config /src/.gitleaks.toml --log-opts="--branches --tags --full-history"
           fi
 
-      - name: Build project
-        run: pnpm build
-
+      # Non-Turbo checks (run before Turbo gates)
       - name: Check formatting
         run: pnpm format-check:root
 
@@ -61,11 +59,22 @@ jobs:
       - name: Validate sub-agents
         run: pnpm subagents:check
 
-      - name: Run linting
-        run: pnpm lint
+      - name: Validate portability
+        run: pnpm portability:check
 
-      - name: Run type checking
-        run: pnpm type-check
+      - name: Run root-level script tests
+        run: pnpm test:root-scripts
 
-      - name: Run tests
-        run: pnpm test
+      - name: Install Playwright browsers for test:ui
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Single Turbo invocation for all Turbo-managed gates
+      - name: Build, type-check, lint, test
+        id: turbo-run
+        run: >-
+          pnpm exec turbo run build type-check lint test test:e2e test:ui
+          smoke:dev:stub --summarize --log-order=grouped --continue
+
+      - name: Report Turbo summary
+        if: always()
+        run: node scripts/ci-turbo-report.mjs >> "$GITHUB_STEP_SUMMARY"

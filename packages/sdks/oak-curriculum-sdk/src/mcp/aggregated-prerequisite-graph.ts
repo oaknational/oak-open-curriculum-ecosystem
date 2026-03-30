@@ -10,7 +10,7 @@
  * - Units with their prior knowledge requirements
  * - prerequisiteFor edges derived from thread ordering
  *
- * @see prerequisite-graph-data.ts for the graph data structure
+ * @see @oaknational/sdk-codegen/vocab-data for the graph data export
  * @see aggregated-thread-progressions.ts for the companion thread graph
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
@@ -19,7 +19,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { prerequisiteGraph } from '@oaknational/sdk-codegen/vocab-data';
 import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
@@ -75,13 +75,7 @@ Complements get-thread-progressions (learning paths) with prerequisite detail.`,
     title: 'Get Prerequisite Graph',
   },
 
-  _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Loading prerequisite graph…',
-    'openai/toolInvocation/invoked': 'Prerequisite graph loaded',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
-  },
+  _meta: undefined,
 } as const;
 
 /**

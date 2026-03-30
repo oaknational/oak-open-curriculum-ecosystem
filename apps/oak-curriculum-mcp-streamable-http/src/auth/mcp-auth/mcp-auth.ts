@@ -16,6 +16,22 @@
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
 import type { Logger } from '@oaknational/logger';
 import type { TokenVerifier } from './types.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+
+// Local declaration merge: augments Express Request with `auth?: AuthInfo`.
+// Replaces the `import type {} from '.../bearerAuth.js'` side-effect import.
+// Both paths reach the SDK via the `"./*"` catch-all wildcard (not a named
+// export), but `server/auth/types.js` is a pure-type leaf file — less likely
+// to move than the middleware module. If the SDK promotes `AuthInfo` to a
+// named export, update this import path to match.
+// REMOVAL CONDITION: if @modelcontextprotocol/sdk re-exports bearerAuth's
+// augmentation of Request.auth as part of its public API, remove this local
+// declaration to avoid merge duplication.
+declare module 'express-serve-static-core' {
+  interface Request {
+    auth?: AuthInfo;
+  }
+}
 import { getPRMUrl } from './get-prm-url.js';
 import { getMcpResourceUrl } from './get-mcp-resource-url.js';
 import { validateResourceParameter } from '../../resource-parameter-validator.js';
@@ -141,11 +157,8 @@ function handleAuthError(
  * 4. Returns 401 if token verification fails
  * 5. Validates JWT audience claim matches resource URL (RFC 8707)
  * 6. Returns 401 if audience validation fails
- * 7. Calls next() if all checks pass (Clerk already set req.auth)
- *
- * **Note**: This middleware does NOT set `req.auth`. Clerk's `clerkMiddleware()`
- * sets `req.auth` to the Clerk auth object. This middleware only gates access
- * by verifying the token is valid.
+ * 7. Sets verified `AuthInfo` on `req.auth` for the MCP SDK transport
+ * 8. Calls next() if all checks pass
  *
  * **RFC 8707 Compliance**: This middleware validates that the JWT's `aud`
  * (audience) claim matches the expected resource URL to prevent token misuse
@@ -162,7 +175,7 @@ function handleAuthError(
  * const auth = mcpAuth(async (token, req) => {
  *   // Custom token verification logic
  *   return verifyMyToken(token);
- * }, logger);
+ * }, logger, allowedHosts);
  * app.post('/mcp', auth, mcpHandler);
  * ```
  */
@@ -198,14 +211,15 @@ export function mcpAuth(
       // RFC 8707: Validate resource parameter (JWT audience claim)
       const validation = checkResourceParameter(token, req, logger, allowedHosts);
       if (!validation.valid) {
-        const reason = validation.reason ?? 'Unknown validation error';
-        sendInvalidResourceResponse(res, prmUrl, reason);
+        sendInvalidResourceResponse(res, prmUrl, validation.reason ?? 'Unknown validation error');
         return;
       }
 
-      // Token verified - proceed to next middleware
-      // Note: We don't set req.auth here. Clerk's clerkMiddleware() already
-      // sets req.auth to the Clerk auth object which downstream code expects.
+      // Set verified AuthInfo on req.auth for the MCP SDK transport.
+      // Direct assignment matches the SDK's own requireBearerAuth pattern.
+      // The MCP SDK augments IncomingMessage with `auth?: AuthInfo`.
+      req.auth = authData;
+
       next();
     } catch (error) {
       // Error is logged by handleAuthError

@@ -184,7 +184,7 @@ Two rounds of specialist reviews ran during the remediation sessions:
 ### Governance and authority work already landed
 
 1. **ADR and architecture**
-   - `docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md`
+   - `docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md`
 2. **Sentry specialist capability surfaces**
    - `.agent/sub-agents/templates/sentry-reviewer.md`
    - `.agent/skills/sentry-expert/SKILL.md`
@@ -331,7 +331,7 @@ phase, and the Search CLI still relies on mutable logger-global configuration.
 ## Chosen Architecture
 
 Per
-[ADR-141](../../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md),
+[ADR-143](../../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md),
 the foundation is:
 
 1. **Coherent structured fan-out**, not a speculative async transport rewrite
@@ -355,7 +355,7 @@ Status: complete.
 Completed outcomes:
 
 1. Sentry specialist capability triplet and discovery surfaces exist.
-2. ADR-141 records the architectural decision.
+2. ADR-143 records the architectural decision.
 3. Milestone, strategy, workflow, and public-alpha docs now treat this work as
    an M2 blocker.
 4. Active plan, thin prompt, and review checkpoint now form the handover
@@ -947,7 +947,7 @@ If session context compresses again, re-ground from these files in order:
 2. [sentry-otel-foundation.prompt.md](../../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
 3. [sentry-otel-foundation.review-checkpoint-2026-03-27.md](./sentry-otel-foundation.review-checkpoint-2026-03-27.md)
 4. [observability-and-quality-metrics.plan.md](../future/observability-and-quality-metrics.plan.md)
-5. [ADR-141](../../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
+5. [ADR-143](../../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
 6. [testing-strategy.md](../../../directives/testing-strategy.md)
 7. [schema-first-execution.md](../../../directives/schema-first-execution.md)
 8. `packages/libs/logger/src/unified-logger.ts`
@@ -989,6 +989,6 @@ Review-state authority is recorded in:
 - [ADR-051](../../../../docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md)
 - [ADR-078](../../../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
 - [ADR-128](../../../../docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md)
-- [ADR-141](../../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
+- [ADR-143](../../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
 - [Sentry specialist capability](../../agentic-engineering-enhancements/current/sentry-specialist-capability.plan.md)
 - Sibling `starter-app-spike` reference implementation (pattern source only)

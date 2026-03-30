@@ -150,8 +150,11 @@ Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads 
 
 ## Cursor (legacy local stdio) configuration
 
-- Today, local stdio setups still point at the legacy stdio workspace via
-  `.mcp.json` / `.cursor/mcp.json`. Ensure the command path points to:
+The checked-in `.mcp.json` and `.cursor/mcp.json` now point at the HTTP
+server, not the legacy stdio workspace.
+
+If you still need a manual local stdio setup during the transition,
+point your client at:
 
 ```json
 {
@@ -256,6 +259,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 
 ## Detailed Documentation
 
+- [MCP primitives: intention and intended audience](docs/mcp-primitives-intention-and-audience.md) - Internal guide to tool/resource/prompt boundaries, control model, and UAT expectations
 - [Operational Debugging](docs/operational-debugging.md) — request tracing, timing, diagnostics, error debugging, production logging
 - [Widget Rendering](docs/widget-rendering.md) — widget dispatch, rendering architecture, and sandbox details
 
