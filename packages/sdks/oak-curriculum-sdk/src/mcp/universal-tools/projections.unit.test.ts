@@ -80,23 +80,16 @@ describe('canonical descriptor projections', () => {
       }
     });
 
-    it('widget tool registration config includes _meta.ui.resourceUri', () => {
+    it('widget tools get _meta.ui.resourceUri in registration config, non-widget tools do not', () => {
       const tools = listUniversalTools(registry);
-      const widgetTools = tools.filter((t) => t._meta?.ui?.resourceUri !== undefined);
-      expect(widgetTools.length).toBeGreaterThan(0);
-      for (const tool of widgetTools) {
-        const config = toRegistrationConfig(tool);
-        expect(config._meta?.ui?.resourceUri).toBe(WIDGET_URI);
-      }
-    });
 
-    it('non-widget tool registration config omits _meta.ui', () => {
-      const tools = listUniversalTools(registry);
-      const nonWidgetTools = tools.filter((t) => !WIDGET_TOOL_NAMES.has(t.name));
-      expect(nonWidgetTools.length).toBeGreaterThan(0);
-      for (const tool of nonWidgetTools) {
+      for (const tool of tools) {
         const config = toRegistrationConfig(tool);
-        expect(config._meta?.ui).toBeUndefined();
+        if (WIDGET_TOOL_NAMES.has(tool.name)) {
+          expect(config._meta?.ui?.resourceUri).toBe(WIDGET_URI);
+        } else {
+          expect(config._meta?.ui).toBeUndefined();
+        }
       }
     });
   });
@@ -114,22 +107,16 @@ describe('canonical descriptor projections', () => {
       }
     });
 
-    it('widget tool protocol entry includes _meta', () => {
+    it('widget tools get _meta.ui.resourceUri in protocol entry, non-widget tools do not', () => {
       const tools = listUniversalTools(registry);
-      const widgetTools = tools.filter((t) => t._meta?.ui?.resourceUri !== undefined);
-      for (const tool of widgetTools) {
-        const entry = toProtocolEntry(tool);
-        expect(entry._meta?.ui?.resourceUri).toBe(WIDGET_URI);
-      }
-    });
 
-    it('non-widget tool protocol entry omits _meta.ui', () => {
-      const tools = listUniversalTools(registry);
-      const nonWidgetTools = tools.filter((t) => !WIDGET_TOOL_NAMES.has(t.name));
-      expect(nonWidgetTools.length).toBeGreaterThan(0);
-      for (const tool of nonWidgetTools) {
+      for (const tool of tools) {
         const entry = toProtocolEntry(tool);
-        expect(entry._meta?.ui).toBeUndefined();
+        if (WIDGET_TOOL_NAMES.has(tool.name)) {
+          expect(entry._meta?.ui?.resourceUri).toBe(WIDGET_URI);
+        } else {
+          expect(entry._meta?.ui).toBeUndefined();
+        }
       }
     });
   });

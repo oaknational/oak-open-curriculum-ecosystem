@@ -103,15 +103,6 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.openWorldHint).toBe(false);
     expect(annotations?.title).toBeDefined();
   });
-
-  it('get-curriculum-model tool has MCP Apps _meta fields', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-    const modelTool = tools.find(findToolByName('get-curriculum-model'));
-
-    expect(modelTool).toBeDefined();
-    expect(modelTool?._meta).toBeDefined();
-    expect(modelTool?._meta?.ui?.resourceUri).toBeDefined();
-  });
 });
 
 // WIDGET_TOOL_NAMES imported from canonical source above.
@@ -123,23 +114,15 @@ describe('listUniversalTools annotations', () => {
  * widget tools, and that all other tools have no _meta.ui.
  */
 describe('listUniversalTools _meta integration', () => {
-  it('widget tools have _meta.ui.resourceUri pointing to widget', () => {
+  it('widget tools get _meta.ui.resourceUri, non-widget tools do not', () => {
     const tools = listUniversalTools(generatedToolRegistry);
-    const widgetTools = tools.filter((t) => WIDGET_TOOL_NAMES.has(t.name));
 
-    expect(widgetTools.length).toBe(WIDGET_TOOL_NAMES.size);
-    for (const tool of widgetTools) {
-      expect(tool._meta?.ui?.resourceUri).toBe(WIDGET_URI);
-    }
-  });
-
-  it('non-widget tools do not have _meta.ui', () => {
-    const tools = listUniversalTools(generatedToolRegistry);
-    const nonWidgetTools = tools.filter((t) => !WIDGET_TOOL_NAMES.has(t.name));
-
-    expect(nonWidgetTools.length).toBeGreaterThan(0);
-    for (const tool of nonWidgetTools) {
-      expect(tool._meta?.ui).toBeUndefined();
+    for (const tool of tools) {
+      if (WIDGET_TOOL_NAMES.has(tool.name)) {
+        expect(tool._meta?.ui?.resourceUri).toBe(WIDGET_URI);
+      } else {
+        expect(tool._meta?.ui).toBeUndefined();
+      }
     }
   });
 });

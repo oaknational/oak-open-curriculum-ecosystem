@@ -7,7 +7,6 @@
 
 import { describe, it, expect } from 'vitest';
 import { GET_CURRICULUM_MODEL_TOOL_DEF, GET_CURRICULUM_MODEL_INPUT_SCHEMA } from './definition.js';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 
 describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
   it('has description explaining its purpose', () => {
@@ -33,10 +32,6 @@ describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
   it('has title annotation', () => {
     expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.title).toBeDefined();
     expect(typeof GET_CURRICULUM_MODEL_TOOL_DEF.annotations.title).toBe('string');
-  });
-
-  it('has _meta.ui.resourceUri pointing to widget', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF._meta.ui.resourceUri).toBe(WIDGET_URI);
   });
 });
 

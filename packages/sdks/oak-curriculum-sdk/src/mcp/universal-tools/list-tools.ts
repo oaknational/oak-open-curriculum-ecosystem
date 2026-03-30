@@ -51,7 +51,7 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
         inputSchema: def.inputSchema,
         securitySchemes: def.securitySchemes,
         annotations: def.annotations,
-        _meta: def._meta,
+        ...('_meta' in def ? { _meta: def._meta } : {}),
       };
     },
   );

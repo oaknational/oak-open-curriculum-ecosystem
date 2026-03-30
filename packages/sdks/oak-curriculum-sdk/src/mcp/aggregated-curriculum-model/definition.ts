@@ -7,7 +7,7 @@
  */
 
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from '../prerequisite-guidance.js';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+// WIDGET_URI import removed while widget is disabled — re-add when re-enabling _meta.ui
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**
@@ -59,7 +59,6 @@ Optionally provide a tool_name to also include specific help for that tool.`,
     openWorldHint: false,
     title: 'Get Curriculum Model',
   },
-  _meta: {
-    ui: { resourceUri: WIDGET_URI },
-  },
+  // TEMPORARILY DISABLED: Widget UI disabled for merge to main.
+  // Re-enable: _meta: { ui: { resourceUri: WIDGET_URI } },
 } as const;

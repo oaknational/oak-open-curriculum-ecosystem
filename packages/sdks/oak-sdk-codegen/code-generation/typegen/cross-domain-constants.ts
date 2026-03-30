@@ -41,12 +41,13 @@ export const BASE_WIDGET_URI = `ui://widget/oak-json-viewer-${generateWidgetUriH
  * aggregated definitions. All other tools have no widget UI — MCP clients
  * will not attempt to render a widget for their results.
  *
- * Currently:
+ * TEMPORARILY EMPTY: Widget rendering is disabled for all tools to allow
+ * the feat/mcp_app branch to merge without shipping half-formed UI to
+ * production. Re-enable by restoring the tool names here:
  * - `search`: minimal Oak branding for search results
  * - `get-curriculum-model`: minimal Oak branding for orientation output
- *
  * Future WS4 will add `user-search` with a full user-facing interface.
  *
  * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
-export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set(['search', 'get-curriculum-model']);
+export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set([]);

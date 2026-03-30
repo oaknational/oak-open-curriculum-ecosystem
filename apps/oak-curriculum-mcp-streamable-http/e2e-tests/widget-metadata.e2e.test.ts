@@ -1,11 +1,11 @@
 /**
  * E2E tests for MCP Apps widget metadata in MCP tools (ADR-141).
  *
- * These tests verify that when an MCP client calls `tools/list`, widget tools
- * include `_meta.ui.resourceUri` pointing to the Oak JSON viewer widget.
- *
- * This proves the end-to-end behaviour: MCP clients receive widget metadata
- * that enables Oak-branded output rendering in any MCP Apps-compliant host.
+ * These tests verify the widget metadata mechanism: tools in
+ * WIDGET_TOOL_NAMES get `_meta.ui.resourceUri`, others do not.
+ * The tests derive from the canonical WIDGET_TOOL_NAMES set rather
+ * than hardcoding tool names, so they remain correct when the
+ * allowlist changes (including when it is temporarily empty).
  *
  * @see aggregated-tool-widget.ts for widget HTML
  * @see widget-resource.e2e.test.ts for widget resource availability
@@ -17,7 +17,7 @@ import request from 'supertest';
 import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
-import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -68,22 +68,6 @@ const ToolsListResultSchema = z.object({
     .loose(),
 });
 
-const ResourceSchema = z
-  .object({
-    uri: z.string(),
-  })
-  .loose();
-
-const ResourcesListResultSchema = z.object({
-  jsonrpc: z.string(),
-  id: z.union([z.string(), z.number()]),
-  result: z
-    .object({
-      resources: z.array(ResourceSchema),
-    })
-    .loose(),
-});
-
 /**
  * Extracts the first SSE `data:` line from a raw response.
  */
@@ -119,58 +103,49 @@ async function callToolsList(app: Awaited<ReturnType<typeof createApp>>) {
 }
 
 describe('MCP Apps Widget Metadata E2E (ADR-141)', () => {
-  const aggregatedWidgetToolNames = ['search', 'get-curriculum-model'] satisfies string[];
+  it('tools in WIDGET_TOOL_NAMES have _meta.ui.resourceUri, others do not', async () => {
+    const app = await createTestApp();
+    const tools = await callToolsList(app);
 
-  describe('_meta.ui.resourceUri', () => {
-    it.each(aggregatedWidgetToolNames)(
-      '%s tool returns _meta.ui.resourceUri in tools/list',
-      async (toolName) => {
-        const app = await createTestApp();
-        const tools = await callToolsList(app);
-
-        const tool = tools.find((t) => t.name === toolName);
-        expect(tool).toBeDefined();
-        expect(tool?._meta?.ui?.resourceUri).toBe(WIDGET_URI);
-      },
-    );
-
-    it('resourceUri matches a registered resource', async () => {
-      const app = await createTestApp();
-      const tools = await callToolsList(app);
-      const searchTool = tools.find((t) => t.name === 'search');
-      const resourceUri = searchTool?._meta?.ui?.resourceUri;
-      expect(resourceUri).toBeDefined();
-
-      const resourcesRes = await request(app)
-        .post('/mcp')
-        .set('Accept', ACCEPT)
-        .send({ jsonrpc: '2.0', id: '2', method: 'resources/list' });
-
-      const resourcesJson: unknown = JSON.parse(extractSseDataLine(resourcesRes.text));
-      const resourcesParsed = ResourcesListResultSchema.parse(resourcesJson);
-      const resourceUris = resourcesParsed.result.resources.map((r) => r.uri);
-      expect(resourceUris).toContain(resourceUri);
-    });
+    for (const tool of tools) {
+      if (WIDGET_TOOL_NAMES.has(tool.name)) {
+        expect(tool._meta?.ui?.resourceUri, `${tool.name} should have widget URI`).toBe(WIDGET_URI);
+      } else {
+        expect(tool._meta?.ui, `${tool.name} should not have widget UI`).toBeUndefined();
+      }
+    }
   });
 
-  describe('non-widget tools omit _meta.ui in MCP response', () => {
-    const nonWidgetToolNames = [
-      'get-subjects',
-      'get-key-stages',
-      'get-lessons-summary',
-      'fetch',
-    ] satisfies string[];
+  it('all widget URIs in tools/list correspond to registered resources', async () => {
+    const app = await createTestApp();
+    const tools = await callToolsList(app);
 
-    it.each(nonWidgetToolNames)(
-      'non-widget tool %s does not have _meta.ui in tools/list',
-      async (toolName) => {
-        const app = await createTestApp();
-        const tools = await callToolsList(app);
+    const widgetUris = tools
+      .filter((t) => t._meta?.ui?.resourceUri !== undefined)
+      .map((t) => t._meta?.ui?.resourceUri);
 
-        const tool = tools.find((t) => t.name === toolName);
-        expect(tool).toBeDefined();
-        expect(tool?._meta?.ui).toBeUndefined();
-      },
-    );
+    if (widgetUris.length === 0) {
+      // No widget tools configured — test passes trivially
+      return;
+    }
+
+    const resourcesRes = await request(app)
+      .post('/mcp')
+      .set('Accept', ACCEPT)
+      .send({ jsonrpc: '2.0', id: '2', method: 'resources/list' });
+
+    const ResourcesListResultSchema = z.object({
+      jsonrpc: z.string(),
+      id: z.union([z.string(), z.number()]),
+      result: z.object({ resources: z.array(z.object({ uri: z.string() }).loose()) }).loose(),
+    });
+
+    const resourcesJson: unknown = JSON.parse(extractSseDataLine(resourcesRes.text));
+    const resourcesParsed = ResourcesListResultSchema.parse(resourcesJson);
+    const registeredUris = resourcesParsed.result.resources.map((r) => r.uri);
+
+    for (const uri of widgetUris) {
+      expect(registeredUris, `widget URI ${uri} should be a registered resource`).toContain(uri);
+    }
   });
 });

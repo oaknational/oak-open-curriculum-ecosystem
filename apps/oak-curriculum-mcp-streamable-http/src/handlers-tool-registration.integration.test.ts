@@ -57,23 +57,6 @@ function registerAndCapture() {
 }
 
 describe('Tool Registration Uses SDK Canonical Projection (Integration)', () => {
-  it('widget tools are registered with _meta.ui.resourceUri in config', () => {
-    const { registerToolSpy } = registerAndCapture();
-    const tools = listUniversalTools(generatedToolRegistry);
-    const widgetToolNames = tools
-      .filter((t) => t._meta?.ui?.resourceUri !== undefined)
-      .map((t) => t.name);
-
-    expect(widgetToolNames.length).toBeGreaterThan(0);
-
-    for (const widgetName of widgetToolNames) {
-      // The config must include _meta.ui.resourceUri so that
-      // registerAppTool() can normalise UI metadata.
-      const config = findRegisteredConfig(registerToolSpy.mock.calls, widgetName);
-      expect(config, `config for ${widgetName}`).toHaveProperty('_meta.ui.resourceUri');
-    }
-  });
-
   it('registration config comes from SDK projection, not hand-assembled', () => {
     const { registerToolSpy } = registerAndCapture();
     const tools = listUniversalTools(generatedToolRegistry);
