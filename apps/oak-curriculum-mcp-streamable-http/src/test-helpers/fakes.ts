@@ -1,23 +1,36 @@
 /**
- * Shared test fakes that satisfy product types without type assertions.
- * Use these instead of casting to Logger, Request, etc.
+ * Shared test fakes for the MCP streamable HTTP app.
+ *
+ * **Naming convention**: `createFake*` functions return plain objects
+ * satisfying narrow interfaces (no library dependency, ADR-078).
+ * `createMock*` functions use `node-mocks-http` to produce full
+ * Express-typed objects for middleware integration tests.
+ *
+ * MCP server/transport fakes: {@link ./fakes-mcp-server.ts}
+ * Clerk auth fakes: {@link ./fakes-clerk.ts}
  */
 
 import { vi } from 'vitest';
+import httpMocks from 'node-mocks-http';
 import type { Request, Response } from 'express';
 import type { Logger } from '@oaknational/logger';
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import type { RequestWithAuthContext } from '../auth/tool-auth-context.js';
-import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { MachineAuthObject } from '@clerk/backend';
-import type { McpServerFactory, McpRequestContext } from '../mcp-request-context.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+import type { McpHandlerRequest, McpHandlerResponse } from '../handlers.js';
+
+/** Re-export MCP server/transport fakes. */
+export {
+  createFakeStreamableTransport,
+  createFakeMcpServer,
+  createFakeMcpServerFactory,
+} from './fakes-mcp-server.js';
+
+/** Re-export Clerk auth fakes. */
+export { createFakeMachineAuthObject } from './fakes-clerk.js';
 
 /**
  * Creates a properly typed fake SearchRetrievalService for tests.
- *
- * Uses `vi.fn()` for assertion support (e.g. `toHaveBeenCalledWith`).
- * For production stub mode, use `createStubSearchRetrieval` from the SDK instead.
+ * Uses `vi.fn()` for assertion support.
  */
 export function createFakeSearchRetrieval(): SearchRetrievalService {
   return {
@@ -31,8 +44,10 @@ export function createFakeSearchRetrieval(): SearchRetrievalService {
 }
 
 /**
- * Creates a full Logger fake (all required methods + child returning self).
- * Use in tests wherever a Logger is required.
+ * Creates a full Logger fake with `vi.fn()` spies on every method.
+ *
+ * Use for tests that assert on logger calls via `toHaveBeenCalledWith`.
+ * For tests that query log entries by content, use {@link createRecordingLogger}.
  */
 export function createFakeLogger(): Logger {
   const logger: Logger = {
@@ -42,174 +57,152 @@ export function createFakeLogger(): Logger {
     warn: vi.fn(),
     error: vi.fn(),
     fatal: vi.fn(),
+    isLevelEnabled: vi.fn(() => true),
     child: () => logger,
   };
   return logger;
 }
 
+/** A single recorded log entry captured by {@link createRecordingLogger}. */
+export interface RecordedLogEntry {
+  readonly level: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+  readonly message: string;
+  readonly context?: unknown;
+  readonly error?: unknown;
+}
+
 /**
- * Creates a minimal request-like object for auth context extraction tests.
- * Satisfies RequestWithAuthContext so no type assertion is needed.
+ * Creates a recording Logger that stores all log entries in-memory.
+ *
+ * Use for tests that query log content (e.g. "find the entry where
+ * `message === 'bootstrap.phase.finish'`"). For tests that assert on
+ * call counts or arguments via `vi.fn()`, use {@link createFakeLogger}.
  */
-export function createFakeRequest(
-  overrides: Partial<RequestWithAuthContext> = {},
-): RequestWithAuthContext {
+export function createRecordingLogger(): {
+  readonly logger: Logger;
+  readonly entries: RecordedLogEntry[];
+} {
+  const entries: RecordedLogEntry[] = [];
+  return { logger: buildRecordingLogger(entries), entries };
+}
+
+function buildRecordingLogger(entries: RecordedLogEntry[]): Logger {
+  const logWithLevel =
+    (level: RecordedLogEntry['level']) =>
+    (message: string, context?: unknown): void => {
+      entries.push({ level, message, context });
+    };
+
   return {
-    headers: overrides.headers ?? {},
-    auth: overrides.auth,
+    trace: logWithLevel('trace'),
+    debug: logWithLevel('debug'),
+    info: logWithLevel('info'),
+    warn: logWithLevel('warn'),
+    error: (message: string, error?: unknown, context?: unknown) => {
+      entries.push({ level: 'error', message, error, context });
+    },
+    fatal: (message: string, error?: unknown, context?: unknown) => {
+      entries.push({ level: 'fatal', message, error, context });
+    },
+    isLevelEnabled: () => true,
+    child: () => buildRecordingLogger(entries),
   };
 }
 
 /**
- * Minimal Express Response fake for handler tests.
- * Express Response has 80+ required members; we implement the subset used by
- * createMcpHandler and extractCorrelationId.
+ * Creates a narrow `McpHandlerResponse` for handler integration tests.
+ * Plain object — satisfies the narrow interface structurally.
  */
 export function createFakeResponse(
-  overrides: Partial<Pick<Response, 'statusCode' | 'locals'>> = {},
-): Response {
-  const res = {
-    statusCode: overrides.statusCode ?? 200,
-    locals: overrides.locals ?? {},
-    getHeader: vi.fn(),
-    setHeader: vi.fn(),
-    getHeaders: vi.fn(() => ({})),
-    status: vi.fn(function (this: typeof res) {
-      return this;
-    }),
-    send: vi.fn(function (this: typeof res) {
-      return this;
-    }),
-    json: vi.fn(function (this: typeof res) {
-      return this;
-    }),
-    end: vi.fn(function (this: typeof res) {
-      return this;
-    }),
-    write: vi.fn(),
-    writeHead: vi.fn(),
-    set: vi.fn(function (this: typeof res) {
-      return this;
-    }),
-    get: vi.fn(),
-    on: vi.fn(function (this: typeof res) {
-      return this;
-    }),
-  };
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Response has 80+ required members; minimal fake for handler tests
-  return res as unknown as Response;
-}
-
-/**
- * Minimal StreamableHTTPServerTransport fake for handler tests.
- * Only handleRequest is used by createMcpHandler.
- */
-export function createFakeStreamableTransport(
-  handleRequestImpl?: StreamableHTTPServerTransport['handleRequest'],
-): StreamableHTTPServerTransport {
-  const transport = {
-    handleRequest: handleRequestImpl ?? vi.fn(),
-    close: vi.fn(),
-  };
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- MCP SDK transport type; minimal fake for handler tests
-  return transport as unknown as StreamableHTTPServerTransport;
-}
-
-/**
- * Minimal McpServer fake for handler integration tests.
- * Only connect() and close() are used by createMcpHandler.
- */
-export function createFakeMcpServer(): McpServer {
-  const server = {
-    connect: vi.fn(() => Promise.resolve()),
-    close: vi.fn(),
-  };
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- MCP SDK server type; minimal fake for handler tests
-  return server as unknown as McpServer;
-}
-
-/**
- * Creates a factory that returns a pre-configured fake server + transport.
- *
- * Returns the factory and the underlying fakes so tests can inspect
- * what was called on them (e.g. transport.handleRequest args).
- */
-export function createFakeMcpServerFactory(
-  handleRequestImpl?: StreamableHTTPServerTransport['handleRequest'],
-): { factory: McpServerFactory; server: McpServer; transport: StreamableHTTPServerTransport } {
-  const server = createFakeMcpServer();
-  const transport = createFakeStreamableTransport(handleRequestImpl);
-  const context: McpRequestContext = { server, transport };
-  const factory: McpServerFactory = () => context;
-  return { factory, server, transport };
-}
-
-/**
- * Creates a MachineAuthObject fake for Clerk token verification tests.
- * For "missing field" tests we return authenticated shape with nulls; Clerk type requires string.
- */
-export function createFakeMachineAuthObject(
   overrides: Partial<{
-    isAuthenticated: boolean;
-    userId: string | null;
-    clientId: string | null;
-    scopes: readonly string[] | null;
+    statusCode: number;
+    locals: { correlationId?: string; [key: string]: unknown };
   }> = {},
-): MachineAuthObject<'oauth_token'> {
-  const isAuthenticated = overrides.isAuthenticated ?? true;
-  const userId = overrides.userId;
-  const clientId = overrides.clientId;
-  const scopes = overrides.scopes;
-  if (isAuthenticated) {
-    const resolvedUserId = userId !== undefined ? userId : 'user';
-    const resolvedClientId = clientId !== undefined ? clientId : 'client';
-    const resolvedScopes = scopes !== undefined ? scopes : [];
-    const out = {
-      tokenType: 'oauth_token' as const,
-      id: 'auth_123',
-      subject: resolvedUserId,
-      scopes: resolvedScopes === null ? null : Array.from(resolvedScopes),
-      userId: resolvedUserId,
-      clientId: resolvedClientId,
-      getToken: (): Promise<string> => Promise.resolve('token'),
-      has: () => true,
-      debug: () => ({ userId, clientId, scopes }),
-      isAuthenticated: true as const,
-    };
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Authenticated shape with nulls for "missing field" tests; Clerk type does not allow null
-    return out as MachineAuthObject<'oauth_token'>;
-  }
+): McpHandlerResponse {
+  const statusCode = overrides.statusCode ?? 200;
+  const locals = overrides.locals ?? {};
   return {
-    tokenType: 'oauth_token',
-    id: null,
-    subject: null,
-    scopes: null,
-    userId: null,
-    clientId: null,
-    getToken: (): Promise<null> => Promise.resolve(null),
-    has: () => false,
-    debug: () => ({}),
-    isAuthenticated: false,
+    statusCode,
+    locals,
+    on: vi.fn(),
   };
 }
 
 /**
- * Minimal Express Request fake for getRequestContext / checkMcpClientAuth tests.
- * Express Request has many required members.
+ * Creates an AuthInfo fake for MCP SDK auth context tests.
+ */
+export function createFakeAuthInfo(overrides?: Partial<AuthInfo>): AuthInfo {
+  const defaults: AuthInfo = {
+    token: 'fake-bearer-token',
+    clientId: 'client_123',
+    scopes: ['mcp:invoke'],
+    extra: { userId: 'user_123' },
+  };
+  if (!overrides) {
+    return defaults;
+  }
+  return { ...defaults, ...overrides };
+}
+
+/**
+ * Creates a narrow `McpHandlerRequest` for handler integration tests.
+ * Plain object — satisfies the narrow interface structurally.
  */
 export function createFakeExpressRequest(
-  overrides: Partial<Pick<Request, 'headers' | 'method' | 'path' | 'body'>> & {
-    auth?: Request['auth'] | { readonly userId: string };
-  } = {},
-): Request {
-  const req = {
+  overrides: Partial<{
+    headers: Record<string, string>;
+    method: string;
+    path: string;
+    body: { method?: string; params?: { name?: string; uri?: string }; [key: string]: unknown };
+  }> & { readonly auth?: AuthInfo } = {},
+): McpHandlerRequest {
+  return {
     headers: overrides.headers ?? {},
     method: overrides.method ?? 'POST',
     path: overrides.path ?? '/mcp',
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Express Request body is broadly typed; test fake accepts minimal shape
     body: overrides.body ?? {},
-    ...(overrides.auth === undefined ? {} : { auth: overrides.auth }),
+    ...(overrides.auth !== undefined ? { auth: overrides.auth } : {}),
   };
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Request has many required members; minimal fake for auth tests
-  return req as unknown as Request;
+}
+
+/**
+ * Creates a properly typed Express Request via `node-mocks-http`.
+ *
+ * Use for Express middleware tests (mcpAuth, mcpRouter, conditionalClerkMiddleware)
+ * where the middleware signature requires the full Express `Request` type.
+ * No type assertions — `node-mocks-http` returns real Express-typed objects.
+ */
+export function createMockExpressRequest(
+  overrides: {
+    token?: string;
+    host?: string;
+    protocol?: string;
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+    path?: string;
+    body?: { method?: string; params?: { name?: string; uri?: string }; [key: string]: unknown };
+  } = {},
+): Request {
+  const headers: Record<string, string> = {};
+  if (overrides.host !== undefined) {
+    headers['host'] = overrides.host;
+  }
+  if (overrides.token !== undefined) {
+    headers['authorization'] = `Bearer ${overrides.token}`;
+  }
+  return httpMocks.createRequest({
+    method: overrides.method ?? 'POST',
+    url: overrides.path ?? '/mcp',
+    headers,
+    body: overrides.body ?? {},
+    protocol: overrides.protocol ?? 'http',
+  });
+}
+
+/**
+ * Creates a properly typed Express Response via `node-mocks-http`.
+ *
+ * Use for Express middleware tests. No type assertions.
+ */
+export function createMockExpressResponse(): Response {
+  return httpMocks.createResponse();
 }

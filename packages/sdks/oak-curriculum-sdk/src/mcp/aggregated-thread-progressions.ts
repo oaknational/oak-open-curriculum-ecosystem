@@ -19,7 +19,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
 import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
-import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
+
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
@@ -71,13 +71,7 @@ Complements get-curriculum-model (which includes the schema-level property graph
     title: 'Get Thread Progressions',
   },
 
-  _meta: {
-    'openai/outputTemplate': WIDGET_URI,
-    'openai/toolInvocation/invoking': 'Loading thread progressions…',
-    'openai/toolInvocation/invoked': 'Thread progressions loaded',
-    'openai/widgetAccessible': true,
-    'openai/visibility': 'public',
-  },
+  _meta: undefined,
 } as const;
 
 /**

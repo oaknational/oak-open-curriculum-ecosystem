@@ -4,7 +4,23 @@ import prettierConfig from 'eslint-config-prettier';
 import { importX } from 'eslint-plugin-import-x';
 import tsdocPlugin from 'eslint-plugin-tsdoc';
 
-import type { Linter } from 'eslint';
+import type { Linter, ESLint } from 'eslint';
+
+import { noEslintDisableRule } from '../rules/no-eslint-disable.js';
+
+/**
+ * Inline plugin registration for the `@oaknational` namespace.
+ *
+ * This registers the plugin directly inside the recommended config so that
+ * any consumer spreading `configs.recommended` automatically gets the
+ * `@oaknational/*` rule namespace. Consumers should NOT separately register
+ * the `@oaknational` plugin — the config provides it.
+ */
+const oakPlugin: ESLint.Plugin = {
+  rules: {
+    'no-eslint-disable': noEslintDisableRule,
+  },
+};
 
 /**
  * Restricted types shared between recommended and strict configs.
@@ -42,6 +58,7 @@ export const recommended: Linter.Config[] = [
   {
     plugins: {
       tsdoc: tsdocPlugin,
+      '@oaknational': oakPlugin,
     },
     rules: {
       // Types
@@ -101,6 +118,11 @@ export const recommended: Linter.Config[] = [
       'import-x/no-cycle': ['error'],
       'import-x/no-useless-path-segments': ['error'],
       'import-x/no-named-as-default': 'error',
+
+      // Check suppression — eslint-disable is banned unless user-approved
+      // TODO: Promote to 'error' after Phase 3 eslint-disable remediation is complete
+      // See: .agent/plans/architecture-and-infrastructure/active/ci-consolidation-and-gate-parity.plan.md
+      '@oaknational/no-eslint-disable': 'warn',
 
       // TSDoc
       'tsdoc/syntax': 'warn',

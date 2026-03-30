@@ -31,12 +31,12 @@ import {
   generateVocabularyGraphData,
   writeAnalysisReportFile,
   writeMinedSynonymsFile,
-  writeMisconceptionGraphFile,
-  writeNCCoverageGraphFile,
-  writePrerequisiteGraphFile,
+  writeMisconceptionGraphAsJson,
+  writeNCCoverageGraphAsJson,
+  writePrerequisiteGraphAsJson,
   writeThreadProgressionFile,
-  writeVocabularyGraphFile,
-} from './generators/index.js';
+  writeVocabularyGraphAsJson,
+} from '../src/bulk.js';
 import { readAllBulkFiles } from './lib/index.js';
 import { type BulkDataInput, processBulkData, type ProcessingResult } from './vocab-gen-core.js';
 import { type PipelineConfig, type PipelineResult } from './vocab-gen-config.js';
@@ -122,11 +122,11 @@ async function generateOutputFiles(
     result.extractedData.threads,
     sourceVersion,
   );
-  const prerequisiteFilePath = await writePrerequisiteGraphFile(
+  const prerequisiteDirPath = await writePrerequisiteGraphAsJson(
     prerequisiteGraph,
     config.outputPath,
   );
-  outputFiles.push(basename(prerequisiteFilePath));
+  outputFiles.push(basename(prerequisiteDirPath));
 
   // Generate analysis report (written to vocab-gen/reports in the SDK)
   const analysisReport = generateAnalysisReport(result.extractedData);
@@ -139,29 +139,29 @@ async function generateOutputFiles(
   const synonymsFilePath = await writeMinedSynonymsFile(minedSynonyms, synonymsDir);
   outputFiles.push(`synonyms/${basename(synonymsFilePath)}`);
 
-  // Generate misconception graph
+  // Generate misconception graph (JSON + typed loader)
   const misconceptionGraph = generateMisconceptionGraphData(
     result.extractedData.misconceptions,
     sourceVersion,
   );
-  const misconceptionFilePath = await writeMisconceptionGraphFile(
+  const misconceptionDirPath = await writeMisconceptionGraphAsJson(
     misconceptionGraph,
     config.outputPath,
   );
-  outputFiles.push(basename(misconceptionFilePath));
+  outputFiles.push(basename(misconceptionDirPath));
 
-  // Generate vocabulary graph
+  // Generate vocabulary graph (JSON + typed loader)
   const vocabularyGraph = generateVocabularyGraphData(result.extractedData.keywords, sourceVersion);
-  const vocabularyFilePath = await writeVocabularyGraphFile(vocabularyGraph, config.outputPath);
-  outputFiles.push(basename(vocabularyFilePath));
+  const vocabularyDirPath = await writeVocabularyGraphAsJson(vocabularyGraph, config.outputPath);
+  outputFiles.push(basename(vocabularyDirPath));
 
-  // Generate NC coverage graph
+  // Generate NC coverage graph (JSON + typed loader)
   const ncCoverageGraph = generateNCCoverageGraphData(
     result.extractedData.ncStatements,
     sourceVersion,
   );
-  const ncCoverageFilePath = await writeNCCoverageGraphFile(ncCoverageGraph, config.outputPath);
-  outputFiles.push(basename(ncCoverageFilePath));
+  const ncCoverageDirPath = await writeNCCoverageGraphAsJson(ncCoverageGraph, config.outputPath);
+  outputFiles.push(basename(ncCoverageDirPath));
 
   return outputFiles;
 }

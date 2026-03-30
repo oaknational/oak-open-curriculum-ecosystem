@@ -17,25 +17,31 @@ This document captures end-to-end validation findings for the `search` MCP tool 
 
 ## Summary
 
-The search infrastructure is mostly healthy across scopes and major filters.
-**Root causes are documented** for the two production filter findings (F1/F2),
-and **code fixes are complete** for F2; F1 is explained as **stale index data**
-for `thread_slugs`, not a retrieval defect. Re-ingest complete
-(v2026-03-24-091112, 15,910 docs). **Production verification** after PR merge
-and deployment is tracked in
-[prod-search-assessment.execution.plan.md](../active/prod-search-assessment.execution.plan.md) — until then, we do not have **closed** evidence for “all search
-filters verified in production”.
+The search infrastructure is healthy across scopes and major filters.
+Both production filter findings (F1/F2) are **closed with production evidence**
+(2026-03-25). Re-ingest v2026-03-24-091112 (15,910 docs) populated corrected
+data; PR #68 merged and deployed to Vercel production
+(`dpl_EqsgwygzHhZjGbNwQXVBA4JMDEva`, commit `0ecbb901`).
+
+**F1 closure evidence**: `threadSlug: "number-fractions"` returns 10 lessons,
+all with `number-fractions` in `thread_slugs`.
+**F2 closure evidence**: `category: "nonexistentzzz"` returns `total: 0` and
+empty hits array; `category: "Biology"` returns 2 sequences with matching
+`category_titles`.
+Assessment plan archived:
+[prod-search-assessment.execution.plan.md](prod-search-assessment.execution.plan.md).
 
 See per-finding status lines and **Current execution state** below.
 
-### Execution state (2026-03-24)
+### Execution state (2026-03-25, closed)
 
 - Re-ingest complete: v2026-03-24-091112 staged + promoted, 15,910 parent docs.
 - Phase 1 code follow-ups complete (2026-03-21): all fixes committed, all
   quality gates green, six specialist reviewer passes.
 - Phase 2 re-ingest complete (2026-03-24).
-- **Remaining**: production verification after PR merge — tracked in
-  [active plan](../active/prod-search-assessment.execution.plan.md).
+- PR #68 merged (2026-03-25), deployed to Vercel production.
+- Production verification complete (2026-03-25): F1 and F2 both pass.
+  See assessment plan: [prod-search-assessment.execution.plan.md](prod-search-assessment.execution.plan.md).
 
 ### Code trace and regression tests (2026-03-21)
 
@@ -102,7 +108,7 @@ Validated scope and option coverage:
 ## F1 - `threadSlug` filter on `lessons` returns empty unexpectedly
 
 - Severity: high
-- Status: reingested_v2026-03-24-091112_prod_verification_pending_deployment
+- Status: closed_prod_verified_2026-03-25
 - Area: `search` filter semantics (`lessons` scope)
 
 ### Reproduction
@@ -267,7 +273,7 @@ Observed with filter: `total = 0`.
 ## F2 - `category` filter on `sequences` appears non-functional
 
 - Severity: medium
-- Status: code_fix_complete_reingested_prod_verification_pending_deployment
+- Status: closed_prod_verified_2026-03-25
 - Area: `search` filter semantics (`sequences` scope)
 
 ### Reproduction
@@ -417,7 +423,7 @@ text behaviour, positive controls) is follow-up scope.
    sub-field for facet aggregation, five specialist reviewer passes complete.
 3. Re-run the production validation matrix for `F1` and `F2` after PR merge
    and deployment — tracked in
-   [prod-search-assessment.execution.plan.md](../active/prod-search-assessment.execution.plan.md).
+   [prod-search-assessment.execution.plan.md](prod-search-assessment.execution.plan.md).
 4. ~~Keep this file linked from prompt + active plan closeout~~ — archived;
    active plan references this register.
 5. Do not close `F1` or `F2` on code-only evidence; closure requires production

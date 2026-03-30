@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { measureAuthSetupStep } from '../auth-instrumentation.js';
-import { createTestLogger } from './test-helpers/create-test-logger.js';
+import { createRecordingLogger } from '../test-helpers/fakes.js';
 
 function contextMatchesStep(context: unknown, step: string): boolean {
   if (typeof context !== 'object' || context === null || Array.isArray(context)) {
@@ -15,7 +15,7 @@ function contextMatchesStep(context: unknown, step: string): boolean {
 
 describe('measureAuthSetupStep', () => {
   it('logs finish entry when operation succeeds', () => {
-    const { logger, entries } = createTestLogger();
+    const { logger, entries } = createRecordingLogger();
 
     const outcome = measureAuthSetupStep(logger, 'clerkMiddleware.create', () => 'ok');
 
@@ -37,13 +37,13 @@ describe('measureAuthSetupStep', () => {
   });
 
   it('logs error entry when operation throws', () => {
-    const { logger, entries } = createTestLogger();
+    const { logger, entries } = createRecordingLogger();
 
     expect(() =>
       measureAuthSetupStep(logger, 'registerPublicOAuthMetadata', () => {
         throw new Error('boom');
       }),
-    ).toThrowError(new Error('boom'));
+    ).toThrow(new Error('boom'));
 
     const errorEntry = entries.find(
       (entry) =>

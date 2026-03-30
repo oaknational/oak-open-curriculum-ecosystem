@@ -16,7 +16,7 @@ The repo rules are in `.agent/directives/principles.md` — read them, reflect o
 
 There are specialist sub-agents you can use — invoke them to report findings rather than make changes.
 
-Run the quality gates to understand the state of the repo, analyse the results, make a long and atomic todo list, decorate it with regular instructions to read and update the collaboration document. Then read `.agent/prompts/GO.md` and follow all instructions.
+Run the quality gates to understand the state of the repo, analyse the results, make a long and atomic todo list, decorate it with regular instructions to read and update the collaboration document. Then read `.agent/skills/go/shared/go.md` and follow all instructions.
 
 ## Coordination Protocol
 

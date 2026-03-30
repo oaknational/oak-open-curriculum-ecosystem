@@ -10,11 +10,18 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 /**
- * Minimal interface for resource registration. Used by tests with fakes.
- * McpServer satisfies this.
+ * Minimal server interface for resource registration.
+ *
+ * An interface (not a type alias) that narrows McpServer to the single
+ * method needed for resource registration. Avoids repeating
+ * `Pick<McpServer, 'registerResource'>` at every function signature.
  */
-export type ResourceRegistrar = Pick<McpServer, 'registerResource'>;
+interface ResourceRegistrar {
+  registerResource: McpServer['registerResource'];
+}
+import { registerAppResource, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import {
+  WIDGET_URI,
   DOCUMENTATION_RESOURCES,
   getDocumentationContent,
   CURRICULUM_MODEL_RESOURCE,
@@ -24,109 +31,56 @@ import {
   THREAD_PROGRESSIONS_RESOURCE,
   getThreadProgressionsJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import {
-  getToolWidgetUri,
-  AGGREGATED_TOOL_WIDGET_MIME_TYPE,
-  AGGREGATED_TOOL_WIDGET_HTML,
-} from './aggregated-tool-widget.js';
+
+import { AGGREGATED_TOOL_WIDGET_HTML } from './aggregated-tool-widget.js';
 
 /**
- * OpenAI Apps SDK Content Security Policy for the widget.
+ * MCP Apps Content Security Policy for the widget.
  *
- * Defines allowed domains for outbound requests from within the widget sandbox.
- * The widget itself is protected from arbitrary iframe embedding by the MCP
- * architecture - only ChatGPT can access MCP resources.
- *
- * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
+ * The widget loads Google Fonts only. All tool data flows through the host's
+ * MCP bridge rather than direct HTTP requests, as verified by the WS2 audit of
+ * widget renderers and widget state scripts.
  */
 const WIDGET_CSP = {
-  /** Domains the widget can make fetch/XHR requests to */
-  connect_domains: ['https://*.thenational.academy'],
-  /** Domains the widget can load static resources from (fonts, images) */
-  resource_domains: [
-    'https://fonts.googleapis.com',
-    'https://fonts.gstatic.com',
-    'https://*.thenational.academy',
-  ],
+  /** Domains the widget can load static resources from */
+  resourceDomains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
 } as const;
-
-/**
- * Human-readable description for the widget, shown to the model.
- *
- * @remarks
- * - Must be ≤200 characters per OpenAI guidance
- * - Model sees this when widget loads, reducing redundant narration
- * - Guides model to call get-curriculum-model for domain understanding
- *
- * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
- */
-const WIDGET_DESCRIPTION =
-  'Oak Open Curriculum: you MUST use the get-curriculum-model tool before calling other tools in order to give relevant responses.';
-
-/**
- * Options for widget resource registration.
- *
- * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
- */
-export interface WidgetResourceOptions {
-  /**
-   * Dedicated origin for the widget sandbox, required for OpenAI app submission.
-   *
-   * ChatGPT renders the widget under `<domain>.web-sandbox.oaiusercontent.com`.
-   * Derived from the deployment URL at runtime (e.g. VERCEL_URL).
-   *
-   * @example "https://curriculum-mcp-alpha.oaknational.dev"
-   */
-  readonly widgetDomain?: string;
-}
 
 /**
  * Registers the Oak JSON viewer widget as an MCP resource.
  *
- * This widget is referenced by aggregated tools via _meta["openai/outputTemplate"]
- * and used by ChatGPT to render tool output with Oak branding.
+ * This widget is referenced by aggregated tools via `_meta.ui.resourceUri` and
+ * renders tool output with Oak branding.
  *
  * The widget URI includes a cache-busting hash generated at sdk-codegen time.
- * Each build produces a new hash, ensuring ChatGPT fetches the latest
+ * Each build produces a new hash, ensuring hosts fetch the latest
  * widget bundle instead of using a stale cached version.
  *
- * This aligns with OpenAI's best practice: "give the template a new URI"
- * whenever widget HTML/CSS/JS changes.
- *
- * Includes OpenAI Apps SDK _meta fields required for production deployment:
- * - openai/widgetCSP: Content Security Policy for outbound requests
- * - openai/widgetPrefersBorder: Hint for bordered card rendering
- * - openai/widgetDescription: Human-readable summary for the model
- * - openai/widgetDomain: Dedicated sandbox origin (when available)
+ * Includes MCP Apps resource metadata required for the widget host:
+ * - `_meta.ui.csp`: Content Security Policy for external assets
+ * - `_meta.ui.prefersBorder`: Hint for bordered card rendering
  *
  * @param server - MCP server instance
- * @param options - Optional widget configuration (e.g. widgetDomain)
- * @see https://developers.openai.com/apps-sdk/reference#component-resource-_meta-fields
- * @see https://developers.openai.com/apps-sdk/build/mcp-server (cache-busting guidance)
  */
-export function registerWidgetResource(
-  server: ResourceRegistrar,
-  options?: WidgetResourceOptions,
-): void {
-  const widgetUri = getToolWidgetUri();
-  server.registerResource(
+export function registerWidgetResource(server: ResourceRegistrar): void {
+  registerAppResource(
+    server,
     'oak-json-viewer',
-    widgetUri,
+    WIDGET_URI,
     {
       description: 'Oak-branded JSON viewer widget for tool output',
-      mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
     },
     () => ({
       contents: [
         {
-          uri: widgetUri,
-          mimeType: AGGREGATED_TOOL_WIDGET_MIME_TYPE,
+          uri: WIDGET_URI,
+          mimeType: RESOURCE_MIME_TYPE,
           text: AGGREGATED_TOOL_WIDGET_HTML,
           _meta: {
-            'openai/widgetCSP': WIDGET_CSP,
-            'openai/widgetPrefersBorder': true,
-            'openai/widgetDescription': WIDGET_DESCRIPTION,
-            ...(options?.widgetDomain ? { 'openai/widgetDomain': options.widgetDomain } : {}),
+            ui: {
+              csp: WIDGET_CSP,
+              prefersBorder: true,
+            },
           },
         },
       ],
@@ -212,13 +166,9 @@ export function registerThreadProgressionsResource(server: ResourceRegistrar): v
  * and thread progressions resource registration into a single call.
  *
  * @param server - MCP server instance
- * @param options - Optional widget configuration (e.g. widgetDomain)
  */
-export function registerAllResources(
-  server: ResourceRegistrar,
-  options?: WidgetResourceOptions,
-): void {
-  registerWidgetResource(server, options);
+export function registerAllResources(server: ResourceRegistrar): void {
+  registerWidgetResource(server);
   registerDocumentationResources(server);
   registerCurriculumModelResource(server);
   registerPrerequisiteGraphResource(server);

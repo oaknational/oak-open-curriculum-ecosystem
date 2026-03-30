@@ -63,7 +63,12 @@ function formatPromptResponse(
  * registerPrompts(server);
  * ```
  */
-export function registerPrompts(server: McpServer): void {
+/** Narrow interface — only `registerPrompt` is used. */
+interface PromptRegistrar {
+  registerPrompt: McpServer['registerPrompt'];
+}
+
+export function registerPrompts(server: PromptRegistrar): void {
   server.registerPrompt(
     'find-lessons',
     {

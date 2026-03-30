@@ -4,123 +4,101 @@
  * Shared test utilities for auth error interception testing.
  */
 
-import { vi } from 'vitest';
+import { vi, expect } from 'vitest';
 import type { Logger } from '@oaknational/logger';
 import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
-import type { ToolHandlerDependencies, ToolRegistrationServer } from '../handlers.js';
+import { authLogContextSchema } from '../auth-log-context.js';
+import type { ToolHandlerDependencies } from '../handlers.js';
+import { createFakeLogger } from './fakes.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type {
+  CallToolResult,
+  Notification,
+  ServerRequest,
+} from '@modelcontextprotocol/sdk/types.js';
 import {
   McpToolError,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import type { Notification, ServerRequest } from '@modelcontextprotocol/sdk/types.js';
 import { err } from '@oaknational/result';
 
 /**
- * Creates mock dependencies for tool handler testing.
+ * Creates mock dependencies for auth error testing.
  *
- * @param executeMcpTool - Mock executeMcpTool implementation
- * @returns Partial tool handler dependencies
+ * Wraps the provided `executeMcpTool` function into a `createRequestExecutor`
+ * factory that invokes the `onToolExecution` callback (for auth error capture).
  */
 export function createMockDeps(
   executeMcpTool: (name: unknown, args: unknown, client: unknown) => Promise<ToolExecutionResult>,
 ): Partial<ToolHandlerDependencies> {
   return {
-    executeMcpTool,
+    createRequestExecutor: vi.fn((config) => {
+      return vi.fn(async (name, args) => {
+        const execution = await executeMcpTool(name, args, {});
+        config.onToolExecution?.(name, execution);
+        if (execution.ok) {
+          return { content: [{ type: 'text' as const, text: JSON.stringify(execution.value) }] };
+        }
+        return {
+          content: [{ type: 'text' as const, text: execution.error.message }],
+          isError: true,
+        };
+      });
+    }),
     getResourceUrl: () => 'https://test.example.com/mcp',
   };
 }
 
 interface Params {
-  [key: string]: unknown;
-  signal: AbortSignal;
-  requestId: string;
-  sendNotification: (notification: Notification) => Promise<void>;
-  sendRequest: (request: ServerRequest) => Promise<unknown>;
+  readonly signal: AbortSignal;
+  readonly requestId: string;
+  readonly sendNotification: (notification: Notification) => Promise<void>;
+  readonly sendRequest: (request: ServerRequest) => Promise<unknown>;
 }
 
 /**
- * Creates a mock MCP server that captures registered tool handlers.
+ * Creates a real MCP server with `registerTool` replaced to capture handlers.
  *
- * Creates a type-safe mock with a generic registerTool method that matches
- * the MCP SDK's signature while capturing handlers for test assertions.
+ * @remarks
+ * Uses a real `McpServer` instance — the SDK object naturally satisfies its
+ * own types. Replaces `registerTool` with a handler-capturing function.
  *
- * Type Safety Note:
- * - The MCP SDK's registerTool has complex generics: `<InputArgs extends ZodRawShape, OutputArgs extends ZodRawShape>`
- * - Our mock needs to capture handlers as `(params: Params) => Promise<unknown>` for test assertions
- * - We bridge this gap by:
- *   1. Creating a generic implementation that accepts any handler signature
- *   2. Internally wrapping to our test Params type
- *   3. Type assertion to satisfy ToolRegistrationServer (library type from MCP SDK)
- *
- * This is test infrastructure code that enables DI-based integration testing per principles.md.
- * Alternative approaches (replicating MCP SDK's entire type system) are disproportionate effort.
- *
- * @param capturedHandlers - Map to store handlers by tool name
- * @returns Mock server satisfying ToolRegistrationServer interface
+ * The `as McpServer['registerTool']` assertion is irreducible: the MCP
+ * SDK's `registerTool` has overloaded generics that TypeScript cannot
+ * satisfy with any plain function. This was confirmed by type-reviewer
+ * analysis. The eslint config for this file allows `as`-style assertions
+ * (see eslint.config.ts).
  */
 export function createMockServer(
-  capturedHandlers: Map<string, (params: Params) => Promise<unknown>>,
-): ToolRegistrationServer {
-  // Create a generic mock function matching MCP SDK's signature
+  capturedHandlers: Map<string, (params: Params) => Promise<CallToolResult>>,
+): McpServer {
+  const server = new McpServer({ name: 'test-server', version: '0.0.0' });
 
-  function mockRegisterToolImpl<TInput = unknown>(
+  function capturingRegisterTool(
     name: string,
-    _config: unknown,
-    handler: (params: TInput, _extra: unknown) => Promise<unknown>,
-  ): unknown {
-    // Capture the handler with our test parameter type
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Bridge between MCP SDK generics and test types
-    const wrappedHandler = (params: Params) => handler(params as TInput, {});
-    capturedHandlers.set(name, wrappedHandler);
-    return undefined; // MCP SDK returns RegisteredTool, but we don't need it in tests
+    configOrCb: unknown,
+    handlerOrUndefined?: (params: unknown, extra: unknown) => Promise<CallToolResult>,
+  ): void {
+    void configOrCb;
+    if (handlerOrUndefined) {
+      const wrappedHandler = (params: Params) => handlerOrUndefined(params, {});
+      capturedHandlers.set(name, wrappedHandler);
+    }
   }
 
-  // Create mock using vi.fn() for call tracking
-  const mockRegisterTool = vi.fn(mockRegisterToolImpl);
+  // Irreducible assertion: McpServer.registerTool has overloaded generics
+  // that no plain function can satisfy. Confirmed by type-reviewer analysis.
+  server.registerTool = capturingRegisterTool as McpServer['registerTool'];
 
-  // Mock registerResource as no-op - tests focus on tool handler behaviour, not widget registration
-  const mockRegisterResource = vi.fn();
-
-  // Mock registerPrompt as no-op - tests focus on tool handler behaviour, not prompt registration
-  const mockRegisterPrompt = vi.fn();
-
-  // Return a properly typed mock server (test double)
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Test double with minimal implementation for testing
-  const mockServer = {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
-    registerTool: mockRegisterTool as ToolRegistrationServer['registerTool'],
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
-    registerResource: mockRegisterResource as ToolRegistrationServer['registerResource'],
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Cast vi.fn mock to MCP SDK library type for test double
-    registerPrompt: mockRegisterPrompt as ToolRegistrationServer['registerPrompt'],
-  } as unknown as ToolRegistrationServer;
-  return mockServer;
+  return server;
 }
 
-/**
- * Creates a mock logger for testing.
- *
- * @returns Partial mock Logger with all required methods
- */
-export function createMockLogger(): Pick<
-  Logger,
-  'warn' | 'error' | 'info' | 'debug' | 'trace' | 'fatal'
-> {
-  return {
-    warn: vi.fn(),
-    error: vi.fn(),
-    info: vi.fn(),
-    debug: vi.fn(),
-    trace: vi.fn(),
-    fatal: vi.fn(),
-  };
+/** Creates a mock logger for testing. Delegates to the canonical fake. */
+export function createMockLogger(): Logger {
+  return createFakeLogger();
 }
 
-/**
- * Creates a mock runtime config for testing.
- *
- * @returns AuthEnabledRuntimeConfig with required fields
- */
+/** Creates a mock runtime config for testing. */
 export function createMockRuntimeConfig(): AuthEnabledRuntimeConfig {
   return {
     env: {
@@ -137,13 +115,7 @@ export function createMockRuntimeConfig(): AuthEnabledRuntimeConfig {
   };
 }
 
-/**
- * Creates a ToolExecutionResult with an auth error.
- *
- * @param status - HTTP status code (401 or 403)
- * @param message - Error message
- * @returns ToolExecutionResult with error
- */
+/** Creates a ToolExecutionResult with an auth error. */
 export function createAuthErrorResult(status: number, message: string): ToolExecutionResult {
   const error = createStatusError(status, message);
   return err(
@@ -153,12 +125,7 @@ export function createAuthErrorResult(status: number, message: string): ToolExec
   );
 }
 
-/**
- * Creates a ToolExecutionResult with a Clerk auth error.
- *
- * @param message - Clerk error message
- * @returns ToolExecutionResult with error
- */
+/** Creates a ToolExecutionResult with a Clerk auth error. */
 export function createClerkErrorResult(message: string): ToolExecutionResult {
   const clerkError = new Error(message);
   return err(
@@ -168,12 +135,7 @@ export function createClerkErrorResult(message: string): ToolExecutionResult {
   );
 }
 
-/**
- * Creates a ToolExecutionResult with a non-auth error.
- *
- * @param message - Error message
- * @returns ToolExecutionResult with error
- */
+/** Creates a ToolExecutionResult with a non-auth error. */
 export function createNonAuthErrorResult(message: string): ToolExecutionResult {
   const error = new Error(message);
   return err(
@@ -196,21 +158,68 @@ function createStatusError(status: number, message: string): Error {
   return new StatusError(status, message);
 }
 
-/**
- * Gets a registered handler from the captured handlers map.
- *
- * @param capturedHandlers - Map of captured handlers
- * @param toolName - Tool name to retrieve
- * @returns Handler function
- * @throws Error if handler not found
- */
+/** Gets a registered handler from the captured handlers map. */
 export function getHandler(
-  capturedHandlers: Map<string, (params: unknown) => Promise<unknown>>,
+  capturedHandlers: Map<string, (params: unknown) => Promise<CallToolResult>>,
   toolName: string,
-): (params: unknown) => Promise<unknown> {
+): (params: unknown) => Promise<CallToolResult> {
   const handler = capturedHandlers.get(toolName);
   if (!handler) {
     throw new Error(`${toolName} handler not registered`);
   }
   return handler;
+}
+
+/**
+ * Assert authentication error response structure.
+ *
+ * Validates that a tool result has the expected MCP-compliant auth error shape:
+ * isError: true, content array with user-friendly message, and _meta with
+ * RFC 6750 WWW-Authenticate header.
+ */
+export function assertAuthErrorResponse(
+  result: CallToolResult,
+  expectedErrorPattern: RegExp,
+): void {
+  expect(result.isError).toBe(true);
+  expect(result.content.length).toBeGreaterThan(0);
+  const firstContent = result.content[0];
+  expect(firstContent).toBeDefined();
+  expect(firstContent?.type).toBe('text');
+  // CallToolResult content is a union — assert 'text' type then access .text
+  expect(firstContent && 'text' in firstContent ? firstContent.text : undefined).toContain(
+    'Authentication Error',
+  );
+  const meta = result._meta;
+  expect(meta).toBeDefined();
+  const wwwAuth = meta?.['mcp/www_authenticate'];
+  expect(wwwAuth).toBeDefined();
+  expect(Array.isArray(wwwAuth)).toBe(true);
+  expect(Array.isArray(wwwAuth) && wwwAuth.length).toBeGreaterThan(0);
+  expect(Array.isArray(wwwAuth) && wwwAuth[0]).toMatch(expectedErrorPattern);
+}
+
+/**
+ * Assert logger was called with auth error context.
+ *
+ * Validates the log context shape with Zod rather than type assertions,
+ * consistent with the boundary-validation pattern used in production code.
+ */
+export function assertAuthErrorLogged(
+  logger: Pick<Logger, 'warn'>,
+  expectedToolName: string,
+  expectedErrorType: string,
+  descriptionContains?: string,
+): void {
+  expect(logger.warn).toHaveBeenCalled();
+  const warnCalls = vi.mocked(logger.warn).mock.calls;
+  expect(warnCalls.length).toBeGreaterThan(0);
+  const [message, context] = warnCalls[0];
+  expect(message).toBe('Tool execution auth error');
+  const logContext = authLogContextSchema.parse(context);
+  expect(logContext.toolName).toBe(expectedToolName);
+  expect(logContext.errorType).toBe(expectedErrorType);
+  if (descriptionContains) {
+    expect(logContext.description).toContain(descriptionContains);
+  }
 }

@@ -147,24 +147,19 @@ export interface ToolDescriptor<
     readonly title?: string;
   };
   /**
-   * OpenAI Apps SDK metadata for tool descriptors.
+   * MCP Apps standard metadata for tool descriptors (ADR-141).
    *
-   * These fields are used by ChatGPT to display status during tool invocation
-   * and to render output using a custom widget.
+   * Widget tools declare ui.resourceUri pointing to a ui:// resource
+   * that hosts render as an interactive MCP App.
    *
-   * @see https://developers.openai.com/apps-sdk/reference
+   * @see https://modelcontextprotocol.io/extensions/apps/overview
    */
   readonly _meta?: {
-    /** URI of widget resource to render tool output */
-    readonly 'openai/outputTemplate'?: string;
-    /** Status text shown while tool is running (max 64 characters) */
-    readonly 'openai/toolInvocation/invoking'?: string;
-    /** Status text shown after tool completes (max 64 characters) */
-    readonly 'openai/toolInvocation/invoked'?: string;
-    /** Allow widget to call this tool via window.openai.callTool() */
-    readonly 'openai/widgetAccessible'?: boolean;
-    /** Tool visibility: 'public' (default) or 'private' (hidden from model) */
-    readonly 'openai/visibility'?: 'public' | 'private';
+    /** MCP Apps UI metadata for widget tools */
+    readonly ui?: {
+      /** URI of the UI resource to display for this tool (e.g. ui://widget/app.html) */
+      readonly resourceUri: string;
+    };
     /** Mirror securitySchemes for clients that only read _meta */
     readonly securitySchemes?: readonly SecurityScheme[];
   };

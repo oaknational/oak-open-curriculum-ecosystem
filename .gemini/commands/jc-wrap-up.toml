@@ -1,0 +1,2 @@
+description = "End-of-session wrap-up — update plans, consolidate, review, commit, and prepare handover"
+prompt = "Read and follow the instructions in .agent/commands/wrap-up.md"

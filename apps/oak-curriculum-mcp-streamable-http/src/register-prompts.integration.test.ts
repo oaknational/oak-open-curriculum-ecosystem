@@ -18,44 +18,21 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { z } from 'zod';
 
 /**
- * Creates a request suitable for MCP SDK transport.handleRequest().
+ * Bridges Express Request to the shape MCP SDK's transport.handleRequest() expects.
  *
  * The MCP SDK expects `IncomingMessage & { auth?: AuthInfo }`. Express Request
- * extends IncomingMessage, but Clerk middleware adds an incompatible `auth` property.
- * This proxy strips the auth property to avoid type conflicts.
+ * extends IncomingMessage, but Clerk middleware adds an incompatible `auth`
+ * property. This cast replaces Clerk's callable `auth` with `undefined`,
+ * matching the production pattern in `createMcpHandler`.
  *
- * This is a documented architectural bridge between incompatible library types,
- * not a shortcut to hide type errors in our code.
- *
- * @remarks This mirrors the pattern in handlers.ts createMcpRequest() for consistency.
  * @param req - Express request (may have Clerk auth)
- * @returns Proxy behaving as IncomingMessage without Clerk auth property
+ * @returns Request cast to IncomingMessage with auth set to undefined
  */
 function createMcpTestRequest(req: express.Request): IncomingMessage {
-  // Proxy delegates to Express Request (which extends IncomingMessage) but omits 'auth'
-  const proxy = new Proxy(req, {
-    get(target, prop) {
-      if (prop === 'auth') {
-        return undefined; // Omit Clerk's auth to avoid type conflict
-      }
-      // Type guard: ensure prop exists on target before access
-      if (typeof prop === 'string' && prop in target) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Proxy get handler for architectural bridge (see function documentation)
-        return target[prop as keyof express.Request];
-      }
-      return undefined;
-    },
-    has(target, prop) {
-      if (prop === 'auth') {
-        return false; // Report auth as not present
-      }
-      return prop in target;
-    },
-  });
-
-  // Type assertion: Proxy<Request> → IncomingMessage (architectural bridge; mirrors handlers.ts createMcpRequest)
-
-  return proxy as unknown as IncomingMessage;
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Bridging Clerk (callable auth) → MCP SDK (AuthInfo | undefined) at test boundary
+  const mcpRequest = req as unknown as IncomingMessage & { auth?: undefined };
+  mcpRequest.auth = undefined;
+  return mcpRequest;
 }
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';

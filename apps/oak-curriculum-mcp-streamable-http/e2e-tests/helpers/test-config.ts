@@ -22,17 +22,21 @@ import type {
 export function createNoOpClerkMiddleware(): () => RequestHandler {
   return () => (req, res, next) => {
     void res;
-    req.auth = () => ({
-      id: null,
-      subject: null,
-      scopes: null,
-      userId: null,
-      clientId: null,
-      getToken: async () => null,
-      has: () => false,
-      debug: () => ({}),
-      tokenType: 'oauth_token',
-      isAuthenticated: false,
+    // Simulate clerkMiddleware() which sets req.auth via Object.assign.
+    // Uses the same mechanism Clerk uses at runtime — no type augmentation needed.
+    Object.assign(req, {
+      auth: () => ({
+        id: null,
+        subject: null,
+        scopes: null,
+        userId: null,
+        clientId: null,
+        getToken: async () => null,
+        has: () => false,
+        debug: () => ({}),
+        tokenType: 'oauth_token',
+        isAuthenticated: false,
+      }),
     });
     next();
   };

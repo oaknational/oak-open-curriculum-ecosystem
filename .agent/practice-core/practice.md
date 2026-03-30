@@ -235,8 +235,14 @@ graph LR
   7. **Documentation propagation** — before phase closure, propagate settled outcomes from
      plans into permanent docs: relevant ADRs, `.agent/practice-core/practice.md`, and any
      additionally impacted docs/READMEs. Apply the consolidate-docs command
-- **Quality gates** — see `.agent/directives/principles.md` and the local quality-gate commands.
-  All gates are always blocking.
+- **Quality gates** — a multi-layered verification taxonomy. Each layer catches
+  a different class of defect: formatting (style), type-checking (compile-time
+  safety), linting (patterns and boundaries), static analysis (dead code,
+  circular dependencies, layer violations), testing (behavioural correctness),
+  mutation testing (test suite effectiveness), build (production artefacts),
+  and specialist review (architectural compliance). No single layer is
+  sufficient; the layers are complementary. All gates are always blocking.
+  See `.agent/directives/principles.md` for the full taxonomy.
 
 ## Artefact Map
 

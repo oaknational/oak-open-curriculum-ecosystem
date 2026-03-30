@@ -6,7 +6,6 @@
  *
  * This file retains:
  * - `parseEnv()` — pure validation function used in tests
- * - `childProcessEnv()` — shallow copy of process.env for child spawns
  * - Schema exports for backward compatibility with existing test fixtures,
  *   re-exported from the canonical schema module
  */
@@ -28,14 +27,6 @@ type EnvResult = Env & { OAK_EFFECTIVE_KEY: string };
  */
 export interface ParseEnvError {
   readonly message: string;
-}
-
-/**
- * Return a shallow copy of `process.env` for forwarding to child
- * process spawns (e.g. benchmark subprocesses, admin orchestration).
- */
-export function childProcessEnv(env: NodeJS.ProcessEnv = process.env): NodeJS.ProcessEnv {
-  return { ...env };
 }
 
 /** Validate a raw env record against the schema. Exported for direct unit testing. */

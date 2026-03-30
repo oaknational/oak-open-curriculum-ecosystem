@@ -1,9 +1,9 @@
 # Upstream API 500 Errors
 
-Observed 500 responses from the Oak Open Curriculum API (`open-api.thenational.academy/api/v0`).
+Observed 500 responses from the Oak Open Curriculum API (`https://open-api.thenational.academy/api/v0`).
 These are genuine server errors, not expected behaviour.
 
-Discovered: 2026-03-20, during error response classification work.
+Discovered: 20 March 2026.
 
 ## 1. Transcript endpoint — null transcript causes TypeError
 
@@ -43,4 +43,4 @@ curl -s -H "Authorization: Bearer $OAK_API_KEY" \
 
 ## Impact
 
-MCP tool users see `UPSTREAM_SERVER_ERROR` when querying transcripts for lessons without video content. The error is indistinguishable from a genuine server outage.
+API consumers receive a 500 Internal Server Error when querying transcripts for lessons without video content. This is indistinguishable from a genuine server outage and obscures the real condition (transcript unavailable).

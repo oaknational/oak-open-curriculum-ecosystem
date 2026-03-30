@@ -37,6 +37,19 @@ const ToolSuccessSchema = z.object({
 
 export type ToolSuccessPayload = z.infer<typeof ToolSuccessSchema>;
 
+const JsonRpcErrorSchema = z
+  .object({
+    message: z.string().optional(),
+  })
+  .loose();
+
+const JsonRpcErrorResultSchema = z
+  .object({
+    isError: z.boolean().optional(),
+    content: z.array(z.unknown()).optional(),
+  })
+  .loose();
+
 function findFirstDataLine(raw: string): string {
   const lines = raw.split('\n');
   for (const line of lines) {
@@ -70,6 +83,37 @@ export function readFirstTextContent(content: readonly unknown[]): string {
     }
   }
   throw new Error('SSE envelope missing text content entry');
+}
+
+export function hasJsonRpcOrResultError(envelope: JsonRpcEnvelope): boolean {
+  const error = JsonRpcErrorSchema.safeParse(envelope.error);
+  if (error.success) {
+    return true;
+  }
+
+  const result = JsonRpcErrorResultSchema.safeParse(envelope.result);
+  return result.success && result.data.isError === true;
+}
+
+export function readJsonRpcOrResultErrorText(envelope: JsonRpcEnvelope): string {
+  const error = JsonRpcErrorSchema.safeParse(envelope.error);
+  if (error.success && error.data.message !== undefined) {
+    return error.data.message;
+  }
+
+  const result = JsonRpcErrorResultSchema.safeParse(envelope.result);
+  if (!result.success || result.data.isError !== true) {
+    return '';
+  }
+
+  for (const entry of result.data.content ?? []) {
+    const parsed = TextContentSchema.safeParse(entry);
+    if (parsed.success) {
+      return parsed.data.text;
+    }
+  }
+
+  return '';
 }
 
 /** structuredContent type from Zod schema - E2E test helper only */

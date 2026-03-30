@@ -4,21 +4,10 @@ import { describe, expect, it, vi } from 'vitest';
 import type { Logger } from '@oaknational/logger';
 
 import { createCorrelationMiddleware } from './middleware.js';
+import { createFakeLogger } from '../test-helpers/fakes.js';
 
 interface TestResponse {
   correlationId: string | undefined;
-}
-
-function createMockLogger(): Logger {
-  return {
-    trace: vi.fn(),
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-    fatal: vi.fn(),
-    isLevelEnabled: vi.fn(() => true),
-  };
 }
 
 function createTestApp(logger: Logger): ReturnType<typeof express> {
@@ -38,7 +27,7 @@ function isObjectWithStringField(value: unknown, field: string): value is Record
 
 describe('createCorrelationMiddleware', () => {
   it('generates correlation ID in response header and res.locals when none provided', async () => {
-    const logger = createMockLogger();
+    const logger = createFakeLogger();
     const app = createTestApp(logger);
 
     const response = await request(app).get('/test');
@@ -50,7 +39,7 @@ describe('createCorrelationMiddleware', () => {
   });
 
   it('reuses client-provided X-Correlation-ID header', async () => {
-    const logger = createMockLogger();
+    const logger = createFakeLogger();
     const app = createTestApp(logger);
     const testCorrelationId = 'test-123';
 
@@ -63,7 +52,7 @@ describe('createCorrelationMiddleware', () => {
   });
 
   it('generates unique IDs for concurrent requests', async () => {
-    const logger = createMockLogger();
+    const logger = createFakeLogger();
     const app = createTestApp(logger);
 
     const responses = await Promise.all([
@@ -82,7 +71,7 @@ describe('createCorrelationMiddleware', () => {
   });
 
   it('passes redacted request headers to logger', async () => {
-    const logger = createMockLogger();
+    const logger = createFakeLogger();
     const app = createTestApp(logger);
 
     await request(app).get('/test').set('Authorization', 'Bearer secret-token');
@@ -105,7 +94,7 @@ describe('createCorrelationMiddleware', () => {
   });
 
   it('logs request completion with timing data', async () => {
-    const logger = createMockLogger();
+    const logger = createFakeLogger();
     const app = createTestApp(logger);
 
     await request(app).get('/test');
@@ -126,7 +115,7 @@ describe('createCorrelationMiddleware', () => {
   });
 
   it('logs slow requests at WARN level with slowRequest flag', async () => {
-    const logger = createMockLogger();
+    const logger = createFakeLogger();
     const app = express();
     app.use(createCorrelationMiddleware(logger, { slowRequestThresholdMs: 0 }));
 
@@ -151,7 +140,7 @@ describe('createCorrelationMiddleware', () => {
   });
 
   it('logs fast requests at DEBUG level without slowRequest flag', async () => {
-    const logger = createMockLogger();
+    const logger = createFakeLogger();
     const app = createTestApp(logger);
 
     await request(app).get('/test');

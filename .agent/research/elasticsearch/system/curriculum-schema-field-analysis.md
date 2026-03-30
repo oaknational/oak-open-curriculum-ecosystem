@@ -77,11 +77,11 @@ The bulk download and vocab-gen pipeline surface additional datasets and fields 
 
 | Data Type | Extracted Count | Source | Potential Use |
 | --------- | --------------- | ------ | ------------- |
-| Keywords with definitions | 13,349 | `vocabulary-graph-data.ts` | Glossary index, definition lookup |
-| Misconceptions with responses | 12,777 | `misconception-graph-data.ts` | Teacher guidance search |
-| National curriculum statements | 7,454 | `nc-coverage-graph-data.ts` | Standards coverage search |
-| Prior knowledge requirements | 7,881 | `prerequisite-graph-data.ts` | Prerequisite queries |
-| Unit prerequisite edges | 3,408 edges | `prerequisite-graph-data.ts` | Learning-path traversal |
+| Keywords with definitions | 13,452 | `vocabulary-graph/` (JSON loader) | Glossary index, definition lookup |
+| Misconceptions with responses | 12,858 | `misconception-graph/` (JSON loader) | Teacher guidance search |
+| National curriculum statements | 7,473 | `nc-coverage-graph/` (JSON loader) | Standards coverage search |
+| Prior knowledge requirements | 7,881 | `prerequisite-graph/` (JSON loader) | Prerequisite queries |
+| Unit prerequisite edges | 3,408 edges | `prerequisite-graph/` (JSON loader) | Learning-path traversal |
 | Thread progressions | 164 | Thread tooling | Progression queries |
 
 #### Bulk-only fields not currently mined

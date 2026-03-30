@@ -106,6 +106,24 @@ const config = defineConfig(
         'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
       },
     },
+    // Two irreducible assertion cases, each confirmed by type-reviewer:
+    // 1. auth-error-test-helpers.ts: McpServer.registerTool has overloaded
+    //    generics that no plain function can satisfy (SDK limitation).
+    // 2. verify-clerk-token.unit.test.ts: tests intentionally construct
+    //    type-violating objects (null where Clerk types say non-null) to
+    //    prove runtime resilience against malformed auth payloads.
+    {
+      files: [
+        'src/test-helpers/auth-error-test-helpers.ts',
+        'src/auth/mcp-auth/verify-clerk-token.unit.test.ts',
+      ],
+      rules: {
+        '@typescript-eslint/consistent-type-assertions': [
+          'warn',
+          { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' },
+        ],
+      },
+    },
     {
       files: ['scripts/**/*.ts', 'smoke-tests/**/*.ts'],
       rules: {

@@ -12,6 +12,7 @@ import type { ExtractedKeyword } from '../extractors/index.js';
 import {
   extractSynonymFromDefinition,
   generateMinedSynonyms,
+  serializeMinedSynonyms,
   type MinedSynonym,
 } from './synonym-miner.js';
 
@@ -207,5 +208,18 @@ describe('MinedSynonym type', () => {
     expect(typedSynonym.confidence).toBeDefined();
     expect(typedSynonym.subjects).toBeDefined();
     expect(typedSynonym.occurrenceCount).toBeDefined();
+  });
+});
+
+describe('serializeMinedSynonyms', () => {
+  it('does not emit eslint-disable directives in generated output', () => {
+    const data = generateMinedSynonyms([
+      createKeyword('fraction', 'A part of a whole, also known as a rational number'),
+    ]);
+
+    const serialized = serializeMinedSynonyms(data);
+
+    expect(serialized).toContain('export const minedDefinitionSynonyms = {');
+    expect(serialized).not.toContain('eslint-disable');
   });
 });

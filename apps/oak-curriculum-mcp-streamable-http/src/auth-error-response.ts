@@ -2,9 +2,7 @@
  * Auth Error Response Builder
  *
  * Pure function for creating MCP-compliant auth error responses with
- * `_meta["mcp/www_authenticate"]` to trigger ChatGPT OAuth linking UI.
- *
- * Part of Phase 2, Sub-Phase 2.7
+ * `_meta["mcp/www_authenticate"]` to trigger MCP client OAuth re-authentication.
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
@@ -21,8 +19,8 @@ export type AuthErrorType =
 /**
  * MCP-compliant auth error response structure
  *
- * Per OpenAI documentation, includes `_meta["mcp/www_authenticate"]` array
- * to signal that OAuth is available and trigger ChatGPT's "Connect" UI.
+ * Per MCP spec, includes `_meta["mcp/www_authenticate"]` array to signal
+ * that OAuth is available and trigger the MCP client's re-authentication flow.
  *
  * Extends CallToolResult to preserve type information and ensure compatibility
  * with MCP SDK expectations.
@@ -39,7 +37,7 @@ export interface AuthErrorResponse extends CallToolResult {
  * Creates an MCP-compliant auth error response with WWW-Authenticate metadata.
  *
  * This function is pure (no side effects, deterministic output) and formats
- * error responses per RFC 6750 and OpenAI's MCP specification.
+ * error responses per RFC 6750 and the MCP specification.
  *
  * @param errorType - OAuth error type per RFC 6750
  * @param description - Human-readable error description
@@ -53,7 +51,7 @@ export interface AuthErrorResponse extends CallToolResult {
  *   'The provided token has expired',
  *   'https://api.example.com/mcp'
  * );
- * // Returns response with _meta["mcp/www_authenticate"] for ChatGPT
+ * // Returns response with _meta["mcp/www_authenticate"] for MCP clients
  * ```
  *
  * @see https://datatracker.ietf.org/doc/html/rfc6750#section-3

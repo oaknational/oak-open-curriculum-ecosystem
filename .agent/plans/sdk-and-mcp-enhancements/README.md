@@ -22,18 +22,22 @@ and `sdk-and-mcp-enhancements/` directories.
 | [archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md) | Completed | All phases complete; post-deploy reindex is operational only. Archived 2026-03-11. |
 | [future/README.md](future/README.md) | Future index | Deferred/later plans |
 | [mcp-apps-support.research.md](mcp-apps-support.research.md) | Research | MCP Apps standard evidence base: ChatGPT support, SEP-1865, capability matrix |
-| [active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md) | Active plan | Plainly named execution entry point for replacing legacy OpenAI App surfaces with MCP Apps infrastructure |
+| [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md) | Active plan | **PRIMARY** session-anchor plan for MCP Apps migration (WS1–WS4). Supersedes the old execution plan. |
+| [active/ws2-app-runtime-migration.plan.md](active/ws2-app-runtime-migration.plan.md) | Active child plan | WS2 detailed implementation plan (complete). 10 specialist reviews across 2 rounds. |
+| [current/mcp-runtime-boundary-simplification.plan.md](current/mcp-runtime-boundary-simplification.plan.md) | Current plan | Post-WS2 runtime cleanup: SDK tool descriptor surface + ingress boundary. Phase 0: `@clerk/mcp-tools/express` evaluation. |
 
 ## Read Order
 
 1. **Roadmap first**: [roadmap.md](roadmap.md)
 2. **Now (in progress)**: [active/README.md](active/README.md)
-3. **Active MCP Apps migration entry point**: [active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](active/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md)
-4. **Archived oak-preview snagging**: [archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md)
-5. **Current queue index**: [current/README.md](current/README.md)
-6. **Current output-schema work**: [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
-7. **Later (deferred)**: [future/README.md](future/README.md)
-8. **Research evidence**: [mcp-apps-support.research.md](mcp-apps-support.research.md)
+3. **Active MCP Apps migration entry point**: [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
+4. **WS2 child plan (complete)**: [active/ws2-app-runtime-migration.plan.md](active/ws2-app-runtime-migration.plan.md)
+5. **Next: runtime boundary simplification**: [current/mcp-runtime-boundary-simplification.plan.md](current/mcp-runtime-boundary-simplification.plan.md)
+6. **Archived oak-preview snagging**: [archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md)
+7. **Current queue index**: [current/README.md](current/README.md)
+8. **Current output-schema work**: [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
+9. **Later (deferred)**: [future/README.md](future/README.md)
+10. **Research evidence**: [mcp-apps-support.research.md](mcp-apps-support.research.md)
 
 ## Icebox (Pipeline Framework)
 

@@ -4,6 +4,7 @@ name: security-reviewer
 model: gpt-5.3-codex-xhigh
 description: Security and privacy review specialist. Use proactively for auth/authz, OAuth, secrets handling, PII exposure, injection risk, and threat-focused analysis after security-sensitive changes.
 readonly: true
+is_background: true
 ---
 
 # Security Reviewer

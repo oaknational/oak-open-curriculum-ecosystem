@@ -50,7 +50,7 @@ then reviewer templates, then pilot evidence.
 rg -n "non-trivial claim|verified|partially verified|unverified|claim-to-evidence|abstain|unsupported claim|No evidence for non-trivial claim" \
   .agent/skills/start-right-quick/shared/start-right.md \
   .agent/skills/start-right-thorough/shared/start-right-thorough.md \
-  .agent/prompts/gt-review.md \
+  .agent/prompts/archive/gt-review.md \
   .agent/sub-agents/templates/code-reviewer.md \
   .agent/sub-agents/templates/architecture-reviewer.md \
   .agent/sub-agents/templates/test-reviewer.md \
@@ -71,7 +71,7 @@ cp .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md \
 1. Policy contract first:
    - `.agent/skills/start-right-quick/shared/start-right.md`
    - `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
-   - `.agent/prompts/gt-review.md`
+   - `.agent/prompts/archive/gt-review.md`
 2. Reviewer template integration second:
    - `.agent/sub-agents/templates/code-reviewer.md`
    - `.agent/sub-agents/templates/test-reviewer.md`
@@ -113,9 +113,9 @@ cp .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md \
 - Target files:
   - `.agent/skills/start-right-quick/shared/start-right.md`
   - `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
-  - `.agent/prompts/gt-review.md`
+  - `.agent/prompts/archive/gt-review.md`
 - Deterministic validation:
-  - `rg -n "claim|evidence|abstain" .agent/skills/start-right-quick/shared/start-right.md .agent/skills/start-right-thorough/shared/start-right-thorough.md .agent/prompts/gt-review.md`
+  - `rg -n "claim|evidence|abstain" .agent/skills/start-right-quick/shared/start-right.md .agent/skills/start-right-thorough/shared/start-right-thorough.md .agent/prompts/archive/gt-review.md`
 
 ### Task 1.3: Reviewer Template Integration
 

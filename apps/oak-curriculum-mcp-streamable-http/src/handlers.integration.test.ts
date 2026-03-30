@@ -2,78 +2,42 @@
  * Integration tests for createMcpHandler.
  *
  * Tests that the MCP handler correctly:
- * 1. Wraps transport.handleRequest in setRequestContext
- * 2. Extracts correlation ID for logging
- * 3. Adapts Express request for MCP SDK
- * 4. Creates server+transport per request via factory
- * 5. Connects server to transport before handling
- * 6. Cleans up server+transport on response close
+ * 1. Passes req.auth (set by mcpAuth middleware) through to transport
+ * 2. Passes body to transport.handleRequest
+ * 3. Creates server+transport per request via factory
+ * 4. Connects server to transport before handling
  *
- * Uses simple fakes injected as arguments - NO network IO.
+ * Tool registration projection tests are in `handlers-tool-registration.integration.test.ts`.
+ *
+ * Uses simple fakes injected as arguments — NO network IO.
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { Request } from 'express';
+import type { McpHandlerRequest } from './handlers.js';
 import { createMcpHandler } from './handlers.js';
-import { getRequestContext } from './request-context.js';
 import {
   createFakeResponse,
   createFakeMcpServerFactory,
   createFakeExpressRequest,
+  createFakeAuthInfo,
 } from './test-helpers/fakes.js';
 
-/**
- * Create a minimal mock Express request for testing.
- */
-function createMockRequest(body: unknown): Request {
-  return createFakeExpressRequest({ body: body as object });
+/** Create a minimal request for handler testing. */
+function createMockRequest(body: { method?: string; [key: string]: unknown }): McpHandlerRequest {
+  return createFakeExpressRequest({ body });
 }
 
 describe('createMcpHandler (Integration)', () => {
-  describe('request context propagation', () => {
-    it('wraps transport.handleRequest with setRequestContext', async () => {
-      let capturedContext: Request | undefined;
-
-      const { factory, transport } = createFakeMcpServerFactory(
-        vi.fn(async () => {
-          capturedContext = getRequestContext();
-        }),
-      );
-
-      const handler = createMcpHandler(factory);
-      const mockReq = createMockRequest({ method: 'tools/list' });
-      const mockRes = createFakeResponse();
-
-      await handler(mockReq, mockRes);
-
-      // Verify transport was called
-      expect(transport.handleRequest).toHaveBeenCalled();
-
-      // Verify context was available inside handleRequest
-      expect(capturedContext).toBe(mockReq);
-    });
-
-    it('context is unavailable outside handler execution', async () => {
-      const { factory } = createFakeMcpServerFactory(vi.fn(async () => undefined));
-
-      const handler = createMcpHandler(factory);
-      const mockReq = createMockRequest({ method: 'tools/list' });
-      const mockRes = createFakeResponse();
-
-      await handler(mockReq, mockRes);
-
-      // After handler completes, context should be undefined
-      expect(getRequestContext()).toBeUndefined();
-    });
-  });
-
   describe('request adaptation', () => {
     it('passes body to transport.handleRequest', async () => {
       const testBody = { jsonrpc: '2.0', method: 'tools/list', id: '123' };
       let receivedBody: unknown;
 
       const { factory } = createFakeMcpServerFactory(
-        vi.fn(async (_req: unknown, _res: unknown, body: unknown) => {
+        vi.fn(async (req: unknown, res: unknown, body: unknown) => {
+          // req and res are positional — only body is needed for this test
+          void req;
+          void res;
           receivedBody = body;
         }),
       );
@@ -87,7 +51,7 @@ describe('createMcpHandler (Integration)', () => {
       expect(receivedBody).toEqual(testBody);
     });
 
-    it('omits auth property from adapted request', async () => {
+    it('passes undefined auth when req.auth is not set by middleware', async () => {
       let receivedRequest: unknown;
 
       const { factory } = createFakeMcpServerFactory(
@@ -100,17 +64,65 @@ describe('createMcpHandler (Integration)', () => {
       const mockReq = createFakeExpressRequest({
         body: { method: 'tools/list' },
         headers: {},
-        auth: { userId: 'test-user' },
       });
       const mockRes = createFakeResponse();
 
       await handler(mockReq, mockRes);
 
-      // The adapted request should not expose the auth property
-      // (to avoid type conflicts with MCP SDK's AuthInfo type)
+      // Without mcpAuth middleware setting req.auth, the property is absent.
+      // The MCP SDK transport reads req.auth and gets undefined.
       expect(receivedRequest).toBeDefined();
-      const adapted = receivedRequest as { auth?: unknown };
-      expect(adapted.auth).toBeUndefined();
+      expect(receivedRequest).not.toHaveProperty('auth');
+    });
+
+    it('passes req.auth through to transport (set by middleware)', async () => {
+      let receivedRequest: unknown;
+
+      const { factory } = createFakeMcpServerFactory(
+        vi.fn(async (req: unknown) => {
+          receivedRequest = req;
+        }),
+      );
+
+      const handler = createMcpHandler(factory);
+      const fakeAuthInfo = createFakeAuthInfo();
+      const mockReq = createFakeExpressRequest({
+        body: { method: 'tools/list' },
+        auth: fakeAuthInfo,
+      });
+      const mockRes = createFakeResponse();
+
+      await handler(mockReq, mockRes);
+
+      // Handler passes req.auth through to transport — no bridging from res.locals.
+      expect(receivedRequest).toBeDefined();
+      expect(receivedRequest).toHaveProperty('auth', fakeAuthInfo);
+    });
+
+    it('does not leak auth between concurrent requests', async () => {
+      const receivedAuthInfos: unknown[] = [];
+
+      const { factory } = createFakeMcpServerFactory(
+        vi.fn(async (req: { auth?: unknown }) => {
+          receivedAuthInfos.push(req.auth);
+        }),
+      );
+
+      const handler = createMcpHandler(factory);
+
+      const authInfo1 = createFakeAuthInfo({ token: 'token-1', clientId: 'client-1' });
+      const authInfo2 = createFakeAuthInfo({ token: 'token-2', clientId: 'client-2' });
+
+      const req1 = createFakeExpressRequest({ body: { method: 'tools/list' }, auth: authInfo1 });
+      const req2 = createFakeExpressRequest({ body: { method: 'tools/list' }, auth: authInfo2 });
+      const res1 = createFakeResponse();
+      const res2 = createFakeResponse();
+
+      await Promise.all([handler(req1, res1), handler(req2, res2)]);
+
+      expect(receivedAuthInfos).toHaveLength(2);
+      expect(receivedAuthInfos).toContainEqual(authInfo1);
+      expect(receivedAuthInfos).toContainEqual(authInfo2);
     });
   });
 

@@ -1,34 +1,40 @@
-import type express from 'express';
-import type { IncomingMessage } from 'node:http';
+/**
+ * MCP handler factory and tool registration.
+ *
+ * Implements the stateless per-request pattern: each HTTP request creates a
+ * fresh `McpServer` + `StreamableHTTPServerTransport`, connects them, and
+ * delegates to `transport.handleRequest()`. Auth flows natively via `req.auth`
+ * (set by `mcpAuth` middleware) → `extra.authInfo` in tool callbacks.
+ *
+ * Tool registration iterates over the SDK's universal tool registry and
+ * registers each tool with its canonical projection config.
+ */
+
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { Logger } from '@oaknational/logger';
-
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import type { McpServerFactory } from './mcp-request-context.js';
-import { extractCorrelationId, createChildLogger } from './logging/index.js';
-import { setRequestContext } from './request-context.js';
+import { createChildLogger } from './logging/index.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
-  zodRawShapeFromToolInputJsonSchema,
   listUniversalTools,
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
   generatedToolRegistry,
+  toRegistrationConfig,
   type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
 import { registerAllResources, registerPrompts } from './register-resources.js';
+import {
+  createDefaultRequestExecutor,
+  createStubRequestExecutor,
+} from './tool-executor-factory.js';
+import type { ToolHandlerDependencies, ToolHandlerOverrides } from './tool-handler-types.js';
 
-export interface ToolHandlerDependencies {
-  readonly createClient: typeof createOakPathBasedClient;
-  readonly executeMcpTool: typeof executeToolCall;
-  readonly createExecutor: typeof createUniversalToolExecutor;
-  readonly getResourceUrl: () => string;
-  readonly searchRetrieval: SearchRetrievalService;
-}
-
-export type ToolHandlerOverrides = Partial<ToolHandlerDependencies>;
+export type { ToolHandlerDependencies, ToolHandlerOverrides } from './tool-handler-types.js';
 
 export interface RegisterHandlersOptions {
   readonly overrides?: ToolHandlerOverrides;
@@ -41,41 +47,40 @@ export interface RegisterHandlersOptions {
   readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
 }
 
-/**
- * Type alias for McpServer, exported for use in tests and tool handlers.
- * @public
- */
-export type ToolRegistrationServer = McpServer;
-
-function mergeOverrides(
-  defaults: ToolHandlerDependencies,
-  overrides: ToolHandlerOverrides,
-): ToolHandlerDependencies {
-  return {
-    createClient: overrides.createClient ?? defaults.createClient,
-    executeMcpTool: overrides.executeMcpTool ?? defaults.executeMcpTool,
-    createExecutor: overrides.createExecutor ?? defaults.createExecutor,
-    getResourceUrl: overrides.getResourceUrl ?? defaults.getResourceUrl,
-    searchRetrieval: overrides.searchRetrieval ?? defaults.searchRetrieval,
-  };
-}
-
 function buildToolHandlerDependencies(
   resourceUrl: string,
   overrides: ToolHandlerOverrides | undefined,
   searchRetrieval: SearchRetrievalService,
+  stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
 ): ToolHandlerDependencies {
+  // searchRetrieval is closed over here — the handler never sees it directly.
+  const createRequestExecutor: ToolHandlerDependencies['createRequestExecutor'] = stubExecutor
+    ? (config) =>
+        createStubRequestExecutor({
+          factoryConfig: { ...config, searchRetrieval },
+          stubExecutor,
+          createExecutor: createUniversalToolExecutor,
+        })
+    : (config) =>
+        createDefaultRequestExecutor({
+          ...config,
+          searchRetrieval,
+          createClient: createOakPathBasedClient,
+          executeToolCall,
+          createExecutor: createUniversalToolExecutor,
+        });
+
   const defaults: ToolHandlerDependencies = {
-    createClient: createOakPathBasedClient,
-    executeMcpTool: executeToolCall,
-    createExecutor: createUniversalToolExecutor,
+    createRequestExecutor,
     getResourceUrl: () => resourceUrl,
-    searchRetrieval,
   };
-  return overrides ? mergeOverrides(defaults, overrides) : defaults;
-}
-function deriveWidgetDomain(config: RuntimeConfig): string | undefined {
-  return config.displayHostname ? `https://${config.displayHostname}` : undefined;
+  if (!overrides) {
+    return defaults;
+  }
+  return {
+    createRequestExecutor: overrides.createRequestExecutor ?? defaults.createRequestExecutor,
+    getResourceUrl: overrides.getResourceUrl ?? defaults.getResourceUrl,
+  };
 }
 
 /**
@@ -89,103 +94,34 @@ function deriveWidgetDomain(config: RuntimeConfig): string | undefined {
  */
 export function registerHandlers(server: McpServer, options: RegisterHandlersOptions): void {
   const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
+  const stubExecutor = options.runtimeConfig.useStubTools
+    ? createStubToolExecutionAdapter()
+    : undefined;
   const deps = buildToolHandlerDependencies(
     resourceUrl,
     options.overrides,
     options.searchRetrieval,
+    stubExecutor,
   );
-  const stubExecutor = options.runtimeConfig.useStubTools
-    ? createStubToolExecutionAdapter()
-    : undefined;
 
   for (const tool of listUniversalTools(generatedToolRegistry)) {
-    // Use generated Zod schema directly when available (includes .describe() for MCP clients).
-    // Falls back to JSON Schema conversion for aggregated tools (search, fetch).
-    const input = tool.flatZodSchema ?? zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
-    const config = {
-      title: tool.annotations?.title ?? tool.name,
-      description: tool.description ?? tool.name,
-      inputSchema: input,
-      securitySchemes: tool.securitySchemes,
-      annotations: tool.annotations,
-    };
-    server.registerTool(tool.name, config, async (params: unknown) => {
+    const config = toRegistrationConfig(tool);
+    server.registerTool(tool.name, config, async (params: unknown, extra) => {
       return handleToolWithAuthInterception({
         tool,
         params,
         deps,
-        stubExecutor,
         logger: options.logger,
         apiKey: options.runtimeConfig.env.OAK_API_KEY,
         runtimeConfig: options.runtimeConfig,
         createAssetDownloadUrl: options.createAssetDownloadUrl,
+        authInfo: extra.authInfo,
       });
     });
   }
 
-  registerAllResources(server, { widgetDomain: deriveWidgetDomain(options.runtimeConfig) });
+  registerAllResources(server);
   registerPrompts(server);
-}
-
-/**
- * Adapts Express Request for MCP SDK transport by omitting Clerk's auth property.
- *
- * ## Type System Conflict
- *
- * We're bridging two incompatible library type systems:
- * - Clerk middleware adds callable `auth(options?)` to Express Request (globally)
- * - MCP SDK transport expects `IncomingMessage & { auth?: AuthInfo }`
- *
- * These `auth` property types are incompatible and neither library is under our control.
- *
- * ## Why This Approach
- *
- * 1. Express Request extends IncomingMessage (structurally compatible)
- * 2. We use AsyncLocalStorage for our auth flow, so MCP SDK doesn't need the auth property
- * 3. Omitting the auth property via Proxy avoids the type conflict
- * 4. At runtime, the Proxy delegates all IncomingMessage properties correctly
- *
- * ## Type Assertion Justification
- *
- * The final type assertion is necessary because:
- * - Proxy<T> is not assignable to T in TypeScript's type system
- * - We cannot construct a real IncomingMessage (it's a Node.js class)
- * - We cannot change Clerk or MCP SDK types
- * - Runtime behavior is safe: Proxy delegates to Express Request which IS an IncomingMessage
- *
- * This is a documented architectural bridge between incompatible library types,
- * not a shortcut to hide type errors in our code.
- *
- * @param req - Express request with Clerk auth
- * @returns Proxy behaving as IncomingMessage without Clerk auth property
- */
-function createMcpRequest(req: express.Request): IncomingMessage {
-  // Proxy delegates to Express Request (which extends IncomingMessage) but omits 'auth'
-  const proxy = new Proxy(req, {
-    get(target, prop) {
-      if (prop === 'auth') {
-        return undefined; // Omit Clerk's auth to avoid type conflict
-      }
-      // Type guard: ensure prop exists on target before access
-      if (typeof prop === 'string' && prop in target) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/consistent-type-assertions -- Proxy get handler for architectural bridge (see function documentation)
-        return target[prop as keyof express.Request];
-      }
-      return undefined;
-    },
-    has(target, prop) {
-      if (prop === 'auth') {
-        return false; // Report auth as not present
-      }
-      return prop in target;
-    },
-  });
-
-  // Type assertion: Proxy<Request> → IncomingMessage
-  // Safe at runtime because Express Request extends IncomingMessage
-  // and we only omit the conflicting auth property
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Architectural bridge between Clerk and MCP SDK types (see function documentation)
-  return proxy as unknown as IncomingMessage;
 }
 
 /**
@@ -207,37 +143,80 @@ function extractMcpMethod(body: unknown): string | undefined {
 }
 
 /**
- * Express handler using per-request MCP server + transport (stateless pattern).
+ * Narrow request interface for `createMcpHandler`.
+ *
+ * Contains only the properties the handler accesses. Express `Request`
+ * satisfies this structurally, so the handler can be used as middleware.
+ * Test fakes satisfy it too — plain objects, no assertions.
+ */
+export interface McpHandlerRequest {
+  /** HTTP headers. */
+  readonly headers: Record<string, string | readonly string[] | undefined>;
+  /** HTTP method (GET, POST, etc.). */
+  readonly method?: string;
+  /** URL path (e.g. '/mcp'). */
+  readonly path: string;
+  /** JSON-RPC request body (parsed by Express body-parser middleware). */
+  body: unknown;
+  /** Verified auth context, set by mcpAuth middleware. Mutable for cleanup. */
+  auth?: AuthInfo;
+}
+
+/**
+ * Narrow response interface for `createMcpHandler`.
+ *
+ * Contains only the properties the handler accesses. Express `Response`
+ * satisfies this structurally.
+ */
+export interface McpHandlerResponse {
+  /** HTTP status code. */
+  readonly statusCode: number;
+  /** Express locals — handler reads `correlationId` for logging. */
+  locals: { correlationId?: string; [key: string]: unknown };
+  /** Register event listeners (handler uses 'close' for cleanup). */
+  on(event: string, listener: (...args: unknown[]) => void): unknown;
+}
+
+/**
+ * Per-request MCP handler (stateless pattern).
+ *
+ * Auth flows natively via `req.auth` (set by `mcpAuth` middleware) →
+ * the MCP SDK transport propagates it as `extra.authInfo` to tool callbacks.
+ * Uses narrow request/response interfaces so test fakes satisfy the types
+ * structurally without assertions (ADR-078).
  *
  * @see ADR-112, MCP SDK simpleStatelessStreamableHttp.ts
  */
 export function createMcpHandler(
   mcpFactory: McpServerFactory,
   logger?: Logger,
-): (req: express.Request, res: express.Response) => Promise<void> {
-  return async (req: express.Request, res: express.Response) => {
-    const correlationId = extractCorrelationId(res);
-    const log = logger && correlationId ? createChildLogger(logger, correlationId) : undefined;
+): (req: McpHandlerRequest, res: McpHandlerResponse) => Promise<void> {
+  return async (req: McpHandlerRequest, res: McpHandlerResponse) => {
+    const correlationId: unknown = res.locals?.['correlationId'];
+    const log =
+      logger && typeof correlationId === 'string'
+        ? createChildLogger(logger, correlationId)
+        : undefined;
     const mcpMethod = extractMcpMethod(req.body);
     log?.debug('MCP request received', { method: req.method, path: req.path, mcpMethod });
 
-    // Create fresh server + transport for this request (stateless mode)
     const { server, transport } = mcpFactory();
     await server.connect(transport);
-    const mcpRequest = createMcpRequest(req);
 
-    await setRequestContext(req, async () => {
-      await transport.handleRequest(mcpRequest, res, req.body);
-    });
+    await transport.handleRequest(req, res, req.body);
 
-    // Clean up per-request resources after the response completes
+    // Clean up per-request resources after the response completes.
+    // Defence-in-depth: clear auth data from the request object.
     res.on('close', () => {
-      Promise.resolve()
-        .then(() => transport.close())
-        .then(() => server.close())
-        .catch((err: unknown) => {
-          logger?.error('MCP per-request cleanup failed', { error: err });
-        });
+      req.auth = undefined;
+      void Promise.allSettled([transport.close(), server.close()]).then((results) => {
+        for (const result of results) {
+          if (result.status === 'rejected') {
+            const error: unknown = result.reason;
+            log?.error('MCP per-request cleanup failed', { error });
+          }
+        }
+      });
     });
 
     log?.debug('MCP request completed', { statusCode: res.statusCode, mcpMethod });

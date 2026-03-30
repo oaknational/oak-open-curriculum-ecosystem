@@ -7,7 +7,6 @@
  * Usage: pnpm benchmark:lessons --all | --subject X --phase Y [--verbose]
  *
  * @see benchmark-main.ts - Core logic with dependency injection
- * @see benchmark-test-harness.ts - Test version with fake
  */
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';

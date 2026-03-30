@@ -909,7 +909,7 @@ Note: `@clerk/mcp-tools@0.3.1` generates path-qualified PRM URLs (e.g., `/.well-
 
 1. **`types.ts`**: Type definitions including Express `Request` augmentation via declaration merging
 2. **`get-prm-url.ts`**: Path-qualified PRM URL generation per RFC 9728 Section 3.1
-3. **`verify-clerk-token.ts`**: Pure function to convert Clerk's `MachineAuthObject` to MCP SDK's `AuthInfo` structure
+3. **`verifyClerkToken`** (from `@clerk/mcp-tools/server`): Pure function to convert Clerk's `MachineAuthObject` to MCP SDK's `AuthInfo` structure (adopted per ADR-142)
 4. **`mcp-auth.ts`**: Generic MCP authentication middleware using `getPRMUrl`
 5. **`mcp-auth-clerk.ts`**: Clerk-specific integration wrapping the generic middleware
 6. **`index.ts`**: Clean public API boundary exporting only `mcpAuthClerk`

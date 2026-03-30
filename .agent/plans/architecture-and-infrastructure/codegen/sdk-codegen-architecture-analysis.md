@@ -213,20 +213,23 @@ produce static data files.
 
 ## 4. Duplication Inventory
 
-### 4.1 Generated Data (TWO COPIES)
+> **Update 2026-03-29**: The duplication described in 4.1 was resolved
+> by the vocab-gen consolidation (commit cf3ffaef) and the JSON loader
+> migration (commit d85b4285). The `src/mcp/` copies were removed;
+> vocab-gen now writes directly to `src/generated/vocab/`. Large datasets
+> use the JSON loader pattern (`data.json` + `types.ts` + `index.ts`
+> directories). See ADR-086 for the current architecture.
 
-| File | Lines | Location A (`src/mcp/`) | Location B (`src/generated/vocab/`) |
-|------|-------|------------------------|-------------------------------------|
-| vocabulary-graph-data.ts | 113,233 | ✅ vocab-gen writes here | ✅ barrel imports from here |
-| misconception-graph-data.ts | 121,776 | ✅ | ✅ |
-| nc-coverage-graph-data.ts | 56,881 | ✅ | ✅ |
-| prerequisite-graph-data.ts | 46,320 | ✅ | ✅ |
-| thread-progression-data.ts | 5,324 | ✅ | ✅ |
-| definition-synonyms.ts | 453 | ✅ | ✅ |
-| **Total duplicated** | **~344,000** | | |
+### 4.1 Generated Data (RESOLVED — previously TWO COPIES)
 
-Files are identical or near-identical. The `src/mcp/` copy is the pipeline output;
-the `src/generated/vocab/` copy is what the barrel imports. No mechanism connects them.
+| Dataset | Current Format | Location |
+|---------|---------------|----------|
+| vocabulary-graph | JSON loader directory | `src/generated/vocab/vocabulary-graph/` |
+| misconception-graph | JSON loader directory | `src/generated/vocab/misconception-graph/` |
+| nc-coverage-graph | JSON loader directory | `src/generated/vocab/nc-coverage-graph/` |
+| prerequisite-graph | JSON loader directory | `src/generated/vocab/prerequisite-graph/` |
+| thread-progression-data.ts | `as const` TS file | `src/generated/vocab/` |
+| definition-synonyms.ts | `as const` TS file | `src/generated/vocab/synonyms/` |
 
 ### 4.2 Generator Code (TWO COPIES)
 

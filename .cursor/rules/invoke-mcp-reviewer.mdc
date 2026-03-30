@@ -1,0 +1,8 @@
+---
+description: Invoke mcp-reviewer when changes touch MCP protocol, MCP Apps Extension widgets, MCP tool/resource/prompt definitions, transport/session patterns, or MCP Apps migration work.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/invoke-mcp-reviewer.md`.
+
+In Cursor, use the Task tool with `readonly: true` and `subagent_type: mcp-reviewer`.

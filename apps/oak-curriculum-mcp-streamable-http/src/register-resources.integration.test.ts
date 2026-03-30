@@ -2,101 +2,231 @@
  * Integration tests for MCP resource registration.
  *
  * These tests verify that widget and documentation resources are registered
- * with the correct metadata, including OpenAI Apps SDK _meta fields required
- * for production deployment.
- *
- * @see https://developers.openai.com/apps-sdk/reference
+ * with the correct MCP Apps metadata and content.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { ResourceMetadata } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type {
+  ResourceTemplate,
+  ResourceMetadata,
+  ReadResourceCallback,
+  ReadResourceTemplateCallback,
+  RegisteredResource,
+  RegisteredResourceTemplate,
+} from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { McpUiReadResourceResult } from '@modelcontextprotocol/ext-apps/server';
 import { DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import {
   registerWidgetResource,
   registerDocumentationResources,
   registerCurriculumModelResource,
   registerAllResources,
-  type ResourceRegistrar,
 } from './register-resources.js';
-
-interface WidgetCSP {
-  connect_domains?: readonly string[];
-  resource_domains?: readonly string[];
-}
-
-interface WidgetContentMeta {
-  'openai/widgetCSP'?: WidgetCSP;
-  'openai/widgetPrefersBorder'?: boolean;
-  'openai/widgetDescription'?: string;
-  'openai/widgetDomain'?: string;
-}
-
-interface CapturedResourceContent {
-  uri?: string;
-  mimeType: string;
-  text?: string;
-  _meta?: WidgetContentMeta;
-}
-
-interface CapturedResource {
-  name: string;
-  uri: string;
-  metadata: ResourceMetadata;
-  contents: readonly CapturedResourceContent[];
-}
-
-interface CapturedRegistrationCall {
-  name: string;
-  uri: string;
-  metadata: ResourceMetadata;
-}
 
 /**
  * Creates a fake server and map to capture registered resources for assertions.
  *
- * MCP SDK's registerResource has overloaded signatures (URL templates, return
- * RegisteredResource). This mock captures only the (name, uri, metadata, handler)
- * overload and calls the handler synchronously. Using untyped vi.fn() so the
- * mock is assignable to the overloaded McpServer.registerResource without casts.
+ * The fake delegates to a backing `McpServer` so the overloaded SDK signature
+ * stays intact while tests capture the registration inputs and read callback
+ * output as plain data.
  */
 function createMockServer(): {
-  server: ResourceRegistrar;
-  registeredResources: Map<string, CapturedResource>;
-  registrationCalls: CapturedRegistrationCall[];
+  server: Pick<McpServer, 'registerResource'>;
+  registeredResources: Map<
+    string,
+    {
+      name: string;
+      uri: string;
+      metadata: ResourceMetadata;
+      contents: McpUiReadResourceResult['contents'];
+    }
+  >;
+  registrationCalls: { name: string; uri: string; metadata: ResourceMetadata }[];
 } {
-  const registeredResources = new Map<string, CapturedResource>();
-  const registrationCalls: CapturedRegistrationCall[] = [];
-  const registerResource = vi.fn();
-  registerResource.mockImplementation(
-    (
-      name: string,
-      uri: string,
-      metadata: ResourceMetadata,
-      handler: () => { contents: readonly CapturedResourceContent[] },
-    ) => {
-      const result = handler();
-      registrationCalls.push({ name, uri, metadata });
-      registeredResources.set(uri, { name, uri, metadata, contents: result.contents });
+  const registeredResources = new Map<
+    string,
+    {
+      name: string;
+      uri: string;
+      metadata: ResourceMetadata;
+      contents: McpUiReadResourceResult['contents'];
+    }
+  >();
+  const registrationCalls: { name: string; uri: string; metadata: ResourceMetadata }[] = [];
+  const backingServer = new McpServer({ name: 'test-server', version: '1.0.0' });
+  const originalRegisterResource = backingServer.registerResource.bind(backingServer);
+  const handlerExtra: Parameters<ReadResourceCallback>[1] = {
+    signal: AbortSignal.abort(),
+    requestId: 'test-request',
+    async sendNotification() {
+      return undefined;
     },
-  );
-  const server: ResourceRegistrar = { registerResource };
+    async sendRequest() {
+      throw new Error('sendRequest is not supported in this test fake');
+    },
+  };
+  function registerResource(
+    name: string,
+    uriOrTemplate: string,
+    metadata: ResourceMetadata,
+    readCallback: ReadResourceCallback,
+  ): RegisteredResource;
+  function registerResource(
+    name: string,
+    uriOrTemplate: ResourceTemplate,
+    metadata: ResourceMetadata,
+    readCallback: ReadResourceTemplateCallback,
+  ): RegisteredResourceTemplate;
+  function registerResource(
+    ...args:
+      | [
+          name: string,
+          uriOrTemplate: string,
+          metadata: ResourceMetadata,
+          readCallback: ReadResourceCallback,
+        ]
+      | [
+          name: string,
+          uriOrTemplate: ResourceTemplate,
+          metadata: ResourceMetadata,
+          readCallback: ReadResourceTemplateCallback,
+        ]
+  ): RegisteredResource | RegisteredResourceTemplate {
+    if (isStaticResourceRegistration(args)) {
+      const result = args[3](new URL(args[1]), handlerExtra);
+
+      if (result instanceof Promise) {
+        throw new Error('Async resource handlers are not supported in this test fake');
+      }
+
+      if (!hasResourceContents(result)) {
+        throw new Error('Expected resource callback to return a contents array');
+      }
+
+      registrationCalls.push({ name: args[0], uri: args[1], metadata: args[2] });
+      registeredResources.set(args[1], {
+        name: args[0],
+        uri: args[1],
+        metadata: args[2],
+        contents: result.contents,
+      });
+
+      return originalRegisterResource(args[0], args[1], args[2], args[3]);
+    }
+
+    return originalRegisterResource(args[0], args[1], args[2], args[3]);
+  }
+
+  const server = { registerResource };
+
   return { server, registeredResources, registrationCalls };
 }
 
-function getWidgetUri(registeredResources: Map<string, CapturedResource>): string {
+function hasResourceContents(value: unknown): value is {
+  contents: McpUiReadResourceResult['contents'];
+} {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'contents' in value &&
+    Array.isArray(value.contents)
+  );
+}
+
+function isStaticResourceRegistration(
+  args:
+    | [
+        name: string,
+        uriOrTemplate: string,
+        metadata: ResourceMetadata,
+        readCallback: ReadResourceCallback,
+      ]
+    | [
+        name: string,
+        uriOrTemplate: ResourceTemplate,
+        metadata: ResourceMetadata,
+        readCallback: ReadResourceTemplateCallback,
+      ],
+): args is [
+  name: string,
+  uriOrTemplate: string,
+  metadata: ResourceMetadata,
+  readCallback: ReadResourceCallback,
+] {
+  return typeof args[1] === 'string';
+}
+
+function getTextContent(content: McpUiReadResourceResult['contents'][number] | undefined): string {
+  if (!content || !('text' in content) || typeof content.text !== 'string') {
+    throw new Error('Expected text resource content');
+  }
+
+  return content.text;
+}
+
+function getWidgetUi(
+  resource:
+    | {
+        name: string;
+        uri: string;
+        metadata: ResourceMetadata;
+        contents: McpUiReadResourceResult['contents'];
+      }
+    | undefined,
+): {
+  csp?: {
+    connectDomains?: readonly string[];
+    resourceDomains?: readonly string[];
+    frameDomains?: readonly string[];
+  };
+  domain?: string;
+  prefersBorder?: boolean;
+} {
+  const meta = resource?.contents[0]?._meta;
+  if (!meta || typeof meta !== 'object' || !('ui' in meta)) {
+    throw new Error('Expected widget _meta.ui');
+  }
+
+  const ui = meta.ui;
+  if (!ui || typeof ui !== 'object') {
+    throw new Error('Expected widget _meta.ui to be an object');
+  }
+
+  return ui;
+}
+
+function getWidgetUri(
+  registeredResources: Map<
+    string,
+    {
+      name: string;
+      uri: string;
+      metadata: ResourceMetadata;
+      contents: McpUiReadResourceResult['contents'];
+    }
+  >,
+): string {
   const widgetEntry = Array.from(registeredResources.entries()).find(
     ([, resource]) => resource.name === 'oak-json-viewer',
   );
   if (!widgetEntry) {
     throw new Error('Widget resource not found in registered resources');
   }
-  const [widgetUri] = widgetEntry;
-  return widgetUri;
+  return widgetEntry[0];
 }
 
 function expectAllDocumentationResourcesRegistered(
-  registeredResources: Map<string, CapturedResource>,
-  registrationCalls: readonly CapturedRegistrationCall[],
+  registeredResources: Map<
+    string,
+    {
+      name: string;
+      uri: string;
+      metadata: ResourceMetadata;
+      contents: McpUiReadResourceResult['contents'];
+    }
+  >,
+  registrationCalls: readonly { name: string; uri: string; metadata: ResourceMetadata }[],
 ): void {
   expect(DOCUMENTATION_RESOURCES.length).toBeGreaterThan(0);
   expect(registrationCalls).toHaveLength(DOCUMENTATION_RESOURCES.length);
@@ -108,18 +238,14 @@ function expectAllDocumentationResourcesRegistered(
   expect(calledUris).toStrictEqual(expectedUris);
 }
 
-function expectJsonContent(content: CapturedResourceContent | undefined): void {
+function expectJsonContent(content: McpUiReadResourceResult['contents'][number] | undefined): void {
   expect(content).toBeDefined();
   if (!content) {
     throw new Error('Expected resource content to be defined');
   }
 
   expect(content.mimeType).toBe('application/json');
-  const jsonText = content.text;
-  expect(jsonText).toBeDefined();
-  if (!jsonText) {
-    throw new Error('Expected JSON content text to be defined');
-  }
+  const jsonText = getTextContent(content);
 
   expect(jsonText.trim().length).toBeGreaterThan(0);
   expect(() => {
@@ -128,8 +254,16 @@ function expectJsonContent(content: CapturedResourceContent | undefined): void {
 }
 
 describe('registerWidgetResource', () => {
-  let server: ResourceRegistrar;
-  let registeredResources: Map<string, CapturedResource>;
+  let server: Pick<McpServer, 'registerResource'>;
+  let registeredResources: Map<
+    string,
+    {
+      name: string;
+      uri: string;
+      metadata: ResourceMetadata;
+      contents: McpUiReadResourceResult['contents'];
+    }
+  >;
 
   beforeEach(() => {
     const mock = createMockServer();
@@ -137,26 +271,26 @@ describe('registerWidgetResource', () => {
     registeredResources = mock.registeredResources;
   });
 
-  it('includes text/html+skybridge MIME type', () => {
+  it('includes the MCP Apps MIME type', () => {
     registerWidgetResource(server);
 
     const widgetUri = getWidgetUri(registeredResources);
     const resource = registeredResources.get(widgetUri);
     expect(resource).toBeDefined();
-    expect(resource?.contents[0]?.mimeType).toBe('text/html+skybridge');
+    expect(resource?.contents[0]?.mimeType).toBe('text/html;profile=mcp-app');
   });
 
-  describe('OpenAI Apps SDK _meta fields (production requirements)', () => {
-    it('includes openai/widgetCSP in resource contents _meta', () => {
+  describe('MCP Apps _meta.ui fields', () => {
+    it('includes ui.csp in resource contents _meta', () => {
       registerWidgetResource(server);
 
       const widgetUri = getWidgetUri(registeredResources);
       const resource = registeredResources.get(widgetUri);
       expect(resource).toBeDefined();
-      const meta = resource?.contents[0]?._meta;
+      const ui = getWidgetUi(resource);
 
-      expect(meta).toBeDefined();
-      expect(meta?.['openai/widgetCSP']).toBeDefined();
+      expect(ui).toBeDefined();
+      expect(ui?.csp).toBeDefined();
     });
 
     it('CSP allows Google Fonts domains for resource loading', () => {
@@ -165,92 +299,59 @@ describe('registerWidgetResource', () => {
       const widgetUri = getWidgetUri(registeredResources);
       const resource = registeredResources.get(widgetUri);
       expect(resource).toBeDefined();
-      const csp = resource?.contents[0]?._meta?.['openai/widgetCSP'];
+      const csp = getWidgetUi(resource).csp;
 
-      expect(csp?.resource_domains).toContain('https://fonts.googleapis.com');
-      expect(csp?.resource_domains).toContain('https://fonts.gstatic.com');
+      expect(csp?.resourceDomains).toContain('https://fonts.googleapis.com');
+      expect(csp?.resourceDomains).toContain('https://fonts.gstatic.com');
     });
 
-    it('CSP allows Oak domains for connections and resources', () => {
+    it('omits connectDomains when widget data flows through the MCP bridge', () => {
       registerWidgetResource(server);
 
       const widgetUri = getWidgetUri(registeredResources);
       const resource = registeredResources.get(widgetUri);
       expect(resource).toBeDefined();
-      const csp = resource?.contents[0]?._meta?.['openai/widgetCSP'];
+      const csp = getWidgetUi(resource).csp;
 
-      expect(csp?.connect_domains).toContain('https://*.thenational.academy');
-      expect(csp?.resource_domains).toContain('https://*.thenational.academy');
+      expect(csp?.connectDomains).toBeUndefined();
     });
 
-    it('includes openai/widgetPrefersBorder: true', () => {
+    it('omits domain when widget does not fetch cross-origin data', () => {
       registerWidgetResource(server);
 
       const widgetUri = getWidgetUri(registeredResources);
       const resource = registeredResources.get(widgetUri);
       expect(resource).toBeDefined();
-      const meta = resource?.contents[0]?._meta;
+      const ui = getWidgetUi(resource);
 
-      expect(meta?.['openai/widgetPrefersBorder']).toBe(true);
+      expect(ui?.domain).toBeUndefined();
     });
 
-    it('widgetDescription is meaningful and not too long (≤200 chars)', () => {
+    it('includes prefersBorder: true', () => {
       registerWidgetResource(server);
 
       const widgetUri = getWidgetUri(registeredResources);
       const resource = registeredResources.get(widgetUri);
       expect(resource).toBeDefined();
-      const description = resource?.contents[0]?._meta?.['openai/widgetDescription'];
+      const ui = getWidgetUi(resource);
 
-      expect(description).toBeDefined();
-      expect(description?.length).toBeGreaterThan(20);
-      expect(description?.length).toBeLessThanOrEqual(200);
-      expect(description).toMatch(/oak|curriculum|lesson/i);
-    });
-
-    it('widgetDescription includes orientation guidance', () => {
-      registerWidgetResource(server);
-
-      const widgetUri = getWidgetUri(registeredResources);
-      const resource = registeredResources.get(widgetUri);
-      expect(resource).toBeDefined();
-      const description = resource?.contents[0]?._meta?.['openai/widgetDescription'];
-
-      expect(description).toBeDefined();
-      expect(description).toMatch(/get-curriculum-model/i);
-    });
-
-    it('includes openai/widgetDomain when widgetDomain option is provided', () => {
-      registerWidgetResource(server, {
-        widgetDomain: 'https://curriculum-mcp-alpha.oaknational.dev',
-      });
-
-      const widgetUri = getWidgetUri(registeredResources);
-      const resource = registeredResources.get(widgetUri);
-      expect(resource).toBeDefined();
-      const meta = resource?.contents[0]?._meta;
-
-      expect(meta?.['openai/widgetDomain']).toBe('https://curriculum-mcp-alpha.oaknational.dev');
-    });
-
-    it('omits openai/widgetDomain when widgetDomain option is not provided', () => {
-      registerWidgetResource(server);
-
-      const widgetUri = getWidgetUri(registeredResources);
-      const resource = registeredResources.get(widgetUri);
-      expect(resource).toBeDefined();
-      const meta = resource?.contents[0]?._meta;
-
-      expect(meta).toBeDefined();
-      expect(meta?.['openai/widgetDomain']).toBeUndefined();
+      expect(ui?.prefersBorder).toBe(true);
     });
   });
 });
 
 describe('registerDocumentationResources', () => {
-  let server: ResourceRegistrar;
-  let registeredResources: Map<string, CapturedResource>;
-  let registrationCalls: CapturedRegistrationCall[];
+  let server: Pick<McpServer, 'registerResource'>;
+  let registeredResources: Map<
+    string,
+    {
+      name: string;
+      uri: string;
+      metadata: ResourceMetadata;
+      contents: McpUiReadResourceResult['contents'];
+    }
+  >;
+  let registrationCalls: { name: string; uri: string; metadata: ResourceMetadata }[];
 
   beforeEach(() => {
     const mock = createMockServer();
@@ -296,7 +397,7 @@ describe('registerDocumentationResources', () => {
       const resource = registeredResources.get(documentationResource.uri);
       expect(resource).toBeDefined();
 
-      const contentText = resource?.contents[0]?.text;
+      const contentText = getTextContent(resource?.contents[0]);
       expect(contentText).toBeDefined();
       expect(contentText?.trim().length).toBeGreaterThan(0);
       expect(contentText).not.toContain('Content not found');
@@ -305,8 +406,16 @@ describe('registerDocumentationResources', () => {
 });
 
 describe('registerCurriculumModelResource forwards annotations', () => {
-  let server: ResourceRegistrar;
-  let registeredResources: Map<string, CapturedResource>;
+  let server: Pick<McpServer, 'registerResource'>;
+  let registeredResources: Map<
+    string,
+    {
+      name: string;
+      uri: string;
+      metadata: ResourceMetadata;
+      contents: McpUiReadResourceResult['contents'];
+    }
+  >;
 
   beforeEach(() => {
     const mock = createMockServer();
@@ -344,8 +453,16 @@ describe('registerCurriculumModelResource forwards annotations', () => {
 });
 
 describe('registerAllResources excludes ontology resource', () => {
-  let server: ResourceRegistrar;
-  let registeredResources: Map<string, CapturedResource>;
+  let server: Pick<McpServer, 'registerResource'>;
+  let registeredResources: Map<
+    string,
+    {
+      name: string;
+      uri: string;
+      metadata: ResourceMetadata;
+      contents: McpUiReadResourceResult['contents'];
+    }
+  >;
 
   beforeEach(() => {
     const mock = createMockServer();
@@ -385,26 +502,19 @@ describe('registerAllResources excludes ontology resource', () => {
     const widgetResource = registeredResources.get(widgetUri);
     expect(widgetResource).toBeDefined();
   });
-
-  it('forwards widget options to widget resource registration', () => {
-    registerAllResources(server, {
-      widgetDomain: 'https://curriculum-mcp-alpha.oaknational.dev',
-    });
-
-    const widgetUri = getWidgetUri(registeredResources);
-    const widgetResource = registeredResources.get(widgetUri);
-    expect(widgetResource).toBeDefined();
-    const widgetMeta = widgetResource?.contents[0]?._meta;
-    expect(widgetMeta).toBeDefined();
-    expect(widgetMeta?.['openai/widgetDomain']).toBe(
-      'https://curriculum-mcp-alpha.oaknational.dev',
-    );
-  });
 });
 
 describe('registerAllResources registers supplementary data resources', () => {
-  let server: ResourceRegistrar;
-  let registeredResources: Map<string, CapturedResource>;
+  let server: Pick<McpServer, 'registerResource'>;
+  let registeredResources: Map<
+    string,
+    {
+      name: string;
+      uri: string;
+      metadata: ResourceMetadata;
+      contents: McpUiReadResourceResult['contents'];
+    }
+  >;
 
   beforeEach(() => {
     const mock = createMockServer();

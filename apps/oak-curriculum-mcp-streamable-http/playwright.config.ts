@@ -1,7 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/* eslint-disable-next-line no-restricted-syntax -- Playwright config file needs env for test configuration */
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3333';
+/**
+ * Base URL for the local MCP server under test.
+ *
+ * Hardcoded to match the port used by `pnpm dev:observe:noauth`.
+ * No `process.env` access — config files follow the same DI
+ * principle as product code.
+ */
+const baseURL = 'http://localhost:3333';
 
 export default defineConfig({
   timeout: 30_000,
@@ -31,18 +37,8 @@ export default defineConfig({
       testDir: './tests/visual',
       use: {
         ...devices['Desktop Chrome'],
-        channel: 'chrome',
         baseURL,
       },
-    },
-    {
-      name: 'widget',
-      testDir: './tests/widget',
-      use: {
-        ...devices['Desktop Chrome'],
-        channel: 'chrome',
-      },
-      // Widget tests use their own Express test server
     },
   ],
 });

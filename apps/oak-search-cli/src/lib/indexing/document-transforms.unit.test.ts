@@ -169,7 +169,7 @@ describe('createUnitDocument', () => {
         subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
         unitContextMap: emptyContextMap,
       }),
-    ).toThrowError(/Missing canonical URL/);
+    ).toThrow(/Missing canonical URL/);
   });
 
   it('uses lessonsByUnit when provided, overriding summary.unitLessons', () => {
@@ -576,6 +576,6 @@ describe('createRollupDocument', () => {
         subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
         unitContextMap: emptyContextMap,
       }),
-    ).toThrowError(/Missing canonical URL/);
+    ).toThrow(/Missing canonical URL/);
   });
 });

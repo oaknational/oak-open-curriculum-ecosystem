@@ -2,7 +2,7 @@
 
 **Status**: ✅ Milestones 0 and 1 complete. Recovery lane plans are archived; active execution is now narrowed to open production validation findings while pending follow-ons are queued in `current/`.
 **Last Updated**: 2026-03-21
-**Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+**Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/archive/semantic-search.prompt.md)
 **Metrics Authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
 
 ---
@@ -40,10 +40,10 @@ For full milestone definitions: [high-level-plan.md](../high-level-plan.md).
 
 ## Current State (Compact)
 
-- Active plan:
-  - [prod-search-assessment.execution.plan.md](active/prod-search-assessment.execution.plan.md)
-  - F2 closure (archived): [f2-closure-and-p0-ingestion.execution.plan.md](archive/completed/f2-closure-and-p0-ingestion.execution.plan.md)
-  - Findings register (archived): [search-tool-prod-validation-findings-2026-03-15.md](archive/completed/search-tool-prod-validation-findings-2026-03-15.md)
+- No active plans. All archived:
+  - [prod-search-assessment.execution.plan.md](archive/completed/prod-search-assessment.execution.plan.md) — verified in production (2026-03-25)
+  - [f2-closure-and-p0-ingestion.execution.plan.md](archive/completed/f2-closure-and-p0-ingestion.execution.plan.md) — code + re-ingest complete (2026-03-24)
+  - [search-tool-prod-validation-findings-2026-03-15.md](archive/completed/search-tool-prod-validation-findings-2026-03-15.md) — findings register (closed 2026-03-25)
 - Completed authorities archived:
   - [semantic-search-recovery-and-guardrails.execution.plan.md](archive/completed/semantic-search-recovery-and-guardrails.execution.plan.md)
   - [semantic-search-ingest-runbook.md](archive/completed/semantic-search-ingest-runbook.md)
@@ -132,7 +132,7 @@ pnpm smoke:dev:stub
 
 ## Related Documents
 
-1. [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+1. [semantic-search.prompt.md](../../prompts/semantic-search/archive/semantic-search.prompt.md)
 2. [README.md](README.md)
 3. [completed-plans.md](../completed-plans.md)
 4. [search-acceptance-criteria.md](search-acceptance-criteria.md)

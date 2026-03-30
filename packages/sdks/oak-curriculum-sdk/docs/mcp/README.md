@@ -5,6 +5,7 @@ Most MCP tools in this repository are thin, schema‑driven facades over the Oak
 - Conceptually: tools provide an MCP‑friendly interface; the SDK remains the canonical TypeScript API.
 - Types and validators: flow from the same generated sources used by the SDK.
 - Navigation: start in the SDK docs for curated types and functions, then link back here if you want to explore the tool shapes and executor patterns.
+- Primitive boundaries (tools vs resources vs prompts): see `apps/oak-curriculum-mcp-streamable-http/docs/mcp-primitives-intention-and-audience.md`.
 
 ### Start here
 

@@ -1,6 +1,6 @@
 # ADR-046: OpenAI-Compatible Tool Surface in the Streamable HTTP App
 
-Status: Accepted
+Status: Superseded by [ADR-141](141-mcp-apps-standard-primary.md)
 Date: 2025-09-15
 
 ## Context

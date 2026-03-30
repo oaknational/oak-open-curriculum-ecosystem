@@ -56,7 +56,7 @@ describe('formatPipelineResult', () => {
 
   it('formats successful result with all extraction stats', () => {
     const result = createResult({
-      outputFiles: ['prerequisite-graph-data.ts', 'vocabulary-graph-data.ts'],
+      outputFiles: ['prerequisite-graph', 'vocabulary-graph'],
     });
 
     const formatted = formatPipelineResult(result);
