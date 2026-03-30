@@ -40,15 +40,17 @@ git log --oneline --decorate origin/feat/mcp_app..HEAD
 
 ## Active Work
 
-1. **eslint-disable remediation** (~64 directives remain): generators,
-   generated data, logger, test fakes, authored code, miscellaneous.
-   See `eslint-disable-remediation.plan.md` for the full inventory and
-   execution order.
-2. **MCP App Extension Migration** (WS3/WS4 pending): Widget UI is
-   temporarily disabled for merge to main (`WIDGET_TOOL_NAMES` is
-   empty). WS3 (client rewrite to MCP Apps SDK) and WS4 (search UI)
-   are the next work streams.
-   See `sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`.
+1. **CI green for merge** (BLOCKING): Fix Turbo cache invalidation
+   (add `package.json` to build inputs), delete remaining
+   process-spawning E2E tests. See `ci-green-for-merge.plan.md`.
+2. **Build tools workspace extraction**: Move root `scripts/` tests
+   into a proper `build-tools/` workspace. See
+   `build-tools-workspace-extraction.plan.md`.
+3. **eslint-disable remediation** (~64 directives remain): See
+   `eslint-disable-remediation.plan.md`.
+4. **MCP App Extension Migration** (WS3/WS4 pending): Widget UI
+   temporarily disabled for merge. See
+   `sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`.
 
 ## Scope Boundaries (do NOT)
 
