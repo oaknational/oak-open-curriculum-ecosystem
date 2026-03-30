@@ -14,7 +14,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerAllResources, registerPrompts } from './register-resources.js';
-import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
+import { createFakeHttpObservability } from './test-helpers/fakes.js';
 
 /**
  * Minimal recording fake for `ResourceRegistrar` / `McpServer`.

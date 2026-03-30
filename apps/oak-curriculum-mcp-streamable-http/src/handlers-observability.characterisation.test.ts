@@ -15,9 +15,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerHandlers } from './handlers.js';
-import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
-import { createFakeLogger } from './test-helpers/logger-fakes.js';
-import { createFakeSearchRetrieval } from './test-helpers/search-fakes.js';
+import {
+  createFakeHttpObservability,
+  createFakeLogger,
+  createFakeSearchRetrieval,
+} from './test-helpers/fakes.js';
 import type { AuthDisabledRuntimeConfig } from './runtime-config.js';
 
 /**

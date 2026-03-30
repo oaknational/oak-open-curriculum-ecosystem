@@ -12,7 +12,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { createMcpHandler } from './handlers.js';
-import { createFakeHttpObservability } from './test-helpers/observability-fakes.js';
+import { createFakeHttpObservability } from './test-helpers/fakes.js';
 import {
   createFakeResponse,
   createFakeExpressRequest,

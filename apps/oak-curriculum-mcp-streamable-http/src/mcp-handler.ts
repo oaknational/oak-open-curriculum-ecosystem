@@ -83,7 +83,7 @@ export function createMcpHandler(
   logger?: Logger,
 ): (req: McpHandlerRequest, res: McpHandlerResponse) => Promise<void> {
   return async (req: McpHandlerRequest, res: McpHandlerResponse) => {
-    const correlationId: unknown = res.locals?.['correlationId'];
+    const correlationId: unknown = res.locals['correlationId'];
     const log =
       logger && typeof correlationId === 'string'
         ? createChildLogger(logger, correlationId)

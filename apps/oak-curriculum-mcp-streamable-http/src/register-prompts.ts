@@ -76,6 +76,11 @@ function formatPromptResponse(
   };
 }
 
+/** Narrow interface — only `registerPrompt` is used. */
+interface PromptRegistrar {
+  readonly registerPrompt: McpServer['registerPrompt'];
+}
+
 /**
  * Registers MCP prompts for common curriculum workflows.
  *
@@ -93,11 +98,6 @@ function formatPromptResponse(
  * registerPrompts(server);
  * ```
  */
-/** Narrow interface — only `registerPrompt` is used. */
-interface PromptRegistrar {
-  readonly registerPrompt: McpServer['registerPrompt'];
-}
-
 export function registerPrompts(server: PromptRegistrar, observability?: HttpObservability): void {
   const mcpObservation = observability?.createMcpObservationOptions();
 
