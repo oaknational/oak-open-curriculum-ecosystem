@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-03-29
+last_updated: 2026-03-30
 ---
 
 # Session Continuation
@@ -44,12 +44,17 @@ git log --oneline --decorate origin/feat/mcp_app..HEAD
    generated data, logger, test fakes, authored code, miscellaneous.
    See `eslint-disable-remediation.plan.md` for the full inventory and
    execution order.
+2. **MCP App Extension Migration** (WS3/WS4 pending): Widget UI is
+   temporarily disabled for merge to main (`WIDGET_TOOL_NAMES` is
+   empty). WS3 (client rewrite to MCP Apps SDK) and WS4 (search UI)
+   are the next work streams.
+   See `sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`.
 
 ## Scope Boundaries (do NOT)
 
 - Do not reopen the completed CI consolidation (all phases done)
   unless fresh CI evidence proves a regression.
-- Do not modify widget deletion decisions (Phase 2 is settled).
+- Do not re-enable widget UI (`WIDGET_TOOL_NAMES`) until WS3 is ready.
 - Do not open new workstreams outside the active plans' scope.
 - Do not refactor `apps/oak-curriculum-mcp-stdio` — it is outside the
   current workspace graph.

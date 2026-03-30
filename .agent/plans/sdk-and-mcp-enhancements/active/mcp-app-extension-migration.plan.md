@@ -39,7 +39,7 @@ todos:
 # MCP App Extension Migration
 
 **Status**: ACTIVE
-**Last Updated**: 2026-03-26
+**Last Updated**: 2026-03-30
 **Scope**: Full migration from ChatGPT-specific widget coupling to MCP Apps open standard, plus new search UI.
 
 ---
@@ -238,6 +238,12 @@ before WS3 implementation begins.
 - External links work via `ui/open-link` pattern
 
 **Dependencies**: WS1 + WS2 (correct metadata and MIME must be in place).
+
+**Pre-merge state (2026-03-30)**: Widget UI is **temporarily disabled** for
+merge to `main`. `WIDGET_TOOL_NAMES` is empty and `_meta.ui` is removed from
+`search` and `get-curriculum-model` tool definitions. The widget HTML resource
+remains registered (useful for debug). To re-enable: restore tool names in
+`cross-domain-constants.ts` and uncomment `_meta.ui` in both tool definitions.
 
 **Child plan**: To be created before implementation begins, following the WS2
 pattern.

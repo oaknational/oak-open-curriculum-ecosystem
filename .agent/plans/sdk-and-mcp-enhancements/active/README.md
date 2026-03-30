@@ -2,8 +2,8 @@
 
 Executable plans that are in progress now.
 
-- [mcp-app-extension-migration.plan.md](mcp-app-extension-migration.plan.md) — **PRIMARY**: Broad session-anchor plan for migrating from ChatGPT-specific widget coupling to MCP Apps open standard (SEP-1865). Covers OpenAI removal, MCP App Extension implementation, branding, and human-facing search UI.
-- [ws2-app-runtime-migration.plan.md](ws2-app-runtime-migration.plan.md) — **WS2 child plan**: App runtime migration — MIME type, resource registration, CSP, ChatGPT artefact deletion. 7 specialist reviews completed. Ready for implementation.
+- [mcp-app-extension-migration.plan.md](mcp-app-extension-migration.plan.md) — **PRIMARY**: Migration from ChatGPT-specific widget coupling to MCP Apps open standard (SEP-1865). WS1-WS2 complete. Widget UI **temporarily disabled** for merge to main (2026-03-30). WS3 (client rewrite) and WS4 (search UI) pending.
+- [ws2-app-runtime-migration.plan.md](ws2-app-runtime-migration.plan.md) — **WS2 child plan**: ✅ Complete (2026-03-26). App runtime migration with 7 specialist reviews.
 
 Completed and archived:
 
