@@ -14,12 +14,17 @@ last_updated: 2026-03-30
    `.agent/directives/principles.md` — these are authoritative and
    override any conflicting detail in this prompt.
 2. Find the current active plans in
-   `.agent/plans/architecture-and-infrastructure/active/`. The primary
-   active plan is:
+   `.agent/plans/architecture-and-infrastructure/active/`. Priority
+   order:
+   - `ci-green-for-merge.plan.md` — **P0 BLOCKER**: fix Turbo cache
+     invalidation and delete process-spawning E2E tests so PR #70
+     passes CI
+   - `build-tools-workspace-extraction.plan.md` — move root scripts
+     into a proper workspace
    - `eslint-disable-remediation.plan.md` — remove ~64 remaining
-     eslint-disable directives by fixing root causes
-   The CI consolidation plan is complete (all 6 phases done) and ready
-   to archive after branch merge.
+     eslint-disable directives
+   The CI consolidation plan is complete and ready to archive after
+   branch merge.
 3. Re-establish live branch state instead of trusting stale document
    snapshots:
 
