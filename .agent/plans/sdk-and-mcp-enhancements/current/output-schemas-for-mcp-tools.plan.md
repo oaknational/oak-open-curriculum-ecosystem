@@ -234,9 +234,9 @@ allows truthful object unions such as `oneOf` over different
 
 Phases 0-2 of this plan can proceed while the runtime-boundary follow-up is
 queued or in progress. However, Phase 3 must consume the canonical descriptor
-groundwork from `mcp-runtime-boundary-simplification.plan.md` rather than
-extending the current app-owned `listUniversalTools()` / `tools/list` exposure
-seam directly.
+groundwork from `../archive/completed/mcp-runtime-boundary-simplification.plan.md`
+rather than extending the current app-owned `listUniversalTools()` /
+`tools/list` exposure seam directly.
 
 ## Output Shape Strategy
 
@@ -377,9 +377,9 @@ Transport-specific expectation:
 
 Phase gate:
 
-Do not start this phase until Phase 3 of
-`mcp-runtime-boundary-simplification.plan.md` has completed and the canonical
-descriptor / projection surface is available.
+Do not start this phase until the canonical descriptor / projection work from
+`../archive/completed/mcp-runtime-boundary-simplification.plan.md` has been
+grounded and verified in the current branch.
 
 ### Phase 4 — Prove the Contract
 
@@ -407,8 +407,8 @@ Minimum reviewers:
 ## Dependencies and Sequencing
 
 1. Phases 0-2 can begin immediately.
-2. Phase 3 is blocked on Phase 3 of
-   `mcp-runtime-boundary-simplification.plan.md`.
+2. Phase 3 depends on the completed groundwork documented in
+   `../archive/completed/mcp-runtime-boundary-simplification.plan.md`.
 3. If the canonical descriptor surface lands first in the same branch, this plan
    must consume it instead of extending `listUniversalTools()` or an app-owned
    `tools/list` override directly.
@@ -461,6 +461,5 @@ This plan is complete when all of the following are true:
 - [ADR-030: SDK Single Source of Truth](../../../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md)
 - [ADR-031: Generation-Time Extraction](../../../../docs/architecture/architectural-decisions/031-generation-time-extraction.md)
 - [Schema-First Execution Directive](../../../directives/schema-first-execution.md)
-- [MCP Runtime Boundary Simplification](mcp-runtime-boundary-simplification.plan.md)
+- [MCP Runtime Boundary Simplification](../archive/completed/mcp-runtime-boundary-simplification.plan.md)
 - MCP spec: [Tools — Output Schema](https://modelcontextprotocol.io/specification/2025-06-18/server/tools#output-schema)
-- OpenAI Apps SDK: [Tool Results Reference](https://developers.openai.com/apps-sdk/reference#tool-results) (useful as a comparison point for `structuredContent` expectations, not as separate migration scope)

@@ -119,6 +119,9 @@ enough for permanent documentation.
 - Moving plan artefacts is cross-cutting: always grep for
   old paths in `*.ts`, `*.mjs`, `*.json`, not just `*.md`
   (test configs and CLI defaults hardcode plan paths)
+- When researching external documentation, fetch
+  `sitemap.xml`, `llms.txt`, or the docs index first; do
+  not guess URL patterns and burn time on avoidable 404s
 - Session prompts in `.agent/prompts/` should be updated
   at end of each session, not just napkin
 - `process.env.X = value` with trailing space in backticks
@@ -146,6 +149,9 @@ enough for permanent documentation.
 
 - Turbo dependency model: see ADR-065 (items 6–7) for
   overrides, phantom tasks, and `^build` ordering
+- `pnpm qg` is the canonical read-only gate set, but it does
+  not currently include static-analysis sweeps (`pnpm knip`,
+  `pnpm depcruise`) unless a plan explicitly requires them
 
 ## Architecture (Domain-Specific)
 

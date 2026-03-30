@@ -1,19 +1,21 @@
 # Current Plans — Agentic Engineering Enhancements
 
-Strategic source plans that define intent and rationale for roadmap phases.
-These are **not queued execution work** — they serve as reference for the
-atomic execution plans in `active/`. When a new execution plan starts, it
-draws from the relevant source plan here.
+Strategic source plans and queued adjacent capability plans.
+
+These files are not the atomic execution plans in `active/`, but they do
+represent the queue of next strategic/capability work to promote into explicit
+active execution plans when scheduled.
 
 ## Source Plans
 
 | Source Plan | Serves | Status |
 |---|---|---|
-| [hallucination-and-evidence-guard-adoption.plan.md](hallucination-and-evidence-guard-adoption.plan.md) | Phases 1 & 2 (hallucination guarding + evidence-based claims) | Reference |
-| [architectural-enforcement-adoption.plan.md](architectural-enforcement-adoption.plan.md) | Phase 3 (architectural enforcement) | Reference |
-| [mutation-testing-implementation.plan.md](mutation-testing-implementation.plan.md) | Phase 5 (mutation testing) | Reference |
-| [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md) | Adjacent: ES specialist (✅ complete) | Reference |
-| [harness-concepts-adoption.plan.md](harness-concepts-adoption.plan.md) | Adjacent: HC-0 baseline metrics | Reference |
+| [hallucination-and-evidence-guard-adoption.plan.md](hallucination-and-evidence-guard-adoption.plan.md) | Phases 1 & 2 (hallucination guarding + evidence-based claims) | REFERENCE |
+| [architectural-enforcement-adoption.plan.md](architectural-enforcement-adoption.plan.md) | Phase 3 (architectural enforcement) | REFERENCE |
+| [mutation-testing-implementation.plan.md](mutation-testing-implementation.plan.md) | Phase 5 (mutation testing) | REFERENCE |
+| [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md) | Adjacent: ES specialist (✅ complete) | REFERENCE |
+| [harness-concepts-adoption.plan.md](harness-concepts-adoption.plan.md) | Adjacent: HC-0 baseline metrics | REFERENCE |
+| [mcp-specialist-upgrade.plan.md](mcp-specialist-upgrade.plan.md) | Adjacent: MCP specialist upgrade (ADR-129 triplet hardening) | QUEUED |
 
 Strategic context: [roadmap.md](../roadmap.md)
 

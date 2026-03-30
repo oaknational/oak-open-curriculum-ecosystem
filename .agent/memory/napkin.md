@@ -1,3 +1,56 @@
+## Session 2026-03-30 — WS3 clean-break plan tightening
+
+### What changed
+
+- Tightened the MCP Apps session prompt to remain operational-only while making
+  the clean-break invariant explicit.
+- Updated the MCP Apps roadmap and umbrella plan to reinforce the full
+  replacement direction and user-search/search split without restating
+  directives across layers.
+- Tightened the WS3 child plan with explicit clean-break execution guardrails:
+  metadata-driven app-only visibility, RED/GREEN evidence expectations,
+  replacement-test-before-deletion sequencing, rename blast-radius checklist,
+  and canonical runtime contamination-check single source of truth.
+- Added missing queued plans to the SDK+MCP `current/README.md` index.
+
+### Patterns to remember
+
+- Keep prompt files operational-only; keep implementation authority in executable
+  plans to prevent hierarchy drift.
+- Use one canonical contamination-check command in one authoritative location
+  and reference it elsewhere.
+- For identity renames (resource slug, URI constants), maintain an explicit
+  blast-radius checklist so codegen/runtime/tests/docs move together.
+
+## Session 2026-03-30 — MCP Apps clean-break planning reset
+
+### What changed
+
+- Rewrote the MCP Apps session prompt, active umbrella plan, active WS3 child
+  plan, collection indexes, and widget-rendering doc to treat the remaining UI
+  work as a total replacement.
+- Removed stale execution guidance that still framed the widget as something to
+  convert or preserve.
+- Updated stale plan references after the runtime-boundary simplification work
+  moved to `archive/completed/`.
+- Reviewed repo-specific Claude memory during consolidation; it did not contain
+  any additional MCP Apps guidance that was not already captured in the active
+  clean-break plans or existing directives.
+- Promoted a cross-platform doc-research rule from Claude-only memory into
+  `distilled.md`: start from `sitemap.xml`, `llms.txt`, or a docs index instead
+  of guessing external documentation URLs.
+- For live MCP Apps planning/docs, keep explicit prohibitions against banned
+  legacy surfaces, but remove historical narrative framing from normative docs.
+
+### Durable guidance
+
+- For Oak WS3, OpenAI-era widget docs and host-specific extension material are
+  historical context only, not architecture authority.
+- The live implementation model is the MCP Apps standard plus
+  `@modelcontextprotocol/ext-apps`, with React as the UI framework.
+- Treat any surviving OpenAI-era runtime code, preview tooling, or normative
+  guidance as contamination to remove, not as scaffolding to adapt.
+
 ## Session 2026-03-29 — Plan/prompt reduction for CI remediation workstream
 
 ### What changed
@@ -330,3 +383,79 @@ directory structure and initial configurations, and wires up the
 quality gates. The Practice's plasmid exchange mechanism already handles
 *importing* into an existing repo — scaffolding would be the *genesis*
 equivalent.
+
+## Session 2026-03-30 — MCP migration docs hardening and reviewer-upgrade promotion
+
+### What Was Done
+
+- Tightened MCP migration prompt and plans to include explicit canonicality
+  gates (`Canonical Compliance Checklist`) and expanded contamination checks.
+- Added stronger cross-plan links between WS3, C8 auth follow-ons, and queued
+  current plans.
+- Removed `mcp-reviewer-upgrade` from the MCP product umbrella todo list to
+  keep product/runtime scope separate from reviewer-capability infrastructure.
+- Promoted MCP reviewer-upgrade strategic plan from
+  `agentic-engineering-enhancements/future/` to `current/` and updated all
+  references across both collections.
+- Fixed markdownlint issues in
+  `current/auth-boundary-type-safety.plan.md` (MD032 blank lines around lists).
+
+### Patterns to Remember
+
+- If a work item is capability-infrastructure (reviewer/skill/rule triplet),
+  track it in the agentic-engineering collection and cross-link from product
+  collections instead of duplicating ownership.
+- When moving plan artefacts between `future/` and `current/`, always update:
+  collection README table, `current/README.md`, roadmap adjacent section, and
+  any external cross-collection references.
+- Canonicality enforcement is clearer when there is one explicit checklist
+  section in the active execution plan rather than diffused prose across docs.
+
+### Follow-up reviewer integration
+
+- Reviewer findings highlighted contradictions between `current/` semantics,
+  MCP specialist plan status text, and "required vs non-blocking" phrasing for
+  cross-collection dependencies.
+- Resolved by: making `mcp-specialist-upgrade` explicitly `IN PROGRESS` with
+  completed/remaining sections; aligning `current/` definitions across the
+  collection docs; setting MCP specialist dependency as non-blocking parallel
+  quality work in SDK migration docs; and de-duplicating roadmap execution prose.
+
+### Style harmonisation pass
+
+- Normalised status vocabulary to uppercase tokens in the affected current and
+  roadmap surfaces (`REFERENCE`, `QUEUED`, `PLANNED`, `IN PROGRESS`) to reduce
+  visual drift and make plan scanning faster.
+
+### Status legend hardening
+
+- Added a canonical `Status Legend` section to both collection README files
+  (`sdk-and-mcp-enhancements`, `agentic-engineering-enhancements`).
+- Added roadmap references to each local `README.md#status-legend` so token
+  semantics have a single obvious source and future edits do not drift.
+
+## Session 2026-03-30 — Consolidate docs pass
+
+### What was checked
+
+- Ran the `jc-consolidate-docs` checklist against live plans/prompts, practice
+  box, ephemeral memory, and fitness functions.
+- Verified `.agent/practice-core/incoming/` is empty.
+- Ran `pnpm practice:fitness:informational` and confirmed PASS across all
+  tracked fitness-doc surfaces.
+- Audited platform memory (`~/.claude/projects/.../memory/`) and platform plans
+  (`~/.claude/plans/`) for cross-platform insights worth canonicalising.
+
+### Documentation promotions
+
+- Promoted one stable workflow insight from platform memory into canonical
+  distilled memory: `pnpm qg` does not include `knip`/`depcruise` unless
+  explicitly required by a plan.
+
+### No-change decisions
+
+- No practice-box integration needed (box empty).
+- No new code-pattern extraction this pass; recent work was consistency and
+  cross-reference hardening rather than a reusable implementation pattern.
+- No experience-file promotion this pass; sampled files remain primarily
+  reflective rather than settled technical guidance.

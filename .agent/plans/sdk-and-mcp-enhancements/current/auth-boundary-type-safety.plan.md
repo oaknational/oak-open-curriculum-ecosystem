@@ -2,31 +2,31 @@
 name: "Auth Boundary Type Safety"
 overview: "Eliminate the req.auth type conflict between Clerk and MCP SDK, add Zod validation at the res.locals boundary, and close the Record<string, unknown> ESLint enforcement gap."
 source_research:
-  - "./mcp-runtime-boundary-simplification.plan.md"
+  - "../archive/completed/mcp-runtime-boundary-simplification.plan.md"
 specialist_reviewer: "type-reviewer"
 todos:
   - id: task-1-remove-global-augmentation
     content: "Task 1: Remove the global Express.Request augmentation for req.auth and fix all consumers."
-    status: done
+    status: completed
   - id: task-1-remediation
     content: "Task 1 remediation: Make auth optional in global augmentation, add explicit type annotation to Object.assign (9-reviewer finding A, 2026-03-28)."
     status: pending
   - id: task-2-zod-validation-at-locals
     content: "Task 2: Add Zod validation at the res.locals.authInfo read site to replace the type assertion."
-    status: done
+    status: completed
   - id: task-2-remediation
     content: "Task 2 remediation: Replace .loose() with .strict(), use safeParse instead of parse, extract to shared module (9-reviewer findings B+D+E, 2026-03-28)."
     status: pending
   - id: task-3-eslint-record-unknown
     content: "Task 3: Add ESLint rule to ban Record<string, unknown> in eslint-plugin-standards."
-    status: done
+    status: completed
 isProject: false
 ---
 
 # Auth Boundary Type Safety
 
 **Last Updated**: 2026-03-28
-**Status**: Tasks 1-3 done; Task 1+2 remediations pending (Phase 7 findings A, B, D, E)
+**Status**: Tasks 1-3 completed; Task 1+2 remediations pending (Phase 7 findings A, B, D, E)
 **Scope**: Eliminate type assertions and enforcement gaps identified during
 Phase 6 of the MCP Runtime Boundary Simplification.
 
@@ -70,6 +70,7 @@ Express Request in the app. But `handlers.ts` overwrites `req.auth` with
 incompatible, forcing a `as unknown as` double-cast.
 
 The global augmentation exists because:
+
 1. `test-fixtures/mock-clerk-middleware.ts:52` sets `req.auth = () => ({...})`
 2. `test-fixtures/mock-clerk-middleware.ts:78` reads `req.auth?.()`
 3. `auth-response-helpers.ts:184` has a stale comment referencing it
@@ -165,6 +166,7 @@ propagating the wrong type.
 ### Problem
 
 The `Record<string, unknown>` ban exists in three documents:
+
 - `.agent/directives/principles.md`
 - `docs/governance/typescript-practice.md`
 - `.agent/rules/strict-validation-at-boundary.md`
@@ -175,6 +177,7 @@ But there is no ESLint rule enforcing it. A developer or agent can write
 ### Fix
 
 Add a rule to `packages/core/oak-eslint-plugin-standards/` that flags:
+
 - `Record<string, unknown>`
 - `{ [key: string]: unknown }`
 - `{ [k: string]: unknown }`

@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
 **Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
-**Last Updated**: 2026-03-23
+**Last Updated**: 2026-03-30
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -14,6 +14,9 @@ This roadmap is the strategic phase sequence for the
 
 Strategic source plans remain authoritative for intent/rationale; active plans
 are authoritative for execution tasks.
+
+Status token definitions are standardised in
+[README.md](README.md#status-legend).
 
 Authoritative active execution sources:
 
@@ -93,7 +96,7 @@ Adjacent:
   HC-0: Harness concepts baseline metrics            📋 PLANNED
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 📋 PLANNED
-  MCP+: MCP specialist upgrade (triplet + ext-apps)  📋 PLANNED
+  MCP+: MCP specialist upgrade (triplet + ext-apps)  📋 QUEUED
   EXP:  Express specialist capability                📋 PLANNED
   CYB:  Cyber security specialist capability         📋 PLANNED
   WAS:  Web/API security specialist capability       📋 PLANNED
@@ -228,7 +231,7 @@ Adjacent:
   - require live consultation of official Sentry and OpenTelemetry documentation as primary authority
   - scope includes Sentry SDK integration, OpenTelemetry instrumentation, distributed tracing, error tracking, MCP Insights, alerting, and performance monitoring
   - treat Vercel (Node.js) + `@sentry/node` as the default deployment context
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - third instantiation of the domain specialist triplet pattern (ADR-129)
   - intentionally outside the numbered phase sequence
@@ -240,7 +243,7 @@ Adjacent:
 ### Adjacent — MCP Specialist Upgrade (MCP+)
 
 - Strategic plan:
-  [mcp-specialist-upgrade.plan.md](future/mcp-specialist-upgrade.plan.md)
+  [mcp-specialist-upgrade.plan.md](current/mcp-specialist-upgrade.plan.md)
 - Goal:
   - upgrade existing `mcp-reviewer` from a general reviewer to a full ADR-129
     triplet (add skill, situational rule, live-spec-first doctrine)
@@ -248,7 +251,7 @@ Adjacent:
     preview, iframe/CSP, host-specific behaviour)
   - require live consultation of the MCP specification and ext-apps docs
   - the MCP spec evolves rapidly — agents need current guidance, not cached knowledge
-- Status: 📋 Planned (future/)
+- Status: 📋 QUEUED (current/)
 - Notes:
   - unlike ES/Clerk/Sentry, this upgrades an existing reviewer rather than creating
     from scratch
@@ -267,7 +270,7 @@ Adjacent:
   - scope includes middleware patterns, error handling, routing, req/res typing,
     and Vercel deployment specifics
   - treat Express 5.x on Vercel as the default deployment context
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - fourth instantiation of the domain specialist triplet pattern (ADR-129)
   - intentionally outside the numbered phase sequence
@@ -285,7 +288,7 @@ Adjacent:
     supply-chain posture, secret lifecycle, and cross-system security trade-offs
   - explicitly complements rather than replaces the existing
     `security-reviewer`, which remains the practical default security specialist
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - broad-remit vs narrow-remit is a scope distinction, not a review-depth
@@ -305,7 +308,7 @@ Adjacent:
   - explicitly complements the broad cyber security specialist, the practical
     `security-reviewer`, and framework specialists such as Express, Clerk, and
     MCP
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - narrow-remit does not imply shallow review; this specialist may still need
@@ -323,7 +326,7 @@ Adjacent:
     retention, redaction, and trust posture
   - establish a privacy lens that is distinct from exploitability-focused
     security review
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - broad-remit vs narrow-remit is a scope distinction, not a review-depth
@@ -343,7 +346,7 @@ Adjacent:
     and data-rights surfaces
   - complement both the broad privacy specialist and the narrow web/API
     security specialist
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - narrow-remit does not imply shallow review; this specialist may still need
@@ -369,7 +372,7 @@ Adjacent:
     don't construct"; "env contracts resolve at startup, not at call site"
   - authority source is the README and source of each internal package, not
     external documentation
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - the repo's own avatar — knows every internal package, every pattern,
     every gotcha, and how they compose
@@ -392,7 +395,7 @@ Adjacent:
   - enforce: correct template usage, required sections, phase gates, cross-reference
     maintenance, plan-vs-docs separation
   - authority source is plan templates, collection READMEs, and practice-core docs
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - complements docs-adr-reviewer (which owns ADR content) — this specialist
@@ -412,7 +415,7 @@ Adjacent:
     test-reviewer audits the result AFTER
   - covers the Red-Green-Refactor sequence at every level, anti-patterns
     (vi.mock, vi.stubGlobal, skipped tests), and test-level selection
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - refines and operationalises `.agent/directives/testing-strategy.md`
@@ -439,7 +442,7 @@ Adjacent:
     feel good to use?"
   - AI agent DX is a first-class concern (clear errors, structured output,
     deterministic behaviour)
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - complements OOCE (correctness) and onboarding-reviewer (first-time
@@ -459,7 +462,7 @@ Adjacent:
   - integrate review depth selection (deep vs focused per specialist)
   - add review coverage tracking across a session
   - rename directive, rule, and adapters (coordinated with taxonomy plan)
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - the gateway's role has outgrown its `code-reviewer` name
   - execution shares rename mechanics with the Agent Classification Taxonomy
@@ -478,7 +481,7 @@ Adjacent:
   - eliminates drift between canonical templates and platform adapters
   - reduces new specialist creation from 4–6 files to 1 manifest entry
   - makes the taxonomy rename (WS3) trivial — update manifest, regenerate
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - prerequisite optimisation for the taxonomy rename
   - at 25 specialists × 4 platforms = 100+ adapter files, manual maintenance
@@ -538,7 +541,7 @@ Adjacent:
 - Goal:
   - evaluate harness-engineering concepts (docs freshness, entropy cleanup, quality scoring)
   - capture baseline metrics for adoption candidates
-- Status: 📋 Planned
+- Status: 📋 PLANNED
 - Done when:
   - baseline metrics captured for docs freshness, entropy, and quality scoring
   - adoption/rejection decision recorded for each harness concept
@@ -633,17 +636,10 @@ stable across at least two delivery cycles.
 
 ## Quality Gates
 
-Run from repo root, one at a time:
+Use the canonical repository gate commands from repo root:
 
 ```bash
-pnpm sdk-codegen
-pnpm build
-pnpm type-check
-pnpm lint:fix
-pnpm format:root
-pnpm markdownlint:root
-pnpm test
-pnpm test:e2e
-pnpm test:ui
-pnpm smoke:dev:stub
+pnpm check
+pnpm qg
+pnpm fix
 ```

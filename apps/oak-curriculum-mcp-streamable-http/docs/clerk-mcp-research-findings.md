@@ -1,247 +1,89 @@
-# Clerk MCP OAuth 2.1 Compatibility Research
+# Clerk MCP OAuth 2.1 Compatibility
 
-**Research Date**: 2025-11-20  
+**Research Date**: 20 November 2025  
 **Researcher**: Project Team  
-**Purpose**: Validate Clerk as authorization server for MCP server with ChatGPT integration  
-**Decision**: ✅ **PROCEED** (with verification)
+**Purpose**: Validate Clerk as an authorisation server for Oak's MCP server  
+**Decision**: Proceed, with empirical verification of RFC 8707 resource and
+audience behaviour
 
 ## Executive Summary
 
-Clerk, particularly when used with `@clerk/mcp-tools`, is **confirmed compatible** with MCP authorization requirements and passes the OpenAI checklist for ChatGPT Apps SDK integration. All critical OAuth 2.1 features required by the MCP specification are present and documented.
+Clerk, particularly when used with `@clerk/mcp-tools`, is compatible with the
+OAuth 2.1 and MCP authorisation requirements Oak needs. The critical standards
+surfaces are present: discovery metadata, PKCE, dynamic client registration,
+protected resource metadata, and standard authorisation-server metadata.
 
-**Recommendation**: Proceed with Clerk as the authorization server for the MCP OAuth implementation.
+The only item that still requires implementation-time verification is how the
+resource parameter maps onto token audience claims in practice.
 
 ## Feature Support Matrix
 
-| Feature                        | RFC       | Status                    | Evidence                                        | Notes                                       |
-| ------------------------------ | --------- | ------------------------- | ----------------------------------------------- | ------------------------------------------- |
-| Discovery Metadata             | RFC 8414  | ✅ **VERIFIED**           | @clerk/mcp-tools provides .well-known endpoints | Compliant with OpenID Connect Discovery     |
-| PKCE with S256                 | OAuth 2.1 | ✅ **VERIFIED**           | Documented in Clerk OAuth implementation        | Mandatory for public clients                |
-| Dynamic Client Registration    | RFC 7591  | ✅ **VERIFIED**           | Supported by Clerk OAuth                        | Enables ChatGPT per-user client creation    |
-| Protected Resource Metadata    | RFC 9728  | ✅ **VERIFIED**           | @clerk/mcp-tools provides RFC 9728 support      | Allows resource server metadata publication |
-| Authorization Server Metadata  | RFC 8414  | ✅ **VERIFIED**           | Standard .well-known/openid-configuration       | Includes all required fields                |
-| Resource Parameter (aud claim) | RFC 8707  | ⚠️ **VERIFY EMPIRICALLY** | Not explicitly documented                       | Test in Phase 2.4 implementation            |
+| Feature                             | RFC       | Status             | Notes                                                 |
+| ----------------------------------- | --------- | ------------------ | ----------------------------------------------------- |
+| Discovery metadata                  | RFC 8414  | Verified           | Standard well-known metadata endpoints available      |
+| PKCE with S256                      | OAuth 2.1 | Verified           | Suitable for public-client flows                      |
+| Dynamic client registration         | RFC 7591  | Verified           | Supports client-registration workflows where required |
+| Protected resource metadata         | RFC 9728  | Verified           | Supported through MCP-oriented helpers                |
+| Authorisation-server metadata       | RFC 8414  | Verified           | Standard metadata surface available                   |
+| Resource parameter / audience claim | RFC 8707  | Verify empirically | Confirm exact claim behaviour during implementation   |
 
-## Detailed Findings
+## Findings
 
-### 1. Discovery Metadata ✅
+### Discovery metadata
 
-**Finding**: Clerk provides standards-compliant OAuth authorization server metadata.
+Clerk exposes standard discovery metadata and aligns with the well-known
+authorisation-server metadata model expected by MCP-capable OAuth clients.
 
-**Evidence**:
+### PKCE
 
-- `@clerk/mcp-tools` package is specifically designed for MCP integration
-- Exposes `.well-known/openid-configuration` endpoint
-- Includes all required OpenID Connect Discovery fields
+Clerk supports PKCE with S256, which is mandatory for secure public-client
+authorisation-code flows.
 
-**Impact**: ChatGPT can discover Clerk's endpoints and capabilities automatically.
+### Dynamic client registration
 
-### 2. PKCE with S256 ✅
+Clerk can support dynamic client-registration workflows, which keeps Oak
+compatible with MCP clients that create dedicated OAuth clients per
+connection.
 
-**Finding**: Clerk supports Proof Key for Code Exchange with SHA-256 code challenge method.
+### Protected resource metadata
 
-**Evidence**:
+`@clerk/mcp-tools` provides the pieces needed for protected resource metadata,
+so the MCP server can publish the metadata documents that clients expect.
 
-- Documented in Clerk's OAuth implementation
-- Passes OpenAI's MCP authorization checklist
+### Resource parameter behaviour
 
-**Impact**: Meets mandatory MCP security requirement. ChatGPT will accept and complete the OAuth flow.
+The remaining open question is not whether tokens are valid, but how the
+resource parameter is reflected in token claims in practice. Oak should verify
+that explicitly and document the observed behaviour in code and tests.
 
-### 3. Dynamic Client Registration (DCR) ✅
+## Implementation Guidance
 
-**Finding**: Clerk supports RFC 7591 Dynamic Client Registration.
+### Runtime
 
-**Evidence**:
+1. Use Clerk's supported server-side integration points already present in the
+   app
+2. Keep the MCP auth boundary explicit and testable
+3. Document any provider-specific behaviour at the boundary where it matters
 
-- @clerk/mcp-tools is designed to support DCR
-- Passes OpenAI's MCP authorization checklist
-- Clerk OAuth implementation includes client registration capabilities
+### Verification
 
-**Impact**: ChatGPT can automatically register as an OAuth client for each user/connector without manual pre-configuration.
+1. Exercise an OAuth flow using a concrete `resource` value
+2. Inspect the resulting token claims
+3. Confirm Oak's audience validation matches the observed contract
+4. Encode that behaviour in tests
 
-### 4. Protected Resource Metadata ✅
+## Testing Expectations
 
-**Finding**: Clerk and @clerk/mcp-tools support RFC 9728 protected resource metadata.
+Minimum validation for this area:
 
-**Evidence**:
-
-- @clerk/mcp-tools provides helpers for generating protected resource metadata
-- Designed specifically for MCP server use case
-
-**Impact**: MCP server can publish metadata at `/.well-known/oauth-protected-resource` that ChatGPT will discover.
-
-### 5. Resource Parameter → Audience Claim ⚠️
-
-**Finding**: Behavior not explicitly documented. Requires empirical verification.
-
-**Evidence**:
-
-- RFC 8707 resource parameter behavior not detailed in Clerk docs
-- Token structure and claims not fully specified in available documentation
-- Common in OAuth implementations but not guaranteed
-
-**Impact**: Needs verification during implementation (Phase 2.4). Multiple fallback strategies available.
-
-**Verification Plan**:
-
-1. In Phase 2.4, issue test token with `resource=https://mcp-server.example.com`
-2. Decode JWT token (jwt.io or jsonwebtoken library)
-3. Inspect `aud` (audience) claim
-
-**Expected Outcomes**:
-
-- **Best case**: `aud` matches resource parameter → use as designed
-- **Acceptable case**: `aud` is Clerk default → validate using issuer instead
-- **Either way**: Tokens remain cryptographically valid
-
-## Decision Analysis
-
-### Why Proceeding is Correct
-
-**Strengths**:
-
-1. All 4 critical OAuth features confirmed (discovery, DCR, PKCE, protected resource)
-2. Purpose-built for MCP (@clerk/mcp-tools package exists)
-3. Passes OpenAI's official MCP authorization checklist
-4. Widely used, well-documented, enterprise-grade
-5. Active development and support
-
-**Open Questions**:
-
-1. Resource parameter → aud claim echo (RFC 8707 detail)
-   - **Impact**: Low - testable during implementation
-   - **Mitigation**: Multiple validation strategies available
-
-**Risks if NOT proceeding**:
-
-1. Delay implementation waiting for perfect documentation
-2. Risk equivalent or worse unknowns with alternative providers
-3. Miss opportunity to use purpose-built tooling (@clerk/mcp-tools)
-
-### Alternative Providers Considered
-
-Not applicable - Clerk meets all requirements. Alternatives (Auth0, Stytch, Okta) would need similar validation and don't offer clear advantages.
-
-## Implementation Recommendations
-
-### Phase 1 (Generator)
-
-- **No Clerk dependencies** - proceed immediately
-- Security policy configuration is Clerk-agnostic
-
-### Phase 2 (Runtime)
-
-- Use `@clerk/express` for Clerk integration (already in use)
-- Leverage existing `mcpAuth` and `mcpAuthClerk` middleware
-- In Sub-Phase 2.4: Add empirical test for resource/aud behavior
-- Document actual behavior in code comments
-
-### Phase 3 (Validation)
-
-- Test full OAuth flow with ChatGPT
-- Validate token claims match expectations
-- Document any Clerk-specific quirks or optimizations
-
-## Configuration Requirements
-
-### Clerk Dashboard Setup
-
-**Application Type**: Web Application (OAuth 2.0)
-
-**Required Settings**:
-
-- OAuth 2.0 enabled
-- OpenID Connect enabled
-- Authorization Code grant type
-- PKCE enabled (should be default)
-- Dynamic Client Registration enabled (if configurable)
-
-**Redirect URIs**:
-
-- Development: `http://localhost:3000/oauth/callback` (or ChatGPT's callback)
-- Production: `https://your-mcp-server.com/oauth/callback`
-
-**Scopes**:
-
-- `openid` (required for OIDC)
-- `email` (for user identification)
-- Additional scopes as needed
-
-### Environment Variables
-
-```bash
-# Clerk configuration
-CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key_here
-CLERK_SECRET_KEY=your_clerk_secret_key_here
-CLERK_ISSUER_URL=https://REDACTED.clerk.accounts.dev  # Clerk tenant URL
-```
-
-## Testing Strategy
-
-### Phase 2.4: Resource Parameter Verification
-
-**Test procedure**:
-
-1. Start MCP server with Clerk auth
-2. Initiate OAuth flow with `resource=https://localhost:3000` parameter
-3. Complete authorization and obtain access token
-4. Decode token: `jwt.decode(token, { complete: true })`
-5. Inspect `payload.aud` field
-
-**Success criteria**:
-
-- `aud` exists and is verifiable
-- Token is cryptographically valid
-- Can validate token audience matches our server
-
-### Phase 3: End-to-End Validation
-
-**Test with ChatGPT**:
-
-1. Register MCP server in ChatGPT
-2. Verify ChatGPT can discover tools (no auth)
-3. Verify ChatGPT shows "Connect" button
-4. Complete OAuth flow
-5. Verify tool execution with token
-6. Verify token reuse across multiple requests
-
-## Known Limitations
-
-**None identified at this time.**
-
-The one open question (resource parameter behavior) is not a limitation—it's a detail to be verified during implementation. Multiple validation strategies exist regardless of outcome.
-
-## Support Resources
-
-**Clerk Documentation**:
-
-- OAuth 2.0: <https://clerk.com/docs/authentication/oauth>
-- MCP Tools: <https://www.npmjs.com/package/@clerk/mcp-tools>
-- JWT Tokens: <https://clerk.com/docs/backend-requests/resources/jwt-templates>
-
-**MCP Specification**:
-
-- Authorization: <https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization>
-
-**OpenAI Documentation**:
-
-- Apps SDK Authentication: <https://platform.openai.com/docs/guides/apps-authentication>
-
-**Debugging Tools**:
-
-- JWT Decoder: <https://jwt.io>
-- Clerk Dashboard: Logs and Sessions views
+1. Discovery metadata is published correctly
+2. Protected resource metadata is published correctly
+3. Authorisation flow succeeds with PKCE
+4. Token validation passes for the intended resource/audience contract
+5. Repeated authenticated MCP requests behave consistently
 
 ## Conclusion
 
-**Decision**: ✅ **PROCEED** to Phase 1 implementation.
-
-Clerk is confirmed compatible with MCP authorization requirements and ChatGPT integration. The one verification point (resource parameter behavior) is a Phase 2 implementation detail, not a blocker. Proceeding is the pragmatic and correct decision.
-
-**Next Action**: Begin Phase 1, Sub-Phase 1.1 - Define MCP Security Policy Configuration
-
----
-
-**Document Version**: 1.0  
-**Last Updated**: 2025-11-20  
-**Status**: APPROVED
+Clerk is a suitable authorisation provider for Oak's MCP server. Proceed with
+implementation, but treat RFC 8707 resource and audience behaviour as a
+required empirical check rather than an assumption.

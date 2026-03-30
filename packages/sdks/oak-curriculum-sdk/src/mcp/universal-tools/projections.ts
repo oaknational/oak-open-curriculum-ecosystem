@@ -17,7 +17,7 @@
  * so repeated calls with the same tool entry produce `===`-equal
  * `inputSchema` values.
  *
- * @see .agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md — Phase 3
+ * @see .agent/plans/sdk-and-mcp-enhancements/archive/completed/mcp-runtime-boundary-simplification.plan.md — Phase 3
  */
 
 import type { z } from 'zod';

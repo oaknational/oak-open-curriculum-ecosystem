@@ -30,7 +30,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `archive/completed/artefact-portability-hardening.plan.md` | Plan (Completed) | Address architectural review findings: trigger content contract, portability validation, rule trigger compliance, naming/documentation gaps |
 | `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
 | `future/sentry-specialist-capability.plan.md` | Plan (Future) | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
-| `future/mcp-specialist-upgrade.plan.md` | Plan (Future) | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
+| `current/mcp-specialist-upgrade.plan.md` | Plan | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
 | `future/express-specialist-capability.plan.md` | Plan (Future) | Express 5.x reviewer, skill, and situational rule (ADR-129 triplet) — middleware, error handling, Vercel deployment |
 | `future/cyber-security-specialist-capability.plan.md` | Plan (Future) | Broad-remit cyber security capability — posture, threat models, defence in depth, and security-architecture doctrine |
 | `future/web-api-security-specialist-capability.plan.md` | Plan (Future) | Narrow-remit web/API security capability — HTTP trust boundaries, endpoint security, sessions, callbacks, and API attack surfaces |
@@ -56,7 +56,8 @@ Plans and research for hardening the agentic engineering practice through physic
 ## Document Roles (DRY)
 
 - **Roadmap (`roadmap.md`)**: strategic phase sequence, dependencies, status, and queued adjacent work.
-- **Current plans (`current/*.md`)**: queued executable tasks ready to start.
+- **Current plans (`current/*.md`)**: strategic source plans and queued
+  capability plans to promote into active execution when scheduled.
 - **Active plans (`active/*.md`)**: authoritative executable tasks and deterministic validation.
 - **Strategic source plans (`*.plan.md`)**: policy intent, rationale, success criteria, and phase design; execution is delegated to active plans.
 - **Research docs (`*.research.md`)**: evidence base only; not execution instructions.
@@ -64,6 +65,20 @@ Plans and research for hardening the agentic engineering practice through physic
 
 If strategy and execution disagree, update the active plan first, then reconcile
 the strategic source plan and roadmap.
+
+## Status Legend
+
+Use these canonical status tokens across this collection:
+
+- `ACTIVE` — currently executing and session-anchor relevant
+- `IN PROGRESS` — partially delivered, with remaining scoped work
+- `QUEUED` — prioritised next, not yet executing
+- `PLANNED` — identified future work, not yet queued
+- `PENDING` — todo-level item not yet started
+- `COMPLETED` / `COMPLETE` — finished and verified
+- `SUPERSEDED` — replaced by a newer authoritative plan/path
+- `STRATEGIC` — long-horizon planning item, not immediate execution
+- `REFERENCE` — context/source artefact, not an active execution task
 
 ## Explicit Goal
 

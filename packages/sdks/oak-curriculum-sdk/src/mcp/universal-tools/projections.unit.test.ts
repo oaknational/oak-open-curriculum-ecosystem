@@ -10,7 +10,7 @@
  * 2. A **protocol projection** for `tools/list` that preserves JSON Schema
  *    `inputSchema` with examples — so the app never re-serialises tool metadata.
  *
- * @see .agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md — Phase 3
+ * @see .agent/plans/sdk-and-mcp-enhancements/archive/completed/mcp-runtime-boundary-simplification.plan.md — Phase 3
  */
 
 import { describe, it, expect } from 'vitest';

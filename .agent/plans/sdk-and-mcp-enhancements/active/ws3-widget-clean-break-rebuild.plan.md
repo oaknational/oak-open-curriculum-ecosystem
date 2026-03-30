@@ -1,1216 +1,638 @@
 ---
-name: "WS3: Widget Clean-Break Rebuild"
-overview: "Delete the entire ChatGPT-era string-template widget system. Build two new MCP Apps from scratch using the official canonical React stack: a branded curriculum-model viewer and a new user-search interactive experience."
+name: "WS3: Fresh React MCP App Rebuild"
+overview: "Delete the dead widget framework and replace it with one fresh React MCP App built from scratch on the MCP Apps standard. No banned legacy code, metadata, docs, or bridge assumptions survive in the active path."
 parent_plan: "mcp-app-extension-migration.plan.md"
 source_research:
+  - "../../roadmap.md"
   - "../../mcp-apps-support.research.md"
 specialist_reviewer: "mcp-reviewer"
 isProject: false
 todos:
-  - id: phase-0-triage
-    content: "Phase 0: Selective commit of valuable uncommitted changes, discard dead widget code, verify quality gates."
+  - id: phase-0-baseline
+    content: "Phase 0: Re-ground the live branch, write RED specs first, and capture the full legacy contamination inventory."
     status: pending
-  - id: phase-1-delete-old
-    content: "Phase 1: Delete old widget system entirely (TDD — update E2E tests FIRST)."
+  - id: phase-1-delete-legacy
+    content: "Phase 1: Delete the legacy widget framework and remove all active-path references to it."
     status: pending
   - id: phase-2-scaffold
-    content: "Phase 2: Scaffold React + Vite build pipeline using official canonical stack."
+    content: "Phase 2: Scaffold a fresh React MCP App build, lint, type-check, test, and Turbo pipeline."
     status: pending
-  - id: phase-3-curriculum-model-app
-    content: "Phase 3: Build curriculum-model MCP App (Oak branding, title link)."
+  - id: phase-3-contracts-runtime
+    content: "Phase 3: Extend canonical SDK/runtime contracts for MCP App registration, visibility, and tool listing."
     status: pending
-  - id: phase-4-user-search-app
-    content: "Phase 4: Build user-search MCP App (new tool, interactive search via search SDK)."
+  - id: phase-4-curriculum-view
+    content: "Phase 4: Build the curriculum-model MCP App view."
     status: pending
-  - id: phase-5-integration
-    content: "Phase 5: Wire apps into resource registration, restore WIDGET_TOOL_NAMES, replace preview server."
+  - id: phase-5-search-view
+    content: "Phase 5: Build the interactive user-search MCP App view and app-only helper flow."
     status: pending
-  - id: phase-6-docs-cleanup
-    content: "Phase 6: Remove all remaining OpenAI references from non-archive files."
-    status: pending
-  - id: phase-7-review-commit
-    content: "Phase 7: Full quality gates, reviewer invocations, commit."
+  - id: phase-6-docs-review
+    content: "Phase 6: Rewrite normative docs, run full quality gates, invoke reviewers, and commit."
     status: pending
 ---
 
-# WS3: Widget Clean-Break Rebuild
+# WS3: Fresh React MCP App Rebuild
 
-**Status**: PLANNING
-**Last Updated**: 2026-03-30
-**Scope**: Delete old widget system. Build two new MCP Apps from scratch.
+**Status**: ACTIVE  
+**Last Updated**: 2026-03-30  
+**Scope**: Delete the dead widget framework and build one fresh React MCP App
+from scratch.
+
+> Anything that survives from the OpenAI-era stack, in code, architecture,
+> design or in guidance, is contamination to be removed.
 
 ---
 
 ## Context
 
-Oak's MCP widget system was built for ChatGPT's `window.openai` bridge API. WS1
-migrated SDK metadata keys, WS2 migrated the server runtime, and a previous
-session mechanically replaced `window.openai` with `undefined` — producing dead
-code that reads from `undefined?.toolOutput`. The entire client-side architecture
-(string-template JS embedded in HTML) is structurally dead.
+The old widget system is not a migration target.
 
-**This plan replaces it entirely.** No adaptation, no compatibility, no
-preservation except Oak brand colours, typefaces (Lexend), and the logo SVG.
+Any surviving `window.openai`, `openai/*` metadata aliases,
+`text/html+skybridge`, preview wrappers, string renderers, or stale normative
+docs are contamination to remove, not assets to preserve.
 
----
+WS3 is therefore a **total replacement**:
 
-## Only Two Tools Get UI
+- delete the old widget framework
+- build one fresh React MCP App resource
+- re-enable only the intended UI tools
+- keep all business logic and schema ownership in the SDK/app boundaries that
+  already govern the MCP server
 
-| Tool | MCP App | Purpose |
-|------|---------|---------|
-| `get-curriculum-model` | Branded viewer | Oak logo, "Oak National Academy" title linking to `www.thenational.academy`, structured display of the curriculum model |
-| `user-search` (NEW) | Interactive search | User-controlled search experience using the search SDK, separate from the agent-facing `search` tool |
+Search split invariant for this rebuild:
 
-The existing `search`, `browse-curriculum`, `explore-topic`, and `fetch` tools
-remain **text-only** — no widget UI. They serve AI agents, not human users.
+1. `search` remains the model-facing, agent-facing tool interface
+2. `user-search` is the new UI-first, user-first MCP App interface
+3. `user-search-query` is app-only helper functionality, not a second
+   model-facing search interface
 
----
+## Foundation Alignment
 
-## Canonical Stack (from Official MCP Apps Documentation)
+This plan is governed by:
 
-Based on the official `basic-server-react` example at
-`github.com/modelcontextprotocol/ext-apps/tree/main/examples/basic-server-react`:
+- `.agent/directives/principles.md`
+- `.agent/directives/testing-strategy.md`
+- `.agent/directives/schema-first-execution.md`
 
-### Dependencies
+Non-negotiables from those directives:
 
-**Production:**
+1. No compatibility layers, shims, hacks, renamed globals, or workarounds
+2. TDD at every level: RED first, then GREEN, then REFACTOR
+3. Schema-first and generator-first remain binding
+4. Apps stay thin; domain logic lives in SDKs and libraries
+5. Dead code is deleted, not adapted
 
-- `react` ^19
-- `react-dom` ^19
+## Governing Technical Sources
 
-**Dev:**
+The implementation model comes from the MCP Apps standard and the
+`@modelcontextprotocol/ext-apps` SDK only:
 
-- `@vitejs/plugin-react` ^4
-- `vite` ^6
-- `vite-plugin-singlefile` ^2
-- `cross-env` ^10
-- `@types/react` ^19
-- `@types/react-dom` ^19
+1. SEP-1865 (MCP Apps)
+2. `@modelcontextprotocol/ext-apps` quickstart
+3. `@modelcontextprotocol/ext-apps` patterns
+4. `@modelcontextprotocol/ext-apps/react` API docs
 
-`@modelcontextprotocol/ext-apps` ^1.3.2 is already installed.
+Host-specific extension material is not normative input for this rebuild.
 
-### Vite Config (official pattern)
+## Non-Goals
 
-```typescript
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { viteSingleFile } from "vite-plugin-singlefile";
+This work explicitly does **not** do any of the following:
 
-const INPUT = process.env.INPUT;
-if (!INPUT) {
-  throw new Error("INPUT environment variable is not set");
-}
+1. Preserve or convert `window.openai` code
+2. Use `openai/*` metadata aliases or host extensions
+3. Introduce a compatibility bridge, preview shim, or renamed global
+4. Add host-specific branching, per-host code paths, or platform toggles
+5. Repair the string-template widget system incrementally
+6. Move schema ownership from SDK/codegen into the HTTP app
+7. Change `apps/oak-curriculum-mcp-stdio`
+8. Make direct HTTP requests from the iframe unless a later explicit plan
+   justifies and governs that change
 
-const isDevelopment = process.env.NODE_ENV === "development";
+## Product Scope
 
-export default defineConfig({
-  plugins: [react(), viteSingleFile()],
-  build: {
-    sourcemap: isDevelopment ? "inline" : undefined,
-    cssMinify: !isDevelopment,
-    minify: !isDevelopment,
-    rollupOptions: { input: INPUT },
-    outDir: "../dist",  // Relative to widget/ — resolves to app root dist/
-    emptyOutDir: false,
-  },
-});
-```
+### User-facing MCP App entry points
 
-### HTML Template (official pattern)
+| Tool | UI | Notes |
+|------|----|-------|
+| `get-curriculum-model` | Yes | Structured curriculum-model view |
+| `user-search` | Yes | New interactive human-facing search entry point |
+| `user-search-query` | App-only helper | Hidden from model; callable from the UI only when needed |
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="color-scheme" content="light dark">
-  <title>Oak National Academy</title>
-  <link rel="stylesheet" href="/src/global.css">
-</head>
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/mcp-app.tsx"></script>
-</body>
-</html>
-```
+### Text-only tools
 
-### React App Pattern (official pattern)
+These remain text-only and do not launch the MCP App:
 
-From the official `basic-server-react` example — full handler set:
+- `search`
+- `fetch`
+- `browse-curriculum`
+- `explore-topic`
 
-```typescript
-import type { App, McpUiHostContext } from "@modelcontextprotocol/ext-apps";
-import { useApp } from "@modelcontextprotocol/ext-apps/react";
-import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+## Target Architecture
 
-function MyApp() {
-  const [toolResult, setToolResult] = useState<CallToolResult | null>(null);
-  const [hostContext, setHostContext] = useState<McpUiHostContext | undefined>();
+### 1. Single MCP App resource
 
-  const { app, error } = useApp({
-    appInfo: { name: "oak-curriculum-viewer", version: "1.0.0" },
-    capabilities: {},
-    onAppCreated: (app) => {
-      app.ontoolresult = async (result) => setToolResult(result);
-      app.ontoolinput = async (input) => { /* show context before result */ };
-      app.ontoolcancelled = (params) => { /* reset to clean state */ };
-      app.onteardown = async () => { /* cancel in-flight requests */ return {}; };
-      app.onerror = console.error;
-      app.onhostcontextchanged = (params) =>
-        setHostContext((prev) => ({ ...prev, ...params }));
-    },
-  });
+Oak serves one fresh MCP App resource and routes inside React on tool name.
 
-  useEffect(() => {
-    if (app) setHostContext(app.getHostContext());
-  }, [app]);
+Why:
 
-  if (error) return <ErrorState error={error} />;
-  if (!app) return <LoadingState />;
-  return <AppInner app={app} toolResult={toolResult} hostContext={hostContext} />;
-}
-```
+- one resource URI keeps the current generated-constant model simple
+- one React root avoids per-tool iframe drift
+- routing inside the app is cleaner than reviving multiple legacy widget files
 
-### CSS Pattern (official pattern)
+Clean-break decision:
 
-Host variable names with Oak brand fallback values in `:root`:
+- rename the resource slug away from `oak-json-viewer`
+- do not preserve the old HTML generator or viewer identity
 
-```css
-:root {
-  color-scheme: light dark;
+### 2. React + ext-apps/react is the canonical UI stack
 
-  /* Oak brand overrides for host variables */
-  --color-text-primary: light-dark(#1a3a1b, #f0f7f0);
-  --color-background-primary: light-dark(#bef2bd, #1b3d1c);
-  --color-accent: #287d3c;
-  --color-text-on-accent: #ffffff;
-  --font-sans: 'Lexend', system-ui, sans-serif;
-  /* ... remaining host variables with Oak defaults ... */
-}
-```
+The UI is a fresh React app under a nested `widget/` build target inside
+`apps/oak-curriculum-mcp-streamable-http/`.
 
-CSS Modules for component-specific styles (e.g., `mcp-app.module.css`).
+Canonical client pattern:
 
-### Key MCP Apps API Methods
+- `useApp()` is the default React entry point
+- register handlers in `onAppCreated`
+- set up `ontoolinput`, `ontoolresult`, `ontoolcancelled`, `onteardown`,
+  `onhostcontextchanged`, and `onerror` before the app starts handling data
+- read host context from the SDK, not from bespoke globals
+- call server tools with `app.callServerTool()`
+- open external URLs with `app.openLink()`
+- update model-visible context only through `app.updateModelContext()`
 
-From the official patterns documentation and official React example:
+The raw `App` class remains the underlying primitive, but the React rebuild
+should use the official React integration by default, not hand-built bridge
+plumbing.
 
-- `app.ontoolresult` — receive tool execution results
-- `app.ontoolinput` — receive tool arguments (show context before result)
-- `app.ontoolcancelled` — handle cancelled tool calls (reset UI state)
-- `app.onteardown` — cleanup before unmount (cancel in-flight requests)
-- `app.onerror` — handle errors
-- `app.onhostcontextchanged` — react to theme/style/display mode changes
-- `app.callServerTool({ name, arguments })` — call server tools from UI
-- `app.openLink({ url })` — request host to open external URL
-- `app.updateModelContext({ content })` — push structured data to model
-- `app.sendMessage({ role, content })` — send message to chat
-- `app.requestDisplayMode({ mode })` — toggle inline/fullscreen
-- `hostContext.safeAreaInsets` — applied as inline padding
+### 3. Data and state model
 
-All `onAppCreated` callbacks MUST register the full handler set:
-`ontoolresult`, `ontoolinput`, `ontoolcancelled`, `onteardown`, `onerror`,
-`onhostcontextchanged` — per the official React example pattern.
+#### Business data
 
-### Tool Visibility
+Business data remains server-owned and arrives through MCP tool results.
 
-Private tools (app-only, hidden from model):
+- curriculum-model data comes from tool results
+- search results come from MCP tool calls initiated by the app
+- the iframe does not become a second API client
 
-```typescript
-registerAppTool(server, "internal-search", {
-  _meta: { ui: { resourceUri, visibility: ["app"] } },
-  // ...
-});
-```
+#### UI state
 
-**Important**: `visibility: ["app"]` is a **discoverability control**, not an
-authorization boundary. It hides the tool from `tools/list` but any
-authenticated MCP client can still call it via `tools/call`. The actual
-protection is Clerk authentication at the HTTP layer. Do not describe
-`visibility` as a security control.
+Use the simplest state model that satisfies behaviour:
 
-### Security Constraints
+1. React state for ephemeral UI state
+2. Do not preserve `window.openai.widgetState` or invent substitutes for it
+3. If recoverable view state is truly needed, follow the documented MCP Apps
+   pattern: server returns a stable `viewUUID`, client keys `localStorage` from
+   that UUID, and only UI-level state is persisted
 
-1. **No `dangerouslySetInnerHTML`**: Widget components MUST NOT use
-   `dangerouslySetInnerHTML`. Tool results are rendered via JSX
-   interpolation only. Enforce via ESLint `react/no-danger` rule in the
-   widget ESLint config (Phase 2i).
+Do **not** invent sessionStorage pseudo-bridges or compatibility wrappers.
 
-2. **URL validation for `openLink`**: Before calling `app.openLink({ url })`,
-   validate that the URL uses `https:` protocol. Reject `javascript:`,
-   `data:`, and other schemes as defense-in-depth against hosts with weak
-   URL validation.
+#### Model-visible context
 
-3. **Dev-mode startup guard**: The development-mode HTML shell (pointing to
-   `localhost:5173`) MUST NOT activate in deployed environments. Add a
-   startup guard: if `NODE_ENV=development` AND a production indicator
-   (`VERCEL`, `FLY_APP_NAME`, etc.) is set, throw an error.
+`app.updateModelContext()` is only for state the model genuinely needs for the
+next turn, such as user-selected search results. The app owns the cumulative
+context it sends; replace semantics are explicit.
 
-4. **PostMessage trust boundary**: The MCP Apps `PostMessageTransport`
-   sends with `"*"` targetOrigin (upstream SDK design). It validates
-   `event.source` on receive. This is accepted for MCP Apps hosts
-   (Claude, ChatGPT) which control their frame hierarchy. Document this
-   trust assumption.
+### 4. Resource, MIME, and CSP model
+
+Server-side UI resources use:
+
+- `registerAppResource`
+- `RESOURCE_MIME_TYPE`
+- `_meta.ui.csp` only for assets actually required by the app
+
+Because Oak’s iframe data flow is MCP-only, `_meta.ui.domain` should be omitted
+unless a future explicit plan introduces direct cross-origin fetches from the
+iframe.
+
+### 5. Registration model must stay canonical
+
+The app must not sprout a second manual inventory of “UI tools”.
+
+Required end state:
+
+1. The app still iterates the canonical universal tool registry
+2. Descriptor metadata remains the source of truth for whether a tool is an
+   MCP App tool
+3. A single canonical registration path chooses `registerAppTool` for
+   UI-bearing tools and `server.registerTool` otherwise
+4. The app does not hard-code a bespoke list of UI tool names outside the
+   canonical descriptor/configuration flow
+
+This preserves schema-first execution and the “apps are thin” rule.
+
+### 6. App-only tool visibility is part of the contract
+
+`user-search-query` must be hidden from the model and callable by the app only.
+
+That means the canonical descriptor/projection path must support:
+
+- `_meta.ui.visibility`
+- `registerAppTool` registration for app-only helper tools
+
+The default canonical behaviour should be metadata-driven visibility. Do not add
+a bespoke second discovery contract unless host-validated evidence requires it.
+
+The current generated contract and registration flow are not yet sufficient.
+WS3 must fix that properly rather than working around it in the HTTP app.
+
+### 7. Build and tooling model
+
+The new app must be first-class in the existing workspace tooling.
+
+Required corrections:
+
+1. Build order must respect `tsup.config.ts` `clean: true`
+2. Turbo inputs must include widget `ts`, `tsx`, `css`, and `html` files
+3. App lint config must include `.tsx`
+4. App type-check config must include `.tsx`
+5. Widget in-process tests need a dedicated DOM-capable Vitest config
+6. No custom preview shim; use the upstream `basic-host` workflow for local
+   MCP App verification
 
 ---
 
-## Architectural Constraints
+## Canonical Compliance Checklist
 
-### Cardinal Rule: All tool schemas flow from codegen (F1)
+Every WS3 phase must satisfy this checklist. Any failure is blocking.
 
-Both `user-search` and `user-search-query` tool definitions (name, description,
-input schema, output schema, `_meta.ui.resourceUri`) MUST be defined in the
-SDK codegen pipeline at `packages/sdks/oak-sdk-codegen/`, generated into the
-SDK, and consumed by the app. No manual schema definitions in `apps/`.
-
-**Note**: `user-search` is NOT an OpenAPI endpoint — it is an MCP-only
-interactive tool that wraps the search SDK. The codegen pipeline must support
-non-OpenAPI tool definitions (manual definitions in the SDK, not in the app).
-This needs resolution before Phase 4 begins. If the codegen pipeline cannot
-support non-OpenAPI tools, the definition lives in the curriculum SDK as a
-manually authored tool definition alongside the generated ones.
-
-### Single MCP App, single URI (codegen simplification)
-
-WS3 uses a **single MCP App resource** that routes internally on tool name.
-This preserves the existing codegen model: one `BASE_WIDGET_URI` + one
-`WIDGET_TOOL_NAMES` Set. No per-tool URI mapping, no codegen pipeline changes
-beyond populating the Set. The single app receives tool results via
-`ontoolresult` and tool input via `ontoolinput`, then routes to the appropriate
-React component based on tool name from the metadata.
-
-### Layer Role Topology: domain contracts in SDKs, not apps (F2)
-
-Search domain contracts — valid scopes (lessons/units/threads/sequences/suggest),
-valid filters (subject, key stage, year, tier, exam board), result type shapes —
-belong in the search SDK or curriculum SDK. The widget components consume these
-contracts; they do not define them.
-
-The React components (presentation) live in the app. The data shapes they render
-flow from the SDK via codegen.
-
-### Widget directory: justified nested build target (F3)
-
-The `widget/` directory inside `apps/oak-curriculum-mcp-streamable-http/` is a
-build target (single Vite entry point), not a shadow workspace. It does NOT
-have its own `package.json` and does NOT participate in the pnpm workspace
-graph. Its `tsconfig.json` is a Vite-only config for JSX compilation — it is
-NOT used by `tsc` or `type-check`. The official MCP Apps example uses an
-identical flat structure (server + UI source in one project).
-
-Design assumption: only this MCP HTTP server serves MCP Apps widgets. If a
-second app needs widgets in future, shared presentation components would be
-extracted to `packages/libs/` at that point. **This is a known design debt
-item** — extraction requires new package scaffold, updated workspace graph,
-ESLint boundary rules, and import changes.
-
-The `widget/tsconfig.json` follows the official MCP Apps React example exactly
-(browser-targeted, `noEmit: true`, JSX support). It does not extend
-`tsconfig.base.json` because the base config targets Node.js (`ES2023`,
-no DOM lib, no JSX). A comment in the file MUST explain this divergence and
-list strict flags that must be kept in sync manually.
-
-### Text-only fallback for non-MCP-Apps hosts (MCP-1)
-
-The MCP Apps spec says servers SHOULD provide text-only fallback content for
-UI-enabled tools. Both `get-curriculum-model` and `user-search` tools MUST
-return meaningful text content alongside `_meta.ui.resourceUri`. Hosts that
-do not support MCP Apps will ignore `_meta.ui` and use the text content.
-
-`getUiCapability()` cannot be called during tool registration because
-`registerHandlers()` runs before `connect()` (WS2 finding). Instead, the tools
-always return text + `_meta.ui` — hosts pick whichever they support.
-
-### Tool registration via `registerAppTool` (MCP-2)
-
-Both `get-curriculum-model` and `user-search` MUST be registered using
-`registerAppTool` from `@modelcontextprotocol/ext-apps/server`. The private
-`user-search-query` helper MUST also use `registerAppTool` with
-`visibility: ["app"]`. Do NOT use raw `server.registerTool`.
-
-### readFileSync at module scope: fail-fast wrapper (W2)
-
-The `readFileSync` call that loads the Vite-built HTML MUST be wrapped in a
-function that provides a clear domain-specific error message on failure:
-
-```typescript
-function loadWidgetHtml(filename: string): string {
-  const filepath = resolve(base, `../../dist/${filename}`);
-  try {
-    return readFileSync(filepath, 'utf-8');
-  } catch (cause) {
-    throw new Error(
-      `Widget HTML not found at ${filepath}. Run 'pnpm build:widget' first.`,
-      { cause },
-    );
-  }
-}
-```
-
-### Turbo cache configuration for widget build
-
-`build:widget` runs as a subprocess within the `build` script, NOT as a
-separate Turbo task. A standalone `build:widget` Turbo override would be
-structurally unreachable because Turbo executes `build` as an opaque shell
-command. Instead, add `widget/**` to the app-level `build` task inputs so
-Turbo invalidates the cache when widget source changes:
-
-```json
-{
-  "@oaknational/oak-curriculum-mcp-streamable-http#build": {
-    "dependsOn": ["^build"],
-    "cache": true,
-    "outputs": ["dist/**", ".tsup/**"],
-    "inputs": [
-      "$TURBO_DEFAULT$",
-      "$TURBO_ROOT$/tsconfig.base.json",
-      "tsconfig.json",
-      "tsconfig.build.json",
-      "tsup.config.ts",
-      "src/**/*.ts",
-      "widget/**",
-      "!src/**/*.test.ts",
-      "!src/**/*.spec.ts"
-    ]
-  }
-}
-```
-
-### Operational Resilience Requirements
-
-These requirements address failure modes identified during plan review and
-MUST be implemented in the relevant phases:
-
-**1. `callServerTool` timeout and error handling (Phase 4c)**:
-All `app.callServerTool()` calls MUST have a 10-second timeout, loading state
-indicator, and explicit error handling. Failed searches show an actionable
-error message ("Search timed out. Try refining your query.") with a retry
-button. In-flight requests are cancelled on component unmount via
-`onteardown`. Duplicate requests are prevented while one is in-flight.
-
-**2. Tool result validation at component boundary (Phase 4c)**:
-Data from `ontoolresult` is external to the React component boundary and
-MUST be validated with Zod before rendering. Each view component defines a
-result schema. Invalid shapes show a user-friendly error, not a React crash.
-Empty results show "No results found", not a blank screen.
-
-**3. `ErrorState` with actionable recovery (Phase 3b)**:
-`ErrorState` MUST distinguish transient errors (offer reload) from permanent
-failures (explain incompatible environment). The error object from `useApp()`
-is a raw library exception — never expose it directly to users.
-
-**4. Request/response correlation for race conditions (Phase 3b)**:
-The app MUST track the latest request and ignore stale results from prior
-tool calls. If `ontoolcancelled` arrives after `ontoolresult` (or vice
-versa), the state machine handles both orderings correctly.
-
-**5. Build output validation (Phase 2e)**:
-The build script MUST validate that `dist/mcp-app.html` exists after
-`build:widget` completes. Use `[ -f dist/mcp-app.html ]` as a post-build
-check. The Phase 2g build pipeline test MUST run as part of `pnpm test`
-(not just as a manual verification step).
-
-**6. Development workflow (Phase 2e)**:
-`pnpm dev:widget` MUST provide hot-reload for widget development without
-requiring manual `pnpm build:widget`. In development mode, the server serves
-a dev-mode HTML shell pointing to the Vite dev server
-(`http://localhost:5173`) instead of reading built HTML from disk. This is
-controlled by `NODE_ENV=development`.
-
-### `public-resources.ts` auth bypass update
-
-When `WIDGET_TOOL_NAMES` is populated and the widget resource is re-registered,
-`src/auth/public-resources.ts` must include the widget URI in its public
-resource URI set. This file currently imports `WIDGET_URI` from the SDK —
-the single-app design preserves this single import (no multi-URI changes
-needed).
+1. **No legacy bridge residue**
+   - No served or reachable runtime path depends on `window.openai`,
+     `text/html+skybridge`, or bridge-emulation placeholders
+   - Dead legacy files are deleted rather than kept behind empty allowlists
+2. **Single source of truth for resource identity**
+   - Resource URI/slug lives in canonical SDK/codegen constants only
+   - Runtime registration, auth allowlists, tests, and docs consume constants;
+     no hard-coded `oak-json-viewer` literals remain in active paths
+3. **Canonical tool registration and visibility only**
+   - One registry-driven registration pass over universal tools
+   - `_meta.ui` metadata drives MCP App registration behaviour
+   - `_meta.ui.visibility` is canonical for app-only helper tools
+   - No bespoke discovery filters or override layers are introduced in HTTP app
+     code to hide/show tools
+4. **Public-resource auth behaviour is explicit and spec-aligned**
+   - Any public-resource bypass behaviour is either removed or explicitly
+     justified by accepted architecture and covered by non-vacuous tests
+   - No undocumented permissive auth path survives for MCP methods
+5. **Test contracts are non-vacuous**
+   - Widget metadata/resource tests must fail if intended UI tools are absent
+     after WS3 registration is expected to be live
+   - Assertions must validate MIME type, resource URI identity, and representative
+     payload content, not only object existence
+6. **Prompt/plan cross-reference integrity**
+   - Prompt, roadmap, umbrella plan, WS3 child plan, and current-plan index are
+     mutually consistent on scope, ownership, and dependency order
+   - No stale operational command appears in multiple conflicting forms
 
 ---
 
-## Phase 0: Triage Uncommitted Changes + Baseline
+## Phase 0: Baseline and RED Specs
 
-**Goal**: Commit valuable work, discard dead code, verify quality gates.
+**Goal**: ground the live branch and write failing specs first.
 
-### 0a. Selective commit
+### Tasks
 
-**KEEP and commit** (principles, rules, SDK, docs — 10 files):
+1. Inspect live branch state with `git status --short` and
+   `git log --oneline --decorate -5`
+2. Capture the runtime contamination inventory using the canonical command in
+   `Canonical Runtime Contamination Check`
+3. Capture a focused non-canonical inventory for:
+   - `src/widget-script.ts` bridge residue and serving path
+   - `src/register-resources.ts` hard-coded legacy resource identity
+   - `src/tools-list-override.ts` bespoke tool discovery/visibility behaviour
+   - public resource auth bypass semantics and test coverage depth
 
-- `.agent/directives/principles.md` — "No shims" principle
-- `.agent/rules/no-shims-or-workarounds.md` — canonical rule
-- `.claude/rules/no-shims-or-workarounds.md` — Claude adapter
-- `.cursor/rules/no-shims-or-workarounds.mdc` — Cursor adapter
-- `docs/engineering/build-system.md` — build system docs
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.ts`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tool-shared.unit.test.ts`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch.integration.test.ts`
-- `.agent/plans/.../mcp-app-extension-migration.plan.md`
+4. Update or add RED tests before product changes:
+   - `e2e-tests/widget-resource.e2e.test.ts`
+   - `e2e-tests/widget-metadata.e2e.test.ts`
+   - `e2e-tests/public-resource-auth-bypass.e2e.test.ts`
+   - any new widget build E2E coverage
+5. Define the RED command/evidence contract for each downstream phase:
+   - exact command
+   - expected failure reason
+   - target GREEN evidence
+6. Rewrite stale normative docs that would otherwise direct work back toward
+   the dead widget model
+
+### Acceptance
+
+- contamination inventory captured against the live tree
+- RED command/evidence contract is written for each downstream phase
+- RED tests fail for the expected reasons and are linked to explicit GREEN
+  expectations
+- non-canonical inventory is captured and mapped to specific phase fixes
+- no planning document still tells the next session to preserve the old widget
+  architecture
+
+---
+
+## Phase 1: Delete the Legacy Widget Framework
+
+**Goal**: remove the old architecture before scaffolding the new one.
+
+### Delete
+
+Delete the dead client stack and its support files, including:
+
+- `src/widget-script.ts`
+- `src/widget-script-state.ts`
+- `src/widget-script-escaping.ts`
+- `src/widget-renderer-registry.ts`
+- `src/widget-file-generator.ts`
+- `src/widget-renderers/**`
+- legacy preview infrastructure under `scripts/` that exists only to emulate
+  the dead widget runtime
+- tests that prove deleted implementation details rather than the new MCP App
+  contract
+
+Keep only architecture-neutral assets that are still useful, such as the Oak
+logo source, if they are reused directly by the React app.
+
+Deletion sequencing rule:
+
+1. Add replacement tests for the new MCP App contract first
+2. Confirm replacement tests are RED then GREEN
+3. Delete legacy tests only after replacement tests prove equivalent or stronger
+   coverage
+
+### Also remove
+
+1. Legacy widget resource registration if no tool points to it
+2. Legacy comments and docs that still describe the deleted runtime as live
+3. Any build step whose sole purpose is to keep the dead framework runnable
+
+### Acceptance
+
+- zero active product code references to `window.openai`
+- zero active product code references to `text/html+skybridge`
+- zero legacy widget renderer files remain in use
+- no legacy widget script/resource can still be served as a fallback path
+- widget-rendering workspace docs no longer describe the deleted runtime as
+  current architecture
+
+---
+
+## Phase 2: Scaffold Fresh MCP App Infrastructure
+
+**Goal**: create a clean React MCP App build and test foundation.
+
+### RED
+
+Write failing tests first for:
+
+1. Widget build output exists and is self-contained
+2. Widget shell renders a React root and expected bundle markers
+3. Lint/type-check/test tooling includes the new widget source set
+
+### GREEN
+
+Create a nested `widget/` build target with:
+
+- `widget/mcp-app.html`
+- `widget/vite.config.ts`
+- `widget/tsconfig.json`
+- `widget/src/mcp-app.tsx`
+- `widget/src/global.css`
+- component files for shared app shell and routed views
+
+Add dependencies for:
+
+- `react`
+- `react-dom`
+- `@vitejs/plugin-react`
+- `vite`
+- `vite-plugin-singlefile`
+- `cross-env`
+- `@types/react`
+- `@types/react-dom`
+- `@testing-library/react`
+- `@testing-library/jest-dom`
+- `jsdom`
+
+### Tooling corrections
+
+Update:
+
+1. `package.json` build/dev/test scripts
+2. `turbo.json` inputs so widget source actually invalidates caches
+3. `eslint.config.ts` for `.tsx`
+4. `tsconfig.lint.json` for `.tsx`
+5. dedicated widget Vitest config for DOM-based in-process tests
+
+### Acceptance
+
+- focused package build produces a self-contained `dist/mcp-app.html`
+- Turbo invalidates correctly on widget `tsx`, `css`, and `html` changes
+- lint and type-check see widget source
+- no preview shim is introduced
+
+---
+
+## Phase 3: Canonical SDK and Runtime Contracts
+
+**Goal**: make the canonical descriptor and registration path sufficient for the
+fresh MCP App.
+
+### Required contract changes
+
+1. Extend the canonical tool metadata contract to support
+   `_meta.ui.visibility`
+2. Support the new `user-search` and `user-search-query` tool descriptors
+   without hand-authoring schema logic in the HTTP app
+3. Rename the generated UI resource slug away from `oak-json-viewer`
+4. Re-populate the canonical UI tool allowlist only when the new app is ready
+5. Align generated auth/noauth wording with ADR-113 and live MCP spec semantics
+   (no permissive "no bearer token required" ambiguity in canonical contracts)
+
+### Required runtime changes
+
+1. Keep one registry-driven iteration over universal tools
+2. Route registration through one canonical helper/path that selects
+   `registerAppTool` when `_meta.ui` is present
+3. Ensure app-only visibility is metadata-driven via `_meta.ui.visibility`
+   semantics and host-compatible behaviour
+4. Update public-resource handling and resource registration to match the new
+   resource URI
+5. Remove bespoke discovery/visibility override behaviour that duplicates
+   canonical descriptor metadata decisions
+
+### Rename blast-radius checklist
+
+When renaming the widget resource slug, update all coupled surfaces atomically:
+
+1. SDK/codegen constants and template source
+2. resource registration and metadata wiring
+3. public resource auth allowlist
+4. resource and metadata E2E assertions
+5. plan/prompt/docs references that describe active architecture
+
+### Acceptance
+
+- `get-curriculum-model` advertises the new MCP App resource
+- `user-search` advertises the new MCP App resource
+- `user-search-query` is registered as app-only using canonical visibility
+  metadata
+- non-UI tools remain standard tool registrations
+- `search` remains model-facing and agent-facing
+- active runtime/tests/docs do not contain hard-coded `oak-json-viewer`
+  identity in place of canonical constants
+- intended UI tool registration cannot pass vacuously with an empty UI tool
+  set once WS3 registration is enabled
+
+---
+
+## Phase 4: Curriculum Model View
+
+**Goal**: deliver the first real view on the new app shell.
+
+### RED
+
+Write tests first for:
+
+- routed rendering of `get-curriculum-model`
+- Oak header/footer behaviour
+- empty/error states
+- host-context-aware layout behaviour where practical
+
+### GREEN
+
+Build:
+
+- a shared app shell
+- tool routing
+- curriculum-model renderer
+- Oak brand styling via CSS variables and host-aware fallbacks
+
+The `useApp()`-owning shell should be exercised primarily through E2E/system
+tests. Child components that receive plain props should be covered with
+in-process React tests.
+
+### Acceptance
+
+- the curriculum-model view renders through the fresh MCP App shell
+- external links go through `app.openLink()`
+- the app handles tool input/result/cancel/teardown through the MCP Apps SDK
+- local verification works against the upstream `basic-host`
+
+---
+
+## Phase 5: Interactive User Search View
+
+**Goal**: add the human-facing search experience without violating app/SDK
+boundaries.
+
+### RED
+
+Write tests first for:
+
+- search submission flow
+- loading/error/empty/result states
+- result validation at the component boundary
+- app-only helper tool behaviour from the UI perspective
+- model-context sync for explicit user selections
+
+### GREEN
+
+Build:
+
+1. `user-search` as the user-facing MCP App entry point
+2. `user-search-query` as an app-only helper if still justified after design
+   review
+3. search UI interactions through `app.callServerTool()`
+4. selection sync through `app.updateModelContext()` only where the model needs
+   that context
+
+The iframe must not call Oak HTTP endpoints directly.
+
+### Acceptance
+
+- search runs through MCP tool calls only
+- result shapes are validated before render
+- UI state remains local to the React app
+- no direct iframe HTTP fetch is required
+
+---
+
+## Phase 6: Docs, Gates, Review, Commit
+
+**Goal**: finish the clean break across normative docs and quality gates.
+
+### Documentation
+
+Rewrite or update the live normative documents so they reflect the new
+architecture and stop preserving the dead one:
+
 - `.agent/prompts/session-continuation.prompt.md`
-
-**DISCARD** (all widget file changes — they are dead code being deleted in
-Phase 1 anyway).
-
-### 0b. Run quality gates
-
-```bash
-pnpm check
-```
-
-Fix any failures. The session continuation prompt mentions a pre-existing lint
-failure in sdk-codegen — diagnose and fix before proceeding.
-
-### 0c. Acceptance
-
-- Clean `git status` after selective commit + discard
-- `pnpm check` passes
-
----
-
-## Phase 1: Delete Old Widget System (TDD)
-
-**Goal**: Remove all ChatGPT-era string-template widget code.
-
-### 1a. Update E2E test assertions (RED)
-
-**File**: `e2e-tests/widget-resource.e2e.test.ts`
-
-The existing test structure is sound — it tests the MCP resource interface.
-Update assertions for the new React system:
-
-- Keep: URI format, MIME type, CSP metadata, `prefersBorder`
-- Keep: Lexend font, light/dark theme, Oak logo assertions
-- Add: Assert HTML contains `<div id="root"></div>` (React mount point)
-- Add: Assert HTML contains `<script type="module"` (Vite bundle)
-- Remove: Any string-template-specific assertions
-
-These tests are RED until Phase 3/5.
-
-### 1b. Delete old widget files
-
-**DELETE entirely** (21 files):
-
-```text
-src/widget-script.ts
-src/widget-script-state.ts
-src/widget-script-escaping.ts
-src/widget-script-escaping.unit.test.ts
-src/widget-renderer-registry.ts
-src/widget-renderer-registry.unit.test.ts
-src/widget-file-generator.ts
-src/widget-file-generator.unit.test.ts
-src/aggregated-tool-widget.unit.test.ts
-src/aggregated-tool-widget.integration.test.ts
-src/widget-renderers/index.ts
-src/widget-renderers/helpers.ts
-src/widget-renderers/helpers.unit.test.ts
-src/widget-renderers/search-renderer.ts
-src/widget-renderers/browse-renderer.ts
-src/widget-renderers/explore-renderer.ts
-scripts/widget-preview-server.ts
-```
-
-**KEEP but replace later:**
-
-- `src/aggregated-tool-widget.ts` — temporarily becomes a placeholder
-- `src/widget-styles.ts` — CSS values extracted in Phase 2, then deleted
-- `src/oak-logo-svg.ts` + test — logo SVG, architecture-neutral
-
-### 1c. Remove widget registration and dangling references
-
-Since `WIDGET_TOOL_NAMES` is already empty, no tool references any widget
-resource URI. No placeholder HTML is needed — a placeholder would be a shim
-(violates "no shims" principle). The resource simply does not exist until the
-new MCP App is built in Phase 5.
-
-1. **`register-resources.ts`**: Remove the `registerWidgetResource()` function
-   call and its import of `AGGREGATED_TOOL_WIDGET_HTML`.
-2. **`register-resources.integration.test.ts`**: Remove the
-   `describe('registerWidgetResource', ...)` test block (6 tests). These tests
-   verify the old HTML contract — they will be rewritten in Phase 5c for the
-   new contract. Other test blocks in this file (documentation, curriculum
-   model, prerequisite graph, thread progressions) remain unchanged.
-3. **`package.json`**: Remove the `"widget:preview"` script entry (references
-   deleted `scripts/widget-preview-server.ts`). It is replaced by
-   `"dev:widget"` in Phase 2e.
-4. **Delete `aggregated-tool-widget.ts`** entirely (the HTML generator).
-
-### 1d. Acceptance
-
-- Zero files in `src/widget-renderers/`
-- Zero `widget-script*.ts` files
-- `scripts/widget-preview-server.ts` deleted
-- `pnpm check` passes (except widget E2E tests — RED, expected)
-
----
-
-## Phase 2: Scaffold React + Vite Build Pipeline
-
-**Goal**: Set up build infrastructure following the official canonical stack.
-
-### 2a. Install dependencies
-
-Add to `apps/oak-curriculum-mcp-streamable-http/package.json`:
-
-```json
-{
-  "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.4",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "cross-env": "^10.1.0",
-    "vite": "^6.0.0",
-    "vite-plugin-singlefile": "^2.3.0"
-  }
-}
-```
-
-### 2b. Create widget source directory
-
-Single MCP App following the official project structure:
-
-```text
-apps/oak-curriculum-mcp-streamable-http/
-  widget/
-    mcp-app.html                   ← Vite entry HTML
-    vite.config.ts                 ← Vite config (react + singlefile)
-    tsconfig.json                  ← TypeScript with jsx: react-jsx
-    src/
-      mcp-app.tsx                  ← React entry point + root component
-      mcp-app.module.css           ← Component styles
-      global.css                   ← Oak brand CSS (host variable fallbacks)
-      components/
-        OakHeader.tsx              ← Logo + "Oak National Academy" link
-        OakFooter.tsx              ← AI disclaimer + Aila link
-        ToolRouter.tsx             ← Routes tool name → renderer component
-        CurriculumModelView.tsx    ← get-curriculum-model display
-        UserSearchView.tsx         ← Interactive search UI
-        SearchInput.tsx
-        SearchResults.tsx
-        ScopeSelector.tsx
-        FilterControls.tsx
-```
-
-### 2c. Vite config
-
-**File**: `widget/vite.config.ts`
-
-Follows the official `basic-server-react` pattern exactly.
-`cross-env INPUT=mcp-app.html vite build` produces a single
-self-contained HTML file.
-
-### 2d. TypeScript config for JSX
-
-**File**: `widget/tsconfig.json`
-
-Follows the official pattern:
-
-```json
-{
-  "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "strict": true,
-    "skipLibCheck": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true
-  },
-  "include": ["src"]
-}
-```
-
-### 2e. Wire into build pipeline
-
-Update `package.json` scripts:
-
-```json
-{
-  "build:widget": "cross-env INPUT=mcp-app.html vite build --config widget/vite.config.ts",
-  "build": "pnpm build:widget && tsup",
-  "dev:widget": "cross-env INPUT=mcp-app.html vite dev --config widget/vite.config.ts"
-}
-```
-
-The `build:widget` step runs BEFORE `tsup` so the HTML file is available when
-the server bundle is created. Single build, single output file — no multi-build
-orchestration or `rm -f` cleanup needed.
-
-### 2f. Create Oak brand global CSS
-
-**File**: `widget/src/global.css`
-
-Follows the official pattern — `:root` block with host variable names, Oak brand
-values as fallbacks:
-
-```css
-:root {
-  color-scheme: light dark;
-
-  /* Oak brand values as fallbacks for host style variables */
-  --color-text-primary: light-dark(#1a3a1b, #f0f7f0);
-  --color-text-secondary: light-dark(#3d5e3e, #b8dab9);
-  --color-background-primary: light-dark(#bef2bd, #1b3d1c);
-  --color-accent: #287d3c;
-  --color-accent-high-contrast: light-dark(#1b6330, #8cd98f);
-  --color-text-on-accent: #ffffff;
-  --border-radius-md: 8px;
-  --font-sans: 'Lexend', system-ui, sans-serif;
-  /* ... etc from widget-styles.ts values ... */
-}
-```
-
-Google Fonts Lexend loaded via `<link>` in the HTML `<head>` (not `@import`,
-which can trigger `connect-src` CSP issues in some hosts). If font loading
-fails in `basic-host` or Claude testing, consider self-hosting the Lexend font
-files inlined as base64 via Vite to eliminate the external dependency entirely.
-
-### 2g. Build pipeline E2E test (RED)
-
-**TDD**: Write a failing E2E test FIRST that asserts the build pipeline
-produces a self-contained HTML file with expected characteristics.
-
-**File**: `e2e-tests/widget-build-pipeline.e2e.test.ts`
-
-This is an **E2E test** (not in-process) because it reads from the filesystem
-(`dist/mcp-app.html`) — IO is prohibited in unit/integration tests. It runs
-via `pnpm test:e2e`, not `pnpm test`.
-
-Assertions:
-
-- File exists at `dist/mcp-app.html`
-- Contains `<div id="root"></div>` (React mount point)
-- Contains `<script` (inlined JS from `vite-plugin-singlefile`)
-- Contains `<style` (inlined CSS)
-- Does NOT contain `<script type="module" src=` (external script — would mean
-  the singlefile plugin failed)
-
-This test is RED because no build output exists yet.
-
-### 2h. Minimal React app (GREEN)
-
-Write just enough React to make the build pipeline test pass:
-
-- `src/mcp-app.tsx`: renders "Connecting..." with Oak logo
-- `mcp-app.html`: shell with `<div id="root">`
-
-```bash
-pnpm build:widget
-# Build pipeline test should now pass (GREEN)
-```
-
-### 2i. ESLint React config for widget
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/eslint.config.ts`
-
-Add a block for `.tsx` files in `widget/src/` that uses `configs.react`
-from `@oaknational/eslint-plugin-standards`. Without this, React hooks
-rules (`react-hooks/rules-of-hooks`, `react-hooks/exhaustive-deps`) are
-absent for all widget code. The existing `**/*.ts` glob does NOT match
-`.tsx` files.
-
-Also configure `parserOptions` to include `widget/tsconfig.json` so
-type-aware lint rules work for widget source.
-
-### 2j. Acceptance
-
-- `pnpm build:widget` produces `dist/mcp-app.html`
-- HTML is self-contained (all JS/CSS inlined)
-- `pnpm check` passes (widget E2E still RED)
-- Invoke `config-reviewer` for build pipeline review
-
----
-
-## Phase 3: Build MCP App Shell + Curriculum-Model View
-
-**Goal**: Single MCP App with connection lifecycle, tool routing, and the
-`get-curriculum-model` view.
-
-### 3a. Integration tests for child components (RED)
-
-Write **integration tests** using `@testing-library/react` for components
-that receive `app` and data as **props** (dependency injection). These are
-`.integration.test.tsx` files placed next to their source.
-
-**Testability boundary**: `mcp-app.tsx` calls `useApp()` directly and
-CANNOT be tested in-process without `vi.mock` (prohibited). The app shell's
-connection lifecycle (`ontoolresult`, `ontoolinput`, `ontoolcancelled`,
-`onteardown`) is tested via **E2E tests** in Phase 5a against a running
-MCP server, not via component tests.
-
-All child components receive `app` and/or data as props — no `useApp` calls.
-
-**Files and assertions**:
-
-- `OakHeader.integration.test.tsx`:
-  - Oak logo SVG is rendered
-  - "Oak National Academy" text is a link to `https://www.thenational.academy`
-- `ToolRouter.integration.test.tsx`:
-  - Routes `get-curriculum-model` to `CurriculumModelView`
-  - Routes `user-search` to `UserSearchView` (stub for now)
-  - Renders JSON fallback for unknown tool names
-- `CurriculumModelView.integration.test.tsx`:
-  - Renders curriculum model data from props
-  - Shows "No data" when result is null
-Note: `loadWidgetHtml` (server-side file loader) is tested in Phase 5b
-where it is implemented — see `loadWidgetHtml.unit.test.ts` there.
-
-### 3b. Implement app shell + routing (GREEN)
-
-**File**: `widget/src/mcp-app.tsx`
-
-```typescript
-import { useApp } from "@modelcontextprotocol/ext-apps/react";
-// Full onAppCreated handler set per official pattern
-
-// App shell renders:
-// - OakHeader (logo + "Oak National Academy" link) — always
-// - ToolRouter (switches on tool name from ontoolinput metadata)
-// - OakFooter (AI disclaimer) — always
-```
-
-**File**: `widget/src/components/ToolRouter.tsx`
-
-Routes tool name to view component:
-
-| Tool Name | Component |
-|-----------|-----------|
-| `get-curriculum-model` | `<CurriculumModelView />` |
-| `user-search` | `<UserSearchView />` (stub: "Search coming soon") |
-| (unknown) | JSON fallback display |
-
-The tool name comes from `ontoolinput` metadata (`toolName` field) or from
-`ontoolresult` metadata. The `ToolResponseOptions.toolName` field in the SDK
-remains useful for this routing — it is NOT redundant with the single-app
-design (Betty Finding 3 resolved: field still needed).
-
-External links use `app.openLink({ url })` per the official React example.
-
-### 3c. Acceptance
-
-- Component tests pass (GREEN)
-- `pnpm build:widget` produces self-contained HTML
-- HTML includes Oak logo, Lexend font, "Oak National Academy" link
-- `get-curriculum-model` view renders tool result data
-- Invoke `mcp-reviewer` for MCP Apps compliance
-
----
-
-## Phase 4: Add User-Search View to MCP App
-
-**Goal**: Add the interactive search view to the existing single MCP App,
-plus a new `user-search` tool and `user-search-query` app-only helper.
-
-### 4a. Define new `user-search` tool
-
-This is a NEW tool, separate from the agent-facing `search`. It needs:
-
-**Server-side registration** (in the SDK, via codegen or manual SDK
-definition — NOT in the app):
-
-- Tool name: `user-search`
-- Description: "Interactive search for Oak curriculum resources"
-- Input schema: minimal (the UI drives the search, not the model)
-- `_meta.ui.resourceUri`: same `BASE_WIDGET_URI` as `get-curriculum-model`
-  (single app, single resource)
-- Text-only fallback: "Open the search interface to browse Oak's curriculum
-  resources." (for hosts without MCP Apps support)
-
-**App-only helper tool** (private, `visibility: ["app"]`):
-
-- `user-search-query` — executes search using the search SDK
-- Returns typed results (lessons, units, threads, sequences)
-- Hidden from the model, callable by any MCP App widget (not just user-search)
-- Search domain contracts (scopes, filters, result shapes) come from the
-  search SDK — the tool handler is thin, the SDK owns the domain logic
-
-### 4b. Integration tests for search components (RED)
-
-Write **integration tests** (`.integration.test.tsx`) for search components.
-Each component receives `app` and data as props (DI, no `useApp`).
-
-- `SearchInput.integration.test.tsx` — text input, submit handler
-- `ScopeSelector.integration.test.tsx` — scope tab selection
-- `FilterControls.integration.test.tsx` — filter state changes
-- `SearchResults.integration.test.tsx` — renders typed results with Oak branding
-- `UserSearchView.integration.test.tsx`:
-  - Renders loading spinner while search in-flight
-  - Renders error message on timeout/failure
-  - Renders "No results found" for empty results
-  - Renders result cards with correct data
-  - Validates tool result shape with Zod (invalid shape → error, not crash)
-  - Result cards with links (using `app.openLink`)
-
-### 4c. Implement user-search view (GREEN)
-
-**File**: `widget/src/components/UserSearchView.tsx`
-
-Receives the `app` instance as a prop from the parent `ToolRouter`. Uses
-`app.callServerTool` to execute searches.
-
-**Data flow** (all via MCP bridge, no direct HTTP):
-
-1. User types query → UI calls `app.callServerTool({ name: "user-search-query", arguments: { query, scope, filters } })`
-2. Server executes search via the search SDK
-3. Result returned to widget via tool result
-4. Widget renders search results with Oak branding
-5. User selects results → `app.updateModelContext()` to sync selection to model
-
-### 4d. Model context sync
-
-Per the official patterns, `app.updateModelContext()` uses replace semantics.
-The widget maintains cumulative state and sends the full current selection on
-each call:
-
-```typescript
-await app.updateModelContext({
-  content: [{
-    type: "text",
-    text: JSON.stringify({
-      selectedLessons: selectedIds,
-      selectedCount: selectedIds.length,
-      searchQuery: currentQuery,
-      scope: currentScope,
-    }),
-  }],
-});
-```
-
-JSON is used instead of YAML frontmatter for machine-readability — the model
-can parse structured JSON reliably without string parsing ambiguity.
-
-### 4e. Acceptance
-
-- Component tests pass (GREEN)
-- `pnpm build:widget` produces self-contained HTML with both views
-- Search executes via MCP bridge (no direct HTTP)
-- Results render with Oak branding
-- External links via `app.openLink()`
-- Model context sync via `app.updateModelContext()`
-- Invoke `mcp-reviewer`, `code-reviewer`, `test-reviewer`
-
----
-
-## Phase 5: Integration (TDD)
-
-**Goal**: Wire MCP Apps into resource registration and re-enable widget rendering.
-
-### 5a. E2E tests for resource and tool wiring (RED)
-
-**TDD**: Write failing **E2E tests** (`.e2e.test.ts` in `e2e-tests/`)
-FIRST. These test a running MCP server over the protocol — they are
-out-of-process tests, not integration tests.
-
-**File**: `e2e-tests/widget-resource.e2e.test.ts` (update existing)
-
-Assertions:
-
-- MCP App resource appears in `resources/list` with correct URI and MIME
-- `resources/read` returns self-contained HTML with `<div id="root"></div>`
-- HTML contains Lexend font, Oak logo, `<script` tag
-- Tools `get-curriculum-model` and `user-search` both have `_meta.ui.resourceUri`
-  pointing to the same resource URI
-- Both tools return meaningful text content (text-only fallback)
-- `user-search-query` does NOT appear in `tools/list` (app-only visibility)
-
-**URI pattern change**: The resource name changes from `oak-json-viewer`
-to `oak-curriculum-viewer`. Update the `getWidgetUri` helper and all URI
-pattern assertions (currently matching `oak-json-viewer-(local|[a-f0-9]{8})`).
-
-These tests are RED because the integration is not yet wired.
-
-### 5b. Create widget HTML loader (TDD)
-
-**RED**: Write `loadWidgetHtml.unit.test.ts` (in `src/`):
-
-- When file exists (inject fake `readFileSync`), returns content
-- When file missing (inject fake that throws), re-throws with actionable
-  error message and preserves `cause`
-
-**GREEN**: Implement. Replace `aggregated-tool-widget.ts` with the HTML
-loader using the fail-fast wrapper from the Architectural Constraints
-section:
-
-```typescript
-import { readFileSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const base = dirname(fileURLToPath(import.meta.url));
-
-function loadWidgetHtml(filename: string): string {
-  const filepath = resolve(base, `../../dist/${filename}`);
-  try {
-    return readFileSync(filepath, 'utf-8');
-  } catch (cause) {
-    throw new Error(
-      `Widget HTML not found at ${filepath}. Run 'pnpm build:widget' first.`,
-      { cause },
-    );
-  }
-}
-
-export const WIDGET_HTML = loadWidgetHtml('mcp-app.html');
-```
-
-### 5c. Update resource registration
-
-**File**: `src/register-resources.ts`
-
-Single resource registration (same as today, just updated HTML source):
-
-```typescript
-registerAppResource(server, 'oak-curriculum-viewer', WIDGET_URI, ...);
-```
-
-The `registerWidgetResource()` function is re-created (it was removed in
-Phase 1c) with the new `WIDGET_HTML` import. The resource name changes from
-`oak-json-viewer` to `oak-curriculum-viewer`.
-
-**Rewrite `register-resources.integration.test.ts`**: The
-`registerWidgetResource` test block (removed in Phase 1c) must be
-rewritten for the new contract: new HTML source, new resource name
-(`oak-curriculum-viewer`), same CSP and MIME assertions.
-
-### 5d. Populate `WIDGET_TOOL_NAMES`
-
-**File**: `packages/sdks/oak-sdk-codegen/.../cross-domain-constants.ts`
-
-No codegen pipeline changes needed — just populate the existing Set:
-
-```typescript
-export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set([
-  'get-curriculum-model',
-  'user-search',
-]);
-```
-
-Update the comment (currently says "Future WS4 will add `user-search`" —
-this is WS3).
-
-Run `pnpm sdk-codegen && pnpm build` to propagate.
-
-### 5e. Register tools via `registerAppTool`
-
-All three tools MUST use `registerAppTool` from
-`@modelcontextprotocol/ext-apps/server`:
-
-- `get-curriculum-model` — `registerAppTool` with `_meta.ui.resourceUri`
-  pointing to the single widget resource. Tool MUST return meaningful
-  text content as fallback for non-MCP-Apps hosts.
-- `user-search` — `registerAppTool` with same `_meta.ui.resourceUri`.
-  Tool returns text like "Open the search interface to browse Oak's
-  curriculum."
-- `user-search-query` — `registerAppTool` with `visibility: ["app"]`.
-  Hidden from model, callable by any widget.
-
-### 5f. Delete `widget-styles.ts`
-
-All CSS values have been extracted to `widget/src/global.css`. Delete the old
-string-constant file and update any remaining imports.
-
-### 5g. E2E tests go GREEN
-
-The integration tests from Phase 5a and E2E tests from Phase 1a should now
-pass. May need two test suites (one per resource) or parameterised tests.
-
-### 5h. Acceptance
-
-- `pnpm check` passes — all gates green
-- Widget E2E tests pass (GREEN)
-- Both MCP Apps render in `basic-host` preview
-- `pnpm sdk-codegen && pnpm build` succeeds
-- Invoke `code-reviewer`, `mcp-reviewer`, `architecture-reviewer-barney`
-
----
-
-## Phase 6: Documentation + OpenAI Cleanup
-
-**Goal**: Remove all remaining OpenAI references from non-archive files.
-
-### 6a. Fix TypeScript comments (4 files)
-
-- `src/mcp-router.ts` — "OpenAI Apps docs" → "MCP spec"
-- `src/auth-error-response.ts` — "OpenAI MCP OAuth" → "MCP OAuth"
-- `src/auth-routes.ts` — "OpenAI Apps docs" → "MCP spec"
-- `src/auth/mcp-auth/mcp-auth.ts` — "Per OpenAI Apps" → "Per MCP spec"
-
-### 6b. Rewrite `widget-rendering.md` entirely
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/docs/widget-rendering.md`
-
-This 195-line document describes the deleted string-template architecture.
-Every section is obsolete. **Rewrite entirely** with:
-
-- Single React MCP App architecture
-- Vite build pipeline and `build:widget` command
-- `useApp` connection lifecycle and `ToolRouter` routing
-- Component structure (CurriculumModelView, UserSearchView)
-- Development workflow (`dev:widget` with hot-reload)
-- Build output expectations (self-contained HTML via `vite-plugin-singlefile`)
-
-### 6c. Update workspace README
-
-**File**: `apps/oak-curriculum-mcp-streamable-http/README.md`
-
-Add:
-
-- "Widget Build" section explaining `build:widget` and `dev:widget`
-- Reference to ADR-141 (MCP Apps Standard)
-- Purpose of the `widget/` directory
-
-### 6d. TSDoc on all new public interfaces
-
-All 15+ new `.tsx` files MUST have TSDoc on exported components describing:
-
-- Component purpose
-- Props interface (especially `app: App` and tool result types)
-- `loadWidgetHtml` must document fail-fast behaviour
-
-### 6e. Clean up remaining non-archive markdown files (~17-20 files)
-
-Update each to reflect MCP Apps standard. Key files:
-
-- `docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md`
-  — add note about `user-search` and `user-search-query` new tool surface
-- `.agent/sub-agents/templates/mcp-reviewer.md`
-- `.agent/skills/mcp-migrate-oai/SKILL.md`
-- `.agent/skills/mcp-create-app/SKILL.md`
-- `.agent/skills/mcp-add-ui/SKILL.md`
+- `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 - `.agent/plans/sdk-and-mcp-enhancements/roadmap.md`
-- Various active/current plan files
+- collection README/index files in this plan set
+- `.agent/plans/sdk-and-mcp-enhancements/current/README.md`
+- `apps/oak-curriculum-mcp-streamable-http/docs/widget-rendering.md`
+- workspace README material that explains widget build/development
 
-Archive files left as-is.
+Historical archive materials remain historical. Active docs must not prescribe
+banned legacy architecture.
 
-### 6f. Update parent plan
+### Quality gates
 
-**File**: `mcp-app-extension-migration.plan.md`
-
-Mark both `ws3-widget-client-branding` AND `ws4-search-ui` todos as `done`
-(this child plan consolidates both work streams into one).
-
-### 6h. Acceptance
-
-- `rg -i "openai" apps/oak-curriculum-mcp-streamable-http/src/ --type ts`
-  returns zero
-- `rg "window\.openai" --glob "*.md" --glob "!*archive*"` returns zero
-- `widget-rendering.md` fully rewritten for React architecture
-- Workspace README includes widget build documentation
-- All new components have TSDoc
-- Parent plan WS3 + WS4 both marked done
-- Invoke `docs-adr-reviewer`
-
----
-
-## Phase 7: Final Review + Commit
-
-### 7a. Coupling regression check
-
-```bash
-rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|openai/visibility|text/html\+skybridge|window\.openai|openai/widget" \
-  packages/sdks/ apps/oak-curriculum-mcp-streamable-http/src/
-```
-
-Expected: zero hits.
-
-### 7b. Full quality gates
+Run at least:
 
 ```bash
 pnpm check
 ```
 
-### 7c. Reviewer invocations
+Focused verification during development should include the HTTP app’s build,
+test, and E2E commands as needed.
 
-- `code-reviewer` — gateway review
-- `mcp-reviewer` — MCP Apps protocol compliance
-- `architecture-reviewer-fred` — ADR compliance
-- `architecture-reviewer-barney` — dependency mapping
-- `test-reviewer` — TDD compliance
-- `type-reviewer` — type flow from ext-apps SDK types
-- `config-reviewer` — Vite + turbo + tsconfig
-- `security-reviewer` — CSP, PostMessage, iframe sandboxing
+### Reviewer set
 
-### 7d. Commit
+- `mcp-reviewer`
+- `code-reviewer`
+- `test-reviewer`
+- `type-reviewer`
+- `config-reviewer`
+- `security-reviewer`
+- `docs-adr-reviewer`
+- `architecture-reviewer-barney`
+- `architecture-reviewer-betty`
+- `architecture-reviewer-fred`
+- `architecture-reviewer-wilma`
 
----
+### Acceptance
 
-## Key Files Reference
+Runtime/product code should be clean under the canonical contamination check:
+(run the command from `Canonical Runtime Contamination Check`)
 
-### Files to DELETE (Phase 1)
+Plus:
 
-| Path (relative to `apps/oak-curriculum-mcp-streamable-http/`) | Reason |
-|--------------------------------------------------------------|--------|
-| `src/widget-script.ts` | Dead code (`undefined?.toolOutput`) |
-| `src/widget-script-state.ts` | Dead code (`undefined?.widgetState`) |
-| `src/widget-script-escaping.ts` + test | String template utility |
-| `src/widget-renderer-registry.ts` + test | Empty map |
-| `src/widget-file-generator.ts` + test | HTML-to-disk writer |
-| `src/widget-renderers/*` (6 files) | String template renderers |
-| `src/aggregated-tool-widget.unit.test.ts` | Tests deleted code |
-| `src/aggregated-tool-widget.integration.test.ts` | Tests deleted code |
-| `scripts/widget-preview-server.ts` | Imports deleted functions |
-
-### Files to CREATE (Phases 2-4)
-
-| Path | Purpose |
-|------|---------|
-| `widget/vite.config.ts` | Official Vite config (react + singlefile) |
-| `widget/tsconfig.json` | TypeScript JSX config (official pattern) |
-| `widget/mcp-app.html` | Vite entry HTML |
-| `widget/src/global.css` | Oak brand CSS (host variable fallbacks) |
-| `widget/src/mcp-app.tsx` | React entry point + root component |
-| `widget/src/mcp-app.module.css` | Component styles |
-| `widget/src/components/OakHeader.tsx` | Logo + title link component |
-| `widget/src/components/OakFooter.tsx` | AI disclaimer component |
-| `widget/src/components/ToolRouter.tsx` | Tool name → view routing |
-| `widget/src/components/CurriculumModelView.tsx` | Curriculum model display |
-| `widget/src/components/UserSearchView.tsx` | Interactive search UI |
-| `widget/src/components/SearchInput.tsx` | Search text input |
-| `widget/src/components/SearchResults.tsx` | Search result cards |
-| `widget/src/components/ScopeSelector.tsx` | Scope tabs |
-| `widget/src/components/FilterControls.tsx` | Filter UI |
-
-### Existing infrastructure (modified)
-
-| Path | Change |
-|------|--------|
-| `src/aggregated-tool-widget.ts` | Reads single Vite HTML from disk |
-| `src/register-resources.ts` | Single resource re-enabled |
-| `src/auth/public-resources.ts` | Widget URI in auth bypass set |
-| `e2e-tests/widget-resource.e2e.test.ts` | Updated assertions |
-| `cross-domain-constants.ts` | Populate `WIDGET_TOOL_NAMES` (no URI changes) |
+- `pnpm check` passes
+- the fresh MCP App renders in the upstream `basic-host`
+- WS3 and WS4 scope in the umbrella plan can be closed together
+- public-resource auth tests assert MIME, URI, and payload contract details
+  (not only object presence)
 
 ---
 
-## Official Documentation Sources
+## Cross-Plan References
 
-- Build guide: <https://modelcontextprotocol.io/extensions/apps/build>
-- API docs: <https://apps.extensions.modelcontextprotocol.io/api/>
-- Quickstart: <https://apps.extensions.modelcontextprotocol.io/api/documents/Quickstart.html>
-- Patterns: <https://apps.extensions.modelcontextprotocol.io/api/documents/Patterns.html>
-- Official React example: <https://github.com/modelcontextprotocol/ext-apps/tree/main/examples/basic-server-react>
-- basic-host preview: <https://github.com/modelcontextprotocol/ext-apps/tree/main/examples/basic-host>
-- ext-apps SDK: <https://github.com/modelcontextprotocol/ext-apps>
+- `mcp-app-extension-migration.plan.md` — umbrella ownership and closure criteria
+- `../roadmap.md` — strategic ordering and C8 blocking status
+- `../current/auth-safety-correction.plan.md` — deny-by-default auth correction
+- `../current/auth-boundary-type-safety.plan.md` — auth boundary typing and
+  fail-fast validation remediation
+- `../current/README.md` — queued and in-progress follow-on execution plans
 
 ---
 
-## Verification
+## Canonical Runtime Contamination Check
 
-1. `pnpm check` — all quality gates pass
-2. `pnpm test:e2e` — widget resource E2E tests GREEN
-3. `pnpm build:widget` — Vite produces single self-contained HTML file
-4. Coupling regression — zero OpenAI hits in non-archive files
-5. Manual: `basic-host` preview renders MCP App with both views
-6. Manual: test in Claude via cloudflare tunnel
+Run throughout implementation:
+
+```bash
+rg -n --hidden \
+  'window\.openai|openai/|text/html\+skybridge|__mcpPreview|chatgpt-emulation|oak-json-viewer|undefined\?\.tool(Output|Input)|tools-list-override' \
+  apps/oak-curriculum-mcp-streamable-http \
+  packages/sdks/oak-curriculum-sdk \
+  packages/sdks/oak-sdk-codegen
+```
+
+Expected active-path result at completion: zero.

@@ -1,16 +1,16 @@
 # MCP Specialist Upgrade — Strategic Plan
 
-**Status**: PARTIALLY COMPLETE (2026-03-25: situational rule created, live-spec-first doctrine added to template, ext-apps coverage already present. Remaining: dedicated skill at `.agent/skills/mcp-expert/SKILL.md`)
+**Status**: IN PROGRESS (promoted to current on 2026-03-30; partially complete)
 **Domain**: Agentic Engineering Enhancements
 **Pattern**: [ADR-129 (Domain Specialist Capability Pattern)](../../../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md)
 
 ## Problem and Intent
 
-The `mcp-reviewer` already exists as a general reviewer but is NOT a full
-ADR-129 triplet — it has no skill, no situational rule, and no live-docs-first
-doctrine. The MCP specification evolves rapidly (2025-11-25 spec, ext-apps,
-streaming, OAuth). Agents using cached knowledge about MCP frequently apply
-outdated patterns.
+The `mcp-reviewer` already exists and has partial upgrade work landed, but it is
+still NOT a full ADR-129 triplet because the dedicated canonical skill is not
+yet present. The MCP specification evolves rapidly (2025-11-25 spec, ext-apps,
+streaming, OAuth), so remaining capability gaps still allow outdated review
+patterns.
 
 Additionally, `@modelcontextprotocol/ext-apps` (App Extensions) is a new and
 evolving surface with host-specific behaviour (ChatGPT, Claude, sandbox
@@ -64,6 +64,20 @@ This is an UPGRADE, not a greenfield creation:
 6. Discoverability updates
 7. Validation
 
+## Progress Snapshot
+
+### Completed
+
+1. Canonical situational rule exists at `.agent/rules/invoke-mcp-reviewer.md`
+2. Live-spec-first doctrine added to `mcp-reviewer` template
+3. ext-apps coverage included in reviewer guidance
+
+### Remaining
+
+1. Create canonical skill: `.agent/skills/mcp-expert/SKILL.md`
+2. Ensure platform adapters include the new skill
+3. Final discoverability and validation sweep after skill creation
+
 ## Ext-Apps Sub-Scope
 
 The `@modelcontextprotocol/ext-apps` surface deserves dedicated coverage:
@@ -73,14 +87,7 @@ The `@modelcontextprotocol/ext-apps` surface deserves dedicated coverage:
 - `_meta.ui.domain` for cross-origin fetch
 - Host-specific iframe behaviour and sandbox domains
 - CSP considerations
-- Migration from direct tool responses to ext-apps patterns
+- Review guidance for migrations from direct tool responses to ext-apps patterns
 
 Decision at implementation time: dedicated section within MCP reviewer, or
 separate sub-specialist. Depends on surface area when work begins.
-
-## Promotion Trigger
-
-This plan promotes to `current/` when:
-
-1. MCP-related work is scheduled that would benefit from the full triplet
-2. No conflicting work is in progress on the agent artefact layer

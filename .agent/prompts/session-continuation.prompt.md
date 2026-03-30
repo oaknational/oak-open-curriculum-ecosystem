@@ -10,66 +10,66 @@ last_updated: 2026-03-30
 
 ## Ground First
 
-1. Read and internalise `.agent/directives/AGENT.md` and
-   `.agent/directives/principles.md` — these are authoritative and
-   override any conflicting detail in this prompt.
-2. Find the current active plans:
-   - Parent: `mcp-app-extension-migration.plan.md`
-   - **Active child**: `ws3-widget-clean-break-rebuild.plan.md` — reviewed
-     by 10 specialists, ready for implementation. Start at Phase 0.
-3. Re-establish live branch state:
+1. Read and internalise:
+   - `.agent/directives/AGENT.md`
+   - `.agent/directives/principles.md`
+   - `.agent/directives/testing-strategy.md`
+   - `.agent/directives/schema-first-execution.md`
+2. Read the live MCP Apps planning stack in this order:
+   - `.agent/plans/sdk-and-mcp-enhancements/roadmap.md`
+   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
+   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
+   - `.agent/plans/sdk-and-mcp-enhancements/current/README.md`
+3. Reconfirm the WS3 non-negotiable invariant from the child plan:
+   - complete replacement of the legacy OpenAI-era widget stack
+   - no conversion, no compatibility bridge, no renamed globals
+   - one brand-new MCP App built on `@modelcontextprotocol/ext-apps`
+4. Re-establish live branch state:
 
 ```bash
 git status --short
 git log --oneline --decorate -5
 ```
 
+5. Run the canonical WS3 runtime contamination check command from the child
+   plan before and after substantive changes.
+6. Reconfirm `Canonical Compliance Checklist` in the WS3 child plan before
+   changing runtime behaviour, metadata visibility, resource identity, or auth.
+
 ## This Prompt's Role
 
-- This file is the operational entry point only.
-- The active plan is authoritative for scope, sequencing, acceptance
-  criteria, and detailed validation.
+- Operational entry point only.
+- Active plans are authoritative for scope, sequencing, acceptance criteria,
+  and validation.
+- If prompt text conflicts with active plans, active plans win.
 
 ## Active Work
 
-### WS3: Widget Clean-Break Rebuild
+### WS3: Fresh React MCP App Rebuild
 
-**Status**: Child plan complete and reviewed by 10 specialists. Ready
-for implementation.
+**Status**: Active implementation track.
 
-**Child plan**: `ws3-widget-clean-break-rebuild.plan.md` (in
-`.agent/plans/sdk-and-mcp-enhancements/active/`)
+**Child plan**:
+`.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 
-**What must happen next session**: Implement the WS3 child plan starting
-at Phase 0 (selective commit of uncommitted changes, quality gate
-baseline).
+**Immediate priority**: execute the WS3 child plan from Phase 0.
 
-**Key decisions** (settled during plan review):
+## Core Invariant
 
-1. **Single MCP App** with internal routing on tool name (not two apps)
-2. **Only 2 tools get UI**: `get-curriculum-model` + `user-search` (NEW)
-3. **Official canonical stack**: React 19 + Vite 6 + `vite-plugin-singlefile`
-4. **Existing codegen model preserved** — one URI, populate `WIDGET_TOOL_NAMES`
-5. **Oak brand primary** — Lexend, green palette, host light/dark respected
-6. **19 uncommitted files** on `feat/mcp_app_ui` — Phase 0 triages these
-7. **~35 markdown files** still reference `window.openai` — cleaned in Phase 6
+This workstream is a clean-break replacement:
 
-## Scope Boundaries (do NOT)
-
-- Do not introduce shims, compatibility layers, or workarounds of
-  any kind (principle in `principles.md`).
-- Do not refactor `apps/oak-curriculum-mcp-stdio`.
+- replace the out-of-date OpenAI-era app integration with a brand-new MCP App
+- keep `search` as the model-facing, agent-facing search interface
+- add `user-search` as a UI-first, user-first MCP App tool built alongside the
+  other aggregated tools
+- keep `user-search-query` app-only via canonical metadata visibility
+  (`_meta.ui.visibility`) when still justified by the active plan
+- do not introduce custom tool-discovery, visibility, or presentation shims in
+  the HTTP app
 
 ## Durable Guidance
 
-- **Run `pnpm check` before every push.**
-- `pnpm qg` before every commit (quick read-only check).
-- `pnpm fix` auto-fixes format, markdownlint, lint.
-- Turbo task-specific overrides (`@package#task`) REPLACE generic
-  tasks entirely. Always verify with `turbo run <task> --dry=json`.
-
-## Quality Gates
-
-Full verification: `pnpm check`
-Read-only check: `pnpm qg`
-Auto-fix: `pnpm fix`
+- Run `pnpm check` before every push.
+- Run `pnpm qg` before every commit.
+- Run `pnpm fix` to apply auto-fixes.
+- Keep this prompt concise and operational; do not duplicate plan authority.

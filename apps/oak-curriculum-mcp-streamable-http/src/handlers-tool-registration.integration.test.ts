@@ -7,7 +7,7 @@
  * 2. Registration config must come from the SDK canonical projection, not from
  *    hand-assembled field extraction in the app layer.
  *
- * @see .agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md — Phase 2
+ * @see .agent/plans/sdk-and-mcp-enhancements/archive/completed/mcp-runtime-boundary-simplification.plan.md — Phase 2
  */
 
 import { describe, it, expect, vi } from 'vitest';
