@@ -18,6 +18,9 @@ import type { McpServerFactory } from './mcp-request-context.js';
 import { createChildLogger } from './logging/index.js';
 import type { HttpObservability } from './observability/http-observability.js';
 
+/** Cleanup timeout — prevents indefinite hangs from stalled close operations. */
+const CLEANUP_TIMEOUT_MS = 5000;
+
 /**
  * Narrow request interface for `createMcpHandler`.
  *
@@ -72,6 +75,65 @@ function extractMcpMethod(body: unknown): string | undefined {
 }
 
 /**
+ * Safely logs a cleanup error. Guards against logging/capture failures
+ * so that a broken logger never masks the original resource-leak error.
+ */
+function safeLogCleanupError(
+  error: unknown,
+  log: Logger | undefined,
+  observability: HttpObservability,
+  method: string | undefined,
+  path: string,
+): void {
+  try {
+    log?.error('MCP per-request cleanup failed', normalizeError(error), { method, path });
+  } catch {
+    // Logger failure must not mask the original cleanup error.
+  }
+  try {
+    observability.captureHandledError(error, { boundary: 'mcp_cleanup', method, path });
+  } catch {
+    // Observability failure must not mask the original cleanup error.
+  }
+}
+
+/**
+ * Registers a cleanup handler on the response 'close' event.
+ *
+ * Defence-in-depth: clears auth, closes transport/server with a timeout,
+ * and guards all error-logging paths so failures never swallow silently.
+ */
+function registerCleanupHandler(
+  res: McpHandlerResponse,
+  req: McpHandlerRequest,
+  transport: { close(): Promise<void> },
+  server: { close(): Promise<void> },
+  log: Logger | undefined,
+  observability: HttpObservability,
+): void {
+  res.on('close', () => {
+    req.auth = undefined;
+    const timeout = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('MCP cleanup timeout')), CLEANUP_TIMEOUT_MS);
+    });
+    void Promise.race([Promise.allSettled([transport.close(), server.close()]), timeout])
+      .then((results) => {
+        if (!Array.isArray(results)) {
+          return;
+        }
+        for (const result of results) {
+          if (result.status === 'rejected') {
+            safeLogCleanupError(result.reason, log, observability, req.method, req.path);
+          }
+        }
+      })
+      .catch((timeoutError: unknown) => {
+        safeLogCleanupError(timeoutError, log, observability, req.method, req.path);
+      });
+  });
+}
+
+/**
  * Per-request MCP handler (stateless pattern).
  *
  * Uses narrow request/response interfaces so test fakes satisfy the types
@@ -94,38 +156,23 @@ export function createMcpHandler(
     const { server, transport } = mcpFactory();
     await server.connect(transport);
 
-    // Clean up per-request resources after the response completes.
-    // Defence-in-depth: clear auth data from the request object.
-    res.on('close', () => {
-      req.auth = undefined;
-      void Promise.allSettled([transport.close(), server.close()]).then((results) => {
-        for (const result of results) {
-          if (result.status === 'rejected') {
-            const error: unknown = result.reason;
-            log?.error('MCP per-request cleanup failed', normalizeError(error), {
-              method: req.method,
-              path: req.path,
-            });
-            observability.captureHandledError(error, {
-              boundary: 'mcp_cleanup',
-              method: req.method,
-              path: req.path,
-            });
-          }
-        }
-      });
-    });
+    registerCleanupHandler(res, req, transport, server, log, observability);
 
-    await observability.withSpan({
-      name: 'oak.http.request.mcp',
-      attributes: {
-        ...(req.method !== undefined ? { 'http.method': req.method } : {}),
-        'http.route': req.path,
-      },
-      run: async () => {
-        await transport.handleRequest(req, res, req.body);
-      },
-    });
+    // Guard withSpan so observability failures never crash the handler.
+    try {
+      await observability.withSpan({
+        name: 'oak.http.request.mcp',
+        attributes: {
+          ...(req.method !== undefined ? { 'http.method': req.method } : {}),
+          'http.route': req.path,
+        },
+        run: async () => {
+          await transport.handleRequest(req, res, req.body);
+        },
+      });
+    } catch (spanError: unknown) {
+      safeLogCleanupError(spanError, log, observability, req.method, req.path);
+    }
 
     log?.debug('MCP request completed', { statusCode: res.statusCode, mcpMethod });
   };
