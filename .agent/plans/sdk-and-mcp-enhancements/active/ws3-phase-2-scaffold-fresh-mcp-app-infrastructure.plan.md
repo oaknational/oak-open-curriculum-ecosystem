@@ -34,3 +34,7 @@ todos:
 1. Build outputs self-contained `dist/mcp-app.html`
 2. Turbo invalidates on widget `ts`, `tsx`, `css`, and `html`
 3. Lint/type-check/test pipelines include widget source set
+4. Widget-specific lint and type-check config is scoped to `widget/` paths
+   only — React/DOM rules do not bleed into server-side lint. This is the
+   structural investment that makes future extraction to a separate package
+   cheap if a second consumer ever appears. (Source: Betty review.)

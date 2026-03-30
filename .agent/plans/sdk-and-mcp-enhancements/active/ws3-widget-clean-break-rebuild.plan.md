@@ -153,8 +153,10 @@ Canonical client pattern:
 
 - `useApp()` is the default React entry point
 - register handlers in `onAppCreated`
-- set up `ontoolinput`, `ontoolresult`, `ontoolcancelled`, `onteardown`,
-  `onhostcontextchanged`, and `onerror` before the app starts handling data
+- set up `ontoolinput`, `ontoolinputpartial`, `ontoolresult`,
+  `ontoolcancelled`, `onteardown`, `onhostcontextchanged`, and `onerror`
+  before the app starts handling data (`ontoolinputpartial` enables streaming
+  partial tool arguments for responsive UI during model generation)
 - read host context from the SDK, not from bespoke globals
 - call server tools with `app.callServerTool()`
 - open external URLs with `app.openLink()`
@@ -317,6 +319,12 @@ plan remains the parent orchestration document and source of phase ordering.
 
 **Goal**: ground the live branch and write failing specs first.
 
+> **Post-WS2 calibration note**: WS2 already removed all runtime-path
+> contamination (`window.openai`, `text/html+skybridge`, `__mcpPreview`,
+> `chatgpt-emulation`). The contamination inventory will primarily find dead
+> files awaiting deletion and the `oak-json-viewer` resource slug awaiting
+> rename — not active runtime patterns requiring decontamination.
+
 ### Tasks
 
 1. Inspect live branch state with `git status --short` and
@@ -326,7 +334,9 @@ plan remains the parent orchestration document and source of phase ordering.
 3. Capture a focused non-canonical inventory for:
    - `src/widget-script.ts` bridge residue and serving path
    - `src/register-resources.ts` hard-coded legacy resource identity
-   - `src/tools-list-override.ts` bespoke tool discovery/visibility behaviour
+   - `src/tools-list-override.ts` B3 Hybrid for JSON Schema examples preservation
+     in `tools/list` — assess for retention or adaptation alongside
+     `registerAppTool` adoption in Phase 3 (not contamination)
    - public resource auth bypass semantics and test coverage depth
 
 4. Update or add RED tests before product changes:
@@ -679,7 +689,7 @@ Run throughout implementation:
 
 ```bash
 rg -n --hidden \
-  'window\.openai|openai/|text/html\+skybridge|__mcpPreview|chatgpt-emulation|oak-json-viewer|undefined\?\.tool(Output|Input)|tools-list-override' \
+  'window\.openai|openai/|text/html\+skybridge|__mcpPreview|chatgpt-emulation|oak-json-viewer|undefined\?\.tool(Output|Input)' \
   apps/oak-curriculum-mcp-streamable-http \
   packages/sdks/oak-curriculum-sdk \
   packages/sdks/oak-sdk-codegen

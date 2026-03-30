@@ -30,12 +30,17 @@ authoritative for full WS3 scope and ordering.
 
 ## Tasks
 
+> **Post-WS2 calibration**: WS2 already removed runtime-path contamination
+> (`window.openai`, `text/html+skybridge`, etc.). This inventory will primarily
+> find dead files and the `oak-json-viewer` slug, not active runtime patterns.
+
 1. Capture live branch state (`git status --short`, `git log --oneline --decorate -5`)
 2. Run canonical runtime contamination check from the WS3 parent plan
 3. Capture non-canonical inventory for:
-   - legacy bridge residue
-   - hard-coded resource identity
-   - bespoke tool-list visibility overrides
+   - legacy bridge residue (dead files awaiting deletion)
+   - hard-coded resource identity (`oak-json-viewer` slug)
+   - `tools-list-override.ts` B3 Hybrid (JSON Schema examples preservation —
+     assess for retention in Phase 3, not contamination)
    - public-resource auth policy surface
 4. Add/adjust RED tests for:
    - widget resource contract
