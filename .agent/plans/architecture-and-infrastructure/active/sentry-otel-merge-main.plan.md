@@ -147,12 +147,16 @@ target exactly those seams.
 
 ## Merge Execution Plan
 
-### Phase 0: Pre-flight (read-only)
+### Phase 0: Pre-flight
 
 1. `pnpm check` on current branch — confirm green baseline
-2. Create characterisation tests (Test 1-3 above)
-3. Run characterisation tests — confirm they pass on current branch
-4. Commit characterisation tests
+2. Fix C1/C2 regex backtracking findings (per
+   [PR73 remediation plan](./sentry-otel-pr73-codeql-remediation.plan.md)) —
+   unrolled-loop pattern in `agent-tools/src/core/codex-project-agent-registry.ts`
+   and `scripts/validate-subagents-helpers.mjs`. Run targeted tests, commit.
+3. Create characterisation tests (Test 1-3 above)
+4. Run characterisation tests — confirm they pass on current branch
+5. Commit characterisation tests
 
 ### Phase 1: Start the merge
 
