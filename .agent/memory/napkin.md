@@ -459,3 +459,53 @@ equivalent.
   cross-reference hardening rather than a reusable implementation pattern.
 - No experience-file promotion this pass; sampled files remain primarily
   reflective rather than settled technical guidance.
+
+## Session 2026-03-30 — WS3 plan stack hardening + phase companion plans
+
+### What was done
+
+- Consolidated direct review findings (assistant + mcp-reviewer) and updated the
+  prompt, roadmap, umbrella, and WS3 parent plan to resolve closure and
+  sequencing ambiguity.
+- Made C8 auth plans explicit closure gates for WS3/WS4 migration completion
+  across all live planning surfaces.
+- Normalised readiness command semantics: `pnpm qg` as canonical non-mutating
+  gate and `pnpm check` as full scrub before push/merge.
+- Added seven WS3 phase companion plan files while keeping the existing WS3 plan
+  as the parent orchestration document.
+
+### Patterns to remember
+
+- For blocker-class dependencies, duplicate the same closure rule in prompt,
+  roadmap, umbrella, and child plan exit criteria to avoid conflicting
+  interpretations at execution time.
+- Keep contamination checks as guardrails only; they do not replace behaviour
+  evidence and closure gates.
+- Large active plans stay manageable when phase execution details move into
+  companion plans linked from the parent plan.
+
+## Session 2026-03-30 — Consolidate docs pass after WS3 decomposition
+
+### What was checked
+
+- Ran `pnpm practice:fitness:informational` and confirmed PASS across tracked
+  fitness-doc surfaces.
+- Verified `.agent/practice-core/incoming/` is empty.
+- Swept active/current/prompt links in the MCP Apps plan stack; no stale
+  `active/` or `current/` links requiring archive rewrites were found in live
+  docs touched this session.
+- Audited representative platform memory and platform-plan files under
+  `~/.claude/projects/.../memory/` and `~/.claude/plans/` for extractable
+  canonical guidance.
+- Sampled recent `.agent/experience/` entries; they remain reflective and do
+  not require promotion into permanent technical docs.
+
+### No-change decisions
+
+- No additional distilled-memory promotion: `distilled.md` is near ceiling and
+  sampled platform-memory guidance was already represented there or remained
+  session/provenance-specific.
+- No code-pattern extraction this pass: work was documentation and plan-structure
+  consolidation rather than a reusable implementation pattern.
+- No distillation run: napkin is below the ~500-line threshold (current line
+  count: 486).

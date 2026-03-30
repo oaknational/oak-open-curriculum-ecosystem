@@ -4,7 +4,6 @@ name: ground-truth-designer
 model: claude-4.6-opus-high-thinking
 description: Specialist for designing ground truth queries for the Oak semantic search service. Use when creating new ground truths, redesigning existing queries, reviewing existing queries, or exploring curriculum content for GT development. Understands teacher search behaviour and known-answer-first methodology.
 readonly: true
-is_background: true
 ---
 
 # Ground Truth Designer

@@ -138,15 +138,21 @@ WS3 delivery and closure must stay aligned with:
 2. `../current/auth-boundary-type-safety.plan.md` for auth boundary typing and
    fail-fast validation at runtime boundaries
 
-These follow-on plans are not part of WS3 implementation scope, but are binding
-for auth-risk closure across the migration workstream.
+These follow-on plans are not part of WS3 implementation scope, but they are
+blocking closure gates for auth-risk closure across the migration workstream.
+
+Explicit rule:
+
+- WS3/WS4 implementation phases may proceed.
+- WS3/WS4 migration closure must not be marked complete until both plans are
+  complete (or explicitly superseded by accepted architecture).
 
 ### Specialist-capability dependency (separate collection)
 
 `mcp-reviewer` upgrade work is intentionally tracked
 outside this product migration collection at:
 
-- `.agent/plans/agentic-engineering-enhancements/current/mcp-specialist-upgrade.plan.md`
+- `.agent/plans/agentic-engineering-enhancements/archive/completed/mcp-specialist-upgrade.plan.md`
 
 Reason: this is reviewer-capability infrastructure (ADR-129 triplet hardening),
 not product/runtime delivery scope. It is a non-blocking parallel dependency for
@@ -167,6 +173,7 @@ WS3 child plan: fresh React MCP App rebuild ▶ active
   Phase 4: curriculum-model view
   Phase 5: user-search view
   Phase 6: docs + review + commit
+C8 closure gates: auth metadata hardening   ⏳ required for migration closure
 ```
 
 ## Exit Criteria
@@ -176,8 +183,12 @@ This umbrella plan is complete when:
 1. The WS3 child plan is complete
 2. `ws3-widget-clean-break` can be marked completed
 3. `ws4-search-ui` can be marked completed
-4. No active product path depends on banned legacy widget code or guidance
-5. All quality gates pass
+4. C8 auth hardening closure gates are complete (or explicitly superseded by
+   accepted architecture):
+   - `../current/auth-safety-correction.plan.md`
+   - `../current/auth-boundary-type-safety.plan.md`
+5. No active product path depends on banned legacy widget code or guidance
+6. All quality gates pass
 
 ## Related Documents
 

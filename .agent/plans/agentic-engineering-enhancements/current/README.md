@@ -1,10 +1,10 @@
 # Current Plans — Agentic Engineering Enhancements
 
-Strategic source plans and queued adjacent capability plans.
+Strategic source plans and adjacent capability plans (queued or in progress).
 
 These files are not the atomic execution plans in `active/`, but they do
-represent the queue of next strategic/capability work to promote into explicit
-active execution plans when scheduled.
+represent strategic/capability work to promote into explicit active execution
+plans when scheduled.
 
 ## Source Plans
 
@@ -15,7 +15,7 @@ active execution plans when scheduled.
 | [mutation-testing-implementation.plan.md](mutation-testing-implementation.plan.md) | Phase 5 (mutation testing) | REFERENCE |
 | [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md) | Adjacent: ES specialist (✅ complete) | REFERENCE |
 | [harness-concepts-adoption.plan.md](harness-concepts-adoption.plan.md) | Adjacent: HC-0 baseline metrics | REFERENCE |
-| [mcp-specialist-upgrade.plan.md](mcp-specialist-upgrade.plan.md) | Adjacent: MCP specialist upgrade (ADR-129 triplet hardening) | QUEUED |
+| [mcp-specialist-upgrade.plan.md](../archive/completed/mcp-specialist-upgrade.plan.md) | Adjacent: MCP specialist upgrade (ADR-129 triplet hardening) | REFERENCE |
 
 Strategic context: [roadmap.md](../roadmap.md)
 

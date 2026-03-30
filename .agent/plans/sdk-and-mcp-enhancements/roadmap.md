@@ -75,6 +75,12 @@ Read the live workstream in this order:
 3. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
 4. [current/README.md](current/README.md)
 
+When touching runtime contract, metadata visibility, resource auth, or tool
+registration, also read:
+
+5. [current/auth-safety-correction.plan.md](current/auth-safety-correction.plan.md)
+6. [current/auth-boundary-type-safety.plan.md](current/auth-boundary-type-safety.plan.md)
+
 Completed dependency work is archived at:
 
 - [archive/completed/ws2-app-runtime-migration.plan.md](archive/completed/ws2-app-runtime-migration.plan.md)
@@ -124,14 +130,21 @@ exposure does not depend on unfinished MCP Apps execution.
 
 ## Validation
 
-Minimum end-to-end validation for this workstream:
+Canonical readiness and validation commands for this workstream:
+
+```bash
+pnpm qg
+```
+
+Full scrub before push/merge:
 
 ```bash
 pnpm check
 ```
 
-Canonical runtime contamination check is defined in the WS3 child plan and is
-the single source of truth for this workstream.
+Canonical runtime contamination check is defined in the WS3 child plan and is a
+required guardrail for active-path legacy residue. It is not, by itself, the
+single source of truth for workstream completion.
 
 Normative documentation drift is validated through executable-plan acceptance
 criteria and reviewer checks, not by searching plan prose for banned strings.
@@ -154,6 +167,6 @@ This roadmap can be treated as complete when:
 - [mcp-apps-support.research.md](mcp-apps-support.research.md) — canonical MCP
   Apps research summary for Oak
 - [future/README.md](future/README.md) — later work beyond the active migration
-- [../agentic-engineering-enhancements/current/mcp-specialist-upgrade.plan.md](../agentic-engineering-enhancements/current/mcp-specialist-upgrade.plan.md) —
+- [../agentic-engineering-enhancements/archive/completed/mcp-specialist-upgrade.plan.md](../agentic-engineering-enhancements/archive/completed/mcp-specialist-upgrade.plan.md) —
   parallel reviewer-capability upgrade tracked in the agentic-engineering
-  collection (separate from product delivery scope)
+  collection (complete; separate from product delivery scope)

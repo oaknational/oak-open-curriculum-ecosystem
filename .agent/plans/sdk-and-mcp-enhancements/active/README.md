@@ -14,6 +14,25 @@ Executable plans that are in progress now.
   enforcement is centralised in the child plan's `Canonical Compliance
   Checklist`.
 
+## WS3 Phase Companion Plans
+
+- [ws3-phase-0-baseline-and-red-specs.plan.md](ws3-phase-0-baseline-and-red-specs.plan.md) —
+  WS3 companion phase plan for grounding, contamination baseline, and RED test
+  setup.
+- [ws3-phase-1-delete-legacy-widget-framework.plan.md](ws3-phase-1-delete-legacy-widget-framework.plan.md) —
+  WS3 companion phase plan for deleting dead widget framework surfaces.
+- [ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md](ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md) —
+  WS3 companion phase plan for fresh React MCP App scaffolding and tooling.
+- [ws3-phase-3-canonical-contracts-and-runtime.plan.md](ws3-phase-3-canonical-contracts-and-runtime.plan.md) —
+  WS3 companion phase plan for canonical metadata/registration/auth/runtime
+  contract alignment.
+- [ws3-phase-4-curriculum-model-view.plan.md](ws3-phase-4-curriculum-model-view.plan.md) —
+  WS3 companion phase plan for the curriculum-model view delivery.
+- [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
+  WS3 companion phase plan for user-search UI delivery and helper-tool flow.
+- [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
+  WS3 companion phase plan for docs, gates, reviewers, and closure checks.
+
 Completed and archived:
 
 - [ws2-app-runtime-migration.plan.md](../archive/completed/ws2-app-runtime-migration.plan.md) —

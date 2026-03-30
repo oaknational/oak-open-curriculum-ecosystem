@@ -96,7 +96,7 @@ Adjacent:
   HC-0: Harness concepts baseline metrics            📋 PLANNED
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 📋 PLANNED
-  MCP+: MCP specialist upgrade (triplet + ext-apps)  📋 QUEUED
+  MCP+: MCP specialist upgrade (triplet + ext-apps)  ✅ COMPLETE
   EXP:  Express specialist capability                📋 PLANNED
   CYB:  Cyber security specialist capability         📋 PLANNED
   WAS:  Web/API security specialist capability       📋 PLANNED
@@ -243,7 +243,7 @@ Adjacent:
 ### Adjacent — MCP Specialist Upgrade (MCP+)
 
 - Strategic plan:
-  [mcp-specialist-upgrade.plan.md](current/mcp-specialist-upgrade.plan.md)
+  [mcp-specialist-upgrade.plan.md](archive/completed/mcp-specialist-upgrade.plan.md)
 - Goal:
   - upgrade existing `mcp-reviewer` from a general reviewer to a full ADR-129
     triplet (add skill, situational rule, live-spec-first doctrine)
@@ -251,12 +251,16 @@ Adjacent:
     preview, iframe/CSP, host-specific behaviour)
   - require live consultation of the MCP specification and ext-apps docs
   - the MCP spec evolves rapidly — agents need current guidance, not cached knowledge
-- Status: 📋 QUEUED (current/)
+- Status: ✅ COMPLETE (current/, reference)
+- Delivered:
+  - `.agent/skills/mcp-expert/SKILL.md` — canonical active workflow skill with doctrine hierarchy, tiered context, capability routing
+  - `.cursor/skills/mcp-expert/SKILL.md` and `.agents/skills/mcp-expert/SKILL.md` — platform wrappers
+  - MCP quick-triage (#9) and worked example added to `invoke-code-reviewers.md`
+  - Full wrapper parity audit across Cursor/Claude/Codex surfaces
+  - Validation evidence: `subagents:check`, `portability:check`, `markdownlint:root` all passing
 - Notes:
-  - unlike ES/Clerk/Sentry, this upgrades an existing reviewer rather than creating
-    from scratch
-  - ext-apps scope may warrant a sub-specialist or a dedicated section within the
-    MCP skill, depending on surface area at implementation time
+  - unlike ES/Clerk/Sentry, this upgraded an existing reviewer rather than creating from scratch
+  - ext-apps remains within MCP specialist scope
   - intentionally outside the numbered phase sequence
 
 ### Adjacent — Express Specialist Capability
@@ -608,8 +612,8 @@ specialists, not deferred.
 
 **Domain specialists (ADR-129 triplets, invoked on domain signal):**
 
-- elasticsearch-reviewer ✅, clerk-reviewer ✅, sentry specialist 📋,
-  mcp specialist 📋, express specialist 📋, cyber security specialist 📋,
+- elasticsearch-reviewer ✅, clerk-reviewer ✅, mcp-reviewer ✅ (triplet complete),
+  sentry specialist 📋, express specialist 📋, cyber security specialist 📋,
   web/API security specialist 📋, privacy specialist 📋,
   web/API GDPR specialist 📋, ooce specialist 📋
 
@@ -620,7 +624,7 @@ specialists, not deferred.
 **Situational (on-demand, not tied to change profile):**
 
 - release-readiness-reviewer, ground-truth-designer, subagent-architect,
-  onboarding-reviewer, mcp-reviewer (current, pre-upgrade)
+  onboarding-reviewer
 
 ---
 

@@ -20,21 +20,26 @@ last_updated: 2026-03-30
    - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
    - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
    - `.agent/plans/sdk-and-mcp-enhancements/current/README.md`
-3. Reconfirm the WS3 non-negotiable invariant from the child plan:
+3. Read the auth closure gate plans that block migration closure:
+   - `.agent/plans/sdk-and-mcp-enhancements/current/auth-safety-correction.plan.md`
+   - `.agent/plans/sdk-and-mcp-enhancements/current/auth-boundary-type-safety.plan.md`
+4. Reconfirm the WS3 non-negotiable invariant from the child plan:
    - complete replacement of the legacy OpenAI-era widget stack
    - no conversion, no compatibility bridge, no renamed globals
    - one brand-new MCP App built on `@modelcontextprotocol/ext-apps`
-4. Re-establish live branch state:
+5. Re-establish live branch state:
 
 ```bash
 git status --short
 git log --oneline --decorate -5
 ```
 
-5. Run the canonical WS3 runtime contamination check command from the child
+6. Run the canonical WS3 runtime contamination check command from the child
    plan before and after substantive changes.
-6. Reconfirm `Canonical Compliance Checklist` in the WS3 child plan before
+7. Reconfirm `Canonical Compliance Checklist` in the WS3 child plan before
    changing runtime behaviour, metadata visibility, resource identity, or auth.
+8. Before treating WS3/WS4 as complete, verify C8 closure gates are complete
+   (or explicitly superseded by accepted architecture).
 
 ## This Prompt's Role
 
@@ -54,6 +59,13 @@ git log --oneline --decorate -5
 
 **Immediate priority**: execute the WS3 child plan from Phase 0.
 
+**Phase execution detail**: each WS3 phase has a companion child plan linked in
+the WS3 child plan's `Phase Companion Plans` section.
+
+**Closure gate note**: WS3/WS4 implementation can progress, but migration closure
+is blocked until C8 auth hardening plans in `current/` are complete (or
+explicitly superseded by accepted architecture).
+
 ## Core Invariant
 
 This workstream is a clean-break replacement:
@@ -69,7 +81,7 @@ This workstream is a clean-break replacement:
 
 ## Durable Guidance
 
-- Run `pnpm check` before every push.
-- Run `pnpm qg` before every commit.
+- Run `pnpm qg` as the canonical non-mutating readiness gate before each commit.
 - Run `pnpm fix` to apply auto-fixes.
+- Run `pnpm check` as the full scrub before push/merge.
 - Keep this prompt concise and operational; do not duplicate plan authority.

@@ -19,6 +19,7 @@ architectural changes.
 | [current/README.md](current/README.md) | Current index | Executable plans queued or resumable |
 | [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md) | Active umbrella plan | Primary session-anchor plan for the MCP Apps migration |
 | [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md) | Active child plan | Fresh React MCP App rebuild. Deletes the dead widget framework and replaces it with MCP Apps infrastructure built from scratch |
+| [active/README.md#ws3-phase-companion-plans](active/README.md#ws3-phase-companion-plans) | Phase companion index | Seven WS3 phase companion plans with task-level execution detail; parent WS3 plan remains orchestration source of truth |
 | [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md) | Current plan | Add truthful `outputSchema` metadata to every MCP tool while keeping generated upstream-response validation aligned with actual MCP `structuredContent` envelopes |
 | [archive/completed/ws2-app-runtime-migration.plan.md](archive/completed/ws2-app-runtime-migration.plan.md) | Completed child plan | WS2 runtime migration completed and archived |
 | [archive/completed/mcp-runtime-boundary-simplification.plan.md](archive/completed/mcp-runtime-boundary-simplification.plan.md) | Completed plan | Canonical runtime descriptor surface and ingress-boundary simplification completed and archived |

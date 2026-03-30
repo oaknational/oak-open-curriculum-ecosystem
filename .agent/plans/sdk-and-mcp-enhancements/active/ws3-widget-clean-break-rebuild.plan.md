@@ -249,6 +249,17 @@ Required corrections:
 6. No custom preview shim; use the upstream `basic-host` workflow for local
    MCP App verification
 
+### 8. Non-UI host behaviour and fallback policy
+
+Oak keeps host-neutral server behaviour:
+
+1. Do not add host-specific server branches for UI/non-UI clients
+2. UI-bearing tools must still provide meaningful text `content` fallback for
+   hosts that ignore `_meta.ui`
+3. Use server-side `getUiCapability()` where capability gating is required
+4. Keep app-side adaptation on host context/lifecycle hooks, and do not
+   introduce a second discovery protocol or compatibility shim
+
 ---
 
 ## Canonical Compliance Checklist
@@ -269,10 +280,12 @@ Every WS3 phase must satisfy this checklist. Any failure is blocking.
    - `_meta.ui.visibility` is canonical for app-only helper tools
    - No bespoke discovery filters or override layers are introduced in HTTP app
      code to hide/show tools
-4. **Public-resource auth behaviour is explicit and spec-aligned**
-   - Any public-resource bypass behaviour is either removed or explicitly
-     justified by accepted architecture and covered by non-vacuous tests
-   - No undocumented permissive auth path survives for MCP methods
+4. **Public-resource auth behaviour is explicit and protocol-clear**
+   - Default target: auth is required for all MCP client-to-server requests
+   - Any retained public-resource bypass must be treated as a bounded Oak
+     compatibility waiver, not canonical MCP compliance
+   - Waiver status must be explicit (owner, scope, host evidence, and removal
+     condition), with no undocumented permissive auth path
 5. **Test contracts are non-vacuous**
    - Widget metadata/resource tests must fail if intended UI tools are absent
      after WS3 registration is expected to be live
@@ -282,6 +295,21 @@ Every WS3 phase must satisfy this checklist. Any failure is blocking.
    - Prompt, roadmap, umbrella plan, WS3 child plan, and current-plan index are
      mutually consistent on scope, ownership, and dependency order
    - No stale operational command appears in multiple conflicting forms
+
+---
+
+## Phase Companion Plans
+
+Execution details for each phase also live in companion child plans. This WS3
+plan remains the parent orchestration document and source of phase ordering.
+
+1. [ws3-phase-0-baseline-and-red-specs.plan.md](ws3-phase-0-baseline-and-red-specs.plan.md)
+2. [ws3-phase-1-delete-legacy-widget-framework.plan.md](ws3-phase-1-delete-legacy-widget-framework.plan.md)
+3. [ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md](ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md)
+4. [ws3-phase-3-canonical-contracts-and-runtime.plan.md](ws3-phase-3-canonical-contracts-and-runtime.plan.md)
+5. [ws3-phase-4-curriculum-model-view.plan.md](ws3-phase-4-curriculum-model-view.plan.md)
+6. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md)
+7. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md)
 
 ---
 
@@ -304,7 +332,8 @@ Every WS3 phase must satisfy this checklist. Any failure is blocking.
 4. Update or add RED tests before product changes:
    - `e2e-tests/widget-resource.e2e.test.ts`
    - `e2e-tests/widget-metadata.e2e.test.ts`
-   - `e2e-tests/public-resource-auth-bypass.e2e.test.ts`
+   - `e2e-tests/public-resource-auth-policy.e2e.test.ts` (or equivalent file
+     rename from `public-resource-auth-bypass.e2e.test.ts`)
    - any new widget build E2E coverage
 5. Define the RED command/evidence contract for each downstream phase:
    - exact command
@@ -421,7 +450,7 @@ Update:
 ### Acceptance
 
 - focused package build produces a self-contained `dist/mcp-app.html`
-- Turbo invalidates correctly on widget `tsx`, `css`, and `html` changes
+- Turbo invalidates correctly on widget `ts`, `tsx`, `css`, and `html` changes
 - lint and type-check see widget source
 - no preview shim is introduced
 
@@ -440,8 +469,11 @@ fresh MCP App.
    without hand-authoring schema logic in the HTTP app
 3. Rename the generated UI resource slug away from `oak-json-viewer`
 4. Re-populate the canonical UI tool allowlist only when the new app is ready
-5. Align generated auth/noauth wording with ADR-113 and live MCP spec semantics
-   (no permissive "no bearer token required" ambiguity in canonical contracts)
+5. Align generated auth/noauth wording with MCP auth target semantics and avoid
+   permissive "no bearer token required" ambiguity in canonical contracts
+6. If a public-resource bypass remains, track it as explicit Oak compatibility
+   waiver (owner, scope, host evidence, removal condition), not as canonical
+   MCP compliance
 
 ### Required runtime changes
 
@@ -574,13 +606,19 @@ banned legacy architecture.
 
 ### Quality gates
 
-Run at least:
+Canonical readiness gate (non-mutating):
+
+```bash
+pnpm qg
+```
+
+Full scrub before push/merge:
 
 ```bash
 pnpm check
 ```
 
-Focused verification during development should include the HTTP app’s build,
+Focused verification during development should include the HTTP app build,
 test, and E2E commands as needed.
 
 ### Reviewer set
@@ -606,7 +644,13 @@ Plus:
 
 - `pnpm check` passes
 - the fresh MCP App renders in the upstream `basic-host`
+- UI-bearing tools provide meaningful text fallback for hosts that ignore
+  `_meta.ui`
 - WS3 and WS4 scope in the umbrella plan can be closed together
+- C8 auth hardening closure gates are complete (or explicitly superseded by
+  accepted architecture)
+- no retained public-resource bypass is presented as canonical MCP compliance;
+  any retained bypass is recorded as explicit compatibility waiver status
 - public-resource auth tests assert MIME, URI, and payload contract details
   (not only object presence)
 
@@ -620,6 +664,12 @@ Plus:
 - `../current/auth-boundary-type-safety.plan.md` — auth boundary typing and
   fail-fast validation remediation
 - `../current/README.md` — queued and in-progress follow-on execution plans
+
+Closure gate rule:
+
+- WS3/WS4 implementation can proceed phase-by-phase.
+- WS3/WS4 migration closure requires C8 auth closure plans to be complete (or
+  explicitly superseded by accepted architecture).
 
 ---
 

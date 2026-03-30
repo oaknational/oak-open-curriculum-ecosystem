@@ -4,14 +4,14 @@ Plans and research for hardening the agentic engineering practice through physic
 
 **Collection Roadmap**: [roadmap.md](roadmap.md)
 **Active Execution Index**: [active/README.md](active/README.md)
-**Queued / Source Plans**: [current/README.md](current/README.md)
+**Current / Source Plans**: [current/README.md](current/README.md)
 
 ## Documents
 
 | File | Type | Description |
 |------|------|-------------|
 | `roadmap.md` | Roadmap | Strategic phase sequence and dependencies for this collection |
-| `current/README.md` | Current Index | Strategic source plans and queued adjacent work |
+| `current/README.md` | Current Index | Strategic source plans and adjacent capability work (queued or in progress) |
 | `active/README.md` | Active Index | Atomic executable plans for roadmap phases plus adjacent active closeout work |
 | ~~`active/practice-convergence.plan.md`~~ | Plan (Completed) | Convergence closeout for Practice Core, local surfaces, and outgoing Context — **COMPLETE** (deleted) |
 | `documentation-sync-log.md` | Tracking Log | Per-phase record of required ADR/directive/reference-doc and README updates |
@@ -30,7 +30,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `archive/completed/artefact-portability-hardening.plan.md` | Plan (Completed) | Address architectural review findings: trigger content contract, portability validation, rule trigger compliance, naming/documentation gaps |
 | `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
 | `future/sentry-specialist-capability.plan.md` | Plan (Future) | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
-| `current/mcp-specialist-upgrade.plan.md` | Plan | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
+| `archive/completed/mcp-specialist-upgrade.plan.md` | Plan (Completed) | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
 | `future/express-specialist-capability.plan.md` | Plan (Future) | Express 5.x reviewer, skill, and situational rule (ADR-129 triplet) — middleware, error handling, Vercel deployment |
 | `future/cyber-security-specialist-capability.plan.md` | Plan (Future) | Broad-remit cyber security capability — posture, threat models, defence in depth, and security-architecture doctrine |
 | `future/web-api-security-specialist-capability.plan.md` | Plan (Future) | Narrow-remit web/API security capability — HTTP trust boundaries, endpoint security, sessions, callbacks, and API attack surfaces |
@@ -49,15 +49,15 @@ Plans and research for hardening the agentic engineering practice through physic
 1. **Roadmap first**: [roadmap.md](roadmap.md)
 2. **Active execution first**: [active/README.md](active/README.md), then
    [current/README.md](current/README.md) for strategic source plans and
-   queued adjacent work
+   adjacent capability work (queued or in progress)
 3. **Strategic source plans**: hallucination/evidence guards -> enforcement -> mutation testing -> Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade -> Express -> security/privacy cluster (cyber security -> web/API security -> privacy -> web/API GDPR) -> OOCE -> Planning -> TDD -> DevX -> Reviewer Gateway -> Adapter Generation -> Agent Classification Taxonomy
 4. **Research as evidence base**: augmented safety -> augmented practices -> standardisation landscape
 
 ## Document Roles (DRY)
 
 - **Roadmap (`roadmap.md`)**: strategic phase sequence, dependencies, status, and queued adjacent work.
-- **Current plans (`current/*.md`)**: strategic source plans and queued
-  capability plans to promote into active execution when scheduled.
+- **Current plans (`current/*.md`)**: strategic source plans and adjacent
+  capability plans that are either queued or in progress prior to active execution.
 - **Active plans (`active/*.md`)**: authoritative executable tasks and deterministic validation.
 - **Strategic source plans (`*.plan.md`)**: policy intent, rationale, success criteria, and phase design; execution is delegated to active plans.
 - **Research docs (`*.research.md`)**: evidence base only; not execution instructions.
@@ -84,8 +84,8 @@ Use these canonical status tokens across this collection:
 
 Maintain a well-structured `.agent/plans/templates/components` ecosystem with
 useful reusable templates, ensure each journey phase in this collection has an
-executable atomic plan in `active/`, and keep queued cross-cutting capability
-work discoverable in `current/`.
+executable atomic plan in `active/`, and keep cross-cutting capability work
+discoverable in `current/` (queued or in progress).
 
 Each phase must also include documentation propagation updates (or explicit
 no-change rationale) for ADR-119, `.agent/practice-core/practice.md`, and any

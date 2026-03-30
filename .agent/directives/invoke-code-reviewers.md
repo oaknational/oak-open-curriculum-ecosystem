@@ -14,6 +14,7 @@ Before starting any non-trivial task, answer these questions to identify which s
 6. Does this change onboarding flows (human or AI), start-right entrypoints, or ADR discoverability? -> `onboarding-reviewer` (situational)
 7. Does this touch Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, or Elastic Serverless capabilities? -> `elasticsearch-reviewer` (situational)
 8. Does this touch Clerk middleware, token verification, OAuth proxy, PRM, `@clerk/mcp-tools`, or Clerk SDK usage? -> `clerk-reviewer` (situational)
+9. Does this touch MCP protocol, tool/resource/prompt definitions, MCP Apps Extension widgets, transport/session patterns, or MCP Apps migration work? -> `mcp-reviewer` (situational)
 
 Documentation drift (`docs-adr-reviewer`) applies whenever behaviour or architecture changes, even if no docs are explicitly edited.
 
@@ -83,6 +84,8 @@ Specialist on-demand (not standard roster -- situational trigger only):
 **Elasticsearch/search change**: Invoke `code-reviewer` + `elasticsearch-reviewer` immediately. Add `type-reviewer` if schema or mapping types are affected.
 
 **Clerk/OAuth change**: Invoke `code-reviewer` + `clerk-reviewer` immediately. Add `security-reviewer` if the change has exploitability implications. Add `mcp-reviewer` if MCP auth spec compliance is in question.
+
+**MCP protocol/tool/Apps change**: Invoke `code-reviewer` + `mcp-reviewer` immediately. Add `security-reviewer` if the MCP auth model is affected. Add `clerk-reviewer` if Clerk integration with MCP auth is in question. Add the relevant architecture reviewer(s) if MCP tool layering or transport boundaries change. For active MCP planning or implementation support, use the `mcp-expert` skill.
 
 ## Invocation
 
