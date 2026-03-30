@@ -23,6 +23,9 @@ todos:
   - id: promote-type-assertions-in-tests
     content: "Remove the testRules exception that makes consistent-type-assertions a warning rather than an error. Remediate all ~218 assertion warnings across 6 workspaces."
     status: pending
+  - id: no-child-process-in-tests-rule
+    content: "Create @oaknational/no-child-process-in-tests ESLint rule enforcing the testing-strategy.md prohibition on process spawning in test files."
+    status: pending
   - id: enable-stryker-all-workspaces
     content: "Enable Stryker mutation testing in all workspaces with initial loose thresholds. Create incremental remediation plan."
     status: pending
@@ -70,7 +73,8 @@ This plan unifies all pending quality gate work into a single strategic brief to
 | dependency-cruiser | None | Independent — triage work only |
 | max-files-per-dir | None | Independent — remediation may overlap with knip dead-code removal |
 | `consistent-type-assertions` in tests | None | Large remediation (~218 warnings across 6 workspaces) |
-| Stryker | None | Existing plan at `.agent/plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md` — absorb into this plan |
+| `no-child-process-in-tests` rule | None | Prevents future violations; sibling test-audit plan triages existing ones |
+| Stryker | Test audit (sibling plan) | Mutation testing is most valuable after the test suite is healthy. Run audit first to remove useless tests that would waste Stryker's budget. |
 
 ## Enhancement Details
 
@@ -130,7 +134,17 @@ This plan unifies all pending quality gate work into a single strategic brief to
 
 **Remediation**: Large — each workspace's test fakes need individual attention. Parallel agents can handle independent workspaces.
 
-### 8. Enable Stryker Mutation Testing
+### 8. No-Child-Process-in-Tests ESLint Rule
+
+**Problem**: The testing strategy prohibits spawning child processes in test files, but enforcement is manual. Three E2E test files in `oak-search-cli` spawn `npx`/`pnpm` child processes; one (`cli-exit.e2e.test.ts`) was the sole CI failure on PR #70 and was deleted. The remaining two (`benchmark-cli.e2e.test.ts`, `bulk-retry-cli.e2e.test.ts`) have the same pattern. Without an automated rule, new violations will accumulate.
+
+**Fix**: Create `@oaknational/no-child-process-in-tests` ESLint rule that bans `spawn`, `exec`, `execFile`, `execSync`, `spawnSync`, and `fork` imports from `child_process` / `node:child_process` in files matching `*.test.ts` and `*.spec.ts` patterns. The rule should suggest using vitest's in-process testing, or moving the test to a standalone script outside the test runner.
+
+**Remediation**: Fix or delete the remaining two process-spawning E2E files. The test audit (sibling plan) will identify any others.
+
+**Relationship to test audit**: The ESLint rule prevents future violations; the test audit triages existing ones.
+
+### 9. Enable Stryker Mutation Testing
 
 **Problem**: Stryker is configured but not enabled as a gate. Existing plan at `.agent/plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md`.
 
@@ -167,3 +181,10 @@ This plan supersedes and absorbs:
 - `.agent/plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md` (Stryker)
 
 When this plan is promoted to `current/`, archive those plans with a note pointing here.
+
+## Sibling Plans
+
+- `test-suite-audit-and-triage.plan.md` — deep audit of all tests
+  (process spawning, implementation coupling, value assessment). Should
+  run before Stryker enablement so mutation testing operates on a
+  healthy suite.
