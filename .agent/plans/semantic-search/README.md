@@ -4,7 +4,7 @@
 
 ## Start Here
 
-- Session entry: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+- Session entry: [semantic-search.prompt.md](../../prompts/semantic-search/archive/semantic-search.prompt.md)
 - Strategic sequence: [roadmap.md](roadmap.md)
 - Research index: [research-index.md](research-index.md)
 

@@ -2,7 +2,7 @@
 
 **Status**: ✅ Milestones 0 and 1 complete. Recovery lane plans are archived; active execution is now narrowed to open production validation findings while pending follow-ons are queued in `current/`.
 **Last Updated**: 2026-03-21
-**Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+**Session Entry**: [semantic-search.prompt.md](../../prompts/semantic-search/archive/semantic-search.prompt.md)
 **Metrics Authority**: [Ground Truth Protocol](../../../apps/oak-search-cli/docs/ground-truths/ground-truth-protocol.md)
 
 ---
@@ -132,7 +132,7 @@ pnpm smoke:dev:stub
 
 ## Related Documents
 
-1. [semantic-search.prompt.md](../../prompts/semantic-search/semantic-search.prompt.md)
+1. [semantic-search.prompt.md](../../prompts/semantic-search/archive/semantic-search.prompt.md)
 2. [README.md](README.md)
 3. [completed-plans.md](../completed-plans.md)
 4. [search-acceptance-criteria.md](search-acceptance-criteria.md)

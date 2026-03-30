@@ -1,5 +1,5 @@
 ---
-prompt_id: go
+skill_id: go
 title: "GO"
 type: workflow
 status: active
@@ -9,8 +9,8 @@ last_updated: 2026-03-07
 # GO GO GO
 
 A complementary grounding prompt for AI agents working in the Oak Open Curriculum
-Ecosystem. This prompt structures task execution and periodic
-self-assessment. It complements [AGENT.md](../directives/AGENT.md),
+Ecosystem. This skill structures task execution and periodic
+self-assessment. It complements [AGENT.md](../../../directives/AGENT.md),
 which provides the canonical directives, rules, and architectural
 context.
 
@@ -18,7 +18,7 @@ Read ALL of this document, then carry out the [Action](#action).
 
 ## Ground Yourself
 
-Read [start-right-quick shared workflow](../skills/start-right-quick/shared/start-right.md) and follow all
+Read [start-right-quick shared workflow](../../start-right-quick/shared/start-right.md) and follow all
 instructions in that file and in the files it leads to (rules, testing
 strategy, schema-first execution).
 
@@ -57,13 +57,13 @@ discoverable.
   items should be prefixed with `QUALITY-GATE:` and happen reasonably
   often.
 - Periodically include a `GROUNDING:` task to re-read this document
-  and the [start-right-quick shared workflow](../skills/start-right-quick/shared/start-right.md), ensuring your
+  and the [start-right-quick shared workflow](../../start-right-quick/shared/start-right.md), ensuring your
   todo list stays relevant and aligned with the plan.
 - Every fourth `REVIEW:` should be a **holistic review** invoking
   multiple sub-agents to assess overall coherence.
 - Remove any items from your todo list that don't make sense, or are
   no longer relevant.
-- Every 6th item must be to re-read @.agent/prompts/GO.md and re-follow ALL instructions in that file, including this one.
+- Every 6th item must be to re-read this document and re-follow ALL instructions, including this one.
 
 ## Action
 

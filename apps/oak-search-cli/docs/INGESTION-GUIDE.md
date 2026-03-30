@@ -5,6 +5,19 @@
 
 ---
 
+## Ingest Safety Policy
+
+- Do not run ingest/promote commands until the execution plan records
+  explicit readiness-gate closure.
+- For operator-run ingest:
+  1. Agent prepares exact command and pre-check context.
+  2. Operator runs command independently.
+  3. Agent monitors output and proposes remediation.
+- Agent does not start ingest commands unless explicitly requested
+  in-session.
+
+---
+
 ## 🔴 IMPORTANT: Data Source Architecture
 
 **ADR**: [ADR-083: Complete Lesson Enumeration Strategy](../../../../docs/architecture/architectural-decisions/083-complete-lesson-enumeration-strategy.md)
