@@ -26,9 +26,10 @@ the process.
 See [ADR-141](../../../docs/architecture/architectural-decisions/141-coherent-structured-fan-out-for-observability.md)
 for the architectural decision.
 
-## Current State (2026-03-29)
+## Current State (2026-03-30)
 
-Branch head: `308881a5`. 16 commits ahead of main.
+Branch head: `ab7dd97b`. 18 commits ahead of main.
+PR: [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73) — open, Vercel preview deployed, awaiting human review.
 
 **What was done** (summary of the 19 resolved remediation findings):
 
@@ -61,10 +62,15 @@ markdownlint, format).
 
 **What remains on this branch**:
 
-- **F10**: `vi.mock()` in `check-mcp-client-auth.unit.test.ts` — out of
-  scope (auth DI refactor, not observability). Track separately.
-- **F18**: Span helper DRY opportunity — deferred (different concerns).
-- **PR review** before merge to main.
+- **C1/C2**: CodeQL regex backtracking findings in TOML parsers — fix pending
+  (see [PR73 remediation plan](../../plans/architecture-and-infrastructure/active/sentry-otel-pr73-codeql-remediation.plan.md))
+- **Human PR review** of [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73)
+
+**Deferred (track separately, not on this branch)**:
+
+- **C3/C4**: Rate limiting on `/mcp` routes (pre-existing, infrastructure)
+- **F10**: `vi.mock()` in `check-mcp-client-auth.unit.test.ts` (auth DI refactor)
+- **F18**: Span helper DRY opportunity (YAGNI)
 
 **Operational documentation added**:
 
@@ -106,13 +112,14 @@ Primary code surfaces:
 
 ## Restart Sequence
 
-1. Verify `pnpm check` still passes (confirms no drift since last
-   session).
-2. Create PR for merge to main, or continue with PR review if already
-   open.
-3. After merge, resume Search CLI adoption (see `search-cli-adoption`
+1. Verify `pnpm check` still passes (confirms no drift since last session).
+2. Fix C1/C2 regex backtracking findings (see
+   [PR73 remediation plan](../../plans/architecture-and-infrastructure/active/sentry-otel-pr73-codeql-remediation.plan.md)).
+3. Push fix, confirm CodeQL annotations clear on PR #73.
+4. Await human PR review and merge.
+5. After merge, resume Search CLI adoption (see `search-cli-adoption`
    todo in the execution plan).
-4. Track F10 and F18 as separate work items outside this branch.
+6. Track C3/C4, F10, and F18 as separate work items outside this branch.
 
 ## Authority Rule
 

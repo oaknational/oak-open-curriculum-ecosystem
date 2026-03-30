@@ -42,6 +42,7 @@ todos:
   - id: http-adoption
     content: "Finish and green the HTTP MCP observability adoption in oak-curriculum-mcp-streamable-http, including cold-start init, MCP wrapping, targeted manual spans, reviewer findings, doc consolidation, and quality gates"
     status: in-progress
+    note: "PR #73 open. C1/C2 regex fix pending, then human review."
   - id: search-cli-adoption
     content: "Adopt the foundation in oak-search-cli with runtime-config-driven logger composition, command init, spans, and shutdown flush"
     status: pending
@@ -77,19 +78,20 @@ Phase 3 should be judged against that outcome. New wiring only counts if it
 improves supportability and release confidence while preserving the redaction
 and capture boundaries established in Phase 1 and Phase 2.
 
-## Current Execution Snapshot (2026-03-29)
+## Current Execution Snapshot (2026-03-30)
 
 ### Lane and state
 
 - Branch: `feat/full-sentry-otel-support`
-- Head: `308881a5` (16 commits ahead of main)
+- Head: `ab7dd97b` (18 commits ahead of main)
+- PR: [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73) — open, Vercel preview deployed, awaiting human review
 - Phases 0-2 complete (governance, shared contracts, shared foundation)
-- Phase 3 HTTP adoption: **near-complete** — 19/21 remediation findings
-  resolved, `pnpm check` green (81/81 tasks), ready for PR review
+- Phase 3 HTTP adoption: **PR open** — 19/21 specialist findings resolved,
+  2 CodeQL regex findings pending fix (C1/C2), `pnpm check` green (81/81 tasks)
 - Phase 3 Search CLI adoption: **pending** — blocked on HTTP merge
 - Phase 4 evidence/deployment: **pending**
 
-### Quality gate status (2026-03-29)
+### Quality gate status (2026-03-30)
 
 `pnpm check` passes: 81/81 tasks (secrets scan, clean rebuild, sdk-codegen,
 build, type-check, doc-gen, lint, test, test:e2e, test:ui, smoke:dev:stub,
@@ -97,15 +99,17 @@ subagents:check, portability:check, markdownlint, format).
 
 ### Remediation status
 
-The remediation plan ([sentry-otel-remediation.plan.md](./sentry-otel-remediation.plan.md))
-tracked 21 findings from 6 specialist reviewers. Status:
+Two remediation plans track findings for this branch:
 
-- **19 resolved** across 8 code commits (de0d897d → 1aeb7290), plus
-  operational docs (env examples, Vercel config, deployment runbook)
-- **F10 reverted** — auth DI refactor (`vi.mock` in `checkMcpClientAuth`)
-  is out of scope for the observability branch. Track separately.
-- **F18 deferred** — span helper DRY between `core/observability` and app;
-  different concerns, YAGNI for now.
+1. **Specialist reviewer findings** ([sentry-otel-remediation.plan.md](./sentry-otel-remediation.plan.md)):
+   21 findings from 6 specialist reviewers. 19 resolved across 8 code commits
+   (de0d897d → 1aeb7290), plus operational docs (env examples, Vercel config,
+   deployment runbook). F10 reverted (out of scope), F18 deferred (YAGNI).
+
+2. **PR #73 CodeQL and deferred findings** ([sentry-otel-pr73-codeql-remediation.plan.md](./sentry-otel-pr73-codeql-remediation.plan.md)):
+   4 CodeQL findings from `github-advanced-security[bot]` plus the carried F10
+   and F18. C1/C2 (regex backtracking) to be fixed on this branch. C3/C4 (rate
+   limiting), F10, and F18 deferred as out of scope.
 
 ### Reviewer sweeps completed
 
@@ -148,15 +152,21 @@ Two rounds of specialist reviews ran during the remediation sessions:
 
 ### Remaining items before merge
 
-1. **PR review** for merge to main
-2. **F10** tracked separately (auth DI refactor, not observability)
-3. **F18** deferred (span DRY, YAGNI)
+1. **Fix C1/C2** — regex backtracking in TOML parsers (see
+   [PR73 remediation plan](./sentry-otel-pr73-codeql-remediation.plan.md))
+2. **Human PR review** of [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73)
+
+### Deferred items (track separately, not on this branch)
+
+- **C3/C4** — rate limiting on `/mcp` routes (pre-existing, infrastructure concern)
+- **F10** — `vi.mock()` in `check-mcp-client-auth.unit.test.ts` (auth DI refactor)
+- **F18** — span helper DRY between core and app (YAGNI)
 
 ### Next steps after merge
 
-1. Resume Search CLI adoption (`search-cli-adoption` todo)
-2. Deployment evidence bundle (`deployment-and-evidence` todo)
-3. Mark `http-adoption` todo as completed
+1. Mark `http-adoption` todo as completed
+2. Resume Search CLI adoption (`search-cli-adoption` todo)
+3. Deployment evidence bundle (`deployment-and-evidence` todo)
 
 ### Authority and review state
 
