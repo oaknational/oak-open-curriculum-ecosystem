@@ -17,6 +17,13 @@ todos:
 
 # WS3 Phase 1: Delete Legacy Widget Framework
 
+## Required Inputs
+
+1. `ws3-widget-clean-break-rebuild.plan.md` — Phase 1 section lists specific
+   files to delete and the deletion sequencing rule
+2. Phase 0 evidence (contamination inventory and non-canonical inventory) —
+   confirms which files are dead and which have transitive consumers
+
 ## Tasks
 
 1. Confirm replacement tests for new MCP App contract are non-vacuous and green

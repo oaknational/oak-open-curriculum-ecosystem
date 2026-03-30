@@ -17,6 +17,15 @@ todos:
 
 # WS3 Phase 2: Scaffold Fresh MCP App Infrastructure
 
+## Required Inputs
+
+1. `ws3-widget-clean-break-rebuild.plan.md` — Phase 2 section lists specific
+   files to create, dependencies to add, and tooling corrections
+2. `mcp-apps-support.research.md` — canonical React UI model and build
+   implications
+3. Phase 1 acceptance evidence — Phase 2 must not start until Phase 1 is
+   complete (see Phase 1 ordering constraint)
+
 ## Tasks
 
 1. Write RED tests for build output, shell render markers, and tooling coverage
@@ -27,7 +36,10 @@ todos:
    - ESLint includes `.tsx`
    - type-check includes `.tsx`
    - dedicated DOM-capable Vitest config for widget tests
-5. Keep local verification on upstream `basic-host`; do not add preview shim
+5. Keep local verification on upstream `basic-host` (from
+   `@modelcontextprotocol/ext-apps` — see its examples/ directory or npm
+   scripts); do not add a custom preview shim
+6. Run `pnpm check` to verify full pipeline integration
 
 ## Acceptance Evidence
 
@@ -38,3 +50,4 @@ todos:
    only — React/DOM rules do not bleed into server-side lint. This is the
    structural investment that makes future extraction to a separate package
    cheap if a second consumer ever appears. (Source: Betty review.)
+5. `pnpm check` passes with the new widget build integrated

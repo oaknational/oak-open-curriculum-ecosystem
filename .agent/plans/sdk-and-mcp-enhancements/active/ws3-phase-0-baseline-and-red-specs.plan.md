@@ -25,8 +25,12 @@ authoritative for full WS3 scope and ordering.
 1. `roadmap.md`
 2. `mcp-app-extension-migration.plan.md`
 3. `ws3-widget-clean-break-rebuild.plan.md`
-4. `current/auth-safety-correction.plan.md`
-5. `current/auth-boundary-type-safety.plan.md`
+4. `ws3-phase-3-canonical-contracts-and-runtime.plan.md` — contains binding
+   `Reviewer-Validated Findings` section (B3 Hybrid retention, C8 prerequisite,
+   visibility array format, task sequencing). Read before capturing the
+   contamination inventory so the B3 Hybrid classification is understood.
+5. `current/auth-safety-correction.plan.md`
+6. `current/auth-boundary-type-safety.plan.md`
 
 ## Tasks
 
@@ -46,7 +50,13 @@ authoritative for full WS3 scope and ordering.
    - widget resource contract
    - widget metadata contract
    - public-resource auth policy
-5. Record expected RED failure reason and planned GREEN evidence for phases 1-6
+   - `WIDGET_TOOL_NAMES` non-empty assertion: the current empty set makes
+     widget metadata E2E tests pass vacuously (no assertions execute). Add a
+     RED test that asserts `WIDGET_TOOL_NAMES.size > 0` — this should fail now
+     and turn GREEN when Phase 3 re-populates the set.
+5. Record expected RED failure reason and planned GREEN evidence for phases 1-6.
+   Record this in the **Evidence** section below — each phase gets one row with:
+   RED command, expected failure reason, target GREEN phase, and GREEN evidence.
 6. Rewrite active normative docs that still direct execution toward the dead
    widget runtime model
 
@@ -55,3 +65,17 @@ authoritative for full WS3 scope and ordering.
 1. Contamination inventory is captured and linked to downstream phases
 2. RED tests fail for expected reasons (and are not vacuous)
 3. No active doc still prescribes preserving legacy widget runtime behaviour
+4. `WIDGET_TOOL_NAMES` non-empty RED assertion is in place and failing
+
+## Evidence
+
+Record the RED/GREEN contract for each downstream phase here during execution.
+
+| Phase | RED command | Expected failure | GREEN phase | GREEN evidence |
+|-------|-----------|------------------|-------------|----------------|
+| 1 | | | | |
+| 2 | | | | |
+| 3 | | | | |
+| 4 | | | | |
+| 5 | | | | |
+| 6 | | | | |

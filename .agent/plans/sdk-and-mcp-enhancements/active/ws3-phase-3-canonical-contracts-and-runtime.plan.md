@@ -26,6 +26,33 @@ todos:
 
 # WS3 Phase 3: Canonical Contracts and Runtime
 
+## Required Inputs
+
+1. `ws3-widget-clean-break-rebuild.plan.md` — Phase 3 section, Canonical
+   Compliance Checklist, and target architecture sections 5-6
+2. `mcp-apps-support.research.md` — canonical server model and registration
+   rules
+3. `current/auth-safety-correction.plan.md` — C8 status (merge prerequisite
+   for task 9)
+
+### Key File Paths
+
+These are the primary files this phase modifies. Read before starting:
+
+| Responsibility | Path |
+|---|---|
+| Widget URI constant (source) | `packages/sdks/oak-sdk-codegen/code-generation/typegen/cross-domain-constants.ts` |
+| Widget constant generator | `packages/sdks/oak-sdk-codegen/code-generation/typegen/generate-widget-constants.ts` |
+| Tool metadata emission | `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/emit-index.ts` |
+| Tool descriptor contract | `packages/sdks/oak-sdk-codegen/src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts` |
+| Aggregated tool definitions | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts` |
+| Tool projections | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/projections.ts` |
+| Tool registration (app) | `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` |
+| Resource registration | `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts` |
+| B3 Hybrid override | `apps/oak-curriculum-mcp-streamable-http/src/tools-list-override.ts` |
+| Auth checker | `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.ts` |
+| Public resource auth | `apps/oak-curriculum-mcp-streamable-http/src/auth/public-resources.ts` |
+
 ## Reviewer-Validated Findings (2026-03-30)
 
 The following findings were confirmed by specialist reviewers and are binding

@@ -60,11 +60,26 @@ git log --oneline --decorate -5
 **Immediate priority**: execute the WS3 child plan from Phase 0.
 
 **Phase execution detail**: each WS3 phase has a companion child plan linked in
-the WS3 child plan's `Phase Companion Plans` section.
+the WS3 child plan's `Phase Companion Plans` section. Start with:
+
+- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-0-baseline-and-red-specs.plan.md`
 
 **Closure gate note**: WS3/WS4 implementation can progress, but migration closure
 is blocked until C8 auth hardening plans in `current/` are complete (or
 explicitly superseded by accepted architecture).
+
+**Reviewer-validated findings (2026-03-30)**: The Phase 3 companion plan
+(`.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-3-canonical-contracts-and-runtime.plan.md`)
+contains a `Reviewer-Validated Findings` section with 6 binding constraints
+confirmed by MCP, architecture, and resilience reviewers. These are pre-resolved
+decisions — do not re-open them without new evidence:
+
+1. B3 Hybrid (`tools-list-override.ts`) must be retained
+2. B3 Hybrid adaptation must precede `registerAppTool` adoption
+3. C8 auth hardening is a merge prerequisite for Phase 3 task 9
+4. `_meta.ui.visibility` is an array (`["app"]` for app-only helpers)
+5. Aggregated tool pattern is an accepted cardinal-rule exception
+6. `ontoolinputpartial` is a required lifecycle handler
 
 ## Core Invariant
 

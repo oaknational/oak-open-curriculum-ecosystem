@@ -20,23 +20,36 @@ todos:
 
 # WS3 Phase 6: Docs, Gates, Review, Commit
 
+## Required Inputs
+
+1. `ws3-widget-clean-break-rebuild.plan.md` — Phase 6 section lists specific
+   docs to rewrite and the full reviewer set
+2. `roadmap.md` — closure criteria
+3. `mcp-app-extension-migration.plan.md` — umbrella exit criteria
+4. `current/auth-safety-correction.plan.md` — C8 closure gate status
+5. `current/auth-boundary-type-safety.plan.md` — C8 closure gate status
+6. Phase 0 evidence table — verify all RED/GREEN contracts are satisfied
+
 ## Tasks
 
 1. Align active docs listed in WS3 parent plan Phase 6
-2. Run readiness gate:
-   - `pnpm qg`
-3. Run full scrub before push/merge:
+2. Run full scrub:
    - `pnpm check`
-4. Run reviewer set listed in WS3 parent plan and address findings
-5. Re-run canonical runtime contamination check from WS3 parent plan
-6. Verify closure gates:
+3. Run reviewer set listed in WS3 parent plan and address ALL findings
+4. Re-run canonical runtime contamination check from WS3 parent plan
+5. Verify closure gates:
    - WS3/WS4 acceptance criteria are complete
-   - C8 auth plans in `current/` are complete, or explicitly superseded by accepted architecture
+   - C8 auth plans in `current/` are complete, or explicitly superseded by
+     accepted architecture
+   - Phase 0 RED/GREEN evidence table is fully populated with GREEN evidence
 
 ## Acceptance Evidence
 
-1. Active docs are mutually consistent (prompt, roadmap, umbrella, WS3 parent, indexes)
-2. `pnpm qg` and `pnpm check` pass
+1. Active docs are mutually consistent (prompt, roadmap, umbrella, WS3 parent,
+   indexes)
+2. `pnpm check` passes
 3. Runtime contamination check is clean
-4. Reviewer findings are resolved (including low priority)
+4. ALL reviewer findings are resolved (all findings are blocking per project
+   rules)
 5. Closure criteria for WS3/WS4 and C8 gates are satisfied
+6. Phase 0 evidence table shows GREEN for all 6 phases
