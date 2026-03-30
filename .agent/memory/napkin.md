@@ -1,5 +1,47 @@
 # Session Napkin
 
+## Session 2026-03-30 — PR creation, merge planning
+
+### What Was Done
+
+- Verified `pnpm check` (81/81 tasks) — no drift
+- Created PR #73 for merge to main
+- Triaged 4 CodeQL findings (2 regex to fix, 2 rate
+  limiting pre-existing/deferred)
+- Created PR73 CodeQL remediation plan on disk
+- Aligned all plans, prompt, and README index for
+  consistency (HEAD, PR#73, CodeQL findings, plan hierarchy)
+- Performed dry-run merge with `origin/main` (PR #70, 708
+  files) — found 22 content conflicts + ~14 clerk dir conflicts
+- Created detailed merge plan with 11 phases
+- Gap analysis uncovered 5 hazards not in initial plan:
+  ADR-141 numbering collision, express-fakes.ts import of
+  deleted type, handleToolWithAuthInterception signature
+  change, mcp-fakes.ts wide types, verify-clerk-token cascade
+
+### Patterns Learned
+
+- After opening a PR, immediately check for auto-merge
+  files that compile on their own but break when combined
+  with the branch's interface changes (Phase 6 gap)
+- ADR numbering collisions are invisible to Git when files
+  have different names — always check the number, not just
+  the path
+- Dry-run merge (`--no-commit`) shows text conflicts but
+  not type-system conflicts in auto-merged files — run
+  `pnpm type-check` immediately after resolving text
+  conflicts to catch these
+
+### Consolidation Notes
+
+- distilled.md at 200 lines (ceiling) — after merge,
+  extract MCP Apps section (~16 lines) since ADR-141/142
+  on main cover those patterns
+- Sentry attribute flattening (from 2026-03-29 napkin)
+  is domain-specific — stays in distilled, not code-patterns
+- Claude plan at `~/.claude/plans/radiant-plotting-firefly.md`
+  is now superseded by on-disk merge plan
+
 ## Session 2026-03-29 — Remediation completion
 
 ### What Was Done
