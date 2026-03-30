@@ -4,7 +4,7 @@ export const REQUIRED_CODEX_SETTINGS = {
   approval_policy: 'never',
 };
 
-const TOML_BASIC_STRING_REGEX = /^([a-z_]+)\s*=\s*"((?:\\.|[^"])*)"$/u;
+const TOML_BASIC_STRING_REGEX = /^([a-z_]+)\s*=\s*"([^"\\]*(?:\\.[^"\\]*)*)"$/u;
 const CODEX_DEVELOPER_INSTRUCTIONS_REGEX =
   /^developer_instructions\s*=\s*"""\r?\n([\s\S]*?)\r?\n"""/mu;
 const CANONICAL_PATH_REGEX = /`(\.agent\/[^`]+)`/gu;

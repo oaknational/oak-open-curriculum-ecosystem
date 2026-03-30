@@ -4,7 +4,7 @@ import { join } from 'node:path';
 export const CODEX_CONFIG_PATH = '.codex/config.toml';
 
 const AGENT_SECTION_PATTERN = /^\[agents\."([^"]+)"\]$/u;
-const TOML_BASIC_STRING_PATTERN = /^([a-z_]+)\s*=\s*"((?:\\.|[^"])*)"$/u;
+const TOML_BASIC_STRING_PATTERN = /^([a-z_]+)\s*=\s*"([^"\\]*(?:\\.[^"\\]*)*)"$/u;
 
 interface MutableCodexAgentRegistration {
   readonly name: string;
