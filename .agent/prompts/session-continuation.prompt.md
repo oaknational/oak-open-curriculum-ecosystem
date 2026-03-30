@@ -13,18 +13,9 @@ last_updated: 2026-03-30
 1. Read and internalise `.agent/directives/AGENT.md` and
    `.agent/directives/principles.md` — these are authoritative and
    override any conflicting detail in this prompt.
-2. Find the current active plans in
-   `.agent/plans/architecture-and-infrastructure/active/`. Priority
-   order:
-   - `ci-green-for-merge.plan.md` — **P0 BLOCKER**: fix Turbo cache
-     invalidation and delete process-spawning E2E tests so PR #70
-     passes CI
-   - `build-tools-workspace-extraction.plan.md` — move root scripts
-     into a proper workspace
-   - `eslint-disable-remediation.plan.md` — remove ~64 remaining
-     eslint-disable directives
-   The CI consolidation plan is complete and ready to archive after
-   branch merge.
+2. Find the current active plan:
+   - `ci-green-for-merge.plan.md` — **P0 BLOCKER**: all fixes applied,
+     needs push and CI verification on PR #70
 3. Re-establish live branch state instead of trusting stale document
    snapshots:
 
@@ -37,49 +28,58 @@ git log --oneline --decorate origin/feat/mcp_app..HEAD
 ## This Prompt's Role
 
 - This file is the operational entry point only.
-- The active plans are authoritative for scope, sequencing, acceptance
-  criteria, and detailed validation. Consult them before marking any
+- The active plan is authoritative for scope, sequencing, acceptance
+  criteria, and detailed validation. Consult it before marking any
   priority item complete.
 - Do not duplicate volatile git facts, long file inventories, or full
   plan detail here.
 
 ## Active Work
 
-1. **CI green for merge** (BLOCKING): Fix Turbo cache invalidation
-   (add `package.json` to build inputs), delete remaining
-   process-spawning E2E tests. See `ci-green-for-merge.plan.md`.
-2. **Build tools workspace extraction**: Move root `scripts/` tests
-   into a proper `build-tools/` workspace. See
-   `build-tools-workspace-extraction.plan.md`.
-3. **eslint-disable remediation** (~64 directives remain): See
-   `eslint-disable-remediation.plan.md`.
-4. **MCP App Extension Migration** (WS3/WS4 pending): Widget UI
-   temporarily disabled for merge. See
-   `sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`.
+1. **CI green for merge** (BLOCKING): Root cause found and fixed.
+   Turbo task-specific overrides for sdk-codegen were missing `outputs`
+   and `inputs` (Turbo replaces, does not merge). `sdk-codegen#build`
+   had `outputs: []` — cache restored zero files, downstream type-check
+   failed. All 5 overrides now have full field sets. `pnpm check`
+   passes locally (64/64). Next: push and verify CI green. See
+   `ci-green-for-merge.plan.md` for full evidence trail.
+
+## Completed This Session
+
+- **Root cause diagnosed**: Turbo task overrides replace (not merge)
+  generic definitions. `sdk-codegen#build` had `outputs: []` — empty
+  cache restoration. Three prior sessions misdiagnosed this as cache
+  invalidation.
+- **All 5 sdk-codegen overrides** now have explicit `outputs`, `inputs`,
+  `cache` matching their generic parent tasks.
+- Deleted process-spawning E2E tests + orphaned harness + dead code
+- Created GO skill SKILL.md + Cursor adapter (portability fix)
+- Replaced 14 Clerk skill symlinks with real adapter files
+- Created no-symlinks rule, adapters, and principle
+- Updated test audit plan with full process-spawning inventory (7 files)
+- `pnpm check` passes locally (exit code 0, 64/64 tasks)
 
 ## Scope Boundaries (do NOT)
 
-- Do not reopen the completed CI consolidation (all phases done)
-  unless fresh CI evidence proves a regression.
-- Do not re-enable widget UI (`WIDGET_TOOL_NAMES`) until WS3 is ready.
-- Do not open new workstreams outside the active plans' scope.
+- Do not open new workstreams outside the active plan's scope.
 - Do not refactor `apps/oak-curriculum-mcp-stdio` — it is outside the
   current workspace graph.
 - Do not rely on ephemeral git state (stashes, reflogs) as
-  continuation state; use the plans and branch state instead.
+  continuation state; use the plan and branch state instead.
 
 ## Durable Guidance
 
-- `pnpm check` is the decisive full-repo verification (includes clean,
-  build, all gates). Use package-scoped filters while iterating; `pnpm
-  check` is the final gate. `pnpm qg` is the read-only variant (no
-  build, no auto-fix). `pnpm fix` auto-fixes format, markdownlint, lint.
+- **Run `pnpm check` before every push.** This is the decisive
+  full-repo verification (includes clean, build, all gates).
+- **Run `pnpm qg` before every commit** as a quick read-only check.
+- `pnpm fix` auto-fixes format, markdownlint, lint.
 - If `pnpm check` fails, diagnose by running individual gates.
-- Use sub-agents for review before completing significant changes. See
-  `.agent/directives/invoke-code-reviewers.md` for the full roster.
-- The vocab-gen pipeline generates types from bulk download data, not
-  from the OpenAPI schema. The cardinal rule (`pnpm sdk-codegen`) governs
-  OpenAPI-derived types only. Do not conflate the two pipelines.
+- Use sub-agents for review before completing significant changes.
+- Download CI logs once to a temp file; do not make repeated network
+  calls for the same data.
+- Turbo task-specific overrides (`@package#task`) REPLACE generic
+  tasks entirely. Always verify with `turbo run <task> --dry=json` and
+  check `resolvedTaskDefinition`.
 
 ## Quality Gates
 

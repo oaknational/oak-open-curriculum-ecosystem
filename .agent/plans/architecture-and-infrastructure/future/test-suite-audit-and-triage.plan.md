@@ -82,9 +82,18 @@ importing and calling directly), or convert to a standalone script (if
 process-level behaviour genuinely needs verification outside the test
 runner).
 
-Known files:
-- `apps/oak-search-cli/e2e-tests/benchmark-cli.e2e.test.ts`
-- `apps/oak-search-cli/e2e-tests/bulk-retry-cli.e2e.test.ts`
+Known files (deleted during CI-green work, 2026-03-30):
+- ~~`apps/oak-search-cli/e2e-tests/benchmark-cli.e2e.test.ts`~~ — DELETED
+- ~~`apps/oak-search-cli/e2e-tests/bulk-retry-cli.e2e.test.ts`~~ — DELETED
+
+Remaining files that spawn child processes (found 2026-03-30):
+- `packages/sdks/oak-sdk-codegen/e2e-tests/generators/write-json-graph-file.e2e.test.ts`
+- `packages/sdks/oak-sdk-codegen/e2e-tests/scripts/zodgen.e2e.test.ts`
+- `agent-tools/tests/cli-smoke.e2e.test.ts`
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/search/generate-search-modules.unit.test.ts` — **unit test spawning processes**
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/search/field-alignment.unit.test.ts` — **unit test spawning processes**
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/search/completion-context-alignment.unit.test.ts` — **unit test spawning processes**
+- `packages/sdks/oak-sdk-codegen/code-generation/typegen/mcp-tools/parts/emit-error-description.unit.test.ts` — **unit test spawning processes**
 
 ### 2. Implementation Coupling
 

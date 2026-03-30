@@ -1,0 +1,6 @@
+---
+description: Symlinks are forbidden in this repository.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/no-symlinks.md`.
