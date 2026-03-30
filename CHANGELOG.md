@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.1.1...v1.2.0) (2026-03-30)
+
+
+### Features
+
+* adopt MCP Apps standard — Part 1 (WS1+WS2, runtime simplification, quality remediation) ([#70](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/70)) ([4762400](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4762400186e1b8e865aa78008882e63921e4dcd8))
+
 ## [1.1.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.1.0...v1.1.1) (2026-03-11)
 
 
