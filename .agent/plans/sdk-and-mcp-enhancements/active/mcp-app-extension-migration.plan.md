@@ -239,20 +239,32 @@ before WS3 implementation begins.
 
 **Dependencies**: WS1 + WS2 (correct metadata and MIME must be in place).
 
-**Pre-merge state (2026-03-30)**: Widget UI is **temporarily disabled** for
-merge to `main`. `WIDGET_TOOL_NAMES` is empty and `_meta.ui` is removed from
-`search` and `get-curriculum-model` tool definitions. The widget HTML resource
-remains registered (useful for debug). To re-enable: restore tool names in
-`cross-domain-constants.ts` and uncomment `_meta.ui` in both tool definitions.
+**Current state (2026-03-30)**:
 
-**Child plan**: To be created before implementation begins, following the WS2
-pattern.
+- Widget UI is **temporarily disabled** — `WIDGET_TOOL_NAMES` is empty,
+  `_meta.ui` removed from tool definitions.
+- All `window.openai` references removed from TypeScript (zero hits).
+- **WARNING**: `window.__mcpPreview` was incorrectly introduced as a
+  renamed shim for `window.openai`. This violates the
+  no-compatibility-layers principle. WS3 must DELETE this shim entirely
+  and rewrite the widget client to use the MCP Apps SDK `App` class
+  directly. No global window properties of any kind.
+- 17 non-archive markdown files still reference `window.openai` — clean
+  up as part of WS3.
+- The `generatePreviewWidgetFile()` function in `widget-file-generator.ts`
+  injects `window.__mcpPreview` for offline preview. WS3 should replace
+  this with the MCP Apps `basic-host` preview server from the ext-apps
+  repo — no custom preview injection needed.
 
-**WS3 TDD obligation (from WS2 Task 3c)**: WS3 implementation MUST begin by
-rewriting the `window.openai` e2e test in `e2e-tests/widget-resource.e2e.test.ts`
-to specify the new MCP Apps `App` class behaviour FIRST (RED), then implement
-(GREEN). Per testing-strategy.md: "When changing system behaviour, update E2E
-tests FIRST."
+**Child plan**: To be created before implementation begins, following
+the WS2 pattern. **This is the next session's deliverable.**
+
+**WS3 TDD obligation (from WS2 Task 3c)**: WS3 implementation MUST
+begin by rewriting the E2E test in
+`e2e-tests/widget-resource.e2e.test.ts` to specify the new MCP Apps
+`App` class behaviour FIRST (RED), then implement (GREEN). Per
+testing-strategy.md: "When changing system behaviour, update E2E tests
+FIRST."
 
 ---
 

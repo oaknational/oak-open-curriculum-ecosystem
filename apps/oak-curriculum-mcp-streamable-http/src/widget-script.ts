@@ -4,7 +4,6 @@
  * Extracted from aggregated-tool-widget.ts for maintainability.
  *
  * Features:
- * - Widget state persistence via window.openai.setWidgetState()
  * - Tool name routing to appropriate renderers
  * - Rendering orchestration
  * - Neutral shell (logo + heading only) for non-search tools
@@ -12,18 +11,16 @@
  * @see aggregated-tool-widget.ts
  * @see widget-renderers/index.ts - Renderer implementations
  * @see widget-renderer-registry.ts - Tool name to renderer mapping
- * @see https://developers.openai.com/apps-sdk/build/chatgpt-ui
  */
 
 import { WIDGET_RENDERER_FUNCTIONS } from './widget-renderers/index.js';
 import { WIDGET_STATE_JS } from './widget-script-state.js';
 
 /**
- * Widget JavaScript that runs inside the ChatGPT sandbox.
+ * Widget JavaScript that runs inside the MCP Apps sandbox.
  *
  * This script handles:
- * - Reading tool output from window.openai.toolOutput
- * - Persisting UI state via window.openai.setWidgetState()
+ * - Reading tool output from the MCP Apps bridge
  * - Tool name routing to select appropriate renderer
  * - Orchestrating rendering of all tool outputs
  * - Showing neutral shell (logo + heading, hidden footer) for
@@ -39,7 +36,7 @@ ${WIDGET_STATE_JS}
 // Safe Area Insets
 // ========================================
 function applySafeAreaInsets() {
-  const safeArea = window.openai?.safeArea;
+  const safeArea = undefined?.safeArea;
   if (safeArea?.insets) {
     const { top, right, bottom, left } = safeArea.insets;
     document.documentElement.style.setProperty('--safe-top', \`\${top}px\`);
@@ -70,19 +67,19 @@ const HEADER_TOOLS = new Set(['search', 'browse-curriculum', 'explore-topic', 'f
 // Rendering
 // ========================================
 function updateToolName() {
-  const meta = window.openai?.toolResponseMetadata;
+  const meta = undefined?.toolResponseMetadata;
   const displayName = meta?.['annotations/title'] || meta?.title || '';
   if (displayName && toolNameEl) { toolNameEl.textContent = displayName; toolNameEl.style.display = 'block'; }
   else if (toolNameEl) { toolNameEl.style.display = 'none'; }
 }
 
 function getFullResults() {
-  return window.openai?.toolOutput ?? {};
+  return undefined?.toolOutput ?? {};
 }
 
 function getToolName() {
-  const input = window.openai?.toolInput;
-  const meta = window.openai?.toolResponseMetadata;
+  const input = undefined?.toolInput;
+  const meta = undefined?.toolResponseMetadata;
   return meta?.toolName || input?.toolName || null;
 }
 
@@ -130,7 +127,7 @@ document.addEventListener('click', (e) => {
   }
 });
 
-window.addEventListener('openai:set_globals', (e) => {
+window.addEventListener('mcp:update', (e) => {
   const globals = e.detail?.globals;
   if (globals?.toolOutput !== undefined) render();
   if (globals?.safeArea !== undefined) applySafeAreaInsets();

@@ -55,7 +55,7 @@ describe('widget script parse check', () => {
 
 describe('four-way renderer sync', () => {
   const stubGlobals = [
-    'const window = { openai: null };',
+    'const window = {};',
     'const document = { getElementById: () => null, querySelector: () => null, documentElement: { scrollTop: 0, style: { setProperty: () => {} } }, addEventListener: () => {} };',
     'window.addEventListener = () => {};',
   ].join('\n');

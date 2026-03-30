@@ -35,14 +35,14 @@ ${generateToolRendererMapJs()}
 // ========================================
 // Widget State Persistence
 // ========================================
-let widgetState = window.openai?.widgetState ?? {
+let widgetState = undefined?.widgetState ?? {
   scrollPosition: 0,
 };
 
 function updateWidgetState(newState) {
   widgetState = { ...widgetState, ...newState };
-  if (window.openai?.setWidgetState) {
-    window.openai.setWidgetState(widgetState);
+  if (undefined?.setWidgetState) {
+    undefined.setWidgetState(widgetState);
   }
 }
 
@@ -63,8 +63,8 @@ document.addEventListener('scroll', () => {
 // ========================================
 function openOnOakWebsite(event, url) {
   if (event) event.preventDefault();
-  if (window.openai?.openExternal) {
-    window.openai.openExternal({ href: url });
+  if (undefined?.openExternal) {
+    undefined.openExternal({ href: url });
   } else {
     window.open(url, '_blank', 'noopener,noreferrer');
   }

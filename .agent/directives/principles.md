@@ -45,6 +45,7 @@ We achieve this by ensuring that ALL static data structures, types, type guards,
 - **Onboarding** - We must have a clear onboarding path for new developers and AI agents, from the root README.md, to detailed documentation in the appropriate directories, to specialised documentation in the docs/ directory, to TSDoc annotations and ADRs. Observe progressive disclosure, starting with the most general information and working towards the most specific.
 - **No absolute paths** - The repo is used on many machines. ALL filesystem paths in the repo (documentation, plans, config, frontmatter, comments, example commands) MUST be relative: either relative to the repo root or relative to the file containing the path. NO absolute paths (e.g. `/Users/...`, `C:\...`). Absolute paths expose usernames and local directory structure and do not resolve for other contributors or in CI.
 - **No symlinks** — Symlinks are forbidden. Structure workspaces properly and use the pnpm workspace dependency graph. Any discovered symlinks must be removed immediately as highest priority. Platform adapters are real files, not symlinks.
+- **No shims, no hacks, no workarounds** — Do it properly or do something else. Never introduce shims, polyfills, compatibility wrappers, renamed globals, or any mechanism whose purpose is to make old code work with new contracts. Replace the old code. If the replacement is not ready, leave the old code disabled — do not bridge it.
 
 ### Refactoring
 

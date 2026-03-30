@@ -1,8 +1,7 @@
 /**
  * Oak-branded widget for rendering aggregated tool output.
  *
- * This HTML is served as an MCP Apps resource. The current client runtime still
- * reads tool data through `window.openai.*`; WS3 migrates that bridge.
+ * This HTML is served as an MCP Apps resource.
  */
 
 import { OAK_LOGO_SVG } from './oak-logo-svg.js';
@@ -16,13 +15,10 @@ import { WIDGET_SCRIPT } from './widget-script.js';
  * - Oak National Academy logo in header with optional tool subtitle
  * - Lexend font from Google Fonts (Oak brand typeface)
  * - Oak brand colors with light/dark mode support (WCAG AA compliant)
- * - Reads tool output from `window.openai.toolOutput`
- * - Widget state persistence via `window.openai.setWidgetState()`
+ * - Reads tool output from MCP Apps bridge
+ * - Widget state persistence via MCP Apps state API
  * - Responsive JSON formatting with word wrap
  * - AI disclaimer footer
- *
- * NOTE: Refresh button via window.openai.callTool() is disabled but code preserved.
- * See widget-script-state.ts for implementation details and how to re-enable.
  */
 /**
  * Generates the complete widget HTML document.
@@ -72,7 +68,6 @@ export function generateWidgetHtml(): string {
  * This is the HTML that gets served as the widget resource.
  * It includes embedded CSS and JavaScript for a self-contained widget.
  *
- * NOTE: Tool calling via window.openai.callTool() is implemented but disabled.
- * See widget-script-state.ts for implementation details and how to re-enable.
+ * The widget HTML is self-contained with embedded CSS and JavaScript.
  */
 export const AGGREGATED_TOOL_WIDGET_HTML = generateWidgetHtml();

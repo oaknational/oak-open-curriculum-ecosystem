@@ -13,7 +13,7 @@ import type { GeneratedToolRegistry } from './universal-tools/types.js';
 
 /**
  * Type for structuredContent field, derived from the MCP SDK's CallToolResult.
- * This is the format expected by OpenAI Apps SDK for `window.openai.toolOutput`.
+ * This is the format expected by MCP Apps hosts for structured tool results.
  */
 type StructuredContent = NonNullable<CallToolResult['structuredContent']>;
 
@@ -92,8 +92,8 @@ export function serialiseArg(value: unknown): unknown {
 export function formatData(data: unknown): CallToolResult {
   const normalised = serialiseArg(data);
   const content: TextContent = { type: 'text', text: JSON.stringify(normalised) };
-  // structuredContent is required for OpenAI Apps SDK widgets to receive data
-  // via window.openai.toolOutput. Without it, the widget only sees {}.
+  // structuredContent is required for MCP Apps widgets to receive structured data.
+  // Without it, the widget only sees {}.
   const structuredContent: StructuredContent = isStructuredContent(normalised)
     ? normalised
     : { data: normalised };
@@ -108,7 +108,7 @@ export function formatData(data: unknown): CallToolResult {
  * - content[0]: human-readable summary for conversation display
  * - content[1]: JSON-serialised full data for backwards compatibility
  *
- * This ensures every MCP client (Cursor, OpenAI Apps SDK, etc.) sees
+ * This ensures every MCP client (Cursor, Claude, ChatGPT, etc.) sees
  * both the summary AND the full data regardless of how it reads responses.
  */
 export interface ToolResponseOptions {
@@ -131,14 +131,14 @@ export interface ToolResponseOptions {
 }
 
 /**
- * Formats MCP CallToolResult per OpenAI Apps SDK reference.
+ * Formats MCP CallToolResult per MCP Apps spec.
  *
- * Per OpenAI docs (https://developers.openai.com/apps-sdk/reference#tool-results):
+ * Per MCP Apps specification:
  * - `structuredContent`: Model AND widget see this - contains FULL data for reasoning
  * - `content`: Model AND widget see this - human-readable summary for conversation
  * - `_meta`: Widget ONLY sees this - additional computed data like lookups
  *
- * @see https://developers.openai.com/apps-sdk/reference#tool-results
+ * @see https://modelcontextprotocol.io/extensions/apps/overview
  */
 
 /** Builds _meta object for widget-only data. Model never sees _meta. */
@@ -156,7 +156,7 @@ function buildMeta(options: ToolResponseOptions): WidgetMeta {
  * Unified tool response formatter for all MCP tools.
  *
  * Produces a 2-item content array (summary + JSON data), structuredContent
- * for the OpenAI Apps SDK, and _meta for widget routing. This ensures
+ * for MCP Apps hosts, and _meta for widget routing. This ensures
  * every MCP client sees both the human-readable summary AND the full data.
  *
  * Per MCP spec: "For backwards compatibility, a tool that returns structured

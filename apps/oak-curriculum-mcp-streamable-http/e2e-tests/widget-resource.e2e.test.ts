@@ -221,14 +221,6 @@ describe('oak-json-viewer widget resource E2E', () => {
       expect(html).toContain('--bg:');
     });
 
-    it('widget HTML includes window.openai integration', async () => {
-      const html = await getWidgetHtml();
-
-      // Widget reads tool output from ChatGPT's window.openai API
-      expect(html).toContain('window.openai');
-      expect(html).toContain('toolOutput');
-    });
-
     it('widget HTML includes Oak National Academy logo', async () => {
       const html = await getWidgetHtml();
 

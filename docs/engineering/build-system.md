@@ -48,6 +48,18 @@ All packages use a unified `build` script. Turbo's `^build` dependency ensures p
   "run `sdk-codegen` in this package first" — scoped to the one package that
   generates types. Other packages build from committed generated code.
 
+> **Turbo override gotcha**: Task-specific overrides (e.g.
+> `@oaknational/sdk-codegen#build`) **replace** the generic task
+> definition entirely — they do NOT merge with it. Every override MUST
+> explicitly include `outputs`, `inputs`, and `cache` from the generic
+> parent task, or those fields default to empty. An override with only
+> `dependsOn` produces `outputs: []`, meaning the cache stores nothing
+> and cache hits restore zero files. This caused PR #70 CI failures:
+> `sdk-codegen:build` cache hits left `dist/` empty, breaking
+> downstream type-check. Verify overrides with
+> `turbo run <task> --filter=@package --dry=json` and inspect
+> `resolvedTaskDefinition`.
+
 Core packages (`oak-eslint`, `openapi-zod-client-adapter`) are leaf nodes with no workspace dependencies, so they build first. Other packages depend on them via `devDependencies` or `dependencies`, ensuring the correct build order without manual configuration.
 
 ## Quality Gate Surfaces
@@ -61,7 +73,7 @@ for the full decision record.
 | ----------------- | ---------- | ------------ | --------------- | ------- | ----------------- |
 | secrets:scan:all  | --         | Yes          | Yes             | --      | Yes               |
 | clean             | --         | --           | --              | --      | Yes               |
-| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | --      | Yes               |
+| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | --      | Yes (via build)   |
 | build             | --         | Yes          | Yes             | --      | Yes               |
 | format-check      | Yes        | Yes          | Yes             | Yes     | Yes (format:root) |
 | markdownlint      | Yes        | Yes          | Yes             | Yes     | Yes               |

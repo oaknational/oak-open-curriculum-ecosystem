@@ -17,7 +17,7 @@
  * ## Security Rationale
  *
  * These resources are safe to serve without auth because:
- * - Widget HTML is a static shell; user data arrives via `window.openai.toolOutput` at render time
+ * - Widget HTML is a static shell; user data arrives via the MCP Apps bridge at render time
  * - Documentation is static markdown generated at SDK compile time
  *
  * Data-fetching tools (tools/call) still require authentication.

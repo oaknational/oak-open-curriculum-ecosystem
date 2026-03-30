@@ -34,7 +34,7 @@
  * endpoints return self-origin URLs; proxy routes forward to Clerk.
  *
  * @see https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
- * @see https://developers.openai.com/apps-sdk/build/auth
+ * @see https://modelcontextprotocol.io/extensions/apps/overview
  */
 
 import { describe, it, expect } from 'vitest';

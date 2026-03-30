@@ -30,7 +30,7 @@
 export const WIDGET_STYLES = `
 :root {
   color-scheme: light dark;
-  /* Safe area insets - updated by JavaScript from window.openai.safeArea */
+  /* Safe area insets - updated by JavaScript from MCP Apps bridge */
   --safe-top: 20px;
   --safe-right: 20px;
   --safe-bottom: 20px;

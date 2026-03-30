@@ -6,7 +6,7 @@
  * - `content`: Model AND widget see this (human-readable summary)
  * - `_meta`: Widget ONLY sees this (additional widget metadata)
  *
- * @see https://developers.openai.com/apps-sdk/reference#tool-results
+ * @see https://modelcontextprotocol.io/extensions/apps/overview
  *
  * @remarks
  * These are integration tests because they test how the execution function

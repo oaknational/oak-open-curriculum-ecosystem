@@ -8,7 +8,7 @@
  * ## Security Rationale
  *
  * - **Widget HTML**: Static shell that loads JS/CSS. User-specific
- *   data arrives via `window.openai.toolOutput` at render time.
+ *   data arrives via the MCP Apps bridge at render time.
  * - **Documentation**: Static markdown generated at SDK compile time.
  *   Contains no user-specific information.
  *
