@@ -128,23 +128,6 @@ enough for permanent documentation.
   imply the latest pushed commit already contains local
   cleanup that is still in flight
 
-## MCP Apps (Domain-Specific)
-
-- `@modelcontextprotocol/ext-apps` `^1.3.2` with server helpers
-  from `@modelcontextprotocol/ext-apps/server` is the canonical
-  migration vehicle for C4/C5/C6. See
-  `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md`
-  for host-specific behaviour (ChatGPT, Claude sandbox domains,
-  `_meta.ui.domain`).
-- `_meta.ui.domain` only needed for direct cross-origin `fetch()`
-  from the iframe; omit if data flows through MCP bridge.
-- **Four MCP guidance surfaces must agree** when a
-  multi-tool workflow changes: tool `description`, workflow
-  data (flows to `get-curriculum-model` + resources), doc
-  resources, and prompt messages. Tool descriptions are
-  highest leverage — per MCP spec, tools are model-controlled
-  via `description`.
-
 ## Build System (Domain-Specific)
 
 - Turbo dependency model: see ADR-065 (items 6–7) for

@@ -5,8 +5,9 @@ overview: >
   into feat/full-sentry-otel-support (19 commits, 342 files). 22 content conflicts
   plus ~14 clerk skill dir/file conflicts. Includes characterisation tests,
   phased resolution, and post-merge verification.
-status: active
+status: completed
 last_updated: 2026-03-30
+completed: 2026-03-30
 parent_plan: ./sentry-otel-integration.execution.plan.md
 ---
 

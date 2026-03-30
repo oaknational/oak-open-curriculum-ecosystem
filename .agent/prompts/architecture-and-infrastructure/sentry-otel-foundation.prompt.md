@@ -28,8 +28,8 @@ for the architectural decision.
 
 ## Current State (2026-03-30)
 
-Branch head: `ab7dd97b`. 18 commits ahead of main.
-PR: [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73) — open, Vercel preview deployed, awaiting human review.
+Branch head: `fd34516b`. 27 commits ahead of main (merged with origin/main).
+PR: [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73) — open, merged with main (PR #70 MCP Apps adoption), awaiting human review.
 
 **What was done** (summary of the 19 resolved remediation findings):
 
@@ -62,14 +62,21 @@ markdownlint, format).
 
 **What remains on this branch**:
 
-- **C1/C2**: CodeQL regex backtracking findings in TOML parsers — fix pending
-  (see [PR73 remediation plan](../../plans/architecture-and-infrastructure/active/sentry-otel-pr73-codeql-remediation.plan.md))
 - **Human PR review** of [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73)
+- **Push** to update PR #73 with merge result
+
+**Completed since last update**:
+
+- **C1/C2**: CodeQL regex backtracking — fixed (unrolled-loop pattern)
+- **Merge with main (PR #70)**: 22 content conflicts + ~14 clerk dirs resolved
+  per [merge plan](../../plans/architecture-and-infrastructure/active/sentry-otel-merge-main.plan.md)
+- **ADR-141 → ADR-143**: Renumbered to avoid collision with main's MCP Apps ADR
+- **`request-context.ts` removed**: Adopted main's `extra.authInfo` DI pattern
+- **`handlers.ts` split**: Registration (handlers.ts) + per-request (mcp-handler.ts)
 
 **Deferred (track separately, not on this branch)**:
 
 - **C3/C4**: Rate limiting on `/mcp` routes (pre-existing, infrastructure)
-- **F10**: `vi.mock()` in `check-mcp-client-auth.unit.test.ts` (auth DI refactor)
 - **F18**: Span helper DRY opportunity (YAGNI)
 
 **Operational documentation added**:

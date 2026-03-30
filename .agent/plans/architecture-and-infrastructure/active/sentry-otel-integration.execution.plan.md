@@ -42,7 +42,7 @@ todos:
   - id: http-adoption
     content: "Finish and green the HTTP MCP observability adoption in oak-curriculum-mcp-streamable-http, including cold-start init, MCP wrapping, targeted manual spans, reviewer findings, doc consolidation, and quality gates"
     status: in-progress
-    note: "PR #73 open. C1/C2 regex fix pending, then human review."
+    note: "PR #73 open. C1/C2 regex fixed. Merged with main (PR #70). Awaiting human review."
   - id: search-cli-adoption
     content: "Adopt the foundation in oak-search-cli with runtime-config-driven logger composition, command init, spans, and shutdown flush"
     status: pending
@@ -83,12 +83,13 @@ and capture boundaries established in Phase 1 and Phase 2.
 ### Lane and state
 
 - Branch: `feat/full-sentry-otel-support`
-- Head: `ab7dd97b` (18 commits ahead of main)
-- PR: [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73) — open, Vercel preview deployed, awaiting human review
+- Head: `fd34516b` (27 commits ahead of main, merged with origin/main)
+- PR: [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73) — open, merged with main (PR #70), awaiting human review
 - Phases 0-2 complete (governance, shared contracts, shared foundation)
-- Phase 3 HTTP adoption: **PR open** — 19/21 specialist findings resolved,
-  2 CodeQL regex findings pending fix (C1/C2), `pnpm check` green (81/81 tasks)
-- Phase 3 Search CLI adoption: **pending** — blocked on HTTP merge
+- Phase 3 HTTP adoption: **PR open** — 21/21 specialist findings resolved,
+  C1/C2 CodeQL regex fixed, merged with main (PR #70 MCP Apps adoption),
+  ADR-141 renumbered to ADR-143, `pnpm check` green
+- Phase 3 Search CLI adoption: **pending** — unblocked after HTTP merge
 - Phase 4 evidence/deployment: **pending**
 
 ### Quality gate status (2026-03-30)
