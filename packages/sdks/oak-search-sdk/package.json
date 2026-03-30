@@ -49,10 +49,10 @@
   "devDependencies": {
     "@elastic/elasticsearch": "^9.3.4",
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^25.3.5",
+    "@types/node": "^25.5.0",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
   },
   "repository": {
     "type": "git",
