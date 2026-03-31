@@ -56,13 +56,24 @@ with injected configuration. Two limiters with different profiles:
   tools in rapid succession. 2 req/s sustained is generous for interactive
   use; batch operations go through the SDK directly.
 
-### OAuth routes (POST /oauth/register, /oauth/token)
+### OAuth routes (POST /oauth/register, POST /oauth/token, GET /oauth/authorize)
 
 - **Window**: 15 minutes
 - **Max requests**: 30 per IP
-- **Rationale**: OAuth registration and token exchange are low-frequency
-  operations. 30 per 15 minutes prevents credential stuffing while allowing
-  normal OAuth flows (register once, token refresh every few minutes).
+- **Rationale**: OAuth registration, token exchange, and authorise redirects
+  are low-frequency operations. 30 per 15 minutes prevents credential
+  stuffing and upstream Clerk amplification while allowing normal OAuth
+  flows. GET /oauth/authorize is included because each request triggers an
+  upstream Clerk authorisation — an amplification vector.
+
+### Asset download proxy (GET /assets/download/:lesson/:type)
+
+- **Window**: 1 minute
+- **Max requests**: 60 per IP
+- **Rationale**: HMAC-signed URLs have expiry but no single-use constraint.
+  Replay of a valid URL could exhaust the Oak API per-key rate limit,
+  degrading service for all users. 60/min is generous for legitimate
+  download use.
 
 ### DI approach
 
@@ -91,6 +102,38 @@ The factory is passed through `createApp` options, defaulting to
 - Rate limiting on unauthenticated routes (/healthz, /, landing page) —
   these are read-only, idempotent, and cached at the CDN
 
+## Security Review Findings (2026-03-31)
+
+The security reviewer identified the following risks. All must be
+addressed during implementation:
+
+### CRITICAL: `trust proxy` not configured
+
+Express has no `trust proxy` setting. Behind Vercel's reverse proxy,
+`req.ip` returns the CDN's IP, not the client's. Without this, all
+requests share one rate limit bucket — either blocking everyone or
+protecting nobody.
+
+**Fix**: Add `app.set('trust proxy', 1)` in `initializeAppInstance` or
+`setupBaseMiddleware`, before any rate limiting middleware. Integration
+tests must verify `req.ip` reflects `X-Forwarded-For`.
+
+### IMPORTANT: In-memory store is per-instance on Vercel serverless
+
+Vercel scales horizontally; each instance has its own counter. The rate
+limiter catches single-instance bursts but does not provide strong
+guarantees under horizontal scaling. The CDN layer provides the strong
+guarantee.
+
+**Fix**: Document honestly in the ADR: "Application-layer rate limiting
+on Vercel serverless is probabilistic. It catches naive single-instance
+bursts. The CDN layer is the authoritative rate limiter."
+
+### IMPORTANT: Response body format
+
+429 responses must match the existing error format (`{ error, message }`
+or the OAuth `{ error, error_description }` shape) for consistency.
+
 ## Phase 0: Confirm Design
 
 1. Verify `express-rate-limit` is compatible with the existing Express
@@ -99,9 +142,12 @@ The factory is passed through `createApp` options, defaulting to
    defence-in-depth; CDN handles sustained attacks)
 3. Confirm `express-rate-limit` returns standard `429 Too Many Requests`
    with `Retry-After` header
+4. **Configure `trust proxy`** — `app.set('trust proxy', 1)` so `req.ip`
+   reflects the real client IP behind Vercel's reverse proxy
 
 **Acceptance criteria**:
 - `express-rate-limit` installed as dependency
+- `trust proxy` configured and tested
 - `pnpm type-check` passes with the import
 
 ## Phase 1: TDD — Add Rate Limiting
@@ -122,11 +168,12 @@ Test that:
 
 ### Task 1.3: GREEN — Wire limiters to routes
 
-- `auth-routes.ts`: add limiter middleware before `mcpRouter` on both
-  POST and GET /mcp routes
-- `oauth-proxy-routes.ts`: add limiter middleware on POST /oauth/register
-  and POST /oauth/token
-- `bootstrap-helpers.ts`: add limiter to the auth-disabled /mcp routes
+- `auth-routes.ts`: add MCP limiter before `mcpRouter` on POST and
+  GET /mcp routes
+- `oauth-proxy-routes.ts`: add OAuth limiter on POST /oauth/register,
+  POST /oauth/token, and GET /oauth/authorize
+- `bootstrap-helpers.ts`: add MCP limiter to the auth-disabled /mcp routes
+- `asset-download-route.ts`: add asset limiter on GET /assets/download
 
 ### Task 1.4: REFACTOR — TSDoc, cleanup
 
