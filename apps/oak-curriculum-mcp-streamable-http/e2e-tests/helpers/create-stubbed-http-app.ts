@@ -4,8 +4,6 @@ import { createApp } from '../../src/application.js';
 import { loadRuntimeConfig } from '../../src/runtime-config.js';
 
 export const STUB_ACCEPT_HEADER = 'application/json, text/event-stream';
-// No longer using bearer tokens - using auth bypass instead
-export const STUB_DEV_BEARER_TOKEN = ''; // Deprecated, kept for backward compatibility
 const STUB_API_KEY = 'stub-api-key';
 
 export interface StubbedHttpApp {

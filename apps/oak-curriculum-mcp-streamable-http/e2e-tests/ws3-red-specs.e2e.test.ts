@@ -16,8 +16,8 @@
  * | user-search-query has visibility ["app"] | Tool does not exist yet | Phase 3 |
  * | Widget resource uses fresh slug | Still uses oak-json-viewer | Phase 3 |
  *
- * @see ws3-widget-clean-break-rebuild.plan.md
- * @see ws3-phase-0-baseline-and-red-specs.plan.md
+ * @see .agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md
+ * @see .agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-0-baseline-and-red-specs.plan.md
  */
 
 import { describe, it, expect } from 'vitest';
@@ -41,7 +41,6 @@ const ToolsListResultSchema = z.object({
                 resourceUri: z.string().optional(),
                 visibility: z.array(z.string()).optional(),
               })
-              .loose()
               .optional(),
           })
           .loose()
