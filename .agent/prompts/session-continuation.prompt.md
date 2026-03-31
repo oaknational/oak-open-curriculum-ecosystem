@@ -15,30 +15,32 @@ last_updated: 2026-03-31
    - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
-2. Read the live MCP Apps planning stack in this order:
+2. Read the merge plan first (immediate priority):
+   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-merge-main-into-branch.plan.md`
+3. Read the live MCP Apps planning stack in this order:
    - `.agent/plans/sdk-and-mcp-enhancements/roadmap.md`
    - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
    - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
    - `.agent/plans/sdk-and-mcp-enhancements/current/README.md`
-3. Read the auth closure gate plans that block migration closure:
+4. Read the auth closure gate plans that block migration closure:
    - `.agent/plans/sdk-and-mcp-enhancements/current/auth-safety-correction.plan.md`
    - `.agent/plans/sdk-and-mcp-enhancements/current/auth-boundary-type-safety.plan.md`
-4. Reconfirm the WS3 non-negotiable invariant from the child plan:
+5. Reconfirm the WS3 non-negotiable invariant from the child plan:
    - complete replacement of the legacy OpenAI-era widget stack
    - no conversion, no compatibility bridge, no renamed globals
    - one brand-new MCP App built on `@modelcontextprotocol/ext-apps`
-5. Re-establish live branch state:
+6. Re-establish live branch state:
 
 ```bash
 git status --short
 git log --oneline --decorate -5
 ```
 
-6. Run the canonical WS3 runtime contamination check command from the child
+7. Run the canonical WS3 runtime contamination check command from the child
    plan before and after substantive changes.
-7. Reconfirm `Canonical Compliance Checklist` in the WS3 child plan before
+8. Reconfirm `Canonical Compliance Checklist` in the WS3 child plan before
    changing runtime behaviour, metadata visibility, resource identity, or auth.
-8. Before treating WS3/WS4 as complete, verify C8 closure gates are complete
+9. Before treating WS3/WS4 as complete, verify C8 closure gates are complete
    (or explicitly superseded by accepted architecture).
 
 ## This Prompt's Role
@@ -57,13 +59,22 @@ git log --oneline --decorate -5
 **Child plan**:
 `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 
-**Immediate priority**: execute the WS3 child plan from the next pending phase.
+**Immediate priority**: merge main into the branch, then resume WS3 Phase 2.
+
+**Pre-Phase-2 blocker**: merge main into this branch first. The merge plan is
+fully reviewed by 4 sub-agent reviewers (architecture-barney, architecture-wilma,
+mcp-reviewer, code-reviewer) and ready to execute:
+
+- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-merge-main-into-branch.plan.md`
+
+The working tree is clean (merge abort done 2026-03-31). Start from Phase 5 of
+the merge plan. After merge passes `pnpm check`, continue with Phase 2:
+
+- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md`
 
 **Phase execution detail**: each WS3 phase has a companion child plan linked in
 the WS3 child plan's `Phase Companion Plans` section. Phases 0 and 1 are
-complete. Continue with the next pending phase:
-
-- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md`
+complete.
 
 **Closure gate note**: WS3/WS4 implementation can progress, but migration closure
 is blocked until C8 auth hardening plans in `current/` are complete (or

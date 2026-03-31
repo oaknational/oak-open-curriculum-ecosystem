@@ -43,3 +43,40 @@ Key observations:
   could be eliminated if: (a) sdk-codegen attaches examples via `.meta()`, and
   (b) the MCP SDK's internal converter honours `.meta()`. Investigate both
   before Phase 3 `registerAppTool` adaptation.
+
+## Session 2026-03-31 — Merge Planning (main → feat/mcp_app_ui)
+
+### What Was Done
+- Thorough pre-merge analysis following `docs/engineering/pre-merge-analysis.md`
+  7-phase process. Produced a comprehensive merge plan with observability gap
+  analysis, call-chain contract verification, and sub-agent plan review.
+- Invoked 4 sub-agent reviewers (architecture-barney, architecture-wilma,
+  mcp-reviewer, code-reviewer) on the plan before execution.
+- Aborted a stale in-progress merge from earlier research to restore clean state.
+- Plan moved from `.cursor/plans/` to canonical repo location.
+
+### Patterns to Remember
+- **"Take main as base, remove only" beats "take branch, add back"**: For the
+  keystone conflict, starting from main's version and removing widget code
+  preserves observability wrapping by default. The reverse (starting from branch
+  and adding wrapping) risks accidentally omitting wrappers.
+- **Characterisation tests are necessary but not sufficient**: `toHaveBeenCalled()`
+  proves a spy was invoked at least once, not that every call site was wrapped.
+  Always pair with the "preserve by default" approach above.
+- **Async wrappers break sync test fakes**: `wrapResourceHandler` returns
+  `async (...args) => Promise<T>`, but `register-resources.integration.test.ts`
+  fake throws on Promise-returning callbacks. Do NOT add observability to that
+  test without also upgrading the fake to async-aware.
+- **`WIDGET_URI` in auth/public-resources.ts is intentional**: Branch retained
+  it per ADR-057 as a harmless no-op during WS3 interim. Reviewers who flag it
+  should be told not to remove it.
+- **`git merge --abort` wipes staged changes**: Any uncommitted staged files
+  (the merge plan and session prompt were staged but not committed) are lost
+  when aborting. Always commit planning artefacts before attempting a merge.
+- **Sub-agent plan review before merge execution**: Having 4 specialist reviewers
+  validate the merge plan caught 3 blocking issues (application.ts seam
+  promotion, merge-state hygiene, async wrapper incompatibility) that would
+  have caused problems during execution.
+- **`register-json-resources.ts` exists on main**: New file that partially
+  duplicates `register-resources.ts`. Do not wire it into keystone resolution —
+  flag for post-merge tidy-up.
