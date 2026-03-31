@@ -10,18 +10,6 @@
  * widget registration using the fresh React MCP App.
  */
 
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-
-/**
- * Minimal server interface for resource registration.
- *
- * An interface (not a type alias) that narrows McpServer to the single
- * method needed for resource registration. Avoids repeating
- * `Pick<McpServer, 'registerResource'>` at every function signature.
- */
-interface ResourceRegistrar {
-  registerResource: McpServer['registerResource'];
-}
 import {
   DOCUMENTATION_RESOURCES,
   getDocumentationContent,
@@ -33,6 +21,12 @@ import {
   getThreadProgressionsJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
+import {
+  maybeWrapResourceHandler,
+  type ResourceRegistrar,
+  type WidgetResourceOptions,
+} from './register-resource-helpers.js';
+
 /**
  * Registers documentation resources for the "start here" experience.
  *
@@ -43,65 +37,114 @@ import {
  * - Common workflow guides
  *
  * @param server - MCP server instance
+ * @param observability - Optional observability for resource handler tracing
  */
-export function registerDocumentationResources(server: ResourceRegistrar): void {
+export function registerDocumentationResources(
+  server: ResourceRegistrar,
+  observability?: WidgetResourceOptions['observability'],
+): void {
   for (const resource of DOCUMENTATION_RESOURCES) {
     const { name, uri, ...metadata } = resource;
-    server.registerResource(name, uri, metadata, () => {
-      const content = getDocumentationContent(uri);
-      return {
-        contents: [
-          {
-            uri,
-            mimeType: resource.mimeType,
-            text: content ?? `# ${resource.title}\n\nContent not found.`,
-          },
-        ],
-      };
-    });
+    server.registerResource(
+      name,
+      uri,
+      metadata,
+      maybeWrapResourceHandler(
+        name,
+        () => {
+          const content = getDocumentationContent(uri);
+          return {
+            contents: [
+              {
+                uri,
+                mimeType: resource.mimeType,
+                text: content ?? `# ${resource.title}\n\nContent not found.`,
+              },
+            ],
+          };
+        },
+        observability,
+      ),
+    );
   }
 }
 
 /** Registers the curriculum model as an MCP resource, complementing `get-curriculum-model`. */
-export function registerCurriculumModelResource(server: ResourceRegistrar): void {
+export function registerCurriculumModelResource(
+  server: ResourceRegistrar,
+  observability?: WidgetResourceOptions['observability'],
+): void {
   const { name, uri, ...metadata } = CURRICULUM_MODEL_RESOURCE;
-  server.registerResource(name, uri, metadata, () => ({
-    contents: [
-      {
-        uri,
-        mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
-        text: getCurriculumModelJson(),
-      },
-    ],
-  }));
+  server.registerResource(
+    name,
+    uri,
+    metadata,
+    maybeWrapResourceHandler(
+      name,
+      () => ({
+        contents: [
+          {
+            uri,
+            mimeType: CURRICULUM_MODEL_RESOURCE.mimeType,
+            text: getCurriculumModelJson(),
+          },
+        ],
+      }),
+      observability,
+    ),
+  );
 }
 
 /** Registers the prerequisite graph as an MCP resource, complementing `get-prerequisite-graph`. */
-export function registerPrerequisiteGraphResource(server: ResourceRegistrar): void {
+export function registerPrerequisiteGraphResource(
+  server: ResourceRegistrar,
+  observability?: WidgetResourceOptions['observability'],
+): void {
   const { name, uri, ...metadata } = PREREQUISITE_GRAPH_RESOURCE;
-  server.registerResource(name, uri, metadata, () => ({
-    contents: [
-      {
-        uri,
-        mimeType: PREREQUISITE_GRAPH_RESOURCE.mimeType,
-        text: getPrerequisiteGraphJson(),
-      },
-    ],
-  }));
+  server.registerResource(
+    name,
+    uri,
+    metadata,
+    maybeWrapResourceHandler(
+      name,
+      () => ({
+        contents: [
+          {
+            uri,
+            mimeType: PREREQUISITE_GRAPH_RESOURCE.mimeType,
+            text: getPrerequisiteGraphJson(),
+          },
+        ],
+      }),
+      observability,
+    ),
+  );
 }
 
 /** Registers thread progressions as an MCP resource, complementing `get-thread-progressions`. */
-export function registerThreadProgressionsResource(server: ResourceRegistrar): void {
+export function registerThreadProgressionsResource(
+  server: ResourceRegistrar,
+  observability?: WidgetResourceOptions['observability'],
+): void {
   const { name, uri, ...metadata } = THREAD_PROGRESSIONS_RESOURCE;
-  server.registerResource(name, uri, metadata, () => ({
-    contents: [
-      {
-        uri,
-        mimeType: THREAD_PROGRESSIONS_RESOURCE.mimeType,
-        text: getThreadProgressionsJson(),
-      },
-    ],
-  }));
+  server.registerResource(
+    name,
+    uri,
+    metadata,
+    maybeWrapResourceHandler(
+      name,
+      () => ({
+        contents: [
+          {
+            uri,
+            mimeType: THREAD_PROGRESSIONS_RESOURCE.mimeType,
+            text: getThreadProgressionsJson(),
+          },
+        ],
+      }),
+      observability,
+    ),
+  );
 }
 
 /**
@@ -114,13 +157,18 @@ export function registerThreadProgressionsResource(server: ResourceRegistrar): v
  * when the fresh React MCP App is scaffolded.
  *
  * @param server - MCP server instance
+ * @param options - Optional widget resource options including observability
  */
-export function registerAllResources(server: ResourceRegistrar): void {
-  registerDocumentationResources(server);
-  registerCurriculumModelResource(server);
-  registerPrerequisiteGraphResource(server);
-  registerThreadProgressionsResource(server);
+export function registerAllResources(
+  server: ResourceRegistrar,
+  options?: WidgetResourceOptions,
+): void {
+  registerDocumentationResources(server, options?.observability);
+  registerCurriculumModelResource(server, options?.observability);
+  registerPrerequisiteGraphResource(server, options?.observability);
+  registerThreadProgressionsResource(server, options?.observability);
 }
 
 // Re-export prompts registration for use in handlers
 export { registerPrompts } from './register-prompts.js';
+export type { ResourceRegistrar, WidgetResourceOptions } from './register-resource-helpers.js';

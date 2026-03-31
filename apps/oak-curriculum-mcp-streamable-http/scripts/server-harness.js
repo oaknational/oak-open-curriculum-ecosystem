@@ -74,7 +74,9 @@ if (existsSync(envPath)) {
   for (const line of lines) {
     const trimmed = line.trim();
     // Skip empty lines and comments
-    if (!trimmed || trimmed.startsWith('#')) continue;
+    if (!trimmed || trimmed.startsWith('#')) {
+      continue;
+    }
 
     const match = trimmed.match(/^([^=]+)=(.*)$/);
     if (match) {

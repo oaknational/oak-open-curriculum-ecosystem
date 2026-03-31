@@ -24,18 +24,18 @@ This plugin provides:
 Boundary rules use `eslint-plugin-import-x` and `@typescript-eslint` to enforce
 layer separation:
 
-| Rule Set                 | Scope             | Enforces                                                                  |
-| ------------------------ | ----------------- | ------------------------------------------------------------------------- |
-| `coreBoundaryRules`      | `packages/core/`  | No imports from libs or apps                                              |
-| `createLibBoundaryRules` | `packages/libs/`  | No imports from other libs or apps; no `process`/`__dirname`/`__filename` |
-| `createSdkBoundaryRules` | `packages/sdks/`  | One-way dependency between generation and runtime SDK workspaces          |
-| `appBoundaryRules`       | `apps/`           | No imports from other apps                                                |
-| `appArchitectureRules`   | `apps/` internals | Integrations cannot import tools and vice versa                           |
+| Rule Set                 | Scope             | Enforces                                                                                        |
+| ------------------------ | ----------------- | ----------------------------------------------------------------------------------------------- |
+| `coreBoundaryRules`      | `packages/core/`  | No imports from libs, SDKs, or apps via relative paths or `@oaknational/*` package specifiers   |
+| `createLibBoundaryRules` | `packages/libs/`  | Tier-aware lib boundaries plus no imports from SDKs/apps; no `process`/`__dirname`/`__filename` |
+| `createSdkBoundaryRules` | `packages/sdks/`  | One-way dependency rules for generation/runtime/search SDK workspaces                           |
+| `appBoundaryRules`       | `apps/`           | Baseline cross-app boundary helper for relative-package and package-specifier imports           |
+| `appArchitectureRules`   | `apps/` internals | Cross-app boundaries plus tools/integrations separation and private-module bans                 |
 
 #### `createSdkBoundaryRules(role)`
 
 Factory function that returns boundary rules for SDK workspaces. The `role`
-parameter (`'generation'` or `'runtime'`) determines the constraint set:
+parameter (`'generation'`, `'runtime'`, or `'search'`) determines the constraint set:
 
 - **`'generation'`**: blocks imports from the runtime SDK
   (`@oaknational/curriculum-sdk`). The generation workspace must not depend
@@ -44,8 +44,11 @@ parameter (`'generation'` or `'runtime'`) determines the constraint set:
   (`@oaknational/sdk-codegen/*/**`) — only single-level
   subpath exports are permitted. Also blocks `@workspace/*` aliases to
   prevent pnpm workspace aliases from bypassing the boundary rules.
+- **`'search'`**: forbids direct imports from
+  `@oaknational/curriculum-sdk` and requires generated search-facing
+  surfaces from `@oaknational/sdk-codegen` instead, in line with ADR-108.
 
-Both roles block `@workspace/*` imports to ensure all cross-workspace
+All roles block `@workspace/*` imports to ensure all cross-workspace
 dependencies go through published package names.
 
 ## Configs

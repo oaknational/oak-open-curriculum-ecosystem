@@ -20,7 +20,7 @@
  */
 
 import { Command } from 'commander';
-import type { SearchCliEnv } from '../../env.js';
+import type { SearchCliEnvLoader } from '../shared/index.js';
 import {
   registerSetupCmd,
   registerStatusCmd,
@@ -55,7 +55,7 @@ import {
  * Lifecycle commands that perform ingestion (versioned-ingest, stage)
  * require the wider `CliSdkEnv & OakClientEnv` to access the Oak API.
  *
- * @param cliEnv - Validated CLI environment values including Oak API credentials
+ * @param cliEnvLoader - Cached loader for validated CLI environment values
  * @returns A Commander `Command` with all admin subcommands registered
  *
  * @example
@@ -64,27 +64,27 @@ import {
  * program.addCommand(adminCommand(cliEnv));
  * ```
  */
-export function adminCommand(cliEnv: SearchCliEnv): Command {
+export function adminCommand(cliEnvLoader: SearchCliEnvLoader): Command {
   const cmd = new Command('admin').description(
     'Elasticsearch setup, ingestion, and index management',
   );
 
-  registerSetupCmd(cmd, cliEnv);
-  registerStatusCmd(cmd, cliEnv);
-  registerSynonymsCmd(cmd, cliEnv);
-  registerMetaCmd(cmd, cliEnv);
-  registerOrchestrationCmds(cmd, cliEnv);
-  registerVersionedIngestCmd(cmd, cliEnv);
-  registerStageCmd(cmd, cliEnv);
-  registerPromoteCmd(cmd, cliEnv);
-  registerRollbackCmd(cmd, cliEnv);
-  registerValidateAliasesCmd(cmd, cliEnv);
-  registerInspectLeaseCmd(cmd, cliEnv);
-  registerReleaseLeaseCmd(cmd, cliEnv);
-  registerCountCmd(cmd, cliEnv);
-  registerDeleteVersionCmd(cmd, cliEnv);
-  registerListOrphansCmd(cmd, cliEnv);
-  registerCleanupOrphansCmd(cmd, cliEnv);
+  registerSetupCmd(cmd, cliEnvLoader);
+  registerStatusCmd(cmd, cliEnvLoader);
+  registerSynonymsCmd(cmd, cliEnvLoader);
+  registerMetaCmd(cmd, cliEnvLoader);
+  registerOrchestrationCmds(cmd, cliEnvLoader);
+  registerVersionedIngestCmd(cmd, cliEnvLoader);
+  registerStageCmd(cmd, cliEnvLoader);
+  registerPromoteCmd(cmd, cliEnvLoader);
+  registerRollbackCmd(cmd, cliEnvLoader);
+  registerValidateAliasesCmd(cmd, cliEnvLoader);
+  registerInspectLeaseCmd(cmd, cliEnvLoader);
+  registerReleaseLeaseCmd(cmd, cliEnvLoader);
+  registerCountCmd(cmd, cliEnvLoader);
+  registerDeleteVersionCmd(cmd, cliEnvLoader);
+  registerListOrphansCmd(cmd, cliEnvLoader);
+  registerCleanupOrphansCmd(cmd, cliEnvLoader);
 
   return cmd;
 }

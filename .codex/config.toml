@@ -29,6 +29,14 @@ config_file = ".codex/agents/docs-adr-reviewer.toml"
 description = "Elasticsearch specialist reviewer for mappings, queries, ELSER, RRF, and Elastic Serverless."
 config_file = ".codex/agents/elasticsearch-reviewer.toml"
 
+[agents."clerk-reviewer"]
+description = "Clerk specialist reviewer for middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage."
+config_file = ".codex/agents/clerk-reviewer.toml"
+
+[agents."sentry-reviewer"]
+description = "Sentry and OpenTelemetry specialist reviewer for SDK init, logging, tracing, MCP Insights, and telemetry redaction."
+config_file = ".codex/agents/sentry-reviewer.toml"
+
 [agents."mcp-reviewer"]
 description = "MCP protocol specification and implementation reviewer."
 config_file = ".codex/agents/mcp-reviewer.toml"

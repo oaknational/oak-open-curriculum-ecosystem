@@ -10,22 +10,30 @@ const EPHEMERAL_PORT = 0;
 /**
  * Starts the streamable HTTP app on the requested port for smoke tests.
  */
+async function createSmokeApp() {
+  const { createApp } = await import('../src/application.js');
+  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
+  const { createHttpObservability, describeHttpObservabilityError } =
+    await import('../src/observability/http-observability.js');
+  const configResult = loadRuntimeConfig({ processEnv: process.env, startDir: process.cwd() });
+  if (!configResult.ok) {
+    throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
+  }
+  const observabilityResult = createHttpObservability(configResult.value);
+  if (!observabilityResult.ok) {
+    throw new Error(
+      `Failed to create observability: ${describeHttpObservabilityError(observabilityResult.error)}`,
+    );
+  }
+  return createApp({ runtimeConfig: configResult.value, observability: observabilityResult.value });
+}
+
 export async function startSmokeServer(port: number): Promise<Server> {
   if (port !== EPHEMERAL_PORT) {
     await assertPortAvailable(port);
   }
-  console.log(`[TRACE] startSmokeServer: importing createApp and loadRuntimeConfig`);
-  const { createApp } = await import('../src/application.js');
-  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
-  const configResult = loadRuntimeConfig({
-    processEnv: process.env,
-    startDir: process.cwd(),
-  });
-  if (!configResult.ok) {
-    throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
-  }
-  console.log(`[TRACE] startSmokeServer: calling createApp()`);
-  const app = await createApp({ runtimeConfig: configResult.value });
+  console.log(`[TRACE] startSmokeServer: creating smoke app`);
+  const app = await createSmokeApp();
   const appId = app.__appId;
   console.log(
     `[TRACE] startSmokeServer: got app #${String(appId)}, starting server on port ${String(port)}`,
@@ -214,16 +222,7 @@ function buildPortCheckTimeoutError(port: number): Error {
  * creates a fresh McpServer + transport per request.
  */
 export async function withEphemeralServer<T>(fn: (baseUrl: string) => Promise<T>): Promise<T> {
-  const { createApp } = await import('../src/application.js');
-  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
-  const configResult = loadRuntimeConfig({
-    processEnv: process.env,
-    startDir: process.cwd(),
-  });
-  if (!configResult.ok) {
-    throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
-  }
-  const app = await createApp({ runtimeConfig: configResult.value });
+  const app = await createSmokeApp();
 
   const server = await new Promise<Server>((resolve, reject) => {
     const instance = app.listen(EPHEMERAL_PORT, LOOPBACK_HOST, () => {

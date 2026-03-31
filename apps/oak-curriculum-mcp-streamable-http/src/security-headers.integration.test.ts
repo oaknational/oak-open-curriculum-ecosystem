@@ -2,6 +2,7 @@ import request from 'supertest';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
+import { createHttpObservabilityOrThrow } from './observability/http-observability.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 import type { Express } from 'express';
 
@@ -28,7 +29,8 @@ describe('Security Headers (Integration)', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(result);
-    app = await createApp({ runtimeConfig });
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    app = await createApp({ runtimeConfig, observability });
   });
 
   describe('Landing page (/) - HTML endpoint', () => {

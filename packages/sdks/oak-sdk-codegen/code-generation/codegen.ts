@@ -22,6 +22,7 @@ import { createOpenCurriculumSchema, saveSchemaToFile } from './schema-separatio
 import { validateOpenApiDocument } from './schema-validator.js';
 import { generateWidgetConstants, generateSubjectHierarchy } from './typegen/index.js';
 import { runSitemapValidation } from './typegen/routing/validate-canonical-urls.js';
+import { normalizeError } from '@oaknational/logger';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { createCodegenLogger } from './create-codegen-logger.js';
 
@@ -101,7 +102,7 @@ async function fetchSchemaOnlineOrNull(url: string, apiKey: string): Promise<obj
     if (!response.ok) {
       const status = String(response.status);
       const statusText = response.statusText;
-      logger.error(`Error fetching API schema: HTTP ${status} ${statusText}`, undefined, { url });
+      logger.error(`Error fetching API schema: HTTP ${status} ${statusText}`, { url });
       return null;
     }
     const parsedJson = await response.json();
@@ -111,7 +112,7 @@ async function fetchSchemaOnlineOrNull(url: string, apiKey: string): Promise<obj
     }
     return parsedJson;
   } catch (error: unknown) {
-    logger.error(`Error fetching API schema from ${url}`, error);
+    logger.error(`Error fetching API schema from ${url}`, normalizeError(error));
     return null;
   }
 }

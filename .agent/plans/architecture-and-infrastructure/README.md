@@ -7,13 +7,25 @@ Cross-cutting architecture, system quality, and observability plans.
 
 ---
 
+## Active Now
+
+See [active/README.md](active/README.md) for work in progress.
+
+| Priority | Plan | Milestone | Status |
+|----------|------|-----------|--------|
+| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | HTTP adoption near-complete (19/21 findings, all gates green on `feat/full-sentry-otel-support`); Search CLI + deployment pending |
+
+Prompt entry:
+
+- [sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
+
 ## Queued Work (Current)
 
 See [current/README.md](current/README.md) for the next-up queue.
 
-| Priority | Plan | Milestone | Status |
-|----------|------|-----------|--------|
-| P0 | [sentry-otel-integration.execution.plan.md](current/sentry-otel-integration.execution.plan.md) | **M3 blocker** | Queued |
+## Strategic Backlog (Future)
+
+See [future/README.md](future/README.md) for later work and umbrella planning.
 
 ## Active Plans
 
@@ -33,8 +45,9 @@ See [current/README.md](current/README.md) for the next-up queue.
 | File | Milestone | Description |
 |------|-----------|-------------|
 | [`codegen/`](codegen/README.md) | Post-M1 | SDK codegen workspace decomposition — [strategic plan](codegen/future/sdk-codegen-workspace-decomposition.md) + [research](codegen/sdk-codegen-architecture-analysis.md). Temporary turbo overrides applied by [turbo boundary fix](../semantic-search/archive/completed/turbo-and-codegen-boundary-fix.plan.md) until decomposition completes. |
+| `active/sentry-otel-integration.execution.plan.md` | M2 | Active execution source for the Sentry + OTel foundation |
 | `current/config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
-| `current/observability-and-quality-metrics.plan.md` | M3 | Structured logging, monitoring, alerting, quality dashboards |
+| `future/observability-and-quality-metrics.plan.md` | M2 + M3 | Strategic umbrella for the observability foundation, alerting, and quality dashboards |
 | `current/security-dependency-triage.plan.md` | M2 | Dependabot + CodeQL + outdated dependency triage (March 2026) |
 | `future/stdio-http-server-alignment.md` | M1 | Align STDIO and HTTP server configuration and behaviour |
 | `archive/completed/no-console-enforcement.plan.md` | M1 | Superseded 2026-03-04 — folded into `developer-experience/active/devx-strictness-convergence.plan.md` |
@@ -42,9 +55,11 @@ See [current/README.md](current/README.md) for the next-up queue.
 ## Milestone Alignment
 
 - **Milestone 2** (open public alpha): server alignment,
-  config standardisation, and public-alpha hardening dependencies
+  config standardisation, and the Sentry + OpenTelemetry observability
+  foundation
 - **Post-M2**: SDK codegen workspace decomposition
-- **Milestone 3** (pre-beta): observability and quality metrics, **Sentry integration (blocker)**
+- **Milestone 3** (pre-beta): alerting, quality metrics, and broader
+  operational hardening on top of the foundation
 
 See [high-level-plan.md](../high-level-plan.md) for the strategic
 overview.

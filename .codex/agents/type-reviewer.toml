@@ -1,3 +1,5 @@
+name = "type-reviewer"
+description = "TypeScript type-safety reviewer."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"

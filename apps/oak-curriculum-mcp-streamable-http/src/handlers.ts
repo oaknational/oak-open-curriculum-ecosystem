@@ -1,21 +1,18 @@
 /**
- * MCP handler factory and tool registration.
+ * MCP tool registration.
  *
- * Implements the stateless per-request pattern: each HTTP request creates a
- * fresh `McpServer` + `StreamableHTTPServerTransport`, connects them, and
- * delegates to `transport.handleRequest()`. Auth flows natively via `req.auth`
- * (set by `mcpAuth` middleware) → `extra.authInfo` in tool callbacks.
+ * Iterates over the SDK's universal tool registry and registers each tool
+ * with its canonical projection config, observability wrapping, and auth
+ * interception.
  *
- * Tool registration iterates over the SDK's universal tool registry and
- * registers each tool with its canonical projection config.
+ * The per-request HTTP handler factory lives in {@link ./mcp-handler.ts}.
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { Logger } from '@oaknational/logger';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+import { wrapToolHandler } from '@oaknational/sentry-mcp';
 import type { RuntimeConfig } from './runtime-config.js';
-import type { McpServerFactory } from './mcp-request-context.js';
-import { createChildLogger } from './logging/index.js';
+import type { HttpObservability } from './observability/http-observability.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
@@ -35,11 +32,14 @@ import {
 import type { ToolHandlerDependencies, ToolHandlerOverrides } from './tool-handler-types.js';
 
 export type { ToolHandlerDependencies, ToolHandlerOverrides } from './tool-handler-types.js';
+export { createMcpHandler } from './mcp-handler.js';
+export type { McpHandlerRequest, McpHandlerResponse } from './mcp-handler.js';
 
 export interface RegisterHandlersOptions {
   readonly overrides?: ToolHandlerOverrides;
   readonly runtimeConfig: RuntimeConfig;
   readonly logger: Logger;
+  readonly observability: HttpObservability;
   readonly resourceUrl?: string;
   /** Pre-created search retrieval service (shared across per-request servers). */
   readonly searchRetrieval: SearchRetrievalService;
@@ -83,6 +83,10 @@ function buildToolHandlerDependencies(
   };
 }
 
+function deriveWidgetDomain(config: RuntimeConfig): string | undefined {
+  return config.displayHostname ? `https://${config.displayHostname}` : undefined;
+}
+
 /**
  * Registers all MCP tools with the server.
  *
@@ -103,122 +107,35 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
     options.searchRetrieval,
     stubExecutor,
   );
+  const mcpObservation = options.observability.createMcpObservationOptions();
 
   for (const tool of listUniversalTools(generatedToolRegistry)) {
     const config = toRegistrationConfig(tool);
-    server.registerTool(tool.name, config, async (params: unknown, extra) => {
-      return handleToolWithAuthInterception({
-        tool,
-        params,
-        deps,
-        logger: options.logger,
-        apiKey: options.runtimeConfig.env.OAK_API_KEY,
-        runtimeConfig: options.runtimeConfig,
-        createAssetDownloadUrl: options.createAssetDownloadUrl,
-        authInfo: extra.authInfo,
-      });
-    });
+    server.registerTool(
+      tool.name,
+      config,
+      wrapToolHandler(
+        tool.name,
+        async (params: unknown, extra) => {
+          return handleToolWithAuthInterception({
+            tool,
+            params,
+            deps,
+            logger: options.logger,
+            apiKey: options.runtimeConfig.env.OAK_API_KEY,
+            runtimeConfig: options.runtimeConfig,
+            createAssetDownloadUrl: options.createAssetDownloadUrl,
+            authInfo: extra.authInfo,
+          });
+        },
+        mcpObservation,
+      ),
+    );
   }
 
-  registerAllResources(server);
-  registerPrompts(server);
-}
-
-/**
- * Type guard for object with method property.
- */
-function hasMethodProperty(value: unknown): value is { method: unknown } {
-  return typeof value === 'object' && value !== null && 'method' in value;
-}
-
-/**
- * Extracts MCP method from JSON-RPC request body for logging.
- * Returns undefined if body is not a valid JSON-RPC request.
- */
-function extractMcpMethod(body: unknown): string | undefined {
-  if (hasMethodProperty(body) && typeof body.method === 'string') {
-    return body.method;
-  }
-  return undefined;
-}
-
-/**
- * Narrow request interface for `createMcpHandler`.
- *
- * Contains only the properties the handler accesses. Express `Request`
- * satisfies this structurally, so the handler can be used as middleware.
- * Test fakes satisfy it too — plain objects, no assertions.
- */
-export interface McpHandlerRequest {
-  /** HTTP headers. */
-  readonly headers: Record<string, string | readonly string[] | undefined>;
-  /** HTTP method (GET, POST, etc.). */
-  readonly method?: string;
-  /** URL path (e.g. '/mcp'). */
-  readonly path: string;
-  /** JSON-RPC request body (parsed by Express body-parser middleware). */
-  body: unknown;
-  /** Verified auth context, set by mcpAuth middleware. Mutable for cleanup. */
-  auth?: AuthInfo;
-}
-
-/**
- * Narrow response interface for `createMcpHandler`.
- *
- * Contains only the properties the handler accesses. Express `Response`
- * satisfies this structurally.
- */
-export interface McpHandlerResponse {
-  /** HTTP status code. */
-  readonly statusCode: number;
-  /** Express locals — handler reads `correlationId` for logging. */
-  locals: { correlationId?: string; [key: string]: unknown };
-  /** Register event listeners (handler uses 'close' for cleanup). */
-  on(event: string, listener: (...args: unknown[]) => void): unknown;
-}
-
-/**
- * Per-request MCP handler (stateless pattern).
- *
- * Auth flows natively via `req.auth` (set by `mcpAuth` middleware) →
- * the MCP SDK transport propagates it as `extra.authInfo` to tool callbacks.
- * Uses narrow request/response interfaces so test fakes satisfy the types
- * structurally without assertions (ADR-078).
- *
- * @see ADR-112, MCP SDK simpleStatelessStreamableHttp.ts
- */
-export function createMcpHandler(
-  mcpFactory: McpServerFactory,
-  logger?: Logger,
-): (req: McpHandlerRequest, res: McpHandlerResponse) => Promise<void> {
-  return async (req: McpHandlerRequest, res: McpHandlerResponse) => {
-    const correlationId: unknown = res.locals?.['correlationId'];
-    const log =
-      logger && typeof correlationId === 'string'
-        ? createChildLogger(logger, correlationId)
-        : undefined;
-    const mcpMethod = extractMcpMethod(req.body);
-    log?.debug('MCP request received', { method: req.method, path: req.path, mcpMethod });
-
-    const { server, transport } = mcpFactory();
-    await server.connect(transport);
-
-    await transport.handleRequest(req, res, req.body);
-
-    // Clean up per-request resources after the response completes.
-    // Defence-in-depth: clear auth data from the request object.
-    res.on('close', () => {
-      req.auth = undefined;
-      void Promise.allSettled([transport.close(), server.close()]).then((results) => {
-        for (const result of results) {
-          if (result.status === 'rejected') {
-            const error: unknown = result.reason;
-            log?.error('MCP per-request cleanup failed', { error });
-          }
-        }
-      });
-    });
-
-    log?.debug('MCP request completed', { statusCode: res.statusCode, mcpMethod });
-  };
+  registerAllResources(server, {
+    widgetDomain: deriveWidgetDomain(options.runtimeConfig),
+    observability: options.observability,
+  });
+  registerPrompts(server, options.observability);
 }

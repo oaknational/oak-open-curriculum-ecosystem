@@ -7,7 +7,6 @@
 import { defineConfig } from 'eslint/config';
 import {
   configs,
-  appBoundaryRules,
   appArchitectureRules,
   commonSettings,
   ignores as globalIgnores,
@@ -56,7 +55,6 @@ const config = defineConfig(
     },
     rules: {
       'import-x/no-relative-parent-imports': 'off',
-      ...appBoundaryRules,
       ...appArchitectureRules,
     },
   },
@@ -82,6 +80,7 @@ const config = defineConfig(
     },
     rules: {
       '@typescript-eslint/no-restricted-imports': 'off',
+      'import-x/no-relative-packages': 'off',
       'import-x/no-relative-parent-imports': 'off',
     },
   },

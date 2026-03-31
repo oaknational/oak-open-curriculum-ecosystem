@@ -105,6 +105,10 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
+    rules: {
+      'import-x/no-relative-packages': 'off',
+      'import-x/no-relative-parent-imports': 'off',
+    },
   },
 );
 

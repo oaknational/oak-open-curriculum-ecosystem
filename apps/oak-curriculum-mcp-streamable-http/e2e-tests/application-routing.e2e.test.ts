@@ -22,7 +22,11 @@ import { describe, it, expect } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
-import { createMockRuntimeConfig, createNoOpClerkMiddleware } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpClerkMiddleware,
+} from './helpers/test-config.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';
@@ -33,17 +37,19 @@ const ACCEPT_HEADER = 'application/json, text/event-stream';
  * Each test creates its own app for isolation.
  */
 async function createAuthEnabledApp(): Promise<Express> {
+  const runtimeConfig = createMockRuntimeConfig({
+    env: {
+      OAK_API_KEY: 'test-api-key',
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_test_123',
+      NODE_ENV: 'test',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+    },
+  });
   return await createApp({
-    runtimeConfig: createMockRuntimeConfig({
-      env: {
-        OAK_API_KEY: 'test-api-key',
-        CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-        CLERK_SECRET_KEY: 'sk_test_123',
-        NODE_ENV: 'test',
-        ELASTICSEARCH_URL: 'http://fake-es:9200',
-        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-      },
-    }),
+    runtimeConfig,
+    observability: createMockObservability(runtimeConfig),
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });
@@ -252,16 +258,18 @@ describe('Application-Level Method-Aware Auth', () => {
      * Each test creates its own app for isolation.
      */
     async function createBypassApp(): Promise<Express> {
+      const runtimeConfig = createMockRuntimeConfig({
+        dangerouslyDisableAuth: true,
+        env: {
+          OAK_API_KEY: 'test-api-key',
+          NODE_ENV: 'development',
+          ELASTICSEARCH_URL: 'http://fake-es:9200',
+          ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+        },
+      });
       return await createApp({
-        runtimeConfig: createMockRuntimeConfig({
-          dangerouslyDisableAuth: true,
-          env: {
-            OAK_API_KEY: 'test-api-key',
-            NODE_ENV: 'development',
-            ELASTICSEARCH_URL: 'http://fake-es:9200',
-            ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-          },
-        }),
+        runtimeConfig,
+        observability: createMockObservability(runtimeConfig),
       });
     }
 

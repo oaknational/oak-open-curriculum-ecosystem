@@ -111,3 +111,44 @@ export function getClaudeHookPortabilityIssues({
 
   return issues;
 }
+
+export function getReviewerAdapterParityIssues({
+  cursorAgentFiles,
+  claudeAgentFiles,
+  codexAgentFiles,
+}) {
+  const issues = [];
+  const cursorAgentNames = new Set(
+    cursorAgentFiles.map((file) => file.replace(/^.*\/|\.md$/gu, '')),
+  );
+  const claudeAgentNames = new Set(
+    claudeAgentFiles.map((file) => file.replace(/^.*\/|\.md$/gu, '')),
+  );
+  const codexAgentNames = new Set(
+    codexAgentFiles.map((file) => file.replace(/^.*\/|\.toml$/gu, '')),
+  );
+
+  const canonicalAgentNames = [
+    ...new Set([...cursorAgentNames, ...claudeAgentNames, ...codexAgentNames]),
+  ].sort();
+
+  for (const agentName of canonicalAgentNames) {
+    if (!cursorAgentNames.has(agentName)) {
+      issues.push(
+        `.cursor/agents/${agentName}.md: missing reviewer adapter required for cross-platform parity`,
+      );
+    }
+    if (!claudeAgentNames.has(agentName)) {
+      issues.push(
+        `.claude/agents/${agentName}.md: missing reviewer adapter required for cross-platform parity`,
+      );
+    }
+    if (!codexAgentNames.has(agentName)) {
+      issues.push(
+        `.codex/agents/${agentName}.toml: missing reviewer adapter required for cross-platform parity`,
+      );
+    }
+  }
+
+  return issues;
+}

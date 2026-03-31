@@ -10,6 +10,7 @@
 
 import { dirname } from 'node:path';
 import type { FileSinkConfig } from './sink-config';
+import type { LogEvent, LogSink } from './types.js';
 
 /**
  * Minimal write stream interface for file sink
@@ -34,13 +35,13 @@ export interface FileSystem {
 /**
  * Interface for file sink operations
  */
-export interface FileSinkInterface {
+export interface FileSinkInterface extends LogSink {
   /**
-   * Writes a pre-formatted log line to the file
+   * Writes a logger event to the file.
    *
-   * @param line - Pre-formatted log string (should include newline if desired)
+   * @param event - Immutable logger event
    */
-  write(line: string): void;
+  write(event: LogEvent): void;
   /**
    * Closes the file sink
    */
@@ -77,9 +78,9 @@ export function createFileSink(config: FileSinkConfig, fs: FileSystem): FileSink
     const stream = fs.createWriteStream(filePath, { flags });
 
     return {
-      write(line: string): void {
+      write(event: LogEvent): void {
         try {
-          stream.write(line, 'utf8', (error?: Error | null) => {
+          stream.write(event.line, 'utf8', (error?: Error | null) => {
             if (error) {
               console.error('Failed to write log line to file', {
                 path: filePath,

@@ -14,6 +14,7 @@
 import { promises as fs } from 'node:fs';
 import { dirname, join, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { normalizeError } from '@oaknational/logger';
 import { createCodegenLogger } from './create-codegen-logger.js';
 
 const logger = createCodegenLogger('verify-docs');
@@ -118,7 +119,7 @@ async function main(): Promise<void> {
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       failures.push(label + ': ' + msg);
-      logger.error(`FAIL ${label} - ${msg}`, err);
+      logger.error(`FAIL ${label} - ${msg}`, normalizeError(err));
     }
   }
 
@@ -140,6 +141,6 @@ async function main(): Promise<void> {
 
 main().catch((err: unknown) => {
   const message = err instanceof Error ? err.message : String(err);
-  logger.error(message, err);
+  logger.error(message, normalizeError(err));
   process.exitCode = 1;
 });

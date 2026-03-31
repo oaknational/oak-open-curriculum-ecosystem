@@ -6,38 +6,45 @@
  */
 
 // Unified Logger
-export { UnifiedLogger } from './unified-logger';
+export { UnifiedLogger } from './unified-logger.js';
 
 // Context Merging
-export { mergeLogContext } from './context-merging';
+export { mergeLogContext } from './context-merging.js';
 
 // Error Normalisation
-export { normalizeError } from './error-normalisation';
+export { buildNormalizedError, isNormalizedError, normalizeError } from './error-normalisation.js';
 
 // JSON Sanitisation
-export { sanitiseForJson, isJsonValue, sanitiseObject } from './json-sanitisation';
+export { sanitiseForJson, isJsonValue, sanitiseObject } from './json-sanitisation.js';
 
 // Express Middleware (optional, requires express peer dependency)
 export {
   createRequestLogger,
   createErrorLogger,
   extractRequestMetadata,
+  type ErrorLoggerOptions,
+  type HeaderRedactor,
   type RequestLoggerOptions,
-} from './express-middleware';
+} from './express-middleware.js';
 
-// Legacy exports from pure-functions
-export { isLevelEnabled } from './pure-functions';
-
-export type { LoggerOptions } from './types';
-export type { Logger } from './types';
-export type { JsonObject } from './types';
-export type { LogContext } from './types';
+export type {
+  JsonObject,
+  JsonValue,
+  LogContext,
+  LogContextInput,
+  LogContextInputValue,
+  LogEvent,
+  LogSink,
+  Logger,
+  LoggerOptions,
+  NormalizedError,
+} from './types.js';
 export {
   DEFAULT_HTTP_SINK_CONFIG,
   parseSinkConfigFromEnv,
   type LoggerSinkConfig,
   type LoggerSinkEnvironment,
-} from './sink-config';
+} from './sink-config.js';
 
 // Export log level utilities
 export {
@@ -51,7 +58,7 @@ export {
   shouldLog,
   type LogLevel,
   type BaseLoggingEnvironment,
-} from './log-levels';
+} from './log-levels.js';
 
 // Timing utilities
 export {
@@ -62,15 +69,15 @@ export {
   type PhaseHandle,
   type PhasedTimer,
   type PhaseResult,
-} from './timing';
+} from './timing.js';
 
 // Error Context Enrichment
-export { enrichError, type ErrorContext } from './error-context';
+export { enrichError, type ErrorContext } from './error-context.js';
 
 // Resource Attributes
-export { buildResourceAttributes, getDeploymentEnvironment } from './resource-attributes';
-export type { ResourceAttributes } from './resource-attributes';
+export { buildResourceAttributes, getDeploymentEnvironment } from './resource-attributes.js';
+export type { ResourceAttributes } from './resource-attributes.js';
 
 // OpenTelemetry Format
-export { logLevelToSeverityNumber, logLevelToSeverityText } from './otel-format';
-export type { OtelLogRecord } from './otel-format';
+export { logLevelToSeverityNumber, logLevelToSeverityText } from './otel-format.js';
+export type { OtelLogRecord } from './otel-format.js';

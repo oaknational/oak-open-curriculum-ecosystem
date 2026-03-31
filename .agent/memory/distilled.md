@@ -5,13 +5,12 @@ split_strategy: "Extract settled entries to permanent docs (ADRs, governance, RE
 
 # Distilled Learnings
 
-Hard-won rules extracted from napkin sessions. Read this
-before every session. Every entry earned its place by
-changing behaviour.
+Hard-won rules extracted from napkin sessions. Read this before every session.
+Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-03-21.md`
-(sessions 2026-02-10 to 2026-03-21).
+`napkin-2026-02-24.md` through `napkin-2026-03-28.md`
+(sessions 2026-02-10 to 2026-03-28).
 
 **Permanent documentation**: Many entries have graduated to
 permanent docs. See TypeScript Practice, Testing Strategy,
@@ -75,8 +74,6 @@ enough for permanent documentation.
   use minimatch: `*` matches one path segment (not `/`),
   `**` matches zero or more segments. Use `**` for deep
   sub-path coverage
-- `isSubject()` then fallback for `AllSubjectSlug` to
-  `SearchSubjectSlug` mapping (KS4 variants)
 - Zod `.passthrough()` deprecated in Zod v4 — use `.loose()`
 - `localeCompare` uses locale-sensitive collation that may
   diverge from `Array.sort()` unicode order. For binary
@@ -124,26 +121,15 @@ enough for permanent documentation.
   not guess URL patterns and burn time on avoidable 404s
 - Session prompts in `.agent/prompts/` should be updated
   at end of each session, not just napkin
-- `process.env.X = value` with trailing space in backticks
-  triggers MD038
-- Blank line between two blockquotes triggers MD028
-
-## MCP Apps (Domain-Specific)
-
-- `@modelcontextprotocol/ext-apps` `^1.3.2` with server helpers
-  from `@modelcontextprotocol/ext-apps/server` is the canonical
-  migration vehicle for C4/C5/C6. See
-  `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md`
-  for host-specific behaviour (ChatGPT, Claude sandbox domains,
-  `_meta.ui.domain`).
-- `_meta.ui.domain` only needed for direct cross-origin `fetch()`
-  from the iframe; omit if data flows through MCP bridge.
-- **Four MCP guidance surfaces must agree** when a
-  multi-tool workflow changes: tool `description`, workflow
-  data (flows to `get-curriculum-model` + resources), doc
-  resources, and prompt messages. Tool descriptions are
-  highest leverage — per MCP spec, tools are model-controlled
-  via `description`.
+- Resolve every reviewer with
+  `pnpm agent-tools:codex-reviewer-resolve <name>` before
+  trusting a Codex review; in this sandbox the underlying
+  `tsx` call may need escalation because it opens a local
+  IPC pipe under `/var/folders/...`
+- Keep pushed checkpoint state and local worktree state
+  explicitly separate in plans/prompts/checkpoints; do not
+  imply the latest pushed commit already contains local
+  cleanup that is still in flight
 
 ## Build System (Domain-Specific)
 
@@ -182,19 +168,25 @@ enough for permanent documentation.
   may still need a local `import type` for its own usage
 - For security metadata, enforce invariants at startup/load
   boundaries and fail hard with remediation guidance
+- **HMAC-signed URLs without single-use constraints are
+  replay vectors** — within the TTL window, a valid URL can
+  amplify upstream API load. Rate-limit the consuming route.
+  See `safety-and-security.md` §Amplification Vectors
+- **`trust proxy` is mandatory behind any reverse proxy** —
+  without it, `req.ip` is the CDN's IP and IP-based rate
+  limiting is useless. Configure before rate limit middleware
 
 ## Troubleshooting (Agent-Specific)
 
 | Symptom | Fix |
 |---------|-----|
-| Grep tool fails with cursorignore errors | Use `rg` in shell with `2>/dev/null` |
 | StrReplace fails on plan files | Unicode quotes (U+2019, U+201C/D) block matching |
-| Reviewer reports G1 failures that seem wrong | Re-run specific gates to verify — reviewers may read stale output |
-| Reviewer flags repo name mismatch | False positive — confirmed three times. Always verify against user's disposition |
-| Onboarding reviewer claims files do not exist | Always verify with `glob` or `ls` — reviewers produce consistent false positives |
+| Reviewer reports failures that seem wrong | Re-run specific gates to verify — reviewers may read stale output. Verify reviewer claims with `glob` or `ls` — they produce consistent false positives on files and repo names |
 | Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |
 | MCP tool call fails with wrong param type | Always read tool descriptors before calling — parameter types are explicit in schema |
 | CI lint/test fails but passes locally with `--force` | Check CI logs for "cache hit, replaying logs" — stale remote Turbo cache. Ensure `turbo.json` `inputs` use `**/*.ts` not directory enumeration |
 | Commitlint rejects commit | See CONTRIBUTING.md §Code Standards for `subject-case` and `body-max-line-length` rules |
 | Pre-commit hook output too large to read | Turbo replays all cached logs. Redirect to file and read the end for the actual error |
 | Worktree agent patches don't apply to feature branch | Worktree agents branch from `main`, not the current feature branch. When `main` and feature have diverged, manual file copy + reconciliation is needed |
+| Pre-commit blocks partial fixes on lint-red branches | The hook runs full `type-check lint test` across all packages — fix ALL lint errors before attempting any commit |
+| ESLint complexity 10 on a 15-line function | `??` and `?.` each count as branches. Extract an options-resolver helper to move the nullish coalescing out of the main function |

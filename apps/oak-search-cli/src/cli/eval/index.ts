@@ -18,15 +18,14 @@
  */
 
 import { Command } from 'commander';
-import type { CliSdkEnv } from '../shared/index.js';
-import { registerPassThrough } from '../shared/index.js';
+import { registerPassThrough, type SearchCliEnvLoader } from '../shared/index.js';
 
 /**
  * Create the `eval benchmark` subcommand group with per-scope commands.
  *
  * @returns A Commander `Command` with benchmark subcommands registered
  */
-function createBenchmarkCmd(cliEnv: CliSdkEnv): Command {
+function createBenchmarkCmd(cliEnvLoader: SearchCliEnvLoader): Command {
   const cmd = new Command('benchmark').description('Run search benchmarks against ground truth');
 
   registerPassThrough(
@@ -34,35 +33,35 @@ function createBenchmarkCmd(cliEnv: CliSdkEnv): Command {
     'all',
     'Run benchmarks for all indexes',
     'evaluation/analysis/benchmark.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     cmd,
     'lessons',
     'Run lesson search benchmarks',
     'evaluation/analysis/benchmark-lessons.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     cmd,
     'units',
     'Run unit search benchmarks',
     'evaluation/analysis/benchmark-units.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     cmd,
     'threads',
     'Run thread search benchmarks',
     'evaluation/analysis/benchmark-threads.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     cmd,
     'sequences',
     'Run sequence search benchmarks',
     'evaluation/analysis/benchmark-sequences.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
 
   return cmd;
@@ -79,26 +78,26 @@ function createBenchmarkCmd(cliEnv: CliSdkEnv): Command {
  * program.addCommand(evalCommand(cliEnv));
  * ```
  */
-export function evalCommand(cliEnv: CliSdkEnv): Command {
+export function evalCommand(cliEnvLoader: SearchCliEnvLoader): Command {
   const cmd = new Command('eval').description(
     'Benchmarks, ground truth validation, and type generation',
   );
 
-  cmd.addCommand(createBenchmarkCmd(cliEnv));
+  cmd.addCommand(createBenchmarkCmd(cliEnvLoader));
 
   registerPassThrough(
     cmd,
     'validate',
     'Validate ground truth entries',
     'evaluation/validation/validate-ground-truth.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     cmd,
     'codegen',
     'Generate ground truth types from bulk data',
     'ground-truths/generation/generate-ground-truth-types.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
 
   return cmd;

@@ -82,7 +82,13 @@ describe('withEsClient', () => {
       deps,
     );
 
-    expect(logger.error).toHaveBeenCalledWith('Command failed', error);
+    expect(logger.error).toHaveBeenCalledWith(
+      'Command failed',
+      expect.objectContaining({
+        name: 'Error',
+        message: 'handler boom',
+      }),
+    );
   });
 
   it('calls printError with the error message when the handler throws', async () => {
@@ -159,7 +165,15 @@ describe('withEsClient', () => {
       deps,
     );
 
-    expect(logger.warn).toHaveBeenCalledWith('ES client close failed', closeError);
+    const warnContext: unknown = logger.warn.mock.calls[0]?.[1];
+
+    expect(logger.warn).toHaveBeenCalledWith('ES client close failed', expect.anything());
+    expect(warnContext).toMatchObject({
+      error: {
+        name: 'Error',
+        message: 'close boom',
+      },
+    });
   });
 
   it('does not re-throw when esClient.close() throws', async () => {

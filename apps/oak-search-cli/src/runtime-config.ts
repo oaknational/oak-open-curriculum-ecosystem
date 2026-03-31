@@ -47,6 +47,21 @@ export interface LoadRuntimeConfigOptions {
 }
 
 /**
+ * Cached loader for validated CLI environment configuration.
+ *
+ * Composition roots create one loader and pass it down to command
+ * registration. Actions opt into env validation only when they run.
+ */
+export interface SearchCliEnvLoader {
+  /**
+   * Load and cache validated CLI environment values.
+   *
+   * @returns `Ok<SearchCliEnv>` or `Err<ConfigError>`
+   */
+  load(): Result<SearchCliEnv, ConfigError>;
+}
+
+/**
  * Loads runtime configuration from the environment resolution pipeline.
  *
  * Calls `resolveEnv` to load `.env` and `.env.local` files from both the
@@ -82,6 +97,46 @@ export function loadRuntimeConfig(
 }
 
 /**
+ * Create a cached loader for validated CLI environment values.
+ *
+ * The first call executes the env resolution pipeline; later calls
+ * return the cached `Result` so command actions share one source.
+ *
+ * @param options - processEnv and startDir for the env resolution pipeline
+ * @returns Loader for validated `SearchCliEnv`
+ */
+export function createSearchCliEnvLoader(options: LoadRuntimeConfigOptions): SearchCliEnvLoader {
+  let cachedResult: Result<SearchCliEnv, ConfigError> | undefined;
+
+  return {
+    load(): Result<SearchCliEnv, ConfigError> {
+      if (cachedResult) {
+        return cachedResult;
+      }
+
+      const configResult = loadRuntimeConfig(options);
+      cachedResult = configResult.ok ? ok(configResult.value.env) : err(configResult.error);
+      return cachedResult;
+    },
+  };
+}
+
+/**
+ * Print structured config diagnostics to stderr.
+ *
+ * @param error - Config validation error from the runtime config pipeline
+ * @returns void
+ */
+export function printConfigError(error: ConfigError): void {
+  process.stderr.write(`Environment validation failed: ${error.message}\n`);
+  for (const diagnostic of error.diagnostics) {
+    if (!diagnostic.present) {
+      process.stderr.write(`  ${diagnostic.key}: MISSING\n`);
+    }
+  }
+}
+
+/**
  * Load runtime config or exit with diagnostics.
  *
  * Convenience wrapper for composition-root entry points (scripts,
@@ -91,12 +146,7 @@ export function loadRuntimeConfig(
 export function loadConfigOrExit(options: LoadRuntimeConfigOptions): SearchCliRuntimeConfig {
   const result = loadRuntimeConfig(options);
   if (!result.ok) {
-    process.stderr.write(`Environment validation failed: ${result.error.message}\n`);
-    for (const d of result.error.diagnostics) {
-      if (!d.present) {
-        process.stderr.write(`  ${d.key}: MISSING\n`);
-      }
-    }
+    printConfigError(result.error);
     return process.exit(1);
   }
   return result.value;

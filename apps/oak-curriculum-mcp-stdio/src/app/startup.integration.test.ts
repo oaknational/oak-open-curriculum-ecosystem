@@ -76,8 +76,11 @@ describe('createStartupLogger', () => {
 
     expect(deps.logger.info).toHaveBeenCalledWith('Test message');
     expect(deps.logger.error).toHaveBeenCalledWith(
-      expect.stringContaining('Failed to write startup log file'),
-      expect.any(Error),
+      'Failed to write startup log file',
+      expect.objectContaining({
+        name: 'Error',
+        message: 'Write failed',
+      }),
     );
   });
 });

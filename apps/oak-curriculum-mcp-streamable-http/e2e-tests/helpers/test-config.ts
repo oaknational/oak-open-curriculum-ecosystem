@@ -4,6 +4,10 @@ import type {
   AuthEnabledRuntimeConfig,
   RuntimeConfig,
 } from '../../src/runtime-config.js';
+import {
+  createHttpObservabilityOrThrow,
+  type HttpObservability,
+} from '../../src/observability/http-observability.js';
 
 /**
  * Creates a no-op Clerk middleware factory for E2E tests.
@@ -71,6 +75,7 @@ export function createMockRuntimeConfig(
         OAK_API_KEY: 'mock-oak-key',
         ELASTICSEARCH_URL: 'http://fake-es:9200',
         ELASTICSEARCH_API_KEY: 'fake-api-key-for-mock-config',
+        SENTRY_MODE: 'off' as const,
         LOG_LEVEL: 'error' as const,
         NODE_ENV: 'test' as const,
         DANGEROUSLY_DISABLE_AUTH: 'true' as const,
@@ -88,9 +93,14 @@ export function createMockRuntimeConfig(
       CLERK_SECRET_KEY: 'sk_test_mock',
       ELASTICSEARCH_URL: 'http://fake-es:9200',
       ELASTICSEARCH_API_KEY: 'fake-api-key-for-mock-config',
+      SENTRY_MODE: 'off' as const,
       LOG_LEVEL: 'error' as const,
       NODE_ENV: 'test' as const,
       ...envOverrides,
     },
   } satisfies AuthEnabledRuntimeConfig;
+}
+
+export function createMockObservability(runtimeConfig: RuntimeConfig): HttpObservability {
+  return createHttpObservabilityOrThrow(runtimeConfig);
 }

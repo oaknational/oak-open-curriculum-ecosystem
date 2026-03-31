@@ -21,13 +21,55 @@ import {
 import {
   createEsClient,
   withEsClient,
+  withLoadedCliEnv,
   printSuccess,
   printError,
   printJson,
   printHeader,
   type CliSdkEnv,
+  type SearchCliEnvLoader,
 } from '../shared/index.js';
 import { ingestLogger } from '../../lib/logger.js';
+
+async function runDeleteVersionCommand(
+  cliEnv: CliSdkEnv,
+  version: string,
+  opts: { force: boolean },
+): Promise<void> {
+  const esClient = createEsClient(cliEnv);
+  await withEsClient(
+    esClient,
+    async () => {
+      const deps = buildAliasLifecycleDeps(esClient, cliEnv.SEARCH_INDEX_TARGET, ingestLogger);
+      const result = await withLifecycleLease(esClient, cliEnv.SEARCH_INDEX_TARGET, async () => {
+        const validation = await validateVersionDeletion(deps, version, opts.force);
+        if (validation.blocked) {
+          printError(validation.message);
+          process.exitCode = 1;
+          return ok(undefined);
+        }
+
+        printHeader(`Deleting version ${version}`);
+        await cleanupOrphanedIndexes(deps, version);
+        printSuccess(`Deleted versioned indexes for ${version}`);
+        printJson({ version, target: cliEnv.SEARCH_INDEX_TARGET });
+        return ok(undefined);
+      });
+      if (!result.ok) {
+        ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+        printError(`${result.error.type}: ${result.error.message}`);
+        process.exitCode = 1;
+      }
+    },
+    {
+      logger: ingestLogger,
+      printError,
+      setExitCode: (c: number) => {
+        process.exitCode = c;
+      },
+    },
+  );
+}
 
 /**
  * Register the `admin delete-version` subcommand.
@@ -40,48 +82,16 @@ import { ingestLogger } from '../../lib/logger.js';
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerDeleteVersionCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerDeleteVersionCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('delete-version <version>')
     .description('Delete all 6 versioned indexes for a specific version')
     .option('--force', 'Delete even if the version is the rollback target', false)
-    .action(async (version: string, opts: { force: boolean }) => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const deps = buildAliasLifecycleDeps(esClient, cliEnv.SEARCH_INDEX_TARGET, ingestLogger);
-          const result = await withLifecycleLease(
-            esClient,
-            cliEnv.SEARCH_INDEX_TARGET,
-            async () => {
-              const validation = await validateVersionDeletion(deps, version, opts.force);
-              if (validation.blocked) {
-                printError(validation.message);
-                process.exitCode = 1;
-                return ok(undefined);
-              }
-
-              printHeader(`Deleting version ${version}`);
-              await cleanupOrphanedIndexes(deps, version);
-              printSuccess(`Deleted versioned indexes for ${version}`);
-              printJson({ version, target: cliEnv.SEARCH_INDEX_TARGET });
-              return ok(undefined);
-            },
-          );
-          if (!result.ok) {
-            ingestLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            process.exitCode = 1;
-          }
-        },
-        {
-          logger: ingestLogger,
-          printError,
-          setExitCode: (c: number) => {
-            process.exitCode = c;
-          },
-        },
-      );
-    });
+    .action(
+      withLoadedCliEnv(
+        cliEnvLoader,
+        async (cliEnv: CliSdkEnv, version: string, opts: { force: boolean }) =>
+          runDeleteVersionCommand(cliEnv, version, opts),
+      ),
+    );
 }

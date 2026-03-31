@@ -15,6 +15,9 @@ describe('browser entrypoint', () => {
 
     expect(entryModule).toHaveProperty('UnifiedLogger');
     expect(entryModule).toHaveProperty('buildResourceAttributes');
+    expect(entryModule).toHaveProperty('buildNormalizedError');
+    expect(entryModule).toHaveProperty('isNormalizedError');
+    expect(entryModule).toHaveProperty('normalizeError');
     expect(entryModule).toHaveProperty('parseLogLevel');
     expect(entryModule).toHaveProperty('startTimer');
   });
@@ -25,6 +28,8 @@ describe('node entrypoint', () => {
     const entryModule = await import('./node');
 
     expect(entryModule).toHaveProperty('createFileSink');
+    expect(entryModule).toHaveProperty('createNodeStdoutSink');
+    expect(entryModule).toHaveProperty('createNodeFileSink');
     expect(entryModule).toHaveProperty('DEFAULT_STDIO_SINK_CONFIG');
   });
 

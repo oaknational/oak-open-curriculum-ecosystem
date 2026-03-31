@@ -2,18 +2,63 @@
 
 This guide helps AI agents working on this codebase understand when and how to add, modify, and test logging functionality.
 
-**Last Updated**: 2026-03-07  
-**Phase**: Phase 2 Complete (Observability instrumentation delivered)
+**Last Updated**: 2026-03-29
+**Phase**: Phases 1-2 complete; HTTP Phase 3 adoption near-complete (19/21 remediation findings resolved, all gates green on `feat/full-sentry-otel-support`). Search CLI adoption pending after HTTP merge.
+**Branch**: `feat/full-sentry-otel-support` head `de232b20`
 
 ## Overview
 
-The Oak Open Curriculum Ecosystem uses `@oaknational/logger` for structured logging with Phase 2 observability features:
+The purpose of this logging guidance is operational clarity: Oak needs
+structured, redacted logs that help diagnose HTTP MCP server and Search CLI
+failures quickly without leaking secrets, payloads, or user-sensitive context.
+
+The Oak Open Curriculum Ecosystem uses `@oaknational/logger` for structured logging with the shared observability foundation:
 
 - **Correlation IDs**: Request tracing across the system
 - **Timing instrumentation**: Sub-millisecond precision with slow request warnings
 - **Error context enrichment**: Full debugging context in error scenarios
 
-All logging must follow these patterns and maintain the architectural constraints established in Phase 1 and Phase 2.
+All logging must follow these patterns and maintain the architectural
+constraints established in Phase 1 and Phase 2.
+
+## Current Observability Contract
+
+For the HTTP MCP server, `SENTRY_MODE` now defines three supported runtime
+contracts:
+
+- `off`: true kill switch. Keep stdout JSON only. Do not initialise Sentry, do
+  not add a Sentry sink, and do not emit outbound Sentry traffic.
+- `fixture`: keep stdout JSON and exercise the observability adapters locally
+  with no network. MCP observations and handled-error captures stay in local
+  fixture stores only.
+- `sentry`: keep stdout JSON and add live Sentry init, sink fan-out, handled
+  exceptions, and tracing.
+
+The HTTP capture boundary remains metadata-only:
+
+- `/mcp` request capture is sanitised down to route and method metadata only
+- request bodies, JSON-RPC envelopes, raw headers, cookies, tokens, auth codes,
+  and query strings must not be retained in Sentry events or breadcrumbs
+- MCP tool, resource, and prompt observations keep only safe metadata
+  (`kind`, `name`, `status`, `durationMs`, `traceId`, `spanId`, release, and
+  environment)
+
+Current HTTP manual spans should stay focused on operational checkpoints with
+safe attributes only:
+
+- bootstrap phases, including upstream metadata fetch
+- OAuth proxy upstream `register` and `token` calls
+- asset-download upstream fetch and stream lifecycle
+
+Handled-error capture is reserved for unexpected terminal boundaries such as
+bootstrap failure, listen failure, Express error middleware, MCP cleanup
+failure, OAuth timeout/network failure, and asset-download proxy failure.
+Expected validation, auth, and upstream-status branches should remain logs plus
+span status only.
+
+Flushes belong to process boundaries, not per-request teardown. The HTTP app
+flushes Sentry on bootstrap failure, server listen error, `SIGINT`, and
+`SIGTERM`.
 
 ## When to Add Logging
 
@@ -35,10 +80,10 @@ logger.info('Server shutting down', { uptime, reason });
 **Request/Tool Execution Boundaries:**
 
 ```typescript
-// ✅ Request started (already instrumented in middleware)
+// ✅ Request started (typically emitted in middleware or another request boundary)
 logger.debug('Request started', { correlationId, method, path });
 
-// ✅ Tool execution started (already instrumented in server)
+// ✅ Tool execution started (typically emitted in the server or CLI entry boundary)
 logger.info('Tool execution started', { correlationId, toolName });
 
 // ✅ Request/tool completed with timing
@@ -57,7 +102,7 @@ logger.info('Request completed', {
 try {
   await riskyOperation();
 } catch (error) {
-  logger.error('Operation failed', error, {
+  logger.error('Operation failed', normalizeError(error), {
     correlationId,
     operationName: 'riskyOperation',
     context: additionalContext,
@@ -214,24 +259,30 @@ import {
   parseLogLevel,
   logLevelToSeverityNumber,
   buildResourceAttributes,
-  startTimer,
+  type LogSink,
 } from '@oaknational/logger';
-import { createNodeStdoutSink } from '@oaknational/logger/node';
 
-const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
+const consoleSink: LogSink = {
+  write(event) {
+    console.log(event.line.trimEnd());
+  },
+};
+
+const level = parseLogLevel('INFO', 'INFO');
+const sinks: readonly LogSink[] = [consoleSink];
 const logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber(level),
-  resourceAttributes: buildResourceAttributes(process.env, 'http-server', '1.0.0'),
+  resourceAttributes: buildResourceAttributes({}, 'http-server', '1.0.0'),
   context: {},
-  stdoutSink: createNodeStdoutSink(),
-  fileSink: null,
+  sinks,
+  getActiveSpanContext: () => undefined,
 });
 ```
 
 **Constraints:**
 
 - NO Node.js `fs` imports in the main entry point
-- Use `createNodeStdoutSink()` from `@oaknational/logger/node` for stdout
+- Provide browser-safe sinks explicitly (for example a console-backed `LogSink`)
 - Dependencies injected explicitly via constructor
 - No file sink support on serverless platforms
 
@@ -252,20 +303,27 @@ import {
   parseLogLevel,
   logLevelToSeverityNumber,
   buildResourceAttributes,
-  startTimer,
+  type LogSink,
 } from '@oaknational/logger';
 import { createNodeFileSink } from '@oaknational/logger/node';
 
 const level = parseLogLevel(process.env.LOG_LEVEL, 'DEBUG');
+const configuredFileOutput = createNodeFileSink({
+  path: '.logs/oak-curriculum-mcp/server.log',
+  append: true,
+});
+if (!configuredFileOutput) {
+  throw new Error('Expected a file sink for stdio logging');
+}
+
+const sinks: readonly LogSink[] = [configuredFileOutput];
+
 const logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber(level),
   resourceAttributes: buildResourceAttributes(process.env, 'stdio-server', '1.0.0'),
   context: {},
-  stdoutSink: null, // MUST be null for stdio MCP
-  fileSink: createNodeFileSink({
-    path: '.logs/oak-curriculum-mcp/server.log',
-    append: true,
-  }),
+  sinks,
+  getActiveSpanContext: () => undefined,
 });
 ```
 
@@ -292,7 +350,8 @@ Are you working on code that might run in a browser?
 Correlation IDs are automatically generated and propagated via middleware. In handlers, extract and use:
 
 ```typescript
-import { extractCorrelationId, createChildLogger } from './logging';
+import { normalizeError } from '@oaknational/logger';
+import { extractCorrelationId, createChildLogger } from './logging.js';
 
 export function createHandler(logger: Logger) {
   return async (req: Request, res: Response) => {
@@ -312,7 +371,7 @@ export function createHandler(logger: Logger) {
       requestLogger.info('Request successful');
       res.json(result);
     } catch (error) {
-      requestLogger.error('Request failed', error);
+      requestLogger.error('Request failed', normalizeError(error));
       res.status(500).json({ error: 'Internal server error' });
     }
   };
@@ -324,8 +383,8 @@ export function createHandler(logger: Logger) {
 Correlation IDs are generated per tool invocation. Pass to all operations:
 
 ```typescript
-import { generateCorrelationId, createChildLogger } from './correlation';
-import { startTimer } from '@oaknational/logger/node';
+import { generateCorrelationId, createChildLogger } from './correlation.js';
+import { normalizeError, startTimer } from '@oaknational/logger/node';
 
 async function executeTool(toolName: string, args: unknown, config: RuntimeConfig) {
   // Generate correlation ID for this execution
@@ -353,7 +412,7 @@ async function executeTool(toolName: string, args: unknown, config: RuntimeConfi
     return result;
   } catch (error) {
     const duration = timer.end();
-    toolLogger.error('Tool execution failed', error, {
+    toolLogger.error('Tool execution failed', normalizeError(error), {
       toolName,
       correlationId,
       duration: duration.formatted,
@@ -412,7 +471,7 @@ async function timedOperation() {
     return result;
   } catch (error) {
     const duration = timer.end();
-    logger.error('Operation failed', error, {
+    logger.error('Operation failed', normalizeError(error), {
       duration: duration.formatted,
     });
     throw error;
@@ -501,7 +560,7 @@ logger.info('Operation completed', { duration: duration.formatted });
 ### Basic Error Enrichment
 
 ```typescript
-import { enrichError, type ErrorContext, startTimer } from '@oaknational/logger';
+import { enrichError, normalizeError, type ErrorContext, startTimer } from '@oaknational/logger';
 
 async function handleRequest(req: Request, res: Response) {
   const timer = startTimer();
@@ -521,12 +580,12 @@ async function handleRequest(req: Request, res: Response) {
       requestPath: req.path,
     };
 
-    const enrichedError = enrichError(error as Error, errorContext);
+    const normalizedError = normalizeError(error);
+    const baseError = error instanceof Error ? error : new Error(normalizedError.message);
+    const enrichedError = enrichError(baseError, errorContext);
 
     // Log enriched error
-    logger.error('Request failed', {
-      message: enrichedError.message,
-      stack: enrichedError.stack,
+    logger.error('Request failed', normalizeError(enrichedError), {
       correlationId,
       duration: duration.formatted,
       method: req.method,
@@ -557,10 +616,11 @@ async function executeTool(toolName: string, args: unknown) {
       toolName, // Tool-specific context
     };
 
-    const enrichedError = enrichError(error as Error, errorContext);
+    const normalizedError = normalizeError(error);
+    const baseError = error instanceof Error ? error : new Error(normalizedError.message);
+    const enrichedError = enrichError(baseError, errorContext);
 
-    logger.error('Tool execution failed', {
-      message: enrichedError.message,
+    logger.error('Tool execution failed', normalizeError(enrichedError), {
       correlationId,
       duration: duration.formatted,
       toolName,
@@ -634,7 +694,10 @@ describe('error handling', () => {
     // Verify error was logged with context
     expect(mockLogger.error).toHaveBeenCalledWith(
       'Operation failed',
-      error,
+      expect.objectContaining({
+        name: 'Error',
+        message: 'Test error',
+      }),
       expect.objectContaining({
         correlationId: expect.stringMatching(/^req_\d+_[a-f0-9]{6}$/),
         duration: expect.any(String),
@@ -651,27 +714,20 @@ import { startTimer } from '@oaknational/logger';
 
 describe('timing', () => {
   it('logs operation duration', async () => {
-    vi.useFakeTimers();
+    vi.spyOn(performance, 'now').mockReturnValueOnce(1_000).mockReturnValueOnce(2_500);
 
     const mockLogger: Logger = { info: vi.fn() /* ... */ };
 
-    const promise = timedOperation(mockLogger);
-
-    // Advance time
-    vi.advanceTimersByTime(1500);
-
-    await promise;
+    await timedOperation(mockLogger);
 
     // Verify timing was logged
     expect(mockLogger.info).toHaveBeenCalledWith(
       expect.any(String),
       expect.objectContaining({
-        durationMs: expect.closeTo(1500, 10),
+        durationMs: 1500,
         duration: expect.stringMatching(/^\d+\.\d{2}s$|^\d+ms$/),
       }),
     );
-
-    vi.useRealTimers();
   });
 });
 ```
@@ -687,8 +743,8 @@ describe('correlation', () => {
     await operation(correlationId, mockLogger);
 
     // Verify all log calls include the correlation ID
-    const calls = (mockLogger.info as any).mock.calls;
-    calls.forEach(([message, context]: [string, any]) => {
+    const calls = vi.mocked(mockLogger.info).mock.calls;
+    calls.forEach(([, context]) => {
       expect(context).toHaveProperty('correlationId', correlationId);
     });
   });
@@ -725,7 +781,7 @@ function processInput(data: unknown) {
 try {
   await operation();
 } catch (error) {
-  logger.error('Operation failed', error);
+  logger.error('Operation failed', normalizeError(error));
   // ❌ Error is lost!
 }
 
@@ -733,7 +789,7 @@ try {
 try {
   await operation();
 } catch (error) {
-  logger.error('Operation failed', error);
+  logger.error('Operation failed', normalizeError(error));
   throw error; // ✅ Propagate error
 }
 ```
@@ -752,17 +808,23 @@ import { UnifiedLogger } from '@oaknational/logger'; // ✅ Works everywhere
 
 ```typescript
 // ❌ Logging to stdout corrupts MCP protocol
+const sinks: readonly LogSink[] = [createNodeStdoutSink()];
 const logger = new UnifiedLogger({
   // ...
-  stdoutSink: createNodeStdoutSink(), // ❌ Corrupts protocol!
-  fileSink: null,
+  sinks, // ❌ Corrupts protocol!
+  getActiveSpanContext: () => undefined,
 });
 
 // ✅ File-only logging for stdio
+const configuredFileOutput = createNodeFileSink({
+  path: '.logs/server.log',
+  append: true,
+});
+const sinks: readonly LogSink[] = configuredFileOutput ? [configuredFileOutput] : [];
 const logger = new UnifiedLogger({
   // ...
-  stdoutSink: null, // ✅ MUST be null
-  fileSink: createNodeFileSink({ path: '.logs/server.log', append: true }),
+  sinks, // ✅ MUST exclude stdout
+  getActiveSpanContext: () => undefined,
 });
 ```
 
@@ -774,7 +836,7 @@ const timer = startTimer();
 try {
   await operation();
 } catch (error) {
-  logger.error('Operation failed', error); // ❌ Lost timing!
+  logger.error('Operation failed', normalizeError(error)); // ❌ Lost timing!
   throw error;
 }
 
@@ -786,7 +848,7 @@ try {
   logger.info('Operation completed', { duration: duration.formatted });
 } catch (error) {
   const duration = timer.end(); // ✅ Capture timing
-  logger.error('Operation failed', error, {
+  logger.error('Operation failed', normalizeError(error), {
     duration: duration.formatted,
   });
   throw error;
@@ -848,8 +910,8 @@ import { createNodeStdoutSink, createNodeFileSink } from '@oaknational/logger/no
 logger.debug('Cache hit', { key }); // DEBUG: detailed traces
 logger.info('Request completed', { duration }); // INFO: normal operations
 logger.warn('Slow request detected', { duration }); // WARN: performance issues
-logger.error('Request failed', error); // ERROR: failures
-logger.fatal('Database connection lost', error); // FATAL: critical failures
+logger.error('Request failed', normalizeError(error)); // ERROR: failures
+logger.fatal('Database connection lost', normalizeError(error)); // FATAL: critical failures
 ```
 
 ## Further Reading
@@ -857,5 +919,5 @@ logger.fatal('Database connection lost', error); // FATAL: critical failures
 - [Logger Package README](../../packages/libs/logger/README.md) - Complete API documentation
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) - How to test logging code
 - [HTTP Server README](../../apps/oak-curriculum-mcp-streamable-http/README.md) - HTTP logging patterns
-- [Stdio Server README](../../apps/oak-curriculum-mcp-stdio/README.md) - Legacy stdio logging patterns (workspace no longer actively maintained)
+- [Legacy Stdio Server README](../../apps/oak-curriculum-mcp-stdio/README.md) - Deprecated stdio logging patterns (workspace no longer actively maintained)
 - [Production Debugging Runbook](../operations/production-debugging-runbook.md) - Using logs for debugging

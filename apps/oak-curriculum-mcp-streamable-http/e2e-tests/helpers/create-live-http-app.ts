@@ -1,6 +1,7 @@
 import type express from 'express';
 import { unwrap } from '@oaknational/result';
 import { createApp } from '../../src/application.js';
+import { createHttpObservabilityOrThrow } from '../../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../../src/runtime-config.js';
 import type { ToolHandlerOverrides } from '../../src/handlers.js';
 
@@ -29,7 +30,12 @@ export async function createLiveHttpApp(options?: CreateLiveHttpAppOptions): Pro
     startDir: process.cwd(),
   });
   const runtimeConfig = unwrap(result);
-  const app = await createApp({ runtimeConfig, toolHandlerOverrides: options?.overrides });
+  const observability = createHttpObservabilityOrThrow(runtimeConfig);
+  const app = await createApp({
+    runtimeConfig,
+    observability,
+    toolHandlerOverrides: options?.overrides,
+  });
 
   return { app };
 }

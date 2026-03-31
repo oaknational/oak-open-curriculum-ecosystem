@@ -1,32 +1,31 @@
 import type { Express, RequestHandler } from 'express';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
-import { ok, err, type Result } from '@oaknational/result';
 import { registerPublicOAuthMetadataEndpoints } from '../auth-routes.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 import { runBootstrapPhase, runAsyncBootstrapPhase } from './bootstrap-helpers.js';
 import {
   createOAuthProxyRoutes,
   deriveUpstreamOAuthBaseUrl,
-  isUpstreamAuthServerMetadata,
   type UpstreamAuthServerMetadata,
 } from '../oauth-proxy/index.js';
-import { classifyFetchError, type MetadataFetchError } from './metadata-fetch-error.js';
+import type { MetadataFetchError } from './metadata-fetch-error.js';
+import type { HttpObservability } from '../observability/http-observability.js';
+import { fetchUpstreamMetadata } from './upstream-metadata-fetch.js';
 
 export type { MetadataFetchError };
+export type { FetchFn, FetchUpstreamOptions } from './upstream-metadata-fetch.js';
+export { fetchUpstreamMetadata } from './upstream-metadata-fetch.js';
 
 /**
  * Creates middleware that adds no-cache headers to error responses.
  *
  * This prevents Vercel and other CDNs from caching error responses (4xx, 5xx)
  * which can block proper diagnosis of authentication and application issues.
- *
- * @returns Express middleware that intercepts status code setting
  */
 function createNoCacheErrorMiddleware(): RequestHandler {
   return (_req, res, next) => {
     const originalStatus = res.status.bind(res);
     res.status = function (code: number) {
-      // Add no-cache headers to error responses (4xx client errors, 5xx server errors)
       if (code >= 400) {
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
         res.setHeader('Pragma', 'no-cache');
@@ -38,150 +37,82 @@ function createNoCacheErrorMiddleware(): RequestHandler {
   };
 }
 
-/**
- * Minimal subset of the Fetch API needed by {@link fetchUpstreamMetadata}.
- * Accepting this as a parameter enables unit testing without global mocks.
- */
-export type FetchFn = (
-  url: string,
-  init?: { signal?: AbortSignal },
-) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>;
-
-class TransientFetchError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'TransientFetchError';
+/** Resolves upstream metadata, either from injection or a live Clerk fetch. */
+async function resolveUpstreamMetadata(
+  runtimeConfig: RuntimeConfig,
+  log: Logger,
+  bootstrapTimer: PhasedTimer,
+  appCounter: number,
+  observability: HttpObservability,
+  injectedMetadata?: UpstreamAuthServerMetadata,
+): Promise<{ upstreamBaseUrl: string; upstreamMetadata: UpstreamAuthServerMetadata }> {
+  if (injectedMetadata) {
+    return { upstreamBaseUrl: injectedMetadata.issuer, upstreamMetadata: injectedMetadata };
   }
-}
 
-function isNetworkOrAbortError(caught: unknown): boolean {
-  if (!(caught instanceof Error)) {
-    return false;
+  const publishableKey = runtimeConfig.env.CLERK_PUBLISHABLE_KEY;
+  if (!publishableKey) {
+    throw new Error('CLERK_PUBLISHABLE_KEY is required for OAuth proxy');
   }
-  return caught.name === 'AbortError' || caught.name === 'TypeError';
-}
-
-function isTransientError(caught: unknown): boolean {
-  return caught instanceof TransientFetchError || isNetworkOrAbortError(caught);
-}
-
-export interface FetchUpstreamOptions {
-  /** Per-attempt timeout in milliseconds. Defaults to 10 000 (10 s). */
-  readonly timeoutMs?: number;
-  /** Total number of attempts (first try + retries). Defaults to 3. */
-  readonly maxRetries?: number;
-  /** Base delay between retries in milliseconds (doubled per attempt). Defaults to 500. */
-  readonly retryDelayMs?: number;
-}
-
-const FETCH_DEFAULTS: Required<FetchUpstreamOptions> = {
-  timeoutMs: 10_000,
-  maxRetries: 3,
-  retryDelayMs: 500,
-};
-
-/**
- * Single fetch attempt with timeout: fetches, validates, and returns metadata.
- * Throws {@link TransientFetchError} for 5xx responses so the caller can retry.
- */
-async function attemptMetadataFetch(
-  metadataUrl: string,
-  fetchFn: FetchFn,
-  timeoutMs: number,
-): Promise<UpstreamAuthServerMetadata> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const response = await fetchFn(metadataUrl, { signal: controller.signal });
-    if (!response.ok) {
-      const msg = `Upstream AS metadata fetch failed: ${metadataUrl} returned HTTP ${String(response.status)}`;
-      if (response.status >= 500) {
-        throw new TransientFetchError(msg);
-      }
-      throw new Error(msg);
-    }
-    const data: unknown = await response.json();
-    if (!isUpstreamAuthServerMetadata(data)) {
-      throw new Error(`Upstream AS metadata at ${metadataUrl} does not match expected shape`);
-    }
-    return data;
-  } finally {
-    clearTimeout(timer);
+  const upstreamBaseUrl = deriveUpstreamOAuthBaseUrl(publishableKey);
+  log.info('OAuth proxy: deriving upstream', { upstreamBaseUrl });
+  const metadataResult = await runAsyncBootstrapPhase(
+    log,
+    bootstrapTimer,
+    'fetchUpstreamMetadata',
+    appCounter,
+    () => fetchUpstreamMetadata(upstreamBaseUrl, fetch, { observability }),
+    observability,
+  );
+  if (!metadataResult.ok) {
+    throw new Error(metadataResult.error.message);
   }
-}
-
-/**
- * Normalises a caught value to an Error instance.
- */
-function toError(caught: unknown): Error {
-  return caught instanceof Error ? caught : new Error(String(caught));
-}
-
-/**
- * Determines whether a failed attempt should be retried.
- */
-function shouldRetry(caught: unknown, isLastAttempt: boolean): boolean {
-  return isTransientError(caught) && !isLastAttempt;
-}
-
-/**
- * Fetches and validates upstream AS metadata from Clerk's well-known endpoint.
- * Called once at startup; the result is cached for the process lifetime.
- *
- * Includes per-attempt timeout and exponential-backoff retry so that a slow
- * or transiently unavailable Clerk instance doesn't block startup indefinitely.
- *
- * @param upstreamBaseUrl - Base URL of the upstream authorization server
- * @param fetchFn - Fetch implementation (defaults to global `fetch`)
- * @param options - Timeout and retry configuration
- * @returns `Ok` with validated metadata, or `Err` with a {@link MetadataFetchError}
- */
-export async function fetchUpstreamMetadata(
-  upstreamBaseUrl: string,
-  fetchFn: FetchFn = fetch,
-  options?: FetchUpstreamOptions,
-): Promise<Result<UpstreamAuthServerMetadata, MetadataFetchError>> {
-  const { timeoutMs, maxRetries, retryDelayMs } = { ...FETCH_DEFAULTS, ...options };
-  const metadataUrl = `${upstreamBaseUrl}/.well-known/oauth-authorization-server`;
-
-  let lastError: Error | undefined;
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const metadata = await attemptMetadataFetch(metadataUrl, fetchFn, timeoutMs);
-      return ok(metadata);
-    } catch (caught) {
-      lastError = toError(caught);
-      if (shouldRetry(caught, attempt === maxRetries - 1)) {
-        await new Promise((resolve) => setTimeout(resolve, retryDelayMs * 2 ** attempt));
-        continue;
-      }
-      return err(classifyFetchError(lastError));
-    }
-  }
-  return err({
-    type: 'network_error',
-    message:
-      lastError?.message ?? `Upstream AS metadata fetch exhausted ${String(maxRetries)} retries`,
-  });
+  return { upstreamBaseUrl, upstreamMetadata: metadataResult.value };
 }
 
 /**
  * Sets up OAuth metadata endpoints, proxy routes, and error caching prevention.
  *
  * Phase 2.5: Registers PUBLIC OAuth metadata endpoints and proxy routes
- *   BEFORE clerkMiddleware. When `injectedMetadata` is provided (tests), the
- *   upstream fetch is skipped. When omitted (production), metadata is fetched
- *   from Clerk's `/.well-known/oauth-authorization-server` at startup.
+ *   BEFORE clerkMiddleware.
  * Phase 2.6: Adds no-cache headers to error responses (4xx/5xx only).
- *
- * @param app - Express application instance
- * @param runtimeConfig - Runtime configuration
- * @param log - Logger instance
- * @param bootstrapTimer - Phased timer for tracking duration
- * @param appCounter - Application counter for logging
- * @param injectedMetadata - Optional upstream metadata for DI (tests). When
- *   provided, no network call is made to Clerk.
  */
+function registerOAuthRoutes(
+  app: Express,
+  runtimeConfig: RuntimeConfig,
+  log: Logger,
+  bootstrapTimer: PhasedTimer,
+  appCounter: number,
+  allowedHosts: readonly string[],
+  observability: HttpObservability,
+  upstreamBaseUrl: string,
+  upstreamMetadata: UpstreamAuthServerMetadata,
+): void {
+  runBootstrapPhase(
+    log,
+    bootstrapTimer,
+    'registerPublicOAuthMetadata',
+    appCounter,
+    () => {
+      registerPublicOAuthMetadataEndpoints(app, runtimeConfig, upstreamMetadata, log, allowedHosts);
+    },
+    observability,
+  );
+
+  runBootstrapPhase(
+    log,
+    bootstrapTimer,
+    'registerOAuthProxy',
+    appCounter,
+    () => {
+      log.info('OAuth proxy enabled', { upstreamBaseUrl });
+      app.use(createOAuthProxyRoutes({ upstreamBaseUrl, logger: log, observability }));
+    },
+    observability,
+  );
+}
+
+/** Sets up OAuth metadata endpoints, proxy routes, and error caching prevention. */
 export async function setupOAuthAndCaching(
   app: Express,
   runtimeConfig: RuntimeConfig,
@@ -189,46 +120,39 @@ export async function setupOAuthAndCaching(
   bootstrapTimer: PhasedTimer,
   appCounter: number,
   allowedHosts: readonly string[],
+  observability: HttpObservability,
   injectedMetadata?: UpstreamAuthServerMetadata,
 ): Promise<void> {
   if (!runtimeConfig.dangerouslyDisableAuth) {
-    let upstreamBaseUrl: string;
-    let upstreamMetadata: UpstreamAuthServerMetadata;
-
-    if (injectedMetadata) {
-      upstreamMetadata = injectedMetadata;
-      upstreamBaseUrl = injectedMetadata.issuer;
-    } else {
-      const publishableKey = runtimeConfig.env.CLERK_PUBLISHABLE_KEY;
-      if (!publishableKey) {
-        throw new Error('CLERK_PUBLISHABLE_KEY is required for OAuth proxy');
-      }
-      upstreamBaseUrl = deriveUpstreamOAuthBaseUrl(publishableKey);
-      log.info('OAuth proxy: deriving upstream', { upstreamBaseUrl });
-      const metadataResult = await runAsyncBootstrapPhase(
-        log,
-        bootstrapTimer,
-        'fetchUpstreamMetadata',
-        appCounter,
-        () => fetchUpstreamMetadata(upstreamBaseUrl),
-      );
-      if (!metadataResult.ok) {
-        throw new Error(metadataResult.error.message);
-      }
-      upstreamMetadata = metadataResult.value;
-    }
-
-    runBootstrapPhase(log, bootstrapTimer, 'registerPublicOAuthMetadata', appCounter, () => {
-      registerPublicOAuthMetadataEndpoints(app, runtimeConfig, upstreamMetadata, log, allowedHosts);
-    });
-
-    runBootstrapPhase(log, bootstrapTimer, 'registerOAuthProxy', appCounter, () => {
-      log.info('OAuth proxy enabled', { upstreamBaseUrl });
-      app.use(createOAuthProxyRoutes({ upstreamBaseUrl, logger: log }));
-    });
+    const { upstreamBaseUrl, upstreamMetadata } = await resolveUpstreamMetadata(
+      runtimeConfig,
+      log,
+      bootstrapTimer,
+      appCounter,
+      observability,
+      injectedMetadata,
+    );
+    registerOAuthRoutes(
+      app,
+      runtimeConfig,
+      log,
+      bootstrapTimer,
+      appCounter,
+      allowedHosts,
+      observability,
+      upstreamBaseUrl,
+      upstreamMetadata,
+    );
   }
 
-  runBootstrapPhase(log, bootstrapTimer, 'addNoCacheToErrors', appCounter, () => {
-    app.use(createNoCacheErrorMiddleware());
-  });
+  runBootstrapPhase(
+    log,
+    bootstrapTimer,
+    'addNoCacheToErrors',
+    appCounter,
+    () => {
+      app.use(createNoCacheErrorMiddleware());
+    },
+    observability,
+  );
 }

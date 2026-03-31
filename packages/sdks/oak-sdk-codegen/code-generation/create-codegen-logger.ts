@@ -24,6 +24,7 @@ import {
   parseLogLevel,
   buildResourceAttributes,
 } from '@oaknational/logger';
+import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import { UnifiedLogger, createNodeStdoutSink } from '@oaknational/logger/node';
 import type { Logger } from '@oaknational/logger';
 
@@ -33,7 +34,7 @@ export function createCodegenLogger(toolName: string): Logger {
     minSeverity: logLevelToSeverityNumber(level),
     resourceAttributes: buildResourceAttributes({}, 'sdk-codegen', '0.0.0'),
     context: { tool: toolName },
-    stdoutSink: createNodeStdoutSink(),
-    fileSink: null,
+    sinks: [createNodeStdoutSink()],
+    getActiveSpanContext: getActiveSpanContextSnapshot,
   });
 }

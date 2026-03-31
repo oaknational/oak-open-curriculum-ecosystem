@@ -8,9 +8,10 @@
  * the max-lines limit. Follows the same pattern as `search-threads.ts`.
  */
 
-import type { Logger } from '@oaknational/logger';
+import type { JsonObject, Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
+import { typeSafeEntries, typeSafeFromEntries } from '@oaknational/type-helpers';
 
 import type { RetrievalError, SequencesSearchResult } from '../types/retrieval-results.js';
 import type { SearchSequencesParams } from '../types/retrieval-params.js';
@@ -20,6 +21,8 @@ import { buildSequenceRetriever } from './retrieval-search-helpers.js';
 import { buildSequenceFilters } from './rrf-query-helpers.js';
 import { toRetrievalError } from './retrieval-error.js';
 import { SEQUENCE_SOURCE_EXCLUDES } from './source-excludes.js';
+
+type SequenceFilter = ReturnType<typeof buildSequenceFilters>[number];
 
 /**
  * Execute sequence search with lexical retrieval.
@@ -44,6 +47,7 @@ export async function searchSequences(
     const from = clampFrom(params.from);
     const filters = buildSequenceFilters(params);
     const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
+    const loggedFilterClause = toLoggedSequenceFilterClause(filters);
     const request: EsSearchRequest = {
       index: resolveIndex('sequences'),
       size,
@@ -61,7 +65,7 @@ export async function searchSequences(
       phaseSlug: params.phaseSlug,
       category: params.category,
       hasFilter: filterClause !== undefined,
-      filterClause,
+      filterClause: loggedFilterClause,
     });
     const res = await search(request);
     const results = res.hits.hits.map((hit) => ({
@@ -79,4 +83,54 @@ export async function searchSequences(
   } catch (error: unknown) {
     return err(toRetrievalError(error));
   }
+}
+
+function toLoggedSequenceFilterClause(filters: readonly SequenceFilter[]): JsonObject | undefined {
+  const loggedFilters = filters.flatMap<JsonObject>((filter) => {
+    if (!filter) {
+      return [];
+    }
+
+    const termClause = toLoggedStringRecord(filter.term);
+    if (termClause) {
+      return [{ term: termClause }];
+    }
+
+    const matchPhraseClause = toLoggedStringRecord(filter.match_phrase);
+    if (matchPhraseClause) {
+      return [{ match_phrase: matchPhraseClause }];
+    }
+
+    return [];
+  });
+
+  if (loggedFilters.length === 0) {
+    return undefined;
+  }
+
+  return {
+    bool: {
+      filter: loggedFilters,
+    },
+  };
+}
+
+function toLoggedStringRecord(value: unknown): JsonObject | undefined {
+  if (!isPlainObject(value)) {
+    return undefined;
+  }
+
+  const entries = typeSafeEntries(value).flatMap(([key, candidate]) => {
+    return typeof candidate === 'string' ? [[key, candidate] as const] : [];
+  });
+
+  if (entries.length === 0) {
+    return undefined;
+  }
+
+  return typeSafeFromEntries<string, string>(entries);
+}
+
+function isPlainObject(value: unknown): value is JsonObject {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }

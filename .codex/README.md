@@ -26,9 +26,19 @@ Reviewer sub-agents are **not** skills. They require `sandbox_mode = "read-only"
 
 ## Reviewer Roster
 
-All 16 reviewers are registered in `config.toml`. Each `.toml` adapter in `agents/` is a thin wrapper that points to the canonical reviewer template in `.agent/sub-agents/templates/`. The architecture-reviewer variants additionally reference an individual persona component in `.agent/sub-agents/components/personas/`.
+All 16 reviewers are registered in `config.toml`, alongside the non-reviewer helper agents `ground-truth-designer` and `subagent-architect`. Each `.toml` adapter in `agents/` is a self-describing project-scoped custom agent: it declares `name`, `description`, the required Codex execution settings, and `developer_instructions` that point to the canonical reviewer template in `.agent/sub-agents/templates/`. The architecture-reviewer variants additionally reference an individual persona component in `.agent/sub-agents/components/personas/`.
 
 For the full reviewer invocation matrix and timing guidance, see `.agent/directives/invoke-code-reviewers.md`.
+
+## Resolver Workflow
+
+When reviewing from Codex, do not assume the runtime has automatically loaded the repo-local reviewer adapter. Resolve the reviewer first:
+
+```bash
+pnpm agent-tools:codex-reviewer-resolve code-reviewer
+```
+
+That command prints the exact `.codex/agents/*.toml` adapter and canonical `.agent` files that should ground the review, and `--json` is available for audit or automation.
 
 ## Entry Points
 

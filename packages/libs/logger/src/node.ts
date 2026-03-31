@@ -7,6 +7,7 @@
  * with file-sink capable utilities that rely on Node.js built-ins.
  */
 import { mkdirSync, createWriteStream, type WriteStream as NodeWriteStream } from 'node:fs';
+import process from 'node:process';
 import {
   createFileSink,
   type FileSinkInterface,
@@ -14,16 +15,16 @@ import {
   type SimpleWriteStream,
 } from './file-sink.js';
 import type { FileSinkConfig } from './sink-config.js';
+import type { LogEvent, LogSink } from './types.js';
 
 export { mergeLogContext } from './context-merging.js';
-export { normalizeError } from './error-normalisation.js';
+export { buildNormalizedError, isNormalizedError, normalizeError } from './error-normalisation.js';
 export { sanitiseForJson, isJsonValue, sanitiseObject } from './json-sanitisation.js';
 export {
   createRequestLogger,
   createErrorLogger,
   extractRequestMetadata,
 } from './express-middleware.js';
-export { isLevelEnabled } from './pure-functions.js';
 export {
   LOG_LEVEL_VALUES,
   LOG_LEVEL_KEY,
@@ -42,13 +43,6 @@ export {
 export { createFileSink } from './file-sink.js';
 export { UnifiedLogger } from './unified-logger.js';
 export { buildResourceAttributes, getDeploymentEnvironment } from './resource-attributes.js';
-
-/**
- * Stdout sink interface for writing to standard output
- */
-export interface StdoutSink {
-  write(line: string): void;
-}
 
 /**
  * Adapt Node.js WriteStream to SimpleWriteStream interface
@@ -86,19 +80,24 @@ export const NODE_FILE_SYSTEM: FileSystem = {
  * additional processing. The caller is responsible for formatting and
  * adding newlines.
  *
- * @returns Stdout sink instance
+ * @returns Log sink instance
  *
  * @example
  * ```typescript
  * const sink = createNodeStdoutSink();
- * sink.write('{"Timestamp":"2025-11-09T10:00:00.000Z","Body":"message"}\n');
+ * sink.write({
+ *   level: 'INFO',
+ *   message: 'message',
+ *   context: {},
+ *   otelRecord: { ... },
+ *   line: '{"Timestamp":"2025-11-09T10:00:00.000Z","Body":"message"}\n',
+ * });
  * ```
  */
-export function createNodeStdoutSink(): StdoutSink {
+export function createNodeStdoutSink(): LogSink {
   return {
-    write(line: string): void {
-      // eslint-disable-next-line no-restricted-globals -- Node.js entry point requires process.stdout access
-      process.stdout.write(line);
+    write(event: LogEvent): void {
+      process.stdout.write(event.line);
     },
   };
 }
@@ -116,7 +115,13 @@ export function createNodeStdoutSink(): StdoutSink {
  * ```typescript
  * const sink = createNodeFileSink({ path: '/tmp/app.log', append: true });
  * if (sink) {
- *   sink.write('{"Timestamp":"2025-11-09T10:00:00.000Z","Body":"message"}\n');
+ *   sink.write({
+ *     level: 'INFO',
+ *     message: 'message',
+ *     context: {},
+ *     otelRecord: { ... },
+ *     line: '{"Timestamp":"2025-11-09T10:00:00.000Z","Body":"message"}\n',
+ *   });
  * }
  * ```
  */
@@ -124,8 +129,23 @@ export function createNodeFileSink(config: FileSinkConfig): FileSinkInterface | 
   return createFileSink(config, NODE_FILE_SYSTEM);
 }
 
-export type { LoggerOptions, Logger, JsonObject } from './types.js';
-export type { RequestLoggerOptions } from './express-middleware.js';
+export type {
+  ErrorLoggerOptions,
+  HeaderRedactor,
+  RequestLoggerOptions,
+} from './express-middleware.js';
+export type {
+  JsonObject,
+  JsonValue,
+  LogContext,
+  LogContextInput,
+  LogContextInputValue,
+  LogEvent,
+  LogSink,
+  Logger,
+  LoggerOptions,
+  NormalizedError,
+} from './types.js';
 export type { FileSinkConfig, LoggerSinkConfig, LoggerSinkEnvironment } from './sink-config.js';
 export type { LogLevel, BaseLoggingEnvironment } from './log-levels.js';
 export type { FileSinkInterface, FileSystem, SimpleWriteStream } from './file-sink.js';

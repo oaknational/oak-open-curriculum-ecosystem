@@ -2,15 +2,17 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import { hasJsonRpcOrResultError, parseSseEnvelope } from './helpers/sse.js';
-import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
 async function callWithBadArgs(): Promise<{ status: number; text: string }> {
   // Disable auth – validation tests isolate Zod enforcement.
   // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
+  const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
   const app = await createApp({
-    runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+    runtimeConfig,
+    observability: createMockObservability(runtimeConfig),
   });
   const body = {
     jsonrpc: '2.0',

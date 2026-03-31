@@ -9,5 +9,5 @@
     "isolatedModules": true
   },
   "include": ["**/*.ts", "evaluation/**/*.ts", "operations/**/*.ts"],
-  "exclude": ["node_modules", "vitest.config.ts", "vitest.e2e.config.ts"]
+  "exclude": ["node_modules"]
 }

@@ -817,7 +817,7 @@ function createUser(data: unknown) {
 ## Related Plans
 
 - `icebox/agent-lifecycle-automation.md` - Automated quality gates (complementary)
-- `architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md` - Observability patterns to detect (promoted from icebox)
+- `architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md` - Observability patterns to detect (promoted from icebox)
 - `sdk-and-mcp-enhancements/comprehensive-mcp-enhancement-plan.md` - MCP tools that could benefit from real-time coaching
 - `.agent/directives/principles.md` - Rules the coach enforces
 - `.agent/directives/typescript-practice.md` - Type safety patterns to detect

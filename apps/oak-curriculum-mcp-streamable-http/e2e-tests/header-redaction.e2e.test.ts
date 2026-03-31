@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
+import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { createNoOpClerkMiddleware } from './helpers/test-config.js';
@@ -47,7 +48,8 @@ async function createBypassedApp() {
     startDir: process.cwd(),
   });
   const runtimeConfig = unwrap(result);
-  return await createApp({ runtimeConfig });
+  const observability = createHttpObservabilityOrThrow(runtimeConfig);
+  return await createApp({ runtimeConfig, observability });
 }
 
 async function createEnforcedApp() {
@@ -56,8 +58,10 @@ async function createEnforcedApp() {
     startDir: process.cwd(),
   });
   const runtimeConfig = unwrap(result);
+  const observability = createHttpObservabilityOrThrow(runtimeConfig);
   return await createApp({
     runtimeConfig,
+    observability,
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });

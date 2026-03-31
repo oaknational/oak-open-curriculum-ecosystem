@@ -22,7 +22,7 @@ import {
   assertAuthErrorResponse,
   assertAuthErrorLogged,
 } from './test-helpers/auth-error-test-helpers.js';
-import { createFakeSearchRetrieval } from './test-helpers/fakes.js';
+import { createFakeHttpObservability, createFakeSearchRetrieval } from './test-helpers/fakes.js';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 describe('Tool Handler Auth Error Interception (Integration)', () => {
@@ -42,6 +42,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
     registerHandlers(mockServer, {
       runtimeConfig,
       logger: mockLogger,
+      observability: createFakeHttpObservability(),
       overrides,
       searchRetrieval: createFakeSearchRetrieval(),
     });

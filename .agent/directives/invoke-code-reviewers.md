@@ -15,6 +15,7 @@ Before starting any non-trivial task, answer these questions to identify which s
 7. Does this touch Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, or Elastic Serverless capabilities? -> `elasticsearch-reviewer` (situational)
 8. Does this touch Clerk middleware, token verification, OAuth proxy, PRM, `@clerk/mcp-tools`, or Clerk SDK usage? -> `clerk-reviewer` (situational)
 9. Does this touch MCP protocol, tool/resource/prompt definitions, MCP Apps Extension widgets, transport/session patterns, or MCP Apps migration work? -> `mcp-reviewer` (situational)
+10. Does this touch Sentry SDK usage, OpenTelemetry trace/log correlation, telemetry redaction, MCP Insights, or Sentry env/config wiring? -> `sentry-reviewer` (situational)
 
 Documentation drift (`docs-adr-reviewer`) applies whenever behaviour or architecture changes, even if no docs are explicitly edited.
 
@@ -66,6 +67,7 @@ Specialist on-demand (not standard roster -- situational trigger only):
 - `mcp-reviewer` for MCP protocol compliance, tool/resource/prompt definition validation, or transport/session pattern checks
 - `elasticsearch-reviewer` for Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, evaluation, or Elastic Serverless capability assessments
 - `clerk-reviewer` for Clerk middleware, token verification, OAuth proxy, PRM, `@clerk/mcp-tools`, or Clerk SDK usage assessments
+- `sentry-reviewer` for Sentry SDK configuration, OpenTelemetry observability integration, trace/log correlation, telemetry redaction, MCP Insights, and release/source-map observability assessments
 
 ## Worked Examples
 
@@ -86,6 +88,8 @@ Specialist on-demand (not standard roster -- situational trigger only):
 **Clerk/OAuth change**: Invoke `code-reviewer` + `clerk-reviewer` immediately. Add `security-reviewer` if the change has exploitability implications. Add `mcp-reviewer` if MCP auth spec compliance is in question.
 
 **MCP protocol/tool/Apps change**: Invoke `code-reviewer` + `mcp-reviewer` immediately. Add `security-reviewer` if the MCP auth model is affected. Add `clerk-reviewer` if Clerk integration with MCP auth is in question. Add the relevant architecture reviewer(s) if MCP tool layering or transport boundaries change. For active MCP planning or implementation support, use the `mcp-expert` skill.
+
+**Sentry/OTel change**: Invoke `code-reviewer` + `sentry-reviewer` immediately. Add `security-reviewer` if redaction, secrets, or PII boundaries change. Add `mcp-reviewer` if MCP wrapping or Insights could affect protocol behaviour.
 
 ## Invocation
 

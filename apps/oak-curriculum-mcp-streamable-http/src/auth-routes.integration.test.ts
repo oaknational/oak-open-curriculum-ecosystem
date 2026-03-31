@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
+import { createHttpObservabilityOrThrow } from './observability/http-observability.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js';
 
@@ -22,7 +23,12 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(result);
-    return await createApp({ runtimeConfig, upstreamMetadata: TEST_UPSTREAM_METADATA });
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    return await createApp({
+      runtimeConfig,
+      observability,
+      upstreamMetadata: TEST_UPSTREAM_METADATA,
+    });
   };
 
   describe('resource URL generation', () => {

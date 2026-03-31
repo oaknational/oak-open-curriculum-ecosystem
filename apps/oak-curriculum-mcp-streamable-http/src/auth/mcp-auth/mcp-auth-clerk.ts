@@ -88,7 +88,7 @@ export function createMcpAuthClerk(
       const parsed = authInfoSchema.safeParse(rawAuthInfo);
       if (!parsed.success) {
         logger.error('Malformed authInfo from verifyClerkToken', {
-          issues: parsed.error.issues,
+          issues: parsed.error.issues.map((issue) => issue.message),
         });
         return Promise.resolve(undefined);
       }

@@ -8,8 +8,9 @@
  */
 
 import { createHash } from 'crypto';
+import type { ActiveSpanContextSnapshot } from '@oaknational/observability';
 import type { LogLevel } from './log-levels';
-import type { JsonObject } from './types';
+import type { LogContext, NormalizedError } from './types';
 
 /**
  * OpenTelemetry severity number mapping
@@ -53,7 +54,7 @@ export interface OtelLogRecord {
   /** Log message */
   Body: string;
   /** Context attributes */
-  Attributes: JsonObject;
+  Attributes: LogContext;
   /** Resource identification attributes */
   Resource: ResourceAttributes;
   /** W3C Trace ID (32-character hex string) */
@@ -69,15 +70,17 @@ export interface OtelLogRecord {
  */
 export interface FormatOtelLogRecordOptions {
   /** Log level */
-  level: LogLevel;
+  readonly level: LogLevel;
   /** Log message */
-  message: string;
+  readonly message: string;
   /** Optional error object */
-  error?: Error;
+  readonly error?: NormalizedError;
   /** Context data */
-  context: JsonObject;
+  readonly context: LogContext;
   /** Resource attributes */
-  resourceAttributes: ResourceAttributes;
+  readonly resourceAttributes: ResourceAttributes;
+  /** Active span context captured by the logger composition root. */
+  readonly activeSpanContext: ActiveSpanContextSnapshot | undefined;
 }
 
 /**
@@ -124,7 +127,7 @@ export function correlationIdToTraceId(correlationId: string | undefined): strin
  * @param error - The error object
  * @returns Object with exception attributes
  */
-function extractErrorAttributes(error: Error): JsonObject {
+function extractErrorAttributes(error: NormalizedError): LogContext {
   return {
     'exception.type': error.name,
     'exception.message': error.message,
@@ -147,13 +150,13 @@ function extractErrorAttributes(error: Error): JsonObject {
  * @returns OpenTelemetry log record
  */
 export function formatOtelLogRecord(options: FormatOtelLogRecordOptions): OtelLogRecord {
-  const { level, message, error, context, resourceAttributes } = options;
+  const { level, message, error, context, resourceAttributes, activeSpanContext } = options;
 
   const now = new Date();
   const timestamp = now.toISOString();
 
   // Build attributes by combining context with error info if present
-  const attributes: JsonObject =
+  const attributes: LogContext =
     error === undefined ? { ...context } : { ...context, ...extractErrorAttributes(error) };
 
   // Extract correlationId if present
@@ -171,8 +174,11 @@ export function formatOtelLogRecord(options: FormatOtelLogRecordOptions): OtelLo
     Resource: resourceAttributes,
   };
 
-  // Add TraceId if we have a correlation ID
-  if (correlationId !== undefined) {
+  if (activeSpanContext) {
+    record.TraceId = activeSpanContext.traceId;
+    record.SpanId = activeSpanContext.spanId;
+    record.TraceFlags = activeSpanContext.traceFlags;
+  } else if (correlationId !== undefined) {
     const traceId = correlationIdToTraceId(correlationId);
     if (traceId !== undefined) {
       record.TraceId = traceId;

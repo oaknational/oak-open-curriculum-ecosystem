@@ -3,6 +3,7 @@ import { z } from 'zod';
 import request from 'supertest';
 import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
+import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
@@ -71,8 +72,10 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
     const app = await createApp({
       runtimeConfig,
+      observability,
       upstreamMetadata: TEST_UPSTREAM_METADATA,
       clerkMiddlewareFactory: createNoOpClerkMiddleware(),
     });
@@ -102,7 +105,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = await createApp({ runtimeConfig });
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const app = await createApp({ runtimeConfig, observability });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -135,7 +139,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = await createApp({ runtimeConfig });
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const app = await createApp({ runtimeConfig, observability });
     const res = await request(app)
       .post('/mcp')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
@@ -151,7 +156,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = await createApp({ runtimeConfig });
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const app = await createApp({ runtimeConfig, observability });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -177,7 +183,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = await createApp({ runtimeConfig });
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const app = await createApp({ runtimeConfig, observability });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -203,7 +210,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = await createApp({ runtimeConfig });
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const app = await createApp({ runtimeConfig, observability });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -231,7 +239,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(configResult);
-    const app = await createApp({ runtimeConfig });
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const app = await createApp({ runtimeConfig, observability });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)

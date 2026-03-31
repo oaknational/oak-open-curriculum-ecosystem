@@ -32,7 +32,13 @@ describe('bootstrapApp', () => {
       }),
     ).rejects.toThrow(startupError);
 
-    expect(logger.error).toHaveBeenCalledWith('Application startup failed', startupError);
+    expect(logger.error).toHaveBeenCalledWith(
+      'Application startup failed',
+      expect.objectContaining({
+        name: 'Error',
+        message: 'OAuth metadata fetch failed',
+      }),
+    );
     expect(exit).toHaveBeenCalledWith(1);
   });
 
@@ -58,5 +64,34 @@ describe('bootstrapApp', () => {
     ).rejects.toThrow(startupError);
 
     expect(callOrder).toStrictEqual(['logger.error', 'exit']);
+  });
+
+  it('awaits onStartupFailure before calling exit', async () => {
+    const callOrder: string[] = [];
+    const startupError = new Error('bootstrap crash');
+
+    const logger = {
+      error: vi.fn(() => {
+        callOrder.push('logger.error');
+      }),
+    };
+    const onStartupFailure = vi.fn(async () => {
+      callOrder.push('onStartupFailure');
+    });
+    const exit = vi.fn(() => {
+      callOrder.push('exit');
+    });
+
+    await expect(
+      bootstrapApp({
+        startApp: () => Promise.reject(startupError),
+        logger,
+        onStartupFailure,
+        exit,
+      }),
+    ).rejects.toThrow(startupError);
+
+    expect(onStartupFailure).toHaveBeenCalledWith(startupError);
+    expect(callOrder).toStrictEqual(['logger.error', 'onStartupFailure', 'exit']);
   });
 });

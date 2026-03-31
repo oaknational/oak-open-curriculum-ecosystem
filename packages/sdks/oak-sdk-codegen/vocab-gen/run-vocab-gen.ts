@@ -25,7 +25,9 @@ import {
   logLevelToSeverityNumber,
   parseLogLevel,
   buildResourceAttributes,
+  normalizeError,
 } from '@oaknational/logger';
+import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import { UnifiedLogger, createNodeStdoutSink } from '@oaknational/logger/node';
 import type { Logger } from '@oaknational/logger';
 
@@ -34,8 +36,8 @@ const logger: Logger = new UnifiedLogger({
   minSeverity: logLevelToSeverityNumber(level),
   resourceAttributes: buildResourceAttributes({}, 'sdk-codegen', '0.0.0'),
   context: { tool: 'vocab-gen' },
-  stdoutSink: createNodeStdoutSink(),
-  fileSink: null,
+  sinks: [createNodeStdoutSink()],
+  getActiveSpanContext: getActiveSpanContextSnapshot,
 });
 
 /**
@@ -138,6 +140,6 @@ async function main(): Promise<void> {
 
 main().catch((err: unknown) => {
   const message = err instanceof Error ? err.message : String(err);
-  logger.error(`Fatal error: ${message}`, err);
+  logger.error(`Fatal error: ${message}`, normalizeError(err));
   process.exit(1);
 });

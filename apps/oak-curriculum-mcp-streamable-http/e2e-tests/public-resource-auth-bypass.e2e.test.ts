@@ -31,7 +31,11 @@ import type { Express } from 'express';
 import request from 'supertest';
 import { z } from 'zod';
 import { createApp } from '../src/application.js';
-import { createMockRuntimeConfig, createNoOpClerkMiddleware } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpClerkMiddleware,
+} from './helpers/test-config.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
@@ -57,17 +61,19 @@ const SseResourceDataSchema = z.object({
  * DANGEROUSLY_DISABLE_AUTH is NOT set - auth is enforced.
  */
 async function createAuthEnabledApp(): Promise<Express> {
+  const runtimeConfig = createMockRuntimeConfig({
+    env: {
+      OAK_API_KEY: 'test-api-key',
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_test_123',
+      NODE_ENV: 'test',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+    },
+  });
   return await createApp({
-    runtimeConfig: createMockRuntimeConfig({
-      env: {
-        OAK_API_KEY: 'test-api-key',
-        CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-        CLERK_SECRET_KEY: 'sk_test_123',
-        NODE_ENV: 'test',
-        ELASTICSEARCH_URL: 'http://fake-es:9200',
-        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-      },
-    }),
+    runtimeConfig,
+    observability: createMockObservability(runtimeConfig),
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });

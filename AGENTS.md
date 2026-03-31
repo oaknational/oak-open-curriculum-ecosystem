@@ -11,3 +11,4 @@ Primary agent workflow CLIs live in `agent-tools/` and are invoked from repo roo
 
 - `pnpm agent-tools:claude-agent-ops status`
 - `pnpm agent-tools:cursor-session-from-claude-session find --last-hours 2`
+- `pnpm agent-tools:codex-reviewer-resolve code-reviewer`

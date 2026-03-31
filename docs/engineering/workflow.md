@@ -129,6 +129,7 @@ During development, the AI agent working on the code invokes specialist sub-agen
 | `config-reviewer`         | Tooling config consistency, quality gate alignment        |
 | `security-reviewer`       | Auth, secrets, PII, injection risks                       |
 | `docs-adr-reviewer`       | Documentation completeness, ADR accuracy                  |
+| `sentry-reviewer`         | Sentry SDK usage, OTel observability, MCP Insights        |
 
 ### When they run
 
@@ -155,6 +156,12 @@ PRs are merged to `main` after:
 1. CI passes
 2. At least one human approval
 3. No unresolved review comments
+
+When a feature branch has diverged significantly from `main` (100+ files
+changed on either side, 10+ conflicts in a dry-run merge), follow the
+[Pre-Merge Divergence Analysis](./pre-merge-analysis.md) guide before
+attempting the merge. Standard conflict resolution misses type-system breaks,
+deleted-file cascades, and signature mismatches in auto-merged files.
 
 ## 11. Release
 
