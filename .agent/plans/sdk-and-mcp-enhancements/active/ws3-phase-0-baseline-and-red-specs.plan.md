@@ -6,16 +6,25 @@ isProject: false
 todos:
   - id: grounding
     content: "Re-ground against roadmap, umbrella plan, WS3 parent plan, and C8 auth closure plans."
-    status: pending
+    status: completed
   - id: contamination-inventory
     content: "Run canonical runtime contamination check and capture baseline evidence."
-    status: pending
+    status: completed
   - id: red-tests
     content: "Add RED tests for widget resource/metadata/auth policy before product code changes."
+    status: completed
+  - id: evidence-table
+    content: "Record RED/GREEN evidence table for phases 1-6."
+    status: completed
+  - id: doc-rewrite
+    content: "Rewrite active normative docs that direct execution toward dead widget model."
     status: pending
 ---
 
 # WS3 Phase 0: Baseline and RED Specs
+
+**Status**: IN PROGRESS
+**Last Updated**: 2026-03-31
 
 This companion plan narrows execution for Phase 0 only. The parent plan remains
 authoritative for full WS3 scope and ordering.
@@ -69,13 +78,46 @@ authoritative for full WS3 scope and ordering.
 
 ## Evidence
 
-Record the RED/GREEN contract for each downstream phase here during execution.
+### Contamination Inventory (captured 2026-03-31)
 
-| Phase | RED command | Expected failure | GREEN phase | GREEN evidence |
-|-------|-----------|------------------|-------------|----------------|
-| 1 | | | | |
-| 2 | | | | |
-| 3 | | | | |
-| 4 | | | | |
-| 5 | | | | |
-| 6 | | | | |
+**Canonical check** (`rg` command from WS3 parent plan):
+
+- `window.openai`: 0 in active code (1 in `docs/widget-rendering.md` — doc only)
+- `text/html+skybridge`: 0
+- `__mcpPreview`: 0
+- `chatgpt-emulation`: 0
+- `oak-json-viewer`: 24 hits across product code, tests, codegen, docs
+- `undefined?.toolOutput|toolInput`: 2 hits in `widget-script.ts` (dead file)
+
+**Non-canonical inventory**:
+
+| Category | Finding | Downstream phase |
+|----------|---------|-----------------|
+| Legacy bridge residue | 5 dead files + `widget-renderers/` dir (6 files) | Phase 1 (delete) |
+| Hard-coded resource identity | `oak-json-viewer` in codegen constants, registration, tests, docs | Phase 3 (rename) |
+| B3 Hybrid (`tools-list-override.ts`) | Active — JSON Schema examples preservation | Phase 3 (adapt, not delete) |
+| Public-resource auth | Well-tested (8 unit + 8 E2E); uses SDK constants | Phase 3 (align to renamed slug) |
+| `WIDGET_TOOL_NAMES` | Empty set — metadata tests pass vacuously | Phase 3 (re-populate) |
+| `aggregated-tool-widget.ts` | Active HTML generation, depends on legacy chain | Phase 2 (replace with React build) |
+
+### RED/GREEN Contract
+
+| Phase | RED command | Expected failure | GREEN evidence |
+|-------|-----------|------------------|----------------|
+| 1 | Canonical contamination check | Legacy files still present in tree | 0 legacy widget files in active paths |
+| 2 | `pnpm build` (widget target) | No `dist/mcp-app.html` output | React build produces self-contained HTML |
+| 3 | `pnpm test:e2e -- ws3-red-specs` | All 4 RED specs fail (see below) | All 4 RED specs pass |
+| 4 | E2E: curriculum-model renders in app shell | No React app shell exists | View renders through fresh MCP App |
+| 5 | E2E: user-search submits and renders results | No user-search UI exists | Search runs through MCP tool calls |
+| 6 | `pnpm check` + canonical contamination check | Pre-existing doc/plan drift | Full gates pass, 0 contamination |
+
+### RED Spec Detail (Phase 3 targets)
+
+All 4 tests in `e2e-tests/ws3-red-specs.e2e.test.ts` — verified RED 2026-03-31:
+
+| Test | RED failure (actual) | GREEN target |
+|------|---------------------|--------------|
+| `WIDGET_TOOL_NAMES.size > 0` | `expected 0 to be greater than 0` | Phase 3 re-populates set |
+| `at least one tool has _meta.ui.resourceUri` | `expected 0 to be greater than 0` | Phase 3 registers UI tools |
+| `user-search-query has visibility ["app"]` | `expected undefined to be defined` | Phase 3 adds tool with `["app"]` |
+| `widget slug not oak-json-viewer` | URI contains `oak-json-viewer` | Phase 3 renames resource slug |

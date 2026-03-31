@@ -2,110 +2,41 @@
 
 **Boundary**: experience-surfaces-and-extensions
 **Legacy Stream Label**: extensions
-**Status**: ⏸️ Blocked — awaiting prerequisites
+**Status**: ❌ SUPERSEDED by WS3 clean-break rebuild
 **Parent**: [README.md](README.md) | [../../roadmap.md](../../roadmap.md)
 **Created**: 2026-02-23
-**Last Updated**: 2026-02-23
+**Last Updated**: 2026-03-31
+**Superseded By**: `sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 
 ---
 
-## Overview
+## Supersession Notice
 
-Reactivate the widget renderers (search, browse, explore) that are
-parked for the current release. The renderer functions already exist
-and are tested; they need to be wired back into the
-`TOOL_RENDERER_MAP` in `widget-renderer-registry.ts` once the
-prerequisites below are satisfied.
+This plan is **no longer viable**. The WS3 clean-break rebuild deletes all
+files referenced here (`widget-renderer-registry.ts`, `widget-renderers/*.ts`,
+`widget-script.ts`, `widget-script-state.ts`) in Phase 1.
 
-The widget currently ships as a header-only shell (Oak logo +
-heading) for all tools. After reactivation, search-family tools
-will render rich results (lesson cards, browse facets, explore
-multi-scope views) inside the ChatGPT iframe.
+The replacement approach builds rich UI views as React components inside a
+fresh MCP App, not by uncommenting parked renderers in the deleted string-
+template framework.
 
----
+For the active execution plan, read:
 
-## What Already Exists
+- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
+- Phase 4 (curriculum-model view) and Phase 5 (user-search view) deliver the
+  equivalent functionality through the React MCP App
 
-| Component | Location | Status |
-|-----------|----------|--------|
-| Search renderer | `src/widget-renderers/search-renderer.ts` | Complete, tested |
-| Browse renderer | `src/widget-renderers/browse-renderer.ts` | Complete, tested |
-| Explore renderer | `src/widget-renderers/explore-renderer.ts` | Complete, tested |
-| Renderer registry | `src/widget-renderer-registry.ts` | Parked — entries commented out |
-| Four-way sync tests | `src/widget-renderer-registry.unit.test.ts` | Verifying parked state |
-| Renderer contract tests | `src/widget-renderers/renderer-contracts.integration.test.ts` | Active |
-| CSS (content-sized layout) | `src/widget-styles.ts` | Complete — `#root` sizes to content with rounded corners |
+## Historical Context (Preserved for Reference)
 
-All paths are relative to `apps/oak-curriculum-mcp-streamable-http/`.
-
----
-
-## Prerequisites (All Must Be Satisfied)
-
-1. **MCP extensions research complete**
-   [../../../sdk-and-mcp-enhancements/roadmap.md](../../../sdk-and-mcp-enhancements/roadmap.md)
-   Domains A-C (research, specialist spec, refactoring backlog).
-   Needed to confirm the widget metadata contract is host-neutral
-   and the renderer stack aligns with the MCP Apps standard.
-
-2. **OpenAI Apps SDK alignment complete**
-   The subsequent OpenAI Apps SDK / MCP Apps integration work that
-   follows the research plan. Needed to ensure the widget rendering
-   approach is compatible with the finalised Apps SDK primitives
-   (resource hosting, safe area handling, theme API).
-
-3. **Current branch merged**
-   `feat/semantic_search_deployment` merged to main. The parked
-   renderers are a deliberate release-scoping decision for this
-   merge.
-
----
-
-## Reactivation Steps
-
-1. Uncomment the three entries in `TOOL_RENDERER_MAP`:
-
-   ```typescript
-   export const TOOL_RENDERER_MAP = {
-     search: 'search',
-     'browse-curriculum': 'browse',
-     'explore-topic': 'explore',
-   } as const satisfies Readonly<Record<string, RendererId>>;
-   ```
-
-2. Update the unit test assertions in
-   `widget-renderer-registry.unit.test.ts` from "parked" to
-   "active" state (positive mapping assertions).
-
-3. Update JSDoc in both the registry and test file to remove
-   "parked for current release" language.
-
-4. Verify all four-way sync tests pass (they already enforce
-   that every map entry has a matching renderer function).
-
-5. Run full quality gates: `pnpm type-check && pnpm lint:fix && pnpm test`.
-
----
-
-## Relationship to MCP Extensions Plan
-
-Domain D item 3 of the MCP extensions plan references:
-
-> Search UX reintroduction aligned with new search backend and
-> hard safety controls.
-
-This plan is the concrete execution of that item for the widget
-layer. Any changes to the renderer stack identified during
-Domain C (refactoring backlog) should be applied before
-reactivation.
-
----
+This plan originally proposed reactivating parked widget renderers (search,
+browse, explore) by uncommenting entries in `TOOL_RENDERER_MAP`. That approach
+assumed the legacy widget framework would survive as a foundation. The WS3
+decision (2026-03-28) chose total replacement instead.
 
 ## Related Documents
 
 | Document | Purpose |
 |----------|---------|
-| [MCP extensions roadmap](../../../sdk-and-mcp-enhancements/roadmap.md) | Prerequisite research and refactoring |
-| [Widget search rendering (archived)](../../archive/completed/widget-search-rendering.md) | Historical context — Phases 0-5 |
-| [advanced-features.md](advanced-features.md) | Other extension capabilities |
-| [search-results-quality.md](../../archive/completed/search-results-quality.md) | Search quality baseline — feeds into result rendering |
+| [WS3 clean-break rebuild](../../../sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md) | Replacement plan |
+| [MCP extensions roadmap](../../../sdk-and-mcp-enhancements/roadmap.md) | Strategic context |
+| [Widget search rendering (archived)](../../archive/completed/widget-search-rendering.md) | Historical context |

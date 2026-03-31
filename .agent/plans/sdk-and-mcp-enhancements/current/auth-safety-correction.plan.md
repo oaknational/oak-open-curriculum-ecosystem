@@ -32,6 +32,9 @@ isProject: false
 
 # Auth Safety Correction
 
+**Status**: Not started
+**Last Updated**: 2026-03-30
+
 ## Context
 
 Extracted from [roadmap.md](../roadmap.md) Domain C item C8. This fix is independent of Domain A research and Domain B specialist work and can be executed immediately.

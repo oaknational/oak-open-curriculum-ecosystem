@@ -17,6 +17,9 @@ todos:
 
 # WS3 Phase 4: Curriculum Model View
 
+**Status**: PENDING
+**Last Updated**: 2026-03-30
+
 ## Required Inputs
 
 1. `ws3-widget-clean-break-rebuild.plan.md` — Phase 4 section and target
