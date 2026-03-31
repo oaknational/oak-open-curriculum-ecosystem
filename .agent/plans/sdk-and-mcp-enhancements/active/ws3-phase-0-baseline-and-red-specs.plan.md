@@ -106,18 +106,26 @@ authoritative for full WS3 scope and ordering.
 |-------|-----------|------------------|----------------|
 | 1 | Canonical contamination check | Legacy files still present in tree | 0 legacy widget files in active paths |
 | 2 | `pnpm build` (widget target) | No `dist/mcp-app.html` output | React build produces self-contained HTML |
-| 3 | `pnpm test:e2e -- ws3-red-specs` | All 4 RED specs fail (see below) | All 4 RED specs pass |
+| 3 | `pnpm test:e2e -- ws3-red-specs` | 3 E2E RED specs fail (see below) | All RED specs pass |
 | 4 | E2E: curriculum-model renders in app shell | No React app shell exists | View renders through fresh MCP App |
 | 5 | E2E: user-search submits and renders results | No user-search UI exists | Search runs through MCP tool calls |
 | 6 | `pnpm check` + canonical contamination check | Pre-existing doc/plan drift | Full gates pass, 0 contamination |
 
 ### RED Spec Detail (Phase 3 targets)
 
-All 4 tests in `e2e-tests/ws3-red-specs.e2e.test.ts` — verified RED 2026-03-31:
+Each RED test proves product behaviour, not constant values. Verified RED 2026-03-31.
+
+**E2E** (`e2e-tests/ws3-red-specs.e2e.test.ts` — 3 tests):
 
 | Test | RED failure (actual) | GREEN target |
 |------|---------------------|--------------|
-| `WIDGET_TOOL_NAMES.size > 0` | `expected 0 to be greater than 0` | Phase 3 re-populates set |
 | `at least one tool has _meta.ui.resourceUri` | `expected 0 to be greater than 0` | Phase 3 registers UI tools |
 | `user-search-query has visibility ["app"]` | `expected undefined to be defined` | Phase 3 adds tool with `["app"]` |
 | `widget slug not oak-json-viewer` | URI contains `oak-json-viewer` | Phase 3 renames resource slug |
+
+**Unit GREEN** (`generate-widget-constants.unit.test.ts` — 2 tests):
+
+| Test | Status | What it proves |
+|------|--------|----------------|
+| URI follows `ui://widget/` scheme | GREEN | Generator produces valid MCP Apps URIs |
+| URI includes cache-busting hash | GREEN | Generator produces deterministic hashes |

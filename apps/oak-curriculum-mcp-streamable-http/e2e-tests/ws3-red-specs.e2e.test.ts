@@ -1,16 +1,18 @@
 /**
- * WS3 RED specifications — failing tests that define the target contract.
+ * WS3 RED specifications — failing tests that define the target system behaviour.
  *
  * These tests are intentionally RED (failing) and document the expected
  * GREEN phase for each. They form the TDD contract for the WS3 MCP App
- * rebuild: each test specifies behaviour that does not yet exist.
+ * rebuild: each test specifies system behaviour that does not yet exist.
+ *
+ * Every test proves something about the running system's protocol-level
+ * behaviour, not about constant values or internal configuration.
  *
  * ## RED/GREEN Contract
  *
  * | Test | Expected RED reason | GREEN phase |
  * |------|-------------------|-------------|
- * | WIDGET_TOOL_NAMES is non-empty | Set is temporarily empty | Phase 3 |
- * | UI tools have _meta.ui.resourceUri | No tools in WIDGET_TOOL_NAMES | Phase 3 |
+ * | UI tools have _meta.ui.resourceUri | No tools configured for UI | Phase 3 |
  * | user-search-query has visibility ["app"] | Tool does not exist yet | Phase 3 |
  * | Widget resource uses fresh slug | Still uses oak-json-viewer | Phase 3 |
  *
@@ -19,7 +21,6 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 import request from 'supertest';
 import { z } from 'zod';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
@@ -92,15 +93,9 @@ async function getResourcesList(app: Awaited<ReturnType<typeof createStubbedHttp
 }
 
 describe('WS3 RED Specs: Widget Tool Registration Contract', () => {
-  it('WIDGET_TOOL_NAMES contains at least one tool name', () => {
-    // RED reason: WIDGET_TOOL_NAMES is temporarily empty (parked for merge safety)
-    // GREEN phase: Phase 3 re-populates with get-curriculum-model, user-search
-    expect(WIDGET_TOOL_NAMES.size).toBeGreaterThan(0);
-  });
-
   it('at least one tool in tools/list has _meta.ui.resourceUri', async () => {
-    // RED reason: No tools in WIDGET_TOOL_NAMES → no tools get _meta.ui
-    // GREEN phase: Phase 3 re-populates WIDGET_TOOL_NAMES
+    // RED reason: No tools configured for UI → no tools get _meta.ui in protocol response
+    // GREEN phase: Phase 3 registers UI tools that advertise widget metadata
     const { app } = await createStubbedHttpApp();
     const tools = await getToolsList(app);
 
