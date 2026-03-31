@@ -81,6 +81,30 @@ describe('redactTelemetryValue', () => {
       grant_type: 'authorization_code',
     });
   });
+
+  it('redacts OAuth assertion credentials by key name', () => {
+    const value = redactTelemetryObject({
+      assertion: 'jwt-bearer-credential',
+      client_assertion: 'signed-client-jwt',
+      client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+    });
+
+    expect(value).toStrictEqual({
+      assertion: REDACTED_VALUE,
+      client_assertion: REDACTED_VALUE,
+      client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+    });
+  });
+
+  it('redacts nonce in URL query strings', () => {
+    expect(
+      redactTelemetryValue(
+        'https://auth.example.test/authorize?nonce=random-nonce-value&response_type=code',
+      ),
+    ).toBe('https://auth.example.test/authorize?nonce=%5BREDACTED%5D&response_type=code');
+  });
 });
 
 describe('redactHeaderValue', () => {

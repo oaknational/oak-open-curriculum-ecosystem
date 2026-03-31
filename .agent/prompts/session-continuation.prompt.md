@@ -64,11 +64,20 @@ architecturally sound. 52 auto-merged files verified line-by-line.
 
 **Next session tasks** (in priority order):
 
-1. **Security hardening** (BLOCKING pre-deployment): `code_verifier` and `code`
-   added to `FULLY_REDACTED_KEYS` (done in `e4bda5b5`). Remaining: review
-   `handleAuthSuccess()` debug logging of `clientId`/`scopes`/`userId` for PII
-   classification. Defence-in-depth: consider allowlisting OAuth token response
-   fields in `handleToken`. Create a dedicated plan if one doesn't exist.
+1. **Security hardening** (COMPLETE):
+   - `code_verifier` and `code` added to `FULLY_REDACTED_KEYS` (done in
+     `e4bda5b5`)
+   - `assertion`, `client_assertion` added to `FULLY_REDACTED_KEYS`; `nonce`
+     added to `REDACTED_QUERY_KEYS` (defence-in-depth for future OAuth grant
+     types, per security-reviewer recommendation)
+   - PII classification of `handleAuthSuccess()` logging (security-reviewer
+     validated 2026-03-31): `clientId` (OAuth app identifier, not PII),
+     `scopes` (permission strings), `userId` (pseudonymised Clerk ID at debug
+     level) — all SAFE
+   - `handleToken()` transparent proxy (ADR-115): logs only metadata (URL,
+     status, duration), never bodies. Field-level filtering would break OAuth
+     protocol. `FULLY_REDACTED_KEYS` covers all telemetry surfaces as
+     defence-in-depth — no further action needed
 2. **Deferred Phase 8 items**:
    - 8b: Create `.agent/skills/complex-merge/SKILL.md`
    - 8c: Update `docs/engineering/pre-merge-analysis.md`
