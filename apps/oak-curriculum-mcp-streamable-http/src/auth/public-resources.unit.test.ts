@@ -10,11 +10,6 @@ import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 describe('isPublicResourceUri', () => {
   describe('returns true for public resources', () => {
-    it('returns true for widget URI', () => {
-      // Use actual WIDGET_URI from SDK which includes hash
-      expect(isPublicResourceUri(WIDGET_URI)).toBe(true);
-    });
-
     it('returns true for getting-started documentation', () => {
       expect(isPublicResourceUri('docs://oak/getting-started.md')).toBe(true);
     });
@@ -29,6 +24,10 @@ describe('isPublicResourceUri', () => {
   });
 
   describe('returns false for non-public resources', () => {
+    it('returns false for widget URI (removed in WS3 Phase 1)', () => {
+      expect(isPublicResourceUri(WIDGET_URI)).toBe(false);
+    });
+
     it('returns false for unknown widget URIs', () => {
       expect(isPublicResourceUri('ui://other/widget.html')).toBe(false);
     });

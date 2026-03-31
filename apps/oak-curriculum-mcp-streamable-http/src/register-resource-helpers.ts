@@ -4,8 +4,7 @@ import type { HttpObservability } from './observability/http-observability.js';
 
 export type ResourceRegistrar = Pick<McpServer, 'registerResource'>;
 
-export interface WidgetResourceOptions {
-  readonly widgetDomain?: string;
+export interface ResourceRegistrationOptions {
   readonly observability?: HttpObservability;
 }
 

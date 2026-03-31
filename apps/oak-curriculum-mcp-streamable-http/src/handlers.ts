@@ -83,10 +83,6 @@ function buildToolHandlerDependencies(
   };
 }
 
-function deriveWidgetDomain(config: RuntimeConfig): string | undefined {
-  return config.displayHostname ? `https://${config.displayHostname}` : undefined;
-}
-
 /**
  * Registers all MCP tools with the server.
  *
@@ -134,7 +130,6 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
   }
 
   registerAllResources(server, {
-    widgetDomain: deriveWidgetDomain(options.runtimeConfig),
     observability: options.observability,
   });
   registerPrompts(server, options.observability);

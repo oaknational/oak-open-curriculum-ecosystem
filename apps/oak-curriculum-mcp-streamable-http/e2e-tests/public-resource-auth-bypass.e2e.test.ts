@@ -11,14 +11,15 @@
  * ## Solution
  *
  * Skip authentication for public resources that contain no user data:
- * - Widget URI (`ui://widget/...`) - auth bypassed even when resource is
- *   temporarily unregistered (WS3 Phase 1 interim; Phase 2-3 re-introduces)
  * - Documentation (`docs://oak/*.md`) - static markdown
+ *
+ * Widget URI was removed from the public list in WS3 Phase 1 (legacy widget
+ * framework deletion). Phase 2-3 will re-add it when the fresh React MCP App
+ * is scaffolded.
  *
  * ## Security Rationale
  *
  * These resources are safe to serve without auth because:
- * - Widget HTML is a static shell; user data arrives via the MCP Apps bridge at render time
  * - Documentation is static markdown generated at SDK compile time
  *
  * Data-fetching tools (tools/call) still require authentication.
@@ -80,8 +81,8 @@ async function createAuthEnabledApp(): Promise<Express> {
 }
 
 describe('Public Resource Authentication Bypass (E2E)', () => {
-  describe('Widget Resource URI (Auth Bypass)', () => {
-    it('bypasses auth for widget URI — returns 200 not 401', async () => {
+  describe('Widget Resource URI (Auth Required — removed from public list in WS3)', () => {
+    it('requires auth for widget URI — returns 401', async () => {
       const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
@@ -92,13 +93,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
           params: { uri: WIDGET_URI },
         });
 
-      // Auth was bypassed: status is 200 (SSE envelope), not 401.
-      // The widget resource is not currently registered (removed in WS3
-      // Phase 1; Phase 2-3 will re-introduce it), so the MCP SDK returns
-      // a JSON-RPC error inside the SSE envelope. This test proves only
-      // the auth bypass — resource existence is tested elsewhere.
-      expect(res.status).toBe(200);
-      expect(res.text).toContain('data:');
+      expect(res.status).toBe(401);
     });
   });
 

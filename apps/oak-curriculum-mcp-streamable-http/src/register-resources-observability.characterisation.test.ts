@@ -49,7 +49,7 @@ describe('registerAllResources — observability characterisation', () => {
 
     registerAllResources(server, { observability });
 
-    // At minimum, the widget and documentation resources should be registered.
+    // At minimum, the documentation resources should be registered.
     expect(resourceCalls.length).toBeGreaterThanOrEqual(2);
   });
 
