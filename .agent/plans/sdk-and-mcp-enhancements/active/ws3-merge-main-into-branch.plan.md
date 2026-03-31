@@ -1,12 +1,12 @@
 ---
 name: Merge main into branch
-overview: "Merge 3 commits from main (PR #73 Sentry/OTel observability + 2 releases) into feat/mcp_app_ui, resolving 6 text conflicts and an estimated 5-8 silent semantic breaks in auto-merged files, following the repo's 7-phase pre-merge analysis process."
+overview: "Merge 3 commits from main (PR #73 Sentry/OTel observability + 2 releases) into feat/mcp_app_ui, resolving 6 text conflicts and verifying 11 auto-merged files (2 HIGH risk, 9 Medium) line by line, following the repo's 7-phase pre-merge analysis process."
 todos:
   - id: plan-review
     content: "Pre-requisite: invoke architecture, MCP, and code reviewers on THIS PLAN before executing"
     status: completed
   - id: pre-step
-    content: Verify clean working tree and create backup branch (working tree is clean as of 2026-03-31)
+    content: Verify clean working tree, commit any uncommitted planning files, create backup branch
     status: pending
   - id: start-merge
     content: Execute git merge --no-ff origin/main and capture full conflict output
@@ -29,14 +29,23 @@ todos:
   - id: verify-tools-list-override
     content: Verify tools-list-override.ts does NOT exist; only preserve-schema-examples.ts exists
     status: pending
+  - id: grep-sweep
+    content: "Grep sweep for stale references: tools-list-override, overrideToolsListHandler, oak-json-viewer, deleted widget paths"
+    status: pending
   - id: verify-auto-merged-tests
     content: Verify auto-merged test files have correct observability parameters and no stale imports
     status: pending
+  - id: verify-plan-config-automerges
+    content: "Verify plan/config auto-merges line by line: architecture-and-infrastructure/README.md (both sides restructured sections — HIGH risk), prompts/README.md (both sides modified table), root package.json (version + scripts + deps), distilled.md, app package.json"
+    status: pending
+  - id: verify-register-json-resources
+    content: "Confirm register-json-resources.ts has no call sites (confirmed duplicate — consolidation deferred to post-merge)"
+    status: pending
+  - id: verify-observability-completeness
+    content: "Observability completeness: verify 4x maybeWrapResourceHandler in merged register-resources.ts AND walk observability threading map against merged files"
+    status: pending
   - id: verify-branch-only-tests
     content: "Verify branch-only test files: do NOT add observability to register-resources.integration.test.ts (async wrapper breaks sync fake); verify auth/public-resources.ts has no imports from deleted widget files"
-    status: pending
-  - id: grep-sweep
-    content: "Grep sweep for stale references: tools-list-override, overrideToolsListHandler, oak-json-viewer, deleted widget paths"
     status: pending
   - id: type-check
     content: Run pnpm type-check for fast feedback on signature mismatches
@@ -56,11 +65,8 @@ todos:
   - id: napkin
     content: Write session learnings to napkin (merge patterns, surprises, time sinks)
     status: pending
-  - id: create-merge-skill
-    content: Create .agent/skills/complex-merge/SKILL.md encoding the full merge workflow
-    status: pending
-  - id: improve-guide
-    content: Update docs/engineering/pre-merge-analysis.md with new insights (observability gap analysis, call-chain contracts, characterisation test inventory)
+  - id: update-merge-guidance
+    content: "Update existing pre-merge-analysis rule and guide with new learnings (see Phase 8b/8c): observability gap analysis, call-chain contracts, characterisation test inventory"
     status: pending
   - id: update-session-prompt
     content: Update session-continuation.prompt.md to reflect merge completion
@@ -71,11 +77,11 @@ todos:
 isProject: false
 ---
 
-# Merge main into feat/mcpappui — Improved Plan
+# Plan to merge main into feat/mcp_app_ui
 
 ## Situation
 
-`feat/mcp_app_ui` is **13 commits ahead** and **3 commits behind** `main`. Main received:
+`feat/mcp_app_ui` is ahead of and **3 commits behind** `main`. Main received:
 
 - `54309a6a` feat(observability): add Sentry + OTel foundation for HTTP MCP server (PR #73) — **359 files, 20,583 insertions**
 - `9c0d4b6e` chore(release): 1.2.0
@@ -98,7 +104,6 @@ The resolution is always "both together": observability wrapping on all resource
 
 ### 6 Text Conflicts
 
-
 | #   | File                                                 | Category              | Resolution                                       |
 | --- | ---------------------------------------------------- | --------------------- | ------------------------------------------------ |
 | 1   | `invoke-code-reviewers.md`                           | Trivial               | Accept main's version, re-apply branch additions |
@@ -108,23 +113,23 @@ The resolution is always "both together": observability wrapping on all resource
 | 5   | `**register-resources.ts`**                          | **Semantic keystone** | Manual merge — see detailed resolution below     |
 | 6   | `pnpm-lock.yaml`                                     | Mechanical            | Regenerate with `pnpm install`                   |
 
-
 ### Silent Breaks in Auto-Merged Files (the real risk)
 
-17 files changed on both sides auto-merge cleanly but may have semantic breaks:
+11 files changed on both sides auto-merge cleanly but may have semantic breaks. All 11 are listed below (the other 6 changed-on-both-sides files are the text conflicts listed above):
 
-
-| #   | File                                                 | Risk     | What to verify                                                                                                                                                                                                                        |
-| --- | ---------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A   | `**application.ts`**                                 | **HIGH** | Branch's rename (`preserveSchemaExamplesInToolsList`) lands in `initializeCoreEndpoints`, not orphaned. Main's extracted helpers (health, static content) used — no inline duplicates. `observability` parameter threaded throughout. |
-| B   | `**handlers-tool-registration.integration.test.ts`** | Medium   | `observability: createFakeHttpObservability()` parameter present in `registerAndCapture()`. Branch's widget test block removed.                                                                                                       |
-| C   | `**create-stubbed-http-app.ts`**                     | Medium   | `observability` parameter present in `createApp()` call. `createHttpObservabilityOrThrow` imported.                                                                                                                                   |
-| D   | `**public-resource-auth-bypass.e2e.test.ts`**        | Medium   | Test setup matches new observability signatures.                                                                                                                                                                                      |
-| E   | `**widget-metadata.e2e.test.ts`**                    | Medium   | Test setup matches new signatures.                                                                                                                                                                                                    |
-| F   | `**auth-enforcement.e2e.test.ts**`                   | Low      | Observability wiring may have changed test setup.                                                                                                                                                                                     |
-| G   | `**distilled.md**`                                   | Low      | No duplicate entries between branch and main additions.                                                                                                                                                                               |
-| H   | `**package.json` (app)**                             | Low      | Sentry deps from main present.                                                                                                                                                                                                        |
-
+| #   | File                                                              | Risk     | What to verify                                                                                                                                                                                                                        |
+| --- | ----------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A   | `**application.ts`**                                              | **HIGH** | Branch's rename (`preserveSchemaExamplesInToolsList`) lands in `initializeCoreEndpoints`, not orphaned. Main's extracted helpers (health, static content) used — no inline duplicates. `observability` parameter threaded throughout. |
+| B   | `**architecture-and-infrastructure/README.md`** (plan index)      | **HIGH** | Both sides restructured sections. Branch added "Recently Completed" and archived CI plan; main added "Active Now" with sentry plan, "Strategic Backlog", updated milestone text, and moved paths from `current/` to `active/`. Verify no duplicate section headers, no mangled tables, both sides' structural changes present, CI plan in "Recently Completed" with archived path. |
+| C   | `**handlers-tool-registration.integration.test.ts`**              | Medium   | `observability: createFakeHttpObservability()` parameter present in `registerAndCapture()`. Branch's widget test block removed.                                                                                                       |
+| D   | `**create-stubbed-http-app.ts`**                                  | Medium   | `observability` parameter present in `createApp()` call. `createHttpObservabilityOrThrow` imported.                                                                                                                                   |
+| E   | `**public-resource-auth-bypass.e2e.test.ts`**                     | Medium   | Test setup matches new observability signatures.                                                                                                                                                                                      |
+| F   | `**widget-metadata.e2e.test.ts`**                                 | Medium   | Test setup matches new signatures.                                                                                                                                                                                                    |
+| G   | `**prompts/README.md`**                                           | Medium   | Branch updated session-continuation row description and references; main added new sentry-otel prompt row. Verify both changes present, table aligned, no duplicated or dropped rows.                                                 |
+| H   | `**package.json` (root)**                                         | Medium   | Branch bumped `dependency-cruiser`, `knip`, `turbo` versions; main bumped `version` to `1.3.0` and added `codex-reviewer-resolve` script. Verify version is `1.3.0`, new script present, branch's dependency bumps intact, valid JSON. |
+| I   | `**auth-enforcement.e2e.test.ts**`                                | Medium   | Observability wiring may have changed test setup. Verify test setup matches new signatures.                                                                                                                                           |
+| J   | `**distilled.md**`                                                | Medium   | No duplicate entries between branch and main additions. Verify no mangled markdown from overlapping hunk boundaries.                                                                                                                  |
+| K   | `**package.json` (app)**                                          | Medium   | Sentry deps from main present. Verify no missing or duplicated dependency entries.                                                                                                                                                    |
 
 ### Rename collision: `tools-list-override.ts` to `preserve-schema-examples.ts`
 
@@ -170,7 +175,6 @@ Main's PR #73 adds a complete observability layer. Every MCP protocol surface (t
 
 ### Observability threading map
 
-
 | Layer                      | Wrapping mechanism                                 | Source file                               | Merge outcome                | Gap risk     |
 | -------------------------- | -------------------------------------------------- | ----------------------------------------- | ---------------------------- | ------------ |
 | HTTP request spans         | `observability.withSpan`                           | `mcp-handler.ts` (new from main)          | Automatic                    | None         |
@@ -184,7 +188,7 @@ Main's PR #73 adds a complete observability layer. Every MCP protocol surface (t
 | Asset download             | `captureHandledError`/`withSpan`                   | `asset-download-route.ts` (main only)     | Automatic                    | None         |
 | Security middleware        | `observability.withSpanSync`                       | `bootstrap-security.ts` (main only)       | Automatic                    | None         |
 | Cleanup errors             | `captureHandledError`                              | `mcp-handler.ts` (new from main)          | Automatic                    | None         |
-
+| `tools/list` override      | Not wrapped (custom handler in `preserve-schema-examples.ts`) | `preserve-schema-examples.ts` (branch)    | Automatic                    | Low — HTTP request span from `mcp-handler.ts` still covers the MCP call; no per-tool `wrapToolHandler` applies to custom `tools/list` handlers |
 
 **Two files require manual attention**: `register-resources.ts` (text conflict, manual merge required) and `application.ts` (auto-merged but changed on both sides — must be verified line-by-line as the composition root where observability threads into all subsystems). All other layers arrive automatically because the branch did not change those files.
 
@@ -252,20 +256,18 @@ The merged `register-resources.ts` MUST satisfy this calling convention:
 
 These items become dead code after widget removal but cause no errors:
 
-- `deriveWidgetDomain()` in `handlers.ts` — returns a hostname string passed as `widgetDomain`, but nothing reads it
-- `WidgetResourceOptions.widgetDomain` — optional field, passed through but never consumed
+- `deriveWidgetDomain()` in `handlers.ts`, `WidgetResourceOptions.widgetDomain`, and the `WidgetResourceOptions` name itself — a single coherent cleanup: rename type, remove dead field, remove dead function
 - Comment in characterisation test: "the widget and documentation resources" — stale text
-- `register-resource-helpers.ts` import of `RESOURCE_MIME_TYPE` — only used by deleted widget registration
 
-Do NOT fix these during merge (scope creep). Flag for post-merge cleanup.
+Note: `RESOURCE_MIME_TYPE` is NOT dead code post-merge — keystone step 4 already removes its import. Do NOT fix the above items during merge (scope creep). Flag for post-merge cleanup as a single consolidated work item.
 
 ---
 
 ## Execution Plan (Phases 5-7)
 
-### Pre-requisite: Sub-agent plan review (COMPLETE)
+### Pre-requisite: Sub-agent plan review (COMPLETE — two rounds)
 
-Invoked architecture-reviewer-barney, architecture-reviewer-wilma, mcp-reviewer, and code-reviewer. All blocking findings addressed below. Key corrections applied:
+**Round 1**: Invoked architecture-reviewer-barney, architecture-reviewer-wilma, mcp-reviewer, and code-reviewer. All blocking findings addressed below. Key corrections applied:
 
 - Promoted `application.ts` to first-class observability seam (Barney)
 - Fixed `auth/public-resources.ts` verification — `WIDGET_URI` is intentionally retained (Barney, MCP reviewer)
@@ -276,20 +278,37 @@ Invoked architecture-reviewer-barney, architecture-reviewer-wilma, mcp-reviewer,
 - Step 1 clarified: edit single SDK import to drop `WIDGET_URI` only (Code reviewer)
 - Noted `register-json-resources.ts` as potential duplicate surface from main (Barney)
 
+**Round 2**: Invoked all 4 architecture reviewers (Barney, Betty, Fred, Wilma), mcp-reviewer, security-reviewer, and code-reviewer with explicit observability-completeness remit. Key corrections applied:
+
+- Added `setupOAuthAndCaching` to Phase 6 step 1 verification checklist (MCP reviewer, Code reviewer)
+- Added Phase 6 step 8: `register-json-resources.ts` call-site verification — confirmed duplicate, 5/7 reviewers flagged (Barney, Betty, Fred, Wilma, Code reviewer)
+- Added Phase 6 step 9: observability completeness verification — 4x `maybeWrapResourceHandler` count + threading map walkthrough (Fred, Wilma, Code reviewer)
+- Added `tools/list` custom handler to observability threading map with gap note (Code reviewer)
+- Added rollback note: `pnpm install` required after `git reset --hard` (Wilma)
+- Removed RESOURCE_MIME_TYPE from dead code list — incorrectly attributed and already handled by keystone step 4 (Fred)
+- Corrected step 10 language: type re-exports preserve API parity, not functionally required by call chain (Barney, MCP reviewer)
+- Consolidated dead code follow-ups into single coherent work item (Betty, Fred)
+- Reworded WIDGET_URI follow-up as conscious ADR-057 deviation with restoration deadline (Fred, Security reviewer)
+- Reworded `register-json-resources.ts` follow-up from "assess whether" to "consolidate — confirmed duplicate" (Fred, Barney)
+- Simplified Phase 8b from new skill creation to updating existing guidance (Barney)
+- Added 4 new risks: OAuth redaction gap, auth data in logs, WIDGET_URI telemetry amplification, widget E2E vacuous pass (Security reviewer)
+- Added security review of observability payloads to post-merge follow-ups (Security reviewer)
+
 ### Rollback strategy
 
 Before starting the merge:
+
 - Create a backup branch at current HEAD: `git branch pre-merge-backup`
 - If merge goes wrong before commit: `git merge --abort`
-- If merge goes wrong after commit: `git reset --hard pre-merge-backup`
+- If merge goes wrong after commit: `git reset --hard pre-merge-backup` then `pnpm install` (reset restores the old lockfile but does not revert `node_modules` or Turbo caches on disk)
 
 ### Phase 5: Execute merge
 
-**Pre-step 1**: Verify clean working tree. The working tree was cleaned via `git merge --abort` on 2026-03-31, so it should be clean. If not, abort any in-progress merge first. The merge MUST start from a clean baseline.
+**Pre-step 1**: Verify the working tree is clean (`git status`). If there is an in-progress merge, abort it with `git merge --abort`. If there are uncommitted changes, handle them before proceeding. The merge MUST start from a clean baseline.
 
-**Pre-step 2**: Create backup branch: `git branch pre-merge-backup`
+**Pre-step 2**: Verify planning files (this merge plan, session prompt, napkin) are committed. If any have uncommitted changes, commit them before starting the merge — `git merge --abort` wipes staged-but-uncommitted files.
 
-**Pre-step 3**: Verify planning files (this merge plan, session prompt, napkin) are committed. They were committed on 2026-03-31. If any new changes exist, commit them before starting the merge.
+**Pre-step 3**: Create backup branch at current HEAD: `git branch pre-merge-backup`
 
 **Step order** (dependency-aware):
 
@@ -314,7 +333,7 @@ Concrete steps:
 7. Remove the `registerWidgetResource(server, options)` call from `registerAllResources`
 8. Restore branch's module-level JSDoc comment about widget removal and WS3 Phase 2-3 restoration
 9. Keep all observability wrapping (`maybeWrapResourceHandler` on all remaining functions) — this is already correct in main's base
-10. Keep re-exports: `export { registerPrompts } from './register-prompts.js'` AND `export type { ResourceRegistrar, WidgetResourceOptions } from './register-resource-helpers.js'` — both are required by the `handlers.ts` call contract
+10. Keep re-exports: `export { registerPrompts } from './register-prompts.js'` (required by the `handlers.ts` call contract) AND `export type { ResourceRegistrar, WidgetResourceOptions } from './register-resource-helpers.js'` (preserves module API parity with main — no current consumer imports these types through `register-resources.ts`, but removing them changes the public surface during a merge)
 
 **Note**: `register-json-resources.ts` is a new file from main that partially duplicates the resource registration surface. Do NOT wire it into the keystone resolution — park as separate follow-up tidy-up to avoid normalising two sources of truth.
 
@@ -323,42 +342,61 @@ Concrete steps:
 After resolving conflicts and committing:
 
 1. **`application.ts`** (first-class observability seam — changed on both sides) — open file, verify line by line:
-  - Import: `import { preserveSchemaExamplesInToolsList } from './preserve-schema-examples.js'` (not `tools-list-override`)
-  - Call site in `initializeCoreEndpoints`: `preserveSchemaExamplesInToolsList(server)` (not `overrideToolsListHandler`)
-  - No inline `addHealthEndpoints`/`mountStaticContentRoutes` functions (should use imports from `./app/`)
-  - `observability: HttpObservability` is required in `CreateAppOptions`
-  - `observability` threaded to all `runBootstrapPhase`, `setupBaseMiddleware`, `setupSecurityMiddleware`, `setupAuthRoutes`, `initializeCoreEndpoints`, `mountAssetDownloadProxy` calls
-  - `PhasedTimer` imported from `@oaknational/logger`
-  - Logger created via `options.observability.createLogger(...)` (not `createHttpLogger`)
-  - No duplicate route mounting (two hunks both adding similar setup)
-  - Correct bootstrap ordering preserved
+
+- Import: `import { preserveSchemaExamplesInToolsList } from './preserve-schema-examples.js'` (not `tools-list-override`)
+- Call site in `initializeCoreEndpoints`: `preserveSchemaExamplesInToolsList(server)` (not `overrideToolsListHandler`)
+- No inline `addHealthEndpoints`/`mountStaticContentRoutes` functions (should use imports from `./app/`)
+- `observability: HttpObservability` is required in `CreateAppOptions`
+- `observability` threaded to all `runBootstrapPhase`, `setupBaseMiddleware`, `setupSecurityMiddleware`, `setupOAuthAndCaching`, `setupAuthRoutes`, `initializeCoreEndpoints`, `mountAssetDownloadProxy` calls
+- `PhasedTimer` imported from `@oaknational/logger`
+- Logger created via `options.observability.createLogger(...)` (not `createHttpLogger`)
+- No duplicate route mounting (two hunks both adding similar setup)
+- Correct bootstrap ordering preserved
+
 2. **`tools-list-override.ts`** — verify file does NOT exist after merge. If it does, delete it.
 3. **Grep sweep for stale references** — search across `apps/oak-curriculum-mcp-streamable-http` for any remaining references to `tools-list-override`, `overrideToolsListHandler`, `oak-json-viewer`, and deleted widget paths. Fix JSDoc/comments only (no import references should exist).
 4. **`handlers-tool-registration.integration.test.ts`** — verify `observability: createFakeHttpObservability()` is in the `registerAndCapture()` call
 5. **`create-stubbed-http-app.ts`** — verify `createHttpObservabilityOrThrow` import and `observability` in `createApp` call
 6. **E2E tests** — verify test setup in `widget-metadata.e2e.test.ts`, `public-resource-auth-bypass.e2e.test.ts`, `auth-enforcement.e2e.test.ts` matches new signatures
-7. **Branch-only test files** — verify:
-  - `register-resources.integration.test.ts`: do NOT add `{ observability: createFakeHttpObservability() }`. The `options` parameter is optional, so existing calls `registerAllResources(server)` remain valid. Adding observability would break: `wrapResourceHandler` returns an async handler, but the test fake explicitly throws on Promise-returning callbacks. Leave as-is; production always passes observability via `handlers.ts`.
-  - `auth/public-resources.ts`: verify no imports from deleted widget **files** — the `WIDGET_URI` import from `@oaknational/curriculum-sdk` is intentionally retained per ADR-057 (harmless no-op during WS3 interim). Do NOT remove it.
-8. **Run `pnpm type-check`** immediately — this is the single fastest way to catch auto-merge signature mismatches. If type-check fails, fix each error before proceeding.
+7. **Plan and config auto-merges** — verify each line by line:
+
+- `architecture-and-infrastructure/README.md` (**HIGH** risk — both sides restructured this file): verify section structure is coherent — should have "Active Now" (with sentry plan from main), "Queued Work", "Strategic Backlog", "Active Plans" (CI plan removed by branch), "Recently Completed" (CI plan archived by branch), "Documents" (sentry entry from main), "Milestone Alignment" (main's updated text). No duplicate section headers. No mangled table rows. CI plan path should reference `archive/completed/`. Plan paths should use `active/` not `current/` where main moved them.
+- `prompts/README.md`: verify session-continuation row has branch's updated description AND main's new sentry-otel-foundation row is present. No duplicated or dropped rows. Table column alignment intact.
+- Root `package.json`: verify `version` is `1.3.0`, `codex-reviewer-resolve` script present in scripts, branch's `dependency-cruiser` (`^17.3.10`), `knip` (`^6.1.0`), `turbo` (`^2.8.21`) version bumps intact. Validate JSON structure is parseable.
+- `distilled.md`: verify no duplicate entries between branch and main additions, no mangled markdown from overlapping hunk boundaries.
+- App `package.json`: verify Sentry deps from main present, no missing or duplicated dependency entries.
+
+8. **`register-json-resources.ts` — confirm no call sites exist**. Grep across the entire `apps/oak-curriculum-mcp-streamable-http` workspace for imports of `register-json-resources`. This file is a confirmed duplicate of the four resource registration functions in `register-resources.ts`. If it has no call sites (expected based on `origin/main` analysis), it is inert and consolidation is deferred to post-merge. If it IS wired in, it must be verified for `maybeWrapResourceHandler` coverage immediately — an unwrapped duplicate path would be a silent observability gap.
+9. **Observability completeness verification** — two checks:
+
+- **Per-resource wrapping count**: Search the merged `register-resources.ts` for occurrences of `maybeWrapResourceHandler`. Must find exactly 4 (one each for `registerDocumentationResources`, `registerCurriculumModelResource`, `registerPrerequisiteGraphResource`, `registerThreadProgressionsResource`). Fewer than 4 means a resource lost its wrapping.
+- **Threading map walkthrough**: Walk each row of the "Observability threading map" table against the actual merged files. Confirm each layer's wrapping mechanism is present: `observability.withSpan` in `mcp-handler.ts`, `wrapToolHandler` in `handlers.ts`, `maybeWrapResourceHandler` in `register-resources.ts`, `observability` parameter in `application.ts` threading to all subsystems, `wrapPromptHandler` in `register-prompts.ts`, `observability.withSpanSync` in `bootstrap-helpers.ts` and `bootstrap-security.ts`, `measureAuthSetupStep` in `auth-routes.ts`, `observability` in `oauth-and-caching-setup.ts`, `captureHandledError`/`withSpan` in `asset-download-route.ts`.
+
+10. **Branch-only test files** — verify:
+
+- `register-resources.integration.test.ts`: do NOT add `{ observability: createFakeHttpObservability() }`. The `options` parameter is optional, so existing calls `registerAllResources(server)` remain valid. Adding observability would break: `wrapResourceHandler` returns an async handler, but the test fake explicitly throws on Promise-returning callbacks. Leave as-is; production always passes observability via `handlers.ts`.
+- `auth/public-resources.ts`: verify no imports from deleted widget **files** — the `WIDGET_URI` import from `@oaknational/curriculum-sdk` is intentionally retained per ADR-057 (harmless no-op during WS3 interim). Do NOT remove it.
+
+11. **Run `pnpm type-check`** immediately — this is the single fastest way to catch auto-merge signature mismatches. If type-check fails, fix each error before proceeding.
 
 ### Phase 7: Full verification and review
 
-1. `pnpm type-check` (fast feedback — catches most merge errors)
-2. `pnpm check` (full clean rebuild + verification)
-3. Contamination check (per WS3 child plan)
-4. Invoke **MCP reviewer** on the merge result (register-resources.ts changes touch MCP protocol)
-5. Invoke **code reviewer** on the overall merge quality
-6. Invoke **architecture reviewer** (Barney for simplification, Wilma for resilience) on the structural integration of observability + widget removal
+`pnpm type-check` already ran in Phase 6 step 11 for fast feedback. Phase 7 runs the full gate suite, which includes type-check.
+
+1. `pnpm check` (full clean rebuild + all gates including type-check)
+2. Contamination check (per WS3 child plan)
+3. Invoke **MCP reviewer** on the merge result (register-resources.ts changes touch MCP protocol)
+4. Invoke **code reviewer** on the overall merge quality
+5. Invoke **architecture reviewer** (Barney for simplification, Wilma for resilience) on the structural integration of observability + widget removal
 
 ---
 
 ## Risks and mitigations
 
-
 | Risk                                                                           | Likelihood | Mitigation                                                                                                                                                                                  |
 | ------------------------------------------------------------------------------ | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `application.ts` auto-merge produces incorrect result                          | Medium     | First-class seam: manual line-by-line verification in Phase 6 step 1; check for duplicate route mounting, correct bootstrap ordering, and behaviour-correct but type-valid silent corruption |
+| `architecture-and-infrastructure/README.md` auto-merge garbles section structure | High       | Both sides restructured sections (branch added "Recently Completed", main added "Active Now"/"Strategic Backlog"). Line-by-line verification in Phase 6 step 7; check for duplicate section headers, mangled tables, lost sections |
 | Git doesn't detect rename and creates modify/delete conflict                   | Low        | Dry-run showed clean auto-merge; if rename not detected, manually apply; grep sweep in Phase 6 step 3 catches stale references                                                             |
 | `observability` parameter missing in auto-merged test files                    | High       | `pnpm type-check` will catch immediately; fix before commit if possible                                                                                                                     |
 | Resource handlers missing `maybeWrapResourceHandler` wrapping                  | Medium     | Starting from main's base (preserves wrapping by default) + characterisation test (necessary but not sufficient) + manual visual check                                                      |
@@ -369,7 +407,10 @@ After resolving conflicts and committing:
 | `WidgetResourceOptions` name misleading post-widget-removal                    | Certain    | Note for post-merge follow-up; do NOT rename during merge (scope creep)                                                                                                                     |
 | Stale comments reference `tools-list-override`                                 | Certain    | Grep sweep in Phase 6 step 3 catches all occurrences across the workspace                                                                                                                   |
 | `deriveWidgetDomain` becomes dead code                                         | Certain    | Harmless; flag for post-merge cleanup                                                                                                                                                        |
-
+| OAuth form-encoded secrets may appear in observability payloads (pre-existing)  | Medium     | Pre-existing in main's observability code, not introduced by merge. `REDACTED_QUERY_KEYS` covers URL params but `/oauth/token` form bodies (`code`, `code_verifier`, `refresh_token`) may flow to Sentry. Flag for post-merge security review |
+| Auth success handler logs `clientId`/`scopes`/`userId` to Sentry (pre-existing) | Low       | Pre-existing in main. `handleAuthSuccess()` identifiers flow to Sentry when `enableLogs` is true. Flag for post-merge privacy review                                                         |
+| `WIDGET_URI` auth bypass creates unauthenticated telemetry amplification surface | Low       | Bypass for a non-existent resource still generates request-span activity. Conscious ADR-057 deviation with restoration deadline in Phase 2-3                                                  |
+| Widget metadata E2E passes vacuously when widget tool allowlist is empty        | Low        | No explicit assertion that widget resource is NOT registered during WS3 interim. Bad merge could reintroduce widget without a failing test                                                    |
 
 ---
 
@@ -385,23 +426,9 @@ Write to `.agent/memory/napkin.md` with a session heading covering:
 - Patterns that worked well (e.g. dry-run first, fork-point comparison, characterisation test safety nets)
 - Corrections made after reviewer feedback
 
-### 8b. Create a complex-merge skill
+### 8b. Update existing merge guidance with new learnings
 
-The repo has a rule (`.agent/rules/pre-merge-divergence-analysis.md`) and a guide (`docs/engineering/pre-merge-analysis.md`), but no dedicated **skill** that wraps the complete workflow into a repeatable, agent-executable process. This session produced a richer understanding than either document currently captures.
-
-Create `.agent/skills/complex-merge/SKILL.md` (with shared workflow at `.agent/skills/complex-merge/shared/complex-merge.md`) encoding:
-
-1. The 7-phase process from the guide, enhanced with:
-  - Observability gap analysis (trace wrapping mechanisms across all protocol surfaces)
-  - Call-chain contract verification (callers in auto-merged files must match manual-merged signatures)
-  - Rename collision detection (Git rename detection is content-similarity-based; verify with file existence checks)
-  - Characterisation test safety nets (identify existing tests that guard integration seams before merging)
-2. The "files changed only on one side" analysis pattern (checking which direction Git will resolve)
-3. The sub-agent pre-review step (have reviewers validate the merge plan before executing)
-4. The concrete wrapping pattern for observability (not just "add parameter" but "wrap handler body")
-5. Create corresponding platform adapters in `.cursor/skills/complex-merge/SKILL.md` and other platforms as appropriate
-
-This skill should be linked from the existing rule and guide as the operational workflow.
+The repo already has a rule (`.agent/rules/pre-merge-divergence-analysis.md`) and a guide (`docs/engineering/pre-merge-analysis.md`). A brand-new multi-platform skill would be overbuilt — the genuinely new learning from this session is a small set of extensions to the existing guidance. Update the rule and guide (see 8c below) rather than creating a new skill.
 
 ### 8c. Improve the pre-merge analysis guide
 
@@ -439,13 +466,33 @@ Follow `.agent/commands/consolidate-docs.md` in full:
 
 ## Post-merge follow-up items (NOT in merge scope, for next session)
 
+### Widget dead code cleanup (single coherent work item)
+
 - Rename `WidgetResourceOptions` to `ResourceRegistrationOptions` or similar
-- Remove `deriveWidgetDomain()` from `handlers.ts` (dead code after widget removal)
-- Remove `widgetDomain` from `WidgetResourceOptions` (unused field)
+- Remove `WidgetResourceOptions.widgetDomain` field (dead — passed but never consumed)
+- Remove `deriveWidgetDomain()` from `handlers.ts` (dead — returns a hostname string nothing reads)
 - Update characterisation test comment "the widget and documentation resources" to reflect widget removal
 - Consider whether `register-resource-helpers.ts` should be absorbed into `register-resources.ts` now that widget-specific helpers are removed
-- Assess whether `register-json-resources.ts` duplicates `register-resources.ts` and should be consolidated (Barney finding)
-- Consider removing `WIDGET_URI` from `PUBLIC_RESOURCE_URIS` in `auth/public-resources.ts` — currently harmless no-op but widens the auth bypass surface beyond the actual registered Phase 1 resources (MCP reviewer finding)
-- Upgrade `register-resources.integration.test.ts` fake to support async resource handlers so observability can be threaded through tests (Code reviewer finding)
-- Resume WS3 Phase 2 per the phase companion plan
 
+### Confirmed duplicates
+
+- Consolidate `register-json-resources.ts` — confirmed duplicate of the four resource registration functions in `register-resources.ts` (5 reviewers flagged; no current call sites on main, but two files exporting identical functions invites future drift)
+
+### ADR-057 deviation: WIDGET_URI auth bypass
+
+- `WIDGET_URI` remains in `PUBLIC_RESOURCE_URIS` during WS3 Phase 1 as a conscious ADR-057 deviation. The bypass targets a URI with no registered resource, which widens the unauthenticated allowlist surface and generates unnecessary telemetry on probes (Security reviewer finding). Restore synchronisation invariant in Phase 2-3 when widget resource is re-registered, or remove bypass if widget is not re-registered.
+
+### Test coverage for observability
+
+- Upgrade `register-resources.integration.test.ts` fake to support async resource handlers (ADR-078 compliance item — current sync constraint prevents testing the production observability path; Code reviewer, Fred)
+- Consider adding per-resource wrapping assertions to characterisation tests (current `toHaveBeenCalled()` only proves wrapping was invoked at least once, not that all four resource paths are wrapped)
+- Consider adding explicit E2E assertion that widget resource is NOT registered during WS3 interim (Security reviewer — current E2E can pass vacuously)
+
+### Security review of observability payloads (pre-existing in main, not introduced by merge)
+
+- Review OAuth form-encoded redaction: `REDACTED_QUERY_KEYS` covers URL params but `/oauth/token` form bodies (`code`, `code_verifier`, `refresh_token`) may flow to Sentry unredacted (Security reviewer — blocking-severity finding on main's implementation)
+- Review auth success handler logging: `handleAuthSuccess()` logs `clientId`, `scopes`, `userId` to Sentry when `enableLogs` is true (Security reviewer — privacy exposure)
+
+### Resume WS3
+
+- Resume WS3 Phase 2 per the phase companion plan

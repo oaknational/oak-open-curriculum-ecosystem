@@ -1,3 +1,31 @@
+## Session 2026-03-31 — Second-Round Plan Review (7 reviewers, observability focus)
+
+### What Was Done
+- Invoked 7 specialist sub-agents on the merge plan with explicit observability
+  completeness remit: MCP reviewer, security reviewer, 4 architecture reviewers
+  (Barney, Betty, Fred, Wilma), and code reviewer.
+- Addressed ~30 findings (including minor) across all reviewers.
+- Consolidated post-merge follow-ups into structured categories.
+
+### Key Observations
+- **5/7 reviewer convergence on `register-json-resources.ts`**: Barney, Betty,
+  Fred, Wilma, and Code reviewer independently flagged the same duplicate file.
+  Cross-reviewer volume at this level is a strong signal — promoted from "assess
+  whether" to "consolidate — confirmed duplicate."
+- **Security reviewer found pre-existing gaps in main**: OAuth form-encoded
+  redaction and auth data in logs are pre-existing in main's observability code,
+  not introduced by the merge. The merge plan correctly scopes them as post-merge
+  follow-ups rather than merge blockers.
+- **Fred's ADR-057 deviation framing**: Instead of "consider removing WIDGET_URI,"
+  frame it as a conscious, documented deviation with a restoration deadline. This
+  is more actionable than a vague "consider" and creates accountability.
+- **Barney on Phase 8b**: Creating a new multi-platform complex-merge skill is
+  overbuilt. The genuinely new learning is a small extension to existing guidance.
+  Prefer updating existing docs over creating new abstractions.
+- **"No low-risk files"**: User explicitly corrected the assumption that some
+  auto-merged files are low-risk. All auto-merges need deep evaluation. Caution
+  over speed, architectural excellence over expediency.
+
 ## Session 2026-03-31 — Napkin rotation (distillation)
 
 Archived `napkin-2026-03-31.md` covering sessions 2026-03-24 to 2026-03-31.

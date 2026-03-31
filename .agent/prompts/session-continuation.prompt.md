@@ -62,13 +62,12 @@ git log --oneline --decorate -5
 **Immediate priority**: merge main into the branch, then resume WS3 Phase 2.
 
 **Pre-Phase-2 blocker**: merge main into this branch first. The merge plan is
-fully reviewed by 4 sub-agent reviewers (architecture-barney, architecture-wilma,
-mcp-reviewer, code-reviewer) and ready to execute:
+fully reviewed across two rounds (7 reviewers in total: all 4 architecture
+reviewers, mcp-reviewer, security-reviewer, code-reviewer) and ready to execute:
 
 - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-merge-main-into-branch.plan.md`
 
-The working tree is clean (merge abort done 2026-03-31). Start from Phase 5 of
-the merge plan. After merge passes `pnpm check`, continue with Phase 2:
+Verify clean working tree before starting. Start from Phase 5 of the merge plan. After merge passes `pnpm check`, continue with Phase 2:
 
 - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md`
 
