@@ -30,7 +30,7 @@ todos:
 # MCP App Extension Migration
 
 **Status**: ACTIVE  
-**Last Updated**: 2026-03-30  
+**Last Updated**: 2026-03-31
 **Scope**: Complete Oak’s MCP Apps migration and finish the fresh React MCP App
 rebuild.
 
@@ -166,8 +166,8 @@ WS1: ADR + metadata contract                ✓ complete
 WS2: runtime migration                      ✓ complete
 Runtime boundary simplification             ✓ complete
 WS3 child plan: fresh React MCP App rebuild ▶ active
-  Phase 0: baseline + RED specs
-  Phase 1: delete legacy widget framework
+  Phase 0: baseline + RED specs              ✓ complete
+  Phase 1: delete legacy widget framework    ▶ next
   Phase 2: scaffold fresh MCP App infra
   Phase 3: canonical contracts + runtime integration
   Phase 4: curriculum-model view

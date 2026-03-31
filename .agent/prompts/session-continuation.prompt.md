@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-03-30
+last_updated: 2026-03-31
 ---
 
 # Session Continuation
