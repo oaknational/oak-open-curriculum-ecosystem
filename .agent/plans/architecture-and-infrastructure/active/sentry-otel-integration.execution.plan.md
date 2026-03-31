@@ -41,8 +41,8 @@ todos:
     status: completed
   - id: http-adoption
     content: "Finish and green the HTTP MCP observability adoption in oak-curriculum-mcp-streamable-http, including cold-start init, MCP wrapping, targeted manual spans, reviewer findings, doc consolidation, and quality gates"
-    status: in-progress
-    note: "PR #73 open. C1/C2 regex fixed. Merged with main (PR #70). Awaiting human review."
+    status: completed
+    note: "PR #73 merged to main (2026-03-31). All 21 findings resolved, C1/C2 regex fixed, ADR-143 renumbered."
   - id: search-cli-adoption
     content: "Adopt the foundation in oak-search-cli with runtime-config-driven logger composition, command init, spans, and shutdown flush"
     status: pending
@@ -82,15 +82,13 @@ and capture boundaries established in Phase 1 and Phase 2.
 
 ### Lane and state
 
-- Branch: `feat/full-sentry-otel-support`
-- Head: `fd34516b` (27 commits ahead of main, merged with origin/main)
-- PR: [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73) — open, merged with main (PR #70), awaiting human review
-- Phases 0-2 complete (governance, shared contracts, shared foundation)
-- Phase 3 HTTP adoption: **PR open** — 21/21 specialist findings resolved,
-  C1/C2 CodeQL regex fixed, merged with main (PR #70 MCP Apps adoption),
-  ADR-141 renumbered to ADR-143, `pnpm check` green
-- Phase 3 Search CLI adoption: **pending** — unblocked after HTTP merge
+- Branch: `feat/otel_sentry_enhancements` (continuation after PR #73 merge)
+- PR #73: **MERGED** to main (2026-03-31). Squash commit `54309a6a`.
+- Phases 0-2: complete (governance, shared contracts, shared foundation)
+- Phase 3 HTTP adoption: **COMPLETE** — all findings resolved, merged
+- Phase 3 Search CLI adoption: **NEXT** — unblocked
 - Phase 4 evidence/deployment: **pending**
+- Rate limiting plan queued: `.agent/plans/architecture-and-infrastructure/current/app-layer-rate-limiting.plan.md`
 
 ### Quality gate status (2026-03-30)
 

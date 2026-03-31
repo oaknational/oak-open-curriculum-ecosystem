@@ -5,8 +5,9 @@ overview: >
   was opened (feat/full-sentry-otel-support): 4 CodeQL findings plus 2
   carried specialist reviewer findings (F10, F18). Extends the specialist
   reviewer remediation plan with post-PR findings.
-status: active
-last_updated: 2026-03-30
+status: completed
+last_updated: 2026-03-31
+completed: 2026-03-31
 parent_plan: ./sentry-otel-remediation.plan.md
 execution_plan: ./sentry-otel-integration.execution.plan.md
 ---

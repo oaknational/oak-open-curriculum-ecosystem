@@ -26,74 +26,38 @@ the process.
 See [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
 for the architectural decision.
 
-## Current State (2026-03-30)
+## Current State (2026-03-31)
 
-Branch head: `fd34516b`. 27 commits ahead of main (merged with origin/main).
-PR: [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73) — open, merged with main (PR #70 MCP Apps adoption), awaiting human review.
+PR #73 **MERGED** to main (squash commit `54309a6a`). Continuation
+branch: `feat/otel_sentry_enhancements`.
 
-**What was done** (summary of the 19 resolved remediation findings):
+**Phase 3 HTTP adoption: COMPLETE.** All 21 specialist findings
+resolved, C1/C2 CodeQL regex fixed, merged with main (PR #70), ADR-141
+renumbered to ADR-143, cleanup resilience hardened (Wilma review),
+multi-layer security architecture documented.
 
-- **Type safety**: Sentry hook parameter type aliases, `typeSafeEntries`
-  / `typeSafeKeys` migrations, `ServerHarness` + `FakeLogger` rewrites
-  with proper Logger overloads, narrow `SentryErrorEvent` /
-  `SentryBreadcrumb` / `SentryTransactionEvent` re-exports (no
-  `NodeOptions` leakage through the lib boundary)
-- **File splitting**: `http-observability.ts` split from 504 to 207
-  lines across 4 modules; 8 other oversized files split
-- **Sentry logger API**: replaced `captureMessage` with
-  `Sentry.logger.*`; OTel attributes flattened with `otel.attributes.*`
-  / `otel.resource.*` dot-prefixed keys for Sentry queryability
-- **Safety guards**: shutdown once-guard for duplicate SIGINT/SIGTERM,
-  `safeRecord` in MCP wrappers, `safeSpanOp` for span lifecycle — all
-  ensure infrastructure failures never mask business logic
-- **DI and test hygiene**: `stdoutSink` injected (removed
-  `vi.spyOn(process.stdout)`), per-test `createTestRuntime()` factory
-  (removed module-level mocks), scoped `fakeSpanCounter` closure
-- **Security**: DSN removed from error messages, `Object.assign`
-  metadata copy removed, `dsn` added to `FULLY_REDACTED_KEYS`
-- **Smoke tests**: `UnifiedLogger` constructor updated from old
-  `stdoutSink`/`fileSink` shape to new `sinks[]`/`getActiveSpanContext`;
-  `createApp` now receives required `observability` option
+**What comes next**:
 
-**Gate status**: `pnpm check` green — 81/81 tasks (secrets scan, clean
-rebuild, sdk-codegen, build, type-check, doc-gen, lint, test, test:e2e,
-test:ui, smoke:dev:stub, subagents:check, portability:check,
-markdownlint, format).
+1. **Rate limiting** — application-layer defence-in-depth on 4+ routes.
+   Plan queued at `plans/architecture-and-infrastructure/current/app-layer-rate-limiting.plan.md`.
+   Includes `trust proxy` configuration, ADR for multi-layer security
+   architecture, and security reviewer findings.
+2. **Search CLI adoption** (`apps/oak-search-cli`) — wire observability
+   foundation, runtime-config-driven logger, command init spans,
+   shutdown flush, Sentry DSN provisioning.
+3. **Deployment evidence bundle** — release/source maps, alerting
+   baseline, MCP Insights verification.
 
-**What remains on this branch**:
+**Deferred (track separately)**:
 
-- **Human PR review** of [#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/73)
-- **Push** to update PR #73 with merge result
+- **F18**: Span helper DRY between core and app (YAGNI)
 
-**Completed since last update**:
+**Operational documentation (complete)**:
 
-- **C1/C2**: CodeQL regex backtracking — fixed (unrolled-loop pattern)
-- **Merge with main (PR #70)**: 22 content conflicts + ~14 clerk dirs resolved
-  per [merge plan](../../plans/architecture-and-infrastructure/active/sentry-otel-merge-main.plan.md)
-- **ADR-141 → ADR-143**: Renumbered to avoid collision with main's MCP Apps ADR
-- **`request-context.ts` removed**: Adopted main's `extra.authInfo` DI pattern
-- **`handlers.ts` split**: Registration (handlers.ts) + per-request (mcp-handler.ts)
-
-**Deferred (track separately, not on this branch)**:
-
-- **C3/C4**: Rate limiting on `/mcp` routes (pre-existing, infrastructure)
-- **F18**: Span helper DRY opportunity (YAGNI)
-
-**Operational documentation added**:
-
-- Per-app `.env.example` files with Sentry variables (HTTP app + search
-  CLI each have their own DSN placeholder)
-- Vercel environment config doc updated with Sentry optional variables
+- Per-app `.env.example` files with Sentry variables
+- Vercel environment config doc updated
 - Deployment runbook at `docs/operations/sentry-deployment-runbook.md`
-  covering per-app DSN provisioning, source maps, alerting, rollback,
-  and a note on Vercel Log Drains as a future alternative
-
-**What comes after merge**:
-
-- Search CLI adoption (`apps/oak-search-cli`)
-- Deployment evidence bundle (release/source maps, alerting, MCP
-  Insights) — the runbook describes the steps; CI automation is not
-  yet wired
+- Multi-layer security architecture in `docs/governance/safety-and-security.md`
 
 ## Read First
 
@@ -120,13 +84,14 @@ Primary code surfaces:
 ## Restart Sequence
 
 1. Verify `pnpm check` still passes (confirms no drift since last session).
-2. Fix C1/C2 regex backtracking findings (see
-   [PR73 remediation plan](../../plans/architecture-and-infrastructure/active/sentry-otel-pr73-codeql-remediation.plan.md)).
-3. Push fix, confirm CodeQL annotations clear on PR #73.
-4. Await human PR review and merge.
-5. After merge, resume Search CLI adoption (see `search-cli-adoption`
-   todo in the execution plan).
-6. Track C3/C4, F10, and F18 as separate work items outside this branch.
+2. Choose the next work item:
+   - **Rate limiting**: promote `app-layer-rate-limiting.plan.md` from
+     `current/` to `active/` and execute. Clears CodeQL alerts and adds
+     defence-in-depth. Includes `trust proxy`, ADR, security review findings.
+   - **Search CLI adoption**: wire observability into `apps/oak-search-cli`.
+     See `search-cli-adoption` todo in the execution plan.
+   - **Deployment evidence**: release/source maps, alerting, MCP Insights.
+3. Track F18 (span helper DRY) as a separate work item.
 
 ## Authority Rule
 
