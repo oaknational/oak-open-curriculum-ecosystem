@@ -23,11 +23,13 @@ describe('isPublicResourceUri', () => {
     });
   });
 
-  describe('returns false for non-public resources', () => {
-    it('returns false for widget URI (removed in WS3 Phase 1)', () => {
-      expect(isPublicResourceUri(WIDGET_URI)).toBe(false);
+  describe('returns true for widget resource (static HTML, no user data)', () => {
+    it('returns true for widget URI', () => {
+      expect(isPublicResourceUri(WIDGET_URI)).toBe(true);
     });
+  });
 
+  describe('returns false for non-public resources', () => {
     it('returns false for unknown widget URIs', () => {
       expect(isPublicResourceUri('ui://other/widget.html')).toBe(false);
     });
@@ -45,13 +47,13 @@ describe('isPublicResourceUri', () => {
     });
 
     it('returns false for similar but not exact URIs', () => {
-      expect(isPublicResourceUri('ui://widget/oak-json-viewer.html/')).toBe(false);
-      expect(isPublicResourceUri('UI://widget/oak-json-viewer.html')).toBe(false);
+      expect(isPublicResourceUri('ui://widget/oak-curriculum-app.html/')).toBe(false);
+      expect(isPublicResourceUri('UI://widget/oak-curriculum-app.html')).toBe(false);
       expect(isPublicResourceUri('docs://oak/getting-started.MD')).toBe(false);
     });
 
     it('returns false for partial matches', () => {
-      expect(isPublicResourceUri('ui://widget/oak-json-viewer')).toBe(false);
+      expect(isPublicResourceUri('ui://widget/oak-curriculum-app')).toBe(false);
       expect(isPublicResourceUri('docs://oak/getting-started')).toBe(false);
     });
   });

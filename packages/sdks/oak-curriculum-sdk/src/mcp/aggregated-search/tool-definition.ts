@@ -16,7 +16,7 @@ import {
   AGGREGATED_PREREQUISITE_GUIDANCE,
   PRIMARY_ORIENTATION_TOOL_NAME,
 } from '../prerequisite-guidance.js';
-// WIDGET_URI import removed while widget is disabled — re-add when re-enabling _meta.ui
+import { WIDGET_URI } from '../widget-constants.js';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 import { SEARCH_SCOPES } from './types.js';
 
@@ -78,8 +78,7 @@ CROSS-TOOL WORKFLOWS:
     openWorldHint: false,
     title: 'Search Curriculum',
   },
-  // TEMPORARILY DISABLED: Widget UI disabled for merge to main.
-  // Re-enable: _meta: { ui: { resourceUri: WIDGET_URI } },
+  _meta: { ui: { resourceUri: WIDGET_URI } },
 } as const;
 
 /**

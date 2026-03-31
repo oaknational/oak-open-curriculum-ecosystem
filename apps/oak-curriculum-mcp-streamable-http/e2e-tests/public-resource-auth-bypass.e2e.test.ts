@@ -81,8 +81,8 @@ async function createAuthEnabledApp(): Promise<Express> {
 }
 
 describe('Public Resource Authentication Bypass (E2E)', () => {
-  describe('Widget Resource URI (Auth Required — removed from public list in WS3)', () => {
-    it('requires auth for widget URI — returns 401', async () => {
+  describe('Widget Resource URI (Public — static HTML, no user data)', () => {
+    it('allows resources/read for widget URI without auth token', async () => {
       const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
@@ -93,7 +93,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
           params: { uri: WIDGET_URI },
         });
 
-      expect(res.status).toBe(401);
+      expect(res.status).toBe(200);
     });
   });
 

@@ -25,13 +25,22 @@ Executable plans that are in progress now.
   WS3 companion phase plan for fresh React MCP App scaffolding and tooling.
 - [ws3-phase-3-canonical-contracts-and-runtime.plan.md](ws3-phase-3-canonical-contracts-and-runtime.plan.md) —
   WS3 companion phase plan for canonical metadata/registration/auth/runtime
-  contract alignment.
+  contract alignment. The closure batch is gate-green locally; the only open
+  parent-plan item is deferred non-UI host fallback evidence.
 - [ws3-phase-4-curriculum-model-view.plan.md](ws3-phase-4-curriculum-model-view.plan.md) —
   WS3 companion phase plan for the curriculum-model view delivery.
 - [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
   WS3 companion phase plan for user-search UI delivery and helper-tool flow.
 - [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
   WS3 companion phase plan for docs, gates, reviewers, and closure checks.
+
+Additional active closure work:
+
+- [ws3-phase-3-schema-fallout-closure.plan.md](ws3-phase-3-schema-fallout-closure.plan.md) —
+  Completed local closure record for the regenerated `canonicalUrl`/`oakUrl`
+  lesson-summary fallout. This remains separate from the queued
+  [current/canonical-url-enforcement.plan.md](../current/canonical-url-enforcement.plan.md)
+  and stays in `active/` until archival.
 
 Completed and archived:
 

@@ -9,16 +9,20 @@
  *
  * - **Documentation**: Static markdown generated at SDK compile time.
  *   Contains no user-specific information.
+ * - **Widget HTML**: Static self-contained React app generated at build time.
+ *   Contains no user-specific information. This is an explicit Oak
+ *   compatibility waiver per ADR-113 — tool calls for data access still
+ *   require authentication. Owner: Oak engineering. Removal condition:
+ *   when the MCP protocol supports authenticated resource delivery for
+ *   all host clients.
  *
  * Data-fetching tools (tools/call) still require authentication.
  *
- * Widget resource will be re-added to this list when WS3 Phase 2-3
- * re-introduces the fresh React MCP App.
- *
  * @see ADR-057: Selective Authentication for MCP Resources
+ * @see ADR-113: MCP Auth Target Semantics
  */
 
-import { DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { DOCUMENTATION_RESOURCES, WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 /**
  * Resource URIs that are publicly accessible without authentication.
@@ -27,6 +31,7 @@ import { DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-
  */
 export const PUBLIC_RESOURCE_URIS = [
   ...DOCUMENTATION_RESOURCES.map((resource) => resource.uri),
+  WIDGET_URI,
 ] as const;
 
 /**

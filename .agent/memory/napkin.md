@@ -1,3 +1,33 @@
+## Session 2026-03-31 — WS3 Phase 3 Truth Repair Closure
+
+### What Was Done
+
+- Closed the widget resource test failure by injecting widget HTML through
+  `ResourceRegistrationOptions.getWidgetHtml` and wiring production
+  `readBuiltWidgetHtml()` through the HTTP app composition path.
+- Closed the lesson-summary schema fallout in both `curriculum-sdk` and
+  `oak-search-cli`, including shared-builder validation and fixture alignment
+  for required `canonicalUrl` / `oakUrl`.
+- Addressed reviewer findings from `type-reviewer`, `test-reviewer`, and
+  `code-reviewer`; `security-reviewer` and `architecture-reviewer-fred`
+  returned clean; `mcp-reviewer` hung twice and produced no findings.
+- Re-ran the wider gates: `pnpm check` was already green, and `pnpm qg`
+  finished green after the closure batch.
+
+### Patterns to Remember
+
+- **Do not patch the turbo graph until the failure reproduces under `--force`**:
+  the earlier qg-only red did not reproduce under forced same-package
+  `test:e2e` + `test:ui`, nor under a fresh full `pnpm qg`. Re-run the narrow
+  turbo shape and the full gate before inventing orchestration fixes.
+- **Parse shared fixture builders with the generated schema**: when a generated
+  contract adds required fields, centralising fixture construction through a
+  schema-backed helper catches drift once instead of across many ad hoc object
+  literals.
+- **Keep closure truth separate from parent-plan leftovers**: the two-stage
+  closure batch can be complete and gate-green even when the broader parent plan
+  still carries a deliberately deferred item such as non-UI fallback evidence.
+
 ## Session 2026-03-31 — Deep Merge Review & Remediation
 
 ### What Was Done

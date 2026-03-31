@@ -75,6 +75,7 @@ function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): Searc
     keyStageSlug: 'ks2',
     keyStageTitle: 'Key Stage 2',
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
+    oakUrl: 'https://www.thenational.academy/teachers/lessons/lesson-slug',
     ...overrides,
   };
   // Validate against schema to ensure fixture is correct
@@ -125,7 +126,10 @@ describe('document-transform-helpers', () => {
     });
 
     it('throws when canonical URL is missing', () => {
-      const summary = buildLessonSummary({ canonicalUrl: undefined });
+      const summary: Parameters<typeof extractLessonDocumentFields>[0] = {
+        ...buildLessonSummary(),
+        canonicalUrl: undefined,
+      };
       expect(() => extractLessonDocumentFields(summary)).toThrow(/canonical url/i);
     });
   });

@@ -16,11 +16,13 @@ import { DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-
 import { registerAllResources, registerPrompts } from './register-resources.js';
 import { createFakeHttpObservability } from './test-helpers/fakes.js';
 
+const TEST_WIDGET_HTML = '<!doctype html><html><body>Oak Curriculum App</body></html>';
+
 /**
- * Total resource count: documentation resources + 3 supplementary resources
- * (curriculum model, prerequisite graph, thread progressions).
+ * Total resource count: documentation resources + 4 supplementary resources
+ * (curriculum model, prerequisite graph, thread progressions, widget).
  */
-const EXPECTED_RESOURCE_COUNT = DOCUMENTATION_RESOURCES.length + 3;
+const EXPECTED_RESOURCE_COUNT = DOCUMENTATION_RESOURCES.length + 4;
 
 /**
  * Creates a minimal recording server using bare `vi.fn()` spies.
@@ -41,7 +43,7 @@ describe('registerAllResources — observability characterisation', () => {
     const observability = createFakeHttpObservability();
     const server = createRecordingServer();
 
-    registerAllResources(server, { observability });
+    registerAllResources(server, { observability, getWidgetHtml: () => TEST_WIDGET_HTML });
 
     // Exact count: every resource must be registered.
     expect(server.registerResource).toHaveBeenCalledTimes(EXPECTED_RESOURCE_COUNT);
@@ -54,7 +56,10 @@ describe('registerAllResources — observability characterisation', () => {
 
     const server = createRecordingServer();
 
-    registerAllResources(server, { observability: scopedObservability });
+    registerAllResources(server, {
+      observability: scopedObservability,
+      getWidgetHtml: () => TEST_WIDGET_HTML,
+    });
 
     // wrapResourceHandler calls createMcpObservationOptions once per
     // resource. Every resource must be wrapped for observability.

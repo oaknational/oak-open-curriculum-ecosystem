@@ -164,7 +164,7 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
   });
 
   describe('public resource authentication bypass', () => {
-    it('requires clerkMiddleware for widget resources/read (removed from public list in WS3)', () => {
+    it('skips clerkMiddleware for widget resources/read (static HTML, public resource)', () => {
       const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
       const req = createMockRequest('/mcp', {
         method: 'resources/read',
@@ -173,7 +173,7 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
 
       conditionalMw(req, mockRes, mockNext);
 
-      expect(mockClerkMw).toHaveBeenCalled();
+      expect(mockClerkMw).not.toHaveBeenCalled();
     });
 
     it('skips clerkMiddleware for documentation resources/read', () => {

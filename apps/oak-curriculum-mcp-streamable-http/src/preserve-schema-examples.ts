@@ -1,6 +1,10 @@
 /**
  * Preserve schema examples in MCP tools/list responses.
  *
+ * **Bounded workaround** per the no-shims principle. This module exists solely
+ * because the MCP SDK's internal Zod → JSON Schema converter does not preserve
+ * `examples`. It will be removed when the removal condition is met.
+ *
  * ## Why This Exists
  *
  * Oak's sdk-codegen generates complete JSON Schema **with examples** from the
@@ -24,6 +28,15 @@
  * 3. The custom handler returns `tool.inputSchema` (pre-generated JSON Schema with examples)
  * 4. `tools/call` still uses Zod validation from `registerHandlers()`
  *
+ * ## registerAppTool Coexistence
+ *
+ * This override is called AFTER `registerHandlers()` in `application.ts`,
+ * so it replaces whatever `tools/list` handler the SDK installed. Since
+ * `registerAppTool` is NOT currently used (tools are registered via
+ * `server.registerTool` with `_meta` passthrough), there is no handler
+ * conflict. If `registerAppTool` is adopted in a future phase, ensure this
+ * override is called last to take precedence.
+ *
  * ## Root Cause
  *
  * The conversion pipeline is: **OpenAPI → Zod → JSON Schema**. The `examples`
@@ -31,13 +44,10 @@
  * representation for `examples`, so the OpenAPI → Zod step discarded them
  * and the Zod → JSON Schema step could not recover them.
  *
- * **Zod 4 changes this**: `.meta({ examples: [...] })` attaches arbitrary
- * metadata that `z.toJSONSchema()` preserves in the output. If sdk-codegen
- * attached examples via `.meta()` during generation, and the MCP SDK used
- * `z.toJSONSchema()` internally for `tools/list`, examples would flow through
- * natively. The two unknowns are: (a) whether the MCP SDK's internal Zod →
- * JSON Schema converter honours `.meta()`, and (b) whether our Zod version
- * supports `.meta()` (Zod 4+).
+ * **Zod 4 investigation result**: Zod 4.3.6 (installed) has `.meta()` which
+ * preserves arbitrary metadata through `z.toJSONSchema()`. However, the MCP
+ * SDK v1.28.0 uses its own internal converter that does NOT honour `.meta()`.
+ * Until the MCP SDK updates its converter, this workaround is required.
  *
  * ## Removal Condition
  *

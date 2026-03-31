@@ -6,19 +6,19 @@ isProject: false
 todos:
   - id: metadata-contract
     content: "Extend canonical metadata projection for UI visibility and app-only helper behaviour."
-    status: pending
+    status: completed
   - id: resource-identity-rename
     content: "Rename resource identity atomically across codegen/runtime/auth/tests/docs."
-    status: pending
+    status: completed
   - id: auth-policy-alignment
     content: "Align auth wording and runtime behaviour to ADR-113 policy."
-    status: pending
+    status: completed
   - id: b3-hybrid-retention
     content: "Adapt preserve-schema-examples.ts (B3 Hybrid) to coexist with registerAppTool — confirmed required because registerAppTool does not handle schema enrichment."
-    status: pending
+    status: completed
   - id: aggregated-security-schemes
     content: "Ensure new aggregated tools (user-search, user-search-query) have correct securitySchemes at top level, consistent with existing aggregated tool pattern."
-    status: pending
+    status: completed
   - id: fallback-policy
     content: "Make non-UI host fallback policy explicit and testable."
     status: pending
@@ -26,8 +26,8 @@ todos:
 
 # WS3 Phase 3: Canonical Contracts and Runtime
 
-**Status**: PENDING
-**Last Updated**: 2026-03-30
+**Status**: IN PROGRESS — Canonical/runtime closure is green and reviewed; only the deferred non-UI host fallback evidence remains open in this parent phase
+**Last Updated**: 2026-03-31
 
 ## Required Inputs
 
@@ -37,6 +37,22 @@ todos:
    rules
 3. `current/auth-safety-correction.plan.md` — C8 status (merge prerequisite
    for task 9)
+
+## Current Closure State (2026-03-31)
+
+- C8 auth closure is complete. Task 9 is no longer blocked by the auth plans.
+- The widget-resource integration failure is closed by injecting widget HTML
+  through `ResourceRegistrationOptions` rather than depending on
+  `dist/mcp-app.html` inside the test fake.
+- The separate lesson-summary schema fallout tracked in
+  `ws3-phase-3-schema-fallout-closure.plan.md` is complete.
+- `pnpm check` and `pnpm qg` are both green on the current tree.
+- Reviewer closure is complete for this batch: `type-reviewer`,
+  `test-reviewer`, and `code-reviewer` findings were addressed;
+  `security-reviewer` and `architecture-reviewer-fred` returned no findings;
+  `mcp-reviewer` hung twice and produced no findings.
+- The explicit non-UI host fallback test remains pending and is intentionally
+  deferred to later host-facing UI delivery work.
 
 ### Key File Paths
 

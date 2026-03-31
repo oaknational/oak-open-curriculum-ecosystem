@@ -1,7 +1,7 @@
 ---
 name: MCP Apps Standard Migration Plan
 overview: "Strategic planning anchor for the remaining Oak MCP Apps work. Defines the canonical target architecture, the live execution stack, and the remaining dependency order."
-lastValidatedDate: 2026-03-30
+lastValidatedDate: 2026-03-31
 todos:
   - id: canonical-research
     content: "Maintain the canonical MCP Apps research summary and keep it aligned with the live executable plans."
@@ -14,7 +14,7 @@ todos:
     status: pending
   - id: c8-auth-metadata-invariant-hardening
     content: "Implement auth metadata invariant hardening."
-    status: pending
+    status: completed
   - id: domain-d-feature-backlog
     content: "Define additive feature work only after the remaining canonical MCP Apps execution work lands."
     status: pending
@@ -73,13 +73,19 @@ Read the live workstream in this order:
 1. [roadmap.md](roadmap.md)
 2. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 3. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
-4. [current/README.md](current/README.md)
+4. [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
+5. [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
+6. [current/README.md](current/README.md)
 
 When touching runtime contract, metadata visibility, resource auth, or tool
 registration, also read:
 
-5. [current/auth-safety-correction.plan.md](current/auth-safety-correction.plan.md)
-6. [current/auth-boundary-type-safety.plan.md](current/auth-boundary-type-safety.plan.md)
+7. [current/auth-safety-correction.plan.md](current/auth-safety-correction.plan.md)
+8. [current/auth-boundary-type-safety.plan.md](current/auth-boundary-type-safety.plan.md)
+
+When closing the regenerated lesson-summary schema fallout, also read:
+
+- [active/ws3-phase-3-schema-fallout-closure.plan.md](active/ws3-phase-3-schema-fallout-closure.plan.md)
 
 Completed dependency work is archived at:
 
@@ -93,8 +99,10 @@ WS1: ADR + metadata contract                ✓ complete
 WS2: runtime migration                      ✓ complete
 Runtime boundary simplification             ✓ complete
 WS3: fresh React MCP App rebuild            ▶ active
+  Phase 3 runtime closure                   ▶ active
+  Phase 3 schema fallout closure            ✓ complete locally
 WS4: search UI delivery                     ▶ executed inside WS3
-C8: auth metadata invariant hardening       ⏳ pending
+C8: auth metadata invariant hardening       ✓ complete
 Output schemas follow-up                    ⏳ current
 Future additive feature backlog             ⏳ blocked on remaining canonical work
 ```
@@ -107,17 +115,18 @@ The remaining UI work is carried by:
 
 - [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 - [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
+- [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
+- [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
+- [active/ws3-phase-3-schema-fallout-closure.plan.md](active/ws3-phase-3-schema-fallout-closure.plan.md)
 
 Detailed WS3/WS4 execution scope, sequencing, and enforcement live in the
 active umbrella and child plans. This roadmap intentionally avoids duplicating
-that operational detail.
+that operational detail. The schema-fallout closure record is complete locally
+and remains in `active/` until archival.
 
 ### C8 auth metadata invariant hardening
 
-This is a blocking correctness item for WS3 contract hardening. It must not be
-treated as optional cleanup.
-
-The execution plans for this work are:
+Complete on 31 March 2026. These plans remain the closure evidence:
 
 - [current/auth-safety-correction.plan.md](current/auth-safety-correction.plan.md)
 - [current/auth-boundary-type-safety.plan.md](current/auth-boundary-type-safety.plan.md)
@@ -155,7 +164,7 @@ This roadmap can be treated as complete when:
 
 1. The active WS3 child plan is complete
 2. The umbrella migration plan can close WS3 and WS4 together
-3. C8 is complete or explicitly superseded by accepted architecture
+3. C8 is complete
 4. Active product/runtime code is clean under the canonical WS3 contamination
    check
 5. Quality gates pass

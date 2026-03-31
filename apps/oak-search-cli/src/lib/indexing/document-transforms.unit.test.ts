@@ -109,6 +109,7 @@ function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): Less
     supervisionLevel: 'low',
     downloadsAvailable: true,
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
+    oakUrl: 'https://www.thenational.academy/teachers/lessons/lesson-slug',
   };
   const summary: LessonSummaryFixture = { ...base, ...overrides };
   void lessonSummarySchema.parse(summary);

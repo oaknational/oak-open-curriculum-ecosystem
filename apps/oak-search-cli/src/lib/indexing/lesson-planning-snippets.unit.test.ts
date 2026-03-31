@@ -25,6 +25,7 @@ function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): Searc
     supervisionLevel: 'low',
     downloadsAvailable: true,
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
+    oakUrl: 'https://www.thenational.academy/teachers/lessons/lesson-slug',
     ...overrides,
   };
   // Parse through schema to get properly typed result

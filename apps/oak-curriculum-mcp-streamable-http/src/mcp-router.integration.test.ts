@@ -66,7 +66,7 @@ describe('createMcpRouter (Integration)', () => {
   });
 
   describe('public resource authentication bypass', () => {
-    it('requires auth for widget resources/read (removed from public list in WS3)', () => {
+    it('skips auth for widget resources/read (static HTML, public resource)', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({
         method: 'resources/read',
@@ -75,7 +75,7 @@ describe('createMcpRouter (Integration)', () => {
 
       router(req, mockRes, mockNext);
 
-      expect(mockAuthMw).toHaveBeenCalled();
+      expect(mockAuthMw).not.toHaveBeenCalled();
     });
 
     it('skips auth for getting-started documentation resources/read', () => {

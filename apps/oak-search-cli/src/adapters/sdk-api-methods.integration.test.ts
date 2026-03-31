@@ -12,6 +12,10 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import type { OakApiClient } from '@oaknational/curriculum-sdk';
+import {
+  lessonSummarySchema,
+  type SearchLessonSummary,
+} from '@oaknational/curriculum-sdk/public/search.js';
 import type { SequenceUnitsResponse } from '../types/oak';
 import {
   makeGetLessonTranscript,
@@ -56,9 +60,13 @@ function createSuccessClient(data: unknown): MinimalOakApiClient {
  * Create minimal valid LessonSummary data matching LessonSummaryResponseSchema.
  * Schema uses .strict() so only required fields should be included.
  */
-function createMockLessonSummary() {
-  return {
+function createMockLessonSummary(
+  overrides: Partial<SearchLessonSummary> = {},
+): SearchLessonSummary {
+  return lessonSummarySchema.parse({
     lessonTitle: 'Test Lesson',
+    canonicalUrl: 'https://teachers.thenational.academy/lessons/test-lesson',
+    oakUrl: 'https://www.thenational.academy/teachers/lessons/test-lesson',
     unitSlug: 'test-unit',
     unitTitle: 'Test Unit',
     subjectSlug: 'maths',
@@ -72,7 +80,8 @@ function createMockLessonSummary() {
     contentGuidance: [],
     supervisionLevel: null,
     downloadsAvailable: true,
-  };
+    ...overrides,
+  });
 }
 
 /**

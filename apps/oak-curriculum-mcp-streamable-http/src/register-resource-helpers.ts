@@ -24,6 +24,8 @@ export interface ResourceRegistrar {
 
 export interface ResourceRegistrationOptions {
   readonly observability: HttpObservability;
+  /** Returns the HTML payload served by the MCP App widget resource. */
+  readonly getWidgetHtml: () => string;
 }
 
 /**

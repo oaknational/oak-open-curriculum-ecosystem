@@ -29,6 +29,7 @@ import {
   validateDownloadAssetArgs,
   runDownloadAssetTool,
 } from '../aggregated-asset-download/index.js';
+import { handleUserSearchExecution } from '../aggregated-user-search/index.js';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
@@ -174,6 +175,8 @@ const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler
   'browse-curriculum': handleBrowseTool,
   'explore-topic': handleExploreTool,
   'download-asset': handleDownloadAssetTool,
+  'user-search': handleUserSearchExecution,
+  'user-search-query': handleUserSearchExecution,
 };
 
 function executeAggregatedTool(

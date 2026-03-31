@@ -24,6 +24,14 @@ import {
   DOWNLOAD_ASSET_TOOL_DEF,
   DOWNLOAD_ASSET_INPUT_SCHEMA,
 } from '../aggregated-asset-download/index.js';
+import {
+  USER_SEARCH_TOOL_DEF,
+  USER_SEARCH_INPUT_SCHEMA,
+  USER_SEARCH_QUERY_TOOL_DEF,
+  USER_SEARCH_QUERY_INPUT_SCHEMA,
+} from '../aggregated-user-search/index.js';
+import type { SecurityScheme } from '@oaknational/sdk-codegen/mcp-tools';
+import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 
 /**
  * Map of aggregated tool definitions with full MCP metadata.
@@ -57,4 +65,36 @@ export const AGGREGATED_TOOL_DEFS = {
   'browse-curriculum': { ...BROWSE_TOOL_DEF, inputSchema: BROWSE_INPUT_SCHEMA },
   'explore-topic': { ...EXPLORE_TOOL_DEF, inputSchema: EXPLORE_INPUT_SCHEMA },
   'download-asset': { ...DOWNLOAD_ASSET_TOOL_DEF, inputSchema: DOWNLOAD_ASSET_INPUT_SCHEMA },
+  'user-search': { ...USER_SEARCH_TOOL_DEF, inputSchema: USER_SEARCH_INPUT_SCHEMA },
+  'user-search-query': {
+    ...USER_SEARCH_QUERY_TOOL_DEF,
+    inputSchema: USER_SEARCH_QUERY_INPUT_SCHEMA,
+  },
 } as const;
+
+/**
+ * Structural shape that all aggregated tool definitions must conform to.
+ *
+ * This compile-time guard catches drift between hand-authored and generated
+ * tool shapes. Every entry in AGGREGATED_TOOL_DEFS must have description,
+ * securitySchemes, annotations, and inputSchema at minimum.
+ */
+interface AggregatedToolDefShape {
+  readonly description: string;
+  readonly securitySchemes: readonly SecurityScheme[];
+  readonly annotations: {
+    readonly readOnlyHint: boolean;
+    readonly destructiveHint: boolean;
+    readonly idempotentHint: boolean;
+    readonly openWorldHint: boolean;
+    readonly title: string;
+  };
+  readonly inputSchema: GenericToolInputJsonSchema;
+}
+
+/**
+ * Compile-time structural constraint: every aggregated tool entry conforms
+ * to the expected shape. This catches missing fields at build time.
+ */
+const structuralCheck: Record<string, AggregatedToolDefShape> = AGGREGATED_TOOL_DEFS;
+void structuralCheck;

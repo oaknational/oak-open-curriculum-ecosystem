@@ -527,29 +527,31 @@ const SubjectAssetsResponseSchema = z.array(
 );
 const LessonAssetsResponseSchema = z
   .object({
-    attribution: z.array(z.string()),
-    assets: z.array(
-      z
-        .object({
-          type: z.enum([
-            "slideDeck",
-            "exitQuiz",
-            "exitQuizAnswers",
-            "starterQuiz",
-            "starterQuizAnswers",
-            "supplementaryResource",
-            "video",
-            "worksheet",
-            "worksheetAnswers",
-          ]),
-          label: z.string(),
-          url: z.string(),
-        })
-        .strict()
-    ),
-    canonicalUrl: z.string(),
+    oakUrl: z.url(),
+    attribution: z.array(z.string()).optional(),
+    assets: z
+      .array(
+        z
+          .object({
+            type: z.enum([
+              "slideDeck",
+              "exitQuiz",
+              "exitQuizAnswers",
+              "starterQuiz",
+              "starterQuizAnswers",
+              "supplementaryResource",
+              "video",
+              "worksheet",
+              "worksheetAnswers",
+            ]),
+            label: z.string(),
+            url: z.string(),
+          })
+          .strict()
+      )
+      .optional(),
+    canonicalUrl: z.string().optional(),
   })
-  .partial()
   .strict();
 const LessonAssetResponseSchema = z.unknown();
 const AllSubjectsResponseSchema = z.array(
@@ -1437,6 +1439,8 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
 const LessonSummaryResponseSchema = z
   .object({
     lessonTitle: z.string(),
+    canonicalUrl: z.string(),
+    oakUrl: z.url(),
     unitSlug: z.string(),
     unitTitle: z.string(),
     subjectSlug: z.string(),
@@ -1469,7 +1473,6 @@ const LessonSummaryResponseSchema = z
     ]),
     supervisionLevel: z.union([z.string(), z.null()]),
     downloadsAvailable: z.boolean(),
-    canonicalUrl: z.string().optional(),
   })
   .strict();
 const LessonSearchResponseSchema = z.array(
@@ -1477,6 +1480,7 @@ const LessonSearchResponseSchema = z.array(
     .object({
       lessonSlug: z.string(),
       lessonTitle: z.string(),
+      oakUrl: z.url(),
       similarity: z.number(),
       units: z.array(
         z

@@ -69,13 +69,17 @@ export interface UnitLessonInfo {
   readonly lessonTitle: string;
 }
 
+type LessonDocumentSummaryInput = Omit<SearchLessonSummary, 'canonicalUrl'> & {
+  canonicalUrl?: string;
+};
+
 /**
  * Extracts lesson planning fields from lesson summary.
  *
  * @param summary - Lesson summary (typed SDK data)
  * @returns Extracted lesson planning fields
  */
-export function extractLessonPlanningFields(summary: SearchLessonSummary): {
+export function extractLessonPlanningFields(summary: LessonDocumentSummaryInput): {
   lessonKeywords?: string[];
   keyLearningPoints?: string[];
   misconceptions?: string[];
@@ -118,7 +122,7 @@ export function extractLessonPlanningFields(summary: SearchLessonSummary): {
  * @param summary - Lesson summary (typed SDK data)
  * @returns Extracted fields for lesson document
  */
-export function extractLessonDocumentFields(summary: SearchLessonSummary): {
+export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput): {
   unitSlug: string;
   unitTitle: string;
   canonicalUrl: string;
