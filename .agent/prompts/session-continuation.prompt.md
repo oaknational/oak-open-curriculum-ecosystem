@@ -57,12 +57,13 @@ git log --oneline --decorate -5
 **Child plan**:
 `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 
-**Immediate priority**: execute the WS3 child plan from Phase 0.
+**Immediate priority**: execute the WS3 child plan from the next pending phase.
 
 **Phase execution detail**: each WS3 phase has a companion child plan linked in
-the WS3 child plan's `Phase Companion Plans` section. Start with:
+the WS3 child plan's `Phase Companion Plans` section. Phase 0 is complete.
+Continue with the next pending phase:
 
-- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-0-baseline-and-red-specs.plan.md`
+- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-1-delete-legacy-widget-framework.plan.md`
 
 **Closure gate note**: WS3/WS4 implementation can progress, but migration closure
 is blocked until C8 auth hardening plans in `current/` are complete (or
