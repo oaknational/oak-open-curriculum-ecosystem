@@ -55,7 +55,7 @@ function getMethodFromRequest(req: { body?: unknown; query?: unknown }): string 
 /**
  * Determines if a request should skip auth entirely.
  *
- * Only public resource reads (widget HTML, documentation) skip auth.
+ * Only public resource reads (documentation URIs) skip auth.
  * All MCP methods including discovery require auth per MCP 2025-11-25.
  *
  * @param method - MCP method from request
@@ -77,7 +77,7 @@ function shouldSkipAuth(method: string | undefined, body: unknown): boolean {
  *
  * Per MCP 2025-11-25: "Authorization MUST be included in every HTTP request
  * from client to server." All MCP methods go through auth. The only exception
- * is public resource reads (widget HTML, documentation) which contain no
+ * is public resource reads (documentation URIs) which contain no
  * user-specific data.
  *
  * **Key Behaviour**: This middleware runs BEFORE the MCP SDK, allowing

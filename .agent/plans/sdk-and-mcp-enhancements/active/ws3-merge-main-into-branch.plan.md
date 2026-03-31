@@ -580,11 +580,30 @@ Create a dedicated plan or work item for this hardening. It blocks deployment of
 | 8d. Session prompt update | **Done** | Updated for next session |
 | 8e. Consolidation workflow | **Deferred** | Not yet run |
 
+### Deep merge review (2026-03-31, second session)
+
+**6 specialist reviewers invoked**: code-reviewer, architecture-reviewer-wilma, test-reviewer, mcp-reviewer, security-reviewer, architecture-reviewer-fred.
+
+**Findings addressed (all blocking per policy):**
+
+| # | Finding | Fix | Status |
+|---|---------|-----|--------|
+| C1 | `eslint-disable` + `as unknown as McpServer` in characterisation tests | Narrowed `registerHandlers` param to `Pick<McpServer, 'registerTool' \| 'registerResource' \| 'registerPrompt'>`, used bare `vi.fn()` fakes, renamed `*.characterisation.test.ts` → `*.integration.test.ts` (3 files were dead — never ran) | **Done** |
+| C2 | Stale "widget HTML" in TSDoc (conditional-clerk-middleware.ts, mcp-router.ts) | Updated to "documentation URIs" | **Done** |
+| C3 | `code_verifier` and `code` missing from OAuth redaction keys | Added to `FULLY_REDACTED_KEYS` in `packages/core/observability/src/redaction.ts` with unit test | **Done** |
+| I1 | `register-json-resources.ts` duplicate (zero call sites) | Deleted | **Done** |
+| I2 | Weak assertions in characterisation test (`toBeGreaterThanOrEqual(2)`, `toHaveBeenCalled()`) | Replaced with `toHaveBeenCalledTimes(EXPECTED_RESOURCE_COUNT)` | **Done** |
+| I3 | Observability optional at registration layer (dead code path) | Made `ResourceRegistrationOptions.observability` required, renamed `maybeWrapResourceHandler` → `wrapResourceHandler`, updated integration test fake to handle async | **Done** |
+
+**Additional discovery:** 3 characterisation test files (`*.characterisation.test.ts`) had naming that excluded them from the vitest include pattern — they never ran. Renamed to `*.integration.test.ts`.
+
+**`pnpm check` result:** 69/75 (same as before — only 3 intentional RED specs fail). 567 unit/integration tests pass (up from 559 — 8 new from characterisation test activation).
+
+**Verdict:** Branch is clean. Ready for security hardening or WS3 Phase 2.
+
 ### Deferred items for next session
 
-1. **Security hardening** (BLOCKING pre-deployment): OAuth form-encoded redaction and auth success handler PII — pre-existing in main, must fix before deployment
+1. **Security hardening** (BLOCKING pre-deployment): OAuth form-encoded redaction (`code_verifier`/`code` now covered) and auth success handler PII review — pre-existing in main, must fix before deployment
 2. **Complex merge skill** (8b): Create `.agent/skills/complex-merge/SKILL.md`
 3. **Pre-merge analysis guide** (8c): Update `docs/engineering/pre-merge-analysis.md`
 4. **Consolidation** (8e): Run full consolidation workflow
-5. **`register-json-resources.ts`**: Consolidate confirmed duplicate
-6. **Deep merge review**: Next session should do a thorough review of the merge outcome before resuming WS3 Phase 2

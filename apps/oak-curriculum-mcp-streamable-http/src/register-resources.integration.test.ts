@@ -25,7 +25,9 @@ import {
   registerDocumentationResources,
   registerCurriculumModelResource,
   registerAllResources,
+  type ResourceRegistrationOptions,
 } from './register-resources.js';
+import { createFakeHttpObservability } from './test-helpers/fakes.js';
 
 /**
  * Creates a fake server and map to capture registered resources for assertions.
@@ -33,6 +35,9 @@ import {
  * The fake delegates to a backing `McpServer` so the overloaded SDK signature
  * stays intact while tests capture the registration inputs and read callback
  * output as plain data.
+ *
+ * Supports both sync and async resource handlers (observability wrapping
+ * makes handlers async). Use `flush()` to resolve all pending async handlers.
  */
 function createMockServer(): {
   server: Pick<McpServer, 'registerResource'>;
@@ -46,6 +51,7 @@ function createMockServer(): {
     }
   >;
   registrationCalls: { name: string; uri: string; metadata: ResourceMetadata }[];
+  flush: () => Promise<void>;
 } {
   const registeredResources = new Map<
     string,
@@ -57,6 +63,7 @@ function createMockServer(): {
     }
   >();
   const registrationCalls: { name: string; uri: string; metadata: ResourceMetadata }[] = [];
+  const pending: Promise<void>[] = [];
   const backingServer = new McpServer({ name: 'test-server', version: '1.0.0' });
   const originalRegisterResource = backingServer.registerResource.bind(backingServer);
   const handlerExtra: Parameters<ReadResourceCallback>[1] = {
@@ -69,6 +76,21 @@ function createMockServer(): {
       throw new Error('sendRequest is not supported in this test fake');
     },
   };
+
+  function processResult(
+    name: string,
+    uri: string,
+    metadata: ResourceMetadata,
+    result: unknown,
+  ): void {
+    if (!hasResourceContents(result)) {
+      throw new Error('Expected resource callback to return a contents array');
+    }
+
+    registrationCalls.push({ name, uri, metadata });
+    registeredResources.set(uri, { name, uri, metadata, contents: result.contents });
+  }
+
   function registerResource(
     name: string,
     uriOrTemplate: string,
@@ -97,23 +119,15 @@ function createMockServer(): {
         ]
   ): RegisteredResource | RegisteredResourceTemplate {
     if (isStaticResourceRegistration(args)) {
-      const result = args[3](new URL(args[1]), handlerExtra);
+      const rawResult = args[3](new URL(args[1]), handlerExtra);
 
-      if (result instanceof Promise) {
-        throw new Error('Async resource handlers are not supported in this test fake');
+      if (rawResult instanceof Promise) {
+        pending.push(
+          rawResult.then((resolved) => processResult(args[0], args[1], args[2], resolved)),
+        );
+      } else {
+        processResult(args[0], args[1], args[2], rawResult);
       }
-
-      if (!hasResourceContents(result)) {
-        throw new Error('Expected resource callback to return a contents array');
-      }
-
-      registrationCalls.push({ name: args[0], uri: args[1], metadata: args[2] });
-      registeredResources.set(args[1], {
-        name: args[0],
-        uri: args[1],
-        metadata: args[2],
-        contents: result.contents,
-      });
 
       return originalRegisterResource(args[0], args[1], args[2], args[3]);
     }
@@ -123,7 +137,14 @@ function createMockServer(): {
 
   const server = { registerResource };
 
-  return { server, registeredResources, registrationCalls };
+  return {
+    server,
+    registeredResources,
+    registrationCalls,
+    async flush() {
+      await Promise.all(pending);
+    },
+  };
 }
 
 function hasResourceContents(value: unknown): value is {
@@ -205,6 +226,11 @@ function expectJsonContent(content: McpUiReadResourceResult['contents'][number] 
   }).not.toThrow();
 }
 
+/** Shared observability options for all registration tests. */
+function createTestOptions(): ResourceRegistrationOptions {
+  return { observability: createFakeHttpObservability() };
+}
+
 describe('registerDocumentationResources', () => {
   let server: Pick<McpServer, 'registerResource'>;
   let registeredResources: Map<
@@ -217,16 +243,21 @@ describe('registerDocumentationResources', () => {
     }
   >;
   let registrationCalls: { name: string; uri: string; metadata: ResourceMetadata }[];
+  let flush: () => Promise<void>;
+  let observability: ResourceRegistrationOptions['observability'];
 
   beforeEach(() => {
     const mock = createMockServer();
     server = mock.server;
     registeredResources = mock.registeredResources;
     registrationCalls = mock.registrationCalls;
+    flush = mock.flush;
+    observability = createFakeHttpObservability();
   });
 
-  it('all documentation resources have text/markdown MIME type', () => {
-    registerDocumentationResources(server);
+  it('all documentation resources have text/markdown MIME type', async () => {
+    registerDocumentationResources(server, observability);
+    await flush();
     expectAllDocumentationResourcesRegistered(registeredResources, registrationCalls);
 
     for (const [, resource] of registeredResources) {
@@ -234,8 +265,9 @@ describe('registerDocumentationResources', () => {
     }
   });
 
-  it('all documentation resources forward title in metadata', () => {
-    registerDocumentationResources(server);
+  it('all documentation resources forward title in metadata', async () => {
+    registerDocumentationResources(server, observability);
+    await flush();
     expectAllDocumentationResourcesRegistered(registeredResources, registrationCalls);
 
     for (const [, resource] of registeredResources) {
@@ -243,8 +275,9 @@ describe('registerDocumentationResources', () => {
     }
   });
 
-  it('forwards the expected title for each documentation resource URI', () => {
-    registerDocumentationResources(server);
+  it('forwards the expected title for each documentation resource URI', async () => {
+    registerDocumentationResources(server, observability);
+    await flush();
     expectAllDocumentationResourcesRegistered(registeredResources, registrationCalls);
 
     for (const documentationResource of DOCUMENTATION_RESOURCES) {
@@ -254,8 +287,9 @@ describe('registerDocumentationResources', () => {
     }
   });
 
-  it('provides generated content for each documentation resource URI', () => {
-    registerDocumentationResources(server);
+  it('provides generated content for each documentation resource URI', async () => {
+    registerDocumentationResources(server, observability);
+    await flush();
     expectAllDocumentationResourcesRegistered(registeredResources, registrationCalls);
 
     for (const documentationResource of DOCUMENTATION_RESOURCES) {
@@ -281,15 +315,20 @@ describe('registerCurriculumModelResource forwards annotations', () => {
       contents: McpUiReadResourceResult['contents'];
     }
   >;
+  let flush: () => Promise<void>;
+  let observability: ResourceRegistrationOptions['observability'];
 
   beforeEach(() => {
     const mock = createMockServer();
     server = mock.server;
     registeredResources = mock.registeredResources;
+    flush = mock.flush;
+    observability = createFakeHttpObservability();
   });
 
-  it('forwards annotations to server.registerResource', () => {
-    registerCurriculumModelResource(server);
+  it('forwards annotations to server.registerResource', async () => {
+    registerCurriculumModelResource(server, observability);
+    await flush();
 
     const resource = registeredResources.get('curriculum://model');
     expect(resource).toBeDefined();
@@ -298,8 +337,9 @@ describe('registerCurriculumModelResource forwards annotations', () => {
     expect(resource?.metadata.annotations?.audience).toContain('assistant');
   });
 
-  it('forwards title to server.registerResource', () => {
-    registerCurriculumModelResource(server);
+  it('forwards title to server.registerResource', async () => {
+    registerCurriculumModelResource(server, observability);
+    await flush();
 
     const resource = registeredResources.get('curriculum://model');
     expect(resource).toBeDefined();
@@ -308,8 +348,9 @@ describe('registerCurriculumModelResource forwards annotations', () => {
     expect(title?.trim().length).toBeGreaterThan(0);
   });
 
-  it('registers parseable JSON content', () => {
-    registerCurriculumModelResource(server);
+  it('registers parseable JSON content', async () => {
+    registerCurriculumModelResource(server, observability);
+    await flush();
 
     const resource = registeredResources.get('curriculum://model');
     expect(resource).toBeDefined();
@@ -328,30 +369,37 @@ describe('registerAllResources registers model and documentation resources', () 
       contents: McpUiReadResourceResult['contents'];
     }
   >;
+  let flush: () => Promise<void>;
+  let options: ResourceRegistrationOptions;
 
   beforeEach(() => {
     const mock = createMockServer();
     server = mock.server;
     registeredResources = mock.registeredResources;
+    flush = mock.flush;
+    options = createTestOptions();
   });
 
-  it('does not register curriculum://ontology (replaced by curriculum://model)', () => {
-    registerAllResources(server);
+  it('does not register curriculum://ontology (replaced by curriculum://model)', async () => {
+    registerAllResources(server, options);
+    await flush();
 
     const uris = Array.from(registeredResources.keys());
     expect(uris.length).toBeGreaterThan(0);
     expect(uris).not.toContain('curriculum://ontology');
   });
 
-  it('registers curriculum://model', () => {
-    registerAllResources(server);
+  it('registers curriculum://model', async () => {
+    registerAllResources(server, options);
+    await flush();
 
     const uris = Array.from(registeredResources.keys());
     expect(uris).toContain('curriculum://model');
   });
 
-  it('registers all documentation resource URIs', () => {
-    registerAllResources(server);
+  it('registers all documentation resource URIs', async () => {
+    registerAllResources(server, options);
+    await flush();
 
     expect(DOCUMENTATION_RESOURCES.length).toBeGreaterThan(0);
     const uris = Array.from(registeredResources.keys());
@@ -372,29 +420,36 @@ describe('registerAllResources registers supplementary data resources', () => {
       contents: McpUiReadResourceResult['contents'];
     }
   >;
+  let flush: () => Promise<void>;
+  let options: ResourceRegistrationOptions;
 
   beforeEach(() => {
     const mock = createMockServer();
     server = mock.server;
     registeredResources = mock.registeredResources;
+    flush = mock.flush;
+    options = createTestOptions();
   });
 
-  it('registers curriculum://prerequisite-graph', () => {
-    registerAllResources(server);
+  it('registers curriculum://prerequisite-graph', async () => {
+    registerAllResources(server, options);
+    await flush();
 
     const uris = Array.from(registeredResources.keys());
     expect(uris).toContain('curriculum://prerequisite-graph');
   });
 
-  it('registers curriculum://thread-progressions', () => {
-    registerAllResources(server);
+  it('registers curriculum://thread-progressions', async () => {
+    registerAllResources(server, options);
+    await flush();
 
     const uris = Array.from(registeredResources.keys());
     expect(uris).toContain('curriculum://thread-progressions');
   });
 
-  it('prerequisite graph has priority 0.5 annotations', () => {
-    registerAllResources(server);
+  it('prerequisite graph has priority 0.5 annotations', async () => {
+    registerAllResources(server, options);
+    await flush();
 
     const resource = registeredResources.get('curriculum://prerequisite-graph');
     expect(resource).toBeDefined();
@@ -403,8 +458,9 @@ describe('registerAllResources registers supplementary data resources', () => {
     expectJsonContent(resource?.contents[0]);
   });
 
-  it('thread progressions has priority 0.5 annotations', () => {
-    registerAllResources(server);
+  it('thread progressions has priority 0.5 annotations', async () => {
+    registerAllResources(server, options);
+    await flush();
 
     const resource = registeredResources.get('curriculum://thread-progressions');
     expect(resource).toBeDefined();

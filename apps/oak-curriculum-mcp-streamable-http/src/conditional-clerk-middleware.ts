@@ -5,12 +5,12 @@
  *
  * The standard `clerkMiddleware()` runs on every request to set up auth context.
  * Non-MCP routes (health checks, OAuth metadata) and public resource reads
- * (widget HTML, documentation) do not need Clerk auth context.
+ * (documentation URIs) do not need Clerk auth context.
  *
  * ## What Skips Clerk
  *
  * - **Path-based**: `/.well-known/*`, `/healthz` (RFC 9728, health checks)
- * - **Public resources**: `resources/read` for widget HTML and documentation URIs
+ * - **Public resources**: `resources/read` for documentation URIs
  *
  * ## What Does NOT Skip Clerk
  *

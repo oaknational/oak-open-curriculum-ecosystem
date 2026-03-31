@@ -67,6 +67,20 @@ describe('redactTelemetryValue', () => {
       'Bearer [REDACTED]',
     ]);
   });
+
+  it('redacts OAuth code and code_verifier by key name', () => {
+    const value = redactTelemetryObject({
+      code: 'authorization-code-value',
+      code_verifier: 'pkce-verifier-secret',
+      grant_type: 'authorization_code',
+    });
+
+    expect(value).toStrictEqual({
+      code: REDACTED_VALUE,
+      code_verifier: REDACTED_VALUE,
+      grant_type: 'authorization_code',
+    });
+  });
 });
 
 describe('redactHeaderValue', () => {

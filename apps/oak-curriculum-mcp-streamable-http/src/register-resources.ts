@@ -22,7 +22,7 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import {
-  maybeWrapResourceHandler,
+  wrapResourceHandler,
   type ResourceRegistrar,
   type ResourceRegistrationOptions,
 } from './register-resource-helpers.js';
@@ -37,11 +37,11 @@ import {
  * - Common workflow guides
  *
  * @param server - MCP server instance
- * @param observability - Optional observability for resource handler tracing
+ * @param observability - Observability for resource handler tracing
  */
 export function registerDocumentationResources(
   server: ResourceRegistrar,
-  observability?: ResourceRegistrationOptions['observability'],
+  observability: ResourceRegistrationOptions['observability'],
 ): void {
   for (const resource of DOCUMENTATION_RESOURCES) {
     const { name, uri, ...metadata } = resource;
@@ -49,7 +49,7 @@ export function registerDocumentationResources(
       name,
       uri,
       metadata,
-      maybeWrapResourceHandler(
+      wrapResourceHandler(
         name,
         () => {
           const content = getDocumentationContent(uri);
@@ -72,14 +72,14 @@ export function registerDocumentationResources(
 /** Registers the curriculum model as an MCP resource, complementing `get-curriculum-model`. */
 export function registerCurriculumModelResource(
   server: ResourceRegistrar,
-  observability?: ResourceRegistrationOptions['observability'],
+  observability: ResourceRegistrationOptions['observability'],
 ): void {
   const { name, uri, ...metadata } = CURRICULUM_MODEL_RESOURCE;
   server.registerResource(
     name,
     uri,
     metadata,
-    maybeWrapResourceHandler(
+    wrapResourceHandler(
       name,
       () => ({
         contents: [
@@ -98,14 +98,14 @@ export function registerCurriculumModelResource(
 /** Registers the prerequisite graph as an MCP resource, complementing `get-prerequisite-graph`. */
 export function registerPrerequisiteGraphResource(
   server: ResourceRegistrar,
-  observability?: ResourceRegistrationOptions['observability'],
+  observability: ResourceRegistrationOptions['observability'],
 ): void {
   const { name, uri, ...metadata } = PREREQUISITE_GRAPH_RESOURCE;
   server.registerResource(
     name,
     uri,
     metadata,
-    maybeWrapResourceHandler(
+    wrapResourceHandler(
       name,
       () => ({
         contents: [
@@ -124,14 +124,14 @@ export function registerPrerequisiteGraphResource(
 /** Registers thread progressions as an MCP resource, complementing `get-thread-progressions`. */
 export function registerThreadProgressionsResource(
   server: ResourceRegistrar,
-  observability?: ResourceRegistrationOptions['observability'],
+  observability: ResourceRegistrationOptions['observability'],
 ): void {
   const { name, uri, ...metadata } = THREAD_PROGRESSIONS_RESOURCE;
   server.registerResource(
     name,
     uri,
     metadata,
-    maybeWrapResourceHandler(
+    wrapResourceHandler(
       name,
       () => ({
         contents: [
@@ -157,16 +157,16 @@ export function registerThreadProgressionsResource(
  * when the fresh React MCP App is scaffolded.
  *
  * @param server - MCP server instance
- * @param options - Optional resource registration options including observability
+ * @param options - Resource registration options including observability
  */
 export function registerAllResources(
   server: ResourceRegistrar,
-  options?: ResourceRegistrationOptions,
+  options: ResourceRegistrationOptions,
 ): void {
-  registerDocumentationResources(server, options?.observability);
-  registerCurriculumModelResource(server, options?.observability);
-  registerPrerequisiteGraphResource(server, options?.observability);
-  registerThreadProgressionsResource(server, options?.observability);
+  registerDocumentationResources(server, options.observability);
+  registerCurriculumModelResource(server, options.observability);
+  registerPrerequisiteGraphResource(server, options.observability);
+  registerThreadProgressionsResource(server, options.observability);
 }
 
 // Re-export prompts registration for use in handlers

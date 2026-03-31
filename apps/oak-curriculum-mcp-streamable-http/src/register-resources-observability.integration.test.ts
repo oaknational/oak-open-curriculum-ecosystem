@@ -12,45 +12,39 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { registerAllResources, registerPrompts } from './register-resources.js';
 import { createFakeHttpObservability } from './test-helpers/fakes.js';
 
 /**
- * Minimal recording fake for `ResourceRegistrar` / `McpServer`.
- * Records all `registerResource` and `registerPrompt` calls.
+ * Total resource count: documentation resources + 3 supplementary resources
+ * (curriculum model, prerequisite graph, thread progressions).
  */
-function createRecordingServer(): {
-  readonly server: McpServer;
-  readonly resourceCalls: readonly { readonly name: string }[];
-  readonly promptCalls: readonly { readonly name: string }[];
-} {
-  const resourceCalls: { readonly name: string }[] = [];
-  const promptCalls: { readonly name: string }[] = [];
+const EXPECTED_RESOURCE_COUNT = DOCUMENTATION_RESOURCES.length + 3;
 
-  const server = {
-    registerResource: vi.fn((name: string) => {
-      resourceCalls.push({ name });
-    }),
-    registerPrompt: vi.fn((name: string) => {
-      promptCalls.push({ name });
-    }),
-    registerTool: vi.fn(),
+/**
+ * Creates a minimal recording server using bare `vi.fn()` spies.
+ *
+ * Each spy satisfies the structural interface expected by `registerAllResources`
+ * (`ResourceRegistrar`) and `registerPrompts` (`PromptRegistrar`) without
+ * requiring the full `McpServer` type or type assertions.
+ */
+function createRecordingServer() {
+  return {
+    registerResource: vi.fn(),
+    registerPrompt: vi.fn(),
   };
-
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- McpServer has many members; minimal recording fake for characterisation tests
-  return { server: server as unknown as McpServer, resourceCalls, promptCalls };
 }
 
 describe('registerAllResources — observability characterisation', () => {
   it('registers resources when observability is provided', () => {
     const observability = createFakeHttpObservability();
-    const { server, resourceCalls } = createRecordingServer();
+    const server = createRecordingServer();
 
     registerAllResources(server, { observability });
 
-    // At minimum, the documentation resources should be registered.
-    expect(resourceCalls.length).toBeGreaterThanOrEqual(2);
+    // Exact count: every resource must be registered.
+    expect(server.registerResource).toHaveBeenCalledTimes(EXPECTED_RESOURCE_COUNT);
   });
 
   it('calls createMcpObservationOptions via the observability parameter', () => {
@@ -58,24 +52,24 @@ describe('registerAllResources — observability characterisation', () => {
     const createMcpSpy = vi.fn(observability.createMcpObservationOptions.bind(observability));
     const scopedObservability = { ...observability, createMcpObservationOptions: createMcpSpy };
 
-    const { server } = createRecordingServer();
+    const server = createRecordingServer();
 
     registerAllResources(server, { observability: scopedObservability });
 
-    // The resource helpers use maybeWrapResourceHandler which calls
-    // createMcpObservationOptions when observability is present.
-    expect(createMcpSpy).toHaveBeenCalled();
+    // wrapResourceHandler calls createMcpObservationOptions once per
+    // resource. Every resource must be wrapped for observability.
+    expect(createMcpSpy).toHaveBeenCalledTimes(EXPECTED_RESOURCE_COUNT);
   });
 });
 
 describe('registerPrompts — observability characterisation', () => {
   it('registers prompts when observability is provided', () => {
     const observability = createFakeHttpObservability();
-    const { server, promptCalls } = createRecordingServer();
+    const server = createRecordingServer();
 
     registerPrompts(server, observability);
 
-    expect(promptCalls.length).toBeGreaterThanOrEqual(1);
+    expect(server.registerPrompt).toHaveBeenCalled();
   });
 
   it('calls createMcpObservationOptions for prompt wrapping', () => {
@@ -83,7 +77,7 @@ describe('registerPrompts — observability characterisation', () => {
     const createMcpSpy = vi.fn(observability.createMcpObservationOptions.bind(observability));
     const scopedObservability = { ...observability, createMcpObservationOptions: createMcpSpy };
 
-    const { server } = createRecordingServer();
+    const server = createRecordingServer();
 
     registerPrompts(server, scopedObservability);
 

@@ -90,16 +90,16 @@ interface PromptRegistrar {
  * - Message generation delegated to the SDK's `getPromptMessages()`
  *
  * @param server - MCP server instance
- * @param observability - Optional observability for prompt handler tracing
+ * @param observability - Observability for prompt handler tracing
  *
  * @example
  * ```typescript
  * const server = new McpServer({ name: 'curriculum', version: '1.0.0' });
- * registerPrompts(server);
+ * registerPrompts(server, observability);
  * ```
  */
-export function registerPrompts(server: PromptRegistrar, observability?: HttpObservability): void {
-  const mcpObservation = observability?.createMcpObservationOptions();
+export function registerPrompts(server: PromptRegistrar, observability: HttpObservability): void {
+  const mcpObservation = observability.createMcpObservationOptions();
 
   for (const prompt of PROMPT_REGISTRATIONS) {
     const handler = (args: Readonly<Record<string, string | undefined>>) =>
@@ -111,7 +111,7 @@ export function registerPrompts(server: PromptRegistrar, observability?: HttpObs
         description: prompt.description,
         argsSchema: prompt.argsSchema,
       },
-      mcpObservation ? wrapPromptHandler(prompt.name, handler, mcpObservation) : handler,
+      wrapPromptHandler(prompt.name, handler, mcpObservation),
     );
   }
 }

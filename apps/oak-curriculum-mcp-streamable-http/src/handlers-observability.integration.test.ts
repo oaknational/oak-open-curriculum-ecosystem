@@ -13,7 +13,6 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerHandlers } from './handlers.js';
 import {
   createFakeHttpObservability,
@@ -43,33 +42,18 @@ function createFakeRuntimeConfig(): AuthDisabledRuntimeConfig {
 }
 
 /**
- * Recording McpServer fake that captures `registerTool` calls so we can
- * inspect the registered tool callbacks.
+ * Creates a minimal recording server using bare `vi.fn()` spies.
+ *
+ * Each spy satisfies the structural interface expected by `registerHandlers`
+ * (`Pick<McpServer, 'registerTool' | 'registerResource' | 'registerPrompt'>`)
+ * without requiring the full `McpServer` type or type assertions.
  */
-function createRecordingMcpServer(): {
-  readonly server: McpServer;
-  readonly registeredTools: readonly {
-    readonly name: string;
-    readonly callback: (...args: readonly unknown[]) => unknown;
-  }[];
-} {
-  const registeredTools: {
-    readonly name: string;
-    readonly callback: (...args: readonly unknown[]) => unknown;
-  }[] = [];
-
-  const server = {
-    registerTool: vi.fn(
-      (name: string, _config: unknown, callback: (...args: readonly unknown[]) => unknown) => {
-        registeredTools.push({ name, callback });
-      },
-    ),
+function createRecordingMcpServer() {
+  return {
+    registerTool: vi.fn(),
     registerResource: vi.fn(),
     registerPrompt: vi.fn(),
   };
-
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- McpServer has many members; minimal recording fake for characterisation tests
-  return { server: server as unknown as McpServer, registeredTools };
 }
 
 describe('registerHandlers — observability characterisation', () => {
@@ -78,7 +62,7 @@ describe('registerHandlers — observability characterisation', () => {
     const createMcpSpy = vi.fn(observability.createMcpObservationOptions.bind(observability));
     const scopedObservability = { ...observability, createMcpObservationOptions: createMcpSpy };
 
-    const { server } = createRecordingMcpServer();
+    const server = createRecordingMcpServer();
 
     registerHandlers(server, {
       runtimeConfig: createFakeRuntimeConfig(),
@@ -87,12 +71,14 @@ describe('registerHandlers — observability characterisation', () => {
       searchRetrieval: createFakeSearchRetrieval(),
     });
 
-    expect(createMcpSpy).toHaveBeenCalledOnce();
+    // Called once in registerHandlers (tools), once per resource via
+    // wrapResourceHandler, and once in registerPrompts.
+    expect(createMcpSpy).toHaveBeenCalled();
   });
 
   it('registers at least one tool with the MCP server', () => {
     const observability = createFakeHttpObservability();
-    const { server, registeredTools } = createRecordingMcpServer();
+    const server = createRecordingMcpServer();
 
     registerHandlers(server, {
       runtimeConfig: createFakeRuntimeConfig(),
@@ -101,12 +87,12 @@ describe('registerHandlers — observability characterisation', () => {
       searchRetrieval: createFakeSearchRetrieval(),
     });
 
-    expect(registeredTools.length).toBeGreaterThan(0);
+    expect(server.registerTool).toHaveBeenCalled();
   });
 
   it('passes observability to registerAllResources and registerPrompts', () => {
     const observability = createFakeHttpObservability();
-    const { server } = createRecordingMcpServer();
+    const server = createRecordingMcpServer();
 
     registerHandlers(server, {
       runtimeConfig: createFakeRuntimeConfig(),

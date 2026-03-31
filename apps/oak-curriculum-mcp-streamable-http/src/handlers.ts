@@ -92,7 +92,10 @@ function buildToolHandlerDependencies(
  * @param server - MCP server instance
  * @param options - Registration options including runtime config and logger
  */
-export function registerHandlers(server: McpServer, options: RegisterHandlersOptions): void {
+export function registerHandlers(
+  server: Pick<McpServer, 'registerTool' | 'registerResource' | 'registerPrompt'>,
+  options: RegisterHandlersOptions,
+): void {
   const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
   const stubExecutor = options.runtimeConfig.useStubTools
     ? createStubToolExecutionAdapter()
