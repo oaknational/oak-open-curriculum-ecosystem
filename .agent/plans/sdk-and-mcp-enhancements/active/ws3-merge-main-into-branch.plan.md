@@ -153,7 +153,7 @@ Branch **deleted** `tools-list-override.ts` and **created** `preserve-schema-exa
 - `[packages/core/observability/](packages/core/observability/)` — new core observability package
 - `[packages/libs/sentry-mcp/](packages/libs/sentry-mcp/)` — new Sentry MCP wrapper library
 - `[apps/.../src/observability/](apps/oak-curriculum-mcp-streamable-http/src/observability/)` — HTTP-level observability module
-- `[apps/.../src/register-resource-helpers.ts](apps/oak-curriculum-mcp-streamable-http/src/register-resource-helpers.ts)` — `maybeWrapResourceHandler`, `ResourceRegistrar` type, `WidgetResourceOptions`
+- `[apps/.../src/register-resource-helpers.ts](apps/oak-curriculum-mcp-streamable-http/src/register-resource-helpers.ts)` — `wrapResourceHandler` (was `maybeWrapResourceHandler`), `ResourceRegistrar` type, `ResourceRegistrationOptions` (was `WidgetResourceOptions`)
 - `[apps/.../src/app/health-endpoints.ts](apps/oak-curriculum-mcp-streamable-http/src/app/health-endpoints.ts)` — extracted health endpoints
 - `[apps/.../src/app/static-content.ts](apps/oak-curriculum-mcp-streamable-http/src/app/static-content.ts)` — extracted static content mounting
 - ADR-143 (coherent structured fan-out for observability)
