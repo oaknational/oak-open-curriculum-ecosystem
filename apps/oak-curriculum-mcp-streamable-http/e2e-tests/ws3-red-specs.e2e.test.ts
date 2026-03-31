@@ -23,6 +23,7 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { z } from 'zod';
+import type { StubbedHttpApp } from './helpers/create-stubbed-http-app.js';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import { parseSseEnvelope } from './helpers/sse.js';
 
@@ -55,18 +56,20 @@ const ToolsListResultSchema = z.object({
  */
 const ResourcesListResultSchema = z.object({
   resources: z.array(
-    z.object({
-      uri: z.string(),
-      name: z.string().optional(),
-      mimeType: z.string().optional(),
-    }),
+    z
+      .object({
+        uri: z.string(),
+        name: z.string().optional(),
+        mimeType: z.string().optional(),
+      })
+      .loose(),
   ),
 });
 
 /**
  * Fetches tools/list from a stubbed app instance.
  */
-async function getToolsList(app: Awaited<ReturnType<typeof createStubbedHttpApp>>['app']) {
+async function getToolsList(app: StubbedHttpApp['app']) {
   const res = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
@@ -80,7 +83,7 @@ async function getToolsList(app: Awaited<ReturnType<typeof createStubbedHttpApp>
 /**
  * Fetches resources/list from a stubbed app instance.
  */
-async function getResourcesList(app: Awaited<ReturnType<typeof createStubbedHttpApp>>['app']) {
+async function getResourcesList(app: StubbedHttpApp['app']) {
   const res = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
@@ -124,7 +127,10 @@ describe('WS3 RED Specs: Fresh Resource Identity', () => {
     const resources = await getResourcesList(app);
 
     const widgetResources = resources.filter((r) => r.mimeType === 'text/html;profile=mcp-app');
-    expect(widgetResources.length).toBeGreaterThan(0);
+    expect(
+      widgetResources.length,
+      'no text/html;profile=mcp-app resources registered',
+    ).toBeGreaterThan(0);
 
     for (const resource of widgetResources) {
       expect(resource.uri).not.toContain('oak-json-viewer');
