@@ -1,8 +1,12 @@
 /**
  * Integration tests for MCP resource registration.
  *
- * These tests verify that widget and documentation resources are registered
- * with the correct MCP Apps metadata and content.
+ * These tests verify that documentation, curriculum model, prerequisite graph,
+ * and thread progressions resources are registered with the correct metadata
+ * and content.
+ *
+ * Widget resource tests were removed as part of WS3 Phase 1 (legacy widget
+ * framework deletion). Phase 2-3 will re-introduce widget registration tests.
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -18,7 +22,6 @@ import type {
 import type { McpUiReadResourceResult } from '@modelcontextprotocol/ext-apps/server';
 import { DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import {
-  registerWidgetResource,
   registerDocumentationResources,
   registerCurriculumModelResource,
   registerAllResources,
@@ -165,57 +168,6 @@ function getTextContent(content: McpUiReadResourceResult['contents'][number] | u
   return content.text;
 }
 
-function getWidgetUi(
-  resource:
-    | {
-        name: string;
-        uri: string;
-        metadata: ResourceMetadata;
-        contents: McpUiReadResourceResult['contents'];
-      }
-    | undefined,
-): {
-  csp?: {
-    connectDomains?: readonly string[];
-    resourceDomains?: readonly string[];
-    frameDomains?: readonly string[];
-  };
-  domain?: string;
-  prefersBorder?: boolean;
-} {
-  const meta = resource?.contents[0]?._meta;
-  if (!meta || typeof meta !== 'object' || !('ui' in meta)) {
-    throw new Error('Expected widget _meta.ui');
-  }
-
-  const ui = meta.ui;
-  if (!ui || typeof ui !== 'object') {
-    throw new Error('Expected widget _meta.ui to be an object');
-  }
-
-  return ui;
-}
-
-function getWidgetUri(
-  registeredResources: Map<
-    string,
-    {
-      name: string;
-      uri: string;
-      metadata: ResourceMetadata;
-      contents: McpUiReadResourceResult['contents'];
-    }
-  >,
-): string {
-  const widgetEntry = Array.from(registeredResources.entries()).find(
-    ([, resource]) => resource.name === 'oak-json-viewer',
-  );
-  if (!widgetEntry) {
-    throw new Error('Widget resource not found in registered resources');
-  }
-  return widgetEntry[0];
-}
-
 function expectAllDocumentationResourcesRegistered(
   registeredResources: Map<
     string,
@@ -252,93 +204,6 @@ function expectJsonContent(content: McpUiReadResourceResult['contents'][number] 
     JSON.parse(jsonText);
   }).not.toThrow();
 }
-
-describe('registerWidgetResource', () => {
-  let server: Pick<McpServer, 'registerResource'>;
-  let registeredResources: Map<
-    string,
-    {
-      name: string;
-      uri: string;
-      metadata: ResourceMetadata;
-      contents: McpUiReadResourceResult['contents'];
-    }
-  >;
-
-  beforeEach(() => {
-    const mock = createMockServer();
-    server = mock.server;
-    registeredResources = mock.registeredResources;
-  });
-
-  it('includes the MCP Apps MIME type', () => {
-    registerWidgetResource(server);
-
-    const widgetUri = getWidgetUri(registeredResources);
-    const resource = registeredResources.get(widgetUri);
-    expect(resource).toBeDefined();
-    expect(resource?.contents[0]?.mimeType).toBe('text/html;profile=mcp-app');
-  });
-
-  describe('MCP Apps _meta.ui fields', () => {
-    it('includes ui.csp in resource contents _meta', () => {
-      registerWidgetResource(server);
-
-      const widgetUri = getWidgetUri(registeredResources);
-      const resource = registeredResources.get(widgetUri);
-      expect(resource).toBeDefined();
-      const ui = getWidgetUi(resource);
-
-      expect(ui).toBeDefined();
-      expect(ui?.csp).toBeDefined();
-    });
-
-    it('CSP allows Google Fonts domains for resource loading', () => {
-      registerWidgetResource(server);
-
-      const widgetUri = getWidgetUri(registeredResources);
-      const resource = registeredResources.get(widgetUri);
-      expect(resource).toBeDefined();
-      const csp = getWidgetUi(resource).csp;
-
-      expect(csp?.resourceDomains).toContain('https://fonts.googleapis.com');
-      expect(csp?.resourceDomains).toContain('https://fonts.gstatic.com');
-    });
-
-    it('omits connectDomains when widget data flows through the MCP bridge', () => {
-      registerWidgetResource(server);
-
-      const widgetUri = getWidgetUri(registeredResources);
-      const resource = registeredResources.get(widgetUri);
-      expect(resource).toBeDefined();
-      const csp = getWidgetUi(resource).csp;
-
-      expect(csp?.connectDomains).toBeUndefined();
-    });
-
-    it('omits domain when widget does not fetch cross-origin data', () => {
-      registerWidgetResource(server);
-
-      const widgetUri = getWidgetUri(registeredResources);
-      const resource = registeredResources.get(widgetUri);
-      expect(resource).toBeDefined();
-      const ui = getWidgetUi(resource);
-
-      expect(ui?.domain).toBeUndefined();
-    });
-
-    it('includes prefersBorder: true', () => {
-      registerWidgetResource(server);
-
-      const widgetUri = getWidgetUri(registeredResources);
-      const resource = registeredResources.get(widgetUri);
-      expect(resource).toBeDefined();
-      const ui = getWidgetUi(resource);
-
-      expect(ui?.prefersBorder).toBe(true);
-    });
-  });
-});
 
 describe('registerDocumentationResources', () => {
   let server: Pick<McpServer, 'registerResource'>;
@@ -452,7 +317,7 @@ describe('registerCurriculumModelResource forwards annotations', () => {
   });
 });
 
-describe('registerAllResources excludes ontology resource', () => {
+describe('registerAllResources registers model and documentation resources', () => {
   let server: Pick<McpServer, 'registerResource'>;
   let registeredResources: Map<
     string,
@@ -493,14 +358,6 @@ describe('registerAllResources excludes ontology resource', () => {
     for (const documentationResource of DOCUMENTATION_RESOURCES) {
       expect(uris).toContain(documentationResource.uri);
     }
-  });
-
-  it('registers widget resource', () => {
-    registerAllResources(server);
-
-    const widgetUri = getWidgetUri(registeredResources);
-    const widgetResource = registeredResources.get(widgetUri);
-    expect(widgetResource).toBeDefined();
   });
 });
 

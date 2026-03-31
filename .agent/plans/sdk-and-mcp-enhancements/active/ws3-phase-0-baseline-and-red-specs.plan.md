@@ -52,7 +52,7 @@ authoritative for full WS3 scope and ordering.
 3. Capture non-canonical inventory for:
    - legacy bridge residue (dead files awaiting deletion)
    - hard-coded resource identity (`oak-json-viewer` slug)
-   - `tools-list-override.ts` B3 Hybrid (JSON Schema examples preservation —
+   - `preserve-schema-examples.ts` B3 Hybrid (JSON Schema examples preservation —
      assess for retention in Phase 3, not contamination)
    - public-resource auth policy surface
 4. Add/adjust RED tests for:
@@ -96,7 +96,7 @@ authoritative for full WS3 scope and ordering.
 |----------|---------|-----------------|
 | Legacy bridge residue | 5 dead files + `widget-renderers/` dir (6 files) | Phase 1 (delete) |
 | Hard-coded resource identity | `oak-json-viewer` in codegen constants, registration, tests, docs | Phase 3 (rename) |
-| B3 Hybrid (`tools-list-override.ts`) | Active — JSON Schema examples preservation | Phase 3 (adapt, not delete) |
+| B3 Hybrid (`preserve-schema-examples.ts`) | Active — JSON Schema examples preservation | Phase 3 (adapt, not delete) |
 | Public-resource auth | Well-tested (8 unit + 8 E2E); uses SDK constants | Phase 3 (align to renamed slug) |
 | `WIDGET_TOOL_NAMES` | Empty set — metadata tests pass vacuously | Phase 3 (re-populate) |
 | `aggregated-tool-widget.ts` | Active HTML generation, depends on legacy chain | Phase 2 (replace with React build) |

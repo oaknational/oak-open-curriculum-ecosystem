@@ -14,7 +14,7 @@ todos:
     content: "Align auth wording and runtime behaviour to ADR-113 policy."
     status: pending
   - id: b3-hybrid-retention
-    content: "Adapt tools-list-override.ts (B3 Hybrid) to coexist with registerAppTool — confirmed required because registerAppTool does not handle schema enrichment."
+    content: "Adapt preserve-schema-examples.ts (B3 Hybrid) to coexist with registerAppTool — confirmed required because registerAppTool does not handle schema enrichment."
     status: pending
   - id: aggregated-security-schemes
     content: "Ensure new aggregated tools (user-search, user-search-query) have correct securitySchemes at top level, consistent with existing aggregated tool pattern."
@@ -52,7 +52,7 @@ These are the primary files this phase modifies. Read before starting:
 | Tool projections | `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/projections.ts` |
 | Tool registration (app) | `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` |
 | Resource registration | `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts` |
-| B3 Hybrid override | `apps/oak-curriculum-mcp-streamable-http/src/tools-list-override.ts` |
+| B3 Hybrid override | `apps/oak-curriculum-mcp-streamable-http/src/preserve-schema-examples.ts` |
 | Auth checker | `apps/oak-curriculum-mcp-streamable-http/src/tool-auth-checker.ts` |
 | Public resource auth | `apps/oak-curriculum-mcp-streamable-http/src/auth/public-resources.ts` |
 
@@ -65,7 +65,7 @@ constraints for this phase:
    `@modelcontextprotocol/ext-apps@1.3.2` is a thin wrapper that normalises
    `_meta.ui.resourceUri` <-> `_meta["ui/resourceUri"]` bidirectionally, then
    delegates to `server.registerTool()`. It performs zero schema enrichment.
-   The `tools-list-override.ts` file remains the only mechanism for injecting
+   The `preserve-schema-examples.ts` file remains the only mechanism for injecting
    JSON Schema `examples` into `tools/list` responses. (Source: MCP reviewer,
    confirmed from installed SDK source.)
 
@@ -132,10 +132,23 @@ Task 3 (slug selection)        ──must precede──>  Task 4 (slug rename)
 7. Implement non-UI host policy from WS3 parent:
    - no host-specific server branching
    - meaningful text fallback for UI-bearing tools
-8. Adapt `tools-list-override.ts` (B3 Hybrid) for `registerAppTool` coexistence:
+8. Adapt `preserve-schema-examples.ts` (B3 Hybrid) for `registerAppTool` coexistence:
+   - **pre-investigation (do first)**: Zod 4 introduces `.meta()` which attaches
+     arbitrary metadata (including `examples`) that `z.toJSONSchema()` preserves
+     in the JSON Schema output. Before adapting the override, investigate whether
+     the B3 Hybrid can be **eliminated entirely** by:
+     (a) checking which Zod version the MCP SDK uses internally for `tools/list`
+         conversion — if Zod 4 with `z.toJSONSchema()`, `.meta()` fields flow through
+     (b) checking whether sdk-codegen can emit `.meta({ examples: [...] })` on
+         generated Zod schemas during the OpenAPI → Zod generation step
+     (c) if both are favourable, the override becomes dead code — examples flow
+         through the native pipeline: OpenAPI → Zod with `.meta({ examples })` →
+         `z.toJSONSchema()` → JSON Schema with examples preserved
+     If the MCP SDK does NOT honour `.meta()` (e.g. uses its own pre-Zod-4
+     converter), document the finding and proceed with adaptation as below.
    - **confirmed**: `registerAppTool` does NOT handle schema enrichment — the
-     B3 Hybrid is retained as a bounded workaround (removal trigger: upstream
-     MCP SDK adds native JSON Schema examples support)
+     B3 Hybrid is retained as a bounded workaround unless the investigation
+     above finds a native path
    - adapt the override so it does not conflict with `ext-apps` handler
      installation order on the same server instance
    - **this task must be completed before any `registerAppTool` call is
@@ -163,10 +176,12 @@ Task 3 (slug selection)        ──must precede──>  Task 4 (slug rename)
    across codegen/runtime/auth/tests/docs
 3. App-only helper visibility (`["app"]`) is metadata-driven and test-covered;
    E2E test validates `_meta.ui.visibility` on `user-search-query`
-4. B3 Hybrid (`tools-list-override.ts`) is adapted for `registerAppTool`
+4. B3 Hybrid (`preserve-schema-examples.ts`) is either eliminated (if Zod 4
+   `.meta()` investigation finds a native path) or adapted for `registerAppTool`
    coexistence, labelled as bounded workaround with documented removal trigger,
    and covered by a coexistence test
-5. JSON Schema `examples` are preserved in `tools/list` responses (E2E test)
+5. JSON Schema `examples` are preserved in `tools/list` responses (E2E test),
+   whether via native `.meta()` flow or via the B3 Hybrid override
 6. Auth semantics and docs match MCP auth target semantics, or carry explicit
    compatibility waiver status where applicable
 7. UI-bearing tools still provide usable text fallback when `_meta.ui` is ignored

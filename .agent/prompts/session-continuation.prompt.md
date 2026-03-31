@@ -60,10 +60,10 @@ git log --oneline --decorate -5
 **Immediate priority**: execute the WS3 child plan from the next pending phase.
 
 **Phase execution detail**: each WS3 phase has a companion child plan linked in
-the WS3 child plan's `Phase Companion Plans` section. Phase 0 is complete.
-Continue with the next pending phase:
+the WS3 child plan's `Phase Companion Plans` section. Phases 0 and 1 are
+complete. Continue with the next pending phase:
 
-- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-1-delete-legacy-widget-framework.plan.md`
+- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md`
 
 **Closure gate note**: WS3/WS4 implementation can progress, but migration closure
 is blocked until C8 auth hardening plans in `current/` are complete (or
@@ -75,7 +75,8 @@ contains a `Reviewer-Validated Findings` section with 6 binding constraints
 confirmed by MCP, architecture, and resilience reviewers. These are pre-resolved
 decisions — do not re-open them without new evidence:
 
-1. B3 Hybrid (`tools-list-override.ts`) must be retained
+1. B3 Hybrid (`preserve-schema-examples.ts`) must be retained (but Phase 3
+   task 8 pre-investigation may find Zod 4 `.meta()` eliminates it)
 2. B3 Hybrid adaptation must precede `registerAppTool` adoption
 3. C8 auth hardening is a merge prerequisite for Phase 3 task 9
 4. `_meta.ui.visibility` is an array (`["app"]` for app-only helpers)

@@ -6,19 +6,19 @@ isProject: false
 todos:
   - id: replacement-tests
     content: "Ensure replacement tests are RED then GREEN before deleting legacy tests."
-    status: pending
+    status: completed
   - id: delete-legacy-files
     content: "Delete legacy widget runtime, renderers, and preview emulation surfaces."
-    status: pending
+    status: completed
   - id: delete-legacy-guidance
     content: "Remove active-path docs/comments that still describe deleted runtime as current."
-    status: pending
+    status: completed
 ---
 
 # WS3 Phase 1: Delete Legacy Widget Framework
 
-**Status**: PENDING
-**Last Updated**: 2026-03-30
+**Status**: COMPLETE
+**Last Updated**: 2026-03-31
 
 ## Required Inputs
 

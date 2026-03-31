@@ -11,7 +11,8 @@
  * ## Solution
  *
  * Skip authentication for public resources that contain no user data:
- * - Widget HTML (`ui://widget/oak-json-viewer-abc12345.html`) - static shell with hash
+ * - Widget URI (`ui://widget/...`) - auth bypassed even when resource is
+ *   temporarily unregistered (WS3 Phase 1 interim; Phase 2-3 re-introduces)
  * - Documentation (`docs://oak/*.md`) - static markdown
  *
  * ## Security Rationale
@@ -28,10 +29,26 @@
 import { describe, it, expect } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
+import { z } from 'zod';
 import { createApp } from '../src/application.js';
 import { createMockRuntimeConfig, createNoOpClerkMiddleware } from './helpers/test-config.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
+
+/**
+ * Schema for validating SSE data payloads from MCP resource reads.
+ *
+ * Intentionally loose: we only need to confirm the envelope shape,
+ * not the full MCP response, because these tests prove auth bypass
+ * behaviour rather than resource content.
+ */
+const SseResourceDataSchema = z.object({
+  result: z
+    .object({
+      contents: z.array(z.unknown()),
+    })
+    .optional(),
+});
 
 /**
  * Test configuration: Auth ENABLED (production equivalent).
@@ -57,8 +74,8 @@ async function createAuthEnabledApp(): Promise<Express> {
 }
 
 describe('Public Resource Authentication Bypass (E2E)', () => {
-  describe('Widget Resource (No Auth Required)', () => {
-    it('allows resources/read for widget URI without auth token', async () => {
+  describe('Widget Resource URI (Auth Bypass)', () => {
+    it('bypasses auth for widget URI — returns 200 not 401', async () => {
       const res = await request(await createAuthEnabledApp())
         .post('/mcp')
         .set('Accept', 'application/json, text/event-stream')
@@ -69,17 +86,13 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
           params: { uri: WIDGET_URI },
         });
 
+      // Auth was bypassed: status is 200 (SSE envelope), not 401.
+      // The widget resource is not currently registered (removed in WS3
+      // Phase 1; Phase 2-3 will re-introduce it), so the MCP SDK returns
+      // a JSON-RPC error inside the SSE envelope. This test proves only
+      // the auth bypass — resource existence is tested elsewhere.
       expect(res.status).toBe(200);
       expect(res.text).toContain('data:');
-
-      const dataLine = res.text.split('\n').find((line) => line.startsWith('data:'));
-      if (dataLine === undefined) {
-        throw new Error('Expected SSE data line not found in response');
-      }
-
-      const jsonData = JSON.parse(dataLine.substring(6)) as { result?: { contents?: unknown[] } };
-      expect(jsonData.result).toBeDefined();
-      expect(jsonData.result?.contents).toBeDefined();
     });
   });
 
@@ -104,7 +117,7 @@ describe('Public Resource Authentication Bypass (E2E)', () => {
         throw new Error('Expected SSE data line not found in response');
       }
 
-      const jsonData = JSON.parse(dataLine.substring(6)) as { result?: { contents?: unknown[] } };
+      const jsonData = SseResourceDataSchema.parse(JSON.parse(dataLine.substring(6)));
       expect(jsonData.result).toBeDefined();
       expect(jsonData.result?.contents).toBeDefined();
     });

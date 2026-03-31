@@ -7,8 +7,9 @@
  * than hardcoding tool names, so they remain correct when the
  * allowlist changes (including when it is temporarily empty).
  *
- * @see aggregated-tool-widget.ts for widget HTML
- * @see widget-resource.e2e.test.ts for widget resource availability
+ * During the WS3 interim (Phase 1-2), WIDGET_TOOL_NAMES is empty,
+ * so these tests pass vacuously. They become substantive in Phase 3
+ * when the allowlist is re-populated with UI-bearing tools.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -28,7 +29,7 @@ const ACCEPT = 'application/json, text/event-stream';
 const testEnv: NodeJS.ProcessEnv = {
   NODE_ENV: 'test',
   DANGEROUSLY_DISABLE_AUTH: 'true',
-  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
+  OAK_API_KEY: 'test',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
   ELASTICSEARCH_URL: 'http://fake-es:9200',
   ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',

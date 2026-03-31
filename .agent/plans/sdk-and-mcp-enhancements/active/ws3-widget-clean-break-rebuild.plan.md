@@ -13,7 +13,7 @@ todos:
     status: completed
   - id: phase-1-delete-legacy
     content: "Phase 1: Delete the legacy widget framework and remove all active-path references to it."
-    status: pending
+    status: completed
   - id: phase-2-scaffold
     content: "Phase 2: Scaffold a fresh React MCP App build, lint, type-check, test, and Turbo pipeline."
     status: pending
@@ -334,7 +334,7 @@ plan remains the parent orchestration document and source of phase ordering.
 3. Capture a focused non-canonical inventory for:
    - `src/widget-script.ts` bridge residue and serving path
    - `src/register-resources.ts` hard-coded legacy resource identity
-   - `src/tools-list-override.ts` B3 Hybrid for JSON Schema examples preservation
+   - `src/preserve-schema-examples.ts` B3 Hybrid for JSON Schema examples preservation
      in `tools/list` — assess for retention or adaptation alongside
      `registerAppTool` adoption in Phase 3 (not contamination)
    - public resource auth bypass semantics and test coverage depth

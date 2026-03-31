@@ -10,7 +10,7 @@ import listRoutes from 'express-list-routes';
 
 import { renderLandingPageHtml } from './landing-page/index.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
-import { overrideToolsListHandler } from './tools-list-override.js';
+import { preserveSchemaExamplesInToolsList } from './preserve-schema-examples.js';
 import {
   SERVER_INSTRUCTIONS,
   createStubSearchRetrieval,
@@ -187,7 +187,7 @@ function initializeCoreEndpoints(
       { instructions: SERVER_INSTRUCTIONS },
     );
     registerHandlers(server, handlerOptions);
-    overrideToolsListHandler(server);
+    preserveSchemaExamplesInToolsList(server);
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
     return { server, transport };
   };

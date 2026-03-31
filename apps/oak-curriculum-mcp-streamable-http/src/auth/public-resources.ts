@@ -23,6 +23,13 @@ import { WIDGET_URI, DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk
  * Resource URIs that are publicly accessible without authentication.
  *
  * Uses SDK-owned resource URIs as the single source of truth.
+ *
+ * Note: `WIDGET_URI` is retained during the WS3 interim (Phase 1-2) even
+ * though the widget resource is temporarily unregistered. The auth bypass
+ * is a harmless no-op for URIs that have no registered resource (the MCP
+ * SDK returns JSON-RPC error -32002 "Resource not found" inside the SSE
+ * envelope). Phase 2-3 will re-register the widget resource, restoring
+ * the ADR-057 synchronisation invariant. See MCP reviewer assessment.
  */
 export const PUBLIC_RESOURCE_URIS = [
   WIDGET_URI,

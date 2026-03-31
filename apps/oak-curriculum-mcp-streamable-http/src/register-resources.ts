@@ -2,9 +2,12 @@
  * MCP Resource Registration
  *
  * Registers static resources with the MCP server, including:
- * - Oak JSON viewer widget for tool output rendering
  * - Documentation resources for the "start here" experience
+ * - Curriculum model, prerequisite graph, and thread progressions
  *
+ * Widget resource registration was removed as part of WS3 Phase 1
+ * (legacy widget framework deletion). Phase 2-3 will re-introduce
+ * widget registration using the fresh React MCP App.
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -19,9 +22,7 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 interface ResourceRegistrar {
   registerResource: McpServer['registerResource'];
 }
-import { registerAppResource, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import {
-  WIDGET_URI,
   DOCUMENTATION_RESOURCES,
   getDocumentationContent,
   CURRICULUM_MODEL_RESOURCE,
@@ -31,62 +32,6 @@ import {
   THREAD_PROGRESSIONS_RESOURCE,
   getThreadProgressionsJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-
-import { AGGREGATED_TOOL_WIDGET_HTML } from './aggregated-tool-widget.js';
-
-/**
- * MCP Apps Content Security Policy for the widget.
- *
- * The widget loads Google Fonts only. All tool data flows through the host's
- * MCP bridge rather than direct HTTP requests, as verified by the WS2 audit of
- * widget renderers and widget state scripts.
- */
-const WIDGET_CSP = {
-  /** Domains the widget can load static resources from */
-  resourceDomains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
-} as const;
-
-/**
- * Registers the Oak JSON viewer widget as an MCP resource.
- *
- * This widget is referenced by aggregated tools via `_meta.ui.resourceUri` and
- * renders tool output with Oak branding.
- *
- * The widget URI includes a cache-busting hash generated at sdk-codegen time.
- * Each build produces a new hash, ensuring hosts fetch the latest
- * widget bundle instead of using a stale cached version.
- *
- * Includes MCP Apps resource metadata required for the widget host:
- * - `_meta.ui.csp`: Content Security Policy for external assets
- * - `_meta.ui.prefersBorder`: Hint for bordered card rendering
- *
- * @param server - MCP server instance
- */
-export function registerWidgetResource(server: ResourceRegistrar): void {
-  registerAppResource(
-    server,
-    'oak-json-viewer',
-    WIDGET_URI,
-    {
-      description: 'Oak-branded JSON viewer widget for tool output',
-    },
-    () => ({
-      contents: [
-        {
-          uri: WIDGET_URI,
-          mimeType: RESOURCE_MIME_TYPE,
-          text: AGGREGATED_TOOL_WIDGET_HTML,
-          _meta: {
-            ui: {
-              csp: WIDGET_CSP,
-              prefersBorder: true,
-            },
-          },
-        },
-      ],
-    }),
-  );
-}
 
 /**
  * Registers documentation resources for the "start here" experience.
@@ -162,13 +107,15 @@ export function registerThreadProgressionsResource(server: ResourceRegistrar): v
 /**
  * Registers all static resources with the MCP server.
  *
- * Combines widget, documentation, curriculum model, prerequisite graph,
+ * Combines documentation, curriculum model, prerequisite graph,
  * and thread progressions resource registration into a single call.
+ *
+ * Widget resource registration will be re-added in WS3 Phase 2-3
+ * when the fresh React MCP App is scaffolded.
  *
  * @param server - MCP server instance
  */
 export function registerAllResources(server: ResourceRegistrar): void {
-  registerWidgetResource(server);
   registerDocumentationResources(server);
   registerCurriculumModelResource(server);
   registerPrerequisiteGraphResource(server);
