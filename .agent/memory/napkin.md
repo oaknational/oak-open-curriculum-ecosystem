@@ -1,3 +1,37 @@
+## Session 2026-03-31 — Deep Merge Review & Remediation
+
+### What Was Done
+
+- Invoked 6 specialist reviewers (code, architecture×2, test, MCP, security)
+  on the merged codebase. All confirmed merge is architecturally sound.
+- Read all 52 auto-merged files line-by-line across 3 parallel agents.
+- Fixed 6 findings: eslint-disable + type assertions, stale TSDoc, duplicate
+  file, weak assertions, missing OAuth redaction keys, optional observability.
+- Discovered 3 characterisation tests were dead — naming excluded them from
+  vitest include pattern. Renamed and activated (8 new tests running).
+- Updated integration test fake to handle async observability-wrapped handlers.
+
+### Key Observations
+
+- **Dead tests are worse than no tests**: `*.characterisation.test.ts` didn't
+  match vitest's `*.unit.test.ts` / `*.integration.test.ts` include pattern.
+  These "safety net" tests had NEVER run. When activated, one immediately
+  caught a real assertion error (`toHaveBeenCalledOnce()` was wrong — the spy
+  is called 8 times across tools, resources, and prompts). Always check the
+  vitest config when adding new test file naming conventions.
+- **`vi.fn()` (bare) satisfies any function type**: The `Mock<(...args: any) => any>`
+  type from vitest is assignable to any function signature, avoiding the need
+  for type assertions in test fakes. This is the cleanest pattern for recording
+  servers in characterisation/integration tests.
+- **`void` return trick for narrow interfaces**: A function returning
+  `RegisteredResource` is assignable to a function returning `void` in
+  TypeScript. Defining `ResourceRegistrar` with `void` return lets both
+  `McpServer` and `vi.fn()` satisfy it without assertions.
+- **Complementary branches merge cleanly**: The two branches (observability
+  addition vs widget deletion) don't intersect at the behaviour level — only
+  at the type/parameter level. This is why zero "semantically correct but
+  behaviourally wrong" issues were found across 52 auto-merged files.
+
 ## Session 2026-03-31 — Merge Execution & OpenAI Remnant Cleanup
 
 ### What Was Done

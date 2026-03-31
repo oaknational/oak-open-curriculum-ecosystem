@@ -53,44 +53,26 @@ git log --oneline --decorate -10
 
 ## Active Work
 
-### Immediate Priority: Deep Review of Merge Outcome
+### Immediate Priority: Security Hardening or WS3 Phase 2
 
-**Status**: Merge COMPLETE. Deep review needed before resuming WS3 Phase 2.
+**Status**: Merge COMPLETE. Deep review COMPLETE (2026-03-31). Branch is clean.
 
 The merge of main into `feat/mcp_app_ui` was executed on 2026-03-31, producing
-3 commits (`8e0b35d2`, `a71c7793`, `bfb5fc76`). The merge brought Sentry/OTel
-observability foundation, releases 1.2.0 and 1.3.0, and was followed by
-OpenAI-era remnant cleanup.
+3 commits (`8e0b35d2`, `a71c7793`, `bfb5fc76`) plus a 4th review-findings
+commit (`e4bda5b5`). All 6 specialist reviewers confirmed the merge is
+architecturally sound. 52 auto-merged files verified line-by-line.
 
 **Next session tasks** (in priority order):
 
-1. **Deep review of merge outcome**: Walk the merged codebase to verify the
-   integration of observability + widget removal is architecturally sound.
-   Key areas to review:
-   - `register-resources.ts` — the keystone file. Verify 4 resource handlers
-     wrapped with `maybeWrapResourceHandler`, no widget remnants, clean exports
-   - `handlers.ts` — verify `wrapToolHandler` on all tools, `observability`
-     threaded, no `deriveWidgetDomain`
-   - `application.ts` — composition root. Verify `observability` threaded to
-     all subsystems, `preserveSchemaExamplesInToolsList` called correctly
-   - `register-resource-helpers.ts` — verify `ResourceRegistrationOptions`
-     (not `WidgetResourceOptions`), no `widgetDomain`
-   - `auth/public-resources.ts` — verify only documentation URIs in public list
-   - `register-resources-observability.characterisation.test.ts` — verify
-     wrapping assertions are correct
-   - Run `pnpm check` to confirm all gates still pass
-2. **Security hardening** (BLOCKING pre-deployment): OAuth form-encoded
-   redaction and auth success handler PII in observability payloads. These are
-   pre-existing in main but must be fixed before the merged branch deploys.
-   Create a dedicated plan if one doesn't exist.
-3. **Deferred Phase 8 items**:
+1. **Security hardening** (BLOCKING pre-deployment): `code_verifier` and `code`
+   added to `FULLY_REDACTED_KEYS` (done in `e4bda5b5`). Remaining: review
+   `handleAuthSuccess()` debug logging of `clientId`/`scopes`/`userId` for PII
+   classification. Defence-in-depth: consider allowlisting OAuth token response
+   fields in `handleToken`. Create a dedicated plan if one doesn't exist.
+2. **Deferred Phase 8 items**:
    - 8b: Create `.agent/skills/complex-merge/SKILL.md`
    - 8c: Update `docs/engineering/pre-merge-analysis.md`
-   - 8e: Run full consolidation workflow
-4. **Post-merge structural cleanup**:
-   - Consolidate `register-json-resources.ts` (confirmed duplicate, zero call
-     sites, 5 reviewers flagged)
-5. **Resume WS3 Phase 2** (after review and security hardening are done):
+3. **Resume WS3 Phase 2** (after security hardening is done):
    - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md`
 
 **Merge plan reference** (completed, for context):
