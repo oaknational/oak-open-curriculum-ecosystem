@@ -50,6 +50,9 @@ todos:
   - id: type-check
     content: Run pnpm type-check for fast feedback on signature mismatches
     status: pending
+  - id: remove-openai-remnants
+    content: "Remove all OpenAI-era remnants: WIDGET_URI from auth bypass, deriveWidgetDomain, widgetDomain field, rename WidgetResourceOptions → ResourceRegistrationOptions"
+    status: pending
   - id: fix-breaks
     content: Fix any type-check failures from auto-merged signature mismatches
     status: pending
@@ -62,11 +65,17 @@ todos:
   - id: invoke-reviewers
     content: Invoke MCP reviewer, code reviewer, and architecture reviewer on merge result
     status: pending
+  - id: security-hardening
+    content: "BLOCKING pre-deployment: fix OAuth form-encoded redaction and auth success handler PII in observability payloads"
+    status: pending
   - id: napkin
     content: Write session learnings to napkin (merge patterns, surprises, time sinks)
     status: pending
-  - id: update-merge-guidance
-    content: "Update existing pre-merge-analysis rule and guide with new learnings (see Phase 8b/8c): observability gap analysis, call-chain contracts, characterisation test inventory"
+  - id: create-merge-skill
+    content: "Create .agent/skills/complex-merge/SKILL.md encoding the full merge workflow (see Phase 8b)"
+    status: pending
+  - id: improve-guide
+    content: "Update docs/engineering/pre-merge-analysis.md with new insights (see Phase 8c): observability gap analysis, call-chain contracts, characterisation test inventory"
     status: pending
   - id: update-session-prompt
     content: Update session-continuation.prompt.md to reflect merge completion
@@ -252,14 +261,18 @@ The merged `register-resources.ts` MUST satisfy this calling convention:
 - Re-export `registerPrompts` from `register-prompts.ts`
 - Re-export `ResourceRegistrar` and `WidgetResourceOptions` from `register-resource-helpers.ts`
 
-### Post-widget-removal dead code (harmless, cleanup deferred)
+### OpenAI-era remnant removal (IN SCOPE — no remnants survive the merge)
 
-These items become dead code after widget removal but cause no errors:
+All OpenAI app remnants must be removed during the merge, no exceptions. These items become dead code after widget removal and MUST be cleaned up as part of the merge:
 
-- `deriveWidgetDomain()` in `handlers.ts`, `WidgetResourceOptions.widgetDomain`, and the `WidgetResourceOptions` name itself — a single coherent cleanup: rename type, remove dead field, remove dead function
-- Comment in characterisation test: "the widget and documentation resources" — stale text
+- `deriveWidgetDomain()` in `handlers.ts` — remove the function call and the derived variable
+- `WidgetResourceOptions.widgetDomain` field in `register-resource-helpers.ts` — remove the dead field
+- `WidgetResourceOptions` type name in `register-resource-helpers.ts` — rename to `ResourceRegistrationOptions`
+- `WIDGET_URI` in `auth/public-resources.ts` — remove from `PUBLIC_RESOURCE_URIS` (no remnants of the auth bypass for a non-existent resource)
+- Comment in characterisation test: "the widget and documentation resources" — update to reflect widget removal
+- Update all references to `WidgetResourceOptions` across the codebase to use the new name
 
-Note: `RESOURCE_MIME_TYPE` is NOT dead code post-merge — keystone step 4 already removes its import. Do NOT fix the above items during merge (scope creep). Flag for post-merge cleanup as a single consolidated work item.
+Note: `RESOURCE_MIME_TYPE` is NOT dead code post-merge — keystone step 4 already removes its import. These cleanups are additional changes made after the merge commit, as a follow-on commit on the branch (see Phase 6 step 12).
 
 ---
 
@@ -270,7 +283,7 @@ Note: `RESOURCE_MIME_TYPE` is NOT dead code post-merge — keystone step 4 alrea
 **Round 1**: Invoked architecture-reviewer-barney, architecture-reviewer-wilma, mcp-reviewer, and code-reviewer. All blocking findings addressed below. Key corrections applied:
 
 - Promoted `application.ts` to first-class observability seam (Barney)
-- Fixed `auth/public-resources.ts` verification — `WIDGET_URI` is intentionally retained (Barney, MCP reviewer)
+- Reviewed `auth/public-resources.ts` — `WIDGET_URI` initially retained per ADR-057, later overridden: all OpenAI remnants removed during merge (user directive, Round 3)
 - Added merge-state hygiene and rollback strategy (Wilma)
 - Downgraded characterisation test trust level from "primary proof" to "necessary but not sufficient" (Wilma)
 - Fixed `register-resources.integration.test.ts` guidance: do NOT add observability (async wrapper breaks sync test fake) — keep omitting it since the parameter is optional (Code reviewer, MCP reviewer)
@@ -293,6 +306,12 @@ Note: `RESOURCE_MIME_TYPE` is NOT dead code post-merge — keystone step 4 alrea
 - Simplified Phase 8b from new skill creation to updating existing guidance (Barney)
 - Added 4 new risks: OAuth redaction gap, auth data in logs, WIDGET_URI telemetry amplification, widget E2E vacuous pass (Security reviewer)
 - Added security review of observability payloads to post-merge follow-ups (Security reviewer)
+
+**Round 3**: User directives applied:
+
+- Restored Phase 8b complex merge skill creation (overriding Barney's simplification recommendation)
+- All OpenAI-era remnants moved into merge scope (Phase 6 step 12): WIDGET_URI removal from auth bypass, deriveWidgetDomain removal, widgetDomain field removal, WidgetResourceOptions rename to ResourceRegistrationOptions
+- OAuth form-encoded redaction gap and auth success handler PII promoted from post-merge follow-up to BLOCKING pre-deployment gate — secrets must not leak into logs
 
 ### Rollback strategy
 
@@ -333,7 +352,7 @@ Concrete steps:
 7. Remove the `registerWidgetResource(server, options)` call from `registerAllResources`
 8. Restore branch's module-level JSDoc comment about widget removal and WS3 Phase 2-3 restoration
 9. Keep all observability wrapping (`maybeWrapResourceHandler` on all remaining functions) — this is already correct in main's base
-10. Keep re-exports: `export { registerPrompts } from './register-prompts.js'` (required by the `handlers.ts` call contract) AND `export type { ResourceRegistrar, WidgetResourceOptions } from './register-resource-helpers.js'` (preserves module API parity with main — no current consumer imports these types through `register-resources.ts`, but removing them changes the public surface during a merge)
+10. Keep re-exports: `export { registerPrompts } from './register-prompts.js'` (required by the `handlers.ts` call contract) AND `export type { ResourceRegistrar, WidgetResourceOptions } from './register-resource-helpers.js'` (keep main's name during keystone resolution — the rename to `ResourceRegistrationOptions` happens in Phase 6 step 12)
 
 **Note**: `register-json-resources.ts` is a new file from main that partially duplicates the resource registration surface. Do NOT wire it into the keystone resolution — park as separate follow-up tidy-up to avoid normalising two sources of truth.
 
@@ -375,13 +394,22 @@ After resolving conflicts and committing:
 10. **Branch-only test files** — verify:
 
 - `register-resources.integration.test.ts`: do NOT add `{ observability: createFakeHttpObservability() }`. The `options` parameter is optional, so existing calls `registerAllResources(server)` remain valid. Adding observability would break: `wrapResourceHandler` returns an async handler, but the test fake explicitly throws on Promise-returning callbacks. Leave as-is; production always passes observability via `handlers.ts`.
-- `auth/public-resources.ts`: verify no imports from deleted widget **files** — the `WIDGET_URI` import from `@oaknational/curriculum-sdk` is intentionally retained per ADR-057 (harmless no-op during WS3 interim). Do NOT remove it.
+- `auth/public-resources.ts`: verify no imports from deleted widget **files**. The `WIDGET_URI` import and its entry in `PUBLIC_RESOURCE_URIS` will be removed in step 12 (OpenAI-era remnant cleanup). At this step, just verify no broken file imports remain.
 
 11. **Run `pnpm type-check`** immediately — this is the single fastest way to catch auto-merge signature mismatches. If type-check fails, fix each error before proceeding.
+12. **OpenAI-era remnant cleanup** — after type-check passes, remove all remaining OpenAI app remnants in a dedicated commit (or amend the merge commit). This is a coherent set of changes:
+
+- `auth/public-resources.ts`: remove `WIDGET_URI` from `PUBLIC_RESOURCE_URIS` and its import from `@oaknational/curriculum-sdk`. Update or remove the JSDoc comment explaining the interim retention.
+- `handlers.ts`: remove the `deriveWidgetDomain()` call and the `widgetDomain` variable. Update the `registerAllResources(server, { widgetDomain, observability })` call to `registerAllResources(server, { observability })`.
+- `register-resource-helpers.ts`: remove the `widgetDomain` field from `WidgetResourceOptions`. Rename the type from `WidgetResourceOptions` to `ResourceRegistrationOptions`.
+- `register-resources.ts`: update the re-export from `WidgetResourceOptions` to `ResourceRegistrationOptions`. Update the `registerAllResources` signature parameter type.
+- Update all other references to `WidgetResourceOptions` across the codebase (grep for the old name).
+- Update the characterisation test comment "the widget and documentation resources" to reflect widget removal.
+- Run `pnpm type-check` again to verify the rename propagated correctly.
 
 ### Phase 7: Full verification and review
 
-`pnpm type-check` already ran in Phase 6 step 11 for fast feedback. Phase 7 runs the full gate suite, which includes type-check.
+`pnpm type-check` ran twice in Phase 6: step 11 for merge verification, and again at the end of step 12 after OpenAI remnant cleanup. Phase 7 runs the full gate suite, which includes type-check.
 
 1. `pnpm check` (full clean rebuild + all gates including type-check)
 2. Contamination check (per WS3 child plan)
@@ -404,12 +432,12 @@ After resolving conflicts and committing:
 | In-progress merge state blocks `git merge`                                     | Medium     | Pre-step 1: verify clean working tree or `git merge --abort`; backup branch at pre-step 2                                                                                                  |
 | `lockfile` regeneration shifts transitive versions                             | Low        | Compare lockfile diff size; CI uses frozen lockfile check                                                                                                                                    |
 | `register-json-resources.ts` creates duplicate resource registration surface   | Low        | Do NOT wire into keystone resolution; flag for post-merge follow-up                                                                                                                          |
-| `WidgetResourceOptions` name misleading post-widget-removal                    | Certain    | Note for post-merge follow-up; do NOT rename during merge (scope creep)                                                                                                                     |
+| `WidgetResourceOptions` rename breaks downstream references                    | Medium     | Grep sweep after rename; `pnpm type-check` catches any missed references. Rename is a single coherent step (Phase 6 step 12)                                                                |
 | Stale comments reference `tools-list-override`                                 | Certain    | Grep sweep in Phase 6 step 3 catches all occurrences across the workspace                                                                                                                   |
-| `deriveWidgetDomain` becomes dead code                                         | Certain    | Harmless; flag for post-merge cleanup                                                                                                                                                        |
-| OAuth form-encoded secrets may appear in observability payloads (pre-existing)  | Medium     | Pre-existing in main's observability code, not introduced by merge. `REDACTED_QUERY_KEYS` covers URL params but `/oauth/token` form bodies (`code`, `code_verifier`, `refresh_token`) may flow to Sentry. Flag for post-merge security review |
-| Auth success handler logs `clientId`/`scopes`/`userId` to Sentry (pre-existing) | Low       | Pre-existing in main. `handleAuthSuccess()` identifiers flow to Sentry when `enableLogs` is true. Flag for post-merge privacy review                                                         |
-| `WIDGET_URI` auth bypass creates unauthenticated telemetry amplification surface | Low       | Bypass for a non-existent resource still generates request-span activity. Conscious ADR-057 deviation with restoration deadline in Phase 2-3                                                  |
+| OpenAI remnant removal changes scope beyond pure merge                         | Certain    | Isolated as Phase 6 step 12 (separate from merge commit). Type-check verifies correctness. All changes are mechanical (remove dead code, rename type)                                        |
+| OAuth form-encoded secrets may appear in observability payloads (pre-existing)  | Medium     | **BLOCKING pre-deployment.** Pre-existing in main's observability code. `REDACTED_QUERY_KEYS` covers URL params but `/oauth/token` form bodies (`code`, `code_verifier`, `refresh_token`) may flow to Sentry unredacted. Must be fixed before merged code goes to production |
+| Auth success handler logs `clientId`/`scopes`/`userId` to Sentry (pre-existing) | Medium    | **BLOCKING pre-deployment.** Pre-existing in main. `handleAuthSuccess()` identifiers flow to Sentry when `enableLogs` is true. Must be reviewed and fixed before merged code goes to production |
+| `WIDGET_URI` removal breaks E2E tests that reference it                        | Low        | `WIDGET_URI` constant still exists in the SDK — only its use in `PUBLIC_RESOURCE_URIS` is removed. E2E tests that import `WIDGET_URI` directly from the SDK are unaffected; tests that reference it from `public-resources.ts` need updating |
 | Widget metadata E2E passes vacuously when widget tool allowlist is empty        | Low        | No explicit assertion that widget resource is NOT registered during WS3 interim. Bad merge could reintroduce widget without a failing test                                                    |
 
 ---
@@ -426,9 +454,25 @@ Write to `.agent/memory/napkin.md` with a session heading covering:
 - Patterns that worked well (e.g. dry-run first, fork-point comparison, characterisation test safety nets)
 - Corrections made after reviewer feedback
 
-### 8b. Update existing merge guidance with new learnings
+### 8b. Create a complex-merge skill
 
-The repo already has a rule (`.agent/rules/pre-merge-divergence-analysis.md`) and a guide (`docs/engineering/pre-merge-analysis.md`). A brand-new multi-platform skill would be overbuilt — the genuinely new learning from this session is a small set of extensions to the existing guidance. Update the rule and guide (see 8c below) rather than creating a new skill.
+The repo has a rule (`.agent/rules/pre-merge-divergence-analysis.md`) and a guide (`docs/engineering/pre-merge-analysis.md`), but no dedicated **skill** that wraps the complete workflow into a repeatable, agent-executable process. This session produced a richer understanding than either document currently captures.
+
+Create `.agent/skills/complex-merge/SKILL.md` (with shared workflow at `.agent/skills/complex-merge/shared/complex-merge.md`) encoding:
+
+1. The 7-phase process from the guide, enhanced with:
+
+- Observability gap analysis (trace wrapping mechanisms across all protocol surfaces)
+- Call-chain contract verification (callers in auto-merged files must match manual-merged signatures)
+- Rename collision detection (Git rename detection is content-similarity-based; verify with file existence checks)
+- Characterisation test safety nets (identify existing tests that guard integration seams before merging)
+
+2. The "files changed only on one side" analysis pattern (checking which direction Git will resolve)
+3. The sub-agent pre-review step (have reviewers validate the merge plan before executing)
+4. The concrete wrapping pattern for observability (not just "add parameter" but "wrap handler body")
+5. Create corresponding platform adapters in `.cursor/skills/complex-merge/SKILL.md` and other platforms as appropriate
+
+This skill should be linked from the existing rule and guide as the operational workflow.
 
 ### 8c. Improve the pre-merge analysis guide
 
@@ -466,21 +510,13 @@ Follow `.agent/commands/consolidate-docs.md` in full:
 
 ## Post-merge follow-up items (NOT in merge scope, for next session)
 
-### Widget dead code cleanup (single coherent work item)
-
-- Rename `WidgetResourceOptions` to `ResourceRegistrationOptions` or similar
-- Remove `WidgetResourceOptions.widgetDomain` field (dead — passed but never consumed)
-- Remove `deriveWidgetDomain()` from `handlers.ts` (dead — returns a hostname string nothing reads)
-- Update characterisation test comment "the widget and documentation resources" to reflect widget removal
-- Consider whether `register-resource-helpers.ts` should be absorbed into `register-resources.ts` now that widget-specific helpers are removed
-
 ### Confirmed duplicates
 
 - Consolidate `register-json-resources.ts` — confirmed duplicate of the four resource registration functions in `register-resources.ts` (5 reviewers flagged; no current call sites on main, but two files exporting identical functions invites future drift)
 
-### ADR-057 deviation: WIDGET_URI auth bypass
+### Structural cleanup
 
-- `WIDGET_URI` remains in `PUBLIC_RESOURCE_URIS` during WS3 Phase 1 as a conscious ADR-057 deviation. The bypass targets a URI with no registered resource, which widens the unauthenticated allowlist surface and generates unnecessary telemetry on probes (Security reviewer finding). Restore synchronisation invariant in Phase 2-3 when widget resource is re-registered, or remove bypass if widget is not re-registered.
+- Consider whether `register-resource-helpers.ts` should be absorbed into `register-resources.ts` now that widget-specific helpers are removed and the type has been renamed
 
 ### Test coverage for observability
 
@@ -488,10 +524,14 @@ Follow `.agent/commands/consolidate-docs.md` in full:
 - Consider adding per-resource wrapping assertions to characterisation tests (current `toHaveBeenCalled()` only proves wrapping was invoked at least once, not that all four resource paths are wrapped)
 - Consider adding explicit E2E assertion that widget resource is NOT registered during WS3 interim (Security reviewer — current E2E can pass vacuously)
 
-### Security review of observability payloads (pre-existing in main, not introduced by merge)
+### BLOCKING: Security hardening of observability payloads (pre-existing in main, must fix before deployment)
 
-- Review OAuth form-encoded redaction: `REDACTED_QUERY_KEYS` covers URL params but `/oauth/token` form bodies (`code`, `code_verifier`, `refresh_token`) may flow to Sentry unredacted (Security reviewer — blocking-severity finding on main's implementation)
-- Review auth success handler logging: `handleAuthSuccess()` logs `clientId`, `scopes`, `userId` to Sentry when `enableLogs` is true (Security reviewer — privacy exposure)
+These are pre-existing in main's observability code, not introduced by the merge, but the merge brings them into the deployment path. Secrets and PII must not leak into logs — these must be fixed before the merged code goes to production:
+
+- **OAuth form-encoded redaction**: `REDACTED_QUERY_KEYS` covers URL query params but `/oauth/token` form bodies (`code`, `code_verifier`, `refresh_token`) may flow to Sentry unredacted. Extend redaction to cover form-encoded request bodies on OAuth token endpoints. (Security reviewer — blocking)
+- **Auth success handler PII**: `handleAuthSuccess()` logs `clientId`, `scopes`, `userId` to Sentry when `enableLogs` is true. Review whether these constitute PII, and if so, redact or remove from log payloads. (Security reviewer — blocking)
+
+Create a dedicated plan or work item for this hardening. It blocks deployment of the merged branch but does not block the merge itself.
 
 ### Resume WS3
 

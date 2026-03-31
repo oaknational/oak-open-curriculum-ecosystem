@@ -26,6 +26,19 @@
   auto-merged files are low-risk. All auto-merges need deep evaluation. Caution
   over speed, architectural excellence over expediency.
 
+### User Directives (overriding reviewer recommendations)
+
+- **Complex merge skill must be created**: User overrode Barney's recommendation
+  to simplify Phase 8b. The skill wraps the full 7-phase merge workflow and is
+  worth the investment even if merges don't recur frequently.
+- **No OpenAI remnants survive the merge**: WIDGET_URI, deriveWidgetDomain,
+  widgetDomain, WidgetResourceOptions name — all removed during the merge, not
+  deferred. "No exceptions." This overrides the previous ADR-057 interim retention
+  and the scope-creep deferral.
+- **Secrets in logs are blocking**: OAuth form-encoded redaction gap and auth
+  success handler PII are pre-existing in main but must be fixed before
+  deployment. Promoted from follow-up to blocking pre-deployment gate.
+
 ## Session 2026-03-31 — Napkin rotation (distillation)
 
 Archived `napkin-2026-03-31.md` covering sessions 2026-03-24 to 2026-03-31.
