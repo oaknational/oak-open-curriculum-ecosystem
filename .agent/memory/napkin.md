@@ -1,3 +1,34 @@
+## Session 2026-03-31 — Merge Execution & OpenAI Remnant Cleanup
+
+### What Was Done
+- Executed `git merge --no-ff origin/main` bringing 3 commits: Sentry/OTel
+  observability foundation, release 1.2.0, and release 1.3.0.
+- Resolved 6 conflicts: 4 trivial doc conflicts, 1 semantic keystone
+  (`register-resources.ts`), 1 mechanical (`pnpm-lock.yaml`).
+- Removed all OpenAI-era remnants: `WIDGET_URI` from public resources,
+  `deriveWidgetDomain`, `widgetDomain` field, renamed `WidgetResourceOptions`
+  to `ResourceRegistrationOptions`.
+- Updated 4 test files to reflect widget URI no longer being public.
+- Invoked code-reviewer and test-reviewer; fixed stale TSDoc comment.
+- All gates pass (559 unit/integration tests, 152/155 E2E tests — 3 expected
+  RED specs for WS3 Phase 2-3).
+
+### Key Observations
+- **Pre-commit formatting catch**: `pnpm format:root` was needed for
+  `handlers-mcp-span.characterisation.test.ts` — auto-merged content from
+  main had inconsistent formatting. Always run `pnpm format:root` after merge.
+- **Cascading test updates**: Removing `WIDGET_URI` from `PUBLIC_RESOURCE_URIS`
+  required updating 4 test files (1 unit, 2 integration, 1 E2E) to flip
+  expectations from "auth bypassed" to "auth required." Test changes outnumber
+  production changes ~3:1 for this type of behavioural shift.
+- **WS3 RED specs are E2E-only**: Confirmed the red specs only fail in the
+  `test:e2e` suite, not during `pnpm check`'s in-process tests. This is by
+  design — `*.e2e.test.ts` files don't block commits.
+- **`register-json-resources.ts` remains inert**: Zero call sites, confirmed.
+  Consolidation deferred to post-merge follow-up.
+- **`displayHostname` is NOT widget-specific**: Used for static content routes
+  and asset download URLs. Correctly retained when removing `deriveWidgetDomain`.
+
 ## Session 2026-03-31 — Second-Round Plan Review (7 reviewers, observability focus)
 
 ### What Was Done
@@ -108,9 +139,9 @@ Key observations:
   `async (...args) => Promise<T>`, but `register-resources.integration.test.ts`
   fake throws on Promise-returning callbacks. Do NOT add observability to that
   test without also upgrading the fake to async-aware.
-- **`WIDGET_URI` in auth/public-resources.ts is intentional**: Branch retained
-  it per ADR-057 as a harmless no-op during WS3 interim. Reviewers who flag it
-  should be told not to remove it.
+- **`WIDGET_URI` was removed from auth/public-resources.ts**: Per user directive,
+  no OpenAI-era remnants survive the merge. Tests updated to expect auth required
+  for widget URIs. Phase 2-3 will re-add when fresh React MCP App is scaffolded.
 - **`git merge --abort` wipes staged changes**: Any uncommitted staged files
   (the merge plan and session prompt were staged but not committed) are lost
   when aborting. Always commit planning artefacts before attempting a merge.

@@ -15,8 +15,9 @@ last_updated: 2026-03-31
    - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
-2. Read the merge plan first (immediate priority):
+2. Read the merge plan and its execution record:
    - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-merge-main-into-branch.plan.md`
+   - Focus on the **Execution Record** section at the bottom for what actually happened
 3. Read the live MCP Apps planning stack in this order:
    - `.agent/plans/sdk-and-mcp-enhancements/roadmap.md`
    - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
@@ -33,7 +34,7 @@ last_updated: 2026-03-31
 
 ```bash
 git status --short
-git log --oneline --decorate -5
+git log --oneline --decorate -10
 ```
 
 7. Run the canonical WS3 runtime contamination check command from the child
@@ -52,28 +53,59 @@ git log --oneline --decorate -5
 
 ## Active Work
 
+### Immediate Priority: Deep Review of Merge Outcome
+
+**Status**: Merge COMPLETE. Deep review needed before resuming WS3 Phase 2.
+
+The merge of main into `feat/mcp_app_ui` was executed on 2026-03-31, producing
+3 commits (`8e0b35d2`, `a71c7793`, `bfb5fc76`). The merge brought Sentry/OTel
+observability foundation, releases 1.2.0 and 1.3.0, and was followed by
+OpenAI-era remnant cleanup.
+
+**Next session tasks** (in priority order):
+
+1. **Deep review of merge outcome**: Walk the merged codebase to verify the
+   integration of observability + widget removal is architecturally sound.
+   Key areas to review:
+   - `register-resources.ts` — the keystone file. Verify 4 resource handlers
+     wrapped with `maybeWrapResourceHandler`, no widget remnants, clean exports
+   - `handlers.ts` — verify `wrapToolHandler` on all tools, `observability`
+     threaded, no `deriveWidgetDomain`
+   - `application.ts` — composition root. Verify `observability` threaded to
+     all subsystems, `preserveSchemaExamplesInToolsList` called correctly
+   - `register-resource-helpers.ts` — verify `ResourceRegistrationOptions`
+     (not `WidgetResourceOptions`), no `widgetDomain`
+   - `auth/public-resources.ts` — verify only documentation URIs in public list
+   - `register-resources-observability.characterisation.test.ts` — verify
+     wrapping assertions are correct
+   - Run `pnpm check` to confirm all gates still pass
+2. **Security hardening** (BLOCKING pre-deployment): OAuth form-encoded
+   redaction and auth success handler PII in observability payloads. These are
+   pre-existing in main but must be fixed before the merged branch deploys.
+   Create a dedicated plan if one doesn't exist.
+3. **Deferred Phase 8 items**:
+   - 8b: Create `.agent/skills/complex-merge/SKILL.md`
+   - 8c: Update `docs/engineering/pre-merge-analysis.md`
+   - 8e: Run full consolidation workflow
+4. **Post-merge structural cleanup**:
+   - Consolidate `register-json-resources.ts` (confirmed duplicate, zero call
+     sites, 5 reviewers flagged)
+5. **Resume WS3 Phase 2** (after review and security hardening are done):
+   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md`
+
+**Merge plan reference** (completed, for context):
+- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-merge-main-into-branch.plan.md`
+
 ### WS3: Fresh React MCP App Rebuild
 
-**Status**: Active implementation track.
+**Status**: Active implementation track. Merge complete. Phase 2 next.
 
 **Child plan**:
 `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 
-**Immediate priority**: merge main into the branch, then resume WS3 Phase 2.
-
-**Pre-Phase-2 blocker**: merge main into this branch first. The merge plan is
-fully reviewed across two rounds (7 reviewers in total: all 4 architecture
-reviewers, mcp-reviewer, security-reviewer, code-reviewer) and ready to execute:
-
-- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-merge-main-into-branch.plan.md`
-
-Verify clean working tree before starting. Start from Phase 5 of the merge plan. After merge passes `pnpm check`, continue with Phase 2:
-
-- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md`
-
 **Phase execution detail**: each WS3 phase has a companion child plan linked in
 the WS3 child plan's `Phase Companion Plans` section. Phases 0 and 1 are
-complete.
+complete. Merge is complete. Phase 2 is next.
 
 **Closure gate note**: WS3/WS4 implementation can progress, but migration closure
 is blocked until C8 auth hardening plans in `current/` are complete (or
