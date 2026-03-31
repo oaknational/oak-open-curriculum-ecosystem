@@ -162,6 +162,13 @@ enough for permanent documentation.
   may still need a local `import type` for its own usage
 - For security metadata, enforce invariants at startup/load
   boundaries and fail hard with remediation guidance
+- **HMAC-signed URLs without single-use constraints are
+  replay vectors** — within the TTL window, a valid URL can
+  amplify upstream API load. Rate-limit the consuming route.
+  See `safety-and-security.md` §Amplification Vectors
+- **`trust proxy` is mandatory behind any reverse proxy** —
+  without it, `req.ip` is the CDN's IP and IP-based rate
+  limiting is useless. Configure before rate limit middleware
 
 ## Troubleshooting (Agent-Specific)
 
