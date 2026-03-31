@@ -156,6 +156,38 @@ Test that:
 | In-memory store lost on cold start | Expected | Low | Acceptable for defence-in-depth; CDN is primary layer |
 | Rate limit headers leak server info | Low | Low | Standard `Retry-After` is expected; no custom headers |
 
+## ADR: Multi-Layer Security Architecture
+
+This work should produce an ADR documenting the full multi-layer rate
+limiting and security architecture. The ADR captures the design rationale
+for where each protection lives and why — not just the application layer
+added here, but the complete stack:
+
+| Layer | Protection | Owner |
+|-------|-----------|-------|
+| **DNS** | DNS rebinding guard (`createDnsRebindingMiddleware`) — rejects requests with unrecognised `Host` headers | App (Express middleware) |
+| **CDN/Edge** | Volumetric DDoS, geographic blocking, bot detection, TLS termination | Vercel edge / CDN config |
+| **Application — auth** | OAuth 2.1 via Clerk (`mcpAuth` middleware), CORS, security headers (CSP, HSTS, X-Frame-Options) | App (Express middleware) |
+| **Application — rate limit** | Per-IP rate limiting on auth-protected routes (this plan) | App (`express-rate-limit`) |
+| **Upstream API** | Oak API key authentication, per-key rate limiting, quota management | Oak API (external) |
+
+The ADR should cover:
+
+1. **Defence-in-depth rationale** — why each layer exists and what it
+   catches that other layers miss
+2. **Trust boundaries** — CDN → app origin, app → upstream API, client →
+   CDN, iframe sandbox → host
+3. **Rate limit coordination** — how CDN limits, app limits, and upstream
+   API limits interact (cascading 429s, back-pressure propagation)
+4. **DNS rebinding** — why the existing guard exists, what it protects,
+   and its relationship to CORS and the `Host` header allowlist
+5. **Security headers** — the current CSP, HSTS, and frame-options
+   posture and how it relates to OpenAI Apps SDK widget sandboxing
+6. **Failure modes** — what happens when each layer fails (CDN down,
+   app rate limit exhausted, upstream API returns 429)
+
+**Suggested ADR number**: next available after ADR-143.
+
 ## Dependencies
 
 - **Blocking**: None — can be done on a separate branch
