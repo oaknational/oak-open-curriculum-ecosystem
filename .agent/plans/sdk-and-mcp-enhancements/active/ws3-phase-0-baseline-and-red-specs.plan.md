@@ -18,12 +18,12 @@ todos:
     status: completed
   - id: doc-rewrite
     content: "Rewrite active normative docs that direct execution toward dead widget model."
-    status: pending
+    status: completed
 ---
 
 # WS3 Phase 0: Baseline and RED Specs
 
-**Status**: IN PROGRESS
+**Status**: COMPLETE
 **Last Updated**: 2026-03-31
 
 This companion plan narrows execution for Phase 0 only. The parent plan remains
@@ -71,10 +71,11 @@ authoritative for full WS3 scope and ordering.
 
 ## Acceptance Evidence
 
-1. Contamination inventory is captured and linked to downstream phases
-2. RED tests fail for expected reasons (and are not vacuous)
-3. No active doc still prescribes preserving legacy widget runtime behaviour
-4. `WIDGET_TOOL_NAMES` non-empty RED assertion is in place and failing
+1. Contamination inventory is captured and linked to downstream phases — ✅
+2. RED tests fail for expected reasons (and are not vacuous) — ✅ 3 E2E RED
+3. No active doc still prescribes preserving legacy widget runtime behaviour — ✅
+4. Widget metadata non-vacancy is tested through product behaviour: E2E RED
+   spec asserts at least one tool advertises `_meta.ui.resourceUri` — ✅
 
 ## Evidence
 

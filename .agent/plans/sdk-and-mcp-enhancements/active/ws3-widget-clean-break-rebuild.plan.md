@@ -10,7 +10,7 @@ isProject: false
 todos:
   - id: phase-0-baseline
     content: "Phase 0: Re-ground the live branch, write RED specs first, and capture the full legacy contamination inventory."
-    status: pending
+    status: completed
   - id: phase-1-delete-legacy
     content: "Phase 1: Delete the legacy widget framework and remove all active-path references to it."
     status: pending
