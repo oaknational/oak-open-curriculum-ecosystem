@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.2.0...v1.3.0) (2026-03-31)
+
+
+### Features
+
+* **observability:** add Sentry + OTel foundation for HTTP MCP server ([#73](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/73)) ([54309a6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/54309a6a2992c7fbd33a03fd2ad92eace5fc142f)), closes [#70](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/70) [#67](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/67) [5-#8](https://github.com/5-/issues/8)
+
 # [1.2.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.1.1...v1.2.0) (2026-03-30)
 
 
