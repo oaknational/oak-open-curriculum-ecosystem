@@ -3,10 +3,11 @@
 ## Why this milestone matters
 
 The open public alpha delivered reliable search, unified MCP Apps
-infrastructure, and initial knowledge graph alignment. Public beta raises
-the bar to production-grade: production authentication with public sign-up,
-full observability, an exemplar interactive UI, and operational hardening
-so the service is reliable enough for sustained daily use.
+infrastructure, initial knowledge graph alignment, and the shared Sentry +
+OpenTelemetry foundation for Oak's canonical runtimes. Public beta raises the
+bar to production-grade: production authentication with public sign-up, richer
+alerting and operational hardening, and an exemplar interactive UI so the
+service is reliable enough for sustained daily use.
 
 ## Who it is for
 
@@ -23,8 +24,9 @@ so the service is reliable enough for sustained daily use.
 - Production Clerk with social providers (Google, Microsoft, GitHub)
   provides a professional, frictionless public sign-up experience.
 - Edge rate limiting on OAuth proxy endpoints protects against abuse.
-- Full Sentry + OTel observability gives clear visibility into production
-  behaviour: structured logging, error tracking, performance monitoring.
+- The Sentry + OTel foundation is turned into sustained operational practice:
+  alerting, release verification discipline, and supportable incident
+  diagnosis.
 - Exemplar MCP App UI (`user_search` tool with React components) —
   a polished, interactive curriculum search experience inside Claude
   Desktop, ChatGPT, and other MCP App hosts.
@@ -43,8 +45,9 @@ All must be true before M3 exit:
 - [ ] Public sign-up enabled (with disposable email blocking)
 - [ ] Edge rate limiting on OAuth proxy endpoints
   (`/oauth/register`, `/oauth/authorize`, `/oauth/token`)
-- [ ] Sentry + OTel integration deployed and verified
-- [ ] Structured logging operational in production
+- [ ] Observability foundation exercised with live alerting and operational
+  verification
+- [ ] Structured logging and Sentry evidence remain operational in production
 - [ ] Exemplar `user_search` MCP App UI implemented (React components,
   design input applied)
 - [ ] Knowledge graph alignment complete (if deferred from M2)
@@ -88,7 +91,7 @@ single rule if needed.
 - Production Clerk:
   [auth/clerk-production-migration.md](../research/auth/clerk-production-migration.md)
 - Sentry + OTel:
-  [sentry-otel-integration.execution.plan.md](../plans/architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md)
+  [architecture-and-infrastructure/README.md](../plans/architecture-and-infrastructure/README.md)
 - Extension surfaces (MCP Apps standard migration):
   [roadmap.md](../plans/sdk-and-mcp-enhancements/roadmap.md)
 - Agentic engineering:

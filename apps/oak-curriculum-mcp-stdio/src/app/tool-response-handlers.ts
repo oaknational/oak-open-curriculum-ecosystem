@@ -48,6 +48,8 @@ interface ToolValidationErrorPayload extends Omit<ToolExecutionErrorPayload, 'to
   readonly outputValidationFailed: { message: string };
 }
 
+type SharedToolMetadata = Omit<ToolExecutionErrorPayload, 'toolExecutionError' | 'toolInput'>;
+
 function serialisePayload(payload: unknown): string {
   try {
     return JSON.stringify(payload);
@@ -95,71 +97,90 @@ function createSuccessResponse(
   return { content: [{ type: 'text', text: serialised }] };
 }
 
-// eslint-disable-next-line max-lines-per-function -- Error enrichment adds necessary context
-export function createToolResponseHandlers(
-  logger: LoggerForToolHandlers,
-  context: ToolHandlerContext,
-): ToolResponseHandlers {
-  const sharedMetadata = {
+function createSharedMetadata(context: ToolHandlerContext): SharedToolMetadata {
+  return {
     toolName: context.name,
     toolDescription: context.description,
     toolInputSchemaRaw: context.inputSchemaRaw,
     toolInputSchemaZod: context.inputSchemaZod,
   };
+}
+
+function createExecutionErrorHandler(
+  logger: LoggerForToolHandlers,
+  sharedMetadata: SharedToolMetadata,
+): ToolResponseHandlers['handleExecutionError'] {
+  return (params: unknown, error: unknown, errorContext?: ErrorContext): ToolResponse => {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    return createErrorResponse(
+      logger,
+      'Tool execution failed',
+      {
+        ...sharedMetadata,
+        toolInput: params,
+        toolExecutionError: { message },
+      },
+      errorContext,
+    );
+  };
+}
+
+function createValidationErrorHandler(
+  logger: LoggerForToolHandlers,
+  context: ToolHandlerContext,
+  sharedMetadata: SharedToolMetadata,
+): ToolResponseHandlers['handleValidationError'] {
+  return (
+    params: unknown,
+    output: ToolExecutionSuccessEnvelope,
+    message: string,
+    errorContext?: ErrorContext,
+  ): ToolResponse =>
+    createErrorResponse(
+      logger,
+      'Tool output validation failed',
+      {
+        ...sharedMetadata,
+        toolInput: params,
+        toolOutputSchemaRaw: context.outputSchemaRaw,
+        toolOutputSchemaZod: context.outputSchemaZod,
+        toolOutput: output,
+        outputValidationFailed: { message },
+      },
+      errorContext,
+    );
+}
+
+function createInformationalHandler(
+  logger: LoggerForToolHandlers,
+): ToolResponseHandlers['handleInformational'] {
+  return (message: string, errorContext?: ErrorContext): ToolResponse => {
+    if (errorContext) {
+      logger.info('Tool returned informational content', {
+        message,
+        correlationId: errorContext.correlationId,
+        duration: errorContext.duration?.formatted,
+        toolName: errorContext.toolName,
+      });
+    } else {
+      logger.info(`Tool returned informational content: ${message}`);
+    }
+    return { content: [{ type: 'text', text: message }] };
+  };
+}
+
+export function createToolResponseHandlers(
+  logger: LoggerForToolHandlers,
+  context: ToolHandlerContext,
+): ToolResponseHandlers {
+  const sharedMetadata = createSharedMetadata(context);
 
   return {
-    handleExecutionError(
-      params: unknown,
-      error: unknown,
-      errorContext?: ErrorContext,
-    ): ToolResponse {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      return createErrorResponse(
-        logger,
-        'Tool execution failed',
-        {
-          ...sharedMetadata,
-          toolInput: params,
-          toolExecutionError: { message },
-        },
-        errorContext,
-      );
-    },
-    handleValidationError(
-      params: unknown,
-      output: ToolExecutionSuccessEnvelope,
-      message: string,
-      errorContext?: ErrorContext,
-    ): ToolResponse {
-      return createErrorResponse(
-        logger,
-        'Tool output validation failed',
-        {
-          ...sharedMetadata,
-          toolInput: params,
-          toolOutputSchemaRaw: context.outputSchemaRaw,
-          toolOutputSchemaZod: context.outputSchemaZod,
-          toolOutput: output,
-          outputValidationFailed: { message },
-        },
-        errorContext,
-      );
-    },
+    handleExecutionError: createExecutionErrorHandler(logger, sharedMetadata),
+    handleValidationError: createValidationErrorHandler(logger, context, sharedMetadata),
     handleSuccess(result: ToolExecutionSuccessEnvelope): ToolResponse {
       return createSuccessResponse(logger, result);
     },
-    handleInformational(message: string, errorContext?: ErrorContext): ToolResponse {
-      if (errorContext) {
-        logger.info('Tool returned informational content', {
-          message,
-          correlationId: errorContext.correlationId,
-          duration: errorContext.duration?.formatted,
-          toolName: errorContext.toolName,
-        });
-      } else {
-        logger.info(`Tool returned informational content: ${message}`);
-      }
-      return { content: [{ type: 'text', text: message }] };
-    },
+    handleInformational: createInformationalHandler(logger),
   };
 }

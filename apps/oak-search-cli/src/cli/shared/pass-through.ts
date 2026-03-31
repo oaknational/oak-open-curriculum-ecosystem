@@ -14,6 +14,7 @@ import type { Command } from 'commander';
 import { typeSafeEntries } from '@oaknational/type-helpers';
 import type { CliSdkEnv } from './create-cli-sdk.js';
 import { printError } from './output.js';
+import { printConfigError, type SearchCliEnvLoader } from '../../runtime-config.js';
 
 /**
  * Resolve the CLI workspace root directory.
@@ -63,6 +64,33 @@ function executePassThroughScript(
   execFileSync('pnpm', ['exec', 'tsx', script, ...args], execOptions);
 }
 
+function loadPassThroughCliEnv(
+  cliEnvLoader: SearchCliEnvLoader | undefined,
+): SerializableCliEnv | undefined {
+  if (!cliEnvLoader) {
+    return undefined;
+  }
+
+  const envResult = cliEnvLoader.load();
+  if (!envResult.ok) {
+    printConfigError(envResult.error);
+    process.exitCode = 1;
+    return undefined;
+  }
+
+  return envResult.value;
+}
+
+function handlePassThroughError(error: unknown): void {
+  if (error && typeof error === 'object' && 'status' in error && typeof error.status === 'number') {
+    process.exitCode = error.status;
+    return;
+  }
+
+  printError(error instanceof Error ? error.message : String(error));
+  process.exitCode = 1;
+}
+
 /**
  * Register a pass-through command that delegates to an existing script.
  *
@@ -93,9 +121,9 @@ export function registerPassThrough(
   name: string,
   description: string,
   scriptPath: string,
-  options?: { cliEnv?: SerializableCliEnv },
+  options?: { cliEnvLoader?: SearchCliEnvLoader },
 ): void {
-  const cliEnv = options?.cliEnv;
+  const cliEnvLoader = options?.cliEnvLoader;
   parent
     .command(name)
     .description(description)
@@ -103,19 +131,13 @@ export function registerPassThrough(
     .allowExcessArguments()
     .action(function passThroughAction(this: Command) {
       try {
+        const cliEnv = loadPassThroughCliEnv(cliEnvLoader);
+        if (cliEnvLoader && cliEnv === undefined) {
+          return;
+        }
         executePassThroughScript(scriptPath, this.args, cliEnv);
       } catch (error) {
-        if (
-          error &&
-          typeof error === 'object' &&
-          'status' in error &&
-          typeof error.status === 'number'
-        ) {
-          process.exitCode = error.status;
-        } else {
-          printError(error instanceof Error ? error.message : String(error));
-          process.exitCode = 1;
-        }
+        handlePassThroughError(error);
       }
     });
 }

@@ -3,10 +3,11 @@
  */
 
 import type { RateLimitTracker, RateLimitInfo } from '@oaknational/curriculum-sdk';
+import type { LogContextInput } from '@oaknational/logger';
 import { ingestLogger } from './logger';
 
 /** Structured rate limit info for logging */
-interface FormattedRateLimitInfo {
+interface FormattedRateLimitInfo extends LogContextInput {
   readonly limit: number | 'unknown';
   readonly remaining: number | 'unknown';
   readonly used: number | 'unknown';

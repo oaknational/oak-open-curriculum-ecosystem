@@ -17,9 +17,9 @@ whether those outputs combine into a coherent user experience.
 
 ## Milestone Context
 
-- **Milestone 1**: educator + engineering/Ed-Tech user experience is ready for
-  public alpha.
-- **Milestone 2**: learner-facing scope assessment and safeguarding-led
+- **Milestone 2**: educator + engineering/Ed-Tech user experience is ready for
+  open public alpha.
+- **Milestone 3**: learner-facing scope assessment and safeguarding-led
   promotion decisions.
 
 See [high-level-plan.md](../high-level-plan.md) for the full milestone map.
@@ -44,10 +44,9 @@ One UX decision remains:
 1. whether to support MCP Apps extension enough to show basic branding in Claude
    before public alpha
 
-### Remaining Non-UX Blockers
+### Remaining Non-UX Blocker
 
-1. Clerk production instance migration
-2. Basic Sentry logging verification
+1. Sentry + OTel foundation verification for the HTTP MCP server and Search CLI
 
 ---
 
@@ -71,7 +70,7 @@ Phase 2: Learner discovery and safeguarding gate review    📋 PLANNED
   - user-segment outcomes are explicit and non-overlapping
   - no-go conditions for public alpha are defined
   - success signals and telemetry expectations are documented
-  - Milestone 1 UI-surface decision criteria are defined (Option X/Option Y)
+  - Milestone 2 UI-surface decision criteria are defined (Option X/Option Y)
   - dependencies to technical plans are linked
 - Dependencies: none
 

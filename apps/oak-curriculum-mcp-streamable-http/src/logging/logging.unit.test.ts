@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import { UnifiedLogger } from '@oaknational/logger';
+import { UnifiedLogger, normalizeError } from '@oaknational/logger';
 import type { Response } from 'express';
 import { unwrap } from '@oaknational/result';
 
@@ -52,7 +52,7 @@ describe('createHttpLogger', () => {
     // Behavior test: error method should accept error and context
     // Should not throw
     expect(() => {
-      logger.error('test message', testError, testContext);
+      logger.error('test message', normalizeError(testError), testContext);
     }).not.toThrow();
   });
 });

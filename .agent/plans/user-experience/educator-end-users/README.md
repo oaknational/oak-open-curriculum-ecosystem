@@ -7,7 +7,7 @@ ChatGPT, Claude, Gemini).
 
 ## Public-Alpha Scope
 
-Educator experience is in-scope for Milestone 1 public alpha.
+Educator experience is in-scope for Milestone 2 open public alpha.
 
 This includes:
 

@@ -27,7 +27,7 @@
  * @see ADR-133 CLI Resource Lifecycle Management
  */
 
-import type { Logger } from '@oaknational/logger/node';
+import { normalizeError, sanitiseForJson, type Logger } from '@oaknational/logger/node';
 
 /** Minimal contract for an ES client that can be closed. */
 export interface CloseableEsClient {
@@ -65,14 +65,14 @@ export async function withEsClient(
   try {
     await handler();
   } catch (error: unknown) {
-    deps.logger.error('Command failed', error);
+    deps.logger.error('Command failed', normalizeError(error));
     deps.printError(error instanceof Error ? error.message : String(error));
     deps.setExitCode(1);
   } finally {
     try {
       await esClient.close();
     } catch (closeErr: unknown) {
-      deps.logger.warn('ES client close failed', closeErr);
+      deps.logger.warn('ES client close failed', { error: sanitiseForJson(closeErr) });
       deps.setExitCode(1);
     }
   }

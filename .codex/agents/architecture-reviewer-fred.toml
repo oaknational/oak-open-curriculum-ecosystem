@@ -1,3 +1,5 @@
+name = "architecture-reviewer-fred"
+description = "Principles-first architecture reviewer — ADR compliance and boundary discipline."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"

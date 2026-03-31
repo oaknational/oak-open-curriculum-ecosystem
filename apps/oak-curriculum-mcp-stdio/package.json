@@ -46,6 +46,7 @@
     "@oaknational/env-resolution": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/oak-search-sdk": "workspace:*",
+    "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
     "zod": "^4.3.6"
   },

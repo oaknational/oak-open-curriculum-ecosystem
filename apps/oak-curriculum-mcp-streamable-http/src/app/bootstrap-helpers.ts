@@ -4,13 +4,17 @@ import {
   createRequestLogger,
   logLevelToSeverityNumber,
   createPhasedTimer,
+  normalizeError,
+  sanitiseForJson,
   type Logger,
+  type LogContextInput,
   type PhasedTimer,
 } from '@oaknational/logger';
 
 import { createCorrelationMiddleware } from '../correlation/middleware.js';
 import { createEnrichedErrorLogger } from '../logging/index.js';
 import { redactHeaders } from '../logging/header-redaction.js';
+import type { HttpObservability } from '../observability/http-observability.js';
 
 export type BootstrapPhaseName =
   | 'setupBaseMiddleware'
@@ -25,34 +29,37 @@ export type BootstrapPhaseName =
   | 'initializeCoreEndpoints'
   | 'setupAuthRoutes';
 
-export interface BootstrapPhaseContext {
+export interface BootstrapPhaseContext extends LogContextInput {
   readonly appId: number;
   readonly phase: BootstrapPhaseName;
 }
 
-/**
- * Executes a bootstrap phase with instrumentation logging.
- *
- * @param log - Logger instance for recording phase events.
- * @param timer - Phased timer for tracking phase duration.
- * @param phase - Name of the bootstrap phase.
- * @param appId - Identifier of the Express app instance.
- * @param operation - Function that performs the phase operations.
- * @returns Result of the operation.
- */
+type BootstrapObservability = Pick<HttpObservability, 'withSpan' | 'withSpanSync'>;
+
+/** Executes a synchronous bootstrap phase with instrumentation logging and optional span wrapping. */
 export function runBootstrapPhase<T>(
   log: Logger,
   timer: PhasedTimer,
   phase: BootstrapPhaseName,
   appId: number,
   operation: () => T,
+  observability?: BootstrapObservability,
 ): T {
   const context: BootstrapPhaseContext = { appId, phase };
   log.debug('bootstrap.phase.start', context);
   const phaseHandle = timer.startPhase(phase);
 
   try {
-    const result = operation();
+    const result = observability
+      ? observability.withSpanSync({
+          name: `oak.http.bootstrap.${phase}`,
+          attributes: {
+            'oak.bootstrap.phase': phase,
+            'oak.bootstrap.app_id': appId,
+          },
+          run: () => operation(),
+        })
+      : operation();
     const durationResult = phaseHandle.end();
     log.info('bootstrap.phase.finish', {
       ...context,
@@ -66,7 +73,7 @@ export function runBootstrapPhase<T>(
       error instanceof Error
         ? error
         : new Error(`Bootstrap phase "${phase}" threw non-error value: ${String(error)}`);
-    log.error('bootstrap.phase.error', errorAsError, {
+    log.error('bootstrap.phase.error', normalizeError(errorAsError), {
       ...context,
       duration: durationResult.duration.formatted,
       durationMs: durationResult.duration.ms,
@@ -86,13 +93,23 @@ export async function runAsyncBootstrapPhase<T>(
   phase: BootstrapPhaseName,
   appId: number,
   operation: () => Promise<T>,
+  observability?: BootstrapObservability,
 ): Promise<T> {
   const context: BootstrapPhaseContext = { appId, phase };
   log.debug('bootstrap.phase.start', context);
   const phaseHandle = timer.startPhase(phase);
 
   try {
-    const result = await operation();
+    const result = observability
+      ? await observability.withSpan({
+          name: `oak.http.bootstrap.${phase}`,
+          attributes: {
+            'oak.bootstrap.phase': phase,
+            'oak.bootstrap.app_id': appId,
+          },
+          run: async () => await operation(),
+        })
+      : await operation();
     const durationResult = phaseHandle.end();
     log.info('bootstrap.phase.finish', {
       ...context,
@@ -106,7 +123,7 @@ export async function runAsyncBootstrapPhase<T>(
       error instanceof Error
         ? error
         : new Error(`Bootstrap phase "${phase}" threw non-error value: ${String(error)}`);
-    log.error('bootstrap.phase.error', errorAsError, {
+    log.error('bootstrap.phase.error', normalizeError(errorAsError), {
       ...context,
       duration: durationResult.duration.formatted,
       durationMs: durationResult.duration.ms,
@@ -116,22 +133,13 @@ export async function runAsyncBootstrapPhase<T>(
 }
 
 /**
- * Adds diagnostic instrumentation checkpoints to base middleware.
- * TEMPORARY: For debugging Vercel hang issue.
- */
-function addBaseMiddlewareInstrumentation(app: Express, log: Logger): void {
-  app.use((req, res, next) => {
-    void res;
-    log.info('→→→ REQUEST ENTRY', { method: req.method, path: req.path, url: req.url });
-    next();
-  });
-}
-
-/**
  * Sets up base Express middleware (JSON parsing, correlation, logging, error handling).
  */
-export function setupBaseMiddleware(app: Express, log: Logger): void {
-  addBaseMiddlewareInstrumentation(app, log);
+export function setupBaseMiddleware(
+  app: Express,
+  log: Logger,
+  observability?: Pick<HttpObservability, 'captureHandledError'>,
+): void {
   app.use(expressJson({ limit: '1mb' }));
   app.use(createCorrelationMiddleware(log));
 
@@ -144,17 +152,7 @@ export function setupBaseMiddleware(app: Express, log: Logger): void {
       }),
     );
   }
-  app.use(createEnrichedErrorLogger(log));
-
-  // INSTRUMENTATION: Final checkpoint
-  app.use((req, res, next) => {
-    log.info('✓✓✓ BASE MIDDLEWARE COMPLETE', {
-      correlationId: res.locals.correlationId,
-      method: req.method,
-      path: req.path,
-    });
-    next();
-  });
+  app.use(createEnrichedErrorLogger(log, observability));
 }
 
 /**
@@ -174,7 +172,7 @@ export function createMcpReadinessMiddleware(ready: Promise<void>, log: Logger):
       ]);
       next();
     } catch (error: unknown) {
-      log.error('MCP connection failed', { error });
+      log.error('MCP connection failed', normalizeError(error));
       _res.status(503).json({
         error: 'MCP server not ready',
         message: error instanceof Error ? error.message : 'Unknown error',
@@ -214,7 +212,10 @@ export function logBootstrapComplete(
  * @param routes - Array of route objects from express-list-routes
  */
 export function logRegisteredRoutes(log: Logger, appId: number, routes: unknown[]): void {
-  log.debug('bootstrap.routes.registered', { appId, routes });
+  log.debug('bootstrap.routes.registered', {
+    appId,
+    routes: sanitiseForJson(routes),
+  });
 }
 
 /**

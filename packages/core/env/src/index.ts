@@ -12,7 +12,15 @@ export {
   ElasticsearchEnvSchema,
   BulkDataEnvSchema,
   LoggingEnvSchema,
+  SentryEnvSchema,
   LOG_LEVELS,
   NODE_ENVS,
+  SENTRY_MODES,
 } from './schemas/index.js';
-export type { OakApiKeyEnv, ElasticsearchEnv, BulkDataEnv, LoggingEnv } from './schemas/index.js';
+export type {
+  OakApiKeyEnv,
+  ElasticsearchEnv,
+  BulkDataEnv,
+  LoggingEnv,
+  SentryEnv,
+} from './schemas/index.js';

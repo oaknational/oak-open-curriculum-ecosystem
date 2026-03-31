@@ -5,7 +5,7 @@
  * without network calls.
  */
 
-import type { Logger } from '@oaknational/logger';
+import type { JsonObject, Logger } from '@oaknational/logger';
 import { describe, it, expect, vi } from 'vitest';
 import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
 import type { EsSearchRequest, EsSearchResponse } from '../internal/types.js';
@@ -36,20 +36,64 @@ function getFirstRequest(calls: EsSearchRequest[]): EsSearchRequest {
   return request;
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+function isJsonObject(value: unknown): value is JsonObject {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 /** Extracts the `standard` property from an RRF sub-retriever via runtime narrowing. */
-function getStandard(retriever: unknown): Record<string, unknown> | undefined {
-  if (!isRecord(retriever)) {
+function getStandard(retriever: unknown): JsonObject | undefined {
+  if (!isJsonObject(retriever)) {
     return undefined;
   }
   const std = retriever.standard;
-  if (!isRecord(std)) {
+  if (!isJsonObject(std)) {
     return undefined;
   }
   return std;
+}
+
+function getNestedJsonObject(
+  value: JsonObject | null | undefined,
+  key: string,
+): JsonObject | undefined {
+  if (value === undefined || value === null) {
+    return undefined;
+  }
+
+  const nestedValue = value[key];
+  return isJsonObject(nestedValue) ? nestedValue : undefined;
+}
+
+function createLoggerMock() {
+  return {
+    trace: vi.fn(),
+    debug: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    fatal: vi.fn(),
+  } satisfies Logger;
+}
+
+function extractLoggedFilterEntries(
+  logger: ReturnType<typeof createLoggerMock>,
+): readonly unknown[] {
+  const callPayload: unknown = logger.debug.mock.calls[0]?.[1];
+  if (!isJsonObject(callPayload)) {
+    throw new Error('Expected logger payload to be an object');
+  }
+
+  const filterClause = callPayload.filterClause;
+  if (!isJsonObject(filterClause)) {
+    throw new Error('Expected logger payload to contain a filter clause');
+  }
+
+  const boolClause = filterClause.bool;
+  if (!isJsonObject(boolClause) || !Array.isArray(boolClause.filter)) {
+    throw new Error('Expected filter clause to contain a bool.filter array');
+  }
+
+  return boolClause.filter;
 }
 
 /** Extracts the filter from the first RRF sub-retriever. */
@@ -85,7 +129,9 @@ describe('searchSequences', () => {
 
       const retrievers = getFirstRequest(calls).retriever?.rrf?.retrievers ?? [];
       const query = getStandard(retrievers[0])?.query;
-      expect(isRecord(query) ? query.multi_match : undefined).toMatchObject({
+      expect(
+        getNestedJsonObject(isJsonObject(query) ? query : undefined, 'multi_match'),
+      ).toMatchObject({
         query: 'algebra',
         fuzziness: 'AUTO',
         fields: ['sequence_title^2', 'category_titles', 'subject_title', 'phase_title'],
@@ -99,7 +145,7 @@ describe('searchSequences', () => {
 
       const retrievers = getFirstRequest(calls).retriever?.rrf?.retrievers ?? [];
       const query = getStandard(retrievers[1])?.query;
-      expect(isRecord(query) ? query.semantic : undefined).toEqual({
+      expect(getNestedJsonObject(isJsonObject(query) ? query : undefined, 'semantic')).toEqual({
         field: 'sequence_semantic',
         query: 'algebra',
       });
@@ -187,7 +233,7 @@ describe('searchSequences', () => {
 
     it('logs resolved sequence filters for debugging', async () => {
       const { search } = createMockSearch();
-      const logger = { debug: vi.fn() } as unknown as Logger;
+      const logger = createLoggerMock();
 
       await searchSequences(
         {
@@ -218,25 +264,23 @@ describe('searchSequences', () => {
         }),
       );
 
-      const callPayload = vi.mocked(logger.debug).mock.calls[0]?.[1] as {
-        filterClause: { bool: { filter: unknown[] } };
-      };
-      expect(callPayload.filterClause.bool.filter).toHaveLength(4);
-      expect(callPayload.filterClause.bool.filter).toContainEqual({
+      const loggedFilters = extractLoggedFilterEntries(logger);
+      expect(loggedFilters).toHaveLength(4);
+      expect(loggedFilters).toContainEqual({
         term: { subject_slug: 'science' },
       });
-      expect(callPayload.filterClause.bool.filter).toContainEqual({
+      expect(loggedFilters).toContainEqual({
         term: { phase_slug: 'secondary' },
       });
-      expect(callPayload.filterClause.bool.filter).toContainEqual({ term: { key_stages: 'ks4' } });
-      expect(callPayload.filterClause.bool.filter).toContainEqual({
+      expect(loggedFilters).toContainEqual({ term: { key_stages: 'ks4' } });
+      expect(loggedFilters).toContainEqual({
         match_phrase: { category_titles: 'Biology' },
       });
     });
 
     it('logs the empty-filter branch for debugging', async () => {
       const { search } = createMockSearch();
-      const logger = { debug: vi.fn() } as unknown as Logger;
+      const logger = createLoggerMock();
 
       await searchSequences({ query: 'geography' }, search, stubResolveIndex, logger);
 

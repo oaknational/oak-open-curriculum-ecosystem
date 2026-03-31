@@ -2,7 +2,7 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import { hasJsonRpcOrResultError, parseSseEnvelope } from './helpers/sse.js';
-import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -21,8 +21,10 @@ function makeInvalidEnumBody() {
 async function post(body: Record<string, unknown>) {
   // Disable auth – this suite exercises validation errors only.
   // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
+  const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
   const app = await createApp({
-    runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+    runtimeConfig,
+    observability: createMockObservability(runtimeConfig),
   });
   return request(app).post('/mcp').set('Host', 'localhost').set('Accept', ACCEPT).send(body);
 }

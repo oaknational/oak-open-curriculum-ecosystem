@@ -43,10 +43,10 @@ describe('sandbox-bulk-response integration', () => {
 
       expect(logger.error).toHaveBeenCalledWith(
         'Bulk indexing errors',
-        undefined,
         expect.objectContaining({
           failureCount: 2,
           errorTypes: { version_conflict_engine_exception: 2 },
+          firstError: { type: 'version_conflict_engine_exception', reason: 'exists' },
         }),
       );
     });
@@ -70,10 +70,10 @@ describe('sandbox-bulk-response integration', () => {
 
       expect(logger.error).toHaveBeenCalledWith(
         'Bulk indexing errors',
-        undefined,
         expect.objectContaining({
           failureCount: 1,
           errorTypes: { mapper_parsing_exception: 1 },
+          firstError: { type: 'mapper_parsing_exception', reason: 'bad field' },
         }),
       );
     });

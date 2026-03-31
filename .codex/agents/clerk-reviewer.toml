@@ -1,0 +1,14 @@
+name = "clerk-reviewer"
+description = "Clerk specialist reviewer for middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, and Clerk SDK usage."
+model_reasoning_effort = "high"
+sandbox_mode = "read-only"
+approval_policy = "never"
+
+developer_instructions = """
+Read and follow `.agent/sub-agents/templates/clerk-reviewer.md`.
+
+This file is a thin Codex adapter. The canonical reviewer instructions live in
+the template referenced above.
+
+Mode: Observe, analyse and report. Do not modify code.
+"""

@@ -13,6 +13,7 @@ import {
   type Logger,
 } from '@oaknational/logger';
 import { createNodeFileSink } from '@oaknational/logger/node';
+import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import { createStdioSinkConfig } from './config.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 
@@ -44,12 +45,17 @@ export function createStdioLogger(config: RuntimeConfig): Logger {
     throw new Error('Stdio server requires file sink configuration');
   }
 
+  const fileSink = createNodeFileSink(fileSinkConfig);
+  if (!fileSink) {
+    throw new Error('Failed to initialise stdio file sink');
+  }
+
   return new UnifiedLogger({
     minSeverity,
     resourceAttributes,
     context: {},
-    stdoutSink: null,
-    fileSink: createNodeFileSink(fileSinkConfig),
+    sinks: [fileSink],
+    getActiveSpanContext: getActiveSpanContextSnapshot,
   });
 }
 

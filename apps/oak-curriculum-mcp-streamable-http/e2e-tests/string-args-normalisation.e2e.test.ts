@@ -8,7 +8,7 @@ import {
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { ok } from '@oaknational/result';
-import { createMockRuntimeConfig } from './helpers/test-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 import {
   getContentArray,
   parseJsonRpcResult,
@@ -68,8 +68,10 @@ describe('HTTP boundary argument validation', () => {
   }
 
   it('returns a descriptive validation error for plain string arguments', async () => {
+    const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
     const app = await createApp({
-      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+      runtimeConfig,
+      observability: createMockObservability(runtimeConfig),
     });
     const res = await request(app)
       .post('/mcp')
@@ -88,8 +90,10 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for JSON string arguments', async () => {
+    const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
     const app = await createApp({
-      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+      runtimeConfig,
+      observability: createMockObservability(runtimeConfig),
     });
     const res = await request(app)
       .post('/mcp')
@@ -108,8 +112,10 @@ describe('HTTP boundary argument validation', () => {
   });
 
   it('returns a descriptive validation error for path-string arguments', async () => {
+    const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
     const app = await createApp({
-      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+      runtimeConfig,
+      observability: createMockObservability(runtimeConfig),
     });
     const res = await request(app)
       .post('/mcp')
@@ -129,9 +135,11 @@ describe('HTTP boundary argument validation', () => {
 
   it('accepts structured arguments that match the tool schema', async () => {
     const captured: CapturedCall[] = [];
+    const runtimeConfig = createMockRuntimeConfig({ dangerouslyDisableAuth: true });
     const app = await createApp({
       toolHandlerOverrides: createStructuredSuccessOverrides(captured),
-      runtimeConfig: createMockRuntimeConfig({ dangerouslyDisableAuth: true }),
+      runtimeConfig,
+      observability: createMockObservability(runtimeConfig),
     });
     const res = await request(app)
       .post('/mcp')

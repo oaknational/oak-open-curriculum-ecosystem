@@ -69,7 +69,11 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    rules: coreTestConfigRules,
+    rules: {
+      ...coreTestConfigRules,
+      'import-x/no-relative-packages': 'off',
+      'import-x/no-relative-parent-imports': 'off',
+    },
   },
 );
 

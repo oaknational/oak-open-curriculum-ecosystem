@@ -1,30 +1,57 @@
-/**
- * Express middleware for HTTP request and error logging
- */
+/** Express middleware for HTTP request and error logging. */
 
 import type { Request, Response, NextFunction, RequestHandler, ErrorRequestHandler } from 'express';
 import type { IncomingHttpHeaders } from 'node:http';
+import {
+  redactHeaderRecord,
+  redactTelemetryObject,
+  redactTelemetryValue,
+} from '@oaknational/observability';
 import type { Logger, JsonObject, JsonValue } from './types.js';
 import { sanitiseForJson } from './json-sanitisation.js';
+import { normalizeError } from './error-normalisation.js';
 
-/**
- * Type guard to check if a JsonValue is a JsonObject
- */
+/** Type guard to check if a JsonValue is a JsonObject. */
 function isJsonObject(value: JsonValue): value is JsonObject {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-/**
- * Options for request logger middleware
- */
+/** Options for request logger middleware. */
+export type HeaderRedactor = (headers: IncomingHttpHeaders) => Record<string, string>;
+
 export interface RequestLoggerOptions {
   /** Log level to use (default: 'debug') */
   level?: 'trace' | 'debug' | 'info';
   /** Whether to include request body in logs (default: false) */
   includeBody?: boolean;
   /** Optional function to redact sensitive headers before logging */
-  redactHeaders?: (headers: IncomingHttpHeaders) => Record<string, string>;
+  redactHeaders?: HeaderRedactor;
 }
+
+/** Options for error logger middleware. */
+export interface ErrorLoggerOptions {
+  /** Optional function to redact sensitive headers before logging */
+  redactHeaders?: HeaderRedactor;
+}
+
+/** Minimal request shape required to extract structured HTTP metadata. */
+export interface RequestMetadataSource {
+  readonly method: string;
+  readonly url: string;
+  readonly path?: string;
+  readonly headers: IncomingHttpHeaders;
+  readonly query?: Request['query'];
+  readonly params?: Request['params'];
+  readonly ip?: string;
+}
+
+/** Request shape required by the logger before Express response objects enter the picture. */
+export interface RequestLoggingSource extends RequestMetadataSource {
+  readonly body?: unknown;
+}
+
+/** Minimal next-function shape used by the logger handlers. */
+export type LoggingNext = (error?: unknown) => void;
 
 /**
  * Safely extracts JSON-safe metadata from an Express Request
@@ -40,10 +67,10 @@ export interface RequestLoggerOptions {
  * ```
  */
 export function extractRequestMetadata(
-  req: Request,
-  options?: { redactHeaders?: (headers: IncomingHttpHeaders) => Record<string, string> },
+  req: RequestMetadataSource,
+  options?: { redactHeaders?: HeaderRedactor },
 ): JsonObject {
-  const headers = options?.redactHeaders ? options.redactHeaders(req.headers) : req.headers;
+  const headers = (options?.redactHeaders ?? redactHeaderRecord)(req.headers);
 
   const metadata = {
     method: req.method,
@@ -63,7 +90,75 @@ export function extractRequestMetadata(
     throw new Error('Unexpected sanitisation result: expected object');
   }
 
-  return result;
+  const redactedMetadata = redactTelemetryObject(result);
+
+  if (!isJsonObject(redactedMetadata)) {
+    throw new Error('Unexpected redaction result: expected object');
+  }
+
+  return redactedMetadata;
+}
+
+/**
+ * Logs an incoming request using transport-agnostic inputs.
+ *
+ * @param logger - Logger instance to use
+ * @param request - Request data required for structured logging
+ * @param next - Continuation callback
+ * @param options - Request logging configuration
+ */
+export function logIncomingRequest(
+  logger: Logger,
+  request: RequestLoggingSource,
+  next: LoggingNext,
+  options: RequestLoggerOptions = {},
+): void {
+  try {
+    const level = options.level ?? 'debug';
+    let metadata = extractRequestMetadata(request, {
+      redactHeaders: options.redactHeaders,
+    });
+
+    if (options.includeBody && request.body) {
+      metadata = {
+        ...metadata,
+        body: redactTelemetryValue(sanitiseForJson(request.body)),
+      };
+    }
+
+    logger[level]('Incoming HTTP request', metadata);
+  } catch {
+    // Preserve the request pipeline even when logging fails.
+  }
+
+  next();
+}
+
+/**
+ * Logs an error with request context using transport-agnostic inputs.
+ *
+ * @param logger - Logger instance to use
+ * @param error - Error to log
+ * @param request - Request data required for structured logging
+ * @param next - Continuation callback
+ */
+export function logRequestError(
+  logger: Logger,
+  error: Error,
+  request: RequestMetadataSource,
+  next: LoggingNext,
+  options: ErrorLoggerOptions = {},
+): void {
+  try {
+    const metadata = extractRequestMetadata(request, {
+      redactHeaders: options.redactHeaders,
+    });
+    logger.error('HTTP request error', normalizeError(error), metadata);
+  } catch {
+    // Preserve the error pipeline even when logging fails.
+  }
+
+  next(error);
 }
 
 /**
@@ -74,9 +169,26 @@ export function extractRequestMetadata(
  *
  * @example
  * ```typescript
- * import { createRequestLogger } from '@oaknational/logger';
+ * import {
+ *   UnifiedLogger,
+ *   buildResourceAttributes,
+ *   createRequestLogger,
+ *   logLevelToSeverityNumber,
+ *   parseLogLevel,
+ *   type LogSink,
+ * } from '@oaknational/logger';
+ * import { createNodeStdoutSink } from '@oaknational/logger/node';
  *
- * const logger = createAdaptiveLogger();
+ * const sinks: readonly LogSink[] = [createNodeStdoutSink()];
+ *
+ * const logger = new UnifiedLogger({
+ *   minSeverity: logLevelToSeverityNumber(parseLogLevel('INFO', 'INFO')),
+ *   resourceAttributes: buildResourceAttributes({}, 'oak-http', '1.0.0'),
+ *   context: {},
+ *   sinks,
+ *   getActiveSpanContext: () => undefined,
+ * });
+ *
  * app.use(createRequestLogger(logger, { level: 'info' }));
  * ```
  */
@@ -84,23 +196,8 @@ export function createRequestLogger(
   logger: Logger,
   options: RequestLoggerOptions = {},
 ): RequestHandler {
-  const level = options.level ?? 'debug';
-
   return (req: Request, _res: Response, next: NextFunction): void => {
-    let metadata = extractRequestMetadata(req, {
-      redactHeaders: options.redactHeaders,
-    });
-
-    if (options.includeBody && req.body) {
-      // JsonObject has readonly index signature, so create new object
-      metadata = {
-        ...metadata,
-        body: sanitiseForJson(req.body),
-      };
-    }
-
-    logger[level]('Incoming HTTP request', metadata);
-    next();
+    logIncomingRequest(logger, req, next, options);
   };
 }
 
@@ -108,21 +205,40 @@ export function createRequestLogger(
  * Creates Express error-handling middleware that logs errors with request context
  * Must be registered after routes to catch errors
  * @param logger - Logger instance to use
+ * @param options - Optional configuration for header redaction
  * @returns Express error middleware function
  *
  * @example
  * ```typescript
- * import { createErrorLogger } from '@oaknational/logger';
+ * import {
+ *   UnifiedLogger,
+ *   buildResourceAttributes,
+ *   createErrorLogger,
+ *   logLevelToSeverityNumber,
+ *   parseLogLevel,
+ *   type LogSink,
+ * } from '@oaknational/logger';
+ * import { createNodeStdoutSink } from '@oaknational/logger/node';
  *
- * const logger = createAdaptiveLogger();
+ * const sinks: readonly LogSink[] = [createNodeStdoutSink()];
+ *
+ * const logger = new UnifiedLogger({
+ *   minSeverity: logLevelToSeverityNumber(parseLogLevel('INFO', 'INFO')),
+ *   resourceAttributes: buildResourceAttributes({}, 'oak-http', '1.0.0'),
+ *   context: {},
+ *   sinks,
+ *   getActiveSpanContext: () => undefined,
+ * });
+ *
  * // Register after all routes
  * app.use(createErrorLogger(logger));
  * ```
  */
-export function createErrorLogger(logger: Logger): ErrorRequestHandler {
+export function createErrorLogger(
+  logger: Logger,
+  options: ErrorLoggerOptions = {},
+): ErrorRequestHandler {
   return (err: Error, req: Request, _res: Response, next: NextFunction): void => {
-    const metadata = extractRequestMetadata(req);
-    logger.error('HTTP request error', err, metadata);
-    next(err); // Must pass error to next middleware
+    logRequestError(logger, err, req, next, options);
   };
 }

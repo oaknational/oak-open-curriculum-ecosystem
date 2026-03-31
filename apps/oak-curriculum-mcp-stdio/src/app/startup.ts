@@ -5,7 +5,7 @@
  * timestamped startup messages plus startup log-file writes.
  */
 
-import type { Logger } from '@oaknational/logger';
+import { normalizeError, type Logger } from '@oaknational/logger';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { requireRepoRoot } from './require-repo-root.js';
@@ -47,10 +47,7 @@ export function createStartupLogger(
       const logFile = deps.path.join(logDir, 'startup.log');
       deps.fs.writeFileSync(logFile, fileLogLine, { flag: 'a' });
     } catch (error: unknown) {
-      deps.logger.error(
-        `Failed to write startup log file: ${error instanceof Error ? error.message : String(error)}`,
-        error,
-      );
+      deps.logger.error('Failed to write startup log file', normalizeError(error));
     }
   };
 }

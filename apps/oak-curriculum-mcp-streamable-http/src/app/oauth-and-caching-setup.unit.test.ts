@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { fetchUpstreamMetadata, type FetchFn } from './oauth-and-caching-setup.js';
+import type { HttpObservability, HttpSpanHandle } from '../observability/http-observability.js';
 
 function createFakeFetch(response: { ok: boolean; status: number; body: unknown }): FetchFn {
   return () =>
@@ -20,6 +21,14 @@ const VALID_METADATA = {
   response_types_supported: ['code'],
   grant_types_supported: ['authorization_code'],
   code_challenge_methods_supported: ['S256'],
+};
+const noopSpanHandle: HttpSpanHandle = {
+  setAttribute(): void {
+    // No-op in unit test.
+  },
+  setAttributes(): void {
+    // No-op in unit test.
+  },
 };
 
 describe('fetchUpstreamMetadata', () => {
@@ -158,5 +167,58 @@ describe('fetchUpstreamMetadata', () => {
       expect(result.error.type).toBe('timeout');
       expect(result.error.message).toContain('aborted');
     }
+  });
+
+  it('wraps metadata fetch in an observability span with safe attributes', async () => {
+    const fakeFetch = createFakeFetch({ ok: true, status: 200, body: VALID_METADATA });
+    const setAttribute = vi.fn<(name: string, value: unknown) => void>();
+    const spanCalls: {
+      readonly name: string;
+      readonly attributes?: Record<string, unknown>;
+    }[] = [];
+    const withSpan: HttpObservability['withSpan'] = async ({ name, attributes, run }) => {
+      spanCalls.push({ name, attributes });
+
+      return await run({
+        ...noopSpanHandle,
+        setAttribute,
+      });
+    };
+
+    const result = await fetchUpstreamMetadata('https://clerk.example.com', fakeFetch, {
+      observability: { withSpan },
+    });
+
+    expect(result.ok).toBe(true);
+    const expectedAttrs: unknown = expect.objectContaining({
+      'oak.bootstrap.phase': 'fetchUpstreamMetadata',
+      'oak.upstream.host': 'clerk.example.com',
+    });
+    expect(spanCalls).toEqual([
+      expect.objectContaining({
+        name: 'oak.http.bootstrap.upstream-metadata',
+        attributes: expectedAttrs,
+      }),
+    ]);
+    expect(setAttribute).toHaveBeenCalledWith('oak.upstream.status', 200);
+  });
+
+  it('records the upstream status on the metadata span when the upstream returns 5xx', async () => {
+    const fakeFetch = createFakeFetch({ ok: false, status: 503, body: {} });
+    const setAttribute = vi.fn();
+
+    const result = await fetchUpstreamMetadata('https://clerk.example.com', fakeFetch, {
+      retryDelayMs: 0,
+      observability: {
+        withSpan: async ({ run }) =>
+          await run({
+            ...noopSpanHandle,
+            setAttribute,
+          }),
+      },
+    });
+
+    expect(result.ok).toBe(false);
+    expect(setAttribute).toHaveBeenCalledWith('oak.upstream.status', 503);
   });
 });

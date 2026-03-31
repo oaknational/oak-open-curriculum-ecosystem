@@ -5,11 +5,16 @@
   "description": "Custom ESLint rules for architectural boundary enforcement and code standards",
   "type": "module",
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
   },
   "peerDependencies": {
     "eslint": "^10.0.0",

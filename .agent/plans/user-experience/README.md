@@ -59,7 +59,7 @@ implemented in technical collections:
 
 1. Supported-client experience contract (host compatibility and graceful
    fallbacks)
-2. Milestone 1 UI-surface decision gate (Claude basic branding before alpha vs
+2. Milestone 2 UI-surface decision gate (Claude basic branding before alpha vs
    post-alpha)
 3. Educator journey outcomes for extension capabilities
    (misconceptions, vocabulary, progression, coverage)
@@ -71,10 +71,10 @@ Technical plans keep implementation detail and sequencing.
 
 ## Milestone Alignment
 
-- **Milestone 1 (Invite-Only Alpha)**: educator and engineering/Ed-Tech outcomes
-  must be credible and measurable with a controlled user base.
-- **Milestone 2 (Extension Surfaces)**: broader host compatibility through
-  MCP-app and OpenAPI app extensions.
+- **Milestone 2 (Open Public Alpha)**: educator and engineering/Ed-Tech
+  outcomes must be credible, supportable, and measurable for broader usage.
+- **Milestone 3 (Public Beta)**: broader host compatibility, richer
+  experiences, and operational hardening on top of the public-alpha baseline.
 - **Later milestones**: learner-facing scope discovery can promote from
   deferred status when safeguarding and moderation prerequisites are in place.
 

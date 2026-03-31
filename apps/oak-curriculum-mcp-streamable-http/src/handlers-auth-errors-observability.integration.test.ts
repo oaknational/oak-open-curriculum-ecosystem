@@ -18,7 +18,7 @@ import {
   getHandler,
   assertAuthErrorLogged,
 } from './test-helpers/auth-error-test-helpers.js';
-import { createFakeSearchRetrieval } from './test-helpers/fakes.js';
+import { createFakeSearchRetrieval, createFakeHttpObservability } from './test-helpers/fakes.js';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 describe('Auth Error Observability and Non-Auth Passthrough (Integration)', () => {
@@ -38,6 +38,7 @@ describe('Auth Error Observability and Non-Auth Passthrough (Integration)', () =
     registerHandlers(mockServer, {
       runtimeConfig,
       logger: mockLogger,
+      observability: createFakeHttpObservability(),
       overrides,
       searchRetrieval: createFakeSearchRetrieval(),
     });

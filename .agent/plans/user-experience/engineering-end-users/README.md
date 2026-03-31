@@ -16,7 +16,8 @@ curriculum data and build user-facing experiences on top of it.
 
 ## Public-Alpha Scope
 
-Engineering and Ed-Tech experience is in-scope for Milestone 1 public alpha.
+Engineering and Ed-Tech experience is in-scope for Milestone 2 open public
+alpha.
 
 Primary focus:
 
@@ -55,7 +56,7 @@ Engineering and Ed-Tech users rely on a clear host-compatibility contract:
 
 ---
 
-## Milestone 1 UI-Surface Gate Responsibilities
+## Milestone 2 UI-Surface Gate Responsibilities
 
 For Option X vs Option Y decisioning, engineering-facing evidence should include:
 

@@ -1,215 +1,246 @@
 /**
- * Unified logger implementation with OpenTelemetry format
+ * Unified logger implementation with OpenTelemetry format.
  *
- * This is the single logger implementation that writes OpenTelemetry-compliant
- * single-line JSON logs to one or more sinks (stdout, file).
+ * This is the single logger implementation that writes one canonical
+ * structured event to one or more sinks.
  */
 
-import type { Logger, JsonObject } from './types';
-import type { LogLevel } from './log-levels';
-import type { StdoutSink } from './stdout-sink';
-import type { FileSinkInterface } from './file-sink';
-import type { ResourceAttributes } from './resource-attributes';
-import { formatOtelLogRecord, logLevelToSeverityNumber } from './otel-format';
-import { mergeLogContext } from './context-merging';
+import {
+  redactTelemetryObject,
+  redactTelemetryValue,
+  type ActiveSpanContextSnapshot,
+} from '@oaknational/observability';
+import type {
+  Logger,
+  LogContext,
+  LogContextInput,
+  LogEvent,
+  LogSink,
+  NormalizedError,
+} from './types.js';
+import type { LogLevel } from './log-levels.js';
+import type { ResourceAttributes } from './resource-attributes.js';
+import { buildNormalizedError, isNormalizedError } from './error-normalisation.js';
+import { mergeLogContext } from './context-merging.js';
+import { formatOtelLogRecord, logLevelToSeverityNumber } from './otel-format.js';
 
 /**
- * Options for creating a UnifiedLogger
+ * Options for creating a `UnifiedLogger`.
  */
 export interface UnifiedLoggerOptions {
-  /** Minimum severity number (messages below this are filtered out) */
-  minSeverity: number;
-  /** Resource attributes for service identification */
-  resourceAttributes: ResourceAttributes;
-  /** Context to include in all log entries */
-  context: JsonObject;
-  /** Optional stdout sink */
-  stdoutSink: StdoutSink | null;
-  /** Optional file sink */
-  fileSink: FileSinkInterface | null;
+  /** Minimum severity number. Messages below this threshold are filtered out. */
+  readonly minSeverity: number;
+  /** Resource attributes for service identification. */
+  readonly resourceAttributes: ResourceAttributes;
+  /** Context included in all log entries. */
+  readonly context: LogContextInput;
+  /** Logger fan-out destinations. */
+  readonly sinks: readonly LogSink[];
+  /** Active span provider captured at the composition root. */
+  readonly getActiveSpanContext: () => ActiveSpanContextSnapshot | undefined;
 }
 
 /**
- * Unified logger that writes OpenTelemetry-compliant logs to multiple sinks
- *
- * This logger:
- * - Formats all logs as single-line JSON using OpenTelemetry Logs Data Model
- * - Writes identical output to all configured sinks
- * - Filters logs based on severity level
- * - Supports child loggers with merged context
- * - Thread-safe (no mutable state)
+ * Unified logger that writes OpenTelemetry-compliant logs to multiple sinks.
  */
 export class UnifiedLogger implements Logger {
   private readonly minSeverity: number;
   private readonly resourceAttributes: ResourceAttributes;
-  private readonly context: JsonObject;
-  private readonly stdoutSink: StdoutSink | null;
-  private readonly fileSink: FileSinkInterface | null;
+  private readonly context: LogContext;
+  private readonly sinks: readonly LogSink[];
+  private readonly getActiveSpanContext: () => ActiveSpanContextSnapshot | undefined;
 
   /**
-   * Create a new UnifiedLogger
+   * Create a new `UnifiedLogger`.
    *
    * @param options - Logger configuration options
    */
   constructor(options: UnifiedLoggerOptions) {
     this.minSeverity = options.minSeverity;
     this.resourceAttributes = options.resourceAttributes;
-    this.context = options.context;
-    this.stdoutSink = options.stdoutSink;
-    this.fileSink = options.fileSink;
+    this.context = mergeLogContext({}, options.context);
+    this.sinks = options.sinks;
+    this.getActiveSpanContext = options.getActiveSpanContext;
   }
 
   /**
-   * Check if a log level should be output
+   * Check whether a severity should be emitted.
    *
    * @param severity - Severity number to check
-   * @returns True if the severity should be logged
+   * @returns `true` when the message is above the configured threshold
    */
   shouldLog(severity: number): boolean {
     return severity >= this.minSeverity;
   }
 
   /**
-   * Check if a log level is enabled (Logger interface method)
+   * Check whether a numeric level is enabled.
    *
    * @param level - Severity number to check
-   * @returns True if the level is enabled
+   * @returns `true` when the level is enabled
    */
-  isLevelEnabled?(level: number): boolean {
+  isLevelEnabled(level: number): boolean {
     return this.shouldLog(level);
   }
 
+  private redactStringValue(value: string): string {
+    const redactedValue = redactTelemetryValue(value);
+    if (typeof redactedValue !== 'string') {
+      throw new Error('Telemetry redaction returned a non-string for string input.');
+    }
+
+    return redactedValue;
+  }
+
+  private redactContext(context: LogContext): LogContext {
+    return redactTelemetryObject(context);
+  }
+
+  private redactError(error: NormalizedError): NormalizedError {
+    return buildNormalizedError({
+      name: this.redactStringValue(error.name),
+      message: this.redactStringValue(error.message),
+      stack: error.stack ? this.redactStringValue(error.stack) : undefined,
+      cause: error.cause ? this.redactError(error.cause) : undefined,
+      metadata: error.metadata ? this.redactContext(error.metadata) : undefined,
+    });
+  }
+
   /**
-   * Write a log record to all configured sinks
+   * Write a log event to all configured sinks.
    *
-   * @param level - Log level
-   * @param message - Log message
-   * @param error - Optional error object
-   * @param additionalContext - Optional additional context
+   * Sink failures are isolated so one failing destination does not prevent
+   * other destinations from receiving the event.
+   *
+   * @param event - Immutable logger event
    */
-  private log(level: LogLevel, message: string, error?: Error, additionalContext?: unknown): void {
+  private writeToSinks(event: LogEvent): void {
+    for (const sink of this.sinks) {
+      try {
+        sink.write(event);
+      } catch {
+        // Intentionally swallow sink failures so fan-out remains isolated.
+      }
+    }
+  }
+
+  private log(
+    level: LogLevel,
+    message: string,
+    error?: NormalizedError,
+    additionalContext?: LogContextInput,
+  ): void {
     const severity = logLevelToSeverityNumber(level);
 
     if (!this.shouldLog(severity)) {
       return;
     }
 
-    // Merge base context with additional context
-    const context = additionalContext
+    const mergedContext = additionalContext
       ? mergeLogContext(this.context, additionalContext)
       : this.context;
 
-    // Format as OpenTelemetry log record
-    const record = formatOtelLogRecord({
+    const redactedContext = this.redactContext(mergedContext);
+    const redactedError = error ? this.redactError(error) : undefined;
+
+    const otelRecord = formatOtelLogRecord({
       level,
       message,
-      error,
-      context,
+      error: redactedError,
+      context: redactedContext,
       resourceAttributes: this.resourceAttributes,
+      activeSpanContext: this.getActiveSpanContext(),
     });
 
-    // Convert to single-line JSON with newline
-    const line = JSON.stringify(record) + '\n';
+    const event: LogEvent = {
+      level,
+      message,
+      context: redactedContext,
+      error: redactedError,
+      otelRecord,
+      line: JSON.stringify(otelRecord) + '\n',
+    };
 
-    // Write to all configured sinks
-    this.writeToSinks(line);
+    this.writeToSinks(event);
   }
 
   /**
-   * Write a pre-formatted log line to all configured sinks
-   *
-   * @param line - Pre-formatted log line (with newline)
+   * Log a trace message.
    */
-  private writeToSinks(line: string): void {
-    if (this.stdoutSink !== null) {
-      this.stdoutSink.write(line);
-    }
-    if (this.fileSink !== null) {
-      this.fileSink.write(line);
-    }
-  }
-
-  /**
-   * Log a trace message (severity 1)
-   *
-   * @param message - Log message
-   * @param context - Optional context data
-   */
-  trace(message: string, context?: unknown): void {
+  trace(message: string, context?: LogContextInput): void {
     this.log('TRACE', message, undefined, context);
   }
 
   /**
-   * Log a debug message (severity 5)
-   *
-   * @param message - Log message
-   * @param context - Optional context data
+   * Log a debug message.
    */
-  debug(message: string, context?: unknown): void {
+  debug(message: string, context?: LogContextInput): void {
     this.log('DEBUG', message, undefined, context);
   }
 
   /**
-   * Log an info message (severity 9)
-   *
-   * @param message - Log message
-   * @param context - Optional context data
+   * Log an info message.
    */
-  info(message: string, context?: unknown): void {
+  info(message: string, context?: LogContextInput): void {
     this.log('INFO', message, undefined, context);
   }
 
   /**
-   * Log a warning message (severity 13)
-   *
-   * @param message - Log message
-   * @param context - Optional context data
+   * Log a warning message.
    */
-  warn(message: string, context?: unknown): void {
+  warn(message: string, context?: LogContextInput): void {
     this.log('WARN', message, undefined, context);
   }
 
   /**
-   * Log an error message (severity 17)
-   *
-   * @param message - Log message
-   * @param error - Optional error object
-   * @param context - Optional context data
+   * Log an error message.
    */
-  error(message: string, error?: Error, context?: unknown): void {
-    this.log('ERROR', message, error, context);
+  error(message: string, context?: LogContextInput): void;
+  error(message: string, error: NormalizedError, context?: LogContextInput): void;
+  error(
+    message: string,
+    errorOrContext?: LogContextInput | NormalizedError,
+    context?: LogContextInput,
+  ): void {
+    if (errorOrContext !== undefined && isNormalizedError(errorOrContext)) {
+      this.log('ERROR', message, errorOrContext, context);
+      return;
+    }
+
+    this.log('ERROR', message, undefined, errorOrContext);
   }
 
   /**
-   * Log a fatal message (severity 21)
-   *
-   * @param message - Log message
-   * @param error - Optional error object
-   * @param context - Optional context data
+   * Log a fatal message.
    */
-  fatal(message: string, error?: Error, context?: unknown): void {
-    this.log('FATAL', message, error, context);
+  fatal(message: string, context?: LogContextInput): void;
+  fatal(message: string, error: NormalizedError, context?: LogContextInput): void;
+  fatal(
+    message: string,
+    errorOrContext?: LogContextInput | NormalizedError,
+    context?: LogContextInput,
+  ): void {
+    if (errorOrContext !== undefined && isNormalizedError(errorOrContext)) {
+      this.log('FATAL', message, errorOrContext, context);
+      return;
+    }
+
+    this.log('FATAL', message, undefined, errorOrContext);
   }
 
   /**
-   * Create a child logger with additional context
+   * Create a child logger with merged context.
    *
-   * The child logger inherits:
-   * - Minimum severity level
-   * - Resource attributes
-   * - All configured sinks
-   * - Parent context (merged with child context)
-   *
-   * @param context - Additional context for child logger
-   * @returns New child logger instance
+   * @param context - Additional context for the child logger
+   * @returns Child logger that shares the same sinks and severity threshold
    */
-  child(context: JsonObject): Logger {
+  child(context: LogContextInput): Logger {
     return new UnifiedLogger({
       minSeverity: this.minSeverity,
       resourceAttributes: this.resourceAttributes,
       context: mergeLogContext(this.context, context),
-      stdoutSink: this.stdoutSink,
-      fileSink: this.fileSink,
+      sinks: this.sinks,
+      getActiveSpanContext: this.getActiveSpanContext,
     });
   }
 }

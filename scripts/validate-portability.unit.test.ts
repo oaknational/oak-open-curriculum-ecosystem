@@ -4,6 +4,7 @@ import {
   CLAUDE_HOOK_COMMAND,
   CLAUDE_SETTINGS_PATH,
   getClaudeHookPortabilityIssues,
+  getReviewerAdapterParityIssues,
   HOOK_POLICY_PATH,
   isClaudeHookWired,
   isClaudeHookWiredInText,
@@ -221,5 +222,29 @@ describe('getClaudeHookPortabilityIssues', () => {
     ).toContain(
       `${SURFACE_MATRIX_PATH}: Claude Code hook support is marked supported in ${HOOK_POLICY_PATH} but the surface matrix does not describe the native activation`,
     );
+  });
+});
+
+describe('getReviewerAdapterParityIssues', () => {
+  it('reports missing Codex reviewer adapters when another platform defines them', () => {
+    expect(
+      getReviewerAdapterParityIssues({
+        cursorAgentFiles: ['.cursor/agents/code-reviewer.md'],
+        claudeAgentFiles: ['.claude/agents/code-reviewer.md'],
+        codexAgentFiles: [],
+      }),
+    ).toContain(
+      '.codex/agents/code-reviewer.toml: missing reviewer adapter required for cross-platform parity',
+    );
+  });
+
+  it('returns no issues when reviewer adapters are present on all supported platforms', () => {
+    expect(
+      getReviewerAdapterParityIssues({
+        cursorAgentFiles: ['.cursor/agents/code-reviewer.md'],
+        claudeAgentFiles: ['.claude/agents/code-reviewer.md'],
+        codexAgentFiles: ['.codex/agents/code-reviewer.toml'],
+      }),
+    ).toStrictEqual([]);
   });
 });

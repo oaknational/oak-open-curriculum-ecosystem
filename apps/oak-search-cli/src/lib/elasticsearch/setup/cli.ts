@@ -8,6 +8,7 @@
 
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { normalizeError } from '@oaknational/logger';
 import { loadRuntimeConfig } from '../../../runtime-config.js';
 import { initializeEsClient } from '../../es-client.js';
 import { ingestLogger, setLogLevel } from '../../logger';
@@ -115,6 +116,6 @@ async function main(): Promise<void> {
 
 main().catch((error: unknown) => {
   const fatalError = error instanceof Error ? error : new Error(String(error), { cause: error });
-  ingestLogger.error('Fatal error', fatalError);
+  ingestLogger.error('Fatal error', normalizeError(fatalError));
   process.exitCode = 1;
 });

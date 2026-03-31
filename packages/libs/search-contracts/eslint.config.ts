@@ -2,7 +2,6 @@ import { defineConfig } from 'eslint/config';
 import {
   configs,
   createLibBoundaryRules,
-  getOtherLibs,
   commonSettings,
   ignores as globalIgnores,
   testRules,
@@ -43,7 +42,7 @@ const config = defineConfig(
         },
       },
     },
-    rules: createLibBoundaryRules('search-contracts', getOtherLibs('search-contracts')),
+    rules: createLibBoundaryRules('search-contracts'),
   },
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
@@ -58,6 +57,10 @@ const config = defineConfig(
         project: './tsconfig.json',
         tsconfigRootDir: thisDir,
       },
+    },
+    rules: {
+      'import-x/no-relative-packages': 'off',
+      'import-x/no-relative-parent-imports': 'off',
     },
   },
 );

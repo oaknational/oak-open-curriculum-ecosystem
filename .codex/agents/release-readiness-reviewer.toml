@@ -1,3 +1,5 @@
+name = "release-readiness-reviewer"
+description = "Release go/no-go readiness reviewer."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"

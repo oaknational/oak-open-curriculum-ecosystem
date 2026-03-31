@@ -14,6 +14,7 @@ when the session needs a focused operational brief.
 | [gt-review.md](gt-review.md) | handover | Ground-truth evaluation session prompt for exhaustive review against both MCP tools and bulk data | [ground-truth-review-checklist.md](../plans/semantic-search/archive/completed/ground-truth-review-checklist.md), [ground-truth-session-template.md](../plans/semantic-search/templates/ground-truth-session-template.md) |
 | [semantic-search/semantic-search.prompt.md](semantic-search/semantic-search.prompt.md) | handover | Primary semantic-search session entry point — dormant, all plans archived | [active/README.md](../plans/semantic-search/active/README.md) |
 | [semantic-search/approaches-to-knowledge.prompt.md](semantic-search/approaches-to-knowledge.prompt.md) | handover | Research prompt exploring MCP, hybrid search, knowledge graphs, and atomic concepts as a unified quality system | Research-phase exploration; no single canonical execution plan |
+| [architecture-and-infrastructure/sentry-otel-foundation.prompt.md](architecture-and-infrastructure/sentry-otel-foundation.prompt.md) | handover | Sentry + OTel observability foundation session entry point | [sentry-otel-integration.execution.plan.md](../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) |
 
 ## Retained Completed Prompts
 

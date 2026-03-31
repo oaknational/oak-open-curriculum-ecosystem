@@ -53,9 +53,25 @@ The SDK accepts an optional `logger` parameter for structured logging and respon
 
 ```typescript
 import { createOakClient } from '@oaknational/curriculum-sdk';
-import { createAdaptiveLogger, startTimer } from '@oaknational/logger';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  logLevelToSeverityNumber,
+  normalizeError,
+  parseLogLevel,
+  startTimer,
+  type LogSink,
+} from '@oaknational/logger';
+import { createNodeStdoutSink } from '@oaknational/logger/node';
 
-const logger = createAdaptiveLogger({ level: 'INFO' });
+const sinks: readonly LogSink[] = [createNodeStdoutSink()];
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(parseLogLevel(process.env.LOG_LEVEL, 'INFO')),
+  resourceAttributes: buildResourceAttributes(process.env, 'oak-curriculum-sdk-consumer', '1.0.0'),
+  context: {},
+  sinks,
+  getActiveSpanContext: () => undefined,
+});
 
 const client = createOakClient({
   apiKey: 'your-api-key',
@@ -67,7 +83,9 @@ const { data, error } = await client.GET('/api/v0/subjects');
 const duration = timer.end();
 
 if (error) {
-  logger.error('Request failed', error instanceof Error ? error : new Error(String(error)));
+  logger.error('Request failed', normalizeError(error), {
+    duration: duration.formatted,
+  });
 } else {
   logger.info('Subjects fetched', {
     count: data.length,

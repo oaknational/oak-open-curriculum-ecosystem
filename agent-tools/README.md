@@ -2,10 +2,11 @@
 
 This workspace is the TypeScript home for agent operational CLIs.
 
-It provides two operator tools:
+It provides three operator tools:
 
 - `claude-agent-ops`: monitor background agents, inspect logs, diff worktrees, run preflight checks.
 - `cursor-session-from-claude-session`: find/inspect Claude sessions and generate Cursor takeover bundles.
+- `codex-reviewer-resolve`: resolve a repo-local Codex reviewer adapter to the exact `.codex` and canonical `.agent` files that should ground a review.
 
 ## Structure
 
@@ -26,6 +27,7 @@ pnpm agent-tools:lint
 pnpm agent-tools:test
 pnpm agent-tools:claude-agent-ops status
 pnpm agent-tools:cursor-session-from-claude-session find --last-hours 2
+pnpm agent-tools:codex-reviewer-resolve code-reviewer
 ```
 
 ## `cursor-session-from-claude-session` quick reference
@@ -41,6 +43,22 @@ pnpm agent-tools:cursor-session-from-claude-session help
 pnpm agent-tools:cursor-session-from-claude-session find --last-hours 4 --file "apps/oak-search-cli/src/cli/admin/index.ts"
 pnpm agent-tools:cursor-session-from-claude-session inspect 143494d9
 pnpm agent-tools:cursor-session-from-claude-session takeover 143494d9 --output .agent/prompts/takeover.md
+```
+
+## `codex-reviewer-resolve` quick reference
+
+- `<agent-name>` — print the repo-local Codex adapter path plus the canonical `.agent` files that the reviewer must load first
+- `--json` — emit the same data as JSON for automation or audit logs
+
+The resolver expects the live repo pattern: a central `.codex/config.toml`
+registration plus a self-describing `.codex/agents/*.toml` adapter whose
+`name` and `description` match the registry entry.
+
+Examples:
+
+```bash
+pnpm agent-tools:codex-reviewer-resolve sentry-reviewer
+pnpm agent-tools:codex-reviewer-resolve architecture-reviewer-fred --json
 ```
 
 ## Repo gate status

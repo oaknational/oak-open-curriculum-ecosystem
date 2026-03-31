@@ -1,18 +1,18 @@
 # Sentry Specialist Capability — Strategic Plan
 
-**Status**: NOT STARTED
+**Status**: ACTIVE REFERENCE
 **Domain**: Agentic Engineering Enhancements
 **Pattern**: [ADR-129 (Domain Specialist Capability Pattern)](../../../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md)
-**Related Integration Plan**: [sentry-otel-integration.execution.plan.md](../../architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md)
+**Related Integration Plan**: [sentry-otel-integration.execution.plan.md](../../architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
 
 ## Problem and Intent
 
 The repo has an established OpenTelemetry-compliant logging infrastructure
-(ADR-051) and a pending Sentry integration plan (M3 blocker). Once Sentry is
-integrated, agents will need specialist capability to assess Sentry/OTel usage
-against current official documentation — covering SDK configuration, distributed
-tracing, error tracking, performance monitoring, MCP Insights, alerting, and
-OpenTelemetry instrumentation patterns.
+(ADR-051) and an active Sentry foundation plan that now blocks Milestone 2
+(open public alpha). Once Sentry is integrated, agents need specialist
+capability to assess Sentry/OTel usage against current official documentation —
+covering SDK configuration, distributed tracing, error tracking, performance
+monitoring, MCP Insights, alerting, and OpenTelemetry instrumentation patterns.
 
 Without a dedicated specialist, agents risk:
 
@@ -53,15 +53,15 @@ Without a dedicated specialist, agents risk:
 3. **Official packages** — `@sentry/node`, `@sentry/types`; `getsentry/sentry-javascript` on GitHub
 4. **Repository ADRs and research** — ADR-051, Sentry integration ADR (pending), archived Sentry guidance
 5. **Existing implementation** — evidence, not authority
-6. **Reference implementation** — `~/code/personal/starter-app-spike/` as pattern source (not authority)
+6. **Reference implementation** — sibling `starter-app-spike` repo as pattern source (not authority)
 
 ## Deployment Context
 
 **Vercel (Node.js) + `@sentry/node`** is the default. Key constraints:
 
 - HTTP MCP server runs on Vercel with stdout-only logging
-- Stdio MCP server uses file-only logging (stdout reserved for MCP protocol)
-- Search CLI uses both stdout and file sinks
+- Search CLI is the second canonical adoption target
+- Standalone stdio MCP server is deprecated and not an implementation target
 - `@sentry/node` (not `@sentry/nextjs`) is the canonical SDK — no Next.js in this monorepo
 - Sentry provides built-in OTel support — do NOT install separate `@opentelemetry/*` SDKs
 
@@ -127,9 +127,9 @@ fourth-layer operational tooling extension could include:
 
 This is out of scope for the initial triplet but noted for ADR-137 alignment.
 
-## Promotion Trigger
+## Status Note
 
-This plan promotes to `current/` when:
-
-1. The Sentry integration execution plan begins or is about to begin
-2. No conflicting work is in progress on the agent artefact layer
+This plan is now in `current/` because Sentry and OpenTelemetry foundation work
+is active. The reviewer, skill, and situational rule must exist before runtime
+implementation begins so the work can be reviewed against current official
+guidance from the first implementation step onward.

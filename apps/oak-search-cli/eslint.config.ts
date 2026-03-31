@@ -12,7 +12,6 @@ import {
   configs,
   ignores,
   testRules,
-  appBoundaryRules,
   appArchitectureRules,
 } from '@oaknational/eslint-plugin-standards';
 import {
@@ -24,14 +23,7 @@ import {
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
 const eslintConfig = defineConfig(
-  globalIgnores([
-    ...ignores,
-    'build/**',
-    'vitest.config.ts',
-    'vitest.e2e.config.ts',
-    'bulk-downloads/**',
-    'scripts/**/*.mjs',
-  ]),
+  globalIgnores([...ignores, 'build/**', 'bulk-downloads/**', 'scripts/**/*.mjs']),
 
   // Use the recommended config from our standards plugin (includes TS, Prettier, Import-X)
   ...configs.strict,
@@ -39,6 +31,14 @@ const eslintConfig = defineConfig(
   // TypeScript rules for source files
   {
     files: ['**/*.ts'],
+    ignores: [
+      '**/*.config.ts',
+      'eslint.config.ts',
+      'vitest.config.ts',
+      'vitest.e2e.config.ts',
+      'vitest.smoke.config.ts',
+      'vitest.experiment.config.ts',
+    ],
     languageOptions: {
       parser: tseslintParser,
       parserOptions: {
@@ -47,7 +47,6 @@ const eslintConfig = defineConfig(
       },
     },
     rules: {
-      ...appBoundaryRules,
       ...appArchitectureRules,
       complexity: ['error', { max: 8 }],
       'max-depth': ['error', 3],
@@ -194,6 +193,31 @@ const eslintConfig = defineConfig(
     files: ['scripts/**/*.ts', 'smoke-tests/**/*.ts'],
     rules: {
       'no-console': 'off',
+    },
+  },
+
+  {
+    files: [
+      '**/*.config.ts',
+      'eslint.config.ts',
+      'vitest.config.ts',
+      'vitest.e2e.config.ts',
+      'vitest.smoke.config.ts',
+      'vitest.experiment.config.ts',
+    ],
+    languageOptions: {
+      parser: tseslintParser,
+      parserOptions: {
+        projectService: {
+          allowDefaultProject: ['vitest.config.ts', 'vitest.e2e.config.ts'],
+        },
+        tsconfigRootDir: thisDir,
+      },
+    },
+    rules: {
+      'import-x/no-relative-packages': 'off',
+      'import-x/no-relative-parent-imports': 'off',
+      'max-lines': 'off',
     },
   },
 

@@ -42,6 +42,16 @@ const validEnvLinesNoClerk = [
   'DANGEROUSLY_DISABLE_AUTH=true',
 ].join('\n');
 
+const validFixtureEnvLinesNoClerk = [validEnvLinesNoClerk, 'SENTRY_MODE=fixture'].join('\n');
+
+const validLiveEnvLinesNoClerk = [
+  validEnvLinesNoClerk,
+  'SENTRY_MODE=sentry',
+  'SENTRY_DSN=https://public@example.ingest.sentry.io/123456',
+  'SENTRY_RELEASE=test-release',
+  'SENTRY_TRACES_SAMPLE_RATE=1',
+].join('\n');
+
 describe('loadRuntimeConfig', () => {
   describe('Result return type', () => {
     it('returns Result ok on valid env with auth enabled', () => {
@@ -70,6 +80,43 @@ describe('loadRuntimeConfig', () => {
         });
 
         expect(result.ok).toBe(true);
+      } finally {
+        tree.cleanup();
+      }
+    });
+
+    it('accepts fixture observability env when auth is disabled', () => {
+      const tree = createTestTree(validFixtureEnvLinesNoClerk);
+      try {
+        const result = loadRuntimeConfig({
+          processEnv: {},
+          startDir: tree.startDir,
+        });
+
+        expect(result.ok).toBe(true);
+        if (result.ok) {
+          expect(result.value.env.SENTRY_MODE).toBe('fixture');
+        }
+      } finally {
+        tree.cleanup();
+      }
+    });
+
+    it('accepts live observability env when auth is disabled', () => {
+      const tree = createTestTree(validLiveEnvLinesNoClerk);
+      try {
+        const result = loadRuntimeConfig({
+          processEnv: {},
+          startDir: tree.startDir,
+        });
+
+        expect(result.ok).toBe(true);
+        if (result.ok) {
+          expect(result.value.env.SENTRY_MODE).toBe('sentry');
+          expect(result.value.env.SENTRY_DSN).toBe(
+            'https://public@example.ingest.sentry.io/123456',
+          );
+        }
       } finally {
         tree.cleanup();
       }
@@ -192,7 +239,9 @@ describe('loadRuntimeConfig', () => {
       }
     });
   });
+});
 
+describe('loadRuntimeConfig — display and misc', () => {
   describe('displayHostname', () => {
     it('uses VERCEL_PROJECT_PRODUCTION_URL in production environment', () => {
       const tree = createTestTree(validEnvLines);

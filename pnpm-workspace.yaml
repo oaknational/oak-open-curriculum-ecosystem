@@ -4,12 +4,15 @@ packages:
   - apps/oak-curriculum-mcp-streamable-http
   - apps/oak-search-cli
   - packages/core/oak-eslint
+  - packages/core/observability
   - packages/core/openapi-zod-client-adapter
   - packages/core/env
   - packages/core/result
   - packages/core/type-helpers
   - packages/libs/env-resolution
   - packages/libs/logger
+  - packages/libs/sentry-node
+  - packages/libs/sentry-mcp
   - packages/libs/search-contracts
   - packages/sdks/oak-curriculum-sdk
   - packages/sdks/oak-sdk-codegen

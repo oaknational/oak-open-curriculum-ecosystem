@@ -1,3 +1,5 @@
+name = "architecture-reviewer-wilma"
+description = "Adversarial architecture reviewer — resilience, failure modes, and hidden coupling risks."
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 approval_policy = "never"

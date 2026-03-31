@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import { normalizeError } from '@oaknational/logger';
 import { createCodegenLogger } from './create-codegen-logger.js';
 
 const logger = createCodegenLogger('typedoc');
@@ -79,7 +80,7 @@ async function run(): Promise<number> {
       resolve(code ?? 0);
     });
     child.on('error', (err: Error) => {
-      logger.error('typedoc spawn failed', err);
+      logger.error('typedoc spawn failed', normalizeError(err));
       resolve(1);
     });
   });

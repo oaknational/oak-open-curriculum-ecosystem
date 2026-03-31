@@ -41,7 +41,11 @@ import { describe, it, expect } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
-import { createMockRuntimeConfig, createNoOpClerkMiddleware } from './helpers/test-config.js';
+import {
+  createMockObservability,
+  createMockRuntimeConfig,
+  createNoOpClerkMiddleware,
+} from './helpers/test-config.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 
 /**
@@ -103,19 +107,21 @@ async function validatePrmSelfOrigin(app: Express): Promise<string> {
  * Creates a fresh auth-enabled app instance with injected upstream metadata.
  */
 async function createAuthApp(): Promise<Express> {
+  const runtimeConfig = createMockRuntimeConfig({
+    useStubTools: true,
+    env: {
+      OAK_API_KEY: 'test-api-key',
+      CLERK_PUBLISHABLE_KEY: 'pk_test_123',
+      CLERK_SECRET_KEY: 'sk_test_123',
+      NODE_ENV: 'test',
+      LOG_LEVEL: 'debug',
+      ELASTICSEARCH_URL: 'http://fake-es:9200',
+      ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+    },
+  });
   return await createApp({
-    runtimeConfig: createMockRuntimeConfig({
-      useStubTools: true,
-      env: {
-        OAK_API_KEY: 'test-api-key',
-        CLERK_PUBLISHABLE_KEY: 'pk_test_123',
-        CLERK_SECRET_KEY: 'sk_test_123',
-        NODE_ENV: 'test',
-        LOG_LEVEL: 'debug',
-        ELASTICSEARCH_URL: 'http://fake-es:9200',
-        ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-      },
-    }),
+    runtimeConfig,
+    observability: createMockObservability(runtimeConfig),
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });

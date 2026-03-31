@@ -24,9 +24,11 @@ import {
   UnifiedLogger,
   buildResourceAttributes,
   createNodeFileSink,
+  createNodeStdoutSink,
   type Logger,
   type FileSinkInterface,
 } from '@oaknational/logger/node';
+import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import { ok, err, type Result } from '@oaknational/result';
 
 /** Valid log levels for the semantic search logger. */
@@ -65,23 +67,21 @@ function getLoggers(): NonNullable<typeof loggerCache> {
     return loggerCache;
   }
 
-  // Use process.stdout.write in Node.js, fallback to no-op outside Node.
-  const writeLine =
-    typeof process !== 'undefined' && typeof process.stdout?.write === 'function'
-      ? (line: string) => process.stdout.write(line + '\n')
-      : () => undefined;
-
   // Create file sink if path is configured
   if (currentFilePath !== null && activeFileSink === null) {
     activeFileSink = createLogFileSink(currentFilePath);
   }
 
+  const sinks = activeFileSink
+    ? [createNodeStdoutSink(), activeFileSink]
+    : [createNodeStdoutSink()];
+
   const base = new UnifiedLogger({
     minSeverity: logLevelToSeverityNumber(currentLevel),
     resourceAttributes: buildResourceAttributes({}, 'SemanticSearch', '1.0.0'),
     context: {},
-    stdoutSink: { write: writeLine },
-    fileSink: activeFileSink,
+    sinks,
+    getActiveSpanContext: getActiveSpanContextSnapshot,
   });
 
   const createChild = (name: string): Logger => {

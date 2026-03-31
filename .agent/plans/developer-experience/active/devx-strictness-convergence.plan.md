@@ -471,7 +471,9 @@ REFACTOR (cleanup/documentation):
 
 1. Remove workaround comments/casts made unnecessary by shared config cleanup.
 2. Update inline docs in config modules for rule intent and phase sequencing.
-3. At Phase 2 closeout, run `@.cursor/commands/jc-consolidate-docs.md` so settled guidance is extracted into permanent documentation before phase sign-off.
+3. At Phase 2 closeout, run the canonical `jc-consolidate-docs` workflow via
+   `.agent/commands/consolidate-docs.md` so settled guidance is extracted into
+   permanent documentation before phase sign-off.
 
 Acceptance criteria:
 
@@ -481,7 +483,8 @@ Acceptance criteria:
 4. Inline-config policy is explicit and enforceable.
 5. `no-console` scope is explicit: default enforcement with a narrow, documented allowlist.
 6. The directory-complexity hand-off is explicit and points to the canonical queued plan.
-7. `@.cursor/commands/jc-consolidate-docs.md` has been run at Phase 2 completion and documentation extraction outcomes are recorded.
+7. The canonical `jc-consolidate-docs` workflow has been run at Phase 2
+   completion and documentation extraction outcomes are recorded.
 
 Deterministic validation:
 
@@ -493,7 +496,8 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint
 rg --line-number "'no-console': 'off'" eslint.config.ts apps/*/eslint.config.ts packages/*/*/eslint.config.ts
 rg --line-number "directory-complexity-enablement\\.execution\\.plan\\.md" .agent/plans/developer-experience .agent/plans/agentic-engineering-enhancements
 # Phase 2 closeout (required):
-# run @.cursor/commands/jc-consolidate-docs.md and record extracted documentation outputs.
+# run the canonical `jc-consolidate-docs` workflow (`.agent/commands/consolidate-docs.md`)
+# and record extracted documentation outputs.
 ```
 
 Non-goals in this phase:
@@ -794,8 +798,8 @@ The 218-warning burn-down target requires nuanced handling:
 - `.agent/skills/start-right-thorough/SKILL.md`
 - `.cursor/skills/start-right-quick/SKILL.md`
 - `.cursor/skills/start-right-thorough/SKILL.md`
-- `.cursor/commands/jc-start-right-quick.md`
-- `.cursor/commands/jc-start-right-thorough.md`
+- `.agent/commands/start-right-quick.md`
+- `.agent/commands/start-right-thorough.md`
 - `.cursor/rules/use-start-right-skills.mdc`
 - `../archive/superseded/e2e-vi-mock-clerk-removal.plan.md`
 - `../archive/superseded/eslint-override-removal.plan.md`
@@ -811,8 +815,13 @@ The 218-warning burn-down target requires nuanced handling:
 Use this section to start the next execution session without external context.
 
 1. Apply session grounding:
-   - Cursor command: `@.cursor/commands/jc-start-right-quick.md` (default) or `@.cursor/commands/jc-start-right-thorough.md` (complex/cross-workspace work).
-   - Skill sources: `.agent/skills/start-right-quick/shared/start-right.md` and `.agent/skills/start-right-thorough/shared/start-right-thorough.md`.
+   - Use the canonical start-right workflows:
+     `.agent/commands/start-right-quick.md` (default) or
+     `.agent/commands/start-right-thorough.md` (complex/cross-workspace work).
+   - Platform adapters may still expose these via Cursor or other tooling, but
+     the canonical sources are the `.agent/commands/` files above.
+   - Skill sources: `.agent/skills/start-right-quick/shared/start-right.md`
+     and `.agent/skills/start-right-thorough/shared/start-right-thorough.md`.
 2. Re-read canonical foundation rules:
    - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`

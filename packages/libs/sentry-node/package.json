@@ -1,0 +1,57 @@
+{
+  "name": "@oaknational/sentry-node",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Shared Sentry Node configuration, fixture runtime, and log sink helpers",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist .turbo",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "dependencies": {
+    "@oaknational/env": "workspace:*",
+    "@oaknational/logger": "workspace:*",
+    "@oaknational/observability": "workspace:*",
+    "@oaknational/result": "workspace:*",
+    "@oaknational/type-helpers": "workspace:*",
+    "@sentry/node": "10.46.0"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
+    "directory": "packages/libs/sentry-node"
+  },
+  "bugs": {
+    "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
+  },
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/libs/sentry-node#readme"
+}

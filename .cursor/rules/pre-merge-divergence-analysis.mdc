@@ -1,0 +1,6 @@
+---
+description: Follow the pre-merge divergence analysis guide when merging branches with 100+ files changed on either side or 10+ conflicts in a dry-run merge.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/pre-merge-divergence-analysis.md`.

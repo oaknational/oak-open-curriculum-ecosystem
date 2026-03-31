@@ -12,12 +12,17 @@ import {
   toolNames,
   getToolFromToolName,
   type ToolDescriptorForName,
-  executeToolCall,
+  type executeToolCall,
   createOakPathBasedClient,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig } from './wiring.js';
-import { startTimer, type Logger, type ErrorContext } from '@oaknational/logger/node';
+import {
+  normalizeError,
+  startTimer,
+  type Logger,
+  type ErrorContext,
+} from '@oaknational/logger/node';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';
@@ -25,14 +30,12 @@ import { isInformationalError } from './informational-errors.js';
 import { generateCorrelationId } from '../correlation/index.js';
 import { createChildLogger } from '../logging/index.js';
 import type { RuntimeConfig } from '../runtime-config.js';
-
-/**
- * Threshold in milliseconds for slow operation warnings.
- * Tool executions exceeding this duration will be logged at WARN level.
- *
- * @internal
- */
-const SLOW_OPERATION_THRESHOLD_MS = 5000;
+import {
+  createToolErrorContext,
+  executeConfiguredTool,
+  getToolExecutionStatus,
+  logToolCompletion,
+} from './tool-execution.js';
 
 /**
  * Setup shutdown handler
@@ -88,7 +91,7 @@ function logToolDiscovery(logger: Logger): void {
       sample: sortedToolNames.slice(0, 3),
     });
   } catch (err: unknown) {
-    logger.error('Failed to inspect tools', { error: err });
+    logger.error('Failed to inspect tools', normalizeError(err));
   }
 }
 
@@ -144,7 +147,6 @@ function handleToolResult(
   return handlers.handleSuccess(execResult.value);
 }
 
-// eslint-disable-next-line max-lines-per-function -- Error enrichment adds necessary context
 function createToolHandler<TName extends (typeof toolNames)[number]>(
   name: TName,
   description: string,
@@ -163,38 +165,12 @@ function createToolHandler<TName extends (typeof toolNames)[number]>(
 
     const handlers = createHandlersForTool(correlatedLogger, name, description, descriptor, input);
 
-    const execResult = toolExecutors?.executeMcpTool
-      ? await toolExecutors.executeMcpTool(name, params ?? {})
-      : await executeToolCall(name, params, client);
-
+    const execResult = await executeConfiguredTool(name, params, client, toolExecutors);
     const duration = timer.end();
-
-    const errorContext: ErrorContext = {
-      correlationId,
-      duration,
-      toolName: name,
-    };
-
+    const errorContext = createToolErrorContext(name, correlationId, duration);
     const result = handleToolResult(execResult, params, descriptor, handlers, errorContext);
-    const isSlowOperation = duration.ms > SLOW_OPERATION_THRESHOLD_MS;
-
-    const status = !execResult.ok
-      ? 'with error'
-      : validateOutput(descriptor, execResult.value).ok
-        ? 'success'
-        : 'with validation error';
-
-    const logMethod = isSlowOperation ? 'warn' : 'debug';
-    const logData = {
-      toolName: name,
-      correlationId,
-      duration: duration.formatted,
-      durationMs: duration.ms,
-      ...(isSlowOperation && { slowOperation: true }),
-    };
-
-    correlatedLogger[logMethod](`Tool execution completed ${status}`, logData);
-
+    const status = getToolExecutionStatus(execResult, descriptor);
+    logToolCompletion(correlatedLogger, name, correlationId, duration, status);
     return result;
   };
 }

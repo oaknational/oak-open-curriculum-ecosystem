@@ -8,8 +8,7 @@
  */
 
 import type { Command } from 'commander';
-import { registerPassThrough } from '../shared/index.js';
-import type { SearchCliEnv } from '../../env.js';
+import { registerPassThrough, type SearchCliEnvLoader } from '../shared/index.js';
 
 /**
  * Register all pass-through orchestration commands on the admin group.
@@ -21,47 +20,47 @@ import type { SearchCliEnv } from '../../env.js';
  * @param parent - The parent Commander command to register under
  * @returns void
  */
-export function registerOrchestrationCmds(parent: Command, cliEnv: SearchCliEnv): void {
+export function registerOrchestrationCmds(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   registerPassThrough(
     parent,
     'verify',
     'Verify ingestion completeness',
     'operations/ingestion/verify-ingestion.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     parent,
     'download',
     'Download Oak curriculum bulk data',
     'scripts/download-bulk.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     parent,
     'sandbox-ingest',
     'Ingest fixture data into sandbox index',
     'operations/sandbox/ingest.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     parent,
     'cache-reset',
     'Reset TTLs for SDK cache keys in Redis',
     'operations/utilities/reset-ttls.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     parent,
     'diagnose-elser',
     'Run ELSER ingestion failure diagnostics',
     'scripts/diagnose-elser-failures.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
   registerPassThrough(
     parent,
     'analyze-elser',
     'Analyse ELSER diagnostic reports',
     'scripts/analyze-elser-failures.ts',
-    { cliEnv },
+    { cliEnvLoader },
   );
 }

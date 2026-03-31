@@ -28,6 +28,9 @@ export {
 /** Re-export Clerk auth fakes. */
 export { createFakeMachineAuthObject } from './fakes-clerk.js';
 
+/** Re-export observability fakes. */
+export { createFakeHttpObservability } from './observability-fakes.js';
+
 /**
  * Creates a properly typed fake SearchRetrievalService for tests.
  * Uses `vi.fn()` for assertion support.

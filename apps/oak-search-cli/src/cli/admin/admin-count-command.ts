@@ -19,10 +19,12 @@ import { createAdminService } from '@oaknational/oak-search-sdk/admin';
 import {
   createEsClient,
   withEsClient,
+  withLoadedCliEnv,
   printError,
   printHeader,
   printJson,
   type CliSdkEnv,
+  type SearchCliEnvLoader,
 } from '../shared/index.js';
 import { handleCount } from './handle-count.js';
 import { buildSearchSdkConfig } from '../shared/build-search-sdk-config.js';
@@ -34,34 +36,36 @@ import { adminLogger } from '../../lib/logger.js';
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-export function registerCountCmd(parent: Command, cliEnv: CliSdkEnv): void {
+export function registerCountCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
   parent
     .command('count')
     .description('Show true parent document counts (excludes ELSER chunk inflation)')
-    .action(async () => {
-      const esClient = createEsClient(cliEnv);
-      await withEsClient(
-        esClient,
-        async () => {
-          const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
-          const result = await handleCount(admin);
-          if (!result.ok) {
-            adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
-            printError(`${result.error.type}: ${result.error.message}`);
-            process.exitCode = 1;
-            return;
-          }
-          printHeader('Document Counts (true parent documents)');
-          const total = result.value.reduce((sum, entry) => sum + entry.count, 0);
-          printJson([...result.value, { kind: 'TOTAL', index: '—', count: total }]);
-        },
-        {
-          logger: adminLogger,
-          printError,
-          setExitCode: (c) => {
-            process.exitCode = c;
+    .action(
+      withLoadedCliEnv(cliEnvLoader, async (cliEnv: CliSdkEnv) => {
+        const esClient = createEsClient(cliEnv);
+        await withEsClient(
+          esClient,
+          async () => {
+            const admin = createAdminService(esClient, buildSearchSdkConfig(cliEnv));
+            const result = await handleCount(admin);
+            if (!result.ok) {
+              adminLogger.error(`${result.error.type}: ${result.error.message}`, result.error);
+              printError(`${result.error.type}: ${result.error.message}`);
+              process.exitCode = 1;
+              return;
+            }
+            printHeader('Document Counts (true parent documents)');
+            const total = result.value.reduce((sum, entry) => sum + entry.count, 0);
+            printJson([...result.value, { kind: 'TOTAL', index: '—', count: total }]);
           },
-        },
-      );
-    });
+          {
+            logger: adminLogger,
+            printError,
+            setExitCode: (c) => {
+              process.exitCode = c;
+            },
+          },
+        );
+      }),
+    );
 }

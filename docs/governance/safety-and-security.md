@@ -119,6 +119,49 @@ Errors are classified and handled appropriately:
 - **Rate Limits**: Clear message without exposing limits
 - **Internal Errors**: Generic message, details logged internally only
 
+## Multi-Layer Security Architecture
+
+The HTTP MCP server operates behind multiple defence layers. Each layer
+catches threats the others miss. No single layer is sufficient alone.
+
+### Layer Stack
+
+| Layer                        | Protection                                                                                                                               | Failure Mode                                                              |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **DNS**                      | DNS rebinding guard rejects requests with unrecognised `Host` headers. Applied selectively (landing page); MCP routes use OAuth instead. | Bypassed if attacker controls DNS for an allowed host                     |
+| **CDN/Edge**                 | Volumetric DDoS, geographic blocking, bot detection, TLS termination (Vercel edge)                                                       | Bypassed by direct origin access or low-rate attacks below CDN thresholds |
+| **Application — auth**       | OAuth 2.1 via Clerk (`mcpAuth` middleware), CORS, security headers (CSP, HSTS, X-Frame-Options)                                          | Bypassed if OAuth token compromised or auth disabled                      |
+| **Application — rate limit** | Per-IP rate limiting on auth-protected routes (`express-rate-limit`). Probabilistic on Vercel serverless (per-instance in-memory store). | Distributed attacks across IPs; counter reset on cold start               |
+| **Upstream API**             | Oak API per-key rate limiting and quota management                                                                                       | Exhaustible via amplification from our server                             |
+
+### Trust Boundaries
+
+- **Client → CDN**: untrusted; CDN applies edge protection
+- **CDN → app origin**: semi-trusted; `trust proxy` must be configured
+  for `req.ip` to reflect the real client IP
+- **App → upstream API**: authenticated via `OAK_API_KEY`; our server is
+  the trust principal, not the end user
+- **Iframe sandbox → host**: OpenAI Apps SDK widget runs in a sandboxed
+  iframe; CSP `connect_domains` and `resource_domains` control outbound
+  requests
+
+### Amplification Vectors
+
+Two patterns allow a single inbound request to produce upstream load:
+
+1. **OAuth authorise redirect**: `GET /oauth/authorize` produces a 302 to
+   Clerk's authorisation server. Each hit creates a pending session at
+   Clerk, consuming per-application quota. The attacker needs no auth —
+   the redirect is public.
+
+2. **HMAC-signed asset replay**: Asset download URLs are HMAC-signed with
+   a 5-minute TTL but no single-use constraint. Within the window, a
+   valid URL can be replayed to generate unlimited upstream Oak API
+   requests, all authenticated with the server's `OAK_API_KEY`.
+
+Both are mitigated by application-layer rate limiting (see the rate
+limiting plan in `.agent/plans/architecture-and-infrastructure/current/`).
+
 ## Network Security
 
 ### HTTPS Only

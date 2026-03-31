@@ -70,7 +70,7 @@ async function fetchWithTimeout(url, options, timeoutMs) {
   } catch (error) {
     clearTimeout(timeout);
     if (error.name === 'AbortError') {
-      throw new Error(`Request timeout after ${timeoutMs}ms`);
+      throw new Error(`Request timeout after ${timeoutMs}ms`, { cause: error });
     }
     throw error;
   }
@@ -122,7 +122,7 @@ async function executeRequest(scenario) {
   let success = false;
   let status = null;
   let errorMessage = null;
-  let responseBody = null;
+  let responseBody;
 
   try {
     const url = `${BASE_URL}${path}`;

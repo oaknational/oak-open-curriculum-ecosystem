@@ -18,7 +18,11 @@ import {
   toRegistrationConfig,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { registerHandlers } from './handlers.js';
-import { createFakeSearchRetrieval, createFakeLogger } from './test-helpers/fakes.js';
+import {
+  createFakeSearchRetrieval,
+  createFakeLogger,
+  createFakeHttpObservability,
+} from './test-helpers/fakes.js';
 import { createMockRuntimeConfig } from './test-helpers/auth-error-test-helpers.js';
 
 /**
@@ -50,6 +54,7 @@ function registerAndCapture() {
   registerHandlers(server, {
     runtimeConfig: createMockRuntimeConfig(),
     logger: createFakeLogger(),
+    observability: createFakeHttpObservability(),
     searchRetrieval: createFakeSearchRetrieval(),
   });
 

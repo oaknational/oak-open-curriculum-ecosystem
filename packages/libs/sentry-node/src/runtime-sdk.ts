@@ -1,0 +1,93 @@
+import {
+  captureException,
+  captureMessage,
+  flush,
+  init,
+  logger,
+  type NodeOptions,
+} from '@sentry/node';
+import type { SentryLiveConfig, SentryNodeSdk, SentryPostRedactionHooks } from './types.js';
+import {
+  redactSentryBreadcrumb,
+  redactSentryEvent,
+  redactSentryLog,
+  redactSentrySpan,
+  redactSentryTransaction,
+} from './runtime-redaction.js';
+
+export const DEFAULT_SENTRY_FLUSH_TIMEOUT_MS = 2_000;
+export const DEFAULT_TRACE_PROPAGATION_TARGETS: readonly string[] = Object.freeze([]);
+
+function createSentryHooks(
+  postRedactionHooks?: SentryPostRedactionHooks,
+): Pick<
+  NodeOptions,
+  'beforeBreadcrumb' | 'beforeSend' | 'beforeSendLog' | 'beforeSendSpan' | 'beforeSendTransaction'
+> {
+  return {
+    beforeSend(event, hint) {
+      const redactedEvent = redactSentryEvent(event);
+      return postRedactionHooks?.beforeSend
+        ? postRedactionHooks.beforeSend(redactedEvent, hint)
+        : redactedEvent;
+    },
+    beforeBreadcrumb(breadcrumb, hint) {
+      const redactedBreadcrumb = redactSentryBreadcrumb(breadcrumb);
+      return postRedactionHooks?.beforeBreadcrumb
+        ? postRedactionHooks.beforeBreadcrumb(redactedBreadcrumb, hint)
+        : redactedBreadcrumb;
+    },
+    beforeSendLog(log) {
+      return redactSentryLog(log);
+    },
+    beforeSendSpan(span) {
+      return redactSentrySpan(span);
+    },
+    beforeSendTransaction(event, hint) {
+      const redactedEvent = redactSentryTransaction(event);
+      return postRedactionHooks?.beforeSendTransaction
+        ? postRedactionHooks.beforeSendTransaction(redactedEvent, hint)
+        : redactedEvent;
+    },
+  };
+}
+
+export function createSentryInitOptions(
+  config: SentryLiveConfig,
+  options: { readonly serviceName: string; readonly postRedactionHooks?: SentryPostRedactionHooks },
+): NodeOptions {
+  return {
+    dsn: config.dsn,
+    environment: config.environment,
+    release: config.release,
+    tracesSampleRate: config.tracesSampleRate,
+    enableLogs: config.enableLogs,
+    sendDefaultPii: config.sendDefaultPii,
+    debug: config.debug,
+    tracePropagationTargets: [...DEFAULT_TRACE_PROPAGATION_TARGETS],
+    initialScope: {
+      tags: {
+        service: options.serviceName,
+        environment: config.environment,
+        release: config.release,
+      },
+    },
+    ...createSentryHooks(options.postRedactionHooks),
+  };
+}
+
+export const defaultSentryNodeSdk: SentryNodeSdk = {
+  init(options): void {
+    init(options);
+  },
+  captureException(error, context): void {
+    captureException(error, context);
+  },
+  captureMessage(message, context): void {
+    captureMessage(message, context);
+  },
+  flush(timeoutMs): Promise<boolean> {
+    return flush(timeoutMs);
+  },
+  logger,
+};

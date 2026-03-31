@@ -15,11 +15,19 @@ import {
   shouldLog,
 } from './log-levels';
 
+const LOG_LEVEL_DETAILS = [
+  LOG_LEVEL_VALUES.TRACE,
+  LOG_LEVEL_VALUES.DEBUG,
+  LOG_LEVEL_VALUES.INFO,
+  LOG_LEVEL_VALUES.WARN,
+  LOG_LEVEL_VALUES.ERROR,
+  LOG_LEVEL_VALUES.FATAL,
+] as const;
+
 describe('log-levels', () => {
   describe('LOG_LEVEL_VALUES', () => {
     it('should have exactly one default level', () => {
-      // eslint-disable-next-line no-restricted-properties -- REFACTOR
-      const defaults = Object.values(LOG_LEVEL_VALUES).filter((level) => level.default);
+      const defaults = LOG_LEVEL_DETAILS.filter((level) => level.default);
       expect(defaults).toHaveLength(1);
     });
 

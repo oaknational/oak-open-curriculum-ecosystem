@@ -14,6 +14,7 @@ import request from 'supertest';
 import { unwrap } from '@oaknational/result';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
+import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
 
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;
@@ -36,7 +37,8 @@ describe('Auth Bypass for Development (E2E)', () => {
       startDir: process.cwd(),
     });
     const runtimeConfig = unwrap(result);
-    app = await createApp({ runtimeConfig });
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    app = await createApp({ runtimeConfig, observability });
   });
 
   it('allows /mcp POST without Authorization when bypass enabled', async () => {

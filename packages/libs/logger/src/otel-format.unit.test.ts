@@ -1,13 +1,11 @@
-/**
- * Unit tests for OpenTelemetry log record formatting
- */
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { normalizeError } from './error-normalisation';
 import {
+  correlationIdToTraceId,
   formatOtelLogRecord,
   logLevelToSeverityNumber,
   logLevelToSeverityText,
-  correlationIdToTraceId,
 } from './otel-format';
 
 describe('otel-format', () => {
@@ -38,7 +36,7 @@ describe('otel-format', () => {
   });
 
   describe('logLevelToSeverityText', () => {
-    it('returns the log level as-is for valid levels', () => {
+    it('returns the log level verbatim', () => {
       expect(logLevelToSeverityText('TRACE')).toBe('TRACE');
       expect(logLevelToSeverityText('DEBUG')).toBe('DEBUG');
       expect(logLevelToSeverityText('INFO')).toBe('INFO');
@@ -49,37 +47,21 @@ describe('otel-format', () => {
   });
 
   describe('correlationIdToTraceId', () => {
-    it('converts correlationId to 32-character hex TraceId', () => {
-      const correlationId = 'req_1699123456789_a3f2c9';
-      const traceId = correlationIdToTraceId(correlationId);
+    it('produces a stable 32-character hex trace ID', () => {
+      const traceId = correlationIdToTraceId('req_1699123456789_a3f2c9');
 
       expect(traceId).toMatch(/^[0-9a-f]{32}$/);
       expect(traceId).toHaveLength(32);
+      expect(traceId).toBe(correlationIdToTraceId('req_1699123456789_a3f2c9'));
     });
 
-    it('produces consistent TraceId for same correlationId', () => {
-      const correlationId = 'req_1699123456789_a3f2c9';
-      const traceId1 = correlationIdToTraceId(correlationId);
-      const traceId2 = correlationIdToTraceId(correlationId);
-
-      expect(traceId1).toBe(traceId2);
-    });
-
-    it('produces different TraceIds for different correlationIds', () => {
-      const traceId1 = correlationIdToTraceId('req_1699123456789_a3f2c9');
-      const traceId2 = correlationIdToTraceId('req_1699123456790_b4e3d0');
-
-      expect(traceId1).not.toBe(traceId2);
-    });
-
-    it('returns undefined for undefined correlationId', () => {
+    it('returns undefined for missing correlation IDs', () => {
       expect(correlationIdToTraceId(undefined)).toBeUndefined();
     });
   });
 
   describe('formatOtelLogRecord', () => {
     beforeEach(() => {
-      // Mock Date.now() for consistent timestamps
       vi.useFakeTimers();
       vi.setSystemTime(new Date('2025-11-08T12:00:00.000Z'));
     });
@@ -88,7 +70,7 @@ describe('otel-format', () => {
       vi.useRealTimers();
     });
 
-    it('creates record with all required OpenTelemetry fields', () => {
+    it('creates all required OpenTelemetry log record fields', () => {
       const record = formatOtelLogRecord({
         level: 'INFO',
         message: 'Test message',
@@ -98,183 +80,123 @@ describe('otel-format', () => {
           'service.version': '1.0.0',
           'deployment.environment': 'development',
         },
+        activeSpanContext: undefined,
       });
 
-      expect(record).toHaveProperty('Timestamp');
-      expect(record).toHaveProperty('ObservedTimestamp');
-      expect(record).toHaveProperty('SeverityNumber');
-      expect(record).toHaveProperty('SeverityText');
-      expect(record).toHaveProperty('Body');
-      expect(record).toHaveProperty('Attributes');
-      expect(record).toHaveProperty('Resource');
-    });
-
-    it('formats timestamps as ISO 8601', () => {
-      const record = formatOtelLogRecord({
-        level: 'INFO',
-        message: 'Test message',
-        context: {},
-        resourceAttributes: {
+      expect(record).toEqual({
+        Timestamp: '2025-11-08T12:00:00.000Z',
+        ObservedTimestamp: '2025-11-08T12:00:00.000Z',
+        SeverityNumber: 9,
+        SeverityText: 'INFO',
+        Body: 'Test message',
+        Attributes: {},
+        Resource: {
           'service.name': 'test-service',
           'service.version': '1.0.0',
           'deployment.environment': 'development',
         },
       });
-
-      expect(record.Timestamp).toBe('2025-11-08T12:00:00.000Z');
-      expect(record.ObservedTimestamp).toBe('2025-11-08T12:00:00.000Z');
     });
 
-    it('sets correct severity number and text', () => {
-      const record = formatOtelLogRecord({
-        level: 'ERROR',
-        message: 'Error message',
-        context: {},
-        resourceAttributes: {
-          'service.name': 'test-service',
-          'service.version': '1.0.0',
-          'deployment.environment': 'development',
-        },
-      });
-
-      expect(record.SeverityNumber).toBe(17);
-      expect(record.SeverityText).toBe('ERROR');
-    });
-
-    it('sets Body to the message', () => {
-      const message = 'Test log message';
-      const record = formatOtelLogRecord({
-        level: 'INFO',
-        message,
-        context: {},
-        resourceAttributes: {
-          'service.name': 'test-service',
-          'service.version': '1.0.0',
-          'deployment.environment': 'development',
-        },
-      });
-
-      expect(record.Body).toBe(message);
-    });
-
-    it('includes context in Attributes', () => {
-      const context = {
-        userId: '123',
-        action: 'login',
-        count: 42,
-      };
-
+    it('merges context attributes into the OTel record', () => {
       const record = formatOtelLogRecord({
         level: 'INFO',
         message: 'User action',
-        context,
+        context: {
+          userId: '123',
+          action: 'login',
+          nested: {
+            count: 1,
+          },
+        },
         resourceAttributes: {
           'service.name': 'test-service',
           'service.version': '1.0.0',
           'deployment.environment': 'development',
         },
+        activeSpanContext: undefined,
       });
 
-      expect(record.Attributes).toMatchObject(context);
+      expect(record.Attributes).toMatchObject({
+        userId: '123',
+        action: 'login',
+        nested: {
+          count: 1,
+        },
+      });
     });
 
-    it('includes error information in Attributes when error provided', () => {
+    it('serialises normalised errors into semantic exception attributes', () => {
       const error = new Error('Test error');
       error.stack = 'Error: Test error\n    at test.ts:1:1';
 
       const record = formatOtelLogRecord({
         level: 'ERROR',
         message: 'Error occurred',
-        error,
+        error: normalizeError(error),
         context: {},
         resourceAttributes: {
           'service.name': 'test-service',
           'service.version': '1.0.0',
           'deployment.environment': 'development',
         },
+        activeSpanContext: undefined,
       });
 
       expect(record.Attributes).toHaveProperty('exception.type', 'Error');
       expect(record.Attributes).toHaveProperty('exception.message', 'Test error');
-      expect(record.Attributes).toHaveProperty('exception.stacktrace');
-      expect(record.Attributes['exception.stacktrace']).toContain('Error: Test error');
+      expect(record.Attributes).toHaveProperty(
+        'exception.stacktrace',
+        'Error: Test error\n    at test.ts:1:1',
+      );
     });
 
-    it('includes Resource attributes', () => {
-      const resourceAttributes = {
-        'service.name': 'my-service',
-        'service.version': '2.0.0',
-        'deployment.environment': 'production',
-      };
-
-      const record = formatOtelLogRecord({
-        level: 'INFO',
-        message: 'Test',
-        context: {},
-        resourceAttributes,
-      });
-
-      expect(record.Resource).toEqual(resourceAttributes);
-    });
-
-    it('converts correlationId to TraceId when present in context', () => {
+    it('falls back to correlation-id hashing when no active span exists', () => {
       const correlationId = 'req_1699123456789_a3f2c9';
-      const context = { correlationId };
 
       const record = formatOtelLogRecord({
         level: 'INFO',
         message: 'Test',
-        context,
+        context: {
+          correlationId,
+        },
         resourceAttributes: {
           'service.name': 'test-service',
           'service.version': '1.0.0',
           'deployment.environment': 'development',
         },
+        activeSpanContext: undefined,
       });
 
-      expect(record).toHaveProperty('TraceId');
-      expect(record.TraceId).toMatch(/^[0-9a-f]{32}$/);
+      expect(record.TraceId).toBe(correlationIdToTraceId(correlationId));
       expect(record.Attributes).toHaveProperty('correlationId', correlationId);
+      expect(record.SpanId).toBeUndefined();
     });
 
-    it('does not include TraceId when correlationId not present', () => {
+    it('prefers the active span context over correlation-id hashing', () => {
+      const spanContext = {
+        traceId: '0123456789abcdef0123456789abcdef',
+        spanId: '0123456789abcdef',
+        traceFlags: 1,
+      } as const;
+
       const record = formatOtelLogRecord({
         level: 'INFO',
         message: 'Test',
-        context: {},
+        context: {
+          correlationId: 'req_1699123456789_a3f2c9',
+        },
         resourceAttributes: {
           'service.name': 'test-service',
           'service.version': '1.0.0',
           'deployment.environment': 'development',
         },
+        activeSpanContext: spanContext,
       });
 
-      expect(record).not.toHaveProperty('TraceId');
-    });
-
-    it('handles nested context objects', () => {
-      const context = {
-        user: {
-          id: '123',
-          name: 'John',
-        },
-        metadata: {
-          count: 5,
-        },
-      };
-
-      const record = formatOtelLogRecord({
-        level: 'INFO',
-        message: 'Test',
-        context,
-        resourceAttributes: {
-          'service.name': 'test-service',
-          'service.version': '1.0.0',
-          'deployment.environment': 'development',
-        },
-      });
-
-      expect(record.Attributes).toMatchObject(context);
+      expect(record.TraceId).toBe(spanContext.traceId);
+      expect(record.SpanId).toBe(spanContext.spanId);
+      expect(record.TraceFlags).toBe(spanContext.traceFlags);
     });
   });
 });

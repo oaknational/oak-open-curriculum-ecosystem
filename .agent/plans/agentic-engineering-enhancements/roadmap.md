@@ -1,6 +1,6 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
 **Last Updated**: 2026-03-23
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
@@ -70,7 +70,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (📋), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -92,7 +92,7 @@ Adjacent:
   CX:   Codex platform parity                       ✅ COMPLETE
   HC-0: Harness concepts baseline metrics            📋 PLANNED
   PC:   Practice convergence closeout                ✅ COMPLETE
-  SNT:  Sentry specialist capability                 📋 PLANNED
+  SNT:  Sentry specialist capability                 🔄 ACTIVE
   MCP+: MCP specialist upgrade (triplet + ext-apps)  📋 PLANNED
   EXP:  Express specialist capability                📋 PLANNED
   CYB:  Cyber security specialist capability         📋 PLANNED
@@ -222,19 +222,19 @@ Adjacent:
 ### Adjacent — Sentry Specialist Capability
 
 - Strategic plan:
-  [sentry-specialist-capability.plan.md](future/sentry-specialist-capability.plan.md)
+  [sentry-specialist-capability.plan.md](current/sentry-specialist-capability.plan.md)
 - Goal:
   - add a canonical Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet)
   - require live consultation of official Sentry and OpenTelemetry documentation as primary authority
   - scope includes Sentry SDK integration, OpenTelemetry instrumentation, distributed tracing, error tracking, MCP Insights, alerting, and performance monitoring
   - treat Vercel (Node.js) + `@sentry/node` as the default deployment context
-- Status: 📋 Planned (future/)
+- Status: 🔄 Active reference (`current/`)
 - Notes:
   - third instantiation of the domain specialist triplet pattern (ADR-129)
   - intentionally outside the numbered phase sequence
   - collection-owned because it extends the agent capability model
   - must be created before or as the very first step of the Sentry integration
-    ([sentry-otel-integration.execution.plan.md](../architecture-and-infrastructure/current/sentry-otel-integration.execution.plan.md))
+    ([sentry-otel-integration.execution.plan.md](../architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md))
     — so agents can review Sentry SDK usage as it's being written
 
 ### Adjacent — MCP Specialist Upgrade (MCP+)
@@ -605,7 +605,7 @@ specialists, not deferred.
 
 **Domain specialists (ADR-129 triplets, invoked on domain signal):**
 
-- elasticsearch-reviewer ✅, clerk-reviewer ✅, sentry specialist 📋,
+- elasticsearch-reviewer ✅, clerk-reviewer ✅, sentry specialist 🔄,
   mcp specialist 📋, express specialist 📋, cyber security specialist 📋,
   web/API security specialist 📋, privacy specialist 📋,
   web/API GDPR specialist 📋, ooce specialist 📋
