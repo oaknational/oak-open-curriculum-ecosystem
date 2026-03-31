@@ -64,6 +64,27 @@
         "!src/**/*.spec.ts"
       ]
     },
+    "@oaknational/oak-curriculum-mcp-streamable-http#build": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["dist/**", ".tsup/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsup.config.ts",
+        "src/**/*.ts",
+        "!src/**/*.test.ts",
+        "!src/**/*.spec.ts",
+        "widget/**/*.ts",
+        "widget/**/*.tsx",
+        "widget/**/*.css",
+        "widget/**/*.html",
+        "widget/vite.config.ts",
+        "widget/tsconfig.json"
+      ]
+    },
     "@oaknational/sdk-codegen#test": {
       "dependsOn": ["^build", "sdk-codegen"],
       "cache": true,
@@ -173,6 +194,18 @@
         "$TURBO_ROOT$/vitest.config.base.ts",
         "stryker.config.ts",
         "$TURBO_ROOT$/stryker.config.base.ts"
+      ]
+    },
+    "test:widget": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "widget/**/*.ts",
+        "widget/**/*.tsx",
+        "vitest.widget.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts"
       ]
     },
     "test:e2e": {

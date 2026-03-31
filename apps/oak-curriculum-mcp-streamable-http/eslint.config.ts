@@ -105,6 +105,41 @@ const config = defineConfig(
       },
     },
     {
+      files: ['widget/**/*.ts', 'widget/**/*.tsx'],
+      languageOptions: {
+        parserOptions: {
+          projectService: true,
+          tsconfigRootDir: thisDir,
+          ecmaFeatures: { jsx: true },
+        },
+      },
+      settings: {
+        ...commonSettings,
+        'import-x/resolver': {
+          ...commonSettings['import-x/resolver'],
+          typescript: {
+            ...commonSettings['import-x/resolver'].typescript,
+            projectService: true,
+          },
+        },
+      },
+      rules: {
+        'import-x/no-relative-parent-imports': 'off',
+        ...appArchitectureRules,
+        'max-lines-per-function': ['error', { max: 50, skipComments: true, skipBlankLines: true }],
+      },
+    },
+    {
+      files: ['widget/**/*.test.tsx', 'widget/**/*.test.ts'],
+      rules: {
+        ...testRules,
+        'import-x/no-relative-parent-imports': 'off',
+        'import-x/no-restricted-paths': 'off',
+        '@typescript-eslint/no-restricted-imports': 'off',
+        'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
+      },
+    },
+    {
       files: ['**/*.test.ts', '**/*.spec.ts'],
       rules: {
         ...testRules,
@@ -155,6 +190,7 @@ const config = defineConfig(
         'eslint.config.base.ts',
         'vitest.config.ts',
         'vitest.e2e.config.ts',
+        'vitest.widget.config.ts',
       ],
       languageOptions: {
         parserOptions: {

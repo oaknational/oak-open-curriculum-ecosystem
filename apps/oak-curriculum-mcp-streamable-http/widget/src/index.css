@@ -1,0 +1,41 @@
+/**
+ * MCP App base styles.
+ *
+ * Minimal reset and layout for the Oak MCP App shell.
+ * Oak brand styling will be added in Phase 4.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  line-height: 1.5;
+  color: #1a1a1a;
+  background: #ffffff;
+}
+
+.oak-mcp-app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.oak-mcp-app-header {
+  border-bottom: 2px solid #222222;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.oak-mcp-app-header h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
