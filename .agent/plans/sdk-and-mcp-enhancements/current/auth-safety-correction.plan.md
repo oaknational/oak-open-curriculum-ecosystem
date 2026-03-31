@@ -5,35 +5,36 @@ lastValidatedDate: 2026-03-05
 todos:
   - id: phase-0-foundation
     content: "Re-read principles.md, testing-strategy.md, schema-first-execution.md. Confirm deny-by-default is the correct security stance (check ADR-113). Record recommitment."
-    status: pending
+    status: completed
   - id: phase-1-red-missing-schemes
     content: "RED: Write failing test for absent securitySchemes on a generated tool — toolRequiresAuth should return true."
-    status: pending
+    status: completed
   - id: phase-2-red-empty-schemes
     content: "RED: Write failing test for empty securitySchemes array — toolRequiresAuth should return true."
-    status: pending
+    status: completed
   - id: phase-3-red-malformed-schemes
     content: "RED: Write failing test for malformed securitySchemes (non-array or null) — toolRequiresAuth should return true + structured warning log."
-    status: pending
+    status: completed
   - id: phase-4-red-aggregated
     content: "RED: Write failing tests for all three cases on an aggregated tool (AGGREGATED_TOOL_DEFS path)."
-    status: pending
+    status: completed
   - id: phase-5-green
     content: "GREEN: Implement deny-by-default in tool-auth-checker.ts. All RED tests must pass. No existing passing tests must break."
-    status: pending
+    status: completed
   - id: phase-6-refactor
     content: "REFACTOR: Extract the decision table into a named helper with clear intent. No behaviour changes. All tests still pass."
-    status: pending
+    status: completed
   - id: phase-7-quality-gates
     content: "Run pnpm qg (type check, lint, test). All gates green. No ts-ignore, no eslint-disable."
-    status: pending
+    status: completed
 isProject: false
 ---
 
 # Auth Safety Correction
 
-**Status**: Not started
-**Last Updated**: 2026-03-30
+**Status**: COMPLETE
+**Last Updated**: 2026-03-31
+**Completed by**: Commit `e6574b5a` on `feat/mcp_app_ui`
 
 ## Context
 

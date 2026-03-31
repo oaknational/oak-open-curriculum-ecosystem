@@ -167,9 +167,9 @@ WS2: runtime migration                      ✓ complete
 Runtime boundary simplification             ✓ complete
 WS3 child plan: fresh React MCP App rebuild ▶ active
   Phase 0: baseline + RED specs              ✓ complete
-  Phase 1: delete legacy widget framework    ▶ next
-  Phase 2: scaffold fresh MCP App infra
-  Phase 3: canonical contracts + runtime integration
+  Phase 1: delete legacy widget framework    ✓ complete
+  Phase 2: scaffold fresh MCP App infra      ✓ complete
+  Phase 3: canonical contracts + runtime     ▶ next
   Phase 4: curriculum-model view
   Phase 5: user-search view
   Phase 6: docs + review + commit

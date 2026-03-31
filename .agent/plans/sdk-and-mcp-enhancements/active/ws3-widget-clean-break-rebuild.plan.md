@@ -16,7 +16,7 @@ todos:
     status: completed
   - id: phase-2-scaffold
     content: "Phase 2: Scaffold a fresh React MCP App build, lint, type-check, test, and Turbo pipeline."
-    status: pending
+    status: completed
   - id: phase-3-contracts-runtime
     content: "Phase 3: Extend canonical SDK/runtime contracts for MCP App registration, visibility, and tool listing."
     status: pending

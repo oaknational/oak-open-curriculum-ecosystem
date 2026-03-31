@@ -6,19 +6,19 @@ isProject: false
 todos:
   - id: red-build-tests
     content: "Write RED tests for widget build output and shell markers."
-    status: pending
+    status: completed
   - id: scaffold-widget
     content: "Create widget build target and baseline React shell files."
-    status: pending
+    status: completed
   - id: tooling-integration
     content: "Wire Turbo, ESLint, type-check, and widget Vitest config."
-    status: pending
+    status: completed
 ---
 
 # WS3 Phase 2: Scaffold Fresh MCP App Infrastructure
 
-**Status**: PENDING
-**Last Updated**: 2026-03-30
+**Status**: COMPLETE
+**Last Updated**: 2026-03-31
 
 ## Required Inputs
 

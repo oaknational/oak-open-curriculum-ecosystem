@@ -53,50 +53,48 @@ git log --oneline --decorate -10
 
 ## Active Work
 
-### Immediate Priority: Security Hardening or WS3 Phase 2
+### Completed This Session (2026-03-31)
 
-**Status**: Merge COMPLETE. Deep review COMPLETE (2026-03-31). Branch is clean.
-
-The merge of main into `feat/mcp_app_ui` was executed on 2026-03-31, producing
-3 commits (`8e0b35d2`, `a71c7793`, `bfb5fc76`) plus a 4th review-findings
-commit (`e4bda5b5`). All 6 specialist reviewers confirmed the merge is
-architecturally sound. 52 auto-merged files verified line-by-line.
-
-**Next session tasks** (in priority order):
-
-1. **Security hardening** (COMPLETE):
-   - `code_verifier` and `code` added to `FULLY_REDACTED_KEYS` (done in
-     `e4bda5b5`)
+1. **Security hardening** (COMPLETE — commit `88dd3ab8`):
    - `assertion`, `client_assertion` added to `FULLY_REDACTED_KEYS`; `nonce`
-     added to `REDACTED_QUERY_KEYS` (defence-in-depth for future OAuth grant
-     types, per security-reviewer recommendation)
-   - PII classification of `handleAuthSuccess()` logging (security-reviewer
-     validated 2026-03-31): `clientId` (OAuth app identifier, not PII),
-     `scopes` (permission strings), `userId` (pseudonymised Clerk ID at debug
-     level) — all SAFE
-   - `handleToken()` transparent proxy (ADR-115): logs only metadata (URL,
-     status, duration), never bodies. Field-level filtering would break OAuth
-     protocol. `FULLY_REDACTED_KEYS` covers all telemetry surfaces as
-     defence-in-depth — no further action needed
-2. **Deferred Phase 8 items**:
+     added to `REDACTED_QUERY_KEYS` (defence-in-depth, security-reviewer)
+   - Formal PII classification for `handleAuthSuccess()` logging — all SAFE
+   - `handleToken()` transparent proxy confirmed correct per ADR-115
+2. **Auth safety correction** (COMPLETE — commit `e6574b5a`):
+   - Deny-by-default in `tool-auth-checker.ts` via
+     `!schemes.every(s => s.type === 'noauth')`
+   - Security-reviewer + type-reviewer findings addressed
+3. **WS3 Phase 2 scaffold** (COMPLETE — commit `69f9b8d2`):
+   - Fresh `widget/` with React/Vite, `dist/mcp-app.html`, DOM tests
+   - Config-reviewer findings addressed (turbo outputs, dep placement,
+     test:widget in QG pipeline)
+
+### Next Session Tasks (in priority order)
+
+1. **Auth safety correction plan closure**: Update plan status at
+   `current/auth-safety-correction.plan.md` — core fix is done, but plan
+   phases 0-3 (foundation, RED tests) were compressed. Mark phases complete.
+2. **Auth boundary type safety remediations** (Tasks 1+2 pending):
+   - `current/auth-boundary-type-safety.plan.md`
+3. **Deferred Phase 8 items**:
    - 8b: Create `.agent/skills/complex-merge/SKILL.md`
    - 8c: Update `docs/engineering/pre-merge-analysis.md`
-3. **Resume WS3 Phase 2** (after security hardening is done):
-   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md`
+4. **Resume WS3 Phase 3** (canonical contracts and runtime):
+   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-3-canonical-contracts-and-runtime.plan.md`
 
 **Merge plan reference** (completed, for context):
 - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-merge-main-into-branch.plan.md`
 
 ### WS3: Fresh React MCP App Rebuild
 
-**Status**: Active implementation track. Merge complete. Phase 2 next.
+**Status**: Active implementation track. Phase 2 COMPLETE. Phase 3 next.
 
 **Child plan**:
 `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 
 **Phase execution detail**: each WS3 phase has a companion child plan linked in
-the WS3 child plan's `Phase Companion Plans` section. Phases 0 and 1 are
-complete. Merge is complete. Phase 2 is next.
+the WS3 child plan's `Phase Companion Plans` section. Phases 0, 1, and 2 are
+complete. Merge is complete. Phase 3 is next.
 
 **Closure gate note**: WS3/WS4 implementation can progress, but migration closure
 is blocked until C8 auth hardening plans in `current/` are complete (or
