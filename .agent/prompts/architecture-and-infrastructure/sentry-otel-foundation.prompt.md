@@ -38,10 +38,10 @@ multi-layer security architecture documented.
 
 **What comes next**:
 
-1. **Rate limiting** — application-layer defence-in-depth on 4+ routes.
-   Plan queued at `plans/architecture-and-infrastructure/current/app-layer-rate-limiting.plan.md`.
-   Includes `trust proxy` configuration, ADR for multi-layer security
-   architecture, and security reviewer findings.
+1. ~~**Rate limiting**~~ — **COMPLETE** (2026-03-31). ADR-144 documents
+   multi-layer security architecture. `express-rate-limit` v8 on 6
+   routes across 3 profiles (MCP 120/min, OAuth 30/15min, Asset 60/min).
+   `trust proxy` configured. All quality gates green, 6 reviewers invoked.
 2. **Search CLI adoption** (`apps/oak-search-cli`) — wire observability
    foundation, runtime-config-driven logger, command init spans,
    shutdown flush, Sentry DSN provisioning.
@@ -85,9 +85,7 @@ Primary code surfaces:
 
 1. Verify `pnpm check` still passes (confirms no drift since last session).
 2. Choose the next work item:
-   - **Rate limiting**: promote `app-layer-rate-limiting.plan.md` from
-     `current/` to `active/` and execute. Clears CodeQL alerts and adds
-     defence-in-depth. Includes `trust proxy`, ADR, security review findings.
+   - ~~**Rate limiting**~~: **COMPLETE** (2026-03-31). ADR-144, all gates green.
    - **Search CLI adoption**: wire observability into `apps/oak-search-cli`.
      See `search-cli-adoption` todo in the execution plan.
    - **Deployment evidence**: release/source maps, alerting, MCP Insights.

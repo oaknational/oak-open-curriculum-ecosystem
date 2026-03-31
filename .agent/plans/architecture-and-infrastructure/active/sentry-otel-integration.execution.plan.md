@@ -78,7 +78,7 @@ Phase 3 should be judged against that outcome. New wiring only counts if it
 improves supportability and release confidence while preserving the redaction
 and capture boundaries established in Phase 1 and Phase 2.
 
-## Current Execution Snapshot (2026-03-30)
+## Current Execution Snapshot (2026-03-31)
 
 ### Lane and state
 
@@ -88,7 +88,7 @@ and capture boundaries established in Phase 1 and Phase 2.
 - Phase 3 HTTP adoption: **COMPLETE** — all findings resolved, merged
 - Phase 3 Search CLI adoption: **NEXT** — unblocked
 - Phase 4 evidence/deployment: **pending**
-- Rate limiting plan queued: `.agent/plans/architecture-and-infrastructure/current/app-layer-rate-limiting.plan.md`
+- Rate limiting: **COMPLETE** (2026-03-31) — ADR-144, 6 routes, 3 profiles, trust proxy, all gates green
 
 ### Quality gate status (2026-03-30)
 

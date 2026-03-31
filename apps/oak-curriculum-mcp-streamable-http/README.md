@@ -265,11 +265,14 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
 
 ## Deployment Preconditions
 
-**Rate limiting**: Edge/WAF rate limiting must be configured before
-production deployment. The OAuth proxy endpoints (`/register`, `/token`)
-are publicly reachable and require rate limiting to prevent abuse. See
-[ADR-115](../../docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
-for details.
+**Rate limiting**: Application-layer per-IP rate limiting is built in via
+`express-rate-limit` on all MCP routes (120/min), OAuth routes (30/15min),
+and asset download routes (60/min). This is defence-in-depth — the
+in-memory store is probabilistic on Vercel serverless (per-instance, resets
+on cold start). **CDN/edge rate limiting must also be configured** for
+production deployment to provide authoritative protection. See
+[ADR-144](../../docs/architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md)
+for the full multi-layer security architecture.
 
 **Documentation Status**: Last verified 2026-03-07 against `src/application.ts`, `src/auth-routes.ts`, and the current workspace-level transport documentation.
 

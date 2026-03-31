@@ -87,6 +87,7 @@ function registerOAuthRoutes(
   observability: HttpObservability,
   upstreamBaseUrl: string,
   upstreamMetadata: UpstreamAuthServerMetadata,
+  oauthRateLimiter: RequestHandler,
 ): void {
   runBootstrapPhase(
     log,
@@ -106,7 +107,12 @@ function registerOAuthRoutes(
     appCounter,
     () => {
       log.info('OAuth proxy enabled', { upstreamBaseUrl });
-      app.use(createOAuthProxyRoutes({ upstreamBaseUrl, logger: log, observability }));
+      app.use(
+        createOAuthProxyRoutes({
+          config: { upstreamBaseUrl, logger: log, observability },
+          oauthRateLimiter,
+        }),
+      );
     },
     observability,
   );
@@ -121,7 +127,8 @@ export async function setupOAuthAndCaching(
   appCounter: number,
   allowedHosts: readonly string[],
   observability: HttpObservability,
-  injectedMetadata?: UpstreamAuthServerMetadata,
+  injectedMetadata: UpstreamAuthServerMetadata | undefined,
+  oauthRateLimiter: RequestHandler,
 ): Promise<void> {
   if (!runtimeConfig.dangerouslyDisableAuth) {
     const { upstreamBaseUrl, upstreamMetadata } = await resolveUpstreamMetadata(
@@ -142,6 +149,7 @@ export async function setupOAuthAndCaching(
       observability,
       upstreamBaseUrl,
       upstreamMetadata,
+      oauthRateLimiter,
     );
   }
 

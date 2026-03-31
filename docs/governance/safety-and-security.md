@@ -126,13 +126,13 @@ catches threats the others miss. No single layer is sufficient alone.
 
 ### Layer Stack
 
-| Layer                        | Protection                                                                                                                               | Failure Mode                                                              |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| **DNS**                      | DNS rebinding guard rejects requests with unrecognised `Host` headers. Applied selectively (landing page); MCP routes use OAuth instead. | Bypassed if attacker controls DNS for an allowed host                     |
-| **CDN/Edge**                 | Volumetric DDoS, geographic blocking, bot detection, TLS termination (Vercel edge)                                                       | Bypassed by direct origin access or low-rate attacks below CDN thresholds |
-| **Application — auth**       | OAuth 2.1 via Clerk (`mcpAuth` middleware), CORS, security headers (CSP, HSTS, X-Frame-Options)                                          | Bypassed if OAuth token compromised or auth disabled                      |
-| **Application — rate limit** | Per-IP rate limiting on auth-protected routes (`express-rate-limit`). Probabilistic on Vercel serverless (per-instance in-memory store). | Distributed attacks across IPs; counter reset on cold start               |
-| **Upstream API**             | Oak API per-key rate limiting and quota management                                                                                       | Exhaustible via amplification from our server                             |
+| Layer                        | Protection                                                                                                                                                                                                                                            | Failure Mode                                                              |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **DNS**                      | DNS rebinding guard rejects requests with unrecognised `Host` headers. Applied selectively (landing page); MCP routes use OAuth instead.                                                                                                              | Bypassed if attacker controls DNS for an allowed host                     |
+| **CDN/Edge**                 | Volumetric DDoS, geographic blocking, bot detection, TLS termination (Vercel edge)                                                                                                                                                                    | Bypassed by direct origin access or low-rate attacks below CDN thresholds |
+| **Application — auth**       | OAuth 2.1 via Clerk (`mcpAuth` middleware), CORS, security headers (CSP, HSTS, X-Frame-Options)                                                                                                                                                       | Bypassed if OAuth token compromised or auth disabled                      |
+| **Application — rate limit** | Per-IP rate limiting on MCP, OAuth, and asset routes (`express-rate-limit`). Probabilistic on Vercel serverless (per-instance in-memory store). See [ADR-144](../architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md). | Distributed attacks across IPs; counter reset on cold start               |
+| **Upstream API**             | Oak API per-key rate limiting and quota management                                                                                                                                                                                                    | Exhaustible via amplification from our server                             |
 
 ### Trust Boundaries
 
@@ -159,8 +159,8 @@ Two patterns allow a single inbound request to produce upstream load:
    valid URL can be replayed to generate unlimited upstream Oak API
    requests, all authenticated with the server's `OAK_API_KEY`.
 
-Both are mitigated by application-layer rate limiting (see the rate
-limiting plan in `.agent/plans/architecture-and-infrastructure/current/`).
+Both are mitigated by application-layer rate limiting (see
+[ADR-144](../architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md)).
 
 ## Network Security
 

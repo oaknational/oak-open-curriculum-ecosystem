@@ -238,6 +238,12 @@ export function initializeAppInstance(
   log.debug(`Creating app #${String(appId)}`);
   const app: ExpressWithAppId = express();
   app.__appId = appId;
+
+  // Trust exactly one reverse proxy (Vercel CDN) so req.ip reflects the
+  // real client IP from X-Forwarded-For rather than the CDN's address.
+  // This MUST be set before any rate-limiting middleware.
+  app.set('trust proxy', 1);
+
   const timer = createPhasedTimer();
   return { app, timer, appId };
 }

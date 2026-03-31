@@ -78,7 +78,10 @@ function createProxyApp(
     observability,
   };
 
-  app.use(createOAuthProxyRoutes(config));
+  const noopRateLimiter: express.RequestHandler = (_req, _res, next) => {
+    next();
+  };
+  app.use(createOAuthProxyRoutes({ config, oauthRateLimiter: noopRateLimiter }));
   return app;
 }
 

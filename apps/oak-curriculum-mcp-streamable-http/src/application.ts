@@ -1,17 +1,9 @@
-import type { Express, RequestHandler } from 'express';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import type { RequestHandler } from 'express';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
 import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';
 
-import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
-import { overrideToolsListHandler } from './tools-list-override.js';
-import {
-  SERVER_INSTRUCTIONS,
-  createStubSearchRetrieval,
-} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { mountAssetDownloadProxy } from './asset-download/asset-download-route.js';
+import type { ToolHandlerOverrides } from './handlers.js';
 import type { RuntimeConfig } from './runtime-config.js';
 import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
@@ -25,13 +17,19 @@ import {
   type ExpressWithAppId,
 } from './app/bootstrap-helpers.js';
 import { setupSecurityMiddleware } from './app/bootstrap-security.js';
-import { addHealthEndpoints } from './app/health-endpoints.js';
 import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
-import { createSearchRetrieval } from './search-retrieval-factory.js';
+import { initializeCoreEndpoints } from './app/core-endpoints.js';
 import type { HttpObservability } from './observability/http-observability.js';
 
-import type { McpServerFactory } from './mcp-request-context.js';
+import {
+  type RateLimiterFactory,
+  createDefaultRateLimiterFactory,
+  MCP_RATE_LIMIT,
+  OAUTH_RATE_LIMIT,
+  ASSET_RATE_LIMIT,
+} from './rate-limiting/index.js';
+
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
 
 export interface CreateAppOptions {
@@ -56,6 +54,15 @@ export interface CreateAppOptions {
    * @see ADR-078 for the dependency injection rationale
    */
   readonly clerkMiddlewareFactory?: () => RequestHandler;
+  /**
+   * Factory for creating per-IP rate limiting middleware. When provided,
+   * replaces the default `express-rate-limit` factory, enabling tests to
+   * inject a no-op or recording fake. Production callers omit this.
+   *
+   * @see ADR-078 for the dependency injection rationale
+   * @see ADR-144 for the multi-layer security architecture
+   */
+  readonly rateLimiterFactory?: RateLimiterFactory;
 }
 
 let appCounter = 0;
@@ -88,6 +95,20 @@ function setupPreAuthPhases(
   );
 }
 
+/** Creates rate limiter middleware instances for all three route profiles. */
+function createRateLimiters(options: CreateAppOptions): {
+  mcpRateLimiter: RequestHandler;
+  oauthRateLimiter: RequestHandler;
+  assetRateLimiter: RequestHandler;
+} {
+  const factory = options.rateLimiterFactory ?? createDefaultRateLimiterFactory();
+  return {
+    mcpRateLimiter: factory(MCP_RATE_LIMIT),
+    oauthRateLimiter: factory(OAUTH_RATE_LIMIT),
+    assetRateLimiter: factory(ASSET_RATE_LIMIT),
+  };
+}
+
 function setupPostAuthPhases(
   app: ExpressWithAppId,
   options: CreateAppOptions,
@@ -96,13 +117,15 @@ function setupPostAuthPhases(
   appId: number,
   allowedHosts: readonly string[],
   dnsRebindingMiddleware: RequestHandler,
+  mcpRateLimiter: RequestHandler,
+  assetRateLimiter: RequestHandler,
 ): void {
   const { mcpFactory, ready } = runBootstrapPhase(
     log,
     bootstrapTimer,
     'initializeCoreEndpoints',
     appId,
-    () => initializeCoreEndpoints(app, options, options.runtimeConfig, log, options.observability),
+    () => initializeCoreEndpoints(app, options, log, assetRateLimiter),
     options.observability,
   );
 
@@ -122,6 +145,7 @@ function setupPostAuthPhases(
         log,
         allowedHosts,
         options.observability,
+        mcpRateLimiter,
       );
     },
     options.observability,
@@ -138,6 +162,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
   const { app, timer: bootstrapTimer, appId } = initializeAppInstance(appCounter, log);
   appCounter = appId;
 
+  const { mcpRateLimiter, oauthRateLimiter, assetRateLimiter } = createRateLimiters(options);
   const { dnsRebindingMiddleware, allowedHosts } = setupPreAuthPhases(
     app,
     options,
@@ -155,6 +180,7 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     allowedHosts,
     options.observability,
     options.upstreamMetadata,
+    oauthRateLimiter,
   );
 
   runBootstrapPhase(
@@ -176,6 +202,8 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     appId,
     allowedHosts,
     dnsRebindingMiddleware,
+    mcpRateLimiter,
+    assetRateLimiter,
   );
 
   const routes = listRoutes(app);
@@ -183,57 +211,4 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
   logRegisteredRoutes(log, appId, routes);
 
   return app;
-}
-
-/** Initialises core MCP endpoints, returns a per-request factory. @see ADR-112 */
-function initializeCoreEndpoints(
-  app: Express,
-  options: CreateAppOptions,
-  runtimeConfig: RuntimeConfig,
-  log: Logger,
-  observability: HttpObservability,
-): { mcpFactory: McpServerFactory; ready: Promise<void> } {
-  const searchRetrieval = runtimeConfig.useStubTools
-    ? createStubSearchRetrieval()
-    : createSearchRetrieval(runtimeConfig.env, log);
-  const resourceUrl = options?.resourceUrl ?? 'http://localhost:3333/mcp';
-  const assetBaseUrl = runtimeConfig.displayHostname
-    ? `https://${runtimeConfig.displayHostname}`
-    : new URL(resourceUrl).origin;
-  const createAssetDownloadUrl = mountAssetDownloadProxy(
-    app,
-    assetBaseUrl,
-    runtimeConfig.env.OAK_API_KEY,
-    log,
-    runtimeConfig.env.OAK_API_BASE_URL ?? 'https://open-api.thenational.academy/api/v0',
-    observability,
-  );
-
-  const handlerOptions = {
-    overrides: options?.toolHandlerOverrides,
-    runtimeConfig,
-    logger: log,
-    observability,
-    resourceUrl,
-    searchRetrieval,
-    createAssetDownloadUrl,
-  };
-
-  log.debug('bootstrap.mcp.factory.created');
-
-  // Factory creates a fresh McpServer + transport per request
-  const mcpFactory: McpServerFactory = () => {
-    const server = new McpServer(
-      { name: 'oak-curriculum-http', version: '0.1.0' },
-      { instructions: SERVER_INSTRUCTIONS },
-    );
-    registerHandlers(server, handlerOptions);
-    overrideToolsListHandler(server);
-    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-    return { server, transport };
-  };
-
-  addHealthEndpoints(app, log);
-
-  return { mcpFactory, ready: Promise.resolve() };
 }

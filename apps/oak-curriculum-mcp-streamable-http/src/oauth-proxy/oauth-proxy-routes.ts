@@ -7,7 +7,11 @@
  * @see docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md
  */
 
-import type { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import type {
+  Request as ExpressRequest,
+  RequestHandler,
+  Response as ExpressResponse,
+} from 'express';
 import { Router, text } from 'express';
 import { normalizeError } from '@oaknational/logger';
 
@@ -21,7 +25,15 @@ import {
 
 export type { OAuthProxyConfig } from './oauth-proxy-handlers.js';
 
-export function createOAuthProxyRoutes(config: OAuthProxyConfig): Router {
+/** Options for creating the OAuth proxy router, including rate limiting. */
+export interface CreateOAuthProxyRoutesOptions {
+  readonly config: OAuthProxyConfig;
+  /** Per-IP rate limiter applied to all three OAuth proxy routes. */
+  readonly oauthRateLimiter: RequestHandler;
+}
+
+export function createOAuthProxyRoutes(options: CreateOAuthProxyRoutesOptions): Router {
+  const { config, oauthRateLimiter } = options;
   const router = Router();
   const timeout = config.timeoutMs ?? 10000;
   const fetchFn = config.fetch ?? globalThis.fetch;
@@ -45,17 +57,21 @@ export function createOAuthProxyRoutes(config: OAuthProxyConfig): Router {
     };
   }
 
+  // Rate limiter goes first — reject abusive traffic before parsing bodies
+  // or making upstream calls.
   router.post(
     '/oauth/register',
+    oauthRateLimiter,
     asyncRoute((req, res) => handleRegister(req, res, config, timeout, fetchFn)),
   );
 
-  router.get('/oauth/authorize', (req, res) => {
+  router.get('/oauth/authorize', oauthRateLimiter, (req, res) => {
     handleAuthorize(req, res, config);
   });
 
   router.post(
     '/oauth/token',
+    oauthRateLimiter,
     text({ type: 'application/x-www-form-urlencoded' }),
     asyncRoute((req, res) => handleToken(req, res, config, timeout, fetchFn)),
   );

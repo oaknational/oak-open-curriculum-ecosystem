@@ -155,6 +155,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-141: MCP Apps Standard as Only UI Surface](141-mcp-apps-standard-primary.md)
 - [ADR-142: `@clerk/mcp-tools` Adopt-or-Explain Decision](142-clerk-mcp-tools-adopt-or-explain.md)
 - [ADR-143: Coherent Structured Fan-Out for the Sentry and OpenTelemetry Foundation](143-coherent-structured-fan-out-for-observability.md)
+- [ADR-144: Multi-Layer Security Architecture and Application Rate Limiting](144-multi-layer-security-and-rate-limiting.md)
 
 ## Key Architectural Decisions
 
@@ -175,6 +176,7 @@ For understanding authentication, authorization, and observability:
 - **[ADR-052](052-oauth-2.1-for-mcp-http-authentication.md)** - OAuth 2.1 for MCP HTTP server authentication
 - **[ADR-053](053-clerk-as-identity-provider.md)** - Clerk as Identity Provider and Authorization Server
 - **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk)
+- **[ADR-144](144-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 

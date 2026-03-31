@@ -7,19 +7,22 @@ overview: >
 todos:
   - id: phase-0-design
     content: "Phase 0: Confirm limiter config and DI approach."
-    status: pending
+    status: completed
+    note: "express-rate-limit v8.3.2 installed, trust proxy configured, 3 profiles defined."
   - id: phase-1-implement
     content: "Phase 1: TDD — add rate limiting middleware with DI."
-    status: pending
+    status: completed
+    note: "6 routes across 3 profiles wired via RateLimiterFactory DI. 16 new tests, all 659 pass."
   - id: phase-2-verify
     content: "Phase 2: Quality gates, CodeQL verification, documentation."
-    status: pending
+    status: completed
+    note: "ADR-144 written, all quality gates green, 6 reviewers invoked."
 ---
 
 # Application-Layer Rate Limiting for MCP HTTP Routes
 
 **Last Updated**: 2026-03-31
-**Status**: 🟡 PLANNING
+**Status**: ✅ COMPLETE (2026-03-31)
 **Scope**: Add `express-rate-limit` to 4 auth-protected routes in the HTTP
 MCP server as defence-in-depth behind existing Vercel/CDN edge protection.
 

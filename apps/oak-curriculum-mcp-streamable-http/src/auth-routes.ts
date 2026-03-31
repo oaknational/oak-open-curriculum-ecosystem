@@ -22,19 +22,21 @@ import {
 export { deriveSelfOrigin, hostValidationErrorMessage, type HostValidationError };
 
 /**
- * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true)
+ * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true).
+ * Rate limiting is still applied — abuse is possible even without auth.
  */
 function registerUnauthenticatedRoutes(
   app: Express,
   mcpFactory: McpServerFactory,
   log: Logger,
   observability: HttpObservability,
+  mcpRateLimiter: RequestHandler,
 ): void {
   log.warn('⚠️  AUTH DISABLED - DANGEROUSLY_DISABLE_AUTH=true (DO NOT USE IN PRODUCTION)');
   log.debug('Registering POST /mcp route (auth disabled)');
-  app.post('/mcp', createMcpHandler(mcpFactory, observability, log));
+  app.post('/mcp', mcpRateLimiter, createMcpHandler(mcpFactory, observability, log));
   log.debug('Registering GET /mcp route (auth disabled)');
-  app.get('/mcp', createMcpHandler(mcpFactory, observability, log));
+  app.get('/mcp', mcpRateLimiter, createMcpHandler(mcpFactory, observability, log));
 }
 
 /**
@@ -107,13 +109,14 @@ function registerAuthenticatedRoutes(
   log: Logger,
   allowedHosts: readonly string[],
   observability: HttpObservability,
+  mcpRateLimiter: RequestHandler,
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'mcp-auth' }) : log;
   const mcpRouter = createMcpRouter({ auth: createMcpAuthClerk(authLog, allowedHosts) });
   log.debug('Registering POST /mcp route (HTTP-level auth via mcpRouter)');
-  app.post('/mcp', mcpRouter, createMcpHandler(mcpFactory, observability, log));
+  app.post('/mcp', mcpRateLimiter, mcpRouter, createMcpHandler(mcpFactory, observability, log));
   log.debug('Registering GET /mcp route (HTTP-level auth via mcpRouter)');
-  app.get('/mcp', mcpRouter, createMcpHandler(mcpFactory, observability, log));
+  app.get('/mcp', mcpRateLimiter, mcpRouter, createMcpHandler(mcpFactory, observability, log));
 }
 
 /**
@@ -183,12 +186,13 @@ export function setupAuthRoutes(
   log: Logger,
   allowedHosts: readonly string[],
   observability: HttpObservability,
+  mcpRateLimiter: RequestHandler,
 ): void {
   const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
 
   if (runtimeConfig.dangerouslyDisableAuth) {
     measureAuthSetupStep(authLog, 'auth.disabled.register', () => {
-      registerUnauthenticatedRoutes(app, mcpFactory, authLog, observability);
+      registerUnauthenticatedRoutes(app, mcpFactory, authLog, observability, mcpRateLimiter);
     });
     return;
   }
@@ -198,6 +202,13 @@ export function setupAuthRoutes(
   // Auth middleware returns HTTP 401 per MCP spec and OpenAI Apps docs
   authLog.debug('Registering MCP routes (HTTP-level auth enforcement)');
   measureAuthSetupStep(authLog, 'mcp.routes.register', () => {
-    registerAuthenticatedRoutes(app, mcpFactory, authLog, allowedHosts, observability);
+    registerAuthenticatedRoutes(
+      app,
+      mcpFactory,
+      authLog,
+      allowedHosts,
+      observability,
+      mcpRateLimiter,
+    );
   });
 }

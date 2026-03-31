@@ -9,7 +9,11 @@
  * @see docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md
  */
 
-export { createOAuthProxyRoutes, type OAuthProxyConfig } from './oauth-proxy-routes.js';
+export {
+  createOAuthProxyRoutes,
+  type OAuthProxyConfig,
+  type CreateOAuthProxyRoutesOptions,
+} from './oauth-proxy-routes.js';
 export {
   deriveUpstreamOAuthBaseUrl,
   rewriteAuthServerMetadata,
