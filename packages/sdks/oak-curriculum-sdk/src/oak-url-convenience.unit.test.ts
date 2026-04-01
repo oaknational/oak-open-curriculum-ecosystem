@@ -1,117 +1,114 @@
 /**
- * Unit tests for canonical URL generation.
+ * Unit tests for Oak URL convenience functions.
  *
- * These tests specify the CORRECT URL patterns (post-fix).
  * URL patterns confirmed against OWA source and live site on 2026-03-05:
  * - Sequences: `/teachers/curriculum/{sequenceSlug}/units`
  * - Units: `/teachers/curriculum/{sequenceSlug}/units/{unitSlug}`
  * - Threads: no OWA page, return `null`
- *
- * @see canonical-url-generator.ts
  */
 
 import { describe, it, expect } from 'vitest';
 import {
   OAK_BASE_URL,
-  generateLessonCanonicalUrl,
-  generateUnitCanonicalUrl,
-  generateUnitCanonicalUrlFromSequence,
-  generateSequenceCanonicalUrl,
-  generateThreadCanonicalUrl,
+  generateLessonOakUrl,
+  generateUnitOakUrl,
+  generateUnitOakUrlFromSequence,
+  generateSequenceOakUrl,
+  generateThreadOakUrl,
   generateSubjectProgrammesUrl,
-} from './canonical-url-generator';
+} from './oak-url-convenience';
 
-describe('canonical-url-generator', () => {
+describe('oak-url-convenience', () => {
   describe('OAK_BASE_URL', () => {
     it('is the teachers section of thenational.academy', () => {
       expect(OAK_BASE_URL).toBe('https://www.thenational.academy/teachers');
     });
   });
 
-  describe('generateLessonCanonicalUrl', () => {
+  describe('generateLessonOakUrl', () => {
     it('generates the correct URL for a lesson', () => {
-      const url = generateLessonCanonicalUrl('adding-fractions-with-same-denominator');
+      const url = generateLessonOakUrl('adding-fractions-with-same-denominator');
       expect(url).toBe(
         'https://www.thenational.academy/teachers/lessons/adding-fractions-with-same-denominator',
       );
     });
 
     it('handles lesson slugs with hyphens', () => {
-      const url = generateLessonCanonicalUrl('child-workers-in-the-victorian-era');
+      const url = generateLessonOakUrl('child-workers-in-the-victorian-era');
       expect(url).toBe(
         'https://www.thenational.academy/teachers/lessons/child-workers-in-the-victorian-era',
       );
     });
   });
 
-  describe('generateUnitCanonicalUrl', () => {
+  describe('generateUnitOakUrl', () => {
     it('generates the correct URL for a primary unit', () => {
-      const url = generateUnitCanonicalUrl('fractions-year-5', 'maths', 'primary');
+      const url = generateUnitOakUrl('fractions-year-5', 'maths', 'primary');
       expect(url).toBe(
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-5',
       );
     });
 
     it('generates the correct URL for a secondary unit', () => {
-      const url = generateUnitCanonicalUrl('algebra-basics', 'maths', 'secondary');
+      const url = generateUnitOakUrl('algebra-basics', 'maths', 'secondary');
       expect(url).toBe(
         'https://www.thenational.academy/teachers/curriculum/maths-secondary/units/algebra-basics',
       );
     });
 
     it('handles subjects with hyphens', () => {
-      const url = generateUnitCanonicalUrl('knife-skills', 'cooking-nutrition', 'secondary');
+      const url = generateUnitOakUrl('knife-skills', 'cooking-nutrition', 'secondary');
       expect(url).toBe(
         'https://www.thenational.academy/teachers/curriculum/cooking-nutrition-secondary/units/knife-skills',
       );
     });
 
     it('normalises key-stage style phase slugs via shared helper', () => {
-      const url = generateUnitCanonicalUrl('fractions-year-2', 'maths', 'ks1');
+      const url = generateUnitOakUrl('fractions-year-2', 'maths', 'ks1');
       expect(url).toBe(
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-2',
       );
     });
   });
 
-  describe('generateUnitCanonicalUrlFromSequence', () => {
+  describe('generateUnitOakUrlFromSequence', () => {
     it('uses explicit sequenceSlug for exam-board sequences', () => {
-      const url = generateUnitCanonicalUrlFromSequence('atomic-structure', 'science-secondary-aqa');
+      const url = generateUnitOakUrlFromSequence('atomic-structure', 'science-secondary-aqa');
       expect(url).toBe(
         'https://www.thenational.academy/teachers/curriculum/science-secondary-aqa/units/atomic-structure',
       );
     });
   });
 
-  describe('generateSequenceCanonicalUrl', () => {
+  describe('generateSequenceOakUrl', () => {
     it('generates the correct URL for a primary sequence', () => {
-      const url = generateSequenceCanonicalUrl('maths-primary');
+      const url = generateSequenceOakUrl('maths-primary');
       expect(url).toBe('https://www.thenational.academy/teachers/curriculum/maths-primary/units');
     });
 
     it('generates the correct URL for a secondary sequence', () => {
-      const url = generateSequenceCanonicalUrl('english-secondary');
+      const url = generateSequenceOakUrl('english-secondary');
       expect(url).toBe(
         'https://www.thenational.academy/teachers/curriculum/english-secondary/units',
       );
     });
 
     it('handles subjects with hyphens in sequence slug', () => {
-      const url = generateSequenceCanonicalUrl('design-technology-secondary');
+      const url = generateSequenceOakUrl('design-technology-secondary');
       expect(url).toBe(
         'https://www.thenational.academy/teachers/curriculum/design-technology-secondary/units',
       );
     });
   });
 
-  describe('generateThreadCanonicalUrl', () => {
+  describe('generateThreadOakUrl', () => {
     it('returns null for a thread (threads have no OWA page)', () => {
-      const url = generateThreadCanonicalUrl('number-multiplication-and-division');
+      const url = generateThreadOakUrl('number-multiplication-and-division');
       expect(url).toBeNull();
     });
 
     it('returns null for any thread slug', () => {
-      const url = generateThreadCanonicalUrl('algebra');
+      const url = generateThreadOakUrl('algebra');
       expect(url).toBeNull();
     });
   });

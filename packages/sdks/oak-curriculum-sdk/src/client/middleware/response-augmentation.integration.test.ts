@@ -76,7 +76,7 @@ async function invokeOnResponse(
   return result;
 }
 
-async function expectLessonCanonicalUrl(path: string, body: unknown): Promise<void> {
+async function expectLessonOakUrl(path: string, body: unknown): Promise<void> {
   const logger = createFakeLogger();
   const middleware = createResponseAugmentationMiddleware({ logger });
   const request = buildGetRequest(path);
@@ -86,7 +86,7 @@ async function expectLessonCanonicalUrl(path: string, body: unknown): Promise<vo
   const resultBody: unknown = await result.json();
 
   expect(resultBody).toHaveProperty(
-    'canonicalUrl',
+    'oakUrl',
     'https://www.thenational.academy/teachers/lessons/add-two-numbers',
   );
 }
@@ -135,7 +135,7 @@ describe('createResponseAugmentationMiddleware', () => {
 
   describe('lesson sub-resource paths', () => {
     it('uses the lesson path segment for lesson summary responses', async () => {
-      await expectLessonCanonicalUrl('/lessons/add-two-numbers/summary', {
+      await expectLessonOakUrl('/lessons/add-two-numbers/summary', {
         lessonTitle: 'Add Two Numbers',
         unitSlug: 'place-value',
         unitTitle: 'Place Value',
@@ -154,21 +154,21 @@ describe('createResponseAugmentationMiddleware', () => {
     });
 
     it('uses the lesson path segment for lesson transcript responses', async () => {
-      await expectLessonCanonicalUrl('/lessons/add-two-numbers/transcript', {
+      await expectLessonOakUrl('/lessons/add-two-numbers/transcript', {
         transcript: 'This is the lesson transcript text',
         vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nThis is the lesson transcript text',
       });
     });
 
     it('uses the lesson path segment for lesson quiz responses', async () => {
-      await expectLessonCanonicalUrl('/lessons/add-two-numbers/quiz', {
+      await expectLessonOakUrl('/lessons/add-two-numbers/quiz', {
         starterQuiz: [],
         exitQuiz: [],
       });
     });
 
     it('uses the lesson path segment for lesson asset responses', async () => {
-      await expectLessonCanonicalUrl('/lessons/add-two-numbers/assets', {
+      await expectLessonOakUrl('/lessons/add-two-numbers/assets', {
         assets: [],
       });
     });

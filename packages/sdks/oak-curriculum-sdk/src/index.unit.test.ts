@@ -8,7 +8,7 @@ import {
   isValidPath,
   isAllowedMethod,
   extractSlug,
-  generateCanonicalUrlWithContext,
+  generateOakUrlWithContext,
 } from '.';
 
 describe('Public API: type guards and allowed values', () => {
@@ -34,7 +34,7 @@ describe('Public API: type guards and allowed values', () => {
 
   it('exposes URL helpers and they behave deterministically', () => {
     expect(extractSlug('lesson:add-two-numbers')).toBe('add-two-numbers');
-    const url = generateCanonicalUrlWithContext('lesson', 'lesson:add-two-numbers');
+    const url = generateOakUrlWithContext('lesson', 'lesson:add-two-numbers');
     expect(typeof url).toBe('string');
     expect(url).toContain('/teachers/lessons/add-two-numbers');
   });

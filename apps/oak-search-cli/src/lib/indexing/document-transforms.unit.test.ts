@@ -69,7 +69,7 @@ function buildUnitSummary(overrides: Partial<UnitSummaryFixture> = {}): UnitSumm
         state: 'published',
       },
     ],
-    canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+    oakUrl: 'https://teachers.thenational.academy/units/unit-slug',
   };
   const summary: UnitSummaryFixture = { ...base, ...overrides };
   void unitSummarySchema.parse(summary);
@@ -108,8 +108,8 @@ function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): Less
     ],
     supervisionLevel: 'low',
     downloadsAvailable: true,
-    canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
-    oakUrl: 'https://www.thenational.academy/teachers/lessons/lesson-slug',
+    canonicalUrl: 'https://www.thenational.academy/context-rich/lessons/lesson-slug',
+    oakUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
   };
   const summary: LessonSummaryFixture = { ...base, ...overrides };
   void lessonSummarySchema.parse(summary);
@@ -159,8 +159,8 @@ describe('createUnitDocument', () => {
     expect(doc.title_suggest?.contexts?.key_stage).toEqual([ks4]);
   });
 
-  it('throws when the canonical URL is missing', () => {
-    const summary = buildUnitSummary({ canonicalUrl: undefined });
+  it('throws when the oak URL is missing', () => {
+    const summary = buildUnitSummary({ oakUrl: undefined });
 
     expect(() =>
       createUnitDocument({
@@ -170,7 +170,7 @@ describe('createUnitDocument', () => {
         subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
         unitContextMap: emptyContextMap,
       }),
-    ).toThrow(/Missing canonical URL/);
+    ).toThrow(/Missing Oak URL/);
   });
 
   it('uses lessonsByUnit when provided, overriding summary.unitLessons', () => {
@@ -293,7 +293,7 @@ describe('createLessonDocument', () => {
         {
           unitSlug: 'unit-slug',
           unitTitle: 'Unit Title',
-          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+          oakUrl: 'https://teachers.thenational.academy/units/unit-slug',
         },
       ],
     });
@@ -327,12 +327,12 @@ describe('createLessonDocument', () => {
         {
           unitSlug: 'unit-higher',
           unitTitle: 'Higher Unit',
-          canonicalUrl: 'https://teachers.thenational.academy/units/unit-higher',
+          oakUrl: 'https://teachers.thenational.academy/units/unit-higher',
         },
         {
           unitSlug: 'unit-foundation',
           unitTitle: 'Foundation Unit',
-          canonicalUrl: 'https://teachers.thenational.academy/units/unit-foundation',
+          oakUrl: 'https://teachers.thenational.academy/units/unit-foundation',
         },
       ],
     });
@@ -368,7 +368,7 @@ describe('createLessonDocument', () => {
         {
           unitSlug: 'unit-slug',
           unitTitle: 'Unit Title',
-          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+          oakUrl: 'https://teachers.thenational.academy/units/unit-slug',
         },
       ],
     });
@@ -398,7 +398,7 @@ describe('createLessonDocument', () => {
         {
           unitSlug: 'trigonometry',
           unitTitle: 'Trigonometry',
-          canonicalUrl: 'https://teachers.thenational.academy/units/trigonometry',
+          oakUrl: 'https://teachers.thenational.academy/units/trigonometry',
         },
       ],
     });
@@ -443,7 +443,7 @@ describe('createLessonDocument', () => {
         {
           unitSlug: 'unit-slug',
           unitTitle: 'Unit Title',
-          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+          oakUrl: 'https://teachers.thenational.academy/units/unit-slug',
         },
       ],
     });
@@ -469,7 +469,7 @@ describe('createLessonDocument', () => {
         {
           unitSlug: 'unit-slug',
           unitTitle: 'Unit Title',
-          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+          oakUrl: 'https://teachers.thenational.academy/units/unit-slug',
         },
       ],
     });
@@ -498,7 +498,7 @@ describe('createLessonDocument', () => {
         {
           unitSlug: 'unit-slug',
           unitTitle: 'Unit Title',
-          canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+          oakUrl: 'https://teachers.thenational.academy/units/unit-slug',
         },
       ],
     });
@@ -565,8 +565,8 @@ describe('createRollupDocument', () => {
     expect(doc.phase_slug).toBe('primary');
   });
 
-  it('throws when the unit canonical URL is missing', () => {
-    const summary = buildUnitSummary({ canonicalUrl: undefined });
+  it('throws when the unit oak URL is missing', () => {
+    const summary = buildUnitSummary({ oakUrl: undefined });
 
     expect(() =>
       createRollupDocument({
@@ -577,6 +577,6 @@ describe('createRollupDocument', () => {
         subjectProgrammesUrl: 'https://teachers.thenational.academy/programmes/maths-ks4',
         unitContextMap: emptyContextMap,
       }),
-    ).toThrow(/Missing canonical URL/);
+    ).toThrow(/Missing oak URL/);
   });
 });

@@ -25,7 +25,7 @@ isProject: false
 
 # Canonical URL Validation Enforcement
 
-**Last Updated**: 2026-03-10
+**Last Updated**: 2026-04-01
 **Status**: QUEUED
 **Scope**: Promote canonical URL validation from observation (warn-only) to
 enforcement (configurable gate), and extend validation into the search
@@ -56,11 +56,12 @@ The validation layer **observes** but does not **enforce**. Specifically:
    logged as warnings but codegen completes successfully. The SDK ships with
    URLs that are known to be wrong.
 2. **Search ingestion is unprotected** — the ingestion pipeline generates URLs
-   from slugs (`canonical-url-generator.ts`) and writes them directly to ES
-   documents. No validation occurs. A bad slug produces a bad URL in the live
-   search index.
+   via `oak-url-convenience.ts` in `@oaknational/curriculum-sdk` (relocated
+   from the former `canonical-url-generator.ts` per ADR-145) and writes them
+   directly to ES documents. No validation occurs. A bad slug produces a bad
+   URL in the live search index.
 3. **Two URL generation paths, zero validation** — the API path trusts
-   `SearchUnitSummary.canonicalUrl` from the curriculum-sdk; the bulk path
+   `SearchUnitSummary.oakUrl` from the curriculum-sdk (see ADR-145); the bulk path
    generates URLs deterministically. Neither path validates against the
    sitemap reference.
 
@@ -70,7 +71,7 @@ The validation layer **observes** but does not **enforce**. Specifically:
 Codegen: generate-url-helpers.ts → validate-canonical-urls.ts → WARN only
                                                                     ↓
 Ingestion (API):  curriculum-sdk → document-transforms.ts → ES  [no check]
-Ingestion (Bulk): slug → canonical-url-generator.ts → ES        [no check]
+Ingestion (Bulk): slug → oak-url-convenience.ts (SDK) → ES     [no check]
 ```
 
 ### Target URL Flow (With Enforcement)
@@ -127,7 +128,7 @@ All tests MUST FAIL at the end of WS1.
 
 ### 1.2: Ingestion-Time URL Validation
 
-**Tests**: `canonical-url-generator.unit.test.ts` (new or extend existing)
+**Tests**: `oak-url-convenience.unit.test.ts` (in `@oaknational/curriculum-sdk`; extend existing)
 
 - Given a generated unit URL and a loaded sitemap reference, `validateUrl`
   returns `{ valid: true }` when the URL exists in `teacherPaths`
@@ -189,7 +190,7 @@ All tests MUST PASS at the end of WS2.
 
 ### 2.3: Ingestion-Time Validation
 
-**File**: `apps/oak-search-cli/src/lib/indexing/canonical-url-generator.ts`
+**File**: `packages/sdks/oak-curriculum-sdk/src/oak-url-convenience.ts`
 
 **Changes**:
 

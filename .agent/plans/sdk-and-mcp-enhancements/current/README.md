@@ -4,8 +4,7 @@ Executable plans queued and ready to start.
 
 | Plan | Scope | Status / Blocked By |
 |---|---|---|
-| [url-naming-collision-remediation.plan.md](url-naming-collision-remediation.plan.md) | Fix decorator overwrite, type widening, naming collision (`canonicalUrl` → `oakUrl`), search-CLI boundary violation, and stale ADR-047 | Queued; should execute before `canonical-url-enforcement.plan.md` |
-| [canonical-url-enforcement.plan.md](canonical-url-enforcement.plan.md) | Promote URL validation from warn-only to configurable gate; validate URLs in ingestion pipeline before ES storage | Queued; depends on naming collision remediation completing first |
+| [canonical-url-enforcement.plan.md](canonical-url-enforcement.plan.md) | Promote URL validation from warn-only to configurable gate; validate URLs in ingestion pipeline before ES storage | Queued; dependency on naming collision remediation satisfied ([archived](../archive/completed/url-naming-collision-remediation.plan.md), ADR-145) |
 | [output-schemas-for-mcp-tools.plan.md](output-schemas-for-mcp-tools.plan.md) | Add truthful `outputSchema` metadata to all MCP tools while preserving generated upstream-response validation and aligning transport contracts | Ready for renewed grounding against the now-archived runtime-boundary simplification work |
 
 Recently completed and archived:

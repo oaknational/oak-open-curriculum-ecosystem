@@ -7,7 +7,7 @@
  * URL generation and slug derivation are re-exported from shared modules
  * for backwards compatibility.
  *
- * @see canonical-url-generator.ts - Shared URL generation (single source of truth)
+ * @see @oaknational/curriculum-sdk - Oak URL convenience helpers (single source of truth)
  * @see curriculum-sdk sequence-slug-derivation.ts - Shared slug derivation
  */
 
@@ -20,13 +20,13 @@ import type { KeyStage } from '../types/oak';
 
 export {
   OAK_BASE_URL as BASE_URL,
-  generateLessonCanonicalUrl as generateLessonUrl,
-  generateUnitCanonicalUrl as generateUnitUrl,
-  generateUnitCanonicalUrlFromSequence as generateUnitUrlFromSequence,
+  generateLessonOakUrl,
+  generateUnitOakUrl,
+  generateUnitOakUrlFromSequence,
   generateSubjectProgrammesUrl,
-  generateSequenceCanonicalUrl,
-  generateThreadCanonicalUrl,
-} from '../lib/indexing/canonical-url-generator';
+  generateSequenceOakUrl,
+  generateThreadOakUrl,
+} from '@oaknational/curriculum-sdk';
 
 export {
   deriveSubjectSlugFromSequence,

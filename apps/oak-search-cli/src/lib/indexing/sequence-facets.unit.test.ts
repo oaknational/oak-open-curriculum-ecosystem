@@ -51,7 +51,7 @@ describe('createSequenceFacetDoc', () => {
     });
   });
 
-  it('includes canonical URL when provided', () => {
+  it('maps oak URL into sequence_canonical_url when provided', () => {
     const params: CreateSequenceFacetDocParams = {
       sequenceSlug: 'science-secondary',
       subjectSlug: 'science',
@@ -64,7 +64,7 @@ describe('createSequenceFacetDoc', () => {
       unitTitles: ['Unit X'],
       lessonCount: 20,
       hasKs4Options: true,
-      canonicalUrl: 'https://example.com/science-secondary',
+      oakUrl: 'https://example.com/science-secondary',
     };
 
     const doc = createSequenceFacetDoc(params);

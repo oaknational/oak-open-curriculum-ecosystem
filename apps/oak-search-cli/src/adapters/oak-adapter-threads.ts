@@ -15,25 +15,25 @@ import { ok, err, type Result } from '@oaknational/result';
 
 /**
  * Thread data from the /threads API endpoint.
- * Note: canonicalUrl is always null for threads since they are data concepts
- * without corresponding pages on the website.
+ * Note: `oakUrl` is always null for threads since they are data concepts
+ * without corresponding pages on the website (upstream may still expose `canonicalUrl`).
  */
 export interface ThreadEntry {
   readonly slug: string;
   readonly title: string;
-  readonly canonicalUrl?: null;
+  readonly oakUrl?: null;
 }
 
 /**
  * Thread unit data from the /threads/\{threadSlug\}/units API endpoint.
- * Note: canonicalUrl is always null for thread units since they are data concepts
+ * Note: `oakUrl` is always null for thread units since they are data concepts
  * without corresponding pages on the website.
  */
 export interface ThreadUnitEntry {
   readonly unitSlug: string;
   readonly unitTitle: string;
   readonly unitOrder: number;
-  readonly canonicalUrl?: null;
+  readonly oakUrl?: null;
 }
 
 /**
@@ -65,7 +65,7 @@ export function makeGetAllThreads(client: Pick<OakApiClient, 'GET'>): GetAllThre
       data.map((thread) => ({
         slug: thread.slug,
         title: thread.title,
-        canonicalUrl: null,
+        oakUrl: null,
       })),
     );
   };
@@ -91,7 +91,7 @@ export function makeGetThreadUnits(client: Pick<OakApiClient, 'GET'>): GetThread
         unitSlug: unit.unitSlug,
         unitTitle: unit.unitTitle,
         unitOrder: unit.unitOrder,
-        canonicalUrl: null,
+        oakUrl: null,
       })),
     );
   };

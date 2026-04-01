@@ -17,7 +17,7 @@ import { createSequenceDocument } from '../lib/indexing/sequence-document-builde
 import {
   derivePhaseSlug,
   normaliseSubjectSlug,
-  generateSequenceCanonicalUrl,
+  generateSequenceOakUrl,
   deriveSubjectSlugFromSequence,
 } from './bulk-transform-helpers';
 import { isSubject } from './sdk-guards';
@@ -229,7 +229,7 @@ export function extractSequenceFacetParamsFromBulkFile(
   const phaseSlug = derivePhaseSlug(bulkFile.sequenceSlug);
   const phaseTitle = capitalise(phaseSlug);
   const hasKs4Options = Boolean(bulkFile.ks4Options && bulkFile.ks4Options.length > 0);
-  const canonicalUrl = generateSequenceCanonicalUrl(bulkFile.sequenceSlug);
+  const oakUrl = generateSequenceOakUrl(bulkFile.sequenceSlug);
   const groups = groupUnitsByKeyStage(bulkFile.sequence);
   const results: CreateSequenceFacetDocParams[] = [];
   for (const [keyStage, group] of groups) {
@@ -246,7 +246,7 @@ export function extractSequenceFacetParamsFromBulkFile(
       unitTitles: group.unitTitles,
       lessonCount: group.lessonCount,
       hasKs4Options,
-      canonicalUrl,
+      oakUrl,
     });
   }
   return results;

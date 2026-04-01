@@ -26,7 +26,7 @@ void (async () => {
   const maybeSdkSchema: unknown = JSON.parse(fs.readFileSync(sdkSchemaPath, 'utf8'));
   const sdkSchema = validateOpenApiDocument(maybeSdkSchema);
 
-  logger.info('Loaded SDK schema with canonicalUrl fields');
+  logger.info('Loaded SDK schema with oakUrl and upstream canonicalUrl fields');
 
   await generateZodSchemas(sdkSchema, outDirectory, logger);
   logger.info('Endpoint schema generation complete!');

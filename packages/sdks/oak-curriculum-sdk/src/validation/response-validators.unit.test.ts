@@ -24,7 +24,7 @@ describe('validateCurriculumResponse', () => {
       expect(result.ok).toBe(true);
       if (result.ok) {
         expect(result.value).toEqual(response);
-        expect(result.value).not.toHaveProperty('canonicalUrl');
+        expect(result.value).not.toHaveProperty('oakUrl');
       }
     });
 
@@ -78,11 +78,11 @@ describe('validateCurriculumResponse', () => {
       }
     });
 
-    it('should preserve canonicalUrl when it is already present in transcript payloads', () => {
+    it('should preserve oakUrl when it is already present in transcript payloads', () => {
       const response = {
         transcript: 'Transcript text',
         vtt: 'WEBVTT content',
-        canonicalUrl: 'https://www.thenational.academy/teachers/lessons/add-two-numbers',
+        oakUrl: 'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       };
 
       const result = validateCurriculumResponse(path, method, statusCode, response);

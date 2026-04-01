@@ -49,8 +49,7 @@ function createMinimalUnitInfo(overrides?: Partial<LessonUnitInfo>): LessonUnitI
   return {
     unitSlug: 'test-unit',
     unitTitle: 'Test Unit',
-    canonicalUrl:
-      'https://www.thenational.academy/teachers/curriculum/maths-primary/units/test-unit',
+    oakUrl: 'https://www.thenational.academy/teachers/curriculum/maths-primary/units/test-unit',
     ...overrides,
   };
 }
@@ -266,7 +265,7 @@ describe('bulk-lesson-transformer', () => {
         const unitInfo = createMinimalUnitInfo({
           unitSlug: 'fractions-year-4',
           unitTitle: 'Fractions Year 4',
-          canonicalUrl:
+          oakUrl:
             'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-4',
         });
 
@@ -333,7 +332,7 @@ describe('bulk-lesson-transformer', () => {
         const unitInfo = createMinimalUnitInfo({
           unitSlug: 'fractions-year-3',
           unitTitle: 'Fractions Year 3',
-          canonicalUrl: 'https://example.com/units/fractions-year-3',
+          oakUrl: 'https://example.com/units/fractions-year-3',
         });
         const years = ['3', '4'];
 

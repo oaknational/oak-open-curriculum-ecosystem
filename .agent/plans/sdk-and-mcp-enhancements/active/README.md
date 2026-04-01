@@ -57,6 +57,17 @@ Completed and archived:
 - [ws3-phase-3-schema-fallout-closure.plan.md](../archive/completed/ws3-phase-3-schema-fallout-closure.plan.md) —
   `canonicalUrl`/`oakUrl` lesson-summary schema fallout closed on 31 March 2026.
 
+Completed and archived (URL remediation):
+
+- [url-naming-collision-remediation.plan.md](../archive/completed/url-naming-collision-remediation.plan.md) —
+  Decorator overwrite, type widening, naming collision (`canonicalUrl` →
+  `oakUrl`), search-CLI boundary violation, and stale ADR-047 — all
+  resolved on 1 April 2026. See ADR-145.
+- [url-remediation-snagging.plan.md](../archive/completed/url-remediation-snagging.plan.md) —
+  Residual findings from the URL naming collision remediation review:
+  stale references, URL pattern duplication, import direction, documentation
+  gaps, and missing test coverage — all resolved on 1 April 2026.
+
 Next-up queue: [current/README.md](../current/README.md)
 Later backlog: [future/README.md](../future/README.md)
 Collection roadmap: [roadmap.md](../roadmap.md)

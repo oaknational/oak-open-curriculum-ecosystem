@@ -47,7 +47,7 @@ export interface LessonBuildResult {
 
 /**
  * Resolves unit info for all units a lesson belongs to.
- * Looks up each unit in the summaries map to get title and canonical URL.
+ * Looks up each unit in the summaries map to get title and oak URL.
  */
 function resolveUnitsForLesson(
   unitSlugs: readonly string[],
@@ -56,11 +56,11 @@ function resolveUnitsForLesson(
   const units: LessonUnitInfo[] = [];
   for (const unitSlug of unitSlugs) {
     const summary = unitSummaries.get(unitSlug);
-    if (summary && summary.canonicalUrl) {
+    if (summary && summary.oakUrl) {
       units.push({
         unitSlug: summary.unitSlug,
         unitTitle: summary.unitTitle,
-        canonicalUrl: summary.canonicalUrl,
+        oakUrl: summary.oakUrl,
       });
     }
   }

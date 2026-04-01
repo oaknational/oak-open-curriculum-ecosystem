@@ -112,7 +112,7 @@ describe('generateUrlHelpers', () => {
     });
   });
 
-  describe('generateCanonicalUrlWithContext', () => {
+  describe('generateOakUrlWithContext', () => {
     it('context type uses sequenceSlug for unit (not subjectSlug/phaseSlug)', () => {
       const output = generateUrlHelpers();
       const contextMatch = output.match(/unit\?:\s*\{[^}]+\}/);
@@ -132,10 +132,10 @@ describe('generateUrlHelpers', () => {
     });
   });
 
-  describe('generateCanonicalUrl (fallback)', () => {
+  describe('generateOakUrl (fallback)', () => {
     it('also uses sequenceSlug context for units', () => {
       const output = generateUrlHelpers();
-      // Both generateCanonicalUrlWithContext and generateCanonicalUrl must use sequenceSlug
+      // Both generateOakUrlWithContext and generateOakUrl must use sequenceSlug
       // in their unit context type (not subjectSlug/phaseSlug)
       // Check for the pattern in actual type declarations (not comments)
       const typeDeclarations = output.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*/g, '');

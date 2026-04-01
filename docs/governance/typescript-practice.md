@@ -118,3 +118,11 @@ Compile-time type assertions (e.g. `AssertNoX<T>`) are inert unless the resultin
 - `TSESLint.FlatConfig.Plugin` from `@typescript-eslint/utils` bridges the `Rule.RuleModule` vs `TSESLint.RuleModule` gap — eliminates `as unknown as ESLint.Plugin['rules']`
 - `@typescript-eslint/no-restricted-imports` `group` patterns use minimatch: `*` matches one path segment (not `/`), `**` matches zero or more segments. Use `**` for deep sub-path coverage
 - `localeCompare` uses locale-sensitive collation that may diverge from `Array.sort()` unicode order. For binary search against `sort()`-ordered data, use `===`/`<`/`>`
+- `vi.fn()` (bare, no generics) returns
+  `Mock<(...args: any) => any>` which is assignable to any
+  function signature — cleanest pattern for recording call
+  sites in characterisation/integration tests without casts
+- A function returning `RegisteredResource` (or any type)
+  is assignable to a function returning `void`. Define DI
+  interfaces with `void` return when callers don't consume
+  the result — both the real impl and `vi.fn()` satisfy it

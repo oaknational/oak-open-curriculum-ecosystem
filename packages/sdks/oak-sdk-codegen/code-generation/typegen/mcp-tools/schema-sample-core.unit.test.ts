@@ -60,7 +60,7 @@ describe('schema-sample-core', () => {
         {
           type: 'object',
           properties: {
-            canonicalUrl: {
+            oakUrl: {
               type: 'string',
             },
           },
@@ -74,7 +74,7 @@ describe('schema-sample-core', () => {
 
     expect(sample).toEqual({
       title: 'string',
-      canonicalUrl: 'string',
+      oakUrl: 'string',
     });
   });
 });

@@ -122,8 +122,8 @@ export function extractUnitParamsFromAPI(params: CreateUnitDocumentParams): Crea
     lessonsByUnit,
   } = params;
 
-  if (!summary.canonicalUrl) {
-    throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
+  if (!summary.oakUrl) {
+    throw new Error(`Missing Oak URL (oakUrl) for unit ${summary.unitSlug}`);
   }
 
   // API path: subject is always canonical, so subjectParent equals subjectSlug
@@ -139,7 +139,7 @@ export function extractUnitParamsFromAPI(params: CreateUnitDocumentParams): Crea
     keyStageTitle,
     years: normaliseYears(summary.year, summary.yearSlug),
     lessonIds: getLessonIds(summary, lessonsByUnit),
-    unitUrl: summary.canonicalUrl,
+    unitUrl: summary.oakUrl,
     subjectProgrammesUrl,
     threadInfo: convertThreadInfo(extractThreadInfo(summary.threads)),
     enrichment: {
@@ -221,7 +221,7 @@ export function extractLessonParamsFromAPI(p: CreateLessonDocumentParams): Creat
     contentGuidance: f.contentGuidance,
     transcript: p.transcript,
     lessonStructure: generateLessonSemanticSummary(p.summary),
-    lessonUrl: f.canonicalUrl,
+    lessonUrl: f.oakUrl,
     pupilLessonOutcome: f.pupilLessonOutcome,
     supervisionLevel: f.supervisionLevel,
     downloadsAvailable: f.downloadsAvailable,
@@ -297,7 +297,7 @@ export function createRollupDocument(p: CreateRollupDocumentParams): SearchUnitR
     unit_structure: unitSemantic,
     unit_content_semantic: rollupText,
     unit_structure_semantic: unitSemantic,
-    unit_url: fields.canonicalUrl,
+    unit_url: fields.oakUrl,
     subject_programmes_url: p.subjectProgrammesUrl,
     sequence_ids: fields.sequenceIds,
     thread_slugs: fields.threadSlugs,

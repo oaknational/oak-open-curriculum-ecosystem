@@ -25,7 +25,7 @@ function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUni
       { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1', state: 'published' },
       { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2', state: 'published' },
     ],
-    canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+    oakUrl: 'https://teachers.thenational.academy/units/unit-slug',
   };
   const summary: SearchUnitSummary = { ...base, ...overrides };
   // Validate against SDK schema to ensure fixture is valid

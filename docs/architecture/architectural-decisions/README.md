@@ -61,7 +61,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-044: NL Delegates to Structured Search and Caching Ownership](044-nl-delegates-to-structured-search-and-caching-ownership.md)
 - [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md)
 - [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md) ← **Superseded by [ADR-141](141-mcp-apps-standard-primary.md)**
-- [ADR-047: Canonical URL Generation at Code-Gen Time](047-canonical-url-generation-at-codegen-time.md)
+- [ADR-047: Canonical URL Generation at Code-Gen Time](047-canonical-url-generation-at-codegen-time.md) ← **Partially Superseded** by ADR-145
 - [ADR-048: Shared Parse Schema Helper](048-shared-parse-schema-helper.md)
 - [ADR-049: SDK-Generated Deterministic Fixtures](049-sdk-generated-fixtures.md)
 - [ADR-050: MCP Tool Layering DAG](050-mcp-tool-layering-dag.md)
@@ -156,6 +156,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-142: `@clerk/mcp-tools` Adopt-or-Explain Decision](142-clerk-mcp-tools-adopt-or-explain.md)
 - [ADR-143: Coherent Structured Fan-Out for the Sentry and OpenTelemetry Foundation](143-coherent-structured-fan-out-for-observability.md)
 - [ADR-144: Two-Threshold Fitness Model](144-two-threshold-fitness-model.md)
+- [ADR-145: Oak URL Naming Collision Remediation](145-oak-url-naming-collision-remediation.md)
 
 ## Key Architectural Decisions
 

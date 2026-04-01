@@ -8,11 +8,11 @@
  *
  * @see SearchSequenceIndexDoc - The Zod-validated type this produces
  * @see SEQUENCES_INDEX_FIELDS - Field definitions in SDK
- * @see generateSequenceCanonicalUrl - URL generation (single source of truth)
+ * @see generateSequenceOakUrl - URL generation (single source of truth)
  */
 
 import type { SearchSequenceIndexDoc, SearchSubjectSlug } from '../../types/oak';
-import { generateSequenceCanonicalUrl } from './canonical-url-generator';
+import { generateSequenceOakUrl } from '@oaknational/curriculum-sdk';
 
 /**
  * Parameters for creating a sequence document.
@@ -92,7 +92,7 @@ export function createSequenceDocument(
   }
 
   const sequenceTitle = `${subjectTitle} ${phaseTitle}`;
-  const sequenceUrl = generateSequenceCanonicalUrl(sequenceSlug);
+  const sequenceUrl = generateSequenceOakUrl(sequenceSlug);
 
   return {
     sequence_id: sequenceSlug,

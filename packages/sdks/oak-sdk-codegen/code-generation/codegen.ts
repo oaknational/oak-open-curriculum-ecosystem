@@ -5,7 +5,7 @@
  *
  * It generates the following files:
  * - api-schema-original.json - The schema as returned from the API (pure, undecorated)
- * - api-schema-sdk.json - The SDK-decorated schema (e.g., canonicalUrl fields)
+ * - api-schema-sdk.json - The SDK-decorated schema (e.g., oakUrl plus upstream canonicalUrl)
  * - api-paths-types.ts - The OpenAPI-TS types for the SDK schema, for use with OpenAPI-Fetch
  * - path-parameters.ts - The tuples, types and type guards for the path parameters, for use in dynamically constructing API requests
  */
@@ -163,7 +163,7 @@ const originalSchemaPath = path.resolve(outDirectory, 'api-schema-original.json'
 saveSchemaToFile(originalSchema, originalSchemaPath);
 logger.info('Original schema saved', { path: path.relative(process.cwd(), originalSchemaPath) });
 
-logger.info('Creating SDK schema with canonicalUrl fields...');
+logger.info('Creating SDK schema with oakUrl and upstream canonicalUrl fields...');
 
 // Use the SDK schema for generation
 await generateSchemaArtifacts(validatedSchema, sdkSchema, outDirectory);

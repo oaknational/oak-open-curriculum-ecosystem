@@ -269,6 +269,13 @@ describe('MCP Server E2E', () => {
 
 **Key Insight**: If tests lag behind code at ANY level, TDD was not followed at that level.
 
+**File-naming for RED specs**: Write RED-phase specs that
+specify not-yet-implemented behaviour in `*.e2e.test.ts`
+files, not `*.unit.test.ts`. The pre-commit hook runs only
+unit tests; a RED unit test blocks every commit until it
+goes green. E2E specs are gated at CI, so they can stay RED
+across multiple commits during the implementation phase.
+
 ## Common TDD Violations and Fixes
 
 ### Violation 1: Writing Code Before Tests

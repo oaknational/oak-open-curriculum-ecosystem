@@ -69,9 +69,7 @@ export interface UnitLessonInfo {
   readonly lessonTitle: string;
 }
 
-type LessonDocumentSummaryInput = Omit<SearchLessonSummary, 'canonicalUrl'> & {
-  canonicalUrl?: string;
-};
+type LessonDocumentSummaryInput = SearchLessonSummary;
 
 /**
  * Extracts lesson planning fields from lesson summary.
@@ -125,7 +123,7 @@ export function extractLessonPlanningFields(summary: LessonDocumentSummaryInput)
 export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput): {
   unitSlug: string;
   unitTitle: string;
-  canonicalUrl: string;
+  oakUrl: string;
   lessonKeywords?: string[];
   keyLearningPoints?: string[];
   misconceptions?: string[];
@@ -137,8 +135,8 @@ export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput)
   supervisionLevel?: string;
   downloadsAvailable?: boolean;
 } {
-  if (!summary.canonicalUrl) {
-    throw new Error(`Missing canonical URL for lesson in unit ${summary.unitSlug}`);
+  if (!summary.oakUrl) {
+    throw new Error(`Missing oak URL for lesson in unit ${summary.unitSlug}`);
   }
 
   const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
@@ -147,7 +145,7 @@ export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput)
   return {
     unitSlug: summary.unitSlug,
     unitTitle: summary.unitTitle,
-    canonicalUrl: summary.canonicalUrl,
+    oakUrl: summary.oakUrl,
     lessonKeywords,
     keyLearningPoints,
     misconceptions,
@@ -176,7 +174,7 @@ export function extractRollupDocumentFields(
 ): {
   unitSlug: string;
   unitTitle: string;
-  canonicalUrl: string;
+  oakUrl: string;
   lessonIds: string[];
   unitTopics: string[] | undefined;
   years: string[] | undefined;
@@ -185,8 +183,8 @@ export function extractRollupDocumentFields(
   threadTitles: string[] | undefined;
   threadOrders: number[] | undefined;
 } {
-  if (!summary.canonicalUrl) {
-    throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
+  if (!summary.oakUrl) {
+    throw new Error(`Missing oak URL for unit ${summary.unitSlug}`);
   }
 
   const lessonIds =
@@ -199,7 +197,7 @@ export function extractRollupDocumentFields(
   return {
     unitSlug: summary.unitSlug,
     unitTitle: summary.unitTitle,
-    canonicalUrl: summary.canonicalUrl,
+    oakUrl: summary.oakUrl,
     lessonIds: [...lessonIds],
     unitTopics: unitTopics && unitTopics.length > 0 ? unitTopics : undefined,
     years,

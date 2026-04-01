@@ -77,7 +77,7 @@ describe('Unit Lesson Count Correctness', () => {
         { lessonSlug: 'lesson-9', lessonTitle: 'Lesson 9', lessonOrder: 9, state: 'published' },
         { lessonSlug: 'lesson-10', lessonTitle: 'Lesson 10', lessonOrder: 10, state: 'published' },
       ],
-      canonicalUrl: 'https://test.com/units/compound-measures',
+      oakUrl: 'https://test.com/units/compound-measures',
     };
 
     // Create unit document WITH lessonsByUnit map
@@ -142,7 +142,7 @@ describe('Unit Lesson Count Correctness', () => {
       threads: undefined,
       categories: undefined,
       unitLessons: [],
-      canonicalUrl: 'https://test.com',
+      oakUrl: 'https://test.com',
     };
 
     const unitDoc = createUnitDocument({

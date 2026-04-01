@@ -132,8 +132,8 @@ export type {
 // ============================================================================
 
 export {
-  generateCanonicalUrlWithContext,
-  generateCanonicalUrl,
+  generateOakUrlWithContext,
+  generateOakUrl,
   CONTENT_TYPE_PREFIXES,
   extractSlug,
   type ContentType,
@@ -145,6 +145,20 @@ export {
   deriveSubjectSlugFromSequence,
   derivePhaseSlugFromSequence,
 } from './sequence-slug-derivation.js';
+
+// ============================================================================
+// Oak URL Convenience Functions
+// ============================================================================
+
+export {
+  OAK_BASE_URL,
+  generateLessonOakUrl,
+  generateUnitOakUrl,
+  generateUnitOakUrlFromSequence,
+  generateSequenceOakUrl,
+  generateThreadOakUrl,
+  generateSubjectProgrammesUrl,
+} from './oak-url-convenience.js';
 
 // ============================================================================
 // Type-Safe Object Helpers

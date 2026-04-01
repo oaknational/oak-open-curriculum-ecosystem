@@ -14,7 +14,7 @@
  * API schema has: lessonTitle, unitSlug, unitTitle, subjectSlug, subjectTitle,
  * keyStageSlug, keyStageTitle, lessonKeywords, keyLearningPoints,
  * misconceptionsAndCommonMistakes, pupilLessonOutcome, teacherTips,
- * contentGuidance, supervisionLevel, downloadsAvailable, canonicalUrl
+ * contentGuidance, supervisionLevel, downloadsAvailable, canonicalUrl (upstream), oakUrl (SDK)
  *
  * Bulk adds: lessonSlug, transcript_sentences, transcript_vtt
  * Bulk changes: downloadsavailable (lowercase) vs downloadsAvailable
@@ -30,7 +30,7 @@ export const BULK_LESSON_DELTA = {
  * Bulk download unit fields - structure differs from API UnitSummaryResponseSchema.
  */
 export const BULK_UNIT_DELTA = {
-  missingFields: ['phaseSlug', 'subjectSlug', 'notes', 'categories', 'canonicalUrl'],
+  missingFields: ['phaseSlug', 'subjectSlug', 'notes', 'categories', 'canonicalUrl', 'oakUrl'],
   addedFields: ['examBoards'],
 } as const;
 

@@ -4,32 +4,32 @@ overview: "Fix the decorator overwrite, type widening, and naming collision betw
 todos:
   - id: phase-0-foundation
     content: "Phase 0: Verify foundation assumptions and map the blast radius."
-    status: pending
+    status: completed
   - id: phase-1-decorator-fix
     content: "Phase 1: Fix decorateCanonicalUrls to preserve upstream-defined fields."
-    status: pending
+    status: completed
   - id: phase-2-rename
     content: "Phase 2: Rename SDK concept from canonicalUrl to oakUrl (aligning with upstream) across codegen, SDK, and apps."
-    status: pending
+    status: completed
   - id: phase-3-search-cli-boundary
     content: "Phase 3: Relocate search-CLI canonical-url-generator domain logic to the SDK."
-    status: pending
+    status: completed
   - id: phase-4-adr
     content: "Phase 4: Write successor ADR to ADR-047 documenting the collision and resolution."
-    status: pending
+    status: completed
   - id: phase-5-quality-gates
     content: "Phase 5: Full quality gate chain."
-    status: pending
+    status: completed
   - id: phase-6-adversarial-review
     content: "Phase 6: Adversarial specialist reviews."
-    status: pending
+    status: completed
 isProject: false
 ---
 
 # URL Naming Collision Remediation
 
 **Last Updated**: 2026-04-01
-**Status**: QUEUED
+**Status**: COMPLETED (all phases executed 2026-04-01)
 **Scope**: Fix five architectural violations in URL handling: schema overwrite,
 type widening, naming inconsistency, stale ADR, and search-CLI boundary
 violation. Rename the SDK concept from `canonicalUrl` to `oakUrl`, aligning
@@ -319,6 +319,11 @@ but not `canonicalUrl`. Since this plan renames the SDK concept to `oakUrl`
 and skip injection when the upstream already provides it. This is the
 simplest case — the upstream provides the field with the same name and same
 semantics, so no decoration is needed.
+
+Also verify `LessonSearchResponseSchema`, which defines `oakUrl` (with
+`format: "uri"`) in its array items. This schema appears in search results
+and the decorator must handle it correctly (skip injection when the upstream
+provides `oakUrl`).
 
 **Acceptance Criteria**:
 
@@ -737,9 +742,13 @@ generated `url-helpers.ts`, either as additional generated output from the
 template or as a hand-authored companion module.
 
 For `generateSubjectProgrammesUrl`: the generated `urlForSubject` already
-exists in `url-helpers.ts`. The convenience function should delegate to it, not
-duplicate the template. If the generated function has the right signature,
-delete the convenience wrapper and use the generated function directly.
+exists in `url-helpers.ts` but has different semantics — it picks a key stage
+from a `keyStageSlugs` array using a preference order (ks1, ks2, ks3, ks4),
+whereas the search-CLI version takes an explicit `(subjectSlug, keyStageSlug)`
+pair. The SDK convenience function should accept an explicit key stage since
+callers know which key stage they want. The preference-order approach is
+appropriate for `generateOakUrlWithContext` where context is optional, but a
+convenience function for direct use should have a deterministic signature.
 
 Export the convenience functions from the SDK's public API.
 

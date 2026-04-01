@@ -6,7 +6,7 @@ import { McpParameterError, type ToolExecutionResult } from './execute-tool-call
 import { err } from '@oaknational/result';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import {
-  generateCanonicalUrlWithContext,
+  generateOakUrlWithContext,
   extractSlug,
   type ContentType,
 } from '@oaknational/sdk-codegen/api-schema';
@@ -141,20 +141,20 @@ export async function runFetchTool(
     context = {};
   }
 
-  let canonicalUrl: string | null;
+  let oakUrl: string | null;
   try {
-    canonicalUrl = generateCanonicalUrlWithContext(type, args.id, context);
+    oakUrl = generateOakUrlWithContext(type, args.id, context);
   } catch {
-    canonicalUrl = null;
+    oakUrl = null;
   }
-  const summary = buildFetchSummary(type, slug, canonicalUrl);
+  const summary = buildFetchSummary(type, slug, oakUrl);
 
   return formatToolResponse({
     summary,
     data: {
       id: args.id,
       type,
-      canonicalUrl,
+      oakUrl,
       httpStatus: result.value.status,
       data: result.value.data,
     },
@@ -168,9 +168,9 @@ export async function runFetchTool(
 /**
  * Builds a human-readable summary of the fetch result.
  */
-function buildFetchSummary(type: ContentType, slug: string, canonicalUrl: string | null): string {
+function buildFetchSummary(type: ContentType, slug: string, oakUrl: string | null): string {
   const typeName = type.charAt(0).toUpperCase() + type.slice(1);
-  const urlPart = canonicalUrl ? ` (${canonicalUrl})` : '';
+  const urlPart = oakUrl ? ` (${oakUrl})` : '';
   return `Fetched ${typeName}: ${slug}${urlPart}`;
 }
 

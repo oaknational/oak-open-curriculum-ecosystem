@@ -30,8 +30,8 @@
     ],
     "supervisionLevel": "low",
     "downloadsAvailable": true,
-    "canonicalUrl": "https://teachers.thenational.academy/lessons/ancient-egypt-lesson-1",
-    "oakUrl": "https://www.thenational.academy/teachers/lessons/ancient-egypt-lesson-1"
+    "canonicalUrl": "https://www.thenational.academy/teachers/lessons/ancient-egypt-lesson-1",
+    "oakUrl": "https://teachers.thenational.academy/lessons/ancient-egypt-lesson-1"
   },
   "ancient-egypt-lesson-2": {
     "lessonTitle": "Life Along the Nile",
@@ -67,7 +67,7 @@
     ],
     "supervisionLevel": "low",
     "downloadsAvailable": true,
-    "canonicalUrl": "https://teachers.thenational.academy/lessons/ancient-egypt-lesson-2",
-    "oakUrl": "https://www.thenational.academy/teachers/lessons/ancient-egypt-lesson-2"
+    "canonicalUrl": "https://www.thenational.academy/teachers/lessons/ancient-egypt-lesson-2",
+    "oakUrl": "https://teachers.thenational.academy/lessons/ancient-egypt-lesson-2"
   }
 }

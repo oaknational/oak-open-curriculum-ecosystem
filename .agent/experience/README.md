@@ -114,4 +114,6 @@ experience file is not the home for technical reference.
 - 2026‑03‑02: portability — see: [the-travelling-practice](./2026-03-02-the-travelling-practice.md) — self-containment as portability; documentation adapter pattern; five-file seed with local root system
 - 2026‑03‑04: planning — see: [learning-from-the-neighbours](./2026-03-04-learning-from-the-neighbours.md) — comparing external and internal planning systems; structural vs operational completeness; blocked protocol as universal pattern
 
+- 2026‑04‑01: consolidation — see: [synthesis-over-extraction](./2026-04-01-synthesis-over-extraction.md) — diminishing returns on entry graduation; synthesis vs extraction; the gap between documentation and understanding
+
 For the complete set, browse this directory; filenames are date‑prefixed for chronology.

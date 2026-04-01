@@ -109,16 +109,18 @@ These URL fields are generated correctly by current code in
 `apps/oak-search-cli/src/lib/indexing/`. Any documents created by a fresh
 ingest will have correct values:
 
-All `generate*CanonicalUrl()` functions are defined in `canonical-url-generator.ts`
-and called from the respective document builders/cores listed below.
+All `generate*OakUrl()` functions are defined in `oak-url-convenience.ts`
+(in `@oaknational/curriculum-sdk`) and called from the respective document
+builders/cores listed below. See [ADR-145](../architecture/architectural-decisions/145-oak-url-naming-collision-remediation.md)
+for the rename from `canonicalUrl` to `oakUrl`.
 
-| Field          | Source file                    | Status                                                 |
-| -------------- | ------------------------------ | ------------------------------------------------------ |
-| `lesson_url`   | `lesson-document-builder.ts`   | Required; emitted via `generateLessonCanonicalUrl()`   |
-| `unit_url`     | `unit-document-core.ts`        | Required; emitted via `generateUnitCanonicalUrl()`     |
-| `unit_urls`    | `lesson-document-core.ts`      | Required; array of canonical unit URLs                 |
-| `sequence_url` | `sequence-document-builder.ts` | Required; emitted via `generateSequenceCanonicalUrl()` |
-| `thread_url`   | `thread-document-builder.ts`   | Intentionally omitted (threads have no Oak web page)   |
+| Field          | Source file                    | Status                                               |
+| -------------- | ------------------------------ | ---------------------------------------------------- |
+| `lesson_url`   | `lesson-document-builder.ts`   | Required; emitted via `generateLessonOakUrl()`       |
+| `unit_url`     | `unit-document-core.ts`        | Required; emitted via `generateUnitOakUrl()`         |
+| `unit_urls`    | `lesson-document-core.ts`      | Required; array of Oak unit URLs                     |
+| `sequence_url` | `sequence-document-builder.ts` | Required; emitted via `generateSequenceOakUrl()`     |
+| `thread_url`   | `thread-document-builder.ts`   | Intentionally omitted (threads have no Oak web page) |
 
 The `thread_url` field remains in the Elasticsearch mapping and Zod schema as
 optional for backward compatibility with existing indexed documents (see
@@ -294,6 +296,25 @@ Worktree agents branch from `main`, not the current feature branch. When `main` 
 ### Codex Reviewer Not Resolved
 
 Resolve every reviewer with `pnpm agent-tools:codex-reviewer-resolve <name>` before trusting a Codex review. The underlying `tsx` call may need escalation because it opens a local IPC pipe under `/var/folders/...`.
+
+### `git merge --abort` Wipes Staged Changes
+
+Any uncommitted staged files (e.g. planning artefacts staged but
+not committed) are lost when aborting a merge. Always commit
+planning artefacts before attempting a merge.
+
+### Run `pnpm format:root` After Merge
+
+Auto-merged content from main may have inconsistent formatting.
+Always run `pnpm format:root` after completing a merge to catch
+formatting drift before the pre-commit hook rejects the commit.
+
+### Turbo Graph: Reproduce Under `--force` First
+
+When a quality gate fails but the error doesn't reproduce under
+a narrower turbo task, re-run both the narrow turbo shape and the
+full gate under `--force` before inventing orchestration fixes.
+The turbo cache itself may be the problem.
 
 ### StrReplace Fails on Plan Files
 

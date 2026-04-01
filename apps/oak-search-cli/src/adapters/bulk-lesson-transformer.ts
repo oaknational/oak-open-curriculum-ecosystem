@@ -18,7 +18,7 @@ import { SUBJECT_TO_PARENT, isAllSubject } from '@oaknational/curriculum-sdk';
 import type { SearchLessonsIndexDoc, AllSubjectSlug } from '../types/oak';
 import { isKeyStage } from './sdk-guards';
 import {
-  generateLessonUrl,
+  generateLessonOakUrl,
   extractKeywordStrings,
   extractLearningPointStrings,
   extractMisconceptionStrings,
@@ -173,7 +173,7 @@ export function extractLessonParamsFromBulk(params: BulkToESLessonParams): Creat
     contentGuidance: extractContentGuidanceLabels(lesson.contentGuidance),
     transcript: lesson.transcript_sentences,
     lessonStructure: generateBulkLessonSemanticSummary(lesson),
-    lessonUrl: generateLessonUrl(lesson.lessonSlug),
+    lessonUrl: generateLessonOakUrl(lesson.lessonSlug),
     pupilLessonOutcome: lesson.pupilLessonOutcome || undefined,
     supervisionLevel: normaliseSupervisionLevel(lesson.supervisionLevel),
     downloadsAvailable: lesson.downloadsavailable,

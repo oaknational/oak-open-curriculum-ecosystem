@@ -23,8 +23,8 @@ import { ok } from '@oaknational/result';
 function minimalLessonSummary(): SearchLessonSummary {
   return {
     lessonTitle: '',
-    canonicalUrl: 'https://teachers.thenational.academy/lessons/test-lesson',
-    oakUrl: 'https://www.thenational.academy/teachers/lessons/test-lesson',
+    canonicalUrl: 'https://www.thenational.academy/teachers/lessons/test-lesson',
+    oakUrl: 'https://teachers.thenational.academy/lessons/test-lesson',
     unitSlug: '',
     unitTitle: '',
     subjectSlug: 'maths',

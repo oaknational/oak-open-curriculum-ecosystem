@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-03-28.md`
-(sessions 2026-02-10 to 2026-03-28).
+`napkin-2026-02-24.md` through `napkin-2026-04-01.md`
+(sessions 2026-02-10 to 2026-04-01).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -44,6 +44,34 @@ context with no natural permanent home.
   their motivations ("anxious about looking foolish",
   "sceptical by default"), not by focus areas
 
+## Fitness Management
+
+- **Char limit is the honest volume constraint**: after wrapping
+  prose to 100 chars, line count inflates from short lines, headers,
+  blank lines. The char limit tracks actual content volume regardless
+  of formatting choices. Use it as the primary volume metric.
+- **Graduation and fitness are separate concerns**: step 7
+  (graduate) asks "stable? natural home?" Step 8 (fitness) asks
+  "too full?" Graduate first, then manage fitness consequences.
+  Never block graduation because a target is tight.
+- **User feedback is the correction signal**: when user feedback
+  contradicts a napkin entry, apply the feedback fully. Do not
+  negotiate a compromise with the original incorrect framing.
+
+## Architecture (Agent Infrastructure)
+
+- **ADR-125 thin wrapper scope**: the thin wrapper contract applies
+  to platform adapters wrapping canonical content, NOT to canonical
+  command-to-skill relationships. Commands and skills are sibling
+  Layer 1 artifacts. A "thick" orchestrating command is sound per
+  ADR-135's process_executor example.
+- **ADR-135 naming deviation**: new agents use `-reviewer` suffix
+  despite ADR-135 deciding to drop it. Acknowledged tech debt;
+  batch rename committed.
+- **Provenance is storytelling, not credit**: "Think less boardroom,
+  more Dreamtime." Both repos appear in the chain because both are
+  part of the knowledge journey.
+
 ## Repo-Specific Rules
 
 - Elasticsearch: `oaksearch admin validate-aliases` proves alias **topology**
@@ -60,6 +88,10 @@ context with no natural permanent home.
   `sdk-codegen-workspace-decomposition.md`
   (M1 prerequisite satisfied, awaiting promotion).
   Turbo overrides are temporary — see ADR-065.
+- **Zod 4 `.meta({ examples })` opportunity**: in Zod 3, OpenAPI
+  `examples` are lost in the pipeline. Zod 4's `.meta()` attaches
+  arbitrary metadata that `z.toJSONSchema()` preserves. Could
+  eliminate `preserve-schema-examples.ts` when adopted.
 - Always add new public exports to the barrel file
   (`src/mcp-tools.ts`) — missing barrel exports cause
   `undefined` at runtime for `instanceof` checks
@@ -72,7 +104,8 @@ context with no natural permanent home.
 
 Graduated to `docs/governance/typescript-practice.md`:
 Zod v4 `.loose()`, `TSESLint.FlatConfig.Plugin`,
-`no-restricted-imports` minimatch, `localeCompare` divergence.
+`no-restricted-imports` minimatch, `localeCompare` divergence,
+`vi.fn()` bare mock assignability, `void` return trick.
 
 ## Elasticsearch
 
@@ -94,7 +127,8 @@ Zod v4 `.loose()`, `TSESLint.FlatConfig.Plugin`,
 
 ## Testing (Domain-Specific)
 
-Graduated to `testing-strategy.md`: E2E assertion placement.
+Graduated to `testing-strategy.md`: E2E assertion placement,
+RED spec file-naming (`*.e2e.test.ts` not `*.unit.test.ts`).
 Graduated to `development-practice.md`: file-move test checks.
 
 - `ensurePathsOnSchema` creates a new object (spread) —
@@ -120,6 +154,10 @@ Codex reviewer resolution.
 - `pnpm qg` is the canonical read-only gate set, but does
   not include static-analysis sweeps (`pnpm knip`,
   `pnpm depcruise`) unless a plan explicitly requires them
+- Empty directories persist after file deletion — always
+  rmdir after deleting the last file. The portability
+  validator checks for SKILL.md presence, so empty skill
+  directories without SKILL.md cause false positives.
 
 ## Architecture (Domain-Specific)
 
@@ -149,4 +187,6 @@ StrReplace unicode quotes, reviewer false positives,
 CI Turbo cache staleness, pre-commit output/blocking,
 ESLint complexity with `??`/`?.`, background reviewer
 agents, MCP tool call param types, commitlint rejections,
-worktree agent patches, Codex reviewer resolution.
+worktree agent patches, Codex reviewer resolution,
+`git merge --abort` staging loss, `pnpm format:root`
+after merge, Turbo `--force` reproduce-first.

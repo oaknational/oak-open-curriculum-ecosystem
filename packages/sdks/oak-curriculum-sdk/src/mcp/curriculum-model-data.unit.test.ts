@@ -36,9 +36,9 @@ describe('composeCurriculumModelData', () => {
       expect(result.domainModel).toHaveProperty('ukEducationContext');
     });
 
-    it('domainModel contains canonicalUrls for linking to Oak website', () => {
+    it('domainModel contains oakUrls for linking to Oak website', () => {
       const result = composeCurriculumModelData();
-      expect(result.domainModel).toHaveProperty('canonicalUrls');
+      expect(result.domainModel).toHaveProperty('oakUrls');
     });
 
     it('domainModel does NOT contain synonyms', () => {

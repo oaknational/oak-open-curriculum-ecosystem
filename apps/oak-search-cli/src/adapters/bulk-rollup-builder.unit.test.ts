@@ -121,11 +121,11 @@ describe('bulk-rollup-builder', () => {
       expect(summary.unitLessons[0]?.lessonSlug).toBe('lesson-1');
     });
 
-    it('generates canonical URL from unit slug and sequence context', () => {
+    it('generates oak URL from unit slug and sequence context', () => {
       const bulkUnit = createMinimalUnit({ unitSlug: 'fractions-year-4' });
       const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
-      expect(summary.canonicalUrl).toBe(
+      expect(summary.oakUrl).toBe(
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-4',
       );
     });
@@ -142,16 +142,16 @@ describe('bulk-rollup-builder', () => {
         'science-secondary-aqa',
       );
 
-      expect(summary.canonicalUrl).toBe(
+      expect(summary.oakUrl).toBe(
         'https://www.thenational.academy/teachers/curriculum/science-secondary-aqa/units/atomic-structure',
       );
     });
 
-    it('generates undefined canonical URL when no sequence context', () => {
+    it('generates undefined oak URL when no sequence context', () => {
       const bulkUnit = createMinimalUnit({ unitSlug: 'fractions-year-4' });
       const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
 
-      expect(summary.canonicalUrl).toBeUndefined();
+      expect(summary.oakUrl).toBeUndefined();
     });
 
     it('maps priorKnowledgeRequirements', () => {

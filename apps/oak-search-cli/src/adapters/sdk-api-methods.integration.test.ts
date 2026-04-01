@@ -65,8 +65,8 @@ function createMockLessonSummary(
 ): SearchLessonSummary {
   return lessonSummarySchema.parse({
     lessonTitle: 'Test Lesson',
-    canonicalUrl: 'https://teachers.thenational.academy/lessons/test-lesson',
-    oakUrl: 'https://www.thenational.academy/teachers/lessons/test-lesson',
+    canonicalUrl: 'https://www.thenational.academy/teachers/lessons/test-lesson',
+    oakUrl: 'https://teachers.thenational.academy/lessons/test-lesson',
     unitSlug: 'test-unit',
     unitTitle: 'Test Unit',
     subjectSlug: 'maths',

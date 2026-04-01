@@ -1,6 +1,7 @@
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
 import type { SearchSequenceFacetsIndexDoc } from '@oaknational/sdk-codegen/search';
 import type { SubjectSequenceEntry } from '../../adapters/oak-adapter';
+import { generateSequenceOakUrl } from '@oaknational/curriculum-sdk';
 
 /** Input-agnostic parameters for creating a sequence facet document (DRY). */
 export interface CreateSequenceFacetDocParams {
@@ -15,7 +16,7 @@ export interface CreateSequenceFacetDocParams {
   readonly unitTitles: readonly string[];
   readonly lessonCount: number;
   readonly hasKs4Options: boolean;
-  readonly canonicalUrl?: string;
+  readonly oakUrl?: string;
 }
 
 /** Creates a sequence facet document from input-agnostic parameters. */
@@ -35,7 +36,8 @@ export function createSequenceFacetDoc(
     unit_count: params.unitSlugs.length,
     lesson_count: params.lessonCount,
     has_ks4_options: params.hasKs4Options,
-    sequence_canonical_url: params.canonicalUrl,
+    // ES field name differs from SDK field name (oakUrl) for index compatibility
+    sequence_canonical_url: params.oakUrl,
   };
 }
 
@@ -115,7 +117,7 @@ function createSequenceFacetDocument({
     unitTitles: unitDetails.titles,
     lessonCount: unitDetails.lessonCount,
     hasKs4Options: sequence.ks4Options !== null,
-    canonicalUrl: sequence.canonicalUrl,
+    oakUrl: sequence.oakUrl ?? generateSequenceOakUrl(sequence.sequenceSlug),
   });
 }
 

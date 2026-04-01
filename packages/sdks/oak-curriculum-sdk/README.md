@@ -42,7 +42,7 @@ The client is an [openapi-fetch](https://openapi-ts.dev/openapi-fetch/) instance
 ## Features
 
 - Type-safe API client generated from the OpenAPI schema (paths, parameters, and responses are all checked at compile time)
-- Automatic canonical URL generation on responses via middleware
+- Automatic Oak URL (`oakUrl`) generation on responses via middleware
 - Configurable rate limiting and retry with exponential backoff
 - Shared validation helpers (`parseSchema`, `parseWithCurriculumSchema`, etc.) for safe parsing without manual assertions
 - Runtime-agnostic design

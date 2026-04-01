@@ -89,8 +89,8 @@ export type { SchemaBase } from './types/generated/api-schema/api-schema-base.js
 export {
   CONTENT_TYPE_PREFIXES,
   extractSlug,
-  generateCanonicalUrlWithContext,
-  generateCanonicalUrl,
+  generateOakUrlWithContext,
+  generateOakUrl,
 } from './types/generated/api-schema/routing/url-helpers.js';
 export type { ContentType } from './types/generated/api-schema/routing/url-helpers.js';
 

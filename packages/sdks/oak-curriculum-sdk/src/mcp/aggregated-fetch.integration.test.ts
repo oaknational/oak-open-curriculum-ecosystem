@@ -69,13 +69,13 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       expect(result.structuredContent).toHaveProperty('type', 'unit');
     });
 
-    it('includes canonicalUrl in structuredContent', async () => {
+    it('includes oakUrl in structuredContent', async () => {
       const deps = createMockExecutor(ok({ status: 200, data: { lessonTitle: 'Test' } }));
 
       const result = await runFetchTool({ id: 'lesson:test-lesson' }, deps);
 
       expect(result.structuredContent).toBeDefined();
-      expect(result.structuredContent).toHaveProperty('canonicalUrl', expect.any(String));
+      expect(result.structuredContent).toHaveProperty('oakUrl', expect.any(String));
     });
 
     it('includes oakContextHint for model context grounding', async () => {
@@ -131,8 +131,8 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
     });
   });
 
-  describe('canonicalUrl for context-dependent types', () => {
-    it('includes non-null canonicalUrl for subject fetch', async () => {
+  describe('oakUrl for context-dependent types', () => {
+    it('includes non-null oakUrl for subject fetch', async () => {
       const deps = createMockExecutor(
         ok({
           status: 200,
@@ -153,12 +153,12 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
 
       expect(result.structuredContent).toBeDefined();
       expect(result.structuredContent).toHaveProperty(
-        'canonicalUrl',
+        'oakUrl',
         'https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes',
       );
     });
 
-    it('includes non-null canonicalUrl for unit fetch', async () => {
+    it('includes non-null oakUrl for unit fetch', async () => {
       const deps = createMockExecutor(
         ok({
           status: 200,
@@ -175,12 +175,12 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
 
       expect(result.structuredContent).toBeDefined();
       expect(result.structuredContent).toHaveProperty(
-        'canonicalUrl',
+        'oakUrl',
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions',
       );
     });
 
-    it('returns null canonicalUrl gracefully when context is insufficient', async () => {
+    it('returns null oakUrl gracefully when context is insufficient', async () => {
       const deps = createMockExecutor(
         ok({
           status: 200,
@@ -194,10 +194,10 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'subject:maths' }, deps);
 
       expect(result.isError).toBeUndefined();
-      expect(result.structuredContent).toHaveProperty('canonicalUrl', null);
+      expect(result.structuredContent).toHaveProperty('oakUrl', null);
     });
 
-    it('returns null canonicalUrl when context derivation throws', async () => {
+    it('returns null oakUrl when context derivation throws', async () => {
       const deps = createMockExecutor(
         ok({
           status: 200,
@@ -213,7 +213,7 @@ describe('runFetchTool result structure per OpenAI Apps SDK', () => {
       const result = await runFetchTool({ id: 'unit:fractions' }, deps);
 
       expect(result.isError).toBeUndefined();
-      expect(result.structuredContent).toHaveProperty('canonicalUrl', null);
+      expect(result.structuredContent).toHaveProperty('oakUrl', null);
     });
   });
 
