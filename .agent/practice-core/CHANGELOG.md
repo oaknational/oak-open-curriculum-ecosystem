@@ -4,6 +4,35 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-01 — Consolidation Workflow Evolution
+
+- Added full abstract Consolidation Workflow section to practice-bootstrap.md
+  (the Knowledge Flow's central mechanism now travels with the Practice as an
+  operational workflow, not just a conceptual description)
+- Renamed "Code Patterns" to "Reusable Patterns" to reflect all learning types:
+  process, architecture, structural, behavioural, agent operational,
+  domain-specific
+- Updated consolidation command summary in the Required Commands table to
+  mention incoming practice box integration and outgoing practice context
+  broadcast
+- Compressed the Distillation subsection into a brief reference that points to
+  the new Consolidation Workflow section
+
+## [oak-open-curriculum-ecosystem] 2026-04-01 — Learning Loop Refinement
+
+- Absorbed the distillation skill into the consolidation command as an
+  inline step. Distillation had exactly one consumer (consolidation step 6)
+  and did not warrant independent extraction as a skill
+- Added explicit graduation criteria for distilled.md entries: stable,
+  natural home exists, target doc has capacity
+- Made fitness management active in the consolidation command: analyse,
+  refine, split, or extend files at or approaching their ceiling
+- Removed "not yet matured into settled practice" barrier language — agent-
+  operational content is what the Practice is for
+- Updated all Practice Core references from "the distillation skill" to
+  "the consolidation command" or conceptual "distillation" process
+- Deleted canonical distillation skill and all platform adapters
+
 ## [oak-open-curriculum-ecosystem] 2026-03-23 — Practice Convergence Remediation
 
 - Clarified hook-runtime wording in the portable Core: hook enforcement uses a

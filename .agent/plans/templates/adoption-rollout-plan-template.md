@@ -129,6 +129,12 @@ todos:
 
 > See [documentation-propagation.md](components/documentation-propagation.md)
 
+## Consolidation
+
+After all work is complete and quality gates pass, run `/jc-consolidate-docs`
+to graduate settled content, extract reusable patterns, rotate the napkin,
+manage fitness, and update the practice exchange.
+
 ## Risk Assessment
 
 > See [risk-assessment.md](components/risk-assessment.md)

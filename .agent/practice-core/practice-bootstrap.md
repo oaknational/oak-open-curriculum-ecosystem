@@ -337,7 +337,7 @@ Unsupported platform states belong in the local surface matrix.
 | start-right      | `jc-start-right.md`      | Read and follow the start-right-quick skill.                                                                                                                                                                                           |
 | gates            | `jc-gates.md`            | Run `type-check -> lint -> build -> test` sequentially. All blocking. Restart from beginning after any fix.                                                                                                                            |
 | commit           | `jc-commit.md`           | Check status, review diff, verify gates, stage selectively, conventional commit format. Safety: never force push, never amend pushed commits, never `--no-verify`.                                                                     |
-| consolidate-docs | `jc-consolidate-docs.md` | Verify documentation is current. Extract any remaining plan content to permanent locations. Update plan statuses. Write to napkin. Check the Practice Box. Audit cohesion. Check Practice fitness. Consider Practice evolution.         |
+| consolidate-docs | `jc-consolidate-docs.md` | Verify docs current. Graduate settled content. Extract reusable patterns. Rotate napkin (distillation). Manage fitness. Integrate incoming Practice Box. Broadcast outgoing Practice Context. See §Consolidation Workflow. |
 | plan             | `jc-plan.md`             | Read directives. Create plan with explicit outcome, impact, value mechanism, acceptance criteria, risk assessment, and non-goals.                                                                                                      |
 
 ## Skills (.agent/skills/)
@@ -413,23 +413,22 @@ error."
 
 Add `### Mistakes Made` or `### Corrections` subsections as needed.
 
-**Rotation**: When the napkin exceeds ~500 lines, follow the distillation skill.
+**Rotation**: When the napkin exceeds ~500 lines, follow the distillation
+step in the consolidation command (`consolidate-docs`).
 
-### Distillation (.agent/skills/distillation/SKILL.md)
+### Distillation (consolidation step)
 
 Extracts high-signal patterns from the napkin into `distilled.md` (target:
-<200 lines). **Trigger**: napkin exceeds ~500 lines, or user requests.
+<200 lines). Protocol: extract actionable entries, merge against existing
+content (add, skip duplicates, update refinements, investigate
+contradictions), prune graduated entries, archive, start fresh. See
+§Consolidation Workflow step 4.
 
-**Protocol**: (1) extract patterns, mistakes, and lessons from the outgoing
-napkin, (2) merge against existing `distilled.md` — add new, skip
-duplicates, update refinements, investigate contradictions, (3) prune
-entries that have graduated to permanent docs, (4) archive the old napkin,
-(5) start fresh. Entries must be specific, actionable, non-obvious, and
-terse.
+### Reusable Patterns (.agent/memory/code-patterns/)
 
-### Code Patterns (.agent/memory/code-patterns/)
-
-Reusable patterns proven by real work. More concrete than rules, more portable than source code.
+Reusable patterns proven by real work — code, process, architecture,
+structural, behavioural, agent operational, and domain-specific. More
+concrete than rules, more portable than source code.
 
 **Barrier to entry**: a pattern belongs here only when it is (a) broadly
 applicable or clearly reusable, (b) proven by implementation,
@@ -460,6 +459,45 @@ cross-repo-applicable, also copy it to
 Practice Context exchange pack. Receiving repos apply the same three-part
 bar as any other Practice material; adopted patterns move to local
 `.agent/memory/code-patterns/`.
+
+### Consolidation Workflow
+
+The consolidation command drives the Knowledge Flow's graduation cycle. It
+is the operational mechanism that converts captured experience into settled
+Practice. Every repo adopting the Practice should implement a consolidation
+command with the following abstract workflow:
+
+1. **Verify documentation is current.** Architectural decisions, system
+   behaviour, and technical reference should already be in permanent
+   locations. Scan active and completed plans for residual content that
+   describes how things work and move it to the appropriate permanent doc.
+2. **Update plan statuses.** Ensure all plans and prompts reflect current
+   state. Fix stale cross-references, especially after archive moves.
+3. **Extract reusable patterns.** Review completed work for patterns that
+   meet the barrier (see §Reusable Patterns). Covers all learning types.
+4. **Rotate the napkin (distillation).** When the napkin exceeds ~500
+   lines: extract high-signal entries, merge against `distilled.md`, prune
+   graduated entries, archive the old napkin, start fresh. See
+   §Distillation.
+5. **Graduate settled content.** For each entry in `distilled.md`, apply
+   three criteria: (a) **stable** — not contradicted by recent work,
+   (b) **natural home** — an existing permanent doc where it belongs,
+   (c) **capacity** — the target doc has room, or should be split/extended.
+   When all three are met, create the permanent entry first, then remove
+   from `distilled.md`.
+6. **Manage fitness limits.** For files at or approaching their ceiling:
+   **analyse** (is content appropriately dense?), **refine** (compress,
+   deduplicate), **split** (follow the file's `split_strategy`), or
+   **extend** (raise the limit with rationale if genuinely valuable).
+7. **Manage the practice exchange.** Two directions:
+   - *Incoming*: integrate files from `.agent/practice-core/incoming/`
+     following the provenance chain, three-part bar (validated by real work?
+     prevents recurring mistakes? stable?), and user approval for structural
+     Core changes.
+   - *Outgoing*: broadcast domain-specific observations and structural
+     notes to `.agent/practice-context/outgoing/`. Content appropriate for
+     Practice Core itself (Learned Principles, structural proposals,
+     bootstrap improvements) goes as Core proposals with user approval.
 
 ## Platform Configuration
 
