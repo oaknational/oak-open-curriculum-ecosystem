@@ -73,10 +73,10 @@ todos:
     status: completed
   - id: create-merge-skill
     content: "Create .agent/skills/complex-merge/SKILL.md encoding the full merge workflow (see Phase 8b)"
-    status: pending
+    status: completed
   - id: improve-guide
     content: "Update docs/engineering/pre-merge-analysis.md with new insights (see Phase 8c): observability gap analysis, call-chain contracts, characterisation test inventory"
-    status: pending
+    status: completed
   - id: update-session-prompt
     content: Update session-continuation.prompt.md to reflect merge completion
     status: completed
@@ -575,8 +575,8 @@ Create a dedicated plan or work item for this hardening. It blocks deployment of
 | Item | Status | Notes |
 |------|--------|-------|
 | 8a. Napkin | **Done** | Session learnings written |
-| 8b. Complex merge skill | **Deferred** | Not yet created |
-| 8c. Pre-merge analysis guide update | **Deferred** | Not yet updated |
+| 8b. Complex merge skill | **Done** | `.agent/skills/complex-merge/` with shared workflow + Cursor adapter |
+| 8c. Pre-merge analysis guide update | **Done** | Added 4f-4h (observability, call-chain, characterisation inventory) + skill link |
 | 8d. Session prompt update | **Done** | Updated for next session |
 | 8e. Consolidation workflow | **Deferred** | Not yet run |
 

@@ -10,13 +10,13 @@ todos:
     status: completed
   - id: task-1-remediation
     content: "Task 1 remediation: Make auth optional in global augmentation, add explicit type annotation to Object.assign (9-reviewer finding A, 2026-03-28)."
-    status: pending
+    status: completed
   - id: task-2-zod-validation-at-locals
     content: "Task 2: Add Zod validation at the res.locals.authInfo read site to replace the type assertion."
     status: completed
   - id: task-2-remediation
     content: "Task 2 remediation: Replace .loose() with .strict(), use safeParse instead of parse, extract to shared module (9-reviewer findings B+D+E, 2026-03-28)."
-    status: pending
+    status: completed
   - id: task-3-eslint-record-unknown
     content: "Task 3: Add ESLint rule to ban Record<string, unknown> in eslint-plugin-standards."
     status: completed
@@ -25,10 +25,31 @@ isProject: false
 
 # Auth Boundary Type Safety
 
-**Last Updated**: 2026-03-28
-**Status**: Tasks 1-3 completed; Task 1+2 remediations pending (Phase 7 findings A, B, D, E)
+**Last Updated**: 2026-03-31
+**Status**: COMPLETE — all tasks and remediations done
 **Scope**: Eliminate type assertions and enforcement gaps identified during
 Phase 6 of the MCP Runtime Boundary Simplification.
+
+## Closure Evidence (2026-03-31)
+
+**Task 1 remediation (Finding A)**: The `mcp-handler` refactoring eliminated the
+`Object.assign` auth mutation from production code entirely. `McpHandlerRequest`
+uses `auth?: AuthInfo` (optional). The last remnant — `createMcpTestRequest` in
+`register-prompts.integration.test.ts` with `as unknown as` and `eslint-disable`
+— was removed. Express requests pass directly to `transport.handleRequest()`
+because `express.Request` extends `IncomingMessage` and `auth` is optional.
+
+**Task 2 remediation (Findings B+D+E)**: All three findings were already
+addressed during the boundary simplification:
+
+- B: `authInfoSchema` uses `.strict()` (`auth-info-schema.ts:46`)
+- D: `mcp-auth-clerk.ts:88` uses `safeParse` with explicit error handling
+- E: Schema extracted to `auth/mcp-auth/auth-info-schema.ts` as shared module
+- The original `res.locals.authInfo` pattern with `as AuthInfo` was eliminated
+  entirely — auth flows via `req.auth` → MCP SDK transport → `extra.authInfo`
+
+All type assertions in `register-prompts.integration.test.ts` replaced with
+Zod schema validation. Type-reviewer invoked for confirmation.
 
 ## Why This Plan Exists
 

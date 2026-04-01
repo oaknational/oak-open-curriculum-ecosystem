@@ -1,6 +1,6 @@
 # Pre-Merge Divergence Analysis
 
-**Last Updated**: 2026-03-30
+**Last Updated**: 2026-03-31
 **Status**: Active guidance
 
 When a feature branch and its target branch have diverged significantly (tens
@@ -10,6 +10,9 @@ cascades, numbering collisions, and signature mismatches in auto-merged files.
 
 This guide codifies a systematic analysis process that surfaces those hidden
 risks before the merge begins.
+
+For an agent-executable workflow wrapping this guide, see the
+[complex-merge skill](../../.agent/skills/complex-merge/SKILL.md).
 
 ## When to Use This Guide
 
@@ -155,6 +158,39 @@ Compare `package.json` changes on both sides. If both branches updated
 the same dependency to different versions, the auto-merge may pick the
 wrong one (or produce an invalid `package.json`).
 
+### 4f. Observability gap analysis
+
+Trace wrapping mechanisms (Sentry spans, structured logging, correlation IDs)
+across all protocol surfaces (HTTP, MCP, SDK). If the other branch added
+observability wrappers to handlers, verify that your branch's new handlers
+also have them. Auto-merge will not add wrappers to files that only exist on
+your branch.
+
+Concrete pattern: do not just "add the parameter" — wrap the handler body in
+the same observability pattern used by existing handlers. Read the other
+branch's wrapped handlers for the canonical pattern.
+
+### 4g. Call-chain contract verification
+
+For each auto-merged file, verify that callers match the post-merge function
+signatures. The pattern: "this file auto-merged from main, but my branch
+calls functions in it with the old signature."
+
+Trace through the call chain from entry point to leaf. If any intermediate
+function gained a new required parameter on the other branch, the auto-merged
+callers on your branch still pass the old argument count.
+
+### 4h. Characterisation test inventory
+
+Before writing new characterisation tests (Phase 5), inventory existing tests
+that guard integration seams. Many seams are already covered — creating
+duplicates wastes effort and creates maintenance burden.
+
+Check: which existing tests exercise the integration boundary between your
+branch's changes and the other branch's changes? Run them against both
+branches independently to confirm they pass. These are your existing safety
+net — new characterisation tests should cover gaps, not duplicate coverage.
+
 ## Phase 5: Create Characterisation Tests
 
 Before starting the merge, write tests that capture the behaviour your branch
@@ -218,7 +254,10 @@ Use this checklist to ensure nothing is missed:
 - [ ] Checked for auto-merged files that import deleted modules
 - [ ] Checked for new files on the other branch that call your new required params
 - [ ] Compared dependency version changes on both sides
-- [ ] Created characterisation tests at integration seams
+- [ ] Traced observability wrappers across protocol surfaces
+- [ ] Verified call-chain contracts in auto-merged files
+- [ ] Inventoried existing characterisation tests at integration seams
+- [ ] Created new characterisation tests for uncovered seams
 - [ ] Committed characterisation tests before starting the merge
 - [ ] Resolved conflicts in dependency order
 - [ ] Adapted non-conflicting files that need new parameters
