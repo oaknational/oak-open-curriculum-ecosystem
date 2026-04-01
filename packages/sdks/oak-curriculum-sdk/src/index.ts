@@ -133,7 +133,6 @@ export type {
 
 export {
   generateOakUrlWithContext,
-  generateOakUrl,
   CONTENT_TYPE_PREFIXES,
   extractSlug,
   type ContentType,

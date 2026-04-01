@@ -159,6 +159,16 @@ export async function buildUnitDocuments(
   return { unitSummaries, unitOps };
 }
 
+function requireUnitOakUrl(summary: SearchUnitSummary, subject: string, keyStage: string): string {
+  if (!summary.oakUrl) {
+    throw new Error(
+      `Missing oakUrl for unit "${summary.unitSlug}" in ${subject}/${keyStage} — ` +
+        `API response augmentation should have set this.`,
+    );
+  }
+  return summary.oakUrl;
+}
+
 /**
  * Builds rollup documents for all unit summaries.
  */
@@ -181,6 +191,7 @@ export function buildRollupDocuments(
   const ops: BulkOperations = [];
   for (const summary of unitSummaries.values()) {
     ensureUnitSummaryMatchesContext(summary, subject, keyStage);
+    const unitUrl = requireUnitOakUrl(summary, subject, keyStage);
     const snippets = rollupSnippets.get(summary.unitSlug) ?? [];
     const rollupDoc = createRollupDocument({
       summary,
@@ -188,6 +199,7 @@ export function buildRollupDocuments(
       subject,
       keyStage,
       subjectProgrammesUrl,
+      unitUrl,
       unitContextMap,
       lessonsByUnit,
     });
@@ -197,17 +209,13 @@ export function buildRollupDocuments(
     );
   }
 
-  ingestLogger.info(
-    formatIngestionEvent(
-      createPhaseEndEvent('rollups', {
-        subject,
-        keyStage,
-        indexed: ops.length / 2,
-        skipped: 0,
-        durationMs: Date.now() - startTime,
-      }),
-    ),
-  );
-
+  const endEvent = createPhaseEndEvent('rollups', {
+    subject,
+    keyStage,
+    indexed: ops.length / 2,
+    skipped: 0,
+    durationMs: Date.now() - startTime,
+  });
+  ingestLogger.info(formatIngestionEvent(endEvent));
   return ops;
 }

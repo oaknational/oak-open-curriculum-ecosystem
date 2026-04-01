@@ -9,6 +9,8 @@ Executable plans queued and ready to start.
 
 Recently completed and archived:
 
+- [url-generation-cleanup.plan.md](../archive/completed/url-generation-cleanup.plan.md) —
+  retired `generateOakUrl`, made `sequenceSlug`/`unitUrl` type-safe (2026-04-01)
 - [auth-boundary-type-safety.plan.md](../archive/completed/auth-boundary-type-safety.plan.md) —
   complete (2026-03-31)
 - [auth-safety-correction.plan.md](../archive/completed/auth-safety-correction.plan.md) —

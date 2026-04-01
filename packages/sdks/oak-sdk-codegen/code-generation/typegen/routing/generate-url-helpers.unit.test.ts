@@ -132,15 +132,10 @@ describe('generateUrlHelpers', () => {
     });
   });
 
-  describe('generateOakUrl (fallback)', () => {
-    it('also uses sequenceSlug context for units', () => {
+  describe('generateOakUrl (legacy fallback)', () => {
+    it('is not present in generated output', () => {
       const output = generateUrlHelpers();
-      // Both generateOakUrlWithContext and generateOakUrl must use sequenceSlug
-      // in their unit context type (not subjectSlug/phaseSlug)
-      // Check for the pattern in actual type declarations (not comments)
-      const typeDeclarations = output.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*/g, '');
-      expect(typeDeclarations).not.toMatch(/unit\?:\s*\{[^}]*subjectSlug/);
-      expect(typeDeclarations).not.toMatch(/unit\?:\s*\{[^}]*phaseSlug/);
+      expect(output).not.toContain('export function generateOakUrl(');
     });
   });
 });

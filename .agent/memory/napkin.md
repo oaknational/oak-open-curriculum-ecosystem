@@ -62,3 +62,33 @@ Executed all 12 tasks of the URL remediation snagging plan.
   `vitest.e2e.config.ts` have `allowDefaultProject` parsing errors. Not
   caused by this work, but worth fixing separately.
 - All 3,797 tests green across all workspaces.
+
+## Session 2026-04-01 — URL generation cleanup (plan complete)
+
+Executed the url-generation-cleanup plan across three phases.
+
+### Key changes
+
+- **`generateOakUrl` retired**: Removed from generator, barrel exports,
+  and the sole consumer (`index-oak-helpers.ts`) migrated to
+  `generateSubjectProgrammesUrl`. No compatibility layer — deleted outright.
+- **`sequenceSlug` made required**: In `transformBulkUnitToSummary`, the
+  parameter was tightened from optional to required. All callers already
+  provided it; this makes the contract compile-time enforced.
+- **`unitUrl: string` added to document params**: Both
+  `CreateRollupDocumentParams` and `CreateUnitDocumentParams` now require
+  an explicit `unitUrl: string`. Callers narrow `summary.oakUrl` (which is
+  `string | undefined` per schema) before passing it. The runtime throw
+  inside `extractUnitParamsFromAPI` was replaced by compile-time typing.
+- **`requireOakUrl` / `requireUnitOakUrl` helpers**: Created small helper
+  functions for type narrowing (avoiding non-null assertions banned by lint).
+  Test files use `requireOakUrl(summary)` instead of `summary.oakUrl!`.
+
+### Patterns observed
+
+- Schema types should stay faithful to the schema (`oakUrl?: string`), but
+  boundaries where the value is *known* to exist should express that via
+  a required typed parameter. This moves validation from runtime throws to
+  compile-time requirements.
+- Extracting a narrowing helper avoids non-null assertion lint violations
+  and provides a descriptive error message if the invariant ever breaks.

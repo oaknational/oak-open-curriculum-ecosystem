@@ -56,27 +56,24 @@ function validateLessonState(state: string): LessonState {
  * Field differences between bulk Unit and SearchUnitSummary:
  * - Bulk `year` accepts `number | "All years"`, API `year` accepts `number | string`
  * - Bulk has no `subjectSlug` or `keyStageSlug` - must be passed as parameters
- * - Bulk has no `oakUrl` - generated from unitSlug + sequenceSlug if available
+ * - Bulk has no `oakUrl` - generated from unitSlug + sequenceSlug
  * - Bulk has no `categories`, `notes`, `phaseSlug` - set to undefined
  *
  * @param unit - The bulk Unit to transform
  * @param subjectSlug - The subject slug (derived from sequence)
  * @param keyStageSlug - The key stage slug
- * @param sequenceSlug - The sequence slug for Oak URL generation (optional)
+ * @param sequenceSlug - The sequence slug for Oak URL generation
  * @returns A SearchUnitSummary compatible with rollup document generation
  */
 export function transformBulkUnitToSummary(
   unit: Unit,
   subjectSlug: SearchSubjectSlug,
   keyStageSlug: KeyStage,
-  sequenceSlug?: string,
+  sequenceSlug: string,
 ): SearchUnitSummary {
   const phaseSlug = normalisePhaseSlug(keyStageSlug);
-  // Use the explicit sequenceSlug when available; this correctly handles exam-board
-  // sequences like 'science-secondary-aqa' which cannot be derived from keyStageSlug alone.
-  const oakUrl = sequenceSlug
-    ? (generateOakUrlWithContext('unit', unit.unitSlug, { unit: { sequenceSlug } }) ?? undefined)
-    : undefined;
+  const oakUrl =
+    generateOakUrlWithContext('unit', unit.unitSlug, { unit: { sequenceSlug } }) ?? undefined;
 
   return {
     unitSlug: unit.unitSlug,
@@ -199,6 +196,12 @@ export function buildRollupDocs(
       ? unit.keyStageSlug
       : deriveKeyStageFromSequence(sequenceSlug);
     const summary = transformBulkUnitToSummary(unit, subjectSlug, keyStage, sequenceSlug);
+    if (!summary.oakUrl) {
+      throw new Error(
+        `transformBulkUnitToSummary produced no oakUrl for unit "${unit.unitSlug}" ` +
+          `with sequenceSlug "${sequenceSlug}" — this should not happen when sequenceSlug is provided.`,
+      );
+    }
     const snippets = lessonSnippets.get(unit.unitSlug) ?? [];
     const subjectProgrammesUrl = getSubjectProgrammesUrl(subjectSlug, keyStage);
 
@@ -210,6 +213,7 @@ export function buildRollupDocs(
       keyStage,
       keyStageTitle: unit.keyStageSlug.toUpperCase().replace('KS', 'Key Stage '),
       subjectProgrammesUrl,
+      unitUrl: summary.oakUrl,
       unitContextMap,
     });
 

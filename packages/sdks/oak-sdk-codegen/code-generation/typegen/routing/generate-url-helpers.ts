@@ -159,32 +159,5 @@ export function generateOakUrlWithContext(
 }
 
 export function generateUrlHelpers(): string {
-  const fallbackSection = `export function generateOakUrl(
-  type: ContentType,
-  id: string,
-  context?: {
-    unit?: { sequenceSlug?: string };
-    subject?: { keyStageSlugs?: readonly string[] };
-  },
-): string | undefined {
-  const slug = extractSlug(id);
-  if (type === 'lesson') return urlForLesson(slug);
-  if (type === 'sequence') return urlForSequence(slug);
-  if (type === 'unit') {
-    return urlForUnit(slug, context?.unit);
-  }
-  if (type === 'subject') {
-    return urlForSubject(slug, context?.subject?.keyStageSlugs);
-  }
-  // Threads are data concepts without Oak URLs - return undefined
-  if (type === 'thread') return undefined;
-  throw new TypeError('Oak URL generation failed: Unsupported content type: ' + String(type));
-}`;
-  return [
-    headerSection(),
-    typesSection(),
-    helpersSection(),
-    dispatcherSection(),
-    fallbackSection,
-  ].join('\n');
+  return [headerSection(), typesSection(), helpersSection(), dispatcherSection()].join('\n');
 }

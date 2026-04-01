@@ -67,6 +67,8 @@ export interface CreateUnitDocumentParams {
   /** Display title for the key stage (e.g., "Key Stage 2" instead of "ks2") */
   keyStageTitle?: string;
   subjectProgrammesUrl: string;
+  /** Fully qualified Oak URL for this unit, pre-validated by the caller. */
+  unitUrl: string;
   /** KS4 metadata context map per ADR-080 */
   unitContextMap: UnitContextMap;
   /** Aggregated lesson data per unit - if provided, overrides summary.unitLessons */
@@ -118,15 +120,11 @@ export function extractUnitParamsFromAPI(params: CreateUnitDocumentParams): Crea
     keyStage,
     keyStageTitle,
     subjectProgrammesUrl,
+    unitUrl,
     unitContextMap,
     lessonsByUnit,
   } = params;
 
-  if (!summary.oakUrl) {
-    throw new Error(`Missing Oak URL (oakUrl) for unit ${summary.unitSlug}`);
-  }
-
-  // API path: subject is always canonical, so subjectParent equals subjectSlug
   const subjectParent: ParentSubjectSlug = subject;
 
   return {
@@ -139,7 +137,7 @@ export function extractUnitParamsFromAPI(params: CreateUnitDocumentParams): Crea
     keyStageTitle,
     years: normaliseYears(summary.year, summary.yearSlug),
     lessonIds: getLessonIds(summary, lessonsByUnit),
-    unitUrl: summary.oakUrl,
+    unitUrl,
     subjectProgrammesUrl,
     threadInfo: convertThreadInfo(extractThreadInfo(summary.threads)),
     enrichment: {
@@ -263,6 +261,8 @@ export interface CreateRollupDocumentParams {
   keyStage: KeyStage;
   keyStageTitle?: string;
   subjectProgrammesUrl: string;
+  /** Fully qualified Oak URL for this unit, pre-validated by the caller. */
+  unitUrl: string;
   unitContextMap: UnitContextMap;
   /** Aggregated lesson data per unit - if provided, overrides summary.unitLessons */
   lessonsByUnit?: ReadonlyMap<string, readonly string[]>;
@@ -297,7 +297,7 @@ export function createRollupDocument(p: CreateRollupDocumentParams): SearchUnitR
     unit_structure: unitSemantic,
     unit_content_semantic: rollupText,
     unit_structure_semantic: unitSemantic,
-    unit_url: fields.oakUrl,
+    unit_url: p.unitUrl,
     subject_programmes_url: p.subjectProgrammesUrl,
     sequence_ids: fields.sequenceIds,
     thread_slugs: fields.threadSlugs,

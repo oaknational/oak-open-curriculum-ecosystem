@@ -4,7 +4,7 @@
  * @see ADR-080 KS4 Metadata Denormalisation, @see ADR-083 Lesson Enumeration
  */
 
-import { generateOakUrl } from '@oaknational/curriculum-sdk';
+import { generateSubjectProgrammesUrl } from '@oaknational/curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { SequenceFacetSource } from './indexing/sequence-facets';
@@ -89,13 +89,9 @@ export async function fetchPairData(
   return { units: result.units, skipped: false };
 }
 
-/** Generate subject programmes URL, throws if unavailable. */
+/** Generate subject programmes URL. */
 function getSubjectProgrammesUrl(subject: SearchSubjectSlug, ks: KeyStage): string {
-  const url = generateOakUrl('subject', subject, { subject: { keyStageSlugs: [ks] } });
-  if (!url) {
-    throw new Error(`Missing subject programmes Oak URL for ${subject}/${ks}`);
-  }
-  return url;
+  return generateSubjectProgrammesUrl(subject, ks);
 }
 
 /** Build unit documents and return summaries for lesson derivation. */

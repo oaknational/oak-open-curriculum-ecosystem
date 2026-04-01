@@ -322,3 +322,15 @@ Recommended reviewers:
   — the observation layer this plan promotes to enforcement
 - Unified versioned ingestion plan — ingestion pipeline where URL validation
   will be integrated
+- [url-generation-cleanup.plan.md](../archive/completed/url-generation-cleanup.plan.md)
+  (COMPLETE) — retired `generateOakUrl`, made `sequenceSlug` and `unitUrl`
+  type-safe at document-creation boundaries
+
+**Related Future Enhancements** (from url-generation-cleanup):
+
+- **Populate `subjectToKeyStages`**: sitemap scanner should extract
+  subject-to-key-stage mappings from the OWA sitemap, enabling data-driven
+  subject URL generation and eliminating the `urlForSubject` heuristic
+- **Subject response augmentation path-awareness**: the response augmentation
+  middleware for subjects should extract the key stage from the request path
+  rather than from the response body's `keyStages` array

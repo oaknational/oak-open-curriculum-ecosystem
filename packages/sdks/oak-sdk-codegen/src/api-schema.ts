@@ -90,7 +90,6 @@ export {
   CONTENT_TYPE_PREFIXES,
   extractSlug,
   generateOakUrlWithContext,
-  generateOakUrl,
 } from './types/generated/api-schema/routing/url-helpers.js';
 export type { ContentType } from './types/generated/api-schema/routing/url-helpers.js';
 

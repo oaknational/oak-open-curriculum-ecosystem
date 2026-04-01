@@ -71,7 +71,7 @@ describe('bulk-rollup-builder', () => {
   describe('transformBulkUnitToSummary', () => {
     it('maps bulk Unit fields to SearchUnitSummary', () => {
       const bulkUnit = createMinimalUnit();
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.unitSlug).toBe(bulkUnit.unitSlug);
       expect(summary.unitTitle).toBe(bulkUnit.unitTitle);
@@ -81,7 +81,7 @@ describe('bulk-rollup-builder', () => {
 
     it('preserves year information', () => {
       const bulkUnit = createMinimalUnit({ year: 4, yearSlug: 'year-4' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.year).toBe(4);
       expect(summary.yearSlug).toBe('year-4');
@@ -89,7 +89,7 @@ describe('bulk-rollup-builder', () => {
 
     it('handles "All years" year value', () => {
       const bulkUnit = createMinimalUnit({ year: 'All years', yearSlug: 'year-mixed' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks4');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks4', 'maths-secondary');
 
       expect(summary.year).toBe('All years');
     });
@@ -101,7 +101,7 @@ describe('bulk-rollup-builder', () => {
           { slug: 'number-decimals', title: 'Number: Decimals', order: 2 },
         ],
       });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.threads).toHaveLength(2);
       expect(summary.threads?.[0]?.slug).toBe('number-fractions');
@@ -115,7 +115,7 @@ describe('bulk-rollup-builder', () => {
           { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2', lessonOrder: 2, state: 'published' },
         ],
       });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.unitLessons).toHaveLength(2);
       expect(summary.unitLessons[0]?.lessonSlug).toBe('lesson-1');
@@ -147,18 +147,19 @@ describe('bulk-rollup-builder', () => {
       );
     });
 
-    it('generates undefined oak URL when no sequence context', () => {
+    it('always produces a string oakUrl (sequenceSlug is required)', () => {
       const bulkUnit = createMinimalUnit({ unitSlug: 'fractions-year-4' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
-      expect(summary.oakUrl).toBeUndefined();
+      expect(typeof summary.oakUrl).toBe('string');
+      expect(summary.oakUrl).toContain('fractions-year-4');
     });
 
     it('maps priorKnowledgeRequirements', () => {
       const bulkUnit = createMinimalUnit({
         priorKnowledgeRequirements: ['Understand equal parts', 'Count to 100'],
       });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.priorKnowledgeRequirements).toEqual([
         'Understand equal parts',
@@ -170,7 +171,7 @@ describe('bulk-rollup-builder', () => {
       const bulkUnit = createMinimalUnit({
         nationalCurriculumContent: ['Recognise and show fractions', 'Compare fractions'],
       });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.nationalCurriculumContent).toEqual([
         'Recognise and show fractions',
@@ -180,14 +181,14 @@ describe('bulk-rollup-builder', () => {
 
     it('maps description', () => {
       const bulkUnit = createMinimalUnit({ description: 'Learn about fractions' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.description).toBe('Learn about fractions');
     });
 
     it('maps whyThisWhyNow when present', () => {
       const bulkUnit = createMinimalUnit({ whyThisWhyNow: 'Builds on Year 3 fraction knowledge' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.whyThisWhyNow).toBe('Builds on Year 3 fraction knowledge');
     });

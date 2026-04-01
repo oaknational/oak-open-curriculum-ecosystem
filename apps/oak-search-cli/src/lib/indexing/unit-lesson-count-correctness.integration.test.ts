@@ -15,6 +15,13 @@ import { createUnitDocument } from './document-transforms';
 import type { SearchUnitSummary } from '../../types/oak';
 import type { UnitContextMap } from './ks4-context-builder';
 
+function requireOakUrl(summary: SearchUnitSummary): string {
+  if (!summary.oakUrl) {
+    throw new Error('Test fixture missing oakUrl');
+  }
+  return summary.oakUrl;
+}
+
 describe('Unit Lesson Count Correctness', () => {
   const emptyContextMap: UnitContextMap = new Map();
 
@@ -86,6 +93,7 @@ describe('Unit Lesson Count Correctness', () => {
       subject: 'maths',
       keyStage: 'ks4',
       subjectProgrammesUrl: 'https://test.com',
+      unitUrl: requireOakUrl(truncatedUnitSummary),
       unitContextMap: emptyContextMap,
       lessonsByUnit, // ← This should override truncated unitLessons
     });
@@ -101,6 +109,7 @@ describe('Unit Lesson Count Correctness', () => {
       subject: 'maths',
       keyStage: 'ks4',
       subjectProgrammesUrl: 'https://test.com',
+      unitUrl: requireOakUrl(truncatedUnitSummary),
       unitContextMap: emptyContextMap,
       // No lessonsByUnit - falls back to truncated unitLessons
     });
@@ -150,6 +159,7 @@ describe('Unit Lesson Count Correctness', () => {
       subject: 'maths',
       keyStage: 'ks4',
       subjectProgrammesUrl: 'https://test.com',
+      unitUrl: requireOakUrl(summary),
       unitContextMap: emptyContextMap,
       lessonsByUnit,
     });
