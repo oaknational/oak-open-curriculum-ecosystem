@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 200
+fitness_line_target: 200
+fitness_line_limit: 275
+fitness_char_limit: 16500
+fitness_line_length: 100
 split_strategy: "Extract detail to referenced docs; this file is an index/entry point"
 ---
 

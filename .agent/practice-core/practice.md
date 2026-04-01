@@ -1,7 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_count: 375
-fitness_char_count: 22000
+fitness_line_target: 375
+fitness_line_limit: 500
+fitness_char_limit: 22000
 fitness_line_length: 100
 ---
 
@@ -121,7 +122,7 @@ is a progression from narrow to broad.
 | **Capture**  | Napkin                                  | Current session                         | ~500 lines → distillation                                                                         |
 | **Refine**   | Distilled learnings                     | Future agents                           | ~200 lines → extraction to permanent docs                                                         |
 | **Graduate** | ADRs, governance docs, READMEs, TSDoc   | Everyone — humans and agents            | Per-file fitness frontmatter → split by responsibility                                            |
-| **Enforce**  | Rules, directives, always-applied rules | All agents, automatically               | `fitness_line_count` frontmatter on directives                                                    |
+| **Enforce**  | Rules, directives, always-applied rules | All agents, automatically               | `fitness_line_target`/`fitness_line_limit` frontmatter on directives (ADR-144)                     |
 | **Inform**   | Code patterns                           | Engineers facing a recognised situation  | Barrier: broadly applicable, proven, recurring, stable. Practice-relevant patterns may travel via the exchange pack |
 
 Not everything in the napkin survives distillation, and not everything distilled graduates to
@@ -134,17 +135,15 @@ artefacts and moves them to their discoverable permanent home.
 Every stage has a governor that prevents unbounded growth. Without these, the knowledge flow
 simply moves the accumulation problem downstream.
 
-- **Napkin** → ~500 lines triggers distillation (see the distillation skill): extract high-signal
-  patterns, archive the rest
+- **Napkin** → ~500 lines triggers distillation (via the consolidation command): extract
+  high-signal patterns, archive the rest
 - **Distilled** → target <200 lines; the primary reduction mechanism is extracting settled
   entries to permanent docs, not compression
-- **Permanent docs** → each file declares the fitness dimensions appropriate to
-  its role. `fitness_line_count` is the common governor; add
-  `fitness_char_count` and `fitness_line_length` where anti-gaming or
-  readability pressure warrants them. Validators should check only the
-  dimensions a file declares
-- **Practice Core** → the trinity files carry all three ceilings:
-  `fitness_line_count`, `fitness_char_count`, and `fitness_line_length`. See
+- **Permanent docs** → each file declares four fitness fields (ADR-144):
+  `fitness_line_target` (soft), `fitness_line_limit` (hard),
+  `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100).
+  Target exceedance is a warning; limit exceedance is blocking
+- **Practice Core** → the trinity files carry all four fields. See
   [practice-lineage.md §Fitness Functions](practice-lineage.md#fitness-functions).
 
 ### Feedback Properties
@@ -209,7 +208,7 @@ graph LR
   `.agents/skills/jc-*/`) — slash commands that initiate structured workflows
 - **Skills** (`.agent/skills/`) — canonical skill definitions providing session workflows
   (start-right-quick, start-right-thorough, go) and passive capabilities (napkin,
-  distillation, code-patterns, etc.). Platform adapters in `.cursor/skills/`,
+  code-patterns, etc.). Platform adapters in `.cursor/skills/`,
   `.agents/skills/`, etc. are thin wrappers pointing to the canonical skills
 - **Prompts** (`.agent/prompts/`) — domain-specific handover playbooks that provide session
   context and pointers to active execution plans. These are intentionally stateful (carrying
@@ -275,8 +274,9 @@ records what changed; the provenance file tracks every repo that has shaped each
 Each repo carries its own Practice instance — there is no hierarchy.
 
 The trinity files carry YAML frontmatter with a `provenance` pointer (to `provenance.yml`), and
-three fitness ceilings: `fitness_line_count` (content lines), `fitness_char_count` (content
-characters), and `fitness_line_length` (prose line width). All measure content only —
+four fitness thresholds (ADR-144): `fitness_line_target` (soft line ceiling),
+`fitness_line_limit` (hard line ceiling), `fitness_char_limit` (hard character ceiling), and
+`fitness_line_length` (hard prose line width, always 100). All measure content only —
 frontmatter is excluded. The provenance file always travels with the Core package.
 
 The mechanism is documented in [practice-lineage.md](practice-lineage.md), which serves as both

@@ -1,3 +1,313 @@
+## Session 2026-04-01 — Principles Reformatting & Graduation
+
+### What Was Done
+
+- Reformatted principles.md prose to 100-char line width (70
+  violations → 0)
+- Raised fitness limits to reflect reformatted file: line target
+  450, line limit 575, char limit 23000 (was 200/275/16500 — the
+  old char limit used a 60-char/line formula on unwrapped prose
+  averaging 126 chars/line)
+- Graduated 4 principle-level insights from napkin to principles.md:
+  - "Semantic naming over mechanism naming" → Code Design section
+  - "Don't extract single-consumer abstractions" → Refactoring
+  - "Dead tests are worse than no tests" → Universal Testing Rules
+  - "Assert effects, not constants" → Universal Testing Rules
+- Fixed typo: "critically thinking" → "critical thinking"
+
+### Patterns to Remember
+
+- **Reformatting increases line count ~2.6x**: 170 unwrapped lines
+  → 447 wrapped lines for the same content. Fitness line limits
+  must be recalculated after reformatting, not just scaled from
+  the pre-wrap count.
+- **Char limit is the honest volume constraint**: After wrapping,
+  line count inflates from short lines, headers, blank lines, and
+  list continuation. The char limit tracks actual content volume
+  regardless of formatting choices.
+- **Reference-style links solve prose width violations**: Long
+  inline links push lines past 100 chars. Moving the URL to a
+  reference definition at section end keeps prose lines short.
+
+---
+
+## Session 2026-04-01 — Post-ADR-144 Consolidation
+
+### What Was Done
+
+- Archived fitness-two-threshold-model.plan.md to archive/completed/
+- Updated current/README.md with completed status and archive path
+- Deleted stale .cursor/plans/ for completed consolidation and learning
+  loop plans
+- Compressed practice-lineage.md fitness section (32668→31567 chars,
+  under 32000 limit)
+- Fixed stale napkin entries: old field names, old capacity percentages
+- Fixed distilled.md prose-width violation (line 59)
+
+### Patterns to Remember
+
+- **Char limit formula is wrong for unwrapped files**: ADR-144 migration
+  used `fitness_line_limit * 60` for char limits, but files with
+  unwrapped prose average 100-126 chars/line. principles.md is 21486
+  chars vs 16500 limit — 30% over, a pre-existing structural problem.
+  The user must decide: raise the char limit, or reformat the file.
+- **Prose line-width violations are widespread and pre-existing**: 10+
+  files have prose lines exceeding 100 chars. These files were never
+  wrapped to 100 chars. Addressing this requires a dedicated
+  reformatting pass across the repository, not a per-file fix during
+  consolidation.
+
+---
+
+## Session 2026-04-01 — Consolidation Round
+
+### What Was Done
+
+- Archived consolidation-workflow-evolution.plan.md to archive/completed/
+- Deleted stale duplicate learning-loop-refinement.plan.md from current/
+- Updated current/README.md references
+- Graduated 7 entries from distilled.md to permanent docs:
+  troubleshooting.md (4 agent workflow entries + Codex reviewer),
+  development-practice.md (file-move test checks, response augmentation),
+  testing-strategy.md (E2E assertion placement)
+
+### Patterns to Remember
+
+- **Capacity is never a blocker for graduation**: The "frozen" or
+  "effectively frozen" framing is wrong. The appropriate response is always
+  to add useful understanding. Fitness management (compress, refine, split,
+  extend) handles the consequences in the next session. Treating capacity
+  as a graduation blocker causes useful knowledge to accumulate in the
+  wrong tier indefinitely.
+- **Graduation and fitness are separate concerns**: Step 7 (graduate) asks
+  "is this stable and does it have a natural home?" Step 8 (fitness) asks
+  "is this file too full?" They run in sequence because graduation may
+  create fitness pressure, and fitness management resolves it. Running them
+  as a single gate (only graduate if there's room) defeats the purpose of
+  having both steps.
+
+---
+
+## Session 2026-04-01 — Consolidation Command Corrections
+
+### What Was Done
+
+- Broadened step 5 from "Extract code patterns" to "Extract reusable patterns"
+  covering all types of learning (process, architecture, structural, behavioural,
+  agent operational, domain-specific)
+- Added outgoing Practice Context pathway to step 9 — content useful for the
+  wider Practice network but not Core-ready goes to `.agent/practice-context/outgoing/`
+- Fixed Practice Core governance in step 7: structural changes are rare but valid,
+  gated by user approval, not categorically excluded
+- Corrected napkin entry that preserved an incorrect framing from the plan's
+  Non-Goals
+
+### Patterns to Remember
+
+- **Consolidation captures all learning, not just code**: the napkin records
+  everything, distilled.md filters for high-signal, and the code-patterns
+  directory has the highest barrier. But the entire pipeline processes all
+  types of learning — process, meta, structural, behavioural, domain-specific.
+  Step names and descriptions must reflect this breadth or agents will
+  self-censor observations that don't look like "code."
+- **Outgoing Practice Context is a distinct pathway**: not everything belongs
+  in Practice Core. Domain-specific observations, structural notes, and
+  patterns that are useful but not universal go to outgoing context for
+  broadcast. Core gets Learned Principles and structural proposals (with
+  user approval).
+- **Incorrect assumptions persist through napkin entries**: the plan's
+  Non-Goal ("Changing the practice-core portable files") was wrong, but
+  the napkin entry in the previous session refined rather than corrected it,
+  preserving the incorrect assumption in a slightly different form. User
+  feedback is the correction signal — apply it fully, don't negotiate a
+  compromise with the original incorrect framing.
+
+---
+
+## Session 2026-04-01 — Learning Loop Refinement
+
+### What Was Done
+
+- Absorbed the distillation SKILL into the consolidation command as an inline
+  protocol (step 6). Distillation had exactly one consumer.
+- Added explicit graduation criteria (stable? natural home? capacity?) in step 7.
+- Made fitness management active (analyse, refine, split, extend) in step 8.
+- Deleted canonical distillation skill and all platform adapters.
+- Updated practice-core files, practice-index, ADR-131 (broken path fix).
+- Created future strategic plan for full agent infrastructure coherence audit.
+
+### Patterns to Remember
+
+- **Single-consumer skill anti-pattern**: Graduated to principles.md
+  Refactoring section as "Don't extract single-consumer abstractions."
+- **ADR-125 "thin wrapper" scope**: the thin wrapper contract applies to
+  platform adapters wrapping canonical content, NOT to the canonical
+  command-to-skill relationship. Commands and skills are sibling Layer 1
+  artifacts. A "thick" orchestrating command is architecturally sound per
+  ADR-135's process_executor example.
+- **Practice-index skill count was stale**: practice-index.md said 19 skills
+  but the actual count was 23 (22 after deletion). Always verify counts against
+  the filesystem, not just decrement from the last recorded number.
+- **Empty directories persist after file deletion**: deleting a file doesn't
+  remove its parent directory. The portability validator checks for SKILL.md
+  presence inside skill directories, so empty directories with no SKILL.md
+  cause false positives. Always rmdir after deleting the last file.
+- **Broader infrastructure debt**: the single-consumer pattern likely exists
+  elsewhere across commands, skills, rules, agents, and adapters. A future
+  audit plan has been created at
+  `.agent/plans/agentic-engineering-enhancements/future/agent-infrastructure-coherence-audit.plan.md`.
+- **Practice-core is not a separate concern**: the plan's Non-Goals said
+  "Changing the practice-core portable files (governed by the plasmid exchange
+  model)" -- but the work required modifying three practice-core files
+  (practice.md, practice-lineage.md, practice-bootstrap.md) plus the
+  CHANGELOG. The Practice describes the system it lives inside. When the
+  system evolves, the Practice must evolve too. Reference updates are routine.
+  Structural changes (new sections, reorganisation, new artefact types) are
+  rare but valid — they require user approval, not categorical exclusion.
+  Plans should never treat practice-core as out of scope; the correct gate
+  is user approval for structural changes, not a blanket prohibition.
+- **Fitness pressure on practice-core** (post ADR-144 migration):
+  practice-lineage.md is **over** char limit (32668/32000) — blocking,
+  needs compression. practice.md chars at 99.6% (21914/22000) — tight
+  but under limit. testing-strategy.md lines 404/target 410 — healthy.
+  troubleshooting.md lines 308/target 315 — healthy.
+
+## Session 2026-04-01 — Frontend Practice Plan: Reviewer Findings Resolution
+
+### What Was Done
+
+- Resolved all 14 reviewer-surfaced decisions (R1-R14) from the seven-reviewer pass
+- Updated the plan to DECISION-COMPLETE — ALL REVIEWER FINDINGS RESOLVED
+
+### Key Architectural Decisions Worth Remembering
+
+- **MCP App HTML resources are directly testable**: For a11y testing, serve the
+  HTML resource content directly to a Playwright page — no iframe embedding needed.
+  The host's sandbox/CSP is the host's responsibility, not ours (R10)
+- **Testing reviewer cluster pattern**: The user wants test-reviewer to evolve into
+  a cluster entry point (like code-reviewer), split by test type with shared
+  principles at the entry. Not implemented in this plan but documented in ADR-146
+  as a future-facing recommendation (R5)
+- **Provenance is storytelling, not credit**: "Think less boardroom, more Dreamtime."
+  Both repos appear in the chain because both are part of the knowledge journey.
+  This reframes how we write provenance entries (R6)
+- **Four-field fitness frontmatter is the standard** (ADR-144): All governed docs
+  carry `fitness_line_target`, `fitness_line_limit`, `fitness_char_limit`,
+  `fitness_line_length` (supersedes R9 — old three-field model replaced)
+- **Old provenance indices are not uniquely identifying**: They can be deleted
+  without information loss because positional order is retained in the array.
+  This is metadata, not code — principles.md's "no compatibility layers" applies
+  to runtime code, not evolving metadata schemas (R14)
+- **Phase 1F hard-blocks Phase 2**: Agents reference ADRs in reading requirements.
+  Temporal coupling between documentation and agent creation is real and must be
+  sequenced, not parallelised
+- **ADR-135 naming deviation is acknowledged tech debt**: New agents use `-reviewer`
+  suffix despite ADR-135 deciding to drop it. Committed to batch rename
+- **packages/design/ requires ADR-041 amendment**: Fifth workspace category with
+  its own dependency direction rules. Produces CSS, not TS APIs
+
+---
+
+## Session 2026-04-01 — Frontend Practice Integration Research
+
+### What Was Done
+
+- Thorough `start-right-thorough` grounding for cross-workspace analysis
+- Full survey of 5 repos for design token patterns, a11y approaches, and
+  frontend architecture: oak-components, Oak-Web-Application,
+  oak-ai-lesson-assistant, opal-connection-site, starter-app-spike
+- Line-by-line reading of all 7 incoming Practice Core files
+- Analysis of 6 new frontend/UI practice-context files from opal-connection-site
+- Search across all plan directories for existing React/frontend/UI specialist plans
+- Created comprehensive report-plan on disk
+
+### Patterns to Remember
+
+- **oak-components tokens are TS-first, not CSS-first**: TypeScript objects +
+  styled-components theme. No framework-agnostic consumption path. This is the
+  key gap the new workspaces need to fill.
+- **Three competing styling stacks in oak-ai-lesson-assistant**: Tailwind +
+  styled-components + Radix Themes. No centralised token governance. No jsx-a11y
+  ESLint. No axe suite. A cautionary example.
+- **opal-connection-site has the cleanest token architecture**: Pure CSS custom
+  properties, three tiers, framework-agnostic, Playwright + axe-core WCAG 2.2 AA
+  as blocking gate.
+- **starter-app-spike has the most sophisticated system**: 12-mode matrix
+  (light/dark × standard/high/low/CVD/monochrome), generated CSS from TS build
+  scripts, 17 custom semantic tokens. But tightly coupled to oak-components
+  internals.
+- **Incoming Practice Core (provenance index 17) matches local copy**: No new
+  Core changes to integrate. All value is in the practice-context layer.
+- **Provenance index linearity creates false equivalence**: Index 17 in one
+  history != index 17 in another. Propose switching to UUIDs.
+- **Zero frontend specialist agents exist**: The entire reviewer roster is
+  backend-focused. This is a clear gap given WS3 Phases 4-5 build React UI.
+- **Two Core Proposals ready for adoption**: Browser testing taxonomy (4 proof
+  surfaces + 9th quality gate) and UI reviewer roster (accessibility-reviewer +
+  design-system-reviewer).
+- **User decisions needed**: Two new workspaces (token harness + Oak token set),
+  full specialist suite (6 agents), Practice evolution (provenance UUIDs).
+
+### User Directives
+
+- Design tokens: two new workspaces, framework-agnostic, consumed by React and
+  static/Astro apps
+- Full suite of UI/UX/a11y/React specialists needed
+- Incoming Practice from opal-connection-site is fully applicable
+- All workspace repos are useful perspectives, NOT canonical or best practice
+- A11y is a primary concern at ALL stages
+- Design token system will be based on idiomatic design best practice
+- Next session does the implementation; this session records findings and plans
+- **Sequencing**: Practice integration → create agents → agents review Practice
+  integration → token infrastructure → widget work
+- **Blocking relationship**: Token infrastructure blocks widget, but token
+  feature-completeness does NOT block widget. Basic alpha-quality foundation
+  clears the gate. Token system and widget improve in tandem after that.
+- **First step of next session**: Render the plan decision-complete by resolving
+  all open questions in Part 5 before any implementation begins.
+
+---
+
+## Session 2026-04-01 — URL Naming Collision Remediation Plan
+
+### What Was Done
+
+- Created `url-naming-collision-remediation.plan.md` in `current/` lane
+  covering: decorator fix, type widening, rename, search-CLI boundary
+  relocation, ADR succession.
+- Invoked Fred (architecture) and docs-adr reviewer on the plan draft.
+- Incorporated critical reviewer findings: Phase 1→2 conditional guard
+  transition gap, `isolatedUrl` vs `oakUrl` semantic duplication question,
+  ADR-132 documentation gap, missing template sections.
+- **Naming decision resolved**: `oakUrl` (align with upstream). Rationale:
+  SDK concept 1 and upstream concept 3 are semantically identical — same
+  concept deserves same name. `isolatedUrl` rejected as it would create new
+  duplication.
+- Added full semantic documentation: `oakUrl` = slug-based direct URL,
+  `canonicalUrl` = context-rich curriculum-path URL.
+- Added decorator behaviour decision matrix (4 cases).
+
+### Patterns to Remember
+
+- **Two URL concepts, two names**: `oakUrl` (direct, slug-based) and
+  `canonicalUrl` (context-rich, curriculum-path). Same concept = same name.
+- **Decorator skips injection when upstream provides `oakUrl`**: Eliminates
+  duplication on `LessonSummaryResponseSchema` and `LessonAssetsResponseSchema`.
+- **Phase 1→2 transition**: After rename, the guard checks for `oakUrl` in
+  properties (to prevent double injection), not `canonicalUrl`. Critical to
+  update the guard in Task 2.3.
+- **SDK-injected `oakUrl` should include `format: "uri"`**: Matches upstream
+  definition, prevents type widening, generates `z.url()`.
+- **ADR-132 must be updated alongside ADR-047**: Both use old terminology.
+- **`generateSubjectProgrammesUrl` duplicates `urlForSubject`**: The generated
+  function already exists; the search-CLI wrapper should delegate, not
+  duplicate.
+
+## Session 2026-04-01 — URL Naming Clash Review (Read-Only)
+
+Superseded by the remediation plan session above. Findings captured in
+`url-naming-collision-remediation.plan.md` (see `current/` lane).
+
 ## Session 2026-03-31 — WS3 Phase 3 Truth Repair Closure
 
 ### What Was Done
@@ -43,12 +353,9 @@
 
 ### Key Observations
 
-- **Dead tests are worse than no tests**: `*.characterisation.test.ts` didn't
-  match vitest's `*.unit.test.ts` / `*.integration.test.ts` include pattern.
-  These "safety net" tests had NEVER run. When activated, one immediately
-  caught a real assertion error (`toHaveBeenCalledOnce()` was wrong — the spy
-  is called 8 times across tools, resources, and prompts). Always check the
-  vitest config when adding new test file naming conventions.
+- **Dead tests are worse than no tests**: Graduated to principles.md
+  Universal Testing Rules. The domain-specific context (characterisation
+  test naming vs vitest include pattern) stays here as reference.
 - **`vi.fn()` (bare) satisfies any function type**: The `Mock<(...args: any) => any>`
   type from vitest is assignable to any function signature, avoiding the need
   for type assertions in test fakes. This is the cleanest pattern for recording
@@ -144,10 +451,8 @@ Key new insight not yet in distilled.md (distilled at ceiling):
   `pnpm turbo run type-check lint test` (in-process only). E2E tests run
   separately via `pnpm test:e2e`. RED specs that specify future behaviour
   should be `*.e2e.test.ts` so they don't block commits during the RED phase.
-- **Assert effects, not constants**: Test `WIDGET_TOOL_NAMES.size > 0` asserts
-  a constant value. Test "at least one tool in tools/list has
-  `_meta.ui.resourceUri`" asserts product behaviour through the protocol. The
-  latter survives refactoring; the former is fragile and tests configuration.
+- **Assert effects, not constants**: Graduated to principles.md
+  Universal Testing Rules.
 
 ## Session 2026-03-31 — WS3 Phase 1: Delete Legacy Widget Framework
 
@@ -166,9 +471,8 @@ Key observations:
   protocol compliance; architecture reviewer wanted YAGNI cleanup of auth
   bypass; test reviewer found vacuous passes and process.env violation. Each
   perspective was valuable — no single reviewer caught everything.
-- **Semantic naming > mechanism naming**: `overrideToolsListHandler` tells you
-  HOW; `preserveSchemaExamplesInToolsList` tells you WHY. The latter makes the
-  call site self-documenting and explains the module's removal condition.
+- **Semantic naming > mechanism naming**: Graduated to principles.md
+  Code Design section as "Semantic naming over mechanism naming."
 - **Interim state requires explicit documentation**: When a resource is
   temporarily unregistered but its auth bypass entry persists, every affected
   file needs a comment explaining the gap and the restoration plan.
@@ -216,3 +520,9 @@ Key observations:
 - **`register-json-resources.ts` exists on main**: New file that partially
   duplicates `register-resources.ts`. Do not wire it into keystone resolution —
   flag for post-merge tidy-up.
+- **Distilled.md graduation round**: The characterisation "agent-operational,
+  domain-specific" was a false reason to keep entries out of permanent docs —
+  the Practice and Directives ARE permanent homes for agent-operational content.
+  Graduated 14+ entries: TypeScript gotchas → typescript-practice.md,
+  documentation workflow → development-practice.md, troubleshooting → troubleshooting.md,
+  architecture patterns → development-practice.md. Freed ~50 lines in distilled.md.

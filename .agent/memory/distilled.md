@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 200
+fitness_line_target: 200
+fitness_line_limit: 275
+fitness_char_limit: 16500
+fitness_line_length: 100
 split_strategy: "Extract settled entries to permanent docs (ADRs, governance, READMEs); this is the specialist refinement layer"
 ---
 
@@ -12,12 +15,11 @@ Every entry earned its place by changing behaviour.
 `napkin-2026-02-24.md` through `napkin-2026-03-28.md`
 (sessions 2026-02-10 to 2026-03-28).
 
-**Permanent documentation**: Many entries have graduated to
-permanent docs. See TypeScript Practice, Testing Strategy,
-CONTRIBUTING.md, Troubleshooting, Development Practice, and
-widget-rendering.md for settled patterns. What remains here
-is agent-operational, domain-specific, or not yet mature
-enough for permanent documentation.
+**Permanent documentation**: Entries graduate to permanent
+docs when stable and a natural home exists. Always graduate
+useful understanding — fitness management handles the
+consequences. What remains here is repo/domain-specific
+context with no natural permanent home.
 
 ---
 
@@ -54,7 +56,8 @@ enough for permanent documentation.
 - `src/bulk/generators/` duplicates `vocab-gen/generators/`
   files — both must be updated in parallel until resolved.
   **Decomposition**: strategic plan at
-  `.agent/plans/architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`
+  `.agent/plans/architecture-and-infrastructure/codegen/future/`
+  `sdk-codegen-workspace-decomposition.md`
   (M1 prerequisite satisfied, awaiting promotion).
   Turbo overrides are temporary — see ADR-065.
 - Always add new public exports to the barrel file
@@ -67,17 +70,9 @@ enough for permanent documentation.
 
 ## TypeScript (Domain-Specific)
 
-- `TSESLint.FlatConfig.Plugin` from `@typescript-eslint/utils`
-  bridges the `Rule.RuleModule` vs `TSESLint.RuleModule`
-  gap — eliminates `as unknown as ESLint.Plugin['rules']`
-- `@typescript-eslint/no-restricted-imports` `group` patterns
-  use minimatch: `*` matches one path segment (not `/`),
-  `**` matches zero or more segments. Use `**` for deep
-  sub-path coverage
-- Zod `.passthrough()` deprecated in Zod v4 — use `.loose()`
-- `localeCompare` uses locale-sensitive collation that may
-  diverge from `Array.sort()` unicode order. For binary
-  search against `sort()`-ordered data, use `===`/`<`/`>`
+Graduated to `docs/governance/typescript-practice.md`:
+Zod v4 `.loose()`, `TSESLint.FlatConfig.Plugin`,
+`no-restricted-imports` minimatch, `localeCompare` divergence.
 
 ## Elasticsearch
 
@@ -99,94 +94,59 @@ enough for permanent documentation.
 
 ## Testing (Domain-Specific)
 
+Graduated to `testing-strategy.md`: E2E assertion placement.
+Graduated to `development-practice.md`: file-move test checks.
+
 - `ensurePathsOnSchema` creates a new object (spread) —
   use `toStrictEqual` not `toBe` for structural equality
 - `server.e2e.test.ts` has a hardcoded aggregated tools
   list — must be updated when adding new aggregated tools
-- When moving files between workspaces, check whether
-  removed tests should be recreated in the destination
 - Capturing calls in a typed array (`const calls: T[] = []`)
   beats `vi.fn().mock.calls` which leaks `any`
-- Keep E2E assertions on system/transport invariants; prove
-  runtime stub semantics in SDK unit/integration tests, not
-  by asserting server output against the same stub path
 
-## Documentation (Agent Operational)
+## Documentation
 
-- Moving plan artefacts is cross-cutting: always grep for
-  old paths in `*.ts`, `*.mjs`, `*.json`, not just `*.md`
-  (test configs and CLI defaults hardcode plan paths)
-- When researching external documentation, fetch
-  `sitemap.xml`, `llms.txt`, or the docs index first; do
-  not guess URL patterns and burn time on avoidable 404s
-- Session prompts in `.agent/prompts/` should be updated
-  at end of each session, not just napkin
-- Resolve every reviewer with
-  `pnpm agent-tools:codex-reviewer-resolve <name>` before
-  trusting a Codex review; in this sandbox the underlying
-  `tsx` call may need escalation because it opens a local
-  IPC pipe under `/var/folders/...`
-- Keep pushed checkpoint state and local worktree state
-  explicitly separate in plans/prompts/checkpoints; do not
-  imply the latest pushed commit already contains local
-  cleanup that is still in flight
+Graduated to `docs/governance/development-practice.md`:
+plan artefact path grepping, external docs research,
+session prompt updates, checkpoint/worktree separation,
+file-move test recreation, response augmentation best-effort.
+
+Graduated to `docs/operations/troubleshooting.md`:
+Codex reviewer resolution.
 
 ## Build System (Domain-Specific)
 
-- Turbo dependency model: see ADR-065 (items 6–7) for
-  overrides, phantom tasks, and `^build` ordering
-- `pnpm qg` is the canonical read-only gate set, but it does
-  not currently include static-analysis sweeps (`pnpm knip`,
+- Turbo dependency model: ADR-065 (items 6–7)
+- `pnpm qg` is the canonical read-only gate set, but does
+  not include static-analysis sweeps (`pnpm knip`,
   `pnpm depcruise`) unless a plan explicitly requires them
 
 ## Architecture (Domain-Specific)
 
-- **Response augmentation is best-effort**: wrap
-  `augmentBody()` in try-catch so decoration never fails the
-  API call. Pure functions throw; middleware boundary logs.
-- When a directive review reveals significant work, update
-  the plan BEFORE coding
-- When a pre-existing eslint override exists in a file you
-  touch, fix the root cause (DRY/split)
+Graduated to permanent docs: plans before code, ESLint
+progressive re-enablement, response augmentation best-effort
+(development-practice.md), security metadata enforcement
+(safety-and-security.md).
+
 - Aggregated tools return `Promise<CallToolResult>` directly
   — they do NOT go through `ToolExecutionResult`
 - `AggregatedToolName` type derives from
   `keyof typeof AGGREGATED_TOOL_DEFS`
-- search-sdk → curriculum-sdk dependency is banned (ADR-108).
-  Shared data lives in `@oaknational/sdk-codegen/synonyms`.
-  `SearchRetrievalService` in curriculum-sdk is ISP, not
-  duplication
+- ADR-108 bans search-sdk → curriculum-sdk dependency.
+  Shared data lives in `@oaknational/sdk-codegen/synonyms`
 - When removing an entry from `LIB_PACKAGES`, check ALL
   packages that called `createLibBoundaryRules` with that
   name — zone uses `../${otherLib}/**` relative paths
 - When splitting a core package with runtime deps: schemas
-  stay in core, runtime pipeline moves to libs. No
-  re-exports, no compatibility layer.
-- Progressive ESLint re-enablement: narrow overrides from
-  directory-wide to file-specific first
+  stay in core, runtime pipeline moves to libs
 - When extracting types from a composition root, the root
   may still need a local `import type` for its own usage
-- For security metadata, enforce invariants at startup/load
-  boundaries and fail hard with remediation guidance
-- **HMAC-signed URLs without single-use constraints are
-  replay vectors** — within the TTL window, a valid URL can
-  amplify upstream API load. Rate-limit the consuming route.
-  See `safety-and-security.md` §Amplification Vectors
-- **`trust proxy` is mandatory behind any reverse proxy** —
-  without it, `req.ip` is the CDN's IP and IP-based rate
-  limiting is useless. Configure before rate limit middleware
 
-## Troubleshooting (Agent-Specific)
+## Troubleshooting
 
-| Symptom | Fix |
-|---------|-----|
-| StrReplace fails on plan files | Unicode quotes (U+2019, U+201C/D) block matching |
-| Reviewer reports failures that seem wrong | Re-run specific gates to verify — reviewers may read stale output. Verify reviewer claims with `glob` or `ls` — they produce consistent false positives on files and repo names |
-| Background reviewer agents not returned | Lost at end of conversation turn — re-invoke in next session |
-| MCP tool call fails with wrong param type | Always read tool descriptors before calling — parameter types are explicit in schema |
-| CI lint/test fails but passes locally with `--force` | Check CI logs for "cache hit, replaying logs" — stale remote Turbo cache. Ensure `turbo.json` `inputs` use `**/*.ts` not directory enumeration |
-| Commitlint rejects commit | See CONTRIBUTING.md §Code Standards for `subject-case` and `body-max-line-length` rules |
-| Pre-commit hook output too large to read | Turbo replays all cached logs. Redirect to file and read the end for the actual error |
-| Worktree agent patches don't apply to feature branch | Worktree agents branch from `main`, not the current feature branch. When `main` and feature have diverged, manual file copy + reconciliation is needed |
-| Pre-commit blocks partial fixes on lint-red branches | The hook runs full `type-check lint test` across all packages — fix ALL lint errors before attempting any commit |
-| ESLint complexity 10 on a 15-line function | `??` and `?.` each count as branches. Extract an options-resolver helper to move the nullish coalescing out of the main function |
+Graduated to `docs/operations/troubleshooting.md`:
+StrReplace unicode quotes, reviewer false positives,
+CI Turbo cache staleness, pre-commit output/blocking,
+ESLint complexity with `??`/`?.`, background reviewer
+agents, MCP tool call param types, commitlint rejections,
+worktree agent patches, Codex reviewer resolution.

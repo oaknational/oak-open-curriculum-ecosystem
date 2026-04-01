@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 300
+fitness_line_target: 315
+fitness_line_limit: 425
+fitness_char_limit: 25500
+fitness_line_length: 100
 split_strategy: 'Extract workspace-specific troubleshooting to workspace READMEs'
 ---
 
@@ -224,6 +227,22 @@ pnpm smoke:dev:stub
 
 Each gate may fix issues for subsequent gates (e.g. `format:root` fixes formatting that `lint:fix` then passes).
 
+### CI Passes Locally but Fails in CI
+
+Check CI logs for "cache hit, replaying logs" — stale remote Turbo cache. Ensure `turbo.json` `inputs` use `**/*.ts` not directory enumeration.
+
+### Pre-Commit Hook Output Too Large
+
+Turbo replays all cached logs during the hook. Redirect output to a file and read the end for the actual error.
+
+### Pre-Commit Blocks Partial Fixes
+
+The hook runs full `type-check lint test` across all packages. On lint-red branches, fix ALL lint errors before attempting any commit — partial fixes will still be blocked by errors elsewhere.
+
+### ESLint Complexity Threshold on Short Functions
+
+`??` and `?.` each count as branches toward the complexity limit. A 15-line function can hit complexity 10 from nullish coalescing alone. Extract an options-resolver helper to move the coalescing out of the main function.
+
 ## File Move and Refactoring Issues
 
 ### ESLint Rule Overrides After File Moves
@@ -253,6 +272,36 @@ When `tsconfig.build.json` narrows `include` from a wide base, add explicit `roo
 ### Vitest v4 Test Filtering
 
 `--testPathPattern` fails in vitest v4. Use file paths as positional args instead: `pnpm vitest run path/to/test.ts`.
+
+## Agent Workflow Issues
+
+### Background Reviewer Agents Not Returned
+
+Reviewer sub-agents dispatched near the end of a conversation turn may be lost when the turn completes. Re-invoke in the next session.
+
+### MCP Tool Call Fails with Wrong Param Type
+
+Always read tool descriptors before calling — parameter types are explicit in the schema. Do not guess parameter shapes.
+
+### Commitlint Rejects Commit
+
+See CONTRIBUTING.md §Code Standards for `subject-case` and `body-max-line-length` rules.
+
+### Worktree Agent Patches Don't Apply to Feature Branch
+
+Worktree agents branch from `main`, not the current feature branch. When `main` and feature have diverged, manual file copy and reconciliation is needed.
+
+### Codex Reviewer Not Resolved
+
+Resolve every reviewer with `pnpm agent-tools:codex-reviewer-resolve <name>` before trusting a Codex review. The underlying `tsx` call may need escalation because it opens a local IPC pipe under `/var/folders/...`.
+
+### StrReplace Fails on Plan Files
+
+Unicode quotes (U+2019, U+201C/D) block exact string matching. Copy the target string from the file rather than typing it.
+
+### Reviewer Reports Failures That Seem Wrong
+
+Re-run specific gates to verify — reviewers may read stale output. Verify reviewer claims with `glob` or `ls`; they produce consistent false positives on file names and repo names.
 
 ## TSDoc Issues
 

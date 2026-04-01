@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 150
+fitness_line_target: 150
+fitness_line_limit: 200
+fitness_char_limit: 12000
+fitness_line_length: 100
 split_strategy: 'Extract growing sections to dedicated governance docs by responsibility'
 ---
 
@@ -75,10 +78,23 @@ NEVER disable any quality gates or Git hooks.
 - **Domain boundaries** - Create folders with index.ts as the public API when splitting files
 - **Question architecture** - If DIP causes complexity, the architecture may need refactoring
 - **Single source of truth** - One responsibility, one reason to change, one place for each concept
+- **Progressive ESLint re-enablement** - When a pre-existing override exists in a file you touch, fix the root cause. Narrow directory-wide overrides to file-specific first
+
+### File Moves Between Workspaces
+
+When moving files between workspaces, check whether removed tests should be recreated in the destination. Also verify ESLint overrides, README relative links, and `tsconfig` include patterns transfer correctly.
+
+### Response Augmentation is Best-Effort
+
+Wrap `augmentBody()` and similar decoration calls in try-catch so decoration never fails the API call. Pure functions throw; middleware boundary logs.
 
 ### Validation After Rewrites
 
 After any major rewrite or re-architecture, validation against the real system is non-negotiable before wiring into consumers.
+
+### Plans Before Code
+
+When a directive review reveals significant work, update the plan BEFORE coding. Do not start implementation until the plan reflects the current understanding.
 
 ## Git Workflow
 
@@ -102,6 +118,10 @@ After any major rewrite or re-architecture, validation against the real system i
 - ADR Consequences sections should use past tense for completed actions — stale future tense creates a false impression of outstanding work.
 - Fenced code blocks without language specifier fail markdownlint MD040.
 - NEVER compress docs to meet line limits — split files by responsibility instead.
+- When moving plan artefacts, grep for old paths in `*.ts`, `*.mjs`, `*.json`, not just `*.md` — test configs and CLI defaults hardcode plan paths.
+- When researching external documentation, fetch `sitemap.xml`, `llms.txt`, or the docs index first; do not guess URL patterns.
+- Session prompts in `.agent/prompts/` should be updated at end of each session, not just the napkin.
+- Keep pushed checkpoint state and local worktree state explicitly separate in plans/prompts/checkpoints.
 
 ## Related Documentation
 

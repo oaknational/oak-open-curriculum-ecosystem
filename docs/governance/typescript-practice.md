@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 150
+fitness_line_target: 150
+fitness_line_limit: 200
+fitness_char_limit: 12000
+fitness_line_length: 100
 split_strategy: 'Extract detailed gotcha collections to a companion gotchas file; keep principles and patterns here'
 ---
 
@@ -56,6 +59,7 @@ ALLOWED_COLOR_SET.has(someString); // widens at lookup, not at definition
 
 - `ZodIssue` is deprecated — use `core.$ZodIssue` via `import type { core } from 'zod'`
 - `.merge()` is deprecated — use `A.extend(B.shape)` to compose Zod object schemas (caught by `@typescript-eslint/no-deprecated`)
+- `.passthrough()` is deprecated — use `.loose()` for pass-through behaviour
 - Shared Zod schemas are opt-in contracts: define fields as required in the schema, consumers use `.partial()` for optionality. This preserves contract semantics: "if you use this capability, you must satisfy these fields."
 
 ## Preserving Type Information
@@ -111,3 +115,6 @@ Compile-time type assertions (e.g. `AssertNoX<T>`) are inert unless the resultin
 - `const noop = () => {};` triggers `no-empty-function` lint — use `const noop = () => undefined;`
 - `{}` as a generic constraint (`T extends {}`) is an escape hatch, not a solution. Use specific per-type builder functions
 - `expect.any(String)` returns `any` which triggers `no-unsafe-assignment` — use `toHaveProperty` for structural checks on `unknown` values
+- `TSESLint.FlatConfig.Plugin` from `@typescript-eslint/utils` bridges the `Rule.RuleModule` vs `TSESLint.RuleModule` gap — eliminates `as unknown as ESLint.Plugin['rules']`
+- `@typescript-eslint/no-restricted-imports` `group` patterns use minimatch: `*` matches one path segment (not `/`), `**` matches zero or more segments. Use `**` for deep sub-path coverage
+- `localeCompare` uses locale-sensitive collation that may diverge from `Array.sort()` unicode order. For binary search against `sort()`-ordered data, use `===`/`<`/`>`

@@ -1,7 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_count: 550
-fitness_char_count: 32000
+fitness_line_target: 550
+fitness_line_limit: 725
+fitness_char_limit: 32000
 fitness_line_length: 100
 ---
 
@@ -20,10 +21,13 @@ See §Frontmatter and §Plasmid Exchange below.
 
 ## Frontmatter
 
-The trinity files carry YAML frontmatter with `provenance` (pointer to `provenance.yml`) and three
-fitness ceilings: `fitness_line_count` (content lines), `fitness_char_count` (content chars), and
-`fitness_line_length` (max prose width). All measure content only — frontmatter is excluded. See
-§Fitness Functions.
+The trinity files carry YAML frontmatter with `provenance` (pointer to
+`provenance.yml`) and four fitness thresholds ([ADR-144][adr-144]):
+`fitness_line_target` (soft), `fitness_line_limit` (hard),
+`fitness_char_limit` (hard), `fitness_line_length` (hard, always 100).
+All measure content only — frontmatter excluded. See §Fitness Functions.
+
+[adr-144]: ../../docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md
 
 ### Provenance (provenance.yml)
 
@@ -256,36 +260,28 @@ natural trigger point.
 
 ## Fitness Functions
 
-The Practice has negative feedback for what enters (the three-part bar), but without a governor on
-cumulative growth each addition clears the bar while the files quietly bloat. The plasmid exchange
-mechanism amplifies this: improvements flow between repos, each exchange potentially adding but
-never compressing.
+The three-part bar governs what enters but not cumulative growth. Without
+fitness limits, files bloat — compounded by plasmid exchange adding content
+across repos.
 
-### Thresholds
+### Thresholds (Two-Threshold Model — ADR-144)
 
-Three fitness dimensions are available to any file with a fitness function.
-Files declare only the dimensions their role needs. All are soft ceilings —
-exceeding any triggers tightening, not a hard block. Lines and chars count
-content only (frontmatter excluded). Width applies to prose only (code blocks,
-tables, frontmatter excluded).
+Four fitness fields govern each tracked file. All measure content only
+(frontmatter excluded). Width applies to prose only (code blocks, tables,
+frontmatter excluded).
 
-| Frontmatter key      | What it guards                                  |
-| -------------------- | ----------------------------------------------- |
-| `fitness_line_count`  | Content lines — structural sprawl               |
-| `fitness_char_count`  | Content characters — honest volume (ungameable) |
-| `fitness_line_length` | Prose line width — readability and diff quality  |
+| Frontmatter key        | Threshold | What it guards                                  |
+| ---------------------- | --------- | ----------------------------------------------- |
+| `fitness_line_target`  | Soft      | Content lines — signal to refine (agent-extendable) |
+| `fitness_line_limit`   | Hard      | Content lines — ceiling (user approval to change)   |
+| `fitness_char_limit`   | Hard      | Content characters — non-adjustable                 |
+| `fitness_line_length`  | Hard      | Prose line width — non-adjustable, always 100       |
 
-**Why three dimensions:** Line count alone is gameable — reflowing prose to
-fewer, wider lines reduces the count without reducing cognitive load.
-Character count is the honest volume constraint. Prose line width is the
-anti-gaming closure. Together they form a constraint triangle where gaming one
-dimension triggers another.
-
-Trinity files carry all three ceilings. Other docs may use only
-`fitness_line_count`, adding `fitness_char_count` and `fitness_line_length`
-when anti-gaming or readability pressure warrants it. Validators check only
-declared dimensions. Only shallow-browsing entry points (root README,
-quickstart, VISION) are exempt entirely.
+Target exceedance warns; limit exceedance blocks. Only the user may raise
+hard limits. The four fields form a constraint triangle — gaming one
+dimension (fewer lines via reflowing) triggers another (characters or
+width). All governed files carry all four fields. Only shallow entry
+points (root README, quickstart, VISION) are exempt.
 
 ### Growth Governance
 
@@ -299,10 +295,9 @@ Two sections within the trinity have their own fitness governors:
 
 ### Tightening Process
 
-When a file exceeds its ceiling: identify grown sections, merge overlapping principles, remove
-examples that have served their teaching purpose, compress while preserving coverage. Present
-tightened versions to the user before committing. Tightening is distillation applied at the file
-level — "what can be said more concisely without losing meaning?"
+When a file exceeds its ceiling: merge overlapping principles, remove
+spent examples, compress while preserving coverage. Present tightened
+versions to the user before committing.
 
 ## Plasmid Exchange
 
@@ -414,13 +409,14 @@ deviations. Preserve and integrate them.
 4. Write `testing-strategy.md` encoding the Testing Philosophy above, with local test targets.
 5. Write `metacognition.md` from the condensed version in `practice-bootstrap.md` (it is universal).
 6. Follow `practice-bootstrap.md` for the remaining artefacts: sub-agent definitions, workflow
-   commands, rules, and skills (start-right, napkin, distillation). For each artefact type,
+   commands, rules, and skills (start-right, napkin). For each artefact type,
    create the canonical content in `.agent/` first, then add thin platform adapters. The bootstrap
    file provides annotated templates and format specifications for every artefact type.
 7. **Practice Core files.** If building from scratch: write all seven files in
    `.agent/practice-core/` — the trinity (`practice.md`, this lineage doc, `practice-bootstrap.md`)
-   each with YAML frontmatter (`provenance: provenance.yml`, `fitness_line_count`,
-   `fitness_char_count`, `fitness_line_length`), plus `README.md`, `index.md`, `CHANGELOG.md`, and
+   each with YAML frontmatter (`provenance: provenance.yml`, `fitness_line_target`,
+   `fitness_line_limit`, `fitness_char_limit`, `fitness_line_length`), plus `README.md`,
+   `index.md`, `CHANGELOG.md`, and
    `provenance.yml` (with an index-0 entry per trinity file). If received from another repo: the
    seven files already exist — append a new entry to each file's chain in `provenance.yml`.
 8. **Create `.agent/practice-index.md`** — the bridge file that carries navigable links from the

@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 400
+fitness_line_target: 410
+fitness_line_limit: 550
+fitness_char_limit: 33000
+fitness_line_length: 100
 split_strategy: "Extract examples to a companion examples file; split by test level (unit/integration/E2E) if needed"
 ---
 
@@ -382,6 +385,10 @@ Every workspace `vitest.config.ts` MUST follow one of two patterns. Deviations c
 - **Pattern 2 (custom)**: Define a workspace-specific config. Non-negotiable: `exclude` MUST contain `'**/*.e2e.test.ts'`. `include` SHOULD use explicit conventions (`*.unit.test.ts`, `*.integration.test.ts`) not broad `*.test.ts` globs.
 
 Workspaces with `*.e2e.test.ts` files MUST also have `vitest.e2e.config.ts` (extending `vitest.e2e.config.base.ts` or workspace-specific) and a `test:e2e` script in `package.json`.
+
+## Test Assertion Placement
+
+Keep E2E assertions on system/transport invariants; prove runtime stub semantics in SDK unit/integration tests, not by asserting server output against the same stub path.
 
 ## Test Configuration Gotchas
 

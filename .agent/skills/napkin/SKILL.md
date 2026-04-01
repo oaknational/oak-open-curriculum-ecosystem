@@ -29,7 +29,8 @@ First thing, every session — read both files before doing anything:
 
 If neither file exists, create `napkin.md` at
 `.agent/memory/napkin.md` with a session heading and start
-logging. The [distillation skill](../distillation/SKILL.md)
+logging. The distillation rotation in the
+[consolidation command](../../commands/consolidate-docs.md)
 handles creating `distilled.md` at rotation time.
 
 ## Continuous Updates
@@ -84,10 +85,10 @@ Add `### Mistakes Made` or `### Fixes` subsections as needed.
 
 ## Rotation
 
-When the napkin exceeds ~500 lines, follow the
-[distillation skill](../distillation/SKILL.md) to extract
-high-signal content into `distilled.md`, archive the napkin,
-and start fresh.
+When the napkin exceeds ~500 lines, follow step 6 of the
+[consolidation command](../../commands/consolidate-docs.md) to
+extract high-signal content into `distilled.md`, archive the
+napkin, and start fresh.
 
 ## Example
 

@@ -19,8 +19,8 @@ Executable plans that are in progress now.
 - [ws3-phase-0-baseline-and-red-specs.plan.md](ws3-phase-0-baseline-and-red-specs.plan.md) —
   WS3 companion phase plan for grounding, contamination baseline, and RED test
   setup.
-- [ws3-phase-1-delete-legacy-widget-framework.plan.md](ws3-phase-1-delete-legacy-widget-framework.plan.md) —
-  WS3 companion phase plan for deleting dead widget framework surfaces.
+- ~~ws3-phase-1-delete-legacy-widget-framework.plan.md~~ —
+  Complete and [archived](../archive/completed/ws3-phase-1-delete-legacy-widget-framework.plan.md).
 - [ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md](ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md) —
   WS3 companion phase plan for fresh React MCP App scaffolding and tooling.
 - [ws3-phase-3-canonical-contracts-and-runtime.plan.md](ws3-phase-3-canonical-contracts-and-runtime.plan.md) —
@@ -33,14 +33,6 @@ Executable plans that are in progress now.
   WS3 companion phase plan for user-search UI delivery and helper-tool flow.
 - [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
   WS3 companion phase plan for docs, gates, reviewers, and closure checks.
-
-Additional active closure work:
-
-- [ws3-phase-3-schema-fallout-closure.plan.md](ws3-phase-3-schema-fallout-closure.plan.md) —
-  Completed local closure record for the regenerated `canonicalUrl`/`oakUrl`
-  lesson-summary fallout. This remains separate from the queued
-  [current/canonical-url-enforcement.plan.md](../current/canonical-url-enforcement.plan.md)
-  and stays in `active/` until archival.
 
 Completed and archived:
 
@@ -60,6 +52,10 @@ Completed and archived:
   Complete and archived.
 - [merge-readiness.plan.md](../archive/completed/merge-readiness.plan.md) —
   Branch merged on 2 March 2026.
+- [ws3-phase-1-delete-legacy-widget-framework.plan.md](../archive/completed/ws3-phase-1-delete-legacy-widget-framework.plan.md) —
+  Legacy widget framework deleted on 31 March 2026.
+- [ws3-phase-3-schema-fallout-closure.plan.md](../archive/completed/ws3-phase-3-schema-fallout-closure.plan.md) —
+  `canonicalUrl`/`oakUrl` lesson-summary schema fallout closed on 31 March 2026.
 
 Next-up queue: [current/README.md](../current/README.md)
 Later backlog: [future/README.md](../future/README.md)

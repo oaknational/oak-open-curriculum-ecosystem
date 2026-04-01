@@ -63,9 +63,10 @@ Each stage serves a broader audience: the napkin serves the current session, dis
 
 **Fitness functions** prevent unbounded growth at every stage. The napkin
 triggers distillation at ~500 lines. Distilled targets <200 lines. Permanent
-docs carry YAML frontmatter ceilings such as `fitness_line_count`,
-`fitness_char_count`, and `fitness_line_length`, with a `split_strategy` to
-describe what happens when the ceiling is exceeded. Without these governors,
+docs carry YAML frontmatter thresholds (ADR-144): `fitness_line_target` (soft),
+`fitness_line_limit` (hard), `fitness_char_limit` (hard), and
+`fitness_line_length` (hard), with a `split_strategy` to describe what
+happens when a ceiling is exceeded. Without these governors,
 the learning loop simply moves accumulation downstream.
 
 The loop is **self-referential**: rules about rule creation, patterns about distillation quality, and insights about consolidation all flow through the same cycle. If any link breaks — if the napkin stops capturing meta-mistakes, or consolidation never graduates insights about consolidation — the loop is degrading. [ADR-131 §The Self-Referential Property](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) provides the diagnostic signals.

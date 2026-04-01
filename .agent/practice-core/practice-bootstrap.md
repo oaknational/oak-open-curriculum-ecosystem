@@ -1,7 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_count: 575
-fitness_char_count: 30000
+fitness_line_target: 575
+fitness_line_limit: 750
+fitness_char_limit: 30000
 fitness_line_length: 100
 ---
 
@@ -480,15 +481,18 @@ command with the following abstract workflow:
    graduated entries, archive the old napkin, start fresh. See
    §Distillation.
 5. **Graduate settled content.** For each entry in `distilled.md`, apply
-   three criteria: (a) **stable** — not contradicted by recent work,
-   (b) **natural home** — an existing permanent doc where it belongs,
-   (c) **capacity** — the target doc has room, or should be split/extended.
-   When all three are met, create the permanent entry first, then remove
-   from `distilled.md`.
-6. **Manage fitness limits.** For files at or approaching their ceiling:
-   **analyse** (is content appropriately dense?), **refine** (compress,
-   deduplicate), **split** (follow the file's `split_strategy`), or
-   **extend** (raise the limit with rationale if genuinely valuable).
+   two criteria: (a) **stable** — not contradicted by recent work,
+   (b) **natural home** — an existing permanent doc where it belongs.
+   When both are met, create the permanent entry first, then remove from
+   `distilled.md`. Always graduate useful understanding — fitness limits
+   are a signal to action (step 6), never a reason to defer graduation.
+6. **Manage fitness thresholds** (see ADR-144). Two levels:
+   - *Target exceeded* (warning): **refine** (compress, deduplicate),
+     **split** (follow `split_strategy`), or **extend target** (agents
+     may raise `fitness_line_target` modestly with rationale).
+   - *Limit exceeded* (blocking): **refine** or **split** to get below
+     the limit. Only the user may raise `fitness_line_limit`,
+     `fitness_char_limit`, or `fitness_line_length`.
 7. **Manage the practice exchange.** Two directions:
    - *Incoming*: integrate files from `.agent/practice-core/incoming/`
      following the provenance chain, three-part bar (validated by real work?

@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 100
+fitness_line_target: 100
+fitness_line_limit: 150
+fitness_char_limit: 9000
+fitness_line_length: 100
 split_strategy: "This is a focused directive; if it grows, extract implementation details to the SDK README"
 ---
 

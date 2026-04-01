@@ -155,6 +155,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-141: MCP Apps Standard as Only UI Surface](141-mcp-apps-standard-primary.md)
 - [ADR-142: `@clerk/mcp-tools` Adopt-or-Explain Decision](142-clerk-mcp-tools-adopt-or-explain.md)
 - [ADR-143: Coherent Structured Fan-Out for the Sentry and OpenTelemetry Foundation](143-coherent-structured-fan-out-for-observability.md)
+- [ADR-144: Two-Threshold Fitness Model](144-two-threshold-fitness-model.md)
 
 ## Key Architectural Decisions
 
@@ -189,6 +190,7 @@ For understanding the agentic engineering practice:
 - **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional fourth layer for agent-accessible CLI/MCP interaction with live domain systems
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
+- **[ADR-144](144-two-threshold-fitness-model.md)** - Two-threshold fitness model: target (soft, agent-extendable) vs limit (hard, user-approval) with consistent character and line-width governance
 
 For understanding semantic search and Elastic-native AI/ML approach:
 

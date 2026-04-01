@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 400
+fitness_line_target: 400
+fitness_line_limit: 525
+fitness_char_limit: 31500
+fitness_line_length: 100
 split_strategy: 'Extract detailed sections to docs/engineering/ or governance docs; keep contributor workflow here'
 ---
 

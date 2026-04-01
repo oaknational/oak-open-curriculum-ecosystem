@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 80
+fitness_line_target: 80
+fitness_line_limit: 125
+fitness_char_limit: 7500
+fitness_line_length: 100
 split_strategy: "Keep concise; this is a reference extracted from AGENT.md"
 ---
 
