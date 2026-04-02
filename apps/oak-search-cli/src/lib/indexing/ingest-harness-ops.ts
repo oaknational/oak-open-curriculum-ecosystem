@@ -1,5 +1,4 @@
 import { sanitiseForJson, type Logger } from '@oaknational/logger';
-import { typeSafeValues } from '@oaknational/type-helpers';
 import type { SearchIndexKind, SearchIndexTarget, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
 import {
@@ -104,6 +103,7 @@ export function summariseOperations(
     sequence_facets: 0,
     threads: 0,
   };
+  let totalDocs = 0;
 
   for (let i = 0; i < operations.length; i += 2) {
     const action = operations[i];
@@ -113,10 +113,10 @@ export function summariseOperations(
     const kind = inferKindFromIndex(action.index._index);
     if (kind) {
       counts[kind] += 1;
+      totalDocs += 1;
     }
   }
 
-  const totalDocs = typeSafeValues(counts).reduce((acc, value) => acc + value, 0);
   return { target, totalDocs, counts };
 }
 

@@ -5,7 +5,7 @@
  * with its canonical projection config, observability wrapping, and auth
  * interception.
  *
- * The per-request HTTP handler factory lives in {@link ./mcp-handler.ts}.
+ * The per-request HTTP handler factory lives in `mcp-handler.ts`.
  */
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';

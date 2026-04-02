@@ -1,7 +1,7 @@
 ---
 name: MCP Apps Standard Migration Plan
 overview: "Strategic planning anchor for the remaining Oak MCP Apps work. Defines the canonical target architecture, the live execution stack, and the remaining dependency order."
-lastValidatedDate: 2026-03-31
+lastValidatedDate: 2026-04-02
 todos:
   - id: canonical-research
     content: "Maintain the canonical MCP Apps research summary and keep it aligned with the live executable plans."
@@ -12,6 +12,9 @@ todos:
   - id: domain-c-execution
     content: "Execute the remaining MCP Apps work through the umbrella migration plan and the active WS3 child plan."
     status: pending
+  - id: ws3-design-token-prerequisite
+    content: "Replace the temporary shell and deliver the minimal design-token infrastructure prerequisite before WS3 Phase 4 and Phase 5 widget UI work."
+    status: in_progress
   - id: c8-auth-metadata-invariant-hardening
     content: "Implement auth metadata invariant hardening."
     status: completed
@@ -24,7 +27,7 @@ isProject: false
 # MCP Apps Standard Migration Plan
 
 **Status**: ACTIVE
-**Last Updated**: 2026-03-31
+**Last Updated**: 2026-04-02
 
 ---
 
@@ -75,7 +78,8 @@ Read the live workstream in this order:
 3. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
 4. [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
 5. [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
-6. [current/README.md](current/README.md)
+6. [current/ws3-design-token-prerequisite.plan.md](current/ws3-design-token-prerequisite.plan.md)
+7. [current/README.md](current/README.md)
 
 When touching runtime contract, metadata visibility, resource auth, or tool
 registration, also read:
@@ -99,9 +103,11 @@ WS1: ADR + metadata contract                ✓ complete
 WS2: runtime migration                      ✓ complete
 Runtime boundary simplification             ✓ complete
 WS3: fresh React MCP App rebuild            ▶ active
-  Phase 3 runtime closure                   ▶ active
-  Phase 3 schema fallout closure            ✓ complete locally
-WS4: search UI delivery                     ▶ executed inside WS3
+  Phase 3 runtime closure                   ✓ complete
+  Design-token prerequisite                 ▶ current (shell/token prerequisite in progress; blocks Phase 4 and Phase 5)
+  Phase 4: curriculum-model view            ⏳ pending after token prerequisite
+  Phase 5: user-search view                 ⏳ pending after token prerequisite
+  Phase 6: docs/gates/review                ⏳ pending
 C8: auth metadata invariant hardening       ✓ complete
 Output schemas follow-up                    ⏳ current
 Future additive feature backlog             ⏳ blocked on remaining canonical work
@@ -118,6 +124,7 @@ The remaining UI work is carried by:
 - [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
 - [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
 - [active/ws3-phase-3-schema-fallout-closure.plan.md](active/ws3-phase-3-schema-fallout-closure.plan.md)
+- [current/ws3-design-token-prerequisite.plan.md](current/ws3-design-token-prerequisite.plan.md)
 
 Detailed WS3/WS4 execution scope, sequencing, and enforcement live in the
 active umbrella and child plans. This roadmap intentionally avoids duplicating
@@ -136,6 +143,14 @@ Complete on 31 March 2026. These plans remain the closure evidence:
 [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
 remains valid follow-on work. It can advance independently where transport
 exposure does not depend on unfinished MCP Apps execution.
+
+### Design-token prerequisite
+
+[current/ws3-design-token-prerequisite.plan.md](current/ws3-design-token-prerequisite.plan.md)
+is the current prerequisite for the first widget UI work. It owns the
+temporary-shell replacement plus the minimal `packages/design/`
+implementation and widget CSS import path required before Phase 4 and Phase 5
+start.
 
 ## Validation
 

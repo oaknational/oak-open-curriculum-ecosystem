@@ -5,7 +5,7 @@
  * Provides pure functions for discovering and parsing bulk download files.
  * All file system operations use Node.js fs/promises for async I/O.
  *
- * Pure filename-parsing utilities live in {@link reader-utils} to avoid
+ * Pure filename-parsing utilities live in \`reader-utils.ts\` to avoid
  * coupling callers that only need string parsing to generated types.
  *
  * @example

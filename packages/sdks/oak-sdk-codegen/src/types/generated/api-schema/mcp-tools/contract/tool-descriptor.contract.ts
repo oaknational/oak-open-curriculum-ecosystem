@@ -75,7 +75,7 @@ export interface InvokeResult {
 
 /**
  * Shared prefix for the TypeError thrown by generated executors when the
- * upstream API returns a documented error HTTP status (>= 400).
+ * upstream API returns a documented error HTTP status of 400 or above.
  *
  * Both the generated `invokeToolByName` (producer) and the authored
  * `mapErrorToResult` (consumer) reference this constant to maintain

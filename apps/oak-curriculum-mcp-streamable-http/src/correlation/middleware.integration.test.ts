@@ -6,10 +6,6 @@ import type { Logger } from '@oaknational/logger';
 import { createCorrelationMiddleware } from './middleware.js';
 import { createFakeLogger } from '../test-helpers/fakes.js';
 
-interface TestResponse {
-  correlationId: string | undefined;
-}
-
 function createTestApp(logger: Logger): ReturnType<typeof express> {
   const app = express();
   app.use(createCorrelationMiddleware(logger));
@@ -31,7 +27,11 @@ describe('createCorrelationMiddleware', () => {
     const app = createTestApp(logger);
 
     const response = await request(app).get('/test');
-    const body = response.body as TestResponse;
+    const body: unknown = response.body;
+    expect(isObjectWithStringField(body, 'correlationId')).toBe(true);
+    if (!isObjectWithStringField(body, 'correlationId')) {
+      throw new Error('Expected response body to include correlationId');
+    }
 
     expect(response.status).toBe(200);
     expect(response.headers['x-correlation-id']).toMatch(/^req_\d+_[a-f0-9]{6}$/);
@@ -44,7 +44,11 @@ describe('createCorrelationMiddleware', () => {
     const testCorrelationId = 'test-123';
 
     const response = await request(app).get('/test').set('X-Correlation-ID', testCorrelationId);
-    const body = response.body as TestResponse;
+    const body: unknown = response.body;
+    expect(isObjectWithStringField(body, 'correlationId')).toBe(true);
+    if (!isObjectWithStringField(body, 'correlationId')) {
+      throw new Error('Expected response body to include correlationId');
+    }
 
     expect(response.status).toBe(200);
     expect(response.headers['x-correlation-id']).toBe(testCorrelationId);

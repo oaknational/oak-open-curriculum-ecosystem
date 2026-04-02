@@ -28,7 +28,7 @@ describe('schema-sample-core', () => {
         },
         child: {
           $ref: '#/components/schemas/Child',
-        } as ReferenceObject,
+        } satisfies ReferenceObject,
       },
       required: ['title', 'count', 'child'],
     };

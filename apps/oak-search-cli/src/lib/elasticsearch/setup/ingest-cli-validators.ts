@@ -5,9 +5,9 @@
  */
 
 import { InvalidArgumentError } from 'commander';
+import { SEARCH_INDEX_KINDS } from '@oaknational/oak-search-sdk/read';
 import type { KeyStage, SearchSubjectSlug } from '../../../types/oak.js';
 import type { SearchIndexKind } from '../../search-index-target.js';
-import { SEARCH_INDEX_KINDS } from '../../search-index-target.js';
 import {
   isKeyStage as isValidKeyStage,
   isSubject as isValidSubject,

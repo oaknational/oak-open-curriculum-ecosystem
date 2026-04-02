@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- Cohesive helper module for batch generation */
 /**
  * Helper functions for batch index generation.
  *
@@ -12,13 +11,7 @@ import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { BulkOperations } from './indexing/bulk-operation-types';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
 import { ingestLogger } from './logger';
-import {
-  fetchPairData,
-  buildPairDocuments,
-  emitSequenceFacetEvents,
-  resolveSequenceSlugFromEntry,
-  type PairBuildContext,
-} from './index-oak-helpers';
+import { fetchPairData, buildPairDocuments, type PairBuildContext } from './index-oak-helpers';
 import type { SequenceFacetSource } from './indexing/sequence-facets';
 import {
   buildSequenceFacetSources,
@@ -26,10 +19,7 @@ import {
 } from './indexing/sequence-facet-index';
 import { fetchAndBuildThreadOps } from './indexing/thread-bulk-helpers';
 import { buildKs4ContextMap, type UnitContextMap } from './indexing/ks4-context-builder';
-
-// ============================================================================
-// Types
-// ============================================================================
+import { emitSequenceFacetEvents, resolveSequenceSlugFromEntry } from './sequence-entry-helpers';
 
 /**
  * Subject context needed to build batches (sequences, sources, unit context).
@@ -39,10 +29,6 @@ export interface SubjectContext {
   readonly sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
   readonly unitContextMap: UnitContextMap;
 }
-
-// ============================================================================
-// Subject Context Helpers
-// ============================================================================
 
 /**
  * Builds the context needed for a subject (sequences, sources, KS4 context).
@@ -173,10 +159,6 @@ async function buildSequenceSourcesWithEvents(
   return { sequenceSources, events };
 }
 
-// ============================================================================
-// Pair Building
-// ============================================================================
-
 /**
  * Result of building operations for a subject/keystage pair.
  */
@@ -220,10 +202,6 @@ export async function buildOpsForPair(
   return { operations, skipped: false };
 }
 
-// ============================================================================
-// Thread Building
-// ============================================================================
-
 /**
  * Fetches and builds thread operations for the given subjects.
  */
@@ -236,8 +214,6 @@ export async function buildThreadOps(
   ingestLogger.debug('Built thread operations', { count: threadOps.length / 2 });
   return threadOps;
 }
-
-// ============================================================================
 // Filtering Helpers
 // ============================================================================
 

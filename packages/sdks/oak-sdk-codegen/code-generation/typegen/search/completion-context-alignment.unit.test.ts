@@ -9,6 +9,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
+import type { EsFieldMapping } from './es-field-config.js';
 import {
   ALL_COMPLETION_CONTEXTS,
   LESSONS_COMPLETION_CONTEXTS,
@@ -29,28 +30,14 @@ import { generateCompletionContextsSchema } from './zod-schema-generator.js';
 /**
  * Extracts context names from ES completion field override.
  */
-function extractEsCompletionContexts(overrides: Record<string, unknown>): string[] {
+function extractEsCompletionContexts(
+  overrides: Readonly<Record<string, EsFieldMapping>>,
+): string[] {
   const titleSuggest = overrides.title_suggest;
-  if (!titleSuggest || typeof titleSuggest !== 'object') {
+  if (!titleSuggest?.contexts) {
     return [];
   }
-
-  // Check for contexts property
-  if (!('contexts' in titleSuggest)) {
-    return [];
-  }
-
-  const contextsValue = (titleSuggest as { contexts: unknown }).contexts;
-  if (!Array.isArray(contextsValue)) {
-    return [];
-  }
-
-  // Type guard for context item
-  const isContextItem = (item: unknown): item is { name: string } =>
-    typeof item === 'object' && item !== null && 'name' in item && typeof item.name === 'string';
-
-  const validContexts = contextsValue.filter(isContextItem);
-  return validContexts.map((ctx) => ctx.name);
+  return titleSuggest.contexts.map((context) => context.name);
 }
 
 /**
@@ -194,26 +181,19 @@ describe('Completion Context Alignment: Regression guard for original bug', () =
   it('lessons documents CANNOT have sequence context (the original bug)', () => {
     // This test documents the bug that was caught by strict ES mapping
     // Lessons should NOT have sequence context - it's a unit-level concept
-    const lessonsContexts = new Set(LESSONS_COMPLETION_CONTEXTS);
-
-    // Set.has() expects the set's value type; we assert that 'sequence' (not in that union) is not present
-    expect(lessonsContexts.has('sequence' as never)).toBe(false);
+    const lessonsContexts = new Set<string>(LESSONS_COMPLETION_CONTEXTS);
+    expect(lessonsContexts.has('sequence')).toBe(false);
 
     // Verify the ES override also lacks sequence
     const esContexts = extractEsCompletionContexts(LESSONS_FIELD_OVERRIDES);
     expect(esContexts).not.toContain('sequence');
   });
 
-  it('strict dynamic mapping would reject extra contexts at runtime', () => {
-    // This test verifies that our type system alignment would catch the bug
-    // If someone tries to add 'sequence' to lessons contexts, the types would fail
+  it('type-level contract excludes sequence from lessons contexts', () => {
     type LessonsContext = (typeof LESSONS_COMPLETION_CONTEXTS)[number];
+    type LessonsRejectsSequence = Extract<LessonsContext, 'sequence'> extends never ? true : false;
 
-    // @ts-expect-error - 'sequence' is not assignable to lessons context
-    const invalidContext: LessonsContext = 'sequence';
-
-    // This line exists to use the variable and avoid linter errors
-    // The real test is the @ts-expect-error above
-    expect(invalidContext).toBe('sequence');
+    const lessonsRejectsSequence: LessonsRejectsSequence = true;
+    expect(lessonsRejectsSequence).toBe(true);
   });
 });

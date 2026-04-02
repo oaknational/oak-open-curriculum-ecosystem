@@ -81,8 +81,7 @@ describe('Header Redaction E2E', () => {
 
       // Verify request succeeds
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('status');
-      expect((response.body as { status: string }).status).toBe('ok');
+      expect(response.body).toMatchObject({ status: 'ok' });
 
       // Verify response headers include correlation ID
       expect(response.headers['x-correlation-id']).toBeDefined();

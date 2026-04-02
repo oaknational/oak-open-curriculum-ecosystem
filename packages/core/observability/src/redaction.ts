@@ -2,10 +2,13 @@
  * Shared telemetry redaction helpers.
  *
  * The policy is recursive and value-oriented so it can be reused by logs,
- * spans, breadcrumbs, CLI metadata, and future Sentry hooks.
+ * spans, breadcrumbs, CLI metadata, and future Sentry hooks. It also covers
+ * secret-bearing wire formats such as URL query strings and form-encoded
+ * OAuth payloads, not just already-parsed objects.
  */
 
 import { typeSafeEntries, typeSafeFromEntries } from '@oaknational/type-helpers';
+import { redactFormEncodedString } from './redaction-form.js';
 import { redactUrlString } from './redaction-url.js';
 import type { TelemetryRecord, TelemetryValue } from './types.js';
 
@@ -29,11 +32,13 @@ const FULLY_REDACTED_KEYS = new Set([
   'dsn',
   'id_token',
   'ip',
+  'nonce',
   'password',
   'proxy-authorization',
   'refresh_token',
   'secret',
   'set-cookie',
+  'state',
   'token',
   'x-api-key',
   'x-auth-token',
@@ -51,10 +56,13 @@ const PARTIALLY_REDACTED_HEADERS = new Set([
 
 const REDACTED_QUERY_KEYS = new Set([
   'access_token',
+  'assertion',
   'api_key',
   'apikey',
+  'client_assertion',
   'client_secret',
   'code',
+  'code_verifier',
   'id_token',
   'nonce',
   'refresh_token',
@@ -96,19 +104,29 @@ function redactEmbeddedCredentials(value: string): string {
   return value
     .replace(/\b(Bearer|Basic)\s+[^\s,]+/giu, '$1 [REDACTED]')
     .replace(
-      /(^|\s)(--?(?:access-token|api-key|api_key|client-secret|client_secret|password|token)|(?:access_token|api_key|client_secret|password|token))=([^\s]+)/giu,
+      /(^|\s)(--?(?:access-token|api-key|api_key|client-secret|client_secret|password|token)|(?:access_token|api_key|client_secret|password|token))=([^\s&]+)/giu,
       '$1$2=[REDACTED]',
     );
 }
 
 function redactString(value: string): string {
-  return redactEmbeddedCredentials(
-    redactUrlString(value, {
-      normaliseKey,
-      redactedQueryKeys: REDACTED_QUERY_KEYS,
-      redactedValue: REDACTED_VALUE,
-    }),
-  );
+  const redactedUrl = redactUrlString(value, {
+    normaliseKey,
+    redactedQueryKeys: REDACTED_QUERY_KEYS,
+    redactedValue: REDACTED_VALUE,
+  });
+  const redactedFormPayload = redactFormEncodedString(redactedUrl, {
+    normaliseKey,
+    redactedQueryKeys: REDACTED_QUERY_KEYS,
+    redactedValue: REDACTED_VALUE,
+    shouldFullyRedactKey,
+  });
+
+  if (redactedFormPayload !== redactedUrl) {
+    return redactedFormPayload;
+  }
+
+  return redactEmbeddedCredentials(redactedUrl);
 }
 
 function redactScalarForKey(key: string | undefined, value: string): string {

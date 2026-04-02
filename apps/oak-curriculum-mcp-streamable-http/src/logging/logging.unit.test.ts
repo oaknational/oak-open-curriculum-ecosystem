@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { UnifiedLogger, normalizeError } from '@oaknational/logger';
-import type { Response } from 'express';
 import { unwrap } from '@oaknational/result';
 
 import { createHttpLogger, createChildLogger, extractCorrelationId } from './index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from '../runtime-config.js';
+import { createMockExpressResponse } from '../test-helpers/fakes.js';
 
 function createRuntimeConfig(overrides: Record<string, string> = {}): RuntimeConfig {
   const baseEnv: NodeJS.ProcessEnv = {
@@ -89,11 +89,10 @@ describe('createChildLogger', () => {
 
 describe('extractCorrelationId', () => {
   it('extracts correlation ID from res.locals', () => {
-    const mockRes = {
-      locals: {
-        correlationId: 'req_123456789_abc123',
-      },
-    } as Response;
+    const mockRes = createMockExpressResponse();
+    mockRes.locals = {
+      correlationId: 'req_123456789_abc123',
+    };
 
     const correlationId = extractCorrelationId(mockRes);
 
@@ -101,9 +100,8 @@ describe('extractCorrelationId', () => {
   });
 
   it('returns undefined when correlation ID is not in res.locals', () => {
-    const mockRes = {
-      locals: {},
-    } as Response;
+    const mockRes = createMockExpressResponse();
+    mockRes.locals = {};
 
     const correlationId = extractCorrelationId(mockRes);
 
@@ -111,7 +109,11 @@ describe('extractCorrelationId', () => {
   });
 
   it('returns undefined when res.locals is undefined', () => {
-    const mockRes = {} as Response;
+    const mockRes = createMockExpressResponse();
+    Object.defineProperty(mockRes, 'locals', {
+      configurable: true,
+      value: undefined,
+    });
 
     const correlationId = extractCorrelationId(mockRes);
 

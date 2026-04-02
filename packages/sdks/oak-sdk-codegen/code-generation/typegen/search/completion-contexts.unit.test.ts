@@ -23,7 +23,7 @@ describe('Completion Context Definitions', () => {
     });
 
     it('does NOT include sequence (lessons use unit-level contexts)', () => {
-      const contexts = LESSONS_COMPLETION_CONTEXTS as readonly string[];
+      const contexts = [...LESSONS_COMPLETION_CONTEXTS];
       expect(contexts).not.toContain('sequence');
     });
 
@@ -58,7 +58,7 @@ describe('Completion Context Definitions', () => {
     });
 
     it('does NOT include key_stage (sequences use phase)', () => {
-      const contexts = SEQUENCES_COMPLETION_CONTEXTS as readonly string[];
+      const contexts = [...SEQUENCES_COMPLETION_CONTEXTS];
       expect(contexts).not.toContain('key_stage');
     });
 

@@ -20,6 +20,20 @@ import type { MachineAuthObject } from '@clerk/backend';
 import { verifyClerkToken } from '@clerk/mcp-tools/server';
 import { createFakeMachineAuthObject } from '../../test-helpers/fakes.js';
 
+function assertAuthenticatedAuthObject(
+  auth: MachineAuthObject<'oauth_token'>,
+): asserts auth is MachineAuthObject<'oauth_token'> & {
+  isAuthenticated: true;
+  subject: string;
+  userId: string;
+  clientId: string;
+  scopes: string[];
+} {
+  if (!auth.isAuthenticated) {
+    throw new Error('Expected authenticated machine auth object');
+  }
+}
+
 /**
  * Creates a raw authenticated machine object with deliberate type violations.
  *
@@ -28,10 +42,31 @@ import { createFakeMachineAuthObject } from '../../test-helpers/fakes.js';
  * type forbids it). These raw objects test verifyClerkToken's runtime
  * null handling and misconfiguration resilience.
  *
- * The `as MachineAuthObject<'oauth_token'>` assertion is intentional —
- * the test is proving that the library handles type-violating inputs.
- * The eslint config for this file allows `as` assertions (see eslint.config.ts).
+ * The helper mutates a correctly typed fake at runtime so the test can pass
+ * invalid values without using type assertions.
  */
+function getRuntimeScopes(
+  overrides: readonly string[] | null | undefined,
+  fallback: readonly string[],
+): readonly string[] | null {
+  if (overrides === undefined) {
+    return fallback;
+  }
+
+  if (overrides === null) {
+    return null;
+  }
+
+  return Array.from(overrides);
+}
+
+function getRuntimeStringValue(
+  override: string | null | undefined,
+  fallback: string,
+): string | null {
+  return override === undefined ? fallback : override;
+}
+
 function createRawAuthObjectWithViolations(
   overrides: Partial<{
     userId: string | null;
@@ -40,23 +75,42 @@ function createRawAuthObjectWithViolations(
     tokenType: string;
   }>,
 ): MachineAuthObject<'oauth_token'> {
-  return {
-    tokenType: overrides.tokenType ?? 'oauth_token',
-    id: 'auth_123',
-    subject: overrides.userId !== undefined ? overrides.userId : 'user',
-    scopes:
-      overrides.scopes !== undefined
-        ? overrides.scopes === null
-          ? null
-          : Array.from(overrides.scopes)
-        : [],
-    userId: overrides.userId !== undefined ? overrides.userId : 'user',
-    clientId: overrides.clientId !== undefined ? overrides.clientId : 'client',
-    getToken: (): Promise<string> => Promise.resolve('token'),
-    has: () => true,
-    debug: () => ({}),
-    isAuthenticated: true,
-  } as MachineAuthObject<'oauth_token'>;
+  const auth = createFakeMachineAuthObject({
+    userId: overrides.userId ?? 'user',
+    clientId: overrides.clientId ?? 'client',
+    scopes: Array.from(overrides.scopes ?? []),
+  });
+  assertAuthenticatedAuthObject(auth);
+
+  Object.defineProperties(auth, {
+    tokenType: {
+      configurable: true,
+      value: overrides.tokenType ?? 'oauth_token',
+      writable: true,
+    },
+    subject: {
+      configurable: true,
+      value: getRuntimeStringValue(overrides.userId, auth.subject),
+      writable: true,
+    },
+    userId: {
+      configurable: true,
+      value: getRuntimeStringValue(overrides.userId, auth.userId),
+      writable: true,
+    },
+    clientId: {
+      configurable: true,
+      value: getRuntimeStringValue(overrides.clientId, auth.clientId),
+      writable: true,
+    },
+    scopes: {
+      configurable: true,
+      value: getRuntimeScopes(overrides.scopes, auth.scopes),
+      writable: true,
+    },
+  });
+
+  return auth;
 }
 
 describe('verifyClerkToken', () => {

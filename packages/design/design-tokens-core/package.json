@@ -1,0 +1,36 @@
+{
+  "name": "@oaknational/design-tokens-core",
+  "version": "0.0.0-development",
+  "private": true,
+  "description": "Pure helpers for validating DTCG token tiers and emitting Oak CSS custom properties",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist .turbo",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}

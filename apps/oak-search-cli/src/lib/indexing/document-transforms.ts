@@ -9,33 +9,23 @@
  * @see ADR-080 KS4 Metadata Denormalisation
  * @see buildLessonDocument - Shared lesson document builder
  */
-/* eslint-disable max-lines -- Document transforms require comprehensive field mappings */
 
-import { SUBJECT_TO_PARENT } from '@oaknational/curriculum-sdk';
 import type {
   KeyStage,
   SearchLessonsIndexDoc,
   SearchLessonSummary,
   SearchSubjectSlug,
-  SearchUnitRollupDoc,
   SearchUnitsIndexDoc,
   SearchUnitSummary,
   ParentSubjectSlug,
-  AllSubjectSlug,
 } from '../../types/oak';
 import {
   extractLessonDocumentFields,
-  extractRollupDocumentFields,
-  extractPedagogicalData,
-  createEnrichedRollupText,
   extractKs4DocumentFields,
   extractUnitEnrichmentFields,
 } from './document-transform-helpers';
 import { getKs4ContextForUnit, type UnitContextMap } from './ks4-context-builder';
-import {
-  generateLessonSemanticSummary,
-  generateUnitSemanticSummary,
-} from './semantic-summary-generator';
+import { generateLessonSemanticSummary } from './semantic-summary-generator';
 import { normaliseYears } from './document-transform-utils';
 import { extractThreadInfo } from './thread-and-pedagogical-extractors';
 import {
@@ -47,6 +37,7 @@ import { buildUnitDocument, type CreateUnitDocParams } from './unit-document-cor
 
 export { extractLessonPlanningFields } from './document-transform-helpers';
 export { normaliseYears, extractPassage } from './document-transform-utils';
+export { createRollupDocument, type CreateRollupDocumentParams } from './rollup-document-api';
 
 // Re-export LessonUnitInfo from shared module for backwards compatibility
 export type { LessonUnitInfo } from './lesson-document-core';
@@ -76,20 +67,6 @@ export interface CreateUnitDocumentParams {
 }
 
 /** Convert ThreadInfo to UnitThreadInfo format */
-/**
- * Derives phase slug from key stage.
- *
- * Phases are the fundamental curriculum division:
- * - `primary`: Years 1-6 (KS1 + KS2)
- * - `secondary`: Years 7-11 (KS3 + KS4)
- *
- * @param keyStage - The key stage slug
- * @returns The corresponding phase slug
- */
-function derivePhaseFromKeyStage(keyStage: KeyStage): 'primary' | 'secondary' {
-  return keyStage === 'ks1' || keyStage === 'ks2' ? 'primary' : 'secondary';
-}
-
 function convertThreadInfo(info: ReturnType<typeof extractThreadInfo>) {
   if (!info.slugs || info.slugs.length === 0) {
     return undefined;
@@ -250,61 +227,4 @@ export function extractLessonParamsFromAPI(p: CreateLessonDocumentParams): Creat
 export function createLessonDocument(params: CreateLessonDocumentParams): SearchLessonsIndexDoc {
   const docParams = extractLessonParamsFromAPI(params);
   return buildLessonDocument(docParams);
-}
-
-export interface CreateRollupDocumentParams {
-  summary: SearchUnitSummary;
-  snippets: string[];
-  /** Subject slug including KS4 variants (AllSubjectSlug). @see ADR-101 */
-  subject: AllSubjectSlug;
-  subjectTitle?: string;
-  keyStage: KeyStage;
-  keyStageTitle?: string;
-  subjectProgrammesUrl: string;
-  /** Fully qualified Oak URL for this unit, pre-validated by the caller. */
-  unitUrl: string;
-  unitContextMap: UnitContextMap;
-  /** Aggregated lesson data per unit - if provided, overrides summary.unitLessons */
-  lessonsByUnit?: ReadonlyMap<string, readonly string[]>;
-}
-
-/** Creates a rollup document for Elasticsearch indexing. */
-export function createRollupDocument(p: CreateRollupDocumentParams): SearchUnitRollupDoc {
-  const fields = extractRollupDocumentFields(p.summary, normaliseYears, p.lessonsByUnit);
-  const rollupText = createEnrichedRollupText(p.snippets, extractPedagogicalData(p.summary));
-  const ks4 = extractKs4DocumentFields(getKs4ContextForUnit(p.unitContextMap, p.summary.unitSlug));
-  const unitSemantic = generateUnitSemanticSummary(
-    p.summary,
-    p.keyStageTitle ?? p.keyStage,
-    p.subjectTitle ?? p.subject,
-  );
-
-  return {
-    unit_id: fields.unitSlug,
-    unit_slug: fields.unitSlug,
-    unit_title: fields.unitTitle,
-    subject_slug: p.subject,
-    subject_parent: SUBJECT_TO_PARENT[p.subject],
-    subject_title: p.subjectTitle,
-    key_stage: p.keyStage,
-    key_stage_title: p.keyStageTitle,
-    phase_slug: derivePhaseFromKeyStage(p.keyStage),
-    years: fields.years,
-    lesson_ids: fields.lessonIds,
-    lesson_count: fields.lessonIds.length,
-    unit_topics: fields.unitTopics,
-    unit_content: rollupText,
-    unit_structure: unitSemantic,
-    unit_content_semantic: rollupText,
-    unit_structure_semantic: unitSemantic,
-    unit_url: p.unitUrl,
-    subject_programmes_url: p.subjectProgrammesUrl,
-    sequence_ids: fields.sequenceIds,
-    thread_slugs: fields.threadSlugs,
-    thread_titles: fields.threadTitles,
-    thread_orders: fields.threadOrders,
-    ...extractUnitEnrichmentFields(p.summary),
-    ...ks4,
-    doc_type: 'unit',
-  };
 }

@@ -30,6 +30,22 @@ export interface ParsedBulkData {
   readonly lessonCount: number;
 }
 
+export interface LessonSlugDatasetSequenceData {
+  readonly subject: string;
+  readonly phase: 'primary' | 'secondary';
+  readonly sequenceSlug: string;
+  readonly lessonCount: number;
+  readonly lessonSlugs: readonly string[];
+}
+
+export interface LessonSlugDataset {
+  readonly generatedAt: string;
+  readonly totalLessonSlugCount: number;
+  readonly sequenceOrder: readonly string[];
+  readonly allLessonSlugs: readonly string[];
+  readonly sequences: Readonly<Record<string, LessonSlugDatasetSequenceData>>;
+}
+
 // ============================================================================
 // String Utilities
 // ============================================================================
@@ -76,40 +92,57 @@ function escapeForSingleQuote(str: string): string {
   return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 }
 
+function getLessonSlugConstantNames(sequenceSlug: string): {
+  countName: string;
+  setName: string;
+} {
+  const screamingSnakeCase = toScreamingSnakeCase(sequenceSlug);
+  return {
+    countName: `${screamingSnakeCase}_LESSON_COUNT`,
+    setName: `${screamingSnakeCase}_LESSON_SLUGS`,
+  };
+}
+
 // ============================================================================
 // Code Generation
 // ============================================================================
 
-/**
- * Generates TypeScript type definition for a single subject/phase.
- *
- * Produces:
- * - Const for lesson count
- * - Set for runtime validation (slugs stored in Set, not union type)
- *
- * Note: Union types with thousands of members crash TypeScript, so we use
- * Sets for runtime validation and branded string types for compile-time safety.
- *
- * @param data - Parsed bulk data for one subject/phase
- * @returns TypeScript source code string
- */
+export function buildLessonSlugDataset(allData: readonly ParsedBulkData[]): LessonSlugDataset {
+  const sequences: Record<string, LessonSlugDatasetSequenceData> = {};
+  const allLessonSlugs: string[] = [];
+
+  for (const data of allData) {
+    sequences[data.sequenceSlug] = {
+      subject: data.subject,
+      phase: data.phase,
+      sequenceSlug: data.sequenceSlug,
+      lessonCount: data.lessonCount,
+      lessonSlugs: [...data.lessonSlugs],
+    };
+    allLessonSlugs.push(...data.lessonSlugs);
+  }
+
+  return {
+    generatedAt: new Date().toISOString(),
+    totalLessonSlugCount: allLessonSlugs.length,
+    sequenceOrder: allData.map((data) => data.sequenceSlug),
+    allLessonSlugs,
+    sequences,
+  };
+}
+
 export function emitLessonSlugType(data: ParsedBulkData): string {
-  const constName = `${toScreamingSnakeCase(data.sequenceSlug)}_LESSON_COUNT`;
-  const setName = `${toScreamingSnakeCase(data.sequenceSlug)}_LESSON_SLUGS`;
+  const { countName, setName } = getLessonSlugConstantNames(data.sequenceSlug);
 
   const lines: string[] = [];
 
-  // Count constant
   lines.push('/**');
   lines.push(` * Count of lessons in ${data.sequenceSlug}.`);
   lines.push(' *');
   lines.push(' * @generated - DO NOT EDIT');
   lines.push(' */');
-  lines.push(`export const ${constName} = ${data.lessonCount} as const;`);
-
+  lines.push(`export const ${countName} = ${data.lessonCount} as const;`);
   lines.push('');
-
-  // Set for runtime validation
   lines.push('/**');
   lines.push(` * Set of valid slugs for ${data.sequenceSlug} runtime validation.`);
   lines.push(' *');
@@ -117,66 +150,103 @@ export function emitLessonSlugType(data: ParsedBulkData): string {
   lines.push(' *');
   lines.push(' * @generated - DO NOT EDIT');
   lines.push(' */');
-  if (data.lessonSlugs.length === 0) {
-    lines.push(`export const ${setName}: ReadonlySet<string> = new Set();`);
-  } else {
-    lines.push(`export const ${setName}: ReadonlySet<string> = new Set([`);
-    for (const slug of data.lessonSlugs) {
-      lines.push(`  '${escapeForSingleQuote(slug)}',`);
-    }
-    lines.push(']);');
-  }
+  lines.push(
+    `export const ${setName}: ReadonlySet<string> = createLessonSlugSet('${escapeForSingleQuote(data.sequenceSlug)}');`,
+  );
 
   return lines.join('\n');
 }
 
 /**
- * Generates complete TypeScript file with all lesson slug constants.
- *
- * Produces:
- * - File header with generation metadata
- * - Per-subject/phase Sets and counts
- * - Combined Set of all slugs
- * - Type guard function
- * - Branded type for validated slugs
- *
- * Note: We use Sets for runtime validation rather than massive union types
- * which would crash TypeScript compiler.
- *
- * @param allData - Parsed bulk data for all subjects/phases
- * @returns Complete TypeScript source file content
+ * Generates types for the JSON-backed lesson slug dataset.
+ */
+export function emitLessonSlugDatasetTypes(): string {
+  const lines: string[] = [];
+  lines.push('/**');
+  lines.push(' * Types for the JSON-backed lesson slug dataset.');
+  lines.push(' *');
+  lines.push(' * @generated - DO NOT EDIT');
+  lines.push(' */');
+  lines.push('');
+  lines.push('export interface LessonSlugDatasetSequenceData {');
+  lines.push('  readonly subject: string;');
+  lines.push("  readonly phase: 'primary' | 'secondary';");
+  lines.push('  readonly sequenceSlug: string;');
+  lines.push('  readonly lessonCount: number;');
+  lines.push('  readonly lessonSlugs: readonly string[];');
+  lines.push('}');
+  lines.push('');
+  lines.push('export interface LessonSlugDataset {');
+  lines.push('  readonly generatedAt: string;');
+  lines.push('  readonly totalLessonSlugCount: number;');
+  lines.push('  readonly sequenceOrder: readonly string[];');
+  lines.push('  readonly allLessonSlugs: readonly string[];');
+  lines.push('  readonly sequences: Readonly<Record<string, LessonSlugDatasetSequenceData>>;');
+  lines.push('}');
+  return lines.join('\n');
+}
+
+/**
+ * Generates the loader module that reads the JSON-backed lesson slug dataset.
  */
 export function emitAllLessonSlugTypes(allData: readonly ParsedBulkData[]): string {
   const lines: string[] = [];
+  const totalCount = allData.reduce((sum, data) => sum + data.lessonCount, 0);
 
-  // File header
   lines.push('/**');
   lines.push(' * Generated lesson slug validation data from bulk download files.');
   lines.push(' *');
   lines.push(' * Provides runtime validation Sets and type guards for ground truth lesson slugs.');
-  lines.push(' * Uses branded string types instead of massive unions (which crash TypeScript).');
+  lines.push(' * Uses a JSON-backed loader to avoid monolithic generated TypeScript data files.');
   lines.push(' *');
   lines.push(' * @generated - DO NOT EDIT');
   lines.push(` * Generated at: ${new Date().toISOString()}`);
   lines.push(' */');
   lines.push('');
-  lines.push('/* eslint-disable max-lines, max-statements, complexity */');
-  lines.push('// Generated file with 12,000+ lesson slugs');
+  lines.push("import rawLessonSlugData from './lesson-slugs-by-subject.data.json';");
+  lines.push("import { typeSafeEntries } from '@oaknational/type-helpers';");
+  lines.push(
+    "import type { LessonSlugDataset, LessonSlugDatasetSequenceData } from './lesson-slugs-by-subject.types.js';",
+  );
   lines.push('');
-
-  // Generate each subject/phase constants
-  for (const data of allData) {
-    lines.push(emitLessonSlugType(data));
-    lines.push('');
-  }
-
-  // Generate combined section
-  lines.push('// ============================================================================');
-  lines.push('// Combined Validation');
-  lines.push('// ============================================================================');
+  lines.push(
+    "function parseLessonSlugPhase(phase: string): LessonSlugDatasetSequenceData['phase'] {",
+  );
+  lines.push("  if (phase === 'primary' || phase === 'secondary') {");
+  lines.push('    return phase;');
+  lines.push('  }');
+  lines.push('  throw new Error(`Invalid lesson slug dataset phase: ${phase}`);');
+  lines.push('}');
   lines.push('');
-
-  // Branded type
+  lines.push('function loadLessonSlugData(): LessonSlugDataset {');
+  lines.push('  const sequences: Record<string, LessonSlugDatasetSequenceData> = {};');
+  lines.push(
+    '  for (const [sequenceSlug, sequenceData] of typeSafeEntries(rawLessonSlugData.sequences)) {',
+  );
+  lines.push('    sequences[sequenceSlug] = {');
+  lines.push('      subject: sequenceData.subject,');
+  lines.push('      phase: parseLessonSlugPhase(sequenceData.phase),');
+  lines.push('      sequenceSlug: sequenceData.sequenceSlug,');
+  lines.push('      lessonCount: sequenceData.lessonCount,');
+  lines.push('      lessonSlugs: sequenceData.lessonSlugs,');
+  lines.push('    };');
+  lines.push('  }');
+  lines.push('');
+  lines.push('  return {');
+  lines.push('    generatedAt: rawLessonSlugData.generatedAt,');
+  lines.push('    totalLessonSlugCount: rawLessonSlugData.totalLessonSlugCount,');
+  lines.push('    sequenceOrder: rawLessonSlugData.sequenceOrder,');
+  lines.push('    allLessonSlugs: rawLessonSlugData.allLessonSlugs,');
+  lines.push('    sequences,');
+  lines.push('  };');
+  lines.push('}');
+  lines.push('');
+  lines.push('const lessonSlugData = loadLessonSlugData();');
+  lines.push('');
+  lines.push(
+    "export type { LessonSlugDataset, LessonSlugDatasetSequenceData } from './lesson-slugs-by-subject.types.js';",
+  );
+  lines.push('');
   lines.push('/**');
   lines.push(' * Branded string type for validated lesson slugs.');
   lines.push(' *');
@@ -186,35 +256,26 @@ export function emitAllLessonSlugTypes(allData: readonly ParsedBulkData[]): stri
   lines.push(' */');
   lines.push("export type AnyLessonSlug = string & { readonly __brand: 'LessonSlug' };");
   lines.push('');
+  lines.push('function getSequenceData(sequenceSlug: string): LessonSlugDatasetSequenceData {');
+  lines.push('  const sequenceData = lessonSlugData.sequences[sequenceSlug];');
+  lines.push('  if (sequenceData === undefined) {');
+  lines.push('    throw new Error(`Missing lesson slug data for sequence: ${sequenceSlug}`);');
+  lines.push('  }');
+  lines.push('  return sequenceData;');
+  lines.push('}');
+  lines.push('');
 
-  // Generate combined Set
   lines.push('/**');
   lines.push(' * Combined Set of all valid lesson slugs for runtime validation.');
   lines.push(' *');
-  const totalCount = allData.reduce((sum, d) => sum + d.lessonCount, 0);
   lines.push(` * Total slugs: ${totalCount}`);
   lines.push(' *');
   lines.push(' * @generated');
   lines.push(' */');
-
-  if (allData.length === 0) {
-    lines.push('export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set();');
-  } else {
-    // Combine all slugs - collect into function to avoid type assertion
-    lines.push('function collectAllSlugs(): string[] {');
-    lines.push('  const all: string[] = [];');
-    for (const data of allData) {
-      const setName = `${toScreamingSnakeCase(data.sequenceSlug)}_LESSON_SLUGS`;
-      lines.push(`  for (const s of ${setName}) all.push(s);`);
-    }
-    lines.push('  return all;');
-    lines.push('}');
-    lines.push('export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set(collectAllSlugs());');
-  }
-
+  lines.push(
+    'export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set(lessonSlugData.allLessonSlugs);',
+  );
   lines.push('');
-
-  // Generate type guard
   lines.push('/**');
   lines.push(' * Type guard to check if a string is a valid lesson slug.');
   lines.push(' *');
@@ -232,41 +293,24 @@ export function emitAllLessonSlugTypes(allData: readonly ParsedBulkData[]): stri
   lines.push('  return ALL_LESSON_SLUGS.has(value);');
   lines.push('}');
   lines.push('');
-
-  // Total count
-  lines.push(`/** Total lessons across all subjects */`);
+  lines.push('/** Total lessons across all subjects */');
   lines.push(`export const TOTAL_LESSON_SLUG_COUNT = ${totalCount} as const;`);
   lines.push('');
-
-  // Generate slug-to-subject Map for cross-subject validation
-  lines.push('// ============================================================================');
-  lines.push('// Slug to Subject Mapping (for cross-subject contamination checks)');
-  lines.push('// ============================================================================');
-  lines.push('');
-  lines.push('/**');
-  lines.push(' * Map from lesson slug to subject slug for cross-subject validation.');
-  lines.push(' *');
-  lines.push(' * Used to detect when a ground truth file references lessons from');
-  lines.push(' * the wrong subject (e.g., maths ground truth containing science slugs).');
-  lines.push(' *');
-  lines.push(' * @generated');
-  lines.push(' */');
   lines.push('function buildSlugToSubjectMap(): Map<string, string> {');
   lines.push('  const map = new Map<string, string>();');
-  for (const data of allData) {
-    const setName = `${toScreamingSnakeCase(data.sequenceSlug)}_LESSON_SLUGS`;
-    lines.push(
-      `  for (const s of ${setName}) map.set(s, '${escapeForSingleQuote(data.subject)}');`,
-    );
-  }
+  lines.push('  for (const sequenceSlug of lessonSlugData.sequenceOrder) {');
+  lines.push('    const sequenceData = getSequenceData(sequenceSlug);');
+  lines.push('    for (const lessonSlug of sequenceData.lessonSlugs) {');
+  lines.push('      map.set(lessonSlug, sequenceData.subject);');
+  lines.push('    }');
+  lines.push('  }');
   lines.push('  return map;');
   lines.push('}');
+  lines.push('');
   lines.push(
     'export const SLUG_TO_SUBJECT: ReadonlyMap<string, string> = buildSlugToSubjectMap();',
   );
   lines.push('');
-
-  // Generate getSubjectForSlug helper
   lines.push('/**');
   lines.push(' * Get the subject for a given lesson slug.');
   lines.push(' *');

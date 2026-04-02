@@ -138,7 +138,7 @@ export function generateThreadOakUrl(threadSlug: string): null {
  * This function deliberately does not delegate to
  * {@link generateOakUrlWithContext} because the generated `urlForSubject`
  * path has different semantics: it takes an array of key stage slugs and
- * applies heuristics to select a preferred one (ks1 > ks2 > ks3 > ks4),
+ * applies heuristics to select a preferred one (ks1 \> ks2 \> ks3 \> ks4),
  * whereas this function takes a single explicit key stage slug. Wrapping the
  * single slug in an array would usually produce the same result, but the
  * heuristic exists for multi-stage cases and the direct construction is

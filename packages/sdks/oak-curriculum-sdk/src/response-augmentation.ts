@@ -165,9 +165,10 @@ function extractIdFromPath(path: string): string | undefined {
   return extractEntityIdFromPath(path, contentType);
 }
 
+export type OakUrlAugmentable = Readonly<Record<string, unknown>>;
+
 /** Augments an array response with Oak URL on each item */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Legitimate: generic captures full type
-export function augmentArrayResponseWithOakUrl<TItem extends object>(
+export function augmentArrayResponseWithOakUrl<TItem extends OakUrlAugmentable>(
   response: TItem[],
   path: string,
   method: HttpMethod,
@@ -185,8 +186,7 @@ export function augmentArrayResponseWithOakUrl<TItem extends object>(
 }
 
 /** Augments a single object response with Oak URL */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Legitimate: generic captures full type
-export function augmentResponseWithOakUrl<T extends object>(
+export function augmentResponseWithOakUrl<T extends OakUrlAugmentable>(
   response: T,
   path: string,
   method: HttpMethod,

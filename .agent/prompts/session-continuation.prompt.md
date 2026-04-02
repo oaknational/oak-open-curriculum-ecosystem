@@ -41,17 +41,21 @@ git log --oneline --decorate -10
   - `.agent/plans/agentic-engineering-enhancements/current/continuity-and-surprise-practice-adoption.plan.md`
 - **Completed plans** (this session):
   - `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md` — COMPLETE
-- **Current state**: WS3 Phase 3 canonical contracts are mostly done (1 deferred
-  item: non-UI host fallback-policy). The merge plan has 2 pending items
-  (security-hardening is BLOCKING, consolidation). Phases 4-6 are PENDING.
-  The frontend practice plan is archived as COMPLETE — specialist agents are
-  available for widget UI work. Design token infrastructure needs its own
-  planning scope (not part of the frontend practice plan). Continuity
-  adoption evidence has started with the first deep-consolidation entry.
-- **Current objective**: Resolve the WS3 merge plan's remaining items
-  (security-hardening, then Phase 3 fallback-policy closure), then proceed
-  to widget UI work (Phases 4-5) which will need design token infrastructure
-  planned as a prerequisite.
+  - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md` — COMPLETE
+- **Current state**: WS3 Phase 3 canonical contracts are COMPLETE, including
+  the non-UI host fallback proof. The merge-main plan is archived as COMPLETE
+  at
+  `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md`.
+  Phases 4-6 are still pending, and the next queued prerequisite is
+  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-design-token-prerequisite.plan.md`.
+  The frontend practice plan is archived as COMPLETE, so the specialist agents
+  are available for widget UI work. Continuity adoption evidence now includes a
+  real WS3 resumption, a `GO` session entry, and a second deep-consolidation
+  entry. Targeted Vitest slices and `pnpm markdownlint:root` are green; full
+  `pnpm qg` / `pnpm check` remain pending.
+- **Current objective**: Execute the queued design-token prerequisite so WS3
+  Phase 4 and Phase 5 can start with canonical package CSS instead of
+  permanent app-local brand values.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -70,37 +74,40 @@ git log --oneline --decorate -10
     and plan all reference 1.3 Editor's Draft (https://w3c.github.io/aria/).
   - axe-core WCAG 2.1 rules have their own tag family (`wcag21a`, `wcag21aa`)
 - **Open questions / low-confidence areas**:
-  - Whether the merge plan's security-hardening item is still current or
-    has been addressed by other work
-  - Whether Phase 3 fallback-policy can be closed or should be deferred
-    to Phase 6
-  - How design token infrastructure should be scoped — as part of WS3 or
-    as a separate plan
-- **Next safe step**: Review the merge plan's security-hardening and
-  fallback-policy items to determine if they are still blocking. Then
-  plan design token infrastructure as a WS3 prerequisite.
-- **Deep consolidation status**: completed this handoff — rotated the napkin,
-  archived the completed frontend practice plan, deleted the extracted
-  `.cursor/plans/` copy, and seeded the first continuity evidence entry.
+  - Whether the minimal v1 token set for the curriculum-model and user-search
+    views is sufficient without forcing an immediate follow-on expansion
+  - Whether token-package build/test wiring exposes any Turbo or workspace
+    cache assumptions that need a small config follow-up
+- **Next safe step**: Start
+  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-design-token-prerequisite.plan.md`
+  with RED tests for CSS emission, tier enforcement, workspace wiring, and
+  widget CSS consumption.
+- **Deep consolidation status**: complete — the WS3 Phase 3/security-closure
+  batch has been consolidated, the merge-main plan archived, and the second
+  deep-consolidation evidence entry recorded. The broader evidence window
+  remains open until the resumption and `GO` thresholds are met.
 
 ## Active Workstreams (2026-04-02)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (Phase 3 near-complete, Phases 4-6 pending)
+### 1. WS3 MCP App Rebuild — ACTIVE (Phase 3 complete, token prerequisite queued)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 
-**Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold).
-**Near-complete**: Phase 3 (canonical contracts) — 1 deferred item
-(non-UI host fallback-policy). All other Phase 3 tasks done and reviewed.
-**Merge plan**: 2 pending items — security-hardening (BLOCKING pre-deploy)
-and consolidation. All other merge tasks complete.
+**Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold),
+Phase 3 (canonical contracts + fallback proof).
+**Merge plan**:
+`.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md`
+— archived as complete on 2 April 2026.
+**Queued prerequisite**:
+`.agent/plans/sdk-and-mcp-enhancements/current/ws3-design-token-prerequisite.plan.md`
+— required before Phase 4 and Phase 5 start.
 **Pending**: Phase 4 (curriculum view), Phase 5 (search view), Phase 6
 (docs/gates/review). These need design token infrastructure as a
 prerequisite.
 
-**Next action**: Assess whether merge plan security-hardening and Phase 3
-fallback-policy items are still current, then proceed to widget UI work.
+**Next action**: Execute the queued design-token prerequisite and then start
+Phase 4 widget UI work.
 
 ### 2. Frontend Practice Integration — COMPLETE
 
@@ -115,8 +122,9 @@ cancelled as out of scope — belongs in WS3 or a dedicated plan.
 
 **Plan**: `.agent/plans/agentic-engineering-enhancements/current/continuity-and-surprise-practice-adoption.plan.md`
 
-Wave 1 surfaces landed. Evidence capture has started, including the first
-deep-consolidation entry, but the evidence window is not yet complete.
+Wave 1 surfaces landed. Evidence capture now includes two
+deep-consolidation entries, but the evidence window is not yet complete
+because the resumption and `GO` quotas are still open.
 
 ### 4. Assumptions Reviewer — COMPLETE
 

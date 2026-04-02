@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-properties, @typescript-eslint/no-restricted-types */
+/* eslint-disable no-restricted-properties, @typescript-eslint/no-restricted-types -- JC: vetted for these helpers */
 
 /**
  * Typed Object.* wrappers — the ONE place where Object method type-widening
@@ -11,13 +11,13 @@
  */
 
 export function typeSafeKeys<T extends object>(obj: T): Extract<keyof T, string>[] {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- vetted for this helper
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
   return Object.keys(obj) as Extract<keyof T, string>[];
 }
 
 /** Typed values (Object.values) */
 export function typeSafeValues<T extends object>(obj: T): T[keyof T][] {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- vetted for this helper
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
   return Object.values(obj) as T[keyof T][];
 }
 
@@ -26,7 +26,7 @@ export function typeSafeEntries<T extends object>(
   obj: T,
 ): [Extract<keyof T, string>, T[Extract<keyof T, string>]][] {
   type K = Extract<keyof T, string>;
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- vetted for this helper
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
   return Object.entries(obj) as [K, T[K]][];
 }
 
@@ -34,7 +34,7 @@ export function typeSafeEntries<T extends object>(
 export function typeSafeFromEntries<K extends PropertyKey, V>(
   iter: Iterable<readonly [K, V]>,
 ): Record<K, V> {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- vetted for this helper
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
   return Object.fromEntries(iter) as Record<K, V>;
 }
 
@@ -64,10 +64,10 @@ export function typeSafeHasOwn<T extends object>(obj: T, key: PropertyKey): key 
 
 /** All own keys (instead of Reflect.ownKeys) */
 export function typeSafeOwnKeys<T extends object>(obj: T): (keyof T)[] {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- vetted for this helper
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
   const names = Object.getOwnPropertyNames(obj) as Extract<keyof T, string>[];
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- vetted for this helper
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
   const symbols = Object.getOwnPropertySymbols(obj) as Extract<keyof T, symbol>[];
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- vetted for this helper
+  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JC: vetted for this helper
   return [...names, ...symbols] as (keyof T)[];
 }

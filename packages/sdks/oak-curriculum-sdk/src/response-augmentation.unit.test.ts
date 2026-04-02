@@ -450,7 +450,7 @@ describe('augmentResponseWithOakUrl', () => {
     });
 
     it('should handle empty array responses', () => {
-      const response: object[] = [];
+      const response: Readonly<Record<string, unknown>>[] = [];
       const result = augmentArrayResponseWithOakUrl(response, '/search/lessons', 'get');
 
       expect(Array.isArray(result)).toBe(true);

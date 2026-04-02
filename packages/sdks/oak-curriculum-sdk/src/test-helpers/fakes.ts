@@ -12,6 +12,5 @@ import type { OakApiPathBasedClient } from '../client/index.js';
  * OpenAPI-generated handler types are incompatible with vi.fn() in tests.
  */
 export function createFakeOakApiPathBasedClient(partial: unknown): OakApiPathBasedClient {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Minimal fake for OpenAPI-generated path-based client; test handlers (vi.fn()) don't match strict handler types.
   return partial as OakApiPathBasedClient;
 }

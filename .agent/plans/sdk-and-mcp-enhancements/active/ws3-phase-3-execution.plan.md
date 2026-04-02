@@ -30,7 +30,7 @@ todos:
     status: completed
   - id: policy-fallback
     content: "Auth policy alignment and non-UI host fallback test"
-    status: pending
+    status: completed
   - id: final-gates-reviewers
     content: "Final quality gates and reviewer invocations"
     status: completed
@@ -38,8 +38,8 @@ todos:
 
 # WS3 Phase 3 Execution Plan: Canonical Contracts and Runtime
 
-**Status**: IN PROGRESS — Stage 1 and Stage 2 closure are complete and gate-green; only the deferred fallback-policy item remains open in the parent track
-**Last Updated**: 2026-03-31
+**Status**: COMPLETE — Stage 1, Stage 2, and the fallback-policy proof are complete
+**Last Updated**: 2026-04-02
 **Parent**: ws3-phase-3-canonical-contracts-and-runtime.plan.md
 
 ## Context
@@ -48,8 +48,10 @@ Branch `feat/mcp_app_ui`, uncommitted Phase 3 changes on top of 15 prior
 commits. Three former RED specs are GREEN. The widget-resource integration test
 failure is closed by injecting widget HTML through
 `ResourceRegistrationOptions`, and the separate lesson-summary schema fallout is
-also closed in `ws3-phase-3-schema-fallout-closure.plan.md`. Targeted workspace
-validation, `pnpm check`, and `pnpm qg` are green on the current tree. B3
+also closed in `ws3-phase-3-schema-fallout-closure.plan.md`. The earlier
+Stage 1/2 closure already carried full `pnpm check` and `pnpm qg` evidence, and
+the 2026-04-02 follow-up added targeted green validation for shared redaction,
+auth-success logging, HTTP observability, and the fallback-proof E2E slice. B3
 Hybrid remains retained (no structural change), and `registerAppTool` is still
 not adopted in this phase.
 
@@ -65,8 +67,8 @@ not adopted in this phase.
 | 6. RED → GREEN | DONE | 155/155 E2E tests pass (was 152/155 with 3 RED). 571/571 HTTP app unit tests pass. |
 | 7. B3 Hybrid TSDoc | DONE | Labelled as bounded workaround, coexistence note, Zod 4 investigation result documented |
 | 8. Widget HTML provider seam | DONE | `ResourceRegistrationOptions.getWidgetHtml` added; tests inject deterministic HTML; resource tests green again |
-| 9. Auth policy + fallback | PENDING | Auth wording is aligned, but the explicit non-UI host fallback test remains deferred to later host-facing UI delivery work |
-| 10. Final closure | DONE | Schema fallout closed; reviewer pass completed; `pnpm check` and `pnpm qg` both green |
+| 9. Auth policy + fallback | DONE | Explicit fallback proof added via `ws3-fallback-proof.e2e.test.ts` for `get-curriculum-model` and `user-search` |
+| 10. Final closure | DONE | Schema fallout closed; reviewer pass completed; earlier Stage 1/2 closure had `pnpm check` and `pnpm qg` green, and the 2026-04-02 follow-up added targeted green validation |
 
 ### Separate Closure Track
 
@@ -168,9 +170,16 @@ HTML and assert the widget resource reads it.
 
 Fallback test: verify UI-bearing tool results include text content.
 
-This remains pending. Auth wording is aligned, but the explicit fallback test
-is intentionally deferred to the UI-delivery work where the host-facing
-behaviour is exercised more directly.
+Completed on 2026-04-02. The new boundary proof exercises
+`get-curriculum-model` and `user-search` end-to-end and confirms each tool
+returns:
+
+- meaningful text summary in `content[0]`
+- parseable JSON payload text in `content[1]`
+- existing `structuredContent`
+
+No new runtime branching was added; the proof closes the policy item against
+the existing shared formatter.
 
 ### Step 10: Final Gates + Reviewers
 

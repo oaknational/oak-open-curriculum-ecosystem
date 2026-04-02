@@ -71,6 +71,26 @@ export interface UnitLessonInfo {
 
 type LessonDocumentSummaryInput = SearchLessonSummary;
 
+function mapOptionalArray<T>(
+  items: readonly T[] | undefined,
+  mapper: (item: T) => string,
+): string[] | undefined {
+  if (!items || items.length === 0) {
+    return undefined;
+  }
+  return items.map(mapper);
+}
+
+function getRollupLessonIds(
+  summary: SearchUnitSummary,
+  lessonsByUnit?: ReadonlyMap<string, readonly string[]>,
+): string[] {
+  return [
+    ...(lessonsByUnit?.get(summary.unitSlug) ??
+      summary.unitLessons.map((lesson) => lesson.lessonSlug)),
+  ];
+}
+
 /**
  * Extracts lesson planning fields from lesson summary.
  *
@@ -166,7 +186,6 @@ export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput)
  * @param normaliseYears - Function to normalise year values
  * @returns Extracted fields for rollup document
  */
-// eslint-disable-next-line complexity -- Field extraction requires conditional logic
 export function extractRollupDocumentFields(
   summary: SearchUnitSummary,
   normaliseYears: (year: string | number, yearSlug: string) => string[] | undefined,
@@ -186,22 +205,16 @@ export function extractRollupDocumentFields(
   if (!summary.oakUrl) {
     throw new Error(`Missing oak URL for unit ${summary.unitSlug}`);
   }
-
-  const lessonIds =
-    lessonsByUnit?.get(summary.unitSlug) ?? summary.unitLessons.map((lesson) => lesson.lessonSlug);
-  const unitTopics = summary.categories?.map((cat) => cat.categoryTitle);
-  const years = normaliseYears(summary.year, summary.yearSlug);
-  const sequenceIds = summary.threads?.map((thread) => thread.slug);
   const threadInfo = extractThreadInfo(summary.threads);
 
   return {
     unitSlug: summary.unitSlug,
     unitTitle: summary.unitTitle,
     oakUrl: summary.oakUrl,
-    lessonIds: [...lessonIds],
-    unitTopics: unitTopics && unitTopics.length > 0 ? unitTopics : undefined,
-    years,
-    sequenceIds: sequenceIds && sequenceIds.length > 0 ? sequenceIds : undefined,
+    lessonIds: getRollupLessonIds(summary, lessonsByUnit),
+    unitTopics: mapOptionalArray(summary.categories, (category) => category.categoryTitle),
+    years: normaliseYears(summary.year, summary.yearSlug),
+    sequenceIds: mapOptionalArray(summary.threads, (thread) => thread.slug),
     threadSlugs: threadInfo.slugs,
     threadTitles: threadInfo.titles,
     threadOrders: threadInfo.orders,

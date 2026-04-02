@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- static property graph data file, structure requires length */
 /**
  * Oak Curriculum Property Graph (schema-level)
  *

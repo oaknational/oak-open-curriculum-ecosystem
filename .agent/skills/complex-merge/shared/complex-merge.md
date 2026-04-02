@@ -173,4 +173,4 @@ Write session learnings to the napkin:
 
 - `.agent/rules/pre-merge-divergence-analysis.md` — canonical rule
 - `docs/engineering/pre-merge-analysis.md` — detailed guide
-- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-merge-main-into-branch.plan.md` — real-world example
+- `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md` — real-world example

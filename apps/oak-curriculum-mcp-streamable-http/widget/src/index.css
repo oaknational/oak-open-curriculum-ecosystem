@@ -1,41 +1,182 @@
-/**
- * MCP App base styles.
- *
- * Minimal reset and layout for the Oak MCP App shell.
- * Oak brand styling will be added in Phase 4.
- */
+@import '@oaknational/oak-design-tokens/index.css';
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  background: var(--oak-semantic-surface-page);
 }
 
 body {
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-  line-height: 1.5;
-  color: #1a1a1a;
-  background: #ffffff;
+  margin: 0;
+  background: var(--oak-semantic-surface-page);
+  color: var(--oak-semantic-text-primary);
+  font-family: var(--oak-component-body-family);
+  font-size: var(--oak-component-body-size);
+  line-height: var(--oak-component-body-line-height);
+  font-weight: var(--oak-component-body-weight);
 }
 
-.oak-mcp-app {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
 
-.oak-mcp-app-header {
-  border-bottom: 2px solid #222222;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
+p,
+h1,
+dl,
+dt,
+dd {
+  margin: 0;
 }
 
-.oak-mcp-app-header h1 {
-  font-size: 1.25rem;
-  font-weight: 600;
+.oak-app {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--oak-component-page-padding);
+}
+
+.oak-shell {
+  width: min(100%, 52rem);
+  display: grid;
+  gap: var(--oak-semantic-gap-lg);
+  padding: var(--oak-component-page-padding);
+  border: 1px solid var(--oak-component-shell-border-color);
+  border-radius: var(--oak-component-panel-radius);
+  background: var(--oak-component-shell-surface);
+  box-shadow: var(--oak-component-shell-shadow);
+}
+
+.oak-shell__header {
+  display: grid;
+  gap: var(--oak-semantic-gap-md);
+}
+
+.oak-shell__eyebrow {
+  color: var(--oak-component-shell-kicker-color);
+  font-size: var(--oak-component-label-size);
+  line-height: var(--oak-component-label-line-height);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.oak-shell__header-row {
+  display: flex;
+  gap: var(--oak-semantic-gap-md);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.oak-shell__title {
+  color: var(--oak-component-shell-title-color);
+  font-family: var(--oak-component-shell-title-family);
+  font-size: var(--oak-component-shell-title-size);
+  line-height: var(--oak-component-shell-title-line-height);
+  font-weight: var(--oak-component-shell-title-weight);
+  text-wrap: balance;
+}
+
+.oak-shell__summary {
+  margin-top: var(--oak-semantic-gap-sm);
+  color: var(--oak-semantic-text-secondary);
+  max-width: 36rem;
+}
+
+.oak-shell__body {
+  display: grid;
+  gap: var(--oak-semantic-gap-md);
+}
+
+.oak-runtime-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--oak-semantic-gap-md);
+}
+
+.oak-runtime-grid__item {
+  display: grid;
+  gap: var(--oak-semantic-gap-sm);
+  padding: var(--oak-semantic-gap-md);
+  border: 1px solid var(--oak-component-status-border-color);
+  border-radius: var(--oak-component-control-radius);
+  background: var(--oak-component-status-background);
+}
+
+.oak-runtime-grid__item dt {
+  color: var(--oak-semantic-text-secondary);
+  font-size: var(--oak-component-label-size);
+  line-height: var(--oak-component-label-line-height);
+  text-transform: uppercase;
+}
+
+.oak-runtime-grid__item dd {
+  color: var(--oak-semantic-text-primary);
+}
+
+.oak-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: calc(var(--oak-semantic-control-padding-block) * 0.75);
+  padding-inline: var(--oak-semantic-control-padding-inline);
+  border: 1px solid var(--oak-component-status-border-color);
+  border-radius: var(--oak-component-status-radius);
+  background: var(--oak-component-status-background);
+  color: var(--oak-component-status-text-color);
+  font-size: var(--oak-component-label-size);
+  line-height: var(--oak-component-label-line-height);
+  white-space: nowrap;
+}
+
+.oak-status-pill[data-state='connected'] {
+  border-color: var(--oak-semantic-accent);
+  color: var(--oak-semantic-accent-strong);
+}
+
+.oak-status-pill[data-state='error'] {
+  border-color: var(--oak-semantic-error);
+  color: var(--oak-semantic-error);
+}
+
+.oak-alert {
+  padding: var(--oak-semantic-gap-md);
+  border: 1px solid var(--oak-semantic-error);
+  border-radius: var(--oak-component-control-radius);
+  color: var(--oak-semantic-error);
+  background: var(--oak-component-status-background);
+}
+
+.oak-note {
+  color: var(--oak-semantic-text-secondary);
+}
+
+@media (max-width: 48rem) {
+  .oak-app {
+    padding: var(--oak-component-page-padding-mobile);
+  }
+
+  .oak-shell {
+    padding: var(--oak-component-page-padding-mobile);
+  }
+
+  .oak-shell__header-row {
+    flex-direction: column;
+  }
+
+  .oak-runtime-grid {
+    grid-template-columns: 1fr;
+  }
 }

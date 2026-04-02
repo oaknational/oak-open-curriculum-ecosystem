@@ -140,7 +140,16 @@ function getSchemaProperties(
   if (!schema || !isSchemaObject(schema) || !schema.properties) {
     throw new Error(`Schema ${schemaName} not found or has no properties`);
   }
-  return schema.properties as Record<string, SchemaObject>;
+
+  const properties: Record<string, SchemaObject> = {};
+  for (const [propertyName, propertySchema] of Object.entries(schema.properties)) {
+    if (!isSchemaObject(propertySchema)) {
+      throw new Error(`Schema ${schemaName} contains a non-schema property: ${propertyName}`);
+    }
+    properties[propertyName] = propertySchema;
+  }
+
+  return properties;
 }
 
 describe('decorateOakUrls', () => {

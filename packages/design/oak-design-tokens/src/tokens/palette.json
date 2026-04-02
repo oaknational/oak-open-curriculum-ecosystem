@@ -1,0 +1,51 @@
+{
+  "color": {
+    "ink-950": { "$type": "color", "$value": "#102033" },
+    "ink-800": { "$type": "color", "$value": "#31465f" },
+    "ink-700": { "$type": "color", "$value": "#485d75" },
+    "paper-050": { "$type": "color", "$value": "#fcfbf8" },
+    "paper-100": { "$type": "color", "$value": "#f4efe8" },
+    "paper-200": { "$type": "color", "$value": "#e6ddd2" },
+    "fern-500": { "$type": "color", "$value": "#1d6f5f" },
+    "fern-600": { "$type": "color", "$value": "#15574b" },
+    "sun-300": { "$type": "color", "$value": "#f0c974" },
+    "sky-400": { "$type": "color", "$value": "#8ab6d6" },
+    "danger-500": { "$type": "color", "$value": "#b43c31" }
+  },
+  "font": {
+    "family-body": {
+      "$type": "fontFamily",
+      "$value": "\"Source Sans 3\", \"Segoe UI\", sans-serif"
+    },
+    "family-display": {
+      "$type": "fontFamily",
+      "$value": "\"Fraunces\", Georgia, serif"
+    },
+    "size-200": { "$type": "dimension", "$value": "0.875rem" },
+    "size-300": { "$type": "dimension", "$value": "1rem" },
+    "size-700": { "$type": "dimension", "$value": "2rem" },
+    "weight-regular": { "$type": "fontWeight", "$value": "400" },
+    "weight-semibold": { "$type": "fontWeight", "$value": "600" },
+    "line-height-300": { "$type": "number", "$value": "1.4" },
+    "line-height-400": { "$type": "number", "$value": "1.6" },
+    "line-height-700": { "$type": "number", "$value": "1.1" }
+  },
+  "space": {
+    "200": { "$type": "dimension", "$value": "0.5rem" },
+    "300": { "$type": "dimension", "$value": "0.75rem" },
+    "400": { "$type": "dimension", "$value": "1rem" },
+    "500": { "$type": "dimension", "$value": "1.5rem" },
+    "700": { "$type": "dimension", "$value": "2.5rem" }
+  },
+  "radius": {
+    "md": { "$type": "dimension", "$value": "0.9rem" },
+    "lg": { "$type": "dimension", "$value": "1.4rem" },
+    "pill": { "$type": "dimension", "$value": "999px" }
+  },
+  "shadow": {
+    "card": {
+      "$type": "shadow",
+      "$value": "0 24px 50px rgba(16, 32, 51, 0.12)"
+    }
+  }
+}

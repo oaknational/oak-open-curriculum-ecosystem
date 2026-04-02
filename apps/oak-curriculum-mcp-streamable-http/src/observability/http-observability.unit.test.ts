@@ -24,6 +24,15 @@ interface FakeSentrySdk {
   readonly flush: ReturnType<typeof vi.fn<SentryNodeSdk['flush']>>;
 }
 
+type BeforeSendHook = NonNullable<Parameters<SentryNodeSdk['init']>[0]['beforeSend']>;
+type BeforeSendHint = Parameters<BeforeSendHook>[1];
+type BeforeSendTransactionHook = NonNullable<
+  Parameters<SentryNodeSdk['init']>[0]['beforeSendTransaction']
+>;
+type BeforeSendTransactionHint = Parameters<BeforeSendTransactionHook>[1];
+type BeforeBreadcrumbHook = NonNullable<Parameters<SentryNodeSdk['init']>[0]['beforeBreadcrumb']>;
+type BeforeBreadcrumbHint = NonNullable<Parameters<BeforeBreadcrumbHook>[1]>;
+
 function createRuntimeConfig(
   mode: 'off' | 'fixture' | 'sentry',
   envOverrides?: Partial<AuthDisabledRuntimeConfig['env']>,
@@ -117,6 +126,157 @@ function getFixtureLogCaptures(
   return captures.filter((capture): capture is FixtureSentryLogCapture => capture.kind === 'log');
 }
 
+function requireDefined<T>(value: T | null | undefined, message: string): T {
+  if (value === undefined || value === null) {
+    throw new Error(message);
+  }
+
+  return value;
+}
+
+function isPromiseLike<T>(value: T | PromiseLike<unknown>): value is PromiseLike<unknown> {
+  return typeof value === 'object' && value !== null && 'then' in value;
+}
+
+function requireImmediateBeforeSendResult(
+  value: ReturnType<BeforeSendHook> | undefined,
+): SentryErrorEvent {
+  const result = requireDefined(value, 'Expected beforeSend to keep the event');
+
+  if (isPromiseLike(result)) {
+    throw new Error('Expected beforeSend to return synchronously');
+  }
+
+  return result;
+}
+
+function requireImmediateBeforeSendTransactionResult(
+  value: ReturnType<BeforeSendTransactionHook> | undefined,
+): SentryTransactionEvent {
+  const result = requireDefined(value, 'Expected beforeSendTransaction to keep the event');
+
+  if (isPromiseLike(result)) {
+    throw new Error('Expected beforeSendTransaction to return synchronously');
+  }
+
+  return result;
+}
+
+function requireImmediateBeforeBreadcrumbResult(
+  value: ReturnType<BeforeBreadcrumbHook> | undefined,
+): SentryBreadcrumb {
+  const result = requireDefined(value, 'Expected beforeBreadcrumb to keep the breadcrumb');
+
+  if (isPromiseLike(result)) {
+    throw new Error('Expected beforeBreadcrumb to return synchronously');
+  }
+
+  return result;
+}
+
+function hasObservations(value: unknown): value is RecorderWithObservations {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'observations' in value &&
+    Array.isArray(value.observations)
+  );
+}
+
+function requireRecorderWithObservations(value: unknown): RecorderWithObservations {
+  if (!hasObservations(value)) {
+    throw new Error('Expected an in-memory MCP observation recorder');
+  }
+
+  return value;
+}
+
+function expectRedactedMcpErrorEvent(beforeSend: BeforeSendHook | undefined): void {
+  expect(beforeSend).toBeDefined();
+
+  const errorEvent: SentryErrorEvent = {
+    type: undefined,
+    request: {
+      url: 'https://curriculum.example.com/mcp?code=secret',
+      method: 'POST',
+      data: {
+        jsonrpc: '2.0',
+        method: 'tools/call',
+        params: { arguments: { query: 'sensitive payload' } },
+      },
+      headers: {
+        authorization: 'Bearer secret-token',
+      },
+    },
+    transaction: 'https://curriculum.example.com/mcp?code=secret',
+  };
+  const beforeSendHint: BeforeSendHint = {};
+  const event = requireImmediateBeforeSendResult(beforeSend?.(errorEvent, beforeSendHint));
+
+  expect(event.request?.method).toBe('POST');
+  expect(event.request?.url).toBe('/mcp');
+  expect(event.transaction).toBe('POST /mcp');
+}
+
+function expectRedactedMcpTransaction(
+  beforeSendTransaction: BeforeSendTransactionHook | undefined,
+): void {
+  expect(beforeSendTransaction).toBeDefined();
+
+  const transactionEvent: SentryTransactionEvent = {
+    type: 'transaction',
+    request: {
+      url: 'https://curriculum.example.com/mcp?state=secret',
+      method: 'POST',
+      headers: {
+        cookie: 'secret-cookie',
+      },
+      data: {
+        jsonrpc: '2.0',
+        id: '123',
+      },
+    },
+    transaction: 'https://curriculum.example.com/mcp?state=secret',
+  };
+  const beforeSendTransactionHint: BeforeSendTransactionHint = {};
+  const transaction = requireImmediateBeforeSendTransactionResult(
+    beforeSendTransaction?.(transactionEvent, beforeSendTransactionHint),
+  );
+
+  expect(transaction.request?.method).toBe('POST');
+  expect(transaction.request?.url).toBe('/mcp');
+  expect(transaction.transaction).toBe('POST /mcp');
+}
+
+function expectRedactedMcpBreadcrumb(beforeBreadcrumb: BeforeBreadcrumbHook | undefined): void {
+  expect(beforeBreadcrumb).toBeDefined();
+
+  const breadcrumbInput: SentryBreadcrumb = {
+    message: 'POST https://curriculum.example.com/mcp?session=secret',
+    data: {
+      method: 'POST',
+      url: 'https://curriculum.example.com/mcp?session=secret',
+      headers: {
+        authorization: 'Bearer secret-token',
+      },
+      body: {
+        jsonrpc: '2.0',
+        method: 'tools/call',
+      },
+    },
+  };
+  const beforeBreadcrumbHint: BeforeBreadcrumbHint = {};
+  const breadcrumb = requireImmediateBeforeBreadcrumbResult(
+    beforeBreadcrumb?.(breadcrumbInput, beforeBreadcrumbHint),
+  );
+
+  expect(breadcrumb.message).toBe('POST /mcp');
+  expect(breadcrumb.data).toEqual({
+    method: 'POST',
+    route: '/mcp',
+  });
+}
+
 describe('createHttpObservability', () => {
   it('treats off mode as a real kill switch with no live Sentry init or sink capture', () => {
     const sdk = createFakeSentrySdk();
@@ -179,96 +339,55 @@ describe('createHttpObservability', () => {
     const beforeSendTransaction = initOptions.beforeSendTransaction;
     const beforeBreadcrumb = initOptions.beforeBreadcrumb;
 
+    expectRedactedMcpErrorEvent(beforeSend);
+    expectRedactedMcpTransaction(beforeSendTransaction);
+    expectRedactedMcpBreadcrumb(beforeBreadcrumb);
+  });
+
+  it('redacts OAuth form-encoded request capture for /oauth/token without stripping the route', () => {
+    const sdk = createFakeSentrySdk();
+    createHttpObservabilityOrThrow(createRuntimeConfig('sentry'), {
+      sentrySdk: sdk.sdk,
+      stdoutSink: noopStdoutSink,
+    });
+
+    const initOptions = getInitOptions(sdk);
+    const beforeSend = initOptions.beforeSend;
+
     expect(beforeSend).toBeDefined();
-    expect(beforeSendTransaction).toBeDefined();
-    expect(beforeBreadcrumb).toBeDefined();
 
-    const event = beforeSend?.(
-      {
-        request: {
-          url: 'https://curriculum.example.com/mcp?code=secret',
-          method: 'POST',
-          data: {
-            jsonrpc: '2.0',
-            method: 'tools/call',
-            params: { arguments: { query: 'sensitive payload' } },
-          },
-          headers: {
-            authorization: 'Bearer secret-token',
-          },
+    const errorEvent: SentryErrorEvent = {
+      type: undefined,
+      request: {
+        url: 'https://curriculum.example.com/oauth/token',
+        method: 'POST',
+        data: 'grant_type=authorization_code&code=secret-code&code_verifier=pkce-secret&client_id=oak-client&state=opaque-state&nonce=random-nonce&client_assertion=signed-client-jwt',
+        headers: {
+          authorization: 'Bearer secret-token',
+          'content-type': 'application/x-www-form-urlencoded',
         },
-        transaction: 'https://curriculum.example.com/mcp?code=secret',
-      } as unknown as SentryErrorEvent,
-      {} as Parameters<NonNullable<Parameters<SentryNodeSdk['init']>[0]['beforeSend']>>[1],
+      },
+      transaction: 'POST /oauth/token',
+    };
+    const beforeSendHint: BeforeSendHint = {};
+    const event = requireImmediateBeforeSendResult(beforeSend?.(errorEvent, beforeSendHint));
+
+    expect(event.transaction).toBe('POST /oauth/token');
+    expect(event.request?.url).toBe('https://curriculum.example.com/oauth/token');
+    expect(event.request?.method).toBe('POST');
+    expect(event.request?.headers).toEqual({
+      authorization: '[REDACTED]',
+      'content-type': 'application/x-www-form-urlencoded',
+    });
+    expect(event.request?.data).toBe(
+      'grant_type=authorization_code&code=%5BREDACTED%5D&code_verifier=%5BREDACTED%5D&client_id=oak-client&state=%5BREDACTED%5D&nonce=%5BREDACTED%5D&client_assertion=%5BREDACTED%5D',
     );
 
-    expect(event).toEqual(
-      expect.objectContaining({
-        request: {
-          method: 'POST',
-          url: '/mcp',
-        },
-        transaction: 'POST /mcp',
-      }),
-    );
-
-    const transaction = beforeSendTransaction?.(
-      {
-        request: {
-          url: 'https://curriculum.example.com/mcp?state=secret',
-          method: 'POST',
-          headers: {
-            cookie: 'secret-cookie',
-          },
-          data: {
-            jsonrpc: '2.0',
-            id: '123',
-          },
-        },
-        transaction: 'https://curriculum.example.com/mcp?state=secret',
-      } as unknown as SentryTransactionEvent,
-      {} as Parameters<
-        NonNullable<Parameters<SentryNodeSdk['init']>[0]['beforeSendTransaction']>
-      >[1],
-    );
-
-    expect(transaction).toEqual(
-      expect.objectContaining({
-        request: {
-          method: 'POST',
-          url: '/mcp',
-        },
-        transaction: 'POST /mcp',
-      }),
-    );
-
-    const breadcrumb = beforeBreadcrumb?.(
-      {
-        message: 'POST https://curriculum.example.com/mcp?session=secret',
-        data: {
-          method: 'POST',
-          url: 'https://curriculum.example.com/mcp?session=secret',
-          headers: {
-            authorization: 'Bearer secret-token',
-          },
-          body: {
-            jsonrpc: '2.0',
-            method: 'tools/call',
-          },
-        },
-      } as SentryBreadcrumb,
-      {} as Parameters<NonNullable<Parameters<SentryNodeSdk['init']>[0]['beforeBreadcrumb']>>[1],
-    );
-
-    expect(breadcrumb).toEqual(
-      expect.objectContaining({
-        message: 'POST /mcp',
-        data: {
-          method: 'POST',
-          route: '/mcp',
-        },
-      }),
-    );
+    expect(JSON.stringify(event)).not.toContain('secret-code');
+    expect(JSON.stringify(event)).not.toContain('pkce-secret');
+    expect(JSON.stringify(event)).not.toContain('opaque-state');
+    expect(JSON.stringify(event)).not.toContain('random-nonce');
+    expect(JSON.stringify(event)).not.toContain('signed-client-jwt');
   });
 });
 
@@ -279,7 +398,7 @@ describe('createHttpObservability trace-context propagation', () => {
       fixtureStore,
       stdoutSink: noopStdoutSink,
     });
-    const recorder = observability.mcpRecorder as unknown as RecorderWithObservations;
+    const recorder = requireRecorderWithObservations(observability.mcpRecorder);
     const logger = observability.createLogger({ name: 'test-http' });
     const observationOptions = observability.createMcpObservationOptions();
 

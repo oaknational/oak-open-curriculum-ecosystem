@@ -177,8 +177,8 @@ export function handleAuthSuccess(
     'Authentication successful',
     createAuthLogContext(req, res, {
       clientId: authData.clientId,
-      scopes: authData.scopes,
-      userId: typeof extraUserId === 'string' ? extraUserId : undefined,
+      scopeCount: authData.scopes.length,
+      hasUserContext: typeof extraUserId === 'string',
     }),
   );
 }

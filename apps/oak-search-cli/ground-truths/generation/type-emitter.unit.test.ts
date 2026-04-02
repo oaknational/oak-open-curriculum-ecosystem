@@ -7,8 +7,10 @@
 
 import { describe, it, expect } from 'vitest';
 import {
+  buildLessonSlugDataset,
   emitLessonSlugType,
   emitAllLessonSlugTypes,
+  emitLessonSlugDatasetTypes,
   toPascalCase,
   type ParsedBulkData,
 } from './type-emitter';
@@ -51,11 +53,9 @@ describe('type-emitter', () => {
       // Should have count constant
       expect(output).toContain('export const MATHS_PRIMARY_LESSON_COUNT = 3');
 
-      // Should have Set with slugs
+      // Should have Set loader
       expect(output).toContain('export const MATHS_PRIMARY_LESSON_SLUGS: ReadonlySet<string>');
-      expect(output).toContain("'adding-fractions'");
-      expect(output).toContain("'subtracting-fractions'");
-      expect(output).toContain("'multiplying-fractions'");
+      expect(output).toContain("createLessonSlugSet('maths-primary')");
     });
 
     it('handles empty slugs array', () => {
@@ -70,22 +70,7 @@ describe('type-emitter', () => {
       const output = emitLessonSlugType(data);
 
       expect(output).toContain('export const MATHS_PRIMARY_LESSON_COUNT = 0');
-      expect(output).toContain('new Set()');
-    });
-
-    it('escapes special characters in slugs', () => {
-      const data: ParsedBulkData = {
-        subject: 'english',
-        phase: 'secondary',
-        sequenceSlug: 'english-secondary',
-        lessonSlugs: ["lesson's-apostrophe"],
-        lessonCount: 1,
-      };
-
-      const output = emitLessonSlugType(data);
-
-      // Single quotes in slugs should be escaped
-      expect(output).toContain("'lesson\\'s-apostrophe'");
+      expect(output).toContain("createLessonSlugSet('maths-primary')");
     });
 
     it('generates SCREAMING_SNAKE_CASE for constant names', () => {
@@ -101,6 +86,51 @@ describe('type-emitter', () => {
 
       expect(output).toContain('DESIGN_TECHNOLOGY_SECONDARY_LESSON_COUNT');
       expect(output).toContain('DESIGN_TECHNOLOGY_SECONDARY_LESSON_SLUGS');
+    });
+  });
+
+  describe('buildLessonSlugDataset', () => {
+    it('builds JSON-friendly dataset metadata', () => {
+      const dataset = buildLessonSlugDataset([
+        {
+          subject: 'maths',
+          phase: 'primary',
+          sequenceSlug: 'maths-primary',
+          lessonSlugs: ['lesson-a', 'lesson-b'],
+          lessonCount: 2,
+        },
+        {
+          subject: 'science',
+          phase: 'secondary',
+          sequenceSlug: 'science-secondary',
+          lessonSlugs: ['lesson-c'],
+          lessonCount: 1,
+        },
+      ]);
+
+      expect(dataset.sequenceOrder).toEqual(['maths-primary', 'science-secondary']);
+      expect(dataset.totalLessonSlugCount).toBe(3);
+      expect(dataset.allLessonSlugs).toEqual(['lesson-a', 'lesson-b', 'lesson-c']);
+      expect(dataset.sequences['maths-primary']).toEqual({
+        subject: 'maths',
+        phase: 'primary',
+        sequenceSlug: 'maths-primary',
+        lessonCount: 2,
+        lessonSlugs: ['lesson-a', 'lesson-b'],
+      });
+    });
+  });
+
+  describe('emitLessonSlugDatasetTypes', () => {
+    it('generates dataset type interfaces', () => {
+      const output = emitLessonSlugDatasetTypes();
+
+      expect(output).toContain('export interface LessonSlugDatasetSequenceData');
+      expect(output).toContain('export interface LessonSlugDataset');
+      expect(output).toContain('readonly allLessonSlugs: readonly string[];');
+      expect(output).toContain(
+        'readonly sequences: Readonly<Record<string, LessonSlugDatasetSequenceData>>;',
+      );
     });
   });
 
@@ -130,10 +160,15 @@ describe('type-emitter', () => {
       expect(output).toContain('Generated lesson slug validation data');
       expect(output).toContain('@generated');
       expect(output).toContain('DO NOT EDIT');
+      expect(output).toContain(
+        "import rawLessonSlugData from './lesson-slugs-by-subject.data.json';",
+      );
+      expect(output).toContain("import { typeSafeEntries } from '@oaknational/type-helpers';");
+      expect(output).toContain(
+        "import type { LessonSlugDataset, LessonSlugDatasetSequenceData } from './lesson-slugs-by-subject.types.js';",
+      );
 
-      // Should contain both Sets
-      expect(output).toContain('MATHS_PRIMARY_LESSON_SLUGS');
-      expect(output).toContain('SCIENCE_SECONDARY_LESSON_SLUGS');
+      expect(output).toContain('function getSequenceData(sequenceSlug: string)');
     });
 
     it('generates branded type for validated slugs', () => {
@@ -150,6 +185,8 @@ describe('type-emitter', () => {
       const output = emitAllLessonSlugTypes(allData);
 
       expect(output).toContain('export type AnyLessonSlug = string & { readonly __brand:');
+      expect(output).toContain('function parseLessonSlugPhase(');
+      expect(output).toContain('const lessonSlugData = loadLessonSlugData();');
     });
 
     it('generates combined ALL_LESSON_SLUGS Set', () => {
@@ -173,16 +210,17 @@ describe('type-emitter', () => {
       const output = emitAllLessonSlugTypes(allData);
 
       expect(output).toContain('export const ALL_LESSON_SLUGS');
-      expect(output).toContain('MATHS_PRIMARY_LESSON_SLUGS');
-      expect(output).toContain('SCIENCE_SECONDARY_LESSON_SLUGS');
-      expect(output).toContain('collectAllSlugs');
+      expect(output).toContain('new Set(lessonSlugData.allLessonSlugs)');
+      expect(output).toContain('function getSequenceData(sequenceSlug: string)');
     });
 
     it('handles empty data array', () => {
       const output = emitAllLessonSlugTypes([]);
 
       expect(output).toContain('export type AnyLessonSlug = string & { readonly __brand:');
-      expect(output).toContain('export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set()');
+      expect(output).toContain(
+        'export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set(lessonSlugData.allLessonSlugs)',
+      );
     });
 
     it('generates type guard function', () => {

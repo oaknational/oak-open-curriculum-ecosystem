@@ -17,8 +17,8 @@ todos:
 
 # WS3 Phase 5: Interactive User Search View
 
-**Status**: PENDING
-**Last Updated**: 2026-03-30
+**Status**: PENDING — blocked on `../current/ws3-design-token-prerequisite.plan.md`
+**Last Updated**: 2026-04-02
 
 ## Required Inputs
 
@@ -26,7 +26,11 @@ todos:
    architecture section 3 (data/state model)
 2. Phase 3 acceptance evidence — `user-search` and `user-search-query`
    descriptors and visibility metadata must be in place
-3. Phase 4 acceptance evidence — shared app shell and routing must be working
+3. `../current/ws3-design-token-prerequisite.plan.md` — shared token package
+   and canonical shell replacement must be available before Phase 5 styling
+   starts; Phase 5 must reuse package CSS rather than adding a second styling
+   layer
+4. Phase 4 acceptance evidence — shared app shell and routing must be working
 
 ## Tasks
 
@@ -34,15 +38,17 @@ todos:
 2. Add RED tests for helper tool behaviour and selection-to-model-context sync
 3. Implement `user-search` view using `app.callServerTool()`
 4. Keep `user-search-query` app-only helper behaviour metadata-driven
-5. Keep iframe data flow MCP-only (no direct iframe HTTP fetch for business data)
-6. Validate result shape before render at component boundary
-7. Handle MCP data flow resilience:
+5. Consume the shared token package from Phase 4 rather than introducing a
+   second local styling layer or reviving scaffold-era CSS
+6. Keep iframe data flow MCP-only (no direct iframe HTTP fetch for business data)
+7. Validate result shape before render at component boundary
+8. Handle MCP data flow resilience:
    - graceful error states if `app.callServerTool()` rejects or times out
    - cancellation handling on app teardown (pending tool calls should not leave
      the UI in an inconsistent state)
    - result size awareness: if search results are large, paginate or truncate
      before rendering (MCP message size is host-dependent)
-8. Run `pnpm check` to verify
+9. Run `pnpm check` to verify
 
 ## Acceptance Evidence
 
@@ -50,6 +56,9 @@ todos:
 2. Helper-tool visibility and invocation path remain canonical
 3. Model context updates happen only when model needs explicit selection context
 4. UI state remains local to React app with no compatibility bridge state model
-5. Error, timeout, and teardown states are tested and produce user-visible
+5. Shared token-package styling is reused rather than forked inside Phase 5
+6. The prerequisite shell remains the only shell; Phase 5 does not reintroduce
+   scaffold copy or local brand fallback CSS
+7. Error, timeout, and teardown states are tested and produce user-visible
    feedback (not silent failures)
-6. `pnpm check` passes
+8. `pnpm check` passes

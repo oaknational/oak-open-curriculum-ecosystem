@@ -12,8 +12,8 @@ import type { OperationObject, ParameterObject, PathItemObject } from 'openapi3-
 export function createFakeOperationObject(
   partial: Partial<OperationObject> & { responses?: OperationObject['responses'] },
 ): OperationObject {
-  const out = { responses: partial.responses ?? {}, ...partial };
-  return out as OperationObject;
+  const out: OperationObject = { responses: partial.responses ?? {}, ...partial };
+  return out;
 }
 
 /**
@@ -23,7 +23,9 @@ export function createFakeOperationObject(
 export function createFakeParameterObject(
   partial: Partial<ParameterObject> & { name: string; in: ParameterObject['in'] },
 ): ParameterObject {
-  return partial as ParameterObject;
+  const { name, in: location, ...rest } = partial;
+  const parameter: ParameterObject = { ...rest, name, in: location };
+  return parameter;
 }
 
 /**
@@ -31,5 +33,6 @@ export function createFakeParameterObject(
  * Cast used so tests can pass plain objects that processOperationParameters accepts at runtime.
  */
 export function createFakePathItemObject(partial: Partial<PathItemObject>): PathItemObject {
-  return partial as PathItemObject;
+  const pathItem: PathItemObject = { ...partial };
+  return pathItem;
 }

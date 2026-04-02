@@ -12,6 +12,7 @@ import { noEslintDisableRule } from './rules/no-eslint-disable.js';
 export {
   coreBoundaryRules,
   coreTestConfigRules,
+  createDesignBoundaryRules,
   createLibBoundaryRules,
   createSdkBoundaryRules,
   appBoundaryRules,

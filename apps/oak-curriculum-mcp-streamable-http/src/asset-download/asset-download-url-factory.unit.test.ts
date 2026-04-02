@@ -45,7 +45,6 @@ describe('createAssetDownloadUrlFactory', () => {
 
     factory('lesson', 'worksheet');
 
-    const calledExp = createSignature.mock.calls[0]?.[2] as number;
-    expect(calledExp).toBe(fixedNow + ttl);
+    expect(createSignature).toHaveBeenCalledWith('lesson', 'worksheet', fixedNow + ttl, 'secret');
   });
 });

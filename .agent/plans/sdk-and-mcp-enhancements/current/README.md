@@ -4,6 +4,7 @@ Executable plans queued and ready to start.
 
 | Plan | Scope | Status / Blocked By |
 |---|---|---|
+| [ws3-design-token-prerequisite.plan.md](ws3-design-token-prerequisite.plan.md) | Replace the temporary widget shell and land the minimal DTCG-to-CSS token workspaces required before WS3 Phases 4-5 | In progress; WS3 Phase 4 and Phase 5 remain blocked until quality-gate and review close-out |
 | [canonical-url-enforcement.plan.md](canonical-url-enforcement.plan.md) | Promote URL validation from warn-only to configurable gate; validate URLs in ingestion pipeline before ES storage | Queued; dependency on naming collision remediation satisfied ([archived](../archive/completed/url-naming-collision-remediation.plan.md), ADR-145) |
 | [output-schemas-for-mcp-tools.plan.md](output-schemas-for-mcp-tools.plan.md) | Add truthful `outputSchema` metadata to all MCP tools while preserving generated upstream-response validation and aligning transport contracts | Ready for renewed grounding against the now-archived runtime-boundary simplification work |
 

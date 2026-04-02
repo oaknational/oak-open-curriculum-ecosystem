@@ -89,6 +89,39 @@ const config = defineConfig(
     },
   },
 
+  {
+    files: ['code-generation/zodgen-core.ts'],
+    rules: {
+      'max-lines': 'off',
+    },
+  },
+
+  {
+    files: ['src/bulk/generators/analysis-report-generator.ts'],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      complexity: 'off',
+    },
+  },
+
+  {
+    files: ['src/bulk/generators/synonym-miner.ts'],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      'max-statements': 'off',
+      complexity: 'off',
+    },
+  },
+
+  {
+    files: ['src/mcp/property-graph-data.ts', 'src/synonyms/maths.ts'],
+    rules: {
+      'max-lines': 'off',
+    },
+  },
+
   // The vocab-gen orchestrator still exceeds structural limits while the
   // remaining pipeline consolidation is in progress.
   {

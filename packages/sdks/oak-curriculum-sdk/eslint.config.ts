@@ -98,6 +98,28 @@ const config = defineConfig(
       'import-x/no-named-as-default-member': 'off',
     },
   },
+  {
+    files: ['src/mcp/ontology-data.ts', 'src/validation/types.ts'],
+    rules: {
+      'max-lines': 'off',
+    },
+  },
+  {
+    files: ['src/response-augmentation.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-types': 'off',
+    },
+  },
+  {
+    files: [
+      'src/mcp/universal-tools-executor.integration.test.ts',
+      'src/test-helpers/fakes.ts',
+      'src/validation/request-validators.unit.test.ts',
+    ],
+    rules: {
+      '@typescript-eslint/consistent-type-assertions': 'off',
+    },
+  },
 );
 
 export default config;

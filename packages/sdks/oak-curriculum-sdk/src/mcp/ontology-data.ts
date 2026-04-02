@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- static ontology data file, structure requires length */
 /**
  * Static curriculum ontology data for the POC.
  *

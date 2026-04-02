@@ -25,14 +25,20 @@ Executable plans that are in progress now.
   WS3 companion phase plan for fresh React MCP App scaffolding and tooling.
 - [ws3-phase-3-canonical-contracts-and-runtime.plan.md](ws3-phase-3-canonical-contracts-and-runtime.plan.md) —
   WS3 companion phase plan for canonical metadata/registration/auth/runtime
-  contract alignment. The closure batch is gate-green locally; the only open
-  parent-plan item is deferred non-UI host fallback evidence.
+  contract alignment. COMPLETE on 2 April 2026, including the non-UI host
+  fallback proof.
 - [ws3-phase-4-curriculum-model-view.plan.md](ws3-phase-4-curriculum-model-view.plan.md) —
   WS3 companion phase plan for the curriculum-model view delivery.
 - [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
   WS3 companion phase plan for user-search UI delivery and helper-tool flow.
 - [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
   WS3 companion phase plan for docs, gates, reviewers, and closure checks.
+
+Queued prerequisite before Phase 4/5:
+
+- [../current/ws3-design-token-prerequisite.plan.md](../current/ws3-design-token-prerequisite.plan.md) —
+  minimal design-token infrastructure plan for `packages/design/` and widget CSS
+  consumption
 
 Completed and archived:
 
@@ -56,6 +62,9 @@ Completed and archived:
   Legacy widget framework deleted on 31 March 2026.
 - [ws3-phase-3-schema-fallout-closure.plan.md](../archive/completed/ws3-phase-3-schema-fallout-closure.plan.md) —
   `canonicalUrl`/`oakUrl` lesson-summary schema fallout closed on 31 March 2026.
+- [ws3-merge-main-into-branch.plan.md](../archive/completed/ws3-merge-main-into-branch.plan.md) —
+  merge-main closure, security hardening, and consolidation complete on
+  2 April 2026.
 
 Completed and archived (URL remediation):
 

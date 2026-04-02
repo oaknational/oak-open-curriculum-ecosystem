@@ -4,8 +4,6 @@
  * Extracted from `handlers.ts` to break the circular dependency:
  * `handlers.ts` → `tool-handler-with-auth.ts` → `handlers.ts`.
  * Both modules now import these types from here.
- *
- * @module
  */
 
 import type {

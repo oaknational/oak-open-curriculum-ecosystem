@@ -67,7 +67,7 @@ todos:
     status: completed
   - id: security-hardening
     content: "BLOCKING pre-deployment: fix OAuth form-encoded redaction and auth success handler PII in observability payloads"
-    status: pending
+    status: completed
   - id: napkin
     content: Write session learnings to napkin (merge patterns, surprises, time sinks)
     status: completed
@@ -82,11 +82,14 @@ todos:
     status: completed
   - id: consolidation
     content: Run full consolidation workflow per .agent/commands/consolidate-docs.md (10 steps)
-    status: pending
+    status: completed
 isProject: false
 ---
 
 # Plan to merge main into feat/mcp_app_ui
+
+**Status**: COMPLETE — merge, security hardening, and consolidation finished
+**Archived**: 2026-04-02
 
 ## Situation
 
@@ -599,11 +602,17 @@ Create a dedicated plan or work item for this hardening. It blocks deployment of
 
 **`pnpm check` result:** 69/75 (same as before — only 3 intentional RED specs fail). 567 unit/integration tests pass (up from 559 — 8 new from characterisation test activation).
 
-**Verdict:** Branch is clean. Ready for security hardening or WS3 Phase 2.
+**Verdict:** Branch is clean. Merge follow-up work is complete and the plan is
+ready to archive.
 
-### Deferred items for next session
+### Completion Notes (2026-04-02)
 
-1. **Security hardening** (BLOCKING pre-deployment): OAuth form-encoded redaction (`code_verifier`/`code` now covered) and auth success handler PII review — pre-existing in main, must fix before deployment
-2. **Complex merge skill** (8b): Create `.agent/skills/complex-merge/SKILL.md`
-3. **Pre-merge analysis guide** (8c): Update `docs/engineering/pre-merge-analysis.md`
-4. **Consolidation** (8e): Run full consolidation workflow
+1. **Security hardening**: complete. Shared observability redaction now
+   covers OAuth form-encoded payloads, and auth-success observability context
+   excludes `userId`.
+2. **Complex merge skill**: complete. `.agent/skills/complex-merge/SKILL.md`
+   captures the executable merge workflow.
+3. **Pre-merge analysis guide**: complete. `docs/engineering/pre-merge-analysis.md`
+   was updated with the merge learnings.
+4. **Consolidation**: complete. Permanent docs and continuity surfaces were
+   refreshed, and this plan now lives in `archive/completed/`.

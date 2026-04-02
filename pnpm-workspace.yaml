@@ -9,6 +9,7 @@ packages:
   - packages/core/env
   - packages/core/result
   - packages/core/type-helpers
+  - packages/design/*
   - packages/libs/env-resolution
   - packages/libs/logger
   - packages/libs/sentry-node

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- validation types module with comprehensive type definitions */
 /**
  * Type definitions for validation module
  * Pure types with no runtime behaviour

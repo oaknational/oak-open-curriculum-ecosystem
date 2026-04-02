@@ -83,12 +83,13 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Unknown Until Validated** -- Use this when: a function produces data whose type cannot be statically verified and a validation boundary exists downstream. → [unknown-until-validated.md](unknown-until-validated.md)
 - **Validation Error Severity Separation** -- Use this when: a schema validation error message lists all absent fields alongside actually failing fields, making operators debug the wrong variables. → [validation-error-severity-separation.md](validation-error-severity-separation.md)
 
-### Architecture (4)
+### Architecture (5)
 
 - **Explicit Missing Resource State** -- Use this when: a numeric or boolean value can mask a missing upstream resource and create fail-open behaviour. → [explicit-missing-resource-state.md](explicit-missing-resource-state.md)
 - **Multi-Layer Schema Synchronisation** -- Use this when: a code generator produces multiple schema representations (JSON schema, Zod, transforms) from a single source and a change to input handling must be reflected across all layers. → [multi-layer-schema-sync.md](multi-layer-schema-sync.md)
 - **Rate-Limit Upstream Amplification Vectors** -- Use this when: a route produces an upstream request (API call, redirect, proxy fetch) as a side effect of handling an inbound request. → [rate-limit-upstream-amplification-vectors.md](rate-limit-upstream-amplification-vectors.md)
 - **SDK-Owned Retriever Delegation** -- Use this when: an app-layer module builds an Elasticsearch retriever shape that the SDK already owns as a shared capability. → [sdk-owned-retriever-delegation.md](sdk-owned-retriever-delegation.md)
+- **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 
 ### Process (5)
 

@@ -19,7 +19,7 @@ todos:
     status: completed
   - id: phase-3-contracts-runtime
     content: "Phase 3: Extend canonical SDK/runtime contracts for MCP App registration, visibility, and tool listing."
-    status: pending
+    status: completed
   - id: phase-4-curriculum-view
     content: "Phase 4: Build the curriculum-model MCP App view."
     status: pending
@@ -34,7 +34,7 @@ todos:
 # WS3: Fresh React MCP App Rebuild
 
 **Status**: ACTIVE  
-**Last Updated**: 2026-03-30  
+**Last Updated**: 2026-04-02  
 **Scope**: Delete the dead widget framework and build one fresh React MCP App
 from scratch.
 
@@ -526,6 +526,12 @@ When renaming the widget resource slug, update all coupled surfaces atomically:
 
 **Goal**: deliver the first real view on the new app shell.
 
+**Prerequisite**: complete
+`../current/ws3-design-token-prerequisite.plan.md` before Phase 4
+implementation starts so the temporary shell is already replaced by the live
+`useApp(...)` runtime and the shared shell imports canonical package CSS rather
+than accumulating permanent app-local brand values.
+
 ### RED
 
 Write tests first for:
@@ -539,10 +545,10 @@ Write tests first for:
 
 Build:
 
-- a shared app shell
-- tool routing
+- tool routing inside the live prerequisite shell
 - curriculum-model renderer
-- Oak brand styling via CSS variables and host-aware fallbacks
+- Oak brand styling via `@oaknational/oak-design-tokens` CSS and host-aware
+  fallbacks
 
 The `useApp()`-owning shell should be exercised primarily through E2E/system
 tests. Child components that receive plain props should be covered with
@@ -551,6 +557,8 @@ in-process React tests.
 ### Acceptance
 
 - the curriculum-model view renders through the fresh MCP App shell
+- the shared shell imports `@oaknational/oak-design-tokens` rather than keeping
+  permanent app-local brand values
 - external links go through `app.openLink()`
 - the app handles tool input/result/cancel/teardown through the MCP Apps SDK
 - local verification works against the upstream `basic-host`
@@ -561,6 +569,11 @@ in-process React tests.
 
 **Goal**: add the human-facing search experience without violating app/SDK
 boundaries.
+
+**Prerequisite**: complete
+`../current/ws3-design-token-prerequisite.plan.md` first so Phase 5 builds on
+the live prerequisite shell and shared token package, not a second local
+styling layer.
 
 ### RED
 
@@ -673,6 +686,8 @@ Plus:
 - `../current/auth-safety-correction.plan.md` — deny-by-default auth correction
 - `../current/auth-boundary-type-safety.plan.md` — auth boundary typing and
   fail-fast validation remediation
+- `../current/ws3-design-token-prerequisite.plan.md` — queued token
+  and shell prerequisite required before Phase 4/5 widget UI work
 - `../current/README.md` — queued and in-progress follow-on execution plans
 
 Closure gate rule:

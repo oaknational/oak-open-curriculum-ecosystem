@@ -1,26 +1,28 @@
-/**
- * Unit tests for the MCP App shell component.
- *
- * These tests run in a jsdom environment to verify the React shell renders
- * the expected DOM structure and markers.
- */
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { App } from './App.js';
+import { AppView } from './App.js';
+import { initialAppRuntimeState } from './app-runtime-state.js';
 
-describe('App shell', () => {
-  it('renders the app shell with the expected test id marker', () => {
-    render(<App />);
-    expect(screen.getByTestId('oak-mcp-app-shell')).toBeDefined();
+describe('AppView', () => {
+  it('renders a deterministic pre-connection state without scaffold copy', () => {
+    render(<AppView state={initialAppRuntimeState} isConnected={false} error={null} />);
+
+    expect(screen.getByText('Waiting for MCP host connection')).toBeDefined();
+    expect(screen.queryByText(/shell ready/iu)).toBeNull();
   });
 
-  it('renders the Oak Curriculum heading', () => {
-    render(<App />);
-    expect(screen.getByRole('heading', { name: /oak curriculum/iu })).toBeDefined();
-  });
+  it('renders the active tool name from runtime state', () => {
+    render(
+      <AppView
+        state={{
+          ...initialAppRuntimeState,
+          currentToolName: 'user-search',
+        }}
+        isConnected={true}
+        error={null}
+      />,
+    );
 
-  it('renders a main content area', () => {
-    render(<App />);
-    expect(screen.getByRole('main')).toBeDefined();
+    expect(screen.getByText('user-search')).toBeDefined();
   });
 });

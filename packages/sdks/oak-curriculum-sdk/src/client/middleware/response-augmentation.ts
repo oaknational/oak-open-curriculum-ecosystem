@@ -3,6 +3,7 @@ import {
   augmentResponseWithOakUrl,
   augmentArrayResponseWithOakUrl,
 } from '../../response-augmentation.js';
+import type { OakUrlAugmentable } from '../../response-augmentation.js';
 import type { Logger } from '@oaknational/logger';
 
 interface MiddlewareOptions {
@@ -67,6 +68,10 @@ async function safeParseJson(response: Response): Promise<unknown> {
   }
 }
 
+function isAugmentableObject(body: unknown): body is OakUrlAugmentable {
+  return typeof body === 'object' && body !== null && !Array.isArray(body);
+}
+
 function extractApiPath(url: string): string {
   const parsed = new URL(url);
   return parsed.pathname.replace(/^\/api\/v\d+/, '');
@@ -86,7 +91,7 @@ function augmentBody(body: unknown, path: string, log: Logger): unknown {
     if (Array.isArray(body)) {
       return augmentArrayResponseWithOakUrl(body, path, 'get');
     }
-    if (body && typeof body === 'object') {
+    if (isAugmentableObject(body)) {
       return augmentResponseWithOakUrl(body, path, 'get');
     }
     return undefined;

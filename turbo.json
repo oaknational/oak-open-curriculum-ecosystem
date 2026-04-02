@@ -85,6 +85,103 @@
         "widget/tsconfig.json"
       ]
     },
+    "@oaknational/design-tokens-core#build": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["dist/**", ".tsup/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsup.config.ts",
+        "src/**/*.ts",
+        "!src/**/*.test.ts",
+        "!src/**/*.spec.ts"
+      ]
+    },
+    "@oaknational/design-tokens-core#test": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.ts",
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts"
+      ]
+    },
+    "@oaknational/oak-design-tokens#build": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["dist/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "src/**/*.json"
+      ]
+    },
+    "@oaknational/oak-design-tokens#test": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "src/**/*.json",
+        "dist/**/*.css",
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts"
+      ]
+    },
+    "@oaknational/oak-design-tokens#type-check": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "src/**/*.json"
+      ]
+    },
+    "@oaknational/oak-design-tokens#lint": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "src/**/*.json",
+        "dist/**/*.css"
+      ]
+    },
+    "@oaknational/oak-design-tokens#lint:fix": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "src/**/*.json",
+        "dist/**/*.css"
+      ]
+    },
     "@oaknational/sdk-codegen#test": {
       "dependsOn": ["^build", "sdk-codegen"],
       "cache": true,

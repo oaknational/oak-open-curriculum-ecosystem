@@ -1,0 +1,53 @@
+{
+  "component": {
+    "shell-surface": { "$type": "color", "$value": "{semantic.surface-panel}" },
+    "shell-border-color": { "$type": "color", "$value": "{semantic.border-subtle}" },
+    "shell-shadow": { "$type": "shadow", "$value": "{semantic.shadow-panel}" },
+    "shell-title-color": { "$type": "color", "$value": "{semantic.text-primary}" },
+    "shell-kicker-color": { "$type": "color", "$value": "{semantic.accent-strong}" },
+    "shell-title-family": {
+      "$type": "fontFamily",
+      "$value": "{semantic.font-display-family}"
+    },
+    "shell-title-size": { "$type": "dimension", "$value": "{semantic.font-heading-size}" },
+    "shell-title-line-height": {
+      "$type": "number",
+      "$value": "{semantic.font-heading-line-height}"
+    },
+    "shell-title-weight": {
+      "$type": "fontWeight",
+      "$value": "{semantic.font-weight-semibold}"
+    },
+    "body-family": { "$type": "fontFamily", "$value": "{semantic.font-body-family}" },
+    "body-size": { "$type": "dimension", "$value": "{semantic.font-body-size}" },
+    "body-line-height": {
+      "$type": "number",
+      "$value": "{semantic.font-body-line-height}"
+    },
+    "body-weight": { "$type": "fontWeight", "$value": "{semantic.font-weight-regular}" },
+    "label-size": { "$type": "dimension", "$value": "{semantic.font-label-size}" },
+    "label-line-height": { "$type": "number", "$value": "{semantic.font-label-line-height}" },
+    "page-padding": { "$type": "dimension", "$value": "{semantic.shell-padding}" },
+    "page-padding-mobile": {
+      "$type": "dimension",
+      "$value": "{semantic.shell-padding-mobile}"
+    },
+    "panel-radius": { "$type": "dimension", "$value": "{semantic.radius-panel}" },
+    "control-radius": { "$type": "dimension", "$value": "{semantic.radius-control}" },
+    "status-radius": { "$type": "dimension", "$value": "{semantic.radius-pill}" },
+    "status-background": { "$type": "color", "$value": "{semantic.surface-page}" },
+    "status-border-color": { "$type": "color", "$value": "{semantic.border-subtle}" },
+    "status-text-color": { "$type": "color", "$value": "{semantic.text-secondary}" },
+    "input-background": { "$type": "color", "$value": "{semantic.surface-page}" },
+    "input-border-color": { "$type": "color", "$value": "{semantic.border-subtle}" },
+    "input-text-color": { "$type": "color", "$value": "{semantic.text-primary}" },
+    "input-focus-ring-color": { "$type": "color", "$value": "{semantic.focus-ring}" },
+    "button-primary-background": { "$type": "color", "$value": "{semantic.accent}" },
+    "button-primary-background-hover": {
+      "$type": "color",
+      "$value": "{semantic.accent-strong}"
+    },
+    "button-primary-border-color": { "$type": "color", "$value": "{semantic.accent}" },
+    "button-primary-text-color": { "$type": "color", "$value": "{semantic.text-inverse}" }
+  }
+}

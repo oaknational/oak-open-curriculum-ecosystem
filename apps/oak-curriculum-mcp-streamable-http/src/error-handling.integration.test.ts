@@ -13,6 +13,44 @@ import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import { createEnrichedErrorLogger } from './logging/index';
 import { createCorrelationMiddleware } from './correlation/middleware';
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function requireRecord(value: unknown, message: string): Record<string, unknown> {
+  if (!isRecord(value)) {
+    throw new Error(message);
+  }
+
+  return value;
+}
+
+function requireLoggedErrorContext(logSpy: Mock<Logger['error']>): Record<string, unknown> {
+  expect(logSpy).toHaveBeenCalled();
+
+  return requireRecord(logSpy.mock.calls[0]?.[1], 'Expected logger.error context');
+}
+
+function requireStringField(context: Record<string, unknown>, field: string): string {
+  const value = context[field];
+
+  if (typeof value !== 'string') {
+    throw new Error(`Expected "${field}" to be a string`);
+  }
+
+  return value;
+}
+
+function requireNumberField(context: Record<string, unknown>, field: string): number {
+  const value = context[field];
+
+  if (typeof value !== 'number') {
+    throw new Error(`Expected "${field}" to be a number`);
+  }
+
+  return value;
+}
+
 describe('HTTP Error Handling Integration', () => {
   let app: Express;
   let logger: Logger;
@@ -53,11 +91,8 @@ describe('HTTP Error Handling Integration', () => {
     await request(app).get('/test-error').expect(500);
 
     // Verify error was logged with correlation ID
-    expect(logSpy).toHaveBeenCalled();
-    const errorCall = logSpy.mock.calls[0];
-    const context = errorCall[1];
-    expect(context).toBeDefined();
-    expect((context as { correlationId?: string }).correlationId).toMatch(/^req_\d+_[a-f0-9]{6}$/);
+    const context = requireLoggedErrorContext(logSpy);
+    expect(requireStringField(context, 'correlationId')).toMatch(/^req_\d+_[a-f0-9]{6}$/);
   });
 
   it('error middleware logs request timing', async () => {
@@ -72,12 +107,9 @@ describe('HTTP Error Handling Integration', () => {
 
     await request(app).get('/test-error').expect(500);
 
-    expect(logSpy).toHaveBeenCalled();
-    const errorCall = logSpy.mock.calls[0];
-    const context = errorCall[1];
-    expect(context).toBeDefined();
-    expect((context as { duration?: string }).duration).toBeDefined();
-    expect((context as { durationMs?: number }).durationMs).toBeGreaterThanOrEqual(0);
+    const context = requireLoggedErrorContext(logSpy);
+    expect(requireStringField(context, 'duration')).toBeDefined();
+    expect(requireNumberField(context, 'durationMs')).toBeGreaterThanOrEqual(0);
   });
 
   it('error middleware includes request context (method and path)', async () => {
@@ -92,12 +124,9 @@ describe('HTTP Error Handling Integration', () => {
 
     await request(app).post('/api/tools').send({}).expect(500);
 
-    expect(logSpy).toHaveBeenCalled();
-    const errorCall = logSpy.mock.calls[0];
-    const context = errorCall[1];
-    expect(context).toBeDefined();
-    expect((context as { method?: string }).method).toBe('POST');
-    expect((context as { path?: string }).path).toBe('/api/tools');
+    const context = requireLoggedErrorContext(logSpy);
+    expect(requireStringField(context, 'method')).toBe('POST');
+    expect(requireStringField(context, 'path')).toBe('/api/tools');
   });
 
   it('error response headers include X-Correlation-ID', async () => {
@@ -125,11 +154,8 @@ describe('HTTP Error Handling Integration', () => {
 
     await request(app).get('/test-error').expect(500);
 
-    expect(logSpy).toHaveBeenCalled();
-    const errorCall = logSpy.mock.calls[0];
-    const context = errorCall[1];
-    // Error message should be in the context object
-    expect((context as { message?: string }).message).toBe(errorMessage);
+    const context = requireLoggedErrorContext(logSpy);
+    expect(requireStringField(context, 'message')).toBe(errorMessage);
   });
 
   it('handles async errors with enrichment', async () => {
@@ -145,10 +171,8 @@ describe('HTTP Error Handling Integration', () => {
 
     await request(app).get('/async-error').expect(500);
 
-    expect(logSpy).toHaveBeenCalled();
-    const errorCall = logSpy.mock.calls[0];
-    const context = errorCall[1];
-    expect((context as { correlationId?: string }).correlationId).toMatch(/^req_\d+_[a-f0-9]{6}$/);
+    const context = requireLoggedErrorContext(logSpy);
+    expect(requireStringField(context, 'correlationId')).toMatch(/^req_\d+_[a-f0-9]{6}$/);
   });
 
   it('reuses correlation ID from request header', async () => {
@@ -168,9 +192,7 @@ describe('HTTP Error Handling Integration', () => {
       .expect(500);
 
     expect(response.headers['x-correlation-id']).toBe(customCorrelationId);
-    expect(logSpy).toHaveBeenCalled();
-    const errorCall = logSpy.mock.calls[0];
-    const context = errorCall[1];
-    expect((context as { correlationId?: string }).correlationId).toBe(customCorrelationId);
+    const context = requireLoggedErrorContext(logSpy);
+    expect(requireStringField(context, 'correlationId')).toBe(customCorrelationId);
   });
 });

@@ -60,6 +60,18 @@ interface LessonDoc {
   unit_ids: string[];
 }
 
+function hasItems<T>(values: readonly T[] | undefined): boolean {
+  return (values?.length ?? 0) > 0;
+}
+
+function hasThreadMetadata(unit: UnitDoc): boolean {
+  return hasItems(unit.thread_titles) || hasItems(unit.thread_orders);
+}
+
+function isMissingThreadSlugs(unit: UnitDoc): boolean {
+  return hasThreadMetadata(unit) && !hasItems(unit.thread_slugs);
+}
+
 /**
  * Fetch all units for maths KS4 from ES.
  */
@@ -164,23 +176,9 @@ describe('Ingestion Data Quality', () => {
     expect(discrepancies).toHaveLength(0);
   });
 
-  // eslint-disable-next-line complexity -- Test validation logic requires branching
   it('units with threads have thread_slugs populated', async () => {
     const units = await fetchAllUnits();
-
-    const missingThreadSlugs: string[] = [];
-
-    for (const unit of units) {
-      // If a unit has thread_titles or thread_orders, it should also have thread_slugs
-      if (
-        (unit.thread_titles && unit.thread_titles.length > 0) ||
-        (unit.thread_orders && unit.thread_orders.length > 0)
-      ) {
-        if (!unit.thread_slugs || unit.thread_slugs.length === 0) {
-          missingThreadSlugs.push(unit.unit_id);
-        }
-      }
-    }
+    const missingThreadSlugs = units.filter(isMissingThreadSlugs).map((unit) => unit.unit_id);
 
     if (missingThreadSlugs.length > 0) {
       console.error('Units missing thread_slugs:', missingThreadSlugs);

@@ -5,8 +5,6 @@
  * NO network IO, simple mock fetch injected as argument.
  */
 
-/* eslint-disable @typescript-eslint/no-misused-promises */
-
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import createClient from 'openapi-fetch';
 import { createFetchWithRetry } from './retry';
@@ -41,13 +39,20 @@ interface TestPaths {
 
 type FetchFn = (input: Request | string | URL, init?: RequestInit) => Promise<Response>;
 
+function createJsonResponse(body: object, status: number): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
 describe('retry middleware integration', () => {
-  let mockFetch: ReturnType<typeof vi.fn>;
+  let mockFetch: ReturnType<typeof vi.fn<FetchFn>>;
 
   beforeEach(() => {
     // Use fake timers to avoid real delays in tests
     vi.useFakeTimers();
-    mockFetch = vi.fn();
+    mockFetch = vi.fn<FetchFn>();
   });
 
   afterEach(() => {
@@ -58,14 +63,11 @@ describe('retry middleware integration', () => {
   it('should not retry on successful response', async () => {
     const config = createRetryConfig({ maxRetries: 3 });
 
-    mockFetch.mockImplementation(async () => {
-      return new Response(JSON.stringify({ message: 'success' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    });
+    mockFetch.mockImplementation(() =>
+      Promise.resolve(createJsonResponse({ message: 'success' }, 200)),
+    );
 
-    const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+    const wrappedFetch = createFetchWithRetry(mockFetch, config);
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
 
     const result = await client.GET('/test', { fetch: wrappedFetch });
@@ -82,26 +84,11 @@ describe('retry middleware integration', () => {
 
     // First call returns 429, second call returns 429, third succeeds
     mockFetch
-      .mockImplementationOnce(async () => {
-        return new Response(JSON.stringify({ error: 'rate limited' }), {
-          status: 429,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      })
-      .mockImplementationOnce(async () => {
-        return new Response(JSON.stringify({ error: 'rate limited' }), {
-          status: 429,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      })
-      .mockImplementationOnce(async () => {
-        return new Response(JSON.stringify({ message: 'success' }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      });
+      .mockResolvedValueOnce(createJsonResponse({ error: 'rate limited' }, 429))
+      .mockResolvedValueOnce(createJsonResponse({ error: 'rate limited' }, 429))
+      .mockResolvedValueOnce(createJsonResponse({ message: 'success' }, 200));
 
-    const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+    const wrappedFetch = createFetchWithRetry(mockFetch, config);
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
 
     const resultPromise = client.GET('/test', { fetch: wrappedFetch });
@@ -123,20 +110,10 @@ describe('retry middleware integration', () => {
     });
 
     mockFetch
-      .mockImplementationOnce(async () => {
-        return new Response(JSON.stringify({ error: 'service unavailable' }), {
-          status: 503,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      })
-      .mockImplementationOnce(async () => {
-        return new Response(JSON.stringify({ message: 'success' }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      });
+      .mockResolvedValueOnce(createJsonResponse({ error: 'service unavailable' }, 503))
+      .mockResolvedValueOnce(createJsonResponse({ message: 'success' }, 200));
 
-    const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+    const wrappedFetch = createFetchWithRetry(mockFetch, config);
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
 
     const resultPromise = client.GET('/test', { fetch: wrappedFetch });
@@ -158,15 +135,10 @@ describe('retry middleware integration', () => {
 
     // All calls return 429
     mockFetch.mockImplementation(() =>
-      Promise.resolve(
-        new Response(JSON.stringify({ error: 'rate limited' }), {
-          status: 429,
-          headers: { 'Content-Type': 'application/json' },
-        }),
-      ),
+      Promise.resolve(createJsonResponse({ error: 'rate limited' }, 429)),
     );
 
-    const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+    const wrappedFetch = createFetchWithRetry(mockFetch, config);
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
 
     const resultPromise = client.GET('/test', { fetch: wrappedFetch });
@@ -187,15 +159,10 @@ describe('retry middleware integration', () => {
     const config = createRetryConfig({ maxRetries: 3 });
 
     mockFetch.mockImplementation(() =>
-      Promise.resolve(
-        new Response(JSON.stringify({ error: 'not found' }), {
-          status: 404,
-          headers: { 'Content-Type': 'application/json' },
-        }),
-      ),
+      Promise.resolve(createJsonResponse({ error: 'not found' }, 404)),
     );
 
-    const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+    const wrappedFetch = createFetchWithRetry(mockFetch, config);
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
 
     const result = await client.GET('/test', { fetch: wrappedFetch });
@@ -208,15 +175,10 @@ describe('retry middleware integration', () => {
     const config = createRetryConfig({ enabled: false, maxRetries: 3 });
 
     mockFetch.mockImplementation(() =>
-      Promise.resolve(
-        new Response(JSON.stringify({ error: 'rate limited' }), {
-          status: 429,
-          headers: { 'Content-Type': 'application/json' },
-        }),
-      ),
+      Promise.resolve(createJsonResponse({ error: 'rate limited' }, 429)),
     );
 
-    const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+    const wrappedFetch = createFetchWithRetry(mockFetch, config);
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
 
     const result = await client.GET('/test', { fetch: wrappedFetch });
@@ -234,15 +196,10 @@ describe('retry middleware integration', () => {
 
     // All calls return 429
     mockFetch.mockImplementation(() =>
-      Promise.resolve(
-        new Response(JSON.stringify({ error: 'rate limited' }), {
-          status: 429,
-          headers: { 'Content-Type': 'application/json' },
-        }),
-      ),
+      Promise.resolve(createJsonResponse({ error: 'rate limited' }, 429)),
     );
 
-    const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+    const wrappedFetch = createFetchWithRetry(mockFetch, config);
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
 
     const resultPromise = client.GET('/test', { fetch: wrappedFetch });
@@ -265,15 +222,10 @@ describe('retry middleware integration', () => {
     });
 
     mockFetch.mockImplementation(() =>
-      Promise.resolve(
-        new Response(JSON.stringify({ error: 'rate limited' }), {
-          status: 429,
-          headers: { 'Content-Type': 'application/json' },
-        }),
-      ),
+      Promise.resolve(createJsonResponse({ error: 'rate limited' }, 429)),
     );
 
-    const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+    const wrappedFetch = createFetchWithRetry(mockFetch, config);
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
 
     const result = await client.GET('/test', { fetch: wrappedFetch });
@@ -294,14 +246,9 @@ describe('retry middleware integration', () => {
       mockFetch
         .mockRejectedValueOnce(new TypeError('fetch failed'))
         .mockRejectedValueOnce(new TypeError('fetch failed'))
-        .mockResolvedValueOnce(
-          new Response(JSON.stringify({ message: 'success' }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-          }),
-        );
+        .mockResolvedValueOnce(createJsonResponse({ message: 'success' }, 200));
 
-      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+      const wrappedFetch = createFetchWithRetry(mockFetch, config);
 
       const resultPromise = wrappedFetch('http://test.local/test');
 
@@ -324,7 +271,7 @@ describe('retry middleware integration', () => {
       // All calls throw network error
       mockFetch.mockRejectedValue(new TypeError('fetch failed'));
 
-      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+      const wrappedFetch = createFetchWithRetry(mockFetch, config);
 
       // Create promise and immediately capture any rejection
       let caughtError: Error | null = null;
@@ -347,7 +294,7 @@ describe('retry middleware integration', () => {
 
       mockFetch.mockRejectedValue(new TypeError('fetch failed'));
 
-      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+      const wrappedFetch = createFetchWithRetry(mockFetch, config);
 
       await expect(wrappedFetch('http://test.local/test')).rejects.toThrow('fetch failed');
       expect(mockFetch).toHaveBeenCalledTimes(1);
@@ -363,7 +310,7 @@ describe('retry middleware integration', () => {
       // All calls throw network error
       mockFetch.mockRejectedValue(new TypeError('fetch failed'));
 
-      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+      const wrappedFetch = createFetchWithRetry(mockFetch, config);
 
       // Create promise and immediately capture any rejection
       let caughtError: Error | null = null;
@@ -389,21 +336,11 @@ describe('retry middleware integration', () => {
       // First: network error, second: 503, third: network error, fourth: success
       mockFetch
         .mockRejectedValueOnce(new TypeError('fetch failed'))
-        .mockResolvedValueOnce(
-          new Response(JSON.stringify({ error: 'service unavailable' }), {
-            status: 503,
-            headers: { 'Content-Type': 'application/json' },
-          }),
-        )
+        .mockResolvedValueOnce(createJsonResponse({ error: 'service unavailable' }, 503))
         .mockRejectedValueOnce(new TypeError('fetch failed again'))
-        .mockResolvedValueOnce(
-          new Response(JSON.stringify({ message: 'success' }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-          }),
-        );
+        .mockResolvedValueOnce(createJsonResponse({ message: 'success' }, 200));
 
-      const wrappedFetch = createFetchWithRetry(mockFetch as FetchFn, config);
+      const wrappedFetch = createFetchWithRetry(mockFetch, config);
 
       const resultPromise = wrappedFetch('http://test.local/test');
 

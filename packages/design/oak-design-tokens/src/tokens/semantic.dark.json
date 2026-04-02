@@ -1,0 +1,16 @@
+{
+  "semantic": {
+    "surface-page": { "$type": "color", "$value": "{color.ink-950}" },
+    "surface-panel": { "$type": "color", "$value": "{color.ink-800}" },
+    "surface-accent": { "$type": "color", "$value": "{color.fern-600}" },
+    "border-subtle": { "$type": "color", "$value": "{color.ink-700}" },
+    "text-primary": { "$type": "color", "$value": "{color.paper-050}" },
+    "text-secondary": { "$type": "color", "$value": "{color.paper-100}" },
+    "text-inverse": { "$type": "color", "$value": "{color.paper-050}" },
+    "accent": { "$type": "color", "$value": "{color.sun-300}" },
+    "accent-strong": { "$type": "color", "$value": "{color.sun-300}" },
+    "focus-ring": { "$type": "color", "$value": "{color.sky-400}" },
+    "attention": { "$type": "color", "$value": "{color.sun-300}" },
+    "error": { "$type": "color", "$value": "{color.danger-500}" }
+  }
+}

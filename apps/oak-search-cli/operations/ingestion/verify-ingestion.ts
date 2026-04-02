@@ -24,7 +24,53 @@ interface CliArgs {
   help: boolean;
 }
 
-// eslint-disable-next-line complexity -- CLI arg parsing
+type ValueOption = '--subject' | '--key-stage' | '--bulk-download' | '--es-url';
+const VALUE_OPTIONS = new Set<ValueOption>([
+  '--subject',
+  '--key-stage',
+  '--bulk-download',
+  '--es-url',
+]);
+
+function isValueOption(arg: string): arg is ValueOption {
+  switch (arg) {
+    case '--subject':
+    case '--key-stage':
+    case '--bulk-download':
+    case '--es-url':
+      return VALUE_OPTIONS.has(arg);
+    default:
+      return false;
+  }
+}
+
+function applyValueOption(
+  option: ValueOption,
+  nextArg: string | undefined,
+  result: CliArgs,
+): boolean {
+  if (!nextArg) {
+    return false;
+  }
+
+  switch (option) {
+    case '--subject':
+      result.subject = nextArg;
+      return true;
+    case '--key-stage':
+      result.keystage = nextArg;
+      return true;
+    case '--bulk-download':
+      result.bulkDownload = nextArg;
+      return true;
+    case '--es-url':
+      result.esUrlOverride = nextArg;
+      return true;
+  }
+
+  return false;
+}
+
 function parseArgs(args: string[]): CliArgs {
   const result: CliArgs = {
     subject: 'maths',
@@ -38,35 +84,13 @@ function parseArgs(args: string[]): CliArgs {
     const arg = args[i];
     const nextArg = args[i + 1];
 
-    switch (arg) {
-      case '--subject':
-        if (nextArg) {
-          result.subject = nextArg;
-          i++;
-        }
-        break;
-      case '--key-stage':
-        if (nextArg) {
-          result.keystage = nextArg;
-          i++;
-        }
-        break;
-      case '--bulk-download':
-        if (nextArg) {
-          result.bulkDownload = nextArg;
-          i++;
-        }
-        break;
-      case '--es-url':
-        if (nextArg) {
-          result.esUrlOverride = nextArg;
-          i++;
-        }
-        break;
-      case '--help':
-      case '-h':
-        result.help = true;
-        break;
+    if (arg === '--help' || arg === '-h') {
+      result.help = true;
+      continue;
+    }
+
+    if (isValueOption(arg) && applyValueOption(arg, nextArg, result)) {
+      i++;
     }
   }
 

@@ -94,6 +94,9 @@ The HTTP telemetry boundary is metadata-only:
   authorisation headers are stripped before Sentry capture
 - MCP tool, resource, and prompt observations retain only kind, name, status,
   duration, and trace identifiers
+- the shared redaction policy also treats raw
+  `application/x-www-form-urlencoded` OAuth payloads as sensitive input,
+  rather than relying on query-only redaction
 
 The app also adds targeted manual spans for:
 
@@ -106,6 +109,10 @@ bootstrap failure, server listen failure, Express error middleware, MCP cleanup
 failure, OAuth upstream timeout/network failure, and asset-download proxy
 failure. Expected validation, auth, and upstream-status branches remain logs
 plus span status only.
+
+Successful auth logs retain client/scoping context only (`clientId`,
+`scopeCount`, `hasUserContext`); `userId` is excluded from structured
+observability payloads.
 
 On shutdown and startup failure paths, the app performs bounded Sentry flushes
 at the process boundary: bootstrap failure, server listen error, `SIGINT`, and

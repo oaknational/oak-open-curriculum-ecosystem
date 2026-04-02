@@ -21,13 +21,13 @@ todos:
     status: completed
   - id: fallback-policy
     content: "Make non-UI host fallback policy explicit and testable."
-    status: pending
+    status: completed
 ---
 
 # WS3 Phase 3: Canonical Contracts and Runtime
 
-**Status**: IN PROGRESS — Canonical/runtime closure is green and reviewed; only the deferred non-UI host fallback evidence remains open in this parent phase
-**Last Updated**: 2026-03-31
+**Status**: COMPLETE — Canonical/runtime closure and non-UI host fallback proof are complete
+**Last Updated**: 2026-04-02
 
 ## Required Inputs
 
@@ -38,7 +38,7 @@ todos:
 3. `current/auth-safety-correction.plan.md` — C8 status (merge prerequisite
    for task 9)
 
-## Current Closure State (2026-03-31)
+## Current Closure State (2026-04-02)
 
 - C8 auth closure is complete. Task 9 is no longer blocked by the auth plans.
 - The widget-resource integration failure is closed by injecting widget HTML
@@ -46,13 +46,17 @@ todos:
   `dist/mcp-app.html` inside the test fake.
 - The separate lesson-summary schema fallout tracked in
   `ws3-phase-3-schema-fallout-closure.plan.md` is complete.
-- `pnpm check` and `pnpm qg` are both green on the current tree.
 - Reviewer closure is complete for this batch: `type-reviewer`,
   `test-reviewer`, and `code-reviewer` findings were addressed;
   `security-reviewer` and `architecture-reviewer-fred` returned no findings;
   `mcp-reviewer` hung twice and produced no findings.
-- The explicit non-UI host fallback test remains pending and is intentionally
-  deferred to later host-facing UI delivery work.
+- Targeted validation for the 2026-04-02 closure batch is green:
+  shared redaction unit tests, auth-success and HTTP observability tests, and
+  the new `ws3-fallback-proof.e2e.test.ts` slice all pass.
+- The explicit non-UI host fallback proof is now complete:
+  `get-curriculum-model` and `user-search` both return summary text in
+  `content[0]`, parseable JSON payload text in `content[1]`, and
+  `structuredContent` through the shared `formatToolResponse()` path.
 
 ### Key File Paths
 
@@ -200,7 +204,9 @@ Task 3 (slug selection)        ──must precede──>  Task 4 (slug rename)
    whether via native `.meta()` flow or via the B3 Hybrid override
 6. Auth semantics and docs match MCP auth target semantics, or carry explicit
    compatibility waiver status where applicable
-7. UI-bearing tools still provide usable text fallback when `_meta.ui` is ignored
+7. UI-bearing tools still provide usable text fallback when `_meta.ui` is
+   ignored, proven by explicit MCP boundary tests for
+   `get-curriculum-model` and `user-search`
 8. New aggregated tool entries use `satisfies` constraint for structural
    consistency with existing aggregated tools
 9. C8 auth-safety-correction is complete before new tool securitySchemes merge
