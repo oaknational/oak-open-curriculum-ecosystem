@@ -30,13 +30,13 @@ The window closes only after the last unmet condition is satisfied.
 
 | Date | Session type | Continuity contract produced | Objective/invariants/next step recovered | Deep consolidation correctly skipped/triggered | Surprise captured with promotion target | Notes |
 |---|---|---|---|---|---|---|
-| pending | pending | pending | pending | pending | pending | pending |
+| 2026-04-02 | `jc-session-handoff` with consolidation escalation | yes | yes | yes — triggered | yes | Prompt contract refreshed from live plans; completed frontend plan archived; extracted `.cursor/plans/` copy deleted; napkin rotated |
 
 ## Deep Consolidation Evidence
 
 | Date | Trigger(s) that fired | Did `consolidate-docs` run at the right depth? | Notes |
 |---|---|---|---|
-| pending | pending | pending | pending |
+| 2026-04-02 | frontend plan closure; napkin over rotation threshold; extracted platform plan needed cleanup | yes | Archived the completed frontend practice plan, deleted the redundant Cursor plan copy, rotated the napkin, refreshed prompt state, and seeded continuity evidence |
 
 ## Promotion Decision
 

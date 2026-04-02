@@ -205,6 +205,10 @@ Make the next session recover orientation quickly and truthfully by:
   - [continuity-adoption-evidence.md](../../../analysis/continuity-adoption-evidence.md)
   - updates to
     [session-continuation.prompt.md](../../../prompts/session-continuation.prompt.md)
+- Progress note:
+  - first evidence entry recorded on 2026-04-02 during a
+    `session-handoff` closeout that escalated into
+    `jc-consolidate-docs`
 - Evidence window:
   - first 5 real MCP App resumptions after rollout
   - first 3 `GO`-driven execution sessions

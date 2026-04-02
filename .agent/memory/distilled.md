@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-01.md`
-(sessions 2026-02-10 to 2026-04-01).
+`napkin-2026-02-24.md` through `napkin-2026-04-02.md`
+(sessions 2026-02-10 to 2026-04-02).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -58,6 +58,20 @@ context with no natural permanent home.
   contradicts a napkin entry, apply the feedback fully. Do not
   negotiate a compromise with the original incorrect framing.
 
+## Process
+
+- **Narrative sections drift first**: when syncing plan state,
+  inspect body status lines, decision tables, and current-state
+  prose, not just frontmatter and todo checkboxes.
+- **Gate-surface truth lives in execution paths**: when ADRs,
+  governance docs, and workflows disagree about what runs where,
+  treat workflow files, gate commands, and package scripts as the
+  source of truth and reconcile the prose to them.
+- **Platform plans are ephemeral**: `.cursor/plans/*.plan.md`
+  can carry useful working notes, but once their value is
+  extracted into canonical repo plans or permanent docs, delete
+  the platform copy and sweep stale references.
+
 ## Architecture (Agent Infrastructure)
 
 - **ADR-125 thin wrapper scope**: the thin wrapper contract applies
@@ -65,13 +79,14 @@ context with no natural permanent home.
   command-to-skill relationships. Commands and skills are sibling
   Layer 1 artifacts. A "thick" orchestrating command is sound per
   ADR-135's process_executor example.
-- **ADR-135 naming deviation**: new agents use `-reviewer` suffix
-  despite ADR-135 deciding to drop it. Acknowledged tech debt;
-  batch rename committed.
 - **Full triplet portability requires 7 adapter types**: Cursor
   agents + skills + rules, Claude Code agents + rules, Codex
   agents + config, Gemini commands. Easy to miss one — always
   run `pnpm portability:check` after creating a new specialist.
+- **Codex adapter descriptions must match exactly**:
+  `.codex/agents/*.toml` descriptions must stay identical to the
+  registration text in `.codex/config.toml`; the validator checks
+  string equality, not semantic similarity.
 
 ## Repo-Specific Rules
 

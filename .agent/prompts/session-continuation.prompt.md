@@ -40,13 +40,14 @@ git log --oneline --decorate -10
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
   - `.agent/plans/agentic-engineering-enhancements/current/continuity-and-surprise-practice-adoption.plan.md`
 - **Completed plans** (this session):
-  - `.agent/plans/agentic-engineering-enhancements/active/frontend-practice-integration-and-specialist-agents.plan.md` — COMPLETE
+  - `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md` — COMPLETE
 - **Current state**: WS3 Phase 3 canonical contracts are mostly done (1 deferred
   item: non-UI host fallback-policy). The merge plan has 2 pending items
   (security-hardening is BLOCKING, consolidation). Phases 4-6 are PENDING.
-  The frontend practice plan is COMPLETE — specialist agents are available
-  for widget UI work. Design token infrastructure needs its own planning
-  scope (not part of the frontend practice plan).
+  The frontend practice plan is archived as COMPLETE — specialist agents are
+  available for widget UI work. Design token infrastructure needs its own
+  planning scope (not part of the frontend practice plan). Continuity
+  adoption evidence has started with the first deep-consolidation entry.
 - **Current objective**: Resolve the WS3 merge plan's remaining items
   (security-hardening, then Phase 3 fallback-policy closure), then proceed
   to widget UI work (Phases 4-5) which will need design token infrastructure
@@ -78,10 +79,9 @@ git log --oneline --decorate -10
 - **Next safe step**: Review the merge plan's security-hardening and
   fallback-policy items to determine if they are still blocking. Then
   plan design token infrastructure as a WS3 prerequisite.
-- **Deep consolidation status**: due — frontend practice plan closed this
-  session. However, the work is bounded: the plan's documentation is
-  already in permanent locations (ADRs, governance docs). The plan itself
-  can be archived when ready.
+- **Deep consolidation status**: completed this handoff — rotated the napkin,
+  archived the completed frontend practice plan, deleted the extracted
+  `.cursor/plans/` copy, and seeded the first continuity evidence entry.
 
 ## Active Workstreams (2026-04-02)
 
@@ -104,7 +104,7 @@ fallback-policy items are still current, then proceed to widget UI work.
 
 ### 2. Frontend Practice Integration — COMPLETE
 
-**Plan**: `.agent/plans/agentic-engineering-enhancements/active/frontend-practice-integration-and-specialist-agents.plan.md`
+**Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md`
 
 Complete. Three ADR-129 agent triplets (accessibility-reviewer,
 design-system-reviewer, react-component-reviewer) with full platform
@@ -115,7 +115,8 @@ cancelled as out of scope — belongs in WS3 or a dedicated plan.
 
 **Plan**: `.agent/plans/agentic-engineering-enhancements/current/continuity-and-surprise-practice-adoption.plan.md`
 
-Wave 1 surfaces landed. Evidence capture not yet completed.
+Wave 1 surfaces landed. Evidence capture has started, including the first
+deep-consolidation entry, but the evidence window is not yet complete.
 
 ### 4. Assumptions Reviewer — COMPLETE
 

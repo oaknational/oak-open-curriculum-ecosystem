@@ -12,8 +12,7 @@ This document defines the accessibility testing practice for
 UI-shipping workspaces in this repository. It is the durable reference
 that workspace READMEs and reviewer reading requirements link to.
 
-**Architectural decision**:
-[ADR-147](../architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md)
+**Architectural decision**: ADR-147
 
 ## Target Standard
 
