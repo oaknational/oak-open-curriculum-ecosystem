@@ -1,0 +1,8 @@
+---
+description: Invoke accessibility-reviewer when changes touch rendered HTML, ARIA attributes, keyboard interaction, colour contrast, focus management, or WCAG compliance in UI-shipping workspaces.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/invoke-accessibility-reviewer.md`.
+
+In Cursor, use the Task tool with `readonly: true` and the appropriate `subagent_type`.

@@ -415,3 +415,17 @@ Tests that agree with code on the wrong contract are worse than no tests. The sn
 - Repeated multi-line test setup → extract scoped helper inside `describe` block (e.g. `registerWithOverrides`, `baseEnv`).
 - For large mechanical migrations (30+ files), use subagents to parallelise the work.
 - Bulk operation factories should accept `startIndex` rather than mutating readonly `_id` after creation.
+
+## Browser Proof Surfaces
+
+Four browser-specific proof categories for UI-shipping workspaces:
+
+1. **Accessibility audit** — Playwright + axe-core, WCAG 2.2 AA,
+   zero-tolerance, both themes. 9th quality gate (blocking).
+2. **Visual regression** — screenshot comparison baselines.
+3. **Responsive validation** — viewport and fluid layout coverage.
+4. **Theme/mode correctness** — light, dark, high-contrast passes.
+
+For MCP App HTML resources: serve content directly to Playwright
+(resource-level a11y), then verify via basic-host (integration-level).
+See ADR-147, `docs/governance/accessibility-practice.md`.

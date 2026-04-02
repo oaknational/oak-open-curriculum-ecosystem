@@ -499,7 +499,7 @@ Follow `.agent/commands/consolidate-docs.md` in full:
 2. Update plan status lines, completion markers, cross-references
 3. Check ephemeral locations for content that has matured into settled documentation
 4. Check `.agent/experience/` files for applied technical patterns
-5. Extract code patterns to `.agent/memory/code-patterns/` if any qualify
+5. Extract patterns to `.agent/memory/patterns/` if any qualify
 6. Rotate napkin if it exceeds ~500 lines (follow distillation skill)
 7. Keep `distilled.md` within size constraints
 8. Run `pnpm practice:fitness` (or `pnpm practice:fitness:informational`)

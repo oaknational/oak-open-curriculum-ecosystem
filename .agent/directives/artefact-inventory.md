@@ -8,7 +8,8 @@ split_strategy: "Keep concise; this is a reference extracted from AGENT.md"
 
 # Agent Artefact Inventory
 
-For the full architecture see [ADR-125 (Agent Artefact Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
+For the full architecture see
+[ADR-125 (Agent Artefact Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 
 ## Canonical Content (Layer 1)
 
@@ -21,7 +22,7 @@ For the full architecture see [ADR-125 (Agent Artefact Portability)](../../docs/
 | `.agent/sub-agents/templates/*.md` | Canonical sub-agent prompts (ADR-114) |
 | `.agent/sub-agents/components/personas/*.md` | Shared reviewer identity and review lens |
 | `.agent/prompts/*.md` | Reusable prompt playbooks |
-| `.agent/memory/code-patterns/` | Known solutions to recurring design problems ([README](../memory/code-patterns/README.md)) |
+| `.agent/memory/patterns/` | Known solutions to recurring design problems ([README](../memory/patterns/README.md)) |
 | `.agent/plans/` | Implementation plans, execution tracking |
 | `agent-tools/` | Repo-root TypeScript CLI workspace for agent operational tooling (`claude-agent-ops`, `cursor-session-from-claude-session`) |
 

@@ -307,8 +307,9 @@ A sub-agent template requires these sections (in order):
 
 ### Core Review Agents
 
-Default portable roster. Local practices may add specialist reviewers such
-as editorial or domain-specific agents.
+Default portable roster. Local practices may add specialist reviewers
+(editorial, domain-specific, or UI-specific such as
+accessibility-reviewer and design-system-reviewer).
 
 | Agent           | Specialisation                   | Key assessment areas                                                                                                                                                  |
 | --------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -425,7 +426,7 @@ content (add, skip duplicates, update refinements, investigate
 contradictions), prune graduated entries, archive, start fresh. See
 §Consolidation Workflow step 4.
 
-### Reusable Patterns (.agent/memory/code-patterns/)
+### Reusable Patterns (.agent/memory/patterns/)
 
 Reusable patterns proven by real work — code, process, architecture,
 structural, behavioural, agent operational, and domain-specific. More
@@ -441,25 +442,31 @@ without immediate churn.
 ```yaml
 ---
 name: {Pattern Name}
-domain: {domain — e.g. agent-infrastructure, planning, validation, testing}
-proven_by: {brief description of the work that proved the pattern}
-prevents: {comma-separated failure modes the pattern prevents}
+use_this_when: {one sentence: when this pattern applies}
+category: {code | architecture | process | testing | agent}
+proven_in: {file path where pattern was first proven}
+proven_date: {YYYY-MM-DD}
+barrier:
+  broadly_applicable: true
+  proven_by_implementation: true
+  prevents_recurring_mistake: {failure mode prevented}
+  stable: true
 ---
 ```
 
 Body sections: **Principle** (one-paragraph statement), **Pattern**
-(numbered steps), **Anti-pattern** (what not to do), **When to Apply**
-(trigger condition).
+(steps), **Anti-pattern** (what not to do), **When to Apply**
+(trigger).
 
-**Index**: maintain a `README.md` in `.agent/memory/code-patterns/` with a
+**Index**: maintain a `README.md` in `.agent/memory/patterns/` with a
 short description for each pattern.
 
-**Cross-repo exchange**: when a code pattern is Practice-relevant and
-cross-repo-applicable, also copy it to
-`.agent/practice-context/outgoing/code-patterns/` so it can travel with the
+**Cross-repo exchange**: when a pattern is Practice-relevant and
+cross-repo-applicable, copy it to
+`.agent/practice-context/outgoing/patterns/` so it can travel with the
 Practice Context exchange pack. Receiving repos apply the same three-part
 bar as any other Practice material; adopted patterns move to local
-`.agent/memory/code-patterns/`.
+`.agent/memory/patterns/`.
 
 ### Consolidation Workflow
 
@@ -483,9 +490,10 @@ command with the following abstract workflow:
 5. **Graduate settled content.** For each entry in `distilled.md`, apply
    two criteria: (a) **stable** — not contradicted by recent work,
    (b) **natural home** — an existing permanent doc where it belongs.
-   When both are met, create the permanent entry first, then remove from
-   `distilled.md`. Always graduate useful understanding — fitness limits
-   are a signal to action (step 6), never a reason to defer graduation.
+   Three outcomes: both met — graduate; stable but no natural home —
+   raise with the user (the gap in documentation structure is the
+   signal); not yet stable — leave for further validation. Fitness
+   limits are a signal to action (step 6), never a reason to defer.
 6. **Manage fitness thresholds** (see ADR-144). Two levels:
    - *Target exceeded* (warning): **refine** (compress, deduplicate),
      **split** (follow `split_strategy`), or **extend target** (agents
@@ -495,9 +503,10 @@ command with the following abstract workflow:
      `fitness_char_limit`, or `fitness_line_length`.
 7. **Manage the practice exchange.** Two directions:
    - *Incoming*: integrate files from `.agent/practice-core/incoming/`
-     following the provenance chain, three-part bar (validated by real work?
-     prevents recurring mistakes? stable?), and user approval for structural
-     Core changes.
+     following the provenance chain and three-part bar. Practice evolution
+     is not linear — incoming can be behind in some areas and ahead in
+     others. Compare bidirectionally. Clear the box only after user-
+     approved integration, never unilaterally.
    - *Outgoing*: broadcast domain-specific observations and structural
      notes to `.agent/practice-context/outgoing/`. Content appropriate for
      Practice Core itself (Learned Principles, structural proposals,

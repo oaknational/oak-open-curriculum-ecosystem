@@ -1069,7 +1069,7 @@ pattern from previous rerun (R2) noted where applicable.
     `emit-index.ts`. Cast 1: `toStatusDiscriminant` replaced with per-tool
     `STATUS_DISCRIMINANTS` const map. Cast 2: `invoke` return changed to
     `unknown`. Zero non-const `as` assertions in generated tool files.
-    Two code patterns extracted to `.agent/memory/code-patterns/`.
+    Two patterns extracted to `.agent/memory/patterns/`.
 
 - [x] **N11. docs/README.md has no entry point for non-technical audiences**
   - Source: Product owner

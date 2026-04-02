@@ -1,0 +1,2 @@
+description = "Lightweight end-of-session continuity update with a conditional consolidation gate"
+prompt = "Read and follow the instructions in .agent/commands/session-handoff.md"

@@ -27,6 +27,7 @@ pnpm lint:fix
 pnpm test
 pnpm test:e2e
 pnpm test:ui
+pnpm test:a11y
 pnpm smoke:dev:stub
 ```
 

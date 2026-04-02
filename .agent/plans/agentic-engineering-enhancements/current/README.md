@@ -16,6 +16,7 @@ plans when scheduled.
 | [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md) | Adjacent: ES specialist (✅ complete) | REFERENCE |
 | [sentry-specialist-capability.plan.md](sentry-specialist-capability.plan.md) | Adjacent: Sentry specialist (foundation active) | REFERENCE |
 | [harness-concepts-adoption.plan.md](harness-concepts-adoption.plan.md) | Adjacent: HC-0 baseline metrics | REFERENCE |
+| [continuity-and-surprise-practice-adoption.plan.md](continuity-and-surprise-practice-adoption.plan.md) | Adjacent: continuity surfaces, session handoff, GO cadence, and surprise pipeline | IN PROGRESS |
 | [learning-loop-refinement.plan.md](../archive/completed/learning-loop-refinement.plan.md) | Adjacent: Unify consolidation/distillation, active fitness management | COMPLETED |
 | [consolidation-workflow-evolution.plan.md](../archive/completed/consolidation-workflow-evolution.plan.md) | Adjacent: Propagate consolidation improvements to Practice Core, decide if consolidation belongs in portable Practice | COMPLETED |
 | [mcp-specialist-upgrade.plan.md](../archive/completed/mcp-specialist-upgrade.plan.md) | Adjacent: MCP specialist upgrade (ADR-129 triplet hardening) | REFERENCE |

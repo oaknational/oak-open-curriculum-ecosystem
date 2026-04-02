@@ -168,7 +168,7 @@ hadn't surfaced — different work, different mistakes, different discoveries.
 
 - **Napkin** — `.agent/memory/napkin.md` — written continuously during every session
 - **Distilled** — `.agent/memory/distilled.md` — curated rulebook, read at session start
-- **Code patterns** — `.agent/memory/code-patterns/` — abstract proven patterns
+- **Code patterns** — `.agent/memory/patterns/` — abstract proven patterns
 - **Rules** — `.agent/directives/principles.md` (authoritative policies) + platform trigger
   adapters (e.g. `.cursor/rules/*.mdc`, `.claude/rules/*.md`)
 - **Experience** — `.agent/experience/` — qualitative records of shifts in understanding
@@ -208,7 +208,7 @@ graph LR
   `.agents/skills/jc-*/`) — slash commands that initiate structured workflows
 - **Skills** (`.agent/skills/`) — canonical skill definitions providing session workflows
   (start-right-quick, start-right-thorough, go) and passive capabilities (napkin,
-  code-patterns, etc.). Platform adapters in `.cursor/skills/`,
+  patterns, etc.). Platform adapters in `.cursor/skills/`,
   `.agents/skills/`, etc. are thin wrappers pointing to the canonical skills
 - **Prompts** (`.agent/prompts/`) — domain-specific handover playbooks that provide session
   context and pointers to active execution plans. These are intentionally stateful (carrying
@@ -238,8 +238,10 @@ graph LR
   a different class of defect: formatting (style), type-checking (compile-time
   safety), linting (patterns and boundaries), static analysis (dead code,
   circular dependencies, layer violations), testing (behavioural correctness),
-  mutation testing (test suite effectiveness), build (production artefacts),
-  and specialist review (architectural compliance). No single layer is
+  mutation testing (test suite effectiveness), build (production
+  artefacts), accessibility audit (WCAG compliance for projects
+  shipping HTML), and specialist review (architectural compliance).
+  No single layer is
   sufficient; the layers are complementary. All gates are always blocking.
   See `.agent/directives/principles.md` for the full taxonomy.
 

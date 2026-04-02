@@ -66,9 +66,13 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 `code-reviewer` (gateway), `architecture-reviewer-barney`, `architecture-reviewer-fred`, `architecture-reviewer-betty`, `architecture-reviewer-wilma`, `test-reviewer`, `type-reviewer`, `config-reviewer`, `security-reviewer`, `docs-adr-reviewer`
 
+#### UI/Frontend Cluster (ADR-149)
+
+`accessibility-reviewer`, `design-system-reviewer`, `react-component-reviewer`
+
 #### Specialist On-Demand
 
-`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`, `onboarding-reviewer`, `mcp-reviewer`, `elasticsearch-reviewer`, `clerk-reviewer`, `sentry-reviewer`
+`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`, `onboarding-reviewer`, `mcp-reviewer`, `elasticsearch-reviewer`, `clerk-reviewer`, `sentry-reviewer`, `assumptions-reviewer`
 
 **Cursor-specific**: Invoke via the Task tool with `subagent_type` parameter. Other tooling: invoke by name using platform-specific methods.
 
@@ -142,12 +146,12 @@ pnpm practice:fitness:informational    # Non-blocking soft-ceiling report
 
 # Convenience commands
 pnpm make           # install, build, type-check, doc-gen, lint:fix, subagents:check, portability:check, practice:fitness:informational, markdownlint, format
-pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents:check, portability:check, test:root-scripts, type-check, lint, test, test:ui, test:e2e, smoke:dev:stub
+pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents:check, portability:check, test:root-scripts, type-check, lint, test, test:ui, test:a11y, test:e2e, smoke:dev:stub
 pnpm fix            # Auto-fix: format, markdownlint, lint:fix
 pnpm doc-gen        # Generate documentation from TSDoc
 
 # All in one command (clean rebuild + full verification)
-pnpm check          # secrets:scan:all, clean, test:root-scripts, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, subagents:check, portability:check, markdownlint:root, format:root
+pnpm check          # secrets:scan:all, clean, test:root-scripts, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, test:a11y, smoke:dev:stub, subagents:check, portability:check, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding
@@ -161,6 +165,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 - `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`, `@oaknational/search-contracts`, `@oaknational/sentry-node`, `@oaknational/sentry-mcp`)
 - `packages/sdks/` – SDKs (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`, `@oaknational/sdk-codegen`)
 - `packages/core/` – shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/type-helpers`, `@oaknational/result`, `@oaknational/env`, `@oaknational/observability`)
+- `packages/design/` – design tokens (`@oaknational/design-tokens-core`, `@oaknational/oak-design-tokens`)
 
 ## Remember
 

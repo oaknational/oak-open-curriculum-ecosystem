@@ -20,6 +20,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `current/mutation-testing-implementation.plan.md` | Plan | Stryker mutation testing across all workspaces |
 | `current/hallucination-and-evidence-guard-adoption.plan.md` | Plan | Prioritised safety adoption: hallucination guards first, evidence-based claims second |
 | `current/harness-concepts-adoption.plan.md` | Plan | Evaluate and adopt concepts from harness-engineering model (docs freshness, entropy cleanup, quality scoring) |
+| `current/continuity-and-surprise-practice-adoption.plan.md` | Plan | Repo-local continuity surfaces, session-handoff rollout, GO alignment, and surprise pipeline adoption with the MCP App lane as evidence source |
 | `evidence-bundle.template.md` | Template | Standard claim/evidence artifact format for non-trivial engineering claims |
 | `evidence/README.md` | Reference | Storage and naming convention for collection evidence artefacts |
 | `archive/completed/cross-agent-standardisation.plan.md` | Plan (Superseded) | Historical portability plan superseded by ADR-125 and archived execution work |
@@ -50,7 +51,7 @@ Plans and research for hardening the agentic engineering practice through physic
 2. **Active execution first**: [active/README.md](active/README.md), then
    [current/README.md](current/README.md) for strategic source plans and
    adjacent capability work (queued or in progress)
-3. **Strategic source plans**: hallucination/evidence guards -> enforcement -> mutation testing -> Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade -> Express -> security/privacy cluster (cyber security -> web/API security -> privacy -> web/API GDPR) -> OOCE -> Planning -> TDD -> DevX -> Reviewer Gateway -> Adapter Generation -> Agent Classification Taxonomy
+3. **Strategic source plans**: hallucination/evidence guards -> enforcement -> mutation testing -> continuity/surprise adoption -> Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade -> Express -> security/privacy cluster (cyber security -> web/API security -> privacy -> web/API GDPR) -> OOCE -> Planning -> TDD -> DevX -> Reviewer Gateway -> Adapter Generation -> Agent Classification Taxonomy
 4. **Research as evidence base**: augmented safety -> augmented practices -> standardisation landscape
 
 ## Document Roles (DRY)

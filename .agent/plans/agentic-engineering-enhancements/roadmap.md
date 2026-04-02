@@ -1,6 +1,6 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption 🔄 active; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
 **Last Updated**: 2026-03-31
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
@@ -33,7 +33,8 @@ Active adjacent execution sources:
 2. ~~codex-platform-parity.execution.plan.md~~ ✅ Complete (deleted)
 3. [phase-0-baseline-metrics.plan.md](active/phase-0-baseline-metrics.plan.md) (HC-0: harness-concepts baseline)
 4. Clerk specialist capability — ✅ Complete (no execution plan needed; single-session delivery)
-5. ~~practice-convergence.plan.md~~ ✅ Complete (deleted; backup trees removed, all workstreams done)
+5. [continuity-and-surprise-practice-adoption.plan.md](current/continuity-and-surprise-practice-adoption.plan.md) (CTY: continuity/session-handoff adoption)
+6. ~~practice-convergence.plan.md~~ ✅ Complete (deleted; backup trees removed, all workstreams done)
 
 ---
 
@@ -73,7 +74,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (🔄), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -94,6 +95,7 @@ Adjacent:
   CLK:  Clerk specialist capability                  ✅ COMPLETE
   CX:   Codex platform parity                       ✅ COMPLETE
   HC-0: Harness concepts baseline metrics            📋 PLANNED
+  CTY:  Continuity/session-handoff adoption          🔄 ACTIVE
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 🔄 ACTIVE
   MCP+: MCP specialist upgrade (triplet + ext-apps)  ✅ COMPLETE
@@ -221,6 +223,22 @@ Adjacent:
 - Notes:
   - intentionally outside the numbered phase sequence
   - extends platform coverage to OpenAI Codex alongside Cursor and Claude Code
+
+### Adjacent — Continuity, Session Handoff, and Surprise Pipeline Adoption
+
+- Strategic plan:
+  [continuity-and-surprise-practice-adoption.plan.md](current/continuity-and-surprise-practice-adoption.plan.md)
+- Goal:
+  - treat continuity as a repo engineering property rather than a vague memory
+    claim
+  - replace `wrap-up` with lightweight `session-handoff`
+  - keep `consolidate-docs` as conditional deep convergence
+  - revive `GO` as a mid-session cadence
+  - use the MCP App lane as the evidence source
+- Status: 🔄 Active reference (`current/`)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - repo-local first, portable by design, no Practice Core mutation in wave 1
 
 ### Adjacent — Sentry Specialist Capability
 

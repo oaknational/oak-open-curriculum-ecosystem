@@ -83,7 +83,7 @@ docs, READMEs) via the consolidation workflow.
 
 | Directory | Purpose |
 | --- | --- |
-| `memory/` | Session learning: `napkin.md` (observations), `distilled.md` (extracted patterns), `code-patterns/` (reusable solutions) |
+| `memory/` | Session learning: `napkin.md` (observations), `distilled.md` (extracted patterns), `patterns/` (reusable solutions) |
 | `experience/` | Qualitative records of what work was like across sessions — see [experience/HUMAN.md](experience/HUMAN.md) |
 | `research/` | Research proposals and analysis |
 | `analysis/` | Technical analysis artefacts (API investigations, reranking assessments, etc.) |

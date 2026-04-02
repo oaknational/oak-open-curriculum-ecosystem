@@ -38,7 +38,7 @@ the Practice in the originating repo and any downstream receivers.
 | `handover-prompts-vs-session-skills.md` | Architectural distinction between state-free session-entry skills and stateful domain-specific handover prompts. Refinement to the prompts-to-skills migration |
 | `two-way-merge-methodology.md` | Operational method for Practice integration when both sides evolved independently. Start from incoming, merge local back. Character ceiling and fitness rename blast radius learnings |
 | `architectural-excellence-and-layer-topology.md` | Two universal principles proven by CLI-SDK retriever drift incident. Active tier (1 repo validation). Applicable to any multi-package architecture |
-| `code-pattern-schema-for-discoverability.md` | Richer frontmatter schema (`use_this_when`, `barrier` checklist) vs the simpler Core schema. Backwards-compatible convergence path |
+| `pattern-schema-for-discoverability.md` | Richer frontmatter schema (`use_this_when`, `barrier` checklist) vs the simpler Core schema. Backwards-compatible convergence path |
 | `production-reviewer-scaling.md` | Three-layer composition (components → templates → wrappers) for scaling to 17+ reviewers. Architecture persona pattern (4 distinct perspectives) |
 | `cross-platform-surface-integration-guide.md` | How to port the surface matrix, wrapper parity checks, and explicit unsupported states into a receiving repo without forcing symmetry |
 | `claude-code-hook-activation.md` | Concrete note on thin native Claude Code hook activation: `PreToolUse` only, canonical policy in `.agent/hooks/`, repo-local runtime in `scripts/`, advisory hooks documented-only |

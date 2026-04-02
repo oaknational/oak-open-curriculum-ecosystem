@@ -260,6 +260,8 @@ paths, setup files) don't apply.
      correctly
   8. **Specialist review** (sub-agents) — architectural compliance,
      security, documentation
+  9. **Accessibility audit** (`test:a11y`) — WCAG 2.2 AA compliance
+     for UI-shipping workspaces, zero-tolerance, both themes
 - **No unused code** - If a function is not used, delete it. If
   product code is only used in tests, delete it. If a file is not
   used, delete it. Delete dead code. Static analysis tools (knip,

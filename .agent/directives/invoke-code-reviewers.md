@@ -17,6 +17,7 @@ Before starting any non-trivial task, answer these questions to identify which s
 9. Does this touch MCP protocol, tool/resource/prompt definitions, MCP Apps Extension widgets, transport/session patterns, or MCP Apps migration work? -> `mcp-reviewer` (situational)
 10. Does this touch Sentry SDK usage, OpenTelemetry trace/log correlation, telemetry redaction, MCP Insights, or Sentry env/config wiring? -> `sentry-reviewer` (situational)
 11. Is this a plan marked decision-complete, proposing 3+ agents, asserting blocking relationships, or committing to technology choices before research? -> `assumptions-reviewer` (situational)
+12. Does this touch rendered UI, CSS, design tokens, or React components? -> UI/Frontend cluster: `accessibility-reviewer`, `design-system-reviewer`, `react-component-reviewer` (situational; see ADR-149)
 
 Documentation drift (`docs-adr-reviewer`) applies whenever behaviour or architecture changes, even if no docs are explicitly edited.
 
@@ -58,6 +59,7 @@ Invoke additional specialists when applicable:
 | Tooling/config quality-gate changes | `config-reviewer` |
 | Auth/authz, OAuth, secrets, PII, injection, security-sensitive logic | `security-reviewer` |
 | README/TSDoc/ADR/docs updates or expected documentation drift | `docs-adr-reviewer` |
+| Rendered UI, CSS, design tokens, React components | UI/Frontend cluster: `accessibility-reviewer`, `design-system-reviewer`, `react-component-reviewer` (ADR-149) |
 
 Specialist on-demand (not standard roster -- situational trigger only):
 
@@ -92,6 +94,8 @@ Specialist on-demand (not standard roster -- situational trigger only):
 **MCP protocol/tool/Apps change**: Invoke `code-reviewer` + `mcp-reviewer` immediately. Add `security-reviewer` if the MCP auth model is affected. Add `clerk-reviewer` if Clerk integration with MCP auth is in question. Add the relevant architecture reviewer(s) if MCP tool layering or transport boundaries change. For active MCP planning or implementation support, use the `mcp-expert` skill.
 
 **Sentry/OTel change**: Invoke `code-reviewer` + `sentry-reviewer` immediately. Add `security-reviewer` if redaction, secrets, or PII boundaries change. Add `mcp-reviewer` if MCP wrapping or Insights could affect protocol behaviour.
+
+**UI/Frontend change**: Invoke `code-reviewer` + relevant UI/Frontend cluster specialist(s) immediately. For MCP App views, add `mcp-reviewer` (owns `_meta.ui*`, resource registration, CSP, host bridge). UI specialists own DOM, accessibility, tokens, and React structure *inside* the view.
 
 **Plan finalisation**: Invoke `assumptions-reviewer` when a plan is marked decision-complete or ready for execution. Also invoke when a plan proposes 3+ new agents, asserts blocking relationships, or commits to technology choices before research phases complete. For active assumption auditing during planning, use the `assumptions-expert` skill.
 

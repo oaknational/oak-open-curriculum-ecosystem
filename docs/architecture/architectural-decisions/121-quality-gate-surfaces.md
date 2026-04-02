@@ -2,7 +2,8 @@
 
 **Status**: Accepted
 **Date**: 2026-02-25
-**Related**: [ADR-013 (Husky and lint-staged)](013-husky-and-lint-staged.md), [ADR-043 (Type Generation in Build and CI)](043-codegen-in-build-and-ci.md), [ADR-111 (Secret Scanning Quality Gate)](111-secret-scanning-quality-gate.md)
+**Updated**: 2026-04-02
+**Related**: [ADR-013 (Husky and lint-staged)](013-husky-and-lint-staged.md), [ADR-043 (Type Generation in Build and CI)](043-codegen-in-build-and-ci.md), [ADR-111 (Secret Scanning Quality Gate)](111-secret-scanning-quality-gate.md), [ADR-147 (Browser Accessibility)](147-browser-accessibility-as-blocking-quality-gate.md)
 
 ## Context
 
@@ -50,6 +51,7 @@ before push**, so developers never discover failures only after pushing.
 | test             | Yes        | Yes          | Yes             | Yes     | Yes               |
 | test:e2e         | --         | Yes (--only) | --              | Yes     | Yes               |
 | test:ui          | --         | --           | --              | Yes     | Yes               |
+| test:a11y        | --         | --           | --              | Yes     | Yes               |
 | smoke:dev:stub   | --         | --           | --              | Yes     | Yes               |
 | doc-gen          | --         | --           | --              | --      | Yes               |
 
@@ -63,9 +65,9 @@ before push**, so developers never discover failures only after pushing.
 - **CI excludes test:e2e**: E2E tests hit Elasticsearch which is not
   available in the GitHub Actions environment. Covered by pre-push
   (`--only` mode) and `pnpm qg`.
-- **CI excludes test:ui and smoke:dev:stub**: Playwright browser install
-  and dev server lifecycle add complexity and flakiness to CI. These are
-  local-only gates covered by pre-push and `pnpm qg`.
+- **CI excludes test:ui, test:a11y, and smoke:dev:stub**: Playwright
+  browser install and dev server lifecycle add complexity and flakiness
+  to CI. These are local-only gates covered by pre-push and `pnpm qg`.
 - **CI excludes doc-gen**: documentation generation is a build-time
   convenience, not a correctness gate.
 - **`pnpm qg` excludes secrets scan and clean**: `qg` assumes an already-

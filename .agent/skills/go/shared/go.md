@@ -3,7 +3,7 @@ skill_id: go
 title: "GO"
 type: workflow
 status: active
-last_updated: 2026-03-07
+last_updated: 2026-04-02
 ---
 
 # GO GO GO
@@ -18,9 +18,15 @@ Read ALL of this document, then carry out the [Action](#action).
 
 ## Ground Yourself
 
-Read [start-right-quick shared workflow](../../start-right-quick/shared/start-right.md) and follow all
-instructions in that file and in the files it leads to (rules, testing
-strategy, schema-first execution).
+Read
+[start-right-quick shared workflow](../../start-right-quick/shared/start-right.md)
+and follow all instructions in that file and in the files it leads to (rules,
+testing strategy, schema-first execution).
+
+Then read the latest `Live continuity contract` in
+`.agent/prompts/session-continuation.prompt.md`. Treat it as the fast recovery
+surface for current objective, invariants, recent surprises, next safe step,
+and whether deep consolidation is due.
 
 If your current task is driven by a plan collection, also read the relevant
 collection `README.md` and `roadmap.md`, then:
@@ -30,6 +36,24 @@ collection `README.md` and `roadmap.md`, then:
 
 before executing the next step so both queued and in-progress work stay
 discoverable.
+
+For MCP App work, start from these three surfaces in order:
+
+1. `start-right-quick`
+2. the latest continuity contract
+3. the active MCP App plan set
+
+## When to Use GO
+
+Use `GO` as a mid-session execution cadence, especially when:
+
+- multiple active sub-plans are in play
+- the session is likely to span more than one focused execution block
+- the todo list needs re-grounding before the work drifts
+
+Do not use `GO` as the ordinary end-of-session handoff. Close ordinary sessions
+with `session-handoff`. Use `consolidate-docs` only when its trigger checklist
+says deep convergence is due.
 
 ## Intent
 
@@ -52,7 +76,8 @@ discoverable.
   This consists of:
   1. Stepping back and reflecting on the action
   2. Checking alignment with the plan and rules
-     3. **Invoking the appropriate sub-agent(s)** per the `invoke-code-reviewers` rule (full matrix, timing, triage, and examples)
+  3. **Invoking the appropriate sub-agent(s)** per the
+     `invoke-code-reviewers` rule (full matrix, timing, triage, and examples)
 - Make sure your todo list includes running the quality gates. These
   items should be prefixed with `QUALITY-GATE:` and happen reasonably
   often.
@@ -63,7 +88,8 @@ discoverable.
   multiple sub-agents to assess overall coherence.
 - Remove any items from your todo list that don't make sense, or are
   no longer relevant.
-- Every 6th item must be to re-read this document and re-follow ALL instructions, including this one.
+- Every 6th item must be to re-read this document and re-follow ALL
+  instructions, including this one.
 
 ## Action
 

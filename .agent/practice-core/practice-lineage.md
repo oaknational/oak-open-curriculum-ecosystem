@@ -22,12 +22,10 @@ See §Frontmatter and §Plasmid Exchange below.
 ## Frontmatter
 
 The trinity files carry YAML frontmatter with `provenance` (pointer to
-`provenance.yml`) and four fitness thresholds ([ADR-144][adr-144]):
+`provenance.yml`) and four fitness thresholds (ADR-144):
 `fitness_line_target` (soft), `fitness_line_limit` (hard),
 `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100).
 All measure content only — frontmatter excluded. See §Fitness Functions.
-
-[adr-144]: ../../docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md
 
 ### Provenance (provenance.yml)
 
@@ -42,10 +40,12 @@ records:
 | `date`    | Date this iteration was created or last evolved.                                       |
 | `purpose` | What the Practice is being used for — tells receiving repos what shaped this evolution. |
 
-The chain serves three functions: **origin tracking** (index 0), **evolution detection** (last
-entry's `repo` differs from local → new learnings), and **context for comparison** (`purpose`
-describes the work that shaped the evolution). When a repo evolves the files, it appends a new entry
-to the relevant chains in `provenance.yml`.
+The chain tracks origin (index 0), evolution (last `repo` differs →
+new learnings), and context (`purpose` describes what shaped the
+evolution). Evolving repos append new entries to `provenance.yml`.
+
+**Caveat**: a higher `index` does not imply superiority across all dimensions. Repos evolve
+independently; always compare content, not indices, when integrating incoming material.
 
 ## The Practice Blueprint
 
@@ -119,6 +119,10 @@ This process is universal. It costs nothing and prevents shallow execution.
 - **Prohibited**: global state manipulation in tests -- environment variable mutation, global mock
   injection, module cache manipulation, or any mechanism that creates hidden coupling between tests.
   Pass configuration as function arguments.
+- **Browser proof surfaces** (UI projects): accessibility audit (WCAG
+  compliance), visual regression, responsive validation, theme/mode
+  correctness. These are proof layers for rendered output — analogous
+  to the unit/integration distinction for code — not replacements.
 
 ### Agent Pattern
 
@@ -131,8 +135,11 @@ reads directives first, applies the First Question, and reports with severity le
 fixes. A repo may stage this layer after the Core itself is installed; until then, `AGENT.md` should
 say explicitly that reviewer infrastructure is not yet installed.
 
-For production, expand: security-reviewer, config-reviewer, architecture-reviewer(s). Use layered
-composition (wrapper -> template -> shared components) at scale; inline for short-lived projects.
+For production, expand: security-reviewer, config-reviewer,
+architecture-reviewer(s). For UI-heavy projects, consider
+accessibility-reviewer and design-system-reviewer; the gateway
+code-reviewer triages to them. Use layered composition at scale;
+inline for short-lived projects.
 
 ### Workflow Commands
 
@@ -202,16 +209,11 @@ The condensed cycle: **Capture** (napkin, always on) → **Refine** (distilled, 
 session, distilled serves future agents, permanent docs serve everyone. Each transition raises the
 bar.
 
-The flow has two critical properties for propagation:
-
-1. **Self-replicating**: the knowledge flow is part of the Practice, which travels via plasmid
-   exchange. A receiving repo inherits the mechanism that produces rules, not just the rules
-   themselves. This means every repo that adopts the Practice immediately has a working learning
-   loop — it doesn't need to invent one.
-
-2. **Self-applicable**: the rules that enforce the Practice are themselves subject to the same
-   evolution process. If consolidation reveals that a rule is wrong, the rule can change — but only
-   if the change clears the three-part bar. The Practice is a ratchet, not a pendulum.
+The flow has two critical properties: **self-replicating** (the
+mechanism travels via plasmid exchange — receiving repos inherit the
+learning loop, not just its outputs) and **self-applicable** (rules
+are subject to the same evolution process; changes require the
+three-part bar).
 
 ### Session-Entry Skills
 
@@ -272,10 +274,10 @@ frontmatter excluded).
 
 | Frontmatter key        | Threshold | What it guards                                  |
 | ---------------------- | --------- | ----------------------------------------------- |
-| `fitness_line_target`  | Soft      | Content lines — signal to refine (agent-extendable) |
-| `fitness_line_limit`   | Hard      | Content lines — ceiling (user approval to change)   |
-| `fitness_char_limit`   | Hard      | Content characters — non-adjustable                 |
-| `fitness_line_length`  | Hard      | Prose line width — non-adjustable, always 100       |
+| `fitness_line_target`  | Soft      | Content lines — signal to refine; agents may extend modestly |
+| `fitness_line_limit`   | Hard      | Content lines — cannot exceed without user approval          |
+| `fitness_char_limit`   | Hard      | Content characters — honest volume (ungameable)              |
+| `fitness_line_length`  | Hard      | Prose line width — readability and diff quality; always 100  |
 
 Target exceedance warns; limit exceedance blocks. Only the user may raise
 hard limits. The four fields form a constraint triangle — gaming one
@@ -352,27 +354,31 @@ When Practice Core files appear in the Practice Box:
    `.agent/practice-context/incoming/` exists, clear its received files and working notes. Local
    `outgoing/` may remain. The integration is complete.
 
-If nothing clears the bar, record that in the napkin too — the incoming material was reviewed and
-found not applicable to this context. That is a valid outcome.
+If nothing clears the bar, record that in the napkin too — the
+incoming material was reviewed and found not applicable to this
+context. That is a valid outcome.
 
-The Practice Core package (trinity + entry points + changelog + provenance) is itself a plasmid. It
-can be carried to any repo. The receiving repo applies its own bar.
+**Two-way merge**: when the local Practice has also evolved since the
+last common ancestor, start from the incoming files (they carry
+cumulative evolution as a coherent whole) and merge local additions
+back. Verify by diffing backup against result. Fitness checks are
+mandatory — two-way merges frequently push files over their ceilings.
 
-### Code Pattern Exchange
+### Pattern Exchange
 
-Proven code patterns (`.agent/memory/code-patterns/`) may travel alongside the Practice Core as
-optional Practice Context. They are not Core files — they are exchange context, one step beyond the
-outgoing notes.
+Proven patterns (`.agent/memory/patterns/`) may travel alongside the
+Practice Core as optional Practice Context — exchange context, one
+step beyond the outgoing notes.
 
-- **Sender**: when a code pattern is Practice-relevant and cross-repo-applicable, copy it to
-  `.agent/practice-context/outgoing/code-patterns/`. The consolidation command's pattern-extraction
-  step is the natural trigger.
-- **Receiver**: incoming patterns land in `.agent/practice-context/incoming/code-patterns/`. Apply
-  the same three-part bar as any other Practice material. Adopted patterns move to local
-  `.agent/memory/code-patterns/`. Rejected patterns are recorded in the napkin and cleared.
-- **Format**: each pattern is a self-contained `.md` file with YAML frontmatter (`name`, `domain`,
-  `proven_by`, `prevents`) and body sections (Principle, Pattern, Anti-pattern, When to Apply). See
-  `practice-bootstrap.md` §Code Patterns for the template.
+- **Sender**: copy Practice-relevant, cross-repo-applicable patterns
+  to `.agent/practice-context/outgoing/patterns/`. The consolidation
+  command's pattern-extraction step is the natural trigger.
+- **Receiver**: incoming patterns land in
+  `.agent/practice-context/incoming/patterns/`. Apply the same
+  three-part bar. Adopted patterns move to local
+  `.agent/memory/patterns/`; rejected ones are recorded in the napkin.
+- **Format**: self-contained `.md` with YAML frontmatter. See
+  `practice-bootstrap.md` §Reusable Patterns for the template.
 
 ## Growing a Practice from This Blueprint
 
@@ -533,3 +539,6 @@ validated across 3+ repos.
 - **Apps are thin; libraries own domain logic.** Apps compose library/SDK
   capabilities. They never reimplement domain logic a library provides. The
   test: "could another consumer need this?" Violations cause silent drift.
+- **Provenance is storytelling, not credit.** The provenance chain records the
+  knowledge journey, not ownership. Every repo that shaped the evolution appears
+  because we are here to collaborate, not compete.

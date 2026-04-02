@@ -1,5 +1,25 @@
 # Consolidate Docs
 
+Deep convergence workflow. This is **not** the default end-of-session flow.
+
+Use this command only when one or more triggers hold. If none apply, use
+`session-handoff` instead.
+
+## Trigger Checklist
+
+Run `consolidate-docs` when one or more of these is true:
+
+- a plan or milestone has closed
+- settled doctrine or design rationale exists only in ephemeral artefacts
+- practice-box incoming or outgoing needs processing
+- napkin, distilled, pattern, or fitness pressure now needs convergence work
+- repeated surprises or corrections suggest a new rule, pattern, ADR, or
+  governance change
+- documentation drift or stale cross-references now need graduation
+
+This command preserves the full deep-convergence role: graduation, pattern
+extraction, napkin rotation, fitness management, and practice exchange.
+
 ## Cardinal Rule: Plans Are Not Documentation
 
 **A completed plan MUST be safe to delete at any point.** Plans are execution instructions — they describe what to do and track progress. They are NOT permanent documentation.
@@ -19,7 +39,7 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
 2. Make sure all plans and prompts are fully up to date (status lines, completion markers, cross-references). After archive/delete moves, explicitly sweep for the two most common stale-link classes: `active/` or `current/` plan paths that should now point at `archive/completed/`, and deleted platform-plan paths such as `.cursor/plans/*.plan.md` that should now point at the canonical repo artefact they delivered.
 3. Identify any content in ephemeral locations (prompts, napkin, distilled.md, **platform-specific memory**) that now functions as settled documentation, and move it to non-ephemeral locations such as ADRs, `/docs/`, or READMEs. Platform-specific memory locations to check: Claude Code auto-memory (`~/.claude/projects/<project>/memory/`), and any platform-equivalent session logs. These are platform-specific napkin analogues — insights captured there should flow into the canonical napkin or distilled.md if they have cross-platform value.
 4. Check whether `.agent/experience/` files contain applied technical patterns that have matured into settled practice — if so, extract the technical content to permanent documentation or `distilled.md`, and replace the experience file with a brief reflective stub.
-5. **Extract reusable patterns.** Review completed work for patterns that meet the barrier: broadly applicable, proven by implementation, prevents a recurring mistake, and stable. This covers all types of learning — code patterns, process patterns, architecture patterns, structural observations, agent operational concerns, behavioural rules, domain-specific gotchas — anything reusable that would change behaviour if read before similar work. Extract qualifying patterns to `.agent/memory/code-patterns/` (one pattern per file, markdown with frontmatter). Patterns are abstract — they describe the principle and anti-pattern, not the domain-specific implementation. See `.agent/memory/code-patterns/README.md` for the frontmatter schema, category options, and barrier criteria.
+5. **Extract reusable patterns.** Review completed work for patterns that meet the barrier: broadly applicable, proven by implementation, prevents a recurring mistake, and stable. This covers all types of learning — code patterns, process patterns, architecture patterns, structural observations, agent operational concerns, behavioural rules, domain-specific gotchas — anything reusable that would change behaviour if read before similar work. Extract qualifying patterns to `.agent/memory/patterns/` (one pattern per file, markdown with frontmatter). Patterns are abstract — they describe the principle and anti-pattern, not the domain-specific implementation. See `.agent/memory/patterns/README.md` for the frontmatter schema, category options, and barrier criteria.
 6. **Rotate the napkin if needed.** If `.agent/memory/napkin.md` exceeds ~500 lines, perform the distillation rotation:
 
    a. **Extract** — read every "Patterns to Remember", "Mistakes Made", "Key Insight", and "Lessons" section from the outgoing napkin. Collect all entries that would change behaviour if read next session.
@@ -34,7 +54,13 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
    a. **Stable?** — not contradicted by recent work.
    b. **Natural home?** — an existing permanent doc (ADR, governance doc, README, TSDoc) where it belongs.
 
-   When both are met, create the permanent doc entry first, then remove from `distilled.md`. Always graduate useful understanding — fitness limits are never a reason to defer. If graduating creates fitness pressure on the target doc, step 8 handles it (compress, split, or extend). The barrier is "stable and useful enough to place," not "no longer agent-operational." Common destinations: rules codified in `.agent/directives/principles.md`, patterns documented in ADRs, tooling documented in `docs/engineering/build-system.md`, workspace-specific gotchas in workspace READMEs. Meta-principles about the Practice itself can graduate to `.agent/practice-core/practice-lineage.md` Learned Principles. Practice Core structural changes (new sections, reorganisation, new artefact types) are rare but valid — they require user approval. This **closes the loop** on the knowledge gained from sessions.
+   Three outcomes:
+
+   - **Both met** — create the permanent doc entry first, then remove from `distilled.md`.
+   - **Stable but no natural home** — do not leave it in distilled.md indefinitely. Raise this with the user: the content may justify *creating* a new permanent home (a new doc section, a new ADR, a new governance page). The conversation is the point — stable knowledge without a home is a signal that the documentation structure has a gap.
+   - **Not yet stable** — leave in distilled.md for further validation.
+
+   Always graduate useful understanding — fitness limits are never a reason to defer. If graduating creates fitness pressure on the target doc, step 8 handles it (compress, split, or extend). The barrier is "stable and useful enough to place," not "no longer agent-operational." Common destinations: rules codified in `.agent/directives/principles.md`, patterns documented in ADRs, tooling documented in `docs/engineering/build-system.md`, workspace-specific gotchas in workspace READMEs. Meta-principles about the Practice itself can graduate to `.agent/practice-core/practice-lineage.md` Learned Principles. Practice Core structural changes (new sections, reorganisation, new artefact types) are rare but valid — they require user approval. This **closes the loop** on the knowledge gained from sessions.
 8. **Actively manage fitness thresholds** (ADR-144). Run `pnpm practice:fitness` (or `pnpm practice:fitness:informational` for a non-blocking report). The validator discovers every live markdown file that declares `fitness_line_target` in YAML frontmatter, excluding archives, backups, and incoming practice boxes. Two threshold levels:
 
    - *Target exceeded* (warning, non-blocking): the file signals refinement.
@@ -51,7 +77,7 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
    Changes to fitness thresholds are self-documenting via frontmatter. An ADR amendment is only needed if the fitness system itself changes.
 9. **Manage the practice exchange.** Two directions:
 
-   **Incoming**: If `.agent/practice-core/incoming/` contains files, follow the integration flow in `.agent/practice-core/practice-lineage.md`. Key steps: (a) check the provenance chain in the YAML frontmatter; (b) compare across the full Practice system; (c) apply the three-part bar (validated by real work? prevents recurring mistakes? stable?); (d) present specific proposals to the user; (e) clear the box after integration. If distilled.md entries have matured into meta-principles about the Practice itself, they may graduate to the Learned Principles section in `.agent/practice-core/practice-lineage.md`.
+   **Incoming**: If `.agent/practice-core/incoming/` contains files, follow the integration flow in `.agent/practice-core/practice-lineage.md`. **Practice evolution is not linear** — an incoming Practice can be behind in some areas and ahead in others. Never dismiss an incoming as "stale" because one file or section is older than the current version. Compare bidirectionally, file by file and section by section. Key steps: (a) check the provenance chain in the YAML frontmatter; (b) compare across the full Practice system bidirectionally; (c) apply the three-part bar (validated by real work? prevents recurring mistakes? stable?); (d) present specific proposals to the user; (e) clear the box only after integration is complete and user-approved. Do not clear the box unilaterally. If distilled.md entries have matured into meta-principles about the Practice itself, they may graduate to the Learned Principles section in `.agent/practice-core/practice-lineage.md`.
 
    **Outgoing**: Check whether completed work has produced insights that would benefit other repos in the Practice network. Not everything belongs in Practice Core — domain-specific observations, structural notes, process learnings, and patterns that are useful but not universal go to `.agent/practice-context/outgoing/` for broadcast via the plasmid exchange. Content appropriate for Practice Core itself (new Learned Principles, structural proposals, bootstrap template improvements) should be proposed as Practice Core changes with user approval.
-10. _(Optional)_ If the session involved meaningful work, consider recording a brief experience in `.agent/experience/`. This should be about what the work was like, not what was done. See `.agent/directives/metacognition.md` and `.agent/experience/README.md`.
+10. *(Optional)* If the session involved meaningful work, consider recording a brief experience in `.agent/experience/`. This should be about what the work was like, not what was done. See `.agent/directives/metacognition.md` and `.agent/experience/README.md`.

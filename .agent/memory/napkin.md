@@ -1,3 +1,323 @@
+## Session 2026-04-02 — Frontend Practice Integration Phase 3 reviews
+
+### What Was Done
+
+- Invoked 5 reviewers on Phase 1+2 output: accessibility-reviewer,
+  design-system-reviewer, code-reviewer, docs-adr-reviewer, subagent-architect
+  (2e covered the last). All returned **conditional-pass**.
+- Fixed all reviewer findings:
+  - WAI-ARIA 1.3 (draft) → 1.2 (Recommendation) in template, skill, governance, plan
+  - DTCG preview URL → stable 2025.10 report URL in template, skill, governance
+  - axe-core tags: added `wcag21a` and `wcag21aa` to match full WCAG 2.2 AA coverage claim
+  - ADR-147: "comprehensive coverage" → "automatable subset"
+  - Token governance example: `bg-surface` raw hex → `{color.white}` palette reference
+  - ADR index: removed ADR-146 duplicate, restored ADR-150 to correct numeric position
+  - ADR-121: added `Updated: 2026-04-02` and back-reference to ADR-147
+  - AGENT.md: added `packages/design/` to Structure, `test:a11y` to qg/check descriptions
+
+### Patterns to Remember
+
+- **New agents produce real findings on first use**: the cohort review model works
+  — accessibility-reviewer and design-system-reviewer both found genuine authority
+  and example problems in their own governance docs.
+- **Spec version hygiene matters — but pragmatic preference overrides**:
+  WAI-ARIA 1.3 Editor's Draft is the preferred working reference (user
+  confirmed 2026-04-02), even though 1.2 is the current Recommendation.
+  This is a deliberate forward-looking choice.
+- **axe-core tag taxonomy**: WCAG 2.1 rules have their own tag family (`wcag21a`,
+  `wcag21aa`) separate from WCAG 2.0 tags. Claiming "full WCAG 2.2 AA" requires
+  all three version families.
+- **Token examples must follow their own rules**: a governance doc whose example
+  violates its tier model teaches the wrong pattern.
+- **ADR index deduplication**: when adding entries, check for pre-existing
+  duplicates — earlier sessions may have inserted items more than once.
+
+### Fitness Status
+
+- Phase 3 complete, plan status updated
+- Session continuation prompt updated for Phase 4 readiness
+
+---
+
+## Session 2026-04-02 — Session handoff consolidation gate
+
+### What Was Done
+
+- Updated `jc-session-handoff` so it now includes a consolidation gate.
+- The command remains the ordinary lightweight closeout surface by default,
+  but it can now escalate into `jc-consolidate-docs` when the trigger is
+  clear and the deeper work is already well-bounded.
+- Aligned the doctrine and planning surfaces with that change:
+  `session-handoff.md`, `continuity-practice.md`, ADR-150, the continuity
+  adoption plan, the continuation prompt, and the evidence log.
+
+### Patterns to Remember
+
+- **Split loops do not forbid escalation**: the important boundary is that
+  deep convergence is not the default. A lightweight workflow can still
+  contain a gate that continues into the deeper loop when the trigger is
+  explicit and proportionate.
+- **Workflow changes need doctrine sync**: command behaviour, governance
+  language, ADR wording, and the active/current plan should all move
+  together or the repo quickly accumulates contradictory operating rules.
+
+---
+
+## Session 2026-04-02 — Frontend plan sync after Phase 2
+
+### What Was Done
+
+- Brought the body of the active frontend practice plan back into line
+  with its frontmatter and the landed repo state.
+- Updated the plan to reflect that Phase 2 is complete and the current
+  UI/Frontend cluster is real: `accessibility-reviewer`,
+  `design-system-reviewer`, and `react-component-reviewer`.
+- Removed stale wording implying the `code-reviewer` template carried the
+  new UI cluster routing; the landed discoverability surfaces are
+  `invoke-code-reviewers.md`, `AGENT.md`, and the platform adapters.
+- Recorded the current `test:a11y` truth in the plan: the implemented gate
+  surfaces are `pnpm qg` and `pnpm check`, while ADR-147 and
+  `docs/governance/accessibility-practice.md` still describe CI more
+  ambitiously than `.github/workflows/ci.yml` and ADR-121 currently do.
+
+### Patterns to Remember
+
+- **Active plans drift most in narrative sections**: frontmatter, prompt,
+  and napkin can be current while the plan body still speaks from an
+  earlier phase. Status sync needs a whole-document pass, not just todo
+  updates.
+- **Gate-surface truth should be checked against the workflow, not just
+  ADR prose**: for `test:a11y`, `.github/workflows/ci.yml` and ADR-121 are
+  the decisive implementation surfaces.
+
+---
+
+## Session 2026-04-02 — Frontend Practice Integration Phase 2 completion
+
+### What Was Done
+
+- Completed all Phase 2 tasks for the Frontend Practice Integration plan
+  (2a-2e: triplets, gateway routing, adapters, validation, review).
+- Created three full ADR-129 agent triplets:
+  - `accessibility-reviewer` (WCAG 2.2 AA, WAI-ARIA, Playwright + axe-core)
+  - `design-system-reviewer` (DTCG JSON, CSS custom properties, three-tier tokens)
+  - `react-component-reviewer` (React docs, hooks correctness, render performance)
+- Each triplet: canonical template + expert skill + situational rule (9 files).
+- Updated AGENT.md roster with UI/Frontend cluster section + added missing
+  `assumptions-reviewer` to Specialist On-Demand.
+- Created 24 platform adapter files across Cursor (agent + rule + skill),
+  Claude Code (agent + rule), Codex (agent + config.toml entries),
+  Gemini CLI (command), and `.agents/skills` (universal).
+- Both `pnpm subagents:check` (22 Cursor wrappers, 22 Codex adapters,
+  19 templates) and `pnpm portability:check` (40 command adapters across
+  4 platforms) pass clean.
+- subagent-architect review verdict: "Ready for use" — optional refinements
+  noted (ADR-129 tier-2 labelling precision, bidirectional MCP routing hints).
+- Updated plan frontmatter status to "PHASE 2 COMPLETE".
+- Updated session continuation prompt for Phase 3 readiness.
+
+### Patterns to Remember
+
+- **Codex description sync**: `.codex/agents/*.toml` descriptions must
+  exactly match `.codex/config.toml` registrations. The validator checks
+  string equality, so even minor wording differences fail.
+- **`.cursor/agents/` is required**: the portability check expects Cursor
+  agent wrappers alongside the rule and skill adapters. Easy to forget
+  since the other platforms only need one or two files.
+- **`assumptions-reviewer` was missing from AGENT.md roster**: even though
+  the triplet existed, it wasn't listed in the roster. Always add new
+  agents to the AGENT.md roster as part of the rollout.
+
+### Fitness Status
+
+- `subagents:check` — PASS (22/22/19)
+- `portability:check` — PASS (40 adapters across 4 platforms)
+- Phase 2 plan todos — all completed
+- Phase 3 (targeted review) — unblocked
+
+---
+
+## Session 2026-04-02 — Frontend Practice Integration Phase 1 completion
+
+### What Was Done
+
+- Completed all remaining Phase 1 tasks for the Frontend Practice
+  Integration plan (1b local directives + 1f ADRs/governance/amendments).
+- Authored `docs/governance/design-token-practice.md` (DTCG JSON source,
+  three-tier model, CSS custom properties, MCP App delivery, theming).
+- Updated ADR index with entries for ADR-147, ADR-148, ADR-149 (both
+  flat and categorised sections).
+- Amended ADR-041: added `packages/design/` category with dependency
+  direction row in the coverage matrix.
+- Amended ADR-121: added `test:a11y` row to coverage matrix, updated
+  exclusion rationale.
+- Updated governance README with accessibility and design token practice
+  entries.
+- Updated `gates.md` to include `test:a11y` after `test:ui` and before
+  `smoke:dev:stub` in canonical gate sequence.
+- Updated plan status to "PHASE 1 COMPLETE" and all Phase 1 todos to
+  completed. Phase 2 (agent triplets) is now unblocked.
+
+### Patterns to Remember
+
+- **ADR index needs both flat and categorised entries**: the README has
+  a numbered flat list and a grouped "Key Architectural Decisions"
+  section. Easy to update one and forget the other.
+- **ADR-041 dependency matrix extends with each new category**: when
+  adding `packages/design/`, had to add both the bullet description and
+  a new row in the dependency direction table with correct constraints.
+
+---
+
+## Session 2026-04-02 — Continuity adoption implementation
+
+### What Was Done
+
+- Added a new current plan for continuity and surprise practice adoption.
+- Added ADR-150 plus `docs/governance/continuity-practice.md`.
+- Replaced `wrap-up` with `session-handoff` across canonical and platform
+  wrapper surfaces.
+- Added a fixed `Live continuity contract` to
+  `session-continuation.prompt.md`.
+- Reframed `consolidate-docs` as conditional deep convergence rather than the
+  default end-of-session loop.
+- Re-grounded `GO` around `start-right-quick`, the continuity contract, and the
+  active MCP App plan set.
+- Formalised structured surprise capture in the napkin skill.
+- Added baseline and evidence artefacts for the MCP App adoption lane.
+
+### Patterns to Remember
+
+- **Continuity needs a fixed operational contract**: active plans remain the
+  authority, but resumptions become materially lighter when the prompt always
+  answers the same questions: objective, invariants, surprises, next safe step,
+  and whether deep consolidation is due.
+- **Ordinary handoff and deep convergence are different loops**: when a single
+  closeout surface tries to do both, it becomes heavy enough to skip. A light
+  handoff command plus conditional deep consolidation is a stronger boundary.
+- **Dynamic ADR numbering must include live plan reservations**: checking only
+  the ADR directory is not enough in a multi-agent repo. The frontend plan had
+  already reserved `ADR-147` to `ADR-149`, so the continuity ADR had to land at
+  `ADR-150`.
+
+## Session 2026-04-02 — Practice integration deep
+
+### What Was Adopted
+
+- **9th quality gate**: accessibility audit added to `practice.md`
+  §Quality Gates.
+- **Browser proof surfaces**: added to `practice-lineage.md`
+  §Testing Philosophy.
+- **UI reviewer vocabulary**: added to `practice-lineage.md`
+  §Agent Pattern and `practice-bootstrap.md` §Core Review Agents.
+- **Two-way merge**: added to `practice-lineage.md`
+  §Integration Flow.
+- **Descriptive fitness wording**: restored in `practice-lineage.md`
+  fitness table — more descriptive than the terse versions.
+- **Portable ADR reference**: `(ADR-144)` instead of repo-local
+  footnote link `([ADR-144][adr-144])`.
+- **Richer pattern schema**: `use_this_when`, `barrier` fields in
+  `practice-bootstrap.md` §Reusable Patterns.
+- **New pattern file**: `accessibility-as-blocking-gate.md` (testing
+  category) from incoming Core Proposal.
+- **Provenance**: Index 19 appended for all three Core files.
+
+### Incoming Context Annotations
+
+All 24 incoming Practice Context files annotated:
+- Group A (Core Proposals): 4 files — 3 ADOPTED, 1 REFERENCE
+- Group B (Transferable Patterns): 5 files — 1 ADOPTED as pattern
+  file, 4 REFERENCE
+- Group C (Already Integrated): 8 files — all INTEGRATED
+- Group D (Operational Guides): 7 files — all REFERENCE
+
+### Compression Techniques Used
+
+With only ~96-214 chars headroom in Core files, had to:
+- Compress verbose passages (provenance chain description,
+  knowledge flow properties) to create ~1000 chars headroom
+- Rename `Code Pattern Exchange` → `Pattern Exchange` (shorter)
+- Draft new additions with extreme conciseness
+- Run fitness checks after each change
+
+---
+
+## Session 2026-04-02 — Monotonic index misconception
+
+### Patterns to Remember
+
+- **Provenance indices invite false linear reasoning**: the
+  `index` field in `provenance.yml` is a monotonic counter
+  ("Position in the chain. 0 is the origin."). Agents
+  naturally read index 17 > index 10 as "more evolved" and
+  conclude that lower-index incoming material is stale. But
+  practice evolution is not linear — repos evolve different
+  dimensions independently. A file at index 10 from repo B
+  may have evolved bootstrap patterns, metacognition depth,
+  or consolidation workflows beyond what index 17 in repo A
+  has reached. The index tracks *temporal position in the
+  chain*, not *completeness or quality across dimensions*.
+- **The consolidation workflow already warns about this**
+  (practice-bootstrap.md §Consolidation Workflow step 7:
+  "Practice evolution is not linear — incoming can be behind
+  in some areas and ahead in others. Compare
+  bidirectionally.") But the provenance specification itself
+  (practice-lineage.md §Provenance) does not carry a
+  corresponding caveat. The description of `index` as
+  "Position in the chain" is accurate but incomplete — it
+  says what the field *is* without saying what it *is not*.
+  Consider adding a note to the provenance spec that the
+  index does not imply superiority across all dimensions.
+- **This is a structural design issue, not just a
+  documentation gap**: the very existence of a single
+  monotonic counter per file encourages one-dimensional
+  comparison. A richer provenance model might track
+  per-section or per-capability evolution, but that would
+  add significant complexity. The pragmatic fix is stronger
+  warnings at the comparison points (provenance spec,
+  consolidation workflow, incoming integration guidance)
+  rather than restructuring the provenance model.
+
+---
+
+## Session 2026-04-02 — Documentation consolidation
+
+### What Was Done
+
+- Archived `plan-amendments-and-assumptions-reviewer.plan.md` to
+  `archive/completed/` — all todos complete, no stale references.
+- Added portability adapter count to distilled.md (Architecture,
+  Agent Infrastructure section).
+- Extracted "Boundary Narrowing for Schema Types" to patterns
+  (from URL remediation session's napkin observations).
+- Fixed artefact-inventory.md prose-line-width violation (1 line).
+- Confirmed: napkin at 201 lines (no rotation), distilled.md at
+  154 lines (no graduation candidates), no new outgoing.
+
+### Mistakes Made
+
+- **Deleted incoming Practice Core files**: wrongly concluded
+  that because practice-bootstrap.md was "ahead" in one section
+  (consolidation workflow), the entire incoming was stale. Practice
+  evolution is not linear — incoming can be behind in some areas
+  and ahead in others. The incoming files are part of the planned
+  frontend-practice integration. Restored via `git checkout`.
+- **Step 7 reasoning too narrow**: treated "no natural home" as
+  terminal. User corrected: stable content without a natural home
+  should trigger a conversation about *creating* a natural home,
+  not just leaving it in distilled.md indefinitely.
+
+### Fitness Status
+
+- 7 pre-existing prose-line-width violations remain across
+  AGENT.md, schema-first-execution.md, testing-strategy.md,
+  CONTRIBUTING.md, development-practice.md, typescript-practice.md,
+  troubleshooting.md. These need dedicated line-wrapping passes.
+- 3 above-target warnings: principles.md +14, testing-strategy.md
+  +1, troubleshooting.md +14.
+
+---
+
 ## Session 2026-04-02 — Plan amendments and assumptions-reviewer creation
 
 ### Key Events
@@ -94,8 +414,8 @@
 
 ### Patterns to Remember
 
-- **Two-level MCP App testing**: resource-level tests (Playwright
-  + axe-core, injected CSS) prove DOM accessibility in isolation.
+- **Two-level MCP App testing**: resource-level tests (Playwright,
+  axe-core, injected CSS) prove DOM accessibility in isolation.
   MCP App integration tests (basic-host or real host) prove
   correct packaging, sandbox, CSP, and bridge lifecycle. Both
   required; neither sufficient alone.
@@ -111,6 +431,7 @@ Archived `napkin-2026-04-01.md` covering sessions 2026-03-31
 to 2026-04-01.
 
 Distilled 9 new entries to `distilled.md`:
+
 - Fitness Management section (3 entries): char limit as honest
   metric, graduation vs fitness separation, user feedback as
   correction signal
@@ -199,3 +520,138 @@ Executed the url-generation-cleanup plan across three phases.
   compile-time requirements.
 - Extracting a narrowing helper avoids non-null assertion lint violations
   and provides a descriptive error message if the invariant ever breaks.
+
+## Session 2026-04-02 — Multipane workflow vs knowledge retention
+
+### What Was Done
+
+- Analysed two external pieces on AI-assisted work: a 4-pane Claude Code
+  iTerm2 workflow and an essay on the "knowledge retention gap".
+- Mapped both onto this repo's Practice model to compare process separation
+  against durable knowledge capture.
+
+### Patterns to Remember
+
+- **Role separation prevents self-grading, not forgetting**: hard pane or
+  agent boundaries (plan/impl/audit/prompt) reduce review contamination and
+  improve process discipline, but they do not create durable understanding by
+  themselves.
+- **Durable notes solve a different failure mode**: chat/session context is
+  transient; retained knowledge needs a capture/refine/graduate loop. This
+  repo's napkin -> distilled -> permanent-doc flow is the structural analogue
+  of the article's Zettelkasten -> review -> spaced repetition loop.
+- **The strongest agentic practice needs both**: specialist reviewers and
+  permission boundaries protect quality in the moment; durable notes and
+  reflection protect learning across time.
+
+## Session 2026-04-02 — Continuity in agentic awareness
+
+### What Was Done
+
+- Applied the metacognition directive to the repo's current Practice,
+  the multipane workflow article, and the knowledge-retention essay.
+- Reflected on what this repo could explore or create for the wider field
+  around continuity in agentic awareness.
+
+### Patterns to Remember
+
+- **Treat continuity as an engineering property, not a model property**:
+  the durable unit is not the model's hidden state; it is the external
+  scaffolding that preserves intent, constraints, decisions, and learnings
+  across interruptions and handoffs.
+- **Continuity has multiple surfaces**: role continuity (what mode am I in?),
+  task continuity (what are we doing next?), epistemic continuity (what have
+  we learned and why does it matter?), permission continuity (what am I
+  allowed to do?), and lineage continuity (how did this understanding evolve
+  across sessions/repos?).
+- **The likely contribution is a protocol plus evaluation, not just another
+  agent**: formalise continuity surfaces and handoff contracts first, then
+  test recovery fidelity under cold-start and handoff conditions before
+  adding more specialist roles.
+
+## Session 2026-04-02 — Continuity blog stub cluster
+
+### What Was Done
+
+- Added three outward-facing blog stubs in `.agent/blog-stubs/`:
+  continuity as an engineering property, the repo as shared memory, and
+  surprise as the route from experience to doctrine.
+- Updated the blog stubs index to make the new pieces discoverable.
+
+### Patterns to Remember
+
+- **A cluster of essays beat one overloaded piece**: continuity, shared
+  memory, and surprise/correction are tightly related, but each has a distinct
+  thesis, audience hook, and failure mode. Splitting them made the arguments
+  cleaner and more reusable.
+- **Blog stubs are a good bridge artefact**: they sit between internal
+  doctrine and public writing. Useful when the repo has earned a concept but
+  it is not ready, or not appropriate, to harden into governance language.
+
+## Session 2026-04-02 — Editorial voice for technical blogs
+
+### What Was Done
+
+- Added `.agent/blog-stubs/editorial-voice.md`, adapting the strongest parts
+  of an adjacent editorial system into a public technical essay voice for this
+  repo.
+- Updated `.agent/blog-stubs/README.md` so writers read the voice guide before
+  expanding or creating stubs.
+
+### Patterns to Remember
+
+- **Editorial guidance is domain-specific, not copy-paste**: a strong voice
+  system can be transplanted from one workspace to another, but the register
+  must change with the object of writing. Identity-led guidance is not the same
+  as public technical argument.
+- **The transferable core is deeper than tone**: "show, don't justify",
+  collaborative credit, confidence without hype, and earned abstraction carry
+  across domains better than surface-level phrasing.
+
+## Session 2026-04-02 — Session handoff and MCP plan review
+
+### What Was Done
+
+- Completed the session handoff (`/jc-session-handoff`) after closing the
+  frontend practice integration plan and reviewing all 10 MCP App plans.
+- Updated the Live Continuity Contract in `session-continuation.prompt.md`
+  with full WS3 plan status landscape.
+- Updated Active Workstreams section to reflect current priorities.
+
+### Corrections and Surprises
+
+- **WAI-ARIA 1.3 is the preferred working reference**: user explicitly
+  confirmed they are happy working from the WAI-ARIA 1.3 Editor's Draft
+  (https://w3c.github.io/aria/) rather than the 1.2 Recommendation. The
+  previous session's correction (1.3 → 1.2) was over-conservative. The
+  agents and governance docs should reference 1.3 Editor's Draft as the
+  forward-looking source, with 1.2 as the current Recommendation fallback.
+  Reversion completed: all affected files updated back to 1.3 Editor's
+  Draft references (governance doc, template, skill, plan).
+- **Frontend practice plan scope clarification**: design token
+  infrastructure was never in scope for the specialist-agents plan.
+  The plan delivers enabling expertise (agents, ADRs, governance), not
+  implementation infrastructure.
+
+### MCP Plan Landscape (snapshot)
+
+| Plan                                     | Status          |
+|------------------------------------------|-----------------|
+| mcp-app-extension-migration (umbrella)   | ACTIVE          |
+| ws3-widget-clean-break-rebuild (parent)  | ACTIVE          |
+| ws3-phase-0-baseline-and-red-specs       | COMPLETE        |
+| ws3-phase-2-scaffold                     | COMPLETE        |
+| ws3-phase-3-canonical-contracts          | IN PROGRESS (1) |
+| ws3-phase-3-execution                    | IN PROGRESS (1) |
+| ws3-merge-main-into-branch               | IN PROGRESS (2) |
+| ws3-phase-4-curriculum-model-view        | PENDING         |
+| ws3-phase-5-interactive-user-search-view | PENDING         |
+| ws3-phase-6-docs-gates-review-commit     | PENDING         |
+
+### Open Questions
+
+- Is the merge plan's security-hardening item still current?
+- Should Phase 3 fallback-policy be closed or deferred to Phase 6?
+- How should design token infrastructure be scoped — as part of WS3
+  or as a separate plan?
+- Which files need WAI-ARIA references updated back to 1.3 Editor's Draft?

@@ -3,10 +3,10 @@ name: napkin
 classification: passive
 description: >-
   Maintain a per-repo napkin file at .agent/memory/napkin.md that tracks
-  mistakes, corrections, and what works. Always active, every session,
-  unconditionally. Read distilled.md and napkin.md before doing anything.
-  Write to the napkin continuously as you work. Log your own mistakes,
-  not just user corrections.
+  mistakes, corrections, surprises, and what works. Always active, every
+  session, unconditionally. Read distilled.md and napkin.md before doing
+  anything. Write to the napkin continuously as you work. Log your own
+  mistakes, not just user corrections.
 ---
 
 # Napkin
@@ -45,6 +45,8 @@ end. Write to it whenever you learn something worth recording:
   the same as user corrections — maybe more.
 - **You try something and it fails.** Log the approach and why.
 - **You try something and it works well.** Log the pattern.
+- **Something surprises you.** Capture the expectation failure while it is
+  still fresh.
 - **You re-read the napkin mid-task** because you are about to
   do something you have gotten wrong before. Good. Do this.
 
@@ -59,6 +61,8 @@ next session:
   differently.
 - **Tool/environment surprises**: things about this repo, its
   tooling, or its patterns that you did not expect.
+- **Positive surprises**: cases where a simpler or stronger approach
+  worked better than expected.
 - **Preferences**: how the user likes things done.
 - **What worked**: approaches that succeeded, especially
   non-obvious ones.
@@ -66,6 +70,23 @@ next session:
 Be specific. "Made an error" is useless. "Assumed the API
 returns a list but it returns a paginated object with `.items`"
 is actionable.
+
+## Surprise Format
+
+When something surprises you, capture it with this shape:
+
+```markdown
+### Surprise
+
+- **Expected**: what you thought would happen
+- **Actual**: what actually happened
+- **Why expectation failed**: what was wrong or incomplete in the mental model
+- **Behaviour change**: what you should do differently next time
+```
+
+Use this for both negative and positive surprise. If a surprise keeps
+reappearing, it is a candidate for `distilled.md`, a reusable pattern, a
+governance update, or an ADR.
 
 ## Napkin Structure
 

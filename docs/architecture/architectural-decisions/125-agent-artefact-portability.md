@@ -202,7 +202,11 @@ Four platforms are now active: Cursor, Claude Code, Gemini CLI, and Codex. Maint
 
 ### Why `.agent/commands/` instead of `.agent/prompts/`
 
-`.agent/prompts/` already exists for reusable prompt playbooks (e.g., `GO.md`, semantic search prompts). Commands are a distinct artefact type: they are invoked by name, have platform-specific syntax, and map to slash commands. Keeping them separate avoids overloading the prompts directory.
+`.agent/prompts/` already exists for reusable prompt playbooks (e.g.,
+`session-continuation.prompt.md`, semantic search prompts). Commands are a
+distinct artefact type: they are invoked by name, have platform-specific
+syntax, and map to slash commands. Keeping them separate avoids overloading the
+prompts directory.
 
 ### Why consistent `jc-*` naming across platforms
 

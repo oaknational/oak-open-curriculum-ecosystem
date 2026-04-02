@@ -79,6 +79,14 @@ practice.md:
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-23
     purpose: 'Practice convergence remediation: clarified portable hook runtime and split fitness doctrine, and aligned outgoing support notes with the live validator and Claude Code activation state'
+  - index: 18
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Patterns taxonomy restructure: renamed code-patterns to patterns, introduced 5-category taxonomy (code, architecture, process, testing, agent), reclassified 30 patterns, broadened skill trigger conditions'
+  - index: 19
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Practice integration: adopted 9th quality gate (accessibility audit) from incoming opal-connection-site Core proposals'
 
 practice-lineage.md:
   - index: 0
@@ -153,6 +161,14 @@ practice-lineage.md:
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-23
     purpose: 'Practice convergence remediation: clarified portable hook runtime and split fitness doctrine, and aligned outgoing support notes with the live validator and Claude Code activation state'
+  - index: 18
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Patterns taxonomy restructure: renamed code-patterns to patterns, introduced 5-category taxonomy (code, architecture, process, testing, agent), updated Pattern Exchange section'
+  - index: 19
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Practice integration: adopted browser proof surfaces, UI reviewer vocabulary, two-way merge methodology, descriptive fitness wording, portable ADR reference from incoming Core proposals'
 
 practice-bootstrap.md:
   - index: 0
@@ -227,3 +243,11 @@ practice-bootstrap.md:
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-23
     purpose: 'Practice convergence remediation: clarified the bootstrap hook-runtime wording, kept the health-check doctrine in the portable Core, and aligned outbound support notes with the live implementation'
+  - index: 18
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Patterns taxonomy restructure: renamed code-patterns to patterns, updated artefact model and exchange pack references'
+  - index: 19
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Practice integration: adopted richer pattern schema (use_this_when, barrier), UI reviewer roster guidance from incoming Core proposals'

@@ -140,7 +140,7 @@ Practice Core package.
   the bootstrap artefact model
 - Added reference/research estate split guidance to the bootstrap
 - Packaged 6 cross-repo-applicable code patterns into
-  `.agent/practice-context/outgoing/code-patterns/`
+  `.agent/practice-context/outgoing/patterns/`
 - Added two new outgoing notes: multi-strand planning pattern and repo-audit
   as Practice enforcement
 
@@ -276,7 +276,7 @@ Practice Core package.
 ## [pine-scripts] 2026-03-17 — Practice Core Integration
 
 - Integrated full Practice Core into trading strategy research repo, replacing stub files
-- Installed memory pipeline (napkin, distillation skills), universal skills (systematic-debugging, code-patterns, receiving-code-review), and prompts
+- Installed memory pipeline (napkin, distillation skills), universal skills (systematic-debugging, patterns, receiving-code-review), and prompts
 - Added missing Cursor agent adapters and completed Claude command adapter coverage
 - Upgraded practice-index to full table format
 - Appended pine-scripts provenance entries to all three trinity files

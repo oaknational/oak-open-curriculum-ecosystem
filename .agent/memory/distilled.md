@@ -68,9 +68,10 @@ context with no natural permanent home.
 - **ADR-135 naming deviation**: new agents use `-reviewer` suffix
   despite ADR-135 deciding to drop it. Acknowledged tech debt;
   batch rename committed.
-- **Provenance is storytelling, not credit**: "Think less boardroom,
-  more Dreamtime." Both repos appear in the chain because both are
-  part of the knowledge journey.
+- **Full triplet portability requires 7 adapter types**: Cursor
+  agents + skills + rules, Claude Code agents + rules, Codex
+  agents + config, Gemini commands. Easy to miss one — always
+  run `pnpm portability:check` after creating a new specialist.
 
 ## Repo-Specific Rules
 
@@ -153,4 +154,3 @@ context with no natural permanent home.
   stay in core, runtime pipeline moves to libs
 - When extracting types from a composition root, the root
   may still need a local `import type` for its own usage
-

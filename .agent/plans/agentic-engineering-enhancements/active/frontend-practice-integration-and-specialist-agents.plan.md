@@ -2,9 +2,9 @@
 name: "Frontend Practice Integration and Specialist Agent Suite"
 overview: "Integrate incoming frontend Practice evolution, create design token workspaces, and build the full suite of UI/UX/a11y/React specialist agents."
 isProject: false
-status: DECISION-COMPLETE — ALL REVIEWER FINDINGS RESOLVED — READY FOR EXECUTION
+status: COMPLETE — practice integration, specialist agents, and reviews all done
 created: 2026-04-01
-updated: 2026-04-01
+updated: 2026-04-02
 reviewer_rounds:
   - round: 1
     date: 2026-04-01
@@ -14,6 +14,10 @@ reviewer_rounds:
     date: 2026-04-01
     reviewers: [mcp-reviewer]
     findings: 3 findings applied (1 high, 2 medium) — R10 testing relabelled, token delivery path clarified, MCP boundary rule added for frontend reviewers
+  - round: 3
+    date: 2026-04-02
+    reviewers: [accessibility-reviewer, design-system-reviewer, code-reviewer, docs-adr-reviewer, subagent-architect]
+    findings: "All conditional-pass. Remediated: WAI-ARIA 1.3→1.2, DTCG preview→stable URL, axe-core tag coverage expanded, token example tier violation fixed, ADR index deduplication, ADR-121 back-reference and Updated date, AGENT.md packages/design/ and test:a11y added"
 blocks:
   - ws3-phase-4-curriculum-model-view (importable CSS with minimal palette + semantic + light/dark themes; widget build bundles it)
   - ws3-phase-5-interactive-user-search-view (importable CSS with minimal palette + semantic + light/dark themes; widget build bundles it)
@@ -23,73 +27,73 @@ todos:
     status: completed
   - id: phase-1a-core-proposals
     content: "Adopt browser testing taxonomy and UI reviewer roster into portable Practice Core (practice-lineage.md, practice.md, practice-bootstrap.md)."
-    status: pending
+    status: completed
   - id: phase-1b-local-adoption
     content: "Add browser proof surfaces, 9th quality gate, and UI/Frontend triage to local directives (testing-strategy.md, principles.md, invoke-code-reviewers.md)."
-    status: pending
+    status: completed
   - id: phase-1c-transferable-patterns
     content: "Adapt accessibility-as-blocking-gate and design-token-governance as local Practice references."
-    status: pending
+    status: completed
   - id: phase-1d-provenance
-    content: "Append provenance index 18, update CHANGELOG."
-    status: pending
+    content: "Append provenance index 19 (18 used by patterns taxonomy), update CHANGELOG."
+    status: completed
   - id: phase-1e-clear-incoming
     content: "Clear practice-core/incoming/ and practice-context/incoming/ after integration."
-    status: pending
-  - id: phase-1f-adr-144
-    content: "Author ADR-144: Browser Accessibility as a Blocking Quality Gate."
-    status: pending
-  - id: phase-1f-adr-145
-    content: "Author ADR-145: Design Token Architecture (DTCG JSON, three-tier model, packages/design/ location)."
-    status: pending
-  - id: phase-1f-adr-146
-    content: "Author ADR-146: Frontend Specialist Reviewer Gateway Cluster."
-    status: pending
+    status: completed
+  - id: phase-1f-adr-147
+    content: "Author ADR-147: Browser Accessibility as a Blocking Quality Gate."
+    status: completed
+  - id: phase-1f-adr-148
+    content: "Author ADR-148: Design Token Architecture (DTCG JSON, three-tier model, packages/design/ location)."
+    status: completed
+  - id: phase-1f-adr-149
+    content: "Author ADR-149: Frontend Specialist Reviewer Gateway Cluster."
+    status: completed
   - id: phase-1f-governance-a11y
-    content: "Author docs/governance/accessibility-practice.md (WCAG 2.2 AA, Playwright + axe-core, MCP App HTML resource testing, three-metric frontmatter)."
-    status: pending
+    content: "Author docs/governance/accessibility-practice.md (WCAG 2.2 AA, Playwright + axe-core, MCP App HTML resource testing, four-metric frontmatter per ADR-144)."
+    status: completed
   - id: phase-1f-governance-tokens
     content: "Author docs/governance/design-token-practice.md (DTCG format, three-tier model, authoring guide, build pipeline)."
-    status: pending
+    status: completed
   - id: phase-1f-adr-index
-    content: "Update ADR index README.md with entries for ADR-144, ADR-145, ADR-146 (flat + categorised sections)."
-    status: pending
+    content: "Update ADR index README.md with entries for ADR-147, ADR-148, ADR-149 (flat + categorised sections)."
+    status: completed
   - id: phase-1f-amend-041
     content: "Amend ADR-041 to add packages/design/ category with dependency direction rules."
-    status: pending
+    status: completed
   - id: phase-1f-amend-121
-    content: "Amend ADR-121 to add test:a11y row to coverage matrix (CI for UI-shipping workspaces)."
-    status: pending
+    content: "Amend ADR-121 to add test:a11y row to coverage matrix (current implementation: local gate surfaces via pnpm qg/pnpm check; CI still excluded)."
+    status: completed
   - id: phase-1f-governance-readme
     content: "Update docs/governance/README.md contents list with the two new governance docs."
-    status: pending
+    status: completed
   - id: phase-1f-gates-md
     content: "Update .agent/commands/gates.md to include test:a11y position in the canonical gate sequence."
-    status: pending
+    status: completed
   - id: phase-2a-triplets
     content: "Create three full ADR-129 triplets: accessibility-reviewer, design-system-reviewer, react-component-reviewer."
-    status: pending
+    status: completed
   - id: phase-2b-gateway
     content: "Add UI/Frontend triage cluster to invoke-code-reviewers.md and update AGENT.md roster."
-    status: pending
+    status: completed
   - id: phase-2c-adapters
     content: "Create platform adapters for Cursor, Claude Code, Codex, Gemini CLI."
-    status: pending
+    status: completed
   - id: phase-2d-validate
     content: "Run pnpm subagents:check and pnpm portability:check."
-    status: pending
+    status: completed
   - id: phase-2e-subagent-architect
     content: "subagent-architect reviews all three triplets for naming, boundary, and duplication consistency."
-    status: pending
+    status: completed
   - id: phase-3-review
     content: "Invoke 5 targeted reviewers (2 cohort + 3 non-cohort) to review Phase 1+2 output."
-    status: pending
+    status: completed
   - id: design-token-infrastructure
-    content: "Create two new workspaces with basic token infrastructure — BLOCKS widget UI work."
-    status: pending
+    content: "Create two new workspaces with basic token infrastructure — OUT OF SCOPE for this plan; belongs in WS3 widget plan or a dedicated design-token plan."
+    status: cancelled
   - id: design-token-feature-complete
-    content: "Iteratively improve token system in tandem with widget design — does NOT block widget."
-    status: pending
+    content: "Iteratively improve token system in tandem with widget design — OUT OF SCOPE for this plan; belongs in WS3 widget plan or a dedicated design-token plan."
+    status: cancelled
 ---
 
 > NOTE: Reviewed by mcp-reviewer (2026-04-01). Three findings applied:
@@ -101,9 +105,9 @@ todos:
 
 # Frontend Practice Integration and Specialist Agent Suite
 
-**Status**: DECISION-COMPLETE — ALL REVIEWER FINDINGS RESOLVED — READY FOR EXECUTION
+**Status**: COMPLETE — practice integration, specialist agents, and reviews all done
 **Created**: 2026-04-01
-**Updated**: 2026-04-01
+**Updated**: 2026-04-02
 **Domain**: Agentic Engineering Enhancements + SDK & MCP Enhancements (cross-cutting)
 
 ## Blocking Relationship to WS3 Widget UI Work
@@ -163,13 +167,22 @@ exchange mechanism.
 
 ### 1.2 Incoming Practice Core: Line-by-Line Diff Analysis
 
-The incoming practice-core package (provenance index 17) is the **same version
-this repo already has** — it was last touched by oak-open-curriculum-ecosystem
-on 2026-03-23, which is the same as the local live copy. There are no new
-Practice Core changes to integrate from the Core files themselves.
+> **Execution note (2026-04-02)**: The analysis below was drafted during
+> planning. Execution revealed that despite sharing provenance index 17,
+> the incoming Core *did* contain valuable differences: more descriptive
+> fitness table wording, portable ADR references (plain `(ADR-144)` vs
+> repo-local footnote links), and other wording refinements. These were
+> adopted on merit during Phase 1a execution. See napkin session
+> "Practice integration deep" for details. The monotonic index
+> misconception is now documented as a reusable pattern.
 
-The value is entirely in the **practice-context/incoming/** layer — the six
-frontend/UI documents.
+The incoming practice-core package (provenance index 17) was last touched
+by oak-open-curriculum-ecosystem on 2026-03-23, which matched the local
+copy's provenance index. However, independent evolution meant the
+incoming carried wording and structural improvements not present locally.
+
+The primary value was in the **practice-context/incoming/** layer — the
+six frontend/UI documents — but the Core itself also contributed.
 
 ### 1.3 Core Proposal Assessment
 
@@ -339,24 +352,33 @@ Based on the survey, the new design token system should:
 
 ### 3.1 Current State
 
-The repo has **zero** frontend/UI specialist agents. The existing roster is
-entirely backend-focused:
+The repo now has a **Phase 1 UI/Frontend specialist cluster** created by
+this plan:
 
-- **Standard**: code-reviewer, test-reviewer, type-reviewer, config-reviewer,
-  security-reviewer, docs-adr-reviewer, 4× architecture-reviewer
-- **Domain**: elasticsearch-reviewer, clerk-reviewer, sentry-reviewer,
-  mcp-reviewer
-- **Future planned (no UI)**: devx, express, OOCE, cyber-security, web-api-
-  security, privacy, web-api-GDPR, TDD, planning
+- `accessibility-reviewer`
+- `design-system-reviewer`
+- `react-component-reviewer`
 
-### 3.2 Proposed Frontend Specialist Agent Suite
+Each exists as a full ADR-129 triplet with gateway routing, platform
+adapters, and validation via `pnpm subagents:check`,
+`pnpm portability:check`, and a `subagent-architect` review with a
+"ready for use" outcome.
+
+The broader reviewer roster is still backend-heavy, and the additional
+frontend specialists below remain future candidates rather than landed
+agents.
+
+### 3.2 Current and Future Frontend Specialist Agent Suite
+
+The first three agents below now exist. The remaining three are still
+planned candidates for later phases, not completed work.
 
 All agents follow the ADR-129 Domain Specialist Capability Pattern: canonical
 template + skill + situational rule + platform adapters.
 
 | Agent | Scope | Key Assessment Areas | Doctrine |
 |-------|-------|---------------------|----------|
-| **accessibility-reviewer** | WCAG compliance, keyboard navigation, screen reader readiness, colour contrast, ARIA patterns, landmark structure | WCAG 2.2 AA compliance, axe-core rule coverage, theme-aware contrast, focus management, motion sensitivity | WCAG 2.2, WAI-ARIA 1.3, axe-core rules, Inclusive Design Principles |
+| **accessibility-reviewer** | WCAG compliance, keyboard navigation, screen reader readiness, colour contrast, ARIA patterns, landmark structure | WCAG 2.2 AA compliance, axe-core rule coverage, theme-aware contrast, focus management, motion sensitivity | WCAG 2.2, WAI-ARIA 1.3 Editor's Draft, axe-core rules, Inclusive Design Principles |
 | **design-system-reviewer** | Token usage consistency, component API correctness, visual regression triage, style containment, tier referencing rules | Token tier violations (palette used directly in components), missing semantic mappings, theme-unaware styles, hardcoded values | Design token governance doc, three-tier model, Oak brand guidelines |
 | **react-component-reviewer** | Component architecture, hook patterns, render performance, accessibility integration, prop API design, composition patterns | Unnecessary re-renders, prop drilling vs context, hook rules violations, missing error boundaries, component responsibility | React docs (current), hook rules, composition over inheritance, server/client component boundary |
 | **responsive-layout-reviewer** | Viewport adaptation, breakpoint consistency, fluid typography, container queries, mobile-first patterns | Missing breakpoints, inconsistent spacing across viewports, text overflow, touch target sizes, viewport-specific a11y | Responsive design best practices, WCAG 2.2 reflow (1.4.10), touch target size (2.5.8) |
@@ -374,18 +396,18 @@ template + skill + situational rule + platform adapters.
 
 ### 3.4 Priority and Sequencing
 
-**Phase 1 (before WS3 Phase 4)**:
+**Phase 1 (completed before WS3 Phase 4)**:
 
 - accessibility-reviewer — universal, applicable immediately
 - design-system-reviewer — needed for token work and React views
 - react-component-reviewer — needed for Phase 4 React views (R3: create now for consistent patterns)
 
-**Phase 2 (alongside WS3 Phase 5)**:
+**Future Phase 2 (alongside WS3 Phase 5, if justified)**:
 
 - responsive-layout-reviewer — needed for interactive search UI
 - browser-testing-reviewer — needed for test coverage review
 
-**Phase 3 (when CSS architecture matures)**:
+**Future Phase 3 (when CSS architecture maturity justifies it)**:
 
 - css-architecture-reviewer — needed when the token system is in use
 
@@ -429,19 +451,19 @@ Runs alongside or immediately after Phases 1A-1E. **Phase 1F must complete
 before Phase 2 begins** — Phase 2 agents reference the ADRs and governance
 docs in their reading requirements. This is a hard blocking prerequisite.
 
-1. **Author ADR-144** — Browser Accessibility as a Blocking Quality Gate
-2. **Author ADR-145** — Design Token Architecture
-3. **Author ADR-146** — Frontend Specialist Reviewer Gateway Cluster
+1. **Author ADR-147** — Browser Accessibility as a Blocking Quality Gate
+2. **Author ADR-148** — Design Token Architecture
+3. **Author ADR-149** — Frontend Specialist Reviewer Gateway Cluster
 4. **Amend ADR-041** (R2) — add `packages/design/` category with dependency
    direction rules (see Part 6: ADR-041 Amendment)
 5. **Amend ADR-121** (R4) — add `test:a11y` row to coverage matrix (see
    Part 6: ADR-121 Amendment)
 6. **Author docs/governance/accessibility-practice.md** — WCAG 2.2 AA,
    Playwright + axe-core, MCP App HTML resource testing (R10), theme-aware.
-   Include three-metric frontmatter (R9)
+   Include four-metric frontmatter (R9)
 7. **Author docs/governance/design-token-practice.md** — DTCG format,
    three-tier model, authoring guide, build pipeline, consumption patterns.
-   Include three-metric frontmatter (R9)
+   Include four-metric frontmatter (R9)
 8. **Update ADR index** — add three entries to README.md (flat + categorised)
 9. **Update governance README** — add two entries to docs/governance/README.md
 10. **Update gates.md** — add `test:a11y` to the canonical gate sequence
@@ -458,14 +480,14 @@ docs are the durable reference material that future workspace READMEs
 1. **Create Phase-1 agents**: accessibility-reviewer, design-system-
    reviewer, react-component-reviewer — following ADR-129 triplet pattern.
    Reviewer reading requirements must include the new ADRs and governance
-   docs (ADR-144, ADR-145, accessibility-practice.md, design-token-practice.md).
+   docs (ADR-147, ADR-148, accessibility-practice.md, design-token-practice.md).
    When reviewing MCP App surfaces, ADR-141 must also be in their reading
    set. **MCP boundary rule** (mcp-reviewer finding): these reviewers assess
    DOM, accessibility, token usage, and React structure *inside* an MCP App
    view. `mcp-reviewer` remains required for `_meta.ui*`, resource
    registration, visibility, MIME, CSP/domain, and host bridge lifecycle.
-   Also update the code-reviewer.md template's reading requirements to
-   reference the new cluster and its routing triggers
+   Update the gateway and reviewer discoverability surfaces to reference
+   the new cluster and its routing triggers
 2. **Update gateway triage**: add UI/Frontend cluster to code-reviewer's
    triage model. Update discoverability/inventory (ADR-129 rollout step 5)
 3. **Platform adapters**: Cursor, Claude Code, Codex, Gemini CLI adapters
@@ -483,10 +505,10 @@ integration itself becomes the agents' first real review target.
 
 1. **accessibility-reviewer** — review the adopted testing taxonomy for
    completeness, check that the 9th gate covers the right axe-core rules.
-   Review ADR-144 for completeness, correct WCAG version citation, and
+   Review ADR-147 for completeness, correct WCAG version citation, and
    consistency with docs/governance/accessibility-practice.md
 2. **design-system-reviewer** — review the design token governance pattern
-   for consistency with the three-tier model. Review ADR-145 for completeness,
+   for consistency with the three-tier model. Review ADR-148 for completeness,
    correct DTCG spec citation, and consistency with
    docs/governance/design-token-practice.md
 
@@ -555,6 +577,10 @@ After the gate clears, token system and widget design improve together:
 All six open questions from the research phase have been resolved (2026-04-01).
 A second round of 14 reviewer-surfaced decisions was resolved the same day.
 
+> **Execution note (2026-04-02)**: A small number of items, especially R4,
+> landed differently from the earliest plan wording. The table below records
+> the current repo state rather than the superseded intent.
+
 ### Research-Phase Decisions (Q1-Q6)
 
 | Q | Decision | Rationale |
@@ -569,18 +595,18 @@ A second round of 14 reviewer-surfaced decisions was resolved the same day.
 
 | R | Decision | Rationale |
 |---|----------|-----------|
-| R1 ADR-146 standalone? | Keep standalone | The cluster concept (cohort with overlap boundaries and inter-agent routing) is a new architectural pattern worth recording, distinct from ADR-129's triplet shape |
+| R1 ADR-149 standalone? | Keep standalone | The cluster concept (cohort with overlap boundaries and inter-agent routing) is a new architectural pattern worth recording, distinct from ADR-129's triplet shape |
 | R2 packages/design/ topology | Keep; amend ADR-041 | Design tokens are categorically different from libs. ADR-041 must be amended with the new category and dependency direction rules |
 | R3 react-component-reviewer timing | Create now | Triplet cost is low; ready when WS3 Phase 4 starts; creating all three together ensures consistent patterns |
-| R4 test:a11y in CI? | Yes — Playwright in CI | Use official Playwright patterns; avoid real network calls so GitHub Actions runner is sufficient without internet access |
+| R4 test:a11y in CI? | Not in current implementation — local gate surfaces only | The original intent was CI coverage, but the landed repo state keeps `test:a11y` in `pnpm qg` and `pnpm check` only. ADR-121 and the CI workflow still exclude it; promote it to CI later only via an explicit follow-up |
 | R5 Gate 5 vs Gate 9 | Testing reviewer cluster | Make the overall test reviewer a new cluster entry point. Split testing reviewers by test type, with shared principles in the entry point. Accessibility gets a distinct gate position AND a type-specific testing reviewer |
 | R6 Provenance attribution | Storytelling, not credit attribution | Tell the story of how knowledge travels. "Think less boardroom, more Dreamtime." Both repos appear in the provenance chain because both are part of the journey |
 | R7 ADR-135 naming deviation | Record in Risks | Acknowledge the deviation (new agents use `-reviewer` suffix despite ADR-135 deciding to drop it); commit to include these agents in the taxonomy rename batch |
 | R8 test-reviewer involvement | Add to Phase 1 | Review testing-strategy.md changes as they are made, not after the fact |
-| R9 Governance doc frontmatter | Full three-metric frontmatter | All new governance docs carry `fitness_line_count`, `fitness_char_count`, `fitness_line_length` |
+| R9 Governance doc frontmatter | Full four-metric frontmatter | All new governance docs carry `fitness_line_target`, `fitness_line_limit`, `fitness_char_limit`, `fitness_line_length` (ADR-144 two-threshold model) |
 | R10 MCP App iframe harness | Specify now; direct HTML resource testing | MCP App HTML resources are self-contained. For a11y testing, serve the resource content directly to a Playwright page — do not embed in an iframe. Inject design token CSS, run axe-core. The host's iframe embedding is the host's responsibility, not ours |
 | R11 subagent-architect | Add to Phase 2 or Phase 3 | Reviews triplets for naming, boundary, and duplication consistency |
-| R12 Phase 3 circularity | Add multiple non-cohort reviewers | Agents reviewing artefacts that define them creates weak circularity. Add architecture reviewers (Barney, Betty, Fred, Wilma) alongside existing non-cohort reviewers |
+| R12 Phase 3 circularity | Add targeted non-cohort reviewers | Agents reviewing artefacts that define them creates weak circularity. The adopted mitigation is the five-reviewer set used in Phase 3: two cohort reviewers plus `code-reviewer`, `docs-adr-reviewer`, and `subagent-architect` |
 | R13 DTCG version strategy | Living spec reference | Link to current draft, note pre-W3C-Recommendation status, accept that the format may evolve. No version pin |
 
 ---
@@ -590,26 +616,29 @@ A second round of 14 reviewer-surfaced decisions was resolved the same day.
 This work is brand new UI/UX/a11y architecture. Three ADRs and two governance
 docs capture the architectural decisions while they are fresh.
 
-### ADR-144: Browser Accessibility as a Blocking Quality Gate
+### ADR-147: Browser Accessibility as a Blocking Quality Gate
 
-**File**: `docs/architecture/architectural-decisions/144-browser-accessibility-as-blocking-quality-gate.md`
+**File**: `docs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md`
 **Related**: ADR-121 (quality gate surfaces — coverage matrix must be amended), ADR-129 (accessibility-reviewer is the enforcement agent)
 
 Records the decision to:
 
 - Add WCAG 2.2 AA compliance as a 9th blocking quality gate for all UI-shipping workspaces
-- Use Playwright + axe-core as the test harness, running in CI (R4)
+- Use Playwright + axe-core as the standard test harness
 - Require both light and dark theme passes
 - Define the MCP App testing approach (R10, refined by mcp-reviewer): two
   required levels — resource-level a11y tests (direct Playwright + axe-core,
   CSS injected as test fixture) AND MCP App integration verification via
   upstream `basic-host` (sandbox, CSP, `ui/initialize`, postMessage bridge)
 - Treat accessibility violations as blocking (zero-tolerance, no `skipRules`)
-- Playwright tests must avoid real network calls so GitHub Actions runners can exercise them without internet access (R4)
+- **Execution status note**: current repo surfaces place `test:a11y` in
+  `pnpm qg` and `pnpm check`; the CI workflow still excludes it. If CI
+  coverage remains the goal, that alignment work is a separate follow-up
+  rather than completed work in this plan
 
-### ADR-145: Design Token Architecture
+### ADR-148: Design Token Architecture
 
-**File**: `docs/architecture/architectural-decisions/145-design-token-architecture.md`
+**File**: `docs/architecture/architectural-decisions/148-design-token-architecture.md`
 **Related**: ADR-041 (workspace structure — amended by this plan to add `packages/design/`), ADR-129 (design-system-reviewer enforces token governance), ADR-141 (MCP Apps standard — tokens must work inside MCP App HTML resources)
 
 Records the decision to:
@@ -634,9 +663,9 @@ why not Tailwind config, why not CSS-in-JS, why DTCG over alternatives (Style
 Dictionary format, Figma Tokens format). This is a "the industry is moving here"
 decision worth recording while the rationale is fresh.
 
-### ADR-146: Frontend Specialist Reviewer Gateway Cluster
+### ADR-149: Frontend Specialist Reviewer Gateway Cluster
 
-**File**: `docs/architecture/architectural-decisions/146-frontend-specialist-reviewer-gateway-cluster.md`
+**File**: `docs/architecture/architectural-decisions/149-frontend-specialist-reviewer-gateway-cluster.md`
 **Related**: ADR-114 (code-reviewer gateway — this extends its routing model), ADR-119 (quality gate framework — cluster must align with gate taxonomy), ADR-125 (reviewer invocation governance), ADR-129 (triplet shape), ADR-135 (agent classification taxonomy — naming deviation acknowledged in Risks)
 
 Records the decision to:
@@ -648,7 +677,7 @@ Records the decision to:
 - Propose the testing reviewer cluster pattern (R5): make test-reviewer a cluster entry point, split testing reviewers by test type with shared principles in the entry point. This is a future-facing pattern documented here to influence the testing reviewer evolution
 
 This ADR is distinct from ADR-129 because ADR-129 defines the triplet shape;
-ADR-146 documents the architectural decision to create a **cluster** of related
+ADR-149 documents the architectural decision to create a **cluster** of related
 specialists with inter-agent routing and overlap boundaries.
 
 ### Governance Documentation
@@ -656,11 +685,13 @@ specialists with inter-agent routing and overlap boundaries.
 Two governance documents provide durable, linkable reference material that future
 workspace READMEs (e.g. `packages/design/*/README.md`) will link to.
 
-Both docs carry the full three-metric frontmatter (R9):
+Both docs carry the full four-metric frontmatter (R9, aligned with
+ADR-144 two-threshold fitness model):
 
 ```yaml
-fitness_line_count: 150
-fitness_char_count: 10000
+fitness_line_target: 150
+fitness_line_limit: 200
+fitness_char_limit: 10000
 fitness_line_length: 100
 split_strategy: 'description of how to split if ceilings are exceeded'
 ```
@@ -668,7 +699,9 @@ split_strategy: 'description of how to split if ceilings are exceeded'
 **`docs/governance/accessibility-practice.md`**
 
 - Target standard: WCAG 2.2 AA
-- Testing approach: Playwright + axe-core in CI (R4)
+- Testing approach: Playwright + axe-core as the standard harness. Current
+  repo surfaces run `test:a11y` via `pnpm qg` and `pnpm check`; CI
+  alignment is still a follow-up if retained as a goal
 - Rule configuration: which axe-core rules, why no skipRules
 - MCP App testing (R10, refined by mcp-reviewer): Two required levels.
   **Resource-level a11y tests**: serve the HTML resource content directly to
@@ -679,8 +712,8 @@ split_strategy: 'description of how to split if ceilings are exceeded'
   sandbox, CSP, `ui/initialize`, and postMessage bridge. Both levels required
 - Theme-aware testing: both light and dark themes must pass
 - Landmark and contrast requirements
-- Links to WCAG 2.2, WAI-ARIA 1.3, axe-core rule reference
-- Cross-references ADR-144
+- Links to WCAG 2.2, WAI-ARIA 1.3 Editor's Draft, axe-core rule reference
+- Cross-references ADR-147
 
 **`docs/governance/design-token-practice.md`**
 
@@ -691,7 +724,7 @@ split_strategy: 'description of how to split if ceilings are exceeded'
 - Consumption patterns: how downstream packages import the generated CSS
 - Relationship to `oak-components`: independent, no coupling
 - Links to W3C DTCG spec, Style Dictionary docs, Design Tokens W3C Community Group
-- Cross-references ADR-145
+- Cross-references ADR-148
 
 ### ADR Index Update
 
@@ -699,9 +732,9 @@ Add three entries to `docs/architecture/architectural-decisions/README.md` in bo
 the flat chronological list **and** the appropriate categorised sections:
 
 ```markdown
-- [ADR-144: Browser Accessibility as a Blocking Quality Gate](144-browser-accessibility-as-blocking-quality-gate.md)
-- [ADR-145: Design Token Architecture](145-design-token-architecture.md)
-- [ADR-146: Frontend Specialist Reviewer Gateway Cluster](146-frontend-specialist-reviewer-gateway-cluster.md)
+- [ADR-147: Browser Accessibility as a Blocking Quality Gate](147-browser-accessibility-as-blocking-quality-gate.md)
+- [ADR-148: Design Token Architecture](148-design-token-architecture.md)
+- [ADR-149: Frontend Specialist Reviewer Gateway Cluster](149-frontend-specialist-reviewer-gateway-cluster.md)
 ```
 
 ### ADR-041 Amendment (R2)
@@ -729,12 +762,14 @@ add `test:a11y` to the coverage matrix:
 
 | Check | pre-commit | pre-push | CI workflow | pnpm qg | pnpm check |
 |-------|------------|----------|-------------|---------|------------|
-| test:a11y | -- | Yes | Yes (UI-shipping workspaces) | Yes | Yes |
+| test:a11y | -- | -- | -- | Yes | Yes |
 
-Add a rationale note: `test:a11y` runs in CI (unlike `test:ui`) because
-accessibility regressions are blocking quality gate violations. Playwright tests
-use the official Playwright patterns and avoid real network calls, so the GitHub
-Actions runner is sufficient without internet access.
+Add a rationale note: the current implementation keeps `test:a11y`
+local-only alongside the other browser/dev-server-heavy surfaces.
+`pnpm qg` and `pnpm check` are the authoritative surfaces today. If CI
+promotion is later adopted, ADR-121, ADR-147,
+`docs/governance/accessibility-practice.md`, and `.github/workflows/ci.yml`
+must be updated together.
 
 ### Governance README Update
 
@@ -764,9 +799,9 @@ pnpm practice:fitness:informational  # Soft-ceiling check on edited docs
 
 ### Non-Goals (Phases 0-3)
 
-- **Token infrastructure** (Phase 4 in this plan) — deferred, not in scope for Phases 0-3. The governance docs and ADR-145 describe the architecture; `packages/design/` workspaces are not created yet
+- **Token infrastructure** (Phase 4 in this plan) — deferred, not in scope for Phases 0-3. The governance docs and ADR-148 describe the architecture; `packages/design/` workspaces are not created yet
 - **Phase 2/3 agents** (responsive-layout-reviewer, browser-testing-reviewer, css-architecture-reviewer) — deferred until WS3 Phase 5
-- **oak-components migration** — no relationship; out of scope entirely
+- **oak-components migration** — there is not oak components migration, that repo is reference only.
 - **Agent Classification Taxonomy rename** — deferred to future plan
 
 ### Risks
@@ -776,11 +811,12 @@ pnpm practice:fitness:informational  # Soft-ceiling check on edited docs
 | testing-strategy.md exceeds fitness ceiling after browser proof surfaces addition | Split into companion file if needed; use the split_strategy in its frontmatter |
 | Expert skills reference web docs that may not be accessible | Doctrine hierarchy (ADR-129) says "fetched live from the web" — if unavailable, fall back to official package/SDK docs |
 | Gateway triage routing may not trigger correctly in Phase 3 | Phase 3 is explicitly a validation step; fix the routing if it fails |
-| Practice Core edits create provenance index 18 — must be consistent across all three practice files | Update all three chains in provenance.yml simultaneously |
+| Practice Core edits create new provenance indices — must be consistent across all three practice files | Update all three chains in provenance.yml simultaneously. Index 18 used by patterns taxonomy, index 19 by Phase 1a practice integration |
 | ADRs and governance docs could drift from each other or from the Practice changes | Phase 3 explicitly uses docs-adr-reviewer to check cross-reference consistency |
-| DTCG spec is still a draft W3C community report — may evolve | ADR-145 records current spec status; governance doc links to living spec URL (R13) |
-| **ADR-135 naming deviation** (R7): New agents use `-reviewer` suffix despite ADR-135 deciding to drop it | Intentional tech debt. All three agents will be included in the taxonomy rename batch when the Agent Classification Taxonomy plan executes. Record this deviation in ADR-146 and reference ADR-135 |
+| DTCG spec is still a draft W3C community report — may evolve | ADR-148 records current spec status; governance doc links to living spec URL (R13) |
+| **ADR-135 naming deviation** (R7): New agents use `-reviewer` suffix despite ADR-135 deciding to drop it | Intentional tech debt. All three agents will be included in the taxonomy rename batch when the Agent Classification Taxonomy plan executes. Record this deviation in ADR-149 and reference ADR-135 |
 | **Phase 1F temporal coupling to Phase 2**: Phase 2 agents reference Phase 1F ADRs and governance docs in their reading requirements | Hard blocking prerequisite — Phase 1F must complete before Phase 2 begins (made explicit in the execution plan) |
 | **ADR-041 amendment scope**: Adding `packages/design/` could be seen as a significant topology change | Amendment is minimal — one new row in the dependency table, one new paragraph in Consequences. The existing four categories are not changed |
-| **Testing reviewer cluster evolution** (R5): The proposed pattern of making test-reviewer a cluster entry point is not implemented in this plan | Document the pattern in ADR-146 as a future-facing recommendation. The implementation belongs in a separate plan |
+| **Testing reviewer cluster evolution** (R5): The proposed pattern of making test-reviewer a cluster entry point is not implemented in this plan | Document the pattern in ADR-149 as a future-facing recommendation. The implementation belongs in a separate plan |
 | **Phase 3 reviewer volume**: Five reviewers in Phase 3 creates a manageable feedback surface | Proportional to the work — 2 cohort agents exercising themselves + 3 non-cohort reviewers (code-reviewer, docs-adr-reviewer, subagent-architect). Architecture reviewers assess the ADRs when they are authored, not again in Phase 3 |
+| **`test:a11y` surface drift**: ADR-147 and `accessibility-practice.md` currently describe CI more ambitiously than ADR-121 and `.github/workflows/ci.yml` implement it | This plan now records the landed local-only gate posture. If CI adoption is still wanted, update all four surfaces together in one follow-up |
