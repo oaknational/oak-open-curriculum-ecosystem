@@ -327,3 +327,66 @@
   imported wording implied
 - **Behaviour change**: when a recovery skill is meant to preserve a document,
   encode the preservation boundary as a hard rule, not a preference
+
+## Session 2026-04-02 — semantic pass planning split
+
+### What Was Done
+
+- Replaced the scaffold-only second-pass note in the external semantic-atlas
+  lane with a real repo-facing planning brief.
+- Added a third-pass planning brief that generalises beyond the repo and treats
+  the completed second pass as a subtraction step before portable lessons are
+  claimed.
+- Tightened the planning prose so even local repo surfaces are described
+  semantically rather than by their literal surface labels.
+
+### Patterns to Remember
+
+- In multi-pass external-system research, separate the repo-facing comparison
+  from the portable-system generalisation pass. The second pass decides local
+  fit; the third pass decides what still travels after local needs are
+  subtracted.
+- If the user asks for fully semantic writing, apply that rule to local repo
+  surfaces as well as to external branded surfaces.
+
+## Session 2026-04-02 — WS3 design-token prerequisite review closure
+
+### What Was Done
+
+- Ran adversarial review cycle (design-system, config, test, code reviewers)
+  against the design-token prerequisite implementation.
+- Fixed 23 tier violations in widget CSS by adding component-tier tokens for
+  layout spacing, state colours, alert styling, and page-level resets.
+- Fixed dark theme token collisions: `text-inverse` now contrasts against
+  accent backgrounds, `accent-strong` is visually distinct from `accent`.
+- Added Turbo `type-check`, `lint`, `lint:fix` overrides for
+  `design-tokens-core` (previously fell through to generic tasks).
+- Removed redundant `prebuild` from `oak-design-tokens` (Turbo handles it).
+- Expanded tier-validation tests to cover all three enforcement branches.
+- Split the chained 4-action widget state test into 7 individual tests
+  covering every action type including previously untested `tool-input`,
+  `runtime-error`, and `tool-cancelled`.
+- Added App tests for error display (alert role) and connected state.
+- Deleted the misclassified `index-css.unit.test.ts` (filesystem IO in a
+  unit test); the build itself proves the import works.
+
+### Patterns to Remember
+
+- When specialist reviewers find tier violations, the fix is to add missing
+  tokens at the correct tier, not to document the violation as an exception.
+- Turbo overrides REPLACE generic tasks completely: if a workspace has any
+  override, it needs overrides for ALL task types it uses.
+- `projectService: false` is the established ESLint pattern for small
+  packages (`core/`, `libs/`, `design/`); SDKs and apps use `true`.
+
+### Surprise
+
+- **Expected**: the review cycle might find cosmetic issues and minor
+  test gaps
+- **Actual**: 23 tier violations in the widget CSS, 3 Turbo config gaps,
+  2 dark theme colour collisions, and 5 untested state transitions
+- **Why expectation failed**: the implementation focused on getting the
+  architecture right at the package level but underfilled the component
+  token tier and the dark theme edge cases
+- **Behaviour change**: when adding a three-tier token system, audit the
+  consumption CSS for tier-skipping before declaring GREEN

@@ -70,4 +70,32 @@ describe('design token core helpers', () => {
       'Component tokens must reference semantic tokens.',
     );
   });
+
+  it('rejects palette tokens that contain references', () => {
+    const invalidTokenTree: DtcgTokenTree = {
+      color: {
+        derived: { $type: 'color', $value: '{color.ink}' },
+        ink: { $type: 'color', $value: '#102033' },
+      },
+    };
+
+    expect(() => validateTierReferences(invalidTokenTree)).toThrow(
+      'Palette tokens must use raw values.',
+    );
+  });
+
+  it('rejects semantic tokens that reference component tokens', () => {
+    const invalidTokenTree: DtcgTokenTree = {
+      component: {
+        'shell-surface': { $type: 'color', $value: '#ffffff' },
+      },
+      semantic: {
+        'surface-page': { $type: 'color', $value: '{component.shell-surface}' },
+      },
+    };
+
+    expect(() => validateTierReferences(invalidTokenTree)).toThrow(
+      'Semantic tokens must reference palette tokens.',
+    );
+  });
 });

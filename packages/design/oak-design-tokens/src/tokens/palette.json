@@ -9,6 +9,7 @@
     "fern-500": { "$type": "color", "$value": "#1d6f5f" },
     "fern-600": { "$type": "color", "$value": "#15574b" },
     "sun-300": { "$type": "color", "$value": "#f0c974" },
+    "sun-400": { "$type": "color", "$value": "#e0b85a" },
     "sky-400": { "$type": "color", "$value": "#8ab6d6" },
     "danger-500": { "$type": "color", "$value": "#b43c31" }
   },

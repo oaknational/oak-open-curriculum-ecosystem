@@ -108,8 +108,46 @@
         "$TURBO_DEFAULT$",
         "**/*.ts",
         "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.base.ts"
+      ]
+    },
+    "@oaknational/design-tokens-core#type-check": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsconfig.lint.json",
+        "src/**/*.ts"
+      ]
+    },
+    "@oaknational/design-tokens-core#lint": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "src/**/*.ts"
+      ]
+    },
+    "@oaknational/design-tokens-core#lint:fix": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "src/**/*.ts"
       ]
     },
     "@oaknational/oak-design-tokens#build": {
@@ -135,7 +173,6 @@
         "src/**/*.json",
         "dist/**/*.css",
         "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.base.ts"
       ]
     },

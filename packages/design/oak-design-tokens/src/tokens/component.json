@@ -48,6 +48,38 @@
       "$value": "{semantic.accent-strong}"
     },
     "button-primary-border-color": { "$type": "color", "$value": "{semantic.accent}" },
-    "button-primary-text-color": { "$type": "color", "$value": "{semantic.text-inverse}" }
+    "button-primary-text-color": { "$type": "color", "$value": "{semantic.text-inverse}" },
+
+    "page-background": { "$type": "color", "$value": "{semantic.surface-page}" },
+    "page-text-color": { "$type": "color", "$value": "{semantic.text-primary}" },
+
+    "shell-gap": { "$type": "dimension", "$value": "{semantic.gap-lg}" },
+    "header-gap": { "$type": "dimension", "$value": "{semantic.gap-md}" },
+    "header-row-gap": { "$type": "dimension", "$value": "{semantic.gap-md}" },
+    "summary-spacing": { "$type": "dimension", "$value": "{semantic.gap-sm}" },
+    "summary-text-color": { "$type": "color", "$value": "{semantic.text-secondary}" },
+    "body-gap": { "$type": "dimension", "$value": "{semantic.gap-md}" },
+
+    "grid-gap": { "$type": "dimension", "$value": "{semantic.gap-md}" },
+    "grid-item-gap": { "$type": "dimension", "$value": "{semantic.gap-sm}" },
+    "grid-item-padding": { "$type": "dimension", "$value": "{semantic.gap-md}" },
+    "grid-label-color": { "$type": "color", "$value": "{semantic.text-secondary}" },
+    "grid-value-color": { "$type": "color", "$value": "{semantic.text-primary}" },
+
+    "pill-padding-block": { "$type": "dimension", "$value": "{semantic.control-padding-block}" },
+    "pill-padding-inline": {
+      "$type": "dimension",
+      "$value": "{semantic.control-padding-inline}"
+    },
+    "status-connected-border-color": { "$type": "color", "$value": "{semantic.accent}" },
+    "status-connected-text-color": { "$type": "color", "$value": "{semantic.accent-strong}" },
+    "status-error-border-color": { "$type": "color", "$value": "{semantic.error}" },
+    "status-error-text-color": { "$type": "color", "$value": "{semantic.error}" },
+
+    "alert-padding": { "$type": "dimension", "$value": "{semantic.gap-md}" },
+    "alert-border-color": { "$type": "color", "$value": "{semantic.error}" },
+    "alert-text-color": { "$type": "color", "$value": "{semantic.error}" },
+
+    "note-text-color": { "$type": "color", "$value": "{semantic.text-secondary}" }
   }
 }

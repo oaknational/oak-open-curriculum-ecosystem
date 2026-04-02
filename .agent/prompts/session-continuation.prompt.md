@@ -46,16 +46,16 @@ git log --oneline --decorate -10
   the non-UI host fallback proof. The merge-main plan is archived as COMPLETE
   at
   `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md`.
-  Phases 4-6 are still pending, and the next queued prerequisite is
-  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-design-token-prerequisite.plan.md`.
-  The frontend practice plan is archived as COMPLETE, so the specialist agents
-  are available for widget UI work. Continuity adoption evidence now includes a
-  real WS3 resumption, a `GO` session entry, and a second deep-consolidation
-  entry. Targeted Vitest slices and `pnpm markdownlint:root` are green; full
-  `pnpm qg` / `pnpm check` remain pending.
-- **Current objective**: Execute the queued design-token prerequisite so WS3
-  Phase 4 and Phase 5 can start with canonical package CSS instead of
-  permanent app-local brand values.
+  Phases 4-6 are still pending. The design-token prerequisite plan at
+  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-design-token-prerequisite.plan.md`
+  is now COMPLETE (all 6 work slices done, `pnpm check` green, adversarial
+  review cycle passed). The frontend practice plan is archived as COMPLETE,
+  so the specialist agents are available for widget UI work. Continuity
+  adoption evidence now includes a real WS3 resumption, a `GO` session
+  entry, and a second deep-consolidation entry.
+- **Current objective**: Start WS3 Phase 4 (curriculum-model view) using
+  the canonical `@oaknational/oak-design-tokens` package CSS and the
+  component-tier token system established in the prerequisite.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -74,14 +74,10 @@ git log --oneline --decorate -10
     and plan all reference 1.3 Editor's Draft (https://w3c.github.io/aria/).
   - axe-core WCAG 2.1 rules have their own tag family (`wcag21a`, `wcag21aa`)
 - **Open questions / low-confidence areas**:
-  - Whether the minimal v1 token set for the curriculum-model and user-search
-    views is sufficient without forcing an immediate follow-on expansion
-  - Whether token-package build/test wiring exposes any Turbo or workspace
-    cache assumptions that need a small config follow-up
-- **Next safe step**: Start
-  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-design-token-prerequisite.plan.md`
-  with RED tests for CSS emission, tier enforcement, workspace wiring, and
-  widget CSS consumption.
+  - Whether the v1 token set needs expansion for Phase 4/5 views beyond
+    what the prerequisite delivered
+- **Next safe step**: Start Phase 4 (curriculum-model view) per
+  `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-curriculum-model-view.plan.md`.
 - **Deep consolidation status**: complete — the WS3 Phase 3/security-closure
   batch has been consolidated, the merge-main plan archived, and the second
   deep-consolidation evidence entry recorded. The broader evidence window
@@ -89,25 +85,20 @@ git log --oneline --decorate -10
 
 ## Active Workstreams (2026-04-02)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (Phase 3 complete, token prerequisite queued)
+### 1. WS3 MCP App Rebuild — ACTIVE (token prerequisite complete, Phase 4 next)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 
 **Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold),
 Phase 3 (canonical contracts + fallback proof).
-**Merge plan**:
-`.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md`
-— archived as complete on 2 April 2026.
-**Queued prerequisite**:
+**Completed prerequisite**:
 `.agent/plans/sdk-and-mcp-enhancements/current/ws3-design-token-prerequisite.plan.md`
-— required before Phase 4 and Phase 5 start.
+— all 6 work slices complete, `pnpm check` green, adversarial review passed.
 **Pending**: Phase 4 (curriculum view), Phase 5 (search view), Phase 6
-(docs/gates/review). These need design token infrastructure as a
-prerequisite.
+(docs/gates/review). Design token infrastructure is now in place.
 
-**Next action**: Execute the queued design-token prerequisite and then start
-Phase 4 widget UI work.
+**Next action**: Start Phase 4 widget UI work.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

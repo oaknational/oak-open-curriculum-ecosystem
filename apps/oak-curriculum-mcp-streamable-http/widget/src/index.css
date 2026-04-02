@@ -13,13 +13,13 @@ body,
 }
 
 html {
-  background: var(--oak-semantic-surface-page);
+  background: var(--oak-component-page-background);
 }
 
 body {
   margin: 0;
-  background: var(--oak-semantic-surface-page);
-  color: var(--oak-semantic-text-primary);
+  background: var(--oak-component-page-background);
+  color: var(--oak-component-page-text-color);
   font-family: var(--oak-component-body-family);
   font-size: var(--oak-component-body-size);
   line-height: var(--oak-component-body-line-height);
@@ -52,7 +52,7 @@ dd {
 .oak-shell {
   width: min(100%, 52rem);
   display: grid;
-  gap: var(--oak-semantic-gap-lg);
+  gap: var(--oak-component-shell-gap);
   padding: var(--oak-component-page-padding);
   border: 1px solid var(--oak-component-shell-border-color);
   border-radius: var(--oak-component-panel-radius);
@@ -62,7 +62,7 @@ dd {
 
 .oak-shell__header {
   display: grid;
-  gap: var(--oak-semantic-gap-md);
+  gap: var(--oak-component-header-gap);
 }
 
 .oak-shell__eyebrow {
@@ -75,7 +75,7 @@ dd {
 
 .oak-shell__header-row {
   display: flex;
-  gap: var(--oak-semantic-gap-md);
+  gap: var(--oak-component-header-row-gap);
   align-items: flex-start;
   justify-content: space-between;
 }
@@ -90,48 +90,48 @@ dd {
 }
 
 .oak-shell__summary {
-  margin-top: var(--oak-semantic-gap-sm);
-  color: var(--oak-semantic-text-secondary);
+  margin-top: var(--oak-component-summary-spacing);
+  color: var(--oak-component-summary-text-color);
   max-width: 36rem;
 }
 
 .oak-shell__body {
   display: grid;
-  gap: var(--oak-semantic-gap-md);
+  gap: var(--oak-component-body-gap);
 }
 
 .oak-runtime-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--oak-semantic-gap-md);
+  gap: var(--oak-component-grid-gap);
 }
 
 .oak-runtime-grid__item {
   display: grid;
-  gap: var(--oak-semantic-gap-sm);
-  padding: var(--oak-semantic-gap-md);
+  gap: var(--oak-component-grid-item-gap);
+  padding: var(--oak-component-grid-item-padding);
   border: 1px solid var(--oak-component-status-border-color);
   border-radius: var(--oak-component-control-radius);
   background: var(--oak-component-status-background);
 }
 
 .oak-runtime-grid__item dt {
-  color: var(--oak-semantic-text-secondary);
+  color: var(--oak-component-grid-label-color);
   font-size: var(--oak-component-label-size);
   line-height: var(--oak-component-label-line-height);
   text-transform: uppercase;
 }
 
 .oak-runtime-grid__item dd {
-  color: var(--oak-semantic-text-primary);
+  color: var(--oak-component-grid-value-color);
 }
 
 .oak-status-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding-block: calc(var(--oak-semantic-control-padding-block) * 0.75);
-  padding-inline: var(--oak-semantic-control-padding-inline);
+  padding-block: calc(var(--oak-component-pill-padding-block) * 0.75);
+  padding-inline: var(--oak-component-pill-padding-inline);
   border: 1px solid var(--oak-component-status-border-color);
   border-radius: var(--oak-component-status-radius);
   background: var(--oak-component-status-background);
@@ -142,25 +142,25 @@ dd {
 }
 
 .oak-status-pill[data-state='connected'] {
-  border-color: var(--oak-semantic-accent);
-  color: var(--oak-semantic-accent-strong);
+  border-color: var(--oak-component-status-connected-border-color);
+  color: var(--oak-component-status-connected-text-color);
 }
 
 .oak-status-pill[data-state='error'] {
-  border-color: var(--oak-semantic-error);
-  color: var(--oak-semantic-error);
+  border-color: var(--oak-component-status-error-border-color);
+  color: var(--oak-component-status-error-text-color);
 }
 
 .oak-alert {
-  padding: var(--oak-semantic-gap-md);
-  border: 1px solid var(--oak-semantic-error);
+  padding: var(--oak-component-alert-padding);
+  border: 1px solid var(--oak-component-alert-border-color);
   border-radius: var(--oak-component-control-radius);
-  color: var(--oak-semantic-error);
+  color: var(--oak-component-alert-text-color);
   background: var(--oak-component-status-background);
 }
 
 .oak-note {
-  color: var(--oak-semantic-text-secondary);
+  color: var(--oak-component-note-text-color);
 }
 
 @media (max-width: 48rem) {

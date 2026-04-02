@@ -12,11 +12,11 @@ todos:
     content: "WS3 (REFACTOR): Tighten package READMEs, build scripts, and plan/README references without widening scope."
     status: completed
   - id: ws4-quality-gates
-    content: "WS4: Run focused workspace validation plus pnpm qg and capture any follow-up before Phase 4 starts."
-    status: pending
+    content: "WS4: Run focused workspace validation plus pnpm check and capture any follow-up before Phase 4 starts."
+    status: completed
   - id: ws5-adversarial-review
     content: "WS5: Invoke design-system, config, test, and code reviewers; add MCP review only if token delivery changes app resource/CSP behaviour."
-    status: pending
+    status: completed
   - id: ws6-doc-propagation
     content: "WS6: Propagate settled outcomes to WS3 plans, collection indexes, widget docs, and continuity surfaces."
     status: completed
