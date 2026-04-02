@@ -180,3 +180,150 @@
   than the repo's artefact taxonomy
 - **Behaviour change**: choose the estate from Practice definitions first, then
   confirm it against nearby examples
+
+## Session 2026-04-02 — report normalisation skill import
+
+### What Was Done
+
+- Imported the `chatgpt-report-normalisation` skill from the
+  `algo-experiments` repo into Oak as a canonical skill with Cursor and Codex
+  wrappers.
+- Adapted the workflow to Oak's local conventions: pattern guidance now lives
+  in `.agent/memory/patterns/`, the validation step names `pnpm exec
+  markdownlint`, and the skill explicitly treats ignored import lanes as
+  staging rather than canonical endpoints.
+- Added the companion pattern note to the local patterns estate and refreshed
+  the practice index and artefact inventory so the new capability is
+  discoverable.
+
+### Patterns to Remember
+
+- Cross-repo skill import is usually a semantic port, not a literal copy:
+  preserve the proven workflow, then retarget the references, validation
+  commands, and estate names to the destination repo.
+- For document-recovery workflows, keeping the editing target separate from the
+  canonical target helps: ignored scratch lanes are fine for reconstruction,
+  but the task is not complete until a tracked canonical markdown file is
+  updated.
+
+### Surprise
+
+- **Expected**: Oak might already have an equivalent report-clean-up skill under
+  a different name
+- **Actual**: the capability lived only in `algo-experiments`, so importing it
+  required both the skill and the supporting pattern note
+- **Why expectation failed**: the remembered workflow was local to the machine,
+  not local to this repo
+- **Behaviour change**: when a remembered capability is "somewhere on this
+  computer", search sibling repos and session traces before assuming the repo's
+  own practice estate lost it
+
+## Session 2026-04-02 — multi-export report consolidation
+
+### What Was Done
+
+- Applied the new `chatgpt-report-normalisation` workflow to the three
+  `Agent Coordination Systems in Multi-Agent AI` exports under the ignored
+  `novel/` lane.
+- Used the Markdown export as the strongest body scaffold and the DOCX export
+  as the reference-recovery layer, then promoted a new tracked consolidated
+  note into `.agent/research/developer-experience/`.
+- Ran a local link-resolution sweep on the deduplicated recovered URL set and
+  carried the unresolved legacy links forward with explicit notes instead of
+  silently dropping them.
+
+### Patterns to Remember
+
+- For imported research reports, "consolidated" is often better than "perfectly
+  reconstructed": preserve the substance, clean the structure, and replace
+  fragile internal markers with a deduplicated bibliography.
+- When local PDF tools are available, run a real PDF pass before closing the
+  document: confirm whether the PDF is text-based, compare it against the
+  Markdown and DOCX surfaces, and separate true extra material from line-break
+  artefacts in dumped URL appendices.
+- When a skill depends on optional Python helpers, record the environment
+  pattern in the skill itself: dedicated virtual environment, explicit
+  interpreter path, no assumption of system-level packages.
+- A source-note style with a full bibliography is often more readable than
+  attaching a citation to every sentence when normalising long LLM-generated
+  research reports.
+
+### Surprise
+
+- **Expected**: the PDF might reveal missing citations or extra body text that
+  the Markdown and DOCX copies had dropped
+- **Actual**: once local PDF tools were installed, the PDF proved to be a
+  text-based export with substantially the same body content plus a noisy raw
+  URL appendix
+- **Why expectation failed**: the apparent "extra" references were mostly
+  line-break or truncation variants of links already recoverable from the DOCX
+- **Behaviour change**: treat PDF URL dumps as a verification layer, not as a
+  better bibliography, unless comparison shows genuinely new targets
+
+## Session 2026-04-02 — report-normalisation doc consolidation
+
+### What Was Done
+
+- Ran the deep-consolidation sweep after the Oak report-normalisation import
+  and the first local multi-export recovery pass.
+- Graduated the proven PDF-handling lesson from session memory into the
+  canonical skill and the permanent pattern note.
+- Confirmed no relevant non-repo platform plans or platform memory files
+  contained additional grounding for this slice.
+- Ran `pnpm practice:fitness:informational`, fixed the touched
+  `artefact-inventory` line-width issue, and left broader pre-existing fitness
+  warnings untouched.
+
+### Patterns to Remember
+
+- When a newly imported skill is proven locally, refresh the canonical skill
+  and permanent pattern note immediately; do not leave the sharper local
+  guidance trapped in napkin memory.
+- For report-normalisation work, the durable deliverable is the source-faithful
+  clean copy itself. Do not encode "consolidated report" as an alternate skill
+  mode.
+- When DOCX or pandoc output is used as the citation-bearing base, add an
+  explicit block-normalisation pass for headings, lists, tables, and `Sources:`
+  lines before calling the copy clean.
+
+### Surprise
+
+- **Expected**: the consolidation pass might need a new outgoing practice note
+  or a plan-doc extraction
+- **Actual**: the durable homes already existed, so the right move was to
+  sharpen the existing skill/pattern pair rather than create a second layer of
+  documentation
+- **Why expectation failed**: the recent work produced a refinement of an
+  existing capability, not a new Practice structure
+- **Behaviour change**: prefer strengthening the established canonical doc
+  surface before creating new documentation estates
+
+## Session 2026-04-02 — clean-copy mode correction
+
+### What Was Done
+
+- Applied user correction to the report-normalisation workflow: the skill now
+  treats the source-faithful clean copy as its only deliverable mode.
+- Folded the fresh recovery refinements into the canonical skill and pattern
+  note: readable `[[n]](...)` citation links, raw-appendix stripping, and a
+  required markdown block-normalisation pass after automated conversion.
+- Regenerated the `Agent Coordination Systems in Multi-Agent AI` normalised
+  copy with those refinements so the output behaves like a clean copy rather
+  than a second report.
+
+### Patterns to Remember
+
+- If the user says a skill has only one mode, reflect that literally in the
+  canonical instructions; do not preserve softer optional branches out of
+  habit.
+
+### Surprise
+
+- **Expected**: separating "default mode" from "optional mode" would be a clear
+  enough way to keep the clean-copy workflow primary
+- **Actual**: the optional mode itself was the mistake; it encouraged drift
+  away from the real deliverable
+- **Why expectation failed**: the workflow boundary was narrower than the
+  imported wording implied
+- **Behaviour change**: when a recovery skill is meant to preserve a document,
+  encode the preservation boundary as a hard rule, not a preference

@@ -91,9 +91,10 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **SDK-Owned Retriever Delegation** -- Use this when: an app-layer module builds an Elasticsearch retriever shape that the SDK already owns as a shared capability. → [sdk-owned-retriever-delegation.md](sdk-owned-retriever-delegation.md)
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 
-### Process (5)
+### Process (6)
 
 - **Check Driven Development** -- Use this when: writing TDD RED-phase assertions in a codebase with multiple quality gates. → [check-driven-development.md](check-driven-development.md)
+- **ChatGPT Report Normalisation** -- Use this when: recovering an LLM-exported report from markdown, DOCX, and PDF copies into durable repo-quality markdown. → [chatgpt-report-normalisation.md](chatgpt-report-normalisation.md)
 - **Current Plan Promotion** -- Use this when: a review or planning pass has resolved "what comes next" and the repo needs a concrete next-session entry point rather than a mere intended future direction. → [current-plan-promotion.md](current-plan-promotion.md)
 - **Monotonic Counter Is Not a Quality Indicator** -- Use this when: comparing two versions of a document or artefact that each carry a sequence counter. → [monotonic-counter-is-not-quality-indicator.md](monotonic-counter-is-not-quality-indicator.md)
 - **README as Index** -- Use this when: a plan-directory README is growing to contain session instructions, outcome narratives, or design rationale that duplicates or replaces .plan.md content. → [readme-as-index.md](readme-as-index.md)

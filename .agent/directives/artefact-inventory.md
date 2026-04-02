@@ -8,15 +8,16 @@ split_strategy: "Keep concise; this is a reference extracted from AGENT.md"
 
 # Agent Artefact Inventory
 
-For the full architecture see
-[ADR-125 (Agent Artefact Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
+For the full architecture, see
+[ADR-125 (Agent Artefact
+Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 
 ## Canonical Content (Layer 1)
 
 | Location | Purpose |
 |----------|---------|
-| `.agent/skills/*/SKILL.md` | Canonical skills (18: 7 active, 11 passive) |
-| `.agent/rules/*.md` | Canonical operational rules (21) — reinforcements of policy |
+| `.agent/skills/*/SKILL.md` | Canonical skills (27: 16 active, 11 passive) |
+| `.agent/rules/*.md` | Canonical operational rules (34) — reinforcements of policy |
 | `.agent/commands/*.md` | Canonical commands (10 active, 3 experiments) |
 | `.agent/directives/*.md` | Policy documents (AGENT.md, principles.md, testing-strategy.md, etc.) |
 | `.agent/sub-agents/templates/*.md` | Canonical sub-agent prompts (ADR-114) |

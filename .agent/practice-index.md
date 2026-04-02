@@ -29,7 +29,7 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 
 The governance layer is larger than a single file:
 
-- **24 canonical rules** live in [`.agent/rules/`](rules/)
+- **34 canonical rules** live in [`.agent/rules/`](rules/)
 - Thin platform adapters live in [`.cursor/rules/`](../.cursor/rules/) and
   [`.claude/rules/`](../.claude/rules/)
 - The canonical hook policy lives in [`.agent/hooks/policy.json`](hooks/policy.json)
@@ -73,7 +73,7 @@ The execution surface is intentionally split by role:
 
 - **10 stable canonical commands** in [`.agent/commands/`](commands/)
 - **3 experimental commands** in [`.agent/commands/experiments/`](commands/experiments/)
-- **22 canonical skills** in [`.agent/skills/`](skills/)
+- **27 canonical skills** in [`.agent/skills/`](skills/)
 - **Prompt library** in [`.agent/prompts/`](prompts/) with the active index at
   [`.agent/prompts/README.md`](prompts/README.md)
 
@@ -83,7 +83,7 @@ Representative execution surfaces:
 | --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
 | Commands              | [`.agent/commands/`](commands/)                         | [`start-right-quick.md`](commands/start-right-quick.md), [`start-right-thorough.md`](commands/start-right-thorough.md), [`go.md`](commands/go.md), [`session-handoff.md`](commands/session-handoff.md), [`gates.md`](commands/gates.md), [`plan.md`](commands/plan.md), [`review.md`](commands/review.md), [`commit.md`](commands/commit.md), [`consolidate-docs.md`](commands/consolidate-docs.md), [`metacognition.md`](commands/metacognition.md) | Explicit user-invoked workflows                               |
 | Experimental commands | [`.agent/commands/experiments/`](commands/experiments/) | `collaborate`, `step-back`, `think`                                                                                                                                                                                                                                                                                                                                                             | Trial surfaces not yet promoted into the stable command set   |
-| Skills                | [`.agent/skills/`](skills/)                             | [`napkin`](skills/napkin/SKILL.md), [`patterns`](skills/patterns/SKILL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL.md), [`start-right-quick`](skills/start-right-quick/SKILL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL.md)                                                                                                                  | On-demand expertise and multi-step workflows                  |
+| Skills                | [`.agent/skills/`](skills/)                             | [`napkin`](skills/napkin/SKILL.md), [`patterns`](skills/patterns/SKILL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL.md), [`start-right-quick`](skills/start-right-quick/SKILL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL.md)                                                                    | On-demand expertise and multi-step workflows                  |
 | Session prompts       | [`.agent/prompts/`](prompts/)                           | [`session-continuation.prompt.md`](prompts/session-continuation.prompt.md), [`gt-review.md`](prompts/archive/gt-review.md), [`semantic-search/semantic-search.prompt.md`](prompts/semantic-search/semantic-search.prompt.md)                                                                                                                                                                                       | Stateful session entry points tied to active plans or domains |
 
 ## Artefact Directories
