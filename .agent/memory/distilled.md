@@ -100,13 +100,6 @@ context with no natural permanent home.
 - MCP tool counts: see ADR-123 for the canonical figure.
   Always distinguish generated vs aggregated (ADR-029/030)
 
-## TypeScript (Domain-Specific)
-
-Graduated to `docs/governance/typescript-practice.md`:
-Zod v4 `.loose()`, `TSESLint.FlatConfig.Plugin`,
-`no-restricted-imports` minimatch, `localeCompare` divergence,
-`vi.fn()` bare mock assignability, `void` return trick.
-
 ## Elasticsearch
 
 - ES client v9: `document` not `body` for `client.index()`
@@ -127,26 +120,12 @@ Zod v4 `.loose()`, `TSESLint.FlatConfig.Plugin`,
 
 ## Testing (Domain-Specific)
 
-Graduated to `testing-strategy.md`: E2E assertion placement,
-RED spec file-naming (`*.e2e.test.ts` not `*.unit.test.ts`).
-Graduated to `development-practice.md`: file-move test checks.
-
 - `ensurePathsOnSchema` creates a new object (spread) —
   use `toStrictEqual` not `toBe` for structural equality
 - `server.e2e.test.ts` has a hardcoded aggregated tools
   list — must be updated when adding new aggregated tools
 - Capturing calls in a typed array (`const calls: T[] = []`)
   beats `vi.fn().mock.calls` which leaks `any`
-
-## Documentation
-
-Graduated to `docs/governance/development-practice.md`:
-plan artefact path grepping, external docs research,
-session prompt updates, checkpoint/worktree separation,
-file-move test recreation, response augmentation best-effort.
-
-Graduated to `docs/operations/troubleshooting.md`:
-Codex reviewer resolution.
 
 ## Build System (Domain-Specific)
 
@@ -160,11 +139,6 @@ Codex reviewer resolution.
   directories without SKILL.md cause false positives.
 
 ## Architecture (Domain-Specific)
-
-Graduated to permanent docs: plans before code, ESLint
-progressive re-enablement, response augmentation best-effort
-(development-practice.md), security metadata enforcement
-(safety-and-security.md).
 
 - Aggregated tools return `Promise<CallToolResult>` directly
   — they do NOT go through `ToolExecutionResult`
@@ -180,13 +154,3 @@ progressive re-enablement, response augmentation best-effort
 - When extracting types from a composition root, the root
   may still need a local `import type` for its own usage
 
-## Troubleshooting
-
-Graduated to `docs/operations/troubleshooting.md`:
-StrReplace unicode quotes, reviewer false positives,
-CI Turbo cache staleness, pre-commit output/blocking,
-ESLint complexity with `??`/`?.`, background reviewer
-agents, MCP tool call param types, commitlint rejections,
-worktree agent patches, Codex reviewer resolution,
-`git merge --abort` staging loss, `pnpm format:root`
-after merge, Turbo `--force` reproduce-first.

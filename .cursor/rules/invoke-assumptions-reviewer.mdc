@@ -1,0 +1,8 @@
+---
+description: Invoke assumptions-reviewer when plans are marked decision-complete, propose 3+ agents, assert blocking relationships, or commit to technology choices before research.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/invoke-assumptions-reviewer.md`.
+
+In Cursor, use the Task tool with `readonly: true` and the appropriate `subagent_type`.

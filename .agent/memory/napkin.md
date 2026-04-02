@@ -1,3 +1,110 @@
+## Session 2026-04-02 — Plan amendments and assumptions-reviewer creation
+
+### Key Events
+
+- **Part A complete**: All 5 frontend-practice plan amendments applied —
+  oak-components reference-only, Phase 3 reduced to 5 reviewers, provenance
+  UUID removed (Phase 5, R14, Q6, risk entries, non-goal), token delivery
+  via Vite clarified in ADR-145 section, blocking gate made specific.
+- **Part B complete**: assumptions-reviewer created as ADR-146 with inverted
+  doctrine hierarchy. Full triplet: template + skill + rule. Platform
+  adapters for Cursor, Claude Code, Codex, Gemini CLI. Invocation matrix
+  updated (quick-triage Q11 + on-demand list + worked example). Practice
+  Core outgoing note created.
+- **Part C complete**: session-continuation.prompt.md updated.
+- **Validation gates passed**: `pnpm subagents:check` (19 wrappers, 19
+  adapters, 16 templates) and `pnpm portability:check` both green after
+  fixing two issues (missing Codex config entry, missing Cursor agent
+  wrapper, missing Cursor skill adapter, missing Claude agent adapter).
+
+### Patterns
+
+- Portability check requires more adapters than initially obvious: Cursor
+  agents, Cursor skills, Claude Code agents, Claude Code rules, Codex
+  agents, Codex config, Gemini commands. Easy to miss one.
+- The inverted doctrine hierarchy is a genuine design departure from
+  ADR-129. Worth noting that ADR-129 says "the doctrine hierarchy assumes
+  authoritative external sources exist. For purely internal domains, the
+  hierarchy collapses to repo context only." The assumptions-reviewer is
+  not a "purely internal domain" — it is a meta-level capability that
+  intentionally inverts the standard order.
+
+---
+
+## Session 2026-04-02 — Assumption audit triage and consolidation
+
+### Key Events
+
+- **Assumption audit triage**: reviewed all findings against user
+  domain knowledge. User confirmed: two workspaces needed (future
+  multi-theme, multi-app), DTCG JSON committed, oak-components is
+  reference-only (no consumer will adopt it), specialist agents
+  created alongside workspaces, full documentation suite.
+- **Amendments plan created**: streamlined Phase 3 (10 → 5-6
+  reviewers), removed provenance UUID, clarified token-to-consumer
+  delivery (Vite bundles CSS into mcp-app.html), specified blocking
+  gate precisely.
+- **Assumptions-reviewer designed**: new meta-level reviewer with
+  inverted doctrine hierarchy. ADR, triplet, and invocation matrix
+  planned.
+- **Session prompt updated**: URL remediation moved to completed,
+  amendments plan added as workstream.
+- **Duplicate Cursor plan deleted**: `.cursor/plans/` copy removed
+  after repo plan created.
+
+### Patterns to Remember
+
+- **Domain knowledge resolves assumption audits**: the assumption
+  audit methodology correctly surfaces questions, but some questions
+  can only be answered by the human who has sight of future work.
+  The audit's value is in making the assumptions explicit, not in
+  requiring all evidence to be in-repo.
+- **Proportionality, not minimalism**: the user confirmed that
+  "architectural excellence over expediency" means building the
+  right architecture from the start, not the minimal thing. The
+  assumption audit's instinct to simplify was right to question
+  but wrong to conclude "over-engineering" without user context.
+- **oak-components is reference-only**: none of the consuming sites
+  will use it as a dependency. Token values (colours, typefaces,
+  spacing) are extracted during authoring, then the relationship
+  ends. This is a settled architectural decision.
+
+## Session 2026-04-01 — MCP review and consolidation
+
+### Key Events
+
+- **MCP reviewer (Round 2)** on frontend-practice-integration plan:
+  3 findings applied (1 high, 2 medium). R10 testing relabelled
+  from "direct HTML is the idiomatic approach" to "resource-level
+  a11y tests + MCP App integration verification via basic-host."
+  Token CSS delivery must use real MCP App resource path. Frontend
+  reviewers given explicit MCP boundary rule (they own DOM/a11y/
+  tokens/React; mcp-reviewer owns _meta.ui*, registration, CSP,
+  bridge lifecycle). ADR-141 added to their reading set for MCP
+  App surfaces.
+- **Consolidation**: removed 36 lines of pointer-only graduation
+  history from distilled.md (192 → 156 lines). Deleted duplicate
+  learning-loop-refinement.plan.md at `current/` — plan already
+  executed and archived. Removed stale reference from session
+  continuation prompt.
+- **Fitness**: 3 above-target warnings (principles.md +14,
+  testing-strategy.md +1, troubleshooting.md +14). No limit
+  violations. testing-strategy.md is the tightest — must refine
+  before Phase 1 adds 9th gate.
+
+### Patterns to Remember
+
+- **Two-level MCP App testing**: resource-level tests (Playwright
+  + axe-core, injected CSS) prove DOM accessibility in isolation.
+  MCP App integration tests (basic-host or real host) prove
+  correct packaging, sandbox, CSP, and bridge lifecycle. Both
+  required; neither sufficient alone.
+- **MCP boundary for frontend reviewers**: accessibility-reviewer,
+  design-system-reviewer, react-component-reviewer operate
+  *inside* the view. mcp-reviewer operates *around* the view
+  (_meta.ui*, resource registration, host lifecycle). Overlapping
+  scope without this boundary leads to drift.
+
 ## Session 2026-04-01 — Napkin rotation (distillation)
 
 Archived `napkin-2026-04-01.md` covering sessions 2026-03-31

@@ -72,3 +72,7 @@ config_file = ".codex/agents/architecture-reviewer-betty.toml"
 [agents."architecture-reviewer-wilma"]
 description = "Adversarial architecture reviewer — resilience, failure modes, and hidden coupling risks."
 config_file = ".codex/agents/architecture-reviewer-wilma.toml"
+
+[agents."assumptions-reviewer"]
+description = "Meta-level plan reviewer for proportionality, assumption validity, and blocking legitimacy."
+config_file = ".codex/agents/assumptions-reviewer.toml"
