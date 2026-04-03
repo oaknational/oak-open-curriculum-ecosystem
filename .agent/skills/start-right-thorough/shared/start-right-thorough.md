@@ -85,8 +85,10 @@ pnpm subagents:check    # After sub-agent definition changes
 pnpm portability:check  # After platform surface or hook changes
 pnpm test:root-scripts  # Repo-level script tests
 pnpm test
+pnpm test:widget
 pnpm test:e2e
 pnpm test:ui
+pnpm test:a11y
 pnpm smoke:dev:stub
 
 # Informational practice health

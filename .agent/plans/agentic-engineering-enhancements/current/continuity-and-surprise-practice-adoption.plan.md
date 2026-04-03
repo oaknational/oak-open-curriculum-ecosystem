@@ -258,7 +258,7 @@ pnpm practice:fitness
 pnpm portability:check
 ```
 
-Use `pnpm qg` when broader merge-readiness proof is needed.
+Use `pnpm check` when broader merge-readiness proof is needed.
 
 ## Foundation Alignment
 

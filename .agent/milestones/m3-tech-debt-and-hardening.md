@@ -56,7 +56,7 @@ All must be true before M3 exit:
 - [ ] Canonical host enforcement verified on Vercel
 - [ ] Architectural enforcement strengthened (boundary checks, dead code
   detection)
-- [ ] Quality gates green (`pnpm qg`)
+- [ ] Canonical aggregate gate green (`pnpm check`)
 - [ ] No severity-1 snagging items open
 
 ## Implementation notes: edge rate limiting

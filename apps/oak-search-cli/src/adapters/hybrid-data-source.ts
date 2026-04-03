@@ -57,7 +57,9 @@ export interface HybridDataSource {
   getStats(): HybridDataSourceStats;
 }
 
-const DEFAULT_CONFIG: HybridDataSourceConfig = { enableKs4Supplementation: true };
+const DEFAULT_CONFIG: HybridDataSourceConfig = {
+  enableKs4Supplementation: true,
+};
 
 function deriveSubjectSlug(sequenceSlug: string): SearchSubjectSlug {
   const candidate = deriveSubjectSlugFromSequence(sequenceSlug);

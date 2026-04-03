@@ -109,7 +109,7 @@ pnpm sdk-codegen    # Regenerate SDK + MCP artefacts from OpenAPI
 
 ```bash
 pnpm make           # Full convenience pipeline with auto-fix steps; review file changes afterwards
-pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents, portability, root script tests, workspace tests, UI, E2E, smoke
+pnpm check          # Canonical full verification gate: clean rebuild + tests + docs + formatting/linting fixes
 pnpm fix            # Auto-fix: format + markdownlint + lint
 pnpm clean          # Remove build artefacts (dist/, .turbo)
 ```

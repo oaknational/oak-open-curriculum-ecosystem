@@ -46,7 +46,7 @@ canonical `.agent/` version.
 ## Can I safely ignore this directory?
 
 Yes. None of these files affect the build, CI, or test execution. The
-quality gates (`pnpm qg`, `pnpm test`, `pnpm type-check`) are what
+quality gates (`pnpm check`, `pnpm test`, `pnpm type-check`) are what
 enforce code quality. The `.agent/` directory helps AI agents follow the
 same standards that human developers follow, but the gates themselves are
 the enforcement mechanism — not these files.

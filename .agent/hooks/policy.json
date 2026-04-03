@@ -27,7 +27,7 @@
       "description": "Remind the agent to ground itself at session start."
     },
     "preCommit": {
-      "quality_gate_reminder": "Run quality gates (pnpm qg) before committing.",
+      "quality_gate_reminder": "Run the required quality gates; `pnpm check` is the canonical aggregate gate.",
       "description": "Remind the agent to run quality gates before committing."
     }
   },

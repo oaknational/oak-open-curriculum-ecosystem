@@ -235,13 +235,8 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http build:widget
 
 > See [Quality Gates component](../../templates/components/quality-gates.md)
 
-Canonical readiness gate before commit:
-
-```bash
-pnpm qg
-```
-
-Full scrub before merge:
+Run the required gates one at a time while iterating. When aggregate
+readiness proof is needed, use:
 
 ```bash
 pnpm check

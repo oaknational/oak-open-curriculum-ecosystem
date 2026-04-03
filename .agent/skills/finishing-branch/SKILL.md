@@ -15,7 +15,7 @@ Checklist for completing development work on a branch before merge or PR creatio
 
 ### 1. Quality gates pass
 
-- Run `pnpm qg` (or the project's full quality gate command)
+- Run `pnpm check`
 - All tests pass, no skipped tests
 - Linting clean, type-checking clean
 - No new warnings introduced

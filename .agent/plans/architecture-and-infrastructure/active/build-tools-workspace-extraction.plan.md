@@ -18,7 +18,7 @@ todos:
     content: "Delete root vitest.config.ts and the test:root-scripts command. Tests now run via pnpm test (Turbo)."
     status: pending
   - id: update-ci-workflow
-    content: "Remove the test:root-scripts step from CI, qg, and check. The tests run via Turbo test."
+    content: "Remove the test:root-scripts step from CI and check. The tests run via Turbo test."
     status: pending
   - id: create-always-on-rule
     content: "Create ESLint or lint rule: repo-root scripts/ must not contain test files. Tests belong in workspaces."
@@ -39,7 +39,7 @@ of workarounds:
 
 1. A root `vitest.config.ts` that only exists for these tests
 2. A `test:root-scripts` command that runs outside the Turbo graph
-3. Manual additions to `qg`, `check`, and CI workflow as separate steps
+3. Manual additions to `check` and the CI workflow as separate steps
 4. A vitest include glob that had to be tightened manually
 
 These scripts are complex enough to warrant proper workspace structure
@@ -83,7 +83,7 @@ with platform adapters:
 
 - `vitest.config.ts` at repo root (the one with `scripts/**/*.test.ts`)
 - `test:root-scripts` command from root `package.json`
-- `test:root-scripts` step from CI workflow, `qg`, and `check` scripts
+- `test:root-scripts` step from the CI workflow and `check` script
 - All `*.test.ts` files under `scripts/`
 
 ## What Stays

@@ -20,7 +20,7 @@ publishing in `release-and-publishing.md`.
 Use this gate structure for each milestone and mark each gate as complete only
 when evidence exists.
 
-- **G1 Quality gates**: `pnpm qg` (and where required `pnpm check`) pass.
+- **G1 Quality gates**: `pnpm check` passes.
 - **G2 Generated artefact stability**: regeneration produces no unexplained drift.
 - **G3 Secrets baseline**: `pnpm secrets:scan:all` passes; manual spot-check complete.
 - **G4 Onboarding release gate**: onboarding simulation evidence exists; blockers closed.

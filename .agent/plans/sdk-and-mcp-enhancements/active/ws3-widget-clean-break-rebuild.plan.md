@@ -629,13 +629,8 @@ banned legacy architecture.
 
 ### Quality gates
 
-Canonical readiness gate (non-mutating):
-
-```bash
-pnpm qg
-```
-
-Full scrub before push/merge:
+Run the required gates one at a time while iterating. When aggregate
+readiness proof is needed, use:
 
 ```bash
 pnpm check

@@ -21,8 +21,8 @@ todos:
   - id: knip-integration
     content: "Configure knip to detect dead code and unused exports across workspaces. (Execution delegated to the canonical directory-complexity plan.)"
     status: pending
-  - id: turbo-qg-unification
-    content: "Update turbo.json and root package.json to include 'pnpm qg' as a combined task. (Execution delegated to the canonical directory-complexity plan.)"
+  - id: turbo-check-unification
+    content: "Update turbo.json and root package.json so `pnpm check` is the combined aggregate task. (Execution delegated to the canonical directory-complexity plan.)"
     status: pending
   - id: agent-directive-grounding
     content: "Create .agent/directives/architectural-enforcement.md and ground all agents. (Strictness subset delegated to devx strictness; directory-complexity subset delegated to the canonical directory-complexity plan.)"
@@ -70,7 +70,7 @@ Directory-complexity-related enforcement work is now split by disruption profile
 2. **Canonicalised in the queued directory-complexity plan**:
    - remediation SOP for directory-complexity breaches
    - structural guardrails required before `max-files-per-dir`
-   - depcruise, knip, and qg-level integration for this workstream
+   - depcruise, knip, and `pnpm check` integration for this workstream
    - staged `max-files-per-dir` activation
    - canonical execution: [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 3. **Retained here as strategic intent only**:
@@ -131,9 +131,9 @@ Directory-complexity-related enforcement work is now split by disruption profile
 
 - **Goal:** Make the "First Question" mechanical for AI agents.
 - **Execution source:** [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md)
-- **Requirement:** `pnpm qg` MUST be run before any PR or merge-ready state. The qg path should include the selected structural checks as that plan lands them.
+- **Requirement:** `pnpm check` MUST be run before any PR or merge-ready state. The `pnpm check` path should include the selected structural checks as that plan lands them.
 - **Evidence requirement:** Any non-trivial enforcement claim (boundary correctness, dead-code elimination, import-flow safety) MUST include an evidence bundle using [Evidence Bundle Template](../evidence-bundle.template.md).
-- **Execution status:** split-guidance/rules updates delegated to canonical strictness convergence; depcruise/knip/qg grounding remains in this stream.
+- **Execution status:** split-guidance/rules updates delegated to canonical strictness convergence; depcruise/knip/`pnpm check` grounding remains in this stream.
 
 ## 3. Documentation Propagation Requirement
 

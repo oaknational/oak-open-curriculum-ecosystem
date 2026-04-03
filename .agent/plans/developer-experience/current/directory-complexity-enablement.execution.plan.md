@@ -9,7 +9,7 @@ todos:
     content: "Phase 1: Define the remediation contract and directory-complexity SOP."
     status: pending
   - id: phase-2-supporting-enforcement
-    content: "Phase 2: Land the supporting enforcement bundle (boundary contract, depcruise, knip, qg integration)."
+    content: "Phase 2: Land the supporting enforcement bundle (boundary contract, depcruise, knip, and `pnpm check` integration)."
     status: pending
   - id: phase-3-pilot-calibration
     content: "Phase 3: Pilot the supporting bundle on real Oak hotspots and calibrate activation settings."
@@ -62,7 +62,7 @@ Oak does **not** yet have the full companion system that prevents `max-files-per
 - a canonical SOP for how to respond to a directory-complexity breach
 - barrel-boundary enforcement proving that extracted sub-domains expose narrow public APIs
 - dead-code enforcement to clean up refactors
-- a quality-gate path that keeps the supporting toolchain permanently active
+- a `pnpm check` path that keeps the supporting toolchain permanently active
 - calibrated rollout evidence showing what threshold and ignore policy Oak should actually use
 
 The external comparator reviewed on 2026-03-07 confirmed the useful pattern:
@@ -131,14 +131,14 @@ REFACTOR (cleanup/documentation):
 Acceptance criteria:
 
 1. `max-files-per-dir` current state is documented with exact code-location evidence.
-2. Supporting-tool gaps (`dependency-cruiser`, `knip`, qg integration, SOP) are explicitly listed.
+2. Supporting-tool gaps (`dependency-cruiser`, `knip`, `pnpm check` integration, SOP) are explicitly listed.
 3. Adjacent plans describe this file as the canonical execution source for this work.
 
 Deterministic validation:
 
 ```bash
 rg --line-number "max-files-per-dir" packages/core/oak-eslint/src
-rg --line-number "dependency-cruiser|knip|qg" package.json turbo.json .agent/plans
+rg --line-number "dependency-cruiser|knip|pnpm check" package.json turbo.json .agent/plans
 rg --line-number "directory-complexity-enablement\\.execution\\.plan\\.md" .agent/plans/developer-experience .agent/plans/agentic-engineering-enhancements
 ```
 
@@ -196,7 +196,7 @@ RED (tests/evidence first):
 
 1. Prove the current boundary model can or cannot express the needed public-API constraints.
 2. Prove the repo currently lacks barrel-boundary and dead-code enforcement.
-3. Prove the current qg path does or does not include the required structural checks.
+3. Prove the current `pnpm check` path does or does not include the required structural checks.
 
 GREEN (minimal implementation):
 
@@ -205,7 +205,7 @@ GREEN (minimal implementation):
    - adopt `eslint-plugin-boundaries` only if the custom rules cannot express the required semantics cleanly
 2. Add `dependency-cruiser` configuration enforcing barrel/public-API access patterns for the selected scopes.
 3. Add `knip` configuration for dead-code and unused-export cleanup after refactors.
-4. Integrate the chosen structural checks into the repo quality-gate path.
+4. Integrate the chosen structural checks into the repo `pnpm check` path.
 5. Decide whether a supplemental graph check such as `madge` adds unique value or should remain out of scope, and record the rationale here.
 
 REFACTOR (cleanup/documentation):
@@ -218,7 +218,7 @@ Acceptance criteria:
 1. Oak has an explicit, tested boundary/public-API contract for extracted sub-domains.
 2. Oak has `dependency-cruiser` configuration for barrel-boundary enforcement.
 3. Oak has `knip` configuration for dead-code detection in the same scopes.
-4. The quality-gate path references the selected structural checks.
+4. The `pnpm check` path references the selected structural checks.
 5. The plan records the rationale for the semantic-boundary implementation choice.
 
 Deterministic validation:
@@ -227,7 +227,7 @@ Deterministic validation:
 test -f .dependency-cruiser.cjs
 rg --line-number "index\\.ts|forbidden|circular" .dependency-cruiser.cjs
 test -f knip.ts || test -f knip.json || test -f knip.config.ts
-rg --line-number "depcruise|knip|qg" package.json turbo.json
+rg --line-number "depcruise|knip|pnpm check" package.json turbo.json
 rg --line-number "eslint-plugin-boundaries|createSdkBoundaryRules|appBoundaryRules|appArchitectureRules" packages/core/oak-eslint apps packages
 ```
 

@@ -154,13 +154,8 @@ start.
 
 ## Validation
 
-Canonical readiness and validation commands for this workstream:
-
-```bash
-pnpm qg
-```
-
-Full scrub before push/merge:
+Run the required gates one at a time while iterating. When aggregate
+readiness or validation proof is needed, use:
 
 ```bash
 pnpm check

@@ -69,30 +69,30 @@ point in the development lifecycle. See
 [ADR-121](../architecture/architectural-decisions/121-quality-gate-surfaces.md)
 for the full decision record.
 
-| Check             | pre-commit | pre-push     | CI workflow     | pnpm qg | pnpm check        |
-| ----------------- | ---------- | ------------ | --------------- | ------- | ----------------- |
-| secrets:scan:all  | --         | Yes          | Yes             | --      | Yes               |
-| clean             | --         | --           | --              | --      | Yes               |
-| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | --      | Yes               |
-| build             | --         | Yes          | Yes             | --      | Yes               |
-| format-check      | Yes        | Yes          | Yes             | Yes     | Yes (format:root) |
-| markdownlint      | Yes        | Yes          | Yes             | Yes     | Yes               |
-| subagents:check   | --         | --           | Yes             | Yes     | Yes               |
-| portability:check | --         | --           | Yes             | Yes     | Yes               |
-| test:root-scripts | --         | --           | Yes             | Yes     | Yes               |
-| type-check        | Yes        | Yes          | Yes             | Yes     | Yes               |
-| lint              | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test              | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test:widget       | --         | --           | --              | Yes     | Yes               |
-| test:e2e          | --         | Yes (--only) | --              | Yes     | Yes               |
-| test:ui           | --         | --           | --              | Yes     | Yes               |
-| test:a11y         | --         | --           | --              | Yes     | Yes               |
-| smoke:dev:stub    | --         | --           | --              | Yes     | Yes               |
-| doc-gen           | --         | --           | --              | --      | Yes               |
+| Check             | pre-commit | pre-push     | CI workflow     | pnpm check        |
+| ----------------- | ---------- | ------------ | --------------- | ----------------- |
+| secrets:scan:all  | --         | Yes          | Yes             | Yes               |
+| clean             | --         | --           | --              | Yes               |
+| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | Yes               |
+| build             | --         | Yes          | Yes             | Yes               |
+| format-check      | Yes        | Yes          | Yes             | Yes (format:root) |
+| markdownlint      | Yes        | Yes          | Yes             | Yes               |
+| subagents:check   | --         | --           | Yes             | Yes               |
+| portability:check | --         | --           | Yes             | Yes               |
+| test:root-scripts | --         | --           | Yes             | Yes               |
+| type-check        | Yes        | Yes          | Yes             | Yes               |
+| lint              | Yes        | Yes          | Yes             | Yes               |
+| test              | Yes        | Yes          | Yes             | Yes               |
+| test:widget       | --         | --           | --              | Yes               |
+| test:e2e          | --         | Yes (--only) | --              | Yes               |
+| test:ui           | --         | --           | --              | Yes               |
+| test:a11y         | --         | --           | --              | Yes               |
+| smoke:dev:stub    | --         | --           | --              | Yes               |
+| doc-gen           | --         | --           | --              | Yes               |
 
 **Key principle**: no check runs only in CI. Every CI check is reproducible
-locally via pre-push, `pnpm qg`, or `pnpm check`. See ADR-121 for the
-rationale behind each exclusion.
+locally via pre-push or `pnpm check`. See ADR-121 for the rationale behind
+each exclusion.
 
 ## Quality Gate Commands
 
@@ -119,39 +119,17 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
    - `markdownlint:root` - fix markdown in root
    - `format:root` - format root files
 
-### `pnpm qg` - Quality gates (verification)
-
-Verifies the codebase passes all checks without modifications:
-
-```bash
-pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && pnpm portability:check && pnpm test:root-scripts && pnpm type-check && pnpm lint && pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub
-```
-
-**Flow**:
-
-1. Root-only checks (no fixes):
-   - `format-check:root` - verify formatting
-   - `markdownlint-check:root` - verify markdown
-   - `subagents:check` - validate sub-agent wrapper/template standards
-   - `portability:check` - validate canonical/adaptor and hook parity
-   - `test:root-scripts` - repo-level script tests
-2. Sequential read-only gates:
-   - `type-check` - TypeScript validation
-   - `lint` - ESLint (verify only, no --fix)
-   - `test` - unit and integration tests
-   - `test:widget` - MCP App widget in-process tests
-   - `test:e2e` - E2E tests (includes built-server behaviour tests)
-   - `test:ui` - Playwright UI tests
-   - `test:a11y` - Playwright accessibility tests
-   - `smoke:dev:stub` - smoke tests with stubs
-
-### `pnpm check` - Full clean build and verify
+### `pnpm check` - Canonical full gate
 
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm lint:fix && pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root
+pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && pnpm sdk-codegen build && pnpm type-check && pnpm doc-gen && pnpm lint:fix && pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root
 ```
+
+`pnpm check` is the only canonical aggregate verification command. The former
+`pnpm qg` surface was removed to avoid having two competing “full gate”
+stories.
 
 ### `pnpm test:all` - All test suites
 

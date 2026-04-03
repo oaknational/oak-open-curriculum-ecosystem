@@ -164,7 +164,7 @@ Adjacent:
 - Convergence update (2026-03-04):
   - Strictness-specific ESLint convergence tasks (`no-console`, shared-config promotion work) are executed in
     [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
-  - Directory-complexity supporting constraints, depcruise/knip/qg integration, and staged `max-files-per-dir` activation are executed in
+  - Directory-complexity supporting constraints, depcruise/knip/`pnpm check` integration, and staged `max-files-per-dir` activation are executed in
     [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 - Done when:
   - enforcement phases 0-5 are delivered with deterministic validation
@@ -663,6 +663,5 @@ Use the canonical repository gate commands from repo root:
 
 ```bash
 pnpm check
-pnpm qg
 pnpm fix
 ```

@@ -49,8 +49,8 @@ commits. Three former RED specs are GREEN. The widget-resource integration test
 failure is closed by injecting widget HTML through
 `ResourceRegistrationOptions`, and the separate lesson-summary schema fallout is
 also closed in `ws3-phase-3-schema-fallout-closure.plan.md`. The earlier
-Stage 1/2 closure already carried full `pnpm check` and `pnpm qg` evidence, and
-the 2026-04-02 follow-up added targeted green validation for shared redaction,
+Stage 1/2 closure already carried full `pnpm check` evidence, and the
+2026-04-02 follow-up added targeted green validation for shared redaction,
 auth-success logging, HTTP observability, and the fallback-proof E2E slice. B3
 Hybrid remains retained (no structural change), and `registerAppTool` is still
 not adopted in this phase.
@@ -68,7 +68,7 @@ not adopted in this phase.
 | 7. B3 Hybrid TSDoc | DONE | Labelled as bounded workaround, coexistence note, Zod 4 investigation result documented |
 | 8. Widget HTML provider seam | DONE | `ResourceRegistrationOptions.getWidgetHtml` added; tests inject deterministic HTML; resource tests green again |
 | 9. Auth policy + fallback | DONE | Explicit fallback proof added via `ws3-fallback-proof.e2e.test.ts` for `get-curriculum-model` and `user-search` |
-| 10. Final closure | DONE | Schema fallout closed; reviewer pass completed; earlier Stage 1/2 closure had `pnpm check` and `pnpm qg` green, and the 2026-04-02 follow-up added targeted green validation |
+| 10. Final closure | DONE | Schema fallout closed; reviewer pass completed; earlier Stage 1/2 closure had `pnpm check` green, and the 2026-04-02 follow-up added targeted green validation |
 
 ### Separate Closure Track
 
@@ -186,7 +186,6 @@ the existing shared formatter.
 Completed on the current tree:
 
 - `pnpm check` passed
-- `pnpm qg` passed
 - `type-reviewer`, `test-reviewer`, and `code-reviewer` findings were addressed
 - `security-reviewer` and `architecture-reviewer-fred` reported no findings
 - `mcp-reviewer` hung twice and produced no findings

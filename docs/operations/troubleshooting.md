@@ -195,11 +195,10 @@ pnpm es:ingest -- --index threads --verbose
 
 ## Known Gate Caveats
 
-As of **25 February 2026**, `pnpm qg` is known to fail in clean local runs:
+No standing `pnpm check` caveats are currently recorded here.
 
-- `apps/oak-curriculum-mcp-streamable-http/tests/widget/widget-rendering.spec.ts` (fails in `pnpm qg` via `test:ui`)
-
-If `pnpm qg` fails, run the affected suite directly and check latest issues/ADRs/plans before assuming local setup problems.
+If `pnpm check` fails, run the affected suite directly and check the latest
+issues, ADRs, and active plans before assuming local setup problems.
 
 ## Quick Fixes
 

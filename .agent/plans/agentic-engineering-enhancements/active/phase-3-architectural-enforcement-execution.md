@@ -21,7 +21,7 @@ todos:
     content: "Phase 4: Delegate knip execution to the canonical directory-complexity plan."
     status: completed
   - id: p3-phase5-grounding
-    content: "Phase 5: Delegate directory-complexity grounding and qg integration while retaining collection-level oversight."
+    content: "Phase 5: Delegate directory-complexity grounding and `pnpm check` integration while retaining collection-level oversight."
     status: completed
   - id: p3-doc-sync
     content: "Update documentation sync log with ADR/directive/reference-doc/README impact for Phase 3."
@@ -44,7 +44,7 @@ Execution ownership changed for part of this stream:
 2. Delegated to [directory-complexity-enablement.execution.plan.md](../../developer-experience/current/directory-complexity-enablement.execution.plan.md):
    - remediation SOP for directory-complexity breaches
    - boundary/public-API support bundle
-   - depcruise, knip, qg integration for this workstream
+   - depcruise, knip, and `pnpm check` integration for this workstream
    - staged `max-files-per-dir` activation
 3. Retained in this plan:
    - evidence bundling for non-trivial enforcement claims

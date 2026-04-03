@@ -102,19 +102,19 @@ This plan unifies all pending quality gate work into a single strategic brief to
 
 **Remediation**: None — all remediation happens in the active CI plan.
 
-### 4. Enable knip as Blocking QG
+### 4. Enable knip as a Blocking `pnpm check` Gate
 
 **Problem**: knip surfaces 94 unused files, 626 unused exports, and 14 dependency issues. These are genuine findings that need triage.
 
-**Fix**: Triage all findings. Delete genuine dead code. Adjust `knip.config.ts` for false positives. Add `pnpm knip` to `qg` and `check` scripts.
+**Fix**: Triage all findings. Delete genuine dead code. Adjust `knip.config.ts` for false positives. Add `pnpm knip` to the `pnpm check` script.
 
 **Remediation**: Significant — see `.agent/plans/architecture-and-infrastructure/static-analysis-tool-promotion.plan.md` for initial triage plan.
 
-### 5. Enable dependency-cruiser as Blocking QG
+### 5. Enable dependency-cruiser as a Blocking `pnpm check` Gate
 
 **Problem**: dependency-cruiser finds circular dependencies and orphan modules. These need resolution before promotion.
 
-**Fix**: Resolve circular deps (refactor or mark as intentional). Exclude genuinely external orphans. Add `pnpm depcruise` to `qg` and `check` scripts.
+**Fix**: Resolve circular deps (refactor or mark as intentional). Exclude genuinely external orphans. Add `pnpm depcruise` to the `pnpm check` script.
 
 **Remediation**: See static-analysis-tool-promotion.plan.md.
 

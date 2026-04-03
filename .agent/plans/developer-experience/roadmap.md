@@ -9,7 +9,7 @@
    - Includes folded no-console convergence and the remaining strictness-specific lint work.
 3. **M2: Directory-complexity enablement (queued)**
    - Execute `current/directory-complexity-enablement.execution.plan.md` as the canonical supporting-constraint bundle before any `max-files-per-dir` activation.
-   - Covers remediation SOP, structural boundary support, depcruise/knip/qg integration, pilot calibration, and staged rule activation.
+   - Covers remediation SOP, structural boundary support, depcruise/knip/`pnpm check` integration, pilot calibration, and staged rule activation.
 4. **M3: Onboarding readiness closure**
    - Close active onboarding remediation tracks for public alpha.
 5. **M4: Deferred docs pipeline work**

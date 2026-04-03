@@ -25,9 +25,10 @@ The five surfaces are:
 4. **GitHub CI workflow** (`.github/workflows/ci.yml`) — runs on PRs and
    pushes to `main`. Canonical remote gate. Must be self-contained (no
    local tooling assumptions).
-5. **Local commands** (`pnpm check`, `pnpm qg`, `pnpm make`) — developer-
-   initiated. `pnpm check` is the canonical aggregate gate and the most
-   comprehensive; `pnpm qg` is verify-only; `pnpm make` is build-and-fix.
+5. **Local commands** (`pnpm check`, `pnpm make`) — developer-initiated.
+   `pnpm check` is the canonical aggregate gate and the most comprehensive;
+   `pnpm make` is build-and-fix. The former `pnpm qg` verify-only surface was
+   removed because it duplicated gate narratives and created onboarding drift.
 
 ## Decision
 
@@ -37,26 +38,26 @@ before push**, so developers never discover failures only after pushing.
 
 ### Coverage matrix
 
-| Check             | pre-commit | pre-push     | CI workflow     | pnpm qg | pnpm check        |
-| ----------------- | ---------- | ------------ | --------------- | ------- | ----------------- |
-| secrets:scan:all  | --         | Yes          | Yes             | --      | Yes               |
-| clean             | --         | --           | --              | --      | Yes               |
-| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | --      | Yes               |
-| build             | --         | Yes          | Yes             | --      | Yes               |
-| format-check      | Yes        | Yes          | Yes             | Yes     | Yes (format:root) |
-| markdownlint      | Yes        | Yes          | Yes             | Yes     | Yes               |
-| subagents:check   | --         | --           | Yes             | Yes     | Yes               |
-| portability:check | --         | --           | Yes             | Yes     | Yes               |
-| test:root-scripts | --         | --           | Yes             | Yes     | Yes               |
-| type-check        | Yes        | Yes          | Yes             | Yes     | Yes               |
-| lint              | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test              | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test:widget       | --         | --           | --              | Yes     | Yes               |
-| test:e2e          | --         | Yes (--only) | --              | Yes     | Yes               |
-| test:ui           | --         | --           | --              | Yes     | Yes               |
-| test:a11y         | --         | --           | --              | Yes     | Yes               |
-| smoke:dev:stub    | --         | --           | --              | Yes     | Yes               |
-| doc-gen           | --         | --           | --              | --      | Yes               |
+| Check             | pre-commit | pre-push     | CI workflow     | pnpm check        |
+| ----------------- | ---------- | ------------ | --------------- | ----------------- |
+| secrets:scan:all  | --         | Yes          | Yes             | Yes               |
+| clean             | --         | --           | --              | Yes               |
+| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | Yes               |
+| build             | --         | Yes          | Yes             | Yes               |
+| format-check      | Yes        | Yes          | Yes             | Yes (format:root) |
+| markdownlint      | Yes        | Yes          | Yes             | Yes               |
+| subagents:check   | --         | --           | Yes             | Yes               |
+| portability:check | --         | --           | Yes             | Yes               |
+| test:root-scripts | --         | --           | Yes             | Yes               |
+| type-check        | Yes        | Yes          | Yes             | Yes               |
+| lint              | Yes        | Yes          | Yes             | Yes               |
+| test              | Yes        | Yes          | Yes             | Yes               |
+| test:widget       | --         | --           | --              | Yes               |
+| test:e2e          | --         | Yes (--only) | --              | Yes               |
+| test:ui           | --         | --           | --              | Yes               |
+| test:a11y         | --         | --           | --              | Yes               |
+| smoke:dev:stub    | --         | --           | --              | Yes               |
+| doc-gen           | --         | --           | --              | Yes               |
 
 ### Rationale for exclusions
 
@@ -64,23 +65,24 @@ before push**, so developers never discover failures only after pushing.
   These run on pre-push instead.
 - **Pre-push excludes test:widget, test:ui, test:a11y, and smoke**:
   local-only widget/browser gates and dev-server smoke require the broader
-  developer environment. `pnpm qg` covers these for developers who want full
-  local verification.
+  developer environment. `pnpm check` covers these when full local
+  verification is needed.
 - **CI excludes test:e2e**: E2E tests hit Elasticsearch which is not
   available in the GitHub Actions environment. Covered by pre-push
-  (`--only` mode) and `pnpm qg`.
+  (`--only` mode) and `pnpm check`.
 - **CI excludes test:widget, test:ui, test:a11y, and smoke:dev:stub**:
   widget/browser gates and dev server lifecycle add complexity and flakiness
-  to CI. These are local-only gates covered by `pnpm qg` and `pnpm check`.
+  to CI. These are local-only gates covered by `pnpm check`.
 - **CI excludes doc-gen**: documentation generation is a build-time
   convenience, not a correctness gate.
-- **`pnpm qg` excludes secrets scan and clean**: `qg` assumes an already-
-  built working tree. `pnpm check` handles full clean rebuilds.
+- **`pnpm check` includes secrets scan and clean**: the canonical aggregate
+  gate intentionally proves clean rebuild readiness instead of relying on an
+  already-built working tree.
 
 ### Design principles
 
 1. **No CI-only checks** — every CI check must be reproducible locally via
-   at least one of: pre-push, `pnpm qg`, or `pnpm check`.
+   pre-push or `pnpm check`.
 2. **Pre-commit is fast** — format, markdown, type-check, lint, and unit
    tests only. No builds or codegen.
 3. **Pre-push is thorough** — secret scan, full build chain, drift check,
@@ -102,7 +104,7 @@ before push**, so developers never discover failures only after pushing.
 
 - test:widget, test:ui, test:a11y, and smoke:dev:stub remain local-only,
   meaning they could regress without CI catching them. Mitigation:
-  `pnpm qg` and `pnpm check` cover the full local surface.
+  `pnpm check` covers the full local surface.
 - Adding checks to more surfaces increases total developer-facing gate time.
   Mitigation: turbo caching makes repeated runs fast.
 

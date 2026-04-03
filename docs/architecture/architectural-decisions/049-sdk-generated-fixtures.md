@@ -49,7 +49,7 @@ fixtures were the last remaining place that broke this principle.
 
 - Fixtures stay aligned with the OpenAPI contract automatically; `pnpm sdk-codegen` regenerates them.
 - No divergence between search/admin fixtures and live response shapes.
-- Local onboarding is completely offline: `pnpm make`, `pnpm qg`, run fixtures.
+- Local onboarding is completely offline: `pnpm make`, `pnpm check`, run fixtures.
 - Tests and demos can switch between success/empty/error modes without network state.
 
 ### Negative

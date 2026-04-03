@@ -159,7 +159,7 @@ This creates circular cache invalidation: `build` produces outputs → outputs c
 ### Positive
 
 - **Reliability**: No more intermittent test failures from race conditions
-- **Performance**: Cached builds make `pnpm test` and `pnpm qg` significantly faster on repeated runs
+- **Performance**: Cached builds make `pnpm test` and `pnpm check` significantly faster on repeated runs
 - **Clarity**: Explicit `lint:fix` vs `lint` makes intent clear
 
 ### Negative

@@ -1,3 +1,24 @@
+## Session 2026-04-03 — consolidate-docs gate-surface sweep
+
+### What Was Done
+
+- Ran `jc-consolidate-docs` after the root gate simplification and found
+  remaining live `pnpm qg` references in milestones, roadmaps,
+  active/current/future plans, and the local Claude project memory.
+- Updated those live surfaces to standardise on `pnpm check`, while leaving
+  archive/history material and explanatory removal notes untouched.
+- Tightened `consolidate-docs` so repo-level command renames now trigger an
+  explicit sweep across live plans, milestones, templates, and platform
+  memory.
+- Verified the remaining `pnpm qg` mentions are historical or explanatory
+  only.
+
+### Patterns to Remember
+
+- Removing a canonical root command requires a sweep across live plans,
+  roadmaps, milestones, and platform memory; if you only fix the canonical
+  docs, operational guidance keeps teaching the retired command.
+
 ## Session 2026-04-03 — napkin rotation and consolidation
 
 ### What Was Done
@@ -230,8 +251,8 @@
 ### What Was Done
 
 - Promoted `pnpm check` to the explicit canonical aggregate gate in
-  `AGENT.md` and ADR-121; `pnpm qg` is now documented as a read-only
-  convenience surface rather than the sign-off command for agent work.
+  `AGENT.md` and ADR-121, then removed `pnpm qg` entirely to avoid
+  competing gate narratives.
 - Added root `test:widget` and `test:a11y` scripts, plus Turbo
   `test:a11y` support, so the documented gate surface matches executable
   commands.

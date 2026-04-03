@@ -135,9 +135,7 @@ settings.
 From the repo root:
 
 Quality gate policy: run gates one at a time while iterating. If you need the
-canonical aggregate verification command, ALWAYS use `pnpm check`, not
-`pnpm qg`. `pnpm qg` remains a read-only convenience surface and is not the
-canonical sign-off command for agent work.
+canonical aggregate verification command, ALWAYS use `pnpm check`.
 
 ```bash
 pnpm install        # Setup
@@ -163,12 +161,11 @@ pnpm practice:fitness:informational    # Non-blocking soft-ceiling report
 
 # Convenience commands
 pnpm make           # install, build, type-check, doc-gen, lint:fix, subagents:check, portability:check, practice:fitness:informational, markdownlint, format
-pnpm qg             # Read-only convenience verification only: format-check, markdownlint-check, subagents:check, portability:check, test:root-scripts, type-check, lint, test, test:widget, test:e2e, test:ui, test:a11y, smoke:dev:stub
 pnpm fix            # Auto-fix: format, markdownlint, lint:fix
 pnpm doc-gen        # Generate documentation from TSDoc
 
 # All in one command (clean rebuild + full verification)
-pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, smoke:dev:stub, subagents:check, portability:check, markdownlint:root, format:root
+pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, sdk-codegen + build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, smoke:dev:stub, subagents:check, portability:check, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding

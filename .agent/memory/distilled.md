@@ -151,7 +151,7 @@ context with no natural permanent home.
   lint:fix). Missing overrides fall through to generic tasks
   with wrong inputs, causing stale cache hits.
 - Turbo dependency model: ADR-065 (items 6–7)
-- `pnpm qg` is the canonical read-only gate set, but does
+- `pnpm check` is the canonical aggregate gate, but it does
   not include static-analysis sweeps (`pnpm knip`,
   `pnpm depcruise`) unless a plan explicitly requires them
 - Empty directories persist after file deletion — always

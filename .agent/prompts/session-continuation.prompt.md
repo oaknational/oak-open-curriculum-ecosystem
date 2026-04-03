@@ -176,7 +176,7 @@ This workstream is a clean-break replacement:
 
 ## Durable Guidance
 
-- Run `pnpm qg` as the canonical non-mutating readiness gate before each commit.
+- Run the required gates one at a time while iterating.
 - Run `pnpm fix` to apply auto-fixes.
-- Run `pnpm check` as the full scrub before push/merge.
+- Run `pnpm check` as the canonical aggregate readiness gate before push/merge.
 - Keep this prompt concise and operational; do not duplicate plan authority.
