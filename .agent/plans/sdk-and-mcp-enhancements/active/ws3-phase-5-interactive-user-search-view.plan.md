@@ -17,8 +17,8 @@ todos:
 
 # WS3 Phase 5: Interactive User Search View
 
-**Status**: PENDING — blocked on `../current/ws3-design-token-prerequisite.plan.md`
-**Last Updated**: 2026-04-02
+**Status**: PENDING — blocked on `../current/ws3-oak-url-augmentable-codegen-fix.plan.md`, then `../current/ws3-contrast-validation-prerequisite.plan.md`
+**Last Updated**: 2026-04-03
 
 ## Required Inputs
 
@@ -26,11 +26,16 @@ todos:
    architecture section 3 (data/state model)
 2. Phase 3 acceptance evidence — `user-search` and `user-search-query`
    descriptors and visibility metadata must be in place
-3. `../current/ws3-design-token-prerequisite.plan.md` — shared token package
-   and canonical shell replacement must be available before Phase 5 styling
-   starts; Phase 5 must reuse package CSS rather than adding a second styling
-   layer
-4. Phase 4 acceptance evidence — shared app shell and routing must be working
+3. `../archive/completed/ws3-design-token-prerequisite.plan.md` — shared token
+   package and canonical shell replacement are already available; Phase 5 must
+   reuse package CSS rather than adding a second styling layer
+4. `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — schema-first
+   response-augmentation remediation remains part of the ordered WS3
+   prerequisites before Phase 5 work resumes
+5. `../current/ws3-contrast-validation-prerequisite.plan.md` — token
+   accessibility validation remains the current prerequisite before Phase 5 UI
+   work continues
+6. Phase 4 acceptance evidence — shared app shell and routing must be working
 
 ## Tasks
 

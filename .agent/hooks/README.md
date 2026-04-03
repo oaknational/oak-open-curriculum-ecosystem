@@ -26,8 +26,8 @@ The hook layer follows a small Policy Spine. The layers are not peers.
    This is the authority for what the repo intends to allow, block, or
    describe.
 2. **Native activation** — platform config such as `.claude/settings.json`
-   This may activate only supported canonical policy. It does not redefine the
-   policy.
+   This tracked project config may activate only supported canonical policy. It
+   does not redefine the policy.
 3. **Repo-local runtime** — `scripts/check-blocked-patterns.mjs`
    The runtime enforces the active policy for the supported native surface.
 4. **Explanatory mirrors** — this README and the cross-platform surface matrix
@@ -43,10 +43,9 @@ Failure semantics:
 ## Platform Support
 
 Claude Code currently has thin native activation wired for
-`PreToolUse` only via the machine-local gitignored file
-`.claude/settings.json`. Clean clones and CI may omit that local file.
+`PreToolUse` only via the tracked project file `.claude/settings.json`.
 Additional Claude overrides can stay in `.claude/settings.local.json`,
-which is also gitignored.
+which is gitignored and additive.
 
 See `.agent/reference/cross-platform-agent-surface-matrix.md` for the
 full platform support status.

@@ -18,7 +18,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/lessons/add-two-numbers', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       );
       expect(result).toHaveProperty('slug', 'add-two-numbers');
@@ -30,7 +31,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/lessons/add-two-numbers', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       );
     });
@@ -40,7 +42,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/lessons/add-two-numbers', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       );
     });
@@ -50,7 +53,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/lessons/add-two-numbers/summary', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       );
     });
@@ -67,7 +71,8 @@ describe('augmentResponseWithOakUrl', () => {
       );
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       );
     });
@@ -77,7 +82,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/lessons/add-two-numbers/quiz', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       );
     });
@@ -87,7 +93,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/lessons/add-two-numbers/assets', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       );
     });
@@ -113,7 +120,8 @@ describe('augmentResponseWithOakUrl', () => {
 
       const result = augmentResponseWithOakUrl(response, '/lessons/add-two-numbers', 'get');
 
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       );
     });
@@ -125,7 +133,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/sequences/maths-ks1', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/curriculum/maths-ks1/units',
       );
     });
@@ -142,7 +151,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/units/place-value', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units/place-value',
       );
     });
@@ -201,7 +211,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/subjects/maths', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes',
       );
     });
@@ -247,7 +258,8 @@ describe('augmentResponseWithOakUrl', () => {
       };
       const result = augmentResponseWithOakUrl(response, '/subjects/maths', 'get');
 
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes',
       );
     });
@@ -341,8 +353,11 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentArrayResponseWithOakUrl(response, '/search/lessons', 'get');
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result[0]).toHaveProperty('oakUrl');
-      expect(result[0].oakUrl).toBe('https://www.thenational.academy/teachers/lessons/test-lesson');
+      expect(result).toHaveProperty([0, 'oakUrl']);
+      expect(result).toHaveProperty(
+        [0, 'oakUrl'],
+        'https://www.thenational.academy/teachers/lessons/test-lesson',
+      );
     });
 
     it('should recognise /search/transcripts as lesson content type', () => {
@@ -350,8 +365,9 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentArrayResponseWithOakUrl(response, '/search/transcripts', 'get');
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result[0]).toHaveProperty('oakUrl');
-      expect(result[0].oakUrl).toBe(
+      expect(result).toHaveProperty([0, 'oakUrl']);
+      expect(result).toHaveProperty(
+        [0, 'oakUrl'],
         'https://www.thenational.academy/teachers/lessons/transcript-lesson',
       );
     });
@@ -365,8 +381,11 @@ describe('augmentResponseWithOakUrl', () => {
       );
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result[0]).toHaveProperty('oakUrl');
-      expect(result[0].oakUrl).toBe('https://www.thenational.academy/teachers/lessons/ks-lesson');
+      expect(result).toHaveProperty([0, 'oakUrl']);
+      expect(result).toHaveProperty(
+        [0, 'oakUrl'],
+        'https://www.thenational.academy/teachers/lessons/ks-lesson',
+      );
     });
 
     it('should recognise /key-stages/{ks}/subjects/{subj}/units as unit content type', () => {
@@ -380,8 +399,9 @@ describe('augmentResponseWithOakUrl', () => {
       );
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result[0]).toHaveProperty('oakUrl');
-      expect(result[0].oakUrl).toBe(
+      expect(result).toHaveProperty([0, 'oakUrl']);
+      expect(result).toHaveProperty(
+        [0, 'oakUrl'],
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units/ks-unit',
       );
     });
@@ -391,8 +411,9 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentArrayResponseWithOakUrl(response, '/subjects/maths/sequences', 'get');
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result[0]).toHaveProperty('oakUrl');
-      expect(result[0].oakUrl).toBe(
+      expect(result).toHaveProperty([0, 'oakUrl']);
+      expect(result).toHaveProperty(
+        [0, 'oakUrl'],
         'https://www.thenational.academy/teachers/curriculum/maths-ks4/units',
       );
     });
@@ -417,16 +438,16 @@ describe('augmentResponseWithOakUrl', () => {
 
       expect(Array.isArray(result)).toBe(true);
       expect(result).toHaveLength(3);
-      expect(result[0]).toHaveProperty(
-        'oakUrl',
+      expect(result).toHaveProperty(
+        [0, 'oakUrl'],
         'https://www.thenational.academy/teachers/lessons/lesson-1',
       );
-      expect(result[1]).toHaveProperty(
-        'oakUrl',
+      expect(result).toHaveProperty(
+        [1, 'oakUrl'],
         'https://www.thenational.academy/teachers/lessons/lesson-2',
       );
-      expect(result[2]).toHaveProperty(
-        'oakUrl',
+      expect(result).toHaveProperty(
+        [2, 'oakUrl'],
         'https://www.thenational.academy/teachers/lessons/lesson-3',
       );
     });
@@ -442,11 +463,11 @@ describe('augmentResponseWithOakUrl', () => {
       ];
       const result = augmentArrayResponseWithOakUrl(response, '/search/lessons', 'get');
 
-      expect(result[0]).toHaveProperty('lessonSlug', 'test-lesson');
-      expect(result[0]).toHaveProperty('lessonTitle', 'Test Lesson');
-      expect(result[0]).toHaveProperty('similarity', 0.95);
-      expect(result[0]).toHaveProperty('units');
-      expect(result[0]).toHaveProperty('oakUrl');
+      expect(result).toHaveProperty([0, 'lessonSlug'], 'test-lesson');
+      expect(result).toHaveProperty([0, 'lessonTitle'], 'Test Lesson');
+      expect(result).toHaveProperty([0, 'similarity'], 0.95);
+      expect(result).toHaveProperty([0, 'units']);
+      expect(result).toHaveProperty([0, 'oakUrl']);
     });
 
     it('should handle empty array responses', () => {
@@ -482,9 +503,9 @@ describe('augmentResponseWithOakUrl', () => {
 
       expect(Array.isArray(result)).toBe(true);
       expect(result).toHaveLength(3);
-      expect(result[0]).toHaveProperty('oakUrl');
-      expect(result[1]).toHaveProperty('oakUrl');
-      expect(result[2]).toHaveProperty('oakUrl');
+      expect(result).toHaveProperty([0, 'oakUrl']);
+      expect(result).toHaveProperty([1, 'oakUrl']);
+      expect(result).toHaveProperty([2, 'oakUrl']);
     });
   });
 
@@ -494,7 +515,10 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/lessons/my-lesson/summary', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe('https://www.thenational.academy/teachers/lessons/my-lesson');
+      expect(result).toHaveProperty(
+        'oakUrl',
+        'https://www.thenational.academy/teachers/lessons/my-lesson',
+      );
     });
 
     it('should extract unitSlug from unit responses', () => {
@@ -507,7 +531,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/units/my-unit/summary', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/curriculum/english-secondary/units/my-unit',
       );
     });
@@ -524,7 +549,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/subjects/science', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/key-stages/ks3/subjects/science/programmes',
       );
     });
@@ -534,7 +560,8 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/sequences/maths-primary/units', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe(
+      expect(result).toHaveProperty(
+        'oakUrl',
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units',
       );
     });
@@ -544,7 +571,10 @@ describe('augmentResponseWithOakUrl', () => {
       const result = augmentResponseWithOakUrl(response, '/lessons/generic-slug', 'get');
 
       expect(result).toHaveProperty('oakUrl');
-      expect(result.oakUrl).toBe('https://www.thenational.academy/teachers/lessons/generic-slug');
+      expect(result).toHaveProperty(
+        'oakUrl',
+        'https://www.thenational.academy/teachers/lessons/generic-slug',
+      );
     });
   });
 
@@ -554,7 +584,7 @@ describe('augmentResponseWithOakUrl', () => {
       const response = { slug: 'test-lesson', title: 'Test', oakUrl: existingUrl };
       const result = augmentResponseWithOakUrl(response, '/lessons/test-lesson', 'get');
 
-      expect(result.oakUrl).toBe(existingUrl);
+      expect(result).toHaveProperty('oakUrl', existingUrl);
     });
 
     it('should preserve existing oakUrl on array items', () => {
@@ -566,9 +596,15 @@ describe('augmentResponseWithOakUrl', () => {
       ];
       const result = augmentArrayResponseWithOakUrl(response, '/search/lessons', 'get');
 
-      expect(result[0]?.oakUrl).toBe('https://www.thenational.academy/teachers/lessons/lesson-1');
-      expect(result[1]?.oakUrl).toBe(existingUrl);
-      expect(result[2]?.oakUrl).toBe('https://www.thenational.academy/teachers/lessons/lesson-3');
+      expect(result).toHaveProperty(
+        [0, 'oakUrl'],
+        'https://www.thenational.academy/teachers/lessons/lesson-1',
+      );
+      expect(result).toHaveProperty([1, 'oakUrl'], existingUrl);
+      expect(result).toHaveProperty(
+        [2, 'oakUrl'],
+        'https://www.thenational.academy/teachers/lessons/lesson-3',
+      );
     });
   });
 });

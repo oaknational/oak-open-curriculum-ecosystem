@@ -1,6 +1,6 @@
 # SDK and MCP Enhancements
 
-**Last Updated**: 2 April 2026
+**Last Updated**: 3 April 2026
 
 Planning hub for SDK pipeline evolution, MCP Apps work, and related
 architectural changes.
@@ -20,7 +20,9 @@ architectural changes.
 | [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md) | Active umbrella plan | Primary session-anchor plan for the MCP Apps migration |
 | [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md) | Active child plan | Fresh React MCP App rebuild. Deletes the dead widget framework and replaces it with MCP Apps infrastructure built from scratch |
 | [active/README.md#ws3-phase-companion-plans](active/README.md#ws3-phase-companion-plans) | Phase companion index | Seven WS3 phase companion plans with task-level execution detail; parent WS3 plan remains orchestration source of truth |
-| [current/ws3-design-token-prerequisite.plan.md](current/ws3-design-token-prerequisite.plan.md) | Current plan | Minimal design-token infrastructure prerequisite before WS3 Phase 4/5 widget UI work |
+| [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md) | Current plan | Build WCAG contrast validation into the token pipeline and fix the blocking token accessibility failures before Phase 4 starts |
+| [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md) | Current plan | Replace widening Oak URL augmentation typing with schema-derived GET response unions and honest middleware validation |
+| [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md) | Completed plan | Minimal design-token infrastructure prerequisite completed and archived; Phase 4/5 now build on the shared token package and canonical shell |
 | [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md) | Current plan | Add truthful `outputSchema` metadata to every MCP tool while keeping generated upstream-response validation aligned with actual MCP `structuredContent` envelopes |
 | [archive/completed/ws2-app-runtime-migration.plan.md](archive/completed/ws2-app-runtime-migration.plan.md) | Completed child plan | WS2 runtime migration completed and archived |
 | [archive/completed/mcp-runtime-boundary-simplification.plan.md](archive/completed/mcp-runtime-boundary-simplification.plan.md) | Completed plan | Canonical runtime descriptor surface and ingress-boundary simplification completed and archived |
@@ -34,9 +36,11 @@ architectural changes.
 3. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 4. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
 5. [current/README.md](current/README.md)
-6. [current/ws3-design-token-prerequisite.plan.md](current/ws3-design-token-prerequisite.plan.md)
-7. [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
-8. [future/README.md](future/README.md)
+6. [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
+7. [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
+8. [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
+9. [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md)
+10. [future/README.md](future/README.md)
 
 ## Source of Truth Model
 

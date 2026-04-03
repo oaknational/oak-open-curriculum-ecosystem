@@ -29,8 +29,8 @@ todos:
    docs to rewrite and the full reviewer set
 2. `roadmap.md` — closure criteria
 3. `mcp-app-extension-migration.plan.md` — umbrella exit criteria
-4. `current/auth-safety-correction.plan.md` — C8 closure gate status
-5. `current/auth-boundary-type-safety.plan.md` — C8 closure gate status
+4. `archive/completed/auth-safety-correction.plan.md` — C8 closure gate status
+5. `archive/completed/auth-boundary-type-safety.plan.md` — C8 closure gate status
 6. Phase 0 evidence table — verify all RED/GREEN contracts are satisfied
 
 ## Tasks
@@ -42,7 +42,7 @@ todos:
 4. Re-run canonical runtime contamination check from WS3 parent plan
 5. Verify closure gates:
    - WS3/WS4 acceptance criteria are complete
-   - C8 auth plans in `current/` are complete, or explicitly superseded by
+   - C8 auth plans in `archive/completed/` are complete, or explicitly superseded by
      accepted architecture
    - Phase 0 RED/GREEN evidence table is fully populated with GREEN evidence
 

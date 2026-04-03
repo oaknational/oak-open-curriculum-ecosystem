@@ -25,10 +25,10 @@ const documentedSurfaceMatrix = `# Cross-Platform Agent Surface Matrix
 
 | Surface | Cursor | Claude Code | Gemini CLI | GitHub Copilot | Codex | \`.agents/\` |
 | ------- | ------ | ----------- | ---------- | -------------- | ----- | ---------- |
-| **Hooks** | unsupported | \`.claude/settings.json\` (machine-local, gitignored \`PreToolUse\`) | unsupported | unsupported | unsupported | unsupported |
+| **Hooks** | unsupported | \`.claude/settings.json\` (tracked project \`PreToolUse\`) | unsupported | unsupported | unsupported | unsupported |
 
 Claude Code currently has native \`PreToolUse\` activation for Bash
-commands via the machine-local gitignored \`.claude/settings.json\`,
+commands via the tracked project \`.claude/settings.json\`,
 backed by the canonical policy in \`.agent/hooks/policy.json\` and the
 repo-local runtime script \`scripts/check-blocked-patterns.mjs\`.
 
@@ -60,7 +60,7 @@ describe('isClaudeHookWired', () => {
 });
 
 describe('isClaudeHookWiredInText', () => {
-  it('finds the Bash PreToolUse command in machine-local settings text', () => {
+  it('finds the Bash PreToolUse command in tracked project settings text', () => {
     const claudeSettingsText = `{
   "hooks": {
     "PreToolUse": [
@@ -102,15 +102,12 @@ describe('isClaudeHookWiredInText', () => {
 });
 
 describe('surfaceMatrixDescribesClaudeHook', () => {
-  it('requires the machine-local gitignored contract to be documented', () => {
+  it('requires the tracked project contract to be documented', () => {
     expect(surfaceMatrixDescribesClaudeHook(documentedSurfaceMatrix)).toBe(true);
 
     expect(
       surfaceMatrixDescribesClaudeHook(
-        documentedSurfaceMatrix.replace(
-          '(machine-local, gitignored `PreToolUse`)',
-          '(`PreToolUse`)',
-        ),
+        documentedSurfaceMatrix.replace('(tracked project `PreToolUse`)', '(`PreToolUse`)'),
       ),
     ).toBe(false);
   });
@@ -125,7 +122,7 @@ describe('surfaceMatrixDescribesClaudeHook', () => {
 });
 
 describe('getClaudeHookPortabilityIssues', () => {
-  it('allows clean clones to omit the machine-local Claude settings file', () => {
+  it('fails when the tracked Claude settings file is missing', () => {
     expect(
       getClaudeHookPortabilityIssues({
         hookPolicy: supportedHookPolicy,
@@ -133,10 +130,12 @@ describe('getClaudeHookPortabilityIssues', () => {
         claudeSettingsExists: false,
         surfaceMatrix: documentedSurfaceMatrix,
       }),
-    ).toStrictEqual([]);
+    ).toContain(
+      '.agent/hooks/policy.json: Claude Code is marked supported but tracked project .claude/settings.json is missing',
+    );
   });
 
-  it('allows a present machine-local Claude settings file when the text wiring is correct', () => {
+  it('allows a present tracked Claude settings file when the text wiring is correct', () => {
     expect(
       getClaudeHookPortabilityIssues({
         hookPolicy: supportedHookPolicy,
@@ -161,7 +160,7 @@ describe('getClaudeHookPortabilityIssues', () => {
     ).toStrictEqual([]);
   });
 
-  it('fails when the machine-local Claude settings text exists but does not wire the hook', () => {
+  it('fails when the tracked Claude settings text exists but does not wire the hook', () => {
     expect(
       getClaudeHookPortabilityIssues({
         hookPolicy: supportedHookPolicy,

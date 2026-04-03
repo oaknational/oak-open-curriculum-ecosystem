@@ -526,11 +526,16 @@ When renaming the widget resource slug, update all coupled surfaces atomically:
 
 **Goal**: deliver the first real view on the new app shell.
 
-**Prerequisite**: complete
-`../current/ws3-design-token-prerequisite.plan.md` before Phase 4
-implementation starts so the temporary shell is already replaced by the live
-`useApp(...)` runtime and the shared shell imports canonical package CSS rather
-than accumulating permanent app-local brand values.
+**Prerequisites** (ordered, all must complete before Phase 4):
+
+1. ✅ `../archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
+2. `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — replace
+   `Record<string, unknown>` widening with schema-derived GET response body
+   union; includes ADR-152 (Constant-Type-Predicate Pattern). Partial progress:
+   codegen types generated, build errors pending resolution.
+3. `../current/ws3-contrast-validation-prerequisite.plan.md` — WCAG contrast
+   ratio validation in the design token pipeline; fix two blocking token
+   contrast violations (focus ring, dark-theme error).
 
 ### RED
 
@@ -570,9 +575,15 @@ in-process React tests.
 **Goal**: add the human-facing search experience without violating app/SDK
 boundaries.
 
-**Prerequisite**: complete
-`../current/ws3-design-token-prerequisite.plan.md` first so Phase 5 builds on
-the live prerequisite shell and shared token package, not a second local
+**Prerequisites** (ordered):
+
+1. ✅ `../archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
+2. `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — prerequisite:
+   replace widening alias with schema-derived union + ADR-152
+3. `../current/ws3-contrast-validation-prerequisite.plan.md` — prerequisite:
+   WCAG contrast validation + fix two blocking token violations
+
+Phase 5 builds on the shared shell and token package, not a second local
 styling layer.
 
 ### RED
@@ -678,11 +689,16 @@ Plus:
 
 - `mcp-app-extension-migration.plan.md` — umbrella ownership and closure criteria
 - `../roadmap.md` — strategic ordering and C8 blocking status
-- `../current/auth-safety-correction.plan.md` — deny-by-default auth correction
-- `../current/auth-boundary-type-safety.plan.md` — auth boundary typing and
-  fail-fast validation remediation
-- `../current/ws3-design-token-prerequisite.plan.md` — queued token
-  and shell prerequisite required before Phase 4/5 widget UI work
+- `../archive/completed/auth-safety-correction.plan.md` — deny-by-default auth
+  correction
+- `../archive/completed/auth-boundary-type-safety.plan.md` — auth boundary
+  typing and fail-fast validation remediation
+- `../archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE: token
+  and shell prerequisite for Phase 4/5 widget UI work
+- `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — prerequisite:
+  replace widening alias with schema-derived union + ADR-152
+- `../current/ws3-contrast-validation-prerequisite.plan.md` — prerequisite:
+  WCAG contrast validation + fix two blocking token violations
 - `../current/README.md` — queued and in-progress follow-on execution plans
 
 Closure gate rule:

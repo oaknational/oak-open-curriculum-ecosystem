@@ -129,7 +129,7 @@ export function generatePathParametersContent(
   const sections = [
     generatePathParametersHeader(),
     generatePathsConstant(schema),
-    generateRuntimeSchemaChecks(),
+    generateRuntimeSchemaChecks(schema),
     generateAllParameterConstants(parameters),
     generatePathParametersInterface(parameters),
     generateValidPathsByParameters(validCombinations),

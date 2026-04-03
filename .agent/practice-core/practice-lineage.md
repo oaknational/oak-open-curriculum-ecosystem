@@ -136,9 +136,8 @@ fixes. A repo may stage this layer after the Core itself is installed; until the
 say explicitly that reviewer infrastructure is not yet installed.
 
 For production, expand: security-reviewer, config-reviewer,
-architecture-reviewer(s). For UI-heavy projects, consider
-accessibility-reviewer and design-system-reviewer; the gateway
-code-reviewer triages to them. Use layered composition at scale;
+architecture-reviewer(s). UI-heavy projects may add a small browser-facing
+cluster routed by the gateway code-reviewer. Use layered composition at scale;
 inline for short-lived projects.
 
 ### Workflow Commands
@@ -159,6 +158,8 @@ The Practice is driven by slash commands that initiate structured workflows:
   priority, then structure the todo list with ACTION/REVIEW/GROUNDING cadence:
   every action followed by a review step, periodic grounding re-reads, and
   holistic reviews every fourth cycle.
+- **session-handoff** -- Lightweight end-of-session continuity update with
+  conditional escalation into `consolidate-docs` when deep convergence is due.
 - **gates** -- Run quality gates in order: `type-check -> lint -> build ->
   test`. All gates are blocking at all times.
 - **review** -- Run gates, triage which specialists are needed, invoke them,
@@ -507,14 +508,11 @@ validated across 3+ repos.
 
 ### Active Principles
 
-- **Metacognition is a technology, not a checklist.** The directive creates recursive
-  self-reflection through named layers (thoughts → reflections → insights), an affective break, and
-  a grounding anchor. Each layer's output is explicitly the next layer's input. Replacing this with
-  a planning template destroys the mechanism entirely — the result is a different thing that
-  prevents the depth it was meant to create.
-- **Intent over mechanics.** Vague language in rules creates escape hatches that agents will walk
-  through. Every directive must carry enough reasoning that an agent understands not just what to
-  do, but why it matters and what failure looks like.
+- **Metacognition is a technology, not a checklist.** Preserve named
+  recursion, the affective break, and the grounding anchor. Replacing this with
+  a planning template destroys the mechanism.
+- **Intent over mechanics.** Vague rules create escape hatches. Agents need to
+  understand what matters and what failure looks like, not just the verb.
 - **The recursive failure mode.** When the metacognition tool is broken, you cannot use
   metacognition to discover that it's broken. Detection requires external comparison.
 - **Exchange context works best as an indexed support pack.** Index
@@ -529,16 +527,18 @@ validated across 3+ repos.
   completes.
 - **RED-first applies to repo-state enforcement.** Prove the failure first, then fix the
   infrastructure.
-- **Session workflows must be state-free.** Session-entry skills must not carry
-  per-session content (specific plan names, tranche status). They reference
-  plan-discovery surfaces and let those own mutable state.
-- **Architectural excellence over expediency.** Always choose long-term clarity
-  over short-term convenience. Proven by CLI-SDK retriever drift in
-  oak-mcp-ecosystem: duplicate builders carried stale config, producing
-  different search results. ~500 lines deleted, Layer Role Topology codified.
+- **Session workflows must be state-free.** Session-entry skills must not
+  carry per-session content; plan-discovery surfaces own mutable state.
+- **Project platform configuration is infrastructure.** Tracked project
+  settings define the baseline contract. Local overrides extend it, and
+  portability checks must verify permissions/hooks as well as wrappers.
+- **Ordinary continuity and deep convergence are separate loops.** Use handoff
+  for cheap resumptions and consolidation for graduation. Bundling them makes
+  both less likely.
+- **Architectural excellence over expediency.** Choose long-term clarity over
+  short-term convenience; duplicate builders and hidden shortcuts cause drift.
 - **Apps are thin; libraries own domain logic.** Apps compose library/SDK
-  capabilities. They never reimplement domain logic a library provides. The
-  test: "could another consumer need this?" Violations cause silent drift.
+  capabilities. Reimplementing library-owned logic creates silent drift.
 - **Provenance is storytelling, not credit.** The provenance chain records the
   knowledge journey, not ownership. Every repo that shaped the evolution appears
   because we are here to collaborate, not compete.

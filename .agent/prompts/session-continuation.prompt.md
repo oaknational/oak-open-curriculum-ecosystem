@@ -33,28 +33,35 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: MCP App migration (WS3 widget rebuild), with continuity
-  adoption running alongside
+- **Workstream**: MCP App migration (WS3 widget rebuild)
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-  - `.agent/plans/agentic-engineering-enhancements/current/continuity-and-surprise-practice-adoption.plan.md`
+  - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`
+  - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
 - **Completed plans** (prior sessions):
+  - `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md` — COMPLETE
   - `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md` — COMPLETE
+  - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md` — COMPLETE
 - **Current state**: WS3 Phase 3 canonical contracts are COMPLETE, including
   the non-UI host fallback proof. The merge-main plan is archived as COMPLETE
   at
   `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md`.
-  Phases 4-6 are still pending. The design-token prerequisite plan at
-  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-design-token-prerequisite.plan.md`
-  is now COMPLETE (all 6 work slices done, `pnpm check` green, adversarial
-  review cycle passed). The frontend practice plan is archived as COMPLETE,
-  so the specialist agents are available for widget UI work. Continuity
-  adoption evidence now includes a real WS3 resumption, a `GO` session
-  entry, and a second deep-consolidation entry.
-- **Current objective**: Implement contrast validation prerequisite, then
-  start Phase 4. The three pre-Phase-4 gates are COMPLETE:
+  Phases 4-6 are still pending. The design-token prerequisite is archived as
+  COMPLETE at
+  `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-design-token-prerequisite.plan.md`
+  (all 6 work slices done, `pnpm check` green, adversarial review cycle
+  passed). The frontend practice plan is archived as COMPLETE, so the
+  specialist agents are available for widget UI work. Continuity adoption is
+  also archived as COMPLETE at
+  `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md`
+  after the 2026-04-03 `promote` decision; the outgoing note and Practice Core
+  promotion both landed. OakUrl remediation is now active as prerequisite 1 of
+  2 before Phase 4: `GetResponseBody`/`ValidGetPath` are generated, but the
+  remaining build fixes are still open.
+- **Current objective**: Complete two ordered prerequisites, then start
+  Phase 4. The three pre-Phase-4 gates are COMPLETE:
   1. ✅ Portability validator extended (Check 11: skill permissions)
   2. ✅ Deferred review findings resolved (threadSlug removed,
      bulk-rollup-builder→Result, OakUrlAugmentable tracked as codegen fix,
@@ -62,9 +69,17 @@ git log --oneline --decorate -10
   3. ✅ Design conversation held — Phase 4 is a brand banner (not a data
      renderer), Phase 5 is user-first search with `callServerTool` +
      `updateModelContext`. ADR-151 records the styling independence decision.
-  The new prerequisite is the **contrast validation plan** at
-  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
-  — must be completed before any Phase 4 code.
+  Two ordered prerequisites remain before Phase 4:
+  1. **OakUrlAugmentable codegen fix** — plan at
+     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`.
+     Partial progress: `GetResponseBody`/`ValidGetPath` generated, build errors
+     pending (array spread, middleware guard, test fixtures). Key unlock:
+     `schemaPath` from openapi-fetch middleware context enables honest validation
+     with `isResponseJsonBody200`. Includes ADR-152 (Constant-Type-Predicate
+     Pattern).
+  2. **Contrast validation** — plan at
+     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`.
+     WCAG contrast ratio validation + fix two blocking token violations.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -83,6 +98,12 @@ git log --oneline --decorate -10
     page background form a triad where all three pairwise ratios must pass.
   - Wider trawl of 7 repos found no reusable contrast/token/styling code.
     Nothing meets the bar for this repo. Build from W3C spec directly.
+  - User corrected `unknown` usage: `unknown` is not a convenience — it is
+    the destruction of hard-won understanding. Only permitted at incoming
+    external boundaries. The generated type system is exhaustive; use it.
+  - User corrected boundary-function proposal: don't create new plumbing.
+    The existing constant → type → predicate infrastructure already has
+    everything needed. Look harder before proposing new functions.
 - **Open questions / low-confidence areas**:
   - Token set expansion for Phase 4/5: design-system reviewer identified
     gaps (link colours, hover surfaces, result-item tokens, font-size-400)
@@ -91,21 +112,21 @@ git log --oneline --decorate -10
   - Whether `prefers-color-scheme` media query fallback is needed when
     the MCP host does not set `data-theme`
 - **Remaining tracked items** (not blocking Phase 4 directly):
-  - `OakUrlAugmentable` codegen-level fix (generate GET response union)
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Next safe step**: Implement the contrast validation prerequisite plan
-  at `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`,
-  then update the Phase 4 plan and begin implementation.
-- **Deep consolidation status**: this session completed all three pre-Phase-4
-  gates, held the design conversation, wrote ADR-151 (styling independence),
-  wrote the contrast validation prerequisite plan, and ran a wider trawl
-  across 7 repos (nothing reusable found). Consolidation pass updated this
-  prompt, platform memory, and Phase 4 plan status. Practice box empty.
+- **Next safe step**: Two ordered prerequisites before Phase 4:
+  1. OakUrlAugmentable codegen fix (plan at
+     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`)
+  2. Contrast validation prerequisite (plan at
+     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`)
+- **Deep consolidation status**: Continuity rollout is closed and promoted.
+  The completed continuity and design-token plans are now archived, SDK/MCP
+  indexes expose OakUrl plus contrast as the live prerequisites, and this
+  prompt has been reconciled to the new plan paths. Practice box empty.
 
 ## Active Workstreams (2026-04-03)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (contrast validation prerequisite, then Phase 4)
+### 1. WS3 MCP App Rebuild — ACTIVE (OakUrl fix, contrast validation, then Phase 4)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
@@ -118,15 +139,20 @@ Phase 3 (canonical contracts + fallback proof).
 - Three pre-Phase-4 gates — portability validator, deferred review
   findings, design conversation (ADR-151 written)
 
-**Current prerequisite**:
-`.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
-— WCAG contrast ratio validation in the design token pipeline. Fixes two
-blocking token contrast violations (focus ring, dark-theme error). Confirmed
-by Betty, Fred, and design-system reviewers.
+**Current prerequisites** (ordered):
+
+1. `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`
+   — replace `Record<string, unknown>` with schema-derived union + ADR-152.
+   Partial progress: codegen types generated, build errors pending.
+2. `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
+   — WCAG contrast ratio validation + fix two blocking token violations.
+   Confirmed by Betty, Fred, and design-system reviewers.
+
 **Pending**: Phase 4 (brand banner), Phase 5 (user search), Phase 6
 (docs/gates/review).
 
-**Next action**: Implement contrast validation prerequisite, then Phase 4.
+**Next action**: Complete OakUrlAugmentable codegen fix, then contrast
+validation, then Phase 4.
 
 ### 2. Frontend Practice Integration — COMPLETE
 
@@ -137,13 +163,13 @@ design-system-reviewer, react-component-reviewer) with full platform
 adapters. Three review rounds passed. Design token infrastructure
 cancelled as out of scope — belongs in WS3 or a dedicated plan.
 
-### 3. Continuity Adoption — WAVE 1 INSTALLED
+### 3. Continuity Adoption — COMPLETE
 
-**Plan**: `.agent/plans/agentic-engineering-enhancements/current/continuity-and-surprise-practice-adoption.plan.md`
+**Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md`
 
-Wave 1 surfaces landed. Evidence capture now includes two
-deep-consolidation entries, but the evidence window is not yet complete
-because the resumption and `GO` quotas are still open.
+Wave 1 closed with an explicit `promote` decision on 3 April 2026. The
+outgoing continuity note landed and the same-day Practice Core promotion is
+recorded separately in `.agent/practice-core/*`.
 
 ### 4. Assumptions Reviewer — COMPLETE
 

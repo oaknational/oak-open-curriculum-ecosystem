@@ -8,7 +8,7 @@ split_strategy: 'Split by workflow surface if continuity doctrine grows beyond o
 
 # Continuity Practice
 
-**Last Updated**: 2026-04-02
+**Last Updated**: 2026-04-03
 **Status**: Active guidance
 
 Continuity in this repository is an engineering property: the ability of the
@@ -196,15 +196,14 @@ Reference artefacts:
 
 - `.agent/analysis/continuity-adoption-baseline.md`
 - `.agent/analysis/continuity-adoption-evidence.md`
-- `.agent/plans/agentic-engineering-enhancements/current/`
+- `.agent/plans/agentic-engineering-enhancements/archive/completed/`
   `continuity-and-surprise-practice-adoption.plan.md`
 
-Promotion to outgoing portable context happens only after the evidence window
-ends with an explicit `promote` decision.
+Wave 1 ended with an explicit `promote` decision on 2026-04-03. Continuity now
+travels both through the outgoing support pack and the portable Practice Core.
 
 ## Non-Goals
 
-- No Practice Core mutation in this wave
 - No new continuity reviewer or specialist in this wave
 - No giant opaque memory layer
 - No vector-memory substitute for disciplined handoff

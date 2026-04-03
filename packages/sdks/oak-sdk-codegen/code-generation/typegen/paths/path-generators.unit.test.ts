@@ -89,7 +89,6 @@ describe('Path Generators', () => {
       expect(result).toContain('type AllowedMethods = keyof (RawPaths[keyof RawPaths])');
       expect(result).toContain('export const allowedMethods: AllowedMethods[]');
       expect(result).toContain('export function isAllowedMethod');
-      expect(result).toContain('export type PathReturnTypes');
     });
 
     it('should include type guards implementation', () => {
@@ -108,12 +107,74 @@ describe('Path Generators', () => {
       expect(result).toContain('throw new TypeError');
     });
 
-    it('should generate PathReturnTypes and JsonBody200 helpers', () => {
+    it('should generate JsonBody200 using direct Paths indexing for eager evaluation', () => {
       const result = generateRuntimeSchemaChecks();
 
-      expect(result).toContain('[P in ValidPath]');
-      expect(result).toContain('export type PathReturnTypes');
       expect(result).toContain('export type JsonBody200');
+      expect(result).toContain('Paths[P][M] extends');
+      expect(result).toContain("responses: { 200: { content: { 'application/json': infer J } } }");
+      expect(result).not.toContain('NormalizedResponsesFor');
+      expect(result).not.toContain('Normalize200');
+    });
+
+    it('should generate ValidGetPath filtering paths with a get method', () => {
+      const result = generateRuntimeSchemaChecks();
+
+      expect(result).toContain('export type ValidGetPath');
+      expect(result).toContain("'get' extends AllowedMethodsForPath<P>");
+    });
+
+    it('should generate GetResponseBody as an explicit union indexing Paths per GET path', () => {
+      const schema = {
+        paths: {
+          '/lessons/{lesson}/summary': { get: {} },
+          '/subjects': { get: {} },
+        },
+      };
+      const result = generateRuntimeSchemaChecks(schema);
+
+      expect(result).toContain('export type GetResponseBody =');
+      expect(result).toContain(
+        "| Paths['/lessons/{lesson}/summary']['get']['responses'][200]['content']['application/json']",
+      );
+      expect(result).toContain(
+        "| Paths['/subjects']['get']['responses'][200]['content']['application/json']",
+      );
+    });
+
+    it('should sort paths alphabetically in GetResponseBody union', () => {
+      const schema = {
+        paths: {
+          '/zebra': { get: {} },
+          '/alpha': { get: {} },
+        },
+      };
+      const result = generateRuntimeSchemaChecks(schema);
+      const alphaIndex = result.indexOf("'/alpha'");
+      const zebraIndex = result.indexOf("'/zebra'");
+
+      expect(alphaIndex).toBeLessThan(zebraIndex);
+    });
+
+    it('should generate GetObjectResponseBody excluding array response bodies', () => {
+      const result = generateRuntimeSchemaChecks();
+
+      expect(result).toContain('export type GetObjectResponseBody');
+      expect(result).toContain('Exclude<GetResponseBody, readonly unknown[]>');
+    });
+
+    it('should generate GetArrayResponseBody extracting array response bodies', () => {
+      const result = generateRuntimeSchemaChecks();
+
+      expect(result).toContain('export type GetArrayResponseBody');
+      expect(result).toContain('Extract<GetResponseBody, readonly unknown[]>');
+    });
+
+    it('should generate GetArrayResponseElement as the element type of array response bodies', () => {
+      const result = generateRuntimeSchemaChecks();
+
+      expect(result).toContain('export type GetArrayResponseElement');
+      expect(result).toContain('GetArrayResponseBody extends readonly (infer E)[] ? E : never');
     });
   });
 });

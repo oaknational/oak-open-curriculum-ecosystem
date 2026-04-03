@@ -39,7 +39,8 @@ pnpm agent-tools:codex-reviewer-resolve code-reviewer
 - `log <id>` — show phase plus recent tool activity for one agent
 - `diff [id]` — diff the main repo or one agent worktree
 - `commit-ready` — count changed files in the main tree and each agent worktree
-- `preflight` — run quick cleanliness and `pnpm qg` checks
+- `preflight` — run quick cleanliness plus non-mutating infrastructure checks
+  (`pnpm portability:check`, `pnpm test:root-scripts`)
 - `cleanup` — remove clean leftover agent worktrees
 
 The `health` command is intentionally content-free by default. It reports

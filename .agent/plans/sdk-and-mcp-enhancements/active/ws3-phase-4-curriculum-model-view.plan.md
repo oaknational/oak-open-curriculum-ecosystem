@@ -17,7 +17,7 @@ todos:
 
 # WS3 Phase 4: Curriculum Model View
 
-**Status**: PENDING — blocked on `../current/ws3-contrast-validation-prerequisite.plan.md`
+**Status**: PENDING — blocked on `../current/ws3-oak-url-augmentable-codegen-fix.plan.md`, then `../current/ws3-contrast-validation-prerequisite.plan.md`
 **Last Updated**: 2026-04-03
 
 ## Required Inputs
@@ -25,11 +25,17 @@ todos:
 1. `ws3-widget-clean-break-rebuild.plan.md` — Phase 4 section and target
    architecture sections 2 (React + ext-apps/react) and 3 (data/state model)
 2. `mcp-apps-support.research.md` — canonical React UI model
-3. `../current/ws3-design-token-prerequisite.plan.md` — token package delivery
-   path, canonical `useApp(...)` shell replacement, and widget CSS import must
-   land before Phase 4 starts; Phase 4 must treat package CSS as the only
+3. `../archive/completed/ws3-design-token-prerequisite.plan.md` — token package
+   delivery path, canonical `useApp(...)` shell replacement, and widget CSS
+   import are already in place; Phase 4 must treat package CSS as the only
    permitted styling source
-4. Phase 3 acceptance evidence — resource identity and tool descriptors must be
+4. `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — schema-first
+   response-augmentation remediation now precedes Phase 4 so the Oak URL typing
+   model is corrected before view work resumes
+5. `../current/ws3-contrast-validation-prerequisite.plan.md` — token
+   accessibility validation now blocks Phase 4 until the contrast gate and the
+   two known token fixes land
+6. Phase 3 acceptance evidence — resource identity and tool descriptors must be
    in place before building views that consume them
 
 ## Tasks

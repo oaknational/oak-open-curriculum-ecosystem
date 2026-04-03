@@ -137,7 +137,7 @@ describe('generateRuntimeSchemaChecks', () => {
     expect(result).toContain('type AllowedMethods = keyof (RawPaths[keyof RawPaths])');
     expect(result).toContain('export const allowedMethods: AllowedMethods[]');
     expect(result).toContain('export function isAllowedMethod');
-    expect(result).toContain('export type PathReturnTypes');
+    expect(result).toContain('export type JsonBody200');
   });
 
   it('should include type guards', () => {

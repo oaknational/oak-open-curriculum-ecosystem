@@ -15,18 +15,23 @@ todos:
     status: completed
   - id: phase-3-pilot
     content: "Phase 3: Use the MCP App lane as the live evidence source for resumptions, GO sessions, and deep consolidations."
-    status: pending
+    status: completed
   - id: phase-4-rollout
     content: "Phase 4: Decide promote/adjust/reject and create the outgoing portable note only if the evidence supports promotion."
-    status: pending
+    status: completed
 ---
 
 # Continuity and Surprise Practice Adoption
 
-**Last Updated**: 2026-04-02
-**Status**: 🟢 IN PROGRESS
+**Last Updated**: 2026-04-03
+**Status**: ✅ COMPLETE
 **Scope**: Repo-local continuity practice, session handoff, GO cadence, and
 surprise capture for the MCP App workstream
+
+**Closure note**: The evidence window closed on 2026-04-03 with an explicit
+`promote` call. This plan delivered the repo-local rollout and the outgoing
+portable note; the same-day Practice Core promotion was recorded separately as
+the follow-on promotion step, not as silent scope drift inside Wave 1.
 
 ---
 
@@ -48,8 +53,10 @@ The session surfaced a clearer model:
   explicit capture and promotion path
 - `GO` has value as an execution cadence, not as a handoff substitute
 
-Wave 1 adopts those ideas inside this repository without mutating
-`.agent/practice-core/*`.
+Wave 1 adopted those ideas inside this repository without mutating
+`.agent/practice-core/*` during the rollout itself. The later same-day Practice
+Core promotion happened only after the evidence log closed with an explicit
+`promote` decision.
 
 ## Goal
 
@@ -66,7 +73,8 @@ Make the next session recover orientation quickly and truthfully by:
 ## Non-Goals
 
 - No claims about model consciousness or inner continuity
-- No Practice Core mutation in this plan
+- No Practice Core mutation inside the Wave 1 rollout itself; any later
+  promotion requires an explicit follow-on decision
 - No new reviewer or specialist in wave 1
 - No automatic promotion of surprises straight to permanent doctrine
 - No default full consolidation at every session end
@@ -205,10 +213,16 @@ Make the next session recover orientation quickly and truthfully by:
   - [continuity-adoption-evidence.md](../../../analysis/continuity-adoption-evidence.md)
   - updates to
     [session-continuation.prompt.md](../../../prompts/session-continuation.prompt.md)
-- Progress note:
+- Completed work:
   - first evidence entry recorded on 2026-04-02 during a
     `session-handoff` closeout that escalated into
     `jc-consolidate-docs`
+  - evidence window closed on 2026-04-03 with an explicit `promote`
+    decision after lightweight handoff, `GO`, and deep-consolidation
+    behaviour all proved stable enough to teach
+  - the evidence log preserves the judgement-call nuance: the original
+    resumption quota was still below target, but the pattern was already
+    directionally stable and the user chose to promote
 - Evidence window:
   - first 5 real MCP App resumptions after rollout
   - first 3 `GO`-driven execution sessions
@@ -224,6 +238,7 @@ Make the next session recover orientation quickly and truthfully by:
 ### Task 3.2: Calibrate after real usage
 
 - Output: decision recorded in the evidence log
+- Outcome: `promote` chosen on 2026-04-03
 - Decision choices:
   - `promote`
   - `adjust`
@@ -235,16 +250,21 @@ Make the next session recover orientation quickly and truthfully by:
 
 ## Phase 4 — Rollout and Portability
 
-### Task 4.1: Promote only if the evidence holds
+### Task 4.1: Promote when the evidence holds
 
-- Conditional output:
+- Outputs:
   - `.agent/practice-context/outgoing/continuity-handoff-and-surprise-pipeline.md`
-- Rule:
-  - create the outgoing note only if the evidence window ends with `promote`
+  - follow-on Practice Core promotion recorded separately in
+    `.agent/practice-core/*`
+- Completed work:
+  - evidence ended with `promote`, so the outgoing portable note was created
+  - the same-day follow-on promotion moved the continuity doctrine into the
+    portable Practice Core after the rollout plan had proved the behaviour
 - Validation:
-  - no Practice Core files are changed in this plan
-  - the outgoing note, if created, is portable by design rather than
-    repo-specific narration
+  - the outgoing note is portable by design rather than repo-specific
+    narration
+  - the later Practice Core promotion happened only after an explicit
+    `promote` decision and is recorded separately from the rollout pass
 
 ---
 

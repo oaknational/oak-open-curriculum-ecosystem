@@ -56,7 +56,7 @@ const HOOK_SURFACE_MATRIX_FIXTURE = [
   '',
   '| Surface | Cursor | Claude Code | Gemini CLI | GitHub Copilot | Codex | `.agents/` |',
   '| --- | --- | --- | --- | --- | --- | --- |',
-  '| **Hooks** | unsupported | `.claude/settings.json` (machine-local, gitignored `PreToolUse`) | unsupported | unsupported | unsupported | unsupported |',
+  '| **Hooks** | unsupported | `.claude/settings.json` (tracked project `PreToolUse`) | unsupported | unsupported | unsupported | unsupported |',
   '',
   '.agent/hooks/policy.json',
   'scripts/check-blocked-patterns.mjs',

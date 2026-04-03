@@ -61,7 +61,7 @@ export function isClaudeHookWiredInText(claudeSettingsText, hookCommand = CLAUDE
 
 export function surfaceMatrixDescribesClaudeHook(surfaceMatrix) {
   const hookRowMatches =
-    /\|\s*\*\*Hooks\*\*\s*\|[^\n]*unsupported[^\n]*\.claude\/settings\.json[^\n]*(?:machine-local[^\n]*gitignored|gitignored[^\n]*machine-local)[^\n]*PreToolUse/iu.test(
+    /\|\s*\*\*Hooks\*\*\s*\|[^\n]*unsupported[^\n]*\.claude\/settings\.json[^\n]*tracked[^\n]*PreToolUse/iu.test(
       surfaceMatrix,
     );
   const policySpineSemanticsMatch = /\boverride\b[\s\S]*\bprune\b[\s\S]*\bblock\b/u.test(
@@ -95,6 +95,12 @@ export function getClaudeHookPortabilityIssues({
     (typeof claudeSettingsText === 'string'
       ? isClaudeHookWiredInText(claudeSettingsText, hookCommand)
       : isClaudeHookWired(claudeSettings, hookCommand));
+
+  if (claudeHookStatus === 'supported' && !claudeSettingsExists) {
+    issues.push(
+      `${hookPolicyPath}: Claude Code is marked supported but tracked project ${claudeSettingsPath} is missing`,
+    );
+  }
 
   if (claudeHookStatus === 'supported' && claudeSettingsExists && !claudeHookIsWired) {
     issues.push(

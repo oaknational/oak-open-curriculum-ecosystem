@@ -26,6 +26,20 @@ repo, copy the relevant files into that repo's `.agent/practice-context/incoming
 
 ## Current Outgoing Set
 
+### Write-Back Notes (2026-04-03 promotion round)
+
+These notes capture the next set of portable learnings promoted after the
+continuity decision and the platform-config hardening pass.
+
+| File | Purpose |
+| ---- | ------- |
+| `continuity-handoff-and-surprise-pipeline.md` | Split-loop continuity model: lightweight `session-handoff`, deep convergence in `consolidate-docs`, and surprise as a capture → distil → graduate → enforce pipeline |
+| `platform-config-is-infrastructure.md` | Tracked project platform settings as part of the agentic system contract; local overrides stay gitignored and additive |
+| `reviewer-gateway-operations.md` | Operational reviewer doctrine for large rosters: layered triage, explicit `focused`/`deep` depth, delegation snapshots, and reintegration discipline |
+| `health-probe-and-policy-spine.md` | Summary-first agent-infrastructure health probing with a four-layer Policy Spine and drift checks for command parity, hooks, continuity, and practice-box state |
+| `frontend-review-cluster-pattern.md` | Gateway-routed browser/UI reviewer cluster pattern with overlap boundaries and host-boundary rules |
+| `design-token-governance-for-self-contained-ui.md` | CSS-first token governance and styling independence for self-contained HTML/iframe surfaces |
+
 ### Write-Back Notes (2026-03-23 integration round)
 
 These notes carry innovations from oak-mcp-ecosystem that the incoming
@@ -41,7 +55,7 @@ the Practice in the originating repo and any downstream receivers.
 | `pattern-schema-for-discoverability.md` | Richer frontmatter schema (`use_this_when`, `barrier` checklist) vs the simpler Core schema. Backwards-compatible convergence path |
 | `production-reviewer-scaling.md` | Three-layer composition (components → templates → wrappers) for scaling to 17+ reviewers. Architecture persona pattern (4 distinct perspectives) |
 | `cross-platform-surface-integration-guide.md` | How to port the surface matrix, wrapper parity checks, and explicit unsupported states into a receiving repo without forcing symmetry |
-| `claude-code-hook-activation.md` | Concrete note on thin native Claude Code hook activation: `PreToolUse` only, canonical policy in `.agent/hooks/`, repo-local runtime in `scripts/`, advisory hooks documented-only |
+| `claude-code-hook-activation.md` | Concrete note on thin native Claude Code hook activation: tracked project `PreToolUse` wiring, canonical policy in `.agent/hooks/`, repo-local runtime in `scripts/`, advisory hooks documented-only |
 
 ### Earlier Notes (pre-integration)
 

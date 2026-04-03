@@ -35,7 +35,7 @@ todos:
    Compliance Checklist, and target architecture sections 5-6
 2. `mcp-apps-support.research.md` — canonical server model and registration
    rules
-3. `current/auth-safety-correction.plan.md` — C8 status (merge prerequisite
+3. `archive/completed/auth-safety-correction.plan.md` — C8 status (merge prerequisite
    for task 9)
 
 ## Current Closure State (2026-04-02)

@@ -34,14 +34,19 @@ Executable plans that are in progress now.
 - [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
   WS3 companion phase plan for docs, gates, reviewers, and closure checks.
 
-Queued prerequisite before Phase 4/5:
+Current ordered prerequisites before Phase 4/5:
 
-- [../current/ws3-design-token-prerequisite.plan.md](../current/ws3-design-token-prerequisite.plan.md) —
-  minimal design-token infrastructure plan for `packages/design/` and widget CSS
-  consumption
+- [../current/ws3-oak-url-augmentable-codegen-fix.plan.md](../current/ws3-oak-url-augmentable-codegen-fix.plan.md) —
+  response-augmentation typing remediation and ADR-152 discoverability work;
+  prerequisite 1 of 2 before Phase 4/5 view work resumes
+- [../current/ws3-contrast-validation-prerequisite.plan.md](../current/ws3-contrast-validation-prerequisite.plan.md) —
+  build-time contrast validation and token accessibility fixes; prerequisite
+  2 of 2 before Phase 4/5 view work continues
 
 Completed and archived:
 
+- [ws3-design-token-prerequisite.plan.md](../archive/completed/ws3-design-token-prerequisite.plan.md) —
+  canonical token foundation and shared shell complete on 2 April 2026.
 - [ws2-app-runtime-migration.plan.md](../archive/completed/ws2-app-runtime-migration.plan.md) —
   WS2 complete and archived on 26 March 2026.
 - [mcp-runtime-boundary-simplification.plan.md](../archive/completed/mcp-runtime-boundary-simplification.plan.md) —

@@ -38,8 +38,8 @@ authoritative for full WS3 scope and ordering.
    `Reviewer-Validated Findings` section (B3 Hybrid retention, C8 prerequisite,
    visibility array format, task sequencing). Read before capturing the
    contamination inventory so the B3 Hybrid classification is understood.
-5. `current/auth-safety-correction.plan.md`
-6. `current/auth-boundary-type-safety.plan.md`
+5. `archive/completed/auth-safety-correction.plan.md`
+6. `archive/completed/auth-boundary-type-safety.plan.md`
 
 ## Tasks
 

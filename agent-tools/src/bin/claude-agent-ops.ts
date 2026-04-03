@@ -160,7 +160,16 @@ function printPreflight(): void {
   writeLine(
     worktrees === 0 ? 'PASS No leftover agent worktrees' : 'FAIL Leftover agent worktrees found',
   );
-  writeLine(runPnpmGate('qg', root) ? 'PASS pnpm qg' : 'FAIL pnpm qg');
+  writeLine(
+    runPnpmGate('portability:check', root)
+      ? 'PASS pnpm portability:check'
+      : 'FAIL pnpm portability:check',
+  );
+  writeLine(
+    runPnpmGate('test:root-scripts', root)
+      ? 'PASS pnpm test:root-scripts'
+      : 'FAIL pnpm test:root-scripts',
+  );
 }
 function printCleanup(): void {
   const root = repoRoot();

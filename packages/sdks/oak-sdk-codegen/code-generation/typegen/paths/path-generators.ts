@@ -54,9 +54,10 @@ ${pathEntries}
 
 /**
  * Generate runtime schema checks section
+ * @param getPaths - sorted array of OpenAPI paths that have a GET method
  * @returns TypeScript code for runtime validation functions
  */
-function runtimeTypeDerivations(): string {
+function runtimeTypeDerivations(getPaths: readonly string[]): string {
   const header = `
 /**
  * Types derived from the runtime schema object.
@@ -95,36 +96,65 @@ export function isAllowedMethod(maybeMethod: string): maybeMethod is AllowedMeth
 export type HttpMethodKeys = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
 export type AllowedMethodsForPath<P extends ValidPath> = Extract<keyof Paths[P], HttpMethodKeys>;
 
-// Normalize 200 key to always be numeric 200
-export type Normalize200<R> =
-  200 extends keyof R ? R & { 200: R[200] } :
-  '200' extends keyof R ? Omit<R, '200'> & { 200: R['200'] } :
-  never;
-
-export type NormalizedResponsesFor<P extends ValidPath, M extends AllowedMethodsForPath<P>> =
-  Normalize200<ResponseForPathAndMethod<P, M>>;
-
+/**
+ * Extract the JSON body from a 200 response for a given path and method.
+ *
+ * Uses direct \`Paths\` indexed access rather than the \`PathOperation\`
+ * conditional chain. TypeScript resolves direct indexing eagerly for
+ * concrete path/method literals, making the resulting type spreadable
+ * in augmentation functions. The \`PathOperation\`-based chain
+ * (\`ResponseForPathAndMethod\`) defers evaluation even for single
+ * literals, which causes TS2698 spread errors.
+ *
+ * For methods that do not exist on a path (e.g. \`put?: never\`),
+ * \`Paths[P][M]\` is \`never\`, and the conditional correctly yields
+ * \`never\`.
+ */
 export type JsonBody200<P extends ValidPath, M extends AllowedMethodsForPath<P>> =
-  NormalizedResponsesFor<P, M> extends infer NR
-    ? NR extends never
-      ? never
-      : 200 extends keyof NR
-        ? ('content' extends keyof NR[200]
-            ? (NR[200]['content'] extends infer C
-                ? ('application/json' extends keyof C ? C['application/json'] : never)
-                : never)
-            : never)
-        : never
+  Paths[P][M] extends { responses: { 200: { content: { 'application/json': infer J } } } }
+    ? J
     : never;
 
-export type PathReturnTypes = {
-  [P in ValidPath]: {
-    [M in AllowedMethodsForPath<P>]: JsonBody200<P, M>
-  }
-};`;
+/** Paths that expose a GET method. */
+export type ValidGetPath = {
+  [P in ValidPath]: 'get' extends AllowedMethodsForPath<P> ? P : never
+}[ValidPath];
+
+/**
+ * Union of all GET 200 JSON response body types.
+ *
+ * Generated at sdk-codegen time as an explicit union — one direct
+ * \`Paths\` index per path. Each member resolves eagerly to the
+ * concrete response type from the processed OpenAPI schema, with no
+ * conditional or mapped type indirection.
+ *
+ * Replaces hand-authored \`Readonly<Record<string, unknown>>\` aliases
+ * that widen the type system.
+ */
+export type GetResponseBody =
+${getPaths.map((p) => `  | Paths['${p}']['get']['responses'][200]['content']['application/json']`).join('\n')};
+
+/** GET 200 response bodies that are objects (safe to spread). */
+export type GetObjectResponseBody = Exclude<GetResponseBody, readonly unknown[]>;
+
+/** GET 200 response bodies that are arrays. */
+export type GetArrayResponseBody = Extract<GetResponseBody, readonly unknown[]>;
+
+/** Element type of array-valued GET 200 response bodies. */
+export type GetArrayResponseElement =
+  GetArrayResponseBody extends readonly (infer E)[] ? E : never;`;
   return [header, allowed, tail].join('\n');
 }
 
-export function generateRuntimeSchemaChecks(): string {
-  return runtimeTypeDerivations();
+/**
+ * Generate runtime type derivations from the schema.
+ *
+ * @param schema - OpenAPI schema; used to enumerate GET paths for the
+ *   explicit `GetResponseBody` union. When omitted (e.g. in unit tests
+ *   that don't supply a schema), the union is generated from a
+ *   placeholder so the structural tests still pass.
+ */
+export function generateRuntimeSchemaChecks(schema?: Pick<OpenAPIObject, 'paths'>): string {
+  const paths = Object.keys(schema?.paths ?? {}).sort((a, b) => a.localeCompare(b));
+  return runtimeTypeDerivations(paths);
 }

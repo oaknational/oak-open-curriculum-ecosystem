@@ -8,34 +8,24 @@ fitness_line_length: 100
 
 # Practice Bootstrap
 
-This file completes the plasmid trinity. `practice.md` describes the system
-(the **what**), `practice-lineage.md` encodes the principles and evolution
-rules (the **why**), and this file provides annotated templates for every
-artefact type (the **how**). Four companion files travel with the trinity:
-`README.md` (for humans), `index.md` (for agents), `CHANGELOG.md` (what
-changed), and `provenance.yml` (per-file evolution chains). An agent reading
-all seven Practice Core files has enough information to build a working
-Practice system from scratch. Templates use `{placeholders}` for
-project-specific content. The Practice uses a **canonical-first artefact
-model**: all substantive content lives in `.agent/` (platform-agnostic), and
-thin platform adapters in `.cursor/`, `.claude/`, `.gemini/`, `.github/`,
-`.agents/`, and `.codex/` reference canonical content without duplicating it.
-Sections below use Cursor as the concrete platform example — adapt adapter
-formats to local platforms. Ecosystem conventions use TypeScript/Node.js as
-examples — substitute your ecosystem's equivalents.
+This file completes the plasmid trinity. `practice.md` is the **what**,
+`practice-lineage.md` the **why**, and this file the **how**: annotated
+templates for every artefact type. Four companion files travel with the
+trinity: `README.md`, `index.md`, `CHANGELOG.md`, and `provenance.yml`.
+Templates use `{placeholders}` for project-specific content. The Practice uses
+a **canonical-first artefact model**: substantive content lives in `.agent/`,
+and thin platform adapters point back to it. Sections below use Cursor and
+TypeScript/Node.js as examples — adapt them to local platforms and ecosystems.
 
 ## Before You Begin: Ecosystem Survey
 
 The templates below use TypeScript/Node.js/Cursor conventions as concrete
 examples. Before creating any artefacts, the hydrating agent MUST:
 
-1. **Survey the existing repo**: language(s), test framework(s), linter(s),
-   formatter(s), package manager, build system, and existing quality
-   standards. Also survey existing Practice infrastructure: commands,
-   skills, rules, sub-agents, memory pipeline. Determine the
-   hydration path: cold start (no existing Practice), augmentation
-   (partial Practice), or restructuring (mature but platform-locked
-   Practice).
+1. **Survey the existing repo**: language(s), test/lint/build stack,
+   package manager, quality standards, and existing Practice
+   infrastructure. Determine whether this is a cold start,
+   augmentation, or restructuring.
 2. **Assess alignment**: identify what the repo already has that meets or
    exceeds Practice principles. Existing standards that are at least as
    rigorous as the Practice MUST be preserved.
@@ -43,13 +33,9 @@ examples. Before creating any artefacts, the hydrating agent MUST:
    extensions (`*.unit.test.ts` becomes `*_test.go`, `test_*.py`, etc.),
    tool names (`Vitest` becomes `pytest`, `go test`, etc.), configuration
    formats, and platform conventions all change.
-4. **Never overwrite**: the Practice enables excellence; it does not
-   replace what has already been achieved. This extends beyond tooling to
-   Practice mechanisms: specialised reviewers, additional knowledge flow
-   feeds, editorial systems, domain-specific sub-agents. The local
-   Practice may exceed the blueprint in areas the blueprint does not
-   model. These are adaptations, not deviations — preserve and integrate
-   them.
+4. **Never overwrite**: preserve any local standard or Practice mechanism
+   that already meets or exceeds the blueprint. These are adaptations,
+   not deviations.
 
 ## The Artefact Model
 
@@ -63,7 +49,7 @@ activation metadata and a pointer to the canonical source.
 | **Rules**                    | `.agent/rules/*.md`                | `.cursor/rules/*.mdc`, `.claude/rules/*.md`, or an entry-point chain where the local matrix documents that choice                                     |
 | **Commands** (`jc-*` prefix) | `.agent/commands/*.md`             | `.cursor/commands/jc-*.md`, `.claude/commands/jc-*.md`, `.gemini/commands/jc-*.toml`, `.agents/skills/jc-*/SKILL.md`                                 |
 | **Sub-agent templates**      | `.agent/sub-agents/templates/*.md` | `.cursor/agents/`, `.claude/agents/`, `.github/agents/*.agent.md`, Codex project-agent config in `.codex/`; unsupported states stay explicit in the local matrix |
-| **Hooks**                    | `.agent/hooks/` (policy + README)  | Thin native activation in platform config (for example `.claude/settings.json` where supported). Runtime in a repo-local script surface (`scripts/` or `tools/` as appropriate). Unsupported platforms stay explicit in the local matrix |
+| **Hooks**                    | `.agent/hooks/` (policy + README)  | Thin native activation in tracked platform config (for example `.claude/settings.json`, with gitignored local overrides where supported). Runtime in a repo-local script surface (`scripts/` or `tools/` as appropriate). Unsupported platforms stay explicit in the local matrix |
 
 Canonical rules are short operational reinforcements of policy. Each platform
 trigger wrapper points at either `.agent/rules/*.md` or
@@ -307,9 +293,8 @@ A sub-agent template requires these sections (in order):
 
 ### Core Review Agents
 
-Default portable roster. Local practices may add specialist reviewers
-(editorial, domain-specific, or UI-specific such as
-accessibility-reviewer and design-system-reviewer).
+Default portable roster. Local practices may add editorial, domain-specific,
+or browser-facing specialists.
 
 | Agent           | Specialisation                   | Key assessment areas                                                                                                                                                  |
 | --------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -326,21 +311,21 @@ across all platforms and contain only a pointer to the canonical command.
 ### Formats
 
 Canonical commands contain the substantive workflow. Platform adapters are
-thin wrappers: Cursor (`.cursor/commands/jc-*.md`) uses `@` injection —
-`Read and follow @.agent/commands/{name}.md`. Claude Code uses YAML
-frontmatter + `$ARGUMENTS`. Gemini uses TOML + `{{args}}`. Codex uses
-`.agents/skills/jc-*/SKILL.md` with `name`/`description` frontmatter.
-Unsupported platform states belong in the local surface matrix.
+thin wrappers: Cursor uses `@` injection, Claude Code YAML + `$ARGUMENTS`,
+Gemini TOML + `{{args}}`, and Codex `.agents/skills/jc-*/SKILL.md` with
+`name`/`description` frontmatter. Unsupported states belong in the local
+surface matrix.
 
 ### Required Commands
 
 | Command          | File                     | Core logic                                                                                                                                                                                                                             |
 | ---------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | start-right      | `jc-start-right.md`      | Read and follow the start-right-quick skill.                                                                                                                                                                                           |
-| gates            | `jc-gates.md`            | Run `type-check -> lint -> build -> test` sequentially. All blocking. Restart from beginning after any fix.                                                                                                                            |
-| commit           | `jc-commit.md`           | Check status, review diff, verify gates, stage selectively, conventional commit format. Safety: never force push, never amend pushed commits, never `--no-verify`.                                                                     |
-| consolidate-docs | `jc-consolidate-docs.md` | Verify docs current. Graduate settled content. Extract reusable patterns. Rotate napkin (distillation). Manage fitness. Integrate incoming Practice Box. Broadcast outgoing Practice Context. See §Consolidation Workflow. |
-| plan             | `jc-plan.md`             | Read directives. Create plan with explicit outcome, impact, value mechanism, acceptance criteria, risk assessment, and non-goals.                                                                                                      |
+| session-handoff  | `jc-session-handoff.md`  | Refresh the continuity contract, sync next-action surfaces, capture surprises, and escalate into `jc-consolidate-docs` only when due.                                                        |
+| gates            | `jc-gates.md`            | Run `type-check -> lint -> build -> test`. All blocking; restart after any fix.                                                                                                                            |
+| commit           | `jc-commit.md`           | Check status, review diff, verify gates, stage selectively, and use a conventional commit. Never force push, amend pushed commits, or use `--no-verify`.                                                                     |
+| consolidate-docs | `jc-consolidate-docs.md` | Verify docs current. Graduate settled content. Extract patterns. Rotate napkin. Manage fitness. Integrate incoming Practice Box. Broadcast outgoing context. See §Consolidation Workflow. |
+| plan             | `jc-plan.md`             | Read directives. Create plan with outcome, impact, value mechanism, acceptance criteria, risks, and non-goals.                                                                                                      |
 
 ## Skills (.agent/skills/)
 
@@ -368,9 +353,9 @@ description: {When to invoke this skill — one sentence trigger condition}
 
 Cursor adapter (`.cursor/skills/{name}/SKILL.md`): `name`/`description`
 frontmatter + `Read and follow @.agent/skills/{name}/SKILL.md`. Native
-Claude/Gemini/GitHub skill adapters use the same thin shape without additional
-policy. Codex adapter (`.agents/skills/{name}/SKILL.md`): `name`/`description`
-frontmatter + reads canonical path without `@`.
+Claude/Gemini/GitHub skill adapters use the same thin shape. Codex adapter
+(`.agents/skills/{name}/SKILL.md`): `name`/`description` frontmatter + reads
+the canonical path without `@`.
 
 ### Session-Entry Skills
 
@@ -514,19 +499,25 @@ command with the following abstract workflow:
 
 ## Platform Configuration
 
-Each platform requires configuration files (e.g. Cursor's
-`.cursor/environment.json` with `agentCanUpdateSnapshot: true`, and
-`.cursor/settings.json` for plugins). These are platform-specific --
-consult each platform's documentation and the Practice Core files for
-adapter patterns.
+Treat platform config like source code: tracked project settings define the
+shared agentic contract, while gitignored local settings carry user-specific
+overrides. Typical pairs are `.claude/settings.json` +
+`.claude/settings.local.json`, `.cursor/settings.json` +
+`.cursor/settings.local.json`, `.gemini/settings.json` +
+`.gemini/settings.local.json`, plus `.codex/config.toml` and a local override
+only if the platform documents one.
+
+Tracked settings carry required permissions, hook activation, plugin state, and
+other fresh-checkout affordances. Local settings carry paths, one-off
+permissions, and machine-specific wiring. Wrappers can exist while the
+platform silently blocks them, so portability checks must verify
+authorisation parity, not just wrapper presence.
 
 ## Bootstrap Checklist
 
 After creating all files, validate:
 
-1. `.agent/practice-core/` contains all seven Practice Core files
-   (`practice.md`, `practice-lineage.md`, `practice-bootstrap.md`,
-   `README.md`, `index.md`, `CHANGELOG.md`, `provenance.yml`) and
+1. `.agent/practice-core/` contains all seven Practice Core files and
    `incoming/.gitkeep`. Optional `.agent/practice-context/` is not
    required; `incoming/` there is transient.
 2. `.agent/practice-index.md` exists, all its links resolve, and its
@@ -541,8 +532,8 @@ After creating all files, validate:
 10. The project builds.
 11. **Artefact portability**: canonical skills and commands in `.agent/`
     contain no platform-specific syntax. All platform adapters are thin
-    wrappers. Validate adapter-to-canonical consistency (portability check
-    script or manual review).
+    wrappers. Validate adapter-to-canonical consistency and authorisation
+    parity in tracked project config with a portability check or manual review.
 12. **Cohesion audit**: all Practice Core files are internally consistent,
     practice-index.md links resolve, and all broader Practice files
     (directives, rules, commands, skills) are aligned with the

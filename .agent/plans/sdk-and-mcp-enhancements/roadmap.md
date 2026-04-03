@@ -1,7 +1,7 @@
 ---
 name: MCP Apps Standard Migration Plan
 overview: "Strategic planning anchor for the remaining Oak MCP Apps work. Defines the canonical target architecture, the live execution stack, and the remaining dependency order."
-lastValidatedDate: 2026-04-02
+lastValidatedDate: 2026-04-03
 todos:
   - id: canonical-research
     content: "Maintain the canonical MCP Apps research summary and keep it aligned with the live executable plans."
@@ -11,9 +11,15 @@ todos:
     status: completed
   - id: domain-c-execution
     content: "Execute the remaining MCP Apps work through the umbrella migration plan and the active WS3 child plan."
-    status: pending
+    status: in_progress
   - id: ws3-design-token-prerequisite
     content: "Replace the temporary shell and deliver the minimal design-token infrastructure prerequisite before WS3 Phase 4 and Phase 5 widget UI work."
+    status: completed
+  - id: ws3-contrast-validation-prerequisite
+    content: "Build WCAG contrast validation into the token pipeline and fix the blocking token accessibility failures before Phase 4 and Phase 5 continue."
+    status: pending
+  - id: oak-url-augmentable-codegen-fix
+    content: "Resolve the OakUrlAugmentable widening leak through schema-derived GET response unions and honest middleware validation."
     status: in_progress
   - id: c8-auth-metadata-invariant-hardening
     content: "Implement auth metadata invariant hardening."
@@ -27,7 +33,7 @@ isProject: false
 # MCP Apps Standard Migration Plan
 
 **Status**: ACTIVE
-**Last Updated**: 2026-04-02
+**Last Updated**: 2026-04-03
 
 ---
 
@@ -78,14 +84,15 @@ Read the live workstream in this order:
 3. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
 4. [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
 5. [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
-6. [current/ws3-design-token-prerequisite.plan.md](current/ws3-design-token-prerequisite.plan.md)
-7. [current/README.md](current/README.md)
+6. [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
+7. [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
+8. [current/README.md](current/README.md)
 
 When touching runtime contract, metadata visibility, resource auth, or tool
 registration, also read:
 
-7. [current/auth-safety-correction.plan.md](current/auth-safety-correction.plan.md)
-8. [current/auth-boundary-type-safety.plan.md](current/auth-boundary-type-safety.plan.md)
+1. [archive/completed/auth-safety-correction.plan.md](archive/completed/auth-safety-correction.plan.md)
+2. [archive/completed/auth-boundary-type-safety.plan.md](archive/completed/auth-boundary-type-safety.plan.md)
 
 When closing the regenerated lesson-summary schema fallout, also read:
 
@@ -95,6 +102,7 @@ Completed dependency work is archived at:
 
 - [archive/completed/ws2-app-runtime-migration.plan.md](archive/completed/ws2-app-runtime-migration.plan.md)
 - [archive/completed/mcp-runtime-boundary-simplification.plan.md](archive/completed/mcp-runtime-boundary-simplification.plan.md)
+- [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md)
 
 ## Execution Order
 
@@ -104,9 +112,11 @@ WS2: runtime migration                      ✓ complete
 Runtime boundary simplification             ✓ complete
 WS3: fresh React MCP App rebuild            ▶ active
   Phase 3 runtime closure                   ✓ complete
-  Design-token prerequisite                 ▶ current (shell/token prerequisite in progress; blocks Phase 4 and Phase 5)
-  Phase 4: curriculum-model view            ⏳ pending after token prerequisite
-  Phase 5: user-search view                 ⏳ pending after token prerequisite
+  Design-token prerequisite                 ✓ complete
+  OakUrl codegen fix                        ⏳ current
+  Contrast validation prerequisite          ⏳ current
+  Phase 4: curriculum-model view            ⏳ pending after current prerequisites
+  Phase 5: user-search view                 ⏳ pending after current prerequisites
   Phase 6: docs/gates/review                ⏳ pending
 C8: auth metadata invariant hardening       ✓ complete
 Output schemas follow-up                    ⏳ current
@@ -124,7 +134,8 @@ The remaining UI work is carried by:
 - [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
 - [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
 - [active/ws3-phase-3-schema-fallout-closure.plan.md](active/ws3-phase-3-schema-fallout-closure.plan.md)
-- [current/ws3-design-token-prerequisite.plan.md](current/ws3-design-token-prerequisite.plan.md)
+- [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
+- [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
 
 Detailed WS3/WS4 execution scope, sequencing, and enforcement live in the
 active umbrella and child plans. This roadmap intentionally avoids duplicating
@@ -135,8 +146,8 @@ and remains in `active/` until archival.
 
 Complete on 31 March 2026. These plans remain the closure evidence:
 
-- [current/auth-safety-correction.plan.md](current/auth-safety-correction.plan.md)
-- [current/auth-boundary-type-safety.plan.md](current/auth-boundary-type-safety.plan.md)
+- [archive/completed/auth-safety-correction.plan.md](archive/completed/auth-safety-correction.plan.md)
+- [archive/completed/auth-boundary-type-safety.plan.md](archive/completed/auth-boundary-type-safety.plan.md)
 
 ### Output schema follow-up
 
@@ -144,13 +155,21 @@ Complete on 31 March 2026. These plans remain the closure evidence:
 remains valid follow-on work. It can advance independently where transport
 exposure does not depend on unfinished MCP Apps execution.
 
-### Design-token prerequisite
+### Completed design-token prerequisite
 
-[current/ws3-design-token-prerequisite.plan.md](current/ws3-design-token-prerequisite.plan.md)
-is the current prerequisite for the first widget UI work. It owns the
-temporary-shell replacement plus the minimal `packages/design/`
-implementation and widget CSS import path required before Phase 4 and Phase 5
-start.
+[archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md)
+closed on 2 April 2026. It delivered the temporary-shell replacement plus the
+minimal `packages/design/` implementation and widget CSS import path that
+Phase 4 and Phase 5 now build on.
+
+### Current ordered prerequisites
+
+[current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
+is prerequisite 2 of 2 before the first view work starts.
+
+[current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
+is prerequisite 1 of 2 before Phase 4 resumes. It carries the schema-first
+response-augmentation remediation now in progress.
 
 ## Validation
 

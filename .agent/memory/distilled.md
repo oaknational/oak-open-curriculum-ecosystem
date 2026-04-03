@@ -184,3 +184,16 @@ context with no natural permanent home.
   to `process.stderr.write`. Build scripts without a logger
   should let errors propagate naturally (Node surfaces the
   stack trace).
+- **`unknown` is destruction, not convenience**: the generated
+  type system is exhaustive (34 type predicates, Zod schemas
+  for every operation, complete path→method→response chains).
+  `unknown` is only permitted at the literal incoming external
+  boundary (HTTP response parse, file read, `process.env`).
+  Every internal function accepting `unknown` throws away
+  information the codegen already provides. Pending ADR-152.
+- **Generated infra IS the off-the-shelf library**: before
+  proposing new boundary helpers or adapter functions, search
+  the generated code. The constant→type→predicate chain
+  already covers paths, methods, response codes, response
+  bodies, search scopes, and MCP tools. 34 type predicates
+  plus Zod schemas for every operation. Look harder.

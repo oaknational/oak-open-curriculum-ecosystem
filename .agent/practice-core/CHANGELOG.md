@@ -4,6 +4,21 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-03 — Continuity Promotion and Platform-Config Doctrine
+
+- Promoted the split-loop continuity model into the portable Core:
+  `session-handoff` is now a required command, prompts explicitly carry live
+  continuity contracts, and the lineage now records that ordinary continuity
+  and deep convergence are separate loops
+- Promoted the platform-configuration doctrine into the portable Core:
+  tracked project settings define the agentic system contract, gitignored local
+  settings are additive overrides, and portability checks must validate
+  authorisation parity as well as wrapper presence
+- Tightened reviewer guidance so UI-heavy repos may install a browser-facing
+  reviewer cluster (for example accessibility, design-system, and
+  component-architecture reviewers) rather than relying on one generic code
+  reviewer for rendered output
+
 ## [oak-open-curriculum-ecosystem] 2026-04-01 — Consolidation Workflow Evolution
 
 - Added full abstract Consolidation Workflow section to practice-bootstrap.md

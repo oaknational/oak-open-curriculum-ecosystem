@@ -16,14 +16,10 @@ plans when scheduled.
 | [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md) | Adjacent: ES specialist (✅ complete) | REFERENCE |
 | [sentry-specialist-capability.plan.md](sentry-specialist-capability.plan.md) | Adjacent: Sentry specialist (foundation active) | REFERENCE |
 | [harness-concepts-adoption.plan.md](harness-concepts-adoption.plan.md) | Adjacent: HC-0 baseline metrics | REFERENCE |
-| [continuity-and-surprise-practice-adoption.plan.md](continuity-and-surprise-practice-adoption.plan.md) | Adjacent: continuity surfaces, session handoff, GO cadence, and surprise pipeline | IN PROGRESS |
 | [reviewer-gateway-upgrade.plan.md](reviewer-gateway-upgrade.plan.md) | Adjacent: layered gateway triage, review depth selection, and coverage tracking | QUEUED |
-| [learning-loop-refinement.plan.md](../archive/completed/learning-loop-refinement.plan.md) | Adjacent: Unify consolidation/distillation, active fitness management | COMPLETED |
-| [consolidation-workflow-evolution.plan.md](../archive/completed/consolidation-workflow-evolution.plan.md) | Adjacent: Propagate consolidation improvements to Practice Core, decide if consolidation belongs in portable Practice | COMPLETED |
-| [mcp-specialist-upgrade.plan.md](../archive/completed/mcp-specialist-upgrade.plan.md) | Adjacent: MCP specialist upgrade (ADR-129 triplet hardening) | REFERENCE |
-| [fitness-two-threshold-model.plan.md](../archive/completed/fitness-two-threshold-model.plan.md) | Adjacent: Evolve fitness functions to target/limit two-threshold model with mandatory char and line-length limits | COMPLETED |
 
 Strategic context: [roadmap.md](../roadmap.md)
+Archived context: [../archive/completed/](../archive/completed/)
 
 In-progress execution: [active/README.md](../active/README.md)
 Documentation tracking for all phases:

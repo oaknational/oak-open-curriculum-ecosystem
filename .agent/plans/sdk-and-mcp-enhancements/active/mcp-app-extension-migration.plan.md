@@ -133,9 +133,9 @@ its execution lives inside the WS3 child plan.
 
 WS3 delivery and closure must stay aligned with:
 
-1. `../current/auth-safety-correction.plan.md` for deny-by-default auth
+1. `../archive/completed/auth-safety-correction.plan.md` for deny-by-default auth
    invariants when tool metadata is absent/empty/malformed
-2. `../current/auth-boundary-type-safety.plan.md` for auth boundary typing and
+2. `../archive/completed/auth-boundary-type-safety.plan.md` for auth boundary typing and
    fail-fast validation at runtime boundaries
 
 These follow-on plans are not part of WS3 implementation scope, but they are
@@ -170,7 +170,9 @@ WS3 child plan: fresh React MCP App rebuild ▶ active
   Phase 1: delete legacy widget framework    ✓ complete
   Phase 2: scaffold fresh MCP App infra      ✓ complete
   Phase 3: canonical contracts + runtime     ✓ complete
-  Design-token prerequisite                  ⏳ current
+  Design-token prerequisite                  ✓ complete
+  OakUrl codegen fix                         ⏳ current
+  Contrast validation prerequisite           ⏳ current
   Phase 4: curriculum-model view             ⏳ pending
   Phase 5: user-search view                  ⏳ pending
   Phase 6: docs + review + commit            ⏳ pending
@@ -186,8 +188,8 @@ This umbrella plan is complete when:
 3. `ws4-search-ui` can be marked completed
 4. C8 auth hardening closure gates are complete (or explicitly superseded by
    accepted architecture):
-   - `../current/auth-safety-correction.plan.md`
-   - `../current/auth-boundary-type-safety.plan.md`
+   - `../archive/completed/auth-safety-correction.plan.md`
+   - `../archive/completed/auth-boundary-type-safety.plan.md`
 5. No active product path depends on banned legacy widget code or guidance
 6. All quality gates pass
 

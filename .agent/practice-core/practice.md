@@ -71,27 +71,16 @@ Practice consists of.
 
 ### Tooling
 
-Platform-specific implementations follow a canonical-first model: skills,
-commands, rule policies, and any installed sub-agent templates all live in
-`.agent/` (platform-agnostic). Thin platform adapters in `.cursor/`,
-`.claude/`, `.gemini/`, `.github/`, `.agents/`, and `.codex/` reference
-canonical content without duplicating it. In Codex, `.agents/skills/` carries
-portable skills and command-shaped workflows only; `.codex/` carries
-project-level metadata and, when installed, reviewer/domain-expert agent
-configuration. Entry-point files (`AGENT.md`, `CLAUDE.md`, `AGENTS.md`,
-`GEMINI.md`) direct each platform to the canonical Practice. Rules have two
-layers: authoritative policies in `.agent/directives/principles.md` and
-platform-specific activation triggers (for example Cursor `.cursor/rules/*.mdc`
-or Claude Code `.claude/rules/*.md`). **Hook guardrails** follow the same
-canonical-first pattern: policy in `.agent/hooks/`, repo-local runtime in a
-script surface such as `scripts/` or `tools/`, thin native activation in
-platform config. Hooks can enforce blocked shell patterns directly, while
-advisory hook types may remain documented-only when equivalent grounding or
-quality-gate reminders already exist elsewhere in the local Practice. Keep the
-detailed supported and unsupported platform mappings in a local surface matrix such as
-`.agent/reference/cross-platform-agent-surface-matrix.md`; do not infer broad
-parity from the existence of one portable adapter family. This layer defines
-_how_ the Practice is used in a specific environment.
+Platform-specific implementations follow a canonical-first model: substantive
+content lives in `.agent/`; thin adapters in platform directories point back to
+it. In Codex, `.agents/skills/` is the portable skill/command layer and
+`.codex/` holds project-agent config. Entry-point files direct each platform to
+the canonical Practice. Rules and hooks use the same split: canonical policy in
+`.agent/`, thin native activation in platform config, and repo-local runtime
+where needed. Project platform config is tracked infrastructure; local
+overrides are additive. Keep exact supported mappings in a local surface matrix
+and validate authorisation parity as well as wrapper presence. This layer
+defines _how_ the Practice is used in a specific environment.
 
 ## The Knowledge Flow
 
@@ -175,23 +164,24 @@ hadn't surfaced — different work, different mistakes, different discoveries.
 
 ## The Review System
 
-Specialist sub-agents provide targeted review after non-trivial changes. When a
-repo has installed its reviewer layer, the `invoke-code-reviewers` rule
-(canonically `.agent/rules/invoke-code-reviewers.md`) is the authoritative
-source for the roster, invocation matrix, timing tiers, and triage checklist.
-The local `AGENT.md` should either list the installed reviewer/domain-expert
-roles or explicitly say that the agent layer is not yet installed. In Codex,
-reviewer roles should be registered through project-agent support in `.codex/`
-rather than modelled as skills.
+Specialist sub-agents provide targeted review after non-trivial changes. The
+canonical `invoke-code-reviewers` rule owns the roster, triage, timing, and
+depth model. Larger rosters should use a gateway pattern: route by change
+profile, state `focused` vs `deep`, and reintegrate delegated findings before
+completion. `AGENT.md` should list installed roles or say the layer is absent.
+In Codex, reviewer roles belong in `.codex/`, not skills. UI-heavy repos may
+add a browser-facing cluster rather than expecting one generic reviewer to
+cover rendered output and framework structure.
 
 Sub-agent prompts, when installed, follow a three-layer composition architecture: components,
 templates, and wrappers.
 
 ## The Workflow
 
-Work flows through a predictable sequence: commands and skills structure
-the work, plans provide the execution detail, and quality gates validate
-the output.
+Work flows through a predictable sequence: commands and skills structure the
+work, plans provide the execution detail, and quality gates validate the
+output. Keep ordinary continuity and deep convergence separate: handoff keeps
+resumptions cheap; consolidation owns graduation and Practice evolution.
 
 ```mermaid
 graph LR
@@ -210,24 +200,25 @@ graph LR
   (start-right-quick, start-right-thorough, go) and passive capabilities (napkin,
   patterns, etc.). Platform adapters in `.cursor/skills/`,
   `.agents/skills/`, etc. are thin wrappers pointing to the canonical skills
-- **Prompts** (`.agent/prompts/`) — domain-specific handover playbooks that provide session
-  context and pointers to active execution plans. These are intentionally stateful (carrying
-  current plan references and domain context) unlike generic session-entry skills
+- **Prompts** (`.agent/prompts/`) — stateful handover playbooks carrying live continuity
+  contracts and pointers to active execution plans
+  Where `session-handoff` is installed, keep the live continuity contract in a
+  stateful prompt surface (canonically `.agent/prompts/session-continuation.prompt.md`
+  if the repo uses prompts). It stays operational-only and carries these
+  fields: Workstream, Active plans, Current state, Current objective, Hard
+  invariants / non-goals, Recent surprises / corrections, Open questions /
+  low-confidence areas, Next safe step, and Deep consolidation status
 - **Plans** (`.agent/plans/`) — executable work plans forming a nested hierarchy from
   strategic overview down to hands-on implementation tasks:
-  1. **Strategic index** — `high-level-plan.md` cross-collection overview
-  2. **Collection roadmaps** — e.g. `semantic-search/roadmap.md` milestone sequence
-  3. **Active execution plans** — e.g. `semantic-search/active/<plan-name>.md` with YAML
-     frontmatter, phased execution, and deterministic validation. Mature repos keep one primary
-     active plan in `active/`; completed plans usually stage in `current/complete/` before archive
-  4. **Paused or parked workstreams** — mature repos may use `current/paused/` for incomplete
-     but non-primary work that is expected to resume. A repo may also temporarily keep
-     non-primary plans physically in `active/` when explicitly directed, but they must be
-     labelled as parked-in-place context rather than companions
-  5. **Platform-specific plans** — e.g. `.cursor/plans/*.plan.md` (Cursor plans) supplement
-     the lowest-level active plans with session-scoped implementation tasks, batch breakdowns,
-     and review checkpoints. These are created per-session and track fine-grained progress
-     that is too ephemeral for the active plan itself
+  1. **Strategic index** — cross-collection overview
+  2. **Collection roadmaps** — milestone sequence
+  3. **Active execution plans** — YAML frontmatter, phased execution, and deterministic
+     validation. Mature repos keep one primary active plan; completed plans usually stage before
+     archive
+  4. **Paused or parked workstreams** — incomplete but non-primary work expected to resume.
+     Parked-in-place context must be labelled explicitly rather than implied
+  5. **Platform-specific plans** — session-scoped implementation tasks and review checkpoints
+     that are too ephemeral for the active plan itself
   6. **Value traceability** — every non-trivial plan states the outcome sought, the impact it
      should create, and the mechanism by which that impact creates value; otherwise the work is
      still under-framed

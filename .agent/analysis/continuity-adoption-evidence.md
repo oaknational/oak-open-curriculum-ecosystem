@@ -1,18 +1,23 @@
 # Continuity Adoption Evidence
 
+**Closed**: 2026-04-03
 **Opened**: 2026-04-02
 **Purpose**: Live evidence log for continuity/session-handoff adoption in the
 MCP App lane
 
 ## Evidence Window
 
-Record evidence until all three conditions are satisfied:
+Record evidence until either all three conditions are satisfied, or an
+explicit `promote` / `adjust` / `reject` decision closes the window early with
+recorded rationale:
 
 1. 5 real MCP App resumptions after rollout
 2. 3 `GO`-driven execution sessions
 3. 2 deep consolidations after rollout
 
-The window closes only after the last unmet condition is satisfied.
+The window closed on 2026-04-03 with an explicit `promote` call after the
+lightweight handoff, `GO`, and deep-consolidation evidence all proved stable
+enough to teach.
 
 ## Rollout Record
 
@@ -44,12 +49,12 @@ The window closes only after the last unmet condition is satisfied.
 | 2026-04-02 | WS3 Phase 3/security closure batch complete; merge plan still in `active/`; continuation prompt still carried a deferred consolidation decision | yes | Promoted wire-format-aware redaction into permanent docs/patterns, archived the merge-main plan, and reset the prompt so token delivery is the next safe step |
 
 **Checkpoint (2026-04-02):** Deep-consolidation quota is satisfied (2/2) and
-the `GO`-session quota is now satisfied (3/3). The evidence window remains
-open because resumptions are still below threshold.
+the `GO`-session quota is now satisfied (3/3). The resumption quota remained
+below target, but the pattern was already directionally stable.
 
 ## Promotion Decision
 
-Status: pending
+Status: promote
 
 Allowed outcomes:
 
@@ -57,4 +62,10 @@ Allowed outcomes:
 - `adjust`
 - `reject`
 
-Decision rationale will be recorded here once the evidence window closes.
+Decision rationale:
+
+- 2026-04-03: user called promotion explicitly after review. The split-loop
+  model had already proved the important behavioural change: ordinary
+  handoff became lightweight enough to use, `GO` stayed a complementary
+  mid-session cadence, and `jc-consolidate-docs` still fired at the right
+  depth when convergence was genuinely due.

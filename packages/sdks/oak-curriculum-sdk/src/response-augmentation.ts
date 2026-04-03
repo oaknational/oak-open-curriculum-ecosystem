@@ -165,14 +165,19 @@ function extractIdFromPath(path: string): string | undefined {
   return extractEntityIdFromPath(path, contentType);
 }
 
-export type OakUrlAugmentable = Readonly<Record<string, unknown>>;
-
-/** Augments an array response with Oak URL on each item */
-export function augmentArrayResponseWithOakUrl<TItem extends OakUrlAugmentable>(
-  response: TItem[],
+/**
+ * Augments an array response with Oak URL on each item.
+ *
+ * Returns `unknown` because the result flows to `JSON.stringify` at
+ * the middleware boundary — there is no typed downstream consumer.
+ * Uses `Object.assign` to avoid the TypeScript 20-member union
+ * spread limit (TS2698).
+ */
+export function augmentArrayResponseWithOakUrl(
+  response: readonly unknown[],
   path: string,
   method: HttpMethod,
-): (TItem & { oakUrl?: string | null })[] {
+): unknown {
   if (method !== 'get') {
     return response;
   }
@@ -181,16 +186,23 @@ export function augmentArrayResponseWithOakUrl<TItem extends OakUrlAugmentable>(
     return response;
   }
   return response.map((item) => {
-    return { ...item, ...extractOakUrlFields(item, path, contentType) };
+    return Object.assign({}, item, extractOakUrlFields(item, path, contentType));
   });
 }
 
-/** Augments a single object response with Oak URL */
-export function augmentResponseWithOakUrl<T extends OakUrlAugmentable>(
-  response: T,
+/**
+ * Augments a single object response with Oak URL.
+ *
+ * Returns `unknown` because the result flows to `JSON.stringify` at
+ * the middleware boundary — there is no typed downstream consumer.
+ * Uses `Object.assign` to avoid the TypeScript 20-member union
+ * spread limit (TS2698).
+ */
+export function augmentResponseWithOakUrl(
+  response: unknown,
   path: string,
   method: HttpMethod,
-): T & { oakUrl?: string | null } {
+): unknown {
   if (method !== 'get') {
     return response;
   }
@@ -198,7 +210,7 @@ export function augmentResponseWithOakUrl<T extends OakUrlAugmentable>(
   if (!contentType) {
     return response;
   }
-  return { ...response, ...extractOakUrlFields(response, path, contentType) };
+  return Object.assign({}, response, extractOakUrlFields(response, path, contentType));
 }
 
 /**

@@ -87,6 +87,10 @@ practice.md:
     repo: oak-open-curriculum-ecosystem
     date: 2026-04-02
     purpose: 'Practice integration: adopted 9th quality gate (accessibility audit) from incoming opal-connection-site Core proposals'
+  - index: 20
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: 'Practice promotion: adopted continuity split-loop doctrine and project-platform-config-as-infrastructure into the portable Core, plus browser-facing reviewer-cluster guidance'
 
 practice-lineage.md:
   - index: 0
@@ -169,6 +173,10 @@ practice-lineage.md:
     repo: oak-open-curriculum-ecosystem
     date: 2026-04-02
     purpose: 'Practice integration: adopted browser proof surfaces, UI reviewer vocabulary, two-way merge methodology, descriptive fitness wording, portable ADR reference from incoming Core proposals'
+  - index: 20
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: 'Practice promotion: adopted continuity split-loop doctrine and project-platform-config-as-infrastructure into the portable Core, plus browser-facing reviewer-cluster guidance'
 
 practice-bootstrap.md:
   - index: 0
@@ -251,3 +259,7 @@ practice-bootstrap.md:
     repo: oak-open-curriculum-ecosystem
     date: 2026-04-02
     purpose: 'Practice integration: adopted richer pattern schema (use_this_when, barrier), UI reviewer roster guidance from incoming Core proposals'
+  - index: 20
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: 'Practice promotion: adopted continuity split-loop doctrine and project-platform-config-as-infrastructure into the portable Core, plus browser-facing reviewer-cluster guidance'

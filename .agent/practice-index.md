@@ -52,7 +52,7 @@ Hook support:
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | Canonical hook policy         | [`.agent/hooks/policy.json`](hooks/policy.json)                                                               | Source of truth                                                                                                         |
 | Hook explainer                | [`.agent/hooks/README.md`](hooks/README.md)                                                                   | Human-readable scope and porting notes                                                                                  |
-| Native Claude activation      | [`.claude/settings.json`](../.claude/settings.json)                                                           | Optional machine-local gitignored Claude Code file; when present, it wires `PreToolUse` and clean clones/CI may omit it |
+| Native Claude activation      | [`.claude/settings.json`](../.claude/settings.json)                                                           | Tracked Claude Code project settings; wires `PreToolUse` on fresh checkout, with additive local overrides in `.claude/settings.local.json` |
 | Cross-platform support matrix | [`.agent/reference/cross-platform-agent-surface-matrix.md`](reference/cross-platform-agent-surface-matrix.md) | Records supported vs unsupported surfaces                                                                               |
 
 ## Architectural Decisions

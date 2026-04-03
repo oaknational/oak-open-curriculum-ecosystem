@@ -1,3 +1,48 @@
+## Session 2026-04-03 — OakUrlAugmentable codegen fix research and plan
+
+### What Was Done
+
+- Researched the OakUrlAugmentable widening violation: `Readonly<Record<string, unknown>>`
+  in response-augmentation.ts destroys the type information that the codegen
+  already generates exhaustively.
+- Generated `GetResponseBody` (union of all GET 200 response body types) and
+  `ValidGetPath` in the codegen path-generators.ts, using TDD (RED/GREEN in
+  path-generators.unit.test.ts).
+- Exported from `api-schema.ts` barrel.
+- Discovered three build issues: (1) GetResponseBody includes array types which
+  can't be spread, (2) middleware type guard is dishonest, (3) test fixtures
+  use ad-hoc untyped objects.
+- Key discovery: openapi-fetch middleware provides `schemaPath: string` in the
+  callback context — the OpenAPI template path. This enables honest validation
+  using `isResponseJsonBody200(schemaPath, 'get', body)`.
+- Explored the full type predicate infrastructure: 34 generated type predicates
+  following the constant → type → predicate pattern.
+- Wrote remediation plan at
+  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`.
+- Plan includes ADR-152 (Constant-Type-Predicate Pattern) for discoverability.
+
+### Patterns to Remember
+
+- `unknown` is not permitted except at incoming external boundaries. It is the
+  destruction of hard-won understanding. The generated type system is exhaustive;
+  using `unknown` internally throws away that information.
+- The constant → type → type predicate pattern is THE canonical pattern in this
+  codebase (34 instances). It needs an ADR to name it, explain it, and make it
+  discoverable.
+- openapi-fetch middleware context includes `schemaPath` — use it for honest
+  type narrowing at the middleware boundary.
+- When `GetResponseBody` includes both object and array types, separate with
+  `Exclude<..., readonly unknown[]>` for spread safety.
+
+### Mistakes Made
+
+- Initially proposed adding a "boundary-safe" augmentation function — user
+  corrected: the existing infrastructure already has everything needed. Look
+  harder before proposing new plumbing.
+- Initially used `GetResponseBody` as the middleware type guard's target type
+  without checking if the runtime check actually proved it. A type guard that
+  checks `typeof === 'object'` but claims `value is GetResponseBody` is a lie.
+
 ## Session 2026-04-03 — consolidate-docs gate-surface sweep
 
 ### What Was Done
@@ -172,6 +217,30 @@
   becomes the reading surface.
 - Updated the local `novel/README.md` guide so it now lists the new clean
   copy alongside the earlier protocol reports.
+
+## Session 2026-04-03 — consolidation archival sweep
+
+### What Was Done
+
+- Archived the completed continuity-adoption plan and the completed WS3
+  design-token prerequisite, then propagated the new archive paths through
+  live READMEs, roadmaps, active plans, the continuity governance doc, the
+  completed-plans index, and the session-continuation prompt.
+- Promoted the OakUrl codegen-fix and contrast-validation plans into the
+  SDK/MCP collection hubs so they are now discoverable from the README,
+  roadmap, current index, and prompt instead of being trapped in prompt-only
+  continuity state.
+- Swept a second stale-link class the reviewers caught: several active WS3
+  plans still pointed at auth closure plans in `current/` even though those
+  plans had already been archived.
+
+### Patterns to Remember
+
+- Clean-break archival needs a body-text sweep, not just hub indexes. The
+  stale references that matter most often live inside active phase plans and
+  closure criteria, not only in README tables.
+- Plan discoverability is a three-surface contract in this repo: README,
+  roadmap, and session prompt all need the same current execution truth.
 
 ### Patterns to Remember
 

@@ -32,20 +32,8 @@ export function evaluateHookPolicySpineCoherence(repoRoot: string): HealthCheckR
       label: 'Hook Policy Spine coherence',
       status: 'fail',
       summary:
-        'The canonical hook policy, local activation, and surface matrix are not fully aligned.',
+        'The canonical hook policy, tracked activation, and surface matrix are not fully aligned.',
       details: failureDetails,
-    };
-  }
-
-  const warningDetails = collectHookPolicyWarningDetails(hookInputs);
-  if (warningDetails.length > 0) {
-    return {
-      key: 'hook-policy-spine',
-      label: 'Hook Policy Spine coherence',
-      status: 'warn',
-      summary:
-        'Canonical hook policy is supported, but the local Claude activation file is absent.',
-      details: warningDetails,
     };
   }
 
@@ -54,7 +42,7 @@ export function evaluateHookPolicySpineCoherence(repoRoot: string): HealthCheckR
     label: 'Hook Policy Spine coherence',
     status: 'pass',
     summary:
-      'Canonical policy, local activation, and the support matrix agree on hook authority and activation order.',
+      'Canonical policy, tracked activation, and the support matrix agree on hook authority and activation order.',
     details: [],
   };
 }
@@ -117,6 +105,12 @@ function collectHookPolicyFailureDetails(inputs: {
 }): string[] {
   const details: string[] = [];
 
+  if (inputs.claudeSupportStatus === 'supported' && !inputs.claudeSettingsExists) {
+    details.push(
+      `${HOOK_POLICY_PATH} marks Claude Code as supported, but tracked project ${CLAUDE_SETTINGS_PATH} is missing.`,
+    );
+  }
+
   if (
     inputs.claudeSupportStatus === 'supported' &&
     inputs.claudeSettingsExists &&
@@ -134,20 +128,6 @@ function collectHookPolicyFailureDetails(inputs: {
   }
 
   return [...details, ...collectSurfaceMatrixDetails(inputs.surfaceMatrixText)];
-}
-
-function collectHookPolicyWarningDetails(inputs: {
-  readonly claudeSupportStatus: string | null;
-  readonly claudeSettingsExists: boolean;
-}): string[] {
-  if (inputs.claudeSupportStatus !== 'supported' || inputs.claudeSettingsExists) {
-    return [];
-  }
-
-  return [
-    `${HOOK_POLICY_PATH} marks Claude Code as supported.`,
-    `${CLAUDE_SETTINGS_PATH} is not present in this working copy, so no machine-local activation can run here.`,
-  ];
 }
 
 function collectSurfaceMatrixDetails(surfaceMatrixText: string | null): string[] {

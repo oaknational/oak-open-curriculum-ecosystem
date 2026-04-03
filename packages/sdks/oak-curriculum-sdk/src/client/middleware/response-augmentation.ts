@@ -3,7 +3,8 @@ import {
   augmentResponseWithOakUrl,
   augmentArrayResponseWithOakUrl,
 } from '../../response-augmentation.js';
-import type { OakUrlAugmentable } from '../../response-augmentation.js';
+import { isValidPath } from '@oaknational/sdk-codegen/api-schema';
+import { isResponseJsonBody200 } from '../../validation/curriculum-response-validators.js';
 import type { Logger } from '@oaknational/logger';
 
 interface MiddlewareOptions {
@@ -26,13 +27,21 @@ interface MiddlewareOptions {
 export function createResponseAugmentationMiddleware(options: MiddlewareOptions): Middleware {
   const log = options.logger;
   return {
-    async onResponse({ request, response }) {
+    async onResponse({ request, response, schemaPath }) {
       if (!shouldAugmentResponse(request, response)) {
+        return response;
+      }
+
+      if (!isValidPath(schemaPath)) {
         return response;
       }
 
       const body = await safeParseJson(response.clone());
       if (body === undefined) {
+        return response;
+      }
+
+      if (!isResponseJsonBody200(schemaPath, 'get', body)) {
         return response;
       }
 
@@ -68,10 +77,6 @@ async function safeParseJson(response: Response): Promise<unknown> {
   }
 }
 
-function isAugmentableObject(body: unknown): body is OakUrlAugmentable {
-  return typeof body === 'object' && body !== null && !Array.isArray(body);
-}
-
 function extractApiPath(url: string): string {
   const parsed = new URL(url);
   return parsed.pathname.replace(/^\/api\/v\d+/, '');
@@ -91,7 +96,7 @@ function augmentBody(body: unknown, path: string, log: Logger): unknown {
     if (Array.isArray(body)) {
       return augmentArrayResponseWithOakUrl(body, path, 'get');
     }
-    if (isAugmentableObject(body)) {
+    if (typeof body === 'object' && body !== null) {
       return augmentResponseWithOakUrl(body, path, 'get');
     }
     return undefined;
