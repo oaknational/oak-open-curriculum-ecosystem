@@ -1,7 +1,11 @@
 # Reviewer Gateway Upgrade — Strategic Plan
 
-**Status**: NOT STARTED
+**Status**: QUEUED
 **Domain**: Agentic Engineering Enhancements
+
+**Promotion note**: Promoted from `future/` to `current/` on 2026-04-03 after
+the external-agent research bundle reinforced the need for layered triage,
+review-depth selection, and coverage tracking.
 
 ## Problem and Intent
 
@@ -225,11 +229,10 @@ This plan does NOT create new files from scratch — it upgrades existing ones:
 - The depth selection integration depends on WS6 (review depth dimension)
   being designed first
 
-## Promotion Trigger
+## Next Promotion Trigger
 
-This plan promotes to `current/` when:
+Promote this plan into explicit active execution when:
 
-1. The Agent Classification Taxonomy plan is promoted to `current/` (they
-   share execution mechanics)
-2. OR: the specialist roster reaches a size where the current flat triage
-   model is demonstrably insufficient (arguably already the case)
+1. the taxonomy rename mechanics are ready to coordinate with it, or
+2. the current flat checklist causes repeated coverage misses or review-noise
+   churn in live sessions

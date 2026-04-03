@@ -1,6 +1,6 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption 🔄 active; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption 🔄 active; reviewer gateway ⏭️ queued; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
 **Last Updated**: 2026-03-31
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
@@ -108,7 +108,7 @@ Adjacent:
   PLN:  Planning specialist capability               📋 PLANNED
   TDD:  TDD specialist capability                    📋 PLANNED
   DVX:  Developer experience specialist              📋 PLANNED
-  GW:   Reviewer gateway upgrade                     📋 PLANNED
+  GW:   Reviewer gateway upgrade                     ⏭️ QUEUED
   AGN:  Manifest-driven adapter generation           📋 PLANNED
   ACT:  Agent classification taxonomy                📋 STRATEGIC
   OPS:  Specialist operational tooling layer         📋 STRATEGIC (ADR-137)
@@ -474,7 +474,7 @@ Adjacent:
 ### Adjacent — Reviewer Gateway Upgrade (GW)
 
 - Strategic plan:
-  [reviewer-gateway-upgrade.plan.md](future/reviewer-gateway-upgrade.plan.md)
+  [reviewer-gateway-upgrade.plan.md](current/reviewer-gateway-upgrade.plan.md)
 - Goal:
   - upgrade `code-reviewer` from a code quality reviewer that also triages
     to a Reviewer Gateway that also does baseline code quality
@@ -484,7 +484,7 @@ Adjacent:
   - integrate review depth selection (deep vs focused per specialist)
   - add review coverage tracking across a session
   - rename directive, rule, and adapters (coordinated with taxonomy plan)
-- Status: 📋 PLANNED (future/)
+- Status: ⏭️ QUEUED (current/)
 - Notes:
   - the gateway's role has outgrown its `code-reviewer` name
   - execution shares rename mechanics with the Agent Classification Taxonomy

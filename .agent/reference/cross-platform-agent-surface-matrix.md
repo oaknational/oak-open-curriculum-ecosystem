@@ -31,6 +31,23 @@ Status by platform:
 - **GitHub Copilot**: no native agent hook surface at time of writing
 - **Codex**: no native agent hook surface at time of writing
 
+## Policy Spine
+
+This repo's hook and adapter surfaces follow a small Policy Spine:
+
+| Layer | Role | Can It Override Higher Layers? |
+| --- | --- | --- |
+| Canonical policy (`.agent/`) | Declares intended behaviour and support | No |
+| Native activation (`.claude/settings.json` when present) | Activates supported policy on the local machine | No |
+| Repo-local runtime (`scripts/check-blocked-patterns.mjs`) | Enforces the active native hook path | No |
+| Explanatory mirrors (this matrix, hook README) | Describe the live state and support contract | No |
+
+Failure semantics:
+
+- `override` — a higher-authority canonical layer wins over a lower mirror or activation hint
+- `prune` — a missing native surface removes a local activation path without changing canonical intent
+- `block` — validators or runtime enforcement reject an unsafe or incoherent state
+
 ## Entry Points
 
 | Platform           | Entry File                                     |

@@ -1,6 +1,11 @@
 ## Delegation Triggers
 
-Invoke this agent after any code is written or modified. The code-reviewer is the always-on gateway reviewer: it reviews every change for quality, correctness, and maintainability, and it is responsible for identifying which specialist reviewers (security, type, test, architecture) also need to be called. If in doubt, invoke it — the cost of an unnecessary review is lower than the cost of a missed defect.
+Invoke this agent after any code is written or modified. `code-reviewer`
+remains the current gateway reviewer: it reviews every change for quality,
+correctness, and maintainability, and it is responsible for identifying which
+specialist reviewers also need to be called, at what depth, and whether
+coverage is complete. If in doubt, invoke it — the cost of an unnecessary
+review is lower than the cost of a missed defect.
 
 ### Triggering Scenarios
 
@@ -256,6 +261,17 @@ In every review, check whether the changes touch any of these categories. If the
 | Release boundary or go/no-go context | `release-readiness-reviewer` (on-demand) |
 
 Include a brief "Specialist coverage" section in your output noting which specialists are relevant and whether they were invoked.
+
+Also include:
+
+- the recommended review depth for each relevant specialist: `focused` or
+  `deep`
+- whether review coverage is complete for the change profile
+- whether any delegated finding still needs reintegration into the parent lane
+
+When you recommend or request a specialist follow-up, pass a compact delegation
+snapshot: goal, owned surface, non-goals, required evidence, acceptance
+signal, reintegration owner, and stop/escalate rule.
 
 ## Success Metrics
 

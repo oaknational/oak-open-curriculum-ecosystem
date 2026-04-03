@@ -30,6 +30,10 @@ Claude Code currently has native \`PreToolUse\` activation for Bash
 commands via the machine-local gitignored \`.claude/settings.json\`,
 backed by the canonical policy in \`.agent/hooks/policy.json\` and the
 repo-local runtime script \`scripts/check-blocked-patterns.mjs\`.
+
+## Policy Spine
+
+override | prune | block
 `;
 
 describe('isClaudeHookWired', () => {
@@ -106,6 +110,14 @@ describe('surfaceMatrixDescribesClaudeHook', () => {
           '(machine-local, gitignored `PreToolUse`)',
           '(`PreToolUse`)',
         ),
+      ),
+    ).toBe(false);
+  });
+
+  it('requires Policy Spine semantics to be documented as well', () => {
+    expect(
+      surfaceMatrixDescribesClaudeHook(
+        documentedSurfaceMatrix.replace('override | prune | block', 'override | prune'),
       ),
     ).toBe(false);
   });

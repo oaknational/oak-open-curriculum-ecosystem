@@ -18,6 +18,28 @@ and thin native activation lives in platform config.
 - `preCommit` — documented policy only; quality-gate reminders already
   live in the workflow and review surfaces
 
+## Policy Spine
+
+The hook layer follows a small Policy Spine. The layers are not peers.
+
+1. **Canonical policy** — `.agent/hooks/policy.json`
+   This is the authority for what the repo intends to allow, block, or
+   describe.
+2. **Native activation** — platform config such as `.claude/settings.json`
+   This may activate only supported canonical policy. It does not redefine the
+   policy.
+3. **Repo-local runtime** — `scripts/check-blocked-patterns.mjs`
+   The runtime enforces the active policy for the supported native surface.
+4. **Explanatory mirrors** — this README and the cross-platform surface matrix
+   These must describe the live arrangement, but they never override it.
+
+Failure semantics:
+
+- `override` — a higher-authority canonical layer wins
+- `prune` — a missing native surface removes a local activation path without
+  changing canonical intent
+- `block` — the runtime or validator rejects an unsafe or incoherent state
+
 ## Platform Support
 
 Claude Code currently has thin native activation wired for

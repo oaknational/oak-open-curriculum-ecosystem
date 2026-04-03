@@ -25,7 +25,7 @@ Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact
 | `.agent/prompts/*.md` | Reusable prompt playbooks |
 | `.agent/memory/patterns/` | Known solutions to recurring design problems ([README](../memory/patterns/README.md)) |
 | `.agent/plans/` | Implementation plans, execution tracking |
-| `agent-tools/` | Repo-root TypeScript CLI workspace for agent operational tooling (`claude-agent-ops`, `cursor-session-from-claude-session`) |
+| `agent-tools/` | Repo-root TypeScript CLI workspace for agent operational tooling (`claude-agent-ops`, `cursor-session-from-claude-session`, `codex-reviewer-resolve`) |
 
 ## Platform Adapters (Layer 2)
 

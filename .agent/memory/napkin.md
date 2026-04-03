@@ -32,3 +32,37 @@
   "platform-config-is-infrastructure" was extracted.
 - Follow-up still needed: extend portability validator to check skill
   permission entries (validator gap, not doctrine gap).
+
+## Session 2026-04-03 — research shortlist implementation
+
+### What Was Done
+
+- Implemented the external-concept promotion pack in the
+  `agentic-engineering-enhancements` evidence template and added a
+  pilot evidence bundle with three research-derived proposals
+  (promotion discipline, delegation snapshot, health probe).
+- Upgraded reviewer/delegation doctrine locally: layered triage,
+  explicit review depth, coverage tracking, delegation snapshot fields,
+  and reintegration wording now live in the directive, rule, gateway
+  template, and `parallel-agents` skill.
+- Named the hook precedence model as a local `Policy Spine` in the hook
+  README and cross-platform surface matrix, then tightened the
+  portability helper test to require that terminology plus
+  `override/prune/block` semantics.
+- Added `claude-agent-ops health`, implemented as a summary-first
+  agent-infrastructure probe with deterministic checks for command
+  adapters, reviewer adapters/registrations, hook-policy coherence,
+  practice-box state, and continuity-prompt freshness.
+- Extended takeover bundles with an explicit reintegration contract and
+  documented the new health surface across `AGENT.md`, `AGENTS.md`,
+  `CLAUDE.md`, `.agent/README.md`, the artefact inventory, repo
+  README, and `agent-tools/README.md`.
+- Verification passed: `pnpm --filter @oaknational/agent-tools lint`,
+  `pnpm --filter @oaknational/agent-tools build`,
+  `pnpm --filter @oaknational/agent-tools test`, and
+  `pnpm test:root-scripts`.
+- Live health result is intentionally `WARN`, not `PASS`: the new probe
+  found a real continuity drift where
+  `.agent/prompts/session-continuation.prompt.md` still says the
+  practice box has 18 incoming items while
+  `.agent/practice-core/incoming/` currently has 0.

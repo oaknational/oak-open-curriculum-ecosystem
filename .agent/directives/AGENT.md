@@ -78,11 +78,11 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 ### Agent Tools
 
-CLI tools for managing agent workflows live in [`agent-tools/`](../../agent-tools/README.md). Use the root scripts (for example `pnpm agent-tools:claude-agent-ops status`) to run them.
+CLI tools for managing agent workflows live in [`agent-tools/`](../../agent-tools/README.md). Use the root scripts (for example `pnpm agent-tools:claude-agent-ops status` or `pnpm agent-tools:claude-agent-ops health`) to run them.
 
 Canonical commands:
 
-- `pnpm agent-tools:claude-agent-ops <status|worktrees|log|diff|commit-ready|preflight|cleanup>`
+- `pnpm agent-tools:claude-agent-ops <status|health|worktrees|log|diff|commit-ready|preflight|cleanup>`
 - `pnpm agent-tools:cursor-session-from-claude-session <find|inspect|takeover>`
 - `pnpm agent-tools:codex-reviewer-resolve <agent-name> [--json]`
 

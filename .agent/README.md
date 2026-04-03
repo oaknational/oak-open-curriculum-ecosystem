@@ -108,8 +108,10 @@ docs, READMEs) via the consolidation workflow.
 | `archive/` | Historical prompts and context snapshots |
 
 Agent tooling CLIs also live at [`../agent-tools/`](../agent-tools/README.md)
-at the repo root (`claude-agent-ops`, `cursor-session-from-claude-session`).
-Ephemeral directories like `tmp/` are gitignored and not listed.
+at the repo root (`claude-agent-ops`, `cursor-session-from-claude-session`,
+`codex-reviewer-resolve`). `claude-agent-ops health` is the summary-first
+probe for agent-infrastructure drift. Ephemeral directories like `tmp/` are
+gitignored and not listed.
 
 ## Entry point and reading order
 

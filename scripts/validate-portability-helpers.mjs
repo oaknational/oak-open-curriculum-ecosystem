@@ -64,11 +64,16 @@ export function surfaceMatrixDescribesClaudeHook(surfaceMatrix) {
     /\|\s*\*\*Hooks\*\*\s*\|[^\n]*unsupported[^\n]*\.claude\/settings\.json[^\n]*(?:machine-local[^\n]*gitignored|gitignored[^\n]*machine-local)[^\n]*PreToolUse/iu.test(
       surfaceMatrix,
     );
+  const policySpineSemanticsMatch = /\boverride\b[\s\S]*\bprune\b[\s\S]*\bblock\b/u.test(
+    surfaceMatrix,
+  );
 
   return (
     hookRowMatches &&
     surfaceMatrix.includes('.agent/hooks/policy.json') &&
-    surfaceMatrix.includes('scripts/check-blocked-patterns.mjs')
+    surfaceMatrix.includes('scripts/check-blocked-patterns.mjs') &&
+    surfaceMatrix.includes('Policy Spine') &&
+    policySpineSemanticsMatch
   );
 }
 
