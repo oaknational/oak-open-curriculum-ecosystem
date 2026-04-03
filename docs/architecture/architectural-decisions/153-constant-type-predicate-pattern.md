@@ -3,14 +3,17 @@
 **Status**: Accepted
 **Date**: 2026-04-03
 **Related**: [ADR-031](031-generation-time-extraction.md),
-[ADR-034](034-system-boundaries-and-type-assertions.md),
+[ADR-034](034-system-boundaries-and-type-assertions.md) (boundary model;
+superseded by ADR-038 on the assertion question),
 [ADR-038](038-compilation-time-revolution.md)
 
 ## Context
 
 The generated code in this repository uses a recurring four-step pattern
 for bridging compile-time type safety with runtime validation. The pattern
-appears 37+ times across the generated type infrastructure and is the
+appears 30+ times across the generated type infrastructure files
+(`path-parameters.ts`, `response-map.ts`, `scopes.ts`,
+`subject-hierarchy.ts`, `index-documents.ts`) and is the
 primary mechanism by which the Cardinal Rule ("types flow from schema")
 is satisfied at runtime boundaries.
 
@@ -41,10 +44,19 @@ four steps:
 4. **Optional `satisfies`** — when the constant needs to prove it
    implements an interface without losing literal types.
 
+The predicate's parameter type should be `unknown` at external
+boundaries (forcing the `typeof === 'string'` runtime check) and
+`string` when the caller has already narrowed. Both signatures appear
+in the generated code: `isSearchScope(value: unknown)` at boundaries,
+`isKeyStage(value: string)` in already-validated contexts.
+
 ### The Intermediate Narrowing Trick
 
-TypeScript cannot call `.includes()` directly on a narrowed literal
-tuple. The standard workaround is an intermediate assignment:
+`Array.prototype.includes` on a `readonly` literal tuple has the
+signature `includes(searchElement: LiteralUnion)`, so passing an
+arbitrary `string` fails because `string` is not assignable to the
+literal union. The standard workaround is an intermediate assignment
+that widens the element type:
 
 ```typescript
 const SCOPES = ['lessons', 'units', 'sequences'] as const;

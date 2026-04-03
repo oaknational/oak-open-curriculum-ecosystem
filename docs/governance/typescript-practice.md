@@ -29,8 +29,8 @@ split_strategy: 'Extract detailed gotcha collections to a companion gotchas file
 
 ## Our Type Definitions: The Constant-Type-Predicate Pattern
 
-The foundational type pattern in this codebase, used 37+ times in the
-generated code. See [ADR-153](../architecture/architectural-decisions/153-constant-type-predicate-pattern.md)
+The foundational type pattern in this codebase, used 30+ times in the
+generated type infrastructure. See [ADR-153](../architecture/architectural-decisions/153-constant-type-predicate-pattern.md)
 for the full specification, decision tree, and common violations.
 
 1. Define runtime constants with `as const`
