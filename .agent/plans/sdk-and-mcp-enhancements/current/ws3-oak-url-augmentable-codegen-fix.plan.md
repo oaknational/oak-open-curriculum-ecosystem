@@ -35,6 +35,32 @@ todos:
 **Scope**: Replace `OakUrlAugmentable = Readonly<Record<string, unknown>>` with
 schema-derived types; fix middleware validation; write ADR-152.
 
+## What Was Actually Implemented (vs Original Plan)
+
+The original Phase 2–3 plan proposed type-preserving generics
+(`T extends GetObjectResponseBody`, return `T & { oakUrl }`) with spread.
+This was blocked by TypeScript's 20-member union spread limit (TS2698).
+
+The actual implementation took a different, simpler approach:
+
+1. **`JsonBody200` redefined** — from 6-layer `PathOperation` conditional
+   chain to single conditional on direct `Paths[P][M]` indexing. This makes
+   `JsonBody200` spreadable for single literal paths (empirically verified).
+2. **Augmentation functions use `Object.assign` + `unknown` return** — the
+   result flows to `JSON.stringify` at the middleware boundary. No typed
+   downstream consumer exists, so type-preserving spread was compile-time
+   ceremony. `Object.assign({}, response, fields)` avoids TS2698 entirely.
+3. **6 dead types removed** — `Normalize200`, `NormalizedResponsesFor`,
+   `PathReturnTypes`, `ResponsesForPath`, `ResponseForPathAndMethod`,
+   `augmentGetResponseBody`.
+4. **Middleware validation honest** — `isResponseJsonBody200(schemaPath, 'get', body)`
+   with `schemaPath` from openapi-fetch context. Body passed as `unknown`.
+5. **Test fixtures schema-anchored** — `as const satisfies JsonBody200<P, M>`
+   in integration tests. Unit test assertions use `toHaveProperty` path form.
+
+The Phase 2–3 task descriptions below reflect the original plan; refer to
+this section and the committed code for what actually shipped.
+
 ---
 
 ## Context
