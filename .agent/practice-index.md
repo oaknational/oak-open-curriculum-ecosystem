@@ -64,7 +64,7 @@ ADRs referenced by the Practice Core files. The full index is at `docs/architect
 | [ADR-114](../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md) | Layered sub-agent prompt composition architecture                                  |
 | [ADR-117](../docs/architecture/architectural-decisions/117-plan-templates-and-components.md)                     | Plan templates and components                                                      |
 | [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)                      | Agentic engineering practice — naming and conceptual boundary                      |
-| [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md)                        | Practice propagation — seven-file package, self-containment, practice-index bridge |
+| [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md)                        | Practice propagation — eight-file package, self-containment, practice-index bridge |
 | [ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)                        | Agent artefact portability — three-layer model for skills, commands, and rules     |
 | [ADR-150](../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) | Continuity surfaces, session handoff, and surprise pipeline                |
 | [ADR-152](../docs/architecture/architectural-decisions/152-provenance-uuid-migration.md)                        | Provenance UUID migration — `index` → `id` in travelling provenance chains        |

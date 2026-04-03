@@ -190,7 +190,7 @@ context with no natural permanent home.
   `unknown` is only permitted at the literal incoming external
   boundary (HTTP response parse, file read, `process.env`).
   Every internal function accepting `unknown` throws away
-  information the codegen already provides. Pending ADR-152.
+  information the codegen already provides.
 - **Generated infra IS the off-the-shelf library**: before
   proposing new boundary helpers or adapter functions, search
   the generated code. The constant→type→predicate chain

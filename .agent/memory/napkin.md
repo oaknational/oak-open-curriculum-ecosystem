@@ -1,3 +1,42 @@
+## Session 2026-04-03 — Practice transmissibility integration
+
+### What Was Done
+
+- Integrated 8 incoming practice-context files from agent-collaboration
+- Split practice-bootstrap.md into template + practice-verification.md
+  (8th Core file) — verification as a distinct lifecycle phase
+- Migrated provenance.yml from sequential index to UUID v4 id fields
+  (66 entries across 4 chains). Created ADR-152
+- Added minimum operational estate, claimed/installed/activated audit,
+  fresh-checkout acceptance criteria, continuity contract, cross-platform
+  integration order, deliberate-omission protocol, policy spine
+- Added 3 new learned principles, promoted 2 to axiom tier
+- Raised fitness thresholds after the split brought all files under limits
+- Ran 7 specialist reviewers across 2 tiers (4 pre-implementation, 3 post)
+
+### Patterns to Remember
+
+- **Consolidate before integrating**: 8 incoming files expressed ~3 core
+  insights. Integrating them as 3 coherent changes (not 8 overlapping
+  ones) produced cleaner results and avoided duplication
+- **Phase 0 reviewers saved significant rework**: the assumptions-reviewer
+  identified overlap and proportionality issues, the onboarding-reviewer
+  caught positioning problems (MOE too early, forward reference misplaced),
+  and architecture-betty identified the natural split boundary — all before
+  a single line was written
+- **The split decision was about weight, not size**: the user said "it's
+  not just being tidy, it lends proper weight to the verification step."
+  Structural decisions about documentation are product decisions about
+  what matters
+
+### Corrections
+
+- Fixed pre-existing broken cross-reference: practice.md pointed at
+  `#code-pattern-exchange` (renamed to `#pattern-exchange` in the
+  2026-04-02 patterns taxonomy restructure)
+- Fixed stale "Pending ADR-152" in distilled.md (that number is now
+  taken by the provenance UUID migration)
+
 ## Session 2026-04-03 — OakUrlAugmentable codegen fix research and plan
 
 ### What Was Done

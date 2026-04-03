@@ -2,7 +2,7 @@
 
 This directory is optional and outside the Practice Core.
 
-The Core remains the required seven-file package in `.agent/practice-core/`.
+The Core remains the required eight-file package in `.agent/practice-core/`.
 This directory exists to help Practice exchanges travel with a little extra
 context without bloating the Core itself.
 

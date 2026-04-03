@@ -3,7 +3,7 @@
 This directory carries sender-maintained supporting context for Practice
 exchange.
 
-It is not canonical. The canonical portable package remains the seven files
+It is not canonical. The canonical portable package remains the eight files
 in `.agent/practice-core/`.
 
 Use these files to explain:
@@ -17,7 +17,7 @@ If a change is significant enough to enter the practice-core changelog,
 consider whether the changelog alone is too thin and whether a supporting note
 or report here would help a receiving repo.
 
-Keep this directory small. If something is already obvious from the seven-file
+Keep this directory small. If something is already obvious from the eight-file
 Core package, its changelog, or the sender repo's canonical permanent docs, do
 not duplicate it here.
 
