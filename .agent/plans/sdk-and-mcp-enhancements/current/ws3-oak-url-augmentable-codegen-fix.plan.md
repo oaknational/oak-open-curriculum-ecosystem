@@ -10,29 +10,28 @@ todos:
     status: completed
   - id: phase-1-codegen
     content: "Phase 1: Generate GetObjectResponseBody and GetArrayResponseElement types (TDD)."
-    status: in_progress
+    status: completed
   - id: phase-2-middleware
     content: "Phase 2: Honest middleware validation using schemaPath + isResponseJsonBody200."
-    status: pending
+    status: completed
   - id: phase-3-functions
-    content: "Phase 3: Replace OakUrlAugmentable constraint in augmentation functions."
-    status: pending
+    content: "Phase 3: Replace OakUrlAugmentable constraint — Object.assign + unknown return."
+    status: completed
   - id: phase-4-tests
-    content: "Phase 4: Rewrite test fixtures with as const satisfies and generated stubs."
-    status: pending
+    content: "Phase 4: Rewrite test fixtures with as const satisfies and schema-anchored data."
+    status: completed
   - id: phase-5-adr
     content: "Phase 5: Write ADR-152 (Constant-Type-Predicate Pattern) and update discoverability."
     status: pending
   - id: phase-6-validation
     content: "Phase 6: Full quality gates, reviewer cycle, and consolidation."
-    status: pending
+    status: in_progress
 ---
 
 # OakUrlAugmentable Codegen Fix and Type Predicate ADR
 
 **Last Updated**: 2026-04-03
-**Status**: 🟠 IN PROGRESS — Phase 1 codegen done; Phases 2–3 BLOCKED by
-TypeScript spread limitation (see Investigation Record below)
+**Status**: 🟢 PHASES 0–4 COMPLETE — ADR-152 pending, then quality gates
 **Scope**: Replace `OakUrlAugmentable = Readonly<Record<string, unknown>>` with
 schema-derived types; fix middleware validation; write ADR-152.
 

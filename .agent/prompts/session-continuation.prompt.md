@@ -45,21 +45,14 @@ git log --oneline --decorate -10
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md` — COMPLETE
 - **Current state**: WS3 Phase 3 canonical contracts are COMPLETE, including
-  the non-UI host fallback proof. The merge-main plan is archived as COMPLETE
-  at
-  `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md`.
-  Phases 4-6 are still pending. The design-token prerequisite is archived as
-  COMPLETE at
-  `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-design-token-prerequisite.plan.md`
-  (all 6 work slices done, `pnpm check` green, adversarial review cycle
-  passed). The frontend practice plan is archived as COMPLETE, so the
-  specialist agents are available for widget UI work. Continuity adoption is
-  also archived as COMPLETE at
-  `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md`
-  after the 2026-04-03 `promote` decision; the outgoing note and Practice Core
-  promotion both landed. OakUrl remediation is now active as prerequisite 1 of
-  2 before Phase 4: `GetResponseBody`/`ValidGetPath` are generated, but the
-  remaining build fixes are still open.
+  the non-UI host fallback proof. Phases 4-6 are still pending. The
+  OakUrlAugmentable codegen fix (prerequisite 1 of 2) is substantially
+  complete: Phases 0–4 done, `JsonBody200` redefined with direct Paths
+  indexing, augmentation functions use `Object.assign` + honest `unknown`
+  return types, all test fixtures schema-anchored with `as const satisfies`.
+  ADR-152 (Constant-Type-Predicate Pattern) is the remaining deliverable,
+  then quality gates close it. Contrast validation (prerequisite 2) is
+  next.
 - **Current objective**: Complete two ordered prerequisites, then start
   Phase 4. The three pre-Phase-4 gates are COMPLETE:
   1. ✅ Portability validator extended (Check 11: skill permissions)
@@ -72,11 +65,10 @@ git log --oneline --decorate -10
   Two ordered prerequisites remain before Phase 4:
   1. **OakUrlAugmentable codegen fix** — plan at
      `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`.
-     Partial progress: `GetResponseBody`/`ValidGetPath` generated, build errors
-     pending (array spread, middleware guard, test fixtures). Key unlock:
-     `schemaPath` from openapi-fetch middleware context enables honest validation
-     with `isResponseJsonBody200`. Includes ADR-152 (Constant-Type-Predicate
-     Pattern).
+     Phases 0–4 COMPLETE. Key changes: `JsonBody200` redefined with direct
+     `Paths[P][M]` indexing (single conditional, no `PathOperation` chain),
+     6 dead types removed, augmentation uses `Object.assign` + `unknown`
+     return (no spread). Remaining: ADR-152 + quality gates.
   2. **Contrast validation** — plan at
      `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`.
      WCAG contrast ratio validation + fix two blocking token violations.
@@ -104,6 +96,13 @@ git log --oneline --decorate -10
   - User corrected boundary-function proposal: don't create new plumbing.
     The existing constant → type → predicate infrastructure already has
     everything needed. Look harder before proposing new functions.
+  - TypeScript's spread checker cannot evaluate conditional types through
+    `PathOperation` (flattened union). Direct `Paths[P][M]` indexing
+    resolves eagerly. Root cause was in the type definition, not the
+    consumer.
+  - At serialisation boundaries (JSON.stringify), type-preserving spread
+    is ceremony with no runtime benefit. Use `Object.assign` + return
+    `unknown`. This unblocked the entire OakUrl fix.
 - **Open questions / low-confidence areas**:
   - Token set expansion for Phase 4/5: design-system reviewer identified
     gaps (link colours, hover surfaces, result-item tokens, font-size-400)
@@ -114,11 +113,8 @@ git log --oneline --decorate -10
 - **Remaining tracked items** (not blocking Phase 4 directly):
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Next safe step**: Two ordered prerequisites before Phase 4:
-  1. OakUrlAugmentable codegen fix (plan at
-     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`)
-  2. Contrast validation prerequisite (plan at
-     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`)
+- **Next safe step**: Write ADR-152 + run quality gates to close the
+  OakUrl codegen fix, then start contrast validation prerequisite.
 - **Deep consolidation status**: Continuity rollout is closed and promoted.
   The completed continuity and design-token plans are now archived, SDK/MCP
   indexes expose OakUrl plus contrast as the live prerequisites, and this
@@ -142,8 +138,7 @@ Phase 3 (canonical contracts + fallback proof).
 **Current prerequisites** (ordered):
 
 1. `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`
-   — replace `Record<string, unknown>` with schema-derived union + ADR-152.
-   Partial progress: codegen types generated, build errors pending.
+   — Phases 0–4 COMPLETE. ADR-152 + quality gates remaining.
 2. `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
    — WCAG contrast ratio validation + fix two blocking token violations.
    Confirmed by Betty, Fred, and design-system reviewers.
@@ -151,8 +146,8 @@ Phase 3 (canonical contracts + fallback proof).
 **Pending**: Phase 4 (brand banner), Phase 5 (user search), Phase 6
 (docs/gates/review).
 
-**Next action**: Complete OakUrlAugmentable codegen fix, then contrast
-validation, then Phase 4.
+**Next action**: Write ADR-152 + run quality gates to close OakUrl fix,
+then contrast validation, then Phase 4.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

@@ -379,3 +379,42 @@
 - Compacted `EnrichmentTracker` interface and `DEFAULT_CONFIG` to single
   lines to fit under max-lines. User caught this — principles say split
   by responsibility, not compress formatting.
+
+## Session 2026-04-03 — JsonBody200 fix and type-preserving ceremony
+
+### What Was Done
+
+- Redefined `JsonBody200` from 6-layer `PathOperation` conditional chain to
+  single conditional on direct `Paths[P][M]` indexing. Empirically verified
+  with temporary type test file.
+- Removed 6 dead types: `Normalize200`, `NormalizedResponsesFor`,
+  `PathReturnTypes`, `ResponsesForPath`, `ResponseForPathAndMethod`,
+  `augmentGetResponseBody`.
+- Replaced type-preserving spread with `Object.assign` + honest `unknown`
+  return types at the serialisation boundary.
+- Fixed integration test fixtures: schema-anchored with `as const satisfies`,
+  schemaPath threaded, error-containment test uses valid-but-throwing fixture.
+- Addressed all 5 test-reviewer findings.
+- 5 specialist reviewers invoked: type, fred, wilma, code, test.
+
+### Patterns to Remember
+
+- **Type-preserving ceremony**: when a function's output flows to
+  `JSON.stringify`, preserving the source type through spread/generics is
+  ceremony. Use `Object.assign` and return `unknown`. Multiple failed spread
+  attempts are the signal.
+- **Workaround gravity**: when the consumer cannot use the type correctly,
+  the fix is almost always in the producer (the generator template, the type
+  definition). Ask "why is this type opaque?" not "how do I spread an opaque
+  type?"
+- **Direct indexing vs conditional chains**: `Paths[P][M]` resolves eagerly
+  for concrete literals. `PathOperation['path'] extends P ? ...` defers
+  evaluation even for single literals. Choose direct indexing.
+
+### Mistakes Made
+
+- Nearly reintroduced `Record<string, unknown>` as a generic constraint when
+  the commit hook failed. User caught this — workaround gravity pulling back
+  to the very pattern we spent the session removing.
+- Spent 7+ attempts trying to make spread work before asking the right
+  question: "does this function need to spread at all?"
