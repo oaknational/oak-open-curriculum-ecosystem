@@ -183,6 +183,48 @@ A trigger file MUST NOT:
 
 ### Plan Template Contract
 
+### Platform Configuration: Project vs Local Settings
+
+Platform configuration files follow the same tracked/untracked split as
+code. **Project settings** define the agentic system contract and must
+work on fresh checkout. **Local settings** contain user-specific paths
+and overrides.
+
+| Platform    | Project config (tracked) | Local config (gitignored)        |
+| ----------- | ------------------------ | -------------------------------- |
+| Claude Code | `.claude/settings.json`  | `.claude/settings.local.json`    |
+| Cursor      | `.cursor/settings.json`  | `.cursor/settings.local.json`    |
+| Gemini CLI  | `.gemini/settings.json`  | `.gemini/settings.local.json`    |
+| Codex       | `.codex/config.toml`     | (no local equivalent documented) |
+
+**Project settings contain:**
+
+- Skill and command permission allowlists (`Skill(jc-*)` entries)
+- Safety hooks (`PreToolUse` matchers for Bash, Edit, Write)
+- MCP tool allowlists (`mcp__*` entries)
+- Domain fetch permissions (`WebFetch(domain:*)`)
+- Plugin enable/disable state
+- Standard development tool permissions (`git`, `gh`, `npx turbo`)
+
+**Local settings contain:**
+
+- Absolute filesystem paths (`/Users/...`, `/tmp/...`)
+- One-off command permissions accumulated during sessions
+- User-specific MCP server selection
+- Output style preferences
+
+Arrays (permissions, hooks) **concatenate and deduplicate** across
+scopes per Claude Code merge semantics. This means project permissions
+are always active, and users can add their own on top without editing
+tracked files.
+
+**Why this matters:** without tracked project settings, a fresh checkout
+has skills that exist as adapters but cannot be invoked — platform
+permission systems silently block them. The project settings layer is
+part of the agentic system infrastructure, not a user preference.
+
+### Plan Templates
+
 Plan templates are platform-agnostic by nature — they are consumed directly by agents on all platforms and do not require Layer 2 adapters.
 
 1. **Location**: plans live under `.agent/plans/<domain>/` organised by status (`active/`, `current/`, `future/`, `archive/`).

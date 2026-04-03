@@ -26,6 +26,9 @@
   agentic system contract: skill permissions, safety hooks, plugin
   state. User-specific paths and one-off permissions move to local.
   Arrays concatenate across scopes per Claude Code merge semantics.
-- Follow-up needed: extend portability validator to check skill
-  permission entries; document the project/local split in AGENT.md
-  and ADR-125.
+- Graduated the settings portability principle to permanent docs:
+  ADR-125 now has a "Platform Configuration" section, distilled.md
+  has a behaviour-changing entry, and a new pattern
+  "platform-config-is-infrastructure" was extracted.
+- Follow-up still needed: extend portability validator to check skill
+  permission entries (validator gap, not doctrine gap).

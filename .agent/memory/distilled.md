@@ -91,6 +91,12 @@ context with no natural permanent home.
   agents + skills + rules, Claude Code agents + rules, Codex
   agents + config, Gemini commands. Easy to miss one — always
   run `pnpm portability:check` after creating a new specialist.
+- **Platform settings are infrastructure, not preferences**:
+  project-scoped settings (permissions, hooks, plugin state) must
+  be tracked in git — without them a fresh checkout has skills that
+  exist but silently cannot be invoked. User-specific paths and
+  one-off permissions go in `settings.local.json` (gitignored).
+  See ADR-125 "Platform Configuration" section.
 - **Codex adapter descriptions must match exactly**:
   `.codex/agents/*.toml` descriptions must stay identical to the
   registration text in `.codex/config.toml`; the validator checks
