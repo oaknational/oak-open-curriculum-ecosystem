@@ -111,11 +111,14 @@ git log --oneline --decorate -10
   principles, and approach before writing any Phase 4 code. (3) Then
   start Phase 4 per
   `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-curriculum-model-view.plan.md`.
-- **Deep consolidation status**: completed this handoff — napkin rotated
-  (632→archive), 5 entries merged to distilled.md, "UX predates visual
-  design" pattern extracted, prompt stale references fixed. Incoming
-  practice box has 18 items awaiting integration (separate session).
-  The broader continuity evidence window remains open.
+- **Deep consolidation status**: completed recent convergence passes — napkin
+  rotated (632→archive), 5 entries merged to distilled.md, "UX predates visual
+  design" plus repair-workflow wording-clarity patterns extracted, prompt
+  stale references fixed, platform-memory review-scope guidance realigned, and
+  duplicate doctrine pruned from distilled.md after graduation to ADR-125 and
+  `consolidate-docs`. Developer-experience research indexing is in place.
+  Incoming practice box is currently empty. The broader continuity evidence
+  window remains open.
 
 ## Active Workstreams (2026-04-03)
 

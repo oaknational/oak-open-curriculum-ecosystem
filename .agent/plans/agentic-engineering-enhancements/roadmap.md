@@ -74,7 +74,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (🔄), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (🔄), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -108,6 +108,7 @@ Adjacent:
   PLN:  Planning specialist capability               📋 PLANNED
   TDD:  TDD specialist capability                    📋 PLANNED
   DVX:  Developer experience specialist              📋 PLANNED
+  RWD:  Repair workflow wording hazard detection     📋 PLANNED
   GW:   Reviewer gateway upgrade                     ⏭️ QUEUED
   AGN:  Manifest-driven adapter generation           📋 PLANNED
   ACT:  Agent classification taxonomy                📋 STRATEGIC

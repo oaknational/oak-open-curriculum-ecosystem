@@ -102,13 +102,8 @@ describe('oak-url-convenience', () => {
   });
 
   describe('generateThreadOakUrl', () => {
-    it('returns null for a thread (threads have no OWA page)', () => {
-      const url = generateThreadOakUrl('number-multiplication-and-division');
-      expect(url).toBeNull();
-    });
-
-    it('returns null for any thread slug', () => {
-      const url = generateThreadOakUrl('algebra');
+    it('returns null because threads have no OWA page', () => {
+      const url = generateThreadOakUrl();
       expect(url).toBeNull();
     });
   });

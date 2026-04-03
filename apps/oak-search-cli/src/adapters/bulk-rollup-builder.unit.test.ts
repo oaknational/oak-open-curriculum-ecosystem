@@ -8,7 +8,11 @@
  */
 import { describe, it, expect } from 'vitest';
 import type { Unit, Lesson } from '@oaknational/sdk-codegen/bulk';
-import { transformBulkUnitToSummary, collectLessonSnippets } from './bulk-rollup-builder';
+import {
+  transformBulkUnitToSummary,
+  collectLessonSnippets,
+  buildRollupDocs,
+} from './bulk-rollup-builder';
 
 /**
  * Creates a minimal valid bulk unit fixture for testing.
@@ -191,6 +195,32 @@ describe('bulk-rollup-builder', () => {
       const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.whyThisWhyNow).toBe('Builds on Year 3 fraction knowledge');
+    });
+  });
+
+  describe('buildRollupDocs', () => {
+    it('returns ok with rollup documents for valid units', () => {
+      const units = [createMinimalUnit()];
+      const lessons = [
+        createMinimalLesson({
+          unitSlug: 'fractions-year-4',
+          transcript_sentences: 'Fractions content.',
+        }),
+      ];
+      const result = buildRollupDocs(units, lessons, 'maths', 'Maths', 'maths-primary', new Map());
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toHaveLength(1);
+        expect(result.value[0]?.unit_title).toBe('Fractions Year 4');
+      }
+    });
+
+    it('returns err when a unit produces no oakUrl', () => {
+      const units = [createMinimalUnit({ unitSlug: '' })];
+      const result = buildRollupDocs(units, [], 'maths', 'Maths', '', new Map());
+
+      expect(result.ok).toBe(false);
     });
   });
 

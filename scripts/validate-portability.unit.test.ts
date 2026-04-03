@@ -5,6 +5,7 @@ import {
   CLAUDE_SETTINGS_PATH,
   getClaudeHookPortabilityIssues,
   getReviewerAdapterParityIssues,
+  getSkillPermissionIssues,
   HOOK_POLICY_PATH,
   isClaudeHookWired,
   isClaudeHookWiredInText,
@@ -258,5 +259,43 @@ describe('getReviewerAdapterParityIssues', () => {
         codexAgentFiles: ['.codex/agents/code-reviewer.toml'],
       }),
     ).toStrictEqual([]);
+  });
+});
+
+describe('getSkillPermissionIssues', () => {
+  it('reports a missing Skill() permission when a Claude command adapter exists without a settings entry', () => {
+    expect(
+      getSkillPermissionIssues({
+        claudeCommandFiles: ['.claude/commands/jc-start-right-quick.md'],
+        claudeSettingsPermissions: ['Skill(jc-plan)', 'Skill(jc-plan:*)'],
+      }),
+    ).toContainEqual(expect.stringContaining('jc-start-right-quick'));
+  });
+
+  it('returns no issues when every Claude command adapter has a matching Skill() permission', () => {
+    expect(
+      getSkillPermissionIssues({
+        claudeCommandFiles: ['.claude/commands/jc-start-right-quick.md'],
+        claudeSettingsPermissions: ['Skill(jc-start-right-quick)', 'Skill(jc-start-right-quick:*)'],
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('does not require the wildcard variant — only the base Skill() entry', () => {
+    expect(
+      getSkillPermissionIssues({
+        claudeCommandFiles: ['.claude/commands/jc-gates.md'],
+        claudeSettingsPermissions: ['Skill(jc-gates)'],
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('ignores non-Skill permissions in the allow list', () => {
+    expect(
+      getSkillPermissionIssues({
+        claudeCommandFiles: ['.claude/commands/jc-commit.md'],
+        claudeSettingsPermissions: ['WebSearch', 'Bash(git status:*)'],
+      }),
+    ).toContainEqual(expect.stringContaining('jc-commit'));
   });
 });

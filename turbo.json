@@ -355,6 +355,12 @@
       "cache": true,
       "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "playwright.config.ts"]
     },
+    "test:a11y": {
+      "dependsOn": ["build"],
+      "outputs": [],
+      "cache": true,
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "playwright.config.ts"]
+    },
     "type-check": {
       "dependsOn": ["^build"],
       "cache": true,

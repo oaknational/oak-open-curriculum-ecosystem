@@ -90,6 +90,16 @@ Canonical commands:
 
 All agent artefacts follow a three-layer model: canonical content in `.agent/`, thin platform adapters in `.cursor/`/`.claude/`/`.gemini/`/`.agents/`/`.codex/`, and entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For the full inventory see [artefact-inventory.md](./artefact-inventory.md).
 
+**Platform configuration split (Claude Code)**: `.claude/settings.json` is
+tracked in git and defines the agentic system contract — skill permissions
+(`Skill(name)` entries), safety hooks (`PreToolUse`), and plugin state.
+User-specific paths, one-off tool permissions, and machine-local overrides
+belong in `.claude/settings.local.json` (gitignored). Arrays concatenate
+across scopes per Claude Code merge semantics. The portability validator
+(`pnpm portability:check`, Check 11) verifies that every Claude command
+adapter has a corresponding `Skill()` permission entry in the project
+settings.
+
 ## Essential Links
 
 **Important**: These documents must be read.
@@ -122,7 +132,12 @@ All agent artefacts follow a three-layer model: canonical content in `.agent/`, 
 
 ## Development Commands
 
-From the repo root, via Turbo:
+From the repo root:
+
+Quality gate policy: run gates one at a time while iterating. If you need the
+canonical aggregate verification command, ALWAYS use `pnpm check`, not
+`pnpm qg`. `pnpm qg` remains a read-only convenience surface and is not the
+canonical sign-off command for agent work.
 
 ```bash
 pnpm install        # Setup
@@ -138,7 +153,9 @@ pnpm lint:fix       # Lint (auto-fix)
 pnpm test:root-scripts    # Repo-level script tests
 pnpm test           # Unit and integration tests
 pnpm test:field-integrity    # Manifest-based semantic-search field-integrity suites
-pnpm test:ui        # UI tests
+pnpm test:widget    # MCP App widget in-process tests
+pnpm test:ui        # Browser UI tests
+pnpm test:a11y      # Browser accessibility tests
 pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
 pnpm practice:fitness    # Strict fitness validation for live docs with frontmatter
@@ -146,12 +163,12 @@ pnpm practice:fitness:informational    # Non-blocking soft-ceiling report
 
 # Convenience commands
 pnpm make           # install, build, type-check, doc-gen, lint:fix, subagents:check, portability:check, practice:fitness:informational, markdownlint, format
-pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents:check, portability:check, test:root-scripts, type-check, lint, test, test:ui, test:a11y, test:e2e, smoke:dev:stub
+pnpm qg             # Read-only convenience verification only: format-check, markdownlint-check, subagents:check, portability:check, test:root-scripts, type-check, lint, test, test:widget, test:e2e, test:ui, test:a11y, smoke:dev:stub
 pnpm fix            # Auto-fix: format, markdownlint, lint:fix
 pnpm doc-gen        # Generate documentation from TSDoc
 
 # All in one command (clean rebuild + full verification)
-pnpm check          # secrets:scan:all, clean, test:root-scripts, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, test:a11y, smoke:dev:stub, subagents:check, portability:check, markdownlint:root, format:root
+pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, smoke:dev:stub, subagents:check, portability:check, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding

@@ -121,13 +121,9 @@ export function generateSequenceOakUrl(sequenceSlug: string): string {
  * Thread "highlighting" is client-side within programme/unit pages.
  * This function always returns `null` to signal no Oak URL exists.
  *
- * The `threadSlug` parameter is retained for API compatibility with callers
- * that may still pass a slug; its value is not used.
- *
  * @returns `null` — threads have no OWA page
  */
-export function generateThreadOakUrl(threadSlug: string): null {
-  void threadSlug;
+export function generateThreadOakUrl(): null {
   return null;
 }
 

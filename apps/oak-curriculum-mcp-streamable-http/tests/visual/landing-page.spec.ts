@@ -39,7 +39,9 @@ test.describe('Landing page', () => {
     await expect(page.locator('summary h2', { hasText: /Tools \(\d+\)/ })).toBeVisible();
   });
 
-  test('passes WCAG accessibility checks', async ({ page }) => {
+  // Tagged so the dedicated `test:a11y` gate can run browser accessibility
+  // assertions separately from the broader UI suite.
+  test('@a11y passes WCAG accessibility checks', async ({ page }) => {
     await page.goto('/');
 
     const axe = await new AxeBuilder({ page }).analyze();

@@ -251,7 +251,7 @@ paths, setup files) don't apply.
      linting and type-checking cannot see. Linting enforces _what
      you should do_; static analysis detects _what you forgot to
      clean up_.
-  5. **Testing** (`test`, `test:e2e`, `test:ui`, `smoke`) —
+  5. **Testing** (`test`, `test:widget`, `test:e2e`, `test:ui`, `smoke`) —
      behavioural correctness at all levels
   6. **Mutation testing** (`mutate`) — test suite effectiveness.
      Proves tests actually detect real faults, not just exercise

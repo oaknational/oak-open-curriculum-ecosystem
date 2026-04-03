@@ -73,7 +73,7 @@ for the full decision record.
 | ----------------- | ---------- | ------------ | --------------- | ------- | ----------------- |
 | secrets:scan:all  | --         | Yes          | Yes             | --      | Yes               |
 | clean             | --         | --           | --              | --      | Yes               |
-| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | --      | Yes (via build)   |
+| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | --      | Yes               |
 | build             | --         | Yes          | Yes             | --      | Yes               |
 | format-check      | Yes        | Yes          | Yes             | Yes     | Yes (format:root) |
 | markdownlint      | Yes        | Yes          | Yes             | Yes     | Yes               |
@@ -83,8 +83,10 @@ for the full decision record.
 | type-check        | Yes        | Yes          | Yes             | Yes     | Yes               |
 | lint              | Yes        | Yes          | Yes             | Yes     | Yes               |
 | test              | Yes        | Yes          | Yes             | Yes     | Yes               |
+| test:widget       | --         | --           | --              | Yes     | Yes               |
 | test:e2e          | --         | Yes (--only) | --              | Yes     | Yes               |
 | test:ui           | --         | --           | --              | Yes     | Yes               |
+| test:a11y         | --         | --           | --              | Yes     | Yes               |
 | smoke:dev:stub    | --         | --           | --              | Yes     | Yes               |
 | doc-gen           | --         | --           | --              | --      | Yes               |
 
@@ -122,7 +124,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
 Verifies the codebase passes all checks without modifications:
 
 ```bash
-pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && pnpm portability:check && pnpm test:root-scripts && turbo run type-check lint test test:ui test:e2e smoke:dev:stub
+pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && pnpm portability:check && pnpm test:root-scripts && pnpm type-check && pnpm lint && pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub
 ```
 
 **Flow**:
@@ -133,12 +135,14 @@ pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check &
    - `subagents:check` - validate sub-agent wrapper/template standards
    - `portability:check` - validate canonical/adaptor and hook parity
    - `test:root-scripts` - repo-level script tests
-2. Single turbo run:
+2. Sequential read-only gates:
    - `type-check` - TypeScript validation
    - `lint` - ESLint (verify only, no --fix)
    - `test` - unit and integration tests
-   - `test:ui` - Playwright UI tests
+   - `test:widget` - MCP App widget in-process tests
    - `test:e2e` - E2E tests (includes built-server behaviour tests)
+   - `test:ui` - Playwright UI tests
+   - `test:a11y` - Playwright accessibility tests
    - `smoke:dev:stub` - smoke tests with stubs
 
 ### `pnpm check` - Full clean build and verify
@@ -146,7 +150,7 @@ pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check &
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && turbo run sdk-codegen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root
+pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm lint:fix && pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root
 ```
 
 ### `pnpm test:all` - All test suites
@@ -154,7 +158,7 @@ pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && turbo run sdk-c
 Runs all test types sequentially:
 
 ```bash
-pnpm test && pnpm test:e2e && pnpm test:ui && pnpm smoke:dev:stub
+pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub
 ```
 
 ### `pnpm fix` - Auto-fix only

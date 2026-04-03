@@ -8,6 +8,7 @@ import {
   CLAUDE_SETTINGS_PATH,
   getClaudeHookPortabilityIssues,
   getReviewerAdapterParityIssues,
+  getSkillPermissionIssues,
   HOOK_POLICY_PATH,
   SURFACE_MATRIX_PATH,
 } from './validate-portability-helpers.mjs';
@@ -365,6 +366,30 @@ if (await exists(HOOK_POLICY_PATH)) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown hook portability failure.';
     addIssue(`Hook portability validation failed: ${message}`);
+  }
+}
+
+// --- Check 11: Skill permission parity (Claude commands → settings.json) ---
+
+if (await exists(CLAUDE_SETTINGS_PATH)) {
+  try {
+    const claudeSettings = await readJson(CLAUDE_SETTINGS_PATH);
+    const permissions = Array.isArray(claudeSettings?.permissions?.allow)
+      ? claudeSettings.permissions.allow
+      : [];
+
+    const claudeCommandFiles = await listFiles('.claude/commands', '.md');
+
+    for (const issue of getSkillPermissionIssues({
+      claudeCommandFiles,
+      claudeSettingsPermissions: permissions,
+    })) {
+      addIssue(issue);
+    }
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Unknown skill permission check failure.';
+    addIssue(`Skill permission validation failed: ${message}`);
   }
 }
 

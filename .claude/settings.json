@@ -7,7 +7,6 @@
       "WebFetch(domain:playwright.dev)",
       "WebFetch(domain:modelcontextprotocol.github.io)",
       "WebFetch(domain:zod.dev)",
-
       "Bash(git status:*)",
       "Bash(git mv:*)",
       "Bash(git remote get-url origin)",
@@ -15,7 +14,6 @@
       "Bash(gh pr:*)",
       "Bash(npx turbo:*)",
       "Bash(npx tsc:*)",
-
       "Skill(jc-plan)",
       "Skill(jc-plan:*)",
       "Skill(jc-start-right-thorough)",
@@ -36,7 +34,6 @@
       "Skill(jc-gates:*)",
       "Skill(jc-review)",
       "Skill(jc-review:*)",
-
       "mcp__claude_ai_Oak_National_Academy__get-curriculum-model",
       "mcp__claude_ai_Oak_National_Academy__get-threads-units",
       "mcp__claude_ai_Oak_National_Academy__get-sequences-units",
@@ -45,14 +42,14 @@
       "mcp__claude_ai_Oak_National_Academy__get-lessons-summary",
       "mcp__oak-preview__get-subjects-sequences",
       "mcp__oak-preview__get-sequences-units",
-
       "Edit(/.claude/skills/clerk/**)",
       "Edit(/.claude/skills/clerk-custom-ui/**)",
       "Edit(/.claude/skills/clerk-nextjs-patterns/**)",
       "Edit(/.claude/skills/clerk-orgs/**)",
       "Edit(/.claude/skills/clerk-setup/**)",
       "Edit(/.claude/skills/clerk-testing/**)",
-      "Edit(/.claude/skills/clerk-webhooks/**)"
+      "Edit(/.claude/skills/clerk-webhooks/**)",
+      "WebFetch(domain:www.w3.org)"
     ]
   },
   "hooks": {

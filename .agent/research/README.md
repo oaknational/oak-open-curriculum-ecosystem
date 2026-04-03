@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 22 February 2026  
+**Last Updated**: 3 April 2026  
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -73,6 +73,19 @@ Research on AI integration, MCP tools, and agent patterns.
 | [openai-apps-sdk-data-return-optimization.md](openai-apps-sdk-data-return-optimization.md) | Data return patterns | |
 | **[openapi-app-sdk/](openapi-app-sdk/)** | OpenAPI app SDK patterns | |
 
+### 🧭 Developer Experience & Agentic Engineering
+
+Research on onboarding quality, architectural enforcement, and external
+developer-experience inputs used to improve Oak's agentic engineering system.
+
+| Document | Purpose | Key Insights |
+|----------|---------|--------------|
+| **[developer-experience/](developer-experience/)** | Developer-experience research index | Onboarding, enforcement, and external research guide |
+| ├─ [README.md](developer-experience/README.md) | Developer-experience index | Entry point for local DX research and the local novel repair lane |
+| ├─ [architectural-enforcement-playbook.md](developer-experience/architectural-enforcement-playbook.md) | Architectural enforcement | Guardrails, prompts, and enforcement posture |
+| ├─ [2026-02-20-onboarding-review.md](developer-experience/2026-02-20-onboarding-review.md) | Onboarding review | Friction points and onboarding improvements |
+| └─ local `developer-experience/novel/` lane | Ignored repair lane | Raw imports and sibling clean copies; stable promotion deferred |
+
 ### 🔐 Authentication & Security
 
 Research on auth patterns and security.
@@ -107,7 +120,6 @@ Research on UI patterns and components.
 
 | Document | Purpose | Key Insights |
 |----------|---------|--------------|
-| **[oak-components/](oak-components/)** | Oak component library | |
 | [oak-widget-svg-implementation-analysis.md](oak-widget-svg-implementation-analysis.md) | SVG widget patterns | |
 | [world-bank-graphing-demo-svg-patterns.md](world-bank-graphing-demo-svg-patterns.md) | Graphing patterns | |
 
@@ -123,6 +135,16 @@ Research on API structure and data analysis.
 | [approaches-to-knowledge-strategic-report.md](approaches-to-knowledge-strategic-report.md) | Knowledge strategy | |
 
 ---
+
+## Recent Additions (2026-04-03)
+
+| Document | Summary |
+|----------|---------|
+| [developer-experience/README.md](developer-experience/README.md) | Developer-experience topic index covering local doctrine, onboarding, and the local ignored novel repair lane. |
+
+External protocol/interoperability report recoveries currently remain in the
+ignored `developer-experience/novel/` lane as local clean copies pending a
+later promotion session into stable tracked homes.
 
 ## Recent Additions (2026-02-22)
 

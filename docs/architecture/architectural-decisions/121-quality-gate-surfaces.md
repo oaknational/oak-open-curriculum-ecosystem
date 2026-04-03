@@ -26,8 +26,8 @@ The five surfaces are:
    pushes to `main`. Canonical remote gate. Must be self-contained (no
    local tooling assumptions).
 5. **Local commands** (`pnpm check`, `pnpm qg`, `pnpm make`) — developer-
-   initiated. `pnpm check` is the most comprehensive; `pnpm qg` is
-   verify-only; `pnpm make` is build-and-fix.
+   initiated. `pnpm check` is the canonical aggregate gate and the most
+   comprehensive; `pnpm qg` is verify-only; `pnpm make` is build-and-fix.
 
 ## Decision
 
@@ -37,37 +37,41 @@ before push**, so developers never discover failures only after pushing.
 
 ### Coverage matrix
 
-| Check            | pre-commit | pre-push     | CI workflow     | pnpm qg | pnpm check        |
-| ---------------- | ---------- | ------------ | --------------- | ------- | ----------------- |
-| secrets:scan:all | --         | Yes          | Yes             | --      | Yes               |
-| clean            | --         | --           | --              | --      | Yes               |
-| sdk-codegen      | --         | Yes (turbo)  | Yes (via build) | --      | Yes               |
-| build            | --         | Yes          | Yes             | --      | Yes               |
-| format-check     | Yes        | Yes          | Yes             | Yes     | Yes (format:root) |
-| markdownlint     | Yes        | Yes          | Yes             | Yes     | Yes               |
-| subagents:check  | --         | --           | Yes             | Yes     | Yes               |
-| type-check       | Yes        | Yes          | Yes             | Yes     | Yes               |
-| lint             | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test             | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test:e2e         | --         | Yes (--only) | --              | Yes     | Yes               |
-| test:ui          | --         | --           | --              | Yes     | Yes               |
-| test:a11y        | --         | --           | --              | Yes     | Yes               |
-| smoke:dev:stub   | --         | --           | --              | Yes     | Yes               |
-| doc-gen          | --         | --           | --              | --      | Yes               |
+| Check             | pre-commit | pre-push     | CI workflow     | pnpm qg | pnpm check        |
+| ----------------- | ---------- | ------------ | --------------- | ------- | ----------------- |
+| secrets:scan:all  | --         | Yes          | Yes             | --      | Yes               |
+| clean             | --         | --           | --              | --      | Yes               |
+| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | --      | Yes               |
+| build             | --         | Yes          | Yes             | --      | Yes               |
+| format-check      | Yes        | Yes          | Yes             | Yes     | Yes (format:root) |
+| markdownlint      | Yes        | Yes          | Yes             | Yes     | Yes               |
+| subagents:check   | --         | --           | Yes             | Yes     | Yes               |
+| portability:check | --         | --           | Yes             | Yes     | Yes               |
+| test:root-scripts | --         | --           | Yes             | Yes     | Yes               |
+| type-check        | Yes        | Yes          | Yes             | Yes     | Yes               |
+| lint              | Yes        | Yes          | Yes             | Yes     | Yes               |
+| test              | Yes        | Yes          | Yes             | Yes     | Yes               |
+| test:widget       | --         | --           | --              | Yes     | Yes               |
+| test:e2e          | --         | Yes (--only) | --              | Yes     | Yes               |
+| test:ui           | --         | --           | --              | Yes     | Yes               |
+| test:a11y         | --         | --           | --              | Yes     | Yes               |
+| smoke:dev:stub    | --         | --           | --              | Yes     | Yes               |
+| doc-gen           | --         | --           | --              | --      | Yes               |
 
 ### Rationale for exclusions
 
 - **Pre-commit excludes build/codegen/secrets**: too slow for every commit.
   These run on pre-push instead.
-- **Pre-push excludes test:ui and smoke**: Playwright browser tests and dev
-  server smoke require specific environment setup. `pnpm qg` covers these
-  for developers who want full local verification.
+- **Pre-push excludes test:widget, test:ui, test:a11y, and smoke**:
+  local-only widget/browser gates and dev-server smoke require the broader
+  developer environment. `pnpm qg` covers these for developers who want full
+  local verification.
 - **CI excludes test:e2e**: E2E tests hit Elasticsearch which is not
   available in the GitHub Actions environment. Covered by pre-push
   (`--only` mode) and `pnpm qg`.
-- **CI excludes test:ui, test:a11y, and smoke:dev:stub**: Playwright
-  browser install and dev server lifecycle add complexity and flakiness
-  to CI. These are local-only gates covered by pre-push and `pnpm qg`.
+- **CI excludes test:widget, test:ui, test:a11y, and smoke:dev:stub**:
+  widget/browser gates and dev server lifecycle add complexity and flakiness
+  to CI. These are local-only gates covered by `pnpm qg` and `pnpm check`.
 - **CI excludes doc-gen**: documentation generation is a build-time
   convenience, not a correctness gate.
 - **`pnpm qg` excludes secrets scan and clean**: `qg` assumes an already-
@@ -96,9 +100,9 @@ before push**, so developers never discover failures only after pushing.
 
 ### Negative
 
-- test:ui and smoke:dev:stub remain local-only, meaning they could regress
-  without CI catching them. Mitigation: pre-push covers E2E; `pnpm qg`
-  covers all.
+- test:widget, test:ui, test:a11y, and smoke:dev:stub remain local-only,
+  meaning they could regress without CI catching them. Mitigation:
+  `pnpm qg` and `pnpm check` cover the full local surface.
 - Adding checks to more surfaces increases total developer-facing gate time.
   Mitigation: turbo caching makes repeated runs fast.
 

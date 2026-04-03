@@ -97,7 +97,14 @@ async function prepareBulkOperations(
       continue;
     }
     const source = sourceResult.value;
-    ops.push(...source.toBulkOperations(LESSONS_INDEX, UNITS_INDEX, UNIT_ROLLUP_INDEX));
+    const opsResult = source.toBulkOperations(LESSONS_INDEX, UNITS_INDEX, UNIT_ROLLUP_INDEX);
+    if (!opsResult.ok) {
+      console.error(
+        `Rollup build failed for ${fileResult.data.sequenceSlug}: ${opsResult.error.message}`,
+      );
+      continue;
+    }
+    ops.push(...opsResult.value);
     if (limit && ops.length / 2 >= limit) {
       return { ops: ops.slice(0, limit * 2), oakClient };
     }

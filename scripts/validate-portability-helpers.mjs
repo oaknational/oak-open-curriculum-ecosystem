@@ -117,6 +117,32 @@ export function getClaudeHookPortabilityIssues({
   return issues;
 }
 
+export function getSkillPermissionIssues({
+  claudeCommandFiles,
+  claudeSettingsPermissions,
+  claudeSettingsPath = CLAUDE_SETTINGS_PATH,
+}) {
+  const issues = [];
+
+  const permittedSkills = new Set(
+    claudeSettingsPermissions
+      .filter((entry) => /^Skill\([^)]+\)$/u.test(entry))
+      .map((entry) => entry.replace(/^Skill\(([^):]+)\)$/u, '$1'))
+      .filter((name) => name.length > 0),
+  );
+
+  for (const file of claudeCommandFiles) {
+    const commandName = file.replace(/^.*\/|\.md$/gu, '');
+    if (!permittedSkills.has(commandName)) {
+      issues.push(
+        `${claudeSettingsPath}: Claude command adapter "${commandName}" has no Skill(${commandName}) entry in permissions.allow`,
+      );
+    }
+  }
+
+  return issues;
+}
+
 export function getReviewerAdapterParityIssues({
   cursorAgentFiles,
   claudeAgentFiles,

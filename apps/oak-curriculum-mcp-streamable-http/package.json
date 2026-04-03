@@ -34,7 +34,8 @@
     "test:watch": "vitest",
     "test:widget": "vitest run --config vitest.widget.config.ts",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "test:ui": "playwright test"
+    "test:ui": "playwright test --grep-invert @a11y",
+    "test:a11y": "playwright test --grep @a11y"
   },
   "dependencies": {
     "@clerk/backend": "^3.2.3",

@@ -50,10 +50,6 @@ context with no natural permanent home.
   prose to 100 chars, line count inflates from short lines, headers,
   blank lines. The char limit tracks actual content volume regardless
   of formatting choices. Use it as the primary volume metric.
-- **Graduation and fitness are separate concerns**: step 7
-  (graduate) asks "stable? natural home?" Step 8 (fitness) asks
-  "too full?" Graduate first, then manage fitness consequences.
-  Never block graduation because a target is tight.
 - **User feedback is the correction signal**: when user feedback
   contradicts a napkin entry, apply the feedback fully. Do not
   negotiate a compromise with the original incorrect framing.
@@ -71,10 +67,6 @@ context with no natural permanent home.
   multiple commits, separate in-scope findings from pre-existing
   issues. Fix in-scope, track pre-existing as a gated follow-up.
   Never conflate scope by fixing everything in one session.
-- **Platform plans are ephemeral**: `.cursor/plans/*.plan.md`
-  can carry useful working notes, but once their value is
-  extracted into canonical repo plans or permanent docs, delete
-  the platform copy and sweep stale references.
 - **Ignored estates need explicit sweeps**: when validating
   gitignored research or staging lanes, use `rg -uu` or run the
   search from inside the target directory; otherwise ignore rules
@@ -91,12 +83,6 @@ context with no natural permanent home.
   agents + skills + rules, Claude Code agents + rules, Codex
   agents + config, Gemini commands. Easy to miss one — always
   run `pnpm portability:check` after creating a new specialist.
-- **Platform settings are infrastructure, not preferences**:
-  project-scoped settings (permissions, hooks, plugin state) must
-  be tracked in git — without them a fresh checkout has skills that
-  exist but silently cannot be invoked. User-specific paths and
-  one-off permissions go in `settings.local.json` (gitignored).
-  See ADR-125 "Platform Configuration" section.
 - **Codex adapter descriptions must match exactly**:
   `.codex/agents/*.toml` descriptions must stay identical to the
   registration text in `.codex/config.toml`; the validator checks

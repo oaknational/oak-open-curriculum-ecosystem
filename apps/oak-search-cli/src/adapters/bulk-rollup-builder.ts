@@ -1,13 +1,10 @@
 /**
  * Bulk rollup document builder.
  *
- * @remarks
  * Transforms bulk download unit data into SearchUnitSummary format
  * for rollup document generation, and collects lesson snippets for
  * unit content enrichment.
-
  */
-
 import type { Unit, Lesson } from '@oaknational/sdk-codegen/bulk';
 import type {
   KeyStage,
@@ -24,13 +21,10 @@ import {
   derivePhaseSlugFromSequence,
   generateSubjectProgrammesUrl,
 } from '@oaknational/curriculum-sdk';
+import { ok, err, type Result } from '@oaknational/result';
 
 /** Valid lesson state values */
 type LessonState = 'published' | 'new';
-
-// ============================================================================
-// Pure Functions
-// ============================================================================
 
 /**
  * Validates and transforms a lesson state string to the expected union type.
@@ -133,10 +127,6 @@ export function collectLessonSnippets(lessons: readonly Lesson[]): Map<string, s
   return snippets;
 }
 
-// ============================================================================
-// Rollup Document Generation
-// ============================================================================
-
 /**
  * Generates the subject programmes URL based on subject and key stage.
  *
@@ -164,6 +154,38 @@ export function deriveKeyStageFromSequence(sequenceSlug: string): KeyStage {
 }
 
 /**
+ * Transforms a unit to a validated summary, returning `err` when the
+ * transformation throws or produces no Oak URL.
+ */
+function transformUnitSafe(
+  unit: Unit,
+  subjectSlug: SearchSubjectSlug,
+  keyStage: KeyStage,
+  sequenceSlug: string,
+): Result<SearchUnitSummary & { readonly oakUrl: string }, Error> {
+  let summary: SearchUnitSummary;
+  try {
+    summary = transformBulkUnitToSummary(unit, subjectSlug, keyStage, sequenceSlug);
+  } catch (caught: unknown) {
+    return err(
+      new Error(
+        `Failed to transform unit "${unit.unitSlug}" with sequenceSlug "${sequenceSlug}": ` +
+          `${caught instanceof Error ? caught.message : String(caught)}`,
+      ),
+    );
+  }
+  if (!summary.oakUrl) {
+    return err(
+      new Error(
+        `transformBulkUnitToSummary produced no oakUrl for unit "${unit.unitSlug}" ` +
+          `with sequenceSlug "${sequenceSlug}" — this should not happen when sequenceSlug is provided.`,
+      ),
+    );
+  }
+  return ok({ ...summary, oakUrl: summary.oakUrl });
+}
+
+/**
  * Builds rollup documents from bulk data for unit search.
  *
  * @remarks
@@ -178,7 +200,7 @@ export function deriveKeyStageFromSequence(sequenceSlug: string): KeyStage {
  * @param subjectTitle - The subject display title
  * @param sequenceSlug - The sequence slug (for key stage derivation fallback)
  * @param unitContextMap - KS4 context map for tier enrichment
- * @returns Array of rollup documents ready for indexing
+ * @returns `ok` with rollup documents, or `err` when a unit produces no Oak URL
  */
 export function buildRollupDocs(
   units: readonly Unit[],
@@ -187,7 +209,7 @@ export function buildRollupDocs(
   subjectTitle: string,
   sequenceSlug: string,
   unitContextMap: UnitContextMap,
-): SearchUnitRollupDoc[] {
+): Result<SearchUnitRollupDoc[], Error> {
   const lessonSnippets = collectLessonSnippets(lessons);
   const rollupDocs: SearchUnitRollupDoc[] = [];
 
@@ -195,30 +217,28 @@ export function buildRollupDocs(
     const keyStage = isKeyStage(unit.keyStageSlug)
       ? unit.keyStageSlug
       : deriveKeyStageFromSequence(sequenceSlug);
-    const summary = transformBulkUnitToSummary(unit, subjectSlug, keyStage, sequenceSlug);
-    if (!summary.oakUrl) {
-      throw new Error(
-        `transformBulkUnitToSummary produced no oakUrl for unit "${unit.unitSlug}" ` +
-          `with sequenceSlug "${sequenceSlug}" — this should not happen when sequenceSlug is provided.`,
-      );
+    const summaryResult = transformUnitSafe(unit, subjectSlug, keyStage, sequenceSlug);
+    if (!summaryResult.ok) {
+      return summaryResult;
     }
+    const summary = summaryResult.value;
     const snippets = lessonSnippets.get(unit.unitSlug) ?? [];
     const subjectProgrammesUrl = getSubjectProgrammesUrl(subjectSlug, keyStage);
 
-    const rollupDoc = createRollupDocument({
-      summary,
-      snippets,
-      subject: subjectSlug,
-      subjectTitle,
-      keyStage,
-      keyStageTitle: unit.keyStageSlug.toUpperCase().replace('KS', 'Key Stage '),
-      subjectProgrammesUrl,
-      unitUrl: summary.oakUrl,
-      unitContextMap,
-    });
-
-    rollupDocs.push(rollupDoc);
+    rollupDocs.push(
+      createRollupDocument({
+        summary,
+        snippets,
+        subject: subjectSlug,
+        subjectTitle,
+        keyStage,
+        keyStageTitle: unit.keyStageSlug.toUpperCase().replace('KS', 'Key Stage '),
+        subjectProgrammesUrl,
+        unitUrl: summary.oakUrl,
+        unitContextMap,
+      }),
+    );
   }
 
-  return rollupDocs;
+  return ok(rollupDocs);
 }
