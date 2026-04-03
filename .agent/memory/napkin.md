@@ -418,3 +418,33 @@
   to the very pattern we spent the session removing.
 - Spent 7+ attempts trying to make spread work before asking the right
   question: "does this function need to spread at all?"
+
+## Session 2026-04-03 — Oak surface isolation strategic programme
+
+### What Was Done
+
+- Created the strategic future plan
+  `.agent/plans/architecture-and-infrastructure/future/`
+  `oak-surface-isolation-and-generic-foundation-programme.plan.md`.
+- Added an authoritative workspace classification matrix covering all current
+  workspaces, marking each as `generic`, `mixed`, or `oak-leaf`, and naming
+  the specific Oak leakage types now present.
+- Defined the six promotion tranches: platform/runtime, design system,
+  tooling/governance, SDK/codegen, search, and app surfaces.
+- Added the missing
+  `.agent/plans/architecture-and-infrastructure/roadmap.md`
+  so the collection now has a roadmap surface for strategic sequencing.
+- Wired the new programme into the collection README, the future index, and
+  the live session-continuation prompt for discoverability.
+
+### Patterns to Remember
+
+- **Plan discoverability is a real contract**: adding a strategic plan is not
+  complete until it is visible from the collection README, the relevant lane
+  index, the roadmap, and a live session prompt.
+- **Leakage is broader than naming**: Oak-specific drift shows up in defaults,
+  emitted CSS/telemetry surfaces, ownership metadata, and domain assumptions,
+  not just package names.
+- **Strategic umbrellas need matrices, not vibes**: for repo-wide separation
+  work, the first useful artefact is an authoritative workspace matrix with
+  leakage types and target states, not an abstract refactor manifesto.

@@ -174,6 +174,17 @@ ADR-146 accepted, triplet deployed, platform adapters created.
 
 Completed 2026-04-01.
 
+### 6. Oak Surface Isolation Programme — FUTURE
+
+**Plan**:
+`.agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md`
+
+Strategic umbrella for separating generic foundations from Oak leaves across
+runtime, design system, tooling/governance, SDK/codegen, search, and app
+surfaces. Not yet promoted. First promotion requires the authoritative
+workspace matrix, agreed tranche target states plus rename map, and a
+deterministic validation set for tranche 1.
+
 ## Core Invariant (WS3)
 
 This workstream is a clean-break replacement:

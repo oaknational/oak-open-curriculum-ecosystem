@@ -22,7 +22,7 @@ This was inspired by the concept of [genetic plasmid exchange](https://en.wikipe
 
 ### Bringing the Practice to a New Repo
 
-To bring the Practice to a new repo, transfer the Practice Core: three core blueprints (the "plasmid trinity"), two entry points (this README and an agent-facing index), a changelog, and a provenance file — seven files in total. It may be accompanied by an optional `.agent/practice-context/` directory, but that directory is not part of the Core. `outgoing/` is sender-maintained support material; copy relevant files into the receiving repo's `incoming/`, use them during integration, then clear `incoming/`. To hydrate it into a new repository:
+To bring the Practice to a new repo, transfer the Practice Core: three core blueprints (the "plasmid trinity"), a verification companion, two entry points (this README and an agent-facing index), a changelog, and a provenance file — eight files in total. It may be accompanied by an optional `.agent/practice-context/` directory, but that directory is not part of the Core. `outgoing/` is sender-maintained support material; copy relevant files into the receiving repo's `incoming/`, use them during integration, then clear `incoming/`. To hydrate it into a new repository:
 
 1. Create a directory: `.agent/practice-core/` (or `practice_core` if you prefer underscores).
 2. Drop these files into it.

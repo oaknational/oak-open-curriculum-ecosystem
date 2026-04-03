@@ -2,7 +2,7 @@
 provenance: provenance.yml
 fitness_line_target: 375
 fitness_line_limit: 500
-fitness_char_limit: 22000
+fitness_char_limit: 23000
 fitness_line_length: 100
 ---
 
@@ -200,14 +200,13 @@ graph LR
   (start-right-quick, start-right-thorough, go) and passive capabilities (napkin,
   patterns, etc.). Platform adapters in `.cursor/skills/`,
   `.agents/skills/`, etc. are thin wrappers pointing to the canonical skills
-- **Prompts** (`.agent/prompts/`) — stateful handover playbooks carrying live continuity
-  contracts and pointers to active execution plans
-  Where `session-handoff` is installed, keep the live continuity contract in a
-  stateful prompt surface (canonically `.agent/prompts/session-continuation.prompt.md`
-  if the repo uses prompts). It stays operational-only and carries these
-  fields: Workstream, Active plans, Current state, Current objective, Hard
-  invariants / non-goals, Recent surprises / corrections, Open questions /
-  low-confidence areas, Next safe step, and Deep consolidation status
+- **Continuity host** — one explicit surface must carry the live continuity
+  contract. If any workflow references a continuity surface, that surface must
+  exist on a fresh checkout — this is a verification target, not just a
+  description. See
+  [practice-bootstrap.md §Continuity Contract](practice-bootstrap.md#continuity-contract)
+  for the full specification including contract fields, host options, and the
+  handoff/consolidation split
 - **Plans** (`.agent/plans/`) — executable work plans forming a nested hierarchy from
   strategic overview down to hands-on implementation tasks:
   1. **Strategic index** — cross-collection overview
@@ -254,16 +253,29 @@ graph LR
 | `.cursor/`, `.claude/`, `.gemini/`, `.github/`, `.agents/`, `.codex/`      | Platform adapters: thin wrappers and project config referencing canonical content                                                                                |
 | Repo's ADR directory                                                       | Permanent architectural decision records (path varies by repo; see [practice-index](../practice-index.md))                                                      |
 
+### Minimum Operational Estate
+
+The artefact map above describes what _can_ exist. A working Practice requires
+a minimum estate to be _operational_: the portable Core, a local bridge, a
+memory layer, a continuity host, a planning scaffold, platform truth for any
+activated surface, and validators. Without these, workflows reference absent
+sinks and the Practice is structurally present but inert. See
+[practice-verification.md §Minimum Operational Estate](practice-verification.md#minimum-operational-estate)
+for the full specification including mandatory surfaces, optional-but-coherent
+guidance, and the fresh-checkout acceptance criteria.
+
 ## Plasmid Exchange
 
 The Practice is not confined to a single repo. The portable part of it travels as the Practice
-Core: a package of seven files in `.agent/practice-core/` consisting of the plasmid trinity —
+Core: a package of eight files in `.agent/practice-core/` consisting of the plasmid trinity —
 this file (the **what**), [practice-lineage.md](practice-lineage.md) (the **why**), and
-[practice-bootstrap.md](practice-bootstrap.md) (the **how**) — the entry points
+[practice-bootstrap.md](practice-bootstrap.md) (the **how**) — the verification companion
+[practice-verification.md](practice-verification.md) — the entry points
 [README.md](README.md) (for humans) and [index.md](index.md) (for agents) — the changelog
 ([CHANGELOG.md](CHANGELOG.md)) — and the provenance file ([provenance.yml](provenance.yml)). The
-trinity files evolve through real work; the entry points provide orientation; the changelog
-records what changed; the provenance file tracks every repo that has shaped each trinity file.
+trinity files evolve through real work; the verification file proves the build is operational;
+the entry points provide orientation; the changelog records what changed; the provenance file
+tracks every repo that has shaped each file.
 Each repo carries its own Practice instance — there is no hierarchy.
 
 The trinity files carry YAML frontmatter with a `provenance` pointer (to `provenance.yml`), and
@@ -277,7 +289,7 @@ the reference for how exchange works and the source template for outbound propag
 exchange context may travel separately in `.agent/practice-context/`, with sender-maintained
 `outgoing/` material copied into receiver-side `incoming/` when needed. Proven code patterns may
 also travel as part of the exchange pack — see
-[practice-lineage.md §Code Pattern Exchange](practice-lineage.md#code-pattern-exchange).
+[practice-lineage.md §Pattern Exchange](practice-lineage.md#pattern-exchange).
 
 ### The Practice Box
 
@@ -311,6 +323,12 @@ prevent repetition.
 The Practice Maturity model (see [practice-lineage.md](practice-lineage.md) §Practice Maturity)
 provides diagnostic criteria for assessing whether this self-teaching property is genuinely active —
 from Level 1 (structurally present but inert) through Level 4 (evolving).
+
+Hydration completeness requires operational verification, not just structural
+correctness. The claimed/installed/activated audit — does the bridge claim it,
+do the files exist, does the platform activate it? — is the practical test.
+See [practice-verification.md §Claimed / Installed / Activated Audit](practice-verification.md#claimed--installed--activated-audit)
+and [practice-lineage.md §Validation](practice-lineage.md#validation).
 
 If you are new to this repository, start with `.agent/directives/AGENT.md`. Follow the links. The
 Practice will teach itself.

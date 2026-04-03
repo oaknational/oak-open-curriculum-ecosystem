@@ -1,8 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_target: 575
+fitness_line_target: 590
 fitness_line_limit: 750
-fitness_char_limit: 30000
+fitness_char_limit: 31000
 fitness_line_length: 100
 ---
 
@@ -18,6 +18,10 @@ and thin platform adapters point back to it. Sections below use Cursor and
 TypeScript/Node.js as examples — adapt them to local platforms and ecosystems.
 
 ## Before You Begin: Ecosystem Survey
+
+**The templates and checklists below all serve a single goal: passing the
+Fresh-Checkout Acceptance Criteria in
+[practice-verification.md](practice-verification.md).**
 
 The templates below use TypeScript/Node.js/Cursor conventions as concrete
 examples. Before creating any artefacts, the hydrating agent MUST:
@@ -36,6 +40,14 @@ examples. Before creating any artefacts, the hydrating agent MUST:
 4. **Never overwrite**: preserve any local standard or Practice mechanism
    that already meets or exceeds the blueprint. These are adaptations,
    not deviations.
+5. **Record deliberate omissions**: when a concept is intentionally not
+   installed (specific reviewer families, hook layers, schema-first if
+   inapplicable, continuity host variants), record the absence in live
+   operational surfaces (`practice-index.md`, `AGENT.md`) with rationale
+   and conditions for future adoption. A broken reference is not proof of
+   required restoration — check the local changelog and current execution
+   surfaces before restoring a referenced concept. Hydration is incomplete
+   until local adaptation decisions are written down.
 
 ## The Artefact Model
 
@@ -84,6 +96,22 @@ Where a repo supports multiple agent platforms, keep a local surface matrix
 (for example `.agent/reference/cross-platform-agent-surface-matrix.md`) that
 records supported and unsupported mappings explicitly. Do not infer broad
 parity from the presence of one portable adapter family.
+
+**Cross-platform integration order** — never reverse this sequence:
+
+1. Decide which platforms are genuinely first-class in the receiving repo.
+2. Install canonical surfaces first: local bridge, memory, continuity
+   host, planning scaffold, hook policy (if hooks are supported).
+3. Write the local surface matrix with explicit supported and unsupported
+   states.
+4. Add thin adapters and tracked platform config.
+5. Add parity checks and health checks.
+
+Activation before canonical source is a structural bug — it creates a broken
+install that false-greens on parity checks. The four-layer authority hierarchy
+for hook and platform surfaces is: canonical policy → native activation →
+repo-local runtime → explanatory mirrors. Lower layers activate or describe;
+they do not redefine higher-authority intent.
 
 ## Metacognition
 
@@ -371,6 +399,35 @@ are thin wrappers.
 - **go** — mid-session re-grounding. Read directives, identify intent,
   structure the todo list with ACTION/REVIEW/GROUNDING cadence.
 
+### Continuity Contract
+
+Session-entry skills depend on a live continuity surface. The following
+contract defines what that surface must provide.
+
+One explicit host surface must carry the live continuity contract. Prompts
+(`.agent/prompts/session-continuation.prompt.md`) are a strong default; other
+hosts are valid if `go`, `session-handoff`, and start-right all point to the
+chosen surface. The key rule: **if any workflow references a continuity
+surface, that surface must exist on a fresh checkout.** Hydration is
+incomplete until the host surface exists and the workflows that reference it
+resolve.
+
+The contract stays operational-only and carries these fields: Workstream,
+Active plans, Current state, Current objective, Hard invariants / non-goals,
+Recent surprises / corrections, Open questions / low-confidence areas, Next
+safe step, and Deep consolidation status.
+
+Keep ordinary continuity and deep convergence separate:
+
+- `session-handoff` refreshes the continuity contract, syncs next-action
+  surfaces, and captures surprises. It is cheap and runs every session.
+- `consolidate-docs` owns graduation, pattern extraction, fitness management,
+  and practice exchange. It runs only when its trigger checklist fires.
+
+Surprise follows an explicit pipeline: capture → distil → graduate → enforce.
+Surprise becomes durable only when it changes future behaviour and clears the
+usual graduation bar.
+
 ### Napkin (.agent/skills/napkin/SKILL.md)
 
 The napkin is the capture stage of the learning loop. It is always active.
@@ -513,56 +570,16 @@ permissions, and machine-specific wiring. Wrappers can exist while the
 platform silently blocks them, so portability checks must verify
 authorisation parity, not just wrapper presence.
 
-## Bootstrap Checklist
+The most dangerous platform-config failure mode is silent: everything looks
+installed, but the platform refuses to run commands or hooks because
+permissions were never granted in tracked project config. A fresh checkout
+must have enough tracked platform config to run the intended agentic
+workflows. Normal operation must not depend on gitignored local settings.
 
-After creating all files, validate:
+## Verification
 
-1. `.agent/practice-core/` contains all seven Practice Core files and
-   `incoming/.gitkeep`. Optional `.agent/practice-context/` is not
-   required; `incoming/` there is transient.
-2. `.agent/practice-index.md` exists, all its links resolve, and its
-   sections match the format specified above.
-3. `AGENT.md` links to `.agent/practice-core/index.md`.
-4. Every file path referenced in AGENT.md, rules, commands, and agents resolves.
-5. Every agent's reading requirements point to files that exist.
-6. `AGENTS.md` links to `AGENT.md`, which links to `principles.md` and `testing-strategy.md`.
-7. The `start-right-quick` skill references all foundation documents.
-8. The napkin rule points to a napkin skill that exists.
-9. Quality gates (`type-check`, `lint`, `build`, `test`) are wired in `package.json`.
-10. The project builds.
-11. **Artefact portability**: canonical skills and commands in `.agent/`
-    contain no platform-specific syntax. All platform adapters are thin
-    wrappers. Validate adapter-to-canonical consistency and authorisation
-    parity in tracked project config with a portability check or manual review.
-12. **Cohesion audit**: all Practice Core files are internally consistent,
-    practice-index.md links resolve, and all broader Practice files
-    (directives, rules, commands, skills) are aligned with the
-    Core. No stale descriptions, no contradictions, no outdated wording.
-
-## Post-Installation Health Check
-
-After the Bootstrap Checklist passes, run this intent-level verification.
-Structure alone does not guarantee a working Practice — shallow artefacts
-look correct but fail silently. This check is mandatory, not optional.
-
-1. **Metacognition verification** — read the metacognition directive. It
-   must contain explicitly named layers (thoughts, reflections, insights),
-   an affective break, and a grounding anchor. If any are missing, the
-   directive has been reduced to a planning template — rewrite it from
-   the reference in this file.
-2. **Escape-hatch scan** — read rules and principles. Flag "where
-   practical", "where possible", "when appropriate", "unless" — these
-   turn mandatory rules into optional suggestions. Flag rules shorter
-   than three lines with no reasoning — they are likely stubs.
-3. **Reference resolution** — for every markdown link in directives,
-   commands, and sub-agent templates, verify the target file exists.
-   Silent degradation (correct-looking links to absent files) is worse
-   than a missing artefact because it is invisible.
-4. **Adapter completeness** — for every canonical rule in `.agent/rules/`,
-   verify a corresponding adapter exists in each configured platform
-   directory. Missing adapters mean rules do not fire on that platform.
-   Record gaps in the surface matrix if one exists.
-5. **Self-reflection** — run the metacognition directive on the
-   integration itself. If it produces genuine insights, the integration
-   is likely healthy. If it produces a summary of steps taken, the
-   metacognition directive is probably broken (return to step 1).
+After building, verify. See
+[practice-verification.md](practice-verification.md) for the full
+verification sequence: structural checklist, intent-level health check,
+minimum operational estate, claimed/installed/activated audit, and
+fresh-checkout acceptance criteria.

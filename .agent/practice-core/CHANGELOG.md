@@ -4,6 +4,59 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-03 — Operational Estate and Provenance UUID Migration
+
+- Migrated `provenance.yml` from sequential `index` integers to UUID v4 `id`
+  fields across all three chains (63 existing entries + 3 new entries).
+  Eliminates implied hierarchy and merge-conflict risk during plasmid exchange.
+  Updated field specification in practice-lineage.md. See ADR-152.
+- Added Minimum Operational Estate section to practice-bootstrap.md: defines
+  6 mandatory surface categories (core+bridge, memory, continuity host,
+  planning scaffold, platform truth, validators) that must exist beyond the
+  Core 7 files for a self-sufficient hydration
+- Added Claimed/Installed/Activated Audit section to practice-bootstrap.md:
+  three-state verification model ensuring surfaces are not just claimed but
+  actually installed and activated on a fresh checkout
+- Added Fresh-Checkout Acceptance Criteria to practice-bootstrap.md: 6 things
+  a fresh-checkout agent must do without consulting the source repo
+- Extended Post-Installation Health Check with continuity-host existence,
+  bridge truthfulness, and runtime smoke checks (three proof modes: presence,
+  parity, runtime)
+- Added Continuity Contract subsection to practice-bootstrap.md Skills: host
+  surface as verification target, contract fields, surprise pipeline, split
+  between session-handoff and consolidate-docs. Cross-references ADR-150
+- Added cross-platform integration order and policy-spine authority hierarchy
+  to the Artefact Model section
+- Extended Ecosystem Survey with deliberate-omission protocol: absent concepts
+  must be recorded in live surfaces with rationale, not just changelogs
+- Added forward reference to Fresh-Checkout Acceptance Criteria near the top
+  of practice-bootstrap.md for hydration orientation
+- Strengthened continuity-host wording in practice.md: the host is a
+  verification target, not just a description; prompts are one valid option
+- Added Minimum Operational Estate pointer and Claimed/Installed/Activated
+  reference to practice.md
+- Added 3 new Active Learned Principles to practice-lineage.md: hydration
+  verifies operations not just structure, deliberate absences must live in
+  operational surfaces, canonical source before activation always
+- Extended practice-lineage.md Integration Flow step 8 with operational
+  surface audit clause
+- Extended practice-lineage.md hydration steps 8-9 with deliberate-omission
+  and claimed/installed/activated requirements
+- Added 3 operational validation checks (7-9) to practice-lineage.md with
+  explicit static/operational distinction
+- Integrated 8 incoming practice-context files from agent-collaboration
+- Split practice-bootstrap.md: extracted verification material (bootstrap
+  checklist, health check, minimum operational estate,
+  claimed/installed/activated audit, fresh-checkout acceptance criteria) into
+  new `practice-verification.md` — 8th Practice Core file. The split gives
+  verification proper weight as a distinct lifecycle phase
+- Deduplicated continuity host description in practice.md: reduced to
+  summary with pointer to practice-bootstrap.md §Continuity Contract
+- Promoted two Active Principles to axiom tier: "Architectural excellence
+  over expediency" and "Apps are thin; libraries own domain logic" — both
+  already stated in the universal principles blueprint
+- Updated all "seven files" references to "eight files" across the Core
+
 ## [oak-open-curriculum-ecosystem] 2026-04-03 — Continuity Promotion and Platform-Config Doctrine
 
 - Promoted the split-loop continuity model into the portable Core:

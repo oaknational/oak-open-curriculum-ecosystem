@@ -163,6 +163,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-149: Frontend Specialist Reviewer Gateway Cluster](149-frontend-specialist-reviewer-gateway-cluster.md)
 - [ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)
 - [ADR-151: MCP App Styling Independence from Oak Web Application and Oak Components](151-mcp-app-styling-independence.md)
+- [ADR-152: Provenance UUID Migration](152-provenance-uuid-migration.md)
 
 ## Key Architectural Decisions
 

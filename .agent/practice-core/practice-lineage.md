@@ -1,8 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_target: 550
+fitness_line_target: 590
 fitness_line_limit: 725
-fitness_char_limit: 32000
+fitness_char_limit: 36000
 fitness_line_length: 100
 ---
 
@@ -12,9 +12,11 @@ This is the canonical lineage document for this repo's Practice. It serves two p
 reference for how the plasmid exchange mechanism works, and (2) the source template for outbound
 propagation.
 
-When propagating the Practice to another repo, copy all seven Practice Core files: the trinity
-(`practice.md`, this file, and `practice-bootstrap.md`), the entry points (`README.md` and
-`index.md`), the changelog (`CHANGELOG.md`), and the provenance file (`provenance.yml`). If
+When propagating the Practice to another repo, copy all eight Practice Core files: the trinity
+(`practice.md`, this file, and `practice-bootstrap.md`), the verification
+companion (`practice-verification.md`), the entry points (`README.md` and
+`index.md`), the changelog (`CHANGELOG.md`), and the provenance file
+(`provenance.yml`). If
 `.agent/practice-context/outgoing/` exists, relevant files may be copied into the receiving repo's
 `.agent/practice-context/incoming/` as optional support material, but they are not part of the Core.
 See §Frontmatter and §Plasmid Exchange below.
@@ -35,17 +37,17 @@ records:
 
 | Field     | Description                                                                            |
 | --------- | -------------------------------------------------------------------------------------- |
-| `index`   | Position in the chain. 0 is the origin.                                                |
+| `id`      | UUID v4 identifying this entry. Unique across all chains.                                |
 | `repo`    | Repository name.                                                                       |
 | `date`    | Date this iteration was created or last evolved.                                       |
 | `purpose` | What the Practice is being used for — tells receiving repos what shaped this evolution. |
 
-The chain tracks origin (index 0), evolution (last `repo` differs →
+The chain tracks origin (first entry), evolution (last `repo` differs →
 new learnings), and context (`purpose` describes what shaped the
 evolution). Evolving repos append new entries to `provenance.yml`.
 
-**Caveat**: a higher `index` does not imply superiority across all dimensions. Repos evolve
-independently; always compare content, not indices, when integrating incoming material.
+**Caveat**: a later entry does not imply superiority across all dimensions. Repos evolve
+independently; always compare content, not position, when integrating incoming material.
 
 ## The Practice Blueprint
 
@@ -347,10 +349,15 @@ When Practice Core files appear in the Practice Box:
    warranted.
 7. **Record what was taken** in the napkin (for traceability, not attribution).
 8. **Audit cohesion.** (a) Check that all Practice Core files (`practice.md`, `practice-lineage.md`,
-   `practice-bootstrap.md`, `index.md`, `README.md`, `CHANGELOG.md`, `provenance.yml`) are
+   `practice-bootstrap.md`, `practice-verification.md`, `index.md`, `README.md`, `CHANGELOG.md`,
+   `provenance.yml`) are
    internally consistent — no contradictions, no stale descriptions, no missing cross-references.
    (b) Check that `.agent/practice-index.md` links resolve. (c) Check that broader Practice files
-   (directives, rules, skills, commands) are aligned with the updated Core.
+   (directives, rules, skills, commands) are aligned with the updated Core. (d) Audit operational
+   surfaces: verify memory sinks exist, continuity host exists and is referenced correctly by
+   workflows, hook estate is consistent (if hooks are supported), the bridge truthfully reflects
+   the installed estate, and every activation in tracked platform config has a canonical backing
+   source.
 9. **Clear transient exchange material.** Remove the incoming files. If
    `.agent/practice-context/incoming/` exists, clear its received files and working notes. Local
    `outgoing/` may remain. The integration is complete.
@@ -419,21 +426,31 @@ deviations. Preserve and integrate them.
    commands, rules, and skills (start-right, napkin). For each artefact type,
    create the canonical content in `.agent/` first, then add thin platform adapters. The bootstrap
    file provides annotated templates and format specifications for every artefact type.
-7. **Practice Core files.** If building from scratch: write all seven files in
+7. **Practice Core files.** If building from scratch: write all eight files in
    `.agent/practice-core/` — the trinity (`practice.md`, this lineage doc, `practice-bootstrap.md`)
    each with YAML frontmatter (`provenance: provenance.yml`, `fitness_line_target`,
    `fitness_line_limit`, `fitness_char_limit`, `fitness_line_length`), plus `README.md`,
    `index.md`, `CHANGELOG.md`, and
-   `provenance.yml` (with an index-0 entry per trinity file). If received from another repo: the
-   seven files already exist — append a new entry to each file's chain in `provenance.yml`.
+   `provenance.yml` (with an origin entry per trinity file), and
+   `practice-verification.md` (with fitness frontmatter). If received from
+   another repo: the eight files already exist — append a new entry to each
+   file's chain in `provenance.yml`.
 8. **Create `.agent/practice-index.md`** — the bridge file that carries navigable links from the
    Practice Core to the local repo's artefacts. The Practice Core references it via
    `../practice-index.md`. Use the template in `practice-bootstrap.md`, populating every section
    with the local repo's actual directives, ADRs, commands, skills, and directories. This file is
-   NOT part of the travelling package — it stays in the repo.
+   NOT part of the travelling package — it stays in the repo. **Record deliberate omissions**:
+   concepts intentionally not installed (specific reviewer families, hook layers, continuity host
+   variants, schema-first if inapplicable) must appear in the bridge with rationale and conditions
+   for future adoption. Historical changelogs are supporting evidence, not sufficient live
+   grounding.
 9. **Validate**: every file reference in every directive, agent, command, and rule resolves. Every
-   agent's first-action file exists. The repo builds. See the Bootstrap Checklist in
-   `practice-bootstrap.md`.
+   agent's first-action file exists. The repo builds. Then run the **claimed/installed/activated
+   audit**: for every surface claimed in `AGENT.md`, `practice-index.md`, commands, or skills,
+   verify (a) the files exist, (b) any platform activation in tracked config has a canonical
+   backing source, and (c) workflow commands (`go`, `session-handoff`, `start-right`) resolve
+   against real surfaces (memory, continuity host, planning scaffold). See the Bootstrap Checklist
+   and `practice-verification.md`.
 10. **Audit cohesion.** Check that all Practice Core files are internally consistent,
     that `.agent/practice-index.md` links resolve, and that broader Practice files
     (directives, rules, skills, commands) are aligned with the Core. Contradictions
@@ -456,6 +473,22 @@ degrades.
 6. **Cohesion check** — all Practice Core files are internally consistent, practice-index.md links
    resolve, and broader Practice files (directives, rules, commands, skills) are aligned with the
    Core content. No stale descriptions, no contradictions, no outdated wording.
+
+### Operational checks (require agent judgement, not scriptable)
+
+7. **Operational check** — workflows (`go`, `session-handoff`, `start-right`)
+   can execute against their claimed surfaces (memory, continuity host,
+   planning scaffold). If a workflow references a surface, that surface must
+   exist on a fresh checkout.
+8. **Deliberate-omission check** — every absent-but-referenced concept is
+   documented as deliberately omitted in `practice-index.md` or `AGENT.md`,
+   with rationale and conditions for future adoption. A broken reference is
+   not proof of required restoration — check the local changelog first.
+9. **Activation-parity check** — every activation in tracked platform config
+   (hook wiring, skill permissions, plugin state) has a corresponding
+   canonical source file. Absence of canonical source is a failing state that
+   must be reported — do not skip the check when the source file is missing;
+   the missing file is itself the defect.
 
 ### Validation scripts
 
@@ -505,6 +538,8 @@ validated across 3+ repos.
 - **Agent files are first-class infrastructure.** They are executable agent code in markdown —
   subject to DRY, SOLID, and production-code rigour.
 - **Portable does not mean symmetrical.** Support only evidenced platform mappings.
+- **Architectural excellence over expediency.**
+- **Apps are thin; libraries own domain logic.**
 
 ### Active Principles
 
@@ -535,10 +570,22 @@ validated across 3+ repos.
 - **Ordinary continuity and deep convergence are separate loops.** Use handoff
   for cheap resumptions and consolidation for graduation. Bundling them makes
   both less likely.
-- **Architectural excellence over expediency.** Choose long-term clarity over
-  short-term convenience; duplicate builders and hidden shortcuts cause drift.
-- **Apps are thin; libraries own domain logic.** Apps compose library/SDK
-  capabilities. Reimplementing library-owned logic creates silent drift.
 - **Provenance is storytelling, not credit.** The provenance chain records the
   knowledge journey, not ownership. Every repo that shaped the evolution appears
   because we are here to collaborate, not compete.
+- **Hydration verifies operations, not just structure.** Checking that files
+  exist and references resolve is necessary but not sufficient. A hydrated repo
+  must prove it can operate: run workflows against real surfaces, write to
+  memory, validate its own estate. The three-state test — claimed, installed,
+  activated — catches the most dangerous failure mode: everything looks right
+  but nothing works.
+- **Deliberate absences must live in operational surfaces.** When a concept is
+  intentionally not installed, record that fact in `practice-index.md` or
+  `AGENT.md` — not just in changelogs. Otherwise the next agent sees a broken
+  reference and mechanically restores doctrine the repo had deliberately
+  removed.
+- **Canonical source before activation, always.** Installing platform adapters,
+  tracked config, or validation wrappers before the canonical sources they
+  depend on creates a broken install that false-greens on parity checks. The
+  order is: canonical → activation → validation. Reversing it is a structural
+  bug.
