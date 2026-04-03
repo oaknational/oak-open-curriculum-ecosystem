@@ -6,6 +6,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import type { Logger } from '@oaknational/logger';
+import type { JsonBody200 } from '@oaknational/sdk-codegen/api-schema';
 import { createQuerySerializer, defaultBodySerializer, defaultPathSerializer } from 'openapi-fetch';
 import { createResponseAugmentationMiddleware } from './response-augmentation.js';
 
@@ -97,14 +98,7 @@ async function expectLessonOakUrl(
 }
 
 describe('createResponseAugmentationMiddleware', () => {
-  describe('logger injection', () => {
-    it('accepts an injected logger', () => {
-      const logger = createFakeLogger();
-      const middleware = createResponseAugmentationMiddleware({ logger });
-      expect(middleware).toBeDefined();
-      expect(middleware.onResponse).toBeDefined();
-    });
-
+  describe('schema validation', () => {
     it('returns unaugmented response when body fails schema validation', async () => {
       const logger = createFakeLogger();
       const middleware = createResponseAugmentationMiddleware({ logger });
@@ -123,11 +117,17 @@ describe('createResponseAugmentationMiddleware', () => {
   });
 
   describe('error containment', () => {
-    it('returns unaugmented response when augmentation throws', async () => {
+    it('returns unaugmented response and logs warning when augmentation throws', async () => {
       const logger = createFakeLogger();
       const middleware = createResponseAugmentationMiddleware({ logger });
 
-      const body = { subjectSlug: 'maths', subjectTitle: 'Maths' };
+      const body = {
+        subjectTitle: 'Maths',
+        subjectSlug: 'maths',
+        sequenceSlugs: [],
+        years: [],
+        keyStages: [],
+      };
       const request = buildGetRequest('/subjects/maths');
       const response = buildJsonResponse(body);
 
@@ -136,12 +136,15 @@ describe('createResponseAugmentationMiddleware', () => {
       expect(result.status).toBe(200);
       const resultBody: unknown = await result.json();
       expect(resultBody).toHaveProperty('subjectSlug', 'maths');
+      expect(resultBody).not.toHaveProperty('oakUrl');
+      const warnCalls = logger.calls.filter((c) => c.startsWith('warn:'));
+      expect(warnCalls.length).toBeGreaterThan(0);
     });
   });
 
   describe('lesson sub-resource paths', () => {
     it('uses the lesson path segment for lesson summary responses', async () => {
-      await expectLessonOakUrl('/lessons/add-two-numbers/summary', '/lessons/{lesson}/summary', {
+      const body = {
         lessonTitle: 'Add Two Numbers',
         canonicalUrl:
           'https://www.thenational.academy/teachers/programmes/maths/units/place-value/lessons/add-two-numbers',
@@ -159,32 +162,40 @@ describe('createResponseAugmentationMiddleware', () => {
         contentGuidance: null,
         supervisionLevel: null,
         downloadsAvailable: true,
-      });
+      } as const satisfies JsonBody200<'/lessons/{lesson}/summary', 'get'>;
+      await expectLessonOakUrl(
+        '/lessons/add-two-numbers/summary',
+        '/lessons/{lesson}/summary',
+        body,
+      );
     });
 
     it('uses the lesson path segment for lesson transcript responses', async () => {
+      const body = {
+        transcript: 'This is the lesson transcript text',
+        vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nThis is the lesson transcript text',
+      } as const satisfies JsonBody200<'/lessons/{lesson}/transcript', 'get'>;
       await expectLessonOakUrl(
         '/lessons/add-two-numbers/transcript',
         '/lessons/{lesson}/transcript',
-        {
-          transcript: 'This is the lesson transcript text',
-          vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nThis is the lesson transcript text',
-        },
+        body,
       );
     });
 
     it('uses the lesson path segment for lesson quiz responses', async () => {
-      await expectLessonOakUrl('/lessons/add-two-numbers/quiz', '/lessons/{lesson}/quiz', {
+      const body = {
         starterQuiz: [],
         exitQuiz: [],
-      });
+      } as const satisfies JsonBody200<'/lessons/{lesson}/quiz', 'get'>;
+      await expectLessonOakUrl('/lessons/add-two-numbers/quiz', '/lessons/{lesson}/quiz', body);
     });
 
     it('uses the lesson path segment for lesson asset responses', async () => {
-      await expectLessonOakUrl('/lessons/add-two-numbers/assets', '/lessons/{lesson}/assets', {
+      const body = {
         oakUrl: 'https://www.thenational.academy/teachers/lessons/add-two-numbers',
         assets: [],
-      });
+      } as const satisfies JsonBody200<'/lessons/{lesson}/assets', 'get'>;
+      await expectLessonOakUrl('/lessons/add-two-numbers/assets', '/lessons/{lesson}/assets', body);
     });
   });
 });
