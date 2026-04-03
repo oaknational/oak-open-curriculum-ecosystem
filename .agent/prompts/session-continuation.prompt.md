@@ -39,7 +39,7 @@ git log --oneline --decorate -10
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
   - `.agent/plans/agentic-engineering-enhancements/current/continuity-and-surprise-practice-adoption.plan.md`
-- **Completed plans** (this session):
+- **Completed plans** (prior sessions):
   - `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md` — COMPLETE
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md` — COMPLETE
 - **Current state**: WS3 Phase 3 canonical contracts are COMPLETE, including
@@ -53,13 +53,13 @@ git log --oneline --decorate -10
   so the specialist agents are available for widget UI work. Continuity
   adoption evidence now includes a real WS3 resumption, a `GO` session
   entry, and a second deep-consolidation entry.
-- **Current objective**: Start WS3 Phase 4 (curriculum-model view) using
-  the canonical `@oaknational/oak-design-tokens` package CSS and the
-  component-tier token system established in the prerequisite. Before
-  Phase 4, a follow-up commit addresses widget resilience (StrictMode,
-  callback exception isolation, safe dispatch, exhaustive reducer) and
-  design token documentation (`$description`, dark theme intent, boundary
-  rules). This commit is staged but not yet landed.
+- **Current objective**: Prepare for WS3 Phase 4 (curriculum-model view).
+  Widget resilience fixes and token documentation landed in `f88b3fbc`.
+  Three gates remain before any Phase 4 code is written:
+  1. Resolve every deferred review finding (see below)
+  2. Hold a design conversation to nail impact goals, UX/DX principles,
+     and the approach for the curriculum-model and user-search views
+  3. Only then start Phase 4 implementation
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -95,10 +95,11 @@ git log --oneline --decorate -10
   - **Documented constraints**: ESLint config-level suppressions for
     `max-lines`, `consistent-type-assertions` (negative tests) in SDK
     workspace — justified in config comments but not yet ADR-recorded
-- **Next safe step**: Before starting Phase 4, resolve or close every
-  deferred review finding listed below. Each item must be either fixed,
-  recorded as an ADR exception, or documented as intentionally accepted
-  with a justification. Only then start Phase 4 per
+- **Next safe step**: (1) Resolve or close every deferred review finding
+  listed above — each must be fixed, ADR-excepted, or accepted with
+  justification. (2) Hold a design conversation about impact goals, UX/DX
+  principles, and approach before writing any Phase 4 code. (3) Then
+  start Phase 4 per
   `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-curriculum-model-view.plan.md`.
 - **Deep consolidation status**: complete — the WS3 Phase 3/security-closure
   batch has been consolidated, the merge-main plan archived, and the second
@@ -122,8 +123,8 @@ wilma). In-scope findings fixed; pre-existing SDK findings deferred.
 **Pending**: Phase 4 (curriculum view), Phase 5 (search view), Phase 6
 (docs/gates/review). Design token infrastructure is now in place.
 
-**Next action**: Resolve or close every deferred review finding, then
-start Phase 4.
+**Next action**: (1) Resolve deferred review findings, (2) hold
+design/UX/DX conversation, (3) then start Phase 4.
 
 ### 2. Frontend Practice Integration — COMPLETE
 
