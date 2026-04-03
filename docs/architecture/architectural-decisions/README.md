@@ -162,6 +162,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-148: Design Token Architecture](148-design-token-architecture.md)
 - [ADR-149: Frontend Specialist Reviewer Gateway Cluster](149-frontend-specialist-reviewer-gateway-cluster.md)
 - [ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)
+- [ADR-151: MCP App Styling Independence from Oak Web Application and Oak Components](151-mcp-app-styling-independence.md)
 
 ## Key Architectural Decisions
 
@@ -202,6 +203,7 @@ For understanding the agentic engineering practice:
 - **[ADR-147](147-browser-accessibility-as-blocking-quality-gate.md)** - Browser accessibility as a 9th blocking quality gate: WCAG 2.2 AA, Playwright + axe-core, two-level MCP App testing
 - **[ADR-148](148-design-token-architecture.md)** - Design token architecture: DTCG JSON source, three-tier model, CSS custom properties output, `packages/design/` location
 - **[ADR-149](149-frontend-specialist-reviewer-gateway-cluster.md)** - Frontend specialist reviewer gateway cluster: accessibility-reviewer, design-system-reviewer, react-component-reviewer cohort with MCP boundary rule
+- **[ADR-151](151-mcp-app-styling-independence.md)** - MCP App styling independence: CSS custom properties over styled-components, self-contained HTML resources, host theme composition
 
 For understanding semantic search and Elastic-native AI/ML approach:
 

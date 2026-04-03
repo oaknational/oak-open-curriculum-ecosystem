@@ -53,13 +53,18 @@ git log --oneline --decorate -10
   so the specialist agents are available for widget UI work. Continuity
   adoption evidence now includes a real WS3 resumption, a `GO` session
   entry, and a second deep-consolidation entry.
-- **Current objective**: Prepare for WS3 Phase 4 (curriculum-model view).
-  Widget resilience fixes and token documentation landed in `f88b3fbc`.
-  Three gates remain before any Phase 4 code is written:
-  1. Resolve every deferred review finding (see below)
-  2. Hold a design conversation to nail impact goals, UX/DX principles,
-     and the approach for the curriculum-model and user-search views
-  3. Only then start Phase 4 implementation
+- **Current objective**: Implement contrast validation prerequisite, then
+  start Phase 4. The three pre-Phase-4 gates are COMPLETE:
+  1. ✅ Portability validator extended (Check 11: skill permissions)
+  2. ✅ Deferred review findings resolved (threadSlug removed,
+     bulk-rollup-builder→Result, OakUrlAugmentable tracked as codegen fix,
+     fakes.ts accepted with justification)
+  3. ✅ Design conversation held — Phase 4 is a brand banner (not a data
+     renderer), Phase 5 is user-first search with `callServerTool` +
+     `updateModelContext`. ADR-151 records the styling independence decision.
+  The new prerequisite is the **contrast validation plan** at
+  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
+  — must be completed before any Phase 4 code.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -67,78 +72,61 @@ git log --oneline --decorate -10
   - Do not introduce custom tool-discovery, visibility, or presentation shims
   - Treat continuity as repo practice, not consciousness language
 - **Recent surprises / corrections**:
-  - Comprehensive review scope creep: 5-reviewer cycle on the full branch
-    expanded into fixing pre-existing SDK issues. User correction: separate
-    in-scope from pre-existing, fix in-scope, defer pre-existing.
-  - `console` ban means "use canonical logger", not "use IO primitives".
-  - `Record<string, unknown>` is sometimes the honest structural constraint
-    when functions use dynamic property checks across 5+ entity shapes.
-  - WAI-ARIA 1.3 Editor's Draft is the preferred working reference.
-  - axe-core WCAG 2.1 rules have their own tag family (`wcag21a`, `wcag21aa`)
+  - User corrected Phase 4 framing: it is a brand banner (logo + "Oak
+    National Academy" link), NOT a data renderer. The curriculum-model data
+    serves the agent; the view serves the human with orientation.
+  - User corrected OakUrlAugmentable reasoning: `Record<string, unknown>`
+    is widening, full stop. The schema-first principle means we know every
+    response type at codegen time. Fix is codegen-level (generate union of
+    GET response body types), not an exception.
+  - Contrast validation needs triadic model: button text + button surface +
+    page background form a triad where all three pairwise ratios must pass.
+  - Wider trawl of 7 repos found no reusable contrast/token/styling code.
+    Nothing meets the bar for this repo. Build from W3C spec directly.
 - **Open questions / low-confidence areas**:
-  - Whether the v1 token set needs expansion for Phase 4/5 views
-  - `ws3-phase-4-curriculum-model-view.plan.md` line 20 still says
-    "blocked on prerequisite" — update when Phase 4 kickoff starts
-- **Settings portability follow-up** (next session):
-  - Extend `pnpm portability:check` to verify that skills with Claude
-    Code adapters also have corresponding `Skill(name)` entries in
-    `.claude/settings.json` permissions — the validator currently checks
-    adapter existence but not platform authorisation
-  - Document the project/local settings split in the agent artefact
-    architecture section of AGENT.md and the ADR-125 permanent docs —
-    explain why project settings are tracked and what belongs in local
-- **Deferred review findings** (next session must evaluate each):
-  - **Needs architectural decision**: `OakUrlAugmentable =
-    Readonly<Record<string, unknown>>` — investigation proved the type is
-    structurally correct for 5+ dynamic entity shapes. The ESLint ban is
-    over-broad for this case. Needs an ADR or rule exception, not a type
-    change. File: `packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts`
-  - **Needs codegen-level solution**: `as OakApiPathBasedClient` in
-    `src/test-helpers/fakes.ts` — 100+ generated path signatures make
-    `Partial<>` unviable. Only 2 callers. Config suppression is documented.
-  - **Quick fix, was reverted during scope correction**:
-    `void threadSlug` in `oak-url-convenience.ts` (no callers, remove param),
-    `@security` TSDoc tag in `resource-parameter-validator.ts` (one word)
-  - **Real Result-pattern violation**: `throw new Error` in
-    `apps/oak-search-cli/src/adapters/bulk-rollup-builder.ts:200` — should
-    use `Result<T, Error>`. Cascade through `HybridDataSource` interface.
-  - **Documented constraints**: ESLint config-level suppressions for
-    `max-lines`, `consistent-type-assertions` (negative tests) in SDK
-    workspace — justified in config comments but not yet ADR-recorded
-- **Next safe step**: (1) Resolve or close every deferred review finding
-  listed above — each must be fixed, ADR-excepted, or accepted with
-  justification. (2) Hold a design conversation about impact goals, UX/DX
-  principles, and approach before writing any Phase 4 code. (3) Then
-  start Phase 4 per
-  `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-curriculum-model-view.plan.md`.
-- **Deep consolidation status**: completed recent convergence passes — napkin
-  rotated (632→archive), 5 entries merged to distilled.md, "UX predates visual
-  design" plus repair-workflow wording-clarity patterns extracted, prompt
-  stale references fixed, platform-memory review-scope guidance realigned, and
-  duplicate doctrine pruned from distilled.md after graduation to ADR-125 and
-  `consolidate-docs`. Developer-experience research indexing is in place.
-  Incoming practice box is currently empty. The broader continuity evidence
-  window remains open.
+  - Token set expansion for Phase 4/5: design-system reviewer identified
+    gaps (link colours, hover surfaces, result-item tokens, font-size-400)
+  - Focus ring contrast (2.08:1 light) and dark error colour (2.84:1) are
+    blocking WCAG AA violations — must fix in contrast validation prereq
+  - Whether `prefers-color-scheme` media query fallback is needed when
+    the MCP host does not set `data-theme`
+- **Remaining tracked items** (not blocking Phase 4 directly):
+  - `OakUrlAugmentable` codegen-level fix (generate GET response union)
+  - `fakes.ts` assertion — accepted, follow-up for codegen partial type
+  - ESLint config suppressions not yet ADR-recorded
+- **Next safe step**: Implement the contrast validation prerequisite plan
+  at `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`,
+  then update the Phase 4 plan and begin implementation.
+- **Deep consolidation status**: this session completed all three pre-Phase-4
+  gates, held the design conversation, wrote ADR-151 (styling independence),
+  wrote the contrast validation prerequisite plan, and ran a wider trawl
+  across 7 repos (nothing reusable found). Consolidation pass updated this
+  prompt, platform memory, and Phase 4 plan status. Practice box empty.
 
 ## Active Workstreams (2026-04-03)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (token prerequisite complete, Phase 4 next)
+### 1. WS3 MCP App Rebuild — ACTIVE (contrast validation prerequisite, then Phase 4)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 
 **Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold),
 Phase 3 (canonical contracts + fallback proof).
-**Completed prerequisite**:
-`.agent/plans/sdk-and-mcp-enhancements/current/ws3-design-token-prerequisite.plan.md`
-— all 6 work slices complete, `pnpm check` green, adversarial review passed.
-Comprehensive 5-reviewer branch review also done (code, type, fred, security,
-wilma). In-scope findings fixed; pre-existing SDK findings deferred.
-**Pending**: Phase 4 (curriculum view), Phase 5 (search view), Phase 6
-(docs/gates/review). Design token infrastructure is now in place.
+**Completed prerequisites**:
 
-**Next action**: (1) Resolve deferred review findings, (2) hold
-design/UX/DX conversation, (3) then start Phase 4.
+- Design-token prerequisite — all 6 work slices, `pnpm check` green
+- Three pre-Phase-4 gates — portability validator, deferred review
+  findings, design conversation (ADR-151 written)
+
+**Current prerequisite**:
+`.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
+— WCAG contrast ratio validation in the design token pipeline. Fixes two
+blocking token contrast violations (focus ring, dark-theme error). Confirmed
+by Betty, Fred, and design-system reviewers.
+**Pending**: Phase 4 (brand banner), Phase 5 (user search), Phase 6
+(docs/gates/review).
+
+**Next action**: Implement contrast validation prerequisite, then Phase 4.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

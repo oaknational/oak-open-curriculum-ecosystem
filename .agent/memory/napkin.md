@@ -266,3 +266,47 @@
 - When quality-gate doctrine drifts, treat root `package.json` scripts and
   live hook/workflow surfaces as source of truth, then repair the command
   surface and the canonical docs together rather than editing prose alone.
+
+## Session 2026-04-03 — pre-Phase-4 gates and design conversation
+
+### What Was Done
+
+- Completed all three pre-Phase-4 gates: portability validator Check 11
+  (skill permissions), deferred review findings (threadSlug removal,
+  bulk-rollup-builder→Result, OakUrlAugmentable tracked, fakes.ts accepted),
+  and the design conversation.
+- Design conversation reframed Phase 4 as a brand banner (not data
+  renderer) and Phase 5 as user-first search with `callServerTool` +
+  `updateModelContext` + `visibility: ["app"]`.
+- Wrote ADR-151 (MCP App Styling Independence). Three architecture
+  reviewers found: inaccurate "same colours" claim (palettes diverge),
+  missing negative consequence (no shared component layer), ADR-045
+  cross-reference gap. All fixed.
+- Wrote contrast validation prerequisite plan. Architecture confirmed by
+  Betty (cohesion), Fred (ADR compliance), design-system (data model).
+  Key decision: no write-back to source JSON — contrast data is a build
+  artefact in `dist/`.
+- Wider trawl of 7 repos found no reusable contrast/token/styling code.
+  Nothing meets the bar. Build from W3C spec.
+- Extracted `buildBulkOps` to `bulk-ops-builder.ts` for max-lines
+  compliance (proper file split, not formatting compression).
+
+### Patterns to Remember
+
+- Triadic contrast (text + button surface + page background): WCAG only
+  defines bilateral contrast. When three elements interact, all three
+  pairwise ratios must pass. Candidate for pattern extraction once the
+  contrast validation tool is implemented and proves the model.
+- When a file exceeds max-lines, extract by responsibility with TDD.
+  Never compress formatting (single-line interfaces, collapsed constants)
+  to fit — that is a hack.
+- "Shared tokens" does not mean "same values". The MCP token palette and
+  oak-components use different hex values. Say "authored with reference
+  to" not "same as" when the values are not generated from a common
+  source.
+
+### Mistakes Made
+
+- Compacted `EnrichmentTracker` interface and `DEFAULT_CONFIG` to single
+  lines to fit under max-lines. User caught this — principles say split
+  by responsibility, not compress formatting.

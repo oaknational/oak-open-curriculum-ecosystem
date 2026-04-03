@@ -17,8 +17,8 @@ todos:
 
 # WS3 Phase 4: Curriculum Model View
 
-**Status**: PENDING — blocked on `../current/ws3-design-token-prerequisite.plan.md`
-**Last Updated**: 2026-04-02
+**Status**: PENDING — blocked on `../current/ws3-contrast-validation-prerequisite.plan.md`
+**Last Updated**: 2026-04-03
 
 ## Required Inputs
 
