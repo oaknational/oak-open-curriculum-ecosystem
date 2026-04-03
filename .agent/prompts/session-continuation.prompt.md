@@ -77,6 +77,8 @@ git log --oneline --decorate -10
   - axe-core WCAG 2.1 rules have their own tag family (`wcag21a`, `wcag21aa`)
 - **Open questions / low-confidence areas**:
   - Whether the v1 token set needs expansion for Phase 4/5 views
+  - `ws3-phase-4-curriculum-model-view.plan.md` line 20 still says
+    "blocked on prerequisite" — update when Phase 4 kickoff starts
 - **Deferred review findings** (next session must evaluate each):
   - **Needs architectural decision**: `OakUrlAugmentable =
     Readonly<Record<string, unknown>>` — investigation proved the type is
@@ -101,10 +103,11 @@ git log --oneline --decorate -10
   principles, and approach before writing any Phase 4 code. (3) Then
   start Phase 4 per
   `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-curriculum-model-view.plan.md`.
-- **Deep consolidation status**: complete — the WS3 Phase 3/security-closure
-  batch has been consolidated, the merge-main plan archived, and the second
-  deep-consolidation evidence entry recorded. The broader evidence window
-  remains open until the resumption and `GO` thresholds are met.
+- **Deep consolidation status**: completed this handoff — napkin rotated
+  (632→archive), 5 entries merged to distilled.md, "UX predates visual
+  design" pattern extracted, prompt stale references fixed. Incoming
+  practice box has 18 items awaiting integration (separate session).
+  The broader continuity evidence window remains open.
 
 ## Active Workstreams (2026-04-03)
 

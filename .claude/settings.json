@@ -1,0 +1,99 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.elastic.co)",
+      "WebFetch(domain:docs.github.com)",
+      "WebFetch(domain:playwright.dev)",
+      "WebFetch(domain:modelcontextprotocol.github.io)",
+      "WebFetch(domain:zod.dev)",
+
+      "Bash(git status:*)",
+      "Bash(git mv:*)",
+      "Bash(git remote get-url origin)",
+      "Bash(gh run:*)",
+      "Bash(gh pr:*)",
+      "Bash(npx turbo:*)",
+      "Bash(npx tsc:*)",
+
+      "Skill(jc-plan)",
+      "Skill(jc-plan:*)",
+      "Skill(jc-start-right-thorough)",
+      "Skill(jc-start-right-thorough:*)",
+      "Skill(jc-start-right-quick)",
+      "Skill(jc-start-right-quick:*)",
+      "Skill(jc-consolidate-docs)",
+      "Skill(jc-consolidate-docs:*)",
+      "Skill(jc-commit)",
+      "Skill(jc-commit:*)",
+      "Skill(jc-session-handoff)",
+      "Skill(jc-session-handoff:*)",
+      "Skill(jc-go)",
+      "Skill(jc-go:*)",
+      "Skill(jc-metacognition)",
+      "Skill(jc-metacognition:*)",
+      "Skill(jc-gates)",
+      "Skill(jc-gates:*)",
+      "Skill(jc-review)",
+      "Skill(jc-review:*)",
+
+      "mcp__claude_ai_Oak_National_Academy__get-curriculum-model",
+      "mcp__claude_ai_Oak_National_Academy__get-threads-units",
+      "mcp__claude_ai_Oak_National_Academy__get-sequences-units",
+      "mcp__claude_ai_Oak_National_Academy__get-lessons-transcript",
+      "mcp__claude_ai_Oak_National_Academy__search",
+      "mcp__claude_ai_Oak_National_Academy__get-lessons-summary",
+      "mcp__oak-preview__get-subjects-sequences",
+      "mcp__oak-preview__get-sequences-units",
+
+      "Edit(/.claude/skills/clerk/**)",
+      "Edit(/.claude/skills/clerk-custom-ui/**)",
+      "Edit(/.claude/skills/clerk-nextjs-patterns/**)",
+      "Edit(/.claude/skills/clerk-orgs/**)",
+      "Edit(/.claude/skills/clerk-setup/**)",
+      "Edit(/.claude/skills/clerk-testing/**)",
+      "Edit(/.claude/skills/clerk-webhooks/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/check-blocked-patterns.mjs",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/check-blocked-content.mjs",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/check-blocked-content.mjs",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": false,
+    "code-simplifier@claude-plugins-official": false,
+    "claude-md-management@claude-plugins-official": false,
+    "skill-creator@claude-plugins-official": false,
+    "claude-code-setup@claude-plugins-official": false
+  }
+}

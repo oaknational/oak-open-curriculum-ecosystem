@@ -16,3 +16,8 @@
   now a gate (must be resolved before Phase 4), each with an honest
   assessment of whether it's genuinely pre-existing or could have been
   fixed in this session.
+- Found 5 skills missing from `.claude/settings.json` permissions
+  allowlist: `jc-session-handoff`, `jc-go`, `jc-metacognition`,
+  `jc-gates`, `jc-review`. The portability validator checks adapter
+  existence but not platform permission authorisation — a validation
+  gap.

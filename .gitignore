@@ -17,9 +17,13 @@ collaboration.txt
 # Local MCP server config
 .mcp.json
 
-# Per-user Claude Code settings (contains absolute paths and local permissions)
-.claude/settings.json
+# Platform settings: project config is tracked, local overrides are not.
+# Project settings define the agentic system contract (skill permissions,
+# hooks, plugin state) and must work on fresh checkout.
+# Local settings contain user-specific paths and one-off permissions.
 .claude/settings.local.json
+.cursor/settings.local.json
+.gemini/settings.local.json
 
 # Claude agent worktrees (transient, machine-local)
 .claude/worktrees/
