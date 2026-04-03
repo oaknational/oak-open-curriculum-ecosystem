@@ -79,6 +79,14 @@ git log --oneline --decorate -10
   - Whether the v1 token set needs expansion for Phase 4/5 views
   - `ws3-phase-4-curriculum-model-view.plan.md` line 20 still says
     "blocked on prerequisite" — update when Phase 4 kickoff starts
+- **Settings portability follow-up** (next session):
+  - Extend `pnpm portability:check` to verify that skills with Claude
+    Code adapters also have corresponding `Skill(name)` entries in
+    `.claude/settings.json` permissions — the validator currently checks
+    adapter existence but not platform authorisation
+  - Document the project/local settings split in the agent artefact
+    architecture section of AGENT.md and the ADR-125 permanent docs —
+    explain why project settings are tracked and what belongs in local
 - **Deferred review findings** (next session must evaluate each):
   - **Needs architectural decision**: `OakUrlAugmentable =
     Readonly<Record<string, unknown>>` — investigation proved the type is

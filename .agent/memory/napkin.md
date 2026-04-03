@@ -21,3 +21,11 @@
   `jc-gates`, `jc-review`. The portability validator checks adapter
   existence but not platform permission authorisation — a validation
   gap.
+- Split `.claude/settings.json` into project (tracked) and
+  `settings.local.json` (gitignored). Project config defines the
+  agentic system contract: skill permissions, safety hooks, plugin
+  state. User-specific paths and one-off permissions move to local.
+  Arrays concatenate across scopes per Claude Code merge semantics.
+- Follow-up needed: extend portability validator to check skill
+  permission entries; document the project/local split in AGENT.md
+  and ADR-125.
