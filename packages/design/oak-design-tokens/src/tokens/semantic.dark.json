@@ -1,16 +1,65 @@
 {
   "semantic": {
-    "surface-page": { "$type": "color", "$value": "{color.ink-950}" },
-    "surface-panel": { "$type": "color", "$value": "{color.ink-800}" },
-    "surface-accent": { "$type": "color", "$value": "{color.fern-600}" },
-    "border-subtle": { "$type": "color", "$value": "{color.ink-700}" },
-    "text-primary": { "$type": "color", "$value": "{color.paper-050}" },
-    "text-secondary": { "$type": "color", "$value": "{color.paper-100}" },
-    "text-inverse": { "$type": "color", "$value": "{color.ink-950}" },
-    "accent": { "$type": "color", "$value": "{color.sun-300}" },
-    "accent-strong": { "$type": "color", "$value": "{color.sun-400}" },
-    "focus-ring": { "$type": "color", "$value": "{color.sky-400}" },
-    "attention": { "$type": "color", "$value": "{color.sun-300}" },
-    "error": { "$type": "color", "$value": "{color.danger-500}" }
+    "$description": "Dark theme: only colour tokens are overridden; non-colour semantics (typography, spacing, radius) remain identical across themes. Intentional v1 constraint.",
+    "surface-page": {
+      "$type": "color",
+      "$value": "{color.ink-950}",
+      "$description": "Page background — deep navy in dark mode"
+    },
+    "surface-panel": {
+      "$type": "color",
+      "$value": "{color.ink-800}",
+      "$description": "Panel/card background — slightly lighter than page"
+    },
+    "surface-accent": {
+      "$type": "color",
+      "$value": "{color.fern-600}",
+      "$description": "Accent surface — fern green preserved from light theme"
+    },
+    "border-subtle": {
+      "$type": "color",
+      "$value": "{color.ink-700}",
+      "$description": "Subtle dividers and panel borders"
+    },
+    "text-primary": {
+      "$type": "color",
+      "$value": "{color.paper-050}",
+      "$description": "Primary body text — warm white"
+    },
+    "text-secondary": {
+      "$type": "color",
+      "$value": "{color.paper-100}",
+      "$description": "Secondary/muted text"
+    },
+    "text-inverse": {
+      "$type": "color",
+      "$value": "{color.ink-950}",
+      "$description": "Text on accent/light backgrounds — dark navy for contrast against sun/fern"
+    },
+    "accent": {
+      "$type": "color",
+      "$value": "{color.sun-300}",
+      "$description": "Primary accent — golden yellow"
+    },
+    "accent-strong": {
+      "$type": "color",
+      "$value": "{color.sun-400}",
+      "$description": "Hover/active accent — darker gold, distinct from accent for visible state change"
+    },
+    "focus-ring": {
+      "$type": "color",
+      "$value": "{color.sky-400}",
+      "$description": "Focus indicator"
+    },
+    "attention": {
+      "$type": "color",
+      "$value": "{color.sun-300}",
+      "$description": "Attention/warning highlights"
+    },
+    "error": {
+      "$type": "color",
+      "$value": "{color.danger-500}",
+      "$description": "Error states and destructive actions"
+    }
   }
 }

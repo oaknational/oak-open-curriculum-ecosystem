@@ -364,6 +364,12 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
             from: '../../../agent-tools/**' as const,
             message: TOOLING_BOUNDARY_MESSAGE,
           },
+          {
+            target: './src/**' as const,
+            from: '../../../packages/libs/**' as const,
+            message:
+              'Design workspaces cannot depend on libs. Tokens are CSS artefact producers with no runtime lib dependencies (ADR-148).',
+          },
         ],
       },
     ],
@@ -385,6 +391,10 @@ export function createDesignBoundaryRules(designName: DesignPackage): Partial<Li
             'Design workspaces cannot depend on apps. Tokens must remain reusable CSS artefact producers.',
           ),
           ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
+          ...createPackageSpecifierPatterns(
+            LIB_PACKAGE_IMPORTS,
+            'Design workspaces cannot depend on libs. Tokens are CSS artefact producers with no runtime lib dependencies (ADR-148).',
+          ),
         ],
       },
     ],

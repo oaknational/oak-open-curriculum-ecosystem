@@ -7,10 +7,12 @@ type DtcgTokenValue = boolean | number | string;
 interface DtcgTokenLeaf {
   readonly $type?: string;
   readonly $value: DtcgTokenValue;
+  readonly $description?: string;
 }
 
 export interface DtcgTokenTree {
-  readonly [key: string]: DtcgTokenLeaf | DtcgTokenTree;
+  readonly $description?: string;
+  readonly [key: string]: DtcgTokenLeaf | DtcgTokenTree | string | undefined;
 }
 
 export interface FlattenedDesignToken {

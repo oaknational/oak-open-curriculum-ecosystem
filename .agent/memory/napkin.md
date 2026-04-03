@@ -1,3 +1,85 @@
+## Session 2026-04-03 — comprehensive review and scope correction
+
+### What Was Done
+
+- Closed WS3 design-token prerequisite: WS4 quality gates (`pnpm check`
+  green), WS5 adversarial review (design-system, config, test, code
+  reviewers), all findings fixed in commit `6743b384`.
+- Ran comprehensive 5-reviewer cycle on the full branch diff (7 commits,
+  356 files): code, type, fred, security, wilma.
+- Fixed in-scope findings: restored StrictMode, added callback exception
+  isolation, safe dispatch, exhaustive reducer (`assertNever`), TSDoc on
+  widget exports, lib-dependency guard on design boundary rules, DTCG
+  `$description` on all tokens, dark theme documentation.
+- Identified and deferred out-of-scope SDK/CLI findings to a follow-up:
+  `OakUrlAugmentable` `Record<string, unknown>`, `fakes.ts` type
+  assertion, `bulk-rollup-builder` throw→Result, `threadSlug` void hack,
+  `@security` tag restoration, ESLint config-level suppressions.
+- User correction on scope creep: the comprehensive review spiralled from
+  "review the design token work" into "fix every finding across every
+  commit across the branch." Reverted out-of-scope fixes and separated
+  the SDK/CLI work as a follow-up.
+- User correction on `console` ban: the ban forces canonical logger usage,
+  not fallback to `process.stderr.write`.
+
+### Patterns to Remember
+
+- When a review cycle produces findings across multiple commits, separate
+  in-scope fixes (this session's work) from pre-existing issues (other
+  commits). Don't conflate scope.
+- `Record<string, unknown>` as a type is sometimes the honest structural
+  constraint — investigate before replacing it.
+- `console` is banned to force logger injection, not to use IO primitives.
+- Build scripts that have no logger available should let errors propagate
+  naturally rather than inventing custom error handling.
+
+### Surprise
+
+- **Expected**: the comprehensive review would mostly validate existing
+  work with minor findings
+- **Actual**: the review exposed significant pre-existing SDK type
+  architecture issues (config-level ESLint suppressions masking forbidden
+  patterns) that are architecturally real but belong to a different scope
+- **Why expectation failed**: reviewing a 7-commit branch surface treats
+  all commits as one scope, but the SDK commit predates the design token
+  work by days and has its own architectural trade-offs
+- **Behaviour change**: when asked for a comprehensive review, identify
+  which findings are in-scope vs pre-existing, fix the in-scope ones,
+  and report the pre-existing ones as tracked follow-ups rather than
+  fixing everything in one session
+
+## Session 2026-04-02 - semantic atlas exact-trace extraction
+
+### What Was Done
+
+- Added six focused semantic-atlas extraction notes under
+  `.agent/research/developer-experience/novel/` for:
+  - `Policy Spine` precedence and validation
+  - `Package Fabric` activation, refresh, and rollback
+  - `Worker Mesh` lane reintegration
+  - `Ops Nerve` telemetry and redaction
+  - `Role Foundry` versioning and repair
+  - `Operator Shell` web-translation keyboard, focus, and announcement traces
+- Used targeted source extraction rather than another broad survey, including a
+  deeper pass on role-definition authority, validation, and repair because that
+  surface looked especially doctrine-relevant.
+- Consulted and then closed the accessibility and delegation-architecture
+  specialists after incorporating their framing into the browser-translation
+  and role-focused notes.
+- Verified the six new notes with `markdownlint` from inside `novel/`.
+- Re-ran the semantic scrub and confirmed there is still no literal
+  `ccunpacked` domain reference anywhere in the repo.
+
+### Patterns to Remember
+
+- When a research set reaches the "one more pass" stage, the best increment is
+  often a family of exact traces or ledgers rather than another umbrella note.
+- Deeply relevant doctrine candidates benefit from a named distinction between
+  authority, activation, diagnosis, and repair; otherwise versioning talk turns
+  mushy very quickly.
+- `markdownlint` against dotted paths is more reliable when run from inside the
+  target directory than from repo root with hidden-path arguments.
+
 ## Session 2026-04-02 — Post-distillation reset
 
 ### What Was Done
@@ -181,6 +263,27 @@
 - **Behaviour change**: choose the estate from Practice definitions first, then
   confirm it against nearby examples
 
+## Session 2026-04-02 — semantic atlas reviewer pass
+
+### What Was Done
+
+- Reviewed the semantic atlas set from the MCP reviewer stance, using only the
+  passes and frontier briefs needed to judge doctrine readiness.
+- Resolved the user's abbreviated file placeholders to the actual
+  `semantic-atlas-*` filenames before reading the frontier notes.
+- Cross-checked the atlas gaps against the live MCP and MCP Apps
+  documentation so the feedback stayed protocol-grounded rather than purely
+  stylistic.
+
+### Patterns to Remember
+
+- When a user gives abbreviated research filenames with `...`, verify the
+  concrete filenames in the tree before reading; this repo often prefixes
+  focused briefs with the full semantic-atlas stem.
+- For MCP-facing review of external-system research, ask first for a protocol
+  crosswalk and a clear host-vs-protocol boundary; those are the usual missing
+  pieces before anything can inform doctrine.
+
 ## Session 2026-04-02 — report normalisation skill import
 
 ### What Was Done
@@ -217,6 +320,111 @@
 - **Behaviour change**: when a remembered capability is "somewhere on this
   computer", search sibling repos and session traces before assuming the repo's
   own practice estate lost it
+
+## Session 2026-04-02 — external semantic atlas Betty review
+
+### What Was Done
+
+- Reviewed the external semantic atlas research set through the Betty
+  architecture lens, focusing on cohesion, coupling, evidence gates, and
+  doctrine-fit.
+- Confirmed the atlas is strongest when it names precedence, trust, operator
+  visibility, and capture-layer distinctions, and weaker where change-cost and
+  ownership boundaries remain implicit.
+
+### Patterns to Remember
+
+- For architecture-facing research, the next useful increment is often not more
+  surface discovery but a sharper map of what changes together, what owns the
+  change, and what evidence would justify doctrine promotion.
+
+## Session 2026-04-02 — external semantic atlas frontier expansion
+
+### What Was Done
+
+- Compared the first three semantic-atlas passes against the wider external
+  section map and identified the areas still underexplored after the original
+  orchestration-focused work.
+- Wrote four follow-on notes in
+  `.agent/research/developer-experience/novel/`:
+  `...frontier-map.md`,
+  `...operator-shell-and-startup-surfaces.md`,
+  `...control-plane-and-trust-surfaces.md`, and
+  `...extension-and-ops-surfaces.md`.
+- Kept the new notes semantic rather than branded by introducing frontier
+  aliases such as `Startup Spine`, `Operator Shell`, `Remote Control Plane`,
+  `Identity Plane`, `Policy Spine`, `Package Fabric`, `Recipe Forge`,
+  `Role Foundry`, `Ops Nerve`, and `Health Probe`.
+- Validated the new notes with residue sweeps for planning language and
+  branded leakage, then fixed the remaining heading-spacing and line-length
+  markdown issues.
+
+### Patterns to Remember
+
+- After a first-pass atlas settles the core loop, the highest-value follow-on
+  work is often at the edges: startup, operator shell, remote control, policy,
+  packaging, diagnostics, and lifecycle maintenance.
+- It helps to separate "not yet explored" from "already explored but only as a
+  latent edge"; that distinction makes the next research pass more targeted and
+  avoids rehashing the core system map.
+- If a branded operational term leaks into a semantic note, replace it with a
+  function-first alias before doing the final validation sweep.
+
+### Surprise
+
+- **Expected**: the unexplored residue after the first three passes would be
+  mostly presentation-layer garnish
+- **Actual**: several of the untouched areas turned out to be structural:
+  boot sequencing, remote integrity rules, managed-policy trust gates,
+  extension lifecycle state, reusable-process capture, and diagnostics
+- **Why expectation failed**: the early passes were strong on inner
+  orchestration semantics, which made the outer shell and operational surfaces
+  look thinner than they really were
+- **Behaviour change**: when doing external-system synthesis, explicitly map
+  what the first passes left outside scope before assuming the remaining site
+  area is low-value packaging detail
+
+## Session 2026-04-02 — specialist consensus and final sweep
+
+### What Was Done
+
+- Consulted the full local specialist roster on what they would still want
+  from the external semantic-atlas resource after the first three passes and
+  the frontier briefs.
+- Wrote a new closing note at
+  `.agent/research/developer-experience/novel/`
+  `2026-04-02-external-agent-system-semantic-atlas-specialist-consensus-and-final-sweep.md`
+  that records the per-lens asks, the repeated consensus themes, and the final
+  distinction between external-site residue and internal Oak promotion work.
+- Ran a repo-wide literal-domain sweep and confirmed the checked external-site
+  domain does not appear anywhere in the repository.
+- Validated the new note with markdown lint.
+
+### Patterns to Remember
+
+- A large reviewer roster often converges faster than expected: once several
+  lenses independently ask for provenance, landing zones, evaluation surfaces,
+  and explicit exclusions, that is usually the real missing work.
+- After enough exploratory passes, more external browsing stops being the main
+  blocker; the missing artefacts become internal promotion tools such as
+  problem registers, ownership maps, and evidence-led adoption tables.
+- When a user asks to purge a specific external reference from the repo, verify
+  the literal string directly with a repo-wide search rather than assuming the
+  semantic rewrite work already removed it.
+
+### Surprise
+
+- **Expected**: the full specialist roster would produce a broad spread of new
+  domain-specific asks
+- **Actual**: most of the roster converged on the same compact set of needs:
+  provenance, local landing zones, evaluation traces, reintegration edges, and
+  explicit "keep this out of doctrine" boundaries
+- **Why expectation failed**: once the atlas was mature enough, the unresolved
+  questions were less about discovering new external areas and more about
+  deciding what Oak could safely promote
+- **Behaviour change**: after a mature external synthesis, ask the specialist
+  roster for the missing promotion artefacts before defaulting to another wide
+  browsing pass
 
 ## Session 2026-04-02 — multi-export report consolidation
 

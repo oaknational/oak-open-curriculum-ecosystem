@@ -1,52 +1,139 @@
 {
   "color": {
-    "ink-950": { "$type": "color", "$value": "#102033" },
-    "ink-800": { "$type": "color", "$value": "#31465f" },
-    "ink-700": { "$type": "color", "$value": "#485d75" },
-    "paper-050": { "$type": "color", "$value": "#fcfbf8" },
-    "paper-100": { "$type": "color", "$value": "#f4efe8" },
-    "paper-200": { "$type": "color", "$value": "#e6ddd2" },
-    "fern-500": { "$type": "color", "$value": "#1d6f5f" },
-    "fern-600": { "$type": "color", "$value": "#15574b" },
-    "sun-300": { "$type": "color", "$value": "#f0c974" },
-    "sun-400": { "$type": "color", "$value": "#e0b85a" },
-    "sky-400": { "$type": "color", "$value": "#8ab6d6" },
-    "danger-500": { "$type": "color", "$value": "#b43c31" }
+    "ink-950": {
+      "$type": "color",
+      "$value": "#102033",
+      "$description": "Deep navy — darkest ink for backgrounds and inverse text"
+    },
+    "ink-800": {
+      "$type": "color",
+      "$value": "#31465f",
+      "$description": "Dark navy — panel surfaces in dark mode"
+    },
+    "ink-700": {
+      "$type": "color",
+      "$value": "#485d75",
+      "$description": "Mid navy — subtle borders in dark mode"
+    },
+    "paper-050": {
+      "$type": "color",
+      "$value": "#fcfbf8",
+      "$description": "Warm white — lightest paper for light backgrounds"
+    },
+    "paper-100": {
+      "$type": "color",
+      "$value": "#f4efe8",
+      "$description": "Light parchment — secondary text in dark mode"
+    },
+    "paper-200": {
+      "$type": "color",
+      "$value": "#e6ddd2",
+      "$description": "Mid parchment — borders and dividers in light mode"
+    },
+    "fern-500": {
+      "$type": "color",
+      "$value": "#1d6f5f",
+      "$description": "Oak brand green — primary accent in light mode"
+    },
+    "fern-600": {
+      "$type": "color",
+      "$value": "#15574b",
+      "$description": "Dark fern — hover/active accent in light mode"
+    },
+    "sun-300": {
+      "$type": "color",
+      "$value": "#f0c974",
+      "$description": "Golden yellow — primary accent in dark mode"
+    },
+    "sun-400": {
+      "$type": "color",
+      "$value": "#e0b85a",
+      "$description": "Deeper gold — hover/active accent in dark mode"
+    },
+    "sky-400": {
+      "$type": "color",
+      "$value": "#8ab6d6",
+      "$description": "Calm blue — focus ring indicator"
+    },
+    "danger-500": {
+      "$type": "color",
+      "$value": "#b43c31",
+      "$description": "Red — error states and destructive actions"
+    }
   },
   "font": {
     "family-body": {
       "$type": "fontFamily",
-      "$value": "\"Source Sans 3\", \"Segoe UI\", sans-serif"
+      "$value": "\"Source Sans 3\", \"Segoe UI\", sans-serif",
+      "$description": "Body typeface — Source Sans 3 with system fallbacks"
     },
     "family-display": {
       "$type": "fontFamily",
-      "$value": "\"Fraunces\", Georgia, serif"
+      "$value": "\"Fraunces\", Georgia, serif",
+      "$description": "Display/heading typeface — Fraunces with serif fallback"
     },
-    "size-200": { "$type": "dimension", "$value": "0.875rem" },
-    "size-300": { "$type": "dimension", "$value": "1rem" },
-    "size-700": { "$type": "dimension", "$value": "2rem" },
-    "weight-regular": { "$type": "fontWeight", "$value": "400" },
-    "weight-semibold": { "$type": "fontWeight", "$value": "600" },
-    "line-height-300": { "$type": "number", "$value": "1.4" },
-    "line-height-400": { "$type": "number", "$value": "1.6" },
-    "line-height-700": { "$type": "number", "$value": "1.1" }
+    "size-200": {
+      "$type": "dimension",
+      "$value": "0.875rem",
+      "$description": "Small text (labels, captions)"
+    },
+    "size-300": { "$type": "dimension", "$value": "1rem", "$description": "Body text" },
+    "size-700": { "$type": "dimension", "$value": "2rem", "$description": "Heading text" },
+    "weight-regular": {
+      "$type": "fontWeight",
+      "$value": "400",
+      "$description": "Regular weight for body text"
+    },
+    "weight-semibold": {
+      "$type": "fontWeight",
+      "$value": "600",
+      "$description": "Semibold weight for headings and emphasis"
+    },
+    "line-height-300": {
+      "$type": "number",
+      "$value": "1.4",
+      "$description": "Compact line height for labels"
+    },
+    "line-height-400": {
+      "$type": "number",
+      "$value": "1.6",
+      "$description": "Comfortable line height for body text"
+    },
+    "line-height-700": {
+      "$type": "number",
+      "$value": "1.1",
+      "$description": "Tight line height for headings"
+    }
   },
   "space": {
-    "200": { "$type": "dimension", "$value": "0.5rem" },
-    "300": { "$type": "dimension", "$value": "0.75rem" },
-    "400": { "$type": "dimension", "$value": "1rem" },
-    "500": { "$type": "dimension", "$value": "1.5rem" },
-    "700": { "$type": "dimension", "$value": "2.5rem" }
+    "200": { "$type": "dimension", "$value": "0.5rem", "$description": "Tight spacing" },
+    "300": { "$type": "dimension", "$value": "0.75rem", "$description": "Compact spacing" },
+    "400": { "$type": "dimension", "$value": "1rem", "$description": "Standard spacing" },
+    "500": { "$type": "dimension", "$value": "1.5rem", "$description": "Comfortable spacing" },
+    "700": { "$type": "dimension", "$value": "2.5rem", "$description": "Generous spacing" }
   },
   "radius": {
-    "md": { "$type": "dimension", "$value": "0.9rem" },
-    "lg": { "$type": "dimension", "$value": "1.4rem" },
-    "pill": { "$type": "dimension", "$value": "999px" }
+    "md": {
+      "$type": "dimension",
+      "$value": "0.9rem",
+      "$description": "Medium border radius for controls"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "1.4rem",
+      "$description": "Large border radius for panels"
+    },
+    "pill": {
+      "$type": "dimension",
+      "$value": "999px",
+      "$description": "Pill/stadium border radius"
+    }
   },
   "shadow": {
     "card": {
       "$type": "shadow",
-      "$value": "0 24px 50px rgba(16, 32, 51, 0.12)"
+      "$value": "0 24px 50px rgba(16, 32, 51, 0.12)",
+      "$description": "Subtle card elevation shadow"
     }
   }
 }

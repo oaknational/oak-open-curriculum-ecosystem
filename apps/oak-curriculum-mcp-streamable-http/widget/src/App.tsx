@@ -10,6 +10,7 @@ import {
   initialAppRuntimeState,
   reduceAppRuntimeState,
   registerAppRuntimeHandlers,
+  type AppRuntimeDispatch,
   type AppRuntimeState,
 } from './app-runtime-state.js';
 
@@ -24,13 +25,39 @@ interface ConnectionStatus {
   readonly state: 'error' | 'connected' | 'pending';
 }
 
-function syncHostContextStyling(hostContext: Partial<McpUiHostContext>): void {
-  if (hostContext.theme) {
-    applyDocumentTheme(hostContext.theme);
-  }
+/**
+ * Applies host-provided visual styling to the document.
+ *
+ * @remarks
+ * Sets the document-level theme attribute and host CSS custom properties.
+ * Errors are caught and dispatched as runtime errors so that the styling
+ * concern cannot poison the state-machine dispatch in the same callback.
+ *
+ * The MCP Apps SDK constrains host style variable keys to a closed union
+ * of 73 specific names (e.g. `--color-background-primary`), none of which
+ * overlap with Oak's `--oak-*` token namespace. Namespace collision is
+ * therefore prevented at the protocol level.
+ */
+function syncHostContextStyling(
+  hostContext: Partial<McpUiHostContext>,
+  dispatch?: AppRuntimeDispatch,
+): void {
+  try {
+    if (hostContext.theme) {
+      applyDocumentTheme(hostContext.theme);
+    }
 
-  if (hostContext.styles?.variables) {
-    applyMcpHostStyleVariables(hostContext.styles.variables);
+    if (hostContext.styles?.variables) {
+      applyMcpHostStyleVariables(hostContext.styles.variables);
+    }
+  } catch (error: unknown) {
+    if (dispatch) {
+      dispatch({
+        type: 'runtime-error',
+        errorMessage:
+          error instanceof Error ? error.message : 'Host styling synchronisation failed',
+      });
+    }
   }
 }
 
@@ -131,6 +158,14 @@ function AppRuntimeMessages({
   );
 }
 
+/**
+ * Pure presentational component for the MCP App shell.
+ *
+ * @remarks
+ * Renders connection status, runtime state grid, and error/notification
+ * messages. Separated from {@link App} so that it can be tested in
+ * isolation without MCP Apps SDK side effects.
+ */
 export function AppView({ state, isConnected, error }: AppViewProps): React.JSX.Element {
   const connectionStatus = getConnectionStatus(error, isConnected);
 
@@ -147,6 +182,14 @@ export function AppView({ state, isConnected, error }: AppViewProps): React.JSX.
   );
 }
 
+/**
+ * Connected MCP App component.
+ *
+ * @remarks
+ * Initialises the MCP Apps React runtime via {@link useApp}, registers
+ * lifecycle handlers, and synchronises host context (theme, styles)
+ * with the document. Delegates rendering to {@link AppView}.
+ */
 export function App(): React.JSX.Element {
   const [state, dispatch] = useReducer(reduceAppRuntimeState, initialAppRuntimeState);
   const { app, isConnected, error } = useApp({
@@ -163,28 +206,26 @@ export function App(): React.JSX.Element {
   useHostStyleVariables(app, app?.getHostContext());
 
   useEffect(() => {
-    const hostContext = app?.getHostContext();
-
-    if (!hostContext) {
-      return;
-    }
-
-    syncHostContextStyling(hostContext);
-    applyHostContextToRuntime(dispatch, hostContext);
-  }, [app]);
-
-  useEffect(() => {
     if (!app) {
       return;
     }
 
+    const hostContext = app.getHostContext();
+
+    if (hostContext) {
+      syncHostContextStyling(hostContext, dispatch);
+      applyHostContextToRuntime(dispatch, hostContext);
+    }
+
     // The SDK currently exposes one host-context callback slot, so we compose
     // host-style application with local runtime-state updates here.
-    app.onhostcontextchanged = (hostContext) => {
-      syncHostContextStyling(hostContext);
-      applyHostContextToRuntime(dispatch, hostContext);
+    // Each concern is error-isolated: syncHostContextStyling catches internally,
+    // so a styling failure cannot prevent the state-machine dispatch.
+    app.onhostcontextchanged = (updatedHostContext) => {
+      syncHostContextStyling(updatedHostContext, dispatch);
+      applyHostContextToRuntime(dispatch, updatedHostContext);
     };
-  }, [app]);
+  }, [app, dispatch]);
 
   return <AppView state={state} isConnected={isConnected} error={error} />;
 }

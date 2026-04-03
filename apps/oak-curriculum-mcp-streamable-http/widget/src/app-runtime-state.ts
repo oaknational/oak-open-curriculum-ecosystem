@@ -1,3 +1,4 @@
+/** Reducer-driven runtime state for the Oak MCP App widget. */
 import type {
   App,
   McpUiHostContext,
@@ -8,24 +9,29 @@ import type {
 } from '@modelcontextprotocol/ext-apps';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
-type ToolArguments = McpUiToolInputNotification['params']['arguments'] | null;
-type PartialToolArguments = McpUiToolInputPartialNotification['params']['arguments'] | null;
-
+/** Runtime state snapshot for the MCP App widget. */
 export interface AppRuntimeState {
   readonly currentToolName: string | null;
   readonly theme: McpUiHostContext['theme'] | null;
-  readonly toolInput: ToolArguments;
-  readonly partialToolInput: PartialToolArguments;
+  readonly toolInput: McpUiToolInputNotification['params']['arguments'] | null;
+  readonly partialToolInput: McpUiToolInputPartialNotification['params']['arguments'] | null;
   readonly toolResult: CallToolResult | null;
   readonly cancellationReason: McpUiToolCancelledNotification['params']['reason'] | null;
   readonly teardownRequested: boolean;
   readonly errorMessage: string | null;
 }
 
+/** Discriminated union of all actions the app runtime reducer handles. */
 export type AppRuntimeAction =
   | { readonly type: 'host-context-changed'; readonly hostContext: Partial<McpUiHostContext> }
-  | { readonly type: 'tool-input'; readonly toolInput: ToolArguments }
-  | { readonly type: 'tool-input-partial'; readonly partialToolInput: PartialToolArguments }
+  | {
+      readonly type: 'tool-input';
+      readonly toolInput: McpUiToolInputNotification['params']['arguments'] | null;
+    }
+  | {
+      readonly type: 'tool-input-partial';
+      readonly partialToolInput: McpUiToolInputPartialNotification['params']['arguments'] | null;
+    }
   | { readonly type: 'tool-result'; readonly toolResult: CallToolResult }
   | {
       readonly type: 'tool-cancelled';
@@ -34,8 +40,10 @@ export type AppRuntimeAction =
   | { readonly type: 'teardown-requested' }
   | { readonly type: 'runtime-error'; readonly errorMessage: string };
 
+/** Dispatch function for the app runtime reducer. */
 export type AppRuntimeDispatch = (action: AppRuntimeAction) => void;
 
+/** Initial state before any host context or tool notifications arrive. */
 export const initialAppRuntimeState: AppRuntimeState = {
   currentToolName: null,
   theme: null,
@@ -51,16 +59,7 @@ function getToolName(hostContext: Partial<McpUiHostContext>): string | null {
   return hostContext.toolInfo?.tool.name ?? null;
 }
 
-type HostContextChangedAction = Extract<
-  AppRuntimeAction,
-  { readonly type: 'host-context-changed' }
->;
-type ToolInputAction = Extract<AppRuntimeAction, { readonly type: 'tool-input' }>;
-type ToolInputPartialAction = Extract<AppRuntimeAction, { readonly type: 'tool-input-partial' }>;
-type ToolResultAction = Extract<AppRuntimeAction, { readonly type: 'tool-result' }>;
-type ToolCancelledAction = Extract<AppRuntimeAction, { readonly type: 'tool-cancelled' }>;
-type RuntimeErrorAction = Extract<AppRuntimeAction, { readonly type: 'runtime-error' }>;
-
+/** Dispatches a host-context-changed action from the given host context. */
 export function applyHostContextToRuntime(
   dispatch: AppRuntimeDispatch,
   hostContext: Partial<McpUiHostContext>,
@@ -71,37 +70,57 @@ export function applyHostContextToRuntime(
   });
 }
 
+/** Dispatch wrapper: catches exceptions and re-dispatches as runtime-error. */
+function createSafeDispatch(dispatch: AppRuntimeDispatch): AppRuntimeDispatch {
+  return (action) => {
+    try {
+      dispatch(action);
+    } catch (error: unknown) {
+      if (action.type !== 'runtime-error') {
+        dispatch({
+          type: 'runtime-error',
+          errorMessage:
+            error instanceof Error ? error.message : `Dispatch failed for action "${action.type}"`,
+        });
+      }
+    }
+  };
+}
+
+/** Registers MCP Apps SDK lifecycle handlers with exception-isolated dispatch. */
 export function registerAppRuntimeHandlers(app: App, dispatch: AppRuntimeDispatch): void {
+  const safeDispatch = createSafeDispatch(dispatch);
+
   app.ontoolinput = ({ arguments: toolInput }) => {
-    dispatch({
+    safeDispatch({
       type: 'tool-input',
       toolInput: toolInput ?? null,
     });
   };
 
   app.ontoolinputpartial = ({ arguments: partialToolInput }) => {
-    dispatch({
+    safeDispatch({
       type: 'tool-input-partial',
       partialToolInput: partialToolInput ?? null,
     });
   };
 
   app.ontoolresult = (toolResult) => {
-    dispatch({
+    safeDispatch({
       type: 'tool-result',
       toolResult,
     });
   };
 
   app.ontoolcancelled = ({ reason }) => {
-    dispatch({
+    safeDispatch({
       type: 'tool-cancelled',
       reason: reason ?? null,
     });
   };
 
   app.onteardown = async (): Promise<McpUiResourceTeardownResult> => {
-    dispatch({
+    safeDispatch({
       type: 'teardown-requested',
     });
 
@@ -109,7 +128,7 @@ export function registerAppRuntimeHandlers(app: App, dispatch: AppRuntimeDispatc
   };
 
   app.onerror = (error) => {
-    dispatch({
+    safeDispatch({
       type: 'runtime-error',
       errorMessage: error.message,
     });
@@ -118,7 +137,7 @@ export function registerAppRuntimeHandlers(app: App, dispatch: AppRuntimeDispatc
 
 function reduceHostContextChanged(
   state: AppRuntimeState,
-  action: HostContextChangedAction,
+  action: Extract<AppRuntimeAction, { readonly type: 'host-context-changed' }>,
 ): AppRuntimeState {
   return {
     ...state,
@@ -127,10 +146,15 @@ function reduceHostContextChanged(
   };
 }
 
-function reduceToolInput(state: AppRuntimeState, action: ToolInputAction): AppRuntimeState {
+function reduceToolInput(
+  state: AppRuntimeState,
+  action: Extract<AppRuntimeAction, { readonly type: 'tool-input' }>,
+): AppRuntimeState {
   return {
     ...state,
     toolInput: action.toolInput,
+    // Seed partialToolInput from the full input so consumers see the latest
+    // arguments regardless of whether a partial-streaming phase preceded.
     partialToolInput: action.toolInput,
     toolResult: null,
     cancellationReason: null,
@@ -141,7 +165,7 @@ function reduceToolInput(state: AppRuntimeState, action: ToolInputAction): AppRu
 
 function reduceToolInputPartial(
   state: AppRuntimeState,
-  action: ToolInputPartialAction,
+  action: Extract<AppRuntimeAction, { readonly type: 'tool-input-partial' }>,
 ): AppRuntimeState {
   return {
     ...state,
@@ -152,7 +176,10 @@ function reduceToolInputPartial(
   };
 }
 
-function reduceToolResult(state: AppRuntimeState, action: ToolResultAction): AppRuntimeState {
+function reduceToolResult(
+  state: AppRuntimeState,
+  action: Extract<AppRuntimeAction, { readonly type: 'tool-result' }>,
+): AppRuntimeState {
   return {
     ...state,
     toolResult: action.toolResult,
@@ -161,7 +188,10 @@ function reduceToolResult(state: AppRuntimeState, action: ToolResultAction): App
   };
 }
 
-function reduceToolCancelled(state: AppRuntimeState, action: ToolCancelledAction): AppRuntimeState {
+function reduceToolCancelled(
+  state: AppRuntimeState,
+  action: Extract<AppRuntimeAction, { readonly type: 'tool-cancelled' }>,
+): AppRuntimeState {
   return {
     ...state,
     cancellationReason: action.reason ?? null,
@@ -175,44 +205,39 @@ function reduceTeardownRequested(state: AppRuntimeState): AppRuntimeState {
   };
 }
 
-function reduceRuntimeError(state: AppRuntimeState, action: RuntimeErrorAction): AppRuntimeState {
+function reduceRuntimeError(
+  state: AppRuntimeState,
+  action: Extract<AppRuntimeAction, { readonly type: 'runtime-error' }>,
+): AppRuntimeState {
   return {
     ...state,
     errorMessage: action.errorMessage,
   };
 }
 
+/** Pure reducer — exhaustively checked at compile time via the `never` default. */
 export function reduceAppRuntimeState(
   state: AppRuntimeState,
   action: AppRuntimeAction,
 ): AppRuntimeState {
-  if (action.type === 'host-context-changed') {
-    return reduceHostContextChanged(state, action);
+  switch (action.type) {
+    case 'host-context-changed':
+      return reduceHostContextChanged(state, action);
+    case 'tool-input':
+      return reduceToolInput(state, action);
+    case 'tool-input-partial':
+      return reduceToolInputPartial(state, action);
+    case 'tool-result':
+      return reduceToolResult(state, action);
+    case 'tool-cancelled':
+      return reduceToolCancelled(state, action);
+    case 'teardown-requested':
+      return reduceTeardownRequested(state);
+    case 'runtime-error':
+      return reduceRuntimeError(state, action);
+    default: {
+      const exhaustiveCheck: never = action;
+      return exhaustiveCheck;
+    }
   }
-
-  if (action.type === 'tool-input') {
-    return reduceToolInput(state, action);
-  }
-
-  if (action.type === 'tool-input-partial') {
-    return reduceToolInputPartial(state, action);
-  }
-
-  if (action.type === 'tool-result') {
-    return reduceToolResult(state, action);
-  }
-
-  if (action.type === 'tool-cancelled') {
-    return reduceToolCancelled(state, action);
-  }
-
-  if (action.type === 'teardown-requested') {
-    return reduceTeardownRequested(state);
-  }
-
-  if (action.type === 'runtime-error') {
-    return reduceRuntimeError(state, action);
-  }
-
-  return state;
 }
