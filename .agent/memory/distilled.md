@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-02.md`
-(sessions 2026-02-10 to 2026-04-02).
+`napkin-2026-02-24.md` through `napkin-2026-04-03.md`
+(sessions 2026-02-10 to 2026-04-03).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -67,10 +67,18 @@ context with no natural permanent home.
   governance docs, and workflows disagree about what runs where,
   treat workflow files, gate commands, and package scripts as the
   source of truth and reconcile the prose to them.
+- **Review scope separation**: when a comprehensive review spans
+  multiple commits, separate in-scope findings from pre-existing
+  issues. Fix in-scope, track pre-existing as a gated follow-up.
+  Never conflate scope by fixing everything in one session.
 - **Platform plans are ephemeral**: `.cursor/plans/*.plan.md`
   can carry useful working notes, but once their value is
   extracted into canonical repo plans or permanent docs, delete
   the platform copy and sweep stale references.
+- **Ignored estates need explicit sweeps**: when validating
+  gitignored research or staging lanes, use `rg -uu` or run the
+  search from inside the target directory; otherwise ignore rules
+  can create false-clean hygiene checks.
 
 ## Architecture (Agent Infrastructure)
 
@@ -145,6 +153,11 @@ context with no natural permanent home.
 
 ## Build System (Domain-Specific)
 
+- **Turbo overrides need ALL task types**: if a workspace
+  has any `@package#task` override, it needs overrides for
+  every task type it uses (build, test, type-check, lint,
+  lint:fix). Missing overrides fall through to generic tasks
+  with wrong inputs, causing stale cache hits.
 - Turbo dependency model: ADR-065 (items 6–7)
 - `pnpm qg` is the canonical read-only gate set, but does
   not include static-analysis sweeps (`pnpm knip`,
@@ -169,3 +182,13 @@ context with no natural permanent home.
   stay in core, runtime pipeline moves to libs
 - When extracting types from a composition root, the root
   may still need a local `import type` for its own usage
+- **MCP Apps single callback slot**: the ext-apps SDK
+  uses one setter per notification (`onhostcontextchanged`),
+  not a multi-listener model. Compose style sync and
+  runtime-state dispatch in one handler with error isolation
+  so a styling failure cannot prevent state updates.
+- **`console` ban means canonical logger**: the `no-console`
+  rule forces injection of `@oaknational/logger`, not fallback
+  to `process.stderr.write`. Build scripts without a logger
+  should let errors propagate naturally (Node surfaces the
+  stack trace).
