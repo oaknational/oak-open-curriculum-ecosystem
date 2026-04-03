@@ -37,41 +37,29 @@ git log --oneline --decorate -10
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-  - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`
   - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
 - **Completed plans** (prior sessions):
+  - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE (ADR-153, quality gates pass)
   - `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md` — COMPLETE
   - `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md` — COMPLETE
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md` — COMPLETE
-- **Current state**: WS3 Phase 3 canonical contracts are COMPLETE, including
-  the non-UI host fallback proof. Phases 4-6 are still pending. The
-  OakUrlAugmentable codegen fix (prerequisite 1 of 2) is substantially
-  complete: Phases 0–4 done, `JsonBody200` redefined with direct Paths
-  indexing, augmentation functions use `Object.assign` + honest `unknown`
-  return types, all test fixtures schema-anchored with `as const satisfies`.
-  ADR-152 (Constant-Type-Predicate Pattern) is the remaining deliverable,
-  then quality gates close it. Contrast validation (prerequisite 2) is
-  next.
-- **Current objective**: Complete two ordered prerequisites, then start
-  Phase 4. The three pre-Phase-4 gates are COMPLETE:
+- **Current state**: WS3 Phase 3 canonical contracts are COMPLETE. Phases
+  4-6 are pending. OakUrlAugmentable codegen fix (prerequisite 1 of 2) is
+  COMPLETE: `JsonBody200` redefined, augmentation uses `Object.assign`,
+  ADR-153 (Constant-Type-Predicate Pattern) written, all gates pass.
+  **Contrast validation (prerequisite 2 of 2) is now active.**
+- **Current objective**: Complete contrast validation prerequisite, then
+  start Phase 4. The three pre-Phase-4 gates are COMPLETE:
   1. ✅ Portability validator extended (Check 11: skill permissions)
-  2. ✅ Deferred review findings resolved (threadSlug removed,
-     bulk-rollup-builder→Result, OakUrlAugmentable tracked as codegen fix,
-     fakes.ts accepted with justification)
-  3. ✅ Design conversation held — Phase 4 is a brand banner (not a data
-     renderer), Phase 5 is user-first search with `callServerTool` +
-     `updateModelContext`. ADR-151 records the styling independence decision.
-  Two ordered prerequisites remain before Phase 4:
-  1. **OakUrlAugmentable codegen fix** — plan at
-     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`.
-     Phases 0–4 COMPLETE. Key changes: `JsonBody200` redefined with direct
-     `Paths[P][M]` indexing (single conditional, no `PathOperation` chain),
-     6 dead types removed, augmentation uses `Object.assign` + `unknown`
-     return (no spread). Remaining: ADR-152 + quality gates.
+  2. ✅ Deferred review findings resolved
+  3. ✅ Design conversation held — ADR-151 records styling independence
+  One prerequisite remains before Phase 4:
+  1. ✅ **OakUrlAugmentable codegen fix** — COMPLETE. ADR-153 written.
   2. **Contrast validation** — plan at
      `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`.
-     WCAG contrast ratio validation + fix two blocking token violations.
+     WCAG contrast ratio validation + fix two blocking token violations
+     (focus ring 2.08:1, dark error 2.84:1). Build from W3C spec directly.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -113,16 +101,17 @@ git log --oneline --decorate -10
 - **Remaining tracked items** (not blocking Phase 4 directly):
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Next safe step**: Write ADR-152 + run quality gates to close the
-  OakUrl codegen fix, then start contrast validation prerequisite.
-- **Deep consolidation status**: Continuity rollout is closed and promoted.
-  The completed continuity and design-token plans are now archived, SDK/MCP
-  indexes expose OakUrl plus contrast as the live prerequisites, and this
-  prompt has been reconciled to the new plan paths. Practice box empty.
+- **Next safe step**: Start the contrast validation prerequisite. Read the
+  plan, ground in the W3C WCAG contrast algorithm, then begin with the
+  core pure functions (relative luminance and contrast ratio) using TDD.
+- **Deep consolidation status**: Practice transmissibility integration
+  complete (8 incoming files integrated, 8-file Core with verification
+  companion, UUID provenance migration). Practice box empty. OakUrl fix
+  closed with ADR-153. Planning surfaces re-geared for contrast validation.
 
 ## Active Workstreams (2026-04-03)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (OakUrl fix, contrast validation, then Phase 4)
+### 1. WS3 MCP App Rebuild — ACTIVE (contrast validation, then Phase 4)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
@@ -134,20 +123,21 @@ Phase 3 (canonical contracts + fallback proof).
 - Design-token prerequisite — all 6 work slices, `pnpm check` green
 - Three pre-Phase-4 gates — portability validator, deferred review
   findings, design conversation (ADR-151 written)
+- OakUrlAugmentable codegen fix — Phases 0–5 COMPLETE, ADR-153 written,
+  all quality gates pass
 
-**Current prerequisites** (ordered):
+**Current prerequisite** (final before Phase 4):
 
-1. `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`
-   — Phases 0–4 COMPLETE. ADR-152 + quality gates remaining.
-2. `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
-   — WCAG contrast ratio validation + fix two blocking token violations.
+1. `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
+   — WCAG contrast ratio validation + fix two blocking token violations
+   (focus ring 2.08:1 light, dark error 2.84:1). Build from W3C spec.
    Confirmed by Betty, Fred, and design-system reviewers.
 
 **Pending**: Phase 4 (brand banner), Phase 5 (user search), Phase 6
 (docs/gates/review).
 
-**Next action**: Write ADR-152 + run quality gates to close OakUrl fix,
-then contrast validation, then Phase 4.
+**Next action**: Start contrast validation — core pure functions first
+(relative luminance, contrast ratio), then pairing manifest, then fixes.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

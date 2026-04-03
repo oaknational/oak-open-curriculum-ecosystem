@@ -21,19 +21,19 @@ todos:
     content: "Phase 4: Rewrite test fixtures with as const satisfies and schema-anchored data."
     status: completed
   - id: phase-5-adr
-    content: "Phase 5: Write ADR-152 (Constant-Type-Predicate Pattern) and update discoverability."
-    status: pending
+    content: "Phase 5: Write ADR-153 (Constant-Type-Predicate Pattern) and update discoverability."
+    status: completed
   - id: phase-6-validation
     content: "Phase 6: Full quality gates, reviewer cycle, and consolidation."
-    status: in_progress
+    status: completed
 ---
 
 # OakUrlAugmentable Codegen Fix and Type Predicate ADR
 
 **Last Updated**: 2026-04-03
-**Status**: 🟢 PHASES 0–4 COMPLETE — ADR-152 pending, then quality gates
+**Status**: 🟢 PHASES 0–5 COMPLETE — ADR-153 written, quality gates remaining
 **Scope**: Replace `OakUrlAugmentable = Readonly<Record<string, unknown>>` with
-schema-derived types; fix middleware validation; write ADR-152.
+schema-derived types; fix middleware validation; write ADR-153.
 
 ## What Was Actually Implemented (vs Original Plan)
 
@@ -66,11 +66,11 @@ and git history on commit `1b44b6a9`.
 
 ## Remaining Work
 
-### Phase 5: ADR-152 and Discoverability
+### Phase 5: ADR-153 and Discoverability
 
-#### Task 5.1: Write ADR-152 — Constant-Type-Predicate Pattern
+#### Task 5.1: Write ADR-153 — Constant-Type-Predicate Pattern
 
-**File**: `docs/architecture/architectural-decisions/152-constant-type-predicate-pattern.md`
+**File**: `docs/architecture/architectural-decisions/153-constant-type-predicate-pattern.md`
 
 Document the foundational pattern used 34+ times in the generated code:
 
@@ -94,14 +94,14 @@ Include:
 #### Task 5.2: Update typescript-practice.md
 
 - Name the pattern ("Constant-Type-Predicate Pattern")
-- Add cross-reference to ADR-152
+- Add cross-reference to ADR-153
 - Expand the `unknown` boundary guidance: checklist of acceptable
   boundary types
 
 #### Task 5.3: Update schema-first-execution.md
 
 - Add a section on how type predicates fit into the schema-first flow
-- Reference ADR-152 for the implementation pattern
+- Reference ADR-153 for the implementation pattern
 
 ---
 
@@ -167,7 +167,7 @@ Run `/jc-consolidate-docs` to graduate settled content.
 | `JsonBody200<ValidPath, 'get'>` not assignable to `GetObjectResponseBody` | Medium | Test at type level with `satisfies` in Phase 1 |
 | Zod validation performance overhead in middleware | Low | Augmentation is best-effort; validation is lightweight |
 | Generated stubs insufficient for all test scenarios | Medium | Create additional fixtures with `satisfies` from scratch |
-| ADR-152 scope too broad | Low | Scope to pattern + decision tree only |
+| ADR-153 scope too broad | Low | Scope to pattern + decision tree only |
 
 ---
 

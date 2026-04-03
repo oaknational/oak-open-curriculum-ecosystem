@@ -58,7 +58,7 @@
   following the constant → type → predicate pattern.
 - Wrote remediation plan at
   `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md`.
-- Plan includes ADR-152 (Constant-Type-Predicate Pattern) for discoverability.
+- Plan includes ADR-153 (Constant-Type-Predicate Pattern) for discoverability.
 
 ### Patterns to Remember
 

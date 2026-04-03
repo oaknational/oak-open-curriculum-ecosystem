@@ -529,10 +529,9 @@ When renaming the widget resource slug, update all coupled surfaces atomically:
 **Prerequisites** (ordered, all must complete before Phase 4):
 
 1. ✅ `../archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
-2. `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — replace
-   `Record<string, unknown>` widening with schema-derived GET response body
-   union; includes ADR-152 (Constant-Type-Predicate Pattern). Partial progress:
-   codegen types generated, build errors pending resolution.
+2. ✅ `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE.
+   Replaced `Record<string, unknown>` widening with schema-derived types;
+   ADR-153 (Constant-Type-Predicate Pattern) written, all gates pass.
 3. `../current/ws3-contrast-validation-prerequisite.plan.md` — WCAG contrast
    ratio validation in the design token pipeline; fix two blocking token
    contrast violations (focus ring, dark-theme error).
@@ -578,8 +577,8 @@ boundaries.
 **Prerequisites** (ordered):
 
 1. ✅ `../archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
-2. `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — prerequisite:
-   replace widening alias with schema-derived union + ADR-152
+2. ✅ `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE:
+   replaced widening alias with schema-derived union + ADR-153
 3. `../current/ws3-contrast-validation-prerequisite.plan.md` — prerequisite:
    WCAG contrast validation + fix two blocking token violations
 
@@ -695,8 +694,8 @@ Plus:
   typing and fail-fast validation remediation
 - `../archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE: token
   and shell prerequisite for Phase 4/5 widget UI work
-- `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — prerequisite:
-  replace widening alias with schema-derived union + ADR-152
+- `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE:
+  replaced widening alias with schema-derived union + ADR-153
 - `../current/ws3-contrast-validation-prerequisite.plan.md` — prerequisite:
   WCAG contrast validation + fix two blocking token violations
 - `../current/README.md` — queued and in-progress follow-on execution plans

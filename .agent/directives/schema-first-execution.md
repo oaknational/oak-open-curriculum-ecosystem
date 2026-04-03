@@ -36,6 +36,19 @@ Every byte of runtime behaviour for MCP tool execution **must** be driven by gen
 - **Tests import generated helpers**: Behavioural tests should import the generated executors to prove correctness. Avoid string/snapshot tests that hide the real flow.
 - **Documentation**: Any generator or runtime change affecting this pipeline must also update the architectural notes and plan context so future agents recognise the constraint.
 
+## Type Predicates in the Schema-First Flow
+
+The Constant-Type-Predicate Pattern
+([ADR-153](../../docs/architecture/architectural-decisions/153-constant-type-predicate-pattern.md))
+is how schema-first types bridge to runtime. Constants extracted at
+generation time produce type predicates that validate `unknown` input
+at system boundaries. This is the mechanism by which the Cardinal Rule
+is satisfied at runtime: data enters as `unknown`, passes through a
+generated predicate, and emerges with full schema-derived type
+information. See
+[typescript-practice.md](../../docs/governance/typescript-practice.md)
+for the implementation pattern and decision tree.
+
 ## Compliance
 
 - All Pull Requests and agent tasks must confirm adherence to this directive.

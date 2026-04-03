@@ -27,11 +27,17 @@ split_strategy: 'Extract detailed gotcha collections to a companion gotchas file
 - Define types in type files, close to where they are used.
 - If a type is used in multiple locations, consider if this is signalling that a refactor is needed.
 
-## Our Type Definitions
+## Our Type Definitions: The Constant-Type-Predicate Pattern
 
-- Define runtime constants with `as const`
-- Use those constants to define types
-- Use those constants to create type predicate functions
+The foundational type pattern in this codebase, used 37+ times in the
+generated code. See [ADR-153](../architecture/architectural-decisions/153-constant-type-predicate-pattern.md)
+for the full specification, decision tree, and common violations.
+
+1. Define runtime constants with `as const`
+2. Derive strict types with `typeof ... [number]`
+3. Create type predicate functions backed by honest runtime checks
+4. Optionally use `satisfies` to prove interface compliance without
+   losing literal types
 
 ### Example
 

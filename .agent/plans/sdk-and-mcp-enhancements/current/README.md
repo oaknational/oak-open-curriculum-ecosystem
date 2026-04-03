@@ -4,8 +4,8 @@ Executable plans queued or ready to resume.
 
 | Plan | Scope | Status / Blocked By |
 |---|---|---|
-| [ws3-oak-url-augmentable-codegen-fix.plan.md](ws3-oak-url-augmentable-codegen-fix.plan.md) | Replace `Record<string, unknown>` widening with schema-derived GET response body union; ADR-152 for Constant-Type-Predicate Pattern | 🟠 In progress; Phase 0 verified, Phase 1 codegen in progress. Prerequisite 1 of 2 for Phase 4. |
-| [ws3-contrast-validation-prerequisite.plan.md](ws3-contrast-validation-prerequisite.plan.md) | WCAG contrast ratio validation in design token pipeline; fix two blocking token contrast violations | Queued; prerequisite 2 of 2 for Phase 4. Blocked by OakUrlAugmentable fix. |
+| [ws3-oak-url-augmentable-codegen-fix.plan.md](ws3-oak-url-augmentable-codegen-fix.plan.md) | Replace `Record<string, unknown>` widening with schema-derived GET response body union; ADR-153 for Constant-Type-Predicate Pattern | 🟢 COMPLETE — Phases 0–5 done, ADR-153 written, quality gates pass. Pending archive after commit. |
+| [ws3-contrast-validation-prerequisite.plan.md](ws3-contrast-validation-prerequisite.plan.md) | WCAG contrast ratio validation in design token pipeline; fix two blocking token contrast violations | 🟠 **ACTIVE** — prerequisite 2 of 2 for Phase 4. No longer blocked. |
 | [canonical-url-enforcement.plan.md](canonical-url-enforcement.plan.md) | Promote URL validation from warn-only to configurable gate; validate URLs in ingestion pipeline before ES storage | Queued; dependency on naming collision remediation satisfied ([archived](../archive/completed/url-naming-collision-remediation.plan.md), ADR-145) |
 | [output-schemas-for-mcp-tools.plan.md](output-schemas-for-mcp-tools.plan.md) | Add truthful `outputSchema` metadata to all MCP tools while preserving generated upstream-response validation and aligning transport contracts | Ready for renewed grounding against the now-archived runtime-boundary simplification work |
 

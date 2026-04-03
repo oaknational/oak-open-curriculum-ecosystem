@@ -37,8 +37,8 @@ Executable plans that are in progress now.
 Current ordered prerequisites before Phase 4/5:
 
 - [../current/ws3-oak-url-augmentable-codegen-fix.plan.md](../current/ws3-oak-url-augmentable-codegen-fix.plan.md) —
-  response-augmentation typing remediation and ADR-152 discoverability work;
-  prerequisite 1 of 2 before Phase 4/5 view work resumes
+  ✅ COMPLETE. Response-augmentation typing remediation and ADR-153
+  (Constant-Type-Predicate Pattern). Prerequisite 1 of 2 satisfied.
 - [../current/ws3-contrast-validation-prerequisite.plan.md](../current/ws3-contrast-validation-prerequisite.plan.md) —
   build-time contrast validation and token accessibility fixes; prerequisite
   2 of 2 before Phase 4/5 view work continues
