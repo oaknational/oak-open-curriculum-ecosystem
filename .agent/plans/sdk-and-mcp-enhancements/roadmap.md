@@ -1,7 +1,7 @@
 ---
 name: MCP Apps Standard Migration Plan
 overview: "Strategic planning anchor for the remaining Oak MCP Apps work. Defines the canonical target architecture, the live execution stack, and the remaining dependency order."
-lastValidatedDate: 2026-04-03
+lastValidatedDate: 2026-04-04
 todos:
   - id: canonical-research
     content: "Maintain the canonical MCP Apps research summary and keep it aligned with the live executable plans."
@@ -17,10 +17,10 @@ todos:
     status: completed
   - id: ws3-contrast-validation-prerequisite
     content: "Build WCAG contrast validation into the token pipeline and fix the blocking token accessibility failures before Phase 4 and Phase 5 continue."
-    status: pending
+    status: completed
   - id: oak-url-augmentable-codegen-fix
     content: "Resolve the OakUrlAugmentable widening leak through schema-derived GET response unions and honest middleware validation."
-    status: in_progress
+    status: completed
   - id: c8-auth-metadata-invariant-hardening
     content: "Implement auth metadata invariant hardening."
     status: completed
@@ -33,7 +33,7 @@ isProject: false
 # MCP Apps Standard Migration Plan
 
 **Status**: ACTIVE
-**Last Updated**: 2026-04-03
+**Last Updated**: 2026-04-04
 
 ---
 
@@ -82,11 +82,12 @@ Read the live workstream in this order:
 1. [roadmap.md](roadmap.md)
 2. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 3. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
-4. [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
-5. [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
-6. [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
-7. [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
-8. [current/README.md](current/README.md)
+4. [active/ws3-mcp-app-rendering-investigation.plan.md](active/ws3-mcp-app-rendering-investigation.plan.md)
+5. [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
+6. [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
+7. [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
+8. [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
+9. [current/README.md](current/README.md)
 
 When touching runtime contract, metadata visibility, resource auth, or tool
 registration, also read:
@@ -116,7 +117,8 @@ WS3: fresh React MCP App rebuild            ▶ active
   OakUrl codegen fix                        ✓ complete
   Contrast validation prerequisite          ✓ complete
   Phase 4: brand banner                     ✓ complete (2026-04-04)
-  Phase 5: user-search view                 ⏳ pending (next)
+  Rendering investigation                   ▶ active (blocks Phase 5)
+  Phase 5: user-search view                 ⏳ pending (blocked)
   Phase 6: docs/gates/review                ⏳ pending
 C8: auth metadata invariant hardening       ✓ complete
 Output schemas follow-up                    ⏳ current
@@ -131,6 +133,7 @@ The remaining UI work is carried by:
 
 - [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 - [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
+- [active/ws3-mcp-app-rendering-investigation.plan.md](active/ws3-mcp-app-rendering-investigation.plan.md)
 - [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
 - [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
 - [active/ws3-phase-3-schema-fallout-closure.plan.md](active/ws3-phase-3-schema-fallout-closure.plan.md)
@@ -164,12 +167,12 @@ Phase 4 and Phase 5 now build on.
 
 ### Current ordered prerequisites
 
-[current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
-is prerequisite 2 of 2 before the first view work starts.
+Both prerequisites are COMPLETE:
 
-[current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
-is prerequisite 1 of 2 before Phase 4 resumes. It carries the schema-first
-response-augmentation remediation now in progress.
+- [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
+  — ✅ COMPLETE. WCAG contrast validation and token fixes.
+- [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
+  — ✅ COMPLETE. Schema-derived union + ADR-153.
 
 ## Validation
 

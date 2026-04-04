@@ -423,9 +423,7 @@ complex mocks.
 
 ### Developer Experience
 
-- **No skipped tests** - Fix it or delete it
 - **No commented out code** - Fix it or delete it
-- **No dead code** - Delete it
 - **Inline docs everywhere** - ALL files, modules, functions, data
   structures, classes, constants, and type information MUST have
   inline jsdoc/tsdoc comments that can be compiled by `typedoc`

@@ -30,7 +30,7 @@ todos:
 # MCP App Extension Migration
 
 **Status**: ACTIVE  
-**Last Updated**: 2026-03-31
+**Last Updated**: 2026-04-04
 **Scope**: Complete Oak’s MCP Apps migration and finish the fresh React MCP App
 rebuild.
 
@@ -120,7 +120,7 @@ This child plan covers:
 
 1. deletion of the dead widget framework
 2. fresh React MCP App infrastructure
-3. curriculum-model UI
+3. brand banner (COMPLETE — rendering investigation active)
 4. user-search UI as a first-class user-first tool in the aggregated tool
    surface
 5. app-only helper-tool visibility and runtime contract work needed to support
@@ -174,7 +174,8 @@ WS3 child plan: fresh React MCP App rebuild ▶ active
   OakUrl codegen fix                         ✓ complete
   Contrast validation prerequisite           ✓ complete
   Phase 4: brand banner                      ✓ complete
-  Phase 5: user-search view                  ⏳ pending
+  Rendering investigation                    ▶ active (blocks Phase 5)
+  Phase 5: user-search view                  ⏳ pending (blocked)
   Phase 6: docs + review + commit            ⏳ pending
 C8 closure gates: auth metadata hardening   ✓ complete
 ```

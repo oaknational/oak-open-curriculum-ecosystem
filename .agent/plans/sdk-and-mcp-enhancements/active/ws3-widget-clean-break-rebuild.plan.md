@@ -34,7 +34,7 @@ todos:
 # WS3: Fresh React MCP App Rebuild
 
 **Status**: ACTIVE  
-**Last Updated**: 2026-04-02  
+**Last Updated**: 2026-04-04  
 **Scope**: Delete the dead widget framework and build one fresh React MCP App
 from scratch.
 
@@ -310,8 +310,9 @@ plan remains the parent orchestration document and source of phase ordering.
 3. [ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md](ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md)
 4. [ws3-phase-3-canonical-contracts-and-runtime.plan.md](ws3-phase-3-canonical-contracts-and-runtime.plan.md)
 5. [ws3-phase-4-brand-banner.plan.md](ws3-phase-4-brand-banner.plan.md)
-6. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md)
-7. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md)
+6. [ws3-mcp-app-rendering-investigation.plan.md](ws3-mcp-app-rendering-investigation.plan.md)
+7. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md)
+8. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md)
 
 ---
 
@@ -566,13 +567,13 @@ only the brand banner for "you are in Oak now" orientation.
 **Goal**: add the human-facing search experience without violating app/SDK
 boundaries.
 
-**Prerequisites** (ordered):
+**Prerequisites** (ordered, all COMPLETE):
 
 1. ✅ `../archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
 2. ✅ `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE:
    replaced widening alias with schema-derived union + ADR-153
-3. `../current/ws3-contrast-validation-prerequisite.plan.md` — prerequisite:
-   WCAG contrast validation + fix two blocking token violations
+3. ✅ `../current/ws3-contrast-validation-prerequisite.plan.md` — COMPLETE:
+   WCAG contrast validation + two blocking token violations fixed
 
 Phase 5 builds on the shared shell and token package, not a second local
 styling layer.
@@ -688,8 +689,10 @@ Plus:
   and shell prerequisite for Phase 4/5 widget UI work
 - `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE:
   replaced widening alias with schema-derived union + ADR-153
-- `../current/ws3-contrast-validation-prerequisite.plan.md` — prerequisite:
-  WCAG contrast validation + fix two blocking token violations
+- `../current/ws3-contrast-validation-prerequisite.plan.md` — ✅ COMPLETE:
+  WCAG contrast validation + two blocking token violations fixed
+- `ws3-mcp-app-rendering-investigation.plan.md` — rendering investigation
+  (blocks Phase 5)
 - `../current/README.md` — queued and in-progress follow-on execution plans
 
 Closure gate rule:
