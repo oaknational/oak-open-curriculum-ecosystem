@@ -30,10 +30,16 @@ describe('BrandBanner', () => {
     expect(svg?.getAttribute('aria-hidden')).toBe('true');
   });
 
-  it('calls onOpenLink with the Oak URL when the link is clicked', () => {
+  it('calls onOpenLink with the Oak URL and the click event', () => {
     const calls: string[] = [];
 
-    render(<BrandBanner onOpenLink={(url) => calls.push(url)} />);
+    render(
+      <BrandBanner
+        onOpenLink={(url) => {
+          calls.push(url);
+        }}
+      />,
+    );
 
     const link = screen.getByRole('link', { name: /oak national academy/iu });
 
@@ -48,5 +54,13 @@ describe('BrandBanner', () => {
     const link = screen.getByRole('link', { name: /oak national academy/iu });
 
     expect(link.className).toContain('oak-banner__link');
+  });
+
+  it('renders inside a header landmark', () => {
+    render(<BrandBanner onOpenLink={() => undefined} />);
+
+    const header = screen.getByRole('banner');
+
+    expect(header).toBeTruthy();
   });
 });

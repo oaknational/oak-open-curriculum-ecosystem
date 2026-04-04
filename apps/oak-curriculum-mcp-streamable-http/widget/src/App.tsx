@@ -1,11 +1,25 @@
+/** Package version from `package.json`, injected at build time by Vite `define`. */
+declare const __APP_VERSION__: string;
+
+/**
+ * Connected MCP App component and presentational shell.
+ *
+ * @remarks
+ * Host-context styling and runtime state dispatch are composed in a
+ * single `onhostcontextchanged` handler registered in `onAppCreated`.
+ * The SDK's `useHostStyleVariables` hook is NOT used because it
+ * internally registers its own `onhostcontextchanged` handler, and the
+ * SDK exposes only one callback slot per notification — a second
+ * assignment silently overwrites the first.
+ */
 import {
   applyDocumentTheme,
   applyHostStyleVariables as applyMcpHostStyleVariables,
   type McpUiHostContext,
   type App as McpApp,
 } from '@modelcontextprotocol/ext-apps';
-import { useApp, useHostStyleVariables } from '@modelcontextprotocol/ext-apps/react';
-import { useEffect, useReducer } from 'react';
+import { useApp } from '@modelcontextprotocol/ext-apps/react';
+import { useReducer } from 'react';
 import {
   applyHostContextToRuntime,
   initialAppRuntimeState,
@@ -21,7 +35,7 @@ import { BrandBanner } from './BrandBanner.js';
  * @remarks
  * Sets the document-level theme attribute and host CSS custom properties.
  * Errors are caught and dispatched as runtime errors so that the styling
- * concern cannot poison the state-machine dispatch in the same callback.
+ * concern cannot poison the runtime state dispatch in the same callback.
  *
  * The MCP Apps SDK constrains host style variable keys to a closed union
  * of 73 specific names (e.g. `--color-background-primary`), none of which
@@ -30,7 +44,7 @@ import { BrandBanner } from './BrandBanner.js';
  */
 function syncHostContextStyling(
   hostContext: Partial<McpUiHostContext>,
-  dispatch?: AppRuntimeDispatch,
+  dispatch: AppRuntimeDispatch,
 ): void {
   try {
     if (hostContext.theme) {
@@ -41,13 +55,10 @@ function syncHostContextStyling(
       applyMcpHostStyleVariables(hostContext.styles.variables);
     }
   } catch (error: unknown) {
-    if (dispatch) {
-      dispatch({
-        type: 'runtime-error',
-        errorMessage:
-          error instanceof Error ? error.message : 'Host styling synchronisation failed',
-      });
-    }
+    dispatch({
+      type: 'runtime-error',
+      errorMessage: error instanceof Error ? error.message : 'Host styling synchronisation failed',
+    });
   }
 }
 
@@ -55,12 +66,20 @@ function syncHostContextStyling(
  * Creates a callback that opens an external URL via the MCP Apps SDK.
  *
  * @remarks
- * Handles `app` nullability — if the app is not yet connected, the
- * callback is a no-op. The banner link has a real `href` as fallback.
+ * When `app` is null (not yet connected), the callback does nothing and
+ * the native `<a href>` fallback is allowed to navigate. When `app` is
+ * connected, `preventDefault` is called before delegating to `openLink`.
+ *
+ * @param app - The MCP App instance, or null if not yet connected.
  */
-function createOpenLinkHandler(app: McpApp | null): (url: string) => void {
-  return (url: string) => {
-    void app?.openLink({ url });
+function createOpenLinkHandler(app: McpApp | null): (url: string, event: React.MouseEvent) => void {
+  return (url, event) => {
+    if (!app) {
+      return;
+    }
+
+    event.preventDefault();
+    void app.openLink({ url });
   };
 }
 
@@ -76,7 +95,7 @@ function createOpenLinkHandler(app: McpApp | null): (url: string) => void {
 export function AppView({
   onOpenLink,
 }: {
-  readonly onOpenLink: (url: string) => void;
+  readonly onOpenLink: (url: string, event: React.MouseEvent) => void;
 }): React.JSX.Element {
   return (
     <div className="oak-app" data-testid="oak-mcp-app-shell">
@@ -90,45 +109,43 @@ export function AppView({
  *
  * @remarks
  * Initialises the MCP Apps React runtime via {@link useApp}, registers
- * lifecycle handlers, and synchronises host context (theme, styles)
- * with the document. Delegates rendering to {@link AppView}.
+ * lifecycle handlers and the composed host-context handler in
+ * `onAppCreated`. Delegates rendering to {@link AppView}.
+ *
+ * Host-context styling (theme + CSS variables) and runtime state
+ * dispatch are composed in a single `onhostcontextchanged` handler to
+ * avoid the single-callback-slot overwrite problem documented in the
+ * module-level TSDoc.
  */
 export function App(): React.JSX.Element {
   const [, dispatch] = useReducer(reduceAppRuntimeState, initialAppRuntimeState);
   const { app } = useApp({
     appInfo: {
       name: 'oak-curriculum-mcp-app',
-      version: '0.0.0-development',
+      version: __APP_VERSION__,
     },
     capabilities: {},
     onAppCreated: (createdApp) => {
       registerAppRuntimeHandlers(createdApp, dispatch);
+
+      // Compose styling and state dispatch in a single host-context
+      // handler. Each concern is error-isolated: syncHostContextStyling
+      // catches internally so a styling failure cannot prevent the
+      // state-machine dispatch.
+      createdApp.onhostcontextchanged = (updatedHostContext) => {
+        syncHostContextStyling(updatedHostContext, dispatch);
+        applyHostContextToRuntime(dispatch, updatedHostContext);
+      };
+
+      // Apply initial host context if available at creation time.
+      const initialContext = createdApp.getHostContext();
+
+      if (initialContext) {
+        syncHostContextStyling(initialContext, dispatch);
+        applyHostContextToRuntime(dispatch, initialContext);
+      }
     },
   });
-
-  useHostStyleVariables(app, app?.getHostContext());
-
-  useEffect(() => {
-    if (!app) {
-      return;
-    }
-
-    const hostContext = app.getHostContext();
-
-    if (hostContext) {
-      syncHostContextStyling(hostContext, dispatch);
-      applyHostContextToRuntime(dispatch, hostContext);
-    }
-
-    // The SDK currently exposes one host-context callback slot, so we compose
-    // host-style application with local runtime-state updates here.
-    // Each concern is error-isolated: syncHostContextStyling catches internally,
-    // so a styling failure cannot prevent the state-machine dispatch.
-    app.onhostcontextchanged = (updatedHostContext) => {
-      syncHostContextStyling(updatedHostContext, dispatch);
-      applyHostContextToRuntime(dispatch, updatedHostContext);
-    };
-  }, [app, dispatch]);
 
   return <AppView onOpenLink={createOpenLinkHandler(app)} />;
 }

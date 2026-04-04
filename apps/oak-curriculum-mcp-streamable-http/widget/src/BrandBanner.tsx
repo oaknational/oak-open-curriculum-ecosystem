@@ -14,8 +14,15 @@
 const OAK_URL = 'https://www.thenational.academy';
 
 interface BrandBannerProps {
-  /** Callback to open an external URL via the MCP Apps SDK. */
-  readonly onOpenLink: (url: string) => void;
+  /**
+   * Callback to open an external URL via the MCP Apps SDK.
+   *
+   * @remarks
+   * Receives the React mouse event so the connected component can decide
+   * whether to call `preventDefault`. When the MCP App is not connected,
+   * the callback is a no-op and the native `<a href>` fallback navigates.
+   */
+  readonly onOpenLink: (url: string, event: React.MouseEvent) => void;
 }
 
 /**
@@ -77,18 +84,17 @@ function OakLogo(): React.JSX.Element {
  */
 export function BrandBanner({ onOpenLink }: BrandBannerProps): React.JSX.Element {
   return (
-    <div className="oak-banner">
+    <header className="oak-banner">
       <a
         href={OAK_URL}
         className="oak-banner__link"
         onClick={(event) => {
-          event.preventDefault();
-          onOpenLink(OAK_URL);
+          onOpenLink(OAK_URL, event);
         }}
       >
         <OakLogo />
         <span className="oak-banner__title">Oak National Academy</span>
       </a>
-    </div>
+    </header>
   );
 }

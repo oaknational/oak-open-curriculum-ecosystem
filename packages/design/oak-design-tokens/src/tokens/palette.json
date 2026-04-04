@@ -101,7 +101,7 @@
     "size-400": {
       "$type": "dimension",
       "$value": "1.25rem",
-      "$description": "Banner title — between body and heading"
+      "$description": "Medium text — between body and heading"
     },
     "size-700": { "$type": "dimension", "$value": "2rem", "$description": "Heading text" },
     "weight-regular": {

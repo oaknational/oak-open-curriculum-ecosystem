@@ -20,9 +20,9 @@ todos:
   - id: phase-3-contracts-runtime
     content: "Phase 3: Extend canonical SDK/runtime contracts for MCP App registration, visibility, and tool listing."
     status: completed
-  - id: phase-4-curriculum-view
-    content: "Phase 4: Build the curriculum-model MCP App view."
-    status: pending
+  - id: phase-4-brand-banner
+    content: "Phase 4: Brand banner — logo + 'Oak National Academy' link."
+    status: completed
   - id: phase-5-search-view
     content: "Phase 5: Build the interactive user-search MCP App view and app-only helper flow."
     status: pending
@@ -114,7 +114,7 @@ This work explicitly does **not** do any of the following:
 
 | Tool | UI | Notes |
 |------|----|-------|
-| `get-curriculum-model` | Yes | Structured curriculum-model view |
+| `get-curriculum-model` | Yes | Brand banner (session-start proxy; data serves agent; human sees branding) |
 | `user-search` | Yes | New interactive human-facing search entry point |
 | `user-search-query` | App-only helper | Hidden from model; callable from the UI only when needed |
 
@@ -309,7 +309,7 @@ plan remains the parent orchestration document and source of phase ordering.
 2. [ws3-phase-1-delete-legacy-widget-framework.plan.md](ws3-phase-1-delete-legacy-widget-framework.plan.md)
 3. [ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md](ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md)
 4. [ws3-phase-3-canonical-contracts-and-runtime.plan.md](ws3-phase-3-canonical-contracts-and-runtime.plan.md)
-5. [ws3-phase-4-curriculum-model-view.plan.md](ws3-phase-4-curriculum-model-view.plan.md)
+5. [ws3-phase-4-brand-banner.plan.md](ws3-phase-4-brand-banner.plan.md)
 6. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md)
 7. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md)
 
@@ -522,49 +522,41 @@ When renaming the widget resource slug, update all coupled surfaces atomically:
 
 ---
 
-## Phase 4: Curriculum Model View
+## Phase 4: Brand Banner
 
-**Goal**: deliver the first real view on the new app shell.
+**Goal**: deliver the brand banner. When `get-curriculum-model` fires (a
+session-start proxy), the MCP App shows the Oak brand banner — logo +
+"Oak National Academy" link. No content area. Just branding. The
+curriculum-model data serves the agent via text content; the human sees
+only the brand banner for "you are in Oak now" orientation.
 
-**Prerequisites** (ordered, all must complete before Phase 4):
+**Prerequisites** (ordered, all COMPLETE):
 
 1. ✅ `../archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
-2. ✅ `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE.
-   Replaced `Record<string, unknown>` widening with schema-derived types;
-   ADR-153 (Constant-Type-Predicate Pattern) written, all gates pass.
-3. `../current/ws3-contrast-validation-prerequisite.plan.md` — WCAG contrast
-   ratio validation in the design token pipeline; fix two blocking token
-   contrast violations (focus ring, dark-theme error).
+2. ✅ `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE
+3. ✅ `../current/ws3-contrast-validation-prerequisite.plan.md` — COMPLETE
 
-### RED
+### What was delivered
 
-Write tests first for:
-
-- routed rendering of `get-curriculum-model`
-- Oak header/footer behaviour
-- empty/error states
-- host-context-aware layout behaviour where practical
-
-### GREEN
-
-Build:
-
-- tool routing inside the live prerequisite shell
-- curriculum-model renderer
-- Oak brand styling via `@oaknational/oak-design-tokens` CSS and host-aware
-  fallbacks
-
-The `useApp()`-owning shell should be exercised primarily through E2E/system
-tests. Child components that receive plain props should be covered with
-in-process React tests.
+- 4 text-context contrast pairings (accent/accent-strong on surfaces)
+- `font.size-400` (1.25rem) palette token + `font-banner-title-size`
+  semantic token + 7 banner component tokens
+- Inline SVG acorn logo with `fill="currentColor"` (adapts to light,
+  dark, and forced-colours modes)
+- `BrandBanner.tsx` — single `<a>` wrapping logo + text (WCAG H2),
+  `onOpenLink` callback prop, underlined, display font, focus-visible ring
+- `prefers-color-scheme` fallback script in `mcp-app.html`
+- `appInfo.version` wired to `package.json` via Vite `define`
+- Diagnostic scaffold deleted, `AppView` renders only the banner
+- 5 pre-implementation specialist reviewers informed the design
 
 ### Acceptance
 
-- the curriculum-model view renders through the fresh MCP App shell
-- the shared shell imports `@oaknational/oak-design-tokens` rather than keeping
-  permanent app-local brand values
-- external links go through `app.openLink()`
-- the app handles tool input/result/cancel/teardown through the MCP Apps SDK
+- the brand banner renders through the fresh MCP App shell
+- the banner imports `@oaknational/oak-design-tokens` CSS — no app-local
+  brand values
+- external links go through `app.openLink()` via callback prop
+- `prefers-color-scheme` fallback applies dark tokens before host context
 - local verification works against the upstream `basic-host`
 
 ---

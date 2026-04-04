@@ -36,7 +36,7 @@ git log --oneline --decorate -10
 - **Workstream**: MCP App migration (WS3 widget rebuild)
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent — Phase 4 section MUST be corrected, see below)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-curriculum-model-view.plan.md` (companion — MUST rename to `ws3-phase-4-brand-banner.plan.md` and correct)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-brand-banner.plan.md` (companion — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
 - **Current state**: WS3 Phase 4 Slice 1 is COMPLETE. Slice 2 is pending.
   Phase 4 delivers: when `get-curriculum-model` fires, the MCP App shows

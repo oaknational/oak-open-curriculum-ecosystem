@@ -21,7 +21,13 @@ describe('AppView', () => {
   it('passes onOpenLink through to the banner', () => {
     const calls: string[] = [];
 
-    render(<AppView onOpenLink={(url) => calls.push(url)} />);
+    render(
+      <AppView
+        onOpenLink={(url) => {
+          calls.push(url);
+        }}
+      />,
+    );
 
     const link = screen.getByRole('link', { name: /oak national academy/iu });
 

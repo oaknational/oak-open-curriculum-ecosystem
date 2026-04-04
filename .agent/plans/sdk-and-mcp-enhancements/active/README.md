@@ -27,21 +27,19 @@ Executable plans that are in progress now.
   WS3 companion phase plan for canonical metadata/registration/auth/runtime
   contract alignment. COMPLETE on 2 April 2026, including the non-UI host
   fallback proof.
-- [ws3-phase-4-curriculum-model-view.plan.md](ws3-phase-4-curriculum-model-view.plan.md) —
-  WS3 companion phase plan for the curriculum-model view delivery.
+- [ws3-phase-4-brand-banner.plan.md](ws3-phase-4-brand-banner.plan.md) —
+  WS3 companion phase plan for the brand banner. COMPLETE on 4 April 2026.
 - [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
   WS3 companion phase plan for user-search UI delivery and helper-tool flow.
 - [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
   WS3 companion phase plan for docs, gates, reviewers, and closure checks.
 
-Current ordered prerequisites before Phase 4/5:
+Completed prerequisites (all satisfied — Phase 4 COMPLETE, Phase 5 unblocked):
 
 - [../current/ws3-oak-url-augmentable-codegen-fix.plan.md](../current/ws3-oak-url-augmentable-codegen-fix.plan.md) —
-  ✅ COMPLETE. Response-augmentation typing remediation and ADR-153
-  (Constant-Type-Predicate Pattern). Prerequisite 1 of 2 satisfied.
+  ✅ COMPLETE. Response-augmentation typing remediation and ADR-153.
 - [../current/ws3-contrast-validation-prerequisite.plan.md](../current/ws3-contrast-validation-prerequisite.plan.md) —
-  build-time contrast validation and token accessibility fixes; prerequisite
-  2 of 2 before Phase 4/5 view work continues
+  ✅ COMPLETE. Build-time contrast validation and token accessibility fixes.
 
 Completed and archived:
 
