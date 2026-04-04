@@ -21,7 +21,8 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@oaknational/design-tokens-core": "workspace:*"
+    "@oaknational/design-tokens-core": "workspace:*",
+    "@oaknational/result": "workspace:*"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",

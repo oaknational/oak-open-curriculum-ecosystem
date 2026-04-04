@@ -66,8 +66,37 @@ Output example:
 }
 ```
 
-The build pipeline validates tier referencing rules and generates
-contrast ratio reports for colour token pairs.
+The build pipeline validates tier referencing rules, runs WCAG
+contrast validation, and generates CSS custom properties. A
+failing contrast check blocks the build.
+
+## Contrast Validation
+
+The build pipeline checks all declared colour pairings against
+WCAG 2.2 AA thresholds. The system has three components:
+
+1. **Pure functions** (`design-tokens-core`): `hexToSrgb`,
+   `srgbToRelativeLuminance`, `contrastRatio`, `checkWcagAA`,
+   `checkNonTextContrast`, `resolveTokenTreeToHex`,
+   `validateContrastPairings`
+2. **Pairing manifest** (`oak-design-tokens/src/tokens/contrast-pairings.ts`):
+   human-authored declaration of which fg/bg pairs to check, including
+   triads for layered elements (e.g. button text on button on page)
+3. **Report** (`oak-design-tokens/dist/contrast-report.json`):
+   machine-generated with computed ratios per theme
+
+### Thresholds
+
+- **Text (SC 1.4.3)**: 4.5:1 normal, 3:1 large
+- **Non-text (SC 1.4.11)**: 3:1 for UI components
+
+### Adding New Pairings
+
+When introducing new colour tokens, add entries to
+`contrast-pairings.ts`. The build validates both themes
+automatically. For layered elements (e.g. button text on button
+surface on page), use the triadic model — all three pairwise
+ratios must independently pass.
 
 ## Consumption Patterns
 

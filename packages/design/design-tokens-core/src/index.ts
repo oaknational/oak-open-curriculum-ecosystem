@@ -1,3 +1,11 @@
+/**
+ * Global DTCG token reference pattern — matches `{group.token-name}` within strings.
+ *
+ * @remarks
+ * The inner pattern `[a-z0-9-]+(?:\.[a-z0-9-]+)*` is shared with
+ * `REFERENCE_PATTERN` in `contrast-validation.ts` (anchored variant). Both
+ * must be updated together if the DTCG reference syntax changes.
+ */
 const TOKEN_REFERENCE_PATTERN = /\{([a-z0-9-]+(?:\.[a-z0-9-]+)*)\}/giu;
 
 type TokenTier = 'palette' | 'semantic' | 'component';
@@ -164,3 +172,29 @@ export function createCssBlock(selector: string, tokens: readonly FlattenedDesig
 
   return [`${selector} {`, ...cssVariables, '}'].join('\n');
 }
+
+// ---------------------------------------------------------------------------
+// Contrast validation re-exports
+// ---------------------------------------------------------------------------
+
+export {
+  hexToSrgb,
+  srgbToRelativeLuminance,
+  contrastRatio,
+  checkWcagAA,
+  checkNonTextContrast,
+} from './contrast.js';
+
+export { resolveTokenTreeToHex } from './contrast-resolve.js';
+
+export { validateContrastPairings } from './contrast-validation.js';
+
+export type {
+  SrgbColour,
+  ContrastPair,
+  ContrastTriad,
+  ContrastManifest,
+  ContrastReportEntry,
+  ContrastReport,
+  ContrastValidationError,
+} from './contrast-types.js';

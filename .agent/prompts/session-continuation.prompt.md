@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-03
+last_updated: 2026-04-04
 ---
 
 # Session Continuation
@@ -45,21 +45,21 @@ git log --oneline --decorate -10
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md` — COMPLETE
 - **Current state**: WS3 Phase 3 canonical contracts are COMPLETE. Phases
-  4-6 are pending. OakUrlAugmentable codegen fix (prerequisite 1 of 2) is
-  COMPLETE: `JsonBody200` redefined, augmentation uses `Object.assign`,
-  ADR-153 (Constant-Type-Predicate Pattern) written, all gates pass.
-  **Contrast validation (prerequisite 2 of 2) is now active.**
-- **Current objective**: Complete contrast validation prerequisite, then
-  start Phase 4. The three pre-Phase-4 gates are COMPLETE:
+  4-6 are pending. Both prerequisites are COMPLETE:
+  1. ✅ OakUrlAugmentable codegen fix — `JsonBody200` redefined,
+     augmentation uses `Object.assign`, ADR-153 written.
+  2. ✅ Contrast validation — WCAG contrast ratio validation built from
+     W3C spec, two blocking token violations fixed (focus ring, dark
+     error, border-subtle), triadic model implemented, build-time gate
+     integrated. All quality gates pass.
+- **Current objective**: Start Phase 4 (brand banner). All pre-Phase-4
+  gates and prerequisites are COMPLETE:
   1. ✅ Portability validator extended (Check 11: skill permissions)
   2. ✅ Deferred review findings resolved
   3. ✅ Design conversation held — ADR-151 records styling independence
-  One prerequisite remains before Phase 4:
-  1. ✅ **OakUrlAugmentable codegen fix** — COMPLETE. ADR-153 written.
-  2. **Contrast validation** — plan at
-     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`.
-     WCAG contrast ratio validation + fix two blocking token violations
-     (focus ring 2.08:1, dark error 2.84:1). Build from W3C spec directly.
+  4. ✅ OakUrlAugmentable codegen fix — ADR-153 written
+  5. ✅ Contrast validation — plan COMPLETE at
+     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -94,50 +94,42 @@ git log --oneline --decorate -10
 - **Open questions / low-confidence areas**:
   - Token set expansion for Phase 4/5: design-system reviewer identified
     gaps (link colours, hover surfaces, result-item tokens, font-size-400)
-  - Focus ring contrast (2.08:1 light) and dark error colour (2.84:1) are
-    blocking WCAG AA violations — must fix in contrast validation prereq
   - Whether `prefers-color-scheme` media query fallback is needed when
     the MCP host does not set `data-theme`
 - **Remaining tracked items** (not blocking Phase 4 directly):
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Next safe step**: Start the contrast validation prerequisite. Read the
-  plan, ground in the W3C WCAG contrast algorithm, then begin with the
-  core pure functions (relative luminance and contrast ratio) using TDD.
+- **Next safe step**: Start Phase 4 (brand banner). Read the parent plan
+  and the Phase 4 section. The brand banner is a logo + "Oak National
+  Academy" link — it serves the human with orientation, not the agent.
 - **Deep consolidation status**: Practice transmissibility integration
-  complete (8 incoming files integrated, 8-file Core with verification
-  companion, UUID provenance migration). Practice box empty. OakUrl fix
-  closed with ADR-153. Planning surfaces re-geared for contrast validation.
+  complete. Practice box empty. OakUrl fix closed with ADR-153. Contrast
+  validation closed — all tokens pass WCAG AA, build-time gate active.
 
-## Active Workstreams (2026-04-03)
+## Active Workstreams (2026-04-04)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (contrast validation, then Phase 4)
+### 1. WS3 MCP App Rebuild — ACTIVE (Phase 4 next)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 
 **Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold),
 Phase 3 (canonical contracts + fallback proof).
-**Completed prerequisites**:
+**Completed prerequisites** (all done — Phase 4 is unblocked):
 
 - Design-token prerequisite — all 6 work slices, `pnpm check` green
 - Three pre-Phase-4 gates — portability validator, deferred review
   findings, design conversation (ADR-151 written)
-- OakUrlAugmentable codegen fix — Phases 0–5 COMPLETE, ADR-153 written,
-  all quality gates pass
-
-**Current prerequisite** (final before Phase 4):
-
-1. `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
-   — WCAG contrast ratio validation + fix two blocking token violations
-   (focus ring 2.08:1 light, dark error 2.84:1). Build from W3C spec.
-   Confirmed by Betty, Fred, and design-system reviewers.
+- OakUrlAugmentable codegen fix — ADR-153 written, all gates pass
+- Contrast validation — WCAG contrast ratio validation built from W3C
+  spec, triadic model, build-time gate, all token violations fixed
+  (focus ring, dark error, border-subtle). Plan COMPLETE.
 
 **Pending**: Phase 4 (brand banner), Phase 5 (user search), Phase 6
 (docs/gates/review).
 
-**Next action**: Start contrast validation — core pure functions first
-(relative luminance, contrast ratio), then pairing manifest, then fixes.
+**Next action**: Start Phase 4 — brand banner (logo + "Oak National
+Academy" link). The view serves the human with orientation.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

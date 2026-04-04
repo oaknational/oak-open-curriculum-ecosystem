@@ -1,11 +1,17 @@
 import {
   createCssBlock,
   flattenDesignTokens,
+  resolveTokenTreeToHex,
+  validateContrastPairings,
   validateTierReferences,
+  type ContrastReport,
+  type ContrastValidationError,
   type DtcgTokenTree,
   type FlattenedDesignToken,
 } from '@oaknational/design-tokens-core';
+import { type Result, err, ok } from '@oaknational/result';
 import componentTokens from './tokens/component.json';
+import contrastPairingsManifest from './tokens/contrast-pairings.js';
 import paletteTokens from './tokens/palette.json';
 import semanticDarkTokens from './tokens/semantic.dark.json';
 import semanticLightTokens from './tokens/semantic.light.json';
@@ -25,6 +31,8 @@ function mergeTokenTrees(...tokenTrees: readonly DtcgTokenTree[]): DtcgTokenTree
   return mergedTree;
 }
 
+const lightTokenTree = mergeTokenTrees(paletteTokens, semanticLightTokens, componentTokens);
+
 function inlinePaletteReferences(
   tokens: readonly FlattenedDesignToken[],
   paletteTokenTree: DtcgTokenTree,
@@ -42,10 +50,9 @@ function inlinePaletteReferences(
 }
 
 export function buildOakDesignTokensCss(): string {
-  const rootTokenTree = mergeTokenTrees(paletteTokens, semanticLightTokens, componentTokens);
   const darkTokenTree = mergeTokenTrees(semanticDarkTokens);
 
-  validateTierReferences(rootTokenTree);
+  validateTierReferences(lightTokenTree);
   validateTierReferences(darkTokenTree);
 
   const darkThemeTokens = inlinePaletteReferences(
@@ -55,8 +62,40 @@ export function buildOakDesignTokensCss(): string {
 
   return [
     '/* Generated file: do not edit directly. */',
-    createCssBlock(':root', flattenDesignTokens(rootTokenTree)),
+    createCssBlock(':root', flattenDesignTokens(lightTokenTree)),
     createCssBlock("[data-theme='dark']", darkThemeTokens),
     '',
   ].join('\n');
+}
+
+/**
+ * Build contrast validation reports for both light and dark themes.
+ *
+ * @remarks
+ * Resolves all colour tokens to hex for each theme, then validates every
+ * pairing declared in the contrast manifest against WCAG 2.2 AA thresholds.
+ * Returns Ok with one report per theme, or Err if any manifest token path
+ * cannot be resolved.
+ *
+ * @returns Ok with contrast reports, or Err with the first unresolved token
+ */
+export function buildContrastReports(): Result<readonly ContrastReport[], ContrastValidationError> {
+  const darkTokenTree = mergeTokenTrees(paletteTokens, semanticDarkTokens, componentTokens);
+
+  const lightResolved = resolveTokenTreeToHex(lightTokenTree);
+  const darkResolved = resolveTokenTreeToHex(darkTokenTree);
+
+  const lightResult = validateContrastPairings(lightResolved, contrastPairingsManifest, 'light');
+
+  if (!lightResult.ok) {
+    return err(lightResult.error);
+  }
+
+  const darkResult = validateContrastPairings(darkResolved, contrastPairingsManifest, 'dark');
+
+  if (!darkResult.ok) {
+    return err(darkResult.error);
+  }
+
+  return ok([lightResult.value, darkResult.value]);
 }

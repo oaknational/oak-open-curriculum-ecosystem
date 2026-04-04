@@ -7,34 +7,37 @@ isProject: false
 todos:
   - id: core-pure-functions
     content: "Implement relative luminance and contrast ratio pure functions in design-tokens-core (TDD)."
-    status: pending
+    status: done
   - id: pairing-manifest-schema
     content: "Define the contrast pairing manifest schema with pairwise and triadic entry types."
-    status: pending
+    status: done
   - id: author-pairings
-    content: "Author contrast-pairings.json for the current token set (all semantic fg/bg pairs + button triads)."
-    status: pending
+    content: "Author contrast-pairings.ts for the current token set (all semantic fg/bg pairs + button pairs)."
+    status: done
   - id: build-pipeline-integration
     content: "Wire contrast validation into the oak-design-tokens build pipeline, emitting dist/contrast-report.json."
-    status: pending
+    status: done
   - id: fix-focus-ring
-    content: "Fix the focus ring token contrast failure (sky-400 on light surfaces, 2.08:1 → ≥3:1)."
-    status: pending
+    content: "Fix the focus ring token contrast failure (sky-400 → sky-600 on light, 2.08:1 → 3.50:1)."
+    status: done
   - id: fix-dark-error
-    content: "Fix the dark-theme error token contrast failure (danger-500 on dark surfaces, 2.84:1 → ≥4.5:1)."
-    status: pending
+    content: "Fix the dark-theme error token contrast failure (danger-500 → danger-300 on dark, 2.84:1 → 8.16:1)."
+    status: done
+  - id: fix-border-subtle
+    content: "Fix border-subtle contrast failures: light paper-200→paper-400 (3.75:1), dark ink-700→ink-500 (5.52:1)."
+    status: done
   - id: quality-gate
-    content: "Add contrast:check as a build-time quality gate that fails on threshold violations."
-    status: pending
+    content: "Contrast validation integrated into build — fails on threshold violations."
+    status: done
   - id: docs-update
     content: "Update design-token-practice.md with contrast validation API, pairing format, and threshold constants."
-    status: pending
+    status: done
 ---
 
 # WS3 Contrast Validation Prerequisite
 
-**Status**: PENDING — prerequisite for Phase 4 (curriculum-model view)
-**Last Updated**: 2026-04-03
+**Status**: COMPLETE — all tasks done, pending commit and review closure
+**Last Updated**: 2026-04-04
 
 ## Motivation
 
@@ -53,7 +56,7 @@ Three reviewers (Betty, Fred, design-system) converged on this architecture:
 | Concern | File | Location | Authored/Generated |
 |---------|------|----------|-------------------|
 | Token values | `palette.json`, `semantic.*.json`, `component.json` | `oak-design-tokens/src/tokens/` | Human-authored |
-| Which colours to test | `contrast-pairings.json` | `oak-design-tokens/src/tokens/` | Human-authored |
+| Which colours to test | `contrast-pairings.ts` | `oak-design-tokens/src/tokens/` | Human-authored |
 | Computed results | `contrast-report.json` | `oak-design-tokens/dist/` | Machine-generated |
 
 ### Pure functions in design-tokens-core
@@ -103,7 +106,7 @@ The existing `build-css.ts` in `oak-design-tokens` already resolves palette
 references to hex. The contrast step runs after reference resolution:
 
 1. Resolve all token references to hex (existing step)
-2. Read `contrast-pairings.json`
+2. Read `contrast-pairings.ts`
 3. Call `validateContrastPairings()` from `design-tokens-core`
 4. Emit `dist/contrast-report.json`
 5. Fail the build if any pairing violates its threshold
@@ -152,7 +155,7 @@ Export from `packages/design/design-tokens-core/src/index.ts`.
 Define the `ContrastManifest` type in `design-tokens-core`. This is the
 contract — the manifest data lives in `oak-design-tokens`.
 
-### 3. Author contrast-pairings.json
+### 3. Author contrast-pairings.ts
 
 Define all current pairings for both themes. At minimum:
 - `text-primary` on `surface-page`, `surface-panel`
@@ -167,7 +170,7 @@ Define all current pairings for both themes. At minimum:
 ### 4. Build pipeline integration
 
 Extend `build-css.ts` to:
-- Load `contrast-pairings.json`
+- Load `contrast-pairings.ts`
 - Resolve all referenced tokens to hex (both themes)
 - Call `validateContrastPairings()` per theme
 - Write `dist/contrast-report.json`

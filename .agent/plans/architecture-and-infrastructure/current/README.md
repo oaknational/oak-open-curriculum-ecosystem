@@ -16,3 +16,5 @@ Active execution:
 Related strategic umbrella:
 
 - [observability-and-quality-metrics.plan.md](../future/observability-and-quality-metrics.plan.md) — strategic parent plan whose first slice is currently being executed by the active child plan
+
+Strategic context: [../roadmap.md](../roadmap.md)

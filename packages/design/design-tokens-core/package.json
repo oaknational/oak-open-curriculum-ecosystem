@@ -26,6 +26,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
+  "dependencies": {
+    "@oaknational/result": "workspace:*"
+  },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "typescript": "^5"

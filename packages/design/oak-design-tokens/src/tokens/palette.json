@@ -28,7 +28,12 @@
     "paper-200": {
       "$type": "color",
       "$value": "#e6ddd2",
-      "$description": "Mid parchment — borders and dividers in light mode"
+      "$description": "Mid parchment — decorative surfaces in light mode"
+    },
+    "paper-400": {
+      "$type": "color",
+      "$value": "#8e7f6f",
+      "$description": "Warm taupe — borders in light mode (≥3:1 on paper surfaces)"
     },
     "fern-500": {
       "$type": "color",
@@ -53,12 +58,27 @@
     "sky-400": {
       "$type": "color",
       "$value": "#8ab6d6",
-      "$description": "Calm blue — focus ring indicator"
+      "$description": "Light blue — focus ring on dark backgrounds"
+    },
+    "sky-600": {
+      "$type": "color",
+      "$value": "#3d8fb5",
+      "$description": "Medium blue — focus ring on light backgrounds (≥3:1 on paper surfaces)"
+    },
+    "danger-300": {
+      "$type": "color",
+      "$value": "#f5a0a0",
+      "$description": "Soft salmon — error text on dark backgrounds (≥4.5:1 on ink surfaces)"
     },
     "danger-500": {
       "$type": "color",
       "$value": "#b43c31",
-      "$description": "Red — error states and destructive actions"
+      "$description": "Red — error states and destructive actions on light backgrounds"
+    },
+    "ink-500": {
+      "$type": "color",
+      "$value": "#8498a9",
+      "$description": "Muted slate blue — borders on dark backgrounds (≥3:1 on ink surfaces)"
     }
   },
   "font": {

@@ -19,3 +19,4 @@ Review checkpoint:
 - [sentry-otel-foundation.review-checkpoint-2026-03-27.md](./sentry-otel-foundation.review-checkpoint-2026-03-27.md)
 
 Next queue: [current/README.md](../current/README.md)
+Strategic context: [../roadmap.md](../roadmap.md)

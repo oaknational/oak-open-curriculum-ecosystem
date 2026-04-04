@@ -18,8 +18,8 @@
     },
     "border-subtle": {
       "$type": "color",
-      "$value": "{color.ink-700}",
-      "$description": "Subtle dividers and panel borders"
+      "$value": "{color.ink-500}",
+      "$description": "Dividers and panel borders (≥3:1 on dark surfaces)"
     },
     "text-primary": {
       "$type": "color",
@@ -58,8 +58,8 @@
     },
     "error": {
       "$type": "color",
-      "$value": "{color.danger-500}",
-      "$description": "Error states and destructive actions"
+      "$value": "{color.danger-300}",
+      "$description": "Error states on dark backgrounds (≥4.5:1 on ink surfaces)"
     }
   }
 }
