@@ -35,10 +35,12 @@ git log --oneline --decorate -10
 
 - **Workstream**: MCP App migration (WS3 widget rebuild)
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent — Phase 4 section MUST be corrected, see below)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-app-rendering-investigation.plan.md` (**START HERE** — rendering investigation)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-brand-banner.plan.md` (companion — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: WS3 Phase 4 is COMPLETE. Phase 5 is next.
+- **Current state**: WS3 Phase 4 is COMPLETE but UI does not render.
+  Rendering investigation blocks Phase 5.
   Phase 4 delivered: when `get-curriculum-model` fires, the MCP App shows
   the Oak brand banner — logo + "Oak National Academy" link. No content
   area. Just branding. `get-curriculum-model` is a session-start proxy;
@@ -52,7 +54,7 @@ git log --oneline --decorate -10
     `appInfo.version` wired, parent/companion/umbrella/roadmap plans
     corrected, 3 specialist reviewers (design-system, a11y, mcp), all
     findings addressed, `pnpm check` green.
-- **Current objective**: Phase 5 — interactive user search view.
+- **Current objective**: MCP App rendering investigation (blocks Phase 5).
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -69,8 +71,8 @@ git log --oneline --decorate -10
     "the curriculum model view" — `get-curriculum-model` is a session-start
     proxy. (3) The banner is displayed when the tool fires, with NO content
     area — just the branding, centred.
-  - Parent plan Phase 4 section says "Curriculum Model View" — this is
-    WRONG and must be corrected in Slice 2.
+  - Parent plan Phase 4 section was corrected from "Curriculum Model
+    View" to "Brand Banner" in Slice 2.
   - 5 specialist reviewers consulted pre-implementation: design-system,
     accessibility, MCP, assumptions, architecture-barney. Key decisions:
     SVG with `currentColor`, `<a href onClick>` not `<button>`, combined
@@ -85,32 +87,32 @@ git log --oneline --decorate -10
     blocking. To be tracked as follow-up.
   - Logo SVG fidelity — the inline SVG is a geometric approximation of
     the original PNG. Visual verification in `basic-host` needed.
-- **Remaining tracked items** (not blocking Slice 2):
-  - `fakes.ts` assertion — accepted, follow-up for codegen partial type
-  - ESLint config suppressions not yet ADR-recorded
-  - `appInfo.version` wired to build constant
 - **Remaining tracked items**:
-  - MCP App UI does not render in Claude Code — investigation brief at
-    `~/.claude/plans/glistening-sniffing-eich.md`. Four issues: wrong
-    registration function (`server.registerTool` vs `registerAppTool`),
-    `preserve-schema-examples.ts` is a compatibility layer, unproven
-    implementation, test gap at the MCP App integration level.
+  - **MCP App UI does not render in Claude Code** — investigation plan
+    at `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-app-rendering-investigation.plan.md`.
+    Four issues identified (two compound). Root cause: `server.registerTool`
+    instead of `registerAppTool` AND `preserve-schema-examples.ts`
+    overriding `tools/list` — these two issues compound because the
+    override bypasses the metadata normalisation that `registerAppTool`
+    would provide. Both must be resolved together.
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Next safe step**: Investigate MCP App UI rendering failure. Read the
-  investigation brief. The most likely root cause is missing legacy
-  `_meta["ui/resourceUri"]` key (adoption of `registerAppTool` would
-  fix). After that: Phase 5 (interactive user search view).
+- **Next safe step**: Execute the MCP App rendering investigation.
+  Read the investigation plan (link above). The plan has 6 steps,
+  verified source references, and architecture deep-dive notes.
+  Critical insight: Issues #1 and #2 compound — see plan for details.
+  After the investigation: Phase 5 (interactive user search view).
 - **Deep consolidation status**: Completed 2026-04-04 — Phase 4 closed,
   all plans/prompts/roadmaps corrected, napkin rotated, patterns extracted,
   fitness checked. MCP App rendering investigation added post-closure.
 
 ## Active Workstreams (2026-04-04)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (Phase 5 next)
+### 1. WS3 MCP App Rebuild — ACTIVE (rendering investigation)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
+**Investigation**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-app-rendering-investigation.plan.md`
 
 **Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold),
 Phase 3 (canonical contracts + fallback proof), Phase 4 (brand banner).
@@ -123,10 +125,16 @@ Phase 3 (canonical contracts + fallback proof), Phase 4 (brand banner).
   fallback, `appInfo.version` wired, dead CSS removed
 - 8 specialist reviewers across planning and review, all findings addressed
 - `pnpm check` fully green
+- **UI does not render in Claude Code** — investigation required
 
-**Pending**: Phase 5 (user search), Phase 6 (docs/gates/review).
+**Pending**: Rendering investigation (blocks Phase 5), Phase 5 (user
+search), Phase 6 (docs/gates/review).
 
-**Next action**: Start Phase 5 — interactive user search view.
+**Next action**: Execute the rendering investigation plan. The plan has
+verified source references and identifies that Issues #1 (wrong
+registration function) and #2 (`tools/list` override) **compound** —
+both must be resolved together. See the investigation plan for full
+details, architecture deep-dive, and 6 recommended steps.
 
 ### 2. Frontend Practice Integration — COMPLETE
 
