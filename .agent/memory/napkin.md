@@ -487,3 +487,37 @@
 - **Strategic umbrellas need matrices, not vibes**: for repo-wide separation
   work, the first useful artefact is an authoritative workspace matrix with
   leakage types and target states, not an abstract refactor manifesto.
+
+## Session 2026-04-04 — Contrast validation closure and reviewer sweep
+
+### What Was Done
+
+- Closed the contrast validation prerequisite with a full `pnpm check`
+  pass, 6 specialist reviewers (code, design-system, accessibility,
+  type, test, architecture-fred), and all findings addressed.
+- Key reviewer-driven fixes: Result pattern for `validateContrastPairings`
+  (was throw), proper type predicate for `isColourTokenLeaf`, `hexToSrgb`
+  input validation, expanded manifest (12→16 pairs + 1 triad).
+- Added `'informational'` context to the triadic model per user guidance:
+  for opaque layers (buttons), fg→bg contrast is computed for design
+  visibility but not WCAG-gated.
+- Split `contrast-validation.ts` into `contrast-resolve.ts` +
+  `contrast-validation.ts` for max-lines compliance.
+- Updated plan status to COMPLETE, prompt updated for Phase 4.
+
+### Patterns to Remember
+
+- **Triadic informational context**: in a layered UI triad (text →
+  button → page), only the two adjacent-layer checks have WCAG a11y
+  value. The fg→bg check is informational when the middle layer is
+  opaque. Model this as `'informational'` in the context type, not as
+  a missing check.
+- **Circular ESM imports from barrel files**: when module A exports
+  from barrel B, and B re-exports from A, non-type value imports from
+  B into A will be `undefined` at module initialisation time. Keep
+  value imports out of cycles — extract shared constants to a leaf file.
+- **Result pattern at library boundaries**: build-time library functions
+  should return `Result<T, E>` even when the caller (build script)
+  will crash on error. The library function's type signature should
+  honestly document its failure modes. The build script makes the
+  conscious decision to crash.

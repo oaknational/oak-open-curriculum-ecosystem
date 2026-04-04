@@ -37,8 +37,8 @@ git log --oneline --decorate -10
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-  - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
 - **Completed plans** (prior sessions):
+  - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md` — COMPLETE (WCAG AA build gate, 16 pairs + 1 triad, Result pattern, 6 reviewers)
   - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE (ADR-153, quality gates pass)
   - `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md` — COMPLETE
   - `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md` — COMPLETE
@@ -74,8 +74,9 @@ git log --oneline --decorate -10
     is widening, full stop. The schema-first principle means we know every
     response type at codegen time. Fix is codegen-level (generate union of
     GET response body types), not an exception.
-  - Contrast validation needs triadic model: button text + button surface +
-    page background form a triad where all three pairwise ratios must pass.
+  - Contrast triads model layered UI (button text + surface + page) but
+    only the two adjacent-layer checks are WCAG-gated. The fg→bg check
+    is `'informational'` for opaque layers (computed, not gated).
   - Wider trawl of 7 repos found no reusable contrast/token/styling code.
     Nothing meets the bar for this repo. Build from W3C spec directly.
   - User corrected `unknown` usage: `unknown` is not a convenience — it is
@@ -102,9 +103,10 @@ git log --oneline --decorate -10
 - **Next safe step**: Start Phase 4 (brand banner). Read the parent plan
   and the Phase 4 section. The brand banner is a logo + "Oak National
   Academy" link — it serves the human with orientation, not the agent.
-- **Deep consolidation status**: Practice transmissibility integration
-  complete. Practice box empty. OakUrl fix closed with ADR-153. Contrast
-  validation closed — all tokens pass WCAG AA, build-time gate active.
+- **Deep consolidation status**: Practice box empty. All prerequisites
+  closed: OakUrl fix (ADR-153), contrast validation (Result pattern,
+  informational triads, 6 reviewers). Napkin at 490 lines. Distilled
+  at 200 lines. Consolidation run 2026-04-04.
 
 ## Active Workstreams (2026-04-04)
 
