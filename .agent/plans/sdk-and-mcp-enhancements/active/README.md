@@ -29,6 +29,9 @@ Executable plans that are in progress now.
   fallback proof.
 - [ws3-phase-4-brand-banner.plan.md](ws3-phase-4-brand-banner.plan.md) —
   WS3 companion phase plan for the brand banner. COMPLETE on 4 April 2026.
+- [ws3-mcp-app-rendering-investigation.plan.md](ws3-mcp-app-rendering-investigation.plan.md) —
+  **INVESTIGATION** — MCP App brand banner does not render in Claude Code
+  despite all code-level gates passing. Four issues identified. Blocks Phase 5.
 - [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
   WS3 companion phase plan for user-search UI delivery and helper-tool flow.
 - [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
