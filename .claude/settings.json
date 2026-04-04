@@ -49,7 +49,8 @@
       "Edit(/.claude/skills/clerk-setup/**)",
       "Edit(/.claude/skills/clerk-testing/**)",
       "Edit(/.claude/skills/clerk-webhooks/**)",
-      "WebFetch(domain:www.w3.org)"
+      "WebFetch(domain:www.w3.org)",
+      "WebFetch(domain:www.designtokens.org)"
     ]
   },
   "hooks": {

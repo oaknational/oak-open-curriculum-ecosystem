@@ -89,11 +89,21 @@ git log --oneline --decorate -10
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
   - `appInfo.version` wired to build constant
-- **Next safe step**: Start Phase 5 (interactive user search view). Read
-  the parent plan Phase 5 section and the Phase 5 companion plan.
+- **Remaining tracked items**:
+  - MCP App UI does not render in Claude Code — investigation brief at
+    `~/.claude/plans/glistening-sniffing-eich.md`. Four issues: wrong
+    registration function (`server.registerTool` vs `registerAppTool`),
+    `preserve-schema-examples.ts` is a compatibility layer, unproven
+    implementation, test gap at the MCP App integration level.
+  - `fakes.ts` assertion — accepted, follow-up for codegen partial type
+  - ESLint config suppressions not yet ADR-recorded
+- **Next safe step**: Investigate MCP App UI rendering failure. Read the
+  investigation brief. The most likely root cause is missing legacy
+  `_meta["ui/resourceUri"]` key (adoption of `registerAppTool` would
+  fix). After that: Phase 5 (interactive user search view).
 - **Deep consolidation status**: Completed 2026-04-04 — Phase 4 closed,
   all plans/prompts/roadmaps corrected, napkin rotated, patterns extracted,
-  fitness checked. Practice box empty.
+  fitness checked. MCP App rendering investigation added post-closure.
 
 ## Active Workstreams (2026-04-04)
 
