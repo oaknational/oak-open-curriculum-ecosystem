@@ -171,9 +171,9 @@ WS3 child plan: fresh React MCP App rebuild ▶ active
   Phase 2: scaffold fresh MCP App infra      ✓ complete
   Phase 3: canonical contracts + runtime     ✓ complete
   Design-token prerequisite                  ✓ complete
-  OakUrl codegen fix                         ⏳ current
-  Contrast validation prerequisite           ⏳ current
-  Phase 4: curriculum-model view             ⏳ pending
+  OakUrl codegen fix                         ✓ complete
+  Contrast validation prerequisite           ✓ complete
+  Phase 4: brand banner                      ✓ complete
   Phase 5: user-search view                  ⏳ pending
   Phase 6: docs + review + commit            ⏳ pending
 C8 closure gates: auth metadata hardening   ✓ complete

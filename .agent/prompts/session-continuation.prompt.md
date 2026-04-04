@@ -38,20 +38,21 @@ git log --oneline --decorate -10
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent — Phase 4 section MUST be corrected, see below)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-brand-banner.plan.md` (companion — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: WS3 Phase 4 Slice 1 is COMPLETE. Slice 2 is pending.
-  Phase 4 delivers: when `get-curriculum-model` fires, the MCP App shows
+- **Current state**: WS3 Phase 4 is COMPLETE. Phase 5 is next.
+  Phase 4 delivered: when `get-curriculum-model` fires, the MCP App shows
   the Oak brand banner — logo + "Oak National Academy" link. No content
   area. Just branding. `get-curriculum-model` is a session-start proxy;
   the data serves the agent; the banner serves the human.
-  - ✅ Slice 1 code: 4 contrast pairings (accent text), `font.size-400`,
+  - ✅ Slice 1: 4 contrast pairings (accent text), `font.size-400`,
     7 banner component tokens, inline SVG logo with `currentColor`,
     `BrandBanner.tsx`, CSS, wired into `App.tsx`, diagnostic scaffold
-    deleted, 17 widget tests passing, build + type-check + lint + test green.
-  - ⬜ Slice 2 pending: `pnpm check`, correct parent/companion plans,
-    3 targeted specialist reviewers (design-system, accessibility, mcp),
-    documentation updates, session learnings.
-- **Current objective**: Complete Phase 4 Slice 2 — quality gates, plan
-  corrections, targeted review, documentation.
+    deleted, all gates green.
+  - ✅ Slice 2: MCP spec violation fixed (handler overwrite), openLink
+    fallback, `prefers-color-scheme` completeness, dead CSS removed,
+    `appInfo.version` wired, parent/companion/umbrella/roadmap plans
+    corrected, 3 specialist reviewers (design-system, a11y, mcp), all
+    findings addressed, `pnpm check` green.
+- **Current objective**: Phase 5 — interactive user search view.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -88,37 +89,34 @@ git log --oneline --decorate -10
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
   - `appInfo.version` wired to build constant
-- **Next safe step**: Complete Phase 4 Slice 2. Run `pnpm check`. Correct
-  parent plan (rename "Curriculum Model View" → "Brand Banner" throughout).
-  Rename companion plan file. Invoke 3 targeted reviewers (design-system,
-  accessibility, mcp). Update documentation. Capture napkin learnings.
-- **Deep consolidation status**: Not due — Slice 2 work (plan corrections,
-  reviewer pass) will handle the parent plan drift. Napkin updated this
-  session. No new practice-box incoming. No plan closure yet.
+- **Next safe step**: Start Phase 5 (interactive user search view). Read
+  the parent plan Phase 5 section and the Phase 5 companion plan.
+- **Deep consolidation status**: Completed 2026-04-04 — Phase 4 closed,
+  all plans/prompts/roadmaps corrected, napkin rotated, patterns extracted,
+  fitness checked. Practice box empty.
 
 ## Active Workstreams (2026-04-04)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (Phase 4 Slice 2 next)
+### 1. WS3 MCP App Rebuild — ACTIVE (Phase 5 next)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 
 **Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold),
-Phase 3 (canonical contracts + fallback proof).
-**Phase 4 Slice 1**: COMPLETE — brand banner implemented. Tokens (4
-contrast pairings, `font.size-400`, 7 component tokens), inline SVG logo
-with `currentColor`, `BrandBanner.tsx`, CSS, wired into `App.tsx`,
-diagnostic scaffold deleted, all gates green.
+Phase 3 (canonical contracts + fallback proof), Phase 4 (brand banner).
 
-**Phase 4 Slice 2**: PENDING — `pnpm check`, correct parent/companion
-plans (rename "Curriculum Model View" → "Brand Banner"), 3 targeted
-specialist reviewers, documentation.
+**Phase 4 summary** (COMPLETE, 2026-04-04):
 
-**Pending after Phase 4**: Phase 5 (user search), Phase 6
-(docs/gates/review).
+- Brand banner: inline SVG logo + "Oak National Academy" link
+- 4 contrast pairings, `font.size-400`, 7 banner component tokens
+- MCP spec violation fixed (handler overwrite), `prefers-color-scheme`
+  fallback, `appInfo.version` wired, dead CSS removed
+- 8 specialist reviewers across planning and review, all findings addressed
+- `pnpm check` fully green
 
-**Next action**: Complete Slice 2 — quality gates, plan corrections,
-targeted review.
+**Pending**: Phase 5 (user search), Phase 6 (docs/gates/review).
+
+**Next action**: Start Phase 5 — interactive user search view.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

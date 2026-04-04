@@ -113,10 +113,10 @@ Runtime boundary simplification             ✓ complete
 WS3: fresh React MCP App rebuild            ▶ active
   Phase 3 runtime closure                   ✓ complete
   Design-token prerequisite                 ✓ complete
-  OakUrl codegen fix                        ⏳ current
-  Contrast validation prerequisite          ⏳ current
-  Phase 4: curriculum-model view            ⏳ pending after current prerequisites
-  Phase 5: user-search view                 ⏳ pending after current prerequisites
+  OakUrl codegen fix                        ✓ complete
+  Contrast validation prerequisite          ✓ complete
+  Phase 4: brand banner                     ✓ complete (2026-04-04)
+  Phase 5: user-search view                 ⏳ pending (next)
   Phase 6: docs/gates/review                ⏳ pending
 C8: auth metadata invariant hardening       ✓ complete
 Output schemas follow-up                    ⏳ current

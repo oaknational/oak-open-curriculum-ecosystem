@@ -158,6 +158,12 @@ context with no natural permanent home.
   rmdir after deleting the last file. The portability
   validator checks for SKILL.md presence, so empty skill
   directories without SKILL.md cause false positives.
+- **ESLint `lint:fix` can merge value+type imports**: when
+  value and type imports share a source module, auto-fix may
+  merge them into a single `import type` statement, making
+  value symbols unavailable at runtime. Use inline `type`
+  keyword on individual specifiers:
+  `import { applyTheme, type McpUiHostContext } from '...'`
 
 ## Architecture (Domain-Specific)
 
