@@ -1,65 +1,32 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { AppView } from './App.js';
-import { initialAppRuntimeState } from './app-runtime-state.js';
 
 describe('AppView', () => {
-  it('renders a deterministic pre-connection state without scaffold copy', () => {
-    render(<AppView state={initialAppRuntimeState} isConnected={false} error={null} />);
+  it('renders the app shell container', () => {
+    render(<AppView onOpenLink={() => undefined} />);
 
-    expect(screen.getByText('Waiting for MCP host connection')).toBeTruthy();
-    expect(screen.queryByText(/shell ready/iu)).toBeNull();
+    expect(screen.getByTestId('oak-mcp-app-shell')).toBeTruthy();
   });
 
-  it('renders the connected status label when connected', () => {
-    render(<AppView state={initialAppRuntimeState} isConnected={true} error={null} />);
+  it('renders the brand banner with the Oak National Academy link', () => {
+    render(<AppView onOpenLink={() => undefined} />);
 
-    expect(screen.getByText('Connected to MCP host')).toBeTruthy();
+    const link = screen.getByRole('link', { name: /oak national academy/iu });
+
+    expect(link).toBeTruthy();
+    expect(link.getAttribute('href')).toBe('https://www.thenational.academy');
   });
 
-  it('renders the active tool name from runtime state', () => {
-    render(
-      <AppView
-        state={{
-          ...initialAppRuntimeState,
-          currentToolName: 'user-search',
-        }}
-        isConnected={true}
-        error={null}
-      />,
-    );
+  it('passes onOpenLink through to the banner', () => {
+    const calls: string[] = [];
 
-    expect(screen.getByText('user-search')).toBeTruthy();
-  });
+    render(<AppView onOpenLink={(url) => calls.push(url)} />);
 
-  it('renders a connection error in an alert role', () => {
-    render(
-      <AppView
-        state={initialAppRuntimeState}
-        isConnected={false}
-        error={new Error('connection timeout')}
-      />,
-    );
+    const link = screen.getByRole('link', { name: /oak national academy/iu });
 
-    const alert = screen.getByRole('alert');
+    link.click();
 
-    expect(alert.textContent).toContain('connection timeout');
-  });
-
-  it('renders a runtime error message in an alert role', () => {
-    render(
-      <AppView
-        state={{
-          ...initialAppRuntimeState,
-          errorMessage: 'unexpected disconnect',
-        }}
-        isConnected={true}
-        error={null}
-      />,
-    );
-
-    const alert = screen.getByRole('alert');
-
-    expect(alert.textContent).toContain('unexpected disconnect');
+    expect(calls).toStrictEqual(['https://www.thenational.academy']);
   });
 });

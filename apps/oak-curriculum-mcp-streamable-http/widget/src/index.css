@@ -163,6 +163,39 @@ dd {
   color: var(--oak-component-note-text-color);
 }
 
+/* Brand banner — logo + "Oak National Academy" link, centred */
+.oak-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.oak-banner__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oak-component-banner-gap);
+  color: var(--oak-component-banner-link-color);
+  text-decoration: underline;
+  font-family: var(--oak-component-banner-title-family);
+  font-size: var(--oak-component-banner-title-size);
+  font-weight: var(--oak-component-banner-title-weight);
+}
+
+.oak-banner__link:hover {
+  color: var(--oak-component-banner-link-color-hover);
+}
+
+.oak-banner__link:focus-visible {
+  outline: 2px solid var(--oak-component-banner-link-focus-ring-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.oak-banner__logo {
+  flex-shrink: 0;
+}
+
 @media (max-width: 48rem) {
   .oak-app {
     padding: var(--oak-component-page-padding-mobile);

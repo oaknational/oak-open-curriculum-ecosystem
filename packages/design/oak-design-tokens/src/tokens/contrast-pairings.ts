@@ -72,6 +72,16 @@ const contrastPairings = {
       context: 'non-text',
     },
     {
+      foreground: 'semantic.accent',
+      background: 'semantic.surface-page',
+      context: 'text',
+    },
+    {
+      foreground: 'semantic.accent',
+      background: 'semantic.surface-panel',
+      context: 'text',
+    },
+    {
       foreground: 'semantic.accent-strong',
       background: 'semantic.surface-page',
       context: 'non-text',
@@ -80,6 +90,16 @@ const contrastPairings = {
       foreground: 'semantic.accent-strong',
       background: 'semantic.surface-panel',
       context: 'non-text',
+    },
+    {
+      foreground: 'semantic.accent-strong',
+      background: 'semantic.surface-page',
+      context: 'text',
+    },
+    {
+      foreground: 'semantic.accent-strong',
+      background: 'semantic.surface-panel',
+      context: 'text',
     },
     {
       foreground: 'semantic.text-inverse',

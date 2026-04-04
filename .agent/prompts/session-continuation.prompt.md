@@ -35,103 +35,90 @@ git log --oneline --decorate -10
 
 - **Workstream**: MCP App migration (WS3 widget rebuild)
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent — Phase 4 section MUST be corrected, see below)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-curriculum-model-view.plan.md` (companion — MUST rename to `ws3-phase-4-brand-banner.plan.md` and correct)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Completed plans** (prior sessions):
-  - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md` — COMPLETE (WCAG AA build gate, 16 pairs + 1 triad, Result pattern, 6 reviewers)
-  - `.agent/plans/sdk-and-mcp-enhancements/current/ws3-oak-url-augmentable-codegen-fix.plan.md` — COMPLETE (ADR-153, quality gates pass)
-  - `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md` — COMPLETE
-  - `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md` — COMPLETE
-  - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-design-token-prerequisite.plan.md` — COMPLETE
-  - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/ws3-merge-main-into-branch.plan.md` — COMPLETE
-- **Current state**: WS3 Phase 3 canonical contracts are COMPLETE. Phases
-  4-6 are pending. Both prerequisites are COMPLETE:
-  1. ✅ OakUrlAugmentable codegen fix — `JsonBody200` redefined,
-     augmentation uses `Object.assign`, ADR-153 written.
-  2. ✅ Contrast validation — WCAG contrast ratio validation built from
-     W3C spec, two blocking token violations fixed (focus ring, dark
-     error, border-subtle), triadic model implemented, build-time gate
-     integrated. All quality gates pass.
-- **Current objective**: Start Phase 4 (brand banner). All pre-Phase-4
-  gates and prerequisites are COMPLETE:
-  1. ✅ Portability validator extended (Check 11: skill permissions)
-  2. ✅ Deferred review findings resolved
-  3. ✅ Design conversation held — ADR-151 records styling independence
-  4. ✅ OakUrlAugmentable codegen fix — ADR-153 written
-  5. ✅ Contrast validation — plan COMPLETE at
-     `.agent/plans/sdk-and-mcp-enhancements/current/ws3-contrast-validation-prerequisite.plan.md`
+- **Current state**: WS3 Phase 4 Slice 1 is COMPLETE. Slice 2 is pending.
+  Phase 4 delivers: when `get-curriculum-model` fires, the MCP App shows
+  the Oak brand banner — logo + "Oak National Academy" link. No content
+  area. Just branding. `get-curriculum-model` is a session-start proxy;
+  the data serves the agent; the banner serves the human.
+  - ✅ Slice 1 code: 4 contrast pairings (accent text), `font.size-400`,
+    7 banner component tokens, inline SVG logo with `currentColor`,
+    `BrandBanner.tsx`, CSS, wired into `App.tsx`, diagnostic scaffold
+    deleted, 17 widget tests passing, build + type-check + lint + test green.
+  - ⬜ Slice 2 pending: `pnpm check`, correct parent/companion plans,
+    3 targeted specialist reviewers (design-system, accessibility, mcp),
+    documentation updates, session learnings.
+- **Current objective**: Complete Phase 4 Slice 2 — quality gates, plan
+  corrections, targeted review, documentation.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
   - Add `user-search` as the UI-first MCP App tool
   - Do not introduce custom tool-discovery, visibility, or presentation shims
-  - Treat continuity as repo practice, not consciousness language
+  - The banner is NOT a "curriculum model view" — it is the brand banner
+  - `get-curriculum-model` is a session-start proxy; the banner is not a
+    view of that tool's data
+  - No content area below the banner — just the branding
+  - No routing infrastructure in Phase 4 (Phase 5 adds when needed)
 - **Recent surprises / corrections**:
-  - User corrected Phase 4 framing: it is a brand banner (logo + "Oak
-    National Academy" link), NOT a data renderer. The curriculum-model data
-    serves the agent; the view serves the human with orientation.
-  - User corrected OakUrlAugmentable reasoning: `Record<string, unknown>`
-    is widening, full stop. The schema-first principle means we know every
-    response type at codegen time. Fix is codegen-level (generate union of
-    GET response body types), not an exception.
-  - Contrast triads model layered UI (button text + surface + page) but
-    only the two adjacent-layer checks are WCAG-gated. The fg→bg check
-    is `'informational'` for opaque layers (computed, not gated).
-  - Wider trawl of 7 repos found no reusable contrast/token/styling code.
-    Nothing meets the bar for this repo. Build from W3C spec directly.
-  - User corrected `unknown` usage: `unknown` is not a convenience — it is
-    the destruction of hard-won understanding. Only permitted at incoming
-    external boundaries. The generated type system is exhaustive; use it.
-  - User corrected boundary-function proposal: don't create new plumbing.
-    The existing constant → type → predicate infrastructure already has
-    everything needed. Look harder before proposing new functions.
-  - TypeScript's spread checker cannot evaluate conditional types through
-    `PathOperation` (flattened union). Direct `Paths[P][M]` indexing
-    resolves eagerly. Root cause was in the type definition, not the
-    consumer.
-  - At serialisation boundaries (JSON.stringify), type-preserving spread
-    is ceremony with no runtime benefit. Use `Object.assign` + return
-    `unknown`. This unblocked the entire OakUrl fix.
+  - User corrected Phase 4 framing THREE times to nail precision:
+    (1) It is a brand banner, NOT a data renderer. (2) The banner is NOT
+    "the curriculum model view" — `get-curriculum-model` is a session-start
+    proxy. (3) The banner is displayed when the tool fires, with NO content
+    area — just the branding, centred.
+  - Parent plan Phase 4 section says "Curriculum Model View" — this is
+    WRONG and must be corrected in Slice 2.
+  - 5 specialist reviewers consulted pre-implementation: design-system,
+    accessibility, MCP, assumptions, architecture-barney. Key decisions:
+    SVG with `currentColor`, `<a href onClick>` not `<button>`, combined
+    link (H2), accent text-context pairings, callback props not SDK.
+  - Assumptions reviewer simplified plan from 5 to 4 then 3 to 2 slices.
+    Architecture-barney eliminated ToolRouter and OakLogo as separate files
+    (single-consumer rule).
+  - ESLint `lint:fix` merged value imports with type imports, breaking
+    type-check. Fixed by using inline `type` keyword in the combined import.
 - **Open questions / low-confidence areas**:
-  - Token set expansion for Phase 4/5: design-system reviewer identified
-    gaps (link colours, hover surfaces, result-item tokens, font-size-400)
-  - Whether `prefers-color-scheme` media query fallback is needed when
-    the MCP host does not set `data-theme`
-- **Remaining tracked items** (not blocking Phase 4 directly):
+  - `prefers-color-scheme` CSS fallback — progressive enhancement, not
+    blocking. To be tracked as follow-up.
+  - Logo SVG fidelity — the inline SVG is a geometric approximation of
+    the original PNG. Visual verification in `basic-host` needed.
+- **Remaining tracked items** (not blocking Slice 2):
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Next safe step**: Start Phase 4 (brand banner). Read the parent plan
-  and the Phase 4 section. The brand banner is a logo + "Oak National
-  Academy" link — it serves the human with orientation, not the agent.
-- **Deep consolidation status**: Practice box empty. All prerequisites
-  closed: OakUrl fix (ADR-153), contrast validation (Result pattern,
-  informational triads, 6 reviewers). Napkin at 490 lines. Distilled
-  at 200 lines. Consolidation run 2026-04-04.
+  - `appInfo.version` wired to build constant
+- **Next safe step**: Complete Phase 4 Slice 2. Run `pnpm check`. Correct
+  parent plan (rename "Curriculum Model View" → "Brand Banner" throughout).
+  Rename companion plan file. Invoke 3 targeted reviewers (design-system,
+  accessibility, mcp). Update documentation. Capture napkin learnings.
+- **Deep consolidation status**: Not due — Slice 2 work (plan corrections,
+  reviewer pass) will handle the parent plan drift. Napkin updated this
+  session. No new practice-box incoming. No plan closure yet.
 
 ## Active Workstreams (2026-04-04)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (Phase 4 next)
+### 1. WS3 MCP App Rebuild — ACTIVE (Phase 4 Slice 2 next)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 
 **Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold),
 Phase 3 (canonical contracts + fallback proof).
-**Completed prerequisites** (all done — Phase 4 is unblocked):
+**Phase 4 Slice 1**: COMPLETE — brand banner implemented. Tokens (4
+contrast pairings, `font.size-400`, 7 component tokens), inline SVG logo
+with `currentColor`, `BrandBanner.tsx`, CSS, wired into `App.tsx`,
+diagnostic scaffold deleted, all gates green.
 
-- Design-token prerequisite — all 6 work slices, `pnpm check` green
-- Three pre-Phase-4 gates — portability validator, deferred review
-  findings, design conversation (ADR-151 written)
-- OakUrlAugmentable codegen fix — ADR-153 written, all gates pass
-- Contrast validation — WCAG contrast ratio validation built from W3C
-  spec, triadic model, build-time gate, all token violations fixed
-  (focus ring, dark error, border-subtle). Plan COMPLETE.
+**Phase 4 Slice 2**: PENDING — `pnpm check`, correct parent/companion
+plans (rename "Curriculum Model View" → "Brand Banner"), 3 targeted
+specialist reviewers, documentation.
 
-**Pending**: Phase 4 (brand banner), Phase 5 (user search), Phase 6
+**Pending after Phase 4**: Phase 5 (user search), Phase 6
 (docs/gates/review).
 
-**Next action**: Start Phase 4 — brand banner (logo + "Oak National
-Academy" link). The view serves the human with orientation.
+**Next action**: Complete Slice 2 — quality gates, plan corrections,
+targeted review.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

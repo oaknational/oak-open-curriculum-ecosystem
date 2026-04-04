@@ -521,3 +521,59 @@
   will crash on error. The library function's type signature should
   honestly document its failure modes. The build script makes the
   conscious decision to crash.
+
+## Session 2026-04-04 — Phase 4 brand banner (Slice 1)
+
+### What Was Done
+
+- Completed Phase 4 Slice 1: brand banner for the MCP App.
+- Added 4 text-context contrast pairings (accent/accent-strong on both
+  surfaces) to the manifest — all pass WCAG AA in both themes.
+- Added `font.size-400` (1.25rem) to palette, `font-banner-title-size`
+  semantic token, and 7 banner component tokens to the DTCG source.
+- Created `BrandBanner.tsx` with inline SVG logo (`currentColor`),
+  `<a href onClick>` link pattern, callback prop interface.
+- Wired banner into `App.tsx`, deleted diagnostic scaffold (`AppHeader`,
+  `AppRuntimeGrid`, `AppRuntimeMessages`, `getConnectionStatus`).
+- 5 pre-implementation specialist reviewers: design-system, a11y, MCP,
+  assumptions, architecture-barney. 2 post-plan reviewers: assumptions,
+  barney.
+- Build, type-check, lint, all tests green (17 widget, 36 total tasks).
+
+### Patterns to Remember
+
+- **Phase 4 is a brand banner, not a data renderer**: the user corrected
+  this framing three times with increasing precision: (1) not a data
+  renderer, (2) not "the curriculum model view", (3) no content area at
+  all — just the branding, centred. `get-curriculum-model` is a
+  session-start proxy. The data serves the agent; the banner serves the
+  human with "you are in Oak now" orientation.
+- **Pre-implementation specialist reviewers save rework**: 5 reviewers
+  before any code produced 16 concrete design decisions (SVG with
+  `currentColor`, `<a>` not `<button>`, combined link H2, accent text
+  pairings, callback props, eliminate ToolRouter, inline OakLogo).
+  Without them, the banner would have been a `<button role="link">` with
+  a PNG `filter: invert()` and generic link tokens — all wrong.
+- **Assumptions reviewer simplifies scope**: plan went from 5 → 4 → 3
+  → 2 slices through reviewer + user feedback. Merging tokens with
+  their sole consumer, eliminating single-consumer abstractions, and
+  deferring progressive enhancements all reduced complexity.
+- **ESLint `lint:fix` can break type-check**: auto-fix merged a value
+  import and a type import into a single `import type` statement,
+  making value symbols unavailable at runtime. Fix: use inline `type`
+  keyword on individual specifiers within a single import statement.
+
+### Mistakes Made
+
+- Proposed Phase 4 as a "curriculum model view" with a structured data
+  renderer, then as an "orientation view", then as a "persistent header"
+  before the user corrected all three framings. The correct model:
+  banner displayed when `get-curriculum-model` fires, no content area.
+- Initially imported `@testing-library/user-event` (not installed) and
+  `vi` (unused after switching to typed array capture). Both caught by
+  build/type-check gates.
+- Used `void state; void isConnected; void error;` as a hack to suppress
+  unused variables — caught by principles. Fixed by not destructuring
+  what isn't used (`[, dispatch]` and `{ app }`).
+- Wrote `() => {}` empty arrow functions in test no-ops — caught by
+  `no-empty-function` lint rule. Fixed with `() => undefined`.

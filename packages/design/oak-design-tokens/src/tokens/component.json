@@ -80,6 +80,23 @@
     "alert-border-color": { "$type": "color", "$value": "{semantic.error}" },
     "alert-text-color": { "$type": "color", "$value": "{semantic.error}" },
 
-    "note-text-color": { "$type": "color", "$value": "{semantic.text-secondary}" }
+    "note-text-color": { "$type": "color", "$value": "{semantic.text-secondary}" },
+
+    "banner-link-color": { "$type": "color", "$value": "{semantic.accent}" },
+    "banner-link-color-hover": { "$type": "color", "$value": "{semantic.accent-strong}" },
+    "banner-link-focus-ring-color": { "$type": "color", "$value": "{semantic.focus-ring}" },
+    "banner-title-family": {
+      "$type": "fontFamily",
+      "$value": "{semantic.font-display-family}"
+    },
+    "banner-title-size": {
+      "$type": "dimension",
+      "$value": "{semantic.font-banner-title-size}"
+    },
+    "banner-title-weight": {
+      "$type": "fontWeight",
+      "$value": "{semantic.font-weight-semibold}"
+    },
+    "banner-gap": { "$type": "dimension", "$value": "{semantic.gap-sm}" }
   }
 }

@@ -21,6 +21,11 @@
     "font-body-size": { "$type": "dimension", "$value": "{font.size-300}" },
     "font-label-size": { "$type": "dimension", "$value": "{font.size-200}" },
     "font-heading-size": { "$type": "dimension", "$value": "{font.size-700}" },
+    "font-banner-title-size": {
+      "$type": "dimension",
+      "$value": "{font.size-400}",
+      "$description": "Brand banner title — emphasis without competing with headings"
+    },
     "font-body-line-height": { "$type": "number", "$value": "{font.line-height-400}" },
     "font-label-line-height": { "$type": "number", "$value": "{font.line-height-300}" },
     "font-heading-line-height": { "$type": "number", "$value": "{font.line-height-700}" },
