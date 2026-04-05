@@ -12,6 +12,7 @@
  * @see aggregated-search/tool-definition.ts — agent-facing search tool
  */
 
+import { z } from 'zod';
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import { WIDGET_URI } from '../widget-constants.js';
@@ -168,3 +169,73 @@ export const USER_SEARCH_QUERY_INPUT_SCHEMA = {
     },
   },
 } as const satisfies GenericToolInputJsonSchema;
+
+import { USER_SEARCH_SCOPES } from './types.js';
+
+/**
+ * Flat Zod shape for MCP SDK registration of the user-search tool.
+ *
+ * Mirrors `USER_SEARCH_INPUT_SCHEMA` with `.describe()` and
+ * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
+ */
+export const USER_SEARCH_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+  query: z
+    .string()
+    .describe('Search query text.')
+    .meta({ examples: ['photosynthesis', 'adding fractions', 'the Romans'] }),
+  scope: z
+    .enum([...USER_SEARCH_SCOPES])
+    .describe('Which index to search: lessons, units, threads, or sequences.')
+    .meta({ examples: ['lessons', 'units'] }),
+  subject: z
+    .enum([...SUBJECTS])
+    .optional()
+    .describe('Filter by subject slug.')
+    .meta({ examples: ['maths', 'science'] }),
+  keyStage: z
+    .enum([...KEY_STAGES])
+    .optional()
+    .describe('Filter by key stage.')
+    .meta({ examples: ['ks2', 'ks3'] }),
+  size: z
+    .number()
+    .int()
+    .min(1)
+    .max(50)
+    .optional()
+    .describe('Maximum number of results to return (1-50, default 25).'),
+};
+
+/**
+ * Flat Zod shape for MCP SDK registration of the user-search-query tool.
+ *
+ * Mirrors `USER_SEARCH_QUERY_INPUT_SCHEMA` with `.describe()` and
+ * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
+ */
+export const USER_SEARCH_QUERY_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+  query: z
+    .string()
+    .describe('Search query text.')
+    .meta({ examples: ['photosynthesis', 'adding fractions'] }),
+  scope: z
+    .enum([...USER_SEARCH_SCOPES])
+    .describe('Which index to search: lessons, units, threads, or sequences.')
+    .meta({ examples: ['lessons', 'units'] }),
+  subject: z
+    .enum([...SUBJECTS])
+    .optional()
+    .describe('Filter by subject slug.')
+    .meta({ examples: ['maths', 'science'] }),
+  keyStage: z
+    .enum([...KEY_STAGES])
+    .optional()
+    .describe('Filter by key stage.')
+    .meta({ examples: ['ks2', 'ks3'] }),
+  size: z
+    .number()
+    .int()
+    .min(1)
+    .max(50)
+    .optional()
+    .describe('Maximum number of results to return (1-50, default 25).'),
+};

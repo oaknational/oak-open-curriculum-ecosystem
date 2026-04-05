@@ -120,20 +120,27 @@ export interface UniversalToolListEntry {
   readonly description?: string;
   /**
    * JSON Schema for tool inputs.
-   * Kept for backwards compatibility with older MCP implementations.
+   *
+   * Kept for the `toProtocolEntry()` projection used by the
+   * `preserve-schema-examples.ts` shim. Phase 4 deletes the shim and
+   * this field, making `flatZodSchema` the sole input schema source.
+   * Until then, both representations must stay structurally equivalent
+   * (same property names, same required sets).
    */
   readonly inputSchema: UniversalToolInputSchema;
   /**
    * Zod raw shape for MCP SDK registerTool().
    *
-   * Generated Zod schemas include .describe() calls that preserve
-   * parameter descriptions through the SDK's zodToJsonSchema conversion.
-   * Undefined for aggregated tools (which use JSON Schema only).
+   * All tools (generated and aggregated) provide this field. It contains
+   * `.describe()` and `.meta({ examples })` calls that preserve parameter
+   * descriptions and examples through the MCP SDK's native `z.toJSONSchema()`
+   * conversion.
    *
-   * @remarks Use this instead of converting inputSchema to avoid
-   * losing parameter description information.
+   * This is the canonical input schema for MCP registration. The JSON Schema
+   * `inputSchema` field is kept for backward compatibility with the
+   * `toProtocolEntry()` projection until Phase 4 removes the shim.
    */
-  readonly flatZodSchema?: z.ZodRawShape;
+  readonly flatZodSchema: z.ZodRawShape;
   /** Security schemes required to invoke this tool */
   readonly securitySchemes?: readonly SecurityScheme[];
   /** MCP annotations providing behavior hints */

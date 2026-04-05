@@ -14,11 +14,11 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { runFetchTool } from './aggregated-fetch.js';
-import type { UniversalToolExecutorDependencies } from './universal-tool-shared.js';
-import { McpToolError, type ToolExecutionResult } from './execute-tool-call.js';
-import { createStubSearchRetrieval } from './search-retrieval-stub.js';
-import { createNullGeneratedToolRegistry } from './test-helpers/null-generated-tool-registry.js';
+import { runFetchTool } from './execution.js';
+import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
+import { McpToolError, type ToolExecutionResult } from '../execute-tool-call.js';
+import { createStubSearchRetrieval } from '../search-retrieval-stub.js';
+import { createNullGeneratedToolRegistry } from '../test-helpers/null-generated-tool-registry.js';
 import { err, ok } from '@oaknational/result';
 
 /**

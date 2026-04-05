@@ -6,6 +6,7 @@
  * stages, and units are available in the curriculum.
  */
 
+import { z } from 'zod';
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import {
@@ -78,3 +79,22 @@ export const BROWSE_INPUT_SCHEMA = {
     },
   },
 } as const satisfies GenericToolInputJsonSchema;
+
+/**
+ * Flat Zod shape for MCP SDK registration of the browse-curriculum tool.
+ *
+ * Mirrors `BROWSE_INPUT_SCHEMA` with `.describe()` and `.meta({ examples })`
+ * for the MCP SDK's native `z.toJSONSchema()` conversion.
+ */
+export const BROWSE_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+  subject: z
+    .enum([...SUBJECTS])
+    .optional()
+    .describe('Filter by subject slug to see what units and lessons are available')
+    .meta({ examples: ['maths', 'science', 'english'] }),
+  keyStage: z
+    .enum([...KEY_STAGES])
+    .optional()
+    .describe('Filter by key stage to see what subjects and content are available')
+    .meta({ examples: ['ks2', 'ks3'] }),
+};

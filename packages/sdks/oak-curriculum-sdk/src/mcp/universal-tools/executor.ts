@@ -15,7 +15,7 @@ import {
   toErrorMessage,
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
-import { validateFetchArgs, runFetchTool } from '../aggregated-fetch.js';
+import { validateFetchArgs, runFetchTool } from '../aggregated-fetch/index.js';
 import {
   validateCurriculumModelArgs,
   runCurriculumModelTool,

@@ -6,6 +6,7 @@
  * the teacher doesn't know which scope they need.
  */
 
+import { z } from 'zod';
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import {
@@ -95,3 +96,28 @@ export const EXPLORE_INPUT_SCHEMA = {
     },
   },
 } as const satisfies GenericToolInputJsonSchema;
+
+/**
+ * Flat Zod shape for MCP SDK registration of the explore-topic tool.
+ *
+ * Mirrors `EXPLORE_INPUT_SCHEMA` with `.describe()` and `.meta({ examples })`
+ * for the MCP SDK's native `z.toJSONSchema()` conversion.
+ */
+export const EXPLORE_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+  query: z
+    .string()
+    .describe(
+      'The topic to explore. Use descriptive terms like "photosynthesis", "the Romans", "fractions".',
+    )
+    .meta({ examples: ['volcanos', 'fractions', 'electricity', 'the Romans'] }),
+  subject: z
+    .enum([...SUBJECTS])
+    .optional()
+    .describe('Optional subject filter applied to all scopes')
+    .meta({ examples: ['maths', 'science', 'history'] }),
+  keyStage: z
+    .enum([...KEY_STAGES])
+    .optional()
+    .describe('Optional key stage filter applied to all scopes')
+    .meta({ examples: ['ks2', 'ks3'] }),
+};

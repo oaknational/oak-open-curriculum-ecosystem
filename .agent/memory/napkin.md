@@ -6,6 +6,78 @@ Rotated at 579 lines after Phase 4 closure. Archived to
 Extracted 1 pattern: `review-intentions-not-just-code.md`.
 Previous rotation: 2026-04-03 at 632 lines.
 
+## Session 2026-04-05 — SDK adoption Phase 2 implementation
+
+### What Was Done
+
+- Implemented Phase 2 of the off-the-shelf MCP SDK adoption plan:
+  all 10 aggregated tools now have `flatZodSchema` with `.describe()`
+  and `.meta({ examples })`.
+- TDD: 9 RED tests → GREEN → REFACTOR. 19 new tests total (726 in SDK).
+- 5 specialist reviewers (code, type, MCP, test, Barney) — all passed.
+  Addressed all findings including 6 test improvements, 3 code fixes,
+  dead fallback removal, structural equivalence test.
+- Promoted `flatZodSchema` from optional to required on
+  `UniversalToolListEntry`. Removed dead `zodRawShapeFromToolInputJsonSchema`
+  fallback and `zodShapeCache` WeakMap from `projections.ts`.
+- Added structural equivalence integration test enforcing that
+  `inputSchema` and `flatZodSchema` have matching property names and
+  required/optional semantics for all aggregated tools.
+- Fixed JSON Schema `year` field to match Zod constraints (`integer`,
+  `minimum`, `maximum`). Extended `JsonSchemaPropertyNumber` type.
+- Added `lesson` examples to `download-asset` tool (JSON Schema + Zod).
+- Promoted fetch tool from single file to directory (`aggregated-fetch/`)
+  matching all other aggregated tools.
+- Replaced duplicate `USER_SEARCH_SCOPES` with import from canonical
+  `./types.js`.
+
+### Patterns to Remember
+
+- **Schema divergence is a bug, not a design choice**: the user
+  corrected the framing that JSON Schema and Zod can diverge for
+  "different purposes". They are representations of the same contract.
+  If they diverge, fix them — don't document the divergence as
+  intentional. A structural equivalence test is the enforcement.
+- **"Out of scope" is a judgement call, not a default**: the fetch
+  directory promotion was initially deferred as "out of scope". The
+  user pushed back — it's a simple structural fix that resolves an
+  inconsistency. The bar for "out of scope" should be: would this
+  create risk or significant work? Not: is it technically part of the
+  plan's bullet points?
+- **Antipatterns need plans or fixes, not notes**: when a reviewer
+  finds an antipattern, either fix it now or create a discoverable
+  plan. "Noted for future" is not an acceptable disposition.
+
+### Corrections (from user)
+
+- **"JSON Schema should always be semantically equivalent to Zod"**:
+  I had documented the `year` field divergence as "intentional" with
+  a comment. The user corrected: the two representations describe the
+  same contract. Fix divergence, don't document it.
+- **"If flatZodSchema is no longer optional, update the type"**: I had
+  left `flatZodSchema` optional on `UniversalToolListEntry` despite
+  all tools providing it. The user directed: tighten the type.
+- **"Should fetch directory promotion be out of scope?"**: I deferred
+  it. The user pushed back — simple structural fixes that resolve
+  inconsistencies should be done now.
+- **"Antipatterns: fix or plan"**: I had noted the module-scope test
+  constant as "pre-existing, tracked elsewhere". The user directed:
+  antipatterns need either immediate fixes or solid discoverable plans.
+- **"WHY do we have three schema representations?"**: I had framed
+  the triple representation as "justified by different purposes".
+  The user reframed: they all describe the same input contract from
+  the same upstream source. The divergence is the bug, not a feature.
+  The resolution is Phase 4: delete JSON Schema, make Zod the sole
+  source.
+
+### Mistakes Made
+
+- Initially deferred too many reviewer findings as "out of scope" or
+  "pre-existing". The user had to push back on each one.
+- Framed schema divergence as a design choice rather than a bug.
+- Did not proactively tighten the `flatZodSchema` type when the
+  condition for optionality was eliminated.
+
 ## Session 2026-04-05 — SDK adoption Phase 1 implementation
 
 ### What Was Done

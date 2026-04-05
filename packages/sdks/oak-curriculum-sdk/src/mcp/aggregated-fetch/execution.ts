@@ -1,23 +1,23 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
-import { formatError, formatToolResponse, toErrorMessage } from './universal-tool-shared.js';
-import type { UniversalToolExecutorDependencies } from './universal-tool-shared.js';
-import { McpParameterError, type ToolExecutionResult } from './execute-tool-call.js';
+import { formatError, formatToolResponse, toErrorMessage } from '../universal-tool-shared.js';
+import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
+import { McpParameterError, type ToolExecutionResult } from '../execute-tool-call.js';
 import { err } from '@oaknational/result';
-import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
+import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import {
   generateOakUrlWithContext,
   extractSlug,
   type ContentType,
 } from '@oaknational/sdk-codegen/api-schema';
-import { extractContextFromResponse } from '../response-augmentation.js';
-import type { ResponseContext } from '../types/response-augmentation.js';
+import { extractContextFromResponse } from '../../response-augmentation.js';
+import type { ResponseContext } from '../../types/response-augmentation.js';
 import {
   FETCH_PREREQUISITE_GUIDANCE,
   PRIMARY_ORIENTATION_TOOL_NAME,
-} from './prerequisite-guidance.js';
+} from '../prerequisite-guidance.js';
 
-import { SCOPES_SUPPORTED } from './scopes-supported.js';
+import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**
  * Fetch tool definition with full MCP metadata.

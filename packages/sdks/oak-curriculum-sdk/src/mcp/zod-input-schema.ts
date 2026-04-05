@@ -9,7 +9,9 @@ interface JsonSchemaPropertyString {
   readonly examples?: readonly unknown[];
 }
 interface JsonSchemaPropertyNumber {
-  readonly type: 'number';
+  readonly type: 'number' | 'integer';
+  readonly minimum?: number;
+  readonly maximum?: number;
   readonly enum?: readonly unknown[];
   readonly description?: string;
   readonly default?: unknown;

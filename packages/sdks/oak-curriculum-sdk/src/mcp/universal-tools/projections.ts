@@ -5,17 +5,14 @@
  * shapes that MCP consumers need:
  *
  * 1. **Registration projection** (`toRegistrationConfig`) — the config
- *    object for `McpServer.registerTool()`, with Zod inputSchema and
- *    `_meta` for widget tools.
+ *    object for `McpServer.registerTool()`, using `flatZodSchema` as
+ *    the canonical input schema. The MCP SDK converts this to JSON
+ *    Schema for the `tools/list` response automatically.
  *
  * 2. **Protocol projection** (`toProtocolEntry`) — the `tools/list`
- *    response entry with JSON Schema inputSchema (preserving examples)
- *    and MCP spec 2025-11-25 top-level `title`.
- *
- * Both projections are referentially stable: the Zod conversion for
- * aggregated tools is cached per `inputSchema` reference via a WeakMap,
- * so repeated calls with the same tool entry produce `===`-equal
- * `inputSchema` values.
+ *    response entry with the hand-written JSON Schema `inputSchema`.
+ *    This projection exists only for the `preserve-schema-examples.ts`
+ *    shim. Phase 4 deletes the shim and this projection.
  *
  * @see .agent/plans/sdk-and-mcp-enhancements/archive/completed/mcp-runtime-boundary-simplification.plan.md — Phase 3
  */
@@ -23,7 +20,6 @@
 import type { z } from 'zod';
 import type { SecurityScheme } from '@oaknational/sdk-codegen/mcp-tools';
 
-import { zodRawShapeFromToolInputJsonSchema } from '../zod-input-schema.js';
 import type {
   UniversalToolListEntry,
   UniversalToolInputSchema,
@@ -32,25 +28,13 @@ import type {
 } from './types.js';
 
 /**
- * Cache for Zod conversions of JSON Schema inputSchemas.
+ * Returns the tool's Zod raw shape for MCP SDK registration.
  *
- * Aggregated tool definitions are module-level constants, so the same
- * `inputSchema` object reference is reused across `listUniversalTools()`
- * calls. Caching here ensures `toRegistrationConfig` returns stable
- * Zod shapes that pass deep-equality checks.
+ * All tools provide `flatZodSchema` — aggregated tools define it
+ * directly, generated tools extract it from `toolMcpFlatInputSchema`.
  */
-const zodShapeCache = new WeakMap<UniversalToolInputSchema, z.ZodRawShape>();
-
 function resolveZodShape(tool: UniversalToolListEntry): z.ZodRawShape {
-  if (tool.flatZodSchema) {
-    return tool.flatZodSchema;
-  }
-  let cached = zodShapeCache.get(tool.inputSchema);
-  if (!cached) {
-    cached = zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
-    zodShapeCache.set(tool.inputSchema, cached);
-  }
-  return cached;
+  return tool.flatZodSchema;
 }
 
 /**

@@ -145,7 +145,12 @@ export const SEARCH_INPUT_SCHEMA = {
     year: {
       anyOf: [
         { type: 'string', description: 'Filter by year group number. Lessons scope only.' },
-        { type: 'number', description: 'Filter by year group number. Lessons scope only.' },
+        {
+          type: 'integer',
+          minimum: 1,
+          maximum: 11,
+          description: 'Filter by year group number. Lessons scope only.',
+        },
       ],
       examples: ['3', '7', 10],
     },

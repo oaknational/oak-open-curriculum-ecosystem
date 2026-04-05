@@ -6,6 +6,7 @@
  * Separate from execution logic.
  */
 
+import { z } from 'zod';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '../widget-constants.js';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
@@ -61,3 +62,19 @@ Optionally provide a tool_name to also include specific help for that tool.`,
   },
   _meta: { ui: { resourceUri: WIDGET_URI } },
 } as const;
+
+/**
+ * Flat Zod shape for MCP SDK registration of the get-curriculum-model tool.
+ *
+ * Mirrors `GET_CURRICULUM_MODEL_INPUT_SCHEMA` with `.describe()` for the
+ * MCP SDK's native `z.toJSONSchema()` conversion. No examples defined
+ * for this tool's parameters.
+ */
+export const GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+  tool_name: z
+    .string()
+    .optional()
+    .describe(
+      'Optional: name of a specific tool to include help for. If omitted, returns domain model and general tool guidance.',
+    ),
+};

@@ -81,7 +81,7 @@ function shouldExtract(targetType: ContentType, contentType: ContentType | undef
 /**
  * Extracts context from response data for units and subjects.
  * Exported for shared use by the response augmentation middleware
- * and `runFetchTool` in `aggregated-fetch.ts`.
+ * and `runFetchTool` in `aggregated-fetch/execution.ts`.
  */
 export function extractContextFromResponse(
   response: unknown,

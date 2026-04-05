@@ -25,6 +25,7 @@
  */
 
 export { SEARCH_TOOL_DEF, SEARCH_INPUT_SCHEMA } from './tool-definition.js';
+export { SEARCH_FLAT_ZOD_SCHEMA } from './flat-zod-schema.js';
 export type {
   SearchSdkArgs,
   SearchSdkScope,

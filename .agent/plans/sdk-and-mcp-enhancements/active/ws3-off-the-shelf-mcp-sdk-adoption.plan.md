@@ -10,7 +10,7 @@ todos:
     status: done
   - id: phase-2-aggregated-zod
     content: "Phase 2: Give aggregated tools Zod input schemas with .meta({ examples })."
-    status: pending
+    status: done
   - id: phase-3-adopt-registerAppTool
     content: "Phase 3: Adopt registerAppTool and registerAppResource in the HTTP app."
     status: pending
@@ -24,7 +24,7 @@ todos:
 
 # WS3: Off-the-Shelf MCP SDK Adoption
 
-**Status**: IN PROGRESS (Phase 1 complete, Phase 2 next)
+**Status**: IN PROGRESS (Phases 1–2 complete, Phase 3 next)
 **Last Updated**: 2026-04-05
 **Scope**: Replace hand-rolled MCP App infrastructure with canonical
 ext-apps SDK functions and Zod 4 `.meta()` for example preservation.
@@ -634,3 +634,25 @@ Non-blocking findings addressed:
 - Contamination grep exclusion of test files documented (Code)
 - Outer object metadata limitation documented (Type)
 - `registerHandlers` Pick type compatibility documented (Barney)
+
+## Phase 2 Review Record (2026-04-05)
+
+Five specialist reviewers examined Phase 2 post-implementation.
+No critical findings. All blocking and non-blocking findings addressed.
+
+| Reviewer | Critical | Findings | Key Contribution |
+|----------|----------|----------|------------------|
+| code-reviewer | 0 | 3 important + suggestions | `USER_SEARCH_SCOPES` duplicate, stale TSDoc, `lesson` examples gap |
+| type-reviewer | 0 | 1 optional | Confirmed `flatZodSchema` required is correct, `_meta` spread |
+| test-reviewer | 0 | 6 improvements | Complete description assertions, round-trip per tool, derived count |
+| mcp-reviewer | 0 | 2 non-blocking | Shim docs outdated (Phase 4), year field divergence (fixed) |
+| architecture-reviewer-barney | 0 | 5 findings | Dead fallback removal, `flatZodSchema` required, fetch dir promotion |
+
+Key outcomes beyond the original Phase 2 scope:
+
+- `flatZodSchema` promoted from optional to required on `UniversalToolListEntry`
+- Dead `zodRawShapeFromToolInputJsonSchema` fallback removed from `resolveZodShape()`
+- Structural equivalence test added (property names + required/optional match)
+- JSON Schema `year` field aligned with Zod constraints (`integer`, `min`, `max`)
+- Fetch tool promoted to directory (`aggregated-fetch/`) for consistency
+- `JsonSchemaPropertyNumber` type extended to support `'integer'`

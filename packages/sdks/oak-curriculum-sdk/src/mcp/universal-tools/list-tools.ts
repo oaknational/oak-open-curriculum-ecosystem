@@ -22,9 +22,9 @@ import { extractZodShape } from './zod-utils.js';
  * (e.g. download-asset on stdio), its handler fails fast with a clear error
  * rather than silently hiding the tool.
  *
- * Generated tools include `flatZodSchema` which contains .describe() calls
- * that preserve parameter descriptions through the MCP SDK's zodToJsonSchema
- * conversion. Aggregated tools don't have this (they use JSON Schema directly).
+ * All tools include `flatZodSchema` which contains `.describe()` and
+ * `.meta({ examples })` calls that preserve parameter descriptions and
+ * examples through the MCP SDK's native `z.toJSONSchema()` conversion.
  *
  * @returns Array of tool entries with name, description, schema, security,
  *          annotations, and MCP Apps standard metadata
@@ -33,11 +33,8 @@ import { extractZodShape } from './zod-utils.js';
  * ```typescript
  * const tools = listUniversalTools(registry);
  * for (const tool of tools) {
- *   if (tool.flatZodSchema) {
- *     server.registerTool(tool.name, tool.flatZodSchema, handler);
- *   } else {
- *     server.registerTool(tool.name, tool.inputSchema, handler);
- *   }
+ *   const config = toRegistrationConfig(tool);
+ *   server.registerTool(tool.name, config, handler);
  * }
  * ```
  */
@@ -49,9 +46,10 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
         name,
         description: def.description,
         inputSchema: def.inputSchema,
+        flatZodSchema: def.flatZodSchema,
         securitySchemes: def.securitySchemes,
         annotations: def.annotations,
-        ...('_meta' in def ? { _meta: def._meta } : {}),
+        _meta: '_meta' in def ? def._meta : undefined,
       };
     },
   );
@@ -62,7 +60,7 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
       name,
       description: descriptor.description,
       inputSchema: descriptor.inputSchema,
-      flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema),
+      flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema) ?? {},
       securitySchemes: descriptor.securitySchemes,
       annotations: descriptor.annotations,
       _meta: descriptor._meta,

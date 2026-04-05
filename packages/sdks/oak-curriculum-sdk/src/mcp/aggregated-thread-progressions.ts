@@ -16,6 +16,7 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { z } from 'zod';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
 import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
@@ -31,6 +32,12 @@ export const GET_THREAD_PROGRESSIONS_INPUT_SCHEMA = {
   properties: {},
   additionalProperties: false,
 } as const;
+
+/**
+ * Flat Zod shape for MCP SDK registration of the get-thread-progressions tool.
+ * Empty shape — this tool takes no parameters.
+ */
+export const GET_THREAD_PROGRESSIONS_FLAT_ZOD_SCHEMA: z.ZodRawShape = {};
 
 /**
  * Tool definition for get-thread-progressions.

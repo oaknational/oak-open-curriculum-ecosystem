@@ -43,17 +43,20 @@ git log --oneline --decorate -10
 - **Workstream**: MCP App migration (WS3 widget rebuild)
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md` (**START HERE** — off-the-shelf SDK adoption, Phase 2 next)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md` (**START HERE** — off-the-shelf SDK adoption, Phase 3 next)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-brand-banner.plan.md` (companion — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: SDK adoption Phase 1 COMPLETE (2026-04-05).
-  Generated Zod schemas now carry `.meta({ examples })`. Shim removal
-  condition #1 fully met. 5 specialist reviewers passed (code, type,
-  MCP, test, Barney). `pnpm check` green. Changes uncommitted.
-  UI still does not render — rendering fix is Phase 3
-  (`registerAppTool` adoption).
-- **Current objective**: SDK adoption Phase 2 — give aggregated tools
-  Zod input schemas with `.meta({ examples })`.
+- **Current state**: SDK adoption Phases 1–2 COMPLETE (2026-04-05).
+  All generated and aggregated tools now carry `flatZodSchema` with
+  `.describe()` and `.meta({ examples })`. `flatZodSchema` is required
+  on `UniversalToolListEntry`. Dead `zodRawShapeFromToolInputJsonSchema`
+  fallback removed. Structural equivalence test enforces
+  `inputSchema` ↔ `flatZodSchema` property/required alignment.
+  Fetch tool promoted to directory. 5 specialist reviewers passed
+  (code, type, MCP, test, Barney). `pnpm check` green.
+  UI still does not render — rendering fix is Phase 3.
+- **Current objective**: SDK adoption Phase 3 — adopt
+  `registerAppTool` and `registerAppResource` in the HTTP app.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -63,13 +66,13 @@ git log --oneline --decorate -10
 - **Remaining tracked items**:
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Next safe step**: Execute SDK adoption Phase 2. Read the plan's
-  Phase 2 section. 10 aggregated tools need `flatZodSchema` with
-  `.describe()` and `.meta({ examples })`. Start with `search` (most
-  complex). Update `listUniversalTools()` mapping and
-  `AggregatedToolDefShape` guard. TDD: RED tests first.
-- **Deep consolidation status**: Not due — Phase 1 is a mid-plan
-  milestone, no plan closure or doctrine change.
+- **Next safe step**: Execute SDK adoption Phase 3. Read the plan's
+  Phase 3 section. Use `registerAppTool` for UI-bearing tools and
+  `registerAppResource` for the widget resource. Create
+  `toAppToolRegistrationConfig()` projection. TDD: RED tests first.
+- **Deep consolidation status**: Completed this handoff — Phase 2
+  corrections captured as 3 feedback memories, napkin updated, plan
+  and prompt synced, platform plans checked (none need extraction).
 
 ## Active Workstreams (2026-04-05)
 
@@ -86,17 +89,19 @@ Phase 3 (canonical contracts + fallback proof), Phase 4 (brand banner).
 
 - **Phase 1 COMPLETE** (2026-04-05): codegen `.meta({ examples })`.
   7 unit tests + 3 integration tests. 5 specialist reviews passed.
-  Shim removal condition #1 fully met.
-- Phase 2 pending: aggregated tool Zod schemas
+- **Phase 2 COMPLETE** (2026-04-05): all 10 aggregated tools have
+  `flatZodSchema`. `flatZodSchema` required on `UniversalToolListEntry`.
+  Dead fallback removed. Structural equivalence test. Fetch promoted
+  to directory. 5 specialist reviews passed. 19 new tests (726 total).
 - Phase 3 pending: `registerAppTool`/`registerAppResource` (rendering fix)
-- Phase 4 pending: delete shim + dead code
+- Phase 4 pending: delete shim + dead code + JSON Schema `inputSchema`
 - Phase 5 pending: prove pipeline end-to-end
 
 **Pending after adoption plan**: WS3 Phase 5 (user search),
 Phase 6 (docs/gates/review).
 
-**Next action**: SDK adoption Phase 2 — give all 10 aggregated tools
-`flatZodSchema` with `.meta({ examples })`. Start with `search`.
+**Next action**: SDK adoption Phase 3 — adopt `registerAppTool` for
+UI-bearing tools and `registerAppResource` for the widget resource.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

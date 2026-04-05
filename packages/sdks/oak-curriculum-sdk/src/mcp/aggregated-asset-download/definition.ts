@@ -6,6 +6,7 @@
  * stdio transport.
  */
 
+import { z } from 'zod';
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { ASSET_TYPES } from '@oaknational/sdk-codegen/api-schema';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
@@ -57,6 +58,7 @@ export const DOWNLOAD_ASSET_INPUT_SCHEMA = {
     lesson: {
       type: 'string',
       description: 'Lesson slug (e.g. "adding-fractions-with-the-same-denominator")',
+      examples: ['adding-fractions-with-the-same-denominator'],
     },
     type: {
       type: 'string',
@@ -67,3 +69,20 @@ export const DOWNLOAD_ASSET_INPUT_SCHEMA = {
   },
   required: ['lesson', 'type'],
 } as const satisfies GenericToolInputJsonSchema;
+
+/**
+ * Flat Zod shape for MCP SDK registration of the download-asset tool.
+ *
+ * Mirrors `DOWNLOAD_ASSET_INPUT_SCHEMA` with `.describe()` and
+ * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
+ */
+export const DOWNLOAD_ASSET_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+  lesson: z
+    .string()
+    .describe('Lesson slug (e.g. "adding-fractions-with-the-same-denominator")')
+    .meta({ examples: ['adding-fractions-with-the-same-denominator'] }),
+  type: z
+    .enum([...ASSET_TYPES])
+    .describe('Asset type to download')
+    .meta({ examples: ['slideDeck', 'worksheet', 'video'] }),
+};

@@ -1,34 +1,66 @@
 /**
  * Aggregated tool definitions with MCP metadata.
  *
- * This module defines the constant map of aggregated tools - hand-written
+ * This module defines the constant map of aggregated tools — hand-written
  * tools that combine multiple API calls into a single operation.
  *
- * @remarks Aggregated tools are separate from generated tools (which come
- * from the OpenAPI spec). They're currently defined at runtime but will
- * eventually move to sdk-codegen time.
+ * Each tool provides both `inputSchema` (JSON Schema) and `flatZodSchema`
+ * (Zod raw shape with `.describe()` and `.meta({ examples })`). These two
+ * representations MUST describe the same properties with matching
+ * required/optional semantics — enforced by the structural equivalence
+ * integration test. Phase 4 will delete the JSON Schema `inputSchema`
+ * once the shim is removed, making `flatZodSchema` the sole source.
  *
  * Each aggregated tool imports its definition from its own module to
  * maintain separation of concerns and keep this file focused on the
  * combined definition map.
  */
 
-import { FETCH_TOOL_DEF, FETCH_INPUT_SCHEMA } from '../aggregated-fetch.js';
-import { GET_CURRICULUM_MODEL_TOOL_DEF } from '../aggregated-curriculum-model/index.js';
-import { GET_THREAD_PROGRESSIONS_TOOL_DEF } from '../aggregated-thread-progressions.js';
-import { GET_PREREQUISITE_GRAPH_TOOL_DEF } from '../aggregated-prerequisite-graph.js';
-import { SEARCH_TOOL_DEF, SEARCH_INPUT_SCHEMA } from '../aggregated-search/index.js';
-import { BROWSE_TOOL_DEF, BROWSE_INPUT_SCHEMA } from '../aggregated-browse/index.js';
-import { EXPLORE_TOOL_DEF, EXPLORE_INPUT_SCHEMA } from '../aggregated-explore/index.js';
+import type { z } from 'zod';
+import {
+  FETCH_TOOL_DEF,
+  FETCH_INPUT_SCHEMA,
+  FETCH_FLAT_ZOD_SCHEMA,
+} from '../aggregated-fetch/index.js';
+import {
+  GET_CURRICULUM_MODEL_TOOL_DEF,
+  GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA,
+} from '../aggregated-curriculum-model/index.js';
+import {
+  GET_THREAD_PROGRESSIONS_TOOL_DEF,
+  GET_THREAD_PROGRESSIONS_FLAT_ZOD_SCHEMA,
+} from '../aggregated-thread-progressions.js';
+import {
+  GET_PREREQUISITE_GRAPH_TOOL_DEF,
+  GET_PREREQUISITE_GRAPH_FLAT_ZOD_SCHEMA,
+} from '../aggregated-prerequisite-graph.js';
+import {
+  SEARCH_TOOL_DEF,
+  SEARCH_INPUT_SCHEMA,
+  SEARCH_FLAT_ZOD_SCHEMA,
+} from '../aggregated-search/index.js';
+import {
+  BROWSE_TOOL_DEF,
+  BROWSE_INPUT_SCHEMA,
+  BROWSE_FLAT_ZOD_SCHEMA,
+} from '../aggregated-browse/index.js';
+import {
+  EXPLORE_TOOL_DEF,
+  EXPLORE_INPUT_SCHEMA,
+  EXPLORE_FLAT_ZOD_SCHEMA,
+} from '../aggregated-explore/index.js';
 import {
   DOWNLOAD_ASSET_TOOL_DEF,
   DOWNLOAD_ASSET_INPUT_SCHEMA,
+  DOWNLOAD_ASSET_FLAT_ZOD_SCHEMA,
 } from '../aggregated-asset-download/index.js';
 import {
   USER_SEARCH_TOOL_DEF,
   USER_SEARCH_INPUT_SCHEMA,
+  USER_SEARCH_FLAT_ZOD_SCHEMA,
   USER_SEARCH_QUERY_TOOL_DEF,
   USER_SEARCH_QUERY_INPUT_SCHEMA,
+  USER_SEARCH_QUERY_FLAT_ZOD_SCHEMA,
 } from '../aggregated-user-search/index.js';
 import type { SecurityScheme } from '@oaknational/sdk-codegen/mcp-tools';
 import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
@@ -57,18 +89,52 @@ import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
  * - The allowlist is defined in `WIDGET_TOOL_NAMES` (cross-domain-constants.ts).
  */
 export const AGGREGATED_TOOL_DEFS = {
-  search: { ...SEARCH_TOOL_DEF, inputSchema: SEARCH_INPUT_SCHEMA },
-  fetch: { ...FETCH_TOOL_DEF, inputSchema: FETCH_INPUT_SCHEMA },
-  'get-curriculum-model': GET_CURRICULUM_MODEL_TOOL_DEF,
-  'get-thread-progressions': GET_THREAD_PROGRESSIONS_TOOL_DEF,
-  'get-prerequisite-graph': GET_PREREQUISITE_GRAPH_TOOL_DEF,
-  'browse-curriculum': { ...BROWSE_TOOL_DEF, inputSchema: BROWSE_INPUT_SCHEMA },
-  'explore-topic': { ...EXPLORE_TOOL_DEF, inputSchema: EXPLORE_INPUT_SCHEMA },
-  'download-asset': { ...DOWNLOAD_ASSET_TOOL_DEF, inputSchema: DOWNLOAD_ASSET_INPUT_SCHEMA },
-  'user-search': { ...USER_SEARCH_TOOL_DEF, inputSchema: USER_SEARCH_INPUT_SCHEMA },
+  search: {
+    ...SEARCH_TOOL_DEF,
+    inputSchema: SEARCH_INPUT_SCHEMA,
+    flatZodSchema: SEARCH_FLAT_ZOD_SCHEMA,
+  },
+  fetch: {
+    ...FETCH_TOOL_DEF,
+    inputSchema: FETCH_INPUT_SCHEMA,
+    flatZodSchema: FETCH_FLAT_ZOD_SCHEMA,
+  },
+  'get-curriculum-model': {
+    ...GET_CURRICULUM_MODEL_TOOL_DEF,
+    flatZodSchema: GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA,
+  },
+  'get-thread-progressions': {
+    ...GET_THREAD_PROGRESSIONS_TOOL_DEF,
+    flatZodSchema: GET_THREAD_PROGRESSIONS_FLAT_ZOD_SCHEMA,
+  },
+  'get-prerequisite-graph': {
+    ...GET_PREREQUISITE_GRAPH_TOOL_DEF,
+    flatZodSchema: GET_PREREQUISITE_GRAPH_FLAT_ZOD_SCHEMA,
+  },
+  'browse-curriculum': {
+    ...BROWSE_TOOL_DEF,
+    inputSchema: BROWSE_INPUT_SCHEMA,
+    flatZodSchema: BROWSE_FLAT_ZOD_SCHEMA,
+  },
+  'explore-topic': {
+    ...EXPLORE_TOOL_DEF,
+    inputSchema: EXPLORE_INPUT_SCHEMA,
+    flatZodSchema: EXPLORE_FLAT_ZOD_SCHEMA,
+  },
+  'download-asset': {
+    ...DOWNLOAD_ASSET_TOOL_DEF,
+    inputSchema: DOWNLOAD_ASSET_INPUT_SCHEMA,
+    flatZodSchema: DOWNLOAD_ASSET_FLAT_ZOD_SCHEMA,
+  },
+  'user-search': {
+    ...USER_SEARCH_TOOL_DEF,
+    inputSchema: USER_SEARCH_INPUT_SCHEMA,
+    flatZodSchema: USER_SEARCH_FLAT_ZOD_SCHEMA,
+  },
   'user-search-query': {
     ...USER_SEARCH_QUERY_TOOL_DEF,
     inputSchema: USER_SEARCH_QUERY_INPUT_SCHEMA,
+    flatZodSchema: USER_SEARCH_QUERY_FLAT_ZOD_SCHEMA,
   },
 } as const;
 
@@ -90,6 +156,7 @@ interface AggregatedToolDefShape {
     readonly title: string;
   };
   readonly inputSchema: GenericToolInputJsonSchema;
+  readonly flatZodSchema: z.ZodRawShape;
 }
 
 /**
