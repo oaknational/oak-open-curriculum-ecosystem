@@ -5,10 +5,7 @@
  * `z.toJSONSchema()` conversion produces correct JSON Schema with
  * examples and descriptions.
  *
- * Must stay structurally equivalent to `SEARCH_INPUT_SCHEMA` (same
- * property names, same required/optional semantics) — enforced by the
- * structural equivalence integration test. Phase 4 will delete the
- * JSON Schema representation, making this the sole source.
+ * This is the sole source of input schema truth for the search tool.
  *
  * Separate from `SearchSdkObjectSchema` in `validation.ts`, which adds
  * `.trim()`, `.refine()`, `.transform()` for runtime input narrowing.

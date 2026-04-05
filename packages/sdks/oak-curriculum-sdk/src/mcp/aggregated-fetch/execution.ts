@@ -4,7 +4,6 @@ import { formatError, formatToolResponse, toErrorMessage } from '../universal-to
 import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
 import { McpParameterError, type ToolExecutionResult } from '../execute-tool-call.js';
 import { err } from '@oaknational/result';
-import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import {
   generateOakUrlWithContext,
   extractSlug,
@@ -51,32 +50,6 @@ Use format "type:slug" (e.g., "lesson:add-fractions-with-the-same-denominator", 
   },
   _meta: undefined,
 } as const;
-
-/**
- * JSON Schema for the fetch aggregated tool.
- *
- * Includes parameter descriptions and examples that will be visible to MCP clients.
- * These help AI agents understand expected formats for canonical identifiers.
- */
-export const FETCH_INPUT_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    id: {
-      type: 'string',
-      description:
-        'Canonical identifier in format "type:slug" (e.g., "lesson:add-fractions-with-the-same-denominator", "unit:comparing-fractions", "subject:maths", "sequence:maths-primary", "thread:number-multiplication-and-division")',
-      examples: [
-        'lesson:adding-fractions-with-the-same-denominator',
-        'unit:comparing-fractions',
-        'subject:maths',
-        'sequence:maths-primary',
-        'thread:number-multiplication-and-division',
-      ],
-    },
-  },
-  required: ['id'],
-} as const satisfies GenericToolInputJsonSchema;
 
 export interface FetchArgs {
   readonly id: string;

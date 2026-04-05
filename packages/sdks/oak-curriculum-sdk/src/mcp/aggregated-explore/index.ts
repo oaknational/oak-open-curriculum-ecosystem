@@ -9,18 +9,14 @@
  * ```typescript
  * import {
  *   EXPLORE_TOOL_DEF,
- *   EXPLORE_INPUT_SCHEMA,
+ *   EXPLORE_FLAT_ZOD_SCHEMA,
  *   validateExploreArgs,
  *   runExploreTool,
  * } from './aggregated-explore/index.js';
  * ```
  */
 
-export {
-  EXPLORE_TOOL_DEF,
-  EXPLORE_INPUT_SCHEMA,
-  EXPLORE_FLAT_ZOD_SCHEMA,
-} from './tool-definition.js';
+export { EXPLORE_TOOL_DEF, EXPLORE_FLAT_ZOD_SCHEMA } from './tool-definition.js';
 export type { ExploreArgs } from './types.js';
 export { validateExploreArgs } from './validation.js';
 export { runExploreTool } from './execution.js';

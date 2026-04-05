@@ -6,7 +6,6 @@ import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';
 
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
-import { preserveSchemaExamplesInToolsList } from './preserve-schema-examples.js';
 import {
   SERVER_INSTRUCTIONS,
   createStubSearchRetrieval,
@@ -228,7 +227,6 @@ function initializeCoreEndpoints(
       { instructions: SERVER_INSTRUCTIONS },
     );
     registerHandlers(server, handlerOptions);
-    preserveSchemaExamplesInToolsList(server);
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
     return { server, transport };
   };

@@ -7,7 +7,6 @@
  */
 
 import { z } from 'zod';
-import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { ASSET_TYPES } from '@oaknational/sdk-codegen/api-schema';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
@@ -46,34 +45,9 @@ Do NOT use for:
 } as const;
 
 /**
- * JSON Schema for the download-asset tool inputs.
- *
- * The `type` enum is derived from the generated OpenAPI schema's
- * ASSET_TYPES constant to stay in sync with the API.
- */
-export const DOWNLOAD_ASSET_INPUT_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    lesson: {
-      type: 'string',
-      description: 'Lesson slug (e.g. "adding-fractions-with-the-same-denominator")',
-      examples: ['adding-fractions-with-the-same-denominator'],
-    },
-    type: {
-      type: 'string',
-      description: 'Asset type to download',
-      enum: [...ASSET_TYPES],
-      examples: ['slideDeck', 'worksheet', 'video'],
-    },
-  },
-  required: ['lesson', 'type'],
-} as const satisfies GenericToolInputJsonSchema;
-
-/**
  * Flat Zod shape for MCP SDK registration of the download-asset tool.
  *
- * Mirrors `DOWNLOAD_ASSET_INPUT_SCHEMA` with `.describe()` and
+ * Canonical Zod schema with `.describe()` and
  * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
 export const DOWNLOAD_ASSET_FLAT_ZOD_SCHEMA: z.ZodRawShape = {

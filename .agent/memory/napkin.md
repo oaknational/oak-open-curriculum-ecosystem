@@ -6,6 +6,116 @@ Rotated at 579 lines after Phase 4 closure. Archived to
 Extracted 1 pattern: `review-intentions-not-just-code.md`.
 Previous rotation: 2026-04-03 at 632 lines.
 
+## Session 2026-04-05 — SDK adoption Phase 4 dead code cleanup
+
+### What Was Done
+
+- Executed Phase 4 of the off-the-shelf MCP SDK adoption plan:
+  deleted all dual-schema dead code.
+- Consumer trace (3 parallel Explore agents) mapped every usage of
+  `resolveZodShape`, `zodFromToolInputJsonSchema`,
+  `zodRawShapeFromToolInputJsonSchema`, `inputSchema` on
+  `UniversalToolListEntry`, `*_INPUT_SCHEMA` constants, and
+  `GenericToolInputJsonSchema`.
+- Key finding: `inputSchema` on `UniversalToolListEntry` had ZERO
+  production readers — `projections.ts` reads `flatZodSchema`. The
+  stdio app reads from the generated descriptor directly, not from
+  `UniversalToolListEntry`.
+- Deleted `zod-input-schema.ts` entirely (180 lines).
+- Deleted structural equivalence test block (purpose fulfilled).
+- Updated 20+ files across SDK and test suites.
+- Caught missed `UniversalToolInputSchema` barrel re-export and
+  `GET_CURRICULUM_MODEL_INPUT_SCHEMA` test import during `pnpm check`.
+- `pnpm check` green after fixes.
+
+### Patterns to Remember
+
+- **Consumer traces before deletion prevent surprises**: the 3-agent
+  parallel exploration found that `ToolRegistryDescriptor.inputSchema`
+  (generated descriptor interface) was a separate concern from
+  `UniversalToolListEntry.inputSchema`. Without the trace, deleting
+  the type alias `GeneratedToolInputSchema` would have broken the
+  generated descriptor — caught and resolved by inlining.
+- **Barrel exports are silent consumers**: `UniversalToolInputSchema`
+  was re-exported from the barrel index but had no downstream users.
+  It survived because barrel exports don't trigger "unused" warnings.
+  Always check barrel files during dead code cleanup.
+
+### Corrections (from user)
+
+- None this session.
+
+### Mistakes Made
+
+- Missed `UniversalToolInputSchema` re-export in barrel `index.ts` —
+  caught by `pnpm check` type-check failure.
+- Missed `GET_CURRICULUM_MODEL_INPUT_SCHEMA` import in
+  `definition.unit.test.ts` — caught by `pnpm check` type-check.
+- Both were systematic misses: the consumer trace agents searched
+  production code and identified test files, but I didn't check every
+  test file during the manual editing pass.
+
+---
+
+## Session 2026-04-05 — SDK adoption Phase 3 implementation
+
+### What Was Done
+
+- Implemented Phase 3: `registerAppTool` for UI tools, `registerAppResource`
+  for widget, shim deletion (pulled forward from Phase 4), `toProtocolEntry`
+  deletion.
+- Added `isAppToolEntry()` type guard and `toAppToolRegistrationConfig()`
+  projection in SDK projections.ts. `AppToolListEntry` interface narrows
+  `UniversalToolListEntry` for tools with `_meta.ui`.
+- Fixed `readonly` on `visibility` array in generator template for structural
+  compatibility with ext-apps SDK's `McpUiToolMeta`.
+- Updated `ResourceRegistrar` from hand-written interface to
+  `type = Pick<McpServer, 'registerResource'>`.
+- TDD: 8 new test assertions with guard counts. 5 specialist reviewers
+  (code, type, MCP, test, Barney) — all passed after fixes.
+- `pnpm check` green.
+
+### Patterns to Remember
+
+- **Shim interactions block the fix they're supposed to support**: the
+  `preserve-schema-examples.ts` shim overrode `tools/list` entirely,
+  nullifying `registerAppTool`'s `_meta` normalisation. The shim HAD
+  to be removed in the same phase as the `registerAppTool` adoption,
+  not deferred. When a shim overrides the very handler a fix targets,
+  order matters.
+- **Empty `interface extends Pick<...> {}` is rejected by ESLint**: the
+  `no-empty-object-type` rule blocks the `interface` form. When
+  delegating to an off-the-shelf SDK type, `type = Pick<...>` is the
+  correct form despite the "no type aliases" rule — the two rules are
+  in tension and ESLint enforcement takes precedence.
+- **Extract handler variables carefully**: extracting a callback from
+  inline to a variable breaks TypeScript's contextual type inference.
+  The `extra` parameter lost its type when the handler was extracted
+  from `server.registerTool(name, config, handler)` to a variable.
+  Use `Parameters<ToolCallback>[0]` to recover the full type.
+
+### Corrections (from user)
+
+- **"Step back, breathe, and review the guidance around types"**: after
+  the type reviewer suggested `interface extends Pick<...> {}` and I
+  implemented it, ESLint rejected the empty interface. The user
+  directed me to re-read the principles. The `type` alias form was
+  the correct resolution — principles are in tension and the quality
+  gate (ESLint) is the arbiter.
+
+### Mistakes Made
+
+- Initially typed `extra` as `{ authInfo?: AuthInfo }` (too narrow)
+  instead of the full SDK `RequestHandlerExtra` type. Caught by type
+  reviewer.
+- Initially used `interface extends Pick<...> {}` which ESLint rejected.
+  Reverted to `type` alias after user direction.
+- Test reviewer found vacuous unit test loops — the fake registry had
+  no `_meta` on its descriptor. Fixed by adding `_meta: { securitySchemes: [] }`
+  and guard assertions (`expect(count).toBeGreaterThan(0)`).
+
+---
+
 ## Session 2026-04-05 — SDK adoption Phase 2 implementation
 
 ### What Was Done

@@ -157,39 +157,3 @@ describe('aggregated tools flatZodSchema propagation', () => {
     }
   });
 });
-
-describe('aggregated tools structural equivalence — inputSchema and flatZodSchema match', () => {
-  const tools = listUniversalTools(generatedToolRegistry);
-  const aggregatedTools = tools.filter((t) => aggregatedNames.has(t.name));
-
-  it('every aggregated tool has matching property names in inputSchema and flatZodSchema', () => {
-    for (const tool of aggregatedTools) {
-      const jsonSchemaProps = typeSafeKeys(tool.inputSchema.properties ?? {}).sort();
-      const zodProps = typeSafeKeys(tool.flatZodSchema).sort();
-
-      expect(zodProps, `${tool.name}: flatZodSchema properties`).toEqual(jsonSchemaProps);
-    }
-  });
-
-  it('required fields in inputSchema match non-optional fields in flatZodSchema', () => {
-    for (const tool of aggregatedTools) {
-      const requiredArray = 'required' in tool.inputSchema ? (tool.inputSchema.required ?? []) : [];
-      const jsonSchemaRequired = new Set(requiredArray);
-      const zodRequired = new Set<string>();
-
-      for (const key of typeSafeKeys(tool.flatZodSchema)) {
-        const schema = tool.flatZodSchema[key];
-        const jsonSchema = z.toJSONSchema(z.object({ [key]: schema }));
-        const requiredInZod = jsonSchema.required ?? [];
-        if (requiredInZod.includes(key)) {
-          zodRequired.add(key);
-        }
-      }
-
-      expect(
-        zodRequired,
-        `${tool.name}: required fields should match between inputSchema and flatZodSchema`,
-      ).toEqual(jsonSchemaRequired);
-    }
-  });
-});

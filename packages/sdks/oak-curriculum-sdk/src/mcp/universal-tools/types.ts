@@ -27,7 +27,7 @@ import type { AGGREGATED_TOOL_DEFS } from './definitions.js';
  */
 export interface ToolRegistryDescriptor {
   readonly description?: string;
-  readonly inputSchema: GeneratedToolInputSchema;
+  readonly inputSchema: ToolDescriptorForName<ToolName>['inputSchema'];
   readonly toolMcpFlatInputSchema?: z.ZodType;
   readonly securitySchemes?: readonly SecurityScheme[];
   readonly annotations?: ToolAnnotations;
@@ -67,21 +67,6 @@ export type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
 export type UniversalToolName = AggregatedToolName | ToolName;
 
 /**
- * Input schema type for generated tools (from OpenAPI spec).
- */
-type GeneratedToolInputSchema = ToolDescriptorForName<ToolName>['inputSchema'];
-
-/**
- * Input schema type for aggregated tools (hand-written JSON Schema).
- */
-type AggregatedToolInputSchema = (typeof AGGREGATED_TOOL_DEFS)[AggregatedToolName]['inputSchema'];
-
-/**
- * Union of all tool input schema types.
- */
-export type UniversalToolInputSchema = GeneratedToolInputSchema | AggregatedToolInputSchema;
-
-/**
  * Contract-level ToolDescriptor with non-parametric properties.
  *
  * `annotations` and `_meta` on ToolDescriptor don't depend on any type
@@ -110,8 +95,8 @@ export type ToolMeta = NonNullable<ContractDescriptor['_meta']>;
  * Entry in the universal tools list for MCP registration.
  *
  * Contains all metadata needed to register a tool with an MCP server,
- * including both JSON Schema (for backwards compatibility) and Zod schema
- * (for MCP SDK registration with proper parameter descriptions).
+ * including Zod schema for MCP SDK registration with proper parameter
+ * descriptions and examples.
  */
 export interface UniversalToolListEntry {
   /** Tool name used for invocation */
@@ -119,26 +104,12 @@ export interface UniversalToolListEntry {
   /** Human-readable description of what the tool does */
   readonly description?: string;
   /**
-   * JSON Schema for tool inputs.
-   *
-   * Kept for the `toProtocolEntry()` projection used by the
-   * `preserve-schema-examples.ts` shim. Phase 4 deletes the shim and
-   * this field, making `flatZodSchema` the sole input schema source.
-   * Until then, both representations must stay structurally equivalent
-   * (same property names, same required sets).
-   */
-  readonly inputSchema: UniversalToolInputSchema;
-  /**
-   * Zod raw shape for MCP SDK registerTool().
+   * Zod raw shape for MCP SDK `registerTool()` / `registerAppTool()`.
    *
    * All tools (generated and aggregated) provide this field. It contains
    * `.describe()` and `.meta({ examples })` calls that preserve parameter
    * descriptions and examples through the MCP SDK's native `z.toJSONSchema()`
-   * conversion.
-   *
-   * This is the canonical input schema for MCP registration. The JSON Schema
-   * `inputSchema` field is kept for backward compatibility with the
-   * `toProtocolEntry()` projection until Phase 4 removes the shim.
+   * conversion. This is the canonical input schema for MCP registration.
    */
   readonly flatZodSchema: z.ZodRawShape;
   /** Security schemes required to invoke this tool */

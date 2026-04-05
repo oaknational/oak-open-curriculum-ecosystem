@@ -13,7 +13,6 @@
  */
 
 import { z } from 'zod';
-import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import { WIDGET_URI } from '../widget-constants.js';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
@@ -61,48 +60,6 @@ Do NOT use for:
 } as const;
 
 /**
- * JSON Schema for the user-search tool inputs.
- *
- * Simplified input schema for user-initiated search. Shares the same
- * underlying search capability as the agent-facing search tool but with
- * a streamlined parameter set appropriate for UI-driven interaction.
- */
-export const USER_SEARCH_INPUT_SCHEMA = {
-  type: 'object',
-  required: ['query', 'scope'],
-  additionalProperties: false,
-  properties: {
-    query: {
-      type: 'string',
-      description: 'Search query text.',
-      examples: ['photosynthesis', 'adding fractions', 'the Romans'],
-    },
-    scope: {
-      type: 'string',
-      description: 'Which index to search: lessons, units, threads, or sequences.',
-      enum: ['lessons', 'units', 'threads', 'sequences'],
-      examples: ['lessons', 'units'],
-    },
-    subject: {
-      type: 'string',
-      description: 'Filter by subject slug.',
-      enum: [...SUBJECTS],
-      examples: ['maths', 'science'],
-    },
-    keyStage: {
-      type: 'string',
-      description: 'Filter by key stage.',
-      enum: [...KEY_STAGES],
-      examples: ['ks2', 'ks3'],
-    },
-    size: {
-      type: 'number',
-      description: 'Maximum number of results to return (1-50, default 25).',
-    },
-  },
-} as const satisfies GenericToolInputJsonSchema;
-
-/**
  * App-only search query helper tool definition.
  *
  * This tool is hidden from the model via `visibility: ['app']` and is
@@ -129,53 +86,12 @@ with search controls directly.`,
   _meta: { ui: { resourceUri: WIDGET_URI, visibility: ['app'] as const } },
 } as const;
 
-/**
- * JSON Schema for the user-search-query tool inputs.
- *
- * Same schema as user-search — the app-only helper accepts the same
- * parameters for direct search execution from the UI.
- */
-export const USER_SEARCH_QUERY_INPUT_SCHEMA = {
-  type: 'object',
-  required: ['query', 'scope'],
-  additionalProperties: false,
-  properties: {
-    query: {
-      type: 'string',
-      description: 'Search query text.',
-      examples: ['photosynthesis', 'adding fractions'],
-    },
-    scope: {
-      type: 'string',
-      description: 'Which index to search: lessons, units, threads, or sequences.',
-      enum: ['lessons', 'units', 'threads', 'sequences'],
-      examples: ['lessons', 'units'],
-    },
-    subject: {
-      type: 'string',
-      description: 'Filter by subject slug.',
-      enum: [...SUBJECTS],
-      examples: ['maths', 'science'],
-    },
-    keyStage: {
-      type: 'string',
-      description: 'Filter by key stage.',
-      enum: [...KEY_STAGES],
-      examples: ['ks2', 'ks3'],
-    },
-    size: {
-      type: 'number',
-      description: 'Maximum number of results to return (1-50, default 25).',
-    },
-  },
-} as const satisfies GenericToolInputJsonSchema;
-
 import { USER_SEARCH_SCOPES } from './types.js';
 
 /**
  * Flat Zod shape for MCP SDK registration of the user-search tool.
  *
- * Mirrors `USER_SEARCH_INPUT_SCHEMA` with `.describe()` and
+ * Canonical Zod schema with `.describe()` and
  * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
 export const USER_SEARCH_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
@@ -209,7 +125,7 @@ export const USER_SEARCH_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
 /**
  * Flat Zod shape for MCP SDK registration of the user-search-query tool.
  *
- * Mirrors `USER_SEARCH_QUERY_INPUT_SCHEMA` with `.describe()` and
+ * Canonical Zod schema with `.describe()` and
  * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
 export const USER_SEARCH_QUERY_FLAT_ZOD_SCHEMA: z.ZodRawShape = {

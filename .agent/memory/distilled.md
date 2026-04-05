@@ -198,9 +198,6 @@ context with no natural permanent home.
   to `process.stderr.write`. Build scripts without a logger
   should let errors propagate naturally (Node surfaces the
   stack trace).
-- **`unknown` and generated infra**: graduated to feedback
-  memories (`feedback_unknown-is-destruction.md` and
-  `feedback_use-off-the-shelf-not-custom-plumbing.md`).
-  Core rule: the generated type system is exhaustive;
-  `unknown` only at incoming external boundaries; search
-  generated code before proposing new boundary helpers.
+- **`unknown` and generated infra**: see feedback memories
+  `feedback_unknown-is-destruction.md` and
+  `feedback_use-off-the-shelf-not-custom-plumbing.md`.

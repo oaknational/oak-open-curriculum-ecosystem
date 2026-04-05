@@ -24,16 +24,6 @@ import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
- * Input schema for get-prerequisite-graph tool.
- * V1 has no parameters — returns the complete graph.
- */
-export const GET_PREREQUISITE_GRAPH_INPUT_SCHEMA = {
-  type: 'object',
-  properties: {},
-  additionalProperties: false,
-} as const;
-
-/**
  * Flat Zod shape for MCP SDK registration of the get-prerequisite-graph tool.
  * Empty shape — this tool takes no parameters.
  */
@@ -69,8 +59,6 @@ Use this to answer questions like:
 ${AGGREGATED_PREREQUISITE_GUIDANCE}
 
 Complements get-thread-progressions (learning paths) with prerequisite detail.`,
-
-  inputSchema: GET_PREREQUISITE_GRAPH_INPUT_SCHEMA,
 
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
 

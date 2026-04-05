@@ -167,7 +167,7 @@ export interface ToolDescriptor<
        *
        * @see https://modelcontextprotocol.io/extensions/apps/overview
        */
-      readonly visibility?: readonly ('model' | 'app')[];
+      readonly visibility?: ('model' | 'app')[];
     };
     /** Mirror securitySchemes for clients that only read _meta */
     readonly securitySchemes?: readonly SecurityScheme[];

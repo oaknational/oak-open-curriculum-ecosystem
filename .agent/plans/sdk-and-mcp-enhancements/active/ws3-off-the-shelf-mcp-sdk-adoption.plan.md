@@ -13,10 +13,10 @@ todos:
     status: done
   - id: phase-3-adopt-registerAppTool
     content: "Phase 3: Adopt registerAppTool and registerAppResource in the HTTP app."
-    status: pending
+    status: done
   - id: phase-4-delete-shim
-    content: "Phase 4: Delete preserve-schema-examples.ts and all supporting dead code."
-    status: pending
+    content: "Phase 4: Delete remaining dead code (toolInputJsonSchema, aggregated JSON Schema inputSchema, resolveZodShape indirection)."
+    status: done
   - id: phase-5-prove
     content: "Phase 5: Add integration test proving the full MCP App pipeline, verify in host."
     status: pending
@@ -24,7 +24,7 @@ todos:
 
 # WS3: Off-the-Shelf MCP SDK Adoption
 
-**Status**: IN PROGRESS (Phases 1–2 complete, Phase 3 next)
+**Status**: IN PROGRESS (Phases 1–4 complete, Phase 5 next)
 **Last Updated**: 2026-04-05
 **Scope**: Replace hand-rolled MCP App infrastructure with canonical
 ext-apps SDK functions and Zod 4 `.meta()` for example preservation.
@@ -296,10 +296,16 @@ input schemas (`properties: {}`). Their Zod equivalent is
 
 ---
 
-### Phase 3: Adopt `registerAppTool` and `registerAppResource`
+### Phase 3: Adopt `registerAppTool` and `registerAppResource` — COMPLETE
 
 **Goal**: Use the ext-apps SDK's canonical registration functions so
 `_meta` is normalised correctly (both modern and legacy keys).
+
+**Status**: COMPLETE (2026-04-05). Shim removal pulled forward from
+Phase 4 because `preserve-schema-examples.ts` overrode `tools/list`,
+nullifying `registerAppTool`'s `_meta` normalisation. 5 specialist
+reviewers passed (code, type, MCP, test, Barney). All findings
+addressed. `pnpm check` green.
 
 **Approach**: TDD.
 
@@ -404,62 +410,45 @@ test changes.
 
 ---
 
-### Phase 4: Delete the Shim and Dead Code
+### Phase 4: Delete Remaining Dead Code — COMPLETE
 
-**Goal**: Remove `preserve-schema-examples.ts` and all code that
-existed solely to support it.
+**Goal**: Remove dead code that survived the shim deletion in Phase 3.
+
+**Status**: COMPLETE (2026-04-05). Deleted `resolveZodShape()` (inlined),
+`zodFromToolInputJsonSchema()`, `zodRawShapeFromToolInputJsonSchema()`,
+`inputSchema` from `UniversalToolListEntry`, all `*_INPUT_SCHEMA` constants
+from aggregated tools, `GenericToolInputJsonSchema` type, and
+`zod-input-schema.ts` entirely. `pnpm check` green.
 
 **Approach**: Deletion is the refactor step. Tests from Phases 1-3
 are the safety net.
 
-#### Delete
-
-1. `apps/oak-curriculum-mcp-streamable-http/src/preserve-schema-examples.ts`
-   — the shim itself.
-2. `preserveSchemaExamplesInToolsList(server)` call in
-   `application.ts:231`.
-3. `toProtocolEntry()` in
-   `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/projections.ts`
-   — only existed to serve the shim.
-4. `extractZodShape()` and `isZodObject()` in
-   `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/zod-utils.ts`
-   — no longer needed if we pass Zod objects directly.
-5. Any imports of the above in barrel files.
-6. Any tests that only tested the deleted code (not tests that prove
-   remaining behaviour).
-
 #### Mandatory consumer trace and deletion
 
-These items are **not optional** — trace all consumers and either
-delete or create a named, time-boxed follow-up within this plan:
-
 - `zodRawShapeFromToolInputJsonSchema()` in `zod-input-schema.ts` —
-  after Phase 2, all tools have `flatZodSchema`, so the runtime
-  JSON Schema → Zod conversion fallback in `projections.ts:50` is
-  dead. Delete the function AND its public barrel export at
-  `src/public/mcp-tools.ts:66`. Verify no other consumers exist.
+  all tools have `flatZodSchema`, so the runtime JSON Schema → Zod
+  fallback is dead. Delete the function AND its public barrel export.
+- `zodFromToolInputJsonSchema()` — depends on the above. Trace
+  consumers.
+- `extractZodShape()` and `isZodObject()` in `zod-utils.ts` — trace
+  whether any consumer remains after `resolveZodShape` inlines
+  `tool.flatZodSchema`.
+- `resolveZodShape()` in `projections.ts` — trivial single-line
+  indirection. Inline `tool.flatZodSchema` at both call sites.
 - `toolInputJsonSchema` constants in generated tool files — trace
-  all usages. Known consumers: `describeToolArgs()` error messages,
-  `toProtocolEntry()` (already deleted above). If `describeToolArgs()`
-  is the only remaining consumer, assess whether it can derive its
-  message from the Zod schema. **Do not delete if other consumers
-  exist** — list them explicitly.
+  all usages. If `describeToolArgs()` is the sole remaining consumer,
+  assess whether it can derive its message from the Zod schema.
 - Aggregated tool JSON Schema `inputSchema` — if `flatZodSchema`
   fully replaces it for MCP registration and no other consumer
-  exists, delete it. If consumers remain, list them and create a
-  follow-up task with a target date.
+  exists, delete it.
+- `inputSchema` field on `UniversalToolListEntry` — delete if no
+  consumers remain after the above.
 
 #### Acceptance
 
-- `preserve-schema-examples.ts` does not exist.
-- No code in the active path calls `server.server.setRequestHandler`
-  to override `tools/list`.
-- `toProtocolEntry` is deleted or has no callers.
 - `pnpm check` passes.
-- Contamination check: `rg 'preserveSchemaExamples\|toProtocolEntry'`
-  returns zero active-path hits. Test files referencing deleted
-  functions will produce compile failures caught by `pnpm type-check`
-  — the contamination grep targets production code, not test residue.
+- `rg 'zodRawShapeFromToolInputJsonSchema\|toProtocolEntry\|preserveSchemaExamples'`
+  returns zero hits in TypeScript source files.
 
 ---
 

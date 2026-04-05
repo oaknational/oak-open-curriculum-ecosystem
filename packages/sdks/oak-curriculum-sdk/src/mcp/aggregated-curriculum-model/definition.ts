@@ -12,24 +12,6 @@ import { WIDGET_URI } from '../widget-constants.js';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
 /**
- * Input schema for get-curriculum-model tool.
- *
- * Defines the optional tool_name parameter for tool-specific help inclusion,
- * allowing agents to include tool-specific help in the response.
- */
-export const GET_CURRICULUM_MODEL_INPUT_SCHEMA = {
-  type: 'object',
-  properties: {
-    tool_name: {
-      type: 'string',
-      description:
-        'Optional: name of a specific tool to include help for. If omitted, returns domain model and general tool guidance.',
-    },
-  },
-  additionalProperties: false,
-} as const;
-
-/**
  * Get-curriculum-model tool definition with full MCP metadata.
  *
  * Includes MCP annotations for behaviour hints and MCP Apps standard
@@ -51,7 +33,6 @@ Do NOT use for:
 - Looking up specific lessons, units, or resources
 
 Optionally provide a tool_name to also include specific help for that tool.`,
-  inputSchema: GET_CURRICULUM_MODEL_INPUT_SCHEMA,
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
     readOnlyHint: true,
@@ -66,7 +47,7 @@ Optionally provide a tool_name to also include specific help for that tool.`,
 /**
  * Flat Zod shape for MCP SDK registration of the get-curriculum-model tool.
  *
- * Mirrors `GET_CURRICULUM_MODEL_INPUT_SCHEMA` with `.describe()` for the
+ * Canonical Zod schema with `.describe()` for the
  * MCP SDK's native `z.toJSONSchema()` conversion. No examples defined
  * for this tool's parameters.
  */

@@ -9,7 +9,7 @@
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
+import { registerAppResource, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import {
   DOCUMENTATION_RESOURCES,
   getDocumentationContent,
@@ -165,10 +165,11 @@ export function readBuiltWidgetHtml(): string {
 }
 
 /**
- * Registers the MCP App widget resource.
+ * Registers the MCP App widget resource via `registerAppResource`.
  *
  * The widget HTML is a self-contained React app built by Vite. It is served
  * as a `text/html;profile=mcp-app` resource per the MCP Apps standard.
+ * `registerAppResource` defaults the MIME type to `RESOURCE_MIME_TYPE`.
  *
  * @param server - MCP server instance
  * @param observability - Observability for resource handler tracing
@@ -178,12 +179,12 @@ export function registerWidgetResource(
   observability: ResourceRegistrationOptions['observability'],
   getWidgetHtml: ResourceRegistrationOptions['getWidgetHtml'],
 ): void {
-  server.registerResource(
+  registerAppResource(
+    server,
     'Oak Curriculum App',
     WIDGET_URI,
     {
       description: 'Interactive Oak curriculum MCP App for search and curriculum exploration.',
-      mimeType: RESOURCE_MIME_TYPE,
     },
     wrapResourceHandler(
       'Oak Curriculum App',

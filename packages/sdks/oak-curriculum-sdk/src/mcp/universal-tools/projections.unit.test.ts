@@ -1,16 +1,11 @@
 /**
  * Unit tests for the canonical SDK descriptor projection functions.
  *
- * These tests prove that `toRegistrationConfig` and `toProtocolEntry`
- * correctly transform `UniversalToolListEntry` into the two shapes
- * MCP consumers need:
+ * These tests prove that `toRegistrationConfig` and `toAppToolRegistrationConfig`
+ * correctly transform `UniversalToolListEntry` into the shapes MCP consumers
+ * need, and that `isAppToolEntry` correctly identifies UI-bearing tools.
  *
- * 1. A **registration projection** that `registerAppTool()` / `registerTool()`
- *    can consume directly — so the app never hand-maps tool fields.
- * 2. A **protocol projection** for `tools/list` that preserves JSON Schema
- *    `inputSchema` with examples — so the app never re-serialises tool metadata.
- *
- * @see .agent/plans/sdk-and-mcp-enhancements/archive/completed/mcp-runtime-boundary-simplification.plan.md — Phase 3
+ * @see .agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md — Phase 3
  */
 
 import { describe, it, expect } from 'vitest';
@@ -18,7 +13,11 @@ import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-c
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { listUniversalTools } from './list-tools.js';
 import type { GeneratedToolRegistry, ToolRegistryDescriptor } from './types.js';
-import { toRegistrationConfig, toProtocolEntry } from './projections.js';
+import {
+  toRegistrationConfig,
+  toAppToolRegistrationConfig,
+  isAppToolEntry,
+} from './projections.js';
 
 // WIDGET_TOOL_NAMES imported from canonical source above.
 
@@ -55,6 +54,7 @@ const sampleDescriptor: ToolRegistryDescriptor = {
   },
   securitySchemes: [],
   requiresDomainContext: false,
+  _meta: { securitySchemes: [] },
 };
 
 function createFakeRegistry(): GeneratedToolRegistry {
@@ -94,45 +94,65 @@ describe('canonical descriptor projections', () => {
     });
   });
 
-  describe('toProtocolEntry — tools/list protocol projection', () => {
-    it('produces a tools/list entry with JSON Schema inputSchema', () => {
+  describe('isAppToolEntry — type guard for UI-bearing tools', () => {
+    it('returns true for widget tools that have _meta.ui.resourceUri', () => {
       const tools = listUniversalTools(registry);
-      for (const tool of tools) {
-        const entry = toProtocolEntry(tool);
-        expect(entry).toHaveProperty('name');
-        expect(entry).toHaveProperty('description');
-        expect(entry).toHaveProperty('inputSchema');
-        // JSON Schema (not Zod) — examples survive the tools/list response
-        expect(entry.inputSchema).toEqual(tool.inputSchema);
+      const widgetTools = tools.filter((t) => WIDGET_TOOL_NAMES.has(t.name));
+      expect(widgetTools.length).toBeGreaterThan(0);
+      for (const tool of widgetTools) {
+        expect(isAppToolEntry(tool)).toBe(true);
       }
     });
 
-    it('widget tools get _meta.ui.resourceUri in protocol entry, non-widget tools do not', () => {
+    it('returns false for non-widget tools without _meta.ui', () => {
       const tools = listUniversalTools(registry);
+      const nonWidgetTools = tools.filter((t) => !WIDGET_TOOL_NAMES.has(t.name));
+      expect(nonWidgetTools.length).toBeGreaterThan(0);
+      for (const tool of nonWidgetTools) {
+        expect(isAppToolEntry(tool)).toBe(false);
+      }
+    });
 
-      for (const tool of tools) {
-        const entry = toProtocolEntry(tool);
-        if (WIDGET_TOOL_NAMES.has(tool.name)) {
-          expect(entry._meta?.ui?.resourceUri).toBe(WIDGET_URI);
-        } else {
-          expect(entry._meta?.ui).toBeUndefined();
-        }
+    it('returns false for tools with _meta but no ui (generated tools with securitySchemes)', () => {
+      const tools = listUniversalTools(registry);
+      const metaWithoutUiTools = tools.filter(
+        (t) => !WIDGET_TOOL_NAMES.has(t.name) && t._meta !== undefined,
+      );
+      expect(metaWithoutUiTools.length).toBeGreaterThan(0);
+      for (const tool of metaWithoutUiTools) {
+        expect(tool._meta).toBeDefined();
+        expect(isAppToolEntry(tool)).toBe(false);
       }
     });
   });
 
-  describe('canonical source consistency', () => {
-    it('registration and protocol projections agree on description and annotations', () => {
+  describe('toAppToolRegistrationConfig — MCP App tool projection', () => {
+    it('returns config with non-optional _meta.ui.resourceUri for widget tools', () => {
       const tools = listUniversalTools(registry);
-      for (const tool of tools) {
-        const regConfig = toRegistrationConfig(tool);
-        const protoEntry = toProtocolEntry(tool);
-        expect(regConfig.description).toBe(protoEntry.description);
-        expect(regConfig.annotations).toEqual(protoEntry.annotations);
+      const appTools = tools.filter(isAppToolEntry);
+      expect(appTools.length).toBeGreaterThan(0);
+      for (const tool of appTools) {
+        const config = toAppToolRegistrationConfig(tool);
+        expect(config._meta).toBeDefined();
+        expect(config).toHaveProperty('_meta.ui.resourceUri', WIDGET_URI);
       }
     });
 
-    it('description falls back to tool name when undefined', () => {
+    it('includes inputSchema, description, and annotations', () => {
+      const tools = listUniversalTools(registry);
+      const appTools = tools.filter(isAppToolEntry);
+      expect(appTools.length).toBeGreaterThan(0);
+      for (const tool of appTools) {
+        const config = toAppToolRegistrationConfig(tool);
+        expect(config).toHaveProperty('inputSchema');
+        expect(config).toHaveProperty('description');
+        expect(config).toHaveProperty('annotations');
+      }
+    });
+  });
+
+  describe('description fallback', () => {
+    it('falls back to tool name when description is undefined', () => {
       const noDescDescriptor: ToolRegistryDescriptor = {
         ...sampleDescriptor,
         description: undefined,
@@ -151,10 +171,7 @@ describe('canonical descriptor projections', () => {
       }
       expect(generatedTool.description).toBeUndefined();
       const regConfig = toRegistrationConfig(generatedTool);
-      const protoEntry = toProtocolEntry(generatedTool);
       expect(regConfig.description).toBe(sampleMcpToolName);
-      expect(protoEntry.description).toBe(sampleMcpToolName);
-      expect(regConfig.description).toBe(protoEntry.description);
     });
   });
 });

@@ -48,7 +48,6 @@ export { AGGREGATED_TOOL_DEFS } from './definitions.js';
 export type {
   AggregatedToolName,
   UniversalToolName,
-  UniversalToolInputSchema,
   ToolAnnotations,
   ToolMeta,
   UniversalToolListEntry,
@@ -67,8 +66,13 @@ export { isZodObject, extractZodShape } from './zod-utils.js';
 // Tool listing
 export { listUniversalTools } from './list-tools.js';
 
-// Projection functions for tool registration and protocol exposure
-export { toRegistrationConfig, toProtocolEntry } from './projections.js';
+// Projection functions for tool registration
+export {
+  toRegistrationConfig,
+  toAppToolRegistrationConfig,
+  isAppToolEntry,
+  type AppToolListEntry,
+} from './projections.js';
 
 // Tool execution
 export { createUniversalToolExecutor, type UniversalToolExecutorDependencies } from './executor.js';

@@ -1,49 +1,51 @@
 /**
  * Projection functions for the canonical tool descriptor surface.
  *
- * These functions transform a `UniversalToolListEntry` into the two
- * shapes that MCP consumers need:
+ * These functions transform a `UniversalToolListEntry` into the shapes
+ * that MCP consumers need:
  *
  * 1. **Registration projection** (`toRegistrationConfig`) — the config
  *    object for `McpServer.registerTool()`, using `flatZodSchema` as
- *    the canonical input schema. The MCP SDK converts this to JSON
- *    Schema for the `tools/list` response automatically.
+ *    the canonical input schema. Used for non-UI tools.
  *
- * 2. **Protocol projection** (`toProtocolEntry`) — the `tools/list`
- *    response entry with the hand-written JSON Schema `inputSchema`.
- *    This projection exists only for the `preserve-schema-examples.ts`
- *    shim. Phase 4 deletes the shim and this projection.
+ * 2. **App tool projection** (`toAppToolRegistrationConfig`) — the config
+ *    object for `registerAppTool()`, with non-optional `_meta.ui` that
+ *    satisfies `McpUiAppToolConfig`. Used for UI-bearing tools.
  *
- * @see .agent/plans/sdk-and-mcp-enhancements/archive/completed/mcp-runtime-boundary-simplification.plan.md — Phase 3
+ * @see .agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md — Phase 3
  */
 
 import type { z } from 'zod';
 import type { SecurityScheme } from '@oaknational/sdk-codegen/mcp-tools';
+import type { McpUiAppToolConfig } from '@modelcontextprotocol/ext-apps/server';
 
-import type {
-  UniversalToolListEntry,
-  UniversalToolInputSchema,
-  ToolAnnotations,
-  ToolMeta,
-} from './types.js';
+import type { UniversalToolListEntry, ToolAnnotations, ToolMeta } from './types.js';
 
 /**
- * Returns the tool's Zod raw shape for MCP SDK registration.
+ * A `UniversalToolListEntry` known to carry `_meta.ui` metadata.
  *
- * All tools provide `flatZodSchema` — aggregated tools define it
- * directly, generated tools extract it from `toolMcpFlatInputSchema`.
+ * Widget tools (those in `WIDGET_TOOL_NAMES`) always have this field.
+ * Use `isAppToolEntry()` to narrow a `UniversalToolListEntry` to this type.
  */
-function resolveZodShape(tool: UniversalToolListEntry): z.ZodRawShape {
-  return tool.flatZodSchema;
+export interface AppToolListEntry extends UniversalToolListEntry {
+  readonly _meta: ToolMeta & { readonly ui: { readonly resourceUri: string } };
+}
+
+/**
+ * Type guard that narrows a `UniversalToolListEntry` to an `AppToolListEntry`.
+ *
+ * Returns true when the tool carries `_meta.ui.resourceUri`, indicating it
+ * should be registered via `registerAppTool()` for UI metadata normalisation.
+ */
+export function isAppToolEntry(tool: UniversalToolListEntry): tool is AppToolListEntry {
+  return tool._meta?.ui !== undefined && typeof tool._meta.ui.resourceUri === 'string';
 }
 
 /**
  * Produces the config object for `McpServer.registerTool()`.
  *
- * Resolves the inputSchema to a Zod raw shape (using `flatZodSchema`
- * when available, falling back to JSON Schema conversion). Includes
- * `_meta` for widget tools so `registerAppTool()` can normalise UI
- * metadata.
+ * Used for non-UI tools. For UI-bearing tools, use
+ * `toAppToolRegistrationConfig()` instead.
  *
  * @param tool - A universal tool list entry from `listUniversalTools()`
  * @returns Config object ready for `server.registerTool(tool.name, config, handler)`
@@ -59,7 +61,7 @@ export function toRegistrationConfig(tool: UniversalToolListEntry): {
   return {
     title: tool.annotations?.title ?? tool.name,
     description: tool.description ?? tool.name,
-    inputSchema: resolveZodShape(tool),
+    inputSchema: tool.flatZodSchema,
     securitySchemes: tool.securitySchemes,
     annotations: tool.annotations,
     _meta: tool._meta,
@@ -67,43 +69,29 @@ export function toRegistrationConfig(tool: UniversalToolListEntry): {
 }
 
 /**
- * Produces a `tools/list` protocol entry with JSON Schema inputSchema.
+ * Produces the config object for `registerAppTool()`.
  *
- * Unlike `toRegistrationConfig`, this preserves the original JSON Schema
- * (including `examples` properties) rather than converting to Zod. This
- * is necessary because Zod→JSON Schema conversion structurally drops
- * examples.
+ * Unlike `toRegistrationConfig()`, this function accepts only tools that
+ * carry `_meta.ui` and returns a config where `_meta` is non-optional with
+ * `ui` guaranteed present — satisfying `McpUiAppToolConfig`.
  *
- * Includes top-level `title` per MCP spec 2025-11-25 (distinct from
- * `annotations.title`).
+ * The spread `{ ...tool._meta }` strips `readonly` modifiers for structural
+ * compatibility with `McpUiAppToolConfig._meta`'s index signature.
  *
- * @param tool - A universal tool list entry from `listUniversalTools()`
- * @returns Protocol entry for the `tools/list` response
+ * @param tool - A universal tool list entry known to have `_meta.ui`
+ * @returns Config object ready for `registerAppTool(server, name, config, handler)`
  */
-export function toProtocolEntry(tool: UniversalToolListEntry): {
-  readonly name: string;
-  readonly title: string;
-  readonly description: string;
-  readonly inputSchema: UniversalToolInputSchema;
-  readonly outputSchema?: undefined;
+export function toAppToolRegistrationConfig(tool: AppToolListEntry): McpUiAppToolConfig & {
+  readonly inputSchema: z.ZodRawShape;
+  readonly securitySchemes: readonly SecurityScheme[] | undefined;
   readonly annotations: ToolAnnotations | undefined;
-  readonly _meta: ToolMeta | undefined;
 } {
-  // MCP spec requires inputSchema to be a JSON Schema object type.
-  // All Oak tools must have type: 'object' — fail fast if violated.
-  if (tool.inputSchema.type !== 'object') {
-    throw new TypeError(
-      `Tool ${tool.name} has inputSchema.type '${String(tool.inputSchema.type)}', ` +
-        `expected 'object'. MCP protocol requires object-type input schemas.`,
-    );
-  }
-
   return {
-    name: tool.name,
     title: tool.annotations?.title ?? tool.name,
     description: tool.description ?? tool.name,
-    inputSchema: tool.inputSchema,
+    inputSchema: tool.flatZodSchema,
+    securitySchemes: tool.securitySchemes,
     annotations: tool.annotations,
-    _meta: tool._meta,
+    _meta: { ...tool._meta },
   };
 }

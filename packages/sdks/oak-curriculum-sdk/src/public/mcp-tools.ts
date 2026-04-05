@@ -62,19 +62,16 @@ export { executeToolCall, McpToolError, McpParameterError } from '../mcp/execute
 export type { ToolExecutionResult } from '../mcp/execute-tool-call.js';
 
 export {
-  zodFromToolInputJsonSchema,
-  zodRawShapeFromToolInputJsonSchema,
-} from '../mcp/zod-input-schema.js';
-
-export {
   listUniversalTools,
   isUniversalToolName,
   isAggregatedToolName,
   createUniversalToolExecutor,
   generatedToolRegistry,
   toRegistrationConfig,
-  toProtocolEntry,
+  toAppToolRegistrationConfig,
+  isAppToolEntry,
   AGGREGATED_TOOL_DEFS,
+  type AppToolListEntry,
   type GeneratedToolRegistry,
   type UniversalToolName,
   type UniversalToolExecutorDependencies,

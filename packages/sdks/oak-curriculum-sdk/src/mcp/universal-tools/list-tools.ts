@@ -45,7 +45,6 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
       return {
         name,
         description: def.description,
-        inputSchema: def.inputSchema,
         flatZodSchema: def.flatZodSchema,
         securitySchemes: def.securitySchemes,
         annotations: def.annotations,
@@ -59,7 +58,6 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
     return {
       name,
       description: descriptor.description,
-      inputSchema: descriptor.inputSchema,
       flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema) ?? {},
       securitySchemes: descriptor.securitySchemes,
       annotations: descriptor.annotations,

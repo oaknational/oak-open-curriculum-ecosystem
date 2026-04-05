@@ -24,16 +24,6 @@ import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
- * Input schema for get-thread-progressions tool.
- * V1 has no parameters — returns the complete graph.
- */
-export const GET_THREAD_PROGRESSIONS_INPUT_SCHEMA = {
-  type: 'object',
-  properties: {},
-  additionalProperties: false,
-} as const;
-
-/**
  * Flat Zod shape for MCP SDK registration of the get-thread-progressions tool.
  * Empty shape — this tool takes no parameters.
  */
@@ -65,8 +55,6 @@ Use this to answer questions like:
 ${AGGREGATED_PREREQUISITE_GUIDANCE}
 
 Complements get-curriculum-model (which includes the schema-level property graph) with actual progression data.`,
-
-  inputSchema: GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
 
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
 

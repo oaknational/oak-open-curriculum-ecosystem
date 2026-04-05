@@ -8,7 +8,8 @@
  * The per-request HTTP handler factory lives in `mcp-handler.ts`.
  */
 
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { McpServer, ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { registerAppTool } from '@modelcontextprotocol/ext-apps/server';
 import type { Logger } from '@oaknational/logger';
 import { wrapToolHandler } from '@oaknational/sentry-mcp';
 import type { RuntimeConfig } from './runtime-config.js';
@@ -21,6 +22,8 @@ import {
   createStubToolExecutionAdapter,
   generatedToolRegistry,
   toRegistrationConfig,
+  toAppToolRegistrationConfig,
+  isAppToolEntry,
   type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
@@ -113,27 +116,28 @@ export function registerHandlers(
   const mcpObservation = options.observability.createMcpObservationOptions();
 
   for (const tool of listUniversalTools(generatedToolRegistry)) {
-    const config = toRegistrationConfig(tool);
-    server.registerTool(
+    const wrappedHandler = wrapToolHandler(
       tool.name,
-      config,
-      wrapToolHandler(
-        tool.name,
-        async (params: unknown, extra) => {
-          return handleToolWithAuthInterception({
-            tool,
-            params,
-            deps,
-            logger: options.logger,
-            apiKey: options.runtimeConfig.env.OAK_API_KEY,
-            runtimeConfig: options.runtimeConfig,
-            createAssetDownloadUrl: options.createAssetDownloadUrl,
-            authInfo: extra.authInfo,
-          });
-        },
-        mcpObservation,
-      ),
+      async (params: unknown, extra: Parameters<ToolCallback>[0]) => {
+        return handleToolWithAuthInterception({
+          tool,
+          params,
+          deps,
+          logger: options.logger,
+          apiKey: options.runtimeConfig.env.OAK_API_KEY,
+          runtimeConfig: options.runtimeConfig,
+          createAssetDownloadUrl: options.createAssetDownloadUrl,
+          authInfo: extra.authInfo,
+        });
+      },
+      mcpObservation,
     );
+
+    if (isAppToolEntry(tool)) {
+      registerAppTool(server, tool.name, toAppToolRegistrationConfig(tool), wrappedHandler);
+    } else {
+      server.registerTool(tool.name, toRegistrationConfig(tool), wrappedHandler);
+    }
   }
 
   registerAllResources(server, {

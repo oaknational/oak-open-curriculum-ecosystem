@@ -6,7 +6,10 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { GET_CURRICULUM_MODEL_TOOL_DEF, GET_CURRICULUM_MODEL_INPUT_SCHEMA } from './definition.js';
+import {
+  GET_CURRICULUM_MODEL_TOOL_DEF,
+  GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA,
+} from './definition.js';
 
 describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
   it('has description explaining its purpose', () => {
@@ -35,13 +38,8 @@ describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
   });
 });
 
-describe('GET_CURRICULUM_MODEL_INPUT_SCHEMA', () => {
-  it('accepts optional tool_name parameter', () => {
-    expect(GET_CURRICULUM_MODEL_INPUT_SCHEMA.properties.tool_name).toBeDefined();
-    expect(GET_CURRICULUM_MODEL_INPUT_SCHEMA.properties.tool_name.type).toBe('string');
-  });
-
-  it('does not allow additional properties', () => {
-    expect(GET_CURRICULUM_MODEL_INPUT_SCHEMA.additionalProperties).toBe(false);
+describe('GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA', () => {
+  it('has tool_name field', () => {
+    expect(GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA.tool_name).toBeDefined();
   });
 });

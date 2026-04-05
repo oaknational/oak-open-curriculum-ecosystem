@@ -12,9 +12,9 @@
  * ```typescript
  * import {
  *   USER_SEARCH_TOOL_DEF,
- *   USER_SEARCH_INPUT_SCHEMA,
+ *   USER_SEARCH_FLAT_ZOD_SCHEMA,
  *   USER_SEARCH_QUERY_TOOL_DEF,
- *   USER_SEARCH_QUERY_INPUT_SCHEMA,
+ *   USER_SEARCH_QUERY_FLAT_ZOD_SCHEMA,
  *   validateUserSearchArgs,
  *   runUserSearchTool,
  * } from './aggregated-user-search/index.js';
@@ -23,10 +23,8 @@
 
 export {
   USER_SEARCH_TOOL_DEF,
-  USER_SEARCH_INPUT_SCHEMA,
   USER_SEARCH_FLAT_ZOD_SCHEMA,
   USER_SEARCH_QUERY_TOOL_DEF,
-  USER_SEARCH_QUERY_INPUT_SCHEMA,
   USER_SEARCH_QUERY_FLAT_ZOD_SCHEMA,
 } from './tool-definition.js';
 export type { UserSearchArgs, UserSearchScope } from './types.js';

@@ -43,20 +43,19 @@ git log --oneline --decorate -10
 - **Workstream**: MCP App migration (WS3 widget rebuild)
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md` (**START HERE** — off-the-shelf SDK adoption, Phase 3 next)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md` (**START HERE** — off-the-shelf SDK adoption, Phase 5 next)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-brand-banner.plan.md` (companion — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: SDK adoption Phases 1–2 COMPLETE (2026-04-05).
-  All generated and aggregated tools now carry `flatZodSchema` with
-  `.describe()` and `.meta({ examples })`. `flatZodSchema` is required
-  on `UniversalToolListEntry`. Dead `zodRawShapeFromToolInputJsonSchema`
-  fallback removed. Structural equivalence test enforces
-  `inputSchema` ↔ `flatZodSchema` property/required alignment.
-  Fetch tool promoted to directory. 5 specialist reviewers passed
-  (code, type, MCP, test, Barney). `pnpm check` green.
-  UI still does not render — rendering fix is Phase 3.
-- **Current objective**: SDK adoption Phase 3 — adopt
-  `registerAppTool` and `registerAppResource` in the HTTP app.
+- **Current state**: SDK adoption Phases 1–4 COMPLETE (2026-04-05).
+  Phase 4 deleted all dual-schema dead code: `resolveZodShape()` inlined,
+  `zodFromToolInputJsonSchema` + `zodRawShapeFromToolInputJsonSchema`
+  deleted, `inputSchema` removed from `UniversalToolListEntry` and all
+  aggregated tool defs, `zod-input-schema.ts` deleted entirely, all
+  `*_INPUT_SCHEMA` constants and `GenericToolInputJsonSchema` type
+  removed. `pnpm check` green. All changes uncommitted on
+  `feat/mcp_app_ui`.
+- **Current objective**: SDK adoption Phase 5 (E2E pipeline test +
+  host verification). Then commit all Phases 1–5.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -66,13 +65,22 @@ git log --oneline --decorate -10
 - **Remaining tracked items**:
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Next safe step**: Execute SDK adoption Phase 3. Read the plan's
-  Phase 3 section. Use `registerAppTool` for UI-bearing tools and
-  `registerAppResource` for the widget resource. Create
-  `toAppToolRegistrationConfig()` projection. TDD: RED tests first.
-- **Deep consolidation status**: Completed this handoff — Phase 2
-  corrections captured as 3 feedback memories, napkin updated, plan
-  and prompt synced, platform plans checked (none need extraction).
+- **Recent surprises / corrections**: Shim had to be removed in
+  Phase 3 (not Phase 4) because it overrides `tools/list` and
+  nullifies `registerAppTool`'s `_meta` normalisation. The shim's
+  own comment about the MCP SDK not honouring `.meta()` was wrong.
+  Empty `interface extends Pick<...> {}` rejected by ESLint's
+  `no-empty-object-type` — `type` alias is the correct form when
+  delegating to off-the-shelf SDK types.
+- **Open questions / low-confidence areas**: None.
+- **Next safe step**: Execute SDK adoption Phase 5 — write
+  `mcp-app-pipeline.e2e.test.ts` asserting `tools/list` → `_meta`
+  (both keys) → `resources/read` → HTML. Then host verification in
+  Claude Code. Then commit all Phases 1–5.
+- **Deep consolidation status**: completed this handoff — Phase 4
+  milestone. Doctrine (Zod sole source) already in permanent TSDoc.
+  No pattern extraction warranted. Napkin at 492 lines (no rotation).
+  No fitness pressure from this session.
 
 ## Active Workstreams (2026-04-05)
 
@@ -93,15 +101,23 @@ Phase 3 (canonical contracts + fallback proof), Phase 4 (brand banner).
   `flatZodSchema`. `flatZodSchema` required on `UniversalToolListEntry`.
   Dead fallback removed. Structural equivalence test. Fetch promoted
   to directory. 5 specialist reviews passed. 19 new tests (726 total).
-- Phase 3 pending: `registerAppTool`/`registerAppResource` (rendering fix)
-- Phase 4 pending: delete shim + dead code + JSON Schema `inputSchema`
+- **Phase 3 COMPLETE** (2026-04-05): `registerAppTool` for UI tools,
+  `registerAppResource` for widget. Shim deleted (pulled forward from
+  Phase 4). `toProtocolEntry` deleted. `isAppToolEntry` type guard
+  and `toAppToolRegistrationConfig` projection added. Generator
+  `readonly` visibility fix. 5 specialist reviews passed. 8 new
+  tests with guard assertions.
+- **Phase 4 COMPLETE** (2026-04-05): deleted all dual-schema dead
+  code. `zod-input-schema.ts` eliminated. `inputSchema` removed from
+  `UniversalToolListEntry`. All `*_INPUT_SCHEMA` constants deleted.
+  Structural equivalence test removed (purpose fulfilled).
 - Phase 5 pending: prove pipeline end-to-end
 
 **Pending after adoption plan**: WS3 Phase 5 (user search),
 Phase 6 (docs/gates/review).
 
-**Next action**: SDK adoption Phase 3 — adopt `registerAppTool` for
-UI-bearing tools and `registerAppResource` for the widget resource.
+**Next action**: SDK adoption Phase 5 — E2E pipeline test + host
+verification. Then commit all Phases 1–5.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

@@ -7,7 +7,6 @@
  */
 
 import { z } from 'zod';
-import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import {
   AGGREGATED_PREREQUISITE_GUIDANCE,
@@ -57,33 +56,9 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
 } as const;
 
 /**
- * JSON Schema for the browse-curriculum tool inputs.
- *
- * All fields optional. An empty object returns all available facets.
- */
-export const BROWSE_INPUT_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    subject: {
-      type: 'string',
-      description: 'Filter by subject slug to see what units and lessons are available',
-      enum: [...SUBJECTS],
-      examples: ['maths', 'science', 'english'],
-    },
-    keyStage: {
-      type: 'string',
-      description: 'Filter by key stage to see what subjects and content are available',
-      enum: [...KEY_STAGES],
-      examples: ['ks2', 'ks3'],
-    },
-  },
-} as const satisfies GenericToolInputJsonSchema;
-
-/**
  * Flat Zod shape for MCP SDK registration of the browse-curriculum tool.
  *
- * Mirrors `BROWSE_INPUT_SCHEMA` with `.describe()` and `.meta({ examples })`
+ * Canonical Zod schema with `.describe()` and `.meta({ examples })`
  * for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
 export const BROWSE_FLAT_ZOD_SCHEMA: z.ZodRawShape = {

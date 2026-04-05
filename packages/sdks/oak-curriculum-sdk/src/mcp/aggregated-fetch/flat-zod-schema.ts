@@ -2,9 +2,8 @@
  * Canonical Zod input schema for the fetch tool's MCP registration.
  *
  * Uses `.describe()` and `.meta({ examples })` so the MCP SDK's native
- * `z.toJSONSchema()` conversion produces correct JSON Schema. Must stay
- * structurally equivalent to `FETCH_INPUT_SCHEMA` until Phase 4 deletes
- * the JSON Schema representation.
+ * `z.toJSONSchema()` conversion produces correct JSON Schema.
+ * This is the sole source of input schema truth for the fetch tool.
  */
 
 import { z } from 'zod';

@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
-import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
 import { listUniversalTools } from './universal-tools/list-tools.js';
 import { isUniversalToolName } from './universal-tools/type-guards.js';
 import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
@@ -94,7 +93,7 @@ describe('listUniversalTools', () => {
     const tools = listUniversalTools(registry);
     const searchTool = tools.find((tool) => tool.name === 'search');
     expect(searchTool).toBeDefined();
-    expect(searchTool?.inputSchema).toEqual(SEARCH_INPUT_SCHEMA);
+    expect(searchTool?.flatZodSchema).toBe(AGGREGATED_TOOL_DEFS.search.flatZodSchema);
   });
 });
 
