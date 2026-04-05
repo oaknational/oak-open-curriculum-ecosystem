@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; reviewer gateway ⏭️ queued; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
-**Last Updated**: 2026-04-03
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
+**Last Updated**: 2026-04-05
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -74,7 +74,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -96,6 +96,7 @@ Adjacent:
   CX:   Codex platform parity                       ✅ COMPLETE
   HC-0: Harness concepts baseline metrics            📋 PLANNED
   CTY:  Continuity/session-handoff adoption          ✅ COMPLETE
+  PCI:  Incoming Practice integration                ✅ COMPLETE
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 🔄 ACTIVE
   MCP+: MCP specialist upgrade (triplet + ext-apps)  ✅ COMPLETE
@@ -110,6 +111,7 @@ Adjacent:
   DVX:  Developer experience specialist              📋 PLANNED
   RWD:  Repair workflow wording hazard detection     📋 PLANNED
   GW:   Reviewer gateway upgrade                     ⏭️ QUEUED
+  SSC:  Cross-vendor session sidecars                📋 STRATEGIC
   AGN:  Manifest-driven adapter generation           📋 PLANNED
   ACT:  Agent classification taxonomy                📋 STRATEGIC
   OPS:  Specialist operational tooling layer         📋 STRATEGIC (ADR-137)
@@ -242,6 +244,44 @@ Adjacent:
   - Wave 1 closed with an explicit `promote` decision on 2026-04-03
   - the outgoing portable note and same-day follow-on Practice Core promotion
     both landed after the evidence window closed
+
+### Adjacent — Incoming Practice Context Integration and Write-Back
+
+- Archived plan:
+  [agent-collaboration-incoming-practice-context-integration.plan.md](archive/completed/agent-collaboration-incoming-practice-context-integration.plan.md)
+- Goal:
+  - integrate the incoming `agent-collaboration` Practice Context batch below
+    Practice Core
+  - capture the net-new gate/workspace-adoption doctrine in local pattern and
+    engineering-doc surfaces
+  - repair the concrete workspace task-export gap that the incoming analysis
+    exposed
+  - create a focused repo-targeted write-back pack under
+    `.agent/practice-context/outgoing/agent-collaboration/`
+- Status: ✅ Complete (archived reference)
+- Notes:
+  - most hydration/self-sufficiency material was already promoted locally, so
+    this round intentionally keeps Practice Core unchanged
+  - consolidation confirmed no further Practice Core or ADR promotion was
+    needed, so the plan was archived on 2026-04-05
+
+### Adjacent — Cross-Vendor Session Sidecars
+
+- Strategic plan:
+  [cross-vendor-session-sidecars.plan.md](future/cross-vendor-session-sidecars.plan.md)
+- Goal:
+  - define a local-first canonical sidecar model for structured session
+    metadata across hook, wrapper, and importer adapters
+  - keep vendor adapters thin and treat injected session context as derived,
+    not authoritative
+  - support durable repo labels, plan refs, workflow checkpoints, and handoff
+    artefacts without depending on vendor-native session titles
+- Status: 📋 Strategic reference (`future/`)
+- Notes:
+  - complements hooks portability rather than replacing it
+  - not yet queued; promote when concrete multi-vendor session ergonomics
+    justify executable work
+  - adjacent to adapter generation, but not blocked on it
 
 ### Adjacent — Sentry Specialist Capability
 

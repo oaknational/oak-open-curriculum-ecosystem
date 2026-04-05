@@ -24,7 +24,21 @@ not duplicate it here.
 This directory may be built up over time. When material is shared to another
 repo, copy the relevant files into that repo's `.agent/practice-context/incoming/`.
 
+## Structure
+
+- Keep broadly reusable support notes as flat files at this level.
+- Use repo-targeted subdirectories when the write-back is specific to one
+  source repo or one exchange round.
+- Give each repo-targeted subdirectory its own `README.md` so a receiver can
+  copy the whole pack without reverse-engineering intent.
+
 ## Current Outgoing Set
+
+### Repo-Targeted Packs
+
+| Path | Purpose |
+| ---- | ------- |
+| `agent-collaboration/` | Focused write-back from OOCE's 2026-04-05 integration of incoming `agent-collaboration` notes; captures the strongest gate/workspace-adoption signals and outgoing-pack hygiene feedback |
 
 ### Write-Back Notes (2026-04-03 promotion round)
 
@@ -69,4 +83,4 @@ the Practice in the originating repo and any downstream receivers.
 | `cross-repo-transfer-operations.md` | Operational guide for Practice Core transfers |
 | `plan-lifecycle-four-stage.md` | Plan lifecycle: active → current → paused → archive |
 | `seeding-protocol-guidance.md` | First-time Practice hydration protocol |
-| `starter-templates.md` | Starter templates for common Practice artefacts |
+| `starter-templates.md` | Starter templates for common Practice artefacts (reviewer-template pack in this repo; see repo-targeted hygiene feedback for the naming collision with incoming hydration seed templates) |

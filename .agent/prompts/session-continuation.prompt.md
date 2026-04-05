@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-04
+last_updated: 2026-04-05
 ---
 
 # Session Continuation
@@ -30,6 +30,13 @@ git log --oneline --decorate -10
 - Active plans are authoritative for scope, sequencing, acceptance criteria,
   and validation.
 - If prompt text conflicts with active plans, active plans win.
+
+## Future Strategic Watchlist
+
+- Strategic only, not active for the current workstream:
+  [cross-vendor-session-sidecars.plan.md](../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
+  tracks a local-first, cross-vendor sidecar model for durable session
+  metadata beyond vendor-native session titles.
 
 ## Live Continuity Contract
 

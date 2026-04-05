@@ -121,3 +121,94 @@ Previous rotation: 2026-04-03 at 632 lines.
   actually returns.
 - Investigation brief written at
   `~/.claude/plans/glistening-sniffing-eich.md` for next session.
+
+## Session 2026-04-05 — Session sidecars strategic brief consolidation
+
+### What Was Done
+
+- Created the future strategic brief at
+  `.agent/plans/agentic-engineering-enhancements/future/`
+  `cross-vendor-session-sidecars.plan.md` for local-first,
+  cross-vendor session sidecars and arbitrary session metadata.
+- Linked the brief from the collection README, roadmap, session
+  continuation prompt, and `hooks-portability.plan.md` so the work is
+  discoverable without promoting it prematurely.
+- During `/jc-consolidate-docs`, found a drift bug: the future hooks
+  plan had started reading like evidence of current repo-local support.
+  Reframed it explicitly as target-state architecture and anchored the
+  present-tense truth back to
+  `.agent/reference/cross-platform-agent-surface-matrix.md`.
+
+### Patterns to Remember
+
+- **Future platform plans must separate target state from current
+  support**: example configs and capability sketches are easily read as
+  "already wired here". When a repo has an authoritative support matrix
+  or execution surface, point to that as the source of present-tense
+  truth and label speculative examples as target-state only.
+
+## Session 2026-04-05 — Incoming Practice context analysis
+
+### What Was Done
+
+- Read all 13 files in `.agent/practice-context/incoming/` and compared
+  them against the local Practice Core, ADRs, patterns, bridge, and
+  operational workflows.
+- Gave extra weight to `canonical-gate-and-strict-foundation.md` and
+  `shared-strictness-requires-workspace-adoption.md`, then checked the
+  current workspace task surface against their "honest participation"
+  doctrine.
+
+### Patterns to Remember
+
+- **Incoming Practice notes can be recirculated doctrine, not net-new
+  doctrine**: most of this incoming set had already been promoted into
+  local Practice Core, ADR, or pattern surfaces. Compare against current
+  canonical homes before treating incoming support notes as new work.
+- **The strongest new signal may be repo-local rather than Core-level**:
+  the hydration/continuity/platform notes were mostly already absorbed
+  here, but the gate/strictness pair added a sharper monorepo doctrine:
+  executable aggregate gates, single package-graph ownership, and
+  workspace adoption as the proof of shared strictness.
+- **Honest gate claims depend on workspace task exports**: a root gate
+  can claim repo-wide coverage while a participating workspace still
+  lacks a task. In this repo, `agent-tools/package.json` lacks `clean`
+  even though root docs and scripts describe `pnpm clean` as cleaning
+  all build products.
+- **Filename reuse can create exchange-level semantic drift**: local
+  outgoing `starter-templates.md` is a reviewer-template pack, while the
+  incoming `starter-templates.md` is a self-sufficient-hydration seed
+  pack. Same filename, different concept. This is easy to miss and can
+  mislead future transfers.
+- **Focused write-back value deserves a repo-targeted outgoing pack**:
+  when the useful response is about what one source repo sent, keep it in
+  a target-specific subdirectory instead of flattening it into the general
+  outgoing note set. That preserves provenance and avoids pretending the
+  feedback is generic doctrine.
+
+### Follow-through
+
+- Created the rollout plan, later archived at
+  `.agent/plans/agentic-engineering-enhancements/archive/completed/`
+  `agent-collaboration-incoming-practice-context-integration.plan.md`,
+  and linked it from the collection README, current index, roadmap, and
+  session continuation prompt during execution.
+- Promoted **Shared Strictness Requires Workspace Adoption** into the
+  local pattern set and indexed it in `.agent/memory/patterns/README.md`.
+- Captured the companion aggregate-gate doctrine in
+  `docs/engineering/build-system.md`: `pnpm check` is executable truth,
+  it remains the only canonical aggregate verification command, design
+  convergence should stay centred on one package-graph owner, and repo-
+  wide claims must stay within workspace task exports.
+- Added repo-targeted outgoing-pack guidance to Practice Context docs and
+  created `.agent/practice-context/outgoing/agent-collaboration/` with
+  two focused feedback notes for the source repo.
+- Repaired the concrete honesty gap the incoming notes exposed by adding
+  `clean` to `@oaknational/agent-tools`.
+- Cleared the integrated incoming batch once the local adoption and
+  write-back surfaces were in place.
+- Ran `jc-consolidate-docs`, reviewed the relevant `~/.claude/plans/`
+  artefacts, found no additional uncaptured doctrine for this round, and
+  archived the rollout plan after confirming the durable content already
+  lived in permanent docs, the local pattern set, the outgoing pack, and
+  the napkin.

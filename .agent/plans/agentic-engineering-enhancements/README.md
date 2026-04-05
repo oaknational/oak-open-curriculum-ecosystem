@@ -30,6 +30,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `augmented-engineering-safety.research.md` | Research | Setup-agnostic safety mechanisms (hallucination guards, evidence gating, tool/sandbox controls) |
 | `archive/completed/artefact-portability-hardening.plan.md` | Plan (Completed) | Address architectural review findings: trigger content contract, portability validation, rule trigger compliance, naming/documentation gaps |
 | `future/hooks-portability.plan.md` | Plan (Future) | Bring hooks into the three-layer model: canonical scripts in `.agent/hooks/`, platform config in `.cursor/`/`.claude/`/`.gemini/` |
+| `future/cross-vendor-session-sidecars.plan.md` | Plan (Future) | Local-first canonical session sidecars for arbitrary structured metadata across hook, wrapper, and importer adapters |
 | `current/sentry-specialist-capability.plan.md` | Plan | Sentry/OpenTelemetry reviewer, skill, and situational rule (ADR-129 triplet) — covers SDK config, distributed tracing, MCP Insights, alerting |
 | `archive/completed/mcp-specialist-upgrade.plan.md` | Plan (Completed) | Upgrade `mcp-reviewer` to full ADR-129 triplet; add `@modelcontextprotocol/ext-apps` coverage |
 | `future/express-specialist-capability.plan.md` | Plan (Future) | Express 5.x reviewer, skill, and situational rule (ADR-129 triplet) — middleware, error handling, Vercel deployment |
@@ -43,6 +44,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `future/devx-specialist-capability.plan.md` | Plan (Future) | Developer experience specialist — code, repo, SDK, and CLI ergonomics and friction |
 | `future/repair-workflow-wording-hazard-detection.plan.md` | Plan (Future) | Detect ambiguous wording and missing output contracts in multi-artefact repair workflows before they trigger rewrite or promotion drift |
 | `current/reviewer-gateway-upgrade.plan.md` | Plan | Upgrade code-reviewer gateway to a full Reviewer Gateway with layered triage, depth selection, and coverage tracking |
+| `archive/completed/agent-collaboration-incoming-practice-context-integration.plan.md` | Plan (Completed) | Completed rollout for incoming `agent-collaboration` Practice Context integration, local doctrine capture, workspace-task honesty repair, and targeted write-back |
 | `future/adapter-generation.plan.md` | Plan (Future) | Manifest-driven platform adapter generation — replace 100+ manual wrapper files with a single manifest + build script |
 | `future/agent-classification-taxonomy.plan.md` | Plan (Future) | Comprehensive agent reclassification, rename, and mode composition (ADR-135) |
 

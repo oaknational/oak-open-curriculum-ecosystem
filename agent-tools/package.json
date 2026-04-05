@@ -5,6 +5,7 @@
   "description": "TypeScript tooling workspace for agent operational CLIs",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist .turbo",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",

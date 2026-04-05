@@ -8,14 +8,19 @@
 
 ADR-125 established the three-layer model for agent artefacts: canonical content in `.agent/`, thin platform adapters, and entry points. This covers skills, commands, rules, and sub-agents. Hooks — deterministic shell commands or LLM prompts that fire at lifecycle points — are a fifth artefact type not yet brought into the system.
 
-Three of four platforms now support hooks natively:
+This plan describes a **target portability architecture**, not the current
+repo-local hook baseline. The authoritative local contract remains
+[`cross-platform-agent-surface-matrix.md`](../../../reference/cross-platform-agent-surface-matrix.md),
+which currently records only Claude Code `PreToolUse` as wired in this repo.
 
-| Platform | Hook support | Configuration location | Events |
-|---|---|---|---|
-| Claude Code | Mature (4 hook types: command, HTTP, prompt, agent) | `.claude/settings.json` `hooks` key | 17 events (SessionStart, PreToolUse, PostToolUse, Stop, SubagentStart, etc.) |
-| Cursor | Supported (command hooks) | `.cursor/hooks.json` | 8+ events (preToolUse, postToolUse, afterFileEdit, beforeShellExecution, etc.) |
-| Gemini CLI | Supported (command hooks) | `.gemini/settings.json` `hooks` key | 11 events (BeforeTool, AfterTool, SessionStart, BeforeModel, etc.) |
-| Codex | Not supported | — | Feature requested (openai/codex#7396) |
+Target-state platform posture:
+
+| Platform | Repo-local status today | Target activation path if promoted |
+|---|---|---|
+| Claude Code | Supported for tracked `PreToolUse` only | `.claude/settings.json` `hooks` key |
+| Cursor | Unsupported in the local support matrix | `.cursor/hooks.json` after fresh verification and wiring |
+| Gemini CLI | Unsupported in the local support matrix | `.gemini/settings.json` `hooks` key after fresh verification and wiring |
+| Codex | Unsupported | Blocked on upstream support |
 
 ## Problem Statement
 
@@ -24,6 +29,19 @@ Without a canonical hooks layer:
 1. Hook scripts would be duplicated across `.cursor/hooks/`, `.claude/hooks/`, and `.gemini/hooks/`.
 2. The same validation logic (e.g., "block destructive commands", "auto-format after edit", "inject context at session start") would drift between platforms.
 3. Adding a new hook behaviour requires editing three configuration files with three different schemas.
+
+## Related Strategic Work
+
+Hook portability covers native lifecycle integration only. Durable
+session-associated metadata is broader than that: wrapper-only and importer-only
+vendors need the same canonical storage and query contract even when no native
+hook surface exists.
+
+See [Cross-Vendor Session Sidecars — Strategic Plan](./cross-vendor-session-sidecars.plan.md)
+for the local-first sidecar model and
+[Manifest-Driven Adapter Generation — Strategic Plan](./adapter-generation.plan.md)
+for adjacent wrapper automation. Sidecars are complementary infrastructure, not
+a prerequisite for basic hook adoption.
 
 ## Proposed Architecture
 
@@ -57,6 +75,10 @@ Scripts must not assume platform-specific stdin schemas. Each script should extr
 ### Layer 2: Platform Hook Configuration
 
 Each platform's configuration file points at the canonical scripts. The configuration is platform-specific (JSON schema differs), but the scripts they invoke are shared.
+
+The Cursor and Gemini examples below are **target-state sketches** for a future
+promotion. They are not evidence that those hook surfaces are currently wired in
+this repository.
 
 **Cursor** (`.cursor/hooks.json`):
 
@@ -152,7 +174,10 @@ Based on existing rules and directives, these are the highest-value hooks to imp
 
 ### Phase 0: Research and Design
 
-- Verify exact stdin/stdout schemas for all three platforms with real hook invocations
+- Verify exact stdin/stdout schemas for all candidate platforms with real hook
+  invocations
+- Reconcile any promotion proposal against the local support matrix before
+  wiring new activation surfaces
 - Determine whether stdin normalisation is needed or if scripts can be schema-tolerant
 - Decide on shell vs Node.js for hook scripts
 - Define the `.agent/hooks/` directory structure and README
@@ -190,7 +215,8 @@ Based on existing rules and directives, these are the highest-value hooks to imp
 ## Dependencies
 
 - ADR-125 (three-layer model) — already accepted
-- Platform hook support (Claude Code, Cursor, Gemini CLI) — already available
+- Repo-local activation beyond Claude Code `PreToolUse` — requires fresh
+  verification, wiring, and matrix updates
 - Codex hook support — blocked on upstream (openai/codex#7396)
 
 ## Non-Goals

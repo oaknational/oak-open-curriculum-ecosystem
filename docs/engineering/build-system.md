@@ -131,6 +131,20 @@ pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && pnpm sdk-codege
 `pnpm qg` surface was removed to avoid having two competing “full gate”
 stories.
 
+#### Aggregate gate doctrine
+
+- `pnpm check` is executable truth and the only canonical aggregate
+  verification command. CI, prompts, and READMEs should name this surface
+  rather than inventing alternatives.
+- Design target: a human-facing aggregate gate should own one package-graph run.
+  In practice, that means extending `pnpm check` rather than adding a
+  second competing full-gate surface. The underlying implementation may still
+  compose multiple root scripts today, but discoverability and future
+  convergence should stay centred on this one gate.
+- Repo-wide claims must stay within the workspace task exports that back them.
+  A workspace is only in the repo-wide `clean`, `type-check`, `lint`, or
+  `test` story if it actually exports that task.
+
 ### `pnpm test:all` - All test suites
 
 Runs all test types sequentially:

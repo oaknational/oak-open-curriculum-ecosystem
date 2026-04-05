@@ -104,6 +104,43 @@ Do not mark a phase complete without an entry.
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: Upgrade (not greenfield). ADR-129 triplet is now complete (reviewer, skill, rule). All must-fix, should-fix, and low-priority findings from specialist review are resolved.
 
+## Incoming Practice Context Integration and Write-Back (Adjacent Work)
+
+- Status: complete (2026-04-05)
+- ADR-119 update or rationale: No-change — this rollout integrates incoming
+  Practice Context below Practice Core and does not change the architecture of
+  the agentic engineering practice itself.
+- practice.md update or rationale: No-change — the hydration/self-sufficiency
+  cluster was already promoted locally, and this round intentionally keeps
+  Practice Core unchanged.
+- Other ADR/docs/README updates:
+  - Added the rollout plan, linked it from the collection README, current-plan
+    index, roadmap, and session continuation prompt during execution, then
+    archived it after the closeout pass
+  - Added the local process pattern
+    `.agent/memory/patterns/shared-strictness-requires-workspace-adoption.md`
+    and indexed it in `.agent/memory/patterns/README.md`
+  - Updated `docs/engineering/build-system.md` with the aggregate-gate
+    doctrine (`pnpm check` as executable truth, one package-graph run as the
+    design target, and workspace-task-export bounded claims)
+  - Updated `.agent/practice-context/README.md` and
+    `.agent/practice-context/outgoing/README.md` to support repo-targeted
+    outgoing subdirectories
+  - Added `.agent/practice-context/outgoing/agent-collaboration/` as the
+    focused write-back pack
+  - Added `clean` to `@oaknational/agent-tools` so the workspace matches the
+    repo-wide clean contract
+- Consolidation review (`jc-consolidate-docs`): complete
+- Notes: Incoming batch cleared after adoption and write-back capture.
+  Verification complete: `markdownlint-check:root`, the workspace-task scan,
+  `@oaknational/agent-tools` clean/build/test, and `pnpm check` all passed.
+  `pnpm practice:fitness` still reports pre-existing repo-wide prose/target
+  violations outside this change set. Relevant platform-side plans
+  (`~/.claude/plans/flickering-pondering-simon.md` and
+  `~/.claude/plans/rippling-meandering-canyon.md`) were reviewed during
+  consolidation and did not contain additional uncaptured doctrine for this
+  round. The plan now lives in `archive/completed/`.
+
 ## Phase 5 — Mutation Testing
 
 - Status: pending
