@@ -177,6 +177,78 @@ describe('buildZodType', () => {
       expect(buildZodType(meta, 'size', 'flat')).toBe('z.number()');
     });
   });
+
+  describe('.meta() examples emission', () => {
+    it('emits .meta({ examples }) for string example in flat context', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'string',
+        valueConstraint: true,
+        required: true,
+        allowedValues: ['ks1', 'ks2', 'ks3', 'ks4'],
+        description: 'Key stage slug',
+        example: 'ks1',
+      };
+      expect(buildZodType(meta, 'keyStage', 'flat')).toBe(
+        'z.enum(["ks1", "ks2", "ks3", "ks4"] as const).describe("Key stage slug").meta({ examples: ["ks1"] })',
+      );
+    });
+
+    it('emits .meta({ examples }) for number example in flat context', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'number',
+        valueConstraint: false,
+        required: false,
+        description: 'Offset for pagination',
+        example: 50,
+      };
+      expect(buildZodType(meta, 'offset', 'flat')).toBe(
+        'z.number().describe("Offset for pagination").meta({ examples: [50] })',
+      );
+    });
+
+    it('does not emit .meta() in nested context', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'string',
+        valueConstraint: false,
+        required: true,
+        description: 'Some param',
+        example: 'val',
+      };
+      expect(buildZodType(meta, 'param', 'nested')).toBe('z.string().describe("Some param")');
+    });
+
+    it('does not emit .meta() when example is undefined', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'string',
+        valueConstraint: false,
+        required: true,
+        description: 'No example here',
+      };
+      expect(buildZodType(meta, 'param', 'flat')).toBe('z.string().describe("No example here")');
+    });
+
+    it('does not emit .meta() for z.preprocess year params even if example exists', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'number',
+        valueConstraint: false,
+        required: true,
+        example: 5,
+      };
+      const result = buildZodType(meta, 'year', 'flat');
+      expect(result).toContain('z.preprocess(');
+      expect(result).not.toContain('.meta(');
+    });
+
+    it('emits .meta() even without description in flat context', () => {
+      const meta: ParamMetadata = {
+        typePrimitive: 'string',
+        valueConstraint: false,
+        required: true,
+        example: 'val',
+      };
+      expect(buildZodType(meta, 'param', 'flat')).toBe('z.string().meta({ examples: ["val"] })');
+    });
+  });
 });
 
 describe('buildZodFields', () => {
@@ -273,5 +345,23 @@ describe('buildZodFields', () => {
     ];
 
     expect(buildZodFields(entries, 'nested')).toEqual(['year: z.number().optional()']);
+  });
+
+  it('chains .meta() before .optional() in flat context', () => {
+    const entries: [string, ParamMetadata][] = [
+      [
+        'unit',
+        {
+          typePrimitive: 'string',
+          valueConstraint: false,
+          required: false,
+          description: 'Unit filter',
+          example: 'word-class',
+        },
+      ],
+    ];
+    expect(buildZodFields(entries, 'flat')).toEqual([
+      'unit: z.string().describe("Unit filter").meta({ examples: ["word-class"] }).optional()',
+    ]);
   });
 });

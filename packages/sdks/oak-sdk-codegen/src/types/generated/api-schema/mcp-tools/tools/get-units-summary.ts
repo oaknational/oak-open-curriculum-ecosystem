@@ -33,7 +33,7 @@ export interface ToolArgs { readonly params: ToolParams; }
 
 export const toolInputJsonSchema = { type: 'object' as const, properties: {"unit":{"type":"string","description":"The unit slug","examples":["simple-compound-and-adverbial-complex-sentences"]}} as const, additionalProperties: false as const, required: ["unit"] };
 export const toolZodSchema = z.object({ params: z.object({ path: z.object({ unit: z.string().describe("The unit slug") }) }) });
-export const toolMcpFlatInputSchema = z.object({ unit: z.string().describe("The unit slug") });
+export const toolMcpFlatInputSchema = z.object({ unit: z.string().describe("The unit slug").meta({ examples: ["simple-compound-and-adverbial-complex-sentences"] }) });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
 const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"unit":{"type":"string","description":"The unit slug","examples":["simple-compound-and-adverbial-complex-sentences"]}},"additionalProperties":false,"required":["unit"]}\nRequired: unit';
 export const describeToolArgs = () => toolArgsDescription;

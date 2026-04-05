@@ -6,6 +6,102 @@ Rotated at 579 lines after Phase 4 closure. Archived to
 Extracted 1 pattern: `review-intentions-not-just-code.md`.
 Previous rotation: 2026-04-03 at 632 lines.
 
+## Session 2026-04-05 — SDK adoption Phase 1 implementation
+
+### What Was Done
+
+- Implemented Phase 1 of the off-the-shelf MCP SDK adoption plan:
+  added `.meta({ examples })` to generated Zod schemas at codegen time.
+- Modified `buildZodType()` in `build-zod-type.ts`: removed early
+  return on `.describe()`, restructured to accumulator pattern,
+  added conditional `.meta()` emission for flat context with
+  `isYearPreprocess` guard for Option A.
+- TDD: 7 unit tests (string, number, nested exclusion, undefined
+  exclusion, year preprocess exclusion, no-description, chain order)
+  + 3 integration round-trip tests (z.toJSONSchema() produces examples).
+- Regenerated 17 tool files via `pnpm sdk-codegen`.
+- 5 specialist reviewers (code, type, MCP, test, Barney) — all passed.
+  Addressed all findings: test renamed to `.integration.test.ts`,
+  type assertions replaced with `toHaveProperty()`, speculative loop
+  replaced with explicit assertions, TSDoc added to private helper.
+- `pnpm check` green (19/19).
+
+### Patterns to Remember
+
+- **Accumulator pattern for chain builders**: when a string-building
+  function has multiple conditional stages (base type, `.describe()`,
+  `.meta()`), replacing early returns with sequential `base = ...`
+  mutations creates a single exit point. Makes future chain additions
+  trivial.
+- **`toHaveProperty()` avoids unsafe index access**: for JSON Schema
+  objects with `[k: string]: unknown` index signatures, `expect(obj)
+  .toHaveProperty('a.b.c', value)` avoids intermediate `as` casts
+  entirely. Cleaner than type guards for test assertions.
+- **The shim's own comment was wrong**: `preserve-schema-examples.ts`
+  line 49 claimed "the MCP SDK v1.28.0 uses its own internal converter
+  that does NOT honour `.meta()`". This is incorrect — the SDK calls
+  `z4mini.toJSONSchema()` which defaults to `globalRegistry`. The
+  comment was likely written without verifying the actual code path.
+  Comments about library behaviour degrade; verify against source.
+
+### Corrections (from user)
+
+- None this session.
+
+### Mistakes Made
+
+- Round-trip test initially placed at wrong directory depth (4 `../`
+  instead of 3) — import path error caught immediately by test runner.
+- Initial test file structure had extra closing brace — placed new
+  describe block outside parent describe due to insertion point error.
+- Both were mechanical errors caught in seconds by running tests.
+
+---
+
+## Session 2026-04-05 — Off-the-shelf MCP SDK adoption plan
+
+### What Was Done
+
+- Deep investigation of full pipeline: OpenAPI → adapter → codegen → SDK
+  → app → host. Traced every stage where examples were captured, lost, or
+  preserved.
+- Discovered that Zod 4.3.6 `.meta()` preserves examples through the MCP
+  SDK v1.28.0's native `z4mini.toJSONSchema()` converter. The
+  `preserve-schema-examples.ts` shim's own removal condition #1 is met.
+- Created 5-phase enhancement plan: codegen `.meta()` → aggregated tool
+  Zod schemas → `registerAppTool`/`registerAppResource` → delete shim →
+  prove pipeline.
+- Launched 4 specialist reviewers (Barney, MCP, code, type). 7 blocking +
+  14 non-blocking findings. All addressed in plan revision.
+
+### Patterns to Remember
+
+- **Workaround removal conditions go stale**: the shim documented three
+  removal conditions. Condition #1 was met when the MCP SDK upgraded to
+  Zod 4's native `toJSONSchema()`, but nobody re-checked. The shim
+  persisted and compounded with `registerAppTool` to prevent rendering.
+  Pattern extracted to `patterns/re-evaluate-removal-conditions.md`.
+- **Multi-reviewer convergence builds confidence**: all 4 reviewers
+  independently identified the `_meta` type mismatch as the critical
+  issue. The solution converged on `toAppToolRegistrationConfig()` — a
+  clean second projection function, not conditional narrowing or type
+  assertions.
+- **String-based codegen has a type-safety gap**: `.meta()` is emitted
+  as a string literal. A typo like `example` (singular) instead of
+  `examples` compiles but silently drops data. The only mitigation is
+  a test that calls `z.toJSONSchema()` and asserts the output.
+
+### Corrections (from user)
+
+- **"We don't just want the SDK for this narrow piece — we want it for
+  everything."** I was framing the fix as adopting `registerAppTool` for
+  the rendering bug. The user reframed: rolling our own was never wanted.
+  The fix is to use the official SDKs for ALL their plumbing.
+- **"Let go of the assumptions encoded in the workspaces."** I was
+  working within the existing architecture. The user wanted a fresh
+  look at the pipeline from first principles — upstream API spec → MCP
+  host, with no assumptions about existing code.
+
 ## Session 2026-04-05 — Practice Core evolution: concepts, ADRs, self-containment
 
 ### What Was Done

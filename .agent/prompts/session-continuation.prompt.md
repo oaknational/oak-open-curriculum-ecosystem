@@ -43,105 +43,60 @@ git log --oneline --decorate -10
 - **Workstream**: MCP App migration (WS3 widget rebuild)
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-app-rendering-investigation.plan.md` (**START HERE** — rendering investigation)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md` (**START HERE** — off-the-shelf SDK adoption, Phase 2 next)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-brand-banner.plan.md` (companion — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: WS3 Phase 4 is COMPLETE but UI does not render.
-  Rendering investigation blocks Phase 5.
-  Phase 4 delivered: when `get-curriculum-model` fires, the MCP App shows
-  the Oak brand banner — logo + "Oak National Academy" link. No content
-  area. Just branding. `get-curriculum-model` is a session-start proxy;
-  the data serves the agent; the banner serves the human.
-  - ✅ Slice 1: 4 contrast pairings (accent text), `font.size-400`,
-    7 banner component tokens, inline SVG logo with `currentColor`,
-    `BrandBanner.tsx`, CSS, wired into `App.tsx`, diagnostic scaffold
-    deleted, all gates green.
-  - ✅ Slice 2: MCP spec violation fixed (handler overwrite), openLink
-    fallback, `prefers-color-scheme` completeness, dead CSS removed,
-    `appInfo.version` wired, parent/companion/umbrella/roadmap plans
-    corrected, 3 specialist reviewers (design-system, a11y, mcp), all
-    findings addressed, `pnpm check` green.
-- **Current objective**: MCP App rendering investigation (blocks Phase 5).
+- **Current state**: SDK adoption Phase 1 COMPLETE (2026-04-05).
+  Generated Zod schemas now carry `.meta({ examples })`. Shim removal
+  condition #1 fully met. 5 specialist reviewers passed (code, type,
+  MCP, test, Barney). `pnpm check` green. Changes uncommitted.
+  UI still does not render — rendering fix is Phase 3
+  (`registerAppTool` adoption).
+- **Current objective**: SDK adoption Phase 2 — give aggregated tools
+  Zod input schemas with `.meta({ examples })`.
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
   - Add `user-search` as the UI-first MCP App tool
   - Do not introduce custom tool-discovery, visibility, or presentation shims
-  - The banner is NOT a "curriculum model view" — it is the brand banner
-  - `get-curriculum-model` is a session-start proxy; the banner is not a
-    view of that tool's data
-  - No content area below the banner — just the branding
-  - No routing infrastructure in Phase 4 (Phase 5 adds when needed)
-- **Recent surprises / corrections**:
-  - User corrected Phase 4 framing THREE times to nail precision:
-    (1) It is a brand banner, NOT a data renderer. (2) The banner is NOT
-    "the curriculum model view" — `get-curriculum-model` is a session-start
-    proxy. (3) The banner is displayed when the tool fires, with NO content
-    area — just the branding, centred.
-  - Parent plan Phase 4 section was corrected from "Curriculum Model
-    View" to "Brand Banner" in Slice 2.
-  - 5 specialist reviewers consulted pre-implementation: design-system,
-    accessibility, MCP, assumptions, architecture-barney. Key decisions:
-    SVG with `currentColor`, `<a href onClick>` not `<button>`, combined
-    link (H2), accent text-context pairings, callback props not SDK.
-  - Assumptions reviewer simplified plan from 5 to 4 then 3 to 2 slices.
-    Architecture-barney eliminated ToolRouter and OakLogo as separate files
-    (single-consumer rule).
-  - ESLint `lint:fix` merged value imports with type imports, breaking
-    type-check. Fixed by using inline `type` keyword in the combined import.
-- **Open questions / low-confidence areas**:
-  - `prefers-color-scheme` CSS fallback — progressive enhancement, not
-    blocking. To be tracked as follow-up.
-  - Logo SVG fidelity — the inline SVG is a geometric approximation of
-    the original PNG. Visual verification in `basic-host` needed.
+  - Use off-the-shelf ext-apps SDK functions, not hand-rolled plumbing
 - **Remaining tracked items**:
-  - **MCP App UI does not render in Claude Code** — investigation plan
-    at `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-app-rendering-investigation.plan.md`.
-    Four issues identified (two compound). Root cause: `server.registerTool`
-    instead of `registerAppTool` AND `preserve-schema-examples.ts`
-    overriding `tools/list` — these two issues compound because the
-    override bypasses the metadata normalisation that `registerAppTool`
-    would provide. Both must be resolved together.
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Next safe step**: Execute the MCP App rendering investigation.
-  Read the investigation plan (link above). The plan has 6 steps,
-  verified source references, and architecture deep-dive notes.
-  Critical insight: Issues #1 and #2 compound — see plan for details.
-  After the investigation: Phase 5 (interactive user search view).
-- **Deep consolidation status**: Completed 2026-04-04 — Phase 4 closed,
-  all plans/prompts/roadmaps corrected, napkin rotated, patterns extracted,
-  fitness checked. MCP App rendering investigation added post-closure.
+- **Next safe step**: Execute SDK adoption Phase 2. Read the plan's
+  Phase 2 section. 10 aggregated tools need `flatZodSchema` with
+  `.describe()` and `.meta({ examples })`. Start with `search` (most
+  complex). Update `listUniversalTools()` mapping and
+  `AggregatedToolDefShape` guard. TDD: RED tests first.
+- **Deep consolidation status**: Not due — Phase 1 is a mid-plan
+  milestone, no plan closure or doctrine change.
 
-## Active Workstreams (2026-04-04)
+## Active Workstreams (2026-04-05)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (rendering investigation)
+### 1. WS3 MCP App Rebuild — ACTIVE (SDK adoption)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
-**Investigation**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-app-rendering-investigation.plan.md`
+**Adoption plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md`
 
 **Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold),
 Phase 3 (canonical contracts + fallback proof), Phase 4 (brand banner).
 
-**Phase 4 summary** (COMPLETE, 2026-04-04):
+**Off-the-shelf SDK adoption progress**:
 
-- Brand banner: inline SVG logo + "Oak National Academy" link
-- 4 contrast pairings, `font.size-400`, 7 banner component tokens
-- MCP spec violation fixed (handler overwrite), `prefers-color-scheme`
-  fallback, `appInfo.version` wired, dead CSS removed
-- 8 specialist reviewers across planning and review, all findings addressed
-- `pnpm check` fully green
-- **UI does not render in Claude Code** — investigation required
+- **Phase 1 COMPLETE** (2026-04-05): codegen `.meta({ examples })`.
+  7 unit tests + 3 integration tests. 5 specialist reviews passed.
+  Shim removal condition #1 fully met.
+- Phase 2 pending: aggregated tool Zod schemas
+- Phase 3 pending: `registerAppTool`/`registerAppResource` (rendering fix)
+- Phase 4 pending: delete shim + dead code
+- Phase 5 pending: prove pipeline end-to-end
 
-**Pending**: Rendering investigation (blocks Phase 5), Phase 5 (user
-search), Phase 6 (docs/gates/review).
+**Pending after adoption plan**: WS3 Phase 5 (user search),
+Phase 6 (docs/gates/review).
 
-**Next action**: Execute the rendering investigation plan. The plan has
-verified source references and identifies that Issues #1 (wrong
-registration function) and #2 (`tools/list` override) **compound** —
-both must be resolved together. See the investigation plan for full
-details, architecture deep-dive, and 6 recommended steps.
+**Next action**: SDK adoption Phase 2 — give all 10 aggregated tools
+`flatZodSchema` with `.meta({ examples })`. Start with `search`.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

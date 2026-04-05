@@ -7,7 +7,7 @@ isProject: false
 todos:
   - id: phase-1-codegen-meta
     content: "Phase 1: Add .meta({ examples }) to generated Zod schemas at codegen time."
-    status: pending
+    status: done
   - id: phase-2-aggregated-zod
     content: "Phase 2: Give aggregated tools Zod input schemas with .meta({ examples })."
     status: pending
@@ -24,7 +24,7 @@ todos:
 
 # WS3: Off-the-Shelf MCP SDK Adoption
 
-**Status**: PENDING
+**Status**: IN PROGRESS (Phase 1 complete, Phase 2 next)
 **Last Updated**: 2026-04-05
 **Scope**: Replace hand-rolled MCP App infrastructure with canonical
 ext-apps SDK functions and Zod 4 `.meta()` for example preservation.

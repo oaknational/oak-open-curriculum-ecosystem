@@ -104,10 +104,13 @@ context with no natural permanent home.
   `sdk-codegen-workspace-decomposition.md`
   (M1 prerequisite satisfied, awaiting promotion).
   Turbo overrides are temporary — see ADR-065.
-- **Zod 4 `.meta({ examples })` opportunity**: in Zod 3, OpenAPI
-  `examples` are lost in the pipeline. Zod 4's `.meta()` attaches
-  arbitrary metadata that `z.toJSONSchema()` preserves. Could
-  eliminate `preserve-schema-examples.ts` when adopted.
+- **Zod 4 `.meta({ examples })` — verified and planned**: the MCP
+  SDK v1.28.0 uses Zod 4's native `z4mini.toJSONSchema()` for v4
+  schemas, which preserves `.meta()` data. The shim's removal
+  condition #1 is met. Adoption plan at
+  `ws3-off-the-shelf-mcp-sdk-adoption.plan.md`. Edge case:
+  `z.preprocess()` fields lose `.meta()` when `io='input'`
+  (per-field, not per-object — only 3 year params affected).
 - Always add new public exports to the barrel file
   (`src/mcp-tools.ts`) — missing barrel exports cause
   `undefined` at runtime for `instanceof` checks

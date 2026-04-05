@@ -40,6 +40,12 @@ repo, copy the relevant files into that repo's `.agent/practice-context/incoming
 | ---- | ------- |
 | `agent-collaboration/` | Focused write-back from OOCE's 2026-04-05 integration of incoming `agent-collaboration` notes; captures the strongest gate/workspace-adoption signals and outgoing-pack hygiene feedback |
 
+### Structural Evolution Guide
+
+| File | Purpose |
+| ---- | ------- |
+| `practice-core-structural-evolution.md` | How the Core grew from 5 to 8 files, why each was added, and step-by-step adoption instructions for repos with older versions |
+
 ### Write-Back Notes (2026-04-03 promotion round)
 
 These notes capture the next set of portable learnings promoted after the
