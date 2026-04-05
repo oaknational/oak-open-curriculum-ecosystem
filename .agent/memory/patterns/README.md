@@ -62,7 +62,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 
 ## Pattern Index
 
-### Code (18)
+### Code (19)
 
 - **Additive-Only Schema Decoration** -- Use this when: a decorator or enrichment pass modifies a third-party schema and must not overwrite properties that the upstream source already defines. → [additive-only-schema-decoration.md](additive-only-schema-decoration.md)
 - **Boundary Narrowing for Schema Types** -- Use this when: a schema type is optional but at a specific call site the value is known to exist, and a non-null assertion or runtime throw is tempting. → [boundary-narrowing-for-schema-types.md](boundary-narrowing-for-schema-types.md)
@@ -78,20 +78,22 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Library Types Before Local Shapes** -- Use this when: An integration parses third-party SDK responses or errors and custom local `*Like` shapes are being considered. → [library-types-before-local-shapes.md](library-types-before-local-shapes.md)
 - **Narrow Re-Exports at Boundaries** -- Use this when: a wrapper library re-exports types from an underlying SDK. → [narrow-re-exports-at-boundaries.md](narrow-re-exports-at-boundaries.md)
 - **Preprocess for Type-Preserving Coercion** -- Use this when: a Zod schema needs to accept multiple input types but preserve a narrow output type, and z.union with .transform() would widen the output. → [preprocess-for-type-preserving-coercion.md](preprocess-for-type-preserving-coercion.md)
+- **String-Based Codegen Type-Safety Gap** -- Use this when: a code generator emits code as string templates and the output includes API calls with specific argument names. → [string-codegen-type-safety-gap.md](string-codegen-type-safety-gap.md)
 - **Pure Leaf Module Extraction** -- Use this when: pure functions and I/O functions coexist in a module, and other modules need only the pure functions. → [pure-leaf-extraction.md](pure-leaf-extraction.md)
 - **Template Literal Derived Union with Builder** -- Use this when: a string union type is the cross-product of two smaller unions joined by a separator, and code constructs members at runtime via template literals. → [template-literal-derived-union.md](template-literal-derived-union.md)
 - **Unknown Until Validated** -- Use this when: a function produces data whose type cannot be statically verified and a validation boundary exists downstream. → [unknown-until-validated.md](unknown-until-validated.md)
 - **Validation Error Severity Separation** -- Use this when: a schema validation error message lists all absent fields alongside actually failing fields, making operators debug the wrong variables. → [validation-error-severity-separation.md](validation-error-severity-separation.md)
 
-### Architecture (5)
+### Architecture (6)
 
 - **Explicit Missing Resource State** -- Use this when: a numeric or boolean value can mask a missing upstream resource and create fail-open behaviour. → [explicit-missing-resource-state.md](explicit-missing-resource-state.md)
 - **Multi-Layer Schema Synchronisation** -- Use this when: a code generator produces multiple schema representations (JSON schema, Zod, transforms) from a single source and a change to input handling must be reflected across all layers. → [multi-layer-schema-sync.md](multi-layer-schema-sync.md)
 - **Rate-Limit Upstream Amplification Vectors** -- Use this when: a route produces an upstream request (API call, redirect, proxy fetch) as a side effect of handling an inbound request. → [rate-limit-upstream-amplification-vectors.md](rate-limit-upstream-amplification-vectors.md)
 - **SDK-Owned Retriever Delegation** -- Use this when: an app-layer module builds an Elasticsearch retriever shape that the SDK already owns as a shared capability. → [sdk-owned-retriever-delegation.md](sdk-owned-retriever-delegation.md)
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
+- **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (9)
+### Process (11)
 
 - **Check Driven Development** -- Use this when: writing TDD RED-phase assertions in a codebase with multiple quality gates. → [check-driven-development.md](check-driven-development.md)
 - **ChatGPT Report Normalisation** -- Use this when: recovering an LLM-exported report from markdown, DOCX, and PDF copies into durable repo-quality markdown. → [chatgpt-report-normalisation.md](chatgpt-report-normalisation.md)
@@ -102,6 +104,8 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Source-First Adopt-or-Explain Evaluation** -- Use this when: evaluating whether an existing dependency's utilities should replace hand-rolled code. → [source-first-adopt-or-explain.md](source-first-adopt-or-explain.md)
 - **Shared Strictness Requires Workspace Adoption** -- Use this when: a repo has landed a root strictness or gate foundation and it is tempting to treat the shared config itself as completion before every claimed participant actually composes it and passes under it. → [shared-strictness-requires-workspace-adoption.md](shared-strictness-requires-workspace-adoption.md)
 - **Substance Before Fitness** -- Use this when: writing concepts to files that have size/fitness limits. → [substance-before-fitness.md](substance-before-fitness.md)
+- **Three Levels of Reference Quality** -- Use this when: documentation or portable content references concepts from another context — choose between opaque pointer, descriptive name, or exported concept. → [three-levels-of-reference-quality.md](three-levels-of-reference-quality.md)
+- **Comments About External Behaviour Degrade** -- Use this when: code comments describe the behaviour of an external library, especially when asserting what it does NOT support. → [comments-about-externals-degrade.md](comments-about-externals-degrade.md)
 
 ### Testing (4)
 

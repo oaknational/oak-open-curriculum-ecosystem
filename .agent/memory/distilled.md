@@ -145,6 +145,11 @@ context with no natural permanent home.
   list — must be updated when adding new aggregated tools
 - Capturing calls in a typed array (`const calls: T[] = []`)
   beats `vi.fn().mock.calls` which leaks `any`
+- **Test pyramid gap: pieces vs composition**: unit + E2E
+  tests can all pass while the integrated product fails. If
+  a feature spans multiple modules (e.g. MCP tool → SDK →
+  host rendering), add a composition test that proves the
+  chain, not just the individual links.
 
 ## Build System (Domain-Specific)
 
