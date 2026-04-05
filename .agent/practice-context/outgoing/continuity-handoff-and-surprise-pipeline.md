@@ -2,7 +2,7 @@
 
 **Type**: Transferable Pattern
 **Origin**: oak-mcp-ecosystem (2026-04-03 promotion)
-**Related ADR**: ADR-150 (Continuity Surfaces, Session Handoff, and Surprise Pipeline)
+**Related concept**: Continuity Surfaces, Session Handoff, and Surprise Pipeline
 
 ## Summary
 

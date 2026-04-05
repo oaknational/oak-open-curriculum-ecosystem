@@ -4,12 +4,38 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-05 — Concept Exchange, ADR Bootstrap, Self-Containment
+
+- Promoted "concepts are the unit of exchange" as a foundational
+  principle in practice.md Philosophy section. The Practice learns,
+  teaches, compares, and evolves at the concept level — not the file or
+  name level. The knowledge flow extracts concepts from instances;
+  Practice exchange compares concepts across repos.
+- Promoted "substance before fitness" as a foundational principle.
+  Concepts must be written at the weight they deserve first; fitness
+  limits are a post-writing editorial concern.
+- Added Architectural Decision Records section to practice-bootstrap.md:
+  portable ADR template, lifecycle states, learning loop connection.
+  ADRs are the graduation target of the knowledge flow.
+- Strengthened self-containment: travelling content must carry the
+  concept itself (what, how, why), not a pointer to where a host repo
+  documents it. A descriptive name is better than an opaque number, but
+  a name alone is still a pointer — the substance must travel.
+- Removed all host-repo-specific ADR references from Practice Core
+  files (6 occurrences of "ADR-144" across 3 files, replaced with
+  concept descriptions).
+- Reframed Integration Flow step 3 to operate at the concept level:
+  "compare at the concept level, not file-by-file."
+- Compressed redundant content across practice.md, practice-bootstrap.md,
+  and practice-lineage.md to accommodate new material within fitness
+  limits — holistically, after writing, not during.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-03 — Operational Estate and Provenance UUID Migration
 
 - Migrated `provenance.yml` from sequential `index` integers to UUID v4 `id`
   fields across all three chains (63 existing entries + 3 new entries).
   Eliminates implied hierarchy and merge-conflict risk during plasmid exchange.
-  Updated field specification in practice-lineage.md. See ADR-152.
+  Updated field specification in practice-lineage.md.
 - Added Minimum Operational Estate section to practice-bootstrap.md: defines
   6 mandatory surface categories (core+bridge, memory, continuity host,
   planning scaffold, platform truth, validators) that must exist beyond the
@@ -24,7 +50,7 @@ Practice Core package.
   parity, runtime)
 - Added Continuity Contract subsection to practice-bootstrap.md Skills: host
   surface as verification target, contract fields, surprise pipeline, split
-  between session-handoff and consolidate-docs. Cross-references ADR-150
+  between session-handoff and consolidate-docs
 - Added cross-platform integration order and policy-spine authority hierarchy
   to the Artefact Model section
 - Extended Ecosystem Survey with deliberate-omission protocol: absent concepts

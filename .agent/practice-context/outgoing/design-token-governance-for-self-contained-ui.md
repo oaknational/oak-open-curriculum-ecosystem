@@ -2,7 +2,7 @@
 
 **Type**: Transferable Architectural Note
 **Origin**: oak-mcp-ecosystem (2026-04-03)
-**Related**: ADR-148, ADR-151
+**Related concepts**: Design Token Architecture, MCP App Styling Independence
 
 ## Summary
 

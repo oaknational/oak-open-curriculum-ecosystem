@@ -2,7 +2,7 @@
 
 **Type**: Transferable Principle
 **Origin**: oak-mcp-ecosystem (2026-04-03 promotion)
-**Related ADR**: ADR-125 (Agent Artefact Portability)
+**Related concept**: Agent Artefact Portability
 
 ## Summary
 

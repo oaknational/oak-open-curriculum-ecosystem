@@ -19,12 +19,15 @@ companion (`practice-verification.md`), the entry points (`README.md` and
 (`provenance.yml`). If
 `.agent/practice-context/outgoing/` exists, relevant files may be copied into the receiving repo's
 `.agent/practice-context/incoming/` as optional support material, but they are not part of the Core.
+**Before propagating**, verify that neither Core nor Context files
+reference host-repo artefacts (ADR numbers, local paths, entity names).
+Content must carry the concept itself, not just a name or pointer.
 See §Frontmatter and §Plasmid Exchange below.
 
 ## Frontmatter
 
 The trinity files carry YAML frontmatter with `provenance` (pointer to
-`provenance.yml`) and four fitness thresholds (ADR-144):
+`provenance.yml`) and four fitness thresholds (two-threshold model):
 `fitness_line_target` (soft), `fitness_line_limit` (hard),
 `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100).
 All measure content only — frontmatter excluded. See §Fitness Functions.
@@ -206,11 +209,10 @@ The knowledge flow is the Practice's central mechanism. See
 [practice.md §The Knowledge Flow](practice.md#the-knowledge-flow) for the full treatment: the cycle
 diagram, three-audience model, fitness functions at every stage, and feedback properties.
 
-The condensed cycle: **Capture** (napkin, always on) → **Refine** (distilled, periodic) →
-**Graduate** (permanent docs, on consolidation) → **Enforce** (rules & directives, always on) →
-**Apply** (work) → repeat. Each stage serves a broader audience: the napkin serves the current
-session, distilled serves future agents, permanent docs serve everyone. Each transition raises the
-bar.
+The condensed cycle: **Capture** (napkin) → **Refine** (distilled) →
+**Graduate** (permanent docs) → **Enforce** (rules & directives) →
+**Apply** (work) → repeat. Each transition extracts concepts from
+instances and raises the bar for a broader audience.
 
 The flow has two critical properties: **self-replicating** (the
 mechanism travels via plasmid exchange — receiving repos inherit the
@@ -269,7 +271,7 @@ The three-part bar governs what enters but not cumulative growth. Without
 fitness limits, files bloat — compounded by plasmid exchange adding content
 across repos.
 
-### Thresholds (Two-Threshold Model — ADR-144)
+### Thresholds (Two-Threshold Model)
 
 Four fitness fields govern each tracked file. All measure content only
 (frontmatter excluded). Width applies to prose only (code blocks, tables,
@@ -337,10 +339,13 @@ When Practice Core files appear in the Practice Box:
    `incoming/` if they exist — to understand what they learned and why. The `purpose` field in each
    provenance entry tells you what kind of work shaped the evolution — use this to assess relevance
    to the local context.
-3. **Compare** with the local Practice and Lineage. Identify differences — not just in the lineage
-   doc, but across the full Practice system (directives, rules, skills, commands). Ask:
-   does the incoming version reveal principles that the local Practice implements implicitly but
-   hasn't named? Does the compression reveal what's essential versus contextual?
+3. **Compare at the concept level** — not file-by-file. The incoming
+   Practice may express the same concepts under different names,
+   structures, or artefacts. Ask: does it reveal principles that the
+   local Practice implements implicitly but hasn't named? Does the
+   local Practice already have the concept but with different
+   mechanics? What is genuinely new substance versus what is a
+   different encoding of something already understood?
 4. **Apply the same bar.** Does the incoming learning meet the structural-change criteria for *this*
    repo? (Validated by real work? Prevents recurring mistakes? Stable?)
 5. **Propose changes** to the user. Be specific: which files across the Practice would change and
@@ -534,12 +539,31 @@ validated across 3+ repos.
   responsibility, not compression.
 - **Practice Core files must be self-contained.** No navigable links outside `practice-core/` except
   `../practice-index.md`. All other external paths as code-formatted text.
+- **Concepts are the unit of exchange.** All Practice exchange —
+  outgoing content, incoming integration, two-way comparison — operates
+  at the concept level: what something is, how it works, why it
+  matters. Not at the file level, not at the pointer level. A name
+  like "the two-threshold fitness model" is better than "ADR-144", but
+  a name alone is still a pointer — the substance must travel. Two
+  repos may implement the same concept under different names and
+  structures; concept-level comparison reveals equivalences that
+  file-level diffing misses. This is both a self-containment guard
+  (no host-repo references in travelling content) and the correct
+  abstraction for Practice evolution. The practice-index bridges
+  portable concepts to each host's local artefacts.
 - **Paused is not future.**
 - **Agent files are first-class infrastructure.** They are executable agent code in markdown —
   subject to DRY, SOLID, and production-code rigour.
 - **Portable does not mean symmetrical.** Support only evidenced platform mappings.
 - **Architectural excellence over expediency.**
 - **Apps are thin; libraries own domain logic.**
+- **Substance before fitness.** When writing concepts to their correct
+  homes, always write at the weight the concept deserves first. Deal
+  with fitness limits holistically afterward — compress, split, or
+  raise limits as a separate editorial pass. Constraining a concept
+  during writing to avoid exceeding a count artificially underweights
+  vital understanding. The concept must arrive fully formed; the
+  container adjusts to hold it.
 
 ### Active Principles
 

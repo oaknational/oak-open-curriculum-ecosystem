@@ -1,7 +1,7 @@
 # Two-Threshold Fitness Functions
 
 > **Origin**: oak-mcp-ecosystem, 2026-03-19 (three-dimension model),
-> evolved 2026-04-01 (two-threshold model, ADR-144)
+> evolved 2026-04-01 (two-threshold model)
 > **Status**: Proven innovation — adopted in the portable Core and
 > the live repo-wide validator
 

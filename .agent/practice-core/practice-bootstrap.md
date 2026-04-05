@@ -31,23 +31,19 @@ examples. Before creating any artefacts, the hydrating agent MUST:
    infrastructure. Determine whether this is a cold start,
    augmentation, or restructuring.
 2. **Assess alignment**: identify what the repo already has that meets or
-   exceeds Practice principles. Existing standards that are at least as
-   rigorous as the Practice MUST be preserved.
+   exceeds Practice principles.
 3. **Adapt templates**: substitute local tooling in every template. File
    extensions (`*.unit.test.ts` becomes `*_test.go`, `test_*.py`, etc.),
    tool names (`Vitest` becomes `pytest`, `go test`, etc.), configuration
    formats, and platform conventions all change.
-4. **Never overwrite**: preserve any local standard or Practice mechanism
-   that already meets or exceeds the blueprint. These are adaptations,
-   not deviations.
+4. **Never overwrite**: preserve anything that already meets or exceeds
+   the blueprint. These are adaptations, not deviations.
 5. **Record deliberate omissions**: when a concept is intentionally not
-   installed (specific reviewer families, hook layers, schema-first if
-   inapplicable, continuity host variants), record the absence in live
-   operational surfaces (`practice-index.md`, `AGENT.md`) with rationale
-   and conditions for future adoption. A broken reference is not proof of
-   required restoration — check the local changelog and current execution
-   surfaces before restoring a referenced concept. Hydration is incomplete
-   until local adaptation decisions are written down.
+   installed, record the absence in live operational surfaces
+   (`practice-index.md`, `AGENT.md`) with rationale and conditions for
+   future adoption. A broken reference is not proof of required
+   restoration — check the changelog and execution surfaces first.
+   Hydration is incomplete until adaptation decisions are written down.
 
 ## The Artefact Model
 
@@ -93,25 +89,22 @@ the canonical source. Add a portability validation script to the quality
 gates to enforce this.
 
 Where a repo supports multiple agent platforms, keep a local surface matrix
-(for example `.agent/reference/cross-platform-agent-surface-matrix.md`) that
-records supported and unsupported mappings explicitly. Do not infer broad
-parity from the presence of one portable adapter family.
+(e.g. `.agent/reference/cross-platform-agent-surface-matrix.md`) recording
+supported and unsupported mappings explicitly.
 
 **Cross-platform integration order** — never reverse this sequence:
 
-1. Decide which platforms are genuinely first-class in the receiving repo.
-2. Install canonical surfaces first: local bridge, memory, continuity
-   host, planning scaffold, hook policy (if hooks are supported).
-3. Write the local surface matrix with explicit supported and unsupported
-   states.
+1. Decide which platforms are first-class in the receiving repo.
+2. Install canonical surfaces: local bridge, memory, continuity host,
+   planning scaffold, hook policy (if supported).
+3. Write the local surface matrix with explicit states.
 4. Add thin adapters and tracked platform config.
 5. Add parity checks and health checks.
 
-Activation before canonical source is a structural bug — it creates a broken
-install that false-greens on parity checks. The four-layer authority hierarchy
-for hook and platform surfaces is: canonical policy → native activation →
-repo-local runtime → explanatory mirrors. Lower layers activate or describe;
-they do not redefine higher-authority intent.
+Activation before canonical source is a structural bug. The four-layer
+authority hierarchy: canonical policy → native activation → repo-local
+runtime → explanatory mirrors. Lower layers activate or describe; they
+do not redefine higher-authority intent.
 
 ## Metacognition
 
@@ -122,21 +115,20 @@ those reflections — those are your insights. Consider what those insights
 teach you about the original problem and your assumptions. How does that
 change the framing? Why?
 
-This process costs nothing and prevents shallow execution. Apply it before
-every plan, every architectural decision, and every non-trivial
-implementation choice. Create this as `.agent/directives/metacognition.md`
-(it is universal — no project-specific content).
+This costs nothing and prevents shallow execution. Apply before every
+plan, architectural decision, and non-trivial implementation. Create as
+`.agent/directives/metacognition.md` (universal — no project-specific
+content).
 
 **Critical**: Metacognition is a **technology**, not a checklist. The
 directive must create recursive self-reflection through explicitly named
 layers (thoughts → reflections → insights), with each layer's output
 becoming the next layer's input. Common failure modes:
 
-- **The "not even wrong" failure**: replacing the recursive prompt with a
-  planning template ("state outcome, state alternatives, state risks").
-  The result is not a weakened version of metacognition — it is a
-  different thing that prevents the depth it was meant to create. A
-  planning template produces plans; the metacognitive prompt produces
+- **The "not even wrong" failure**: replacing the recursive prompt with
+  a planning template. The result is not weakened metacognition — it is
+  a different thing that prevents the depth it was meant to create.
+  Planning templates produce plans; the metacognitive prompt produces
   insights about the nature of the work itself.
 - **The recursive failure**: when the metacognition directive is broken,
   you cannot use metacognition to discover that it is broken. Detection
@@ -152,11 +144,9 @@ becoming the next layer's input. Common failure modes:
 
 ## The Practice Index (.agent/practice-index.md)
 
-The Practice Index is the bridge between the portable Practice Core and the
-local repo. It is **not** part of the travelling package — it is created
-during hydration and stays in the repo. Practice Core files link to it via
-`../practice-index.md`; it carries the navigable links to the repo's actual
-artefacts.
+The Practice Index bridges the portable Practice Core and the local repo.
+It is **not** part of the travelling package — created during hydration
+and stays in the repo. Core files link to it via `../practice-index.md`.
 
 ### Required sections
 
@@ -231,6 +221,65 @@ code). Make explicit that strictness means complete proof in the correct layer
 rather than forcing type, lint, import-boundary, or repo-state checks into
 tests.
 
+## Architectural Decision Records (ADRs)
+
+ADRs are the **graduation target** of the learning loop. When captured
+experience (napkin → distilled) settles into a permanent architectural
+decision, it becomes an ADR. ADRs are the architectural source of truth:
+they record _why_ the system is shaped as it is, not just what it does.
+Rules and directives operationalise ADRs; code implements them; quality
+gates enforce them. Without ADR infrastructure, the learning loop has no
+permanent destination for architectural knowledge.
+
+### Location and Index
+
+ADRs conventionally live in a dedicated directory (e.g.
+`docs/architecture/architectural-decisions/`). Each is a numbered
+markdown file. The directory contains a `README.md` index — the entry
+point for architectural orientation, with a **Start Here** section
+listing foundational ADRs.
+
+### ADR Template
+
+```markdown
+# ADR-{NNN}: {Title}
+
+**Status**: Proposed | Accepted | Superseded by ADR-{NNN} | Deprecated
+**Date**: {YYYY-MM-DD}
+**Related**: [ADR-{NNN}]({filename}) — {relationship}
+
+## Context
+
+{What situation or problem prompted this decision? What constraints
+apply? What prior decisions does this build on?}
+
+## Decision
+
+{What was decided and why. Be specific enough that an agent or
+engineer can determine whether code complies.}
+
+## Consequences
+
+{What follows from this decision — positive, negative, and neutral.
+Include migration impact if replacing a prior approach.}
+```
+
+### Lifecycle
+
+- **Proposed**: under discussion, not yet binding.
+- **Accepted**: binding. Code, rules, and quality gates must comply.
+- **Superseded**: replaced by a newer ADR. Keep the file; update status
+  and link to the successor.
+- **Deprecated**: no longer applicable (e.g. workspace removed).
+
+### Connection to the Learning Loop
+
+ADRs are created when a decision is significant enough to shape future
+work. The consolidation workflow checks whether completed work produced
+decisions that should be recorded. Custom lint rules can encode
+ADR constraints as automated enforcement — graduating knowledge into
+quality gates.
+
 ## Rules: Canonical Rules and Platform Triggers
 
 The rules system has three layers:
@@ -286,20 +335,15 @@ not modelled as skills.
 
 ## Sub-agents: Templates and Platform Adapters
 
-When a repo has installed reviewer or domain-expert agents, canonical
-sub-agent prompts live in `.agent/sub-agents/templates/*.md`
-(platform-agnostic). For a production app, use the three-layer composition
-system: shared components → canonical templates → thin platform adapters.
-If the agent layer is not yet installed, make that status explicit in
-`AGENT.md` and the local Practice bridge rather than implying a roster
-exists.
+Canonical sub-agent prompts live in `.agent/sub-agents/templates/*.md`
+(platform-agnostic). Production apps use three-layer composition: shared
+components → canonical templates → thin platform adapters. If the agent
+layer is not yet installed, make that status explicit in `AGENT.md` and
+the Practice bridge.
 
 Platform adapters contain only activation metadata and a pointer to the
-canonical template: Cursor `.cursor/agents/*.md`, Claude Code
-`.claude/agents/*.md`, GitHub Copilot `.github/agents/*.agent.md`, and Codex
-project-agent config under `.codex/`. If a platform has no supported
-sub-agent surface in the local matrix, keep that state explicit rather than
-inventing a partial adapter family.
+canonical template (see Artefact Model table for paths). Unsupported
+platforms stay explicit in the local matrix.
 
 ### Template Structure
 
@@ -333,14 +377,9 @@ or browser-facing specialists.
 ## Commands: Canonical and Platform Adapters
 
 Canonical commands in `.agent/commands/*.md` contain the substantive
-workflow instructions. Platform adapters use the `jc-*` prefix consistently
-across all platforms and contain only a pointer to the canonical command.
-
-### Formats
-
-Canonical commands contain the substantive workflow. Platform adapters are
-thin wrappers: Cursor uses `@` injection, Claude Code YAML + `$ARGUMENTS`,
-Gemini TOML + `{{args}}`, and Codex `.agents/skills/jc-*/SKILL.md` with
+workflow. Platform adapters use the `jc-*` prefix consistently and are
+thin wrappers: Cursor `@` injection, Claude Code YAML + `$ARGUMENTS`,
+Gemini TOML + `{{args}}`, Codex `.agents/skills/jc-*/SKILL.md` with
 `name`/`description` frontmatter. Unsupported states belong in the local
 surface matrix.
 
@@ -503,19 +542,16 @@ Body sections: **Principle** (one-paragraph statement), **Pattern**
 **Index**: maintain a `README.md` in `.agent/memory/patterns/` with a
 short description for each pattern.
 
-**Cross-repo exchange**: when a pattern is Practice-relevant and
-cross-repo-applicable, copy it to
-`.agent/practice-context/outgoing/patterns/` so it can travel with the
-Practice Context exchange pack. Receiving repos apply the same three-part
-bar as any other Practice material; adopted patterns move to local
+**Cross-repo exchange**: copy Practice-relevant patterns to
+`.agent/practice-context/outgoing/patterns/` for exchange. Receiving
+repos apply the same three-part bar; adopted patterns move to local
 `.agent/memory/patterns/`.
 
 ### Consolidation Workflow
 
-The consolidation command drives the Knowledge Flow's graduation cycle. It
-is the operational mechanism that converts captured experience into settled
-Practice. Every repo adopting the Practice should implement a consolidation
-command with the following abstract workflow:
+The consolidation command drives the Knowledge Flow's graduation cycle —
+converting captured experience into settled Practice. Every repo should
+implement a consolidation command with this abstract workflow:
 
 1. **Verify documentation is current.** Architectural decisions, system
    behaviour, and technical reference should already be in permanent
@@ -536,45 +572,47 @@ command with the following abstract workflow:
    raise with the user (the gap in documentation structure is the
    signal); not yet stable — leave for further validation. Fitness
    limits are a signal to action (step 6), never a reason to defer.
-6. **Manage fitness thresholds** (see ADR-144). Two levels:
-   - *Target exceeded* (warning): **refine** (compress, deduplicate),
+6. **Manage fitness thresholds** (two-threshold model). **Important**:
+   fitness is a post-writing editorial concern, never a writing
+   constraint. Always write concepts at the weight they deserve first,
+   then deal with limits holistically in this step. Constraining a
+   concept during writing to stay within a count artificially
+   underweights vital understanding.
+   - _Target exceeded_ (warning): **refine** (compress, deduplicate),
      **split** (follow `split_strategy`), or **extend target** (agents
      may raise `fitness_line_target` modestly with rationale).
-   - *Limit exceeded* (blocking): **refine** or **split** to get below
+   - _Limit exceeded_ (blocking): **refine** or **split** to get below
      the limit. Only the user may raise `fitness_line_limit`,
      `fitness_char_limit`, or `fitness_line_length`.
 7. **Manage the practice exchange.** Two directions:
-   - *Incoming*: integrate files from `.agent/practice-core/incoming/`
+   - _Incoming_: integrate files from `.agent/practice-core/incoming/`
      following the provenance chain and three-part bar. Practice evolution
      is not linear — incoming can be behind in some areas and ahead in
      others. Compare bidirectionally. Clear the box only after user-
      approved integration, never unilaterally.
-   - *Outgoing*: broadcast domain-specific observations and structural
+   - _Outgoing_: broadcast domain-specific observations and structural
      notes to `.agent/practice-context/outgoing/`. Content appropriate for
      Practice Core itself (Learned Principles, structural proposals,
      bootstrap improvements) goes as Core proposals with user approval.
+     All outgoing content must carry the **concept itself** — not a
+     pointer to where this repo documents it. No ADR numbers, no local
+     paths. The substance must be understandable without the source repo.
 
 ## Platform Configuration
 
 Treat platform config like source code: tracked project settings define the
-shared agentic contract, while gitignored local settings carry user-specific
-overrides. Typical pairs are `.claude/settings.json` +
-`.claude/settings.local.json`, `.cursor/settings.json` +
-`.cursor/settings.local.json`, `.gemini/settings.json` +
-`.gemini/settings.local.json`, plus `.codex/config.toml` and a local override
-only if the platform documents one.
+shared agentic contract, gitignored local settings carry user-specific
+overrides. Each platform has a tracked/local pair (e.g.
+`.claude/settings.json` + `.claude/settings.local.json`), plus
+`.codex/config.toml` and a local override only if documented.
 
-Tracked settings carry required permissions, hook activation, plugin state, and
-other fresh-checkout affordances. Local settings carry paths, one-off
-permissions, and machine-specific wiring. Wrappers can exist while the
-platform silently blocks them, so portability checks must verify
-authorisation parity, not just wrapper presence.
-
-The most dangerous platform-config failure mode is silent: everything looks
-installed, but the platform refuses to run commands or hooks because
-permissions were never granted in tracked project config. A fresh checkout
-must have enough tracked platform config to run the intended agentic
-workflows. Normal operation must not depend on gitignored local settings.
+Tracked settings carry required permissions, hook activation, plugin state,
+and fresh-checkout affordances. Local settings carry paths, one-off
+permissions, and machine-specific wiring. The most dangerous failure mode is
+silent: wrappers exist but the platform refuses to run them because
+permissions were never granted in tracked config. Portability checks must
+verify authorisation parity, not just wrapper presence. Normal operation
+must not depend on gitignored local settings.
 
 ## Verification
 

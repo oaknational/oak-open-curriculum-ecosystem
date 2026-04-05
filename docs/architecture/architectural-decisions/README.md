@@ -260,12 +260,51 @@ For understanding the now deprecated and removed biological architecture:
 
 ## About ADRs
 
-Architecture Decision Records (ADRs) capture important architectural decisions made in the project. Each ADR includes:
+Architecture Decision Records (ADRs) are the **graduation target** of the
+learning loop. When captured experience settles into a permanent
+architectural decision, it becomes an ADR. ADRs are the architectural
+source of truth: they record _why_ the system is shaped as it is, not
+just what it does. Rules and directives operationalise ADRs; code
+implements them; quality gates enforce them. Custom ESLint rules can
+encode ADR constraints as automated enforcement — graduating knowledge
+into quality gates.
 
-- **Status**: Whether the decision is accepted, superseded, or deprecated
-- **Context**: The situation and forces at play
-- **Decision**: The change we're making
-- **Rationale**: Why we chose this approach
-- **Consequences**: What we expect to happen (both positive and negative)
+### Template
 
-ADRs help future developers (including ourselves) understand why the architecture is the way it is.
+```markdown
+# ADR-{NNN}: {Title}
+
+**Status**: Proposed | Accepted | Superseded by ADR-{NNN} | Deprecated
+**Date**: {YYYY-MM-DD}
+**Related**: [ADR-{NNN}]({filename}) — {relationship}
+
+## Context
+
+{What situation or problem prompted this decision? What constraints
+apply? What prior decisions does this build on?}
+
+## Decision
+
+{What was decided and why. Be specific enough that an agent or
+engineer can determine whether code complies.}
+
+## Consequences
+
+{What follows from this decision — positive, negative, and neutral.
+Include migration impact if replacing a prior approach.}
+```
+
+### Lifecycle
+
+- **Proposed**: under discussion, not yet binding.
+- **Accepted**: binding. Code, rules, and quality gates must comply.
+- **Superseded**: replaced by a newer ADR. Keep the file; update status
+  and link to the successor.
+- **Deprecated**: no longer applicable (e.g. workspace removed).
+
+### Creating an ADR
+
+ADRs are created when a decision is significant enough to shape future
+work. The consolidation workflow checks whether completed work produced
+decisions that should be recorded. Number sequentially from the highest
+existing ADR. Add the new entry to the Index above.

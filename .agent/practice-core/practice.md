@@ -58,7 +58,30 @@ enforcement** is a core philosophical commitment: preferring physical
 constraints (lint rules, boundary tooling) over human vigilance. **Strict and
 complete, everywhere, all the time** is the operational expression of that
 commitment: prefer fully enforced truth in the correct layer over permissive,
-partial, or hand-wavy systems. This layer defines _why_ the Practice works.
+partial, or hand-wavy systems.
+
+**Concepts are the unit of exchange.** The Practice learns, teaches, compares,
+and evolves at the concept level — not the file level, not the name level.
+Every major Practice mechanism is an expression of this principle. The
+knowledge flow extracts concepts from instances: the napkin captures what
+happened, distillation extracts the reusable understanding, graduation places
+it where everyone benefits. Metacognition extracts concepts from thoughts: the
+recursive layers produce insights that are themselves concepts about the work.
+The three-part bar (validated, recurring, stable) filters instances from
+concepts. Practice exchange compares concepts across repos: two repos may
+implement the same idea under different names, and concept-level comparison
+reveals equivalences that file-level diffing misses. Travelling content must
+carry the concept itself — what it is, how it works, why it matters — not a
+pointer to where a host repo documents it.
+
+**Substance before fitness.** When writing concepts to their correct homes,
+always write at the weight the concept deserves first. Deal with fitness
+limits holistically afterward — through compression, splitting, or raising
+limits. Artificially constraining a concept during writing to stay within a
+count underweights vital understanding. Fitness is a post-writing editorial
+concern, never a writing constraint.
+
+This layer defines _why_ the Practice works.
 
 ### Structure
 
@@ -84,9 +107,12 @@ defines _how_ the Practice is used in a specific environment.
 
 ## The Knowledge Flow
 
-The knowledge flow is the Practice's central mechanism. It converts raw experience into settled
-knowledge through a progression of stages, each serving a broader audience and demanding a stricter
-bar for entry.
+The knowledge flow is the Practice's central mechanism. It converts raw
+experience into settled knowledge by extracting concepts from instances.
+A specific mistake becomes a reusable pattern; a repeated correction
+becomes a rule; a structural decision becomes an ADR. Each stage serves
+a broader audience and demands a stricter bar — the progression from
+capture to graduation is the progression from instance to concept.
 
 ### The Cycle
 
@@ -103,15 +129,12 @@ graph LR
 
 ### Three Audiences
 
-Each stage exists because it serves a different audience. The progression from capture to graduation
-is a progression from narrow to broad.
-
 | Stage        | Artefact                                | Audience                                | Fitness governor                                                                                  |
 | ------------ | --------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | **Capture**  | Napkin                                  | Current session                         | ~500 lines → distillation                                                                         |
 | **Refine**   | Distilled learnings                     | Future agents                           | ~200 lines → extraction to permanent docs                                                         |
 | **Graduate** | ADRs, governance docs, READMEs, TSDoc   | Everyone — humans and agents            | Per-file fitness frontmatter → split by responsibility                                            |
-| **Enforce**  | Rules, directives, always-applied rules | All agents, automatically               | `fitness_line_target`/`fitness_line_limit` frontmatter on directives (ADR-144)                     |
+| **Enforce**  | Rules, directives, always-applied rules | All agents, automatically               | `fitness_line_target`/`fitness_line_limit` frontmatter on directives (two-threshold fitness model) |
 | **Inform**   | Code patterns                           | Engineers facing a recognised situation  | Barrier: broadly applicable, proven, recurring, stable. Practice-relevant patterns may travel via the exchange pack |
 
 Not everything in the napkin survives distillation, and not everything distilled graduates to
@@ -128,7 +151,7 @@ simply moves the accumulation problem downstream.
   high-signal patterns, archive the rest
 - **Distilled** → target <200 lines; the primary reduction mechanism is extracting settled
   entries to permanent docs, not compression
-- **Permanent docs** → each file declares four fitness fields (ADR-144):
+- **Permanent docs** → each file declares four fitness fields (two-threshold model):
   `fitness_line_target` (soft), `fitness_line_limit` (hard),
   `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100).
   Target exceedance is a warning; limit exceedance is blocking
@@ -224,16 +247,11 @@ graph LR
   7. **Documentation propagation** — before phase closure, propagate settled outcomes from
      plans into permanent docs: relevant ADRs, `.agent/practice-core/practice.md`, and any
      additionally impacted docs/READMEs. Apply the consolidate-docs command
-- **Quality gates** — a multi-layered verification taxonomy. Each layer catches
-  a different class of defect: formatting (style), type-checking (compile-time
-  safety), linting (patterns and boundaries), static analysis (dead code,
-  circular dependencies, layer violations), testing (behavioural correctness),
-  mutation testing (test suite effectiveness), build (production
-  artefacts), accessibility audit (WCAG compliance for projects
-  shipping HTML), and specialist review (architectural compliance).
-  No single layer is
-  sufficient; the layers are complementary. All gates are always blocking.
-  See `.agent/directives/principles.md` for the full taxonomy.
+- **Quality gates** — a multi-layered verification taxonomy covering
+  formatting, type-checking, linting, static analysis, testing, mutation
+  testing, build, accessibility, and specialist review. No single layer
+  is sufficient; the layers are complementary. All gates are always
+  blocking. See `.agent/directives/principles.md` for the full taxonomy.
 
 ## Artefact Map
 
@@ -260,29 +278,24 @@ a minimum estate to be _operational_: the portable Core, a local bridge, a
 memory layer, a continuity host, a planning scaffold, platform truth for any
 activated surface, and validators. Without these, workflows reference absent
 sinks and the Practice is structurally present but inert. See
-[practice-verification.md §Minimum Operational Estate](practice-verification.md#minimum-operational-estate)
-for the full specification including mandatory surfaces, optional-but-coherent
-guidance, and the fresh-checkout acceptance criteria.
+[practice-verification.md §Minimum Operational
+Estate](practice-verification.md#minimum-operational-estate) for the
+full specification including mandatory surfaces and the fresh-checkout
+acceptance criteria.
 
 ## Plasmid Exchange
 
-The Practice is not confined to a single repo. The portable part of it travels as the Practice
-Core: a package of eight files in `.agent/practice-core/` consisting of the plasmid trinity —
-this file (the **what**), [practice-lineage.md](practice-lineage.md) (the **why**), and
-[practice-bootstrap.md](practice-bootstrap.md) (the **how**) — the verification companion
-[practice-verification.md](practice-verification.md) — the entry points
-[README.md](README.md) (for humans) and [index.md](index.md) (for agents) — the changelog
-([CHANGELOG.md](CHANGELOG.md)) — and the provenance file ([provenance.yml](provenance.yml)). The
-trinity files evolve through real work; the verification file proves the build is operational;
-the entry points provide orientation; the changelog records what changed; the provenance file
-tracks every repo that has shaped each file.
-Each repo carries its own Practice instance — there is no hierarchy.
+The Practice is not confined to a single repo. The portable part travels
+as the Practice Core: eight files in `.agent/practice-core/` — the
+plasmid trinity (this file, practice-lineage, practice-bootstrap),
+verification, entry points, changelog, and provenance. See
+[index.md](index.md) for the full inventory. The trinity evolves through
+real work; the remaining files prove, orient, record, and trace. Each
+repo carries its own Practice instance — there is no hierarchy.
 
-The trinity files carry YAML frontmatter with a `provenance` pointer (to `provenance.yml`), and
-four fitness thresholds (ADR-144): `fitness_line_target` (soft line ceiling),
-`fitness_line_limit` (hard line ceiling), `fitness_char_limit` (hard character ceiling), and
-`fitness_line_length` (hard prose line width, always 100). All measure content only —
-frontmatter is excluded. The provenance file always travels with the Core package.
+The trinity files carry YAML frontmatter with a `provenance` pointer
+and the four fitness thresholds described in §Fitness Functions above.
+The provenance file always travels with the Core package.
 
 The mechanism is documented in [practice-lineage.md](practice-lineage.md), which serves as both
 the reference for how exchange works and the source template for outbound propagation. Optional
@@ -290,6 +303,14 @@ exchange context may travel separately in `.agent/practice-context/`, with sende
 `outgoing/` material copied into receiver-side `incoming/` when needed. Proven code patterns may
 also travel as part of the exchange pack — see
 [practice-lineage.md §Pattern Exchange](practice-lineage.md#pattern-exchange).
+
+**Self-containment**: all travelling content must carry the concept
+itself — what it is, how it works, why it matters — never a pointer to
+where a host repo documents it. No ADR numbers, no local paths, no
+repo-specific entity names. A descriptive label is better than an opaque
+number, but a label alone is still a pointer if the receiving repo has
+never encountered it. The practice-index bridges portable concepts to
+each host repo's local artefacts.
 
 ### The Practice Box
 
@@ -320,27 +341,24 @@ same rules that guided its creation.
 The napkin captures what went wrong, distillation extracts rules, and the rules
 prevent repetition.
 
-The Practice Maturity model (see [practice-lineage.md](practice-lineage.md) §Practice Maturity)
-provides diagnostic criteria for assessing whether this self-teaching property is genuinely active —
-from Level 1 (structurally present but inert) through Level 4 (evolving).
-
-Hydration completeness requires operational verification, not just structural
-correctness. The claimed/installed/activated audit — does the bridge claim it,
-do the files exist, does the platform activate it? — is the practical test.
-See [practice-verification.md §Claimed / Installed / Activated Audit](practice-verification.md#claimed--installed--activated-audit)
-and [practice-lineage.md §Validation](practice-lineage.md#validation).
+The Practice Maturity model (see [practice-lineage.md §Practice
+Maturity](practice-lineage.md#practice-maturity)) provides diagnostic
+criteria — from Level 1 (structurally present but inert) through
+Level 4 (evolving). Hydration completeness requires operational
+verification: the claimed/installed/activated audit. See
+[practice-verification.md](practice-verification.md).
 
 If you are new to this repository, start with `.agent/directives/AGENT.md`. Follow the links. The
 Practice will teach itself.
 
 ## Sustainability and Scaling
 
-The Practice spans ~1,000+ files. This volume is managed, not accidental — each layer generates
-files with distinct lifecycles (directives are stable, plans are ephemeral, generated artefacts
-are rebuilt on demand). Three mechanisms keep volume manageable: the knowledge flow's fitness
-functions (§The Knowledge Flow above), the consolidate-docs command (which graduates plan content
-to permanent docs then archives the plan), and sub-agent architecture consolidation (which
-extracts common prompt patterns into shared templates).
+The Practice spans ~1,000+ files. This volume is managed, not accidental
+— each layer has distinct lifecycles. Three mechanisms keep it
+manageable: knowledge flow fitness functions (§The Knowledge Flow),
+the consolidate-docs command (graduates plan content then archives),
+and sub-agent architecture consolidation (extracts common prompt
+patterns into shared templates).
 
 Intentional repetition is a conscious trade-off: the Cardinal Rule appears in ~66 files so that
 any contributor encounters it within their first few documents. DRY matters for code;

@@ -27,6 +27,17 @@ The trinity files point to `provenance.yml` for their evolution history and evol
 
 The Practice Core files are **portable** — they travel between repos and must be self-contained. The one permitted external link is to `../practice-index.md`, a **local** bridge file that each repo creates during hydration. All other external paths appear as code-formatted text only.
 
+**Concepts are the unit of exchange.** All Practice exchange — outgoing
+content, incoming integration, two-way comparison — operates at the
+concept level: what something is, how it works, why it matters.
+Travelling content must carry the substance, not a pointer to where a
+host repo documents it (no ADR numbers, no local paths, no repo-specific
+names). A descriptive label is better than an opaque number, but a label
+alone is still a pointer — the substance must travel. Two repos may
+implement the same concept under different names; concept-level
+comparison reveals equivalences that file-level diffing misses. The
+practice-index bridges portable concepts to each host's local artefacts.
+
 |                | Portable (travels)               | Local (stays)                  |
 | -------------- | -------------------------------- | ------------------------------ |
 | **Files**      | The eight Practice Core files    | `.agent/practice-index.md`     |

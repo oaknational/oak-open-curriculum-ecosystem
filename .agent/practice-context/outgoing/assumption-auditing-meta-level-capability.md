@@ -2,7 +2,7 @@
 
 **Type**: Transferable Pattern
 **Origin**: oak-mcp-ecosystem (2026-04-02)
-**Related ADR**: ADR-146 (Assumptions Reviewer — Meta-Level Plan Assessment)
+**Related concept**: Assumptions Reviewer — Meta-Level Plan Assessment
 
 ## Summary
 
@@ -14,7 +14,7 @@ Existing reviewer systems question whether work is done correctly (code quality,
 
 ## Key Design Decision: Inverted Doctrine Hierarchy
 
-Standard domain specialists (per ADR-129) place external expertise at the top of their doctrine hierarchy. The assumptions reviewer inverts this:
+Standard domain specialists (per the domain specialist capability pattern) place external expertise at the top of their doctrine hierarchy. The assumptions reviewer inverts this:
 
 1. **Project principles** — "could it be simpler?" takes priority
 2. **Architectural decisions** — existing constraints
@@ -44,6 +44,6 @@ A structured per-assumption evidence check with three ratings:
 
 ## Adoption Guidance
 
-This pattern follows the ADR-129 triplet shape (reviewer template + active skill + situational rule) and can be adopted by any repo carrying the agentic engineering practice. The inverted doctrine hierarchy is the key differentiator — it requires a conscious departure from the standard ADR-129 hierarchy.
+This pattern follows the domain specialist capability triplet shape (reviewer template + active skill + situational rule) and can be adopted by any repo carrying the agentic engineering practice. The inverted doctrine hierarchy is the key differentiator — it requires a conscious departure from the standard domain specialist hierarchy.
 
 Trigger conditions: plan marked decision-complete, blocking assertions, 3+ agents proposed, new workspace categories, technology commitments before research.

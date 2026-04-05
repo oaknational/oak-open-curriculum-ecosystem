@@ -13,7 +13,7 @@
  *   node scripts/validate-practice-fitness.mjs
  *
  * Origin: oak-mcp-ecosystem, 2026-04-01
- * See: ADR-144 (Two-Threshold Fitness Model) for the rationale
+ * See: the two-threshold fitness model for the rationale
  */
 
 import fs from 'node:fs/promises';

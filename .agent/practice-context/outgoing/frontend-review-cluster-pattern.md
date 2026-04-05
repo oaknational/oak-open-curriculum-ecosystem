@@ -2,7 +2,7 @@
 
 **Type**: Transferable Pattern
 **Origin**: oak-mcp-ecosystem (2026-04-03)
-**Related ADR**: ADR-149 (Frontend Specialist Reviewer Gateway Cluster)
+**Related concept**: Frontend Specialist Reviewer Gateway Cluster
 
 ## Summary
 
