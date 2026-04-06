@@ -198,6 +198,10 @@ context with no natural permanent home.
   to `process.stderr.write`. Build scripts without a logger
   should let errors propagate naturally (Node surfaces the
   stack trace).
-- **`unknown` and generated infra**: see feedback memories
-  `feedback_unknown-is-destruction.md` and
-  `feedback_use-off-the-shelf-not-custom-plumbing.md`.
+- **`unknown` and generated infra**: promoted to canonical
+  rule `.agent/rules/unknown-is-type-destruction.md`.
+  Covers `z.unknown()`, shadow schemas, and all Zod-level
+  widening. Type-reviewer upgraded to 12 Commandments.
+- **Zod v4 `.merge()` is NOT deprecated**: prior docs
+  claimed otherwise. Confirmed no `@deprecated` annotation
+  in Zod 4.3.6 source. Fixed in `typescript-practice.md`.

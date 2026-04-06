@@ -19,13 +19,13 @@ todos:
     status: done
   - id: phase-5-prove
     content: "Phase 5: Add integration test proving the full MCP App pipeline, verify in host."
-    status: pending
+    status: done
 ---
 
 # WS3: Off-the-Shelf MCP SDK Adoption
 
-**Status**: IN PROGRESS (Phases 1–4 complete, Phase 5 next)
-**Last Updated**: 2026-04-05
+**Status**: COMPLETE (all five phases done)
+**Last Updated**: 2026-04-06
 **Scope**: Replace hand-rolled MCP App infrastructure with canonical
 ext-apps SDK functions and Zod 4 `.meta()` for example preservation.
 **Blocks**: WS3 Phase 5 (interactive user search view).

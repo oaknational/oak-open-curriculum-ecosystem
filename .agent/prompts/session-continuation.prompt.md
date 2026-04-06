@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-05
+last_updated: 2026-04-06
 ---
 
 # Session Continuation
@@ -43,19 +43,17 @@ git log --oneline --decorate -10
 - **Workstream**: MCP App migration (WS3 widget rebuild)
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md` (**START HERE** — off-the-shelf SDK adoption, Phase 5 next)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md` (SDK adoption — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-brand-banner.plan.md` (companion — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: SDK adoption Phases 1–4 COMPLETE (2026-04-05).
-  Phase 4 deleted all dual-schema dead code: `resolveZodShape()` inlined,
-  `zodFromToolInputJsonSchema` + `zodRawShapeFromToolInputJsonSchema`
-  deleted, `inputSchema` removed from `UniversalToolListEntry` and all
-  aggregated tool defs, `zod-input-schema.ts` deleted entirely, all
-  `*_INPUT_SCHEMA` constants and `GenericToolInputJsonSchema` type
-  removed. `pnpm check` green. All changes uncommitted on
-  `feat/mcp_app_ui`.
-- **Current objective**: SDK adoption Phase 5 (E2E pipeline test +
-  host verification). Then commit all Phases 1–5.
+- **Current state**: SDK adoption all 5 phases COMPLETE and committed
+  on `feat/mcp_app_ui` (2026-04-06). Host verification pending.
+  Type-correctness audit completed: new rule
+  `unknown-is-type-destruction.md`, type-reviewer upgraded to 12
+  Commandments, DRY consolidation of principles/governance docs.
+- **Current objective**: Host verification (rebuild, dev:auth:stub,
+  get-curriculum-model, verify banner). Then proceed to WS3 Phase 5
+  (interactive user search view).
 - **Hard invariants / non-goals**:
   - Clean-break replacement of the out-of-date OpenAI-era app integration
   - Keep `search` as the model-facing, agent-facing search interface
@@ -65,26 +63,28 @@ git log --oneline --decorate -10
 - **Remaining tracked items**:
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-- **Recent surprises / corrections**: Shim had to be removed in
-  Phase 3 (not Phase 4) because it overrides `tools/list` and
-  nullifies `registerAppTool`'s `_meta` normalisation. The shim's
-  own comment about the MCP SDK not honouring `.meta()` was wrong.
-  Empty `interface extends Pick<...> {}` rejected by ESLint's
-  `no-empty-object-type` — `type` alias is the correct form when
-  delegating to off-the-shelf SDK types.
+  - Host verification for SDK adoption Phase 5
+- **Recent surprises / corrections**: Type-reviewer recommended
+  `z.unknown()` which is type destruction, not type safety. Then
+  hand-crafted `JsonSchemaPropertySchema` was entropy (shadow type).
+  Both caught by human review. Led to type-correctness audit: new
+  canonical rule, 12 Commandments in type-reviewer, DRY
+  consolidation. `.merge()` was NOT deprecated in Zod v4 — docs
+  claimed otherwise (fixed). `core.$ZodIssue` import path was
+  fragile — replaced with `ZodError['issues'][number]`.
 - **Open questions / low-confidence areas**: None.
-- **Next safe step**: Execute SDK adoption Phase 5 — write
-  `mcp-app-pipeline.e2e.test.ts` asserting `tools/list` → `_meta`
-  (both keys) → `resources/read` → HTML. Then host verification in
-  Claude Code. Then commit all Phases 1–5.
-- **Deep consolidation status**: completed this handoff — Phase 4
-  milestone. Doctrine (Zod sole source) already in permanent TSDoc.
-  No pattern extraction warranted. Napkin at 492 lines (no rotation).
-  No fitness pressure from this session.
+- **Next safe step**: Host verification, then WS3 Phase 5 (user
+  search view).
+- **Deep consolidation status**: completed this handoff — napkin
+  rotated (559→fresh), 1 pattern extracted
+  (reviewer-widening-is-always-wrong), 2 distilled entries merged,
+  `unknown` graduated to canonical rule. Practice outgoing: the
+  `unknown-is-type-destruction` concept may warrant Practice Core
+  promotion (deferred — requires user approval).
 
-## Active Workstreams (2026-04-05)
+## Active Workstreams (2026-04-06)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (SDK adoption)
+### 1. WS3 MCP App Rebuild — ACTIVE (SDK adoption COMPLETE)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
@@ -111,13 +111,16 @@ Phase 3 (canonical contracts + fallback proof), Phase 4 (brand banner).
   code. `zod-input-schema.ts` eliminated. `inputSchema` removed from
   `UniversalToolListEntry`. All `*_INPUT_SCHEMA` constants deleted.
   Structural equivalence test removed (purpose fulfilled).
-- Phase 5 pending: prove pipeline end-to-end
+- **Phase 5 COMPLETE** (2026-04-06): E2E pipeline test committed.
+  5 assertions prove tools/list → _meta → resources/read → HTML.
+  Reviewed by code-reviewer, test-reviewer, mcp-reviewer,
+  type-reviewer.
 
-**Pending after adoption plan**: WS3 Phase 5 (user search),
-Phase 6 (docs/gates/review).
+**Pending after adoption plan**: Host verification, then WS3 Phase 5
+(user search), Phase 6 (docs/gates/review).
 
-**Next action**: SDK adoption Phase 5 — E2E pipeline test + host
-verification. Then commit all Phases 1–5.
+**Next action**: Host verification (rebuild, dev:auth:stub, call
+get-curriculum-model in Claude Code, verify banner). Then WS3 Phase 5.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

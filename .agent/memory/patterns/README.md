@@ -116,6 +116,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Interface Segregation for Test Fakes** -- Use this when: test fakes cannot satisfy a complex generated type without type assertions. → [interface-segregation-for-test-fakes.md](interface-segregation-for-test-fakes.md)
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
 
-### Agent (1)
+### Agent (2)
 
 - **Agentic Surface Separation** -- Use this when: designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters. → [agentic-surface-separation.md](agentic-surface-separation.md)
+- **Reviewer Widening Is Always Wrong** -- Use this when: a sub-agent reviewer recommends replacing one type construct with a wider one; the fix widens the type, which is never the answer. → [reviewer-widening-is-always-wrong.md](reviewer-widening-is-always-wrong.md)
