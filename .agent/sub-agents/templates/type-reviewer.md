@@ -5,6 +5,7 @@ Invoke this agent whenever TypeScript's type system is under pressure: type asse
 ### Triggering Scenarios
 
 - A `as SomeType`, `!`, `any`, `@ts-expect-error`, or `@ts-ignore` appears in a diff and the reason is not obvious
+- `z.unknown()`, `z.record(z.string(), z.unknown())`, or hand-crafted Zod schemas appear where generated types exist
 - New Zod schemas, generated types, or OpenAPI-derived types are introduced, modified, or the SDK codegen output changes
 - A complex generic, conditional type, or mapped type is introduced and its correctness is unclear
 
@@ -80,41 +81,27 @@ Classify each finding as `must-fix`, `optional`, or `incorrect`.
 
 ## The Cardinal Rule
 
-**ALL static data structures, types, type guards, Zod schemas, and validators MUST flow from the Open Curriculum OpenAPI schema in the SDK, generated at build/compile time via `pnpm sdk-codegen`.**
-
-If the upstream OpenAPI schema changes, running `pnpm sdk-codegen` followed by `pnpm build` MUST be sufficient to bring all workspaces into alignment.
+See `.agent/rules/cardinal-rule-types-from-schema.md` for the canonical
+statement. When reviewing, verify: does every type trace back to the
+OpenAPI schema via `pnpm sdk-codegen`? If a type is hand-crafted where a
+generated equivalent exists, that is a violation — fix the generator or
+import the generated type.
 
 ## The Compilation-Time Revolution (ADR-038)
 
-1. **All knowable validation is embedded at generation time** - No runtime schema lookups
-2. **Self-contained generated files** - Each file has everything it needs
-3. **Two-executor pattern** - Type-safe executor + generic wrapper for unknown inputs
-4. **Zero type assertions** - If you need `as`, we've failed at generation time
-5. **Literal types preserved** - From schema to generated code to runtime
+See `docs/architecture/architectural-decisions/038-compilation-time-revolution.md`
+for the full architectural decision. When reviewing, look for:
 
-### The Pattern
+- **Two-executor pattern**: type-safe executor + generic wrapper for
+  `unknown` inputs. If code handles `unknown` without this pattern,
+  flag it.
+- **Zero type assertions**: if `as` appears, the generation pipeline
+  failed to embed the type — fix the generator, not the consumer.
+- **Literal types preserved**: from schema → generated code → runtime.
+  Any widening (`string` where `'ks1' | 'ks2'` was available) is a
+  violation.
 
-```typescript
-// GENERATED FILE - All validation embedded at compile time
-const allowedValues = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
-type Value = (typeof allowedValues)[number];
-
-function isValue(v: string): v is Value {
-  return allowedValues.includes(v);
-}
-
-// Two-executor pattern
-const executor = (client: Client, params: ValidParams): Response => {
-  // Type-safe execution - no assertions needed
-};
-
-const executeFromUnknown = (client: Client, params: unknown) => {
-  if (!isValidParams(params)) throw new Error(getParamsDescription());
-  return executor(client, params); // Now type-safe!
-};
-```
-
-## The Ten Commandments of Type Safety
+## The Twelve Commandments of Type Safety
 
 1. **Thou shalt not widen to `string`** - Preserve literal types
 2. **Thou shalt not widen to `number`** - Preserve numeric literals
@@ -126,6 +113,8 @@ const executeFromUnknown = (client: Client, params: unknown) => {
 8. **Thou shalt embed at compile time** - Not discover at runtime
 9. **Thou shalt generate specific code** - Not generic abstractions
 10. **Thou shalt preserve literals through generation** - `as const` everywhere
+11. **Thou shalt not use `z.unknown()` where a concrete schema exists** - Zod-level type erasure is the same violation as TypeScript-level `unknown`; use the generated schema or a concrete Zod shape
+12. **Thou shalt not hand-craft schemas that shadow generated shapes** - Re-inventing known types is entropy; import from the generated source of truth
 
 ## Common Anti-Patterns
 
@@ -181,6 +170,32 @@ function process<T extends '/api/users' | '/api/posts'>(path: T) {
 }
 ```
 
+### 5. Zod-Level Type Destruction
+
+```typescript
+// ANTI-PATTERN: z.unknown() erases all structural type information
+const schema = z.record(z.string(), z.unknown());
+// Equivalent to Record<string, unknown> — same violation, Zod flavour
+
+// ANTI-PATTERN: Hand-crafted shadow schema duplicating a generated shape
+const PropertySchema = z.object({
+  type: z.string(),
+  examples: z.array(z.unknown()),
+});
+// When toolInputJsonSchema already has the exact shape with literal types
+
+// SOLUTION: Import and use the generated schema or value directly
+import { getToolFromToolName } from '@oaknational/sdk-codegen/mcp-tools';
+const generated = getToolFromToolName('get-key-stages-subject-lessons');
+// Compare wire values against the generated source of truth
+expect(wireValue).toHaveProperty(
+  'properties.keyStage',
+  generated.inputSchema.properties.keyStage,
+);
+```
+
+See `.agent/rules/unknown-is-type-destruction.md` for the canonical rule.
+
 ## Boundaries
 
 This agent reviews type safety and compilation-time type embedding. It does NOT:
@@ -221,6 +236,14 @@ When type safety issues stem from architectural decisions, this agent flags the 
 - [ ] SDK used for API responses
 - [ ] Zod used for other external data
 - [ ] Clear boundary between unknown and validated
+
+### Zod Schema Integrity
+
+- [ ] No `z.unknown()` where a concrete schema exists or can be generated
+- [ ] No `z.record(z.string(), z.unknown())` substituting for a known shape
+- [ ] No hand-crafted Zod schemas duplicating shapes from generated types
+- [ ] Zod schemas structurally equivalent to their JSON Schema counterparts
+- [ ] `z.unknown()` only for genuinely open-ended data from third-party systems
 
 ## Output Format
 
@@ -343,11 +366,11 @@ function execute(params: unknown) {
 
 ## Key Principles
 
-1. **Runtime is expensive, compilation is free** - Resolve at compile time when possible
-2. **Generated code is better than generic code** - Specific beats abstract
-3. **Types prove, assertions hope** - Use type guards, not assertions
-4. **Preserve information** - Every widening destroys knowledge
-5. **Schema is truth** - Types flow from OpenAPI schema via SDK
+1. **Schema is truth** — types flow from the OpenAPI schema via SDK; everything else is derived
+2. **Define types ONCE** — from the API spec or external library, then never widen, never redefine
+3. **Types prove, assertions hope** — use type guards, not assertions
+4. **`unknown` is destruction** — permitted only at incoming third-party boundaries (see `.agent/rules/unknown-is-type-destruction.md`)
+5. **Generated code beats hand-crafted code** — import from `sdk-codegen`, don't reinvent
 
 ---
 

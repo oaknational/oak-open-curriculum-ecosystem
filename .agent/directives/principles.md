@@ -269,46 +269,44 @@ paths, setup files) don't apply.
 
 ### Compiler Time Types and Runtime Validation
 
-- **No type shortcuts** - Never use `as`, `any`, `!`, or
-  `Record<string, unknown>`, or `{ [key: string]: unknown }`, or
-  `Object.*` methods, or `Reflect.*` methods, or `isObject` type
-  predicates, or any user-defined type guard whose runtime checks
-  don't prove the asserted return type (e.g. checking
-  `typeof === 'object'` but claiming `value is SomeSpecificType`
-  — the predicate proves object-ness, not the specific type, so
-  the narrowing is a lie) - they ALL disable the type system, they
-  are all sources of entropy. The goal is to preserve type
-  information as much as possible, not to work around this rule.
-  Exceptions: `as const` and `satisfies` are permitted — both are
-  compile-time constraints that validate or narrow types without
-  overriding the inferred type. `as const` narrows values to their
-  literal types; `satisfies` verifies an expression matches a type
-  without changing what TypeScript infers.
-- **Preserve type information** - NEVER widen types by assigning to
+- **No type shortcuts** — see `.agent/rules/no-type-shortcuts.md`
+  for the full forbidden-constructs list (TypeScript AND Zod
+  level). The goal is to preserve type information, not to work
+  around the constraint. `as const` and `satisfies` are the only
+  permitted exceptions.
+- **`unknown` is type destruction** — see
+  `.agent/rules/unknown-is-type-destruction.md`. Permitted only at
+  incoming external boundaries from third-party systems. Using
+  `unknown`, `z.unknown()`, or hand-crafted shadow schemas where
+  generated types exist is a violation.
+- **Preserve type information** — NEVER widen types by assigning to
   broader types like `string` or `number`. If you have a literal
   type `'/api/path'`, keep it as that literal, don't accept it as
   `string`. Type information flows from data structures with
   `as const` through to usage. Every `: string` or `: number`
-  parameter destroys type information irreversibly
-- **Single source of truth for types** - Define types ONCE, and
-  import them consistently
-- **Use library types directly where possible** - don't make up a
-  type when you can use a library type
-- **Prefer library-native error and response types** - when parsing
+  parameter destroys type information irreversibly.
+- **Single source of truth for types** — define types ONCE,
+  preferably from the API spec or an external library, and then do
+  not allow them to widen. Never redefine them later as
+  approximations.
+- **Use library types directly where possible** — don't make up a
+  type when you can use a library type.
+- **Prefer library-native error and response types** — when parsing
   third-party SDK outputs (e.g. Elasticsearch), use official
   exported types/classes first; only introduce local shapes when
-  the library does not expose what is needed
-- **Validate external signals** - parse and/or validate external
+  the library does not expose what is needed.
+- **Validate external signals** — parse and/or validate external
   signals (e.g. API responses, read from files, etc), official
-  SDKs count as validation, use Zod where appropriate
-- **Type imports must be labelled with `type`** - e.g.
+  SDKs count as validation, use Zod where appropriate. See
+  `.agent/rules/strict-validation-at-boundary.md`.
+- **Type imports must be labelled with `type`** — e.g.
   `import type { Type } from 'package'` or
-  `import { type Type } from 'package'`
-- **Don't use type aliases, use good naming** Don't use type
-  aliases, use good naming. Type aliases are a source of entropy.
-- **Reviewer findings are action items by default** - implement all
+  `import { type Type } from 'package'`.
+- **Don't use type aliases, use good naming** — type aliases are a
+  source of entropy.
+- **Reviewer findings are action items by default** — implement all
   reviewer findings unless explicitly rejected as incorrect with a
-  written rationale
+  written rationale.
 
 ### Testing
 

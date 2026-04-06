@@ -12,7 +12,7 @@ split_strategy: "This is a focused directive; if it grows, extract implementatio
 
 ## Cardinal Intent
 
-Every byte of runtime behaviour for MCP tool execution **must** be driven by generated artefacts that flow directly from the Open Curriculum OpenAPI schema. Runtime files act only as very thin façades; they do **not** duplicate logic, infer types, or widen unions. The generator is the single source of truth.
+Per the cardinal rule (`.agent/directives/principles.md` §Cardinal Rule): every byte of runtime behaviour for MCP tool execution **must** be driven by generated artefacts that flow directly from the Open Curriculum OpenAPI schema. Runtime files act only as very thin façades; they do **not** duplicate logic, infer types, or widen unions. The generator is the single source of truth.
 
 ## Required Flow
 
