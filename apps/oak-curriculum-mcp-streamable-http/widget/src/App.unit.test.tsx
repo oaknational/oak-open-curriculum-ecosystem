@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { AppView } from './App.js';
 
 describe('AppView', () => {
@@ -31,7 +31,7 @@ describe('AppView', () => {
 
     const link = screen.getByRole('link', { name: /oak national academy/iu });
 
-    link.click();
+    fireEvent.click(link);
 
     expect(calls).toStrictEqual(['https://www.thenational.academy']);
   });

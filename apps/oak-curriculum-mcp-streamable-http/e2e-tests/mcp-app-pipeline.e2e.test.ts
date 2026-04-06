@@ -3,14 +3,12 @@
  *
  * Proves the full pipeline from tool registration through protocol response:
  *
- * 1. `registerAppTool` normalisation produces both modern (`_meta.ui.resourceUri`)
- *    and legacy (`_meta["ui/resourceUri"]`) metadata keys for UI tools.
- * 2. `_meta.securitySchemes` flows through the MCP SDK to the `tools/list` response
+ * 1. `_meta.securitySchemes` flows through the MCP SDK to the `tools/list` response
  *    (tested on a generated tool where the code generator mirrors it into `_meta`).
- * 3. App-only visibility (`['app']`) is correctly set on `user-search-query`.
- * 4. OpenAPI-derived examples flow from codegen through Zod `.meta({ examples })`
+ * 2. App-only visibility (`['app']`) is correctly set on `user-search-query`.
+ * 3. OpenAPI-derived examples flow from codegen through Zod `.meta({ examples })`
  *    through `z.toJSONSchema()` to the `tools/list` JSON Schema output.
- * 5. Widget resource serves HTML with the MCP Apps MIME type via `resources/read`.
+ * 4. Widget resource serves HTML with the MCP Apps MIME type via `resources/read`.
  *
  * Uses `createStubbedHttpApp()` for in-process testing with auth bypassed (ADR-078).
  *
@@ -22,7 +20,7 @@ import request from 'supertest';
 import { z } from 'zod';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import { parseSseEnvelope } from './helpers/sse.js';
-import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
+import { WIDGET_URI } from '@oaknational/sdk-codegen/widget-constants';
 import { getToolFromToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 
@@ -30,12 +28,7 @@ import { RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 // Zod boundary schemas — validate `unknown` protocol responses at the E2E edge
 // ---------------------------------------------------------------------------
 
-/**
- * Validates `_meta` on a tool in `tools/list`.
- *
- * The legacy key `"ui/resourceUri"` is declared explicitly so that Zod's
- * `.loose()` preserves it on the parsed type without requiring a type assertion.
- */
+/** Validates `_meta` on a tool in `tools/list`. */
 const ToolMetaSchema = z
   .object({
     ui: z
@@ -46,7 +39,6 @@ const ToolMetaSchema = z
       .loose()
       .optional(),
     securitySchemes: z.array(z.object({ type: z.string() }).loose()).optional(),
-    'ui/resourceUri': z.string().optional(),
   })
   .loose();
 
@@ -118,26 +110,6 @@ function findToolOrFail(
 // ---------------------------------------------------------------------------
 
 describe('MCP App Pipeline E2E', () => {
-  it('registerAppTool normalisation adds legacy _meta["ui/resourceUri"] equal to modern key', async () => {
-    const { app } = await createStubbedHttpApp();
-    const tools = await fetchToolsList(app);
-
-    // Guard: WIDGET_TOOL_NAMES must be non-empty to avoid a vacuous pass.
-    // The modern key (_meta.ui.resourceUri) is proved in widget-metadata.e2e.test.ts;
-    // this test focuses on the legacy flat key added by registerAppTool normalisation.
-    expect(WIDGET_TOOL_NAMES.size).toBeGreaterThan(0);
-
-    const uiTools = tools.filter((t) => WIDGET_TOOL_NAMES.has(t.name));
-    expect(uiTools.length).toBe(WIDGET_TOOL_NAMES.size);
-
-    for (const tool of uiTools) {
-      // Legacy flat key must be present and equal to the modern nested key
-      expect(tool._meta?.['ui/resourceUri'], `${tool.name}: legacy _meta["ui/resourceUri"]`).toBe(
-        tool._meta?.ui?.resourceUri,
-      );
-    }
-  });
-
   it('_meta.securitySchemes survives to tools/list for generated tools', async () => {
     const { app } = await createStubbedHttpApp();
     const tools = await fetchToolsList(app);

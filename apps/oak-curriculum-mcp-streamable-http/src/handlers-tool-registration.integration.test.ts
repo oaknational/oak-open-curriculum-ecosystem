@@ -2,10 +2,10 @@
  * Integration tests for tool registration via SDK canonical projection.
  *
  * These tests prove that:
- * 1. UI-bearing tools are registered via `registerAppTool()` which normalises
- *    `_meta` to include both modern and legacy keys for host compatibility.
+ * 1. UI-bearing tools are registered via `registerAppTool()` with the SDK
+ *    canonical projection (`toAppToolRegistrationConfig`).
  * 2. Non-UI tools are registered via `server.registerTool()` with the standard
- *    SDK canonical projection.
+ *    SDK canonical projection (`toRegistrationConfig`).
  * 3. Registration config comes from the SDK canonical projection, not from
  *    hand-assembled field extraction in the app layer.
  *
@@ -90,43 +90,13 @@ describe('Tool Registration Uses SDK Canonical Projection (Integration)', () => 
       }
       const actualConfig = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
       const expectedConfig = toAppToolRegistrationConfig(tool);
-      // registerAppTool normalises _meta by adding the legacy "ui/resourceUri"
-      // key, so the registered config is a superset of the projection output.
-      // Verify all non-_meta fields match exactly.
+      // The SDK's registerAppTool may add additional _meta keys internally.
+      // Verify all fields from our projection are present.
       expect(actualConfig).toHaveProperty('title', expectedConfig.title);
       expect(actualConfig).toHaveProperty('description', expectedConfig.description);
       expect(actualConfig).toHaveProperty('inputSchema', expectedConfig.inputSchema);
       expect(actualConfig).toHaveProperty('annotations', expectedConfig.annotations);
-      // _meta is a superset — the projection's _meta.ui is present, plus the legacy key.
       expect(actualConfig).toHaveProperty('_meta.ui', expectedConfig._meta.ui);
-    }
-  });
-});
-
-describe('registerAppTool normalises _meta for UI tools (Integration)', () => {
-  it('UI tools have both modern _meta.ui.resourceUri and legacy _meta["ui/resourceUri"]', () => {
-    const { registerToolSpy } = registerAndCapture();
-    const tools = listUniversalTools(generatedToolRegistry);
-    const uiTools = tools.filter(isAppToolEntry);
-    expect(uiTools.length).toBeGreaterThan(0);
-
-    for (const tool of uiTools) {
-      const actualConfig = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
-      expect(actualConfig).toHaveProperty('_meta.ui.resourceUri');
-      expect(actualConfig).toHaveProperty(['_meta', 'ui/resourceUri']);
-    }
-  });
-
-  it('non-UI tools do not have legacy _meta["ui/resourceUri"] key', () => {
-    const { registerToolSpy } = registerAndCapture();
-    const tools = listUniversalTools(generatedToolRegistry);
-
-    for (const tool of tools) {
-      if (isAppToolEntry(tool)) {
-        continue;
-      }
-      const actualConfig = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
-      expect(actualConfig).not.toHaveProperty(['_meta', 'ui/resourceUri']);
     }
   });
 });

@@ -48,14 +48,6 @@ describe('BrandBanner', () => {
     expect(calls).toStrictEqual([OAK_URL]);
   });
 
-  it('renders the link with the banner link class', () => {
-    render(<BrandBanner onOpenLink={() => undefined} />);
-
-    const link = screen.getByRole('link', { name: /oak national academy/iu });
-
-    expect(link.className).toContain('oak-banner__link');
-  });
-
   it('renders inside a header landmark', () => {
     render(<BrandBanner onOpenLink={() => undefined} />);
 

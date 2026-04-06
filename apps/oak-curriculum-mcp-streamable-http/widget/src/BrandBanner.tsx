@@ -87,6 +87,8 @@ export function BrandBanner({ onOpenLink }: BrandBannerProps): React.JSX.Element
     <header className="oak-banner">
       <a
         href={OAK_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         className="oak-banner__link"
         onClick={(event) => {
           onOpenLink(OAK_URL, event);
