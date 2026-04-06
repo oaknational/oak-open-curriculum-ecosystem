@@ -12,6 +12,8 @@
     "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
     "dev:auth": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
     "dev:auth:stub": "LOG_LEVEL=debug OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true OAK_API_KEY=stub-api-key DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
+    "dev:widget": "vite dev --config widget/vite.config.ts",
+    "dev:basic-host": "(test -d /tmp/mcp-ext-apps || git clone --depth 1 https://github.com/modelcontextprotocol/ext-apps.git /tmp/mcp-ext-apps) && cd /tmp/mcp-ext-apps/examples/basic-host && npm install --silent 2>&1 | tail -1 && SERVERS='[\"http://localhost:3333/mcp\"]' npm run dev",
     "dev:observe": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-$(date +%Y%m%d-%H%M%S).log",
     "dev:observe:noauth": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-noauth-$(date +%Y%m%d-%H%M%S).log",
     "inspect:oauth": "tsx smoke-tests/smoke-oauth-mcp-inspector.ts",

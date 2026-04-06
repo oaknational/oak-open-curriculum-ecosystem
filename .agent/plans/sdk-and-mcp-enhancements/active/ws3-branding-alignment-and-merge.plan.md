@@ -10,7 +10,7 @@ prerequisites_complete:
 todos:
   - id: p0-dev-infra
     content: "P0: Add dev:widget and dev:basic-host scripts."
-    status: pending
+    status: done
   - id: p1-branding
     content: "P1: Fix branding — real Oak logo SVG, Lexend font, mint #bef2bd, dark text #222222, minimal banner height."
     status: pending
@@ -26,7 +26,7 @@ isProject: false
 # Oak Branding Alignment + Merge Readiness
 
 **Last Updated**: 2026-04-06
-**Status**: 🟡 PLANNING
+**Status**: 🟢 IN PROGRESS (P0 done, P1 next)
 **Branch**: `feat/mcp_app_ui`
 **Scope**: Fix the BrandBanner to match Oak branding. Merge to `main`.
 

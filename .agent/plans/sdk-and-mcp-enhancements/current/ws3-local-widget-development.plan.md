@@ -8,22 +8,22 @@ isProject: false
 todos:
   - id: phase-1-red
     content: "Phase 1 (RED): Write tests for Vite dev server config and basic-host script. Tests MUST fail."
-    status: pending
+    status: done
   - id: phase-2-green
     content: "Phase 2 (GREEN): Implement dev:widget script and dev:basic-host script."
-    status: pending
+    status: done
   - id: phase-3-refactor
     content: "Phase 3 (REFACTOR): Documentation, TSDoc, README updates."
-    status: pending
+    status: done
   - id: phase-4-quality-gates
     content: "Phase 4: Full quality gate chain."
-    status: pending
+    status: done
 ---
 
 # WS3: Local Widget Development Infrastructure
 
 **Last Updated**: 2026-04-06
-**Status**: CURRENT (queued, not started)
+**Status**: SUPERSEDED — work completed in ws3-branding-alignment-and-merge.plan.md P0
 **Scope**: Add two local development scripts for the MCP App widget —
 a Vite dev server for hot-reload UI iteration and a basic-host
 integration for full MCP Apps lifecycle testing.

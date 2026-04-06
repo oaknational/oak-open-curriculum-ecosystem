@@ -71,6 +71,54 @@ Bearer token instead of relying on the disabled-auth path above.
 
 Note: The server automatically adds the required `Accept: application/json, text/event-stream` header if missing, improving UX for simple curl commands and UI integrations.
 
+## Widget development
+
+The MCP App widget has a Vite dev server with hot module replacement for
+iterating on UI and branding. To see the widget inside an MCP host, use
+the `basic-host` example from the ext-apps SDK.
+
+**Prerequisites**: `pnpm install` and `pnpm build` from the repo root
+(design tokens and SDK must be built before the widget can resolve its
+imports).
+
+### Widget-only iteration (one terminal)
+
+For layout and styling work that does not need MCP host context:
+
+```bash
+pnpm dev:widget
+```
+
+Open `http://localhost:5173/mcp-app.html`. Vite provides hot module
+replacement — edits to React components, CSS, and design tokens are
+reflected immediately. The ext-apps SDK will not connect to a host in
+this mode, but the UI renders normally.
+
+### Full MCP App dev loop (three terminals)
+
+To see the widget rendered inside an MCP host iframe:
+
+| Terminal | Command               | Purpose                                                                 |
+| -------- | --------------------- | ----------------------------------------------------------------------- |
+| 1        | `pnpm dev:auth:stub`  | MCP server on port 3333 (stub tools, no real API needed)                |
+| 2        | `pnpm dev:widget`     | Widget Vite dev server with HMR at `http://localhost:5173/mcp-app.html` |
+| 3        | `pnpm dev:basic-host` | basic-host from ext-apps SDK, connects to localhost:3333 (port 8080)    |
+
+Start in order: server first (terminal 1), then widget (terminal 2),
+then basic-host (terminal 3). Open `http://localhost:8080` to see the
+host UI. Call a UI-bearing tool (e.g. `get-curriculum-model`) from the
+basic-host interface to render the widget inside the host iframe.
+
+`dev:basic-host` clones the `@modelcontextprotocol/ext-apps` repo to
+`/tmp/mcp-ext-apps` on first run and reuses it on subsequent runs.
+Delete that directory to refresh: `rm -rf /tmp/mcp-ext-apps`.
+
+### Visual review with MCPJam
+
+[MCPJam](https://www.mcpjam.com/) is an MCP Apps-compatible host useful
+for visual design review and acceptance testing. Connect it to the local
+server at `http://localhost:3333/mcp` (requires `dev:auth:stub` running).
+
 ## Observability
 
 The HTTP server now uses a single app-level observability bundle created at

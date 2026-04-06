@@ -140,6 +140,32 @@ on thenational.academy. The #287C34 is the old button accent.
 - Fonts: Lexend embedded as @font-face, `--font-sans` set to Lexend
 - Logo: real Oak SVG from Oak-Web-Application sprite sheet
 
+---
+
+### Session 2026-04-06d — P0 dev infra execution
+
+#### Surprises
+
+**S1: ext-apps package blocks `require('./package.json')` via exports.**
+Expected: `require('@modelcontextprotocol/ext-apps/package.json').version`
+would read the installed version. Actual: Node throws
+`ERR_PACKAGE_PATH_NOT_EXPORTED`. The package uses the `exports` field
+which restricts subpath access. Workaround: `require.resolve` the
+entry point, walk up directories to find `package.json`. Simplified
+by dropping version pinning entirely — shallow clone of default branch
+is sufficient for a dev tool.
+
+**S2: `vite-plugin-singlefile` is a no-op in dev mode.**
+Expected: might need a separate `vite.dev.config.ts` without the
+singlefile plugin. Actual: the plugin hooks into `generateBundle`
+(a Rollup build-only hook). During `vite dev` there is no build step,
+so the plugin does nothing. The `build:` config block is similarly
+ignored. One config serves both modes.
+
+#### Corrections
+
+- None this session.
+
 #### New artefacts
 
 - `docs/governance/mcp-app-styling.md` — canonical MCP App styling
