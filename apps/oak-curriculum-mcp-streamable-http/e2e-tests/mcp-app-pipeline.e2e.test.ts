@@ -23,6 +23,7 @@ import { z } from 'zod';
 import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import { parseSseEnvelope } from './helpers/sse.js';
 import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
+import { getToolFromToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 
 // ---------------------------------------------------------------------------
@@ -49,32 +50,11 @@ const ToolMetaSchema = z
   })
   .loose();
 
-/**
- * A JSON Schema property descriptor as produced by `z.toJSONSchema()`.
- *
- * We know the structure: the MCP SDK converts our Zod schemas into JSON Schema
- * with `type`, `description`, `examples`, `enum`, etc. Modelling this preserves
- * our understanding rather than discarding it with `z.unknown()`.
- */
-const JsonSchemaPropertySchema = z
-  .object({
-    type: z.string().optional(),
-    description: z.string().optional(),
-    examples: z.array(z.unknown()).optional(),
-    enum: z.array(z.unknown()).optional(),
-  })
-  .loose();
-
 /** A single tool entry from `tools/list`. */
 const ToolEntrySchema = z
   .object({
     name: z.string(),
-    inputSchema: z
-      .object({
-        properties: z.record(z.string(), JsonSchemaPropertySchema).optional(),
-      })
-      .loose()
-      .optional(),
+    inputSchema: z.object({}).loose().optional(),
     _meta: ToolMetaSchema.optional(),
   })
   .loose();
@@ -183,15 +163,21 @@ describe('MCP App Pipeline E2E', () => {
     expect(tool._meta?.ui?.visibility).toEqual(['app']);
   });
 
-  it('get-key-stages-subject-lessons has keyStage.examples containing "ks1"', async () => {
+  it('tools/list inputSchema preserves generated keyStage property including examples', async () => {
     const { app } = await createStubbedHttpApp();
     const tools = await fetchToolsList(app);
 
     const tool = findToolOrFail(tools, 'get-key-stages-subject-lessons');
-    const keyStageProperty = tool.inputSchema?.properties?.['keyStage'];
+    const generated = getToolFromToolName('get-key-stages-subject-lessons');
+    const expectedKeyStage = generated.inputSchema.properties.keyStage;
 
-    expect(keyStageProperty, 'keyStage property should exist in inputSchema').toBeDefined();
-    expect(keyStageProperty?.examples).toContain('ks1');
+    // The wire inputSchema is produced by z.toJSONSchema() from our flatZodSchema.
+    // Compare the keyStage property against the generated source of truth — this
+    // proves examples survive the codegen → Zod .meta() → z.toJSONSchema() pipeline.
+    // We extract the wire value via the SSE envelope (unknown at the boundary) and
+    // compare at the value level using vitest's deep equality.
+    const wireInputSchema = tool.inputSchema;
+    expect(wireInputSchema).toHaveProperty('properties.keyStage', expectedKeyStage);
   });
 
   it('resources/read for widget URI returns HTML with text/html;profile=mcp-app', async () => {
