@@ -495,3 +495,19 @@ Previous rotation: 2026-04-03 at 632 lines.
 
 - Replaced repo-wide `**/reference/*` with scoped `packages/sdks/oak-sdk-codegen/reference/*.json` only; `.agent/reference/` is now normal tracked content (including `history-of-the-practice.md`).
 - Machine-local agent drops: one ignored directory name in root `.gitignore` only; no tracked README or markdown links into it.
+
+### jc-consolidate-docs (2026-04-06)
+
+- Ran `pnpm practice:fitness`: **fails** on pre-existing prose-width violations
+  (`.agent/directives/AGENT.md`, `schema-first-execution.md`,
+  `testing-strategy.md`, `CONTRIBUTING.md`, `docs/governance/development-practice.md`,
+  `typescript-practice.md`, `docs/operations/troubleshooting.md`) and line-count
+  warnings on several practice directives and governance docs. No fitness edits
+  in this pass — debt predates the reference layout work.
+- Napkin at 497 lines: below the ~500 rotation threshold; distillation deferred.
+- Practice Core **incoming**: empty (`.gitkeep` only).
+- Extracted **Scoped Gitignore for Colliding Directory Names** to
+  `.agent/memory/patterns/scoped-gitignore-for-colliding-directory-names.md`
+  and indexed it in `patterns/README.md`.
+- Stale-link sweep: no tracked markdown still pointed at removed
+  `reference-local` README or `reference/scratch/` paths.

@@ -93,7 +93,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (12)
+### Process (13)
 
 - **Check Driven Development** -- Use this when: writing TDD RED-phase assertions in a codebase with multiple quality gates. → [check-driven-development.md](check-driven-development.md)
 - **ChatGPT Report Normalisation** -- Use this when: recovering an LLM-exported report from markdown, DOCX, and PDF copies into durable repo-quality markdown. → [chatgpt-report-normalisation.md](chatgpt-report-normalisation.md)
@@ -107,6 +107,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Three Levels of Reference Quality** -- Use this when: documentation or portable content references concepts from another context — choose between opaque pointer, descriptive name, or exported concept. → [three-levels-of-reference-quality.md](three-levels-of-reference-quality.md)
 - **Comments About External Behaviour Degrade** -- Use this when: code comments describe the behaviour of an external library, especially when asserting what it does NOT support. → [comments-about-externals-degrade.md](comments-about-externals-degrade.md)
 - **Cross-Session Pattern Emergence** -- Use this when: running consolidation after multiple sessions on the same workstream, or when insights from separate sessions form a larger picture. → [cross-session-pattern-emergence.md](cross-session-pattern-emergence.md)
+- **Scoped Gitignore for Colliding Directory Names** -- Use this when: a generically named directory (`reference`, `data`, `output`) appears in multiple subtrees with different ignore intent and a broad `**/dirname/*` rule causes surprise ignores or negation sprawl. → [scoped-gitignore-for-colliding-directory-names.md](scoped-gitignore-for-colliding-directory-names.md)
 
 ### Testing (4)
 
