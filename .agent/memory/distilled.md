@@ -188,11 +188,11 @@ context with no natural permanent home.
   stay in core, runtime pipeline moves to libs
 - When extracting types from a composition root, the root
   may still need a local `import type` for its own usage
-- **MCP Apps single callback slot**: the ext-apps SDK
-  uses one setter per notification (`onhostcontextchanged`),
-  not a multi-listener model. Compose style sync and
-  runtime-state dispatch in one handler with error isolation
-  so a styling failure cannot prevent state updates.
+- **MCP Apps handler composition**: the ext-apps SDK has
+  both `on*` property setters AND `addEventListener` for
+  multi-listener support. We compose style sync and
+  runtime-state dispatch in one handler for simplicity and
+  error isolation, not because the SDK forces single-slot.
 - **`console` ban means canonical logger**: the `no-console`
   rule forces injection of `@oaknational/logger`, not fallback
   to `process.stderr.write`. Build scripts without a logger

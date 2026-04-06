@@ -12,11 +12,11 @@ declare const __APP_VERSION__: string;
  * imperatively in the callback — following the canonical MCP Apps SDK
  * React pattern from `ext-apps/docs/patterns.md`.
  *
- * The SDK exposes only one callback slot per notification
- * (`onhostcontextchanged`), so the convenience hooks
- * (`useHostStyleVariables`, etc.) are NOT used — a second assignment
- * silently overwrites the first. Instead, a single handler composes
- * state accumulation and runtime dispatch.
+ * The SDK supports both `on*` property setters and `addEventListener`
+ * for multi-listener composition. We use a single composed handler
+ * for simplicity and error isolation rather than multiple listeners.
+ * The convenience hooks (`useHostStyleVariables`, etc.) are not used
+ * because we need to compose styling with runtime state dispatch.
  */
 import {
   applyDocumentTheme,

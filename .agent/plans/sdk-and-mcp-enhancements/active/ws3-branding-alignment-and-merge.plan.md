@@ -48,7 +48,7 @@ The banner must show:
 5. **Minimal banner height** — compact, not centred in a full viewport
 
 And the design token pipeline must produce the correct CSS custom
-properties to achieve this, using the MCP Apps SDK's 73 standard
+properties to achieve this, using the MCP Apps SDK's standard
 host style variable names as the app's brand defaults (the host MAY
 override these via CSS specificity for visual integration).
 
@@ -76,7 +76,7 @@ the output provides the correct values, how we generate them is our
 concern. The pipeline should also emit the SDK's standard variable
 names so the host can override them for visual integration.
 
-### SDK Standard Variable Names (closed union of 73)
+### SDK Standard Variable Names (closed union)
 
 Colours: `--color-{text,background,border,ring}-{primary,secondary,...}`
 Typography: `--font-{sans,mono}`, `--font-weight-{normal,medium,...}`,
@@ -92,7 +92,7 @@ Full list: `McpUiStyleVariableKey` in `@modelcontextprotocol/ext-apps`.
 - Logo: Real Oak SVG from Oak-Web-Application sprite sheet
 - Brand colour: `#bef2bd` (mint) — surfaces/backgrounds only
 - Text/links: `#222222` — dark text, not coloured accents
-- Font: Lexend, embedded as `@font-face` (self-contained per ADR-151)
+- Font: Lexend, imported as a Google web font via `@import`
 - Banner: minimally tall — logo + text on one compact line
 
 ---
@@ -146,11 +146,13 @@ Update workspace README: dev workflow, MCPJam for visual review.
 This is the core work. All changes flow through the design token
 pipeline.
 
-### 1.1: Embed Lexend font
+### 1.1: Import Lexend web font
 
-Download Lexend Latin variable WOFF2. Add `@font-face` declaration
-to the widget CSS (or a `fonts.css` imported by it). The font data
-will be inlined by `vite-plugin-singlefile` into the single HTML.
+Lexend is a Google Font. Import it in the widget CSS:
+
+```css
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+```
 
 Update the palette token `font.family-body` and `font.family-display`
 to `"Lexend", system-ui, sans-serif`.
@@ -335,7 +337,7 @@ merge `feat/mcp_app_ui` to `main`.
 |------|------------|
 | Mint #bef2bd fails as text colour | Surface-only; all text is #222 (12.6:1 on mint) |
 | Dark theme contrast breaks | Do not apply #222 to dark theme; validate via build |
-| Lexend WOFF2 bloats single-file HTML | Variable font ~25KB; measure before/after |
+| Google Fonts CDN unavailable in host sandbox | Fallback: `system-ui, sans-serif` in font stack |
 | basic-host clone workflow cumbersome | Document clearly; consider MCPJam as alternative |
 | Branch divergence from `main` | Check divergence and merge `main` before P3 |
 
@@ -357,5 +359,9 @@ merge `feat/mcp_app_ui` to `main`.
 ## Cross-Plan References
 
 - `ws3-widget-clean-break-rebuild.plan.md` — parent umbrella
+- `ws3-mcp-apps-sdk-audit.plan.md` — SDK audit: bad assumptions +
+  missed opportunities. B5 (CSP) is blocking for P1. A1/A3/A5 are
+  blocking for P3 merge. B4 (`downloadFile` for `download-asset`)
+  is high-value.
 - `ws3-phase-5-interactive-user-search-view.plan.md` — next consumer
 - `ws3-phase-6-docs-gates-review-commit.plan.md` — final closure

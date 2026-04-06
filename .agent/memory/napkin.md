@@ -208,3 +208,53 @@ side-effect, not the state accumulation.
 - `.agent/reference/official-mcp-app-skills.md` — upstream skill
   installation and integration
 - `.agents/skills/{create-mcp-app,add-app-to-server,convert-web-app,migrate-oai-app}/` — official upstream skills
+
+---
+
+### Session 2026-04-06f — Full SDK docs audit
+
+#### Surprises
+
+**S1: SDK has addEventListener, not just on* setters.**
+Expected: single callback slot per notification (stated in our TSDoc
+and distilled.md). Actual: `App` class has `addEventListener(event,
+handler)` and `removeEventListener(event, handler)` that compose with
+`on*` setters. Multiple listeners supported. Our TSDoc and
+distilled.md entry "MCP Apps single callback slot" are wrong.
+
+**S2: CSP declarations required for external resources.**
+Expected: MCP App iframes can freely make network requests. Actual:
+hosts enforce CSP based on `_meta.ui.csp` declarations in the
+resource `contents[]`. Must declare `resourceDomains` for Google Fonts
+(`fonts.googleapis.com`, `fonts.gstatic.com`) and `connectDomains`
+for any API calls. Without this, hosts may block requests.
+
+**S3: `downloadFile` method exists for sandbox-bypassing downloads.**
+Expected: file downloads require workarounds in sandboxed iframes.
+Actual: `app.downloadFile({ contents: [...] })` is an official SDK
+method that delegates to the host. We already have `download-asset`
+for curriculum slides/PDFs — this should wire into `downloadFile`.
+
+**S4: `useApp` returns connection state we're ignoring.**
+Expected: `app` is sufficient. Actual: `{ app, isConnected, error }`.
+Connection failures or timeouts show a broken widget with no error
+indication.
+
+**S5: ~65 standard variable keys, not 73.**
+Expected: 73 (stated in TSDoc). Actual: installed
+`McpUiStyleVariableKey` union has ~65 keys. The number was never
+authoritative — just a count from an earlier review.
+
+#### Corrections
+
+- Font embedding assumption corrected (again) — user had to correct
+  this a third time. Web fonts use `@import`, not WOFF2 downloads.
+  Saved as feedback memory. Plan and risk assessment updated.
+- "Single callback slot" carried forward from session 2026-04-06c
+  napkin into distilled.md without verification against source. Must
+  correct distilled.md entry.
+
+#### New artefacts
+
+- `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-apps-sdk-audit.plan.md`
+  — 5 bad assumptions, 16 opportunities, all immediate priorities

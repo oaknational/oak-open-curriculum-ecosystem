@@ -19,7 +19,7 @@ communicates styling information via the MCP Apps protocol:
 Host (Claude Desktop, etc.)
   │
   ├── Sends: theme ("light" | "dark")
-  ├── Sends: styles.variables (73 standard CSS custom properties)
+  ├── Sends: styles.variables (standard CSS custom properties)
   ├── Sends: styles.css.fonts (CSS string: @font-face or @import)
   └── Sends: safeAreaInsets (top, right, bottom, left)
   │
@@ -35,7 +35,7 @@ App iframe (your code)
 
 ## CSS Custom Properties
 
-### The 73 Standard Variable Names
+### The Standard Variable Names
 
 The SDK defines a closed union of CSS custom property names
 (`McpUiStyleVariableKey` in `@modelcontextprotocol/ext-apps`). The
@@ -84,7 +84,7 @@ specificity) to integrate the app into its own visual language:
   --color-background-primary: light-dark(#ffffff, #222222);
   --font-sans: 'Lexend', system-ui, sans-serif;
 
-  /* App-specific variables (not in the SDK's 73) */
+  /* App-specific variables (not in the SDK's standard) */
   --color-accent: #bef2bd;
 }
 ```
@@ -97,7 +97,7 @@ and without host overrides) are correct and complete.
 
 ### Brand-Specific Variables
 
-Variables outside the SDK's 73 names are yours. The host will never
+Variables outside the SDK's standard names are yours. The host will never
 override them. Use a namespace prefix (e.g. `--oak-*`) for clarity:
 
 ```css
@@ -215,17 +215,47 @@ function MyApp() {
 }
 ```
 
+## CSP Declarations for External Resources
+
+MCP hosts enforce Content Security Policy based on `_meta.ui.csp`
+declared in the resource `contents[]` return. If the widget loads
+external resources (fonts, stylesheets, APIs), declare the origins:
+
+```typescript
+contents: [
+  {
+    uri: WIDGET_URI,
+    mimeType: RESOURCE_MIME_TYPE,
+    text: getWidgetHtml(),
+    _meta: {
+      ui: {
+        csp: {
+          resourceDomains: ['https://fonts.googleapis.com',
+                            'https://fonts.gstatic.com'],
+        },
+      },
+    },
+  },
+],
+```
+
+- `resourceDomains`: scripts, stylesheets, images, fonts
+- `connectDomains`: fetch/XHR/WebSocket requests
+- Include `localhost` origins during development
+
+Without CSP declarations, hosts may block external requests.
+
 ## What Not to Do
 
-- **Do not load fonts from a CDN** — the iframe CSP may block it.
-  Embed fonts or rely on host-provided fonts.
 - **Do not invent custom host integration** — use the three SDK
   functions (`applyDocumentTheme`, `applyHostStyleVariables`,
   `applyHostFonts`) and nothing else.
-- **Do not ignore the 73 standard names** — provide defaults for
+- **Do not ignore the standard names** — provide defaults for
   every variable you use. The host expects to override these.
 - **Do not hardcode colours in components** — use CSS custom
   properties everywhere so the host theme system works.
+- **Do not load external resources without CSP declarations** —
+  declare all external origins in `_meta.ui.csp`.
 
 ## Reference
 
