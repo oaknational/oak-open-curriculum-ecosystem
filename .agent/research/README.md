@@ -12,7 +12,6 @@
 |---------------|----------|--------|---------|
 | **Research** | `.agent/research/` | Permanent | Record discoveries, insights, analysis |
 | **Reference** | `.agent/reference/` | Permanent | Long-lived supporting material for agents and developers (not ADRs) |
-| **Reference (local)** | `.agent/reference-local/` | Local only | Scratch imports and machine-local drops — not version-controlled |
 | **Plans** | `.agent/plans/` | Ephemeral | Track work in progress, acceptance criteria |
 | **Prompts** | `.agent/prompts/` | Entry points | Start new sessions with context |
 | **Experience** | `.agent/experience/` | Reflections | Metacognitive learnings |
@@ -142,7 +141,7 @@ Research on API structure and data analysis.
 
 | Document | Summary |
 |----------|---------|
-| [../reference/README.md](../reference/README.md), [../reference-local/README.md](../reference-local/README.md) | Clarified **Reference** vs **Reference (local)** vs SDK generated maps in the index table; long-lived agent reference stays under `.agent/reference/`, local-only drops under `.agent/reference-local/`. |
+| [../reference/README.md](../reference/README.md) | Scoped SDK `reference/*.json` ignore; long-lived agent reference under `.agent/reference/`; machine-local drops are intentionally not documented in tracked files (see root `.gitignore`). |
 
 ## Recent Additions (2026-04-03)
 

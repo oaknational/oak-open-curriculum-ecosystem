@@ -12,8 +12,7 @@ At the repository root, [`.gitignore`](../../../../.gitignore) ignores
 This `README.md` remains tracked.
 
 **Contrast** — Agent-facing long-lived reference docs live under
-[`.agent/reference/`](../../../../.agent/reference/README.md). Local-only
-drops belong under [`.agent/reference-local/`](../../../../.agent/reference-local/README.md).
+[`.agent/reference/`](../../../../.agent/reference/README.md).
 
 ## canonical-url-map.json
 

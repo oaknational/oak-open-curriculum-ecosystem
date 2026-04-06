@@ -494,4 +494,4 @@ Previous rotation: 2026-04-03 at 632 lines.
 ### Reference vs research split (2026-04-06)
 
 - Replaced repo-wide `**/reference/*` with scoped `packages/sdks/oak-sdk-codegen/reference/*.json` only; `.agent/reference/` is now normal tracked content (including `history-of-the-practice.md`).
-- Added `.agent/reference-local/` (`*` ignored except README + `.gitignore`) for local-only drops; documented in `.agent/reference/README.md` and the research index table.
+- Machine-local agent drops: one ignored directory name in root `.gitignore` only; no tracked README or markdown links into it.
