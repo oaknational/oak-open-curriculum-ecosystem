@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "typescript": "^5"
+    "typescript": "^6"
   },
   "engines": {
     "node": "24.x"

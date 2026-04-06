@@ -35,11 +35,11 @@
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
-    "@sentry/node": "10.46.0"
+    "@sentry/node": "10.47.0"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
   "engines": {
     "node": "24.x"

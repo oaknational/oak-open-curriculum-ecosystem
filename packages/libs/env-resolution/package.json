@@ -31,12 +31,12 @@
   },
   "dependencies": {
     "@oaknational/result": "workspace:*",
-    "dotenv": "^17.3.1",
+    "dotenv": "^17.4.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "typescript": "^5"
+    "typescript": "^6"
   },
   "engines": {
     "node": "24.x"
