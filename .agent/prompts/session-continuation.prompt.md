@@ -46,16 +46,19 @@ git log --oneline --decorate -10
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md` (SDK adoption — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-brand-banner.plan.md` (companion — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: SDK adoption all 5 phases COMPLETE and committed
-  on `feat/mcp_app_ui` (2026-04-06). Host verification pending.
-  Type-correctness audit completed: new rule
-  `unknown-is-type-destruction.md`, type-reviewer upgraded to 12
-  Commandments, DRY consolidation of principles/governance docs.
-- **Current objective**: Host verification (rebuild, dev:auth:stub,
-  get-curriculum-model, verify banner). Then proceed to WS3 Phase 5
-  (interactive user search view).
+- **Current state**: SDK adoption all 5 phases COMPLETE. Host
+  verification COMPLETE (2026-04-06): server-side MCP Apps pipeline
+  verified correct by 8 specialist reviewers + wire-protocol
+  inspection. Claude Code does not support MCP Apps rendering
+  (confirmed via official docs). MCPJam validates UI renders
+  correctly. Legacy compatibility tests removed. All quality gates
+  green.
+- **Current objective**: Bring the brand banner in line with actual
+  Oak branding (next session), then WS3 Phase 5 (interactive user
+  search view). Local widget dev infrastructure plan queued at
+  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-local-widget-development.plan.md`.
 - **Hard invariants / non-goals**:
-  - Clean-break replacement of the out-of-date OpenAI-era app integration
+  - Clean-break replacement — fully achieved, zero legacy contamination
   - Keep `search` as the model-facing, agent-facing search interface
   - Add `user-search` as the UI-first MCP App tool
   - Do not introduce custom tool-discovery, visibility, or presentation shims
@@ -63,28 +66,27 @@ git log --oneline --decorate -10
 - **Remaining tracked items**:
   - `fakes.ts` assertion — accepted, follow-up for codegen partial type
   - ESLint config suppressions not yet ADR-recorded
-  - Host verification for SDK adoption Phase 5
-- **Recent surprises / corrections**: Type-reviewer recommended
-  `z.unknown()` which is type destruction, not type safety. Then
-  hand-crafted `JsonSchemaPropertySchema` was entropy (shadow type).
-  Both caught by human review. Led to type-correctness audit: new
-  canonical rule, 12 Commandments in type-reviewer, DRY
-  consolidation. `.merge()` was NOT deprecated in Zod v4 — docs
-  claimed otherwise (fixed). `core.$ZodIssue` import path was
-  fragile — replaced with `ZodError['issues'][number]`.
+  - Brand banner needs actual Oak branding (next session)
+  - Local widget dev infrastructure (Vite dev server + basic-host)
+  - `getUiCapability` capability negotiation (mcp-reviewer finding)
+  - Browser proof surfaces per ADR-147 (code-reviewer finding)
+- **Recent surprises / corrections**: Claude Code does not support
+  MCP Apps rendering — the "VS Code" in the MCP Apps client list
+  refers to VS Code Copilot, not Claude Code. Use MCPJam or
+  basic-host for validation. Legacy compatibility tests were testing
+  SDK internals, not Oak product behaviour — deleted.
 - **Open questions / low-confidence areas**: None.
-- **Next safe step**: Host verification, then WS3 Phase 5 (user
-  search view).
-- **Deep consolidation status**: completed this handoff — napkin
-  rotated (559→fresh), 1 pattern extracted
-  (reviewer-widening-is-always-wrong), 2 distilled entries merged,
-  `unknown` graduated to canonical rule. Practice outgoing: the
-  `unknown-is-type-destruction` concept may warrant Practice Core
-  promotion (deferred — requires user approval).
+- **Next safe step**: Oak branding update for banner, then WS3
+  Phase 5 (user search view).
+- **Deep consolidation status**: completed this handoff — rendering
+  investigation archived, 1 pattern extracted
+  (dont-test-sdk-internals), practice outgoing created
+  (unknown-is-type-destruction for Practice Core promotion),
+  cross-references updated.
 
-## Active Workstreams (2026-04-06)
+## Active Workstreams (2026-04-06, updated end of session)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (SDK adoption COMPLETE)
+### 1. WS3 MCP App Rebuild — ACTIVE (SDK adoption + host verification COMPLETE)
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
@@ -116,11 +118,14 @@ Phase 3 (canonical contracts + fallback proof), Phase 4 (brand banner).
   Reviewed by code-reviewer, test-reviewer, mcp-reviewer,
   type-reviewer.
 
-**Pending after adoption plan**: Host verification, then WS3 Phase 5
-(user search), Phase 6 (docs/gates/review).
+**Host verification**: COMPLETE (2026-04-06). Server-side pipeline
+verified correct. Claude Code does not support MCP Apps rendering —
+use MCPJam or basic-host. 8 specialist reviewers passed with zero
+critical issues. Legacy compatibility tests removed.
 
-**Next action**: Host verification (rebuild, dev:auth:stub, call
-get-curriculum-model in Claude Code, verify banner). Then WS3 Phase 5.
+**Next action**: Oak branding update for banner (next session), then
+WS3 Phase 5 (interactive user search view). Local widget dev
+infrastructure plan queued.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

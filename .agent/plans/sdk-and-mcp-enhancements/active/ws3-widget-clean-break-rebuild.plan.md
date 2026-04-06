@@ -310,7 +310,7 @@ plan remains the parent orchestration document and source of phase ordering.
 3. [ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md](ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md)
 4. [ws3-phase-3-canonical-contracts-and-runtime.plan.md](ws3-phase-3-canonical-contracts-and-runtime.plan.md)
 5. [ws3-phase-4-brand-banner.plan.md](ws3-phase-4-brand-banner.plan.md)
-6. [ws3-mcp-app-rendering-investigation.plan.md](ws3-mcp-app-rendering-investigation.plan.md)
+6. [ws3-mcp-app-rendering-investigation.plan.md](../archive/completed/ws3-mcp-app-rendering-investigation.plan.md) — RESOLVED
 7. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md)
 8. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md)
 
@@ -691,8 +691,8 @@ Plus:
   replaced widening alias with schema-derived union + ADR-153
 - `../current/ws3-contrast-validation-prerequisite.plan.md` — ✅ COMPLETE:
   WCAG contrast validation + two blocking token violations fixed
-- `ws3-mcp-app-rendering-investigation.plan.md` — rendering investigation
-  (blocks Phase 5)
+- `archive/completed/ws3-mcp-app-rendering-investigation.plan.md` — RESOLVED:
+  Claude Code does not support MCP Apps. No longer blocks Phase 5.
 - `../current/README.md` — queued and in-progress follow-on execution plans
 
 Closure gate rule:

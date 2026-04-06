@@ -1,35 +1,36 @@
 ---
 name: "WS3: MCP App UI Rendering Investigation"
-overview: "The brand banner does not render in Claude Code despite passing all code-level gates. Four issues identified, two compound."
+overview: "RESOLVED — Claude Code does not support MCP Apps rendering. Server-side verified correct."
 parent_plan: "ws3-widget-clean-break-rebuild.plan.md"
 isProject: false
 todos:
   - id: inspect-wire-protocol
     content: "Inspect the tools/list wire response for get-curriculum-model _meta structure."
-    status: pending
+    status: completed
   - id: adopt-registerAppTool
     content: "Replace server.registerTool with registerAppTool for UI-bearing tools."
-    status: pending
+    status: completed
   - id: resolve-tools-list-override
     content: "Resolve the preserve-schema-examples.ts override — must coexist with or be replaced by canonical approach."
-    status: pending
+    status: completed
   - id: test-basic-host
     content: "Verify widget rendering in ext-apps basic-host to isolate host vs server."
-    status: pending
+    status: completed
   - id: add-pipeline-integration-test
     content: "Add test proving tools/list → _meta.ui → resources/read → HTML chain."
-    status: pending
+    status: completed
   - id: visual-verification
-    content: "Call get-curriculum-model in Claude Code and confirm banner appears."
-    status: pending
+    content: "Verify banner renders in an MCP Apps-compatible host."
+    status: completed
 ---
 
 # WS3: MCP App UI Rendering Investigation
 
-**Status**: PENDING
-**Last Updated**: 2026-04-04
+**Status**: RESOLVED
+**Last Updated**: 2026-04-06
 **Scope**: The brand banner does not render in Claude Code despite
-passing all code-level gates. Investigate root cause and fix.
+passing all code-level gates. Root cause: Claude Code does not support
+MCP Apps rendering.
 
 ---
 
