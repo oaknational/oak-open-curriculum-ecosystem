@@ -40,53 +40,44 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: MCP App migration (WS3 widget rebuild)
+- **Workstream**: MCP App branding alignment + merge
 - **Active plans**:
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-branding-alignment-and-merge.plan.md` (**PRIMARY** — P0-P3)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md` (SDK adoption — COMPLETE)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4-brand-banner.plan.md` (companion — COMPLETE)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: SDK adoption all 5 phases COMPLETE. Host
-  verification COMPLETE (2026-04-06): server-side MCP Apps pipeline
-  verified correct by 8 specialist reviewers + wire-protocol
-  inspection. Claude Code does not support MCP Apps rendering
-  (confirmed via official docs). MCPJam validates UI renders
-  correctly. Legacy compatibility tests removed. All quality gates
-  green.
-- **Current objective**: Bring the brand banner in line with actual
-  Oak branding and merge `feat/mcp_app_ui` to `main`. Phase 5
-  (interactive user search view) and local widget dev infrastructure
-  are deferred to the next branch. Local dev plan queued at
-  `.agent/plans/sdk-and-mcp-enhancements/current/ws3-local-widget-development.plan.md`.
+- **Current state**: Branding plan REVIEWED by 5 specialists. All
+  blocking findings resolved in the plan. Design decisions confirmed:
+  mint `#bef2bd` (surface), `#222222` (text), Lexend (embedded
+  @font-face), real Oak logo SVG, minimal banner height. Canonical
+  MCP App styling doc written (`docs/governance/mcp-app-styling.md`).
+  Official upstream MCP App skills installed. Custom skills removed.
+  Host context pattern aligned with official SDK docs (imperative
+  `applyDocumentTheme`/`applyHostStyleVariables`/`applyHostFonts`
+  in `useEffect`). No code changes to product files yet — plan only.
+- **Current objective**: Execute P0 (dev infra), P1 (branding), P2
+  (host context alignment), P3 (quality gates + merge to `main`).
 - **Hard invariants / non-goals**:
-  - Clean-break replacement — fully achieved, zero legacy contamination
-  - Keep `search` as the model-facing, agent-facing search interface
-  - Add `user-search` as the UI-first MCP App tool
-  - Do not introduce custom tool-discovery, visibility, or presentation shims
-  - Use off-the-shelf ext-apps SDK functions, not hand-rolled plumbing
-- **Remaining tracked items (this branch)**:
-  - Brand banner needs actual Oak branding — then merge to `main`
-  - Pre-merge divergence analysis against `main`
-- **Deferred to next branch**:
-  - WS3 Phase 5 (interactive user search view)
-  - Local widget dev infrastructure (Vite dev server + basic-host)
-  - `getUiCapability` capability negotiation (mcp-reviewer finding)
-  - Browser proof surfaces per ADR-147 (code-reviewer finding)
-  - `fakes.ts` assertion — accepted, follow-up for codegen partial type
-  - ESLint config suppressions not yet ADR-recorded
-- **Recent surprises / corrections**: Claude Code does not support
-  MCP Apps rendering — the "VS Code" in the MCP Apps client list
-  refers to VS Code Copilot, not Claude Code. Use MCPJam or
-  basic-host for validation. Legacy compatibility tests were testing
-  SDK internals, not Oak product behaviour — deleted.
-- **Open questions / low-confidence areas**: None.
-- **Next safe step**: Oak branding update for banner, then merge
-  `feat/mcp_app_ui` to `main`. Phase 5 deferred to next branch.
-- **Deep consolidation status**: completed this handoff — rendering
-  investigation archived, 1 pattern extracted
-  (dont-test-sdk-internals), practice outgoing created
-  (unknown-is-type-destruction for Practice Core promotion),
-  cross-references updated.
+  - No fallbacks — app brand defaults are correct on their own; host
+    overrides are optional via CSS specificity
+  - Use off-the-shelf SDK patterns, not custom plumbing
+  - `getUiCapability` deferred (incompatible with per-request server)
+  - Dark theme: minimal adjustment only, #222222 is LIGHT-THEME-ONLY
+- **Recent surprises / corrections**:
+  - basic-host is NOT an npm package — must clone ext-apps repo
+  - Single-callback-slot: disputed between reviewers (v1.3.2 bundle
+    vs GitHub source). Resolved: use imperative functions in useEffect
+    per official patterns, not convenience hooks.
+  - `getUiCapability` incompatible with per-request stateless server
+    (ADR-112) — text content[] already provides the correct behaviour
+  - "Fallback" language corrected to "app brand defaults"
+- **Open questions / low-confidence areas**:
+  - Whether `fern-500`/`fern-600` can be removed after semantic
+    remapping or are still referenced elsewhere
+- **Next safe step**: Execute P0 — add `dev:widget` and
+  `dev:basic-host` scripts, verify banner renders in basic-host.
+- **Deep consolidation status**: due — new governance doc created,
+  plans consolidated, custom skills removed, official skills
+  installed, 5 reviewer findings addressed
 
 ## Active Workstreams (2026-04-06, updated end of session)
 

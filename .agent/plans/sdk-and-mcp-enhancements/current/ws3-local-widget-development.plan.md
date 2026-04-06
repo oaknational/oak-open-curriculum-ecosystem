@@ -1,8 +1,9 @@
 ---
 name: "WS3: Local Widget Development Infrastructure"
-overview: "Add Vite dev server and basic-host integration for local MCP App widget preview and development."
+overview: "SUPERSEDED — absorbed into ws3-branding-alignment-and-merge.plan.md (P0)."
 parent_plan: "ws3-widget-clean-break-rebuild.plan.md"
 specialist_reviewer: "mcp-reviewer"
+superseded_by: "../active/ws3-branding-alignment-and-merge.plan.md"
 isProject: false
 todos:
   - id: phase-1-red

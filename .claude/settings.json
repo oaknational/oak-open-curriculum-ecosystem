@@ -50,7 +50,13 @@
       "Edit(/.claude/skills/clerk-testing/**)",
       "Edit(/.claude/skills/clerk-webhooks/**)",
       "WebFetch(domain:www.w3.org)",
-      "WebFetch(domain:www.designtokens.org)"
+      "WebFetch(domain:www.designtokens.org)",
+      "WebFetch(domain:www.thenational.academy)",
+      "Bash(npx skills:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(npm view:*)",
+      "Bash(git clone:*)"
     ]
   },
   "hooks": {
@@ -92,6 +98,7 @@
     "code-simplifier@claude-plugins-official": false,
     "claude-md-management@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": false,
-    "claude-code-setup@claude-plugins-official": false
+    "claude-code-setup@claude-plugins-official": false,
+    "mcp-apps@mcp-apps": true
   }
 }

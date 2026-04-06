@@ -32,16 +32,26 @@ Use this skill when the working agent needs to:
 
 ## Capability Routing
 
-This skill is the entry point for MCP expertise. For narrower workflows, route to the appropriate specialist skill:
+This skill is the entry point for MCP expertise. For narrower
+workflows, route to the official upstream MCP App skills (installed
+via `npx skills add modelcontextprotocol/ext-apps`):
 
 | Task | Route to |
 |------|----------|
-| Migrate OpenAI Apps SDK usage to MCP Apps standard (Domain C) | `.agent/skills/mcp-migrate-oai/SKILL.md` |
-| Create a new MCP App (tool + HTML resource) from scratch (Domain D) | `.agent/skills/mcp-create-app/SKILL.md` |
-| Add an MCP App UI to an existing tool (Domain D) | `.agent/skills/mcp-add-ui/SKILL.md` |
-| Convert an existing web component into an MCP App resource (Domain D) | `.agent/skills/mcp-convert-web/SKILL.md` |
+| Create a new MCP App (tool + HTML resource) | `.agents/skills/create-mcp-app/SKILL.md` |
+| Add MCP App UI to an existing MCP tool | `.agents/skills/add-app-to-server/SKILL.md` |
+| Convert a web app into an MCP App resource | `.agents/skills/convert-web-app/SKILL.md` |
+| Migrate from OpenAI Apps SDK to MCP Apps | `.agents/skills/migrate-oai-app/SKILL.md` |
 
-Use this skill (`mcp-expert`) for cross-cutting MCP work that does not fit a single narrower skill — protocol planning, transport design, auth model decisions, primitives strategy, and general MCP implementation support. When the task clearly maps to one of the narrower skills above, route directly to it.
+These are the official skills from the `modelcontextprotocol/ext-apps`
+repository. See `.agent/reference/official-mcp-app-skills.md` for
+installation and integration documentation.
+
+Use this skill (`mcp-expert`) for cross-cutting MCP work that does
+not fit a single narrower skill — protocol planning, transport design,
+auth model decisions, primitives strategy, and general MCP
+implementation support. When the task clearly maps to one of the
+narrower skills above, route directly to it.
 
 ## Overlap Boundaries
 
@@ -73,11 +83,38 @@ Before any MCP planning or implementation, consult live official documentation:
 | MCP Introduction | `https://modelcontextprotocol.io/docs/getting-started/intro` | Protocol overview, concepts, architecture |
 | MCP SDK Documentation | `https://modelcontextprotocol.io/docs/sdk` | TypeScript SDK usage patterns and API |
 | MCP TypeScript SDK | `https://github.com/modelcontextprotocol/typescript-sdk` | SDK source, types, implementation reference |
-| MCP Apps Extension | `https://modelcontextprotocol.io/extensions/apps/overview` | Apps Extension spec: widgets, resources, UI |
-| MCP Apps SDK | `https://github.com/modelcontextprotocol/ext-apps` | `@modelcontextprotocol/ext-apps` source and skills |
 | Extensions Overview | `https://modelcontextprotocol.io/extensions/overview` | Extension mechanism, capability negotiation |
+| MCP Apps Extension | `https://modelcontextprotocol.io/extensions/apps/overview` | Apps Extension spec: widgets, resources, UI |
+| MCP Apps SDK Source | `https://github.com/modelcontextprotocol/ext-apps` | `@modelcontextprotocol/ext-apps` source, examples, and skills |
+| MCP Apps API Docs | `https://apps.extensions.modelcontextprotocol.io/api/` | Generated API reference: all modules, functions, types |
+| MCP Apps React Hooks | `https://apps.extensions.modelcontextprotocol.io/api/modules/_modelcontextprotocol_ext-apps_react.html` | React hooks: `useApp`, `useHostFonts`, `useHostStyleVariables`, `useDocumentTheme`, `useAutoResize` |
+| MCP Apps Server Module | `https://apps.extensions.modelcontextprotocol.io/api/modules/server.html` | Server helpers: `registerAppTool`, `registerAppResource`, `getUiCapability` |
+| MCP Apps Quickstart | `https://apps.extensions.modelcontextprotocol.io/api/documents/quickstart.html` | Step-by-step guide: tool + resource registration, build config |
+| MCP Apps Agent Skills | `https://apps.extensions.modelcontextprotocol.io/api/documents/agent-skills.html` | Upstream installable skills for MCP App development |
+| MCP Apps Spec (Stable) | `https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx` | Stable specification version |
+| MCP Apps Spec (Draft) | `https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/draft/apps.mdx` | Draft specification (upcoming changes) |
 
 Use WebFetch or WebSearch to consult these. The URLs are starting points — follow links for specific areas.
+
+### Upstream MCP App Skills (installed)
+
+The upstream MCP Apps repository provides 4 installable skills
+at `.agents/skills/` (installed via `npx skills add modelcontextprotocol/ext-apps`):
+
+| Skill | Path | Purpose |
+|---|---|---|
+| `create-mcp-app` | `.agents/skills/create-mcp-app/` | Scaffold a new MCP App with interactive UI |
+| `add-app-to-server` | `.agents/skills/add-app-to-server/` | Add UI to an existing MCP tool |
+| `convert-web-app` | `.agents/skills/convert-web-app/` | Convert a web component to MCP App |
+| `migrate-oai-app` | `.agents/skills/migrate-oai-app/` | Migrate from OpenAI Apps SDK |
+
+These are the canonical versions. Custom Oak-specific skills were
+removed in favour of the upstream versions. For Oak-specific migration
+context (coupling inventory, CSP field mapping), consult the archived
+migration plans at `.agent/plans/sdk-and-mcp-enhancements/archive/completed/`.
+
+See `.agent/reference/official-mcp-app-skills.md` for installation
+and integration documentation.
 
 ## Required Local Reading
 
@@ -139,4 +176,4 @@ If current MCP specification capabilities could improve the implementation beyon
 - **Never recommend approaches that violate the MCP specification** without explicitly flagging the deviation and its rationale.
 - **Never make product commitments** about adopting MCP capabilities. Flag opportunities; the team decides.
 - **Never substitute for the reviewer.** After implementation, invoke `mcp-reviewer` for independent assessment.
-- **Never bypass the narrower skills.** When a task cleanly maps to mcp-migrate-oai, mcp-create-app, mcp-add-ui, or mcp-convert-web, route to that skill.
+- **Never bypass the narrower skills.** When a task cleanly maps to create-mcp-app, add-app-to-server, convert-web-app, or migrate-oai-app, route to the upstream skill.

@@ -6,10 +6,10 @@ source_research:
   - "../mcp-apps-support.research.md"
 specialist_reviewer: "mcp-reviewer"
 skills:
-  - "mcp-migrate-oai"
-  - "mcp-create-app"
-  - "mcp-add-ui"
-  - "mcp-convert-web"
+  - "migrate-oai-app"
+  - "create-mcp-app"
+  - "add-app-to-server"
+  - "convert-web-app"
 supersedes:
   - "replace-openai-app-with-mcp-app-infrastructure.execution.plan.md"
 todos:

@@ -49,8 +49,14 @@ These are the primary standards. Always consult the live documentation — the s
 |--------|-----|---------|
 | Extensions Overview | `https://modelcontextprotocol.io/extensions/overview` | Extension mechanism, capability negotiation |
 | MCP Apps Extension | `https://modelcontextprotocol.io/extensions/apps/overview` | Apps Extension spec: widgets, resources, UI |
-| MCP Apps SDK | `https://github.com/modelcontextprotocol/ext-apps` | `@modelcontextprotocol/ext-apps` source and skills |
-| MCP Apps Quickstart | `https://apps.extensions.modelcontextprotocol.io/api/documents/Quickstart.html` | Getting started with MCP Apps |
+| MCP Apps SDK Source | `https://github.com/modelcontextprotocol/ext-apps` | `@modelcontextprotocol/ext-apps` source, examples, skills |
+| MCP Apps API Docs | `https://apps.extensions.modelcontextprotocol.io/api/` | Generated API reference: all modules, functions, types |
+| MCP Apps React Hooks | `https://apps.extensions.modelcontextprotocol.io/api/modules/_modelcontextprotocol_ext-apps_react.html` | React hooks: `useApp`, `useHostFonts`, `useHostStyleVariables`, `useDocumentTheme` |
+| MCP Apps Server Module | `https://apps.extensions.modelcontextprotocol.io/api/modules/server.html` | Server: `registerAppTool`, `registerAppResource`, `getUiCapability` |
+| MCP Apps Quickstart | `https://apps.extensions.modelcontextprotocol.io/api/documents/quickstart.html` | Step-by-step: tool + resource registration, build config |
+| MCP Apps Agent Skills | `https://apps.extensions.modelcontextprotocol.io/api/documents/agent-skills.html` | Upstream installable skills for MCP App development |
+| MCP Apps Spec (Stable) | `https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/2026-01-26/apps.mdx` | Stable specification |
+| MCP Apps Spec (Draft) | `https://github.com/modelcontextprotocol/ext-apps/blob/main/specification/draft/apps.mdx` | Draft specification (upcoming) |
 
 ### This Repo
 
@@ -90,10 +96,10 @@ When the task concerns the OpenAI App to MCP Apps migration, also read:
 | `.agent/plans/sdk-and-mcp-enhancements/roadmap.md` | Migration sequencing, Domain C ordering, and non-goals |
 | `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` | Primary session-anchor plan for MCP Apps migration (WS1–WS4) |
 | `.agent/plans/sdk-and-mcp-enhancements/mcp-apps-support.research.md` | MCP Apps standards evidence and host compatibility findings |
-| `.agent/skills/mcp-migrate-oai/SKILL.md` | Primary Oak migration workflow |
-| `.agent/skills/mcp-create-app/SKILL.md` | Post-migration additive app creation path |
-| `.agent/skills/mcp-add-ui/SKILL.md` | Post-migration additive tool-UI path |
-| `.agent/skills/mcp-convert-web/SKILL.md` | Post-migration web-to-MCP-App conversion path |
+| `.agents/skills/migrate-oai-app/SKILL.md` | Upstream MCP Apps migration skill |
+| `.agents/skills/create-mcp-app/SKILL.md` | Upstream MCP App creation skill |
+| `.agents/skills/add-app-to-server/SKILL.md` | Upstream skill: add UI to existing tool |
+| `.agents/skills/convert-web-app/SKILL.md` | Upstream skill: convert web app to MCP App |
 
 ## Core Philosophy
 
@@ -188,7 +194,7 @@ relevant workspaces:
 - `RESOURCE_MIME_TYPE` — canonical MIME constant
 - Widget data flows through the MCP bridge, never via `window.openai.*`
 - `connect()` is async — widget render must not run before it resolves
-- See `.agent/skills/mcp-add-ui/SKILL.md`, `.agent/skills/mcp-create-app/SKILL.md`, `.agent/skills/mcp-convert-web/SKILL.md`, `.agent/skills/mcp-migrate-oai/SKILL.md` for Oak-specific workflows
+- See upstream MCP App skills at `.agents/skills/{create-mcp-app,add-app-to-server,convert-web-app,migrate-oai-app}/SKILL.md` for SDK workflows
 
 ### Primitives Strategy
 
