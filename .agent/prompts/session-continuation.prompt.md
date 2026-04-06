@@ -54,8 +54,9 @@ git log --oneline --decorate -10
   correctly. Legacy compatibility tests removed. All quality gates
   green.
 - **Current objective**: Bring the brand banner in line with actual
-  Oak branding (next session), then WS3 Phase 5 (interactive user
-  search view). Local widget dev infrastructure plan queued at
+  Oak branding and merge `feat/mcp_app_ui` to `main`. Phase 5
+  (interactive user search view) and local widget dev infrastructure
+  are deferred to the next branch. Local dev plan queued at
   `.agent/plans/sdk-and-mcp-enhancements/current/ws3-local-widget-development.plan.md`.
 - **Hard invariants / non-goals**:
   - Clean-break replacement — fully achieved, zero legacy contamination
@@ -63,21 +64,24 @@ git log --oneline --decorate -10
   - Add `user-search` as the UI-first MCP App tool
   - Do not introduce custom tool-discovery, visibility, or presentation shims
   - Use off-the-shelf ext-apps SDK functions, not hand-rolled plumbing
-- **Remaining tracked items**:
-  - `fakes.ts` assertion — accepted, follow-up for codegen partial type
-  - ESLint config suppressions not yet ADR-recorded
-  - Brand banner needs actual Oak branding (next session)
+- **Remaining tracked items (this branch)**:
+  - Brand banner needs actual Oak branding — then merge to `main`
+  - Pre-merge divergence analysis against `main`
+- **Deferred to next branch**:
+  - WS3 Phase 5 (interactive user search view)
   - Local widget dev infrastructure (Vite dev server + basic-host)
   - `getUiCapability` capability negotiation (mcp-reviewer finding)
   - Browser proof surfaces per ADR-147 (code-reviewer finding)
+  - `fakes.ts` assertion — accepted, follow-up for codegen partial type
+  - ESLint config suppressions not yet ADR-recorded
 - **Recent surprises / corrections**: Claude Code does not support
   MCP Apps rendering — the "VS Code" in the MCP Apps client list
   refers to VS Code Copilot, not Claude Code. Use MCPJam or
   basic-host for validation. Legacy compatibility tests were testing
   SDK internals, not Oak product behaviour — deleted.
 - **Open questions / low-confidence areas**: None.
-- **Next safe step**: Oak branding update for banner, then WS3
-  Phase 5 (user search view).
+- **Next safe step**: Oak branding update for banner, then merge
+  `feat/mcp_app_ui` to `main`. Phase 5 deferred to next branch.
 - **Deep consolidation status**: completed this handoff — rendering
   investigation archived, 1 pattern extracted
   (dont-test-sdk-internals), practice outgoing created
@@ -123,9 +127,9 @@ verified correct. Claude Code does not support MCP Apps rendering —
 use MCPJam or basic-host. 8 specialist reviewers passed with zero
 critical issues. Legacy compatibility tests removed.
 
-**Next action**: Oak branding update for banner (next session), then
-WS3 Phase 5 (interactive user search view). Local widget dev
-infrastructure plan queued.
+**Next action**: Oak branding update for banner, then merge
+`feat/mcp_app_ui` to `main`. Phase 5 (interactive user search view)
+and local widget dev infrastructure deferred to next branch.
 
 ### 2. Frontend Practice Integration — COMPLETE
 
