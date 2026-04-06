@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 3 April 2026  
+**Last Updated**: 6 April 2026  
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -11,6 +11,8 @@
 | Document Type | Location | Nature | Purpose |
 |---------------|----------|--------|---------|
 | **Research** | `.agent/research/` | Permanent | Record discoveries, insights, analysis |
+| **Reference** | `.agent/reference/` | Permanent | Long-lived supporting material for agents and developers (not ADRs) |
+| **Reference (local)** | `.agent/reference-local/` | Local only | Scratch imports and machine-local drops — not version-controlled |
 | **Plans** | `.agent/plans/` | Ephemeral | Track work in progress, acceptance criteria |
 | **Prompts** | `.agent/prompts/` | Entry points | Start new sessions with context |
 | **Experience** | `.agent/experience/` | Reflections | Metacognitive learnings |
@@ -135,6 +137,12 @@ Research on API structure and data analysis.
 | [approaches-to-knowledge-strategic-report.md](approaches-to-knowledge-strategic-report.md) | Knowledge strategy | |
 
 ---
+
+## Recent Additions (2026-04-06)
+
+| Document | Summary |
+|----------|---------|
+| [../reference/README.md](../reference/README.md), [../reference-local/README.md](../reference-local/README.md) | Clarified **Reference** vs **Reference (local)** vs SDK generated maps in the index table; long-lived agent reference stays under `.agent/reference/`, local-only drops under `.agent/reference-local/`. |
 
 ## Recent Additions (2026-04-03)
 
@@ -293,4 +301,4 @@ This index should be updated when:
 - Research is reorganized
 - Major discoveries are made
 
-**Last reviewed**: 2 January 2026
+**Last reviewed**: 6 April 2026

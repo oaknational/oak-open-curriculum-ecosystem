@@ -49,13 +49,29 @@ const ToolMetaSchema = z
   })
   .loose();
 
+/**
+ * A JSON Schema property descriptor as produced by `z.toJSONSchema()`.
+ *
+ * We know the structure: the MCP SDK converts our Zod schemas into JSON Schema
+ * with `type`, `description`, `examples`, `enum`, etc. Modelling this preserves
+ * our understanding rather than discarding it with `z.unknown()`.
+ */
+const JsonSchemaPropertySchema = z
+  .object({
+    type: z.string().optional(),
+    description: z.string().optional(),
+    examples: z.array(z.unknown()).optional(),
+    enum: z.array(z.unknown()).optional(),
+  })
+  .loose();
+
 /** A single tool entry from `tools/list`. */
 const ToolEntrySchema = z
   .object({
     name: z.string(),
     inputSchema: z
       .object({
-        properties: z.record(z.string(), z.unknown()).optional(),
+        properties: z.record(z.string(), JsonSchemaPropertySchema).optional(),
       })
       .loose()
       .optional(),
@@ -78,14 +94,6 @@ const ResourcesReadResultSchema = z.object({
     }),
   ),
 });
-
-/**
- * Validates a JSON Schema property that carries an `examples` array.
- *
- * Used to assert that OpenAPI-derived examples survive the codegen → Zod
- * `.meta({ examples })` → `z.toJSONSchema()` → `tools/list` pipeline.
- */
-const PropertyWithExamplesSchema = z.object({ examples: z.array(z.unknown()) }).loose();
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -183,10 +191,7 @@ describe('MCP App Pipeline E2E', () => {
     const keyStageProperty = tool.inputSchema?.properties?.['keyStage'];
 
     expect(keyStageProperty, 'keyStage property should exist in inputSchema').toBeDefined();
-
-    const parsed = PropertyWithExamplesSchema.parse(keyStageProperty);
-
-    expect(parsed.examples).toContain('ks1');
+    expect(keyStageProperty?.examples).toContain('ks1');
   });
 
   it('resources/read for widget URI returns HTML with text/html;profile=mcp-app', async () => {

@@ -41,17 +41,9 @@ collaboration.txt
 # File system artifacts
 .DS_Store
 
-# Reference material (scratch research, not version-controlled)
-# The directory ignore + negation pattern requires both lines:
-# 1. Ignore all files in the directory (not the directory itself)
-# 2. Un-ignore the specific file to version-control
-# General to specific
-# Workspace reference
-**/reference/*
-!**/reference/README.md
-# Agent reference
-!.agent/reference/cross-platform-agent-surface-matrix.md
-
+# Generated SDK reference data (JSON maps from sitemap scan; regenerated on demand).
+# See packages/sdks/oak-sdk-codegen/reference/README.md
+packages/sdks/oak-sdk-codegen/reference/*.json
 
 
 # Logs
