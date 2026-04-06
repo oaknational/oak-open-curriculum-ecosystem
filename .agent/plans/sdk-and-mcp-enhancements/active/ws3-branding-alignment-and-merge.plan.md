@@ -16,7 +16,7 @@ todos:
     status: pending
   - id: p2-host-context
     content: "P2: Align host context handling with official SDK patterns."
-    status: pending
+    status: in_progress
   - id: p3-quality-merge
     content: "P3: Quality gates, specialist reviews, merge to main."
     status: pending
@@ -230,7 +230,23 @@ viewport. Change to:
 - Banner sits at the top, compact height
 - Padding from design tokens
 
-### 1.7: Verify
+### 1.7: SDK variable bridging (F3/F5 from reviewer sweep)
+
+The token build must also emit CSS that bridges SDK standard variable
+names to `--oak-*` tokens, so that `applyHostStyleVariables` overrides
+have visible effect. For example:
+
+```css
+:root {
+  --color-background-primary: var(--oak-semantic-surface-page);
+  --font-sans: var(--oak-semantic-font-body-family);
+}
+```
+
+Any SDK variable referenced in CSS must include a fallback value:
+`var(--font-sans, system-ui, sans-serif)`.
+
+### 1.8: Verify
 
 - Build widget, check in basic-host
 - Light theme: mint surface where appropriate, dark text, Lexend,
@@ -251,19 +267,26 @@ viewport. Change to:
 
 ## P2 — Align Host Context with Official SDK Pattern
 
-Our `App.tsx` is close to the canonical pattern but should match it
-exactly (from `ext-apps/docs/patterns.md`):
+**Status**: MOSTLY DONE (pulled forward during P0 reviewer sweep).
 
-1. `onhostcontextchanged` stores context in React state
-2. A `useEffect` on that state calls `applyDocumentTheme()`,
-   `applyHostStyleVariables()`, and `applyHostFonts()` imperatively
-3. Safe area insets applied as inline styles
-4. Initial context applied via `useEffect` on `app`
+Completed:
 
-Also ensure the CSS provides the SDK's standard variable names as
-app brand defaults so the host can override them for visual
-integration. Our DTCG pipeline can generate these alongside the
-`--oak-*` variables.
+1. ✅ `onhostcontextchanged` stores context in React state with merge
+   semantics (`{ ...prev, ...ctx }`)
+2. ✅ `useEffect` on accumulated state calls `applyDocumentTheme()`,
+   `applyHostStyleVariables()`, AND `applyHostFonts()`
+3. ✅ Safe area insets applied as inline styles on `.oak-app` container
+4. ✅ Initial context applied via `useEffect` on `app`
+5. ✅ `useCallback` for stable `openLink` handler reference
+6. ✅ Dead `oak-banner__title` CSS class removed from `BrandBanner`
+
+Remaining (blocked on P1 token pipeline work):
+
+- **F3**: Bridge SDK standard variable names (`--color-background-primary`,
+  `--font-sans`, etc.) to `--oak-*` tokens in CSS so host overrides
+  have visible effect. The token build must emit these mappings.
+- **F5**: Add CSS variable fallbacks for any SDK variable references
+  (e.g. `var(--font-sans, system-ui, sans-serif)`).
 
 **Key files**: `apps/oak-curriculum-mcp-streamable-http/widget/src/App.tsx`
 

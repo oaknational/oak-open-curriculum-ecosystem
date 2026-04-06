@@ -45,13 +45,14 @@ git log --oneline --decorate -10
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-branding-alignment-and-merge.plan.md` (**PRIMARY** — P0-P3)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: P0 DONE. `dev:widget` (Vite HMR on port 5173)
-  and `dev:basic-host` (ext-apps clone to `/tmp`, port 8080) scripts
-  added. Turbo pipeline entries added. README updated with dev
-  workflow. All design decisions confirmed from prior session still
-  hold. `pnpm fix` passes.
-- **Current objective**: Execute P1 (branding), P2 (host context
-  alignment), P3 (quality gates + merge to `main`).
+- **Current state**: P0 DONE. P2 MOSTLY DONE (pulled forward).
+  App.tsx refactored to canonical SDK React pattern: accumulated
+  host context state with merge semantics, `useEffect` styling,
+  `applyHostFonts` added, safe area insets applied, `useCallback`
+  for stable refs. Remaining P2 items (F3 SDK variable bridging,
+  F5 CSS fallbacks) blocked on P1 token pipeline work.
+- **Current objective**: Execute P1 (branding + token pipeline
+  including F3/F5), finish P2 remainders, P3 (gates + merge).
 - **Hard invariants / non-goals**:
   - No fallbacks — app brand defaults are correct on their own; host
     overrides are optional via CSS specificity
@@ -59,21 +60,26 @@ git log --oneline --decorate -10
   - `getUiCapability` deferred (incompatible with per-request server)
   - Dark theme: minimal adjustment only, #222222 is LIGHT-THEME-ONLY
 - **Recent surprises / corrections**:
-  - `@modelcontextprotocol/ext-apps` blocks `require('./package.json')`
-    via Node exports field — version lookup needs `require.resolve` +
-    walk-up to find `package.json`. Simplified by dropping version
-    pinning from `dev:basic-host` (shallow clone of default branch).
-  - `vite-plugin-singlefile` confirmed as no-op in dev mode — hooks
-    into `generateBundle` (build-only). No separate dev config needed.
+  - 4-reviewer sweep (assumptions, mcp, code, react-component)
+    found 7 divergences from canonical SDK pattern. D2 was
+    partially false alarm — reducer already had merge semantics,
+    but styling side-effect was imperative on partial context.
+  - MCP spec confirms `hostcontextchanged` sends partial updates
+    (SHOULD merge). Host does NOT guarantee full context each time.
+  - SDK does NOT require apps to define the 73 standard variable
+    names — those are the host override channel. Apps can use any
+    CSS naming internally.
 - **Open questions / low-confidence areas**:
   - Whether `fern-500`/`fern-600` can be removed after semantic
     remapping or are still referenced elsewhere
+  - F3 bridging approach: map SDK names to `--oak-*` tokens in CSS
+    vs adapter in JS. CSS bridging preferred (plan §1.7).
 - **Next safe step**: Execute P1 — embed Lexend, replace logo SVG,
-  adjust palette tokens, update semantic mappings, make banner compact.
-  Ask user about specific visual choices (mint placement, banner
-  layout) rather than assuming.
-- **Deep consolidation status**: not due — P0 is infrastructure only,
-  no new governance docs or patterns
+  adjust palette tokens, update semantic mappings, make banner
+  compact, emit SDK variable bridges (F3/F5). Ask user about
+  specific visual choices rather than assuming.
+- **Deep consolidation status**: not due — reviewer findings are
+  operational corrections, no new governance docs or patterns
 
 ## Active Workstreams (2026-04-06, updated end of session)
 

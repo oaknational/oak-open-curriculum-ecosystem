@@ -166,6 +166,40 @@ ignored. One config serves both modes.
 
 - None this session.
 
+---
+
+### Session 2026-04-06e — Canonical divergence review + fixes
+
+#### Surprises
+
+**S1: MCP spec confirms partial host context updates.**
+Expected: unclear whether hosts always send full context.
+Actual: MCP Apps spec explicitly says these are "partial updates"
+and Views SHOULD merge. A theme-only update followed by a
+variables-only update is a valid host sequence. Our imperative
+approach was silently losing previously-set styling fields.
+
+**S2: SDK does NOT require 73 standard variable names in app CSS.**
+Expected: apps must define `--color-background-primary` etc.
+Actual: those are purely the host-to-app override channel. Apps
+can use whatever CSS naming they want internally. The MUST is
+narrower: provide fallbacks for any SDK variable you DO reference.
+
+**S3: D2 was partially a false alarm.**
+The assumptions-reviewer caught that our reducer already had merge
+semantics via `?? state.theme` (line 144-145 of
+`app-runtime-state.ts`). The real bug was only on the styling
+side-effect, not the state accumulation.
+
+#### Corrections
+
+- Refactored App.tsx to canonical SDK React pattern: `useState`
+  with merge semantics, `useEffect` for styling, `applyHostFonts`
+  added, safe area insets applied, `useCallback` for stable refs.
+- Removed dead `oak-banner__title` CSS class from BrandBanner.
+- Extracted `useHostContextStyling` hook to keep `App` under
+  50-line lint limit.
+
 #### New artefacts
 
 - `docs/governance/mcp-app-styling.md` — canonical MCP App styling

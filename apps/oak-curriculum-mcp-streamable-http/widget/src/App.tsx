@@ -5,27 +5,33 @@ declare const __APP_VERSION__: string;
  * Connected MCP App component and presentational shell.
  *
  * @remarks
- * Host-context styling and runtime state dispatch are composed in a
- * single `onhostcontextchanged` handler registered in `onAppCreated`.
- * The SDK's `useHostStyleVariables` hook is NOT used because it
- * internally registers its own `onhostcontextchanged` handler, and the
- * SDK exposes only one callback slot per notification — a second
- * assignment silently overwrites the first.
+ * Host context is accumulated in React state with merge semantics so
+ * that partial updates (e.g. theme-only, then variables-only) never
+ * lose previously received fields. Styling side-effects are applied
+ * reactively via `useEffect` on the accumulated state — not
+ * imperatively in the callback — following the canonical MCP Apps SDK
+ * React pattern from `ext-apps/docs/patterns.md`.
+ *
+ * The SDK exposes only one callback slot per notification
+ * (`onhostcontextchanged`), so the convenience hooks
+ * (`useHostStyleVariables`, etc.) are NOT used — a second assignment
+ * silently overwrites the first. Instead, a single handler composes
+ * state accumulation and runtime dispatch.
  */
 import {
   applyDocumentTheme,
+  applyHostFonts,
   applyHostStyleVariables as applyMcpHostStyleVariables,
   type McpUiHostContext,
-  type App as McpApp,
 } from '@modelcontextprotocol/ext-apps';
 import { useApp } from '@modelcontextprotocol/ext-apps/react';
-import { useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import {
   applyHostContextToRuntime,
   initialAppRuntimeState,
   reduceAppRuntimeState,
   registerAppRuntimeHandlers,
-  type AppRuntimeDispatch,
+  type AppRuntimeAction,
 } from './app-runtime-state.js';
 import { BrandBanner } from './BrandBanner.js';
 
@@ -33,54 +39,28 @@ import { BrandBanner } from './BrandBanner.js';
  * Applies host-provided visual styling to the document.
  *
  * @remarks
- * Sets the document-level theme attribute and host CSS custom properties.
- * Errors are caught and dispatched as runtime errors so that the styling
- * concern cannot poison the runtime state dispatch in the same callback.
+ * Applies all three host styling channels: document theme attribute,
+ * CSS custom properties, and font declarations. Operates on the
+ * accumulated host context so that partial updates never lose
+ * previously received styling fields.
  *
  * The MCP Apps SDK constrains host style variable keys to a closed union
- * of 73 specific names (e.g. `--color-background-primary`), none of which
+ * of standard names (e.g. `--color-background-primary`), none of which
  * overlap with Oak's `--oak-*` token namespace. Namespace collision is
  * therefore prevented at the protocol level.
  */
-function syncHostContextStyling(
-  hostContext: Partial<McpUiHostContext>,
-  dispatch: AppRuntimeDispatch,
-): void {
-  try {
-    if (hostContext.theme) {
-      applyDocumentTheme(hostContext.theme);
-    }
-
-    if (hostContext.styles?.variables) {
-      applyMcpHostStyleVariables(hostContext.styles.variables);
-    }
-  } catch (error: unknown) {
-    dispatch({
-      type: 'runtime-error',
-      errorMessage: error instanceof Error ? error.message : 'Host styling synchronisation failed',
-    });
+function syncHostContextStyling(hostContext: Partial<McpUiHostContext>): void {
+  if (hostContext.theme) {
+    applyDocumentTheme(hostContext.theme);
   }
-}
 
-/**
- * Creates a callback that opens an external URL via the MCP Apps SDK.
- *
- * @remarks
- * When `app` is null (not yet connected), the callback does nothing and
- * the native `<a href>` fallback is allowed to navigate. When `app` is
- * connected, `preventDefault` is called before delegating to `openLink`.
- *
- * @param app - The MCP App instance, or null if not yet connected.
- */
-function createOpenLinkHandler(app: McpApp | null): (url: string, event: React.MouseEvent) => void {
-  return (url, event) => {
-    if (!app) {
-      return;
-    }
+  if (hostContext.styles?.variables) {
+    applyMcpHostStyleVariables(hostContext.styles.variables);
+  }
 
-    event.preventDefault();
-    void app.openLink({ url });
-  };
+  if (hostContext.styles?.css?.fonts) {
+    applyHostFonts(hostContext.styles.css.fonts);
+  }
 }
 
 /**
@@ -91,17 +71,63 @@ function createOpenLinkHandler(app: McpApp | null): (url: string, event: React.M
  * The banner is the complete view when `get-curriculum-model` fires
  * (a session-start proxy). The curriculum-model data serves the agent
  * via text content; the human sees only the brand banner for orientation.
+ *
+ * Safe area insets from the host context are applied as inline padding
+ * so content is not obscured by device notches or system UI overlays.
  */
 export function AppView({
   onOpenLink,
+  safeAreaInsets,
 }: {
   readonly onOpenLink: (url: string, event: React.MouseEvent) => void;
+  readonly safeAreaInsets?: McpUiHostContext['safeAreaInsets'];
 }): React.JSX.Element {
   return (
-    <div className="oak-app" data-testid="oak-mcp-app-shell">
+    <div
+      className="oak-app"
+      data-testid="oak-mcp-app-shell"
+      style={
+        safeAreaInsets
+          ? {
+              paddingTop: safeAreaInsets.top,
+              paddingRight: safeAreaInsets.right,
+              paddingBottom: safeAreaInsets.bottom,
+              paddingLeft: safeAreaInsets.left,
+            }
+          : undefined
+      }
+    >
       <BrandBanner onOpenLink={onOpenLink} />
     </div>
   );
+}
+
+/**
+ * Applies accumulated host context styling as a React side-effect.
+ *
+ * @remarks
+ * Runs reactively whenever the merged host context changes. Errors are
+ * caught so a styling failure cannot poison the React render cycle.
+ */
+function useHostContextStyling(
+  hostContext: Partial<McpUiHostContext> | undefined,
+  dispatch: React.Dispatch<AppRuntimeAction>,
+): void {
+  useEffect(() => {
+    if (!hostContext) {
+      return;
+    }
+
+    try {
+      syncHostContextStyling(hostContext);
+    } catch (error: unknown) {
+      dispatch({
+        type: 'runtime-error',
+        errorMessage:
+          error instanceof Error ? error.message : 'Host styling synchronisation failed',
+      });
+    }
+  }, [hostContext, dispatch]);
 }
 
 /**
@@ -109,16 +135,15 @@ export function AppView({
  *
  * @remarks
  * Initialises the MCP Apps React runtime via {@link useApp}, registers
- * lifecycle handlers and the composed host-context handler in
- * `onAppCreated`. Delegates rendering to {@link AppView}.
- *
- * Host-context styling (theme + CSS variables) and runtime state
- * dispatch are composed in a single `onhostcontextchanged` handler to
- * avoid the single-callback-slot overwrite problem documented in the
- * module-level TSDoc.
+ * lifecycle handlers, and accumulates host context in React state with
+ * merge semantics. Styling side-effects are applied reactively via
+ * {@link useHostContextStyling}, following the canonical SDK React
+ * pattern. Delegates rendering to {@link AppView}.
  */
 export function App(): React.JSX.Element {
   const [, dispatch] = useReducer(reduceAppRuntimeState, initialAppRuntimeState);
+  const [hostContext, setHostContext] = useState<Partial<McpUiHostContext>>();
+
   const { app } = useApp({
     appInfo: {
       name: 'oak-curriculum-mcp-app',
@@ -128,24 +153,38 @@ export function App(): React.JSX.Element {
     onAppCreated: (createdApp) => {
       registerAppRuntimeHandlers(createdApp, dispatch);
 
-      // Compose styling and state dispatch in a single host-context
-      // handler. Each concern is error-isolated: syncHostContextStyling
-      // catches internally so a styling failure cannot prevent the
-      // state-machine dispatch.
       createdApp.onhostcontextchanged = (updatedHostContext) => {
-        syncHostContextStyling(updatedHostContext, dispatch);
+        setHostContext((prev) => ({ ...prev, ...updatedHostContext }));
         applyHostContextToRuntime(dispatch, updatedHostContext);
       };
-
-      // Apply initial host context if available at creation time.
-      const initialContext = createdApp.getHostContext();
-
-      if (initialContext) {
-        syncHostContextStyling(initialContext, dispatch);
-        applyHostContextToRuntime(dispatch, initialContext);
-      }
     },
   });
 
-  return <AppView onOpenLink={createOpenLinkHandler(app)} />;
+  // Apply initial host context after connection.
+  useEffect(() => {
+    if (app) {
+      const initialContext = app.getHostContext();
+
+      if (initialContext) {
+        setHostContext(initialContext);
+        applyHostContextToRuntime(dispatch, initialContext);
+      }
+    }
+  }, [app, dispatch]);
+
+  useHostContextStyling(hostContext, dispatch);
+
+  const handleOpenLink = useCallback(
+    (url: string, event: React.MouseEvent) => {
+      if (!app) {
+        return;
+      }
+
+      event.preventDefault();
+      void app.openLink({ url });
+    },
+    [app],
+  );
+
+  return <AppView onOpenLink={handleOpenLink} safeAreaInsets={hostContext?.safeAreaInsets} />;
 }

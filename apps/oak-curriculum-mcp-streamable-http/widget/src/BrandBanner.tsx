@@ -95,7 +95,7 @@ export function BrandBanner({ onOpenLink }: BrandBannerProps): React.JSX.Element
         }}
       >
         <OakLogo />
-        <span className="oak-banner__title">Oak National Academy</span>
+        <span>Oak National Academy</span>
       </a>
     </header>
   );
