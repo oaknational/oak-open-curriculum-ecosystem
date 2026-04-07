@@ -1,14 +1,13 @@
 /**
  * Vite configuration for the Oak MCP App widget.
  *
- * Builds a self-contained `index.html` file that can be served as an
- * MCP App resource. Uses `vite-plugin-singlefile` to inline all JS and CSS
- * into one HTML file — no external network requests needed from the iframe.
+ * **Dev mode** (multi-page): Serves an index page, individual widget pages,
+ * and a design token demo page. The dev server watches design token sources
+ * and rebuilds token CSS on change for live-reload across workspaces.
  *
- * In dev mode, a custom plugin watches the design token source directory
- * (`packages/design/oak-design-tokens/src/`) and rebuilds the token CSS
- * when any JSON or TS source changes. This enables live-reload of token
- * edits across the workspace boundary without a manual rebuild step.
+ * **Build mode** (single-page): Builds only `oak-banner.html` as a
+ * self-contained HTML file via `vite-plugin-singlefile`. The output
+ * (`dist/oak-banner.html`) is registered as the MCP App resource.
  */
 import { execSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -28,6 +27,19 @@ export default defineConfig({
   plugins: [
     react(),
     viteSingleFile(),
+    /**
+     * Cross-workspace file watcher for design token source files.
+     *
+     * Watches `oak-design-tokens/src/` and triggers a synchronous rebuild
+     * + full-reload when token JSON or TS sources change. This is fragile:
+     * it uses `execSync` (blocks the event loop), and knows the internal
+     * source layout of a different workspace. If `oak-design-tokens`
+     * restructures its `src/tokens/` directory, this watcher silently
+     * breaks with no build error.
+     *
+     * Remove when Turborepo watch mode supports cross-workspace dev
+     * dependency tracking (tracked in vercel/turbo roadmap).
+     */
     {
       name: 'oak-design-tokens-watch',
       apply: 'serve',
@@ -70,7 +82,7 @@ export default defineConfig({
     outDir: resolve(widgetRoot, '..', 'dist'),
     emptyOutDir: false,
     rollupOptions: {
-      input: resolve(widgetRoot, 'index.html'),
+      input: resolve(widgetRoot, 'oak-banner.html'),
     },
   },
 });

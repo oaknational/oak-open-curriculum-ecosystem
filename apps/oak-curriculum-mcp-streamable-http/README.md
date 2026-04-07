@@ -73,9 +73,12 @@ Note: The server automatically adds the required `Accept: application/json, text
 
 ## Widget development
 
-The MCP App widget has a Vite dev server with hot module replacement for
-iterating on UI and branding. To see the widget inside an MCP host, use
-the `basic-host` example from the ext-apps SDK.
+The MCP App widget has a multi-page Vite dev server for iterating on
+UI, branding, and design tokens. The dev server serves:
+
+- **Index page** (`/`) — navigation hub listing all widgets and tools
+- **Widget pages** (e.g. `/oak-banner.html`) — individual widgets
+- **Token demo** (`/tokens.html`) — live colour palette, typography, and spacing reference
 
 **Prerequisites**: `pnpm install` and `pnpm build` from the repo root
 (design tokens and SDK must be built before the widget can resolve its
@@ -83,7 +86,7 @@ imports).
 
 ### Widget-only iteration (one terminal)
 
-For layout and styling work that does not need MCP host context:
+For layout, styling, and token work that does not need MCP host context:
 
 ```bash
 pnpm dev:widget
@@ -91,33 +94,60 @@ pnpm dev:widget
 
 Open `http://localhost:5173/`. Vite provides hot module replacement —
 edits to React components, CSS, and design tokens are reflected
-immediately. The ext-apps SDK will not connect to a host in this mode,
-but the UI renders normally.
+immediately. Design token JSON edits in `packages/design/` trigger an
+automatic rebuild and full-page reload via a Vite plugin. The ext-apps
+SDK will not connect to a host in this mode, but the UI renders normally.
 
-### Full MCP App dev loop (three terminals)
+### Full MCP App dev loop (two terminals)
 
-To see the widget rendered inside an MCP host iframe:
+To see the widget rendered inside a real MCP host iframe with security
+sandboxing:
 
-| Terminal | Command               | Purpose                                                              |
-| -------- | --------------------- | -------------------------------------------------------------------- |
-| 1        | `pnpm dev:auth:stub`  | MCP server on port 3333 (stub tools, no real API needed)             |
-| 2        | `pnpm dev:widget`     | Widget Vite dev server with HMR at `http://localhost:5173/`          |
-| 3        | `pnpm dev:basic-host` | basic-host from ext-apps SDK, connects to localhost:3333 (port 8080) |
+| Terminal | Command                   | Purpose                                                      |
+| -------- | ------------------------- | ------------------------------------------------------------ |
+| 1        | `pnpm dev:observe:noauth` | MCP server on port 3333 (auth disabled for local dev)        |
+| 2        | `pnpm dev:widget-in-host` | ext-apps basic-host on port 8080, connects to localhost:3333 |
 
-Start in order: server first (terminal 1), then widget (terminal 2),
-then basic-host (terminal 3). Open `http://localhost:8080` to see the
-host UI. Call a UI-bearing tool (e.g. `get-curriculum-model`) from the
-basic-host interface to render the widget inside the host iframe.
+Start the MCP server first (terminal 1), then the host (terminal 2).
+The `dev:widget-in-host` script checks prerequisites, prints usage
+instructions, and starts the host automatically. Open
+`http://localhost:8080`, select a tool, and call it — the widget renders
+in a sandboxed double-iframe matching the production security model.
 
-`dev:basic-host` clones the `@modelcontextprotocol/ext-apps` repo to
-`/tmp/mcp-ext-apps` on first run and reuses it on subsequent runs.
-Delete that directory to refresh: `rm -rf /tmp/mcp-ext-apps`.
+`dev:widget-in-host` clones `@modelcontextprotocol/ext-apps` to
+`$TMPDIR/mcp-ext-apps` on first run and reuses it subsequently. Delete
+that directory to refresh: `rm -rf /tmp/mcp-ext-apps`. Requires `bun`.
+
+### Design tokens
+
+Tokens live in `packages/design/oak-design-tokens/src/tokens/`:
+
+| File                   | Purpose                              |
+| ---------------------- | ------------------------------------ |
+| `palette.json`         | Base colour palette (all hex values) |
+| `semantic.light.json`  | Light theme semantic mappings        |
+| `semantic.dark.json`   | Dark theme semantic mappings         |
+| `component.json`       | Component-level token aliases        |
+| `contrast-pairings.ts` | WCAG AA contrast validation manifest |
+
+Dark mode is CSS-only via `@media (prefers-color-scheme: dark)` — no
+JavaScript theme switching. The build pipeline generates
+`dist/contrast-report.json` validating all declared pairings against
+WCAG AA thresholds. Violations fail the build (unless `OAK_TOKEN_DEV=1`
+is set for iterative development).
+
+The widget loads **Google Fonts (Lexend)** via `@import` from
+`fonts.googleapis.com` and `fonts.gstatic.com`. These domains are
+declared in the MCP resource's `_meta.ui.csp.resourceDomains` so that
+hosts with CSP enforcement allow the font requests. The widget also
+provides defaults for all 76 standard MCP host CSS custom properties,
+mapping them to Oak design tokens where equivalents exist.
 
 ### Visual review with MCPJam
 
 [MCPJam](https://www.mcpjam.com/) is an MCP Apps-compatible host useful
 for visual design review and acceptance testing. Connect it to the local
-server at `http://localhost:3333/mcp` (requires `dev:auth:stub` running).
+server at `http://localhost:3333/mcp` (requires `dev:observe:noauth` running).
 
 ## Observability
 
@@ -297,19 +327,39 @@ This application has comprehensive test coverage across three testing layers:
 - **Header Redaction E2E** (`e2e-tests/header-redaction.e2e.test.ts`): full request/response cycles with sensitive headers, OAuth scenarios
 - **Tool E2E** (`e2e-tests/`): MCP tool invocation, resource listing, prompt registration, widget metadata
 
-### Running Tests
+### Widget Tests (Playwright)
+
+Widget tests run against the Vite dev server (port 5173), separate from
+the MCP server landing page tests (port 3333). Both light and dark
+themes are tested via Playwright projects with `colorScheme` emulation.
 
 ```bash
-# Run all unit and integration tests
+# Widget visual/structural tests (both themes)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:ui
+
+# Widget WCAG 2.2 AA accessibility tests (both themes, axe-core)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
+```
+
+### Running All Tests
+
+```bash
+# Unit and integration tests (Vitest)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
 
-# Run E2E tests
+# Widget unit tests (Vitest, React Testing Library)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget
+
+# E2E tests (Vitest, requires built server)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 
-# Run all workspace test suites
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
+# MCP server landing page tests (Playwright)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:a11y
+
+# Widget Playwright tests (separate from server tests)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:ui
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 ```
 
 ## Detailed Documentation

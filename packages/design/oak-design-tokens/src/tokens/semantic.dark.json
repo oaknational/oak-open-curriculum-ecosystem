@@ -43,8 +43,8 @@
     },
     "accent-strong": {
       "$type": "color",
-      "$value": "{color.paper-050}",
-      "$description": "Hover accent — white for visible state change (4.78:1 on green-700)"
+      "$value": "{color.mint-300}",
+      "$description": "Hover/active accent — mint on green for visible state change (3.91:1 on green-700, passes 3:1 non-text)"
     },
     "focus-ring": {
       "$type": "color",

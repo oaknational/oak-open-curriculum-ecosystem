@@ -150,9 +150,10 @@ export function registerThreadProgressionsResource(
 
 /**
  * Path to the built MCP App HTML bundle consumed by the production HTML
- * provider.
+ * provider. Named `oak-banner.html` to match the widget page naming
+ * convention introduced in the multi-page widget dev server.
  */
-const WIDGET_HTML_PATH = resolve(import.meta.dirname, '../dist/index.html');
+const WIDGET_HTML_PATH = resolve(import.meta.dirname, '../dist/oak-banner.html');
 
 /**
  * Reads the built MCP App HTML bundle from disk for production resource reads.
@@ -163,6 +164,22 @@ const WIDGET_HTML_PATH = resolve(import.meta.dirname, '../dist/index.html');
 export function readBuiltWidgetHtml(): string {
   return readFileSync(WIDGET_HTML_PATH, 'utf-8');
 }
+
+/**
+ * MCP App UI metadata for the widget resource.
+ *
+ * Placed on the `contents[]` item per the MCP Apps CSP/CORS specification
+ * (content-item `_meta.ui` takes precedence over listing-level config).
+ * Google Fonts domains are declared so hosts with CSP enforcement allow
+ * the Lexend `@import` request. `prefersBorder: false` because the widget
+ * manages its own branded background.
+ */
+const WIDGET_UI_META = {
+  csp: {
+    resourceDomains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+  },
+  prefersBorder: false,
+} as const;
 
 /**
  * Registers the MCP App widget resource via `registerAppResource`.
@@ -194,6 +211,7 @@ export function registerWidgetResource(
             uri: WIDGET_URI,
             mimeType: RESOURCE_MIME_TYPE,
             text: getWidgetHtml(),
+            _meta: { ui: WIDGET_UI_META },
           },
         ],
       }),

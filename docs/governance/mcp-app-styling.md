@@ -41,14 +41,14 @@ The SDK defines a closed union of CSS custom property names
 (`McpUiStyleVariableKey` in `@modelcontextprotocol/ext-apps`). The
 host MAY provide values for any of these. Your app provides defaults.
 
-**Colours** (40 variables):
+**Colours** (37 variables):
 
 ```text
 --color-{background,text,border}-{primary,secondary,tertiary,inverse,ghost,info,danger,success,warning,disabled}
 --color-ring-{primary,secondary,inverse,info,danger,success,warning}
 ```
 
-**Typography** (20 variables):
+**Typography** (28 variables):
 
 ```text
 --font-sans                          Font family (sans-serif)
@@ -60,11 +60,12 @@ host MAY provide values for any of these. Your app provides defaults.
 --font-heading-{xs,sm,md,lg,xl,2xl,3xl}-line-height
 ```
 
-**Layout** (7 variables):
+**Layout and shadows** (11 variables):
 
 ```text
 --border-radius-{xs,sm,md,lg,xl,full}
 --border-width-regular
+--shadow-{hairline,sm,md,lg}
 ```
 
 ### App Brand Defaults

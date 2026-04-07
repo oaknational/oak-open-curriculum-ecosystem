@@ -67,7 +67,8 @@ function syncHostContextStyling(hostContext: Partial<McpUiHostContext>): void {
  * Pure presentational component for the MCP App shell.
  *
  * @remarks
- * Renders the Oak brand banner — logo + "Oak National Academy" link.
+ * Uses `<main>` as the document landmark and includes a visually hidden
+ * `<h1>` for screen readers (WCAG landmark-one-main, page-has-heading-one).
  * The banner is the complete view when `get-curriculum-model` fires
  * (a session-start proxy). The curriculum-model data serves the agent
  * via text content; the human sees only the brand banner for orientation.
@@ -83,7 +84,7 @@ export function AppView({
   readonly safeAreaInsets?: McpUiHostContext['safeAreaInsets'];
 }): React.JSX.Element {
   return (
-    <div
+    <main
       className="oak-app"
       data-testid="oak-mcp-app-shell"
       style={
@@ -97,8 +98,9 @@ export function AppView({
           : undefined
       }
     >
+      <h1 className="visually-hidden">Oak National Academy Curriculum</h1>
       <BrandBanner onOpenLink={onOpenLink} />
-    </div>
+    </main>
   );
 }
 
@@ -144,7 +146,7 @@ export function App(): React.JSX.Element {
   const [, dispatch] = useReducer(reduceAppRuntimeState, initialAppRuntimeState);
   const [hostContext, setHostContext] = useState<Partial<McpUiHostContext>>();
 
-  const { app } = useApp({
+  const { app, isConnected, error } = useApp({
     appInfo: {
       name: 'oak-curriculum-mcp-app',
       version: __APP_VERSION__,
@@ -174,16 +176,28 @@ export function App(): React.JSX.Element {
 
   useHostContextStyling(hostContext, dispatch);
 
+  useEffect(() => {
+    if (error) {
+      dispatch({ type: 'runtime-error', errorMessage: error.message });
+    }
+  }, [error, dispatch]);
+
   const handleOpenLink = useCallback(
     (url: string, event: React.MouseEvent) => {
-      if (!app) {
+      if (!app || !isConnected) {
+        return;
+      }
+
+      const capabilities = app.getHostCapabilities();
+
+      if (!capabilities?.openLinks) {
         return;
       }
 
       event.preventDefault();
       void app.openLink({ url });
     },
-    [app],
+    [app, isConnected],
   );
 
   return <AppView onOpenLink={handleOpenLink} safeAreaInsets={hostContext?.safeAreaInsets} />;
