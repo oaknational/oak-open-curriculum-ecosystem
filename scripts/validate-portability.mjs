@@ -99,6 +99,18 @@ function isClerkSkill(name) {
   return name.startsWith(CLERK_SKILL_PREFIX);
 }
 
+/** Vendor MCP Apps skills installed by the ext-apps Claude plugin. */
+const MCP_APPS_VENDOR_SKILLS = new Set([
+  'add-app-to-server',
+  'convert-web-app',
+  'create-mcp-app',
+  'migrate-oai-app',
+]);
+
+function isMcpAppsVendorSkill(name) {
+  return MCP_APPS_VENDOR_SKILLS.has(name);
+}
+
 function isSubagentAdapter(name) {
   // Match exact template name or persona variants (e.g., "architecture-reviewer-barney" matches "architecture-reviewer")
   return subagentTemplateNames.some((t) => name === t || name.startsWith(`${t}-`));
@@ -194,9 +206,10 @@ const skillAdapterPlatforms = [
 for (const platform of skillAdapterPlatforms) {
   const dirs = await listSubdirs(platform.dir);
   for (const dir of dirs) {
-    // Skip Clerk plugins, command adapters (jc-*), and sub-agent wrappers
+    // Skip Clerk plugins, command adapters (jc-*), sub-agent wrappers, and vendor MCP Apps skills
     if (isClerkSkill(dir) || dir.startsWith('jc-')) continue;
     if (isSubagentAdapter(dir)) continue;
+    if (isMcpAppsVendorSkill(dir)) continue;
 
     if (!canonicalSkillSet.has(dir)) {
       addIssue(

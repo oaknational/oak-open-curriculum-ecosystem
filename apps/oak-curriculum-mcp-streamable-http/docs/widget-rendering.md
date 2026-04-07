@@ -2,16 +2,11 @@
 
 ## Status
 
-The legacy widget-rendering architecture is superseded.
-
-Oak is building a **total replacement**: one fresh React MCP App built on the
-MCP Apps standard and `@modelcontextprotocol/ext-apps`.
-
-Until that rebuild lands:
-
-- widget UI is intentionally disabled
-- the legacy files are deletion targets, not a foundation to extend
-- any legacy widget behaviour or documentation should be treated as stale
+The MCP App widget is **live**. Phases 0–4 (infrastructure, branding,
+theming, SDK alignment) are complete. The Oak brand banner renders in
+standalone dev mode (`dev:widget`), in the reference MCP host
+(`dev:widget-in-host`), and passes WCAG 2.2 AA in both light and dark
+themes (`test:widget:a11y`).
 
 ## Canonical Target
 

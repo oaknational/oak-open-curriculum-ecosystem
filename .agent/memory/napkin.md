@@ -356,7 +356,7 @@ Expected: #69be4b (7.10:1 on ink-950) would be the dark accent.
 Actual: on ink-800 (#31465f, panel background) it's only 4.17:1 —
 fails text contrast. Adjusted to #78c85a (4.70:1 on ink-800).
 
-**S4: dev:basic-host fundamentally requires bun.**
+**S4: dev:widget-in-host fundamentally requires bun.**
 Expected: npm install + npm run dev would work. Actual: The
 ext-apps basic-host serve.ts uses `bun --watch serve.ts` — hard
 dependency. Also, npm install must run at repo root (workspace),
@@ -383,7 +383,7 @@ unchanged. Good test design.
   instead of gold. focus-ring-on-accent uses paper-050 on dark
   (sky-400 fails on #008237).
 - Dev scripts: dev:widget has port conflict detection with PID/command
-  output. dev:basic-host checks for bun, runs npm install at repo root.
+  output. dev:widget-in-host checks for bun, runs npm install at repo root.
 - Hex case normalised: #287C34→#287c34, #22692C→#22692c (reviewer).
 - Stale "fern" description in dark semantic.dark.json fixed (reviewer).
 - Accessibility: added visually-hidden new-tab warning (G201) and
@@ -448,7 +448,7 @@ not green. Green is only on white backgrounds. Fix: light `accent`
 changed to `oak-black`, matching Oak website pattern.
 
 **S6: basic-host genuinely requires bun.**
-Expected: the bun gate in `dev:basic-host` might be unnecessary.
+Expected: the bun gate in `dev:widget-in-host` might be unnecessary.
 Actual: thorough investigation confirmed bun needed for (a) root
 `npm install` triggers `prepare` → `build` which invokes bun via
 `scripts/run-bun.mjs`, and (b) `serve` script runs

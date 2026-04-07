@@ -101,7 +101,10 @@ replace Level 1 — both levels are required.
 ## Gate Position
 
 `test:a11y` runs in the canonical gate sequence after `test:ui` and
-before `smoke:dev:stub`. See
+before `smoke:dev:stub`. The widget has its own Playwright tests:
+`test:widget:ui` and `test:widget:a11y` (using
+`playwright.widget.config.ts`), which run against the Vite dev server
+in both light and dark theme projects. See
 [ADR-121](../architecture/architectural-decisions/121-quality-gate-surfaces.md)
 for the coverage matrix.
 

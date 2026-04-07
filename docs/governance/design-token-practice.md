@@ -104,8 +104,10 @@ ratios must independently pass.
 
 The widget build (`widget/vite.config.ts`) imports the generated CSS
 from `@oaknational/oak-design-tokens`. Vite's `vite-plugin-singlefile`
-inlines it into `mcp-app.html`. No CDN or
-`_meta.ui.csp.resourceDomains` entry needed.
+inlines it into `oak-banner.html`. The design token CSS itself needs
+no CDN, but the widget's Google Fonts `@import` (for Lexend) requires
+`_meta.ui.csp.resourceDomains` declaring `fonts.googleapis.com` and
+`fonts.gstatic.com` on the MCP resource registration.
 
 ### Future Consumers
 

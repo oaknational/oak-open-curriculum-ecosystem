@@ -1,13 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * Base URL for the local MCP server under test.
+ * Base URL for the MCP server under test.
  *
- * Hardcoded to match the port used by `pnpm dev:observe:noauth`.
- * No `process.env` access — config files follow the same DI
- * principle as product code.
+ * Uses port 3334 (not the default 3333) to avoid clashing with
+ * `dev:observe:noauth` or `smoke:dev:stub` when Turbo runs tasks
+ * in parallel. No `process.env` access — config files follow the
+ * same DI principle as product code.
  */
-const baseURL = 'http://localhost:3333';
+const baseURL = 'http://localhost:3334';
 
 export default defineConfig({
   timeout: 30_000,
@@ -19,6 +20,7 @@ export default defineConfig({
     reuseExistingServer: true,
     timeout: 60_000,
     env: {
+      PORT: '3334',
       OAK_API_KEY: 'test-key',
       CLERK_PUBLISHABLE_KEY: 'pk_test_dummy',
       CLERK_SECRET_KEY: 'sk_test_dummy',
@@ -28,8 +30,8 @@ export default defineConfig({
     },
   },
   use: {
-    trace: 'on',
-    screenshot: 'on',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
   },
   projects: [
     {

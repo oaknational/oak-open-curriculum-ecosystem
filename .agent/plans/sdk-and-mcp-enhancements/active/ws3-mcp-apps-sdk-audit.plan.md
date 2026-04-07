@@ -6,26 +6,26 @@ specialist_reviewer: "mcp-reviewer, code-reviewer, react-component-reviewer"
 isProject: false
 todos:
   - id: a1-fix-tsdoc-single-slot
-    content: "A1: Correct misleading single-callback-slot TSDoc in App.tsx — SDK has addEventListener, not just on* setters."
-    status: pending
+    content: "A1: Verified — TSDoc already accurate. No 'single callback slot' claim found."
+    status: done
   - id: a3-fix-variable-count
-    content: "A3: Remove specific count from TSDoc — say 'standard names' not '73' or '65'."
-    status: pending
+    content: "A3: Verified — no hardcoded '73' count found. TSDoc accurate."
+    status: done
   - id: a4-update-readme-network
-    content: "A4: Update README 'no network requests' text after Google Fonts @import is added."
-    status: pending
+    content: "A4: README updated with Google Fonts + CSP documentation."
+    status: done
   - id: a5-handle-connection-state
-    content: "A5: Destructure isConnected and error from useApp, render error/connecting states. error is Error | null."
-    status: pending
+    content: "A5: isConnected and error destructured from useApp. Error dispatched to runtime state. isConnected guards openLink."
+    status: done
   - id: b5-csp-google-fonts
-    content: "B5: Add _meta.ui.csp.resourceDomains + prefersBorder in same _meta.ui object on content item."
-    status: pending
+    content: "B5: _meta.ui.csp.resourceDomains on content item (fonts.googleapis.com, fonts.gstatic.com)."
+    status: done
   - id: b6-prefers-border
-    content: "B6: Combined with B5 — prefersBorder: true in _meta.ui alongside csp."
-    status: pending
+    content: "B6: prefersBorder: false in WIDGET_UI_META constant on content item."
+    status: done
   - id: b8-capability-check
-    content: "B8: Check getHostCapabilities()?.openLinks (PLURAL) before openLink. SDK throws without capability."
-    status: pending
+    content: "B8: getHostCapabilities()?.openLinks checked before app.openLink(). event.preventDefault() only when capable."
+    status: done
   - id: b4-downloadfile-for-assets
     content: "B4: DEFERRED to Phase 5. API: app.downloadFile({ contents: (EmbeddedResource | ResourceLink)[] })."
     status: deferred

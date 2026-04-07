@@ -89,6 +89,8 @@ pnpm test:widget
 pnpm test:e2e
 pnpm test:ui
 pnpm test:a11y
+pnpm test:widget:ui
+pnpm test:widget:a11y
 pnpm smoke:dev:stub
 
 # Informational practice health

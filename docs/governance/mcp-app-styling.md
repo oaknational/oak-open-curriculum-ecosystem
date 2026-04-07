@@ -130,21 +130,30 @@ canonical HTML entry point does this in a blocking `<script>`).
 
 ## Font Loading
 
-### Self-Contained Embedding (ADR-151)
+### Standard Web Fonts via `@import` + CSP
 
-MCP App HTML is served as a resource — the iframe may have strict
-CSP. External network requests (Google Fonts CDN) may be blocked.
-Embed fonts as `@font-face` with base64-encoded WOFF2:
+For standard web fonts (Google Fonts, etc.), use `@import` in your
+CSS and declare the CDN domains in `_meta.ui.csp.resourceDomains` on
+the MCP resource content item:
 
 ```css
-@font-face {
-  font-family: 'Lexend';
-  src: url(data:font/woff2;base64,...) format('woff2');
-  font-display: swap;
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;700&display=swap');
+```
+
+```typescript
+_meta: {
+  ui: {
+    csp: {
+      resourceDomains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+    },
+  },
 }
 ```
 
-`vite-plugin-singlefile` inlines everything into one HTML file.
+Hosts that support CSP metadata will allow the external font request.
+Hosts that do not will fall back to the `system-ui` stack declared in
+the font-family token. `vite-plugin-singlefile` inlines local assets
+but the `@import` URL passes through to the built HTML.
 
 ### Host-Provided Fonts
 

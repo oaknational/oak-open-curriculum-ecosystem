@@ -152,8 +152,10 @@ pnpm test:root-scripts    # Repo-level script tests
 pnpm test           # Unit and integration tests
 pnpm test:field-integrity    # Manifest-based semantic-search field-integrity suites
 pnpm test:widget    # MCP App widget in-process tests
-pnpm test:ui        # Browser UI tests
-pnpm test:a11y      # Browser accessibility tests
+pnpm test:ui        # Browser UI tests (server landing page)
+pnpm test:a11y      # Browser accessibility tests (server landing page)
+pnpm test:widget:ui    # Widget Playwright visual/structural tests (both themes)
+pnpm test:widget:a11y  # Widget Playwright WCAG 2.2 AA accessibility tests (both themes)
 pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
 pnpm practice:fitness    # Strict fitness validation for live docs with frontmatter
@@ -165,7 +167,7 @@ pnpm fix            # Auto-fix: format, markdownlint, lint:fix
 pnpm doc-gen        # Generate documentation from TSDoc
 
 # All in one command (clean rebuild + full verification)
-pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, sdk-codegen + build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, smoke:dev:stub, subagents:check, portability:check, markdownlint:root, format:root
+pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, then ONE turbo run (sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, test:widget:ui, test:widget:a11y, smoke:dev:stub), then subagents:check, portability:check, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding

@@ -19,7 +19,7 @@ review_gates:
     description: "Release readiness reviewer produces GO/NO-GO for merge to main."
 todos:
   - id: p0-dev-infra
-    content: "P0: Add dev:widget and dev:basic-host scripts."
+    content: "P0: Add dev:widget and dev:widget-in-host scripts."
     status: done
   - id: p1-branding
     content: "P1: Fix branding — real Oak logo SVG, Lexend font, oakGreen #287c34, mint #bef2bd, dark text #222222, dark accent green #008237/#78c85a, minimal banner height."
@@ -28,14 +28,14 @@ todos:
     content: "P0 hardening: port conflict detection, bun dependency check, npm install path fix."
     status: done
   - id: p1b-dev-dx
-    content: "P1b: Dev DX fixes — widget serves at /, token watch plugin, CSS-only dark mode, theme rework."
-    status: in-progress
+    content: "P1b: Dev DX fixes — multi-page dev server, token watch plugin, CSS-only dark mode, theme rework, Playwright widget tests."
+    status: done
   - id: p2-host-context
-    content: "P2: Remaining host context alignment (SDK variable bridges in widget CSS, CSS fallbacks)."
-    status: pending
+    content: "P2: 76 MCP host CSS variable bridges in widget CSS, CSP resourceDomains, prefersBorder metadata."
+    status: done
   - id: p2-sdk-fixes
-    content: "P2: SDK audit fixes — isConnected/error, capability checks, prefersBorder, CSP, TSDoc corrections."
-    status: pending
+    content: "P2: SDK audit fixes — isConnected/error, capability checks, axe-core tag filtering, contrast manifest, docs reconciliation."
+    status: done
   - id: p3-quality-merge
     content: "P3: Quality gates, specialist reviews, merge to main."
     status: pending

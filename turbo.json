@@ -282,7 +282,7 @@
       "cache": false,
       "persistent": true
     },
-    "dev:basic-host": {
+    "dev:widget-in-host": {
       "cache": false,
       "persistent": true
     },
@@ -364,7 +364,7 @@
       "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "playwright.config.ts"]
     },
     "test:a11y": {
-      "dependsOn": ["build"],
+      "dependsOn": ["build", "test:ui"],
       "outputs": [],
       "cache": true,
       "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "playwright.config.ts"]
@@ -376,7 +376,7 @@
       "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "**/*.tsx", "playwright.widget.config.ts"]
     },
     "test:widget:a11y": {
-      "dependsOn": ["build"],
+      "dependsOn": ["build", "test:widget:ui"],
       "outputs": [],
       "cache": true,
       "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "**/*.tsx", "playwright.widget.config.ts"]

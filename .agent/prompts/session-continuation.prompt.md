@@ -57,9 +57,9 @@ git log --oneline --decorate -10
   - Dark theme: green-700 (#008237) page bg, paper-050 (white) text and accent
   - Contrast pairings updated: removed accent-strong text checks, accent surface
     changed to oak-green-600 in dark for text-primary contrast
-  - `dev:basic-host` confirmed to require bun — updated error message with install
-    instructions and alternative
-  - User still validating both colour schemes and basic-host
+  - `dev:widget-in-host` (renamed from `dev:basic-host`) confirmed to require bun
+    — prerequisite checks, pinned to ext-apps v1.3.2, uses /healthz for server check
+  - Both colour schemes validated by user; widget verified working in basic-host
 - **Current objective**: Complete P1b validation (user confirms both
   themes visually), then P2 SDK fixes.
   BLOCKING PREREQUISITE: playwright+axe-core a11y tests must be in
@@ -75,7 +75,7 @@ git log --oneline --decorate -10
   - Reviewer sign-off required before each phase transition
 - **Open questions / low-confidence areas**:
   - User still evaluating light/dark colour schemes — may need further adjustments
-  - basic-host requires bun, not yet tested by user
+  - dev:widget-in-host validated by user — widget renders correctly in sandboxed host
   - 4 contrast violations existed before this session's fix; all now resolved
     but theme may change further based on user feedback
   - Pre-existing: portability:check fails on 4 vendor skill adapters
