@@ -60,8 +60,8 @@ todos:
 
 # MCP Apps SDK Audit: Assumptions and Opportunities
 
-**Last Updated**: 2026-04-06
-**Status**: 🟢 IN PROGRESS — items phased between P2 (this branch) and Phase 5
+**Last Updated**: 2026-04-07
+**Status**: ✅ P2 ITEMS COMPLETE — Phase 5 items deferred to next branch
 **Branch**: `feat/mcp_app_ui`
 **Scope**: Correct bad assumptions and adopt missed SDK opportunities.
 

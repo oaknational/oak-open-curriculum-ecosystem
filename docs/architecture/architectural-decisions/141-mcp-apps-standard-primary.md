@@ -59,19 +59,18 @@ Specifically:
    `@modelcontextprotocol/ext-apps/server` with `RESOURCE_MIME_TYPE`
    (`text/html;profile=mcp-app`) instead of `text/html+skybridge`.
 
-3. **Tool registration**: Tool surfaces remain registry-driven from
-   `listUniversalTools(generatedToolRegistry)` until the HTTP app can migrate to
-   `registerAppTool` without introducing a second runtime inventory. That later
-   migration must stay generic over the generated registry/listing path.
+3. **Tool registration**: UI-bearing tools migrated to `registerAppTool`
+   from `@modelcontextprotocol/ext-apps/server`. Generated tools continue to
+   use the registry-driven path via `listUniversalTools(generatedToolRegistry)`.
 
-4. **Widget client**: Widget JavaScript still uses `window.openai.*` during
-   WS2. WS3 hard-cuts the client bridge to the MCP Apps `App` class from
-   `@modelcontextprotocol/ext-apps`.
+4. **Widget client**: WS3 replaced the `window.openai.*` bridge with the
+   MCP Apps `App` class from `@modelcontextprotocol/ext-apps/react`. The
+   widget is a self-contained React MCP App using `useApp()` for host
+   communication.
 
-5. **No dual paths**: Oak-owned OpenAI-specific resource metadata, MIME types,
-   and local ChatGPT emulation wrappers are deleted immediately. The remaining
-   `window.openai` widget bridge persists only until WS3 replaces it; no second
-   Oak-authored compatibility path is introduced alongside it.
+5. **No dual paths**: All OpenAI-specific resource metadata, MIME types,
+   ChatGPT emulation wrappers, and `window.openai` widget bridges have been
+   deleted. No compatibility layer exists.
 
 ## Consequences
 
@@ -85,8 +84,8 @@ Specifically:
 
 ### Negative
 
-- Hard cutover means old ChatGPT-only widget previews stop working immediately.
-  WS3 introduces the MCP Apps client/basic-host development path.
+- Hard cutover means old ChatGPT-only widget previews stopped working immediately.
+  WS3 introduced the MCP Apps client/basic-host development path (`pnpm dev:widget-in-host`).
 - Any host that only reads `openai/outputTemplate` and not `_meta.ui.resourceUri`
   will not render widgets. Per the compatibility matrix, no known active host has
   this limitation — ChatGPT reads both.

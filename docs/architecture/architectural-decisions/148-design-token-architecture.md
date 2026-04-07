@@ -73,6 +73,16 @@ Two workspaces:
 - **`@oaknational/oak-design-tokens`** — Oak-specific token set: palette,
   semantic layer, themes, generated CSS
 
+### Build-Time Contrast Validation
+
+The build pipeline validates all declared colour pairings against WCAG 2.2
+AA thresholds (4.5:1 for text, 3:1 for non-text). Violations fail the
+build. Pairings are declared in `contrast-pairings.ts` with an explicit
+`context: 'text' | 'non-text'` field — a token passing the non-text
+threshold may still fail when used as text colour. The `OAK_TOKEN_DEV=1`
+environment variable downgrades violations to warnings for local iteration
+without disabling the CI gate.
+
 ### Token-to-Consumer Delivery
 
 Primary delivery is CSS custom properties bundled into the MCP App HTML

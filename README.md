@@ -105,6 +105,16 @@ pnpm build          # Build all workspaces
 pnpm sdk-codegen    # Regenerate SDK + MCP artefacts from OpenAPI
 ```
 
+**Widget development** (from `apps/oak-curriculum-mcp-streamable-http/`):
+
+```bash
+pnpm dev:widget          # Standalone widget dev server with token live-reload
+pnpm dev:widget-in-host  # Widget rendered inside MCP Apps basic-host (requires bun)
+pnpm test:widget         # Widget unit + integration tests
+pnpm test:widget:ui      # Playwright visual tests (light + dark themes)
+pnpm test:widget:a11y    # Playwright axe-core WCAG 2.2 AA gate
+```
+
 **Full verification:**
 
 ```bash
@@ -127,14 +137,15 @@ Everything flows from the OpenAPI schema:
 
 Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vectors, BM25, synonym expansion, and phrase boosting) to achieve high-accuracy retrieval across curriculum structures. See the [search architecture](apps/oak-search-cli/docs/ARCHITECTURE.md) for details and the [OpenAPI pipeline](docs/architecture/openapi-pipeline.md) for the generation architecture.
 
-| Directory        | Purpose                                                                                                                  |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `apps/`          | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI                               |
-| `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                             |
-| `packages/core/` | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs |
-| `packages/libs/` | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
-| `agent-tools/`   | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`              |
-| `docs/`          | Developer documentation, guides, and 130+ ADRs                                                                           |
+| Directory          | Purpose                                                                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `apps/`            | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI                               |
+| `packages/sdks/`   | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                             |
+| `packages/core/`   | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs |
+| `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
+| `packages/design/` | Design token pipeline: DTCG source format, CSS custom property generation, WCAG AA contrast validation                   |
+| `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`              |
+| `docs/`            | Developer documentation, guides, and 130+ ADRs                                                                           |
 
 ### Workspace Summaries
 
@@ -142,7 +153,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 | Workspace                                                                        | Purpose                                                                                                                                                                                                                                           |
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 31 curriculum tools, resources, and prompts                                                                                                                                  |
+| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 31 curriculum tools, resources, prompts, and MCP App widget                                                                                                                  |
 | [`oak-curriculum-mcp-stdio`](apps/oak-curriculum-mcp-stdio/)                     | **Legacy** stdio MCP workspace — not actively maintained; future stdio support will be generalised from the HTTP server ([ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md)) |
 | [`oak-search-cli`](apps/oak-search-cli/)                                         | Search CLI — admin operations, bulk ingestion, blue/green index lifecycle ([ADR-130](docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)), evaluation, and ground-truth benchmarking                                      |
 
@@ -175,6 +186,13 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | [`@oaknational/search-contracts`](packages/libs/search-contracts/README.md) | Canonical semantic-search field and stage contracts                           |
 | [`@oaknational/sentry-node`](packages/libs/sentry-node/README.md)           | Shared Sentry Node config, sinks, fixture runtime, and flush helpers          |
 | [`@oaknational/sentry-mcp`](packages/libs/sentry-mcp/README.md)             | Metadata-only MCP observation wrappers                                        |
+
+**Design:**
+
+| Workspace                                                   | Purpose                                                                            |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [`design-tokens-core`](packages/design/design-tokens-core/) | Pure functions for DTCG token parsing and WCAG AA contrast validation              |
+| [`oak-design-tokens`](packages/design/oak-design-tokens/)   | Oak-specific token definitions (palette, semantic, component) and CSS build output |
 
 Architectural Decision Records (ADRs) are the architectural source of truth. These three foundational ADRs define the schema-first approach that underpins the codebase:
 

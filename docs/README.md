@@ -61,6 +61,9 @@ last_reviewed: 2026-03-12
 - [TypeScript Practice](governance/typescript-practice.md) - Type safety guidelines
 - [Testing Strategy](../.agent/directives/testing-strategy.md) - TDD approach at all levels
 - [Safety and Security](governance/safety-and-security.md) - Security measures and privacy protection
+- [Accessibility Practice](governance/accessibility-practice.md) - WCAG 2.2 AA compliance, Playwright + axe-core testing
+- [Design Token Practice](governance/design-token-practice.md) - DTCG three-tier model, contrast validation, CSS output
+- [MCP App Styling](governance/mcp-app-styling.md) - CSS custom properties, host integration, font loading, CSP declarations
 
 ## Search Application
 

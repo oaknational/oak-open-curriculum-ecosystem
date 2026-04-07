@@ -111,6 +111,12 @@ settings.
 - [TypeScript Practice](../../docs/governance/typescript-practice.md) - Type safety
 - [Safety and Security](../../docs/governance/safety-and-security.md) - API keys, PII protection, security principles
 
+### UI and Design
+
+- [Accessibility Practice](../../docs/governance/accessibility-practice.md) - WCAG 2.2 AA, Playwright + axe-core
+- [Design Token Practice](../../docs/governance/design-token-practice.md) - DTCG three-tier model, contrast validation
+- [MCP App Styling](../../docs/governance/mcp-app-styling.md) - SDK variable bridges, font loading, CSP
+
 ### Architecture and Schema
 
 - [Architecture](../../docs/architecture/README.md) - Architecture overview

@@ -285,6 +285,20 @@ pnpm build
 pnpm test
 ```
 
+### Widget Development
+
+The MCP server ships an MCP App widget (React + Vite, self-contained HTML). For widget work, run from the `apps/oak-curriculum-mcp-streamable-http/` workspace:
+
+```bash
+pnpm dev:widget          # Standalone dev server with token live-reload
+pnpm dev:widget-in-host  # Widget inside MCP Apps basic-host (requires bun)
+pnpm test:widget         # Unit + integration tests
+pnpm test:widget:ui      # Playwright visual tests (light + dark themes)
+pnpm test:widget:a11y    # Playwright axe-core WCAG 2.2 AA gate
+```
+
+Design token JSON edits live-reload in the widget dev server. See the [workspace README](../../apps/oak-curriculum-mcp-streamable-http/README.md) for the full widget development guide, and [MCP App Styling](../governance/mcp-app-styling.md) for CSS custom property conventions.
+
 ## Common Tasks
 
 ### Run All Quality Gates
@@ -334,6 +348,7 @@ oak-open-curriculum-ecosystem/
 │   │   ├── oak-sdk-codegen/          # OpenAPI/code-generation pipeline
 │   │   ├── oak-curriculum-sdk/       # Runtime SDK consumed by apps
 │   │   └── oak-search-sdk/           # Search SDK (ES retrieval, admin)
+│   ├── design/                        # Design tokens: DTCG pipeline, WCAG contrast validation, CSS output
 │   ├── core/                          # Shared low-level code (result, env schemas, type-helpers, ESLint plugin)
 │   └── libs/                          # Shared libraries (logger, env-resolution)
 ├── apps/

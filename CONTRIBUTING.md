@@ -305,6 +305,12 @@ For full TypeScript, ESM, testing, and error handling standards, see:
   testing, error handling, ESM conventions
 - [Testing Strategy](.agent/directives/testing-strategy.md) — TDD approach at
   all levels
+- [Accessibility Practice](docs/governance/accessibility-practice.md) — WCAG 2.2
+  AA compliance, Playwright + axe-core testing
+- [Design Token Practice](docs/governance/design-token-practice.md) — DTCG
+  three-tier model, contrast validation, CSS output
+- [MCP App Styling](docs/governance/mcp-app-styling.md) — CSS custom properties,
+  host integration, font loading, CSP
 
 ## Testing Your Changes
 
@@ -313,6 +319,14 @@ For full TypeScript, ESM, testing, and error handling standards, see:
 ```bash
 pnpm test -- scrubbing
 # Runs only scrubbing tests
+```
+
+### Widget Tests
+
+```bash
+pnpm test:widget         # Unit + integration tests
+pnpm test:widget:ui      # Playwright visual (light + dark themes)
+pnpm test:widget:a11y    # Playwright axe-core WCAG 2.2 AA gate
 ```
 
 ### E2E Tests

@@ -120,12 +120,16 @@ framework-agnostic — it works with any CSS-capable environment.
 Themes override semantic tokens for a given mode. The palette tier
 remains constant; the semantic tier maps differently per theme.
 
-```css
-[data-theme='dark'] {
-  --semantic-text-primary: #e0e0e0;
-  --semantic-bg-surface: #1a1a2e;
-}
-```
+Dark mode uses a dual-selector approach in generated CSS:
+
+1. `@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) { ... } }`
+   — CSS-only OS preference detection, no JavaScript required
+2. `[data-theme='dark'] { ... }` — explicit override via
+   `applyDocumentTheme()` from the MCP Apps SDK host context
+
+The `:not([data-theme='light'])` specificity trick lets an explicit
+light override win over an OS dark preference. Never set `data-theme`
+eagerly on page load — let the CSS media query govern by default.
 
 Minimum requirement: light and dark themes. High-contrast and
 reduced-motion modes are future extensions.

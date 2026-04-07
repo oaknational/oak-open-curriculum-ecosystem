@@ -53,6 +53,8 @@ before push**, so developers never discover failures only after pushing.
 | lint              | Yes        | Yes          | Yes             | Yes               |
 | test              | Yes        | Yes          | Yes             | Yes               |
 | test:widget       | --         | --           | --              | Yes               |
+| test:widget:ui    | --         | --           | --              | Yes               |
+| test:widget:a11y  | --         | --           | --              | Yes               |
 | test:e2e          | --         | Yes (--only) | --              | Yes               |
 | test:ui           | --         | --           | --              | Yes               |
 | test:a11y         | --         | --           | --              | Yes               |
@@ -63,16 +65,17 @@ before push**, so developers never discover failures only after pushing.
 
 - **Pre-commit excludes build/codegen/secrets**: too slow for every commit.
   These run on pre-push instead.
-- **Pre-push excludes test:widget, test:ui, test:a11y, and smoke**:
-  local-only widget/browser gates and dev-server smoke require the broader
-  developer environment. `pnpm check` covers these when full local
-  verification is needed.
+- **Pre-push excludes test:widget, test:widget:ui, test:widget:a11y,
+  test:ui, test:a11y, and smoke**: local-only widget/browser gates and
+  dev-server smoke require the broader developer environment. `pnpm check`
+  covers these when full local verification is needed.
 - **CI excludes test:e2e**: E2E tests hit Elasticsearch which is not
   available in the GitHub Actions environment. Covered by pre-push
   (`--only` mode) and `pnpm check`.
-- **CI excludes test:widget, test:ui, test:a11y, and smoke:dev:stub**:
-  widget/browser gates and dev server lifecycle add complexity and flakiness
-  to CI. These are local-only gates covered by `pnpm check`.
+- **CI excludes test:widget, test:widget:ui, test:widget:a11y, test:ui,
+  test:a11y, and smoke:dev:stub**: widget/browser gates and dev server
+  lifecycle add complexity and flakiness to CI. These are local-only gates
+  covered by `pnpm check`.
 - **CI excludes doc-gen**: documentation generation is a build-time
   convenience, not a correctness gate.
 - **`pnpm check` includes secrets scan and clean**: the canonical aggregate

@@ -26,6 +26,8 @@ pnpm test:widget
 pnpm test:e2e
 pnpm test:ui
 pnpm test:a11y
+pnpm test:widget:ui
+pnpm test:widget:a11y
 pnpm smoke:dev:stub
 pnpm subagents:check
 pnpm portability:check
@@ -45,7 +47,7 @@ pnpm format:root
 For each gate in the sequence above:
 
 - If the gate fails, fix the issue
-- After fixing, restart from `pnpm format:root`
+- After fixing, restart from the beginning (`pnpm secrets:scan:all`)
 - If the gate passes, proceed to the next one
 
 The full sequence mirrors `pnpm check` in `package.json`.

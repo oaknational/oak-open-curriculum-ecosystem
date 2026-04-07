@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-03.md`
-(sessions 2026-02-10 to 2026-04-03).
+`napkin-2026-02-24.md` through `napkin-2026-04-07.md`
+(sessions 2026-02-10 to 2026-04-07).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -198,17 +198,16 @@ context with no natural permanent home.
   Never set `data-theme` eagerly on load — it overrides
   the media query and breaks OS preference tracking. The
   attribute is only for explicit host/user override.
-- **Cross-workspace token dev loop**: Vite HMR does not
-  cross workspace boundaries. A Vite plugin that watches
-  token source JSON, rebuilds, and sends `full-reload`
-  bridges the gap. Use `OAK_TOKEN_DEV=1` to allow contrast
-  warnings (not errors) during visual iteration.
 - **`console` ban means canonical logger**: the `no-console`
   rule forces injection of `@oaknational/logger`, not fallback
   to `process.stderr.write`. Build scripts without a logger
   should let errors propagate naturally (Node surfaces the
   stack trace).
-- **`unknown` and generated infra**: graduated to canonical
-  rule `.agent/rules/unknown-is-type-destruction.md`.
-- **Zod v4 `.merge()` is NOT deprecated**: graduated to
-  `docs/governance/typescript-practice.md`.
+- **MCP Apps CSP goes on content items only**: declare
+  `_meta.ui.csp.resourceDomains` on `contents[]` items in
+  `registerAppResource`, NOT on the listing config. The MCP
+  Apps spec is explicit: hosts read CSP from content items.
+- **Contrast pairings need usage context**: a design token
+  that passes the 3:1 non-text threshold may fail 4.5:1
+  for text. Always declare `context: 'text' | 'non-text'`
+  in `contrast-pairings.ts` and validate accordingly.

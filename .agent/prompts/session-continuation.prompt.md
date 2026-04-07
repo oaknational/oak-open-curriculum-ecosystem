@@ -42,28 +42,19 @@ git log --oneline --decorate -10
 
 - **Workstream**: MCP App branding alignment + merge
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-branding-alignment-and-merge.plan.md` (**PRIMARY** — P1b dev DX in progress)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-apps-sdk-audit.plan.md` (**SDK AUDIT** — items phased between P2 and Phase 5)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-branding-alignment-and-merge.plan.md` (**PRIMARY** — P3 merge readiness)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-apps-sdk-audit.plan.md` (**SDK AUDIT** — P2 items DONE, Phase 5 items deferred)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: P0 DONE. P1 DONE + REVIEWED. P1b IN PROGRESS.
-  P1b reworked dev DX and theme system during user visual evaluation:
-  - Widget HTML renamed `mcp-app.html` → `index.html` (serves at `/`)
-  - Vite plugin watches design token sources and rebuilds CSS on change
-  - Token build has dev mode (`OAK_TOKEN_DEV=1`) — contrast warnings not errors
-  - Dark theme CSS now via `@media (prefers-color-scheme: dark)` — no JS required
-  - Inline theme script removed — CSS media query handles initial theme
-  - Light theme: mint-300 page bg, oak-black text AND accent (matching Oak website)
-  - Dark theme: green-700 (#008237) page bg, paper-050 (white) text and accent
-  - Contrast pairings updated: removed accent-strong text checks, accent surface
-    changed to oak-green-600 in dark for text-primary contrast
-  - `dev:widget-in-host` (renamed from `dev:basic-host`) confirmed to require bun
-    — prerequisite checks, pinned to ext-apps v1.3.2, uses /healthz for server check
-  - Both colour schemes validated by user; widget verified working in basic-host
-- **Current objective**: Complete P1b validation (user confirms both
-  themes visually), then P2 SDK fixes.
-  BLOCKING PREREQUISITE: playwright+axe-core a11y tests must be in
-  place before building a second widget/view.
+- **Current state**: P0-P2 ALL DONE. P3 (quality gates + merge) is next.
+  Branch `feat/mcp_app_ui` has 4 commits ahead of `main`:
+  1. P1 branding (logo, Lexend, Oak palette)
+  2. P1b theming (CSS-only dark mode, multi-page dev server, Playwright tests)
+  3. P2 SDK alignment (76 variable bridges, CSP, capability checks, connection state)
+  4. Documentation + infrastructure (onboarding, turbo port isolation, portability gate)
+  Widget validated in standalone dev mode, in basic-host sandbox, and via
+  Playwright in both light/dark themes. 10 specialist reviewer passes across
+  2 rounds. `pnpm check` passes (88 turbo tasks green).
 - **Hard invariants / non-goals**:
   - No fallbacks — app brand defaults are correct on their own
   - Dark theme page bg is green-700 (#008237), NOT ink-950
@@ -74,61 +65,27 @@ git log --oneline --decorate -10
   - `getUiCapability` deferred (incompatible with per-request server)
   - Reviewer sign-off required before each phase transition
 - **Open questions / low-confidence areas**:
-  - User still evaluating light/dark colour schemes — may need further adjustments
-  - dev:widget-in-host validated by user — widget renders correctly in sandboxed host
-  - 4 contrast violations existed before this session's fix; all now resolved
-    but theme may change further based on user feedback
-  - Pre-existing: portability:check fails on 4 vendor skill adapters
-- **Next safe step**: User confirms both themes look correct visually.
-  If adjustments needed, iterate using the live token watch dev loop.
-  After visual sign-off, run `pnpm check` full quality gate, then
-  proceed to P2 SDK fixes. Playwright+axe-core tests needed before
-  second widget.
-- **Deep consolidation status**: completed this handoff — napkin
-  updated with 2026-04-07b session, memories saved, patterns extracted
+  - Pre-merge review (release-readiness-reviewer) not yet run
+  - Phase 5 (interactive search widget) is unblocked but not started
+- **Next safe step**: Run pre-merge review (release-readiness-reviewer),
+  then merge `feat/mcp_app_ui` to `main`.
+- **Deep consolidation status**: due — napkin at 560+ lines (rotation
+  threshold 500), plan statuses updated, consolidation requested by user
 
-## Active Workstreams (2026-04-06, updated end of session)
+## Active Workstreams (2026-04-07)
 
-### 1. WS3 MCP App Rebuild — ACTIVE (SDK adoption + host verification COMPLETE)
+### 1. WS3 MCP App Rebuild — P3 MERGE READINESS
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
-**Adoption plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md`
 
-**Completed phases**: Phase 0 (baseline/RED specs), Phase 2 (scaffold),
-Phase 3 (canonical contracts + fallback proof), Phase 4 (brand banner).
+**Completed phases**: Phase 0-4 (infrastructure, scaffold, contracts, brand
+banner). P0-P2 branding/SDK work on `feat/mcp_app_ui` branch.
 
-**Off-the-shelf SDK adoption progress**:
+**Branch status**: 4 commits, all reviewed, `pnpm check` passing. Ready
+for pre-merge review and merge to `main`.
 
-- **Phase 1 COMPLETE** (2026-04-05): codegen `.meta({ examples })`.
-  7 unit tests + 3 integration tests. 5 specialist reviews passed.
-- **Phase 2 COMPLETE** (2026-04-05): all 10 aggregated tools have
-  `flatZodSchema`. `flatZodSchema` required on `UniversalToolListEntry`.
-  Dead fallback removed. Structural equivalence test. Fetch promoted
-  to directory. 5 specialist reviews passed. 19 new tests (726 total).
-- **Phase 3 COMPLETE** (2026-04-05): `registerAppTool` for UI tools,
-  `registerAppResource` for widget. Shim deleted (pulled forward from
-  Phase 4). `toProtocolEntry` deleted. `isAppToolEntry` type guard
-  and `toAppToolRegistrationConfig` projection added. Generator
-  `readonly` visibility fix. 5 specialist reviews passed. 8 new
-  tests with guard assertions.
-- **Phase 4 COMPLETE** (2026-04-05): deleted all dual-schema dead
-  code. `zod-input-schema.ts` eliminated. `inputSchema` removed from
-  `UniversalToolListEntry`. All `*_INPUT_SCHEMA` constants deleted.
-  Structural equivalence test removed (purpose fulfilled).
-- **Phase 5 COMPLETE** (2026-04-06): E2E pipeline test committed.
-  5 assertions prove tools/list → _meta → resources/read → HTML.
-  Reviewed by code-reviewer, test-reviewer, mcp-reviewer,
-  type-reviewer.
-
-**Host verification**: COMPLETE (2026-04-06). Server-side pipeline
-verified correct. Claude Code does not support MCP Apps rendering —
-use MCPJam or basic-host. 8 specialist reviewers passed with zero
-critical issues. Legacy compatibility tests removed.
-
-**Next action**: Oak branding update for banner, then merge
-`feat/mcp_app_ui` to `main`. Phase 5 (interactive user search view)
-and local widget dev infrastructure deferred to next branch.
+**Next after merge**: Phase 5 (interactive user search view) on a new branch.
 
 ### 2. Frontend Practice Integration — COMPLETE
 

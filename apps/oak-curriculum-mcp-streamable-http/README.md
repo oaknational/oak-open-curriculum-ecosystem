@@ -86,7 +86,8 @@ imports).
 
 ### Widget-only iteration (one terminal)
 
-For layout, styling, and token work that does not need MCP host context:
+For layout, styling, and token work that does not need MCP host context
+(run from this workspace, or use `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http dev:widget` from repo root):
 
 ```bash
 pnpm dev:widget

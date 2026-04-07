@@ -37,15 +37,15 @@ todos:
     content: "P2: SDK audit fixes — isConnected/error, capability checks, axe-core tag filtering, contrast manifest, docs reconciliation."
     status: done
   - id: p3-quality-merge
-    content: "P3: Quality gates, specialist reviews, merge to main."
-    status: pending
+    content: "P3: Quality gates (pnpm check passing), pre-merge review, merge to main."
+    status: in-progress
 isProject: false
 ---
 
 # Oak Branding Alignment + Merge Readiness
 
 **Last Updated**: 2026-04-07
-**Status**: 🟢 IN PROGRESS (P0 done, P1 done + reviewed, P1b dev DX + theme rework in progress, P2 next)
+**Status**: 🟢 P0-P2 COMPLETE — P3 merge readiness in progress
 **Branch**: `feat/mcp_app_ui`
 **Scope**: Fix the BrandBanner to match Oak branding. Merge to `main`.
 

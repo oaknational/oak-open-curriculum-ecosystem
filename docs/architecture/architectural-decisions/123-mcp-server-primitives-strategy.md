@@ -43,6 +43,14 @@ Three resources for clients that support resource injection:
 
 The host application decides whether and how to inject these into the model's context.
 
+A fourth resource serves the interactive MCP App widget:
+
+| Resource URI                    | Content              | Priority | Audience  |
+| ------------------------------- | -------------------- | -------- | --------- |
+| `ui://widget/oak-banner-*.html` | React MCP App (HTML) | —        | `["app"]` |
+
+This resource uses `text/html;profile=mcp-app` content type and is registered via `registerAppResource` per [ADR-141](141-mcp-apps-standard-primary.md). CSP declarations for external fonts are included via `_meta.ui.csp.resourceDomains` on the content item.
+
 **Intent**: Clients that support resource auto-injection get orientation data without a tool call.
 
 **Impact**: Reduced latency for first-turn responses in capable clients (e.g., Claude Desktop). For clients that do not surface resources (e.g., ChatGPT), the `get-curriculum-model` tool provides the same orientation data on-demand.

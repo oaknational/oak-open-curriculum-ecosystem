@@ -21,7 +21,7 @@ todos:
     status: completed
   - id: ws3-widget-clean-break
     content: "WS3: Delete the dead widget framework and build one fresh React MCP App on the MCP Apps standard."
-    status: pending
+    status: in-progress
   - id: ws4-search-ui
     content: "WS4: Deliver the human-facing search UI as part of the WS3 clean-break MCP App rebuild."
     status: pending
