@@ -106,7 +106,7 @@ authoritative for full WS3 scope and ordering.
 | Phase | RED command | Expected failure | GREEN evidence |
 |-------|-----------|------------------|----------------|
 | 1 | Canonical contamination check | Legacy files still present in tree | 0 legacy widget files in active paths |
-| 2 | `pnpm build` (widget target) | No `dist/mcp-app.html` output | React build produces self-contained HTML |
+| 2 | `pnpm build` (widget target) | No `dist/index.html` output | React build produces self-contained HTML |
 | 3 | `pnpm test:e2e -- ws3-red-specs` | 3 E2E RED specs fail (see below) | All RED specs pass |
 | 4 | E2E: curriculum-model renders in app shell | No React app shell exists | View renders through fresh MCP App |
 | 5 | E2E: user-search submits and renders results | No user-search UI exists | Search runs through MCP tool calls |

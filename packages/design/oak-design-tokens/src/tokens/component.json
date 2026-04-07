@@ -82,7 +82,7 @@
 
     "note-text-color": { "$type": "color", "$value": "{semantic.text-secondary}" },
 
-    "banner-link-color": { "$type": "color", "$value": "{semantic.accent}" },
+    "banner-link-color": { "$type": "color", "$value": "{semantic.text-primary}" },
     "banner-link-color-hover": { "$type": "color", "$value": "{semantic.accent-strong}" },
     "banner-link-focus-ring-color": { "$type": "color", "$value": "{semantic.focus-ring}" },
     "focus-ring-on-accent-color": {

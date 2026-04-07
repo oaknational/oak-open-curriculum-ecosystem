@@ -82,7 +82,7 @@ Themes override semantic tokens only. The palette is invariant. Check that all t
 
 ### 5. Validate Delivery Path
 
-For MCP App views: token CSS is bundled into `mcp-app.html` via Vite. For other consumers: CSS is imported through their build systems.
+For MCP App views: token CSS is bundled into `index.html` via Vite. For other consumers: CSS is imported through their build systems.
 
 ## Guardrails
 

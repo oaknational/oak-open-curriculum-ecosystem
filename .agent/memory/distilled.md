@@ -193,6 +193,16 @@ context with no natural permanent home.
   multi-listener support. We compose style sync and
   runtime-state dispatch in one handler for simplicity and
   error isolation, not because the SDK forces single-slot.
+- **CSS media query is the dark mode foundation**: use
+  `@media (prefers-color-scheme: dark)` in generated CSS.
+  Never set `data-theme` eagerly on load — it overrides
+  the media query and breaks OS preference tracking. The
+  attribute is only for explicit host/user override.
+- **Cross-workspace token dev loop**: Vite HMR does not
+  cross workspace boundaries. A Vite plugin that watches
+  token source JSON, rebuilds, and sends `full-reload`
+  bridges the gap. Use `OAK_TOKEN_DEV=1` to allow contrast
+  warnings (not errors) during visual iteration.
 - **`console` ban means canonical logger**: the `no-console`
   rule forces injection of `@oaknational/logger`, not fallback
   to `process.stderr.write`. Build scripts without a logger

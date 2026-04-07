@@ -103,7 +103,7 @@ When the live spec contradicts your cached knowledge, the live spec wins.
 
 Per ADR-149, this reviewer assesses token usage, tier referencing, theme correctness, and style containment **inside** an MCP App view. `mcp-reviewer` remains required for `_meta.ui*`, resource registration, visibility, MIME, CSP/domain, and host bridge lifecycle. When reviewing MCP App surfaces, both reviewers apply.
 
-Token CSS reaches MCP App views through the Vite build pipeline — bundled into `mcp-app.html` via `vite-plugin-singlefile`. No CDN or `_meta.ui.csp.resourceDomains` entry needed for tokens (per ADR-148).
+Token CSS reaches MCP App views through the Vite build pipeline — bundled into `index.html` via `vite-plugin-singlefile`. No CDN or `_meta.ui.csp.resourceDomains` entry needed for tokens (per ADR-148).
 
 ## When Invoked
 

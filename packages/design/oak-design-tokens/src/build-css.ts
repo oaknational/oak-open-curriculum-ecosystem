@@ -1,5 +1,6 @@
 import {
   createCssBlock,
+  emitCssVariables,
   flattenDesignTokens,
   resolveTokenTreeToHex,
   validateContrastPairings,
@@ -60,9 +61,17 @@ export function buildOakDesignTokensCss(): string {
     paletteTokens,
   );
 
+  const darkCssBlock = emitCssVariables(darkThemeTokens).join('\n');
+
   return [
     '/* Generated file: do not edit directly. */',
     createCssBlock(':root', flattenDesignTokens(lightTokenTree)),
+    // Pure CSS dark mode: responds to OS preference without JavaScript.
+    // :not([data-theme='light']) allows an explicit light override from the
+    // MCP Apps SDK host to win via specificity.
+    `@media (prefers-color-scheme: dark) {\n  :root:not([data-theme='light']) {\n${darkCssBlock}\n  }\n}`,
+    // Attribute selector: used by the MCP Apps SDK applyDocumentTheme() and
+    // the inline <script> fallback to force a specific theme.
     createCssBlock("[data-theme='dark']", darkThemeTokens),
     '',
   ].join('\n');

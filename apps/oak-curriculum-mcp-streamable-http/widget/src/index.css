@@ -8,15 +8,11 @@
 }
 
 /* Height chain: html → body → #root establishes context for
-   .oak-banner min-height: 100% to fill the iframe viewport. */
+   .oak-banner min-height */
 html,
 body,
 #root {
-  min-height: 100%;
-}
-
-html {
-  background: var(--oak-component-page-background);
+  min-height: fit-content;
 }
 
 body {
@@ -44,6 +40,16 @@ dd {
   margin: 0;
 }
 
+a {
+  color: var(--oak-semantic-accent);
+  text-decoration: underline;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--oak-semantic-accent-strong);
+}
+
 .oak-app {
   display: flex;
   flex-direction: column;
@@ -55,7 +61,6 @@ dd {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100%;
 }
 
 .oak-banner__link {
@@ -63,10 +68,10 @@ dd {
   align-items: center;
   gap: var(--oak-component-banner-gap);
   color: var(--oak-component-banner-link-color);
-  text-decoration: underline;
   font-family: var(--oak-component-banner-title-family);
   font-size: var(--oak-component-banner-title-size);
   font-weight: var(--oak-component-banner-title-weight);
+  text-decoration: none;
 }
 
 .oak-banner__link:hover {

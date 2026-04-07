@@ -397,3 +397,124 @@ unchanged. Good test design.
 - code-reviewer: APPROVED, 2 findings fixed (same as design-system)
 - accessibility: NO VIOLATIONS, 2 best-practice gaps fixed
 - architecture-barney: COMPLIANT, paper-200 removed per observation
+
+---
+
+### Session 2026-04-07b — Dev DX fixes + theme rework
+
+#### Surprises
+
+**S1: Vite dev server blank page — widget HTML was `mcp-app.html`.**
+Expected: `http://localhost:5173/` would show the widget. Actual:
+blank page with no errors. Root cause: the HTML entry was named
+`mcp-app.html`, but Vite only auto-serves `index.html` at `/`.
+The `rollupOptions.input` only controls the build, not dev serving.
+Fix: renamed to `index.html`. Updated 8 active plan files, 3 agent
+docs, register-resources.ts, and README.
+
+**S2: Token edits invisible in dev server — cross-workspace boundary.**
+Expected: editing design token JSON would live-reload in the widget.
+Actual: no change. The widget imports the *built* `dist/index.css`
+from the tokens package. JSON source changes do nothing until
+`tsx src/build.ts` runs. Fix: custom Vite plugin (`oak-design-tokens-watch`)
+watches `packages/design/oak-design-tokens/src/tokens/` and triggers
+`pnpm --filter @oaknational/oak-design-tokens build` on change, then
+sends `full-reload` to the browser.
+
+**S3: Token build contrast check blocks CSS generation.**
+Expected: dev iteration on colours. Actual: contrast violations
+throw, producing no CSS — dev server shows stale styles.
+Fix: `OAK_TOKEN_DEV=1` env var makes violations warnings, not
+errors. CSS still generated. CI build does not set this flag.
+
+**S4: `data-theme` attribute overrides CSS media query.**
+Expected: `@media (prefers-color-scheme: dark)` + inline JS would
+handle theme switching. Actual: the inline script eagerly set
+`data-theme="light"` on page load, and the `[data-theme='dark']`
+CSS selector could never win because the attribute was stuck on
+`light`. Investigation of user's 3 other repos (Astro, Next.js)
+confirmed the pattern: in auto mode, do NOT set `data-theme` —
+let the CSS media query govern. Only set the attribute when the
+user or host explicitly overrides.
+Fix: removed the inline script entirely. Added
+`@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) { ... } }`
+to the generated CSS. Dark mode now works CSS-only.
+
+**S5: Light theme accent (green links on mint bg) fails WCAG.**
+Expected: oakGreen (#287c34) as link colour on mint-300 (#bef2bd).
+Actual: 4.13:1 — fails 4.5:1 for text. Checking the Oak website
+screenshot confirmed: on mint sections, links use dark text (#222),
+not green. Green is only on white backgrounds. Fix: light `accent`
+changed to `oak-black`, matching Oak website pattern.
+
+**S6: basic-host genuinely requires bun.**
+Expected: the bun gate in `dev:basic-host` might be unnecessary.
+Actual: thorough investigation confirmed bun needed for (a) root
+`npm install` triggers `prepare` → `build` which invokes bun via
+`scripts/run-bun.mjs`, and (b) `serve` script runs
+`bun --watch serve.ts`. The actual serve.ts is pure Node/Express
+(even has `#!/usr/bin/env npx tsx` shebang), but the npm scripts
+require bun. Updated error message with install instructions and
+`dev:widget` as alternative.
+
+#### Corrections
+
+- Dark `surface-page` changed from `ink-950` (#102033) to
+  `green-700` (#008237) — user directed this is Oak brand identity
+- Light `surface-page` changed from `paper-050` to `mint-300`
+  (#bef2bd) — matching Oak teacher landing page
+- Light `accent` changed from `oak-green-500` to `oak-black` —
+  dark links on mint, matching Oak website
+- Light `focus-ring` changed from `sky-600` to `oak-green-500` —
+  sky fails on mint
+- Dark accent tokens reworked: white text/accents on green-700 page
+- `accent-strong` text contrast pairings removed (hover-only state)
+- `text-primary` on `surface-accent` pairing kept (not `text-inverse`)
+- Dark `surface-accent` changed to `oak-green-600` for text contrast
+- `banner-link-color` component token: `accent` → `text-primary`
+
+#### Patterns to Remember
+
+- **CSS media query is the foundation; JS is the override.**
+  `@media (prefers-color-scheme: dark)` works without JavaScript,
+  without attributes, without React. The data-theme attribute should
+  only be set by explicit user/host choice, never eagerly on load.
+  Three user repos confirm this pattern independently.
+
+- **Cross-workspace dev loops need explicit plumbing.**
+  Vite HMR works within one workspace. When CSS depends on a built
+  artefact from another package, edits to the source are invisible.
+  A Vite plugin that watches + rebuilds + sends full-reload bridges
+  the gap without requiring a separate terminal.
+
+- **Contrast violations should warn in dev, fail in CI.**
+  Iterating on colour schemes is impossible when the build throws
+  on every contrast failure. A dev-mode flag that generates CSS
+  despite violations (with prominent warnings) enables visual
+  iteration while preserving the CI quality gate.
+
+---
+
+### Session 2026-04-07a — Initial review of `reference-local/eef-data`
+
+#### What Was Done
+
+- Reviewed `.agent/reference-local/eef-data` as a gitignored reference lane
+  using explicit `find`/`rg -uu`-style discovery rather than default file
+  search.
+- Checked packaging metadata, default data-file resolution, and core query
+  behaviour with small local Python probes.
+
+#### Patterns to Remember
+
+- Gitignored reference folders can look empty if searched with default ignore
+  settings. Use explicit sweeps before concluding a lane only contains README
+  docs.
+- For standalone reference packages, check `pyproject.toml` entry points and
+  wheel package paths against the actual on-disk layout first. It is a fast way
+  to catch "README install command cannot possibly work" failures before doing
+  heavier setup.
+- Data-loader assumptions are easy to drift from packaging rules. In this lane,
+  the default lookup path and the declared shared-data install path point to
+  different places, so startup depends on `EEF_TOOLKIT_DATA` even though a JSON
+  file ships beside the code.

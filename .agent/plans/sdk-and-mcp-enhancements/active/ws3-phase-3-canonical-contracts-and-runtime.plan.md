@@ -43,7 +43,7 @@ todos:
 - C8 auth closure is complete. Task 9 is no longer blocked by the auth plans.
 - The widget-resource integration failure is closed by injecting widget HTML
   through `ResourceRegistrationOptions` rather than depending on
-  `dist/mcp-app.html` inside the test fake.
+  `dist/index.html` inside the test fake.
 - The separate lesson-summary schema fallout tracked in
   `ws3-phase-3-schema-fallout-closure.plan.md` is complete.
 - Reviewer closure is complete for this batch: `type-reviewer`,

@@ -89,20 +89,20 @@ For layout and styling work that does not need MCP host context:
 pnpm dev:widget
 ```
 
-Open `http://localhost:5173/mcp-app.html`. Vite provides hot module
-replacement — edits to React components, CSS, and design tokens are
-reflected immediately. The ext-apps SDK will not connect to a host in
-this mode, but the UI renders normally.
+Open `http://localhost:5173/`. Vite provides hot module replacement —
+edits to React components, CSS, and design tokens are reflected
+immediately. The ext-apps SDK will not connect to a host in this mode,
+but the UI renders normally.
 
 ### Full MCP App dev loop (three terminals)
 
 To see the widget rendered inside an MCP host iframe:
 
-| Terminal | Command               | Purpose                                                                 |
-| -------- | --------------------- | ----------------------------------------------------------------------- |
-| 1        | `pnpm dev:auth:stub`  | MCP server on port 3333 (stub tools, no real API needed)                |
-| 2        | `pnpm dev:widget`     | Widget Vite dev server with HMR at `http://localhost:5173/mcp-app.html` |
-| 3        | `pnpm dev:basic-host` | basic-host from ext-apps SDK, connects to localhost:3333 (port 8080)    |
+| Terminal | Command               | Purpose                                                              |
+| -------- | --------------------- | -------------------------------------------------------------------- |
+| 1        | `pnpm dev:auth:stub`  | MCP server on port 3333 (stub tools, no real API needed)             |
+| 2        | `pnpm dev:widget`     | Widget Vite dev server with HMR at `http://localhost:5173/`          |
+| 3        | `pnpm dev:basic-host` | basic-host from ext-apps SDK, connects to localhost:3333 (port 8080) |
 
 Start in order: server first (terminal 1), then widget (terminal 2),
 then basic-host (terminal 3). Open `http://localhost:8080` to see the

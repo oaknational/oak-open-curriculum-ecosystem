@@ -152,7 +152,7 @@ export function registerThreadProgressionsResource(
  * Path to the built MCP App HTML bundle consumed by the production HTML
  * provider.
  */
-const WIDGET_HTML_PATH = resolve(import.meta.dirname, '../dist/mcp-app.html');
+const WIDGET_HTML_PATH = resolve(import.meta.dirname, '../dist/index.html');
 
 /**
  * Reads the built MCP App HTML bundle from disk for production resource reads.

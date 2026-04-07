@@ -12,7 +12,7 @@ Invoke `accessibility-reviewer` when the change involves:
 - Colour values, contrast-sensitive styling, or theme-aware CSS
 - Form inputs, labels, error messages, or validation feedback
 - Interactive widgets (menus, dialogs, tabs, accordions, tooltips)
-- MCP App view files (`widget/`, `*.view.tsx`, `mcp-app.html`)
+- MCP App view files (`widget/`, `*.view.tsx`, `index.html`)
 - Touch target sizing or pointer interaction patterns
 - Animation, motion, or transition behaviour
 

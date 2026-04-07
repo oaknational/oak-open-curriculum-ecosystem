@@ -27,6 +27,9 @@ todos:
   - id: p0-dev-infra-hardening
     content: "P0 hardening: port conflict detection, bun dependency check, npm install path fix."
     status: done
+  - id: p1b-dev-dx
+    content: "P1b: Dev DX fixes — widget serves at /, token watch plugin, CSS-only dark mode, theme rework."
+    status: in-progress
   - id: p2-host-context
     content: "P2: Remaining host context alignment (SDK variable bridges in widget CSS, CSS fallbacks)."
     status: pending
@@ -42,7 +45,7 @@ isProject: false
 # Oak Branding Alignment + Merge Readiness
 
 **Last Updated**: 2026-04-07
-**Status**: 🟢 IN PROGRESS (P0 done, P1 done + reviewed, P2 next)
+**Status**: 🟢 IN PROGRESS (P0 done, P1 done + reviewed, P1b dev DX + theme rework in progress, P2 next)
 **Branch**: `feat/mcp_app_ui`
 **Scope**: Fix the BrandBanner to match Oak branding. Merge to `main`.
 
@@ -189,7 +192,7 @@ Add Google Fonts `@import` in `widget/src/index.css`:
 ```
 
 **Vite singlefile verification (BLOCKING)**: After build, inspect
-`dist/mcp-app.html` to confirm the `@import` is either preserved
+`dist/index.html` to confirm the `@import` is either preserved
 with the absolute URL or inlined correctly. If the singlefile plugin
 breaks the `@import`, the fallback is a `<link>` tag in
 `widget/index.html` (the Vite HTML entry point):

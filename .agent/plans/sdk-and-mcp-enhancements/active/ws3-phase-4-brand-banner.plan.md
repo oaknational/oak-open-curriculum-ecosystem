@@ -35,7 +35,7 @@ via text content; the human sees only the brand banner.
 - Inline SVG acorn logo with `fill="currentColor"` (light/dark/forced-colours)
 - `BrandBanner.tsx` — single `<a>` wrapping logo + text (WCAG H2),
   `onOpenLink` callback prop, underlined, display font, focus-visible ring
-- `prefers-color-scheme` fallback script in `mcp-app.html`
+- `prefers-color-scheme` fallback script in `index.html`
 - `appInfo.version` wired to `package.json` via Vite `define`
 - Diagnostic scaffold deleted, `AppView` renders only the banner
 - 5 pre-implementation specialist reviewers, 3 post-implementation reviewers

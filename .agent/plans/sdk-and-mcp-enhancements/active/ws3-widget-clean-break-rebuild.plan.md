@@ -427,7 +427,7 @@ Write failing tests first for:
 
 Create a nested `widget/` build target with:
 
-- `widget/mcp-app.html`
+- `widget/index.html`
 - `widget/vite.config.ts`
 - `widget/tsconfig.json`
 - `widget/src/mcp-app.tsx`
@@ -460,7 +460,7 @@ Update:
 
 ### Acceptance
 
-- focused package build produces a self-contained `dist/mcp-app.html`
+- focused package build produces a self-contained `dist/index.html`
 - Turbo invalidates correctly on widget `ts`, `tsx`, `css`, and `html` changes
 - lint and type-check see widget source
 - no preview shim is introduced
@@ -546,7 +546,7 @@ only the brand banner for "you are in Oak now" orientation.
   dark, and forced-colours modes)
 - `BrandBanner.tsx` — single `<a>` wrapping logo + text (WCAG H2),
   `onOpenLink` callback prop, underlined, display font, focus-visible ring
-- `prefers-color-scheme` fallback script in `mcp-app.html`
+- `prefers-color-scheme` fallback script in `index.html`
 - `appInfo.version` wired to `package.json` via Vite `define`
 - Diagnostic scaffold deleted, `AppView` renders only the banner
 - 5 pre-implementation specialist reviewers informed the design

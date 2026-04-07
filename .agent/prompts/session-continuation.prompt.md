@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-06
+last_updated: 2026-04-07
 ---
 
 # Session Continuation
@@ -42,55 +42,50 @@ git log --oneline --decorate -10
 
 - **Workstream**: MCP App branding alignment + merge
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-branding-alignment-and-merge.plan.md` (**PRIMARY** — plan-review gate passed, P1 ready)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-branding-alignment-and-merge.plan.md` (**PRIMARY** — P1b dev DX in progress)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-apps-sdk-audit.plan.md` (**SDK AUDIT** — items phased between P2 and Phase 5)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
   - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: P0 DONE. P1 DONE + REVIEWED.
-  P1 implemented and reviewed by 5 specialist reviewers (code,
-  design-system, accessibility, react-component, architecture-barney).
-  All findings addressed in-scope. Dark theme accent changed from
-  gold (sun-300/sun-400) to Oak green family per user direction.
-  Dev scripts hardened (port conflict detection, bun dependency check).
-- **Current objective**: P2 SDK fixes (isConnected/error, capability
-  checks, CSP, prefersBorder, TSDoc, README, governance doc),
-  then P3 gates + merge.
+- **Current state**: P0 DONE. P1 DONE + REVIEWED. P1b IN PROGRESS.
+  P1b reworked dev DX and theme system during user visual evaluation:
+  - Widget HTML renamed `mcp-app.html` → `index.html` (serves at `/`)
+  - Vite plugin watches design token sources and rebuilds CSS on change
+  - Token build has dev mode (`OAK_TOKEN_DEV=1`) — contrast warnings not errors
+  - Dark theme CSS now via `@media (prefers-color-scheme: dark)` — no JS required
+  - Inline theme script removed — CSS media query handles initial theme
+  - Light theme: mint-300 page bg, oak-black text AND accent (matching Oak website)
+  - Dark theme: green-700 (#008237) page bg, paper-050 (white) text and accent
+  - Contrast pairings updated: removed accent-strong text checks, accent surface
+    changed to oak-green-600 in dark for text-primary contrast
+  - `dev:basic-host` confirmed to require bun — updated error message with install
+    instructions and alternative
+  - User still validating both colour schemes and basic-host
+- **Current objective**: Complete P1b validation (user confirms both
+  themes visually), then P2 SDK fixes.
+  BLOCKING PREREQUISITE: playwright+axe-core a11y tests must be in
+  place before building a second widget/view.
 - **Hard invariants / non-goals**:
   - No fallbacks — app brand defaults are correct on their own
-  - ink-950 (#102033) stays UNCHANGED for dark surface-page
+  - Dark theme page bg is green-700 (#008237), NOT ink-950
+  - Light theme page bg is mint-300 (#bef2bd)
+  - CSS media query governs dark mode, not JS — data-theme only for SDK override
   - SDK variable bridge in widget CSS, NOT in token build pipeline
   - B4 downloadFile deferred to Phase 5 (scope creep)
   - `getUiCapability` deferred (incompatible with per-request server)
   - Reviewer sign-off required before each phase transition
-- **P1 implementation summary (2026-04-07)**:
-  - Palette: added oak-black, oak-green-500/600, mint-300, green-700
-    (#008237 old Oak Green), oak-green-300/200 (dark accent).
-    Removed fern-500/600, sun-300/400, paper-200.
-  - Semantic: light accent = mint-300, dark accent links = oak-green-300
-    (#78c85a), dark surface-accent = green-700 (#008237).
-    focus-ring-on-accent added both themes. attention removed.
-  - Font: Lexend via @import. weight-light (300), weight-bold (700).
-  - Logo: real Oak acorn SVG from Oak-Web-Application sprite sheet.
-  - Layout: compact top-aligned (removed 100vh centring).
-  - A11y: visually-hidden new-tab warning, forced-colours focus ring.
-  - Dev: port conflict detection, bun check, npm install path fix.
-  - All contrast pairings pass WCAG AA in both themes.
-  - Vite singlefile @import survives (BLOCKING check passed).
 - **Open questions / low-confidence areas**:
-  - oakGreen (#287c34) on paper-100 (#f4efe8) = ~4.58:1 — marginal
-    for 4.5:1 text. Build validates exact ratio.
-  - Dev tooling (dev:widget, dev:basic-host) needs user evaluation.
+  - User still evaluating light/dark colour schemes — may need further adjustments
+  - basic-host requires bun, not yet tested by user
+  - 4 contrast violations existed before this session's fix; all now resolved
+    but theme may change further based on user feedback
   - Pre-existing: portability:check fails on 4 vendor skill adapters
-    (MCP Apps SDK skills without canonical counterparts).
-- **Next safe step**: Session opens with user evaluation of dev
-  tooling (dev:widget visual check in browser, dev:basic-host with
-  bun installed). User confirms branding looks correct in both themes
-  before P2 SDK fixes begin. Dev tooling evaluation is BLOCKING —
-  do not start P2 until the user has validated the visual output.
+- **Next safe step**: User confirms both themes look correct visually.
+  If adjustments needed, iterate using the live token watch dev loop.
+  After visual sign-off, run `pnpm check` full quality gate, then
+  proceed to P2 SDK fixes. Playwright+axe-core tests needed before
+  second widget.
 - **Deep consolidation status**: completed this handoff — napkin
-  updated (399 lines, below rotation threshold), plans synced,
-  no graduation candidates, fitness informational (all pre-existing),
-  no practice exchange needed
+  updated with 2026-04-07b session, memories saved, patterns extracted
 
 ## Active Workstreams (2026-04-06, updated end of session)
 

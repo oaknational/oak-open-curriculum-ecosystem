@@ -45,9 +45,9 @@ collaboration.txt
 # See packages/sdks/oak-sdk-codegen/reference/README.md
 packages/sdks/oak-sdk-codegen/reference/*.json
 
-# Optional machine-local agent drops. Not part of checkout; create on disk if
-# needed. Nothing in the repo may depend on this path existing.
-.agent/reference-local/
+# Local reference files, not for source control
+.agent/reference-local/**/*
+!.agent/reference-local/.gitignore
 
 # Logs
 *.log
