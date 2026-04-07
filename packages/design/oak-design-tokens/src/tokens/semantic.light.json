@@ -2,18 +2,18 @@
   "semantic": {
     "surface-page": { "$type": "color", "$value": "{color.paper-050}" },
     "surface-panel": { "$type": "color", "$value": "{color.paper-100}" },
-    "surface-accent": { "$type": "color", "$value": "{color.fern-500}" },
+    "surface-accent": { "$type": "color", "$value": "{color.mint-300}" },
     "border-subtle": { "$type": "color", "$value": "{color.paper-400}" },
-    "text-primary": { "$type": "color", "$value": "{color.ink-950}" },
+    "text-primary": { "$type": "color", "$value": "{color.oak-black}" },
     "text-secondary": { "$type": "color", "$value": "{color.ink-700}" },
     "text-inverse": { "$type": "color", "$value": "{color.paper-050}" },
-    "accent": { "$type": "color", "$value": "{color.fern-500}" },
-    "accent-strong": { "$type": "color", "$value": "{color.fern-600}" },
+    "accent": { "$type": "color", "$value": "{color.oak-green-500}" },
+    "accent-strong": { "$type": "color", "$value": "{color.oak-green-600}" },
     "focus-ring": { "$type": "color", "$value": "{color.sky-600}" },
-    "attention": {
+    "focus-ring-on-accent": {
       "$type": "color",
-      "$value": "{color.sun-300}",
-      "$description": "Decorative/background-only — 1.52:1 on light surfaces, must not be used as a foreground element without an accompanying text label"
+      "$value": "{color.oak-green-500}",
+      "$description": "Focus ring for elements on accent (mint) surfaces — sky-600 fails ≥3:1 on mint, oakGreen passes at ~4.2:1"
     },
     "error": { "$type": "color", "$value": "{color.danger-500}" },
     "font-body-family": { "$type": "fontFamily", "$value": "{font.family-body}" },
@@ -29,8 +29,8 @@
     "font-body-line-height": { "$type": "number", "$value": "{font.line-height-400}" },
     "font-label-line-height": { "$type": "number", "$value": "{font.line-height-300}" },
     "font-heading-line-height": { "$type": "number", "$value": "{font.line-height-700}" },
-    "font-weight-regular": { "$type": "fontWeight", "$value": "{font.weight-regular}" },
-    "font-weight-semibold": { "$type": "fontWeight", "$value": "{font.weight-semibold}" },
+    "font-weight-light": { "$type": "fontWeight", "$value": "{font.weight-light}" },
+    "font-weight-bold": { "$type": "fontWeight", "$value": "{font.weight-bold}" },
     "gap-sm": { "$type": "dimension", "$value": "{space.200}" },
     "gap-md": { "$type": "dimension", "$value": "{space.300}" },
     "gap-lg": { "$type": "dimension", "$value": "{space.500}" },

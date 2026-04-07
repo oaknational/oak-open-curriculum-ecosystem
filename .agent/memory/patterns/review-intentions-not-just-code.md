@@ -29,13 +29,19 @@ token tier, wrong SDK method) are expensive to fix after the fact.
 
 ## Evidence
 
-Phase 4 brand banner: 5 pre-implementation reviewers (design-system,
-accessibility, MCP, assumptions, architecture-barney) produced 16
-concrete decisions. Without them, the implementation would have used
-`<button role="link">` (wrong), PNG `filter: invert()` (breaks
-forced-colours), generic link tokens (YAGNI), a `ToolRouter.tsx` file
-(single-consumer), and `useHostStyleVariables` (handler overwrite).
-Every wrong choice was caught before code existed.
+**Phase 4 brand banner** (2026-04-04): 5 pre-implementation reviewers
+produced 16 concrete decisions. Wrong HTML element, wrong CSS
+pattern, wrong token tier — all caught before code existed.
+
+**P1 branding alignment** (2026-04-06): 5 reviewers × 2 rounds = 10
+reviews. 28 findings total. Highest-value catches: focus ring
+arithmetic (plan said ~3.1:1, actual ~2.79:1 — FAILS WCAG), SDK
+capability key pluralisation (`openLinks` not `openLink` — would
+throw at runtime), boundary violation in token build (design package
+depending on app-layer protocol), and wrong brand colours (plan had accent
+`#222222`, real Oak uses `#287C34`). Two-round structure with
+sign-off gates prevented implementation on a fundamentally flawed
+plan. All 28 items resolved before writing a single line of code.
 
 ## When to Apply
 

@@ -13,8 +13,8 @@
     },
     "surface-accent": {
       "$type": "color",
-      "$value": "{color.fern-600}",
-      "$description": "Accent surface — fern green preserved from light theme"
+      "$value": "{color.green-700}",
+      "$description": "Accent surface — dark forest green in dark mode"
     },
     "border-subtle": {
       "$type": "color",
@@ -34,27 +34,27 @@
     "text-inverse": {
       "$type": "color",
       "$value": "{color.ink-950}",
-      "$description": "Text on accent/light backgrounds — dark navy for contrast against sun/fern"
+      "$description": "Text on accent/light backgrounds — dark navy for contrast against green surfaces"
     },
     "accent": {
       "$type": "color",
-      "$value": "{color.sun-300}",
-      "$description": "Primary accent — golden yellow"
+      "$value": "{color.oak-green-300}",
+      "$description": "Primary accent — Oak logo green (7.10:1 on ink-950)"
     },
     "accent-strong": {
       "$type": "color",
-      "$value": "{color.sun-400}",
-      "$description": "Hover/active accent — darker gold, distinct from accent for visible state change"
+      "$value": "{color.oak-green-200}",
+      "$description": "Hover/active accent — lighter green, distinct from accent for visible state change (8.40:1 on ink-950)"
     },
     "focus-ring": {
       "$type": "color",
       "$value": "{color.sky-400}",
       "$description": "Focus indicator"
     },
-    "attention": {
+    "focus-ring-on-accent": {
       "$type": "color",
-      "$value": "{color.sun-300}",
-      "$description": "Attention/warning highlights"
+      "$value": "{color.paper-050}",
+      "$description": "Focus ring on accent surfaces — white on old Oak Green (4.78:1, ≥3:1 non-text)"
     },
     "error": {
       "$type": "color",

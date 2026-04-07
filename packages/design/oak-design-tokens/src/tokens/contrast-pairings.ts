@@ -106,6 +106,26 @@ const contrastPairings = {
       background: 'semantic.accent-strong',
       context: 'text',
     },
+    {
+      foreground: 'semantic.text-primary',
+      background: 'semantic.surface-accent',
+      context: 'text',
+    },
+    {
+      foreground: 'semantic.text-inverse',
+      background: 'semantic.surface-accent',
+      context: 'informational',
+    },
+    {
+      foreground: 'semantic.text-inverse',
+      background: 'semantic.accent',
+      context: 'text',
+    },
+    {
+      foreground: 'semantic.focus-ring-on-accent',
+      background: 'semantic.surface-accent',
+      context: 'non-text',
+    },
   ],
   triads: [
     // Button primary: text on button surface on page background.

@@ -16,7 +16,7 @@
     },
     "shell-title-weight": {
       "$type": "fontWeight",
-      "$value": "{semantic.font-weight-semibold}"
+      "$value": "{semantic.font-weight-bold}"
     },
     "body-family": { "$type": "fontFamily", "$value": "{semantic.font-body-family}" },
     "body-size": { "$type": "dimension", "$value": "{semantic.font-body-size}" },
@@ -24,7 +24,7 @@
       "$type": "number",
       "$value": "{semantic.font-body-line-height}"
     },
-    "body-weight": { "$type": "fontWeight", "$value": "{semantic.font-weight-regular}" },
+    "body-weight": { "$type": "fontWeight", "$value": "{semantic.font-weight-light}" },
     "label-size": { "$type": "dimension", "$value": "{semantic.font-label-size}" },
     "label-line-height": { "$type": "number", "$value": "{semantic.font-label-line-height}" },
     "page-padding": { "$type": "dimension", "$value": "{semantic.shell-padding}" },
@@ -85,6 +85,10 @@
     "banner-link-color": { "$type": "color", "$value": "{semantic.accent}" },
     "banner-link-color-hover": { "$type": "color", "$value": "{semantic.accent-strong}" },
     "banner-link-focus-ring-color": { "$type": "color", "$value": "{semantic.focus-ring}" },
+    "focus-ring-on-accent-color": {
+      "$type": "color",
+      "$value": "{semantic.focus-ring-on-accent}"
+    },
     "banner-title-family": {
       "$type": "fontFamily",
       "$value": "{semantic.font-display-family}"
@@ -95,7 +99,7 @@
     },
     "banner-title-weight": {
       "$type": "fontWeight",
-      "$value": "{semantic.font-weight-semibold}"
+      "$value": "{semantic.font-weight-bold}"
     },
     "banner-gap": { "$type": "dimension", "$value": "{semantic.gap-sm}" }
   }

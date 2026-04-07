@@ -15,6 +15,11 @@
       "$value": "#485d75",
       "$description": "Mid navy — subtle borders in dark mode"
     },
+    "ink-500": {
+      "$type": "color",
+      "$value": "#8498a9",
+      "$description": "Muted slate blue — borders on dark backgrounds (≥3:1 on ink surfaces)"
+    },
     "paper-050": {
       "$type": "color",
       "$value": "#fcfbf8",
@@ -25,35 +30,45 @@
       "$value": "#f4efe8",
       "$description": "Light parchment — secondary text in dark mode"
     },
-    "paper-200": {
-      "$type": "color",
-      "$value": "#e6ddd2",
-      "$description": "Mid parchment — decorative surfaces in light mode"
-    },
     "paper-400": {
       "$type": "color",
       "$value": "#8e7f6f",
       "$description": "Warm taupe — borders in light mode (≥3:1 on paper surfaces)"
     },
-    "fern-500": {
+    "oak-black": {
       "$type": "color",
-      "$value": "#1d6f5f",
-      "$description": "Oak brand green — primary accent in light mode"
+      "$value": "#222222",
+      "$description": "Oak brand 'black' — primary text colour in light mode"
     },
-    "fern-600": {
+    "oak-green-500": {
       "$type": "color",
-      "$value": "#15574b",
-      "$description": "Dark fern — hover/active accent in light mode"
+      "$value": "#287c34",
+      "$description": "Oak brand green — primary accent (links, buttons) in light mode"
     },
-    "sun-300": {
+    "oak-green-600": {
       "$type": "color",
-      "$value": "#f0c974",
-      "$description": "Golden yellow — primary accent in dark mode"
+      "$value": "#22692c",
+      "$description": "Darker oak green — hover/active accent in light mode"
     },
-    "sun-400": {
+    "mint-300": {
       "$type": "color",
-      "$value": "#e0b85a",
-      "$description": "Deeper gold — hover/active accent in dark mode"
+      "$value": "#bef2bd",
+      "$description": "Oak signature mint — accent surface colour in light mode"
+    },
+    "green-700": {
+      "$type": "color",
+      "$value": "#008237",
+      "$description": "Old Oak Green — accent surface colour in dark mode. Brand callback to early Oak sites."
+    },
+    "oak-green-300": {
+      "$type": "color",
+      "$value": "#78c85a",
+      "$description": "Oak logo green family — primary accent in dark mode (8.00:1 on ink-950, 4.70:1 on ink-800)"
+    },
+    "oak-green-200": {
+      "$type": "color",
+      "$value": "#8ad46c",
+      "$description": "Light oak green — hover/active accent in dark mode (9.18:1 on ink-950, 5.39:1 on ink-800)"
     },
     "sky-400": {
       "$type": "color",
@@ -74,23 +89,18 @@
       "$type": "color",
       "$value": "#b43c31",
       "$description": "Red — error states and destructive actions on light backgrounds"
-    },
-    "ink-500": {
-      "$type": "color",
-      "$value": "#8498a9",
-      "$description": "Muted slate blue — borders on dark backgrounds (≥3:1 on ink surfaces)"
     }
   },
   "font": {
     "family-body": {
       "$type": "fontFamily",
-      "$value": "\"Source Sans 3\", \"Segoe UI\", sans-serif",
-      "$description": "Body typeface — Source Sans 3 with system fallbacks"
+      "$value": "\"Lexend\", system-ui, sans-serif",
+      "$description": "Body typeface — Lexend (Oak brand). Shares the same typeface as family-display; kept as a separate seam for future typographic divergence."
     },
     "family-display": {
       "$type": "fontFamily",
-      "$value": "\"Fraunces\", Georgia, serif",
-      "$description": "Display/heading typeface — Fraunces with serif fallback"
+      "$value": "\"Lexend\", system-ui, sans-serif",
+      "$description": "Display/heading typeface — Lexend (Oak brand). Intentionally the same as family-body for the current Oak brand; separate token preserved as a future divergence seam."
     },
     "size-200": {
       "$type": "dimension",
@@ -104,15 +114,15 @@
       "$description": "Medium text — between body and heading"
     },
     "size-700": { "$type": "dimension", "$value": "2rem", "$description": "Heading text" },
-    "weight-regular": {
+    "weight-light": {
       "$type": "fontWeight",
-      "$value": "400",
-      "$description": "Regular weight for body text"
+      "$value": "300",
+      "$description": "Light weight — Oak's default body weight (CSS font-weight: 300)"
     },
-    "weight-semibold": {
+    "weight-bold": {
       "$type": "fontWeight",
-      "$value": "600",
-      "$description": "Semibold weight for headings and emphasis"
+      "$value": "700",
+      "$description": "Bold weight — Oak's emphasis weight for headings and strong text (CSS font-weight: 700)"
     },
     "line-height-300": {
       "$type": "number",
