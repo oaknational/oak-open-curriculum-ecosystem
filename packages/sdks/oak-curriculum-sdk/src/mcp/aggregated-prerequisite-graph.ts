@@ -68,7 +68,6 @@ Complements get-thread-progressions (learning paths) with prerequisite detail.`,
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Get Prerequisite Graph',
   },
 
   _meta: undefined,

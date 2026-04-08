@@ -51,7 +51,6 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Browse Curriculum',
   },
   _meta: undefined,
 } as const;

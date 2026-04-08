@@ -123,7 +123,6 @@ interface AggregatedToolDefShape {
     readonly destructiveHint: boolean;
     readonly idempotentHint: boolean;
     readonly openWorldHint: boolean;
-    readonly title: string;
   };
   readonly flatZodSchema: z.ZodRawShape;
 }

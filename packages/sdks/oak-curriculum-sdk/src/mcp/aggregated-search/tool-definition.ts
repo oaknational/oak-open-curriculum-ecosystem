@@ -74,7 +74,6 @@ CROSS-TOOL WORKFLOWS:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Search Curriculum',
   },
   _meta: { ui: { resourceUri: WIDGET_URI } },
 } as const;

@@ -149,6 +149,12 @@ const config = defineConfig(
         'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
       },
     },
+    {
+      files: ['e2e-tests/**/*.test.ts'],
+      rules: {
+        'max-lines-per-function': ['error', { max: 300, skipComments: true, skipBlankLines: true }],
+      },
+    },
     // Two irreducible assertion cases, each confirmed by type-reviewer:
     // 1. auth-error-test-helpers.ts: McpServer.registerTool has overloaded
     //    generics that no plain function can satisfy (SDK limitation).

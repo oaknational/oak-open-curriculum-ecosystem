@@ -55,7 +55,6 @@ Do NOT use for:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'User Search',
   },
   _meta: { ui: { resourceUri: WIDGET_URI } },
 } as const;
@@ -83,7 +82,6 @@ with search controls directly.`,
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'User Search Query',
   },
   _meta: { ui: { resourceUri: WIDGET_URI, visibility: ['app'] as const } },
 } as const;

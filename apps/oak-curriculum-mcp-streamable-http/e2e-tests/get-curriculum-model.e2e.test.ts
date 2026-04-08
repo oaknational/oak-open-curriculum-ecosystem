@@ -27,7 +27,6 @@ const ToolsListResultSchema = z.object({
         .object({
           readOnlyHint: z.boolean().optional(),
           idempotentHint: z.boolean().optional(),
-          title: z.string().optional(),
         })
         .optional(),
     }),
@@ -136,12 +135,11 @@ describe('get-curriculum-model E2E', () => {
       expect(modelTool?.description).toContain('Use this when');
     });
 
-    it('has correct annotations (readOnly, idempotent, title)', async () => {
+    it('has correct annotations (readOnly, idempotent)', async () => {
       const tools = await callToolsList();
       const modelTool = tools.find((t) => t.name === 'get-curriculum-model');
       expect(modelTool?.annotations?.readOnlyHint).toBe(true);
       expect(modelTool?.annotations?.idempotentHint).toBe(true);
-      expect(modelTool?.annotations?.title).toBeDefined();
     });
   });
 

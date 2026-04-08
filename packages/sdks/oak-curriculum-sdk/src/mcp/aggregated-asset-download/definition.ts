@@ -40,7 +40,6 @@ Do NOT use for:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Download Asset',
   },
   _meta: undefined,
 } as const;

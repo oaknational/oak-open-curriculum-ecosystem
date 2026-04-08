@@ -95,8 +95,9 @@ const OAK_ICON_DARK: Icon = {
  * ```
  */
 export const OAK_SERVER_BRANDING = {
-  title: 'Oak National Curriculum',
-  description: 'Curriculum tools, lesson content, and semantic search for Oak National Academy.',
+  title: 'Oak National Academy',
+  description:
+    "Search, explore, download and use Oak's free, fully sequenced and resourced curriculum resources, for KS1 to KS4.",
   websiteUrl: 'https://www.thenational.academy',
   icons: [OAK_ICON_LIGHT, OAK_ICON_DARK],
 };

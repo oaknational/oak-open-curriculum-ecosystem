@@ -47,7 +47,6 @@ Use format "type:slug" (e.g., "lesson:add-fractions-with-the-same-denominator", 
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Fetch Curriculum Resource',
   },
   _meta: undefined,
 } as const;

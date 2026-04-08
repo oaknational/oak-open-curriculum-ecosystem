@@ -80,7 +80,7 @@ const server = new McpServer(
   {
     name: 'oak-curriculum-http',
     version: '0.1.0',
-    title: 'Oak National Curriculum',
+    title: 'Oak National Academy',
     description: 'Curriculum tools, lesson content, and semantic search for Oak National Academy.',
     websiteUrl: 'https://www.thenational.academy',
     icons: [
@@ -96,6 +96,7 @@ const server = new McpServer(
 
 Extract the Oak logo SVG from the widget's `BrandBanner.tsx` and encode as
 `data:image/svg+xml;base64,...` URIs. Two variants:
+
 - **Light theme**: Green logo on transparent (for light host backgrounds)
 - **Dark theme**: White logo on transparent (for dark host backgrounds)
 
@@ -104,6 +105,7 @@ Place in a `server-branding.ts` module next to `application.ts`.
 ### T3: Audit tool titles
 
 Verify every tool has a human-friendly `annotations.title`:
+
 - Aggregated: already present (e.g. "Get Prerequisite Graph")
 - Generated: need to add via the codegen template
 

@@ -58,10 +58,10 @@ describe('listUniversalTools annotations', () => {
     const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
-      expect(tool.annotations?.title).toBeDefined();
+      expect(tool.title).toBeDefined();
       // Title should be human-readable (contains spaces or is single word)
       // and not kebab-case
-      expect(tool.annotations?.title).not.toContain('-');
+      expect(tool.title).not.toContain('-');
     }
   });
 
@@ -75,7 +75,6 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.destructiveHint).toBe(false);
     expect(annotations?.idempotentHint).toBe(true);
     expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBe('Search Curriculum');
   });
 
   it('fetch tool has correct annotations', () => {
@@ -88,7 +87,6 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.destructiveHint).toBe(false);
     expect(annotations?.idempotentHint).toBe(true);
     expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBe('Fetch Curriculum Resource');
   });
 
   it('get-curriculum-model tool has correct annotations', () => {
@@ -101,7 +99,6 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.destructiveHint).toBe(false);
     expect(annotations?.idempotentHint).toBe(true);
     expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBeDefined();
   });
 });
 

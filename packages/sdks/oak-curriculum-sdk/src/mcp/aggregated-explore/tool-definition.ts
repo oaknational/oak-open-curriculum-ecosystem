@@ -61,7 +61,6 @@ NEXT STEPS AFTER EXPLORE:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Explore Topic',
   },
   _meta: undefined,
 } as const;

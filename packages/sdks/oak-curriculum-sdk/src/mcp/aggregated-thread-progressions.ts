@@ -64,7 +64,6 @@ Complements get-curriculum-model (which includes the schema-level property graph
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Get Thread Progressions',
   },
 
   _meta: undefined,

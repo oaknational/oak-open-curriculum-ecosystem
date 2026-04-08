@@ -44,6 +44,7 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
       const def = AGGREGATED_TOOL_DEFS[name];
       return {
         name,
+        title: def.title,
         description: def.description,
         flatZodSchema: def.flatZodSchema,
         securitySchemes: def.securitySchemes,
@@ -57,6 +58,7 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
     const descriptor = registry.getToolFromToolName(name);
     return {
       name,
+      title: descriptor.annotations?.title,
       description: descriptor.description,
       flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema) ?? {},
       securitySchemes: descriptor.securitySchemes,

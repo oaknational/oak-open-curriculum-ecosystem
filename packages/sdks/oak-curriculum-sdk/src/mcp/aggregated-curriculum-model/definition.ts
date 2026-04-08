@@ -38,7 +38,6 @@ Do NOT use for:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Oak Curriculum Overview',
   },
   _meta: { ui: { resourceUri: WIDGET_URI } },
 } as const;

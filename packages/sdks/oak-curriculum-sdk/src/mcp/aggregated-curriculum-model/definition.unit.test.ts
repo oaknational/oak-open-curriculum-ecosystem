@@ -32,11 +32,6 @@ describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
   it('has openWorldHint annotation set to false', () => {
     expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.openWorldHint).toBe(false);
   });
-
-  it('has title annotation', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.title).toBeDefined();
-    expect(typeof GET_CURRICULUM_MODEL_TOOL_DEF.annotations.title).toBe('string');
-  });
 });
 
 describe('GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA', () => {

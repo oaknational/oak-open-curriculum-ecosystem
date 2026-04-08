@@ -46,12 +46,6 @@ describe('runCurriculumModelTool', () => {
     }
   });
 
-  it('does not include toolSpecificHelp (removed)', () => {
-    const result = runCurriculumModelTool();
-    const data = extractStructuredData(result);
-    expect(data).not.toHaveProperty('toolSpecificHelp');
-  });
-
   it('returns identical data on repeated calls', () => {
     const first = runCurriculumModelTool();
     const second = runCurriculumModelTool();

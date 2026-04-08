@@ -35,7 +35,6 @@ describe('GET_PREREQUISITE_GRAPH_TOOL_DEF', () => {
       destructiveHint: false,
       idempotentHint: true,
       openWorldHint: false,
-      title: 'Get Prerequisite Graph',
     });
   });
 });
