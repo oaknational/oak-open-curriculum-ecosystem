@@ -21,6 +21,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  * Compound tool that provides a cross-curriculum overview in one call.
  */
 export const EXPLORE_TOOL_DEF = {
+  title: 'Explore Topic',
   description: `Explore a topic across the entire Oak curriculum in one call.
 
 ${AGGREGATED_PREREQUISITE_GUIDANCE}

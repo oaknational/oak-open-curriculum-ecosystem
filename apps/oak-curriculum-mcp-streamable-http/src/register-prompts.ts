@@ -32,24 +32,28 @@ import type { HttpObservability } from './observability/http-observability.js';
 const PROMPT_REGISTRATIONS = [
   {
     name: 'find-lessons',
+    title: 'Find Lessons',
     description:
       'Find curriculum lessons on a specific topic. Searches across all subjects and key stages.',
     argsSchema: findLessonsArgsSchema,
   },
   {
     name: 'lesson-planning',
+    title: 'Lesson Planning',
     description:
       'Gather materials for planning a lesson on a topic, including objectives and resources.',
     argsSchema: lessonPlanningArgsSchema,
   },
   {
     name: 'explore-curriculum',
+    title: 'Explore Curriculum',
     description:
       'Explore what Oak has on a topic across the whole curriculum. Searches lessons, units, and threads in parallel.',
     argsSchema: exploreCurriculumArgsSchema,
   },
   {
     name: 'learning-progression',
+    title: 'Learning Progression',
     description:
       'Understand how a concept builds across year groups by searching progression threads and mapping dependencies.',
     argsSchema: learningProgressionArgsSchema,
@@ -108,6 +112,7 @@ export function registerPrompts(server: PromptRegistrar, observability: HttpObse
     server.registerPrompt(
       prompt.name,
       {
+        title: prompt.title,
         description: prompt.description,
         argsSchema: prompt.argsSchema,
       },

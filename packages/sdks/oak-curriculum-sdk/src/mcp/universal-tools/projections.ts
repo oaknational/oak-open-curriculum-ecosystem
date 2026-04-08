@@ -59,7 +59,7 @@ export function toRegistrationConfig(tool: UniversalToolListEntry): {
   readonly _meta: ToolMeta | undefined;
 } {
   return {
-    title: tool.annotations?.title ?? tool.name,
+    title: tool.title ?? tool.annotations?.title ?? tool.name,
     description: tool.description ?? tool.name,
     inputSchema: tool.flatZodSchema,
     securitySchemes: tool.securitySchemes,
@@ -87,7 +87,7 @@ export function toAppToolRegistrationConfig(tool: AppToolListEntry): McpUiAppToo
   readonly annotations: ToolAnnotations | undefined;
 } {
   return {
-    title: tool.annotations?.title ?? tool.name,
+    title: tool.title ?? tool.annotations?.title ?? tool.name,
     description: tool.description ?? tool.name,
     inputSchema: tool.flatZodSchema,
     securitySchemes: tool.securitySchemes,

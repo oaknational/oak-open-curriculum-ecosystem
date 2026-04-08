@@ -19,53 +19,42 @@ function extractStructuredData(result: {
 }
 
 describe('runCurriculumModelTool', () => {
-  describe('without tool_name', () => {
-    it('returns CallToolResult with structuredContent', () => {
-      const result = runCurriculumModelTool({});
-      expect(result.isError).toBeUndefined();
-      expect(result.structuredContent).toBeDefined();
-    });
-
-    it('returns domainModel in structuredContent', () => {
-      const result = runCurriculumModelTool({});
-      const data = extractStructuredData(result);
-      expect(data).toHaveProperty('domainModel');
-    });
-
-    it('returns toolGuidance in structuredContent', () => {
-      const result = runCurriculumModelTool({});
-      const data = extractStructuredData(result);
-      expect(data).toHaveProperty('toolGuidance');
-    });
-
-    it('returns human-readable summary in content', () => {
-      const result = runCurriculumModelTool({});
-      expect(result.content[0]).toHaveProperty('type', 'text');
-      const firstContent = result.content[0];
-      if ('text' in firstContent) {
-        expect(firstContent.text).toMatch(/curriculum/i);
-      }
-    });
+  it('returns CallToolResult with structuredContent', () => {
+    const result = runCurriculumModelTool();
+    expect(result.isError).toBeUndefined();
+    expect(result.structuredContent).toBeDefined();
   });
 
-  describe('with tool_name', () => {
-    it('includes tool-specific help for known tool', () => {
-      const result = runCurriculumModelTool({ tool_name: 'search' });
-      const data = extractStructuredData(result);
-      expect(data).toHaveProperty('toolSpecificHelp');
-    });
-
-    it('handles unknown tool gracefully', () => {
-      const result = runCurriculumModelTool({ tool_name: 'nonexistent-tool' });
-      expect(result.isError).toBeUndefined();
-    });
+  it('returns domainModel in structuredContent', () => {
+    const result = runCurriculumModelTool();
+    const data = extractStructuredData(result);
+    expect(data).toHaveProperty('domainModel');
   });
 
-  describe('idempotency', () => {
-    it('returns identical data on repeated calls', () => {
-      const first = runCurriculumModelTool({});
-      const second = runCurriculumModelTool({});
-      expect(first.structuredContent).toEqual(second.structuredContent);
-    });
+  it('returns toolGuidance in structuredContent', () => {
+    const result = runCurriculumModelTool();
+    const data = extractStructuredData(result);
+    expect(data).toHaveProperty('toolGuidance');
+  });
+
+  it('returns human-readable summary in content', () => {
+    const result = runCurriculumModelTool();
+    expect(result.content[0]).toHaveProperty('type', 'text');
+    const firstContent = result.content[0];
+    if ('text' in firstContent) {
+      expect(firstContent.text).toMatch(/curriculum/i);
+    }
+  });
+
+  it('does not include toolSpecificHelp (removed)', () => {
+    const result = runCurriculumModelTool();
+    const data = extractStructuredData(result);
+    expect(data).not.toHaveProperty('toolSpecificHelp');
+  });
+
+  it('returns identical data on repeated calls', () => {
+    const first = runCurriculumModelTool();
+    const second = runCurriculumModelTool();
+    expect(first.structuredContent).toEqual(second.structuredContent);
   });
 });

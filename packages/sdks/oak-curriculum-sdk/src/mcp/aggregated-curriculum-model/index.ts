@@ -10,4 +10,4 @@ export {
   GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA,
 } from './definition.js';
 
-export { runCurriculumModelTool, validateCurriculumModelArgs } from './execution.js';
+export { runCurriculumModelTool } from './execution.js';

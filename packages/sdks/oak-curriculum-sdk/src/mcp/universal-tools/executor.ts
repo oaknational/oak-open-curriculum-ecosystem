@@ -16,10 +16,7 @@ import {
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
 import { validateFetchArgs, runFetchTool } from '../aggregated-fetch/index.js';
-import {
-  validateCurriculumModelArgs,
-  runCurriculumModelTool,
-} from '../aggregated-curriculum-model/index.js';
+import { runCurriculumModelTool } from '../aggregated-curriculum-model/index.js';
 import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
 import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
@@ -69,14 +66,10 @@ function mapExecutionResult(
 }
 
 /**
- * Handles curriculum model tool validation and execution.
+ * Handles curriculum model tool execution (no parameters).
  */
-function handleCurriculumModelTool(input: unknown): CallToolResult {
-  const validation = validateCurriculumModelArgs(input);
-  if (!validation.ok) {
-    return formatError(validation.message);
-  }
-  return runCurriculumModelTool(validation.value);
+function handleCurriculumModelTool(): CallToolResult {
+  return runCurriculumModelTool();
 }
 
 /**
@@ -168,7 +161,7 @@ type AggregatedHandler = (
 
 const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler>> = {
   search: handleSearchTool,
-  'get-curriculum-model': (input) => Promise.resolve(handleCurriculumModelTool(input)),
+  'get-curriculum-model': () => Promise.resolve(handleCurriculumModelTool()),
   'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
   'get-prerequisite-graph': () => Promise.resolve(runPrerequisiteGraphTool()),
   fetch: handleFetchTool,

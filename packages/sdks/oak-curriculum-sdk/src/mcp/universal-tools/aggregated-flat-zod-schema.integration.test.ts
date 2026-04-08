@@ -114,7 +114,7 @@ describe('aggregated tools flatZodSchema propagation', () => {
     expect(jsonSchema).toHaveProperty('properties.query.examples');
   });
 
-  it('get-curriculum-model flatZodSchema produces valid JSON Schema', () => {
+  it('get-curriculum-model flatZodSchema is empty (no parameters)', () => {
     const tools = listUniversalTools(generatedToolRegistry);
     const model = tools.find((t) => t.name === 'get-curriculum-model');
 
@@ -123,8 +123,7 @@ describe('aggregated tools flatZodSchema propagation', () => {
       throw new Error('get-curriculum-model flatZodSchema not found');
     }
 
-    const jsonSchema = z.toJSONSchema(z.object(model.flatZodSchema));
-    expect(jsonSchema).toHaveProperty('properties.tool_name.description');
+    expect(typeSafeKeys(model.flatZodSchema)).toHaveLength(0);
   });
 
   it('empty-param tools have empty flatZodSchema', () => {

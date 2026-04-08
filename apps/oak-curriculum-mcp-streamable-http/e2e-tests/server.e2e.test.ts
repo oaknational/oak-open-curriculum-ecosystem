@@ -57,6 +57,23 @@ const InitInstructionsResultSchema = z.object({
   instructions: z.string(),
 });
 
+const IconSchema = z.object({
+  src: z.string().startsWith('data:image/svg+xml;base64,'),
+  mimeType: z.literal('image/svg+xml'),
+  theme: z.enum(['light', 'dark']),
+});
+
+const InitServerInfoResultSchema = z.object({
+  serverInfo: z.object({
+    name: z.literal('oak-curriculum-http'),
+    version: z.string(),
+    title: z.string().min(1),
+    description: z.string().min(1),
+    websiteUrl: z.url(),
+    icons: z.array(IconSchema).min(2),
+  }),
+});
+
 const JsonRpcErrorSchema = z.object({
   message: z.string().optional(),
 });
@@ -233,6 +250,38 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
 
     expect(initResult.instructions.length).toBeGreaterThan(0);
     expect(initResult.instructions).toMatch(/orientation|domain model/i);
+  });
+
+  it('initialize response includes Oak branding in serverInfo', async () => {
+    const configResult = loadRuntimeConfig({
+      processEnv: authBypassedEnv,
+      startDir: process.cwd(),
+    });
+    const runtimeConfig = unwrap(configResult);
+    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const app = await createApp({ runtimeConfig, observability });
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', ACCEPT)
+      .send({
+        jsonrpc: '2.0',
+        id: 'init-branding',
+        method: 'initialize',
+        params: {
+          protocolVersion: '2025-06-18',
+          capabilities: {},
+          clientInfo: { name: 'branding-test', version: '1.0.0' },
+        },
+      });
+    expect(res.status).toBe(200);
+    const envelope = parseSseEnvelope(res.text);
+    const initResult = InitServerInfoResultSchema.parse(envelope.result);
+
+    expect(initResult.serverInfo.title).toBe('Oak National Curriculum');
+    expect(initResult.serverInfo.websiteUrl).toBe('https://www.thenational.academy');
+    const themes = initResult.serverInfo.icons.map((i) => i.theme);
+    expect(themes).toContain('light');
+    expect(themes).toContain('dark');
   });
 
   it('returns error when calling an unknown tool (error path)', async () => {

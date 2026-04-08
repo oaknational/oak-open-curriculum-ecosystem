@@ -4,7 +4,7 @@
  * These tests prove that MCP clients can:
  * - Discover the tool via tools/list with correct metadata
  * - Call the tool to get combined orientation (domain model + tool guidance)
- * - Call the tool with tool_name for tool-specific help
+ * - Call the parameterless tool to receive combined orientation
  * - Discover the curriculum://model resource
  *
  * Coverage consolidated from get-ontology and get-help E2E tests after
@@ -73,18 +73,6 @@ const DomainModelResponseSchema = z
         toolCategories: z.unknown(),
         workflows: z.unknown(),
         tips: z.unknown(),
-      })
-      .loose(),
-  })
-  .loose();
-
-const ToolSpecificHelpSchema = z
-  .object({
-    toolSpecificHelp: z
-      .object({
-        tool: z.string(),
-        category: z.string(),
-        relatedWorkflows: z.unknown(),
       })
       .loose(),
   })
@@ -197,36 +185,6 @@ describe('get-curriculum-model E2E', () => {
       const data = await callGetCurriculumModel();
       const parsed = DomainModelResponseSchema.parse(data);
       expect(parsed.domainModel.workflows.findLessons.description).toContain('Search for lessons');
-    });
-  });
-
-  describe('tools/call - tool-specific help (with tool_name)', () => {
-    it('returns toolSpecificHelp with tool name and category', async () => {
-      const data = await callGetCurriculumModel({ tool_name: 'search' });
-      const parsed = ToolSpecificHelpSchema.safeParse(data);
-      expect(parsed.success).toBe(true);
-      expect(parsed.data?.toolSpecificHelp.tool).toBe('search');
-    });
-
-    it('returns category context for fetching tools', async () => {
-      const data = await callGetCurriculumModel({ tool_name: 'fetch' });
-      const parsed = ToolSpecificHelpSchema.safeParse(data);
-      expect(parsed.success).toBe(true);
-      expect(parsed.data?.toolSpecificHelp.category).toBeDefined();
-    });
-
-    it('returns related workflows for the tool', async () => {
-      const data = await callGetCurriculumModel({ tool_name: 'search' });
-      const parsed = ToolSpecificHelpSchema.safeParse(data);
-      expect(parsed.success).toBe(true);
-      expect(parsed.data?.toolSpecificHelp.relatedWorkflows).toBeDefined();
-    });
-
-    it('returns base orientation without toolSpecificHelp for unknown tool_name', async () => {
-      const data = await callGetCurriculumModel({ tool_name: 'nonexistent-tool' });
-      expect(data).toHaveProperty('domainModel');
-      expect(data).toHaveProperty('toolGuidance');
-      expect(data).not.toHaveProperty('toolSpecificHelp');
     });
   });
 

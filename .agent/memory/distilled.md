@@ -193,11 +193,8 @@ context with no natural permanent home.
   multi-listener support. We compose style sync and
   runtime-state dispatch in one handler for simplicity and
   error isolation, not because the SDK forces single-slot.
-- **CSS media query is the dark mode foundation**: use
-  `@media (prefers-color-scheme: dark)` in generated CSS.
-  Never set `data-theme` eagerly on load — it overrides
-  the media query and breaks OS preference tracking. The
-  attribute is only for explicit host/user override.
+- **CSS media query dark mode**: graduated to
+  `docs/governance/design-token-practice.md` (Theming section).
 - **`console` ban means canonical logger**: the `no-console`
   rule forces injection of `@oaknational/logger`, not fallback
   to `process.stderr.write`. Build scripts without a logger
@@ -207,6 +204,12 @@ context with no natural permanent home.
   `_meta.ui.csp.resourceDomains` on `contents[]` items in
   `registerAppResource`, NOT on the listing config. The MCP
   Apps spec is explicit: hosts read CSP from content items.
+- **MCP tool `name` vs `title`**: `name` is the machine ID
+  (kebab-case, used in `tools/call`). `title` (BaseMetadata,
+  spec 2025-11-25) is the human display name. `annotations.title`
+  (spec 2025-06-18) is the older location — both supported.
+  Projection chain: `tool.title` → `annotations.title` → `name`.
+  Generated tools need codegen template work for `title`.
 - **Contrast pairings need usage context**: a design token
   that passes the 3:1 non-text threshold may fail 4.5:1
   for text. Always declare `context: 'text' | 'non-text'`

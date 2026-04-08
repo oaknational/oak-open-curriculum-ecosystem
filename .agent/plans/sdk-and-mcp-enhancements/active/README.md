@@ -14,6 +14,15 @@ Executable plans that are in progress now.
   enforcement is centralised in the child plan's `Canonical Compliance
   Checklist`.
 
+## Standalone Active Plans
+
+- [server-info-branding.plan.md](server-info-branding.plan.md) —
+  **BLOCKING PR #76**. Add title, description, icons, websiteUrl to
+  server Implementation. Audit tool titles for human-friendly names.
+- [misconception-graph-mcp-surface.plan.md](misconception-graph-mcp-surface.plan.md) —
+  **POST-MERGE**. Expose misconception graph as MCP resource + tool.
+  Includes documentation resource annotation fixes.
+
 ## WS3 Phase Companion Plans
 
 - [ws3-phase-0-baseline-and-red-specs.plan.md](ws3-phase-0-baseline-and-red-specs.plan.md) —

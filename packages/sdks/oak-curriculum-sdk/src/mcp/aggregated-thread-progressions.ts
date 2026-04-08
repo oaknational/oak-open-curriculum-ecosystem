@@ -36,6 +36,7 @@ export const GET_THREAD_PROGRESSIONS_FLAT_ZOD_SCHEMA: z.ZodRawShape = {};
  * Do NOT hide the graph in _meta — that would defeat the purpose.
  */
 export const GET_THREAD_PROGRESSIONS_TOOL_DEF = {
+  title: 'Get Thread Progressions',
   description: `Returns the Oak Curriculum thread progression graph.
 
 This instance-level graph shows ordered unit sequences within curriculum threads:

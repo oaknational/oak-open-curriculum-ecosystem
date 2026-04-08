@@ -31,6 +31,7 @@ import { createSearchRetrieval } from './search-retrieval-factory.js';
 import type { HttpObservability } from './observability/http-observability.js';
 
 import type { McpServerFactory } from './mcp-request-context.js';
+import { OAK_SERVER_BRANDING } from './server-branding.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
 
 export interface CreateAppOptions {
@@ -223,7 +224,7 @@ function initializeCoreEndpoints(
   // Factory creates a fresh McpServer + transport per request
   const mcpFactory: McpServerFactory = () => {
     const server = new McpServer(
-      { name: 'oak-curriculum-http', version: '0.1.0' },
+      { name: 'oak-curriculum-http', version: '0.1.0', ...OAK_SERVER_BRANDING },
       { instructions: SERVER_INSTRUCTIONS },
     );
     registerHandlers(server, handlerOptions);

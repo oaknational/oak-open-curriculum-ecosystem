@@ -6,6 +6,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
+import { typeSafeKeys } from '@oaknational/type-helpers';
 import {
   GET_CURRICULUM_MODEL_TOOL_DEF,
   GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA,
@@ -39,7 +40,7 @@ describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
 });
 
 describe('GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA', () => {
-  it('has tool_name field', () => {
-    expect(GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA.tool_name).toBeDefined();
+  it('takes no parameters (empty schema)', () => {
+    expect(typeSafeKeys(GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA)).toHaveLength(0);
   });
 });

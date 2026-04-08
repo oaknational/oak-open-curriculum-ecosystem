@@ -25,6 +25,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  * agent (who reads the description) and the human teacher (who sees results).
  */
 export const SEARCH_TOOL_DEF = {
+  title: 'Search Curriculum',
   description: `Search Oak's curriculum using semantic search across all four content indexes.
 
 ${AGGREGATED_PREREQUISITE_GUIDANCE}

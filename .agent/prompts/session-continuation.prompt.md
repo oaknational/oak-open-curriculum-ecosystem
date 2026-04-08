@@ -43,18 +43,24 @@ git log --oneline --decorate -10
 - **Workstream**: MCP App branding alignment + merge
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-branding-alignment-and-merge.plan.md` (**PRIMARY** — P3 merge readiness)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/server-info-branding.plan.md` (**BLOCKING PR** — server title/icons/description)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md` (post-merge)
+  - `.agent/plans/sdk-and-mcp-enhancements/future/mcp-protocol-adoption-roadmap.plan.md` (strategic)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-apps-sdk-audit.plan.md` (**SDK AUDIT** — P2 items DONE, Phase 5 items deferred)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md` (WS3 parent)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md` (umbrella)
-- **Current state**: P0-P2 ALL DONE. P3 (quality gates + merge) is next.
-  Branch `feat/mcp_app_ui` has 4 commits ahead of `main`:
+- **Current state**: P0-P2 DONE + ADR sweep + tool titles + curriculum model
+  simplification. Branch `feat/mcp_app_ui` has 5 committed + uncommitted:
+  Committed (5 ahead of `main`):
   1. P1 branding (logo, Lexend, Oak palette)
   2. P1b theming (CSS-only dark mode, multi-page dev server, Playwright tests)
   3. P2 SDK alignment (76 variable bridges, CSP, capability checks, connection state)
   4. Documentation + infrastructure (onboarding, turbo port isolation, portability gate)
-  Widget validated in standalone dev mode, in basic-host sandbox, and via
-  Playwright in both light/dark themes. 10 specialist reviewer passes across
-  2 rounds. `pnpm check` passes (88 turbo tasks green).
+  5. ADR/governance sweep (7 ADRs updated, 11 onboarding fixes, turbo cache fix)
+  Uncommitted:
+  6. Top-level `title` on all 10 aggregated tools (spec 2025-11-25 BaseMetadata)
+  7. `get-curriculum-model` renamed to "Oak Curriculum Overview", `tool_name`
+     param removed (was never intended), dead `tool-help-lookup` deleted
+  8. 3 new plans: server-info-branding (blocking), misconception-graph, protocol roadmap
+  14 specialist reviewer passes. SDK tests: 50 files, 700 tests passing.
 - **Hard invariants / non-goals**:
   - No fallbacks — app brand defaults are correct on their own
   - Dark theme page bg is green-700 (#008237), NOT ink-950
@@ -65,14 +71,19 @@ git log --oneline --decorate -10
   - `getUiCapability` deferred (incompatible with per-request server)
   - Reviewer sign-off required before each phase transition
 - **Open questions / low-confidence areas**:
-  - Pre-merge review (release-readiness-reviewer) not yet run
+  - Server-info-branding plan is blocking merge — needs implementation
+  - Generated tool titles (human-friendly transform of name) deferred
+  - Resource templates (`curriculum://lesson/{slug}`) needs design work
   - Phase 5 (interactive search widget) is unblocked but not started
-- **Next safe step**: Run pre-merge review (release-readiness-reviewer),
-  then merge `feat/mcp_app_ui` to `main`.
-- **Deep consolidation status**: due — napkin at 560+ lines (rotation
-  threshold 500), plan statuses updated, consolidation requested by user
+- **Next safe step**: **BLOCKING BUG** — fix doubled `dist/dist/` widget
+  HTML path on Vercel (`register-resources.ts:156`). Then commit all
+  uncommitted work (tool titles, curriculum model, plans, bug fix).
+  Then implement server-info-branding. Then release-readiness, merge.
+- **Deep consolidation status**: completed this handoff — 5 surprises
+  captured, tool naming spec added to distilled, CSS media query
+  graduated, 3 new plans linked in collection README, active index updated
 
-## Active Workstreams (2026-04-07)
+## Active Workstreams (2026-04-08)
 
 ### 1. WS3 MCP App Rebuild — P3 MERGE READINESS
 
@@ -82,8 +93,9 @@ git log --oneline --decorate -10
 **Completed phases**: Phase 0-4 (infrastructure, scaffold, contracts, brand
 banner). P0-P2 branding/SDK work on `feat/mcp_app_ui` branch.
 
-**Branch status**: 4 commits, all reviewed, `pnpm check` passing. Ready
-for pre-merge review and merge to `main`.
+**Branch status**: 5 commits, all reviewed (14 specialist passes),
+`pnpm check` passing. PR #76 updated. Ready for pre-merge review
+and merge to `main`.
 
 **Next after merge**: Phase 5 (interactive user search view) on a new branch.
 

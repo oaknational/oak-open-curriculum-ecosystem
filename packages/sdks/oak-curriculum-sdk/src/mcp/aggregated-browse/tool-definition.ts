@@ -21,6 +21,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  * Provides structured navigation of the curriculum via faceted data.
  */
 export const BROWSE_TOOL_DEF = {
+  title: 'Browse Curriculum',
   description: `Browse what's available in Oak's curriculum without searching.
 
 ${AGGREGATED_PREREQUISITE_GUIDANCE}

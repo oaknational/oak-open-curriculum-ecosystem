@@ -25,6 +25,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  * _meta fields for widget URI routing (ADR-141).
  */
 export const FETCH_TOOL_DEF = {
+  title: 'Fetch Curriculum Resource',
   description: `Fetch curriculum resource by canonical identifier.
 
 ${FETCH_PREREQUISITE_GUIDANCE}

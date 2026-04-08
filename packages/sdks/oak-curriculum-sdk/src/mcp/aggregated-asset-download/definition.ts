@@ -17,6 +17,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  * self-authenticating via HMAC signature and expires after 5 minutes.
  */
 export const DOWNLOAD_ASSET_TOOL_DEF = {
+  title: 'Download Asset',
   description: `Generate a short-lived, secure download link for a lesson asset.
 
 Returns a clickable URL valid for 5 minutes that downloads the asset

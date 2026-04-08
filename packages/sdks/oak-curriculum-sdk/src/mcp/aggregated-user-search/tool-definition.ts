@@ -25,6 +25,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  * call it when the user requests a visual search experience.
  */
 export const USER_SEARCH_TOOL_DEF = {
+  title: 'User Search',
   description: `Interactive user-facing curriculum search within the Oak MCP App.
 
 This tool provides a visual, interactive search experience for teachers using
@@ -67,6 +68,7 @@ Do NOT use for:
  * queries directly without requiring model mediation.
  */
 export const USER_SEARCH_QUERY_TOOL_DEF = {
+  title: 'User Search Query',
   description: `App-only search query helper for the Oak MCP App.
 
 This tool executes search queries initiated by the MCP App UI without

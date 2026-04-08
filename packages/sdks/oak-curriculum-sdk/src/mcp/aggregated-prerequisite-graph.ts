@@ -36,6 +36,7 @@ export const GET_PREREQUISITE_GRAPH_FLAT_ZOD_SCHEMA: z.ZodRawShape = {};
  * Do NOT hide the graph in _meta — that would defeat the purpose.
  */
 export const GET_PREREQUISITE_GRAPH_TOOL_DEF = {
+  title: 'Get Prerequisite Graph',
   description: `Returns the Oak Curriculum prerequisite graph.
 
 This instance-level graph shows unit dependencies and prior knowledge requirements:

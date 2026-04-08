@@ -1,6 +1,6 @@
 # SDK and MCP Enhancements
 
-**Last Updated**: 3 April 2026
+**Last Updated**: 8 April 2026
 
 Planning hub for SDK pipeline evolution, MCP Apps work, and related
 architectural changes.
@@ -27,6 +27,9 @@ architectural changes.
 | [archive/completed/ws2-app-runtime-migration.plan.md](archive/completed/ws2-app-runtime-migration.plan.md) | Completed child plan | WS2 runtime migration completed and archived |
 | [archive/completed/mcp-runtime-boundary-simplification.plan.md](archive/completed/mcp-runtime-boundary-simplification.plan.md) | Completed plan | Canonical runtime descriptor surface and ingress-boundary simplification completed and archived |
 | [mcp-apps-support.research.md](mcp-apps-support.research.md) | Research | Canonical MCP Apps research summary for Oak. Active implementation is governed by the MCP Apps spec, `@modelcontextprotocol/ext-apps`, and the live executable plans |
+| [active/server-info-branding.plan.md](active/server-info-branding.plan.md) | Active plan | MCP server branding (title, icons, description) — blocking PR #76 |
+| [active/misconception-graph-mcp-surface.plan.md](active/misconception-graph-mcp-surface.plan.md) | Active plan | Expose misconception graph as MCP resource + tool (post-merge) |
+| [future/mcp-protocol-adoption-roadmap.plan.md](future/mcp-protocol-adoption-roadmap.plan.md) | Future plan | Resource templates, prompt completion, curriculum downloads, per-primitive icons |
 | [future/README.md](future/README.md) | Future index | Deferred/later plans |
 
 ## Read Order

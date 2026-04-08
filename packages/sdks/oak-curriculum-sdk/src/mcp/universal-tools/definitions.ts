@@ -115,6 +115,7 @@ export const AGGREGATED_TOOL_DEFS = {
  * securitySchemes, annotations, and flatZodSchema at minimum.
  */
 interface AggregatedToolDefShape {
+  readonly title: string;
   readonly description: string;
   readonly securitySchemes: readonly SecurityScheme[];
   readonly annotations: {

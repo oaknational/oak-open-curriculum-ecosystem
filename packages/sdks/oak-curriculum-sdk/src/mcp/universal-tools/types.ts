@@ -99,8 +99,10 @@ export type ToolMeta = NonNullable<ContractDescriptor['_meta']>;
  * descriptions and examples.
  */
 export interface UniversalToolListEntry {
-  /** Tool name used for invocation */
+  /** Tool name used for invocation (machine identifier) */
   readonly name: UniversalToolName;
+  /** Human-friendly display name (MCP BaseMetadata, spec 2025-11-25) */
+  readonly title?: string;
   /** Human-readable description of what the tool does */
   readonly description?: string;
   /**
