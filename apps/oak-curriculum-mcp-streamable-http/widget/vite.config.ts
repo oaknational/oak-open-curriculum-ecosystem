@@ -9,9 +9,9 @@
  * self-contained HTML file via `vite-plugin-singlefile`. The output
  * (`dist/oak-banner.html`) is registered as the MCP App resource.
  */
-import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { exec } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve, sep } from 'node:path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { viteSingleFile } from 'vite-plugin-singlefile';
@@ -20,7 +20,29 @@ const widgetRoot = resolve(import.meta.dirname);
 const packageJsonPath = resolve(widgetRoot, '..', 'package.json');
 const packageVersion = JSON.parse(readFileSync(packageJsonPath, 'utf-8')).version;
 
-const tokenSourceDir = resolve(widgetRoot, '../../../packages/design/oak-design-tokens/src');
+/**
+ * Derives the monorepo workspace root by walking up from `startDir` to
+ * find `pnpm-workspace.yaml`. Returns `undefined` if not found
+ * (standalone checkout or misconfigured clone).
+ */
+function findWorkspaceRoot(startDir: string): string | undefined {
+  let current = startDir;
+  const root = resolve('/');
+
+  while (current !== root) {
+    if (existsSync(resolve(current, 'pnpm-workspace.yaml'))) {
+      return current;
+    }
+    current = resolve(current, '..');
+  }
+
+  return undefined;
+}
+
+const workspaceRoot = findWorkspaceRoot(widgetRoot);
+const tokenSourceDir = workspaceRoot
+  ? resolve(workspaceRoot, 'packages/design/oak-design-tokens/src')
+  : undefined;
 
 export default defineConfig({
   root: widgetRoot,
@@ -30,12 +52,10 @@ export default defineConfig({
     /**
      * Cross-workspace file watcher for design token source files.
      *
-     * Watches `oak-design-tokens/src/` and triggers a synchronous rebuild
-     * + full-reload when token JSON or TS sources change. This is fragile:
-     * it uses `execSync` (blocks the event loop), and knows the internal
-     * source layout of a different workspace. If `oak-design-tokens`
-     * restructures its `src/tokens/` directory, this watcher silently
-     * breaks with no build error.
+     * Watches `oak-design-tokens/src/` and triggers an async rebuild
+     * + full-reload when token JSON or TS sources change. Guarded by
+     * an existence check on the token source directory and a rebuild
+     * lock to prevent concurrent builds.
      *
      * Remove when Turborepo watch mode supports cross-workspace dev
      * dependency tracking (tracked in vercel/turbo roadmap).
@@ -44,10 +64,34 @@ export default defineConfig({
       name: 'oak-design-tokens-watch',
       apply: 'serve',
       configureServer(server) {
+        if (!workspaceRoot) {
+          server.config.logger.warn(
+            'Could not find pnpm-workspace.yaml — skipping design token watcher',
+          );
+          return;
+        }
+
+        if (!tokenSourceDir || !existsSync(tokenSourceDir)) {
+          server.config.logger.warn(
+            `Token source directory not found at ${tokenSourceDir ?? '(unknown)'} — skipping design token watcher`,
+          );
+          return;
+        }
+
+        let rebuilding = false;
+        const tokenSourcePrefix = tokenSourceDir + sep;
+
         server.watcher.add(resolve(tokenSourceDir, 'tokens'));
 
         server.watcher.on('change', (changedPath) => {
-          if (!changedPath.startsWith(tokenSourceDir)) {
+          if (changedPath !== tokenSourceDir && !changedPath.startsWith(tokenSourcePrefix)) {
+            return;
+          }
+
+          if (rebuilding) {
+            server.config.logger.info('Token rebuild already in progress — skipping', {
+              timestamp: true,
+            });
             return;
           }
 
@@ -55,22 +99,29 @@ export default defineConfig({
             timestamp: true,
           });
 
-          try {
-            execSync('OAK_TOKEN_DEV=1 pnpm --filter @oaknational/oak-design-tokens build', {
-              cwd: resolve(widgetRoot, '../../..'),
-              stdio: 'pipe',
-            });
+          rebuilding = true;
 
-            server.config.logger.info('Design tokens rebuilt — sending full reload', {
-              timestamp: true,
-            });
+          exec(
+            'OAK_TOKEN_DEV=1 pnpm --filter @oaknational/oak-design-tokens build',
+            { cwd: workspaceRoot },
+            (error, stdout, stderr) => {
+              try {
+                if (error) {
+                  const output = stderr || stdout || error.message;
+                  server.config.logger.error(`Token build failed:\n${output}`);
+                  return;
+                }
 
-            server.ws.send({ type: 'full-reload' });
-          } catch (buildError: unknown) {
-            const message = buildError instanceof Error ? buildError.message : String(buildError);
+                server.config.logger.info('Design tokens rebuilt — sending full reload', {
+                  timestamp: true,
+                });
 
-            server.config.logger.error(`Token build failed:\n${message}`);
-          }
+                server.ws.send({ type: 'full-reload' });
+              } finally {
+                rebuilding = false;
+              }
+            },
+          );
         });
       },
     },

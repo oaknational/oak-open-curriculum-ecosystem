@@ -13,24 +13,18 @@ import {
 } from './definition.js';
 
 describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
-  it('has description explaining its purpose', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.description).toContain('curriculum');
+  it('has description explaining its orientation purpose', () => {
+    expect(GET_CURRICULUM_MODEL_TOOL_DEF.description).toContain('orientation');
+    expect(GET_CURRICULUM_MODEL_TOOL_DEF.description).toContain('domain model');
   });
 
-  it('has readOnlyHint annotation set to true', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.readOnlyHint).toBe(true);
-  });
-
-  it('has destructiveHint annotation set to false', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.destructiveHint).toBe(false);
-  });
-
-  it('has idempotentHint annotation set to true', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.idempotentHint).toBe(true);
-  });
-
-  it('has openWorldHint annotation set to false', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.openWorldHint).toBe(false);
+  it('has annotations marking it as read-only and idempotent', () => {
+    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations).toEqual({
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    });
   });
 });
 

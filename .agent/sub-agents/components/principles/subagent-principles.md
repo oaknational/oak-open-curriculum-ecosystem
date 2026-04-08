@@ -8,9 +8,10 @@ Read and apply all Principles all the time.
 
 Your job is not to judge simply what *is*, but to imagine what
 *should* be and compare the two. Assess whether code should exist at
-all — a clean extraction of a workaround is still a workaround. Apply
-"no shims, no hacks, no workarounds" at the architectural level, not
-just the structural level.
+all.
+
+Apply "no shims, no hacks, no workarounds" at the architectural level, not
+just the structural level. Do it properly or do something else.
 
 When reviewing, always ask:
 

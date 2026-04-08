@@ -75,3 +75,111 @@ Log: `lk99p-1775627562768-61fab88abdd6`
 - Misconception graph MCP surface is **post-merge**
 - Resource templates, prompt completion, per-primitive icons are **future**
 - Generated tool titles deferred to codegen template change
+
+### Session 2026-04-08b — Branding + architecture alignment
+
+#### Surprises
+
+**S7: sentry-mcp `wrapResourceHandler` type doesn't handle async.**
+Expected: wrapping an async handler would preserve the return type.
+Actual: `TResult | Promise<TResult>` creates double-Promise when TResult
+is already `Promise<X>`. Widget handler bypasses wrapper. Fix needed in
+`@oaknational/sentry-mcp` package.
+
+**S8: server-harness.js was importing non-existent modules.**
+Expected: `dist/src/application.js` would exist as a separate file.
+Actual: tsup `bundle: true` produces a single `dist/src/index.js` — no
+individual module files. The harness was broken since bundling was enabled.
+Fixed with multi-entry tsup.
+
+**S9: reviewers passed code that shouldn't exist.**
+Expected: architecture-reviewer-wilma and barney would flag the
+`widget-html-provider.ts` workaround as "should not exist." Actual: both
+gave COMPLIANT verdicts on a well-structured extraction of a workaround.
+User corrected: reviewers must assess what *should* exist. Subagent
+principles updated.
+
+**S10: `readFileSync` IS the official pattern (async variant).**
+Expected: Node filesystem APIs would be wrong for MCP Apps. Actual: the
+official `basic-server-react` example uses `fs.readFile` (async,
+`node:fs/promises`). The pattern is correct; our error was using the sync
+variant.
+
+#### Corrections
+
+- "Never wave away pre-existing issues" — all issues are blocking per
+  principles, regardless of when introduced
+- Reviewers must assess what *should* exist, not just what does
+- Research official docs FIRST, before implementing
+- `readFileSync` → `readFile` (async) per official example
+- Flat tsup output eliminates the need for path resolution workarounds
+
+#### Decisions
+
+- Widget-pipeline-idiomatic-alignment plan created for post-merge
+- 9 reviewer findings tracked to closure
+- Sentry wrapper async fix is T4, widget observability is T5 (blocked)
+- Build ordering documentation is T3
+
+### Session 2026-04-08c — Widget pipeline idiomatic alignment execution
+
+#### Resolutions
+
+All 7 tasks from the widget-pipeline-idiomatic-alignment plan completed:
+- T1: Annotation tests consolidated to single toEqual
+- T2: `validateWidgetHtmlExists` with DI (ADR-078), called at bootstrap
+- T3: Build ordering documented; stale Build Output Structure and Build
+  Configuration sections fixed (pre-existing drift found by docs-adr-reviewer)
+- T4: `Awaited<TResult>` across all 4 sentry-mcp wrappers + app-level wrapper
+- T5: Widget resource wrapped with Sentry observability (unblocked by T4)
+- T8: Token watcher: async exec, workspace root derivation, existence guard,
+  rebuild lock with try/finally, path-safe startsWith
+- File split: `register-widget-resource.ts` extracted (max-lines trigger)
+
+#### Surprises
+
+**S11: Sentry wrappers type-checked clean even without Awaited fix.**
+Expected: `satisfies` assertions on async handler results would fail at
+type-check (RED phase). Actual: TypeScript's inference resolves `TResult`
+from the `Promise<TResult> | TResult` union correctly, so the sentry-level
+wrappers already handled async handlers. The real blockage was at the
+app-level wrapper in `register-resource-helpers.ts` where the handler
+parameter was `(...args) => TResult` (no Promise union), making `TResult =
+Promise<X>` for async handlers. The fix was still correct and necessary.
+
+**S12: Pre-existing deployment-architecture.md had extensive drift.**
+Expected: only the new Build Ordering section needed review. Actual: the
+"Build Output Structure" showed single entry, chunks, and DTS (all wrong),
+and the "Build Configuration" tsup code block had nearly every field wrong
+(single entry, dts true, es2023, skipNodeModulesBundle). docs-adr-reviewer
+caught both as critical. Fixed in-scope.
+
+#### Surprises
+
+**S13: vite-plugin-singlefile IS the canonical MCP Apps pattern.**
+Expected: it was a wrong simplification that made the React app static.
+Actual: every official MCP Apps example uses it. The host loads HTML via
+`document.write()` into a sandboxed iframe with no backing web server —
+external `<script src>` references resolve to nothing. All JS/CSS MUST
+be inline. Confirmed by disabling the plugin: Vite produces separate
+files that cannot load. The built artefact contains `createRoot`,
+`useApp`, `PostMessageTransport`, and all MCP Apps lifecycle handlers.
+The widget IS a live React app.
+
+**S14: 6-reviewer adversarial plan review caught the wrong premise.**
+Expected: Phase 4.5 plan would be sound after metacognition. Actual:
+assumptions-reviewer questioned whether singlefile removal was solving
+the right problem, MCP-reviewer confirmed it was the canonical pattern
+with official doc citations, architecture-reviewer found blocking type
+issues in the metadata shape work. The plan was revised to drop the
+widget half entirely. First time a plan-level review caught a fundamental
+premise error before any code was written.
+
+#### Corrections
+
+- All reviewer findings are blocking — no "non-blocking" classification
+- `readBuiltWidgetHtml` given DI parameter for path (was closing over module
+  constant, inconsistent with ADR-078)
+- `changedPath.startsWith(dir)` is path-fragile without trailing separator
+- "Static HTML" framing was wrong — the confusion was delivery mechanism
+  vs runtime behaviour

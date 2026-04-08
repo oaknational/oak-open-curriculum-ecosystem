@@ -17,25 +17,22 @@ todos:
 
 # WS3 Phase 5: Interactive User Search View
 
-**Status**: PENDING — blocked on `../current/ws3-oak-url-augmentable-codegen-fix.plan.md`, then `../current/ws3-contrast-validation-prerequisite.plan.md`
-**Last Updated**: 2026-04-03
+**Status**: PENDING — blocked on Phase 4.5 (live React app + metadata shape) and PR #76 merge
+**Last Updated**: 2026-04-08
 
 ## Required Inputs
 
-1. `ws3-widget-clean-break-rebuild.plan.md` — Phase 5 section and target
+1. `ws3-phase-4.5-live-react-and-metadata-shape.plan.md` — **PRIMARY BLOCKER**.
+   The live React MCP App foundation and SDK-ready tool metadata must be in
+   place before Phase 5 can build interactive UI on top.
+2. `ws3-widget-clean-break-rebuild.plan.md` — Phase 5 section and target
    architecture section 3 (data/state model)
-2. Phase 3 acceptance evidence — `user-search` and `user-search-query`
+3. Phase 3 acceptance evidence — `user-search` and `user-search-query`
    descriptors and visibility metadata must be in place
-3. `../archive/completed/ws3-design-token-prerequisite.plan.md` — shared token
+4. `../archive/completed/ws3-design-token-prerequisite.plan.md` — shared token
    package and canonical shell replacement are already available; Phase 5 must
    reuse package CSS rather than adding a second styling layer
-4. `../current/ws3-oak-url-augmentable-codegen-fix.plan.md` — schema-first
-   response-augmentation remediation remains part of the ordered WS3
-   prerequisites before Phase 5 work resumes
-5. `../current/ws3-contrast-validation-prerequisite.plan.md` — token
-   accessibility validation remains the current prerequisite before Phase 5 UI
-   work continues
-6. Phase 4 acceptance evidence — shared app shell and routing must be working
+5. Phase 4 + 4.5 acceptance evidence — live React app shell must be working
 
 ## Tasks
 

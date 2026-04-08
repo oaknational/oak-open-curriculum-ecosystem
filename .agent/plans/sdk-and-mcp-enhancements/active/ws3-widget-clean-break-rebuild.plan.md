@@ -23,6 +23,9 @@ todos:
   - id: phase-4-brand-banner
     content: "Phase 4: Brand banner — logo + 'Oak National Academy' link."
     status: completed
+  - id: phase-4-5-live-react-metadata
+    content: "Phase 4.5: Live React app foundation + tool metadata shape fix."
+    status: in-progress
   - id: phase-5-search-view
     content: "Phase 5: Build the interactive user-search MCP App view and app-only helper flow."
     status: pending
@@ -305,14 +308,14 @@ Every WS3 phase must satisfy this checklist. Any failure is blocking.
 Execution details for each phase also live in companion child plans. This WS3
 plan remains the parent orchestration document and source of phase ordering.
 
-1. [ws3-phase-0-baseline-and-red-specs.plan.md](ws3-phase-0-baseline-and-red-specs.plan.md)
-2. [ws3-phase-1-delete-legacy-widget-framework.plan.md](ws3-phase-1-delete-legacy-widget-framework.plan.md)
-3. [ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md](ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md)
-4. [ws3-phase-3-canonical-contracts-and-runtime.plan.md](ws3-phase-3-canonical-contracts-and-runtime.plan.md)
-5. [ws3-phase-4-brand-banner.plan.md](ws3-phase-4-brand-banner.plan.md)
-6. [ws3-mcp-app-rendering-investigation.plan.md](../archive/completed/ws3-mcp-app-rendering-investigation.plan.md) — RESOLVED
-7. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md)
-8. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md)
+1. [ws3-phase-0-baseline-and-red-specs.plan.md](../archive/completed/ws3-phase-0-baseline-and-red-specs.plan.md) — COMPLETE
+2. [ws3-phase-1-delete-legacy-widget-framework.plan.md](../archive/completed/ws3-phase-1-delete-legacy-widget-framework.plan.md) — COMPLETE
+3. [ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md](../archive/completed/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md) — COMPLETE
+4. [ws3-phase-3-canonical-contracts-and-runtime.plan.md](../archive/completed/ws3-phase-3-canonical-contracts-and-runtime.plan.md) — COMPLETE
+5. [ws3-phase-4-brand-banner.plan.md](../archive/completed/ws3-phase-4-brand-banner.plan.md) — COMPLETE
+6. [ws3-phase-4.5-live-react-and-metadata-shape.plan.md](ws3-phase-4.5-live-react-and-metadata-shape.plan.md) — **ACTIVE**
+7. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) — blocked on 4.5 + merge
+8. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) — runs pre-merge and post-Phase 5
 
 ---
 

@@ -15,12 +15,15 @@ After running `pnpm build`, the `dist/` directory contains:
 
 ```text
 dist/
-├── src/
-│   ├── index.js          # Single entry point (exports Express app instance)
-│   ├── index.d.ts
-│   └── index.js.map
-└── chunk-*.js            # Bundled application code
+├── index.js              # Server entry point (exports Express app instance)
+├── index.js.map
+├── application.js        # Importable factory (createApp)
+├── application.js.map
+└── oak-banner.html       # MCP App widget (built by Vite)
 ```
+
+Note: `splitting: false` in tsup means each entry point produces a
+self-contained bundle with no separate chunk files.
 
 ## Vercel Deployment
 
@@ -145,19 +148,61 @@ LOG_LEVEL=debug
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'], // ✅ Single entry point
+  entry: { index: 'src/index.ts', application: 'src/application.ts' },
+  format: ['esm'],
+  dts: false,
+  splitting: false,
   sourcemap: true,
   clean: true,
-  format: ['esm'],
-  dts: true,
-  target: 'es2023',
-  skipNodeModulesBundle: true,
+  target: 'es2022',
+  bundle: true,
+  treeshake: true,
+  outDir: 'dist',
+  external: [/node_modules/],
 });
 ```
 
-This configuration builds the single canonical entry point:
+This configuration builds two entry points as self-contained ESM bundles:
 
-- `src/index.ts` → `dist/index.js` (works for both Vercel and local dev)
+- `src/index.ts` → `dist/index.js` (server entry, exports Express app)
+- `src/application.ts` → `dist/application.js` (importable factory)
+
+## Build Ordering: tsup Then Vite
+
+The `build` script runs two tools sequentially into the same `dist/` directory:
+
+```json
+"build": "tsup && pnpm build:widget"
+```
+
+1. **tsup runs first** — compiles `src/` to `dist/`. The `clean: true` option
+   in `tsup.config.ts` empties `dist/` before writing `index.js` and
+   `application.js` (two self-contained bundles, no separate chunks).
+2. **Vite runs second** — builds the widget HTML into `dist/oak-banner.html`.
+   The `emptyOutDir: false` option in `widget/vite.config.ts` preserves the
+   tsup output already in `dist/`.
+
+The `&&` operator enforces sequential execution: if tsup fails, Vite never
+runs. This is critical because:
+
+- If Vite ran first, tsup's `clean: true` would delete `oak-banner.html`
+- If both ran in parallel, race conditions could corrupt `dist/`
+
+### Turbo Treats This as One Atomic Task
+
+The Turbo override at `@oaknational/oak-curriculum-mcp-streamable-http#build`
+treats the entire `build` script as a single task. Turbo does not parallelise
+sub-steps within a script — the `&&` chain runs inside a single shell process.
+The override's `inputs` array includes `src/**/*.ts` (tsup sources) and
+specific `widget/` globs (`*.ts`, `*.tsx`, `*.css`, `*.html`, config files),
+so a change to either set invalidates the whole build cache entry.
+
+### Startup Validation
+
+At server startup, `validateWidgetHtmlExists()` checks that
+`dist/oak-banner.html` exists before resource registration. If the build step
+was skipped or failed, this produces a clear error with `pnpm build` guidance
+instead of an opaque `ENOENT` on the first `resources/read` request.
 
 ## Async Initialization
 

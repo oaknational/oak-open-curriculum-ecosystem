@@ -62,11 +62,9 @@ describe('registerAllResources — observability characterisation', () => {
     });
 
     // wrapResourceHandler calls createMcpObservationOptions once per
-    // resource that uses the sentry wrapper. The widget resource uses a
-    // direct async callback (matching the official ext-apps pattern) and
-    // does not go through wrapResourceHandler.
-    const WRAPPED_RESOURCE_COUNT = EXPECTED_RESOURCE_COUNT - 1;
-    expect(createMcpSpy).toHaveBeenCalledTimes(WRAPPED_RESOURCE_COUNT);
+    // resource that uses the sentry wrapper. All resources including the
+    // widget are now wrapped for observability.
+    expect(createMcpSpy).toHaveBeenCalledTimes(EXPECTED_RESOURCE_COUNT);
   });
 });
 

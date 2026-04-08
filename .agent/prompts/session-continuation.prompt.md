@@ -40,48 +40,51 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: MCP App branding alignment + merge
+- **Workstream**: Phase 4.5 tool metadata shape + PR #76 merge readiness
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-branding-alignment-and-merge.plan.md` (**PRIMARY** — P3 merge readiness)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/server-info-branding.plan.md` (**BLOCKING PR** — server title/icons/description)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md` (post-merge)
-  - `.agent/plans/sdk-and-mcp-enhancements/future/mcp-protocol-adoption-roadmap.plan.md` (strategic)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-mcp-apps-sdk-audit.plan.md` (**SDK AUDIT** — P2 items DONE, Phase 5 items deferred)
-- **Current state**: P0-P2 DONE + ADR sweep + tool titles + curriculum model
-  simplification. Branch `feat/mcp_app_ui` has 5 committed + uncommitted:
-  Committed (5 ahead of `main`):
-  1. P1 branding (logo, Lexend, Oak palette)
-  2. P1b theming (CSS-only dark mode, multi-page dev server, Playwright tests)
-  3. P2 SDK alignment (76 variable bridges, CSP, capability checks, connection state)
-  4. Documentation + infrastructure (onboarding, turbo port isolation, portability gate)
-  5. ADR/governance sweep (7 ADRs updated, 11 onboarding fixes, turbo cache fix)
-  Uncommitted:
-  6. Top-level `title` on all 10 aggregated tools (spec 2025-11-25 BaseMetadata)
-  7. `get-curriculum-model` renamed to "Oak Curriculum Overview", `tool_name`
-     param removed (was never intended), dead `tool-help-lookup` deleted
-  8. 3 new plans: server-info-branding (blocking), misconception-graph, protocol roadmap
-  14 specialist reviewer passes. SDK tests: 50 files, 700 tests passing.
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4.5-live-react-and-metadata-shape.plan.md`
+    (**ACTIVE** — eliminate projection layer, SDK-ready tool shapes)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-6-docs-gates-review-commit.plan.md`
+    (**PENDING** — pre-merge docs/gates)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md`
+    (post-merge)
+- **Current state**: Branch `feat/mcp_app_ui` with uncommitted changes.
+  88/88 quality gates passing. PR #76. Session work:
+  - Widget-pipeline-idiomatic-alignment plan: all 7 tasks complete
+  - Phase 4.5 plan created, revised after 6-reviewer adversarial review
+  - Widget confirmed as live React MCP App (vite-plugin-singlefile is
+    canonical, verified by disabling and inspecting built artefacts)
+  - 10 completed plans archived, roadmap and cross-references fixed
+  - Merge plan removed (user directs merge)
+  11 specialist reviewer passes across 6 reviewer types.
+- **Current objective**: Execute Phase 4.5 (tool metadata shape), then
+  pre-merge docs/gates (Phase 6a), then commit and merge PR #76.
 - **Hard invariants / non-goals**:
   - No fallbacks — app brand defaults are correct on their own
   - Dark theme page bg is green-700 (#008237), NOT ink-950
   - Light theme page bg is mint-300 (#bef2bd)
-  - CSS media query governs dark mode, not JS — data-theme only for SDK override
-  - SDK variable bridge in widget CSS, NOT in token build pipeline
-  - B4 downloadFile deferred to Phase 5 (scope creep)
-  - `getUiCapability` deferred (incompatible with per-request server)
-  - Reviewer sign-off required before each phase transition
+  - CSS media query governs dark mode, not JS
+  - `annotations.title` removed — top-level `title` only
+  - Widget URI uses `ui://` scheme per spec
+  - `readBuiltWidgetHtml` is async (`node:fs/promises`)
+- **Resolved this session** (previously open):
+  - Sentry wrapper async support — FIXED with Awaited<TResult>
+  - Build ordering — DOCUMENTED in deployment-architecture.md
+  - Startup validation — IMPLEMENTED with validateWidgetHtmlExists
+  - Token watcher blocking execSync — REPLACED with async exec
+  - Widget "static HTML" confusion — RESOLVED: it IS a live React app,
+    vite-plugin-singlefile is the canonical MCP Apps delivery pattern
+  - Generated tool titles — still deferred (codegen template change)
 - **Open questions / low-confidence areas**:
-  - Server-info-branding plan is blocking merge — needs implementation
-  - Generated tool titles (human-friendly transform of name) deferred
-  - Resource templates (`curriculum://lesson/{slug}`) needs design work
-  - Phase 5 (interactive search widget) is unblocked but not started
-- **Next safe step**: **BLOCKING BUG** — fix doubled `dist/dist/` widget
-  HTML path on Vercel (`register-resources.ts:156`). Then commit all
-  uncommitted work (tool titles, curriculum model, plans, bug fix).
-  Then implement server-info-branding. Then release-readiness, merge.
-- **Deep consolidation status**: completed this handoff — 5 surprises
-  captured, tool naming spec added to distilled, CSS media query
-  graduated, 3 new plans linked in collection README, active index updated
+  - `as const` readonly vs mutable `_meta` index signature — plan T1
+    satisfies tests will prove this before deletion
+  - `securitySchemes` routing after projection removal — auth checker
+    uses direct lookup, not projection output
+- **Next safe step**: Execute Phase 4.5 (T1-T9). Then Phase 6a
+  pre-merge docs/gates. Then commit and merge PR #76.
+- **Deep consolidation status**: completed — singlefile pattern and
+  plan-level review learning added to distilled, napkin updated with
+  S13/S14, no rotation needed (185 lines).
 
 ## Active Workstreams (2026-04-08)
 

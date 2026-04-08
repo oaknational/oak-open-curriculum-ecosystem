@@ -120,10 +120,11 @@ This child plan covers:
 
 1. deletion of the dead widget framework
 2. fresh React MCP App infrastructure
-3. brand banner (COMPLETE — rendering investigation active)
-4. user-search UI as a first-class user-first tool in the aggregated tool
+3. brand banner (COMPLETE)
+4. live React app foundation + tool metadata shape (Phase 4.5 — ACTIVE)
+5. user-search UI as a first-class user-first tool in the aggregated tool
    surface
-5. app-only helper-tool visibility and runtime contract work needed to support
+6. app-only helper-tool visibility and runtime contract work needed to support
    the new UI properly
 
 `ws4-search-ui` remains a distinct umbrella todo for milestone tracking, but
@@ -174,9 +175,11 @@ WS3 child plan: fresh React MCP App rebuild ▶ active
   OakUrl codegen fix                         ✓ complete
   Contrast validation prerequisite           ✓ complete
   Phase 4: brand banner                      ✓ complete
-  Rendering investigation                    ▶ active (blocks Phase 5)
-  Phase 5: user-search view                  ⏳ pending (blocked)
-  Phase 6: docs + review + commit            ⏳ pending
+  Phase 4.5: live React app + metadata shape ▶ active (pre-merge)
+  Phase 6a: pre-merge docs + gates           ⏳ pending
+  --- PR #76 merge ---
+  Phase 5: user-search view                  ⏳ pending (post-merge)
+  Phase 6b: post-Phase 5 docs + gates        ⏳ pending
 C8 closure gates: auth metadata hardening   ✓ complete
 ```
 

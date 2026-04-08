@@ -5,7 +5,6 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "//build": "Order matters: tsup compiles server TS to dist/, then Vite builds widget HTML into same dist/ (emptyOutDir: false).",
     "build": "tsup && pnpm build:widget",
     "build:widget": "vite build --config widget/vite.config.ts",
     "clean": "rm -rf dist .turbo",

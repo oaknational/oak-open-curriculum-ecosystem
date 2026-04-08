@@ -82,22 +82,15 @@ Read the live workstream in this order:
 1. [roadmap.md](roadmap.md)
 2. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 3. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
-4. [active/ws3-mcp-app-rendering-investigation.plan.md](active/ws3-mcp-app-rendering-investigation.plan.md)
-5. [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
-6. [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
-7. [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
-8. [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
-9. [current/README.md](current/README.md)
+4. [active/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](active/ws3-phase-4.5-live-react-and-metadata-shape.plan.md) — **current focus**
+5. [active/ws3-phase-5-interactive-user-search-view.plan.md](active/ws3-phase-5-interactive-user-search-view.plan.md)
+6. [active/ws3-phase-6-docs-gates-review-commit.plan.md](active/ws3-phase-6-docs-gates-review-commit.plan.md)
 
 When touching runtime contract, metadata visibility, resource auth, or tool
 registration, also read:
 
 1. [archive/completed/auth-safety-correction.plan.md](archive/completed/auth-safety-correction.plan.md)
 2. [archive/completed/auth-boundary-type-safety.plan.md](archive/completed/auth-boundary-type-safety.plan.md)
-
-When closing the regenerated lesson-summary schema fallout, also read:
-
-- [active/ws3-phase-3-schema-fallout-closure.plan.md](active/ws3-phase-3-schema-fallout-closure.plan.md)
 
 Completed dependency work is archived at:
 
@@ -117,9 +110,11 @@ WS3: fresh React MCP App rebuild            ▶ active
   OakUrl codegen fix                        ✓ complete
   Contrast validation prerequisite          ✓ complete
   Phase 4: brand banner                     ✓ complete (2026-04-04)
-  Rendering investigation                   ▶ active (blocks Phase 5)
-  Phase 5: user-search view                 ⏳ pending (blocked)
-  Phase 6: docs/gates/review                ⏳ pending
+  Phase 4.5: live React + metadata shape   ▶ active (pre-merge)
+  Phase 6a: pre-merge docs/gates            ⏳ pending
+  --- PR #76 merge ---
+  Phase 5: user-search view                 ⏳ pending (post-merge)
+  Phase 6b: post-Phase 5 docs/gates         ⏳ pending
 C8: auth metadata invariant hardening       ✓ complete
 Output schemas follow-up                    ⏳ current
 Future additive feature backlog             ⏳ blocked on remaining canonical work

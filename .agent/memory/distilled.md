@@ -188,28 +188,49 @@ context with no natural permanent home.
   stay in core, runtime pipeline moves to libs
 - When extracting types from a composition root, the root
   may still need a local `import type` for its own usage
+- **Non-UI hosts degrade gracefully**: tools with `_meta.ui`
+  still work in non-MCP-Apps hosts (Claude Code, CLI). The
+  host ignores `_meta.ui` and the tool returns text content
+  normally. No fallback code needed — the protocol handles it.
+- **`_meta.ui.visibility` is an array**: `["model"]`,
+  `["app"]`, or `["model", "app"]`. Controls who can call
+  the tool. Missing = both. `registerAppTool` normalises both
+  nested `_meta.ui.resourceUri` and legacy flat key formats.
 - **MCP Apps handler composition**: the ext-apps SDK has
   both `on*` property setters AND `addEventListener` for
   multi-listener support. We compose style sync and
   runtime-state dispatch in one handler for simplicity and
   error isolation, not because the SDK forces single-slot.
-- **CSS media query dark mode**: graduated to
-  `docs/governance/design-token-practice.md` (Theming section).
 - **`console` ban means canonical logger**: the `no-console`
   rule forces injection of `@oaknational/logger`, not fallback
   to `process.stderr.write`. Build scripts without a logger
   should let errors propagate naturally (Node surfaces the
   stack trace).
+- **sentry-mcp wrappers use `Awaited<TResult>`**: all three
+  wrappers (`wrapToolHandler`, `wrapResourceHandler`,
+  `wrapPromptHandler`) plus `observeMcpOperation` return
+  `Promise<Awaited<TResult>>`. The app-level wrapper in
+  `register-resource-helpers.ts` matches. Without `Awaited`,
+  async handlers produce `Promise<Promise<X>>` at the type
+  level when the handler param lacks the `Promise<T> | T`
+  union. TypeScript inference hides this at the sentry level
+  but not at the app level.
+- **`vite-plugin-singlefile` is the canonical MCP Apps build
+  pattern**: the host loads HTML via `document.write()` into a
+  sandboxed iframe with no backing web server. External
+  `<script src>` references resolve to nothing. All JS/CSS
+  must be inlined. The plugin does NOT make the app "static" —
+  the inlined JS runs as live React with full SDK lifecycle.
 - **MCP Apps CSP goes on content items only**: declare
   `_meta.ui.csp.resourceDomains` on `contents[]` items in
   `registerAppResource`, NOT on the listing config. The MCP
   Apps spec is explicit: hosts read CSP from content items.
 - **MCP tool `name` vs `title`**: `name` is the machine ID
   (kebab-case, used in `tools/call`). `title` (BaseMetadata,
-  spec 2025-11-25) is the human display name. `annotations.title`
-  (spec 2025-06-18) is the older location — both supported.
-  Projection chain: `tool.title` → `annotations.title` → `name`.
-  Generated tools need codegen template work for `title`.
+  spec 2025-11-25) is the sole human display name —
+  `annotations.title` was removed (redundant, all hosts read
+  top-level `title`). Generated tools still need codegen
+  template work for `title`.
 - **Contrast pairings need usage context**: a design token
   that passes the 3:1 non-text threshold may fail 4.5:1
   for text. Always declare `context: 'text' | 'non-text'`

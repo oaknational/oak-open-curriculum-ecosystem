@@ -26,7 +26,7 @@ todos:
 
 # MCP Server Info Branding
 
-**Status**: DONE — all tasks complete, pending `pnpm check` + reviewer sign-off
+**Status**: DONE — all 6 tasks complete, `pnpm check` 88/88, MCP reviewer COMPLIANT
 **Last Updated**: 2026-04-08
 **Branch**: `feat/mcp_app_ui`
 

@@ -180,4 +180,65 @@ describe('MCP observation wrappers', () => {
     });
     expect(recorder.observations[0]?.durationMs).toEqual(expect.any(Number));
   });
+
+  it('wraps async tool handlers with single-layer Promise return type', async () => {
+    const { runtime } = createTestRuntime();
+    const recorder = createInMemoryMcpObservationRecorder();
+    const asyncHandler = async (): Promise<{ readonly ok: true }> => ({ ok: true });
+    const wrapped = wrapToolHandler('test-tool', asyncHandler, {
+      service: 'oak-http',
+      environment: 'test',
+      release: 'v1',
+      recorder,
+      runtime,
+    });
+
+    const result = await wrapped();
+
+    /** Type-level proof: result is `{ ok: true }`, not `Promise<{ ok: true }>`. */
+    result satisfies { readonly ok: true };
+    expect(result).toEqual({ ok: true });
+  });
+
+  it('wraps async resource handlers with single-layer Promise return type', async () => {
+    const { runtime } = createTestRuntime();
+    const recorder = createInMemoryMcpObservationRecorder();
+    const asyncHandler = async (): Promise<{ readonly contents: readonly string[] }> => ({
+      contents: ['html'],
+    });
+    const wrapped = wrapResourceHandler('test-resource', asyncHandler, {
+      service: 'oak-http',
+      environment: 'test',
+      release: 'v1',
+      recorder,
+      runtime,
+    });
+
+    const result = await wrapped();
+
+    /** Type-level proof: result is the inner type, not doubly wrapped. */
+    result satisfies { readonly contents: readonly string[] };
+    expect(result).toEqual({ contents: ['html'] });
+  });
+
+  it('wraps async prompt handlers with single-layer Promise return type', async () => {
+    const { runtime } = createTestRuntime();
+    const recorder = createInMemoryMcpObservationRecorder();
+    const asyncHandler = async (): Promise<{ readonly messages: readonly string[] }> => ({
+      messages: ['hello'],
+    });
+    const wrapped = wrapPromptHandler('test-prompt', asyncHandler, {
+      service: 'oak-http',
+      environment: 'test',
+      release: 'v1',
+      recorder,
+      runtime,
+    });
+
+    const result = await wrapped();
+
+    /** Type-level proof: result is the inner type, not doubly wrapped. */
+    result satisfies { readonly messages: readonly string[] };
+    expect(result).toEqual({ messages: ['hello'] });
+  });
 });

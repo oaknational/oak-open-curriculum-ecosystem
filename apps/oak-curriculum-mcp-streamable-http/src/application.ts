@@ -29,6 +29,8 @@ import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
 import { createSearchRetrieval } from './search-retrieval-factory.js';
 import type { HttpObservability } from './observability/http-observability.js';
+import { validateWidgetHtmlExists } from './validate-widget-html.js';
+import { WIDGET_HTML_PATH } from './register-resources.js';
 
 import type { McpServerFactory } from './mcp-request-context.js';
 import { OAK_SERVER_BRANDING } from './server-branding.js';
@@ -194,6 +196,9 @@ function initializeCoreEndpoints(
   log: Logger,
   observability: HttpObservability,
 ): { mcpFactory: McpServerFactory; ready: Promise<void> } {
+  // DI seam is on the leaf function; integration tests bypass this via createStubbedHttpApp().
+  validateWidgetHtmlExists(WIDGET_HTML_PATH);
+
   const searchRetrieval = runtimeConfig.useStubTools
     ? createStubSearchRetrieval()
     : createSearchRetrieval(runtimeConfig.env, log);
