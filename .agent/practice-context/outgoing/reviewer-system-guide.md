@@ -157,7 +157,7 @@ components/
 ├── architecture/
 │   └── reviewer-team.md        # How the 4 architecture reviewers collaborate
 └── principles/
-    └── dry-yagni.md            # DRY and YAGNI guardrails
+    └── subagent-principles.md            # DRY and YAGNI guardrails
 ```
 
 **Persona example** (`personas/fred.md`):
@@ -428,7 +428,7 @@ mkdir -p .cursor/agents
 3. **Create shared components** in `.agent/sub-agents/components/`:
    - Copy `behaviours/subagent-identity.md` (universal)
    - Copy `behaviours/reading-discipline.md` (universal)
-   - Copy `principles/dry-yagni.md` (universal)
+   - Copy `principles/subagent-principles.md` (universal)
    - Copy `architecture/reviewer-team.md` (adapt persona descriptions)
 
 ### Phase 2: Rules (15 minutes per rule)

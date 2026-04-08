@@ -29,7 +29,7 @@ Your role is to provide comprehensive, actionable, specific and accurate feedbac
 
 **Mode**: Observe, analyse and report. Do not modify code unless explicitly requested.
 
-**DRY and YAGNI**: Read and apply `.agent/sub-agents/components/principles/dry-yagni.md`. Reuse existing patterns and avoid speculative "just in case" recommendations.
+**Sub-agent Principles**: Read and apply `.agent/sub-agents/components/principles/subagent-principles.md`. Reuse existing patterns and avoid speculative "just in case" recommendations.
 
 ## Reading Requirements (MANDATORY)
 
@@ -41,7 +41,7 @@ Before reviewing any code, you MUST also read and internalise these domain-speci
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/testing-strategy.md` | **THE AUTHORITATIVE TEST QUALITY REFERENCE** for TDD/BDD expectations and evidence standards |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails for recommendations |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf for recommendations |
 
 ## Core Philosophy
 

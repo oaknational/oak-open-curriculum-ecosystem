@@ -7,6 +7,8 @@
  * - MCP App widget resource (interactive React curriculum app)
  */
 
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { registerAppResource, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import {
   DOCUMENTATION_RESOURCES,
@@ -147,6 +149,17 @@ export function registerThreadProgressionsResource(
 }
 
 /**
+ * Path to the built MCP App HTML bundle. In both dev (`src/`) and production
+ * (`dist/`), `../dist/oak-banner.html` resolves to `<pkg>/dist/oak-banner.html`.
+ */
+const WIDGET_HTML_PATH = resolve(import.meta.dirname, '../dist/oak-banner.html');
+
+/** Reads the built MCP App HTML bundle from disk for resource reads. */
+export async function readBuiltWidgetHtml(): Promise<string> {
+  return readFile(WIDGET_HTML_PATH, 'utf-8');
+}
+
+/**
  * MCP App UI metadata for the widget resource.
  *
  * Placed on the `contents[]` item per the MCP Apps CSP/CORS specification
@@ -170,11 +183,10 @@ const WIDGET_UI_META = {
  * `registerAppResource` defaults the MIME type to `RESOURCE_MIME_TYPE`.
  *
  * @param server - MCP server instance
- * @param observability - Observability for resource handler tracing
+ * @param getWidgetHtml - Async function returning the built widget HTML
  */
 export function registerWidgetResource(
   server: ResourceRegistrar,
-  observability: ResourceRegistrationOptions['observability'],
   getWidgetHtml: ResourceRegistrationOptions['getWidgetHtml'],
 ): void {
   registerAppResource(
@@ -184,20 +196,16 @@ export function registerWidgetResource(
     {
       description: 'Interactive Oak curriculum MCP App for search and curriculum exploration.',
     },
-    wrapResourceHandler(
-      'Oak Curriculum App',
-      () => ({
-        contents: [
-          {
-            uri: WIDGET_URI,
-            mimeType: RESOURCE_MIME_TYPE,
-            text: getWidgetHtml(),
-            _meta: { ui: WIDGET_UI_META },
-          },
-        ],
-      }),
-      observability,
-    ),
+    async () => ({
+      contents: [
+        {
+          uri: WIDGET_URI,
+          mimeType: RESOURCE_MIME_TYPE,
+          text: await getWidgetHtml(),
+          _meta: { ui: WIDGET_UI_META },
+        },
+      ],
+    }),
   );
 }
 
@@ -218,7 +226,7 @@ export function registerAllResources(
   registerCurriculumModelResource(server, options.observability);
   registerPrerequisiteGraphResource(server, options.observability);
   registerThreadProgressionsResource(server, options.observability);
-  registerWidgetResource(server, options.observability, options.getWidgetHtml);
+  registerWidgetResource(server, options.getWidgetHtml);
 }
 
 // Re-export prompts registration for use in handlers

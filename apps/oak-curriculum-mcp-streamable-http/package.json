@@ -3,8 +3,7 @@
   "version": "0.0.0-development",
   "private": true,
   "type": "module",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
   "scripts": {
     "//build": "Order matters: tsup compiles server TS to dist/, then Vite builds widget HTML into same dist/ (emptyOutDir: false).",
     "build": "tsup && pnpm build:widget",
@@ -19,7 +18,7 @@
     "dev:widget-in-host": "bash scripts/dev-widget-in-host.sh",
     "inspect:oauth": "tsx smoke-tests/smoke-oauth-mcp-inspector.ts",
     "trace:oauth": "tsx smoke-tests/auth/capture-browser-trace.ts",
-    "start": "node dist/src/index.js",
+    "start": "node dist/index.js",
     "prod:harness": "node scripts/server-harness.js",
     "prod:requests": "node scripts/run-requests.js",
     "prod:diagnostics": "pnpm build && pnpm prod:harness",

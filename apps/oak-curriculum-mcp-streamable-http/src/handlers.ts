@@ -27,8 +27,11 @@ import {
   type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
-import { registerAllResources, registerPrompts } from './register-resources.js';
-import { readBuiltWidgetHtml } from './widget-html-provider.js';
+import {
+  readBuiltWidgetHtml,
+  registerAllResources,
+  registerPrompts,
+} from './register-resources.js';
 import {
   createDefaultRequestExecutor,
   createStubRequestExecutor,

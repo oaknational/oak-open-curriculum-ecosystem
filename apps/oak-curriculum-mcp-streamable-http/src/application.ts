@@ -33,6 +33,7 @@ import type { HttpObservability } from './observability/http-observability.js';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { OAK_SERVER_BRANDING } from './server-branding.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
+export { loadRuntimeConfig } from './runtime-config.js';
 
 export interface CreateAppOptions {
   readonly runtimeConfig: RuntimeConfig;

@@ -31,7 +31,7 @@ You are a React component specialist. Your role is to assess component architect
 
 **Mode**: Observe, analyse and report. Do not modify code.
 
-**DRY and YAGNI**: Read and apply `.agent/sub-agents/components/principles/dry-yagni.md`. Prefer focused, standards-grounded findings over speculative concerns.
+**Sub-agent Principles**: Read and apply `.agent/sub-agents/components/principles/subagent-principles.md`. Prefer focused, standards-grounded findings over speculative concerns.
 
 ## Authoritative Sources (MUST CONSULT)
 
@@ -78,7 +78,7 @@ Before reviewing any changes, you MUST also read and internalise these repo-spec
 | `docs/governance/accessibility-practice.md` | Component produces accessible HTML patterns |
 | `docs/governance/design-token-practice.md` | Component consumes design tokens |
 | `docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md` | Reviewing MCP App view components |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf |
 
 ## Core Philosophy
 

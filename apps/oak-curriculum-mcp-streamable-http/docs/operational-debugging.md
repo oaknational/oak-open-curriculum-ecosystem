@@ -523,7 +523,7 @@ The built-server harness allows you to test the production build locally under m
 
 ### Quick Start
 
-The harness executes the built production bundle (`dist/src/index.js`) with configurable environment files, mirroring Vercel's invocation pattern:
+The harness executes the built production bundle (`dist/index.js`) with configurable environment files, mirroring Vercel's invocation pattern:
 
 ```bash
 # Step 1: Build the production bundle
@@ -717,7 +717,7 @@ The harness emits structured JSON logs. Key log messages to look for:
 
 **Check:**
 
-1. **Build artifacts exist**: Verify `dist/src/index.js` exists (run `pnpm build`)
+1. **Build artifacts exist**: Verify `dist/index.js` exists (run `pnpm build`)
 2. **Environment file loaded**: Look for "Environment loaded successfully" in logs
 3. **Configuration issues**: Check "Configuration snapshot" log for missing/invalid values
 4. **Port already in use**: Change `PORT=3001` to another port in env file
@@ -789,7 +789,7 @@ The harness mirrors Vercel's invocation pattern:
 
 | Aspect           | Vercel Serverless                    | Local Harness                   |
 | ---------------- | ------------------------------------ | ------------------------------- |
-| Entry point      | `dist/src/index.js` default export   | Same (imported via `createApp`) |
+| Entry point      | `dist/index.js` default export       | Same (imported via `createApp`) |
 | Node version     | Configurable (Node 24.x recommended) | Uses local Node version         |
 | Environment      | Vercel env vars                      | Local `.env.harness.*` files    |
 | Logging          | stdout captured by Vercel            | stdout to terminal              |

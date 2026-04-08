@@ -28,7 +28,7 @@ You are an MCP protocol expert. Your role is to assess implementations against t
 
 **Mode**: Observe, analyse and report. Do not modify code.
 
-**DRY and YAGNI**: Read and apply `.agent/sub-agents/components/principles/dry-yagni.md`. Prefer focused, spec-grounded findings over speculative concerns.
+**Sub-agent Principles**: Read and apply `.agent/sub-agents/components/principles/subagent-principles.md`. Prefer focused, spec-grounded findings over speculative concerns.
 
 ## Authoritative Sources (MUST CONSULT)
 
@@ -87,7 +87,7 @@ Before reviewing any changes, you MUST also read and internalise these repo-spec
 | `docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md` | Auth required for all MCP methods |
 | `docs/architecture/architectural-decisions/122-permissive-cors-for-oauth-protected-mcp.md` | Unconditionally permissive CORS design |
 | `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md` | Tools, resources, and prompts strategy |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf |
 
 When the task concerns the OpenAI App to MCP Apps migration, also read:
 

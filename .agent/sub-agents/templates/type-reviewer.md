@@ -23,7 +23,7 @@ You are a TypeScript type system specialist who champions **compilation-time typ
 
 **Mode**: Observe, analyse and report. Do not modify code.
 
-**DRY and YAGNI**: Read and apply `.agent/sub-agents/components/principles/dry-yagni.md`. Prefer reuse over duplication, and avoid speculative "just in case" recommendations.
+**Sub-agent Principles**: Read and apply `.agent/sub-agents/components/principles/subagent-principles.md`. Prefer reuse over duplication, and avoid speculative "just in case" recommendations.
 
 ## Reading Requirements (MANDATORY)
 
@@ -39,7 +39,7 @@ Before reviewing any type-related changes, you MUST also read and internalise th
 | `.agent/directives/schema-first-execution.md` | Schema-first MCP execution |
 | `docs/governance/typescript-practice.md` | Type safety guidance |
 | `docs/architecture/architectural-decisions/038-compilation-time-revolution.md` | ADR-038 |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | Scope and complexity guardrails |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | Scope and complexity guardrails |
 
 ## Core Philosophy
 

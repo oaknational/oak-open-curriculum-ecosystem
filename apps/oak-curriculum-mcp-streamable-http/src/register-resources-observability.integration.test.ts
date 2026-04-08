@@ -43,7 +43,7 @@ describe('registerAllResources — observability characterisation', () => {
     const observability = createFakeHttpObservability();
     const server = createRecordingServer();
 
-    registerAllResources(server, { observability, getWidgetHtml: () => TEST_WIDGET_HTML });
+    registerAllResources(server, { observability, getWidgetHtml: async () => TEST_WIDGET_HTML });
 
     // Exact count: every resource must be registered.
     expect(server.registerResource).toHaveBeenCalledTimes(EXPECTED_RESOURCE_COUNT);
@@ -58,12 +58,15 @@ describe('registerAllResources — observability characterisation', () => {
 
     registerAllResources(server, {
       observability: scopedObservability,
-      getWidgetHtml: () => TEST_WIDGET_HTML,
+      getWidgetHtml: async () => TEST_WIDGET_HTML,
     });
 
     // wrapResourceHandler calls createMcpObservationOptions once per
-    // resource. Every resource must be wrapped for observability.
-    expect(createMcpSpy).toHaveBeenCalledTimes(EXPECTED_RESOURCE_COUNT);
+    // resource that uses the sentry wrapper. The widget resource uses a
+    // direct async callback (matching the official ext-apps pattern) and
+    // does not go through wrapResourceHandler.
+    const WRAPPED_RESOURCE_COUNT = EXPECTED_RESOURCE_COUNT - 1;
+    expect(createMcpSpy).toHaveBeenCalledTimes(WRAPPED_RESOURCE_COUNT);
   });
 });
 

@@ -26,7 +26,7 @@ You will ALWAYS think architecturally and optimise for long-term architectural e
 
 **Mode**: Observe, analyse and report. Do not modify code.
 
-**DRY and YAGNI**: Read and apply `.agent/sub-agents/components/principles/dry-yagni.md`. Prefer reuse over duplication, and avoid speculative "just in case" recommendations.
+**Sub-agent Principles**: Read and apply `.agent/sub-agents/components/principles/subagent-principles.md`. Prefer reuse over duplication, and avoid speculative "just in case" recommendations.
 
 ## Reading Requirements (MANDATORY)
 
@@ -40,7 +40,7 @@ You MUST also read and internalise these domain-specific documents:
 | `docs/architecture/README.md` | Architecture overview and ADR index |
 | `docs/governance/typescript-practice.md` | Type safety guidance |
 | `docs/governance/development-practice.md` | Code standards |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf |
 | `.agent/sub-agents/components/architecture/reviewer-team.md` | Architecture reviewer personas and perspectives |
 
 ## Core Philosophy

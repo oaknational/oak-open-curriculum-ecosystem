@@ -29,7 +29,7 @@ dist/
 Vercel's Express framework support automatically:
 
 1. Reads `vercel.json` and detects `"framework": "express"`
-2. Looks for entry point at canonical location: `src/index.{js,ts}` → `dist/src/index.js`
+2. Looks for entry point at canonical location: `src/index.{js,ts}` → `dist/index.js`
 3. Imports the **default export** (the Express app instance)
 4. Wraps the Express app in serverless infrastructure
 5. Routes all requests to the Express app
@@ -50,8 +50,8 @@ Vercel's Express framework support automatically:
 
 ```json
 {
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts"
 }
 ```
 
@@ -108,7 +108,7 @@ For local development:
 Or for testing the built production bundle:
 
 1. Build the project: `pnpm build`
-2. Run `pnpm start` which executes `node dist/src/index.js`
+2. Run `pnpm start` which executes `node dist/index.js`
 3. Same conditional listening logic applies
 
 **package.json**
@@ -116,7 +116,7 @@ Or for testing the built production bundle:
 ```json
 {
   "scripts": {
-    "start": "node dist/src/index.js",
+    "start": "node dist/index.js",
     "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts"
   }
 }
@@ -157,7 +157,7 @@ export default defineConfig({
 
 This configuration builds the single canonical entry point:
 
-- `src/index.ts` → `dist/src/index.js` (works for both Vercel and local dev)
+- `src/index.ts` → `dist/index.js` (works for both Vercel and local dev)
 
 ## Async Initialization
 
@@ -329,7 +329,7 @@ See **[middleware-chain.md](./middleware-chain.md)**.
 The built artifact can be imported and tested:
 
 ```bash
-node -e "import('./dist/src/index.js').then(m => console.log('✅ Module loads:', typeof m.default, typeof m.createApp))"
+node -e "import('./dist/index.js').then(m => console.log('✅ Module loads:', typeof m.default, typeof m.createApp))"
 ```
 
 Should output: `✅ Module loads: object function` (default is the app instance, createApp is the factory)
@@ -348,9 +348,9 @@ pnpm start
 
 **Symptom**: `Error: Cannot find module '/path/to/dist/index.js'`
 
-**Cause**: The `package.json` `main` field pointed to `dist/index.js` but tsup outputs to `dist/src/index.js`
+**Cause**: The `package.json` `main` field pointed to `dist/index.js` but tsup outputs to `dist/index.js`
 
-**Solution**: ✅ Fixed - `main` now correctly points to `dist/src/index.js`
+**Solution**: ✅ Fixed - `main` now correctly points to `dist/index.js`
 
 ### Issue: Server builds but doesn't respond on Vercel (Historical)
 

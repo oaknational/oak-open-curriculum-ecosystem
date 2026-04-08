@@ -44,12 +44,12 @@ This creates a simple, acyclic relationship tree and makes prompt reuse explicit
 ## Scope of Migration
 
 - Canonical prompt content moved into `.agent/sub-agents/templates/*`.
-- Shared DRY/YAGNI guidance moved to `.agent/sub-agents/components/principles/dry-yagni.md`.
+- Shared DRY/YAGNI guidance moved to `.agent/sub-agents/components/principles/subagent-principles.md`.
 - Shared architecture reviewer team guidance moved to `.agent/sub-agents/components/architecture/reviewer-team.md`.
 - `.cursor/agents/*.md` simplified into thin wrappers that reference templates.
 - Compatibility aliases removed; canonical references are:
   - `.agent/sub-agents/templates/code-reviewer.md`
-  - `.agent/sub-agents/components/principles/dry-yagni.md`
+  - `.agent/sub-agents/components/principles/subagent-principles.md`
 
 ## Rationale
 
@@ -90,7 +90,7 @@ This creates a simple, acyclic relationship tree and makes prompt reuse explicit
 ## References
 
 - `.agent/sub-agents/README.md`
-- `.agent/sub-agents/components/principles/dry-yagni.md`
+- `.agent/sub-agents/components/principles/subagent-principles.md`
 - `.agent/sub-agents/components/architecture/reviewer-team.md`
 - `.agent/sub-agents/templates/`
 - `.cursor/agents/`

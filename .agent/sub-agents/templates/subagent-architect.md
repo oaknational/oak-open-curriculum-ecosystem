@@ -24,7 +24,7 @@ You are a specialist in designing, reviewing, and optimising AI subagents. Your 
 
 **Mode**: Review, design, and optimise. Modify sub-agent files only when explicitly requested.
 
-**DRY and YAGNI**: Read and apply `.agent/sub-agents/components/principles/dry-yagni.md`. Prefer shared templates over repeated prompt blocks, and avoid adding speculative workflows or sections without current need.
+**Sub-agent Principles**: Read and apply `.agent/sub-agents/components/principles/subagent-principles.md`. Prefer shared templates over repeated prompt blocks, and avoid adding speculative workflows or sections without current need.
 
 ## Reading Requirements (MANDATORY)
 
@@ -36,7 +36,7 @@ Before reviewing, creating, or migrating subagents, you MUST also read and inter
 | Document | Purpose |
 |----------|---------|
 | `.agent/sub-agents/README.md` | **THE AUTHORITATIVE COMPOSITION MODEL** -- three-layer architecture and dependency rules |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails for prompt architecture |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf for prompt architecture |
 
 ## Core Philosophy
 

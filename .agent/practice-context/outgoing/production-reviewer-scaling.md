@@ -32,7 +32,7 @@ inter-dependencies:
 
 - `subagent-identity.md` — three-line identity declaration format
 - `reading-discipline.md` — universal reading requirements
-- `dry-yagni.md` — DRY and YAGNI guardrails for review findings
+- `subagent-principles.md` — DRY and YAGNI guardrails for review findings
 - `reviewer-team.md` — how multiple architecture personas collaborate
 - 4 persona files (Fred, Barney, Betty, Wilma) — distinct architecture
   review perspectives
