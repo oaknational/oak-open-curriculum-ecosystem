@@ -4,6 +4,7 @@ import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 
 /**
  * E2E tests for parameter examples metadata in MCP tools.
@@ -119,7 +120,11 @@ async function createTestApp() {
   });
   const runtimeConfig = unwrap(result);
   const observability = createHttpObservabilityOrThrow(runtimeConfig);
-  return await createApp({ runtimeConfig, observability });
+  return await createApp({
+    runtimeConfig,
+    observability,
+    validateWidgetHtml: skipWidgetHtmlValidation,
+  });
 }
 
 async function callToolsList(

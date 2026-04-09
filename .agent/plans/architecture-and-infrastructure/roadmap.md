@@ -1,7 +1,7 @@
 # Architecture and Infrastructure Roadmap
 
-**Status**: Active M2 blocker execution, queued cross-app standardisation, and a new post-M2 structural separation programme.
-**Last Updated**: 2026-04-03
+**Status**: Active M2 blocker execution, queued cross-app standardisation, and an agreed next hardening promotion after the current improvement tranche.
+**Last Updated**: 2026-04-09
 **Session Entry**: [../../prompts/session-continuation.prompt.md](../../prompts/session-continuation.prompt.md)
 
 ---
@@ -34,6 +34,9 @@ Lane indexes:
   [future/oak-surface-isolation-and-generic-foundation-programme.plan.md](future/oak-surface-isolation-and-generic-foundation-programme.plan.md),
   now defines the later programme for separating generic foundations from Oak
   leaves across all affected workspaces.
+- [future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
+  remains in `future/` today, but it is now the explicit first promotion
+  candidate once the current improvement tranche is complete.
 - The existing nested codegen plan,
   [codegen/future/sdk-codegen-workspace-decomposition.md](codegen/future/sdk-codegen-workspace-decomposition.md),
   remains the tranche-4 companion strategy rather than a parallel direction.
@@ -49,6 +52,8 @@ Milestone 3: Pre-beta hardening      📋 LATER
 ```
 
 For high-level milestone framing, see [../high-level-plan.md](../high-level-plan.md).
+The first planned hardening promotion after the current improvement tranche is
+[future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md).
 
 ---
 
@@ -104,9 +109,11 @@ Phase 4: Quality/operations hardening                 📋 future
 ### Phase 4 — Quality and Operational Hardening
 
 - Strategic umbrellas:
-  - [future/observability-and-quality-metrics.plan.md](future/observability-and-quality-metrics.plan.md)
   - [future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
   - [future/test-suite-audit-and-triage.plan.md](future/test-suite-audit-and-triage.plan.md)
+  - [future/observability-and-quality-metrics.plan.md](future/observability-and-quality-metrics.plan.md)
+- First promotion candidate after the current improvement tranche:
+  [future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
 - Historical alignment reference:
   [future/stdio-http-server-alignment.md](future/stdio-http-server-alignment.md)
 - Done when:

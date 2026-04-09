@@ -3,6 +3,7 @@ import { unwrap } from '@oaknational/result';
 import { createApp } from '../../src/application.js';
 import { createHttpObservabilityOrThrow } from '../../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../../src/runtime-config.js';
+import { skipWidgetHtmlValidation } from '../../src/test-helpers/widget-html-validation.js';
 import type { ToolHandlerOverrides } from '../../src/handlers.js';
 
 export interface LiveHttpApp {
@@ -34,6 +35,7 @@ export async function createLiveHttpApp(options?: CreateLiveHttpAppOptions): Pro
   const app = await createApp({
     runtimeConfig,
     observability,
+    validateWidgetHtml: skipWidgetHtmlValidation,
     toolHandlerOverrides: options?.overrides,
   });
 

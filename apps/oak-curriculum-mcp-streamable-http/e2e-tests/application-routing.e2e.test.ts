@@ -22,6 +22,7 @@ import { describe, it, expect } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
 import { createApp } from '../src/application.js';
+import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 import {
   createMockObservability,
   createMockRuntimeConfig,
@@ -50,6 +51,7 @@ async function createAuthEnabledApp(): Promise<Express> {
   return await createApp({
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
+    validateWidgetHtml: skipWidgetHtmlValidation,
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });
@@ -270,6 +272,7 @@ describe('Application-Level Method-Aware Auth', () => {
       return await createApp({
         runtimeConfig,
         observability: createMockObservability(runtimeConfig),
+        validateWidgetHtml: skipWidgetHtmlValidation,
       });
     }
 

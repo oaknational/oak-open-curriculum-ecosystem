@@ -3,6 +3,7 @@ import { unwrap } from '@oaknational/result';
 import { createApp } from '../../src/application.js';
 import { createHttpObservabilityOrThrow } from '../../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../../src/runtime-config.js';
+import { skipWidgetHtmlValidation } from '../../src/test-helpers/widget-html-validation.js';
 
 export const STUB_ACCEPT_HEADER = 'application/json, text/event-stream';
 const STUB_API_KEY = 'stub-api-key';
@@ -31,7 +32,11 @@ export async function createStubbedHttpApp(
   });
   const runtimeConfig = unwrap(result);
   const observability = createHttpObservabilityOrThrow(runtimeConfig);
-  const app = await createApp({ runtimeConfig, observability });
+  const app = await createApp({
+    runtimeConfig,
+    observability,
+    validateWidgetHtml: skipWidgetHtmlValidation,
+  });
 
   return { app };
 }

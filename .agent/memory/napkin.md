@@ -218,6 +218,49 @@ File: `apps/oak-curriculum-mcp-streamable-http/e2e-tests/get-curriculum-model.e2
 
 ### Session 2026-04-09 — Phase 4.5 wrap-up docs sync
 
+### Session 2026-04-09b — CI dependency enforcement gap
+
+#### Surprises
+
+**S18: Nested worktrees under the repo can give false-clean dependency runs.**
+Expected: a clean worktree under `.claude/worktrees/` would behave like CI.
+Actual: Node walked up to the parent checkout's `node_modules`, so undeclared
+workspace imports such as `@oaknational/observability` resolved successfully
+even though the workspace did not declare them. A sibling worktree outside the
+repo root reproduced the real failure.
+
+**S19: `knip` already catches undeclared workspace imports precisely; the
+blocking gates do not.** Expected: ESLint or dependency-cruiser would clearly
+flag missing direct dependencies before runtime. Actual: `dependency-cruiser`
+does not police manifest completeness, and the blocking `pnpm check` path does
+not run `knip`. In an isolated Turbo run on PR #76, `@oaknational/sdk-codegen`
+failed with `ERR_MODULE_NOT_FOUND` for undeclared
+`@oaknational/observability`; targeted `knip` also flagged undeclared
+`@elastic/elasticsearch` and a stale `@modelcontextprotocol/ext-apps`
+dependency in the same workspace.
+
+**S20: Standalone workspace verification exposed a second missing type-only
+dependency.** Expected: once the codegen workspace deps were fixed, the isolated
+Turbo reproduction would be clean. Actual: `@oaknational/logger` failed
+standalone type-check/build until `@types/express` was declared locally.
+
+#### Resolutions
+
+- Added `@oaknational/observability` and `@elastic/elasticsearch` to
+  `packages/sdks/oak-sdk-codegen` `devDependencies`
+- Removed stale `@modelcontextprotocol/ext-apps` from the same workspace
+- Added `@types/express` to `packages/libs/logger` `devDependencies`
+- Updated the quality-gate-hardening plan to record that knip promotion must
+  cover manifest completeness, and that dependency-cruiser is complementary
+  rather than sufficient for that class of failure
+
+#### Decisions
+
+- Use sibling worktrees outside the repo root for CI-style dependency debugging
+  when undeclared imports are suspected
+- Treat `knip` as the canonical detector for undeclared workspace imports until
+  a blocking manifest-completeness gate is promoted
+
 #### Surprises
 
 **S16: active docs can drift long after the code is correct.**
@@ -279,3 +322,44 @@ the tests honest and satisfied the no-unused-vars / no-type-assertion rules.
   existing background fitness pressure in directives/governance docs, but no
   new blocking issue created by this session and no additional graduation work
   that belonged inside this branch closeout.
+
+### Session 2026-04-09d — quality gate sequencing
+
+#### Resolutions
+
+- Architecture-and-infrastructure planning now treats
+  `future/quality-gate-hardening.plan.md` as the explicit first promotion
+  candidate once the current improvement tranche is complete.
+- This was kept as a sequencing/docs change only; `knip` and `depcruise` still
+  fail on the current baseline, so promoting them into blocking gates now would
+  break `pnpm check`, `pre-commit`, and `pre-push`.
+
+### Session 2026-04-09e — sdk-codegen dependency classification
+
+#### Patterns to Remember
+
+- For `packages/sdks/oak-sdk-codegen`, classify package dependencies from the
+  published surface defined by `package.json` `exports` plus `tsup.config.ts`
+  `entry: ['src/**/*.ts', ...]`, not from `code-generation/` or `vocab-gen/`
+  scripts. Imports used only by generator CLIs or build-time helpers belong in
+  `devDependencies` even if they run as real Node processes during local
+  `pnpm sdk-codegen` or `pnpm vocab-gen`.
+
+### Session 2026-04-09f — Turbo self-build test dependency
+
+#### Surprises
+
+**S21: source-imported tests were accidentally proving a build artefact
+precondition.** Expected: in-process tests would prove imported code behaviour,
+while build artefact validation would be handled by `pnpm build` and
+built-system coverage. Actual: `@oaknational/oak-curriculum-mcp-streamable-http`
+source tests failed whenever `dist/oak-banner.html` was absent because
+`createApp()` called `validateWidgetHtmlExists()` during bootstrap. The issue
+was the test seam, not Turbo's refusal to build the package first.
+
+#### Resolutions
+
+- Added an explicit `createApp()` widget-validation seam so in-process tests can
+  inject a no-op validator and stay independent of `dist/`
+- Updated the quality-gate-hardening plan to record the correct response for
+  this class of issue: keep build validation at build / built-system level

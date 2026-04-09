@@ -5,6 +5,7 @@ import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { parseSseEnvelope } from './helpers/sse.js';
@@ -91,6 +92,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const app = await createApp({
       runtimeConfig,
       observability,
+      validateWidgetHtml: skipWidgetHtmlValidation,
       upstreamMetadata: TEST_UPSTREAM_METADATA,
       clerkMiddlewareFactory: createNoOpClerkMiddleware(),
     });
@@ -121,7 +123,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     });
     const runtimeConfig = unwrap(configResult);
     const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({ runtimeConfig, observability });
+    const app = await createApp({
+      runtimeConfig,
+      observability,
+      validateWidgetHtml: skipWidgetHtmlValidation,
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -157,7 +163,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     });
     const runtimeConfig = unwrap(configResult);
     const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({ runtimeConfig, observability });
+    const app = await createApp({
+      runtimeConfig,
+      observability,
+      validateWidgetHtml: skipWidgetHtmlValidation,
+    });
     const res = await request(app)
       .post('/mcp')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
@@ -174,7 +184,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     });
     const runtimeConfig = unwrap(configResult);
     const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({ runtimeConfig, observability });
+    const app = await createApp({
+      runtimeConfig,
+      observability,
+      validateWidgetHtml: skipWidgetHtmlValidation,
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -201,7 +215,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     });
     const runtimeConfig = unwrap(configResult);
     const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({ runtimeConfig, observability });
+    const app = await createApp({
+      runtimeConfig,
+      observability,
+      validateWidgetHtml: skipWidgetHtmlValidation,
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -228,7 +246,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     });
     const runtimeConfig = unwrap(configResult);
     const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({ runtimeConfig, observability });
+    const app = await createApp({
+      runtimeConfig,
+      observability,
+      validateWidgetHtml: skipWidgetHtmlValidation,
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -257,7 +279,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     });
     const runtimeConfig = unwrap(configResult);
     const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({ runtimeConfig, observability });
+    const app = await createApp({
+      runtimeConfig,
+      observability,
+      validateWidgetHtml: skipWidgetHtmlValidation,
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)
@@ -289,7 +315,11 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     });
     const runtimeConfig = unwrap(configResult);
     const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    const app = await createApp({ runtimeConfig, observability });
+    const app = await createApp({
+      runtimeConfig,
+      observability,
+      validateWidgetHtml: skipWidgetHtmlValidation,
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', ACCEPT)

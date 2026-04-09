@@ -12,10 +12,10 @@ todos:
     content: "Promote @oaknational/no-eslint-disable from warn to error after Phase 3 remediation in the active CI plan completes."
     status: pending
   - id: enable-knip
-    content: "Triage knip findings (94 unused files, 626 unused exports, 14 dependency issues) and promote to blocking QG."
+    content: "Triage knip findings across unused files/exports and dependency hygiene, including undeclared workspace imports that currently escape blocking gates, then promote to blocking QG."
     status: pending
   - id: enable-depcruise
-    content: "Resolve dependency-cruiser findings (circular deps, orphans) and promote to blocking QG."
+    content: "Resolve dependency-cruiser findings (circular deps, orphans) and promote to blocking QG, while keeping manifest-completeness enforcement separate."
     status: pending
   - id: enable-max-files-per-dir
     content: "Enable the max-files-per-dir ESLint rule across all workspaces and remediate violations."
@@ -33,8 +33,8 @@ todos:
 
 # Quality Gate Hardening
 
-**Last Updated**: 2026-03-29
-**Status**: Strategic brief — not yet executable
+**Last Updated**: 2026-04-09
+**Status**: Strategic brief — first promotion candidate after the current improvement tranche
 **Scope**: All pending quality gate promotions and enforcement hardenings, consolidated into a single plan with remediation work for each.
 
 ## Problem and Intent
@@ -42,6 +42,28 @@ todos:
 The repository has several quality tools installed but not yet promoted to blocking gates, and several enforcement gaps where checks are weaker than the principles demand. Each tool surfaces genuine pre-existing issues that must be remediated before promotion.
 
 This plan unifies all pending quality gate work into a single strategic brief to prevent fragmentation across multiple small plans.
+
+Per the 2026-04-09 sequencing decision, this is the first plan to promote once
+the current improvement tranche is complete.
+
+Targeted CI debugging on 9 April 2026 confirmed a concrete dependency-enforcement
+gap behind PR #76. In an isolated Turbo run, `@oaknational/sdk-codegen#sdk-codegen`
+failed with `ERR_MODULE_NOT_FOUND` for undeclared `@oaknational/observability`,
+and targeted `knip` also flagged undeclared `@elastic/elasticsearch` usage plus
+a stale `@modelcontextprotocol/ext-apps` dependency in the same workspace.
+`dependency-cruiser` did not report that class of issue, and the blocking
+`pnpm check` path never ran `knip`, so the defect escaped until CI-style
+execution. The same isolated verification also exposed `@oaknational/logger`
+missing `@types/express` for standalone type-check/build.
+
+Commit-hook reproduction on the same date confirmed a separate quality-gate
+hardening issue: source-imported tests can accidentally become build-aware when
+runtime startup validation is hard-wired into app composition code. The
+`@oaknational/oak-curriculum-mcp-streamable-http` test surface hit this because
+`createApp()` failed fast when `dist/oak-banner.html` was missing. The correct
+remediation was not to make generic source tests depend on `build`, but to keep
+build artefact validation in `pnpm build` / built-system coverage and inject a
+no-op validator into in-process tests.
 
 ## Domain Boundaries
 
@@ -69,8 +91,8 @@ This plan unifies all pending quality gate work into a single strategic brief to
 | Forbidden-comment test exemption | None | Can proceed immediately |
 | oak-eslint self-linting | Forbidden-comment exemption (if self-linting catches test file patterns) | Investigate circular dependency risk first |
 | `no-eslint-disable` promotion | `eslint-disable-remediation.plan.md` (extracted from CI plan) | Cannot promote until all comments are remediated |
-| knip | None | Independent — triage work only |
-| dependency-cruiser | None | Independent — triage work only |
+| knip | None | First static-analysis promotion candidate. It is the current precise detector for undeclared workspace imports and stale manifest entries. |
+| dependency-cruiser | None | Independent — but complementary. It covers graph shape, not package-manifest completeness. |
 | max-files-per-dir | None | Independent — remediation may overlap with knip dead-code removal |
 | `consistent-type-assertions` in tests | None | Large remediation (~218 warnings across 6 workspaces) |
 | `no-child-process-in-tests` rule | None | Prevents future violations; sibling test-audit plan triages existing ones |
@@ -104,15 +126,33 @@ This plan unifies all pending quality gate work into a single strategic brief to
 
 ### 4. Enable knip as a Blocking `pnpm check` Gate
 
-**Problem**: knip surfaces 94 unused files, 626 unused exports, and 14 dependency issues. These are genuine findings that need triage.
+**Problem**: knip surfaces a large backlog of unused files, unused exports,
+and dependency-hygiene issues. It is also the current precise detector for
+undeclared direct/transitive workspace imports. Because it is not blocking,
+runtime and generator tasks can fail in CI before the underlying manifest issue
+is diagnosed cleanly.
 
-**Fix**: Triage all findings. Delete genuine dead code. Adjust `knip.config.ts` for false positives. Add `pnpm knip` to the `pnpm check` script.
+**Confirmed example (9 April 2026)**:
+- PR #76 isolated Turbo reproduction failed in `@oaknational/sdk-codegen#sdk-codegen`
+  because `@oaknational/observability` was imported but undeclared
+- Targeted `knip` for `packages/sdks/oak-sdk-codegen` also flagged
+  undeclared `@elastic/elasticsearch`
+- The same workspace still carried unused `@modelcontextprotocol/ext-apps`
+  until explicitly removed
+
+**Fix**: Triage all findings. Treat `unlisted` dependency findings as hard
+blockers. Delete genuine dead code. Adjust `knip.config.ts` for false
+positives. Add `pnpm knip` to the `pnpm check` script and then to pre-push /
+pre-commit once the baseline is clean.
 
 **Remediation**: Significant — see `.agent/plans/architecture-and-infrastructure/static-analysis-tool-promotion.plan.md` for initial triage plan.
 
 ### 5. Enable dependency-cruiser as a Blocking `pnpm check` Gate
 
-**Problem**: dependency-cruiser finds circular dependencies and orphan modules. These need resolution before promotion.
+**Problem**: dependency-cruiser finds circular dependencies and orphan modules.
+These need resolution before promotion. It does not currently police package
+manifests, so it cannot be relied on to catch undeclared direct dependencies or
+missing type-only devDependencies.
 
 **Fix**: Resolve circular deps (refactor or mark as intentional). Exclude genuinely external orphans. Add `pnpm depcruise` to the `pnpm check` script.
 
@@ -154,14 +194,23 @@ This plan unifies all pending quality gate work into a single strategic brief to
 
 ## Success Signals (Justifying Promotion to Current)
 
+- The current improvement tranche is complete and can hand off into a focused
+  hardening sprint
 - eslint-disable remediation complete (`eslint-disable-remediation.plan.md`)
 - CI consolidation plan complete (Phases 0-6 done as of 2026-03-29)
+- Targeted dependency-only `knip` sweeps are clean for generator/build-heavy
+  workspaces before global promotion
 - Capacity for a focused sprint on quality gate work
 - No higher-priority feature or bug work blocking
 
 ## Risks and Unknowns
 
 - knip triage scope is large (626 unused exports) — may need phased approach
+- Isolated-worktree verification can reveal missing manifest entries that are
+  masked in nested worktrees by parent `node_modules` resolution
+- If a source-imported test starts depending on build outputs, refactor the
+  seam or move the proof to build/out-of-process coverage instead of teaching
+  generic source tests to depend on `build`
 - oak-eslint self-linting may hit circular dependency — needs investigation
 - Stryker thresholds need calibration per workspace — initial run needed
 - `consistent-type-assertions` remediation in tests is labour-intensive (~218 warnings)
@@ -170,8 +219,9 @@ This plan unifies all pending quality gate work into a single strategic brief to
 
 Promote to `current/` when:
 
-1. The eslint-disable remediation plan is complete (~64 remaining as of 2026-03-29)
-2. The `feat/mcp_app` branch is merged to `main`
+1. The current improvement tranche is complete and the collection is ready to
+   pivot from delivery work to hardening
+2. The eslint-disable remediation plan is complete
 3. Team has capacity for a quality-gate sprint
 
 ## Absorbed Plans

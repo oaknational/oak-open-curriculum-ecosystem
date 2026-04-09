@@ -3,7 +3,7 @@
 Cross-cutting architecture, system quality, and observability plans.
 
 **Status**: 🔄 Active backlog (Milestone 2 and Milestone 3 work)
-**Last Updated**: 2026-04-03
+**Last Updated**: 2026-04-09
 
 ---
 
@@ -22,6 +22,9 @@ Prompt entry:
 ## Queued Work (Current)
 
 See [current/README.md](current/README.md) for the next-up queue.
+Once the current improvement tranche closes, promote
+[future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
+as the next focused hardening sprint.
 
 ## Strategic Backlog (Future)
 
@@ -36,7 +39,8 @@ Roadmap:
 | Plan | Status | Description |
 |------|--------|-------------|
 | [`eslint-disable-remediation.plan.md`](active/eslint-disable-remediation.plan.md) | 🟢 In progress | Remove ~64 remaining eslint-disable comments by fixing root causes. Extracted from CI plan. |
-| [`static-analysis-tool-promotion.plan.md`](static-analysis-tool-promotion.plan.md) | Pending | Triage knip + dependency-cruiser findings, then promote to blocking QG |
+| [`future/quality-gate-hardening.plan.md`](future/quality-gate-hardening.plan.md) | 📋 Next promotion candidate | First follow-on after the current improvement tranche; umbrella for static-analysis promotion, rule hardening, and broader gate enforcement work. |
+| [`static-analysis-tool-promotion.plan.md`](static-analysis-tool-promotion.plan.md) | 📎 Reference only | Background knip + dependency-cruiser triage detail retained until the hardening umbrella is promoted and absorbs execution. |
 
 ## Recently Completed
 
@@ -67,6 +71,9 @@ Roadmap:
   including SDK codegen workspace decomposition
 - **Milestone 3** (pre-beta): alerting, quality metrics, and broader
   operational hardening on top of the foundation
+- **Next hardening follow-on**: promote
+  `future/quality-gate-hardening.plan.md` once the current improvement tranche
+  closes
 
 See [high-level-plan.md](../high-level-plan.md) for the strategic
 overview.

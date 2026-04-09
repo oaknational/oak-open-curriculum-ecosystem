@@ -11,7 +11,7 @@ queue item, then to `../active/` when implementation starts.
 |---|---|---|
 | P0 | [oak-surface-isolation-and-generic-foundation-programme.plan.md](./oak-surface-isolation-and-generic-foundation-programme.plan.md) | Strategic umbrella for separating Oak-specific leaves from generic foundations across runtime, design, tooling, SDK/codegen, search, and app surfaces |
 | P0 | [observability-and-quality-metrics.plan.md](./observability-and-quality-metrics.plan.md) | Strategic umbrella for the M2 observability foundation plus M3 alerting and quality-metrics hardening |
-| P1 | [quality-gate-hardening.plan.md](./quality-gate-hardening.plan.md) | Strategic umbrella for pending quality-gate promotions and enforcement hardening |
+| P1 | [quality-gate-hardening.plan.md](./quality-gate-hardening.plan.md) | First promotion candidate once the current improvement tranche is complete; umbrella for pending quality-gate promotions and enforcement hardening |
 | P1 | [test-suite-audit-and-triage.plan.md](./test-suite-audit-and-triage.plan.md) | Deep test-suite audit before stricter enforcement and mutation-testing rollout |
 | P2 | [stdio-http-server-alignment.md](./stdio-http-server-alignment.md) | Historical/server-alignment strategy reference; not an active observability adoption lane |
 

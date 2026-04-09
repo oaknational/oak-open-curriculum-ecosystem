@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { RuntimeConfig } from '../src/runtime-config.js';
 import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
+import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { createNoOpClerkMiddleware } from './helpers/test-config.js';
 
@@ -29,6 +30,7 @@ async function createTestApp() {
   return await createApp({
     runtimeConfig: mockRuntimeConfig,
     observability,
+    validateWidgetHtml: skipWidgetHtmlValidation,
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });

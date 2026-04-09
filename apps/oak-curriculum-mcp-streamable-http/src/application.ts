@@ -31,7 +31,6 @@ import { createSearchRetrieval } from './search-retrieval-factory.js';
 import type { HttpObservability } from './observability/http-observability.js';
 import { validateWidgetHtmlExists } from './validate-widget-html.js';
 import { WIDGET_HTML_PATH } from './register-resources.js';
-
 import type { McpServerFactory } from './mcp-request-context.js';
 import { OAK_SERVER_BRANDING } from './server-branding.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
@@ -43,6 +42,12 @@ export interface CreateAppOptions {
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
   readonly logger?: Logger;
   readonly resourceUrl?: string;
+  /**
+   * Validates the built widget HTML path before core endpoints are initialised.
+   * Production callers omit this so the real startup validation runs; in-process
+   * tests inject a no-op validator so they do not depend on build artefacts.
+   */
+  readonly validateWidgetHtml?: (widgetHtmlPath: string) => void;
   /**
    * Upstream AS metadata for the OAuth proxy. When provided, `createApp`
    * skips the network fetch to Clerk's `/.well-known/oauth-authorization-server`
@@ -196,8 +201,9 @@ function initializeCoreEndpoints(
   log: Logger,
   observability: HttpObservability,
 ): { mcpFactory: McpServerFactory; ready: Promise<void> } {
-  // DI seam is on the leaf function; integration tests bypass this via createStubbedHttpApp().
-  validateWidgetHtmlExists(WIDGET_HTML_PATH);
+  // Tests inject a no-op validator so source-imported coverage does not depend
+  // on build artefacts; production callers use the real fail-fast validation.
+  (options.validateWidgetHtml ?? validateWidgetHtmlExists)(WIDGET_HTML_PATH);
 
   const searchRetrieval = runtimeConfig.useStubTools
     ? createStubSearchRetrieval()

@@ -15,6 +15,7 @@ import { unwrap } from '@oaknational/result';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
 import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
+import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;
@@ -38,7 +39,11 @@ describe('Auth Bypass for Development (E2E)', () => {
     });
     const runtimeConfig = unwrap(result);
     const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    app = await createApp({ runtimeConfig, observability });
+    app = await createApp({
+      runtimeConfig,
+      observability,
+      validateWidgetHtml: skipWidgetHtmlValidation,
+    });
   });
 
   it('allows /mcp POST without Authorization when bypass enabled', async () => {
