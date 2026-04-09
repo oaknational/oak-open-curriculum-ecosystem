@@ -1,7 +1,7 @@
 ---
 name: MCP Apps Standard Migration Plan
 overview: "Strategic planning anchor for the remaining Oak MCP Apps work. Defines the canonical target architecture, the live execution stack, and the remaining dependency order."
-lastValidatedDate: 2026-04-04
+lastValidatedDate: 2026-04-09
 todos:
   - id: canonical-research
     content: "Maintain the canonical MCP Apps research summary and keep it aligned with the live executable plans."
@@ -33,7 +33,7 @@ isProject: false
 # MCP Apps Standard Migration Plan
 
 **Status**: ACTIVE
-**Last Updated**: 2026-04-04
+**Last Updated**: 2026-04-09
 
 ---
 
@@ -82,9 +82,9 @@ Read the live workstream in this order:
 1. [roadmap.md](roadmap.md)
 2. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 3. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
-4. [active/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](active/ws3-phase-4.5-live-react-and-metadata-shape.plan.md) — **current focus**
-5. [active/ws3-phase-5-interactive-user-search-view.plan.md](active/ws3-phase-5-interactive-user-search-view.plan.md)
-6. [active/ws3-phase-6-docs-gates-review-commit.plan.md](active/ws3-phase-6-docs-gates-review-commit.plan.md)
+4. [active/ws3-phase-6-docs-gates-review-commit.plan.md](active/ws3-phase-6-docs-gates-review-commit.plan.md) — **current merge handoff**
+5. [active/ws3-phase-5-interactive-user-search-view.plan.md](active/ws3-phase-5-interactive-user-search-view.plan.md) — post-merge
+6. [archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md) — completed provenance
 
 When touching runtime contract, metadata visibility, resource auth, or tool
 registration, also read:
@@ -97,6 +97,7 @@ Completed dependency work is archived at:
 - [archive/completed/ws2-app-runtime-migration.plan.md](archive/completed/ws2-app-runtime-migration.plan.md)
 - [archive/completed/mcp-runtime-boundary-simplification.plan.md](archive/completed/mcp-runtime-boundary-simplification.plan.md)
 - [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md)
+- [archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md)
 
 ## Execution Order
 
@@ -110,8 +111,8 @@ WS3: fresh React MCP App rebuild            ▶ active
   OakUrl codegen fix                        ✓ complete
   Contrast validation prerequisite          ✓ complete
   Phase 4: brand banner                     ✓ complete (2026-04-04)
-  Phase 4.5: live React + metadata shape   ▶ active (pre-merge)
-  Phase 6a: pre-merge docs/gates            ⏳ pending
+  Phase 4.5: live React + metadata shape    ✓ complete (2026-04-09)
+  Phase 6a: pre-merge docs/gates            ✓ complete (2026-04-09)
   --- PR #76 merge ---
   Phase 5: user-search view                 ⏳ pending (post-merge)
   Phase 6b: post-Phase 5 docs/gates         ⏳ pending
@@ -124,21 +125,16 @@ Future additive feature backlog             ⏳ blocked on remaining canonical w
 
 ### WS3 and WS4
 
-The remaining UI work is carried by:
+The remaining UI work is carried by the live umbrella and child plans:
 
 - [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 - [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
-- [active/ws3-mcp-app-rendering-investigation.plan.md](active/ws3-mcp-app-rendering-investigation.plan.md)
-- [active/ws3-phase-3-canonical-contracts-and-runtime.plan.md](active/ws3-phase-3-canonical-contracts-and-runtime.plan.md)
-- [active/ws3-phase-3-execution.plan.md](active/ws3-phase-3-execution.plan.md)
-- [active/ws3-phase-3-schema-fallout-closure.plan.md](active/ws3-phase-3-schema-fallout-closure.plan.md)
-- [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md)
-- [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md)
+- [active/ws3-phase-6-docs-gates-review-commit.plan.md](active/ws3-phase-6-docs-gates-review-commit.plan.md)
+- [active/ws3-phase-5-interactive-user-search-view.plan.md](active/ws3-phase-5-interactive-user-search-view.plan.md)
 
 Detailed WS3/WS4 execution scope, sequencing, and enforcement live in the
-active umbrella and child plans. This roadmap intentionally avoids duplicating
-that operational detail. The schema-fallout closure record is complete locally
-and remains in `active/` until archival.
+active umbrella and child plans. Archived and completed prerequisites no longer
+belong in the live active-work list.
 
 ### C8 auth metadata invariant hardening
 

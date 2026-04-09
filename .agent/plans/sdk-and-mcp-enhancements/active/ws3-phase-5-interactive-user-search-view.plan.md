@@ -17,14 +17,14 @@ todos:
 
 # WS3 Phase 5: Interactive User Search View
 
-**Status**: PENDING — blocked on Phase 4.5 (live React app + metadata shape) and PR #76 merge
-**Last Updated**: 2026-04-08
+**Status**: PENDING — blocked on PR #76 merge; Phase 4.5 prerequisite is complete
+**Last Updated**: 2026-04-09
 
 ## Required Inputs
 
-1. `ws3-phase-4.5-live-react-and-metadata-shape.plan.md` — **PRIMARY BLOCKER**.
-   The live React MCP App foundation and SDK-ready tool metadata must be in
-   place before Phase 5 can build interactive UI on top.
+1. `../archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md` —
+   completed prerequisite. The live React MCP App foundation and SDK-ready tool
+   metadata are already in place for Phase 5 to build on after merge.
 2. `ws3-widget-clean-break-rebuild.plan.md` — Phase 5 section and target
    architecture section 3 (data/state model)
 3. Phase 3 acceptance evidence — `user-search` and `user-search-query`

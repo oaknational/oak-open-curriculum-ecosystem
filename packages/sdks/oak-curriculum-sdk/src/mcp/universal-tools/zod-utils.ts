@@ -33,9 +33,9 @@ export function isZodObject(schema: z.ZodType): schema is z.ZodObject<z.ZodRawSh
 /**
  * Safely extract the shape from a Zod schema if it's a ZodObject.
  *
- * All generated toolMcpFlatInputSchema values are ZodObjects, so this will
- * always return the shape for generated tools. Returns undefined for
- * non-object schemas or if the schema is undefined (e.g., in test mocks).
+ * Generated `toolMcpFlatInputSchema` values should be ZodObjects. Returning
+ * `undefined` therefore indicates contract drift (or an intentionally broken
+ * test double), not an expected runtime path.
  *
  * The extracted shape can be passed directly to the MCP SDK's registerTool()
  * function, preserving parameter descriptions that were added via .describe()
@@ -47,8 +47,8 @@ export function isZodObject(schema: z.ZodType): schema is z.ZodObject<z.ZodRawSh
  * @example
  * ```typescript
  * const inputSchema = extractZodShape(descriptor.toolMcpFlatInputSchema);
- * if (inputSchema) {
- *   server.registerTool(name, { inputSchema }, handler);
+ * if (!inputSchema) {
+ *   throw new Error('Generated tool input schema must stay object-shaped');
  * }
  * ```
  */

@@ -215,3 +215,67 @@ isolation and on a later `pnpm check` run. Likely test coupling, race
 condition, or shared state mutation. Needs investigation: check test
 isolation, shared server instances, and any global state in the E2E harness.
 File: `apps/oak-curriculum-mcp-streamable-http/e2e-tests/get-curriculum-model.e2e.test.ts`
+
+### Session 2026-04-09 — Phase 4.5 wrap-up docs sync
+
+#### Surprises
+
+**S16: active docs can drift long after the code is correct.**
+Expected: once `c4d37089` landed, the live plan/prompt/README stack would
+already reflect the final Phase 4.5 contract. Actual: the code correctly used
+present `inputSchema` values with `{}` for no-input tools, but the active
+Phase 4.5 plan, session prompt, README, and ADR text still described the older
+"omit inputSchema" / legacy-schema-field story. Some live docs also still
+quoted the old 31-tool inventory after `user-search` and `user-search-query`
+landed.
+
+#### Behaviour change
+
+- When a refactor lands, audit the live planning/docs stack immediately, not
+  just the product code and tests.
+- Treat active plans, prompts, collection indexes, workspace READMEs, and
+  factual ADR sections as one consistency surface for pre-merge work.
+- Prefer resilient wording in READMEs, but keep canonical ADR/tool-count docs
+  numerically truthful when they are used as the source of record.
+
+### Session 2026-04-09b — Phase 4.5 wrap-up complete
+
+#### Resolutions
+
+- Phase 4.5 wrap-up finished on `feat/mcp_app_ui`: comprehensive example-bearing
+  TSDoc landed across the public universal-tools surface and the streamable-HTTP
+  handler registration seam.
+- Added a shared generated-tool descriptor helper so `tools/list`,
+  registration, and executor summaries all resolve titles the same way:
+  top-level `title` first, `annotations.title` fallback only in one place until
+  codegen catches up.
+- Generated-tool metadata now fails fast on missing title/description and on
+  missing/non-object `toolMcpFlatInputSchema`; tests cover both drift cases.
+- Final proof/evidence captured:
+  `pnpm type-check`, filtered SDK/server tests, `pnpm doc-gen`, contamination
+  greps, reviewer superset, upstream `basic-host` smoke, and full `pnpm check`
+  all passed on 2026-04-09.
+
+#### Surprises
+
+**S17: final gate failures can be test-fixture hygiene, not production logic.**
+The only failing step in the first aggregate `pnpm check` rerun was
+`@oaknational/curriculum-sdk#lint:fix`, caused by new failure-path tests using
+unused destructured placeholders and a type assertion. Replacing those with an
+`omitProperty()` helper and a runtime `Object.defineProperty()` override kept
+the tests honest and satisfied the no-unused-vars / no-type-assertion rules.
+
+### Session 2026-04-09c — handoff and consolidation
+
+#### Resolutions
+
+- Archived the completed Phase 4.5 companion plan and re-pointed the live
+  roadmap, umbrella, parent plan, active index, and session prompt to the
+  Phase 6 merge-handoff state.
+- Checked `~/.claude/plans/` for Oak-specific plan residue; the Phase 4.5
+  external note duplicated the canonical repo plan and did not contain new
+  grounding that needed extraction.
+- Ran `pnpm practice:fitness:informational` during closeout. It reported
+  existing background fitness pressure in directives/governance docs, but no
+  new blocking issue created by this session and no additional graduation work
+  that belonged inside this branch closeout.

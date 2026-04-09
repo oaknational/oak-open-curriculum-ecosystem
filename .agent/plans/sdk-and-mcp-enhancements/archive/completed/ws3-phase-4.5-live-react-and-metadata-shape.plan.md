@@ -1,6 +1,6 @@
 ---
 name: "Phase 4.5: Tool Metadata Shape Correction"
-overview: "Eliminate the tool metadata projection layer — produce SDK-ready shapes at the definition site."
+overview: "Consolidate the landed tool metadata shape refactor with TSDoc, live-doc sync, targeted proof, and final review before Phase 6a."
 specialist_reviewer: "architecture-reviewer-fred, type-reviewer, mcp-reviewer, test-reviewer, code-reviewer"
 isProject: false
 todos:
@@ -17,7 +17,7 @@ todos:
     content: "T3 (GREEN): Replace widening structural check with satisfies"
     status: done
   - id: t4-green-rename-inputschema
-    content: "T4 (GREEN): Rename flatZodSchema → inputSchema across all files"
+    content: "T4 (GREEN): Rename the legacy schema field to inputSchema across authored universal-tool surfaces"
     status: done
   - id: t5-green-no-input
     content: "T5 (GREEN): No-input tools use empty ZodRawShape (MCP spec compliant)"
@@ -26,42 +26,47 @@ todos:
     content: "T6 (GREEN): Delete projections.ts, inline at call site, relocate type guards, require title/description"
     status: done
   - id: t7-refactor-docs
-    content: "T7 (REFACTOR): TSDoc, docs cleanup, remaining flatZodSchema references"
-    status: pending
+    content: "T7 (REFACTOR): TSDoc, active-doc sync, and stale-comment cleanup"
+    status: done
   - id: t8-quality-gates
     content: "T8: Full quality gate chain"
-    status: pending
+    status: done
   - id: t9-adversarial-review
-    content: "T9: Final adversarial specialist reviews"
-    status: pending
+    content: "T9: Final consolidated reviewer pass for Phase 4.5 and Phase 6a"
+    status: done
 ---
 
 # Phase 4.5: Tool Metadata Shape Correction
 
 **Last Updated**: 2026-04-09
-**Status**: IN PROGRESS — T0-T6 complete, T7-T9 remaining
-**Scope**: Eliminate the tool metadata projection layer so definitions
-produce SDK-ready shapes directly. No widget build changes.
+**Status**: COMPLETE — Phase 4.5 wrap-up finished; Phase 6a pre-merge closure is next
+**Scope**: Finish the landed metadata-shape refactor with documentation,
+verification, and review closure. No widget build changes.
 **Branch**: `feat/mcp_app_ui` (existing)
 
 ---
 
 ## Context
 
-### Problem: Tool Metadata Undergoes Unnecessary Transformations
+The core shape correction already landed in `c4d37089`:
 
-Tool definitions are created in one shape (`flatZodSchema`, custom
-metadata fields) and then projected into another shape (`inputSchema`,
-SDK config) at registration time. The projection layer
-(`toRegistrationConfig`, `toAppToolRegistrationConfig` in
-`projections.ts`) exists only because the definition shape doesn't match
-the SDK's consumption shape.
+- the projection layer is deleted
+- `listUniversalTools()` now returns registration-ready metadata
+- `inputSchema` is present on every tool entry, with `{}` for no-input tools
+- generated tools fail fast if title or description is missing
 
-Additionally, no-input tools pass an empty Zod shape `{}` as
-`inputSchema`, which the SDK converts to `{ type: 'object', properties: {} }`.
-The wire output is identical whether `undefined` or `{}` is passed (the
-SDK normalises both), but `undefined` is semantically clearer at the
-registration site.
+The remaining work is now strictly pre-merge wrap-up:
+
+1. add comprehensive example-bearing TSDoc on the authored public exports
+2. sync active plans, prompts, READMEs, and ADRs to the landed contract
+3. run targeted proof before the final reviewer superset and aggregate gate
+
+### Non-Goals
+
+- generated human-friendly tool titles (codegen follow-up)
+- preview-only widget path fixes
+- misconception graph MCP surface
+- Phase 5 interactive user-search UI work
 
 ### What Was Dropped (and Why)
 
@@ -80,7 +85,7 @@ unanimously determined this was wrong:
 - Confirmed by temporarily disabling the plugin: Vite produces separate
   files that cannot load in the iframe delivery model
 
-### Reviewer Findings Incorporated
+### Reviewer Findings Already Incorporated
 
 | Source | Finding | How Addressed |
 |--------|---------|---------------|
@@ -89,14 +94,14 @@ unanimously determined this was wrong:
 | Fred F4 | `list-tools.ts` missing from file list | T4: included |
 | Fred F6 | `isAppToolEntry`/`AppToolListEntry` relocation | T6: move to types.ts |
 | Type T1 | `definitions.ts:134` widening assignment | T3: fix with `satisfies` |
-| Type T3 | `flatZodSchema` typed as `z.ZodRawShape` | T4: use `ZodRawShapeCompat` |
-| Type W3 | Generated tools `?? {}` fallback | T5: fix in list-tools.ts |
-| MCP 3 | `annotations?.title` dead fallback | T7: don't carry forward |
+| Type T3 | Legacy schema field typed as `z.ZodRawShape` | T4: replace with direct `inputSchema` contract |
+| Type W3 | Generated tools `?? {}` fallback | T7: fail fast on generated flat-input-schema drift |
+| MCP 3 | `annotations?.title` dead fallback | T7: centralise title resolution (top-level `title` first, `annotations.title` fallback in one helper until codegen catches up) |
 | MCP 1 | `inputSchema` wire output identical | T2 narrative adjusted |
 
 ---
 
-## T0: Prerequisite Dependency Update (COMPLETE)
+## Completed Foundation Work
 
 All outdated dependencies updated (except Zod and TypeScript):
 
@@ -108,7 +113,8 @@ All outdated dependencies updated (except Zod and TypeScript):
 - jsdom replaced with happy-dom (widget tests)
 - Removed `.js` suffixes from 60 files of `@modelcontextprotocol/sdk/*` imports
 - Migrated deprecated ext-apps `on*` callbacks to `addEventListener`
-- All 88 gates passing
+- Targeted proof chain, consolidated reviewer pass, upstream host smoke, and
+  the canonical aggregate `pnpm check` all passed on 2026-04-09
 
 ---
 
@@ -125,8 +131,9 @@ All outdated dependencies updated (except Zod and TypeScript):
    operation in the projection is `{ ...tool._meta }` to strip readonly.
    This belongs at the call site, not in a single-consumer abstraction.
 4. **Title and description are required** — `UniversalToolListEntry`
-   requires both. `list-tools.ts` fails fast if a generated tool lacks
-   either. No fallback chains.
+   requires both. The SDK owns one title-resolution rule for generated
+   tools: top-level `title` first, then `annotations.title` until the
+   codegen template catches up. Missing metadata still fails fast.
 
 **Non-Goals** (YAGNI):
 
@@ -137,127 +144,90 @@ All outdated dependencies updated (except Zod and TypeScript):
 
 ---
 
-## WS1 — Test Specification (RED)
-
-### T1: satisfies Tests for SDK Config Compatibility
-
-**File**: `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.unit.test.ts` (new or existing)
-
-**Tests**:
-
-- `satisfies` assertion: each aggregated tool definition (after rename)
-  satisfies the subset of `registerTool` config fields
-- `satisfies` assertion: app tool definitions' `_meta` (after spread)
-  satisfies `McpUiAppToolConfig`
-- Verify `securitySchemes` is NOT expected in the SDK config type
-
-### T2: No-Input Tools Have inputSchema Undefined
-
-**File**: `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-curriculum-model/definition.unit.test.ts`
-
-**Tests**:
-
-- Assert `inputSchema` property is `undefined` (not `{}`) on no-input
-  tool definitions
-- Note: on the wire both produce `{ type: 'object', properties: {} }` —
-  this test proves author-facing clarity, not protocol difference
-
----
-
-## WS2 — Implementation (GREEN)
-
-### T3: Fix Widening Structural Check
-
-**File**: `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts`
-
-**Change**: Replace the widening assignment at line 134:
-```typescript
-// Before (widens, loses literal types):
-const structuralCheck: Record<string, AggregatedToolDefShape> = AGGREGATED_TOOL_DEFS;
-void structuralCheck;
-
-// After (preserves literals, proves structure):
-// Apply satisfies on the AGGREGATED_TOOL_DEFS declaration itself
-```
-
-### T4: Rename flatZodSchema → inputSchema
-
-**Files** (all must change in the same pass):
-
-- All aggregated tool `definition.ts` files (search, fetch, browse,
-  get-curriculum-model, get-thread-progressions, get-prerequisite-graph)
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts` —
-  rename field, change type to `ZodRawShapeCompat | undefined`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/list-tools.ts` —
-  rename in generated tool mapping
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/aggregated-flat-zod-schema.integration.test.ts` —
-  update all `flatZodSchema` references
-- Any other test files referencing `flatZodSchema`
-
-### T5: No-Input Tools Omit inputSchema
-
-**Files**:
-
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-curriculum-model/definition.ts` —
-  remove `inputSchema: {}`, set to `undefined` or omit
-- Same for `aggregated-prerequisite-graph` and `aggregated-thread-progressions`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/list-tools.ts` —
-  change `?? {}` fallback to `?? undefined` for generated tools
-
-### T6: Delete Projection Layer, Inline Spread, Relocate Type Guards
-
-**Files**:
-
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/projections.ts` — DELETE
-- `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts` —
-  absorb `AppToolListEntry` and `isAppToolEntry` from projections
-- `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts` — pass
-  definitions directly to `registerTool`/`registerAppTool` with inline
-  `{ ...def._meta }` spread for app tools
-- Verify `securitySchemes` is NOT threaded through `registerTool` —
-  confirm auth checker's existing direct-lookup pattern is preserved
-- Remove `annotations?.title` dead fallback (the field doesn't exist
-  on `ToolAnnotations`)
-
-**Deterministic Validation**:
-
-```bash
-pnpm type-check
-pnpm test --filter @oaknational/curriculum-sdk
-pnpm test --filter @oaknational/oak-curriculum-mcp-streamable-http
-```
-
----
-
 ## WS3 — Documentation and Polish (REFACTOR)
 
 ### T7: TSDoc and Documentation
 
-- TSDoc on all changed interfaces
-- Remove references to `flatZodSchema` from docs and comments
-- Note in deployment-architecture.md that `vite-plugin-singlefile` is
-  the canonical MCP Apps pattern (not a workaround)
+- Add example-bearing TSDoc on the authored public exports touched by
+  Phase 4.5:
+  - `AGGREGATED_TOOL_DEFS`
+  - `GeneratedToolRegistry`
+  - `UniversalToolListEntry`
+  - `AppToolListEntry`
+  - `generatedToolRegistry`
+  - `listUniversalTools`
+  - `isAppToolEntry`
+  - `createUniversalToolExecutor`
+  - `UniversalToolExecutorDependencies`
+  - `RegisterHandlersOptions`
+  - `registerHandlers`
+- Remove stale active-path prose that still describes omitted `inputSchema`
+  or pre-removal projection behaviour
+- Sync the live planning/docs stack:
+  - `.agent/prompts/session-continuation.prompt.md`
+  - `.agent/plans/sdk-and-mcp-enhancements/active/README.md`
+  - `.agent/plans/sdk-and-mcp-enhancements/current/README.md`
+  - `.agent/plans/sdk-and-mcp-enhancements/roadmap.md`
+  - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
+  - `apps/oak-curriculum-mcp-streamable-http/README.md`
+  - `apps/oak-curriculum-mcp-streamable-http/docs/deployment-architecture.md`
+  - `docs/architecture/architectural-decisions/055-zod-version-boundaries.md`
+  - `docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md`
 
 ---
 
 ## WS4 — Quality Gates (T8)
 
+Run targeted proof before the aggregate gate:
+
 ```bash
-pnpm check   # Full 88/88 gate suite
+pnpm type-check
+pnpm test --filter @oaknational/curriculum-sdk
+pnpm test --filter @oaknational/oak-curriculum-mcp-streamable-http
+pnpm doc-gen
+rg -n --hidden \
+  'window\.openai|openai/|text/html\+skybridge|__mcpPreview|chatgpt-emulation|oak-json-viewer|undefined\?\.tool(Output|Input)' \
+  apps/oak-curriculum-mcp-streamable-http \
+  packages/sdks/oak-curriculum-sdk \
+  packages/sdks/oak-sdk-codegen
+rg -n 'inputSchema: undefined|No-input tools set|omit inputSchema|flatZodSchema' \
+  .agent/prompts/session-continuation.prompt.md \
+  .agent/plans/sdk-and-mcp-enhancements/active/README.md \
+  .agent/plans/sdk-and-mcp-enhancements/current/README.md \
+  .agent/plans/sdk-and-mcp-enhancements/roadmap.md \
+  .agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md \
+  packages/sdks/oak-curriculum-sdk/src \
+  apps/oak-curriculum-mcp-streamable-http/src \
+  apps/oak-curriculum-mcp-streamable-http/README.md \
+  apps/oak-curriculum-mcp-streamable-http/docs/deployment-architecture.md \
+  docs/architecture/architectural-decisions/055-zod-version-boundaries.md \
+  docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md
+```
+
+Then run the final aggregate readiness gate:
+
+```bash
+pnpm check
 ```
 
 ---
 
 ## WS5 — Adversarial Review (T9)
 
-| Reviewer | Focus |
-|----------|-------|
-| `architecture-reviewer-fred` | Projection removal, boundary discipline |
-| `type-reviewer` | satisfies patterns, ZodRawShapeCompat flow |
-| `mcp-reviewer` | registerTool/registerAppTool compliance |
-| `test-reviewer` | Test quality |
-| `code-reviewer` | Gateway review |
+Run one consolidated reviewer pass that satisfies both Phase 4.5 and the
+pre-merge Phase 6a reviewer requirement:
+
+- `mcp-reviewer`
+- `code-reviewer`
+- `test-reviewer`
+- `type-reviewer`
+- `config-reviewer`
+- `security-reviewer`
+- `docs-adr-reviewer`
+- `architecture-reviewer-barney`
+- `architecture-reviewer-betty`
+- `architecture-reviewer-fred`
+- `architecture-reviewer-wilma`
 
 ---
 
@@ -291,8 +261,10 @@ Before beginning work and at the start of each phase:
 **Related Plans**:
 
 - `../archive/completed/ws3-phase-4-brand-banner.plan.md` — Phase 4 (COMPLETE)
-- `ws3-phase-5-interactive-user-search-view.plan.md` — Phase 5 depends
-  on SDK-ready tool definitions from this plan
+- `ws3-phase-6-docs-gates-review-commit.plan.md` — immediate next pre-merge
+  phase after this wrap-up lands
+- `ws3-phase-5-interactive-user-search-view.plan.md` — Phase 5 remains
+  post-merge and depends on the stable live React foundation from this plan
 - `../archive/completed/widget-pipeline-idiomatic-alignment.plan.md` —
   Reviewer findings (COMPLETE)
 
@@ -300,6 +272,6 @@ Before beginning work and at the start of each phase:
 
 ## Consolidation
 
-After all work is complete and quality gates pass, run `/jc-consolidate-docs`
+After all work is complete and quality gates pass, run `jc-consolidate-docs`
 to graduate settled content, extract reusable patterns, rotate the napkin,
 manage fitness, and update the practice exchange.

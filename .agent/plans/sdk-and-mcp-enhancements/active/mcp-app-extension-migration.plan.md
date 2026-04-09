@@ -30,7 +30,7 @@ todos:
 # MCP App Extension Migration
 
 **Status**: ACTIVE  
-**Last Updated**: 2026-04-04
+**Last Updated**: 2026-04-09
 **Scope**: Complete Oak’s MCP Apps migration and finish the fresh React MCP App
 rebuild.
 
@@ -121,11 +121,14 @@ This child plan covers:
 1. deletion of the dead widget framework
 2. fresh React MCP App infrastructure
 3. brand banner (COMPLETE)
-4. live React app foundation + tool metadata shape (Phase 4.5 — ACTIVE)
+4. live React app foundation + tool metadata shape (Phase 4.5 — COMPLETE)
 5. user-search UI as a first-class user-first tool in the aggregated tool
    surface
 6. app-only helper-tool visibility and runtime contract work needed to support
    the new UI properly
+
+Immediate next step is PR #76 merge from the completed Phase 6a merge-handoff
+state. Phase 5 remains post-merge.
 
 `ws4-search-ui` remains a distinct umbrella todo for milestone tracking, but
 its execution lives inside the WS3 child plan.
@@ -175,8 +178,8 @@ WS3 child plan: fresh React MCP App rebuild ▶ active
   OakUrl codegen fix                         ✓ complete
   Contrast validation prerequisite           ✓ complete
   Phase 4: brand banner                      ✓ complete
-  Phase 4.5: live React app + metadata shape ▶ active (pre-merge)
-  Phase 6a: pre-merge docs + gates           ⏳ pending
+  Phase 4.5: live React app + metadata shape ✓ complete (archived)
+  Phase 6a: pre-merge docs + gates           ✓ complete (merge handoff ready)
   --- PR #76 merge ---
   Phase 5: user-search view                  ⏳ pending (post-merge)
   Phase 6b: post-Phase 5 docs + gates        ⏳ pending

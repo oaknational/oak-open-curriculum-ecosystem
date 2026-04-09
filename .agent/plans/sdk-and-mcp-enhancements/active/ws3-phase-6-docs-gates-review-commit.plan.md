@@ -6,22 +6,30 @@ isProject: false
 todos:
   - id: docs-sync
     content: "Rewrite and align active normative docs to the fresh MCP App architecture."
-    status: pending
+    status: done
   - id: gates
     content: "Run canonical readiness and full-scrub gates."
-    status: pending
+    status: done
   - id: reviewer-pass
     content: "Run required reviewer set and address findings."
-    status: pending
+    status: done
   - id: closure-checks
     content: "Verify WS3/WS4 acceptance plus C8 closure gate status."
-    status: pending
+    status: done
+  - id: handoff-commit
+    content: "Record merge-handoff state in the closeout commit and push PR #76 readiness evidence."
+    status: done
 ---
 
 # WS3 Phase 6: Docs, Gates, Review, Commit
 
-**Status**: PENDING
-**Last Updated**: 2026-03-30
+**Status**: ACTIVE MERGE HANDOFF — pre-merge closure is complete and this plan stays live until the closeout commit is pushed and PR #76 is merged
+**Last Updated**: 2026-04-09
+
+Pre-merge docs, gates, reviewer remediation, and closure checks are complete.
+Keep this plan active as the merge-handoff reference while the latest closeout
+commit is pushed and until PR #76 lands; after merge it can be archived or
+reused for the post-Phase 5 closure pass if needed.
 
 ## Required Inputs
 
@@ -31,7 +39,9 @@ todos:
 3. `mcp-app-extension-migration.plan.md` — umbrella exit criteria
 4. `../archive/completed/auth-safety-correction.plan.md` — C8 closure gate status
 5. `../archive/completed/auth-boundary-type-safety.plan.md` — C8 closure gate status
-6. Phase 0 evidence table — verify all RED/GREEN contracts are satisfied
+6. `../archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md` —
+   completed Phase 4.5 provenance and acceptance evidence
+7. Phase 0 evidence table — verify all RED/GREEN contracts are satisfied
 
 ## Tasks
 
@@ -45,6 +55,7 @@ todos:
    - C8 auth plans in `archive/completed/` are complete, or explicitly superseded by
      accepted architecture
    - Phase 0 RED/GREEN evidence table is fully populated with GREEN evidence
+6. Commit and push the branch so PR #76 has a single merge-handoff state
 
 ## Acceptance Evidence
 
@@ -56,3 +67,5 @@ todos:
    rules)
 5. Closure criteria for WS3/WS4 and C8 gates are satisfied
 6. Phase 0 evidence table shows GREEN for all 6 phases
+7. The branch is committed and pushed with a single merge-handoff state for
+   PR #76

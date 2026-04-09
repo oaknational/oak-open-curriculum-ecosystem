@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-07
+last_updated: 2026-04-09
 ---
 
 # Session Continuation
@@ -40,31 +40,42 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Phase 4.5 tool metadata shape + PR #76 merge readiness
+- **Workstream**: PR #76 merge handoff + Phase 5 queue
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-4.5-live-react-and-metadata-shape.plan.md`
-    (**ACTIVE** — eliminate projection layer, SDK-ready tool shapes)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-6-docs-gates-review-commit.plan.md`
-    (**PENDING** — pre-merge docs/gates)
+    (**ACTIVE** — merge-handoff reference; pre-merge closure is complete)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
+    (**QUEUED** — post-merge interactive user-search UI)
   - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md`
     (post-merge)
-- **Current state**: Branch `feat/mcp_app_ui` with uncommitted changes.
-  All quality gates passing. PR #76. Phase 4.5 T0-T6 complete:
+- **Current state**: Branch `feat/mcp_app_ui` is in the Phase 6 merge-handoff
+  state. Phase 4.5 is archived as complete, Phase 6a pre-merge closure evidence
+  is complete, and the branch is carrying the final closeout for PR #76.
+  Validation evidence captured this session:
+  - `pnpm type-check`
+  - filtered curriculum SDK and streamable-HTTP test suites
+  - `pnpm doc-gen`
+  - contamination and stale-prose grep sweeps
+  - consolidated reviewer superset
+  - upstream `basic-host` smoke against the live widget tools
+  - canonical `pnpm check`
+  PR #76 status:
   - T0: All deps updated (MCP SDK 1.29, ext-apps 1.5, Vite 8,
     happy-dom, .js suffix removal, deprecated API migration)
   - T1-T2: RED tests written (inputSchema rename, empty shape assertions)
   - T3: `satisfies` replaces widening structural check
-  - T4: `flatZodSchema` → `inputSchema` across ~26 files
+  - T4: legacy schema-field rename completed across authored universal-tool surfaces
   - T5: No-input tools use `{}` (empty ZodRawShape, MCP spec compliant)
   - T6: `projections.ts` deleted, registration inlined in `handlers.ts`,
     `isAppToolEntry` relocated to `type-guards.ts`, `AppToolListEntry`
     to `types.ts`, title/description made required with fail-fast
-  - T7-T9 remaining: TSDoc cleanup, final review, final gates
+  - Phase 4.5 archived complete with T7-T9 closure evidence
+  - Phase 6a merge handoff complete in-repo; next step is PR merge
+  - Live tool inventory: 24 generated + 10 aggregated = 34 total tools
   - Potentially flaky E2E test noted (see napkin)
-- **Current objective**: Complete Phase 4.5 (T7-T9), then Phase 6a
-  pre-merge docs/gates, then commit and merge PR #76.
+- **Current objective**: Merge PR #76, then start Phase 5 on a fresh branch.
 - **Hard invariants / non-goals**:
-  - No fallbacks, no invented optionality
+  - No compatibility shims or invented optionality on the tool-shape contract
   - `inputSchema` always present (empty `{}` for no-input, per MCP spec)
   - Title and description required on `UniversalToolListEntry`
   - Dark theme page bg is green-700 (#008237), NOT ink-950
@@ -72,26 +83,28 @@ git log --oneline --decorate -10
   - CSS media query governs dark mode, not JS
   - Widget URI uses `ui://` scheme per spec
   - `readBuiltWidgetHtml` is async (`node:fs/promises`)
-- **Resolved this session**:
-  - Projection layer eliminated (projections.ts deleted)
-  - `as const satisfies` pattern replaces widening assignment
-  - MCP spec checked: `inputSchema` MUST be valid JSON Schema object
-  - SDK handler signature: 2-arg when inputSchema truthy, 1-arg when falsy
-  - `securitySchemes` confirmed: auth checker uses direct lookup
-  - `annotations?.title` dead fallback removed (title required)
-  - Generated tool titles — still deferred (codegen template change)
+- **Recent surprises / corrections**:
+  - Active docs drifted behind the landed contract after `c4d37089`; prompt,
+    roadmap, umbrella, README, and ADR surfaces all needed a coordinated sync
+    before merge readiness was truthful again.
+  - The only failing step in the first aggregate rerun was
+    `@oaknational/curriculum-sdk#lint:fix`; it was test-fixture hygiene, not a
+    product regression.
+  - Generated tool titles still need the codegen template follow-up; for now
+    top-level `title` and `annotations.title` are centralised in one SDK helper.
 - **Open questions / low-confidence areas**:
   - Potentially flaky E2E test: `get-curriculum-model.e2e.test.ts`
     (passed in isolation, failed once during `pnpm check`)
-- **Next safe step**: T7 (TSDoc/docs), T8 (final gates), T9 (final
-  review). Then Phase 6a pre-merge docs/gates. Then commit/merge #76.
-- **Deep consolidation status**: completed this handoff — distilled.md
-  updated (addEventListener migration), napkin at 217 lines (no rotation),
-  no patterns met barrier, graduation candidates deferred to T7 TSDoc work
+- **Next safe step**: Merge PR #76. After merge, start
+  `ws3-phase-5-interactive-user-search-view.plan.md` on a fresh branch.
+- **Deep consolidation status**: completed this handoff — Phase 4.5 companion
+  archived, live indexes/prompts re-pointed to the Phase 6 merge handoff,
+  practice fitness checked informationally, and no additional pattern or
+  distilled graduation change was warranted.
 
-## Active Workstreams (2026-04-08)
+## Active Workstreams (2026-04-09)
 
-### 1. WS3 MCP App Rebuild — P3 MERGE READINESS
+### 1. WS3 MCP App Rebuild — P3 MERGE HANDOFF
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 **Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
@@ -99,9 +112,9 @@ git log --oneline --decorate -10
 **Completed phases**: Phase 0-4 (infrastructure, scaffold, contracts, brand
 banner). P0-P2 branding/SDK work on `feat/mcp_app_ui` branch.
 
-**Branch status**: 5 commits, all reviewed (14 specialist passes),
-`pnpm check` passing. PR #76 updated. Ready for pre-merge review
-and merge to `main`.
+**Branch status**: Phase 4.5 wrap-up is archived complete on
+`feat/mcp_app_ui`. Phase 6a pre-merge closure is done, all readiness evidence
+is green, and PR #76 is ready for merge once this closeout commit is pushed.
 
 **Next after merge**: Phase 5 (interactive user search view) on a new branch.
 

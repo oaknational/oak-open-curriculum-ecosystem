@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
+import { z } from 'zod';
 import { listUniversalTools } from './universal-tools/list-tools.js';
 import { isUniversalToolName } from './universal-tools/type-guards.js';
 import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
@@ -55,6 +56,14 @@ const sampleDescriptor: ToolRegistryDescriptor = {
   },
   securitySchemes: [],
   requiresDomainContext: false,
+  toolMcpFlatInputSchema: z.object({
+    params: z.object({
+      path: z.object({
+        keyStage: z.string(),
+        subject: z.string(),
+      }),
+    }),
+  }),
 };
 
 function createFakeRegistry(): GeneratedToolRegistry {

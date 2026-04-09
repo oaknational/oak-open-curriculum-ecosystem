@@ -30,6 +30,7 @@ import { handleUserSearchExecution } from '../aggregated-user-search/index.js';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
+import { requireGeneratedToolMetadata } from './descriptor-utils.js';
 
 /**
  * Maps a generated tool execution result to an MCP CallToolResult.
@@ -54,7 +55,7 @@ function mapExecutionResult(
   }
 
   const descriptor = deps.generatedTools.getToolFromToolName(toolName);
-  const title = descriptor.annotations?.title ?? toolName;
+  const { title } = requireGeneratedToolMetadata(toolName, descriptor);
 
   return formatToolResponse({
     summary: `${title}: ${String(result.value.status)}`,

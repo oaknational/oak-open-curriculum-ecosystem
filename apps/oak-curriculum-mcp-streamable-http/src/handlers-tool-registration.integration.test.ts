@@ -2,8 +2,8 @@
  * Integration tests for tool registration.
  *
  * These tests prove that:
- * 1. Every universal tool is registered with `server.registerTool()` or
- *    `registerAppTool()` depending on whether it carries `_meta.ui`.
+ * 1. Every universal tool is registered with the server, and UI tools show
+ *    the ext-apps registration normalisation effect.
  * 2. Registration configs use the tool's title, description, inputSchema,
  *    annotations, and _meta directly — no projection functions.
  * 3. UI-bearing tools have `_meta.ui.resourceUri` in their registration config.
@@ -87,7 +87,7 @@ describe('Tool Registration (Integration)', () => {
     }
   });
 
-  it('UI tools are registered with _meta.ui.resourceUri', () => {
+  it('UI tools are registered with title, description, inputSchema, and _meta.ui.resourceUri', () => {
     const { registerToolSpy } = registerAndCapture();
     const tools = listUniversalTools(generatedToolRegistry);
     const appTools = tools.filter(isAppToolEntry);
@@ -98,7 +98,35 @@ describe('Tool Registration (Integration)', () => {
       const config = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
       expect(config).toHaveProperty('title', tool.title);
       expect(config).toHaveProperty('description', tool.description);
+      expect(config).toHaveProperty('inputSchema', tool.inputSchema);
       expect(config).toHaveProperty('_meta.ui.resourceUri', tool._meta.ui.resourceUri);
     }
+  });
+
+  it('UI tools include ext-apps resource-uri normalisation on the server-facing config', () => {
+    const { registerToolSpy } = registerAndCapture();
+    const appTools = listUniversalTools(generatedToolRegistry).filter(isAppToolEntry);
+
+    expect(appTools.length).toBeGreaterThan(0);
+
+    for (const tool of appTools) {
+      const config = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
+      expect(config).toHaveProperty('_meta.ui.resourceUri', tool._meta.ui.resourceUri);
+      expect(config).toHaveProperty('_meta.ui/resourceUri', tool._meta.ui.resourceUri);
+    }
+  });
+
+  it('get-curriculum-model keeps an empty input schema on app-tool registration', () => {
+    const { registerToolSpy } = registerAndCapture();
+    const modelTool = listUniversalTools(generatedToolRegistry)
+      .filter(isAppToolEntry)
+      .find((tool) => tool.name === 'get-curriculum-model');
+
+    expect(modelTool).toBeDefined();
+
+    const config = findRegisteredConfig(registerToolSpy.mock.calls, 'get-curriculum-model');
+    expect(config).toHaveProperty('inputSchema', modelTool?.inputSchema);
+    expect(config).toHaveProperty('inputSchema', {});
+    expect(modelTool?.inputSchema).toEqual({});
   });
 });

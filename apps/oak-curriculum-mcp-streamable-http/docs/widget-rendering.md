@@ -24,7 +24,7 @@ The replacement architecture is:
 
 ## Explicit Non-Goals
 
-- No `window.openai`
+- No legacy host globals
 - No legacy metadata aliases
 - No compatibility shims or preview wrappers
 - No direct HTTP fetch from the iframe unless explicitly re-planned

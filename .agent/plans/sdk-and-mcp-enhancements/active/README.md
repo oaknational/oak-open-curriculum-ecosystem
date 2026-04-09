@@ -11,12 +11,9 @@ Executable plans that are in progress now.
 
 ## Pre-Merge (must complete before PR #76 merges)
 
-- [ws3-phase-4.5-live-react-and-metadata-shape.plan.md](ws3-phase-4.5-live-react-and-metadata-shape.plan.md) —
-  **ACTIVE**. Eliminate tool metadata projection layer, produce SDK-ready
-  shapes at definition site, no-input tools omit inputSchema. Widget
-  build unchanged (vite-plugin-singlefile is the canonical MCP Apps pattern).
 - [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
-  **PENDING**. Pre-merge docs, gates, reviewers, closure checks.
+  **ACTIVE**. Pre-merge docs, gates, reviewer closure, and push are complete;
+  keep this as the merge-handoff reference for PR #76.
 
 ## Post-Merge
 
@@ -26,12 +23,13 @@ Executable plans that are in progress now.
 - [misconception-graph-mcp-surface.plan.md](misconception-graph-mcp-surface.plan.md) —
   **PENDING**. Expose misconception graph as MCP resource + tool.
 
-## Completed This Branch (archived 2026-04-08)
+## Completed This Branch (latest archive 2026-04-09)
 
 All archived to `archive/completed/`:
 
 - Phases 0–4, server-info branding, off-the-shelf SDK adoption,
   MCP Apps SDK audit, widget pipeline idiomatic alignment.
+- Phase 4.5 live React + metadata shape wrap-up archived on 2026-04-09.
 
 ## Navigation
 

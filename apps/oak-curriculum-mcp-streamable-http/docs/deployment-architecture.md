@@ -1,13 +1,30 @@
 # Deployment Architecture
 
-This document describes how the Oak Curriculum MCP Streamable HTTP server is structured for deployment following the canonical Vercel Express pattern.
+This document describes the current deployment/runtime structure for the Oak
+Curriculum MCP Streamable HTTP server. It focuses on the repo-owned contract:
+what we build, what starts at runtime, and which files Vercel/local execution
+rely on today.
 
 ## Architecture Overview
 
-The application uses a **single entry point** (`src/index.ts`) that:
+The deployed runtime has three important artefacts and one shared startup path:
 
-1. **Exports Express app instance** - Works with Vercel serverless automatically
-2. **Conditionally starts server** - Calls `app.listen()` when not on Vercel (local dev)
+1. `dist/index.js` — Node entry point that loads runtime config and
+   observability, then calls `startConfiguredHttpServer(...)`
+2. `dist/application.js` — importable async Express app factory used by the
+   bootstrap/runtime code
+3. `dist/oak-banner.html` — self-contained MCP App widget built by Vite
+
+`src/index.ts` does **not** export a special Vercel-only Express default export
+or branch on `process.env.VERCEL`. Both local and deployed startup go through
+the same repo code:
+
+1. load runtime config
+2. create HTTP observability
+3. bootstrap the Express app via `bootstrapApp(...)`
+4. create the HTTP server via `http.createServer(app)`
+5. listen on the resolved port with explicit startup/shutdown handling from
+   `src/server-runtime.ts`
 
 ## Build Output Structure
 
@@ -15,9 +32,9 @@ After running `pnpm build`, the `dist/` directory contains:
 
 ```text
 dist/
-├── index.js              # Server entry point (exports Express app instance)
+├── index.js              # Server entry point (starts configured runtime)
 ├── index.js.map
-├── application.js        # Importable factory (createApp)
+├── application.js        # Importable async Express app factory
 ├── application.js.map
 └── oak-banner.html       # MCP App widget (built by Vite)
 ```
@@ -27,15 +44,18 @@ self-contained bundle with no separate chunk files.
 
 ## Vercel Deployment
 
-### How It Works
+### Repo-Owned Configuration
 
-Vercel's Express framework support automatically:
+This repository currently provides:
 
-1. Reads `vercel.json` and detects `"framework": "express"`
-2. Looks for entry point at canonical location: `src/index.{js,ts}` → `dist/index.js`
-3. Imports the **default export** (the Express app instance)
-4. Wraps the Express app in serverless infrastructure
-5. Routes all requests to the Express app
+1. `vercel.json` with `"framework": "express"`
+2. `package.json` with `"main": "dist/index.js"`
+3. a build pipeline that emits both the server bundle and widget HTML
+4. no repo-local rewrite list or separate Vercel-only adapter file
+
+This means the deployment contract in-repo is intentionally small: build the
+Node bundle at `dist/index.js`, point the package main field at it, and let
+Vercel's Express framework integration handle the platform-side wiring.
 
 ### Key Files
 
@@ -44,8 +64,7 @@ Vercel's Express framework support automatically:
 ```json
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "express",
-  "rewrites": []
+  "framework": "express"
 }
 ```
 
@@ -53,40 +72,51 @@ Vercel's Express framework support automatically:
 
 ```json
 {
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts"
+  "main": "dist/index.js"
 }
 ```
 
-**src/index.ts** (Simplified)
+**src/index.ts** (simplified)
 
 ```typescript
 import http from 'node:http';
 import { createApp } from './application.js';
 import { bootstrapApp } from './bootstrap-app.js';
+import { createHttpObservability } from './observability/http-observability.js';
+import { loadRuntimeConfig } from './runtime-config.js';
+import { startConfiguredHttpServer } from './server-runtime.js';
 
-const app = await bootstrapApp({
-  startApp: () => createApp({ runtimeConfig: config }),
-  logger: bootstrapLog,
+const config = loadRuntimeConfig(...);
+const observability = createHttpObservability(config);
+
+await startConfiguredHttpServer({
+  runtimeConfig: config,
+  observability,
+  createApp,
+  bootstrapApp,
+  createServer: (app) => http.createServer(app),
+  onSignal: (signal, handler) => process.once(signal, handler),
   exit: (code) => process.exit(code),
 });
-
-const port = config.env.PORT ? Number(config.env.PORT) : 3333;
-const server = http.createServer(app);
-server.listen(port);
 ```
 
-Note: `createApp` is **async** (returns `Promise<ExpressWithAppId>`) because it fetches
-OAuth upstream metadata at startup. `bootstrapApp` wraps this in structured error handling
-with log-and-exit on failure. The entry point always starts a local HTTP server; Vercel
-deployment uses the framework adapter which imports the built module directly.
+`createApp` is async because startup includes OAuth metadata work and MCP
+factory/readiness setup. `bootstrapApp` handles startup failures consistently,
+and `startConfiguredHttpServer(...)` centralises port resolution, server error
+handling, readiness logs, and signal handling.
 
-### What Vercel Does
+### What This Repo Guarantees
 
-- **Sets VERCEL environment variable** - Detected by the app to skip `app.listen()`
-- **Serverless wrapping** - Each request may hit a new/recycled function instance
-- **Environment variables** - Provided via Vercel project settings
-- **Automatic scaling** - Scales based on traffic
+This repo guarantees:
+
+1. the built server entry point is `dist/index.js`
+2. local and deployed execution use the same startup code path
+3. widget HTML is emitted to `dist/oak-banner.html` and validated at startup
+4. the MCP runtime remains per-request at the transport layer (see
+   `src/application.ts` / ADR-112)
+
+Platform-specific Express framework behaviour beyond those points is owned by
+Vercel, not reimplemented in this repository.
 
 ### Required Environment Variables
 
@@ -94,6 +124,8 @@ Set in Vercel Project Settings → Environment Variables:
 
 - `CLERK_PUBLISHABLE_KEY` - OAuth authentication (Clerk)
 - `CLERK_SECRET_KEY` - OAuth authentication (Clerk)
+- `ELASTICSEARCH_URL` - Elasticsearch cluster URL for search-backed tools
+- `ELASTICSEARCH_API_KEY` - Elasticsearch API key for search-backed tools
 - `OAK_API_KEY` - Oak Curriculum API access
 
 See [vercel-environment-config.md](./vercel-environment-config.md) for complete details.
@@ -102,17 +134,13 @@ See [vercel-environment-config.md](./vercel-environment-config.md) for complete 
 
 ### How It Works
 
-For local development:
+For local development and local production-bundle verification, we use the same
+runtime path with different entry commands:
 
-1. Run `pnpm dev` which executes `tsx src/index.ts`
-2. The module-level code detects `!process.env.VERCEL` and calls `app.listen()`
-3. Server starts on port from `PORT` env var (default 3333)
-
-Or for testing the built production bundle:
-
-1. Build the project: `pnpm build`
-2. Run `pnpm start` which executes `node dist/index.js`
-3. Same conditional listening logic applies
+1. `pnpm dev` executes `tsx src/index.ts`
+2. `pnpm start` executes `node dist/index.js` after `pnpm build`
+3. both paths call `startConfiguredHttpServer(...)`
+4. the server listens on `PORT` when set, otherwise `3333`
 
 **package.json**
 
@@ -133,6 +161,8 @@ For local development, create a `.env` file in the repo root:
 OAK_API_KEY=your_oak_api_key_here
 CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key_here
 CLERK_SECRET_KEY=your_clerk_secret_key_here
+ELASTICSEARCH_URL=https://your-elasticsearch-cluster.example.com
+ELASTICSEARCH_API_KEY=your_elasticsearch_api_key_here
 
 # Optional (for local dev only)
 DANGEROUSLY_DISABLE_AUTH=true
@@ -148,6 +178,8 @@ LOG_LEVEL=debug
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
+  // Two entries: index (runs server) + application (importable factory).
+  // Matches the current split between runtime bootstrap and app creation.
   entry: { index: 'src/index.ts', application: 'src/application.ts' },
   format: ['esm'],
   dts: false,
@@ -155,7 +187,10 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   target: 'es2022',
+  minify: false,
   bundle: true,
+  tsconfig: './tsconfig.build.json',
+  ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],
   treeshake: true,
   outDir: 'dist',
   external: [/node_modules/],
@@ -164,7 +199,7 @@ export default defineConfig({
 
 This configuration builds two entry points as self-contained ESM bundles:
 
-- `src/index.ts` → `dist/index.js` (server entry, exports Express app)
+- `src/index.ts` → `dist/index.js` (server entry, starts configured runtime)
 - `src/application.ts` → `dist/application.js` (importable factory)
 
 ## Build Ordering: tsup Then Vite
@@ -181,6 +216,11 @@ The `build` script runs two tools sequentially into the same `dist/` directory:
 2. **Vite runs second** — builds the widget HTML into `dist/oak-banner.html`.
    The `emptyOutDir: false` option in `widget/vite.config.ts` preserves the
    tsup output already in `dist/`.
+
+The widget build intentionally uses `vite-plugin-singlefile`. This is the
+canonical MCP Apps pattern: hosts load the HTML into a sandboxed iframe with
+no backing asset server, so the React app's JavaScript and CSS must be inlined
+into the final HTML file.
 
 The `&&` operator enforces sequential execution: if tsup fails, Vite never
 runs. This is critical because:
@@ -369,77 +409,54 @@ See **[middleware-chain.md](./middleware-chain.md)**.
 
 ## Testing the Build
 
-### Test Entry Point
+### Test Importable App Factory
 
-The built artifact can be imported and tested:
+The importable seam is `dist/application.js`, not `dist/index.js`:
 
 ```bash
-node -e "import('./dist/index.js').then(m => console.log('✅ Module loads:', typeof m.default, typeof m.createApp))"
+pnpm build
+node -e "import('./dist/application.js').then(m => console.log('✅ Module loads:', typeof m.createApp))"
 ```
 
-Should output: `✅ Module loads: object function` (default is the app instance, createApp is the factory)
+Should output: `✅ Module loads: function`
+
+`dist/index.js` is the runtime entry point and boots the server immediately; it
+is not an importable app-factory verification seam.
 
 ### Test Server Startup
 
 ```bash
 pnpm build
 pnpm start
-# Server should start on port 3333
+# Server should start on port 3333 (or PORT if set)
 ```
 
 ## Common Issues & Solutions
 
-### Issue: Module not found error for `dist/index.js`
+## Operational Notes
 
-**Symptom**: `Error: Cannot find module '/path/to/dist/index.js'`
-
-**Cause**: The `package.json` `main` field pointed to `dist/index.js` but tsup outputs to `dist/index.js`
-
-**Solution**: ✅ Fixed - `main` now correctly points to `dist/index.js`
-
-### Issue: Server builds but doesn't respond on Vercel (Historical)
-
-**Symptom**: Vercel deployment succeeds but requests timeout or get no response
-
-**Cause**: Build configuration was incorrect and didn't follow canonical Vercel Express pattern
-
-**Solution**: ✅ Fixed - Migrated to canonical pattern with single entry point at `src/index.ts`
-
-### Issue: Async initialization causes timeouts
-
-**Symptom**: First request times out, subsequent requests work
-
-**Cause**: MCP server initialization blocking first request
-
-**Solution**: ✅ Already implemented - Middleware awaits initialization Promise, which resolves once and is cached for subsequent requests
-
-## Canonical Express on Vercel Pattern
-
-According to [Vercel's Express documentation](https://vercel.com/docs/frameworks/backend/express):
-
-✅ **DO:**
-
-- Export the Express app instance as default export
-- Use canonical entry point location (`src/index.{js,ts}`)
-- Conditionally call `app.listen()` only when not on Vercel
-- Use `"framework": "express"` in `vercel.json`
-- Handle async initialization in middleware
-
-❌ **DON'T:**
-
-- Call `app.listen()` in the Vercel-deployed code
-- Use `npm run start` on Vercel (it uses the framework mode instead)
-- Assume requests always hit the same instance
-- Store state in memory (use stateless design)
+- If `dist/index.js` is missing, the build did not complete successfully or the
+  runtime is starting from the wrong working tree.
+- If `dist/oak-banner.html` is missing, startup fails fast via
+  `validateWidgetHtmlExists()` rather than waiting for the first MCP App
+  resource request to throw `ENOENT`.
+- Port conflicts are handled explicitly in `src/server-runtime.ts` via the
+  `http.createServer(...).listen(...)` error path, which produces a concrete
+  `EADDRINUSE` message.
+- Async bootstrap happens before the server is marked ready; MCP readiness
+  middleware then guards request handling until the per-request MCP factory is
+  initialised.
 
 ## Summary
 
-This dual-mode architecture provides:
+The current deployment/runtime model is:
 
-- ✅ **Production-ready Vercel deployment** with proper serverless patterns
-- ✅ **Local development flexibility** with traditional server mode
-- ✅ **Type safety** with proper TypeScript compilation
-- ✅ **Clean separation** between deployment modes
-- ✅ **Proper async initialization** that works in both environments
+- one shared startup path for local and deployed execution
+- Vercel-specific configuration limited to framework selection, not a separate
+  code path
+- a Node server bundle at `dist/index.js`
+- an importable app factory at `dist/application.js`
+- a self-contained MCP App widget at `dist/oak-banner.html`
 
-Both modes use the same application code (`createApp` function), ensuring consistency between local development and production deployment.
+That keeps the deployment contract small and puts the important behaviour in
+repo-owned runtime code rather than undocumented platform branches.

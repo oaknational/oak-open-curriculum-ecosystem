@@ -6,7 +6,7 @@
  *
  * Each tool provides `inputSchema` (Zod raw shape with `.describe()` and
  * `.meta({ examples })`) as the canonical input schema for MCP registration.
- * No-input tools set `inputSchema: undefined`.
+ * No-input tools expose `inputSchema: {}`.
  *
  * Each aggregated tool imports its definition from its own module to
  * maintain separation of concerns and keep this file focused on the
@@ -48,7 +48,7 @@ import type { SecurityScheme } from '@oaknational/sdk-codegen/mcp-tools';
  * This compile-time guard catches drift between hand-authored and generated
  * tool shapes. Every entry in AGGREGATED_TOOL_DEFS must have title,
  * description, securitySchemes, annotations, and inputSchema at minimum.
- * No-input tools set `inputSchema: undefined`.
+ * No-input tools still provide `inputSchema: {}` so registration stays uniform.
  */
 interface AggregatedToolDefShape {
   readonly title: string;
@@ -85,6 +85,14 @@ interface AggregatedToolDefShape {
  *   is emitted only by the generator for generated tools. Aggregated tools
  *   expose `securitySchemes` at the top level of their definition.
  * - The allowlist is defined in `WIDGET_TOOL_NAMES` (cross-domain-constants.ts).
+ *
+ * @example
+ * ```typescript
+ * const searchDefinition = AGGREGATED_TOOL_DEFS.search;
+ *
+ * console.log(searchDefinition.title);
+ * console.log(Object.keys(searchDefinition.inputSchema));
+ * ```
  */
 export const AGGREGATED_TOOL_DEFS = {
   search: {

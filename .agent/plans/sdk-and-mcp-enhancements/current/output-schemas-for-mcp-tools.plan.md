@@ -8,10 +8,10 @@ todos:
     content: "Phase 0: Audit the current generated-response validation path, tool inventory, and transport registration surfaces so the work is scoped against the real MCP contract rather than the raw OpenAPI payload shape."
     status: pending
   - id: phase-1-generated-tool-schemas
-    content: "Phase 1: Generate truthful `outputSchema` objects for the 23 generated tools by composing the existing response JSON Schemas into the actual MCP `structuredContent` envelope."
+    content: "Phase 1: Generate truthful `outputSchema` objects for the 24 generated tools by composing the existing response JSON Schemas into the actual MCP `structuredContent` envelope."
     status: pending
   - id: phase-2-aggregated-tool-schemas
-    content: "Phase 2: Add hand-authored `outputSchema` declarations for the 8 aggregated tools, matching each tool's real `structuredContent` shape rather than forcing an over-generic shared envelope."
+    content: "Phase 2: Add hand-authored `outputSchema` declarations for the 10 aggregated tools, matching each tool's real `structuredContent` shape rather than forcing an over-generic shared envelope."
     status: pending
   - id: phase-3-transport-exposure
     content: "Phase 3: Expose `outputSchema` through the MCP registration and `tools/list` surfaces, and align any transport that would otherwise advertise a false contract."
@@ -23,7 +23,7 @@ todos:
 
 # MCP Output Schemas and Response Validation
 
-**Last Updated**: 2026-03-07
+**Last Updated**: 2026-04-09
 **Status**: Current — queued, not started
 **Priority**: High — improves model reasoning and spec compliance, but only if
 the declared contract matches the real MCP response surface
@@ -80,10 +80,10 @@ actually place into `structuredContent`.
 
 The repository currently exposes:
 
-1. **23 generated tools**
-2. **8 aggregated tools**
+1. **24 generated tools**
+2. **10 aggregated tools**
 
-Total: **31 tools**
+Total: **34 tools**
 
 The aggregated set is:
 
@@ -95,18 +95,20 @@ The aggregated set is:
 6. `browse-curriculum`
 7. `explore-topic`
 8. `download-asset`
+9. `user-search`
+10. `user-search-query`
 
 ### Transport Inventory
 
 The current transports do not expose the same tool surface:
 
-1. **Universal/streamable HTTP** exposes all 31 tools through
+1. **Universal/streamable HTTP** exposes all 34 tools through
    `listUniversalTools()`
-2. **Stdio** currently exposes only the 23 generated tools
+2. **Stdio** currently exposes only the 24 generated tools
 
 That distinction matters for this plan:
 
-1. the universal/HTTP surface is the main place where all 31 tool contracts
+1. the universal/HTTP surface is the main place where all 34 tool contracts
    must become visible
 2. stdio must not advertise generated-tool `outputSchema` until its success
    responses return matching `structuredContent`
@@ -160,20 +162,19 @@ exposes the same top-level fields. A helper may be used where truthful, but the
 plan must not force a fake universal `status?: string` contract across tools
 that do not actually emit that field.
 
-### 5. Land on the canonical descriptor surface, not today's app seam
+### 5. Land on the canonical descriptor surface, not transport-specific seams
 
 `outputSchema` must be threaded through the canonical transport-neutral SDK tool
-descriptor surface, not directly through whatever temporary app-owned exposure
-path exists at the time. If the boundary-simplification plan replaces a mixed or
-app-owned exposure surface, this plan must consume the new canonical descriptor
-rather than extending the superseded seam.
+descriptor surface, then exposed through transport consumers such as
+`listUniversalTools()` and registration layers. This plan should extend that
+SDK-owned seam rather than inventing a parallel transport-owned path.
 
 ## Scope
 
 In scope:
 
-1. generating MCP output schemas for the 23 generated tools
-2. hand-authoring MCP output schemas for the 8 aggregated tools
+1. generating MCP output schemas for the 24 generated tools
+2. hand-authoring MCP output schemas for the 10 aggregated tools
 3. explicitly preserving and documenting generated upstream-response validation
 4. exposing `outputSchema` through the MCP registration and `tools/list`
    surfaces
@@ -301,7 +302,7 @@ Tasks:
 
 Phase complete when:
 
-1. the plan still describes **31** tools, not stale counts
+1. the plan still describes **34** tools, not stale counts
 2. the generator/runtime split is written down clearly
 3. there is no remaining ambiguity about where response validation already
    happens
@@ -338,7 +339,8 @@ Tasks:
 1. add `outputSchema` beside each aggregated tool definition
 2. model the actual `structuredContent` emitted by each tool family
 3. use small shared helpers only where they remain truthful
-4. cover the eighth aggregated tool, `download-asset`, explicitly
+4. cover the full ten-tool aggregated set explicitly, including
+   `download-asset`, `user-search`, and `user-search-query`
 
 Required outcome:
 
@@ -370,9 +372,9 @@ lying contract.
 
 Transport-specific expectation:
 
-1. universal/HTTP should expose `outputSchema` for all 31 tools once the
+1. universal/HTTP should expose `outputSchema` for all 34 tools once the
    declared contracts are available
-2. stdio currently exposes only the 23 generated tools and should only expose
+2. stdio currently exposes only the 24 generated tools and should only expose
    `outputSchema` after its success path returns matching `structuredContent`
 
 Phase gate:
@@ -410,10 +412,10 @@ Minimum reviewers:
 2. Phase 3 depends on the completed groundwork documented in
    `../archive/completed/mcp-runtime-boundary-simplification.plan.md`.
 3. If the canonical descriptor surface lands first in the same branch, this plan
-   must consume it instead of extending `listUniversalTools()` or an app-owned
-   `tools/list` override directly.
-4. Do not land transport-exposure work for `outputSchema` against the
-   pre-simplification app-owned exposure path.
+   must consume it instead of duplicating tool metadata in transport-specific
+   registration code or `tools/list` overrides.
+4. Do not land transport-exposure work for `outputSchema` against a
+   transport-local seam that bypasses the SDK-owned descriptor surface.
 
 ## Quality Gates
 
@@ -443,11 +445,11 @@ replacement for the full gate set.
 
 This plan is complete when all of the following are true:
 
-1. all **31** tools have truthful `outputSchema` declarations
+1. all **34** tools have truthful `outputSchema` declarations
 2. generated-tool output schemas are produced at codegen time
 3. generated upstream-response validation remains intact and explicitly
    documented in the implementation
-4. the universal/HTTP surface exposes `outputSchema` for all 31 tools
+4. the universal/HTTP surface exposes `outputSchema` for all 34 tools
 5. stdio only exposes `outputSchema` after its generated-tool success responses
    have been aligned to the declared contract
 6. no transport advertises a schema it does not honour

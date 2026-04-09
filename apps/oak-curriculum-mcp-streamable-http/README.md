@@ -28,7 +28,13 @@ Start with the [ADR index](../../docs/architecture/architectural-decisions/), th
 
 This server exposes Oak's curriculum through the three MCP primitive types, each with a distinct control model defined by the [MCP specification](https://modelcontextprotocol.io/).
 
-**Tools** (model-controlled) — 31 curriculum tools: 23 generated from the OpenAPI schema plus 8 aggregated tools (search, browse, fetch, explore, graph/orientation tools, and `download-asset`). The AI model decides when to call them. Generated tool definitions are updated automatically when the upstream API changes via `pnpm sdk-codegen`.
+**Tools** (model-controlled) — currently 34 curriculum tools: 24 generated
+from the OpenAPI schema plus 10 aggregated tools. The aggregated set covers
+search/browse/fetch flows, orientation and graph tools, `download-asset`, and
+the MCP App user-search pair (`user-search`, `user-search-query`). The AI
+model decides when to call them, subject to per-tool visibility metadata.
+Generated tool definitions are updated automatically when the upstream API
+changes via `pnpm sdk-codegen`.
 
 **Resources** (application-controlled) — `curriculum://model` (domain ontology, `priority: 1.0`), `curriculum://prerequisite-graph` (unit dependency data, `priority: 0.5`), and `curriculum://thread-progressions` (learning progression data, `priority: 0.5`). All annotated with `audience: ["assistant"]`. The host application decides whether to inject these into the model's context. Clients that support resource auto-injection get orientation data without a tool call.
 

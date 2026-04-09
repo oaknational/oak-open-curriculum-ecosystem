@@ -24,11 +24,15 @@ import type { AGGREGATED_TOOL_DEFS } from './definitions.js';
  * Narrowed from the full `ToolDescriptorForName<TName>` via Interface
  * Segregation: consumers only need listing metadata and domain-context
  * hints, not invoke functions or Zod schemas.
+ *
+ * Generated tools must still provide a human-facing title and description.
+ * `listUniversalTools()` fails fast if either field is missing.
  */
 export interface ToolRegistryDescriptor {
+  readonly title?: string;
   readonly description?: string;
   readonly inputSchema: ToolDescriptorForName<ToolName>['inputSchema'];
-  readonly toolMcpFlatInputSchema?: z.ZodType;
+  readonly toolMcpFlatInputSchema: ToolDescriptorForName<ToolName>['toolMcpFlatInputSchema'];
   readonly securitySchemes?: readonly SecurityScheme[];
   readonly annotations?: ToolAnnotations;
   readonly _meta?: ToolMeta;
@@ -42,6 +46,15 @@ export interface ToolRegistryDescriptor {
  * enabling dependency injection in both product code and tests.
  * The default implementation wires the real generation SDK functions;
  * tests inject lightweight fakes.
+ *
+ * @example
+ * ```typescript
+ * const registry: GeneratedToolRegistry = {
+ *   toolNames: ['get-subjects'],
+ *   getToolFromToolName: (name) => generatedToolRegistry.getToolFromToolName(name),
+ *   isToolName: (value): value is ToolName => value === 'get-subjects',
+ * };
+ * ```
  */
 export interface GeneratedToolRegistry {
   readonly toolNames: readonly ToolName[];
@@ -97,11 +110,25 @@ export type ToolMeta = NonNullable<ContractDescriptor['_meta']>;
  * Contains all metadata needed to register a tool with an MCP server,
  * including Zod schema for MCP SDK registration with proper parameter
  * descriptions and examples.
+ *
+ * `inputSchema` is always present. Tools without arguments expose `{}`,
+ * which keeps the registration contract uniform while still producing an
+ * object schema with no declared input properties on the wire.
+ *
+ * @example
+ * ```typescript
+ * const tool: UniversalToolListEntry = {
+ *   name: 'get-curriculum-model',
+ *   title: 'Oak Curriculum Overview',
+ *   description: 'Orientation tool for the Oak curriculum domain.',
+ *   inputSchema: {},
+ * };
+ * ```
  */
 export interface UniversalToolListEntry {
   /** Tool name used for invocation (machine identifier) */
   readonly name: UniversalToolName;
-  /** Human-friendly display name (MCP BaseMetadata, spec 2025-11-25) */
+  /** Human-friendly display name carried through from tool metadata */
   readonly title: string;
   /** Human-readable description of what the tool does */
   readonly description: string;
@@ -111,7 +138,7 @@ export interface UniversalToolListEntry {
    * Tools with parameters provide a Zod raw shape containing `.describe()`
    * and `.meta({ examples })` calls that preserve parameter descriptions
    * and examples through the MCP SDK's native `z.toJSONSchema()` conversion.
-   * No-input tools set this to `undefined`.
+   * No-input tools expose an empty shape (`{}`).
    */
   readonly inputSchema: z.ZodRawShape;
   /** Security schemes required to invoke this tool */
@@ -127,6 +154,17 @@ export interface UniversalToolListEntry {
  *
  * Widget tools (those in `WIDGET_TOOL_NAMES`) always have this field.
  * Use `isAppToolEntry()` to narrow a `UniversalToolListEntry` to this type.
+ *
+ * @example
+ * ```typescript
+ * const tool = listUniversalTools(generatedToolRegistry).find(
+ *   (entry) => entry.name === 'user-search',
+ * );
+ *
+ * if (tool && isAppToolEntry(tool)) {
+ *   console.log(tool._meta.ui.resourceUri);
+ * }
+ * ```
  */
 export interface AppToolListEntry extends UniversalToolListEntry {
   readonly _meta: ToolMeta & { readonly ui: { readonly resourceUri: string } };

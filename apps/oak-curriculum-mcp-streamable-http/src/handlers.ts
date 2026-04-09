@@ -39,6 +39,24 @@ export type { ToolHandlerDependencies, ToolHandlerOverrides } from './tool-handl
 export { createMcpHandler } from './mcp-handler.js';
 export type { McpHandlerRequest, McpHandlerResponse } from './mcp-handler.js';
 
+/**
+ * Inputs required to register Oak's MCP tools, resources, and prompts.
+ *
+ * The HTTP app stays thin: it receives prebuilt SDK/runtime dependencies,
+ * then registers the canonical universal tool inventory directly without
+ * reintroducing a projection layer.
+ *
+ * @example
+ * ```typescript
+ * registerHandlers(server, {
+ *   runtimeConfig,
+ *   logger,
+ *   observability,
+ *   searchRetrieval,
+ *   resourceUrl: 'https://example.org/mcp',
+ * });
+ * ```
+ */
 export interface RegisterHandlersOptions {
   readonly overrides?: ToolHandlerOverrides;
   readonly runtimeConfig: RuntimeConfig;
@@ -89,8 +107,27 @@ function buildToolHandlerDependencies(
 /**
  * Registers all MCP tools, resources, and prompts with the server.
  *
+ * Tool metadata is registered in the same shape returned by
+ * `listUniversalTools()`: `title`, `description`, `inputSchema`,
+ * `annotations`, and `_meta`. No compatibility projection layer sits
+ * between the SDK registry and the transport registration step.
+ *
  * @param server - MCP server instance
  * @param options - Registration options including runtime config and logger
+ *
+ * @example
+ * ```typescript
+ * const server = new McpServer({ name: 'oak-http', version: '0.1.0' });
+ *
+ * registerHandlers(server, {
+ *   runtimeConfig,
+ *   logger,
+ *   observability,
+ *   searchRetrieval,
+ *   createAssetDownloadUrl: (lesson, type) =>
+ *     `https://example.org/api/assets/${lesson}/${type}`,
+ * });
+ * ```
  */
 export function registerHandlers(
   server: Pick<McpServer, 'registerTool' | 'registerResource' | 'registerPrompt'>,

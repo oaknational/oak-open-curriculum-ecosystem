@@ -313,9 +313,9 @@ plan remains the parent orchestration document and source of phase ordering.
 3. [ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md](../archive/completed/ws3-phase-2-scaffold-fresh-mcp-app-infrastructure.plan.md) — COMPLETE
 4. [ws3-phase-3-canonical-contracts-and-runtime.plan.md](../archive/completed/ws3-phase-3-canonical-contracts-and-runtime.plan.md) — COMPLETE
 5. [ws3-phase-4-brand-banner.plan.md](../archive/completed/ws3-phase-4-brand-banner.plan.md) — COMPLETE
-6. [ws3-phase-4.5-live-react-and-metadata-shape.plan.md](ws3-phase-4.5-live-react-and-metadata-shape.plan.md) — **ACTIVE**
-7. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) — blocked on 4.5 + merge
-8. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) — runs pre-merge and post-Phase 5
+6. [../archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](../archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md) — COMPLETE
+7. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) — blocked on merge
+8. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) — active merge handoff; post-Phase 5 closure later
 
 ---
 

@@ -185,7 +185,7 @@ This repo's decisions (ADR-035, ADR-050):
 
 ### MCP Apps Extension
 
-This repo currently declares `@modelcontextprotocol/ext-apps` `^1.3.2` in the
+This repo currently declares `@modelcontextprotocol/ext-apps` `^1.5.0` in the
 relevant workspaces:
 
 - `registerAppTool` — links tool to `_meta.ui.resourceUri`

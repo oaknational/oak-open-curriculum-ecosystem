@@ -32,6 +32,23 @@ function isStructuredContent(value: unknown): value is StructuredContent {
   return keys.length > 0 && typeof keys[0] === 'string' && keys[0] !== '';
 }
 
+/**
+ * Dependencies required to execute the canonical universal tool inventory.
+ *
+ * Generated tools flow through the schema-derived descriptor pipeline via
+ * `executeMcpTool`. Aggregated tools use the same dependency bundle for
+ * search retrieval and HTTP-only download URL generation.
+ *
+ * @example
+ * ```typescript
+ * const deps: UniversalToolExecutorDependencies = {
+ *   executeMcpTool: executeToolCall,
+ *   searchRetrieval,
+ *   generatedTools: generatedToolRegistry,
+ *   createAssetDownloadUrl: (lesson, type) => `/api/assets/${lesson}/${type}`,
+ * };
+ * ```
+ */
 export interface UniversalToolExecutorDependencies {
   readonly executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
 
@@ -126,7 +143,7 @@ export interface ToolResponseOptions {
   readonly status?: string;
   /** Tool name for widget routing (e.g., 'search') */
   readonly toolName?: string;
-  /** Human-readable tool title from annotations (e.g., 'Search Curriculum') */
+  /** Human-readable tool title for `annotations/title` metadata (e.g., 'Search Curriculum') */
   readonly annotationsTitle?: string;
 }
 

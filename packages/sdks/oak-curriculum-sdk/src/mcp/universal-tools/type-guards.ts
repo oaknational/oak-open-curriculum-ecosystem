@@ -69,6 +69,20 @@ export function isUniversalToolName(
  *
  * Returns true when the tool carries `_meta.ui.resourceUri`, indicating it
  * should be registered via `registerAppTool()` for UI metadata normalisation.
+ *
+ * @example
+ * ```typescript
+ * for (const tool of listUniversalTools(generatedToolRegistry)) {
+ *   if (isAppToolEntry(tool)) {
+ *     registerAppTool(server, tool.name, {
+ *       title: tool.title,
+ *       description: tool.description,
+ *       inputSchema: tool.inputSchema,
+ *       _meta: { ...tool._meta },
+ *     }, handler);
+ *   }
+ * }
+ * ```
  */
 export function isAppToolEntry(tool: UniversalToolListEntry): tool is AppToolListEntry {
   return tool._meta?.ui !== undefined && typeof tool._meta.ui.resourceUri === 'string';
