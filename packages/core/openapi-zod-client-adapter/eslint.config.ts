@@ -9,7 +9,6 @@ import { defineConfig } from 'eslint/config';
 import {
   configs,
   coreBoundaryRules,
-  coreTestConfigRules,
   commonSettings,
   ignores as globalIgnores,
   testRules,
@@ -70,7 +69,7 @@ const config = defineConfig(
     },
   },
   {
-    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts', '*.config.ts'],
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -92,13 +91,10 @@ const config = defineConfig(
         },
       },
     },
-    rules: {
-      ...coreTestConfigRules,
-      ...testRules,
-    },
+    rules: testRules,
   },
   {
-    files: ['eslint.config.ts', 'vitest.config.ts', 'tsup.config.ts'],
+    files: ['*.config.ts'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',

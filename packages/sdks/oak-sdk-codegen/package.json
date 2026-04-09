@@ -88,23 +88,24 @@
     "scan:sitemap": "tsx code-generation/sitemap-scanner.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0",
-    "@oaknational/type-helpers": "workspace:*",
-    "@zod/core": "^0.11.6",
-    "openapi-fetch": "^0.17.0",
-    "zod": "^4.3.6"
-  },
-  "devDependencies": {
     "@elastic/elasticsearch": "^9.3.4",
-    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@oaknational/logger": "workspace:^",
     "@oaknational/observability": "workspace:*",
     "@oaknational/openapi-zod-client-adapter": "workspace:*",
     "@oaknational/result": "workspace:*",
-    "@types/node": "^25.5.2",
+    "@oaknational/type-helpers": "workspace:*",
+    "@zod/core": "^0.11.6",
     "dotenv": "^17.4.1",
+    "openapi-fetch": "^0.17.0",
     "openapi-typescript": "^7.13.0",
     "openapi3-ts": "^4.5.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^25.5.2",
+    "eslint": "^10.2.0",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5",

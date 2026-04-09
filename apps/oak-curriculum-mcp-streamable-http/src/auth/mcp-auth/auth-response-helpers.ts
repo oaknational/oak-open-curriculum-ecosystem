@@ -8,6 +8,11 @@ import type { Logger, LogContextInput } from '@oaknational/logger';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types';
 import { getMcpResourceUrl } from './get-mcp-resource-url.js';
 
+interface AuthResponseLocals {
+  readonly correlationId?: string;
+}
+type AuthContextResponse = Response<unknown, AuthResponseLocals>;
+
 /**
  * Base logging context for authentication events.
  */
@@ -39,15 +44,15 @@ type LoggableExtras = Readonly<Record<string, string | string[] | number | boole
  * logger.warn('Authentication failed', context);
  * ```
  */
-export function createAuthLogContext(req: Request, res: Response): AuthLogContext;
+export function createAuthLogContext(req: Request, res: AuthContextResponse): AuthLogContext;
 export function createAuthLogContext<T extends LoggableExtras>(
   req: Request,
-  res: Response,
+  res: AuthContextResponse,
   extra: T,
 ): AuthLogContext & T;
 export function createAuthLogContext<T extends LoggableExtras>(
   req: Request,
-  res: Response,
+  res: AuthContextResponse,
   extra?: T,
 ): AuthLogContext | (AuthLogContext & T) {
   const base: AuthLogContext = {
@@ -113,7 +118,7 @@ export function sendInvalidResourceResponse(res: Response, prmUrl: string, reaso
  */
 export function handleMissingAuth(
   req: Request,
-  res: Response,
+  res: AuthContextResponse,
   logger: Logger,
   prmUrl: string,
 ): void {
@@ -126,7 +131,7 @@ export function handleMissingAuth(
  */
 export function handleInvalidFormat(
   req: Request,
-  res: Response,
+  res: AuthContextResponse,
   logger: Logger,
   prmUrl: string,
 ): void {
@@ -137,7 +142,11 @@ export function handleInvalidFormat(
 /**
  * Handle token verification failure.
  */
-export function handleVerificationFailed(req: Request, res: Response, logger: Logger): void {
+export function handleVerificationFailed(
+  req: Request,
+  res: AuthContextResponse,
+  logger: Logger,
+): void {
   logger.warn('Token verification failed', createAuthLogContext(req, res));
   sendVerificationFailedResponse(res);
 }
@@ -147,7 +156,7 @@ export function handleVerificationFailed(req: Request, res: Response, logger: Lo
  */
 export function handleResourceValidationFailed(
   req: Request,
-  res: Response,
+  res: AuthContextResponse,
   logger: Logger,
   prmUrl: string,
   reason: string,
@@ -168,7 +177,7 @@ export function handleResourceValidationFailed(
  */
 export function handleAuthSuccess(
   req: Request,
-  res: Response,
+  res: AuthContextResponse,
   logger: Logger,
   authData: AuthInfo,
 ): void {

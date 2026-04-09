@@ -11,7 +11,6 @@ import { noEslintDisableRule } from './rules/no-eslint-disable.js';
  */
 export {
   coreBoundaryRules,
-  coreTestConfigRules,
   createDesignBoundaryRules,
   createLibBoundaryRules,
   createSdkBoundaryRules,
@@ -94,6 +93,10 @@ export const ignores = [
  * Structural limits (max-lines, max-lines-per-function) are relaxed for
  * test files because describe blocks legitimately grow.
  *
+ * Tests may import workspace-local devDependencies, but they still must
+ * declare those packages in the workspace manifest rather than relying on
+ * the repo root toolchain.
+ *
  * Type-safety and global-state rules are set to 'warn' pending promotion
  * to 'error'. See e2e-vi-mock-clerk-removal.plan.md for the phased
  * promotion schedule.
@@ -114,6 +117,15 @@ export const testRules = {
   '@typescript-eslint/consistent-type-definitions': 'off',
   '@typescript-eslint/no-restricted-types': 'off',
   '@typescript-eslint/unbound-method': 'off',
+  'import-x/no-extraneous-dependencies': [
+    'error',
+    {
+      devDependencies: true,
+      optionalDependencies: false,
+      peerDependencies: false,
+      includeTypes: false,
+    },
+  ],
   'import-x/no-named-as-default-member': 'off',
 } as const satisfies Linter.RulesRecord;
 

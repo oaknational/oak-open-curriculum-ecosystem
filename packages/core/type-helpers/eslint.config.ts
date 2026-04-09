@@ -8,7 +8,6 @@ import { defineConfig } from 'eslint/config';
 import {
   configs,
   coreBoundaryRules,
-  coreTestConfigRules,
   commonSettings,
   ignores as globalIgnores,
   testRules,
@@ -56,13 +55,10 @@ const config = defineConfig(
   },
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
-    rules: {
-      ...testRules,
-      ...coreTestConfigRules,
-    },
+    rules: testRules,
   },
   {
-    files: ['eslint.config.ts', 'vitest.config.ts'],
+    files: ['*.config.ts'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',
@@ -70,7 +66,6 @@ const config = defineConfig(
       },
     },
     rules: {
-      ...coreTestConfigRules,
       'import-x/no-relative-packages': 'off',
       'import-x/no-relative-parent-imports': 'off',
     },

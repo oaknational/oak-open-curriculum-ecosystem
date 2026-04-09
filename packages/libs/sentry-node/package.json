@@ -30,7 +30,6 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@oaknational/env": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
@@ -39,7 +38,12 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "typescript": "^5.9.3"
+    "@types/node": "^25.5.2",
+    "eslint": "^10.2.0",
+    "globals": "^17.4.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.3"
   },
   "engines": {
     "node": "24.x"

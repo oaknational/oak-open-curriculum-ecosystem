@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { type Response } from 'express';
 import request from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
 import type { Logger } from '@oaknational/logger';
@@ -6,11 +6,17 @@ import type { Logger } from '@oaknational/logger';
 import { createCorrelationMiddleware } from './middleware.js';
 import { createFakeLogger } from '../test-helpers/fakes.js';
 
+type CorrelationLocals = { readonly correlationId?: string };
+type CorrelationBody = { readonly correlationId: string };
+
 function createTestApp(logger: Logger): ReturnType<typeof express> {
   const app = express();
   app.use(createCorrelationMiddleware(logger));
 
-  app.get('/test', (_req, res) => {
+  app.get('/test', (_req, res: Response<CorrelationBody, CorrelationLocals>) => {
+    if (typeof res.locals.correlationId !== 'string') {
+      throw new Error('Expected correlationId in res.locals');
+    }
     res.json({ correlationId: res.locals.correlationId });
   });
 

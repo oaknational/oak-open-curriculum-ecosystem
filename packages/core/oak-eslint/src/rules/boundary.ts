@@ -110,11 +110,10 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
   'import-x/no-internal-modules': 'off', // Allow internal module imports
   'import-x/no-relative-packages': 'error', // Disallow cross-package relative imports
 
-  // Ensure production code uses only declared dependencies
+  // Enforce manifest-complete imports everywhere.
   'import-x/no-extraneous-dependencies': [
     'error',
     {
-      // Allow dev dependencies only in test and config files
       devDependencies: false,
       optionalDependencies: false,
       peerDependencies: false,
@@ -148,16 +147,6 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
       ],
     },
   ],
-};
-
-/**
- * Core test and config file rules
- * Allows dev dependencies and internal modules in test/config files while
- * keeping the cross-workspace boundary rules active.
- */
-export const coreTestConfigRules: Partial<Linter.RulesRecord> = {
-  'import-x/no-extraneous-dependencies': 'off',
-  'import-x/no-internal-modules': 'off',
 };
 
 /**
