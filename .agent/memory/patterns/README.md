@@ -109,11 +109,12 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Cross-Session Pattern Emergence** -- Use this when: running consolidation after multiple sessions on the same workstream, or when insights from separate sessions form a larger picture. → [cross-session-pattern-emergence.md](cross-session-pattern-emergence.md)
 - **Scoped Gitignore for Colliding Directory Names** -- Use this when: a generically named directory (`reference`, `data`, `output`) appears in multiple subtrees with different ignore intent and a broad `**/dirname/*` rule causes surprise ignores or negation sprawl. → [scoped-gitignore-for-colliding-directory-names.md](scoped-gitignore-for-colliding-directory-names.md)
 
-### Testing (4)
+### Testing (5)
 
 - **Accessibility as a Blocking Gate** -- Use this when: a project ships user-facing HTML and needs to prove WCAG compliance automatically. → [accessibility-as-blocking-gate.md](accessibility-as-blocking-gate.md)
 - **Conformance Tests for Library Adoption** -- Use this when: replacing hand-rolled code with a library import and keeping existing unit tests as library contract guards. → [conformance-tests-for-library-adoption.md](conformance-tests-for-library-adoption.md)
 - **Interface Segregation for Test Fakes** -- Use this when: test fakes cannot satisfy a complex generated type without type assertions. → [interface-segregation-for-test-fakes.md](interface-segregation-for-test-fakes.md)
+- **Plain-Node Built-Artefact Proof** -- Use this when: a workspace runs source with a dev loader locally but ships built JavaScript under plain Node, and dev success may mask production-startup defects. → [plain-node-built-artifact-proof.md](plain-node-built-artifact-proof.md)
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
 
 ### Agent (2)

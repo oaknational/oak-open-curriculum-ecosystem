@@ -9,27 +9,30 @@ todos:
     status: done
   - id: gates
     content: "Run canonical readiness and full-scrub gates."
-    status: done
+    status: in_progress
   - id: reviewer-pass
     content: "Run required reviewer set and address findings."
     status: done
   - id: closure-checks
     content: "Verify WS3/WS4 acceptance plus C8 closure gate status."
-    status: done
+    status: in_progress
   - id: handoff-commit
-    content: "Record merge-handoff state in the closeout commit and push PR #76 readiness evidence."
-    status: done
+    content: "Record the production-startup and ESLint resolver-standardisation handoff state in the closeout commit and push PR #76 readiness evidence."
+    status: in_progress
 ---
 
 # WS3 Phase 6: Docs, Gates, Review, Commit
 
-**Status**: ACTIVE MERGE HANDOFF — pre-merge closure is complete and this plan stays live until the closeout commit is pushed and PR #76 is merged
+**Status**: ACTIVE MERGE HANDOFF — post-CI Vercel startup failure reopened the closeout; targeted recovery, built-artifact proof, and resolver-standardisation are green locally, final gates/preview/commit remain
 **Last Updated**: 2026-04-09
 
-Pre-merge docs, gates, reviewer remediation, and closure checks are complete.
-Keep this plan active as the merge-handoff reference while the latest closeout
-commit is pushed and until PR #76 lands; after merge it can be archived or
-reused for the post-Phase 5 closure pass if needed.
+Pre-merge docs, reviewers, and closure work had been complete, but the first
+Vercel preview after CI exposed a production-only startup defect. The closeout
+is therefore reopened long enough to land the built-runtime fix, add a
+production-path proof, standardise the active-workspace ESLint resolver stack
+so runtime-correct `.js` MCP SDK imports stay lint-clean, rerun the final
+aggregate/preview checks, and push one truthful merge-handoff state before
+PR #76 lands.
 
 ## Required Inputs
 
@@ -46,26 +49,34 @@ reused for the post-Phase 5 closure pass if needed.
 ## Tasks
 
 1. Align active docs listed in WS3 parent plan Phase 6
-2. Run full scrub:
+2. Re-run targeted production-path proof for the startup recovery:
+   - `pnpm exec turbo run build --filter=@oaknational/oak-curriculum-mcp-streamable-http --continue --force`
+   - plain-Node import of `dist/application.js`
+   - focused built-artifact E2E coverage
+3. Run full scrub:
    - `pnpm check`
-3. Run reviewer set listed in WS3 parent plan and address ALL findings
-4. Re-run canonical runtime contamination check from WS3 parent plan
-5. Verify closure gates:
+4. Run reviewer set listed in WS3 parent plan and address ALL findings
+5. Re-run canonical runtime contamination check from WS3 parent plan
+6. Verify closure gates:
    - WS3/WS4 acceptance criteria are complete
    - C8 auth plans in `archive/completed/` are complete, or explicitly superseded by
      accepted architecture
    - Phase 0 RED/GREEN evidence table is fully populated with GREEN evidence
-6. Commit and push the branch so PR #76 has a single merge-handoff state
+   - deployed preview/runtime startup is confirmed after push
+7. Commit and push the branch so PR #76 has a single merge-handoff state
 
 ## Acceptance Evidence
 
 1. Active docs are mutually consistent (prompt, roadmap, umbrella, WS3 parent,
    indexes)
-2. `pnpm check` passes
-3. Runtime contamination check is clean
-4. ALL reviewer findings are resolved (all findings are blocking per project
+2. Production-path proof passes for the built server entry surface:
+   plain-Node import of `dist/application.js` and focused built-artifact E2E
+3. `pnpm check` passes
+4. Runtime contamination check is clean
+5. ALL reviewer findings are resolved (all findings are blocking per project
    rules)
-5. Closure criteria for WS3/WS4 and C8 gates are satisfied
-6. Phase 0 evidence table shows GREEN for all 6 phases
-7. The branch is committed and pushed with a single merge-handoff state for
+6. Closure criteria for WS3/WS4 and C8 gates are satisfied
+7. Phase 0 evidence table shows GREEN for all 6 phases
+8. The deployed preview/runtime startup path has been rechecked after push
+9. The branch is committed and pushed with a single merge-handoff state for
    PR #76

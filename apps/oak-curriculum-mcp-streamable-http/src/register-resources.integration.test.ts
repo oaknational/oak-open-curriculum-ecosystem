@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import type {
   ResourceTemplate,
@@ -16,7 +16,7 @@ import type {
   ReadResourceTemplateCallback,
   RegisteredResource,
   RegisteredResourceTemplate,
-} from '@modelcontextprotocol/sdk/server/mcp';
+} from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { McpUiReadResourceResult } from '@modelcontextprotocol/ext-apps/server';
 import {
   DOCUMENTATION_RESOURCES,

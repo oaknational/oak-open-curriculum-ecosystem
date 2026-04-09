@@ -363,3 +363,59 @@ was the test seam, not Turbo's refusal to build the package first.
   inject a no-op validator and stay independent of `dist/`
 - Updated the quality-gate-hardening plan to record the correct response for
   this class of issue: keep build validation at build / built-system level
+
+### Session 2026-04-09g — built artefact import proof
+
+#### Surprises
+
+**S22: `tsx` masked a Node ESM subpath defect in MCP SDK imports.**
+Expected: if the streamable-HTTP app booted in dev, the built artefact would
+resolve the same imports. Actual: source/dev ran under `tsx`, which tolerated
+extensionless `@modelcontextprotocol/sdk/...` subpaths, while plain Node 24 ESM
+rejected them in built code. The app-side imports were one layer; the deeper
+production crash came from generated `@oaknational/sdk-codegen` MCP runtime
+files still emitting `@modelcontextprotocol/sdk/types` without `.js`.
+
+#### Resolutions
+
+- Fixed the MCP tool generator source of truth so emitted runtime and contract
+  files use Node-compatible `@modelcontextprotocol/sdk/types.js` specifiers,
+  then regenerated the checked-in MCP tool outputs.
+- Added a built-artifact E2E proof that spawns plain `node` to import
+  `apps/oak-curriculum-mcp-streamable-http/dist/application.js`, so the repo
+  now catches dev-loader-vs-built-loader drift without relying on network or
+  extra file reads during the test body.
+
+### Session 2026-04-09h — ESLint resolver standardisation
+
+#### Surprises
+
+**S23: `import-x/no-unresolved` can disagree with both TypeScript and Node on
+package-export `.js` subpaths.** Expected: once the generated MCP SDK imports
+used `.js`, lint and type-check would agree. Actual: `tsc` under
+`moduleResolution: bundler` and plain Node ESM both resolved
+`@modelcontextprotocol/sdk/types.js`, but the shared ESLint resolver stack
+returned a false negative, so lint failed on the runtime-correct specifier.
+
+**S24: resolver-side `projectService: true` was noise, not the fix.**
+Expected: the mismatch might be a lint-project selection issue. Actual: the
+false negative reproduced even with explicit projects; the useful correction
+was chaining a Node-aware resolver alongside the TypeScript resolver, while
+leaving parser-side `projectService: true` in place only where typed lint still
+needs it.
+
+#### Resolutions
+
+- Standardised active workspace ESLint configs on
+  `import-x/resolver-next` with chained TypeScript + Node resolvers
+- Removed resolver-side `projectService: true` from workspace configs; kept
+  parser-side `projectService: true` where typed lint still needs it
+- Verified the original generated-file lint failure is green without backing
+  out the required `.js` suffixes
+
+#### Behaviour change
+
+- Treat runtime/module-resolution truth as authoritative when lint disagrees;
+  fix the resolver stack, not the imports
+- Audit and standardise ESLint config across active workspaces rather than
+  patching one package at a time

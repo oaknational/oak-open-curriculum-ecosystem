@@ -18,7 +18,7 @@
  *
  */
 
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { getPromptMessages } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { wrapPromptHandler } from '@oaknational/sentry-mcp';
 import {

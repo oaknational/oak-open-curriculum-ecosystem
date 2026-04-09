@@ -10,7 +10,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import { mcpAuth } from './mcp-auth.js';
 import {
   createFakeLogger,

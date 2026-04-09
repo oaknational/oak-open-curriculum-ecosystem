@@ -10,6 +10,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import { parser as tseslintParser } from 'typescript-eslint';
 import {
   configs,
+  createImportResolverSettings,
   ignores,
   testRules,
   appArchitectureRules,
@@ -27,6 +28,11 @@ const eslintConfig = defineConfig(
 
   // Use the recommended config from our standards plugin (includes TS, Prettier, Import-X)
   ...configs.strict,
+
+  {
+    files: ['**/*.ts'],
+    settings: createImportResolverSettings({ project: thisDir }),
+  },
 
   // TypeScript rules for source files
   {

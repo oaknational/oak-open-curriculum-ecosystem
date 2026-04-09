@@ -6,7 +6,7 @@ import { defineConfig } from 'eslint/config';
 import {
   configs,
   coreBoundaryRules,
-  commonSettings,
+  createImportResolverSettings,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -36,16 +36,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
-        },
-      },
-    },
+    settings: createImportResolverSettings({ project: wsTsProject }),
     rules: coreBoundaryRules,
   },
   {
@@ -61,16 +52,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
-        },
-      },
-    },
+    settings: createImportResolverSettings({ project: wsTsProject }),
     rules: testRules,
   },
   {

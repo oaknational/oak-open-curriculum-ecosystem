@@ -299,7 +299,9 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 
 - **Server fails to start (OAuth metadata fetch timeout)**: If the server hangs or fails during startup when auth is enabled, ensure Clerk's `/.well-known/oauth-authorization-server` endpoint is reachable from the server's network. The auth bootstrap fetches upstream OAuth metadata at startup and will retry with exponential backoff (added in F10), but if the endpoint is unreachable the server will eventually fail. Check DNS resolution, firewall rules, and Clerk service status.
 - 500 on `/.well-known/oauth-protected-resource` or `/mcp`:
-  - Ensure Vercel framework is Express and the app default‑exports an Express instance (this repo does in `src/index.ts`).
+  - Ensure Vercel framework is Express and the deployed build is using
+    `dist/index.js`. This repo does not rely on a separate Vercel-only default
+    export path.
   - Verify `ALLOWED_HOSTS` includes your alias host (e.g. `curriculum-mcp-alpha.oaknational.dev`).
   - If auth is enabled, verify `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` are set and that Clerk metadata discovery succeeds at startup.
 - 401 without `Authorization`: the client must either follow the OAuth discovery flow or send a valid Clerk-issued Bearer token. For local smoke tests, either use a real Clerk token or set `DANGEROUSLY_DISABLE_AUTH=true` and retry without the `Authorization` header.
@@ -333,6 +335,9 @@ This application has comprehensive test coverage across three testing layers:
 
 - **Header Redaction E2E** (`e2e-tests/header-redaction.e2e.test.ts`): full request/response cycles with sensitive headers, OAuth scenarios
 - **Tool E2E** (`e2e-tests/`): MCP tool invocation, resource listing, prompt registration, widget metadata
+- **Built-artifact startup proof** (`e2e-tests/built-artifact-import.e2e.test.ts`):
+  imports `dist/application.js` under plain Node to catch dev-loader versus
+  production-runtime resolver drift without making network requests
 
 ### Widget Tests (Playwright)
 
@@ -357,7 +362,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
 # Widget unit tests (Vitest, React Testing Library)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget
 
-# E2E tests (Vitest, requires built server)
+# E2E tests (Vitest, requires built artefacts)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 
 # MCP server landing page tests (Playwright)
@@ -383,7 +388,9 @@ are publicly reachable and require rate limiting to prevent abuse. See
 [ADR-115](../../docs/architecture/architectural-decisions/115-proxy-oauth-as-for-cursor.md)
 for details.
 
-**Documentation Status**: Last verified 2026-03-07 against `src/application.ts`, `src/auth-routes.ts`, and the current workspace-level transport documentation.
+**Documentation Status**: Last verified 2026-04-09 against `src/application.ts`,
+the built-artifact E2E coverage, and the current workspace-level transport
+documentation.
 
 **Related Documentation**:
 

@@ -142,6 +142,11 @@ runtime path with different entry commands:
 3. both paths call `startConfiguredHttpServer(...)`
 4. the server listens on `PORT` when set, otherwise `3333`
 
+These paths share the same repo-owned startup logic but they do **not** share
+the same module resolver. `tsx` can tolerate import specifiers that plain Node
+ESM later rejects in built output. Production-path confidence therefore needs a
+built-artifact proof as well as the dev path.
+
 **package.json**
 
 ```json
@@ -423,6 +428,11 @@ Should output: `✅ Module loads: function`
 `dist/index.js` is the runtime entry point and boots the server immediately; it
 is not an importable app-factory verification seam.
 
+The repo also carries a regression-proof version of this check in
+`e2e-tests/built-artifact-import.e2e.test.ts`. That test spawns plain Node and
+imports the built `application.js` artefact so production resolver behaviour is
+verified separately from `tsx`-driven source execution.
+
 ### Test Server Startup
 
 ```bash
@@ -440,6 +450,9 @@ pnpm start
 - If `dist/oak-banner.html` is missing, startup fails fast via
   `validateWidgetHtmlExists()` rather than waiting for the first MCP App
   resource request to throw `ENOENT`.
+- If `pnpm dev` works but the built server crashes immediately, suspect a
+  dev-loader versus plain-Node resolver mismatch first and rerun the
+  built-artifact import proof against `dist/application.js`.
 - Port conflicts are handled explicitly in `src/server-runtime.ts` via the
   `http.createServer(...).listen(...)` error path, which produces a concrete
   `EADDRINUSE` message.
@@ -452,6 +465,8 @@ pnpm start
 The current deployment/runtime model is:
 
 - one shared startup path for local and deployed execution
+- separate resolver proof for built artefacts, because `tsx` success is not
+  sufficient evidence for plain-Node startup
 - Vercel-specific configuration limited to framework selection, not a separate
   code path
 - a Node server bundle at `dist/index.js`

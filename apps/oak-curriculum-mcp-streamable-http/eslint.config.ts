@@ -2,7 +2,7 @@ import { defineConfig } from 'eslint/config';
 import {
   configs,
   appArchitectureRules,
-  commonSettings,
+  createImportResolverSettings,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -14,6 +14,10 @@ import { importX } from 'eslint-plugin-import-x';
 import tseslint from 'typescript-eslint';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
+const widgetDir = fileURLToPath(new URL('./widget', import.meta.url));
+const workspaceImportResolverSettings = createImportResolverSettings({
+  project: [thisDir, widgetDir],
+});
 const javaScriptRuleOverrides = Object.fromEntries(
   configs.strict
     .flatMap((config) => Object.keys(config.rules ?? {}))
@@ -71,17 +75,7 @@ const config = defineConfig(
           // allowDefaultProject: true,
         },
       },
-      settings: {
-        ...commonSettings,
-        'import-x/resolver': {
-          ...commonSettings['import-x/resolver'],
-          typescript: {
-            ...commonSettings['import-x/resolver'].typescript,
-            // project: wsTsProject,
-            projectService: true,
-          },
-        },
-      },
+      settings: workspaceImportResolverSettings,
       rules: {
         'import-x/no-relative-parent-imports': 'off',
         ...appArchitectureRules,
@@ -113,16 +107,7 @@ const config = defineConfig(
           ecmaFeatures: { jsx: true },
         },
       },
-      settings: {
-        ...commonSettings,
-        'import-x/resolver': {
-          ...commonSettings['import-x/resolver'],
-          typescript: {
-            ...commonSettings['import-x/resolver'].typescript,
-            projectService: true,
-          },
-        },
-      },
+      settings: workspaceImportResolverSettings,
       rules: {
         'import-x/no-relative-parent-imports': 'off',
         ...appArchitectureRules,

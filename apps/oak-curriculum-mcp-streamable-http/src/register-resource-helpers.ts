@@ -1,4 +1,4 @@
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { wrapResourceHandler as sentryWrapResourceHandler } from '@oaknational/sentry-mcp';
 import type { HttpObservability } from './observability/http-observability.js';
 

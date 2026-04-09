@@ -12,8 +12,9 @@ Executable plans that are in progress now.
 ## Pre-Merge (must complete before PR #76 merges)
 
 - [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
-  **ACTIVE**. Pre-merge docs, gates, reviewer closure, and push are complete;
-  keep this as the merge-handoff reference for PR #76.
+  **ACTIVE**. Pre-merge closure was reopened by a post-CI Vercel startup
+  failure; the production-startup fix and built-artifact proof are local, and
+  this remains the merge-handoff reference until the closeout push lands.
 
 ## Post-Merge
 

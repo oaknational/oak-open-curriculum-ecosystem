@@ -7,7 +7,7 @@
  * forced tests to re-implement the composition chain.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type {
   UniversalToolName,
   ToolName,

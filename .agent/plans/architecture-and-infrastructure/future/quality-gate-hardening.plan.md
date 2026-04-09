@@ -8,6 +8,9 @@ todos:
   - id: oak-eslint-self-linting
     content: "Subject the oak-eslint workspace to the oak-eslint recommended/strict config, unless circular dependency prevents it."
     status: pending
+  - id: eslint-config-standardisation
+    content: "Audit and standardise ESLint flat-config composition, resolver wiring, and typed-lint project setup across all workspaces before further gate promotion, including honest handling of multi-project workspaces via tsconfig references or another standard pattern."
+    status: pending
   - id: promote-no-eslint-disable
     content: "Promote @oaknational/no-eslint-disable from warn to error after Phase 3 remediation in the active CI plan completes."
     status: pending
@@ -25,6 +28,9 @@ todos:
     status: pending
   - id: no-child-process-in-tests-rule
     content: "Create @oaknational/no-child-process-in-tests ESLint rule enforcing the testing-strategy.md prohibition on process spawning in test files."
+    status: pending
+  - id: built-artifact-proof-lane
+    content: "Add built-artifact startup proof coverage where dev loaders can mask production-runtime resolver or bootstrap defects."
     status: pending
   - id: enable-stryker-all-workspaces
     content: "Enable Stryker mutation testing in all workspaces with initial loose thresholds. Create incremental remediation plan."
@@ -65,6 +71,31 @@ remediation was not to make generic source tests depend on `build`, but to keep
 build artefact validation in `pnpm build` / built-system coverage and inject a
 no-op validator into in-process tests.
 
+Vercel preview debugging on the same date exposed a second, related gap: dev
+loaders such as `tsx` can mask Node ESM resolver defects that only appear when
+the built artefact is executed under plain Node. The HTTP app worked in local
+dev but crashed on deployed startup because extensionless
+`@modelcontextprotocol/sdk/*` subpath imports survived into built code. The
+correct response was a focused built-artifact proof (`dist/application.js`
+imported under plain Node), not weakening source tests or assuming dev success
+proves production startup.
+
+The same debugging work also exposed repo-wide ESLint config drift: some
+workspaces still used legacy `import-x/resolver` wiring, some relied on
+workspace-local resolver overrides, and parser-side typed-lint settings had
+started to blur together with import-resolution settings. Before more lint or
+static-analysis promotions, the repo needs an explicit audit and
+standardisation pass across all workspace `eslint.config.ts` files so the
+quality gates are trustworthy and mechanically consistent.
+
+A full repo-root `pnpm lint` rerun after the resolver clean-up also surfaced an
+advisory warning in `apps/oak-curriculum-mcp-streamable-http`: ESLint is
+loading multiple TS projects for the combined server + widget workspace. That
+warning should be treated as a real configuration-hardening task, not
+suppressed away. The long-term fix is to standardise multi-project workspaces
+on a single `tsconfig` with `references`, or another explicitly approved
+pattern, so typed lint stays both truthful and predictable.
+
 ## Domain Boundaries
 
 ### In Scope
@@ -76,7 +107,8 @@ no-op validator into in-process tests.
 5. **dependency-cruiser** — resolve findings, promote to blocking QG
 6. **max-files-per-dir** — enable and remediate
 7. **`consistent-type-assertions` in tests** — remove the warn exception, promote to error
-8. **Stryker mutation testing** — enable in all workspaces with loose initial thresholds, then incrementally tighten
+8. **Built-artifact startup proof lane** — add production-path proof where dev loaders differ materially from deployed/runtime execution
+9. **Stryker mutation testing** — enable in all workspaces with loose initial thresholds, then incrementally tighten
 
 ### Not in Scope
 
@@ -96,6 +128,7 @@ no-op validator into in-process tests.
 | max-files-per-dir | None | Independent — remediation may overlap with knip dead-code removal |
 | `consistent-type-assertions` in tests | None | Large remediation (~218 warnings across 6 workspaces) |
 | `no-child-process-in-tests` rule | None | Prevents future violations; sibling test-audit plan triages existing ones |
+| Built-artifact startup proof lane | None | Most important for Node-entry workspaces whose dev path uses `tsx`, Vite, or another permissive loader |
 | Stryker | Test audit (sibling plan) | Mutation testing is most valuable after the test suite is healthy. Run audit first to remove useless tests that would waste Stryker's budget. |
 
 ## Enhancement Details
@@ -184,7 +217,32 @@ missing type-only devDependencies.
 
 **Relationship to test audit**: The ESLint rule prevents future violations; the test audit triages existing ones.
 
-### 9. Enable Stryker Mutation Testing
+### 9. Add a Built-Artifact Startup Proof Lane
+
+**Problem**: Some workspaces run source through `tsx`, Vite, or other dev
+loaders locally but ship built JavaScript under plain Node or another stricter
+runtime. Dev success can therefore mask resolver or bootstrap defects in the
+actual deployed artefacts.
+
+**Confirmed example (9 April 2026)**:
+- `apps/oak-curriculum-mcp-streamable-http` worked via `tsx src/index.ts`
+- The first Vercel preview after CI crashed on startup
+- Root cause: built code still contained extensionless
+  `@modelcontextprotocol/sdk/*` subpath imports that Node ESM rejected
+- The fix belonged in generator/runtime code plus a dedicated plain-Node import
+  proof for `dist/application.js`
+
+**Fix**: For entrypoint-bearing workspaces where dev/runtime loaders differ,
+add a focused built-artifact proof that executes the shipped artefact under the
+real runtime rules. Keep this separate from source-imported unit/integration
+tests. Validate the build by running the build; validate the runtime by
+executing the built artefact.
+
+**Remediation**: Workspace-specific. Choose the narrowest importable or
+startable seam that proves production startup without adding unnecessary
+networked E2E complexity.
+
+### 10. Enable Stryker Mutation Testing
 
 **Problem**: Stryker is configured but not enabled as a gate. Existing plan at `.agent/plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md`.
 
@@ -200,6 +258,13 @@ missing type-only devDependencies.
 - CI consolidation plan complete (Phases 0-6 done as of 2026-03-29)
 - Targeted dependency-only `knip` sweeps are clean for generator/build-heavy
   workspaces before global promotion
+- ESLint config composition and resolver strategy are standardised across all
+  active workspaces, with documented exceptions only where genuinely required
+- Multi-project workspaces no longer emit advisory ESLint project-selection
+  warnings during root lint because their TS project model has been
+  standardised honestly
+- Critical Node-entry workspaces have an explicit built-artifact proof lane
+  where dev and deployed runtimes differ materially
 - Capacity for a focused sprint on quality gate work
 - No higher-priority feature or bug work blocking
 
@@ -208,9 +273,14 @@ missing type-only devDependencies.
 - knip triage scope is large (626 unused exports) — may need phased approach
 - Isolated-worktree verification can reveal missing manifest entries that are
   masked in nested worktrees by parent `node_modules` resolution
+- Workspace-level ESLint config drift can create false unresolved-import
+  failures or mask real ones if resolver strategy and typed-lint setup are not
+  standardised
 - If a source-imported test starts depending on build outputs, refactor the
   seam or move the proof to build/out-of-process coverage instead of teaching
   generic source tests to depend on `build`
+- `tsx`, Vite, or similar dev loaders can mask built-runtime resolver defects;
+  production-path proof must execute the built artefact under the real runtime
 - oak-eslint self-linting may hit circular dependency — needs investigation
 - Stryker thresholds need calibration per workspace — initial run needed
 - `consistent-type-assertions` remediation in tests is labour-intensive (~218 warnings)

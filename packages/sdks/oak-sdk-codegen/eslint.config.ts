@@ -9,7 +9,7 @@ import { defineConfig } from 'eslint/config';
 import oakStandards, {
   ignores,
   testRules,
-  commonSettings,
+  createImportResolverSettings,
   createSdkBoundaryRules,
 } from '@oaknational/eslint-plugin-standards';
 import type { Linter } from 'eslint';
@@ -43,16 +43,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          projectService: true,
-        },
-      },
-    },
+    settings: createImportResolverSettings({ project: thisDir }),
   },
 
   {

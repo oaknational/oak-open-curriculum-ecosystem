@@ -23,7 +23,7 @@ import {
   assertAuthErrorLogged,
 } from './test-helpers/auth-error-test-helpers.js';
 import { createFakeHttpObservability, createFakeSearchRetrieval } from './test-helpers/fakes.js';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 describe('Tool Handler Auth Error Interception (Integration)', () => {
   let mockServer: ReturnType<typeof createMockServer>;

@@ -25,19 +25,19 @@ todos:
     status: completed
   - id: phase-4-5-live-react-metadata
     content: "Phase 4.5: Live React app foundation + tool metadata shape fix."
-    status: in-progress
+    status: completed
   - id: phase-5-search-view
     content: "Phase 5: Build the interactive user-search MCP App view and app-only helper flow."
     status: pending
   - id: phase-6-docs-review
     content: "Phase 6: Rewrite normative docs, run full quality gates, invoke reviewers, and commit."
-    status: pending
+    status: in-progress
 ---
 
 # WS3: Fresh React MCP App Rebuild
 
-**Status**: ACTIVE  
-**Last Updated**: 2026-04-07  
+**Status**: ACTIVE — Phase 6 closeout is finishing the post-CI production-startup recovery before PR #76 merges
+**Last Updated**: 2026-04-09
 **Scope**: Delete the dead widget framework and build one fresh React MCP App
 from scratch.
 
@@ -315,7 +315,7 @@ plan remains the parent orchestration document and source of phase ordering.
 5. [ws3-phase-4-brand-banner.plan.md](../archive/completed/ws3-phase-4-brand-banner.plan.md) — COMPLETE
 6. [../archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](../archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md) — COMPLETE
 7. [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) — blocked on merge
-8. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) — active merge handoff; post-Phase 5 closure later
+8. [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) — active closeout after the production-startup recovery; post-Phase 5 closure later
 
 ---
 
@@ -463,7 +463,7 @@ Update:
 
 ### Acceptance
 
-- focused package build produces a self-contained `dist/index.html`
+- focused package build produces a self-contained `dist/oak-banner.html`
 - Turbo invalidates correctly on widget `ts`, `tsx`, `css`, and `html` changes
 - lint and type-check see widget source
 - no preview shim is introduced
@@ -643,7 +643,9 @@ pnpm check
 ```
 
 Focused verification during development should include the HTTP app build,
-test, and E2E commands as needed.
+test, and E2E commands as needed. For production-path startup confidence, run a
+built-artifact proof against plain Node as well as the source/dev path. Do not
+teach ordinary source-imported tests to depend on `build`.
 
 ### Reviewer set
 
@@ -668,6 +670,9 @@ Plus:
 
 - `pnpm check` passes
 - the fresh MCP App renders in the upstream `basic-host`
+- built artefacts prove the production runtime path, not just the dev loader:
+  plain Node can import `dist/application.js` and the focused built-artifact
+  E2E proof passes
 - UI-bearing tools provide meaningful text fallback for hosts that ignore
   `_meta.ui`
 - WS3 and WS4 scope in the umbrella plan can be closed together

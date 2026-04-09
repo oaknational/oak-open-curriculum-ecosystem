@@ -1,7 +1,7 @@
 import { defineConfig } from 'eslint/config';
 import {
   configs,
-  commonSettings,
+  createImportResolverSettings,
   createDesignBoundaryRules,
   ignores as globalIgnores,
   testRules,
@@ -32,16 +32,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
-        },
-      },
-    },
+    settings: createImportResolverSettings({ project: wsTsProject }),
     rules: createDesignBoundaryRules('oak-design-tokens'),
   },
   {
@@ -57,16 +48,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
-        },
-      },
-    },
+    settings: createImportResolverSettings({ project: wsTsProject }),
     rules: {
       ...testRules,
     },

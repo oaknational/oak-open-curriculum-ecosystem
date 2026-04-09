@@ -9,7 +9,7 @@
 import type { RequestHandler, Request } from 'express';
 import type { Logger } from '@oaknational/logger';
 import type { MachineAuthObject } from '@clerk/backend';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import { getAuth as defaultGetAuth } from '@clerk/express';
 import { verifyClerkToken as defaultVerifyClerkToken } from '@clerk/mcp-tools/server';
 import { mcpAuth } from './mcp-auth.js';

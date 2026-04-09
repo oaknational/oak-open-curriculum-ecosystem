@@ -82,7 +82,7 @@ Read the live workstream in this order:
 1. [roadmap.md](roadmap.md)
 2. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
 3. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
-4. [active/ws3-phase-6-docs-gates-review-commit.plan.md](active/ws3-phase-6-docs-gates-review-commit.plan.md) — **current merge handoff**
+4. [active/ws3-phase-6-docs-gates-review-commit.plan.md](active/ws3-phase-6-docs-gates-review-commit.plan.md) — **current closeout after the production-startup recovery**
 5. [active/ws3-phase-5-interactive-user-search-view.plan.md](active/ws3-phase-5-interactive-user-search-view.plan.md) — post-merge
 6. [archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md) — completed provenance
 
@@ -112,8 +112,8 @@ WS3: fresh React MCP App rebuild            ▶ active
   Contrast validation prerequisite          ✓ complete
   Phase 4: brand banner                     ✓ complete (2026-04-04)
   Phase 4.5: live React + metadata shape    ✓ complete (2026-04-09)
-  Phase 6a: pre-merge docs/gates            ✓ complete (2026-04-09)
-  --- PR #76 merge ---
+  Phase 6a: pre-merge docs/gates            ▶ active closeout (post-CI startup recovery)
+  --- PR #76 merge after closeout commit/push + preview recheck ---
   Phase 5: user-search view                 ⏳ pending (post-merge)
   Phase 6b: post-Phase 5 docs/gates         ⏳ pending
 C8: auth metadata invariant hardening       ✓ complete
@@ -135,6 +135,11 @@ The remaining UI work is carried by the live umbrella and child plans:
 Detailed WS3/WS4 execution scope, sequencing, and enforcement live in the
 active umbrella and child plans. Archived and completed prerequisites no longer
 belong in the live active-work list.
+
+The immediate Phase 6 focus is the production-startup recovery that Vercel
+surfaced after CI passed: keep the generator/runtime fix, the built-artifact
+proof, and the closeout docs in sync until the preview path is rechecked and
+PR #76 can merge truthfully.
 
 ### C8 auth metadata invariant hardening
 

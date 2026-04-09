@@ -8,7 +8,7 @@
  * @remarks This file is part of the schema-first execution DAG described in
  * .agent/directives/schema-first-execution.md. Do not hand-edit.
  */
-import { CallToolRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types';
+import { CallToolRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types.js';
 import { getToolEntryFromToolName, getToolFromToolName, isToolName, toolNames, type ToolDescriptorForName, type ToolName } from '../definitions.js';
 import type { ToolArgsForName, ToolClientForName, ToolResultForName } from '../aliases/types.js';
 import { DOCUMENTED_ERROR_PREFIX } from '../contract/tool-descriptor.contract.js';

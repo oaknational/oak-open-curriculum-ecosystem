@@ -1,6 +1,6 @@
 import type { Express, RequestHandler } from 'express';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
-import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
 import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';

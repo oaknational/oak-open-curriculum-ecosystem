@@ -6,7 +6,7 @@
  * contract.
  */
 
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { Request } from 'express';
 
 /**

@@ -1,8 +1,8 @@
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import {
-  commonSettings,
   configs,
+  createImportResolverSettings,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -30,16 +30,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
-        },
-      },
-    },
+    settings: createImportResolverSettings({ project: wsTsProject }),
   },
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],

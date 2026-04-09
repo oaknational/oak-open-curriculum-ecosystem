@@ -12,8 +12,8 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
-import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { z } from 'zod';
 
 const ACCEPT_HEADER = 'application/json, text/event-stream';

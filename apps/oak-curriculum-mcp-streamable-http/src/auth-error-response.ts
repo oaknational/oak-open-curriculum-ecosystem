@@ -5,7 +5,7 @@
  * `_meta["mcp/www_authenticate"]` to trigger MCP client OAuth re-authentication.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 /**
  * Types of authentication errors per RFC 6750 (OAuth 2.0 Bearer Token Usage)

@@ -16,7 +16,7 @@
 import type { RequestHandler, Request, Response, NextFunction } from 'express';
 import type { Logger } from '@oaknational/logger';
 import type { TokenVerifier } from './types.js';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 
 // Local declaration merge: augments Express Request with `auth?: AuthInfo`.
 // Replaces the `import type {} from '.../bearerAuth.js'` side-effect import.

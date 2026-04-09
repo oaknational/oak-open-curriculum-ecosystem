@@ -40,67 +40,83 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: PR #76 merge handoff + Phase 5 queue
+- **Workstream**: PR #76 production-startup closeout + Phase 5 queue
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-6-docs-gates-review-commit.plan.md`
-    (**ACTIVE** — merge-handoff reference; pre-merge closure is complete)
+    (**ACTIVE** — merge-handoff closeout reopened by the post-CI Vercel startup
+    failure; targeted recovery is green locally, final aggregate rerun pending)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
     (**QUEUED** — post-merge interactive user-search UI)
   - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md`
     (post-merge)
-- **Current state**: Branch `feat/mcp_app_ui` is in the Phase 6 merge-handoff
-  state. Phase 4.5 is archived as complete, Phase 6a pre-merge closure evidence
-  is complete, and the branch is carrying the final closeout for PR #76.
-  Validation evidence captured this session:
-  - `pnpm type-check`
-  - filtered curriculum SDK and streamable-HTTP test suites
-  - `pnpm doc-gen`
-  - contamination and stale-prose grep sweeps
-  - consolidated reviewer superset
-  - upstream `basic-host` smoke against the live widget tools
-  - canonical `pnpm check`
-  PR #76 status:
-  - T0: All deps updated (MCP SDK 1.29, ext-apps 1.5, Vite 8,
-    happy-dom, .js suffix removal, deprecated API migration)
-  - T1-T2: RED tests written (inputSchema rename, empty shape assertions)
-  - T3: `satisfies` replaces widening structural check
-  - T4: legacy schema-field rename completed across authored universal-tool surfaces
-  - T5: No-input tools use `{}` (empty ZodRawShape, MCP spec compliant)
-  - T6: `projections.ts` deleted, registration inlined in `handlers.ts`,
-    `isAppToolEntry` relocated to `type-guards.ts`, `AppToolListEntry`
-    to `types.ts`, title/description made required with fail-fast
+- **Current state**: Branch `feat/mcp_app_ui` is carrying the post-CI
+  production-startup recovery for PR #76 after the Vercel preview built
+  successfully but crashed on startup. The root cause was a dev-vs-built
+  resolver mismatch: `tsx` tolerated extensionless MCP SDK subpath imports that
+  plain Node ESM rejected in built code. The HTTP app imports were corrected,
+  the code generator was fixed and regenerated so emitted MCP SDK imports use
+  `.js` suffixes, and a built-artifact E2E proof now imports
+  `dist/application.js` under plain Node. The follow-on lint false negative on
+  those correct `.js` imports was then fixed by standardising active workspace
+  ESLint configs on `import-x/resolver-next` with chained TypeScript + Node
+  resolvers. Targeted recovery evidence is green:
+  - `pnpm --filter @oaknational/sdk-codegen test -- --run ...generate-execute-file.unit.test.ts ...stub-modules.unit.test.ts ...generate-tool-descriptor-file.unit.test.ts`
+  - `pnpm exec turbo run build --filter=@oaknational/oak-curriculum-mcp-streamable-http --continue --force`
+  - plain-Node import of `apps/oak-curriculum-mcp-streamable-http/dist/application.js`
+  - `pnpm --dir apps/oak-curriculum-mcp-streamable-http exec vitest run --config vitest.e2e.config.ts e2e-tests/built-artifact-import.e2e.test.ts e2e-tests/built-server.e2e.test.ts`
+  - `pnpm --dir apps/oak-curriculum-mcp-streamable-http type-check`
+  - targeted lint/type-check sweeps for `@oaknational/eslint-plugin-standards`,
+    `@oaknational/sdk-codegen`,
+    `@oaknational/oak-curriculum-mcp-streamable-http`,
+    `@oaknational/search-cli`, `@oaknational/oak-search-sdk`, and
+    `@oaknational/curriculum-sdk`
+  PR #76 status remains otherwise unchanged:
   - Phase 4.5 archived complete with T7-T9 closure evidence
-  - Phase 6a merge handoff complete in-repo; next step is PR merge
-  - Live tool inventory: 24 generated + 10 aggregated = 34 total tools
+  - 24 generated + 10 aggregated = 34 total live tools
+  - Phase 5 remains post-merge
   - Potentially flaky E2E test noted (see napkin)
-- **Current objective**: Merge PR #76, then start Phase 5 on a fresh branch.
+- **Current objective**: Finish the Phase 6 closeout by rerunning the final
+  aggregate gate on the resolver-standardised merge candidate, then
+  commit/push the production-startup recovery, recheck the deployed
+  preview/smoke path, and merge PR #76. Phase 5 stays on a fresh post-merge
+  branch.
 - **Hard invariants / non-goals**:
   - No compatibility shims or invented optionality on the tool-shape contract
   - `inputSchema` always present (empty `{}` for no-input, per MCP spec)
   - Title and description required on `UniversalToolListEntry`
+  - Do not make source-imported unit/integration tests depend on build
+    artefacts; prove production startup by executing built code separately
+  - Do not loosen or disable lint/import/dependency checks to hide config or
+    manifest problems; make resolver settings and workspace manifests tell the
+    truth
   - Dark theme page bg is green-700 (#008237), NOT ink-950
   - Light theme page bg is mint-300 (#bef2bd)
   - CSS media query governs dark mode, not JS
   - Widget URI uses `ui://` scheme per spec
   - `readBuiltWidgetHtml` is async (`node:fs/promises`)
 - **Recent surprises / corrections**:
-  - Active docs drifted behind the landed contract after `c4d37089`; prompt,
-    roadmap, umbrella, README, and ADR surfaces all needed a coordinated sync
-    before merge readiness was truthful again.
-  - The only failing step in the first aggregate rerun was
-    `@oaknational/curriculum-sdk#lint:fix`; it was test-fixture hygiene, not a
-    product regression.
-  - Generated tool titles still need the codegen template follow-up; for now
-    top-level `title` and `annotations.title` are centralised in one SDK helper.
+  - `tsx` masked a built-runtime defect: source execution worked while deployed
+    Node ESM crashed on extensionless `@modelcontextprotocol/sdk/*` subpaths.
+  - Fixing the app imports alone was insufficient; generated MCP SDK runtime
+    files also needed `.js` suffixes at the generator source of truth.
+  - `import-x/no-unresolved` was disagreeing with both TypeScript and Node on
+    correct `.js` MCP SDK subpath imports; the fix was resolver standardisation
+    (`import-x/resolver-next` + TypeScript + Node), not backing out the
+    runtime-correct specifiers.
 - **Open questions / low-confidence areas**:
+  - Need one final aggregate `pnpm check` rerun after the repo-wide ESLint
+    resolver standardisation; targeted sweeps are green but the full merge
+    candidate has not been replayed yet
+  - Need post-push confirmation that the Vercel preview now starts cleanly under
+    the deployed build/runtime path
   - Potentially flaky E2E test: `get-curriculum-model.e2e.test.ts`
     (passed in isolation, failed once during `pnpm check`)
-- **Next safe step**: Merge PR #76. After merge, start
-  `ws3-phase-5-interactive-user-search-view.plan.md` on a fresh branch.
-- **Deep consolidation status**: completed this handoff — Phase 4.5 companion
-  archived, live indexes/prompts re-pointed to the Phase 6 merge handoff,
-  practice fitness checked informationally, and no additional pattern or
-  distilled graduation change was warranted.
+- **Next safe step**: Review the remaining dirty tree, rerun `pnpm check` on
+  the merge candidate, then commit/push the branch and rerun the deployed
+  preview/smoke path before merging PR #76.
+- **Deep consolidation status**: not due — the resolver-standardisation lesson
+  was already captured in the quality-gate hardening plan and this handoff only
+  needed continuity sync plus napkin capture.
 
 ## Active Workstreams (2026-04-09)
 
@@ -113,8 +129,10 @@ git log --oneline --decorate -10
 banner). P0-P2 branding/SDK work on `feat/mcp_app_ui` branch.
 
 **Branch status**: Phase 4.5 wrap-up is archived complete on
-`feat/mcp_app_ui`. Phase 6a pre-merge closure is done, all readiness evidence
-is green, and PR #76 is ready for merge once this closeout commit is pushed.
+`feat/mcp_app_ui`. Phase 6 pre-merge closure was reopened by a post-CI Vercel
+startup failure; the recovery and built-artifact proof are green locally, and
+the remaining work is closeout commit/push plus preview confirmation before
+merge.
 
 **Next after merge**: Phase 5 (interactive user search view) on a new branch.
 

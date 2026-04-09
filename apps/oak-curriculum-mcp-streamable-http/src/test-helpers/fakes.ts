@@ -18,7 +18,7 @@ import {
 import type { Request, Response } from 'express';
 import type { Logger } from '@oaknational/logger';
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { McpHandlerRequest, McpHandlerResponse } from '../handlers.js';
 
 /** Re-export MCP server/transport fakes. */

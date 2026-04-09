@@ -7,7 +7,7 @@
  * The per-request HTTP handler factory lives in `mcp-handler.ts`.
  */
 
-import type { McpServer, ToolCallback } from '@modelcontextprotocol/sdk/server/mcp';
+import type { McpServer, ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { registerAppTool } from '@modelcontextprotocol/ext-apps/server';
 import type { Logger } from '@oaknational/logger';
 import { wrapToolHandler } from '@oaknational/sentry-mcp';

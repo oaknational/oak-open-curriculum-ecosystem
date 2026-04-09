@@ -12,8 +12,8 @@
  * @see .agent/plans/sdk-and-mcp-enhancements/b3-tools-list-override-test-plan.md
  */
 import { describe, it, expect } from 'vitest';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
-import { ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
 describe('McpServer internal server access', () => {
   it('McpServer exposes .server property', () => {

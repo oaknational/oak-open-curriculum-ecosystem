@@ -7,7 +7,7 @@ import type {
   McpUiToolInputNotification,
   McpUiToolInputPartialNotification,
 } from '@modelcontextprotocol/ext-apps';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 /** Runtime state snapshot for the MCP App widget. */
 export interface AppRuntimeState {

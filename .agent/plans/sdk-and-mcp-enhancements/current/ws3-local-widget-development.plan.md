@@ -1,9 +1,9 @@
 ---
 name: "WS3: Local Widget Development Infrastructure"
-overview: "SUPERSEDED — absorbed into ws3-branding-alignment-and-merge.plan.md (P0)."
+overview: "SUPERSEDED — absorbed into archive/completed/ws3-branding-alignment-and-merge.plan.md (P0)."
 parent_plan: "ws3-widget-clean-break-rebuild.plan.md"
 specialist_reviewer: "mcp-reviewer"
-superseded_by: "../active/ws3-branding-alignment-and-merge.plan.md"
+superseded_by: "../archive/completed/ws3-branding-alignment-and-merge.plan.md"
 isProject: false
 todos:
   - id: phase-1-red
@@ -32,11 +32,11 @@ integration for full MCP Apps lifecycle testing.
 
 ## Context
 
-The Oak MCP App widget builds to a self-contained `dist/index.html`
+The Oak MCP App widget builds to a self-contained `dist/oak-banner.html`
 via Vite + `vite-plugin-singlefile`. There is currently no local
 preview or dev server. The only ways to see the widget are:
 
-1. `pnpm build` then open `dist/index.html` directly (no hot-reload,
+1. `pnpm build` then open `dist/oak-banner.html` directly (no hot-reload,
    no MCP host context)
 2. Connect the MCP server to an external MCP Apps host like MCPJam
    (requires network, third-party dependency)
