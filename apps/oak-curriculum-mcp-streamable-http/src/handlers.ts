@@ -2,13 +2,12 @@
  * MCP tool registration.
  *
  * Iterates over the SDK's universal tool registry and registers each tool
- * with its canonical projection config, observability wrapping, and auth
- * interception.
+ * with its observability wrapping and auth interception.
  *
  * The per-request HTTP handler factory lives in `mcp-handler.ts`.
  */
 
-import type { McpServer, ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { McpServer, ToolCallback } from '@modelcontextprotocol/sdk/server/mcp';
 import { registerAppTool } from '@modelcontextprotocol/ext-apps/server';
 import type { Logger } from '@oaknational/logger';
 import { wrapToolHandler } from '@oaknational/sentry-mcp';
@@ -21,8 +20,6 @@ import {
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
   generatedToolRegistry,
-  toRegistrationConfig,
-  toAppToolRegistrationConfig,
   isAppToolEntry,
   type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
@@ -60,7 +57,6 @@ function buildToolHandlerDependencies(
   searchRetrieval: SearchRetrievalService,
   stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
 ): ToolHandlerDependencies {
-  // searchRetrieval is closed over here — the handler never sees it directly.
   const createRequestExecutor: ToolHandlerDependencies['createRequestExecutor'] = stubExecutor
     ? (config) =>
         createStubRequestExecutor({
@@ -91,10 +87,7 @@ function buildToolHandlerDependencies(
 }
 
 /**
- * Registers all MCP tools with the server.
- *
- * Iterates over universal tools (generated + aggregated) and registers each
- * with proper configuration including Zod schemas with parameter descriptions.
+ * Registers all MCP tools, resources, and prompts with the server.
  *
  * @param server - MCP server instance
  * @param options - Registration options including runtime config and logger
@@ -113,6 +106,22 @@ export function registerHandlers(
     options.searchRetrieval,
     stubExecutor,
   );
+
+  registerTools(server, deps, options);
+
+  registerAllResources(server, {
+    observability: options.observability,
+    getWidgetHtml: readBuiltWidgetHtml,
+  });
+  registerPrompts(server, options.observability);
+}
+
+/** Iterates over universal tools and registers each with the server. */
+function registerTools(
+  server: Pick<McpServer, 'registerTool'>,
+  deps: ToolHandlerDependencies,
+  options: RegisterHandlersOptions,
+): void {
   const mcpObservation = options.observability.createMcpObservationOptions();
 
   for (const tool of listUniversalTools(generatedToolRegistry)) {
@@ -133,16 +142,17 @@ export function registerHandlers(
       mcpObservation,
     );
 
+    const config = {
+      title: tool.title,
+      description: tool.description,
+      inputSchema: tool.inputSchema,
+      annotations: tool.annotations,
+    };
+
     if (isAppToolEntry(tool)) {
-      registerAppTool(server, tool.name, toAppToolRegistrationConfig(tool), wrappedHandler);
+      registerAppTool(server, tool.name, { ...config, _meta: { ...tool._meta } }, wrappedHandler);
     } else {
-      server.registerTool(tool.name, toRegistrationConfig(tool), wrappedHandler);
+      server.registerTool(tool.name, { ...config, _meta: tool._meta }, wrappedHandler);
     }
   }
-
-  registerAllResources(server, {
-    observability: options.observability,
-    getWidgetHtml: readBuiltWidgetHtml,
-  });
-  registerPrompts(server, options.observability);
 }

@@ -71,7 +71,7 @@ NEXT STEPS AFTER EXPLORE:
  * Canonical Zod schema with `.describe()` and `.meta({ examples })`
  * for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
-export const EXPLORE_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+export const EXPLORE_INPUT_SCHEMA: z.ZodRawShape = {
   query: z
     .string()
     .describe(

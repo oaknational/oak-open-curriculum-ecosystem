@@ -94,7 +94,7 @@ import { USER_SEARCH_SCOPES } from './types.js';
  * Canonical Zod schema with `.describe()` and
  * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
-export const USER_SEARCH_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+export const USER_SEARCH_INPUT_SCHEMA: z.ZodRawShape = {
   query: z
     .string()
     .describe('Search query text.')
@@ -128,7 +128,7 @@ export const USER_SEARCH_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
  * Canonical Zod schema with `.describe()` and
  * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
-export const USER_SEARCH_QUERY_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+export const USER_SEARCH_QUERY_INPUT_SCHEMA: z.ZodRawShape = {
   query: z
     .string()
     .describe('Search query text.')

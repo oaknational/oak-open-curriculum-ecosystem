@@ -17,7 +17,7 @@
  * ```typescript
  * import {
  *   SEARCH_TOOL_DEF,
- *   SEARCH_FLAT_ZOD_SCHEMA,
+ *   SEARCH_INPUT_SCHEMA,
  *   validateSearchSdkArgs,
  *   runSearchSdkTool,
  * } from './aggregated-search/index.js';
@@ -25,7 +25,7 @@
  */
 
 export { SEARCH_TOOL_DEF } from './tool-definition.js';
-export { SEARCH_FLAT_ZOD_SCHEMA } from './flat-zod-schema.js';
+export { SEARCH_INPUT_SCHEMA } from './flat-zod-schema.js';
 export type {
   SearchSdkArgs,
   SearchSdkScope,

@@ -5,7 +5,7 @@
  * human-readable summary and structured content for model reasoning.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { formatToolResponse } from '../universal-tool-shared.js';
 
 /** Shape of each scope's outcome from the parallel search. */

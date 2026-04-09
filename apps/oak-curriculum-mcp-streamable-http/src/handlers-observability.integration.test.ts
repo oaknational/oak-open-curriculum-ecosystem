@@ -4,7 +4,7 @@
  * Verifies that `registerHandlers` wraps each tool handler with `wrapToolHandler`
  * from `@oaknational/sentry-mcp`. This is the branch's core observability
  * contribution to `handlers.ts` and the integration seam most at risk during
- * the merge with main's `toRegistrationConfig` changes.
+ * the merge with main's inline tool registration changes.
  *
  * Safety net for merge — captures branch's observability behaviour so that
  * regressions from the semantic merge in `handlers.ts` are caught immediately.

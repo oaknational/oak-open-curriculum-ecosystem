@@ -22,7 +22,7 @@ import { extractZodShape } from './zod-utils.js';
  * (e.g. download-asset on stdio), its handler fails fast with a clear error
  * rather than silently hiding the tool.
  *
- * All tools include `flatZodSchema` which contains `.describe()` and
+ * All tools include `inputSchema` which contains `.describe()` and
  * `.meta({ examples })` calls that preserve parameter descriptions and
  * examples through the MCP SDK's native `z.toJSONSchema()` conversion.
  *
@@ -33,8 +33,13 @@ import { extractZodShape } from './zod-utils.js';
  * ```typescript
  * const tools = listUniversalTools(registry);
  * for (const tool of tools) {
- *   const config = toRegistrationConfig(tool);
- *   server.registerTool(tool.name, config, handler);
+ *   server.registerTool(tool.name, {
+ *     title: tool.title,
+ *     description: tool.description,
+ *     inputSchema: tool.inputSchema,
+ *     annotations: tool.annotations,
+ *     _meta: tool._meta,
+ *   }, handler);
  * }
  * ```
  */
@@ -46,7 +51,7 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
         name,
         title: def.title,
         description: def.description,
-        flatZodSchema: def.flatZodSchema,
+        inputSchema: def.inputSchema,
         securitySchemes: def.securitySchemes,
         annotations: def.annotations,
         _meta: '_meta' in def ? def._meta : undefined,
@@ -56,11 +61,22 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
 
   const generatedEntries: UniversalToolListEntry[] = registry.toolNames.map((name) => {
     const descriptor = registry.getToolFromToolName(name);
+    const title = descriptor.annotations?.title;
+    const description = descriptor.description;
+
+    if (!title || !description) {
+      throw new Error(
+        `Generated tool "${name}" missing required metadata: ` +
+          `title=${String(title)}, description=${String(description)}. ` +
+          'Fix the generator template or OpenAPI spec.',
+      );
+    }
+
     return {
       name,
-      title: descriptor.annotations?.title,
-      description: descriptor.description,
-      flatZodSchema: extractZodShape(descriptor.toolMcpFlatInputSchema) ?? {},
+      title,
+      description,
+      inputSchema: extractZodShape(descriptor.toolMcpFlatInputSchema) ?? {},
       securitySchemes: descriptor.securitySchemes,
       annotations: descriptor.annotations,
       _meta: descriptor._meta,

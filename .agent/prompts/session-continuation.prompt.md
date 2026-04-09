@@ -49,42 +49,45 @@ git log --oneline --decorate -10
   - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md`
     (post-merge)
 - **Current state**: Branch `feat/mcp_app_ui` with uncommitted changes.
-  88/88 quality gates passing. PR #76. Session work:
-  - Widget-pipeline-idiomatic-alignment plan: all 7 tasks complete
-  - Phase 4.5 plan created, revised after 6-reviewer adversarial review
-  - Widget confirmed as live React MCP App (vite-plugin-singlefile is
-    canonical, verified by disabling and inspecting built artefacts)
-  - 10 completed plans archived, roadmap and cross-references fixed
-  - Merge plan removed (user directs merge)
-  11 specialist reviewer passes across 6 reviewer types.
-- **Current objective**: Execute Phase 4.5 (tool metadata shape), then
-  pre-merge docs/gates (Phase 6a), then commit and merge PR #76.
+  All quality gates passing. PR #76. Phase 4.5 T0-T6 complete:
+  - T0: All deps updated (MCP SDK 1.29, ext-apps 1.5, Vite 8,
+    happy-dom, .js suffix removal, deprecated API migration)
+  - T1-T2: RED tests written (inputSchema rename, empty shape assertions)
+  - T3: `satisfies` replaces widening structural check
+  - T4: `flatZodSchema` → `inputSchema` across ~26 files
+  - T5: No-input tools use `{}` (empty ZodRawShape, MCP spec compliant)
+  - T6: `projections.ts` deleted, registration inlined in `handlers.ts`,
+    `isAppToolEntry` relocated to `type-guards.ts`, `AppToolListEntry`
+    to `types.ts`, title/description made required with fail-fast
+  - T7-T9 remaining: TSDoc cleanup, final review, final gates
+  - Potentially flaky E2E test noted (see napkin)
+- **Current objective**: Complete Phase 4.5 (T7-T9), then Phase 6a
+  pre-merge docs/gates, then commit and merge PR #76.
 - **Hard invariants / non-goals**:
-  - No fallbacks — app brand defaults are correct on their own
+  - No fallbacks, no invented optionality
+  - `inputSchema` always present (empty `{}` for no-input, per MCP spec)
+  - Title and description required on `UniversalToolListEntry`
   - Dark theme page bg is green-700 (#008237), NOT ink-950
   - Light theme page bg is mint-300 (#bef2bd)
   - CSS media query governs dark mode, not JS
-  - `annotations.title` removed — top-level `title` only
   - Widget URI uses `ui://` scheme per spec
   - `readBuiltWidgetHtml` is async (`node:fs/promises`)
-- **Resolved this session** (previously open):
-  - Sentry wrapper async support — FIXED with Awaited<TResult>
-  - Build ordering — DOCUMENTED in deployment-architecture.md
-  - Startup validation — IMPLEMENTED with validateWidgetHtmlExists
-  - Token watcher blocking execSync — REPLACED with async exec
-  - Widget "static HTML" confusion — RESOLVED: it IS a live React app,
-    vite-plugin-singlefile is the canonical MCP Apps delivery pattern
+- **Resolved this session**:
+  - Projection layer eliminated (projections.ts deleted)
+  - `as const satisfies` pattern replaces widening assignment
+  - MCP spec checked: `inputSchema` MUST be valid JSON Schema object
+  - SDK handler signature: 2-arg when inputSchema truthy, 1-arg when falsy
+  - `securitySchemes` confirmed: auth checker uses direct lookup
+  - `annotations?.title` dead fallback removed (title required)
   - Generated tool titles — still deferred (codegen template change)
 - **Open questions / low-confidence areas**:
-  - `as const` readonly vs mutable `_meta` index signature — plan T1
-    satisfies tests will prove this before deletion
-  - `securitySchemes` routing after projection removal — auth checker
-    uses direct lookup, not projection output
-- **Next safe step**: Execute Phase 4.5 (T1-T9). Then Phase 6a
-  pre-merge docs/gates. Then commit and merge PR #76.
-- **Deep consolidation status**: completed — singlefile pattern and
-  plan-level review learning added to distilled, napkin updated with
-  S13/S14, no rotation needed (185 lines).
+  - Potentially flaky E2E test: `get-curriculum-model.e2e.test.ts`
+    (passed in isolation, failed once during `pnpm check`)
+- **Next safe step**: T7 (TSDoc/docs), T8 (final gates), T9 (final
+  review). Then Phase 6a pre-merge docs/gates. Then commit/merge #76.
+- **Deep consolidation status**: completed this handoff — distilled.md
+  updated (addEventListener migration), napkin at 217 lines (no rotation),
+  no patterns met barrier, graduation candidates deferred to T7 TSDoc work
 
 ## Active Workstreams (2026-04-08)
 

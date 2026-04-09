@@ -10,12 +10,8 @@ import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
 import { authLogContextSchema } from '../auth-log-context.js';
 import type { ToolHandlerDependencies } from '../handlers.js';
 import { createFakeLogger } from './fakes.js';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type {
-  CallToolResult,
-  Notification,
-  ServerRequest,
-} from '@modelcontextprotocol/sdk/types.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
+import type { CallToolResult, Notification, ServerRequest } from '@modelcontextprotocol/sdk/types';
 import {
   McpToolError,
   type ToolExecutionResult,

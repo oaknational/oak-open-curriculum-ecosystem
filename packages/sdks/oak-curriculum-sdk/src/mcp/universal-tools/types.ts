@@ -102,22 +102,32 @@ export interface UniversalToolListEntry {
   /** Tool name used for invocation (machine identifier) */
   readonly name: UniversalToolName;
   /** Human-friendly display name (MCP BaseMetadata, spec 2025-11-25) */
-  readonly title?: string;
+  readonly title: string;
   /** Human-readable description of what the tool does */
-  readonly description?: string;
+  readonly description: string;
   /**
    * Zod raw shape for MCP SDK `registerTool()` / `registerAppTool()`.
    *
-   * All tools (generated and aggregated) provide this field. It contains
-   * `.describe()` and `.meta({ examples })` calls that preserve parameter
-   * descriptions and examples through the MCP SDK's native `z.toJSONSchema()`
-   * conversion. This is the canonical input schema for MCP registration.
+   * Tools with parameters provide a Zod raw shape containing `.describe()`
+   * and `.meta({ examples })` calls that preserve parameter descriptions
+   * and examples through the MCP SDK's native `z.toJSONSchema()` conversion.
+   * No-input tools set this to `undefined`.
    */
-  readonly flatZodSchema: z.ZodRawShape;
+  readonly inputSchema: z.ZodRawShape;
   /** Security schemes required to invoke this tool */
   readonly securitySchemes?: readonly SecurityScheme[];
   /** MCP annotations providing behavior hints */
   readonly annotations?: ToolAnnotations;
   /** MCP Apps standard metadata for UI integration (ADR-141) */
   readonly _meta?: ToolMeta;
+}
+
+/**
+ * A `UniversalToolListEntry` known to carry `_meta.ui` metadata.
+ *
+ * Widget tools (those in `WIDGET_TOOL_NAMES`) always have this field.
+ * Use `isAppToolEntry()` to narrow a `UniversalToolListEntry` to this type.
+ */
+export interface AppToolListEntry extends UniversalToolListEntry {
+  readonly _meta: ToolMeta & { readonly ui: { readonly resourceUri: string } };
 }

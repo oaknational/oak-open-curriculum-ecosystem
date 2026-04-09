@@ -7,7 +7,7 @@ import type {
   McpUiToolInputNotification,
   McpUiToolInputPartialNotification,
 } from '@modelcontextprotocol/ext-apps';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 
 /** Runtime state snapshot for the MCP App widget. */
 export interface AppRuntimeState {
@@ -91,33 +91,33 @@ function createSafeDispatch(dispatch: AppRuntimeDispatch): AppRuntimeDispatch {
 export function registerAppRuntimeHandlers(app: App, dispatch: AppRuntimeDispatch): void {
   const safeDispatch = createSafeDispatch(dispatch);
 
-  app.ontoolinput = ({ arguments: toolInput }) => {
+  app.addEventListener('toolinput', ({ arguments: toolInput }) => {
     safeDispatch({
       type: 'tool-input',
       toolInput: toolInput ?? null,
     });
-  };
+  });
 
-  app.ontoolinputpartial = ({ arguments: partialToolInput }) => {
+  app.addEventListener('toolinputpartial', ({ arguments: partialToolInput }) => {
     safeDispatch({
       type: 'tool-input-partial',
       partialToolInput: partialToolInput ?? null,
     });
-  };
+  });
 
-  app.ontoolresult = (toolResult) => {
+  app.addEventListener('toolresult', (toolResult) => {
     safeDispatch({
       type: 'tool-result',
       toolResult,
     });
-  };
+  });
 
-  app.ontoolcancelled = ({ reason }) => {
+  app.addEventListener('toolcancelled', ({ reason }) => {
     safeDispatch({
       type: 'tool-cancelled',
       reason: reason ?? null,
     });
-  };
+  });
 
   app.onteardown = async (): Promise<McpUiResourceTeardownResult> => {
     safeDispatch({

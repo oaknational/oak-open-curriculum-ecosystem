@@ -36,7 +36,7 @@ export function generateStubModules(
 
   const mainIndex = [
     '/* GENERATED FILE - DO NOT EDIT */',
-    "import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';",
+    "import type { CallToolResult } from '@modelcontextprotocol/sdk/types';",
     "import { stubbedToolResponses } from './tools/index.js';",
     "import type { StubbedToolName } from './tools/index.js';",
     '',

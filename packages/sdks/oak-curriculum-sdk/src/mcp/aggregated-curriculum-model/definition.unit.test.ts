@@ -6,11 +6,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { typeSafeKeys } from '@oaknational/type-helpers';
-import {
-  GET_CURRICULUM_MODEL_TOOL_DEF,
-  GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA,
-} from './definition.js';
+import { GET_CURRICULUM_MODEL_TOOL_DEF, GET_CURRICULUM_MODEL_INPUT_SCHEMA } from './definition.js';
 
 describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
   it('has description explaining its orientation purpose', () => {
@@ -28,8 +24,8 @@ describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
   });
 });
 
-describe('GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA', () => {
-  it('takes no parameters (empty schema)', () => {
-    expect(typeSafeKeys(GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA)).toHaveLength(0);
+describe('GET_CURRICULUM_MODEL_INPUT_SCHEMA', () => {
+  it('is an empty shape because this tool takes no parameters', () => {
+    expect(GET_CURRICULUM_MODEL_INPUT_SCHEMA).toEqual({});
   });
 });

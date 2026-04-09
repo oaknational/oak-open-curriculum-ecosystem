@@ -50,5 +50,7 @@ Use pnpm as the package manager for this project.
 - Commit `pnpm-lock.yaml` to version control
 - Document pnpm requirement in README
 - Configure CI/CD to use pnpm
-- Set up `.npmrc` for pnpm-specific settings
+- Prefer `pnpm-workspace.yaml` for install and workspace behaviour; use a
+  project `.npmrc` only for npm-compatible registry and auth settings (see
+  [build-system.md](../../engineering/build-system.md#pnpm-workspace-configuration))
 - Use `pnpm` in all scripts and documentation

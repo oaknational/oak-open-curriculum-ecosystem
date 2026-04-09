@@ -143,7 +143,7 @@ describe('MCP App Pipeline E2E', () => {
     const generated = getToolFromToolName('get-key-stages-subject-lessons');
     const expectedKeyStage = generated.inputSchema.properties.keyStage;
 
-    // The wire inputSchema is produced by z.toJSONSchema() from our flatZodSchema.
+    // The wire inputSchema is produced by z.toJSONSchema() from our inputSchema.
     // Compare the keyStage property against the generated source of truth — this
     // proves examples survive the codegen → Zod .meta() → z.toJSONSchema() pipeline.
     // We extract the wire value via the SSE envelope (unknown at the boundary) and

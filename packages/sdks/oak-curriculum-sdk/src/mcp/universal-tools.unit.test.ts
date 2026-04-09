@@ -93,7 +93,7 @@ describe('listUniversalTools', () => {
     const tools = listUniversalTools(registry);
     const searchTool = tools.find((tool) => tool.name === 'search');
     expect(searchTool).toBeDefined();
-    expect(searchTool?.flatZodSchema).toBe(AGGREGATED_TOOL_DEFS.search.flatZodSchema);
+    expect(searchTool?.inputSchema).toBe(AGGREGATED_TOOL_DEFS.search.inputSchema);
   });
 });
 

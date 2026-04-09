@@ -449,7 +449,7 @@ Add dependencies for:
 - `@types/react-dom`
 - `@testing-library/react`
 - `@testing-library/jest-dom`
-- `jsdom`
+- `happy-dom`
 
 ### Tooling corrections
 

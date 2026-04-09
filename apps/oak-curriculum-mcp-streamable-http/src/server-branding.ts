@@ -20,7 +20,7 @@
  * @see {@link https://spec.modelcontextprotocol.io/2025-11-25/core/lifecycle/} MCP Implementation schema
  */
 
-import type { Icon } from '@modelcontextprotocol/sdk/types.js';
+import type { Icon } from '@modelcontextprotocol/sdk/types';
 
 /**
  * Oak acorn SVG path data (viewBox 0 0 32 42).

@@ -50,7 +50,7 @@ Do NOT use for:
  * Canonical Zod schema with `.describe()` and
  * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
-export const DOWNLOAD_ASSET_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+export const DOWNLOAD_ASSET_INPUT_SCHEMA: z.ZodRawShape = {
   lesson: z
     .string()
     .describe('Lesson slug (e.g. "adding-fractions-with-the-same-denominator")')

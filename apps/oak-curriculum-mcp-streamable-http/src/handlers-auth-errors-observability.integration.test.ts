@@ -19,7 +19,7 @@ import {
   assertAuthErrorLogged,
 } from './test-helpers/auth-error-test-helpers.js';
 import { createFakeSearchRetrieval, createFakeHttpObservability } from './test-helpers/fakes.js';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 
 describe('Auth Error Observability and Non-Auth Passthrough (Integration)', () => {
   let mockServer: ReturnType<typeof createMockServer>;

@@ -8,7 +8,7 @@
 
 import { z } from 'zod';
 
-export const FETCH_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+export const FETCH_INPUT_SCHEMA: z.ZodRawShape = {
   id: z
     .string()
     .describe(

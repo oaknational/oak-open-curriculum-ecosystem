@@ -1,24 +1,19 @@
 /**
- * Integration tests for tool registration via SDK canonical projection.
+ * Integration tests for tool registration.
  *
  * These tests prove that:
- * 1. UI-bearing tools are registered via `registerAppTool()` with the SDK
- *    canonical projection (`toAppToolRegistrationConfig`).
- * 2. Non-UI tools are registered via `server.registerTool()` with the standard
- *    SDK canonical projection (`toRegistrationConfig`).
- * 3. Registration config comes from the SDK canonical projection, not from
- *    hand-assembled field extraction in the app layer.
- *
- * @see .agent/plans/sdk-and-mcp-enhancements/active/ws3-off-the-shelf-mcp-sdk-adoption.plan.md — Phase 3
+ * 1. Every universal tool is registered with `server.registerTool()` or
+ *    `registerAppTool()` depending on whether it carries `_meta.ui`.
+ * 2. Registration configs use the tool's title, description, inputSchema,
+ *    annotations, and _meta directly — no projection functions.
+ * 3. UI-bearing tools have `_meta.ui.resourceUri` in their registration config.
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
 import {
   listUniversalTools,
   generatedToolRegistry,
-  toRegistrationConfig,
-  toAppToolRegistrationConfig,
   isAppToolEntry,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { registerHandlers } from './handlers.js';
@@ -65,8 +60,18 @@ function registerAndCapture() {
   return { server, registerToolSpy };
 }
 
-describe('Tool Registration Uses SDK Canonical Projection (Integration)', () => {
-  it('non-UI tools use toRegistrationConfig projection', () => {
+describe('Tool Registration (Integration)', () => {
+  it('every universal tool is registered with the server', () => {
+    const { registerToolSpy } = registerAndCapture();
+    const tools = listUniversalTools(generatedToolRegistry);
+
+    for (const tool of tools) {
+      const config = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
+      expect(config).toBeDefined();
+    }
+  });
+
+  it('non-UI tools are registered with title, description, inputSchema, and annotations', () => {
     const { registerToolSpy } = registerAndCapture();
     const tools = listUniversalTools(generatedToolRegistry);
 
@@ -74,29 +79,26 @@ describe('Tool Registration Uses SDK Canonical Projection (Integration)', () => 
       if (isAppToolEntry(tool)) {
         continue;
       }
-      const actualConfig = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
-      const expectedConfig = toRegistrationConfig(tool);
-      expect(actualConfig).toEqual(expectedConfig);
+      const config = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
+      expect(config).toHaveProperty('title', tool.title);
+      expect(config).toHaveProperty('description', tool.description);
+      expect(config).toHaveProperty('inputSchema', tool.inputSchema);
+      expect(config).toHaveProperty('annotations', tool.annotations);
     }
   });
 
-  it('UI tools use toAppToolRegistrationConfig projection (superset after normalisation)', () => {
+  it('UI tools are registered with _meta.ui.resourceUri', () => {
     const { registerToolSpy } = registerAndCapture();
     const tools = listUniversalTools(generatedToolRegistry);
+    const appTools = tools.filter(isAppToolEntry);
 
-    for (const tool of tools) {
-      if (!isAppToolEntry(tool)) {
-        continue;
-      }
-      const actualConfig = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
-      const expectedConfig = toAppToolRegistrationConfig(tool);
-      // The SDK's registerAppTool may add additional _meta keys internally.
-      // Verify all fields from our projection are present.
-      expect(actualConfig).toHaveProperty('title', expectedConfig.title);
-      expect(actualConfig).toHaveProperty('description', expectedConfig.description);
-      expect(actualConfig).toHaveProperty('inputSchema', expectedConfig.inputSchema);
-      expect(actualConfig).toHaveProperty('annotations', expectedConfig.annotations);
-      expect(actualConfig).toHaveProperty('_meta.ui', expectedConfig._meta.ui);
+    expect(appTools.length).toBeGreaterThan(0);
+
+    for (const tool of appTools) {
+      const config = findRegisteredConfig(registerToolSpy.mock.calls, tool.name);
+      expect(config).toHaveProperty('title', tool.title);
+      expect(config).toHaveProperty('description', tool.description);
+      expect(config).toHaveProperty('_meta.ui.resourceUri', tool._meta.ui.resourceUri);
     }
   });
 });

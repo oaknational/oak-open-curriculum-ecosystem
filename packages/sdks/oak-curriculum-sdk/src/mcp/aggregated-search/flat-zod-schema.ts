@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import { SEARCH_SCOPES } from './types.js';
 
-export const SEARCH_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+export const SEARCH_INPUT_SCHEMA: z.ZodRawShape = {
   query: z
     .string()
     .optional()

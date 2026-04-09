@@ -8,7 +8,7 @@
  * @see aggregated-search/execution.ts — agent-facing search execution
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
 import { formatError } from '../universal-tool-shared.js';
 import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';

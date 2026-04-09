@@ -67,8 +67,6 @@ export {
   isAggregatedToolName,
   createUniversalToolExecutor,
   generatedToolRegistry,
-  toRegistrationConfig,
-  toAppToolRegistrationConfig,
   isAppToolEntry,
   AGGREGATED_TOOL_DEFS,
   type AppToolListEntry,

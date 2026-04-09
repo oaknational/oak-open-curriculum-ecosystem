@@ -54,7 +54,7 @@ options are too slow for development feedback loops.
 - `@modelcontextprotocol/ext-apps` already installed — the
   `basic-host` example from the same repo is the upstream reference
   host implementation
-- Widget unit tests in jsdom — prove component rendering
+- Widget unit tests in happy-dom — prove component rendering
 
 ### Problem Statement
 

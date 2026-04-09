@@ -60,8 +60,7 @@ function splitDescriptionByFirstParagraph(desc: string): [string, string] {
  * @returns HTML string for the tool
  */
 function renderToolItem(tool: UniversalToolListEntry): string {
-  const desc = tool.description ?? '';
-  const [summary, howToUse] = splitDescriptionByFirstParagraph(desc);
+  const [summary, howToUse] = splitDescriptionByFirstParagraph(tool.description);
 
   const summaryHtml = escapeHtml(summary);
   const howToUseHtml = howToUse

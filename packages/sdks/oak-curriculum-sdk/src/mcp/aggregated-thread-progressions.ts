@@ -15,8 +15,7 @@
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import type { z } from 'zod';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
 import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
@@ -24,10 +23,12 @@ import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
- * Flat Zod shape for MCP SDK registration of the get-thread-progressions tool.
- * Empty shape — this tool takes no parameters.
+ * Empty input schema for the get-thread-progressions tool (no parameters).
+ *
+ * Per MCP spec, no-input tools declare `{ "type": "object", "additionalProperties": false }`
+ * on the wire. An empty `ZodRawShape` produces this through the SDK's `z.toJSONSchema()`.
  */
-export const GET_THREAD_PROGRESSIONS_FLAT_ZOD_SCHEMA: z.ZodRawShape = {};
+export const GET_THREAD_PROGRESSIONS_INPUT_SCHEMA: Record<string, never> = {};
 
 /**
  * Tool definition for get-thread-progressions.

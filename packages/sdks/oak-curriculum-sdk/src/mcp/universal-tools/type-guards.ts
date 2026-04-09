@@ -8,7 +8,12 @@
 
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { AGGREGATED_TOOL_DEFS } from './definitions.js';
-import type { AggregatedToolName, UniversalToolName } from './types.js';
+import type {
+  AggregatedToolName,
+  UniversalToolName,
+  UniversalToolListEntry,
+  AppToolListEntry,
+} from './types.js';
 
 /**
  * Type predicate for aggregated tool names.
@@ -57,4 +62,14 @@ export function isUniversalToolName(
     return false;
   }
   return isAggregatedToolName(value) || isToolNameFn(value);
+}
+
+/**
+ * Type guard that narrows a `UniversalToolListEntry` to an `AppToolListEntry`.
+ *
+ * Returns true when the tool carries `_meta.ui.resourceUri`, indicating it
+ * should be registered via `registerAppTool()` for UI metadata normalisation.
+ */
+export function isAppToolEntry(tool: UniversalToolListEntry): tool is AppToolListEntry {
+  return tool._meta?.ui !== undefined && typeof tool._meta.ui.resourceUri === 'string';
 }

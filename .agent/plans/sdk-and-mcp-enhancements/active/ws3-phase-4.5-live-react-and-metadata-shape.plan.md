@@ -4,39 +4,42 @@ overview: "Eliminate the tool metadata projection layer — produce SDK-ready sh
 specialist_reviewer: "architecture-reviewer-fred, type-reviewer, mcp-reviewer, test-reviewer, code-reviewer"
 isProject: false
 todos:
+  - id: t0-deps
+    content: "T0: Update all outdated dependencies (except Zod/TS)"
+    status: done
   - id: t1-red-satisfies
-    content: "T1 (RED): satisfies tests proving tool definitions match registerTool/registerAppTool config"
-    status: pending
+    content: "T1 (RED): Tests with inputSchema rename (compiler errors = RED)"
+    status: done
   - id: t2-red-no-input
-    content: "T2 (RED): Test asserting no-input tools have inputSchema undefined, not empty {}"
-    status: pending
+    content: "T2 (RED): Tests asserting no-input tools have empty inputSchema"
+    status: done
   - id: t3-green-fix-widening
-    content: "T3 (GREEN): Replace widening structural check with satisfies in definitions.ts"
-    status: pending
+    content: "T3 (GREEN): Replace widening structural check with satisfies"
+    status: done
   - id: t4-green-rename-inputschema
-    content: "T4 (GREEN): Rename flatZodSchema → inputSchema across all definitions and consumers"
-    status: pending
+    content: "T4 (GREEN): Rename flatZodSchema → inputSchema across all files"
+    status: done
   - id: t5-green-no-input
-    content: "T5 (GREEN): No-input tools omit inputSchema (both aggregated and generated)"
-    status: pending
+    content: "T5 (GREEN): No-input tools use empty ZodRawShape (MCP spec compliant)"
+    status: done
   - id: t6-green-inline-projection
-    content: "T6 (GREEN): Delete projections.ts, inline _meta spread at call site, relocate type guards"
-    status: pending
+    content: "T6 (GREEN): Delete projections.ts, inline at call site, relocate type guards, require title/description"
+    status: done
   - id: t7-refactor-docs
-    content: "T7 (REFACTOR): TSDoc, update deployment-architecture.md, remove dead fallbacks"
+    content: "T7 (REFACTOR): TSDoc, docs cleanup, remaining flatZodSchema references"
     status: pending
   - id: t8-quality-gates
     content: "T8: Full quality gate chain"
     status: pending
   - id: t9-adversarial-review
-    content: "T9: Adversarial specialist reviews"
+    content: "T9: Final adversarial specialist reviews"
     status: pending
 ---
 
 # Phase 4.5: Tool Metadata Shape Correction
 
-**Last Updated**: 2026-04-08
-**Status**: PLANNING — revised after 6-reviewer adversarial review
+**Last Updated**: 2026-04-09
+**Status**: IN PROGRESS — T0-T6 complete, T7-T9 remaining
 **Scope**: Eliminate the tool metadata projection layer so definitions
 produce SDK-ready shapes directly. No widget build changes.
 **Branch**: `feat/mcp_app_ui` (existing)
@@ -93,16 +96,37 @@ unanimously determined this was wrong:
 
 ---
 
+## T0: Prerequisite Dependency Update (COMPLETE)
+
+All outdated dependencies updated (except Zod and TypeScript):
+
+- Minor/patch: vitest 4.1.3, @clerk/* 3.2.7/2.0.11, @types/node 25.5.2,
+  @playwright/test 1.59.1, @sentry/node 10.47.0, eslint 10.2.0, knip 6.3.1,
+  turbo 2.9.5, react 19.2.4, dotenv 17.4.1, typescript-eslint 8.58.1
+- MCP SDK: @modelcontextprotocol/sdk 1.29.0, ext-apps 1.5.0
+- Major: Vite 8.0, @vitejs/plugin-react 6.0, cross-env 10.1
+- jsdom replaced with happy-dom (widget tests)
+- Removed `.js` suffixes from 60 files of `@modelcontextprotocol/sdk/*` imports
+- Migrated deprecated ext-apps `on*` callbacks to `addEventListener`
+- All 88 gates passing
+
+---
+
 ## Design Principles
 
 1. **Build directly to the target interface** — tool metadata is produced
    once in the shape the SDK consumes. No intermediate representations.
-2. **No-input means no input** — tools that take no parameters express
-   this by omitting `inputSchema` at the registration site (the SDK
-   normalises both to the same wire output, but `undefined` is clearer).
+2. **No-input tools declare an empty object schema** — per MCP spec,
+   `inputSchema` MUST be a valid JSON Schema object. No-input tools use
+   an empty `ZodRawShape` (`{}`) which produces `{ "type": "object",
+   "additionalProperties": false }` on the wire (Zod v4 default strict).
+   This preserves the SDK's 2-arg handler signature for all tools.
 3. **Inline spread, not a projection layer** — the only non-trivial
    operation in the projection is `{ ...tool._meta }` to strip readonly.
    This belongs at the call site, not in a single-consumer abstraction.
+4. **Title and description are required** — `UniversalToolListEntry`
+   requires both. `list-tools.ts` fails fast if a generated tool lacks
+   either. No fallback chains.
 
 **Non-Goals** (YAGNI):
 

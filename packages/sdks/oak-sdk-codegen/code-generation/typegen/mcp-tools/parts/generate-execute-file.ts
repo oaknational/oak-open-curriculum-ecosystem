@@ -58,7 +58,7 @@ export function generateExecuteFile(toolNames: string[]): string {
 
   return [
     BANNER,
-    "import { CallToolRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types.js';",
+    "import { CallToolRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types';",
     "import { getToolEntryFromToolName, getToolFromToolName, isToolName, toolNames, type ToolDescriptorForName, type ToolName } from '../definitions.js';",
     "import type { ToolArgsForName, ToolClientForName, ToolResultForName } from '../aliases/types.js';",
     "import { DOCUMENTED_ERROR_PREFIX } from '../contract/tool-descriptor.contract.js';",

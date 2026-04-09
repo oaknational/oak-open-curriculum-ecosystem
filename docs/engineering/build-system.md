@@ -10,6 +10,27 @@ The build system uses:
 - **Turborepo** - Task runner with caching and dependency management
 - **tsup** - TypeScript bundler for libraries and apps
 
+## pnpm workspace configuration
+
+Workspace membership lives in `pnpm-workspace.yaml` at the repo root. Linking and
+hoisting use **pnpm defaults** (no overrides for `linkWorkspacePackages`,
+`preferWorkspacePackages`, or `shamefullyHoist`), which keeps the strict
+`node_modules` layout described in
+[ADR-012](../architecture/architectural-decisions/012-pnpm-package-manager.md).
+
+Internal `@oaknational/*` dependencies must use the `workspace:` protocol in
+`package.json` (`workspace:*` or `workspace:^`). Do not point them at the public
+registry by semver alone.
+
+`onlyBuiltDependencies` in `pnpm-workspace.yaml` is an **intentional** allowlist:
+only those packages may run install lifecycle scripts.
+
+**Project `.npmrc` is optional.** Use it for npm-compatible registry and auth
+only (`registry`, scoped registry maps, tokens). Avoid pnpm-only keys in
+`.npmrc`: npm 9+ warns on unknown project config, and a future npm major may
+treat that as an error. Other pnpm settings belong in `pnpm-workspace.yaml` (see
+[pnpm settings](https://pnpm.io/settings)).
+
 ## Build Order
 
 All packages use a unified `build` script. Turbo's `^build` dependency ensures packages build in the correct order based on the workspace dependency graph:

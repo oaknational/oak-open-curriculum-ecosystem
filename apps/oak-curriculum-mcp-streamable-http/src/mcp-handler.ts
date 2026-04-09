@@ -13,7 +13,7 @@
 
 import { normalizeError } from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { createChildLogger } from './logging/index.js';
 import type { HttpObservability } from './observability/http-observability.js';

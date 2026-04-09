@@ -155,10 +155,10 @@ export function App(): React.JSX.Element {
     onAppCreated: (createdApp) => {
       registerAppRuntimeHandlers(createdApp, dispatch);
 
-      createdApp.onhostcontextchanged = (updatedHostContext) => {
+      createdApp.addEventListener('hostcontextchanged', (updatedHostContext) => {
         setHostContext((prev) => ({ ...prev, ...updatedHostContext }));
         applyHostContextToRuntime(dispatch, updatedHostContext);
-      };
+      });
     },
   });
 

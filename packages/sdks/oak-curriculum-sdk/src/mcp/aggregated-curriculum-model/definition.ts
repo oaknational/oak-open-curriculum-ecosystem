@@ -6,7 +6,6 @@
  * Separate from execution logic.
  */
 
-import type { z } from 'zod';
 import { ONTOLOGY_RECOMMENDED_FIRST_STEP } from '../prerequisite-guidance.js';
 import { WIDGET_URI } from '../widget-constants.js';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
@@ -43,10 +42,9 @@ Do NOT use for:
 } as const;
 
 /**
- * Flat Zod shape for MCP SDK registration of the get-curriculum-model tool.
+ * Empty input schema for the get-curriculum-model tool (no parameters).
  *
- * Canonical Zod schema with `.describe()` for the
- * MCP SDK's native `z.toJSONSchema()` conversion. No examples defined
- * for this tool's parameters.
+ * Per MCP spec, no-input tools declare `{ "type": "object", "additionalProperties": false }`
+ * on the wire. An empty `ZodRawShape` produces this through the SDK's `z.toJSONSchema()`.
  */
-export const GET_CURRICULUM_MODEL_FLAT_ZOD_SCHEMA: z.ZodRawShape = {};
+export const GET_CURRICULUM_MODEL_INPUT_SCHEMA: Record<string, never> = {};

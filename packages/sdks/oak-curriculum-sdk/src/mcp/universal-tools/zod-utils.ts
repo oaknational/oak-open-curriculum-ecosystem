@@ -46,9 +46,9 @@ export function isZodObject(schema: z.ZodType): schema is z.ZodObject<z.ZodRawSh
  *
  * @example
  * ```typescript
- * const flatZodSchema = extractZodShape(descriptor.toolMcpFlatInputSchema);
- * if (flatZodSchema) {
- *   server.registerTool(name, flatZodSchema, handler);
+ * const inputSchema = extractZodShape(descriptor.toolMcpFlatInputSchema);
+ * if (inputSchema) {
+ *   server.registerTool(name, { inputSchema }, handler);
  * }
  * ```
  */

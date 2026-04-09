@@ -1,14 +1,14 @@
 /**
  * Vitest configuration for MCP App widget in-process tests.
  *
- * Uses jsdom environment for DOM testing. Scoped to widget/ source only —
+ * Uses happy-dom environment for DOM testing. Scoped to widget/ source only —
  * server-side tests use the main vitest.config.ts with node environment.
  */
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    environment: 'jsdom',
+    environment: 'happy-dom',
     include: [
       'widget/src/**/*.unit.test.ts',
       'widget/src/**/*.unit.test.tsx',

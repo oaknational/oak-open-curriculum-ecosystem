@@ -8,7 +8,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types';
 import type { Request } from 'express';
 import { authInfoSchema } from './auth-info-schema.js';
 

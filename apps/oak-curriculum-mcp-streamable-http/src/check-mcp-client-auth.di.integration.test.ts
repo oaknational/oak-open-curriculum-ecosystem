@@ -9,7 +9,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { Logger } from '@oaknational/logger';
 import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
+import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types';
 import type { ResourceValidationResult } from './resource-parameter-validator.js';
 import { checkMcpClientAuth, type CheckMcpClientAuthDeps } from './check-mcp-client-auth.js';
 import { createFakeAuthInfo, createFakeLogger } from './test-helpers/fakes.js';

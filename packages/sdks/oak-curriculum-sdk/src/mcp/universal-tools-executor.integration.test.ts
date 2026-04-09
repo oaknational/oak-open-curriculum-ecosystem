@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import { McpToolError } from './execute-tool-call.js';
 import { err, ok } from '@oaknational/result';

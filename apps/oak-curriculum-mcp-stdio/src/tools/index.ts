@@ -5,7 +5,7 @@
  * All tool logic and validation is handled by the SDK.
  */
 
-import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types';
 import {
   executeToolCall,
   createUniversalToolExecutor,

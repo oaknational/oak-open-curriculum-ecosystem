@@ -7,7 +7,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { runCurriculumModelTool } from './execution.js';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 
 type StructuredContent = NonNullable<CallToolResult['structuredContent']>;
 

@@ -6,7 +6,7 @@
  * validation, dispatch, and result formatting.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import type { ToolExecutionResult } from '../execute-tool-call.js';
 import {
   formatToolResponse,

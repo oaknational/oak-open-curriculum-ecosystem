@@ -5,7 +5,7 @@
  * curriculum model data composition function.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { composeCurriculumModelData } from '../curriculum-model-data.js';
 import { formatToolResponse } from '../universal-tool-shared.js';
 

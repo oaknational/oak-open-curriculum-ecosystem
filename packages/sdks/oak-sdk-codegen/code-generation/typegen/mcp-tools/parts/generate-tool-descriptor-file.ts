@@ -11,7 +11,7 @@ export function generateToolDescriptorFile(): string {
  * @remarks See .agent/directives/schema-first-execution.md
  * for the schema-first execution directive that governs this file.
  */
-import type { Tool } from '@modelcontextprotocol/sdk/types.js';
+import type { Tool } from '@modelcontextprotocol/sdk/types';
 import type { ZodType, core } from 'zod';
 
 /**

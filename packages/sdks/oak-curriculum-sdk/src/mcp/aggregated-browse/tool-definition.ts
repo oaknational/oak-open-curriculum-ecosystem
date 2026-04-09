@@ -61,7 +61,7 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
  * Canonical Zod schema with `.describe()` and `.meta({ examples })`
  * for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
-export const BROWSE_FLAT_ZOD_SCHEMA: z.ZodRawShape = {
+export const BROWSE_INPUT_SCHEMA: z.ZodRawShape = {
   subject: z
     .enum([...SUBJECTS])
     .optional()

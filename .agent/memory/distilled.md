@@ -196,11 +196,11 @@ context with no natural permanent home.
   `["app"]`, or `["model", "app"]`. Controls who can call
   the tool. Missing = both. `registerAppTool` normalises both
   nested `_meta.ui.resourceUri` and legacy flat key formats.
-- **MCP Apps handler composition**: the ext-apps SDK has
-  both `on*` property setters AND `addEventListener` for
-  multi-listener support. We compose style sync and
-  runtime-state dispatch in one handler for simplicity and
-  error isolation, not because the SDK forces single-slot.
+- **MCP Apps handler composition**: use `addEventListener`
+  for all notification events (`toolinput`, `toolresult`,
+  `toolcancelled`, `hostcontextchanged`). The `on*` property
+  setters are deprecated since ext-apps 1.5. `onteardown` and
+  `onerror` are NOT deprecated (request handlers, not events).
 - **`console` ban means canonical logger**: the `no-console`
   rule forces injection of `@oaknational/logger`, not fallback
   to `process.stderr.write`. Build scripts without a logger

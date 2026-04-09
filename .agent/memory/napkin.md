@@ -183,3 +183,35 @@ premise error before any code was written.
 - `changedPath.startsWith(dir)` is path-fragile without trailing separator
 - "Static HTML" framing was wrong — the confusion was delivery mechanism
   vs runtime behaviour
+
+### Session 2026-04-08d — pnpm defaults and `.npmrc`
+
+#### Resolutions
+
+- Moved pnpm-only settings out of `.npmrc` (npm 9+ unknown-project-config
+  warnings), then removed non-default hoisting/linking overrides entirely.
+- Workspace install now uses **pnpm defaults**; internal packages already use
+  `workspace:` protocol, so linking stays correct without `linkWorkspacePackages`
+  or `preferWorkspacePackages`.
+- Deleted project `.npmrc` when it contained only comments; add one back for
+  registry/auth if needed.
+- Permanent doc: `docs/engineering/build-system.md` § pnpm workspace
+  configuration; ADR-012 Implementation updated.
+
+#### Surprises
+
+**S15: npm “unknown config” is not pnpm deprecation.** npm reads project
+`.npmrc` and does not recognise pnpm-specific keys; pnpm still supports them
+when set in `pnpm-workspace.yaml` or other pnpm config surfaces.
+
+### Session 2026-04-08e/09 — Phase 4.5 execution
+
+#### Potentially flaky test
+
+`@oaknational/oak-curriculum-mcp-streamable-http#test:e2e` — intermittent
+failure during `pnpm check`. The E2E tests for `get-curriculum-model` failed
+once during a gate run but passed on a subsequent run of `pnpm test:e2e` in
+isolation and on a later `pnpm check` run. Likely test coupling, race
+condition, or shared state mutation. Needs investigation: check test
+isolation, shared server instances, and any global state in the E2E harness.
+File: `apps/oak-curriculum-mcp-streamable-http/e2e-tests/get-curriculum-model.e2e.test.ts`
