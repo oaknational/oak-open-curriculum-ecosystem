@@ -81,8 +81,13 @@ structural decisions or choosing a rebuild strategy.
 2. Inspect the strong layers with local tools.
    - `textutil -convert txt -stdout report.docx` for visible text
    - `unzip -p report.docx word/_rels/document.xml.rels` for hyperlink targets
-   - `pandoc report.docx -t gfm` as a secondary lens for citation placement and
-     footnote hints
+     (note: for ChatGPT deep-research exports, the rels file often contains
+     very few URLs — most citation links are embedded in the document body and
+     only recoverable via `pandoc`)
+   - `pandoc report.docx -t gfm` as the **primary citation recovery surface**
+     for ChatGPT exports — this converts the DOCX body into markdown with
+     properly numbered `[[N]](URL)` citation links at the correct text
+     positions, which is the authoritative source for positional replacement
    - If `pandoc` emits a trailing horizontal-rule or raw-URL bibliography
      dump, treat only the body before that dump as the usable citation surface
      unless a link is uniquely recoverable there
@@ -99,6 +104,19 @@ structural decisions or choosing a rebuild strategy.
    - Treat dumped raw URLs from a PDF as a verification layer, not as a better
      bibliography. Compare them against the DOCX relationship targets before
      claiming they add genuinely new references.
+
+   **Critical: Unicode Private Use Area encoding.** ChatGPT exports wrap
+   citation markers in invisible Unicode PUA characters:
+   - `U+E200` — start of citation block
+   - `U+E202` — separator between individual turn references
+   - `U+E201` — end of citation block
+
+   These characters are **invisible** in most editors, terminals, and the Read
+   tool. A line that appears as `citeturn4view0turn2view0` is actually
+   `\ue200cite\ue202turn4view0\ue202turn2view0\ue201`. Standard text grep
+   for `citeturn` will fail. Use `cat -v` or `python3 -c "print(hex(ord(c)))"
+   inspection to detect them, or match on the PUA range
+   `[\ue200-\ue2ff]` in regex.
 
 3. Choose the canonical editing target.
    - The editing target is the source-faithful clean copy.
@@ -140,6 +158,20 @@ structural decisions or choosing a rebuild strategy.
      at that point in the markdown.
    - Replace broken inline markers with inline linked citation numbers before
      escalating to heavier editorial structures.
+   - **Citation markers are not stable keys.** The same `citeturn4view0`
+     marker can appear at multiple document positions mapping to completely
+     different numbered citations. Do not build a marker-to-URL lookup table.
+     Use **positional matching**: for each marker, find the preceding text
+     context in the pandoc conversion and extract the citation(s) that follow
+     that context.
+   - **Use full-text search, not line-by-line matching.** Pandoc wraps long
+     paragraphs and list items across multiple lines, so the context you need
+     may span pandoc line breaks. Join or normalise whitespace in the pandoc
+     text before searching.
+   - **A single citation block can map to multiple consecutive citations.**
+     Some `citeturnXturnYturnZ` blocks correspond to grouped citations like
+     `[[6]](url1)[[7]](url2)` in the pandoc output. Extract all consecutive
+     citations at each matched position, not just the first.
    - When recovered numeric citations come from DOCX or pandoc output,
      normalise them to readable markdown such as `[[12]](https://example.com)`
      rather than leaving heavily escaped link text in the final copy.

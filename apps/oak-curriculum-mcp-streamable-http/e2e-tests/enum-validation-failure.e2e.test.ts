@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
-import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 import { hasJsonRpcOrResultError, parseSseEnvelope } from './helpers/sse.js';
 import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 
@@ -26,7 +25,7 @@ async function post(body: Record<string, unknown>) {
   const app = await createApp({
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
-    validateWidgetHtml: skipWidgetHtmlValidation,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
   });
   return request(app).post('/mcp').set('Host', 'localhost').set('Accept', ACCEPT).send(body);
 }

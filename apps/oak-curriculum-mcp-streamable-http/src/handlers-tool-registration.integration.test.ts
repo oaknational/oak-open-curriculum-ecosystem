@@ -55,6 +55,7 @@ function registerAndCapture() {
     logger: createFakeLogger(),
     observability: createFakeHttpObservability(),
     searchRetrieval: createFakeSearchRetrieval(),
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
   });
 
   return { server, registerToolSpy };

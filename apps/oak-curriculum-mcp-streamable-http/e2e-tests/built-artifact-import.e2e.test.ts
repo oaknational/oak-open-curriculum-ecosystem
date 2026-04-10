@@ -109,7 +109,7 @@ describe('Built application artefact', () => {
     expect(result.stderr).toBe('');
   });
 
-  it('serves the widget resource after the compiled app is relocated away from dist sidecars', async () => {
+  it('serves the widget resource from the injected provider after the compiled app is relocated', async () => {
     const { relocatedDir, moduleUrl } = await createRelocatedBuiltApplicationModule();
 
     try {
@@ -122,7 +122,11 @@ describe('Built application artefact', () => {
         useStubTools: true,
       });
       const observability = createMockObservability(runtimeConfig);
-      const app = await module.createApp({ runtimeConfig, observability });
+      const app = await module.createApp({
+        runtimeConfig,
+        observability,
+        getWidgetHtml: () => '<!doctype html><html><body>relocated-widget</body></html>',
+      });
 
       const response = await request(app)
         .post('/mcp')
@@ -143,7 +147,7 @@ describe('Built application artefact', () => {
 
       expect(content?.uri).toBe(WIDGET_URI);
       expect(content?.mimeType).toBe(RESOURCE_MIME_TYPE);
-      expect(content?.text).toContain('<!doctype html>');
+      expect(content?.text).toContain('relocated-widget');
     } finally {
       await rm(relocatedDir, { recursive: true, force: true });
     }

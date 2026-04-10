@@ -612,7 +612,7 @@ The deep analysis (Phase 2) will confirm each package's tier and determine the o
 
 ## Relationship to Plan A (Widget Crash Fix)
 
-Plan A ([`embed-widget-html-at-build-time.plan.md`](.agent/plans/sdk-and-mcp-enhancements/active/embed-widget-html-at-build-time.plan.md)) is correct as-is. This exploration confirms:
+Plan A ([`embed-widget-html-at-build-time.plan.md`](.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md)) is **COMPLETE** (ADR-156). This exploration confirmed:
 
 - Committed constant in the app workspace is proportional
 - DI preservation is correct

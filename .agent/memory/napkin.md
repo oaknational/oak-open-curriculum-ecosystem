@@ -197,15 +197,123 @@ Derived from dependency analysis of all package.json files:
   format deviation, missing plan links, "consumer-general"
   phrasing opacity, and the un-graduated tier model issue.
 
+### Session 2026-04-10g — embed-widget-html-at-build-time execution
+
+#### Completed (Phases 1-3)
+
+- **Phase 1**: Vite outDir → `.widget-build/` (gitignored intermediate),
+  `scripts/embed-widget-html.js` codegen, `src/generated/widget-html-content.ts`
+  committed constant, `build` decoupled to `tsup` only, `build:widget` chains
+  Vite + embed. Turbo inputs cleaned (removed widget paths from `#build`).
+- **Phase 2**: `getWidgetHtml` changed `() => Promise<string>` → `() => string`.
+  `CreateAppOptions.getWidgetHtml` required. `server-runtime.ts` `createApp`
+  made required (was optional with fallback). `index.ts` wraps `createApp`
+  to inject `WIDGET_HTML_CONTENT` via DI closure — framework stays generic
+  (ADR-154). `register-widget-resource.ts` rewritten (all fs code removed).
+  3 dead files deleted. ~18 test files: `validateWidgetHtml: skipWidgetHtmlValidation`
+  → `getWidgetHtml: () => '<html>test</html>'`.
+- **Phase 3**: `deployment-architecture.md` fully updated (no more `dist/oak-banner.html`,
+  `validateWidgetHtmlExists`, `process.cwd()` resolution). ADR-156 created.
+  ADR README index updated. `README.md` and `dev-server-management.md` stale
+  references fixed. All quality gates green: 590 unit/integration tests,
+  15 widget tests, 157 E2E tests.
+- **Reviewer coverage**: 7 sub-agent reviews across 5 specialties (code,
+  config, architecture-fred, architecture-wilma, test, docs-adr). Wilma
+  caught a smoke-test blind spot (missing `getWidgetHtml`); test-reviewer
+  caught stale E2E test description.
+
+#### Key patterns established
+
+- **Codegen constant via DI**: The entry point (`index.ts`) imports the
+  committed constant and closes over it in the `createApp` wrapper.
+  `server-runtime.ts` stays generic (ADR-154). Tests inject trivial fakes.
+- **`build:widget` is codegen**: Runs separately from `build` (like
+  `sdk-codegen`). Committed output is a normal `.ts` source file.
+- **`dist/index.js` size**: 466KB (was 122KB) — 345KB widget HTML constant
+  embedded. Acceptable for Node serverless.
+
 #### Next session pickup
 
-1. Execute `embed-widget-html-at-build-time.plan.md` — widget
-   HTML as committed TypeScript constant, DI preserved, ~3 files
-   deleted, ~18 test files cleaned up
-2. After green gates + Vercel verification, archive
-   `vercel-widget-crash-deep-investigation.notes.md`
+1. Commit/push the widget crash fix, verify Vercel preview
+2. Archive `vercel-widget-crash-deep-investigation.notes.md`
 3. Separately track `static-content.ts` `process.cwd()` pattern
    (non-blocking, Vercel ignores `express.static()`)
 4. Workspace topology exploration (plan B) — lifecycle
    classification doc, logger reclassification, synonym-to-
    codegen conversion, ESLint cross-category enforcement
+
+### Session 2026-04-10h — EEF vs Oak MCP stack comparison note
+
+#### What Was Done
+
+- Created `.agent/reference-local/eef-data/oak-http-stack-comparison.md`
+  comparing the local EEF snapshot against the canonical Oak HTTP MCP stack
+  and the immediate shared SDK boundary.
+- Kept the note explicit about three different truth modes:
+  snapshot truth, README/package claim, and current Oak implementation.
+
+#### Mistakes Made
+
+- Initially treated `.agent/reference-local/eef-data/` as if it only contained
+  `README.md` because the first file sweep used plain `rg --files` and missed
+  ignored/local artefacts. The repo's own distilled note was right: use
+  `rg -uu` or an explicit directory walk when inspecting `reference-local` or
+  other potentially ignored estates.
+
+#### Patterns to Remember
+
+- For local reference snapshots, compare not just code vs code but also
+  checked-in layout vs declared package layout vs runtime loader assumptions.
+  In the EEF snapshot, those three layers diverged in a way that materially
+  changed the comparison.
+- `scripts/validate-practice-fitness.mjs` only evaluates markdown files that
+  declare `fitness_line_target` frontmatter. A new note under
+  `.agent/reference-local/` is discoverable as markdown, but it is not a
+  practice-fitness-managed file unless it opts in with fitness frontmatter.
+- User correction: when analysing reference material, the primary goal may be
+  to understand the impact it strives to create and how Oak could gain value
+  from it, not to turn every divergence into a fix list. Keep the engineering
+  gap analysis subordinate to the product-intent reading.
+
+### Session 2026-04-10i — Widget crash fix execution
+
+#### What Was Done
+
+- Executed all three phases of the embed-widget-html-at-build-time
+  plan. Vite now outputs to `.widget-build/` (gitignored), embed
+  script produces `src/generated/widget-html-content.ts` (committed),
+  runtime imports via DI. Deleted `validate-widget-html.ts`,
+  `test-helpers/widget-html-validation.ts`, and their tests.
+- Created ADR-156 documenting the decision. Updated
+  `deployment-architecture.md`, `README.md`, `dev-server-management.md`.
+- Extracted generic HTTP server lifecycle helpers from
+  `smoke-tests/local-server.ts` into `smoke-tests/server-lifecycle.ts`
+  (port probing, address validation, graceful shutdown).
+- Invoked reviewers continuously throughout: code reviewer, config
+  reviewer, Wilma (adversarial), test reviewer, docs-ADR reviewer.
+
+#### Mistakes Made
+
+- Wilma reviewer caught that `smoke-tests/local-server.ts` calls
+  `createApp` without `getWidgetHtml` — file was excluded from
+  `tsconfig.lint.json` type-check, so the type error was invisible
+  until runtime. Lesson: smoke tests outside type-check scope are
+  a blind spot for DI contract changes.
+- Config reviewer caught that `turbo.json` still listed widget paths
+  in the `#build` task inputs after the runtime build was decoupled
+  from widget sources. Lesson: when decoupling build phases, audit
+  task-runner configs in the same pass.
+
+#### Patterns to Remember
+
+- When changing a DI contract (adding/removing/changing a required
+  option), sweep all call sites including those outside the main
+  type-check scope (smoke tests, E2E helpers, scripts). Files in
+  `tsconfig.lint.json` `exclude` can silently hold stale contracts.
+- `built-artifact-import.e2e.test.ts` verifies module relocatability,
+  not embedded content correctness. After switching to DI-injected
+  fakes, update both the test description and assertions to match
+  what the test actually proves.
+- Continuous reviewer invocation (not just at the end) catches issues
+  early when each phase is small and focused. Particularly effective
+  for adversarial (Wilma) and config reviewers.

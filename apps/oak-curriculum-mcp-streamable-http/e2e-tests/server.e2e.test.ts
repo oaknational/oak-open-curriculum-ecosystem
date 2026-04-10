@@ -5,7 +5,6 @@ import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
-import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 import { toolNames } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 import { parseSseEnvelope } from './helpers/sse.js';
@@ -92,7 +91,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       upstreamMetadata: TEST_UPSTREAM_METADATA,
       clerkMiddlewareFactory: createNoOpClerkMiddleware(),
     });
@@ -126,7 +125,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -166,7 +165,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -187,7 +186,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -218,7 +217,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -249,7 +248,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -282,7 +281,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -318,7 +317,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')

@@ -16,9 +16,10 @@ This commonly happens when:
 3. Changes to server code aren't reflected (still running old process)
 
 The HTTP dev scripts now solve one older failure mode automatically: they run
-an initial widget build and keep `dist/oak-banner.html` current with a
-background watcher before starting the server. You no longer need a separate
-manual `pnpm build` just to satisfy the MCP App widget contract.
+an initial widget build and regenerate `src/generated/widget-html-content.ts`
+(the committed TypeScript constant) before starting the server. You no longer
+need a separate manual `pnpm build:widget` just to satisfy the MCP App widget
+contract.
 
 ## The Solution
 

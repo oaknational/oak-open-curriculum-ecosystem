@@ -7,7 +7,8 @@
  *
  * **Build mode** (single-page): Builds only `oak-banner.html` as a
  * self-contained HTML file via `vite-plugin-singlefile`. The output
- * (`dist/oak-banner.html`) is registered as the MCP App resource.
+ * (`.widget-build/oak-banner.html`) is an intermediate artefact consumed
+ * by the embed script to produce a committed TypeScript constant.
  */
 import { exec } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
@@ -131,8 +132,8 @@ export default defineConfig({
     __APP_VERSION__: JSON.stringify(packageVersion),
   },
   build: {
-    outDir: resolve(widgetRoot, '..', 'dist'),
-    emptyOutDir: false,
+    outDir: resolve(widgetRoot, '..', '.widget-build'),
+    emptyOutDir: true,
     assetsInlineLimit: () => true,
     chunkSizeWarningLimit: 100000000,
     cssCodeSplit: false,

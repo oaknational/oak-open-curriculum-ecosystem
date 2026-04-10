@@ -167,6 +167,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-153: Constant-Type-Predicate Pattern](153-constant-type-predicate-pattern.md)
 - [ADR-154: Separate Framework from Consumer](154-separate-framework-from-consumer.md)
 - [ADR-155: Decompose at the Tension](155-decompose-at-the-tension.md)
+- [ADR-156: Embed Widget HTML as Committed TypeScript Constant](156-embed-widget-html-at-build-time.md)
 
 ## Key Architectural Decisions
 

@@ -1,5 +1,6 @@
 import http from 'node:http';
 
+import { WIDGET_HTML_CONTENT } from './generated/widget-html-content.js';
 import { createApp } from './application.js';
 import { bootstrapApp } from './bootstrap-app.js';
 import {
@@ -31,7 +32,7 @@ const observability = observabilityResult.value;
 await startConfiguredHttpServer({
   runtimeConfig: config,
   observability,
-  createApp,
+  createApp: (opts) => createApp({ ...opts, getWidgetHtml: () => WIDGET_HTML_CONTENT }),
   bootstrapApp,
   createServer: (app) => {
     /**

@@ -64,9 +64,9 @@ pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 ```
 
 `pnpm dev`, `pnpm dev:observe`, and `pnpm dev:observe:noauth` now perform the
-initial widget build automatically and keep `dist/oak-banner.html` fresh with a
-background watch process. Manual `pnpm build` is no longer required just to
-prepare the HTTP dev server's widget artefact.
+initial widget build automatically and regenerate the committed
+`src/generated/widget-html-content.ts` constant. Manual `pnpm build:widget` is
+only required when widget sources change outside the dev watcher.
 
 3. List tools (auth disabled path shown above):
 
@@ -126,9 +126,10 @@ instructions, and starts the host automatically. Open
 `http://localhost:8080`, select a tool, and call it — the widget renders
 in a sandboxed double-iframe matching the production security model.
 
-The HTTP dev server still serves the canonical runtime widget from
-`dist/oak-banner.html`; the difference in dev is that the package script now
-prepares that file from source automatically before booting the server.
+The HTTP dev server serves the widget HTML from the committed TypeScript
+constant `WIDGET_HTML_CONTENT` (in `src/generated/widget-html-content.ts`),
+injected via DI. The dev orchestrator regenerates this constant from widget
+sources automatically before booting the server.
 
 `dev:widget-in-host` clones `@modelcontextprotocol/ext-apps` to
 `$TMPDIR/mcp-ext-apps` on first run and reuses it subsequently. Delete

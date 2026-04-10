@@ -29,8 +29,6 @@ import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
 import { createSearchRetrieval } from './search-retrieval-factory.js';
 import type { HttpObservability } from './observability/http-observability.js';
-import { validateWidgetHtmlExists } from './validate-widget-html.js';
-import { WIDGET_HTML_PATH } from './register-resources.js';
 import type { McpServerFactory } from './mcp-request-context.js';
 import { OAK_SERVER_BRANDING } from './server-branding.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
@@ -43,11 +41,15 @@ export interface CreateAppOptions {
   readonly logger?: Logger;
   readonly resourceUrl?: string;
   /**
-   * Validates the built widget HTML path before core endpoints are initialised.
-   * Production callers omit this so the real startup validation runs; in-process
-   * tests inject a no-op validator so they do not depend on build artefacts.
+   * Returns the built widget HTML content for the MCP App resource.
+   *
+   * Production callers provide `() => WIDGET_HTML_CONTENT` using the committed
+   * codegen constant. Tests inject a trivial fake: `() => '<html>test</html>'`.
+   *
+   * @see ADR-078 for the dependency injection rationale
+   * @see src/generated/widget-html-content.ts — Committed codegen constant
    */
-  readonly validateWidgetHtml?: (widgetHtmlPath: string) => void;
+  readonly getWidgetHtml: () => string;
   /**
    * Upstream AS metadata for the OAuth proxy. When provided, `createApp`
    * skips the network fetch to Clerk's `/.well-known/oauth-authorization-server`
@@ -201,8 +203,6 @@ function initializeCoreEndpoints(
   log: Logger,
   observability: HttpObservability,
 ): { mcpFactory: McpServerFactory; ready: Promise<void> } {
-  (options.validateWidgetHtml ?? validateWidgetHtmlExists)(WIDGET_HTML_PATH);
-
   const searchRetrieval = runtimeConfig.useStubTools
     ? createStubSearchRetrieval()
     : createSearchRetrieval(runtimeConfig.env, log);
@@ -227,6 +227,7 @@ function initializeCoreEndpoints(
     resourceUrl,
     searchRetrieval,
     createAssetDownloadUrl,
+    getWidgetHtml: options.getWidgetHtml,
   };
 
   log.debug('bootstrap.mcp.factory.created');

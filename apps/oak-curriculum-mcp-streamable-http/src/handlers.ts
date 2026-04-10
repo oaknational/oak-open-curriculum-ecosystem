@@ -24,11 +24,7 @@ import {
   type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
-import {
-  readBuiltWidgetHtml,
-  registerAllResources,
-  registerPrompts,
-} from './register-resources.js';
+import { registerAllResources, registerPrompts } from './register-resources.js';
 import {
   createDefaultRequestExecutor,
   createStubRequestExecutor,
@@ -67,6 +63,8 @@ export interface RegisterHandlersOptions {
   readonly searchRetrieval: SearchRetrievalService;
   /** Factory for generating signed asset download URLs (HTTP-only). */
   readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
+  /** Returns the built widget HTML content (DI per ADR-078). */
+  readonly getWidgetHtml: () => string;
 }
 
 function buildToolHandlerDependencies(
@@ -148,7 +146,7 @@ export function registerHandlers(
 
   registerAllResources(server, {
     observability: options.observability,
-    getWidgetHtml: readBuiltWidgetHtml,
+    getWidgetHtml: options.getWidgetHtml,
   });
   registerPrompts(server, options.observability);
 }

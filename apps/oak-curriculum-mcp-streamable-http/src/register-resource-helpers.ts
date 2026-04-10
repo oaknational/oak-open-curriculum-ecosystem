@@ -14,7 +14,7 @@ export type ResourceRegistrar = Pick<McpServer, 'registerResource'>;
 export interface ResourceRegistrationOptions {
   readonly observability: HttpObservability;
   /** Returns the HTML payload served by the MCP App widget resource. */
-  readonly getWidgetHtml: () => Promise<string>;
+  readonly getWidgetHtml: () => string;
 }
 
 /**

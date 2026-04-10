@@ -5,9 +5,9 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsup && pnpm build:widget",
-    "build:widget": "vite build --config widget/vite.config.ts",
-    "clean": "rm -rf dist .turbo",
+    "build": "tsup",
+    "build:widget": "vite build --config widget/vite.config.ts && node scripts/embed-widget-html.js",
+    "clean": "rm -rf dist .turbo .widget-build",
     "dev": "tsx operations/development/http-dev.ts dev",
     "dev:auth": "tsx operations/development/http-dev.ts dev",
     "dev:auth:stub": "OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true OAK_API_KEY=stub-api-key tsx operations/development/http-dev.ts dev",

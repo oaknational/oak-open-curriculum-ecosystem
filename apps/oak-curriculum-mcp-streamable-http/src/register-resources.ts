@@ -165,13 +165,8 @@ export function registerAllResources(
   registerWidgetResource(server, options.getWidgetHtml, options.observability);
 }
 
-// Re-export prompts registration for use in handlers
 export { registerPrompts } from './register-prompts.js';
-export {
-  registerWidgetResource,
-  WIDGET_HTML_PATH,
-  readBuiltWidgetHtml,
-} from './register-widget-resource.js';
+export { registerWidgetResource } from './register-widget-resource.js';
 export type {
   ResourceRegistrar,
   ResourceRegistrationOptions,

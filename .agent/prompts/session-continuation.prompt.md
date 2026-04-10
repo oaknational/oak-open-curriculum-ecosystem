@@ -40,76 +40,76 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Vercel widget crash fix (preview server crash)
-  + workspace topology exploration (strategic)
+- **Workstream**: Vercel widget crash fix (resolving preview
+  server crash) + workspace topology exploration (strategic)
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/embed-widget-html-at-build-time.plan.md`
-    (**ACTIVE** — Phase 0 complete, Phases 1-3 pending execution)
+  - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md`
+    (**COMPLETE** — all phases executed, ADR-156 created)
   - `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
     (**FUTURE** — four-tier architecture, function-level analysis)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
     (**QUEUED** — post-merge interactive user-search UI)
-- **Current state**: Rules consolidation tidy-up complete (16
-  portability failures fixed, `pnpm check` green). ADR-154
-  (Separate Framework from Consumer), ADR-155 (Decompose at the
-  Tension) created and accepted. ADR-125 updated with many-to-one
-  consolidation pattern. Two clean commits on `feat/mcp_app_ui`.
-  Widget crash plan is final and reviewed, ready for execution.
-- **Current objective**: Execute widget crash fix (Plan A) —
-  resolve the preview server crash by embedding widget HTML as a
-  committed TypeScript constant.
+- **Current state**: Widget crash fix (Phases 1-3) fully
+  executed. All quality gates green: 590 unit/integration tests,
+  15 widget tests, 157 E2E tests. ADR-156 created and indexed.
+  `deployment-architecture.md`, `README.md`, and
+  `dev-server-management.md` updated. Smoke-test helpers
+  extracted to `server-lifecycle.ts`. Changes are local only —
+  not yet committed or pushed.
+- **Current objective**: Commit, push, and verify the Vercel
+  preview deployment no longer crashes.
 - **Hard invariants / non-goals**:
   - DI is always used — constant provides VALUE, DI provides
     TESTABILITY (ADR-078)
   - Widget HTML follows the same codegen pattern as all other
     generated metadata (same as `WIDGET_URI`, tool descriptions)
-  - `principles.md` is the source of truth for all principles;
-    `.agent/rules/` and `.cursor/rules/` are operationalisation
-    mechanisms, not the definitions
+  - `principles.md` is the source of truth for all principles
   - Separate framework from consumer in all new work (ADR-154)
-  - Decompose at tensions rather than classifying around them
-    (ADR-155)
+  - Decompose at tensions rather than classifying (ADR-155)
   - `static-content.ts` `process.cwd()` bug tracked separately
   - No compatibility shims, no invented optionality
 - **Recent surprises / corrections**:
-  - Portability validator only accepts `.agent/rules/` and
-    `.agent/skills/` references — cursor rules referencing
-    `.agent/directives/` directly fail the check. Maintain the
-    indirection layer (cursor rule → canonical rule → directive).
+  - Wilma reviewer caught a smoke-test blind spot: `createApp`
+    without `getWidgetHtml` in `smoke-tests/local-server.ts`
+    (excluded from `tsconfig.lint.json` type-check). Fixed.
+  - Template literal escaping in embed script works correctly
+    for Vite-generated HTML (resolved open question).
+  - `dist/index.js` grew from 122KB to 466KB (345KB embedded
+    widget HTML constant). Acceptable for Node serverless.
 - **Open questions / low-confidence areas**:
-  - Template literal escaping in the embed script (backticks,
-    `${` in Vite-built HTML) — needs testing
   - Whether `build:widget` should be a Turbo codegen task or
-    standalone script
+    standalone script (currently standalone, works well)
+  - CI drift check for stale `widget-html-content.ts` (not yet
+    implemented, tracked as follow-up)
   - Topology Plan B: physical directory structure decision
     deferred to after function-level analysis evidence
-  - `static-content.ts` `process.cwd()` bug (non-crash, tracked
-    separately)
-- **Next safe step**: Execute Phase 1 of the widget crash plan —
-  change Vite output dir, create embed script, produce committed
-  TypeScript constant, decouple from runtime build.
-- **Deep consolidation status**: completed this handoff — ADR-154,
-  ADR-155 created; ADR-125 updated; rules tidy-up committed;
-  distilled.md reviewed (no graduation needed).
+  - `static-content.ts` `process.cwd()` bug (non-crash)
+- **Next safe step**: Commit and push the widget crash fix on
+  `feat/mcp_app_ui`, then verify the Vercel preview deployment
+  starts without crashing.
+- **Deep consolidation status**: completed this handoff —
+  ADR-156 created; docs updated; napkin updated; distilled.md
+  reviewed (no graduation needed, all new learnings already
+  present in permanent docs or distilled.md).
 
 ## Active Workstreams (2026-04-10)
 
-### 1. Vercel Widget Crash Fix — ACTIVE
+### 1. Vercel Widget Crash Fix — COMPLETE
 
-**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/embed-widget-html-at-build-time.plan.md`
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md`
 
-Vercel preview deployments crash because widget HTML is read from
-the filesystem at runtime. Fix: generate widget HTML as a committed
-TypeScript constant at codegen time (same pattern as `WIDGET_URI`
-and other tool metadata), consumed via DI. Phase 0 (debug cleanup)
-complete. Phases 1-3 pending execution.
+All phases executed. Widget HTML is now a committed TypeScript
+constant (`src/generated/widget-html-content.ts`), consumed via
+DI (ADR-156). Filesystem-based code deleted. All quality gates
+green. ADR-156 created and indexed. Changes are local — pending
+commit and Vercel preview verification.
 
 ### 2. WS3 MCP App Rebuild — MERGE PENDING
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 
-Local gates green on `feat/mcp_app_ui`. Vercel crash blocks merge.
-Once the widget crash fix lands, commit/push and verify preview.
+Local gates green on `feat/mcp_app_ui`. Widget crash fix complete
+locally. Next: commit, push, verify Vercel preview, then merge.
 Phase 5 (interactive user search view) queued post-merge.
 
 ### 2. Frontend Practice Integration — COMPLETE

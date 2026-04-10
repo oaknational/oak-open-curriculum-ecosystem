@@ -69,6 +69,7 @@ describe('registerHandlers — observability characterisation', () => {
       logger: createFakeLogger(),
       observability: scopedObservability,
       searchRetrieval: createFakeSearchRetrieval(),
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
 
     // Called once in registerHandlers (tools), once per resource via
@@ -85,6 +86,7 @@ describe('registerHandlers — observability characterisation', () => {
       logger: createFakeLogger(),
       observability,
       searchRetrieval: createFakeSearchRetrieval(),
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
 
     expect(server.registerTool).toHaveBeenCalled();
@@ -99,6 +101,7 @@ describe('registerHandlers — observability characterisation', () => {
       logger: createFakeLogger(),
       observability,
       searchRetrieval: createFakeSearchRetrieval(),
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
 
     // registerAllResources and registerPrompts are called by registerHandlers.

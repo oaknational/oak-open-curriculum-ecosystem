@@ -174,16 +174,9 @@ context with no natural permanent home.
 
 ## Vercel Deployment
 
-- `process.cwd()` on Vercel Lambda = `/var/task` (task root),
-  NOT the app package directory. Code using `process.cwd()` for
-  app-relative paths will resolve to wrong locations.
-- Vercel NFT only bundles files reachable via static `import` /
-  `require`. Dynamic `readFile()` targets may be missing from
-  the Lambda bundle.
-- Build artefact content the app serves (e.g. widget HTML for
-  MCP resources) should be a committed TypeScript constant
-  (same codegen pattern as `WIDGET_URI`), consumed via DI —
-  not runtime filesystem reads.
+- See [ADR-156](docs/architecture/architectural-decisions/156-embed-widget-html-at-build-time.md)
+  for Vercel Lambda `process.cwd()` mismatch, NFT tracing gaps,
+  and the committed TypeScript constant pattern that resolves both.
 
 ## Architecture (Domain-Specific)
 

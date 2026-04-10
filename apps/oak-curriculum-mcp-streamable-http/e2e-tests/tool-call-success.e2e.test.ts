@@ -2,7 +2,6 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
-import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 import {
   createUniversalToolExecutor,
   generatedToolRegistry,
@@ -68,7 +67,7 @@ async function executeToolCall(): Promise<{
     toolHandlerOverrides: overrides,
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
-    validateWidgetHtml: skipWidgetHtmlValidation,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
   });
   const response = await request(app)
     .post('/mcp')

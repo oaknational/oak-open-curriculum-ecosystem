@@ -86,13 +86,7 @@
         "tsup.config.ts",
         "src/**/*.ts",
         "!src/**/*.test.ts",
-        "!src/**/*.spec.ts",
-        "widget/**/*.ts",
-        "widget/**/*.tsx",
-        "widget/**/*.css",
-        "widget/**/*.html",
-        "widget/vite.config.ts",
-        "widget/tsconfig.json"
+        "!src/**/*.spec.ts"
       ]
     },
     "@oaknational/oak-design-tokens#build": {

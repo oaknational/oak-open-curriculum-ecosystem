@@ -235,7 +235,7 @@ function expectJsonContent(content: McpUiReadResourceResult['contents'][number] 
 
 /** Shared observability options for all registration tests. */
 function createTestOptions(
-  getWidgetHtml: ResourceRegistrationOptions['getWidgetHtml'] = async () => TEST_WIDGET_HTML,
+  getWidgetHtml: ResourceRegistrationOptions['getWidgetHtml'] = () => TEST_WIDGET_HTML,
 ): ResourceRegistrationOptions {
   return {
     observability: createFakeHttpObservability(),
@@ -476,7 +476,7 @@ describe('registerAllResources registers the widget resource', () => {
     readResource = mock.readResource;
     flush = mock.flush;
     widgetHtmlReadCount = 0;
-    options = createTestOptions(async () => {
+    options = createTestOptions(() => {
       widgetHtmlReadCount += 1;
       return TEST_WIDGET_HTML;
     });

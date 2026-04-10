@@ -4,7 +4,6 @@ import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
 import { createHttpObservabilityOrThrow } from './observability/http-observability.js';
 import { loadRuntimeConfig } from './runtime-config.js';
-import { skipWidgetHtmlValidation } from './test-helpers/widget-html-validation.js';
 import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js';
 
 describe('OAuth Protected Resource Metadata (Integration)', () => {
@@ -28,7 +27,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
     return await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       upstreamMetadata: TEST_UPSTREAM_METADATA,
     });
   };

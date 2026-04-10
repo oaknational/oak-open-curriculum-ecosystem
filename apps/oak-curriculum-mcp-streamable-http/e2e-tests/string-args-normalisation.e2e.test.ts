@@ -2,7 +2,6 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
-import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 import {
   createUniversalToolExecutor,
   generatedToolRegistry,
@@ -74,7 +73,7 @@ describe('HTTP boundary argument validation', () => {
     const app = await createApp({
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -97,7 +96,7 @@ describe('HTTP boundary argument validation', () => {
     const app = await createApp({
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -120,7 +119,7 @@ describe('HTTP boundary argument validation', () => {
     const app = await createApp({
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -145,7 +144,7 @@ describe('HTTP boundary argument validation', () => {
       toolHandlerOverrides: createStructuredSuccessOverrides(captured),
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')

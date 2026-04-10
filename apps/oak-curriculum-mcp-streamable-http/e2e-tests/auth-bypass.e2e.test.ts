@@ -15,8 +15,6 @@ import { unwrap } from '@oaknational/result';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
 import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
-import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
-
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;
 
@@ -42,7 +40,7 @@ describe('Auth Bypass for Development (E2E)', () => {
     app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
   });
 

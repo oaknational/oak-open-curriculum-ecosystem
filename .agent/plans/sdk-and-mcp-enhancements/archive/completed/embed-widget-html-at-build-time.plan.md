@@ -7,19 +7,19 @@ todos:
     status: complete
   - id: phase-1-codegen-pipeline
     content: "Phase 1: Widget build produces committed TypeScript constant."
-    status: pending
+    status: complete
   - id: phase-2-di-and-cleanup
     content: "Phase 2: Wire constant via DI, delete filesystem code."
-    status: pending
+    status: complete
   - id: phase-3-tests-gates-docs
     content: "Phase 3: Tests, quality gates, documentation, verification."
-    status: pending
+    status: complete
 ---
 
 # Generate Widget HTML as Committed TypeScript Constant
 
 **Last Updated**: 2026-04-10
-**Status**: PLANNED (reviewed by 8 specialists + user corrections)
+**Status**: COMPLETE (all phases executed, all gates green, ADR-156 created)
 **Scope**: Widget HTML follows the same codegen pattern as all other
 generated metadata — committed TypeScript constant, consumed via DI.
 

@@ -4,7 +4,6 @@ import { unwrap } from '@oaknational/result';
 import { createApp } from './application.js';
 import { createHttpObservabilityOrThrow } from './observability/http-observability.js';
 import { loadRuntimeConfig } from './runtime-config.js';
-import { skipWidgetHtmlValidation } from './test-helpers/widget-html-validation.js';
 import type { Express } from 'express';
 
 /**
@@ -34,7 +33,7 @@ describe('Security Headers (Integration)', () => {
     app = await createApp({
       runtimeConfig,
       observability,
-      validateWidgetHtml: skipWidgetHtmlValidation,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
   });
 

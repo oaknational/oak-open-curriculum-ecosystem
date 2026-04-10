@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/application.js';
-import { skipWidgetHtmlValidation } from '../src/test-helpers/widget-html-validation.js';
 import { hasJsonRpcOrResultError, parseSseEnvelope } from './helpers/sse.js';
 import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 
@@ -14,7 +13,7 @@ async function callWithBadArgs(): Promise<{ status: number; text: string }> {
   const app = await createApp({
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
-    validateWidgetHtml: skipWidgetHtmlValidation,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
   });
   const body = {
     jsonrpc: '2.0',

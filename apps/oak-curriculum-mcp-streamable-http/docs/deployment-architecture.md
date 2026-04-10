@@ -7,18 +7,18 @@ rely on today.
 
 ## Architecture Overview
 
-The deployed runtime has three important artefacts and one shared startup path:
+The deployed runtime has two important artefacts and one shared startup path:
 
 1. `dist/index.js` — Node entry point that loads runtime config and
    observability, then calls `startConfiguredHttpServer(...)`
 2. `dist/application.js` — importable async Express app factory used by the
    bootstrap/runtime code
-3. `dist/oak-banner.html` — self-contained MCP App widget built by Vite
 
-The runtime resolves the widget HTML from `process.cwd()/dist/oak-banner.html`,
-not from a bundle-file-relative path. This keeps the contract anchored to the
-function/package root rather than to the transient location of `application.js`
-inside a deployment bundle.
+Widget HTML is embedded in `dist/index.js` as a TypeScript constant
+(`WIDGET_HTML_CONTENT`) generated at codegen time. There is no filesystem
+dependency on a separate HTML file at runtime — the constant is bundled
+directly into the server entry point by tsup, eliminating `process.cwd()`
+resolution issues on Vercel Lambda.
 
 `src/index.ts` does **not** export a special Vercel-only Express default export
 or branch on `process.env.VERCEL`. Both local and deployed startup go through
@@ -37,15 +37,16 @@ After running `pnpm build`, the `dist/` directory contains:
 
 ```text
 dist/
-├── index.js              # Server entry point (starts configured runtime)
+├── index.js              # Server entry point (includes embedded widget HTML)
 ├── index.js.map
 ├── application.js        # Importable async Express app factory
-├── application.js.map
-└── oak-banner.html       # MCP App widget (built by Vite)
+└── application.js.map
 ```
 
 Note: `splitting: false` in tsup means each entry point produces a
-self-contained bundle with no separate chunk files.
+self-contained bundle with no separate chunk files. The widget HTML constant
+(`WIDGET_HTML_CONTENT`) is inlined into `dist/index.js` via the normal
+TypeScript import from `src/generated/widget-html-content.ts`.
 
 ## Vercel Deployment
 
@@ -55,7 +56,8 @@ This repository currently provides:
 
 1. `vercel.json` with `"framework": "express"`
 2. `package.json` with `"main": "dist/index.js"`
-3. a build pipeline that emits both the server bundle and widget HTML
+3. a build pipeline that emits the server bundle (widget HTML is a committed
+   codegen constant embedded in the bundle)
 4. no repo-local rewrite list or separate Vercel-only adapter file
 
 This means the deployment contract in-repo is intentionally small: build the
@@ -85,6 +87,7 @@ Vercel's Express framework integration handle the platform-side wiring.
 
 ```typescript
 import http from 'node:http';
+import { WIDGET_HTML_CONTENT } from './generated/widget-html-content.js';
 import { createApp } from './application.js';
 import { bootstrapApp } from './bootstrap-app.js';
 import { createHttpObservability } from './observability/http-observability.js';
@@ -97,7 +100,7 @@ const observability = createHttpObservability(config);
 await startConfiguredHttpServer({
   runtimeConfig: config,
   observability,
-  createApp,
+  createApp: (opts) => createApp({ ...opts, getWidgetHtml: () => WIDGET_HTML_CONTENT }),
   bootstrapApp,
   createServer: (app) => http.createServer(app),
   onSignal: (signal, handler) => process.once(signal, handler),
@@ -116,8 +119,8 @@ This repo guarantees:
 
 1. the built server entry point is `dist/index.js`
 2. local and deployed execution use the same startup code path
-3. widget HTML is emitted to `dist/oak-banner.html` and resolved from the
-   package working directory at startup
+3. widget HTML is a committed TypeScript constant (`src/generated/widget-html-content.ts`)
+   embedded in the server bundle — no filesystem dependency at runtime
 4. the MCP runtime remains per-request at the transport layer (see
    `src/application.ts` / ADR-112)
 
@@ -169,11 +172,10 @@ built-artifact proof as well as the dev path.
 }
 ```
 
-The HTTP server runtime contract stays the same in both modes: resource
-registration reads `process.cwd()/dist/oak-banner.html`. Development is
-source-driven because the `operations/development` entrypoint materialises and
-watches that canonical artefact automatically; production remains built-output
-driven.
+The HTTP server runtime contract stays the same in both modes: widget HTML
+is provided via DI from the committed constant `WIDGET_HTML_CONTENT`. The
+`operations/development` entrypoint uses `tsx` to run source directly; it
+imports the same constant as the production entry point.
 
 ### Environment Variables
 
@@ -224,48 +226,43 @@ This configuration builds two entry points as self-contained ESM bundles:
 - `src/index.ts` → `dist/index.js` (server entry, starts configured runtime)
 - `src/application.ts` → `dist/application.js` (importable factory)
 
-## Build Ordering: tsup Then Vite
+## Build Ordering: Widget Codegen Then tsup
 
-The `build` script runs two tools sequentially into the same `dist/` directory:
+The build pipeline has two independent steps:
+
+### Widget Codegen (`build:widget`)
 
 ```json
-"build": "tsup && pnpm build:widget"
+"build:widget": "vite build --config widget/vite.config.ts && node scripts/embed-widget-html.js"
 ```
 
-1. **tsup runs first** — compiles `src/` to `dist/`. The `clean: true` option
-   in `tsup.config.ts` empties `dist/` before writing `index.js` and
-   `application.js` (two self-contained bundles, no separate chunks).
-2. **Vite runs second** — builds the widget HTML into `dist/oak-banner.html`.
-   The `emptyOutDir: false` option in `widget/vite.config.ts` preserves the
-   tsup output already in `dist/`.
+1. **Vite** builds the widget React app into `.widget-build/oak-banner.html`
+   (intermediate, gitignored). Uses `vite-plugin-singlefile` to inline all
+   JavaScript and CSS — the canonical MCP Apps pattern for sandboxed iframes.
+2. **`embed-widget-html.js`** reads the built HTML and writes
+   `src/generated/widget-html-content.ts` — a committed TypeScript constant
+   exporting `WIDGET_HTML_CONTENT`.
 
-The widget build intentionally uses `vite-plugin-singlefile`. This is the
-canonical MCP Apps pattern: hosts load the HTML into a sandboxed iframe with
-no backing asset server, so the React app's JavaScript and CSS must be inlined
-into the final HTML file.
+This is a codegen step (like `pnpm sdk-codegen`): run it when widget sources
+change, commit the result, and the runtime build consumes it as normal TypeScript.
 
-The `&&` operator enforces sequential execution: if tsup fails, Vite never
-runs. This is critical because:
+### Runtime Build (`build`)
 
-- If Vite ran first, tsup's `clean: true` would delete `oak-banner.html`
-- If both ran in parallel, race conditions could corrupt `dist/`
+```json
+"build": "tsup"
+```
 
-### Turbo Treats This as One Atomic Task
+tsup compiles `src/` to `dist/`. The committed
+`src/generated/widget-html-content.ts` is bundled into `dist/index.js` via
+the normal import chain. No separate Vite step runs during `build`.
+
+### Turbo Configuration
 
 The Turbo override at `@oaknational/oak-curriculum-mcp-streamable-http#build`
-treats the entire `build` script as a single task. Turbo does not parallelise
-sub-steps within a script — the `&&` chain runs inside a single shell process.
-The override's `inputs` array includes `src/**/*.ts` (tsup sources) and
-specific `widget/` globs (`*.ts`, `*.tsx`, `*.css`, `*.html`, config files),
-so a change to either set invalidates the whole build cache entry.
-
-### Startup Validation
-
-At server startup, `validateWidgetHtmlExists()` checks that
-`process.cwd()/dist/oak-banner.html` exists before resource registration. If
-the build step was skipped or failed, this produces a clear error with
-`pnpm build` guidance instead of an opaque `ENOENT` on the first
-`resources/read` request.
+uses `src/**/*.ts` as inputs and `dist/**` as outputs. Widget sources
+(`widget/**`) are not inputs to the `build` task because the widget HTML
+is already committed as `src/generated/widget-html-content.ts` — a regular
+TypeScript source file.
 
 ## Async Initialization
 
@@ -465,9 +462,9 @@ pnpm start
 
 - If `dist/index.js` is missing, the build did not complete successfully or the
   runtime is starting from the wrong working tree.
-- If `dist/oak-banner.html` is missing, startup fails fast via
-  `validateWidgetHtmlExists()` rather than waiting for the first MCP App
-  resource request to throw `ENOENT`.
+- Widget HTML is embedded in the bundle. If the widget appears stale, re-run
+  `pnpm build:widget` to regenerate `src/generated/widget-html-content.ts`,
+  then `pnpm build` to bundle it.
 - If `pnpm dev` works but the built server crashes immediately, suspect a
   dev-loader versus plain-Node resolver mismatch first and rerun the
   built-artifact import proof against `dist/application.js`.
@@ -487,9 +484,10 @@ The current deployment/runtime model is:
   sufficient evidence for plain-Node startup
 - Vercel-specific configuration limited to framework selection, not a separate
   code path
-- a Node server bundle at `dist/index.js`
+- a Node server bundle at `dist/index.js` (includes embedded widget HTML)
 - an importable app factory at `dist/application.js`
-- a self-contained MCP App widget at `dist/oak-banner.html`
+- widget HTML as a committed TypeScript constant with no runtime filesystem
+  dependency
 
 That keeps the deployment contract small and puts the important behaviour in
 repo-owned runtime code rather than undocumented platform branches.

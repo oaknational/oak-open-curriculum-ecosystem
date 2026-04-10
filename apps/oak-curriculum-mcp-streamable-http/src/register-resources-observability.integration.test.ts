@@ -43,7 +43,7 @@ describe('registerAllResources — observability characterisation', () => {
     const observability = createFakeHttpObservability();
     const server = createRecordingServer();
 
-    registerAllResources(server, { observability, getWidgetHtml: async () => TEST_WIDGET_HTML });
+    registerAllResources(server, { observability, getWidgetHtml: () => TEST_WIDGET_HTML });
 
     // Exact count: every resource must be registered.
     expect(server.registerResource).toHaveBeenCalledTimes(EXPECTED_RESOURCE_COUNT);
@@ -58,7 +58,7 @@ describe('registerAllResources — observability characterisation', () => {
 
     registerAllResources(server, {
       observability: scopedObservability,
-      getWidgetHtml: async () => TEST_WIDGET_HTML,
+      getWidgetHtml: () => TEST_WIDGET_HTML,
     });
 
     // wrapResourceHandler calls createMcpObservationOptions once per
