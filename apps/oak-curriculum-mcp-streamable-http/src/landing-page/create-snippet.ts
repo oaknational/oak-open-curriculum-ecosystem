@@ -39,12 +39,12 @@ import { resolveCanonicalUrl } from './resolve-canonical-url.js';
  * ```
  */
 export function createSnippet(vercelHost?: string): string {
-  const canonicalUrl = resolveCanonicalUrl(vercelHost);
+  const mcpServerUrl = resolveCanonicalUrl(vercelHost);
   return `
   "mcpServers": {
     "oak-curriculum": {
       "type": "http",
-      "url": "${canonicalUrl}"
+      "url": "${mcpServerUrl}"
     }
   }
 `;

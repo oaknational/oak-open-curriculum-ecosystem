@@ -1,7 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_count: 550
-fitness_char_count: 32000
+fitness_line_target: 590
+fitness_line_limit: 725
+fitness_char_limit: 36000
 fitness_line_length: 100
 ---
 
@@ -11,19 +12,25 @@ This is the canonical lineage document for this repo's Practice. It serves two p
 reference for how the plasmid exchange mechanism works, and (2) the source template for outbound
 propagation.
 
-When propagating the Practice to another repo, copy all seven Practice Core files: the trinity
-(`practice.md`, this file, and `practice-bootstrap.md`), the entry points (`README.md` and
-`index.md`), the changelog (`CHANGELOG.md`), and the provenance file (`provenance.yml`). If
+When propagating the Practice to another repo, copy all eight Practice Core files: the trinity
+(`practice.md`, this file, and `practice-bootstrap.md`), the verification
+companion (`practice-verification.md`), the entry points (`README.md` and
+`index.md`), the changelog (`CHANGELOG.md`), and the provenance file
+(`provenance.yml`). If
 `.agent/practice-context/outgoing/` exists, relevant files may be copied into the receiving repo's
 `.agent/practice-context/incoming/` as optional support material, but they are not part of the Core.
+**Before propagating**, verify that neither Core nor Context files
+reference host-repo artefacts (ADR numbers, local paths, entity names).
+Content must carry the concept itself, not just a name or pointer.
 See §Frontmatter and §Plasmid Exchange below.
 
 ## Frontmatter
 
-The trinity files carry YAML frontmatter with `provenance` (pointer to `provenance.yml`) and three
-fitness ceilings: `fitness_line_count` (content lines), `fitness_char_count` (content chars), and
-`fitness_line_length` (max prose width). All measure content only — frontmatter is excluded. See
-§Fitness Functions.
+The trinity files carry YAML frontmatter with `provenance` (pointer to
+`provenance.yml`) and four fitness thresholds (two-threshold model):
+`fitness_line_target` (soft), `fitness_line_limit` (hard),
+`fitness_char_limit` (hard), `fitness_line_length` (hard, always 100).
+All measure content only — frontmatter excluded. See §Fitness Functions.
 
 ### Provenance (provenance.yml)
 
@@ -33,15 +40,17 @@ records:
 
 | Field     | Description                                                                            |
 | --------- | -------------------------------------------------------------------------------------- |
-| `index`   | Position in the chain. 0 is the origin.                                                |
+| `id`      | UUID v4 identifying this entry. Unique across all chains.                                |
 | `repo`    | Repository name.                                                                       |
 | `date`    | Date this iteration was created or last evolved.                                       |
 | `purpose` | What the Practice is being used for — tells receiving repos what shaped this evolution. |
 
-The chain serves three functions: **origin tracking** (index 0), **evolution detection** (last
-entry's `repo` differs from local → new learnings), and **context for comparison** (`purpose`
-describes the work that shaped the evolution). When a repo evolves the files, it appends a new entry
-to the relevant chains in `provenance.yml`.
+The chain tracks origin (first entry), evolution (last `repo` differs →
+new learnings), and context (`purpose` describes what shaped the
+evolution). Evolving repos append new entries to `provenance.yml`.
+
+**Caveat**: a later entry does not imply superiority across all dimensions. Repos evolve
+independently; always compare content, not position, when integrating incoming material.
 
 ## The Practice Blueprint
 
@@ -115,6 +124,10 @@ This process is universal. It costs nothing and prevents shallow execution.
 - **Prohibited**: global state manipulation in tests -- environment variable mutation, global mock
   injection, module cache manipulation, or any mechanism that creates hidden coupling between tests.
   Pass configuration as function arguments.
+- **Browser proof surfaces** (UI projects): accessibility audit (WCAG
+  compliance), visual regression, responsive validation, theme/mode
+  correctness. These are proof layers for rendered output — analogous
+  to the unit/integration distinction for code — not replacements.
 
 ### Agent Pattern
 
@@ -127,8 +140,10 @@ reads directives first, applies the First Question, and reports with severity le
 fixes. A repo may stage this layer after the Core itself is installed; until then, `AGENT.md` should
 say explicitly that reviewer infrastructure is not yet installed.
 
-For production, expand: security-reviewer, config-reviewer, architecture-reviewer(s). Use layered
-composition (wrapper -> template -> shared components) at scale; inline for short-lived projects.
+For production, expand: security-reviewer, config-reviewer,
+architecture-reviewer(s). UI-heavy projects may add a small browser-facing
+cluster routed by the gateway code-reviewer. Use layered composition at scale;
+inline for short-lived projects.
 
 ### Workflow Commands
 
@@ -148,6 +163,8 @@ The Practice is driven by slash commands that initiate structured workflows:
   priority, then structure the todo list with ACTION/REVIEW/GROUNDING cadence:
   every action followed by a review step, periodic grounding re-reads, and
   holistic reviews every fourth cycle.
+- **session-handoff** -- Lightweight end-of-session continuity update with
+  conditional escalation into `consolidate-docs` when deep convergence is due.
 - **gates** -- Run quality gates in order: `type-check -> lint -> build ->
   test`. All gates are blocking at all times.
 - **review** -- Run gates, triage which specialists are needed, invoke them,
@@ -192,22 +209,16 @@ The knowledge flow is the Practice's central mechanism. See
 [practice.md §The Knowledge Flow](practice.md#the-knowledge-flow) for the full treatment: the cycle
 diagram, three-audience model, fitness functions at every stage, and feedback properties.
 
-The condensed cycle: **Capture** (napkin, always on) → **Refine** (distilled, periodic) →
-**Graduate** (permanent docs, on consolidation) → **Enforce** (rules & directives, always on) →
-**Apply** (work) → repeat. Each stage serves a broader audience: the napkin serves the current
-session, distilled serves future agents, permanent docs serve everyone. Each transition raises the
-bar.
+The condensed cycle: **Capture** (napkin) → **Refine** (distilled) →
+**Graduate** (permanent docs) → **Enforce** (rules & directives) →
+**Apply** (work) → repeat. Each transition extracts concepts from
+instances and raises the bar for a broader audience.
 
-The flow has two critical properties for propagation:
-
-1. **Self-replicating**: the knowledge flow is part of the Practice, which travels via plasmid
-   exchange. A receiving repo inherits the mechanism that produces rules, not just the rules
-   themselves. This means every repo that adopts the Practice immediately has a working learning
-   loop — it doesn't need to invent one.
-
-2. **Self-applicable**: the rules that enforce the Practice are themselves subject to the same
-   evolution process. If consolidation reveals that a rule is wrong, the rule can change — but only
-   if the change clears the three-part bar. The Practice is a ratchet, not a pendulum.
+The flow has two critical properties: **self-replicating** (the
+mechanism travels via plasmid exchange — receiving repos inherit the
+learning loop, not just its outputs) and **self-applicable** (rules
+are subject to the same evolution process; changes require the
+three-part bar).
 
 ### Session-Entry Skills
 
@@ -256,36 +267,28 @@ natural trigger point.
 
 ## Fitness Functions
 
-The Practice has negative feedback for what enters (the three-part bar), but without a governor on
-cumulative growth each addition clears the bar while the files quietly bloat. The plasmid exchange
-mechanism amplifies this: improvements flow between repos, each exchange potentially adding but
-never compressing.
+The three-part bar governs what enters but not cumulative growth. Without
+fitness limits, files bloat — compounded by plasmid exchange adding content
+across repos.
 
-### Thresholds
+### Thresholds (Two-Threshold Model)
 
-Three fitness dimensions are available to any file with a fitness function.
-Files declare only the dimensions their role needs. All are soft ceilings —
-exceeding any triggers tightening, not a hard block. Lines and chars count
-content only (frontmatter excluded). Width applies to prose only (code blocks,
-tables, frontmatter excluded).
+Four fitness fields govern each tracked file. All measure content only
+(frontmatter excluded). Width applies to prose only (code blocks, tables,
+frontmatter excluded).
 
-| Frontmatter key      | What it guards                                  |
-| -------------------- | ----------------------------------------------- |
-| `fitness_line_count`  | Content lines — structural sprawl               |
-| `fitness_char_count`  | Content characters — honest volume (ungameable) |
-| `fitness_line_length` | Prose line width — readability and diff quality  |
+| Frontmatter key        | Threshold | What it guards                                  |
+| ---------------------- | --------- | ----------------------------------------------- |
+| `fitness_line_target`  | Soft      | Content lines — signal to refine; agents may extend modestly |
+| `fitness_line_limit`   | Hard      | Content lines — cannot exceed without user approval          |
+| `fitness_char_limit`   | Hard      | Content characters — honest volume (ungameable)              |
+| `fitness_line_length`  | Hard      | Prose line width — readability and diff quality; always 100  |
 
-**Why three dimensions:** Line count alone is gameable — reflowing prose to
-fewer, wider lines reduces the count without reducing cognitive load.
-Character count is the honest volume constraint. Prose line width is the
-anti-gaming closure. Together they form a constraint triangle where gaming one
-dimension triggers another.
-
-Trinity files carry all three ceilings. Other docs may use only
-`fitness_line_count`, adding `fitness_char_count` and `fitness_line_length`
-when anti-gaming or readability pressure warrants it. Validators check only
-declared dimensions. Only shallow-browsing entry points (root README,
-quickstart, VISION) are exempt entirely.
+Target exceedance warns; limit exceedance blocks. Only the user may raise
+hard limits. The four fields form a constraint triangle — gaming one
+dimension (fewer lines via reflowing) triggers another (characters or
+width). All governed files carry all four fields. Only shallow entry
+points (root README, quickstart, VISION) are exempt.
 
 ### Growth Governance
 
@@ -299,10 +302,9 @@ Two sections within the trinity have their own fitness governors:
 
 ### Tightening Process
 
-When a file exceeds its ceiling: identify grown sections, merge overlapping principles, remove
-examples that have served their teaching purpose, compress while preserving coverage. Present
-tightened versions to the user before committing. Tightening is distillation applied at the file
-level — "what can be said more concisely without losing meaning?"
+When a file exceeds its ceiling: merge overlapping principles, remove
+spent examples, compress while preserving coverage. Present tightened
+versions to the user before committing.
 
 ## Plasmid Exchange
 
@@ -337,10 +339,13 @@ When Practice Core files appear in the Practice Box:
    `incoming/` if they exist — to understand what they learned and why. The `purpose` field in each
    provenance entry tells you what kind of work shaped the evolution — use this to assess relevance
    to the local context.
-3. **Compare** with the local Practice and Lineage. Identify differences — not just in the lineage
-   doc, but across the full Practice system (directives, rules, skills, commands). Ask:
-   does the incoming version reveal principles that the local Practice implements implicitly but
-   hasn't named? Does the compression reveal what's essential versus contextual?
+3. **Compare at the concept level** — not file-by-file. The incoming
+   Practice may express the same concepts under different names,
+   structures, or artefacts. Ask: does it reveal principles that the
+   local Practice implements implicitly but hasn't named? Does the
+   local Practice already have the concept but with different
+   mechanics? What is genuinely new substance versus what is a
+   different encoding of something already understood?
 4. **Apply the same bar.** Does the incoming learning meet the structural-change criteria for *this*
    repo? (Validated by real work? Prevents recurring mistakes? Stable?)
 5. **Propose changes** to the user. Be specific: which files across the Practice would change and
@@ -349,35 +354,44 @@ When Practice Core files appear in the Practice Box:
    warranted.
 7. **Record what was taken** in the napkin (for traceability, not attribution).
 8. **Audit cohesion.** (a) Check that all Practice Core files (`practice.md`, `practice-lineage.md`,
-   `practice-bootstrap.md`, `index.md`, `README.md`, `CHANGELOG.md`, `provenance.yml`) are
+   `practice-bootstrap.md`, `practice-verification.md`, `index.md`, `README.md`, `CHANGELOG.md`,
+   `provenance.yml`) are
    internally consistent — no contradictions, no stale descriptions, no missing cross-references.
    (b) Check that `.agent/practice-index.md` links resolve. (c) Check that broader Practice files
-   (directives, rules, skills, commands) are aligned with the updated Core.
+   (directives, rules, skills, commands) are aligned with the updated Core. (d) Audit operational
+   surfaces: verify memory sinks exist, continuity host exists and is referenced correctly by
+   workflows, hook estate is consistent (if hooks are supported), the bridge truthfully reflects
+   the installed estate, and every activation in tracked platform config has a canonical backing
+   source.
 9. **Clear transient exchange material.** Remove the incoming files. If
    `.agent/practice-context/incoming/` exists, clear its received files and working notes. Local
    `outgoing/` may remain. The integration is complete.
 
-If nothing clears the bar, record that in the napkin too — the incoming material was reviewed and
-found not applicable to this context. That is a valid outcome.
+If nothing clears the bar, record that in the napkin too — the
+incoming material was reviewed and found not applicable to this
+context. That is a valid outcome.
 
-The Practice Core package (trinity + entry points + changelog + provenance) is itself a plasmid. It
-can be carried to any repo. The receiving repo applies its own bar.
+**Two-way merge**: when the local Practice has also evolved since the
+last common ancestor, start from the incoming files (they carry
+cumulative evolution as a coherent whole) and merge local additions
+back. Verify by diffing backup against result. Fitness checks are
+mandatory — two-way merges frequently push files over their ceilings.
 
-### Code Pattern Exchange
+### Pattern Exchange
 
-Proven code patterns (`.agent/memory/code-patterns/`) may travel alongside the Practice Core as
-optional Practice Context. They are not Core files — they are exchange context, one step beyond the
-outgoing notes.
+Proven patterns (`.agent/memory/patterns/`) may travel alongside the
+Practice Core as optional Practice Context — exchange context, one
+step beyond the outgoing notes.
 
-- **Sender**: when a code pattern is Practice-relevant and cross-repo-applicable, copy it to
-  `.agent/practice-context/outgoing/code-patterns/`. The consolidation command's pattern-extraction
-  step is the natural trigger.
-- **Receiver**: incoming patterns land in `.agent/practice-context/incoming/code-patterns/`. Apply
-  the same three-part bar as any other Practice material. Adopted patterns move to local
-  `.agent/memory/code-patterns/`. Rejected patterns are recorded in the napkin and cleared.
-- **Format**: each pattern is a self-contained `.md` file with YAML frontmatter (`name`, `domain`,
-  `proven_by`, `prevents`) and body sections (Principle, Pattern, Anti-pattern, When to Apply). See
-  `practice-bootstrap.md` §Code Patterns for the template.
+- **Sender**: copy Practice-relevant, cross-repo-applicable patterns
+  to `.agent/practice-context/outgoing/patterns/`. The consolidation
+  command's pattern-extraction step is the natural trigger.
+- **Receiver**: incoming patterns land in
+  `.agent/practice-context/incoming/patterns/`. Apply the same
+  three-part bar. Adopted patterns move to local
+  `.agent/memory/patterns/`; rejected ones are recorded in the napkin.
+- **Format**: self-contained `.md` with YAML frontmatter. See
+  `practice-bootstrap.md` §Reusable Patterns for the template.
 
 ## Growing a Practice from This Blueprint
 
@@ -414,23 +428,34 @@ deviations. Preserve and integrate them.
 4. Write `testing-strategy.md` encoding the Testing Philosophy above, with local test targets.
 5. Write `metacognition.md` from the condensed version in `practice-bootstrap.md` (it is universal).
 6. Follow `practice-bootstrap.md` for the remaining artefacts: sub-agent definitions, workflow
-   commands, rules, and skills (start-right, napkin, distillation). For each artefact type,
+   commands, rules, and skills (start-right, napkin). For each artefact type,
    create the canonical content in `.agent/` first, then add thin platform adapters. The bootstrap
    file provides annotated templates and format specifications for every artefact type.
-7. **Practice Core files.** If building from scratch: write all seven files in
+7. **Practice Core files.** If building from scratch: write all eight files in
    `.agent/practice-core/` — the trinity (`practice.md`, this lineage doc, `practice-bootstrap.md`)
-   each with YAML frontmatter (`provenance: provenance.yml`, `fitness_line_count`,
-   `fitness_char_count`, `fitness_line_length`), plus `README.md`, `index.md`, `CHANGELOG.md`, and
-   `provenance.yml` (with an index-0 entry per trinity file). If received from another repo: the
-   seven files already exist — append a new entry to each file's chain in `provenance.yml`.
+   each with YAML frontmatter (`provenance: provenance.yml`, `fitness_line_target`,
+   `fitness_line_limit`, `fitness_char_limit`, `fitness_line_length`), plus `README.md`,
+   `index.md`, `CHANGELOG.md`, and
+   `provenance.yml` (with an origin entry per trinity file), and
+   `practice-verification.md` (with fitness frontmatter). If received from
+   another repo: the eight files already exist — append a new entry to each
+   file's chain in `provenance.yml`.
 8. **Create `.agent/practice-index.md`** — the bridge file that carries navigable links from the
    Practice Core to the local repo's artefacts. The Practice Core references it via
    `../practice-index.md`. Use the template in `practice-bootstrap.md`, populating every section
    with the local repo's actual directives, ADRs, commands, skills, and directories. This file is
-   NOT part of the travelling package — it stays in the repo.
+   NOT part of the travelling package — it stays in the repo. **Record deliberate omissions**:
+   concepts intentionally not installed (specific reviewer families, hook layers, continuity host
+   variants, schema-first if inapplicable) must appear in the bridge with rationale and conditions
+   for future adoption. Historical changelogs are supporting evidence, not sufficient live
+   grounding.
 9. **Validate**: every file reference in every directive, agent, command, and rule resolves. Every
-   agent's first-action file exists. The repo builds. See the Bootstrap Checklist in
-   `practice-bootstrap.md`.
+   agent's first-action file exists. The repo builds. Then run the **claimed/installed/activated
+   audit**: for every surface claimed in `AGENT.md`, `practice-index.md`, commands, or skills,
+   verify (a) the files exist, (b) any platform activation in tracked config has a canonical
+   backing source, and (c) workflow commands (`go`, `session-handoff`, `start-right`) resolve
+   against real surfaces (memory, continuity host, planning scaffold). See the Bootstrap Checklist
+   and `practice-verification.md`.
 10. **Audit cohesion.** Check that all Practice Core files are internally consistent,
     that `.agent/practice-index.md` links resolve, and that broader Practice files
     (directives, rules, skills, commands) are aligned with the Core. Contradictions
@@ -453,6 +478,22 @@ degrades.
 6. **Cohesion check** — all Practice Core files are internally consistent, practice-index.md links
    resolve, and broader Practice files (directives, rules, commands, skills) are aligned with the
    Core content. No stale descriptions, no contradictions, no outdated wording.
+
+### Operational checks (require agent judgement, not scriptable)
+
+7. **Operational check** — workflows (`go`, `session-handoff`, `start-right`)
+   can execute against their claimed surfaces (memory, continuity host,
+   planning scaffold). If a workflow references a surface, that surface must
+   exist on a fresh checkout.
+8. **Deliberate-omission check** — every absent-but-referenced concept is
+   documented as deliberately omitted in `practice-index.md` or `AGENT.md`,
+   with rationale and conditions for future adoption. A broken reference is
+   not proof of required restoration — check the local changelog first.
+9. **Activation-parity check** — every activation in tracked platform config
+   (hook wiring, skill permissions, plugin state) has a corresponding
+   canonical source file. Absence of canonical source is a failing state that
+   must be reported — do not skip the check when the source file is missing;
+   the missing file is itself the defect.
 
 ### Validation scripts
 
@@ -498,21 +539,39 @@ validated across 3+ repos.
   responsibility, not compression.
 - **Practice Core files must be self-contained.** No navigable links outside `practice-core/` except
   `../practice-index.md`. All other external paths as code-formatted text.
+- **Concepts are the unit of exchange.** All Practice exchange —
+  outgoing content, incoming integration, two-way comparison — operates
+  at the concept level: what something is, how it works, why it
+  matters. Not at the file level, not at the pointer level. A name
+  like "the two-threshold fitness model" is better than "ADR-144", but
+  a name alone is still a pointer — the substance must travel. Two
+  repos may implement the same concept under different names and
+  structures; concept-level comparison reveals equivalences that
+  file-level diffing misses. This is both a self-containment guard
+  (no host-repo references in travelling content) and the correct
+  abstraction for Practice evolution. The practice-index bridges
+  portable concepts to each host's local artefacts.
 - **Paused is not future.**
 - **Agent files are first-class infrastructure.** They are executable agent code in markdown —
   subject to DRY, SOLID, and production-code rigour.
 - **Portable does not mean symmetrical.** Support only evidenced platform mappings.
+- **Architectural excellence over expediency.**
+- **Apps are thin; libraries own domain logic.**
+- **Substance before fitness.** When writing concepts to their correct
+  homes, always write at the weight the concept deserves first. Deal
+  with fitness limits holistically afterward — compress, split, or
+  raise limits as a separate editorial pass. Constraining a concept
+  during writing to avoid exceeding a count artificially underweights
+  vital understanding. The concept must arrive fully formed; the
+  container adjusts to hold it.
 
 ### Active Principles
 
-- **Metacognition is a technology, not a checklist.** The directive creates recursive
-  self-reflection through named layers (thoughts → reflections → insights), an affective break, and
-  a grounding anchor. Each layer's output is explicitly the next layer's input. Replacing this with
-  a planning template destroys the mechanism entirely — the result is a different thing that
-  prevents the depth it was meant to create.
-- **Intent over mechanics.** Vague language in rules creates escape hatches that agents will walk
-  through. Every directive must carry enough reasoning that an agent understands not just what to
-  do, but why it matters and what failure looks like.
+- **Metacognition is a technology, not a checklist.** Preserve named
+  recursion, the affective break, and the grounding anchor. Replacing this with
+  a planning template destroys the mechanism.
+- **Intent over mechanics.** Vague rules create escape hatches. Agents need to
+  understand what matters and what failure looks like, not just the verb.
 - **The recursive failure mode.** When the metacognition tool is broken, you cannot use
   metacognition to discover that it's broken. Detection requires external comparison.
 - **Exchange context works best as an indexed support pack.** Index
@@ -527,13 +586,30 @@ validated across 3+ repos.
   completes.
 - **RED-first applies to repo-state enforcement.** Prove the failure first, then fix the
   infrastructure.
-- **Session workflows must be state-free.** Session-entry skills must not carry
-  per-session content (specific plan names, tranche status). They reference
-  plan-discovery surfaces and let those own mutable state.
-- **Architectural excellence over expediency.** Always choose long-term clarity
-  over short-term convenience. Proven by CLI-SDK retriever drift in
-  oak-mcp-ecosystem: duplicate builders carried stale config, producing
-  different search results. ~500 lines deleted, Layer Role Topology codified.
-- **Apps are thin; libraries own domain logic.** Apps compose library/SDK
-  capabilities. They never reimplement domain logic a library provides. The
-  test: "could another consumer need this?" Violations cause silent drift.
+- **Session workflows must be state-free.** Session-entry skills must not
+  carry per-session content; plan-discovery surfaces own mutable state.
+- **Project platform configuration is infrastructure.** Tracked project
+  settings define the baseline contract. Local overrides extend it, and
+  portability checks must verify permissions/hooks as well as wrappers.
+- **Ordinary continuity and deep convergence are separate loops.** Use handoff
+  for cheap resumptions and consolidation for graduation. Bundling them makes
+  both less likely.
+- **Provenance is storytelling, not credit.** The provenance chain records the
+  knowledge journey, not ownership. Every repo that shaped the evolution appears
+  because we are here to collaborate, not compete.
+- **Hydration verifies operations, not just structure.** Checking that files
+  exist and references resolve is necessary but not sufficient. A hydrated repo
+  must prove it can operate: run workflows against real surfaces, write to
+  memory, validate its own estate. The three-state test — claimed, installed,
+  activated — catches the most dangerous failure mode: everything looks right
+  but nothing works.
+- **Deliberate absences must live in operational surfaces.** When a concept is
+  intentionally not installed, record that fact in `practice-index.md` or
+  `AGENT.md` — not just in changelogs. Otherwise the next agent sees a broken
+  reference and mechanically restores doctrine the repo had deliberately
+  removed.
+- **Canonical source before activation, always.** Installing platform adapters,
+  tracked config, or validation wrappers before the canonical sources they
+  depend on creates a broken install that false-greens on parity checks. The
+  order is: canonical → activation → validation. Reversing it is a structural
+  bug.

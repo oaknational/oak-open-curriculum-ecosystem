@@ -13,6 +13,7 @@ const mockRuntimeConfig: RuntimeConfig = {
     CLERK_SECRET_KEY: 'sk_test_mock',
     ELASTICSEARCH_URL: 'http://fake-es:9200',
     ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
+    ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
     SENTRY_MODE: 'off',
     LOG_LEVEL: 'error',
     NODE_ENV: 'test',
@@ -28,6 +29,7 @@ async function createTestApp() {
   return await createApp({
     runtimeConfig: mockRuntimeConfig,
     observability,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });

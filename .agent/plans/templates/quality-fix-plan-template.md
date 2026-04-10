@@ -139,7 +139,7 @@ Before marking a phase complete:
 2. Update `.agent/practice-core/practice.md` if impacted
 
 3. Update any additionally impacted ADRs, `/docs/` pages, or README files
-4. Apply `.cursor/commands/jc-consolidate-docs.md` to ensure settled documentation is not trapped in plans
+4. Apply `/jc-consolidate-docs` to ensure settled documentation is not trapped in plans
 
 If no update is needed for a required surface, record an explicit no-change rationale.
 
@@ -592,6 +592,14 @@ Run these checks to confirm architectural compliance:
 [command]
 # Expected: [Expected result]
 ```
+
+---
+
+## Consolidation
+
+After all work is complete and quality gates pass, run `/jc-consolidate-docs`
+to graduate settled content, extract reusable patterns, rotate the napkin,
+manage fitness, and update the practice exchange.
 
 ---
 

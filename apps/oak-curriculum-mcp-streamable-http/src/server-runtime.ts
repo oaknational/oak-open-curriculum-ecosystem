@@ -1,11 +1,18 @@
 import type express from 'express';
 import type { Logger } from '@oaknational/logger';
-import { createApp } from './application.js';
 import { bootstrapApp, type BootstrapAppDeps } from './bootstrap-app.js';
 import type { HttpObservability } from './observability/http-observability.js';
 import type { RuntimeConfig } from './runtime-config.js';
 
 type ShutdownSignal = 'SIGINT' | 'SIGTERM';
+
+/**
+ * Factory for creating the Express application.
+ *
+ * Accepts only the framework-level dependencies (`runtimeConfig`, `observability`).
+ * Consumer-specific dependencies (e.g. `getWidgetHtml`) are closed over by the
+ * caller when wrapping the real `createApp` — keeping this type generic per ADR-154.
+ */
 type CreateAppFn = (options: {
   readonly runtimeConfig: RuntimeConfig;
   readonly observability: HttpObservability;
@@ -20,7 +27,7 @@ export interface HttpServerLike {
 export interface StartConfiguredHttpServerDeps {
   readonly runtimeConfig: RuntimeConfig;
   readonly observability: HttpObservability;
-  readonly createApp?: CreateAppFn;
+  readonly createApp: CreateAppFn;
   readonly bootstrapApp?: BootstrapExpressApp;
   readonly createServer: (app: express.Express) => HttpServerLike;
   readonly onSignal: (signal: ShutdownSignal, handler: () => void) => void;
@@ -114,7 +121,7 @@ export async function startConfiguredHttpServer(
   const flushObservability = createFlushObservability(deps.observability, bootstrapLog);
   const bootstrappedApp = await (deps.bootstrapApp ?? bootstrapApp)({
     startApp: async () =>
-      await (deps.createApp ?? createApp)({
+      await deps.createApp({
         runtimeConfig: deps.runtimeConfig,
         observability: deps.observability,
       }),

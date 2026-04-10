@@ -37,4 +37,12 @@ describe('stub-modules', () => {
     expect(betaModule).toContain('export const stubBetaToolResponse');
     expect(betaModule).toContain('"id": "beta-1"');
   });
+
+  it('uses Node ESM-compatible MCP SDK specifiers in the stub index', () => {
+    const modules = generateStubModules([], new Map());
+
+    expect(modules['index.ts']).toContain(
+      "import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';",
+    );
+  });
 });

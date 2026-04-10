@@ -4,12 +4,10 @@
  * Provides runtime validation for ground truth entries.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-03-25T21:26:07.324Z
+ * Generated at: 2026-04-02T14:20:30.829Z
  */
 
-/* eslint-disable no-restricted-properties */
-// Object.keys is used by Zod refinements
-
+import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
 import { ALL_LESSON_SLUGS } from './lesson-slugs-by-subject';
 
@@ -82,7 +80,7 @@ export const GroundTruthQuerySchema = z.object({
     { message: 'Query must have at least 1 word' }
   ),
   expectedRelevance: z.record(z.string(), RelevanceScoreSchema).refine(
-    (obj) => Object.keys(obj).length > 0,
+    (obj) => typeSafeKeys(obj).length > 0,
     { message: 'expectedRelevance must have at least one entry' }
   ),
   category: QueryCategorySchema.optional(),

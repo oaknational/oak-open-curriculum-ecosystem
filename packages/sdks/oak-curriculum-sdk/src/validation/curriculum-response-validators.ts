@@ -77,8 +77,9 @@ export function isResponseJsonBody200<P extends ValidPath, M extends AllowedMeth
  * Validates response data for an API operation
  *
  * This function validates against the SDK response schema, including generated
- * decorations such as the optional `canonicalUrl` field. It does not derive or
- * augment `canonicalUrl`; that decoration happens at the client
+ * decorations such as the optional `oakUrl` field (slug-based teachers-site URL).
+ * The upstream API's `canonicalUrl` may also be present. This validator does not
+ * derive or augment `oakUrl`; that decoration happens at the client
  * response-augmentation middleware boundary, where a concrete request URL is
  * available.
  * @param path - The API path template (e.g., '/lessons/\{lesson\}/transcript')

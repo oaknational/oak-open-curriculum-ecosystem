@@ -1,0 +1,8 @@
+---
+description: Invoke design-system-reviewer when changes touch design tokens, CSS custom properties, colour palettes, spacing scales, typography scales, theming, or visual consistency in UI-shipping workspaces.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/invoke-design-system-reviewer.md`.
+
+In Cursor, use the Task tool with `readonly: true` and the appropriate `subagent_type`.

@@ -13,6 +13,7 @@ async function callWithBadArgs(): Promise<{ status: number; text: string }> {
   const app = await createApp({
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
   });
   const body = {
     jsonrpc: '2.0',

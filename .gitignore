@@ -17,9 +17,13 @@ collaboration.txt
 # Local MCP server config
 .mcp.json
 
-# Per-user Claude Code settings (contains absolute paths and local permissions)
-.claude/settings.json
+# Platform settings: project config is tracked, local overrides are not.
+# Project settings define the agentic system contract (skill permissions,
+# hooks, plugin state) and must work on fresh checkout.
+# Local settings contain user-specific paths and one-off permissions.
 .claude/settings.local.json
+.cursor/settings.local.json
+.gemini/settings.local.json
 
 # Claude agent worktrees (transient, machine-local)
 .claude/worktrees/
@@ -37,18 +41,13 @@ collaboration.txt
 # File system artifacts
 .DS_Store
 
-# Reference material (scratch research, not version-controlled)
-# The directory ignore + negation pattern requires both lines:
-# 1. Ignore all files in the directory (not the directory itself)
-# 2. Un-ignore the specific file to version-control
-# General to specific
-# Workspace reference
-**/reference/*
-!**/reference/README.md
-# Agent reference
-!.agent/reference/cross-platform-agent-surface-matrix.md
+# Generated SDK reference data (JSON maps from sitemap scan; regenerated on demand).
+# See packages/sdks/oak-sdk-codegen/reference/README.md
+packages/sdks/oak-sdk-codegen/reference/*.json
 
-
+# Local reference files, not for source control
+.agent/reference-local/**/*
+!.agent/reference-local/.gitignore
 
 # Logs
 *.log

@@ -1,0 +1,6 @@
+# Everything in here is ignored by default
+
+# Exceptions
+
+!.gitignore
+!README.md

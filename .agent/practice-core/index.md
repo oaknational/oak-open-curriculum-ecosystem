@@ -8,14 +8,15 @@ Follow `.agent/directives/AGENT.md` and `.agent/directives/principles.md`. That 
 
 ## The Practice Core Files
 
-The Practice Core travels between repos as a package of seven required files. The three **plasmid trinity** files encode the blueprint; the **entry points** provide orientation; the **changelog** records what changed; the **provenance file** tracks evolution history. It may be accompanied by an optional `.agent/practice-context/` directory, but that directory is not part of the Core.
+The Practice Core travels between repos as a package of eight required files. The three **plasmid trinity** files encode the blueprint; the **verification companion** proves the build is operational; the **entry points** provide orientation; the **changelog** records what changed; the **provenance file** tracks evolution history. It may be accompanied by an optional `.agent/practice-context/` directory, but that directory is not part of the Core.
 
 | File                                           | Role                                                                     |
 | ---------------------------------------------- | ------------------------------------------------------------------------ |
 | [practice.md](practice.md)                     | Blueprint: artefact map, workflow, three-layer model (the **what**)      |
 | [practice-lineage.md](practice-lineage.md)     | Blueprint: principles, evolution rules, exchange mechanism (the **why**) |
-| [practice-bootstrap.md](practice-bootstrap.md) | Blueprint: annotated templates for every artefact type (the **how**)     |
-| [README.md](README.md)                         | Entry point for humans: context and hydration how-to                     |
+| [practice-bootstrap.md](practice-bootstrap.md)         | Blueprint: annotated templates for every artefact type (the **how**)            |
+| [practice-verification.md](practice-verification.md)   | Verification: checklist, health check, operational estate, acceptance criteria  |
+| [README.md](README.md)                                 | Entry point for humans: context and hydration how-to                           |
 | [index.md](index.md)                           | Entry point for agents: operational orientation (this file)              |
 | [CHANGELOG.md](CHANGELOG.md)                   | What changed: repo-tagged summaries for plasmid integration              |
 | [provenance.yml](provenance.yml)               | Per-file evolution chains for the plasmid trinity                        |
@@ -26,9 +27,20 @@ The trinity files point to `provenance.yml` for their evolution history and evol
 
 The Practice Core files are **portable** — they travel between repos and must be self-contained. The one permitted external link is to `../practice-index.md`, a **local** bridge file that each repo creates during hydration. All other external paths appear as code-formatted text only.
 
+**Concepts are the unit of exchange.** All Practice exchange — outgoing
+content, incoming integration, two-way comparison — operates at the
+concept level: what something is, how it works, why it matters.
+Travelling content must carry the substance, not a pointer to where a
+host repo documents it (no ADR numbers, no local paths, no repo-specific
+names). A descriptive label is better than an opaque number, but a label
+alone is still a pointer — the substance must travel. Two repos may
+implement the same concept under different names; concept-level
+comparison reveals equivalences that file-level diffing misses. The
+practice-index bridges portable concepts to each host's local artefacts.
+
 |                | Portable (travels)               | Local (stays)                  |
 | -------------- | -------------------------------- | ------------------------------ |
-| **Files**      | The seven Practice Core files    | `.agent/practice-index.md`     |
+| **Files**      | The eight Practice Core files    | `.agent/practice-index.md`     |
 | **Links**      | Only to each other + the bridge  | To the repo's actual artefacts |
 | **Created by** | Origin repo or prior propagation | Hydration step 8               |
 

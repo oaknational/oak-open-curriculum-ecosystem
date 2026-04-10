@@ -49,7 +49,15 @@ export const toolGuidanceData = {
    */
   toolCategories: {
     discovery: {
-      tools: ['search', 'explore-topic', 'browse-curriculum', 'get-subjects', 'get-key-stages'],
+      tools: [
+        'search',
+        'user-search',
+        'user-search-query',
+        'explore-topic',
+        'browse-curriculum',
+        'get-subjects',
+        'get-key-stages',
+      ],
       description:
         'Find curriculum content using semantic search, topic exploration, or structured listing. ' +
         'search provides semantic search across lessons, units, threads, and sequences via a scope parameter. ' +

@@ -10,6 +10,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import { parser as tseslintParser } from 'typescript-eslint';
 import {
   configs,
+  createImportResolverSettings,
   ignores,
   testRules,
   appArchitectureRules,
@@ -27,6 +28,11 @@ const eslintConfig = defineConfig(
 
   // Use the recommended config from our standards plugin (includes TS, Prettier, Import-X)
   ...configs.strict,
+
+  {
+    files: ['**/*.ts'],
+    settings: createImportResolverSettings({ project: thisDir }),
+  },
 
   // TypeScript rules for source files
   {
@@ -196,6 +202,25 @@ const eslintConfig = defineConfig(
     },
   },
 
+  // Static curriculum traversal data is intentionally exhaustive and
+  // easier to review as a single source-of-truth table than split shards.
+  {
+    files: ['src/lib/indexing/curriculum-pattern-config.ts'],
+    rules: {
+      'max-lines': 'off',
+    },
+  },
+
+  // Validation CLI keeps many orthogonal checks in one script so failures
+  // are visible from a single execution path.
+  {
+    files: ['evaluation/validation/validate-ground-truth.ts'],
+    rules: {
+      'max-lines': 'off',
+      'max-statements': 'off',
+    },
+  },
+
   {
     files: [
       '**/*.config.ts',
@@ -208,9 +233,7 @@ const eslintConfig = defineConfig(
     languageOptions: {
       parser: tseslintParser,
       parserOptions: {
-        projectService: {
-          allowDefaultProject: ['vitest.config.ts', 'vitest.e2e.config.ts'],
-        },
+        projectService: true,
         tsconfigRootDir: thisDir,
       },
     },

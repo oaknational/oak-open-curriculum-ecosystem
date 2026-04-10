@@ -4,7 +4,6 @@ import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
 import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
 import { loadRuntimeConfig } from '../src/runtime-config.js';
-
 /**
  * E2E tests for parameter examples metadata in MCP tools.
  *
@@ -68,6 +67,16 @@ interface McpTool {
   readonly inputSchema?: ToolInputSchema;
 }
 
+function isJsonRpcEnvelope(value: unknown): value is JsonRpcEnvelope {
+  return typeof value === 'object' && value !== null;
+}
+
+function hasToolsResult(value: unknown): value is { readonly tools: unknown[] } {
+  return (
+    typeof value === 'object' && value !== null && 'tools' in value && Array.isArray(value.tools)
+  );
+}
+
 function parseFirstSseData(raw: string): JsonRpcEnvelope {
   const line = raw
     .split('\n')
@@ -78,18 +87,17 @@ function parseFirstSseData(raw: string): JsonRpcEnvelope {
   }
   const json = line.replace(/^data: /, '');
   const parsed: unknown = JSON.parse(json);
-  if (parsed && typeof parsed === 'object') {
-    return parsed as JsonRpcEnvelope;
+  if (isJsonRpcEnvelope(parsed)) {
+    return parsed;
   }
   throw new Error('Invalid SSE JSON');
 }
 
 function getToolsFromResult(payload: JsonRpcEnvelope): McpTool[] {
-  const result = payload.result as { tools?: unknown[] } | undefined;
-  if (!result?.tools || !Array.isArray(result.tools)) {
+  if (!hasToolsResult(payload.result)) {
     return [];
   }
-  return result.tools.filter(
+  return payload.result.tools.filter(
     (t): t is McpTool => t !== null && typeof t === 'object' && 'name' in t,
   );
 }
@@ -110,7 +118,11 @@ async function createTestApp() {
   });
   const runtimeConfig = unwrap(result);
   const observability = createHttpObservabilityOrThrow(runtimeConfig);
-  return await createApp({ runtimeConfig, observability });
+  return await createApp({
+    runtimeConfig,
+    observability,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+  });
 }
 
 async function callToolsList(

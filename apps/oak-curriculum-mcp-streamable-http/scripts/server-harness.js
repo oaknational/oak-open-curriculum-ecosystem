@@ -2,7 +2,7 @@
 /**
  * Production Build Server Harness
  *
- * Runs the built production bundle (dist/src/index.js) locally with configurable
+ * Runs the built production bundle (dist/index.js) locally with configurable
  * environment to diagnose deployment issues and validate instrumentation.
  *
  * Usage:
@@ -118,12 +118,11 @@ log.info('Configuration snapshot', configSnapshot);
 const startTime = Date.now();
 
 log.info('Importing production bundle', {
-  bundlePath: 'dist/src/index.js',
+  bundlePath: 'dist/application.js',
 });
 
 try {
-  const { createApp } = await import(`${rootDir}/dist/src/application.js`);
-  const { loadRuntimeConfig } = await import(`${rootDir}/dist/src/runtime-config.js`);
+  const { createApp, loadRuntimeConfig } = await import(`${rootDir}/dist/application.js`);
 
   if (typeof createApp !== 'function') {
     throw new Error('createApp is not a function in production bundle');

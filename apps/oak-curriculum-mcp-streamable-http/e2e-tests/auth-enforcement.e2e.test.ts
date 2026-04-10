@@ -34,7 +34,7 @@
  * endpoints return self-origin URLs; proxy routes forward to Clerk.
  *
  * @see https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization
- * @see https://developers.openai.com/apps-sdk/build/auth
+ * @see https://modelcontextprotocol.io/extensions/apps/overview
  */
 
 import { describe, it, expect } from 'vitest';
@@ -54,6 +54,8 @@ import { TEST_UPSTREAM_METADATA } from './helpers/upstream-metadata-fixture.js';
 function isOAuthMetadata(value: unknown): value is {
   authorization_servers: string[];
   resource: string;
+  scopes_supported?: string[];
+  bearer_methods_supported?: string[];
 } {
   return (
     typeof value === 'object' &&
@@ -62,6 +64,18 @@ function isOAuthMetadata(value: unknown): value is {
     Array.isArray(value.authorization_servers) &&
     'resource' in value
   );
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function requireRecord(value: unknown, message: string): Record<string, unknown> {
+  if (!isRecord(value)) {
+    throw new Error(message);
+  }
+
+  return value;
 }
 
 interface AuthServerMetadata {
@@ -122,6 +136,7 @@ async function createAuthApp(): Promise<Express> {
   return await createApp({
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });
@@ -288,7 +303,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
 
       expect(res.status).toBe(200);
 
-      const body = res.body as Record<string, unknown>;
+      const body = requireRecord(res.body, 'Expected auth server metadata body');
 
       expect(body.response_types_supported).toEqual(['code']);
       expect(body.grant_types_supported).toEqual(['authorization_code', 'refresh_token']);
@@ -366,7 +381,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
         throw new Error('Invalid OAuth metadata response');
       }
 
-      const scopes = (body as { scopes_supported?: string[] }).scopes_supported;
+      const scopes = body.scopes_supported ?? [];
       expect(scopes).toEqual(expect.arrayContaining(['email']));
       expect(scopes).not.toContain('openid');
       expect(scopes).toHaveLength(1);
@@ -411,13 +426,16 @@ describe('Auth Enforcement - RFC Compliance', () => {
       const body: unknown = res.body;
       expect(body).toHaveProperty('resource');
 
-      const resource = (body as { resource: unknown }).resource;
-      expect(typeof resource).toBe('string');
+      if (!isOAuthMetadata(body)) {
+        throw new Error('Response does not conform to OAuth metadata structure');
+      }
+
+      const resource = body.resource;
 
       expect(resource).toMatch(/^https?:\/\/127\.0\.0\.1:\d+\/mcp$/);
       expect(resource).toContain('/mcp');
 
-      const resourceUrl = new URL(resource as string);
+      const resourceUrl = new URL(resource);
       expect(resourceUrl.hostname).toBe('127.0.0.1');
       expect(resourceUrl.pathname).toBe('/mcp');
     });

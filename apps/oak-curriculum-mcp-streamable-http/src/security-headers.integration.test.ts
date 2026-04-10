@@ -30,7 +30,11 @@ describe('Security Headers (Integration)', () => {
     });
     const runtimeConfig = unwrap(result);
     const observability = createHttpObservabilityOrThrow(runtimeConfig);
-    app = await createApp({ runtimeConfig, observability });
+    app = await createApp({
+      runtimeConfig,
+      observability,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+    });
   });
 
   describe('Landing page (/) - HTML endpoint', () => {

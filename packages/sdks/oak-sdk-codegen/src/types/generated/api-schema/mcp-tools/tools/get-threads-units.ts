@@ -32,7 +32,7 @@ export interface ToolArgs { readonly params: ToolParams; }
 
 export const toolInputJsonSchema = { type: 'object' as const, properties: {"thread":{"type":"string","examples":["number-multiplication-and-division"]}} as const, additionalProperties: false as const, required: ["thread"] };
 export const toolZodSchema = z.object({ params: z.object({ path: z.object({ threadSlug: z.string() }) }) });
-export const toolMcpFlatInputSchema = z.object({ thread: z.string() });
+export const toolMcpFlatInputSchema = z.object({ thread: z.string().meta({ examples: ["number-multiplication-and-division"] }) });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
 const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"thread":{"type":"string","examples":["number-multiplication-and-division"]}},"additionalProperties":false,"required":["thread"]}\nRequired: thread';
 export const describeToolArgs = () => toolArgsDescription;

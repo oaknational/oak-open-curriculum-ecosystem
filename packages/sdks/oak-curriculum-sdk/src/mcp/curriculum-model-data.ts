@@ -11,28 +11,14 @@
  * @see ./tool-guidance-data.ts for tool usage guidance
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { OntologyData } from './ontology-data.js';
 import { ontologyData } from './ontology-data.js';
 import { toolGuidanceData } from './tool-guidance-data.js';
-import { getToolSpecificHelp } from './tool-help-lookup.js';
 
-interface ComposeCurriculumModelOptions {
-  readonly toolName?: string;
-}
-
-type StructuredContent = NonNullable<CallToolResult['structuredContent']>;
-
-interface CurriculumModelBase {
+interface CurriculumModelData {
   readonly domainModel: OntologyData;
   readonly toolGuidance: ReturnType<typeof composeToolGuidance>;
 }
-
-interface CurriculumModelWithHelp extends CurriculumModelBase {
-  readonly toolSpecificHelp: StructuredContent;
-}
-
-type CurriculumModelData = CurriculumModelBase | CurriculumModelWithHelp;
 
 /**
  * Tool guidance extracted from toolGuidanceData.
@@ -54,26 +40,14 @@ function composeToolGuidance() {
  * Composes the full curriculum model data for agent orientation.
  *
  * Returns the complete ontology (domain model) plus tool guidance
- * in a single response. Optionally includes tool-specific help when
- * a tool name is provided.
+ * in a single response. No parameters — the full model is always
+ * returned. Per-tool help is available on each tool's own description.
  *
- * @param options - Optional configuration with toolName for tool-specific help
  * @returns Composed curriculum model data
  */
-export function composeCurriculumModelData(
-  options?: ComposeCurriculumModelOptions,
-): CurriculumModelData {
-  const domainModel: OntologyData = ontologyData;
-  const toolGuidance = composeToolGuidance();
-
-  const base = { domainModel, toolGuidance };
-
-  if (options?.toolName) {
-    const helpResult = getToolSpecificHelp(options.toolName);
-    if (!helpResult.isError && helpResult.structuredContent) {
-      return { ...base, toolSpecificHelp: helpResult.structuredContent };
-    }
-  }
-
-  return base;
+export function composeCurriculumModelData(): CurriculumModelData {
+  return {
+    domainModel: ontologyData,
+    toolGuidance: composeToolGuidance(),
+  };
 }

@@ -10,20 +10,9 @@
 
 import { describe, it, expect } from 'vitest';
 import {
-  GET_PREREQUISITE_GRAPH_INPUT_SCHEMA,
   GET_PREREQUISITE_GRAPH_TOOL_DEF,
   runPrerequisiteGraphTool,
 } from './aggregated-prerequisite-graph.js';
-
-describe('GET_PREREQUISITE_GRAPH_INPUT_SCHEMA', () => {
-  it('is an object type with no parameters', () => {
-    expect(GET_PREREQUISITE_GRAPH_INPUT_SCHEMA).toEqual({
-      type: 'object',
-      properties: {},
-      additionalProperties: false,
-    });
-  });
-});
 
 describe('GET_PREREQUISITE_GRAPH_TOOL_DEF', () => {
   it('has description explaining the graph purpose', () => {
@@ -46,12 +35,7 @@ describe('GET_PREREQUISITE_GRAPH_TOOL_DEF', () => {
       destructiveHint: false,
       idempotentHint: true,
       openWorldHint: false,
-      title: 'Get Prerequisite Graph',
     });
-  });
-
-  it('references the input schema', () => {
-    expect(GET_PREREQUISITE_GRAPH_TOOL_DEF.inputSchema).toBe(GET_PREREQUISITE_GRAPH_INPUT_SCHEMA);
   });
 });
 

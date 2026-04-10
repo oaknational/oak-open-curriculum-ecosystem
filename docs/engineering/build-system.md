@@ -10,6 +10,27 @@ The build system uses:
 - **Turborepo** - Task runner with caching and dependency management
 - **tsup** - TypeScript bundler for libraries and apps
 
+## pnpm workspace configuration
+
+Workspace membership lives in `pnpm-workspace.yaml` at the repo root. Linking and
+hoisting use **pnpm defaults** (no overrides for `linkWorkspacePackages`,
+`preferWorkspacePackages`, or `shamefullyHoist`), which keeps the strict
+`node_modules` layout described in
+[ADR-012](../architecture/architectural-decisions/012-pnpm-package-manager.md).
+
+Internal `@oaknational/*` dependencies must use the `workspace:` protocol in
+`package.json` (`workspace:*` or `workspace:^`). Do not point them at the public
+registry by semver alone.
+
+`onlyBuiltDependencies` in `pnpm-workspace.yaml` is an **intentional** allowlist:
+only those packages may run install lifecycle scripts.
+
+**Project `.npmrc` is optional.** Use it for npm-compatible registry and auth
+only (`registry`, scoped registry maps, tokens). Avoid pnpm-only keys in
+`.npmrc`: npm 9+ warns on unknown project config, and a future npm major may
+treat that as an error. Other pnpm settings belong in `pnpm-workspace.yaml` (see
+[pnpm settings](https://pnpm.io/settings)).
+
 ## Build Order
 
 All packages use a unified `build` script. Turbo's `^build` dependency ensures packages build in the correct order based on the workspace dependency graph:
@@ -48,6 +69,18 @@ All packages use a unified `build` script. Turbo's `^build` dependency ensures p
   "run `sdk-codegen` in this package first" — scoped to the one package that
   generates types. Other packages build from committed generated code.
 
+> **Turbo override gotcha**: Task-specific overrides (e.g.
+> `@oaknational/sdk-codegen#build`) **replace** the generic task
+> definition entirely — they do NOT merge with it. Every override MUST
+> explicitly include `outputs`, `inputs`, and `cache` from the generic
+> parent task, or those fields default to empty. An override with only
+> `dependsOn` produces `outputs: []`, meaning the cache stores nothing
+> and cache hits restore zero files. This caused PR #70 CI failures:
+> `sdk-codegen:build` cache hits left `dist/` empty, breaking
+> downstream type-check. Verify overrides with
+> `turbo run <task> --filter=@package --dry=json` and inspect
+> `resolvedTaskDefinition`.
+
 Core packages (`oak-eslint`, `openapi-zod-client-adapter`) are leaf nodes with no workspace dependencies, so they build first. Other packages depend on them via `devDependencies` or `dependencies`, ensuring the correct build order without manual configuration.
 
 ## Quality Gate Surfaces
@@ -57,28 +90,30 @@ point in the development lifecycle. See
 [ADR-121](../architecture/architectural-decisions/121-quality-gate-surfaces.md)
 for the full decision record.
 
-| Check             | pre-commit | pre-push     | CI workflow     | pnpm qg | pnpm check        |
-| ----------------- | ---------- | ------------ | --------------- | ------- | ----------------- |
-| secrets:scan:all  | --         | Yes          | Yes             | --      | Yes               |
-| clean             | --         | --           | --              | --      | Yes               |
-| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | --      | Yes               |
-| build             | --         | Yes          | Yes             | --      | Yes               |
-| format-check      | Yes        | Yes          | Yes             | Yes     | Yes (format:root) |
-| markdownlint      | Yes        | Yes          | Yes             | Yes     | Yes               |
-| subagents:check   | --         | --           | Yes             | Yes     | Yes               |
-| portability:check | --         | --           | Yes             | Yes     | Yes               |
-| test:root-scripts | --         | --           | Yes             | Yes     | Yes               |
-| type-check        | Yes        | Yes          | Yes             | Yes     | Yes               |
-| lint              | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test              | Yes        | Yes          | Yes             | Yes     | Yes               |
-| test:e2e          | --         | Yes (--only) | --              | Yes     | Yes               |
-| test:ui           | --         | --           | --              | Yes     | Yes               |
-| smoke:dev:stub    | --         | --           | --              | Yes     | Yes               |
-| doc-gen           | --         | --           | --              | --      | Yes               |
+| Check             | pre-commit | pre-push     | CI workflow     | pnpm check        |
+| ----------------- | ---------- | ------------ | --------------- | ----------------- |
+| secrets:scan:all  | --         | Yes          | Yes             | Yes               |
+| clean             | --         | --           | --              | Yes               |
+| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | Yes               |
+| build             | --         | Yes          | Yes             | Yes               |
+| format-check      | Yes        | Yes          | Yes             | Yes (format:root) |
+| markdownlint      | Yes        | Yes          | Yes             | Yes               |
+| subagents:check   | --         | --           | Yes             | Yes               |
+| portability:check | --         | --           | Yes             | Yes               |
+| test:root-scripts | --         | --           | Yes             | Yes               |
+| type-check        | Yes        | Yes          | Yes             | Yes               |
+| lint              | Yes        | Yes          | Yes             | Yes               |
+| test              | Yes        | Yes          | Yes             | Yes               |
+| test:widget       | --         | --           | --              | Yes               |
+| test:e2e          | --         | Yes (--only) | --              | Yes               |
+| test:ui           | --         | --           | --              | Yes               |
+| test:a11y         | --         | --           | --              | Yes               |
+| smoke:dev:stub    | --         | --           | --              | Yes               |
+| doc-gen           | --         | --           | --              | Yes               |
 
 **Key principle**: no check runs only in CI. Every CI check is reproducible
-locally via pre-push, `pnpm qg`, or `pnpm check`. See ADR-121 for the
-rationale behind each exclusion.
+locally via pre-push or `pnpm check`. See ADR-121 for the rationale behind
+each exclusion.
 
 ## Quality Gate Commands
 
@@ -105,44 +140,38 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
    - `markdownlint:root` - fix markdown in root
    - `format:root` - format root files
 
-### `pnpm qg` - Quality gates (verification)
-
-Verifies the codebase passes all checks without modifications:
-
-```bash
-pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && pnpm portability:check && pnpm test:root-scripts && turbo run type-check lint test test:ui test:e2e smoke:dev:stub
-```
-
-**Flow**:
-
-1. Root-only checks (no fixes):
-   - `format-check:root` - verify formatting
-   - `markdownlint-check:root` - verify markdown
-   - `subagents:check` - validate sub-agent wrapper/template standards
-   - `portability:check` - validate canonical/adaptor and hook parity
-   - `test:root-scripts` - repo-level script tests
-2. Single turbo run:
-   - `type-check` - TypeScript validation
-   - `lint` - ESLint (verify only, no --fix)
-   - `test` - unit and integration tests
-   - `test:ui` - Playwright UI tests
-   - `test:e2e` - E2E tests (includes built-server behaviour tests)
-   - `smoke:dev:stub` - smoke tests with stubs
-
-### `pnpm check` - Full clean build and verify
+### `pnpm check` - Canonical full gate
 
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && turbo run sdk-codegen build type-check doc-gen lint:fix test test:e2e test:ui smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root
+pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && pnpm sdk-codegen build && pnpm type-check && pnpm doc-gen && pnpm lint:fix && pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root
 ```
+
+`pnpm check` is the only canonical aggregate verification command. The former
+`pnpm qg` surface was removed to avoid having two competing “full gate”
+stories.
+
+#### Aggregate gate doctrine
+
+- `pnpm check` is executable truth and the only canonical aggregate
+  verification command. CI, prompts, and READMEs should name this surface
+  rather than inventing alternatives.
+- Design target: a human-facing aggregate gate should own one package-graph run.
+  In practice, that means extending `pnpm check` rather than adding a
+  second competing full-gate surface. The underlying implementation may still
+  compose multiple root scripts today, but discoverability and future
+  convergence should stay centred on this one gate.
+- Repo-wide claims must stay within the workspace task exports that back them.
+  A workspace is only in the repo-wide `clean`, `type-check`, `lint`, or
+  `test` story if it actually exports that task.
 
 ### `pnpm test:all` - All test suites
 
 Runs all test types sequentially:
 
 ```bash
-pnpm test && pnpm test:e2e && pnpm test:ui && pnpm smoke:dev:stub
+pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub
 ```
 
 ### `pnpm fix` - Auto-fix only

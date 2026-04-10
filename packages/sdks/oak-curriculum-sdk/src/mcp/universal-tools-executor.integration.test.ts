@@ -7,8 +7,9 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
+import { z } from 'zod';
 import { McpToolError } from './execute-tool-call.js';
 import { err, ok } from '@oaknational/result';
 import { createUniversalToolExecutor } from './universal-tools/executor.js';
@@ -52,12 +53,22 @@ const sampleDescriptor: ToolRegistryDescriptor = {
   },
   securitySchemes: [],
   requiresDomainContext: false,
+  toolMcpFlatInputSchema: z.object({
+    params: z.object({
+      path: z.object({
+        keyStage: z.string(),
+        subject: z.string(),
+      }),
+    }),
+  }),
 };
 
-function createFakeRegistry(): GeneratedToolRegistry {
+function createFakeRegistry(
+  descriptor: ToolRegistryDescriptor = sampleDescriptor,
+): GeneratedToolRegistry {
   return {
     toolNames: [sampleMcpToolName],
-    getToolFromToolName: () => sampleDescriptor,
+    getToolFromToolName: () => descriptor,
     isToolName: (value: unknown): value is ToolName =>
       typeof value === 'string' && value === sampleMcpToolName,
   };
@@ -79,6 +90,12 @@ function parseTextContent(result: CallToolResult): StructuredContent {
   const parsed: unknown = JSON.parse(jsonContent.text);
   assertIsStructuredContent(parsed);
   return parsed;
+}
+
+function omitProperty<T extends object, K extends keyof T>(object: T, key: K): Omit<T, K> {
+  const { [key]: omitted, ...rest } = object;
+  void omitted;
+  return rest;
 }
 
 const registry = createFakeRegistry();
@@ -178,6 +195,36 @@ describe('createUniversalToolExecutor', () => {
     expect(executeMcpTool).toHaveBeenCalledWith(SAMPLE_MCP_TOOL_NAME, args);
     const payload = parseTextContent(result);
     expect(payload).toEqual({ status: 200, data: { status: 'ok' } });
+  });
+
+  it('uses the shared title-resolution rule for summaries and widget metadata', async () => {
+    const annotations = sampleDescriptor.annotations;
+
+    expect(annotations).toBeDefined();
+    if (!annotations) {
+      throw new Error('Expected generated tool descriptor to include annotations');
+    }
+
+    const annotationsWithoutTitle = omitProperty(annotations, 'title');
+    const registryWithTopLevelTitle = createFakeRegistry({
+      ...sampleDescriptor,
+      title: 'Spec-aligned top-level title',
+      annotations: annotationsWithoutTitle,
+    });
+    const executeMcpTool = vi.fn().mockResolvedValue(ok({ status: 200, data: { status: 'ok' } }));
+    const callUniversalTool = createUniversalToolExecutor({
+      executeMcpTool,
+      searchRetrieval: createStubSearchRetrieval(),
+      generatedTools: registryWithTopLevelTitle,
+    });
+
+    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {});
+
+    expect(result.content[0]).toEqual({
+      type: 'text',
+      text: 'Spec-aligned top-level title: 200',
+    });
+    expect(result._meta).toHaveProperty('annotations/title', 'Spec-aligned top-level title');
   });
 
   it('maps executor errors to CallToolResult', async () => {

@@ -6,7 +6,7 @@
  * from the Search SDK to MCP `CallToolResult`.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import type { Result } from '@oaknational/result';
 import { formatError, type UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
 import type {

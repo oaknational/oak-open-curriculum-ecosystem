@@ -104,7 +104,7 @@ cp .env.example .env
 
 # 2. Run setup and verification commands
 pnpm make    # Full convenience pipeline; mutates files via lint/doc/format fix steps
-pnpm qg      # Read-only verification (format-check:root + markdownlint-check:root + subagents:check + portability:check + test:root-scripts + workspace/UI/E2E/smoke suites)
+pnpm check   # Canonical full verification gate
 
 # 3. Start the canonical MCP dev server
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
@@ -121,7 +121,7 @@ pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
 For AI agent execution order, directives are normative: run quality gates one at
 a time as specified in
 [`start-right-thorough.md`](../../.agent/skills/start-right-thorough/shared/start-right-thorough.md).
-`pnpm make` and `pnpm qg` remain convenience commands for human local workflows.
+`pnpm make` and `pnpm check` are the aggregate local workflow commands.
 
 See [environment variables guide](../operations/environment-variables.md) for complete setup details.
 
@@ -134,7 +134,7 @@ See [environment variables guide](../operations/environment-variables.md) for co
 - [ ] You have read the three foundational ADRs (029, 030, 031)
 - [ ] You know which area you are working on (SDK, MCP server, search, or docs)
 
-For known `pnpm qg` local caveats, see [Troubleshooting → Known Gate Caveats](../operations/troubleshooting.md#known-gate-caveats).
+For any current `pnpm check` caveats, see [Troubleshooting → Known Gate Caveats](../operations/troubleshooting.md#known-gate-caveats).
 
 ## Key Concepts
 
@@ -285,17 +285,31 @@ pnpm build
 pnpm test
 ```
 
+### Widget Development
+
+The MCP server ships an MCP App widget (React + Vite, self-contained HTML). For widget work, run from the `apps/oak-curriculum-mcp-streamable-http/` workspace:
+
+```bash
+pnpm dev:widget          # Standalone dev server with token live-reload
+pnpm dev:widget-in-host  # Widget inside MCP Apps basic-host (requires bun)
+pnpm test:widget         # Unit + integration tests
+pnpm test:widget:ui      # Playwright visual tests (light + dark themes)
+pnpm test:widget:a11y    # Playwright axe-core WCAG 2.2 AA gate
+```
+
+Design token JSON edits live-reload in the widget dev server. See the [workspace README](../../apps/oak-curriculum-mcp-streamable-http/README.md) for the full widget development guide, and [MCP App Styling](../governance/mcp-app-styling.md) for CSS custom property conventions.
+
 ## Common Tasks
 
 ### Run All Quality Gates
 
 ```bash
 pnpm make    # Full convenience pipeline with auto-fix steps; review file changes afterwards
-pnpm qg      # Read-only quality checks (including UI/E2E/smoke suites)
+pnpm check   # Canonical aggregate verification gate
 pnpm clean   # Remove build artefacts (dist/, .turbo) — for a full reset also rm -rf node_modules
 ```
 
-If `pnpm qg` fails locally, check [Troubleshooting → Known Gate Caveats](../operations/troubleshooting.md#known-gate-caveats) before assuming setup issues.
+If `pnpm check` fails locally, check [Troubleshooting → Known Gate Caveats](../operations/troubleshooting.md#known-gate-caveats) before assuming setup issues.
 
 ### Test a Specific Workspace
 
@@ -334,6 +348,7 @@ oak-open-curriculum-ecosystem/
 │   │   ├── oak-sdk-codegen/          # OpenAPI/code-generation pipeline
 │   │   ├── oak-curriculum-sdk/       # Runtime SDK consumed by apps
 │   │   └── oak-search-sdk/           # Search SDK (ES retrieval, admin)
+│   ├── design/                        # Design tokens: DTCG pipeline, WCAG contrast validation, CSS output
 │   ├── core/                          # Shared low-level code (result, env schemas, type-helpers, ESLint plugin)
 │   └── libs/                          # Shared libraries (logger, env-resolution)
 ├── apps/

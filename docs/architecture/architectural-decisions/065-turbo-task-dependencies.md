@@ -159,7 +159,7 @@ This creates circular cache invalidation: `build` produces outputs → outputs c
 ### Positive
 
 - **Reliability**: No more intermittent test failures from race conditions
-- **Performance**: Cached builds make `pnpm test` and `pnpm qg` significantly faster on repeated runs
+- **Performance**: Cached builds make `pnpm test` and `pnpm check` significantly faster on repeated runs
 - **Clarity**: Explicit `lint:fix` vs `lint` makes intent clear
 
 ### Negative
@@ -193,8 +193,13 @@ This creates circular cache invalidation: `build` produces outputs → outputs c
  cached    cached    cached   uncached
 
 Same-package build dependency (for out-of-process tests):
-- test:e2e (cache: true, dependsOn: [build])
-- test:ui  (cache: true, dependsOn: [build])
+- test:e2e       (cache: true, dependsOn: [build])
+- test:ui        (cache: true, dependsOn: [build])
+- test:widget:ui (cache: true, dependsOn: [build])
+
+Sequential test chaining (shared webServer port):
+- test:a11y        (cache: true, dependsOn: [build, test:ui])
+- test:widget:a11y (cache: true, dependsOn: [build, test:widget:ui])
 
 Same-package build + test:e2e dependency:
 - smoke:dev:stub (uncached, dependsOn: [build, test:e2e])
@@ -208,8 +213,10 @@ Build-only dependency:
 
 1. **Use `^build` for verification tasks** (lint, type-check, test): they need upstream
    packages' `.d.ts` files but not same-package build output.
-2. **Use `build` (same-package) for out-of-process tests** (test:e2e, test:ui, smoke):
-   they test a built artefact and need the same package compiled.
+2. **Use `build` (same-package) for out-of-process tests** (test:e2e, test:ui,
+   test:widget:ui, smoke): they test a built artefact and need the same package compiled.
+   When two tasks share a webServer config (same port), chain them with `dependsOn`
+   (e.g. `test:a11y` after `test:ui`, `test:widget:a11y` after `test:widget:ui`).
 3. **Never use same-package `sdk-codegen`** in generic task definitions: only one package
    has the script; same-package references create phantom tasks in all other packages.
    Use a package-specific override instead.

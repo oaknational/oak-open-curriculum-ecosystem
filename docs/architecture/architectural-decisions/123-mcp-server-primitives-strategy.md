@@ -22,10 +22,12 @@ This ADR fills that gap: it documents which curriculum capabilities are exposed 
 
 ### Tools (model-controlled)
 
-31 curriculum tools: 23 generated from the OpenAPI schema plus 8 aggregated tools (search, browse, fetch, explore, graph/orientation tools, and `download-asset`). The model decides when to call them based on the user's question.
+34 curriculum tools: 24 generated from the OpenAPI schema plus 10 aggregated
+tools. The model decides when to call them based on the user's question and
+the tool visibility metadata exposed through the MCP contract.
 
-- **Generated tools** (23) are produced at SDK compile time from the OpenAPI schema. When the upstream API changes, `pnpm sdk-codegen` updates the tool definitions automatically.
-- **Aggregated tools** (8) are hand-authored compositions that orchestrate API calls, search, and reference data. These include `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prerequisite-graph`, `get-curriculum-model` (domain ontology and tool usage guidance), and `download-asset`.
+- **Generated tools** (24) are produced at SDK compile time from the OpenAPI schema. When the upstream API changes, `pnpm sdk-codegen` updates the tool definitions automatically.
+- **Aggregated tools** (10) are hand-authored compositions that orchestrate API calls, search, reference data, and MCP App entry points. These include `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prerequisite-graph`, `get-curriculum-model` (domain ontology and tool usage guidance), `download-asset`, `user-search`, and `user-search-query`.
 
 **Intent**: Let AI assistants search, browse, and fetch curriculum data autonomously.
 
@@ -42,6 +44,14 @@ Three resources for clients that support resource injection:
 | `curriculum://thread-progressions` | Learning progression data  | 0.5      | `["assistant"]` |
 
 The host application decides whether and how to inject these into the model's context.
+
+A fourth resource serves the interactive MCP App widget:
+
+| Resource URI                    | Content              | Priority | Audience  |
+| ------------------------------- | -------------------- | -------- | --------- |
+| `ui://widget/oak-banner-*.html` | React MCP App (HTML) | —        | `["app"]` |
+
+This resource uses `text/html;profile=mcp-app` content type and is registered via `registerAppResource` per [ADR-141](141-mcp-apps-standard-primary.md). CSP declarations for external fonts are included via `_meta.ui.csp.resourceDomains` on the content item.
 
 **Intent**: Clients that support resource auto-injection get orientation data without a tool call.
 

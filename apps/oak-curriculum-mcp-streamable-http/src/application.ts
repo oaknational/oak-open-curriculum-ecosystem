@@ -6,7 +6,6 @@ import type { UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import listRoutes from 'express-list-routes';
 
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
-import { overrideToolsListHandler } from './tools-list-override.js';
 import {
   SERVER_INSTRUCTIONS,
   createStubSearchRetrieval,
@@ -30,9 +29,10 @@ import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
 import { createSearchRetrieval } from './search-retrieval-factory.js';
 import type { HttpObservability } from './observability/http-observability.js';
-
 import type { McpServerFactory } from './mcp-request-context.js';
+import { OAK_SERVER_BRANDING } from './server-branding.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
+export { loadRuntimeConfig } from './runtime-config.js';
 
 export interface CreateAppOptions {
   readonly runtimeConfig: RuntimeConfig;
@@ -40,6 +40,16 @@ export interface CreateAppOptions {
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
   readonly logger?: Logger;
   readonly resourceUrl?: string;
+  /**
+   * Returns the built widget HTML content for the MCP App resource.
+   *
+   * Production callers provide `() => WIDGET_HTML_CONTENT` using the committed
+   * codegen constant. Tests inject a trivial fake: `() => '<html>test</html>'`.
+   *
+   * @see ADR-078 for the dependency injection rationale
+   * @see src/generated/widget-html-content.ts — Committed codegen constant
+   */
+  readonly getWidgetHtml: () => string;
   /**
    * Upstream AS metadata for the OAuth proxy. When provided, `createApp`
    * skips the network fetch to Clerk's `/.well-known/oauth-authorization-server`
@@ -217,6 +227,7 @@ function initializeCoreEndpoints(
     resourceUrl,
     searchRetrieval,
     createAssetDownloadUrl,
+    getWidgetHtml: options.getWidgetHtml,
   };
 
   log.debug('bootstrap.mcp.factory.created');
@@ -224,11 +235,10 @@ function initializeCoreEndpoints(
   // Factory creates a fresh McpServer + transport per request
   const mcpFactory: McpServerFactory = () => {
     const server = new McpServer(
-      { name: 'oak-curriculum-http', version: '0.1.0' },
+      { name: 'oak-curriculum-http', version: '0.1.0', ...OAK_SERVER_BRANDING },
       { instructions: SERVER_INSTRUCTIONS },
     );
     registerHandlers(server, handlerOptions);
-    overrideToolsListHandler(server);
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
     return { server, transport };
   };

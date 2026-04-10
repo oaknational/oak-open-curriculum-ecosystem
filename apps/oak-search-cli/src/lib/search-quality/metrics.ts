@@ -23,15 +23,7 @@
  * ```
  */
 
-/**
- * Type-safe Object.values that preserves value types.
- * Avoids the no-restricted-properties lint rule for Object.values.
- * @remarks Generic over Record with string keys (e.g. document slugs or arbitrary labels).
- */
-function typeSafeValues<T extends Readonly<Record<string, number>>>(obj: T): number[] {
-  // eslint-disable-next-line no-restricted-properties -- Encapsulated in type-safe helper
-  return Object.values(obj);
-}
+import { typeSafeValues } from '@oaknational/type-helpers';
 
 /**
  * Relevance threshold for MRR calculation.

@@ -69,13 +69,35 @@ export interface UnitLessonInfo {
   readonly lessonTitle: string;
 }
 
+type LessonDocumentSummaryInput = SearchLessonSummary;
+
+function mapOptionalArray<T>(
+  items: readonly T[] | undefined,
+  mapper: (item: T) => string,
+): string[] | undefined {
+  if (!items || items.length === 0) {
+    return undefined;
+  }
+  return items.map(mapper);
+}
+
+function getRollupLessonIds(
+  summary: SearchUnitSummary,
+  lessonsByUnit?: ReadonlyMap<string, readonly string[]>,
+): string[] {
+  return [
+    ...(lessonsByUnit?.get(summary.unitSlug) ??
+      summary.unitLessons.map((lesson) => lesson.lessonSlug)),
+  ];
+}
+
 /**
  * Extracts lesson planning fields from lesson summary.
  *
  * @param summary - Lesson summary (typed SDK data)
  * @returns Extracted lesson planning fields
  */
-export function extractLessonPlanningFields(summary: SearchLessonSummary): {
+export function extractLessonPlanningFields(summary: LessonDocumentSummaryInput): {
   lessonKeywords?: string[];
   keyLearningPoints?: string[];
   misconceptions?: string[];
@@ -118,10 +140,10 @@ export function extractLessonPlanningFields(summary: SearchLessonSummary): {
  * @param summary - Lesson summary (typed SDK data)
  * @returns Extracted fields for lesson document
  */
-export function extractLessonDocumentFields(summary: SearchLessonSummary): {
+export function extractLessonDocumentFields(summary: LessonDocumentSummaryInput): {
   unitSlug: string;
   unitTitle: string;
-  canonicalUrl: string;
+  oakUrl: string;
   lessonKeywords?: string[];
   keyLearningPoints?: string[];
   misconceptions?: string[];
@@ -133,8 +155,8 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
   supervisionLevel?: string;
   downloadsAvailable?: boolean;
 } {
-  if (!summary.canonicalUrl) {
-    throw new Error(`Missing canonical URL for lesson in unit ${summary.unitSlug}`);
+  if (!summary.oakUrl) {
+    throw new Error(`Missing oak URL for lesson in unit ${summary.unitSlug}`);
   }
 
   const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
@@ -143,7 +165,7 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
   return {
     unitSlug: summary.unitSlug,
     unitTitle: summary.unitTitle,
-    canonicalUrl: summary.canonicalUrl,
+    oakUrl: summary.oakUrl,
     lessonKeywords,
     keyLearningPoints,
     misconceptions,
@@ -164,7 +186,6 @@ export function extractLessonDocumentFields(summary: SearchLessonSummary): {
  * @param normaliseYears - Function to normalise year values
  * @returns Extracted fields for rollup document
  */
-// eslint-disable-next-line complexity -- Field extraction requires conditional logic
 export function extractRollupDocumentFields(
   summary: SearchUnitSummary,
   normaliseYears: (year: string | number, yearSlug: string) => string[] | undefined,
@@ -172,7 +193,7 @@ export function extractRollupDocumentFields(
 ): {
   unitSlug: string;
   unitTitle: string;
-  canonicalUrl: string;
+  oakUrl: string;
   lessonIds: string[];
   unitTopics: string[] | undefined;
   years: string[] | undefined;
@@ -181,25 +202,19 @@ export function extractRollupDocumentFields(
   threadTitles: string[] | undefined;
   threadOrders: number[] | undefined;
 } {
-  if (!summary.canonicalUrl) {
-    throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
+  if (!summary.oakUrl) {
+    throw new Error(`Missing oak URL for unit ${summary.unitSlug}`);
   }
-
-  const lessonIds =
-    lessonsByUnit?.get(summary.unitSlug) ?? summary.unitLessons.map((lesson) => lesson.lessonSlug);
-  const unitTopics = summary.categories?.map((cat) => cat.categoryTitle);
-  const years = normaliseYears(summary.year, summary.yearSlug);
-  const sequenceIds = summary.threads?.map((thread) => thread.slug);
   const threadInfo = extractThreadInfo(summary.threads);
 
   return {
     unitSlug: summary.unitSlug,
     unitTitle: summary.unitTitle,
-    canonicalUrl: summary.canonicalUrl,
-    lessonIds: [...lessonIds],
-    unitTopics: unitTopics && unitTopics.length > 0 ? unitTopics : undefined,
-    years,
-    sequenceIds: sequenceIds && sequenceIds.length > 0 ? sequenceIds : undefined,
+    oakUrl: summary.oakUrl,
+    lessonIds: getRollupLessonIds(summary, lessonsByUnit),
+    unitTopics: mapOptionalArray(summary.categories, (category) => category.categoryTitle),
+    years: normaliseYears(summary.year, summary.yearSlug),
+    sequenceIds: mapOptionalArray(summary.threads, (thread) => thread.slug),
     threadSlugs: threadInfo.slugs,
     threadTitles: threadInfo.titles,
     threadOrders: threadInfo.orders,

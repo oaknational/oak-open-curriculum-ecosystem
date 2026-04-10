@@ -141,9 +141,9 @@ catches threats the others miss. No single layer is sufficient alone.
   for `req.ip` to reflect the real client IP
 - **App → upstream API**: authenticated via `OAK_API_KEY`; our server is
   the trust principal, not the end user
-- **Iframe sandbox → host**: OpenAI Apps SDK widget runs in a sandboxed
-  iframe; CSP `connect_domains` and `resource_domains` control outbound
-  requests
+- **Iframe sandbox → host**: MCP Apps SDK widget runs in a sandboxed
+  iframe; CSP `csp.connectDomains` and `csp.resourceDomains` control
+  outbound requests (declared via `_meta.ui.csp` on resource content items)
 
 ### Amplification Vectors
 

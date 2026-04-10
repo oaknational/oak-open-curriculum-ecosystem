@@ -4,7 +4,6 @@ name: architecture-reviewer-barney
 model: gpt-5.4-xhigh
 description: Simplification-first architecture reviewer focused on boundary and dependency mapping. Use proactively for structural refactors, layer transitions, import-direction changes, or when complexity can be reduced without loss of quality.
 readonly: true
-is_background: true
 ---
 
 # Architecture Reviewer: Barney

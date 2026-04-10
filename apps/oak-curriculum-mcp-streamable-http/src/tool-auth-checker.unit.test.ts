@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { toolRequiresAuth } from './tool-auth-checker.js';
+import { resolveAuthRequired, toolRequiresAuth } from './tool-auth-checker.js';
 
 /**
  * Unit tests for tool authentication checker.
  *
  * Tests prove that the function correctly reads security metadata from
- * both generated tool descriptors and aggregated tool definitions.
+ * both generated tool descriptors and aggregated tool definitions, and
+ * that the deny-by-default decision logic is correct.
  *
  * Per OAuth 2.1 security implementation, tools with oauth2 schemes require
  * authentication, tools with noauth schemes do not.
@@ -51,14 +52,32 @@ describe('toolRequiresAuth', () => {
       expect(toolRequiresAuth('fetch')).toBe(true);
     });
   });
+});
 
-  describe('edge cases', () => {
-    it('handles tool name type safety with UniversalToolName', () => {
-      // This test verifies type safety at compile time
-      // If this compiles, the function signature is correct
-      const toolName = 'get-changelog' as const;
-      const result = toolRequiresAuth(toolName);
-      expect(typeof result).toBe('boolean');
+describe('resolveAuthRequired', () => {
+  describe('deny-by-default cases', () => {
+    it('requires auth when securitySchemes is undefined', () => {
+      expect(resolveAuthRequired(undefined)).toBe(true);
+    });
+
+    it('requires auth when securitySchemes is an empty array', () => {
+      expect(resolveAuthRequired([])).toBe(true);
+    });
+  });
+
+  describe('explicit scheme resolution', () => {
+    it('requires auth when securitySchemes contains oauth2', () => {
+      expect(resolveAuthRequired([{ type: 'oauth2', scopes: ['openid'] }])).toBe(true);
+    });
+
+    it('permits public access when all securitySchemes are noauth', () => {
+      expect(resolveAuthRequired([{ type: 'noauth' }])).toBe(false);
+    });
+
+    it('requires auth for mixed schemes containing both noauth and oauth2', () => {
+      expect(
+        resolveAuthRequired([{ type: 'noauth' }, { type: 'oauth2', scopes: ['openid'] }]),
+      ).toBe(true);
     });
   });
 });

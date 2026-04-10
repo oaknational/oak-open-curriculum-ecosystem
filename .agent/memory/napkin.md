@@ -1,332 +1,412 @@
-## Session 2026-03-29 — Plan/prompt reduction for CI remediation workstream
+## Napkin rotation — 2026-04-10
 
-### What changed
-
-- Rewrote the active CI remediation plan to make it the single
-  authoritative source for scope, sequencing, risks, and validation.
-- Rewrote the session-continuation prompt to be operational only:
-  grounding, live git inspection, immediate priority, durable guidance.
-
-### Why
-
-- Both documents had drifted into stale, session-specific state
-  snapshots (hard-coded SHAs, uncommitted file inventories, stash
-  ordinals).
-- ADR-117 document hierarchy matters here: the prompt should not become
-  a second plan, and volatile git facts should be discovered live.
-
-### Durable guidance
-
-- Keep volatile branch state out of long-lived docs.
-- Use the plan as the authoritative workstream document.
-- Use the prompt as a short operational entry point that tells the next
-  session what to read and how to re-ground.
-
-## Session 2026-03-29 — E2E failure analysis (`feat/mcp_app`)
-
-### What was verified
-
-- Applied `start-right-quick`; Practice Box is empty (`.agent/practice-core/incoming/` contains only `.gitkeep`).
-- Current local repro: `pnpm test:e2e` passes on `feat/mcp_app` (20/20 Turbo tasks successful).
-- Current branch CI status: latest `CI` run for `origin/feat/mcp_app` (`18e050dd`) is green.
-
-### Key finding
-
-- The recent failed CI runs on `feat/mcp_app` (`13e44690`, `c54707a5`, `7d3e2f8b`, `31d69461`, `87717762`, `07e2e14b`) did **not** fail in E2E; they failed in the lint step before tests ran.
-- The concrete E2E regression signal in this branch history is commit `4761550c` (`fix: e2e overrides must use SDK executor, not bypass it`).
-- Root cause: some E2E overrides returned raw MCP `content` directly, which bypassed `createUniversalToolExecutor` and therefore skipped `mapExecutionResult()` / `formatToolResponse()`.
-- Consequence: tests expecting the SDK-formatted tool response contract (summary text + structured JSON payload) would see the wrong shape.
-- Current correct pattern in the tests is to build overrides on top of `createUniversalToolExecutor`, preserving the same formatting pipeline used by production handlers.
-
-## Session 2026-03-29 — CI consolidation, eslint-disable enforcement, widget test cleanup
-
-### CI/Turbo analysis
-
-- CI runs 4 separate Turbo invocations (97 resolved tasks, 36 redundant cache lookups)
-- `pnpm qg` already batches into 1 invocation — CI should do the same
-- 5 gates missing from CI vs local: `test:e2e`, `test:ui`, `smoke:dev:stub`, `test:root-scripts`, `portability:check`
-- Turbo `--summarize` writes `.turbo/runs/*.json` with per-task exit codes — drives GitHub Step Summary reporting
-
-### Playwright test audit (deep, multi-reviewer)
-
-- 16 widget Playwright tests testing dead `window.openai` ChatGPT integration being replaced
-- `eslint-disable` for `any` masked stale `window.openai` references — exact failure mode the ban exists to prevent
-- 4 landing page tests are valuable and independent — keep
-- Deleted: 7 widget Playwright files + 4 renderer integration tests + widget test infra
-- Reverted agent-introduced eslint config override (`no-restricted-syntax: 'off'`) — disabling checks is banned absolutely
-- Hardcoded Playwright baseURL instead of `process.env` access
-
-### eslint-disable enforcement
-
-- Created `@oaknational/no-eslint-disable` custom ESLint rule (TDD, 15 tests)
-- Detects all `eslint-disable` comments; allows user-approved exceptions (JC prefix convention)
-- Also detects `@ts-ignore` and `@ts-expect-error` (no exceptions)
-- Registered in oak-eslint plugin, activated in recommended config
-- Created `check-blocked-content.mjs` PreToolUse hook — blocks agents from writing the JC approval marker
-
-### Key finding: 106 eslint-disable directives in repo
-
-- Ban existed in documentation but had zero automated enforcement
-- `type-helpers` (7 instances) and user-approved comments are exceptions
-- Phase 3 (remediation of remaining ~101) is next session's primary work
-- Remediation categories: generated data files (refactor generators), generator code (split modules), logger (WeakSet<object>), test fakes (narrow interfaces), authored code (extract functions)
-
-### Agent behaviour pattern observed
-
-- Subagent implementer defaulted to "disable the check" (`no-restricted-syntax: 'off'` in eslint config) rather than "fix the code" — demonstrates why automated enforcement is essential
-- Every proposed "override" or "config-level exception" is the same pattern: moving the suppression rather than fixing the root cause
+Rotated at 508 lines after the PR #76 merge-handoff sync,
+Vercel/bootstrap remediation, and HTTP dev-contract closeout.
+Archived to `archive/napkin-2026-04-10.md`. Merged 0 new
+entries into `distilled.md`. Graduated/pruned 9 entries now
+covered by permanent docs or source TSDoc: barrel-export
+reminder, `pnpm vocab-gen` reminder, MCP tool-count pointer,
+canonical logger rule, `Awaited<TResult>` wrapper note,
+singlefile MCP Apps build note, content-item CSP placement,
+tool `name` vs `title`, and contrast usage context.
+Extracted 0 new patterns (the new dev-orchestration learning
+is documented in permanent docs and plans for now). Previous
+rotation: 2026-04-07 at 562 lines.
 
 ---
 
-## Session 2026-03-25 (cont.) — Prod search assessment complete
+### Session 2026-04-10a — post-rotation continuity seed
 
-### Production MCP server verified
+#### Current state
 
-- **Deployment**: `dpl_EqsgwygzHhZjGbNwQXVBA4JMDEva` on Vercel,
-  commit `0ecbb901` (merge of PR #68), state READY.
-- **F1 (threadSlug)**: PASS — 10 lessons returned for
-  `fraction`+`number-fractions`, all with correct thread_slugs.
-- **F2 (category) negative**: PASS — `nonexistentzzz` returns
-  `total: 0`, empty array. Filter correctly active.
-- **F2 (category) positive**: PASS — `Biology` returns 2 sequences
-  (Primary + Secondary) with matching category_titles.
-- **Spot-checks**: all 5 passed (lessons with highlight, units,
-  threads queryless, sequences with phaseSlug, suggest with subject).
-- **All CI checks green**: test (5m57s), CodeQL, Bugbot, Vercel.
-- **Release workflow**: completed successfully.
+- Phase 6 merge-handoff and the Vercel/bootstrap plan are locally green after
+  `pnpm check`, the built-artifact proof, and the dev-orchestration acceptance
+  check.
+- Remaining external step: commit/push `feat/mcp_app_ui`, then recheck the
+  deployed preview/build logs before PR #76 merges.
 
----
+### Session 2026-04-10b — Cursor plugins strategic plan
 
-## Session 2026-03-25 (cont.) — Canonical vitest config enforcement
+- Added `developer-experience/future/cursor-plugins-practice-and-oak-developer.plan.md`:
+  marketplace-track Practice plugin vs local-first Oak developer plugin (MCP HTTP,
+  codegen, SDK, search). Promotion gated on marketplace spike + A↔B layering decision.
+  No scaffold yet — exploration only.
 
-### Vitest config adulteration — root cause and fix
+### Session 2026-04-10c — Vercel widget crash investigation + plan
 
-- **Symptom**: `agent-tools` CLI smoke E2E tests timing out at
-  5000ms in CI under `pnpm test`, but passing locally.
-- **Root cause**: `agent-tools/vitest.config.ts` had
-  `include: ['tests/**/*.test.ts']` with NO `**/*.e2e.test.ts`
-  exclusion. The base config (`vitest.config.base.ts`) excludes
-  E2E tests, but agent-tools didn't extend it. The broad glob
-  captured `cli-smoke.e2e.test.ts` into the unit/integration
-  pipeline. In CI (2 CPUs, 7GB RAM), `pnpm tsx` child process
-  spawning exceeded the 5s default timeout.
-- **Fix**:
-  - `agent-tools/vitest.config.ts` now extends `baseTestConfig`
-  - New `agent-tools/vitest.e2e.config.ts` with 60s timeout for
-    CLI smoke tests, plus `test:e2e` script in package.json
-  - `packages/core/oak-eslint/vitest.config.ts` also migrated
-    from minimal custom config to `baseTestConfig`
-- **Prevention**:
-  - Added "Canonical Vitest Configuration" section to
-    `testing-strategy.md` defining two patterns (extend base
-    preferred, custom with mandatory E2E exclusion)
-  - Added "Canonical Configuration" mandate to `principles.md`
-  - Updated `config-reviewer.md` with reading requirements for
-    base vitest configs, canonical pattern enforcement, and
-    E2E config checklist items
-- **Key learning**: workspace vitest configs that don't extend
-  the base config and use broad `*.test.ts` globs without
-  `**/*.e2e.test.ts` exclusion silently leak E2E tests into
-  the unit/integration pipeline. This only manifests in CI
-  where resource constraints cause timeouts.
+- **Root cause confirmed**: `process.cwd()` on Vercel Lambda = `/var/task`,
+  not app dir. `dist/oak-banner.html` resolved to wrong path. NFT also
+  doesn't trace non-imported HTML files.
+- Added debug instrumentation, confirmed root cause from Vercel runtime logs,
+  then **removed all debug instrumentation** (clean baseline restored).
+- Created investigation notes:
+  `.agent/plans/sdk-and-mcp-enhancements/active/vercel-widget-crash-deep-investigation.notes.md`
+- Created quality-fix plan:
+  `.agent/plans/sdk-and-mcp-enhancements/active/embed-widget-html-at-build-time.plan.md`
+- Plan went through **2 rounds of architecture review** (8 reviewers total):
+  4 architecture (Fred, Betty, Barney, Wilma) + test, config, docs-adr, code.
 
----
+#### Key corrections from user (session 2026-04-10d)
 
-## Session 2026-03-25 (cont.) — CI lint cache poisoning + turbo inputs fix
+- **DI is always used**: I wrongly suggested removing the
+  `getWidgetHtml` DI seam because the HTML becomes a constant.
+  DI is always used because it enables testing with trivial fakes
+  (ADR-078). The constant provides the VALUE; DI provides
+  TESTABILITY. Tests inject `() => '<html>test</html>'`.
+- **Widget HTML is generated metadata**: User pointed out that the
+  repo is "a machine for building codegen-time SDKs consumed by
+  thin runtime apps". The widget HTML is just another form of
+  generated metadata associated with an MCP tool — same pattern
+  as `WIDGET_URI`, tool descriptions, documentation content. It
+  should follow the established pattern: generate at codegen
+  time → produce a committed TypeScript constant → import and
+  consume via DI.
+- **AGENTS.md is ephemeral**: learnings I placed in AGENTS.md
+  belong in napkin/distilled/docs/ADRs depending on maturity.
+  AGENTS.md was reverted.
+- **New architectural principle**: Whenever we build something,
+  clearly separate (a) a purpose-specific, consumer-general
+  framework from (b) the Oak-specific consumer instance. This
+  needs to be codified in principles.md with an always-on rule.
 
-### Turbo cache poisoning — root cause and fix
+#### Vercel Lambda facts (for distilled.md)
 
-- **Symptom**: CI lint step failed with 1091 `import-x/no-unresolved`
-  errors for `@oaknational/search-cli`, but lint passed locally with
-  `--force`. Same commit (`0abc01b4`).
-- **Root cause**: ALL 27 lint tasks in CI were **remote cache hits**.
-  The errors were replayed from a stale remote cache entry, not from
-  a fresh lint run. The cache was poisoned by a previous CI run where
-  `@oaknational/sdk-codegen` subpath exports (`/search`, `/zod`)
-  weren't available at lint time.
-- **Why it persisted**: `turbo.json` lint inputs enumerated specific
-  directories (`src/`, `tests/`, `smoke-tests/`) — so changes to
-  `evaluation/`, `operations/`, and root-level `.ts` files didn't
-  invalidate the cache. The poisoned entry kept being replayed.
-- **Fix**: replaced directory-specific patterns with `**/*.ts` for
-  lint, lint:fix, test, mutate, test:ui, and type-check tasks.
-  Turbo respects `.gitignore` so `dist/` and `node_modules/` are
-  automatically excluded. This invalidated all stale cache entries.
-- **Graph comparison** (`pnpm check` vs CI): dependency ordering is
-  identical — Turbo correctly pulls `sdk-codegen` as transitive dep
-  of `build`. The issue was cache, not graph structure.
-- **Key learning**: when Turbo remote cache produces different results
-  from local, check cache hit/miss status first (`--dry=json` or
-  CI logs for "cache hit, replaying logs"). ALL hits = stale cache.
-  Incomplete `inputs` patterns are a common cause.
+- `process.cwd()` on Vercel Lambda = `/var/task` (task root),
+  not the app package directory
+- Vercel NFT only bundles files reachable via static `import` /
+  `require` — dynamic `readFile()` targets may be missing
+- Build artefact content served by the app should be a committed
+  TypeScript constant (same pattern as codegen output), consumed
+  via DI, not runtime filesystem reads
 
-### Agent-tools test timeout (remaining CI failure)
+#### Four-tier layered architecture model
 
-- `@oaknational/agent-tools#test`: 4 tests timing out at 5000ms in CI.
-- Unrelated to search work or turbo config changes.
-- Needs investigation as a separate issue.
+Derived from dependency analysis of all package.json files:
+- **Tier 0 — Primitives**: zero deps, pure, stateless
+  (result, type-helpers). Importing cannot pull in anything.
+- **Tier 1 — Infrastructure**: depends on T0, cross-cutting,
+  operational character (config, state, env, side effects).
+  (logger, observability, env, possibly design tokens).
+  Importing carries weight.
+- **Tier 2a — Codegen-time**: depends on T0+T1, produces
+  committed artifacts. (sdk-codegen, openapi adapter).
+- **Tier 2b — Runtime**: depends on T0+T1+committed artifacts
+  from T2a. (apps, runtime sdks, runtime libs).
+- Import direction: lower tiers MUST NOT import higher.
+  T2a and T2b are peers (T2b imports committed output only).
+- Key insight: core != shared. `result` (zero deps, always
+  safe) is qualitatively different from `logger` (has deps,
+  config, side effects). They should not be in the same tier.
+- Direction: analyse to function level, define optimal
+  principles, then move code. Not document-and-wait.
+- **Tensions reveal foundational solutions**:
+  1. Barrel re-exports in codegen = false neutrality. Root cause:
+     codegen workspace serves as distribution hub. Solution:
+     separate codegen engine from output distribution.
+  2. Logger conflates framework + instance. Root cause: organic
+     growth. Solution: decompose along Framework/Consumer lines.
+     `buildResourceAttributes` (Vercel-specific), Express
+     middleware → consumer instance in runtime. Generic
+     `UnifiedLogger`, error normalisation → framework in infra.
+  3. Design is shared infrastructure (Tier 1), not a separate
+     category. `design-tokens-core` + `oak-design-tokens`
+     already follows Framework/Consumer correctly.
+  4. Tooling is orthogonal to the product tier model. Don't
+     classify alongside product code.
+- **"Decompose at the Tension"** added as a principle in
+  principles.md. When code resists clean classification,
+  decompose at the fault line rather than classify around the
+  compromise. Each tension resolved this way produces cleaner
+  boundaries.
+- **Cursor rules consolidated**: 12 always-on architecture rules
+  reduced to 1 (`apply-architectural-principles.mdc` → 
+  `principles.md`). 3 kept for unique detail (type-shortcuts,
+  unknown, tsdoc syntax). Process rules unchanged.
 
----
+#### Lifecycle classification corrections
 
-## Session 2026-03-25 — CI hang blocker + docs consolidation
+- **Bulk data processing is codegen-time**: bulk data is
+  downloaded as a prerequisite for the codegen pipeline. The
+  `src/bulk/` readers/extractors in `oak-sdk-codegen` are
+  codegen-time utilities, not runtime code. The search CLI's
+  ingestion commands are also codegen-time/operational.
+- **Synonym builders should become codegen-time generators**:
+  `buildElasticsearchSynonyms()`, `buildPhraseVocabulary()`,
+  `buildSynonymLookup()` process static data. They should run
+  at codegen time and produce committed TypeScript constants,
+  not be called at runtime. Same pattern as widget constants,
+  thread progressions, concept graphs.
+- **Logger use in codegen is legitimate**: at GA codegen runs
+  remotely — structured logs are essential for operational
+  visibility. Logger → `packages/core/logger`.
+- **Terminology**: "build time" is ambiguous — both codegen-time
+  and runtime have build steps. Use "codegen time" and "runtime
+  build" consistently.
+- **knip and dependency-cruiser** are available for thorough
+  import/export analysis during the lifecycle classification
+  work.
 
-### CI hang blocker — root cause identified
+#### Key corrections from user (session 2026-04-10e)
 
-- **GitHub CI hanging** on `feat/es_index_update` branch — job never
-  completes. Previous turbo daemon / concurrency fixes reverted as they
-  were symptom-level.
-- **Root cause identified**: `@oaknational/search-cli:test` is the
-  single workspace that never completes. From cancelled CI run logs
-  (23537232656): 14 of 15 workspace test suites complete successfully,
-  `search-cli:test` never even produces its turbo group header.
-  Turbo buffers output for running tasks, so the absence of output
-  means the vitest process started but never finished.
-- **Key evidence**:
-  - search-cli: 101 test files, `pool: 'forks'`, `isolate: true`,
-    `NODE_OPTIONS='--max-old-space-size=6144'` (6GB heap per process)
-  - CI runner: 7GB RAM, 2 CPUs
-  - Already has 1 test excluded for OOM (`ingest-harness.unit.test.ts`)
-  - Orphan processes at cleanup: turbo, esbuild, 5x MainThread, 2x sh
-- **Hypotheses** (ranked):
-  - H1: OOM kill of vitest fork worker → vitest hangs waiting for dead child
-  - H2: esbuild service process leak after abnormal fork exit
-  - H3: Import-time side effect blocking in CI
-  - H4: NODE_OPTIONS inheritance causing fork startup failure
-- **Instrumentation added**:
-  - CI workflow: split search-cli tests into isolated step with
-    verbose reporter, memory monitoring (10s interval), OOM kill
-    detection (dmesg), 5-minute timeout
-  - test.setup.ts: process-level diagnostics on CI (heap/RSS on load,
-    exit, SIGTERM, SIGINT, memory warnings)
-- **Next step**: push to CI, read diagnostic output, confirm/reject
-  hypotheses.
+- **principles.md is the source of truth**: I moved
+  fundamental definitions INTO `.agent/rules/*.md` files,
+  which broke every mechanism that reads principles directly.
+  Rules are ONE operationalisation mechanism among several.
+  The correction: inline all detailed guidance into
+  `principles.md`, then rewrite rule files as thin pointers.
+- **Fitness constraints serve excellence, not the reverse**:
+  user said "the GOAL is excellence, not rule following. Where
+  a discussion is needed let's have that discussion." Fitness
+  targets are tools, not laws.
+- **Rule consolidation completed**: 12 `.cursor/rules/*.mdc`
+  architecture files deleted, replaced by 1
+  `apply-architectural-principles.mdc` pointing to
+  `principles.md`. 3 kept for unique content (type-shortcuts,
+  unknown-is-type-destruction, tsdoc-hygiene) but updated to
+  point to `principles.md` for definitions.
 
-### CONTRIBUTING.md improvement
+### Session 2026-04-10f — rules tidy-up + ADR gap analysis
 
-- Added `pnpm check` as the canonical all-in-one quality gate command
-  in the "Run Quality Gates" section. Individual commands reframed as
-  fallback for isolating failures.
+#### Completed
 
-### Second consolidate-docs pass
+- **Rules consolidation tidy-up**: fixed 16 portability failures.
+  Created `.agent/rules/apply-architectural-principles.md` as the
+  consolidated canonical rule. Updated 4 cursor rules to reference
+  canonical rules. Deleted 12 orphan canonical rules + 11 Claude
+  adapters. Created consolidated Claude adapter. `pnpm check`
+  green. Commit `54907d8e`.
+- **ADR-154**: Separate Framework from Consumer — new core
+  principle, with the test "Could a non-Oak consumer use this
+  unchanged?" and structural expectation.
+- **ADR-155**: Decompose at the Tension — classification
+  resistance signals hidden coupling, decompose at the fault line.
+- **ADR-125 update**: documented the many-to-one consolidation
+  pattern for rules, updated trigger examples, replaced hard
+  agent count. Commit `99011393`.
+- **ADR README index**: updated with ADR-154 and ADR-155 entries
+  in both sequential index and key decisions section.
 
-- **2 stale cross-refs fixed**:
-  - `.cursor/plans/field-integrity-framework-plan`: 6 `active/` paths
-    updated to `archive/completed/` (comprehensive-field-integrity,
-    field-gap-ledger, evidence files).
-  - ADR-138: `active/field-integrity-test-manifest.json` →
-    `archive/completed/`.
-- **Active README status** updated to "Blocked — CI hanging".
-- **Prompt** `last_updated` and date header updated to 2026-03-25.
-- **Fitness check**: all 13 tracked files pass.
-- **Practice box**: empty.
-- **No new code patterns, experience extractions, or distillation needed.**
+#### Observations
 
-### First consolidate-docs pass (earlier this session)
+- The portability validator's `CANONICAL_RULE_OR_SKILL_PATTERN`
+  only accepts `.agent/rules/` and `.agent/skills/` references.
+  If cursor rules ever need to reference `.agent/directives/`
+  directly, the pattern will need extending. Currently the
+  indirection layer (rule → directive) satisfies the validator.
+- Docs-adr-reviewer feedback was high quality: caught em-dash
+  format deviation, missing plan links, "consumer-general"
+  phrasing opacity, and the un-graduated tier model issue.
 
-- **build-system.md drift fixed**: troubleshooting section implied
-  generic `type-check` depends on `sdk-codegen`; corrected to clarify
-  only `@oaknational/sdk-codegen` has the override (per ADR-065).
-- **4 stale cross-refs fixed**:
-  - `high-level-plan.md`: `active/kg-alignment-audit` → `current/`
-  - `search-sdk-github-release-asset-distribution`: `active/search-sdk-args-extraction` → `current/`
-  - `bulk-canonical-merge` + `search-ingestion-sdk-extraction` in `future/`:
-    `./f2-closure-and-p0-ingestion` → `../archive/completed/`
-- **distilled.md compressed** 200 → 194/200: graduated turbo build
-  system entries to ADR-065 pointer; compressed turbo overrides
-  reference in decomposition entry.
-- **Fitness check**: all 13 tracked files pass.
-- **Practice box**: empty.
-- **Experience files**: reflective, no technical content to extract.
-- **Code patterns**: no new patterns from turbo/B2 work (domain-specific
-  or standard refactoring — doesn't meet the barrier).
-- **Doc extraction from completed plans**:
-  - `error-response-classification.plan.md`: TSDoc on
-    `classify-error-response.ts` already adequate — archived to
-    `archive/completed/`.
-  - `codegen-schema-error-response-adaptation.plan.md`: added module-level
-    TSDoc to `build-response-map.ts` (wildcard consolidation, component
-    name sanitisation, downstream consumers). Added response-map mention
-    to sdk-codegen README. Archived to `archive/completed/`.
-  - Updated `current/README.md`, `prompts/README.md`, and 2 prompt files
-    with archive paths.
+### Session 2026-04-10g — embed-widget-html-at-build-time execution
 
----
+#### Completed (Phases 1-3)
 
-## Session 2026-03-24 — Turbo boundary triage + plan consolidation
+- **Phase 1**: Vite outDir → `.widget-build/` (gitignored intermediate),
+  `scripts/embed-widget-html.js` codegen, `src/generated/widget-html-content.ts`
+  committed constant, `build` decoupled to `tsup` only, `build:widget` chains
+  Vite + embed. Turbo inputs cleaned (removed widget paths from `#build`).
+- **Phase 2**: `getWidgetHtml` changed `() => Promise<string>` → `() => string`.
+  `CreateAppOptions.getWidgetHtml` required. `server-runtime.ts` `createApp`
+  made required (was optional with fallback). `index.ts` wraps `createApp`
+  to inject `WIDGET_HTML_CONTENT` via DI closure — framework stays generic
+  (ADR-154). `register-widget-resource.ts` rewritten (all fs code removed).
+  3 dead files deleted. ~18 test files: `validateWidgetHtml: skipWidgetHtmlValidation`
+  → `getWidgetHtml: () => '<html>test</html>'`.
+- **Phase 3**: `deployment-architecture.md` fully updated (no more `dist/oak-banner.html`,
+  `validateWidgetHtmlExists`, `process.cwd()` resolution). ADR-156 created.
+  ADR README index updated. `README.md` and `dev-server-management.md` stale
+  references fixed. All quality gates green: 590 unit/integration tests,
+  15 widget tests, 157 E2E tests.
+- **Reviewer coverage**: 7 sub-agent reviews across 5 specialties (code,
+  config, architecture-fred, architecture-wilma, test, docs-adr). Wilma
+  caught a smoke-test blind spot (missing `getWidgetHtml`); test-reviewer
+  caught stale E2E test description.
 
-### What Was Done
+#### Key patterns established
 
-- Distilled napkin (549 lines → archive/napkin-2026-03-24.md).
-- Graduated commitlint troubleshooting to CONTRIBUTING.md, vitest v4
-  entry to troubleshooting.md.
-- Added turbo build system insights to distilled.md (concurrency masks,
-  workspace boundary as dependency declaration).
-- Compressed response augmentation entry to free space (200/200 ceiling).
-- Added turbo-and-codegen-boundary-fix plan to active README index.
-- Cross-referenced turbo plan with existing strategic decomposition plan
-  at `.agent/plans/architecture-and-infrastructure/codegen/`.
+- **Codegen constant via DI**: The entry point (`index.ts`) imports the
+  committed constant and closes over it in the `createApp` wrapper.
+  `server-runtime.ts` stays generic (ADR-154). Tests inject trivial fakes.
+- **`build:widget` is codegen**: Runs separately from `build` (like
+  `sdk-codegen`). Committed output is a normal `.ts` source file.
+- **`dist/index.js` size**: 466KB (was 122KB) — 345KB widget HTML constant
+  embedded. Acceptable for Node serverless.
 
-### Turbo Boundary Triage
+#### Next session pickup
 
-- **B2 extractions done**: `reader-utils.ts` (extractSubjectPhase),
-  `vocab-gen-config.ts` (PipelineConfig/Result + createPipelineConfig).
-- **B2 reassessment**: 3 of 5 B2 tests had type-only or no generated-type
-  deps — `import type` is erased at compile time. No extraction needed.
-- **Turbo overrides extended**: added `#type-check`, `#lint`, `#lint:fix`
-  for sdk-codegen (same pattern as `#build`, `#test`).
-- **agent-tools bug fixed**: missing `devDependencies` for
-  `@oaknational/eslint-plugin-standards` — exposed by removing
-  `--concurrency=2`. All other workspaces had it declared.
-- **`pnpm clean && pnpm check` passes** with all fixes.
-- **B1 deferred**: 4 tests that import generated code directly. Proper
-  fix is workspace decomposition (separate workspaces make `^build`
-  provide the ordering). Documented in decomposition plan's acceptance
-  criteria.
-- **Decomposition plan discoverability improved**: direct links from
-  architecture README, distilled.md, and turbo plan.
+1. Commit/push the widget crash fix, verify Vercel preview
+2. Archive `vercel-widget-crash-deep-investigation.notes.md`
+3. Separately track `static-content.ts` `process.cwd()` pattern
+   (non-blocking, Vercel ignores `express.static()`)
+4. Workspace topology exploration (plan B) — lifecycle
+   classification doc, logger reclassification, synonym-to-
+   codegen conversion, ESLint cross-category enforcement
 
-### Semantic Search Plan Consolidation
+### Session 2026-04-10h — EEF vs Oak MCP stack comparison note
 
-- **Active/ reduced** from 5 plans + findings register to README + 1 plan.
-- **Archived**: turbo-and-codegen-boundary-fix, f2-closure-and-p0-ingestion,
-  search-tool-prod-validation-findings.
-- **Moved to future/**: bulk-canonical-merge, search-ingestion-sdk-extraction.
-- **Single active plan**: `prod-search-assessment.execution.plan.md` — assess
-  prod search via MCP server after PR merge and deployment.
-- **Cross-ref sweep**: 11 files updated to point at archive/completed/ or
-  future/ paths. Archive files left untouched (historical records).
-- **Prompt simplified**: semantic-search.prompt.md now reflects single action.
-- **Fitness check**: all 13 tracked files pass.
+#### What Was Done
 
-### Learnings
+- Created `.agent/reference-local/eef-data/oak-http-stack-comparison.md`
+  comparing the local EEF snapshot against the canonical Oak HTTP MCP stack
+  and the immediate shared SDK boundary.
+- Kept the note explicit about three different truth modes:
+  snapshot truth, README/package claim, and current Oak implementation.
 
-- `import type` is erased by esbuild/SWC — vitest does NOT resolve
-  the target module for type-only imports. This means tests with
-  `import type { Foo } from './heavy-module.js'` do NOT create a
-  runtime dependency on that module's transitive imports.
-- When turbo's `--concurrency=N` is removed, ALL undeclared workspace
-  dependencies become visible. Check `devDependencies` in every
-  workspace that uses shared ESLint plugins, tsconfig bases, etc.
-- Turbo `^build` only sees declared `dependencies`/`devDependencies`
-  in `package.json`. If a workspace imports another workspace's
-  package at ESLint config load time but doesn't declare the dep,
-  turbo won't order them correctly.
+#### Mistakes Made
 
-## Session 2026-03-26 — Practice scaffolding gap
+- Initially treated `.agent/reference-local/eef-data/` as if it only contained
+  `README.md` because the first file sweep used plain `rg --files` and missed
+  ignored/local artefacts. The repo's own distilled note was right: use
+  `rg -uu` or an explicit directory walk when inspecting `reference-local` or
+  other potentially ignored estates.
 
-### Observation: The Practice does not yet support scaffolding a new repo
+#### Patterns to Remember
 
-The Practice is designed to make existing repos excellent — principles,
-reviewers, quality gates, memory, experience. But it has no mechanism
-for creating a new repo from scratch. This is reasonable: the Practice
-is about *how*, not *what*. However, a scaffolding framework could
-combine: **mission statement** (what the repo exists to do) + **the
-Practice** (how it should be done). That pairing might be sufficient to
-generate a well-structured repo from first principles.
+- For local reference snapshots, compare not just code vs code but also
+  checked-in layout vs declared package layout vs runtime loader assumptions.
+  In the EEF snapshot, those three layers diverged in a way that materially
+  changed the comparison.
+- `scripts/validate-practice-fitness.mjs` only evaluates markdown files that
+  declare `fitness_line_target` frontmatter. A new note under
+  `.agent/reference-local/` is discoverable as markdown, but it is not a
+  practice-fitness-managed file unless it opts in with fitness frontmatter.
+- User correction: when analysing reference material, the primary goal may be
+  to understand the impact it strives to create and how Oak could gain value
+  from it, not to turn every divergence into a fix list. Keep the engineering
+  gap analysis subordinate to the product-intent reading.
 
-Potential shape: a `practice-scaffold` command that takes a mission
-description, selects relevant practice-core rules, generates the
-directory structure and initial configurations, and wires up the
-quality gates. The Practice's plasmid exchange mechanism already handles
-*importing* into an existing repo — scaffolding would be the *genesis*
-equivalent.
+### Session 2026-04-10i — Widget crash fix execution
+
+#### What Was Done
+
+- Executed all three phases of the embed-widget-html-at-build-time
+  plan. Vite now outputs to `.widget-build/` (gitignored), embed
+  script produces `src/generated/widget-html-content.ts` (committed),
+  runtime imports via DI. Deleted `validate-widget-html.ts`,
+  `test-helpers/widget-html-validation.ts`, and their tests.
+- Created ADR-156 documenting the decision. Updated
+  `deployment-architecture.md`, `README.md`, `dev-server-management.md`.
+- Extracted generic HTTP server lifecycle helpers from
+  `smoke-tests/local-server.ts` into `smoke-tests/server-lifecycle.ts`
+  (port probing, address validation, graceful shutdown).
+- Invoked reviewers continuously throughout: code reviewer, config
+  reviewer, Wilma (adversarial), test reviewer, docs-ADR reviewer.
+
+#### Mistakes Made
+
+- Wilma reviewer caught that `smoke-tests/local-server.ts` calls
+  `createApp` without `getWidgetHtml` — file was excluded from
+  `tsconfig.lint.json` type-check, so the type error was invisible
+  until runtime. Lesson: smoke tests outside type-check scope are
+  a blind spot for DI contract changes.
+- Config reviewer caught that `turbo.json` still listed widget paths
+  in the `#build` task inputs after the runtime build was decoupled
+  from widget sources. Lesson: when decoupling build phases, audit
+  task-runner configs in the same pass.
+
+#### Patterns to Remember
+
+- When changing a DI contract (adding/removing/changing a required
+  option), sweep all call sites including those outside the main
+  type-check scope (smoke tests, E2E helpers, scripts). Files in
+  `tsconfig.lint.json` `exclude` can silently hold stale contracts.
+- `built-artifact-import.e2e.test.ts` verifies module relocatability,
+  not embedded content correctness. After switching to DI-injected
+  fakes, update both the test description and assertions to match
+  what the test actually proves.
+- Continuous reviewer invocation (not just at the end) catches issues
+  early when each phase is small and focused. Particularly effective
+  for adversarial (Wilma) and config reviewers.
+
+### Session 2026-04-10k — ChatGPT report normalisation + command wiring
+
+#### What Was Done
+
+- Normalised two software architecture reference reports from ChatGPT
+  deep-research exports into `-clean.md` siblings with durable citation
+  links (126 + 220 citations recovered, 346 total).
+- Updated `chatgpt-report-normalisation` SKILL.md with 6 operational
+  learnings: PUA encoding, positional matching, full-text search,
+  multi-citation grouping, double-space cleanup, rels-file limitation.
+- Updated the patterns file with matching learnings, bumped proven_date.
+- Created canonical command `.agent/commands/chatgpt-report-normalisation.md`
+  with 4-platform adapter parity (Claude, Cursor, Gemini, Codex).
+  Added permission entry to `.claude/settings.json`. `pnpm portability:check`
+  green.
+- Cleaned 2,145 invisible PUA characters from 7 tracked `.agent/` files.
+
+#### Mistakes Made
+
+- Initial citation replacement script used line-by-line matching against
+  pandoc output, which failed for all list items and long paragraphs because
+  pandoc wraps lines. Switching to full-text search with normalised whitespace
+  fixed the problem (41 → 123 → 126 citations placed).
+- The `citeturn` markers were initially treated as plain text for regex
+  matching, but they were invisible in the Read tool output because they're
+  wrapped in PUA characters. `cat -v` was needed to detect them.
+- The SKILL.md itself contained leaked PUA characters in its backtick-quoted
+  example markers (`cite`, `filecite`), making Edit tool string matching
+  fail silently.
+
+#### Patterns to Remember
+
+- ChatGPT citation markers use Unicode PUA characters (U+E200 start,
+  U+E202 separator, U+E201 end) that are invisible in editors and the
+  Read tool. Always use `cat -v` or Python `ord()` to inspect export files.
+- `citeturn` markers are positional, not stable keys. The same marker
+  string maps to different numbered citations at different document positions.
+  Use positional context matching against full pandoc text, not lookup tables.
+- DOCX `word/_rels/document.xml.rels` may contain very few URLs for
+  deep-research exports. The pandoc `docx -t gfm` conversion is the primary
+  citation recovery surface.
+- When editing files that may contain PUA characters, the Edit tool's string
+  matching will fail because the provided old_string won't contain the
+  invisible bytes. Use Python or match on surrounding PUA-free context.
+
+### Session 2026-04-10j — continuity refresh + doc consolidation
+
+#### What Was Done
+
+- Refreshed `.agent/prompts/session-continuation.prompt.md` so the
+  continuity contract reflects the current branch truth: the widget
+  crash fix is committed locally and `feat/mcp_app_ui` is 4 commits
+  ahead of `origin/feat/mcp_app_ui`, with push and preview
+  verification still pending.
+- Trimmed `AGENTS.md` back to a lightweight entry point after it
+  re-accumulated durable learnings already captured in longer-lived
+  surfaces.
+- Swept live docs for stale
+  `active/embed-widget-html-at-build-time.plan.md` and
+  `.cursor/plans/*.plan.md` links. Only historical napkin/archive
+  references remain. The live plan/index chain was already synced to
+  the same push-only next step and now carries the completed-plan
+  entry for the archived widget crash fix.
+- Checked `.agent/practice-core/incoming/`; no incoming practice
+  payloads are waiting.
+- Ran `pnpm practice:fitness:informational` plus targeted
+  markdownlint on the touched files. The fitness report surfaced
+  only pre-existing repo/worktree warnings; the touched files
+  linted cleanly.
+
+#### Mistakes Made
+
+- A previous handoff left the continuity prompt in a pre-commit
+  state even after the local branch had advanced. Lesson: refresh the
+  continuity contract from `git status`, `git log`, and ahead/behind
+  state, not from the last narrative snapshot.
+- `AGENTS.md` had drifted into a second distilled-memory surface.
+  Lesson: entry-point files are for orientation and discovery, not
+  for accumulating durable repo learnings.
+
+#### Patterns to Remember
+
+- When a closeout spans local commits, continuity surfaces must be
+  grounded against live branch state before the handoff is considered
+  truthful.
+- `pnpm practice:fitness:informational` currently reports on nested
+  `.claude/worktrees/*` copies as well as the main repo tree, so
+  duplicate warnings there do not necessarily indicate new drift in
+  the primary workspace.
+- Keep entry-point files index-like. Stable learnings should flow
+  into napkin, distilled docs, ADRs, governance docs, or READMEs
+  instead of living in `AGENTS.md`.

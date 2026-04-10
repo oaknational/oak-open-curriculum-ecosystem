@@ -2,22 +2,27 @@
  * Public resource definitions for selective authentication.
  *
  * Resources listed here skip Clerk authentication because they contain
- * no user-specific data. This is a latency optimisation for widget/resource
+ * no user-specific data. This is a latency optimisation for resource
  * discovery.
  *
  * ## Security Rationale
  *
- * - **Widget HTML**: Static shell that loads JS/CSS. User-specific
- *   data arrives via `window.openai.toolOutput` at render time.
  * - **Documentation**: Static markdown generated at SDK compile time.
  *   Contains no user-specific information.
+ * - **Widget HTML**: Static self-contained React app generated at build time.
+ *   Contains no user-specific information. This is an explicit Oak
+ *   compatibility waiver per ADR-113 — tool calls for data access still
+ *   require authentication. Owner: Oak engineering. Removal condition:
+ *   when the MCP protocol supports authenticated resource delivery for
+ *   all host clients.
  *
  * Data-fetching tools (tools/call) still require authentication.
  *
  * @see ADR-057: Selective Authentication for MCP Resources
+ * @see ADR-113: MCP Auth Target Semantics
  */
 
-import { WIDGET_URI, DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk/public/mcp-tools';
+import { DOCUMENTATION_RESOURCES, WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 /**
  * Resource URIs that are publicly accessible without authentication.
@@ -25,8 +30,8 @@ import { WIDGET_URI, DOCUMENTATION_RESOURCES } from '@oaknational/curriculum-sdk
  * Uses SDK-owned resource URIs as the single source of truth.
  */
 export const PUBLIC_RESOURCE_URIS = [
-  WIDGET_URI,
   ...DOCUMENTATION_RESOURCES.map((resource) => resource.uri),
+  WIDGET_URI,
 ] as const;
 
 /**
@@ -43,7 +48,6 @@ const PUBLIC_RESOURCE_URI_SET: ReadonlySet<string> = new Set(PUBLIC_RESOURCE_URI
  *
  * @example
  * ```typescript
- * isPublicResourceUri(WIDGET_URI);                      // true
  * isPublicResourceUri('docs://oak/getting-started.md'); // true
  * isPublicResourceUri('ui://other/widget.html');        // false
  * ```

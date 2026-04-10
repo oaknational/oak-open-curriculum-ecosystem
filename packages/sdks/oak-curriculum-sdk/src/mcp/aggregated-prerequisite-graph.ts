@@ -10,12 +10,12 @@
  * - Units with their prior knowledge requirements
  * - prerequisiteFor edges derived from thread ordering
  *
- * @see @oaknational/sdk-codegen/vocab-data for the graph data export
+ * @see \@oaknational/sdk-codegen/vocab-data for the graph data export
  * @see aggregated-thread-progressions.ts for the companion thread graph
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { prerequisiteGraph } from '@oaknational/sdk-codegen/vocab-data';
 import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
@@ -23,14 +23,12 @@ import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
- * Input schema for get-prerequisite-graph tool.
- * V1 has no parameters — returns the complete graph.
+ * Empty input schema for the get-prerequisite-graph tool (no parameters).
+ *
+ * Per MCP spec, no-input tools declare `{ "type": "object", "additionalProperties": false }`
+ * on the wire. An empty `ZodRawShape` produces this through the SDK's `z.toJSONSchema()`.
  */
-export const GET_PREREQUISITE_GRAPH_INPUT_SCHEMA = {
-  type: 'object',
-  properties: {},
-  additionalProperties: false,
-} as const;
+export const GET_PREREQUISITE_GRAPH_INPUT_SCHEMA: Record<string, never> = {};
 
 /**
  * Tool definition for get-prerequisite-graph.
@@ -39,6 +37,7 @@ export const GET_PREREQUISITE_GRAPH_INPUT_SCHEMA = {
  * Do NOT hide the graph in _meta — that would defeat the purpose.
  */
 export const GET_PREREQUISITE_GRAPH_TOOL_DEF = {
+  title: 'Get Prerequisite Graph',
   description: `Returns the Oak Curriculum prerequisite graph.
 
 This instance-level graph shows unit dependencies and prior knowledge requirements:
@@ -63,8 +62,6 @@ ${AGGREGATED_PREREQUISITE_GUIDANCE}
 
 Complements get-thread-progressions (learning paths) with prerequisite detail.`,
 
-  inputSchema: GET_PREREQUISITE_GRAPH_INPUT_SCHEMA,
-
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
 
   annotations: {
@@ -72,7 +69,6 @@ Complements get-thread-progressions (learning paths) with prerequisite detail.`,
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Get Prerequisite Graph',
   },
 
   _meta: undefined,

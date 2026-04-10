@@ -1,6 +1,8 @@
 import { noExportTrivialTypeAliasesRule } from './rules/no-export-trivial-type-aliases.js';
 import { noEslintDisableRule } from './rules/no-eslint-disable.js';
 // import { boundaryRules } from './rules/boundary.js'; // We will need to wrap the boundary logic in a rule or config export
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
+import { createNodeResolver } from 'eslint-plugin-import-x';
 
 /**
  * Re-exports boundary rules and helpers from the boundary module.
@@ -11,7 +13,7 @@ import { noEslintDisableRule } from './rules/no-eslint-disable.js';
  */
 export {
   coreBoundaryRules,
-  coreTestConfigRules,
+  createDesignBoundaryRules,
   createLibBoundaryRules,
   createSdkBoundaryRules,
   appBoundaryRules,
@@ -51,17 +53,43 @@ const plugin: TSESLint.FlatConfig.Plugin = {
   configs: configs,
 };
 
+type ImportResolverProject = string | string[];
+type NodeResolverOptions = Parameters<typeof createNodeResolver>[0];
+
+export interface ImportResolverSettingsOptions {
+  readonly project?: ImportResolverProject;
+  readonly node?: NodeResolverOptions;
+}
+
 /**
- * Common settings shared across all ESLint configurations.
- * Includes import resolver settings for TypeScript.
+ * Shared import-resolution settings for flat-config ESLint consumers.
+ *
+ * The TypeScript resolver understands TS pathing and declaration surfaces.
+ * The Node resolver is chained after it so lint follows real Node/package
+ * export semantics when the TypeScript resolver produces false negatives.
  */
-export const commonSettings = {
-  'import-x/resolver': {
-    typescript: {
-      alwaysTryTypes: true,
-    },
-  },
-} as const;
+export function createImportResolverSettings(options: ImportResolverSettingsOptions = {}) {
+  const { project, node } = options;
+  const typeScriptResolver =
+    project === undefined
+      ? createTypeScriptImportResolver({
+          alwaysTryTypes: true,
+        })
+      : createTypeScriptImportResolver({
+          alwaysTryTypes: true,
+          project,
+        });
+
+  return {
+    'import-x/resolver-next': [typeScriptResolver, createNodeResolver(node)],
+  };
+}
+
+/**
+ * Default resolver settings for workspaces that do not need explicit project
+ * or Node-resolution overrides.
+ */
+export const commonSettings = createImportResolverSettings();
 
 /**
  * Global ignore patterns for ESLint.
@@ -93,6 +121,10 @@ export const ignores = [
  * Structural limits (max-lines, max-lines-per-function) are relaxed for
  * test files because describe blocks legitimately grow.
  *
+ * Tests may import workspace-local devDependencies, but they still must
+ * declare those packages in the workspace manifest rather than relying on
+ * the repo root toolchain.
+ *
  * Type-safety and global-state rules are set to 'warn' pending promotion
  * to 'error'. See e2e-vi-mock-clerk-removal.plan.md for the phased
  * promotion schedule.
@@ -113,6 +145,15 @@ export const testRules = {
   '@typescript-eslint/consistent-type-definitions': 'off',
   '@typescript-eslint/no-restricted-types': 'off',
   '@typescript-eslint/unbound-method': 'off',
+  'import-x/no-extraneous-dependencies': [
+    'error',
+    {
+      devDependencies: true,
+      optionalDependencies: false,
+      peerDependencies: false,
+      includeTypes: false,
+    },
+  ],
   'import-x/no-named-as-default-member': 'off',
 } as const satisfies Linter.RulesRecord;
 

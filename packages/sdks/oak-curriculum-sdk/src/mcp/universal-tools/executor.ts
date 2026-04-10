@@ -6,7 +6,7 @@
  * validation, dispatch, and result formatting.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import type { ToolExecutionResult } from '../execute-tool-call.js';
 import {
   formatToolResponse,
@@ -15,11 +15,8 @@ import {
   toErrorMessage,
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
-import { validateFetchArgs, runFetchTool } from '../aggregated-fetch.js';
-import {
-  validateCurriculumModelArgs,
-  runCurriculumModelTool,
-} from '../aggregated-curriculum-model/index.js';
+import { validateFetchArgs, runFetchTool } from '../aggregated-fetch/index.js';
+import { runCurriculumModelTool } from '../aggregated-curriculum-model/index.js';
 import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
 import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
@@ -29,9 +26,11 @@ import {
   validateDownloadAssetArgs,
   runDownloadAssetTool,
 } from '../aggregated-asset-download/index.js';
+import { handleUserSearchExecution } from '../aggregated-user-search/index.js';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { AggregatedToolName, UniversalToolName } from './types.js';
 import { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
+import { requireGeneratedToolMetadata } from './descriptor-utils.js';
 
 /**
  * Maps a generated tool execution result to an MCP CallToolResult.
@@ -56,7 +55,7 @@ function mapExecutionResult(
   }
 
   const descriptor = deps.generatedTools.getToolFromToolName(toolName);
-  const title = descriptor.annotations?.title ?? toolName;
+  const { title } = requireGeneratedToolMetadata(toolName, descriptor);
 
   return formatToolResponse({
     summary: `${title}: ${String(result.value.status)}`,
@@ -68,14 +67,10 @@ function mapExecutionResult(
 }
 
 /**
- * Handles curriculum model tool validation and execution.
+ * Handles curriculum model tool execution (no parameters).
  */
-function handleCurriculumModelTool(input: unknown): CallToolResult {
-  const validation = validateCurriculumModelArgs(input);
-  if (!validation.ok) {
-    return formatError(validation.message);
-  }
-  return runCurriculumModelTool(validation.value);
+function handleCurriculumModelTool(): CallToolResult {
+  return runCurriculumModelTool();
 }
 
 /**
@@ -167,13 +162,15 @@ type AggregatedHandler = (
 
 const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler>> = {
   search: handleSearchTool,
-  'get-curriculum-model': (input) => Promise.resolve(handleCurriculumModelTool(input)),
+  'get-curriculum-model': () => Promise.resolve(handleCurriculumModelTool()),
   'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
   'get-prerequisite-graph': () => Promise.resolve(runPrerequisiteGraphTool()),
   fetch: handleFetchTool,
   'browse-curriculum': handleBrowseTool,
   'explore-topic': handleExploreTool,
   'download-asset': handleDownloadAssetTool,
+  'user-search': handleUserSearchExecution,
+  'user-search-query': handleUserSearchExecution,
 };
 
 function executeAggregatedTool(

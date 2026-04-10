@@ -1,22 +1,25 @@
 # Current Plans — Agentic Engineering Enhancements
 
-Strategic source plans that define intent and rationale for roadmap phases.
-These are **not queued execution work** — they serve as reference for the
-atomic execution plans in `active/`. When a new execution plan starts, it
-draws from the relevant source plan here.
+Strategic source plans and adjacent capability plans (queued or in progress).
+
+These files are not the atomic execution plans in `active/`, but they do
+represent strategic/capability work to promote into explicit active execution
+plans when scheduled.
 
 ## Source Plans
 
 | Source Plan | Serves | Status |
 |---|---|---|
-| [hallucination-and-evidence-guard-adoption.plan.md](hallucination-and-evidence-guard-adoption.plan.md) | Phases 1 & 2 (hallucination guarding + evidence-based claims) | Reference |
-| [architectural-enforcement-adoption.plan.md](architectural-enforcement-adoption.plan.md) | Phase 3 (architectural enforcement) | Reference |
-| [mutation-testing-implementation.plan.md](mutation-testing-implementation.plan.md) | Phase 5 (mutation testing) | Reference |
-| [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md) | Adjacent: ES specialist (✅ complete) | Reference |
-| [sentry-specialist-capability.plan.md](sentry-specialist-capability.plan.md) | Adjacent: Sentry specialist (foundation active) | Reference |
-| [harness-concepts-adoption.plan.md](harness-concepts-adoption.plan.md) | Adjacent: HC-0 baseline metrics | Reference |
+| [hallucination-and-evidence-guard-adoption.plan.md](hallucination-and-evidence-guard-adoption.plan.md) | Phases 1 & 2 (hallucination guarding + evidence-based claims) | REFERENCE |
+| [architectural-enforcement-adoption.plan.md](architectural-enforcement-adoption.plan.md) | Phase 3 (architectural enforcement) | REFERENCE |
+| [mutation-testing-implementation.plan.md](mutation-testing-implementation.plan.md) | Phase 5 (mutation testing) | REFERENCE |
+| [elasticsearch-specialist-capability.plan.md](elasticsearch-specialist-capability.plan.md) | Adjacent: ES specialist (✅ complete) | REFERENCE |
+| [sentry-specialist-capability.plan.md](sentry-specialist-capability.plan.md) | Adjacent: Sentry specialist (foundation active) | REFERENCE |
+| [harness-concepts-adoption.plan.md](harness-concepts-adoption.plan.md) | Adjacent: HC-0 baseline metrics | REFERENCE |
+| [reviewer-gateway-upgrade.plan.md](reviewer-gateway-upgrade.plan.md) | Adjacent: layered gateway triage, review depth selection, and coverage tracking | QUEUED |
 
 Strategic context: [roadmap.md](../roadmap.md)
+Archived context: [../archive/completed/](../archive/completed/)
 
 In-progress execution: [active/README.md](../active/README.md)
 Documentation tracking for all phases:

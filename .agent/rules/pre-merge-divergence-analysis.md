@@ -20,3 +20,6 @@ Standard text-level conflict resolution misses:
 
 Always run `pnpm type-check` immediately after resolving text conflicts —
 this catches the silent breaks that Git cannot detect.
+
+For the full agent-executable workflow, use the
+[complex-merge skill](../skills/complex-merge/SKILL.md).

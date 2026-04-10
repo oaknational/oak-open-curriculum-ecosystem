@@ -44,7 +44,49 @@ export async function* yieldCurriculumBatches(
 }
 
 /** Yields one batch per (subject, keyStage) pair. */
-// eslint-disable-next-line max-lines-per-function -- Generator requires sequential flow
+async function* yieldSubjectKeyStagePairs(
+  client: OakClient,
+  subject: SearchSubjectSlug,
+  keyStages: readonly KeyStage[],
+  subjectContext: Awaited<ReturnType<typeof buildSubjectContext>>,
+): AsyncGenerator<CurriculumBatch> {
+  let ksIndex = 0;
+  for (const keyStage of keyStages) {
+    ksIndex++;
+    ingestLogger.debug('Processing key stage', {
+      subject,
+      keyStage,
+      progress: `${ksIndex}/${keyStages.length}`,
+    });
+
+    const dataIntegrityReport = createDataIntegrityCollector();
+    const result = await buildOpsForPair(
+      client,
+      keyStage,
+      subject,
+      subjectContext,
+      dataIntegrityReport,
+    );
+
+    if (result.skipped) {
+      ingestLogger.debug('Skipping batch (no data)', {
+        subject,
+        keyStage,
+        reason: result.skipReason,
+      });
+      continue;
+    }
+
+    yield {
+      kind: 'curriculum',
+      subject,
+      keyStage,
+      operations: result.operations,
+      dataIntegrityReport,
+    };
+  }
+}
+
 async function* yieldSubjectKeyStageGranularity(
   client: OakClient,
   subjects: readonly SearchSubjectSlug[],
@@ -62,43 +104,7 @@ async function* yieldSubjectKeyStageGranularity(
     });
 
     const subjectContext = await buildSubjectContext(client, subject, onSequenceFacetProcessed);
-
-    let ksIndex = 0;
-    for (const keyStage of keyStages) {
-      ksIndex++;
-      ingestLogger.debug('Processing key stage', {
-        subject,
-        keyStage,
-        progress: `${ksIndex}/${keyStages.length}`,
-      });
-
-      const dataIntegrityReport = createDataIntegrityCollector();
-      const result = await buildOpsForPair(
-        client,
-        keyStage,
-        subject,
-        subjectContext,
-        dataIntegrityReport,
-      );
-
-      // Skip combinations with no data (pattern-aware)
-      if (result.skipped) {
-        ingestLogger.debug('Skipping batch (no data)', {
-          subject,
-          keyStage,
-          reason: result.skipReason,
-        });
-        continue;
-      }
-
-      yield {
-        kind: 'curriculum',
-        subject,
-        keyStage,
-        operations: result.operations,
-        dataIntegrityReport,
-      };
-    }
+    yield* yieldSubjectKeyStagePairs(client, subject, keyStages, subjectContext);
   }
 }
 

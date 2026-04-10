@@ -103,6 +103,8 @@ describe('session tools', () => {
 
     expect(content).toContain('Claude Session Takeover Bundle');
     expect(content).toContain('agent-a1');
+    expect(content).toContain('Reintegration Contract');
+    expect(content).toContain('Absorb the delegated outcome back into the parent plan or dialogue');
   });
 
   it('builds a takeover bundle with empty subagent state', () => {

@@ -2,7 +2,7 @@
 
 ## Status
 
-**Accepted** - 2024-12-19
+**Partially Superseded by [ADR-145](145-oak-url-naming-collision-remediation.md)** - 2024-12-19
 
 ## Context
 
@@ -116,7 +116,7 @@ The canonical URL generation logic was scattered across:
 
 #### Schema Integration
 
-- `packages/sdks/oak-sdk-codegen/code-generation/schema-decoration-core.ts` - Schema decoration logic
+- `packages/sdks/oak-sdk-codegen/code-generation/schema-separation-decorators.ts` - Schema decoration logic (renamed from `schema-decoration-core.ts`; see ADR-145)
 - Integration with type generation pipeline to decorate OpenAPI schema
 
 #### Application Updates
@@ -139,6 +139,14 @@ All changes pass the complete quality gate sequence:
 8. `pnpm markdownlint` - Markdown linting passed
 9. `pnpm test` - All tests passing
 10. `pnpm test:e2e` - All E2E tests passing
+
+## Superseded By
+
+The naming and conditional injection behaviour described in this ADR have been
+updated by [ADR-145](145-oak-url-naming-collision-remediation.md). The
+codegen-time generation mechanism remains valid, but the field name has changed
+from `canonicalUrl` to `oakUrl` and the schema decorator now conditionally
+skips injection when the upstream API already provides the field.
 
 ## Related ADRs
 

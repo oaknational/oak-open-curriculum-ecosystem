@@ -87,7 +87,7 @@ Categories require API supplementation during bulk ingestion:
 
 Created shared utilities for DRY compliance:
 
-- `canonical-url-generator.ts` - Single source of truth for URL patterns
+- `oak-url-convenience.ts` (in `@oaknational/curriculum-sdk`) — URL generation, delegating to generated helpers (relocated from `canonical-url-generator.ts` per ADR-145)
 - `slug-derivation.ts` - Extracting subject/phase from sequence slugs
 - `category-supplementation.ts` - Building and using category maps
 
@@ -116,7 +116,7 @@ Created shared utilities for DRY compliance:
 - `category-supplementation.ts` - Category map building and lookup
 - `bulk-unit-transformer.ts` - Updated to accept CategoryMap
 - `bulk-sequence-transformer.ts` - Updated for canonical URLs and category titles
-- `canonical-url-generator.ts` - Shared URL generation
+- `oak-url-convenience.ts` (in `@oaknational/curriculum-sdk`) — Shared URL generation (per ADR-145)
 - `slug-derivation.ts` - Shared slug parsing
 
 ## Related Decisions

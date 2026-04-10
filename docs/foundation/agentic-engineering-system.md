@@ -47,7 +47,7 @@ The layers interact: philosophy governs what structures are created (e.g. "if a 
 
 The system prevents entropy through interlocking negative feedback loops.
 
-**Quality gates** are the primary enforcement mechanism. Every change must pass: type-check, lint, build, test, format, markdownlint. The critical design choice: **all gates are always blocking** — there is no "non-blocking warning" category inside the gate set. This is enforced through [always-applied rules](../../.agent/rules/all-quality-gate-issues-are-always-blocking.md) that fire on every agent interaction and the `pnpm qg` command that runs the full suite. Informational health checks such as `pnpm practice:fitness:informational` sit outside `pnpm qg`; they surface drift without redefining it as a quality gate. Gates catch entropy within seconds.
+**Quality gates** are the primary enforcement mechanism. Every change must pass: type-check, lint, build, test, format, markdownlint. The critical design choice: **all gates are always blocking** — there is no "non-blocking warning" category inside the gate set. This is enforced through [architectural principles](../../.agent/directives/principles.md) (§Code Quality) that fire on every agent interaction and the canonical `pnpm check` command. Informational health checks such as `pnpm practice:fitness:informational` sit outside `pnpm check`; they surface drift without redefining it as a quality gate. Gates catch entropy within seconds.
 
 **Specialist reviewers** provide targeted review after non-trivial changes. The [specialist roster](../../.agent/directives/invoke-code-reviewers.md) includes a gateway reviewer (`code-reviewer`) that triages to specialists: architecture reviewers (4, each with a different lens), test-reviewer, type-reviewer, security-reviewer, config-reviewer, docs-adr-reviewer, and domain specialists. Reviewers catch entropy within the session — they assess not just code correctness but architectural alignment with the Practice itself.
 
@@ -63,9 +63,10 @@ Each stage serves a broader audience: the napkin serves the current session, dis
 
 **Fitness functions** prevent unbounded growth at every stage. The napkin
 triggers distillation at ~500 lines. Distilled targets <200 lines. Permanent
-docs carry YAML frontmatter ceilings such as `fitness_line_count`,
-`fitness_char_count`, and `fitness_line_length`, with a `split_strategy` to
-describe what happens when the ceiling is exceeded. Without these governors,
+docs carry YAML frontmatter thresholds (ADR-144): `fitness_line_target` (soft),
+`fitness_line_limit` (hard), `fitness_char_limit` (hard), and
+`fitness_line_length` (hard), with a `split_strategy` to describe what
+happens when a ceiling is exceeded. Without these governors,
 the learning loop simply moves accumulation downstream.
 
 The loop is **self-referential**: rules about rule creation, patterns about distillation quality, and insights about consolidation all flow through the same cycle. If any link breaks — if the napkin stops capturing meta-mistakes, or consolidation never graduates insights about consolidation — the loop is degrading. [ADR-131 §The Self-Referential Property](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) provides the diagnostic signals.

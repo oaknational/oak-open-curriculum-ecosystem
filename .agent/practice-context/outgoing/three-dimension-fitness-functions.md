@@ -1,76 +1,69 @@
-# Three-Dimension Fitness Functions
+# Two-Threshold Fitness Functions
 
-> **Origin**: oak-mcp-ecosystem, 2026-03-19
-> **Status**: Proven innovation — adopted in the portable Core and the live repo-wide validator
+> **Origin**: oak-mcp-ecosystem, 2026-03-19 (three-dimension model),
+> evolved 2026-04-01 (two-threshold model)
+> **Status**: Proven innovation — adopted in the portable Core and
+> the live repo-wide validator
 
 ## The Problem
 
-The original fitness function used a single dimension: line count
-(`fitness_line_count` in YAML frontmatter). This created a perverse
-incentive: "tightening" a file to fit under its ceiling could mean
-making lines longer — reducing the count while preserving or
-increasing actual content volume. The constraint was gameable by
-the very mechanism it was supposed to govern.
+A single `fitness_line_count` ceiling was gameable — reflowing prose
+to fewer, wider lines reduced the count without reducing content
+volume. Adding `fitness_char_count` and `fitness_line_length` closed
+the gaming vector, but treating all ceilings as soft allowed gradual
+inflation. Agents could raise limits without constraint.
 
 ## The Solution
 
-Three dimensions constrain each file. All three are soft ceilings —
-exceeding any triggers tightening, not a hard block.
+Four frontmatter fields govern each tracked file. Line count uses
+two thresholds (target and limit); character count and prose width
+are hard limits only.
 
-| Dimension | Frontmatter key | What it guards |
-| --------- | --------------- | -------------- |
-| Line count | `fitness_line_count` | Structural sprawl — the intuitive "feel" check |
-| Character count | `fitness_char_count` | Content volume — cannot be gamed by reflowing |
-| Max prose line width | `fitness_line_length` | Readability and diff quality |
+| Frontmatter key       | Threshold | What it guards                       |
+| --------------------- | --------- | ------------------------------------ |
+| `fitness_line_target` | Soft      | Content lines — signal to refine     |
+| `fitness_line_limit`  | Hard      | Content lines — ceiling              |
+| `fitness_char_limit`  | Hard      | Content characters — non-adjustable  |
+| `fitness_line_length` | Hard      | Prose line width — always 100        |
 
-**Why all three are needed:**
+**Target vs limit:** Exceeding `fitness_line_target` is a warning —
+the file needs refinement but work is not blocked. Exceeding
+`fitness_line_limit` is blocking — the file must be compressed or
+split before merge. Only the user may raise hard limits. Agents may
+extend `fitness_line_target` modestly with rationale.
 
-- **Line count** is the intuitive metric humans relate to — "is this
-  still readable in one sitting?"
-- **Character count** is the honest constraint — it measures actual
-  content volume regardless of line breaks.
-- **Prose line width** prevents the gaming mechanism — you cannot
-  reduce line count by making lines longer without triggering the
-  width ceiling.
+**Why four fields:** The fields form a constraint triangle. Gaming
+one dimension (fewer lines via reflowing) triggers another (character
+or width limit). The target/limit split prevents runaway inflation.
 
-**Adoption nuance**:
-
-- The Practice Core trinity files (`practice.md`, `practice-lineage.md`,
-  `practice-bootstrap.md`) carry all three dimensions.
-- Other documents may declare only `fitness_line_count` when that is the
-  appropriate constraint for their role.
-- The validator should check **only the dimensions each file declares**.
+All governed files carry all four fields. All measure content only
+(frontmatter excluded). Width applies to prose only (code blocks,
+tables, frontmatter excluded). Only shallow entry points (root
+README, quickstart, VISION) are exempt.
 
 ## Adoption Steps
 
-### 1. Use three dimensions for the trinity, and declare only what other files need
+### 1. Add four fields to governed files
 
-Each of the three Practice Core files should carry all three
-ceilings. Example from `practice.md`:
+Example frontmatter:
 
 ```yaml
-fitness_line_count: 400
-fitness_char_count: 25000
+fitness_line_target: 400
+fitness_line_limit: 525
+fitness_char_limit: 31500
 fitness_line_length: 100
 ```
 
-Set the ceilings to values appropriate for your repo. The line and
-character ceilings should reflect "readable in one sitting" for
-their respective roles. A prose line width of 100 is a good default
-— it matches common readability guidelines and produces clean diffs.
-
-Outside the trinity, declare only the dimensions the file genuinely
-needs. In `oak-mcp-ecosystem`, many governance and onboarding docs
-carry `fitness_line_count` only.
+Set targets and limits appropriate for each file's role. A ratio of
+~1.3x target-to-limit gives reasonable headroom. Character limits
+should reflect realistic content density. A prose width of 100 is
+the standard default.
 
 ### 2. Reflow prose to the width ceiling
 
-Reflow all prose lines in the trinity files to the chosen width
-(e.g. 100 characters). Excluded from the width check:
-
-- YAML frontmatter
-- Code blocks (fenced with ``` or ~~~)
-- Table rows (lines starting with `|`)
+Reflow all prose lines in governed files to 100 characters. Excluded
+from the width check: YAML frontmatter, fenced code blocks, and
+table rows (lines starting with `|`).
 
 ### 3. Add the validation script
 
@@ -79,48 +72,36 @@ zero-dependency validator (`scripts/validate-practice-fitness.mjs`).
 Install it as:
 
 ```bash
-# Copy the TypeScript mirror to your scripts directory
 cp validate-practice-fitness.ts scripts/
-
-# Or adapt the live zero-dependency version directly:
-# "practice:fitness": "node scripts/validate-practice-fitness.mjs"
-# "practice:fitness:informational": "node scripts/validate-practice-fitness.mjs --informational"
 ```
 
-The live repo implementation uses the `.mjs` version so it can run with
-plain Node:
-
-```bash
-pnpm practice:fitness
-pnpm practice:fitness:informational
-```
-
-The validator discovers every **live markdown file** that declares
-`fitness_line_count` in frontmatter (excluding archives, backups, and
-incoming practice boxes). It checks line count and any extra dimensions
-the file declares, reporting a colour-coded pass/fail table.
+The validator discovers every live markdown file that declares
+`fitness_line_target` in frontmatter (excluding archives, backups,
+and incoming practice boxes). It checks all four dimensions, reports
+a colour-coded pass/warn/fail table, and exits non-zero only when
+hard limits are exceeded.
 
 ### 4. Extend beyond the trinity
 
-Any document in the knowledge flow cycle can carry these ceilings.
-Agent-facing and contributor-facing documents benefit from the same
-discipline, but not every file needs all three dimensions. Only shallow
-entry points (root README, quickstart, VISION) are typically exempt.
+Any governed document can carry these fields. Agent-facing and
+contributor-facing documents benefit from the same discipline.
 
 ### 5. Wire into consolidation
 
-The `jc-consolidate-docs` command should check fitness as part of
-its pass. `pnpm make` and start-right workflows can run the
-informational mode to surface drift early. This is a signal, not a
-gate — exceeding a ceiling triggers tightening work, not a hard block.
+Run the validator during consolidation passes. Informational mode
+surfaces drift early; strict mode gates merges. Target exceedance
+triggers refinement work; limit exceedance blocks the merge.
 
 ## Design Decisions
 
-- **Soft ceilings, not hard gates.** The fitness function is a
-  governor, not a wall. Creative writing sometimes needs breathing
-  room. The signal is "pay attention", not "stop".
+- **Two thresholds, not one.** Separating "signal" (target) from
+  "block" (limit) gives agents autonomy to manage content growth
+  while preserving a hard stop that requires human approval.
+- **Constants, not formulas.** Each file's thresholds are independent
+  numbers. The initial calculation (1.3x, etc.) sets starting values;
+  after that, values evolve independently.
 - **Prose-only width check.** Code blocks, tables, and frontmatter
-  are excluded because they have their own natural width constraints
-  and reflowing them would damage readability.
-- **Per-file, not aggregate.** Each file carries its own ceilings
+  are excluded — they have natural width constraints and reflowing
+  them would damage readability.
+- **Per-file, not aggregate.** Each file carries its own thresholds
   because different files have different roles and natural sizes.

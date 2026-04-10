@@ -472,7 +472,7 @@ Required closing proof:
 
 Deterministic validation commands:
 
-1. `pnpm qg`
+1. `pnpm check`
 2. `pnpm practice:fitness`
 3. `pnpm markdownlint:root`
 4. `pnpm subagents:check`
@@ -912,7 +912,7 @@ The foundation is not complete until automated verification includes:
 8. explicit kill-switch proof that `SENTRY_MODE=off` disables Sentry init,
    sink registration, outbound delivery, and trace propagation
 9. bounded-drain proof for Search CLI success, failure, and interrupted exits
-10. repo-wide regression proof after the logger rewrite (`pnpm qg`)
+10. repo-wide regression proof after the logger rewrite (`pnpm check`)
 11. HTTP transport proof that generic request capture does not retain raw `/mcp`
    JSON-RPC envelopes
 

@@ -1,0 +1,6 @@
+---
+description: Apply all architectural principles — code design, quality gates, testing, naming, error handling, type discipline, and decomposition
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/apply-architectural-principles.md`.

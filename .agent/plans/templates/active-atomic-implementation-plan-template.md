@@ -156,9 +156,16 @@ blocked protocol above.
 
 > See [Foundation Alignment component](components/foundation-alignment.md)
 
+## Consolidation
+
+After all work is complete and quality gates pass, run `/jc-consolidate-docs`
+to graduate settled content, extract reusable patterns, rotate the napkin,
+manage fitness, and update the practice exchange.
+
 ## Done When
 
 1. All atomic tasks complete with deterministic validation output.
 2. Evidence bundle exists and covers non-trivial claims.
 3. Documentation sync entry is complete for this phase.
 4. No blocked-protocol items remain unresolved (all failures presented to owner and addressed).
+5. Consolidation has been run.

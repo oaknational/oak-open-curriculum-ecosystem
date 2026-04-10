@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Oak MCP App — Widget Development</title>
+    <link rel="stylesheet" href="./src/index.css" />
+    <style>
+      .dev-index {
+        max-width: 40rem;
+        margin: 0 auto;
+      }
+
+      .dev-index h1 {
+        font-size: var(--oak-semantic-font-heading-size);
+        font-weight: var(--oak-semantic-font-weight-bold);
+        margin-bottom: var(--oak-semantic-gap-lg);
+      }
+
+      .dev-index h2 {
+        font-size: var(--oak-semantic-font-banner-title-size);
+        font-weight: var(--oak-semantic-font-weight-bold);
+        margin-top: var(--oak-semantic-gap-lg);
+        margin-bottom: var(--oak-semantic-gap-md);
+      }
+
+      .dev-index ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--oak-semantic-gap-sm);
+      }
+
+      .dev-index li a {
+        display: block;
+        padding: var(--oak-semantic-control-padding-block)
+          var(--oak-semantic-control-padding-inline);
+        background: var(--oak-semantic-surface-panel);
+        border: 1px solid var(--oak-semantic-border-subtle);
+        border-radius: var(--oak-component-control-radius);
+        text-decoration: none;
+      }
+
+      .dev-index li a:hover {
+        border-color: var(--oak-semantic-accent-strong);
+      }
+
+      .dev-index li a:focus-visible {
+        outline: 2px solid var(--oak-semantic-focus-ring);
+        outline-offset: 2px;
+      }
+
+      .dev-index__description {
+        font-size: var(--oak-component-label-size);
+        color: var(--oak-semantic-text-secondary);
+        margin-top: 0.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="oak-app">
+      <div class="dev-index">
+        <h1>Oak MCP App Widgets</h1>
+
+        <nav aria-label="Widget pages">
+          <h2>Design</h2>
+          <ul>
+            <li>
+              <a href="/tokens.html">
+                Design Tokens
+                <div class="dev-index__description">
+                  Colour palette, semantic tokens, typography, and spacing
+                </div>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </main>
+  </body>
+</html>

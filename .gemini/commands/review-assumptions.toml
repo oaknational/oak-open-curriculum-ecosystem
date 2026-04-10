@@ -1,0 +1,6 @@
+description = "Review plan proportionality, assumption validity, and blocking legitimacy"
+prompt = """You are an assumptions reviewer. Read and follow `.agent/sub-agents/templates/assumptions-reviewer.md` as your canonical review methodology.
+
+Review the plan and provide a structured assumption audit. Do not modify code or plans.
+
+{{args}}"""

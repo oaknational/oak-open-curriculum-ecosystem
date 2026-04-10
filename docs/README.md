@@ -52,6 +52,7 @@ last_reviewed: 2026-03-12
 
 - [How the Agentic Engineering System Works](foundation/agentic-engineering-system.md) - The Practice explained as an integrated engineering system
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
+- [Continuity Practice](governance/continuity-practice.md) - Lightweight session handoff, conditional deep consolidation, and surprise capture
 - [The Practice](../.agent/practice-core/index.md) - Orientation and entry point for the practice system (agent-facing)
 
 ## Code Standards and Testing
@@ -60,6 +61,9 @@ last_reviewed: 2026-03-12
 - [TypeScript Practice](governance/typescript-practice.md) - Type safety guidelines
 - [Testing Strategy](../.agent/directives/testing-strategy.md) - TDD approach at all levels
 - [Safety and Security](governance/safety-and-security.md) - Security measures and privacy protection
+- [Accessibility Practice](governance/accessibility-practice.md) - WCAG 2.2 AA compliance, Playwright + axe-core testing
+- [Design Token Practice](governance/design-token-practice.md) - DTCG three-tier model, contrast validation, CSS output
+- [MCP App Styling](governance/mcp-app-styling.md) - CSS custom properties, host integration, font loading, CSP declarations
 
 ## Search Application
 
@@ -72,5 +76,5 @@ For semantic search specific documentation:
 
 ## Additional Resources
 
-- [GO.md](../.agent/skills/go/shared/go.md) - Grounding prompt for structured task execution (ACTION/REVIEW cadence)
+- [GO workflow](../.agent/skills/go/shared/go.md) - Grounding workflow for structured task execution (ACTION/REVIEW cadence)
 - [SDK README](../packages/sdks/oak-curriculum-sdk/README.md) - SDK generation and exports

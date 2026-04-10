@@ -59,13 +59,13 @@ pnpm make  # install → build → type-check → doc-gen → lint:fix → subag
 **Full verification** (before pushing):
 
 ```bash
-pnpm qg    # format-check:root → markdownlint-check:root → subagents:check → portability:check → test:root-scripts → type-check → lint → test → test:ui → test:e2e → smoke:dev:stub
+pnpm check # canonical aggregate gate: clean rebuild + verification
 ```
 
 See [Build System](./build-system.md) for the single source of truth on all command definitions.
 For AI agent execution order, directives are normative and require one gate at
-a time; `pnpm make` and `pnpm qg` remain convenience aggregate commands for
-human local workflows.
+a time; `pnpm make` and `pnpm check` are the only aggregate local workflow
+commands.
 
 ## 4. Commit
 
@@ -101,9 +101,9 @@ See [CONTRIBUTING.md](../../CONTRIBUTING.md) for PR title format and checklist.
 
 ## 7. Quality Gate Surfaces
 
-Quality is enforced through five surfaces: pre-commit hook, pre-push hook,
-GitHub CI workflow, `pnpm qg`, and `pnpm check`. Each runs a specific set
-of checks; see
+Quality is enforced through the hook surfaces, GitHub CI workflow, and the
+canonical local aggregate gate `pnpm check`. Each runs a specific set of
+checks; see
 [ADR-121](../architecture/architectural-decisions/121-quality-gate-surfaces.md)
 for the full coverage matrix and rationale, or
 [build-system.md](build-system.md#quality-gate-surfaces) for a quick
@@ -112,7 +112,7 @@ reference table.
 **Key principle**: no check runs only in CI. Every CI check is reproducible
 locally. CI covers secrets, build, formatting, markdown,
 sub-agents, lint, type-check, and unit tests. E2E, UI, and smoke tests run
-locally only (pre-push, `pnpm qg`).
+locally only (pre-push, `pnpm check`).
 
 ## 8. AI Sub-Agent Review
 
@@ -181,7 +181,7 @@ for milestone/service release gates, snagging, and go/no-go controls.
 For individual contributors:
 
 - Tests written before code at all levels
-- All quality gates pass locally (`pnpm qg`) before pushing
+- All quality gates pass locally (`pnpm check`) before pushing
 - Conventional commit messages that explain _why_, not just _what_
 - Documentation updated alongside code changes
 - ADRs created for significant architectural decisions

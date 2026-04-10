@@ -4,12 +4,12 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { TransportRequestOptions, TransportRequestParams } from '@elastic/elasticsearch';
 import { normalizeError, sanitiseForJson } from '@oaknational/logger';
+import { resolveZeroHitIndexName } from '@oaknational/oak-search-sdk/read';
 import { loadConfigOrExit } from '../../src/runtime-config.js';
 import { initializeEsClient, esClient } from '../../src/lib/es-client.js';
 import {
   coerceSearchIndexTarget,
   currentSearchIndexTarget,
-  resolveZeroHitIndexName,
   type SearchIndexTarget,
 } from '../../src/lib/search-index-target';
 import { searchLogger } from '../../src/lib/logger';

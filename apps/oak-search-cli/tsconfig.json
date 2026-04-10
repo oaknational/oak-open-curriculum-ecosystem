@@ -6,7 +6,8 @@
     "allowJs": false,
     "noEmit": true,
     "incremental": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "resolveJsonModule": true
   },
   "include": ["**/*.ts", "evaluation/**/*.ts", "operations/**/*.ts"],
   "exclude": ["node_modules"]

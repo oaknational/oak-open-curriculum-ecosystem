@@ -1,0 +1,8 @@
+---
+description: Invoke react-component-reviewer when changes touch React component architecture, hooks, render performance, prop API design, or component composition patterns in UI-shipping workspaces.
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/invoke-react-component-reviewer.md`.
+
+In Cursor, use the Task tool with `readonly: true` and the appropriate `subagent_type`.

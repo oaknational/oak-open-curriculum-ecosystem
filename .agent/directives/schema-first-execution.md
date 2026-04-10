@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 100
+fitness_line_target: 100
+fitness_line_limit: 150
+fitness_char_limit: 9000
+fitness_line_length: 100
 split_strategy: "This is a focused directive; if it grows, extract implementation details to the SDK README"
 ---
 
@@ -9,7 +12,7 @@ split_strategy: "This is a focused directive; if it grows, extract implementatio
 
 ## Cardinal Intent
 
-Every byte of runtime behaviour for MCP tool execution **must** be driven by generated artefacts that flow directly from the Open Curriculum OpenAPI schema. Runtime files act only as very thin façades; they do **not** duplicate logic, infer types, or widen unions. The generator is the single source of truth.
+Per the cardinal rule (`.agent/directives/principles.md` §Cardinal Rule): every byte of runtime behaviour for MCP tool execution **must** be driven by generated artefacts that flow directly from the Open Curriculum OpenAPI schema. Runtime files act only as very thin façades; they do **not** duplicate logic, infer types, or widen unions. The generator is the single source of truth.
 
 ## Required Flow
 
@@ -32,6 +35,19 @@ Every byte of runtime behaviour for MCP tool execution **must** be driven by gen
 - **Comprehensive TSDoc**: Generator templates must emit TSDoc comments that describe the dependency order and the role of each layer. Authored runtime files must reference the generated helpers explicitly (e.g. `@see ../../types/generated/.../execute.ts`).
 - **Tests import generated helpers**: Behavioural tests should import the generated executors to prove correctness. Avoid string/snapshot tests that hide the real flow.
 - **Documentation**: Any generator or runtime change affecting this pipeline must also update the architectural notes and plan context so future agents recognise the constraint.
+
+## Type Predicates in the Schema-First Flow
+
+The Constant-Type-Predicate Pattern
+([ADR-153](../../docs/architecture/architectural-decisions/153-constant-type-predicate-pattern.md))
+is how schema-first types bridge to runtime. Constants extracted at
+generation time produce type predicates that validate `unknown` input
+at system boundaries. This is the mechanism by which the Cardinal Rule
+is satisfied at runtime: data enters as `unknown`, passes through a
+generated predicate, and emerges with full schema-derived type
+information. See
+[typescript-practice.md](../../docs/governance/typescript-practice.md)
+for the implementation pattern and decision tree.
 
 ## Compliance
 

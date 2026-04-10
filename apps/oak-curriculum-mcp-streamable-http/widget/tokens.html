@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Oak Design Tokens</title>
+    <link rel="stylesheet" href="./src/index.css" />
+    <style>
+      .token-page {
+        max-width: 56rem;
+        margin: 0 auto;
+      }
+
+      .token-page h1 {
+        font-size: var(--oak-semantic-font-heading-size);
+        font-weight: var(--oak-semantic-font-weight-bold);
+        margin-bottom: var(--oak-semantic-gap-lg);
+      }
+
+      .token-page h2 {
+        font-size: var(--oak-semantic-font-banner-title-size);
+        font-weight: var(--oak-semantic-font-weight-bold);
+        margin-top: var(--oak-semantic-gap-lg);
+        margin-bottom: var(--oak-semantic-gap-md);
+      }
+
+      .token-page a {
+        font-size: var(--oak-component-label-size);
+      }
+
+      .swatch-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+        gap: var(--oak-semantic-gap-md);
+      }
+
+      .swatch {
+        border: 1px solid var(--oak-semantic-border-subtle);
+        border-radius: var(--oak-component-control-radius);
+        overflow: hidden;
+      }
+
+      .swatch__colour {
+        height: 3rem;
+      }
+
+      .swatch__label {
+        padding: var(--oak-semantic-gap-sm);
+        font-size: var(--oak-component-label-size);
+        line-height: var(--oak-component-label-line-height);
+        background: var(--oak-semantic-surface-panel);
+      }
+
+      .swatch__label code {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--oak-semantic-text-secondary);
+        margin-top: 0.125rem;
+      }
+
+      .type-sample {
+        padding: var(--oak-semantic-gap-md);
+        background: var(--oak-semantic-surface-panel);
+        border: 1px solid var(--oak-semantic-border-subtle);
+        border-radius: var(--oak-component-panel-radius);
+        margin-bottom: var(--oak-semantic-gap-sm);
+      }
+
+      .type-sample__label {
+        font-size: var(--oak-component-label-size);
+        color: var(--oak-semantic-text-secondary);
+        margin-bottom: var(--oak-semantic-gap-sm);
+      }
+
+      .space-row {
+        display: flex;
+        align-items: center;
+        gap: var(--oak-semantic-gap-md);
+        margin-bottom: var(--oak-semantic-gap-sm);
+      }
+
+      .space-block {
+        background: var(--oak-semantic-accent);
+        border-radius: 2px;
+        height: 1rem;
+        flex-shrink: 0;
+      }
+
+      .space-label {
+        font-size: var(--oak-component-label-size);
+        color: var(--oak-semantic-text-secondary);
+        white-space: nowrap;
+      }
+
+      .interactive-demo {
+        display: flex;
+        gap: var(--oak-semantic-gap-md);
+        flex-wrap: wrap;
+        align-items: center;
+        padding: var(--oak-semantic-gap-md);
+        background: var(--oak-semantic-surface-panel);
+        border: 1px solid var(--oak-semantic-border-subtle);
+        border-radius: var(--oak-component-panel-radius);
+      }
+
+      .interactive-demo a {
+        font-size: var(--oak-component-body-size);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="oak-app">
+      <div class="token-page">
+        <a href="/">&larr; Back to index</a>
+        <h1>Design Tokens</h1>
+
+        <p>
+          Current theme: <strong id="current-theme">detecting...</strong>. Toggle your OS appearance
+          to switch between light and dark.
+        </p>
+
+        <h2>Semantic Colours</h2>
+        <div class="swatch-grid">
+          <div class="swatch">
+            <div class="swatch__colour" style="background: var(--oak-semantic-surface-page)"></div>
+            <div class="swatch__label">surface-page<code>--oak-semantic-surface-page</code></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch__colour" style="background: var(--oak-semantic-surface-panel)"></div>
+            <div class="swatch__label">surface-panel<code>--oak-semantic-surface-panel</code></div>
+          </div>
+          <div class="swatch">
+            <div
+              class="swatch__colour"
+              style="background: var(--oak-semantic-surface-accent)"
+            ></div>
+            <div class="swatch__label">
+              surface-accent<code>--oak-semantic-surface-accent</code>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="swatch__colour" style="background: var(--oak-semantic-text-primary)"></div>
+            <div class="swatch__label">text-primary<code>--oak-semantic-text-primary</code></div>
+          </div>
+          <div class="swatch">
+            <div
+              class="swatch__colour"
+              style="background: var(--oak-semantic-text-secondary)"
+            ></div>
+            <div class="swatch__label">
+              text-secondary<code>--oak-semantic-text-secondary</code>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="swatch__colour" style="background: var(--oak-semantic-text-inverse)"></div>
+            <div class="swatch__label">text-inverse<code>--oak-semantic-text-inverse</code></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch__colour" style="background: var(--oak-semantic-accent)"></div>
+            <div class="swatch__label">accent<code>--oak-semantic-accent</code></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch__colour" style="background: var(--oak-semantic-accent-strong)"></div>
+            <div class="swatch__label">accent-strong<code>--oak-semantic-accent-strong</code></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch__colour" style="background: var(--oak-semantic-border-subtle)"></div>
+            <div class="swatch__label">border-subtle<code>--oak-semantic-border-subtle</code></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch__colour" style="background: var(--oak-semantic-focus-ring)"></div>
+            <div class="swatch__label">focus-ring<code>--oak-semantic-focus-ring</code></div>
+          </div>
+          <div class="swatch">
+            <div
+              class="swatch__colour"
+              style="background: var(--oak-semantic-focus-ring-on-accent)"
+            ></div>
+            <div class="swatch__label">
+              focus-ring-on-accent<code>--oak-semantic-focus-ring-on-accent</code>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="swatch__colour" style="background: var(--oak-semantic-error)"></div>
+            <div class="swatch__label">error<code>--oak-semantic-error</code></div>
+          </div>
+        </div>
+
+        <h2>Interactive States</h2>
+        <div class="interactive-demo">
+          <a href="#">Default link (hover thickens underline)</a>
+          <a href="#">Focus me (tab to see ring)</a>
+        </div>
+
+        <h2>Typography</h2>
+        <div class="type-sample">
+          <div class="type-sample__label">Heading — Lexend Bold 2rem/1.1</div>
+          <div
+            style="
+              font-size: var(--oak-semantic-font-heading-size);
+              font-weight: var(--oak-semantic-font-weight-bold);
+              line-height: var(--oak-semantic-font-heading-line-height);
+            "
+          >
+            The quick brown fox jumps over the lazy dog
+          </div>
+        </div>
+        <div class="type-sample">
+          <div class="type-sample__label">Banner Title — Lexend Bold 1.25rem</div>
+          <div
+            style="
+              font-size: var(--oak-semantic-font-banner-title-size);
+              font-weight: var(--oak-semantic-font-weight-bold);
+            "
+          >
+            Oak National Academy
+          </div>
+        </div>
+        <div class="type-sample">
+          <div class="type-sample__label">Body — Lexend Light 1rem/1.6</div>
+          <div>
+            Lessons are grouped by key stage and subject, allowing teachers to find relevant
+            curriculum content quickly. Each lesson includes a title, slug, and summary for display.
+          </div>
+        </div>
+        <div class="type-sample">
+          <div class="type-sample__label">Label — Lexend 0.875rem/1.4</div>
+          <div
+            style="
+              font-size: var(--oak-component-label-size);
+              line-height: var(--oak-component-label-line-height);
+            "
+          >
+            Key Stage 3 &middot; Science &middot; 42 lessons
+          </div>
+        </div>
+
+        <h2>Spacing</h2>
+        <div class="space-row">
+          <div class="space-block" style="width: var(--oak-space-200)"></div>
+          <span class="space-label">200 — 0.5rem (tight)</span>
+        </div>
+        <div class="space-row">
+          <div class="space-block" style="width: var(--oak-space-300)"></div>
+          <span class="space-label">300 — 0.75rem (compact)</span>
+        </div>
+        <div class="space-row">
+          <div class="space-block" style="width: var(--oak-space-400)"></div>
+          <span class="space-label">400 — 1rem (standard)</span>
+        </div>
+        <div class="space-row">
+          <div class="space-block" style="width: var(--oak-space-500)"></div>
+          <span class="space-label">500 — 1.5rem (comfortable)</span>
+        </div>
+        <div class="space-row">
+          <div class="space-block" style="width: var(--oak-space-700)"></div>
+          <span class="space-label">700 — 2.5rem (generous)</span>
+        </div>
+
+        <script>
+          /* Detect and display current theme */
+          function updateTheme() {
+            const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.getElementById('current-theme').textContent = isDark ? 'dark' : 'light';
+          }
+          updateTheme();
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
+        </script>
+      </div>
+    </main>
+  </body>
+</html>

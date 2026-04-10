@@ -4,7 +4,7 @@ Date: 2025-09-15
 
 ## Status
 
-Superseded — Next.js UI layer removed
+Superseded — Next.js UI layer removed; further superseded by [ADR-151](151-mcp-app-styling-independence.md) (MCP App styling independence from Oak Web Application)
 
 > The entire Next.js UI layer, including React, styled-components, Oak Components, and all
 > referenced code (`app/lib/theme/*`, `app/lib/Providers.tsx`, `app/layout.tsx`), was removed in

@@ -29,7 +29,7 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 
 The governance layer is larger than a single file:
 
-- **24 canonical rules** live in [`.agent/rules/`](rules/)
+- **34 canonical rules** live in [`.agent/rules/`](rules/)
 - Thin platform adapters live in [`.cursor/rules/`](../.cursor/rules/) and
   [`.claude/rules/`](../.claude/rules/)
 - The canonical hook policy lives in [`.agent/hooks/policy.json`](hooks/policy.json)
@@ -52,7 +52,7 @@ Hook support:
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | Canonical hook policy         | [`.agent/hooks/policy.json`](hooks/policy.json)                                                               | Source of truth                                                                                                         |
 | Hook explainer                | [`.agent/hooks/README.md`](hooks/README.md)                                                                   | Human-readable scope and porting notes                                                                                  |
-| Native Claude activation      | [`.claude/settings.json`](../.claude/settings.json)                                                           | Optional machine-local gitignored Claude Code file; when present, it wires `PreToolUse` and clean clones/CI may omit it |
+| Native Claude activation      | [`.claude/settings.json`](../.claude/settings.json)                                                           | Tracked Claude Code project settings; wires `PreToolUse` on fresh checkout, with additive local overrides in `.claude/settings.local.json` |
 | Cross-platform support matrix | [`.agent/reference/cross-platform-agent-surface-matrix.md`](reference/cross-platform-agent-surface-matrix.md) | Records supported vs unsupported surfaces                                                                               |
 
 ## Architectural Decisions
@@ -64,8 +64,10 @@ ADRs referenced by the Practice Core files. The full index is at `docs/architect
 | [ADR-114](../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md) | Layered sub-agent prompt composition architecture                                  |
 | [ADR-117](../docs/architecture/architectural-decisions/117-plan-templates-and-components.md)                     | Plan templates and components                                                      |
 | [ADR-119](../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md)                      | Agentic engineering practice — naming and conceptual boundary                      |
-| [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md)                        | Practice propagation — seven-file package, self-containment, practice-index bridge |
+| [ADR-124](../docs/architecture/architectural-decisions/124-practice-propagation-model.md)                        | Practice propagation — eight-file package, self-containment, practice-index bridge |
 | [ADR-125](../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)                        | Agent artefact portability — three-layer model for skills, commands, and rules     |
+| [ADR-150](../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) | Continuity surfaces, session handoff, and surprise pipeline                |
+| [ADR-152](../docs/architecture/architectural-decisions/152-provenance-uuid-migration.md)                        | Provenance UUID migration — `index` → `id` in travelling provenance chains        |
 
 ## Commands, Skills, and Prompts
 
@@ -73,7 +75,7 @@ The execution surface is intentionally split by role:
 
 - **10 stable canonical commands** in [`.agent/commands/`](commands/)
 - **3 experimental commands** in [`.agent/commands/experiments/`](commands/experiments/)
-- **19 canonical skills** in [`.agent/skills/`](skills/)
+- **27 canonical skills** in [`.agent/skills/`](skills/)
 - **Prompt library** in [`.agent/prompts/`](prompts/) with the active index at
   [`.agent/prompts/README.md`](prompts/README.md)
 
@@ -81,10 +83,10 @@ Representative execution surfaces:
 
 | Surface               | Canonical location                                      | Representative entries                                                                                                                                                                                                                                                                                                                                                                          | Purpose                                                       |
 | --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Commands              | [`.agent/commands/`](commands/)                         | [`start-right-quick.md`](commands/start-right-quick.md), [`start-right-thorough.md`](commands/start-right-thorough.md), [`go.md`](commands/go.md), [`gates.md`](commands/gates.md), [`plan.md`](commands/plan.md), [`review.md`](commands/review.md), [`commit.md`](commands/commit.md), [`consolidate-docs.md`](commands/consolidate-docs.md), [`metacognition.md`](commands/metacognition.md) | Explicit user-invoked workflows                               |
+| Commands              | [`.agent/commands/`](commands/)                         | [`start-right-quick.md`](commands/start-right-quick.md), [`start-right-thorough.md`](commands/start-right-thorough.md), [`go.md`](commands/go.md), [`session-handoff.md`](commands/session-handoff.md), [`gates.md`](commands/gates.md), [`plan.md`](commands/plan.md), [`review.md`](commands/review.md), [`commit.md`](commands/commit.md), [`consolidate-docs.md`](commands/consolidate-docs.md), [`metacognition.md`](commands/metacognition.md) | Explicit user-invoked workflows                               |
 | Experimental commands | [`.agent/commands/experiments/`](commands/experiments/) | `collaborate`, `step-back`, `think`                                                                                                                                                                                                                                                                                                                                                             | Trial surfaces not yet promoted into the stable command set   |
-| Skills                | [`.agent/skills/`](skills/)                             | [`napkin`](skills/napkin/SKILL.md), [`distillation`](skills/distillation/SKILL.md), [`code-patterns`](skills/code-patterns/SKILL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL.md), [`start-right-quick`](skills/start-right-quick/SKILL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL.md)                                                                  | On-demand expertise and multi-step workflows                  |
-| Handover prompts      | [`.agent/prompts/`](prompts/)                           | [`GO.md`](skills/go/shared/go.md), [`gt-review.md`](prompts/archive/gt-review.md), [`semantic-search/semantic-search.prompt.md`](prompts/semantic-search/semantic-search.prompt.md)                                                                                                                                                                                                                              | Stateful session entry points tied to active plans or domains |
+| Skills                | [`.agent/skills/`](skills/)                             | [`napkin`](skills/napkin/SKILL.md), [`patterns`](skills/patterns/SKILL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL.md), [`start-right-quick`](skills/start-right-quick/SKILL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL.md)                                                                    | On-demand expertise and multi-step workflows                  |
+| Session prompts       | [`.agent/prompts/`](prompts/)                           | [`session-continuation.prompt.md`](prompts/session-continuation.prompt.md), [`gt-review.md`](prompts/archive/gt-review.md), [`semantic-search/semantic-search.prompt.md`](prompts/semantic-search/semantic-search.prompt.md)                                                                                                                                                                                       | Stateful session entry points tied to active plans or domains |
 
 ## Artefact Directories
 

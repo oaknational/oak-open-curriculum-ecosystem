@@ -2,7 +2,7 @@
  * Shared helpers for formatting MCP tool responses with structured logging.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import type { ToolResult, ToolName } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { type Logger, enrichError, type ErrorContext } from '@oaknational/logger/node';
 import type { ToolExecutionSuccessEnvelope } from './validation.js';

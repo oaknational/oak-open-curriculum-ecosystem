@@ -13,7 +13,6 @@
  * - `type-guards.ts` - Type predicates for tool name validation
  * - `zod-utils.ts` - Zod schema extraction utilities
  * - `list-tools.ts` - Tool listing for MCP registration
- * - `projections.ts` - Registration and protocol projection functions
  * - `executor.ts` - Tool execution dispatch logic
  *
  * ## Usage
@@ -48,10 +47,10 @@ export { AGGREGATED_TOOL_DEFS } from './definitions.js';
 export type {
   AggregatedToolName,
   UniversalToolName,
-  UniversalToolInputSchema,
   ToolAnnotations,
   ToolMeta,
   UniversalToolListEntry,
+  AppToolListEntry,
   GeneratedToolRegistry,
 } from './types.js';
 
@@ -59,16 +58,13 @@ export type {
 export { generatedToolRegistry } from './generated-tool-registry.js';
 
 // Type guards
-export { isAggregatedToolName, isUniversalToolName } from './type-guards.js';
+export { isAggregatedToolName, isUniversalToolName, isAppToolEntry } from './type-guards.js';
 
 // Zod utilities (internal, but exported for testing)
 export { isZodObject, extractZodShape } from './zod-utils.js';
 
 // Tool listing
 export { listUniversalTools } from './list-tools.js';
-
-// Projection functions for tool registration and protocol exposure
-export { toRegistrationConfig, toProtocolEntry } from './projections.js';
 
 // Tool execution
 export { createUniversalToolExecutor, type UniversalToolExecutorDependencies } from './executor.js';

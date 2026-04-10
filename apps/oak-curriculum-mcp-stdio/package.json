@@ -52,7 +52,11 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@oaknational/type-helpers": "workspace:*",
     "@types/node": "^25.5.0",
+    "eslint": "^10.2.0",
+    "globals": "^17.4.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.1.2"

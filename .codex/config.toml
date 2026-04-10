@@ -72,3 +72,19 @@ config_file = ".codex/agents/architecture-reviewer-betty.toml"
 [agents."architecture-reviewer-wilma"]
 description = "Adversarial architecture reviewer — resilience, failure modes, and hidden coupling risks."
 config_file = ".codex/agents/architecture-reviewer-wilma.toml"
+
+[agents."assumptions-reviewer"]
+description = "Meta-level plan reviewer for proportionality, assumption validity, and blocking legitimacy."
+config_file = ".codex/agents/assumptions-reviewer.toml"
+
+[agents."accessibility-reviewer"]
+description = "WCAG 2.2 AA compliance reviewer for rendered HTML, ARIA, keyboard interaction, colour contrast, and focus management."
+config_file = ".codex/agents/accessibility-reviewer.toml"
+
+[agents."design-system-reviewer"]
+description = "Design token and visual consistency reviewer for DTCG JSON, CSS custom properties, and theming."
+config_file = ".codex/agents/design-system-reviewer.toml"
+
+[agents."react-component-reviewer"]
+description = "React component architecture reviewer for hooks, render performance, prop API design, and composition patterns."
+config_file = ".codex/agents/react-component-reviewer.toml"

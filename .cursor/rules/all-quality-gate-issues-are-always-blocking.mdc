@@ -1,6 +1,0 @@
----
-description: All quality gate issues are always blocking.
-alwaysApply: true
----
-
-Read and follow `.agent/rules/all-quality-gate-issues-are-always-blocking.md`.

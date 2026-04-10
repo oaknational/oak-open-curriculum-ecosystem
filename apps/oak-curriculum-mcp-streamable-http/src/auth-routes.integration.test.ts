@@ -27,6 +27,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
     return await createApp({
       runtimeConfig,
       observability,
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       upstreamMetadata: TEST_UPSTREAM_METADATA,
     });
   };

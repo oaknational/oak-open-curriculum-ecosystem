@@ -11,7 +11,7 @@
  * the dispatch layer preserves per-scope types through the union.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { formatToolResponse } from '../universal-tool-shared.js';
 import type { SearchSdkScope, ScopedSearchResult, SearchDispatchResult } from './types.js';
 import type { SuggestionResponse } from '../search-retrieval-types.js';

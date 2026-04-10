@@ -267,15 +267,14 @@ Goal: All reviewer findings addressed. Work in order:
 5. **F21**: Add `dsn` to `FULLY_REDACTED_KEYS`
 
 ### Phase E: Final Verification
-1. Run full `pnpm qg` (all quality gates)
-2. Run `pnpm check` (clean rebuild + full verification)
-3. Re-invoke reviewers on the remediated code:
+1. Run `pnpm check` (clean rebuild + full verification)
+2. Re-invoke reviewers on the remediated code:
    - code-reviewer (gateway)
    - sentry-reviewer (Sentry/OTel specifics)
    - test-reviewer (TDD compliance)
    - architecture-reviewer-fred (boundary compliance)
-4. Confirm all findings addressed
-5. Update plan status and handover documentation
+3. Confirm all findings addressed
+4. Update plan status and handover documentation
 
 ---
 
@@ -286,7 +285,7 @@ After each phase, run the appropriate gates:
 - Phase B: `pnpm type-check && pnpm lint:fix && pnpm test && pnpm test:e2e`
 - Phase C: `pnpm test` (security-relevant tests)
 - Phase D: `pnpm test`
-- Phase E: `pnpm qg` (full gate suite)
+- Phase E: `pnpm check` (canonical aggregate gate)
 
 ---
 

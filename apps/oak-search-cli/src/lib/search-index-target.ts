@@ -11,14 +11,7 @@
 // Re-exports from SDK — single source of truth (ADR-030)
 // ---------------------------------------------------------------------------
 
-export {
-  SEARCH_INDEX_TARGETS,
-  SEARCH_INDEX_KINDS,
-  ZERO_HIT_INDEX_BASE,
-  BASE_INDEX_NAMES,
-  resolveSearchIndexName,
-  resolveZeroHitIndexName,
-} from '@oaknational/oak-search-sdk/read';
+export { BASE_INDEX_NAMES } from '@oaknational/oak-search-sdk/read';
 
 export type {
   SearchIndexTarget,
@@ -30,13 +23,25 @@ export type {
 // CLI-only helpers
 // ---------------------------------------------------------------------------
 
-import { resolveSearchIndexName as resolveIndexName } from '@oaknational/oak-search-sdk/read';
+import { BASE_INDEX_NAMES } from '@oaknational/oak-search-sdk/read';
 
 import type {
   SearchIndexTarget,
   SearchIndexKind,
   IndexResolverFn,
 } from '@oaknational/oak-search-sdk/read';
+
+function resolveIndexName(kind: SearchIndexKind, target: SearchIndexTarget): string {
+  const baseName = BASE_INDEX_NAMES[kind];
+  return target === 'sandbox' ? `${baseName}_sandbox` : baseName;
+}
+
+/**
+ * Resolve the canonical index name for the requested target.
+ */
+export function resolveSearchIndexName(kind: SearchIndexKind, target: SearchIndexTarget): string {
+  return resolveIndexName(kind, target);
+}
 
 /**
  * Create an index resolver function bound to a specific target.
@@ -45,12 +50,12 @@ import type {
  * @returns A function that resolves index names for the bound target
  */
 export function createIndexResolver(target: SearchIndexTarget): IndexResolverFn {
-  return (kind: SearchIndexKind) => resolveIndexName(kind, target);
+  return (kind: SearchIndexKind) => resolveSearchIndexName(kind, target);
 }
 
 /** Resolve the canonical index name for the primary (production) target. */
 export function resolvePrimarySearchIndexName(kind: SearchIndexKind): string {
-  return resolveIndexName(kind, 'primary');
+  return resolveSearchIndexName(kind, 'primary');
 }
 
 /** Config shape for resolving search index target. */
@@ -88,7 +93,7 @@ export function resolveCurrentSearchIndexName(
   kind: SearchIndexKind,
   targetOrConfig?: SearchIndexTarget | SearchIndexTargetConfigCandidate,
 ): string {
-  return resolveIndexName(kind, currentSearchIndexTarget(targetOrConfig));
+  return resolveSearchIndexName(kind, currentSearchIndexTarget(targetOrConfig));
 }
 
 /**

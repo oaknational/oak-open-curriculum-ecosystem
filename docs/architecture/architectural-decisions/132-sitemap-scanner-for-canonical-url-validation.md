@@ -19,6 +19,13 @@ ADR-047 established that canonical URL generation should happen at codegen time.
 However, there was no mechanism to **validate** that constructed URLs correspond
 to URLs that actually exist on the live site.
 
+Note: [ADR-145](145-oak-url-naming-collision-remediation.md) renamed the SDK
+concept from `canonicalUrl` to `oakUrl` to resolve a naming collision with the
+upstream API's `canonicalUrl` (which has different semantics). References to
+"canonical URL" in this ADR refer to the Oak URL concept (now named `oakUrl` in
+the SDK). The sitemap scanner validates these slug-based teacher URLs regardless
+of their field name.
+
 The OWA publishes a sitemap index at `https://www.thenational.academy/sitemap.xml`
 containing sub-sitemaps for all teacher-facing pages. This sitemap provides a
 comprehensive, authoritative list of valid teacher URLs — a natural validation

@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;700&display=swap');
+@import '@oaknational/oak-design-tokens/index.css';
+
+/* ─── MCP Host Variable Bridges ──────────────────────────────
+ * Defaults for all McpUiStyleVariableKey properties (76 variables).
+ * The host MAY override any of these via applyHostStyleVariables()
+ * (inline styles, higher specificity). Oak tokens are used where an
+ * equivalent exists; sensible defaults elsewhere.
+ * See docs/governance/mcp-app-styling.md.
+ * ──────────────────────────────────────────────────────────── */
+:root {
+  /* Colour — Background (10) */
+  --color-background-primary: var(--oak-semantic-surface-page);
+  --color-background-secondary: var(--oak-semantic-surface-panel);
+  --color-background-tertiary: var(--oak-semantic-surface-panel);
+  /* No Oak "surface-inverse" token — text-primary resolves to the primary dark colour */
+  --color-background-inverse: var(--oak-semantic-text-primary);
+  --color-background-ghost: transparent;
+  --color-background-info: var(--oak-semantic-surface-panel);
+  --color-background-danger: var(--oak-semantic-surface-panel);
+  --color-background-success: var(--oak-semantic-surface-panel);
+  --color-background-warning: var(--oak-semantic-surface-panel);
+  --color-background-disabled: var(--oak-semantic-surface-panel);
+
+  /* Colour — Text (10)
+   * info/success/warning are placeholder defaults — the host overrides
+   * these with its own semantic colours via applyHostStyleVariables(). */
+  --color-text-primary: var(--oak-semantic-text-primary);
+  --color-text-secondary: var(--oak-semantic-text-secondary);
+  --color-text-tertiary: var(--oak-semantic-text-secondary);
+  --color-text-inverse: var(--oak-semantic-text-inverse);
+  --color-text-ghost: var(--oak-semantic-text-secondary);
+  --color-text-info: var(--oak-semantic-text-primary);
+  --color-text-danger: var(--oak-semantic-error);
+  --color-text-success: var(--oak-semantic-accent);
+  --color-text-warning: var(--oak-semantic-text-primary);
+  --color-text-disabled: var(--oak-semantic-text-secondary);
+
+  /* Colour — Border (10) */
+  --color-border-primary: var(--oak-semantic-border-subtle);
+  --color-border-secondary: var(--oak-semantic-border-subtle);
+  --color-border-tertiary: var(--oak-semantic-border-subtle);
+  --color-border-inverse: var(--oak-semantic-text-inverse);
+  --color-border-ghost: transparent;
+  --color-border-info: var(--oak-semantic-border-subtle);
+  --color-border-danger: var(--oak-semantic-error);
+  --color-border-success: var(--oak-semantic-accent);
+  --color-border-warning: var(--oak-semantic-border-subtle);
+  --color-border-disabled: var(--oak-semantic-border-subtle);
+
+  /* Colour — Ring (7) */
+  --color-ring-primary: var(--oak-semantic-focus-ring);
+  --color-ring-secondary: var(--oak-semantic-focus-ring);
+  --color-ring-inverse: var(--oak-semantic-focus-ring-on-accent);
+  --color-ring-info: var(--oak-semantic-focus-ring);
+  --color-ring-danger: var(--oak-semantic-error);
+  --color-ring-success: var(--oak-semantic-accent);
+  --color-ring-warning: var(--oak-semantic-focus-ring);
+
+  /* Typography — Family (2) */
+  --font-sans: var(--oak-semantic-font-body-family);
+  --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Typography — Weight (4) */
+  --font-weight-normal: var(--oak-semantic-font-weight-light);
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: var(--oak-semantic-font-weight-bold);
+
+  /* Typography — Text Size (4) */
+  --font-text-xs-size: 0.75rem;
+  --font-text-sm-size: var(--oak-semantic-font-label-size);
+  --font-text-md-size: var(--oak-semantic-font-body-size);
+  --font-text-lg-size: 1.125rem;
+
+  /* Typography — Heading Size (7) */
+  --font-heading-xs-size: 1rem;
+  --font-heading-sm-size: var(--oak-semantic-font-banner-title-size);
+  --font-heading-md-size: 1.5rem;
+  --font-heading-lg-size: var(--oak-semantic-font-heading-size);
+  --font-heading-xl-size: 2.5rem;
+  --font-heading-2xl-size: 3rem;
+  --font-heading-3xl-size: 3.5rem;
+
+  /* Typography — Text Line Height (4) */
+  --font-text-xs-line-height: var(--oak-semantic-font-label-line-height);
+  --font-text-sm-line-height: var(--oak-semantic-font-label-line-height);
+  --font-text-md-line-height: var(--oak-semantic-font-body-line-height);
+  --font-text-lg-line-height: var(--oak-semantic-font-body-line-height);
+
+  /* Typography — Heading Line Height (7) */
+  --font-heading-xs-line-height: var(--oak-semantic-font-heading-line-height);
+  --font-heading-sm-line-height: var(--oak-semantic-font-heading-line-height);
+  --font-heading-md-line-height: var(--oak-semantic-font-heading-line-height);
+  --font-heading-lg-line-height: var(--oak-semantic-font-heading-line-height);
+  --font-heading-xl-line-height: 1.1;
+  --font-heading-2xl-line-height: 1.1;
+  --font-heading-3xl-line-height: 1.1;
+
+  /* Layout — Border Radius (6) + Width (1) */
+  --border-radius-xs: 2px;
+  --border-radius-sm: 4px;
+  --border-radius-md: var(--oak-semantic-radius-control);
+  --border-radius-lg: var(--oak-semantic-radius-panel);
+  --border-radius-xl: 1rem;
+  --border-radius-full: 9999px;
+  --border-width-regular: 1px;
+
+  /* Shadows (4) */
+  --shadow-hairline: 0 0 0 1px var(--oak-semantic-border-subtle);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+  --shadow-md: var(--oak-semantic-shadow-panel);
+  --shadow-lg: 0 10px 15px rgb(0 0 0 / 0.1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Height chain: html → body → #root establishes context for
+   .oak-banner min-height */
+html,
+body,
+#root {
+  min-height: fit-content;
+}
+
+body {
+  margin: 0;
+  background: var(--oak-component-page-background);
+  color: var(--oak-component-page-text-color);
+  font-family: var(--oak-component-body-family);
+  font-size: var(--oak-component-body-size);
+  line-height: var(--oak-component-body-line-height);
+  font-weight: var(--oak-component-body-weight);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+dl,
+dt,
+dd {
+  margin: 0;
+}
+
+a {
+  color: var(--oak-semantic-accent);
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--oak-semantic-focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+  text-decoration-thickness: 2px;
+}
+
+.oak-app {
+  display: flex;
+  flex-direction: column;
+  padding: var(--oak-component-page-padding);
+}
+
+/* Brand banner — logo + "Oak National Academy" link, centred */
+.oak-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.oak-banner__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oak-component-banner-gap);
+  color: var(--oak-component-banner-link-color);
+  font-family: var(--oak-component-banner-title-family);
+  font-size: var(--oak-component-banner-title-size);
+  font-weight: var(--oak-component-banner-title-weight);
+  text-decoration: none;
+}
+
+.oak-banner__link:hover {
+  color: var(--oak-component-banner-link-color-hover);
+}
+
+.oak-banner__link:focus-visible {
+  outline: 2px solid var(--oak-component-banner-link-focus-ring-color);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.oak-banner__logo {
+  flex-shrink: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (forced-colors: active) {
+  .oak-banner__link:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+@media (max-width: 48rem) {
+  .oak-app {
+    padding: var(--oak-component-page-padding-mobile);
+  }
+}

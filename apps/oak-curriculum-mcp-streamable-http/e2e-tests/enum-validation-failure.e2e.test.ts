@@ -25,6 +25,7 @@ async function post(body: Record<string, unknown>) {
   const app = await createApp({
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
   });
   return request(app).post('/mcp').set('Host', 'localhost').set('Accept', ACCEPT).send(body);
 }

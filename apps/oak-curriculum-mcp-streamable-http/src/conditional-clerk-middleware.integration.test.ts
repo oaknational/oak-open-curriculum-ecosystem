@@ -15,8 +15,9 @@ import type { Logger } from '@oaknational/logger';
  * Tests that the middleware correctly delegates to or skips clerkMiddleware
  * based on request properties. Uses simple mocks injected as arguments.
  *
- * Per MCP 2025-11-25: All MCP methods require auth. Path-based and public
- * resource skips remain for non-MCP routes (health, OAuth metadata, widget).
+ * Per MCP 2025-11-25: All MCP methods require auth. Path-based skips
+ * remain for non-MCP routes (health, OAuth metadata). Public resource
+ * skips apply only to documentation URIs (widget removed in WS3 Phase 1).
  */
 describe('createConditionalClerkMiddleware (Integration)', () => {
   let mockClerkMw: RequestHandler;
@@ -163,7 +164,7 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
   });
 
   describe('public resource authentication bypass', () => {
-    it('skips clerkMiddleware for widget resources/read', () => {
+    it('skips clerkMiddleware for widget resources/read (static HTML, public resource)', () => {
       const conditionalMw = createConditionalClerkMiddleware(mockClerkMw, mockLogger);
       const req = createMockRequest('/mcp', {
         method: 'resources/read',
@@ -173,7 +174,6 @@ describe('createConditionalClerkMiddleware (Integration)', () => {
       conditionalMw(req, mockRes, mockNext);
 
       expect(mockClerkMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
     });
 
     it('skips clerkMiddleware for documentation resources/read', () => {

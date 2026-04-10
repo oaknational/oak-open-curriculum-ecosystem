@@ -39,10 +39,14 @@ test.describe('Landing page', () => {
     await expect(page.locator('summary h2', { hasText: /Tools \(\d+\)/ })).toBeVisible();
   });
 
-  test('passes WCAG accessibility checks', async ({ page }) => {
+  // Tagged so the dedicated `test:a11y` gate can run browser accessibility
+  // assertions separately from the broader UI suite.
+  test('@a11y passes WCAG accessibility checks', async ({ page }) => {
     await page.goto('/');
 
-    const axe = await new AxeBuilder({ page }).analyze();
+    const axe = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
     expect(axe.violations.length, JSON.stringify(axe.violations, null, 2)).toBe(0);
   });
 });

@@ -2,7 +2,7 @@ import { defineConfig } from 'eslint/config';
 import {
   configs,
   appArchitectureRules,
-  commonSettings,
+  createImportResolverSettings,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -14,6 +14,10 @@ import { importX } from 'eslint-plugin-import-x';
 import tseslint from 'typescript-eslint';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
+const widgetDir = fileURLToPath(new URL('./widget', import.meta.url));
+const workspaceImportResolverSettings = createImportResolverSettings({
+  project: [thisDir, widgetDir],
+});
 const javaScriptRuleOverrides = Object.fromEntries(
   configs.strict
     .flatMap((config) => Object.keys(config.rules ?? {}))
@@ -71,17 +75,7 @@ const config = defineConfig(
           // allowDefaultProject: true,
         },
       },
-      settings: {
-        ...commonSettings,
-        'import-x/resolver': {
-          ...commonSettings['import-x/resolver'],
-          typescript: {
-            ...commonSettings['import-x/resolver'].typescript,
-            // project: wsTsProject,
-            projectService: true,
-          },
-        },
-      },
+      settings: workspaceImportResolverSettings,
       rules: {
         'import-x/no-relative-parent-imports': 'off',
         ...appArchitectureRules,
@@ -89,9 +83,22 @@ const config = defineConfig(
       },
     },
     {
+      files: ['operations/**/*.ts'],
+      rules: {
+        'no-console': 'error',
+      },
+    },
+    {
       files: ['**/*.ts'],
       // TODO: remove once config DI standardisation is complete (see .agent/plans/architecture/config-architecture-standardisation-plan.md)
-      ignores: ['**/*.test.ts', '**/*.spec.ts', 'smoke-tests/**', 'e2e-tests/**', 'src/index.ts'],
+      ignores: [
+        '**/*.test.ts',
+        '**/*.spec.ts',
+        'operations/**',
+        'smoke-tests/**',
+        'e2e-tests/**',
+        'src/index.ts',
+      ],
       rules: {
         'no-restricted-syntax': [
           'error',
@@ -105,6 +112,32 @@ const config = defineConfig(
       },
     },
     {
+      files: ['widget/**/*.ts', 'widget/**/*.tsx'],
+      languageOptions: {
+        parserOptions: {
+          projectService: true,
+          tsconfigRootDir: thisDir,
+          ecmaFeatures: { jsx: true },
+        },
+      },
+      settings: workspaceImportResolverSettings,
+      rules: {
+        'import-x/no-relative-parent-imports': 'off',
+        ...appArchitectureRules,
+        'max-lines-per-function': ['error', { max: 50, skipComments: true, skipBlankLines: true }],
+      },
+    },
+    {
+      files: ['widget/**/*.test.tsx', 'widget/**/*.test.ts'],
+      rules: {
+        ...testRules,
+        'import-x/no-relative-parent-imports': 'off',
+        'import-x/no-restricted-paths': 'off',
+        '@typescript-eslint/no-restricted-imports': 'off',
+        'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
+      },
+    },
+    {
       files: ['**/*.test.ts', '**/*.spec.ts'],
       rules: {
         ...testRules,
@@ -112,6 +145,12 @@ const config = defineConfig(
         'import-x/no-restricted-paths': 'off',
         '@typescript-eslint/no-restricted-imports': 'off',
         'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
+      },
+    },
+    {
+      files: ['e2e-tests/**/*.test.ts'],
+      rules: {
+        'max-lines-per-function': ['error', { max: 300, skipComments: true, skipBlankLines: true }],
       },
     },
     // Two irreducible assertion cases, each confirmed by type-reviewer:
@@ -139,6 +178,16 @@ const config = defineConfig(
       },
     },
     {
+      files: ['operations/**/*.unit.test.ts', 'operations/**/*.integration.test.ts'],
+      rules: {
+        ...testRules,
+        'import-x/no-relative-parent-imports': 'off',
+        'import-x/no-restricted-paths': 'off',
+        '@typescript-eslint/no-restricted-imports': 'off',
+        'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
+      },
+    },
+    {
       files: ['scripts/**/*.js', 'scripts/**/*.mjs'],
       rules: {
         complexity: 'off',
@@ -155,6 +204,7 @@ const config = defineConfig(
         'eslint.config.base.ts',
         'vitest.config.ts',
         'vitest.e2e.config.ts',
+        'vitest.widget.config.ts',
       ],
       languageOptions: {
         parserOptions: {

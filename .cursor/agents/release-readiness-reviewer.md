@@ -4,7 +4,6 @@ name: release-readiness-reviewer
 model: default
 description: Release go/no-go specialist. Use for release-critical changes to assess quality-gate status, migration risk, rollout safety, and final readiness recommendations.
 readonly: true
-is_background: true
 ---
 
 # Release Readiness Reviewer

@@ -6,7 +6,7 @@
  * stdio transport.
  */
 
-import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
+import { z } from 'zod';
 import { ASSET_TYPES } from '@oaknational/sdk-codegen/api-schema';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
 
@@ -17,6 +17,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  * self-authenticating via HMAC signature and expires after 5 minutes.
  */
 export const DOWNLOAD_ASSET_TOOL_DEF = {
+  title: 'Download Asset',
   description: `Generate a short-lived, secure download link for a lesson asset.
 
 Returns a clickable URL valid for 5 minutes that downloads the asset
@@ -39,31 +40,23 @@ Do NOT use for:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Download Asset',
   },
   _meta: undefined,
 } as const;
 
 /**
- * JSON Schema for the download-asset tool inputs.
+ * Flat Zod shape for MCP SDK registration of the download-asset tool.
  *
- * The `type` enum is derived from the generated OpenAPI schema's
- * ASSET_TYPES constant to stay in sync with the API.
+ * Canonical Zod schema with `.describe()` and
+ * `.meta({ examples })` for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
-export const DOWNLOAD_ASSET_INPUT_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    lesson: {
-      type: 'string',
-      description: 'Lesson slug (e.g. "adding-fractions-with-the-same-denominator")',
-    },
-    type: {
-      type: 'string',
-      description: 'Asset type to download',
-      enum: [...ASSET_TYPES],
-      examples: ['slideDeck', 'worksheet', 'video'],
-    },
-  },
-  required: ['lesson', 'type'],
-} as const satisfies GenericToolInputJsonSchema;
+export const DOWNLOAD_ASSET_INPUT_SCHEMA: z.ZodRawShape = {
+  lesson: z
+    .string()
+    .describe('Lesson slug (e.g. "adding-fractions-with-the-same-denominator")')
+    .meta({ examples: ['adding-fractions-with-the-same-denominator'] }),
+  type: z
+    .enum([...ASSET_TYPES])
+    .describe('Asset type to download')
+    .meta({ examples: ['slideDeck', 'worksheet', 'video'] }),
+};

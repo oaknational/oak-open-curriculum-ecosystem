@@ -12,41 +12,42 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import request from 'supertest';
 import express from 'express';
-import type { IncomingMessage } from 'http';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { z } from 'zod';
 
-/**
- * Bridges Express Request to the shape MCP SDK's transport.handleRequest() expects.
- *
- * The MCP SDK expects `IncomingMessage & { auth?: AuthInfo }`. Express Request
- * extends IncomingMessage, but Clerk middleware adds an incompatible `auth`
- * property. This cast replaces Clerk's callable `auth` with `undefined`,
- * matching the production pattern in `createMcpHandler`.
- *
- * @param req - Express request (may have Clerk auth)
- * @returns Request cast to IncomingMessage with auth set to undefined
- */
-function createMcpTestRequest(req: express.Request): IncomingMessage {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Bridging Clerk (callable auth) → MCP SDK (AuthInfo | undefined) at test boundary
-  const mcpRequest = req as unknown as IncomingMessage & { auth?: undefined };
-  mcpRequest.auth = undefined;
-  return mcpRequest;
-}
-
 const ACCEPT_HEADER = 'application/json, text/event-stream';
+
+/** Zod schema for a JSON-RPC envelope from SSE. */
+const envelopeSchema = z.object({
+  result: z.unknown().optional(),
+  error: z.unknown().optional(),
+});
+
+/** Zod schema for a prompts/get result. */
+const messagesResultSchema = z.object({
+  messages: z.array(
+    z.object({
+      content: z.object({ text: z.string() }),
+    }),
+  ),
+});
+
+/** Zod schema for a prompts/list result. */
+const promptsListResultSchema = z.object({
+  prompts: z.array(z.object({ name: z.string() })),
+});
 
 /**
  * Parses an SSE response to extract the JSON-RPC envelope.
  */
-function parseSseEnvelope(raw: string): { result?: unknown; error?: unknown } {
+function parseSseEnvelope(raw: string): z.infer<typeof envelopeSchema> {
   const lines = raw.split('\n');
   for (const line of lines) {
     const trimmed = line.trim();
     if (trimmed.startsWith('data:')) {
       const jsonText = trimmed.slice('data:'.length).trimStart();
-      return JSON.parse(jsonText) as { result?: unknown; error?: unknown };
+      return envelopeSchema.parse(JSON.parse(jsonText));
     }
   }
   throw new Error('SSE payload missing data line');
@@ -85,8 +86,8 @@ async function createTestServerWithPrompt(): Promise<TestServer> {
       },
     },
     (args) => {
-      const topic: string = args.topic;
-      const category: string = args.category ?? 'none';
+      const topic = args.topic;
+      const category = args.category ?? 'none';
       return {
         messages: [
           {
@@ -105,8 +106,7 @@ async function createTestServerWithPrompt(): Promise<TestServer> {
   await mcpServer.connect(transport);
 
   app.post('/mcp', async (req, res) => {
-    const mcpRequest = createMcpTestRequest(req);
-    await transport.handleRequest(mcpRequest, res, req.body);
+    await transport.handleRequest(req, res, req.body);
   });
 
   return { app, mcpServer, transport };
@@ -148,7 +148,7 @@ describe('MCP registerPrompt with argsSchema (Integration)', () => {
 
       const envelope = parseSseEnvelope(response.text);
       expect(envelope.result).toBeDefined();
-      const result = envelope.result as { messages: { content: { text: string } }[] };
+      const result = messagesResultSchema.parse(envelope.result);
       expect(result.messages.length).toBeGreaterThan(0);
 
       // Verify the topic was received correctly (not a fallback value)
@@ -180,7 +180,7 @@ describe('MCP registerPrompt with argsSchema (Integration)', () => {
       expect(response.status).toBe(200);
 
       const envelope = parseSseEnvelope(response.text);
-      const result = envelope.result as { messages: { content: { text: string } }[] };
+      const result = messagesResultSchema.parse(envelope.result);
 
       expect(result.messages[0]?.content.text).toContain('fractions');
       expect(result.messages[0]?.content.text).toContain('none');
@@ -203,7 +203,7 @@ describe('MCP registerPrompt with argsSchema (Integration)', () => {
       expect(response.status).toBe(200);
 
       const envelope = parseSseEnvelope(response.text);
-      const result = envelope.result as { prompts: { name: string }[] };
+      const result = promptsListResultSchema.parse(envelope.result);
 
       const testPrompt = result.prompts.find((p) => p.name === 'test-prompt');
       expect(testPrompt).toBeDefined();

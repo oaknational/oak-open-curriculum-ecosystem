@@ -4,7 +4,6 @@ name: code-reviewer
 model: default
 description: Expert code review specialist for quality, security, and maintainability. Use proactively and immediately after writing or modifying code, completing features, fixing bugs, or refactoring. Invoke when you need comprehensive feedback on code changes, design patterns, or implementation quality.
 readonly: true
-is_background: true
 ---
 
 # Code Reviewer

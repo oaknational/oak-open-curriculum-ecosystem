@@ -39,7 +39,7 @@ describe('formatData', () => {
   });
 
   describe('structuredContent field (OpenAI Apps SDK support)', () => {
-    it('includes structuredContent with object data for widget access via window.openai.toolOutput', () => {
+    it('includes structuredContent with object data for widget access', () => {
       const data = { status: 200, data: { lessons: [] } };
       const result = formatData(data);
 

@@ -18,6 +18,11 @@ export const LIB_PACKAGE_IMPORTS = [
   '@oaknational/sentry-mcp',
 ] as const;
 
+export const DESIGN_PACKAGE_IMPORTS = [
+  '@oaknational/design-tokens-core',
+  '@oaknational/oak-design-tokens',
+] as const;
+
 export const SDK_PACKAGE_IMPORTS = [
   '@oaknational/curriculum-sdk',
   '@oaknational/sdk-codegen',
@@ -105,11 +110,10 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
   'import-x/no-internal-modules': 'off', // Allow internal module imports
   'import-x/no-relative-packages': 'error', // Disallow cross-package relative imports
 
-  // Ensure production code uses only declared dependencies
+  // Enforce manifest-complete imports everywhere.
   'import-x/no-extraneous-dependencies': [
     'error',
     {
-      // Allow dev dependencies only in test and config files
       devDependencies: false,
       optionalDependencies: false,
       peerDependencies: false,
@@ -146,16 +150,6 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
 };
 
 /**
- * Core test and config file rules
- * Allows dev dependencies and internal modules in test/config files while
- * keeping the cross-workspace boundary rules active.
- */
-export const coreTestConfigRules: Partial<Linter.RulesRecord> = {
-  'import-x/no-extraneous-dependencies': 'off',
-  'import-x/no-internal-modules': 'off',
-};
-
-/**
  * Foundation libraries may not depend on any other libraries.
  */
 export const FOUNDATION_LIB_PACKAGES = ['env-resolution', 'logger', 'search-contracts'] as const;
@@ -172,6 +166,7 @@ export const ADAPTER_LIB_PACKAGES = ['sentry-node', 'sentry-mcp'] as const;
 export const LIB_PACKAGES = [...FOUNDATION_LIB_PACKAGES, ...ADAPTER_LIB_PACKAGES] as const;
 
 export type LibPackage = (typeof LIB_PACKAGES)[number];
+export type DesignPackage = 'design-tokens-core' | 'oak-design-tokens';
 const SEARCH_CONTRACTS_LIB = 'search-contracts' as const;
 const LIB_SDK_BOUNDARY_MESSAGE =
   'Libraries cannot depend on SDKs unless ADR-041 documents an approved generated-surface exception.';
@@ -297,6 +292,99 @@ export function createLibBoundaryRules(libName: LibPackage): Partial<Linter.Rule
         name: '__filename',
         message:
           'Libraries must not access __filename directly. File paths must be injected as dependencies.',
+      },
+    ],
+  };
+}
+
+/**
+ * Generate boundary rules for design-token workspaces.
+ *
+ * Design workspaces may depend on core and library packages. The Oak token set
+ * may also depend on the shared design-token core workspace. Neither design
+ * workspace may depend on apps, SDKs, or tooling packages.
+ *
+ * @param designName - The current design workspace name
+ */
+export function createDesignBoundaryRules(designName: DesignPackage): Partial<Linter.RulesRecord> {
+  const createDesignRestrictionMessage = (
+    otherDesignPackage: (typeof DESIGN_PACKAGE_IMPORTS)[number],
+  ) =>
+    `Design workspace '${designName}' cannot depend on '${otherDesignPackage}'. Follow ADR-041's packages/design dependency direction.`;
+
+  const restrictedDesignImportPatterns =
+    designName === 'design-tokens-core'
+      ? createPackageSpecifierPatterns(
+          ['@oaknational/oak-design-tokens'],
+          createDesignRestrictionMessage('@oaknational/oak-design-tokens'),
+        )
+      : [];
+  const restrictedDesignPathZones =
+    designName === 'design-tokens-core'
+      ? [
+          {
+            target: './src/**' as const,
+            from: '../oak-design-tokens/**' as const,
+            message: createDesignRestrictionMessage('@oaknational/oak-design-tokens'),
+          },
+        ]
+      : [];
+
+  return {
+    'import-x/no-restricted-paths': [
+      'error',
+      {
+        zones: [
+          ...restrictedDesignPathZones,
+          {
+            target: './src/**' as const,
+            from: '../../../apps/**' as const,
+            message:
+              'Design workspaces cannot depend on apps. Tokens must remain reusable CSS artefact producers.',
+          },
+          {
+            target: './src/**' as const,
+            from: '../../../packages/sdks/**' as const,
+            message:
+              'Design workspaces cannot depend on SDKs. Tokens must stay outside schema/runtime application layers.',
+          },
+          {
+            target: './src/**' as const,
+            from: '../../../agent-tools/**' as const,
+            message: TOOLING_BOUNDARY_MESSAGE,
+          },
+          {
+            target: './src/**' as const,
+            from: '../../../packages/libs/**' as const,
+            message:
+              'Design workspaces cannot depend on libs. Tokens are CSS artefact producers with no runtime lib dependencies (ADR-148).',
+          },
+        ],
+      },
+    ],
+    'import-x/no-relative-packages': 'error',
+    '@typescript-eslint/no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            ...WORKSPACE_ALIAS_IMPORT_PATTERN,
+          },
+          ...restrictedDesignImportPatterns,
+          ...createPackageSpecifierPatterns(
+            SDK_PACKAGE_IMPORTS,
+            'Design workspaces cannot depend on SDKs. Tokens must stay outside schema/runtime application layers.',
+          ),
+          ...createPackageSpecifierPatterns(
+            APP_PACKAGE_IMPORTS,
+            'Design workspaces cannot depend on apps. Tokens must remain reusable CSS artefact producers.',
+          ),
+          ...createPackageSpecifierPatterns(TOOLING_PACKAGE_IMPORTS, TOOLING_BOUNDARY_MESSAGE),
+          ...createPackageSpecifierPatterns(
+            LIB_PACKAGE_IMPORTS,
+            'Design workspaces cannot depend on libs. Tokens are CSS artefact producers with no runtime lib dependencies (ADR-148).',
+          ),
+        ],
       },
     ],
   };

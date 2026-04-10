@@ -15,7 +15,7 @@
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
 import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
@@ -23,14 +23,12 @@ import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
 
 /**
- * Input schema for get-thread-progressions tool.
- * V1 has no parameters — returns the complete graph.
+ * Empty input schema for the get-thread-progressions tool (no parameters).
+ *
+ * Per MCP spec, no-input tools declare `{ "type": "object", "additionalProperties": false }`
+ * on the wire. An empty `ZodRawShape` produces this through the SDK's `z.toJSONSchema()`.
  */
-export const GET_THREAD_PROGRESSIONS_INPUT_SCHEMA = {
-  type: 'object',
-  properties: {},
-  additionalProperties: false,
-} as const;
+export const GET_THREAD_PROGRESSIONS_INPUT_SCHEMA: Record<string, never> = {};
 
 /**
  * Tool definition for get-thread-progressions.
@@ -39,6 +37,7 @@ export const GET_THREAD_PROGRESSIONS_INPUT_SCHEMA = {
  * Do NOT hide the graph in _meta — that would defeat the purpose.
  */
 export const GET_THREAD_PROGRESSIONS_TOOL_DEF = {
+  title: 'Get Thread Progressions',
   description: `Returns the Oak Curriculum thread progression graph.
 
 This instance-level graph shows ordered unit sequences within curriculum threads:
@@ -59,8 +58,6 @@ ${AGGREGATED_PREREQUISITE_GUIDANCE}
 
 Complements get-curriculum-model (which includes the schema-level property graph) with actual progression data.`,
 
-  inputSchema: GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
-
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
 
   annotations: {
@@ -68,7 +65,6 @@ Complements get-curriculum-model (which includes the schema-level property graph
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Get Thread Progressions',
   },
 
   _meta: undefined,

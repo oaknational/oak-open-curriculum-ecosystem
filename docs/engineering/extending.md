@@ -99,5 +99,5 @@ Regardless of what you are adding:
 - **Types flow from the schema** — Do not create ad-hoc types; derive from generated contracts
 - **Fail fast** — Validate inputs, return `Result<T, E>`, never silently ignore errors
 - **Document** — TSDoc on all public interfaces, update the workspace README, create ADRs for significant decisions
-- **Run quality gates** — `pnpm make` after changes, `pnpm qg` before pushing
+- **Run quality gates** — `pnpm make` after changes, `pnpm check` before pushing
 - **See [Build System](./build-system.md)** for the single source of truth on commands and gate ordering

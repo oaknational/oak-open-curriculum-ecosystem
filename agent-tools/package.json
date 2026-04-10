@@ -5,6 +5,7 @@
   "description": "TypeScript tooling workspace for agent operational CLIs",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf dist .turbo",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
@@ -15,6 +16,12 @@
     "codex-reviewer-resolve": "tsx src/bin/codex-reviewer-resolve.ts"
   },
   "devDependencies": {
-    "@oaknational/eslint-plugin-standards": "workspace:*"
+    "@oaknational/eslint-plugin-standards": "workspace:*",
+    "@types/node": "^25.5.2",
+    "eslint": "^10.2.0",
+    "globals": "^17.4.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5",
+    "vitest": "^4.1.3"
   }
 }

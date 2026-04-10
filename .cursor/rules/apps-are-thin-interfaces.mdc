@@ -1,7 +1,0 @@
----
-description: Apps are thin interfaces over SDK capabilities — never duplicate domain logic
-globs:
-alwaysApply: true
----
-
-Read and follow `.agent/rules/apps-are-thin-interfaces.md`.

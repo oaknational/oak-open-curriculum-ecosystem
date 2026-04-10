@@ -6,7 +6,7 @@ import { esSearch, type EsSearchRequest } from '../elastic-http';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
 import type { SequenceFacet, SearchFacets } from './types';
 
-interface FetchSequenceFacetsParams {
+export interface FetchSequenceFacetsParams {
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
 }

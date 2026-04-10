@@ -19,7 +19,7 @@ import {
   type SequenceFacetProcessingMetrics,
 } from './indexing/sequence-facet-index';
 import { ingestLogger } from './logger';
-import { emitSequenceFacetEvents, resolveSequenceSlugFromEntry } from './index-oak-helpers';
+import { emitSequenceFacetEvents, resolveSequenceSlugFromEntry } from './sequence-entry-helpers';
 import { buildKeyStageOps } from './index-oak-keystage-ops';
 import {
   createDataIntegrityCollector,

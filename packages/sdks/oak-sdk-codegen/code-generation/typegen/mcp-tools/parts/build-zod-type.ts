@@ -4,6 +4,12 @@ import {
   isYearParameterRequiringNormalisation,
 } from './year-normalisation.js';
 
+/**
+ * Build a z.preprocess() string that normalises year parameters from numeric
+ * to canonical string format (M1-S002).
+ *
+ * @returns Zod preprocess string wrapping a z.enum of canonical year values
+ */
 function buildCanonicalYearPreprocess(): string {
   const enumValues = CANONICAL_YEAR_VALUES.map((value) => JSON.stringify(value)).join(', ');
   return `z.preprocess((val) => typeof val === 'number' && Number.isInteger(val) && val >= 1 && val <= 11 ? String(val) : val, z.enum([${enumValues}] as const))`;
@@ -16,12 +22,17 @@ function buildCanonicalYearPreprocess(): string {
  * - Type-appropriate schemas (z.string(), z.number(), etc.)
  * - z.enum() for allowed values (proper JSON Schema conversion)
  * - .describe() when description is provided (preserves metadata for MCP clients)
+ * - .meta() with examples in flat context when example is defined (enables AI
+ *   agents to see parameter examples via Zod 4 to JSON Schema conversion)
  * - M1-S002 year normalisation for known upstream schema inconsistency
+ *
+ * Year parameters using z.preprocess() skip .meta() because Zod 4's
+ * toJSONSchema(io:'input') strips examples from transforming schemas.
  *
  * @param meta - Parameter metadata from OpenAPI schema
  * @param paramName - Optional parameter name for name-based normalisation logic
  * @param context - Schema context ('flat' for MCP input, 'nested' for SDK invoke)
- * @returns Zod type string (e.g., 'z.string().describe("User name")')
+ * @returns Zod type string (e.g., `z.string().describe("...").meta(\{ examples: ["ks1"] \})`)
  */
 export function buildZodType(
   meta: ParamMetadata,
@@ -30,7 +41,14 @@ export function buildZodType(
 ): string {
   let base: string;
 
-  if (context === 'flat' && paramName === 'year' && isYearParameterRequiringNormalisation(meta)) {
+  // Year normalisation: z.preprocess wraps the entire expression.
+  // .meta() is skipped because Zod 4's toJSONSchema(io:'input') strips
+  // `examples` from transforming schemas. The enum constraint provides
+  // sufficient guidance. See ws3-off-the-shelf-mcp-sdk-adoption.plan.md.
+  const isYearPreprocess =
+    context === 'flat' && paramName === 'year' && isYearParameterRequiringNormalisation(meta);
+
+  if (isYearPreprocess) {
     base = buildCanonicalYearPreprocess();
   } else if (meta.allowedValues && meta.allowedValues.length > 0) {
     // Use z.enum() for proper JSON Schema conversion via zodToJsonSchema
@@ -61,10 +79,14 @@ export function buildZodType(
     }
   }
 
-  // Add .describe() if description exists - enables MCP SDK to preserve
-  // parameter descriptions when converting Zod to JSON Schema
   if (meta.description) {
-    return `${base}.describe(${JSON.stringify(meta.description)})`;
+    base = `${base}.describe(${JSON.stringify(meta.description)})`;
+  }
+
+  // Attach .meta({ examples }) for flat MCP schemas when examples exist.
+  // Enables AI agents to see parameter examples via Zod 4 → JSON Schema conversion.
+  if (context === 'flat' && meta.example !== undefined && !isYearPreprocess) {
+    base = `${base}.meta({ examples: [${JSON.stringify(meta.example)}] })`;
   }
 
   return base;

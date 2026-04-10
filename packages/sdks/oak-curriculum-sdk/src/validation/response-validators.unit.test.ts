@@ -5,6 +5,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { validateCurriculumResponse } from './curriculum-response-validators.js';
+import { lessonSummarySchema, type SearchLessonSummary } from '../public/search.js';
 
 describe('validateCurriculumResponse', () => {
   describe('for GET /lessons/{lesson}/transcript response', () => {
@@ -23,7 +24,7 @@ describe('validateCurriculumResponse', () => {
       expect(result.ok).toBe(true);
       if (result.ok) {
         expect(result.value).toEqual(response);
-        expect(result.value).not.toHaveProperty('canonicalUrl');
+        expect(result.value).not.toHaveProperty('oakUrl');
       }
     });
 
@@ -77,11 +78,11 @@ describe('validateCurriculumResponse', () => {
       }
     });
 
-    it('should preserve canonicalUrl when it is already present in transcript payloads', () => {
+    it('should preserve oakUrl when it is already present in transcript payloads', () => {
       const response = {
         transcript: 'Transcript text',
         vtt: 'WEBVTT content',
-        canonicalUrl: 'https://www.thenational.academy/teachers/lessons/add-two-numbers',
+        oakUrl: 'https://www.thenational.academy/teachers/lessons/add-two-numbers',
       };
 
       const result = validateCurriculumResponse(path, method, statusCode, response);
@@ -98,37 +99,10 @@ describe('validateCurriculumResponse', () => {
     const method = 'get';
     const statusCode = 200;
 
-    it('should validate valid lesson summary response without augmenting it', () => {
-      const response = {
-        lessonTitle: 'Introduction to Algebra',
-        unitSlug: 'algebra-basics',
-        unitTitle: 'Algebra Basics',
-        subjectSlug: 'maths',
-        subjectTitle: 'Mathematics',
-        keyStageSlug: 'ks3',
-        keyStageTitle: 'Key Stage 3',
-        lessonKeywords: [{ keyword: 'algebra', description: 'Branch of mathematics' }],
-        keyLearningPoints: [{ keyLearningPoint: 'Understanding variables' }],
-        misconceptionsAndCommonMistakes: [
-          { misconception: 'Variables are always x', response: 'Variables can be any letter' },
-        ],
-        teacherTips: [{ teacherTip: 'Use visual aids' }],
-        contentGuidance: null,
-        supervisionLevel: null,
-        downloadsAvailable: true,
-      };
-
-      const result = validateCurriculumResponse(path, method, statusCode, response);
-
-      expect(result.ok).toBe(true);
-      if (result.ok) {
-        expect(result.value).toEqual(response);
-        expect(result.value).not.toHaveProperty('canonicalUrl');
-      }
-    });
-
-    it('should validate response with optional fields omitted', () => {
-      const response = {
+    function buildLessonSummaryResponse(
+      overrides: Partial<SearchLessonSummary> = {},
+    ): SearchLessonSummary {
+      return lessonSummarySchema.parse({
         lessonTitle: 'Introduction to Algebra',
         unitSlug: 'algebra-basics',
         unitTitle: 'Algebra Basics',
@@ -143,30 +117,59 @@ describe('validateCurriculumResponse', () => {
         contentGuidance: null,
         supervisionLevel: null,
         downloadsAvailable: false,
-        // pupilLessonOutcome is optional
-      };
+        canonicalUrl:
+          'https://www.thenational.academy/teachers/programmes/maths-secondary-ks3/units/algebra-basics/lessons/introduction-to-algebra',
+        oakUrl: 'https://www.thenational.academy/teachers/lessons/introduction-to-algebra',
+        ...overrides,
+      });
+    }
+
+    it('should validate valid lesson summary response without augmenting it', () => {
+      const response = buildLessonSummaryResponse({
+        lessonKeywords: [{ keyword: 'algebra', description: 'Branch of mathematics' }],
+        keyLearningPoints: [{ keyLearningPoint: 'Understanding variables' }],
+        misconceptionsAndCommonMistakes: [
+          { misconception: 'Variables are always x', response: 'Variables can be any letter' },
+        ],
+        teacherTips: [{ teacherTip: 'Use visual aids' }],
+        downloadsAvailable: true,
+      });
 
       const result = validateCurriculumResponse(path, method, statusCode, response);
 
       expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toEqual(response);
+      }
+    });
+
+    it('should validate response with optional fields omitted', () => {
+      const response = buildLessonSummaryResponse({
+        lessonKeywords: [],
+        keyLearningPoints: [],
+        misconceptionsAndCommonMistakes: [],
+        teacherTips: [],
+        downloadsAvailable: false,
+        // pupilLessonOutcome is optional
+      });
+
+      const result = validateCurriculumResponse(path, method, statusCode, response);
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toEqual(response);
+      }
     });
 
     it('should reject response with invalid array types', () => {
       const response = {
-        lessonTitle: 'Introduction to Algebra',
-        unitSlug: 'algebra-basics',
-        unitTitle: 'Algebra Basics',
-        subjectSlug: 'maths',
-        subjectTitle: 'Mathematics',
-        keyStageSlug: 'ks3',
-        keyStageTitle: 'Key Stage 3',
+        ...buildLessonSummaryResponse({
+          keyLearningPoints: [],
+          misconceptionsAndCommonMistakes: [],
+          teacherTips: [],
+          downloadsAvailable: true,
+        }),
         lessonKeywords: 'not an array', // Should be array
-        keyLearningPoints: [],
-        misconceptionsAndCommonMistakes: [],
-        teacherTips: [],
-        contentGuidance: null,
-        supervisionLevel: null,
-        downloadsAvailable: true,
       };
 
       const result = validateCurriculumResponse(path, method, statusCode, response);
@@ -178,24 +181,30 @@ describe('validateCurriculumResponse', () => {
       }
     });
 
-    it('should preserve canonicalUrl when it is already present in summary payloads', () => {
-      const response = {
-        lessonTitle: 'Introduction to Algebra',
-        unitSlug: 'algebra-basics',
-        unitTitle: 'Algebra Basics',
-        subjectSlug: 'maths',
-        subjectTitle: 'Mathematics',
-        keyStageSlug: 'ks3',
-        keyStageTitle: 'Key Stage 3',
+    it('should reject response missing required canonical and Oak URLs', () => {
+      const { canonicalUrl, oakUrl, ...response } = buildLessonSummaryResponse();
+
+      expect(canonicalUrl).toBeTruthy();
+      expect(oakUrl).toBeTruthy();
+
+      const result = validateCurriculumResponse(path, method, statusCode, response);
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        const issuePaths = result.issues.map((issue) => issue.path.join('.'));
+        expect(issuePaths).toContain('canonicalUrl');
+        expect(issuePaths).toContain('oakUrl');
+      }
+    });
+
+    it('should preserve canonical and Oak URLs when they are already present in summary payloads', () => {
+      const response = buildLessonSummaryResponse({
         lessonKeywords: [],
         keyLearningPoints: [],
         misconceptionsAndCommonMistakes: [],
         teacherTips: [],
-        contentGuidance: null,
-        supervisionLevel: null,
         downloadsAvailable: true,
-        canonicalUrl: 'https://www.thenational.academy/teachers/lessons/introduction-to-algebra',
-      };
+      });
 
       const result = validateCurriculumResponse(path, method, statusCode, response);
 

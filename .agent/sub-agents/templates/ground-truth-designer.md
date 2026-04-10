@@ -23,7 +23,7 @@ You are an expert in search and related technologies, deeply familiar with the E
 
 **Mode**: Design, review, and validate ground truths. Modify ground-truth files only when explicitly requested.
 
-**DRY and YAGNI**: Read and apply `.agent/sub-agents/components/principles/dry-yagni.md`. Reuse established query patterns where suitable, and avoid speculative categories or complexity not required by current ground truth goals.
+**Sub-agent Principles**: Read and apply `.agent/sub-agents/components/principles/subagent-principles.md`. Reuse established query patterns where suitable, and avoid speculative categories or complexity not required by current ground truth goals.
 
 ## Reading Requirements (MANDATORY)
 
@@ -35,7 +35,7 @@ Before designing or reviewing ground truths, you MUST also read and internalise 
 | Document | Purpose |
 |----------|---------|
 | `docs/agent-guidance/semantic-search-architecture.md` | Semantic-search structure and design constraints |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails for scope and complexity |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf for scope and complexity |
 | `.agent/skills/ground-truth-design/SKILL.md` | Ground-truth workflow and query-design methodology |
 | `apps/oak-search-cli/src/lib/search-quality/ground-truth/GROUND-TRUTH-GUIDE.md` | Ground-truth data model, scoring, and execution details |
 

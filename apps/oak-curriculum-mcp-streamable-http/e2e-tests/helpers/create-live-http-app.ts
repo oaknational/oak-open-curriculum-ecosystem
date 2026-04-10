@@ -34,6 +34,7 @@ export async function createLiveHttpApp(options?: CreateLiveHttpAppOptions): Pro
   const app = await createApp({
     runtimeConfig,
     observability,
+    getWidgetHtml: () => '<!doctype html><html><body>live-widget</body></html>',
     toolHandlerOverrides: options?.overrides,
   });
 

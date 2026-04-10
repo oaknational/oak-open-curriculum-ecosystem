@@ -1,6 +1,0 @@
----
-description: Fail FAST with helpful error messages. Never fail silently.
-alwaysApply: true
----
-
-Read and follow `.agent/rules/fail-fast-with-helpful-errors.md`.

@@ -6,7 +6,7 @@
  * gracefully (if one scope errors, still returns the others).
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { formatError, type UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
 import type {
   SearchRetrievalService,

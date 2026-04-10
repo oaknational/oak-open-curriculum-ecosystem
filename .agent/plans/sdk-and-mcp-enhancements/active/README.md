@@ -2,19 +2,46 @@
 
 Executable plans that are in progress now.
 
-- [mcp-app-extension-migration.plan.md](mcp-app-extension-migration.plan.md) — **PRIMARY**: Migration from ChatGPT-specific widget coupling to MCP Apps open standard (SEP-1865). WS1-WS2 complete. Widget UI **temporarily disabled** for merge to main (2026-03-30). WS3 (client rewrite) and WS4 (search UI) pending.
-- [ws2-app-runtime-migration.plan.md](ws2-app-runtime-migration.plan.md) — **WS2 child plan**: ✅ Complete (2026-03-26). App runtime migration with 7 specialist reviews.
+## Umbrella
 
-Completed and archived:
+- [mcp-app-extension-migration.plan.md](mcp-app-extension-migration.plan.md) —
+  **PRIMARY** umbrella for the MCP Apps migration.
+- [ws3-widget-clean-break-rebuild.plan.md](ws3-widget-clean-break-rebuild.plan.md) —
+  **ACTIVE CHILD**. Clean-break React MCP App rebuild.
 
-- [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](../archive/completed/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md) — Superseded 2026-03-25 by the migration plan above. Documentation-only activation (Phases 0-2, 4 complete; Phase 3 superseded by WS1-WS4).
-- [oak-preview-mcp-snagging.execution.plan.md](../archive/completed/oak-preview-mcp-snagging.execution.plan.md) — Complete (all 4 phases + sequence keyStage filter fix + suggestion URL schema fix). Archived 2026-03-11. Post-deploy reindex is an operational step, not a code task.
-- [asset-download-proxy.plan.md](../archive/completed/asset-download-proxy.plan.md) — Complete (WS1-WS9, ADR-126 written, 715 tests pass). Archived 2026-03-06.
-- [sitemap-driven-canonical-urls.plan.md](../archive/completed/sitemap-driven-canonical-urls.plan.md) — Complete (all 4 phases + follow-up unified slug derivation). Archived 2026-03-06.
-- [auth-safety-correction.plan.md](../current/auth-safety-correction.plan.md) — Archived/superseded on 5 March 2026; C8 is now a small fail-fast auth metadata invariant hardening task in [roadmap.md](../roadmap.md).
-- [ws1-get-curriculum-model.plan.md](../archive/completed/ws1-get-curriculum-model.plan.md) — Complete (WS1-WS6 + follow-ups).
-- [merge-readiness.plan.md](../archive/completed/merge-readiness.plan.md) — Branch merged 2026-03-02.
+## Pre-Merge (must complete before PR #76 merges)
 
-Next-up queue: [current/README.md](../current/README.md)
-Later backlog: [future/README.md](../future/README.md)
-Collection roadmap: [roadmap.md](../roadmap.md)
+- [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
+  **ACTIVE**. Local production-startup recovery, warning cleanup, contamination
+  check, aggregate gates, and closeout commits are in; this remains the
+  merge-handoff reference until the branch push and deployed preview recheck
+  land.
+- [vercel-mcp-build-warnings-and-bootstrap.plan.md](vercel-mcp-build-warnings-and-bootstrap.plan.md) —
+  **ACTIVE** (Phase 0 baseline complete; deploy verification pending). Local
+  fixes for preview bootstrap, build warnings, and the HTTP dev contract are in
+  place; remaining work is fresh preview/build-log confirmation for
+  `dist/oak-banner.html` startup plus the enumerated warning classes.
+
+## Post-Merge
+
+- [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
+  **PENDING**. Interactive user-search MCP App view and helper-tool flow.
+  Builds on the live React foundation from Phase 4.5.
+- [misconception-graph-mcp-surface.plan.md](misconception-graph-mcp-surface.plan.md) —
+  **PENDING**. Expose misconception graph as MCP resource + tool.
+
+## Completed This Branch (latest archive 2026-04-10)
+
+All archived to `archive/completed/`:
+
+- Phases 0–4, server-info branding, off-the-shelf SDK adoption,
+  MCP Apps SDK audit, widget pipeline idiomatic alignment.
+- Embed-widget HTML codegen crash fix archived on 2026-04-10
+  (ADR-156).
+- Phase 4.5 live React + metadata shape wrap-up archived on 2026-04-09.
+
+## Navigation
+
+- Next-up queue: [current/README.md](../current/README.md)
+- Later backlog: [future/README.md](../future/README.md)
+- Collection roadmap: [roadmap.md](../roadmap.md)

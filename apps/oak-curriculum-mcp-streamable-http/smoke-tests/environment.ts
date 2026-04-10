@@ -81,8 +81,17 @@ export function restoreEnv(snapshot: EnvSnapshot): void {
  */
 function restoreKey(key: keyof EnvSnapshot, value: string | undefined): void {
   if (value === undefined) {
-    // eslint-disable-next-line no-restricted-properties -- Architectural debt: smoke tests mutate process.env (see TSDoc above)
-    Reflect.deleteProperty(process.env, key);
+    if (key === 'OAK_CURRICULUM_MCP_USE_STUB_TOOLS') {
+      delete process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS;
+      return;
+    }
+
+    if (key === 'OAK_API_KEY') {
+      delete process.env.OAK_API_KEY;
+      return;
+    }
+
+    delete process.env.PORT;
   } else {
     process.env[key] = value;
   }

@@ -7,15 +7,27 @@ import {
   type Logger,
   type LogContextInput,
   type LogSink,
+  type Timer,
 } from '@oaknational/logger';
 import { createNodeStdoutSink } from '@oaknational/logger/node';
 import {
   getActiveSpanContextSnapshot,
   type ActiveSpanContextSnapshot,
 } from '@oaknational/observability';
-import type { Request, Response, ErrorRequestHandler } from 'express';
+import type { Response, ErrorRequestHandler } from 'express';
 
 import type { RuntimeConfig } from '../runtime-config.js';
+
+interface HttpLoggingLocals {
+  readonly correlationId?: string;
+  readonly timer?: Timer;
+}
+
+interface CorrelationIdCarrier {
+  readonly locals?: HttpLoggingLocals;
+}
+
+type HttpLoggingResponse = Response<unknown, HttpLoggingLocals>;
 
 export interface HttpLoggerOptions {
   readonly name?: string;
@@ -101,8 +113,9 @@ export function createChildLogger(parentLogger: Logger, correlationId: string): 
  *
  * @public
  */
-export function extractCorrelationId(res: Response): string | undefined {
-  return res.locals?.correlationId;
+export function extractCorrelationId(res: CorrelationIdCarrier): string | undefined {
+  const correlationId = res.locals?.correlationId;
+  return typeof correlationId === 'string' ? correlationId : undefined;
 }
 
 /** Builds the log context shared between observability capture and structured log. */
@@ -138,7 +151,7 @@ export function createEnrichedErrorLogger(
   logger: Logger,
   observability?: ErrorLoggerObservability,
 ): ErrorRequestHandler {
-  return (err: Error, req: Request, res: Response, next): void => {
+  return (err: Error, req, res: HttpLoggingResponse, next): void => {
     const correlationId = res.locals.correlationId;
     const timer = res.locals.timer;
     const duration = timer?.end();

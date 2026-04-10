@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import type { Request, Response } from 'express';
+import { createMockExpressRequest, createMockExpressResponse } from '../../test-helpers/fakes.js';
 import { createAuthLogContext } from './auth-response-helpers.js';
 
 describe('createAuthLogContext', () => {
@@ -14,18 +14,16 @@ describe('createAuthLogContext', () => {
    * Helper to create minimal Express mock objects
    */
   function createMocks(options: { correlationId?: string } = {}) {
-    const req = {
+    const req = createMockExpressRequest({
       method: 'POST',
       path: '/mcp',
-    } as Partial<Request>;
+    });
+    const res = createMockExpressResponse();
+    res.locals = {
+      correlationId: options.correlationId ?? 'test-correlation-id-123',
+    };
 
-    const res = {
-      locals: {
-        correlationId: options.correlationId ?? 'test-correlation-id-123',
-      },
-    } as Partial<Response>;
-
-    return { req: req as Request, res: res as Response };
+    return { req, res };
   }
 
   it('returns base context with method, path, and correlationId', () => {
@@ -59,18 +57,16 @@ describe('createAuthLogContext', () => {
   });
 
   it('handles different request methods and paths', () => {
-    const req = {
+    const req = createMockExpressRequest({
       method: 'GET',
       path: '/api/status',
-    } as Partial<Request>;
+    });
+    const res = createMockExpressResponse();
+    res.locals = {
+      correlationId: 'another-correlation-id',
+    };
 
-    const res = {
-      locals: {
-        correlationId: 'another-correlation-id',
-      },
-    } as Partial<Response>;
-
-    const context = createAuthLogContext(req as Request, res as Response);
+    const context = createAuthLogContext(req, res);
 
     expect(context).toEqual({
       method: 'GET',
@@ -108,16 +104,14 @@ describe('createAuthLogContext', () => {
   });
 
   it('handles missing correlationId in res.locals', () => {
-    const req = {
+    const req = createMockExpressRequest({
       method: 'POST',
       path: '/mcp',
-    } as Partial<Request>;
+    });
+    const res = createMockExpressResponse();
+    res.locals = {};
 
-    const res = {
-      locals: {},
-    } as Partial<Response>;
-
-    const context = createAuthLogContext(req as Request, res as Response);
+    const context = createAuthLogContext(req, res);
 
     expect(context).toEqual({
       method: 'POST',

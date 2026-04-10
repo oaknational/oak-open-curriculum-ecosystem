@@ -228,21 +228,21 @@ describe('appendToolEnhancements', () => {
 
       expect(result).toContain('Base description');
       expect(result).toContain('thenational.academy');
-      expect(result).toContain('canonicalUrl');
+      expect(result).toContain('oakUrl');
     });
 
     it('appends download guidance for get-key-stages-subject-assets', () => {
       const result = appendToolEnhancements('Base description', 'get-key-stages-subject-assets');
 
       expect(result).toContain('thenational.academy');
-      expect(result).toContain('canonicalUrl');
+      expect(result).toContain('oakUrl');
     });
 
     it('appends download guidance for get-sequences-assets', () => {
       const result = appendToolEnhancements('Base description', 'get-sequences-assets');
 
       expect(result).toContain('thenational.academy');
-      expect(result).toContain('canonicalUrl');
+      expect(result).toContain('oakUrl');
     });
 
     it('does not append asset guidance to unrelated tools', () => {

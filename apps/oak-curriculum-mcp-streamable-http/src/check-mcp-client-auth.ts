@@ -123,7 +123,9 @@ export function checkMcpClientAuth(
 
   logger.info('MCP client authentication successful', {
     toolName,
-    userId,
+    clientId: authInfo.clientId,
+    scopeCount: authInfo.scopes.length,
+    hasUserContext: typeof userId === 'string',
   });
 
   return undefined;

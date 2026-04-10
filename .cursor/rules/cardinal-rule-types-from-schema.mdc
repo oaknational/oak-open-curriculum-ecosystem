@@ -1,6 +1,0 @@
----
-description: ALL types flow from the OpenAPI schema via pnpm sdk-codegen. Cardinal rule.
-alwaysApply: true
----
-
-Read and follow `.agent/rules/cardinal-rule-types-from-schema.md`.

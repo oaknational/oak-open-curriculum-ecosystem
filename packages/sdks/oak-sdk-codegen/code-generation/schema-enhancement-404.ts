@@ -32,8 +32,9 @@ interface Legitimate404Descriptor {
  * is updated.
  *
  * @remarks
- * As of 2026-03-19 the upstream schema documents 404 for GET /lessons/{lesson}/transcript,
- * so the transcript decorator has been removed. The infrastructure remains for future use.
+ * As of 2026-03-19 the upstream schema documents 404 for the lesson transcript
+ * endpoint, so the transcript decorator has been removed. The infrastructure
+ * remains for future use.
  */
 export const ENDPOINTS_WITH_LEGITIMATE_404S: readonly Legitimate404Descriptor[] = [] as const;
 

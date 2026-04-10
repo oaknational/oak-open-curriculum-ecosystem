@@ -65,7 +65,7 @@ export type ExamBoard = z.infer<typeof examBoardSchema>;
  *
  * @remarks
  * Structure differs from API UnitSummaryResponseSchema:
- * - Missing: phaseSlug, subjectSlug, notes, categories, canonicalUrl
+ * - Missing: phaseSlug, subjectSlug, notes, categories, canonicalUrl, oakUrl
  * - Added: examBoards (KS4 only)
  * - Required: description (optional in API), year as number or "All years"
  */

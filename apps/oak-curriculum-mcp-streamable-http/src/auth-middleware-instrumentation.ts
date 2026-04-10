@@ -8,6 +8,10 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import type { Logger, JsonObject } from '@oaknational/logger';
 
 const PENDING_LOG_DELAY_MS = 5000;
+interface AuthInstrumentationLocals {
+  readonly correlationId?: string;
+}
+type AuthInstrumentationResponse = Response<unknown, AuthInstrumentationLocals>;
 
 /**
  * Creates a child logger with auth-specific context.
@@ -16,12 +20,8 @@ export function createAuthScopedLogger(
   parentLog: Logger,
   name: string,
   req: Request,
-  res: Response,
+  res: AuthInstrumentationResponse,
 ): Logger {
-  if (typeof parentLog.child !== 'function') {
-    return parentLog;
-  }
-
   const correlationId = res.locals.correlationId;
   const context: JsonObject = {
     scope: 'auth',
@@ -30,6 +30,10 @@ export function createAuthScopedLogger(
     path: req.path,
     ...(typeof correlationId === 'string' && correlationId.length > 0 ? { correlationId } : {}),
   };
+
+  if (typeof parentLog.child !== 'function') {
+    return parentLog;
+  }
 
   return parentLog.child(context);
 }
@@ -94,7 +98,7 @@ export function createWrappedNext(
  * Logs if response closes before middleware calls next().
  */
 export function logEarlyResponseClose(
-  res: Response,
+  res: AuthInstrumentationResponse,
   log: Logger,
   name: string,
   startedAt: number,
@@ -118,7 +122,7 @@ export function logEarlyResponseClose(
 export function executeMiddleware(
   middleware: RequestHandler,
   req: Request,
-  res: Response,
+  res: AuthInstrumentationResponse,
   next: NextFunction,
   log: Logger,
   name: string,
@@ -168,7 +172,7 @@ export function instrumentMiddleware(
   middleware: RequestHandler,
   parentLog: Logger,
 ): RequestHandler {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return (req: Request, res: AuthInstrumentationResponse, next: NextFunction): void => {
     const log = createAuthScopedLogger(parentLog, name, req, res);
     const startedAt = Date.now();
     log.debug(`${name} start`);

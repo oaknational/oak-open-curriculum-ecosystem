@@ -5,6 +5,7 @@ import {
   CLAUDE_SETTINGS_PATH,
   getClaudeHookPortabilityIssues,
   getReviewerAdapterParityIssues,
+  getSkillPermissionIssues,
   HOOK_POLICY_PATH,
   isClaudeHookWired,
   isClaudeHookWiredInText,
@@ -24,12 +25,16 @@ const documentedSurfaceMatrix = `# Cross-Platform Agent Surface Matrix
 
 | Surface | Cursor | Claude Code | Gemini CLI | GitHub Copilot | Codex | \`.agents/\` |
 | ------- | ------ | ----------- | ---------- | -------------- | ----- | ---------- |
-| **Hooks** | unsupported | \`.claude/settings.json\` (machine-local, gitignored \`PreToolUse\`) | unsupported | unsupported | unsupported | unsupported |
+| **Hooks** | unsupported | \`.claude/settings.json\` (tracked project \`PreToolUse\`) | unsupported | unsupported | unsupported | unsupported |
 
 Claude Code currently has native \`PreToolUse\` activation for Bash
-commands via the machine-local gitignored \`.claude/settings.json\`,
+commands via the tracked project \`.claude/settings.json\`,
 backed by the canonical policy in \`.agent/hooks/policy.json\` and the
 repo-local runtime script \`scripts/check-blocked-patterns.mjs\`.
+
+## Policy Spine
+
+override | prune | block
 `;
 
 describe('isClaudeHookWired', () => {
@@ -55,7 +60,7 @@ describe('isClaudeHookWired', () => {
 });
 
 describe('isClaudeHookWiredInText', () => {
-  it('finds the Bash PreToolUse command in machine-local settings text', () => {
+  it('finds the Bash PreToolUse command in tracked project settings text', () => {
     const claudeSettingsText = `{
   "hooks": {
     "PreToolUse": [
@@ -97,22 +102,27 @@ describe('isClaudeHookWiredInText', () => {
 });
 
 describe('surfaceMatrixDescribesClaudeHook', () => {
-  it('requires the machine-local gitignored contract to be documented', () => {
+  it('requires the tracked project contract to be documented', () => {
     expect(surfaceMatrixDescribesClaudeHook(documentedSurfaceMatrix)).toBe(true);
 
     expect(
       surfaceMatrixDescribesClaudeHook(
-        documentedSurfaceMatrix.replace(
-          '(machine-local, gitignored `PreToolUse`)',
-          '(`PreToolUse`)',
-        ),
+        documentedSurfaceMatrix.replace('(tracked project `PreToolUse`)', '(`PreToolUse`)'),
+      ),
+    ).toBe(false);
+  });
+
+  it('requires Policy Spine semantics to be documented as well', () => {
+    expect(
+      surfaceMatrixDescribesClaudeHook(
+        documentedSurfaceMatrix.replace('override | prune | block', 'override | prune'),
       ),
     ).toBe(false);
   });
 });
 
 describe('getClaudeHookPortabilityIssues', () => {
-  it('allows clean clones to omit the machine-local Claude settings file', () => {
+  it('fails when the tracked Claude settings file is missing', () => {
     expect(
       getClaudeHookPortabilityIssues({
         hookPolicy: supportedHookPolicy,
@@ -120,10 +130,12 @@ describe('getClaudeHookPortabilityIssues', () => {
         claudeSettingsExists: false,
         surfaceMatrix: documentedSurfaceMatrix,
       }),
-    ).toStrictEqual([]);
+    ).toContain(
+      '.agent/hooks/policy.json: Claude Code is marked supported but tracked project .claude/settings.json is missing',
+    );
   });
 
-  it('allows a present machine-local Claude settings file when the text wiring is correct', () => {
+  it('allows a present tracked Claude settings file when the text wiring is correct', () => {
     expect(
       getClaudeHookPortabilityIssues({
         hookPolicy: supportedHookPolicy,
@@ -148,7 +160,7 @@ describe('getClaudeHookPortabilityIssues', () => {
     ).toStrictEqual([]);
   });
 
-  it('fails when the machine-local Claude settings text exists but does not wire the hook', () => {
+  it('fails when the tracked Claude settings text exists but does not wire the hook', () => {
     expect(
       getClaudeHookPortabilityIssues({
         hookPolicy: supportedHookPolicy,
@@ -246,5 +258,43 @@ describe('getReviewerAdapterParityIssues', () => {
         codexAgentFiles: ['.codex/agents/code-reviewer.toml'],
       }),
     ).toStrictEqual([]);
+  });
+});
+
+describe('getSkillPermissionIssues', () => {
+  it('reports a missing Skill() permission when a Claude command adapter exists without a settings entry', () => {
+    expect(
+      getSkillPermissionIssues({
+        claudeCommandFiles: ['.claude/commands/jc-start-right-quick.md'],
+        claudeSettingsPermissions: ['Skill(jc-plan)', 'Skill(jc-plan:*)'],
+      }),
+    ).toContainEqual(expect.stringContaining('jc-start-right-quick'));
+  });
+
+  it('returns no issues when every Claude command adapter has a matching Skill() permission', () => {
+    expect(
+      getSkillPermissionIssues({
+        claudeCommandFiles: ['.claude/commands/jc-start-right-quick.md'],
+        claudeSettingsPermissions: ['Skill(jc-start-right-quick)', 'Skill(jc-start-right-quick:*)'],
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('does not require the wildcard variant — only the base Skill() entry', () => {
+    expect(
+      getSkillPermissionIssues({
+        claudeCommandFiles: ['.claude/commands/jc-gates.md'],
+        claudeSettingsPermissions: ['Skill(jc-gates)'],
+      }),
+    ).toStrictEqual([]);
+  });
+
+  it('ignores non-Skill permissions in the allow list', () => {
+    expect(
+      getSkillPermissionIssues({
+        claudeCommandFiles: ['.claude/commands/jc-commit.md'],
+        claudeSettingsPermissions: ['WebSearch', 'Bash(git status:*)'],
+      }),
+    ).toContainEqual(expect.stringContaining('jc-commit'));
   });
 });

@@ -121,7 +121,7 @@ export const toolGuidanceWorkflows = {
         example:
           'download-asset({ lesson: "add-fractions-with-the-same-denominator", type: "slideDeck" })',
         returns: 'Short-lived download URL the user can click to save the asset directly',
-        note: 'HTTP transport only. On stdio, direct users to the lesson page via canonicalUrl instead. Call once per asset type.',
+        note: 'HTTP transport only. On stdio, direct users to the lesson page via oakUrl (slug-based OWA URL; upstream also exposes canonicalUrl). Call once per asset type.',
       },
     ],
   } satisfies Workflow,

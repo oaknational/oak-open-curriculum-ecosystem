@@ -87,14 +87,17 @@ async function processSingleBulkFile(
     throw new Error(sourceResult.error.message);
   }
   const hybridSource = sourceResult.value;
-  const fileOperations = hybridSource.toBulkOperations(
+  const opsResult = hybridSource.toBulkOperations(
     resolveIndex('lessons'),
     resolveIndex('units'),
     resolveIndex('unit_rollup'),
   );
+  if (!opsResult.ok) {
+    throw new Error(opsResult.error.message);
+  }
   const stats = hybridSource.getStats();
   return {
-    operations: [...fileOperations],
+    operations: [...opsResult.value],
     totalLessons: stats.lessonCount,
     totalUnits: stats.unitCount,
     totalRollups: stats.rollupCount,

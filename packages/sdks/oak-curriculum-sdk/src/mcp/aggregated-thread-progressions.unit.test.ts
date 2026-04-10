@@ -10,20 +10,9 @@
 
 import { describe, it, expect } from 'vitest';
 import {
-  GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
   GET_THREAD_PROGRESSIONS_TOOL_DEF,
   runThreadProgressionsTool,
 } from './aggregated-thread-progressions.js';
-
-describe('GET_THREAD_PROGRESSIONS_INPUT_SCHEMA', () => {
-  it('is an object type with no parameters', () => {
-    expect(GET_THREAD_PROGRESSIONS_INPUT_SCHEMA).toEqual({
-      type: 'object',
-      properties: {},
-      additionalProperties: false,
-    });
-  });
-});
 
 describe('GET_THREAD_PROGRESSIONS_TOOL_DEF', () => {
   it('has description explaining the graph purpose', () => {
@@ -46,12 +35,7 @@ describe('GET_THREAD_PROGRESSIONS_TOOL_DEF', () => {
       destructiveHint: false,
       idempotentHint: true,
       openWorldHint: false,
-      title: 'Get Thread Progressions',
     });
-  });
-
-  it('references the input schema', () => {
-    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.inputSchema).toBe(GET_THREAD_PROGRESSIONS_INPUT_SCHEMA);
   });
 });
 

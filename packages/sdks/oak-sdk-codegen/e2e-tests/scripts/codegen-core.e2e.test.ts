@@ -94,12 +94,11 @@ describe('generateSchemaArtifacts functionality tests', () => {
 
     // Test that JSON is valid and contains expected structure
     const jsonContent = fs.readFileSync(path.join(testDir, 'api-schema-sdk.json'), 'utf-8');
-    const parsed: OpenAPIObject = JSON.parse(jsonContent) as OpenAPIObject; // Will throw if invalid JSON
-
-    expect(parsed).toBeDefined();
-    expect(parsed.openapi).toBe('3.0.0');
-    expect(parsed.info.title).toBe('Test API');
-    expect(parsed.paths?.['/api/test']).toBeDefined();
+    expect(JSON.parse(jsonContent)).toMatchObject({
+      openapi: '3.0.0',
+      info: { title: 'Test API' },
+    });
+    expect(JSON.parse(jsonContent)).toHaveProperty(['paths', '/api/test']);
   });
 
   it('should generate valid TypeScript files', async () => {

@@ -1,6 +1,3 @@
-/* eslint-disable max-lines -- generator with serialisation requires length */
-/* eslint-disable max-lines-per-function -- serialisation functions are long by nature */
-/* eslint-disable complexity -- synonym pattern extraction is inherently complex */
 /**
  * Analysis report generator for the vocabulary mining pipeline.
  *

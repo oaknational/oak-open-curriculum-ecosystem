@@ -7,223 +7,294 @@
 attribution: 'created by Jim Cresswell (https://www.jimcresswell.net/), evolved by many people and agents in many repos'
 
 practice.md:
-  - index: 0
+  - id: 084f1543-fdab-4904-8af4-0727b47cefd2
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-26
     purpose: 'Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop'
-  - index: 1
+  - id: dd2df794-5c6a-4605-9edb-c50bf02147da
     repo: cloudinary-icon-ingest-poc
     date: 2026-02-26
     purpose: 'Short-lived POC: build-time SVG icon ingestion from Cloudinary, 3 reviewers, simplified gates'
-  - index: 2
+  - id: 5bfac04a-683d-470e-8a44-a7f77ed6bfaa
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
     purpose: 'Production SDK ecosystem: adopted Practice Core structure, trinity concept, and bootstrap from round-trip'
-  - index: 3
+  - id: fef87dd1-1ae7-47d5-857d-b544496378d0
     repo: new-cv
     date: 2026-03-06
     purpose: 'Personal website and CV: editorial voice, accessibility, single-developer workflow with learning loop'
-  - index: 4
+  - id: acf7f080-4f4d-46d7-b2b7-4b255923c654
     repo: new-cv
     date: 2026-03-08
     purpose: 'Personal website and CV: Codex reviewer-sub-agent alignment and Practice Core consolidation'
-  - index: 5
+  - id: add6e621-0588-4747-b9db-a7705a8a02ac
     repo: new-cv
     date: 2026-03-09
     purpose: 'Personal website and CV: value-traceability planning and Practice Core structural tightening'
-  - index: 6
+  - id: abc3022f-dc58-42cc-a24e-a2c30e3dd039
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-09
     purpose: 'Production SDK ecosystem: integrated new-cv round-trip — Codex model, value traceability, six-file package, practice-context adjunct, napkin threshold 800→500, 16 specialist reviewers'
-  - index: 7
+  - id: 58b36dbe-6d4b-4e70-a001-afbe55553614
     repo: castr
     date: 2026-03-09
     purpose: 'IR-based schema transformation library: integrated portable Practice Core into a mature local doctrine via clean-break principles naming, canonical-first restructuring, knowledge-flow installation, and paused-workstream lifecycle'
-  - index: 8
+  - id: d98c9eeb-5861-44d0-8765-6df77b36dced
     repo: pine-scripts
     date: 2026-03-17
     purpose: 'Trading strategy research: Pine Script and Python, intraday NVDA strategies with MTF context, quality-gated deployment support'
-  - index: 9
+  - id: 74001111-ddc9-44e6-8e61-51d8c690a0eb
     repo: algo-experiments
     date: 2026-03-19
     purpose: 'Trading-research platform: process market inputs, validate algorithms in Python, and emit output adapters for hosted trading platforms'
-  - index: 10
+  - id: 9ddaafda-1544-4bc9-b13c-0d455164deff
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: promoted strict-completeness and exchange-pack learnings into the portable Practice Core'
-  - index: 11
+  - id: 2dd5ba67-6059-4819-9d9e-356033f064da
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: innovation write-back — code-pattern exchange mechanism, four learned principles, session priority, plan readiness, reference/research split, outgoing code-pattern and note pack'
-  - index: 12
+  - id: 91067cc7-7093-427b-935d-7044eb9fcdcd
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: structural reform — provenance extraction to single file, content-only fitness ceilings, Learned Principles tiering, growth governance'
-  - index: 13
+  - id: afed3809-4434-4170-b21b-2840653aa47b
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: added hook guardrails to Practice Core, extended triple fitness constraint to all fitness-carrying files'
-  - index: 14
+  - id: 50992515-1c99-4b67-a4a7-40ac885c1c01
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: fitness constraint reflow and rename — renamed frontmatter keys for clarity, reflowed prose to 100-char line length, recalibrated line count ceilings'
-  - index: 15
+  - id: 9ea37e88-2688-43e4-831f-6a6340fd6f34
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: prompts-to-skills migration — removed prompts as artefact category, updated workflow diagrams and artefact lists, added state-free session workflow principle and readme-as-index code pattern'
-  - index: 16
+  - id: 77e3f67b-dfa1-46e1-8715-8c6ab185e5b0
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-23
     purpose: 'Production SDK ecosystem: integrated algo-experiments round-trip — provenance extraction, fitness key rename, strict-completeness tenet, learned principles tiering, code-pattern exchange, session priority ordering, 8 evolution rounds absorbed'
-  - index: 17
+  - id: 667eece2-76ad-4688-8b39-f5caf69fa603
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-23
     purpose: 'Practice convergence remediation: clarified portable hook runtime and split fitness doctrine, and aligned outgoing support notes with the live validator and Claude Code activation state'
+  - id: 7f5c71ae-de5b-4206-90ab-cb9095bd2a4f
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Patterns taxonomy restructure: renamed code-patterns to patterns, introduced 5-category taxonomy (code, architecture, process, testing, agent), reclassified 30 patterns, broadened skill trigger conditions'
+  - id: 46153cd9-3f97-4620-b1bf-598dcace42c5
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Practice integration: adopted 9th quality gate (accessibility audit) from incoming opal-connection-site Core proposals'
+  - id: b9ee20fe-eeb9-4b60-bf78-89276d81cb0f
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: 'Practice promotion: adopted continuity split-loop doctrine and project-platform-config-as-infrastructure into the portable Core, plus browser-facing reviewer-cluster guidance'
+  - id: aad2a41a-989f-4a8d-87ec-aba91d82fbe8
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: >-
+      Practice transmissibility: UUID provenance migration, minimum
+      operational estate, claimed/installed/activated audit,
+      deliberate-omission protocol, continuity-host verification —
+      incoming from agent-collaboration
 
 practice-lineage.md:
-  - index: 0
+  - id: 08161792-4a38-4b89-add3-d8d56ca96d83
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-26
     purpose: 'Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop'
-  - index: 1
+  - id: 9ff97919-0498-4303-9fc7-ae856553f0ac
     repo: cloudinary-icon-ingest-poc
     date: 2026-02-26
     purpose: 'Short-lived POC: build-time SVG icon ingestion from Cloudinary, 3 reviewers, simplified gates'
-  - index: 2
+  - id: 26aa400e-b888-4231-b9da-64d500607e42
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
     purpose: 'Production SDK ecosystem: adopted Practice Core structure, trinity concept, and bootstrap from round-trip'
-  - index: 3
+  - id: 2fe9f2b6-89bc-4043-a74a-cff3ff5d9498
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-28
     purpose: 'Ecosystem-agnostic hydration: labelled ecosystem-specific content, added cold-start path, aligned consolidation with concurrent documentation principle'
-  - index: 4
+  - id: 7701751f-dd4b-4c45-84ee-197b7b8bac2b
     repo: new-cv
     date: 2026-03-06
     purpose: 'Personal website and CV: editorial voice, accessibility, single-developer workflow with learning loop'
-  - index: 5
+  - id: 22ed86c6-d790-4acc-a3f5-083b7fbfa44b
     repo: new-cv
     date: 2026-03-09
     purpose: 'Personal website and CV: value-traceability planning and Practice Core structural tightening'
-  - index: 6
+  - id: c99ba058-42dc-466a-b59c-9204fabc817d
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-09
     purpose: 'Production SDK ecosystem: integrated new-cv round-trip — Codex model, value traceability, six-file package, practice-context adjunct, napkin threshold 800→500, 16 specialist reviewers'
-  - index: 7
+  - id: a44dc192-7652-4548-89e5-b34065b1cfe1
     repo: castr
     date: 2026-03-09
     purpose: 'IR-based schema transformation library: integrated portable Practice Core into a mature local doctrine via clean-break principles naming, canonical-first restructuring, knowledge-flow installation, and paused-workstream lifecycle'
-  - index: 8
+  - id: 0f99318a-fab0-4e5d-9615-56dbcebae86d
     repo: pine-scripts
     date: 2026-03-17
     purpose: 'Trading strategy research: Pine Script and Python, intraday NVDA strategies with MTF context, quality-gated deployment support'
-  - index: 9
+  - id: 054a5c5c-cfe5-4bf7-91cc-d5d7c386aec2
     repo: algo-experiments
     date: 2026-03-19
     purpose: 'Trading-research platform: process market inputs, validate algorithms in Python, and emit output adapters for hosted trading platforms'
-  - index: 10
+  - id: 1fe68bf1-35d0-4f36-9c02-70f987c3a798
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: promoted strict-completeness and exchange-pack learnings into the portable Practice Core'
-  - index: 11
+  - id: 4265dd09-ce92-4083-8c8f-3d3d1aebf169
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: innovation write-back — code-pattern exchange mechanism, four learned principles, session priority, plan readiness, reference/research split, outgoing code-pattern and note pack'
-  - index: 12
+  - id: 749c6b10-9f1f-487b-a027-8af8f8e5e803
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: structural reform — provenance extraction to single file, content-only fitness ceilings, Learned Principles tiering, growth governance'
-  - index: 13
+  - id: 2aac65aa-0e31-4561-80a7-833e2022ed8b
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: extended triple fitness constraint to all fitness-carrying files'
-  - index: 14
+  - id: e11242a8-59d0-4498-8475-96d5c94967f8
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: fitness constraint reflow and rename — renamed frontmatter keys for clarity, reflowed prose to 100-char line length, recalibrated line count ceilings'
-  - index: 15
+  - id: df032f5d-3d27-4cd3-8218-69f2cb407ad6
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: prompts-to-skills migration — removed prompts as artefact category, updated integration flow and validation sections, added state-free session workflow principle'
-  - index: 16
+  - id: 88ecabdd-12fb-417a-b724-a6d4de569fc7
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-23
     purpose: 'Production SDK ecosystem: integrated algo-experiments round-trip — provenance extraction, fitness key rename, strict-completeness tenet, learned principles tiering, code-pattern exchange, session priority ordering, 8 evolution rounds absorbed'
-  - index: 17
+  - id: f97439a9-dad9-48d3-834c-8c5a2f5aab94
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-23
     purpose: 'Practice convergence remediation: clarified portable hook runtime and split fitness doctrine, and aligned outgoing support notes with the live validator and Claude Code activation state'
+  - id: 4a8603ab-4cf5-4aab-ba2f-2d1f8ac23b63
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Patterns taxonomy restructure: renamed code-patterns to patterns, introduced 5-category taxonomy (code, architecture, process, testing, agent), updated Pattern Exchange section'
+  - id: 5d4b7836-eaa3-47ab-a0c3-4008afd048fe
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Practice integration: adopted browser proof surfaces, UI reviewer vocabulary, two-way merge methodology, descriptive fitness wording, portable ADR reference from incoming Core proposals'
+  - id: 7f401fe1-8e3c-4181-a4e0-d026e8041cdc
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: 'Practice promotion: adopted continuity split-loop doctrine and project-platform-config-as-infrastructure into the portable Core, plus browser-facing reviewer-cluster guidance'
+  - id: 2d79a63e-a155-4f30-a316-3d3a10509a5b
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: >-
+      Practice transmissibility: UUID provenance migration, minimum
+      operational estate, claimed/installed/activated audit,
+      deliberate-omission protocol, continuity-host verification —
+      incoming from agent-collaboration
 
 practice-bootstrap.md:
-  - index: 0
+  - id: cb8ca9b8-248c-40f9-a0fb-791923f8a918
     repo: cloudinary-icon-ingest-poc
     date: 2026-02-26
     purpose: 'Short-lived POC: build-time SVG icon ingestion from Cloudinary, 3 reviewers, simplified gates'
-  - index: 1
+  - id: aa23d1c5-2799-4a4c-bf79-667833ea414f
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-27
     purpose: 'Production SDK ecosystem: curriculum SDK, MCP servers, semantic search, 13 specialist reviewers, full learning loop'
-  - index: 2
+  - id: f7de5e2a-d6d3-428e-a212-044f25965438
     repo: oak-open-curriculum-ecosystem
     date: 2026-02-28
     purpose: 'Ecosystem-agnostic hydration: added ecosystem survey preamble for agents hydrating into non-TypeScript repos'
-  - index: 3
+  - id: bf3f23b6-a235-4bee-a9e0-ab47b33613c5
     repo: new-cv
     date: 2026-03-06
     purpose: 'Personal website and CV: editorial voice, accessibility, single-developer workflow with learning loop'
-  - index: 4
+  - id: b8ce8aa9-92de-4852-8ba5-237e4d1e1f70
     repo: new-cv
     date: 2026-03-08
     purpose: 'Personal website and CV: Codex reviewer-sub-agent alignment and Practice Core consolidation'
-  - index: 5
+  - id: 6ada52a0-790c-4a2e-b160-68e0c5bf7060
     repo: new-cv
     date: 2026-03-09
     purpose: 'Personal website and CV: value-traceability planning and Practice Core structural tightening'
-  - index: 6
+  - id: 6aaf6504-5794-4dec-b3fe-eaa1dec7d949
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-09
     purpose: 'Production SDK ecosystem: integrated new-cv round-trip — Codex model, value traceability, six-file package, practice-context adjunct, napkin threshold 800→500, 16 specialist reviewers'
-  - index: 7
+  - id: 003327cb-df96-4255-a6a6-de817bb8f5e1
     repo: castr
     date: 2026-03-09
     purpose: 'IR-based schema transformation library: integrated portable Practice Core into a mature local doctrine via clean-break principles naming, canonical-first restructuring, knowledge-flow installation, and paused-workstream lifecycle'
-  - index: 8
+  - id: 7d0b0880-b609-4c34-9aba-d0d1b9767aa4
     repo: pine-scripts
     date: 2026-03-17
     purpose: 'Trading strategy research: Pine Script and Python, intraday NVDA strategies with MTF context, quality-gated deployment support'
-  - index: 9
+  - id: 47ddea2d-9cfa-42e1-a7b7-db6a685e14e3
     repo: algo-experiments
     date: 2026-03-19
     purpose: 'Trading-research platform: process market inputs, validate algorithms in Python, and emit output adapters for hosted trading platforms'
-  - index: 10
+  - id: 194b1ea3-52c5-4676-b0e2-28e8b1368691
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: promoted strict-completeness and exchange-pack learnings into the portable Practice Core'
-  - index: 11
+  - id: ae745964-cba6-497b-8bbe-c86441ed1388
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: innovation write-back — code-pattern exchange mechanism, four learned principles, session priority, plan readiness, reference/research split, outgoing code-pattern and note pack'
-  - index: 12
+  - id: 1dfba0ee-4c7d-44ff-9750-44ede403568f
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: structural reform — provenance extraction to single file, content-only fitness ceilings, Learned Principles tiering, growth governance'
-  - index: 13
+  - id: 2b687a8f-41e2-4652-9eaa-ab731e6a7e36
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: added hooks row to artefact model, extended triple fitness constraint to all fitness-carrying files'
-  - index: 14
+  - id: 456cba61-3870-446a-88f1-fd38e15ef274
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: fitness constraint reflow and rename — renamed frontmatter keys for clarity, reflowed prose to 100-char line length, recalibrated line count ceilings'
-  - index: 15
+  - id: 3c2fc9a6-f35c-4403-9bd9-12d96dfaa88d
     repo: algo-experiments
     date: 2026-03-23
     purpose: 'Trading-research platform: prompts-to-skills migration — removed prompts as artefact category, updated ecosystem survey and bootstrap checklist, added readme-as-index code pattern to exchange pack'
-  - index: 16
+  - id: e4c812e0-144c-444e-8515-3f774afd4ad6
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-23
     purpose: 'Production SDK ecosystem: integrated algo-experiments round-trip — provenance extraction, fitness key rename, strict-completeness tenet, learned principles tiering, code-pattern exchange, session priority ordering, 8 evolution rounds absorbed'
-  - index: 17
+  - id: 71c17b10-91f4-4bf3-8bb9-d2fc31f73a84
     repo: oak-open-curriculum-ecosystem
     date: 2026-03-23
     purpose: 'Practice convergence remediation: clarified the bootstrap hook-runtime wording, kept the health-check doctrine in the portable Core, and aligned outbound support notes with the live implementation'
+  - id: 1b0e47f3-7ec1-4e00-ae02-2ee3eaa91a16
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Patterns taxonomy restructure: renamed code-patterns to patterns, updated artefact model and exchange pack references'
+  - id: a2a4556a-7f3e-453e-a222-a0b8c1fb5dce
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-02
+    purpose: 'Practice integration: adopted richer pattern schema (use_this_when, barrier), UI reviewer roster guidance from incoming Core proposals'
+  - id: e8f69aa3-4d3f-41ee-82e8-1488d9eebbff
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: 'Practice promotion: adopted continuity split-loop doctrine and project-platform-config-as-infrastructure into the portable Core, plus browser-facing reviewer-cluster guidance'
+  - id: b643d7e3-d2ea-405c-aa9c-688bc0f621e9
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: >-
+      Practice transmissibility: UUID provenance migration, minimum
+      operational estate, claimed/installed/activated audit,
+      deliberate-omission protocol, continuity-host verification —
+      incoming from agent-collaboration
+
+practice-verification.md:
+  - id: 3147edc7-8b7d-4b44-8f61-1f51e063d751
+    repo: oak-open-curriculum-ecosystem
+    date: 2026-04-03
+    purpose: >-
+      Origin: split from practice-bootstrap.md to give verification
+      proper weight as a distinct lifecycle phase. Contains bootstrap
+      checklist, health check, minimum operational estate,
+      claimed/installed/activated audit, and fresh-checkout acceptance
+      criteria

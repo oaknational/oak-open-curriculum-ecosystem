@@ -31,8 +31,9 @@ describe('schema cache helpers', () => {
 
     expect(wroteCache).toBe(true);
     const cachedRaw = readFileSync(cachePath, 'utf8');
-    const cached = JSON.parse(cachedRaw) as { info: { version: string } };
-    expect(cached.info.version).toBe('1.0.0');
+    expect(JSON.parse(cachedRaw)).toMatchObject({
+      info: { version: '1.0.0' },
+    });
   });
 
   it('skips writing when the cached schema has the same version', async () => {

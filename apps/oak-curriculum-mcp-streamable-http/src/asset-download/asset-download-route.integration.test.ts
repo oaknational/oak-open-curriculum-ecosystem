@@ -1,20 +1,29 @@
 import { describe, it, expect, vi } from 'vitest';
 import type { Request, Response, NextFunction } from 'express';
+import {
+  createRequest as createNodeMockRequest,
+  createResponse as createNodeMockResponse,
+} from 'node-mocks-http';
 import type { LogContextInput } from '@oaknational/logger';
 import { createAssetDownloadRoute, type AssetDownloadRouteDeps } from './asset-download-route.js';
 import type { HttpObservability } from '../observability/http-observability.js';
 
 const VALID_HEX_SIG = 'a'.repeat(64);
-function createStubLogger() {
-  return {
+function createStubLogger(): AssetDownloadRouteDeps['logger'] {
+  const logger: AssetDownloadRouteDeps['logger'] = {
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
     fatal: vi.fn(),
     trace: vi.fn(),
-    child: vi.fn().mockReturnThis(),
+    child: vi.fn((context) => {
+      void context;
+      return logger;
+    }),
   };
+
+  return logger;
 }
 function createStubDeps(overrides?: Partial<AssetDownloadRouteDeps>): AssetDownloadRouteDeps {
   return {
@@ -22,7 +31,7 @@ function createStubDeps(overrides?: Partial<AssetDownloadRouteDeps>): AssetDownl
     oakApiKey: 'test-api-key',
     signingSecret: 'test-signing-secret',
     oakApiBaseUrl: 'https://test-api.example.com/api/v0',
-    logger: createStubLogger() as unknown as AssetDownloadRouteDeps['logger'],
+    logger: createStubLogger(),
     fetch: vi.fn(),
     now: () => Date.now(),
     ...overrides,
@@ -71,18 +80,15 @@ function createObservabilitySpy(): ObservabilitySpy {
   };
 }
 function createMockReqRes(params: Record<string, string>, query: Record<string, string>) {
-  const req = { params, query } as unknown as Request;
-  const res = {
-    status: vi.fn().mockReturnThis(),
-    json: vi.fn().mockReturnThis(),
-    setHeader: vi.fn(),
-    end: vi.fn(),
-    headersSent: false,
-    writableEnded: false,
-    once: vi.fn(),
-    on: vi.fn(),
-    destroy: vi.fn(),
-  } as unknown as Response;
+  const req: Request = createNodeMockRequest({ params, query });
+  const res: Response = createNodeMockResponse();
+  vi.spyOn(res, 'status');
+  vi.spyOn(res, 'json');
+  vi.spyOn(res, 'setHeader');
+  vi.spyOn(res, 'end');
+  vi.spyOn(res, 'once');
+  vi.spyOn(res, 'on');
+  vi.spyOn(res, 'destroy');
   const next: NextFunction = vi.fn();
   return { req, res, next };
 }
@@ -91,30 +97,7 @@ function createUpstreamResponse(
   body: string | null,
   headers?: Record<string, string>,
 ): globalThis.Response {
-  const headerMap = new Map<string, string>();
-  if (headers) {
-    for (const key in headers) {
-      const value = headers[key];
-      if (value !== undefined) {
-        headerMap.set(key, value);
-      }
-    }
-  }
-  const responseBody =
-    body !== null
-      ? new ReadableStream({
-          start(c) {
-            c.enqueue(new TextEncoder().encode(body));
-            c.close();
-          },
-        })
-      : null;
-  return {
-    ok: status >= 200 && status < 300,
-    status,
-    headers: { get: (name: string) => headerMap.get(name) ?? null },
-    body: responseBody,
-  } as unknown as globalThis.Response;
+  return new Response(body, { status, headers });
 }
 describe('createAssetDownloadRoute — parameter validation', () => {
   it('returns 400 for missing lesson parameter', async () => {
@@ -199,7 +182,7 @@ describe('createAssetDownloadRoute — signature validation', () => {
     const logger = createStubLogger();
     const deps = createStubDeps({
       validateSignature: () => ({ valid: false, reason: 'Invalid signature' }),
-      logger: logger as unknown as AssetDownloadRouteDeps['logger'],
+      logger,
     });
     const handler = createAssetDownloadRoute(deps);
     const { req, res, next } = createMockReqRes(
@@ -356,7 +339,7 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
     const stubFetch = vi.fn().mockResolvedValue(createUpstreamResponse(401, null));
     const deps = createStubDeps({
       fetch: stubFetch,
-      logger: logger as unknown as AssetDownloadRouteDeps['logger'],
+      logger,
     });
     const handler = createAssetDownloadRoute(deps);
     const { req, res, next } = createMockReqRes(
@@ -375,7 +358,7 @@ describe('createAssetDownloadRoute — upstream proxy', () => {
     const stubFetch = vi.fn().mockResolvedValue(createUpstreamResponse(500, null));
     const deps = createStubDeps({
       fetch: stubFetch,
-      logger: logger as unknown as AssetDownloadRouteDeps['logger'],
+      logger,
     });
     const handler = createAssetDownloadRoute(deps);
     const { req, res, next } = createMockReqRes(

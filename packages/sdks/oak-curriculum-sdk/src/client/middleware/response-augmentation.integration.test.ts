@@ -6,6 +6,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import type { Logger } from '@oaknational/logger';
+import type { JsonBody200 } from '@oaknational/sdk-codegen/api-schema';
 import { createQuerySerializer, defaultBodySerializer, defaultPathSerializer } from 'openapi-fetch';
 import { createResponseAugmentationMiddleware } from './response-augmentation.js';
 
@@ -51,6 +52,7 @@ async function invokeOnResponse(
   middleware: ReturnType<typeof createResponseAugmentationMiddleware>,
   request: Request,
   response: Response,
+  schemaPath: string,
 ): Promise<Response> {
   if (!middleware.onResponse) {
     throw new Error('Middleware missing onResponse handler');
@@ -58,7 +60,7 @@ async function invokeOnResponse(
   const result = await middleware.onResponse({
     request,
     response,
-    schemaPath: '/test',
+    schemaPath,
     params: {},
     id: 'test-invocation',
     options: {
@@ -76,31 +78,28 @@ async function invokeOnResponse(
   return result;
 }
 
-async function expectLessonCanonicalUrl(path: string, body: unknown): Promise<void> {
+async function expectLessonOakUrl(
+  concretePath: string,
+  schemaPath: string,
+  body: unknown,
+): Promise<void> {
   const logger = createFakeLogger();
   const middleware = createResponseAugmentationMiddleware({ logger });
-  const request = buildGetRequest(path);
+  const request = buildGetRequest(concretePath);
   const response = buildJsonResponse(body);
 
-  const result = await invokeOnResponse(middleware, request, response);
+  const result = await invokeOnResponse(middleware, request, response, schemaPath);
   const resultBody: unknown = await result.json();
 
   expect(resultBody).toHaveProperty(
-    'canonicalUrl',
+    'oakUrl',
     'https://www.thenational.academy/teachers/lessons/add-two-numbers',
   );
 }
 
 describe('createResponseAugmentationMiddleware', () => {
-  describe('logger injection', () => {
-    it('accepts an injected logger', () => {
-      const logger = createFakeLogger();
-      const middleware = createResponseAugmentationMiddleware({ logger });
-      expect(middleware).toBeDefined();
-      expect(middleware.onResponse).toBeDefined();
-    });
-
-    it('uses injected logger for augmentation failures', async () => {
+  describe('schema validation', () => {
+    it('returns unaugmented response when body fails schema validation', async () => {
       const logger = createFakeLogger();
       const middleware = createResponseAugmentationMiddleware({ logger });
 
@@ -108,35 +107,48 @@ describe('createResponseAugmentationMiddleware', () => {
       const body = { subjectSlug: 'maths', subjectTitle: 'Maths' };
       const response = buildJsonResponse(body);
 
-      const result = await invokeOnResponse(middleware, request, response);
+      const result = await invokeOnResponse(middleware, request, response, '/subjects/{subject}');
 
       expect(result.status).toBe(200);
+      const resultBody: unknown = await result.json();
+      expect(resultBody).toEqual(body);
+      expect(resultBody).not.toHaveProperty('oakUrl');
+    });
+  });
+
+  describe('error containment', () => {
+    it('returns unaugmented response and logs warning when augmentation throws', async () => {
+      const logger = createFakeLogger();
+      const middleware = createResponseAugmentationMiddleware({ logger });
+
+      const body = {
+        subjectTitle: 'Maths',
+        subjectSlug: 'maths',
+        sequenceSlugs: [],
+        years: [],
+        keyStages: [],
+      };
+      const request = buildGetRequest('/subjects/maths');
+      const response = buildJsonResponse(body);
+
+      const result = await invokeOnResponse(middleware, request, response, '/subjects/{subject}');
+
+      expect(result.status).toBe(200);
+      const resultBody: unknown = await result.json();
+      expect(resultBody).toHaveProperty('subjectSlug', 'maths');
+      expect(resultBody).not.toHaveProperty('oakUrl');
       const warnCalls = logger.calls.filter((c) => c.startsWith('warn:'));
       expect(warnCalls.length).toBeGreaterThan(0);
     });
   });
 
-  describe('error containment', () => {
-    it('returns unaugmented response when augmentation throws', async () => {
-      const logger = createFakeLogger();
-      const middleware = createResponseAugmentationMiddleware({ logger });
-
-      const body = { subjectSlug: 'maths', subjectTitle: 'Maths' };
-      const request = buildGetRequest('/subjects/maths');
-      const response = buildJsonResponse(body);
-
-      const result = await invokeOnResponse(middleware, request, response);
-
-      expect(result.status).toBe(200);
-      const resultBody: unknown = await result.json();
-      expect(resultBody).toHaveProperty('subjectSlug', 'maths');
-    });
-  });
-
   describe('lesson sub-resource paths', () => {
     it('uses the lesson path segment for lesson summary responses', async () => {
-      await expectLessonCanonicalUrl('/lessons/add-two-numbers/summary', {
+      const body = {
         lessonTitle: 'Add Two Numbers',
+        canonicalUrl:
+          'https://www.thenational.academy/teachers/programmes/maths/units/place-value/lessons/add-two-numbers',
+        oakUrl: 'https://www.thenational.academy/teachers/lessons/add-two-numbers',
         unitSlug: 'place-value',
         unitTitle: 'Place Value',
         subjectSlug: 'maths',
@@ -150,27 +162,40 @@ describe('createResponseAugmentationMiddleware', () => {
         contentGuidance: null,
         supervisionLevel: null,
         downloadsAvailable: true,
-      });
+      } as const satisfies JsonBody200<'/lessons/{lesson}/summary', 'get'>;
+      await expectLessonOakUrl(
+        '/lessons/add-two-numbers/summary',
+        '/lessons/{lesson}/summary',
+        body,
+      );
     });
 
     it('uses the lesson path segment for lesson transcript responses', async () => {
-      await expectLessonCanonicalUrl('/lessons/add-two-numbers/transcript', {
+      const body = {
         transcript: 'This is the lesson transcript text',
         vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nThis is the lesson transcript text',
-      });
+      } as const satisfies JsonBody200<'/lessons/{lesson}/transcript', 'get'>;
+      await expectLessonOakUrl(
+        '/lessons/add-two-numbers/transcript',
+        '/lessons/{lesson}/transcript',
+        body,
+      );
     });
 
     it('uses the lesson path segment for lesson quiz responses', async () => {
-      await expectLessonCanonicalUrl('/lessons/add-two-numbers/quiz', {
+      const body = {
         starterQuiz: [],
         exitQuiz: [],
-      });
+      } as const satisfies JsonBody200<'/lessons/{lesson}/quiz', 'get'>;
+      await expectLessonOakUrl('/lessons/add-two-numbers/quiz', '/lessons/{lesson}/quiz', body);
     });
 
     it('uses the lesson path segment for lesson asset responses', async () => {
-      await expectLessonCanonicalUrl('/lessons/add-two-numbers/assets', {
+      const body = {
+        oakUrl: 'https://www.thenational.academy/teachers/lessons/add-two-numbers',
         assets: [],
-      });
+      } as const satisfies JsonBody200<'/lessons/{lesson}/assets', 'get'>;
+      await expectLessonOakUrl('/lessons/add-two-numbers/assets', '/lessons/{lesson}/assets', body);
     });
   });
 });

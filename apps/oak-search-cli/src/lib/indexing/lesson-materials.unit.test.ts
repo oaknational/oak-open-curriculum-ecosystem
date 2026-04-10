@@ -16,6 +16,10 @@ import { ok, err } from '@oaknational/result';
 import { fetchLessonMaterials, type FetchContext } from './lesson-materials';
 import type { OakClient } from '../../adapters/oak-adapter';
 import type { SdkNotFoundError } from '@oaknational/curriculum-sdk';
+import {
+  lessonSummarySchema,
+  type SearchLessonSummary,
+} from '@oaknational/curriculum-sdk/public/search.js';
 import { createMockClient } from '../../test-helpers/mock-oak-client';
 
 // =============================================================================
@@ -26,9 +30,11 @@ import { createMockClient } from '../../test-helpers/mock-oak-client';
  * Create a mock lesson summary that matches the Zod schema.
  * Based on actual fixture data from fixtures/sandbox/lesson-summaries.json
  */
-function createMockSummary() {
-  return {
+function createMockSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
+  return lessonSummarySchema.parse({
     lessonTitle: 'Test Lesson',
+    canonicalUrl: 'https://www.thenational.academy/teachers/lessons/test-lesson',
+    oakUrl: 'https://teachers.thenational.academy/lessons/test-lesson',
     unitSlug: 'test-unit',
     unitTitle: 'Test Unit',
     subjectSlug: 'maths',
@@ -50,8 +56,8 @@ function createMockSummary() {
     ],
     supervisionLevel: 'low',
     downloadsAvailable: true,
-    canonicalUrl: 'https://teachers.thenational.academy/lessons/test-lesson',
-  };
+    ...overrides,
+  });
 }
 
 /** Create a mock OakClient with customisable transcript/summary responses. */

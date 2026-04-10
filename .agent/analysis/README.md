@@ -1,6 +1,7 @@
 # Analysis Reports
 
-Purpose: consolidated, focussed reports on legacy search, repo search capabilities (SDK/CLI), and the comparison gap.
+Purpose: consolidated, focussed reports on product, repo, and practice
+investigations.
 
 ## Reports
 
@@ -14,6 +15,12 @@ Purpose: consolidated, focussed reports on legacy search, repo search capabiliti
   - Scenario-based request/response pairs for legacy and semantic search endpoints.
 - `feature-goals-roadmap-alignment.md`
   - Parity and exceed feature goals, extra high-impact work, and alignment to the roadmap.
+- `continuity-adoption-baseline.md`
+  - Pre-rollout baseline for continuity, session handoff, and deep
+    consolidation boundaries in the MCP App lane.
+- `continuity-adoption-evidence.md`
+  - Live evidence log for resumptions, `GO` sessions, and deep-consolidation
+    triggers after the continuity rollout.
 
 ## Suggested reading order
 

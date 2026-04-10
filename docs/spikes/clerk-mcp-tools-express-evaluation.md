@@ -1,7 +1,7 @@
 # Spike: `@clerk/mcp-tools/express` Adoption Evaluation
 
 **Date**: 2026-03-26
-**Phase**: Phase 0 of [MCP Runtime Boundary Simplification](../../.agent/plans/sdk-and-mcp-enhancements/current/mcp-runtime-boundary-simplification.plan.md)
+**Phase**: Phase 0 of [MCP Runtime Boundary Simplification](../../.agent/plans/sdk-and-mcp-enhancements/archive/completed/mcp-runtime-boundary-simplification.plan.md)
 **Decision**: [ADR-142](../architecture/architectural-decisions/142-clerk-mcp-tools-adopt-or-explain.md)
 
 ## Purpose

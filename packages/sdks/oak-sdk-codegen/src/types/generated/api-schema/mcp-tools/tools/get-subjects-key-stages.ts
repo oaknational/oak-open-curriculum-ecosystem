@@ -33,7 +33,7 @@ export interface ToolArgs { readonly params: ToolParams; }
 
 export const toolInputJsonSchema = { type: 'object' as const, properties: {"subject":{"type":"string","description":"The subject slug identifier","examples":["art"]}} as const, additionalProperties: false as const, required: ["subject"] };
 export const toolZodSchema = z.object({ params: z.object({ path: z.object({ subject: z.string().describe("The subject slug identifier") }) }) });
-export const toolMcpFlatInputSchema = z.object({ subject: z.string().describe("The subject slug identifier") });
+export const toolMcpFlatInputSchema = z.object({ subject: z.string().describe("The subject slug identifier").meta({ examples: ["art"] }) });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
 const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"The subject slug identifier","examples":["art"]}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
 export const describeToolArgs = () => toolArgsDescription;

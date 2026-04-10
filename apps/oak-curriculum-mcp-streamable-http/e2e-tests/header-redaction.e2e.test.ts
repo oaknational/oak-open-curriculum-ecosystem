@@ -49,7 +49,11 @@ async function createBypassedApp() {
   });
   const runtimeConfig = unwrap(result);
   const observability = createHttpObservabilityOrThrow(runtimeConfig);
-  return await createApp({ runtimeConfig, observability });
+  return await createApp({
+    runtimeConfig,
+    observability,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
+  });
 }
 
 async function createEnforcedApp() {
@@ -62,6 +66,7 @@ async function createEnforcedApp() {
   return await createApp({
     runtimeConfig,
     observability,
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });
@@ -81,8 +86,7 @@ describe('Header Redaction E2E', () => {
 
       // Verify request succeeds
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('status');
-      expect((response.body as { status: string }).status).toBe('ok');
+      expect(response.body).toMatchObject({ status: 'ok' });
 
       // Verify response headers include correlation ID
       expect(response.headers['x-correlation-id']).toBeDefined();

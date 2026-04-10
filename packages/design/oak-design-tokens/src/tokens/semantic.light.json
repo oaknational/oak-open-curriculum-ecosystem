@@ -1,0 +1,145 @@
+{
+  "semantic": {
+    "surface-page": {
+      "$type": "color",
+      "$value": "{color.mint-300}"
+    },
+    "surface-panel": {
+      "$type": "color",
+      "$value": "{color.paper-100}"
+    },
+    "surface-accent": {
+      "$type": "color",
+      "$value": "{color.mint-300}"
+    },
+    "border-subtle": {
+      "$type": "color",
+      "$value": "{color.paper-400}"
+    },
+    "text-primary": {
+      "$type": "color",
+      "$value": "{color.oak-black}"
+    },
+    "text-secondary": {
+      "$type": "color",
+      "$value": "{color.ink-700}"
+    },
+    "text-inverse": {
+      "$type": "color",
+      "$value": "{color.paper-050}"
+    },
+    "accent": {
+      "$type": "color",
+      "$value": "{color.oak-black}",
+      "$description": "Links and interactive elements — dark on mint background (matching Oak website pattern)"
+    },
+    "accent-strong": {
+      "$type": "color",
+      "$value": "{color.oak-green-500}",
+      "$description": "Hover/active state — green visible against mint (4.13:1)"
+    },
+    "focus-ring": {
+      "$type": "color",
+      "$value": "{color.oak-green-500}",
+      "$description": "Focus ring — green on mint page (4.13:1, passes 3:1 non-text)"
+    },
+    "focus-ring-on-accent": {
+      "$type": "color",
+      "$value": "{color.oak-green-500}",
+      "$description": "Focus ring for elements on accent (mint) surfaces — sky-600 fails ≥3:1 on mint, oakGreen passes at ~4.2:1"
+    },
+    "error": {
+      "$type": "color",
+      "$value": "{color.danger-500}"
+    },
+    "font-body-family": {
+      "$type": "fontFamily",
+      "$value": "{font.family-body}"
+    },
+    "font-display-family": {
+      "$type": "fontFamily",
+      "$value": "{font.family-display}"
+    },
+    "font-body-size": {
+      "$type": "dimension",
+      "$value": "{font.size-300}"
+    },
+    "font-label-size": {
+      "$type": "dimension",
+      "$value": "{font.size-200}"
+    },
+    "font-heading-size": {
+      "$type": "dimension",
+      "$value": "{font.size-700}"
+    },
+    "font-banner-title-size": {
+      "$type": "dimension",
+      "$value": "{font.size-400}",
+      "$description": "Brand banner title — emphasis without competing with headings"
+    },
+    "font-body-line-height": {
+      "$type": "number",
+      "$value": "{font.line-height-400}"
+    },
+    "font-label-line-height": {
+      "$type": "number",
+      "$value": "{font.line-height-300}"
+    },
+    "font-heading-line-height": {
+      "$type": "number",
+      "$value": "{font.line-height-700}"
+    },
+    "font-weight-light": {
+      "$type": "fontWeight",
+      "$value": "{font.weight-light}"
+    },
+    "font-weight-bold": {
+      "$type": "fontWeight",
+      "$value": "{font.weight-bold}"
+    },
+    "gap-sm": {
+      "$type": "dimension",
+      "$value": "{space.200}"
+    },
+    "gap-md": {
+      "$type": "dimension",
+      "$value": "{space.300}"
+    },
+    "gap-lg": {
+      "$type": "dimension",
+      "$value": "{space.500}"
+    },
+    "shell-padding": {
+      "$type": "dimension",
+      "$value": "{space.700}"
+    },
+    "shell-padding-mobile": {
+      "$type": "dimension",
+      "$value": "{space.500}"
+    },
+    "control-padding-inline": {
+      "$type": "dimension",
+      "$value": "{space.400}"
+    },
+    "control-padding-block": {
+      "$type": "dimension",
+      "$value": "{space.300}"
+    },
+    "radius-panel": {
+      "$type": "dimension",
+      "$value": "{radius.lg}"
+    },
+    "radius-control": {
+      "$type": "dimension",
+      "$value": "{radius.md}"
+    },
+    "radius-pill": {
+      "$type": "dimension",
+      "$value": "{radius.pill}"
+    },
+    "shadow-panel": {
+      "$type": "shadow",
+      "$value": "{shadow.card}"
+    }
+  }
+}

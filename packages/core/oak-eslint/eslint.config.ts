@@ -1,10 +1,23 @@
 import tseslint from 'typescript-eslint';
 import { defineConfig } from 'eslint/config';
 import eslint from '@eslint/js';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
+import { createNodeResolver } from 'eslint-plugin-import-x';
 
 export default defineConfig(
   {
     ignores: ['dist', 'node_modules', '**/*.d.ts'],
+  },
+  {
+    settings: {
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
+          alwaysTryTypes: true,
+          project: import.meta.dirname,
+        }),
+        createNodeResolver(),
+      ],
+    },
   },
   {
     languageOptions: {

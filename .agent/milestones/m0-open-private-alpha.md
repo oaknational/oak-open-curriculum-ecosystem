@@ -35,7 +35,7 @@ All must be true before M0 exit:
   simulations (three rounds: initial remediation, post-remediation
   validation, and post-fix review)
 - [x] All documentation defects from onboarding simulations resolved
-- [x] Quality gates green (`pnpm qg`)
+- [x] Canonical aggregate gate green (`pnpm check`)
 - [x] All agent guidance tooling in the MCP tools folded into get-curriculum-model
 - [x] Final secrets and PII sweep passes (`pnpm secrets:scan:all`)
 - [x] Manual review of configuration files, environment examples, READMEs,

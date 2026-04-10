@@ -4,7 +4,6 @@ name: clerk-reviewer
 model: gpt-5.4-xhigh
 description: Clerk specialist reviewer grounded in current official Clerk documentation with Vercel (Express) + shared Clerk instance as the default deployment context. Use for Clerk middleware, token verification, OAuth proxy, PRM, @clerk/mcp-tools, or Clerk SDK usage reviews.
 readonly: true
-is_background: true
 ---
 
 # Clerk Reviewer

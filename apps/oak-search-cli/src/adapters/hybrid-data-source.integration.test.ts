@@ -115,7 +115,12 @@ describe('createHybridDataSource', () => {
     const bulkFile = createMockBulkFile();
     const source = await createSourceOrFail(bulkFile, null);
 
-    const ops = source.toBulkOperations('oak_lessons', 'oak_units', 'oak_unit_rollup');
+    const opsResult = source.toBulkOperations('oak_lessons', 'oak_units', 'oak_unit_rollup');
+    expect(opsResult.ok).toBe(true);
+    if (!opsResult.ok) {
+      return;
+    }
+    const ops = opsResult.value;
 
     // 1 lesson + 1 unit + 1 rollup, each with index action + doc = 6 operations
     expect(ops.length).toBe(6);

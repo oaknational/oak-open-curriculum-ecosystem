@@ -54,6 +54,7 @@ describe('schema-emitter', () => {
       const output = emitGroundTruthSchemas(allData);
 
       // Should have imports
+      expect(output).toContain("import { typeSafeKeys } from '@oaknational/type-helpers';");
       expect(output).toContain("import { z } from 'zod';");
       expect(output).toContain("import { ALL_LESSON_SLUGS } from './lesson-slugs-by-subject';");
 
@@ -130,7 +131,7 @@ describe('schema-emitter', () => {
       const output = emitGroundTruthSchemas([]);
 
       // Should require at least one entry in expectedRelevance
-      expect(output).toContain('Object.keys(obj).length > 0');
+      expect(output).toContain('typeSafeKeys(obj).length > 0');
     });
 
     it('generates AnyLessonSlugSchema with runtime validation', () => {

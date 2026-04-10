@@ -1,12 +1,14 @@
 /**
- * Response augmentation with canonical URLs
+ * Response augmentation with Oak URLs
  *
- * Pure function that augments API responses with canonical URLs
- * based on content type and available context.
+ * Pure function that augments API responses with Oak URLs (direct,
+ * slug-based resource URLs) based on content type and available context.
+ * The upstream's `canonicalUrl` (context-rich curriculum URL) passes
+ * through untouched.
  */
 import {
   CONTENT_TYPE_PREFIXES,
-  generateCanonicalUrlWithContext,
+  generateOakUrlWithContext,
 } from '@oaknational/sdk-codegen/api-schema';
 import type { ResponseContext, ContentType } from './types/response-augmentation.js';
 import type { HttpMethod } from './validation/types.js';
@@ -79,7 +81,7 @@ function shouldExtract(targetType: ContentType, contentType: ContentType | undef
 /**
  * Extracts context from response data for units and subjects.
  * Exported for shared use by the response augmentation middleware
- * and `runFetchTool` in `aggregated-fetch.ts`.
+ * and `runFetchTool` in `aggregated-fetch/execution.ts`.
  */
 export function extractContextFromResponse(
   response: unknown,
@@ -163,13 +165,19 @@ function extractIdFromPath(path: string): string | undefined {
   return extractEntityIdFromPath(path, contentType);
 }
 
-/** Augments an array response with canonical URL on each item */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Legitimate: generic captures full type
-export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
-  response: TItem[],
+/**
+ * Augments an array response with Oak URL on each item.
+ *
+ * Returns `unknown` because the result flows to `JSON.stringify` at
+ * the middleware boundary — there is no typed downstream consumer.
+ * Uses `Object.assign` to avoid the TypeScript 20-member union
+ * spread limit (TS2698).
+ */
+export function augmentArrayResponseWithOakUrl(
+  response: readonly unknown[],
   path: string,
   method: HttpMethod,
-): (TItem & { canonicalUrl?: string | null })[] {
+): unknown {
   if (method !== 'get') {
     return response;
   }
@@ -178,17 +186,23 @@ export function augmentArrayResponseWithCanonicalUrl<TItem extends object>(
     return response;
   }
   return response.map((item) => {
-    return { ...item, ...extractCanonicalUrlFields(item, path, contentType) };
+    return Object.assign({}, item, extractOakUrlFields(item, path, contentType));
   });
 }
 
-/** Augments a single object response with canonical URL */
-// eslint-disable-next-line @typescript-eslint/no-restricted-types -- Legitimate: generic captures full type
-export function augmentResponseWithCanonicalUrl<T extends object>(
-  response: T,
+/**
+ * Augments a single object response with Oak URL.
+ *
+ * Returns `unknown` because the result flows to `JSON.stringify` at
+ * the middleware boundary — there is no typed downstream consumer.
+ * Uses `Object.assign` to avoid the TypeScript 20-member union
+ * spread limit (TS2698).
+ */
+export function augmentResponseWithOakUrl(
+  response: unknown,
   path: string,
   method: HttpMethod,
-): T & { canonicalUrl?: string | null } {
+): unknown {
   if (method !== 'get') {
     return response;
   }
@@ -196,32 +210,27 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
   if (!contentType) {
     return response;
   }
-  return { ...response, ...extractCanonicalUrlFields(response, path, contentType) };
+  return Object.assign({}, response, extractOakUrlFields(response, path, contentType));
 }
 
 /**
- * Extracts canonical URL fields from a response
- * @param response - The response to extract canonical URL fields from
- * @param path - The path to extract canonical URL fields from
- * @param contentType - The content type to extract canonical URL fields from
- * @returns The canonical URL fields for the response, which is null for threads (no website equivalent)
- * @throws An error if the content type is unsupported or no result is generated
+ * Extracts Oak URL fields from a response.
  *
- * @remarks
- * TODO: Refactor to return a Result\<string, Error\> instead of throwing errors
+ * The `oakUrl` is the direct, slug-based URL for the resource.
+ * When the upstream already provides `oakUrl`, it is preserved
+ * (idempotent). The upstream's `canonicalUrl` is a separate field
+ * and passes through untouched.
+ *
+ * @returns The oakUrl field for the response, which is null for threads (no website equivalent)
+ * @throws An error if the content type is unsupported or no result is generated
  */
-function extractCanonicalUrlFields(
+function extractOakUrlFields(
   response: unknown,
   path: string,
   contentType: ContentType,
-): { canonicalUrl: string | null } {
-  // Idempotent: preserve existing canonicalUrl
-  if (
-    isNonNullObject(response) &&
-    'canonicalUrl' in response &&
-    typeof response.canonicalUrl === 'string'
-  ) {
-    return { canonicalUrl: response.canonicalUrl };
+): { oakUrl: string | null } {
+  if (isNonNullObject(response) && 'oakUrl' in response && typeof response.oakUrl === 'string') {
+    return { oakUrl: response.oakUrl };
   }
   const id = extractIdFromResponse(response, path);
   if (!id) {
@@ -230,6 +239,6 @@ function extractCanonicalUrlFields(
     );
   }
   const context = extractContextFromResponse(response, contentType);
-  const canonicalUrl = generateCanonicalUrlWithContext(contentType, id, context);
-  return { canonicalUrl };
+  const oakUrl = generateOakUrlWithContext(contentType, id, context);
+  return { oakUrl };
 }

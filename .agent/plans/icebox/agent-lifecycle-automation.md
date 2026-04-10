@@ -43,7 +43,7 @@ Example flow:
 1. Agent makes 8 file changes
 2. Threshold triggered (e.g., 10 files changed)
 3. Plugin captures: "Implementing OAuth middleware - added Clerk integration, updated tests"
-4. Plugin runs: `pnpm qg`
+4. Plugin runs: `pnpm check`
 5. Plugin finds 2 linting issues, fixes them
 6. Plugin commits: "feat(auth): implement Clerk OAuth middleware
    - Add Clerk auth middleware with JWT verification

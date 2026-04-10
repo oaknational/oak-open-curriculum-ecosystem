@@ -3,7 +3,7 @@ import type { KeyStage } from '../../types/oak';
 export interface LessonUnitReference {
   readonly unitSlug: string;
   readonly unitTitle: string;
-  readonly canonicalUrl: string;
+  readonly oakUrl: string;
 }
 
 /** Extracts unit arrays from unit info list. */
@@ -15,7 +15,7 @@ export function extractUnitArrays(units: readonly LessonUnitReference[]): {
   return {
     unitIds: units.map((unit) => unit.unitSlug),
     unitTitles: units.map((unit) => unit.unitTitle),
-    unitUrls: units.map((unit) => unit.canonicalUrl),
+    unitUrls: units.map((unit) => unit.oakUrl),
   };
 }
 

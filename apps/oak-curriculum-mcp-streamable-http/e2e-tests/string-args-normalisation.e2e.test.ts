@@ -54,6 +54,7 @@ describe('HTTP boundary argument validation', () => {
                     },
                   ],
                   canonicalUrl: 'https://www.thenational.academy/teachers/lessons/stub-lesson',
+                  oakUrl: 'https://teachers.thenational.academy/lessons/stub-lesson',
                 },
               ],
             });
@@ -72,6 +73,7 @@ describe('HTTP boundary argument validation', () => {
     const app = await createApp({
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -94,6 +96,7 @@ describe('HTTP boundary argument validation', () => {
     const app = await createApp({
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -116,6 +119,7 @@ describe('HTTP boundary argument validation', () => {
     const app = await createApp({
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -140,6 +144,7 @@ describe('HTTP boundary argument validation', () => {
       toolHandlerOverrides: createStructuredSuccessOverrides(captured),
       runtimeConfig,
       observability: createMockObservability(runtimeConfig),
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
     const res = await request(app)
       .post('/mcp')
@@ -172,6 +177,6 @@ describe('HTTP boundary argument validation', () => {
       throw new Error('Tool payload data must be an array');
     }
     expect(payload.data).toHaveLength(1);
-    expect(payload.data[0]).toHaveProperty('canonicalUrl');
+    expect(payload.data[0]).toHaveProperty('oakUrl');
   });
 });

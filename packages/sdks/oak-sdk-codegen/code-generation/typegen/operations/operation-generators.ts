@@ -74,10 +74,6 @@ export function getOperationIdByPathAndMethod(path: string, method: string): Ope
   return operation?.operationId;
 }
 
-export type ResponsesForPath<P extends ValidPath> = PathOperation['path'] extends P ? PathOperation['responses'] : never;
-export type ResponseForPathAndMethod<P extends ValidPath, M extends AllowedMethodsForPath<P>> = // if path extends p and method extends m, then return the responses
-  PathOperation['path'] extends P ? PathOperation['method'] extends M ? PathOperation['responses'] : never : never;
-
 /**
  * All response codes
  */

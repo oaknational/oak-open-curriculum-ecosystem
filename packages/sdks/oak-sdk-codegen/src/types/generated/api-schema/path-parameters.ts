@@ -89,33 +89,79 @@ export function isAllowedMethod(maybeMethod: string): maybeMethod is AllowedMeth
 export type HttpMethodKeys = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
 export type AllowedMethodsForPath<P extends ValidPath> = Extract<keyof Paths[P], HttpMethodKeys>;
 
-// Normalize 200 key to always be numeric 200
-export type Normalize200<R> =
-  200 extends keyof R ? R & { 200: R[200] } :
-  '200' extends keyof R ? Omit<R, '200'> & { 200: R['200'] } :
-  never;
-
-export type NormalizedResponsesFor<P extends ValidPath, M extends AllowedMethodsForPath<P>> =
-  Normalize200<ResponseForPathAndMethod<P, M>>;
-
+/**
+ * Extract the JSON body from a 200 response for a given path and method.
+ *
+ * Uses direct `Paths` indexed access rather than the `PathOperation`
+ * conditional chain. TypeScript resolves direct indexing eagerly for
+ * concrete path/method literals, making the resulting type spreadable
+ * in augmentation functions. The `PathOperation`-based chain
+ * (`ResponseForPathAndMethod`) defers evaluation even for single
+ * literals, which causes TS2698 spread errors.
+ *
+ * For methods that do not exist on a path (e.g. `put?: never`),
+ * `Paths[P][M]` is `never`, and the conditional correctly yields
+ * `never`.
+ */
 export type JsonBody200<P extends ValidPath, M extends AllowedMethodsForPath<P>> =
-  NormalizedResponsesFor<P, M> extends infer NR
-    ? NR extends never
-      ? never
-      : 200 extends keyof NR
-        ? ('content' extends keyof NR[200]
-            ? (NR[200]['content'] extends infer C
-                ? ('application/json' extends keyof C ? C['application/json'] : never)
-                : never)
-            : never)
-        : never
+  Paths[P][M] extends { responses: { 200: { content: { 'application/json': infer J } } } }
+    ? J
     : never;
 
-export type PathReturnTypes = {
-  [P in ValidPath]: {
-    [M in AllowedMethodsForPath<P>]: JsonBody200<P, M>
-  }
-};
+/** Paths that expose a GET method. */
+export type ValidGetPath = {
+  [P in ValidPath]: 'get' extends AllowedMethodsForPath<P> ? P : never
+}[ValidPath];
+
+/**
+ * Union of all GET 200 JSON response body types.
+ *
+ * Generated at sdk-codegen time as an explicit union — one direct
+ * `Paths` index per path. Each member resolves eagerly to the
+ * concrete response type from the processed OpenAPI schema, with no
+ * conditional or mapped type indirection.
+ *
+ * Replaces hand-authored `Readonly<Record<string, unknown>>` aliases
+ * that widen the type system.
+ */
+export type GetResponseBody =
+  | Paths['/changelog']['get']['responses'][200]['content']['application/json']
+  | Paths['/changelog/latest']['get']['responses'][200]['content']['application/json']
+  | Paths['/key-stages']['get']['responses'][200]['content']['application/json']
+  | Paths['/key-stages/{keyStage}/subject/{subject}/assets']['get']['responses'][200]['content']['application/json']
+  | Paths['/key-stages/{keyStage}/subject/{subject}/lessons']['get']['responses'][200]['content']['application/json']
+  | Paths['/key-stages/{keyStage}/subject/{subject}/questions']['get']['responses'][200]['content']['application/json']
+  | Paths['/key-stages/{keyStage}/subject/{subject}/units']['get']['responses'][200]['content']['application/json']
+  | Paths['/keywords']['get']['responses'][200]['content']['application/json']
+  | Paths['/lessons/{lesson}/assets']['get']['responses'][200]['content']['application/json']
+  | Paths['/lessons/{lesson}/assets/{type}']['get']['responses'][200]['content']['application/json']
+  | Paths['/lessons/{lesson}/quiz']['get']['responses'][200]['content']['application/json']
+  | Paths['/lessons/{lesson}/summary']['get']['responses'][200]['content']['application/json']
+  | Paths['/lessons/{lesson}/transcript']['get']['responses'][200]['content']['application/json']
+  | Paths['/rate-limit']['get']['responses'][200]['content']['application/json']
+  | Paths['/search/lessons']['get']['responses'][200]['content']['application/json']
+  | Paths['/search/transcripts']['get']['responses'][200]['content']['application/json']
+  | Paths['/sequences/{sequence}/assets']['get']['responses'][200]['content']['application/json']
+  | Paths['/sequences/{sequence}/questions']['get']['responses'][200]['content']['application/json']
+  | Paths['/sequences/{sequence}/units']['get']['responses'][200]['content']['application/json']
+  | Paths['/subjects']['get']['responses'][200]['content']['application/json']
+  | Paths['/subjects/{subject}']['get']['responses'][200]['content']['application/json']
+  | Paths['/subjects/{subject}/key-stages']['get']['responses'][200]['content']['application/json']
+  | Paths['/subjects/{subject}/sequences']['get']['responses'][200]['content']['application/json']
+  | Paths['/subjects/{subject}/years']['get']['responses'][200]['content']['application/json']
+  | Paths['/threads']['get']['responses'][200]['content']['application/json']
+  | Paths['/threads/{threadSlug}/units']['get']['responses'][200]['content']['application/json']
+  | Paths['/units/{unit}/summary']['get']['responses'][200]['content']['application/json'];
+
+/** GET 200 response bodies that are objects (safe to spread). */
+export type GetObjectResponseBody = Exclude<GetResponseBody, readonly unknown[]>;
+
+/** GET 200 response bodies that are arrays. */
+export type GetArrayResponseBody = Extract<GetResponseBody, readonly unknown[]>;
+
+/** Element type of array-valued GET 200 response bodies. */
+export type GetArrayResponseElement =
+  GetArrayResponseBody extends readonly (infer E)[] ? E : never;
 
 /**
  * KeyStages extracted from the API schema
@@ -2621,10 +2667,6 @@ export function getOperationIdByPathAndMethod(path: string, method: string): Ope
   const operation = PATH_OPERATIONS.find((op) => op.path === path && op.method === method);
   return operation?.operationId;
 }
-
-export type ResponsesForPath<P extends ValidPath> = PathOperation['path'] extends P ? PathOperation['responses'] : never;
-export type ResponseForPathAndMethod<P extends ValidPath, M extends AllowedMethodsForPath<P>> = // if path extends p and method extends m, then return the responses
-  PathOperation['path'] extends P ? PathOperation['method'] extends M ? PathOperation['responses'] : never : never;
 
 /**
  * All response codes

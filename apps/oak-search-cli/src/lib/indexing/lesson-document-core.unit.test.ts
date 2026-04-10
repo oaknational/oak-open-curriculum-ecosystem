@@ -20,7 +20,7 @@ function createMinimalParams(overrides?: Partial<CreateLessonDocParams>): Create
   const defaultUnit: LessonUnitInfo = {
     unitSlug: 'fractions-year-3',
     unitTitle: 'Fractions Year 3',
-    canonicalUrl: 'https://example.com/units/fractions-year-3',
+    oakUrl: 'https://example.com/units/fractions-year-3',
   };
 
   return {
@@ -93,8 +93,8 @@ describe('lesson-document-core', () => {
 
     it('extracts unit arrays from unit info', () => {
       const units: LessonUnitInfo[] = [
-        { unitSlug: 'unit-1', unitTitle: 'Unit 1', canonicalUrl: 'https://example.com/unit-1' },
-        { unitSlug: 'unit-2', unitTitle: 'Unit 2', canonicalUrl: 'https://example.com/unit-2' },
+        { unitSlug: 'unit-1', unitTitle: 'Unit 1', oakUrl: 'https://example.com/unit-1' },
+        { unitSlug: 'unit-2', unitTitle: 'Unit 2', oakUrl: 'https://example.com/unit-2' },
       ];
       const params = createMinimalParams({ units, unitCount: 2 });
 
