@@ -1,6 +1,0 @@
----
-description: No shims, hacks, or workarounds. Do it properly or do something else.
-alwaysApply: true
----
-
-Read and follow `.agent/rules/no-shims-or-workarounds.md`.

@@ -1,6 +1,4 @@
 import type { Express, RequestHandler } from 'express';
-import { existsSync } from 'node:fs';
-import { resolve } from 'node:path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { Logger, PhasedTimer } from '@oaknational/logger';
@@ -203,63 +201,6 @@ function initializeCoreEndpoints(
   log: Logger,
   observability: HttpObservability,
 ): { mcpFactory: McpServerFactory; ready: Promise<void> } {
-  const processCwd = process.cwd();
-  const distDirPath = resolve(processCwd, 'dist');
-  const packageJsonPath = resolve(processCwd, 'package.json');
-  const cwdExists = existsSync(processCwd);
-  const distDirExists = existsSync(distDirPath);
-  const packageJsonExists = existsSync(packageJsonPath);
-  const widgetExistsAtPath = existsSync(WIDGET_HTML_PATH);
-  // #region agent log
-  fetch('http://127.0.0.1:7247/ingest/e98d08de-8905-4602-82c6-b7a35fc0848b', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'ae9818' },
-    body: JSON.stringify({
-      sessionId: 'ae9818',
-      runId: 'pre-fix',
-      hypothesisId: 'H4',
-      location: 'application.ts:initializeCoreEndpoints',
-      message: 'initializing core endpoints and widget validation',
-      data: {
-        widgetHtmlPath: WIDGET_HTML_PATH,
-        processCwd,
-        useStubTools: runtimeConfig.useStubTools,
-        cwdExists,
-        distDirPath,
-        distDirExists,
-        packageJsonPath,
-        packageJsonExists,
-        widgetExistsAtPath,
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-  // #region agent log
-  console.error(
-    JSON.stringify({
-      marker: 'agent_debug',
-      runId: 'pre-fix',
-      hypothesisId: 'H4',
-      location: 'application.ts:initializeCoreEndpoints',
-      message: 'initializing core endpoints and widget validation',
-      data: {
-        widgetHtmlPath: WIDGET_HTML_PATH,
-        processCwd,
-        useStubTools: runtimeConfig.useStubTools,
-        cwdExists,
-        distDirPath,
-        distDirExists,
-        packageJsonPath,
-        packageJsonExists,
-        widgetExistsAtPath,
-      },
-      timestamp: Date.now(),
-    }),
-  );
-  // #endregion
-  // Tests inject a no-op validator so source-imported coverage does not depend
-  // on build artefacts; production callers use the real fail-fast validation.
   (options.validateWidgetHtml ?? validateWidgetHtmlExists)(WIDGET_HTML_PATH);
 
   const searchRetrieval = runtimeConfig.useStubTools

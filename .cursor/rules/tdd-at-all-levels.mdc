@@ -1,6 +1,0 @@
----
-description: TDD at unit, integration, AND E2E. Write tests FIRST. Red-Green-Refactor.
-alwaysApply: true
----
-
-Read and follow `.agent/rules/tdd-at-all-levels.md`.

@@ -20,36 +20,7 @@ export function validateWidgetHtmlExists(
   widgetHtmlPath: string,
   existsSync: (path: string) => boolean = nodeExistsSync,
 ): void {
-  const existsAtWidgetPath = existsSync(widgetHtmlPath);
-  // #region agent log
-  fetch('http://127.0.0.1:7247/ingest/e98d08de-8905-4602-82c6-b7a35fc0848b', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'ae9818' },
-    body: JSON.stringify({
-      sessionId: 'ae9818',
-      runId: 'pre-fix',
-      hypothesisId: 'H1',
-      location: 'validate-widget-html.ts:validateWidgetHtmlExists',
-      message: 'validated widget html existence',
-      data: { widgetHtmlPath, existsAtWidgetPath },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-  // #region agent log
-  console.error(
-    JSON.stringify({
-      marker: 'agent_debug',
-      runId: 'pre-fix',
-      hypothesisId: 'H1',
-      location: 'validate-widget-html.ts:validateWidgetHtmlExists',
-      message: 'validated widget html existence',
-      data: { widgetHtmlPath, existsAtWidgetPath },
-      timestamp: Date.now(),
-    }),
-  );
-  // #endregion
-  if (!existsAtWidgetPath) {
+  if (!existsSync(widgetHtmlPath)) {
     throw new Error(
       `Widget HTML not found at ${widgetHtmlPath}. ` +
         'Run `pnpm build` to generate the widget bundle before starting the server.',

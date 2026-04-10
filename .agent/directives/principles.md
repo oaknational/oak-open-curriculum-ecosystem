@@ -1,9 +1,9 @@
 ---
 fitness_line_target: 450
-fitness_line_limit: 575
-fitness_char_limit: 23000
+fitness_line_limit: 525
+fitness_char_limit: 24000
 fitness_line_length: 100
-split_strategy: "Extract elaborated guidance to governance docs; this file is authoritative principles"
+split_strategy: "This file is the source of truth for all principles. Extract only elaborated guidance to governance docs, never the principles themselves. The principles are operationalised through several mechanisms, including rules, sub-agents, and tooling."
 ---
 
 # Principles
@@ -13,12 +13,12 @@ All of these principles MUST be followed at all times.
 ## First Question
 
 Always apply the first question; **Ask: could it be simpler _without
-compromising quality_?**. The answer will often be no, that is fine,
+compromising quality or value_?**. The answer will often be no, that is fine,
 but bring real critical thinking to the question each time.
 
 ## Strict and Complete
 
-**Strict and complete, everywhere, all the time.** Prefer explicit,
+**Strict and complete, everywhere, all the time.** Prefer explicit, strict,
 total, fully checked systems over permissive, partial, or hand-wavy
 ones. Do not invent optionality, fallback options, or implied
 enforcement. Type precision is one of the clearest concrete
@@ -51,20 +51,50 @@ apps. In other words, ALL the heavy lifting MUST happen at
 sdk-codegen time, i.e. when `pnpm sdk-codegen` is run. All the
 libraries, all the apps, all the MCP servers are simple consumers,
 the complexity is in the SDK and ONLY in the code-generation process.
+No ad-hoc types. If a type is missing, it is a generator bug — fix
+the generator, not the consumer.
+
+### Separate Framework from Consumer
+
+Whenever we build something, clearly separate (a) a
+purpose-specific, consumer-general framework from (b) the
+Oak-specific consumer instance. The framework is the reusable
+mechanism that solves a category of problem — usable by any
+consumer. The consumer instance applies that framework to Oak's
+domain and data. This separation must be visible in code structure:
+different modules, directories, or packages. If general mechanism
+and Oak-specific configuration are mixed in one module, split them.
+The framework defines the contract; the consumer provides the
+specifics. The test: "Could a non-Oak consumer use this component
+unchanged?" If not, extract the Oak-specific parts.
+
+### Decompose at the Tension
+
+When code resists clean classification or forces compromise
+labels ("lifecycle-neutral", "shared", "cross-cutting"), that
+resistance reveals hidden coupling. The response is to decompose
+at the fault line — separate the concerns being conflated — not
+to classify around the compromise. A barrel re-export that exists
+to make something "work" is a symptom; the cure is to eliminate
+the coupling that made the barrel necessary. Each tension resolved
+this way produces cleaner boundaries and simpler classification.
 
 ### Code Design and Architectural Principles
 
-- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests.
-  Write tests **FIRST**. Red (run the test to _prove it fails_),
-  Green (run the test to prove it passes, _because product code
-  exists now_), Refactor (improve the product code implementation,
-  now that the _behaviour_ at the interface will remain proven by
-  the test)
+- **TDD** - ALWAYS use TDD at ALL levels — unit, integration, AND
+  E2E. Write tests **FIRST**. Red (run the test to _prove it
+  fails_), Green (run the test to prove it passes, _because
+  product code exists now_), Refactor (improve the product code
+  implementation, now that the _behaviour_ at the interface will
+  remain proven by the test). If tests lag behind code at ANY
+  level, TDD was not followed.
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
 - **NEVER create compatibility layers, no backwards
   compatibility** - replace old approaches with new approaches,
   never create compatibility layers, never prioritise backwards
-  compatibility
+  compatibility. When renaming, rename EVERYWHERE — interfaces,
+  private functions, variable names, log keys, TSDoc. One concept
+  = one name.
 - **Keep it strict** - don't invent optionality, don't add fallback
   options. We know exactly what is needed, and the proper
   functioning of the system depends on acknowledging and embracing
@@ -115,7 +145,14 @@ the complexity is in the SDK and ONLY in the code-generation process.
   appropriate directories, default to the README.md for the current
   workspace. Observe progressive disclosure, starting with the
   most general information and working towards the most specific.
-  DO NOT create summary documents of each piece of work.
+  DO NOT create summary documents of each piece of work. **TSDoc
+  syntax**: open every TSDoc block with a plain-language summary
+  sentence (not a tag); put supporting detail in `@remarks`; only
+  use tags supported by `tsdoc.json`; use `@packageDocumentation`
+  for file-level docs (never `@module` or `@fileoverview`); escape
+  literal braces as `\{` and `\}` for clean `tsdoc/syntax`; use
+  TSDoc to explain intent and trade-offs, not to narrate obvious
+  code.
 - **Onboarding** - We must have a clear onboarding path for new
   developers and AI agents, from the root README.md, to detailed
   documentation in the appropriate directories, to specialised
@@ -132,7 +169,10 @@ the complexity is in the SDK and ONLY in the code-generation process.
 - **No symlinks** — Symlinks are forbidden. Structure workspaces
   properly and use the pnpm workspace dependency graph. Any
   discovered symlinks must be removed immediately as highest
-  priority. Platform adapters are real files, not symlinks.
+  priority. Platform adapters (`.claude/`, `.cursor/`, `.agents/`)
+  must be real files — thin pointers to canonical content — not
+  symlinks. pnpm's own `node_modules` symlinks are managed by
+  pnpm and are not in scope.
 - **No shims, no hacks, no workarounds** — Do it properly or do
   something else. Never introduce shims, polyfills, compatibility
   wrappers, renamed globals, or any mechanism whose purpose is to
@@ -142,12 +182,7 @@ the complexity is in the SDK and ONLY in the code-generation process.
 
 ### Refactoring
 
-- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests.
-  Write tests **FIRST**. Red (run the test to _prove it fails_),
-  Green (run the test to prove it passes, _because product code
-  exists now_), Refactor (improve the product code implementation,
-  know that the _behaviour_ at the interface will remain proven by
-  the test)
+- **TDD** — see §Code Design above
 - **NEVER create compatibility layers** - replace old approaches
   with new approaches
 - **Don't extract single-consumer abstractions** — If a protocol
@@ -213,12 +248,7 @@ paths, setup files) don't apply.
 
 ### Code Quality
 
-- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests.
-  Write tests **FIRST**. Red (run the test to _prove it fails_),
-  Green (run the test to prove it passes, _because product code
-  exists now_), Refactor (improve the product code implementation,
-  know that the _behaviour_ at the interface will remain proven by
-  the test)
+- **TDD** — see §Code Design above
 - **NEVER disable checks** - Never disable any quality gates, never
   disable type checks, never disable any linting, never disable
   any formatting, never disable any tests, never disable Git hooks
@@ -269,16 +299,31 @@ paths, setup files) don't apply.
 
 ### Compiler Time Types and Runtime Validation
 
-- **No type shortcuts** — see `.agent/rules/no-type-shortcuts.md`
-  for the full forbidden-constructs list (TypeScript AND Zod
-  level). The goal is to preserve type information, not to work
-  around the constraint. `as const` and `satisfies` are the only
-  permitted exceptions.
-- **`unknown` is type destruction** — see
-  `.agent/rules/unknown-is-type-destruction.md`. Permitted only at
-  incoming external boundaries from third-party systems. Using
-  `unknown`, `z.unknown()`, or hand-crafted shadow schemas where
-  generated types exist is a violation.
+- **No type shortcuts** — never use `as`, `any`, `!`,
+  `Record<string, unknown>`, `{ [key: string]: unknown }`,
+  `Object.*` methods, `Reflect.*` methods, `isObject` type
+  predicates, `z.unknown()` (where a concrete schema exists),
+  `z.record(z.string(), z.unknown())`, or hand-crafted Zod
+  schemas that duplicate generated shapes. They all disable the
+  type system. Preserve type information; never widen. `as const`
+  and `satisfies` are the only permitted exceptions — both are
+  compile-time constraints that narrow without overriding. When
+  using external libraries, prefer official library types and
+  error classes over local `*Like` shapes.
+- **`unknown` is type destruction** — `unknown`, `z.unknown()`,
+  and `Record<string, unknown>` erase structural type information.
+  **Permitted**: function parameter at an incoming external
+  boundary from a third-party system (data genuinely has no known
+  shape yet); `z.unknown()` only when the upstream schema
+  genuinely declares no structure (e.g. polymorphic aggregation
+  buckets from Elasticsearch). **Forbidden**: replacing a concrete
+  type with `unknown` to avoid a type error; using `z.unknown()`
+  where a concrete Zod schema exists or can be generated; using
+  `z.record(z.string(), z.unknown())` as a stand-in for a known
+  object shape; hand-crafting a Zod schema that approximates a
+  generated shape. **The test**: if the type information exists
+  anywhere in the pipeline — the OpenAPI spec, the generated
+  types, a library's exported types — it MUST be preserved.
 - **Preserve type information** — NEVER widen types by assigning to
   broader types like `string` or `number`. If you have a literal
   type `'/api/path'`, keep it as that literal, don't accept it as

@@ -1,6 +1,0 @@
----
-description: Never prefix unused variables with an underscore. Find root cause.
-alwaysApply: true
----
-
-Read and follow `.agent/rules/never-prefix-unused-variables-with-underscore.md`.

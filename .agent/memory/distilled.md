@@ -143,6 +143,13 @@ context with no natural permanent home.
   host rendering), add a composition test that proves the
   chain, not just the individual links.
 
+## Terminology
+
+- "Build time" is ambiguous — both codegen-time and runtime
+  have build steps. Say "codegen time" for SDK generation
+  pipeline steps, "runtime build" for app compilation. Never
+  use "build time" unqualified.
+
 ## Build System (Domain-Specific)
 
 - **Turbo overrides need ALL task types**: if a workspace
@@ -164,6 +171,19 @@ context with no natural permanent home.
   value symbols unavailable at runtime. Use inline `type`
   keyword on individual specifiers:
   `import { applyTheme, type McpUiHostContext } from '...'`
+
+## Vercel Deployment
+
+- `process.cwd()` on Vercel Lambda = `/var/task` (task root),
+  NOT the app package directory. Code using `process.cwd()` for
+  app-relative paths will resolve to wrong locations.
+- Vercel NFT only bundles files reachable via static `import` /
+  `require`. Dynamic `readFile()` targets may be missing from
+  the Lambda bundle.
+- Build artefact content the app serves (e.g. widget HTML for
+  MCP resources) should be a committed TypeScript constant
+  (same codegen pattern as `WIDGET_URI`), consumed via DI —
+  not runtime filesystem reads.
 
 ## Architecture (Domain-Specific)
 

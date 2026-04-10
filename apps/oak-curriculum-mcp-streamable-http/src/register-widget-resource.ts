@@ -28,36 +28,7 @@ import {
  * Exported for startup validation in {@link validateWidgetHtmlExists}.
  */
 export function resolveWidgetHtmlPath(currentWorkingDirectory: string = process.cwd()): string {
-  const resolvedPath = resolve(currentWorkingDirectory, 'dist/oak-banner.html');
-  // #region agent log
-  fetch('http://127.0.0.1:7247/ingest/e98d08de-8905-4602-82c6-b7a35fc0848b', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'ae9818' },
-    body: JSON.stringify({
-      sessionId: 'ae9818',
-      runId: 'pre-fix',
-      hypothesisId: 'H2',
-      location: 'register-widget-resource.ts:resolveWidgetHtmlPath',
-      message: 'resolved widget html path',
-      data: { currentWorkingDirectory, resolvedPath },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-  // #region agent log
-  console.error(
-    JSON.stringify({
-      marker: 'agent_debug',
-      runId: 'pre-fix',
-      hypothesisId: 'H2',
-      location: 'register-widget-resource.ts:resolveWidgetHtmlPath',
-      message: 'resolved widget html path',
-      data: { currentWorkingDirectory, resolvedPath },
-      timestamp: Date.now(),
-    }),
-  );
-  // #endregion
-  return resolvedPath;
+  return resolve(currentWorkingDirectory, 'dist/oak-banner.html');
 }
 
 /**
@@ -73,34 +44,6 @@ export const WIDGET_HTML_PATH = resolveWidgetHtmlPath();
 export async function readBuiltWidgetHtml(
   widgetHtmlPath: string = WIDGET_HTML_PATH,
 ): Promise<string> {
-  // #region agent log
-  fetch('http://127.0.0.1:7247/ingest/e98d08de-8905-4602-82c6-b7a35fc0848b', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'ae9818' },
-    body: JSON.stringify({
-      sessionId: 'ae9818',
-      runId: 'pre-fix',
-      hypothesisId: 'H5',
-      location: 'register-widget-resource.ts:readBuiltWidgetHtml',
-      message: 'attempting widget html read',
-      data: { widgetHtmlPath },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-  // #region agent log
-  console.error(
-    JSON.stringify({
-      marker: 'agent_debug',
-      runId: 'pre-fix',
-      hypothesisId: 'H5',
-      location: 'register-widget-resource.ts:readBuiltWidgetHtml',
-      message: 'attempting widget html read',
-      data: { widgetHtmlPath },
-      timestamp: Date.now(),
-    }),
-  );
-  // #endregion
   return readFile(widgetHtmlPath, 'utf-8');
 }
 

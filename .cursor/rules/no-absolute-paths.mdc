@@ -1,6 +1,0 @@
----
-description: All filesystem paths must be relative. No absolute paths.
-alwaysApply: true
----
-
-Read and follow `.agent/rules/no-absolute-paths.md`.

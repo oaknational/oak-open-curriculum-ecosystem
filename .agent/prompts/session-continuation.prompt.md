@@ -40,102 +40,87 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: PR #76 merge-handoff after local production-startup recovery,
-  Vercel/bootstrap remediation, and HTTP dev-contract alignment; Phase 5 stays
-  queued post-merge
+- **Workstream**: Vercel widget crash fix + workspace topology
+  exploration (strategic)
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-6-docs-gates-review-commit.plan.md`
-    (**ACTIVE** — local gates, built-runtime proof, and contamination check are
-    green; commit/push plus deployed preview recheck remain)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/vercel-mcp-build-warnings-and-bootstrap.plan.md`
-    (**ACTIVE** — Phase 0 baseline is evidenced from the provided build log;
-    local Phase 1/1b/2 fixes and docs are green; deployed preview/build-log
-    verification still pending)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/embed-widget-html-at-build-time.plan.md`
+    (**ACTIVE** — Phase 0 complete, Phases 1-3 pending execution)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
+    (**FUTURE** — four-tier architecture, function-level analysis)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
     (**QUEUED** — post-merge interactive user-search UI)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md`
-    (post-merge)
-- **Current state**: Branch `feat/mcp_app_ui` now carries the local merge-ready
-  remediation set for the post-CI Vercel startup failure:
-  - built runtime reads the widget from `process.cwd()/dist/oak-banner.html`
-    and the relocation-style built-artifact proof passes under plain Node
-  - the MCP SDK/runtime `.js` import fix, resolver-standardisation, and warning
-    cleanup remain in place
-  - Vercel-related local follow-up is green: Turbo env pass-through added,
-    `canonical-url-map.json` missing-data logging reduced to INFO, and the
-    `vite-plugin-singlefile` deprecation removed without changing the widget
-    contract
-  - HTTP dev orchestration now lives in
-    `apps/oak-curriculum-mcp-streamable-http/operations/`; `pnpm dev*`
-    auto-builds and watches the canonical widget artefact before booting the
-    source server
-  - validation is green locally: targeted workspace tests, live
-    `dev:observe:noauth` acceptance after deleting `dist/`, canonical runtime
-    contamination check (zero hits), targeted built-artifact E2E, and full
-    `pnpm check`
-- **Current objective**: Commit and push the truthful merge-handoff state,
-  recheck the deployed Vercel preview/build logs, and merge PR #76 once the
-  preview starts cleanly and the enumerated warnings stay gone. Phase 5 remains
-  post-merge on a fresh branch.
+- **Current state**: Widget crash plan is final and reviewed.
+  Topology exploration plan created with four-tier model
+  (primitives, infrastructure, codegen-time, runtime), lifecycle
+  classification of all workspaces, tension analysis, and phased
+  execution plan. Two new principles codified: "Separate Framework
+  from Consumer" and "Decompose at the Tension". Cursor rules
+  consolidated: 12 always-on architecture rules replaced by 1
+  pointing to `principles.md` as the source of truth.
+- **Current objective**: Execute widget crash fix (Plan A) first,
+  then proceed to topology exploration (Plan B) Phase 2.
 - **Hard invariants / non-goals**:
-  - No compatibility shims or invented optionality on the tool-shape contract
-  - `inputSchema` always present (empty `{}` for no-input, per MCP spec)
-  - Title and description required on `UniversalToolListEntry`
-  - Do not make source-imported unit/integration tests depend on build
-    artefacts; prove production startup by executing built code separately
-  - Keep `dist/oak-banner.html` as the single runtime widget contract; no
-    `public/` copy, no second source of truth, no runtime `NODE_ENV` /
-    `VERCEL` branching for widget loading
-  - Complex dev tooling belongs in workspace `operations/`, not `scripts/`
-  - Do not loosen or disable lint/import/dependency checks to hide config or
-    manifest problems; make resolver settings and workspace manifests tell the
-    truth
-  - Widget URI uses `ui://` scheme per spec
-  - `readBuiltWidgetHtml` is async (`node:fs/promises`)
+  - DI is always used — constant provides VALUE, DI provides
+    TESTABILITY (ADR-078)
+  - Widget HTML follows the same codegen pattern as all other
+    generated metadata (same as `WIDGET_URI`, tool descriptions)
+  - `principles.md` is the source of truth for all principles;
+    `.agent/rules/` and `.cursor/rules/` are operationalisation
+    mechanisms, not the definitions
+  - Separate framework from consumer in all new work
+  - Decompose at tensions rather than classifying around them
+  - `static-content.ts` `process.cwd()` bug tracked separately
+  - No compatibility shims, no invented optionality
 - **Recent surprises / corrections**:
-  - The clean widget bootstrap fix was path anchoring, not a move to `public/`
-    or a Vercel-specific asset override: the MCP server loads widget HTML as a
-    resource payload, not via `express.static()`
-  - "Dev from source, prod from build" belongs in orchestration, not runtime
-    branching: keep one runtime contract (`dist/oak-banner.html`) and make the
-    dev entrypoint materialise it automatically
-  - `pnpm exec` wrappers were insufficient for managed shutdown; direct
-    workspace binaries were required to keep the watcher and source server under
-    deterministic child-process ownership
+  - `principles.md` is the source of truth. Moving fundamental
+    definitions into `.agent/rules/*.md` files breaks every
+    mechanism that reads principles directly. Rules are one
+    operationalisation mechanism among several.
+  - Fitness constraints can be changed — the goal is excellence,
+    not rule following. Where discussion is needed, have the
+    discussion.
+  - ADRs are history, not unbreakable rules. They inform future
+    decisions but do not constrain them.
+  - "Decompose at the Tension": when code resists clean
+    classification, that resistance reveals hidden coupling.
+    Decompose at the fault line, don't classify around the
+    compromise.
 - **Open questions / low-confidence areas**:
-  - Need post-push confirmation that the Vercel preview now starts cleanly
-    under the deployed build/runtime path and that the enumerated warning
-    classes are absent from the fresh build log
-  - If preview verification still disagrees with local evidence, a human
-    dashboard check of the Vercel project root/build settings may still be
-    needed; no Vercel CLI usage is allowed on this branch
-  - Potentially flaky E2E test: `get-curriculum-model.e2e.test.ts`
-    (passed in isolation, failed once during `pnpm check`)
-- **Next safe step**: Review the final working tree, commit the Vercel/bootstrap
-  and HTTP dev-contract changes, push `feat/mcp_app_ui`, then verify preview
-  startup and build logs via the deployed surface before merging PR #76.
-- **Deep consolidation status**: completed this handoff — continuity surfaces
-  synced, napkin rotated, duplicated distilled entries graduated/pruned, and
-  fitness rechecked.
+  - Template literal escaping in the embed script (backticks,
+    `${` in Vite-built HTML) — needs testing
+  - Whether `build:widget` should be a Turbo codegen task or
+    standalone script
+  - Topology Plan B: physical directory structure decision
+    deferred to after function-level analysis evidence
+  - `static-content.ts` `process.cwd()` bug (non-crash, tracked
+    separately)
+- **Next safe step**: Execute Phase 1 of the widget crash plan —
+  change Vite output dir, create embed script, produce committed
+  TypeScript constant, decouple from runtime build.
+- **Deep consolidation status**: completed this handoff — settled
+  doctrine (source-of-truth correction, new principles) now in
+  permanent docs; topology plan referenced; practice exchange
+  checked.
 
 ## Active Workstreams (2026-04-10)
 
-### 1. WS3 MCP App Rebuild — P3 MERGE HANDOFF
+### 1. Vercel Widget Crash Fix — ACTIVE
+
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/embed-widget-html-at-build-time.plan.md`
+
+Vercel preview deployments crash because widget HTML is read from
+the filesystem at runtime. Fix: generate widget HTML as a committed
+TypeScript constant at codegen time (same pattern as `WIDGET_URI`
+and other tool metadata), consumed via DI. Phase 0 (debug cleanup)
+complete. Phases 1-3 pending execution.
+
+### 2. WS3 MCP App Rebuild — MERGE PENDING
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
-**Umbrella**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md`
 
-**Completed phases**: Phase 0-4 (infrastructure, scaffold, contracts, brand
-banner). P0-P2 branding/SDK work on `feat/mcp_app_ui` branch.
-
-**Branch status**: Phase 4.5 wrap-up is archived complete on
-`feat/mcp_app_ui`. Phase 6 pre-merge closure is now at truthful merge-handoff:
-local recovery, warning cleanup, contamination check, and `pnpm check` are
-green; remaining work is commit/push plus preview confirmation before merge.
-**Parallel**: `vercel-mcp-build-warnings-and-bootstrap.plan.md` remains active
-until the deployed preview/build-log path is rechecked.
-
-**Next after merge**: Phase 5 (interactive user search view) on a new branch.
+Local gates green on `feat/mcp_app_ui`. Vercel crash blocks merge.
+Once the widget crash fix lands, commit/push and verify preview.
+Phase 5 (interactive user search view) queued post-merge.
 
 ### 2. Frontend Practice Integration — COMPLETE
 
@@ -162,25 +147,25 @@ ADR-146 accepted, triplet deployed, platform adapters created.
 
 Completed 2026-04-01.
 
-### 6. Oak Surface Isolation Programme — FUTURE
+### 6. Workspace Topology Exploration — FUTURE
 
-**Plan**:
-`.agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md`
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
 
-Strategic umbrella for separating generic foundations from Oak leaves across
-runtime, design system, tooling/governance, SDK/codegen, search, and app
-surfaces. Not yet promoted. First promotion requires the authoritative
-workspace matrix, agreed tranche target states plus rename map, and a
-deterministic validation set for tranche 1.
+Four-tier layered architecture (primitives, infrastructure, codegen-time,
+runtime). Lifecycle classification of all workspaces complete. Phase 2
+(function-level analysis with knip + dependency-cruiser) pending.
+Informed by the Oak Surface Isolation Programme
+(`.agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md`).
 
-## Core Invariant (WS3)
+## Core Invariants
 
-This workstream is a clean-break replacement:
-
-- replace the out-of-date OpenAI-era app integration with a brand-new MCP App
-- keep `search` as the model-facing, agent-facing search interface
-- add `user-search` as a UI-first, user-first MCP App tool
-- do not introduce custom tool-discovery, visibility, or presentation shims
+- Widget HTML is generated metadata — same codegen constant pattern
+  as `WIDGET_URI`, tool descriptions, documentation content
+- DI is always used — enables testing with trivial fakes (ADR-078)
+- `principles.md` is the source of truth; rules operationalise it
+- Separate framework from consumer in all new work
+- Decompose at tensions rather than classifying around compromises
+- Apps are thin interfaces over SDK/codegen capabilities
 
 ## Durable Guidance
 
