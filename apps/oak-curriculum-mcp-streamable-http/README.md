@@ -63,6 +63,11 @@ export ALLOWED_HOSTS=localhost,127.0.0.1,::1
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 ```
 
+`pnpm dev`, `pnpm dev:observe`, and `pnpm dev:observe:noauth` now perform the
+initial widget build automatically and keep `dist/oak-banner.html` fresh with a
+background watch process. Manual `pnpm build` is no longer required just to
+prepare the HTTP dev server's widget artefact.
+
 3. List tools (auth disabled path shown above):
 
 ```bash
@@ -120,6 +125,10 @@ The `dev:widget-in-host` script checks prerequisites, prints usage
 instructions, and starts the host automatically. Open
 `http://localhost:8080`, select a tool, and call it — the widget renders
 in a sandboxed double-iframe matching the production security model.
+
+The HTTP dev server still serves the canonical runtime widget from
+`dist/oak-banner.html`; the difference in dev is that the package script now
+prepares that file from source automatically before booting the server.
 
 `dev:widget-in-host` clones `@modelcontextprotocol/ext-apps` to
 `$TMPDIR/mcp-ext-apps` on first run and reuses it subsequently. Delete

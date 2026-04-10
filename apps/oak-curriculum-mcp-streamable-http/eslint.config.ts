@@ -83,9 +83,22 @@ const config = defineConfig(
       },
     },
     {
+      files: ['operations/**/*.ts'],
+      rules: {
+        'no-console': 'error',
+      },
+    },
+    {
       files: ['**/*.ts'],
       // TODO: remove once config DI standardisation is complete (see .agent/plans/architecture/config-architecture-standardisation-plan.md)
-      ignores: ['**/*.test.ts', '**/*.spec.ts', 'smoke-tests/**', 'e2e-tests/**', 'src/index.ts'],
+      ignores: [
+        '**/*.test.ts',
+        '**/*.spec.ts',
+        'operations/**',
+        'smoke-tests/**',
+        'e2e-tests/**',
+        'src/index.ts',
+      ],
       rules: {
         'no-restricted-syntax': [
           'error',
@@ -162,6 +175,16 @@ const config = defineConfig(
       files: ['scripts/**/*.ts', 'smoke-tests/**/*.ts'],
       rules: {
         'no-console': 'off',
+      },
+    },
+    {
+      files: ['operations/**/*.unit.test.ts', 'operations/**/*.integration.test.ts'],
+      rules: {
+        ...testRules,
+        'import-x/no-relative-parent-imports': 'off',
+        'import-x/no-restricted-paths': 'off',
+        '@typescript-eslint/no-restricted-imports': 'off',
+        'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
       },
     },
     {

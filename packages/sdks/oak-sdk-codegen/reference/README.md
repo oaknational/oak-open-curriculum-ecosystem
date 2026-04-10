@@ -11,6 +11,11 @@ At the repository root, [`.gitignore`](../../../../.gitignore) ignores
 `canonical-url-map.json`) stay local and CI regenerates or validates as needed.
 This `README.md` remains tracked.
 
+When the file is absent, `pnpm sdk-codegen` skips sitemap reference validation
+with an informational log and regeneration guidance. Missing local reference
+data is therefore non-blocking by policy; malformed or invalid reference data
+still emits warnings.
+
 **Contrast** — Agent-facing long-lived reference docs live under
 [`.agent/reference/`](../../../../.agent/reference/README.md).
 

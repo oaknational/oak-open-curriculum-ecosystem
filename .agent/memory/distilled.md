@@ -111,14 +111,6 @@ context with no natural permanent home.
   `ws3-off-the-shelf-mcp-sdk-adoption.plan.md`. Edge case:
   `z.preprocess()` fields lose `.meta()` when `io='input'`
   (per-field, not per-object — only 3 year params affected).
-- Always add new public exports to the barrel file
-  (`src/mcp-tools.ts`) — missing barrel exports cause
-  `undefined` at runtime for `instanceof` checks
-- Generated vocab files at `src/generated/vocab/` need
-  `pnpm vocab-gen`, not `pnpm sdk-codegen`
-- MCP tool counts: see ADR-123 for the canonical figure.
-  Always distinguish generated vs aggregated (ADR-029/030)
-
 ## Elasticsearch
 
 - ES client v9: `document` not `body` for `client.index()`
@@ -201,37 +193,3 @@ context with no natural permanent home.
   `toolcancelled`, `hostcontextchanged`). The `on*` property
   setters are deprecated since ext-apps 1.5. `onteardown` and
   `onerror` are NOT deprecated (request handlers, not events).
-- **`console` ban means canonical logger**: the `no-console`
-  rule forces injection of `@oaknational/logger`, not fallback
-  to `process.stderr.write`. Build scripts without a logger
-  should let errors propagate naturally (Node surfaces the
-  stack trace).
-- **sentry-mcp wrappers use `Awaited<TResult>`**: all three
-  wrappers (`wrapToolHandler`, `wrapResourceHandler`,
-  `wrapPromptHandler`) plus `observeMcpOperation` return
-  `Promise<Awaited<TResult>>`. The app-level wrapper in
-  `register-resource-helpers.ts` matches. Without `Awaited`,
-  async handlers produce `Promise<Promise<X>>` at the type
-  level when the handler param lacks the `Promise<T> | T`
-  union. TypeScript inference hides this at the sentry level
-  but not at the app level.
-- **`vite-plugin-singlefile` is the canonical MCP Apps build
-  pattern**: the host loads HTML via `document.write()` into a
-  sandboxed iframe with no backing web server. External
-  `<script src>` references resolve to nothing. All JS/CSS
-  must be inlined. The plugin does NOT make the app "static" —
-  the inlined JS runs as live React with full SDK lifecycle.
-- **MCP Apps CSP goes on content items only**: declare
-  `_meta.ui.csp.resourceDomains` on `contents[]` items in
-  `registerAppResource`, NOT on the listing config. The MCP
-  Apps spec is explicit: hosts read CSP from content items.
-- **MCP tool `name` vs `title`**: `name` is the machine ID
-  (kebab-case, used in `tools/call`). `title` (BaseMetadata,
-  spec 2025-11-25) is the sole human display name —
-  `annotations.title` was removed (redundant, all hosts read
-  top-level `title`). Generated tools still need codegen
-  template work for `title`.
-- **Contrast pairings need usage context**: a design token
-  that passes the 3:1 non-text threshold may fail 4.5:1
-  for text. Always declare `context: 'text' | 'non-text'`
-  in `contrast-pairings.ts` and validate accordingly.

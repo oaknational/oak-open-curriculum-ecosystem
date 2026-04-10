@@ -9,7 +9,7 @@ todos:
     status: done
   - id: gates
     content: "Run canonical readiness and full-scrub gates."
-    status: in_progress
+    status: done
   - id: reviewer-pass
     content: "Run required reviewer set and address findings."
     status: done
@@ -23,8 +23,8 @@ todos:
 
 # WS3 Phase 6: Docs, Gates, Review, Commit
 
-**Status**: ACTIVE MERGE HANDOFF — post-CI Vercel startup failure reopened the closeout; targeted recovery, built-artifact proof, and resolver-standardisation are green locally, final gates/preview/commit remain
-**Last Updated**: 2026-04-09
+**Status**: ACTIVE MERGE HANDOFF — post-CI Vercel startup failure reopened the closeout; local recovery, built-artifact proof, warning cleanup, contamination check, and aggregate gates are green, while preview/commit remain
+**Last Updated**: 2026-04-10
 
 Pre-merge docs, reviewers, and closure work had been complete, but the first
 Vercel preview after CI exposed a production-only startup defect. The closeout
@@ -45,6 +45,9 @@ PR #76 lands.
 6. `../archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md` —
    completed Phase 4.5 provenance and acceptance evidence
 7. Phase 0 evidence table — verify all RED/GREEN contracts are satisfied
+8. **Related**: [vercel-mcp-build-warnings-and-bootstrap.plan.md](vercel-mcp-build-warnings-and-bootstrap.plan.md) —
+   active execution plan for Vercel build warnings + `oak-banner.html` bootstrap;
+   preview must start cleanly for Phase 6 acceptance item 8
 
 ## Tasks
 
@@ -64,6 +67,14 @@ PR #76 lands.
    - Phase 0 RED/GREEN evidence table is fully populated with GREEN evidence
    - deployed preview/runtime startup is confirmed after push
 7. Commit and push the branch so PR #76 has a single merge-handoff state
+
+## Execution Notes (2026-04-10)
+
+- Full aggregate gate rerun is green: `pnpm check`
+- Canonical runtime contamination check now returns zero active-path matches
+- The remaining acceptance gap is external to local code verification:
+  item 8 still needs deployed preview/runtime recheck after push, and item 9
+  still needs the closeout commit/push itself
 
 ## Acceptance Evidence
 

@@ -46,9 +46,10 @@ const tokenSourceDir = workspaceRoot
 
 export default defineConfig({
   root: widgetRoot,
+  base: './',
   plugins: [
     react(),
-    viteSingleFile(),
+    viteSingleFile({ useRecommendedBuildConfig: false }),
     /**
      * Cross-workspace file watcher for design token source files.
      *
@@ -132,6 +133,10 @@ export default defineConfig({
   build: {
     outDir: resolve(widgetRoot, '..', 'dist'),
     emptyOutDir: false,
+    assetsInlineLimit: () => true,
+    chunkSizeWarningLimit: 100000000,
+    cssCodeSplit: false,
+    assetsDir: '',
     rollupOptions: {
       input: resolve(widgetRoot, 'oak-banner.html'),
     },

@@ -15,6 +15,11 @@ The deployed runtime has three important artefacts and one shared startup path:
    bootstrap/runtime code
 3. `dist/oak-banner.html` — self-contained MCP App widget built by Vite
 
+The runtime resolves the widget HTML from `process.cwd()/dist/oak-banner.html`,
+not from a bundle-file-relative path. This keeps the contract anchored to the
+function/package root rather than to the transient location of `application.js`
+inside a deployment bundle.
+
 `src/index.ts` does **not** export a special Vercel-only Express default export
 or branch on `process.env.VERCEL`. Both local and deployed startup go through
 the same repo code:
@@ -111,7 +116,8 @@ This repo guarantees:
 
 1. the built server entry point is `dist/index.js`
 2. local and deployed execution use the same startup code path
-3. widget HTML is emitted to `dist/oak-banner.html` and validated at startup
+3. widget HTML is emitted to `dist/oak-banner.html` and resolved from the
+   package working directory at startup
 4. the MCP runtime remains per-request at the transport layer (see
    `src/application.ts` / ADR-112)
 
@@ -137,10 +143,13 @@ See [vercel-environment-config.md](./vercel-environment-config.md) for complete 
 For local development and local production-bundle verification, we use the same
 runtime path with different entry commands:
 
-1. `pnpm dev` executes `tsx src/index.ts`
+1. `pnpm dev` executes `tsx operations/development/http-dev.ts dev`
 2. `pnpm start` executes `node dist/index.js` after `pnpm build`
-3. both paths call `startConfiguredHttpServer(...)`
-4. the server listens on `PORT` when set, otherwise `3333`
+3. the dev orchestrator first runs the workspace widget build command, then
+   starts the matching widget watch command, then boots the source HTTP server
+   via the workspace-local `tsx` binary
+4. both runtime paths call `startConfiguredHttpServer(...)`
+5. the server listens on `PORT` when set, otherwise `3333`
 
 These paths share the same repo-owned startup logic but they do **not** share
 the same module resolver. `tsx` can tolerate import specifiers that plain Node
@@ -153,10 +162,18 @@ built-artifact proof as well as the dev path.
 {
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts"
+    "dev": "tsx operations/development/http-dev.ts dev",
+    "dev:observe": "tsx operations/development/http-dev.ts observe",
+    "dev:observe:noauth": "tsx operations/development/http-dev.ts observe-noauth"
   }
 }
 ```
+
+The HTTP server runtime contract stays the same in both modes: resource
+registration reads `process.cwd()/dist/oak-banner.html`. Development is
+source-driven because the `operations/development` entrypoint materialises and
+watches that canonical artefact automatically; production remains built-output
+driven.
 
 ### Environment Variables
 
@@ -245,9 +262,10 @@ so a change to either set invalidates the whole build cache entry.
 ### Startup Validation
 
 At server startup, `validateWidgetHtmlExists()` checks that
-`dist/oak-banner.html` exists before resource registration. If the build step
-was skipped or failed, this produces a clear error with `pnpm build` guidance
-instead of an opaque `ENOENT` on the first `resources/read` request.
+`process.cwd()/dist/oak-banner.html` exists before resource registration. If
+the build step was skipped or failed, this produces a clear error with
+`pnpm build` guidance instead of an opaque `ENOENT` on the first
+`resources/read` request.
 
 ## Async Initialization
 

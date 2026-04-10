@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-09
+last_updated: 2026-04-10
 ---
 
 # Session Continuation
@@ -40,85 +40,85 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: PR #76 production-startup closeout + Phase 5 queue
+- **Workstream**: PR #76 merge-handoff after local production-startup recovery,
+  Vercel/bootstrap remediation, and HTTP dev-contract alignment; Phase 5 stays
+  queued post-merge
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-6-docs-gates-review-commit.plan.md`
-    (**ACTIVE** — merge-handoff closeout reopened by the post-CI Vercel startup
-    failure; targeted recovery is green locally, final aggregate rerun pending)
+    (**ACTIVE** — local gates, built-runtime proof, and contamination check are
+    green; commit/push plus deployed preview recheck remain)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/vercel-mcp-build-warnings-and-bootstrap.plan.md`
+    (**ACTIVE** — Phase 0 baseline is evidenced from the provided build log;
+    local Phase 1/1b/2 fixes and docs are green; deployed preview/build-log
+    verification still pending)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
     (**QUEUED** — post-merge interactive user-search UI)
   - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md`
     (post-merge)
-- **Current state**: Branch `feat/mcp_app_ui` is carrying the post-CI
-  production-startup recovery for PR #76 after the Vercel preview built
-  successfully but crashed on startup. The root cause was a dev-vs-built
-  resolver mismatch: `tsx` tolerated extensionless MCP SDK subpath imports that
-  plain Node ESM rejected in built code. The HTTP app imports were corrected,
-  the code generator was fixed and regenerated so emitted MCP SDK imports use
-  `.js` suffixes, and a built-artifact E2E proof now imports
-  `dist/application.js` under plain Node. The follow-on lint false negative on
-  those correct `.js` imports was then fixed by standardising active workspace
-  ESLint configs on `import-x/resolver-next` with chained TypeScript + Node
-  resolvers. Targeted recovery evidence is green:
-  - `pnpm --filter @oaknational/sdk-codegen test -- --run ...generate-execute-file.unit.test.ts ...stub-modules.unit.test.ts ...generate-tool-descriptor-file.unit.test.ts`
-  - `pnpm exec turbo run build --filter=@oaknational/oak-curriculum-mcp-streamable-http --continue --force`
-  - plain-Node import of `apps/oak-curriculum-mcp-streamable-http/dist/application.js`
-  - `pnpm --dir apps/oak-curriculum-mcp-streamable-http exec vitest run --config vitest.e2e.config.ts e2e-tests/built-artifact-import.e2e.test.ts e2e-tests/built-server.e2e.test.ts`
-  - `pnpm --dir apps/oak-curriculum-mcp-streamable-http type-check`
-  - targeted lint/type-check sweeps for `@oaknational/eslint-plugin-standards`,
-    `@oaknational/sdk-codegen`,
-    `@oaknational/oak-curriculum-mcp-streamable-http`,
-    `@oaknational/search-cli`, `@oaknational/oak-search-sdk`, and
-    `@oaknational/curriculum-sdk`
-  PR #76 status remains otherwise unchanged:
-  - Phase 4.5 archived complete with T7-T9 closure evidence
-  - 24 generated + 10 aggregated = 34 total live tools
-  - Phase 5 remains post-merge
-  - Potentially flaky E2E test noted (see napkin)
-- **Current objective**: Finish the Phase 6 closeout by rerunning the final
-  aggregate gate on the resolver-standardised merge candidate, then
-  commit/push the production-startup recovery, recheck the deployed
-  preview/smoke path, and merge PR #76. Phase 5 stays on a fresh post-merge
-  branch.
+- **Current state**: Branch `feat/mcp_app_ui` now carries the local merge-ready
+  remediation set for the post-CI Vercel startup failure:
+  - built runtime reads the widget from `process.cwd()/dist/oak-banner.html`
+    and the relocation-style built-artifact proof passes under plain Node
+  - the MCP SDK/runtime `.js` import fix, resolver-standardisation, and warning
+    cleanup remain in place
+  - Vercel-related local follow-up is green: Turbo env pass-through added,
+    `canonical-url-map.json` missing-data logging reduced to INFO, and the
+    `vite-plugin-singlefile` deprecation removed without changing the widget
+    contract
+  - HTTP dev orchestration now lives in
+    `apps/oak-curriculum-mcp-streamable-http/operations/`; `pnpm dev*`
+    auto-builds and watches the canonical widget artefact before booting the
+    source server
+  - validation is green locally: targeted workspace tests, live
+    `dev:observe:noauth` acceptance after deleting `dist/`, canonical runtime
+    contamination check (zero hits), targeted built-artifact E2E, and full
+    `pnpm check`
+- **Current objective**: Commit and push the truthful merge-handoff state,
+  recheck the deployed Vercel preview/build logs, and merge PR #76 once the
+  preview starts cleanly and the enumerated warnings stay gone. Phase 5 remains
+  post-merge on a fresh branch.
 - **Hard invariants / non-goals**:
   - No compatibility shims or invented optionality on the tool-shape contract
   - `inputSchema` always present (empty `{}` for no-input, per MCP spec)
   - Title and description required on `UniversalToolListEntry`
   - Do not make source-imported unit/integration tests depend on build
     artefacts; prove production startup by executing built code separately
+  - Keep `dist/oak-banner.html` as the single runtime widget contract; no
+    `public/` copy, no second source of truth, no runtime `NODE_ENV` /
+    `VERCEL` branching for widget loading
+  - Complex dev tooling belongs in workspace `operations/`, not `scripts/`
   - Do not loosen or disable lint/import/dependency checks to hide config or
     manifest problems; make resolver settings and workspace manifests tell the
     truth
-  - Dark theme page bg is green-700 (#008237), NOT ink-950
-  - Light theme page bg is mint-300 (#bef2bd)
-  - CSS media query governs dark mode, not JS
   - Widget URI uses `ui://` scheme per spec
   - `readBuiltWidgetHtml` is async (`node:fs/promises`)
 - **Recent surprises / corrections**:
-  - `tsx` masked a built-runtime defect: source execution worked while deployed
-    Node ESM crashed on extensionless `@modelcontextprotocol/sdk/*` subpaths.
-  - Fixing the app imports alone was insufficient; generated MCP SDK runtime
-    files also needed `.js` suffixes at the generator source of truth.
-  - `import-x/no-unresolved` was disagreeing with both TypeScript and Node on
-    correct `.js` MCP SDK subpath imports; the fix was resolver standardisation
-    (`import-x/resolver-next` + TypeScript + Node), not backing out the
-    runtime-correct specifiers.
+  - The clean widget bootstrap fix was path anchoring, not a move to `public/`
+    or a Vercel-specific asset override: the MCP server loads widget HTML as a
+    resource payload, not via `express.static()`
+  - "Dev from source, prod from build" belongs in orchestration, not runtime
+    branching: keep one runtime contract (`dist/oak-banner.html`) and make the
+    dev entrypoint materialise it automatically
+  - `pnpm exec` wrappers were insufficient for managed shutdown; direct
+    workspace binaries were required to keep the watcher and source server under
+    deterministic child-process ownership
 - **Open questions / low-confidence areas**:
-  - Need one final aggregate `pnpm check` rerun after the repo-wide ESLint
-    resolver standardisation; targeted sweeps are green but the full merge
-    candidate has not been replayed yet
-  - Need post-push confirmation that the Vercel preview now starts cleanly under
-    the deployed build/runtime path
+  - Need post-push confirmation that the Vercel preview now starts cleanly
+    under the deployed build/runtime path and that the enumerated warning
+    classes are absent from the fresh build log
+  - If preview verification still disagrees with local evidence, a human
+    dashboard check of the Vercel project root/build settings may still be
+    needed; no Vercel CLI usage is allowed on this branch
   - Potentially flaky E2E test: `get-curriculum-model.e2e.test.ts`
     (passed in isolation, failed once during `pnpm check`)
-- **Next safe step**: Review the remaining dirty tree, rerun `pnpm check` on
-  the merge candidate, then commit/push the branch and rerun the deployed
-  preview/smoke path before merging PR #76.
-- **Deep consolidation status**: not due — the resolver-standardisation lesson
-  was already captured in the quality-gate hardening plan and this handoff only
-  needed continuity sync plus napkin capture.
+- **Next safe step**: Review the final working tree, commit the Vercel/bootstrap
+  and HTTP dev-contract changes, push `feat/mcp_app_ui`, then verify preview
+  startup and build logs via the deployed surface before merging PR #76.
+- **Deep consolidation status**: completed this handoff — continuity surfaces
+  synced, napkin rotated, duplicated distilled entries graduated/pruned, and
+  fitness rechecked.
 
-## Active Workstreams (2026-04-09)
+## Active Workstreams (2026-04-10)
 
 ### 1. WS3 MCP App Rebuild — P3 MERGE HANDOFF
 
@@ -129,10 +129,11 @@ git log --oneline --decorate -10
 banner). P0-P2 branding/SDK work on `feat/mcp_app_ui` branch.
 
 **Branch status**: Phase 4.5 wrap-up is archived complete on
-`feat/mcp_app_ui`. Phase 6 pre-merge closure was reopened by a post-CI Vercel
-startup failure; the recovery and built-artifact proof are green locally, and
-the remaining work is closeout commit/push plus preview confirmation before
-merge.
+`feat/mcp_app_ui`. Phase 6 pre-merge closure is now at truthful merge-handoff:
+local recovery, warning cleanup, contamination check, and `pnpm check` are
+green; remaining work is commit/push plus preview confirmation before merge.
+**Parallel**: `vercel-mcp-build-warnings-and-bootstrap.plan.md` remains active
+until the deployed preview/build-log path is rechecked.
 
 **Next after merge**: Phase 5 (interactive user search view) on a new branch.
 

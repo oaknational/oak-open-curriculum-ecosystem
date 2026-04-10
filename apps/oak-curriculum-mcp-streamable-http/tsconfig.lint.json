@@ -5,6 +5,7 @@
     "incremental": false
   },
   "include": [
+    "operations/**/*.ts",
     "src/**/*.ts",
     "scripts/**/*.ts",
     "e2e-tests/**/*.ts",

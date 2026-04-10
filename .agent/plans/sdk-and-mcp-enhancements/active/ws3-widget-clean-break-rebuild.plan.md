@@ -36,8 +36,8 @@ todos:
 
 # WS3: Fresh React MCP App Rebuild
 
-**Status**: ACTIVE — Phase 6 closeout is finishing the post-CI production-startup recovery before PR #76 merges
-**Last Updated**: 2026-04-09
+**Status**: ACTIVE — Phase 6 closeout is at merge-handoff: local recovery, warning cleanup, contamination check, and gates are green; commit/push + preview recheck remain
+**Last Updated**: 2026-04-10
 **Scope**: Delete the dead widget framework and build one fresh React MCP App
 from scratch.
 
@@ -646,6 +646,15 @@ Focused verification during development should include the HTTP app build,
 test, and E2E commands as needed. For production-path startup confidence, run a
 built-artifact proof against plain Node as well as the source/dev path. Do not
 teach ordinary source-imported tests to depend on `build`.
+
+Current local evidence (2026-04-10):
+
+- `pnpm check` passes
+- canonical runtime contamination check returns zero matches
+- the focused built-artifact E2E proof is green
+- deleting `dist/` and starting `pnpm dev:observe:noauth` recreates
+  `dist/oak-banner.html` before `/healthz` serves traffic, while keeping the
+  runtime contract unchanged
 
 ### Reviewer set
 

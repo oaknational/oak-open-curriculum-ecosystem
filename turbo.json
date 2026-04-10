@@ -4,6 +4,16 @@
   "remoteCache": {
     "enabled": true
   },
+  "globalPassThroughEnv": [
+    "OAK_API_KEY",
+    "LOG_LEVEL",
+    "OAK_API_URL",
+    "CLERK_PUBLISHABLE_KEY",
+    "CLERK_SECRET_KEY",
+    "DANGEROUSLY_DISABLE_AUTH",
+    "ELASTICSEARCH_URL",
+    "ELASTICSEARCH_API_KEY"
+  ],
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
     "sdk-codegen": {

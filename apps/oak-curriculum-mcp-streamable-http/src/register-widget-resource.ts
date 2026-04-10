@@ -18,12 +18,23 @@ import {
 } from './register-resource-helpers.js';
 
 /**
- * Path to the built MCP App HTML bundle. In both dev (`src/`) and production
- * (`dist/`), `../dist/oak-banner.html` resolves to `<pkg>/dist/oak-banner.html`.
+ * Resolves the built MCP App HTML bundle from the package working directory.
+ *
+ * Vercel Functions recommend resolving runtime files from `process.cwd()`
+ * rather than from a specific bundle file location. This keeps the widget
+ * path anchored to the function root, not to the transient location of an
+ * individual compiled module.
  *
  * Exported for startup validation in {@link validateWidgetHtmlExists}.
  */
-export const WIDGET_HTML_PATH = resolve(import.meta.dirname, '../dist/oak-banner.html');
+export function resolveWidgetHtmlPath(currentWorkingDirectory: string = process.cwd()): string {
+  return resolve(currentWorkingDirectory, 'dist/oak-banner.html');
+}
+
+/**
+ * Absolute path to the built widget HTML for the current runtime.
+ */
+export const WIDGET_HTML_PATH = resolveWidgetHtmlPath();
 
 /**
  * Reads the built MCP App HTML bundle from disk for resource reads.

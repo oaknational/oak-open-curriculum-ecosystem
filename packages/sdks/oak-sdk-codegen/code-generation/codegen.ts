@@ -196,9 +196,13 @@ if (!validation.ok) {
       path: refError.path,
     });
   } else {
-    logger.warn('Sitemap reference validation skipped — reference file not found', {
-      path: refError.path,
-    });
+    logger.info(
+      'Sitemap reference validation skipped — reference file not found. ' +
+        'Run `pnpm -F @oaknational/sdk-codegen scan:sitemap` in an online environment to enable validation.',
+      {
+        path: refError.path,
+      },
+    );
   }
 } else {
   const { sequenceValidation, programmeValidation, generatedAt } = validation.value;

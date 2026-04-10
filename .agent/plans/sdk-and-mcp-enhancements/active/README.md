@@ -12,9 +12,14 @@ Executable plans that are in progress now.
 ## Pre-Merge (must complete before PR #76 merges)
 
 - [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
-  **ACTIVE**. Pre-merge closure was reopened by a post-CI Vercel startup
-  failure; the production-startup fix and built-artifact proof are local, and
-  this remains the merge-handoff reference until the closeout push lands.
+  **ACTIVE**. Local production-startup recovery, warning cleanup, contamination
+  check, and aggregate gates are green; this remains the merge-handoff
+  reference until the closeout commit/push and deployed preview recheck land.
+- [vercel-mcp-build-warnings-and-bootstrap.plan.md](vercel-mcp-build-warnings-and-bootstrap.plan.md) —
+  **ACTIVE** (Phase 0 baseline complete; deploy verification pending). Local
+  fixes for preview bootstrap, build warnings, and the HTTP dev contract are in
+  place; remaining work is fresh preview/build-log confirmation for
+  `dist/oak-banner.html` startup plus the enumerated warning classes.
 
 ## Post-Merge
 

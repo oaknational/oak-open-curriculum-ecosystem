@@ -30,7 +30,7 @@ todos:
 # MCP App Extension Migration
 
 **Status**: ACTIVE  
-**Last Updated**: 2026-04-09
+**Last Updated**: 2026-04-10
 **Scope**: Complete Oak’s MCP Apps migration and finish the fresh React MCP App
 rebuild.
 
@@ -127,9 +127,10 @@ This child plan covers:
 6. app-only helper-tool visibility and runtime contract work needed to support
    the new UI properly
 
-Immediate next step is to finish the reopened Phase 6 closeout: sync the live
-docs, commit/push the production-startup recovery, recheck the deployed preview
-path, then merge PR #76. Phase 5 remains post-merge.
+Immediate next step is to finish the reopened Phase 6 closeout truthfully:
+local docs, gates, contamination check, and Vercel/bootstrap remediation are
+green; remaining work is commit/push plus deployed preview/build-log recheck,
+then merge PR #76. Phase 5 remains post-merge.
 
 `ws4-search-ui` remains a distinct umbrella todo for milestone tracking, but
 its execution lives inside the WS3 child plan.
@@ -180,7 +181,7 @@ WS3 child plan: fresh React MCP App rebuild ▶ active
   Contrast validation prerequisite           ✓ complete
   Phase 4: brand banner                      ✓ complete
   Phase 4.5: live React app + metadata shape ✓ complete (archived)
-  Phase 6a: pre-merge docs + gates           ▶ active closeout (post-CI startup recovery)
+  Phase 6a: pre-merge docs + gates           ▶ active closeout (local recovery + gates green; push/preview pending)
   --- PR #76 merge after closeout commit/push + preview recheck ---
   Phase 5: user-search view                  ⏳ pending (post-merge)
   Phase 6b: post-Phase 5 docs + gates        ⏳ pending
