@@ -317,3 +317,96 @@ Derived from dependency analysis of all package.json files:
 - Continuous reviewer invocation (not just at the end) catches issues
   early when each phase is small and focused. Particularly effective
   for adversarial (Wilma) and config reviewers.
+
+### Session 2026-04-10k — ChatGPT report normalisation + command wiring
+
+#### What Was Done
+
+- Normalised two software architecture reference reports from ChatGPT
+  deep-research exports into `-clean.md` siblings with durable citation
+  links (126 + 220 citations recovered, 346 total).
+- Updated `chatgpt-report-normalisation` SKILL.md with 6 operational
+  learnings: PUA encoding, positional matching, full-text search,
+  multi-citation grouping, double-space cleanup, rels-file limitation.
+- Updated the patterns file with matching learnings, bumped proven_date.
+- Created canonical command `.agent/commands/chatgpt-report-normalisation.md`
+  with 4-platform adapter parity (Claude, Cursor, Gemini, Codex).
+  Added permission entry to `.claude/settings.json`. `pnpm portability:check`
+  green.
+- Cleaned 2,145 invisible PUA characters from 7 tracked `.agent/` files.
+
+#### Mistakes Made
+
+- Initial citation replacement script used line-by-line matching against
+  pandoc output, which failed for all list items and long paragraphs because
+  pandoc wraps lines. Switching to full-text search with normalised whitespace
+  fixed the problem (41 → 123 → 126 citations placed).
+- The `citeturn` markers were initially treated as plain text for regex
+  matching, but they were invisible in the Read tool output because they're
+  wrapped in PUA characters. `cat -v` was needed to detect them.
+- The SKILL.md itself contained leaked PUA characters in its backtick-quoted
+  example markers (`cite`, `filecite`), making Edit tool string matching
+  fail silently.
+
+#### Patterns to Remember
+
+- ChatGPT citation markers use Unicode PUA characters (U+E200 start,
+  U+E202 separator, U+E201 end) that are invisible in editors and the
+  Read tool. Always use `cat -v` or Python `ord()` to inspect export files.
+- `citeturn` markers are positional, not stable keys. The same marker
+  string maps to different numbered citations at different document positions.
+  Use positional context matching against full pandoc text, not lookup tables.
+- DOCX `word/_rels/document.xml.rels` may contain very few URLs for
+  deep-research exports. The pandoc `docx -t gfm` conversion is the primary
+  citation recovery surface.
+- When editing files that may contain PUA characters, the Edit tool's string
+  matching will fail because the provided old_string won't contain the
+  invisible bytes. Use Python or match on surrounding PUA-free context.
+
+### Session 2026-04-10j — continuity refresh + doc consolidation
+
+#### What Was Done
+
+- Refreshed `.agent/prompts/session-continuation.prompt.md` so the
+  continuity contract reflects the current branch truth: the widget
+  crash fix is committed locally and `feat/mcp_app_ui` is 4 commits
+  ahead of `origin/feat/mcp_app_ui`, with push and preview
+  verification still pending.
+- Trimmed `AGENTS.md` back to a lightweight entry point after it
+  re-accumulated durable learnings already captured in longer-lived
+  surfaces.
+- Swept live docs for stale
+  `active/embed-widget-html-at-build-time.plan.md` and
+  `.cursor/plans/*.plan.md` links. Only historical napkin/archive
+  references remain. The live plan/index chain was already synced to
+  the same push-only next step and now carries the completed-plan
+  entry for the archived widget crash fix.
+- Checked `.agent/practice-core/incoming/`; no incoming practice
+  payloads are waiting.
+- Ran `pnpm practice:fitness:informational` plus targeted
+  markdownlint on the touched files. The fitness report surfaced
+  only pre-existing repo/worktree warnings; the touched files
+  linted cleanly.
+
+#### Mistakes Made
+
+- A previous handoff left the continuity prompt in a pre-commit
+  state even after the local branch had advanced. Lesson: refresh the
+  continuity contract from `git status`, `git log`, and ahead/behind
+  state, not from the last narrative snapshot.
+- `AGENTS.md` had drifted into a second distilled-memory surface.
+  Lesson: entry-point files are for orientation and discovery, not
+  for accumulating durable repo learnings.
+
+#### Patterns to Remember
+
+- When a closeout spans local commits, continuity surfaces must be
+  grounded against live branch state before the handoff is considered
+  truthful.
+- `pnpm practice:fitness:informational` currently reports on nested
+  `.claude/worktrees/*` copies as well as the main repo tree, so
+  duplicate warnings there do not necessarily indicate new drift in
+  the primary workspace.
+- Keep entry-point files index-like. Stable learnings should flow
+  into napkin, distilled docs, ADRs, governance docs, or READMEs
+  instead of living in `AGENTS.md`.

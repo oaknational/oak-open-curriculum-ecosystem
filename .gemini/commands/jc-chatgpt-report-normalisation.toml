@@ -1,0 +1,2 @@
+description = "Normalise a ChatGPT/LLM-exported report into clean markdown with durable citations"
+prompt = "Read and follow the instructions in .agent/commands/chatgpt-report-normalisation.md"

@@ -1,6 +1,6 @@
 # SDK and MCP Enhancements
 
-**Last Updated**: 9 April 2026
+**Last Updated**: 10 April 2026
 
 Planning hub for SDK pipeline evolution, MCP Apps work, and related
 architectural changes.
@@ -21,6 +21,7 @@ architectural changes.
 | [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md) | Active child plan | Fresh React MCP App rebuild. Deletes the dead widget framework and replaces it with MCP Apps infrastructure built from scratch |
 | [active/README.md#ws3-phase-companion-plans](active/README.md#ws3-phase-companion-plans) | Phase companion index | Eight WS3 phase companion plans with task-level execution detail; parent WS3 plan remains orchestration source of truth |
 | [archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md) | Completed plan | Phase 4.5 wrap-up complete: projection removal, SDK-ready tool metadata, TSDoc/doc sync, and readiness evidence archived |
+| [archive/completed/embed-widget-html-at-build-time.plan.md](archive/completed/embed-widget-html-at-build-time.plan.md) | Completed plan | Widget HTML now follows the committed codegen-constant pattern, preserves DI, and records the runtime decision in ADR-156 |
 | [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md) | Current plan (complete, awaiting archive) | Build WCAG contrast validation into the token pipeline and fix the blocking token accessibility failures before Phase 4 starts |
 | [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md) | Current plan (complete, awaiting archive) | Replace widening Oak URL augmentation typing with schema-derived GET response unions and honest middleware validation |
 | [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md) | Completed plan | Minimal design-token infrastructure prerequisite completed and archived; Phase 4/5 now build on the shared token package and canonical shell |

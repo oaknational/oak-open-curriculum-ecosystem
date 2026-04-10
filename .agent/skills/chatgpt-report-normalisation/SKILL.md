@@ -36,7 +36,7 @@ This skill is for **repair**, not editorial rewrite or summary generation.
 ## Use This Skill When
 
 - The user provides paired `.md`, `.docx`, or `.pdf` copies of the same report
-- The markdown contains `cite`, `filecite`, `turn...`, or other internal
+- The markdown contains `cite`, `filecite`, `turn...`, or other internal
   export markers
 - The DOCX appears to preserve live links that the markdown has lost
 - The document contains time-sensitive claims that need an accuracy sweep
@@ -143,10 +143,10 @@ structural decisions or choosing a rebuild strategy.
      markdown scaffold just because the conversion surfaces more links.
 
 4. Remove export artefacts explicitly.
-   - Delete internal citation markers such as `cite`, `filecite`, and
+   - Delete internal citation markers such as `cite`, `filecite`, and
      `turn...`
-   - Replace or remove `entity` markers as plain visible text
-   - Remove `image_group` and similar non-markdown export artefacts
+   - Replace or remove `entity` markers as plain visible text
+   - Remove `image_group` and similar non-markdown export artefacts
    - Strip tracking parameters such as `utm_source=chatgpt.com`
    - Remove generic export metadata unless it is useful provenance
 
@@ -204,6 +204,10 @@ structural decisions or choosing a rebuild strategy.
      clean copy look broken
    - Ensure narrative lines such as `Sources:` do not get absorbed into the row
      stream of a preceding table
+   - **Clean up double spaces** left by PUA marker removal — stripping
+     `\ue200...\ue201` blocks often leaves double spaces at the replacement
+     boundary (but do not collapse intentional indentation inside code fences
+     or Mermaid blocks)
    - Match repo conventions such as British spelling when they apply
    - Add a dated accuracy note when you perform a sweep
    - Summarise unresolved gaps rather than hiding uncertainty
@@ -212,21 +216,31 @@ structural decisions or choosing a rebuild strategy.
    - Use the repo-appropriate markdown validation surface for the edited file
      or files. If the target doc estate intentionally excludes markdownlint,
      use structural validation instead of forcing it.
-   - Grep for leftover `cite`, `filecite`, `turn...`, and
+   - Grep for leftover `cite`, `filecite`, `turn...`, and
      `utm_source=chatgpt.com` markers when the export started noisy
+   - Scan for remaining PUA characters (U+E200 to U+E2FF range) — these are
+     invisible to normal grep and the Read tool but remain in file bytes
+   - Strip the clean copy of all citation markup and compare against the
+     original (also stripped) to confirm text identity — the two texts must
+     be character-identical after normalising whitespace
 
 ## Validation
 
 Before closing the task, confirm:
 
-- No `cite`, `filecite`, or `turn...` markers remain
+- No `cite`, `filecite`, or `turn...` markers remain
 - No `utm_source=chatgpt.com` trackers remain
+- No Unicode PUA characters remain (U+E200 to U+E2FF range)
 - No duplicated raw-URL appendix from DOCX or PDF export artefacts remains
+- No double spaces from marker removal remain (except inside code/Mermaid
+  fences)
 - Every footnote used in the body is defined
 - Tables are still real markdown tables, and adjacent prose has not been
   accidentally pulled into them
 - The references support the claims they are attached to
 - Time-sensitive claims were either verified or softened
+- Text identity confirmed: the clean copy stripped of citations is
+  character-identical to the original stripped of PUA citation blocks
 - The cleaned output landed in the agreed destination: tracked canon when
   promotion was requested, or the agreed repair lane when promotion was
   explicitly deferred
@@ -246,6 +260,12 @@ Before closing the task, confirm:
   artefacts.
 - Do not rebuild citation numbering globally from heuristics if local
   marker-by-marker repair is possible.
+- Do not build a marker-string-to-URL lookup table — the same `citeturn`
+  marker string maps to different citations at different document positions.
+  Always use positional context matching against the pandoc conversion.
+- Do not match citations line-by-line against pandoc output — pandoc wraps
+  long lines, so the same paragraph or list item may span multiple pandoc
+  lines. Use full-text or paragraph-level matching with normalised whitespace.
 - Do not treat a PDF's dumped raw-URL appendix as authoritative new references
   until you confirm they are not just line-break or truncation variants of
   links already recoverable from the DOCX.

@@ -181,8 +181,8 @@ WS3 child plan: fresh React MCP App rebuild ▶ active
   Contrast validation prerequisite           ✓ complete
   Phase 4: brand banner                      ✓ complete
   Phase 4.5: live React app + metadata shape ✓ complete (archived)
-  Phase 6a: pre-merge docs + gates           ▶ active closeout (local recovery + gates green; push/preview pending)
-  --- PR #76 merge after closeout commit/push + preview recheck ---
+  Phase 6a: pre-merge docs + gates           ▶ active closeout (local recovery + closeout commits + gates green; push/preview pending)
+  --- PR #76 merge after branch push + preview recheck ---
   Phase 5: user-search view                  ⏳ pending (post-merge)
   Phase 6b: post-Phase 5 docs + gates        ⏳ pending
 C8 closure gates: auth metadata hardening   ✓ complete

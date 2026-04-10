@@ -40,8 +40,9 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Vercel widget crash fix (resolving preview
-  server crash) + workspace topology exploration (strategic)
+- **Workstream**: ChatGPT report normalisation skill upgrade +
+  command wiring + PUA cleanup (completed). Widget crash fix push
+  still pending from prior session.
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md`
     (**COMPLETE** — all phases executed, ADR-156 created)
@@ -49,15 +50,22 @@ git log --oneline --decorate -10
     (**FUTURE** — four-tier architecture, function-level analysis)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
     (**QUEUED** — post-merge interactive user-search UI)
-- **Current state**: Widget crash fix (Phases 1-3) fully
-  executed. All quality gates green: 590 unit/integration tests,
-  15 widget tests, 157 E2E tests. ADR-156 created and indexed.
-  `deployment-architecture.md`, `README.md`, and
-  `dev-server-management.md` updated. Smoke-test helpers
-  extracted to `server-lifecycle.ts`. Changes are local only —
-  not yet committed or pushed.
-- **Current objective**: Commit, push, and verify the Vercel
-  preview deployment no longer crashes.
+- **Current state**: ChatGPT report normalisation session
+  complete. Two architecture reference reports normalised into
+  `-clean.md` siblings with 346 citation links recovered from
+  DOCX via positional pandoc matching. SKILL.md updated with 6
+  operational learnings (PUA encoding, positional matching,
+  full-text search, multi-citation grouping, double-space cleanup,
+  rels-file limitation). Patterns file updated. Canonical command
+  created with 4-platform adapter parity (Claude, Cursor, Gemini,
+  Codex). Permission entry added to `.claude/settings.json`.
+  `pnpm portability:check` green (12 commands, 23 skills, 44
+  adapters). 2,145 PUA characters cleaned from 7 tracked files.
+  Branch `feat/mcp_app_ui` is 4 commits ahead of origin; push
+  and preview verification still pending from prior session.
+- **Current objective**: Push `feat/mcp_app_ui` and verify the
+  Vercel preview deployment no longer crashes; then the
+  normalised reports can be committed.
 - **Hard invariants / non-goals**:
   - DI is always used — constant provides VALUE, DI provides
     TESTABILITY (ADR-078)
@@ -69,13 +77,18 @@ git log --oneline --decorate -10
   - `static-content.ts` `process.cwd()` bug tracked separately
   - No compatibility shims, no invented optionality
 - **Recent surprises / corrections**:
-  - Wilma reviewer caught a smoke-test blind spot: `createApp`
-    without `getWidgetHtml` in `smoke-tests/local-server.ts`
-    (excluded from `tsconfig.lint.json` type-check). Fixed.
-  - Template literal escaping in embed script works correctly
-    for Vite-generated HTML (resolved open question).
-  - `dist/index.js` grew from 122KB to 466KB (345KB embedded
-    widget HTML constant). Acceptable for Node serverless.
+  - ChatGPT export markers use invisible Unicode PUA characters
+    (U+E200/E202/E201) that are undetectable by standard grep,
+    editors, and the Read tool. `cat -v` or Python `ord()`
+    inspection required. 7 tracked files had leaked PUA chars.
+  - `citeturn` markers are positional, not stable keys — the same
+    marker string maps to different citations at different document
+    positions. Lookup-table approach fails; positional context
+    matching against full pandoc text is required.
+  - DOCX `word/_rels/document.xml.rels` contained only 1 URL for
+    these deep-research exports — virtually all citations were
+    body-embedded. Pandoc conversion is the primary recovery
+    surface, not the rels file.
 - **Open questions / low-confidence areas**:
   - Whether `build:widget` should be a Turbo codegen task or
     standalone script (currently standalone, works well)
@@ -84,13 +97,17 @@ git log --oneline --decorate -10
   - Topology Plan B: physical directory structure decision
     deferred to after function-level analysis evidence
   - `static-content.ts` `process.cwd()` bug (non-crash)
-- **Next safe step**: Commit and push the widget crash fix on
+- **Next safe step**: Push the current local commits on
   `feat/mcp_app_ui`, then verify the Vercel preview deployment
-  starts without crashing.
+  starts without crashing. Then commit the report normalisation
+  and command-wiring changes.
 - **Deep consolidation status**: completed this handoff —
-  ADR-156 created; docs updated; napkin updated; distilled.md
-  reviewed (no graduation needed, all new learnings already
-  present in permanent docs or distilled.md).
+  9-step consolidation run: documentation verified current,
+  plans/prompts synced, no graduation needed (learnings went
+  directly to permanent homes in SKILL.md and patterns file),
+  napkin at 412 lines (below rotation threshold), fitness
+  informational shows pre-existing warnings only, no practice
+  exchange action needed.
 
 ## Active Workstreams (2026-04-10)
 
@@ -101,18 +118,20 @@ git log --oneline --decorate -10
 All phases executed. Widget HTML is now a committed TypeScript
 constant (`src/generated/widget-html-content.ts`), consumed via
 DI (ADR-156). Filesystem-based code deleted. All quality gates
-green. ADR-156 created and indexed. Changes are local — pending
-commit and Vercel preview verification.
+green. ADR-156 created and indexed. The branch is 4 commits ahead
+of origin locally; next step is push plus Vercel preview
+verification.
 
 ### 2. WS3 MCP App Rebuild — MERGE PENDING
 
 **Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
 
 Local gates green on `feat/mcp_app_ui`. Widget crash fix complete
-locally. Next: commit, push, verify Vercel preview, then merge.
+locally and committed. Next: push, verify Vercel preview, then
+merge.
 Phase 5 (interactive user search view) queued post-merge.
 
-### 2. Frontend Practice Integration — COMPLETE
+### 3. Frontend Practice Integration — COMPLETE
 
 **Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md`
 
@@ -121,7 +140,7 @@ design-system-reviewer, react-component-reviewer) with full platform
 adapters. Three review rounds passed. Design token infrastructure
 cancelled as out of scope — belongs in WS3 or a dedicated plan.
 
-### 3. Continuity Adoption — COMPLETE
+### 4. Continuity Adoption — COMPLETE
 
 **Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md`
 
@@ -129,15 +148,15 @@ Wave 1 closed with an explicit `promote` decision on 3 April 2026. The
 outgoing continuity note landed and the same-day Practice Core promotion is
 recorded separately in `.agent/practice-core/*`.
 
-### 4. Assumptions Reviewer — COMPLETE
+### 5. Assumptions Reviewer — COMPLETE
 
 ADR-146 accepted, triplet deployed, platform adapters created.
 
-### 5. URL Naming Collision Remediation — COMPLETE
+### 6. URL Naming Collision Remediation — COMPLETE
 
 Completed 2026-04-01.
 
-### 6. Workspace Topology Exploration — FUTURE
+### 7. Workspace Topology Exploration — FUTURE
 
 **Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
 

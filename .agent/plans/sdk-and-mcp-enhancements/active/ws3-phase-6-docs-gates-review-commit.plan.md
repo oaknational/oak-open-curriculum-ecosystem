@@ -23,7 +23,7 @@ todos:
 
 # WS3 Phase 6: Docs, Gates, Review, Commit
 
-**Status**: ACTIVE MERGE HANDOFF — post-CI Vercel startup failure reopened the closeout; local recovery, built-artifact proof, warning cleanup, contamination check, and aggregate gates are green, while preview/commit remain
+**Status**: ACTIVE MERGE HANDOFF — post-CI Vercel startup failure reopened the closeout; local recovery, built-artifact proof, warning cleanup, contamination check, aggregate gates, and closeout commits are green, while push plus deployed preview recheck remain
 **Last Updated**: 2026-04-10
 
 Pre-merge docs, reviewers, and closure work had been complete, but the first
@@ -66,7 +66,7 @@ PR #76 lands.
      accepted architecture
    - Phase 0 RED/GREEN evidence table is fully populated with GREEN evidence
    - deployed preview/runtime startup is confirmed after push
-7. Commit and push the branch so PR #76 has a single merge-handoff state
+7. Push the branch so PR #76 has a single merge-handoff state
 
 ## Execution Notes (2026-04-10)
 
@@ -74,7 +74,7 @@ PR #76 lands.
 - Canonical runtime contamination check now returns zero active-path matches
 - The remaining acceptance gap is external to local code verification:
   item 8 still needs deployed preview/runtime recheck after push, and item 9
-  still needs the closeout commit/push itself
+  still needs the branch push itself
 
 ## Acceptance Evidence
 
@@ -89,5 +89,4 @@ PR #76 lands.
 6. Closure criteria for WS3/WS4 and C8 gates are satisfied
 7. Phase 0 evidence table shows GREEN for all 6 phases
 8. The deployed preview/runtime startup path has been rechecked after push
-9. The branch is committed and pushed with a single merge-handoff state for
-   PR #76
+9. The branch is pushed with a single merge-handoff state for PR #76

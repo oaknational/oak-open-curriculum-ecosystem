@@ -28,12 +28,20 @@ async function createSmokeApp() {
     await import('../src/observability/http-observability.js');
   const { WIDGET_HTML_CONTENT } = await import('../src/generated/widget-html-content.js');
   const configResult = loadRuntimeConfig({ processEnv: process.env, startDir: process.cwd() });
-  if (!configResult.ok) {throw new Error(`Failed to load runtime config: ${configResult.error.message}`);}
+  if (!configResult.ok) {
+    throw new Error(`Failed to load runtime config: ${configResult.error.message}`);
+  }
   const observabilityResult = createHttpObservability(configResult.value);
   if (!observabilityResult.ok) {
-    throw new Error(`Failed to create observability: ${describeHttpObservabilityError(observabilityResult.error)}`);
+    throw new Error(
+      `Failed to create observability: ${describeHttpObservabilityError(observabilityResult.error)}`,
+    );
   }
-  return createApp({ runtimeConfig: configResult.value, observability: observabilityResult.value, getWidgetHtml: () => WIDGET_HTML_CONTENT });
+  return createApp({
+    runtimeConfig: configResult.value,
+    observability: observabilityResult.value,
+    getWidgetHtml: () => WIDGET_HTML_CONTENT,
+  });
 }
 
 export async function startSmokeServer(port: number): Promise<Server> {

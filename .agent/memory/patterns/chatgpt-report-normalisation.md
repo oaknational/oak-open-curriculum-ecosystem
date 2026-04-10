@@ -3,9 +3,9 @@ name: "ChatGPT report normalisation"
 use_this_when: "Recovering an LLM-exported report from markdown, DOCX, and PDF copies into durable repo-quality markdown"
 category: process
 proven_in: >-
-  pythonic-algo-approaches clean-up plus Oak multi-export report
-  consolidation (2026-03-20 to 2026-04-03)
-proven_date: 2026-04-03
+  pythonic-algo-approaches clean-up, Oak multi-export report consolidation,
+  and architecture reference report normalisation (2026-03-20 to 2026-04-10)
+proven_date: 2026-04-10
 barrier:
   broadly_applicable: true
   proven_by_implementation: true
@@ -32,7 +32,9 @@ before editing.
 In the common paired-export case, the strongest surviving layer is usually:
 
 - the existing markdown for structure and content
-- the DOCX relationship targets for the real external links
+- the DOCX (via `pandoc` conversion) for the real external links — the DOCX
+  rels file often contains very few URLs in ChatGPT deep-research exports;
+  the pandoc conversion is the primary citation recovery surface
 
 ## Pattern
 
@@ -51,8 +53,12 @@ In the common paired-export case, the strongest surviving layer is usually:
    or Mermaid blocks. If a `pandoc` conversion appends a trailing
    horizontal-rule or raw-URL bibliography dump, treat only the pre-dump body
    as the usable citation surface unless a link is uniquely recoverable there.
-5. Repair citations marker-by-marker inside the markdown scaffold instead of
-   globally remapping the document from pandoc output.
+5. Repair citations by **positional context matching** against the pandoc
+   conversion rather than globally remapping. Citation markers like
+   `citeturnXviewY` are not stable keys — the same marker string maps to
+   different citations at different document positions. For each marker, find
+   the preceding text context in the full pandoc text (normalised whitespace,
+   not line-by-line) and extract the consecutive citation(s) that follow.
 6. When local PDF tools are available, inspect the PDF as a real text surface
    rather than treating it as metadata only:
    - `pdfinfo` for provenance and pagination
@@ -63,10 +69,14 @@ In the common paired-export case, the strongest surviving layer is usually:
    better bibliography. Compare them against the DOCX relationship targets
    before treating them as genuinely new references.
 8. Strip export artefacts explicitly:
-   - internal citation markers such as `cite`, `filecite`, and `turn...`
-   - entity/image export markers such as `entity` and `image_group`
+   - internal citation markers such as `cite`, `filecite`, and `turn...`
+   - Unicode PUA wrapper characters (U+E200 start, U+E202 separator, U+E201
+     end) — these are invisible in editors and the Read tool but persist in
+     file bytes; use `cat -v` or Python `ord()` to detect them
+   - entity/image export markers such as `entity` and `image_group`
    - tracking parameters such as `utm_source=chatgpt.com`
    - generic export metadata where relevant
+   - double spaces left by PUA marker removal (except inside code fences)
 9. Make the output contract explicit before editing:
    - overwrite the raw markdown only if that is the agreed landing pattern
    - use a sibling clean copy (for example `*-clean.md`) when raw imports must
@@ -124,6 +134,11 @@ In the common paired-export case, the strongest surviving layer is usually:
   URL appendices in what is supposed to be the clean copy
 - Globally reassigning citations from heuristic matching and ending up with
   giant citation bundles or misattached links
+- Building a citeturn-marker-to-URL lookup table — the same marker string
+  maps to different citations at different positions; use positional matching
+- Matching line-by-line against pandoc output when pandoc wraps long lines;
+  use full-text search with normalised whitespace
+- Leaving invisible PUA characters in the clean output
 - Treating a dumped PDF URL appendix as authoritative new references without
   comparing it to the DOCX relationship targets
 - Rebuilding from a fresh conversion that worsens the document structure when a

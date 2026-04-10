@@ -148,12 +148,20 @@ export function buildInvalidAddressMessage(
 
 function isAddressInfo(address: string | AddressInfo | null): address is AddressInfo {
   return Boolean(
-    address && typeof address !== 'string' && typeof address.address === 'string' && typeof address.port === 'number',
+    address &&
+    typeof address !== 'string' &&
+    typeof address.address === 'string' &&
+    typeof address.port === 'number',
   );
 }
 
 function isServerNotRunningError(error: unknown): error is NodeJS.ErrnoException {
-  return Boolean(error && typeof error === 'object' && 'code' in error && error.code === 'ERR_SERVER_NOT_RUNNING');
+  return Boolean(
+    error &&
+    typeof error === 'object' &&
+    'code' in error &&
+    error.code === 'ERR_SERVER_NOT_RUNNING',
+  );
 }
 
 function buildPortInUseError(port: number): Error {
