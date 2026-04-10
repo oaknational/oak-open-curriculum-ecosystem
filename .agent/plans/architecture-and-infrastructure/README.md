@@ -22,6 +22,12 @@ Prompt entry:
 ## Queued Work (Current)
 
 See [current/README.md](current/README.md) for the next-up queue.
+
+Documentation architecture excellence (from synthesis analysis):
+
+- [current/doc-architecture-phase-a-immediate.plan.md](current/doc-architecture-phase-a-immediate.plan.md) — QA register, fitness function ADR, ADR index, C4 diagrams, layer contract
+- [current/doc-architecture-phase-b-dependent.plan.md](current/doc-architecture-phase-b-dependent.plan.md) — Deduplication, operability, trade-off guidance, Practice Core integration
+
 Once the current improvement tranche closes, promote
 [future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
 as the next focused hardening sprint.

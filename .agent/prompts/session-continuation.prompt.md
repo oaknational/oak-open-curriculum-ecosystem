@@ -40,55 +40,58 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: ChatGPT report normalisation skill upgrade +
-  command wiring + PUA cleanup (completed). Widget crash fix push
-  still pending from prior session.
+- **Workstream**: KGs and Pedagogy analysis (completed this session).
+  Widget crash fix push still pending from prior session.
 - **Active plans**:
+  - `.agent/plans/kgs-and-pedagogy/` (**NEW** — future strategic
+    brief for evidence-grounded curriculum discovery)
   - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md`
     (**COMPLETE** — all phases executed, ADR-156 created)
   - `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
     (**FUTURE** — four-tier architecture, function-level analysis)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
     (**QUEUED** — post-merge interactive user-search UI)
-- **Current state**: ChatGPT report normalisation session
-  complete. Two architecture reference reports normalised into
-  `-clean.md` siblings with 346 citation links recovered from
-  DOCX via positional pandoc matching. SKILL.md updated with 6
-  operational learnings (PUA encoding, positional matching,
-  full-text search, multi-citation grouping, double-space cleanup,
-  rels-file limitation). Patterns file updated. Canonical command
-  created with 4-platform adapter parity (Claude, Cursor, Gemini,
-  Codex). Permission entry added to `.claude/settings.json`.
-  `pnpm portability:check` green (12 commands, 23 skills, 44
-  adapters). 2,145 PUA characters cleaned from 7 tracked files.
-  Branch `feat/mcp_app_ui` is 4 commits ahead of origin; push
-  and preview verification still pending from prior session.
+- **Current state**: Plan collection at `.agent/plans/kgs-and-pedagogy/`
+  complete with strategic brief, technical comparison, and EEF data
+  file. Coherence review completed — found structural coherence
+  but identified that Levels 1-3 (EEF resources/tools/prompts) are
+  independently deliverable without waiting for KG alignment audit.
+  Four tightening edits applied: ADR-059 renamed to "Curriculum
+  Concept Map" with terminology note distinguishing bulk-data
+  derivations from the formal ontology; misconception graph plan
+  updated with ontology relationship note; evidence integration
+  levels made explicit about data sources and dependencies;
+  promotion triggers split (Levels 1-3 ready now, 4/4b after audit).
+  Attribution requirements documented (JR for EEF, MH for KG).
+  Branch `feat/mcp_app_ui` still 4 commits ahead of origin.
 - **Current objective**: Push `feat/mcp_app_ui` and verify the
   Vercel preview deployment no longer crashes; then the
-  normalised reports can be committed.
+  normalised reports and KGs-and-pedagogy plan collection can
+  be committed.
 - **Hard invariants / non-goals**:
   - DI is always used — constant provides VALUE, DI provides
     TESTABILITY (ADR-078)
-  - Widget HTML follows the same codegen pattern as all other
-    generated metadata (same as `WIDGET_URI`, tool descriptions)
   - `principles.md` is the source of truth for all principles
   - Separate framework from consumer in all new work (ADR-154)
   - Decompose at tensions rather than classifying (ADR-155)
-  - `static-content.ts` `process.cwd()` bug tracked separately
   - No compatibility shims, no invented optionality
+  - KGs-and-pedagogy Levels 1-3 ready now; Levels 4/4b after
+    KG alignment audit
+  - Bulk-data derivations (ADR-059 concept map, misconception graph)
+    are NOT knowledge graphs — the formal ontology is
 - **Recent surprises / corrections**:
-  - ChatGPT export markers use invisible Unicode PUA characters
-    (U+E200/E202/E201) that are undetectable by standard grep,
-    editors, and the Read tool. `cat -v` or Python `ord()`
-    inspection required. 7 tracked files had leaked PUA chars.
-  - `citeturn` markers are positional, not stable keys — the same
-    marker string maps to different citations at different document
-    positions. Lookup-table approach fails; positional context
-    matching against full pandoc text is required.
-  - DOCX `word/_rels/document.xml.rels` contained only 1 URL for
-    these deep-research exports — virtually all citations were
-    body-embedded. Pandoc conversion is the primary recovery
-    surface, not the rels file.
+  - KG repo has a single primary author (Mark Hodierne, 170/180
+    commits) — important for attribution on integration.
+  - EEF roadmap v0.5 explicitly targets "Oak Layer 2 schema"
+    alignment — the KG repo IS that schema. Convergence is
+    architecturally mapped, not aspirational.
+  - The repo's bulk-data derivations (ADR-059 concept map,
+    misconception graph, prerequisite graph) and the formal
+    ontology are different orders of thing. ADR-059 renamed
+    to "Curriculum Concept Map" to disambiguate.
+  - Levels 1-3 of EEF integration don't need the ontology at
+    all — they work from EEF JSON + bulk data. This decouples
+    the demo/value path from the KG alignment audit.
 - **Open questions / low-confidence areas**:
   - Whether `build:widget` should be a Turbo codegen task or
     standalone script (currently standalone, works well)
@@ -97,17 +100,16 @@ git log --oneline --decorate -10
   - Topology Plan B: physical directory structure decision
     deferred to after function-level analysis evidence
   - `static-content.ts` `process.cwd()` bug (non-crash)
-- **Next safe step**: Push the current local commits on
-  `feat/mcp_app_ui`, then verify the Vercel preview deployment
-  starts without crashing. Then commit the report normalisation
-  and command-wiring changes.
-- **Deep consolidation status**: completed this handoff —
-  9-step consolidation run: documentation verified current,
-  plans/prompts synced, no graduation needed (learnings went
-  directly to permanent homes in SKILL.md and patterns file),
-  napkin at 412 lines (below rotation threshold), fitness
-  informational shows pre-existing warnings only, no practice
-  exchange action needed.
+  - Curriculum-evidence crosswalk quality: which EEF strand
+    mappings are natural vs require expert pedagogical judgement?
+- **Next safe step**: Commit the KGs-and-pedagogy plan collection
+  and tightening edits on `feat/mcp_app_ui`, push, and verify
+  the Vercel preview deployment. Then begin EEF Levels 1-3
+  implementation on a demo branch.
+- **Deep consolidation status**: not due — plan collection and
+  tightening edits committed this session, but no architectural
+  decisions or milestone closures. Napkin ~460 lines (below
+  rotation threshold).
 
 ## Active Workstreams (2026-04-10)
 

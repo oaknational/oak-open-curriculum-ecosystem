@@ -42,6 +42,7 @@ isProject: false
 
 **Status**: Strategic exploration plan — execute in a dedicated session
 **Informed by**: ADR-041 (historical), ADR-108 (2x2 grid), surface isolation programme, user architectural questions
+**Cross-references**: `architecture-and-infrastructure/current/doc-architecture-phase-a-immediate.plan.md` (C4 diagrams must reflect tier model; fitness function ADR must account for tier boundary rules), `architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md` (boundary enforcement evaluation must evaluate `import-x` in context of four-tier model)
 
 ADR-041 and ADR-108 are historical records of past decisions. They inform this analysis but do not constrain it.
 

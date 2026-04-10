@@ -410,3 +410,49 @@ Derived from dependency analysis of all package.json files:
 - Keep entry-point files index-like. Stable learnings should flow
   into napkin, distilled docs, ADRs, governance docs, or READMEs
   instead of living in `AGENTS.md`.
+
+### Session 2026-04-10c — KGs and Pedagogy analysis
+
+#### What happened
+
+- Deep analysis of the Oak MCP ecosystem, EEF Toolkit MCP server
+  prototype, existing comparison report, and the Oak Curriculum
+  Ontology (knowledge graph) repo.
+- Created plan collection at `.agent/plans/kgs-and-pedagogy/` with
+  strategic brief, technical comparison, and EEF data file.
+- Identified 8 impact-preserving requirements (R1-R8) that go beyond
+  technical comparison to capture the educational values an evidence
+  layer must encode.
+- Identified three-layer architecture: MCP ecosystem (Layer 1),
+  Ontology (Layer 2), Evidence (Layer 3). Layer 2 already exists
+  and is stable. Level 4 integration is architecturally ready.
+
+#### Surprises
+
+- The KG repo has a single primary author: Mark Hodierne (170 of 180
+  commits). Important for attribution when integrating KG aspects.
+- The EEF MCP prototype's `pyproject.toml` layout doesn't match its
+  actual file structure — it's a local capture, not a verified package.
+  This was already documented in the stack comparison but is a genuine
+  integrity mismatch worth noting.
+- The EEF roadmap (v0.5) explicitly targets "Oak Layer 2 schema"
+  alignment — and the KG repo IS that Layer 2 schema. The convergence
+  is not aspirational, it's architecturally already mapped.
+
+#### Patterns to Remember
+
+- When analysing external prototype code for integration, capture
+  impact-preserving requirements (the "why" values the system encodes)
+  not just technical patterns. A technically correct reimplementation
+  that omits epistemic honesty or disadvantage-gap weighting would be
+  educationally weaker.
+- The three-layer framing (transport/ontology/evidence) is a useful
+  architectural lens for future integration work in this space.
+- Bulk-data derivations (ADR-059 concept map, misconception graph,
+  prerequisite graph) and the formal ontology are different orders of
+  thing. The naming collision ("knowledge graph" for both) is a real
+  source of confusion. ADR-059 renamed to "Curriculum Concept Map."
+- Integration plans that appear sequential may have independently
+  deliverable subsets. Levels 1-3 of EEF integration don't need the
+  ontology — decoupling them from the KG alignment audit unblocks
+  the value demonstration path.

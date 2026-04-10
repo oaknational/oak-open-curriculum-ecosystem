@@ -1,4 +1,4 @@
-# ADR-059: Knowledge Graph for Agent Context
+# ADR-059: Curriculum Concept Map for Agent Context
 
 ## Status
 
@@ -6,10 +6,20 @@ Accepted
 
 > **Update (March 2026)**: The standalone `get-knowledge-graph` tool was first merged into
 > `get-ontology`, and then both `get-ontology` and `get-help` were consolidated into
-> `get-curriculum-model`. The knowledge graph data (property graph of concepts and edges)
+> `get-curriculum-model`. The concept map data (property graph of concepts and edges)
 > now lives in the `domainModel.propertyGraph` section of the `get-curriculum-model`
 > response. The architectural principle — complementary data enriching the domain model —
 > remains valid.
+>
+> **Terminology note (April 2026)**: This ADR's structure is a **schema-level
+> concept map** — a 28-node, 45-edge JSON property graph derived from the
+> API schema and domain knowledge. It is useful for AI agent orientation but
+> is not a knowledge graph in the formal sense. The
+> [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)
+> is the formal W3C-compliant knowledge graph (RDF, OWL, SKOS, SHACL; 26
+> classes, 40+ properties, ~150K nodes). The two serve different purposes:
+> this concept map provides compact agent context (~5K tokens); the ontology
+> provides authoritative curriculum structure for graph integration work.
 
 ## Context
 

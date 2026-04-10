@@ -8,10 +8,16 @@ Current queued work for this collection.
 |----------|------|-------|--------|
 | P1 | [config-architecture-standardisation-plan.md](./config-architecture-standardisation-plan.md) | Shared config DI and runtime-config standardisation | Queued |
 | P2 | [security-dependency-triage.plan.md](./security-dependency-triage.plan.md) | Dependabot, CodeQL, and outdated dependency triage | Queued |
+| P3 | [doc-architecture-phase-a-immediate.plan.md](./doc-architecture-phase-a-immediate.plan.md) | QA register, fitness function ADR, ADR index, C4 diagrams, layer contract | Queued |
+| P4 | [doc-architecture-phase-b-dependent.plan.md](./doc-architecture-phase-b-dependent.plan.md) | Deduplication, operability practice, trade-off guidance, Practice Core | Queued (blocked by Phase A) |
 
 Active execution:
 
 - [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — HTTP adoption near-complete on `feat/full-sentry-otel-support`; Search CLI adoption next after merge
+
+Strategic analysis (parent of Phase A and B):
+
+- [architectural-documentation-excellence-synthesis.plan.md](./architectural-documentation-excellence-synthesis.plan.md) — multi-part report synthesising internal docs against external research
 
 Planned follow-on after the current improvement tranche:
 

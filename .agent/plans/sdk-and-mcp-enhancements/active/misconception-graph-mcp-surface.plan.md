@@ -59,6 +59,22 @@ The prerequisite graph and thread progressions are both exposed as MCP
 resources AND aggregated tools. The misconception graph is not — it is only
 available internally via the `@oaknational/sdk-codegen/vocab-data` subpath.
 
+## Ontology Relationship
+
+The [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)
+(v0.1.0) has its own formal misconception model as part of its W3C-compliant
+RDF/OWL curriculum structure. That model captures structural relationships
+between misconceptions and curriculum content that the bulk data does not.
+
+This plan exposes the **bulk-data-derived** misconception graph (12,858
+items extracted from the Oak API bulk download). It is independently
+valuable and does not depend on the ontology. However, as KG integration
+matures (see `.agent/plans/kgs-and-pedagogy/` and
+`.agent/plans/semantic-search/current/kg-alignment-audit.execution.plan.md`),
+this MCP surface may eventually source from the ontology instead of bulk
+data, gaining richer relational context. That is a future consideration,
+not a current dependency.
+
 ## Decision
 
 Follow the exact pattern established by `prerequisite-graph-resource.ts` and
