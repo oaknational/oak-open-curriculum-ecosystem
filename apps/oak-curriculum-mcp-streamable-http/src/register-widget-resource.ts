@@ -44,6 +44,19 @@ export function resolveWidgetHtmlPath(currentWorkingDirectory: string = process.
     }),
   }).catch(() => {});
   // #endregion
+  // #region agent log
+  console.error(
+    JSON.stringify({
+      marker: 'agent_debug',
+      runId: 'pre-fix',
+      hypothesisId: 'H2',
+      location: 'register-widget-resource.ts:resolveWidgetHtmlPath',
+      message: 'resolved widget html path',
+      data: { currentWorkingDirectory, resolvedPath },
+      timestamp: Date.now(),
+    }),
+  );
+  // #endregion
   return resolvedPath;
 }
 
@@ -74,6 +87,19 @@ export async function readBuiltWidgetHtml(
       timestamp: Date.now(),
     }),
   }).catch(() => {});
+  // #endregion
+  // #region agent log
+  console.error(
+    JSON.stringify({
+      marker: 'agent_debug',
+      runId: 'pre-fix',
+      hypothesisId: 'H5',
+      location: 'register-widget-resource.ts:readBuiltWidgetHtml',
+      message: 'attempting widget html read',
+      data: { widgetHtmlPath },
+      timestamp: Date.now(),
+    }),
+  );
   // #endregion
   return readFile(widgetHtmlPath, 'utf-8');
 }

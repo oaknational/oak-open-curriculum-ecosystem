@@ -36,6 +36,19 @@ export function validateWidgetHtmlExists(
     }),
   }).catch(() => {});
   // #endregion
+  // #region agent log
+  console.error(
+    JSON.stringify({
+      marker: 'agent_debug',
+      runId: 'pre-fix',
+      hypothesisId: 'H1',
+      location: 'validate-widget-html.ts:validateWidgetHtmlExists',
+      message: 'validated widget html existence',
+      data: { widgetHtmlPath, existsAtWidgetPath },
+      timestamp: Date.now(),
+    }),
+  );
+  // #endregion
   if (!existsAtWidgetPath) {
     throw new Error(
       `Widget HTML not found at ${widgetHtmlPath}. ` +

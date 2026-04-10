@@ -235,6 +235,29 @@ function initializeCoreEndpoints(
     }),
   }).catch(() => {});
   // #endregion
+  // #region agent log
+  console.error(
+    JSON.stringify({
+      marker: 'agent_debug',
+      runId: 'pre-fix',
+      hypothesisId: 'H4',
+      location: 'application.ts:initializeCoreEndpoints',
+      message: 'initializing core endpoints and widget validation',
+      data: {
+        widgetHtmlPath: WIDGET_HTML_PATH,
+        processCwd,
+        useStubTools: runtimeConfig.useStubTools,
+        cwdExists,
+        distDirPath,
+        distDirExists,
+        packageJsonPath,
+        packageJsonExists,
+        widgetExistsAtPath,
+      },
+      timestamp: Date.now(),
+    }),
+  );
+  // #endregion
   // Tests inject a no-op validator so source-imported coverage does not depend
   // on build artefacts; production callers use the real fail-fast validation.
   (options.validateWidgetHtml ?? validateWidgetHtmlExists)(WIDGET_HTML_PATH);
