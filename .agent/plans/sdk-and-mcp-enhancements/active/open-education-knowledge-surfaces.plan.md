@@ -169,10 +169,22 @@ Update the root README to:
 1. Change "Three capabilities, all generated from the Oak Open
    Curriculum API" to acknowledge three data sources
 2. Add a prominent **Data Sources** section listing all three with
-   links and descriptions
+   links, descriptions, and licence information:
+   - Oak Open Curriculum API — OGL
+     ([open-api.thenational.academy](https://open-api.thenational.academy/))
+   - Oak Curriculum Ontology — OGL (data) + MIT (code)
+     ([oak-curriculum-ontology](https://github.com/oaknational/oak-curriculum-ontology))
+   - EEF Teaching and Learning Toolkit — attribution required
+     ([EEF](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit))
 3. Update the capabilities table to include ontology-derived and
    evidence-derived surfaces
-4. Add attribution for EEF and the ontology project
+4. Add a **Credits and Attribution** section with:
+   - Education Endowment Foundation (data source, citation required)
+   - John Roberts (EEF MCP prototype)
+   - Mark Hodierne (Oak Curriculum Ontology, primary author)
+   - Link to `LICENCE-DATA.md` for upstream data licence terms
+5. Reference `LICENCE-DATA.md` from the data sources section so
+   licence obligations are clear to all consumers
 
 The README update should make it clear within 30 seconds of reading
 that this repository brings together three major open education assets.
