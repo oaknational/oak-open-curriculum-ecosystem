@@ -24,3 +24,22 @@ rotation: 2026-04-07 at 562 lines.
   check.
 - Remaining external step: commit/push `feat/mcp_app_ui`, then recheck the
   deployed preview/build logs before PR #76 merges.
+
+### Session 2026-04-10b — Cursor plugins strategic plan
+
+- Added `developer-experience/future/cursor-plugins-practice-and-oak-developer.plan.md`:
+  marketplace-track Practice plugin vs local-first Oak developer plugin (MCP HTTP,
+  codegen, SDK, search). Promotion gated on marketplace spike + A↔B layering decision.
+  No scaffold yet — exploration only.
+
+### Session 2026-04-10c — Vercel widget crash re-investigation
+
+- Re-validated preview deployment `dpl_LuHvjnukFy7RjQuetxmNk7tmBsDP` via Vercel MCP:
+  deployment reports `READY`, but runtime logs show repeated `500` responses with
+  `initializeCoreEndpoints` failure signature across `/`, `/mcp`, and well-known auth paths.
+- Added explicit debug instrumentation (session `ae9818`) in:
+  `src/application.ts`, `src/validate-widget-html.ts`, and
+  `src/register-widget-resource.ts` with hypothesis IDs H1/H2/H4/H5.
+- Created investigation notes in
+  `.agent/plans/sdk-and-mcp-enhancements/active/vercel-widget-crash-deep-investigation.notes.md`
+  to keep detailed reasoning in plan artefacts (not only napkin).
