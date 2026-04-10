@@ -81,7 +81,7 @@ Classify each finding as `must-fix`, `optional`, or `incorrect`.
 
 ## The Cardinal Rule
 
-See `.agent/rules/cardinal-rule-types-from-schema.md` for the canonical
+See `.agent/directives/principles.md` §Cardinal Rule for the canonical
 statement. When reviewing, verify: does every type trace back to the
 OpenAPI schema via `pnpm sdk-codegen`? If a type is hand-crafted where a
 generated equivalent exists, that is a violation — fix the generator or

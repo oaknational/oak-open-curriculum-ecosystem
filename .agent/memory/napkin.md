@@ -165,6 +165,38 @@ Derived from dependency analysis of all package.json files:
   unknown-is-type-destruction, tsdoc-hygiene) but updated to
   point to `principles.md` for definitions.
 
+### Session 2026-04-10f — rules tidy-up + ADR gap analysis
+
+#### Completed
+
+- **Rules consolidation tidy-up**: fixed 16 portability failures.
+  Created `.agent/rules/apply-architectural-principles.md` as the
+  consolidated canonical rule. Updated 4 cursor rules to reference
+  canonical rules. Deleted 12 orphan canonical rules + 11 Claude
+  adapters. Created consolidated Claude adapter. `pnpm check`
+  green. Commit `54907d8e`.
+- **ADR-154**: Separate Framework from Consumer — new core
+  principle, with the test "Could a non-Oak consumer use this
+  unchanged?" and structural expectation.
+- **ADR-155**: Decompose at the Tension — classification
+  resistance signals hidden coupling, decompose at the fault line.
+- **ADR-125 update**: documented the many-to-one consolidation
+  pattern for rules, updated trigger examples, replaced hard
+  agent count. Commit `99011393`.
+- **ADR README index**: updated with ADR-154 and ADR-155 entries
+  in both sequential index and key decisions section.
+
+#### Observations
+
+- The portability validator's `CANONICAL_RULE_OR_SKILL_PATTERN`
+  only accepts `.agent/rules/` and `.agent/skills/` references.
+  If cursor rules ever need to reference `.agent/directives/`
+  directly, the pattern will need extending. Currently the
+  indirection layer (rule → directive) satisfies the validator.
+- Docs-adr-reviewer feedback was high quality: caught em-dash
+  format deviation, missing plan links, "consumer-general"
+  phrasing opacity, and the un-graduated tier model issue.
+
 #### Next session pickup
 
 1. Execute `embed-widget-html-at-build-time.plan.md` — widget

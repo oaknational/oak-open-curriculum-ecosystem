@@ -40,8 +40,8 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Vercel widget crash fix + workspace topology
-  exploration (strategic)
+- **Workstream**: Vercel widget crash fix (preview server crash)
+  + workspace topology exploration (strategic)
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/embed-widget-html-at-build-time.plan.md`
     (**ACTIVE** — Phase 0 complete, Phases 1-3 pending execution)
@@ -49,16 +49,15 @@ git log --oneline --decorate -10
     (**FUTURE** — four-tier architecture, function-level analysis)
   - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
     (**QUEUED** — post-merge interactive user-search UI)
-- **Current state**: Widget crash plan is final and reviewed.
-  Topology exploration plan created with four-tier model
-  (primitives, infrastructure, codegen-time, runtime), lifecycle
-  classification of all workspaces, tension analysis, and phased
-  execution plan. Two new principles codified: "Separate Framework
-  from Consumer" and "Decompose at the Tension". Cursor rules
-  consolidated: 12 always-on architecture rules replaced by 1
-  pointing to `principles.md` as the source of truth.
-- **Current objective**: Execute widget crash fix (Plan A) first,
-  then proceed to topology exploration (Plan B) Phase 2.
+- **Current state**: Rules consolidation tidy-up complete (16
+  portability failures fixed, `pnpm check` green). ADR-154
+  (Separate Framework from Consumer), ADR-155 (Decompose at the
+  Tension) created and accepted. ADR-125 updated with many-to-one
+  consolidation pattern. Two clean commits on `feat/mcp_app_ui`.
+  Widget crash plan is final and reviewed, ready for execution.
+- **Current objective**: Execute widget crash fix (Plan A) —
+  resolve the preview server crash by embedding widget HTML as a
+  committed TypeScript constant.
 - **Hard invariants / non-goals**:
   - DI is always used — constant provides VALUE, DI provides
     TESTABILITY (ADR-078)
@@ -67,24 +66,16 @@ git log --oneline --decorate -10
   - `principles.md` is the source of truth for all principles;
     `.agent/rules/` and `.cursor/rules/` are operationalisation
     mechanisms, not the definitions
-  - Separate framework from consumer in all new work
+  - Separate framework from consumer in all new work (ADR-154)
   - Decompose at tensions rather than classifying around them
+    (ADR-155)
   - `static-content.ts` `process.cwd()` bug tracked separately
   - No compatibility shims, no invented optionality
 - **Recent surprises / corrections**:
-  - `principles.md` is the source of truth. Moving fundamental
-    definitions into `.agent/rules/*.md` files breaks every
-    mechanism that reads principles directly. Rules are one
-    operationalisation mechanism among several.
-  - Fitness constraints can be changed — the goal is excellence,
-    not rule following. Where discussion is needed, have the
-    discussion.
-  - ADRs are history, not unbreakable rules. They inform future
-    decisions but do not constrain them.
-  - "Decompose at the Tension": when code resists clean
-    classification, that resistance reveals hidden coupling.
-    Decompose at the fault line, don't classify around the
-    compromise.
+  - Portability validator only accepts `.agent/rules/` and
+    `.agent/skills/` references — cursor rules referencing
+    `.agent/directives/` directly fail the check. Maintain the
+    indirection layer (cursor rule → canonical rule → directive).
 - **Open questions / low-confidence areas**:
   - Template literal escaping in the embed script (backticks,
     `${` in Vite-built HTML) — needs testing
@@ -97,10 +88,9 @@ git log --oneline --decorate -10
 - **Next safe step**: Execute Phase 1 of the widget crash plan —
   change Vite output dir, create embed script, produce committed
   TypeScript constant, decouple from runtime build.
-- **Deep consolidation status**: completed this handoff — settled
-  doctrine (source-of-truth correction, new principles) now in
-  permanent docs; topology plan referenced; practice exchange
-  checked.
+- **Deep consolidation status**: completed this handoff — ADR-154,
+  ADR-155 created; ADR-125 updated; rules tidy-up committed;
+  distilled.md reviewed (no graduation needed).
 
 ## Active Workstreams (2026-04-10)
 
