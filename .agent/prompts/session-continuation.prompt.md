@@ -40,34 +40,37 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: KGs and Pedagogy analysis (completed this session).
-  Widget crash fix push still pending from prior session.
+- **Workstream**: Open Education Knowledge Surfaces (WS-0 → WS-6).
+  Parent plan created, coordinating graph factory, 4 graph surfaces,
+  agent guidance consolidation, and ADR/README narrative.
 - **Active plans**:
-  - `.agent/plans/kgs-and-pedagogy/` (**NEW** — future strategic
-    brief for evidence-grounded curriculum discovery)
-  - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md`
-    (**COMPLETE** — all phases executed, ADR-156 created)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
+    (**PARENT** — WS-0 through WS-6 coordination)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/graph-resource-factory.plan.md`
+    (**WS-1** — prerequisite, extract shared infrastructure)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md`
+    (**WS-2** — first factory consumer)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/eef-evidence-mcp-surface.plan.md`
+    (**WS-3** — recommendation tool + R1-R8)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/nc-knowledge-taxonomy-surface.plan.md`
+    (**WS-4** — smallest KG integration, ontology-derived)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/agent-guidance-consolidation.plan.md`
+    (**WS-5** — consolidate after all surfaces)
   - `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
-    (**FUTURE** — four-tier architecture, function-level analysis)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
-    (**QUEUED** — post-merge interactive user-search UI)
-- **Current state**: Plan collection at `.agent/plans/kgs-and-pedagogy/`
-  complete with strategic brief, technical comparison, and EEF data
-  file. Coherence review completed — found structural coherence
-  but identified that Levels 1-3 (EEF resources/tools/prompts) are
-  independently deliverable without waiting for KG alignment audit.
-  Four tightening edits applied: ADR-059 renamed to "Curriculum
-  Concept Map" with terminology note distinguishing bulk-data
-  derivations from the formal ontology; misconception graph plan
-  updated with ontology relationship note; evidence integration
-  levels made explicit about data sources and dependencies;
-  promotion triggers split (Levels 1-3 ready now, 4/4b after audit).
-  Attribution requirements documented (JR for EEF, MH for KG).
-  Branch `feat/mcp_app_ui` still 4 commits ahead of origin.
-- **Current objective**: Push `feat/mcp_app_ui` and verify the
-  Vercel preview deployment no longer crashes; then the
-  normalised reports and KGs-and-pedagogy plan collection can
-  be committed.
+    (**CURRENT** — four-tier architecture analysis)
+  - `.agent/plans/kgs-and-pedagogy/` (**FUTURE** — deeper KG
+    integration, Levels 4/4b, after alignment audit)
+- **Current state**: Full plan family created across a long planning
+  session. Parent plan with 7 work stages, graph factory prerequisite,
+  NC knowledge taxonomy plan (smallest KG integration), plus earlier
+  EEF evidence and guidance consolidation plans. 4 completed plans
+  archived, 7 session plans cleaned. ADR-059 renamed to "Curriculum
+  Concept Map". Branch `planning/kg_eef_integration`.
+- **Current objective**: Next session begins with specialist reviewer
+  sweep of the entire plan family (architecture-reviewer-betty,
+  architecture-reviewer-barney, mcp-reviewer, code-reviewer), then
+  executes WS-0 (ADR + README + authors), WS-1 (graph factory),
+  WS-2 (misconception graph).
 - **Hard invariants / non-goals**:
   - DI is always used — constant provides VALUE, DI provides
     TESTABILITY (ADR-078)
@@ -102,14 +105,14 @@ git log --oneline --decorate -10
   - `static-content.ts` `process.cwd()` bug (non-crash)
   - Curriculum-evidence crosswalk quality: which EEF strand
     mappings are natural vs require expert pedagogical judgement?
-- **Next safe step**: Commit the KGs-and-pedagogy plan collection
-  and tightening edits on `feat/mcp_app_ui`, push, and verify
-  the Vercel preview deployment. Then begin EEF Levels 1-3
-  implementation on a demo branch.
-- **Deep consolidation status**: not due — plan collection and
-  tightening edits committed this session, but no architectural
-  decisions or milestone closures. Napkin ~460 lines (below
-  rotation threshold).
+- **Next safe step**: Start next session with specialist reviewer
+  sweep of the full plan family, then execute WS-0 (ADR, README,
+  authors: Cresswell, Hodierne, Roberts alphabetically), WS-1
+  (graph factory), WS-2 (misconception graph).
+- **Deep consolidation status**: completed this handoff —
+  4 plans archived, 7 session plans cleaned, active README
+  updated, parent plan created, napkin updated. Napkin ~500
+  lines (at rotation threshold — rotate next consolidation).
 
 ## Active Workstreams (2026-04-10)
 

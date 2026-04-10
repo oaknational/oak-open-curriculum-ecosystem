@@ -1,7 +1,7 @@
 ---
 name: "Misconception Graph MCP Surface"
 overview: "Expose the existing misconception graph data as both an MCP resource and an aggregated tool, following the established prerequisite-graph pattern."
-parent_plan: "mcp-app-extension-migration.plan.md"
+parent_plan: "open-education-knowledge-surfaces.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer"
 isProject: false
 todos:

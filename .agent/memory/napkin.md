@@ -456,3 +456,68 @@ Derived from dependency analysis of all package.json files:
   deliverable subsets. Levels 1-3 of EEF integration don't need the
   ontology — decoupling them from the KG alignment audit unblocks
   the value demonstration path.
+
+### Session 2026-04-10d — plans, archival, graph infrastructure
+
+#### What happened
+
+- Created 2 new sibling plans: `eef-evidence-mcp-surface.plan.md` and
+  `agent-guidance-consolidation.plan.md`, alongside existing
+  `misconception-graph-mcp-surface.plan.md`. Execution order:
+  misconceptions → EEF evidence → guidance consolidation.
+- Archived 4 completed plans (WS3 rebuild, Phase 6, Vercel warnings,
+  crash investigation). Cleaned 7 superseded session plans.
+- Identified graph resource shared infrastructure: all 3 existing graph
+  surfaces (prerequisite, thread progressions, curriculum model) follow
+  100% identical 6-layer boilerplate (~160 lines each). A factory
+  function would reduce each to ~20 lines of config.
+- Confirmed all 34 tools have proper `title` metadata (24 generated
+  via `kebabToTitleCase()`, 10 hand-written).
+- Identified smallest meaningful KG integration: NC knowledge taxonomy
+  (SKOS Discipline→Strand→SubStrand→ContentDescriptor hierarchy) exists
+  only in the ontology, not in bulk data. ~356 content descriptors for
+  maths alone. Self-contained, no Neo4j needed.
+
+#### Surprises
+
+- The graph resource pattern is so consistent that extracting a factory
+  is purely mechanical — config-only variation across all instances.
+- Agent guidance is more DRY than expected at the generated layer but
+  fragile at the hand-written tool description layer.
+- All tool titles were already correct — the Claude Desktop UI uses
+  tool IDs for display regardless of the `title` property.
+
+#### Patterns to Remember
+
+- When adding a new "graph as MCP resource + tool" surface, check
+  whether a shared factory exists before writing boilerplate. If not,
+  consider creating one — the pattern is 100% stable across 3+ instances.
+- The workspace topology plan should stay current/active — it's an
+  ongoing architectural lens, not a completable task.
+
+### Session 2026-04-10e — parent plan and final structure
+
+#### What happened
+
+- Created parent plan `open-education-knowledge-surfaces.plan.md`
+  (WS-0 through WS-6) coordinating the full arc from narrative
+  (ADR + README) through graph factory, 4 graph surfaces, guidance
+  consolidation, and documentation propagation.
+- Created `graph-resource-factory.plan.md` as WS-1 prerequisite.
+- Created `nc-knowledge-taxonomy-surface.plan.md` as WS-4 (smallest
+  meaningful KG integration — SKOS extraction from ontology).
+- Updated all sibling plans to reference the parent.
+- Metacognitive reflection: lead with narrative (WS-0), not
+  infrastructure. The README and ADR declaring three data sources
+  frames everything that follows.
+- Next session protocol: specialist reviewer sweep before code.
+
+#### Patterns to Remember
+
+- Lead with the narrative, not the infrastructure. Documentation
+  that declares "what we're doing and why" frames all subsequent
+  technical work and prevents infrastructure-for-infrastructure's-sake.
+- When creating a plan family, the parent plan's most important job
+  is sequencing — what must come first and why. WS-0 (narrative)
+  before WS-1 (factory) before WS-2+ (consumers) is not arbitrary;
+  each stage depends on the meaning established by the previous one.
