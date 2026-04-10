@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.3.0...v1.4.0) (2026-04-10)
+
+
+### Features
+
+* **mcp-app,design:** fresh React MCP App with Oak branding, design tokens, and SDK alignment ([#76](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/76)) ([028dc21](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/028dc2171009a2cebc91536c3662be5efa39ae9b)), closes [#1](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/1) [#2](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/2) [#bef2bd](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/bef2bd) [#222222](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/222222) [#008237](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/008237) [#008237](https://github.com/oaknational/oak-open-curriculum-ecosystem/issues/008237)
+
 # [1.3.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.2.0...v1.3.0) (2026-03-31)
 
 
