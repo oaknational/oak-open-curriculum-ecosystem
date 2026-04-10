@@ -129,29 +129,55 @@ Rules have two conceptually distinct layers:
 
 2. **Activation triggers** (`.cursor/rules/*.mdc`, entry-point chains) — platform-specific mechanisms that determine _when_ and _how_ policies surface during a session. These are not thin wrappers for `principles.md` in the way command wrappers point at commands. They are a separate artefact type: a trigger mechanism that activates specific policies, directives, or skills at the right moment.
 
-Some triggers activate policies from `principles.md` (e.g., `tdd-at-all-levels.mdc`). Others activate standalone directives (e.g., `invoke-code-reviewers.mdc` → `.agent/directives/invoke-code-reviewers.md`). Others activate skills (e.g., `napkin-always-active.mdc` → `.agent/skills/napkin/SKILL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
+Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-reviewers.mdc` → `.agent/directives/invoke-code-reviewers.md`). Others activate skills (e.g., `napkin-always-active.mdc` → `.agent/skills/napkin/SKILL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
+
+#### Many-to-One Consolidation Pattern
+
+When multiple canonical rules all point to the same authoritative source
+(e.g., different sections of `principles.md`), they may be consolidated
+into a single canonical rule with a single trigger. This avoids
+maintaining many thin redirects that add no value beyond the indirection.
+
+The consolidation works as follows:
+
+1. **One consolidated canonical rule** (e.g.,
+   `.agent/rules/apply-architectural-principles.md`) replaces many
+   individual rules that were thin pointers to `principles.md`.
+2. **One consolidated trigger per platform** (e.g.,
+   `apply-architectural-principles.mdc`,
+   `.claude/rules/apply-architectural-principles.md`) replaces the
+   individual triggers.
+3. **Specialised rules retained** when they have unique activation
+   metadata (e.g., `no-type-shortcuts.mdc` with `globs: "**/*.ts"`)
+   that cannot be expressed by the consolidated trigger.
+
+The three-layer model is preserved: trigger → canonical rule →
+authoritative source. The consolidation reduces the number of
+canonical rules and triggers, not the number of layers.
 
 **Cursor** has granular activation via `.cursor/rules/*.mdc` frontmatter:
 
-| Activation     | Mechanism               | Example                                                |
-| -------------- | ----------------------- | ------------------------------------------------------ |
-| Always-on      | `alwaysApply: true`     | `tdd-at-all-levels.mdc`, `never-disable-checks.mdc`    |
-| File-scoped    | `globs: "**/*.test.ts"` | `no-skipped-tests.mdc`, `no-global-state-in-tests.mdc` |
-| Agent-selected | `description: "..."`    | Agent decides based on relevance                       |
+| Activation     | Mechanism               | Example                                                    |
+| -------------- | ----------------------- | ---------------------------------------------------------- |
+| Always-on      | `alwaysApply: true`     | `apply-architectural-principles.mdc` (consolidated)        |
+| File-scoped    | `globs: "**/*.test.ts"` | `no-skipped-tests.mdc`, `no-global-state-in-tests.mdc`     |
+| File-scoped    | `globs: "**/*.ts"`      | `no-type-shortcuts.mdc`, `unknown-is-type-destruction.mdc` |
+| Agent-selected | `description: "..."`    | Agent decides based on relevance                           |
 
 **Claude Code** has two activation mechanisms: always-on policies via the entry-point chain (`CLAUDE.md` → `AGENT.md` → `principles.md`), and path-scoped rules via `.claude/rules/*.md` with `paths` frontmatter. Path-scoped rules only load when Claude opens matching files, reducing context consumption for domain-specific policies (e.g., test rules only when editing test files). Only glob-scoped triggers have Claude rule equivalents — always-on triggers are already covered by the entry-point chain.
 
 **Gemini CLI, Codex** receive policies via the entry-point chain only: `GEMINI.md` / `AGENTS.md` → `.agent/directives/AGENT.md` → `.agent/directives/principles.md`. All policies are effectively always-on via the entry point.
 
-**Triggers that activate skills:**
+**Triggers that activate skills or directives:**
 
-| Trigger                  | What it activates                                                                         |
-| ------------------------ | ----------------------------------------------------------------------------------------- |
-| `napkin-always-active`   | `.agent/skills/napkin/SKILL.md`                                                           |
-| `use-start-right-skills` | `.agent/skills/start-right-quick/SKILL.md`, `.agent/skills/start-right-thorough/SKILL.md` |
-| `follow-the-practice`    | Practice reading, which leads to skills                                                   |
-| `invoke-code-reviewers`  | Sub-agent reviewers (14 agents) via `.agent/directives/invoke-code-reviewers.md`          |
-| `lint-after-edit`        | Lint checking (file-scoped to `*.ts`)                                                     |
+| Trigger                          | What it activates                                                                         |
+| -------------------------------- | ----------------------------------------------------------------------------------------- |
+| `apply-architectural-principles` | All architectural principles via `.agent/rules/apply-architectural-principles.md`         |
+| `napkin-always-active`           | `.agent/skills/napkin/SKILL.md`                                                           |
+| `use-start-right-skills`         | `.agent/skills/start-right-quick/SKILL.md`, `.agent/skills/start-right-thorough/SKILL.md` |
+| `follow-the-practice`            | Practice reading, which leads to skills                                                   |
+| `invoke-code-reviewers`          | All registered reviewers via `.agent/directives/invoke-code-reviewers.md`                 |
+| `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                     |
 
 #### Trigger Content Contract
 

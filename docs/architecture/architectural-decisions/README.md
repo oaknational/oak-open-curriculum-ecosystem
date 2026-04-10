@@ -165,6 +165,8 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-151: MCP App Styling Independence from Oak Web Application and Oak Components](151-mcp-app-styling-independence.md)
 - [ADR-152: Provenance UUID Migration](152-provenance-uuid-migration.md)
 - [ADR-153: Constant-Type-Predicate Pattern](153-constant-type-predicate-pattern.md)
+- [ADR-154: Separate Framework from Consumer](154-separate-framework-from-consumer.md)
+- [ADR-155: Decompose at the Tension](155-decompose-at-the-tension.md)
 
 ## Key Architectural Decisions
 
@@ -178,6 +180,8 @@ For understanding our API integration approach:
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
 - **[ADR-064](064-elasticsearch-mapping-organization.md)** - Elasticsearch index mapping organization
 - **[ADR-108](108-sdk-workspace-decomposition.md)** - SDK workspace decomposition (generic/Oak x sdk-codegen/runtime)
+- **[ADR-154](154-separate-framework-from-consumer.md)** - Separate framework from consumer: reusable mechanism vs Oak-specific instance, visible in code structure
+- **[ADR-155](155-decompose-at-the-tension.md)** - Decompose at the tension: classification resistance signals hidden coupling, decompose at the fault line
 - **[ADR-132](132-sitemap-scanner-for-canonical-url-validation.md)** - Sitemap scanner and reference-map validation for canonical URL generation
 
 For understanding authentication, authorization, and observability:
