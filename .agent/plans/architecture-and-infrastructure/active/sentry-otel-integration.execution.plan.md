@@ -86,15 +86,28 @@ and capture boundaries established in Phase 1 and Phase 2.
 - PR #73: **MERGED** to main (2026-03-31). Squash commit `54309a6a`.
 - Phases 0-2: complete (governance, shared contracts, shared foundation)
 - Phase 3 HTTP adoption: **COMPLETE** — all findings resolved, merged
-- Phase 3 Search CLI adoption: **NEXT** — unblocked
+- Rate limiting: **COMPLETE** (ADR-144, 6 routes, 3 profiles)
+- Phase 3 Search CLI adoption: **NEXT** — unblocked, 6 critical gaps identified
 - Phase 4 evidence/deployment: **pending**
-- Rate limiting: **COMPLETE** (2026-03-31) — ADR-144, 6 routes, 3 profiles, trust proxy, all gates green
 
-### Quality gate status (2026-03-30)
+### Pending merge from main (2026-04-11)
 
-`pnpm check` passes: 81/81 tasks (secrets scan, clean rebuild, sdk-codegen,
-build, type-check, doc-gen, lint, test, test:e2e, test:ui, smoke:dev:stub,
-subagents:check, portability:check, markdownlint, format).
+Main received PR #76 (React MCP App + design tokens, 977 files, ~78k
+insertions). This branch must merge main before PRing. PR #76 replaced
+the legacy widget framework with a React app + Vite build pipeline and
+added `packages/design/` (design-tokens-core, oak-design-tokens).
+
+**Post-merge observability impact assessment needed:**
+
+- Deleted legacy widget renderers may have had observability references
+- New widget resource handler already wrapped by `wrapResourceHandler()`
+- New design/build pipeline is build-time only (no observability needed)
+- Verify characterisation tests still pass after merge
+- Verify no observability gaps in the new widget resource registration
+
+### Quality gate status
+
+Must re-verify after merging main. Last green: 2026-03-31.
 
 ### Remediation status
 

@@ -26,38 +26,51 @@ the process.
 See [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
 for the architectural decision.
 
-## Current State (2026-03-31)
+## Current State (2026-04-11)
 
-PR #73 **MERGED** to main (squash commit `54309a6a`). Continuation
-branch: `feat/otel_sentry_enhancements`.
+PR #73 **MERGED** to main (2026-03-31). Rate limiting **COMPLETE**
+(ADR-144). Continuation branch: `feat/otel_sentry_enhancements`.
 
-**Phase 3 HTTP adoption: COMPLETE.** All 21 specialist findings
-resolved, C1/C2 CodeQL regex fixed, merged with main (PR #70), ADR-141
-renumbered to ADR-143, cleanup resilience hardened (Wilma review),
-multi-layer security architecture documented.
+### Completed
 
-**What comes next**:
+- Phase 3 HTTP adoption (PR #73) — all 21 findings, C1/C2 regex,
+  ADR-143, cleanup resilience, multi-layer security architecture
+- Rate limiting (ADR-144) — `express-rate-limit` on 6 routes, 3
+  profiles, `trust proxy` configured
 
-1. ~~**Rate limiting**~~ — **COMPLETE** (2026-03-31). ADR-144 documents
-   multi-layer security architecture. `express-rate-limit` v8 on 6
-   routes across 3 profiles (MCP 120/min, OAuth 30/15min, Asset 60/min).
-   `trust proxy` configured. All quality gates green, 6 reviewers invoked.
-2. **Search CLI adoption** (`apps/oak-search-cli`) — wire observability
-   foundation, runtime-config-driven logger, command init spans,
-   shutdown flush, Sentry DSN provisioning.
-3. **Deployment evidence bundle** — release/source maps, alerting
+### Pending merge from main
+
+Main received **PR #76** (React MCP App + design tokens, 977 files).
+This replaces the legacy widget framework with a React app + Vite build
+pipeline and adds `packages/design/`. Must merge before PRing.
+
+**Post-merge assessment needed**: verify observability wiring survives
+the widget replacement — the new widget resource handler should already
+be wrapped, but characterisation tests and the deleted legacy code must
+be checked.
+
+### What comes next
+
+1. **Merge main** (PR #76) — resolve conflicts, verify observability
+2. **Post-merge observability gap analysis** — does the new React app,
+   design token pipeline, or any new routes need observability? Does
+   the widget resource handler correctly use `wrapResourceHandler()`?
+3. **Search CLI adoption** (`apps/oak-search-cli`) — 6 critical gaps:
+   no Sentry init, no sinks, no env config, no command spans, no
+   flush, no error capture. Reference: HTTP server implementation.
+4. **Deployment evidence bundle** — release/source maps, alerting
    baseline, MCP Insights verification.
 
-**Deferred (track separately)**:
+### Deferred
 
 - **F18**: Span helper DRY between core and app (YAGNI)
 
-**Operational documentation (complete)**:
+### Operational documentation (complete)
 
 - Per-app `.env.example` files with Sentry variables
-- Vercel environment config doc updated
 - Deployment runbook at `docs/operations/sentry-deployment-runbook.md`
 - Multi-layer security architecture in `docs/governance/safety-and-security.md`
+- ADR-144: multi-layer rate limiting and security
 
 ## Read First
 
@@ -83,13 +96,16 @@ Primary code surfaces:
 
 ## Restart Sequence
 
-1. Verify `pnpm check` still passes (confirms no drift since last session).
-2. Choose the next work item:
-   - ~~**Rate limiting**~~: **COMPLETE** (2026-03-31). ADR-144, all gates green.
-   - **Search CLI adoption**: wire observability into `apps/oak-search-cli`.
-     See `search-cli-adoption` todo in the execution plan.
-   - **Deployment evidence**: release/source maps, alerting, MCP Insights.
-3. Track F18 (span helper DRY) as a separate work item.
+1. **Merge main** — PR #76 (React MCP App + design tokens, 977 files)
+   must be merged into this branch. Expect conflicts in the HTTP app
+   (widget replacement, resource registration, turbo config).
+2. **Post-merge verification** — `pnpm check`, characterisation tests,
+   observability gap analysis on new/changed code.
+3. **Assess expanded scope** — does the new React app widget, design
+   token build pipeline, or any changed routes need additional
+   observability wiring? Update the execution plan if so.
+4. **Search CLI adoption** — 6 critical gaps (see execution plan).
+5. **Deployment evidence** — release/source maps, alerting, MCP Insights.
 
 ## Authority Rule
 
