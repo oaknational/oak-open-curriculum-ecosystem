@@ -44,6 +44,10 @@ Boundary definitions align with:
 - Elastic retrieval architecture and retriever composition: <https://www.elastic.co/docs>
 - MCP architecture and host/client/server separation: <https://modelcontextprotocol.io/docs/getting-started/intro>
 
+## Cross-Boundary Plans
+
+- [curriculum-nlp-processing-workspace.md](curriculum-nlp-processing-workspace.md) — Python NLP workspace for ML-based entity extraction, semantic compression, and relationship mining from bulk curriculum data. Subsumes vocabulary-mining Phases 4–5 and the archived transcript-mining plan.
+
 ## Research Companions
 
 The preferred research entry points are:

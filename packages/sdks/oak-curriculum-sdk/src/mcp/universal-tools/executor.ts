@@ -18,7 +18,8 @@ import {
 import { validateFetchArgs, runFetchTool } from '../aggregated-fetch/index.js';
 import { runCurriculumModelTool } from '../aggregated-curriculum-model/index.js';
 import { runThreadProgressionsTool } from '../aggregated-thread-progressions.js';
-import { runPrerequisiteGraphTool } from '../aggregated-prerequisite-graph.js';
+import { runPriorKnowledgeGraphTool } from '../aggregated-prior-knowledge-graph.js';
+import { runMisconceptionGraphTool } from '../aggregated-misconception-graph.js';
 import { validateSearchSdkArgs, runSearchSdkTool } from '../aggregated-search/index.js';
 import { validateBrowseArgs, runBrowseTool } from '../aggregated-browse/index.js';
 import { validateExploreArgs, runExploreTool } from '../aggregated-explore/index.js';
@@ -164,7 +165,8 @@ const AGGREGATED_HANDLERS: Readonly<Record<AggregatedToolName, AggregatedHandler
   search: handleSearchTool,
   'get-curriculum-model': () => Promise.resolve(handleCurriculumModelTool()),
   'get-thread-progressions': () => Promise.resolve(runThreadProgressionsTool()),
-  'get-prerequisite-graph': () => Promise.resolve(runPrerequisiteGraphTool()),
+  'get-prior-knowledge-graph': () => Promise.resolve(runPriorKnowledgeGraphTool()),
+  'get-misconception-graph': () => Promise.resolve(runMisconceptionGraphTool()),
   fetch: handleFetchTool,
   'browse-curriculum': handleBrowseTool,
   'explore-topic': handleExploreTool,

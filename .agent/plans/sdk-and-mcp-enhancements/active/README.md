@@ -2,43 +2,51 @@
 
 Executable plans that are in progress now.
 
-## Umbrella
+## Umbrellas
 
 - [mcp-app-extension-migration.plan.md](mcp-app-extension-migration.plan.md) —
-  **PRIMARY** umbrella for the MCP Apps migration.
-- [ws3-widget-clean-break-rebuild.plan.md](ws3-widget-clean-break-rebuild.plan.md) —
-  **ACTIVE CHILD**. Clean-break React MCP App rebuild.
+  MCP Apps migration. WS1-WS3 Phases 0-4.5 complete and shipped
+  (PR #76 merged). Phase 5 pending.
+- [open-education-knowledge-surfaces.plan.md](open-education-knowledge-surfaces.plan.md) —
+  **NEW**. Coordinate integration of three open education data sources
+  (Oak API, Oak Ontology, EEF Toolkit) into MCP surfaces. Parent for
+  WS-0 through WS-6 below.
 
-## Pre-Merge (must complete before PR #76 merges)
+## Open Education Knowledge Surfaces (WS-0 → WS-6)
 
-- [ws3-phase-6-docs-gates-review-commit.plan.md](ws3-phase-6-docs-gates-review-commit.plan.md) —
-  **ACTIVE**. Local production-startup recovery, warning cleanup, contamination
-  check, aggregate gates, and closeout commits are in; this remains the
-  merge-handoff reference until the branch push and deployed preview recheck
-  land.
-- [vercel-mcp-build-warnings-and-bootstrap.plan.md](vercel-mcp-build-warnings-and-bootstrap.plan.md) —
-  **ACTIVE** (Phase 0 baseline complete; deploy verification pending). Local
-  fixes for preview bootstrap, build warnings, and the HTTP dev contract are in
-  place; remaining work is fresh preview/build-log confirmation for
-  `dist/oak-banner.html` startup plus the enumerated warning classes.
+Execution order:
 
-## Post-Merge
+1. **WS-0**: ADR + root README update (narrative first)
+2. **WS-1**: [graph-resource-factory.plan.md](graph-resource-factory.plan.md) —
+   **PENDING**. Extract shared graph infrastructure, refactor existing
+   surfaces.
+3. **WS-2**: [misconception-graph-mcp-surface.plan.md](misconception-graph-mcp-surface.plan.md) —
+   **PENDING**. 12,858 misconceptions from bulk data (first factory
+   consumer).
+4. **WS-3**: [eef-evidence-mcp-surface.plan.md](eef-evidence-mcp-surface.plan.md) —
+   **PENDING**. EEF evidence resources + recommendation tool + prompt.
+5. **WS-4**: [nc-knowledge-taxonomy-surface.plan.md](nc-knowledge-taxonomy-surface.plan.md) —
+   **PENDING**. NC knowledge taxonomy from the ontology (smallest KG
+   integration).
+6. **WS-5**: [agent-guidance-consolidation.plan.md](agent-guidance-consolidation.plan.md) —
+   **PENDING**. Consolidate agent guidance after all surfaces exist.
+7. **WS-6**: Documentation propagation (tracked in parent plan).
+
+## MCP App UI
 
 - [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
-  **PENDING**. Interactive user-search MCP App view and helper-tool flow.
-  Builds on the live React foundation from Phase 4.5.
-- [misconception-graph-mcp-surface.plan.md](misconception-graph-mcp-surface.plan.md) —
-  **PENDING**. Expose misconception graph as MCP resource + tool.
+  **PENDING**. Interactive user-search MCP App view. Post-merge.
 
-## Completed This Branch (latest archive 2026-04-10)
+## Exploration
 
-All archived to `archive/completed/`:
+- [workspace_topology_exploration.plan.md](workspace_topology_exploration.plan.md) —
+  **CURRENT**. Four-tier layered architecture analysis. Phase 2
+  (function-level analysis) pending.
 
-- Phases 0–4, server-info branding, off-the-shelf SDK adoption,
-  MCP Apps SDK audit, widget pipeline idiomatic alignment.
-- Embed-widget HTML codegen crash fix archived on 2026-04-10
-  (ADR-156).
-- Phase 4.5 live React + metadata shape wrap-up archived on 2026-04-09.
+## Recently Archived (2026-04-10)
+
+Moved to `archive/completed/`: WS3 rebuild, Phase 6, Vercel warnings,
+crash investigation, and all earlier WS1-WS3 phase plans.
 
 ## Navigation
 

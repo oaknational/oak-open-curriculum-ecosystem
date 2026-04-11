@@ -2,7 +2,7 @@
  * E2E test for JSON graph file runtime loading.
  *
  * @remarks
- * Spawns a child process to verify the generated prerequisite-graph
+ * Spawns a child process to verify the generated prior-knowledge-graph
  * loader works under plain Node ESM. This proves the three-file output
  * (data.json, types.ts, index.ts) loads correctly at runtime, not just
  * at compile time.
@@ -20,8 +20,8 @@ import { promisify } from 'util';
 
 import { describe, expect, it } from 'vitest';
 
-import type { PrerequisiteGraph } from '../../src/bulk/generators/prerequisite-graph-generator.js';
-import { writePrerequisiteGraphAsJson } from '../../src/bulk/generators/write-json-graph-file.js';
+import type { PriorKnowledgeGraph } from '../../src/bulk/generators/prior-knowledge-graph-generator.js';
+import { writePriorKnowledgeGraphAsJson } from '../../src/bulk/generators/write-json-graph-file.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -53,25 +53,25 @@ const sampleGraph = {
       source: 'thread',
     },
   ],
-  seeAlso: 'get-prerequisite-graph',
-} satisfies PrerequisiteGraph;
+  seeAlso: 'get-prior-knowledge-graph',
+} satisfies PriorKnowledgeGraph;
 
-describe('writePrerequisiteGraphAsJson runtime loading', () => {
+describe('writePriorKnowledgeGraphAsJson runtime loading', () => {
   it('loads under plain Node ESM and restores explicit undefined years', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'oak-prerequisite-graph-runtime-'));
+    const tempDir = await mkdtemp(join(tmpdir(), 'oak-prior-knowledge-graph-runtime-'));
 
     try {
-      const outputDir = await writePrerequisiteGraphAsJson(sampleGraph, tempDir);
+      const outputDir = await writePriorKnowledgeGraphAsJson(sampleGraph, tempDir);
       const moduleUrl = pathToFileURL(join(outputDir, 'index.ts')).href;
       const { stdout } = await execFileAsync(process.execPath, [
         '--experimental-strip-types',
         '--input-type=module',
         '-e',
-        `import(${JSON.stringify(moduleUrl)}).then(({ prerequisiteGraph }) => {
-          const firstNode = prerequisiteGraph.nodes[0];
-          const firstEdge = prerequisiteGraph.edges[0];
+        `import(${JSON.stringify(moduleUrl)}).then(({ priorKnowledgeGraph }) => {
+          const firstNode = priorKnowledgeGraph.nodes[0];
+          const firstEdge = priorKnowledgeGraph.edges[0];
           console.log(JSON.stringify({
-            graph: prerequisiteGraph,
+            graph: priorKnowledgeGraph,
             firstNodeHasYear: Object.prototype.hasOwnProperty.call(firstNode, 'year'),
             firstNodeYearType: typeof firstNode.year,
             firstEdgeRel: firstEdge?.rel,
@@ -110,7 +110,7 @@ describe('writePrerequisiteGraphAsJson runtime loading', () => {
               source: 'thread',
             },
           ],
-          seeAlso: 'get-prerequisite-graph',
+          seeAlso: 'get-prior-knowledge-graph',
         },
         firstNodeHasYear: true,
         firstNodeYearType: 'undefined',

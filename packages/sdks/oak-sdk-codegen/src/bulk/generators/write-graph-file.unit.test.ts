@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { serializePrerequisiteGraph, serializeThreadProgressionGraph } from './write-graph-file.js';
-import type { PrerequisiteGraph } from './prerequisite-graph-generator.js';
+import {
+  serializePriorKnowledgeGraph,
+  serializeThreadProgressionGraph,
+} from './write-graph-file.js';
+import type { PriorKnowledgeGraph } from './prior-knowledge-graph-generator.js';
 import type { ThreadProgressionGraph } from './thread-progression-generator.js';
 
 function createThreadProgressionGraph(): ThreadProgressionGraph {
@@ -25,11 +28,11 @@ function createThreadProgressionGraph(): ThreadProgressionGraph {
       },
     ],
     seeAlso:
-      'Use get-curriculum-model for complete orientation (includes property graph). Use get-prerequisite-graph for unit dependencies.',
+      'Use get-curriculum-model for complete orientation (includes property graph). Use get-prior-knowledge-graph for unit dependencies.',
   };
 }
 
-function createPrerequisiteGraph(): PrerequisiteGraph {
+function createPriorKnowledgeGraph(): PriorKnowledgeGraph {
   return {
     version: '1.0.0',
     generatedAt: '2026-03-29T15:00:00.000Z',
@@ -72,11 +75,11 @@ describe('serializeThreadProgressionGraph', () => {
   });
 });
 
-describe('serializePrerequisiteGraph', () => {
+describe('serializePriorKnowledgeGraph', () => {
   it('does not emit eslint-disable directives in generated output', () => {
-    const serialized = serializePrerequisiteGraph(createPrerequisiteGraph());
+    const serialized = serializePriorKnowledgeGraph(createPriorKnowledgeGraph());
 
-    expect(serialized).toContain('export const prerequisiteGraph: PrerequisiteGraph = {');
+    expect(serialized).toContain('export const priorKnowledgeGraph: PriorKnowledgeGraph = {');
     expect(serialized).not.toContain('eslint-disable');
   });
 });

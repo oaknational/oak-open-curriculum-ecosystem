@@ -22,12 +22,12 @@ This ADR fills that gap: it documents which curriculum capabilities are exposed 
 
 ### Tools (model-controlled)
 
-34 curriculum tools: 24 generated from the OpenAPI schema plus 10 aggregated
+35 curriculum tools: 24 generated from the OpenAPI schema plus 11 aggregated
 tools. The model decides when to call them based on the user's question and
 the tool visibility metadata exposed through the MCP contract.
 
 - **Generated tools** (24) are produced at SDK compile time from the OpenAPI schema. When the upstream API changes, `pnpm sdk-codegen` updates the tool definitions automatically.
-- **Aggregated tools** (10) are hand-authored compositions that orchestrate API calls, search, reference data, and MCP App entry points. These include `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prerequisite-graph`, `get-curriculum-model` (domain ontology and tool usage guidance), `download-asset`, `user-search`, and `user-search-query`.
+- **Aggregated tools** (11) are hand-authored compositions that orchestrate API calls, search, reference data, and MCP App entry points. These include `search`, `fetch`, `browse-curriculum`, `explore-topic`, `get-thread-progressions`, `get-prior-knowledge-graph`, `get-misconception-graph`, `get-curriculum-model` (domain ontology and tool usage guidance), `download-asset`, `user-search`, and `user-search-query`.
 
 **Intent**: Let AI assistants search, browse, and fetch curriculum data autonomously.
 
@@ -35,15 +35,16 @@ the tool visibility metadata exposed through the MCP contract.
 
 ### Resources (application-controlled)
 
-Three resources for clients that support resource injection:
+Four resources for clients that support resource injection:
 
-| Resource URI                       | Content                    | Priority | Audience        |
-| ---------------------------------- | -------------------------- | -------- | --------------- |
-| `curriculum://model`               | Domain ontology + guidance | 1.0      | `["assistant"]` |
-| `curriculum://prerequisite-graph`  | Unit dependency data       | 0.5      | `["assistant"]` |
-| `curriculum://thread-progressions` | Learning progression data  | 0.5      | `["assistant"]` |
+| Resource URI                         | Content                    | Priority | Audience        |
+| ------------------------------------ | -------------------------- | -------- | --------------- |
+| `curriculum://model`                 | Domain ontology + guidance | 1.0      | `["assistant"]` |
+| `curriculum://prior-knowledge-graph` | Unit dependency data       | 0.5      | `["assistant"]` |
+| `curriculum://thread-progressions`   | Learning progression data  | 0.5      | `["assistant"]` |
+| `curriculum://misconception-graph`   | Misconception data         | 0.5      | `["assistant"]` |
 
-The host application decides whether and how to inject these into the model's context.
+The host application decides whether and how to inject these into the model's context. Only `curriculum://model` (priority 1.0) should be loaded at conversation start — the other graph resources are supplementary and should be loaded only when the conversation needs them.
 
 A fourth resource serves the interactive MCP App widget:
 
@@ -86,7 +87,7 @@ A prompt earns its place when it:
 
 ### Deduplication: `progression-map` removed
 
-`progression-map` and `learning-progression` were near-duplicates: same arguments (`concept`, `subject`), same tool sequence (search threads → get progressions → map dependencies → suggest scaffolding), same output shape. `learning-progression` additionally references `get-thread-progressions` and `get-prerequisite-graph` explicitly and includes gap-identification guidance. It is strictly more complete. `progression-map` was removed.
+`progression-map` and `learning-progression` were near-duplicates: same arguments (`concept`, `subject`), same tool sequence (search threads → get progressions → map dependencies → suggest scaffolding), same output shape. `learning-progression` additionally references `get-thread-progressions` and `get-prior-knowledge-graph` explicitly and includes gap-identification guidance. It is strictly more complete. `progression-map` was removed.
 
 ## Consequences
 

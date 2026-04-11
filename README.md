@@ -30,7 +30,7 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 
 ## What This Repo Provides
 
-Three capabilities, all generated from the [Oak Open Curriculum](https://open-api.thenational.academy/) OpenAPI specification:
+Three capabilities, powered by three open education data sources:
 
 | Capability          | What it does                                                                                                                                                                                                  | Packages                                                                                                                                                                                          |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -38,14 +38,24 @@ Three capabilities, all generated from the [Oak Open Curriculum](https://open-ap
 | **MCP Servers**     | AI assistants can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) — the standard that lets tools like ChatGPT and Claude connect to data sources | [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (canonical server workspace, web, Vercel), [`mcp-stdio`](apps/oak-curriculum-mcp-stdio/) (legacy stdio workspace, not actively maintained) |
 | **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                                                                  | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)                                                                                                       |
 
-The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides the subset of Oak's curriculum data that is openly licensed and free of third-party copyright (most of it). Everything in this repository works with this open data.
+### Data Sources
+
+This repository integrates three open education data sources, each answering a different question that teachers ask:
+
+| Source                                                                                                                        | What It Provides                                                                                                                                 | Licence                                                                                |
+| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| [Oak Open Curriculum API](https://open-api.thenational.academy/)                                                              | Lessons, units, threads, sequences, quizzes, and transcripts — openly-licensed, fully sequenced, fully resourced curriculum content              | [OGL v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) |
+| [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)                                             | Formal knowledge graph (W3C RDF/OWL/SKOS/SHACL) modelling the UK National Curriculum structure, concept relationships, and teaching progressions | OGL v3.0 (data) + MIT (code)                                                           |
+| [EEF Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit) | 30 research-synthesised teaching approaches with quantified impact, cost, and evidence strength ratings                                          | Attribution required                                                                   |
+
+Together these sources enable **evidence-grounded curriculum discovery**: AI agents can search for content (Oak API), understand where it fits in the curriculum structure (ontology), and recommend evidence-backed teaching approaches (EEF). See [ADR-157](docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md) for the integration architecture and [LICENCE-DATA.md](LICENCE-DATA.md) for full licence terms.
 
 ### MCP Server Capabilities
 
 The MCP servers expose curriculum data through the three [MCP primitive types](https://modelcontextprotocol.io/docs/learn/server-concepts):
 
 - **Tools** (model-controlled): 31 curriculum tools (23 generated from the OpenAPI schema, 8 aggregated) including orientation via `get-curriculum-model` and `download-asset`. The AI decides when to use them.
-- **Resources** (application-controlled): Curriculum model, prerequisite graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
+- **Resources** (application-controlled): Curriculum model, prior knowledge graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
 - **Prompts** (user-controlled): Four workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`) that guide users through common curriculum tasks.
 
 The standalone stdio workspace is now a legacy transitional surface. Future
@@ -145,7 +155,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
 | `packages/design/` | Design token pipeline: DTCG source format, CSS custom property generation, WCAG AA contrast validation                   |
 | `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`              |
-| `docs/`            | Developer documentation, guides, and 130+ ADRs                                                                           |
+| `docs/`            | Developer documentation, guides, and 155+ ADRs                                                                           |
 
 ### Workspace Summaries
 
@@ -255,6 +265,15 @@ over time rather than eroding.
 - [ADR-131](docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) — the improvement loop, interaction map, and self-referential property
 - [ADR-124](docs/architecture/architectural-decisions/124-practice-propagation-model.md) — how the Practice travels between repos
 - [.agent/HUMANS.md](.agent/HUMANS.md) — contributor context
+
+## Credits and Attribution
+
+This repository brings together work from multiple contributors and open
+education organisations:
+
+- **[Education Endowment Foundation](https://educationendowmentfoundation.org.uk/)** — Teaching and Learning Toolkit data (citation required when using EEF-derived outputs; see [LICENCE-DATA.md](LICENCE-DATA.md))
+- **Mark Hodierne** — [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology), primary author
+- **John Roberts** — EEF MCP server prototype
 
 ## Contributing
 

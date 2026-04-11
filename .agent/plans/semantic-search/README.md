@@ -32,6 +32,10 @@ Recently archived:
 - [current/thread-sequence-semantic-surfaces.execution.plan.md](current/thread-sequence-semantic-surfaces.execution.plan.md)
 - [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
 
+## Future (Strategic)
+
+- [future/curriculum-nlp-processing-workspace.md](future/curriculum-nlp-processing-workspace.md) — Python NLP workspace for ML-based entity extraction, semantic transcript compression, and relationship mining from bulk curriculum data
+
 ## Key Completed Evidence
 
 - [archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md](archive/completed/comprehensive-field-integrity-integration-tests.execution.plan.md)

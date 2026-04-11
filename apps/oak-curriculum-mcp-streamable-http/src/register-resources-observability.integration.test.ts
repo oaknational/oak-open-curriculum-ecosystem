@@ -19,10 +19,10 @@ import { createFakeHttpObservability } from './test-helpers/fakes.js';
 const TEST_WIDGET_HTML = '<!doctype html><html><body>Oak Curriculum App</body></html>';
 
 /**
- * Total resource count: documentation resources + 4 supplementary resources
- * (curriculum model, prerequisite graph, thread progressions, widget).
+ * Total resource count: documentation resources + 5 supplementary resources
+ * (curriculum model, prior knowledge graph, thread progressions, misconception graph, widget).
  */
-const EXPECTED_RESOURCE_COUNT = DOCUMENTATION_RESOURCES.length + 4;
+const EXPECTED_RESOURCE_COUNT = DOCUMENTATION_RESOURCES.length + 5;
 
 /**
  * Creates a minimal recording server using bare `vi.fn()` spies.

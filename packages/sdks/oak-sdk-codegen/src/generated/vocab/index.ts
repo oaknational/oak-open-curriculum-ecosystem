@@ -10,13 +10,13 @@
  */
 
 export { threadProgressionGraph } from './thread-progression-data.js';
-export { prerequisiteGraph } from './prerequisite-graph/index.js';
+export { priorKnowledgeGraph } from './prior-knowledge-graph/index.js';
 export type {
-  PrerequisiteEdge,
-  PrerequisiteGraph,
-  PrerequisiteGraphStats,
-  PrerequisiteNode,
-} from './prerequisite-graph/index.js';
+  PriorKnowledgeEdge,
+  PriorKnowledgeGraph,
+  PriorKnowledgeGraphStats,
+  PriorKnowledgeNode,
+} from './prior-knowledge-graph/index.js';
 export { misconceptionGraph } from './misconception-graph/index.js';
 export type {
   MisconceptionGraph,

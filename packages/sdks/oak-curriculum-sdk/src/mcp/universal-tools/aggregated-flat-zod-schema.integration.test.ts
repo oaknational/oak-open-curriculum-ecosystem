@@ -26,7 +26,7 @@ describe('aggregated tools inputSchema propagation', () => {
       (t) =>
         t.name !== 'get-curriculum-model' &&
         t.name !== 'get-thread-progressions' &&
-        t.name !== 'get-prerequisite-graph',
+        t.name !== 'get-prior-knowledge-graph',
     );
 
     for (const tool of toolsWithParams) {
@@ -150,9 +150,9 @@ describe('no-input tools have empty inputSchema (MCP spec: strict empty object)'
     expect(threadProgressions?.inputSchema).toEqual({});
   });
 
-  it('get-prerequisite-graph inputSchema is an empty shape', () => {
+  it('get-prior-knowledge-graph inputSchema is an empty shape', () => {
     const tools = listUniversalTools(generatedToolRegistry);
-    const prereqGraph = tools.find((t) => t.name === 'get-prerequisite-graph');
+    const prereqGraph = tools.find((t) => t.name === 'get-prior-knowledge-graph');
 
     expect(prereqGraph).toBeDefined();
     expect(prereqGraph?.inputSchema).toEqual({});

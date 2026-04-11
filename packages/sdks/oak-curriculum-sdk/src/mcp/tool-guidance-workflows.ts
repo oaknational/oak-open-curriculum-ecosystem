@@ -174,8 +174,8 @@ export const toolGuidanceWorkflows = {
       },
       {
         step: 3,
-        action: 'Get prerequisite graph for specific units to understand dependencies',
-        tool: 'get-prerequisite-graph',
+        action: 'Get prior knowledge graph for specific units to understand dependencies',
+        tool: 'get-prior-knowledge-graph',
         returns: 'Unit dependencies and prior knowledge requirements',
       },
     ],

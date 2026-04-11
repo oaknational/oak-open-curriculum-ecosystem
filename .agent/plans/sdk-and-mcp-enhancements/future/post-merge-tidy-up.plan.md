@@ -77,7 +77,7 @@ isProject: false
 
 ### From resource pattern work
 
-4. **Resource pattern test fixes** — `prerequisite-graph-resource` and
+4. **Resource pattern test fixes** — `prior-knowledge-graph-resource` and
    `thread-progressions-resource` tests need architectural fix: direct
    source function comparison instead of JSON re-parsing with Zod.
 

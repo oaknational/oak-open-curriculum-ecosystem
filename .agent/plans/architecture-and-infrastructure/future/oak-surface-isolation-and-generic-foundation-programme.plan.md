@@ -31,9 +31,12 @@ todos:
 **Status**: Strategic brief — not yet executable
 **Lane**: `future/`
 **Related plans**:
+
 - `codegen/future/sdk-codegen-workspace-decomposition.md`
 - `current/config-architecture-standardisation-plan.md`
 - `future/stdio-http-server-alignment.md`
+- `current/doc-architecture-phase-a-immediate.plan.md` — C4 diagrams and fitness functions must align with this programme's direction
+- `current/doc-architecture-phase-b-dependent.plan.md` — boundary enforcement evaluation and operability practice must account for new services/structure
 
 ## Problem and Intent
 

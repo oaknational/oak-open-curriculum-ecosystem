@@ -28,8 +28,8 @@ export const ontologyData = {
   relatedResources: {
     threadProgressions:
       'Call get-thread-progressions for ordered unit sequences within curriculum threads (instance data)',
-    prerequisiteGraph:
-      'Call get-prerequisite-graph for unit dependencies and prior knowledge requirements',
+    priorKnowledgeGraph:
+      'Call get-prior-knowledge-graph for unit dependencies and prior knowledge requirements',
   },
 
   curriculumStructure: {

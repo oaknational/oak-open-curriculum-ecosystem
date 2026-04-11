@@ -26,14 +26,14 @@ import {
   generateMinedSynonyms,
   generateMisconceptionGraphData,
   generateNCCoverageGraphData,
-  generatePrerequisiteGraphData,
+  generatePriorKnowledgeGraphData,
   generateThreadProgressionData,
   generateVocabularyGraphData,
   writeAnalysisReportFile,
   writeMinedSynonymsFile,
   writeMisconceptionGraphAsJson,
   writeNCCoverageGraphAsJson,
-  writePrerequisiteGraphAsJson,
+  writePriorKnowledgeGraphAsJson,
   writeThreadProgressionFile,
   writeVocabularyGraphAsJson,
 } from '../src/bulk.js';
@@ -116,17 +116,17 @@ async function generateOutputFiles(
   const threadFilePath = await writeThreadProgressionFile(threadGraph, config.outputPath);
   outputFiles.push(basename(threadFilePath));
 
-  // Generate prerequisite graph
-  const prerequisiteGraph = generatePrerequisiteGraphData(
+  // Generate prior knowledge graph
+  const priorKnowledgeGraph = generatePriorKnowledgeGraphData(
     result.extractedData.priorKnowledge,
     result.extractedData.threads,
     sourceVersion,
   );
-  const prerequisiteDirPath = await writePrerequisiteGraphAsJson(
-    prerequisiteGraph,
+  const priorKnowledgeDirPath = await writePriorKnowledgeGraphAsJson(
+    priorKnowledgeGraph,
     config.outputPath,
   );
-  outputFiles.push(basename(prerequisiteDirPath));
+  outputFiles.push(basename(priorKnowledgeDirPath));
 
   // Generate analysis report (written to vocab-gen/reports in the SDK)
   const analysisReport = generateAnalysisReport(result.extractedData);

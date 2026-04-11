@@ -11,7 +11,7 @@ import type { NCCoverageGraph } from './types.js';
 const require = createRequire(import.meta.url);
 // Direct type annotation is acceptable here: NCCoverageGraph contains only
 // primitive fields (string, number, Record<string, number>) with no union
-// literals requiring runtime validation. See prerequisite-graph/index.ts
+// literals requiring runtime validation. See prior-knowledge-graph/index.ts
 // for the two-step validation pattern used when union narrowing is needed.
 const data: NCCoverageGraph = require('./data.json');
 

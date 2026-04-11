@@ -1,47 +1,47 @@
 ---
 name: "Misconception Graph MCP Surface"
-overview: "Expose the existing misconception graph data as both an MCP resource and an aggregated tool, following the established prerequisite-graph pattern."
-parent_plan: "mcp-app-extension-migration.plan.md"
+overview: "Expose the existing misconception graph data as both an MCP resource and an aggregated tool, following the established prior-knowledge-graph pattern."
+parent_plan: "open-education-knowledge-surfaces.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer"
 isProject: false
 todos:
   - id: t1-resource-constant
     content: "Create misconception-graph-resource.ts with MISCONCEPTION_GRAPH_RESOURCE constant and getMisconceptionGraphJson() getter"
-    status: pending
+    status: done
   - id: t2-aggregated-tool
     content: "Create aggregated-misconception-graph.ts with tool definition, guidance, and runMisconceptionGraphTool() executor"
-    status: pending
+    status: done
   - id: t3-register-definitions
     content: "Add get-misconception-graph to AGGREGATED_TOOL_DEFS in definitions.ts"
-    status: pending
+    status: done
   - id: t4-register-executor
     content: "Add handler in AGGREGATED_HANDLERS map in executor.ts"
-    status: pending
+    status: done
   - id: t5-public-export
     content: "Export MISCONCEPTION_GRAPH_RESOURCE and getMisconceptionGraphJson from public/mcp-tools.ts"
-    status: pending
+    status: done
   - id: t6-register-resource
     content: "Add registerMisconceptionGraphResource() to register-resources.ts in the MCP app"
-    status: pending
+    status: done
   - id: t7-adr-123-update
     content: "Update ADR-123 resources table with curriculum://misconception-graph"
-    status: pending
+    status: done
   - id: t8-e2e-test
     content: "Add E2E assertions for get-misconception-graph tool and misconception resource"
-    status: pending
+    status: done
   - id: t9-guidance
     content: "Create misconception-guidance.ts with AGGREGATED_MISCONCEPTION_GUIDANCE constant"
-    status: pending
+    status: done
   - id: t10-doc-resource-annotations
     content: "Add annotations (audience, priority) to the 3 documentation resources"
-    status: pending
+    status: done
 ---
 
 # Misconception Graph MCP Surface
 
-**Status**: PENDING
-**Last Updated**: 2026-04-08
-**Branch**: TBD (new branch from `main` after WS3 merge)
+**Status**: DONE — committed in `1eb302e8` (2026-04-11)
+**Last Updated**: 2026-04-11
+**Branch**: `planning/kg_eef_integration`
 
 ## Context
 
@@ -55,14 +55,30 @@ The misconception graph data pipeline is fully built:
 - **Types**: `MisconceptionGraph`, `MisconceptionNode`, `MisconceptionGraphStats`
 - **Loader**: `generated/vocab/misconception-graph/index.ts` with typed export
 
-The prerequisite graph and thread progressions are both exposed as MCP
+The prior knowledge graph and thread progressions are both exposed as MCP
 resources AND aggregated tools. The misconception graph is not — it is only
 available internally via the `@oaknational/sdk-codegen/vocab-data` subpath.
 
+## Ontology Relationship
+
+The [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)
+(v0.1.0) has its own formal misconception model as part of its W3C-compliant
+RDF/OWL curriculum structure. That model captures structural relationships
+between misconceptions and curriculum content that the bulk data does not.
+
+This plan exposes the **bulk-data-derived** misconception graph (12,858
+items extracted from the Oak API bulk download). It is independently
+valuable and does not depend on the ontology. However, as KG integration
+matures (see `.agent/plans/kgs-and-pedagogy/` and
+`.agent/plans/semantic-search/current/kg-alignment-audit.execution.plan.md`),
+this MCP surface may eventually source from the ontology instead of bulk
+data, gaining richer relational context. That is a future consideration,
+not a current dependency.
+
 ## Decision
 
-Follow the exact pattern established by `prerequisite-graph-resource.ts` and
-`aggregated-prerequisite-graph.ts`. No new patterns, no new infrastructure.
+Follow the exact pattern established by `prior-knowledge-graph-resource.ts` and
+`aggregated-prior-knowledge-graph.ts`. No new patterns, no new infrastructure.
 
 ## Implementation
 
@@ -88,7 +104,7 @@ export function getMisconceptionGraphJson(): string {
 }
 ```
 
-Pattern source: `prerequisite-graph-resource.ts`
+Pattern source: `prior-knowledge-graph-resource.ts`
 
 **T9: Guidance constant** — `misconception-guidance.ts`
 
@@ -103,7 +119,7 @@ remediation). Pattern source: `prerequisite-guidance.ts`.
 - `runMisconceptionGraphTool()` returning `CallToolResult` via `formatToolResponse`
 - Annotations: `readOnlyHint: true`, `idempotentHint: true`
 
-Pattern source: `aggregated-prerequisite-graph.ts`
+Pattern source: `aggregated-prior-knowledge-graph.ts`
 
 **T3: Register in definitions** — add to `AGGREGATED_TOOL_DEFS`
 **T4: Register in executor** — add to `AGGREGATED_HANDLERS`
@@ -114,7 +130,7 @@ Pattern source: `aggregated-prerequisite-graph.ts`
 **T6: Register resource** — `register-resources.ts`
 
 Add `registerMisconceptionGraphResource()` following the same pattern as
-`registerPrerequisiteGraphResource()`. Call it from `registerAllResources()`.
+`registerGraphResource()`. Call it from `registerAllResources()`.
 
 ### Phase 3: Documentation and tests
 

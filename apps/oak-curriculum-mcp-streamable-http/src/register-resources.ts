@@ -3,7 +3,7 @@
  *
  * Registers static resources with the MCP server, including:
  * - Documentation resources for the "start here" experience
- * - Curriculum model, prerequisite graph, and thread progressions
+ * - Curriculum model, prior knowledge graph, and thread progressions
  * - MCP App widget resource (interactive React curriculum app)
  */
 
@@ -12,10 +12,12 @@ import {
   getDocumentationContent,
   CURRICULUM_MODEL_RESOURCE,
   getCurriculumModelJson,
-  PREREQUISITE_GRAPH_RESOURCE,
-  getPrerequisiteGraphJson,
+  PRIOR_KNOWLEDGE_GRAPH_RESOURCE,
+  getPriorKnowledgeGraphJson,
   THREAD_PROGRESSIONS_RESOURCE,
   getThreadProgressionsJson,
+  MISCONCEPTION_GRAPH_RESOURCE,
+  getMisconceptionGraphJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import {
@@ -93,12 +95,36 @@ export function registerCurriculumModelResource(
   );
 }
 
-/** Registers the prerequisite graph as an MCP resource, complementing `get-prerequisite-graph`. */
-export function registerPrerequisiteGraphResource(
+/**
+ * Registers a graph resource with the MCP server.
+ *
+ * Generic helper that eliminates per-graph registration boilerplate.
+ * Each graph surface (prior knowledge, thread progressions, misconception, etc.)
+ * follows the same registration pattern — only the resource constant and
+ * JSON getter differ.
+ *
+ * @param server - MCP server instance
+ * @param resource - Resource constant from the SDK (name, uri, mimeType, etc.)
+ * @param getJson - Function returning the graph data as formatted JSON
+ * @param observability - Observability for resource handler tracing
+ */
+export function registerGraphResource(
   server: ResourceRegistrar,
+  resource: {
+    readonly name: string;
+    readonly uri: string;
+    readonly title: string;
+    readonly description: string;
+    readonly mimeType: string;
+    readonly annotations: {
+      readonly priority: 0.5 | 1.0;
+      readonly audience: ('user' | 'assistant')[];
+    };
+  },
+  getJson: () => string,
   observability: ResourceRegistrationOptions['observability'],
 ): void {
-  const { name, uri, ...metadata } = PREREQUISITE_GRAPH_RESOURCE;
+  const { name, uri, ...metadata } = resource;
   server.registerResource(
     name,
     uri,
@@ -109,34 +135,8 @@ export function registerPrerequisiteGraphResource(
         contents: [
           {
             uri,
-            mimeType: PREREQUISITE_GRAPH_RESOURCE.mimeType,
-            text: getPrerequisiteGraphJson(),
-          },
-        ],
-      }),
-      observability,
-    ),
-  );
-}
-
-/** Registers thread progressions as an MCP resource, complementing `get-thread-progressions`. */
-export function registerThreadProgressionsResource(
-  server: ResourceRegistrar,
-  observability: ResourceRegistrationOptions['observability'],
-): void {
-  const { name, uri, ...metadata } = THREAD_PROGRESSIONS_RESOURCE;
-  server.registerResource(
-    name,
-    uri,
-    metadata,
-    wrapResourceHandler(
-      name,
-      () => ({
-        contents: [
-          {
-            uri,
-            mimeType: THREAD_PROGRESSIONS_RESOURCE.mimeType,
-            text: getThreadProgressionsJson(),
+            mimeType: resource.mimeType,
+            text: getJson(),
           },
         ],
       }),
@@ -148,7 +148,7 @@ export function registerThreadProgressionsResource(
 /**
  * Registers all static resources with the MCP server.
  *
- * Combines documentation, curriculum model, prerequisite graph,
+ * Combines documentation, curriculum model, prior knowledge graph,
  * thread progressions, and widget resource registration into a single call.
  *
  * @param server - MCP server instance
@@ -160,8 +160,24 @@ export function registerAllResources(
 ): void {
   registerDocumentationResources(server, options.observability);
   registerCurriculumModelResource(server, options.observability);
-  registerPrerequisiteGraphResource(server, options.observability);
-  registerThreadProgressionsResource(server, options.observability);
+  registerGraphResource(
+    server,
+    PRIOR_KNOWLEDGE_GRAPH_RESOURCE,
+    getPriorKnowledgeGraphJson,
+    options.observability,
+  );
+  registerGraphResource(
+    server,
+    THREAD_PROGRESSIONS_RESOURCE,
+    getThreadProgressionsJson,
+    options.observability,
+  );
+  registerGraphResource(
+    server,
+    MISCONCEPTION_GRAPH_RESOURCE,
+    getMisconceptionGraphJson,
+    options.observability,
+  );
   registerWidgetResource(server, options.getWidgetHtml, options.observability);
 }
 

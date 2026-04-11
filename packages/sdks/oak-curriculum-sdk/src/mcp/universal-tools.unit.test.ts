@@ -112,7 +112,7 @@ describe('isUniversalToolName', () => {
     expect(isUniversalToolName('fetch', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-curriculum-model', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-thread-progressions', registry.isToolName)).toBe(true);
-    expect(isUniversalToolName('get-prerequisite-graph', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('get-prior-knowledge-graph', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('browse-curriculum', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('explore-topic', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('download-asset', registry.isToolName)).toBe(true);

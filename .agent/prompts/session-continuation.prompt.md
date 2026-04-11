@@ -40,76 +40,65 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: ChatGPT report normalisation skill upgrade +
-  command wiring + PUA cleanup (completed). Widget crash fix push
-  still pending from prior session.
+- **Workstream**: Open Education Knowledge Surfaces — WS-0/1/2 DONE,
+  WS-3 (EEF evidence) is next.
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md`
-    (**COMPLETE** — all phases executed, ADR-156 created)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
-    (**FUTURE** — four-tier architecture, function-level analysis)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
-    (**QUEUED** — post-merge interactive user-search UI)
-- **Current state**: ChatGPT report normalisation session
-  complete. Two architecture reference reports normalised into
-  `-clean.md` siblings with 346 citation links recovered from
-  DOCX via positional pandoc matching. SKILL.md updated with 6
-  operational learnings (PUA encoding, positional matching,
-  full-text search, multi-citation grouping, double-space cleanup,
-  rels-file limitation). Patterns file updated. Canonical command
-  created with 4-platform adapter parity (Claude, Cursor, Gemini,
-  Codex). Permission entry added to `.claude/settings.json`.
-  `pnpm portability:check` green (12 commands, 23 skills, 44
-  adapters). 2,145 PUA characters cleaned from 7 tracked files.
-  Branch `feat/mcp_app_ui` is 4 commits ahead of origin; push
-  and preview verification still pending from prior session.
-- **Current objective**: Push `feat/mcp_app_ui` and verify the
-  Vercel preview deployment no longer crashes; then the
-  normalised reports can be committed.
+  - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
+    (**PARENT** — WS-0/1/2 done, WS-3 next)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/eef-evidence-mcp-surface.plan.md`
+    (**WS-3** — recommendation tool + R1-R8, all 12 findings resolved,
+    ready for implementation)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/nc-knowledge-taxonomy-surface.plan.md`
+    (**WS-4** — smallest KG integration, ontology-derived)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/agent-guidance-consolidation.plan.md`
+    (**WS-5** — consolidate after all surfaces)
+- **Current state**: WS-0/1/2 committed (`1eb302e8`) on
+  `planning/kg_eef_integration`. Prior knowledge graph renamed
+  (was "prerequisite graph"), 6 fragile tests deleted,
+  misconception-graph E2E assertions added. All 12 EEF plan
+  findings resolved with precise Zod schemas. `pnpm check` passes.
+- **Current objective**: Implement WS-3 (EEF evidence surface).
+  The EEF plan is fully resolved — ready for implementation.
 - **Hard invariants / non-goals**:
-  - DI is always used — constant provides VALUE, DI provides
-    TESTABILITY (ADR-078)
-  - Widget HTML follows the same codegen pattern as all other
-    generated metadata (same as `WIDGET_URI`, tool descriptions)
-  - `principles.md` is the source of truth for all principles
-  - Separate framework from consumer in all new work (ADR-154)
-  - Decompose at tensions rather than classifying (ADR-155)
-  - `static-content.ts` `process.cwd()` bug tracked separately
-  - No compatibility shims, no invented optionality
-- **Recent surprises / corrections**:
-  - ChatGPT export markers use invisible Unicode PUA characters
-    (U+E200/E202/E201) that are undetectable by standard grep,
-    editors, and the Read tool. `cat -v` or Python `ord()`
-    inspection required. 7 tracked files had leaked PUA chars.
-  - `citeturn` markers are positional, not stable keys — the same
-    marker string maps to different citations at different document
-    positions. Lookup-table approach fails; positional context
-    matching against full pandoc text is required.
-  - DOCX `word/_rels/document.xml.rels` contained only 1 URL for
-    these deep-research exports — virtually all citations were
-    body-embedded. Pandoc conversion is the primary recovery
-    surface, not the rels file.
+  - Only `get-curriculum-model` is a prerequisite tool. All graph
+    tools are supplementary, loaded as needed — no prerequisite
+    guidance injected by the factory.
+  - Graph factory is SDK-internal, not publicly exported
+  - Registration lives in app layer (needs observability)
+  - URI scheme: all `curriculum://` with source-identifying segments
+  - EEF data is NOT generated from OpenAPI — lives in SDK, not codegen
+  - Separate framework from consumer (ADR-154) — factory is framework
+  - No `unknown`, no `Record<string, unknown>`, no type aliases
+  - Future graph sub-setting feature tracked in memory
+- **Recent surprises / corrections** (2026-04-11):
+  - Flaky E2E test `returns HTTP 401 for tools/list with fake Bearer
+    token` in `application-routing.e2e.test.ts` — fails during full
+    `pnpm check` concurrency, passes on isolated re-run. Tracked in
+    `project_flaky-test-tracker.md`.
+  - `replace_all` on lowercase `prerequisite` in a code-template file
+    corrupted `prerequisiteFor` and `prerequisiteGraph` camelCase
+    strings. Lesson: never use blanket `replace_all` on partial words
+    in files that contain code templates with mixed casing.
 - **Open questions / low-confidence areas**:
-  - Whether `build:widget` should be a Turbo codegen task or
-    standalone script (currently standalone, works well)
-  - CI drift check for stale `widget-html-content.ts` (not yet
-    implemented, tracked as follow-up)
-  - Topology Plan B: physical directory structure decision
-    deferred to after function-level analysis evidence
-  - `static-content.ts` `process.cwd()` bug (non-crash)
-- **Next safe step**: Push the current local commits on
-  `feat/mcp_app_ui`, then verify the Vercel preview deployment
-  starts without crashing. Then commit the report normalisation
-  and command-wiring changes.
+  - Whether WS-5 (guidance consolidation) should be a catalogue
+    abstraction or simpler validation test approach (barney
+    recommended the simpler path)
+- **Next safe step**: Implement WS-3 per the resolved EEF plan.
+  T1 (data loader, Zod), T2-T5 (resources, tool, guidance),
+  T6-T10 (registration, prompt), T11-T12 (ADR, E2E).
+- **Flaky test tracker**: see memory note
+  `project_flaky-test-tracker.md`. Two failures observed (auth
+  routing E2E, curriculum-model E2E). Suspected: turbo concurrency
+  or test coupling.
 - **Deep consolidation status**: completed this handoff —
-  9-step consolidation run: documentation verified current,
-  plans/prompts synced, no graduation needed (learnings went
-  directly to permanent homes in SKILL.md and patterns file),
-  napkin at 412 lines (below rotation threshold), fitness
-  informational shows pre-existing warnings only, no practice
-  exchange action needed.
+  deduplicated distilled.md (removed Vercel section, ADR-065
+  pointer, npm scope fact, duplicate "lead with narrative"),
+  promoted "pre-implementation plan review" to pattern file,
+  fixed stale MEMORY.md entries (widget, mcpjam reference),
+  updated all plan statuses with commit refs, fixed stale
+  file path in future plan.
 
-## Active Workstreams (2026-04-10)
+## Active Workstreams (2026-04-11)
 
 ### 1. Vercel Widget Crash Fix — COMPLETE
 

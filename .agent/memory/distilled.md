@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-07.md`
-(sessions 2026-02-10 to 2026-04-07).
+`napkin-2026-02-24.md` through `napkin-2026-04-10b.md`
+(sessions 2026-02-10 to 2026-04-10).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -56,6 +56,16 @@ context with no natural permanent home.
 
 ## Process
 
+- **Lead with narrative, not infrastructure**: when starting a
+  multi-workstream initiative, write the ADR and README first.
+  Documentation that declares "what we're doing and why" frames
+  all subsequent technical work and prevents infrastructure-for-
+  infrastructure's-sake. WS-0 (narrative) before WS-1 (factory)
+  before WS-2+ (consumers) is not arbitrary; each stage depends
+  on the meaning established by the previous one.
+- **Review plans, not just code**: see pattern
+  `patterns/pre-implementation-plan-review.md`. Proven across
+  2 sessions (19 findings caught before implementation).
 - **Narrative sections drift first**: when syncing plan state,
   inspect body status lines, decision tables, and current-state
   prose, not just frontmatter and todo checkboxes.
@@ -96,7 +106,6 @@ context with no natural permanent home.
   `apps/oak-search-cli/docs/INDEXING.md` (*Operational CLI* section).
 - From `packages/sdks/oak-curriculum-sdk/`, repo root is
   `../../../` not `../../`
-- `@oaknational` is confirmed npm org scope (no token yet)
 - `src/bulk/generators/` duplicates `vocab-gen/generators/`
   files — both must be updated in parallel until resolved.
   **Decomposition**: strategic plan at
@@ -157,7 +166,6 @@ context with no natural permanent home.
   every task type it uses (build, test, type-check, lint,
   lint:fix). Missing overrides fall through to generic tasks
   with wrong inputs, causing stale cache hits.
-- Turbo dependency model: ADR-065 (items 6–7)
 - `pnpm check` is the canonical aggregate gate, but it does
   not include static-analysis sweeps (`pnpm knip`,
   `pnpm depcruise`) unless a plan explicitly requires them
@@ -171,12 +179,6 @@ context with no natural permanent home.
   value symbols unavailable at runtime. Use inline `type`
   keyword on individual specifiers:
   `import { applyTheme, type McpUiHostContext } from '...'`
-
-## Vercel Deployment
-
-- See [ADR-156](docs/architecture/architectural-decisions/156-embed-widget-html-at-build-time.md)
-  for Vercel Lambda `process.cwd()` mismatch, NFT tracing gaps,
-  and the committed TypeScript constant pattern that resolves both.
 
 ## Architecture (Domain-Specific)
 
