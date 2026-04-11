@@ -20,7 +20,26 @@
  * @see ADR-086 for the extraction methodology
  */
 
+import type { ThreadProgressionGraph } from '@oaknational/sdk-codegen/vocab';
 import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
+import type { GraphSurfaceConfig } from './graph-resource-factory.js';
+import { createGraphResource, createGraphJsonGetter } from './graph-resource-factory.js';
+
+/**
+ * Shared configuration for the thread progressions MCP surface.
+ *
+ * Used by both the resource definition and the tool definition
+ * (in aggregated-thread-progressions.ts) to ensure consistency.
+ */
+export const THREAD_PROGRESSIONS_CONFIG: GraphSurfaceConfig<ThreadProgressionGraph> = {
+  name: 'thread-progressions',
+  title: 'Oak Curriculum Thread Progressions',
+  description:
+    'Ordered unit sequences within curriculum threads showing conceptual progressions across years. Use for learning path recommendations and progression queries.',
+  uriSegment: 'thread-progressions',
+  sourceData: threadProgressionGraph,
+  summary: `Thread progression graph loaded. Contains ${String(threadProgressionGraph.stats.threadCount)} threads across ${String(threadProgressionGraph.stats.subjectsCovered.length)} subjects with ordered unit sequences.`,
+};
 
 /**
  * Thread progressions resource definition for MCP registration.
@@ -31,18 +50,7 @@ import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
  * server.registerResource(name, uri, metadata, handler);
  * ```
  */
-export const THREAD_PROGRESSIONS_RESOURCE = {
-  name: 'thread-progressions',
-  uri: 'curriculum://thread-progressions',
-  title: 'Oak Curriculum Thread Progressions',
-  description:
-    'Ordered unit sequences within curriculum threads showing conceptual progressions across years. Use for learning path recommendations and progression queries.',
-  mimeType: 'application/json' as const,
-  annotations: {
-    priority: 0.5,
-    audience: ['assistant'] satisfies ('user' | 'assistant')[],
-  },
-};
+export const THREAD_PROGRESSIONS_RESOURCE = createGraphResource(THREAD_PROGRESSIONS_CONFIG);
 
 /**
  * Generates the thread progressions as a JSON string for resource responses.
@@ -52,6 +60,4 @@ export const THREAD_PROGRESSIONS_RESOURCE = {
  *
  * @returns JSON string representation of the thread progressions
  */
-export function getThreadProgressionsJson(): string {
-  return JSON.stringify(threadProgressionGraph, null, 2);
-}
+export const getThreadProgressionsJson = createGraphJsonGetter(THREAD_PROGRESSIONS_CONFIG);

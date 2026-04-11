@@ -1,523 +1,111 @@
-## Napkin rotation — 2026-04-10
+## Napkin rotation — 2026-04-10b
 
-Rotated at 508 lines after the PR #76 merge-handoff sync,
-Vercel/bootstrap remediation, and HTTP dev-contract closeout.
-Archived to `archive/napkin-2026-04-10.md`. Merged 0 new
-entries into `distilled.md`. Graduated/pruned 9 entries now
-covered by permanent docs or source TSDoc: barrel-export
-reminder, `pnpm vocab-gen` reminder, MCP tool-count pointer,
-canonical logger rule, `Awaited<TResult>` wrapper note,
-singlefile MCP Apps build note, content-item CSP placement,
-tool `name` vs `title`, and contrast usage context.
-Extracted 0 new patterns (the new dev-orchestration learning
-is documented in permanent docs and plans for now). Previous
-rotation: 2026-04-07 at 562 lines.
+Rotated at 570 lines after 12 sessions (10a–10l) covering
+widget crash fix, rules consolidation, ADR-154/155, KGs and
+pedagogy analysis, open-education knowledge surfaces plan
+family, ChatGPT report normalisation, EEF comparison, and
+curriculum NLP processing workspace plan.
+Archived to `archive/napkin-2026-04-10b.md`. Merged 2 new
+entries into `distilled.md`: DI contract sweep rule (Testing),
+lead-with-narrative process rule (Process). Graduated/pruned
+13 entries now covered by permanent docs: Vercel Lambda facts
+(ADR-156), four-tier model (principles.md), lifecycle
+corrections (distilled terminology entry), rule consolidation
+(ADR-125 update), ChatGPT PUA patterns (dedicated pattern
+file), framework/consumer separation (ADR-154),
+decompose-at-tension (ADR-155). Extracted 0 new patterns
+(codegen-constant-via-DI is a candidate but borderline with
+ADR-156; new-ecosystem-new-workspace is single instance).
+Previous rotation: 2026-04-10 at 508 lines.
 
 ---
 
-### Session 2026-04-10a — post-rotation continuity seed
-
-#### Current state
-
-- Phase 6 merge-handoff and the Vercel/bootstrap plan are locally green after
-  `pnpm check`, the built-artifact proof, and the dev-orchestration acceptance
-  check.
-- Remaining external step: commit/push `feat/mcp_app_ui`, then recheck the
-  deployed preview/build logs before PR #76 merges.
-
-### Session 2026-04-10b — Cursor plugins strategic plan
-
-- Added `developer-experience/future/cursor-plugins-practice-and-oak-developer.plan.md`:
-  marketplace-track Practice plugin vs local-first Oak developer plugin (MCP HTTP,
-  codegen, SDK, search). Promotion gated on marketplace spike + A↔B layering decision.
-  No scaffold yet — exploration only.
-
-### Session 2026-04-10c — Vercel widget crash investigation + plan
-
-- **Root cause confirmed**: `process.cwd()` on Vercel Lambda = `/var/task`,
-  not app dir. `dist/oak-banner.html` resolved to wrong path. NFT also
-  doesn't trace non-imported HTML files.
-- Added debug instrumentation, confirmed root cause from Vercel runtime logs,
-  then **removed all debug instrumentation** (clean baseline restored).
-- Created investigation notes:
-  `.agent/plans/sdk-and-mcp-enhancements/active/vercel-widget-crash-deep-investigation.notes.md`
-- Created quality-fix plan:
-  `.agent/plans/sdk-and-mcp-enhancements/active/embed-widget-html-at-build-time.plan.md`
-- Plan went through **2 rounds of architecture review** (8 reviewers total):
-  4 architecture (Fred, Betty, Barney, Wilma) + test, config, docs-adr, code.
-
-#### Key corrections from user (session 2026-04-10d)
-
-- **DI is always used**: I wrongly suggested removing the
-  `getWidgetHtml` DI seam because the HTML becomes a constant.
-  DI is always used because it enables testing with trivial fakes
-  (ADR-078). The constant provides the VALUE; DI provides
-  TESTABILITY. Tests inject `() => '<html>test</html>'`.
-- **Widget HTML is generated metadata**: User pointed out that the
-  repo is "a machine for building codegen-time SDKs consumed by
-  thin runtime apps". The widget HTML is just another form of
-  generated metadata associated with an MCP tool — same pattern
-  as `WIDGET_URI`, tool descriptions, documentation content. It
-  should follow the established pattern: generate at codegen
-  time → produce a committed TypeScript constant → import and
-  consume via DI.
-- **AGENTS.md is ephemeral**: learnings I placed in AGENTS.md
-  belong in napkin/distilled/docs/ADRs depending on maturity.
-  AGENTS.md was reverted.
-- **New architectural principle**: Whenever we build something,
-  clearly separate (a) a purpose-specific, consumer-general
-  framework from (b) the Oak-specific consumer instance. This
-  needs to be codified in principles.md with an always-on rule.
-
-#### Vercel Lambda facts (for distilled.md)
-
-- `process.cwd()` on Vercel Lambda = `/var/task` (task root),
-  not the app package directory
-- Vercel NFT only bundles files reachable via static `import` /
-  `require` — dynamic `readFile()` targets may be missing
-- Build artefact content served by the app should be a committed
-  TypeScript constant (same pattern as codegen output), consumed
-  via DI, not runtime filesystem reads
-
-#### Four-tier layered architecture model
-
-Derived from dependency analysis of all package.json files:
-- **Tier 0 — Primitives**: zero deps, pure, stateless
-  (result, type-helpers). Importing cannot pull in anything.
-- **Tier 1 — Infrastructure**: depends on T0, cross-cutting,
-  operational character (config, state, env, side effects).
-  (logger, observability, env, possibly design tokens).
-  Importing carries weight.
-- **Tier 2a — Codegen-time**: depends on T0+T1, produces
-  committed artifacts. (sdk-codegen, openapi adapter).
-- **Tier 2b — Runtime**: depends on T0+T1+committed artifacts
-  from T2a. (apps, runtime sdks, runtime libs).
-- Import direction: lower tiers MUST NOT import higher.
-  T2a and T2b are peers (T2b imports committed output only).
-- Key insight: core != shared. `result` (zero deps, always
-  safe) is qualitatively different from `logger` (has deps,
-  config, side effects). They should not be in the same tier.
-- Direction: analyse to function level, define optimal
-  principles, then move code. Not document-and-wait.
-- **Tensions reveal foundational solutions**:
-  1. Barrel re-exports in codegen = false neutrality. Root cause:
-     codegen workspace serves as distribution hub. Solution:
-     separate codegen engine from output distribution.
-  2. Logger conflates framework + instance. Root cause: organic
-     growth. Solution: decompose along Framework/Consumer lines.
-     `buildResourceAttributes` (Vercel-specific), Express
-     middleware → consumer instance in runtime. Generic
-     `UnifiedLogger`, error normalisation → framework in infra.
-  3. Design is shared infrastructure (Tier 1), not a separate
-     category. `design-tokens-core` + `oak-design-tokens`
-     already follows Framework/Consumer correctly.
-  4. Tooling is orthogonal to the product tier model. Don't
-     classify alongside product code.
-- **"Decompose at the Tension"** added as a principle in
-  principles.md. When code resists clean classification,
-  decompose at the fault line rather than classify around the
-  compromise. Each tension resolved this way produces cleaner
-  boundaries.
-- **Cursor rules consolidated**: 12 always-on architecture rules
-  reduced to 1 (`apply-architectural-principles.mdc` → 
-  `principles.md`). 3 kept for unique detail (type-shortcuts,
-  unknown, tsdoc syntax). Process rules unchanged.
-
-#### Lifecycle classification corrections
-
-- **Bulk data processing is codegen-time**: bulk data is
-  downloaded as a prerequisite for the codegen pipeline. The
-  `src/bulk/` readers/extractors in `oak-sdk-codegen` are
-  codegen-time utilities, not runtime code. The search CLI's
-  ingestion commands are also codegen-time/operational.
-- **Synonym builders should become codegen-time generators**:
-  `buildElasticsearchSynonyms()`, `buildPhraseVocabulary()`,
-  `buildSynonymLookup()` process static data. They should run
-  at codegen time and produce committed TypeScript constants,
-  not be called at runtime. Same pattern as widget constants,
-  thread progressions, concept graphs.
-- **Logger use in codegen is legitimate**: at GA codegen runs
-  remotely — structured logs are essential for operational
-  visibility. Logger → `packages/core/logger`.
-- **Terminology**: "build time" is ambiguous — both codegen-time
-  and runtime have build steps. Use "codegen time" and "runtime
-  build" consistently.
-- **knip and dependency-cruiser** are available for thorough
-  import/export analysis during the lifecycle classification
-  work.
-
-#### Key corrections from user (session 2026-04-10e)
-
-- **principles.md is the source of truth**: I moved
-  fundamental definitions INTO `.agent/rules/*.md` files,
-  which broke every mechanism that reads principles directly.
-  Rules are ONE operationalisation mechanism among several.
-  The correction: inline all detailed guidance into
-  `principles.md`, then rewrite rule files as thin pointers.
-- **Fitness constraints serve excellence, not the reverse**:
-  user said "the GOAL is excellence, not rule following. Where
-  a discussion is needed let's have that discussion." Fitness
-  targets are tools, not laws.
-- **Rule consolidation completed**: 12 `.cursor/rules/*.mdc`
-  architecture files deleted, replaced by 1
-  `apply-architectural-principles.mdc` pointing to
-  `principles.md`. 3 kept for unique content (type-shortcuts,
-  unknown-is-type-destruction, tsdoc-hygiene) but updated to
-  point to `principles.md` for definitions.
-
-### Session 2026-04-10f — rules tidy-up + ADR gap analysis
-
-#### Completed
-
-- **Rules consolidation tidy-up**: fixed 16 portability failures.
-  Created `.agent/rules/apply-architectural-principles.md` as the
-  consolidated canonical rule. Updated 4 cursor rules to reference
-  canonical rules. Deleted 12 orphan canonical rules + 11 Claude
-  adapters. Created consolidated Claude adapter. `pnpm check`
-  green. Commit `54907d8e`.
-- **ADR-154**: Separate Framework from Consumer — new core
-  principle, with the test "Could a non-Oak consumer use this
-  unchanged?" and structural expectation.
-- **ADR-155**: Decompose at the Tension — classification
-  resistance signals hidden coupling, decompose at the fault line.
-- **ADR-125 update**: documented the many-to-one consolidation
-  pattern for rules, updated trigger examples, replaced hard
-  agent count. Commit `99011393`.
-- **ADR README index**: updated with ADR-154 and ADR-155 entries
-  in both sequential index and key decisions section.
-
-#### Observations
-
-- The portability validator's `CANONICAL_RULE_OR_SKILL_PATTERN`
-  only accepts `.agent/rules/` and `.agent/skills/` references.
-  If cursor rules ever need to reference `.agent/directives/`
-  directly, the pattern will need extending. Currently the
-  indirection layer (rule → directive) satisfies the validator.
-- Docs-adr-reviewer feedback was high quality: caught em-dash
-  format deviation, missing plan links, "consumer-general"
-  phrasing opacity, and the un-graduated tier model issue.
-
-### Session 2026-04-10g — embed-widget-html-at-build-time execution
-
-#### Completed (Phases 1-3)
-
-- **Phase 1**: Vite outDir → `.widget-build/` (gitignored intermediate),
-  `scripts/embed-widget-html.js` codegen, `src/generated/widget-html-content.ts`
-  committed constant, `build` decoupled to `tsup` only, `build:widget` chains
-  Vite + embed. Turbo inputs cleaned (removed widget paths from `#build`).
-- **Phase 2**: `getWidgetHtml` changed `() => Promise<string>` → `() => string`.
-  `CreateAppOptions.getWidgetHtml` required. `server-runtime.ts` `createApp`
-  made required (was optional with fallback). `index.ts` wraps `createApp`
-  to inject `WIDGET_HTML_CONTENT` via DI closure — framework stays generic
-  (ADR-154). `register-widget-resource.ts` rewritten (all fs code removed).
-  3 dead files deleted. ~18 test files: `validateWidgetHtml: skipWidgetHtmlValidation`
-  → `getWidgetHtml: () => '<html>test</html>'`.
-- **Phase 3**: `deployment-architecture.md` fully updated (no more `dist/oak-banner.html`,
-  `validateWidgetHtmlExists`, `process.cwd()` resolution). ADR-156 created.
-  ADR README index updated. `README.md` and `dev-server-management.md` stale
-  references fixed. All quality gates green: 590 unit/integration tests,
-  15 widget tests, 157 E2E tests.
-- **Reviewer coverage**: 7 sub-agent reviews across 5 specialties (code,
-  config, architecture-fred, architecture-wilma, test, docs-adr). Wilma
-  caught a smoke-test blind spot (missing `getWidgetHtml`); test-reviewer
-  caught stale E2E test description.
-
-#### Key patterns established
-
-- **Codegen constant via DI**: The entry point (`index.ts`) imports the
-  committed constant and closes over it in the `createApp` wrapper.
-  `server-runtime.ts` stays generic (ADR-154). Tests inject trivial fakes.
-- **`build:widget` is codegen**: Runs separately from `build` (like
-  `sdk-codegen`). Committed output is a normal `.ts` source file.
-- **`dist/index.js` size**: 466KB (was 122KB) — 345KB widget HTML constant
-  embedded. Acceptable for Node serverless.
-
-#### Next session pickup
-
-1. Commit/push the widget crash fix, verify Vercel preview
-2. Archive `vercel-widget-crash-deep-investigation.notes.md`
-3. Separately track `static-content.ts` `process.cwd()` pattern
-   (non-blocking, Vercel ignores `express.static()`)
-4. Workspace topology exploration (plan B) — lifecycle
-   classification doc, logger reclassification, synonym-to-
-   codegen conversion, ESLint cross-category enforcement
-
-### Session 2026-04-10h — EEF vs Oak MCP stack comparison note
-
-#### What Was Done
-
-- Created `.agent/reference-local/eef-data/oak-http-stack-comparison.md`
-  comparing the local EEF snapshot against the canonical Oak HTTP MCP stack
-  and the immediate shared SDK boundary.
-- Kept the note explicit about three different truth modes:
-  snapshot truth, README/package claim, and current Oak implementation.
-
-#### Mistakes Made
-
-- Initially treated `.agent/reference-local/eef-data/` as if it only contained
-  `README.md` because the first file sweep used plain `rg --files` and missed
-  ignored/local artefacts. The repo's own distilled note was right: use
-  `rg -uu` or an explicit directory walk when inspecting `reference-local` or
-  other potentially ignored estates.
-
-#### Patterns to Remember
-
-- For local reference snapshots, compare not just code vs code but also
-  checked-in layout vs declared package layout vs runtime loader assumptions.
-  In the EEF snapshot, those three layers diverged in a way that materially
-  changed the comparison.
-- `scripts/validate-practice-fitness.mjs` only evaluates markdown files that
-  declare `fitness_line_target` frontmatter. A new note under
-  `.agent/reference-local/` is discoverable as markdown, but it is not a
-  practice-fitness-managed file unless it opts in with fitness frontmatter.
-- User correction: when analysing reference material, the primary goal may be
-  to understand the impact it strives to create and how Oak could gain value
-  from it, not to turn every divergence into a fix list. Keep the engineering
-  gap analysis subordinate to the product-intent reading.
-
-### Session 2026-04-10i — Widget crash fix execution
-
-#### What Was Done
-
-- Executed all three phases of the embed-widget-html-at-build-time
-  plan. Vite now outputs to `.widget-build/` (gitignored), embed
-  script produces `src/generated/widget-html-content.ts` (committed),
-  runtime imports via DI. Deleted `validate-widget-html.ts`,
-  `test-helpers/widget-html-validation.ts`, and their tests.
-- Created ADR-156 documenting the decision. Updated
-  `deployment-architecture.md`, `README.md`, `dev-server-management.md`.
-- Extracted generic HTTP server lifecycle helpers from
-  `smoke-tests/local-server.ts` into `smoke-tests/server-lifecycle.ts`
-  (port probing, address validation, graceful shutdown).
-- Invoked reviewers continuously throughout: code reviewer, config
-  reviewer, Wilma (adversarial), test reviewer, docs-ADR reviewer.
-
-#### Mistakes Made
-
-- Wilma reviewer caught that `smoke-tests/local-server.ts` calls
-  `createApp` without `getWidgetHtml` — file was excluded from
-  `tsconfig.lint.json` type-check, so the type error was invisible
-  until runtime. Lesson: smoke tests outside type-check scope are
-  a blind spot for DI contract changes.
-- Config reviewer caught that `turbo.json` still listed widget paths
-  in the `#build` task inputs after the runtime build was decoupled
-  from widget sources. Lesson: when decoupling build phases, audit
-  task-runner configs in the same pass.
-
-#### Patterns to Remember
-
-- When changing a DI contract (adding/removing/changing a required
-  option), sweep all call sites including those outside the main
-  type-check scope (smoke tests, E2E helpers, scripts). Files in
-  `tsconfig.lint.json` `exclude` can silently hold stale contracts.
-- `built-artifact-import.e2e.test.ts` verifies module relocatability,
-  not embedded content correctness. After switching to DI-injected
-  fakes, update both the test description and assertions to match
-  what the test actually proves.
-- Continuous reviewer invocation (not just at the end) catches issues
-  early when each phase is small and focused. Particularly effective
-  for adversarial (Wilma) and config reviewers.
-
-### Session 2026-04-10k — ChatGPT report normalisation + command wiring
-
-#### What Was Done
-
-- Normalised two software architecture reference reports from ChatGPT
-  deep-research exports into `-clean.md` siblings with durable citation
-  links (126 + 220 citations recovered, 346 total).
-- Updated `chatgpt-report-normalisation` SKILL.md with 6 operational
-  learnings: PUA encoding, positional matching, full-text search,
-  multi-citation grouping, double-space cleanup, rels-file limitation.
-- Updated the patterns file with matching learnings, bumped proven_date.
-- Created canonical command `.agent/commands/chatgpt-report-normalisation.md`
-  with 4-platform adapter parity (Claude, Cursor, Gemini, Codex).
-  Added permission entry to `.claude/settings.json`. `pnpm portability:check`
-  green.
-- Cleaned 2,145 invisible PUA characters from 7 tracked `.agent/` files.
-
-#### Mistakes Made
-
-- Initial citation replacement script used line-by-line matching against
-  pandoc output, which failed for all list items and long paragraphs because
-  pandoc wraps lines. Switching to full-text search with normalised whitespace
-  fixed the problem (41 → 123 → 126 citations placed).
-- The `citeturn` markers were initially treated as plain text for regex
-  matching, but they were invisible in the Read tool output because they're
-  wrapped in PUA characters. `cat -v` was needed to detect them.
-- The SKILL.md itself contained leaked PUA characters in its backtick-quoted
-  example markers (`cite`, `filecite`), making Edit tool string matching
-  fail silently.
-
-#### Patterns to Remember
-
-- ChatGPT citation markers use Unicode PUA characters (U+E200 start,
-  U+E202 separator, U+E201 end) that are invisible in editors and the
-  Read tool. Always use `cat -v` or Python `ord()` to inspect export files.
-- `citeturn` markers are positional, not stable keys. The same marker
-  string maps to different numbered citations at different document positions.
-  Use positional context matching against full pandoc text, not lookup tables.
-- DOCX `word/_rels/document.xml.rels` may contain very few URLs for
-  deep-research exports. The pandoc `docx -t gfm` conversion is the primary
-  citation recovery surface.
-- When editing files that may contain PUA characters, the Edit tool's string
-  matching will fail because the provided old_string won't contain the
-  invisible bytes. Use Python or match on surrounding PUA-free context.
-
-### Session 2026-04-10j — continuity refresh + doc consolidation
-
-#### What Was Done
-
-- Refreshed `.agent/prompts/session-continuation.prompt.md` so the
-  continuity contract reflects the current branch truth: the widget
-  crash fix is committed locally and `feat/mcp_app_ui` is 4 commits
-  ahead of `origin/feat/mcp_app_ui`, with push and preview
-  verification still pending.
-- Trimmed `AGENTS.md` back to a lightweight entry point after it
-  re-accumulated durable learnings already captured in longer-lived
-  surfaces.
-- Swept live docs for stale
-  `active/embed-widget-html-at-build-time.plan.md` and
-  `.cursor/plans/*.plan.md` links. Only historical napkin/archive
-  references remain. The live plan/index chain was already synced to
-  the same push-only next step and now carries the completed-plan
-  entry for the archived widget crash fix.
-- Checked `.agent/practice-core/incoming/`; no incoming practice
-  payloads are waiting.
-- Ran `pnpm practice:fitness:informational` plus targeted
-  markdownlint on the touched files. The fitness report surfaced
-  only pre-existing repo/worktree warnings; the touched files
-  linted cleanly.
-
-#### Mistakes Made
-
-- A previous handoff left the continuity prompt in a pre-commit
-  state even after the local branch had advanced. Lesson: refresh the
-  continuity contract from `git status`, `git log`, and ahead/behind
-  state, not from the last narrative snapshot.
-- `AGENTS.md` had drifted into a second distilled-memory surface.
-  Lesson: entry-point files are for orientation and discovery, not
-  for accumulating durable repo learnings.
-
-#### Patterns to Remember
-
-- When a closeout spans local commits, continuity surfaces must be
-  grounded against live branch state before the handoff is considered
-  truthful.
-- `pnpm practice:fitness:informational` currently reports on nested
-  `.claude/worktrees/*` copies as well as the main repo tree, so
-  duplicate warnings there do not necessarily indicate new drift in
-  the primary workspace.
-- Keep entry-point files index-like. Stable learnings should flow
-  into napkin, distilled docs, ADRs, governance docs, or READMEs
-  instead of living in `AGENTS.md`.
-
-### Session 2026-04-10c — KGs and Pedagogy analysis
-
-#### What happened
-
-- Deep analysis of the Oak MCP ecosystem, EEF Toolkit MCP server
-  prototype, existing comparison report, and the Oak Curriculum
-  Ontology (knowledge graph) repo.
-- Created plan collection at `.agent/plans/kgs-and-pedagogy/` with
-  strategic brief, technical comparison, and EEF data file.
-- Identified 8 impact-preserving requirements (R1-R8) that go beyond
-  technical comparison to capture the educational values an evidence
-  layer must encode.
-- Identified three-layer architecture: MCP ecosystem (Layer 1),
-  Ontology (Layer 2), Evidence (Layer 3). Layer 2 already exists
-  and is stable. Level 4 integration is architecturally ready.
-
-#### Surprises
-
-- The KG repo has a single primary author: Mark Hodierne (170 of 180
-  commits). Important for attribution when integrating KG aspects.
-- The EEF MCP prototype's `pyproject.toml` layout doesn't match its
-  actual file structure — it's a local capture, not a verified package.
-  This was already documented in the stack comparison but is a genuine
-  integrity mismatch worth noting.
-- The EEF roadmap (v0.5) explicitly targets "Oak Layer 2 schema"
-  alignment — and the KG repo IS that Layer 2 schema. The convergence
-  is not aspirational, it's architecturally already mapped.
-
-#### Patterns to Remember
-
-- When analysing external prototype code for integration, capture
-  impact-preserving requirements (the "why" values the system encodes)
-  not just technical patterns. A technically correct reimplementation
-  that omits epistemic honesty or disadvantage-gap weighting would be
-  educationally weaker.
-- The three-layer framing (transport/ontology/evidence) is a useful
-  architectural lens for future integration work in this space.
-- Bulk-data derivations (ADR-059 concept map, misconception graph,
-  prerequisite graph) and the formal ontology are different orders of
-  thing. The naming collision ("knowledge graph" for both) is a real
-  source of confusion. ADR-059 renamed to "Curriculum Concept Map."
-- Integration plans that appear sequential may have independently
-  deliverable subsets. Levels 1-3 of EEF integration don't need the
-  ontology — decoupling them from the KG alignment audit unblocks
-  the value demonstration path.
-
-### Session 2026-04-10d — plans, archival, graph infrastructure
-
-#### What happened
-
-- Created 2 new sibling plans: `eef-evidence-mcp-surface.plan.md` and
-  `agent-guidance-consolidation.plan.md`, alongside existing
-  `misconception-graph-mcp-surface.plan.md`. Execution order:
-  misconceptions → EEF evidence → guidance consolidation.
-- Archived 4 completed plans (WS3 rebuild, Phase 6, Vercel warnings,
-  crash investigation). Cleaned 7 superseded session plans.
-- Identified graph resource shared infrastructure: all 3 existing graph
-  surfaces (prerequisite, thread progressions, curriculum model) follow
-  100% identical 6-layer boilerplate (~160 lines each). A factory
-  function would reduce each to ~20 lines of config.
-- Confirmed all 34 tools have proper `title` metadata (24 generated
-  via `kebabToTitleCase()`, 10 hand-written).
-- Identified smallest meaningful KG integration: NC knowledge taxonomy
-  (SKOS Discipline→Strand→SubStrand→ContentDescriptor hierarchy) exists
-  only in the ontology, not in bulk data. ~356 content descriptors for
-  maths alone. Self-contained, no Neo4j needed.
-
-#### Surprises
-
-- The graph resource pattern is so consistent that extracting a factory
-  is purely mechanical — config-only variation across all instances.
-- Agent guidance is more DRY than expected at the generated layer but
-  fragile at the hand-written tool description layer.
-- All tool titles were already correct — the Claude Desktop UI uses
-  tool IDs for display regardless of the `title` property.
-
-#### Patterns to Remember
-
-- When adding a new "graph as MCP resource + tool" surface, check
-  whether a shared factory exists before writing boilerplate. If not,
-  consider creating one — the pattern is 100% stable across 3+ instances.
-- The workspace topology plan should stay current/active — it's an
-  ongoing architectural lens, not a completable task.
-
-### Session 2026-04-10e — parent plan and final structure
-
-#### What happened
-
-- Created parent plan `open-education-knowledge-surfaces.plan.md`
-  (WS-0 through WS-6) coordinating the full arc from narrative
-  (ADR + README) through graph factory, 4 graph surfaces, guidance
-  consolidation, and documentation propagation.
-- Created `graph-resource-factory.plan.md` as WS-1 prerequisite.
-- Created `nc-knowledge-taxonomy-surface.plan.md` as WS-4 (smallest
-  meaningful KG integration — SKOS extraction from ontology).
-- Updated all sibling plans to reference the parent.
-- Metacognitive reflection: lead with narrative (WS-0), not
-  infrastructure. The README and ADR declaring three data sources
-  frames everything that follows.
-- Next session protocol: specialist reviewer sweep before code.
-
-#### Patterns to Remember
-
-- Lead with the narrative, not the infrastructure. Documentation
-  that declares "what we're doing and why" frames all subsequent
-  technical work and prevents infrastructure-for-infrastructure's-sake.
-- When creating a plan family, the parent plan's most important job
-  is sequencing — what must come first and why. WS-0 (narrative)
-  before WS-1 (factory) before WS-2+ (consumers) is not arbitrary;
-  each stage depends on the meaning established by the previous one.
+### Session 2026-04-10m: Open Education Knowledge Surfaces WS-0/1/2
+
+**Surprise: git stash as diagnostic is dangerous**
+Used `git stash` to check if lint errors were pre-existing. The stash
+reverted all tracked changes. `stash pop` then failed on a conflict
+(another agent had modified `.agent/memory/distilled.md` concurrently).
+Recovery required: backup current tree, restore conflicting files to HEAD,
+pop stash, re-apply backed-up versions. Lesson: never use `git stash` as
+a quick diagnostic without understanding the full tree state and potential
+concurrent modifications.
+
+**Correction: prerequisite guidance scope**
+Only `get-curriculum-model` is a prerequisite tool. Graph tools
+(prerequisite, thread progressions, misconception) are supplementary
+resources loaded as needed — they should NOT include "You MUST call
+get-curriculum-model first" guidance. The factory was updated to not
+inject prerequisite guidance. Tests updated to assert the negative.
+
+**Correction: `object` is forbidden as generic constraint**
+ESLint rule `@typescript-eslint/no-restricted-types` forbids `object`.
+Used `{ readonly version: string }` as the structural constraint
+instead — all graph data types share this field.
+
+**Pattern: pre-implementation specialist review**
+Running 4 specialist reviewers (betty, barney, mcp, code) against plan
+files BEFORE implementation caught 7 blocking findings and 9 design
+changes. This saved significant rework. The pattern is: review plans,
+not just code.
+
+**Correction: fragile idempotency test pattern**
+The `is idempotent — returns identical data on repeated calls` test
+comparing `structuredContent` on graph tools proves nothing meaningful —
+it tests that a pure function returns the same value twice, which is
+guaranteed by the type system and the fact that the source data is a
+module-level constant. Delete these tests. Also, `includes summary text
+mentioning misconceptions in content` tests a string constant, not
+behaviour. Tests must prove product behaviour through the interface,
+not assert constants. See testing-strategy.md §Universal Testing Rules.
+
+**Correction: prerequisite graph name is ambiguous**
+"Prerequisite graph" is ambiguous — it can be read as "prerequisite for
+using this tool" (which caused the prerequisite guidance confusion) or
+"student prior-knowledge prerequisites for curriculum sequencing" (which
+is the actual meaning). The resource and tool should be renamed to make
+the student/curriculum context clear. E.g. `prior-knowledge-graph` or
+`student-prerequisites-graph`. This is a rename-everywhere task:
+resource URI, tool name, file names, ADR-123, all references.
+Track as a next-session task.
+
+**Overlooked from archived napkins — surfaced during handoff review**
+
+The following items were in rotated napkins but not graduated or tracked:
+
+1. ~~**Server Implementation branding is empty**~~ — RESOLVED. Was
+   done in `server-branding.ts` (title, description, websiteUrl, themed
+   icons). Wired into `application.ts:238`. The napkin entry (S5) lacked
+   a resolution annotation, causing a false alarm during review.
+
+2. **Generated tools have no human-friendly title** (S3, napkin-2026-04-10):
+   Generated tools fall back to kebab-case `tool.name`. Deferred to
+   codegen template change but no plan tracks it.
+
+3. **Pre-implementation plan review as a pattern**: Running specialist
+   reviewers against PLANS (not code) caught a fundamental premise error
+   (S14, napkin-2026-04-10) and 7 blocking findings (this session).
+   This pattern should be graduated to testing-strategy.md or a
+   governance doc as a recommended practice.
+
+4. **Synonym builders should become codegen-time** (napkin-2026-04-10b):
+   `buildElasticsearchSynonyms()`, `buildPhraseVocabulary()`,
+   `buildSynonymLookup()` run at runtime over static data. Should be
+   codegen-time generators. No plan tracks the migration.
+
+5. **`static-content.ts` `process.cwd()` bug** (napkin-2026-04-10b):
+   Non-crash, Vercel ignores `express.static()`. Still wrong. Tracked
+   nowhere permanently.
+
+6. **E2E test flakiness** (napkin-2026-04-10, S session 2026-04-08e/09):
+   `get-curriculum-model.e2e.test.ts` intermittent failure. No plan or
+   issue tracks investigation.
+
+7. **Lead with narrative, not infrastructure**: Process insight worth
+   graduating to governance or distilled: "Documentation that declares
+   what we're doing and why frames all subsequent technical work."
+
+**Pattern: graph sub-setting as future feature**
+User identified the need for sub-graph extraction — either at runtime
+(tool parameters) or codegen-time (per-subject sub-graphs). Tracked in
+memory. The factory is the natural extension point.

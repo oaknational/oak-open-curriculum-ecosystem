@@ -1,9 +1,11 @@
 /**
- * Prerequisite graph generator.
+ * Prior knowledge graph generator.
  *
  * @remarks
  * Transforms extracted prior knowledge and thread data into a static graph
  * structure suitable for MCP tool consumption and AI agent reasoning.
+ * "Prior knowledge" refers to what students should already know before
+ * beginning a curriculum unit — not tool prerequisites.
  *
  * The output follows the pattern established by `property-graph-data.ts`:
  * - Static data with `as const` for type inference
@@ -13,14 +15,13 @@
  * @see property-graph-data.ts for the canonical pattern
  * @see thread-progression-generator.ts for the sister implementation
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
-
  */
 import type { ExtractedPriorKnowledge, ExtractedThread } from '../extractors/index.js';
 
 /**
- * A prerequisite edge in the graph.
+ * A prior knowledge edge in the graph.
  */
-export interface PrerequisiteEdge {
+export interface PriorKnowledgeEdge {
   /** Source unit slug */
   readonly from: string;
   /** Target unit slug */
@@ -32,9 +33,9 @@ export interface PrerequisiteEdge {
 }
 
 /**
- * A unit node in the prerequisite graph.
+ * A unit node in the prior knowledge graph.
  */
-export interface PrerequisiteNode {
+export interface PriorKnowledgeNode {
   /** Unit slug identifier */
   readonly unitSlug: string;
   /** Human-readable unit title */
@@ -52,9 +53,9 @@ export interface PrerequisiteNode {
 }
 
 /**
- * Statistics about the prerequisite graph.
+ * Statistics about the prior knowledge graph.
  */
-export interface PrerequisiteGraphStats {
+export interface PriorKnowledgeGraphStats {
   /** Number of units that have prior knowledge requirements */
   readonly unitsWithPrerequisites: number;
   /** Total number of edges in the graph */
@@ -64,13 +65,13 @@ export interface PrerequisiteGraphStats {
 }
 
 /**
- * The complete prerequisite graph structure.
+ * The complete prior knowledge graph structure.
  *
  * @remarks
  * This structure is designed to be exported as a static TypeScript file
  * with `as const` for full type inference.
  */
-export interface PrerequisiteGraph {
+export interface PriorKnowledgeGraph {
   /** Semantic version of the graph structure */
   readonly version: string;
   /** ISO timestamp when this graph was generated */
@@ -78,11 +79,11 @@ export interface PrerequisiteGraph {
   /** Version of the source bulk download data */
   readonly sourceVersion: string;
   /** Statistics for agent context */
-  readonly stats: PrerequisiteGraphStats;
-  /** Unit nodes with prerequisite metadata */
-  readonly nodes: readonly PrerequisiteNode[];
-  /** Prerequisite edges between units */
-  readonly edges: readonly PrerequisiteEdge[];
+  readonly stats: PriorKnowledgeGraphStats;
+  /** Unit nodes with prior knowledge metadata */
+  readonly nodes: readonly PriorKnowledgeNode[];
+  /** Prior knowledge edges between units */
+  readonly edges: readonly PriorKnowledgeEdge[];
   /** Cross-reference to related MCP tools */
   readonly seeAlso: string;
 }
@@ -129,8 +130,8 @@ function groupPriorKnowledgeByUnit(
 function createNodes(
   groupedPK: Map<string, ExtractedPriorKnowledge[]>,
   unitToThreads: Map<string, string[]>,
-): readonly PrerequisiteNode[] {
-  const nodes: PrerequisiteNode[] = [];
+): readonly PriorKnowledgeNode[] {
+  const nodes: PriorKnowledgeNode[] = [];
 
   for (const [unitSlug, pkList] of groupedPK.entries()) {
     const first = pkList[0];
@@ -158,8 +159,10 @@ function createNodes(
  * @remarks
  * For each thread with 2+ units, creates edges from unit[i] to unit[i+1].
  */
-function createEdgesFromThreads(threads: readonly ExtractedThread[]): readonly PrerequisiteEdge[] {
-  const edges: PrerequisiteEdge[] = [];
+function createEdgesFromThreads(
+  threads: readonly ExtractedThread[],
+): readonly PriorKnowledgeEdge[] {
+  const edges: PriorKnowledgeEdge[] = [];
 
   for (const thread of threads) {
     // Only process threads with 2+ units
@@ -198,27 +201,27 @@ function collectSubjects(priorKnowledge: readonly ExtractedPriorKnowledge[]): re
 }
 
 /**
- * Generates the prerequisite graph from extracted data.
+ * Generates the prior knowledge graph from extracted data.
  *
  * @param priorKnowledge - Extracted prior knowledge requirements from units
  * @param threads - Extracted threads for ordering-based edges
  * @param sourceVersion - Version identifier for the source bulk download data
- * @returns Prerequisite graph structure
+ * @returns Prior knowledge graph structure
  *
  * @example
  * ```ts
  * const priorKnowledge = extractPriorKnowledge(units);
  * const threads = extractThreads(units);
- * const graph = generatePrerequisiteGraphData(priorKnowledge, threads, '2025-12-07T09:37:04.693Z');
+ * const graph = generatePriorKnowledgeGraphData(priorKnowledge, threads, '2025-12-07T09:37:04.693Z');
  * // graph.nodes contains units with prerequisites
  * // graph.edges contains prerequisiteFor relationships
  * ```
  */
-export function generatePrerequisiteGraphData(
+export function generatePriorKnowledgeGraphData(
   priorKnowledge: readonly ExtractedPriorKnowledge[],
   threads: readonly ExtractedThread[],
   sourceVersion: string,
-): PrerequisiteGraph {
+): PriorKnowledgeGraph {
   const unitToThreads = buildUnitToThreadsMap(threads);
   const groupedPK = groupPriorKnowledgeByUnit(priorKnowledge);
   const nodes = createNodes(groupedPK, unitToThreads);

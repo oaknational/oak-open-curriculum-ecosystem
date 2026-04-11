@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-07.md`
-(sessions 2026-02-10 to 2026-04-07).
+`napkin-2026-02-24.md` through `napkin-2026-04-10b.md`
+(sessions 2026-02-10 to 2026-04-10).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -56,6 +56,18 @@ context with no natural permanent home.
 
 ## Process
 
+- **Lead with narrative, not infrastructure**: when starting a
+  multi-workstream initiative, write the ADR and README first.
+  Documentation that declares "what we're doing and why" frames
+  all subsequent technical work and prevents infrastructure-for-
+  infrastructure's-sake. WS-0 (narrative) before WS-1 (factory)
+  before WS-2+ (consumers) is not arbitrary; each stage depends
+  on the meaning established by the previous one.
+- **Review plans, not just code**: running specialist reviewers
+  against PLAN files before implementation catches fundamental
+  premise errors and design issues before any code is written.
+  The 2026-04-10 session: 4 pre-implementation reviewers caught
+  7 blocking findings and 9 design changes across 5 plan files.
 - **Narrative sections drift first**: when syncing plan state,
   inspect body status lines, decision tables, and current-state
   prose, not just frontmatter and todo checkboxes.
@@ -67,6 +79,12 @@ context with no natural permanent home.
   multiple commits, separate in-scope findings from pre-existing
   issues. Fix in-scope, track pre-existing as a gated follow-up.
   Never conflate scope by fixing everything in one session.
+- **Lead with narrative, not infrastructure**: documentation
+  that declares "what we're doing and why" frames all
+  subsequent technical work and prevents building
+  infrastructure for infrastructure's sake. When creating a
+  plan family, sequence narrative (WS-0) before factory
+  (WS-1) before consumers (WS-2+).
 - **Ignored estates need explicit sweeps**: when validating
   gitignored research or staging lanes, use `rg -uu` or run the
   search from inside the target directory; otherwise ignore rules

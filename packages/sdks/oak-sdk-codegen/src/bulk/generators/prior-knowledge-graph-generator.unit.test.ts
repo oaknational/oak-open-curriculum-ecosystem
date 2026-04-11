@@ -1,8 +1,8 @@
 /**
- * Unit tests for the prerequisite graph generator.
+ * Unit tests for the prior knowledge graph generator.
  *
  * @remarks
- * TDD: These tests specify the behaviour of the prerequisite graph generator.
+ * TDD: These tests specify the behaviour of the prior knowledge graph generator.
  * Written FIRST before implementation (RED phase).
  *
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for requirements
@@ -12,9 +12,9 @@ import { describe, expect, it } from 'vitest';
 import type { ExtractedPriorKnowledge } from '../extractors/index.js';
 import type { ExtractedThread } from '../extractors/thread-extractor.js';
 
-import { generatePrerequisiteGraphData } from './prerequisite-graph-generator.js';
+import { generatePriorKnowledgeGraphData } from './prior-knowledge-graph-generator.js';
 
-describe('generatePrerequisiteGraphData', () => {
+describe('generatePriorKnowledgeGraphData', () => {
   const baseThread: ExtractedThread = {
     slug: 'number-fractions',
     title: 'Number: Fractions',
@@ -59,25 +59,25 @@ describe('generatePrerequisiteGraphData', () => {
 
   describe('graph metadata', () => {
     it('returns a graph with version 1.0.0', () => {
-      const result = generatePrerequisiteGraphData([], [], '2025-12-07T09:37:04.693Z');
+      const result = generatePriorKnowledgeGraphData([], [], '2025-12-07T09:37:04.693Z');
 
       expect(result.version).toBe('1.0.0');
     });
 
     it('includes generatedAt timestamp', () => {
-      const result = generatePrerequisiteGraphData([], [], '2025-12-07T09:37:04.693Z');
+      const result = generatePriorKnowledgeGraphData([], [], '2025-12-07T09:37:04.693Z');
 
       expect(result.generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
     });
 
     it('includes sourceVersion from input', () => {
-      const result = generatePrerequisiteGraphData([], [], '2025-12-07T09:37:04.693Z');
+      const result = generatePriorKnowledgeGraphData([], [], '2025-12-07T09:37:04.693Z');
 
       expect(result.sourceVersion).toBe('2025-12-07T09:37:04.693Z');
     });
 
     it('includes seeAlso cross-reference', () => {
-      const result = generatePrerequisiteGraphData([], [], '2025-12-07T09:37:04.693Z');
+      const result = generatePriorKnowledgeGraphData([], [], '2025-12-07T09:37:04.693Z');
 
       expect(result.seeAlso).toContain('get-thread-progressions');
     });
@@ -91,7 +91,7 @@ describe('generatePrerequisiteGraphData', () => {
         { ...basePriorKnowledge, unitSlug: 'unit-2' },
       ];
 
-      const result = generatePrerequisiteGraphData(priorKnowledge, [], '2025-12-07');
+      const result = generatePriorKnowledgeGraphData(priorKnowledge, [], '2025-12-07');
 
       expect(result.stats.unitsWithPrerequisites).toBe(2);
     });
@@ -100,7 +100,7 @@ describe('generatePrerequisiteGraphData', () => {
       const threads: readonly ExtractedThread[] = [baseThread];
       const priorKnowledge: readonly ExtractedPriorKnowledge[] = [basePriorKnowledge];
 
-      const result = generatePrerequisiteGraphData(priorKnowledge, threads, '2025-12-07');
+      const result = generatePriorKnowledgeGraphData(priorKnowledge, threads, '2025-12-07');
 
       // At minimum: 2 thread edges (fractions-year-2 → year-3 → year-4)
       expect(result.stats.totalEdges).toBeGreaterThanOrEqual(2);
@@ -112,7 +112,7 @@ describe('generatePrerequisiteGraphData', () => {
         { ...basePriorKnowledge, subject: 'science', unitSlug: 'different-unit' },
       ];
 
-      const result = generatePrerequisiteGraphData(priorKnowledge, [], '2025-12-07');
+      const result = generatePriorKnowledgeGraphData(priorKnowledge, [], '2025-12-07');
 
       expect(result.stats.subjectsCovered).toContain('maths');
       expect(result.stats.subjectsCovered).toContain('science');
@@ -123,7 +123,7 @@ describe('generatePrerequisiteGraphData', () => {
     it('creates a node for each unit with prior knowledge', () => {
       const priorKnowledge: readonly ExtractedPriorKnowledge[] = [basePriorKnowledge];
 
-      const result = generatePrerequisiteGraphData(priorKnowledge, [], '2025-12-07');
+      const result = generatePriorKnowledgeGraphData(priorKnowledge, [], '2025-12-07');
 
       const node = result.nodes.find((n) => n.unitSlug === 'fractions-year-4');
       expect(node).toBeDefined();
@@ -132,7 +132,7 @@ describe('generatePrerequisiteGraphData', () => {
     it('includes unit metadata on nodes', () => {
       const priorKnowledge: readonly ExtractedPriorKnowledge[] = [basePriorKnowledge];
 
-      const result = generatePrerequisiteGraphData(priorKnowledge, [], '2025-12-07');
+      const result = generatePriorKnowledgeGraphData(priorKnowledge, [], '2025-12-07');
 
       const node = result.nodes.find((n) => n.unitSlug === 'fractions-year-4');
       expect(node?.unitTitle).toBe('Fractions Year 4');
@@ -147,7 +147,7 @@ describe('generatePrerequisiteGraphData', () => {
         { ...basePriorKnowledge, requirement: 'Requirement 2' },
       ];
 
-      const result = generatePrerequisiteGraphData(priorKnowledge, [], '2025-12-07');
+      const result = generatePriorKnowledgeGraphData(priorKnowledge, [], '2025-12-07');
 
       const node = result.nodes.find((n) => n.unitSlug === 'fractions-year-4');
       expect(node?.priorKnowledge).toContain('Requirement 1');
@@ -159,7 +159,7 @@ describe('generatePrerequisiteGraphData', () => {
       const threads: readonly ExtractedThread[] = [baseThread];
       const priorKnowledge: readonly ExtractedPriorKnowledge[] = [basePriorKnowledge];
 
-      const result = generatePrerequisiteGraphData(priorKnowledge, threads, '2025-12-07');
+      const result = generatePriorKnowledgeGraphData(priorKnowledge, threads, '2025-12-07');
 
       const node = result.nodes.find((n) => n.unitSlug === 'fractions-year-4');
       expect(node?.threadSlugs).toContain('number-fractions');
@@ -170,7 +170,7 @@ describe('generatePrerequisiteGraphData', () => {
     it('creates prerequisiteFor edges from thread ordering', () => {
       const threads: readonly ExtractedThread[] = [baseThread];
 
-      const result = generatePrerequisiteGraphData([], threads, '2025-12-07');
+      const result = generatePriorKnowledgeGraphData([], threads, '2025-12-07');
 
       // Thread has 3 units: fractions-year-2 → fractions-year-3 → fractions-year-4
       const edge1 = result.edges.find(
@@ -206,15 +206,15 @@ describe('generatePrerequisiteGraphData', () => {
         ],
       };
 
-      const result = generatePrerequisiteGraphData([], [singleUnitThread], '2025-12-07');
+      const result = generatePriorKnowledgeGraphData([], [singleUnitThread], '2025-12-07');
 
       expect(result.edges.filter((e) => e.source === 'thread')).toHaveLength(0);
     });
   });
 
   describe('graph structure validation', () => {
-    it('returns a valid PrerequisiteGraph structure', () => {
-      const result = generatePrerequisiteGraphData(
+    it('returns a valid PriorKnowledgeGraph structure', () => {
+      const result = generatePriorKnowledgeGraphData(
         [basePriorKnowledge],
         [baseThread],
         '2025-12-07',

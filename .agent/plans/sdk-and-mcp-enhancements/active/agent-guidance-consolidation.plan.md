@@ -182,7 +182,7 @@ resource-priority model:
 |---|---|---|---|
 | `curriculum://model` | Conversation start | Agent or host | Domain orientation |
 | `eef-toolkit://methodology` | Before citing EEF data | Agent | Methodology context |
-| `curriculum://prerequisite-graph` | When exploring progressions | Agent | Relationship context |
+| `curriculum://prior-knowledge-graph` | When exploring progressions | Agent | Relationship context |
 | `curriculum://misconception-graph` | When diagnosing understanding | Agent | Error patterns |
 | `eef-toolkit://strands` | When recommending approaches | Agent | Evidence overview |
 
@@ -282,5 +282,5 @@ mechanical (replacing manual imports with catalogue-driven generation).
 | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-explore/tool-definition.ts` | Remove manual import |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch/execution.ts` | Remove manual import |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts` | Remove manual import |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prerequisite-graph.ts` | Remove manual import |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts` | Remove manual import |
 | `apps/oak-curriculum-mcp-streamable-http/e2e-tests/server.e2e.test.ts` | Add validation |

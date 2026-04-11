@@ -52,12 +52,12 @@ export {
 } from './synonym-miner.js';
 
 export {
-  generatePrerequisiteGraphData,
-  type PrerequisiteEdge,
-  type PrerequisiteGraph,
-  type PrerequisiteGraphStats,
-  type PrerequisiteNode,
-} from './prerequisite-graph-generator.js';
+  generatePriorKnowledgeGraphData,
+  type PriorKnowledgeEdge,
+  type PriorKnowledgeGraph,
+  type PriorKnowledgeGraphStats,
+  type PriorKnowledgeNode,
+} from './prior-knowledge-graph-generator.js';
 
 export {
   generateThreadProgressionData,
@@ -76,13 +76,13 @@ export {
 } from './vocabulary-graph-generator.js';
 
 export {
-  serializePrerequisiteGraph,
+  serializePriorKnowledgeGraph,
   serializeThreadProgressionGraph,
-  writePrerequisiteGraphFile,
+  writePriorKnowledgeGraphFile,
   writeThreadProgressionFile,
 } from './write-graph-file.js';
 
-export { writePrerequisiteGraphAsJson } from './write-json-graph-file.js';
+export { writePriorKnowledgeGraphAsJson } from './write-json-graph-file.js';
 
 export {
   serializeDatasetToJson,

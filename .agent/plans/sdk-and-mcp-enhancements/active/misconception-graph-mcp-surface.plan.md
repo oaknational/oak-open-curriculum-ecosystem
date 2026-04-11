@@ -1,6 +1,6 @@
 ---
 name: "Misconception Graph MCP Surface"
-overview: "Expose the existing misconception graph data as both an MCP resource and an aggregated tool, following the established prerequisite-graph pattern."
+overview: "Expose the existing misconception graph data as both an MCP resource and an aggregated tool, following the established prior-knowledge-graph pattern."
 parent_plan: "open-education-knowledge-surfaces.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, test-reviewer"
 isProject: false
@@ -39,9 +39,9 @@ todos:
 
 # Misconception Graph MCP Surface
 
-**Status**: PENDING
-**Last Updated**: 2026-04-08
-**Branch**: TBD (new branch from `main` after WS3 merge)
+**Status**: DONE
+**Last Updated**: 2026-04-10
+**Branch**: `planning/kg_eef_integration`
 
 ## Context
 
@@ -55,7 +55,7 @@ The misconception graph data pipeline is fully built:
 - **Types**: `MisconceptionGraph`, `MisconceptionNode`, `MisconceptionGraphStats`
 - **Loader**: `generated/vocab/misconception-graph/index.ts` with typed export
 
-The prerequisite graph and thread progressions are both exposed as MCP
+The prior knowledge graph and thread progressions are both exposed as MCP
 resources AND aggregated tools. The misconception graph is not — it is only
 available internally via the `@oaknational/sdk-codegen/vocab-data` subpath.
 
@@ -77,8 +77,8 @@ not a current dependency.
 
 ## Decision
 
-Follow the exact pattern established by `prerequisite-graph-resource.ts` and
-`aggregated-prerequisite-graph.ts`. No new patterns, no new infrastructure.
+Follow the exact pattern established by `prior-knowledge-graph-resource.ts` and
+`aggregated-prior-knowledge-graph.ts`. No new patterns, no new infrastructure.
 
 ## Implementation
 
@@ -104,7 +104,7 @@ export function getMisconceptionGraphJson(): string {
 }
 ```
 
-Pattern source: `prerequisite-graph-resource.ts`
+Pattern source: `prior-knowledge-graph-resource.ts`
 
 **T9: Guidance constant** — `misconception-guidance.ts`
 
@@ -119,7 +119,7 @@ remediation). Pattern source: `prerequisite-guidance.ts`.
 - `runMisconceptionGraphTool()` returning `CallToolResult` via `formatToolResponse`
 - Annotations: `readOnlyHint: true`, `idempotentHint: true`
 
-Pattern source: `aggregated-prerequisite-graph.ts`
+Pattern source: `aggregated-prior-knowledge-graph.ts`
 
 **T3: Register in definitions** — add to `AGGREGATED_TOOL_DEFS`
 **T4: Register in executor** — add to `AGGREGATED_HANDLERS`
@@ -130,7 +130,7 @@ Pattern source: `aggregated-prerequisite-graph.ts`
 **T6: Register resource** — `register-resources.ts`
 
 Add `registerMisconceptionGraphResource()` following the same pattern as
-`registerPrerequisiteGraphResource()`. Call it from `registerAllResources()`.
+`registerGraphResource()`. Call it from `registerAllResources()`.
 
 ### Phase 3: Documentation and tests
 

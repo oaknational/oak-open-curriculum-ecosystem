@@ -2,13 +2,22 @@
   "name": "@oaknational/open-curriculum-ecosystem",
   "version": "1.3.0",
   "private": true,
-  "description": "Oak National Academy MCP ecosystem - A collection of MCP servers, frameworks, libraries, and supporting services",
-  "author": {
-    "name": "Jim Cresswell",
-    "email": "contact@jimcresswell.net",
-    "url": "https://jimcresswell.net"
-  },
+  "description": "Oak National Academy open curriculum data ecosystem - tools and services for working with the Oak Open Curriculum data",
+  "author": "https://github.com/jimCresswell",
   "contributors": [
+    {
+      "name": "Jim Cresswell",
+      "email": "contact@jimcresswell.net",
+      "url": "https://jimcresswell.net"
+    },
+    {
+      "name": "Mark Hodierne",
+      "email": "mark@markhodierne.com"
+    },
+    {
+      "name": "John Roberts",
+      "email": "john.roberts@thenational.academy"
+    },
     {
       "name": "Oak National Academy",
       "email": "help@thenational.academy",

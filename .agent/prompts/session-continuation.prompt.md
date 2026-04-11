@@ -40,79 +40,68 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Open Education Knowledge Surfaces (WS-0 → WS-6).
-  Parent plan created, coordinating graph factory, 4 graph surfaces,
-  agent guidance consolidation, and ADR/README narrative.
+- **Workstream**: Open Education Knowledge Surfaces — WS-0/1/2 DONE,
+  WS-3 (EEF evidence) is next.
 - **Active plans**:
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
-    (**PARENT** — WS-0 through WS-6 coordination)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/graph-resource-factory.plan.md`
-    (**WS-1** — prerequisite, extract shared infrastructure)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/misconception-graph-mcp-surface.plan.md`
-    (**WS-2** — first factory consumer)
+    (**PARENT** — WS-0/1/2 done, WS-3 next)
   - `.agent/plans/sdk-and-mcp-enhancements/active/eef-evidence-mcp-surface.plan.md`
-    (**WS-3** — recommendation tool + R1-R8)
+    (**WS-3** — recommendation tool + R1-R8, 12 pre-implementation
+    findings to resolve before coding)
   - `.agent/plans/sdk-and-mcp-enhancements/active/nc-knowledge-taxonomy-surface.plan.md`
     (**WS-4** — smallest KG integration, ontology-derived)
   - `.agent/plans/sdk-and-mcp-enhancements/active/agent-guidance-consolidation.plan.md`
     (**WS-5** — consolidate after all surfaces)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
-    (**CURRENT** — four-tier architecture analysis)
-  - `.agent/plans/kgs-and-pedagogy/` (**FUTURE** — deeper KG
-    integration, Levels 4/4b, after alignment audit)
-- **Current state**: Full plan family created across a long planning
-  session. Parent plan with 7 work stages, graph factory prerequisite,
-  NC knowledge taxonomy plan (smallest KG integration), plus earlier
-  EEF evidence and guidance consolidation plans. 4 completed plans
-  archived, 7 session plans cleaned. ADR-059 renamed to "Curriculum
-  Concept Map". Branch `planning/kg_eef_integration`.
-- **Current objective**: Next session begins with specialist reviewer
-  sweep of the entire plan family (architecture-reviewer-betty,
-  architecture-reviewer-barney, mcp-reviewer, code-reviewer), then
-  executes WS-0 (ADR + README + authors), WS-1 (graph factory),
-  WS-2 (misconception graph).
+- **Current state**: WS-0 (narrative), WS-1 (factory), WS-2
+  (misconception surface) are implemented and all reviewer findings
+  addressed. `pnpm check` passes except E2E (fixed, re-running).
+  All changes are uncommitted on `planning/kg_eef_integration`.
+  Graph resource factory is live. Misconception graph (12,858 nodes)
+  is registered as resource + tool. ADR-157, LICENCE-DATA, README
+  all updated for multi-source narrative.
+- **Current objective**: Commit WS-0/1/2, then implement WS-3 (EEF
+  evidence surface). The EEF plan has 12 pre-implementation findings
+  that must be resolved before coding — they are recorded at the top
+  of the EEF plan file.
 - **Hard invariants / non-goals**:
-  - DI is always used — constant provides VALUE, DI provides
-    TESTABILITY (ADR-078)
-  - `principles.md` is the source of truth for all principles
-  - Separate framework from consumer in all new work (ADR-154)
-  - Decompose at tensions rather than classifying (ADR-155)
-  - No compatibility shims, no invented optionality
-  - KGs-and-pedagogy Levels 1-3 ready now; Levels 4/4b after
-    KG alignment audit
-  - Bulk-data derivations (ADR-059 concept map, misconception graph)
-    are NOT knowledge graphs — the formal ontology is
+  - Only `get-curriculum-model` is a prerequisite tool. All graph
+    tools are supplementary, loaded as needed — no prerequisite
+    guidance injected by the factory.
+  - Graph factory is SDK-internal, not publicly exported
+  - Registration lives in app layer (needs observability)
+  - URI scheme: all `curriculum://` with source-identifying segments
+  - EEF data is NOT generated from OpenAPI — lives in SDK, not codegen
+  - Separate framework from consumer (ADR-154) — factory is framework
+  - No `unknown`, no `Record<string, unknown>`, no type aliases
+  - Future graph sub-setting feature tracked in memory
 - **Recent surprises / corrections**:
-  - KG repo has a single primary author (Mark Hodierne, 170/180
-    commits) — important for attribution on integration.
-  - EEF roadmap v0.5 explicitly targets "Oak Layer 2 schema"
-    alignment — the KG repo IS that schema. Convergence is
-    architecturally mapped, not aspirational.
-  - The repo's bulk-data derivations (ADR-059 concept map,
-    misconception graph, prerequisite graph) and the formal
-    ontology are different orders of thing. ADR-059 renamed
-    to "Curriculum Concept Map" to disambiguate.
-  - Levels 1-3 of EEF integration don't need the ontology at
-    all — they work from EEF JSON + bulk data. This decouples
-    the demo/value path from the KG alignment audit.
+  - `git stash` during diagnostic reverted working tree — recovery
+    required careful stash pop with conflict resolution. Lesson:
+    never stash as a diagnostic shortcut without understanding the
+    full tree state.
+  - Pre-existing lint errors in `documentation-resources.unit.test.ts`
+    (unsafe assignment) — not caused by our changes but surfaced by
+    the turbo cache miss. Pre-existing, not blocking.
+  - Another agent was working in the repo concurrently — their changes
+    to `.agent/memory/distilled.md`, napkin, semantic-search plans,
+    and cursor hooks state needed to be preserved during recovery.
 - **Open questions / low-confidence areas**:
-  - Whether `build:widget` should be a Turbo codegen task or
-    standalone script (currently standalone, works well)
-  - CI drift check for stale `widget-html-content.ts` (not yet
-    implemented, tracked as follow-up)
-  - Topology Plan B: physical directory structure decision
-    deferred to after function-level analysis evidence
-  - `static-content.ts` `process.cwd()` bug (non-crash)
-  - Curriculum-evidence crosswalk quality: which EEF strand
-    mappings are natural vs require expert pedagogical judgement?
-- **Next safe step**: Start next session with specialist reviewer
-  sweep of the full plan family, then execute WS-0 (ADR, README,
-  authors: Cresswell, Hodierne, Roberts alphabetically), WS-1
-  (graph factory), WS-2 (misconception graph).
-- **Deep consolidation status**: completed this handoff —
-  4 plans archived, 7 session plans cleaned, active README
-  updated, parent plan created, napkin updated. Napkin ~500
-  lines (at rotation threshold — rotate next consolidation).
+  - EEF `focus` enum alignment with JSON field names
+  - EEF `uk_context` and `school_context_schema` exact typing
+  - Whether WS-5 (guidance consolidation) should be a catalogue
+    abstraction or simpler validation test approach (barney
+    recommended the simpler path)
+  - E2E test coverage for `curriculum://misconception-graph`
+    resource read (tracked but not yet added — test-reviewer
+    finding)
+- **Next safe step**: Commit all WS-0/1/2 changes on
+  `planning/kg_eef_integration`, then begin WS-3 with
+  pre-implementation review finding resolution.
+- **Deep consolidation status**: due — WS-1 and WS-2 plans closed,
+  significant new napkin entries (prerequisite guidance scope, git
+  stash recovery, fragile test patterns, prerequisite graph rename).
+  Not bounded for this closeout. Next session MUST run
+  `/jc-consolidate-docs` before starting WS-3.
 
 ## Active Workstreams (2026-04-10)
 

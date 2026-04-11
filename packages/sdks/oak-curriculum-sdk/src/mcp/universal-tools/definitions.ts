@@ -24,9 +24,13 @@ import {
   GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
 } from '../aggregated-thread-progressions.js';
 import {
-  GET_PREREQUISITE_GRAPH_TOOL_DEF,
-  GET_PREREQUISITE_GRAPH_INPUT_SCHEMA,
-} from '../aggregated-prerequisite-graph.js';
+  GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF,
+  GET_PRIOR_KNOWLEDGE_GRAPH_INPUT_SCHEMA,
+} from '../aggregated-prior-knowledge-graph.js';
+import {
+  GET_MISCONCEPTION_GRAPH_TOOL_DEF,
+  GET_MISCONCEPTION_GRAPH_INPUT_SCHEMA,
+} from '../aggregated-misconception-graph.js';
 import { SEARCH_TOOL_DEF, SEARCH_INPUT_SCHEMA } from '../aggregated-search/index.js';
 import { BROWSE_TOOL_DEF, BROWSE_INPUT_SCHEMA } from '../aggregated-browse/index.js';
 import { EXPLORE_TOOL_DEF, EXPLORE_INPUT_SCHEMA } from '../aggregated-explore/index.js';
@@ -71,7 +75,7 @@ interface AggregatedToolDefShape {
  * - `search`: Full-text search across curriculum content
  * - `fetch`: Retrieve detailed content by prefixed ID
  * - `get-thread-progressions`: Return ordered unit sequences within threads
- * - `get-prerequisite-graph`: Return unit dependencies and prior knowledge
+ * - `get-prior-knowledge-graph`: Return unit dependencies and prior knowledge
  * - `browse-curriculum`: Browse subjects, key stages, units
  * - `explore-topic`: Explore a topic across lessons, units, and threads
  *
@@ -111,9 +115,13 @@ export const AGGREGATED_TOOL_DEFS = {
     ...GET_THREAD_PROGRESSIONS_TOOL_DEF,
     inputSchema: GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
   },
-  'get-prerequisite-graph': {
-    ...GET_PREREQUISITE_GRAPH_TOOL_DEF,
-    inputSchema: GET_PREREQUISITE_GRAPH_INPUT_SCHEMA,
+  'get-prior-knowledge-graph': {
+    ...GET_PRIOR_KNOWLEDGE_GRAPH_TOOL_DEF,
+    inputSchema: GET_PRIOR_KNOWLEDGE_GRAPH_INPUT_SCHEMA,
+  },
+  'get-misconception-graph': {
+    ...GET_MISCONCEPTION_GRAPH_TOOL_DEF,
+    inputSchema: GET_MISCONCEPTION_GRAPH_INPUT_SCHEMA,
   },
   'browse-curriculum': {
     ...BROWSE_TOOL_DEF,

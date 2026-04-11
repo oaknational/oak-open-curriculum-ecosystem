@@ -47,11 +47,47 @@ todos:
 
 # EEF Evidence MCP Surface
 
-**Status**: PENDING
+**Status**: PENDING — next to implement (WS-3)
 **Last Updated**: 2026-04-10
-**Branch**: TBD (new branch from `main` after WS3 merge)
+**Branch**: `planning/kg_eef_integration`
 **Strategic context**: `.agent/plans/kgs-and-pedagogy/future/evidence-integration-strategy.md`
 (this plan implements Levels 2-3 of the evidence integration strategy)
+
+## Pre-Implementation Review Findings (MUST resolve before coding)
+
+The 2026-04-10 session ran 4 specialist reviewers (betty, barney, mcp,
+code) against the full plan family. These findings apply to this plan
+specifically:
+
+1. **EEF data placement**: Place in `oak-curriculum-sdk/src/mcp/data/`
+   (NOT `oak-sdk-codegen/`). EEF data is third-party static data, not
+   generated from the OpenAPI spec. Cardinal rule does not apply.
+2. **Type all fields precisely**: No `Record<string, unknown>` for
+   `uk_context` or `school_context_schema`. The EEF JSON is static —
+   type it exhaustively from the file.
+3. **`EefToolkitData.meta` is incomplete**: The plan's interface only
+   declares `caveats`. The actual `meta` has 7 fields including
+   `source`, `licence`, `last_updated`. Type them all.
+4. **`as const satisfies` incompatible with `createRequire`**: Use
+   the direct type annotation pattern (same as misconception graph).
+5. **Null-impact guard**: 4 strands have `impact_months: null`.
+   Pre-filter before scoring. Mention in `data_coverage` for R8.
+6. **URI scheme**: Use `curriculum://eef-methodology` and
+   `curriculum://eef-strands` (NOT `eef-toolkit://`).
+7. **Build-time Zod validation**: Add Zod schema that validates
+   the JSON at load time. Schema drift = loud failure.
+8. **Prompt step 3 clarification**: "get-implementation-guidance
+   equivalent" means data extraction from the recommendation
+   response, not a separate tool call. Clarify in prompt text.
+9. **KS-to-phase mapping**: Include explicit mapping table in the
+   prompt message text.
+10. **`focus` enum alignment**: Verify enum values match JSON field
+    names (e.g. `closing_disadvantage_gap` vs
+    `closing_the_disadvantage_gap`).
+11. **EEF resources use the graph factory**: For resource constants
+    and JSON getters. Recommendation tool is custom (has params).
+12. **`securitySchemes`**: Must include in the custom tool def (not
+    just factory-produced tools). Use `SCOPES_SUPPORTED` directly.
 
 ## Credits
 
@@ -72,7 +108,7 @@ ratings (1-5), and evidence strength ratings (0-5 padlocks).
 A prototype MCP server (Python, stdio) demonstrates the concept. This
 plan brings the evidence data into Oak's production MCP server using
 Oak's established patterns — following the same approach as the
-misconception graph and prerequisite graph surfaces.
+misconception graph and prior knowledge graph surfaces.
 
 The EEF data file (`eef-toolkit.json`, v0.2.0) is already in the repo
 at `.agent/plans/kgs-and-pedagogy/future/eef-toolkit.json`. This plan
@@ -98,8 +134,8 @@ strategy. The critical ones for this scope:
 
 ## Decision
 
-Follow the patterns established by `prerequisite-graph-resource.ts`,
-`aggregated-prerequisite-graph.ts`, and `misconception-graph-mcp-surface.plan.md`.
+Follow the patterns established by `prior-knowledge-graph-resource.ts`,
+`aggregated-prior-knowledge-graph.ts`, and `misconception-graph-mcp-surface.plan.md`.
 Add one recommendation tool with transparent composite scoring, two
 resources (methodology+caveats, strands overview), and one prompt.
 
@@ -185,7 +221,7 @@ export const EEF_METHODOLOGY_RESOURCE = {
 
 Returns: `{ methodology, caveats, uk_context }` from the data file.
 
-Pattern source: `prerequisite-graph-resource.ts`
+Pattern source: `prior-knowledge-graph-resource.ts`
 
 **T3: Strands resource** — `eef-strands-resource.ts`
 
@@ -277,7 +313,7 @@ Response shape (per R1, R2, R7):
 
 Annotations: `readOnlyHint: true`, `idempotentHint: true`
 
-Pattern source: `aggregated-prerequisite-graph.ts` (structure),
+Pattern source: `aggregated-prior-knowledge-graph.ts` (structure),
 EEF `server.py` `recommend_for_context` (algorithm)
 
 **T6: Register in definitions** — add to `AGGREGATED_TOOL_DEFS`

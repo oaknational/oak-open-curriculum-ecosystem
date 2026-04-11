@@ -12,31 +12,31 @@ isProject: false
 todos:
   - id: t1-analyse-pattern
     content: "Analyse the 3 existing graph surfaces and document the exact invariant vs variable parts"
-    status: pending
+    status: done
   - id: t2-design-factory
-    content: "Design the factory API: createGraphResource, createGraphToolDef, createGraphToolExecutor, createGraphResourceRegistrar"
-    status: pending
+    content: "Design the factory API: createGraphResource, createGraphToolDef, createGraphToolExecutor (no createGraphResourceRegistrar — registration in app layer)"
+    status: done
   - id: t3-implement-factory
     content: "Implement graph-resource-factory.ts with typed factory functions"
-    status: pending
+    status: done
   - id: t4-unit-tests
     content: "Write unit tests for factory functions (config in → correct shapes out)"
-    status: pending
+    status: done
   - id: t5-refactor-prerequisite
-    content: "Refactor prerequisite-graph-resource.ts and aggregated-prerequisite-graph.ts to use factory"
-    status: pending
+    content: "Refactor prior-knowledge-graph-resource.ts and aggregated-prior-knowledge-graph.ts to use factory"
+    status: done
   - id: t6-refactor-threads
     content: "Refactor thread-progressions-resource.ts and aggregated-thread-progressions.ts to use factory"
-    status: pending
+    status: done
   - id: t7-refactor-curriculum-model
-    content: "Assess curriculum-model: it composes two sources (ontology + tool guidance) — factory may not apply directly"
-    status: pending
+    content: "Assess curriculum-model: justified exception — composes two sources, priority 1.0. TSDoc documented."
+    status: done
   - id: t8-verify-no-behavioural-change
     content: "Run full test suite to verify refactoring is behaviour-preserving"
-    status: pending
+    status: done
   - id: t9-public-export
-    content: "Export factory from public/mcp-tools.ts for downstream consumers"
-    status: pending
+    content: "Factory is SDK-internal (not exported). Only resource constants and getters exported."
+    status: done
   - id: t10-handoff
     content: "Hand off to parent plan: factory ready for misconception, EEF, and NC taxonomy surfaces"
     status: pending
@@ -44,9 +44,9 @@ todos:
 
 # Graph Resource Factory
 
-**Status**: PENDING
+**Status**: DONE
 **Last Updated**: 2026-04-10
-**Branch**: TBD (same branch as parent plan)
+**Branch**: `planning/kg_eef_integration`
 **Parent**: `open-education-knowledge-surfaces.plan.md` (WS-1)
 
 ## Problem
@@ -86,7 +86,7 @@ The only things that vary per graph:
 
 Extract a typed factory module that produces all 6 layers from a
 single configuration object. Refactor the 2 pure graph surfaces
-(prerequisite graph, thread progressions) to use the factory.
+(prior knowledge graph, thread progressions) to use the factory.
 Assess whether curriculum model (which composes two sources) can
 also use the factory or should remain bespoke.
 
@@ -112,13 +112,13 @@ factory functions:
 
 ```typescript
 interface GraphSurfaceConfig {
-  /** Kebab-case identifier, e.g. 'prerequisite-graph' */
+  /** Kebab-case identifier, e.g. 'prior-knowledge-graph' */
   readonly name: string;
   /** Human-readable display name */
   readonly title: string;
   /** Multi-line description for AI agents (may include stats) */
   readonly description: string;
-  /** URI scheme segment, e.g. 'prerequisite-graph' */
+  /** URI scheme segment, e.g. 'prior-knowledge-graph' */
   readonly uriSegment: string;
   /** URI scheme prefix, default 'curriculum' */
   readonly uriScheme?: string;
@@ -188,7 +188,7 @@ T1 pattern analysis  ──▶  T2 API design
                      T3 implement factory
                      T4 unit tests
                                 │
-                     T5 refactor prerequisite graph
+                     T5 refactor prior knowledge graph
                      T6 refactor thread progressions
                      T7 assess curriculum model
                                 │
@@ -221,8 +221,8 @@ of ~90 lines. No new dependencies.
 | File | Change |
 |------|--------|
 | `packages/sdks/oak-curriculum-sdk/src/mcp/graph-resource-factory.ts` | NEW |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/prerequisite-graph-resource.ts` | Refactor |
-| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prerequisite-graph.ts` | Refactor |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/prior-knowledge-graph-resource.ts` | Refactor |
+| `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-prior-knowledge-graph.ts` | Refactor |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/thread-progressions-resource.ts` | Refactor |
 | `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-thread-progressions.ts` | Refactor |
 | `packages/sdks/oak-curriculum-sdk/src/public/mcp-tools.ts` | Add export |

@@ -171,14 +171,14 @@ describe('getPromptMessages', () => {
       expect(content).toContain('threads');
     });
 
-    it('references get-thread-progressions and get-prerequisite-graph', () => {
+    it('references get-thread-progressions and get-prior-knowledge-graph', () => {
       const messages = getPromptMessages('learning-progression', {
         concept: 'algebra',
         subject: 'maths',
       });
       const content = messages.map((m) => m.content.text).join(' ');
       expect(content).toContain('get-thread-progressions');
-      expect(content).toContain('get-prerequisite-graph');
+      expect(content).toContain('get-prior-knowledge-graph');
     });
   });
 

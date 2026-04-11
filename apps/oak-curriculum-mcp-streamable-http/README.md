@@ -36,7 +36,7 @@ model decides when to call them, subject to per-tool visibility metadata.
 Generated tool definitions are updated automatically when the upstream API
 changes via `pnpm sdk-codegen`.
 
-**Resources** (application-controlled) — `curriculum://model` (domain ontology, `priority: 1.0`), `curriculum://prerequisite-graph` (unit dependency data, `priority: 0.5`), and `curriculum://thread-progressions` (learning progression data, `priority: 0.5`). All annotated with `audience: ["assistant"]`. The host application decides whether to inject these into the model's context. Clients that support resource auto-injection get orientation data without a tool call.
+**Resources** (application-controlled) — `curriculum://model` (domain ontology, `priority: 1.0`), `curriculum://prior-knowledge-graph` (unit dependency data, `priority: 0.5`), and `curriculum://thread-progressions` (learning progression data, `priority: 0.5`). All annotated with `audience: ["assistant"]`. The host application decides whether to inject these into the model's context. Clients that support resource auto-injection get orientation data without a tool call.
 
 **Prompts** (user-controlled) — `find-lessons`, `lesson-planning`, `explore-curriculum`, and `learning-progression`. Parameterised workflow templates the user explicitly invokes as slash commands or UI actions. Each orchestrates multiple tools in a proven sequence for a common teacher task.
 

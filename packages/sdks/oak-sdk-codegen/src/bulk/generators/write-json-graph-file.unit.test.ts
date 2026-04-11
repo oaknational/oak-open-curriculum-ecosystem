@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import { serializeDatasetToJson } from './write-json-dataset.js';
-import type { PrerequisiteGraph } from './prerequisite-graph-generator.js';
-import { prerequisiteGraphDescriptor } from './write-json-graph-file.js';
+import type { PriorKnowledgeGraph } from './prior-knowledge-graph-generator.js';
+import { priorKnowledgeGraphDescriptor } from './write-json-graph-file.js';
 
 const sampleGraph = {
   version: '1.0.0',
@@ -41,8 +41,8 @@ const sampleGraph = {
       source: 'thread',
     },
   ],
-  seeAlso: 'get-prerequisite-graph',
-} satisfies PrerequisiteGraph;
+  seeAlso: 'get-prior-knowledge-graph',
+} satisfies PriorKnowledgeGraph;
 
 const expectedJsonGraph = {
   version: '1.0.0',
@@ -80,10 +80,10 @@ const expectedJsonGraph = {
       source: 'thread',
     },
   ],
-  seeAlso: 'get-prerequisite-graph',
+  seeAlso: 'get-prior-knowledge-graph',
 };
 
-describe('serializeDatasetToJson with prerequisite graph', () => {
+describe('serializeDatasetToJson with prior knowledge graph', () => {
   it('produces valid JSON from the graph data', () => {
     const json = serializeDatasetToJson(sampleGraph);
     const parsed: unknown = JSON.parse(json);
@@ -112,18 +112,18 @@ describe('serializeDatasetToJson with prerequisite graph', () => {
   });
 });
 
-describe('prerequisiteGraphDescriptor.typesModuleContent', () => {
-  it('contains the published prerequisite graph interfaces', () => {
-    const content = prerequisiteGraphDescriptor.typesModuleContent;
+describe('priorKnowledgeGraphDescriptor.typesModuleContent', () => {
+  it('contains the published prior knowledge graph interfaces', () => {
+    const content = priorKnowledgeGraphDescriptor.typesModuleContent;
 
-    expect(content).toContain('export interface PrerequisiteEdge');
-    expect(content).toContain('export interface PrerequisiteNode');
-    expect(content).toContain('export interface PrerequisiteGraphStats');
-    expect(content).toContain('export interface PrerequisiteGraph');
+    expect(content).toContain('export interface PriorKnowledgeEdge');
+    expect(content).toContain('export interface PriorKnowledgeNode');
+    expect(content).toContain('export interface PriorKnowledgeGraphStats');
+    expect(content).toContain('export interface PriorKnowledgeGraph');
   });
 
-  it('preserves the published prerequisite graph contract', () => {
-    const content = prerequisiteGraphDescriptor.typesModuleContent;
+  it('preserves the published prior knowledge graph contract', () => {
+    const content = priorKnowledgeGraphDescriptor.typesModuleContent;
 
     expect(content).toContain("readonly rel: 'prerequisiteFor';");
     expect(content).toContain("readonly source: 'thread' | 'priorKnowledge';");
@@ -131,45 +131,45 @@ describe('prerequisiteGraphDescriptor.typesModuleContent', () => {
   });
 
   it('retains readonly structure for arrays and properties', () => {
-    const content = prerequisiteGraphDescriptor.typesModuleContent;
+    const content = priorKnowledgeGraphDescriptor.typesModuleContent;
 
-    expect(content).toContain('readonly nodes: readonly PrerequisiteNode[];');
+    expect(content).toContain('readonly nodes: readonly PriorKnowledgeNode[];');
     expect(content).toContain('readonly threadSlugs: readonly string[];');
   });
 
   it('does not contain eslint-disable directives', () => {
-    const content = prerequisiteGraphDescriptor.typesModuleContent;
+    const content = priorKnowledgeGraphDescriptor.typesModuleContent;
 
     expect(content).not.toContain('eslint-disable');
   });
 });
 
-describe('prerequisiteGraphDescriptor.indexModuleContent', () => {
+describe('priorKnowledgeGraphDescriptor.indexModuleContent', () => {
   it('imports from types.js and data.json', () => {
-    const content = prerequisiteGraphDescriptor.indexModuleContent;
+    const content = priorKnowledgeGraphDescriptor.indexModuleContent;
 
     expect(content).toContain("from 'node:module'");
     expect(content).toContain("from './types.js'");
     expect(content).toContain('const require = createRequire(import.meta.url);');
-    expect(content).toContain("const data: JsonPrerequisiteGraph = require('./data.json');");
+    expect(content).toContain("const data: JsonPriorKnowledgeGraph = require('./data.json');");
   });
 
   it('normalises JSON data into the published graph shape and re-exports the local types', () => {
-    const content = prerequisiteGraphDescriptor.indexModuleContent;
+    const content = priorKnowledgeGraphDescriptor.indexModuleContent;
 
-    expect(content).toContain('function createPrerequisiteEdge');
-    expect(content).toContain('function createPrerequisiteNode');
-    expect(content).toContain('function createPrerequisiteGraph');
+    expect(content).toContain('function createPriorKnowledgeEdge');
+    expect(content).toContain('function createPriorKnowledgeNode');
+    expect(content).toContain('function createPriorKnowledgeGraph');
     expect(content).toContain(
-      'export const prerequisiteGraph: PrerequisiteGraph = createPrerequisiteGraph(data);',
+      'export const priorKnowledgeGraph: PriorKnowledgeGraph = createPriorKnowledgeGraph(data);',
     );
-    expect(content).toContain('PrerequisiteNode');
-    expect(content).toContain('PrerequisiteEdge');
-    expect(content).toContain('PrerequisiteGraphStats');
+    expect(content).toContain('PriorKnowledgeNode');
+    expect(content).toContain('PriorKnowledgeEdge');
+    expect(content).toContain('PriorKnowledgeGraphStats');
   });
 
   it('does not contain eslint-disable directives or type assertions', () => {
-    const content = prerequisiteGraphDescriptor.indexModuleContent;
+    const content = priorKnowledgeGraphDescriptor.indexModuleContent;
 
     expect(content).not.toContain('eslint-disable');
     expect(content).not.toMatch(/\bas\b/);

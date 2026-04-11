@@ -12,13 +12,13 @@ specialist_reviewer: "mcp-reviewer, code-reviewer, docs-adr-reviewer, architectu
 todos:
   - id: ws-0-narrative
     content: "WS-0: Write ADR for multi-source open education integration and update root README"
-    status: pending
+    status: done
   - id: ws-1-factory
     content: "WS-1: Extract graph resource factory, refactor existing graphs (prerequisite plan)"
-    status: pending
+    status: done
   - id: ws-2-misconceptions
     content: "WS-2: Misconception graph MCP surface (first consumer of factory)"
-    status: pending
+    status: done
   - id: ws-3-eef
     content: "WS-3: EEF evidence MCP surface (recommendation tool + resources + prompt)"
     status: pending
@@ -35,9 +35,9 @@ todos:
 
 # Open Education Knowledge Surfaces
 
-**Status**: ACTIVE
+**Status**: ACTIVE — WS-0, WS-1, WS-2 complete; WS-3 next
 **Last Updated**: 2026-04-10
-**Branch**: TBD (new branch from `main`)
+**Branch**: `planning/kg_eef_integration`
 
 ## Why This Plan Exists
 
@@ -101,6 +101,90 @@ reviewers against the full plan family:
 - `code-reviewer` — gateway quality, correctness
 
 Fix all findings before starting WS-0 implementation.
+
+## Session Progress (2026-04-10)
+
+### WS-0: DONE
+
+- ADR-157 written and indexed
+- Root README updated with Data Sources table, Credits and Attribution
+- LICENCE-DATA.md updated with ontology + EEF sections
+- package.json contributors added (Hodierne, Roberts)
+- ADR count updated to 155+
+- `docs-adr-reviewer` passed — COMPLIANT
+
+### WS-1 + WS-2 (merged into WS-A): DONE
+
+- `graph-resource-factory.ts` — generic `<T extends { readonly version: string }>`,
+  4 composable factory functions, SDK-internal (not publicly exported)
+- Prerequisite graph and thread progressions refactored to use factory
+- Misconception graph surface implemented as first factory consumer
+  (resource + tool + guidance, 12,858 misconceptions)
+- App-layer `registerGraphResource` helper replaces per-resource functions
+- Documentation resource annotations added (priority, audience)
+- Curriculum model TSDoc exception documented
+- ADR-123 updated (tool count 35, resource count 4+widget)
+
+### Key Design Decisions Made
+
+- **Factory generic**: `<T extends { readonly version: string }>` (not `unknown`)
+- **No prerequisite guidance on graph tools**: Only `get-curriculum-model`
+  is a prerequisite. All graph tools are supplementary, loaded as needed.
+- **Factory SDK-internal**: Not exported from `public/mcp-tools.ts`
+- **Registration in app layer**: `registerGraphResource` needs observability
+- **URI scheme**: All `curriculum://` with source-identifying path segments
+- **EEF data placement** (for WS-3): Lives in SDK, not codegen — fully
+  typed with Zod validation at load time
+
+### Reviewer Findings Applied
+
+4 pre-implementation reviewers (betty, barney, mcp, code) + 5 post-
+implementation reviewers (code, type, test, fred, docs-adr). All findings
+addressed:
+
+- `[...SCOPES_SUPPORTED]` → `SCOPES_SUPPORTED` (tuple preservation)
+- Explicit return type on `createGraphToolDef`
+- Removed redundant `as const` assertions
+- Module-level executor constants (no per-call closure recreation)
+- Priority type narrowed to `0.5 | 1.0` in app registration
+- WorkflowStep type alias inlined
+- Missing `aggregated-misconception-graph.unit.test.ts` created
+- Weak length-threshold test assertions replaced with domain checks
+- ADR-123 tool count updated to 35 (11 aggregated)
+
+### Next Session: Pre-commit fixes then WS-3
+
+**Pre-commit tasks** (do before committing WS-0/1/2):
+
+1. **Rename prior knowledge graph**: "prior knowledge graph" is ambiguous.
+   Rename to make clear it's about student prior-knowledge
+   prerequisites for curriculum sequencing (not tool prerequisites).
+   Rename-everywhere: URI, tool name, file names, ADR-123, all
+   references.
+2. **Delete fragile idempotency tests**: The `is idempotent — returns
+   identical data on repeated calls` tests on graph tools prove
+   nothing (pure function over module constant). Delete them.
+3. **Delete weak constant-assertion tests**: Tests asserting string
+   length or checking `typeof` prove nothing about behaviour.
+4. **Run `/jc-consolidate-docs`**: Napkin has new entries, plans were
+   updated substantially. Also triage 5 overlooked items from archived
+   napkins: server branding (S5), generated tool titles (S3), synonym
+   builder codegen migration, `static-content.ts` process.cwd() bug,
+   E2E test flakiness.
+
+**Then WS-3: EEF Evidence Surface**
+
+**Blocking EEF plan findings from pre-implementation review** (must
+resolve in next session before coding):
+
+1. EEF data lives in `oak-curriculum-sdk/src/mcp/data/` (not codegen)
+2. All `EefToolkitData` fields fully typed — no `Record<string, unknown>`
+3. `as const satisfies` incompatible with `createRequire` — use direct
+   type annotation
+4. Null-impact guard for scoring (4 strands have `impact_months: null`)
+5. URI scheme: `curriculum://eef-methodology`, `curriculum://eef-strands`
+6. Build-time Zod validation for EEF JSON schema drift
+7. Prompt step 3 clarification + KS-to-phase mapping in prompt text
 
 ## Execution Order
 
@@ -194,7 +278,7 @@ that this repository brings together three major open education assets.
 **Child plan**: `graph-resource-factory.plan.md`
 
 Extract shared infrastructure from the 3 existing graph surfaces
-(prerequisite graph, thread progressions, curriculum model):
+(prior knowledge graph, thread progressions, curriculum model):
 
 - `createGraphResource()` — resource constant from config
 - `createGraphJsonGetter()` — JSON serialisation
@@ -209,8 +293,8 @@ existing tests — no behavioural change, just DRY extraction.
 
 **Existing plan**: `misconception-graph-mcp-surface.plan.md`
 
-Uses the graph factory. 12,858 misconceptions from bulk data. Resource
-+ tool following prerequisite-graph pattern. ~200 lines → ~50 lines
+Uses the graph factory. 12,858 misconceptions from bulk data. Resource and
+tool following prior-knowledge-graph pattern. ~200 lines reduced to ~50 lines
 with factory.
 
 ## WS-3: EEF Evidence Surface

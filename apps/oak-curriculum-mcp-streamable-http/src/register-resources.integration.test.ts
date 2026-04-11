@@ -1,7 +1,7 @@
 /**
  * Integration tests for MCP resource registration.
  *
- * These tests verify that documentation, curriculum model, prerequisite graph,
+ * These tests verify that documentation, curriculum model, prior knowledge graph,
  * thread progressions, and widget resources are registered with the correct
  * metadata and content.
  */
@@ -418,12 +418,12 @@ describe('registerAllResources registers supplementary data resources', () => {
     options = createTestOptions();
   });
 
-  it('registers curriculum://prerequisite-graph', async () => {
+  it('registers curriculum://prior-knowledge-graph', async () => {
     registerAllResources(server, options);
     await flush();
 
     const uris = Array.from(registeredResources.keys());
-    expect(uris).toContain('curriculum://prerequisite-graph');
+    expect(uris).toContain('curriculum://prior-knowledge-graph');
   });
 
   it('registers curriculum://thread-progressions', async () => {
@@ -434,15 +434,15 @@ describe('registerAllResources registers supplementary data resources', () => {
     expect(uris).toContain('curriculum://thread-progressions');
   });
 
-  it('prerequisite graph has priority 0.5 annotations', async () => {
+  it('prior knowledge graph has priority 0.5 annotations', async () => {
     registerAllResources(server, options);
     await flush();
 
-    const resource = registeredResources.get('curriculum://prerequisite-graph');
+    const resource = registeredResources.get('curriculum://prior-knowledge-graph');
     expect(resource).toBeDefined();
     expect(resource?.metadata.annotations?.priority).toBe(0.5);
     expect(resource?.metadata.annotations?.audience).toContain('assistant');
-    const content = await readResource('curriculum://prerequisite-graph');
+    const content = await readResource('curriculum://prior-knowledge-graph');
     expectJsonContent(content.contents[0]);
   });
 

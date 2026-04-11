@@ -58,6 +58,12 @@ Use this index when you need to understand:
 
 ---
 
+## Cross-Boundary Strategic Plans
+
+| Plan | Scope | Consumes |
+|------|-------|----------|
+| [curriculum-nlp-processing-workspace.md](future/curriculum-nlp-processing-workspace.md) | Python NLP workspace: NER, semantic compression, relationship extraction | Bulk metadata opportunities, vocabulary mining (Phases 4–5), transcript mining research |
+
 ## Contract
 
 - `*.research.md` documents capture evidence, opportunity mapping, and

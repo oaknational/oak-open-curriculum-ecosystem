@@ -11,7 +11,7 @@ import type { VocabularyGraph } from './types.js';
 const require = createRequire(import.meta.url);
 // Direct type annotation is acceptable here: VocabularyGraph contains only
 // primitive fields (string, number, boolean, Record<string, number>) with no
-// union literals requiring runtime validation. Unlike PrerequisiteGraph (which
+// union literals requiring runtime validation. Unlike PriorKnowledgeGraph (which
 // validates 'prerequisiteFor' | 'thread' | 'priorKnowledge' at load time),
 // this shape cannot contain type-narrowing surprises from JSON.
 const data: VocabularyGraph = require('./data.json');

@@ -142,9 +142,18 @@ denominator: "the BOTTOM NUMBER in a fraction" → "bottom number"
 
 ---
 
-## Phase 4: Transcript Mining
+## Phase 4: Transcript Mining — SUBSUMED
 
-### The Opportunity
+> **Note**: Phases 4 and 5 of this plan are subsumed by
+> [curriculum-nlp-processing-workspace.md](../curriculum-nlp-processing-workspace.md),
+> which provides a Python workspace for ML/NLP-based extraction.
+> Transcript mining and entity extraction require Python's ML ecosystem
+> (spaCy, transformers, etc.) and are better served by a dedicated
+> workspace than by TypeScript+LLM in the codegen pipeline. Phases 1–3
+> (synonym classification, science expansion, definition mining) remain
+> independent and continue as TypeScript-native work.
+
+### The Opportunity (Reference)
 
 | Pattern                  | Example                                        | Value              |
 | ------------------------ | ---------------------------------------------- | ------------------ |
@@ -168,9 +177,12 @@ The 2025-12-26 experiment showed:
 
 ---
 
-## Phase 5: Entity Extraction
+## Phase 5: Entity Extraction — SUBSUMED
 
-### Entity Types
+> **Note**: See Phase 4 note above. Entity extraction is subsumed by
+> [curriculum-nlp-processing-workspace.md](../curriculum-nlp-processing-workspace.md).
+
+### Entity Types (Reference)
 
 | Type        | Examples                           | Use Case              |
 | ----------- | ---------------------------------- | --------------------- |

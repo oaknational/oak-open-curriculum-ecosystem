@@ -168,6 +168,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-154: Separate Framework from Consumer](154-separate-framework-from-consumer.md)
 - [ADR-155: Decompose at the Tension](155-decompose-at-the-tension.md)
 - [ADR-156: Embed Widget HTML as Committed TypeScript Constant](156-embed-widget-html-at-build-time.md)
+- [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md)
 
 ## Key Architectural Decisions
 

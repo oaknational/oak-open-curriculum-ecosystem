@@ -153,7 +153,7 @@ Call get-curriculum-model first for domain definitions and tool guidance.
 Please:
 1. Use search with scope "threads" to find progression threads: search({ query: "${concept}", scope: "threads", subject: "${subject}" })
 2. Use get-thread-progressions for the full progression graph
-3. Use get-prerequisite-graph for unit-level dependencies
+3. Use get-prior-knowledge-graph for unit-level dependencies
 4. Map out:
    - The progression from earliest to latest year group
    - Key prerequisites at each stage
