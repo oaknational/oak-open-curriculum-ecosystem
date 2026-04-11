@@ -5,7 +5,8 @@ overview: >
   ~78k insertions) into feat/otel_sentry_enhancements (7 commits, 36 files).
   4 text conflicts, 10 files changed on both sides, 96 files deleted by main
   (24 in the HTTP app). 6 hazards documented after Wilma and docs-ADR review.
-  ADR-144 numbering collision (both branches created ADR-144 for different things).
+  ADR-144 numbering collision. PR #78 also landed on main (ADR-158), so our
+  ADR renumbers to ADR-158.
 status: active
 last_updated: 2026-04-11
 parent_plan: ./sentry-otel-integration.execution.plan.md
@@ -16,9 +17,14 @@ parent_plan: ./sentry-otel-integration.execution.plan.md
 ## Divergence
 
 - Merge base: `54309a6a` (PR #73 merge commit)
-- Main: 3 commits ahead (PR #76 + two release commits), 977 files changed
-- Branch: 7 commits ahead (docs + rate limiting), 36 files changed
+- Main: 5 commits ahead (PR #76, PR #78, three release commits), 1048 files
+- Branch: ~10 commits ahead (docs + rate limiting + plan work), 36 files
+- PR #78 added ADR-157 (open education knowledge surfaces) — our ADR
+  renumbers to ADR-158
 - Asymmetry favours accepting main for most conflicts
+
+**Important (Fred advisory)**: Confirm the highest ADR number at execution
+time — main's velocity means new ADRs may land between planning and execution.
 
 ## Text Conflicts (4 files)
 
@@ -78,7 +84,7 @@ Main also added ADR-145 through ADR-156. Both files have different filenames
 so Git merges them without conflict — but the numbering is broken.
 
 **Resolution**: Renumber our ADR-144 to the next available number after
-main's highest (ADR-156 → ours becomes **ADR-157**). Update the file, the
+main's highest (ADR-156 → ours becomes **ADR-158**). Update the file, the
 ADR index, all internal references, and cross-references in plans, prompts,
 safety-and-security.md, and code comments.
 
@@ -137,13 +143,13 @@ Files referencing ADR-144 on this branch:
 14. `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
 15. This merge plan
 
-All must be updated to ADR-157 (or whatever the next available number is
+All must be updated to ADR-158 (or whatever the next available number is
 after main's highest ADR).
 
 ## Resolution Order
 
 1. **Trivial**: accept main for `pnpm-lock.yaml`, plan READMEs
-2. **ADR collision**: renumber our ADR-144 → ADR-157 across all 15 files
+2. **ADR collision**: renumber our ADR-144 → ADR-158 across all 15 files
 3. **Composition decision**: accept main's inlined `initializeCoreEndpoints`,
    delete branch's `core-endpoints.ts`. The extracted file was single-use
    (called once at bootstrap) and main consolidated it back.
@@ -157,7 +163,12 @@ after main's highest ADR).
 5. **Hazard 1**: remove `overrideToolsListHandler` import — main's Zod 4
    pipeline preserves examples end-to-end; no replacement needed
 6. **Hazard 3**: no action — `getWidgetHtml` auto-merges from main
-7. **Hazard 5**: extend `setupOAuthAndCaching` with `oauthRateLimiter`
+7. **Hazard 5**: extend `setupOAuthAndCaching` with `oauthRateLimiter`.
+   Also verify the full threading chain: `registerOAuthRoutes` →
+   `createOAuthProxyRoutes` must also preserve the parameter.
+   **Same class**: `mountAssetDownloadProxy` signature — main's version
+   lacks `assetRateLimiter` (Fred finding). Verify auto-merge preserves
+   branch's extended signatures for both OAuth and asset routes.
 8. **Non-conflicting adaptations**: check all auto-merged files for signature
    mismatches — especially test files calling `createApp` or `registerHandlers`.
    All test callers of `createApp()` must now provide `getWidgetHtml`.
