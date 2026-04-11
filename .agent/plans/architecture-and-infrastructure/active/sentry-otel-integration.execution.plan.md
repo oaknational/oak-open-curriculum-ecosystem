@@ -453,8 +453,9 @@ Deterministic validation commands:
 
 ### Phase 3: GREEN runtime adoption
 
-Status: HTTP adoption near-complete (19/21 findings resolved, all gates green,
-ready for PR review). Search CLI adoption pending, blocked on HTTP merge.
+Status: HTTP adoption **complete** (PR #73 merged 2026-03-31, all 21 findings
+resolved, all gates green). Rate limiting complete (ADR-144). Search CLI
+adoption pending.
 
 Adopt the shared foundation in the in-scope runtimes only:
 

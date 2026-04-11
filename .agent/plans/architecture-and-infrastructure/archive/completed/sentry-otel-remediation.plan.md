@@ -8,7 +8,7 @@ overview: >
 status: completed
 last_updated: 2026-04-11
 completed: 2026-03-31
-parent_plan: ./sentry-otel-integration.execution.plan.md
+parent_plan: ../../active/sentry-otel-integration.execution.plan.md
 ---
 
 # Remediation Plan: `feat/full-sentry-otel-support` Branch

@@ -9,7 +9,7 @@ status: completed
 last_updated: 2026-03-31
 completed: 2026-03-31
 parent_plan: ./sentry-otel-remediation.plan.md
-execution_plan: ./sentry-otel-integration.execution.plan.md
+execution_plan: ../../active/sentry-otel-integration.execution.plan.md
 ---
 
 # Remediation Plan: PR #73 CodeQL and Deferred Findings

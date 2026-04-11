@@ -8,7 +8,7 @@ overview: >
 status: completed
 last_updated: 2026-03-30
 completed: 2026-03-30
-parent_plan: ./sentry-otel-integration.execution.plan.md
+parent_plan: ../../active/sentry-otel-integration.execution.plan.md
 ---
 
 # Plan: Safe Merge of `origin/main` into `feat/full-sentry-otel-support`
