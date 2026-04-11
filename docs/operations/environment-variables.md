@@ -113,28 +113,6 @@ DANGEROUSLY_DISABLE_AUTH=true  # NEVER use in production!
 
 **Complete reference**: See `apps/oak-curriculum-mcp-streamable-http/README.md` and [`apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`](../../apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md).
 
-### Legacy stdio MCP workspace (via root `.env`)
-
-**Minimal configuration**:
-
-```bash
-OAK_API_KEY=your_oak_api_key_here
-```
-
-**Optional**:
-
-```bash
-LOG_LEVEL=debug  # For debugging
-MCP_LOGGER_FILE_PATH=.logs/custom-path.log  # Custom log file location
-```
-
-This workspace is now a legacy surface: development is halted and it is not the
-long-term maintained Oak MCP server. Future stdio support is intended to come
-from a separate stdio entry point generalised from the HTTP workspace. See
-`apps/oak-curriculum-mcp-stdio/README.md`,
-`apps/oak-curriculum-mcp-streamable-http/README.md`, and
-`docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md`.
-
 ## Getting API Keys
 
 ### Oak API Key

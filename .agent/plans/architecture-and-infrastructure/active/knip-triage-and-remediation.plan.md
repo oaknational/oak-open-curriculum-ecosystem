@@ -4,15 +4,15 @@ overview: "Run knip, triage all findings by category, design and apply remediati
 todos:
   - id: triage-unused-deps
     content: "Phase 0: Triage unused dependencies (2) and unused devDependencies (9) — hard blockers, real manifest issues."
-    status: pending
+    status: completed
   - id: triage-unused-files
-    content: "Phase 1: Triage unused files (96) — investigate each, verify consumption, remediate."
+    content: "Phase 1: Triage unused files (53) — investigate each, verify consumption, remediate."
     status: pending
   - id: triage-unused-exports
-    content: "Phase 2: Triage unused exports (515) and unused exported types (234) — investigate by workspace, verify each, remediate."
+    content: "Phase 2: Triage unused exports (630) — investigate by workspace, verify each, remediate."
     status: pending
   - id: triage-config-hints
-    content: "Phase 3: Triage configuration hints (45) — fix knip.config.ts entry/project patterns and stale ignore entries."
+    content: "Phase 3: Triage configuration hints (~40) — fix knip.config.ts entry/project patterns and stale ignore entries."
     status: pending
   - id: remediate-and-promote
     content: "Phase 4: Verify clean knip baseline, add knip to pnpm check, pre-commit, pre-push, and CI, update ADR-121."
@@ -22,7 +22,7 @@ todos:
 # Knip Triage and Remediation
 
 **Last Updated**: 2026-04-11
-**Status**: Active — knip output captured, triage pending
+**Status**: Active — Phase 0 complete, Phase 1 next
 **Scope**: Run knip, triage all findings, design and apply remediations,
 promote to blocking quality gate.
 **Parent**: [quality-gate-hardening.plan.md](../current/quality-gate-hardening.plan.md)
@@ -48,17 +48,33 @@ sensitivity is a gate weakness, not a fix.
 
 ## Verified Findings (2026-04-11)
 
-| Category | Count | Priority |
-|---|---|---|
-| Unused dependencies | 2 | P0 — real manifest issues |
-| Unused devDependencies | 9 | P0 — real manifest issues |
-| Unlisted binaries | 2 | P1 — operational gap |
-| Unused files | 96 | P1 — investigate each |
-| Unused exports | 515 | P2 — investigate each |
-| Unused exported types | 234 | P2 — investigate each |
-| Duplicate exports | 1 | P2 — investigate |
-| Configuration hints | 45 | P1 — stale config, foundation |
-| **Total** | **904** | |
+| Category | Pre-Phase 0 | Post-Phase 0 | Priority |
+|---|---|---|---|
+| Unused dependencies | 2 | **0** | P0 — resolved |
+| Unused devDependencies | 9 | **0** | P0 — resolved |
+| Unlisted binaries | 2 | 2 | P1 — operational gap |
+| Unused files | 96 | **53** | P1 — investigate each |
+| Unused exports | 515+234 | **630** | P2 — investigate each |
+| Duplicate exports | 1 | 0 | P2 — resolved |
+| Configuration hints | 45 | **~40** | P1 — stale config, foundation |
+| **Total** | **904** | **~725** | |
+
+### Phase 0 Resolution (2026-04-11i)
+
+- **Stdio workspace removed entirely** per ADR-128. Deleted
+  `apps/oak-curriculum-mcp-stdio/` (~5000 lines, 55 files). No unique
+  code needed extraction — HTTP app has equivalents for all patterns.
+- **4 root devDeps removed**: `@axe-core/playwright`, `@eslint/js`,
+  `tsup`, `typescript-eslint` (redundant at root, workspaces have own).
+- **Knip config fixed**: `scripts/**/*.ts` and `evaluation/**/*.ts`
+  added as entries+project for oak-search-cli; `widget/src/main.tsx`
+  and `widget/src/**/*.{ts,tsx,css}` added for streamable-http.
+- **2 documented ignoreDependencies added**: `@types/express-serve-static-core`
+  (TS module augmentation), `@oaknational/oak-design-tokens` (CSS @import).
+- **Pre-existing bug fixed**: knip entry path was `src/bin/oaksearch.ts`,
+  corrected to `bin/oaksearch.ts`.
+- **13 documentation files updated** to remove stale stdio references.
+- **3 legacy-stdio agent rules deleted**.
 
 ### Unused Dependencies (2) — P0
 

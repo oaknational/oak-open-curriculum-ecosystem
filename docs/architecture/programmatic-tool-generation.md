@@ -225,7 +225,6 @@ packages/sdks/oak-sdk-codegen/
 ### Runtime registration surfaces (current)
 
 ```text
-apps/oak-curriculum-mcp-stdio/src/tools/index.ts
 apps/oak-curriculum-mcp-streamable-http/src/handlers.ts
 ```
 

@@ -30,7 +30,6 @@ export const SDK_PACKAGE_IMPORTS = [
 ] as const;
 
 export const APP_PACKAGE_IMPORTS = [
-  '@oaknational/oak-curriculum-mcp-stdio',
   '@oaknational/oak-curriculum-mcp-streamable-http',
   '@oaknational/search-cli',
 ] as const;

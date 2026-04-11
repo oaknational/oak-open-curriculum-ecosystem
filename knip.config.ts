@@ -65,23 +65,38 @@ const config: KnipConfig = {
       entry: ['src/cli/**/*.ts', 'src/index.ts'],
       project: ['src/**/*.ts'],
     },
-    'apps/oak-curriculum-mcp-stdio': {
-      entry: ['src/index.ts'],
-      project: ['src/**/*.ts', 'e2e-tests/**/*.ts'],
-    },
     'apps/oak-curriculum-mcp-streamable-http': {
-      entry: ['src/index.ts'],
-      project: ['src/**/*.ts', 'e2e-tests/**/*.ts', 'tests/**/*.ts', 'smoke-tests/**/*.ts'],
+      entry: ['src/index.ts', 'widget/src/main.tsx'],
+      project: [
+        'src/**/*.ts',
+        'e2e-tests/**/*.ts',
+        'tests/**/*.ts',
+        'smoke-tests/**/*.ts',
+        'widget/src/**/*.{ts,tsx,css}',
+      ],
       ignoreDependencies: [
         // Used via Clerk middleware, not direct imports
         '@clerk/backend',
         // prettier is needed for eslint-plugin-prettier
         'prettier',
+        // TypeScript module augmentation: declare module 'express-serve-static-core'
+        // in src/auth/mcp-auth/mcp-auth.ts and src/correlation/middleware.ts.
+        // Knip cannot detect module augmentation as dependency usage.
+        '@types/express-serve-static-core',
+        // Consumed via CSS @import in widget/src/index.css, not a TS/JS import.
+        // Knip cannot detect CSS @import as dependency usage.
+        '@oaknational/oak-design-tokens',
       ],
     },
     'apps/oak-search-cli': {
-      entry: ['src/bin/oaksearch.ts'],
-      project: ['src/**/*.ts', 'e2e-tests/**/*.ts', 'ground-truths/**/*.ts'],
+      entry: ['bin/oaksearch.ts', 'scripts/**/*.ts', 'evaluation/**/*.ts'],
+      project: [
+        'src/**/*.ts',
+        'e2e-tests/**/*.ts',
+        'ground-truths/**/*.ts',
+        'scripts/**/*.ts',
+        'evaluation/**/*.ts',
+      ],
       ignoreDependencies: [
         // Used via CLI tooling, not direct imports
         '@asteasolutions/zod-to-openapi',

@@ -22,7 +22,7 @@ Quality gate hardening:
 
 | Plan | Scope | Status |
 |---|---|---|
-| [knip-triage-and-remediation.plan.md](./knip-triage-and-remediation.plan.md) | Investigate all 904 knip findings with evidence, remediate, promote to blocking gate | Triage pending |
+| [knip-triage-and-remediation.plan.md](./knip-triage-and-remediation.plan.md) | Investigate all knip findings with evidence, remediate, promote to blocking gate | Phase 0 complete (0 unused deps), ~725 remaining, Phase 1 next |
 
 Next queue: [current/README.md](../current/README.md)
 Strategic context: [../roadmap.md](../roadmap.md)

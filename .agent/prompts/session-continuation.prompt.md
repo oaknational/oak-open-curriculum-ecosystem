@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-11h
+last_updated: 2026-04-11i
 ---
 
 # Session Continuation
@@ -44,22 +44,22 @@ git log --oneline --decorate -10
   remediation.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
-    (**PRIMARY** — 904 knip findings captured, 5-phase triage plan
-    created, all phases pending)
+    (**PRIMARY** — Phase 0 complete, ~725 findings remaining,
+    Phase 1 next)
   - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
     (**PARENT** — promoted from future/ to current/, owner decisions
     resolved, ADR-121 reconciled, `enable-knip` item in progress)
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
     (**PARKED** — WS-0/1/2 done, WS-3 next, not current focus)
-- **Current state**: Knip plan is in `active/` with verified
-  findings. No code changes yet — all 5 phase todos are pending.
-  The stdio app (`apps/oak-curriculum-mcp-stdio`) is deprecated;
-  removing it is a valid remediation path requiring learning
-  extraction first.
+- **Current state**: Phase 0 (unused deps) is complete. Stdio
+  workspace deleted entirely per ADR-128. 4 root devDeps removed.
+  Knip config refined (oak-search-cli entries, streamable-http
+  widget patterns, 2 documented ignoreDependencies). All quality
+  gates pass. ~725 findings remain across 4 categories.
 - **Current objective**: Execute the knip triage plan phase by
-  phase. Phase 0 (unused deps) first, then Phase 1 (unused files),
-  etc. End state: `pnpm knip` exits 0, knip added to all four
-  gate surfaces (pnpm check, pre-commit, pre-push, CI).
+  phase. Phase 1 (unused files, 53 remaining) next. End state:
+  `pnpm knip` exits 0, knip added to all four gate surfaces
+  (pnpm check, pre-commit, pre-push, CI).
 - **Hard invariants / non-goals**:
   - No finding may be labelled as a false positive without
     evidence-based proof
@@ -69,20 +69,17 @@ git log --oneline --decorate -10
   - ESLint config standardisation must precede all lint-rule
     promotions (Tier 1, not Tier 3)
   - No `unknown`, no `Record<string, unknown>`, no type erasure
-  - stdio app is deprecated — removal valid but requires learning
-    extraction and reference cleanup
-- **Recent surprises / corrections** (2026-04-11h):
-  - Plan initially labelled findings as "false positives" without
-    evidence — user corrected: evidence-first, no presumptions
-  - Plan initially placed in `current/` — user corrected: it is
-    active work, belongs in `active/`
-  - Knip must be on ALL FOUR gate surfaces including pre-commit,
-    not just pre-push/CI
+- **Recent surprises / corrections** (2026-04-11i):
+  - Knip `entry` vs `project`: standalone scripts invoked via `tsx`
+    must be in `entry`, not just `project` — knip only traces
+    dependency trees from entry points
+  - Pre-existing bug: `knip.config.ts` had `src/bin/oaksearch.ts`
+    but actual CLI entry is `bin/oaksearch.ts` (no `src/` prefix)
+  - Two doc files still referenced deleted stdio workspace after
+    initial cleanup — found by code-reviewer
 - **Open questions / low-confidence areas**:
   - Whether ground-truth-archive files are consumed via dynamic
-    discovery (open investigation, no conclusion without evidence)
-  - Whether removing the stdio app is the right path vs fixing
-    its dependencies (owner decision during Phase 0)
+    discovery (open investigation for Phase 1)
   - Whether WS-5 (guidance consolidation) should be a catalogue
     abstraction or simpler validation test approach
 - **Tracked follow-ups** (not blocking current work):
@@ -91,19 +88,15 @@ git log --oneline --decorate -10
   - Generated tools have no human-friendly title (no plan)
   - Synonym builders should become codegen-time (no plan)
   - `static-content.ts` `process.cwd()` bug (tracked nowhere)
-- **Next safe step**: Begin Phase 0 of the knip triage plan —
-  investigate the 2 unused dependencies in the stdio app and the
-  9 unused devDependencies across workspaces.
-- **Deep consolidation status**: completed this handoff —
-  2 entries graduated from distilled.md (gate-surface truth to
-  ADR-121, never-weaken-gates to principles.md), 4 stale
-  cross-references fixed (roadmap, collection README, eslint
-  plan, synthesis plan), new pattern extracted
-  (evidence-before-classification), fitness checked
-  (principles.md char overrun is pre-existing, deferred to
-  dedicated compression pass).
+- **Next safe step**: Begin Phase 1 of the knip triage plan —
+  investigate the 53 unused files, starting with
+  ground-truth-archive files in oak-search-cli.
+- **Deep consolidation status**: not due — Phase 0 is one step in
+  a multi-phase plan; no plan or milestone has closed. Napkin at
+  ~170 lines, well under rotation threshold. Surprises captured
+  in napkin.
 
-## Active Workstreams (2026-04-11h)
+## Active Workstreams (2026-04-11i)
 
 ### 1. Vercel Widget Crash Fix — COMPLETE
 

@@ -123,3 +123,47 @@ transport but that is not a current priority — out of scope.
 At plan completion, knip must run on pnpm check, pre-commit, pre-push,
 AND CI. This is stricter than the pre-push === CI principle alone —
 pre-commit also gets knip so unused code never enters the repo at all.
+
+---
+
+### Session 2026-04-11i: Knip Phase 0 — unused deps triage
+
+**Stdio workspace removed entirely**
+Deleted `apps/oak-curriculum-mcp-stdio/` (~5000 lines, 55 files).
+Already commented out of pnpm-workspace.yaml, no turbo/CI references.
+ADR-128 documents the retirement. No unique code needed extraction —
+HTTP app has its own equivalents for all patterns (stubbed server,
+file logging, CLI binary).
+
+**Unused deps resolved: 2 deps + 9 devDeps → 0**
+- 2 unused deps: resolved by stdio removal
+- 4 root devDeps removed: `@axe-core/playwright`, `@eslint/js`,
+  `tsup`, `typescript-eslint` — all redundant at root, workspaces
+  have their own declarations
+- 3 knip config fixes: `scripts/**/*.ts` and `evaluation/**/*.ts`
+  added as entries+project for oak-search-cli (standalone scripts
+  not imported by CLI entry)
+- 2 ignoreDependencies added with docs:
+  `@types/express-serve-static-core` (TS module augmentation),
+  `@oaknational/oak-design-tokens` (CSS @import)
+
+**Knip findings after Phase 0**: 53 unused files (down from 96),
+630 unused exports (recount after wider scope), 2 unlisted
+binaries, ~40 config hints. Zero unused deps/devDeps.
+
+**Config reviewer caught pre-existing entry path bug**
+`knip.config.ts` had `src/bin/oaksearch.ts` but actual CLI entry
+is `bin/oaksearch.ts` (no `src/` prefix). Fixed during this session.
+
+**Code reviewer caught 2 missed doc references**
+`packages/sdks/oak-curriculum-sdk/docs/logging-guide.md` had a
+broken link to deleted stdio README.
+`docs/architecture/programmatic-tool-generation.md` listed stdio
+as a "current" runtime registration surface. Both fixed.
+
+**Process observation: standalone scripts need entry, not just project**
+Adding `scripts/**/*.ts` to knip's `project` is not enough — knip
+only traces dependency trees from `entry` points. Standalone scripts
+invoked via `tsx` (not imported by the main entry) must also be
+listed as entries. Project just defines the workspace file set;
+entry defines the dependency graph roots.
