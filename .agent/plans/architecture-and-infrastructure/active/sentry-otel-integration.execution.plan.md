@@ -46,9 +46,14 @@ todos:
   - id: search-cli-adoption
     content: "Adopt the foundation in oak-search-cli with runtime-config-driven logger composition, command init, spans, and shutdown flush"
     status: pending
+  - id: sentry-credential-provisioning
+    content: "Provision real Sentry DSN credentials in .env.local (HTTP app) and deployment platform (Vercel). Owner will configure once all code foundations are in place."
+    status: blocked
+    note: "Blocked on: search-cli-adoption completion. Owner configures credentials from Sentry dashboard per docs/operations/sentry-deployment-runbook.md."
   - id: deployment-and-evidence
     content: "Verify release/source maps, alerting baseline, MCP Insights, and produce a date-stamped evidence bundle"
     status: pending
+    note: "Depends on sentry-credential-provisioning. Cannot verify live capture without real DSN."
 ---
 
 # Sentry and OpenTelemetry Foundation
