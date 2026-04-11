@@ -143,74 +143,67 @@ Files referencing ADR-144 on this branch:
 14. `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
 15. This merge plan
 
-All must be updated to ADR-158 (or whatever the next available number is
-after main's highest ADR).
+Use a `sed` sweep for the rename, with the file list as verification:
+
+```bash
+git ls-files -z | xargs -0 sed -i '' 's/ADR-144/ADR-158/g'
+git mv docs/architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md \
+       docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md
+```
+
+Then verify all 15 files updated correctly.
+
+**Investigated and dismissed** (Hazards 3 and 6): `getWidgetHtml` DI chain
+and `OAK_SERVER_BRANDING` both auto-merge cleanly from main — branch didn't
+touch these interfaces. No action needed.
 
 ## Resolution Order
 
 1. **Trivial**: accept main for `pnpm-lock.yaml`, plan READMEs
-2. **ADR collision**: renumber our ADR-144 → ADR-158 across all 15 files
-3. **Composition decision**: accept main's inlined `initializeCoreEndpoints`,
-   delete branch's `core-endpoints.ts`. The extracted file was single-use
-   (called once at bootstrap) and main consolidated it back.
+2. **ADR collision**: `sed` sweep ADR-144 → ADR-158, rename file, verify
+3. **Composition**: accept main's inlined `initializeCoreEndpoints`,
+   delete branch's `core-endpoints.ts`
 4. **Semantic**: resolve `application.ts` — accept main's structure, then
-   re-apply rate limiting wiring:
-   - Add `rateLimiterFactory` back to `CreateAppOptions`
-   - Add `createRateLimiters()` helper
-   - Pass limiters to route setup functions
-   - `getWidgetHtml` and `OAK_SERVER_BRANDING` auto-merge from main (no
-     action — branch didn't touch these interfaces)
-5. **Hazard 1**: remove `overrideToolsListHandler` import — main's Zod 4
-   pipeline preserves examples end-to-end; no replacement needed
-6. **Hazard 3**: no action — `getWidgetHtml` auto-merges from main
-7. **Hazard 5**: extend `setupOAuthAndCaching` with `oauthRateLimiter`.
-   Also verify the full threading chain: `registerOAuthRoutes` →
-   `createOAuthProxyRoutes` must also preserve the parameter.
-   **Same class**: `mountAssetDownloadProxy` signature — main's version
-   lacks `assetRateLimiter` (Fred finding). Verify auto-merge preserves
-   branch's extended signatures for both OAuth and asset routes.
-8. **Non-conflicting adaptations**: check all auto-merged files for signature
-   mismatches — especially test files calling `createApp` or `registerHandlers`.
-   All test callers of `createApp()` must now provide `getWidgetHtml`.
-9. `pnpm install` to regenerate lockfile
-10. `pnpm type-check` immediately — catches silent breaks
-11. `pnpm check` — full verification
-12. **Post-merge observability gap analysis** — verify:
-    - Widget resource handler wrapped by `wrapResourceHandler()`
-    - Characterisation tests still pass
-    - No observability gaps in new code
-    - New Turbo tasks (`test:widget`, `dev:widget`) don't need observability
-    - No new Express routes from PR #76 that need rate limiting
-
-## Post-Merge Scope Assessment
-
-After the merge is clean and gates pass:
-
-1. Verify all `wrapResourceHandler()` / `wrapToolHandler()` usage on new
-   and changed handlers
-2. Check if the new widget Vite build pipeline interacts with any
-   observability paths
-3. Check if new Turbo tasks need observability configuration
-4. Run characterisation tests to confirm observability wiring survived
-5. Assess whether the scope of Search CLI adoption needs expanding based
-   on any new patterns from PR #76
+   re-apply rate limiting wiring (`rateLimiterFactory` DI field,
+   `createRateLimiters()` helper, limiter params to route setup functions).
+   **Note (Barney)**: this will push `application.ts` to ~270 lines,
+   breaching `max-lines`. Extract `createRateLimiters` to a small utility
+   if needed, or accept the overshoot as a fast-follow.
+5. **Hazard 1**: remove `overrideToolsListHandler` import
+6. **Hazard 5 + Fred finding**: verify auto-merge preserves branch's
+   extended signatures on `setupOAuthAndCaching` (+ full chain:
+   `registerOAuthRoutes` → `createOAuthProxyRoutes`) and
+   `mountAssetDownloadProxy` (+ `createAssetDownloadRoute`). If auto-merge
+   dropped the rate limiter params, re-apply them.
+7. **Non-conflicting adaptations**: check auto-merged test files —
+   all callers of `createApp()` must now provide `getWidgetHtml`
+8. `pnpm install` → `pnpm type-check` → `pnpm check`
+9. **Post-merge check**: visually confirm `registerWidgetResource` uses
+   `wrapResourceHandler`. Characterisation tests run as part of `pnpm check`.
 
 ## Risk Assessment
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
 | `core-endpoints.ts` import break | High | Medium | Delete file, inline into main's pattern |
-| ADR numbering collision missed | High | Low | Explicit renumber with 15-file sweep |
-| `application.ts` merge error | Medium | High | Careful semantic merge, type-check gate |
-| `setupOAuthAndCaching` signature | High | Medium | Re-apply rate limiter param |
-| Rate limiting wiring lost | Medium | Medium | Re-apply after accepting main |
-| Observability gap in new widget | Low | Medium | Post-merge gap analysis |
+| ADR numbering collision | High | Low | `sed` sweep + verification |
+| `application.ts` merge error | Medium | High | Type-check gate immediately after |
+| Rate limiter signatures silently dropped | High | Medium | Explicit verification step (step 6) |
+| `application.ts` breaches `max-lines` | High | Low | Extract helper or fast-follow |
 
 ## Estimated Complexity
 
 - **Text conflicts**: 4 files (2 trivial, 2 semantic)
-- **Hazards**: 6 documented (reviewed by Wilma + docs-ADR reviewer)
-- **Non-conflicting adaptations**: ~8 files (auto-merged but need params)
-- **ADR renumbering**: 15 files
-- **Scale**: Smaller than PR #70 merge (4 conflicts vs 22) but more
-  hazards due to rate limiting + widget DI chain interaction
+- **Real hazards**: 4 (composition, ADR collision, signatures, import cascade)
+- **Non-conflicting adaptations**: ~8 files (test callers need `getWidgetHtml`)
+- **ADR renumbering**: 15 files (mechanical `sed` sweep)
+- **Scale**: Much smaller than PR #70 merge (4 conflicts vs 22)
+
+## Reviewer Verdicts
+
+| Reviewer | Verdict | Key Finding |
+|----------|---------|-------------|
+| Wilma | CRITICAL HAZARDS → downgraded after investigation | `getWidgetHtml` and `OAK_SERVER_BRANDING` are non-hazards |
+| docs-ADR | GAPS FOUND → fixed | Deleted file count corrected, `getWidgetHtml` threading documented |
+| Fred | COMPLIANT | `mountAssetDownloadProxy` signature gap; ADR freshness check |
+| Barney | COMPLIANT WITH RECOMMENDATIONS | Trim non-action hazards, `max-lines` warning, `sed` sweep |
