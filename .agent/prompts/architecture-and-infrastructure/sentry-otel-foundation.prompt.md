@@ -3,16 +3,17 @@ prompt_id: architecture-sentry-otel-foundation
 title: "Sentry + OpenTelemetry Foundation Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-03-29
+last_updated: 2026-04-11
 ---
 
 # Sentry + OpenTelemetry Foundation — Session Entry Point
 
 ## What this branch does
 
-Branch `feat/full-sentry-otel-support` adds a production observability
-foundation so the HTTP MCP server and Search CLI are diagnosable during
-open public alpha. It is a **Milestone 2 blocker**.
+Branch `feat/otel_sentry_enhancements` continues the production
+observability foundation so the HTTP MCP server and Search CLI are
+diagnosable during open public alpha. It is a **Milestone 2 blocker**.
+The original branch `feat/full-sentry-otel-support` merged as PR #73.
 
 The branch rewrites the logger around a coherent `LogSink[]` fan-out
 model, adds three shared packages (`@oaknational/sentry-node`,
@@ -75,8 +76,8 @@ be checked.
 ## Read First
 
 1. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) — main execution plan (phases, contracts, scope)
-2. [sentry-otel-remediation.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-remediation.plan.md) — 21 findings, resolution status
-3. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md) — architectural decision
+2. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md) — observability architectural decision
+3. [ADR-144](../../../docs/architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md) — multi-layer security and rate limiting
 
 Primary code surfaces:
 
