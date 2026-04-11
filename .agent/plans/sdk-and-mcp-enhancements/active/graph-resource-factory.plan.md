@@ -39,13 +39,13 @@ todos:
     status: done
   - id: t10-handoff
     content: "Hand off to parent plan: factory ready for misconception, EEF, and NC taxonomy surfaces"
-    status: pending
+    status: done
 ---
 
 # Graph Resource Factory
 
-**Status**: DONE
-**Last Updated**: 2026-04-10
+**Status**: DONE — committed in `1eb302e8` (2026-04-11)
+**Last Updated**: 2026-04-11
 **Branch**: `planning/kg_eef_integration`
 **Parent**: `open-education-knowledge-surfaces.plan.md` (WS-1)
 
@@ -53,7 +53,7 @@ todos:
 
 The repository has 3 existing graph-as-MCP-resource+tool surfaces:
 
-1. **Prerequisite graph** — resource + tool, ~160 lines
+1. **Prior knowledge graph** — resource + tool, ~160 lines
 2. **Thread progressions** — resource + tool, ~160 lines
 3. **Curriculum model** — resource + tool, ~180 lines (slightly
    different: composes two data sources)

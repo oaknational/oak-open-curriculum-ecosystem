@@ -14,7 +14,7 @@ todos:
     content: "WS-0: Write ADR for multi-source open education integration and update root README"
     status: done
   - id: ws-1-factory
-    content: "WS-1: Extract graph resource factory, refactor existing graphs (prerequisite plan)"
+    content: "WS-1: Extract graph resource factory, refactor existing graphs (prior knowledge graph plan)"
     status: done
   - id: ws-2-misconceptions
     content: "WS-2: Misconception graph MCP surface (first consumer of factory)"
@@ -35,8 +35,8 @@ todos:
 
 # Open Education Knowledge Surfaces
 
-**Status**: ACTIVE — WS-0, WS-1, WS-2 complete; WS-3 next
-**Last Updated**: 2026-04-10
+**Status**: ACTIVE — WS-0/1/2 committed (`1eb302e8`); WS-3 next
+**Last Updated**: 2026-04-11
 **Branch**: `planning/kg_eef_integration`
 
 ## Why This Plan Exists
@@ -117,7 +117,7 @@ Fix all findings before starting WS-0 implementation.
 
 - `graph-resource-factory.ts` — generic `<T extends { readonly version: string }>`,
   4 composable factory functions, SDK-internal (not publicly exported)
-- Prerequisite graph and thread progressions refactored to use factory
+- Prior knowledge graph and thread progressions refactored to use factory
 - Misconception graph surface implemented as first factory consumer
   (resource + tool + guidance, 12,858 misconceptions)
 - App-layer `registerGraphResource` helper replaces per-resource functions
@@ -152,39 +152,33 @@ addressed:
 - Weak length-threshold test assertions replaced with domain checks
 - ADR-123 tool count updated to 35 (11 aggregated)
 
-### Next Session: Pre-commit fixes then WS-3
+### Session Progress (2026-04-11): Pre-commit + Plan Resolution
 
-**Pre-commit tasks** (do before committing WS-0/1/2):
+**Pre-commit fixes DONE** (committed `1eb302e8`):
 
-1. **Rename prior knowledge graph**: "prior knowledge graph" is ambiguous.
-   Rename to make clear it's about student prior-knowledge
-   prerequisites for curriculum sequencing (not tool prerequisites).
-   Rename-everywhere: URI, tool name, file names, ADR-123, all
-   references.
-2. **Delete fragile idempotency tests**: The `is idempotent — returns
-   identical data on repeated calls` tests on graph tools prove
-   nothing (pure function over module constant). Delete them.
-3. **Delete weak constant-assertion tests**: Tests asserting string
-   length or checking `typeof` prove nothing about behaviour.
-4. **Run `/jc-consolidate-docs`**: Napkin has new entries, plans were
-   updated substantially. Also triage 5 overlooked items from archived
-   napkins: server branding (S5), generated tool titles (S3), synonym
-   builder codegen migration, `static-content.ts` process.cwd() bug,
-   E2E test flakiness.
+1. **Renamed prerequisite-graph → prior-knowledge-graph**: ~260
+   references across ~40 files. One concept = one name.
+2. **Deleted 6 fragile tests**: idempotency on pure functions (2),
+   string constant content check (1), arbitrary length checks (2),
+   size/token budget on constants (1).
+3. **Added misconception-graph E2E assertions**: resource list +
+   resource read in `documentation-resources.e2e.test.ts`.
+4. All gates passed. Committed as single WS-0/1/2 commit.
 
-**Then WS-3: EEF Evidence Surface**
+**EEF plan findings RESOLVED** (all 12 — see EEF plan file):
 
-**Blocking EEF plan findings from pre-implementation review** (must
-resolve in next session before coding):
+All 12 pre-implementation review findings resolved in the EEF plan
+with precise Zod schemas derived from actual JSON structure. Key
+resolutions: data lives in SDK `src/mcp/data/` (not codegen), full
+Zod validation at load time, `curriculum://eef-*` URI scheme, focus
+enum matches `most_relevant_priorities` exactly, null-impact guard
+pre-filters 4 strands.
 
-1. EEF data lives in `oak-curriculum-sdk/src/mcp/data/` (not codegen)
-2. All `EefToolkitData` fields fully typed — no `Record<string, unknown>`
-3. `as const satisfies` incompatible with `createRequire` — use direct
-   type annotation
-4. Null-impact guard for scoring (4 strands have `impact_months: null`)
-5. URI scheme: `curriculum://eef-methodology`, `curriculum://eef-strands`
-6. Build-time Zod validation for EEF JSON schema drift
-7. Prompt step 3 clarification + KS-to-phase mapping in prompt text
+**Live MCP server validation** (2026-04-11): All 3 graph tools and
+4 graph resources verified working via `oak-local`. Rename fully
+propagated — no trace of old `prerequisite-graph` in running server.
+
+**Next: WS-3 implementation** (next session)
 
 ## Execution Order
 

@@ -7,40 +7,40 @@ isProject: false
 todos:
   - id: t1-resource-constant
     content: "Create misconception-graph-resource.ts with MISCONCEPTION_GRAPH_RESOURCE constant and getMisconceptionGraphJson() getter"
-    status: pending
+    status: done
   - id: t2-aggregated-tool
     content: "Create aggregated-misconception-graph.ts with tool definition, guidance, and runMisconceptionGraphTool() executor"
-    status: pending
+    status: done
   - id: t3-register-definitions
     content: "Add get-misconception-graph to AGGREGATED_TOOL_DEFS in definitions.ts"
-    status: pending
+    status: done
   - id: t4-register-executor
     content: "Add handler in AGGREGATED_HANDLERS map in executor.ts"
-    status: pending
+    status: done
   - id: t5-public-export
     content: "Export MISCONCEPTION_GRAPH_RESOURCE and getMisconceptionGraphJson from public/mcp-tools.ts"
-    status: pending
+    status: done
   - id: t6-register-resource
     content: "Add registerMisconceptionGraphResource() to register-resources.ts in the MCP app"
-    status: pending
+    status: done
   - id: t7-adr-123-update
     content: "Update ADR-123 resources table with curriculum://misconception-graph"
-    status: pending
+    status: done
   - id: t8-e2e-test
     content: "Add E2E assertions for get-misconception-graph tool and misconception resource"
-    status: pending
+    status: done
   - id: t9-guidance
     content: "Create misconception-guidance.ts with AGGREGATED_MISCONCEPTION_GUIDANCE constant"
-    status: pending
+    status: done
   - id: t10-doc-resource-annotations
     content: "Add annotations (audience, priority) to the 3 documentation resources"
-    status: pending
+    status: done
 ---
 
 # Misconception Graph MCP Surface
 
-**Status**: DONE
-**Last Updated**: 2026-04-10
+**Status**: DONE — committed in `1eb302e8` (2026-04-11)
+**Last Updated**: 2026-04-11
 **Branch**: `planning/kg_eef_integration`
 
 ## Context

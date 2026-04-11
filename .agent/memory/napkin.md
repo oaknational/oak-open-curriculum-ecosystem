@@ -109,3 +109,52 @@ The following items were in rotated napkins but not graduated or tracked:
 User identified the need for sub-graph extraction — either at runtime
 (tool parameters) or codegen-time (per-subject sub-graphs). Tracked in
 memory. The factory is the natural extension point.
+
+---
+
+### Session 2026-04-11: Pre-commit fixes + EEF plan resolution
+
+**Correction: blanket `replace_all` on partial words corrupts code templates**
+Used `replace_all` with `prerequisite` (lowercase) in
+`write-json-graph-file.ts`, which is a code-template file generating
+TypeScript source. This corrupted `prerequisiteFor` → `prior-knowledgeFor`
+and `prerequisiteGraph` → `prior-knowledgeGraph` (invalid JS identifiers).
+Had to restore from git and rewrite the entire file. Lesson: in files
+that generate code with mixed-case identifiers, never use blanket
+substring replacement. Rewrite the file completely or use exact-match
+replacements for each distinct identifier.
+
+**Pattern: background agents for mechanical rename-everywhere**
+Two background agents handled ~30 files of test/guidance/app-layer renames
+while I worked on the generator layer and documentation. The agents
+completed without conflicts because file scopes didn't overlap. The
+rename-everywhere task (~260 references, ~40 files) was completed in a
+single session by parallelising across 3 workers (me + 2 agents).
+
+**Surprise: flaky auth E2E test under turbo concurrency**
+`returns HTTP 401 for tools/list with fake Bearer token` in
+`application-routing.e2e.test.ts` failed during full `pnpm check` (87/88
+passed) but passed on isolated `pnpm test:e2e` re-run. This is a
+different test from the previously noted `get-curriculum-model.e2e.test.ts`
+flakiness. Now two distinct flaky E2E tests observed. Created dedicated
+memory note `project_flaky-test-tracker.md` per user request.
+
+**Validation: live MCP server graph surfaces verified post-rename**
+All 3 graph tools (`get-prior-knowledge-graph`, `get-misconception-graph`,
+`get-thread-progressions`) and all 4 graph resources (`curriculum://model`,
+`curriculum://prior-knowledge-graph`, `curriculum://misconception-graph`,
+`curriculum://thread-progressions`) verified working via `oak-local` MCP
+server. Tool calls returned correct stats (1,607 units/3,452 edges,
+12,858 misconceptions, 164 threads). Resource reads returned valid JSON
+(1.9 MB, 6.4 MB, 241 KB). No trace of old `prerequisite-graph` name in
+the running server. This confirms the rename cascaded correctly through
+generators → generated data → SDK → app → running server.
+
+**Pattern: EEF data structure is more varied than plan assumed**
+Detailed JSON analysis revealed: (a) strand fields have high optionality
+(6 optional top-level fields, 3 rare `implementation_requirements` fields),
+(b) `school_context_schema` is a JSON Schema meta-definition (schema of a
+schema) — typing it fully would be excessive, (c) `pp_relevance` has only
+3 values (`moderate`, `high`, `very_high`), (d) `closing_disadvantage_gap`
+in priorities matches the plan (no "the"), but `closing_the_disadvantage_gap`
+IS a separate strand field (2/30 strands). These are distinct concepts.

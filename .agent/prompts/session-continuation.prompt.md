@@ -46,23 +46,19 @@ git log --oneline --decorate -10
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
     (**PARENT** — WS-0/1/2 done, WS-3 next)
   - `.agent/plans/sdk-and-mcp-enhancements/active/eef-evidence-mcp-surface.plan.md`
-    (**WS-3** — recommendation tool + R1-R8, 12 pre-implementation
-    findings to resolve before coding)
+    (**WS-3** — recommendation tool + R1-R8, all 12 findings resolved,
+    ready for implementation)
   - `.agent/plans/sdk-and-mcp-enhancements/active/nc-knowledge-taxonomy-surface.plan.md`
     (**WS-4** — smallest KG integration, ontology-derived)
   - `.agent/plans/sdk-and-mcp-enhancements/active/agent-guidance-consolidation.plan.md`
     (**WS-5** — consolidate after all surfaces)
-- **Current state**: WS-0 (narrative), WS-1 (factory), WS-2
-  (misconception surface) are implemented and all reviewer findings
-  addressed. `pnpm check` passes except E2E (fixed, re-running).
-  All changes are uncommitted on `planning/kg_eef_integration`.
-  Graph resource factory is live. Misconception graph (12,858 nodes)
-  is registered as resource + tool. ADR-157, LICENCE-DATA, README
-  all updated for multi-source narrative.
-- **Current objective**: Commit WS-0/1/2, then implement WS-3 (EEF
-  evidence surface). The EEF plan has 12 pre-implementation findings
-  that must be resolved before coding — they are recorded at the top
-  of the EEF plan file.
+- **Current state**: WS-0/1/2 committed (`1eb302e8`) on
+  `planning/kg_eef_integration`. Prior knowledge graph renamed
+  (was "prerequisite graph"), 6 fragile tests deleted,
+  misconception-graph E2E assertions added. All 12 EEF plan
+  findings resolved with precise Zod schemas. `pnpm check` passes.
+- **Current objective**: Implement WS-3 (EEF evidence surface).
+  The EEF plan is fully resolved — ready for implementation.
 - **Hard invariants / non-goals**:
   - Only `get-curriculum-model` is a prerequisite tool. All graph
     tools are supplementary, loaded as needed — no prerequisite
@@ -74,36 +70,35 @@ git log --oneline --decorate -10
   - Separate framework from consumer (ADR-154) — factory is framework
   - No `unknown`, no `Record<string, unknown>`, no type aliases
   - Future graph sub-setting feature tracked in memory
-- **Recent surprises / corrections**:
-  - `git stash` during diagnostic reverted working tree — recovery
-    required careful stash pop with conflict resolution. Lesson:
-    never stash as a diagnostic shortcut without understanding the
-    full tree state.
-  - Pre-existing lint errors in `documentation-resources.unit.test.ts`
-    (unsafe assignment) — not caused by our changes but surfaced by
-    the turbo cache miss. Pre-existing, not blocking.
-  - Another agent was working in the repo concurrently — their changes
-    to `.agent/memory/distilled.md`, napkin, semantic-search plans,
-    and cursor hooks state needed to be preserved during recovery.
+- **Recent surprises / corrections** (2026-04-11):
+  - Flaky E2E test `returns HTTP 401 for tools/list with fake Bearer
+    token` in `application-routing.e2e.test.ts` — fails during full
+    `pnpm check` concurrency, passes on isolated re-run. Tracked in
+    `project_flaky-test-tracker.md`.
+  - `replace_all` on lowercase `prerequisite` in a code-template file
+    corrupted `prerequisiteFor` and `prerequisiteGraph` camelCase
+    strings. Lesson: never use blanket `replace_all` on partial words
+    in files that contain code templates with mixed casing.
 - **Open questions / low-confidence areas**:
-  - EEF `focus` enum alignment with JSON field names
-  - EEF `uk_context` and `school_context_schema` exact typing
   - Whether WS-5 (guidance consolidation) should be a catalogue
     abstraction or simpler validation test approach (barney
     recommended the simpler path)
-  - E2E test coverage for `curriculum://misconception-graph`
-    resource read (tracked but not yet added — test-reviewer
-    finding)
-- **Next safe step**: Commit all WS-0/1/2 changes on
-  `planning/kg_eef_integration`, then begin WS-3 with
-  pre-implementation review finding resolution.
-- **Deep consolidation status**: due — WS-1 and WS-2 plans closed,
-  significant new napkin entries (prerequisite guidance scope, git
-  stash recovery, fragile test patterns, prerequisite graph rename).
-  Not bounded for this closeout. Next session MUST run
-  `/jc-consolidate-docs` before starting WS-3.
+- **Next safe step**: Implement WS-3 per the resolved EEF plan.
+  T1 (data loader, Zod), T2-T5 (resources, tool, guidance),
+  T6-T10 (registration, prompt), T11-T12 (ADR, E2E).
+- **Flaky test tracker**: see memory note
+  `project_flaky-test-tracker.md`. Two failures observed (auth
+  routing E2E, curriculum-model E2E). Suspected: turbo concurrency
+  or test coupling.
+- **Deep consolidation status**: completed this handoff —
+  deduplicated distilled.md (removed Vercel section, ADR-065
+  pointer, npm scope fact, duplicate "lead with narrative"),
+  promoted "pre-implementation plan review" to pattern file,
+  fixed stale MEMORY.md entries (widget, mcpjam reference),
+  updated all plan statuses with commit refs, fixed stale
+  file path in future plan.
 
-## Active Workstreams (2026-04-10)
+## Active Workstreams (2026-04-11)
 
 ### 1. Vercel Widget Crash Fix — COMPLETE
 
