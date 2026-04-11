@@ -39,24 +39,19 @@ PR #73 **MERGED** to main (2026-03-31). Rate limiting **COMPLETE**
 - Rate limiting (ADR-158) — `express-rate-limit` on 6 routes, 3
   profiles, `trust proxy` configured
 
-### Pending merge from main
+### Merge from main — COMPLETE (2026-04-11)
 
-Main received **PR #76** (React MCP App + design tokens, 977 files).
-This replaces the legacy widget framework with a React app + Vite build
-pipeline and adds `packages/design/`. Must merge before PRing.
-
-**Post-merge assessment needed**: verify observability wiring survives
-the widget replacement — the new widget resource handler should already
-be wrapped, but characterisation tests and the deleted legacy code must
-be checked.
+Main merged (commits `da26c4bf`, `9e6ed327`). PR #76 (React MCP App,
+977 files), PR #78 (open education, ADR-157), releases 1.3.0-1.5.0
+integrated. ADR-144 renumbered to ADR-158. Rate limiting re-applied
+with extracted `CoreEndpointOptions`. 6 specialist reviewers passed.
+`pnpm check` green. `registerWidgetResource` confirmed using
+`wrapResourceHandler` (observability intact). Integration sweep
+verified no main work lost.
 
 ### What comes next
 
-1. **Merge main** (PR #76) — resolve conflicts, verify observability
-2. **Post-merge observability gap analysis** — does the new React app,
-   design token pipeline, or any new routes need observability? Does
-   the widget resource handler correctly use `wrapResourceHandler()`?
-3. **Search CLI adoption** (`apps/oak-search-cli`) — 6 critical gaps:
+1. **Search CLI adoption** (`apps/oak-search-cli`) — 6 critical gaps:
    no Sentry init, no sinks, no env config, no command spans, no
    flush, no error capture. Reference: HTTP server implementation.
 4. **Sentry credential provisioning** (owner action) — once all code
@@ -103,17 +98,11 @@ Primary code surfaces:
 
 ## Restart Sequence
 
-1. **Merge main** — PR #76 (React MCP App + design tokens, 977 files)
-   must be merged into this branch. Expect conflicts in the HTTP app
-   (widget replacement, resource registration, turbo config).
-2. **Post-merge verification** — `pnpm check`, characterisation tests,
-   observability gap analysis on new/changed code.
-3. **Assess expanded scope** — does the new React app widget, design
-   token build pipeline, or any changed routes need additional
-   observability wiring? Update the execution plan if so.
-4. **Search CLI adoption** — 6 critical gaps (see execution plan).
-5. **Sentry credentials** — owner configures real DSN after code is ready.
-6. **Deployment evidence** — depends on real credentials being live.
+1. **Search CLI adoption** — 6 critical gaps (see execution plan and
+   the session plan at `~/.claude/plans/effervescent-hatching-goose.md`
+   Part 2). TDD throughout.
+2. **Sentry credentials** — owner configures real DSN after code is ready.
+3. **Deployment evidence** — depends on real credentials being live.
 
 ## Authority Rule
 

@@ -40,63 +40,54 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Open Education Knowledge Surfaces — WS-0/1/2 DONE,
-  WS-3 (EEF evidence) is next.
+- **Workstream**: Sentry + OTel Observability Foundation
+  (`feat/otel_sentry_enhancements`). Merge complete, Search CLI
+  adoption is next.
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
-    (**PARENT** — WS-0/1/2 done, WS-3 next)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/eef-evidence-mcp-surface.plan.md`
-    (**WS-3** — recommendation tool + R1-R8, all 12 findings resolved,
-    ready for implementation)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/nc-knowledge-taxonomy-surface.plan.md`
-    (**WS-4** — smallest KG integration, ontology-derived)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/agent-guidance-consolidation.plan.md`
-    (**WS-5** — consolidate after all surfaces)
-- **Current state**: WS-0/1/2 committed (`1eb302e8`) on
-  `planning/kg_eef_integration`. Prior knowledge graph renamed
-  (was "prerequisite graph"), 6 fragile tests deleted,
-  misconception-graph E2E assertions added. All 12 EEF plan
-  findings resolved with precise Zod schemas. `pnpm check` passes.
-- **Current objective**: Implement WS-3 (EEF evidence surface).
-  The EEF plan is fully resolved — ready for implementation.
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
+    (**authoritative** — phases 0-3 HTTP complete, Search CLI next)
+  - `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
+    (**entry point** — restart sequence, current state, authority rule)
+- **Current state**: Main merged into branch (commits `da26c4bf`,
+  `9e6ed327`). PR #76 (React MCP App, 977 files), PR #78 (open
+  education, ADR-157), releases 1.3.0-1.5.0 all integrated. ADR-144
+  renumbered to ADR-158. Rate limiting re-applied with extracted
+  `CoreEndpointOptions` (breaks circular import). `pnpm check` passes.
+  6 specialist reviewers complete, all findings addressed. Integration
+  sweep confirms no main work lost.
+- **Current objective**: Search CLI observability adoption — 6 critical
+  gaps (no Sentry init, no sinks, no env config, no command spans,
+  no flush, no error capture).
 - **Hard invariants / non-goals**:
-  - Only `get-curriculum-model` is a prerequisite tool. All graph
-    tools are supplementary, loaded as needed — no prerequisite
-    guidance injected by the factory.
-  - Graph factory is SDK-internal, not publicly exported
-  - Registration lives in app layer (needs observability)
-  - URI scheme: all `curriculum://` with source-identifying segments
-  - EEF data is NOT generated from OpenAPI — lives in SDK, not codegen
-  - Separate framework from consumer (ADR-154) — factory is framework
-  - No `unknown`, no `Record<string, unknown>`, no type aliases
-  - Future graph sub-setting feature tracked in memory
+  - `SENTRY_MODE=off` is the default and kill switch
+  - No `vi.mock`, no `process.env` mutation in tests
+  - TDD at all levels, Result pattern for config/init
+  - ADR-078 DI everywhere, ADR-143 observability architecture
+  - CLI observability is lighter than HTTP (no MCP wrapping needed)
+  - Owner configures real Sentry DSN after all code foundations land
+  - `apps/oak-curriculum-mcp-stdio` is NOT an adoption target
 - **Recent surprises / corrections** (2026-04-11):
-  - Flaky E2E test `returns HTTP 401 for tools/list with fake Bearer
-    token` in `application-routing.e2e.test.ts` — fails during full
-    `pnpm check` concurrency, passes on isolated re-run. Tracked in
-    `project_flaky-test-tracker.md`.
-  - `replace_all` on lowercase `prerequisite` in a code-template file
-    corrupted `prerequisiteFor` and `prerequisiteGraph` camelCase
-    strings. Lesson: never use blanket `replace_all` on partial words
-    in files that contain code templates with mixed casing.
+  - `sed` sweep for ADR renumbering caught main's ADR-144 (Two-Threshold)
+    references — must use targeted file lists, not blanket sweeps
+  - `mcp-rate-limit.integration.test.ts` timed out because it lacked
+    `upstreamMetadata` DI — `createApp` tries to fetch Clerk metadata
+    over the network without it
+  - Prettier reformats compact function calls, so `max-lines-per-function`
+    compliance must be checked after formatting, not before
+  - `max-lines: 250` is enforced via shared `recommended` config in
+    `@oaknational/eslint-plugin-standards`, not workspace-level config
 - **Open questions / low-confidence areas**:
-  - Whether WS-5 (guidance consolidation) should be a catalogue
-    abstraction or simpler validation test approach (barney
-    recommended the simpler path)
-- **Next safe step**: Implement WS-3 per the resolved EEF plan.
-  T1 (data loader, Zod), T2-T5 (resources, tool, guidance),
-  T6-T10 (registration, prompt), T11-T12 (ADR, E2E).
-- **Flaky test tracker**: see memory note
-  `project_flaky-test-tracker.md`. Two failures observed (auth
-  routing E2E, curriculum-model E2E). Suspected: turbo concurrency
-  or test coupling.
-- **Deep consolidation status**: completed this handoff —
-  deduplicated distilled.md (removed Vercel section, ADR-065
-  pointer, npm scope fact, duplicate "lead with narrative"),
-  promoted "pre-implementation plan review" to pattern file,
-  fixed stale MEMORY.md entries (widget, mcpjam reference),
-  updated all plan statuses with commit refs, fixed stale
-  file path in future plan.
+  - CLI observability: whether `SearchCliEnvLoader` should carry the
+    `observability` instance (convenient) or whether it should be
+    passed separately (more explicit). Plan recommends loader approach.
+  - `app/` directory still lacks barrel `index.ts` (Barney finding) —
+    acceptable as fast-follow, not blocking
+- **Next safe step**: Search CLI adoption per Part 2 of the session
+  plan. Start with Step 0 (add `@oaknational/sentry-node` dep) and
+  Step 1 (extend env schema with `SentryEnvSchema`, TDD).
+- **Deep consolidation status**: not due — session was merge execution
+  and reviewer fixes, no new doctrine or patterns to graduate. Napkin
+  is 160 lines (well under threshold).
 
 ## Active Workstreams (2026-04-11)
 
