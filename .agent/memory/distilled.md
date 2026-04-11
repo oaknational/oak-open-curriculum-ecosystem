@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-10b.md`
-(sessions 2026-02-10 to 2026-04-10).
+`napkin-2026-02-24.md` through `napkin-2026-04-11.md`
+(sessions 2026-02-10 to 2026-04-11g).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -69,10 +69,11 @@ context with no natural permanent home.
 - **Narrative sections drift first**: when syncing plan state,
   inspect body status lines, decision tables, and current-state
   prose, not just frontmatter and todo checkboxes.
-- **Gate-surface truth lives in execution paths**: when ADRs,
-  governance docs, and workflows disagree about what runs where,
-  treat workflow files, gate commands, and package scripts as the
-  source of truth and reconcile the prose to them.
+- **Ground plans in verified data, not memory**: never classify
+  effort/impact or propose interventions from stale counts or
+  napkin memories. Run the actual tools, read the actual files,
+  verify the actual state BEFORE drafting a plan. Plans built
+  on assumptions get rejected. (Session 2026-04-11g failure.)
 - **Review scope separation**: when a comprehensive review spans
   multiple commits, separate in-scope findings from pre-existing
   issues. Fix in-scope, track pre-existing as a gated follow-up.
@@ -173,6 +174,21 @@ context with no natural permanent home.
   rmdir after deleting the last file. The portability
   validator checks for SKILL.md presence, so empty skill
   directories without SKILL.md cause false positives.
+- **`lint:fix` can silently revert manual edits**: `pnpm check`
+  runs `lint:fix` internally. If an edit introduces code that the
+  linter "fixes" back, the edit is lost mid-pipeline. Always
+  verify the edited file AFTER the full `pnpm check`, not just
+  after a single gate.
+- **Blanket `replace_all` corrupts mixed-case code**: in files
+  containing mixed-case identifiers (e.g. code templates), never
+  use blanket substring replacement. `prerequisite` matches
+  `prerequisiteFor` and `prerequisiteGraph`, producing invalid
+  identifiers. Rewrite the file or use exact-match replacements.
+- **Verify reviewer fixes are on disk**: a fix recorded in the
+  napkin or conversation summary is not a fix applied on disk.
+  Always verify the file's actual content after claiming a fix.
+  Three sessions (2026-04-11d/e/f) recorded the same fix as
+  "done" before discovering it was never persisted.
 - **ESLint `lint:fix` can merge value+type imports**: when
   value and type imports share a source module, auto-fix may
   merge them into a single `import type` statement, making

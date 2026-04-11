@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-11
+last_updated: 2026-04-11h
 ---
 
 # Session Continuation
@@ -40,68 +40,70 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Gate hardening on `feat/gate_hardening_part1`.
-  The TS2430 gate failure is **FIXED** — `ToolDescriptor` now uses
-  `extends Omit<Tool, '_meta'>` instead of `extends Tool`, keeping
-  the library type while preventing `unknown` leaking from the
-  SDK's `Tool._meta`. `pnpm check` 88/88. Ready to commit.
+- **Workstream**: Quality gate hardening — knip triage and
+  remediation.
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-protocol-types-interface-to-type-fix.plan.md`
-    (**COMPLETE** — fix applied via `Omit<Tool, '_meta'>`, not the
-    original `interface→type` approach which was wrong)
+  - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
+    (**PRIMARY** — 904 knip findings captured, 5-phase triage plan
+    created, all phases pending)
+  - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
+    (**PARENT** — promoted from future/ to current/, owner decisions
+    resolved, ADR-121 reconciled, `enable-knip` item in progress)
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
-    (**PARENT** — WS-0/1/2 done, namespace + type extraction done,
-    WS-3 next)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/eef-evidence-mcp-surface.plan.md`
-    (**WS-3** — recommendation tool + R1-R8, all 12 findings resolved,
-    ready for implementation)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/nc-knowledge-taxonomy-surface.plan.md`
-    (**WS-4** — smallest KG integration, ontology-derived)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/agent-guidance-consolidation.plan.md`
-    (**WS-5** — consolidate after all surfaces)
-- **Completed Cursor plans**: deleted (delivered in prior sessions)
-- **Current state**: Branch `feat/gate_hardening_part1` at `779ab475`.
-  All type extraction, namespace, and gate-fix work is staged +
-  modified. `pnpm check` 88/88 clean. Ready to commit.
-- **Current objective**: Commit the gate fix, then classify quality
-  gate hardening options by effort and impact. Pick a small number
-  of low-effort, high-impact interventions.
+    (**PARKED** — WS-0/1/2 done, WS-3 next, not current focus)
+- **Current state**: Knip plan is in `active/` with verified
+  findings. No code changes yet — all 5 phase todos are pending.
+  The stdio app (`apps/oak-curriculum-mcp-stdio`) is deprecated;
+  removing it is a valid remediation path requiring learning
+  extraction first.
+- **Current objective**: Execute the knip triage plan phase by
+  phase. Phase 0 (unused deps) first, then Phase 1 (unused files),
+  etc. End state: `pnpm knip` exits 0, knip added to all four
+  gate surfaces (pnpm check, pre-commit, pre-push, CI).
 - **Hard invariants / non-goals**:
-  - Use library types (`Tool`) — never reinvent SDK types
-  - `Omit<Tool, '_meta'>` is the pattern for removing `unknown`
-    from SDK types while keeping the library relationship
-  - Spread at boundary (`{ ...tool._meta }`) when passing our
-    `ToolMeta` to SDK's `Record<string, unknown>` expectation
+  - No finding may be labelled as a false positive without
+    evidence-based proof
+  - Fix consumption patterns to be standard rather than adding
+    knip ignores — reducing sensitivity is a gate weakness
+  - Never weaken gates to solve testing problems
+  - ESLint config standardisation must precede all lint-rule
+    promotions (Tier 1, not Tier 3)
   - No `unknown`, no `Record<string, unknown>`, no type erasure
-  - Non-API-derived types live in `mcp-protocol-types.ts`
-  - Namespace: no prefix (bulk API), `oak-kg-*` (ontology),
-    `eef-*` (EEF), no `nc-*` (ADR-157)
-  - Separate framework from consumer (ADR-154)
-- **Recent surprises / corrections** (2026-04-11f):
-  - **`interface→type` was the wrong fix**: three sessions attempted
-    it; the linter converts `type` back to `interface`. The real
-    problem was `unknown` leaking via `extends Tool`. The fix is
-    `extends Omit<Tool, '_meta'>` in the generator.
-  - **Verify edits survive the full pipeline**: edits can be
-    reverted by `lint:fix`. Always verify the edited file AFTER
-    `pnpm check`, not just after `type-check`.
-  - Boundary spread pattern: `{ ...tool._meta }` creates a fresh
-    object literal that TypeScript can verify against index sigs.
+  - stdio app is deprecated — removal valid but requires learning
+    extraction and reference cleanup
+- **Recent surprises / corrections** (2026-04-11h):
+  - Plan initially labelled findings as "false positives" without
+    evidence — user corrected: evidence-first, no presumptions
+  - Plan initially placed in `current/` — user corrected: it is
+    active work, belongs in `active/`
+  - Knip must be on ALL FOUR gate surfaces including pre-commit,
+    not just pre-push/CI
 - **Open questions / low-confidence areas**:
+  - Whether ground-truth-archive files are consumed via dynamic
+    discovery (open investigation, no conclusion without evidence)
+  - Whether removing the stdio app is the right path vs fixing
+    its dependencies (owner decision during Phase 0)
   - Whether WS-5 (guidance consolidation) should be a catalogue
     abstraction or simpler validation test approach
 - **Tracked follow-ups** (not blocking current work):
   - Consolidate `security-types.ts` with `mcp-protocol-types.ts`
   - Note contract re-export surface change for semver
-- **Next safe step**: Classify gate hardening options by effort
-  and impact. Pick low-effort, high-impact interventions.
-- **Flaky test tracker**: see `project_flaky-test-tracker.md`.
-- **Deep consolidation status**: partially completed this handoff —
-  pattern extracted (`omit-unknown-from-library-types.md`), completed
-  plan archived, stale Cursor plans deleted. Napkin rotation deferred
-  (523 lines, over 500 threshold) — next session should rotate.
+  - Generated tools have no human-friendly title (no plan)
+  - Synonym builders should become codegen-time (no plan)
+  - `static-content.ts` `process.cwd()` bug (tracked nowhere)
+- **Next safe step**: Begin Phase 0 of the knip triage plan —
+  investigate the 2 unused dependencies in the stdio app and the
+  9 unused devDependencies across workspaces.
+- **Deep consolidation status**: completed this handoff —
+  2 entries graduated from distilled.md (gate-surface truth to
+  ADR-121, never-weaken-gates to principles.md), 4 stale
+  cross-references fixed (roadmap, collection README, eslint
+  plan, synthesis plan), new pattern extracted
+  (evidence-before-classification), fitness checked
+  (principles.md char overrun is pre-existing, deferred to
+  dedicated compression pass).
 
-## Active Workstreams (2026-04-11f)
+## Active Workstreams (2026-04-11h)
 
 ### 1. Vercel Widget Crash Fix — COMPLETE
 

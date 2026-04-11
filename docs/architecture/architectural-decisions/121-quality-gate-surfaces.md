@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-02-25
-**Updated**: 2026-04-02
+**Updated**: 2026-04-11
 **Related**: [ADR-013 (Husky and lint-staged)](013-husky-and-lint-staged.md), [ADR-043 (Type Generation in Build and CI)](043-codegen-in-build-and-ci.md), [ADR-111 (Secret Scanning Quality Gate)](111-secret-scanning-quality-gate.md), [ADR-147 (Browser Accessibility)](147-browser-accessibility-as-blocking-quality-gate.md)
 
 ## Context
@@ -33,67 +33,93 @@ The five surfaces are:
 ## Decision
 
 Each surface has a defined purpose and a specific set of checks. The
-principle is: **every check that runs in CI must also be catchable locally
-before push**, so developers never discover failures only after pushing.
+governing principle is: **pre-push and CI run the same check set**, so a
+CI-only failure is immediately diagnostic — it indicates an environmental
+or configuration issue, never a missing check.
 
 ### Coverage matrix
 
-| Check             | pre-commit | pre-push     | CI workflow     | pnpm check        |
-| ----------------- | ---------- | ------------ | --------------- | ----------------- |
-| secrets:scan:all  | --         | Yes          | Yes             | Yes               |
-| clean             | --         | --           | --              | Yes               |
-| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | Yes               |
-| build             | --         | Yes          | Yes             | Yes               |
-| format-check      | Yes        | Yes          | Yes             | Yes (format:root) |
-| markdownlint      | Yes        | Yes          | Yes             | Yes               |
-| subagents:check   | --         | --           | Yes             | Yes               |
-| portability:check | --         | --           | Yes             | Yes               |
-| test:root-scripts | --         | --           | Yes             | Yes               |
-| type-check        | Yes        | Yes          | Yes             | Yes               |
-| lint              | Yes        | Yes          | Yes             | Yes               |
-| test              | Yes        | Yes          | Yes             | Yes               |
-| test:widget       | --         | --           | --              | Yes               |
-| test:widget:ui    | --         | --           | --              | Yes               |
-| test:widget:a11y  | --         | --           | --              | Yes               |
-| test:e2e          | --         | Yes (--only) | --              | Yes               |
-| test:ui           | --         | --           | --              | Yes               |
-| test:a11y         | --         | --           | --              | Yes               |
-| smoke:dev:stub    | --         | --           | --              | Yes               |
-| doc-gen           | --         | --           | --              | Yes               |
+| Check             | pre-commit | pre-push | CI workflow | pnpm check              |
+| ----------------- | ---------- | -------- | ----------- | ----------------------- |
+| secrets:scan      | --         | Yes      | Yes         | Yes                     |
+| clean             | --         | --       | --          | Yes                     |
+| sdk-codegen       | --         | Yes      | Yes         | Yes                     |
+| build             | --         | Yes      | Yes         | Yes                     |
+| format-check      | Yes        | Yes      | Yes         | Yes (format:root)       |
+| markdownlint      | Yes        | Yes      | Yes         | Yes (markdownlint:root) |
+| subagents:check   | --         | Yes      | Yes         | Yes                     |
+| portability:check | --         | Yes      | Yes         | Yes                     |
+| test:root-scripts | --         | Yes      | Yes         | Yes                     |
+| type-check        | Yes        | Yes      | Yes         | Yes                     |
+| lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
+| test              | Yes        | Yes      | Yes         | Yes                     |
+| test:widget       | --         | --       | --          | Yes                     |
+| test:widget:ui    | --         | --       | --          | Yes                     |
+| test:widget:a11y  | --         | --       | --          | Yes                     |
+| test:e2e          | --         | Yes      | Yes         | Yes                     |
+| test:ui           | --         | Yes      | Yes         | Yes                     |
+| test:a11y         | --         | --       | --          | Yes                     |
+| smoke:dev:stub    | --         | Yes      | Yes         | Yes                     |
+| doc-gen           | --         | --       | --          | Yes                     |
 
 ### Rationale for exclusions
 
 - **Pre-commit excludes build/codegen/secrets**: too slow for every commit.
   These run on pre-push instead.
-- **Pre-push excludes test:widget, test:widget:ui, test:widget:a11y,
-  test:ui, test:a11y, and smoke**: local-only widget/browser gates and
-  dev-server smoke require the broader developer environment. `pnpm check`
-  covers these when full local verification is needed.
-- **CI excludes test:e2e**: E2E tests hit Elasticsearch which is not
-  available in the GitHub Actions environment. Covered by pre-push
-  (`--only` mode) and `pnpm check`.
-- **CI excludes test:widget, test:widget:ui, test:widget:a11y, test:ui,
-  test:a11y, and smoke:dev:stub**: widget/browser gates and dev server
-  lifecycle add complexity and flakiness to CI. These are local-only gates
-  covered by `pnpm check`.
-- **CI excludes doc-gen**: documentation generation is a build-time
-  convenience, not a correctness gate.
-- **`pnpm check` includes secrets scan and clean**: the canonical aggregate
-  gate intentionally proves clean rebuild readiness instead of relying on an
+- **Pre-push and CI exclude test:widget, test:widget:ui, test:widget:a11y,
+  and test:a11y**: widget tests and browser accessibility tests are not yet
+  promoted to these surfaces. `pnpm check` covers them locally. Promotion
+  is tracked in the quality gate hardening plan (item 0d); when promoted,
+  they will be added to both pre-push and CI simultaneously to preserve
+  equality.
+- **Pre-push and CI exclude doc-gen**: documentation generation is a
+  build-time convenience, not a correctness gate.
+- **`pnpm check` includes clean**: the canonical aggregate gate
+  intentionally proves clean rebuild readiness instead of relying on an
   already-built working tree.
+
+### Verify vs Mutate
+
+`pnpm check` is a developer workflow that produces a clean state then
+verifies it. It uses fix-mode commands: `format:root` (writes),
+`markdownlint:root` (writes), and `lint:fix` (writes). This is
+**intentional** — the developer sees the changes and can commit them.
+
+Pre-commit, pre-push, and CI use check/verify-only commands. They never
+mutate files. This is also **intentional** — mutations in hooks are
+disruptive, and mutations in CI are invisible and misleading.
+
+The design rule: **developer aggregate surfaces may mutate; hook and
+remote surfaces verify only.**
+
+### Secret scanning scope
+
+All routine gate surfaces use branch-scope scanning (`secrets:scan`),
+which examines branch tips and tags. This catches new secrets introduced
+by new commits.
+
+Full-history scanning (`secrets:scan:all`) is retained as a bootstrap
+and audit action. It is idempotent after the first clean run — unless
+someone rewrites history (which is prohibited), re-scanning full history
+adds no enforcement value. It is not part of any routine gate surface.
 
 ### Design principles
 
-1. **No CI-only checks** — every CI check must be reproducible locally via
-   pre-push or `pnpm check`.
+1. **Pre-push === CI** — pre-push and CI run the same check set. A
+   CI-only failure indicates an environmental or configuration issue,
+   not a missing check.
 2. **Pre-commit is fast** — format, markdown, type-check, lint, and unit
    tests only. No builds or codegen.
-3. **Pre-push is thorough** — secret scan, full build chain, drift check,
-   and E2E tests. This is the last local gate before remote CI.
-4. **CI is the canonical remote gate** — if CI passes, the PR is
-   mechanically sound. It runs a strict subset of what pre-push covers.
-5. **`pnpm check` is exhaustive** — the only surface that runs every check
-   including clean rebuild, doc-gen, and all test types.
+3. **Pre-push is comprehensive** — secret scan, full build chain, all
+   non-widget test suites, sub-agent and portability validation.
+4. **`pnpm check` is exhaustive** — the only surface that runs every
+   check including clean rebuild, doc-gen, widget tests, a11y tests,
+   and fix-mode commands.
+5. **No CI-only checks** — every CI check is reproducible locally via
+   pre-push. A developer who passes pre-push knows CI will pass
+   (assuming equivalent environment).
+6. **Developer surfaces fix; hook and remote surfaces verify** — see
+   §Verify vs Mutate above.
 
 ## Consequences
 
@@ -101,22 +127,40 @@ before push**, so developers never discover failures only after pushing.
 
 - Clear documentation of what runs where eliminates "CI" ambiguity.
 - The coverage matrix makes gaps visible and auditable.
-- The "no CI-only checks" principle ensures fast local feedback.
+- Pre-push === CI means a CI failure is always a diagnostic signal
+  (environment/config), never "you didn't run that check."
+- The verify-vs-mutate distinction is explicit and intentional.
 
 ### Negative
 
-- test:widget, test:ui, test:a11y, and smoke:dev:stub remain local-only,
-  meaning they could regress without CI catching them. Mitigation:
-  `pnpm check` covers the full local surface.
-- Adding checks to more surfaces increases total developer-facing gate time.
-  Mitigation: turbo caching makes repeated runs fast.
+- Pre-push is slower than it was when it ran a subset of CI. Mitigation:
+  Turbo caching makes repeated runs fast, and pushes are less frequent
+  than commits.
+- test:widget, test:a11y, and widget browser tests remain pnpm-check-only
+  until promoted. Mitigation: promotion is planned and will add them to
+  both surfaces simultaneously.
 
 ## Implementation
 
-- `subagents:check` is not in pre-push (too noisy for push flow; covered by CI).
-- CI workflow updated to include `markdownlint-check:root` and
-  `subagents:check`.
-- ADR-043 updated to reflect the drift-check-based freshness verification
-  approach (replacing the `--only` build isolation).
+- Pre-push runs: `secrets:scan`, `format-check:root`,
+  `markdownlint-check:root`, `subagents:check`, `portability:check`,
+  `test:root-scripts`, then Turbo: `sdk-codegen build type-check lint
+test test:e2e test:ui smoke:dev:stub`.
+- CI runs: `secrets:scan` (with Docker gitleaks fallback),
+  `format-check:root`, `markdownlint-check:root`, `subagents:check`,
+  `portability:check`, `test:root-scripts`, Playwright install, then
+  Turbo: `sdk-codegen build type-check lint test test:e2e test:ui
+smoke:dev:stub`.
+- `pnpm check` runs the broadest set with fix-mode and clean rebuild.
 - Coverage matrix maintained in this ADR and referenced from
   `docs/engineering/build-system.md` and `docs/engineering/workflow.md`.
+- ADR-043 updated to reflect the drift-check-based freshness verification
+  approach (replacing the `--only` build isolation).
+
+## Change Log
+
+| Date       | Change                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-02-25 | Initial accepted version                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 2026-04-02 | Added ADR-147 cross-reference, widget test rows                                                                                                                                                                                                                                                                                                                                                                                                   |
+| 2026-04-11 | Reconciled matrix with actual gate implementations. Rewrote principle #4 (pre-push === CI). Added verify-vs-mutate section. Changed secret scanning from full-history to branch-scope. Added sdk-codegen to CI Turbo invocation. Added subagents:check, portability:check, test:root-scripts, test:ui, test:e2e, smoke:dev:stub to pre-push. Removed --only from pre-push test:e2e. Updated rationale, consequences, and implementation to match. |

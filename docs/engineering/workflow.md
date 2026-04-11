@@ -1,6 +1,6 @@
 # Development Workflow
 
-**Last Updated**: 2026-02-25  
+**Last Updated**: 2026-04-11  
 **Status**: Active workflow guide
 
 The complete development lifecycle for this repository, from branch creation to release.
@@ -109,10 +109,12 @@ for the full coverage matrix and rationale, or
 [build-system.md](build-system.md#quality-gate-surfaces) for a quick
 reference table.
 
-**Key principle**: no check runs only in CI. Every CI check is reproducible
-locally. CI covers secrets, build, formatting, markdown,
-sub-agents, lint, type-check, and unit tests. E2E, UI, and smoke tests run
-locally only (pre-push, `pnpm check`).
+**Key principle**: pre-push and CI run the same check set. A CI-only failure
+indicates an environmental or configuration issue, not a missing check. Both
+surfaces cover secrets, build, formatting, markdown, sub-agents, portability,
+root-script tests, lint, type-check, unit tests, E2E, UI, and smoke tests.
+`pnpm check` adds widget tests, a11y tests, doc-gen, clean rebuild, and
+fix-mode commands.
 
 ## 8. AI Sub-Agent Review
 

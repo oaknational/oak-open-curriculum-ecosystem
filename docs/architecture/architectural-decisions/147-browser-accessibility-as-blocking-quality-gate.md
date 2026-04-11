@@ -35,7 +35,11 @@ UI-shipping workspaces.
 
 - **Playwright** + **axe-core** (`@axe-core/playwright`) as the test
   harness
-- Tests run in CI via `test:a11y` script in UI-shipping workspaces
+- Tests run via `test:a11y` script in UI-shipping workspaces. Currently
+  enforced in `pnpm check` (local); promotion to pre-push and CI is
+  tracked in the quality gate hardening plan (item 0d) and will add
+  `test:a11y` to both surfaces simultaneously per ADR-121's pre-push
+  === CI principle
 - Tests must avoid real network calls so GitHub Actions runners can
   exercise them without internet access
 

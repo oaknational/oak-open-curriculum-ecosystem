@@ -16,7 +16,7 @@ if ! command -v gitleaks >/dev/null 2>&1; then
 fi
 
 echo "🛡️ Running secret scan..."
-if ! pnpm secrets:scan:all; then
+if ! pnpm secrets:scan; then
   echo "❌ Secret scan failed."
   echo "Remove or scrub secret-like values before pushing."
   echo "Use local placeholders for .env.example and real credentials only in .env files."
@@ -31,12 +31,31 @@ if ! pnpm format-check:root; then
 fi
 
 echo "🔍 Running full markdownlint..."
-pnpm markdownlint-check:root
+if ! pnpm markdownlint-check:root; then
+  echo "❌ Markdownlint issues found!"
+  echo "💡 Run 'pnpm markdownlint:root' to fix markdown issues, then commit again"
+  exit 1
+fi
 
-echo "🔤 Running build and verification..."
-pnpm turbo run sdk-codegen build type-check lint test
+echo "🔧 Validating sub-agents..."
+if ! pnpm subagents:check; then
+  echo "❌ Sub-agent validation failed!"
+  exit 1
+fi
 
-echo "🧪 Running E2E tests..."
-pnpm turbo run test:e2e --only
+echo "🔧 Validating portability..."
+if ! pnpm portability:check; then
+  echo "❌ Portability validation failed!"
+  exit 1
+fi
+
+echo "🧪 Running root-level script tests..."
+if ! pnpm test:root-scripts; then
+  echo "❌ Root-level script tests failed!"
+  exit 1
+fi
+
+echo "🔤 Running build, type-check, lint, and tests..."
+pnpm turbo run sdk-codegen build type-check lint test test:e2e test:ui smoke:dev:stub
 
 echo "✅ Pre-push checks completed!"

@@ -712,7 +712,7 @@ COORDINATES WITH EXTERNAL PLAN:
 
 - **Observability and quality metrics** (`future/observability-and-quality-metrics.plan.md`)
   — I6 (operability practice) builds on this plan's outputs
-- **Quality gate hardening** (`future/quality-gate-hardening.plan.md`)
+- **Quality gate hardening** (`current/quality-gate-hardening.plan.md`)
   — I9b (boundary enforcement) connects to ESLint config standardisation
   — I2 (fitness function framing) provides the conceptual framework for gate evaluation
 - **Oak surface isolation** (`future/oak-surface-isolation-and-generic-foundation-programme.plan.md`)

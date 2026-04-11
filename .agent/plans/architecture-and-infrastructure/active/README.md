@@ -18,5 +18,11 @@ Review checkpoint:
 
 - [sentry-otel-foundation.review-checkpoint-2026-03-27.md](./sentry-otel-foundation.review-checkpoint-2026-03-27.md)
 
+Quality gate hardening:
+
+| Plan | Scope | Status |
+|---|---|---|
+| [knip-triage-and-remediation.plan.md](./knip-triage-and-remediation.plan.md) | Investigate all 904 knip findings with evidence, remediate, promote to blocking gate | Triage pending |
+
 Next queue: [current/README.md](../current/README.md)
 Strategic context: [../roadmap.md](../roadmap.md)
