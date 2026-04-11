@@ -68,7 +68,7 @@ export interface OtelLogRecord {
 /**
  * Options for formatting an OpenTelemetry log record
  */
-export interface FormatOtelLogRecordOptions {
+interface FormatOtelLogRecordOptions {
   /** Log level */
   readonly level: LogLevel;
   /** Log message */

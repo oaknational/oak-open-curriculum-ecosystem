@@ -21,7 +21,7 @@ import { createBulkAction } from './bulk-action-factory';
 /**
  * Parameters for building sequence bulk operations.
  */
-export interface BuildSequenceOpsParams {
+interface BuildSequenceOpsParams {
   /** The subject slug */
   readonly subject: SearchSubjectSlug;
   /** Sequences for this subject */

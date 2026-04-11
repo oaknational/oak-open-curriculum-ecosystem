@@ -37,7 +37,7 @@ import { buildUnitDocument, type CreateUnitDocParams } from './unit-document-cor
 
 export { extractLessonPlanningFields } from './document-transform-helpers';
 export { normaliseYears, extractPassage } from './document-transform-utils';
-export { createRollupDocument, type CreateRollupDocumentParams } from './rollup-document-api';
+export { createRollupDocument } from './rollup-document-api';
 
 // Re-export LessonUnitInfo from shared module for backwards compatibility
 export type { LessonUnitInfo } from './lesson-document-core';
@@ -49,7 +49,7 @@ export type { LessonUnitInfo } from './lesson-document-core';
  * (SearchUnitSummary, UnitContextMap). The function extracts
  * relevant fields and delegates to the shared builder.
  */
-export interface CreateUnitDocumentParams {
+interface CreateUnitDocumentParams {
   summary: SearchUnitSummary;
   subject: SearchSubjectSlug;
   /** Display title for the subject (e.g., "Mathematics" instead of "maths") */
@@ -89,7 +89,7 @@ function getLessonIds(
  * This function transforms API-specific types into the input-agnostic
  * `CreateUnitDocParams` interface used by the shared builder.
  */
-export function extractUnitParamsFromAPI(params: CreateUnitDocumentParams): CreateUnitDocParams {
+function extractUnitParamsFromAPI(params: CreateUnitDocumentParams): CreateUnitDocParams {
   const {
     summary,
     subject,
@@ -148,7 +148,7 @@ export function createUnitDocument(params: CreateUnitDocumentParams): SearchUnit
  * (SearchLessonSummary, UnitContextMap). The function extracts
  * relevant fields and delegates to the shared builder.
  */
-export interface CreateLessonDocumentParams {
+interface CreateLessonDocumentParams {
   lesson: { lessonSlug: string; lessonTitle: string };
   /**
    * Lesson transcript text. When undefined, null, or empty, content fields are
@@ -168,7 +168,7 @@ export interface CreateLessonDocumentParams {
 }
 
 /** Extracts lesson document params from API types. Transforms API-specific types into `CreateLessonDocParams`. */
-export function extractLessonParamsFromAPI(p: CreateLessonDocumentParams): CreateLessonDocParams {
+function extractLessonParamsFromAPI(p: CreateLessonDocumentParams): CreateLessonDocParams {
   if (p.units.length === 0) {
     throw new Error(`Lesson ${p.lesson.lessonSlug} has no unit relationships`);
   }

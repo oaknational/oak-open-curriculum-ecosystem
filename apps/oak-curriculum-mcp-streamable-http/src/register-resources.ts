@@ -108,7 +108,7 @@ export function registerCurriculumModelResource(
  * @param getJson - Function returning the graph data as formatted JSON
  * @param observability - Observability for resource handler tracing
  */
-export function registerGraphResource(
+function registerGraphResource(
   server: ResourceRegistrar,
   resource: {
     readonly name: string;
@@ -182,8 +182,4 @@ export function registerAllResources(
 }
 
 export { registerPrompts } from './register-prompts.js';
-export { registerWidgetResource } from './register-widget-resource.js';
-export type {
-  ResourceRegistrar,
-  ResourceRegistrationOptions,
-} from './register-resource-helpers.js';
+export type { ResourceRegistrationOptions } from './register-resource-helpers.js';

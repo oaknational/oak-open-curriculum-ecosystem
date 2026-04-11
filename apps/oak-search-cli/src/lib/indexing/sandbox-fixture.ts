@@ -15,7 +15,7 @@ import type { SdkNotFoundError } from '@oaknational/curriculum-sdk';
 /**
  * Package of a parsed fixture dataset together with an Oak-compatible client.
  */
-export interface FixtureOakClient {
+interface FixtureOakClient {
   readonly client: OakClient;
   readonly data: FixtureData;
 }

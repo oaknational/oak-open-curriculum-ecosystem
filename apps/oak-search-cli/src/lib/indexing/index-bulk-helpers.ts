@@ -21,17 +21,7 @@ import {
 } from './ingestion-events';
 import { processUnitSummary } from './unit-processing';
 
-// Re-export from split modules for backwards compatibility
-export { processUnitSummary } from './unit-processing';
-export { fetchLessonMaterials, type FetchContext } from './lesson-materials';
-
-/** Extract sequence IDs from a unit summary. */
-export function extractUnitSequenceIds(summary: SearchUnitSummary): string[] | undefined {
-  if (!summary.threads) {
-    return undefined;
-  }
-  return summary.threads.map((thread) => thread.slug);
-}
+export { fetchLessonMaterials } from './lesson-materials';
 
 /** Validate that a unit summary matches the expected subject and key stage. */
 export function ensureUnitSummaryMatchesContext(

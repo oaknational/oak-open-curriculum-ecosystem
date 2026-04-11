@@ -8,8 +8,4 @@
  * @see {@link https://datatracker.ietf.org/doc/html/rfc9728#section-3.1 | RFC 9728 Section 3.1}
  */
 
-export { mcpAuth } from './mcp-auth.js';
 export { createMcpAuthClerk } from './mcp-auth-clerk.js';
-export { createAuthLogContext } from './auth-response-helpers.js';
-export type { TokenVerifier } from './types.js';
-export type { AuthLogContext } from './auth-response-helpers.js';

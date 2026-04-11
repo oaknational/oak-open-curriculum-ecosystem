@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-11j
+last_updated: 2026-04-11k
 ---
 
 # Session Continuation
@@ -44,26 +44,26 @@ git log --oneline --decorate -10
   remediation.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
-    (**PRIMARY** — Phase 0 + 1 complete, 614 unused exports
-    remaining, Phase 2 next)
+    (**PRIMARY** — Phases 0-3 complete, `pnpm knip` exits 0.
+    Phase 2.5 follow-ups + Phase 4 gate promotion remain.)
   - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
-    (**PARENT** — promoted from future/ to current/, owner decisions
-    resolved, ADR-121 reconciled, `enable-knip` item in progress)
+    (**PARENT** — `enable-knip` item near completion)
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
     (**PARKED** — WS-0/1/2 done, WS-3 next, not current focus)
-- **Current state**: Phase 0 (unused deps) and Phase 1 (unused
-  files) are complete. Zero unused files, zero unlisted binaries,
-  zero unused dependencies. 614 unused exports and ~40 config
-  hints remain. `knip.config.ts` restructured: root workspace
-  moved to `workspaces["."]`, smoke-tests and generation scripts
-  added as entries, sentry-mcp workspace added. `bulk-data-manifest`
-  consumption bug fixed with completeness validation in
-  `validate-ground-truth.ts`. All quality gates pass.
-- **Current objective**: Execute Phase 2 of the knip triage plan
-  — triage 614 unused exports by workspace. Then Phase 3 (config
-  hints, ~40), Phase 4 (promote knip to all four gate surfaces).
-  End state: `pnpm knip` exits 0, knip added to pnpm check,
-  pre-commit, pre-push, and CI.
+- **Current state**: Phases 0-3 all complete. `pnpm knip` returns
+  0 findings across all categories: unused deps, files, exports,
+  types, config hints, duplicate exports, unlisted binaries. Full
+  quality gate (`pnpm build && type-check && doc-gen && test &&
+  knip`) passes. 850 unused exports/types remediated across 4
+  batches (ground-truth barrels, oak-search-cli, streamable-http,
+  agent-tools/packages). 43 config hints resolved via knip.config
+  cleanup. Child plan complete:
+  `.cursor/plans/knip_phase_2_execution_cc08d451.plan.md`.
+- **Current objective**: Phase 2.5 — resolve 4 follow-ups from
+  Phase 2 (consolidate auth helpers, restructure ground-truth
+  barrels, fix schema-emitter, resolve cli/shared barrel). Then
+  Phase 4 — promote knip to all four gate surfaces (pnpm check,
+  pre-commit, pre-push, CI) and update ADR-121.
 - **Hard invariants / non-goals**:
   - No finding may be labelled as a false positive without
     evidence-based proof
@@ -73,18 +73,22 @@ git log --oneline --decorate -10
   - ESLint config standardisation must precede all lint-rule
     promotions (Tier 1, not Tier 3)
   - No `unknown`, no `Record<string, unknown>`, no type erasure
-- **Recent surprises / corrections** (2026-04-11j):
-  - Knip top-level `entry`/`project` are ignored when `workspaces`
-    is defined — must use `workspaces["."]` for root workspace
-  - Architecture reviewers diverged on generated barrel: Barney
-    (keep, route through) vs Betty (delete, import directly).
-    Followed Barney — barrel is generated, serves as sentinel,
-    rewiring is smaller than updating generator
-  - `bulk-data-manifest` was a consumption bug, not dead code —
-    owner correctly identified it should be in use
+- **Recent surprises / corrections** (2026-04-11k):
+  - TypeDoc entry points must be declared in knip config `entry`
+    to avoid false-positive "unused type" findings for public API
+    types consumed only by doc generation
+  - `e2e-tests/**/*.ts` must be a knip entry for streamable-http
+    to capture type consumption in e2e test files
+  - Removing `export` from a type used in a public function
+    signature breaks `pnpm doc-gen` — must re-export for TypeDoc
+  - Knip redundant-ignore detection is thorough — most
+    `ignoreDependencies` entries were stale after Phase 0/1 fixes
+  - `auth-response-helpers.ts` had 8 dead functions duplicating
+    private implementations in `mcp-auth.ts` — deleted, not
+    consolidated (consolidation tracked as Phase 2.5 follow-up)
 - **Open questions / low-confidence areas**:
-  - Phase 2 strategy: triage by workspace or by export type?
-    614 exports is large — need a systematic approach
+  - Phase 2.5 follow-ups: owner decision needed on scope for each
+    (action vs defer with rationale)
   - Whether WS-5 (guidance consolidation) should be a catalogue
     abstraction or simpler validation test approach
 - **Tracked follow-ups** (not blocking current work):
@@ -93,16 +97,15 @@ git log --oneline --decorate -10
   - Generated tools have no human-friendly title (no plan)
   - Synonym builders should become codegen-time (no plan)
   - `static-content.ts` `process.cwd()` bug (tracked nowhere)
-- **Next safe step**: Begin Phase 2 of the knip triage plan —
-  investigate the 614 unused exports, likely starting with
-  oak-search-cli (~350+ exports) as the largest contributor.
-  Create a child plan with workspace-by-workspace triage.
-- **Deep consolidation status**: not due — Phase 1 is one step
-  in a multi-phase plan; no plan or milestone has closed. Napkin
-  at ~193 lines, well under rotation threshold. Surprises
-  captured in napkin.
+- **Next safe step**: Phase 2.5 — resolve the 4 follow-ups from
+  Phase 2 (each needs owner decision: action or defer with
+  rationale). Then Phase 4 — verify clean knip baseline, add
+  knip to pnpm check, pre-commit, pre-push, CI, update ADR-121.
+- **Deep consolidation status**: due — Phase 2 (largest phase)
+  and Phase 3 are complete. A child plan has closed. Napkin will
+  be updated with session learnings. Consolidation warranted.
 
-## Active Workstreams (2026-04-11j)
+## Active Workstreams (2026-04-11k)
 
 ### 1. Vercel Widget Crash Fix — COMPLETE
 

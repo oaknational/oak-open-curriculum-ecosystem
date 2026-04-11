@@ -55,7 +55,7 @@ export function emptyVocabularyStats(): VocabularyMiningStats {
 /**
  * Complete result from vocabulary mining.
  */
-export interface VocabularyMiningResult {
+interface VocabularyMiningResult {
   readonly stats: ExtractionStats;
   readonly extractedData: ExtractedData;
 }
@@ -67,7 +67,7 @@ export interface VocabularyMiningResult {
  * Provides access to extracted vocabulary data and mined synonyms.
  * Use this to get vocabulary analytics during ingestion.
  */
-export interface VocabularyMiningAdapter {
+interface VocabularyMiningAdapter {
   /** Get the full vocabulary extraction result */
   readonly getVocabularyResult: () => VocabularyMiningResult;
 

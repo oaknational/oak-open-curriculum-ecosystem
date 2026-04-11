@@ -11,7 +11,7 @@ import { Readable } from 'node:stream';
 import type { Response } from 'express';
 import type { HttpObservability, HttpSpanHandle } from '../observability/http-observability.js';
 
-export interface AssetProxyDeps {
+interface AssetProxyDeps {
   readonly oakApiKey: string;
   readonly oakApiBaseUrl: string;
   readonly logger: Logger;

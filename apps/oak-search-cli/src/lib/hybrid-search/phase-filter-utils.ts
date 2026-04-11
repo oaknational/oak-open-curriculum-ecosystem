@@ -30,7 +30,7 @@ export type Phase = 'primary' | 'secondary';
  * expandPhasesToKeyStages(['primary', 'secondary']) // => ['ks1', 'ks2', 'ks3', 'ks4']
  * ```
  */
-export function expandPhasesToKeyStages(phases: readonly Phase[]): KeyStage[] {
+function expandPhasesToKeyStages(phases: readonly Phase[]): KeyStage[] {
   const result: KeyStage[] = [];
   for (const phase of phases) {
     if (phase === 'primary') {
@@ -43,7 +43,7 @@ export function expandPhasesToKeyStages(phases: readonly Phase[]): KeyStage[] {
 }
 
 /** Options for key stage filtering with phase expansion. */
-export interface KeyStageFilterOptions {
+interface KeyStageFilterOptions {
   readonly phase?: Phase;
   readonly phases?: readonly Phase[];
   readonly keyStage?: KeyStage;
@@ -68,7 +68,7 @@ export function buildKeyStageFilter(options: KeyStageFilterOptions): QueryContai
 }
 
 /** Metadata filter options */
-export interface MetadataFilterOptions {
+interface MetadataFilterOptions {
   readonly year?: string;
   readonly years?: readonly string[];
   readonly tier?: string;
@@ -82,7 +82,7 @@ export interface MetadataFilterOptions {
 }
 
 /** Builds year filter. Priority: `years > year` */
-export function buildYearFilter(options: MetadataFilterOptions): QueryContainer | undefined {
+function buildYearFilter(options: MetadataFilterOptions): QueryContainer | undefined {
   if (options.years?.length) {
     return { terms: { years: [...options.years] } };
   }
@@ -93,7 +93,7 @@ export function buildYearFilter(options: MetadataFilterOptions): QueryContainer 
 }
 
 /** Builds tier filter. Priority: `tiers > tier` */
-export function buildTierFilter(options: MetadataFilterOptions): QueryContainer | undefined {
+function buildTierFilter(options: MetadataFilterOptions): QueryContainer | undefined {
   if (options.tiers?.length) {
     return { terms: { tiers: [...options.tiers] } };
   }
@@ -110,7 +110,7 @@ export function buildTierFilter(options: MetadataFilterOptions): QueryContainer 
 }
 
 /** Builds exam board filter. Priority: `examBoards > examBoard` */
-export function buildExamBoardFilter(options: MetadataFilterOptions): QueryContainer | undefined {
+function buildExamBoardFilter(options: MetadataFilterOptions): QueryContainer | undefined {
   if (options.examBoards?.length) {
     return { terms: { exam_boards: [...options.examBoards] } };
   }

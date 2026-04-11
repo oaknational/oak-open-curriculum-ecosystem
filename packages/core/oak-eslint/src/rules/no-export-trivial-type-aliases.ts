@@ -114,4 +114,3 @@ function extractEntityName(name: TSESTree.EntityName): string {
 }
 
 export { noExportTrivialTypeAliasesRule };
-export default noExportTrivialTypeAliasesRule;

@@ -14,7 +14,6 @@ import {
   createEsClient,
   withEsClient,
   withLoadedCliEnv,
-  resolveBulkDirFromInputs,
   validateIngestEnv,
   printSuccess,
   printError,
@@ -23,6 +22,7 @@ import {
   type CliSdkEnv,
   type SearchCliEnvLoader,
 } from '../shared/index.js';
+import { resolveBulkDirFromInputs } from '../shared/resolve-bulk-dir.js';
 import { buildLifecycleService } from './shared/build-lifecycle-service.js';
 import {
   parseLifecycleIngestOpts,
@@ -33,7 +33,7 @@ import { createIngestionClient } from '../../lib/elasticsearch/setup/ingest-clie
 import { createRunVersionedIngest } from '../../lib/indexing/run-versioned-ingest.js';
 import { ingestLogger } from '../../lib/logger.js';
 
-export type LifecycleIngestEnv = CliSdkEnv & OakClientEnv & BulkDataEnv;
+type LifecycleIngestEnv = CliSdkEnv & OakClientEnv & BulkDataEnv;
 
 function validateMinDocCount(rawCount: string): number {
   const parsed = Number.parseInt(rawCount, 10);

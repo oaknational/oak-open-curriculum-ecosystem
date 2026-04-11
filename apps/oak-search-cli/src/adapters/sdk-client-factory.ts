@@ -59,7 +59,7 @@ interface BaseMethods {
 }
 
 /** Create base client methods without caching. */
-export function createBaseMethods(apiClient: OakApiClient): BaseMethods {
+function createBaseMethods(apiClient: OakApiClient): BaseMethods {
   return {
     getUnitsByKeyStageAndSubject: makeGetUnitsByKeyStageAndSubject(apiClient),
     getLessonTranscript: makeGetLessonTranscript(apiClient),
@@ -75,7 +75,7 @@ export function createBaseMethods(apiClient: OakApiClient): BaseMethods {
 }
 
 /** Adapt Redis client to CacheOperations interface. */
-export function createCacheOps(redis: Redis): CacheOperations {
+function createCacheOps(redis: Redis): CacheOperations {
   return {
     get: (key) => redis.get(key),
     setex: async (key, ttl, value) => {

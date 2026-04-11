@@ -16,10 +16,10 @@ export type LessonSkipReason =
   | 'unknown';
 
 /** Reasons why a unit may be skipped during ingestion. */
-export type UnitSkipReason = 'summary_unavailable' | 'fetch_error';
+type UnitSkipReason = 'summary_unavailable' | 'fetch_error';
 
 /** All possible ingestion event types. */
-export type IngestionEventType =
+type IngestionEventType =
   | 'PHASE_START'
   | 'PHASE_END'
   | 'PROGRESS'
@@ -31,7 +31,7 @@ export type IngestionEventType =
   | 'SUMMARY';
 
 /** Ingestion event structure with type, optional phase, and key-value context. */
-export interface IngestionEvent {
+interface IngestionEvent {
   readonly type: IngestionEventType;
   readonly phase?: IngestionPhase;
   readonly context: Readonly<Record<string, string | number | boolean>>;

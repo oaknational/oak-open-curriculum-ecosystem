@@ -25,7 +25,7 @@ import type { Ks4DocumentFields } from '../lib/indexing/document-transform-helpe
 /**
  * Result of KS4 supplementation for a document.
  */
-export interface Ks4SupplementationResult {
+interface Ks4SupplementationResult {
   /** KS4 fields to merge into the document */
   readonly ks4Fields: Ks4DocumentFields;
   /** Whether any KS4 data was found */
@@ -185,7 +185,7 @@ export function isKs4(keyStage: string): boolean {
  * Subject slugs that have KS4 tier differentiation.
  * Currently only Maths has tiers; Science has exam subjects.
  */
-export const SUBJECTS_WITH_KS4_TIERS = ['maths', 'science'] as const;
+const SUBJECTS_WITH_KS4_TIERS = ['maths', 'science'] as const;
 
 /** Type guard for subjects with KS4 tiers */
 function isSubjectWithKs4Tiers(slug: string): slug is (typeof SUBJECTS_WITH_KS4_TIERS)[number] {

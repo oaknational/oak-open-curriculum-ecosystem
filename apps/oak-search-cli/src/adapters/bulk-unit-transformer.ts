@@ -93,7 +93,7 @@ function resolveUnitTopics(
  * @param params - Bulk unit params (optionally with categoryMap)
  * @returns Params for `buildUnitDocument()`
  */
-export function extractUnitParamsFromBulk(params: BulkToESUnitParams): CreateUnitDocParams {
+function extractUnitParamsFromBulk(params: BulkToESUnitParams): CreateUnitDocParams {
   const { unit, subjectSlug, subjectParent, subjectTitle, subjectProgrammesUrl, categoryMap } =
     params;
 

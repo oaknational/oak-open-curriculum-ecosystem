@@ -70,26 +70,3 @@ export const learningProgressionArgsSchema = {
     .describe('The concept to trace (e.g., "algebra", "cells", "narrative writing")'),
   subject: z.string().describe('The subject area (e.g., "maths", "science", "english")'),
 };
-
-/**
- * Map of prompt names to their argument schemas.
- *
- * Used by `registerPrompts()` to look up the appropriate schema
- * for each prompt during registration.
- */
-export const PROMPT_SCHEMAS = {
-  'find-lessons': findLessonsArgsSchema,
-  'lesson-planning': lessonPlanningArgsSchema,
-  'explore-curriculum': exploreCurriculumArgsSchema,
-  'learning-progression': learningProgressionArgsSchema,
-} as const;
-
-/**
- * Type representing the prompt name to schema mapping.
- */
-export type PromptSchemas = typeof PROMPT_SCHEMAS;
-
-/**
- * Type representing valid prompt names that have schemas.
- */
-export type PromptName = keyof PromptSchemas;

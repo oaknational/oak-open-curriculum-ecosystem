@@ -22,11 +22,7 @@ import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { McpHandlerRequest, McpHandlerResponse } from '../handlers.js';
 
 /** Re-export MCP server/transport fakes. */
-export {
-  createFakeStreamableTransport,
-  createFakeMcpServer,
-  createFakeMcpServerFactory,
-} from './fakes-mcp-server.js';
+export { createFakeMcpServerFactory } from './fakes-mcp-server.js';
 
 /** Re-export Clerk auth fakes. */
 export { createFakeMachineAuthObject } from './fakes-clerk.js';
@@ -70,7 +66,7 @@ export function createFakeLogger(): Logger {
 }
 
 /** A single recorded log entry captured by {@link createRecordingLogger}. */
-export interface RecordedLogEntry {
+interface RecordedLogEntry {
   readonly level: 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
   readonly message: string;
   readonly context?: unknown;

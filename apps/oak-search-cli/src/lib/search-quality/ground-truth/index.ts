@@ -44,14 +44,7 @@ import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
 
 import type { CrossSubjectLessonGroundTruth, LessonGroundTruth, Phase } from './types.js';
 
-export type {
-  LessonGroundTruth,
-  CrossSubjectLessonGroundTruth,
-  SubjectPhasePair,
-  Phase,
-  SubjectPhaseKey,
-} from './types.js';
-export { subjectPhaseKey } from './types';
+export type { LessonGroundTruth, CrossSubjectLessonGroundTruth } from './types.js';
 
 // =============================================================================
 // Ground Truth Entries
@@ -132,45 +125,9 @@ export const LESSON_GROUND_TRUTHS: readonly LessonGroundTruth[] = [
   SPANISH_SECONDARY,
 ] as const;
 
-// Re-export individual entries for direct access
-export { ART_PRIMARY } from './entries/art-primary';
-export { ART_SECONDARY } from './entries/art-secondary';
-export { CITIZENSHIP_SECONDARY } from './entries/citizenship-secondary';
-export { COOKING_NUTRITION_PRIMARY } from './entries/cooking-nutrition-primary';
-export { COOKING_NUTRITION_SECONDARY } from './entries/cooking-nutrition-secondary';
-export { COMPUTING_PRIMARY } from './entries/computing-primary';
-export { COMPUTING_SECONDARY } from './entries/computing-secondary';
-export { DESIGN_TECHNOLOGY_PRIMARY } from './entries/design-technology-primary';
-export { DESIGN_TECHNOLOGY_SECONDARY } from './entries/design-technology-secondary';
-export { ENGLISH_PRIMARY } from './entries/english-primary';
-export { ENGLISH_SECONDARY } from './entries/english-secondary';
-export { FRENCH_PRIMARY } from './entries/french-primary';
-export { FRENCH_SECONDARY } from './entries/french-secondary';
-export { GEOGRAPHY_PRIMARY } from './entries/geography-primary';
-export { GEOGRAPHY_SECONDARY } from './entries/geography-secondary';
-export { GERMAN_SECONDARY } from './entries/german-secondary';
-export { HISTORY_PRIMARY } from './entries/history-primary';
-export { HISTORY_SECONDARY } from './entries/history-secondary';
-export { MATHS_PRIMARY } from './entries/maths-primary';
-export { MATHS_SECONDARY } from './entries/maths-secondary';
-export { MUSIC_PRIMARY } from './entries/music-primary';
-export { MUSIC_SECONDARY } from './entries/music-secondary';
-export { PHYSICAL_EDUCATION_PRIMARY } from './entries/physical-education-primary';
-export { PHYSICAL_EDUCATION_SECONDARY } from './entries/physical-education-secondary';
-export { RELIGIOUS_EDUCATION_PRIMARY } from './entries/religious-education-primary';
-export { RELIGIOUS_EDUCATION_SECONDARY } from './entries/religious-education-secondary';
-export { SCIENCE_PRIMARY } from './entries/science-primary';
-export { SCIENCE_SECONDARY } from './entries/science-secondary';
-export { SPANISH_PRIMARY } from './entries/spanish-primary';
-export { SPANISH_SECONDARY } from './entries/spanish-secondary';
-
 // =============================================================================
 // Cross-Subject Ground Truth Entries
 // =============================================================================
-
-export { APPLE_LESSONS } from './cross-subject/apple-lessons';
-export { TREE_LESSONS } from './cross-subject/tree-lessons';
-export { MOUNTAIN_LESSONS } from './cross-subject/mountain-lessons';
 
 /**
  * All cross-subject lesson ground truths.

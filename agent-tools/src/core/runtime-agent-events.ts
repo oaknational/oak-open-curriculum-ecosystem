@@ -11,7 +11,7 @@ interface JsonCandidate {
   command?: unknown;
 }
 
-export interface AgentEvents {
+interface AgentEvents {
   stopReason: string;
   toolNames: string[];
   bashCommands: string[];

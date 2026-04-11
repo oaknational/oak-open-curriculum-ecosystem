@@ -25,10 +25,7 @@ export {
   generateSequenceOakUrl,
 } from '@oaknational/curriculum-sdk';
 
-export {
-  deriveSubjectSlugFromSequence,
-  derivePhaseSlugFromSequence,
-} from '@oaknational/curriculum-sdk';
+export { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 
 // ============================================================================
 // Field Extraction Helpers
@@ -118,22 +115,17 @@ export function getKeyStageTitle(keyStage: KeyStage): string {
  * These map to the parent 'science' subject for filtering purposes.
  * @see ADR-101 Subject Hierarchy for Search Filtering
  */
-export const KS4_SCIENCE_VARIANTS = [
-  'biology',
-  'chemistry',
-  'physics',
-  'combined-science',
-] as const;
+const KS4_SCIENCE_VARIANTS = ['biology', 'chemistry', 'physics', 'combined-science'] as const;
 
 /**
  * Type for KS4 science variant slugs.
  */
-export type Ks4ScienceVariant = (typeof KS4_SCIENCE_VARIANTS)[number];
+type Ks4ScienceVariant = (typeof KS4_SCIENCE_VARIANTS)[number];
 
 /**
  * Type guard for KS4 science variants.
  */
-export function isKs4ScienceVariant(value: string): value is Ks4ScienceVariant {
+function isKs4ScienceVariant(value: string): value is Ks4ScienceVariant {
   const variants: readonly string[] = KS4_SCIENCE_VARIANTS;
   return variants.includes(value);
 }

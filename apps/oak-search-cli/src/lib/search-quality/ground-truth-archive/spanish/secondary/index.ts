@@ -34,13 +34,3 @@ export const SPANISH_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
   ),
   combineGroundTruth(SPANISH_SECONDARY_CROSS_TOPIC_QUERY, SPANISH_SECONDARY_CROSS_TOPIC_EXPECTED),
 ] as const;
-
-// Re-export query definitions and expected relevance
-export { SPANISH_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
-export { SPANISH_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
-export { SPANISH_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
-export { SPANISH_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
-export { SPANISH_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
-export { SPANISH_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
-export { SPANISH_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
-export { SPANISH_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

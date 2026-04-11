@@ -57,7 +57,7 @@ function isEsHit<TDoc>(v: unknown): v is EsHit<TDoc> {
     typeof v._id === 'string'
   );
 }
-export function isEsSearchResponse<TDoc>(v: unknown): v is EsSearchResponse<TDoc> {
+function isEsSearchResponse<TDoc>(v: unknown): v is EsSearchResponse<TDoc> {
   if (!(typeof v === 'object' && v !== null && hasKey(v, 'hits'))) {
     return false;
   }
@@ -71,19 +71,6 @@ export function isEsSearchResponse<TDoc>(v: unknown): v is EsSearchResponse<TDoc
   }
   return arr.every(isEsHit);
 }
-
-/**
- * Type for the search function, enabling dependency injection for testability.
- * @see ADR-078 Dependency Injection for Testability
- */
-export type EsSearchFn = <T>(body: EsSearchRequest) => Promise<EsSearchResponse<T>>;
-
-/**
- * Lessons-specific search function type. Accepts both EsSearchFn and
- * `(body) =\> Promise\<EsSearchResponse\<SearchLessonsIndexDoc\>\>` so tests can pass
- * a fixed response without type assertions.
- */
-export type EsSearchFnForDoc<TDoc> = (body: EsSearchRequest) => Promise<EsSearchResponse<TDoc>>;
 
 export async function esSearch<T>(body: EsSearchRequest): Promise<EsSearchResponse<T>> {
   const client = esClient();
@@ -225,26 +212,4 @@ type HighlightMap = Record<string, string[]>;
 
 function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string');
-}
-
-/**
- * Bulk helper — accepts classic action/line pairs (same shape we already used),
- * composes NDJSON, and calls the client's transport to POST /_bulk.
- */
-export async function esBulk(ops: readonly unknown[]): Promise<void> {
-  const client = esClient();
-  const ndjson = ops.map((o) => JSON.stringify(o)).join('\n') + '\n';
-  await client.transport.request(
-    {
-      method: 'POST',
-      path: '/_bulk',
-      body: ndjson,
-    },
-    {
-      headers: { 'content-type': 'application/x-ndjson' },
-    },
-  );
-
-  // Server replies with per-item errors in body; we could optionally parse it,
-  // but we keep parity with our previous strict/no-partial-success approach.
 }

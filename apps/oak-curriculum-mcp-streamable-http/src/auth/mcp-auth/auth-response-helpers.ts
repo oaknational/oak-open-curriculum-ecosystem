@@ -6,7 +6,6 @@
 import type { Request, Response } from 'express';
 import type { Logger, LogContextInput } from '@oaknational/logger';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
-import { getMcpResourceUrl } from './get-mcp-resource-url.js';
 
 interface AuthResponseLocals {
   readonly correlationId?: string;
@@ -16,7 +15,7 @@ type AuthContextResponse = Response<unknown, AuthResponseLocals>;
 /**
  * Base logging context for authentication events.
  */
-export interface AuthLogContext extends LogContextInput {
+interface AuthLogContext extends LogContextInput {
   readonly method: string;
   readonly path: string;
   readonly correlationId?: string;
@@ -64,112 +63,6 @@ export function createAuthLogContext<T extends LoggableExtras>(
     return { ...base, ...extra };
   }
   return base;
-}
-
-/**
- * Send 401 response with WWW-Authenticate header for missing authorization.
- */
-export function sendMissingAuthResponse(res: Response, prmUrl: string): void {
-  res
-    .status(401)
-    .set({ 'WWW-Authenticate': `Bearer resource_metadata=${prmUrl}` })
-    .send({ error: 'Unauthorized' });
-}
-
-/**
- * Send 401 response for invalid Bearer token format.
- */
-export function sendInvalidFormatResponse(res: Response, prmUrl: string): void {
-  res
-    .status(401)
-    .set({
-      'WWW-Authenticate': `Bearer resource_metadata="${prmUrl}", error="invalid_request", error_description="Invalid Authorization header format. Must be 'Bearer <token>'."`,
-    })
-    .send({
-      error: 'Unauthorized',
-      message: 'Invalid Authorization header format.',
-    });
-}
-
-/**
- * Send 401 response for failed token verification.
- */
-export function sendVerificationFailedResponse(res: Response): void {
-  res.status(401).json({ error: 'Unauthorized' });
-}
-
-/**
- * Send 401 response for invalid resource parameter (audience mismatch).
- */
-export function sendInvalidResourceResponse(res: Response, prmUrl: string, reason: string): void {
-  res
-    .status(401)
-    .set({
-      'WWW-Authenticate': `Bearer resource_metadata="${prmUrl}", error="invalid_token", error_description="${reason}"`,
-    })
-    .send({
-      error: 'Unauthorized',
-      message: reason,
-    });
-}
-
-/**
- * Handle missing authorization header.
- */
-export function handleMissingAuth(
-  req: Request,
-  res: AuthContextResponse,
-  logger: Logger,
-  prmUrl: string,
-): void {
-  logger.warn('Auth required but no authorization header present', createAuthLogContext(req, res));
-  sendMissingAuthResponse(res, prmUrl);
-}
-
-/**
- * Handle invalid Bearer token format.
- */
-export function handleInvalidFormat(
-  req: Request,
-  res: AuthContextResponse,
-  logger: Logger,
-  prmUrl: string,
-): void {
-  logger.warn('Invalid Bearer token format', createAuthLogContext(req, res));
-  sendInvalidFormatResponse(res, prmUrl);
-}
-
-/**
- * Handle token verification failure.
- */
-export function handleVerificationFailed(
-  req: Request,
-  res: AuthContextResponse,
-  logger: Logger,
-): void {
-  logger.warn('Token verification failed', createAuthLogContext(req, res));
-  sendVerificationFailedResponse(res);
-}
-
-/**
- * Handle resource parameter validation failure.
- */
-export function handleResourceValidationFailed(
-  req: Request,
-  res: AuthContextResponse,
-  logger: Logger,
-  prmUrl: string,
-  reason: string,
-  allowedHosts: readonly string[],
-): void {
-  logger.warn(
-    'Resource parameter validation failed',
-    createAuthLogContext(req, res, {
-      reason,
-      expectedResource: getMcpResourceUrl(req, allowedHosts),
-    }),
-  );
-  sendInvalidResourceResponse(res, prmUrl, reason);
 }
 
 /**

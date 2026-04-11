@@ -15,15 +15,6 @@ import type {
 } from './ingestion-error-types';
 import { calculateSummary, formatContext, isRetryableStatus } from './ingestion-error-helpers';
 
-// Re-export types for consumers
-export type {
-  IngestionContext,
-  IngestionErrorCollector,
-  IngestionIssue,
-  IssueSeverity,
-  IssueSummary,
-};
-
 /** Create a new issue record. */
 function createIssue(
   severity: IssueSeverity,
@@ -114,7 +105,7 @@ function internalRecord500Error(
 /**
  * Create an ingestion error collector.
  */
-export function createIngestionErrorCollector(): IngestionErrorCollector {
+function createIngestionErrorCollector(): IngestionErrorCollector {
   const issues: IngestionIssue[] = [];
 
   return {
@@ -157,12 +148,4 @@ export function getIngestionErrorCollector(): IngestionErrorCollector {
     globalCollector = createIngestionErrorCollector();
   }
   return globalCollector;
-}
-
-/** Reset the global error collector (call at start of new ingestion). */
-export function resetIngestionErrorCollector(): void {
-  if (globalCollector) {
-    globalCollector.clear();
-  }
-  globalCollector = createIngestionErrorCollector();
 }

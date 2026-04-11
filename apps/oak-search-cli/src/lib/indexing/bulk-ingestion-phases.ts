@@ -170,7 +170,7 @@ function extractVocabularyStats(files: readonly BulkDownloadFile[]): VocabularyM
 }
 
 /** Collected results from all ingestion phases. */
-export interface PhaseResults {
+interface PhaseResults {
   readonly operations: BulkOperationEntry[];
   readonly processingResult: BulkProcessingAccumulator;
   readonly threadCount: number;

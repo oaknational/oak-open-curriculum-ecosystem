@@ -9,11 +9,14 @@ todos:
     content: "Phase 1: Triage unused files (53) — investigate each, verify consumption, remediate."
     status: completed
   - id: triage-unused-exports
-    content: "Phase 2: Triage unused exports (630) — investigate by workspace, verify each, remediate."
+    content: "Phase 2: Triage unused exports (614 exports + 236 types) — investigate by workspace, verify each, remediate."
+    status: completed
+  - id: resolve-phase2-followups
+    content: "Phase 2.5: Resolve follow-ups from Phase 2 — consolidate auth helpers, restructure ground-truth barrels, fix schema-emitter, resolve cli/shared barrel."
     status: pending
   - id: triage-config-hints
-    content: "Phase 3: Triage configuration hints (~40) — fix knip.config.ts entry/project patterns and stale ignore entries."
-    status: pending
+    content: "Phase 3: Triage configuration hints (43) — fix knip.config.ts entry/project patterns and stale ignore entries."
+    status: completed
   - id: remediate-and-promote
     content: "Phase 4: Verify clean knip baseline, add knip to pnpm check, pre-commit, pre-push, and CI, update ADR-121."
     status: pending
@@ -22,7 +25,7 @@ todos:
 # Knip Triage and Remediation
 
 **Last Updated**: 2026-04-11
-**Status**: Active — Phase 0 + 1 complete, Phase 2 next
+**Status**: Active — Phases 0-3 complete (`pnpm knip` exits 0). Phase 2.5 follow-ups + Phase 4 (gate promotion) remain.
 **Scope**: Run knip, triage all findings, design and apply remediations,
 promote to blocking quality gate.
 **Parent**: [quality-gate-hardening.plan.md](../current/quality-gate-hardening.plan.md)
@@ -48,16 +51,16 @@ sensitivity is a gate weakness, not a fix.
 
 ## Verified Findings (2026-04-11)
 
-| Category | Pre-Phase 0 | Post-Phase 0 | Priority |
-|---|---|---|---|
-| Unused dependencies | 2 | **0** | P0 — resolved |
-| Unused devDependencies | 9 | **0** | P0 — resolved |
-| Unlisted binaries | 2 | **0** | P1 — resolved |
-| Unused files | 96 | **0** | P1 — resolved |
-| Unused exports | 515+234 | **614** | P2 — investigate each |
-| Duplicate exports | 1 | 0 | P2 — resolved |
-| Configuration hints | 45 | **~40** | P1 — stale config, foundation |
-| **Total** | **904** | **~725** | |
+| Category | Pre-Phase 0 | Post-Phase 0 | Post-Phase 3 | Priority |
+|---|---|---|---|---|
+| Unused dependencies | 2 | **0** | **0** | P0 — resolved |
+| Unused devDependencies | 9 | **0** | **0** | P0 — resolved |
+| Unlisted binaries | 2 | **0** | **0** | P1 — resolved |
+| Unused files | 96 | **0** | **0** | P1 — resolved |
+| Unused exports | 515+234 | 614 | **0** | P2 — resolved |
+| Duplicate exports | 1 | 0 | **0** | P2 — resolved |
+| Configuration hints | 45 | ~40 | **0** | P1 — resolved |
+| **Total** | **904** | **~725** | **0** | |
 
 ### Phase 0 Resolution (2026-04-11i)
 
@@ -94,6 +97,48 @@ sensitivity is a gate weakness, not a fix.
 - **`smoke:dev:auth` script added** to streamable-http `package.json`.
 - **`typedoc.json` updated** to remove references to deleted files.
 - Architecture reviewers consulted on all barrel file decisions.
+
+### Phase 2 Resolution (2026-04-11k)
+
+614 unused exports + 236 unused types resolved to **0** across 4 batches:
+
+- **Batch A**: Ground-truth archive barrel trimming (~526 findings).
+  Scripted removal of per-query-constant re-exports from 54 barrel files.
+  Fixed `generate-ground-truth-types.ts` to stop emitting `TOTAL_LESSON_COUNT`
+  and `GENERATED_AT`. Deleted 16 empty subject-level barrel files and
+  `ablation-query-builders.ts` (dead file).
+- **Batch B**: oak-search-cli non-ground-truth (~153 findings).
+  De-exported ~40 internal types/helpers. Deleted dead code: `esBulk`,
+  `createEsClient`, `suggestLogger`, `printWarning`, `getIndexVersion`,
+  `handleUploadComplete`, `writeFailureReport`, `buildThreadRrfRequest`,
+  `BaseEnvSchema`, and numerous unused type aliases. Re-exported 9 types
+  for TypeDoc API documentation.
+- **Batch C**: streamable-http + agent-tools + packages (~118 findings).
+  De-exported ~50 same-file-only functions/types/constants. Trimmed ~20
+  barrel re-exports. Deleted 8 duplicate auth-response-helpers functions,
+  `PROMPT_SCHEMAS`/`PromptSchemas`/`PromptName` dead code, and default
+  export from eslint rule.
+- **Batch D**: Config-level resolution of remaining 14 type findings —
+  5 e2e-test types resolved by adding `e2e-tests/**/*.ts` as entry for
+  streamable-http; 9 doc-gen types resolved by adding TypeDoc entry
+  points to oak-search-cli entries.
+
+Child plan: `.cursor/plans/knip_phase_2_execution_cc08d451.plan.md`
+Code reviewers invoked after each batch. Config reviewer invoked for
+Phase 3 knip config changes.
+
+### Phase 3 Resolution (2026-04-11k)
+
+43 configuration hints resolved to **0** by updating `knip.config.ts`:
+
+- Removed 7 redundant `ignore` patterns (knip doesn't scan `.agent/**` etc.)
+- Removed `ignoreFiles` (no generated type files exist)
+- Removed 14 stale `ignoreDependencies` (knip now auto-detects them)
+- Removed 1 stale `ignoreBinaries` (`playwright`)
+- Fixed 2 wrong entry patterns (`src/cli` → `src/bin`, `src/mcp-tools.ts`)
+- Removed ~14 redundant `src/index.ts` entries (knip auto-detects from exports)
+- Added TypeDoc entry points for oak-search-cli
+- Added `e2e-tests/**/*.ts` as entry for streamable-http
 
 ### Unused Dependencies (2) — P0
 
@@ -395,7 +440,6 @@ a prerequisite for knip work.
 
 ## Non-Goals (YAGNI)
 
-- Unused exports in generated files (already excluded via `ignoreFiles`)
 - Knip integration with Turbo (knip runs as a standalone command)
 - Per-workspace knip configs (single root config is sufficient)
 
@@ -412,6 +456,58 @@ a prerequisite for knip work.
 - **Large unused-export count may include re-exports consumed by
   external tools** (typedoc, documentation generators). Verify before
   deleting.
+
+## Phase 2.5: Resolve Phase 2 Follow-ups (blocks Phase 4)
+
+Four items surfaced during Phase 2 investigation that represent
+architectural improvements beyond export trimming. Each must be
+resolved (actioned OR explicitly deferred with owner rationale)
+before Phase 4 can proceed.
+
+### Follow-up 2.5.1: Consolidate auth response helpers
+
+`auth-response-helpers.ts` exports 8 functions that duplicate private
+implementations in `mcp-auth.ts`. Phase 2 deletes the dead exports.
+This follow-up evaluates whether to consolidate the duplicate code
+into a single implementation.
+
+**Resolution options**: (a) consolidate into `auth-response-helpers.ts`
+and import from `mcp-auth.ts`, (b) keep `mcp-auth.ts` private
+implementations and document the rationale, (c) defer with rationale.
+
+### Follow-up 2.5.2: Restructure ground-truth barrel hierarchy
+
+54 barrel files across 16 subjects with 3 nesting levels. Phase 2
+trims unused re-exports but preserves the structure. The nesting is
+excessive for an app with no downstream consumers.
+
+**Resolution options**: (a) flatten to 2 levels (subject + phase),
+(b) keep 3 levels with trimmed barrels and document rationale,
+(c) defer with rationale.
+
+### Follow-up 2.5.3: Fix schema-emitter for unused generated exports
+
+`generate-ground-truth-types.ts` emits `TOTAL_LESSON_COUNT`,
+`GENERATED_AT`, and validation schemas that have zero runtime
+consumers. The generator should not emit unused exports.
+
+**Resolution options**: (a) fix generator to remove dead exports and
+regenerate, (b) defer with rationale.
+
+### Follow-up 2.5.4: Resolve cli/shared barrel dead-on-arrival
+
+`src/cli/shared/index.ts` is a barrel with zero importers — all CLI
+code uses deep imports. Phase 2 trims unused re-exports from the
+barrel.
+
+**Resolution options**: (a) delete the barrel entirely, (b) migrate
+CLI imports to use the barrel consistently, (c) defer with rationale.
+
+**Acceptance Criteria**:
+
+1. Each follow-up has a documented resolution (actioned or deferred)
+2. If deferred, owner has provided explicit rationale
+3. Quality gates pass
 
 ## Consolidation
 

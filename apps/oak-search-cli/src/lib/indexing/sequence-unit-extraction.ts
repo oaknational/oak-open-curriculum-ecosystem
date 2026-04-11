@@ -11,7 +11,7 @@ import type { KeyStage } from '../../types/oak';
 /**
  * Unit data extracted from a sequence.
  */
-export interface ExtractedUnit {
+interface ExtractedUnit {
   readonly unitSlug: string;
   readonly unitTitle: string;
 }

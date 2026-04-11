@@ -10,7 +10,7 @@
 
 import type { Linter } from 'eslint';
 
-export const LIB_PACKAGE_IMPORTS = [
+const LIB_PACKAGE_IMPORTS = [
   '@oaknational/env-resolution',
   '@oaknational/logger',
   '@oaknational/search-contracts',
@@ -18,10 +18,7 @@ export const LIB_PACKAGE_IMPORTS = [
   '@oaknational/sentry-mcp',
 ] as const;
 
-export const DESIGN_PACKAGE_IMPORTS = [
-  '@oaknational/design-tokens-core',
-  '@oaknational/oak-design-tokens',
-] as const;
+type DesignPackageImport = '@oaknational/design-tokens-core' | '@oaknational/oak-design-tokens';
 
 export const SDK_PACKAGE_IMPORTS = [
   '@oaknational/curriculum-sdk',
@@ -164,8 +161,8 @@ export const ADAPTER_LIB_PACKAGES = ['sentry-node', 'sentry-mcp'] as const;
  */
 export const LIB_PACKAGES = [...FOUNDATION_LIB_PACKAGES, ...ADAPTER_LIB_PACKAGES] as const;
 
-export type LibPackage = (typeof LIB_PACKAGES)[number];
-export type DesignPackage = 'design-tokens-core' | 'oak-design-tokens';
+type LibPackage = (typeof LIB_PACKAGES)[number];
+type DesignPackage = 'design-tokens-core' | 'oak-design-tokens';
 const SEARCH_CONTRACTS_LIB = 'search-contracts' as const;
 const LIB_SDK_BOUNDARY_MESSAGE =
   'Libraries cannot depend on SDKs unless ADR-041 documents an approved generated-surface exception.';
@@ -306,9 +303,7 @@ export function createLibBoundaryRules(libName: LibPackage): Partial<Linter.Rule
  * @param designName - The current design workspace name
  */
 export function createDesignBoundaryRules(designName: DesignPackage): Partial<Linter.RulesRecord> {
-  const createDesignRestrictionMessage = (
-    otherDesignPackage: (typeof DESIGN_PACKAGE_IMPORTS)[number],
-  ) =>
+  const createDesignRestrictionMessage = (otherDesignPackage: DesignPackageImport) =>
     `Design workspace '${designName}' cannot depend on '${otherDesignPackage}'. Follow ADR-041's packages/design dependency direction.`;
 
   const restrictedDesignImportPatterns =

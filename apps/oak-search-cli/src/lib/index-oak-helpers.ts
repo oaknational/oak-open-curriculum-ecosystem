@@ -36,7 +36,7 @@ export type PairUnits = readonly { unitSlug: string; unitTitle: string }[];
 /**
  * Result of fetching pair data with pattern awareness.
  */
-export interface PairDataResult {
+interface PairDataResult {
   readonly units: PairUnits;
   readonly skipped: boolean;
   readonly skipReason?: string;

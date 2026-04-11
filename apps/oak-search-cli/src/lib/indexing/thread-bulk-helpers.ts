@@ -25,12 +25,12 @@ import { createBulkAction } from './bulk-action-factory';
  * A single bulk operation for thread indexing.
  * Bulk operations alternate between action metadata and document.
  */
-export type ThreadBulkOperation = BulkIndexAction | BulkCreateAction | SearchThreadIndexDoc;
+type ThreadBulkOperation = BulkIndexAction | BulkCreateAction | SearchThreadIndexDoc;
 
 /**
  * Thread data enriched with unit information.
  */
-export interface EnrichedThread {
+interface EnrichedThread {
   readonly slug: string;
   readonly title: string;
   readonly unitCount: number;
@@ -40,7 +40,7 @@ export interface EnrichedThread {
 /**
  * Options for fetching and enriching threads.
  */
-export interface FetchThreadsOptions {
+interface FetchThreadsOptions {
   /**
    * Subject slugs to associate with threads.
    *
@@ -90,7 +90,7 @@ async function enrichThread(
 }
 
 /** Fetches all threads and enriches them with unit counts. */
-export async function fetchAndEnrichThreads(
+async function fetchAndEnrichThreads(
   client: OakClient,
   options: FetchThreadsOptions,
 ): Promise<readonly EnrichedThread[]> {
@@ -119,7 +119,7 @@ export async function fetchAndEnrichThreads(
  * @param threads - Array of thread entries from the /threads API
  * @returns Array of bulk operations (alternating metadata and document)
  */
-export function buildThreadOps(threads: readonly EnrichedThread[]): ThreadBulkOperation[] {
+function buildThreadOps(threads: readonly EnrichedThread[]): ThreadBulkOperation[] {
   const ops: ThreadBulkOperation[] = [];
 
   for (const thread of threads) {

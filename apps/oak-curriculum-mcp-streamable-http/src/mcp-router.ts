@@ -21,7 +21,7 @@ import { isPublicResourceUri } from './auth/public-resources.js';
 /**
  * Configuration options for MCP router.
  */
-export interface McpRouterOptions {
+interface McpRouterOptions {
   /**
    * Authentication middleware to apply when auth is required.
    * Typically `createMcpAuthClerk(logger)` or similar OAuth middleware factory.

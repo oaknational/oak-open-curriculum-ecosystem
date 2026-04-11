@@ -78,7 +78,7 @@ interface IngestOptions {
 }
 
 /** Ingestion harness interface. */
-export interface IngestHarness {
+interface IngestHarness {
   prepareBulkOperations(): Promise<IngestBulkResult>;
   ingest(options?: IngestOptions): Promise<IngestBulkResult>;
 }

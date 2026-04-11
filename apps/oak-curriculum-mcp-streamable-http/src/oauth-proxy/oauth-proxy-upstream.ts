@@ -38,7 +38,7 @@ export const upstreamAuthServerMetadataSchema = z.object({
 export type UpstreamAuthServerMetadata = z.infer<typeof upstreamAuthServerMetadataSchema>;
 
 /** OAuth 2.0 error response per RFC 6749 Section 5.2. */
-export interface OAuthErrorResponse {
+interface OAuthErrorResponse {
   readonly error: string;
   readonly error_description: string;
 }

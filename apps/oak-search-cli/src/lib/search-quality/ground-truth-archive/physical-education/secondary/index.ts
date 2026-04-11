@@ -37,13 +37,3 @@ export const PHYSICAL_EDUCATION_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery
     PHYSICAL_EDUCATION_SECONDARY_CROSS_TOPIC_EXPECTED,
   ),
 ] as const;
-
-// Re-export query definitions and expected relevance
-export { PHYSICAL_EDUCATION_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
-export { PHYSICAL_EDUCATION_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
-export { PHYSICAL_EDUCATION_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
-export { PHYSICAL_EDUCATION_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
-export { PHYSICAL_EDUCATION_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
-export { PHYSICAL_EDUCATION_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
-export { PHYSICAL_EDUCATION_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
-export { PHYSICAL_EDUCATION_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

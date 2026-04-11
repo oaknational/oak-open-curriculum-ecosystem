@@ -11,7 +11,7 @@
 import { ok, err, type Result } from '@oaknational/result';
 
 /** Error from ingest environment validation. */
-export interface EnvError {
+interface EnvError {
   readonly type: 'missing_env';
   readonly message: string;
 }

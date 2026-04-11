@@ -35,7 +35,7 @@ export interface ErrorLoggerOptions {
 }
 
 /** Minimal request shape required to extract structured HTTP metadata. */
-export interface RequestMetadataSource {
+interface RequestMetadataSource {
   readonly method: string;
   readonly url: string;
   readonly path?: string;
@@ -46,12 +46,12 @@ export interface RequestMetadataSource {
 }
 
 /** Request shape required by the logger before Express response objects enter the picture. */
-export interface RequestLoggingSource extends RequestMetadataSource {
+interface RequestLoggingSource extends RequestMetadataSource {
   readonly body?: unknown;
 }
 
 /** Minimal next-function shape used by the logger handlers. */
-export type LoggingNext = (error?: unknown) => void;
+type LoggingNext = (error?: unknown) => void;
 
 /**
  * Safely extracts JSON-safe metadata from an Express Request

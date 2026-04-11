@@ -27,7 +27,7 @@ import { formatOtelLogRecord, logLevelToSeverityNumber } from './otel-format.js'
 /**
  * Options for creating a `UnifiedLogger`.
  */
-export interface UnifiedLoggerOptions {
+interface UnifiedLoggerOptions {
   /** Minimum severity number. Messages below this threshold are filtered out. */
   readonly minSeverity: number;
   /** Resource attributes for service identification. */

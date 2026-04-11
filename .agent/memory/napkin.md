@@ -190,3 +190,44 @@ This is a knip behaviour, not documented prominently.
 
 **Remaining knip scope:** 614 unused exports, 2 unlisted binaries,
 config hints. Phase 2 (exports) is next.
+
+---
+
+### Session 2026-04-11k: Knip Phase 2 + 3 — 850 exports/types → 0, config hints → 0
+
+**Result: 850 → 0 unused exports/types, 43 → 0 config hints. Phases 2 + 3 complete.**
+
+Executed across 4 batches in GO cadence with code and architecture reviewers:
+- Batch A: 526 ground-truth barrel findings (scripted barrel trimming,
+  generator fix for `TOTAL_LESSON_COUNT`/`GENERATED_AT`, 16 file deletions)
+- Batch B: 153 oak-search-cli non-ground-truth (de-exports, dead code
+  deletion, TypeDoc re-exports for 9 public API types)
+- Batch C: 118 streamable-http + agent-tools + packages (de-exports,
+  8 dead auth-response-helpers deleted, barrel trims)
+- Batch D (Phase 3): 43 config hints resolved + 14 remaining type
+  findings via knip.config.ts cleanup
+
+**Key learnings:**
+- TypeDoc entry points must be declared in knip `entry` arrays, not
+  just `project` — otherwise types consumed only by doc generation
+  appear as false positives
+- Removing `export` from a type used in a public function's return
+  type breaks `pnpm doc-gen` with a warning — must re-export via
+  the TypeDoc entry point chain
+- `e2e-tests/**/*.ts` needs to be a knip entry (not just project)
+  for streamable-http to capture type consumption in e2e tests
+- Knip's redundant-ignore detection is thorough — after Phase 0/1
+  fixes, most `ignoreDependencies` entries were stale
+- Sub-agents for bulk ripgrep analysis across workspaces massively
+  accelerated evidence gathering for 600+ findings
+
+**Phase 2.5 follow-ups (blocking Phase 4):**
+1. Consolidate `auth-response-helpers.ts` with `mcp-auth.ts`
+2. Restructure ground-truth barrel hierarchy (excessive nesting)
+3. Fix schema-emitter to stop generating unused validation schemas
+4. Resolve cli/shared barrel (dead-on-arrival, zero importers)
+
+**Process observation: batched GO cadence scales well**
+The 4-batch structure (each with ACTION/REVIEW/GATE) kept quality
+high across 850 findings. Invoking code reviewers after each batch
+caught TypeDoc drift and import cleanup issues early.

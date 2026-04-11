@@ -17,7 +17,7 @@ import {
 /**
  * Validation result for pattern config completeness.
  */
-export interface PatternConfigValidationResult {
+interface PatternConfigValidationResult {
   readonly valid: boolean;
   readonly total: number;
   readonly configured: number;

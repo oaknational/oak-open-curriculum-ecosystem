@@ -18,10 +18,10 @@ import {
 import type { BulkOperationEntry } from './bulk-operation-types';
 import type { SearchIndexKind, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
-import { collectPhaseResults, type BulkProcessingAccumulator } from './bulk-ingestion-phases.js';
+import { collectPhaseResults } from './bulk-ingestion-phases.js';
 import { buildIngestionStats, type BulkIngestionStats } from './bulk-ingestion-stats.js';
 
-export type { BulkIngestionStats, BulkProcessingAccumulator };
+export type { BulkIngestionStats };
 
 /** Result from bulk ingestion preparation. */
 export interface BulkIngestionResult {

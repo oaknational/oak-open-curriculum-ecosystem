@@ -37,13 +37,3 @@ export const DESIGN_TECHNOLOGY_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] 
     DESIGN_TECHNOLOGY_PRIMARY_CROSS_TOPIC_EXPECTED,
   ),
 ] as const;
-
-// Re-export query definitions and expected relevance
-export { DESIGN_TECHNOLOGY_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
-export { DESIGN_TECHNOLOGY_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
-export { DESIGN_TECHNOLOGY_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
-export { DESIGN_TECHNOLOGY_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
-export { DESIGN_TECHNOLOGY_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
-export { DESIGN_TECHNOLOGY_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
-export { DESIGN_TECHNOLOGY_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
-export { DESIGN_TECHNOLOGY_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

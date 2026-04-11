@@ -77,31 +77,3 @@ export const MATHS_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
   combineGroundTruth(MATHS_SECONDARY_CROSS_TOPIC_2_QUERY, MATHS_SECONDARY_CROSS_TOPIC_2_EXPECTED),
   combineGroundTruth(MATHS_SECONDARY_CROSS_TOPIC_3_QUERY, MATHS_SECONDARY_CROSS_TOPIC_3_EXPECTED),
 ] as const;
-
-// Re-export query definitions
-export { MATHS_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
-export { MATHS_SECONDARY_PRECISE_TOPIC_2_QUERY } from './precise-topic-2.query';
-export { MATHS_SECONDARY_PRECISE_TOPIC_3_QUERY } from './precise-topic-3.query';
-export { MATHS_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
-export { MATHS_SECONDARY_NATURAL_EXPRESSION_2_QUERY } from './natural-expression-2.query';
-export { MATHS_SECONDARY_NATURAL_EXPRESSION_3_QUERY } from './natural-expression-3.query';
-export { MATHS_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
-export { MATHS_SECONDARY_IMPRECISE_INPUT_2_QUERY } from './imprecise-input-2.query';
-export { MATHS_SECONDARY_IMPRECISE_INPUT_3_QUERY } from './imprecise-input-3.query';
-export { MATHS_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
-export { MATHS_SECONDARY_CROSS_TOPIC_2_QUERY } from './cross-topic-2.query';
-export { MATHS_SECONDARY_CROSS_TOPIC_3_QUERY } from './cross-topic-3.query';
-
-// Re-export expected relevance
-export { MATHS_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
-export { MATHS_SECONDARY_PRECISE_TOPIC_2_EXPECTED } from './precise-topic-2.expected';
-export { MATHS_SECONDARY_PRECISE_TOPIC_3_EXPECTED } from './precise-topic-3.expected';
-export { MATHS_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
-export { MATHS_SECONDARY_NATURAL_EXPRESSION_2_EXPECTED } from './natural-expression-2.expected';
-export { MATHS_SECONDARY_NATURAL_EXPRESSION_3_EXPECTED } from './natural-expression-3.expected';
-export { MATHS_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
-export { MATHS_SECONDARY_IMPRECISE_INPUT_2_EXPECTED } from './imprecise-input-2.expected';
-export { MATHS_SECONDARY_IMPRECISE_INPUT_3_EXPECTED } from './imprecise-input-3.expected';
-export { MATHS_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
-export { MATHS_SECONDARY_CROSS_TOPIC_2_EXPECTED } from './cross-topic-2.expected';
-export { MATHS_SECONDARY_CROSS_TOPIC_3_EXPECTED } from './cross-topic-3.expected';

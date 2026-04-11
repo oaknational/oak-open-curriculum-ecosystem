@@ -10,7 +10,7 @@ import type {
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 /** Runtime state snapshot for the MCP App widget. */
-export interface AppRuntimeState {
+interface AppRuntimeState {
   readonly currentToolName: string | null;
   readonly theme: McpUiHostContext['theme'] | null;
   readonly toolInput: McpUiToolInputNotification['params']['arguments'] | null;
@@ -41,7 +41,7 @@ export type AppRuntimeAction =
   | { readonly type: 'runtime-error'; readonly errorMessage: string };
 
 /** Dispatch function for the app runtime reducer. */
-export type AppRuntimeDispatch = (action: AppRuntimeAction) => void;
+type AppRuntimeDispatch = (action: AppRuntimeAction) => void;
 
 /** Initial state before any host context or tool notifications arrive. */
 export const initialAppRuntimeState: AppRuntimeState = {

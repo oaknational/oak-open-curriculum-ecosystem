@@ -13,11 +13,9 @@ import { cacheLogger } from '../lib/logger';
 import type { makeGetAllThreads, makeGetThreadUnits } from './oak-adapter-threads';
 import { createUncachedClient, createCachedClient, buildClientConfig } from './sdk-client-factory';
 import type {
-  UnitListEntry,
   LessonGroupResponse,
   LessonsPaginationOptions,
   SubjectSequenceEntry,
-  SubjectAssetEntry,
   GetUnitsFn,
   GetTranscriptFn,
   GetLessonSummaryFn,
@@ -28,15 +26,8 @@ import type {
   GetSubjectAssetsFn,
 } from './oak-adapter-types';
 
-// Re-export types for consumers
-export type { UnitListEntry, LessonGroupResponse, LessonsPaginationOptions, SubjectSequenceEntry };
-export type {
-  SubjectAssetEntry,
-  GetUnitsFn,
-  GetTranscriptFn,
-  GetLessonSummaryFn,
-  GetUnitSummaryFn,
-};
+export type { LessonGroupResponse, LessonsPaginationOptions, SubjectSequenceEntry };
+export type { GetUnitsFn, GetTranscriptFn, GetLessonSummaryFn, GetUnitSummaryFn };
 export type { GetSubjectSequencesFn, GetSequenceUnitsFn, GetLessonsByKeyStageAndSubjectFn };
 export type { GetSubjectAssetsFn };
 export type {
@@ -178,29 +169,6 @@ function resolveCacheBypass(options: CreateOakClientOptions): boolean {
   return options.caching?.ignoreCached404 ?? false;
 }
 
-/** Clear all cached SDK responses from Redis. */
-export async function clearSdkCache(env: OakClientEnv): Promise<number> {
-  if (!env.SDK_CACHE_ENABLED) {
-    cacheLogger.info('SDK caching not enabled, nothing to clear');
-    return 0;
-  }
-
-  return withRedisConnection(
-    env.SDK_CACHE_REDIS_URL ?? 'redis://localhost:6379',
-    0,
-    async (redis) => {
-      const keys = await redis.keys(`${CACHE_KEY_PREFIX}*`);
-      if (keys.length === 0) {
-        cacheLogger.info('No cached entries to clear');
-        return 0;
-      }
-      const deleted = await redis.del(...keys);
-      cacheLogger.info('Cleared cached entries', { count: deleted });
-      return deleted;
-    },
-  );
-}
-
 /**
  * SDK cache connection status.
  * Used by {@link getSdkCacheStatus} to report cache availability.
@@ -227,9 +195,4 @@ export async function getSdkCacheStatus(env: OakClientEnv): Promise<CacheStatus>
       return { enabled: true, connected: true, keyCount: keys.length };
     },
   );
-}
-
-/** Reset singleton for testing purposes. @internal */
-export function resetClientSingleton(): void {
-  clientSingleton = null;
 }

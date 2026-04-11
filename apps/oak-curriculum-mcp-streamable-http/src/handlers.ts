@@ -53,7 +53,7 @@ export type { McpHandlerRequest, McpHandlerResponse } from './mcp-handler.js';
  * });
  * ```
  */
-export interface RegisterHandlersOptions {
+interface RegisterHandlersOptions {
   readonly overrides?: ToolHandlerOverrides;
   readonly runtimeConfig: RuntimeConfig;
   readonly logger: Logger;

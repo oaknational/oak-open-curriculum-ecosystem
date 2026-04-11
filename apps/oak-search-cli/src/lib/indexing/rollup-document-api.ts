@@ -19,7 +19,7 @@ import { normaliseYears } from './document-transform-utils';
 /**
  * Parameters for creating a rollup document via API path.
  */
-export interface CreateRollupDocumentParams {
+interface CreateRollupDocumentParams {
   summary: SearchUnitSummary;
   snippets: string[];
   /** Subject slug including KS4 variants (AllSubjectSlug). @see ADR-101 */

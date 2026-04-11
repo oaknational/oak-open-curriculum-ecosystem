@@ -34,13 +34,3 @@ export const COMPUTING_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
   ),
   combineGroundTruth(COMPUTING_PRIMARY_CROSS_TOPIC_QUERY, COMPUTING_PRIMARY_CROSS_TOPIC_EXPECTED),
 ] as const;
-
-// Re-export query definitions and expected relevance
-export { COMPUTING_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
-export { COMPUTING_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
-export { COMPUTING_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
-export { COMPUTING_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
-export { COMPUTING_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
-export { COMPUTING_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
-export { COMPUTING_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
-export { COMPUTING_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

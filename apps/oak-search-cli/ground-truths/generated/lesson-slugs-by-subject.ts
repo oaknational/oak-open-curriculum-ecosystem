@@ -42,7 +42,6 @@ function loadLessonSlugData(): LessonSlugDataset {
 
 const lessonSlugData = loadLessonSlugData();
 
-export type { LessonSlugDataset, LessonSlugDatasetSequenceData } from './lesson-slugs-by-subject.types.js';
 
 /**
  * Branded string type for validated lesson slugs.
@@ -51,7 +50,6 @@ export type { LessonSlugDataset, LessonSlugDatasetSequenceData } from './lesson-
  *
  * @generated
  */
-export type AnyLessonSlug = string & { readonly __brand: 'LessonSlug' };
 
 function getSequenceData(sequenceSlug: string): LessonSlugDatasetSequenceData {
   const sequenceData = lessonSlugData.sequences[sequenceSlug];
@@ -77,15 +75,7 @@ export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set(lessonSlugData.allL
  * @returns True if value is a valid lesson slug
  *
  * @example
- * ```typescript
- * if (isValidLessonSlug('adding-fractions')) {
- *   // value is narrowed to AnyLessonSlug
- * }
- * ```
  */
-export function isValidLessonSlug(value: string): value is AnyLessonSlug {
-  return ALL_LESSON_SLUGS.has(value);
-}
 
 /** Total lessons across all subjects */
 export const TOTAL_LESSON_SLUG_COUNT = 12391 as const;
@@ -101,7 +91,7 @@ function buildSlugToSubjectMap(): Map<string, string> {
   return map;
 }
 
-export const SLUG_TO_SUBJECT: ReadonlyMap<string, string> = buildSlugToSubjectMap();
+const SLUG_TO_SUBJECT: ReadonlyMap<string, string> = buildSlugToSubjectMap();
 
 /**
  * Get the subject for a given lesson slug.

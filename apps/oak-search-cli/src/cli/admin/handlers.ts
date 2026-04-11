@@ -25,7 +25,7 @@ import type {
  *
  * Merges connection verification and index listing from two SDK calls.
  */
-export interface StatusResult {
+interface StatusResult {
   /** Elasticsearch connection status (cluster health, reachability). */
   readonly connection: ConnectionStatus;
 

@@ -24,7 +24,7 @@ import { emitSequenceFacetEvents, resolveSequenceSlugFromEntry } from './sequenc
 /**
  * Subject context needed to build batches (sequences, sources, unit context).
  */
-export interface SubjectContext {
+interface SubjectContext {
   readonly subjectSequences: readonly SubjectSequenceEntry[];
   readonly sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
   readonly unitContextMap: UnitContextMap;
@@ -162,7 +162,7 @@ async function buildSequenceSourcesWithEvents(
 /**
  * Result of building operations for a subject/keystage pair.
  */
-export interface BuildOpsForPairResult {
+interface BuildOpsForPairResult {
   readonly operations: BulkOperations;
   readonly skipped: boolean;
   readonly skipReason?: string;

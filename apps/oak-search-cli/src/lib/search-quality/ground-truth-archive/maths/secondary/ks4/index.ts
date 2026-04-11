@@ -14,6 +14,3 @@ import type { GroundTruthQuery } from '../../../types';
  * Empty array - KS4 queries integrated into secondary entry.
  */
 export const MATHS_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [] as const;
-
-// Legacy export for backward compatibility
-export const MATHS_KS4_TIER_QUERIES: readonly GroundTruthQuery[] = [] as const;

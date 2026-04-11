@@ -19,14 +19,7 @@ import { ingestLogger } from './logger';
 import { filterKeyStages, filterSubjects } from './index-batch-helpers';
 import { yieldCurriculumBatches, yieldThreadsBatch } from './index-batch-granularity';
 
-// Re-export types for external consumers
-export type {
-  BatchGranularity,
-  CurriculumBatch,
-  ThreadsBatch,
-  IngestionBatch,
-  BatchGeneratorOptions,
-} from './index-batch-types';
+export type { BatchGranularity, IngestionBatch, BatchGeneratorOptions } from './index-batch-types';
 
 import type { IngestionBatch, BatchGeneratorOptions } from './index-batch-types';
 

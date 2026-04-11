@@ -2,11 +2,11 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 export const CLAUDE_HOOK_COMMAND = 'node scripts/check-blocked-patterns.mjs';
-export const COMMANDS_DIR = '.agent/commands';
+const COMMANDS_DIR = '.agent/commands';
 export const CURSOR_COMMANDS_DIR = '.cursor/commands';
 export const CLAUDE_COMMANDS_DIR = '.claude/commands';
 export const GEMINI_COMMANDS_DIR = '.gemini/commands';
-export const PORTABLE_COMMANDS_DIR = '.agents/skills';
+const PORTABLE_COMMANDS_DIR = '.agents/skills';
 export const CURSOR_AGENTS_DIR = '.cursor/agents';
 export const CLAUDE_AGENTS_DIR = '.claude/agents';
 export const CODEX_AGENTS_DIR = '.codex/agents';
