@@ -150,6 +150,40 @@ server. Tool calls returned correct stats (1,607 units/3,452 edges,
 the running server. This confirms the rename cascaded correctly through
 generators → generated data → SDK → app → running server.
 
+---
+
+### Session 2026-04-11b: Search CLI Observability Planning
+
+**Session scope**: Planning only — no code changes. Thorough start-right
+workflow, 3 Explore agents, 3 Plan agents, synthesised into a 10-step
+implementation plan for Search CLI observability adoption.
+
+**Key design decisions recorded in session plan**:
+- `CliObservability` interface is lighter than `HttpObservability` — no
+  MCP wrapping, no live OTel tracer, no logger factory. Exposes
+  `sentrySink` as a property for the module-level logger pattern.
+- `registerAdditionalSink()` extends the existing module-level logger
+  pattern rather than redesigning to a factory model.
+- Observability threaded to commands via optional parameter on
+  `withLoadedCliEnv`, not embedded in the env loader.
+- `captureHandledError` only in `withEsClient` catch (unexpected
+  throws), not on domain `Result.err` paths (expected failures).
+- Eager env load in entry point for observability init, non-fatal on
+  failure.
+
+**Observation: plan agent disagreement on file location**
+Plan agent 2 placed `CliObservability` in `src/lib/cli-observability.ts`;
+Plan agent 1 used `src/observability/`. The HTTP server uses
+`src/observability/`, which is the better pattern (separate concern
+directory). Resolved in favour of `src/observability/`.
+
+**Observation: plan agent disagreement on factory signature**
+Plan agent 2 suggested `createCliObservability(env, version)` while
+Plan agent 1 used `createCliObservability(runtimeConfig, options?)`.
+Using `SearchCliRuntimeConfig` is consistent with the HTTP server
+pattern and carries both `env` and `version` in one object. Resolved
+in favour of `runtimeConfig`.
+
 **Pattern: EEF data structure is more varied than plan assumed**
 Detailed JSON analysis revealed: (a) strand fields have high optionality
 (6 optional top-level fields, 3 rare `implementation_requirements` fields),

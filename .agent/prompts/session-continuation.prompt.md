@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-10
+last_updated: 2026-04-11
 ---
 
 # Session Continuation
@@ -46,18 +46,21 @@ git log --oneline --decorate -10
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
     (**authoritative** — phases 0-3 HTTP complete, Search CLI next)
+  - `.agent/plans/architecture-and-infrastructure/active/search-cli-observability-adoption.plan.md`
+    (**session plan** — 10 implementation steps, TDD throughout)
   - `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
     (**entry point** — restart sequence, current state, authority rule)
 - **Current state**: Main merged into branch (commits `da26c4bf`,
-  `9e6ed327`). PR #76 (React MCP App, 977 files), PR #78 (open
-  education, ADR-157), releases 1.3.0-1.5.0 all integrated. ADR-144
-  renumbered to ADR-158. Rate limiting re-applied with extracted
-  `CoreEndpointOptions` (breaks circular import). `pnpm check` passes.
-  6 specialist reviewers complete, all findings addressed. Integration
-  sweep confirms no main work lost.
-- **Current objective**: Search CLI observability adoption — 6 critical
-  gaps (no Sentry init, no sinks, no env config, no command spans,
-  no flush, no error capture).
+  `9e6ed327`, `f005a4ad`). PR #76 (React MCP App, 977 files), PR #78
+  (open education, ADR-157), releases 1.3.0-1.5.0 all integrated.
+  ADR-144 renumbered to ADR-158. Rate limiting re-applied with
+  extracted `CoreEndpointOptions`. `pnpm check` green. 6 specialist
+  reviewers complete, all findings addressed. Integration sweep
+  confirms no main work lost. Merge plan archived. Session plan for
+  Search CLI adoption written and approved.
+- **Current objective**: Search CLI observability adoption — implement
+  the 10 steps in the session plan. 6 critical gaps to close: Sentry
+  init, sinks, env config, command spans, flush, error capture.
 - **Hard invariants / non-goals**:
   - `SENTRY_MODE=off` is the default and kill switch
   - No `vi.mock`, no `process.env` mutation in tests
@@ -66,6 +69,8 @@ git log --oneline --decorate -10
   - CLI observability is lighter than HTTP (no MCP wrapping needed)
   - Owner configures real Sentry DSN after all code foundations land
   - `apps/oak-curriculum-mcp-stdio` is NOT an adoption target
+  - Observability failure must not block the CLI (non-fatal init)
+  - Flush must happen before `process.exit` in all exit paths
 - **Recent surprises / corrections** (2026-04-11):
   - `sed` sweep for ADR renumbering caught main's ADR-144 (Two-Threshold)
     references — must use targeted file lists, not blanket sweeps
@@ -77,17 +82,14 @@ git log --oneline --decorate -10
   - `max-lines: 250` is enforced via shared `recommended` config in
     `@oaknational/eslint-plugin-standards`, not workspace-level config
 - **Open questions / low-confidence areas**:
-  - CLI observability: whether `SearchCliEnvLoader` should carry the
-    `observability` instance (convenient) or whether it should be
-    passed separately (more explicit). Plan recommends loader approach.
   - `app/` directory still lacks barrel `index.ts` (Barney finding) —
     acceptable as fast-follow, not blocking
-- **Next safe step**: Search CLI adoption per Part 2 of the session
-  plan. Start with Step 0 (add `@oaknational/sentry-node` dep) and
-  Step 1 (extend env schema with `SentryEnvSchema`, TDD).
-- **Deep consolidation status**: not due — session was merge execution
-  and reviewer fixes, no new doctrine or patterns to graduate. Napkin
-  is 160 lines (well under threshold).
+- **Next safe step**: Execute Search CLI adoption session plan Step 1
+  (add `@oaknational/sentry-node` dep) then Step 2 (extend env schema
+  with `SentryEnvSchema`, TDD). Use `jc-start-right-quick` or
+  `jc-go` to ground, then implement sequentially.
+- **Deep consolidation status**: due — merge plan completed and
+  archived; consolidation gate fires on plan closure.
 
 ## Active Workstreams (2026-04-11)
 

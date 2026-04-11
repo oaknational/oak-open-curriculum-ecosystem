@@ -53,14 +53,16 @@ verified no main work lost.
 
 1. **Search CLI adoption** (`apps/oak-search-cli`) — 6 critical gaps:
    no Sentry init, no sinks, no env config, no command spans, no
-   flush, no error capture. Reference: HTTP server implementation.
-4. **Sentry credential provisioning** (owner action) — once all code
+   flush, no error capture. Detailed session plan at
+   `.agent/plans/architecture-and-infrastructure/active/search-cli-observability-adoption.plan.md`.
+   Reference implementation: HTTP server observability.
+2. **Sentry credential provisioning** (owner action) — once all code
    foundations are in place, the owner will configure real Sentry DSN
    credentials in `.env.local` and the Vercel dashboard per
    `docs/operations/sentry-deployment-runbook.md`. No `.env.local`
    currently has Sentry variables — the code defaults to
    `SENTRY_MODE=off` (fail-closed, safe).
-5. **Deployment evidence bundle** — verify release/source maps,
+3. **Deployment evidence bundle** — verify release/source maps,
    alerting baseline, MCP Insights. Depends on real credentials.
 
 ### Deferred
@@ -98,9 +100,9 @@ Primary code surfaces:
 
 ## Restart Sequence
 
-1. **Search CLI adoption** — 6 critical gaps (see execution plan and
-   the session plan at `~/.claude/plans/effervescent-hatching-goose.md`
-   Part 2). TDD throughout.
+1. **Search CLI adoption** — 6 critical gaps. Session plan at
+   `.agent/plans/architecture-and-infrastructure/active/search-cli-observability-adoption.plan.md`.
+   TDD throughout.
 2. **Sentry credentials** — owner configures real DSN after code is ready.
 3. **Deployment evidence** — depends on real credentials being live.
 

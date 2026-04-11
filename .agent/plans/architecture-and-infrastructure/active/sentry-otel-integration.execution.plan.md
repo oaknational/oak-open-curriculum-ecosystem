@@ -95,24 +95,19 @@ and capture boundaries established in Phase 1 and Phase 2.
 - Phase 3 Search CLI adoption: **NEXT** — unblocked, 6 critical gaps identified
 - Phase 4 evidence/deployment: **pending**
 
-### Pending merge from main (2026-04-11)
+### Merge from main — COMPLETE (2026-04-11)
 
-Main received PR #76 (React MCP App + design tokens, 977 files, ~78k
-insertions). This branch must merge main before PRing. PR #76 replaced
-the legacy widget framework with a React app + Vite build pipeline and
-added `packages/design/` (design-tokens-core, oak-design-tokens).
-
-**Post-merge observability impact assessment needed:**
-
-- Deleted legacy widget renderers may have had observability references
-- New widget resource handler already wrapped by `wrapResourceHandler()`
-- New design/build pipeline is build-time only (no observability needed)
-- Verify characterisation tests still pass after merge
-- Verify no observability gaps in the new widget resource registration
+Main merged (commits `da26c4bf`, `9e6ed327`, `f005a4ad`). PR #76
+(React MCP App, 977 files), PR #78 (open education, ADR-157), releases
+1.3.0-1.5.0 integrated. ADR-144 renumbered to ADR-158. Rate limiting
+re-applied with extracted `CoreEndpointOptions`. 6 specialist reviewers
+passed. `pnpm check` green. `registerWidgetResource` confirmed using
+`wrapResourceHandler` (observability intact). Integration sweep verified
+no main work lost. Merge plan archived.
 
 ### Quality gate status
 
-Must re-verify after merging main. Last green: 2026-03-31.
+Green after merge. Last verified: 2026-04-11.
 
 ### Remediation status
 
@@ -180,10 +175,13 @@ Two rounds of specialist reviews ran during the remediation sessions:
 
 ### Next steps (2026-04-11)
 
-1. **Merge main** — PR #76 (React MCP App + design tokens, 977 files)
-2. **Post-merge observability gap analysis** — verify wiring, assess new surfaces
-3. **Search CLI adoption** (`search-cli-adoption` todo) — 6 critical gaps
-4. **Deployment evidence bundle** (`deployment-and-evidence` todo)
+1. **Search CLI adoption** (`search-cli-adoption` todo) — 6 critical gaps.
+   Detailed session plan at
+   `.agent/plans/architecture-and-infrastructure/active/search-cli-observability-adoption.plan.md`.
+   Implementation order: dependency → env schema → CliObservability module →
+   logger sink registration → entry point wiring → command spans → error
+   capture → quality gates → reviewer sweep.
+2. **Deployment evidence bundle** (`deployment-and-evidence` todo)
 
 ### Authority and review state
 

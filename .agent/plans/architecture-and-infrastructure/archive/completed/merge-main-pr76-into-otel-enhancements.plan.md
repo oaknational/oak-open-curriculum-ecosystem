@@ -7,7 +7,7 @@ overview: >
   (24 in the HTTP app). 6 hazards documented after Wilma and docs-ADR review.
   ADR-158 numbering collision. PR #78 also landed on main (ADR-158), so our
   ADR renumbers to ADR-158.
-status: active
+status: completed
 last_updated: 2026-04-11
 parent_plan: ./sentry-otel-integration.execution.plan.md
 ---

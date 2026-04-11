@@ -52,6 +52,7 @@ Roadmap:
 
 | Plan | Status | Description |
 |------|--------|-------------|
+| [`merge-main-pr76-into-otel-enhancements.plan.md`](archive/completed/merge-main-pr76-into-otel-enhancements.plan.md) | ✅ Complete | Merge main (PR #76, #78, releases 1.3.0-1.5.0) into otel branch. ADR-158 renumbering. Archived 2026-04-11. |
 | [`ci-consolidation-and-gate-parity.plan.md`](archive/completed/ci-consolidation-and-gate-parity.plan.md) | ✅ Complete | CI consolidation, ESLint rule, widget deletion, documentation. Archived after completion. |
 
 ## Documents
