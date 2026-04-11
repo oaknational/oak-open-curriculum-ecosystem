@@ -100,6 +100,7 @@ for the full decision record.
 | markdownlint      | Yes        | Yes      | Yes         | Yes (markdownlint:root) |
 | subagents:check   | --         | Yes      | Yes         | Yes                     |
 | portability:check | --         | Yes      | Yes         | Yes                     |
+| knip              | Yes        | Yes      | Yes         | Yes                     |
 | test:root-scripts | --         | Yes      | Yes         | Yes                     |
 | type-check        | Yes        | Yes      | Yes         | Yes                     |
 | lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
@@ -148,7 +149,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan && pnpm clean && pnpm test:root-scripts && turbo run --continue sdk-codegen build type-check doc-gen lint:fix test test:widget test:e2e test:ui test:a11y test:widget:ui test:widget:a11y smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root
+pnpm secrets:scan && pnpm clean && pnpm test:root-scripts && turbo run --continue sdk-codegen build type-check doc-gen lint:fix test test:widget test:e2e test:ui test:a11y test:widget:ui test:widget:a11y smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm knip && pnpm markdownlint:root && pnpm format:root
 ```
 
 `pnpm check` is the only canonical aggregate verification command. The former

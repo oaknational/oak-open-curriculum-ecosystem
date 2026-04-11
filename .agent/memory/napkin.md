@@ -231,3 +231,35 @@ Executed across 4 batches in GO cadence with code and architecture reviewers:
 The 4-batch structure (each with ACTION/REVIEW/GATE) kept quality
 high across 850 findings. Invoking code reviewers after each batch
 caught TypeDoc drift and import cleanup issues early.
+
+---
+
+### Session 2026-04-11l: Knip Phase 4 — gate promotion
+
+**Result: knip promoted to all 4 gate surfaces. Phase 4 complete.**
+
+Added `pnpm knip` to pre-commit, pre-push, CI, and `pnpm check`.
+ADR-121 coverage matrix updated with knip row. 7 cross-reference
+documents updated. Config-reviewer and docs-adr-reviewer invoked.
+
+**Docs-ADR reviewer caught 2 gaps:**
+1. `build-system.md` coverage matrix was missing the knip row
+   (the ADR-121 matrix had been updated but the duplicate in
+   build-system.md was missed)
+2. `CONTRIBUTING.md` `pnpm check` description didn't mention knip
+
+Both fixed immediately. Lesson: when ADR-121 coverage matrix
+changes, always update BOTH copies (ADR-121 and build-system.md).
+
+**Config reviewer observation: ordering asymmetry**
+`pnpm check` runs knip after turbo (post-build), while CI and
+pre-push run knip before turbo (pre-build). Not a bug — knip
+analyses source files, not build output — but worth documenting
+if the ordering ever matters for codegen-generated entries.
+
+**Parent plan updated:** `enable-knip` in quality-gate-hardening
+marked complete. Section 4 text updated to reflect completion.
+
+**Phase 2.5 is next:** 4 follow-ups from Phase 2, each needing
+owner decision. This will require a detailed investigation plan
+for the next session.

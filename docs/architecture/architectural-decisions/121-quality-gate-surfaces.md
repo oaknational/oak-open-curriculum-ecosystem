@@ -49,6 +49,7 @@ or configuration issue, never a missing check.
 | markdownlint      | Yes        | Yes      | Yes         | Yes (markdownlint:root) |
 | subagents:check   | --         | Yes      | Yes         | Yes                     |
 | portability:check | --         | Yes      | Yes         | Yes                     |
+| knip              | Yes        | Yes      | Yes         | Yes                     |
 | test:root-scripts | --         | Yes      | Yes         | Yes                     |
 | type-check        | Yes        | Yes      | Yes         | Yes                     |
 | lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
@@ -108,8 +109,8 @@ adds no enforcement value. It is not part of any routine gate surface.
 1. **Pre-push === CI** — pre-push and CI run the same check set. A
    CI-only failure indicates an environmental or configuration issue,
    not a missing check.
-2. **Pre-commit is fast** — format, markdown, type-check, lint, and unit
-   tests only. No builds or codegen.
+2. **Pre-commit is fast** — format, markdown, knip, type-check, lint, and
+   unit tests only. No builds or codegen.
 3. **Pre-push is comprehensive** — secret scan, full build chain, all
    non-widget test suites, sub-agent and portability validation.
 4. **`pnpm check` is exhaustive** — the only surface that runs every
@@ -144,12 +145,12 @@ adds no enforcement value. It is not part of any routine gate surface.
 
 - Pre-push runs: `secrets:scan`, `format-check:root`,
   `markdownlint-check:root`, `subagents:check`, `portability:check`,
-  `test:root-scripts`, then Turbo: `sdk-codegen build type-check lint
-test test:e2e test:ui smoke:dev:stub`.
+  `knip`, `test:root-scripts`, then Turbo: `sdk-codegen build type-check
+lint test test:e2e test:ui smoke:dev:stub`.
 - CI runs: `secrets:scan` (with Docker gitleaks fallback),
   `format-check:root`, `markdownlint-check:root`, `subagents:check`,
-  `portability:check`, `test:root-scripts`, Playwright install, then
-  Turbo: `sdk-codegen build type-check lint test test:e2e test:ui
+  `portability:check`, `knip`, `test:root-scripts`, Playwright install,
+  then Turbo: `sdk-codegen build type-check lint test test:e2e test:ui
 smoke:dev:stub`.
 - `pnpm check` runs the broadest set with fix-mode and clean rebuild.
 - Coverage matrix maintained in this ADR and referenced from
@@ -164,3 +165,4 @@ smoke:dev:stub`.
 | 2026-02-25 | Initial accepted version                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | 2026-04-02 | Added ADR-147 cross-reference, widget test rows                                                                                                                                                                                                                                                                                                                                                                                                   |
 | 2026-04-11 | Reconciled matrix with actual gate implementations. Rewrote principle #4 (pre-push === CI). Added verify-vs-mutate section. Changed secret scanning from full-history to branch-scope. Added sdk-codegen to CI Turbo invocation. Added subagents:check, portability:check, test:root-scripts, test:ui, test:e2e, smoke:dev:stub to pre-push. Removed --only from pre-push test:e2e. Updated rationale, consequences, and implementation to match. |
+| 2026-04-11 | Promoted knip to all four gate surfaces (pre-commit, pre-push, CI, pnpm check). Added knip row to coverage matrix. Updated design principle #2 and implementation lists. Knip runs in ~2s so pre-commit speed is preserved.                                                                                                                                                                                                                       |

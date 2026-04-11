@@ -31,7 +31,7 @@ todos:
     status: pending
   - id: enable-knip
     content: "Triage knip findings across unused files/exports and dependency hygiene, including undeclared workspace imports that currently escape blocking gates, then promote to blocking QG. Child plan: knip-triage-and-remediation.plan.md"
-    status: in_progress
+    status: completed
   - id: enable-depcruise
     content: "Resolve dependency-cruiser findings (circular deps, orphans) and promote to blocking QG, while keeping manifest-completeness enforcement separate."
     status: pending
@@ -571,28 +571,13 @@ strictness, not convenience.
 
 **Remediation**: None — all remediation happens in the active CI plan.
 
-### 4. Enable knip as a Blocking `pnpm check` Gate
+### 4. Enable knip as a Blocking Quality Gate — COMPLETE
 
-**Problem**: knip surfaces a large backlog of unused files, unused exports,
-and dependency-hygiene issues. It is also the current precise detector for
-undeclared direct/transitive workspace imports. Because it is not blocking,
-runtime and generator tasks can fail in CI before the underlying manifest issue
-is diagnosed cleanly.
-
-**Confirmed example (9 April 2026)**:
-- PR #76 isolated Turbo reproduction failed in `@oaknational/sdk-codegen#sdk-codegen`
-  because `@oaknational/observability` was imported but undeclared
-- Targeted `knip` for `packages/sdks/oak-sdk-codegen` also flagged
-  undeclared `@elastic/elasticsearch`
-- The same workspace still carried unused `@modelcontextprotocol/ext-apps`
-  until explicitly removed
-
-**Fix**: Triage all findings. Treat `unlisted` dependency findings as hard
-blockers. Delete genuine dead code. Adjust `knip.config.ts` for false
-positives. Add `pnpm knip` to the `pnpm check` script and then to pre-push /
-pre-commit once the baseline is clean.
-
-**Remediation**: Significant — see `.agent/plans/architecture-and-infrastructure/static-analysis-tool-promotion.plan.md` for initial triage plan.
+**Completed**: 2026-04-11. All 904 knip findings triaged and remediated
+across Phases 0-3 (child plan). Knip promoted to all four gate surfaces:
+pre-commit, pre-push, CI, and `pnpm check`. ADR-121 coverage matrix
+updated. See child plan
+`knip-triage-and-remediation.plan.md` for full resolution details.
 
 ### 5. Enable dependency-cruiser as a Blocking `pnpm check` Gate
 

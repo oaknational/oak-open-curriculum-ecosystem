@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-11k
+last_updated: 2026-04-11l
 ---
 
 # Session Continuation
@@ -41,29 +41,26 @@ git log --oneline --decorate -10
 ## Live Continuity Contract
 
 - **Workstream**: Quality gate hardening — knip triage and
-  remediation.
+  remediation (Phase 2.5 follow-ups).
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
-    (**PRIMARY** — Phases 0-3 complete, `pnpm knip` exits 0.
-    Phase 2.5 follow-ups + Phase 4 gate promotion remain.)
+    (**PRIMARY** — Phases 0-4 complete. Phase 2.5 follow-ups remain.)
+  - `.agent/plans/architecture-and-infrastructure/active/knip-phase-2.5-follow-ups.plan.md`
+    (**CHILD** — detailed plan for the 4 follow-ups)
   - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
-    (**PARENT** — `enable-knip` item near completion)
+    (**PARENT** — `enable-knip` item complete)
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
     (**PARKED** — WS-0/1/2 done, WS-3 next, not current focus)
-- **Current state**: Phases 0-3 all complete. `pnpm knip` returns
-  0 findings across all categories: unused deps, files, exports,
-  types, config hints, duplicate exports, unlisted binaries. Full
-  quality gate (`pnpm build && type-check && doc-gen && test &&
-  knip`) passes. 850 unused exports/types remediated across 4
-  batches (ground-truth barrels, oak-search-cli, streamable-http,
-  agent-tools/packages). 43 config hints resolved via knip.config
-  cleanup. Child plan complete:
-  `.cursor/plans/knip_phase_2_execution_cc08d451.plan.md`.
+- **Current state**: Phases 0-4 all complete. `pnpm knip` exits 0
+  across all categories (904 findings remediated). Knip promoted
+  to all four gate surfaces: pre-commit, pre-push, CI, `pnpm
+  check`. ADR-121 coverage matrix updated. Full `pnpm check`
+  passes. Parent plan `enable-knip` marked complete. Phase 2.5
+  has 4 follow-ups from Phase 2, each needing owner decision
+  (action or defer with rationale).
 - **Current objective**: Phase 2.5 — resolve 4 follow-ups from
-  Phase 2 (consolidate auth helpers, restructure ground-truth
-  barrels, fix schema-emitter, resolve cli/shared barrel). Then
-  Phase 4 — promote knip to all four gate surfaces (pnpm check,
-  pre-commit, pre-push, CI) and update ADR-121.
+  Phase 2. Each needs detailed investigation and owner decision.
+  See child plan for the detailed execution approach.
 - **Hard invariants / non-goals**:
   - No finding may be labelled as a false positive without
     evidence-based proof
@@ -73,22 +70,17 @@ git log --oneline --decorate -10
   - ESLint config standardisation must precede all lint-rule
     promotions (Tier 1, not Tier 3)
   - No `unknown`, no `Record<string, unknown>`, no type erasure
-- **Recent surprises / corrections** (2026-04-11k):
-  - TypeDoc entry points must be declared in knip config `entry`
-    to avoid false-positive "unused type" findings for public API
-    types consumed only by doc generation
-  - `e2e-tests/**/*.ts` must be a knip entry for streamable-http
-    to capture type consumption in e2e test files
-  - Removing `export` from a type used in a public function
-    signature breaks `pnpm doc-gen` — must re-export for TypeDoc
-  - Knip redundant-ignore detection is thorough — most
-    `ignoreDependencies` entries were stale after Phase 0/1 fixes
-  - `auth-response-helpers.ts` had 8 dead functions duplicating
-    private implementations in `mcp-auth.ts` — deleted, not
-    consolidated (consolidation tracked as Phase 2.5 follow-up)
+- **Recent surprises / corrections** (2026-04-11l):
+  - `build-system.md` has a coverage matrix copy that must be
+    kept in sync with ADR-121 — docs-adr reviewer caught this
+  - `CONTRIBUTING.md` `pnpm check` description needs updating
+    when gate composition changes
+  - `pnpm check` runs knip after turbo (post-build), while CI
+    runs knip before turbo (pre-build) — both work because knip
+    analyses source, not build output
 - **Open questions / low-confidence areas**:
-  - Phase 2.5 follow-ups: owner decision needed on scope for each
-    (action vs defer with rationale)
+  - Phase 2.5 follow-ups: owner decision needed on scope for
+    each (action vs defer with rationale)
   - Whether WS-5 (guidance consolidation) should be a catalogue
     abstraction or simpler validation test approach
 - **Tracked follow-ups** (not blocking current work):
@@ -97,26 +89,24 @@ git log --oneline --decorate -10
   - Generated tools have no human-friendly title (no plan)
   - Synonym builders should become codegen-time (no plan)
   - `static-content.ts` `process.cwd()` bug (tracked nowhere)
-- **Next safe step**: Phase 2.5 — resolve the 4 follow-ups from
-  Phase 2 (each needs owner decision: action or defer with
-  rationale). Then Phase 4 — verify clean knip baseline, add
-  knip to pnpm check, pre-commit, pre-push, CI, update ADR-121.
-- **Deep consolidation status**: due — Phase 2 (largest phase)
-  and Phase 3 are complete. A child plan has closed. Napkin will
-  be updated with session learnings. Consolidation warranted.
+- **Next safe step**: Phase 2.5 — read the child plan, gather
+  evidence for each follow-up, present options with
+  recommendations to the owner for decision.
+- **Deep consolidation status**: completed this handoff — Phase 4
+  complete, napkin updated, session prompt refreshed. Napkin at
+  ~260 lines (under rotation threshold).
 
-## Active Workstreams (2026-04-11k)
+## Active Workstreams (2026-04-11l)
 
-### 1. Vercel Widget Crash Fix — COMPLETE
+### 1. Quality Gate Hardening — knip IN PROGRESS
 
-**Plan**: `.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md`
+**Parent plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
+**Child plan**: `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
 
-All phases executed. Widget HTML is now a committed TypeScript
-constant (`src/generated/widget-html-content.ts`), consumed via
-DI (ADR-156). Filesystem-based code deleted. All quality gates
-green. ADR-156 created and indexed. The branch is 4 commits ahead
-of origin locally; next step is push plus Vercel preview
-verification.
+Phases 0-4 complete. 904 knip findings remediated to 0. Knip
+promoted to all four gate surfaces. Phase 2.5 (4 architectural
+follow-ups) remains. After Phase 2.5, the `enable-knip` item
+in the parent plan is fully done.
 
 ### 2. WS3 MCP App Rebuild — MERGE PENDING
 
@@ -124,43 +114,15 @@ verification.
 
 Local gates green on `feat/mcp_app_ui`. Widget crash fix complete
 locally and committed. Next: push, verify Vercel preview, then
-merge.
-Phase 5 (interactive user search view) queued post-merge.
+merge. Phase 5 (interactive user search view) queued post-merge.
 
-### 3. Frontend Practice Integration — COMPLETE
-
-**Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md`
-
-Complete. Three ADR-129 agent triplets (accessibility-reviewer,
-design-system-reviewer, react-component-reviewer) with full platform
-adapters. Three review rounds passed. Design token infrastructure
-cancelled as out of scope — belongs in WS3 or a dedicated plan.
-
-### 4. Continuity Adoption — COMPLETE
-
-**Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md`
-
-Wave 1 closed with an explicit `promote` decision on 3 April 2026. The
-outgoing continuity note landed and the same-day Practice Core promotion is
-recorded separately in `.agent/practice-core/*`.
-
-### 5. Assumptions Reviewer — COMPLETE
-
-ADR-146 accepted, triplet deployed, platform adapters created.
-
-### 6. URL Naming Collision Remediation — COMPLETE
-
-Completed 2026-04-01.
-
-### 7. Workspace Topology Exploration — FUTURE
+### 3. Workspace Topology Exploration — FUTURE
 
 **Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
 
-Four-tier layered architecture (primitives, infrastructure, codegen-time,
-runtime). Lifecycle classification of all workspaces complete. Phase 2
-(function-level analysis with knip + dependency-cruiser) pending.
-Informed by the Oak Surface Isolation Programme
-(`.agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md`).
+Four-tier layered architecture. Lifecycle classification complete.
+Phase 2 (function-level analysis with knip + dependency-cruiser)
+pending.
 
 ## Core Invariants
 
@@ -176,5 +138,7 @@ Informed by the Oak Surface Isolation Programme
 
 - Run the required gates one at a time while iterating.
 - Run `pnpm fix` to apply auto-fixes.
-- Run `pnpm check` as the canonical aggregate readiness gate before push/merge.
-- Keep this prompt concise and operational; do not duplicate plan authority.
+- Run `pnpm check` as the canonical aggregate readiness gate before
+  push/merge. It now includes `pnpm knip`.
+- Keep this prompt concise and operational; do not duplicate plan
+  authority.

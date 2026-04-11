@@ -19,13 +19,13 @@ todos:
     status: completed
   - id: remediate-and-promote
     content: "Phase 4: Verify clean knip baseline, add knip to pnpm check, pre-commit, pre-push, and CI, update ADR-121."
-    status: pending
+    status: completed
 ---
 
 # Knip Triage and Remediation
 
 **Last Updated**: 2026-04-11
-**Status**: Active — Phases 0-3 complete (`pnpm knip` exits 0). Phase 2.5 follow-ups + Phase 4 (gate promotion) remain.
+**Status**: Active — Phases 0-4 complete (`pnpm knip` exits 0, promoted to all gate surfaces). Phase 2.5 follow-ups remain.
 **Scope**: Run knip, triage all findings, design and apply remediations,
 promote to blocking quality gate.
 **Parent**: [quality-gate-hardening.plan.md](../current/quality-gate-hardening.plan.md)
@@ -139,6 +139,23 @@ Phase 3 knip config changes.
 - Removed ~14 redundant `src/index.ts` entries (knip auto-detects from exports)
 - Added TypeDoc entry points for oak-search-cli
 - Added `e2e-tests/**/*.ts` as entry for streamable-http
+
+### Phase 4 Resolution (2026-04-11)
+
+Knip promoted to all four gate surfaces:
+
+- **`pnpm check`**: added `pnpm knip` after `portability:check`
+- **Pre-commit** (`.husky/pre-commit`): added knip check before turbo gates
+- **Pre-push** (`.husky/pre-push`): added knip check after `portability:check`
+- **CI** (`.github/workflows/ci.yml`): added knip step after `portability:check`
+- **ADR-121**: knip row added to coverage matrix, design principle #2 updated,
+  implementation lists updated, change log entry added
+- **Cross-references updated**: `build-system.md` (matrix + command expansion),
+  `workflow.md` (gate surface list), `CONTRIBUTING.md` (`pnpm check` description),
+  `AGENT.md` (`pnpm check` comment), `distilled.md` (corrected stale entry)
+- **Parent plan** (`quality-gate-hardening.plan.md`): `enable-knip` marked complete
+
+Config-reviewer and docs-adr-reviewer invoked. All findings addressed.
 
 ### Unused Dependencies (2) — P0
 

@@ -62,6 +62,9 @@ jobs:
       - name: Validate portability
         run: pnpm portability:check
 
+      - name: Run knip (unused code detection)
+        run: pnpm knip
+
       - name: Run root-level script tests
         run: pnpm test:root-scripts
 

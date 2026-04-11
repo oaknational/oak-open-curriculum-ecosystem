@@ -167,9 +167,9 @@ context with no natural permanent home.
   every task type it uses (build, test, type-check, lint,
   lint:fix). Missing overrides fall through to generic tasks
   with wrong inputs, causing stale cache hits.
-- `pnpm check` is the canonical aggregate gate, but it does
-  not include static-analysis sweeps (`pnpm knip`,
-  `pnpm depcruise`) unless a plan explicitly requires them
+- `pnpm check` is the canonical aggregate gate and includes
+  `pnpm knip`. `pnpm depcruise` is not included unless a
+  plan explicitly requires it
 - Empty directories persist after file deletion — always
   rmdir after deleting the last file. The portability
   validator checks for SKILL.md presence, so empty skill

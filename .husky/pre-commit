@@ -21,6 +21,13 @@ if ! pnpm markdownlint-check:root; then
   exit 1
 fi
 
+echo "🔬 Running knip (unused code detection)..."
+if ! pnpm knip; then
+  echo "❌ Knip found unused code, exports, or dependencies!"
+  echo "💡 Run 'pnpm knip' to see details, then fix or remove unused items"
+  exit 1
+fi
+
 echo "🔤 Running quality gate checks..."
 pnpm turbo run type-check lint test
 

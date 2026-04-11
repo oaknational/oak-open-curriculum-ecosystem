@@ -112,9 +112,9 @@ reference table.
 **Key principle**: pre-push and CI run the same check set. A CI-only failure
 indicates an environmental or configuration issue, not a missing check. Both
 surfaces cover secrets, build, formatting, markdown, sub-agents, portability,
-root-script tests, lint, type-check, unit tests, E2E, UI, and smoke tests.
-`pnpm check` adds widget tests, a11y tests, doc-gen, clean rebuild, and
-fix-mode commands.
+knip (unused code detection), root-script tests, lint, type-check, unit tests,
+E2E, UI, and smoke tests. `pnpm check` adds widget tests, a11y tests, doc-gen,
+clean rebuild, and fix-mode commands.
 
 ## 8. AI Sub-Agent Review
 
