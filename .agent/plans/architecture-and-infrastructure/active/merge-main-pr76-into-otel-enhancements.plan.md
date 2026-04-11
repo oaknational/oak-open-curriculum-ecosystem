@@ -3,8 +3,8 @@ name: "Merge main (PR #76) into feat/otel_sentry_enhancements"
 overview: >
   Merge origin/main (PR #76 React MCP App + design tokens, 977 files,
   ~78k insertions) into feat/otel_sentry_enhancements (7 commits, 36 files).
-  4 text conflicts, 10 files changed on both sides, 33 files deleted by main.
-  One hazard: core-endpoints.ts imports deleted tools-list-override.ts.
+  4 text conflicts, 10 files changed on both sides, 96 files deleted by main
+  (24 in the HTTP app). 6 hazards documented after Wilma and docs-ADR review.
   ADR-144 numbering collision (both branches created ADR-144 for different things).
 status: active
 last_updated: 2026-04-11
@@ -57,10 +57,16 @@ Main deleted this file. Our branch's `core-endpoints.ts` imports it:
 import { overrideToolsListHandler } from '../tools-list-override.js';
 ```
 
-**Resolution**: Accept main's deletion. Check what `overrideToolsListHandler`
-did and whether main replaced it with a different mechanism (likely moved into
-the MCP App widget registration or `registerAppTool` from `ext-apps`). Adapt
-`core-endpoints.ts` to use main's approach.
+**Resolution**: Accept main's deletion. The override was a Zod 3 compatibility
+shim that intercepted `tools/list` to preserve JSON Schema examples. Three
+upstream changes made it obsolete: sdk-codegen now generates `flatZodSchema`
+with `.meta({ examples })`, aggregated tools have `.describe()` metadata, and
+Zod 4's `toJSONSchema()` preserves `.meta()` natively. Main's tool
+registration passes `tool.inputSchema` directly — no override needed.
+
+Fix: remove the `import { overrideToolsListHandler }` and its call from
+`core-endpoints.ts`. No replacement logic needed — the SDK pipeline now
+handles this end-to-end.
 
 ### Hazard 2: ADR-144 numbering collision
 
@@ -76,39 +82,98 @@ main's highest (ADR-156 → ours becomes **ADR-157**). Update the file, the
 ADR index, all internal references, and cross-references in plans, prompts,
 safety-and-security.md, and code comments.
 
-### Hazard 3: `register-resources.ts` structural change
+### Hazard 3: `getWidgetHtml` DI chain propagation (Wilma finding)
 
-Main restructured resource registration significantly:
-- Deleted `register-json-resources.ts` (our branch imported from it in the
-  previous merge, but that was already adapted)
-- Added `register-widget-resource.ts` as a separate module
-- Changed `registerAllResources` signature to accept `getWidgetHtml` param
-- Changed `registerHandlers` to pass `getWidgetHtml`
+Main added `getWidgetHtml: () => string` throughout the DI chain:
+`CreateAppOptions` → `RegisterHandlersOptions` → `ResourceRegistrationOptions`
+→ `registerWidgetResource()`. Branch's `handlers.ts` and `RegisterHandlersOptions`
+do not have this field. After auto-merge, `application.ts` will pass
+`getWidgetHtml` to `registerHandlers()`, but the interface won't accept it.
 
-Our branch's `register-resources.ts` auto-merges from main (we didn't touch
-it this session), but callers in our `application.ts` and test files must
-match the new signatures.
+**Resolution**: Extend `RegisterHandlersOptions` in `handlers.ts` to include
+`getWidgetHtml`. This is a type-check blocker that auto-merge will not catch.
 
-### Hazard 4: `application.ts` composition root restructured
+### Hazard 4: `application.ts` composition pattern collision (Wilma finding)
 
-Main restructured the app composition root to support the widget build
-pipeline. Our branch added rate limiting wiring to this file. The text
-conflict will require careful merging of both sets of changes.
+Two conflicting architectural choices:
+- **Main**: inlined `initializeCoreEndpoints()` inside `application.ts`
+- **Branch**: extracted it to `src/app/core-endpoints.ts` (for max-lines)
+
+Main also restructured for the widget build pipeline. Branch added rate
+limiting wiring (`createRateLimiters`, `rateLimiterFactory` DI field,
+limiter passing to route setup functions).
+
+**Decision**: Accept main's inlined pattern. Delete branch's
+`core-endpoints.ts`. Re-apply rate limiting wiring into main's structure.
+Rationale: `core-endpoints` was a single-use extraction (called once) and
+main consolidated it back; fighting that direction adds friction.
+
+### Hazard 5: `setupOAuthAndCaching` signature mismatch (Wilma finding)
+
+Branch extended the signature with `oauthRateLimiter: RequestHandler`.
+Main's version does not have this parameter. The file auto-merges from
+main (branch didn't change it structurally), but the call site in
+`application.ts` passes the extra argument.
+
+**Resolution**: After accepting main's `application.ts`, re-apply the
+`oauthRateLimiter` parameter to `setupOAuthAndCaching` and its call site.
+Same pattern as last merge — extend the function signature, update callers.
+
+### Hazard 6: ADR-144 renumbering scope (15 files)
+
+Files referencing ADR-144 on this branch:
+
+1. `docs/architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md`
+2. `docs/architecture/architectural-decisions/README.md`
+3. `docs/governance/safety-and-security.md`
+4. `docs/operations/sentry-deployment-runbook.md`
+5. `apps/oak-curriculum-mcp-streamable-http/README.md`
+6. `apps/oak-curriculum-mcp-streamable-http/src/application.ts`
+7. `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limiter-factory.ts`
+8. `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/rate-limit-profiles.ts`
+9. `apps/oak-curriculum-mcp-streamable-http/src/rate-limiting/index.ts`
+10. `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
+11. `.agent/plans/architecture-and-infrastructure/active/README.md`
+12. `.agent/plans/architecture-and-infrastructure/README.md`
+13. `.agent/plans/architecture-and-infrastructure/archive/completed/app-layer-rate-limiting.plan.md`
+14. `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
+15. This merge plan
+
+All must be updated to ADR-157 (or whatever the next available number is
+after main's highest ADR).
 
 ## Resolution Order
 
 1. **Trivial**: accept main for `pnpm-lock.yaml`, plan READMEs
-2. **ADR collision**: renumber our ADR-144 → ADR-157
-3. **Semantic**: resolve `application.ts` — accept main's structure, re-apply
-   rate limiting wiring
-4. **Hazard 1**: adapt `core-endpoints.ts` for deleted `tools-list-override`
-5. **Non-conflicting adaptations**: check auto-merged files for signature
-   mismatches
-6. `pnpm install` to regenerate lockfile
-7. `pnpm type-check` immediately — catches silent breaks
-8. `pnpm check` — full verification
-9. **Post-merge observability gap analysis** — verify new widget resource
-   handler is wrapped, characterisation tests pass, no gaps in new code
+2. **ADR collision**: renumber our ADR-144 → ADR-157 across all 15 files
+3. **Composition decision**: accept main's inlined `initializeCoreEndpoints`,
+   delete branch's `core-endpoints.ts`. The extracted file was single-use
+   (called once at bootstrap) and main consolidated it back.
+4. **Semantic**: resolve `application.ts` — accept main's structure, then
+   re-apply rate limiting wiring:
+   - Add `rateLimiterFactory` back to `CreateAppOptions`
+   - Add `createRateLimiters()` helper
+   - Pass limiters to route setup functions
+   - Ensure `getWidgetHtml` (main's new required field) is preserved
+   - Add `OAK_SERVER_BRANDING` spread to McpServer constructor (PR #76 added
+     this for branding metadata; branch's version doesn't have it)
+5. **Hazard 1**: remove `overrideToolsListHandler` import — main's Zod 4
+   pipeline preserves examples end-to-end; no replacement needed
+6. **Hazard 3**: extend `RegisterHandlersOptions` with `getWidgetHtml`
+   and thread it through to `registerAllResources` / `registerWidgetResource`
+7. **Hazard 5**: extend `setupOAuthAndCaching` with `oauthRateLimiter`
+8. **Non-conflicting adaptations**: check all auto-merged files for signature
+   mismatches — especially test files calling `createApp` or `registerHandlers`.
+   All test callers of `createApp()` must now provide `getWidgetHtml`.
+9. `pnpm install` to regenerate lockfile
+10. `pnpm type-check` immediately — catches silent breaks
+11. `pnpm check` — full verification
+12. **Post-merge observability gap analysis** — verify:
+    - Widget resource handler wrapped by `wrapResourceHandler()`
+    - Characterisation tests still pass
+    - No observability gaps in new code
+    - New Turbo tasks (`test:widget`, `dev:widget`) don't need observability
+    - No new Express routes from PR #76 that need rate limiting
 
 ## Post-Merge Scope Assessment
 
@@ -127,15 +192,20 @@ After the merge is clean and gates pass:
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| `core-endpoints.ts` import break | High | Medium | Adapt to main's replacement |
-| ADR numbering collision missed | High | Low | Explicit renumber step |
-| `application.ts` merge error | Medium | High | Careful semantic merge |
-| Observability gap in new widget | Low | Medium | Post-merge gap analysis |
+| `core-endpoints.ts` import break | High | Medium | Delete file, inline into main's pattern |
+| ADR numbering collision missed | High | Low | Explicit renumber with 15-file sweep |
+| `application.ts` merge error | Medium | High | Careful semantic merge, type-check gate |
+| `getWidgetHtml` DI chain break | High | Medium | Extend interfaces before type-check |
+| `setupOAuthAndCaching` signature | High | Medium | Re-apply rate limiter param |
 | Rate limiting wiring lost | Medium | Medium | Re-apply after accepting main |
+| Observability gap in new widget | Low | Medium | Post-merge gap analysis |
+| `OAK_SERVER_BRANDING` missing | Medium | Low | Add spread to McpServer constructor |
 
 ## Estimated Complexity
 
 - **Text conflicts**: 4 files (2 trivial, 2 semantic)
-- **Hazards**: 4 (1 import cascade, 1 ADR collision, 2 signature changes)
-- **Non-conflicting adaptations**: ~5 files (auto-merged but may need params)
-- **Scale**: Much smaller than the PR #70 merge (4 conflicts vs 22)
+- **Hazards**: 6 documented (reviewed by Wilma + docs-ADR reviewer)
+- **Non-conflicting adaptations**: ~8 files (auto-merged but need params)
+- **ADR renumbering**: 15 files
+- **Scale**: Smaller than PR #70 merge (4 conflicts vs 22) but more
+  hazards due to rate limiting + widget DI chain interaction
