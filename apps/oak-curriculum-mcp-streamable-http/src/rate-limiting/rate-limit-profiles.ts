@@ -7,7 +7,6 @@
  * is the authoritative rate limiter.
  *
  * @see ADR-158 for the multi-layer security architecture.
- * @module
  */
 import type { RateLimiterOptions } from './rate-limiter-factory.js';
 

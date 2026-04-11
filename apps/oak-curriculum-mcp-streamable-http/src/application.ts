@@ -115,15 +115,7 @@ function setupPostAuthPhases(
     bootstrapTimer,
     'initializeCoreEndpoints',
     appId,
-    () =>
-      initializeCoreEndpoints(
-        app,
-        options,
-        options.runtimeConfig,
-        log,
-        options.observability,
-        assetRateLimiter,
-      ),
+    () => initializeCoreEndpoints(app, options, log, assetRateLimiter),
     options.observability,
   );
 

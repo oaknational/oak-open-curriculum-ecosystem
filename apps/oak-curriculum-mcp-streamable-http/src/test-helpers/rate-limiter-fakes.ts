@@ -7,8 +7,6 @@
  * const app = await createApp({ ...options, rateLimiterFactory: factory });
  * expect(calls).toHaveLength(3); // MCP, OAuth, Asset
  * ```
- *
- * @module
  */
 import type { RequestHandler } from 'express';
 import type {

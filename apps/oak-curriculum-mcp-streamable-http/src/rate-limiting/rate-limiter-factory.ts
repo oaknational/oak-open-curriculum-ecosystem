@@ -5,8 +5,6 @@
  * `express-rate-limit`. Tests inject a no-op or recording factory via the
  * {@link RateLimiterFactory} function type, following ADR-078 (DI for
  * testability).
- *
- * @module
  */
 import type { RequestHandler } from 'express';
 import { rateLimit } from 'express-rate-limit';

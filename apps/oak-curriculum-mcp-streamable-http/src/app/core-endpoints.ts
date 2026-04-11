@@ -19,28 +19,39 @@ import {
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 import { mountAssetDownloadProxy } from '../asset-download/asset-download-route.js';
-import { registerHandlers } from '../handlers.js';
+import { registerHandlers, type ToolHandlerOverrides } from '../handlers.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 import { createSearchRetrieval } from '../search-retrieval-factory.js';
 import type { HttpObservability } from '../observability/http-observability.js';
 import type { McpServerFactory } from '../mcp-request-context.js';
 import { OAK_SERVER_BRANDING } from '../server-branding.js';
 import { addHealthEndpoints } from './health-endpoints.js';
-import type { CreateAppOptions } from '../application.js';
+
+/**
+ * Narrow options for {@link initializeCoreEndpoints}. Contains only the
+ * fields the function actually needs, avoiding a circular type import
+ * back to the composition root's `CreateAppOptions`.
+ */
+export interface CoreEndpointOptions {
+  readonly runtimeConfig: RuntimeConfig;
+  readonly observability: HttpObservability;
+  readonly toolHandlerOverrides?: ToolHandlerOverrides;
+  readonly resourceUrl?: string;
+  readonly getWidgetHtml: () => string;
+}
 
 /** Initialises core MCP endpoints, returns a per-request factory. @see ADR-112 */
 export function initializeCoreEndpoints(
   app: Express,
-  options: CreateAppOptions,
-  runtimeConfig: RuntimeConfig,
+  options: CoreEndpointOptions,
   log: Logger,
-  observability: HttpObservability,
   assetRateLimiter: RequestHandler,
 ): { mcpFactory: McpServerFactory; ready: Promise<void> } {
+  const { runtimeConfig, observability } = options;
   const searchRetrieval = runtimeConfig.useStubTools
     ? createStubSearchRetrieval()
     : createSearchRetrieval(runtimeConfig.env, log);
-  const resourceUrl = options?.resourceUrl ?? 'http://localhost:3333/mcp';
+  const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
   const assetBaseUrl = runtimeConfig.displayHostname
     ? `https://${runtimeConfig.displayHostname}`
     : new URL(resourceUrl).origin;
@@ -55,7 +66,7 @@ export function initializeCoreEndpoints(
   );
 
   const handlerOptions = {
-    overrides: options?.toolHandlerOverrides,
+    overrides: options.toolHandlerOverrides,
     runtimeConfig,
     logger: log,
     observability,

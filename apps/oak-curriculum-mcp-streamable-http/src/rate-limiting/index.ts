@@ -6,7 +6,6 @@
  * {@link ASSET_RATE_LIMIT}) for defence-in-depth behind CDN edge protection.
  *
  * @see ADR-158 for the multi-layer security architecture.
- * @module
  */
 export {
   type RateLimiterFactory,

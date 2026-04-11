@@ -6,7 +6,6 @@
  * production callers omit it to get the default `express-rate-limit` factory.
  *
  * @see ADR-158 for the multi-layer security architecture.
- * @module
  */
 import type { RequestHandler } from 'express';
 
