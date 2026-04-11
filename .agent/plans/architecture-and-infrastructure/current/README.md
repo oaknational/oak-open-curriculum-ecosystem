@@ -11,7 +11,7 @@ Current queued work for this collection.
 
 Active execution:
 
-- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — HTTP adoption near-complete on `feat/full-sentry-otel-support`; Search CLI adoption next after merge
+- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — HTTP adoption + rate limiting complete; Search CLI adoption next. Branch: `feat/otel_sentry_enhancements`
 
 Related strategic umbrella:
 

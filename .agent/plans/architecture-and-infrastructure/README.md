@@ -13,7 +13,7 @@ See [active/README.md](active/README.md) for work in progress.
 
 | Priority | Plan | Milestone | Status |
 |----------|------|-----------|--------|
-| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | HTTP adoption near-complete (19/21 findings, all gates green on `feat/full-sentry-otel-support`); Search CLI + deployment pending |
+| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | HTTP adoption complete (PR #73 merged), rate limiting complete (ADR-144); Search CLI adoption + deployment evidence pending. Branch: `feat/otel_sentry_enhancements`. |
 
 Prompt entry:
 
