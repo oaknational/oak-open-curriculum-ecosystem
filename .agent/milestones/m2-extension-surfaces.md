@@ -45,7 +45,7 @@ All must be true before M2 exit:
   and Search CLI
 - [ ] Release/source-map evidence captured for the deployed observability
   foundation
-- [ ] Quality gates green (`pnpm qg`)
+- [ ] Canonical aggregate gate green (`pnpm check`)
 - [ ] No severity-1 or severity-2 snagging items open
 
 ## Current status

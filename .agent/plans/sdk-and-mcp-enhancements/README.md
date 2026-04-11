@@ -1,10 +1,9 @@
 # SDK and MCP Enhancements
 
-**Last Updated**: 7 March 2026
+**Last Updated**: 10 April 2026
 
-Planning hub for SDK pipeline evolution, MCP extensions, and related
-architectural work. Consolidated from the former `pipeline-enhancements/`
-and `sdk-and-mcp-enhancements/` directories.
+Planning hub for SDK pipeline evolution, MCP Apps work, and related
+architectural changes.
 
 **Collection Roadmap**: [roadmap.md](roadmap.md)
 **Active Plans**: [active/README.md](active/README.md)
@@ -15,29 +14,66 @@ and `sdk-and-mcp-enhancements/` directories.
 
 | File | Type | Description |
 |------|------|-------------|
-| [roadmap.md](roadmap.md) | Roadmap | MCP Apps standard migration: reframing rationale, coupling inventory, ADR matrix, domain ordering |
+| [roadmap.md](roadmap.md) | Roadmap | Strategic MCP Apps migration anchor, constraints, and dependency ordering |
 | [active/README.md](active/README.md) | Active index | In-progress executable plans |
 | [current/README.md](current/README.md) | Current index | Executable plans queued or resumable |
-| [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md) | Current plan | Add truthful `outputSchema` metadata to every MCP tool while keeping generated upstream-response validation aligned with the actual MCP `structuredContent` envelope |
-| [archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md) | Completed | All phases complete; post-deploy reindex is operational only. Archived 2026-03-11. |
+| [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md) | Active umbrella plan | Primary session-anchor plan for the MCP Apps migration |
+| [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md) | Active child plan | Fresh React MCP App rebuild. Deletes the dead widget framework and replaces it with MCP Apps infrastructure built from scratch |
+| [active/README.md#ws3-phase-companion-plans](active/README.md#ws3-phase-companion-plans) | Phase companion index | Eight WS3 phase companion plans with task-level execution detail; parent WS3 plan remains orchestration source of truth |
+| [archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md) | Completed plan | Phase 4.5 wrap-up complete: projection removal, SDK-ready tool metadata, TSDoc/doc sync, and readiness evidence archived |
+| [archive/completed/embed-widget-html-at-build-time.plan.md](archive/completed/embed-widget-html-at-build-time.plan.md) | Completed plan | Widget HTML now follows the committed codegen-constant pattern, preserves DI, and records the runtime decision in ADR-156 |
+| [current/ws3-contrast-validation-prerequisite.plan.md](current/ws3-contrast-validation-prerequisite.plan.md) | Current plan (complete, awaiting archive) | Build WCAG contrast validation into the token pipeline and fix the blocking token accessibility failures before Phase 4 starts |
+| [current/ws3-oak-url-augmentable-codegen-fix.plan.md](current/ws3-oak-url-augmentable-codegen-fix.plan.md) | Current plan (complete, awaiting archive) | Replace widening Oak URL augmentation typing with schema-derived GET response unions and honest middleware validation |
+| [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md) | Completed plan | Minimal design-token infrastructure prerequisite completed and archived; Phase 4/5 now build on the shared token package and canonical shell |
+| [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md) | Current plan | Add truthful `outputSchema` metadata to every MCP tool while keeping generated upstream-response validation aligned with actual MCP `structuredContent` envelopes |
+| [archive/completed/ws2-app-runtime-migration.plan.md](archive/completed/ws2-app-runtime-migration.plan.md) | Completed child plan | WS2 runtime migration completed and archived |
+| [archive/completed/mcp-runtime-boundary-simplification.plan.md](archive/completed/mcp-runtime-boundary-simplification.plan.md) | Completed plan | Canonical runtime descriptor surface and ingress-boundary simplification completed and archived |
+| [mcp-apps-support.research.md](mcp-apps-support.research.md) | Research | Canonical MCP Apps research summary for Oak. Active implementation is governed by the MCP Apps spec, `@modelcontextprotocol/ext-apps`, and the live executable plans |
+| [archive/completed/server-info-branding.plan.md](archive/completed/server-info-branding.plan.md) | Completed plan | MCP server branding alignment completed and archived |
+| [active/misconception-graph-mcp-surface.plan.md](active/misconception-graph-mcp-surface.plan.md) | Active plan | Expose misconception graph as MCP resource + tool (post-merge) |
+| [future/mcp-protocol-adoption-roadmap.plan.md](future/mcp-protocol-adoption-roadmap.plan.md) | Future plan | Resource templates, prompt completion, curriculum downloads, per-primitive icons |
 | [future/README.md](future/README.md) | Future index | Deferred/later plans |
-| [mcp-apps-support.research.md](mcp-apps-support.research.md) | Research | MCP Apps standard evidence base: ChatGPT support, SEP-1865, capability matrix |
-| [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md) | Active plan | **PRIMARY** session-anchor plan for MCP Apps migration (WS1–WS4). Supersedes the old execution plan. |
-| [active/ws2-app-runtime-migration.plan.md](active/ws2-app-runtime-migration.plan.md) | Active child plan | WS2 detailed implementation plan (complete). 10 specialist reviews across 2 rounds. |
-| [current/mcp-runtime-boundary-simplification.plan.md](current/mcp-runtime-boundary-simplification.plan.md) | Current plan | Post-WS2 runtime cleanup: SDK tool descriptor surface + ingress boundary. Phase 0: `@clerk/mcp-tools/express` evaluation. |
 
 ## Read Order
 
-1. **Roadmap first**: [roadmap.md](roadmap.md)
-2. **Now (in progress)**: [active/README.md](active/README.md)
-3. **Active MCP Apps migration entry point**: [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
-4. **WS2 child plan (complete)**: [active/ws2-app-runtime-migration.plan.md](active/ws2-app-runtime-migration.plan.md)
-5. **Next: runtime boundary simplification**: [current/mcp-runtime-boundary-simplification.plan.md](current/mcp-runtime-boundary-simplification.plan.md)
-6. **Archived oak-preview snagging**: [archive/completed/oak-preview-mcp-snagging.execution.plan.md](archive/completed/oak-preview-mcp-snagging.execution.plan.md)
-7. **Current queue index**: [current/README.md](current/README.md)
-8. **Current output-schema work**: [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
-9. **Later (deferred)**: [future/README.md](future/README.md)
-10. **Research evidence**: [mcp-apps-support.research.md](mcp-apps-support.research.md)
+1. [roadmap.md](roadmap.md)
+2. [active/README.md](active/README.md)
+3. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
+4. [active/ws3-widget-clean-break-rebuild.plan.md](active/ws3-widget-clean-break-rebuild.plan.md)
+5. [active/ws3-phase-6-docs-gates-review-commit.plan.md](active/ws3-phase-6-docs-gates-review-commit.plan.md)
+6. [archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md)
+7. [current/README.md](current/README.md)
+8. [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
+9. [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md)
+10. [future/README.md](future/README.md)
+
+## Source of Truth Model
+
+1. Accepted ADRs are the architectural source of truth.
+2. Code is the implementation source of truth.
+3. Active and current plans are the execution source of truth.
+4. Archived plans and research artefacts are provenance and context only.
+
+## Status Legend
+
+Use these canonical status tokens across this collection:
+
+- `ACTIVE` — currently executing and session-anchor relevant
+- `IN PROGRESS` — partially delivered, with remaining scoped work
+- `QUEUED` — prioritised next, not yet executing
+- `PLANNED` — identified future work, not yet queued
+- `PENDING` — todo-level item not yet started
+- `COMPLETED` / `COMPLETE` — finished and verified
+- `SUPERSEDED` — replaced by a newer authoritative plan/path
+- `STRATEGIC` — long-horizon planning item, not immediate execution
+- `REFERENCE` — context/source artefact, not an active execution task
+
+## MCP Apps Direction
+
+- Oak is building an MCP App, not preserving a legacy app surface.
+- Active implementation is governed by the MCP Apps spec and
+  `@modelcontextprotocol/ext-apps`.
+- Background research artefacts are not normative design input.
 
 ## Icebox (Pipeline Framework)
 
@@ -46,39 +82,11 @@ and the OpenAPI pipeline framework extraction are iceboxed:
 
 - [openapi-pipeline-framework.md](../icebox/openapi-pipeline-framework.md)
 
-## Source of Truth Model
-
-1. ADRs are the architecture source of truth.
-2. Code is the current implementation source of truth.
-3. Archived plans are concept sources only — do not execute directly.
-
-## Archive
-
-All legacy materials are archived and should not be executed directly.
-
-| Archive Path | Contents |
-|--------------|----------|
-| [archive/legacy-numbered/](archive/legacy-numbered/) | Legacy numbered plans (01–18) |
-| [archive/implemented/](archive/implemented/) | Historically implemented references |
-| [archive/completed/](archive/completed/) | Completed plans with provenance |
-| [archive/](archive/) | Historical notes, data artefacts, applied metaplans |
-
-## Workspace Context
-
-Per [ADR-108](../../../docs/architecture/architectural-decisions/108-sdk-workspace-decomposition.md),
-work in this area mainly touches:
-
-- WS2: Oak Code-Gen
-- WS4: Oak Runtime
-
-Generator-first and schema-first remain non-negotiable.
-
 ## Usage Guidance
 
-When promoting a concept from archive:
+When promoting an archived concept back into live work:
 
-1. Extract the concept from archived sources.
-2. Validate it against accepted ADR constraints.
-3. Verify current-state claims in code.
-4. Promote execution detail into an active plan, not an archived plan.
-5. Add provenance links back to the archived source.
+1. Re-validate it against accepted ADRs and current code.
+2. Strip any compatibility-layer thinking, stale counts, or historical
+   assumptions before reuse.
+3. Promote execution detail into `active/` or `current/`, never into archive.

@@ -10,6 +10,7 @@ import { createApp } from '../application.js';
 import { createDefaultRateLimiterFactory } from './rate-limiter-factory.js';
 import { createHttpObservabilityOrThrow } from '../observability/http-observability.js';
 import { loadRuntimeConfig } from '../runtime-config.js';
+import { TEST_UPSTREAM_METADATA } from '../../e2e-tests/helpers/upstream-metadata-fixture.js';
 
 function createTestRuntimeConfig() {
   const result = loadRuntimeConfig({
@@ -42,6 +43,8 @@ describe('MCP route rate limiting', () => {
       runtimeConfig,
       observability,
       rateLimiterFactory: createLowLimitFactory(2),
+      getWidgetHtml: () => '<html><body>test</body></html>',
+      upstreamMetadata: TEST_UPSTREAM_METADATA,
     });
 
     // First request — allowed; verify rate limit headers are present

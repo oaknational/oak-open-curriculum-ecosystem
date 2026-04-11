@@ -56,7 +56,7 @@ export const FETCH_PREREQUISITE_GUIDANCE =
  *
  * Used **only** in the get-curriculum-model tool definition, where "this tool"
  * correctly refers to get-curriculum-model itself. Other aggregated tools
- * (get-thread-progressions, get-prerequisite-graph) should use
+ * (get-thread-progressions, get-prior-knowledge-graph) should use
  * {@link AGGREGATED_PREREQUISITE_GUIDANCE} instead, which explicitly names
  * get-curriculum-model as the prerequisite rather than claiming the current
  * tool is a mandatory first call.

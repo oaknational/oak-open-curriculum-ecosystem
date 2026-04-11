@@ -1,0 +1,408 @@
+---
+name: "Documentation Architecture Phase A: Immediate Improvements"
+overview: >
+  Five documentation-only improvements with no dependencies: quality attribute
+  register, fitness function ADR, ADR index categorisation, C4 architecture
+  diagrams, and document layer content contract. All can execute in parallel.
+todos:
+  - id: i1-quality-attribute-register
+    content: "I1: Create quality attribute register at docs/architecture/quality-attribute-register.md"
+    status: pending
+  - id: i2-fitness-function-adr
+    content: "I2: Write ADR framing quality gates as architectural fitness functions"
+    status: pending
+  - id: i4-adr-index-categorisation
+    content: "I4: Add categorised view and skipped-number note to ADR index"
+    status: pending
+  - id: i5-c4-diagrams
+    content: "I5: Add C4 context and container diagrams to docs/architecture/README.md"
+    status: pending
+  - id: i9a-layer-content-contract
+    content: "I9a: Add document layer content contract to governance README"
+    status: pending
+  - id: validation
+    content: "Run markdownlint, practice:fitness:informational, and verify cross-references"
+    status: pending
+---
+
+# Documentation Architecture Phase A: Immediate Improvements
+
+**Last Updated**: 2026-04-10
+**Status**: Queued
+**Scope**: Five documentation-only improvements with no dependencies
+**Parent**: [architectural-documentation-excellence-synthesis.plan.md](./architectural-documentation-excellence-synthesis.plan.md)
+
+---
+
+## Context
+
+The architectural documentation excellence synthesis identified 10 improvement
+items. Five have no dependencies and can execute immediately. This plan covers
+those five. All are documentation-only — no code changes, no test changes.
+
+### Foundation Alignment
+
+> "Architectural Excellence Over Expediency — Always choose long-term
+> architectural clarity over short-term convenience." — principles.md
+>
+> "We must have a clear onboarding path for new developers and AI agents"
+> — principles.md §Onboarding
+>
+> "Document Everywhere — ALL files, modules, functions, data structures,
+> classes, constants, and type information MUST have exhaustive,
+> comprehensive TSDoc annotations" — principles.md §Code Design
+
+---
+
+## Quality Gate Strategy
+
+Documentation-only work. After each task:
+
+```bash
+pnpm markdownlint:root            # Markdown lint
+pnpm practice:fitness:informational  # Fitness report (non-blocking)
+```
+
+After all tasks:
+
+```bash
+pnpm check  # Full canonical verification
+```
+
+---
+
+## Task I1: Quality Attribute Register
+
+**File**: `docs/architecture/quality-attribute-register.md`
+
+**What**: A single document that explicitly names, ranks, and connects the
+quality attributes this system values to their enforcement mechanisms (fitness
+functions).
+
+**Content structure**:
+
+1. Brief introduction connecting to principles.md §Architectural Excellence
+2. Ranked quality attribute table with columns:
+   - Quality Attribute (name)
+   - Rank (priority ordering for trade-off navigation)
+   - Definition (what this means for this system)
+   - Enforcement Mechanisms (which fitness functions protect it)
+   - Measured By (how we know it's working)
+3. Brief note on how to use the register (referenced by ADRs, reviewers,
+   and when navigating principle tensions)
+
+**Quality attributes to include** (derived from principles.md):
+
+| Rank | Quality Attribute | Key enforcement |
+|------|-------------------|-----------------|
+| 1 | Type safety / correctness | type-check, schema-first, no-type-shortcuts rule |
+| 2 | Evolvability | TDD, modularity, no compat layers, ADR governance |
+| 3 | Testability | TDD, DI (ADR-078), pure functions, test taxonomy |
+| 4 | Security | PII scrubbing, secret scanning (ADR-111), input validation, Clerk |
+| 5 | Maintainability | Documentation, KISS/DRY/YAGNI, knip, depcruise |
+| 6 | Accessibility | WCAG 2.2 AA, Playwright + axe-core, both themes |
+| 7 | Operability | Structured logging (ADR-051), Sentry, error cause chains |
+
+**Ranking rationale** (from Betty review): Security must outrank maintainability
+for a system that handles PII (Sentry scrubbing), exposes MCP endpoints to
+external AI hosts, and integrates with an identity provider (Clerk). The register
+is used as a tiebreaker — rank 6 security would lose to maintainability, which
+inverts the risk hierarchy.
+
+**Critical framing note** (from Fred review): The register MUST explicitly state
+that ALL quality attributes are mandatory. The ranking is for tie-breaking when
+two absolutes create an apparent conflict — it is NOT permission to deprioritise
+lower-ranked attributes. This framing must be present in the register's
+introduction to prevent misuse by downstream agents.
+
+**Onboarding placement** (from onboarding review): The register answers "what
+does this project care about?" — the single most valuable orientation question
+for a newcomer. It must surface early, not deep in the architecture fold:
+
+- Add as item 0 in the governance README's "5-minute reading path" (before
+  Development Practice) with framing: "What this project values and how it
+  enforces those values."
+- Add to the quick-start guide's "ADR Start Here" section as a preamble.
+- Do NOT add to `AGENT.md` directly — let agents discover it through
+  progressive disclosure via governance or architecture.
+
+**Acceptance Criteria**:
+
+1. Document exists at `docs/architecture/quality-attribute-register.md`
+2. All 7 quality attributes listed with definitions and enforcement mechanisms
+3. Ranking reflects the implicit priority from principles.md
+4. Document references principles.md and links to relevant ADRs
+5. Architecture README links to the register
+6. Governance README 5-minute reading path links to the register as item 0
+7. Quick-start guide links to the register in the "ADR Start Here" section
+8. markdownlint passes
+
+**Deterministic Validation**:
+
+```bash
+# 1. File exists
+test -f docs/architecture/quality-attribute-register.md && echo "OK" || echo "MISSING"
+# Expected: OK
+
+# 2. All quality attributes present
+grep -c "| [1-7] |" docs/architecture/quality-attribute-register.md
+# Expected: 7
+
+# 3. Linked from architecture README
+grep -l "quality-attribute-register" docs/architecture/README.md
+# Expected: docs/architecture/README.md
+
+# 4. Markdown lint
+pnpm markdownlint:root
+# Expected: exit 0
+```
+
+---
+
+## Task I2: Fitness Function Framing ADR
+
+**File**: `docs/architecture/architectural-decisions/157-quality-gates-as-fitness-functions.md`
+(or next available number)
+
+**What**: An ADR that re-frames the existing 9-layer quality gate taxonomy as
+"architectural fitness functions" using the vocabulary from evolutionary
+architecture (Thoughtworks, Richards & Ford).
+
+**Content structure**:
+
+1. **Context**: The repo has a 9-layer quality gate taxonomy. The external
+   research (FOSA, Thoughtworks) identifies "fitness functions" as the primary
+   mechanism for preventing architectural drift. Our quality gates ARE fitness
+   functions — this ADR names them as such.
+2. **Decision**: Adopt the fitness function vocabulary. Each quality gate layer
+   protects one or more quality attributes from the register. New gates must
+   specify which quality attribute they protect.
+3. **Consequences**: New gates evaluated against the quality attribute register.
+   Existing gates mapped to the attributes they protect. The vocabulary
+   connects our practice to the broader architecture community's language.
+
+**Mapping to include**:
+
+| Gate Layer | Fitness Function | Protects (QA Register) |
+|-----------|-----------------|------------------------|
+| Formatting | Style consistency | Maintainability |
+| Type correctness | Compile-time safety | Type safety |
+| Linting | Pattern enforcement, boundary rules | Evolvability, Type safety |
+| Static analysis | Dead code, circular deps | Maintainability, Evolvability |
+| Testing | Behavioural correctness | Testability, Type safety |
+| Mutation testing | Test suite effectiveness | Testability |
+| Build | Production artefact integrity | Operability |
+| Specialist review | Architectural compliance | All attributes |
+| Accessibility audit | WCAG 2.2 AA compliance | Accessibility |
+
+**Enforcement hook** (from Betty review): The ADR must specify where and how
+the "new gates must specify which quality attribute they protect" requirement
+is operationalised. Options:
+
+- Add a checklist item to the quality-gate-hardening plan template
+- Add a review checklist item to the code-reviewer agent's gate evaluation
+- Add a section to the quality-fix-plan-template.md
+
+Without enforcement, this ADR is relabelling, not governance.
+
+**Acceptance Criteria**:
+
+1. ADR file exists with correct template structure (Status, Date, Context,
+   Decision, Consequences)
+2. Includes the gate-to-quality-attribute mapping table
+3. References the quality attribute register (I1)
+4. Specifies at least one enforcement mechanism for the new-gate requirement
+5. Added to ADR index README.md
+6. markdownlint passes
+
+---
+
+## Task I4: ADR Index Categorisation
+
+**File**: `docs/architecture/architectural-decisions/README.md` (modify)
+
+**What**: Add a categorised view grouping ADRs by domain concern, plus a note
+about intentionally skipped ADR numbers.
+
+**Categories** (from synthesis analysis):
+
+- **Cardinal Rule / Schema-First**: 029, 030, 031, 035, 036, 043, 105
+- **Search / Elasticsearch**: 064, 067, 072, 074, 076, 080, 082, 084, 089, 102, 104
+- **Type Safety / Error Handling**: 028, 032, 034, 078, 088, 153
+- **Auth / Identity**: 040, 052, 053, 056, 057, 113, 115
+- **MCP Protocol**: 050, 112, 113, 123, 141
+- **Testing / Quality**: 078, 085, 098, 106, 111, 121, 147
+- **UI / Design**: 045, 061, 148, 149, 151, 156
+- **Workspace / Build**: 010-017, 041, 065, 108, 128
+- **Agentic Engineering**: 114, 119, 125, 129, 135, 146, 150
+- **Operations / Observability**: 033, 051, 069, 087, 130, 143
+
+**Skipped numbers note**: "ADR numbers 039 and 090 were never assigned.
+ADRs 020, 021, and 023 are archived."
+
+**Acceptance Criteria**:
+
+1. Categorised view added to README.md (does not replace chronological list)
+2. Every ADR file on disk appears in at least one category
+3. Skipped-number note added
+4. markdownlint passes
+
+**Deterministic Validation**:
+
+```bash
+# 1. Categorised section exists
+grep "By Domain" docs/architecture/architectural-decisions/README.md
+# Expected: match found
+
+# 2. Skipped number note exists
+grep "039" docs/architecture/architectural-decisions/README.md
+# Expected: match found
+
+# 3. Markdown lint
+pnpm markdownlint:root
+# Expected: exit 0
+```
+
+---
+
+## Task I5: C4 Architecture Diagrams
+
+**File**: `docs/architecture/README.md` (modify) or
+`docs/architecture/c4-diagrams.md` (new, linked from README)
+
+**What**: Add Mermaid-format C4 context and container diagrams.
+
+**C4 Level 1 — System Context**:
+
+Shows the Oak MCP ecosystem and its external dependencies:
+
+- Oak Open Curriculum API (upstream data source)
+- Elasticsearch (search engine)
+- Clerk (identity provider)
+- AI Host applications (ChatGPT, Claude, etc.)
+- Human developers / contributors
+
+**C4 Level 2 — Container**:
+
+Shows the internal structure:
+
+- `apps/oak-mcp-server-ext` (HTTP MCP server)
+- `apps/oak-search-cli` (search CLI + ingestion)
+- `packages/sdks/curriculum-sdk` (OpenAPI client + code generation)
+- `packages/sdks/oak-search-sdk` (search query/response)
+- `packages/sdks/sdk-codegen` (code generation tooling)
+- `packages/core/*` (shared foundations)
+- `packages/libs/*` (shared libraries)
+- `packages/design/*` (design tokens)
+
+With dependency direction arrows showing the layer topology. Annotate
+build-time-only vs runtime dependencies (e.g., design tokens are build-time
+only — this distinction is architecturally significant per Betty review).
+
+**Onboarding placement** (from onboarding review): A system context diagram is
+the single highest-value artefact for a newcomer's first 5 minutes. Placing it
+only in the architecture section means it is not reached until minute 15-20.
+
+- Embed or inline the C4 Level 1 context diagram in `docs/foundation/quick-start.md`
+  "Architecture TL;DR" section — this is the first visual a newcomer sees.
+- Keep the Level 2 container diagram in `docs/architecture/README.md` for
+  deeper exploration.
+
+**Acceptance Criteria**:
+
+1. Context diagram present in Mermaid format
+2. Container diagram present in Mermaid format
+3. Dependency arrows match the layer topology in AGENT.md §Structure
+4. Level 1 context diagram embedded in `docs/foundation/quick-start.md`
+5. Level 2 container diagram in architecture README "Start Here" section
+5. markdownlint passes
+
+---
+
+## Task I9a: Document Layer Content Contract
+
+**File**: `docs/governance/README.md` (modify)
+
+**What**: Add a short section defining the content contract between the three
+documentation layers.
+
+**Content**:
+
+```markdown
+## Document Layer Content Contract
+
+The documentation system has three layers with distinct roles. Content should
+exist in exactly one layer and be referenced (not restated) by others.
+
+- **Directives** (`.agent/directives/`): Prescriptive — what agents and
+  developers must do. The authoritative source for principles and rules.
+- **Rules** (`.agent/rules/`): Enforcement triggers — when to check, what
+  to enforce. Thin pointers to the directive that defines the rule.
+- **Governance docs** (`docs/governance/`): Descriptive-elaborative — how to
+  do it well, with examples, edge cases, and tooling guidance. Elaborates on
+  directives without restating them.
+
+When in doubt: if it says "you must", it belongs in a directive. If it says
+"here's how", it belongs in governance. If content is found in the wrong
+layer, it is moved to the correct layer — never duplicated.
+```
+
+**Onboarding placement** (from onboarding review): AI agents are primary
+documentation authors but arrive via `AGENT.md`, not the governance README.
+They need to know where content belongs.
+
+- Add a one-line note to `AGENT.md` under "Essential Links > Core Practice"
+  pointing to the governance README's content contract section.
+
+**Acceptance Criteria**:
+
+1. Content contract section added to governance README
+2. Defines all three layers with distinct roles
+3. Includes the "when in doubt" guidance
+4. One-line reference added to `AGENT.md` Essential Links > Core Practice
+5. markdownlint passes
+
+---
+
+## Related Architectural Organisation Plans
+
+These plans reshape the workspace structure and boundaries. The C4 diagrams
+(I5), quality attribute register (I1), and fitness function framing (I2) must
+align with the architectural direction they set:
+
+- [Oak Surface Isolation](../future/oak-surface-isolation-and-generic-foundation-programme.plan.md) — separating Oak-specific surfaces from generic foundations; affects C4 container diagram scope
+- [Workspace Topology Exploration](../../sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md) — four-tier layered architecture model; affects C4 container diagram layer annotations and fitness function boundary rules
+- [SDK Codegen Workspace Decomposition](../codegen/future/sdk-codegen-workspace-decomposition.md) — SDK codegen restructuring; affects C4 container diagram SDK container boundaries
+
+**Alignment requirement**: C4 diagrams (I5) must reflect the current structure
+but note the planned direction. The fitness function ADR (I2) must account for
+the boundary enforcement rules that the topology exploration will introduce.
+
+---
+
+## Validation
+
+After all five tasks complete:
+
+```bash
+pnpm markdownlint:root
+pnpm practice:fitness:informational
+pnpm check  # Full canonical verification
+```
+
+---
+
+## Documentation Propagation
+
+Before marking complete:
+
+1. Architecture README updated with links to new documents
+2. ADR index updated with new ADR and categorised view
+3. Governance README updated with content contract
+4. Run `/jc-consolidate-docs`
+
+---
+
+## Consolidation
+
+After all work complete and gates pass, run `/jc-consolidate-docs`.

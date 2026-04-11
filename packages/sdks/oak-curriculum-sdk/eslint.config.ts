@@ -9,7 +9,7 @@ import { defineConfig } from 'eslint/config';
 import oakStandards, {
   ignores,
   testRules,
-  commonSettings,
+  createImportResolverSettings,
   createSdkBoundaryRules,
 } from '@oaknational/eslint-plugin-standards';
 import type { Linter } from 'eslint';
@@ -51,16 +51,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          projectService: true,
-        },
-      },
-    },
+    settings: createImportResolverSettings({ project: thisDir }),
   },
   // SDK boundary rules: prevent deep imports into generation workspace (ADR-108)
   {
@@ -96,6 +87,28 @@ const config = defineConfig(
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/consistent-type-assertions': 'off',
       'import-x/no-named-as-default-member': 'off',
+    },
+  },
+  {
+    files: ['src/mcp/ontology-data.ts', 'src/validation/types.ts'],
+    rules: {
+      'max-lines': 'off',
+    },
+  },
+  {
+    files: ['src/response-augmentation.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-types': 'off',
+    },
+  },
+  {
+    files: [
+      'src/mcp/universal-tools-executor.integration.test.ts',
+      'src/test-helpers/fakes.ts',
+      'src/validation/request-validators.unit.test.ts',
+    ],
+    rules: {
+      '@typescript-eslint/consistent-type-assertions': 'off',
     },
   },
 );

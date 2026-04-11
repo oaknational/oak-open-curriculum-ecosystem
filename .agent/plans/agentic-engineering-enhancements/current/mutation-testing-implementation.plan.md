@@ -34,7 +34,7 @@ todos:
 
 ## Intent
 
-Deliver a dependable mutation-testing capability across all pnpm workspaces so that mutation coverage (via `pnpm mutate`) is available as a supplementary signal in Phases 0-2, with a Phase 3 decision on promotion into `pnpm qg`. Mutation testing validates that tests actually protect behaviour — if you introduce a bug and tests still pass, tests are not protecting you.
+Deliver a dependable mutation-testing capability across all pnpm workspaces so that mutation coverage (via `pnpm mutate`) is available as a supplementary signal in Phases 0-2, with a Phase 3 decision on promotion into `pnpm check`. Mutation testing validates that tests actually protect behaviour — if you introduce a bug and tests still pass, tests are not protecting you.
 
 ### Execution Role
 
@@ -82,7 +82,7 @@ See [Appendix: Historical Pilot](#appendix-historical-pilot) for findings from t
 
 - Draft a `mutate` task in `turbo.json` modelled on `test`
 - Define `pnpm mutate` at root to call `turbo run --continue mutate`
-- During Phases 0–2, `mutate` runs as a **supplementary signal** (nightly CI or release pipelines only — not part of `pnpm qg`). During Phase 3, evaluate promotion to `pnpm qg` once performance overhead is acceptable and mutant survival is below threshold.
+- During Phases 0–2, `mutate` runs as a **supplementary signal** (nightly CI or release pipelines only — not part of `pnpm check`). During Phase 3, evaluate promotion to `pnpm check` once performance overhead is acceptable and mutant survival is below threshold.
 
 ## Strategic Roadmap
 
@@ -123,7 +123,7 @@ Apply the shared documentation-propagation contract:
 ## Success Metrics
 
 - **Coverage adoption**: 100% of workspaces with `test` scripts have active `mutate` tasks wired into Turbo
-- **Supplementary signal (Phases 0–2)**: Mutation testing runs as part of nightly CI or release pipelines; not a blocking quality gate during initial roll-out. Phase 3 evaluates promotion to `pnpm qg`.
+- **Supplementary signal (Phases 0–2)**: Mutation testing runs as part of nightly CI or release pipelines; not a blocking quality gate during initial roll-out. Phase 3 evaluates promotion to `pnpm check`.
 - **Surviving mutants**: Critical workspaces maintain ≤ 5% surviving mutants after remediation
 - **Developer experience**: Mutation runs complete within 2x the baseline unit-test runtime for pilot workspaces
 

@@ -61,7 +61,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-044: NL Delegates to Structured Search and Caching Ownership](044-nl-delegates-to-structured-search-and-caching-ownership.md)
 - [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md)
 - [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md) ← **Superseded by [ADR-141](141-mcp-apps-standard-primary.md)**
-- [ADR-047: Canonical URL Generation at Code-Gen Time](047-canonical-url-generation-at-codegen-time.md)
+- [ADR-047: Canonical URL Generation at Code-Gen Time](047-canonical-url-generation-at-codegen-time.md) ← **Partially Superseded** by ADR-145
 - [ADR-048: Shared Parse Schema Helper](048-shared-parse-schema-helper.md)
 - [ADR-049: SDK-Generated Deterministic Fixtures](049-sdk-generated-fixtures.md)
 - [ADR-050: MCP Tool Layering DAG](050-mcp-tool-layering-dag.md)
@@ -155,7 +155,21 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-141: MCP Apps Standard as Only UI Surface](141-mcp-apps-standard-primary.md)
 - [ADR-142: `@clerk/mcp-tools` Adopt-or-Explain Decision](142-clerk-mcp-tools-adopt-or-explain.md)
 - [ADR-143: Coherent Structured Fan-Out for the Sentry and OpenTelemetry Foundation](143-coherent-structured-fan-out-for-observability.md)
-- [ADR-144: Multi-Layer Security Architecture and Application Rate Limiting](144-multi-layer-security-and-rate-limiting.md)
+- [ADR-144: Two-Threshold Fitness Model](144-two-threshold-fitness-model.md)
+- [ADR-145: Oak URL Naming Collision Remediation](145-oak-url-naming-collision-remediation.md)
+- [ADR-146: Assumptions Reviewer — Meta-Level Plan Assessment](146-assumptions-reviewer-meta-level-plan-assessment.md)
+- [ADR-147: Browser Accessibility as a Blocking Quality Gate](147-browser-accessibility-as-blocking-quality-gate.md)
+- [ADR-148: Design Token Architecture](148-design-token-architecture.md)
+- [ADR-149: Frontend Specialist Reviewer Gateway Cluster](149-frontend-specialist-reviewer-gateway-cluster.md)
+- [ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)
+- [ADR-151: MCP App Styling Independence from Oak Web Application and Oak Components](151-mcp-app-styling-independence.md)
+- [ADR-152: Provenance UUID Migration](152-provenance-uuid-migration.md)
+- [ADR-153: Constant-Type-Predicate Pattern](153-constant-type-predicate-pattern.md)
+- [ADR-154: Separate Framework from Consumer](154-separate-framework-from-consumer.md)
+- [ADR-155: Decompose at the Tension](155-decompose-at-the-tension.md)
+- [ADR-156: Embed Widget HTML as Committed TypeScript Constant](156-embed-widget-html-at-build-time.md)
+- [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md)
+- [ADR-158: Multi-Layer Security Architecture and Application Rate Limiting](158-multi-layer-security-and-rate-limiting.md)
 
 ## Key Architectural Decisions
 
@@ -169,6 +183,8 @@ For understanding our API integration approach:
 - **[ADR-063](063-sdk-domain-synonyms-source-of-truth.md)** - SDK as single source of truth for domain synonyms
 - **[ADR-064](064-elasticsearch-mapping-organization.md)** - Elasticsearch index mapping organization
 - **[ADR-108](108-sdk-workspace-decomposition.md)** - SDK workspace decomposition (generic/Oak x sdk-codegen/runtime)
+- **[ADR-154](154-separate-framework-from-consumer.md)** - Separate framework from consumer: reusable mechanism vs Oak-specific instance, visible in code structure
+- **[ADR-155](155-decompose-at-the-tension.md)** - Decompose at the tension: classification resistance signals hidden coupling, decompose at the fault line
 - **[ADR-132](132-sitemap-scanner-for-canonical-url-validation.md)** - Sitemap scanner and reference-map validation for canonical URL generation
 
 For understanding authentication, authorization, and observability:
@@ -177,7 +193,7 @@ For understanding authentication, authorization, and observability:
 - **[ADR-053](053-clerk-as-identity-provider.md)** - Clerk as Identity Provider and Authorization Server
 - **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk)
 - **[ADR-143](143-coherent-structured-fan-out-for-observability.md)** - Coherent structured fan-out for the Sentry and OpenTelemetry foundation
-- **[ADR-144](144-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting
+- **[ADR-158](158-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 
@@ -192,6 +208,13 @@ For understanding the agentic engineering practice:
 - **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional fourth layer for agent-accessible CLI/MCP interaction with live domain systems
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
+- **[ADR-144](144-two-threshold-fitness-model.md)** - Two-threshold fitness model: target (soft, agent-extendable) vs limit (hard, user-approval) with consistent character and line-width governance
+- **[ADR-146](146-assumptions-reviewer-meta-level-plan-assessment.md)** - Assumptions reviewer: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
+- **[ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)** - Continuity surfaces, lightweight session handoff, conditional deep consolidation, and the surprise pipeline
+- **[ADR-147](147-browser-accessibility-as-blocking-quality-gate.md)** - Browser accessibility as a 9th blocking quality gate: WCAG 2.2 AA, Playwright + axe-core, two-level MCP App testing
+- **[ADR-148](148-design-token-architecture.md)** - Design token architecture: DTCG JSON source, three-tier model, CSS custom properties output, `packages/design/` location
+- **[ADR-149](149-frontend-specialist-reviewer-gateway-cluster.md)** - Frontend specialist reviewer gateway cluster: accessibility-reviewer, design-system-reviewer, react-component-reviewer cohort with MCP boundary rule
+- **[ADR-151](151-mcp-app-styling-independence.md)** - MCP App styling independence: CSS custom properties over styled-components, self-contained HTML resources, host theme composition
 
 For understanding semantic search and Elastic-native AI/ML approach:
 
@@ -246,12 +269,51 @@ For understanding the now deprecated and removed biological architecture:
 
 ## About ADRs
 
-Architecture Decision Records (ADRs) capture important architectural decisions made in the project. Each ADR includes:
+Architecture Decision Records (ADRs) are the **graduation target** of the
+learning loop. When captured experience settles into a permanent
+architectural decision, it becomes an ADR. ADRs are the architectural
+source of truth: they record _why_ the system is shaped as it is, not
+just what it does. Rules and directives operationalise ADRs; code
+implements them; quality gates enforce them. Custom ESLint rules can
+encode ADR constraints as automated enforcement — graduating knowledge
+into quality gates.
 
-- **Status**: Whether the decision is accepted, superseded, or deprecated
-- **Context**: The situation and forces at play
-- **Decision**: The change we're making
-- **Rationale**: Why we chose this approach
-- **Consequences**: What we expect to happen (both positive and negative)
+### Template
 
-ADRs help future developers (including ourselves) understand why the architecture is the way it is.
+```markdown
+# ADR-{NNN}: {Title}
+
+**Status**: Proposed | Accepted | Superseded by ADR-{NNN} | Deprecated
+**Date**: {YYYY-MM-DD}
+**Related**: [ADR-{NNN}]({filename}) — {relationship}
+
+## Context
+
+{What situation or problem prompted this decision? What constraints
+apply? What prior decisions does this build on?}
+
+## Decision
+
+{What was decided and why. Be specific enough that an agent or
+engineer can determine whether code complies.}
+
+## Consequences
+
+{What follows from this decision — positive, negative, and neutral.
+Include migration impact if replacing a prior approach.}
+```
+
+### Lifecycle
+
+- **Proposed**: under discussion, not yet binding.
+- **Accepted**: binding. Code, rules, and quality gates must comply.
+- **Superseded**: replaced by a newer ADR. Keep the file; update status
+  and link to the successor.
+- **Deprecated**: no longer applicable (e.g. workspace removed).
+
+### Creating an ADR
+
+ADRs are created when a decision is significant enough to shape future
+work. The consolidation workflow checks whether completed work produced
+decisions that should be recorded. Number sequentially from the highest
+existing ADR. Add the new entry to the Index above.

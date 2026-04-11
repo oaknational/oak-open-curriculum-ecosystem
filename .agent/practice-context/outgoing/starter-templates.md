@@ -55,7 +55,7 @@ accurate feedback on code changes.
 explicitly requested.
 
 **DRY and YAGNI**: Read and apply
-`.agent/sub-agents/components/principles/dry-yagni.md`.
+`.agent/sub-agents/components/principles/subagent-principles.md`.
 
 ## Reading Requirements (MANDATORY)
 
@@ -67,7 +67,7 @@ Before reviewing any code, you MUST also read and internalise:
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/principles.md` | Core project rules and quality expectations |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | DRY and YAGNI guardrails |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | DRY and YAGNI guardrails |
 
 <!-- ADD YOUR PROJECT'S TESTING STRATEGY AND OTHER KEY DOCS HERE -->
 
@@ -217,7 +217,7 @@ prove product behaviour.
 **Mode**: Observe, analyse and report. Do not modify code.
 
 **DRY and YAGNI**: Read and apply
-`.agent/sub-agents/components/principles/dry-yagni.md`.
+`.agent/sub-agents/components/principles/subagent-principles.md`.
 
 ## Reading Requirements (MANDATORY)
 
@@ -338,7 +338,7 @@ not short-term convenience.
 **Mode**: Observe, analyse and report. Do not modify code.
 
 **DRY and YAGNI**: Read and apply
-`.agent/sub-agents/components/principles/dry-yagni.md`.
+`.agent/sub-agents/components/principles/subagent-principles.md`.
 
 ## Reading Requirements (MANDATORY)
 
@@ -348,7 +348,7 @@ Read and apply `.agent/sub-agents/components/behaviours/subagent-identity.md`.
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/principles.md` | Core project rules |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | DRY/YAGNI guardrails |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | DRY/YAGNI guardrails |
 | `.agent/sub-agents/components/architecture/reviewer-team.md` | Team perspectives |
 
 <!-- ADD YOUR PROJECT'S ARCHITECTURE DOCS AND ADR INDEX HERE -->
@@ -494,7 +494,7 @@ guidance conflicts with what you observe in the code, flag the
 conflict — do not silently ignore either.
 ```
 
-### `components/principles/dry-yagni.md`
+### `components/principles/subagent-principles.md`
 
 ```markdown
 # DRY and YAGNI Guardrails

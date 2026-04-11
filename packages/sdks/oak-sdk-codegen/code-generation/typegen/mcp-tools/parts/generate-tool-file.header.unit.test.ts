@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import type { OperationObject } from 'openapi3-ts/oas31';
+
+import { createFakeOperationObject } from '../../../test-fakes.js';
 import { generateToolFile, type ParamMetadata } from './generate-tool-file.js';
 
-function op(): OperationObject {
-  return { responses: {} } as OperationObject;
+function op() {
+  return createFakeOperationObject({});
 }
 
 describe('buildImports path resolution', () => {

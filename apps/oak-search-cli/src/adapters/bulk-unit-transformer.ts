@@ -22,7 +22,7 @@ import { deriveSequenceSlug } from '@oaknational/curriculum-sdk';
 import type { SearchUnitsIndexDoc, AllSubjectSlug, ParentSubjectSlug } from '../types/oak';
 import { isKeyStage } from './sdk-guards';
 import {
-  generateUnitUrlFromSequence,
+  generateUnitOakUrlFromSequence,
   normaliseYearsFromUnit,
   getKeyStageTitle,
 } from './bulk-transform-helpers.js';
@@ -116,7 +116,7 @@ export function extractUnitParamsFromBulk(params: BulkToESUnitParams): CreateUni
     keyStageTitle: getKeyStageTitle(keyStage),
     years: normaliseYearsFromUnit(unit.year, unit.yearSlug),
     lessonIds: unit.unitLessons.map((l) => l.lessonSlug),
-    unitUrl: generateUnitUrlFromSequence(unit.unitSlug, resolvedSequenceSlug),
+    unitUrl: generateUnitOakUrlFromSequence(unit.unitSlug, resolvedSequenceSlug),
     subjectProgrammesUrl,
     threadInfo: extractThreadInfoFromBulk(unit),
     enrichment: {

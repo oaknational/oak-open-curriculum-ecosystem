@@ -5,8 +5,6 @@
  * NO network IO, simple mock fetch injected as argument.
  */
 
-/* eslint-disable @typescript-eslint/no-misused-promises */
-
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import createClient, { type Middleware } from 'openapi-fetch';
 import { createRateLimitMiddleware } from './rate-limit';
@@ -32,14 +30,29 @@ interface TestPaths {
 
 type FetchFn = (input: Request | string | URL, init?: RequestInit) => Promise<Response>;
 
+function createSuccessResponse(): Response {
+  return new Response(JSON.stringify({ message: 'success' }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+function getRequestInput(fetchMock: ReturnType<typeof vi.fn<FetchFn>>, callIndex = 0): Request {
+  const [request] = fetchMock.mock.calls[callIndex] ?? [];
+  if (!(request instanceof Request)) {
+    throw new Error('Expected middleware to invoke fetch with a Request');
+  }
+  return request;
+}
+
 describe('rate-limit middleware integration', () => {
-  let mockFetch: ReturnType<typeof vi.fn>;
+  let mockFetch: ReturnType<typeof vi.fn<FetchFn>>;
 
   beforeEach(() => {
     // Use fake timers to avoid real delays in tests
     vi.useFakeTimers();
     // Reset mock before each test
-    mockFetch = vi.fn();
+    mockFetch = vi.fn<FetchFn>();
   });
 
   afterEach(() => {
@@ -52,18 +65,13 @@ describe('rate-limit middleware integration', () => {
     const middleware = createRateLimitMiddleware(config);
 
     // Mock successful response
-    mockFetch.mockResolvedValueOnce(
-      new Response(JSON.stringify({ message: 'success' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      }),
-    );
+    mockFetch.mockResolvedValueOnce(createSuccessResponse());
 
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
     client.use(middleware);
 
     // First request should not be delayed
-    const promise = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise = client.GET('/test', { fetch: mockFetch });
     await vi.runAllTimersAsync();
     await promise;
 
@@ -75,26 +83,19 @@ describe('rate-limit middleware integration', () => {
     const middleware = createRateLimitMiddleware(config);
 
     // Mock successful responses - create new Response for each call
-    mockFetch.mockImplementation(() =>
-      Promise.resolve(
-        new Response(JSON.stringify({ message: 'success' }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        }),
-      ),
-    );
+    mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
     client.use(middleware);
 
     // Make first request
-    const firstPromise = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const firstPromise = client.GET('/test', { fetch: mockFetch });
     await vi.runAllTimersAsync(); // Let any timers complete
     await firstPromise;
     expect(mockFetch).toHaveBeenCalledTimes(1);
 
     // Make second request immediately - should be delayed
-    const secondPromise = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const secondPromise = client.GET('/test', { fetch: mockFetch });
 
     // The middleware should delay by 100ms
     await vi.advanceTimersByTimeAsync(100);
@@ -108,26 +109,21 @@ describe('rate-limit middleware integration', () => {
     const config = createRateLimitConfig({ minRequestInterval: 50 });
     const middleware = createRateLimitMiddleware(config);
 
-    mockFetch.mockImplementation(async () => {
-      return new Response(JSON.stringify({ message: 'success' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    });
+    mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
     client.use(middleware);
 
     // Make 3 requests - each needs 50ms interval
-    const promise1 = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise1 = client.GET('/test', { fetch: mockFetch });
     await vi.runAllTimersAsync();
     await promise1;
 
-    const promise2 = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise2 = client.GET('/test', { fetch: mockFetch });
     await vi.advanceTimersByTimeAsync(50);
     await promise2;
 
-    const promise3 = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise3 = client.GET('/test', { fetch: mockFetch });
     await vi.advanceTimersByTimeAsync(50);
     await promise3;
 
@@ -138,21 +134,16 @@ describe('rate-limit middleware integration', () => {
     const config = createRateLimitConfig({ enabled: false, minRequestInterval: 100 });
     const middleware = createRateLimitMiddleware(config);
 
-    mockFetch.mockImplementation(async () => {
-      return new Response(JSON.stringify({ message: 'success' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    });
+    mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
     client.use(middleware);
 
     // Make 3 requests quickly - should not be delayed
     await Promise.all([
-      client.GET('/test', { fetch: mockFetch as FetchFn }),
-      client.GET('/test', { fetch: mockFetch as FetchFn }),
-      client.GET('/test', { fetch: mockFetch as FetchFn }),
+      client.GET('/test', { fetch: mockFetch }),
+      client.GET('/test', { fetch: mockFetch }),
+      client.GET('/test', { fetch: mockFetch }),
     ]);
     await vi.runAllTimersAsync();
 
@@ -163,18 +154,13 @@ describe('rate-limit middleware integration', () => {
     const config = createRateLimitConfig({ minRequestInterval: 50 });
     const middleware = createRateLimitMiddleware(config);
 
-    mockFetch.mockImplementation(async () => {
-      return new Response(JSON.stringify({ message: 'success' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    });
+    mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
     client.use(middleware);
 
     // Make first request
-    const promise1 = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise1 = client.GET('/test', { fetch: mockFetch });
     await vi.runAllTimersAsync();
     await promise1;
 
@@ -182,7 +168,7 @@ describe('rate-limit middleware integration', () => {
     await vi.advanceTimersByTimeAsync(60);
 
     // Second request should not be delayed since enough time has passed
-    const promise2 = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise2 = client.GET('/test', { fetch: mockFetch });
     await vi.runAllTimersAsync();
     await promise2;
 
@@ -193,23 +179,18 @@ describe('rate-limit middleware integration', () => {
     const config = createRateLimitConfig({ minRequestInterval: 200 });
     const middleware = createRateLimitMiddleware(config);
 
-    mockFetch.mockImplementation(async () => {
-      return new Response(JSON.stringify({ message: 'success' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    });
+    mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
     client.use(middleware);
 
     // First request
-    const promise1 = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise1 = client.GET('/test', { fetch: mockFetch });
     await vi.runAllTimersAsync();
     await promise1;
 
     // Second request should wait 200ms
-    const promise2 = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise2 = client.GET('/test', { fetch: mockFetch });
     await vi.advanceTimersByTimeAsync(200);
     await promise2;
 
@@ -228,30 +209,24 @@ describe('rate-limit middleware integration', () => {
       },
     };
 
-    mockFetch.mockImplementation(async () => {
-      return new Response(JSON.stringify({ message: 'success' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    });
+    mockFetch.mockImplementation(() => Promise.resolve(createSuccessResponse()));
 
     const client = createClient<TestPaths>({ baseUrl: 'http://test.local' });
     client.use(authMiddleware);
     client.use(rateLimitMiddleware);
 
     // First request
-    const promise1 = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise1 = client.GET('/test', { fetch: mockFetch });
     await vi.runAllTimersAsync();
     await promise1;
 
     // Second request should wait 100ms
-    const promise2 = client.GET('/test', { fetch: mockFetch as FetchFn });
+    const promise2 = client.GET('/test', { fetch: mockFetch });
     await vi.advanceTimersByTimeAsync(100);
     await promise2;
 
     // Auth header should be set
-    const firstCall = mockFetch.mock.calls[0];
-    const firstRequest = firstCall[0] as Request;
+    const firstRequest = getRequestInput(mockFetch);
     expect(firstRequest.headers.get('X-Test-Auth')).toBe('test-token');
 
     expect(mockFetch).toHaveBeenCalledTimes(2);

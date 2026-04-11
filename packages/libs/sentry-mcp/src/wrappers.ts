@@ -22,7 +22,7 @@ async function observeMcpOperation<T>(
   name: string,
   run: () => Promise<T> | T,
   options: McpObservationOptions,
-): Promise<T> {
+): Promise<Awaited<T>> {
   const now = options.now ?? DEFAULT_CLOCK;
   const start = now();
 
@@ -58,8 +58,8 @@ export function wrapToolHandler<TArgs extends readonly unknown[], TResult>(
   name: string,
   handler: (...args: TArgs) => Promise<TResult> | TResult,
   options: McpObservationOptions,
-): (...args: TArgs) => Promise<TResult> {
-  return async (...args: TArgs): Promise<TResult> =>
+): (...args: TArgs) => Promise<Awaited<TResult>> {
+  return async (...args: TArgs): Promise<Awaited<TResult>> =>
     observeMcpOperation('tool', name, () => handler(...args), options);
 }
 
@@ -67,8 +67,8 @@ export function wrapResourceHandler<TArgs extends readonly unknown[], TResult>(
   name: string,
   handler: (...args: TArgs) => Promise<TResult> | TResult,
   options: McpObservationOptions,
-): (...args: TArgs) => Promise<TResult> {
-  return async (...args: TArgs): Promise<TResult> =>
+): (...args: TArgs) => Promise<Awaited<TResult>> {
+  return async (...args: TArgs): Promise<Awaited<TResult>> =>
     observeMcpOperation('resource', name, () => handler(...args), options);
 }
 
@@ -76,7 +76,7 @@ export function wrapPromptHandler<TArgs extends readonly unknown[], TResult>(
   name: string,
   handler: (...args: TArgs) => Promise<TResult> | TResult,
   options: McpObservationOptions,
-): (...args: TArgs) => Promise<TResult> {
-  return async (...args: TArgs): Promise<TResult> =>
+): (...args: TArgs) => Promise<Awaited<TResult>> {
+  return async (...args: TArgs): Promise<Awaited<TResult>> =>
     observeMcpOperation('prompt', name, () => handler(...args), options);
 }

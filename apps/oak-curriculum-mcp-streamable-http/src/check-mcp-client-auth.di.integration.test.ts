@@ -117,6 +117,33 @@ describe('checkMcpClientAuth (DI contract)', () => {
       expect(result).toBeUndefined();
     });
 
+    it('logs only non-PII success metadata when auth checks pass', () => {
+      const deps = createFakeDeps({
+        toolRequiresAuth: () => true,
+        validateResourceParameter: (): ResourceValidationResult => ({
+          valid: true,
+        }),
+      });
+      const authInfo = createFakeAuthInfo({
+        clientId: 'client_789',
+        scopes: ['openid', 'email'],
+        extra: { userId: 'user_123' },
+      });
+      const logger = createFakeLogger();
+
+      const result = callWithDI(authInfo, deps, { logger });
+
+      expect(result).toBeUndefined();
+      expect(logger.info).toHaveBeenCalledWith('MCP client authentication successful', {
+        toolName,
+        clientId: 'client_789',
+        scopeCount: 2,
+        hasUserContext: true,
+      });
+      const infoCalls = vi.mocked(logger.info).mock.calls;
+      expect(infoCalls[0]?.[1]).not.toHaveProperty('userId');
+    });
+
     it('passes authInfo.token to validateResourceParameter', () => {
       const validateSpy = vi.fn((): ResourceValidationResult => ({ valid: true }));
       const deps = createFakeDeps({

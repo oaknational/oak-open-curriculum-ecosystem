@@ -34,7 +34,7 @@ All must be true before M1 exit:
 - [x] HTTP MCP server deployed at `curriculum-mcp-alpha.oaknational.dev`
 - [x] Access restricted to Oak email domain + explicit Clerk invitations
   (allowlist on development instance)
-- [x] Quality gates green (`pnpm qg`) — verified 2026-03-03
+- [x] Canonical aggregate gate green (`pnpm check`) — verified 2026-03-03
 - [x] No severity-1 or severity-2 snagging items open — all M1-S00x
   items completed or closed; M1-S007 deferred (P3)
 

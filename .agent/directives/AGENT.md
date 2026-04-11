@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 200
+fitness_line_target: 200
+fitness_line_limit: 275
+fitness_char_limit: 16500
+fitness_line_length: 100
 split_strategy: "Extract detail to referenced docs; this file is an index/entry point"
 ---
 
@@ -63,25 +66,39 @@ Specialist sub-agents provide targeted reviews and insights. Use them proactivel
 
 `code-reviewer` (gateway), `architecture-reviewer-barney`, `architecture-reviewer-fred`, `architecture-reviewer-betty`, `architecture-reviewer-wilma`, `test-reviewer`, `type-reviewer`, `config-reviewer`, `security-reviewer`, `docs-adr-reviewer`
 
+#### UI/Frontend Cluster (ADR-149)
+
+`accessibility-reviewer`, `design-system-reviewer`, `react-component-reviewer`
+
 #### Specialist On-Demand
 
-`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`, `onboarding-reviewer`, `mcp-reviewer`, `elasticsearch-reviewer`, `clerk-reviewer`, `sentry-reviewer`
+`ground-truth-designer`, `subagent-architect`, `release-readiness-reviewer`, `onboarding-reviewer`, `mcp-reviewer`, `elasticsearch-reviewer`, `clerk-reviewer`, `sentry-reviewer`, `assumptions-reviewer`
 
 **Cursor-specific**: Invoke via the Task tool with `subagent_type` parameter. Other tooling: invoke by name using platform-specific methods.
 
 ### Agent Tools
 
-CLI tools for managing agent workflows live in [`agent-tools/`](../../agent-tools/README.md). Use the root scripts (for example `pnpm agent-tools:claude-agent-ops status`) to run them.
+CLI tools for managing agent workflows live in [`agent-tools/`](../../agent-tools/README.md). Use the root scripts (for example `pnpm agent-tools:claude-agent-ops status` or `pnpm agent-tools:claude-agent-ops health`) to run them.
 
 Canonical commands:
 
-- `pnpm agent-tools:claude-agent-ops <status|worktrees|log|diff|commit-ready|preflight|cleanup>`
+- `pnpm agent-tools:claude-agent-ops <status|health|worktrees|log|diff|commit-ready|preflight|cleanup>`
 - `pnpm agent-tools:cursor-session-from-claude-session <find|inspect|takeover>`
 - `pnpm agent-tools:codex-reviewer-resolve <agent-name> [--json]`
 
 ### Agent Artefact Architecture (ADR-125)
 
 All agent artefacts follow a three-layer model: canonical content in `.agent/`, thin platform adapters in `.cursor/`/`.claude/`/`.gemini/`/`.agents/`/`.codex/`, and entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For the full inventory see [artefact-inventory.md](./artefact-inventory.md).
+
+**Platform configuration split (Claude Code)**: `.claude/settings.json` is
+tracked in git and defines the agentic system contract — skill permissions
+(`Skill(name)` entries), safety hooks (`PreToolUse`), and plugin state.
+User-specific paths, one-off tool permissions, and machine-local overrides
+belong in `.claude/settings.local.json` (gitignored). Arrays concatenate
+across scopes per Claude Code merge semantics. The portability validator
+(`pnpm portability:check`, Check 11) verifies that every Claude command
+adapter has a corresponding `Skill()` permission entry in the project
+settings.
 
 ## Essential Links
 
@@ -93,6 +110,12 @@ All agent artefacts follow a three-layer model: canonical content in `.agent/`, 
 - [Testing Strategy](testing-strategy.md) - TDD/BDD approach at all levels
 - [TypeScript Practice](../../docs/governance/typescript-practice.md) - Type safety
 - [Safety and Security](../../docs/governance/safety-and-security.md) - API keys, PII protection, security principles
+
+### UI and Design
+
+- [Accessibility Practice](../../docs/governance/accessibility-practice.md) - WCAG 2.2 AA, Playwright + axe-core
+- [Design Token Practice](../../docs/governance/design-token-practice.md) - DTCG three-tier model, contrast validation
+- [MCP App Styling](../../docs/governance/mcp-app-styling.md) - SDK variable bridges, font loading, CSP
 
 ### Architecture and Schema
 
@@ -115,7 +138,10 @@ All agent artefacts follow a three-layer model: canonical content in `.agent/`, 
 
 ## Development Commands
 
-From the repo root, via Turbo:
+From the repo root:
+
+Quality gate policy: run gates one at a time while iterating. If you need the
+canonical aggregate verification command, ALWAYS use `pnpm check`.
 
 ```bash
 pnpm install        # Setup
@@ -131,7 +157,11 @@ pnpm lint:fix       # Lint (auto-fix)
 pnpm test:root-scripts    # Repo-level script tests
 pnpm test           # Unit and integration tests
 pnpm test:field-integrity    # Manifest-based semantic-search field-integrity suites
-pnpm test:ui        # UI tests
+pnpm test:widget    # MCP App widget in-process tests
+pnpm test:ui        # Browser UI tests (server landing page)
+pnpm test:a11y      # Browser accessibility tests (server landing page)
+pnpm test:widget:ui    # Widget Playwright visual/structural tests (both themes)
+pnpm test:widget:a11y  # Widget Playwright WCAG 2.2 AA accessibility tests (both themes)
 pnpm test:e2e       # E2E tests (includes built-server behaviour tests)
 pnpm smoke:dev:stub # Local smoke tests
 pnpm practice:fitness    # Strict fitness validation for live docs with frontmatter
@@ -139,12 +169,11 @@ pnpm practice:fitness:informational    # Non-blocking soft-ceiling report
 
 # Convenience commands
 pnpm make           # install, build, type-check, doc-gen, lint:fix, subagents:check, portability:check, practice:fitness:informational, markdownlint, format
-pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents:check, portability:check, test:root-scripts, type-check, lint, test, test:ui, test:e2e, smoke:dev:stub
 pnpm fix            # Auto-fix: format, markdownlint, lint:fix
 pnpm doc-gen        # Generate documentation from TSDoc
 
 # All in one command (clean rebuild + full verification)
-pnpm check          # secrets:scan:all, clean, test:root-scripts, sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:e2e, test:ui, smoke:dev:stub, subagents:check, portability:check, markdownlint:root, format:root
+pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, then ONE turbo run (sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, test:widget:ui, test:widget:a11y, smoke:dev:stub), then subagents:check, portability:check, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding
@@ -158,6 +187,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 - `packages/libs/` – libraries (`@oaknational/logger`, `@oaknational/env-resolution`, `@oaknational/search-contracts`, `@oaknational/sentry-node`, `@oaknational/sentry-mcp`)
 - `packages/sdks/` – SDKs (`@oaknational/curriculum-sdk`, `@oaknational/oak-search-sdk`, `@oaknational/sdk-codegen`)
 - `packages/core/` – shared low-level code (`@oaknational/eslint-plugin-standards`, `@oaknational/type-helpers`, `@oaknational/result`, `@oaknational/env`, `@oaknational/observability`)
+- `packages/design/` – design tokens (`@oaknational/design-tokens-core`, `@oaknational/oak-design-tokens`)
 
 ## Remember
 

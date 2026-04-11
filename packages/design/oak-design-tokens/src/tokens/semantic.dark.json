@@ -1,0 +1,65 @@
+{
+  "semantic": {
+    "$description": "Dark theme: green-700 page background with light text. Only colour tokens are overridden; non-colour semantics (typography, spacing, radius) remain identical across themes.",
+    "surface-page": {
+      "$type": "color",
+      "$value": "{color.green-700}",
+      "$description": "Page background — old Oak Green"
+    },
+    "surface-panel": {
+      "$type": "color",
+      "$value": "{color.ink-800}",
+      "$description": "Panel/card background — dark navy for contrast with green page"
+    },
+    "surface-accent": {
+      "$type": "color",
+      "$value": "{color.oak-green-600}",
+      "$description": "Accent surface — darker green so text-primary (white) passes 4.5:1"
+    },
+    "border-subtle": {
+      "$type": "color",
+      "$value": "{color.mint-300}",
+      "$description": "Dividers and panel borders — mint on green (3.91:1)"
+    },
+    "text-primary": {
+      "$type": "color",
+      "$value": "{color.paper-050}",
+      "$description": "Primary body text — warm white (4.78:1 on green-700)"
+    },
+    "text-secondary": {
+      "$type": "color",
+      "$value": "{color.paper-050}",
+      "$description": "Secondary text — same as primary on green-700 (paper-100 fails 4.5:1)"
+    },
+    "text-inverse": {
+      "$type": "color",
+      "$value": "{color.ink-950}",
+      "$description": "Text on accent/light surfaces — dark navy (8.00:1 on oak-green-300)"
+    },
+    "accent": {
+      "$type": "color",
+      "$value": "{color.paper-050}",
+      "$description": "Primary accent on green page — white links/buttons (4.78:1 on green-700)"
+    },
+    "accent-strong": {
+      "$type": "color",
+      "$value": "{color.mint-300}",
+      "$description": "Hover/active accent — mint on green for visible state change (3.91:1 on green-700, passes 3:1 non-text)"
+    },
+    "focus-ring": {
+      "$type": "color",
+      "$value": "{color.paper-050}",
+      "$description": "Focus indicator — white on green (4.78:1, exceeds 3:1 non-text)"
+    },
+    "focus-ring-on-accent": {
+      "$type": "color",
+      "$value": "{color.paper-050}",
+      "$description": "Focus ring on accent surfaces — white on dark green (6.49:1)"
+    },
+    "error": {
+      "$type": "color",
+      "$value": "{color.paper-050}",
+      "$description": "Error states — white on green page. Styling distinguishes via icon/border, not colour alone."
+    }
+  }
+}

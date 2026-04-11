@@ -2,8 +2,8 @@
  * E2E tests for core server behaviour: healthcheck, landing page, MCP endpoint.
  *
  * These tests verify the same behaviours previously tested via subprocess + fetch,
- * now using in-process DI with supertest (no network IO). The "does the built
- * artefact actually boot?" concern is covered by the smoke:dev:stub script.
+ * now using in-process DI with supertest (no network IO). Plain-Node import
+ * coverage for the compiled artefact lives in built-artifact-import.e2e.test.ts.
  */
 import { describe, it, expect, beforeAll } from 'vitest';
 import type { Express } from 'express';

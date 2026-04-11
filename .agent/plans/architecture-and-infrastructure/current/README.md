@@ -8,11 +8,23 @@ Current queued work for this collection.
 |----------|------|-------|--------|
 | P1 | [config-architecture-standardisation-plan.md](./config-architecture-standardisation-plan.md) | Shared config DI and runtime-config standardisation | Queued |
 | P2 | [security-dependency-triage.plan.md](./security-dependency-triage.plan.md) | Dependabot, CodeQL, and outdated dependency triage | Queued |
+| P3 | [doc-architecture-phase-a-immediate.plan.md](./doc-architecture-phase-a-immediate.plan.md) | QA register, fitness function ADR, ADR index, C4 diagrams, layer contract | Queued |
+| P4 | [doc-architecture-phase-b-dependent.plan.md](./doc-architecture-phase-b-dependent.plan.md) | Deduplication, operability practice, trade-off guidance, Practice Core | Queued (blocked by Phase A) |
 
 Active execution:
 
 - [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — HTTP adoption + rate limiting complete; Search CLI adoption next. Branch: `feat/otel_sentry_enhancements`
 
+Strategic analysis (parent of Phase A and B):
+
+- [architectural-documentation-excellence-synthesis.plan.md](./architectural-documentation-excellence-synthesis.plan.md) — multi-part report synthesising internal docs against external research
+
+Planned follow-on after the current improvement tranche:
+
+- [../future/quality-gate-hardening.plan.md](../future/quality-gate-hardening.plan.md) — first promotion candidate once the current active and queued improvement work is complete
+
 Related strategic umbrella:
 
 - [observability-and-quality-metrics.plan.md](../future/observability-and-quality-metrics.plan.md) — strategic parent plan whose first slice is currently being executed by the active child plan
+
+Strategic context: [../roadmap.md](../roadmap.md)

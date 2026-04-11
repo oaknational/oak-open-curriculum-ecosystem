@@ -14,7 +14,7 @@ const AGGREGATED_TOOL_NAMES = [
   'fetch',
   'get-curriculum-model',
   'get-thread-progressions',
-  'get-prerequisite-graph',
+  'get-prior-knowledge-graph',
   'browse-curriculum',
   'explore-topic',
   'download-asset',

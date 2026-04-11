@@ -1514,7 +1514,7 @@ export const threadProgressionGraph = {
     },
   ],
 
-  seeAlso: 'Use get-curriculum-model for complete orientation (includes property graph). Use get-prerequisite-graph for unit dependencies.',
+  seeAlso: 'Use get-curriculum-model for complete orientation (includes property graph). Use get-prior-knowledge-graph for unit dependencies.',
 } as const;
 
 /**

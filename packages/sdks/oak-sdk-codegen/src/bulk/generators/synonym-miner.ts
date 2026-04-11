@@ -1,7 +1,3 @@
-/* eslint-disable max-lines -- generator with serialisation requires length */
-/* eslint-disable max-lines-per-function -- pattern extraction and serialisation are long */
-/* eslint-disable max-statements -- pattern extraction requires many statements */
-/* eslint-disable complexity -- pattern matching is inherently complex */
 /**
  * Synonym miner for extracting synonyms from keyword definitions.
  *

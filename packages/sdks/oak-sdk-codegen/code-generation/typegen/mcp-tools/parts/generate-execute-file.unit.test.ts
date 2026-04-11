@@ -45,4 +45,12 @@ describe('generateExecuteFile', () => {
 
     expect(code).toContain('raw: invokeResult.payload');
   });
+
+  it('uses Node ESM-compatible MCP SDK specifiers in generated imports', () => {
+    const code = generateExecuteFile(toolNames);
+
+    expect(code).toContain(
+      "import { CallToolRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types.js';",
+    );
+  });
 });

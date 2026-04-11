@@ -4,7 +4,7 @@ import {
   type ToolName,
   type ToolExecutionResult,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types';
 import { createMcpToolsModule } from './index.js';
 import { err, ok } from '@oaknational/result';
 import { createFakeOakPathBasedClient } from '../test-helpers/fakes.js';

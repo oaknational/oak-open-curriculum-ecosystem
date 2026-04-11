@@ -12,47 +12,7 @@ export type { KeyStage, Subject as SearchSubjectSlug } from '@oaknational/curric
 export type { AllSubjectSlug, ParentSubjectSlug } from '@oaknational/curriculum-sdk';
 
 // Search schemas, constants, factories, and type guards from sdk-codegen
-export {
-  SearchFacetsSchema,
-  SearchLessonsIndexDocSchema,
-  SearchUnitsIndexDocSchema,
-  SearchUnitRollupDocSchema,
-  SearchSequenceIndexDocSchema,
-  SearchThreadIndexDocSchema,
-  isSearchLessonsIndexDoc,
-  isSearchUnitsIndexDoc,
-  isSearchUnitRollupDoc,
-  isSearchSequenceIndexDoc,
-  isSearchThreadIndexDoc,
-  DEFAULT_INCLUDE_FACETS,
-  SearchStructuredRequestSchema,
-  isSearchStructuredRequest,
-  SearchNaturalLanguageRequestSchema,
-  isSearchNaturalLanguageRequest,
-  SearchParsedQuerySchema,
-  isSearchParsedQuery,
-  SEARCH_SCOPES,
-  SEARCH_SCOPES_WITH_ALL,
-  isSearchScope,
-  isSearchScopeWithAll,
-  DEFAULT_SUGGESTION_CACHE,
-  SearchSuggestionContextSchema,
-  SearchSuggestionItemSchema,
-  SearchSuggestionResponseSchema,
-  SearchSuggestionRequestSchema,
-  isSearchSuggestionRequest,
-  isSearchSuggestionResponse,
-  SearchLessonsResponseSchema,
-  SearchUnitsResponseSchema,
-  SearchSequencesResponseSchema,
-  SearchMultiScopeResponseSchema,
-  createSearchLessonsResponse,
-  createSearchUnitsResponse,
-  createSearchSequencesResponse,
-  createSearchMultiScopeResponse,
-} from '@oaknational/sdk-codegen/search';
-
-export { SequenceFacetUnitSchema, SequenceFacetSchema } from '@oaknational/sdk-codegen/zod';
+export { SEARCH_SCOPES } from '@oaknational/sdk-codegen/search';
 
 export type {
   SearchStructuredRequest,

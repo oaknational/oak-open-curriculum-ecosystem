@@ -21,7 +21,7 @@ import type {
 import {
   deriveSubjectSlugFromSequence,
   generateSubjectProgrammesUrl,
-  generateUnitUrlFromSequence,
+  generateUnitOakUrlFromSequence,
   normaliseYearsFromUnit,
 } from './bulk-transform-helpers.js';
 import {
@@ -104,7 +104,7 @@ function createLessonTransformer(
       const unitInfo: LessonUnitInfo = {
         unitSlug: lesson.unitSlug,
         unitTitle: lesson.unitTitle,
-        canonicalUrl: generateUnitUrlFromSequence(lesson.unitSlug, sequenceSlug),
+        oakUrl: generateUnitOakUrlFromSequence(lesson.unitSlug, sequenceSlug),
         threadSlugs: unit?.threads.map((thread) => thread.slug) ?? [],
         threadTitles: unit?.threads.map((thread) => thread.title) ?? [],
       };

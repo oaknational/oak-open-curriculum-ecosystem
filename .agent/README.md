@@ -83,7 +83,7 @@ docs, READMEs) via the consolidation workflow.
 
 | Directory | Purpose |
 | --- | --- |
-| `memory/` | Session learning: `napkin.md` (observations), `distilled.md` (extracted patterns), `code-patterns/` (reusable solutions) |
+| `memory/` | Session learning: `napkin.md` (observations), `distilled.md` (extracted patterns), `patterns/` (reusable solutions) |
 | `experience/` | Qualitative records of what work was like across sessions — see [experience/HUMAN.md](experience/HUMAN.md) |
 | `research/` | Research proposals and analysis |
 | `analysis/` | Technical analysis artefacts (API investigations, reranking assessments, etc.) |
@@ -108,8 +108,10 @@ docs, READMEs) via the consolidation workflow.
 | `archive/` | Historical prompts and context snapshots |
 
 Agent tooling CLIs also live at [`../agent-tools/`](../agent-tools/README.md)
-at the repo root (`claude-agent-ops`, `cursor-session-from-claude-session`).
-Ephemeral directories like `tmp/` are gitignored and not listed.
+at the repo root (`claude-agent-ops`, `cursor-session-from-claude-session`,
+`codex-reviewer-resolve`). `claude-agent-ops health` is the summary-first
+probe for agent-infrastructure drift. Ephemeral directories like `tmp/` are
+gitignored and not listed.
 
 ## Entry point and reading order
 

@@ -1,5 +1,5 @@
 /**
- * Integration tests for the prerequisite graph JSON writer.
+ * Integration tests for the prior knowledge graph JSON writer.
  *
  * @remarks
  * Tests actual filesystem output: directory creation and file content.
@@ -12,8 +12,8 @@ import { join } from 'path';
 
 import { describe, expect, it } from 'vitest';
 
-import type { PrerequisiteGraph } from './prerequisite-graph-generator.js';
-import { writePrerequisiteGraphAsJson } from './write-json-graph-file.js';
+import type { PriorKnowledgeGraph } from './prior-knowledge-graph-generator.js';
+import { writePriorKnowledgeGraphAsJson } from './write-json-graph-file.js';
 
 const sampleGraph = {
   version: '1.0.0',
@@ -43,17 +43,17 @@ const sampleGraph = {
       source: 'thread',
     },
   ],
-  seeAlso: 'get-prerequisite-graph',
-} satisfies PrerequisiteGraph;
+  seeAlso: 'get-prior-knowledge-graph',
+} satisfies PriorKnowledgeGraph;
 
-describe('writePrerequisiteGraphAsJson', () => {
-  it('writes data.json, types.ts, and index.ts into a prerequisite-graph directory', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'oak-prerequisite-graph-'));
+describe('writePriorKnowledgeGraphAsJson', () => {
+  it('writes data.json, types.ts, and index.ts into a prior-knowledge-graph directory', async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), 'oak-prior-knowledge-graph-'));
 
     try {
-      const outputDir = await writePrerequisiteGraphAsJson(sampleGraph, tempDir);
+      const outputDir = await writePriorKnowledgeGraphAsJson(sampleGraph, tempDir);
 
-      expect(outputDir).toBe(join(tempDir, 'prerequisite-graph'));
+      expect(outputDir).toBe(join(tempDir, 'prior-knowledge-graph'));
 
       const dataJson = await readFile(join(outputDir, 'data.json'), 'utf-8');
       const typesModule = await readFile(join(outputDir, 'types.ts'), 'utf-8');
@@ -86,12 +86,14 @@ describe('writePrerequisiteGraphAsJson', () => {
             source: 'thread',
           },
         ],
-        seeAlso: 'get-prerequisite-graph',
+        seeAlso: 'get-prior-knowledge-graph',
       });
-      expect(typesModule).toContain('export interface PrerequisiteGraph');
+      expect(typesModule).toContain('export interface PriorKnowledgeGraph');
       expect(indexModule).toContain("import { createRequire } from 'node:module';");
       expect(indexModule).toContain('const require = createRequire(import.meta.url);');
-      expect(indexModule).toContain("const data: JsonPrerequisiteGraph = require('./data.json');");
+      expect(indexModule).toContain(
+        "const data: JsonPriorKnowledgeGraph = require('./data.json');",
+      );
     } finally {
       await rm(tempDir, { recursive: true, force: true });
     }

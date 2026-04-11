@@ -69,6 +69,28 @@ describe('transformZodV3ToV4', () => {
     });
   });
 
+  describe('deprecated string validators', () => {
+    it('transforms z.string().url() to z.url()', () => {
+      const input = 'oakUrl: z.string().url(),';
+      const expected = 'oakUrl: z.url(),';
+
+      expect(transformZodV3ToV4(input)).toBe(expected);
+    });
+
+    it('transforms multiple z.string().url() occurrences', () => {
+      const input = 'url1: z.string().url(), url2: z.string().url()';
+      const expected = 'url1: z.url(), url2: z.url()';
+
+      expect(transformZodV3ToV4(input)).toBe(expected);
+    });
+
+    it('does not transform z.string() without .url()', () => {
+      const input = 'name: z.string(),';
+
+      expect(transformZodV3ToV4(input)).toBe(input);
+    });
+  });
+
   describe('zodios removal', () => {
     it('removes makeApi, Zodios, ZodiosOptions import', () => {
       const input =

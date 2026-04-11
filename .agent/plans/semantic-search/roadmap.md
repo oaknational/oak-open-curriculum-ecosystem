@@ -97,6 +97,10 @@ Primary hubs:
 - [future/07-runtime-governance-and-operations/](future/07-runtime-governance-and-operations/)
 - [future/08-experience-surfaces-and-extensions/](future/08-experience-surfaces-and-extensions/)
 
+Cross-boundary strategic plans:
+
+- [future/curriculum-nlp-processing-workspace.md](future/curriculum-nlp-processing-workspace.md) — Python NLP workspace: NER, semantic transcript compression, relationship extraction from bulk data
+
 Cross-stream queued references:
 
 - [current/bulk-metadata-quick-wins.execution.plan.md](current/bulk-metadata-quick-wins.execution.plan.md)

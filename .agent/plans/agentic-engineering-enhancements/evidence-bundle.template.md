@@ -26,6 +26,22 @@ Example:
 - Author: `[name]`
 - Date (YYYY-MM-DD): `[date]`
 
+## 1A. External Concept Adoption Register
+
+Use this register when the bundle turns external research into an Oak-facing
+proposal or implementation decision.
+
+Allowed `Difference Type` values:
+
+- `naming` — Oak already has the mechanism; wording is the main gap
+- `timing` — Oak has the mechanism, but at a different workflow point
+- `boundary` — Oak has the pieces, but the seam is implied rather than named
+- `capability-gap` — Oak does not yet have the mechanism locally
+
+| Candidate ID | Local Problem | Current Oak Analogue | Difference Type | Likely Landing Zone | Confidence | Proof Needed | Disconfirming Case | Blast Radius | Reversibility | Natural Home |
+|---|---|---|---|---|---|---|---|---|---|---|
+| A-001 | `[problem]` | `[current counterpart]` | `[naming/timing/boundary/capability-gap]` | `[plan/doc/script]` | `[high/moderate/low]` | `[pilot or evidence needed]` | `[what would show Oak is already sufficient]` | `[low/medium/high]` | `[high/medium/low]` | `[research/pattern/rule/ADR/README]` |
+
 ## 2. Claim Register
 
 | Claim ID | Claim Class | Claim Statement | Evidence Refs | Status |
@@ -67,11 +83,13 @@ Use precise file spans for implementation and test evidence.
 - Behaviour change summary: `[what changed from observed evidence]`
 - Known uncertainty: `[what remains uncertain]`
 - Risk impact: `[none/low/medium/high + rationale]`
+- Evidence level: `[direct repo evidence / direct external evidence / Oak-side inference]`
 
 ## 7. Open Items (if any)
 
 - `[claim id]` remains `partially verified` because `[reason]`
 - Follow-up action: `[action]`
+- `[candidate id]` needs promotion proof because `[reason]`
 
 ## 8. Merge-Readiness Check
 
@@ -79,5 +97,6 @@ Use precise file spans for implementation and test evidence.
 - [ ] No "tests pass" claim without command/output evidence
 - [ ] Behaviour claims anchored to test or runtime evidence
 - [ ] Remaining uncertainty is explicit and tracked
+- [ ] Research-derived proposals include an adoption-register row with proof and a disconfirming case
 
 If any box is unchecked, the change is not merge-ready.

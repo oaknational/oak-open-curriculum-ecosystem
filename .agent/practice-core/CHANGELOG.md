@@ -4,6 +4,129 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-05 — Concept Exchange, ADR Bootstrap, Self-Containment
+
+- Promoted "concepts are the unit of exchange" as a foundational
+  principle in practice.md Philosophy section. The Practice learns,
+  teaches, compares, and evolves at the concept level — not the file or
+  name level. The knowledge flow extracts concepts from instances;
+  Practice exchange compares concepts across repos.
+- Promoted "substance before fitness" as a foundational principle.
+  Concepts must be written at the weight they deserve first; fitness
+  limits are a post-writing editorial concern.
+- Added Architectural Decision Records section to practice-bootstrap.md:
+  portable ADR template, lifecycle states, learning loop connection.
+  ADRs are the graduation target of the knowledge flow.
+- Strengthened self-containment: travelling content must carry the
+  concept itself (what, how, why), not a pointer to where a host repo
+  documents it. A descriptive name is better than an opaque number, but
+  a name alone is still a pointer — the substance must travel.
+- Removed all host-repo-specific ADR references from Practice Core
+  files (6 occurrences of "ADR-144" across 3 files, replaced with
+  concept descriptions).
+- Reframed Integration Flow step 3 to operate at the concept level:
+  "compare at the concept level, not file-by-file."
+- Compressed redundant content across practice.md, practice-bootstrap.md,
+  and practice-lineage.md to accommodate new material within fitness
+  limits — holistically, after writing, not during.
+
+## [oak-open-curriculum-ecosystem] 2026-04-03 — Operational Estate and Provenance UUID Migration
+
+- Migrated `provenance.yml` from sequential `index` integers to UUID v4 `id`
+  fields across all three chains (63 existing entries + 3 new entries).
+  Eliminates implied hierarchy and merge-conflict risk during plasmid exchange.
+  Updated field specification in practice-lineage.md.
+- Added Minimum Operational Estate section to practice-bootstrap.md: defines
+  6 mandatory surface categories (core+bridge, memory, continuity host,
+  planning scaffold, platform truth, validators) that must exist beyond the
+  Core 7 files for a self-sufficient hydration
+- Added Claimed/Installed/Activated Audit section to practice-bootstrap.md:
+  three-state verification model ensuring surfaces are not just claimed but
+  actually installed and activated on a fresh checkout
+- Added Fresh-Checkout Acceptance Criteria to practice-bootstrap.md: 6 things
+  a fresh-checkout agent must do without consulting the source repo
+- Extended Post-Installation Health Check with continuity-host existence,
+  bridge truthfulness, and runtime smoke checks (three proof modes: presence,
+  parity, runtime)
+- Added Continuity Contract subsection to practice-bootstrap.md Skills: host
+  surface as verification target, contract fields, surprise pipeline, split
+  between session-handoff and consolidate-docs
+- Added cross-platform integration order and policy-spine authority hierarchy
+  to the Artefact Model section
+- Extended Ecosystem Survey with deliberate-omission protocol: absent concepts
+  must be recorded in live surfaces with rationale, not just changelogs
+- Added forward reference to Fresh-Checkout Acceptance Criteria near the top
+  of practice-bootstrap.md for hydration orientation
+- Strengthened continuity-host wording in practice.md: the host is a
+  verification target, not just a description; prompts are one valid option
+- Added Minimum Operational Estate pointer and Claimed/Installed/Activated
+  reference to practice.md
+- Added 3 new Active Learned Principles to practice-lineage.md: hydration
+  verifies operations not just structure, deliberate absences must live in
+  operational surfaces, canonical source before activation always
+- Extended practice-lineage.md Integration Flow step 8 with operational
+  surface audit clause
+- Extended practice-lineage.md hydration steps 8-9 with deliberate-omission
+  and claimed/installed/activated requirements
+- Added 3 operational validation checks (7-9) to practice-lineage.md with
+  explicit static/operational distinction
+- Integrated 8 incoming practice-context files from agent-collaboration
+- Split practice-bootstrap.md: extracted verification material (bootstrap
+  checklist, health check, minimum operational estate,
+  claimed/installed/activated audit, fresh-checkout acceptance criteria) into
+  new `practice-verification.md` — 8th Practice Core file. The split gives
+  verification proper weight as a distinct lifecycle phase
+- Deduplicated continuity host description in practice.md: reduced to
+  summary with pointer to practice-bootstrap.md §Continuity Contract
+- Promoted two Active Principles to axiom tier: "Architectural excellence
+  over expediency" and "Apps are thin; libraries own domain logic" — both
+  already stated in the universal principles blueprint
+- Updated all "seven files" references to "eight files" across the Core
+
+## [oak-open-curriculum-ecosystem] 2026-04-03 — Continuity Promotion and Platform-Config Doctrine
+
+- Promoted the split-loop continuity model into the portable Core:
+  `session-handoff` is now a required command, prompts explicitly carry live
+  continuity contracts, and the lineage now records that ordinary continuity
+  and deep convergence are separate loops
+- Promoted the platform-configuration doctrine into the portable Core:
+  tracked project settings define the agentic system contract, gitignored local
+  settings are additive overrides, and portability checks must validate
+  authorisation parity as well as wrapper presence
+- Tightened reviewer guidance so UI-heavy repos may install a browser-facing
+  reviewer cluster (for example accessibility, design-system, and
+  component-architecture reviewers) rather than relying on one generic code
+  reviewer for rendered output
+
+## [oak-open-curriculum-ecosystem] 2026-04-01 — Consolidation Workflow Evolution
+
+- Added full abstract Consolidation Workflow section to practice-bootstrap.md
+  (the Knowledge Flow's central mechanism now travels with the Practice as an
+  operational workflow, not just a conceptual description)
+- Renamed "Code Patterns" to "Reusable Patterns" to reflect all learning types:
+  process, architecture, structural, behavioural, agent operational,
+  domain-specific
+- Updated consolidation command summary in the Required Commands table to
+  mention incoming practice box integration and outgoing practice context
+  broadcast
+- Compressed the Distillation subsection into a brief reference that points to
+  the new Consolidation Workflow section
+
+## [oak-open-curriculum-ecosystem] 2026-04-01 — Learning Loop Refinement
+
+- Absorbed the distillation skill into the consolidation command as an
+  inline step. Distillation had exactly one consumer (consolidation step 6)
+  and did not warrant independent extraction as a skill
+- Added explicit graduation criteria for distilled.md entries: stable,
+  natural home exists, target doc has capacity
+- Made fitness management active in the consolidation command: analyse,
+  refine, split, or extend files at or approaching their ceiling
+- Removed "not yet matured into settled practice" barrier language — agent-
+  operational content is what the Practice is for
+- Updated all Practice Core references from "the distillation skill" to
+  "the consolidation command" or conceptual "distillation" process
+- Deleted canonical distillation skill and all platform adapters
+
 ## [oak-open-curriculum-ecosystem] 2026-03-23 — Practice Convergence Remediation
 
 - Clarified hook-runtime wording in the portable Core: hook enforcement uses a
@@ -111,7 +234,7 @@ Practice Core package.
   the bootstrap artefact model
 - Added reference/research estate split guidance to the bootstrap
 - Packaged 6 cross-repo-applicable code patterns into
-  `.agent/practice-context/outgoing/code-patterns/`
+  `.agent/practice-context/outgoing/patterns/`
 - Added two new outgoing notes: multi-strand planning pattern and repo-audit
   as Practice enforcement
 
@@ -247,7 +370,7 @@ Practice Core package.
 ## [pine-scripts] 2026-03-17 — Practice Core Integration
 
 - Integrated full Practice Core into trading strategy research repo, replacing stub files
-- Installed memory pipeline (napkin, distillation skills), universal skills (systematic-debugging, code-patterns, receiving-code-review), and prompts
+- Installed memory pipeline (napkin, distillation skills), universal skills (systematic-debugging, patterns, receiving-code-review), and prompts
 - Added missing Cursor agent adapters and completed Claude command adapter coverage
 - Upgraded practice-index to full table format
 - Appended pine-scripts provenance entries to all three trinity files

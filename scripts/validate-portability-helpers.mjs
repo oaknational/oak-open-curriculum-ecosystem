@@ -61,14 +61,19 @@ export function isClaudeHookWiredInText(claudeSettingsText, hookCommand = CLAUDE
 
 export function surfaceMatrixDescribesClaudeHook(surfaceMatrix) {
   const hookRowMatches =
-    /\|\s*\*\*Hooks\*\*\s*\|[^\n]*unsupported[^\n]*\.claude\/settings\.json[^\n]*(?:machine-local[^\n]*gitignored|gitignored[^\n]*machine-local)[^\n]*PreToolUse/iu.test(
+    /\|\s*\*\*Hooks\*\*\s*\|[^\n]*unsupported[^\n]*\.claude\/settings\.json[^\n]*tracked[^\n]*PreToolUse/iu.test(
       surfaceMatrix,
     );
+  const policySpineSemanticsMatch = /\boverride\b[\s\S]*\bprune\b[\s\S]*\bblock\b/u.test(
+    surfaceMatrix,
+  );
 
   return (
     hookRowMatches &&
     surfaceMatrix.includes('.agent/hooks/policy.json') &&
-    surfaceMatrix.includes('scripts/check-blocked-patterns.mjs')
+    surfaceMatrix.includes('scripts/check-blocked-patterns.mjs') &&
+    surfaceMatrix.includes('Policy Spine') &&
+    policySpineSemanticsMatch
   );
 }
 
@@ -91,6 +96,12 @@ export function getClaudeHookPortabilityIssues({
       ? isClaudeHookWiredInText(claudeSettingsText, hookCommand)
       : isClaudeHookWired(claudeSettings, hookCommand));
 
+  if (claudeHookStatus === 'supported' && !claudeSettingsExists) {
+    issues.push(
+      `${hookPolicyPath}: Claude Code is marked supported but tracked project ${claudeSettingsPath} is missing`,
+    );
+  }
+
   if (claudeHookStatus === 'supported' && claudeSettingsExists && !claudeHookIsWired) {
     issues.push(
       `${hookPolicyPath}: Claude Code is marked supported but ${claudeSettingsPath} does not wire Bash PreToolUse to ${hookCommand}`,
@@ -107,6 +118,32 @@ export function getClaudeHookPortabilityIssues({
     issues.push(
       `${surfaceMatrixPath}: Claude Code hook support is marked supported in ${hookPolicyPath} but the surface matrix does not describe the native activation`,
     );
+  }
+
+  return issues;
+}
+
+export function getSkillPermissionIssues({
+  claudeCommandFiles,
+  claudeSettingsPermissions,
+  claudeSettingsPath = CLAUDE_SETTINGS_PATH,
+}) {
+  const issues = [];
+
+  const permittedSkills = new Set(
+    claudeSettingsPermissions
+      .filter((entry) => /^Skill\([^)]+\)$/u.test(entry))
+      .map((entry) => entry.replace(/^Skill\(([^):]+)\)$/u, '$1'))
+      .filter((name) => name.length > 0),
+  );
+
+  for (const file of claudeCommandFiles) {
+    const commandName = file.replace(/^.*\/|\.md$/gu, '');
+    if (!permittedSkills.has(commandName)) {
+      issues.push(
+        `${claudeSettingsPath}: Claude command adapter "${commandName}" has no Skill(${commandName}) entry in permissions.allow`,
+      );
+    }
   }
 
   return issues;

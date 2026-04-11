@@ -10,15 +10,12 @@
  * per ADR-107 (NL interpretation at MCP boundary).
  */
 
-import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
-import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import {
   AGGREGATED_PREREQUISITE_GUIDANCE,
   PRIMARY_ORIENTATION_TOOL_NAME,
 } from '../prerequisite-guidance.js';
-// WIDGET_URI import removed while widget is disabled — re-add when re-enabling _meta.ui
+import { WIDGET_URI } from '../widget-constants.js';
 import { SCOPES_SUPPORTED } from '../scopes-supported.js';
-import { SEARCH_SCOPES } from './types.js';
 
 /**
  * SDK-backed search tool definition with MCP metadata.
@@ -28,6 +25,7 @@ import { SEARCH_SCOPES } from './types.js';
  * agent (who reads the description) and the human teacher (who sees results).
  */
 export const SEARCH_TOOL_DEF = {
+  title: 'Search Curriculum',
   description: `Search Oak's curriculum using semantic search across all four content indexes.
 
 ${AGGREGATED_PREREQUISITE_GUIDANCE}
@@ -68,7 +66,7 @@ SCOPE LIMITATIONS:
 - "threads" can omit query when subject or keyStage is provided, returning all matching threads sorted by unit count.
 CROSS-TOOL WORKFLOWS:
 - For lesson planning: search(scope: 'lessons') → fetch(lesson:slug) for full details
-- For prerequisites: search(scope: 'threads') → get-prerequisite-graph for dependencies
+- For prerequisites: search(scope: 'threads') → get-prior-knowledge-graph for dependencies
 - For progressions: search(scope: 'threads') → get-thread-progressions for ordered units`,
   securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
   annotations: {
@@ -76,104 +74,6 @@ CROSS-TOOL WORKFLOWS:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Search Curriculum',
   },
-  // TEMPORARILY DISABLED: Widget UI disabled for merge to main.
-  // Re-enable: _meta: { ui: { resourceUri: WIDGET_URI } },
+  _meta: { ui: { resourceUri: WIDGET_URI } },
 } as const;
-
-/**
- * JSON Schema for the SDK-backed search tool inputs.
- *
- * Required field: `scope`. `query` is required for all scopes except `threads`
- * (which can filter by subject/keyStage alone). Common filters apply to all scopes.
- * Scope-specific filters are optional and validated in the handler to keep
- * the schema simple for agents.
- */
-export const SEARCH_INPUT_SCHEMA = {
-  type: 'object',
-  required: ['scope'],
-  additionalProperties: false,
-  properties: {
-    query: {
-      type: 'string',
-      description:
-        'Search query. Required for all scopes except threads — for threads scope, omit query and provide subject or keyStage to browse all threads matching the filter.',
-      examples: ['photosynthesis', 'adding fractions', 'the Romans', 'electricity and circuits'],
-    },
-    scope: {
-      type: 'string',
-      description:
-        'Which index to search. "lessons" for specific lessons, "units" for topic groups, "threads" for cross-year progressions, "sequences" for programme structures, "suggest" for typeahead.',
-      enum: [...SEARCH_SCOPES],
-      examples: ['lessons', 'units', 'threads'],
-    },
-    subject: {
-      type: 'string',
-      description: 'Filter by subject slug (e.g. "maths", "science", "english")',
-      enum: [...SUBJECTS],
-      examples: ['maths', 'science', 'english'],
-    },
-    keyStage: {
-      type: 'string',
-      description: 'Filter by key stage (ks1, ks2, ks3, ks4)',
-      enum: [...KEY_STAGES],
-      examples: ['ks2', 'ks3'],
-    },
-    size: {
-      type: 'number',
-      description: 'Maximum number of results to return (1-100, default 25)',
-    },
-    from: {
-      type: 'number',
-      description: 'Offset for pagination (default 0)',
-    },
-    unitSlug: {
-      type: 'string',
-      description: 'Filter lessons to a specific unit by slug. Lessons scope only.',
-      examples: ['fractions', 'the-romans'],
-    },
-    tier: {
-      type: 'string',
-      description: 'Filter by tier (foundation/higher). Lessons scope only, KS4.',
-      examples: ['foundation', 'higher'],
-    },
-    examBoard: {
-      type: 'string',
-      description: 'Filter by exam board. Lessons scope only.',
-      examples: ['aqa', 'edexcel', 'ocr'],
-    },
-    year: {
-      anyOf: [
-        { type: 'string', description: 'Filter by year group number. Lessons scope only.' },
-        { type: 'number', description: 'Filter by year group number. Lessons scope only.' },
-      ],
-      examples: ['3', '7', 10],
-    },
-    threadSlug: {
-      type: 'string',
-      description: 'Filter by curriculum thread slug. Lessons scope only.',
-    },
-    highlight: {
-      type: 'boolean',
-      description: 'Include highlighted text snippets in results. Lessons and units scopes.',
-    },
-    minLessons: {
-      type: 'number',
-      description: 'Minimum number of lessons a unit must contain. Units scope only.',
-    },
-    phaseSlug: {
-      type: 'string',
-      description: 'Filter by phase slug. Sequences scope only.',
-      examples: ['primary', 'secondary'],
-    },
-    category: {
-      type: 'string',
-      description: 'Filter by category. Sequences scope only.',
-    },
-    limit: {
-      type: 'number',
-      description: 'Maximum number of suggestions. Suggest scope only.',
-    },
-  },
-} as const satisfies GenericToolInputJsonSchema;

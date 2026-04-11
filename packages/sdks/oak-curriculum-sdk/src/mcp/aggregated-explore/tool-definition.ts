@@ -6,7 +6,7 @@
  * the teacher doesn't know which scope they need.
  */
 
-import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
+import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import {
   AGGREGATED_PREREQUISITE_GUIDANCE,
@@ -21,6 +21,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  * Compound tool that provides a cross-curriculum overview in one call.
  */
 export const EXPLORE_TOOL_DEF = {
+  title: 'Explore Topic',
   description: `Explore a topic across the entire Oak curriculum in one call.
 
 ${AGGREGATED_PREREQUISITE_GUIDANCE}
@@ -60,38 +61,31 @@ NEXT STEPS AFTER EXPLORE:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Explore Topic',
   },
   _meta: undefined,
 } as const;
 
 /**
- * JSON Schema for the explore-topic tool inputs.
+ * Flat Zod shape for MCP SDK registration of the explore-topic tool.
  *
- * Required: query. Optional: subject, keyStage (applied to all scopes).
+ * Canonical Zod schema with `.describe()` and `.meta({ examples })`
+ * for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
-export const EXPLORE_INPUT_SCHEMA = {
-  type: 'object',
-  required: ['query'],
-  additionalProperties: false,
-  properties: {
-    query: {
-      type: 'string',
-      description:
-        'The topic to explore. Use descriptive terms like "photosynthesis", "the Romans", "fractions".',
-      examples: ['volcanos', 'fractions', 'electricity', 'the Romans'],
-    },
-    subject: {
-      type: 'string',
-      description: 'Optional subject filter applied to all scopes',
-      enum: [...SUBJECTS],
-      examples: ['maths', 'science', 'history'],
-    },
-    keyStage: {
-      type: 'string',
-      description: 'Optional key stage filter applied to all scopes',
-      enum: [...KEY_STAGES],
-      examples: ['ks2', 'ks3'],
-    },
-  },
-} as const satisfies GenericToolInputJsonSchema;
+export const EXPLORE_INPUT_SCHEMA: z.ZodRawShape = {
+  query: z
+    .string()
+    .describe(
+      'The topic to explore. Use descriptive terms like "photosynthesis", "the Romans", "fractions".',
+    )
+    .meta({ examples: ['volcanos', 'fractions', 'electricity', 'the Romans'] }),
+  subject: z
+    .enum([...SUBJECTS])
+    .optional()
+    .describe('Optional subject filter applied to all scopes')
+    .meta({ examples: ['maths', 'science', 'history'] }),
+  keyStage: z
+    .enum([...KEY_STAGES])
+    .optional()
+    .describe('Optional key stage filter applied to all scopes')
+    .meta({ examples: ['ks2', 'ks3'] }),
+};

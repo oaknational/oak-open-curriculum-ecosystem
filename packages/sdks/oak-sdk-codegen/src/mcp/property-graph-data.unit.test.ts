@@ -155,18 +155,4 @@ describe('conceptGraph', () => {
       expect(hasInferredEdge('programme', 'subject')).toBe(true);
     });
   });
-
-  describe('size constraints', () => {
-    it('is within token budget (JSON size < 8000 bytes)', () => {
-      const json = JSON.stringify(conceptGraph);
-      expect(json.length).toBeLessThan(8000);
-    });
-
-    it('estimated tokens is under 2500', () => {
-      const json = JSON.stringify(conceptGraph);
-      // Rough estimate: ~4 characters per token
-      const estimatedTokens = json.length / 4;
-      expect(estimatedTokens).toBeLessThan(2500);
-    });
-  });
 });

@@ -50,6 +50,7 @@ async function createAuthEnabledApp(): Promise<Express> {
   return await createApp({
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     upstreamMetadata: TEST_UPSTREAM_METADATA,
     clerkMiddlewareFactory: createNoOpClerkMiddleware(),
   });
@@ -270,6 +271,7 @@ describe('Application-Level Method-Aware Auth', () => {
       return await createApp({
         runtimeConfig,
         observability: createMockObservability(runtimeConfig),
+        getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
       });
     }
 

@@ -2,6 +2,8 @@
  * Ingestion event types and formatting functions for comprehensive logging.
  */
 
+import { typeSafeEntries } from '@oaknational/type-helpers';
+
 /** Valid phases in the ingestion process. */
 export type IngestionPhase = 'units' | 'lessons' | 'rollups' | 'threads';
 
@@ -50,9 +52,7 @@ function formatDuration(ms: number): string {
 
 /** Formats context key-value pairs (e.g., "subject=maths keyStage=ks4"). */
 function formatContext(context: Readonly<Record<string, string | number | boolean>>): string {
-  // Context is intentionally a generic record for logging flexibility - keys are not statically known
-  // eslint-disable-next-line no-restricted-properties -- Record<string, T> cannot use typeSafeEntries
-  return Object.entries(context)
+  return typeSafeEntries(context)
     .map(([key, value]) => `${key}=${String(value)}`)
     .join(' ');
 }

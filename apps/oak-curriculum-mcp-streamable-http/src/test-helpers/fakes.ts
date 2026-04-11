@@ -6,12 +6,15 @@
  * `createMock*` functions use `node-mocks-http` to produce full
  * Express-typed objects for middleware integration tests.
  *
- * MCP server/transport fakes: {@link ./fakes-mcp-server.ts}
- * Clerk auth fakes: {@link ./fakes-clerk.ts}
+ * MCP server/transport fakes live in `fakes-mcp-server.ts`.
+ * Clerk auth fakes live in `fakes-clerk.ts`.
  */
 
 import { vi } from 'vitest';
-import httpMocks from 'node-mocks-http';
+import {
+  createRequest as createNodeMockRequest,
+  createResponse as createNodeMockResponse,
+} from 'node-mocks-http';
 import type { Request, Response } from 'express';
 import type { Logger } from '@oaknational/logger';
 import type { SearchRetrievalService } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
@@ -192,7 +195,7 @@ export function createMockExpressRequest(
   if (overrides.token !== undefined) {
     headers['authorization'] = `Bearer ${overrides.token}`;
   }
-  return httpMocks.createRequest({
+  return createNodeMockRequest({
     method: overrides.method ?? 'POST',
     url: overrides.path ?? '/mcp',
     headers,
@@ -207,5 +210,5 @@ export function createMockExpressRequest(
  * Use for Express middleware tests. No type assertions.
  */
 export function createMockExpressResponse(): Response {
-  return httpMocks.createResponse();
+  return createNodeMockResponse();
 }

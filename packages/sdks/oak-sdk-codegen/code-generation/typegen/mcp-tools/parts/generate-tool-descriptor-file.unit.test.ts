@@ -76,4 +76,10 @@ describe('generateToolDescriptorFile', () => {
       'readonly invoke: (client: TClient, args: TArgs) => InvokeResult | Promise<InvokeResult>',
     );
   });
+
+  it('uses Node ESM-compatible MCP SDK specifiers in the contract import', () => {
+    const generated = generateToolDescriptorFile();
+
+    expect(generated).toContain("import type { Tool } from '@modelcontextprotocol/sdk/types.js';");
+  });
 });

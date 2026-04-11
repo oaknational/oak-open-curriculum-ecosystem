@@ -54,7 +54,7 @@ export type RateLimiterFactory = (options: RateLimiterOptions) => RequestHandler
  * application-layer rate limiting probabilistic. The CDN edge is the
  * authoritative rate limiter.
  *
- * **Known limitations** (see ADR-144):
+ * **Known limitations** (see ADR-158):
  * - Counters reset on cold start — brief unprotected window.
  * - Counter increment is not atomic under concurrent burst — observed
  *   limit may be slightly higher than configured.

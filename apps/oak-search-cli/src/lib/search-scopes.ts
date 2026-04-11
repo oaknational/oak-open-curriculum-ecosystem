@@ -1,4 +1,5 @@
-import { SEARCH_SCOPES, SEARCH_SCOPES_WITH_ALL, type SearchScope } from '../types/oak';
+import { SEARCH_SCOPES_WITH_ALL } from '@oaknational/sdk-codegen/search';
+import { SEARCH_SCOPES, type SearchScope } from '../types/oak';
 
 export const NARROW_SEARCH_SCOPES = [...SEARCH_SCOPES] as const;
 export const ALL_SEARCH_SCOPES = [...SEARCH_SCOPES_WITH_ALL] as const;

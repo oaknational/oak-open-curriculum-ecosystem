@@ -28,9 +28,15 @@ Start with the [ADR index](../../docs/architecture/architectural-decisions/), th
 
 This server exposes Oak's curriculum through the three MCP primitive types, each with a distinct control model defined by the [MCP specification](https://modelcontextprotocol.io/).
 
-**Tools** (model-controlled) — 31 curriculum tools: 23 generated from the OpenAPI schema plus 8 aggregated tools (search, browse, fetch, explore, graph/orientation tools, and `download-asset`). The AI model decides when to call them. Generated tool definitions are updated automatically when the upstream API changes via `pnpm sdk-codegen`.
+**Tools** (model-controlled) — currently 34 curriculum tools: 24 generated
+from the OpenAPI schema plus 10 aggregated tools. The aggregated set covers
+search/browse/fetch flows, orientation and graph tools, `download-asset`, and
+the MCP App user-search pair (`user-search`, `user-search-query`). The AI
+model decides when to call them, subject to per-tool visibility metadata.
+Generated tool definitions are updated automatically when the upstream API
+changes via `pnpm sdk-codegen`.
 
-**Resources** (application-controlled) — `curriculum://model` (domain ontology, `priority: 1.0`), `curriculum://prerequisite-graph` (unit dependency data, `priority: 0.5`), and `curriculum://thread-progressions` (learning progression data, `priority: 0.5`). All annotated with `audience: ["assistant"]`. The host application decides whether to inject these into the model's context. Clients that support resource auto-injection get orientation data without a tool call.
+**Resources** (application-controlled) — `curriculum://model` (domain ontology, `priority: 1.0`), `curriculum://prior-knowledge-graph` (unit dependency data, `priority: 0.5`), and `curriculum://thread-progressions` (learning progression data, `priority: 0.5`). All annotated with `audience: ["assistant"]`. The host application decides whether to inject these into the model's context. Clients that support resource auto-injection get orientation data without a tool call.
 
 **Prompts** (user-controlled) — `find-lessons`, `lesson-planning`, `explore-curriculum`, and `learning-progression`. Parameterised workflow templates the user explicitly invokes as slash commands or UI actions. Each orchestrates multiple tools in a proven sequence for a common teacher task.
 
@@ -57,6 +63,11 @@ export ALLOWED_HOSTS=localhost,127.0.0.1,::1
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 ```
 
+`pnpm dev`, `pnpm dev:observe`, and `pnpm dev:observe:noauth` now perform the
+initial widget build automatically and regenerate the committed
+`src/generated/widget-html-content.ts` constant. Manual `pnpm build:widget` is
+only required when widget sources change outside the dev watcher.
+
 3. List tools (auth disabled path shown above):
 
 ```bash
@@ -70,6 +81,90 @@ If you enable auth locally, repeat the same request with a valid Clerk-issued
 Bearer token instead of relying on the disabled-auth path above.
 
 Note: The server automatically adds the required `Accept: application/json, text/event-stream` header if missing, improving UX for simple curl commands and UI integrations.
+
+## Widget development
+
+The MCP App widget has a multi-page Vite dev server for iterating on
+UI, branding, and design tokens. The dev server serves:
+
+- **Index page** (`/`) — navigation hub listing all widgets and tools
+- **Widget pages** (e.g. `/oak-banner.html`) — individual widgets
+- **Token demo** (`/tokens.html`) — live colour palette, typography, and spacing reference
+
+**Prerequisites**: `pnpm install` and `pnpm build` from the repo root
+(design tokens and SDK must be built before the widget can resolve its
+imports).
+
+### Widget-only iteration (one terminal)
+
+For layout, styling, and token work that does not need MCP host context
+(run from this workspace, or use `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http dev:widget` from repo root):
+
+```bash
+pnpm dev:widget
+```
+
+Open `http://localhost:5173/`. Vite provides hot module replacement —
+edits to React components, CSS, and design tokens are reflected
+immediately. Design token JSON edits in `packages/design/` trigger an
+automatic rebuild and full-page reload via a Vite plugin. The ext-apps
+SDK will not connect to a host in this mode, but the UI renders normally.
+
+### Full MCP App dev loop (two terminals)
+
+To see the widget rendered inside a real MCP host iframe with security
+sandboxing:
+
+| Terminal | Command                   | Purpose                                                      |
+| -------- | ------------------------- | ------------------------------------------------------------ |
+| 1        | `pnpm dev:observe:noauth` | MCP server on port 3333 (auth disabled for local dev)        |
+| 2        | `pnpm dev:widget-in-host` | ext-apps basic-host on port 8080, connects to localhost:3333 |
+
+Start the MCP server first (terminal 1), then the host (terminal 2).
+The `dev:widget-in-host` script checks prerequisites, prints usage
+instructions, and starts the host automatically. Open
+`http://localhost:8080`, select a tool, and call it — the widget renders
+in a sandboxed double-iframe matching the production security model.
+
+The HTTP dev server serves the widget HTML from the committed TypeScript
+constant `WIDGET_HTML_CONTENT` (in `src/generated/widget-html-content.ts`),
+injected via DI. The dev orchestrator regenerates this constant from widget
+sources automatically before booting the server.
+
+`dev:widget-in-host` clones `@modelcontextprotocol/ext-apps` to
+`$TMPDIR/mcp-ext-apps` on first run and reuses it subsequently. Delete
+that directory to refresh: `rm -rf /tmp/mcp-ext-apps`. Requires `bun`.
+
+### Design tokens
+
+Tokens live in `packages/design/oak-design-tokens/src/tokens/`:
+
+| File                   | Purpose                              |
+| ---------------------- | ------------------------------------ |
+| `palette.json`         | Base colour palette (all hex values) |
+| `semantic.light.json`  | Light theme semantic mappings        |
+| `semantic.dark.json`   | Dark theme semantic mappings         |
+| `component.json`       | Component-level token aliases        |
+| `contrast-pairings.ts` | WCAG AA contrast validation manifest |
+
+Dark mode is CSS-only via `@media (prefers-color-scheme: dark)` — no
+JavaScript theme switching. The build pipeline generates
+`dist/contrast-report.json` validating all declared pairings against
+WCAG AA thresholds. Violations fail the build (unless `OAK_TOKEN_DEV=1`
+is set for iterative development).
+
+The widget loads **Google Fonts (Lexend)** via `@import` from
+`fonts.googleapis.com` and `fonts.gstatic.com`. These domains are
+declared in the MCP resource's `_meta.ui.csp.resourceDomains` so that
+hosts with CSP enforcement allow the font requests. The widget also
+provides defaults for all 76 standard MCP host CSS custom properties,
+mapping them to Oak design tokens where equivalents exist.
+
+### Visual review with MCPJam
+
+[MCPJam](https://www.mcpjam.com/) is an MCP Apps-compatible host useful
+for visual design review and acceptance testing. Connect it to the local
+server at `http://localhost:3333/mcp` (requires `dev:observe:noauth` running).
 
 ## Observability
 
@@ -94,6 +189,9 @@ The HTTP telemetry boundary is metadata-only:
   authorisation headers are stripped before Sentry capture
 - MCP tool, resource, and prompt observations retain only kind, name, status,
   duration, and trace identifiers
+- the shared redaction policy also treats raw
+  `application/x-www-form-urlencoded` OAuth payloads as sensitive input,
+  rather than relying on query-only redaction
 
 The app also adds targeted manual spans for:
 
@@ -106,6 +204,10 @@ bootstrap failure, server listen failure, Express error middleware, MCP cleanup
 failure, OAuth upstream timeout/network failure, and asset-download proxy
 failure. Expected validation, auth, and upstream-status branches remain logs
 plus span status only.
+
+Successful auth logs retain client/scoping context only (`clientId`,
+`scopeCount`, `hasUserContext`); `userId` is excluded from structured
+observability payloads.
 
 On shutdown and startup failure paths, the app performs bounded Sentry flushes
 at the process boundary: bootstrap failure, server listen error, `SIGINT`, and
@@ -207,7 +309,9 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 
 - **Server fails to start (OAuth metadata fetch timeout)**: If the server hangs or fails during startup when auth is enabled, ensure Clerk's `/.well-known/oauth-authorization-server` endpoint is reachable from the server's network. The auth bootstrap fetches upstream OAuth metadata at startup and will retry with exponential backoff (added in F10), but if the endpoint is unreachable the server will eventually fail. Check DNS resolution, firewall rules, and Clerk service status.
 - 500 on `/.well-known/oauth-protected-resource` or `/mcp`:
-  - Ensure Vercel framework is Express and the app default‑exports an Express instance (this repo does in `src/index.ts`).
+  - Ensure Vercel framework is Express and the deployed build is using
+    `dist/index.js`. This repo does not rely on a separate Vercel-only default
+    export path.
   - Verify `ALLOWED_HOSTS` includes your alias host (e.g. `curriculum-mcp-alpha.oaknational.dev`).
   - If auth is enabled, verify `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` are set and that Clerk metadata discovery succeeds at startup.
 - 401 without `Authorization`: the client must either follow the OAuth discovery flow or send a valid Clerk-issued Bearer token. For local smoke tests, either use a real Clerk token or set `DANGEROUSLY_DISABLE_AUTH=true` and retry without the `Authorization` header.
@@ -241,20 +345,43 @@ This application has comprehensive test coverage across three testing layers:
 
 - **Header Redaction E2E** (`e2e-tests/header-redaction.e2e.test.ts`): full request/response cycles with sensitive headers, OAuth scenarios
 - **Tool E2E** (`e2e-tests/`): MCP tool invocation, resource listing, prompt registration, widget metadata
+- **Built-artifact startup proof** (`e2e-tests/built-artifact-import.e2e.test.ts`):
+  imports `dist/application.js` under plain Node to catch dev-loader versus
+  production-runtime resolver drift without making network requests
 
-### Running Tests
+### Widget Tests (Playwright)
+
+Widget tests run against the Vite dev server (port 5173), separate from
+the MCP server landing page tests (port 3333). Both light and dark
+themes are tested via Playwright projects with `colorScheme` emulation.
 
 ```bash
-# Run all unit and integration tests
+# Widget visual/structural tests (both themes)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:ui
+
+# Widget WCAG 2.2 AA accessibility tests (both themes, axe-core)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
+```
+
+### Running All Tests
+
+```bash
+# Unit and integration tests (Vitest)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
 
-# Run E2E tests
+# Widget unit tests (Vitest, React Testing Library)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget
+
+# E2E tests (Vitest, requires built artefacts)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
 
-# Run all workspace test suites
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
+# MCP server landing page tests (Playwright)
 pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:ui
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:a11y
+
+# Widget Playwright tests (separate from server tests)
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:ui
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 ```
 
 ## Detailed Documentation
@@ -271,10 +398,12 @@ and asset download routes (60/min). This is defence-in-depth — the
 in-memory store is probabilistic on Vercel serverless (per-instance, resets
 on cold start). **CDN/edge rate limiting must also be configured** for
 production deployment to provide authoritative protection. See
-[ADR-144](../../docs/architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md)
+[ADR-158](../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md)
 for the full multi-layer security architecture.
 
-**Documentation Status**: Last verified 2026-03-07 against `src/application.ts`, `src/auth-routes.ts`, and the current workspace-level transport documentation.
+**Documentation Status**: Last verified 2026-04-09 against `src/application.ts`,
+the built-artifact E2E coverage, and the current workspace-level transport
+documentation.
 
 **Related Documentation**:
 

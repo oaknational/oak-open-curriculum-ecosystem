@@ -4,6 +4,16 @@
   "remoteCache": {
     "enabled": true
   },
+  "globalPassThroughEnv": [
+    "OAK_API_KEY",
+    "LOG_LEVEL",
+    "OAK_API_URL",
+    "CLERK_PUBLISHABLE_KEY",
+    "CLERK_SECRET_KEY",
+    "DANGEROUSLY_DISABLE_AUTH",
+    "ELASTICSEARCH_URL",
+    "ELASTICSEARCH_API_KEY"
+  ],
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
     "sdk-codegen": {
@@ -62,6 +72,87 @@
         "src/**/*.ts",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
+      ]
+    },
+    "@oaknational/oak-curriculum-mcp-streamable-http#build": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["dist/**", ".tsup/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsup.config.ts",
+        "src/**/*.ts",
+        "!src/**/*.test.ts",
+        "!src/**/*.spec.ts"
+      ]
+    },
+    "@oaknational/oak-design-tokens#build": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": ["dist/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "src/**/*.json"
+      ]
+    },
+    "@oaknational/oak-design-tokens#test": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "src/**/*.json",
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts"
+      ]
+    },
+    "@oaknational/oak-design-tokens#type-check": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "src/**/*.json"
+      ]
+    },
+    "@oaknational/oak-design-tokens#lint": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "src/**/*.json"
+      ]
+    },
+    "@oaknational/oak-design-tokens#lint:fix": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "tsconfig.lint.json",
+        "src/**/*.ts",
+        "src/**/*.json"
       ]
     },
     "@oaknational/sdk-codegen#test": {
@@ -123,6 +214,14 @@
       "persistent": true,
       "passThroughEnv": ["OAK_API_KEY"]
     },
+    "dev:widget": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:widget-in-host": {
+      "cache": false,
+      "persistent": true
+    },
     "lint": {
       "dependsOn": ["^build"],
       "cache": true,
@@ -175,6 +274,18 @@
         "$TURBO_ROOT$/stryker.config.base.ts"
       ]
     },
+    "test:widget": {
+      "dependsOn": ["^build"],
+      "cache": true,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "widget/**/*.ts",
+        "widget/**/*.tsx",
+        "vitest.widget.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts"
+      ]
+    },
     "test:e2e": {
       "dependsOn": ["build"],
       "outputs": [],
@@ -187,6 +298,24 @@
       "outputs": [],
       "cache": true,
       "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "playwright.config.ts"]
+    },
+    "test:a11y": {
+      "dependsOn": ["build", "test:ui"],
+      "outputs": [],
+      "cache": true,
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "playwright.config.ts"]
+    },
+    "test:widget:ui": {
+      "dependsOn": ["build"],
+      "outputs": [],
+      "cache": true,
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "**/*.tsx", "playwright.widget.config.ts"]
+    },
+    "test:widget:a11y": {
+      "dependsOn": ["build", "test:widget:ui"],
+      "outputs": [],
+      "cache": true,
+      "inputs": ["$TURBO_DEFAULT$", "**/*.ts", "**/*.tsx", "playwright.widget.config.ts"]
     },
     "type-check": {
       "dependsOn": ["^build"],

@@ -3,7 +3,7 @@
 How to enable live Sentry error capture and tracing for Oak runtimes.
 
 **Status**: The observability foundation code is in the HTTP MCP server
-(PR #73, merged 2026-03-31). Rate limiting is in place (ADR-144).
+(PR #73, merged 2026-03-31). Rate limiting is in place (ADR-158).
 Search CLI adoption is pending. No Sentry credentials are configured
 in `.env.local` or the Vercel dashboard yet — the code defaults to
 `SENTRY_MODE=off` (fail-closed, safe). This runbook covers the

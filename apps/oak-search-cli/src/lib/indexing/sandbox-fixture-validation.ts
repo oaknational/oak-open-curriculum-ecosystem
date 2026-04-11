@@ -6,6 +6,7 @@
  * to fixture data structures.
  */
 
+import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { isKeyStage, isSubject } from '../../adapters/sdk-guards';
@@ -25,11 +26,9 @@ type StringKeyedObject = z.infer<typeof stringKeyedObjectSchema>;
 /**
  * Returns the keys of a Zod-validated string-keyed object.
  * This is used at JSON parsing boundaries where keys are genuinely unknown strings.
- * @remarks The Object.keys usage is intentional here — we're at an external data boundary.
  */
 export function getRecordKeys(record: StringKeyedObject): string[] {
-  // eslint-disable-next-line no-restricted-properties -- At JSON boundary, keys are genuinely unknown strings
-  return Object.keys(record);
+  return typeSafeKeys(record);
 }
 
 /**

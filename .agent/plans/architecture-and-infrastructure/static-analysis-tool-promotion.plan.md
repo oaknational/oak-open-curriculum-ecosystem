@@ -18,8 +18,8 @@ todos:
   - id: triage-knip-deps
     content: "Triage remaining dependency findings (4+4+6)"
     status: pending
-  - id: promote-to-qg
-    content: "Add both tools to qg and check scripts as blocking gates"
+  - id: promote-to-check
+    content: "Add both tools to the `pnpm check` script as blocking gates"
     status: pending
 isProject: false
 ---
@@ -36,7 +36,7 @@ then promote both to blocking quality gates.
 knip (`^6.0.6`) and dependency-cruiser (`^17.3.9`) were added to the monorepo
 on 2026-03-26. Both tools run successfully and surface genuine pre-existing
 issues. They are available as `pnpm knip` and `pnpm depcruise` but are NOT yet
-in the `qg` or `check` quality gate scripts because they have findings that
+in the `pnpm check` quality gate script because they have findings that
 would block the gate.
 
 This plan records every finding, classifies it, and tracks resolution so the
@@ -51,7 +51,7 @@ tools can be promoted to blocking gates.
 
 ## Promotion Criteria
 
-Both tools can be added to `qg` and `check` when:
+Both tools can be added to `pnpm check` when:
 
 1. `pnpm knip` exits 0 (no findings)
 2. `pnpm depcruise` exits 0 (no violations)
@@ -59,8 +59,8 @@ Both tools can be added to `qg` and `check` when:
 The promotion change is a one-line edit in `package.json`:
 
 ```diff
--"qg": "pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && pnpm portability:check && pnpm test:root-scripts && turbo run type-check lint test test:ui test:e2e smoke:dev:stub",
-+"qg": "pnpm format-check:root && pnpm markdownlint-check:root && pnpm subagents:check && pnpm portability:check && pnpm knip && pnpm depcruise && pnpm test:root-scripts && turbo run type-check lint test test:ui test:e2e smoke:dev:stub",
+-"check": "... && pnpm portability:check && pnpm markdownlint:root && pnpm format:root",
++"check": "... && pnpm portability:check && pnpm knip && pnpm depcruise && pnpm markdownlint:root && pnpm format:root",
 ```
 
 And similarly for `check`.
@@ -259,7 +259,7 @@ This is the largest finding category. Breakdown:
    with generated files config, then genuine cleanup.
 7. **Knip config tuning**: Exclude generated ground-truth data from export
    analysis.
-8. **Promote**: Add `pnpm knip && pnpm depcruise` to `qg` and `check`.
+8. **Promote**: Add `pnpm knip && pnpm depcruise` to `pnpm check`.
 
 ## References
 

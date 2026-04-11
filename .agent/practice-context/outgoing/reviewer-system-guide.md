@@ -157,7 +157,7 @@ components/
 ├── architecture/
 │   └── reviewer-team.md        # How the 4 architecture reviewers collaborate
 └── principles/
-    └── dry-yagni.md            # DRY and YAGNI guardrails
+    └── subagent-principles.md            # DRY and YAGNI guardrails
 ```
 
 **Persona example** (`personas/fred.md`):
@@ -368,7 +368,7 @@ An automated script enforces that the three layers stay in sync.
 | 6 | Orphan detection (commands/skills) | Canonical item with no platform adapters |
 | 7 | Rule orphan detection | Canonical rule missing Claude `.md` AND/OR Cursor `.mdc` |
 | 8 | Trigger content contract | Cursor trigger has >10 content lines (excl. frontmatter) |
-| 9 | Hook portability parity | `.agent/hooks/policy.json`, optional machine-local `.claude/settings.json`, and the surface matrix disagree about Claude hook activation |
+| 9 | Hook portability parity | `.agent/hooks/policy.json`, tracked project `.claude/settings.json`, and the surface matrix disagree about Claude hook activation |
 
 ### Running It
 
@@ -394,8 +394,9 @@ helper module. Copy `scripts/validate-portability.mjs` and
 
 Then add it to your quality gates / CI pipeline.
 
-Check 9 only fires when the machine-local `.claude/settings.json` exists, so
-clean clones and CI do not fail solely because that ignored file is absent.
+Check 9 assumes the repo carries tracked project activation in
+`.claude/settings.json`. Local overrides, if any, remain additive in
+`.claude/settings.local.json`.
 
 ---
 
@@ -427,7 +428,7 @@ mkdir -p .cursor/agents
 3. **Create shared components** in `.agent/sub-agents/components/`:
    - Copy `behaviours/subagent-identity.md` (universal)
    - Copy `behaviours/reading-discipline.md` (universal)
-   - Copy `principles/dry-yagni.md` (universal)
+   - Copy `principles/subagent-principles.md` (universal)
    - Copy `architecture/reviewer-team.md` (adapt persona descriptions)
 
 ### Phase 2: Rules (15 minutes per rule)

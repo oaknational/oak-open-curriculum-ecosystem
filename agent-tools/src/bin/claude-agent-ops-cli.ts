@@ -10,6 +10,7 @@ export type CliHandler = () => void | Promise<void>;
 
 const CLI_COMMANDS = [
   'status',
+  'health',
   'worktrees',
   'log',
   'diff',
@@ -25,7 +26,7 @@ const CLI_COMMAND_SET: ReadonlySet<string> = new Set(CLI_COMMANDS);
 const HELP_ALIASES = new Set(['help', '--help', '-h']);
 
 export const HELP_TEXT =
-  'claude-agent-ops — CLI for monitoring and managing Claude background agents\n\nCommands:\n  status [--watch]\n  worktrees\n  log <id>\n  diff [id]\n  commit-ready\n  preflight\n  cleanup\n  help';
+  'claude-agent-ops — CLI for monitoring and managing Claude background agents\n\nCommands:\n  status [--watch]\n  health\n  worktrees\n  log <id>\n  diff [id]\n  commit-ready\n  preflight\n  cleanup\n  help';
 
 export function parseCliArgs(argv: string[]): CliArgs {
   const command = parseCommand(argv[0] ?? 'status');

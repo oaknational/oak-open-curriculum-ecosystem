@@ -6,7 +6,7 @@
  * units, and lesson counts.
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import {
   formatError,
   formatToolResponse,

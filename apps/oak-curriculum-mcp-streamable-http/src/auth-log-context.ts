@@ -5,9 +5,7 @@
  * auth errors are intercepted during tool execution. This schema is
  * the single source of truth for the shape of the context object
  * passed to `logger.warn('Tool execution auth error', context)` in
- * {@link handleToolWithAuthInterception}.
- *
- * @module
+ * `handleToolWithAuthInterception`.
  */
 
 import { z } from 'zod';

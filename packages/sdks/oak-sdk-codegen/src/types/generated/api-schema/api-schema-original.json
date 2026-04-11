@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.6.0-6b626523dd02ee19d004ea3e9bb71a75cf3b3eb8"
+    "version": "0.6.0-2b4abb0b767449f82949accbdb168c7fcb98e00f"
   },
   "servers": [
     {
@@ -3385,8 +3385,8 @@
         ],
         "additionalProperties": false,
         "example": {
-          "transcript": "Hello, I'm Ms X. I'm looking forward to guiding you through your learning today...",
-          "vtt": "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Ms X.</v>\n\n2\n00:00:08.070 --> 00:00:09.240\nI'm looking forward to guiding you\n\n3\n00:00:09.240 --> 00:00:10.980\nthrough your learning today..."
+          "transcript": "Hello, I'm Mrs. Lashley. I'm looking forward to guiding you through your learning today...",
+          "vtt": "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Mrs. Lashley.</v>\n\n2\n00:00:08.070 --> 00:00:09.240\nI'm looking forward to guiding you\n\n3\n00:00:09.240 --> 00:00:10.980\nthrough your learning today..."
         }
       },
       "SearchTranscriptResponseSchema": {
@@ -3624,6 +3624,11 @@
       "LessonAssetsResponseSchema": {
         "type": "object",
         "properties": {
+          "oakUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "The Oak National URL for the lesson"
+          },
           "attribution": {
             "description": "Licence information for any third-party content contained in the lessons' downloadable resources",
             "type": "array",
@@ -3671,8 +3676,12 @@
             }
           }
         },
+        "required": [
+          "oakUrl"
+        ],
         "additionalProperties": false,
         "example": {
+          "oakUrl": "https://www.thenational.academy/teachers/lessons/using-numerals",
           "attribution": [
             "Copyright XYZ Authors",
             "Creative Commons Attribution Example 4.0"
@@ -7218,6 +7227,16 @@
             "type": "string",
             "description": "The lesson title"
           },
+          "canonicalUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "The canonical Oak National URL for the lesson"
+          },
+          "oakUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "The Oak National URL for the lesson"
+          },
           "unitSlug": {
             "type": "string",
             "description": "The unit slug identifier"
@@ -7381,6 +7400,8 @@
         },
         "required": [
           "lessonTitle",
+          "canonicalUrl",
+          "oakUrl",
           "unitSlug",
           "unitTitle",
           "subjectSlug",
@@ -7397,54 +7418,50 @@
         ],
         "additionalProperties": false,
         "example": {
-          "lessonTitle": "Joining using 'and'",
-          "unitSlug": "simple-sentences",
-          "unitTitle": "Simple sentences",
-          "subjectSlug": "english",
-          "subjectTitle": "English",
-          "keyStageSlug": "ks1",
-          "keyStageTitle": "Key Stage 1",
+          "lessonTitle": "Using vector tools to draw and modify shapes",
+          "canonicalUrl": "https://www.thenational.academy/teachers/programmes/computing-secondary-ks3/units/developing-vector-graphics/lessons/using-vector-tools-to-draw-and-modify-shapes",
+          "oakUrl": "https://www.thenational.academy/teachers/lessons/using-vector-tools-to-draw-and-modify-shapes",
+          "unitSlug": "developing-vector-graphics",
+          "unitTitle": "Developing vector graphics",
+          "subjectSlug": "computing",
+          "subjectTitle": "Computing",
+          "keyStageSlug": "ks3",
+          "keyStageTitle": "Key Stage 3",
           "lessonKeywords": [
             {
-              "keyword": "joining word",
-              "description": "a word that joins words or ideas"
+              "keyword": "vector graphic",
+              "description": "an image made up of lines and shapes"
             },
             {
-              "keyword": "build on",
-              "description": "add to"
+              "keyword": "z-order",
+              "description": "the order of overlapping objects"
             },
             {
-              "keyword": "related",
-              "description": "linked to"
+              "keyword": "layer",
+              "description": "the level on which an object (e.g. text, shapes and photos) can be placed relative to other objects"
             }
           ],
           "keyLearningPoints": [
             {
-              "keyLearningPoint": "And is a type of joining word."
+              "keyLearningPoint": "Vector graphics are made from shapes described by coordinates, not pixels."
             },
             {
-              "keyLearningPoint": "A joining word can join two simple sentences."
+              "keyLearningPoint": "Vector illustrations are built using simple shapes."
             },
             {
-              "keyLearningPoint": "Each simple sentence is about one idea and makes complete sense."
-            },
-            {
-              "keyLearningPoint": "The second idea builds on to the first idea if ‘and’ is used to join them."
-            },
-            {
-              "keyLearningPoint": "Grammatically accurate sentences start with capital letters and most often end with full stops."
+              "keyLearningPoint": "Vector graphics use z-order to show which shapes are in front and are visible."
             }
           ],
           "misconceptionsAndCommonMistakes": [
             {
-              "misconception": "Pupils may struggle to link related ideas together.",
-              "response": "Give some non-examples to show what it sounds like when two ideas are unrelated e.g. Dad baked bread and she missed her sister."
+              "misconception": "Vector graphics are made from pixels and can lose quality when resized.",
+              "response": "Vector graphics are made from lines and shapes. They do not lose quality when resized."
             }
           ],
-          "pupilLessonOutcome": "I can join two simple sentences with 'and'.",
+          "pupilLessonOutcome": "I can use software to draw and modify vector shapes.",
           "teacherTips": [
             {
-              "teacherTip": "In Learning Cycle 1, make sure pupils are given plenty of opportunities to say sentences orally and hear that they make complete sense."
+              "teacherTip": "You need to be familiar with the basic tools and features of vector editing software. The Inkscape tutorials may be useful — oak.link/inkscape-tutorials"
             }
           ],
           "contentGuidance": null,
@@ -7464,6 +7481,11 @@
             "lessonTitle": {
               "type": "string",
               "description": "The lesson title"
+            },
+            "oakUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "The Oak National URL for the lesson"
             },
             "similarity": {
               "type": "number",
@@ -7512,6 +7534,7 @@
           "required": [
             "lessonSlug",
             "lessonTitle",
+            "oakUrl",
             "similarity",
             "units"
           ],
@@ -7521,6 +7544,7 @@
           {
             "lessonSlug": "performing-your-chosen-gothic-poem",
             "lessonTitle": "Performing your chosen Gothic poem",
+            "oakUrl": "https://www.thenational.academy/teachers/lessons/performing-your-chosen-gothic-poem",
             "similarity": 0.20588236,
             "units": [
               {
@@ -7535,6 +7559,7 @@
           {
             "lessonSlug": "the-twisted-tree-the-novel-as-a-gothic-text",
             "lessonTitle": "'The Twisted Tree': the novel as a Gothic text",
+            "oakUrl": "https://www.thenational.academy/teachers/lessons/the-twisted-tree-the-novel-as-a-gothic-text",
             "similarity": 0.19444445,
             "units": [
               {

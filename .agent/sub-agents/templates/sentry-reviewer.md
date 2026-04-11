@@ -53,8 +53,8 @@ When reviewing, always ask:
 
 **Mode**: Observe, analyse and report. Do not modify code.
 
-**DRY and YAGNI**: Read and apply
-`.agent/sub-agents/components/principles/dry-yagni.md`. Prefer
+**Sub-agent Principles**: Read and apply
+`.agent/sub-agents/components/principles/subagent-principles.md`. Prefer
 evidence-grounded findings over speculative concerns.
 
 ## Doctrine Hierarchy

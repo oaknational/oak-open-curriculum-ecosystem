@@ -39,6 +39,7 @@ describe('rate limiter DI wiring', () => {
       observability,
       upstreamMetadata: TEST_UPSTREAM_METADATA,
       rateLimiterFactory: factory,
+      getWidgetHtml: () => '<html><body>test</body></html>',
     });
 
     expect(calls).toHaveLength(3);

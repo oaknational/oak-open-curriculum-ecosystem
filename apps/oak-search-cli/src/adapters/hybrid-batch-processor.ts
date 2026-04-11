@@ -6,24 +6,16 @@
  */
 
 import type { BulkDownloadFile } from '@oaknational/sdk-codegen/bulk';
-import type { SearchLessonsIndexDoc, SearchUnitsIndexDoc, SearchUnitRollupDoc } from '../types/oak';
 import type { OakClient } from './oak-adapter';
-import type { BulkIndexAction } from './bulk-data-adapter';
+import type { BulkOperationEntry } from './bulk-ops-builder';
 import {
   createHybridDataSource,
   type HybridDataSource,
   type HybridDataSourceConfig,
   type HybridDataSourceStats,
 } from './hybrid-data-source';
-import { ok, type Result } from '@oaknational/result';
+import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '@oaknational/oak-search-sdk/admin';
-
-/** Bulk operation entry type */
-type BulkOperationEntry =
-  | BulkIndexAction
-  | SearchLessonsIndexDoc
-  | SearchUnitsIndexDoc
-  | SearchUnitRollupDoc;
 
 /** Result of processing multiple bulk files */
 export interface BatchProcessingResult {
@@ -76,7 +68,14 @@ export async function processBulkFileBatch(
     }
     const source = sourceResult.value;
     sources.push(source);
-    allOps.push(...source.toBulkOperations(lessonsIndex, unitsIndex, rollupIndex));
+    const opsResult = source.toBulkOperations(lessonsIndex, unitsIndex, rollupIndex);
+    if (!opsResult.ok) {
+      return err({
+        type: 'data_source_error',
+        message: opsResult.error.message,
+      });
+    }
+    allOps.push(...opsResult.value);
   }
 
   return ok({ operations: allOps, stats: aggregateStats(sources), sources });

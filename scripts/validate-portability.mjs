@@ -8,6 +8,7 @@ import {
   CLAUDE_SETTINGS_PATH,
   getClaudeHookPortabilityIssues,
   getReviewerAdapterParityIssues,
+  getSkillPermissionIssues,
   HOOK_POLICY_PATH,
   SURFACE_MATRIX_PATH,
 } from './validate-portability-helpers.mjs';
@@ -96,6 +97,18 @@ const subagentTemplateNames = (await listFiles('.agent/sub-agents/templates', '.
 
 function isClerkSkill(name) {
   return name.startsWith(CLERK_SKILL_PREFIX);
+}
+
+/** Vendor MCP Apps skills installed by the ext-apps Claude plugin. */
+const MCP_APPS_VENDOR_SKILLS = new Set([
+  'add-app-to-server',
+  'convert-web-app',
+  'create-mcp-app',
+  'migrate-oai-app',
+]);
+
+function isMcpAppsVendorSkill(name) {
+  return MCP_APPS_VENDOR_SKILLS.has(name);
 }
 
 function isSubagentAdapter(name) {
@@ -193,9 +206,10 @@ const skillAdapterPlatforms = [
 for (const platform of skillAdapterPlatforms) {
   const dirs = await listSubdirs(platform.dir);
   for (const dir of dirs) {
-    // Skip Clerk plugins, command adapters (jc-*), and sub-agent wrappers
+    // Skip Clerk plugins, command adapters (jc-*), sub-agent wrappers, and vendor MCP Apps skills
     if (isClerkSkill(dir) || dir.startsWith('jc-')) continue;
     if (isSubagentAdapter(dir)) continue;
+    if (isMcpAppsVendorSkill(dir)) continue;
 
     if (!canonicalSkillSet.has(dir)) {
       addIssue(
@@ -365,6 +379,30 @@ if (await exists(HOOK_POLICY_PATH)) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown hook portability failure.';
     addIssue(`Hook portability validation failed: ${message}`);
+  }
+}
+
+// --- Check 11: Skill permission parity (Claude commands → settings.json) ---
+
+if (await exists(CLAUDE_SETTINGS_PATH)) {
+  try {
+    const claudeSettings = await readJson(CLAUDE_SETTINGS_PATH);
+    const permissions = Array.isArray(claudeSettings?.permissions?.allow)
+      ? claudeSettings.permissions.allow
+      : [];
+
+    const claudeCommandFiles = await listFiles('.claude/commands', '.md');
+
+    for (const issue of getSkillPermissionIssues({
+      claudeCommandFiles,
+      claudeSettingsPermissions: permissions,
+    })) {
+      addIssue(issue);
+    }
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Unknown skill permission check failure.';
+    addIssue(`Skill permission validation failed: ${message}`);
   }
 }
 

@@ -1,8 +1,10 @@
 import type { Middleware } from 'openapi-fetch';
 import {
-  augmentResponseWithCanonicalUrl,
-  augmentArrayResponseWithCanonicalUrl,
+  augmentResponseWithOakUrl,
+  augmentArrayResponseWithOakUrl,
 } from '../../response-augmentation.js';
+import { isValidPath } from '@oaknational/sdk-codegen/api-schema';
+import { isResponseJsonBody200 } from '../../validation/curriculum-response-validators.js';
 import type { Logger } from '@oaknational/logger';
 
 interface MiddlewareOptions {
@@ -13,10 +15,10 @@ interface MiddlewareOptions {
  * Creates middleware that augments API responses with canonical URLs.
  *
  * This middleware intercepts successful GET responses and adds
- * `canonicalUrl` fields based on content type and available context.
+ * `oakUrl` fields based on content type and available context.
  *
- * The augmentation is idempotent - if a response already has a
- * `canonicalUrl` field, it will be preserved.
+ * The augmentation is idempotent - if a response already has an
+ * `oakUrl` field, it will be preserved.
  *
  * @param options - Configuration with a required `logger` for
  *   augmentation diagnostics. The consuming app provides the logger.
@@ -25,13 +27,21 @@ interface MiddlewareOptions {
 export function createResponseAugmentationMiddleware(options: MiddlewareOptions): Middleware {
   const log = options.logger;
   return {
-    async onResponse({ request, response }) {
+    async onResponse({ request, response, schemaPath }) {
       if (!shouldAugmentResponse(request, response)) {
+        return response;
+      }
+
+      if (!isValidPath(schemaPath)) {
         return response;
       }
 
       const body = await safeParseJson(response.clone());
       if (body === undefined) {
+        return response;
+      }
+
+      if (!isResponseJsonBody200(schemaPath, 'get', body)) {
         return response;
       }
 
@@ -84,10 +94,10 @@ function extractApiPath(url: string): string {
 function augmentBody(body: unknown, path: string, log: Logger): unknown {
   try {
     if (Array.isArray(body)) {
-      return augmentArrayResponseWithCanonicalUrl(body, path, 'get');
+      return augmentArrayResponseWithOakUrl(body, path, 'get');
     }
-    if (body && typeof body === 'object') {
-      return augmentResponseWithCanonicalUrl(body, path, 'get');
+    if (typeof body === 'object' && body !== null) {
+      return augmentResponseWithOakUrl(body, path, 'get');
     }
     return undefined;
   } catch (error: unknown) {

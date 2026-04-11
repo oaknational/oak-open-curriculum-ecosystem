@@ -7,7 +7,7 @@
  */
 
 import { z } from 'zod';
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { isAssetType, ASSET_TYPES } from '@oaknational/sdk-codegen/api-schema';
 import type { AssetType } from '@oaknational/sdk-codegen/api-schema';
 import { formatToolResponse } from '../universal-tool-shared.js';

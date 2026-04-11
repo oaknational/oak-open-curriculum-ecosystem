@@ -6,7 +6,7 @@
  * Application-layer rate limiting is defence-in-depth; the CDN edge
  * is the authoritative rate limiter.
  *
- * @see ADR-144 for the multi-layer security architecture.
+ * @see ADR-158 for the multi-layer security architecture.
  * @module
  */
 import type { RateLimiterOptions } from './rate-limiter-factory.js';

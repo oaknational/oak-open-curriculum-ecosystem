@@ -91,7 +91,7 @@ and capture boundaries established in Phase 1 and Phase 2.
 - PR #73: **MERGED** to main (2026-03-31). Squash commit `54309a6a`.
 - Phases 0-2: complete (governance, shared contracts, shared foundation)
 - Phase 3 HTTP adoption: **COMPLETE** — all findings resolved, merged
-- Rate limiting: **COMPLETE** (ADR-144, 6 routes, 3 profiles)
+- Rate limiting: **COMPLETE** (ADR-158, 6 routes, 3 profiles)
 - Phase 3 Search CLI adoption: **NEXT** — unblocked, 6 critical gaps identified
 - Phase 4 evidence/deployment: **pending**
 
@@ -125,7 +125,7 @@ Two remediation plans track findings for this branch:
 
 2. **PR #73 CodeQL and deferred findings** (archived:
    `archive/completed/sentry-otel-pr73-codeql-remediation.plan.md`):
-   C1/C2 regex fixed. C3/C4 rate limiting resolved by ADR-144. F10 resolved
+   C1/C2 regex fixed. C3/C4 rate limiting resolved by ADR-158. F10 resolved
    by main's auth DI refactor. F18 deferred (YAGNI).
 
 ### Reviewer sweeps completed
@@ -170,7 +170,7 @@ Two rounds of specialist reviews ran during the remediation sessions:
 ### Resolved items (for historical record)
 
 - **C1/C2** — regex backtracking fixed (unrolled-loop pattern, committed on branch)
-- **C3/C4** — rate limiting resolved by ADR-144 (`express-rate-limit` on 6 routes)
+- **C3/C4** — rate limiting resolved by ADR-158 (`express-rate-limit` on 6 routes)
 - **F10** — `vi.mock()` in auth test resolved by main's DI refactor (file deleted)
 - **PR #73** — merged to main 2026-03-31 (squash commit `54309a6a`)
 
@@ -459,7 +459,7 @@ Deterministic validation commands:
 ### Phase 3: GREEN runtime adoption
 
 Status: HTTP adoption **complete** (PR #73 merged 2026-03-31, all 21 findings
-resolved, all gates green). Rate limiting complete (ADR-144). Search CLI
+resolved, all gates green). Rate limiting complete (ADR-158). Search CLI
 adoption pending.
 
 Adopt the shared foundation in the in-scope runtimes only:
@@ -489,7 +489,7 @@ Required closing proof:
 
 Deterministic validation commands:
 
-1. `pnpm qg`
+1. `pnpm check`
 2. `pnpm practice:fitness`
 3. `pnpm markdownlint:root`
 4. `pnpm subagents:check`
@@ -929,7 +929,7 @@ The foundation is not complete until automated verification includes:
 8. explicit kill-switch proof that `SENTRY_MODE=off` disables Sentry init,
    sink registration, outbound delivery, and trace propagation
 9. bounded-drain proof for Search CLI success, failure, and interrupted exits
-10. repo-wide regression proof after the logger rewrite (`pnpm qg`)
+10. repo-wide regression proof after the logger rewrite (`pnpm check`)
 11. HTTP transport proof that generic request capture does not retain raw `/mcp`
    JSON-RPC envelopes
 

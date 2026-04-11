@@ -27,12 +27,12 @@ function generateWidgetUriHash(isLocal: boolean): string {
  * registration use the same URI. New builds get new hashes, naturally
  * busting the host widget cache.
  *
- * Format: ui://widget/oak-json-viewer-<hash>.html
- * Example: ui://widget/oak-json-viewer-abc12345.html
+ * Format: ui://widget/oak-curriculum-app-<hash>.html
+ * Example: ui://widget/oak-curriculum-app-abc12345.html
  *
  * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
-export const BASE_WIDGET_URI = `ui://widget/oak-json-viewer-${generateWidgetUriHash(isLocal)}.html`;
+export const BASE_WIDGET_URI = `ui://widget/oak-curriculum-app-${generateWidgetUriHash(isLocal)}.html`;
 
 /**
  * Tools that should advertise a widget UI via `_meta.ui.resourceUri`.
@@ -41,13 +41,14 @@ export const BASE_WIDGET_URI = `ui://widget/oak-json-viewer-${generateWidgetUriH
  * aggregated definitions. All other tools have no widget UI — MCP clients
  * will not attempt to render a widget for their results.
  *
- * TEMPORARILY EMPTY: Widget rendering is disabled for all tools to allow
- * the feat/mcp_app branch to merge without shipping half-formed UI to
- * production. Re-enable by restoring the tool names here:
- * - `search`: minimal Oak branding for search results
- * - `get-curriculum-model`: minimal Oak branding for orientation output
- * Future WS4 will add `user-search` with a full user-facing interface.
+ * Tools in this set get `_meta.ui.resourceUri` in their codegen output
+ * and in aggregated definitions. All other tools have no widget UI.
  *
  * @see https://modelcontextprotocol.io/extensions/apps/overview (MCP Apps standard)
  */
-export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set([]);
+export const WIDGET_TOOL_NAMES: ReadonlySet<string> = new Set([
+  'search',
+  'get-curriculum-model',
+  'user-search',
+  'user-search-query',
+]);

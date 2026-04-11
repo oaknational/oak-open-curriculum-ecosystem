@@ -36,9 +36,6 @@
  * @see ADR-085 Ground Truth Validation Discipline
  */
 
-/* eslint-disable max-lines, max-statements */
-// Validation script with many checks is inherently long
-
 import { existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';

@@ -30,13 +30,13 @@ for the architectural decision.
 ## Current State (2026-04-11)
 
 PR #73 **MERGED** to main (2026-03-31). Rate limiting **COMPLETE**
-(ADR-144). Continuation branch: `feat/otel_sentry_enhancements`.
+(ADR-158). Continuation branch: `feat/otel_sentry_enhancements`.
 
 ### Completed
 
 - Phase 3 HTTP adoption (PR #73) — all 21 findings, C1/C2 regex,
   ADR-143, cleanup resilience, multi-layer security architecture
-- Rate limiting (ADR-144) — `express-rate-limit` on 6 routes, 3
+- Rate limiting (ADR-158) — `express-rate-limit` on 6 routes, 3
   profiles, `trust proxy` configured
 
 ### Pending merge from main
@@ -77,13 +77,13 @@ be checked.
 - Per-app `.env.example` files with Sentry variables
 - Deployment runbook at `docs/operations/sentry-deployment-runbook.md`
 - Multi-layer security architecture in `docs/governance/safety-and-security.md`
-- ADR-144: multi-layer rate limiting and security
+- ADR-158: multi-layer rate limiting and security
 
 ## Read First
 
 1. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) — main execution plan (phases, contracts, scope)
 2. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md) — observability architectural decision
-3. [ADR-144](../../../docs/architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md) — multi-layer security and rate limiting
+3. [ADR-158](../../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md) — multi-layer security and rate limiting
 
 Primary code surfaces:
 

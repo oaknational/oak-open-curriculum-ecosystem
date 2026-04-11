@@ -61,9 +61,7 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
   lines.push(` * Generated at: ${new Date().toISOString()}`);
   lines.push(' */');
   lines.push('');
-  lines.push('/* eslint-disable no-restricted-properties */');
-  lines.push('// Object.keys is used by Zod refinements');
-  lines.push('');
+  lines.push("import { typeSafeKeys } from '@oaknational/type-helpers';");
   lines.push("import { z } from 'zod';");
   lines.push("import { ALL_LESSON_SLUGS } from './lesson-slugs-by-subject';");
   lines.push('');
@@ -154,7 +152,7 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
   lines.push("    { message: 'Query must have at least 1 word' }");
   lines.push('  ),');
   lines.push('  expectedRelevance: z.record(z.string(), RelevanceScoreSchema).refine(');
-  lines.push('    (obj) => Object.keys(obj).length > 0,');
+  lines.push('    (obj) => typeSafeKeys(obj).length > 0,');
   lines.push("    { message: 'expectedRelevance must have at least one entry' }");
   lines.push('  ),');
   lines.push('  category: QueryCategorySchema.optional(),');

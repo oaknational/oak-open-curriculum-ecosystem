@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR-141](141-mcp-apps-standard-primary.md). The MCP Apps resource registration model (`registerAppResource` with `RESOURCE_MIME_TYPE` and a fixed `WIDGET_URI`) replaced the filename-hash cache-busting scheme. The `oak-json-viewer-<hash>.html` pattern and `openai/outputTemplate` key no longer exist.
 
 ## Context
 

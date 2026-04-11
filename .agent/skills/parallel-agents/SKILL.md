@@ -28,13 +28,37 @@ Guidance for dispatching multiple sub-agents concurrently to speed up independen
 1. **Define tasks explicitly**: each agent gets a clear, self-contained brief
 2. **Include full context**: agents start fresh — provide file paths, code snippets, and intent
 3. **Specify boundaries**: tell each agent exactly which files/directories it owns
-4. **Merge results**: after all agents complete, review and integrate their work
+4. **Attach a delegation snapshot**: include the minimum contract below so the child lane can work without guessing
+5. **Merge results**: after all agents complete, review and integrate their work
+
+## Delegation Snapshot
+
+Every bounded delegated task should carry these fields:
+
+- **Goal**: the concrete outcome the child lane owns
+- **Owned surface**: files, modules, or concern boundary owned by that lane
+- **Non-goals**: what must stay out of scope
+- **Required evidence**: tests, docs, screenshots, or command output needed before reintegration
+- **Acceptance signal**: what tells the parent lane the work is ready to absorb
+- **Reintegration owner**: who updates the authoritative plan or dialogue
+- **Stop or escalate rule**: when the child lane should stop and ask rather than improvise
+
+If you cannot fill these fields concisely, the task is probably under-scoped.
 
 ## Merging Results
 
 - Check for conflicting changes across agents
 - Run quality gates after integration
 - If agents produced overlapping changes, resolve manually rather than accepting both
+
+## Reintegration Contract
+
+- Mailbox delivery is not reintegration.
+- Reintegration completes only when the parent lane absorbs the child outcome
+  back into the authoritative plan, prompt, or dialogue.
+- If the child result conflicts with the live repo state, re-ground before
+  editing or merging.
+- Keep the parent lane as the owner of final sequencing and closure decisions.
 
 ## Common Parallel Patterns
 
@@ -49,3 +73,4 @@ Guidance for dispatching multiple sub-agents concurrently to speed up independen
 
 - [ADR-114](../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md) — sub-agent composition model
 - `.agent/sub-agents/` — canonical sub-agent templates and components
+- `agent-tools/src/core/session-tools.ts` — takeover bundle reintegration contract

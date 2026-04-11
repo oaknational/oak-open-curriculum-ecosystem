@@ -36,7 +36,9 @@ Before archival, mine completed outcomes into permanent documentation
 
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
+| Generate Widget HTML as Committed TypeScript Constant | 2026-04-10 | Replaced runtime widget filesystem reads with a committed TypeScript constant produced by the widget build, preserved the DI seam for tests, removed the runtime validation/path helpers, and recorded the decision in ADR-156. | [archived plan](sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md) |
 | Graph Data Integrity Snagging | 2026-03-11 | Graph integrity defects classified and resolved: bulk data dedup, thread ordering contract, generation invariant enforcement (self-loops, duplicate edges, node payload arrays), MCP pass-through boundary preserved. | [archived plan](sdk-and-mcp-enhancements/archive/completed/graph-data-integrity-snagging.execution.plan.md) |
+| WS3 Design Token Infrastructure Prerequisite | 2026-04-02 | Replaced the temporary widget shell with the canonical MCP Apps runtime, landed the minimal `packages/design/` token foundation, passed `pnpm check`, and completed the design-system/config/test/code-review cycle before Phase 4 work. | [archived plan](sdk-and-mcp-enhancements/archive/completed/ws3-design-token-prerequisite.plan.md) |
 | Oak Preview MCP Snagging | 2026-03-11 | All 4 phases complete: canonical URL fix, reindex boundary documented, MCP guidance tightened, reviewer gates passed. Plus sequence keyStage filter fix and suggestion URL schema fix. Post-deploy reindex is operational only. | [archived plan](sdk-and-mcp-enhancements/archive/completed/oak-preview-mcp-snagging.execution.plan.md) |
 | Merge Readiness | 2026-03-02 | `feat/semantic_search_deployment` merged to `main`. MCP prompts investigated (ADR-123), onboarding review complete, quality gates green, secrets sweep done. | [archived plan](sdk-and-mcp-enhancements/archive/completed/merge-readiness.plan.md) |
 | Search `text` → `query` Rename | 2026-03-07 | Renamed the primary search/explore-topic MCP parameter from `text` to `query` across SDK, MCP, CLI, codegen, tests, prompts, and docs. Full specialist-review remediation completed and the governance follow-through that closed the wrapper/rules gap was recorded. | [archived plan](sdk-and-mcp-enhancements/archive/completed/search-tool-text-to-query-rename.plan.md) |
@@ -69,6 +71,7 @@ Before archival, mine completed outcomes into permanent documentation
 | Plan | Completed | Key Outcomes | Archive |
 |------|-----------|--------------|---------|
 | Documentation Accuracy Improvements | 2026-02 | Documentation inaccuracies and structural issues fixed as prerequisite for enforcement work. | [archived plan](agentic-engineering-enhancements/archive/completed/documentation-accuracy-improvements.plan.md) |
+| Continuity and Surprise Practice Adoption | 2026-04-03 | Installed `session-handoff`, split ordinary continuity from deep consolidation, closed the evidence window with an explicit `promote` decision, and graduated the portable continuity note that later promoted into Practice Core. | [archived plan](agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md) |
 | Cross-Agent Standardisation | 2026-03 | Superseded — absorbed into ADR-125 (Agent Artefact Portability). | [archived plan](agentic-engineering-enhancements/archive/completed/cross-agent-standardisation.plan.md) |
 
 ---

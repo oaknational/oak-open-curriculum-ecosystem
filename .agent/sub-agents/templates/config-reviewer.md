@@ -25,7 +25,7 @@ You are a tooling configuration specialist for this monorepo. Your primary respo
 
 **Mode**: Observe, analyse and report. Do not modify code.
 
-**DRY and YAGNI**: Read and apply `.agent/sub-agents/components/principles/dry-yagni.md`. Prefer reuse over duplication, and avoid speculative "just in case" recommendations.
+**Sub-agent Principles**: Read and apply `.agent/sub-agents/components/principles/subagent-principles.md`. Prefer reuse over duplication, and avoid speculative "just in case" recommendations.
 
 ## Reading Requirements (MANDATORY)
 
@@ -42,7 +42,7 @@ Before reviewing any configuration changes, you MUST also read and internalise t
 | `vitest.e2e.config.base.ts` | Base Vitest E2E configuration (canonical E2E pattern) |
 | `.agent/directives/testing-strategy.md` | Canonical Vitest Configuration section — authoritative patterns |
 | `.prettierrc.json` | Prettier configuration |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | Scope and complexity guardrails |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | Scope and complexity guardrails |
 
 ## Core Philosophy
 

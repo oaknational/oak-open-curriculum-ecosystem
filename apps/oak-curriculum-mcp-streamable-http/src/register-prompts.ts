@@ -32,24 +32,28 @@ import type { HttpObservability } from './observability/http-observability.js';
 const PROMPT_REGISTRATIONS = [
   {
     name: 'find-lessons',
+    title: 'Find Lessons',
     description:
       'Find curriculum lessons on a specific topic. Searches across all subjects and key stages.',
     argsSchema: findLessonsArgsSchema,
   },
   {
     name: 'lesson-planning',
+    title: 'Lesson Planning',
     description:
       'Gather materials for planning a lesson on a topic, including objectives and resources.',
     argsSchema: lessonPlanningArgsSchema,
   },
   {
     name: 'explore-curriculum',
+    title: 'Explore Curriculum',
     description:
       'Explore what Oak has on a topic across the whole curriculum. Searches lessons, units, and threads in parallel.',
     argsSchema: exploreCurriculumArgsSchema,
   },
   {
     name: 'learning-progression',
+    title: 'Learning Progression',
     description:
       'Understand how a concept builds across year groups by searching progression threads and mapping dependencies.',
     argsSchema: learningProgressionArgsSchema,
@@ -90,16 +94,16 @@ interface PromptRegistrar {
  * - Message generation delegated to the SDK's `getPromptMessages()`
  *
  * @param server - MCP server instance
- * @param observability - Optional observability for prompt handler tracing
+ * @param observability - Observability for prompt handler tracing
  *
  * @example
  * ```typescript
  * const server = new McpServer({ name: 'curriculum', version: '1.0.0' });
- * registerPrompts(server);
+ * registerPrompts(server, observability);
  * ```
  */
-export function registerPrompts(server: PromptRegistrar, observability?: HttpObservability): void {
-  const mcpObservation = observability?.createMcpObservationOptions();
+export function registerPrompts(server: PromptRegistrar, observability: HttpObservability): void {
+  const mcpObservation = observability.createMcpObservationOptions();
 
   for (const prompt of PROMPT_REGISTRATIONS) {
     const handler = (args: Readonly<Record<string, string | undefined>>) =>
@@ -108,10 +112,11 @@ export function registerPrompts(server: PromptRegistrar, observability?: HttpObs
     server.registerPrompt(
       prompt.name,
       {
+        title: prompt.title,
         description: prompt.description,
         argsSchema: prompt.argsSchema,
       },
-      mcpObservation ? wrapPromptHandler(prompt.name, handler, mcpObservation) : handler,
+      wrapPromptHandler(prompt.name, handler, mcpObservation),
     );
   }
 }

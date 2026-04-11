@@ -27,7 +27,7 @@ const AGGREGATED_TOOL_ORDER: readonly string[] = [
   'search',
   'fetch',
   'get-thread-progressions',
-  'get-prerequisite-graph',
+  'get-prior-knowledge-graph',
 ];
 
 /**
@@ -60,8 +60,7 @@ function splitDescriptionByFirstParagraph(desc: string): [string, string] {
  * @returns HTML string for the tool
  */
 function renderToolItem(tool: UniversalToolListEntry): string {
-  const desc = tool.description ?? '';
-  const [summary, howToUse] = splitDescriptionByFirstParagraph(desc);
+  const [summary, howToUse] = splitDescriptionByFirstParagraph(tool.description);
 
   const summaryHtml = escapeHtml(summary);
   const howToUseHtml = howToUse

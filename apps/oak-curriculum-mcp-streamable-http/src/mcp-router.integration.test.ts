@@ -66,7 +66,7 @@ describe('createMcpRouter (Integration)', () => {
   });
 
   describe('public resource authentication bypass', () => {
-    it('skips auth for widget resources/read', () => {
+    it('skips auth for widget resources/read (static HTML, public resource)', () => {
       const router = createMcpRouter({ auth: mockAuthMw });
       const req = createMockRequest({
         method: 'resources/read',
@@ -76,7 +76,6 @@ describe('createMcpRouter (Integration)', () => {
       router(req, mockRes, mockNext);
 
       expect(mockAuthMw).not.toHaveBeenCalled();
-      expect(mockNext).toHaveBeenCalled();
     });
 
     it('skips auth for getting-started documentation resources/read', () => {

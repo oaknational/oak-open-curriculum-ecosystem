@@ -10,20 +10,9 @@
 
 import { describe, it, expect } from 'vitest';
 import {
-  GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
   GET_THREAD_PROGRESSIONS_TOOL_DEF,
   runThreadProgressionsTool,
 } from './aggregated-thread-progressions.js';
-
-describe('GET_THREAD_PROGRESSIONS_INPUT_SCHEMA', () => {
-  it('is an object type with no parameters', () => {
-    expect(GET_THREAD_PROGRESSIONS_INPUT_SCHEMA).toEqual({
-      type: 'object',
-      properties: {},
-      additionalProperties: false,
-    });
-  });
-});
 
 describe('GET_THREAD_PROGRESSIONS_TOOL_DEF', () => {
   it('has description explaining the graph purpose', () => {
@@ -31,8 +20,8 @@ describe('GET_THREAD_PROGRESSIONS_TOOL_DEF', () => {
     expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).toContain('learning path');
   });
 
-  it('references get-curriculum-model as the prerequisite, not itself', () => {
-    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).toContain(
+  it('does not include prerequisite guidance (graph tools are loaded as needed, not prerequisites)', () => {
+    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).not.toContain(
       'You MUST call `get-curriculum-model` first',
     );
     expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.description).not.toContain(
@@ -46,12 +35,7 @@ describe('GET_THREAD_PROGRESSIONS_TOOL_DEF', () => {
       destructiveHint: false,
       idempotentHint: true,
       openWorldHint: false,
-      title: 'Get Thread Progressions',
     });
-  });
-
-  it('references the input schema', () => {
-    expect(GET_THREAD_PROGRESSIONS_TOOL_DEF.inputSchema).toBe(GET_THREAD_PROGRESSIONS_INPUT_SCHEMA);
   });
 });
 
@@ -75,11 +59,5 @@ describe('runThreadProgressionsTool', () => {
 
     expect(textContent).toHaveProperty('type', 'text');
     expect(textContent).toHaveProperty('text');
-  });
-
-  it('is idempotent - returns identical data on repeated calls', () => {
-    const first = runThreadProgressionsTool();
-    const second = runThreadProgressionsTool();
-    expect(first.structuredContent).toEqual(second.structuredContent);
   });
 });

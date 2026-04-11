@@ -20,11 +20,15 @@ If this is your first time here, the 5-minute reading path is:
 ## Contents
 
 - [Development Practice](./development-practice.md) — Best practices for development in this project
+- [Continuity Practice](./continuity-practice.md) — Lightweight session handoff, deep consolidation triggers, and surprise pipeline guidance
 - [Safety and Security](./safety-and-security.md) — Critical safety guidelines and security considerations
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) — **MOVED**: Comprehensive TDD approach at all levels (now in directives)
 - [TypeScript Practice](./typescript-practice.md) — TypeScript-specific guidelines and patterns
 - [Understanding Agent References](./understanding-agent-references.md) — How to interpret and use agent-specific references
 - [Curriculum Tools, Guidance and Playbooks](./curriculum-tools-guidance-and-playbooks.md) — Categories, tags, and domain playbooks
+- [Accessibility Practice](./accessibility-practice.md) — WCAG 2.2 AA compliance, Playwright + axe-core, theme-aware testing
+- [Design Token Practice](./design-token-practice.md) — DTCG JSON source format, three-tier model, CSS custom properties output
+- [MCP App Styling](./mcp-app-styling.md) — CSS custom properties, SDK variable bridges, font loading, CSP declarations
 
 ## Key Principles
 

@@ -35,7 +35,7 @@ The indexing pipeline processes curriculum data from bulk download files and the
 
 ### Shared Utilities
 
-- **`canonical-url-generator.ts`** - Single source of truth for all canonical URL patterns
+- URL generation now lives in `@oaknational/curriculum-sdk` (`oak-url-convenience.ts`), which delegates to generated URL helpers in `@oaknational/sdk-codegen`. See ADR-145.
 - Slug derivation (subject/phase extraction from sequence slugs) lives in `@oaknational/curriculum-sdk` (`sequence-slug-derivation.ts`)
 
 ## DRY Pattern for Document Builders
@@ -224,17 +224,17 @@ pnpm es:ingest -- --no-retry
 
 ## Key Files Reference
 
-| File                           | Purpose                                         |
-| ------------------------------ | ----------------------------------------------- |
-| `bulk-ingestion.ts`            | Bulk-first ingestion pipeline orchestrator      |
-| `bulk-chunk-uploader.ts`       | Upload orchestration with two-tier retry        |
-| `lesson-document-builder.ts`   | High-level lesson building from aggregated data |
-| `lesson-document-core.ts`      | Shared lesson document builder (DRY)            |
-| `unit-document-core.ts`        | Shared unit document builder (DRY)              |
-| `thread-document-builder.ts`   | Creates thread index documents                  |
-| `sequence-document-builder.ts` | Creates sequence index documents                |
-| `sequence-facets.ts`           | Creates sequence facet documents                |
-| `canonical-url-generator.ts`   | Single source of truth for URL patterns         |
+| File                           | Purpose                                           |
+| ------------------------------ | ------------------------------------------------- |
+| `bulk-ingestion.ts`            | Bulk-first ingestion pipeline orchestrator        |
+| `bulk-chunk-uploader.ts`       | Upload orchestration with two-tier retry          |
+| `lesson-document-builder.ts`   | High-level lesson building from aggregated data   |
+| `lesson-document-core.ts`      | Shared lesson document builder (DRY)              |
+| `unit-document-core.ts`        | Shared unit document builder (DRY)                |
+| `thread-document-builder.ts`   | Creates thread index documents                    |
+| `sequence-document-builder.ts` | Creates sequence index documents                  |
+| `sequence-facets.ts`           | Creates sequence facet documents                  |
+| `oak-url-convenience.ts` (SDK) | URL generation (in `@oaknational/curriculum-sdk`) |
 
 ## Related Documentation
 

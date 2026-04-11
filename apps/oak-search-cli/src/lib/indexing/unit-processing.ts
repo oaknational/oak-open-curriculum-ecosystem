@@ -43,6 +43,12 @@ export async function processUnitSummary(
   }
 
   const summary = result.value;
+  if (!summary.oakUrl) {
+    throw new Error(
+      `Missing oakUrl for unit "${summary.unitSlug}" in ${subject}/${ks} — ` +
+        `API response augmentation should have set this.`,
+    );
+  }
   const ops: BulkOperations = [
     createBulkAction(resolvePrimarySearchIndexName('units'), summary.unitSlug),
     createUnitDocument({
@@ -50,6 +56,7 @@ export async function processUnitSummary(
       subject,
       keyStage: ks,
       subjectProgrammesUrl,
+      unitUrl: summary.oakUrl,
       unitContextMap,
       lessonsByUnit,
     }),

@@ -172,9 +172,17 @@ function classifyLines(content) {
 }
 
 /**
- * Check a single fitness-managed file.
+ * Check a single fitness-managed file against the two-threshold model (ADR-144).
  *
- * Fitness ceilings measure content only, excluding YAML frontmatter.
+ * Fitness thresholds measure content only, excluding YAML frontmatter.
+ *
+ * Line count has two thresholds:
+ * - `fitness_line_target` — soft ceiling. Exceeding it is a warning, not a violation.
+ * - `fitness_line_limit` — hard ceiling. Exceeding it is a blocking violation.
+ *
+ * Character count and prose line width have single hard limits:
+ * - `fitness_char_limit` — hard ceiling for total characters.
+ * - `fitness_line_length` — hard ceiling for individual prose line width.
  *
  * @param {string} relPath
  * @param {string} content
@@ -186,19 +194,23 @@ function classifyLines(content) {
  *   maxProseLineNum: number,
  *   proseViolationCount: number,
  *   proseViolations: { text: string, kind: string, lineNumber: number }[],
- *   ceilingLines: number | null,
- *   ceilingChars: number | null,
+ *   targetLines: number | null,
+ *   limitLines: number | null,
+ *   limitChars: number | null,
  *   maxProseLineWidth: number | null,
- *   linesOk: boolean,
+ *   targetOk: boolean,
+ *   limitOk: boolean,
  *   charsOk: boolean,
  *   proseOk: boolean,
+ *   warnings: string[],
  *   violations: string[],
  * }}
  */
 export function evaluateFitnessFile(relPath, content) {
   const frontmatter = extractFrontmatter(content);
-  const ceilingLines = getFrontmatterNumber(frontmatter, 'fitness_line_count');
-  const ceilingChars = getFrontmatterNumber(frontmatter, 'fitness_char_count');
+  const targetLines = getFrontmatterNumber(frontmatter, 'fitness_line_target');
+  const limitLines = getFrontmatterNumber(frontmatter, 'fitness_line_limit');
+  const limitChars = getFrontmatterNumber(frontmatter, 'fitness_char_limit');
   const maxProseLineWidth = getFrontmatterNumber(frontmatter, 'fitness_line_length');
   const classified = classifyLines(content);
   const contentLines = classified.filter((line) => line.kind !== 'frontmatter');
@@ -225,15 +237,21 @@ export function evaluateFitnessFile(relPath, content) {
     }
   }
 
+  const warnings = [];
   const violations = [];
-  const linesOk = ceilingLines == null || totalLines <= ceilingLines;
-  if (!linesOk) {
-    violations.push(`Lines: ${totalLines} exceeds ceiling ${ceilingLines}`);
+
+  const targetOk = targetLines == null || totalLines <= targetLines;
+  const limitOk = limitLines == null || totalLines <= limitLines;
+
+  if (!limitOk) {
+    violations.push(`Lines: ${totalLines} exceeds limit ${limitLines}`);
+  } else if (!targetOk) {
+    warnings.push(`Lines: ${totalLines} exceeds target ${targetLines} (limit ${limitLines})`);
   }
 
-  const charsOk = ceilingChars == null || totalChars <= ceilingChars;
+  const charsOk = limitChars == null || totalChars <= limitChars;
   if (!charsOk) {
-    violations.push(`Characters: ${totalChars} exceeds ceiling ${ceilingChars}`);
+    violations.push(`Characters: ${totalChars} exceeds limit ${limitChars}`);
   }
 
   const proseOk = maxProseLineWidth == null || maxProseLen <= maxProseLineWidth;
@@ -251,12 +269,15 @@ export function evaluateFitnessFile(relPath, content) {
     maxProseLineNum,
     proseViolationCount: proseViolations.length,
     proseViolations: proseViolations.slice(0, 5),
-    ceilingLines,
-    ceilingChars,
+    targetLines,
+    limitLines,
+    limitChars,
     maxProseLineWidth,
-    linesOk,
+    targetOk,
+    limitOk,
     charsOk,
     proseOk,
+    warnings,
     violations,
   };
 }
@@ -274,7 +295,7 @@ async function discoverFitnessFiles() {
     const content = await readText(relPath);
     const frontmatter = extractFrontmatter(content);
 
-    if (getFrontmatterNumber(frontmatter, 'fitness_line_count') !== null) {
+    if (getFrontmatterNumber(frontmatter, 'fitness_line_target') !== null) {
       fitnessFiles.push(relPath);
     }
   }
@@ -284,39 +305,65 @@ async function discoverFitnessFiles() {
 
 // --- Format output ---
 
-function indicator(ok) {
-  return ok ? '\x1b[32m✓\x1b[0m' : '\x1b[31m✗\x1b[0m';
+function passIndicator() {
+  return '\x1b[32m✓\x1b[0m';
+}
+
+function failIndicator() {
+  return '\x1b[31m✗\x1b[0m';
+}
+
+function warnIndicator() {
+  return '\x1b[33m⚠\x1b[0m';
+}
+
+function formatLineStatus(result) {
+  const count = String(result.totalLines).padStart(6);
+
+  if (result.targetLines == null && result.limitLines == null) {
+    return `    Lines:            ${count}  (no threshold)`;
+  }
+
+  const targetPart = result.targetLines != null ? `target ${result.targetLines}` : '';
+  const limitPart = result.limitLines != null ? `limit ${result.limitLines}` : '';
+  const thresholds = [targetPart, limitPart].filter(Boolean).join(' / ');
+
+  if (!result.limitOk) {
+    return `    Lines:            ${count} / ${thresholds}  ${failIndicator()}`;
+  }
+
+  if (!result.targetOk) {
+    return `    Lines:            ${count} / ${thresholds}  ${warnIndicator()} above target`;
+  }
+
+  return `    Lines:            ${count} / ${thresholds}  ${passIndicator()}`;
 }
 
 function formatResult(result) {
   const lines = [];
   lines.push(`  ${result.filename}`);
 
-  if (result.ceilingLines != null) {
-    lines.push(
-      `    Lines:            ${String(result.totalLines).padStart(6)} / ${result.ceilingLines}  ${indicator(result.linesOk)}`,
-    );
-  } else {
-    lines.push(`    Lines:            ${String(result.totalLines).padStart(6)}  (no ceiling)`);
-  }
+  lines.push(formatLineStatus(result));
 
-  if (result.ceilingChars != null) {
+  if (result.limitChars != null) {
+    const charIndicator = result.charsOk ? passIndicator() : failIndicator();
     lines.push(
-      `    Characters:       ${String(result.totalChars).padStart(6)} / ${result.ceilingChars}  ${indicator(result.charsOk)}`,
+      `    Characters:       ${String(result.totalChars).padStart(6)} / ${result.limitChars}  ${charIndicator}`,
     );
   } else {
-    lines.push(`    Characters:       ${String(result.totalChars).padStart(6)}  (no ceiling)`);
+    lines.push(`    Characters:       ${String(result.totalChars).padStart(6)}  (no limit)`);
   }
 
   if (result.maxProseLineWidth != null) {
     const detail = result.proseOk
       ? ''
       : ` (${result.proseViolationCount} violations, longest at line ${result.maxProseLineNum})`;
+    const proseInd = result.proseOk ? passIndicator() : failIndicator();
     lines.push(
-      `    Max prose line:   ${String(result.maxProseLen).padStart(6)} / ${result.maxProseLineWidth}  ${indicator(result.proseOk)}${detail}`,
+      `    Max prose line:   ${String(result.maxProseLen).padStart(6)} / ${result.maxProseLineWidth}  ${proseInd}${detail}`,
     );
   } else {
-    lines.push(`    Max prose line:   ${String(result.maxProseLen).padStart(6)}  (no ceiling)`);
+    lines.push(`    Max prose line:   ${String(result.maxProseLen).padStart(6)}  (no limit)`);
   }
 
   if (!result.proseOk && result.proseViolations.length > 0) {
@@ -373,6 +420,7 @@ async function main(args = process.argv.slice(2)) {
     fitnessFiles.map(async (relPath) => evaluateFitnessFile(relPath, await readText(relPath))),
   );
   const totalViolations = results.reduce((sum, result) => sum + result.violations.length, 0);
+  const totalWarnings = results.reduce((sum, result) => sum + result.warnings.length, 0);
 
   for (const result of results) {
     console.log(formatResult(result));
@@ -381,8 +429,21 @@ async function main(args = process.argv.slice(2)) {
 
   const exitCode = getExitCode(mode, totalViolations);
 
-  if (totalViolations === 0) {
+  if (totalViolations === 0 && totalWarnings === 0) {
     console.log('\x1b[32mResult: PASS\x1b[0m\n');
+    return exitCode;
+  }
+
+  if (totalViolations === 0 && totalWarnings > 0) {
+    console.log(
+      `\x1b[33mResult: PASS with ${totalWarnings} warning${totalWarnings === 1 ? '' : 's'} (target exceeded)\x1b[0m\n`,
+    );
+    for (const result of results) {
+      for (const warning of result.warnings) {
+        console.log(`  \x1b[33m⚠\x1b[0m ${result.filename}: ${warning}`);
+      }
+    }
+    console.log();
     return exitCode;
   }
 
@@ -391,12 +452,15 @@ async function main(args = process.argv.slice(2)) {
   const summarySuffix = mode === FITNESS_MODE_INFORMATIONAL ? ' — informational mode' : '';
 
   console.log(
-    `${summaryColour}Result: ${summaryLabel} (${totalViolations} violation${totalViolations === 1 ? '' : 's'})${summarySuffix}\x1b[0m\n`,
+    `${summaryColour}Result: ${summaryLabel} (${totalViolations} violation${totalViolations === 1 ? '' : 's'}${totalWarnings > 0 ? `, ${totalWarnings} warning${totalWarnings === 1 ? '' : 's'}` : ''})${summarySuffix}\x1b[0m\n`,
   );
 
   for (const result of results) {
     for (const violation of result.violations) {
       console.log(`  \x1b[31m•\x1b[0m ${result.filename}: ${violation}`);
+    }
+    for (const warning of result.warnings) {
+      console.log(`  \x1b[33m⚠\x1b[0m ${result.filename}: ${warning}`);
     }
   }
 

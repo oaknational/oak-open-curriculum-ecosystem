@@ -13,10 +13,10 @@ describe('getResourceUriFromBody', () => {
     it('extracts URI from valid MCP resources/read body', () => {
       const body = {
         method: 'resources/read',
-        params: { uri: 'ui://widget/oak-json-viewer.html' },
+        params: { uri: 'ui://widget/oak-curriculum-app.html' },
       };
 
-      expect(getResourceUriFromBody(body)).toBe('ui://widget/oak-json-viewer.html');
+      expect(getResourceUriFromBody(body)).toBe('ui://widget/oak-curriculum-app.html');
     });
 
     it('extracts documentation URI', () => {

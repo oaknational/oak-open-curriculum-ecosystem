@@ -10,11 +10,6 @@ import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools';
 
 describe('isPublicResourceUri', () => {
   describe('returns true for public resources', () => {
-    it('returns true for widget URI', () => {
-      // Use actual WIDGET_URI from SDK which includes hash
-      expect(isPublicResourceUri(WIDGET_URI)).toBe(true);
-    });
-
     it('returns true for getting-started documentation', () => {
       expect(isPublicResourceUri('docs://oak/getting-started.md')).toBe(true);
     });
@@ -25,6 +20,12 @@ describe('isPublicResourceUri', () => {
 
     it('returns true for workflows documentation', () => {
       expect(isPublicResourceUri('docs://oak/workflows.md')).toBe(true);
+    });
+  });
+
+  describe('returns true for widget resource (static HTML, no user data)', () => {
+    it('returns true for widget URI', () => {
+      expect(isPublicResourceUri(WIDGET_URI)).toBe(true);
     });
   });
 
@@ -46,13 +47,13 @@ describe('isPublicResourceUri', () => {
     });
 
     it('returns false for similar but not exact URIs', () => {
-      expect(isPublicResourceUri('ui://widget/oak-json-viewer.html/')).toBe(false);
-      expect(isPublicResourceUri('UI://widget/oak-json-viewer.html')).toBe(false);
+      expect(isPublicResourceUri('ui://widget/oak-curriculum-app.html/')).toBe(false);
+      expect(isPublicResourceUri('UI://widget/oak-curriculum-app.html')).toBe(false);
       expect(isPublicResourceUri('docs://oak/getting-started.MD')).toBe(false);
     });
 
     it('returns false for partial matches', () => {
-      expect(isPublicResourceUri('ui://widget/oak-json-viewer')).toBe(false);
+      expect(isPublicResourceUri('ui://widget/oak-curriculum-app')).toBe(false);
       expect(isPublicResourceUri('docs://oak/getting-started')).toBe(false);
     });
   });

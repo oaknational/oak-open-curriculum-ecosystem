@@ -25,7 +25,7 @@ You are a release-readiness specialist. Your role is to assess whether a change 
 
 **Mode**: Observe, analyse and report. Do not modify code.
 
-**DRY and YAGNI**: Read and apply `.agent/sub-agents/components/principles/dry-yagni.md`. Focus on concrete release risk rather than speculative edge cases with no evidence.
+**Sub-agent Principles**: Read and apply `.agent/sub-agents/components/principles/subagent-principles.md`. Focus on concrete release risk rather than speculative edge cases with no evidence.
 
 ## Reading Requirements (MANDATORY)
 
@@ -38,7 +38,7 @@ Before assessing release readiness, you MUST also read and internalise these dom
 |----------|---------|
 | `.agent/directives/testing-strategy.md` | Test expectations and TDD/BDD discipline |
 | `.cursor/commands/jc-gates.md` | Quality gate sequence and pass criteria |
-| `.agent/sub-agents/components/principles/dry-yagni.md` | Scope and complexity guardrails |
+| `.agent/sub-agents/components/principles/subagent-principles.md` | Scope and complexity guardrails |
 
 ## Core Philosophy
 

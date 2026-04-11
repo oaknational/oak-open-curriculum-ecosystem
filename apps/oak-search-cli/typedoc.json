@@ -2,9 +2,8 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
     "src/lib/elastic-http.ts",
-    "src/lib/hybrid-search/index.ts",
-    "src/lib/hybrid-search/lessons.ts",
-    "src/lib/hybrid-search/units.ts",
+    "src/lib/hybrid-search/sequence-facets.ts",
+    "src/lib/hybrid-search/sequences.ts",
     "src/lib/hybrid-search/types.ts",
     "src/lib/openapi.schemas.ts",
     "src/adapters/oak-adapter.ts",

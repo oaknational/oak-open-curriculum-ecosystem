@@ -6,7 +6,7 @@
  * stages, and units are available in the curriculum.
  */
 
-import type { GenericToolInputJsonSchema } from '../zod-input-schema.js';
+import { z } from 'zod';
 import { KEY_STAGES, SUBJECTS } from '@oaknational/sdk-codegen/api-schema';
 import {
   AGGREGATED_PREREQUISITE_GUIDANCE,
@@ -21,6 +21,7 @@ import { SCOPES_SUPPORTED } from '../scopes-supported.js';
  * Provides structured navigation of the curriculum via faceted data.
  */
 export const BROWSE_TOOL_DEF = {
+  title: 'Browse Curriculum',
   description: `Browse what's available in Oak's curriculum without searching.
 
 ${AGGREGATED_PREREQUISITE_GUIDANCE}
@@ -50,31 +51,25 @@ NATURAL LANGUAGE MAPPING EXAMPLES:
     destructiveHint: false,
     idempotentHint: true,
     openWorldHint: false,
-    title: 'Browse Curriculum',
   },
   _meta: undefined,
 } as const;
 
 /**
- * JSON Schema for the browse-curriculum tool inputs.
+ * Flat Zod shape for MCP SDK registration of the browse-curriculum tool.
  *
- * All fields optional. An empty object returns all available facets.
+ * Canonical Zod schema with `.describe()` and `.meta({ examples })`
+ * for the MCP SDK's native `z.toJSONSchema()` conversion.
  */
-export const BROWSE_INPUT_SCHEMA = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    subject: {
-      type: 'string',
-      description: 'Filter by subject slug to see what units and lessons are available',
-      enum: [...SUBJECTS],
-      examples: ['maths', 'science', 'english'],
-    },
-    keyStage: {
-      type: 'string',
-      description: 'Filter by key stage to see what subjects and content are available',
-      enum: [...KEY_STAGES],
-      examples: ['ks2', 'ks3'],
-    },
-  },
-} as const satisfies GenericToolInputJsonSchema;
+export const BROWSE_INPUT_SCHEMA: z.ZodRawShape = {
+  subject: z
+    .enum([...SUBJECTS])
+    .optional()
+    .describe('Filter by subject slug to see what units and lessons are available')
+    .meta({ examples: ['maths', 'science', 'english'] }),
+  keyStage: z
+    .enum([...KEY_STAGES])
+    .optional()
+    .describe('Filter by key stage to see what subjects and content are available')
+    .meta({ examples: ['ks2', 'ks3'] }),
+};

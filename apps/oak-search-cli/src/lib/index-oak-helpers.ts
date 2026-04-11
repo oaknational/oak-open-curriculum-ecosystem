@@ -1,27 +1,22 @@
-/* eslint-disable max-lines -- Cohesive module for Oak curriculum bulk operations */
 /**
  * Helper functions for building Oak curriculum bulk operations.
  * @see ADR-080 KS4 Metadata Denormalisation, @see ADR-083 Lesson Enumeration
  */
 
-import { generateCanonicalUrl } from '@oaknational/curriculum-sdk';
+import { generateSubjectProgrammesUrl } from '@oaknational/curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
 import type { SequenceFacetSource } from './indexing/sequence-facets';
-import {
-  buildSequenceFacetOps,
-  type SequenceFacetProcessingMetrics,
-} from './indexing/sequence-facet-index';
+import { buildSequenceFacetOps } from './indexing/sequence-facet-index';
 import { buildRollupDocuments, buildUnitDocuments } from './indexing/index-bulk-helpers';
 import { buildSequenceOps } from './indexing/sequence-bulk-helpers';
 import { ingestLogger } from './logger';
 import type { DataIntegrityReport } from './indexing/data-integrity-report';
 import type { UnitContextMap } from './indexing/ks4-context-builder';
-import { fetchAllLessonsByUnit } from './indexing/fetch-all-lessons';
 import type { BulkOperations } from './indexing/bulk-operation-types';
-import { processLessonForIndexing } from './indexing/lesson-processing';
 import { buildLessonsByUnit } from './indexing/lesson-aggregation';
 import { fetchUnitsPatternAware } from './indexing/pattern-aware-fetcher';
+import { buildLessonOpsForPair, fetchAggregatedLessonsForPair } from './index-oak-build-helpers';
 
 /** Context for building a subject/keystage pair. */
 export interface PairBuildContext {
@@ -89,13 +84,9 @@ export async function fetchPairData(
   return { units: result.units, skipped: false };
 }
 
-/** Generate subject programmes URL, throws if unavailable. */
+/** Generate subject programmes URL. */
 function getSubjectProgrammesUrl(subject: SearchSubjectSlug, ks: KeyStage): string {
-  const url = generateCanonicalUrl('subject', subject, { subject: { keyStageSlugs: [ks] } });
-  if (!url) {
-    throw new Error(`Missing subject programmes canonical URL for ${subject}/${ks}`);
-  }
-  return url;
+  return generateSubjectProgrammesUrl(subject, ks);
 }
 
 /** Build unit documents and return summaries for lesson derivation. */
@@ -125,8 +116,40 @@ async function buildUnitsWithSummaries(
   return result;
 }
 
+function buildRollupOpsForPair(params: {
+  unitSummaries: Map<string, SearchUnitSummary>;
+  rollupSnippets: Map<string, string[]>;
+  subject: SearchSubjectSlug;
+  keyStage: KeyStage;
+  subjectProgrammesUrl: string;
+  unitContextMap: UnitContextMap;
+  lessonsByUnit: ReadonlyMap<string, readonly string[]>;
+}): BulkOperations {
+  ingestLogger.debug('Building rollup documents', {
+    subject: params.subject,
+    keyStage: params.keyStage,
+  });
+
+  const rollupOps = buildRollupDocuments(
+    params.unitSummaries,
+    params.rollupSnippets,
+    params.subject,
+    params.keyStage,
+    params.subjectProgrammesUrl,
+    params.unitContextMap,
+    params.lessonsByUnit,
+  );
+
+  ingestLogger.debug('Built rollup docs', {
+    subject: params.subject,
+    keyStage: params.keyStage,
+    count: rollupOps.length / 2,
+  });
+
+  return rollupOps;
+}
+
 /** Build unit, lesson, and rollup operations with progress logging. */
-// eslint-disable-next-line max-lines-per-function, max-statements -- Core orchestration requires sequential steps
 async function buildCoreDocumentOps(
   context: PairBuildContext,
   units: PairUnits,
@@ -137,83 +160,40 @@ async function buildCoreDocumentOps(
   rollupOps: BulkOperations;
   unitSummaries: Map<string, SearchUnitSummary>;
 }> {
-  const { ks, subject, unitContextMap, client } = context;
-
-  // Fetch lessons FIRST to get accurate lesson counts (per ADR-083)
-  // WORKAROUND: Fetch by unit due to upstream API bug (see ADR-083)
-  // NOTE: With bulk-first approach (ADR-093), this will be replaced by bulk download parsing
-  const unitSlugs = units.map((u) => u.unitSlug);
-  ingestLogger.info('Fetching all lessons by unit', {
-    subject,
-    keyStage: ks,
-    unitCount: unitSlugs.length,
-  });
-  const aggregatedLessons = await fetchAllLessonsByUnit(
-    client.getLessonsByKeyStageAndSubject,
-    ks,
-    subject,
-    unitSlugs,
-  );
-  ingestLogger.info('Fetched lessons', { subject, keyStage: ks, count: aggregatedLessons.size });
-
-  // Build lessonsByUnit map for accurate unit/rollup lesson counts
+  const { ks, subject, unitContextMap } = context;
+  const aggregatedLessons = await fetchAggregatedLessonsForPair(context, units);
   const lessonsByUnit = buildLessonsByUnit(aggregatedLessons);
   ingestLogger.debug('Built lessonsByUnit map', {
     subject,
     keyStage: ks,
     unitCount: lessonsByUnit.size,
   });
-
-  // Build units with accurate lesson counts
   const { unitSummaries, unitOps } = await buildUnitsWithSummaries(
     context,
     units,
     subjectProgrammesUrl,
     lessonsByUnit,
   );
-
-  // Build lesson documents (reuses aggregatedLessons, doesn't re-fetch)
-  // NOTE: hasVideo parameter preserved for future bulk-first integration
-  const lessonOps: BulkOperations = [],
-    rollupSnippets = new Map<string, string[]>();
-  let processed = 0,
-    skipped = 0;
-
-  for (const lesson of aggregatedLessons.values()) {
-    const skipCount = await processLessonForIndexing(
-      lesson,
-      context,
-      unitSummaries,
-      lessonOps,
-      rollupSnippets,
-    );
-    if (skipCount > 0) {
-      skipped++;
-      continue;
-    }
-    processed++;
-  }
-
+  const { lessonOps, rollupSnippets, processed, skipped } = await buildLessonOpsForPair(
+    aggregatedLessons,
+    context,
+    unitSummaries,
+  );
   ingestLogger.info('Built lesson docs', {
     subject,
     keyStage: ks,
     count: processed,
     skipped,
   });
-
-  // Build rollups with accurate lesson counts
-  ingestLogger.debug('Building rollup documents', { subject, keyStage: ks });
-  const rollupOps = buildRollupDocuments(
+  const rollupOps = buildRollupOpsForPair({
     unitSummaries,
     rollupSnippets,
     subject,
-    ks,
+    keyStage: ks,
     subjectProgrammesUrl,
     unitContextMap,
     lessonsByUnit,
-  );
-  ingestLogger.debug('Built rollup docs', { subject, keyStage: ks, count: rollupOps.length / 2 });
-
+  });
   return { unitOps, lessonOps, rollupOps, unitSummaries };
 }
 
@@ -246,34 +226,4 @@ export async function buildPairDocuments(
   });
 
   return [...unitOps, ...lessonOps, ...rollupOps, ...sequenceFacetOps, ...sequenceOps];
-}
-
-/** Emit sequence facet events to callback if provided. */
-export function emitSequenceFacetEvents(
-  events: readonly SequenceFacetProcessingMetrics[],
-  subject: SearchSubjectSlug,
-  onEvent:
-    | ((details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug }) => void)
-    | undefined,
-): void {
-  if (!onEvent) {
-    return;
-  }
-  for (const event of events) {
-    onEvent({ ...event, subject });
-  }
-}
-
-/** Resolve sequence slug from a subject sequence entry. */
-export function resolveSequenceSlugFromEntry(entry: SubjectSequenceEntry): string {
-  if (typeof entry === 'string') {
-    return entry;
-  }
-  if (typeof entry === 'object' && entry !== null && 'sequenceSlug' in entry) {
-    const slug = entry.sequenceSlug;
-    if (typeof slug === 'string') {
-      return slug;
-    }
-  }
-  throw new Error(`Cannot resolve sequence slug from entry: ${JSON.stringify(entry)}`);
 }

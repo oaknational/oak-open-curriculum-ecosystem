@@ -4,9 +4,9 @@ Run the quality gates one by one from the repo root. Fix any and all issues that
 
 After each fix, **restart the quality gate sequence from the beginning**. This prevents regressions to earlier gates from later fixes.
 
-This sequence corresponds to `pnpm check` — the most comprehensive local
-surface. See ADR-121 (`docs/architecture/architectural-decisions/121-quality-gate-surfaces.md`)
-for how this relates to pre-commit, pre-push, CI, and `pnpm qg`.
+This sequence corresponds to `pnpm check` — the canonical aggregate local
+gate. See ADR-121 (`docs/architecture/architectural-decisions/121-quality-gate-surfaces.md`)
+for how this relates to pre-commit, pre-push, and CI.
 
 ## The Sequence
 
@@ -15,26 +15,31 @@ Run each gate in order. If a gate fails, fix the issues before proceeding.
 ```bash
 pnpm secrets:scan:all
 pnpm clean
+pnpm test:root-scripts
 pnpm sdk-codegen
 pnpm build
 pnpm type-check
 pnpm doc-gen
-pnpm format:root
-pnpm markdownlint:root
-pnpm subagents:check
-pnpm portability:check
 pnpm lint:fix
 pnpm test
+pnpm test:widget
 pnpm test:e2e
 pnpm test:ui
+pnpm test:a11y
+pnpm test:widget:ui
+pnpm test:widget:a11y
 pnpm smoke:dev:stub
+pnpm subagents:check
+pnpm portability:check
+pnpm markdownlint:root
+pnpm format:root
 ```
 
 ## Rules
 
 1. **All issues are blocking** - There is no such thing as "someone else's problem"
 2. **Fix, don't disable** - Never use `eslint-disable`, `@ts-ignore`, or similar escapes
-3. **Restart on fix** - After fixing any issue, restart from `pnpm format:root`
+3. **Restart on fix** - After fixing any issue, restart from the beginning
 4. **No skipping** - Every gate must pass before proceeding to the next
 
 ## Process
@@ -42,7 +47,7 @@ pnpm smoke:dev:stub
 For each gate in the sequence above:
 
 - If the gate fails, fix the issue
-- After fixing, restart from `pnpm format:root`
+- After fixing, restart from the beginning (`pnpm secrets:scan:all`)
 - If the gate passes, proceed to the next one
 
 The full sequence mirrors `pnpm check` in `package.json`.

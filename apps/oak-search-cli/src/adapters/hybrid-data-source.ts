@@ -8,7 +8,7 @@ import type {
 } from '../types/oak';
 import type { OakClient } from './oak-adapter';
 import type { CategoryMap } from './category-supplementation';
-import { createBulkDataAdapter, type BulkIndexAction } from './bulk-data-adapter';
+import { createBulkDataAdapter } from './bulk-data-adapter';
 import {
   buildKs4SupplementationContext,
   enrichLessonDocWithKs4,
@@ -20,6 +20,7 @@ import {
 import { deriveSubjectSlugFromSequence } from '@oaknational/curriculum-sdk';
 import { isSubject } from './sdk-guards';
 import { buildRollupDocs } from './bulk-rollup-builder';
+import { buildBulkOps, type BulkOperationEntry } from './bulk-ops-builder';
 import { createEmptyUnitContextMap } from '../lib/indexing/ks4-context-builder';
 import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '@oaknational/oak-search-sdk/admin';
@@ -38,13 +39,6 @@ export interface HybridDataSourceStats {
   readonly ks4UnitsEnriched: number;
 }
 
-/** Bulk operation entry (action or document) */
-type BulkOperationEntry =
-  | BulkIndexAction
-  | SearchLessonsIndexDoc
-  | SearchUnitsIndexDoc
-  | SearchUnitRollupDoc;
-
 /** Interface for the hybrid data source */
 export interface HybridDataSource {
   readonly sequenceSlug: string;
@@ -54,12 +48,12 @@ export interface HybridDataSource {
   getLessons(): readonly Lesson[];
   transformLessonsToES(): readonly SearchLessonsIndexDoc[];
   transformUnitsToES(): readonly SearchUnitsIndexDoc[];
-  transformUnitsToRollupDocs(): readonly SearchUnitRollupDoc[];
+  transformUnitsToRollupDocs(): Result<readonly SearchUnitRollupDoc[], Error>;
   toBulkOperations(
     lessonsIndex: string,
     unitsIndex: string,
     rollupIndex: string,
-  ): readonly BulkOperationEntry[];
+  ): Result<readonly BulkOperationEntry[], Error>;
   getStats(): HybridDataSourceStats;
 }
 
@@ -140,28 +134,6 @@ function enrichUnits(
   });
 }
 
-/** Build bulk operations from transformed documents */
-function buildBulkOps(
-  lessons: readonly SearchLessonsIndexDoc[],
-  units: readonly SearchUnitsIndexDoc[],
-  rollups: readonly SearchUnitRollupDoc[],
-  lessonsIndex: string,
-  unitsIndex: string,
-  rollupIndex: string,
-): BulkOperationEntry[] {
-  const ops: BulkOperationEntry[] = [];
-  for (const doc of lessons) {
-    ops.push({ index: { _index: lessonsIndex, _id: doc.lesson_id } }, doc);
-  }
-  for (const doc of units) {
-    ops.push({ index: { _index: unitsIndex, _id: doc.unit_id } }, doc);
-  }
-  for (const doc of rollups) {
-    ops.push({ index: { _index: rollupIndex, _id: doc.unit_id } }, doc);
-  }
-  return ops;
-}
-
 /** Try to build KS4 context, returning a data_source_error on failure. */
 async function buildKs4ContextSafe(
   client: OakClient | null,
@@ -210,8 +182,15 @@ function assembleHybridDataSource(
     transformLessonsToES: transformLessons,
     transformUnitsToES: transformUnits,
     transformUnitsToRollupDocs: transformRollups,
-    toBulkOperations: (li, ui, ri) =>
-      buildBulkOps(transformLessons(), transformUnits(), transformRollups(), li, ui, ri),
+    toBulkOperations: (li, ui, ri) => {
+      const rollupsResult = transformRollups();
+      if (!rollupsResult.ok) {
+        return rollupsResult;
+      }
+      return ok(
+        buildBulkOps(transformLessons(), transformUnits(), rollupsResult.value, li, ui, ri),
+      );
+    },
     getStats: () => ({
       lessonCount: bulkAdapter.getLessons().length,
       unitCount: bulkAdapter.getUnits().length,

@@ -177,7 +177,7 @@ const SequenceUnitsResponseSchema = z.array(
               .strict(),
           ])
         ),
-        canonicalUrl: z.string().optional(),
+        oakUrl: z.url().optional(),
       })
       .strict(),
     z
@@ -342,7 +342,7 @@ const SequenceUnitsResponseSchema = z.array(
               .strict(),
           ])
         ),
-        canonicalUrl: z.string().optional(),
+        oakUrl: z.url().optional(),
       })
       .strict(),
     z
@@ -424,7 +424,7 @@ const SequenceUnitsResponseSchema = z.array(
             })
             .strict()
         ),
-        canonicalUrl: z.string().optional(),
+        oakUrl: z.url().optional(),
       })
       .strict(),
   ])
@@ -454,7 +454,7 @@ const TranscriptResponseSchema = z
   .object({
     transcript: z.string(),
     vtt: z.string(),
-    canonicalUrl: z.string().optional(),
+    oakUrl: z.url().optional(),
   })
   .strict();
 const SearchTranscriptResponseSchema = z.array(
@@ -463,7 +463,7 @@ const SearchTranscriptResponseSchema = z.array(
       lessonTitle: z.string(),
       lessonSlug: z.string(),
       transcriptSnippet: z.string().optional(),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
@@ -492,7 +492,7 @@ const SequenceAssetsResponseSchema = z.array(
           })
           .strict()
       ),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
@@ -521,35 +521,36 @@ const SubjectAssetsResponseSchema = z.array(
           })
           .strict()
       ),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
 const LessonAssetsResponseSchema = z
   .object({
-    attribution: z.array(z.string()),
-    assets: z.array(
-      z
-        .object({
-          type: z.enum([
-            "slideDeck",
-            "exitQuiz",
-            "exitQuizAnswers",
-            "starterQuiz",
-            "starterQuizAnswers",
-            "supplementaryResource",
-            "video",
-            "worksheet",
-            "worksheetAnswers",
-          ]),
-          label: z.string(),
-          url: z.string(),
-        })
-        .strict()
-    ),
-    canonicalUrl: z.string(),
+    oakUrl: z.url(),
+    attribution: z.array(z.string()).optional(),
+    assets: z
+      .array(
+        z
+          .object({
+            type: z.enum([
+              "slideDeck",
+              "exitQuiz",
+              "exitQuizAnswers",
+              "starterQuiz",
+              "starterQuizAnswers",
+              "supplementaryResource",
+              "video",
+              "worksheet",
+              "worksheetAnswers",
+            ]),
+            label: z.string(),
+            url: z.string(),
+          })
+          .strict()
+      )
+      .optional(),
   })
-  .partial()
   .strict();
 const LessonAssetResponseSchema = z.unknown();
 const AllSubjectsResponseSchema = z.array(
@@ -582,7 +583,7 @@ const AllSubjectsResponseSchema = z.array(
           .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
           .strict()
       ),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
@@ -613,7 +614,7 @@ const SubjectResponseSchema = z
     keyStages: z.array(
       z.object({ keyStageTitle: z.string(), keyStageSlug: z.string() }).strict()
     ),
-    canonicalUrl: z.string().optional(),
+    oakUrl: z.url().optional(),
   })
   .strict();
 const SubjectSequenceResponseSchema = z.array(
@@ -632,7 +633,7 @@ const SubjectSequenceResponseSchema = z.array(
         z.object({ title: z.string(), slug: z.string() }).strict(),
         z.null(),
       ]),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
@@ -641,7 +642,7 @@ const SubjectKeyStagesResponseSchema = z.array(
     .object({
       keyStageTitle: z.string(),
       keyStageSlug: z.string(),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
@@ -651,7 +652,7 @@ const KeyStageResponseSchema = z.array(
     .object({
       slug: z.string(),
       title: z.string(),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
@@ -663,7 +664,7 @@ const KeyStageSubjectLessonsResponseSchema = z.array(
       lessons: z.array(
         z.object({ lessonSlug: z.string(), lessonTitle: z.string() }).strict()
       ),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
@@ -675,7 +676,7 @@ const AllKeyStageAndSubjectUnitsResponseSchema = z.array(
       units: z.array(
         z.object({ unitSlug: z.string(), unitTitle: z.string() }).strict()
       ),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
@@ -925,7 +926,7 @@ const QuestionForLessonsResponseSchema = z
           .strict(),
       ])
     ),
-    canonicalUrl: z.string().optional(),
+    oakUrl: z.url().optional(),
   })
   .strict();
 const QuestionsForSequenceResponseSchema = z.array(
@@ -1177,7 +1178,7 @@ const QuestionsForSequenceResponseSchema = z.array(
             .strict(),
         ])
       ),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
@@ -1430,13 +1431,15 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
             .strict(),
         ])
       ),
-      canonicalUrl: z.string().optional(),
+      oakUrl: z.url().optional(),
     })
     .strict()
 );
 const LessonSummaryResponseSchema = z
   .object({
     lessonTitle: z.string(),
+    canonicalUrl: z.url(),
+    oakUrl: z.url(),
     unitSlug: z.string(),
     unitTitle: z.string(),
     subjectSlug: z.string(),
@@ -1469,7 +1472,6 @@ const LessonSummaryResponseSchema = z
     ]),
     supervisionLevel: z.union([z.string(), z.null()]),
     downloadsAvailable: z.boolean(),
-    canonicalUrl: z.string().optional(),
   })
   .strict();
 const LessonSearchResponseSchema = z.array(
@@ -1477,6 +1479,7 @@ const LessonSearchResponseSchema = z.array(
     .object({
       lessonSlug: z.string(),
       lessonTitle: z.string(),
+      oakUrl: z.url(),
       similarity: z.number(),
       units: z.array(
         z
@@ -1489,7 +1492,6 @@ const LessonSearchResponseSchema = z.array(
           })
           .strict()
       ),
-      canonicalUrl: z.string().optional(),
     })
     .strict()
 );
@@ -1534,7 +1536,7 @@ const UnitSummaryResponseSchema = z
         })
         .strict()
     ),
-    canonicalUrl: z.string().optional(),
+    oakUrl: z.url().optional(),
   })
   .strict();
 const AllThreadsResponseSchema = z.array(
@@ -1542,7 +1544,7 @@ const AllThreadsResponseSchema = z.array(
     .object({
       title: z.string(),
       slug: z.string(),
-      canonicalUrl: z.null().optional(),
+      oakUrl: z.null().optional(),
     })
     .strict()
 );
@@ -1552,7 +1554,7 @@ const ThreadUnitsResponseSchema = z.array(
       unitTitle: z.string(),
       unitSlug: z.string(),
       unitOrder: z.number(),
-      canonicalUrl: z.null().optional(),
+      oakUrl: z.null().optional(),
     })
     .strict()
 );
@@ -1561,7 +1563,7 @@ const RateLimitResponseSchema = z
     limit: z.number(),
     remaining: z.number(),
     reset: z.number(),
-    canonicalUrl: z.string().optional(),
+    oakUrl: z.url().optional(),
   })
   .strict();
 

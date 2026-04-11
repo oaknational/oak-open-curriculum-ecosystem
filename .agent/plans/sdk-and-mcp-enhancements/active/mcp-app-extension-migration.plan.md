@@ -1,396 +1,215 @@
 ---
 name: "MCP App Extension Migration"
-overview: "Broad session-anchor plan for migrating Oak's MCP HTTP server from ChatGPT-specific widget coupling to the MCP Apps open standard (SEP-1865). Covers OpenAI removal, MCP App Extension implementation, branding, and a new human-facing search UI. Child plans carry implementation details for each work stream."
+overview: "Umbrella plan for completing Oak's MCP Apps migration. WS1 and WS2 are complete; the active remaining work is a total clean-break rebuild of the UI surface as one fresh React MCP App."
 source_research:
-  - "../mcp-apps-support.research.md"
   - "../roadmap.md"
+  - "../mcp-apps-support.research.md"
 specialist_reviewer: "mcp-reviewer"
 skills:
-  - "mcp-migrate-oai"
-  - "mcp-create-app"
-  - "mcp-add-ui"
-  - "mcp-convert-web"
+  - "migrate-oai-app"
+  - "create-mcp-app"
+  - "add-app-to-server"
+  - "convert-web-app"
 supersedes:
   - "replace-openai-app-with-mcp-app-infrastructure.execution.plan.md"
 todos:
   - id: ws1-adr-codegen
-    content: "WS1: Write reframing ADR and migrate SDK codegen contract from openai/* metadata keys to _meta.ui.resourceUri."
-    status: done
+    content: "WS1: Write ADR-141 and migrate canonical tool metadata from legacy aliases to MCP Apps `_meta.ui.resourceUri`."
+    status: completed
   - id: ws2-runtime-migration
-    content: "WS2: Migrate HTTP app runtime — MIME type, resource registration, CSP, delete ChatGPT artefacts."
-    status: done
-  - id: ws3-widget-client-branding
-    content: "WS3: Rewrite widget client from window.openai.* to MCP Apps SDK App class. Add Oak branding on key tools."
-    status: pending
+    content: "WS2: Migrate runtime resource registration, MIME usage, and delete obvious host-specific artefacts."
+    status: completed
+  - id: ws3-widget-clean-break
+    content: "WS3: Delete the dead widget framework and build one fresh React MCP App on the MCP Apps standard."
+    status: in-progress
   - id: ws4-search-ui
-    content: "WS4: Build new MCP App search UI for human users with 5 scopes, filters, and drill-down."
-    status: pending
-  - id: mcp-reviewer-upgrade
-    content: "Upgrade mcp-reviewer with live-spec-first doctrine and ext-apps coverage per specialist upgrade plan."
-    status: pending
-  - id: session-continuation-prompt
-    content: "Write session continuation prompt at .agent/prompts/session-continuation.prompt.md."
-    status: done
-  - id: planning-docs-update
-    content: "Update roadmap, milestones, and mark old execution plan as superseded."
+    content: "WS4: Deliver the human-facing search UI as part of the WS3 clean-break MCP App rebuild."
     status: pending
 ---
 
 # MCP App Extension Migration
 
-**Status**: ACTIVE
-**Last Updated**: 2026-03-30
-**Scope**: Full migration from ChatGPT-specific widget coupling to MCP Apps open standard, plus new search UI.
+**Status**: ACTIVE  
+**Last Updated**: 2026-04-10
+**Scope**: Complete Oak’s MCP Apps migration and finish the fresh React MCP App
+rebuild.
 
 ---
 
 ## Context
 
-Oak's MCP HTTP server (`apps/oak-curriculum-mcp-streamable-http/`) has its UI layer locked to ChatGPT. All 5 aggregated tools (search, fetch, browse-curriculum, explore-topic, get-curriculum-model) serve widgets via `window.openai.*` APIs and `text/html+skybridge` MIME — a ChatGPT-only surface. The `@modelcontextprotocol/ext-apps` package (^1.3.2) is declared in `package.json`. WS1 migrated SDK metadata keys; WS2 migrated the app runtime to use the SDK's server helpers (`registerAppResource`, `RESOURCE_MIME_TYPE`).
+Oak’s MCP HTTP server is moving to a fully MCP Apps-native UI surface.
 
-**Governing ADR**: [ADR-141: MCP Apps Standard as Only UI Surface](../../../../docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md)
+The remaining UI work is a **total clean break**:
 
-The MCP Apps standard (SEP-1865, stable 2026-01-26) is the official, host-neutral way to serve interactive UIs from MCP tools. ChatGPT and Claude both support it. This work migrates from single-host lock-in to the open standard, adds branding, and builds a new human-facing search UI.
+- delete the dead widget framework
+- remove banned legacy runtime assumptions from active guidance
+- build one fresh React MCP App on the MCP Apps standard
 
-**This plan supersedes** the documentation-only execution plan at `replace-openai-app-with-mcp-app-infrastructure.execution.plan.md` and replaces the old Domain A–D taxonomy as the primary session anchor.
+The old widget system is not a compatibility target.
 
----
+The intended search split is also non-negotiable:
 
-## Vision
+1. `search` remains the model-facing, agent-facing search interface
+2. `user-search` is the UI-first, user-first MCP App search interface
+3. `user-search-query` remains app-only helper functionality when justified by
+   the WS3 child plan
 
-Oak's MCP HTTP server becomes a first-class MCP Apps server — one codebase, one open standard, every host. All OpenAI-specific coupling is deleted, not wrapped. The server uses `@modelcontextprotocol/ext-apps/server` helpers as the sole registration surface. Oak branding flows through MCP Apps resource HTML. A new interactive search UI gives human users a rich search experience. ChatGPT and Claude consume the same tools, resources, and UI.
+## Governing Constraints
 
----
+This umbrella plan is governed by:
 
-## Research Findings (2026-03-25)
+- `.agent/directives/principles.md`
+- `.agent/directives/testing-strategy.md`
+- `.agent/directives/schema-first-execution.md`
+- ADR-141
 
-### Spec Status
+Binding consequences:
 
-- SEP-1865 stable (2026-01-26). No breaking changes since publication.
-- ext-apps SDK: v1.3.2 (^1.3.2 in package.json).
-- Local research at `../mcp-apps-support.research.md` is fully current.
+1. No compatibility layers, shims, or bridge code
+2. Schema-first and generator-first remain non-negotiable
+3. Apps stay thin; canonical contracts stay in SDK/codegen
+4. Active implementation uses the MCP Apps standard and
+   `@modelcontextprotocol/ext-apps`, not host-specific legacy surfaces
 
-### MCP Specialist Answers (Key Technical Decisions)
+## Completed Foundations
 
-1. **`registerAppTool` does NOT emit `openai/outputTemplate`** — hard cutover is correct; ChatGPT reads `_meta.ui.resourceUri` natively.
-2. **`getUiCapability()`** is the correct fallback check for hosts without MCP Apps support (returns `undefined`, not `null` — use falsy checks). Text-only fallback for Claude Desktop CLI, Cursor, etc.
-3. **Widget state**: in-memory or `sessionStorage` (keyed by viewUUID). No `localStorage` for auth/PII.
-4. **Search UI**: widget-initiated `tools/call` for subsequent searches. `visibility: ["app"]` for private helper tools. `app.updateModelContext()` to sync selections back to model.
-5. **MIME**: ChatGPT accepts `text/html;profile=mcp-app`. Safe to remove `text/html+skybridge`.
-6. **CSP**: Minimal — just `resourceDomains` for Google Fonts if using MCP bridge for all data.
-7. **Multiple widgets**: No limits. One resource per UI concern is the recommended pattern.
-8. **Dev preview**: `basic-host` from ext-apps repo replaces `chatgpt-emulation-wrapper.ts`.
+### WS1 — ADR and metadata contract
 
-### OpenAI Coupling Inventory (at time of planning)
+Complete.
 
-**SDK codegen** (metadata keys — all migrated in WS1, zero `openai/` hits
-remain in `packages/sdks/`):
+Outcomes:
 
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch.ts`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-browse/tool-definition.ts`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-explore/tool-definition.ts`
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-curriculum-model/definition.ts`
+- ADR-141 accepted
+- canonical tool metadata moved to `_meta.ui.resourceUri`
+- legacy metadata aliases removed from the canonical SDK contract path
 
-**HTTP app** (widget runtime, resources, security — paths relative to
-`apps/oak-curriculum-mcp-streamable-http/`):
+### WS2 — Runtime resource migration
 
-- `src/aggregated-tool-widget.ts` — MIME constant and `window.openai` refs
-- `src/register-resources.ts` — `openai/widget*` metadata keys (migrated in WS2)
-- `src/widget-script.ts` — `window.openai.*` bridge calls (WS3 scope)
-- `src/widget-script-state.ts` — `window.openai.widgetState` (WS3 scope)
-- `src/widget-cta/` — ChatGPT-focused CTA (deleted in WS2)
-- `scripts/chatgpt-emulation-wrapper.ts` — dev preview server (deleted in WS2)
-- `src/widget-file-generator.ts` — `window.openai` mock injection (WS3 scope, review finding 2026-03-26)
-- `src/security.ts`, `src/security-config.ts` — ChatGPT-specific comments
-- `src/tools-list-override.ts` — "OpenAI Apps SDK" comment (simplification Phase 6)
-- `src/auth-error-response.ts` — "ChatGPT OAuth" TSDoc (WS2 Task 4 / simplification Phase 6)
-- `packages/sdks/oak-sdk-codegen/src/types/generated/widget-constants.ts` — ChatGPT cache-busting comments
+Complete and archived at:
 
-### Domain A/B Assessment
+- `../archive/completed/ws2-app-runtime-migration.plan.md`
 
-- **Domain A (research)**: COMPLETE and current. MIME validation gap closed by MCP specialist confirmation.
-- **Domain B (specialist alignment)**: COMPLETE. Skills and reviewer are in place. The "reframing ADR" blocker is a formality — the decision is made.
+Outcomes:
 
-### The "Reframing ADR"
+- runtime resource registration moved onto MCP Apps helpers
+- `RESOURCE_MIME_TYPE` adopted in the active runtime
+- obvious host-specific artefacts deleted
 
-The decision: *"Oak builds one MCP server with MCP Apps widgets. ChatGPT is one host. No separate OpenAI App. No dual paths."* This is already reflected throughout the roadmap. The ADR formalises it. Written as part of WS1.
+### Runtime boundary simplification
 
----
+Complete and archived at:
 
-## Work Streams
+- `../archive/completed/mcp-runtime-boundary-simplification.plan.md`
 
-### WS1: ADR + Codegen Contract Migration
+Outcomes:
 
-**Scope**: Write the reframing ADR. Migrate SDK codegen emitter and tool descriptor contracts from `openai/*` metadata keys to `_meta.ui.resourceUri`.
+- canonical transport-neutral descriptor surface established
+- explicit ingress/auth boundary established
+- the WS3 child plan no longer depends on unfinished runtime simplification work
 
-**Files**:
+## Active Workstream
 
-- `docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md` (written in WS1)
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-search/tool-definition.ts` — `_meta` block
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch.ts` — `_meta` block
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-browse/tool-definition.ts` — `_meta` block
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-explore/tool-definition.ts` — `_meta` block
-- `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-curriculum-model/definition.ts` — `_meta` block
-- `packages/sdks/oak-sdk-codegen/src/types/generated/widget-constants.ts`
+### WS3 + WS4 now execute together
 
-**Change**: Replaced `_meta: { 'openai/outputTemplate': WIDGET_URI, ... }` with `_meta: { ui: { resourceUri: WIDGET_URI } }` across all 5 aggregated tool definitions. Dropped `openai/toolInvocation/*` because MCP Apps does not yet implement equivalents. Translated `openai/widgetAccessible` / `openai/visibility` only when app-vs-model exposure semantics are required, using `_meta.ui.visibility`; for WS1 aggregated tools, no such split was needed.
+The remaining UI work is carried by one child plan:
 
-**Acceptance**:
+- [ws3-widget-clean-break-rebuild.plan.md](ws3-widget-clean-break-rebuild.plan.md)
 
-- `rg "openai/" packages/sdks/` returns zero hits
-- `pnpm sdk-codegen && pnpm build && pnpm type-check` passes
-- ADR written and cross-referenced
+This child plan covers:
 
-**Dependencies**: None. First stream.
+1. deletion of the dead widget framework
+2. fresh React MCP App infrastructure
+3. brand banner (COMPLETE)
+4. live React app foundation + tool metadata shape (Phase 4.5 — COMPLETE)
+5. user-search UI as a first-class user-first tool in the aggregated tool
+   surface
+6. app-only helper-tool visibility and runtime contract work needed to support
+   the new UI properly
 
----
+Immediate next step is to finish the reopened Phase 6 closeout truthfully:
+local docs, gates, contamination check, and Vercel/bootstrap remediation are
+green; remaining work is commit/push plus deployed preview/build-log recheck,
+then merge PR #76. Phase 5 remains post-merge.
 
-### WS2: App Runtime Migration (MIME, Resources, Deletions)
+`ws4-search-ui` remains a distinct umbrella todo for milestone tracking, but
+its execution lives inside the WS3 child plan.
 
-**Child plan**: [ws2-app-runtime-migration.plan.md](ws2-app-runtime-migration.plan.md) — detailed implementation plan with 7 distinct specialists across 10 review runs in 2 rounds (2026-03-26).
+### Cross-plan dependency note
 
-**Scope**: Migrate HTTP app resource registration, MIME type, CSP. Delete all ChatGPT-only artefacts.
+WS3 delivery and closure must stay aligned with:
 
-**Files**:
+1. `../archive/completed/auth-safety-correction.plan.md` for deny-by-default auth
+   invariants when tool metadata is absent/empty/malformed
+2. `../archive/completed/auth-boundary-type-safety.plan.md` for auth boundary typing and
+   fail-fast validation at runtime boundaries
 
-- `apps/oak-curriculum-mcp-streamable-http/src/register-resources.ts` — rewrite to use `registerAppResource`, `RESOURCE_MIME_TYPE`, `_meta.ui.csp` (camelCase)
-- `apps/oak-curriculum-mcp-streamable-http/src/aggregated-tool-widget.ts` — replace `AGGREGATED_TOOL_WIDGET_MIME_TYPE` with `RESOURCE_MIME_TYPE`
-- `apps/oak-curriculum-mcp-streamable-http/src/security.ts` — update ChatGPT-specific comments
-- `apps/oak-curriculum-mcp-streamable-http/src/security-config.ts` — update comments
-- DELETE: `scripts/chatgpt-emulation-wrapper.ts`
-- DELETE: `src/widget-cta/` directory (vestigial)
+These follow-on plans are not part of WS3 implementation scope, but they are
+blocking closure gates for auth-risk closure across the migration workstream.
 
-**CSP migration**:
+Explicit rule:
+
+- WS3/WS4 implementation phases may proceed.
+- WS3/WS4 migration closure must not be marked complete until both plans are
+  complete (or explicitly superseded by accepted architecture).
+
+### Specialist-capability dependency (separate collection)
+
+`mcp-reviewer` upgrade work is intentionally tracked
+outside this product migration collection at:
+
+- `.agent/plans/agentic-engineering-enhancements/archive/completed/mcp-specialist-upgrade.plan.md`
+
+Reason: this is reviewer-capability infrastructure (ADR-129 triplet hardening),
+not product/runtime delivery scope. It is a non-blocking parallel dependency for
+review quality; WS3/WS4 closure is governed by the product/runtime exit criteria
+in this plan.
+
+## Execution Order
 
 ```text
-BEFORE: openai/widgetCSP → { connect_domains, resource_domains } (snake_case)
-AFTER:  _meta.ui.csp → { connectDomains, resourceDomains } (camelCase)
+WS1: ADR + metadata contract                ✓ complete
+WS2: runtime migration                      ✓ complete
+Runtime boundary simplification             ✓ complete
+WS3 child plan: fresh React MCP App rebuild ▶ active
+  Phase 0: baseline + RED specs              ✓ complete
+  Phase 1: delete legacy widget framework    ✓ complete
+  Phase 2: scaffold fresh MCP App infra      ✓ complete
+  Phase 3: canonical contracts + runtime     ✓ complete
+  Design-token prerequisite                  ✓ complete
+  OakUrl codegen fix                         ✓ complete
+  Contrast validation prerequisite           ✓ complete
+  Phase 4: brand banner                      ✓ complete
+  Phase 4.5: live React app + metadata shape ✓ complete (archived)
+  Phase 6a: pre-merge docs + gates           ▶ active closeout (local recovery + closeout commits + gates green; push/preview pending)
+  --- PR #76 merge after branch push + preview recheck ---
+  Phase 5: user-search view                  ⏳ pending (post-merge)
+  Phase 6b: post-Phase 5 docs + gates        ⏳ pending
+C8 closure gates: auth metadata hardening   ✓ complete
 ```
 
-`connectDomains` can be dropped if all data flows through MCP bridge. `resourceDomains` keeps Google Fonts only.
+## Exit Criteria
 
-**Acceptance**:
+This umbrella plan is complete when:
 
-- Zero `text/html+skybridge` in runtime code
-- Zero `openai/widget*` keys in resource registration
-- `widget-cta/` directory does not exist
-- `chatgpt-emulation-wrapper.ts` does not exist
-- All e2e tests pass with MCP-standard assertions
-
-**Dependencies**: WS1 (metadata keys must be MCP-standard before resource registration changes).
-
-**Queued follow-up after WS2**:
-[../current/mcp-runtime-boundary-simplification.plan.md](../current/mcp-runtime-boundary-simplification.plan.md)
-captures the two runtime seams intentionally left behind by WS2: app-owned tool
-projection and the Express/Clerk ingress bridge. It establishes one canonical
-transport-neutral SDK descriptor surface, keeps app-rendering registration on
-the `registerAppTool()` helper boundary, and replaces ambient request state with
-one explicit auth boundary. Default sequencing: run it immediately after WS2 and
-complete it before promoting WS3. Any deferral must be recorded explicitly
-before WS3 implementation begins.
-
-**Simplification plan progress (2026-03-27)**:
-
-- **Phase 0** (complete): `@clerk/mcp-tools/express` utilities evaluated. All
-  five Express utilities SKIP'd per ADR-142. Only `verifyClerkToken` adopted.
-- **Phase 1** (complete): Seam inventory mapped, 3 specialist reviewers passed.
-  Key decisions: `tool-auth-context.ts` is dead code (delete in Phase 6);
-  `tools/list` override stays (MCP SDK cannot preserve examples); canonical
-  ingress is `getAuth()` once → `verifyClerkToken()` → forward `AuthInfo`.
-- **Phase 2** (complete): RED tests for canonical SDK descriptor surface.
-  `toRegistrationConfig` and `toProtocolEntry` asserted but non-existent.
-  type-check, lint, and test all RED. All 1,372 existing tests green.
-- **Phase 3** (complete, 2026-03-27): GREEN — `projections.ts` created with
-  `toRegistrationConfig` + `toProtocolEntry`. App simplified to single SDK
-  calls. 706 SDK + 676 HTTP + 165 E2E tests pass. MCP-reviewer COMPLIANT.
-- **Phase 4** (complete, 2026-03-27): RED — 6 DI-based unit tests, `AuthInfo`
-  from MCP SDK adopted as explicit auth contract, convergence test superseded
-  (dead code). Code-reviewer APPROVED, type-reviewer findings addressed.
-- **Phase 5** (next): GREEN — implement explicit ingress boundary.
-
----
-
-### WS3: Widget Client-Side Migration + Branding
-
-**Scope**: Rewrite widget JavaScript from `window.openai.*` to MCP Apps SDK `App` class. Add Oak branding on key entry-point tools.
-
-**Files**:
-
-- `apps/oak-curriculum-mcp-streamable-http/src/widget-script.ts` — complete rewrite: `App` class, `connect()`, `PostMessageTransport`, `app.on('tool-result')`
-- `apps/oak-curriculum-mcp-streamable-http/src/widget-script-state.ts` — replace `window.openai.widgetState`/`setWidgetState` with in-memory state
-- `apps/oak-curriculum-mcp-streamable-http/src/aggregated-tool-widget.ts` — update HTML shell to load MCP Apps client SDK, async `connect()` lifecycle
-- `apps/oak-curriculum-mcp-streamable-http/src/widget-file-generator.ts` — rewrite `generatePreviewWidgetFile()` to inject MCP Apps bridge instead of `window.openai` mock (review finding 2026-03-26)
-- `apps/oak-curriculum-mcp-streamable-http/scripts/widget-preview-server.ts` — update to use MCP Apps preview host instead of ChatGPT emulation (review finding 2026-03-26)
-- `apps/oak-curriculum-mcp-streamable-http/src/auth/public-resources.ts` — update comment referencing `window.openai.toolOutput` (review finding 2026-03-26)
-
-**Key design decisions** (settled):
-
-1. **React with ext-apps/react hooks** — use `useApp`, `useHostStyles`, `useHostFonts`, `useDocumentTheme` from `@modelcontextprotocol/ext-apps/react`. Keep it basic. Bundle with Vite.
-2. **Async lifecycle**: Show Oak-branded loading state until `useApp` reports `isConnected` and tool result arrives via `app.ontoolresult`.
-3. **Branding**: Oak logo, Lexend font, brand colours already exist in `widget-styles.ts` and `oak-logo-svg.ts` — carry forward into React components.
-
-**Acceptance**:
-
-- Zero `window.openai` references in `apps/oak-curriculum-mcp-streamable-http/src/`
-- Widget renders correctly via MCP Apps bridge
-- Oak branding visible on search, browse, fetch, explore, get-curriculum-model tools
-- External links work via `ui/open-link` pattern
-
-**Dependencies**: WS1 + WS2 (correct metadata and MIME must be in place).
-
-**Pre-merge state (2026-03-30)**: Widget UI is **temporarily disabled** for
-merge to `main`. `WIDGET_TOOL_NAMES` is empty and `_meta.ui` is removed from
-`search` and `get-curriculum-model` tool definitions. The widget HTML resource
-remains registered (useful for debug). To re-enable: restore tool names in
-`cross-domain-constants.ts` and uncomment `_meta.ui` in both tool definitions.
-
-**Child plan**: To be created before implementation begins, following the WS2
-pattern.
-
-**WS3 TDD obligation (from WS2 Task 3c)**: WS3 implementation MUST begin by
-rewriting the `window.openai` e2e test in `e2e-tests/widget-resource.e2e.test.ts`
-to specify the new MCP Apps `App` class behaviour FIRST (RED), then implement
-(GREEN). Per testing-strategy.md: "When changing system behaviour, update E2E
-tests FIRST."
-
----
-
-### WS4: MCP App Search UI for Humans
-
-**Scope**: Build a new, separate MCP App widget for interactive human-facing search across all 5 scopes.
-
-**Design**:
-
-- **Separate tool** (`search-ui` or similar) with `_meta.ui.resourceUri` pointing to a dedicated resource. The existing `search` tool remains agent-facing.
-- **Separate resource** (`ui://search/app.html`) — NOT a branch in the aggregated widget. Per MCP specialist: one resource per distinct UI concern.
-- **Private helper tools** with `visibility: ["app"]` for scope-specific searches called by the widget, if needed.
-- **Data flow**: All via MCP bridge (`app.callServerTool`). No direct API calls. Minimal CSP.
-- **Features**: search input, scope selector (lessons/units/threads/sequences/suggest), filter controls (subject, key stage, year, tier, exam board), results with drill-down via `tools/call`, Oak branding.
-- **Model context sync**: `app.updateModelContext()` when user selects items, so the model knows what the human found. **Important**: each call overwrites prior context (replace semantics, not append). The widget must maintain cumulative state and send the full current selection on each call. Only the last update before the next user message is sent to the model.
-
-**Key design decisions** (settled or partially settled):
-
-1. **React with ext-apps/react hooks** — decided. Use `useApp`, `useHostStyles`, `useHostFonts`, `useDocumentTheme`. Keep it basic. Bundle with Vite.
-2. **Renderer reuse**: Existing `widget-renderers/` may be adapted as React components for result display.
-3. **Suggest scope**: Live typeahead via debounced `tools/call` or simpler scope-based filtering — to resolve during child plan.
-
-**Acceptance**:
-
-- Search UI renders in ChatGPT and Claude
-- All 5 scopes searchable with subject + key stage filters minimum
-- Drill-down from result to detail works via MCP bridge
-- Oak branding present (logo, font, colours)
-- No direct API calls from iframe
-- Keyboard navigable, WCAG 2.2 AA contrast
-
-**Dependencies**: WS3 (MCP Apps bridge must be working).
-
-**Child plan**: To be created before implementation begins, following the WS2
-pattern.
-
----
-
-## Ordering and Parallelism
-
-```text
-WS1: ADR + Codegen Contract ──────────────────────┐  ✓ done
-                                                    ▼
-WS2: App Runtime Migration ────────────────────────┐  ✓ done
-                                                    ▼
-Runtime Boundary Simplification ───────────────────┐  ← active
-  Phase 0: evaluate @clerk/mcp-tools/express       │  ✓ done
-  Phase 1: foundation + seam audit                 │  ✓ done
-  Phase 2: RED — SDK descriptor tests              │  ✓ done
-  Phase 3: GREEN — canonicalise SDK surface        │  ✓ done
-  Phase 4: RED — ingress auth tests                 │  ✓ done
-  Phase 5: GREEN — explicit ingress boundary        │  ← next
-  Phase 6: cleanup + review                        │
-                                                    ▼
-WS3: Widget Client + Branding ─────────────────────┐
-  (design spike can begin during simplification)   │
-                                                    ▼
-WS4: Search UI for Humans
-  (design/prototype can begin during WS3)
-```
-
----
-
-## Validation
-
-**Global coupling regression** (run after every stream):
-
-```bash
-rg -n "openai/outputTemplate|openai/toolInvocation|openai/widgetAccessible|openai/visibility|text/html\+skybridge|window\.openai|openai/widget" \
-  packages/sdks/ apps/oak-curriculum-mcp-streamable-http/src/
-```
-
-Expected: decreasing hit count per stream, zero after WS3.
-
-**Quality gates per stream**:
-
-```bash
-pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm lint:fix && pnpm test && pnpm test:e2e && pnpm format:root && pnpm markdownlint:root
-```
-
----
-
-## Preparatory Work (This Session)
-
-Before implementation begins, this planning session delivers:
-
-1. **This plan** — broad session anchor
-2. **Reframing ADR draft** — captures the MCP-standard-primary decision
-3. **mcp-reviewer upgrade** — add live-spec-first doctrine, ext-apps coverage
-4. **Session continuation prompt** at `.agent/prompts/session-continuation.prompt.md`
-5. **Updated planning docs** — roadmap, milestones, old execution plan marked superseded
-
----
-
-## Session Continuation
-
-When picking up this work in a new session:
-
-1. Read this plan
-2. Read `.agent/prompts/session-continuation.prompt.md`
-3. Run the coupling regression check to see current state
-4. Check which WS is active and read its child plan
-5. Re-ground: `AGENT.md`, `principles.md`, `testing-strategy.md`, `schema-first-execution.md`
-6. Use `mcp-reviewer` before implementation decisions
-7. Use skill chain: `mcp-migrate-oai` (WS1-3), `mcp-create-app` + `mcp-add-ui` (WS4)
-
----
-
-## Specialist Reviewer
-
-`mcp-reviewer` is the specialist of record. Invoke for:
-
-- MCP Apps standards review
-- Resource metadata and CSP review
-- Capability negotiation patterns
-- Widget data flow and lifecycle review
-
----
-
-## Key References
-
-- [../mcp-apps-support.research.md](../mcp-apps-support.research.md) — research
-- [../roadmap.md](../roadmap.md) — strategic context
-- [mcp-migrate-oai skill](../../../.agent/skills/mcp-migrate-oai/SKILL.md) — migration skill
-- [mcp-create-app skill](../../../.agent/skills/mcp-create-app/SKILL.md) — new app creation skill
-- [mcp-add-ui skill](../../../.agent/skills/mcp-add-ui/SKILL.md) — add UI to existing tool skill
-- [mcp-reviewer template](../../../.agent/sub-agents/templates/mcp-reviewer.md) — specialist reviewer
-- [ADR-141: MCP Apps Standard as Only UI Surface](../../../../docs/architecture/architectural-decisions/141-mcp-apps-standard-primary.md) — governing ADR
-- SEP-1865 stable spec: <https://modelcontextprotocol.io/extensions/apps/overview>
-- ext-apps SDK: <https://github.com/modelcontextprotocol/ext-apps>
-- MCP Apps Patterns: <https://apps.extensions.modelcontextprotocol.io/api/documents/Patterns.html>
-- ext-apps React hooks: <https://apps.extensions.modelcontextprotocol.io/api/modules/_modelcontextprotocol_ext-apps_react.html>
-
----
+1. The WS3 child plan is complete
+2. `ws3-widget-clean-break` can be marked completed
+3. `ws4-search-ui` can be marked completed
+4. C8 auth hardening closure gates are complete (or explicitly superseded by
+   accepted architecture):
+   - `../archive/completed/auth-safety-correction.plan.md`
+   - `../archive/completed/auth-boundary-type-safety.plan.md`
+5. No active product path depends on banned legacy widget code or guidance
+6. All quality gates pass
 
 ## Related Documents
 
-- [replace-openai-app-with-mcp-app-infrastructure.execution.plan.md](../archive/completed/replace-openai-app-with-mcp-app-infrastructure.execution.plan.md) — superseded predecessor
-- [../roadmap.md](../roadmap.md) — strategic context (Domains A–D)
-- [../README.md](../README.md) — collection index
-- [README.md](README.md) — active plans index
+- [../roadmap.md](../roadmap.md) — strategic migration roadmap
+- [ws3-widget-clean-break-rebuild.plan.md](ws3-widget-clean-break-rebuild.plan.md) —
+  active implementation plan
+- [../archive/completed/ws2-app-runtime-migration.plan.md](../archive/completed/ws2-app-runtime-migration.plan.md) —
+  completed runtime migration
+- [../archive/completed/mcp-runtime-boundary-simplification.plan.md](../archive/completed/mcp-runtime-boundary-simplification.plan.md) —
+  completed runtime simplification
+- [../mcp-apps-support.research.md](../mcp-apps-support.research.md) —
+  canonical MCP Apps research summary for this collection

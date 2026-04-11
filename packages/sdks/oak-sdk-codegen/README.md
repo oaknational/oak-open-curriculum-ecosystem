@@ -94,8 +94,9 @@ an operator/maintenance command, not part of CI.
 
 During `pnpm sdk-codegen`, the code-generation pipeline also runs a
 post-generation sitemap reference validation step (`runSitemapValidation`).
-This is currently warn-only: invalid or unavailable reference data produces
-warnings rather than failing code generation.
+This is currently a soft gate: malformed reference data still emits warnings,
+but an absent local reference file is logged as informational output with
+regeneration guidance rather than failing code generation.
 
 ### `generate:clean` caveat
 

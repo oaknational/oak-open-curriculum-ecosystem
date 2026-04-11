@@ -1,332 +1,160 @@
-## Session 2026-03-29 — Plan/prompt reduction for CI remediation workstream
+## Napkin rotation — 2026-04-10b
 
-### What changed
-
-- Rewrote the active CI remediation plan to make it the single
-  authoritative source for scope, sequencing, risks, and validation.
-- Rewrote the session-continuation prompt to be operational only:
-  grounding, live git inspection, immediate priority, durable guidance.
-
-### Why
-
-- Both documents had drifted into stale, session-specific state
-  snapshots (hard-coded SHAs, uncommitted file inventories, stash
-  ordinals).
-- ADR-117 document hierarchy matters here: the prompt should not become
-  a second plan, and volatile git facts should be discovered live.
-
-### Durable guidance
-
-- Keep volatile branch state out of long-lived docs.
-- Use the plan as the authoritative workstream document.
-- Use the prompt as a short operational entry point that tells the next
-  session what to read and how to re-ground.
-
-## Session 2026-03-29 — E2E failure analysis (`feat/mcp_app`)
-
-### What was verified
-
-- Applied `start-right-quick`; Practice Box is empty (`.agent/practice-core/incoming/` contains only `.gitkeep`).
-- Current local repro: `pnpm test:e2e` passes on `feat/mcp_app` (20/20 Turbo tasks successful).
-- Current branch CI status: latest `CI` run for `origin/feat/mcp_app` (`18e050dd`) is green.
-
-### Key finding
-
-- The recent failed CI runs on `feat/mcp_app` (`13e44690`, `c54707a5`, `7d3e2f8b`, `31d69461`, `87717762`, `07e2e14b`) did **not** fail in E2E; they failed in the lint step before tests ran.
-- The concrete E2E regression signal in this branch history is commit `4761550c` (`fix: e2e overrides must use SDK executor, not bypass it`).
-- Root cause: some E2E overrides returned raw MCP `content` directly, which bypassed `createUniversalToolExecutor` and therefore skipped `mapExecutionResult()` / `formatToolResponse()`.
-- Consequence: tests expecting the SDK-formatted tool response contract (summary text + structured JSON payload) would see the wrong shape.
-- Current correct pattern in the tests is to build overrides on top of `createUniversalToolExecutor`, preserving the same formatting pipeline used by production handlers.
-
-## Session 2026-03-29 — CI consolidation, eslint-disable enforcement, widget test cleanup
-
-### CI/Turbo analysis
-
-- CI runs 4 separate Turbo invocations (97 resolved tasks, 36 redundant cache lookups)
-- `pnpm qg` already batches into 1 invocation — CI should do the same
-- 5 gates missing from CI vs local: `test:e2e`, `test:ui`, `smoke:dev:stub`, `test:root-scripts`, `portability:check`
-- Turbo `--summarize` writes `.turbo/runs/*.json` with per-task exit codes — drives GitHub Step Summary reporting
-
-### Playwright test audit (deep, multi-reviewer)
-
-- 16 widget Playwright tests testing dead `window.openai` ChatGPT integration being replaced
-- `eslint-disable` for `any` masked stale `window.openai` references — exact failure mode the ban exists to prevent
-- 4 landing page tests are valuable and independent — keep
-- Deleted: 7 widget Playwright files + 4 renderer integration tests + widget test infra
-- Reverted agent-introduced eslint config override (`no-restricted-syntax: 'off'`) — disabling checks is banned absolutely
-- Hardcoded Playwright baseURL instead of `process.env` access
-
-### eslint-disable enforcement
-
-- Created `@oaknational/no-eslint-disable` custom ESLint rule (TDD, 15 tests)
-- Detects all `eslint-disable` comments; allows user-approved exceptions (JC prefix convention)
-- Also detects `@ts-ignore` and `@ts-expect-error` (no exceptions)
-- Registered in oak-eslint plugin, activated in recommended config
-- Created `check-blocked-content.mjs` PreToolUse hook — blocks agents from writing the JC approval marker
-
-### Key finding: 106 eslint-disable directives in repo
-
-- Ban existed in documentation but had zero automated enforcement
-- `type-helpers` (7 instances) and user-approved comments are exceptions
-- Phase 3 (remediation of remaining ~101) is next session's primary work
-- Remediation categories: generated data files (refactor generators), generator code (split modules), logger (WeakSet<object>), test fakes (narrow interfaces), authored code (extract functions)
-
-### Agent behaviour pattern observed
-
-- Subagent implementer defaulted to "disable the check" (`no-restricted-syntax: 'off'` in eslint config) rather than "fix the code" — demonstrates why automated enforcement is essential
-- Every proposed "override" or "config-level exception" is the same pattern: moving the suppression rather than fixing the root cause
+Rotated at 570 lines after 12 sessions (10a–10l) covering
+widget crash fix, rules consolidation, ADR-154/155, KGs and
+pedagogy analysis, open-education knowledge surfaces plan
+family, ChatGPT report normalisation, EEF comparison, and
+curriculum NLP processing workspace plan.
+Archived to `archive/napkin-2026-04-10b.md`. Merged 2 new
+entries into `distilled.md`: DI contract sweep rule (Testing),
+lead-with-narrative process rule (Process). Graduated/pruned
+13 entries now covered by permanent docs: Vercel Lambda facts
+(ADR-156), four-tier model (principles.md), lifecycle
+corrections (distilled terminology entry), rule consolidation
+(ADR-125 update), ChatGPT PUA patterns (dedicated pattern
+file), framework/consumer separation (ADR-154),
+decompose-at-tension (ADR-155). Extracted 0 new patterns
+(codegen-constant-via-DI is a candidate but borderline with
+ADR-156; new-ecosystem-new-workspace is single instance).
+Previous rotation: 2026-04-10 at 508 lines.
 
 ---
 
-## Session 2026-03-25 (cont.) — Prod search assessment complete
+### Session 2026-04-10m: Open Education Knowledge Surfaces WS-0/1/2
 
-### Production MCP server verified
+**Surprise: git stash as diagnostic is dangerous**
+Used `git stash` to check if lint errors were pre-existing. The stash
+reverted all tracked changes. `stash pop` then failed on a conflict
+(another agent had modified `.agent/memory/distilled.md` concurrently).
+Recovery required: backup current tree, restore conflicting files to HEAD,
+pop stash, re-apply backed-up versions. Lesson: never use `git stash` as
+a quick diagnostic without understanding the full tree state and potential
+concurrent modifications.
 
-- **Deployment**: `dpl_EqsgwygzHhZjGbNwQXVBA4JMDEva` on Vercel,
-  commit `0ecbb901` (merge of PR #68), state READY.
-- **F1 (threadSlug)**: PASS — 10 lessons returned for
-  `fraction`+`number-fractions`, all with correct thread_slugs.
-- **F2 (category) negative**: PASS — `nonexistentzzz` returns
-  `total: 0`, empty array. Filter correctly active.
-- **F2 (category) positive**: PASS — `Biology` returns 2 sequences
-  (Primary + Secondary) with matching category_titles.
-- **Spot-checks**: all 5 passed (lessons with highlight, units,
-  threads queryless, sequences with phaseSlug, suggest with subject).
-- **All CI checks green**: test (5m57s), CodeQL, Bugbot, Vercel.
-- **Release workflow**: completed successfully.
+**Correction: prerequisite guidance scope**
+Only `get-curriculum-model` is a prerequisite tool. Graph tools
+(prerequisite, thread progressions, misconception) are supplementary
+resources loaded as needed — they should NOT include "You MUST call
+get-curriculum-model first" guidance. The factory was updated to not
+inject prerequisite guidance. Tests updated to assert the negative.
 
----
+**Correction: `object` is forbidden as generic constraint**
+ESLint rule `@typescript-eslint/no-restricted-types` forbids `object`.
+Used `{ readonly version: string }` as the structural constraint
+instead — all graph data types share this field.
 
-## Session 2026-03-25 (cont.) — Canonical vitest config enforcement
+**Pattern: pre-implementation specialist review**
+Running 4 specialist reviewers (betty, barney, mcp, code) against plan
+files BEFORE implementation caught 7 blocking findings and 9 design
+changes. This saved significant rework. The pattern is: review plans,
+not just code.
 
-### Vitest config adulteration — root cause and fix
+**Correction: fragile idempotency test pattern**
+The `is idempotent — returns identical data on repeated calls` test
+comparing `structuredContent` on graph tools proves nothing meaningful —
+it tests that a pure function returns the same value twice, which is
+guaranteed by the type system and the fact that the source data is a
+module-level constant. Delete these tests. Also, `includes summary text
+mentioning misconceptions in content` tests a string constant, not
+behaviour. Tests must prove product behaviour through the interface,
+not assert constants. See testing-strategy.md §Universal Testing Rules.
 
-- **Symptom**: `agent-tools` CLI smoke E2E tests timing out at
-  5000ms in CI under `pnpm test`, but passing locally.
-- **Root cause**: `agent-tools/vitest.config.ts` had
-  `include: ['tests/**/*.test.ts']` with NO `**/*.e2e.test.ts`
-  exclusion. The base config (`vitest.config.base.ts`) excludes
-  E2E tests, but agent-tools didn't extend it. The broad glob
-  captured `cli-smoke.e2e.test.ts` into the unit/integration
-  pipeline. In CI (2 CPUs, 7GB RAM), `pnpm tsx` child process
-  spawning exceeded the 5s default timeout.
-- **Fix**:
-  - `agent-tools/vitest.config.ts` now extends `baseTestConfig`
-  - New `agent-tools/vitest.e2e.config.ts` with 60s timeout for
-    CLI smoke tests, plus `test:e2e` script in package.json
-  - `packages/core/oak-eslint/vitest.config.ts` also migrated
-    from minimal custom config to `baseTestConfig`
-- **Prevention**:
-  - Added "Canonical Vitest Configuration" section to
-    `testing-strategy.md` defining two patterns (extend base
-    preferred, custom with mandatory E2E exclusion)
-  - Added "Canonical Configuration" mandate to `principles.md`
-  - Updated `config-reviewer.md` with reading requirements for
-    base vitest configs, canonical pattern enforcement, and
-    E2E config checklist items
-- **Key learning**: workspace vitest configs that don't extend
-  the base config and use broad `*.test.ts` globs without
-  `**/*.e2e.test.ts` exclusion silently leak E2E tests into
-  the unit/integration pipeline. This only manifests in CI
-  where resource constraints cause timeouts.
+**Correction: prerequisite graph name is ambiguous**
+"Prerequisite graph" is ambiguous — it can be read as "prerequisite for
+using this tool" (which caused the prerequisite guidance confusion) or
+"student prior-knowledge prerequisites for curriculum sequencing" (which
+is the actual meaning). The resource and tool should be renamed to make
+the student/curriculum context clear. E.g. `prior-knowledge-graph` or
+`student-prerequisites-graph`. This is a rename-everywhere task:
+resource URI, tool name, file names, ADR-123, all references.
+Track as a next-session task.
 
----
+**Overlooked from archived napkins — surfaced during handoff review**
 
-## Session 2026-03-25 (cont.) — CI lint cache poisoning + turbo inputs fix
+The following items were in rotated napkins but not graduated or tracked:
 
-### Turbo cache poisoning — root cause and fix
+1. ~~**Server Implementation branding is empty**~~ — RESOLVED. Was
+   done in `server-branding.ts` (title, description, websiteUrl, themed
+   icons). Wired into `application.ts:238`. The napkin entry (S5) lacked
+   a resolution annotation, causing a false alarm during review.
 
-- **Symptom**: CI lint step failed with 1091 `import-x/no-unresolved`
-  errors for `@oaknational/search-cli`, but lint passed locally with
-  `--force`. Same commit (`0abc01b4`).
-- **Root cause**: ALL 27 lint tasks in CI were **remote cache hits**.
-  The errors were replayed from a stale remote cache entry, not from
-  a fresh lint run. The cache was poisoned by a previous CI run where
-  `@oaknational/sdk-codegen` subpath exports (`/search`, `/zod`)
-  weren't available at lint time.
-- **Why it persisted**: `turbo.json` lint inputs enumerated specific
-  directories (`src/`, `tests/`, `smoke-tests/`) — so changes to
-  `evaluation/`, `operations/`, and root-level `.ts` files didn't
-  invalidate the cache. The poisoned entry kept being replayed.
-- **Fix**: replaced directory-specific patterns with `**/*.ts` for
-  lint, lint:fix, test, mutate, test:ui, and type-check tasks.
-  Turbo respects `.gitignore` so `dist/` and `node_modules/` are
-  automatically excluded. This invalidated all stale cache entries.
-- **Graph comparison** (`pnpm check` vs CI): dependency ordering is
-  identical — Turbo correctly pulls `sdk-codegen` as transitive dep
-  of `build`. The issue was cache, not graph structure.
-- **Key learning**: when Turbo remote cache produces different results
-  from local, check cache hit/miss status first (`--dry=json` or
-  CI logs for "cache hit, replaying logs"). ALL hits = stale cache.
-  Incomplete `inputs` patterns are a common cause.
+2. **Generated tools have no human-friendly title** (S3, napkin-2026-04-10):
+   Generated tools fall back to kebab-case `tool.name`. Deferred to
+   codegen template change but no plan tracks it.
 
-### Agent-tools test timeout (remaining CI failure)
+3. **Pre-implementation plan review as a pattern**: Running specialist
+   reviewers against PLANS (not code) caught a fundamental premise error
+   (S14, napkin-2026-04-10) and 7 blocking findings (this session).
+   This pattern should be graduated to testing-strategy.md or a
+   governance doc as a recommended practice.
 
-- `@oaknational/agent-tools#test`: 4 tests timing out at 5000ms in CI.
-- Unrelated to search work or turbo config changes.
-- Needs investigation as a separate issue.
+4. **Synonym builders should become codegen-time** (napkin-2026-04-10b):
+   `buildElasticsearchSynonyms()`, `buildPhraseVocabulary()`,
+   `buildSynonymLookup()` run at runtime over static data. Should be
+   codegen-time generators. No plan tracks the migration.
 
----
+5. **`static-content.ts` `process.cwd()` bug** (napkin-2026-04-10b):
+   Non-crash, Vercel ignores `express.static()`. Still wrong. Tracked
+   nowhere permanently.
 
-## Session 2026-03-25 — CI hang blocker + docs consolidation
+6. **E2E test flakiness** (napkin-2026-04-10, S session 2026-04-08e/09):
+   `get-curriculum-model.e2e.test.ts` intermittent failure. No plan or
+   issue tracks investigation.
 
-### CI hang blocker — root cause identified
+7. **Lead with narrative, not infrastructure**: Process insight worth
+   graduating to governance or distilled: "Documentation that declares
+   what we're doing and why frames all subsequent technical work."
 
-- **GitHub CI hanging** on `feat/es_index_update` branch — job never
-  completes. Previous turbo daemon / concurrency fixes reverted as they
-  were symptom-level.
-- **Root cause identified**: `@oaknational/search-cli:test` is the
-  single workspace that never completes. From cancelled CI run logs
-  (23537232656): 14 of 15 workspace test suites complete successfully,
-  `search-cli:test` never even produces its turbo group header.
-  Turbo buffers output for running tasks, so the absence of output
-  means the vitest process started but never finished.
-- **Key evidence**:
-  - search-cli: 101 test files, `pool: 'forks'`, `isolate: true`,
-    `NODE_OPTIONS='--max-old-space-size=6144'` (6GB heap per process)
-  - CI runner: 7GB RAM, 2 CPUs
-  - Already has 1 test excluded for OOM (`ingest-harness.unit.test.ts`)
-  - Orphan processes at cleanup: turbo, esbuild, 5x MainThread, 2x sh
-- **Hypotheses** (ranked):
-  - H1: OOM kill of vitest fork worker → vitest hangs waiting for dead child
-  - H2: esbuild service process leak after abnormal fork exit
-  - H3: Import-time side effect blocking in CI
-  - H4: NODE_OPTIONS inheritance causing fork startup failure
-- **Instrumentation added**:
-  - CI workflow: split search-cli tests into isolated step with
-    verbose reporter, memory monitoring (10s interval), OOM kill
-    detection (dmesg), 5-minute timeout
-  - test.setup.ts: process-level diagnostics on CI (heap/RSS on load,
-    exit, SIGTERM, SIGINT, memory warnings)
-- **Next step**: push to CI, read diagnostic output, confirm/reject
-  hypotheses.
-
-### CONTRIBUTING.md improvement
-
-- Added `pnpm check` as the canonical all-in-one quality gate command
-  in the "Run Quality Gates" section. Individual commands reframed as
-  fallback for isolating failures.
-
-### Second consolidate-docs pass
-
-- **2 stale cross-refs fixed**:
-  - `.cursor/plans/field-integrity-framework-plan`: 6 `active/` paths
-    updated to `archive/completed/` (comprehensive-field-integrity,
-    field-gap-ledger, evidence files).
-  - ADR-138: `active/field-integrity-test-manifest.json` →
-    `archive/completed/`.
-- **Active README status** updated to "Blocked — CI hanging".
-- **Prompt** `last_updated` and date header updated to 2026-03-25.
-- **Fitness check**: all 13 tracked files pass.
-- **Practice box**: empty.
-- **No new code patterns, experience extractions, or distillation needed.**
-
-### First consolidate-docs pass (earlier this session)
-
-- **build-system.md drift fixed**: troubleshooting section implied
-  generic `type-check` depends on `sdk-codegen`; corrected to clarify
-  only `@oaknational/sdk-codegen` has the override (per ADR-065).
-- **4 stale cross-refs fixed**:
-  - `high-level-plan.md`: `active/kg-alignment-audit` → `current/`
-  - `search-sdk-github-release-asset-distribution`: `active/search-sdk-args-extraction` → `current/`
-  - `bulk-canonical-merge` + `search-ingestion-sdk-extraction` in `future/`:
-    `./f2-closure-and-p0-ingestion` → `../archive/completed/`
-- **distilled.md compressed** 200 → 194/200: graduated turbo build
-  system entries to ADR-065 pointer; compressed turbo overrides
-  reference in decomposition entry.
-- **Fitness check**: all 13 tracked files pass.
-- **Practice box**: empty.
-- **Experience files**: reflective, no technical content to extract.
-- **Code patterns**: no new patterns from turbo/B2 work (domain-specific
-  or standard refactoring — doesn't meet the barrier).
-- **Doc extraction from completed plans**:
-  - `error-response-classification.plan.md`: TSDoc on
-    `classify-error-response.ts` already adequate — archived to
-    `archive/completed/`.
-  - `codegen-schema-error-response-adaptation.plan.md`: added module-level
-    TSDoc to `build-response-map.ts` (wildcard consolidation, component
-    name sanitisation, downstream consumers). Added response-map mention
-    to sdk-codegen README. Archived to `archive/completed/`.
-  - Updated `current/README.md`, `prompts/README.md`, and 2 prompt files
-    with archive paths.
+**Pattern: graph sub-setting as future feature**
+User identified the need for sub-graph extraction — either at runtime
+(tool parameters) or codegen-time (per-subject sub-graphs). Tracked in
+memory. The factory is the natural extension point.
 
 ---
 
-## Session 2026-03-24 — Turbo boundary triage + plan consolidation
+### Session 2026-04-11: Pre-commit fixes + EEF plan resolution
 
-### What Was Done
+**Correction: blanket `replace_all` on partial words corrupts code templates**
+Used `replace_all` with `prerequisite` (lowercase) in
+`write-json-graph-file.ts`, which is a code-template file generating
+TypeScript source. This corrupted `prerequisiteFor` → `prior-knowledgeFor`
+and `prerequisiteGraph` → `prior-knowledgeGraph` (invalid JS identifiers).
+Had to restore from git and rewrite the entire file. Lesson: in files
+that generate code with mixed-case identifiers, never use blanket
+substring replacement. Rewrite the file completely or use exact-match
+replacements for each distinct identifier.
 
-- Distilled napkin (549 lines → archive/napkin-2026-03-24.md).
-- Graduated commitlint troubleshooting to CONTRIBUTING.md, vitest v4
-  entry to troubleshooting.md.
-- Added turbo build system insights to distilled.md (concurrency masks,
-  workspace boundary as dependency declaration).
-- Compressed response augmentation entry to free space (200/200 ceiling).
-- Added turbo-and-codegen-boundary-fix plan to active README index.
-- Cross-referenced turbo plan with existing strategic decomposition plan
-  at `.agent/plans/architecture-and-infrastructure/codegen/`.
+**Pattern: background agents for mechanical rename-everywhere**
+Two background agents handled ~30 files of test/guidance/app-layer renames
+while I worked on the generator layer and documentation. The agents
+completed without conflicts because file scopes didn't overlap. The
+rename-everywhere task (~260 references, ~40 files) was completed in a
+single session by parallelising across 3 workers (me + 2 agents).
 
-### Turbo Boundary Triage
+**Surprise: flaky auth E2E test under turbo concurrency**
+`returns HTTP 401 for tools/list with fake Bearer token` in
+`application-routing.e2e.test.ts` failed during full `pnpm check` (87/88
+passed) but passed on isolated `pnpm test:e2e` re-run. This is a
+different test from the previously noted `get-curriculum-model.e2e.test.ts`
+flakiness. Now two distinct flaky E2E tests observed. Created dedicated
+memory note `project_flaky-test-tracker.md` per user request.
 
-- **B2 extractions done**: `reader-utils.ts` (extractSubjectPhase),
-  `vocab-gen-config.ts` (PipelineConfig/Result + createPipelineConfig).
-- **B2 reassessment**: 3 of 5 B2 tests had type-only or no generated-type
-  deps — `import type` is erased at compile time. No extraction needed.
-- **Turbo overrides extended**: added `#type-check`, `#lint`, `#lint:fix`
-  for sdk-codegen (same pattern as `#build`, `#test`).
-- **agent-tools bug fixed**: missing `devDependencies` for
-  `@oaknational/eslint-plugin-standards` — exposed by removing
-  `--concurrency=2`. All other workspaces had it declared.
-- **`pnpm clean && pnpm check` passes** with all fixes.
-- **B1 deferred**: 4 tests that import generated code directly. Proper
-  fix is workspace decomposition (separate workspaces make `^build`
-  provide the ordering). Documented in decomposition plan's acceptance
-  criteria.
-- **Decomposition plan discoverability improved**: direct links from
-  architecture README, distilled.md, and turbo plan.
+**Validation: live MCP server graph surfaces verified post-rename**
+All 3 graph tools (`get-prior-knowledge-graph`, `get-misconception-graph`,
+`get-thread-progressions`) and all 4 graph resources (`curriculum://model`,
+`curriculum://prior-knowledge-graph`, `curriculum://misconception-graph`,
+`curriculum://thread-progressions`) verified working via `oak-local` MCP
+server. Tool calls returned correct stats (1,607 units/3,452 edges,
+12,858 misconceptions, 164 threads). Resource reads returned valid JSON
+(1.9 MB, 6.4 MB, 241 KB). No trace of old `prerequisite-graph` name in
+the running server. This confirms the rename cascaded correctly through
+generators → generated data → SDK → app → running server.
 
-### Semantic Search Plan Consolidation
-
-- **Active/ reduced** from 5 plans + findings register to README + 1 plan.
-- **Archived**: turbo-and-codegen-boundary-fix, f2-closure-and-p0-ingestion,
-  search-tool-prod-validation-findings.
-- **Moved to future/**: bulk-canonical-merge, search-ingestion-sdk-extraction.
-- **Single active plan**: `prod-search-assessment.execution.plan.md` — assess
-  prod search via MCP server after PR merge and deployment.
-- **Cross-ref sweep**: 11 files updated to point at archive/completed/ or
-  future/ paths. Archive files left untouched (historical records).
-- **Prompt simplified**: semantic-search.prompt.md now reflects single action.
-- **Fitness check**: all 13 tracked files pass.
-
-### Learnings
-
-- `import type` is erased by esbuild/SWC — vitest does NOT resolve
-  the target module for type-only imports. This means tests with
-  `import type { Foo } from './heavy-module.js'` do NOT create a
-  runtime dependency on that module's transitive imports.
-- When turbo's `--concurrency=N` is removed, ALL undeclared workspace
-  dependencies become visible. Check `devDependencies` in every
-  workspace that uses shared ESLint plugins, tsconfig bases, etc.
-- Turbo `^build` only sees declared `dependencies`/`devDependencies`
-  in `package.json`. If a workspace imports another workspace's
-  package at ESLint config load time but doesn't declare the dep,
-  turbo won't order them correctly.
-
-## Session 2026-03-26 — Practice scaffolding gap
-
-### Observation: The Practice does not yet support scaffolding a new repo
-
-The Practice is designed to make existing repos excellent — principles,
-reviewers, quality gates, memory, experience. But it has no mechanism
-for creating a new repo from scratch. This is reasonable: the Practice
-is about *how*, not *what*. However, a scaffolding framework could
-combine: **mission statement** (what the repo exists to do) + **the
-Practice** (how it should be done). That pairing might be sufficient to
-generate a well-structured repo from first principles.
-
-Potential shape: a `practice-scaffold` command that takes a mission
-description, selects relevant practice-core rules, generates the
-directory structure and initial configurations, and wires up the
-quality gates. The Practice's plasmid exchange mechanism already handles
-*importing* into an existing repo — scaffolding would be the *genesis*
-equivalent.
+**Pattern: EEF data structure is more varied than plan assumed**
+Detailed JSON analysis revealed: (a) strand fields have high optionality
+(6 optional top-level fields, 3 rare `implementation_requirements` fields),
+(b) `school_context_schema` is a JSON Schema meta-definition (schema of a
+schema) — typing it fully would be excessive, (c) `pp_relevance` has only
+3 values (`moderate`, `high`, `very_high`), (d) `closing_disadvantage_gap`
+in priorities matches the plan (no "the"), but `closing_the_disadvantage_gap`
+IS a separate strand field (2/30 strands). These are distinct concepts.

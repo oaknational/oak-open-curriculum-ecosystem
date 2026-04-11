@@ -35,8 +35,8 @@ export interface LessonUnitInfo {
   readonly unitSlug: string;
   /** Unit display title */
   readonly unitTitle: string;
-  /** Unit canonical URL */
-  readonly canonicalUrl: string;
+  /** Oak slug-based URL for the unit (SDK `oakUrl` concept). */
+  readonly oakUrl: string;
   /** Optional thread slugs carried through unit relationships. */
   readonly threadSlugs?: readonly string[];
   /** Optional thread titles carried through unit relationships. */

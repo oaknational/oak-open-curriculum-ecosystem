@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- static ontology data file, structure requires length */
 /**
  * Static curriculum ontology data for the POC.
  *
@@ -29,8 +28,8 @@ export const ontologyData = {
   relatedResources: {
     threadProgressions:
       'Call get-thread-progressions for ordered unit sequences within curriculum threads (instance data)',
-    prerequisiteGraph:
-      'Call get-prerequisite-graph for unit dependencies and prior knowledge requirements',
+    priorKnowledgeGraph:
+      'Call get-prior-knowledge-graph for unit dependencies and prior knowledge requirements',
   },
 
   curriculumStructure: {
@@ -511,7 +510,7 @@ export const ontologyData = {
     },
   },
 
-  canonicalUrls: {
+  oakUrls: {
     description: 'URL patterns for linking to Oak Web Application',
     patterns: {
       lesson: 'https://www.thenational.academy/teachers/lessons/{lessonSlug}',

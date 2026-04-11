@@ -1,26 +1,31 @@
 ---
-fitness_line_count: 80
+fitness_line_target: 80
+fitness_line_limit: 125
+fitness_char_limit: 7500
+fitness_line_length: 100
 split_strategy: "Keep concise; this is a reference extracted from AGENT.md"
 ---
 
 # Agent Artefact Inventory
 
-For the full architecture see [ADR-125 (Agent Artefact Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
+For the full architecture, see
+[ADR-125 (Agent Artefact
+Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 
 ## Canonical Content (Layer 1)
 
 | Location | Purpose |
 |----------|---------|
-| `.agent/skills/*/SKILL.md` | Canonical skills (18: 7 active, 11 passive) |
-| `.agent/rules/*.md` | Canonical operational rules (21) — reinforcements of policy |
+| `.agent/skills/*/SKILL.md` | Canonical skills (27: 16 active, 11 passive) |
+| `.agent/rules/*.md` | Canonical operational rules (34) — reinforcements of policy |
 | `.agent/commands/*.md` | Canonical commands (10 active, 3 experiments) |
 | `.agent/directives/*.md` | Policy documents (AGENT.md, principles.md, testing-strategy.md, etc.) |
 | `.agent/sub-agents/templates/*.md` | Canonical sub-agent prompts (ADR-114) |
 | `.agent/sub-agents/components/personas/*.md` | Shared reviewer identity and review lens |
 | `.agent/prompts/*.md` | Reusable prompt playbooks |
-| `.agent/memory/code-patterns/` | Known solutions to recurring design problems ([README](../memory/code-patterns/README.md)) |
+| `.agent/memory/patterns/` | Known solutions to recurring design problems ([README](../memory/patterns/README.md)) |
 | `.agent/plans/` | Implementation plans, execution tracking |
-| `agent-tools/` | Repo-root TypeScript CLI workspace for agent operational tooling (`claude-agent-ops`, `cursor-session-from-claude-session`) |
+| `agent-tools/` | Repo-root TypeScript CLI workspace for agent operational tooling (`claude-agent-ops`, `cursor-session-from-claude-session`, `codex-reviewer-resolve`) |
 
 ## Platform Adapters (Layer 2)
 

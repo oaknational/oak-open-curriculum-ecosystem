@@ -9,7 +9,7 @@ real repo.
 ## What Was Activated
 
 - **Platform**: Claude Code
-- **Native surface**: machine-local gitignored `.claude/settings.json`
+- **Native surface**: tracked project `.claude/settings.json`
 - **Hook event**: `PreToolUse`
 - **Matcher**: `Bash`
 - **Runtime**: `node scripts/check-blocked-patterns.mjs`
@@ -20,9 +20,9 @@ command, loads `hooks.preToolUse.blocked_patterns` from the canonical policy,
 and returns a structured `PreToolUse` deny payload when a dangerous pattern is
 matched.
 
-The repo only relies on the ignored machine-local `.claude/settings.json`
-entry for native activation. Additional Claude overrides can stay in
-`.claude/settings.local.json`, which is also gitignored.
+The repo relies on the tracked project `.claude/settings.json` entry for native
+activation so the hook works on a fresh checkout. Additional Claude overrides
+can stay in `.claude/settings.local.json`, which is gitignored and additive.
 
 ## Why Only `PreToolUse`
 
@@ -54,9 +54,8 @@ check that three artefacts stay aligned:
 2. `.claude/settings.json`
 3. `.agent/reference/cross-platform-agent-surface-matrix.md`
 
-Policy and matrix parity are always enforced. Local hook wiring is validated
-only when the machine-local `.claude/settings.json` exists, so clean clones and
-CI do not fail simply because that ignored file is absent.
+Policy, tracked activation, and matrix parity are all enforced. Clean clones
+must carry the tracked `.claude/settings.json`; local overrides remain optional.
 
 ## Limits
 

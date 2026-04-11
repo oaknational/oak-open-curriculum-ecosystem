@@ -1,49 +1,46 @@
 /**
- * Initialisation of core MCP endpoints: search retrieval, asset download
- * proxy, tool handler registration, and per-request MCP server factory.
+ * Core MCP endpoint initialisation: search retrieval, asset download proxy,
+ * handler registration, and per-request MCP server factory.
  *
- * Extracted from `application.ts` to stay within file-length limits.
+ * Extracted from `application.ts` to keep the composition root under the
+ * 250-line `max-lines` threshold. This function is called once during app
+ * bootstrap.
  *
- * @module
+ * @see ADR-112 for the per-request MCP transport pattern.
+ * @see ADR-158 for the asset rate limiter parameter.
  */
 import type { Express, RequestHandler } from 'express';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { Logger } from '@oaknational/logger';
-
-import { registerHandlers, type ToolHandlerOverrides } from '../handlers.js';
-import { overrideToolsListHandler } from '../tools-list-override.js';
 import {
   SERVER_INSTRUCTIONS,
   createStubSearchRetrieval,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+
 import { mountAssetDownloadProxy } from '../asset-download/asset-download-route.js';
+import { registerHandlers } from '../handlers.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 import { createSearchRetrieval } from '../search-retrieval-factory.js';
 import type { HttpObservability } from '../observability/http-observability.js';
 import type { McpServerFactory } from '../mcp-request-context.js';
+import { OAK_SERVER_BRANDING } from '../server-branding.js';
 import { addHealthEndpoints } from './health-endpoints.js';
-
-/** Options forwarded from {@link CreateAppOptions} for core endpoint init. */
-export interface CoreEndpointOptions {
-  readonly runtimeConfig: RuntimeConfig;
-  readonly observability: HttpObservability;
-  readonly toolHandlerOverrides?: ToolHandlerOverrides;
-  readonly resourceUrl?: string;
-}
+import type { CreateAppOptions } from '../application.js';
 
 /** Initialises core MCP endpoints, returns a per-request factory. @see ADR-112 */
 export function initializeCoreEndpoints(
   app: Express,
-  options: CoreEndpointOptions,
+  options: CreateAppOptions,
+  runtimeConfig: RuntimeConfig,
   log: Logger,
+  observability: HttpObservability,
   assetRateLimiter: RequestHandler,
 ): { mcpFactory: McpServerFactory; ready: Promise<void> } {
-  const { runtimeConfig, observability } = options;
   const searchRetrieval = runtimeConfig.useStubTools
     ? createStubSearchRetrieval()
     : createSearchRetrieval(runtimeConfig.env, log);
-  const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
+  const resourceUrl = options?.resourceUrl ?? 'http://localhost:3333/mcp';
   const assetBaseUrl = runtimeConfig.displayHostname
     ? `https://${runtimeConfig.displayHostname}`
     : new URL(resourceUrl).origin;
@@ -58,13 +55,14 @@ export function initializeCoreEndpoints(
   );
 
   const handlerOptions = {
-    overrides: options.toolHandlerOverrides,
+    overrides: options?.toolHandlerOverrides,
     runtimeConfig,
     logger: log,
     observability,
     resourceUrl,
     searchRetrieval,
     createAssetDownloadUrl,
+    getWidgetHtml: options.getWidgetHtml,
   };
 
   log.debug('bootstrap.mcp.factory.created');
@@ -72,11 +70,10 @@ export function initializeCoreEndpoints(
   // Factory creates a fresh McpServer + transport per request
   const mcpFactory: McpServerFactory = () => {
     const server = new McpServer(
-      { name: 'oak-curriculum-http', version: '0.1.0' },
+      { name: 'oak-curriculum-http', version: '0.1.0', ...OAK_SERVER_BRANDING },
       { instructions: SERVER_INSTRUCTIONS },
     );
     registerHandlers(server, handlerOptions);
-    overrideToolsListHandler(server);
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
     return { server, transport };
   };

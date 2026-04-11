@@ -14,7 +14,7 @@ todos:
     content: "Phase 2: roll out mutate tasks across all workspaces with tests."
     status: pending
   - id: p5-phase3-optimise
-    content: "Phase 3: optimise and decide qg promotion readiness."
+    content: "Phase 3: optimise and decide `pnpm check` promotion readiness."
     status: pending
   - id: p5-evidence
     content: "Capture evidence bundles for mutation claims in each phase."
@@ -59,9 +59,9 @@ todos:
 
 - Output:
   - touched-files/incremental approach documented
-  - explicit promotion decision for `pnpm qg` with threshold rationale
+  - explicit promotion decision for `pnpm check` with threshold rationale
 - Deterministic validation:
-  - `rg -n "incremental|touched-files|promotion|pnpm qg" .agent/plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md`
+  - `rg -n "incremental|touched-files|promotion|pnpm check" .agent/plans/agentic-engineering-enhancements/current/mutation-testing-implementation.plan.md`
 
 ### Task 5.4: Evidence Bundles per Phase
 
@@ -85,5 +85,5 @@ todos:
 
 1. Source phases 0-3 are delivered with deterministic validation.
 2. Rollout claims are evidence-backed.
-3. Promotion decision for `pnpm qg` is explicit and justified.
+3. Promotion decision for `pnpm check` is explicit and justified.
 4. Documentation sync entry is complete for Phase 5.

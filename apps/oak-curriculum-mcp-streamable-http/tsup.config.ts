@@ -1,8 +1,9 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  // Entry creates dist/src/index.js to match package.json#main for Vercel Express
-  entry: { 'src/index': 'src/index.ts' },
+  // Two entries: index (runs server) + application (importable factory).
+  // Matches the official ext-apps pattern of separate main.ts + server.ts.
+  entry: { index: 'src/index.ts', application: 'src/application.ts' },
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations
   splitting: false,

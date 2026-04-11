@@ -15,30 +15,29 @@
  * @see ADR-086 (`docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md`) for extraction methodology
  */
 
-import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { formatToolResponse } from './universal-tool-shared.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
-import { AGGREGATED_PREREQUISITE_GUIDANCE } from './prerequisite-guidance.js';
-
-import { SCOPES_SUPPORTED } from './scopes-supported.js';
+import { createGraphToolDef, createGraphToolExecutor } from './graph-resource-factory.js';
+import { THREAD_PROGRESSIONS_CONFIG } from './thread-progressions-resource.js';
 
 /**
- * Input schema for get-thread-progressions tool.
- * V1 has no parameters — returns the complete graph.
+ * Empty input schema for the get-thread-progressions tool (no parameters).
+ *
+ * Per MCP spec, no-input tools declare `{ "type": "object", "additionalProperties": false }`
+ * on the wire. An empty `ZodRawShape` produces this through the SDK's `z.toJSONSchema()`.
  */
-export const GET_THREAD_PROGRESSIONS_INPUT_SCHEMA = {
-  type: 'object',
-  properties: {},
-  additionalProperties: false,
-} as const;
+export const GET_THREAD_PROGRESSIONS_INPUT_SCHEMA: Record<string, never> = {};
 
 /**
  * Tool definition for get-thread-progressions.
  *
+ * @remarks
+ * The description includes live stats interpolated from the generated graph data.
  * The graph is delivered in structuredContent because the MODEL needs to reason about it.
  * Do NOT hide the graph in _meta — that would defeat the purpose.
  */
-export const GET_THREAD_PROGRESSIONS_TOOL_DEF = {
+export const GET_THREAD_PROGRESSIONS_TOOL_DEF = createGraphToolDef({
+  ...THREAD_PROGRESSIONS_CONFIG,
   description: `Returns the Oak Curriculum thread progression graph.
 
 This instance-level graph shows ordered unit sequences within curriculum threads:
@@ -55,24 +54,10 @@ Use this to answer questions like:
 - "What comes after this unit in the thread?"
 - "Which threads cover algebra?"
 
-${AGGREGATED_PREREQUISITE_GUIDANCE}
-
 Complements get-curriculum-model (which includes the schema-level property graph) with actual progression data.`,
+});
 
-  inputSchema: GET_THREAD_PROGRESSIONS_INPUT_SCHEMA,
-
-  securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }] as const,
-
-  annotations: {
-    readOnlyHint: true,
-    destructiveHint: false,
-    idempotentHint: true,
-    openWorldHint: false,
-    title: 'Get Thread Progressions',
-  },
-
-  _meta: undefined,
-} as const;
+const executeThreadProgressionsTool = createGraphToolExecutor(THREAD_PROGRESSIONS_CONFIG);
 
 /**
  * Execute the get-thread-progressions tool.
@@ -83,12 +68,5 @@ Complements get-curriculum-model (which includes the schema-level property graph
  * @returns CallToolResult with graph in structuredContent
  */
 export function runThreadProgressionsTool(): CallToolResult {
-  return formatToolResponse({
-    summary: `Thread progression graph loaded. Contains ${String(threadProgressionGraph.stats.threadCount)} threads across ${String(threadProgressionGraph.stats.subjectsCovered.length)} subjects with ordered unit sequences.`,
-    data: threadProgressionGraph,
-    status: 'success',
-    timestamp: Date.now(),
-    toolName: 'get-thread-progressions',
-    annotationsTitle: 'Get Thread Progressions',
-  });
+  return executeThreadProgressionsTool();
 }

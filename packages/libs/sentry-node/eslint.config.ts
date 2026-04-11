@@ -1,7 +1,7 @@
 import { defineConfig } from 'eslint/config';
 import {
-  commonSettings,
   configs,
+  createImportResolverSettings,
   createLibBoundaryRules,
   ignores as globalIgnores,
   testRules,
@@ -31,16 +31,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
-        },
-      },
-    },
+    settings: createImportResolverSettings({ project: wsTsProject }),
     rules: createLibBoundaryRules('sentry-node'),
   },
   {

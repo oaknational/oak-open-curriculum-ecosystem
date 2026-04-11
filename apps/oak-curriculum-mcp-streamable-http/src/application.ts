@@ -19,18 +19,12 @@ import {
 import { setupSecurityMiddleware } from './app/bootstrap-security.js';
 import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
-import { initializeCoreEndpoints } from './app/core-endpoints.js';
 import type { HttpObservability } from './observability/http-observability.js';
-
-import {
-  type RateLimiterFactory,
-  createDefaultRateLimiterFactory,
-  MCP_RATE_LIMIT,
-  OAUTH_RATE_LIMIT,
-  ASSET_RATE_LIMIT,
-} from './rate-limiting/index.js';
-
+import { createRateLimiters } from './rate-limiting/create-rate-limiters.js';
+import type { RateLimiterFactory } from './rate-limiting/index.js';
+import { initializeCoreEndpoints } from './app/core-endpoints.js';
 export type { McpRequestContext, McpServerFactory } from './mcp-request-context.js';
+export { loadRuntimeConfig } from './runtime-config.js';
 
 export interface CreateAppOptions {
   readonly runtimeConfig: RuntimeConfig;
@@ -38,6 +32,16 @@ export interface CreateAppOptions {
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
   readonly logger?: Logger;
   readonly resourceUrl?: string;
+  /**
+   * Returns the built widget HTML content for the MCP App resource.
+   *
+   * Production callers provide `() => WIDGET_HTML_CONTENT` using the committed
+   * codegen constant. Tests inject a trivial fake: `() => '<html>test</html>'`.
+   *
+   * @see ADR-078 for the dependency injection rationale
+   * @see src/generated/widget-html-content.ts — Committed codegen constant
+   */
+  readonly getWidgetHtml: () => string;
   /**
    * Upstream AS metadata for the OAuth proxy. When provided, `createApp`
    * skips the network fetch to Clerk's `/.well-known/oauth-authorization-server`
@@ -60,7 +64,7 @@ export interface CreateAppOptions {
    * inject a no-op or recording fake. Production callers omit this.
    *
    * @see ADR-078 for the dependency injection rationale
-   * @see ADR-144 for the multi-layer security architecture
+   * @see ADR-158 for the multi-layer security architecture
    */
   readonly rateLimiterFactory?: RateLimiterFactory;
 }
@@ -95,20 +99,6 @@ function setupPreAuthPhases(
   );
 }
 
-/** Creates rate limiter middleware instances for all three route profiles. */
-function createRateLimiters(options: CreateAppOptions): {
-  mcpRateLimiter: RequestHandler;
-  oauthRateLimiter: RequestHandler;
-  assetRateLimiter: RequestHandler;
-} {
-  const factory = options.rateLimiterFactory ?? createDefaultRateLimiterFactory();
-  return {
-    mcpRateLimiter: factory(MCP_RATE_LIMIT),
-    oauthRateLimiter: factory(OAUTH_RATE_LIMIT),
-    assetRateLimiter: factory(ASSET_RATE_LIMIT),
-  };
-}
-
 function setupPostAuthPhases(
   app: ExpressWithAppId,
   options: CreateAppOptions,
@@ -125,7 +115,15 @@ function setupPostAuthPhases(
     bootstrapTimer,
     'initializeCoreEndpoints',
     appId,
-    () => initializeCoreEndpoints(app, options, log, assetRateLimiter),
+    () =>
+      initializeCoreEndpoints(
+        app,
+        options,
+        options.runtimeConfig,
+        log,
+        options.observability,
+        assetRateLimiter,
+      ),
     options.observability,
   );
 
@@ -152,9 +150,21 @@ function setupPostAuthPhases(
   );
 }
 
+/** Logs the final bootstrap summary: route count, timing, and registered paths. */
+function logBootstrapSummary(
+  app: ExpressWithAppId,
+  log: Logger,
+  appId: number,
+  bootstrapTimer: PhasedTimer,
+): void {
+  const routes = listRoutes(app);
+  logBootstrapComplete(log, appId, bootstrapTimer, routes.length);
+  logRegisteredRoutes(log, appId, routes);
+}
+
 /**
  * Creates and configures an Express application instance for MCP over HTTP.
- * Middleware order: base → security → OAuth metadata → auth context → core → static → /mcp → auth routes.
+ * Middleware order: base → security → rate limiters → OAuth → auth context → core → static → /mcp → auth routes.
  */
 export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
   const log =
@@ -162,7 +172,10 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
   const { app, timer: bootstrapTimer, appId } = initializeAppInstance(appCounter, log);
   appCounter = appId;
 
-  const { mcpRateLimiter, oauthRateLimiter, assetRateLimiter } = createRateLimiters(options);
+  const { mcpRateLimiter, oauthRateLimiter, assetRateLimiter } = createRateLimiters(
+    options.rateLimiterFactory,
+  );
+
   const { dnsRebindingMiddleware, allowedHosts } = setupPreAuthPhases(
     app,
     options,
@@ -206,9 +219,6 @@ export async function createApp(options: CreateAppOptions): Promise<ExpressWithA
     assetRateLimiter,
   );
 
-  const routes = listRoutes(app);
-  logBootstrapComplete(log, appId, bootstrapTimer, routes.length);
-  logRegisteredRoutes(log, appId, routes);
-
+  logBootstrapSummary(app, log, appId, bootstrapTimer);
   return app;
 }

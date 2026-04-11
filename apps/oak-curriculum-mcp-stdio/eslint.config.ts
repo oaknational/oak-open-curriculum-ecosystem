@@ -8,7 +8,7 @@ import { defineConfig } from 'eslint/config';
 import {
   configs,
   appArchitectureRules,
-  commonSettings,
+  createImportResolverSettings,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -38,21 +38,13 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        node: {
-          extensions: ['.ts', '.js'],
-          // Honour the package.json "exports" condition we use during dev
-          conditions: ['development', 'import', 'types'],
-        },
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
-        },
+    settings: createImportResolverSettings({
+      project: wsTsProject,
+      node: {
+        extensions: ['.ts', '.js'],
+        conditions: ['development', 'import', 'types'],
       },
-    },
+    }),
     rules: {
       'import-x/no-relative-parent-imports': 'off',
       ...appArchitectureRules,

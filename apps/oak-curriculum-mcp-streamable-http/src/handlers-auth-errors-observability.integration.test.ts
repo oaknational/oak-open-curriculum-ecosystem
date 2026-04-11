@@ -41,6 +41,7 @@ describe('Auth Error Observability and Non-Auth Passthrough (Integration)', () =
       observability: createFakeHttpObservability(),
       overrides,
       searchRetrieval: createFakeSearchRetrieval(),
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
   }
 

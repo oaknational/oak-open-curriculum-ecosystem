@@ -20,7 +20,7 @@ function createLessonParams(): CreateLessonDocParams {
       {
         unitSlug: 'fractions-year-3',
         unitTitle: 'Fractions Year 3',
-        canonicalUrl: 'https://example.com/units/fractions-year-3',
+        oakUrl: 'https://example.com/units/fractions-year-3',
       },
     ],
     unitCount: 1,

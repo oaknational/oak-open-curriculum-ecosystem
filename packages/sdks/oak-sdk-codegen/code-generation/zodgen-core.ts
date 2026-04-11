@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- This is a generator script that produces code, not production code */
 import path from 'node:path';
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import type { OpenAPIObject, ResponsesObject } from 'openapi3-ts/oas31';

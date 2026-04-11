@@ -2,6 +2,15 @@
 
 Supporting reference material for AI agents and developers.
 
+## Where this fits
+
+| Need | Location |
+| ---- | -------- |
+| **Shared, long-lived reference** (not a natural fit for ADRs or `docs/`) | This directory — `.agent/reference/` |
+| **Generated SDK validation data** (sitemap-derived maps) | [`packages/sdks/oak-sdk-codegen/reference/`](../../packages/sdks/oak-sdk-codegen/reference/README.md) — JSON outputs are git-ignored; see that README |
+| **Durable findings and investigations** | [`.agent/research/`](../research/README.md) |
+| **DX external report recovery until promoted** | [`.agent/research/developer-experience/novel/`](../research/developer-experience/novel/README.md) |
+
 ## Architecture
 
 | File | Purpose |
@@ -36,3 +45,8 @@ Supporting reference material for AI agents and developers.
 | ---- | ------- |
 | `prog-frame/agentic-engineering-practice.md` | Agentic engineering practice framework |
 | `cross-platform-agent-surface-matrix.md` | Local contract for supported and unsupported adapter and hook surfaces |
+| `history-of-the-practice.md` | Living record of how the Practice emerged, grew, and evolved |
+
+Material that must never be committed belongs outside tracked paths (for
+example outside the clone, or an ignored directory you create locally — see
+root [`.gitignore`](../../.gitignore) for the conventional ignored path).

@@ -8,7 +8,11 @@
  */
 import { describe, it, expect } from 'vitest';
 import type { Unit, Lesson } from '@oaknational/sdk-codegen/bulk';
-import { transformBulkUnitToSummary, collectLessonSnippets } from './bulk-rollup-builder';
+import {
+  transformBulkUnitToSummary,
+  collectLessonSnippets,
+  buildRollupDocs,
+} from './bulk-rollup-builder';
 
 /**
  * Creates a minimal valid bulk unit fixture for testing.
@@ -71,7 +75,7 @@ describe('bulk-rollup-builder', () => {
   describe('transformBulkUnitToSummary', () => {
     it('maps bulk Unit fields to SearchUnitSummary', () => {
       const bulkUnit = createMinimalUnit();
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.unitSlug).toBe(bulkUnit.unitSlug);
       expect(summary.unitTitle).toBe(bulkUnit.unitTitle);
@@ -81,7 +85,7 @@ describe('bulk-rollup-builder', () => {
 
     it('preserves year information', () => {
       const bulkUnit = createMinimalUnit({ year: 4, yearSlug: 'year-4' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.year).toBe(4);
       expect(summary.yearSlug).toBe('year-4');
@@ -89,7 +93,7 @@ describe('bulk-rollup-builder', () => {
 
     it('handles "All years" year value', () => {
       const bulkUnit = createMinimalUnit({ year: 'All years', yearSlug: 'year-mixed' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks4');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks4', 'maths-secondary');
 
       expect(summary.year).toBe('All years');
     });
@@ -101,7 +105,7 @@ describe('bulk-rollup-builder', () => {
           { slug: 'number-decimals', title: 'Number: Decimals', order: 2 },
         ],
       });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.threads).toHaveLength(2);
       expect(summary.threads?.[0]?.slug).toBe('number-fractions');
@@ -115,17 +119,17 @@ describe('bulk-rollup-builder', () => {
           { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2', lessonOrder: 2, state: 'published' },
         ],
       });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.unitLessons).toHaveLength(2);
       expect(summary.unitLessons[0]?.lessonSlug).toBe('lesson-1');
     });
 
-    it('generates canonical URL from unit slug and sequence context', () => {
+    it('generates oak URL from unit slug and sequence context', () => {
       const bulkUnit = createMinimalUnit({ unitSlug: 'fractions-year-4' });
       const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
-      expect(summary.canonicalUrl).toBe(
+      expect(summary.oakUrl).toBe(
         'https://www.thenational.academy/teachers/curriculum/maths-primary/units/fractions-year-4',
       );
     });
@@ -142,23 +146,24 @@ describe('bulk-rollup-builder', () => {
         'science-secondary-aqa',
       );
 
-      expect(summary.canonicalUrl).toBe(
+      expect(summary.oakUrl).toBe(
         'https://www.thenational.academy/teachers/curriculum/science-secondary-aqa/units/atomic-structure',
       );
     });
 
-    it('generates undefined canonical URL when no sequence context', () => {
+    it('always produces a string oakUrl (sequenceSlug is required)', () => {
       const bulkUnit = createMinimalUnit({ unitSlug: 'fractions-year-4' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
-      expect(summary.canonicalUrl).toBeUndefined();
+      expect(typeof summary.oakUrl).toBe('string');
+      expect(summary.oakUrl).toContain('fractions-year-4');
     });
 
     it('maps priorKnowledgeRequirements', () => {
       const bulkUnit = createMinimalUnit({
         priorKnowledgeRequirements: ['Understand equal parts', 'Count to 100'],
       });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.priorKnowledgeRequirements).toEqual([
         'Understand equal parts',
@@ -170,7 +175,7 @@ describe('bulk-rollup-builder', () => {
       const bulkUnit = createMinimalUnit({
         nationalCurriculumContent: ['Recognise and show fractions', 'Compare fractions'],
       });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.nationalCurriculumContent).toEqual([
         'Recognise and show fractions',
@@ -180,16 +185,42 @@ describe('bulk-rollup-builder', () => {
 
     it('maps description', () => {
       const bulkUnit = createMinimalUnit({ description: 'Learn about fractions' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.description).toBe('Learn about fractions');
     });
 
     it('maps whyThisWhyNow when present', () => {
       const bulkUnit = createMinimalUnit({ whyThisWhyNow: 'Builds on Year 3 fraction knowledge' });
-      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2');
+      const summary = transformBulkUnitToSummary(bulkUnit, 'maths', 'ks2', 'maths-primary');
 
       expect(summary.whyThisWhyNow).toBe('Builds on Year 3 fraction knowledge');
+    });
+  });
+
+  describe('buildRollupDocs', () => {
+    it('returns ok with rollup documents for valid units', () => {
+      const units = [createMinimalUnit()];
+      const lessons = [
+        createMinimalLesson({
+          unitSlug: 'fractions-year-4',
+          transcript_sentences: 'Fractions content.',
+        }),
+      ];
+      const result = buildRollupDocs(units, lessons, 'maths', 'Maths', 'maths-primary', new Map());
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value).toHaveLength(1);
+        expect(result.value[0]?.unit_title).toBe('Fractions Year 4');
+      }
+    });
+
+    it('returns err when a unit produces no oakUrl', () => {
+      const units = [createMinimalUnit({ unitSlug: '' })];
+      const result = buildRollupDocs(units, [], 'maths', 'Maths', '', new Map());
+
+      expect(result.ok).toBe(false);
     });
   });
 

@@ -32,7 +32,7 @@ function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUni
       { lessonSlug: 'lesson-1', lessonTitle: 'Lesson 1', state: 'published' },
       { lessonSlug: 'lesson-2', lessonTitle: 'Lesson 2', state: 'published' },
     ],
-    canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
+    oakUrl: 'https://www.thenational.academy/teachers/curriculum/maths-primary/units/unit-slug',
     ...overrides,
   };
   // Validate against schema to ensure fixture is correct
@@ -74,7 +74,8 @@ function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): Searc
     downloadsAvailable: true,
     keyStageSlug: 'ks2',
     keyStageTitle: 'Key Stage 2',
-    canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
+    canonicalUrl: 'https://www.thenational.academy/context-rich/lessons/lesson-slug',
+    oakUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
     ...overrides,
   };
   // Validate against schema to ensure fixture is correct
@@ -120,13 +121,8 @@ describe('document-transform-helpers', () => {
 
       expect(fields.unitSlug).toBe('unit-slug');
       expect(fields.unitTitle).toBe('Unit Title');
-      expect(fields.canonicalUrl).toBe('https://teachers.thenational.academy/lessons/lesson-slug');
+      expect(fields.oakUrl).toBe('https://teachers.thenational.academy/lessons/lesson-slug');
       expect(fields.lessonKeywords).toEqual(['fractions', 'ratio']);
-    });
-
-    it('throws when canonical URL is missing', () => {
-      const summary = buildLessonSummary({ canonicalUrl: undefined });
-      expect(() => extractLessonDocumentFields(summary)).toThrow(/canonical url/i);
     });
   });
 
@@ -139,15 +135,10 @@ describe('document-transform-helpers', () => {
 
       expect(fields.unitSlug).toBe('unit-slug');
       expect(fields.unitTitle).toBe('Unit Title');
-      expect(fields.canonicalUrl).toBe('https://teachers.thenational.academy/units/unit-slug');
+      expect(fields.oakUrl).toBe(
+        'https://www.thenational.academy/teachers/curriculum/maths-primary/units/unit-slug',
+      );
       expect(fields.lessonIds).toEqual(['lesson-1', 'lesson-2']);
-    });
-
-    it('throws when canonical URL is missing', () => {
-      const summary = buildUnitSummary({ canonicalUrl: undefined });
-      const normaliseYears = (year: string | number, yearSlug: string) =>
-        yearSlug ? [String(year)] : [String(year)];
-      expect(() => extractRollupDocumentFields(summary, normaliseYears)).toThrow(/canonical url/i);
     });
   });
 });

@@ -1,0 +1,2203 @@
+{
+  "meta": {
+    "schema_version": "0.1.0",
+    "data_version": "0.2.0",
+    "source": {
+      "name": "EEF Teaching and Learning Toolkit",
+      "url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit",
+      "organisation": "Education Endowment Foundation",
+      "original_authors": [
+        "Higgins, S.",
+        "Katsipataki, M.",
+        "Kokotsaki, D.",
+        "Coleman, R.",
+        "Major, L.E.",
+        "Coe, R."
+      ]
+    },
+    "licence": {
+      "name": "Dataset compilation under fair dealing; original EEF content is Crown-adjacent public benefit",
+      "url": "https://educationendowmentfoundation.org.uk",
+      "attribution_note": "This structured dataset is derived from the EEF Teaching and Learning Toolkit. All impact estimates, cost ratings, and evidence strength ratings are sourced from EEF publications. Users should consult the original EEF strand pages for full detail, technical appendices, and the most current figures. This dataset is provided for research, education and AI grounding purposes."
+    },
+    "last_updated": "2026-04-02",
+    "coverage": {
+      "age_range": "3-18 year-olds",
+      "jurisdiction_focus": "International evidence base; primary audience is schools in England and Wales",
+      "evidence_scope": "Systematic reviews of meta-analyses and randomised controlled trials"
+    },
+    "caveats": [
+      "Impact figures represent population averages from research conditions, not guaranteed outcomes for individual schools or pupils.",
+      "Effect sizes are converted to 'months of additional progress' using a standard approximation (~0.2 SD per month in primary). This conversion varies by age and subject.",
+      "High impact with low evidence strength should be treated with caution \u2014 the true effect may differ substantially.",
+      "Implementation quality is a critical moderator. Poorly implemented high-impact strategies can show zero or negative effects.",
+      "The toolkit measures academic attainment outcomes. It does not capture the full value of approaches that have important non-academic benefits (e.g. arts, physical activity, SEL).",
+      "Absence from the toolkit is not evidence of ineffectiveness \u2014 it indicates insufficient research to date.",
+      "Digital technology was removed as a standalone strand in 2021 and integrated as a sub-section within other strands.",
+      "Data in this file reflects the May 2025 and October 2025 living systematic review updates where available. Some strands may reflect earlier data pending their annual refresh.",
+      "Some strands now show null impact where evidence is rated 'insufficient'. The EEF cannot determine a reliable impact estimate for these strands."
+    ]
+  },
+  "methodology": {
+    "impact_measure": {
+      "name": "Months of additional progress",
+      "unit": "months",
+      "derivation": "Derived from effect sizes (typically Cohen's d) reported in meta-analyses and systematic reviews. Effect sizes are converted to months using a standard conversion based on ~0.2 standard deviations of improvement per month of typical school progress.",
+      "interpretation_guidance": "A figure of '+6 months' means that, on average across the included studies, pupils receiving this intervention made 6 months more progress than comparable pupils who did not. This is an average, not a guarantee."
+    },
+    "cost_measure": {
+      "name": "Implementation cost",
+      "scale": {
+        "1": {
+          "rating": 1,
+          "label": "Very low",
+          "range_per_pupil_per_year_gbp": "Up to \u00a380",
+          "range_per_class_per_year_gbp": "Up to \u00a32,000"
+        },
+        "2": {
+          "rating": 2,
+          "label": "Low",
+          "range_per_pupil_per_year_gbp": "\u00a380-\u00a3200",
+          "range_per_class_per_year_gbp": "\u00a32,000-\u00a35,000"
+        },
+        "3": {
+          "rating": 3,
+          "label": "Moderate",
+          "range_per_pupil_per_year_gbp": "\u00a3200-\u00a3600",
+          "range_per_class_per_year_gbp": "\u00a35,000-\u00a315,000"
+        },
+        "4": {
+          "rating": 4,
+          "label": "High",
+          "range_per_pupil_per_year_gbp": "\u00a3600-\u00a31,200",
+          "range_per_class_per_year_gbp": "\u00a315,000-\u00a330,000"
+        },
+        "5": {
+          "rating": 5,
+          "label": "Very high",
+          "range_per_pupil_per_year_gbp": "Over \u00a31,200",
+          "range_per_class_per_year_gbp": "Over \u00a330,000"
+        }
+      }
+    },
+    "evidence_strength_measure": {
+      "name": "Evidence strength (padlocks)",
+      "scale_min": 1,
+      "scale_max": 5,
+      "factors": [
+        "Number of studies (90+ studies required for 5 padlocks base)",
+        "Quality of study designs (RCTs weighted most heavily)",
+        "Ecological validity (studies in real school settings preferred)",
+        "Use of curriculum-relevant outcome measures",
+        "Independence of evaluation (non-independent evaluations may reduce rating)",
+        "Consistency of findings across studies",
+        "Recency of evidence (post-1990 studies preferred in living review)"
+      ],
+      "interpretation_guidance": "5 padlocks = very extensive, high-quality evidence. 1 padlock = very limited evidence. Padlocks can be lost from the base count for issues such as non-independent evaluation, inconsistent findings, or poor ecological validity."
+    },
+    "effect_size_to_months_conversion": {
+      "table": [
+        {
+          "effect_size_range": "0.00-0.05",
+          "months_progress": 0
+        },
+        {
+          "effect_size_range": "0.06-0.09",
+          "months_progress": 1
+        },
+        {
+          "effect_size_range": "0.10-0.18",
+          "months_progress": 2
+        },
+        {
+          "effect_size_range": "0.19-0.26",
+          "months_progress": 3
+        },
+        {
+          "effect_size_range": "0.27-0.35",
+          "months_progress": 4
+        },
+        {
+          "effect_size_range": "0.36-0.44",
+          "months_progress": 5
+        },
+        {
+          "effect_size_range": "0.45-0.52",
+          "months_progress": 6
+        },
+        {
+          "effect_size_range": "0.53-0.61",
+          "months_progress": 7
+        },
+        {
+          "effect_size_range": "0.62-0.69",
+          "months_progress": 8
+        },
+        {
+          "effect_size_range": "0.70-0.78",
+          "months_progress": 9
+        },
+        {
+          "effect_size_range": "0.79-0.87",
+          "months_progress": 10
+        },
+        {
+          "effect_size_range": "0.88-0.95",
+          "months_progress": 11
+        },
+        {
+          "effect_size_range": "0.96+",
+          "months_progress": 12
+        }
+      ],
+      "notes": "This conversion is approximate and based on typical academic progress rates. It is most accurate for primary-age pupils and may overestimate months for older pupils who typically make less progress per month in standardised terms."
+    }
+  },
+  "strands": [
+    {
+      "id": "eef-tl-arts-participation",
+      "name": "Arts participation",
+      "slug": "arts-participation",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/arts-participation",
+      "headline": {
+        "impact_months": 3,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 3,
+        "evidence_strength_label": "Moderate",
+        "headline_summary": "Moderate impact for very low cost based on moderate evidence"
+      },
+      "definition": {
+        "short": "Involvement in artistic and creative activities such as dance, drama, music, painting, or sculpture.",
+        "full": "Arts participation is defined as involvement in artistic and creative activities, such as dance, drama, music, painting, or sculpture. It can occur either as part of the curriculum or as extra-curricular activity. Arts-based approaches may be used in other areas of the curriculum, such as the use of drama to develop engagement and oral language before a writing task. This entry focuses on the benefits of arts participation for core academic attainment in other areas of the curriculum, particularly literacy and mathematics."
+      },
+      "key_findings": [
+        "Arts participation approaches can have a positive impact on academic outcomes in other areas of the curriculum.",
+        "The value of arts participation should be considered beyond maths or English outcomes \u2014 arts engagement is valuable in and of itself.",
+        "If the aim is to improve academic attainment, it is important to identify the link between the chosen arts intervention and the outcomes you want to improve.",
+        "Arts-based approaches may offer a route to re-engage older pupils in learning, though this does not always translate into better attainment."
+      ],
+      "effectiveness": {
+        "summary": "The average impact of arts participation on other areas of academic learning appears to be positive but moderate, about an additional three months' progress. Improved outcomes have been identified in English, mathematics and science.",
+        "mechanisms": [
+          "Increased engagement and motivation, particularly for disengaged pupils",
+          "Development of transferable skills (creativity, collaboration, self-expression)",
+          "Specific cross-curricular links (e.g. drama and writing, music and spatial awareness)"
+        ]
+      },
+      "behind_the_average": {
+        "summary": "Impact is similar for both primary and secondary school pupils. Effects tend to be higher for writing and mathematics than reading.",
+        "by_phase": {
+          "primary": {
+            "notes": "Similar impact to secondary"
+          },
+          "secondary": {
+            "notes": "Similar impact to primary; may particularly benefit disengaged learners"
+          }
+        },
+        "by_subject": [
+          {
+            "subject": "Writing",
+            "notes": "Higher impact than average, particularly through drama"
+          },
+          {
+            "subject": "Mathematics",
+            "notes": "Higher impact than average, possible link via music and spatial awareness"
+          },
+          {
+            "subject": "Reading",
+            "notes": "Lower impact than writing or mathematics"
+          }
+        ],
+        "moderating_factors": [
+          "Quality and structure of arts provision",
+          "Explicit connection made between arts activity and target academic outcomes",
+          "Whether participation is curricular or extra-curricular"
+        ]
+      },
+      "closing_the_disadvantage_gap": {
+        "summary": "Arts participation may offer a route to re-engage disadvantaged learners, though more evidence is needed on whether this translates to attainment gains."
+      },
+      "implementation": {
+        "key_considerations": [
+          "Consider whether the aim is academic improvement or wider development \u2014 both are valid but require different approaches",
+          "Ensure explicit links between arts activities and target learning outcomes where academic improvement is the goal",
+          "Consider how increased engagement through arts can be channelled into improved academic learning"
+        ]
+      },
+      "related_strands": [
+        "eef-tl-collaborative-learning",
+        "eef-tl-oral-language-interventions"
+      ],
+      "tags": [
+        "creative",
+        "engagement",
+        "cross-curricular",
+        "enrichment",
+        "primary",
+        "secondary"
+      ]
+    },
+    {
+      "id": "eef-tl-aspiration-interventions",
+      "name": "Aspiration interventions",
+      "slug": "aspiration-interventions",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/aspiration-interventions",
+      "headline": {
+        "impact_months": null,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 0,
+        "evidence_strength_label": "Insufficient",
+        "headline_summary": "Unclear impact for very low cost based on insufficient evidence"
+      },
+      "definition": {
+        "short": "Interventions that aim to raise pupils' aspirations for their future education and career.",
+        "full": "Aspiration interventions aim to raise the educational aspirations of pupils who come from disadvantaged backgrounds, or those who are at risk of educational underachievement. Approaches include mentoring by successful role models, trips to universities, and interventions to raise career awareness."
+      },
+      "key_findings": [
+        "There is very limited evidence that aspiration interventions alone improve academic attainment.",
+        "Most disadvantaged pupils already have high aspirations \u2014 the challenge is often a gap between aspirations and the knowledge, skills or qualifications needed to achieve them.",
+        "Aspiration interventions are more likely to be effective when combined with academic support and practical strategies to help pupils achieve their goals."
+      ],
+      "effectiveness": {
+        "summary": "Overall, the evidence suggests that aspiration interventions have little to no impact on attainment when delivered in isolation.",
+        "mechanisms": [
+          "Assumption that raising aspirations leads to increased motivation and effort",
+          "Evidence suggests the aspiration-effort link is weaker than commonly assumed"
+        ]
+      },
+      "tags": [
+        "motivation",
+        "disadvantage",
+        "careers",
+        "widening-participation"
+      ]
+    },
+    {
+      "id": "eef-tl-behaviour-interventions",
+      "name": "Behaviour interventions",
+      "slug": "behaviour-interventions",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/behaviour-interventions",
+      "headline": {
+        "impact_months": 3,
+        "cost_rating": 2,
+        "cost_label": "Low",
+        "evidence_strength_rating": 3,
+        "evidence_strength_label": "Moderate",
+        "headline_summary": "Moderate impact for low cost based on moderate evidence"
+      },
+      "definition": {
+        "short": "Approaches that aim to improve attainment by reducing challenging behaviour in schools.",
+        "full": "Behaviour interventions seek to improve attainment by reducing problematic behaviours. These include universal programmes (implemented schoolwide or in classrooms) and more targeted programmes aimed at students with specific behavioural issues. They range from simple classroom management strategies to more intensive approaches for pupils with significant behavioural difficulties."
+      },
+      "key_findings": [
+        "Behaviour interventions can produce moderate improvements in academic performance alongside reductions in problematic behaviour.",
+        "Both targeted and universal approaches can be effective.",
+        "Programmes that focus on self-management and social skills tend to show positive effects.",
+        "Interventions lasting 2-6 months tend to show the most impact."
+      ],
+      "effectiveness": {
+        "summary": "On average, behaviour interventions produce about four months' additional progress. Both universal and targeted programmes can be effective.",
+        "mechanisms": [
+          "Reduced disruption leading to more time on task",
+          "Improved self-regulation and social skills",
+          "Better teacher-pupil and peer relationships"
+        ]
+      },
+      "related_strands": [
+        "eef-tl-social-and-emotional-learning",
+        "eef-tl-metacognition-and-self-regulation"
+      ],
+      "related_guidance_reports": [
+        {
+          "title": "Improving Behaviour in Schools",
+          "url": "https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/behaviour"
+        }
+      ],
+      "tags": [
+        "behaviour",
+        "classroom-management",
+        "self-regulation",
+        "universal",
+        "targeted",
+        "primary",
+        "secondary"
+      ],
+      "update_history": [
+        {
+          "date": "2025-05-21",
+          "notes": "Updated as part of first living systematic review cycle"
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS1",
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "improving_behaviour",
+          "closing_disadvantage_gap"
+        ],
+        "pp_relevance": "high",
+        "pp_relevance_note": "Behavioural challenges disproportionately affect disadvantaged pupils. Both universal and targeted approaches effective.",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": false,
+          "resource_cost": "low",
+          "time_to_embed": "2-6 months",
+          "key_staff": [
+            "classroom_teachers",
+            "pastoral_leads",
+            "behaviour_leads"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-collaborative-learning",
+      "name": "Collaborative learning approaches",
+      "slug": "collaborative-learning-approaches",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/collaborative-learning-approaches",
+      "headline": {
+        "impact_months": 5,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 2,
+        "evidence_strength_label": "Limited",
+        "headline_summary": "Moderate impact for very low cost based on limited evidence"
+      },
+      "definition": {
+        "short": "Pupils working together on activities or learning tasks in a group small enough to ensure that everyone participates.",
+        "full": "A collaborative (or cooperative) learning approach involves pupils working together on activities or learning tasks in a group small enough to ensure that everyone participates. Pupils in the group may work on separate tasks contributing to a common overall outcome, or work together on a shared task. This is distinct from unstructured group work."
+      },
+      "key_findings": [
+        "Collaborative learning approaches have a positive impact, on average, and may be a cost-effective approach for raising attainment.",
+        "Pupils need support and practice to work together; it does not happen automatically.",
+        "Tasks and activities need to be designed carefully so that working together is effective and efficient.",
+        "It is important to ensure that all pupils talk and articulate their thinking in collaborative tasks to ensure they benefit fully."
+      ],
+      "effectiveness": {
+        "summary": "Collaborative learning has a consistently positive impact of approximately five additional months' progress. The effect applies when collaboration is structured, with clear roles and genuine interdependence.",
+        "mechanisms": [
+          "Explanation and demonstration develop deeper understanding in both parties",
+          "Problem-solving and metacognitive skills are developed through discussion",
+          "Sharing cognitive load on challenging tasks",
+          "Peer accountability and motivation"
+        ]
+      },
+      "implementation": {
+        "key_considerations": [
+          "Ensure all pupils, particularly those with low prior attainment, are supported to fully participate",
+          "Carefully consider the make-up of pairings and groups",
+          "Model high quality discussions so collaborative activities are productive",
+          "Monitor collaborative activities and support pupils that are struggling or not contributing"
+        ],
+        "common_pitfalls": [
+          "Unstructured group work where some pupils do not participate",
+          "Tasks that can be completed individually, removing genuine need for collaboration",
+          "Domination by higher-attaining pupils"
+        ]
+      },
+      "related_strands": [
+        "eef-tl-peer-tutoring",
+        "eef-tl-metacognition-and-self-regulation",
+        "eef-tl-oral-language-interventions"
+      ],
+      "tags": [
+        "pedagogy",
+        "group-work",
+        "cooperative-learning",
+        "talk",
+        "primary",
+        "secondary"
+      ],
+      "update_history": [
+        {
+          "date": "2025-05-21",
+          "notes": "Updated as part of first living systematic review cycle"
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "improving_oracy",
+          "improving_writing",
+          "metacognition_and_self_regulation"
+        ],
+        "pp_relevance": "moderate",
+        "pp_relevance_note": "Benefits all pupils when well-structured. Ensure disadvantaged pupils are supported to participate fully.",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": false,
+          "resource_cost": "minimal",
+          "time_to_embed": "1 term",
+          "key_staff": [
+            "classroom_teachers"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-extending-school-time",
+      "name": "Extending school time",
+      "slug": "extending-school-time",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/extending-school-time",
+      "headline": {
+        "impact_months": 3,
+        "cost_rating": 3,
+        "cost_label": "Moderate",
+        "evidence_strength_rating": 3,
+        "evidence_strength_label": "Moderate",
+        "headline_summary": "Moderate impact for moderate cost based on moderate evidence"
+      },
+      "definition": {
+        "short": "Additional time spent in school, including before/after school programmes, longer school days, or weekend/holiday provision.",
+        "full": "Extending school time encompasses a range of approaches including before and after school programmes, holiday programmes, longer school days, and weekend schools. This strand was formed by merging the earlier 'After school programmes' and 'Extended school time' strands."
+      },
+      "key_findings": [
+        "The impact is moderate on average but varies considerably depending on what the additional time is used for.",
+        "Time spent on targeted academic support tends to be more effective than general enrichment.",
+        "The quality of provision during extended time matters more than the quantity of time added."
+      ],
+      "tags": [
+        "time",
+        "after-school",
+        "holiday",
+        "enrichment",
+        "academic-support"
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "closing_disadvantage_gap",
+          "improving_reading",
+          "improving_maths"
+        ],
+        "pp_relevance": "moderate",
+        "pp_relevance_note": "Quality of provision during extended time matters more than quantity of time added.",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": true,
+          "resource_cost": "moderate",
+          "time_to_embed": "1 term",
+          "key_staff": [
+            "teachers",
+            "support_staff"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-feedback",
+      "name": "Feedback",
+      "slug": "feedback",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/feedback",
+      "headline": {
+        "impact_months": 6,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 4,
+        "evidence_strength_label": "Extensive",
+        "headline_summary": "High impact for very low cost based on extensive evidence"
+      },
+      "definition": {
+        "short": "Information given to the learner about their performance relative to learning goals or outcomes.",
+        "full": "Feedback is information given to the learner about the learner's performance relative to learning goals or outcomes. It should aim to (and be capable of producing) improvement in students' learning. Feedback redirects or refocuses the learner's actions to achieve a goal, by aligning effort and activity with an outcome."
+      },
+      "key_findings": [
+        "Providing feedback is a well-evidenced and high-impact intervention.",
+        "Effective feedback tends to focus on the task, subject and self-regulation strategies rather than on the pupil personally.",
+        "Feedback is most effective when it provides specific guidance on how to improve.",
+        "Feedback can be given orally or in writing; the mode matters less than the quality.",
+        "Feedback is most effective when it is timely and actionable."
+      ],
+      "effectiveness": {
+        "summary": "Feedback has a high impact on average (+6 months) and the strongest evidence base of any strand in the toolkit (5 padlocks). It is the most securely evidenced intervention. Not all feedback is equal; the quality, focus and timeliness matter greatly.",
+        "mechanisms": [
+          "Reduces the gap between current and desired performance",
+          "Directs attention to specific aspects of the task that need improvement",
+          "Develops self-assessment and self-regulation skills",
+          "Can correct misconceptions before they become embedded"
+        ]
+      },
+      "behind_the_average": {
+        "summary": "The impact of feedback varies significantly depending on the type. Task-level and process-level feedback is most effective. Self-level feedback (praise) has little impact on learning.",
+        "moderating_factors": [
+          "Feedback about the task and how to improve it is most effective",
+          "Feedback about self-regulation strategies is also effective",
+          "Feedback about the self as a person (praise, grades alone) is least effective",
+          "The timing and specificity of feedback matters significantly"
+        ]
+      },
+      "related_strands": [
+        "eef-tl-metacognition-and-self-regulation",
+        "eef-tl-mastery-learning"
+      ],
+      "related_guidance_reports": [
+        {
+          "title": "Teacher Feedback to Improve Pupil Learning",
+          "url": "https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/feedback"
+        }
+      ],
+      "tags": [
+        "assessment",
+        "formative-assessment",
+        "marking",
+        "pedagogy",
+        "primary",
+        "secondary",
+        "high-impact",
+        "low-cost"
+      ],
+      "update_history": [
+        {
+          "date": "2025-05-21",
+          "notes": "Updated as part of first living systematic review cycle"
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS1",
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "closing_disadvantage_gap",
+          "improving_reading",
+          "improving_writing",
+          "improving_maths"
+        ],
+        "pp_relevance": "very_high",
+        "pp_relevance_note": "Feedback involving metacognitive approaches may have greater impact on disadvantaged pupils.",
+        "behind_the_average_by_phase": {
+          "primary": {
+            "impact_months": 7
+          },
+          "secondary": {
+            "impact_months": 5
+          }
+        },
+        "applications": {
+          "written_feedback": {
+            "impact_months": 5
+          },
+          "oral_feedback": {
+            "impact_months": 7
+          }
+        },
+        "number_of_studies": 155,
+        "review_last_updated": "2021-06",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": false,
+          "resource_cost": "minimal",
+          "time_to_embed": "1-2 terms",
+          "key_staff": [
+            "classroom_teachers"
+          ],
+          "workload_note": "Monitor teacher workload. Written marking is only one part of an effective feedback strategy."
+        }
+      }
+    },
+    {
+      "id": "eef-tl-homework",
+      "name": "Homework",
+      "slug": "homework",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/homework",
+      "headline": {
+        "impact_months": 5,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 1,
+        "evidence_strength_label": "Very Limited",
+        "headline_summary": "Moderate impact for very low cost based on very limited evidence"
+      },
+      "definition": {
+        "short": "Tasks given to pupils by their teachers to be completed outside of usual lessons.",
+        "full": "Homework refers to tasks given to pupils by their teachers to be completed outside of usual lessons. Common homework activities include reading or preparing for the next lesson, completing worksheets, revision, and project work."
+      },
+      "key_findings": [
+        "The impact of homework is positive on average, but varies significantly by age.",
+        "Homework has a greater impact for secondary pupils than for primary pupils.",
+        "Short, focused tasks closely related to what is being taught tend to be more effective.",
+        "There is some evidence that homework is most effective when it is routinely set and when pupils receive feedback."
+      ],
+      "behind_the_average": {
+        "summary": "There is a substantial difference in impact between primary and secondary phases.",
+        "by_phase": {
+          "primary": {
+            "impact_months": 2,
+            "notes": "Lower impact; short, focused tasks linked to classroom learning are most effective"
+          },
+          "secondary": {
+            "impact_months": 5,
+            "notes": "Higher impact, particularly when closely tied to curriculum content"
+          }
+        }
+      },
+      "tags": [
+        "homework",
+        "independent-learning",
+        "primary",
+        "secondary"
+      ],
+      "update_history": [
+        {
+          "date": "2025-05-21",
+          "notes": "Updated as part of first living systematic review cycle"
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "improving_reading",
+          "improving_maths"
+        ],
+        "pp_relevance": "moderate",
+        "pp_relevance_note": "Consider whether disadvantaged pupils have suitable home environments for homework. Short, focused tasks are more effective than lengthy assignments.",
+        "behind_the_average_by_phase": {
+          "primary": {
+            "impact_months": 2
+          },
+          "secondary": {
+            "impact_months": 5
+          }
+        },
+        "implementation_requirements": {
+          "cpd_intensity": "low",
+          "additional_staff_needed": false,
+          "resource_cost": "minimal",
+          "time_to_embed": "immediate",
+          "key_staff": [
+            "classroom_teachers"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-individualised-instruction",
+      "name": "Individualised instruction",
+      "slug": "individualised-instruction",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/individualised-instruction",
+      "headline": {
+        "impact_months": 4,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 2,
+        "evidence_strength_label": "Limited",
+        "headline_summary": "Moderate impact for very low cost based on limited evidence"
+      },
+      "definition": {
+        "short": "Teaching tailored to individual pupil needs, progress and abilities.",
+        "full": "Individualised instruction involves tailoring teaching to individual pupil needs and abilities. This can include adaptive teaching approaches, differentiated tasks, or technology-enabled personalised learning pathways."
+      },
+      "key_findings": [
+        "Individualised instruction can be effective but quality of implementation matters significantly.",
+        "Technology-enabled individualisation shows promise but is not automatically effective.",
+        "The most effective approaches tend to supplement rather than replace whole-class teaching."
+      ],
+      "tags": [
+        "differentiation",
+        "adaptive-teaching",
+        "personalisation",
+        "technology"
+      ]
+    },
+    {
+      "id": "eef-tl-learning-styles",
+      "name": "Learning styles",
+      "slug": "learning-styles",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/learning-styles",
+      "headline": {
+        "impact_months": null,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 0,
+        "evidence_strength_label": "Insufficient",
+        "headline_summary": "Unclear impact for very low cost based on insufficient evidence"
+      },
+      "definition": {
+        "short": "The idea that pupils learn best when teaching is matched to their preferred learning style (e.g. visual, auditory, kinaesthetic).",
+        "full": "Learning styles refers to the idea that pupils learn best when teaching is matched to their preferred learning style. Commonly cited categorisations include Visual, Auditory and Kinaesthetic (VAK) approaches. The evidence does not support tailoring teaching to individual learning styles."
+      },
+      "key_findings": [
+        "There is no consistent evidence that matching teaching to pupils' reported learning styles improves outcomes.",
+        "Pupils may have preferences but teaching to those preferences does not systematically improve learning.",
+        "Using multiple representations (visual, verbal, practical) to present material is supported by evidence, but this is distinct from the learning styles hypothesis.",
+        "Categorising pupils by learning style risks limiting the approaches they are exposed to."
+      ],
+      "tags": [
+        "debunked",
+        "myths",
+        "VAK",
+        "differentiation"
+      ]
+    },
+    {
+      "id": "eef-tl-mastery-learning",
+      "name": "Mastery learning",
+      "slug": "mastery-learning",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/mastery-learning",
+      "headline": {
+        "impact_months": 5,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 2,
+        "evidence_strength_label": "Limited",
+        "headline_summary": "Moderate impact for very low cost based on limited evidence"
+      },
+      "definition": {
+        "short": "An approach where pupils are expected to achieve a high level of mastery before moving on to the next topic.",
+        "full": "Mastery learning breaks subject matter and learning content into units with clearly specified objectives which are pursued until they are achieved. Pupils work through each block of content in a series of sequential steps and must demonstrate a high level of success on tests, typically about 80%, before progressing to the next block."
+      },
+      "key_findings": [
+        "Mastery learning has a consistently positive impact, allowing pupils to work at their own pace.",
+        "It is important that clear unit outcomes are defined with targeted re-teaching before pupils move on.",
+        "Provides opportunity for pupils to work collaboratively and receive corrective feedback."
+      ],
+      "related_strands": [
+        "eef-tl-feedback",
+        "eef-tl-individualised-instruction"
+      ],
+      "tags": [
+        "mastery",
+        "curriculum-design",
+        "assessment",
+        "progression",
+        "primary",
+        "secondary",
+        "mathematics"
+      ],
+      "update_history": [
+        {
+          "date": "2025-05-21",
+          "notes": "Updated as part of first living systematic review cycle"
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "improving_maths",
+          "curriculum_development"
+        ],
+        "pp_relevance": "moderate",
+        "pp_relevance_note": "Allows pupils to work at their own pace. Re-teaching before progression ensures foundational knowledge.",
+        "implementation_requirements": {
+          "cpd_intensity": "high",
+          "additional_staff_needed": false,
+          "resource_cost": "low",
+          "time_to_embed": "2-3 terms",
+          "key_staff": [
+            "classroom_teachers",
+            "subject_leaders"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-mentoring",
+      "name": "Mentoring",
+      "slug": "mentoring",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/mentoring",
+      "headline": {
+        "impact_months": 2,
+        "cost_rating": 3,
+        "cost_label": "Moderate",
+        "evidence_strength_rating": 3,
+        "evidence_strength_label": "Moderate",
+        "headline_summary": "Low impact for moderate cost based on moderate evidence"
+      },
+      "definition": {
+        "short": "Pairing a young person with an older peer or adult volunteer who acts as a positive role model.",
+        "full": "Mentoring in education involves pairing young people with an older peer or adult volunteer who acts as a role model. Mentors typically meet with their mentee regularly over a sustained period and engage in a range of activities, such as academic support, careers advice, or personal development."
+      },
+      "key_findings": [
+        "Mentoring has a modest positive impact on academic outcomes on average.",
+        "The quality of the mentor-mentee relationship is critical to effectiveness.",
+        "Poor mentoring can be worse than no mentoring for vulnerable young people.",
+        "Mentoring appears to have wider benefits beyond academic outcomes, including improved attitudes to school."
+      ],
+      "tags": [
+        "relationships",
+        "role-models",
+        "disadvantage",
+        "pastoral"
+      ]
+    },
+    {
+      "id": "eef-tl-metacognition-and-self-regulation",
+      "name": "Metacognition and self-regulation",
+      "slug": "metacognition-and-self-regulation",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/metacognition-and-self-regulation",
+      "headline": {
+        "impact_months": 8,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 4,
+        "evidence_strength_label": "Extensive",
+        "number_of_studies": 355,
+        "headline_summary": "High impact for very low cost based on extensive evidence"
+      },
+      "definition": {
+        "short": "Approaches that support pupils to think about their own learning more explicitly, often by teaching specific strategies for planning, monitoring and evaluating.",
+        "full": "Metacognition and self-regulation approaches support pupils to think about their own learning more explicitly, often by teaching them specific strategies for planning, monitoring and evaluating their learning. Metacognition is the learner's ability to be aware of, reflect on, and direct their thinking. Self-regulation refers to the extent to which learners can manage their own motivation and behaviour."
+      },
+      "key_findings": [
+        "Metacognition and self-regulation strategies have very high impact for very low cost, making them one of the most cost-effective approaches available.",
+        "Studies focus on equipping pupils with metacognitive strategies to promote learner independence.",
+        "Teachers have an important role in the explicit teaching of metacognition and self-regulation strategies.",
+        "Teachers can model metacognition and provide scaffolding to support pupils to become better self-regulated learners.",
+        "Metacognitive strategies should be taught in conjunction with specific subject content, not as generic 'learning to learn' sessions.",
+        "Studies with higher numbers of disadvantaged pupils showed high impact \u2014 this is a promising area for closing the disadvantage gap."
+      ],
+      "effectiveness": {
+        "summary": "Metacognition and self-regulation has the highest impact of any strand in the toolkit at +8 months, increased from +7 months following the May 2025 update incorporating 107 new studies. The effect is consistent across ages and subjects when strategies are explicitly taught within subject content.",
+        "mechanisms": [
+          "Planning strategies help pupils organise their approach to learning tasks",
+          "Monitoring strategies enable pupils to track their own understanding during learning",
+          "Evaluation strategies support reflection on what worked and what to change",
+          "Explicit teaching of these strategies makes implicit expert processes visible to novice learners"
+        ]
+      },
+      "behind_the_average": {
+        "summary": "The evidence strength rating lost a padlock because a large percentage of the 355 studies were not independently evaluated.",
+        "moderating_factors": [
+          "Most effective when taught within specific subject content rather than generically",
+          "Requires explicit teaching, modelling and scaffolding \u2014 does not emerge automatically",
+          "Even young children (age 3+) can engage in metacognitive and self-regulatory behaviours",
+          "Stronger background knowledge enables more effective metacognitive strategy use"
+        ]
+      },
+      "closing_the_disadvantage_gap": {
+        "summary": "Studies with higher proportions of disadvantaged pupils showed high impact, making this a particularly promising approach for closing the attainment gap."
+      },
+      "implementation": {
+        "key_considerations": [
+          "Teach metacognitive strategies explicitly within subject content",
+          "Model your own thinking processes using think-alouds",
+          "Set an appropriate level of challenge \u2014 metacognition requires effortful thinking",
+          "Develop metacognitive talk in the classroom through questioning and discussion",
+          "Use the principle of 'least help first' \u2014 prompting, clueing, modelling"
+        ],
+        "common_pitfalls": [
+          "Teaching metacognition as generic 'study skills' divorced from subject content",
+          "Assuming metacognition only develops in older pupils \u2014 evidence shows it starts from age 3",
+          "Conflating metacognition with Bloom's taxonomy \u2014 metacognition is not 'higher order' thinking that sits above knowledge",
+          "Forgetting that metacognition requires strong subject knowledge to be effective"
+        ],
+        "digital_technology_application": "Digital tools can support metacognitive strategy use through structured prompts, self-assessment tools, and learning journals."
+      },
+      "related_strands": [
+        "eef-tl-oral-language-interventions",
+        "eef-tl-reading-comprehension-strategies",
+        "eef-tl-collaborative-learning",
+        "eef-tl-feedback"
+      ],
+      "related_guidance_reports": [
+        {
+          "title": "Metacognition and Self-Regulated Learning",
+          "url": "https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/metacognition"
+        }
+      ],
+      "tags": [
+        "metacognition",
+        "self-regulation",
+        "planning",
+        "monitoring",
+        "evaluation",
+        "pedagogy",
+        "high-impact",
+        "low-cost",
+        "disadvantage",
+        "primary",
+        "secondary",
+        "early-years"
+      ],
+      "update_history": [
+        {
+          "date": "2025-05-21",
+          "notes": "Updated with 107 new studies as part of first living systematic review cycle. Impact increased from +7 to +8 months."
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "closing_disadvantage_gap",
+          "metacognition_and_self_regulation",
+          "improving_reading",
+          "improving_maths",
+          "improving_writing"
+        ],
+        "pp_relevance": "very_high",
+        "pp_relevance_note": "Studies with higher proportions of disadvantaged pupils showed high impact.",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": false,
+          "resource_cost": "minimal",
+          "time_to_embed": "1-2 terms",
+          "key_staff": [
+            "classroom_teachers",
+            "subject_leaders"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-one-to-one-tuition",
+      "name": "One to one tuition",
+      "slug": "one-to-one-tuition",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/one-to-one-tuition",
+      "headline": {
+        "impact_months": 5,
+        "cost_rating": 3,
+        "cost_label": "Moderate",
+        "evidence_strength_rating": 3,
+        "evidence_strength_label": "Moderate",
+        "number_of_studies": 123,
+        "headline_summary": "Moderate impact for moderate cost based on moderate evidence"
+      },
+      "definition": {
+        "short": "A teacher, teaching assistant or other adult providing intensive individual support to a single learner.",
+        "full": "One to one tuition involves a teacher, teaching assistant or other adult giving a pupil intensive individual support. It may be delivered in addition to or as a replacement for normal lessons. One to one tuition is most commonly provided to support lower attaining learners or those falling behind."
+      },
+      "key_findings": [
+        "One to one tuition can be effective, on average delivering approximately five months' additional progress.",
+        "Studies in primary schools tend to show greater impact (+6 months) compared with secondary schools (+4 months).",
+        "Short, regular sessions (around 30 minutes, 3-5 times a week over a set period up to 10 weeks) tend to be most effective.",
+        "Online tutoring can be as effective as in-person tutoring when the technology is sound and the tutor is well-trained."
+      ],
+      "behind_the_average": {
+        "by_phase": {
+          "primary": {
+            "impact_months": 6,
+            "notes": "Tends to show greater impact than secondary"
+          },
+          "secondary": {
+            "impact_months": 4,
+            "notes": "Lower impact than primary on average"
+          }
+        }
+      },
+      "related_strands": [
+        "eef-tl-small-group-tuition",
+        "eef-tl-teaching-assistant-interventions"
+      ],
+      "related_guidance_reports": [
+        {
+          "title": "Making Best Use of Teaching Assistants",
+          "url": "https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/teaching-assistants"
+        }
+      ],
+      "tags": [
+        "tuition",
+        "intervention",
+        "targeted-support",
+        "primary",
+        "secondary",
+        "online-tutoring",
+        "pupil-premium"
+      ],
+      "update_history": [
+        {
+          "date": "2025-05-21",
+          "notes": "Updated as part of first living systematic review cycle"
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "closing_disadvantage_gap",
+          "improving_reading",
+          "improving_maths",
+          "post_covid_recovery"
+        ],
+        "pp_relevance": "very_high",
+        "pp_relevance_note": "Core PP intervention. Short regular sessions most effective.",
+        "behind_the_average_by_phase": {
+          "primary": {
+            "impact_months": 6
+          },
+          "secondary": {
+            "impact_months": 4
+          }
+        },
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": true,
+          "resource_cost": "high",
+          "time_to_embed": "immediate",
+          "key_staff": [
+            "tutors",
+            "teaching_assistants"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-oral-language-interventions",
+      "name": "Oral language interventions",
+      "slug": "oral-language-interventions",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/oral-language-interventions",
+      "headline": {
+        "impact_months": 6,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 4,
+        "evidence_strength_label": "Extensive",
+        "headline_summary": "High impact for very low cost based on extensive evidence"
+      },
+      "definition": {
+        "short": "Approaches that emphasise the importance of spoken language and verbal interaction in the classroom.",
+        "full": "Oral language interventions emphasise the importance of spoken language and verbal interaction in the classroom. They include targeted reading aloud and discussing books with young children, explicitly extending pupils' spoken vocabulary, and the use of structured questioning to develop reading comprehension."
+      },
+      "key_findings": [
+        "Oral language approaches have a high impact on academic outcomes.",
+        "Approaches that develop comprehension, reading skills, vocabulary, articulation and spoken expression are all effective.",
+        "Collaborative approaches where pupils discuss, explain and challenge ideas are particularly beneficial.",
+        "Impact is seen across early years, primary and secondary phases."
+      ],
+      "related_strands": [
+        "eef-tl-reading-comprehension-strategies",
+        "eef-tl-collaborative-learning",
+        "eef-tl-metacognition-and-self-regulation",
+        "eef-tl-phonics"
+      ],
+      "tags": [
+        "oracy",
+        "speaking",
+        "listening",
+        "vocabulary",
+        "language",
+        "literacy",
+        "early-years",
+        "primary",
+        "secondary",
+        "high-impact"
+      ],
+      "update_history": [
+        {
+          "date": "2025-05-21",
+          "notes": "Updated with 34 new studies with increased focus on early years and primary. Part of first living systematic review cycle."
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "early_years",
+          "primary"
+        ],
+        "most_relevant_key_stages": [
+          "EYFS",
+          "KS1",
+          "KS2"
+        ],
+        "most_relevant_priorities": [
+          "improving_oracy",
+          "improving_reading",
+          "closing_disadvantage_gap"
+        ],
+        "pp_relevance": "very_high",
+        "pp_relevance_note": "Language development is foundational. Particularly impactful for disadvantaged pupils with limited language exposure at home.",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": false,
+          "resource_cost": "minimal",
+          "time_to_embed": "1-2 terms",
+          "key_staff": [
+            "early_years_practitioners",
+            "classroom_teachers"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-outdoor-adventure-learning",
+      "name": "Outdoor adventure learning",
+      "slug": "outdoor-adventure-learning",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/outdoor-adventure-learning",
+      "headline": {
+        "impact_months": null,
+        "cost_rating": 3,
+        "cost_label": "Moderate",
+        "evidence_strength_rating": 0,
+        "evidence_strength_label": "Insufficient",
+        "headline_summary": "Unclear impact for moderate cost based on insufficient evidence"
+      },
+      "definition": {
+        "short": "Learning through outdoor experiences such as survival, ropes, or problem-solving exercises.",
+        "full": "Outdoor adventure learning typically involves collaborative learning experiences in an outdoor environment. Activities may include rock climbing, survival exercises, ropes courses, and other problem-solving tasks."
+      },
+      "key_findings": [
+        "Outdoor adventure learning can have positive impacts on academic outcomes but the evidence base is limited.",
+        "Wider benefits such as self-confidence, self-efficacy and motivation are consistently reported.",
+        "Effects tend to be more durable when linked to curriculum content."
+      ],
+      "tags": [
+        "outdoor",
+        "adventure",
+        "residential",
+        "enrichment",
+        "wellbeing"
+      ]
+    },
+    {
+      "id": "eef-tl-parental-engagement",
+      "name": "Parental engagement",
+      "slug": "parental-engagement",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/parental-engagement",
+      "headline": {
+        "impact_months": 4,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 4,
+        "evidence_strength_label": "Extensive",
+        "headline_summary": "Moderate impact for very low cost based on extensive evidence"
+      },
+      "definition": {
+        "short": "Approaches and programmes which aim to develop parental engagement with their child's learning.",
+        "full": "Parental engagement refers to approaches and programmes that aim to develop parental engagement with their child's learning and with the school. This can include strategies such as encouraging parents to support their children's reading at home, or involving parents in school governance."
+      },
+      "key_findings": [
+        "Parental engagement strategies have a positive impact on average.",
+        "The impact is particularly seen in early years and primary phases.",
+        "Programmes that support parents in reading with children at home tend to be effective.",
+        "Communication between school and home is important but does not automatically lead to improved outcomes."
+      ],
+      "related_guidance_reports": [
+        {
+          "title": "Working with Parents to Support Children's Learning",
+          "url": "https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/supporting-parents"
+        }
+      ],
+      "tags": [
+        "parents",
+        "families",
+        "home-learning",
+        "communication",
+        "early-years",
+        "primary"
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "early_years",
+          "primary"
+        ],
+        "most_relevant_key_stages": [
+          "EYFS",
+          "KS1",
+          "KS2"
+        ],
+        "most_relevant_priorities": [
+          "parental_engagement",
+          "closing_disadvantage_gap",
+          "improving_reading"
+        ],
+        "pp_relevance": "high",
+        "pp_relevance_note": "Supporting parents to read with children at home is particularly effective. Impact strongest in early years and primary.",
+        "implementation_requirements": {
+          "cpd_intensity": "low",
+          "additional_staff_needed": false,
+          "resource_cost": "low",
+          "time_to_embed": "1 term",
+          "key_staff": [
+            "family_liaison",
+            "classroom_teachers"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-peer-tutoring",
+      "name": "Peer tutoring",
+      "slug": "peer-tutoring",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/peer-tutoring",
+      "headline": {
+        "impact_months": 6,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 4,
+        "evidence_strength_label": "Extensive",
+        "headline_summary": "High impact for very low cost based on extensive evidence"
+      },
+      "definition": {
+        "short": "Pupils being supported by other pupils in their learning, typically in structured pairings.",
+        "full": "Peer tutoring includes a range of approaches in which learners work in pairs or small groups to provide each other with explicit teaching support. In cross-age peer tutoring, an older pupil takes the tutoring role. In same-age peer tutoring, roles may alternate."
+      },
+      "key_findings": [
+        "Structured peer tutoring benefits both the tutor and the tutee.",
+        "The act of explaining material forces the tutor to organise and deepen their own understanding.",
+        "Clear roles and structured tasks are important \u2014 unstructured arrangements are less effective.",
+        "Both same-age and cross-age peer tutoring can be effective."
+      ],
+      "related_strands": [
+        "eef-tl-collaborative-learning",
+        "eef-tl-one-to-one-tuition"
+      ],
+      "tags": [
+        "peer-support",
+        "tutoring",
+        "structured",
+        "reciprocal",
+        "primary",
+        "secondary",
+        "high-impact",
+        "low-cost"
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "closing_disadvantage_gap",
+          "improving_reading",
+          "improving_maths"
+        ],
+        "pp_relevance": "high",
+        "pp_relevance_note": "Low attaining pupils tend to receive additional benefits from peer tutoring.",
+        "behind_the_average_by_phase": {
+          "primary": {
+            "impact_months": 5
+          },
+          "secondary": {
+            "impact_months": 7
+          }
+        },
+        "applications": {
+          "impact_on_tutors": {
+            "impact_months": 6
+          },
+          "reciprocal_tutoring": {
+            "impact_months": 7
+          }
+        },
+        "number_of_studies": 145,
+        "review_last_updated": "2025-05",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": false,
+          "resource_cost": "low",
+          "time_to_embed": "4-10 weeks",
+          "key_staff": [
+            "classroom_teachers"
+          ],
+          "session_guidance": "Regular sessions 4-5x/week, up to 10 weeks. Cross-age gap <3 years optimal."
+        }
+      }
+    },
+    {
+      "id": "eef-tl-performance-pay",
+      "name": "Performance pay",
+      "slug": "performance-pay",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/performance-pay",
+      "headline": {
+        "impact_months": 1,
+        "cost_rating": 2,
+        "cost_label": "Low",
+        "evidence_strength_rating": 1,
+        "evidence_strength_label": "Very Limited",
+        "headline_summary": "Low impact for low cost based on very limited evidence"
+      },
+      "definition": {
+        "short": "Financial incentives linked to teacher performance or pupil outcomes.",
+        "full": "Performance pay involves making some component of teacher pay dependent on measures of teacher effectiveness, typically pupil test scores or classroom observations."
+      },
+      "key_findings": [
+        "The impact of performance pay on academic outcomes is modest and the evidence is limited.",
+        "Well-designed systems can have some positive effect but the mechanisms are not well understood.",
+        "Performance pay can have unintended negative consequences on collaboration and morale."
+      ],
+      "tags": [
+        "teacher-pay",
+        "incentives",
+        "workforce",
+        "policy"
+      ]
+    },
+    {
+      "id": "eef-tl-phonics",
+      "name": "Phonics",
+      "slug": "phonics",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/phonics",
+      "headline": {
+        "impact_months": 5,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 4,
+        "evidence_strength_label": "Extensive",
+        "headline_summary": "Moderate impact for very low cost based on extensive evidence"
+      },
+      "definition": {
+        "short": "An approach to teaching reading that focuses on developing pupils' knowledge and skills in mapping sounds to written letters.",
+        "full": "Phonics is an approach to teaching reading which focuses on developing pupils' phonemic awareness \u2014 the ability to hear, identify and use phonemes (units of sound). Systematic phonics teaches these in a structured sequence."
+      },
+      "key_findings": [
+        "Phonics approaches have been consistently found to be effective in supporting younger readers to master the basics of reading.",
+        "Systematic phonics instruction is more effective than unsystematic or no phonics instruction.",
+        "Phonics should be taught alongside other literacy approaches, not in isolation.",
+        "It is most effective in early years and KS1; impact diminishes for older readers."
+      ],
+      "behind_the_average": {
+        "by_phase": {
+          "early_years": {
+            "notes": "Highest impact \u2014 foundational for reading development"
+          },
+          "primary": {
+            "notes": "Strong impact in KS1, diminishing in KS2"
+          },
+          "secondary": {
+            "notes": "Limited impact for typical readers; may help struggling readers"
+          }
+        }
+      },
+      "related_strands": [
+        "eef-tl-reading-comprehension-strategies",
+        "eef-tl-oral-language-interventions"
+      ],
+      "tags": [
+        "reading",
+        "literacy",
+        "early-reading",
+        "systematic-synthetic-phonics",
+        "early-years",
+        "KS1",
+        "high-impact"
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "early_years",
+          "primary"
+        ],
+        "most_relevant_key_stages": [
+          "EYFS",
+          "KS1"
+        ],
+        "most_relevant_priorities": [
+          "improving_reading",
+          "closing_disadvantage_gap"
+        ],
+        "pp_relevance": "high",
+        "pp_relevance_note": "Foundational for early reading. Most effective in EYFS and KS1.",
+        "implementation_requirements": {
+          "cpd_intensity": "high",
+          "additional_staff_needed": false,
+          "resource_cost": "moderate",
+          "time_to_embed": "1-2 terms",
+          "key_staff": [
+            "early_years_practitioners",
+            "ks1_teachers",
+            "reading_leads"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-physical-activity",
+      "name": "Physical activity",
+      "slug": "physical-activity",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/physical-activity",
+      "headline": {
+        "impact_months": 2,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 4,
+        "evidence_strength_label": "Extensive",
+        "headline_summary": "Low impact for very low cost based on extensive evidence"
+      },
+      "definition": {
+        "short": "Physical activity interventions used to improve academic performance.",
+        "full": "Physical activity interventions are approaches that engage learners in physical activity with the aim of improving academic performance. This includes both curricular PE and additional physical activity programmes."
+      },
+      "key_findings": [
+        "The impact of physical activity on academic outcomes is low on average.",
+        "Physical activity has important health and wellbeing benefits beyond academic attainment.",
+        "There is some evidence that physical activity improves concentration and on-task behaviour.",
+        "The evidence does not support replacing academic learning time with physical activity as a strategy for raising attainment."
+      ],
+      "tags": [
+        "PE",
+        "physical-activity",
+        "health",
+        "wellbeing",
+        "concentration"
+      ]
+    },
+    {
+      "id": "eef-tl-reading-comprehension-strategies",
+      "name": "Reading comprehension strategies",
+      "slug": "reading-comprehension-strategies",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/reading-comprehension-strategies",
+      "headline": {
+        "impact_months": 7,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 3,
+        "evidence_strength_label": "Moderate",
+        "headline_summary": "High impact for very low cost based on moderate evidence"
+      },
+      "definition": {
+        "short": "Teaching specific strategies to support reading comprehension, including summarising, questioning, clarifying and predicting.",
+        "full": "Reading comprehension strategies focus on the learner's understanding of written text. Pupils are taught a range of techniques which enable them to comprehend the meaning of what they read. These include: inferring meaning from context, summarising or identifying key points, using graphic or semantic organisers, developing questioning strategies, and monitoring their own comprehension."
+      },
+      "key_findings": [
+        "Reading comprehension strategies are high-impact and low cost.",
+        "Explicit teaching of strategies such as summarising, questioning, clarifying and predicting is effective.",
+        "Teacher modelling through think-alouds is particularly powerful.",
+        "Strategies are most effective when taught in context, applied to authentic texts."
+      ],
+      "effectiveness": {
+        "summary": "Reading comprehension strategies now show +7 months impact (increased from +6 following October 2025 update incorporating 40 new studies). They are among the highest-impact and most cost-effective approaches in the toolkit.",
+        "mechanisms": [
+          "Making implicit comprehension processes explicit and teachable",
+          "Equipping pupils with tools to actively engage with and monitor their reading",
+          "Building metacognitive awareness of the reading process"
+        ]
+      },
+      "related_strands": [
+        "eef-tl-metacognition-and-self-regulation",
+        "eef-tl-oral-language-interventions",
+        "eef-tl-phonics"
+      ],
+      "related_guidance_reports": [
+        {
+          "title": "Improving Literacy in Secondary Schools",
+          "url": "https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/literacy-ks3-ks4"
+        },
+        {
+          "title": "Improving Literacy in Key Stage 1",
+          "url": "https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/literacy-ks-1"
+        }
+      ],
+      "tags": [
+        "reading",
+        "literacy",
+        "comprehension",
+        "strategies",
+        "primary",
+        "secondary",
+        "high-impact",
+        "low-cost"
+      ],
+      "update_history": [
+        {
+          "date": "2025-10-30",
+          "notes": "Updated with 40 new studies. Impact increased from +6 to +7 months."
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "improving_reading",
+          "closing_disadvantage_gap"
+        ],
+        "pp_relevance": "very_high",
+        "pp_relevance_note": "High impact approach for improving reading across all phases.",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": false,
+          "resource_cost": "minimal",
+          "time_to_embed": "1-2 terms",
+          "key_staff": [
+            "classroom_teachers",
+            "literacy_leads"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-reducing-class-size",
+      "name": "Reducing class size",
+      "slug": "reducing-class-size",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/reducing-class-size",
+      "headline": {
+        "impact_months": 1,
+        "cost_rating": 5,
+        "cost_label": "Very High",
+        "evidence_strength_rating": 1,
+        "evidence_strength_label": "Very Limited",
+        "headline_summary": "Low impact for very high cost based on very limited evidence"
+      },
+      "definition": {
+        "short": "Reducing the number of pupils in a class to improve teaching and learning.",
+        "full": "Reducing class size involves employing additional teachers or restructuring groups to reduce the number of pupils in each class. The evidence suggests this has a modest impact on outcomes."
+      },
+      "key_findings": [
+        "Reducing class size has a small positive impact on attainment on average.",
+        "The costs are very high, making it one of the least cost-effective approaches.",
+        "Effects are largest when class sizes are reduced to below 20, and ideally below 15.",
+        "Simply reducing class size does not automatically lead to better outcomes \u2014 teachers need to adapt their pedagogy to take advantage of smaller groups."
+      ],
+      "tags": [
+        "class-size",
+        "staffing",
+        "policy",
+        "resources"
+      ]
+    },
+    {
+      "id": "eef-tl-repeating-a-year",
+      "name": "Repeating a year",
+      "slug": "repeating-a-year",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/repeating-a-year",
+      "headline": {
+        "impact_months": -2,
+        "cost_rating": 5,
+        "cost_label": "Very High",
+        "evidence_strength_rating": 2,
+        "evidence_strength_label": "Limited",
+        "headline_summary": "Negative impact for very high cost based on limited evidence"
+      },
+      "definition": {
+        "short": "Requiring a pupil to repeat an entire school year, also known as grade retention or being 'held back'.",
+        "full": "Repeating a year involves a pupil who has not reached the required academic standard re-doing the same school year. This practice is uncommon in England but used in other countries."
+      },
+      "key_findings": [
+        "On average, repeating a year has a negative impact on outcomes.",
+        "Any short-term gains tend to fade over time.",
+        "The cost is very high due to the additional year of schooling.",
+        "Alternative approaches such as targeted support and intervention are more effective and less costly."
+      ],
+      "tags": [
+        "retention",
+        "progression",
+        "policy",
+        "negative-impact"
+      ]
+    },
+    {
+      "id": "eef-tl-school-uniform",
+      "name": "School uniform",
+      "slug": "school-uniform",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/school-uniform",
+      "headline": {
+        "impact_months": null,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 0,
+        "evidence_strength_label": "Insufficient",
+        "headline_summary": "Unclear impact for very low cost based on insufficient evidence"
+      },
+      "definition": {
+        "short": "A standard set of clothing required to be worn by pupils attending a school.",
+        "full": "School uniform refers to a standard set of clothing required to be worn by pupils. This strand examines the evidence for whether school uniforms affect academic outcomes."
+      },
+      "key_findings": [
+        "There is very limited evidence that school uniforms have any direct impact on academic outcomes.",
+        "Some studies suggest uniforms may improve behaviour or attendance, but the evidence is not robust.",
+        "There may be other arguments for or against uniforms (equity, identity) that are not captured by academic impact measures."
+      ],
+      "tags": [
+        "uniform",
+        "policy",
+        "behaviour",
+        "school-culture"
+      ]
+    },
+    {
+      "id": "eef-tl-setting-and-streaming",
+      "name": "Setting and streaming",
+      "slug": "setting-and-streaming",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/setting-and-streaming",
+      "headline": {
+        "impact_months": 0,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 1,
+        "evidence_strength_label": "Very Limited",
+        "headline_summary": "No impact for very low cost based on very limited evidence"
+      },
+      "definition": {
+        "short": "Grouping pupils by attainment level for all lessons (streaming) or for particular subjects (setting).",
+        "full": "Setting involves grouping pupils by attainment for specific subjects, while streaming involves grouping by overall attainment for all subjects. Both approaches aim to allow teachers to pitch lessons more appropriately."
+      },
+      "key_findings": [
+        "On average, setting and streaming have a slightly negative impact on attainment.",
+        "The approach may benefit higher-attaining pupils slightly but tends to disadvantage lower-attaining pupils.",
+        "Allocation to sets/streams is often influenced by socio-economic background rather than purely by attainment.",
+        "Flexible grouping within classes may be a more effective alternative."
+      ],
+      "related_strands": [
+        "eef-tl-within-class-attainment-grouping"
+      ],
+      "tags": [
+        "grouping",
+        "setting",
+        "streaming",
+        "ability-grouping",
+        "equity",
+        "disadvantage"
+      ]
+    },
+    {
+      "id": "eef-tl-small-group-tuition",
+      "name": "Small group tuition",
+      "slug": "small-group-tuition",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/small-group-tuition",
+      "headline": {
+        "impact_months": 4,
+        "cost_rating": 2,
+        "cost_label": "Low",
+        "evidence_strength_rating": 3,
+        "evidence_strength_label": "Moderate",
+        "headline_summary": "Moderate impact for low cost based on moderate evidence"
+      },
+      "definition": {
+        "short": "A teacher, teaching assistant or other adult working with a small group of typically 2-5 pupils together.",
+        "full": "Small group tuition involves a teacher, teaching assistant or other adult working with small groups of 2-5 pupils to provide targeted support. This can be delivered in addition to or as a replacement for normal lessons."
+      },
+      "key_findings": [
+        "Small group tuition is effective and somewhat less costly than one-to-one tuition.",
+        "Smaller groups of 2-3 tend to produce higher impact than groups of 4-5.",
+        "Sessions should be regular, short and closely linked to classroom teaching.",
+        "The quality of teaching within the group is more important than the group size."
+      ],
+      "related_strands": [
+        "eef-tl-one-to-one-tuition",
+        "eef-tl-teaching-assistant-interventions"
+      ],
+      "tags": [
+        "tuition",
+        "intervention",
+        "targeted-support",
+        "small-group",
+        "primary",
+        "secondary",
+        "pupil-premium"
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3",
+          "KS4"
+        ],
+        "most_relevant_priorities": [
+          "closing_disadvantage_gap",
+          "improving_reading",
+          "improving_maths",
+          "post_covid_recovery"
+        ],
+        "pp_relevance": "very_high",
+        "pp_relevance_note": "More cost-effective than 1:1. Groups of 2-3 tend to produce higher impact than 4-5.",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": true,
+          "resource_cost": "moderate",
+          "time_to_embed": "immediate",
+          "key_staff": [
+            "tutors",
+            "teaching_assistants"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-social-and-emotional-learning",
+      "name": "Social and emotional learning",
+      "slug": "social-and-emotional-learning",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/social-and-emotional-learning",
+      "headline": {
+        "impact_months": 3,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 3,
+        "evidence_strength_label": "Moderate",
+        "headline_summary": "Moderate impact for very low cost based on moderate evidence"
+      },
+      "definition": {
+        "short": "Interventions that seek to improve pupils' decision-making skills, interaction with others and self-management of emotions.",
+        "full": "Social and emotional learning (SEL) interventions seek to improve pupils' decision-making skills, interaction with others and their self-management of emotions, rather than focusing directly on the academic or cognitive elements of learning."
+      },
+      "key_findings": [
+        "SEL interventions have a valuable impact on attitudes to learning and social relationships in school.",
+        "The impact on academic attainment is positive on average.",
+        "Universal programmes (delivered to whole classes) tend to be more effective than targeted programmes.",
+        "SEL approaches complement academic interventions rather than competing with them."
+      ],
+      "related_strands": [
+        "eef-tl-behaviour-interventions",
+        "eef-tl-metacognition-and-self-regulation"
+      ],
+      "tags": [
+        "SEL",
+        "wellbeing",
+        "PSHE",
+        "social-skills",
+        "emotional-regulation",
+        "resilience",
+        "primary",
+        "secondary"
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS1",
+          "KS2",
+          "KS3"
+        ],
+        "most_relevant_priorities": [
+          "improving_behaviour",
+          "closing_disadvantage_gap"
+        ],
+        "pp_relevance": "moderate",
+        "pp_relevance_note": "Universal programmes tend to be more effective than targeted. Complements academic interventions.",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": false,
+          "resource_cost": "low",
+          "time_to_embed": "1-2 terms",
+          "key_staff": [
+            "classroom_teachers",
+            "pshe_leads",
+            "pastoral_leads"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-summer-schools",
+      "name": "Summer schools",
+      "slug": "summer-schools",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/summer-schools",
+      "headline": {
+        "impact_months": 3,
+        "cost_rating": 3,
+        "cost_label": "Moderate",
+        "evidence_strength_rating": 2,
+        "evidence_strength_label": "Limited",
+        "headline_summary": "Moderate impact for moderate cost based on limited evidence"
+      },
+      "definition": {
+        "short": "Schools or academic programmes that run during the summer holidays to support learning.",
+        "full": "Summer schools are programmes typically run during the summer holidays that provide additional academic support, enrichment activities, or both. They aim to prevent the 'summer learning loss' that particularly affects disadvantaged pupils."
+      },
+      "key_findings": [
+        "Summer schools can have a moderate positive impact on academic outcomes.",
+        "Programmes with a clear academic component tend to be more effective than purely enrichment-focused provision.",
+        "Additional experiences and activities such as arts or sporting activities can help increase engagement alongside academic support.",
+        "Summer schools can be particularly beneficial for disadvantaged pupils in mitigating summer learning loss."
+      ],
+      "related_strands": [
+        "eef-tl-extending-school-time"
+      ],
+      "tags": [
+        "summer",
+        "holiday",
+        "catch-up",
+        "enrichment",
+        "disadvantage"
+      ],
+      "update_history": [
+        {
+          "date": "2025-05-21",
+          "notes": "Updated as part of first living systematic review cycle"
+        }
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS2",
+          "KS3"
+        ],
+        "most_relevant_priorities": [
+          "closing_disadvantage_gap",
+          "post_covid_recovery",
+          "transition_support"
+        ],
+        "pp_relevance": "high",
+        "pp_relevance_note": "Can mitigate summer learning loss for disadvantaged pupils. Academic component is essential alongside enrichment.",
+        "implementation_requirements": {
+          "cpd_intensity": "moderate",
+          "additional_staff_needed": true,
+          "resource_cost": "moderate",
+          "time_to_embed": "seasonal",
+          "key_staff": [
+            "teachers",
+            "support_staff"
+          ]
+        }
+      }
+    },
+    {
+      "id": "eef-tl-teaching-assistant-interventions",
+      "name": "Teaching assistant interventions",
+      "slug": "teaching-assistant-interventions",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/teaching-assistant-interventions",
+      "headline": {
+        "impact_months": 4,
+        "cost_rating": 3,
+        "cost_label": "Moderate",
+        "evidence_strength_rating": 3,
+        "evidence_strength_label": "Moderate",
+        "headline_summary": "Moderate impact for moderate cost based on moderate evidence"
+      },
+      "definition": {
+        "short": "The use of teaching assistants to provide structured support for learning.",
+        "full": "Teaching assistant interventions cover structured programmes and support delivered by teaching assistants. This includes targeted interventions for individuals or small groups, and TAs supporting whole-class learning. The evidence distinguishes between TAs deployed to deliver structured interventions and TAs used for general classroom support."
+      },
+      "key_findings": [
+        "When TAs are used to deliver structured interventions to individuals or small groups, they can have a positive impact.",
+        "Using TAs for general classroom support without specific structure has much less impact \u2014 some studies show near-zero or negative effects.",
+        "TAs are most effective when they receive training, clear guidance, and time to prepare.",
+        "TAs should supplement, not replace, interaction with the teacher."
+      ],
+      "implementation": {
+        "key_considerations": [
+          "Deploy TAs to deliver structured, evidence-based interventions with training and support",
+          "Avoid using TAs simply to 'sit with' lower-attaining pupils \u2014 this can reduce rather than increase their contact with the teacher",
+          "Ensure TAs have dedicated preparation and planning time"
+        ]
+      },
+      "related_strands": [
+        "eef-tl-one-to-one-tuition",
+        "eef-tl-small-group-tuition"
+      ],
+      "related_guidance_reports": [
+        {
+          "title": "Making Best Use of Teaching Assistants",
+          "url": "https://educationendowmentfoundation.org.uk/education-evidence/guidance-reports/teaching-assistants"
+        }
+      ],
+      "tags": [
+        "teaching-assistants",
+        "TAs",
+        "deployment",
+        "intervention",
+        "targeted-support",
+        "primary",
+        "secondary"
+      ],
+      "school_context_relevance": {
+        "most_relevant_phases": [
+          "primary",
+          "secondary"
+        ],
+        "most_relevant_key_stages": [
+          "KS1",
+          "KS2",
+          "KS3"
+        ],
+        "most_relevant_priorities": [
+          "effective_use_of_tas",
+          "closing_disadvantage_gap",
+          "improving_send_provision"
+        ],
+        "pp_relevance": "high",
+        "pp_relevance_note": "Structured TA interventions effective. General classroom support shows near-zero effects.",
+        "implementation_requirements": {
+          "cpd_intensity": "high",
+          "additional_staff_needed": false,
+          "resource_cost": "moderate",
+          "time_to_embed": "1-2 terms",
+          "key_staff": [
+            "teaching_assistants",
+            "sencos"
+          ],
+          "critical_note": "TAs must deliver structured, evidence-based interventions. Avoid deploying TAs to 'sit with' lower-attaining pupils."
+        }
+      }
+    },
+    {
+      "id": "eef-tl-within-class-attainment-grouping",
+      "name": "Within-class attainment grouping",
+      "slug": "within-class-attainment-grouping",
+      "eef_url": "https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/within-class-attainment-grouping",
+      "headline": {
+        "impact_months": 2,
+        "cost_rating": 1,
+        "cost_label": "Very Low",
+        "evidence_strength_rating": 1,
+        "evidence_strength_label": "Very Limited",
+        "headline_summary": "Low impact for very low cost based on very limited evidence"
+      },
+      "definition": {
+        "short": "Grouping pupils by attainment within a single class for specific tasks or activities.",
+        "full": "Within-class attainment grouping involves the teacher grouping pupils by attainment within their class for specific activities, while all pupils remain in the same mixed-attainment class for the majority of their learning."
+      },
+      "key_findings": [
+        "Within-class grouping has a small positive impact on average.",
+        "Flexible grouping, where groups are regularly reviewed and changed, tends to be more effective.",
+        "Groups should be seen as temporary and based on specific needs rather than fixed."
+      ],
+      "related_strands": [
+        "eef-tl-setting-and-streaming"
+      ],
+      "tags": [
+        "grouping",
+        "differentiation",
+        "flexible-grouping",
+        "adaptive-teaching"
+      ]
+    }
+  ],
+  "school_context_schema": {
+    "description": "UK school context parameters for contextualised recommendations. Pass these to recommend_for_context.",
+    "properties": {
+      "phase": {
+        "type": "string",
+        "enum": [
+          "early_years",
+          "primary",
+          "secondary",
+          "post_16",
+          "all_through",
+          "special"
+        ]
+      },
+      "key_stage": {
+        "type": "string",
+        "enum": [
+          "EYFS",
+          "KS1",
+          "KS2",
+          "KS3",
+          "KS4",
+          "KS5"
+        ]
+      },
+      "school_type": {
+        "type": "string",
+        "enum": [
+          "maintained",
+          "academy",
+          "free_school",
+          "independent",
+          "special",
+          "alternative_provision",
+          "nursery"
+        ]
+      },
+      "pupil_premium": {
+        "type": "object",
+        "properties": {
+          "pp_percentage": {
+            "type": "number",
+            "description": "% eligible for PP (national avg ~27%)"
+          },
+          "pp_band": {
+            "type": "string",
+            "enum": [
+              "low",
+              "below_average",
+              "average",
+              "above_average",
+              "high"
+            ]
+          },
+          "total_pp_funding_gbp": {
+            "type": "integer"
+          }
+        }
+      },
+      "send_percentage": {
+        "type": "number"
+      },
+      "ofsted_grade": {
+        "type": "string",
+        "enum": [
+          "outstanding",
+          "good",
+          "requires_improvement",
+          "inadequate"
+        ]
+      },
+      "attainment": {
+        "type": "object",
+        "properties": {
+          "ks2_reading_expected_plus": {
+            "type": "number"
+          },
+          "ks2_maths_expected_plus": {
+            "type": "number"
+          },
+          "ks4_progress_8": {
+            "type": "number"
+          },
+          "disadvantage_gap_months": {
+            "type": "number"
+          }
+        }
+      },
+      "workforce": {
+        "type": "object",
+        "properties": {
+          "teacher_count": {
+            "type": "integer"
+          },
+          "ta_count": {
+            "type": "integer"
+          },
+          "pupil_teacher_ratio": {
+            "type": "number"
+          }
+        }
+      },
+      "priorities": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "closing_disadvantage_gap",
+            "improving_reading",
+            "improving_writing",
+            "improving_maths",
+            "improving_oracy",
+            "improving_behaviour",
+            "improving_attendance",
+            "improving_send_provision",
+            "teacher_retention",
+            "curriculum_development",
+            "metacognition_and_self_regulation",
+            "effective_use_of_tas",
+            "parental_engagement",
+            "transition_support",
+            "post_covid_recovery"
+          ]
+        }
+      }
+    }
+  },
+  "uk_context": {
+    "pupil_premium_rates_2024_25": {
+      "primary_fsm": 1455,
+      "secondary_fsm": 1035,
+      "looked_after_children": 2530,
+      "service_children": 335
+    },
+    "national_averages": {
+      "pp_percentage": 27.0,
+      "send_support_percentage": 13.0,
+      "ehcp_percentage": 4.3,
+      "primary_avg_size": 281,
+      "secondary_avg_size": 993
+    },
+    "key_stage_mapping": {
+      "EYFS": {
+        "age": "3-5",
+        "years": [
+          "Nursery",
+          "Reception"
+        ]
+      },
+      "KS1": {
+        "age": "5-7",
+        "years": [
+          "Y1",
+          "Y2"
+        ]
+      },
+      "KS2": {
+        "age": "7-11",
+        "years": [
+          "Y3",
+          "Y4",
+          "Y5",
+          "Y6"
+        ]
+      },
+      "KS3": {
+        "age": "11-14",
+        "years": [
+          "Y7",
+          "Y8",
+          "Y9"
+        ]
+      },
+      "KS4": {
+        "age": "14-16",
+        "years": [
+          "Y10",
+          "Y11"
+        ]
+      },
+      "KS5": {
+        "age": "16-18",
+        "years": [
+          "Y12",
+          "Y13"
+        ]
+      }
+    }
+  }
+}

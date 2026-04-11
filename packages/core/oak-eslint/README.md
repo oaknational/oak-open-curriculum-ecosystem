@@ -24,13 +24,14 @@ This plugin provides:
 Boundary rules use `eslint-plugin-import-x` and `@typescript-eslint` to enforce
 layer separation:
 
-| Rule Set                 | Scope             | Enforces                                                                                        |
-| ------------------------ | ----------------- | ----------------------------------------------------------------------------------------------- |
-| `coreBoundaryRules`      | `packages/core/`  | No imports from libs, SDKs, or apps via relative paths or `@oaknational/*` package specifiers   |
-| `createLibBoundaryRules` | `packages/libs/`  | Tier-aware lib boundaries plus no imports from SDKs/apps; no `process`/`__dirname`/`__filename` |
-| `createSdkBoundaryRules` | `packages/sdks/`  | One-way dependency rules for generation/runtime/search SDK workspaces                           |
-| `appBoundaryRules`       | `apps/`           | Baseline cross-app boundary helper for relative-package and package-specifier imports           |
-| `appArchitectureRules`   | `apps/` internals | Cross-app boundaries plus tools/integrations separation and private-module bans                 |
+| Rule Set                    | Scope              | Enforces                                                                                                  |
+| --------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------- |
+| `coreBoundaryRules`         | `packages/core/`   | No imports from libs, SDKs, or apps via relative paths or `@oaknational/*` package specifiers             |
+| `createDesignBoundaryRules` | `packages/design/` | Design-token dependency direction: core may stay independent; Oak token set may depend on token core only |
+| `createLibBoundaryRules`    | `packages/libs/`   | Tier-aware lib boundaries plus no imports from SDKs/apps; no `process`/`__dirname`/`__filename`           |
+| `createSdkBoundaryRules`    | `packages/sdks/`   | One-way dependency rules for generation/runtime/search SDK workspaces                                     |
+| `appBoundaryRules`          | `apps/`            | Baseline cross-app boundary helper for relative-package and package-specifier imports                     |
+| `appArchitectureRules`      | `apps/` internals  | Cross-app boundaries plus tools/integrations separation and private-module bans                           |
 
 #### `createSdkBoundaryRules(role)`
 

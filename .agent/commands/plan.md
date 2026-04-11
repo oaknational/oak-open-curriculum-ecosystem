@@ -78,6 +78,7 @@ Every executable plan MUST have:
 6. **Foundation alignment** — explicit references to principles.md,
    testing-strategy.md, schema-first-execution.md
 7. **Non-goals** — what we are explicitly NOT doing (YAGNI)
+8. **Learning Loop** — all plans MUST end with running the consolidation workflow
 
 ## Promotion Workflow (`future/` -> `current/` -> `active/`)
 

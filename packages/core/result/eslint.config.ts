@@ -8,8 +8,7 @@ import { defineConfig } from 'eslint/config';
 import {
   configs,
   coreBoundaryRules,
-  coreTestConfigRules,
-  commonSettings,
+  createImportResolverSettings,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -39,16 +38,7 @@ const config = defineConfig(
         tsconfigRootDir: thisDir,
       },
     },
-    settings: {
-      ...commonSettings,
-      'import-x/resolver': {
-        ...commonSettings['import-x/resolver'],
-        typescript: {
-          ...commonSettings['import-x/resolver'].typescript,
-          project: wsTsProject,
-        },
-      },
-    },
+    settings: createImportResolverSettings({ project: wsTsProject }),
   },
   {
     files: ['src/**/*.ts'],
@@ -56,13 +46,10 @@ const config = defineConfig(
   },
   {
     files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**/*.ts'],
-    rules: {
-      ...testRules,
-      ...coreTestConfigRules,
-    },
+    rules: testRules,
   },
   {
-    files: ['eslint.config.ts', 'vitest.config.ts'],
+    files: ['*.config.ts'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',
@@ -70,7 +57,6 @@ const config = defineConfig(
       },
     },
     rules: {
-      ...coreTestConfigRules,
       'import-x/no-relative-packages': 'off',
       'import-x/no-relative-parent-imports': 'off',
     },

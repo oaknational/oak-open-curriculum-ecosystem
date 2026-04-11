@@ -4,6 +4,7 @@
     "baseUrl": "."
   },
   "include": [
+    "operations/**/*.ts",
     "src/**/*.ts",
     "scripts/**/*.ts",
     "smoke-tests/**/*.ts",

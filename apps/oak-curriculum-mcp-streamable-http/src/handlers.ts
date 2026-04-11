@@ -2,13 +2,13 @@
  * MCP tool registration.
  *
  * Iterates over the SDK's universal tool registry and registers each tool
- * with its canonical projection config, observability wrapping, and auth
- * interception.
+ * with its observability wrapping and auth interception.
  *
- * The per-request HTTP handler factory lives in {@link ./mcp-handler.ts}.
+ * The per-request HTTP handler factory lives in `mcp-handler.ts`.
  */
 
-import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { McpServer, ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { registerAppTool } from '@modelcontextprotocol/ext-apps/server';
 import type { Logger } from '@oaknational/logger';
 import { wrapToolHandler } from '@oaknational/sentry-mcp';
 import type { RuntimeConfig } from './runtime-config.js';
@@ -20,7 +20,7 @@ import {
   createUniversalToolExecutor,
   createStubToolExecutionAdapter,
   generatedToolRegistry,
-  toRegistrationConfig,
+  isAppToolEntry,
   type SearchRetrievalService,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 import { handleToolWithAuthInterception } from './tool-handler-with-auth.js';
@@ -35,6 +35,24 @@ export type { ToolHandlerDependencies, ToolHandlerOverrides } from './tool-handl
 export { createMcpHandler } from './mcp-handler.js';
 export type { McpHandlerRequest, McpHandlerResponse } from './mcp-handler.js';
 
+/**
+ * Inputs required to register Oak's MCP tools, resources, and prompts.
+ *
+ * The HTTP app stays thin: it receives prebuilt SDK/runtime dependencies,
+ * then registers the canonical universal tool inventory directly without
+ * reintroducing a projection layer.
+ *
+ * @example
+ * ```typescript
+ * registerHandlers(server, {
+ *   runtimeConfig,
+ *   logger,
+ *   observability,
+ *   searchRetrieval,
+ *   resourceUrl: 'https://example.org/mcp',
+ * });
+ * ```
+ */
 export interface RegisterHandlersOptions {
   readonly overrides?: ToolHandlerOverrides;
   readonly runtimeConfig: RuntimeConfig;
@@ -45,6 +63,8 @@ export interface RegisterHandlersOptions {
   readonly searchRetrieval: SearchRetrievalService;
   /** Factory for generating signed asset download URLs (HTTP-only). */
   readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
+  /** Returns the built widget HTML content (DI per ADR-078). */
+  readonly getWidgetHtml: () => string;
 }
 
 function buildToolHandlerDependencies(
@@ -53,7 +73,6 @@ function buildToolHandlerDependencies(
   searchRetrieval: SearchRetrievalService,
   stubExecutor: ReturnType<typeof createStubToolExecutionAdapter> | undefined,
 ): ToolHandlerDependencies {
-  // searchRetrieval is closed over here — the handler never sees it directly.
   const createRequestExecutor: ToolHandlerDependencies['createRequestExecutor'] = stubExecutor
     ? (config) =>
         createStubRequestExecutor({
@@ -83,20 +102,35 @@ function buildToolHandlerDependencies(
   };
 }
 
-function deriveWidgetDomain(config: RuntimeConfig): string | undefined {
-  return config.displayHostname ? `https://${config.displayHostname}` : undefined;
-}
-
 /**
- * Registers all MCP tools with the server.
+ * Registers all MCP tools, resources, and prompts with the server.
  *
- * Iterates over universal tools (generated + aggregated) and registers each
- * with proper configuration including Zod schemas with parameter descriptions.
+ * Tool metadata is registered in the same shape returned by
+ * `listUniversalTools()`: `title`, `description`, `inputSchema`,
+ * `annotations`, and `_meta`. No compatibility projection layer sits
+ * between the SDK registry and the transport registration step.
  *
  * @param server - MCP server instance
  * @param options - Registration options including runtime config and logger
+ *
+ * @example
+ * ```typescript
+ * const server = new McpServer({ name: 'oak-http', version: '0.1.0' });
+ *
+ * registerHandlers(server, {
+ *   runtimeConfig,
+ *   logger,
+ *   observability,
+ *   searchRetrieval,
+ *   createAssetDownloadUrl: (lesson, type) =>
+ *     `https://example.org/api/assets/${lesson}/${type}`,
+ * });
+ * ```
  */
-export function registerHandlers(server: McpServer, options: RegisterHandlersOptions): void {
+export function registerHandlers(
+  server: Pick<McpServer, 'registerTool' | 'registerResource' | 'registerPrompt'>,
+  options: RegisterHandlersOptions,
+): void {
   const resourceUrl = options.resourceUrl ?? 'http://localhost:3333/mcp';
   const stubExecutor = options.runtimeConfig.useStubTools
     ? createStubToolExecutionAdapter()
@@ -107,35 +141,53 @@ export function registerHandlers(server: McpServer, options: RegisterHandlersOpt
     options.searchRetrieval,
     stubExecutor,
   );
+
+  registerTools(server, deps, options);
+
+  registerAllResources(server, {
+    observability: options.observability,
+    getWidgetHtml: options.getWidgetHtml,
+  });
+  registerPrompts(server, options.observability);
+}
+
+/** Iterates over universal tools and registers each with the server. */
+function registerTools(
+  server: Pick<McpServer, 'registerTool'>,
+  deps: ToolHandlerDependencies,
+  options: RegisterHandlersOptions,
+): void {
   const mcpObservation = options.observability.createMcpObservationOptions();
 
   for (const tool of listUniversalTools(generatedToolRegistry)) {
-    const config = toRegistrationConfig(tool);
-    server.registerTool(
+    const wrappedHandler = wrapToolHandler(
       tool.name,
-      config,
-      wrapToolHandler(
-        tool.name,
-        async (params: unknown, extra) => {
-          return handleToolWithAuthInterception({
-            tool,
-            params,
-            deps,
-            logger: options.logger,
-            apiKey: options.runtimeConfig.env.OAK_API_KEY,
-            runtimeConfig: options.runtimeConfig,
-            createAssetDownloadUrl: options.createAssetDownloadUrl,
-            authInfo: extra.authInfo,
-          });
-        },
-        mcpObservation,
-      ),
+      async (params: unknown, extra: Parameters<ToolCallback>[0]) => {
+        return handleToolWithAuthInterception({
+          tool,
+          params,
+          deps,
+          logger: options.logger,
+          apiKey: options.runtimeConfig.env.OAK_API_KEY,
+          runtimeConfig: options.runtimeConfig,
+          createAssetDownloadUrl: options.createAssetDownloadUrl,
+          authInfo: extra.authInfo,
+        });
+      },
+      mcpObservation,
     );
-  }
 
-  registerAllResources(server, {
-    widgetDomain: deriveWidgetDomain(options.runtimeConfig),
-    observability: options.observability,
-  });
-  registerPrompts(server, options.observability);
+    const config = {
+      title: tool.title,
+      description: tool.description,
+      inputSchema: tool.inputSchema,
+      annotations: tool.annotations,
+    };
+
+    if (isAppToolEntry(tool)) {
+      registerAppTool(server, tool.name, { ...config, _meta: { ...tool._meta } }, wrappedHandler);
+    } else {
+      server.registerTool(tool.name, { ...config, _meta: tool._meta }, wrappedHandler);
+    }
+  }
 }

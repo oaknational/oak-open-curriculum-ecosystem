@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
-**Last Updated**: 2026-03-23
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
+**Last Updated**: 2026-04-05
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -14,6 +14,9 @@ This roadmap is the strategic phase sequence for the
 
 Strategic source plans remain authoritative for intent/rationale; active plans
 are authoritative for execution tasks.
+
+Status token definitions are standardised in
+[README.md](README.md#status-legend).
 
 Authoritative active execution sources:
 
@@ -30,7 +33,8 @@ Active adjacent execution sources:
 2. ~~codex-platform-parity.execution.plan.md~~ ✅ Complete (deleted)
 3. [phase-0-baseline-metrics.plan.md](active/phase-0-baseline-metrics.plan.md) (HC-0: harness-concepts baseline)
 4. Clerk specialist capability — ✅ Complete (no execution plan needed; single-session delivery)
-5. ~~practice-convergence.plan.md~~ ✅ Complete (deleted; backup trees removed, all workstreams done)
+5. ~~continuity-and-surprise-practice-adoption.plan.md~~ ✅ Complete (archived in `archive/completed/` for reference)
+6. ~~practice-convergence.plan.md~~ ✅ Complete (deleted; backup trees removed, all workstreams done)
 
 ---
 
@@ -70,7 +74,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Reviewer gateway upgrade (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -91,9 +95,11 @@ Adjacent:
   CLK:  Clerk specialist capability                  ✅ COMPLETE
   CX:   Codex platform parity                       ✅ COMPLETE
   HC-0: Harness concepts baseline metrics            📋 PLANNED
+  CTY:  Continuity/session-handoff adoption          ✅ COMPLETE
+  PCI:  Incoming Practice integration                ✅ COMPLETE
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 🔄 ACTIVE
-  MCP+: MCP specialist upgrade (triplet + ext-apps)  📋 PLANNED
+  MCP+: MCP specialist upgrade (triplet + ext-apps)  ✅ COMPLETE
   EXP:  Express specialist capability                📋 PLANNED
   CYB:  Cyber security specialist capability         📋 PLANNED
   WAS:  Web/API security specialist capability       📋 PLANNED
@@ -103,7 +109,9 @@ Adjacent:
   PLN:  Planning specialist capability               📋 PLANNED
   TDD:  TDD specialist capability                    📋 PLANNED
   DVX:  Developer experience specialist              📋 PLANNED
-  GW:   Reviewer gateway upgrade                     📋 PLANNED
+  RWD:  Repair workflow wording hazard detection     📋 PLANNED
+  GW:   Reviewer gateway upgrade                     ⏭️ QUEUED
+  SSC:  Cross-vendor session sidecars                📋 STRATEGIC
   AGN:  Manifest-driven adapter generation           📋 PLANNED
   ACT:  Agent classification taxonomy                📋 STRATEGIC
   OPS:  Specialist operational tooling layer         📋 STRATEGIC (ADR-137)
@@ -158,7 +166,7 @@ Adjacent:
 - Convergence update (2026-03-04):
   - Strictness-specific ESLint convergence tasks (`no-console`, shared-config promotion work) are executed in
     [devx-strictness-convergence.plan.md](../developer-experience/active/devx-strictness-convergence.plan.md)
-  - Directory-complexity supporting constraints, depcruise/knip/qg integration, and staged `max-files-per-dir` activation are executed in
+  - Directory-complexity supporting constraints, depcruise/knip/`pnpm check` integration, and staged `max-files-per-dir` activation are executed in
     [directory-complexity-enablement.execution.plan.md](../developer-experience/current/directory-complexity-enablement.execution.plan.md)
 - Done when:
   - enforcement phases 0-5 are delivered with deterministic validation
@@ -219,6 +227,62 @@ Adjacent:
   - intentionally outside the numbered phase sequence
   - extends platform coverage to OpenAI Codex alongside Cursor and Claude Code
 
+### Adjacent — Continuity, Session Handoff, and Surprise Pipeline Adoption
+
+- Strategic plan:
+  [continuity-and-surprise-practice-adoption.plan.md](archive/completed/continuity-and-surprise-practice-adoption.plan.md)
+- Goal:
+  - treat continuity as a repo engineering property rather than a vague memory
+    claim
+  - replace `wrap-up` with lightweight `session-handoff`
+  - keep `consolidate-docs` as conditional deep convergence
+  - revive `GO` as a mid-session cadence
+  - use the MCP App lane as the evidence source
+- Status: ✅ Complete (archived reference)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - Wave 1 closed with an explicit `promote` decision on 2026-04-03
+  - the outgoing portable note and same-day follow-on Practice Core promotion
+    both landed after the evidence window closed
+
+### Adjacent — Incoming Practice Context Integration and Write-Back
+
+- Archived plan:
+  [agent-collaboration-incoming-practice-context-integration.plan.md](archive/completed/agent-collaboration-incoming-practice-context-integration.plan.md)
+- Goal:
+  - integrate the incoming `agent-collaboration` Practice Context batch below
+    Practice Core
+  - capture the net-new gate/workspace-adoption doctrine in local pattern and
+    engineering-doc surfaces
+  - repair the concrete workspace task-export gap that the incoming analysis
+    exposed
+  - create a focused repo-targeted write-back pack under
+    `.agent/practice-context/outgoing/agent-collaboration/`
+- Status: ✅ Complete (archived reference)
+- Notes:
+  - most hydration/self-sufficiency material was already promoted locally, so
+    this round intentionally keeps Practice Core unchanged
+  - consolidation confirmed no further Practice Core or ADR promotion was
+    needed, so the plan was archived on 2026-04-05
+
+### Adjacent — Cross-Vendor Session Sidecars
+
+- Strategic plan:
+  [cross-vendor-session-sidecars.plan.md](future/cross-vendor-session-sidecars.plan.md)
+- Goal:
+  - define a local-first canonical sidecar model for structured session
+    metadata across hook, wrapper, and importer adapters
+  - keep vendor adapters thin and treat injected session context as derived,
+    not authoritative
+  - support durable repo labels, plan refs, workflow checkpoints, and handoff
+    artefacts without depending on vendor-native session titles
+- Status: 📋 Strategic reference (`future/`)
+- Notes:
+  - complements hooks portability rather than replacing it
+  - not yet queued; promote when concrete multi-vendor session ergonomics
+    justify executable work
+  - adjacent to adapter generation, but not blocked on it
+
 ### Adjacent — Sentry Specialist Capability
 
 - Strategic plan:
@@ -240,7 +304,7 @@ Adjacent:
 ### Adjacent — MCP Specialist Upgrade (MCP+)
 
 - Strategic plan:
-  [mcp-specialist-upgrade.plan.md](future/mcp-specialist-upgrade.plan.md)
+  [mcp-specialist-upgrade.plan.md](archive/completed/mcp-specialist-upgrade.plan.md)
 - Goal:
   - upgrade existing `mcp-reviewer` from a general reviewer to a full ADR-129
     triplet (add skill, situational rule, live-spec-first doctrine)
@@ -248,12 +312,16 @@ Adjacent:
     preview, iframe/CSP, host-specific behaviour)
   - require live consultation of the MCP specification and ext-apps docs
   - the MCP spec evolves rapidly — agents need current guidance, not cached knowledge
-- Status: 📋 Planned (future/)
+- Status: ✅ COMPLETE (current/, reference)
+- Delivered:
+  - `.agent/skills/mcp-expert/SKILL.md` — canonical active workflow skill with doctrine hierarchy, tiered context, capability routing
+  - `.cursor/skills/mcp-expert/SKILL.md` and `.agents/skills/mcp-expert/SKILL.md` — platform wrappers
+  - MCP quick-triage (#9) and worked example added to `invoke-code-reviewers.md`
+  - Full wrapper parity audit across Cursor/Claude/Codex surfaces
+  - Validation evidence: `subagents:check`, `portability:check`, `markdownlint:root` all passing
 - Notes:
-  - unlike ES/Clerk/Sentry, this upgrades an existing reviewer rather than creating
-    from scratch
-  - ext-apps scope may warrant a sub-specialist or a dedicated section within the
-    MCP skill, depending on surface area at implementation time
+  - unlike ES/Clerk/Sentry, this upgraded an existing reviewer rather than creating from scratch
+  - ext-apps remains within MCP specialist scope
   - intentionally outside the numbered phase sequence
 
 ### Adjacent — Express Specialist Capability
@@ -267,7 +335,7 @@ Adjacent:
   - scope includes middleware patterns, error handling, routing, req/res typing,
     and Vercel deployment specifics
   - treat Express 5.x on Vercel as the default deployment context
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - fourth instantiation of the domain specialist triplet pattern (ADR-129)
   - intentionally outside the numbered phase sequence
@@ -285,7 +353,7 @@ Adjacent:
     supply-chain posture, secret lifecycle, and cross-system security trade-offs
   - explicitly complements rather than replaces the existing
     `security-reviewer`, which remains the practical default security specialist
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - broad-remit vs narrow-remit is a scope distinction, not a review-depth
@@ -305,7 +373,7 @@ Adjacent:
   - explicitly complements the broad cyber security specialist, the practical
     `security-reviewer`, and framework specialists such as Express, Clerk, and
     MCP
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - narrow-remit does not imply shallow review; this specialist may still need
@@ -323,7 +391,7 @@ Adjacent:
     retention, redaction, and trust posture
   - establish a privacy lens that is distinct from exploitability-focused
     security review
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - broad-remit vs narrow-remit is a scope distinction, not a review-depth
@@ -343,7 +411,7 @@ Adjacent:
     and data-rights surfaces
   - complement both the broad privacy specialist and the narrow web/API
     security specialist
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - narrow-remit does not imply shallow review; this specialist may still need
@@ -369,7 +437,7 @@ Adjacent:
     don't construct"; "env contracts resolve at startup, not at call site"
   - authority source is the README and source of each internal package, not
     external documentation
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - the repo's own avatar — knows every internal package, every pattern,
     every gotcha, and how they compose
@@ -392,7 +460,7 @@ Adjacent:
   - enforce: correct template usage, required sections, phase gates, cross-reference
     maintenance, plan-vs-docs separation
   - authority source is plan templates, collection READMEs, and practice-core docs
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - complements docs-adr-reviewer (which owns ADR content) — this specialist
@@ -412,7 +480,7 @@ Adjacent:
     test-reviewer audits the result AFTER
   - covers the Red-Green-Refactor sequence at every level, anti-patterns
     (vi.mock, vi.stubGlobal, skipped tests), and test-level selection
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - refines and operationalises `.agent/directives/testing-strategy.md`
@@ -439,7 +507,7 @@ Adjacent:
     feel good to use?"
   - AI agent DX is a first-class concern (clear errors, structured output,
     deterministic behaviour)
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - intentionally outside the numbered phase sequence
   - complements OOCE (correctness) and onboarding-reviewer (first-time
@@ -449,7 +517,7 @@ Adjacent:
 ### Adjacent — Reviewer Gateway Upgrade (GW)
 
 - Strategic plan:
-  [reviewer-gateway-upgrade.plan.md](future/reviewer-gateway-upgrade.plan.md)
+  [reviewer-gateway-upgrade.plan.md](current/reviewer-gateway-upgrade.plan.md)
 - Goal:
   - upgrade `code-reviewer` from a code quality reviewer that also triages
     to a Reviewer Gateway that also does baseline code quality
@@ -459,7 +527,7 @@ Adjacent:
   - integrate review depth selection (deep vs focused per specialist)
   - add review coverage tracking across a session
   - rename directive, rule, and adapters (coordinated with taxonomy plan)
-- Status: 📋 Planned (future/)
+- Status: ⏭️ QUEUED (current/)
 - Notes:
   - the gateway's role has outgrown its `code-reviewer` name
   - execution shares rename mechanics with the Agent Classification Taxonomy
@@ -478,7 +546,7 @@ Adjacent:
   - eliminates drift between canonical templates and platform adapters
   - reduces new specialist creation from 4–6 files to 1 manifest entry
   - makes the taxonomy rename (WS3) trivial — update manifest, regenerate
-- Status: 📋 Planned (future/)
+- Status: 📋 PLANNED (future/)
 - Notes:
   - prerequisite optimisation for the taxonomy rename
   - at 25 specialists × 4 platforms = 100+ adapter files, manual maintenance
@@ -538,7 +606,7 @@ Adjacent:
 - Goal:
   - evaluate harness-engineering concepts (docs freshness, entropy cleanup, quality scoring)
   - capture baseline metrics for adoption candidates
-- Status: 📋 Planned
+- Status: 📋 PLANNED
 - Done when:
   - baseline metrics captured for docs freshness, entropy, and quality scoring
   - adoption/rejection decision recorded for each harness concept
@@ -605,8 +673,8 @@ specialists, not deferred.
 
 **Domain specialists (ADR-129 triplets, invoked on domain signal):**
 
-- elasticsearch-reviewer ✅, clerk-reviewer ✅, sentry specialist 🔄,
-  mcp specialist 📋, express specialist 📋, cyber security specialist 📋,
+- elasticsearch-reviewer ✅, clerk-reviewer ✅, mcp-reviewer ✅ (triplet complete),
+  sentry specialist 🔄, express specialist 📋, cyber security specialist 📋,
   web/API security specialist 📋, privacy specialist 📋,
   web/API GDPR specialist 📋, ooce specialist 📋
 
@@ -617,7 +685,7 @@ specialists, not deferred.
 **Situational (on-demand, not tied to change profile):**
 
 - release-readiness-reviewer, ground-truth-designer, subagent-architect,
-  onboarding-reviewer, mcp-reviewer (current, pre-upgrade)
+  onboarding-reviewer
 
 ---
 
@@ -633,17 +701,9 @@ stable across at least two delivery cycles.
 
 ## Quality Gates
 
-Run from repo root, one at a time:
+Use the canonical repository gate commands from repo root:
 
 ```bash
-pnpm sdk-codegen
-pnpm build
-pnpm type-check
-pnpm lint:fix
-pnpm format:root
-pnpm markdownlint:root
-pnpm test
-pnpm test:e2e
-pnpm test:ui
-pnpm smoke:dev:stub
+pnpm check
+pnpm fix
 ```

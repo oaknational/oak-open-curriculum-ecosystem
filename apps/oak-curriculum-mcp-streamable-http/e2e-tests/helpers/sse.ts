@@ -8,9 +8,9 @@ const JsonRpcEnvelopeSchema = z.object({
 export type JsonRpcEnvelope = z.infer<typeof JsonRpcEnvelopeSchema>;
 
 /**
- * Schema for tool call results per OpenAI Apps SDK reference.
+ * Schema for tool call results per MCP Apps spec.
  *
- * Per https://developers.openai.com/apps-sdk/reference#tool-results:
+ * Per MCP Apps specification:
  * - `content`: Model AND widget see this (human-readable summary)
  * - `structuredContent`: Model AND widget see this (FULL data for reasoning)
  * - `_meta`: Widget ONLY sees this (additional widget metadata)

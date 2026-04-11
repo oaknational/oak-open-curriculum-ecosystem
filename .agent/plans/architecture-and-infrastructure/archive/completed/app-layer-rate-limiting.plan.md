@@ -16,7 +16,7 @@ todos:
   - id: phase-2-verify
     content: "Phase 2: Quality gates, CodeQL verification, documentation."
     status: completed
-    note: "ADR-144 written, all quality gates green, 6 reviewers invoked."
+    note: "ADR-158 written, all quality gates green, 6 reviewers invoked."
 ---
 
 # Application-Layer Rate Limiting for MCP HTTP Routes

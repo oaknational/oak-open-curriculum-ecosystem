@@ -1,18 +1,5 @@
 /**
  * Helpers for building Elasticsearch bulk operations.
- *
- * This module provides the public API for bulk indexing:
- * - Unit and rollup document creation
- * - Lesson material fetching
- * - Context validation
- *
- * Implementation is split across focused modules:
- * - unit-processing.ts: Unit summary fetching and document creation
- * - lesson-materials.ts: Lesson transcript and summary fetching
- *
- * All SDK methods return `Result<T, SdkFetchError>` per ADR-088.
- * KS4 metadata denormalisation is handled via UnitContextMap per ADR-080.
- *
  * @see ADR-080 KS4 Metadata Denormalisation Strategy
  * @see ADR-088 Result Pattern for Explicit Error Handling
  */
@@ -37,10 +24,6 @@ import { processUnitSummary } from './unit-processing';
 // Re-export from split modules for backwards compatibility
 export { processUnitSummary } from './unit-processing';
 export { fetchLessonMaterials, type FetchContext } from './lesson-materials';
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
 
 /** Extract sequence IDs from a unit summary. */
 export function extractUnitSequenceIds(summary: SearchUnitSummary): string[] | undefined {
@@ -69,14 +52,89 @@ export function ensureUnitSummaryMatchesContext(
   }
 }
 
-// ============================================================================
-// Document Building
-// ============================================================================
+function shouldLogUnitSummaryProgress(unitIndex: number, totalUnits: number): boolean {
+  return unitIndex % 10 === 1 || unitIndex === totalUnits;
+}
 
-/**
- * Builds unit documents and returns summaries for lesson derivation.
- */
-// eslint-disable-next-line max-lines-per-function -- Core orchestration
+function recordSkippedUnitSummary(params: {
+  unit: { unitSlug: string; unitTitle: string };
+  subject: SearchSubjectSlug;
+  keyStage: KeyStage;
+  dataIntegrityReport: DataIntegrityReport;
+}): void {
+  ingestLogger.warn(
+    formatIngestionEvent(
+      createUnitSkippedEvent({
+        unitSlug: params.unit.unitSlug,
+        subject: params.subject,
+        keyStage: params.keyStage,
+        reason: 'summary_unavailable',
+      }),
+    ),
+  );
+
+  params.dataIntegrityReport.skippedUnits.push({
+    unitSlug: params.unit.unitSlug,
+    unitTitle: params.unit.unitTitle,
+    subject: params.subject,
+    keyStage: params.keyStage,
+  });
+}
+
+interface UnitSummaryBatch {
+  unitSummaries: Map<string, SearchUnitSummary>;
+  unitOps: BulkOperations;
+  skippedCount: number;
+}
+
+async function processUnitSummaries(
+  client: OakClient,
+  units: readonly { unitSlug: string; unitTitle: string }[],
+  subject: SearchSubjectSlug,
+  ks: KeyStage,
+  subjectProgrammesUrl: string,
+  unitContextMap: UnitContextMap,
+  lessonsByUnit: ReadonlyMap<string, readonly string[]> | undefined,
+  dataIntegrityReport: DataIntegrityReport,
+): Promise<UnitSummaryBatch> {
+  const unitSummaries = new Map<string, SearchUnitSummary>();
+  const unitOps: BulkOperations = [];
+  let skippedCount = 0,
+    unitIndex = 0;
+  for (const unit of units) {
+    unitIndex++;
+    if (shouldLogUnitSummaryProgress(unitIndex, units.length)) {
+      ingestLogger.debug('Fetching unit summaries', {
+        progress: `${unitIndex}/${units.length}`,
+        subject,
+        keyStage: ks,
+      });
+    }
+    const result = await processUnitSummary(
+      client,
+      unit,
+      subject,
+      ks,
+      subjectProgrammesUrl,
+      unitContextMap,
+      lessonsByUnit,
+    );
+    if (result === null) {
+      skippedCount++;
+      recordSkippedUnitSummary({
+        unit,
+        subject,
+        keyStage: ks,
+        dataIntegrityReport,
+      });
+      continue;
+    }
+    unitSummaries.set(result.summary.unitSlug, result.summary);
+    unitOps.push(...result.ops);
+  }
+  return { unitSummaries, unitOps, skippedCount };
+}
+
 export async function buildUnitDocuments(
   client: OakClient,
   units: readonly { unitSlug: string; unitTitle: string }[],
@@ -97,52 +155,16 @@ export async function buildUnitDocuments(
     ),
   );
 
-  const unitSummaries = new Map<string, SearchUnitSummary>();
-  const unitOps: BulkOperations = [];
-  let skippedCount = 0;
-
-  let unitIndex = 0;
-  for (const unit of units) {
-    unitIndex++;
-    if (unitIndex % 10 === 1 || unitIndex === units.length) {
-      ingestLogger.debug('Fetching unit summaries', {
-        progress: `${unitIndex}/${units.length}`,
-        subject,
-        keyStage: ks,
-      });
-    }
-    const result = await processUnitSummary(
-      client,
-      unit,
-      subject,
-      ks,
-      subjectProgrammesUrl,
-      unitContextMap,
-      lessonsByUnit,
-    );
-    if (result === null) {
-      skippedCount++;
-      ingestLogger.warn(
-        formatIngestionEvent(
-          createUnitSkippedEvent({
-            unitSlug: unit.unitSlug,
-            subject,
-            keyStage: ks,
-            reason: 'summary_unavailable',
-          }),
-        ),
-      );
-      dataIntegrityReport.skippedUnits.push({
-        unitSlug: unit.unitSlug,
-        unitTitle: unit.unitTitle,
-        subject,
-        keyStage: ks,
-      });
-      continue;
-    }
-    unitSummaries.set(result.summary.unitSlug, result.summary);
-    unitOps.push(...result.ops);
-  }
+  const { unitSummaries, unitOps, skippedCount } = await processUnitSummaries(
+    client,
+    units,
+    subject,
+    ks,
+    subjectProgrammesUrl,
+    unitContextMap,
+    lessonsByUnit,
+    dataIntegrityReport,
+  );
 
   ingestLogger.info(
     formatIngestionEvent(
@@ -157,6 +179,16 @@ export async function buildUnitDocuments(
   );
 
   return { unitSummaries, unitOps };
+}
+
+function requireUnitOakUrl(summary: SearchUnitSummary, subject: string, keyStage: string): string {
+  if (!summary.oakUrl) {
+    throw new Error(
+      `Missing oakUrl for unit "${summary.unitSlug}" in ${subject}/${keyStage} — ` +
+        `API response augmentation should have set this.`,
+    );
+  }
+  return summary.oakUrl;
 }
 
 /**
@@ -181,6 +213,7 @@ export function buildRollupDocuments(
   const ops: BulkOperations = [];
   for (const summary of unitSummaries.values()) {
     ensureUnitSummaryMatchesContext(summary, subject, keyStage);
+    const unitUrl = requireUnitOakUrl(summary, subject, keyStage);
     const snippets = rollupSnippets.get(summary.unitSlug) ?? [];
     const rollupDoc = createRollupDocument({
       summary,
@@ -188,6 +221,7 @@ export function buildRollupDocuments(
       subject,
       keyStage,
       subjectProgrammesUrl,
+      unitUrl,
       unitContextMap,
       lessonsByUnit,
     });
@@ -197,17 +231,13 @@ export function buildRollupDocuments(
     );
   }
 
-  ingestLogger.info(
-    formatIngestionEvent(
-      createPhaseEndEvent('rollups', {
-        subject,
-        keyStage,
-        indexed: ops.length / 2,
-        skipped: 0,
-        durationMs: Date.now() - startTime,
-      }),
-    ),
-  );
-
+  const endEvent = createPhaseEndEvent('rollups', {
+    subject,
+    keyStage,
+    indexed: ops.length / 2,
+    skipped: 0,
+    durationMs: Date.now() - startTime,
+  });
+  ingestLogger.info(formatIngestionEvent(endEvent));
   return ops;
 }

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- Data configuration for all 68 subject×keystage combinations */
 /**
  * Static curriculum pattern configuration.
  *

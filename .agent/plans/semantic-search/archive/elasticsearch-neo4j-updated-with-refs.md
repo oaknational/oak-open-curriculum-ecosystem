@@ -4,25 +4,25 @@
 
 Elasticsearch is **not a native graph database** (no Cypher/Gremlin-style traversal engine, no built-in shortest-path operator, no first-class adjacency storage optimised for deep traversals), but it can support **graph-shaped outcomes** through two complementary approaches:
 
-**Elastic Graph (official Graph analytics)** builds an *implicit*, **term-to-term association graph** over your indexed documents. Vertices are “terms in the index”; edges summarise co-occurrence evidence from sampled top-matching documents and can be filtered by statistical “significance” to prioritise non-obvious connections. It is delivered as the **Graph explore API** (`POST /{index}/_graph/explore`) plus an interactive **Kibana Graph** UI, and it works “out of the box” on existing indices without storing explicit edges. citeturn0search1turn25view0turn11search9
+**Elastic Graph (official Graph analytics)** builds an *implicit*, **term-to-term association graph** over your indexed documents. Vertices are “terms in the index”; edges summarise co-occurrence evidence from sampled top-matching documents and can be filtered by statistical “significance” to prioritise non-obvious connections. It is delivered as the **Graph explore API** (`POST /{index}/_graph/explore`) plus an interactive **Kibana Graph** UI, and it works “out of the box” on existing indices without storing explicit edges. citeturn0search1turn25view0turn11search9
 
-**Explicit knowledge-graph modelling in Elasticsearch** is an engineering pattern rather than a single built-in feature: you model **entities and relationships as documents** (e.g., nodes index + edges/triples index), enrich and normalise them at ingest time, and perform traversal-like behaviour via **iterative search queries** in application logic. Elastic’s own Search Labs “Graph RAG” guidance describes building and dynamically pruning query-specific subgraphs while storing triplets in Elasticsearch, which is a practical blueprint for KG-enhanced retrieval. citeturn4search0
+**Explicit knowledge-graph modelling in Elasticsearch** is an engineering pattern rather than a single built-in feature: you model **entities and relationships as documents** (e.g., nodes index + edges/triples index), enrich and normalise them at ingest time, and perform traversal-like behaviour via **iterative search queries** in application logic. Elastic’s own Search Labs “Graph RAG” guidance describes building and dynamically pruning query-specific subgraphs while storing triplets in Elasticsearch, which is a practical blueprint for KG-enhanced retrieval. citeturn4search0
 
-For **knowledge-graph and semantic search workloads**, Elastic’s strongest primitives are its **ingest pipelines** (including the **inference processor** for ML/NLP at ingest), **enrich processors** for reference-data joins, and **vector/sparse semantic search** (dense vectors, ELSER sparse embeddings, and the higher-level `semantic_text` field type). These provide a robust toolkit for entity extraction, canonicalisation, and hybrid retrieval—even if graph traversal remains application-driven. citeturn2search4turn5search0turn2search1turn2search3turn3search1turn20search0turn3search0
+For **knowledge-graph and semantic search workloads**, Elastic’s strongest primitives are its **ingest pipelines** (including the **inference processor** for ML/NLP at ingest), **enrich processors** for reference-data joins, and **vector/sparse semantic search** (dense vectors, ELSER sparse embeddings, and the higher-level `semantic_text` field type). These provide a robust toolkit for entity extraction, canonicalisation, and hybrid retrieval—even if graph traversal remains application-driven. citeturn2search4turn5search0turn2search1turn2search3turn3search1turn20search0turn3search0
 
 From a product/solution perspective:
 
-- **Enterprise Search (App Search / Workplace Search)** is in transition. Elastic’s Enterprise Search docs recommend that new users prefer “native Elasticsearch tools” over the standalone App Search / Workplace Search products, and Elastic provides a migration guide stating **Enterprise Search will no longer be available in Elastic 9.0+**. citeturn1search0turn1search8  
-- **Kibana Maps** supports relationship-like exploration through multi-layer querying and **term joins** (client-side joining of a terms aggregation result to vector features) and is often used to situate entity relationships geographically. citeturn1search2turn10search14  
-- **Elastic Security** includes graph-shaped investigative tooling (process/event visualisations such as **Visual event analyzer** and **Session View**) and entity-centric analytics such as **entity risk scoring**—useful “graph use cases” even though they are not exposed as a general graph query engine. citeturn1search3turn10search0turn10search1
+- **Enterprise Search (App Search / Workplace Search)** is in transition. Elastic’s Enterprise Search docs recommend that new users prefer “native Elasticsearch tools” over the standalone App Search / Workplace Search products, and Elastic provides a migration guide stating **Enterprise Search will no longer be available in Elastic 9.0+**. citeturn1search0turn1search8  
+- **Kibana Maps** supports relationship-like exploration through multi-layer querying and **term joins** (client-side joining of a terms aggregation result to vector features) and is often used to situate entity relationships geographically. citeturn1search2turn10search14  
+- **Elastic Security** includes graph-shaped investigative tooling (process/event visualisations such as **Visual event analyzer** and **Session View**) and entity-centric analytics such as **entity risk scoring**—useful “graph use cases” even though they are not exposed as a general graph query engine. citeturn1search3turn10search0turn10search1
 
-Licensing and deployment choices matter: the Elastic subscription matrix shows **Graph exploration** is **not available in the Basic tier** (it appears only in higher tiers), and several semantic/AI features explicitly depend on licence state (e.g., `semantic_text` can cause indexing/reindexing failures if the inference API is not licensed). citeturn14view0turn18view0turn3search1 Graph docs are marked **“Serverless Unavailable”**, so if you plan to rely on Kibana Graph in Elastic Cloud Serverless, validate feature availability early. citeturn21search3turn23search9turn23search15
+Licensing and deployment choices matter: the Elastic subscription matrix shows **Graph exploration** is **not available in the Basic tier** (it appears only in higher tiers), and several semantic/AI features explicitly depend on licence state (e.g., `semantic_text` can cause indexing/reindexing failures if the inference API is not licensed). citeturn14view0turn18view0turn3search1 Graph docs are marked **“Serverless Unavailable”**, so if you plan to rely on Kibana Graph in Elastic Cloud Serverless, validate feature availability early. citeturn21search3turn23search9turn23search15
 
 **Recommendations (high-level):**
 
-- Use **Elasticsearch + Elastic Graph** when your “graph” requirement is primarily **association discovery** (co-occurrence, shared attributes, recommendation-like exploration) and you benefit from Elastic’s relevance ranking, filtering, and operational scale. citeturn0search1turn25view0  
-- Use **Elasticsearch as a KG store** when your main goal is **search + semantic retrieval** over entity/relationship documents, and traversal needs can be satisfied with bounded application-driven expansion (GraphRAG-style subgraph building). citeturn4search0turn19search2  
-- Choose a **dedicated graph database** (Neo4j/JanusGraph/TigerGraph) when you need **native variable-length traversal, shortest path, complex pattern matching, or graph algorithms** as first-class operations; integrate Elasticsearch for best-in-class text/semantic retrieval and ranking. citeturn8search16turn8search0turn8search2turn22search3turn8search1
+- Use **Elasticsearch + Elastic Graph** when your “graph” requirement is primarily **association discovery** (co-occurrence, shared attributes, recommendation-like exploration) and you benefit from Elastic’s relevance ranking, filtering, and operational scale. citeturn0search1turn25view0  
+- Use **Elasticsearch as a KG store** when your main goal is **search + semantic retrieval** over entity/relationship documents, and traversal needs can be satisfied with bounded application-driven expansion (GraphRAG-style subgraph building). citeturn4search0turn19search2  
+- Choose a **dedicated graph database** (Neo4j/JanusGraph/TigerGraph) when you need **native variable-length traversal, shortest path, complex pattern matching, or graph algorithms** as first-class operations; integrate Elasticsearch for best-in-class text/semantic retrieval and ranking. citeturn8search16turn8search0turn8search2turn22search3turn8search1
 
 Key source links (real websites) used throughout this report:
 
@@ -48,27 +48,27 @@ HNSW paper (arXiv):            https://arxiv.org/abs/1603.09320
 Elastic’s graph story is distributed across (a) **Graph analytics**, (b) **search/enterprise search tooling**, (c) **visualisations (Graph/Maps/Vega)**, and (d) **solution-specific UIs (Security)**.
 
 **Graph API and Kibana Graph: what it is (and what it is not)**  
-Elastic Graph is defined by Elastic as “a network of related terms in the index,” where terms are **vertices** and **connections** summarise documents containing both terms. This is a term association model rather than an explicit entity-edge model. citeturn0search1turn0search13 The core API is the **Graph explore API** (`POST /{index}/_graph/explore`), intended to “extract and summarise information about the documents and terms” and to “spider out” across multiple hops by nesting `connections`. citeturn25view0turn6search11
+Elastic Graph is defined by Elastic as “a network of related terms in the index,” where terms are **vertices** and **connections** summarise documents containing both terms. This is a term association model rather than an explicit entity-edge model. citeturn0search1turn0search13 The core API is the **Graph explore API** (`POST /{index}/_graph/explore`), intended to “extract and summarise information about the documents and terms” and to “spider out” across multiple hops by nesting `connections`. citeturn25view0turn6search11
 
-Operationally, the explore API is **enabled by default**, and Elastic documents how to disable both the API and Kibana Graph UI using `xpack.graph.enabled: false`. citeturn25view0 Kibana persists graph workspaces as saved objects in the `.kibana` index, storing both configuration and (optionally) the data currently visualised (vertices/connections). citeturn21search3
+Operationally, the explore API is **enabled by default**, and Elastic documents how to disable both the API and Kibana Graph UI using `xpack.graph.enabled: false`. citeturn25view0 Kibana persists graph workspaces as saved objects in the `.kibana` index, storing both configuration and (optionally) the data currently visualised (vertices/connections). citeturn21search3
 
 **Enterprise Search, App Search, Workplace Search: relevance to knowledge graphs**  
-Enterprise Search historically offered packaged “enterprise search” capabilities (APIs/UIs, connectors, crawler) and two standalone products: **App Search** and **Workplace Search**. Elastic’s Enterprise Search docs still describe Enterprise Search as an additional service enabling connectors, the web crawler, and App Search / Workplace Search. citeturn1search14turn1search4 However, the documentation now explicitly recommends that **new users use native Elasticsearch tools rather than standalone App Search / Workplace Search**, and Elastic provides a migration guide stating **Enterprise Search is not available in Elastic 9.0+**. citeturn1search0turn1search8turn1search1
+Enterprise Search historically offered packaged “enterprise search” capabilities (APIs/UIs, connectors, crawler) and two standalone products: **App Search** and **Workplace Search**. Elastic’s Enterprise Search docs still describe Enterprise Search as an additional service enabling connectors, the web crawler, and App Search / Workplace Search. citeturn1search14turn1search4 However, the documentation now explicitly recommends that **new users use native Elasticsearch tools rather than standalone App Search / Workplace Search**, and Elastic provides a migration guide stating **Enterprise Search is not available in Elastic 9.0+**. citeturn1search0turn1search8turn1search1
 
-For KG work, what matters is the direction: “enterprise search” capabilities (connectors, relevance tuning, retrieval, permissions) are increasingly expressed as **native Elasticsearch + Kibana** features rather than a separate server. citeturn1search7turn1search0
+For KG work, what matters is the direction: “enterprise search” capabilities (connectors, relevance tuning, retrieval, permissions) are increasingly expressed as **native Elasticsearch + Kibana** features rather than a separate server. citeturn1search7turn1search0
 
 **Elastic Maps: graph-adjacent joins and relationship visualisation**  
-Kibana Maps is not a graph analytics engine, but it enables relationship exploration by combining layers and filtering across them. citeturn10search14 A key “relationship” primitive is the **term join**: a shared-key join between vector features (“left source”) and a **terms aggregation** result (“right source”). citeturn1search2turn10search2 This can be used for geo-enriched entity views (e.g., entity activity by region) and is often complementary to entity graphs.
+Kibana Maps is not a graph analytics engine, but it enables relationship exploration by combining layers and filtering across them. citeturn10search14 A key “relationship” primitive is the **term join**: a shared-key join between vector features (“left source”) and a **terms aggregation** result (“right source”). citeturn1search2turn10search2 This can be used for geo-enriched entity views (e.g., entity activity by region) and is often complementary to entity graphs.
 
 **Machine learning integrations: inference in ingest and semantic retrieval**  
-Elastic supports adding an **inference processor** to ingest pipelines to apply deployed NLP models at index time (e.g., NER), and provides a worked NER example that deploys a Hugging Face NER model, tests it, and uses it in an ingest pipeline. citeturn2search0turn2search1turn2search4 Elastic also documents ELSER (Elastic Learned Sparse Encoder) as a semantic retrieval model with explicit subscription requirements and deployment options via Elastic Inference Service. citeturn20search0turn20search1 These are foundational for KG-style entity extraction and semantic search.
+Elastic supports adding an **inference processor** to ingest pipelines to apply deployed NLP models at index time (e.g., NER), and provides a worked NER example that deploys a Hugging Face NER model, tests it, and uses it in an ingest pipeline. citeturn2search0turn2search1turn2search4 Elastic also documents ELSER (Elastic Learned Sparse Encoder) as a semantic retrieval model with explicit subscription requirements and deployment options via Elastic Inference Service. citeturn20search0turn20search1 These are foundational for KG-style entity extraction and semantic search.
 
 **Elastic Security: “graph uses” in investigation and entity analytics**  
 Elastic Security includes graph-shaped investigative tools such as:
 
-- **Visual event analyzer**, described by Elastic as a “process-based visual analyzer” showing a graphical timeline of processes around an alert. citeturn1search3  
-- **Session View**, which organises Linux process data in a tree-like structure by parentage and time of execution. citeturn10search0  
-- **Entity analytics** features like **entity risk scoring**, which is explicitly an entity-centric analytics feature for hosts/users/services risk posture monitoring. citeturn10search1turn10search5  
+- **Visual event analyzer**, described by Elastic as a “process-based visual analyzer” showing a graphical timeline of processes around an alert. citeturn1search3  
+- **Session View**, which organises Linux process data in a tree-like structure by parentage and time of execution. citeturn10search0  
+- **Entity analytics** features like **entity risk scoring**, which is explicitly an entity-centric analytics feature for hosts/users/services risk posture monitoring. citeturn10search1turn10search5  
 
 These are practical “graph” applications (process trees, entity-centric correlation) even though they do not expose arbitrary traversal and path queries like a graph DB would.
 
@@ -77,29 +77,29 @@ These are practical “graph” applications (process trees, entity-centric corr
 A knowledge graph typically requires: (a) entity extraction/identification, (b) relationship modelling, (c) schema/ontology governance and potentially reasoning, and (d) retrieval (lexical + semantic) across entities/relations. Elastic covers (a) and (d) strongly, offers workable patterns for (b), and is comparatively weak for (c).
 
 **Entity extraction (NER) and enrichment**  
-Elastic’s recommended path for entity extraction is ingest-time NLP inference. The “Named entity recognition” example shows how to deploy and use an NER model and add it to an inference ingest pipeline. citeturn2search1 The underlying processor is the **inference processor**, which applies a pre-trained NLP model (or trained model) during ingest. citeturn2search4turn2search0
+Elastic’s recommended path for entity extraction is ingest-time NLP inference. The “Named entity recognition” example shows how to deploy and use an NER model and add it to an inference ingest pipeline. citeturn2search1 The underlying processor is the **inference processor**, which applies a pre-trained NLP model (or trained model) during ingest. citeturn2search4turn2search0
 
-For KG pipelines, entity extraction is usually followed by **canonicalisation** (mapping “UK”, “United Kingdom”, “Britain” → one canonical entity ID). Elastic’s **enrich processor** supports ingest-time enrichment from another index (reference data). citeturn5search1turn5search4 This is a natural fit for entity dictionaries and controlled vocabularies.
+For KG pipelines, entity extraction is usually followed by **canonicalisation** (mapping “UK”, “United Kingdom”, “Britain” → one canonical entity ID). Elastic’s **enrich processor** supports ingest-time enrichment from another index (reference data). citeturn5search1turn5search4 This is a natural fit for entity dictionaries and controlled vocabularies.
 
 **Relationship modelling: implicit vs explicit**  
 Elastic supports two relationship paradigms:
 
-- **Implicit relationships (Elastic Graph):** relationships are inferred from document co-occurrence among indexed terms. You configure vertex fields and connection fields; the API builds a term graph, optionally filtered by significance. citeturn0search1turn25view0  
-- **Explicit relationships (KG-in-ES):** you model relationships explicitly as documents (edge/triple records). Elastic’s own GraphRAG guidance describes storing graph triplets directly in Elasticsearch and dynamically generating subgraphs for retrieval. citeturn4search0  
+- **Implicit relationships (Elastic Graph):** relationships are inferred from document co-occurrence among indexed terms. You configure vertex fields and connection fields; the API builds a term graph, optionally filtered by significance. citeturn0search1turn25view0  
+- **Explicit relationships (KG-in-ES):** you model relationships explicitly as documents (edge/triple records). Elastic’s own GraphRAG guidance describes storing graph triplets directly in Elasticsearch and dynamically generating subgraphs for retrieval. citeturn4search0  
 
 The second approach is the usual way to represent a true (explicit) KG in Elasticsearch, but traversal is not a native engine feature (it is orchestrated in application logic).
 
 **Schema/ontology and reasoning support: limited in Elasticsearch**  
-Elasticsearch provides mappings, index templates, and analyzers as schema tooling; it does not provide RDF/OWL semantics, SPARQL, or built-in reasoning. In contrast, RDF knowledge-graph platforms are explicitly designed around triples and reasoning. W3C RDF defines the RDF data model, and SPARQL 1.1 defines a query language for RDF graphs. citeturn9search0turn8search3 Systems like Ontotext GraphDB document forward-chaining reasoning and total materialisation strategies, and Stardog documents reasoning integrated into SPARQL evaluation. citeturn9search10turn9search9turn9search13
+Elasticsearch provides mappings, index templates, and analyzers as schema tooling; it does not provide RDF/OWL semantics, SPARQL, or built-in reasoning. In contrast, RDF knowledge-graph platforms are explicitly designed around triples and reasoning. W3C RDF defines the RDF data model, and SPARQL 1.1 defines a query language for RDF graphs. citeturn9search0turn8search3 Systems like Ontotext GraphDB document forward-chaining reasoning and total materialisation strategies, and Stardog documents reasoning integrated into SPARQL evaluation. citeturn9search10turn9search9turn9search13
 
 Implication: Elasticsearch can store KG-shaped data, but **ontology-driven inference and constraint validation must be external** (ETL/ML layer, application logic, or a dedicated KG platform).
 
 **Semantic search: embeddings, vectors, and hybrid retrieval**  
 Elastic offers multiple semantic retrieval options:
 
-- **Dense vector search** using `dense_vector` fields (primarily for kNN search); dense vectors do **not support aggregations or sorting**, so you preserve structured fields for analytics downstream. citeturn2search3  
-- **Sparse semantic retrieval** via ELSER and `sparse_vector`. Elastic explicitly states `sparse_vector` is the field type used with ELSER mappings, and `text_expansion` converts query text to token-weight pairs to query sparse vectors or rank-features. citeturn3search0turn3search4turn20search0  
-- The higher-level **`semantic_text`** field type, which aims to automate much of the mapping/ingest/chunking work for semantic search; Elastic warns that using `semantic_text` without an appropriate licence can cause indexing/reindexing to fail because it typically calls the inference API. citeturn3search1turn3search17  
+- **Dense vector search** using `dense_vector` fields (primarily for kNN search); dense vectors do **not support aggregations or sorting**, so you preserve structured fields for analytics downstream. citeturn2search3  
+- **Sparse semantic retrieval** via ELSER and `sparse_vector`. Elastic explicitly states `sparse_vector` is the field type used with ELSER mappings, and `text_expansion` converts query text to token-weight pairs to query sparse vectors or rank-features. citeturn3search0turn3search4turn20search0  
+- The higher-level **`semantic_text`** field type, which aims to automate much of the mapping/ingest/chunking work for semantic search; Elastic warns that using `semantic_text` without an appropriate licence can cause indexing/reindexing to fail because it typically calls the inference API. citeturn3search1turn3search17  
 
 These semantic primitives are directly useful in KG scenarios: you can semantically retrieve **entity nodes**, **relationship evidence**, or **document passages** before building an explicit subgraph (GraphRAG pattern).
 
@@ -107,8 +107,8 @@ These semantic primitives are directly useful in KG scenarios: you can semantica
 Elastic does not provide native KG federation; linking is typically achieved through:
 
 - storing external KB IDs/IRIs in entity documents, and/or  
-- Kibana Graph “drilldown URLs” and similar UI actions, which allow users to jump from a vertex term to an external system (Elastic describes drilldown configuration as part of Graph settings). citeturn21search3  
-- connectors replicating content from external systems into Elastic as searchable indices (useful when you want to treat external KB documents as part of retrieval). citeturn7search0turn7search4  
+- Kibana Graph “drilldown URLs” and similar UI actions, which allow users to jump from a vertex term to an external system (Elastic describes drilldown configuration as part of Graph settings). citeturn21search3  
+- connectors replicating content from external systems into Elastic as searchable indices (useful when you want to treat external KB documents as part of retrieval). citeturn7search0turn7search4  
 
 ## Data modelling and indexing strategies for graph and KG workloads on Elasticsearch
 
@@ -125,25 +125,25 @@ The modelling decision that determines success or failure is whether you treat E
 
 - `kg_entities` index: one document per canonical entity (plus aliases, metadata, embeddings).  
 - `kg_relations` index: one document per relationship/triple/edge (subject_id, predicate, object_id, provenance, confidence, optional embeddings for evidence text).  
-This aligns with Elastic’s own GraphRAG approach of storing triplets and dynamically extracting subgraphs. citeturn4search0
+This aligns with Elastic’s own GraphRAG approach of storing triplets and dynamically extracting subgraphs. citeturn4search0
 
 **Why Elastic recommends denormalisation over joins**  
-Elasticsearch’s join features exist, but the platform is explicit about trade-offs: the **join field** “shouldn’t be used like joins in a relational database”; each `has_child`/`has_parent` query adds a “significant tax” to performance and can trigger global ordinals. Elastic says the join field only makes sense in certain one-to-many situations where one entity outnumbers the other (e.g., products and offers). citeturn19search0  
-Nested fields are also “typically expensive,” and Elastic even recommends `flattened` in some cases; nested fields have incomplete Kibana support. citeturn19search1
+Elasticsearch’s join features exist, but the platform is explicit about trade-offs: the **join field** “shouldn’t be used like joins in a relational database”; each `has_child`/`has_parent` query adds a “significant tax” to performance and can trigger global ordinals. Elastic says the join field only makes sense in certain one-to-many situations where one entity outnumbers the other (e.g., products and offers). citeturn19search0  
+Nested fields are also “typically expensive,” and Elastic even recommends `flattened` in some cases; nested fields have incomplete Kibana support. citeturn19search1
 
 For graph/KG: these warnings imply that **many-to-many edges are better represented as separate edge documents** rather than parent/child joins.
 
 **Ingest pipelines and processors: extraction, normalisation, enrichment**  
-Elastic documents ingest pipelines as ordered sequences of processors where each processor depends on the previous output, making ordering critical. citeturn5search12turn5search20 For KG building, common steps are: parse → NLP inference → canonicalise → enrich → route/index.
+Elastic documents ingest pipelines as ordered sequences of processors where each processor depends on the previous output, making ordering critical. citeturn5search12turn5search20 For KG building, common steps are: parse → NLP inference → canonicalise → enrich → route/index.
 
-- **Inference processor:** runs ML inference at ingest, including NLP models. citeturn2search4turn2search0  
-- **Enrich processor:** enriches documents from another index; Elastic strongly recommends benchmarking enrich in production-like settings and explicitly does **not recommend** using enrich to append real-time data. It works best for reference data that doesn’t change frequently; it can impact ingest speed; Elastic recommends co-locating ingest and data roles to minimise remote searches. citeturn5search0turn5search1  
+- **Inference processor:** runs ML inference at ingest, including NLP models. citeturn2search4turn2search0  
+- **Enrich processor:** enriches documents from another index; Elastic strongly recommends benchmarking enrich in production-like settings and explicitly does **not recommend** using enrich to append real-time data. It works best for reference data that doesn’t change frequently; it can impact ingest speed; Elastic recommends co-locating ingest and data roles to minimise remote searches. citeturn5search0turn5search1  
 
 **Entity extraction example as an official building block**  
-Elastic’s NER example explicitly targets the “deploy, test, add to ingest pipeline” workflow, which is a direct on-ramp to entity extraction for KG pipelines. citeturn2search1
+Elastic’s NER example explicitly targets the “deploy, test, add to ingest pipeline” workflow, which is a direct on-ramp to entity extraction for KG pipelines. citeturn2search1
 
 **Vector indexing and performance/scalability**  
-Vector search has unique operational costs. Elasticsearch’s approximate kNN search uses **HNSW**, which is an approximate method trading accuracy for speed; the API supports filters to restrict the candidate set. citeturn3search18turn4search9 Elastic also provides production guidance for tuning approximate kNN search and notes that kNN indexing builds vector index structures and has performance considerations distinct from “normal” search. citeturn20search2turn3search10 Elastic’s Search Labs HNSW guidance highlights a key architectural point: **each Lucene segment has its own HNSW graph**, and segments are searched independently. citeturn4search1 The HNSW algorithm itself is described in the foundational paper by Malkov & Yashunin. citeturn4search2
+Vector search has unique operational costs. Elasticsearch’s approximate kNN search uses **HNSW**, which is an approximate method trading accuracy for speed; the API supports filters to restrict the candidate set. citeturn3search18turn4search9 Elastic also provides production guidance for tuning approximate kNN search and notes that kNN indexing builds vector index structures and has performance considerations distinct from “normal” search. citeturn20search2turn3search10 Elastic’s Search Labs HNSW guidance highlights a key architectural point: **each Lucene segment has its own HNSW graph**, and segments are searched independently. citeturn4search1 The HNSW algorithm itself is described in the foundational paper by Malkov & Yashunin. citeturn4search2
 
 For graph-shaped KGs, this matters because vector-heavy entity/edge indices can become memory-relevant; you must size for vector data and query load, not only term search.
 
@@ -157,16 +157,16 @@ The Graph explore API defines:
 - a **seed query**;  
 - **vertices** (fields containing the terms to treat as vertices), including include/exclude, `size`, `min_doc_count` thresholds;  
 - **connections** (fields to extract associated terms), which can be nested into multiple levels; each nesting level is “considered a hop,” and the API talks about proximity in hop depth;  
-- **controls** such as `use_significance` (based on `significant_terms`) and `sample_size` (sampling top docs per shard). citeturn25view0turn6search3turn6search0  
+- **controls** such as `use_significance` (based on `significant_terms`) and `sample_size` (sampling top docs per shard). citeturn25view0turn6search3turn6search0  
 
-Elastic also clarifies an important interpretability nuance: in Graph explore responses, the `doc_count` for a connection reflects how many documents in the **sample set** contain the pairing, not a global corpus count. citeturn25view0 This is why Graph is excellent for **discovery** but not a deterministic traversal engine.
+Elastic also clarifies an important interpretability nuance: in Graph explore responses, the `doc_count` for a connection reflects how many documents in the **sample set** contain the pairing, not a global corpus count. citeturn25view0 This is why Graph is excellent for **discovery** but not a deterministic traversal engine.
 
 **Aggregation primitives that look like graph operations**  
 Even without Graph explore, you can perform relationship-like analytics:
 
-- **`significant_terms` aggregation** returns statistically unusual/interesting term occurrences and is explicitly described as supporting fraud/common-point-of-compromise scenarios. citeturn6search0turn22search10  
-- **`adjacency_matrix` aggregation** returns named intersections among filter sets (“cells” in a matrix of intersecting filters). This can be used to compute co-membership overlap patterns (an adjacency-like representation). citeturn6search1  
-- Relationship analytics performance is often governed by **doc values and global ordinals**; Elastic documents how term-based field types store doc values with ordinal mappings and how global ordinals support aggregation-like operations. citeturn6search2turn19search15  
+- **`significant_terms` aggregation** returns statistically unusual/interesting term occurrences and is explicitly described as supporting fraud/common-point-of-compromise scenarios. citeturn6search0turn22search10  
+- **`adjacency_matrix` aggregation** returns named intersections among filter sets (“cells” in a matrix of intersecting filters). This can be used to compute co-membership overlap patterns (an adjacency-like representation). citeturn6search1  
+- Relationship analytics performance is often governed by **doc values and global ordinals**; Elastic documents how term-based field types store doc values with ordinal mappings and how global ordinals support aggregation-like operations. citeturn6search2turn19search15  
 
 **k-hop and subgraph extraction: how teams implement it on Elastic**  
 Elasticsearch does not provide a native `kHop(startNode, k)` operator over explicit edges, nor native shortest path. Instead, teams typically:
@@ -176,10 +176,10 @@ Elasticsearch does not provide a native `kHop(startNode, k)` operator over expli
 3) cap expansion to avoid hub explosion;  
 4) optionally use semantic ranking to choose which edges to expand.
 
-Elastic’s own GraphRAG article follows this “build a tailored subgraph for the query” approach on Elasticsearch-stored triplets. citeturn4search0 Operationally, deep expansions risk hitting search pagination constraints; Elastic discourages deep `from/size` pagination beyond 10,000 hits and recommends `search_after` with a point-in-time (PIT) when preserving index state is needed. citeturn19search2
+Elastic’s own GraphRAG article follows this “build a tailored subgraph for the query” approach on Elasticsearch-stored triplets. citeturn4search0 Operationally, deep expansions risk hitting search pagination constraints; Elastic discourages deep `from/size` pagination beyond 10,000 hits and recommends `search_after` with a point-in-time (PIT) when preserving index state is needed. citeturn19search2
 
 **Shortest path: not a native Elasticsearch feature**  
-Unlike Neo4j, which documents a `SHORTEST` keyword for shortest path variations and reachability constructs, Elasticsearch does not offer a built-in shortest-path query primitive. citeturn8search16 In Elastic-based systems, shortest path requires either:
+Unlike Neo4j, which documents a `SHORTEST` keyword for shortest path variations and reachability constructs, Elasticsearch does not offer a built-in shortest-path query primitive. citeturn8search16 In Elastic-based systems, shortest path requires either:
 
 - exporting the relevant subgraph and running a graph algorithm externally, or  
 - integrating a graph database/graph analytics engine.
@@ -187,66 +187,66 @@ Unlike Neo4j, which documents a `SHORTEST` keyword for shortest path variations 
 **Combining vector + graph queries: recommended hybrid patterns**  
 For KG-enhanced search, one high-leverage pattern is “retrieve semantically, then expand structurally”:
 
-- Step A: Elasticsearch retrieves top entities/edges/doc passages using dense vectors (`dense_vector` + kNN) or sparse semantics (ELSER + `sparse_vector` / `text_expansion`). citeturn2search3turn3search0turn3search4turn20search0  
+- Step A: Elasticsearch retrieves top entities/edges/doc passages using dense vectors (`dense_vector` + kNN) or sparse semantics (ELSER + `sparse_vector` / `text_expansion`). citeturn2search3turn3search0turn3search4turn20search0  
 - Step B: application builds a bounded subgraph by pulling edges touching those entities.  
 - Step C: optionally re-rank using Elastic’s multi-stage retrieval pipelines (**retrievers**) or custom scoring.
 
-Version note: Elastic retrievers were added to the Search API in **8.14.0** and became GA in **8.16.0**, enabling multi-stage retrieval pipelines in a single `_search` call. citeturn24search1turn24search0 The **RRF retriever** combines multiple child retrievers into one ranked list. citeturn3search3
+Version note: Elastic retrievers were added to the Search API in **8.14.0** and became GA in **8.16.0**, enabling multi-stage retrieval pipelines in a single `_search` call. citeturn24search1turn24search0 The **RRF retriever** combines multiple child retrievers into one ranked list. citeturn3search3
 
-Licensing note: Elastic’s current subscription matrix shows that advanced retrieval functions (including RRF and some retrievers) are tier-dependent, so organisations on Basic may need to implement fusion/reranking in application code. citeturn15view0turn18view1
+Licensing note: Elastic’s current subscription matrix shows that advanced retrieval functions (including RRF and some retrievers) are tier-dependent, so organisations on Basic may need to implement fusion/reranking in application code. citeturn15view0turn18view1
 
 ## Tooling and ecosystem: Kibana, clients, connectors, integrations, and third-party tooling
 
 **Kibana visualisation surface**  
 Elastic provides multiple “surfaces” for graph and KG-adjacent workflows:
 
-- **Kibana Graph** for interactive association exploration. citeturn0search13turn0search1  
-- **Kibana Lens** for general analytics and dashboards; Lens is described as Kibana’s drag-and-drop visualisation editor. citeturn10search3  
-- **Vega/Vega-Lite** panels for custom visualisations; Elastic documents that Vega panels can query Elasticsearch and other sources and support Kibana extensions. citeturn21search1turn21search13  
-- **Kibana Maps**, including term joins and layer-based filtering considerations. citeturn1search2turn10search18turn10search14  
+- **Kibana Graph** for interactive association exploration. citeturn0search13turn0search1  
+- **Kibana Lens** for general analytics and dashboards; Lens is described as Kibana’s drag-and-drop visualisation editor. citeturn10search3  
+- **Vega/Vega-Lite** panels for custom visualisations; Elastic documents that Vega panels can query Elasticsearch and other sources and support Kibana extensions. citeturn21search1turn21search13  
+- **Kibana Maps**, including term joins and layer-based filtering considerations. citeturn1search2turn10search18turn10search14  
 
 These tools matter because KG projects frequently depend on good exploratory UX and analyst workflows even if the backend data is not a “native” KG platform.
 
 **Graph API clients and programmatic access**  
 Elastic’s Graph explore endpoint is exposed through official clients, including:
 
-- Python client Graph explore docs. citeturn0search4  
-- Go typed client Graph explore API. citeturn0search8  
-- .NET client Graph namespace. citeturn0search12  
+- Python client Graph explore docs. citeturn0search4  
+- Go typed client Graph explore API. citeturn0search8  
+- .NET client Graph namespace. citeturn0search12  
 
 This enables building bespoke graph-assisted applications (fraud rings, recommendations, entity investigation) on top of Elastic’s term-association model.
 
 **Connectors and content ingestion**  
-Elastic connectors synchronise data from third-party sources into Elasticsearch and create searchable, read-only replicas. Elastic highlights that connectors are written in Python and that source is available in `elastic/connectors`. citeturn7search0turn7search4 Content sync behaviour matters for consistency: Elastic documents that a **full sync** deletes Elasticsearch documents that no longer exist in the source, improving consistency at the cost of longer runtimes. citeturn7search12 Connector-specific DLS is versioned and described as introduced in 8.9.0 (beta), with prerequisites; this can be relevant if you treat connector-ingested content as part of a “knowledge base”. citeturn7search11
+Elastic connectors synchronise data from third-party sources into Elasticsearch and create searchable, read-only replicas. Elastic highlights that connectors are written in Python and that source is available in `elastic/connectors`. citeturn7search0turn7search4 Content sync behaviour matters for consistency: Elastic documents that a **full sync** deletes Elasticsearch documents that no longer exist in the source, improving consistency at the cost of longer runtimes. citeturn7search12 Connector-specific DLS is versioned and described as introduced in 8.9.0 (beta), with prerequisites; this can be relevant if you treat connector-ingested content as part of a “knowledge base”. citeturn7search11
 
 **Beats and Logstash: classic ingestion and enrichment**  
-Beats can ship data directly to Elasticsearch or via Logstash, enabling event-to-entity correlation workflows (security/observability graphs). citeturn7search1turn7search5 Logstash’s Elasticsearch output plugin is an established pathway for high-throughput ingestion into Elasticsearch. citeturn5search3turn5search17
+Beats can ship data directly to Elasticsearch or via Logstash, enabling event-to-entity correlation workflows (security/observability graphs). citeturn7search1turn7search5 Logstash’s Elasticsearch output plugin is an established pathway for high-throughput ingestion into Elasticsearch. citeturn5search3turn5search17
 
 **Open-source and example repositories**  
 Elastic maintains multiple repos that often become “de facto references” for implementation patterns:
 
-- `elastic/elasticsearch` main repo (core engine). citeturn21search12  
-- `elastic/elasticsearch-labs` for notebooks and example apps for vector search, hybrid search, and RAG-style applications. citeturn4search3  
-- `elastic/search-ui` (open-source Search UI library) for building search UIs on Elastic backends—useful in KG-backed search experiences. citeturn21search0turn21search4  
-- `elastic/beats` and Logstash plugin repos, for ingestion tooling. citeturn7search5turn5search7  
+- `elastic/elasticsearch` main repo (core engine). citeturn21search12  
+- `elastic/elasticsearch-labs` for notebooks and example apps for vector search, hybrid search, and RAG-style applications. citeturn4search3  
+- `elastic/search-ui` (open-source Search UI library) for building search UIs on Elastic backends—useful in KG-backed search experiences. citeturn21search0turn21search4  
+- `elastic/beats` and Logstash plugin repos, for ingestion tooling. citeturn7search5turn5search7  
 
 ## Security, access control, licensing, and deployment options
 
 **Access control and security model**  
-Elastic’s security model is privilege-based: roles are built from cluster, indices, run-as, and application privileges. citeturn7search2 Fine-grained controls include **field-level security** and **document-level security**, but Elastic warns these features are meant for **read-only privileged accounts** (users with DLS/FLS should not perform writes). citeturn7search3
+Elastic’s security model is privilege-based: roles are built from cluster, indices, run-as, and application privileges. citeturn7search2 Fine-grained controls include **field-level security** and **document-level security**, but Elastic warns these features are meant for **read-only privileged accounts** (users with DLS/FLS should not perform writes). citeturn7search3
 
 For KG scenarios, this warning matters because:
 
 - if you treat Elasticsearch as a shared KG store, you must separate write pipelines (service accounts) from user-facing read roles;  
-- if you project sensitive relationships, DLS/FLS might be necessary but introduces operational complexity and licensing constraints. citeturn7search6turn7search3
+- if you project sensitive relationships, DLS/FLS might be necessary but introduces operational complexity and licensing constraints. citeturn7search6turn7search3
 
 **Licensing implications (graph + semantic features)**  
-Elastic’s documentation is explicit that licences/subscriptions determine available features; licences apply at different levels depending on deployment type (cloud vs self-managed). citeturn0search10 The self-managed subscriptions table defines tiers including “Free and open – Basic”, “Platinum”, and “Enterprise” (and notes Gold is discontinued). citeturn18view0 Within that matrix, **Graph exploration** is shown as not available in the Basic tier but available in higher tiers (check marks in non-Basic columns). citeturn14view0turn18view1
+Elastic’s documentation is explicit that licences/subscriptions determine available features; licences apply at different levels depending on deployment type (cloud vs self-managed). citeturn0search10 The self-managed subscriptions table defines tiers including “Free and open – Basic”, “Platinum”, and “Enterprise” (and notes Gold is discontinued). citeturn18view0 Within that matrix, **Graph exploration** is shown as not available in the Basic tier but available in higher tiers (check marks in non-Basic columns). citeturn14view0turn18view1
 
-For semantic features, Elastic’s `semantic_text` docs warn that although the mapping can be added regardless of licence state, it typically calls the inference API; without an appropriate licence, indexing and reindexing may fail. citeturn3search1 ELSER also has explicit subscription requirements (“appropriate subscription level for semantic search or trial period activated”). citeturn20search0
+For semantic features, Elastic’s `semantic_text` docs warn that although the mapping can be added regardless of licence state, it typically calls the inference API; without an appropriate licence, indexing and reindexing may fail. citeturn3search1 ELSER also has explicit subscription requirements (“appropriate subscription level for semantic search or trial period activated”). citeturn20search0
 
 **Deployment options: cloud hosted vs serverless vs self-managed**  
-Elastic Cloud Serverless is described as fully managed, decoupling compute and storage and removing the need to manage clusters/nodes/tiers directly. citeturn21search11turn23search0 Elastic also documents a comparison guide for Cloud Hosted vs Serverless. citeturn23search15 However, Elastic’s Graph docs are labelled **“Serverless Unavailable”** (Graph UI/configuration/troubleshooting pages), implying that Kibana Graph is not available in serverless projects even if it exists in stack deployments. citeturn23search9turn21search3turn21search7
+Elastic Cloud Serverless is described as fully managed, decoupling compute and storage and removing the need to manage clusters/nodes/tiers directly. citeturn21search11turn23search0 Elastic also documents a comparison guide for Cloud Hosted vs Serverless. citeturn23search15 However, Elastic’s Graph docs are labelled **“Serverless Unavailable”** (Graph UI/configuration/troubleshooting pages), implying that Kibana Graph is not available in serverless projects even if it exists in stack deployments. citeturn23search9turn21search3turn21search7
 
 Practical implication: if Graph UI is a core requirement, plan around **Elastic Stack deployments (self-managed / ECK / ECE / Cloud Hosted)** rather than assuming Serverless will support it.
 
@@ -256,27 +256,27 @@ Practical implication: if Graph UI is a core requirement, plan around **Elastic 
 
 **Strengths**
 
-- Large-scale text search, relevance ranking, aggregations, and near-real-time indexing behaviour. citeturn5search3turn0search1  
-- Out-of-the-box association graphs via Graph explore API, including multi-hop “spidering” and significance filtering. citeturn25view0turn6search3  
-- Ingest-time ML inference (NER, embeddings), enrichment joins, and mature ingestion ecosystem (Beats, Logstash, connectors). citeturn2search4turn5search0turn7search0turn7search1turn5search3  
-- Native vector search (HNSW-based approximate kNN) and sparse semantic retrieval (ELSER). citeturn3search18turn4search1turn20search0turn3search0  
+- Large-scale text search, relevance ranking, aggregations, and near-real-time indexing behaviour. citeturn5search3turn0search1  
+- Out-of-the-box association graphs via Graph explore API, including multi-hop “spidering” and significance filtering. citeturn25view0turn6search3  
+- Ingest-time ML inference (NER, embeddings), enrichment joins, and mature ingestion ecosystem (Beats, Logstash, connectors). citeturn2search4turn5search0turn7search0turn7search1turn5search3  
+- Native vector search (HNSW-based approximate kNN) and sparse semantic retrieval (ELSER). citeturn3search18turn4search1turn20search0turn3search0  
 
 **Gaps**
 
-- No native equivalents of **shortest path**, general path pattern matching, or a graph traversal query language. Neo4j documents shortest-path query support directly in Cypher, highlighting the contrast. citeturn8search16  
-- No ontology reasoning or SPARQL; RDF and SPARQL are formalised by W3C and supported by dedicated KG platforms. citeturn9search0turn8search3  
-- Relationship modelling is largely “bring your own model” (edge docs) and “bring your own traversal” (application logic), which increases complexity and can be expensive at high hop counts; deep pagination constraints (10k result window; preference for PIT + `search_after`) become relevant quickly. citeturn19search2turn4search0  
+- No native equivalents of **shortest path**, general path pattern matching, or a graph traversal query language. Neo4j documents shortest-path query support directly in Cypher, highlighting the contrast. citeturn8search16  
+- No ontology reasoning or SPARQL; RDF and SPARQL are formalised by W3C and supported by dedicated KG platforms. citeturn9search0turn8search3  
+- Relationship modelling is largely “bring your own model” (edge docs) and “bring your own traversal” (application logic), which increases complexity and can be expensive at high hop counts; deep pagination constraints (10k result window; preference for PIT + `search_after`) become relevant quickly. citeturn19search2turn4search0  
 
 ### Recommended patterns and workarounds
 
 **Pattern: Elastic Graph for association discovery**
 
 - Use Graph explore when your graph question is: “Which terms co-occur meaningfully in a subset of documents?”  
-- Tune `sample_size`, `use_significance`, and `min_doc_count` depending on whether you need signal vs completeness (Elastic explains these defaults and how they can miss details). citeturn6search3turn25view0
+- Tune `sample_size`, `use_significance`, and `min_doc_count` depending on whether you need signal vs completeness (Elastic explains these defaults and how they can miss details). citeturn6search3turn25view0
 
 **Pattern: Explicit triplets store + bounded expansion (GraphRAG-style)**
 
-- Store edge documents and build subgraphs dynamically at query time; cap neighbour counts; use semantic retrieval to prioritise expansions. Elastic’s GraphRAG guidance is a concrete reference for this design. citeturn4search0turn19search2
+- Store edge documents and build subgraphs dynamically at query time; cap neighbour counts; use semantic retrieval to prioritise expansions. Elastic’s GraphRAG guidance is a concrete reference for this design. citeturn4search0turn19search2
 
 **Pattern: Dual-store (graph DB + Elasticsearch)**
 
@@ -286,31 +286,31 @@ Practical implication: if Graph UI is a core requirement, plan around **Elastic 
 
 | System | Native graph model | Query language for traversal | Shortest path | Semantic search / vectors | Typical strengths / use-cases |
 |---|---|---|---|---|---|
-| Elasticsearch + Elastic Graph | Document index; Graph = term association over documents citeturn0search1turn25view0 | Elasticsearch Query DSL; Graph explore API “hops” over term associations citeturn25view0 | Not native (application or external) | Strong: dense vectors (`dense_vector`), sparse `sparse_vector`/ELSER, `semantic_text` (licence-dependent) citeturn2search3turn3search0turn3search1turn20search0 | Search-first systems; association discovery; KG-shaped retrieval (GraphRAG); log/security investigation |
-| Neo4j | Property graph (nodes + relationships) | Cypher (pattern matching, variable-length paths) citeturn8search0 | Native (`SHORTEST`) citeturn8search16 | Available (vector index), but many deployments still pair ES for search citeturn22search3 | Traversal-heavy apps; fraud rings; recommendation paths; graph algorithms (GDS) citeturn22search3 |
-| JanusGraph | Property graph with pluggable storage/index backends | Gremlin (via Apache TinkerPop) | Via Gremlin/analytics stack | Often uses external index; JanusGraph explicitly supports Elasticsearch as an index backend citeturn8search1turn8search9 | Very large graphs with distributed storage; operational flexibility; external indexing |
-| TigerGraph | Native distributed graph system | GSQL with distributed traversal execution | Supported via query/algorithm patterns | Varies by setup | Large-scale traversal/analytics; distributed query mode for multi-machine traversals citeturn8search2turn8search14 |
-| RDF KG platforms (e.g., GraphDB, Stardog) | RDF triples (subject–predicate–object) citeturn9search0 | SPARQL 1.1 citeturn8search3 | Path queries supported via SPARQL property paths (platform-dependent) | Often integrate text search; some support vector/ML add-ons | Ontology-centric KGs; reasoning/inference; semantic constraints (GraphDB/Stardog reasoning) citeturn9search10turn9search9turn9search13 |
+| Elasticsearch + Elastic Graph | Document index; Graph = term association over documents citeturn0search1turn25view0 | Elasticsearch Query DSL; Graph explore API “hops” over term associations citeturn25view0 | Not native (application or external) | Strong: dense vectors (`dense_vector`), sparse `sparse_vector`/ELSER, `semantic_text` (licence-dependent) citeturn2search3turn3search0turn3search1turn20search0 | Search-first systems; association discovery; KG-shaped retrieval (GraphRAG); log/security investigation |
+| Neo4j | Property graph (nodes + relationships) | Cypher (pattern matching, variable-length paths) citeturn8search0 | Native (`SHORTEST`) citeturn8search16 | Available (vector index), but many deployments still pair ES for search citeturn22search3 | Traversal-heavy apps; fraud rings; recommendation paths; graph algorithms (GDS) citeturn22search3 |
+| JanusGraph | Property graph with pluggable storage/index backends | Gremlin (via Apache TinkerPop) | Via Gremlin/analytics stack | Often uses external index; JanusGraph explicitly supports Elasticsearch as an index backend citeturn8search1turn8search9 | Very large graphs with distributed storage; operational flexibility; external indexing |
+| TigerGraph | Native distributed graph system | GSQL with distributed traversal execution | Supported via query/algorithm patterns | Varies by setup | Large-scale traversal/analytics; distributed query mode for multi-machine traversals citeturn8search2turn8search14 |
+| RDF KG platforms (e.g., GraphDB, Stardog) | RDF triples (subject–predicate–object) citeturn9search0 | SPARQL 1.1 citeturn8search3 | Path queries supported via SPARQL property paths (platform-dependent) | Often integrate text search; some support vector/ML add-ons | Ontology-centric KGs; reasoning/inference; semantic constraints (GraphDB/Stardog reasoning) citeturn9search10turn9search9turn9search13 |
 
 ### When to use Elasticsearch for graph/KG needs vs when to choose a graph DB
 
 Use **Elasticsearch (and optionally Elastic Graph)** when:
 
-- The product is **search-led** and graph is used for **association discovery** or to provide “related things” based on co-occurrence. citeturn0search1turn25view0  
-- You need a **single platform** for text + filter analytics + embeddings + ingestion at scale; and traversal can be bounded and application-driven (GraphRAG-style subgraph). citeturn4search0turn2search3turn19search2  
-- You want to operationalise entity extraction and enrichment at ingest time using inference + enrich pipelines. citeturn2search4turn5search0turn2search1  
+- The product is **search-led** and graph is used for **association discovery** or to provide “related things” based on co-occurrence. citeturn0search1turn25view0  
+- You need a **single platform** for text + filter analytics + embeddings + ingestion at scale; and traversal can be bounded and application-driven (GraphRAG-style subgraph). citeturn4search0turn2search3turn19search2  
+- You want to operationalise entity extraction and enrichment at ingest time using inference + enrich pipelines. citeturn2search4turn5search0turn2search1  
 
 Choose a **dedicated graph DB / KG platform** when:
 
-- You require **variable-length traversal, shortest path, or complex pattern matching** as standard queries (Neo4j Cypher is the canonical reference). citeturn8search0turn8search16  
-- You rely on **graph algorithms** as first-class operations (centrality, community detection, embeddings, path finding). Neo4j’s GDS library documents broad algorithm coverage. citeturn22search3  
-- You require **ontology reasoning** and SPARQL-level graph semantics (GraphDB/Stardog reasoning; W3C standards). citeturn8search3turn9search10turn9search9  
+- You require **variable-length traversal, shortest path, or complex pattern matching** as standard queries (Neo4j Cypher is the canonical reference). citeturn8search0turn8search16  
+- You rely on **graph algorithms** as first-class operations (centrality, community detection, embeddings, path finding). Neo4j’s GDS library documents broad algorithm coverage. citeturn22search3  
+- You require **ontology reasoning** and SPARQL-level graph semantics (GraphDB/Stardog reasoning; W3C standards). citeturn8search3turn9search10turn9search9  
 
 ## Practical examples: mappings, pipelines, queries, and reference architectures
 
 ### Example explicit KG indices in Elasticsearch (entities + relations)
 
-Below is a pragmatic baseline for explicit KGs in Elasticsearch. It respects Elastic’s constraints: vectors are for kNN and cannot be aggregated; keep structured fields for filtering/analytics. citeturn2search3
+Below is a pragmatic baseline for explicit KGs in Elasticsearch. It respects Elastic’s constraints: vectors are for kNN and cannot be aggregated; keep structured fields for filtering/analytics. citeturn2search3
 
 **Entities index**
 
@@ -366,14 +366,14 @@ PUT kg_relations
 }
 ```
 
-This aligns with Elastic’s GraphRAG recommendation to store triplets/edges and build query-specific subgraphs. citeturn4search0
+This aligns with Elastic’s GraphRAG recommendation to store triplets/edges and build query-specific subgraphs. citeturn4search0
 
 ### Example ingest pipeline: NER inference + reference enrichment
 
 This combines:
 
-- the **inference processor** (NER model) citeturn2search4turn2search1  
-- the **enrich processor** (reference entity dictionary join), with the caveat that enrich is best for slowly changing reference data and can impact ingest speed. citeturn5search0turn5search1  
+- the **inference processor** (NER model) citeturn2search4turn2search1  
+- the **enrich processor** (reference entity dictionary join), with the caveat that enrich is best for slowly changing reference data and can impact ingest speed. citeturn5search0turn5search1  
 
 ```json
 PUT _ingest/pipeline/kg_ingest_v1
@@ -400,7 +400,7 @@ PUT _ingest/pipeline/kg_ingest_v1
 
 ### Example: Elastic Graph explore API request (association graph)
 
-This request seeds exploration from a filtered query, defines vertices, and expands connections one hop. It uses the defaults and controls described in Elastic’s Graph explore API docs (sampling, significance, min doc count). citeturn25view0turn6search3turn0search0
+This request seeds exploration from a filtered query, defines vertices, and expands connections one hop. It uses the defaults and controls described in Elastic’s Graph explore API docs (sampling, significance, min doc count). citeturn25view0turn6search3turn0search0
 
 ```json
 POST events-*/_graph/explore
@@ -430,7 +430,7 @@ POST events-*/_graph/explore
 
 ### Example: adjacency-matrix “overlap graph” using aggregations
 
-Elastic describes `adjacency_matrix` as returning non-empty intersections among named filters (a form of adjacency matrix). citeturn6search1
+Elastic describes `adjacency_matrix` as returning non-empty intersections among named filters (a form of adjacency matrix). citeturn6search1
 
 ```json
 POST transactions/_search
@@ -472,7 +472,7 @@ flowchart LR
   G --> H[Answering / UI<br/>Dashboards, RAG, analysts]
 ```
 
-The “inference → enrich” path is directly grounded in Elastic’s inference processor and enrich processor documentation. citeturn2search4turn5search1 The “bounded expansion” is aligned with Elastic’s GraphRAG guidance and the need to respect pagination constraints (PIT + `search_after`). citeturn4search0turn19search2
+The “inference → enrich” path is directly grounded in Elastic’s inference processor and enrich processor documentation. citeturn2search4turn5search1 The “bounded expansion” is aligned with Elastic’s GraphRAG guidance and the need to respect pagination constraints (PIT + `search_after`). citeturn4search0turn19search2
 
 #### Entity–relationship structure for an explicit KG in Elasticsearch
 
@@ -515,11 +515,11 @@ timeline
   2025-2026 : Enterprise Search sunset path : Enterprise Search not available in 9.0+
 ```
 
-The timeline references: HNSW paper citeturn4search2, retrievers versioning citeturn24search1turn24search0, ES|QL LOOKUP JOIN introduction citeturn21search14turn21search6, semantic_text licensing note citeturn3search1, and Enterprise Search 9.0 removal guidance citeturn1search8.
+The timeline references: HNSW paper citeturn4search2, retrievers versioning citeturn24search1turn24search0, ES|QL LOOKUP JOIN introduction citeturn21search14turn21search6, semantic_text licensing note citeturn3search1, and Enterprise Search 9.0 removal guidance citeturn1search8.
 
 ### “GraphRAG” context: why KGs matter for RAG and where Elastic fits
 
-Academic and industry work increasingly supports graph-enhanced retrieval for multi-hop reasoning and query-focused summarisation. Microsoft’s GraphRAG paper describes building an entity knowledge graph and using community summaries to answer questions over private corpora. citeturn22search0turn22search4 Surveys on GraphRAG emphasise that flat retrieval struggles with relational structure. citeturn22search1turn22search5 Elastic’s GraphRAG guidance shows how Elasticsearch can store and retrieve KG triplets effectively, but you should treat it as **search-centric KG storage**, not a graph traversal engine. citeturn4search0
+Academic and industry work increasingly supports graph-enhanced retrieval for multi-hop reasoning and query-focused summarisation. Microsoft’s GraphRAG paper describes building an entity knowledge graph and using community summaries to answer questions over private corpora. citeturn22search0turn22search4 Surveys on GraphRAG emphasise that flat retrieval struggles with relational structure. citeturn22search1turn22search5 Elastic’s GraphRAG guidance shows how Elasticsearch can store and retrieve KG triplets effectively, but you should treat it as **search-centric KG storage**, not a graph traversal engine. citeturn4search0
 
 # Graph and Knowledge-Graph Capabilities in Elasticsearch and the Elastic Stack
 
@@ -527,25 +527,25 @@ Academic and industry work increasingly supports graph-enhanced retrieval for mu
 
 Elasticsearch is **not a native graph database** (no Cypher/Gremlin-style traversal engine, no built-in shortest-path operator, no first-class adjacency storage optimised for deep traversals), but it can support **graph-shaped outcomes** through two complementary approaches:
 
-**Elastic Graph (official Graph analytics)** builds an *implicit*, **term-to-term association graph** over your indexed documents. Vertices are “terms in the index”; edges summarise co-occurrence evidence from sampled top-matching documents and can be filtered by statistical “significance” to prioritise non-obvious connections. It is delivered as the **Graph explore API** (`POST /{index}/_graph/explore`) plus an interactive **Kibana Graph** UI, and it works “out of the box” on existing indices without storing explicit edges. citeturn0search1turn25view0turn11search9
+**Elastic Graph (official Graph analytics)** builds an *implicit*, **term-to-term association graph** over your indexed documents. Vertices are “terms in the index”; edges summarise co-occurrence evidence from sampled top-matching documents and can be filtered by statistical “significance” to prioritise non-obvious connections. It is delivered as the **Graph explore API** (`POST /{index}/_graph/explore`) plus an interactive **Kibana Graph** UI, and it works “out of the box” on existing indices without storing explicit edges. citeturn0search1turn25view0turn11search9
 
-**Explicit knowledge-graph modelling in Elasticsearch** is an engineering pattern rather than a single built-in feature: you model **entities and relationships as documents** (e.g., nodes index + edges/triples index), enrich and normalise them at ingest time, and perform traversal-like behaviour via **iterative search queries** in application logic. Elastic’s own Search Labs “Graph RAG” guidance describes building and dynamically pruning query-specific subgraphs while storing triplets in Elasticsearch, which is a practical blueprint for KG-enhanced retrieval. citeturn4search0
+**Explicit knowledge-graph modelling in Elasticsearch** is an engineering pattern rather than a single built-in feature: you model **entities and relationships as documents** (e.g., nodes index + edges/triples index), enrich and normalise them at ingest time, and perform traversal-like behaviour via **iterative search queries** in application logic. Elastic’s own Search Labs “Graph RAG” guidance describes building and dynamically pruning query-specific subgraphs while storing triplets in Elasticsearch, which is a practical blueprint for KG-enhanced retrieval. citeturn4search0
 
-For **knowledge-graph and semantic search workloads**, Elastic’s strongest primitives are its **ingest pipelines** (including the **inference processor** for ML/NLP at ingest), **enrich processors** for reference-data joins, and **vector/sparse semantic search** (dense vectors, ELSER sparse embeddings, and the higher-level `semantic_text` field type). These provide a robust toolkit for entity extraction, canonicalisation, and hybrid retrieval—even if graph traversal remains application-driven. citeturn2search4turn5search0turn2search1turn2search3turn3search1turn20search0turn3search0
+For **knowledge-graph and semantic search workloads**, Elastic’s strongest primitives are its **ingest pipelines** (including the **inference processor** for ML/NLP at ingest), **enrich processors** for reference-data joins, and **vector/sparse semantic search** (dense vectors, ELSER sparse embeddings, and the higher-level `semantic_text` field type). These provide a robust toolkit for entity extraction, canonicalisation, and hybrid retrieval—even if graph traversal remains application-driven. citeturn2search4turn5search0turn2search1turn2search3turn3search1turn20search0turn3search0
 
 From a product/solution perspective:
 
-- **Enterprise Search (App Search / Workplace Search)** is in transition. Elastic’s Enterprise Search docs recommend that new users prefer “native Elasticsearch tools” over the standalone App Search / Workplace Search products, and Elastic provides a migration guide stating **Enterprise Search will no longer be available in Elastic 9.0+**. citeturn1search0turn1search8  
-- **Kibana Maps** supports relationship-like exploration through multi-layer querying and **term joins** (client-side joining of a terms aggregation result to vector features) and is often used to situate entity relationships geographically. citeturn1search2turn10search14  
-- **Elastic Security** includes graph-shaped investigative tooling (process/event visualisations such as **Visual event analyzer** and **Session View**) and entity-centric analytics such as **entity risk scoring**—useful “graph use cases” even though they are not exposed as a general graph query engine. citeturn1search3turn10search0turn10search1
+- **Enterprise Search (App Search / Workplace Search)** is in transition. Elastic’s Enterprise Search docs recommend that new users prefer “native Elasticsearch tools” over the standalone App Search / Workplace Search products, and Elastic provides a migration guide stating **Enterprise Search will no longer be available in Elastic 9.0+**. citeturn1search0turn1search8  
+- **Kibana Maps** supports relationship-like exploration through multi-layer querying and **term joins** (client-side joining of a terms aggregation result to vector features) and is often used to situate entity relationships geographically. citeturn1search2turn10search14  
+- **Elastic Security** includes graph-shaped investigative tooling (process/event visualisations such as **Visual event analyzer** and **Session View**) and entity-centric analytics such as **entity risk scoring**—useful “graph use cases” even though they are not exposed as a general graph query engine. citeturn1search3turn10search0turn10search1
 
-Licensing and deployment choices matter: the Elastic subscription matrix shows **Graph exploration** is **not available in the Basic tier** (it appears only in higher tiers), and several semantic/AI features explicitly depend on licence state (e.g., `semantic_text` can cause indexing/reindexing failures if the inference API is not licensed). citeturn14view0turn18view0turn3search1 Graph docs are marked **“Serverless Unavailable”**, so if you plan to rely on Kibana Graph in Elastic Cloud Serverless, validate feature availability early. citeturn21search3turn23search9turn23search15
+Licensing and deployment choices matter: the Elastic subscription matrix shows **Graph exploration** is **not available in the Basic tier** (it appears only in higher tiers), and several semantic/AI features explicitly depend on licence state (e.g., `semantic_text` can cause indexing/reindexing failures if the inference API is not licensed). citeturn14view0turn18view0turn3search1 Graph docs are marked **“Serverless Unavailable”**, so if you plan to rely on Kibana Graph in Elastic Cloud Serverless, validate feature availability early. citeturn21search3turn23search9turn23search15
 
 **Recommendations (high-level):**
 
-- Use **Elasticsearch + Elastic Graph** when your “graph” requirement is primarily **association discovery** (co-occurrence, shared attributes, recommendation-like exploration) and you benefit from Elastic’s relevance ranking, filtering, and operational scale. citeturn0search1turn25view0  
-- Use **Elasticsearch as a KG store** when your main goal is **search + semantic retrieval** over entity/relationship documents, and traversal needs can be satisfied with bounded application-driven expansion (GraphRAG-style subgraph building). citeturn4search0turn19search2  
-- Choose a **dedicated graph database** (Neo4j/JanusGraph/TigerGraph) when you need **native variable-length traversal, shortest path, complex pattern matching, or graph algorithms** as first-class operations; integrate Elasticsearch for best-in-class text/semantic retrieval and ranking. citeturn8search16turn8search0turn8search2turn22search3turn8search1
+- Use **Elasticsearch + Elastic Graph** when your “graph” requirement is primarily **association discovery** (co-occurrence, shared attributes, recommendation-like exploration) and you benefit from Elastic’s relevance ranking, filtering, and operational scale. citeturn0search1turn25view0  
+- Use **Elasticsearch as a KG store** when your main goal is **search + semantic retrieval** over entity/relationship documents, and traversal needs can be satisfied with bounded application-driven expansion (GraphRAG-style subgraph building). citeturn4search0turn19search2  
+- Choose a **dedicated graph database** (Neo4j/JanusGraph/TigerGraph) when you need **native variable-length traversal, shortest path, complex pattern matching, or graph algorithms** as first-class operations; integrate Elasticsearch for best-in-class text/semantic retrieval and ranking. citeturn8search16turn8search0turn8search2turn22search3turn8search1
 
 Key source links (real websites) used throughout this report:
 
@@ -571,27 +571,27 @@ HNSW paper (arXiv):            https://arxiv.org/abs/1603.09320
 Elastic’s graph story is distributed across (a) **Graph analytics**, (b) **search/enterprise search tooling**, (c) **visualisations (Graph/Maps/Vega)**, and (d) **solution-specific UIs (Security)**.
 
 **Graph API and Kibana Graph: what it is (and what it is not)**  
-Elastic Graph is defined by Elastic as “a network of related terms in the index,” where terms are **vertices** and **connections** summarise documents containing both terms. This is a term association model rather than an explicit entity-edge model. citeturn0search1turn0search13 The core API is the **Graph explore API** (`POST /{index}/_graph/explore`), intended to “extract and summarise information about the documents and terms” and to “spider out” across multiple hops by nesting `connections`. citeturn25view0turn6search11
+Elastic Graph is defined by Elastic as “a network of related terms in the index,” where terms are **vertices** and **connections** summarise documents containing both terms. This is a term association model rather than an explicit entity-edge model. citeturn0search1turn0search13 The core API is the **Graph explore API** (`POST /{index}/_graph/explore`), intended to “extract and summarise information about the documents and terms” and to “spider out” across multiple hops by nesting `connections`. citeturn25view0turn6search11
 
-Operationally, the explore API is **enabled by default**, and Elastic documents how to disable both the API and Kibana Graph UI using `xpack.graph.enabled: false`. citeturn25view0 Kibana persists graph workspaces as saved objects in the `.kibana` index, storing both configuration and (optionally) the data currently visualised (vertices/connections). citeturn21search3
+Operationally, the explore API is **enabled by default**, and Elastic documents how to disable both the API and Kibana Graph UI using `xpack.graph.enabled: false`. citeturn25view0 Kibana persists graph workspaces as saved objects in the `.kibana` index, storing both configuration and (optionally) the data currently visualised (vertices/connections). citeturn21search3
 
 **Enterprise Search, App Search, Workplace Search: relevance to knowledge graphs**  
-Enterprise Search historically offered packaged “enterprise search” capabilities (APIs/UIs, connectors, crawler) and two standalone products: **App Search** and **Workplace Search**. Elastic’s Enterprise Search docs still describe Enterprise Search as an additional service enabling connectors, the web crawler, and App Search / Workplace Search. citeturn1search14turn1search4 However, the documentation now explicitly recommends that **new users use native Elasticsearch tools rather than standalone App Search / Workplace Search**, and Elastic provides a migration guide stating **Enterprise Search is not available in Elastic 9.0+**. citeturn1search0turn1search8turn1search1
+Enterprise Search historically offered packaged “enterprise search” capabilities (APIs/UIs, connectors, crawler) and two standalone products: **App Search** and **Workplace Search**. Elastic’s Enterprise Search docs still describe Enterprise Search as an additional service enabling connectors, the web crawler, and App Search / Workplace Search. citeturn1search14turn1search4 However, the documentation now explicitly recommends that **new users use native Elasticsearch tools rather than standalone App Search / Workplace Search**, and Elastic provides a migration guide stating **Enterprise Search is not available in Elastic 9.0+**. citeturn1search0turn1search8turn1search1
 
-For KG work, what matters is the direction: “enterprise search” capabilities (connectors, relevance tuning, retrieval, permissions) are increasingly expressed as **native Elasticsearch + Kibana** features rather than a separate server. citeturn1search7turn1search0
+For KG work, what matters is the direction: “enterprise search” capabilities (connectors, relevance tuning, retrieval, permissions) are increasingly expressed as **native Elasticsearch + Kibana** features rather than a separate server. citeturn1search7turn1search0
 
 **Elastic Maps: graph-adjacent joins and relationship visualisation**  
-Kibana Maps is not a graph analytics engine, but it enables relationship exploration by combining layers and filtering across them. citeturn10search14 A key “relationship” primitive is the **term join**: a shared-key join between vector features (“left source”) and a **terms aggregation** result (“right source”). citeturn1search2turn10search2 This can be used for geo-enriched entity views (e.g., entity activity by region) and is often complementary to entity graphs.
+Kibana Maps is not a graph analytics engine, but it enables relationship exploration by combining layers and filtering across them. citeturn10search14 A key “relationship” primitive is the **term join**: a shared-key join between vector features (“left source”) and a **terms aggregation** result (“right source”). citeturn1search2turn10search2 This can be used for geo-enriched entity views (e.g., entity activity by region) and is often complementary to entity graphs.
 
 **Machine learning integrations: inference in ingest and semantic retrieval**  
-Elastic supports adding an **inference processor** to ingest pipelines to apply deployed NLP models at index time (e.g., NER), and provides a worked NER example that deploys a Hugging Face NER model, tests it, and uses it in an ingest pipeline. citeturn2search0turn2search1turn2search4 Elastic also documents ELSER (Elastic Learned Sparse Encoder) as a semantic retrieval model with explicit subscription requirements and deployment options via Elastic Inference Service. citeturn20search0turn20search1 These are foundational for KG-style entity extraction and semantic search.
+Elastic supports adding an **inference processor** to ingest pipelines to apply deployed NLP models at index time (e.g., NER), and provides a worked NER example that deploys a Hugging Face NER model, tests it, and uses it in an ingest pipeline. citeturn2search0turn2search1turn2search4 Elastic also documents ELSER (Elastic Learned Sparse Encoder) as a semantic retrieval model with explicit subscription requirements and deployment options via Elastic Inference Service. citeturn20search0turn20search1 These are foundational for KG-style entity extraction and semantic search.
 
 **Elastic Security: “graph uses” in investigation and entity analytics**  
 Elastic Security includes graph-shaped investigative tools such as:
 
-- **Visual event analyzer**, described by Elastic as a “process-based visual analyzer” showing a graphical timeline of processes around an alert. citeturn1search3  
-- **Session View**, which organises Linux process data in a tree-like structure by parentage and time of execution. citeturn10search0  
-- **Entity analytics** features like **entity risk scoring**, which is explicitly an entity-centric analytics feature for hosts/users/services risk posture monitoring. citeturn10search1turn10search5  
+- **Visual event analyzer**, described by Elastic as a “process-based visual analyzer” showing a graphical timeline of processes around an alert. citeturn1search3  
+- **Session View**, which organises Linux process data in a tree-like structure by parentage and time of execution. citeturn10search0  
+- **Entity analytics** features like **entity risk scoring**, which is explicitly an entity-centric analytics feature for hosts/users/services risk posture monitoring. citeturn10search1turn10search5  
 
 These are practical “graph” applications (process trees, entity-centric correlation) even though they do not expose arbitrary traversal and path queries like a graph DB would.
 
@@ -600,29 +600,29 @@ These are practical “graph” applications (process trees, entity-centric corr
 A knowledge graph typically requires: (a) entity extraction/identification, (b) relationship modelling, (c) schema/ontology governance and potentially reasoning, and (d) retrieval (lexical + semantic) across entities/relations. Elastic covers (a) and (d) strongly, offers workable patterns for (b), and is comparatively weak for (c).
 
 **Entity extraction (NER) and enrichment**  
-Elastic’s recommended path for entity extraction is ingest-time NLP inference. The “Named entity recognition” example shows how to deploy and use an NER model and add it to an inference ingest pipeline. citeturn2search1 The underlying processor is the **inference processor**, which applies a pre-trained NLP model (or trained model) during ingest. citeturn2search4turn2search0
+Elastic’s recommended path for entity extraction is ingest-time NLP inference. The “Named entity recognition” example shows how to deploy and use an NER model and add it to an inference ingest pipeline. citeturn2search1 The underlying processor is the **inference processor**, which applies a pre-trained NLP model (or trained model) during ingest. citeturn2search4turn2search0
 
-For KG pipelines, entity extraction is usually followed by **canonicalisation** (mapping “UK”, “United Kingdom”, “Britain” → one canonical entity ID). Elastic’s **enrich processor** supports ingest-time enrichment from another index (reference data). citeturn5search1turn5search4 This is a natural fit for entity dictionaries and controlled vocabularies.
+For KG pipelines, entity extraction is usually followed by **canonicalisation** (mapping “UK”, “United Kingdom”, “Britain” → one canonical entity ID). Elastic’s **enrich processor** supports ingest-time enrichment from another index (reference data). citeturn5search1turn5search4 This is a natural fit for entity dictionaries and controlled vocabularies.
 
 **Relationship modelling: implicit vs explicit**  
 Elastic supports two relationship paradigms:
 
-- **Implicit relationships (Elastic Graph):** relationships are inferred from document co-occurrence among indexed terms. You configure vertex fields and connection fields; the API builds a term graph, optionally filtered by significance. citeturn0search1turn25view0  
-- **Explicit relationships (KG-in-ES):** you model relationships explicitly as documents (edge/triple records). Elastic’s own GraphRAG guidance describes storing graph triplets directly in Elasticsearch and dynamically generating subgraphs for retrieval. citeturn4search0  
+- **Implicit relationships (Elastic Graph):** relationships are inferred from document co-occurrence among indexed terms. You configure vertex fields and connection fields; the API builds a term graph, optionally filtered by significance. citeturn0search1turn25view0  
+- **Explicit relationships (KG-in-ES):** you model relationships explicitly as documents (edge/triple records). Elastic’s own GraphRAG guidance describes storing graph triplets directly in Elasticsearch and dynamically generating subgraphs for retrieval. citeturn4search0  
 
 The second approach is the usual way to represent a true (explicit) KG in Elasticsearch, but traversal is not a native engine feature (it is orchestrated in application logic).
 
 **Schema/ontology and reasoning support: limited in Elasticsearch**  
-Elasticsearch provides mappings, index templates, and analyzers as schema tooling; it does not provide RDF/OWL semantics, SPARQL, or built-in reasoning. In contrast, RDF knowledge-graph platforms are explicitly designed around triples and reasoning. W3C RDF defines the RDF data model, and SPARQL 1.1 defines a query language for RDF graphs. citeturn9search0turn8search3 Systems like Ontotext GraphDB document forward-chaining reasoning and total materialisation strategies, and Stardog documents reasoning integrated into SPARQL evaluation. citeturn9search10turn9search9turn9search13
+Elasticsearch provides mappings, index templates, and analyzers as schema tooling; it does not provide RDF/OWL semantics, SPARQL, or built-in reasoning. In contrast, RDF knowledge-graph platforms are explicitly designed around triples and reasoning. W3C RDF defines the RDF data model, and SPARQL 1.1 defines a query language for RDF graphs. citeturn9search0turn8search3 Systems like Ontotext GraphDB document forward-chaining reasoning and total materialisation strategies, and Stardog documents reasoning integrated into SPARQL evaluation. citeturn9search10turn9search9turn9search13
 
 Implication: Elasticsearch can store KG-shaped data, but **ontology-driven inference and constraint validation must be external** (ETL/ML layer, application logic, or a dedicated KG platform).
 
 **Semantic search: embeddings, vectors, and hybrid retrieval**  
 Elastic offers multiple semantic retrieval options:
 
-- **Dense vector search** using `dense_vector` fields (primarily for kNN search); dense vectors do **not support aggregations or sorting**, so you preserve structured fields for analytics downstream. citeturn2search3  
-- **Sparse semantic retrieval** via ELSER and `sparse_vector`. Elastic explicitly states `sparse_vector` is the field type used with ELSER mappings, and `text_expansion` converts query text to token-weight pairs to query sparse vectors or rank-features. citeturn3search0turn3search4turn20search0  
-- The higher-level **`semantic_text`** field type, which aims to automate much of the mapping/ingest/chunking work for semantic search; Elastic warns that using `semantic_text` without an appropriate licence can cause indexing/reindexing to fail because it typically calls the inference API. citeturn3search1turn3search17  
+- **Dense vector search** using `dense_vector` fields (primarily for kNN search); dense vectors do **not support aggregations or sorting**, so you preserve structured fields for analytics downstream. citeturn2search3  
+- **Sparse semantic retrieval** via ELSER and `sparse_vector`. Elastic explicitly states `sparse_vector` is the field type used with ELSER mappings, and `text_expansion` converts query text to token-weight pairs to query sparse vectors or rank-features. citeturn3search0turn3search4turn20search0  
+- The higher-level **`semantic_text`** field type, which aims to automate much of the mapping/ingest/chunking work for semantic search; Elastic warns that using `semantic_text` without an appropriate licence can cause indexing/reindexing to fail because it typically calls the inference API. citeturn3search1turn3search17  
 
 These semantic primitives are directly useful in KG scenarios: you can semantically retrieve **entity nodes**, **relationship evidence**, or **document passages** before building an explicit subgraph (GraphRAG pattern).
 
@@ -630,8 +630,8 @@ These semantic primitives are directly useful in KG scenarios: you can semantica
 Elastic does not provide native KG federation; linking is typically achieved through:
 
 - storing external KB IDs/IRIs in entity documents, and/or  
-- Kibana Graph “drilldown URLs” and similar UI actions, which allow users to jump from a vertex term to an external system (Elastic describes drilldown configuration as part of Graph settings). citeturn21search3  
-- connectors replicating content from external systems into Elastic as searchable indices (useful when you want to treat external KB documents as part of retrieval). citeturn7search0turn7search4  
+- Kibana Graph “drilldown URLs” and similar UI actions, which allow users to jump from a vertex term to an external system (Elastic describes drilldown configuration as part of Graph settings). citeturn21search3  
+- connectors replicating content from external systems into Elastic as searchable indices (useful when you want to treat external KB documents as part of retrieval). citeturn7search0turn7search4  
 
 ## Data modelling and indexing strategies for graph and KG workloads on Elasticsearch
 
@@ -648,25 +648,25 @@ The modelling decision that determines success or failure is whether you treat E
 
 - `kg_entities` index: one document per canonical entity (plus aliases, metadata, embeddings).  
 - `kg_relations` index: one document per relationship/triple/edge (subject_id, predicate, object_id, provenance, confidence, optional embeddings for evidence text).  
-This aligns with Elastic’s own GraphRAG approach of storing triplets and dynamically extracting subgraphs. citeturn4search0
+This aligns with Elastic’s own GraphRAG approach of storing triplets and dynamically extracting subgraphs. citeturn4search0
 
 **Why Elastic recommends denormalisation over joins**  
-Elasticsearch’s join features exist, but the platform is explicit about trade-offs: the **join field** “shouldn’t be used like joins in a relational database”; each `has_child`/`has_parent` query adds a “significant tax” to performance and can trigger global ordinals. Elastic says the join field only makes sense in certain one-to-many situations where one entity outnumbers the other (e.g., products and offers). citeturn19search0  
-Nested fields are also “typically expensive,” and Elastic even recommends `flattened` in some cases; nested fields have incomplete Kibana support. citeturn19search1
+Elasticsearch’s join features exist, but the platform is explicit about trade-offs: the **join field** “shouldn’t be used like joins in a relational database”; each `has_child`/`has_parent` query adds a “significant tax” to performance and can trigger global ordinals. Elastic says the join field only makes sense in certain one-to-many situations where one entity outnumbers the other (e.g., products and offers). citeturn19search0  
+Nested fields are also “typically expensive,” and Elastic even recommends `flattened` in some cases; nested fields have incomplete Kibana support. citeturn19search1
 
 For graph/KG: these warnings imply that **many-to-many edges are better represented as separate edge documents** rather than parent/child joins.
 
 **Ingest pipelines and processors: extraction, normalisation, enrichment**  
-Elastic documents ingest pipelines as ordered sequences of processors where each processor depends on the previous output, making ordering critical. citeturn5search12turn5search20 For KG building, common steps are: parse → NLP inference → canonicalise → enrich → route/index.
+Elastic documents ingest pipelines as ordered sequences of processors where each processor depends on the previous output, making ordering critical. citeturn5search12turn5search20 For KG building, common steps are: parse → NLP inference → canonicalise → enrich → route/index.
 
-- **Inference processor:** runs ML inference at ingest, including NLP models. citeturn2search4turn2search0  
-- **Enrich processor:** enriches documents from another index; Elastic strongly recommends benchmarking enrich in production-like settings and explicitly does **not recommend** using enrich to append real-time data. It works best for reference data that doesn’t change frequently; it can impact ingest speed; Elastic recommends co-locating ingest and data roles to minimise remote searches. citeturn5search0turn5search1  
+- **Inference processor:** runs ML inference at ingest, including NLP models. citeturn2search4turn2search0  
+- **Enrich processor:** enriches documents from another index; Elastic strongly recommends benchmarking enrich in production-like settings and explicitly does **not recommend** using enrich to append real-time data. It works best for reference data that doesn’t change frequently; it can impact ingest speed; Elastic recommends co-locating ingest and data roles to minimise remote searches. citeturn5search0turn5search1  
 
 **Entity extraction example as an official building block**  
-Elastic’s NER example explicitly targets the “deploy, test, add to ingest pipeline” workflow, which is a direct on-ramp to entity extraction for KG pipelines. citeturn2search1
+Elastic’s NER example explicitly targets the “deploy, test, add to ingest pipeline” workflow, which is a direct on-ramp to entity extraction for KG pipelines. citeturn2search1
 
 **Vector indexing and performance/scalability**  
-Vector search has unique operational costs. Elasticsearch’s approximate kNN search uses **HNSW**, which is an approximate method trading accuracy for speed; the API supports filters to restrict the candidate set. citeturn3search18turn4search9 Elastic also provides production guidance for tuning approximate kNN search and notes that kNN indexing builds vector index structures and has performance considerations distinct from “normal” search. citeturn20search2turn3search10 Elastic’s Search Labs HNSW guidance highlights a key architectural point: **each Lucene segment has its own HNSW graph**, and segments are searched independently. citeturn4search1 The HNSW algorithm itself is described in the foundational paper by Malkov & Yashunin. citeturn4search2
+Vector search has unique operational costs. Elasticsearch’s approximate kNN search uses **HNSW**, which is an approximate method trading accuracy for speed; the API supports filters to restrict the candidate set. citeturn3search18turn4search9 Elastic also provides production guidance for tuning approximate kNN search and notes that kNN indexing builds vector index structures and has performance considerations distinct from “normal” search. citeturn20search2turn3search10 Elastic’s Search Labs HNSW guidance highlights a key architectural point: **each Lucene segment has its own HNSW graph**, and segments are searched independently. citeturn4search1 The HNSW algorithm itself is described in the foundational paper by Malkov & Yashunin. citeturn4search2
 
 For graph-shaped KGs, this matters because vector-heavy entity/edge indices can become memory-relevant; you must size for vector data and query load, not only term search.
 
@@ -680,16 +680,16 @@ The Graph explore API defines:
 - a **seed query**;  
 - **vertices** (fields containing the terms to treat as vertices), including include/exclude, `size`, `min_doc_count` thresholds;  
 - **connections** (fields to extract associated terms), which can be nested into multiple levels; each nesting level is “considered a hop,” and the API talks about proximity in hop depth;  
-- **controls** such as `use_significance` (based on `significant_terms`) and `sample_size` (sampling top docs per shard). citeturn25view0turn6search3turn6search0  
+- **controls** such as `use_significance` (based on `significant_terms`) and `sample_size` (sampling top docs per shard). citeturn25view0turn6search3turn6search0  
 
-Elastic also clarifies an important interpretability nuance: in Graph explore responses, the `doc_count` for a connection reflects how many documents in the **sample set** contain the pairing, not a global corpus count. citeturn25view0 This is why Graph is excellent for **discovery** but not a deterministic traversal engine.
+Elastic also clarifies an important interpretability nuance: in Graph explore responses, the `doc_count` for a connection reflects how many documents in the **sample set** contain the pairing, not a global corpus count. citeturn25view0 This is why Graph is excellent for **discovery** but not a deterministic traversal engine.
 
 **Aggregation primitives that look like graph operations**  
 Even without Graph explore, you can perform relationship-like analytics:
 
-- **`significant_terms` aggregation** returns statistically unusual/interesting term occurrences and is explicitly described as supporting fraud/common-point-of-compromise scenarios. citeturn6search0turn22search10  
-- **`adjacency_matrix` aggregation** returns named intersections among filter sets (“cells” in a matrix of intersecting filters). This can be used to compute co-membership overlap patterns (an adjacency-like representation). citeturn6search1  
-- Relationship analytics performance is often governed by **doc values and global ordinals**; Elastic documents how term-based field types store doc values with ordinal mappings and how global ordinals support aggregation-like operations. citeturn6search2turn19search15  
+- **`significant_terms` aggregation** returns statistically unusual/interesting term occurrences and is explicitly described as supporting fraud/common-point-of-compromise scenarios. citeturn6search0turn22search10  
+- **`adjacency_matrix` aggregation** returns named intersections among filter sets (“cells” in a matrix of intersecting filters). This can be used to compute co-membership overlap patterns (an adjacency-like representation). citeturn6search1  
+- Relationship analytics performance is often governed by **doc values and global ordinals**; Elastic documents how term-based field types store doc values with ordinal mappings and how global ordinals support aggregation-like operations. citeturn6search2turn19search15  
 
 **k-hop and subgraph extraction: how teams implement it on Elastic**  
 Elasticsearch does not provide a native `kHop(startNode, k)` operator over explicit edges, nor native shortest path. Instead, teams typically:
@@ -699,10 +699,10 @@ Elasticsearch does not provide a native `kHop(startNode, k)` operator over expli
 3) cap expansion to avoid hub explosion;  
 4) optionally use semantic ranking to choose which edges to expand.
 
-Elastic’s own GraphRAG article follows this “build a tailored subgraph for the query” approach on Elasticsearch-stored triplets. citeturn4search0 Operationally, deep expansions risk hitting search pagination constraints; Elastic discourages deep `from/size` pagination beyond 10,000 hits and recommends `search_after` with a point-in-time (PIT) when preserving index state is needed. citeturn19search2
+Elastic’s own GraphRAG article follows this “build a tailored subgraph for the query” approach on Elasticsearch-stored triplets. citeturn4search0 Operationally, deep expansions risk hitting search pagination constraints; Elastic discourages deep `from/size` pagination beyond 10,000 hits and recommends `search_after` with a point-in-time (PIT) when preserving index state is needed. citeturn19search2
 
 **Shortest path: not a native Elasticsearch feature**  
-Unlike Neo4j, which documents a `SHORTEST` keyword for shortest path variations and reachability constructs, Elasticsearch does not offer a built-in shortest-path query primitive. citeturn8search16 In Elastic-based systems, shortest path requires either:
+Unlike Neo4j, which documents a `SHORTEST` keyword for shortest path variations and reachability constructs, Elasticsearch does not offer a built-in shortest-path query primitive. citeturn8search16 In Elastic-based systems, shortest path requires either:
 
 - exporting the relevant subgraph and running a graph algorithm externally, or  
 - integrating a graph database/graph analytics engine.
@@ -710,66 +710,66 @@ Unlike Neo4j, which documents a `SHORTEST` keyword for shortest path variations 
 **Combining vector + graph queries: recommended hybrid patterns**  
 For KG-enhanced search, one high-leverage pattern is “retrieve semantically, then expand structurally”:
 
-- Step A: Elasticsearch retrieves top entities/edges/doc passages using dense vectors (`dense_vector` + kNN) or sparse semantics (ELSER + `sparse_vector` / `text_expansion`). citeturn2search3turn3search0turn3search4turn20search0  
+- Step A: Elasticsearch retrieves top entities/edges/doc passages using dense vectors (`dense_vector` + kNN) or sparse semantics (ELSER + `sparse_vector` / `text_expansion`). citeturn2search3turn3search0turn3search4turn20search0  
 - Step B: application builds a bounded subgraph by pulling edges touching those entities.  
 - Step C: optionally re-rank using Elastic’s multi-stage retrieval pipelines (**retrievers**) or custom scoring.
 
-Version note: Elastic retrievers were added to the Search API in **8.14.0** and became GA in **8.16.0**, enabling multi-stage retrieval pipelines in a single `_search` call. citeturn24search1turn24search0 The **RRF retriever** combines multiple child retrievers into one ranked list. citeturn3search3
+Version note: Elastic retrievers were added to the Search API in **8.14.0** and became GA in **8.16.0**, enabling multi-stage retrieval pipelines in a single `_search` call. citeturn24search1turn24search0 The **RRF retriever** combines multiple child retrievers into one ranked list. citeturn3search3
 
-Licensing note: Elastic’s current subscription matrix shows that advanced retrieval functions (including RRF and some retrievers) are tier-dependent, so organisations on Basic may need to implement fusion/reranking in application code. citeturn15view0turn18view1
+Licensing note: Elastic’s current subscription matrix shows that advanced retrieval functions (including RRF and some retrievers) are tier-dependent, so organisations on Basic may need to implement fusion/reranking in application code. citeturn15view0turn18view1
 
 ## Tooling and ecosystem: Kibana, clients, connectors, integrations, and third-party tooling
 
 **Kibana visualisation surface**  
 Elastic provides multiple “surfaces” for graph and KG-adjacent workflows:
 
-- **Kibana Graph** for interactive association exploration. citeturn0search13turn0search1  
-- **Kibana Lens** for general analytics and dashboards; Lens is described as Kibana’s drag-and-drop visualisation editor. citeturn10search3  
-- **Vega/Vega-Lite** panels for custom visualisations; Elastic documents that Vega panels can query Elasticsearch and other sources and support Kibana extensions. citeturn21search1turn21search13  
-- **Kibana Maps**, including term joins and layer-based filtering considerations. citeturn1search2turn10search18turn10search14  
+- **Kibana Graph** for interactive association exploration. citeturn0search13turn0search1  
+- **Kibana Lens** for general analytics and dashboards; Lens is described as Kibana’s drag-and-drop visualisation editor. citeturn10search3  
+- **Vega/Vega-Lite** panels for custom visualisations; Elastic documents that Vega panels can query Elasticsearch and other sources and support Kibana extensions. citeturn21search1turn21search13  
+- **Kibana Maps**, including term joins and layer-based filtering considerations. citeturn1search2turn10search18turn10search14  
 
 These tools matter because KG projects frequently depend on good exploratory UX and analyst workflows even if the backend data is not a “native” KG platform.
 
 **Graph API clients and programmatic access**  
 Elastic’s Graph explore endpoint is exposed through official clients, including:
 
-- Python client Graph explore docs. citeturn0search4  
-- Go typed client Graph explore API. citeturn0search8  
-- .NET client Graph namespace. citeturn0search12  
+- Python client Graph explore docs. citeturn0search4  
+- Go typed client Graph explore API. citeturn0search8  
+- .NET client Graph namespace. citeturn0search12  
 
 This enables building bespoke graph-assisted applications (fraud rings, recommendations, entity investigation) on top of Elastic’s term-association model.
 
 **Connectors and content ingestion**  
-Elastic connectors synchronise data from third-party sources into Elasticsearch and create searchable, read-only replicas. Elastic highlights that connectors are written in Python and that source is available in `elastic/connectors`. citeturn7search0turn7search4 Content sync behaviour matters for consistency: Elastic documents that a **full sync** deletes Elasticsearch documents that no longer exist in the source, improving consistency at the cost of longer runtimes. citeturn7search12 Connector-specific DLS is versioned and described as introduced in 8.9.0 (beta), with prerequisites; this can be relevant if you treat connector-ingested content as part of a “knowledge base”. citeturn7search11
+Elastic connectors synchronise data from third-party sources into Elasticsearch and create searchable, read-only replicas. Elastic highlights that connectors are written in Python and that source is available in `elastic/connectors`. citeturn7search0turn7search4 Content sync behaviour matters for consistency: Elastic documents that a **full sync** deletes Elasticsearch documents that no longer exist in the source, improving consistency at the cost of longer runtimes. citeturn7search12 Connector-specific DLS is versioned and described as introduced in 8.9.0 (beta), with prerequisites; this can be relevant if you treat connector-ingested content as part of a “knowledge base”. citeturn7search11
 
 **Beats and Logstash: classic ingestion and enrichment**  
-Beats can ship data directly to Elasticsearch or via Logstash, enabling event-to-entity correlation workflows (security/observability graphs). citeturn7search1turn7search5 Logstash’s Elasticsearch output plugin is an established pathway for high-throughput ingestion into Elasticsearch. citeturn5search3turn5search17
+Beats can ship data directly to Elasticsearch or via Logstash, enabling event-to-entity correlation workflows (security/observability graphs). citeturn7search1turn7search5 Logstash’s Elasticsearch output plugin is an established pathway for high-throughput ingestion into Elasticsearch. citeturn5search3turn5search17
 
 **Open-source and example repositories**  
 Elastic maintains multiple repos that often become “de facto references” for implementation patterns:
 
-- `elastic/elasticsearch` main repo (core engine). citeturn21search12  
-- `elastic/elasticsearch-labs` for notebooks and example apps for vector search, hybrid search, and RAG-style applications. citeturn4search3  
-- `elastic/search-ui` (open-source Search UI library) for building search UIs on Elastic backends—useful in KG-backed search experiences. citeturn21search0turn21search4  
-- `elastic/beats` and Logstash plugin repos, for ingestion tooling. citeturn7search5turn5search7  
+- `elastic/elasticsearch` main repo (core engine). citeturn21search12  
+- `elastic/elasticsearch-labs` for notebooks and example apps for vector search, hybrid search, and RAG-style applications. citeturn4search3  
+- `elastic/search-ui` (open-source Search UI library) for building search UIs on Elastic backends—useful in KG-backed search experiences. citeturn21search0turn21search4  
+- `elastic/beats` and Logstash plugin repos, for ingestion tooling. citeturn7search5turn5search7  
 
 ## Security, access control, licensing, and deployment options
 
 **Access control and security model**  
-Elastic’s security model is privilege-based: roles are built from cluster, indices, run-as, and application privileges. citeturn7search2 Fine-grained controls include **field-level security** and **document-level security**, but Elastic warns these features are meant for **read-only privileged accounts** (users with DLS/FLS should not perform writes). citeturn7search3
+Elastic’s security model is privilege-based: roles are built from cluster, indices, run-as, and application privileges. citeturn7search2 Fine-grained controls include **field-level security** and **document-level security**, but Elastic warns these features are meant for **read-only privileged accounts** (users with DLS/FLS should not perform writes). citeturn7search3
 
 For KG scenarios, this warning matters because:
 
 - if you treat Elasticsearch as a shared KG store, you must separate write pipelines (service accounts) from user-facing read roles;  
-- if you project sensitive relationships, DLS/FLS might be necessary but introduces operational complexity and licensing constraints. citeturn7search6turn7search3
+- if you project sensitive relationships, DLS/FLS might be necessary but introduces operational complexity and licensing constraints. citeturn7search6turn7search3
 
 **Licensing implications (graph + semantic features)**  
-Elastic’s documentation is explicit that licences/subscriptions determine available features; licences apply at different levels depending on deployment type (cloud vs self-managed). citeturn0search10 The self-managed subscriptions table defines tiers including “Free and open – Basic”, “Platinum”, and “Enterprise” (and notes Gold is discontinued). citeturn18view0 Within that matrix, **Graph exploration** is shown as not available in the Basic tier but available in higher tiers (check marks in non-Basic columns). citeturn14view0turn18view1
+Elastic’s documentation is explicit that licences/subscriptions determine available features; licences apply at different levels depending on deployment type (cloud vs self-managed). citeturn0search10 The self-managed subscriptions table defines tiers including “Free and open – Basic”, “Platinum”, and “Enterprise” (and notes Gold is discontinued). citeturn18view0 Within that matrix, **Graph exploration** is shown as not available in the Basic tier but available in higher tiers (check marks in non-Basic columns). citeturn14view0turn18view1
 
-For semantic features, Elastic’s `semantic_text` docs warn that although the mapping can be added regardless of licence state, it typically calls the inference API; without an appropriate licence, indexing and reindexing may fail. citeturn3search1 ELSER also has explicit subscription requirements (“appropriate subscription level for semantic search or trial period activated”). citeturn20search0
+For semantic features, Elastic’s `semantic_text` docs warn that although the mapping can be added regardless of licence state, it typically calls the inference API; without an appropriate licence, indexing and reindexing may fail. citeturn3search1 ELSER also has explicit subscription requirements (“appropriate subscription level for semantic search or trial period activated”). citeturn20search0
 
 **Deployment options: cloud hosted vs serverless vs self-managed**  
-Elastic Cloud Serverless is described as fully managed, decoupling compute and storage and removing the need to manage clusters/nodes/tiers directly. citeturn21search11turn23search0 Elastic also documents a comparison guide for Cloud Hosted vs Serverless. citeturn23search15 However, Elastic’s Graph docs are labelled **“Serverless Unavailable”** (Graph UI/configuration/troubleshooting pages), implying that Kibana Graph is not available in serverless projects even if it exists in stack deployments. citeturn23search9turn21search3turn21search7
+Elastic Cloud Serverless is described as fully managed, decoupling compute and storage and removing the need to manage clusters/nodes/tiers directly. citeturn21search11turn23search0 Elastic also documents a comparison guide for Cloud Hosted vs Serverless. citeturn23search15 However, Elastic’s Graph docs are labelled **“Serverless Unavailable”** (Graph UI/configuration/troubleshooting pages), implying that Kibana Graph is not available in serverless projects even if it exists in stack deployments. citeturn23search9turn21search3turn21search7
 
 Practical implication: if Graph UI is a core requirement, plan around **Elastic Stack deployments (self-managed / ECK / ECE / Cloud Hosted)** rather than assuming Serverless will support it.
 
@@ -779,27 +779,27 @@ Practical implication: if Graph UI is a core requirement, plan around **Elastic 
 
 **Strengths**
 
-- Large-scale text search, relevance ranking, aggregations, and near-real-time indexing behaviour. citeturn5search3turn0search1  
-- Out-of-the-box association graphs via Graph explore API, including multi-hop “spidering” and significance filtering. citeturn25view0turn6search3  
-- Ingest-time ML inference (NER, embeddings), enrichment joins, and mature ingestion ecosystem (Beats, Logstash, connectors). citeturn2search4turn5search0turn7search0turn7search1turn5search3  
-- Native vector search (HNSW-based approximate kNN) and sparse semantic retrieval (ELSER). citeturn3search18turn4search1turn20search0turn3search0  
+- Large-scale text search, relevance ranking, aggregations, and near-real-time indexing behaviour. citeturn5search3turn0search1  
+- Out-of-the-box association graphs via Graph explore API, including multi-hop “spidering” and significance filtering. citeturn25view0turn6search3  
+- Ingest-time ML inference (NER, embeddings), enrichment joins, and mature ingestion ecosystem (Beats, Logstash, connectors). citeturn2search4turn5search0turn7search0turn7search1turn5search3  
+- Native vector search (HNSW-based approximate kNN) and sparse semantic retrieval (ELSER). citeturn3search18turn4search1turn20search0turn3search0  
 
 **Gaps**
 
-- No native equivalents of **shortest path**, general path pattern matching, or a graph traversal query language. Neo4j documents shortest-path query support directly in Cypher, highlighting the contrast. citeturn8search16  
-- No ontology reasoning or SPARQL; RDF and SPARQL are formalised by W3C and supported by dedicated KG platforms. citeturn9search0turn8search3  
-- Relationship modelling is largely “bring your own model” (edge docs) and “bring your own traversal” (application logic), which increases complexity and can be expensive at high hop counts; deep pagination constraints (10k result window; preference for PIT + `search_after`) become relevant quickly. citeturn19search2turn4search0  
+- No native equivalents of **shortest path**, general path pattern matching, or a graph traversal query language. Neo4j documents shortest-path query support directly in Cypher, highlighting the contrast. citeturn8search16  
+- No ontology reasoning or SPARQL; RDF and SPARQL are formalised by W3C and supported by dedicated KG platforms. citeturn9search0turn8search3  
+- Relationship modelling is largely “bring your own model” (edge docs) and “bring your own traversal” (application logic), which increases complexity and can be expensive at high hop counts; deep pagination constraints (10k result window; preference for PIT + `search_after`) become relevant quickly. citeturn19search2turn4search0  
 
 ### Recommended patterns and workarounds
 
 **Pattern: Elastic Graph for association discovery**
 
 - Use Graph explore when your graph question is: “Which terms co-occur meaningfully in a subset of documents?”  
-- Tune `sample_size`, `use_significance`, and `min_doc_count` depending on whether you need signal vs completeness (Elastic explains these defaults and how they can miss details). citeturn6search3turn25view0
+- Tune `sample_size`, `use_significance`, and `min_doc_count` depending on whether you need signal vs completeness (Elastic explains these defaults and how they can miss details). citeturn6search3turn25view0
 
 **Pattern: Explicit triplets store + bounded expansion (GraphRAG-style)**
 
-- Store edge documents and build subgraphs dynamically at query time; cap neighbour counts; use semantic retrieval to prioritise expansions. Elastic’s GraphRAG guidance is a concrete reference for this design. citeturn4search0turn19search2
+- Store edge documents and build subgraphs dynamically at query time; cap neighbour counts; use semantic retrieval to prioritise expansions. Elastic’s GraphRAG guidance is a concrete reference for this design. citeturn4search0turn19search2
 
 **Pattern: Dual-store (graph DB + Elasticsearch)**
 
@@ -809,31 +809,31 @@ Practical implication: if Graph UI is a core requirement, plan around **Elastic 
 
 | System | Native graph model | Query language for traversal | Shortest path | Semantic search / vectors | Typical strengths / use-cases |
 |---|---|---|---|---|---|
-| Elasticsearch + Elastic Graph | Document index; Graph = term association over documents citeturn0search1turn25view0 | Elasticsearch Query DSL; Graph explore API “hops” over term associations citeturn25view0 | Not native (application or external) | Strong: dense vectors (`dense_vector`), sparse `sparse_vector`/ELSER, `semantic_text` (licence-dependent) citeturn2search3turn3search0turn3search1turn20search0 | Search-first systems; association discovery; KG-shaped retrieval (GraphRAG); log/security investigation |
-| Neo4j | Property graph (nodes + relationships) | Cypher (pattern matching, variable-length paths) citeturn8search0 | Native (`SHORTEST`) citeturn8search16 | Available (vector index), but many deployments still pair ES for search citeturn22search3 | Traversal-heavy apps; fraud rings; recommendation paths; graph algorithms (GDS) citeturn22search3 |
-| JanusGraph | Property graph with pluggable storage/index backends | Gremlin (via Apache TinkerPop) | Via Gremlin/analytics stack | Often uses external index; JanusGraph explicitly supports Elasticsearch as an index backend citeturn8search1turn8search9 | Very large graphs with distributed storage; operational flexibility; external indexing |
-| TigerGraph | Native distributed graph system | GSQL with distributed traversal execution | Supported via query/algorithm patterns | Varies by setup | Large-scale traversal/analytics; distributed query mode for multi-machine traversals citeturn8search2turn8search14 |
-| RDF KG platforms (e.g., GraphDB, Stardog) | RDF triples (subject–predicate–object) citeturn9search0 | SPARQL 1.1 citeturn8search3 | Path queries supported via SPARQL property paths (platform-dependent) | Often integrate text search; some support vector/ML add-ons | Ontology-centric KGs; reasoning/inference; semantic constraints (GraphDB/Stardog reasoning) citeturn9search10turn9search9turn9search13 |
+| Elasticsearch + Elastic Graph | Document index; Graph = term association over documents citeturn0search1turn25view0 | Elasticsearch Query DSL; Graph explore API “hops” over term associations citeturn25view0 | Not native (application or external) | Strong: dense vectors (`dense_vector`), sparse `sparse_vector`/ELSER, `semantic_text` (licence-dependent) citeturn2search3turn3search0turn3search1turn20search0 | Search-first systems; association discovery; KG-shaped retrieval (GraphRAG); log/security investigation |
+| Neo4j | Property graph (nodes + relationships) | Cypher (pattern matching, variable-length paths) citeturn8search0 | Native (`SHORTEST`) citeturn8search16 | Available (vector index), but many deployments still pair ES for search citeturn22search3 | Traversal-heavy apps; fraud rings; recommendation paths; graph algorithms (GDS) citeturn22search3 |
+| JanusGraph | Property graph with pluggable storage/index backends | Gremlin (via Apache TinkerPop) | Via Gremlin/analytics stack | Often uses external index; JanusGraph explicitly supports Elasticsearch as an index backend citeturn8search1turn8search9 | Very large graphs with distributed storage; operational flexibility; external indexing |
+| TigerGraph | Native distributed graph system | GSQL with distributed traversal execution | Supported via query/algorithm patterns | Varies by setup | Large-scale traversal/analytics; distributed query mode for multi-machine traversals citeturn8search2turn8search14 |
+| RDF KG platforms (e.g., GraphDB, Stardog) | RDF triples (subject–predicate–object) citeturn9search0 | SPARQL 1.1 citeturn8search3 | Path queries supported via SPARQL property paths (platform-dependent) | Often integrate text search; some support vector/ML add-ons | Ontology-centric KGs; reasoning/inference; semantic constraints (GraphDB/Stardog reasoning) citeturn9search10turn9search9turn9search13 |
 
 ### When to use Elasticsearch for graph/KG needs vs when to choose a graph DB
 
 Use **Elasticsearch (and optionally Elastic Graph)** when:
 
-- The product is **search-led** and graph is used for **association discovery** or to provide “related things” based on co-occurrence. citeturn0search1turn25view0  
-- You need a **single platform** for text + filter analytics + embeddings + ingestion at scale; and traversal can be bounded and application-driven (GraphRAG-style subgraph). citeturn4search0turn2search3turn19search2  
-- You want to operationalise entity extraction and enrichment at ingest time using inference + enrich pipelines. citeturn2search4turn5search0turn2search1  
+- The product is **search-led** and graph is used for **association discovery** or to provide “related things” based on co-occurrence. citeturn0search1turn25view0  
+- You need a **single platform** for text + filter analytics + embeddings + ingestion at scale; and traversal can be bounded and application-driven (GraphRAG-style subgraph). citeturn4search0turn2search3turn19search2  
+- You want to operationalise entity extraction and enrichment at ingest time using inference + enrich pipelines. citeturn2search4turn5search0turn2search1  
 
 Choose a **dedicated graph DB / KG platform** when:
 
-- You require **variable-length traversal, shortest path, or complex pattern matching** as standard queries (Neo4j Cypher is the canonical reference). citeturn8search0turn8search16  
-- You rely on **graph algorithms** as first-class operations (centrality, community detection, embeddings, path finding). Neo4j’s GDS library documents broad algorithm coverage. citeturn22search3  
-- You require **ontology reasoning** and SPARQL-level graph semantics (GraphDB/Stardog reasoning; W3C standards). citeturn8search3turn9search10turn9search9  
+- You require **variable-length traversal, shortest path, or complex pattern matching** as standard queries (Neo4j Cypher is the canonical reference). citeturn8search0turn8search16  
+- You rely on **graph algorithms** as first-class operations (centrality, community detection, embeddings, path finding). Neo4j’s GDS library documents broad algorithm coverage. citeturn22search3  
+- You require **ontology reasoning** and SPARQL-level graph semantics (GraphDB/Stardog reasoning; W3C standards). citeturn8search3turn9search10turn9search9  
 
 ## Practical examples: mappings, pipelines, queries, and reference architectures
 
 ### Example explicit KG indices in Elasticsearch (entities + relations)
 
-Below is a pragmatic baseline for explicit KGs in Elasticsearch. It respects Elastic’s constraints: vectors are for kNN and cannot be aggregated; keep structured fields for filtering/analytics. citeturn2search3
+Below is a pragmatic baseline for explicit KGs in Elasticsearch. It respects Elastic’s constraints: vectors are for kNN and cannot be aggregated; keep structured fields for filtering/analytics. citeturn2search3
 
 **Entities index**
 
@@ -889,14 +889,14 @@ PUT kg_relations
 }
 ```
 
-This aligns with Elastic’s GraphRAG recommendation to store triplets/edges and build query-specific subgraphs. citeturn4search0
+This aligns with Elastic’s GraphRAG recommendation to store triplets/edges and build query-specific subgraphs. citeturn4search0
 
 ### Example ingest pipeline: NER inference + reference enrichment
 
 This combines:
 
-- the **inference processor** (NER model) citeturn2search4turn2search1  
-- the **enrich processor** (reference entity dictionary join), with the caveat that enrich is best for slowly changing reference data and can impact ingest speed. citeturn5search0turn5search1  
+- the **inference processor** (NER model) citeturn2search4turn2search1  
+- the **enrich processor** (reference entity dictionary join), with the caveat that enrich is best for slowly changing reference data and can impact ingest speed. citeturn5search0turn5search1  
 
 ```json
 PUT _ingest/pipeline/kg_ingest_v1
@@ -923,7 +923,7 @@ PUT _ingest/pipeline/kg_ingest_v1
 
 ### Example: Elastic Graph explore API request (association graph)
 
-This request seeds exploration from a filtered query, defines vertices, and expands connections one hop. It uses the defaults and controls described in Elastic’s Graph explore API docs (sampling, significance, min doc count). citeturn25view0turn6search3turn0search0
+This request seeds exploration from a filtered query, defines vertices, and expands connections one hop. It uses the defaults and controls described in Elastic’s Graph explore API docs (sampling, significance, min doc count). citeturn25view0turn6search3turn0search0
 
 ```json
 POST events-*/_graph/explore
@@ -953,7 +953,7 @@ POST events-*/_graph/explore
 
 ### Example: adjacency-matrix “overlap graph” using aggregations
 
-Elastic describes `adjacency_matrix` as returning non-empty intersections among named filters (a form of adjacency matrix). citeturn6search1
+Elastic describes `adjacency_matrix` as returning non-empty intersections among named filters (a form of adjacency matrix). citeturn6search1
 
 ```json
 POST transactions/_search
@@ -995,7 +995,7 @@ flowchart LR
   G --> H[Answering / UI<br/>Dashboards, RAG, analysts]
 ```
 
-The “inference → enrich” path is directly grounded in Elastic’s inference processor and enrich processor documentation. citeturn2search4turn5search1 The “bounded expansion” is aligned with Elastic’s GraphRAG guidance and the need to respect pagination constraints (PIT + `search_after`). citeturn4search0turn19search2
+The “inference → enrich” path is directly grounded in Elastic’s inference processor and enrich processor documentation. citeturn2search4turn5search1 The “bounded expansion” is aligned with Elastic’s GraphRAG guidance and the need to respect pagination constraints (PIT + `search_after`). citeturn4search0turn19search2
 
 #### Entity–relationship structure for an explicit KG in Elasticsearch
 
@@ -1038,11 +1038,11 @@ timeline
   2025-2026 : Enterprise Search sunset path : Enterprise Search not available in 9.0+
 ```
 
-The timeline references: HNSW paper citeturn4search2, retrievers versioning citeturn24search1turn24search0, ES|QL LOOKUP JOIN introduction citeturn21search14turn21search6, semantic_text licensing note citeturn3search1, and Enterprise Search 9.0 removal guidance citeturn1search8.
+The timeline references: HNSW paper citeturn4search2, retrievers versioning citeturn24search1turn24search0, ES|QL LOOKUP JOIN introduction citeturn21search14turn21search6, semantic_text licensing note citeturn3search1, and Enterprise Search 9.0 removal guidance citeturn1search8.
 
 ### “GraphRAG” context: why KGs matter for RAG and where Elastic fits
 
-Academic and industry work increasingly supports graph-enhanced retrieval for multi-hop reasoning and query-focused summarisation. Microsoft’s GraphRAG paper describes building an entity knowledge graph and using community summaries to answer questions over private corpora. citeturn22search0turn22search4 Surveys on GraphRAG emphasise that flat retrieval struggles with relational structure. citeturn22search1turn22search5 Elastic’s GraphRAG guidance shows how Elasticsearch can store and retrieve KG triplets effectively, but you should treat it as **search-centric KG storage**, not a graph traversal engine. citeturn4search0
+Academic and industry work increasingly supports graph-enhanced retrieval for multi-hop reasoning and query-focused summarisation. Microsoft’s GraphRAG paper describes building an entity knowledge graph and using community summaries to answer questions over private corpora. citeturn22search0turn22search4 Surveys on GraphRAG emphasise that flat retrieval struggles with relational structure. citeturn22search1turn22search5 Elastic’s GraphRAG guidance shows how Elasticsearch can store and retrieve KG triplets effectively, but you should treat it as **search-centric KG storage**, not a graph traversal engine. citeturn4search0
 
 ---
 

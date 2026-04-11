@@ -67,6 +67,7 @@ async function executeToolCall(): Promise<{
     toolHandlerOverrides: overrides,
     runtimeConfig,
     observability: createMockObservability(runtimeConfig),
+    getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
   });
   const response = await request(app)
     .post('/mcp')

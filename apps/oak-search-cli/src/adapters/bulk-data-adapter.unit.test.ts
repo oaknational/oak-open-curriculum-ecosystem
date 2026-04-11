@@ -83,7 +83,7 @@ describe('transformBulkLessonToESDoc', () => {
       unitInfo: {
         unitSlug: 'test-unit',
         unitTitle: 'Test Unit Title',
-        canonicalUrl: 'https://example.com/units/test-unit',
+        oakUrl: 'https://example.com/units/test-unit',
       },
       years: ['4'],
     };
@@ -112,7 +112,7 @@ describe('transformBulkLessonToESDoc', () => {
     });
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 
@@ -127,7 +127,7 @@ describe('transformBulkLessonToESDoc', () => {
     });
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 
@@ -145,7 +145,7 @@ describe('transformBulkLessonToESDoc', () => {
     });
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 
@@ -160,7 +160,7 @@ describe('transformBulkLessonToESDoc', () => {
     });
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 
@@ -173,7 +173,7 @@ describe('transformBulkLessonToESDoc', () => {
     const lesson = createMockLesson({ contentGuidance: null });
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 
@@ -195,7 +195,7 @@ describe('transformBulkLessonToESDoc', () => {
     });
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 
@@ -208,7 +208,7 @@ describe('transformBulkLessonToESDoc', () => {
     const lesson = createMockLesson({ pupilLessonOutcome: 'I can add fractions' });
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 
@@ -221,7 +221,7 @@ describe('transformBulkLessonToESDoc', () => {
     const lesson = createMockLesson({ supervisionLevel: 'Adult supervision required' });
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 
@@ -234,7 +234,7 @@ describe('transformBulkLessonToESDoc', () => {
     const lesson = createMockLesson();
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 
@@ -250,7 +250,7 @@ describe('transformBulkLessonToESDoc', () => {
     const lesson = createMockLesson({ transcript_sentences: undefined });
     const params: BulkToESLessonParams = {
       lesson,
-      unitInfo: { unitSlug: 'u', unitTitle: 'U', canonicalUrl: 'https://example.com/u' },
+      unitInfo: { unitSlug: 'u', unitTitle: 'U', oakUrl: 'https://example.com/u' },
       years: [],
     };
 

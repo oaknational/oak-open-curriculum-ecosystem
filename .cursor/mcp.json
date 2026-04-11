@@ -6,7 +6,7 @@
     },
     "oak-preview": {
       "type": "http",
-      "url": "https://poc-oak-open-curriculum-mcp-git-feat-searchclienhancements.vercel.thenational.academy/mcp"
+      "url": "https://poc-oak-open-curriculum-mcp-git-feat-mcpappui.vercel.thenational.academy/mcp"
     },
     "oak-local": {
       "type": "http",

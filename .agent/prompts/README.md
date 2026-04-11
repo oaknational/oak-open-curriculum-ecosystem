@@ -9,12 +9,16 @@ when the session needs a focused operational brief.
 
 | Prompt | Type | Purpose | Primary plan/reference |
 |---|---|---|---|
-| [session-continuation.prompt.md](session-continuation.prompt.md) | workflow | MCP App Extension Migration session entry point — live-spec-first research, coupling regression check, work stream detection, WS2 child plan reference | [mcp-app-extension-migration.plan.md](../plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md), [ws2-app-runtime-migration.plan.md](../plans/sdk-and-mcp-enhancements/active/ws2-app-runtime-migration.plan.md) |
-| [GO.md](GO.md) | workflow | Complementary execution cadence for plan-driven work: structure TODOs, interleave review/grounding, and keep reviewer checkpoints frequent | Current plan collection `README.md` plus its `current/README.md` or `active/README.md` |
+| [session-continuation.prompt.md](session-continuation.prompt.md) | workflow | MCP App continuity prompt for the PR #76 merge-handoff, Vercel/bootstrap verification lane, and the queued post-merge Phase 5 work | [roadmap.md](../plans/sdk-and-mcp-enhancements/roadmap.md), [mcp-app-extension-migration.plan.md](../plans/sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md), [ws3-widget-clean-break-rebuild.plan.md](../plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md), [ws3-phase-6-docs-gates-review-commit.plan.md](../plans/sdk-and-mcp-enhancements/active/ws3-phase-6-docs-gates-review-commit.plan.md), [vercel-mcp-build-warnings-and-bootstrap.plan.md](../plans/sdk-and-mcp-enhancements/active/vercel-mcp-build-warnings-and-bootstrap.plan.md), [current/README.md](../plans/sdk-and-mcp-enhancements/current/README.md) |
 | [gt-review.md](gt-review.md) | handover | Ground-truth evaluation session prompt for exhaustive review against both MCP tools and bulk data | [ground-truth-review-checklist.md](../plans/semantic-search/archive/completed/ground-truth-review-checklist.md), [ground-truth-session-template.md](../plans/semantic-search/templates/ground-truth-session-template.md) |
 | [semantic-search/semantic-search.prompt.md](semantic-search/semantic-search.prompt.md) | handover | Primary semantic-search session entry point — dormant, all plans archived | [active/README.md](../plans/semantic-search/active/README.md) |
 | [semantic-search/approaches-to-knowledge.prompt.md](semantic-search/approaches-to-knowledge.prompt.md) | handover | Research prompt exploring MCP, hybrid search, knowledge graphs, and atomic concepts as a unified quality system | Research-phase exploration; no single canonical execution plan |
 | [architecture-and-infrastructure/sentry-otel-foundation.prompt.md](architecture-and-infrastructure/sentry-otel-foundation.prompt.md) | handover | Sentry + OTel observability foundation session entry point | [sentry-otel-integration.execution.plan.md](../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) |
+
+Complementary execution cadence: use
+[`/jc-go`](../../.cursor/commands/jc-go.md), which reads
+[`.agent/commands/go.md`](../commands/go.md) and the shared
+[GO workflow](../skills/go/shared/go.md).
 
 ## Retained Completed Prompts
 

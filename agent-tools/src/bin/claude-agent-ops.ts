@@ -12,6 +12,10 @@ import {
 } from './claude-agent-ops-cli';
 import { detectPhaseFromEvents, resolveDiffCwd } from '../core/agent-ops';
 import {
+  evaluateAgentInfrastructureHealth,
+  formatAgentInfrastructureHealthReport,
+} from '../core/health-probe';
+import {
   listAgentShortIds,
   nonEmptyLines,
   readAgentEvents,
@@ -29,6 +33,7 @@ function createHandlers(args: CliArgs): Record<CliCommand, CliHandler> {
   return {
     help: () => printHelp(),
     status: () => printStatus(args.watch),
+    health: () => printHealth(),
     worktrees: () => printWorktrees(),
     log: () => printLog(args.agentId),
     diff: () => printDiff(args.agentId),
@@ -75,6 +80,10 @@ function printStatusSnapshot(root: string, homePath: string, watch: boolean): vo
     const worktree = resolveWorktree(root, id) ? 'yes' : 'no';
     writeLine(`- ${id} | phase=${phase} | tools=${events.toolNames.length} | worktree=${worktree}`);
   }
+}
+function printHealth(): void {
+  const report = evaluateAgentInfrastructureHealth(repoRoot());
+  writeLine(formatAgentInfrastructureHealthReport(report));
 }
 function printWorktrees(): void {
   const root = repoRoot();
@@ -151,7 +160,16 @@ function printPreflight(): void {
   writeLine(
     worktrees === 0 ? 'PASS No leftover agent worktrees' : 'FAIL Leftover agent worktrees found',
   );
-  writeLine(runPnpmGate('qg', root) ? 'PASS pnpm qg' : 'FAIL pnpm qg');
+  writeLine(
+    runPnpmGate('portability:check', root)
+      ? 'PASS pnpm portability:check'
+      : 'FAIL pnpm portability:check',
+  );
+  writeLine(
+    runPnpmGate('test:root-scripts', root)
+      ? 'PASS pnpm test:root-scripts'
+      : 'FAIL pnpm test:root-scripts',
+  );
 }
 function printCleanup(): void {
   const root = repoRoot();

@@ -15,7 +15,8 @@ import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubb
 import { parseSseEnvelope } from './helpers/sse.js';
 import { z } from 'zod';
 import {
-  getPrerequisiteGraphJson,
+  getMisconceptionGraphJson,
+  getPriorKnowledgeGraphJson,
   getThreadProgressionsJson,
 } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
@@ -255,7 +256,7 @@ describe('Documentation Resources E2E', () => {
 
 describe('Supplementary Data Resources E2E', () => {
   describe('resources/list includes supplementary data resources', () => {
-    it('includes curriculum://prerequisite-graph in resource list', async () => {
+    it('includes curriculum://prior-knowledge-graph in resource list', async () => {
       const { app } = await createStubbedHttpApp();
 
       const response = await request(app)
@@ -269,9 +270,11 @@ describe('Supplementary Data Resources E2E', () => {
       expect(parsed.success).toBe(true);
 
       const resources = parsed.data?.resources ?? [];
-      const prereqGraph = resources.find((r) => r.uri === 'curriculum://prerequisite-graph');
-      expect(prereqGraph).toBeDefined();
-      expect(prereqGraph?.mimeType).toBe('application/json');
+      const priorKnowledgeGraph = resources.find(
+        (r) => r.uri === 'curriculum://prior-knowledge-graph',
+      );
+      expect(priorKnowledgeGraph).toBeDefined();
+      expect(priorKnowledgeGraph?.mimeType).toBe('application/json');
     });
 
     it('includes curriculum://thread-progressions in resource list', async () => {
@@ -294,17 +297,43 @@ describe('Supplementary Data Resources E2E', () => {
       expect(threadProgressions).toBeDefined();
       expect(threadProgressions?.mimeType).toBe('application/json');
     });
+
+    it('includes curriculum://misconception-graph in resource list', async () => {
+      const { app } = await createStubbedHttpApp();
+
+      const response = await request(app)
+        .post('/mcp')
+        .set('Host', 'localhost')
+        .set('Accept', STUB_ACCEPT_HEADER)
+        .send({ jsonrpc: '2.0', id: '1', method: 'resources/list' });
+
+      const envelope = parseSseEnvelope(response.text);
+      const parsed = ResourcesListResultSchema.safeParse(envelope.result);
+      expect(parsed.success).toBe(true);
+
+      const resources = parsed.data?.resources ?? [];
+      const misconceptionGraph = resources.find(
+        (r) => r.uri === 'curriculum://misconception-graph',
+      );
+      expect(misconceptionGraph).toBeDefined();
+      expect(misconceptionGraph?.mimeType).toBe('application/json');
+    });
   });
 
   describe('resources/read returns valid data', () => {
-    it('prerequisite graph returns the source data via MCP protocol', async () => {
-      const content = await readResource('curriculum://prerequisite-graph');
-      expect(content).toBe(getPrerequisiteGraphJson());
+    it('prior knowledge graph returns the source data via MCP protocol', async () => {
+      const content = await readResource('curriculum://prior-knowledge-graph');
+      expect(content).toBe(getPriorKnowledgeGraphJson());
     });
 
     it('thread progressions returns the source data via MCP protocol', async () => {
       const content = await readResource('curriculum://thread-progressions');
       expect(content).toBe(getThreadProgressionsJson());
+    });
+
+    it('misconception graph returns the source data via MCP protocol', async () => {
+      const content = await readResource('curriculum://misconception-graph');
+      expect(content).toBe(getMisconceptionGraphJson());
     });
   });
 });

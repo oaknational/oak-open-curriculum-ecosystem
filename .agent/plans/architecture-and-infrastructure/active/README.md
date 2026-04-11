@@ -5,7 +5,7 @@ immediate blocker for Open Public Alpha readiness.
 
 | Plan | Scope | Status |
 |---|---|---|
-| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation (parent plan) | HTTP adoption + rate limiting complete (PR #73 merged, ADR-144). Search CLI + deployment pending. Branch: `feat/otel_sentry_enhancements` |
+| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation (parent plan) | HTTP adoption + rate limiting complete (PR #73 merged, ADR-158). Search CLI + deployment pending. Branch: `feat/otel_sentry_enhancements` |
 
 Companion remediation and merge plans archived to `archive/completed/`.
 
@@ -18,3 +18,4 @@ Review checkpoint:
 - [sentry-otel-foundation.review-checkpoint-2026-03-27.md](./sentry-otel-foundation.review-checkpoint-2026-03-27.md)
 
 Next queue: [current/README.md](../current/README.md)
+Strategic context: [../roadmap.md](../roadmap.md)

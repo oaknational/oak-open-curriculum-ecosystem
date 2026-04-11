@@ -2,7 +2,7 @@
 
 Status: Accepted (Revised)
 Date: 2025-09-08
-Updated: 2026-03-28
+Updated: 2026-04-02
 
 ## Context
 
@@ -19,6 +19,8 @@ Adopt Option A (conventional) with clear directories:
   - foundation libs (`env-resolution`, `logger`, `search-contracts`)
   - adapter libs (`sentry-node`, `sentry-mcp`)
 - `packages/sdks/` – SDK packages (curriculum-sdk, oak-search-sdk)
+- `packages/design/` – design token workspaces producing CSS artefacts
+  (design-tokens-core, oak-design-tokens). See ADR-148.
 
 Rules & relationships:
 
@@ -34,6 +36,7 @@ Rules & relationships:
 | foundation libs | yes  | —               | no           | approved generated subpath exports only (`search-contracts` -> `@oaknational/sdk-codegen/*`) | no   | No lib-to-lib back-edges; `search-contracts` is the documented generated-contract exception                                         |
 | adapter libs    | yes  | yes             | no           | no                                                                                           | no   | No adapter-to-adapter imports                                                                                                       |
 | sdks            | yes  | yes             | yes          | directed only                                                                                | no   | No circular SDK-to-SDK dependencies; ADR-108 requires approved package-surface imports rather than direct runtime/search back-edges |
+| design          | yes  | yes             | no           | no                                                                                           | no   | CSS artefact producers; consumed via built CSS, not TS imports                                                                      |
 | apps            | yes  | yes             | yes          | yes                                                                                          | —    | —                                                                                                                                   |
 
 ## Rationale

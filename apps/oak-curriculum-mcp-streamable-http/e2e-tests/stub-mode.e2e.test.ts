@@ -10,6 +10,18 @@ import {
   getStructuredContentData,
 } from './helpers/sse.js';
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function requireRecord(value: unknown, message: string): Record<string, unknown> {
+  if (!isRecord(value)) {
+    throw new Error(message);
+  }
+
+  return value;
+}
+
 function extractResultAndContent(responseText: string): {
   readonly result: ReturnType<typeof parseJsonRpcResult>;
   readonly content: readonly unknown[];
@@ -29,24 +41,22 @@ function assertFetchLessonResponse(responseText: string, lessonId: string): void
   expect(result.isError).not.toBe(true);
 
   // Full data is in structuredContent per OpenAI Apps SDK
-  const structured = getStructuredContentData(result) as {
-    readonly canonicalUrl?: string;
-    readonly data?: unknown;
-    readonly id?: string;
-    readonly type?: string;
-  };
+  const structured = requireRecord(
+    getStructuredContentData(result),
+    'Expected structuredContent to be an object',
+  );
 
   expect(structured.id).toBe(lessonId);
   expect(structured.type).toBe('lesson');
-  expect(typeof structured.canonicalUrl).toBe('string');
-  expect(structured.canonicalUrl).toContain('thenational.academy');
+  expect(typeof structured.oakUrl).toBe('string');
+  expect(structured.oakUrl).toContain('thenational.academy');
   expect(structured.data).toBeDefined();
   expect(typeof structured.data).toBe('object');
   expect(structured.data).not.toBeNull();
 }
 
 describe('Streamable HTTP server (stub mode)', () => {
-  it('serialises stubbed fetch results with canonicalUrl', async () => {
+  it('serialises stubbed fetch results with oakUrl (SDK slug URL)', async () => {
     const { app } = await createStubbedHttpApp();
     const lessonId = 'lesson:four-types-of-simple-sentence';
     const response = await request(app)

@@ -30,7 +30,7 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 
 ## What This Repo Provides
 
-Three capabilities, all generated from the [Oak Open Curriculum](https://open-api.thenational.academy/) OpenAPI specification:
+Three capabilities, powered by three open education data sources:
 
 | Capability          | What it does                                                                                                                                                                                                  | Packages                                                                                                                                                                                          |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -38,14 +38,24 @@ Three capabilities, all generated from the [Oak Open Curriculum](https://open-ap
 | **MCP Servers**     | AI assistants can search, browse, and fetch curriculum data through [Model Context Protocol](https://modelcontextprotocol.io/) — the standard that lets tools like ChatGPT and Claude connect to data sources | [`mcp-http`](apps/oak-curriculum-mcp-streamable-http/) (canonical server workspace, web, Vercel), [`mcp-stdio`](apps/oak-curriculum-mcp-stdio/) (legacy stdio workspace, not actively maintained) |
 | **Semantic Search** | Hybrid lexical + semantic retrieval across lessons, units, threads, and curriculum sequences using Elasticsearch with reciprocal rank fusion                                                                  | [`oak-search-cli`](apps/oak-search-cli/), [`oak-search-sdk`](packages/sdks/oak-search-sdk/)                                                                                                       |
 
-The [Oak Open Curriculum API](https://open-api.thenational.academy/) provides the subset of Oak's curriculum data that is openly licensed and free of third-party copyright (most of it). Everything in this repository works with this open data.
+### Data Sources
+
+This repository integrates three open education data sources, each answering a different question that teachers ask:
+
+| Source                                                                                                                        | What It Provides                                                                                                                                 | Licence                                                                                |
+| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| [Oak Open Curriculum API](https://open-api.thenational.academy/)                                                              | Lessons, units, threads, sequences, quizzes, and transcripts — openly-licensed, fully sequenced, fully resourced curriculum content              | [OGL v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/) |
+| [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)                                             | Formal knowledge graph (W3C RDF/OWL/SKOS/SHACL) modelling the UK National Curriculum structure, concept relationships, and teaching progressions | OGL v3.0 (data) + MIT (code)                                                           |
+| [EEF Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit) | 30 research-synthesised teaching approaches with quantified impact, cost, and evidence strength ratings                                          | Attribution required                                                                   |
+
+Together these sources enable **evidence-grounded curriculum discovery**: AI agents can search for content (Oak API), understand where it fits in the curriculum structure (ontology), and recommend evidence-backed teaching approaches (EEF). See [ADR-157](docs/architecture/architectural-decisions/157-multi-source-open-education-integration.md) for the integration architecture and [LICENCE-DATA.md](LICENCE-DATA.md) for full licence terms.
 
 ### MCP Server Capabilities
 
 The MCP servers expose curriculum data through the three [MCP primitive types](https://modelcontextprotocol.io/docs/learn/server-concepts):
 
 - **Tools** (model-controlled): 31 curriculum tools (23 generated from the OpenAPI schema, 8 aggregated) including orientation via `get-curriculum-model` and `download-asset`. The AI decides when to use them.
-- **Resources** (application-controlled): Curriculum model, prerequisite graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
+- **Resources** (application-controlled): Curriculum model, prior knowledge graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
 - **Prompts** (user-controlled): Four workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`) that guide users through common curriculum tasks.
 
 The standalone stdio workspace is now a legacy transitional surface. Future
@@ -105,11 +115,21 @@ pnpm build          # Build all workspaces
 pnpm sdk-codegen    # Regenerate SDK + MCP artefacts from OpenAPI
 ```
 
+**Widget development** (from `apps/oak-curriculum-mcp-streamable-http/`):
+
+```bash
+pnpm dev:widget          # Standalone widget dev server with token live-reload
+pnpm dev:widget-in-host  # Widget rendered inside MCP Apps basic-host (requires bun)
+pnpm test:widget         # Widget unit + integration tests
+pnpm test:widget:ui      # Playwright visual tests (light + dark themes)
+pnpm test:widget:a11y    # Playwright axe-core WCAG 2.2 AA gate
+```
+
 **Full verification:**
 
 ```bash
 pnpm make           # Full convenience pipeline with auto-fix steps; review file changes afterwards
-pnpm qg             # Read-only quality gates: format-check, markdownlint-check, subagents, portability, root script tests, workspace tests, UI, E2E, smoke
+pnpm check          # Canonical full verification gate: clean rebuild + tests + docs + formatting/linting fixes
 pnpm fix            # Auto-fix: format + markdownlint + lint
 pnpm clean          # Remove build artefacts (dist/, .turbo)
 ```
@@ -127,14 +147,15 @@ Everything flows from the OpenAPI schema:
 
 Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vectors, BM25, synonym expansion, and phrase boosting) to achieve high-accuracy retrieval across curriculum structures. See the [search architecture](apps/oak-search-cli/docs/ARCHITECTURE.md) for details and the [OpenAPI pipeline](docs/architecture/openapi-pipeline.md) for the generation architecture.
 
-| Directory        | Purpose                                                                                                                  |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `apps/`          | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI                               |
-| `packages/sdks/` | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                             |
-| `packages/core/` | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs |
-| `packages/libs/` | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
-| `agent-tools/`   | Agent workflow CLIs: `claude-agent-ops` and `cursor-session-from-claude-session`                                         |
-| `docs/`          | Developer documentation, guides, and 130+ ADRs                                                                           |
+| Directory          | Purpose                                                                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `apps/`            | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI                               |
+| `packages/sdks/`   | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                             |
+| `packages/core/`   | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs |
+| `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
+| `packages/design/` | Design token pipeline: DTCG source format, CSS custom property generation, WCAG AA contrast validation                   |
+| `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`              |
+| `docs/`            | Developer documentation, guides, and 155+ ADRs                                                                           |
 
 ### Workspace Summaries
 
@@ -142,7 +163,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 | Workspace                                                                        | Purpose                                                                                                                                                                                                                                           |
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 31 curriculum tools, resources, and prompts                                                                                                                                  |
+| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 31 curriculum tools, resources, prompts, and MCP App widget                                                                                                                  |
 | [`oak-curriculum-mcp-stdio`](apps/oak-curriculum-mcp-stdio/)                     | **Legacy** stdio MCP workspace — not actively maintained; future stdio support will be generalised from the HTTP server ([ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md)) |
 | [`oak-search-cli`](apps/oak-search-cli/)                                         | Search CLI — admin operations, bulk ingestion, blue/green index lifecycle ([ADR-130](docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)), evaluation, and ground-truth benchmarking                                      |
 
@@ -175,6 +196,13 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | [`@oaknational/search-contracts`](packages/libs/search-contracts/README.md) | Canonical semantic-search field and stage contracts                           |
 | [`@oaknational/sentry-node`](packages/libs/sentry-node/README.md)           | Shared Sentry Node config, sinks, fixture runtime, and flush helpers          |
 | [`@oaknational/sentry-mcp`](packages/libs/sentry-mcp/README.md)             | Metadata-only MCP observation wrappers                                        |
+
+**Design:**
+
+| Workspace                                                   | Purpose                                                                            |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [`design-tokens-core`](packages/design/design-tokens-core/) | Pure functions for DTCG token parsing and WCAG AA contrast validation              |
+| [`oak-design-tokens`](packages/design/oak-design-tokens/)   | Oak-specific token definitions (palette, semantic, component) and CSS build output |
 
 Architectural Decision Records (ADRs) are the architectural source of truth. These three foundational ADRs define the schema-first approach that underpins the codebase:
 
@@ -237,6 +265,15 @@ over time rather than eroding.
 - [ADR-131](docs/architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) — the improvement loop, interaction map, and self-referential property
 - [ADR-124](docs/architecture/architectural-decisions/124-practice-propagation-model.md) — how the Practice travels between repos
 - [.agent/HUMANS.md](.agent/HUMANS.md) — contributor context
+
+## Credits and Attribution
+
+This repository brings together work from multiple contributors and open
+education organisations:
+
+- **[Education Endowment Foundation](https://educationendowmentfoundation.org.uk/)** — Teaching and Learning Toolkit data (citation required when using EEF-derived outputs; see [LICENCE-DATA.md](LICENCE-DATA.md))
+- **Mark Hodierne** — [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology), primary author
+- **John Roberts** — EEF MCP server prototype
 
 ## Contributing
 

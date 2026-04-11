@@ -1,8 +1,11 @@
 import { describe, it, expect } from 'vitest';
+import { z } from 'zod';
 import { listUniversalTools, generatedToolRegistry } from './universal-tools/index.js';
 import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
+import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
+import type { GeneratedToolRegistry, ToolRegistryDescriptor } from './universal-tools/types.js';
 
 /**
  * Integration tests verifying universal tools have proper MCP annotations
@@ -58,10 +61,10 @@ describe('listUniversalTools annotations', () => {
     const tools = listUniversalTools(generatedToolRegistry);
 
     for (const tool of tools) {
-      expect(tool.annotations?.title).toBeDefined();
+      expect(tool.title).toBeDefined();
       // Title should be human-readable (contains spaces or is single word)
       // and not kebab-case
-      expect(tool.annotations?.title).not.toContain('-');
+      expect(tool.title).not.toContain('-');
     }
   });
 
@@ -75,7 +78,6 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.destructiveHint).toBe(false);
     expect(annotations?.idempotentHint).toBe(true);
     expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBe('Search Curriculum');
   });
 
   it('fetch tool has correct annotations', () => {
@@ -88,7 +90,6 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.destructiveHint).toBe(false);
     expect(annotations?.idempotentHint).toBe(true);
     expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBe('Fetch Curriculum Resource');
   });
 
   it('get-curriculum-model tool has correct annotations', () => {
@@ -101,7 +102,6 @@ describe('listUniversalTools annotations', () => {
     expect(annotations?.destructiveHint).toBe(false);
     expect(annotations?.idempotentHint).toBe(true);
     expect(annotations?.openWorldHint).toBe(false);
-    expect(annotations?.title).toBeDefined();
   });
 });
 
@@ -156,9 +156,96 @@ describe('generated tools _meta integration', () => {
     expect(sampleTool._meta?.ui).toBeUndefined();
     expect(sampleTool._meta?.securitySchemes).toBeDefined();
   });
+
+  it('fails fast when a generated tool is missing a title or description', () => {
+    const toolName = generatedToolRegistry.toolNames[0];
+    const descriptor = generatedToolRegistry.getToolFromToolName(toolName);
+
+    expect(descriptor.annotations).toBeDefined();
+
+    const annotations = descriptor.annotations;
+    if (!annotations) {
+      throw new Error('Expected generated tool descriptor to include annotations');
+    }
+
+    const annotationsWithoutTitle = omitProperty(annotations, 'title');
+    const descriptorWithoutDescription = omitProperty(descriptor, 'description');
+
+    const missingTitleRegistry = createRegistryWithDescriptor(toolName, {
+      ...descriptor,
+      annotations: annotationsWithoutTitle,
+    });
+    const missingDescriptionRegistry = createRegistryWithDescriptor(
+      toolName,
+      descriptorWithoutDescription,
+    );
+
+    expect(() => listUniversalTools(missingTitleRegistry)).toThrow(
+      `Generated tool "${toolName}" missing required metadata`,
+    );
+    expect(() => listUniversalTools(missingDescriptionRegistry)).toThrow(
+      `Generated tool "${toolName}" missing required metadata`,
+    );
+  });
+
+  it('accepts a top-level descriptor title when annotations.title is absent', () => {
+    const toolName = generatedToolRegistry.toolNames[0];
+    const descriptor = generatedToolRegistry.getToolFromToolName(toolName);
+    const annotations = descriptor.annotations;
+
+    expect(annotations).toBeDefined();
+    if (!annotations) {
+      throw new Error('Expected generated tool descriptor to include annotations');
+    }
+
+    const annotationsWithoutTitle = omitProperty(annotations, 'title');
+    const topLevelTitle = 'Spec-aligned top-level title';
+    const registry = createRegistryWithDescriptor(toolName, {
+      ...descriptor,
+      title: topLevelTitle,
+      annotations: annotationsWithoutTitle,
+    });
+
+    const tool = listUniversalTools(registry).find((entry) => entry.name === toolName);
+    expect(tool?.title).toBe(topLevelTitle);
+  });
+
+  it('fails fast when a generated tool flat input schema stops being object-shaped', () => {
+    const toolName = generatedToolRegistry.toolNames[0];
+    const descriptor = generatedToolRegistry.getToolFromToolName(toolName);
+    const invalidDescriptor = { ...descriptor };
+    Object.defineProperty(invalidDescriptor, 'toolMcpFlatInputSchema', {
+      configurable: true,
+      value: z.string(),
+    });
+    const registry = createRegistryWithDescriptor(toolName, {
+      ...invalidDescriptor,
+    });
+
+    expect(() => listUniversalTools(registry)).toThrow(
+      `Generated tool "${toolName}" missing required flat input schema`,
+    );
+  });
 });
 
 /** Helper to find a tool by name, reducing complexity in test functions */
 function findToolByName(name: string) {
   return (t: { name: string }) => t.name === name;
+}
+
+function omitProperty<T extends object, K extends keyof T>(object: T, key: K): Omit<T, K> {
+  const { [key]: omitted, ...rest } = object;
+  void omitted;
+  return rest;
+}
+
+function createRegistryWithDescriptor(
+  toolName: ToolName,
+  descriptor: ToolRegistryDescriptor,
+): GeneratedToolRegistry {
+  return {
+    toolNames: [toolName],
+    getToolFromToolName: () => descriptor,
+    isToolName: (value): value is ToolName => value === toolName,
+  };
 }

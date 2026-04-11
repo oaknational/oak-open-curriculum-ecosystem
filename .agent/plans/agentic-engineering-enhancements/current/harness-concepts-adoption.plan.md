@@ -94,6 +94,10 @@ leverage while preserving the existing Practice's core guarantees:
 4. **Improved agent legibility maps**
    - Better indexing/discovery in repo docs outside transfer-only practice-core
      materials.
+5. **Research-promotion pack**
+   - One standard register for turning external concepts into Oak-facing
+     adoption decisions with proof, disconfirming cases, blast radius, and
+     reversibility.
 
 ### 5.2 Best concepts (highest upside, pilot before broad rollout)
 

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { WIDGET_URI, WIDGET_TOOL_NAMES } from '@oaknational/sdk-codegen/widget-constants';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
-import { SEARCH_INPUT_SCHEMA } from './aggregated-search/index.js';
+import { z } from 'zod';
 import { listUniversalTools } from './universal-tools/list-tools.js';
 import { isUniversalToolName } from './universal-tools/type-guards.js';
 import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
@@ -56,6 +56,14 @@ const sampleDescriptor: ToolRegistryDescriptor = {
   },
   securitySchemes: [],
   requiresDomainContext: false,
+  toolMcpFlatInputSchema: z.object({
+    params: z.object({
+      path: z.object({
+        keyStage: z.string(),
+        subject: z.string(),
+      }),
+    }),
+  }),
 };
 
 function createFakeRegistry(): GeneratedToolRegistry {
@@ -94,7 +102,7 @@ describe('listUniversalTools', () => {
     const tools = listUniversalTools(registry);
     const searchTool = tools.find((tool) => tool.name === 'search');
     expect(searchTool).toBeDefined();
-    expect(searchTool?.inputSchema).toEqual(SEARCH_INPUT_SCHEMA);
+    expect(searchTool?.inputSchema).toBe(AGGREGATED_TOOL_DEFS.search.inputSchema);
   });
 });
 
@@ -104,7 +112,7 @@ describe('isUniversalToolName', () => {
     expect(isUniversalToolName('fetch', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-curriculum-model', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('get-thread-progressions', registry.isToolName)).toBe(true);
-    expect(isUniversalToolName('get-prerequisite-graph', registry.isToolName)).toBe(true);
+    expect(isUniversalToolName('get-prior-knowledge-graph', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('browse-curriculum', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('explore-topic', registry.isToolName)).toBe(true);
     expect(isUniversalToolName('download-asset', registry.isToolName)).toBe(true);

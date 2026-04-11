@@ -127,6 +127,13 @@ export function buildTakeoverBundle(input: TakeoverBundleInput): string {
       'Use the sub-agent summary below as context, then verify current git status and continue the work.',
     '```',
     '',
+    '## Reintegration Contract',
+    '',
+    '- Reintegration owner: the receiving operator in the parent lane',
+    '- Required evidence: verify current git status, active plans, and any live continuity surfaces before acting',
+    '- Acceptance signal: Absorb the delegated outcome back into the parent plan or dialogue before continuing execution',
+    '- Stop or escalate if the takeover bundle conflicts with the live repo state or the active plan authority',
+    '',
     '## Sub-agent Summary',
     '',
   ];

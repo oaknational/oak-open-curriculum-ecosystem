@@ -12,8 +12,8 @@
  * Or adapt to plain Node:
  *   node scripts/validate-practice-fitness.mjs
  *
- * Origin: oak-mcp-ecosystem, 2026-03-23
- * See: three-dimension-fitness-functions.md for the rationale
+ * Origin: oak-mcp-ecosystem, 2026-04-01
+ * See: the two-threshold fitness model for the rationale
  */
 
 import fs from 'node:fs/promises';
@@ -62,12 +62,15 @@ interface FileResult {
   maxProseLineNum: number;
   proseViolationCount: number;
   proseViolations: ClassifiedLine[];
-  ceilingLines: number | null;
-  ceilingChars: number | null;
+  targetLines: number | null;
+  limitLines: number | null;
+  limitChars: number | null;
   maxProseLineWidth: number | null;
-  linesOk: boolean;
+  targetOk: boolean;
+  limitOk: boolean;
   charsOk: boolean;
   proseOk: boolean;
+  warnings: string[];
   violations: string[];
 }
 
@@ -208,8 +211,9 @@ export function evaluateFitnessFile(
   content: string,
 ): FileResult {
   const frontmatter = extractFrontmatter(content);
-  const ceilingLines = getFrontmatterNumber(frontmatter, 'fitness_line_count');
-  const ceilingChars = getFrontmatterNumber(frontmatter, 'fitness_char_count');
+  const targetLines = getFrontmatterNumber(frontmatter, 'fitness_line_target');
+  const limitLines = getFrontmatterNumber(frontmatter, 'fitness_line_limit');
+  const limitChars = getFrontmatterNumber(frontmatter, 'fitness_char_limit');
   const maxProseLineWidth = getFrontmatterNumber(
     frontmatter,
     'fitness_line_length',
@@ -239,15 +243,23 @@ export function evaluateFitnessFile(
     }
   }
 
+  const warnings: string[] = [];
   const violations: string[] = [];
-  const linesOk = ceilingLines == null || totalLines <= ceilingLines;
-  if (!linesOk) {
-    violations.push(`Lines: ${totalLines} exceeds ceiling ${ceilingLines}`);
+
+  const targetOk = targetLines == null || totalLines <= targetLines;
+  const limitOk = limitLines == null || totalLines <= limitLines;
+
+  if (!limitOk) {
+    violations.push(`Lines: ${totalLines} exceeds limit ${limitLines}`);
+  } else if (!targetOk) {
+    warnings.push(
+      `Lines: ${totalLines} exceeds target ${targetLines} (limit ${limitLines})`,
+    );
   }
 
-  const charsOk = ceilingChars == null || totalChars <= ceilingChars;
+  const charsOk = limitChars == null || totalChars <= limitChars;
   if (!charsOk) {
-    violations.push(`Characters: ${totalChars} exceeds ceiling ${ceilingChars}`);
+    violations.push(`Characters: ${totalChars} exceeds limit ${limitChars}`);
   }
 
   const proseOk =
@@ -268,12 +280,15 @@ export function evaluateFitnessFile(
     maxProseLineNum,
     proseViolationCount: proseViolations.length,
     proseViolations: proseViolations.slice(0, 5),
-    ceilingLines,
-    ceilingChars,
+    targetLines,
+    limitLines,
+    limitChars,
     maxProseLineWidth,
-    linesOk,
+    targetOk,
+    limitOk,
     charsOk,
     proseOk,
+    warnings,
     violations,
   };
 }
@@ -286,7 +301,7 @@ async function discoverFitnessFiles(): Promise<string[]> {
     const content = await readText(relPath);
     const frontmatter = extractFrontmatter(content);
 
-    if (getFrontmatterNumber(frontmatter, 'fitness_line_count') !== null) {
+    if (getFrontmatterNumber(frontmatter, 'fitness_line_target') !== null) {
       fitnessFiles.push(relPath);
     }
   }
@@ -298,26 +313,53 @@ function indicator(ok: boolean): string {
   return ok ? '\x1b[32m✓\x1b[0m' : '\x1b[31m✗\x1b[0m';
 }
 
+function passIndicator(): string {
+  return '\x1b[32m✓\x1b[0m';
+}
+
+function failIndicator(): string {
+  return '\x1b[31m✗\x1b[0m';
+}
+
+function warnIndicator(): string {
+  return '\x1b[33m⚠\x1b[0m';
+}
+
+function formatLineStatus(result: FileResult): string {
+  const count = String(result.totalLines).padStart(6);
+  if (result.targetLines == null && result.limitLines == null) {
+    return `    Lines:            ${count} (no ceiling)`;
+  }
+
+  const parts = [`    Lines:            ${count}`];
+  if (result.targetLines != null) {
+    parts.push(`/ target ${result.targetLines}`);
+  }
+  if (result.limitLines != null) {
+    parts.push(`/ limit ${result.limitLines}`);
+  }
+
+  if (!result.limitOk) {
+    parts.push(` ${failIndicator()}`);
+  } else if (!result.targetOk) {
+    parts.push(` ${warnIndicator()} [warning: above target]`);
+  } else {
+    parts.push(` ${passIndicator()}`);
+  }
+
+  return parts.join(' ');
+}
+
 function formatResult(result: FileResult): string {
   const lines: string[] = [];
   lines.push(`  ${result.filename}`);
 
-  if (result.ceilingLines != null) {
-    lines.push(
-      `    Lines:            ${String(result.totalLines).padStart(6)} / ` +
-        `${result.ceilingLines}  ${indicator(result.linesOk)}`,
-    );
-  } else {
-    lines.push(
-      `    Lines:            ${String(result.totalLines).padStart(6)} ` +
-        '(no ceiling)',
-    );
-  }
+  lines.push(formatLineStatus(result));
 
-  if (result.ceilingChars != null) {
+  if (result.limitChars != null) {
     lines.push(
       `    Characters:       ${String(result.totalChars).padStart(6)} / ` +
-        `${result.ceilingChars}  ${indicator(result.charsOk)}`,
+        `${result.limitChars}  ${indicator(result.charsOk)}`,
     );
   } else {
     lines.push(
@@ -392,6 +434,10 @@ async function main(args = process.argv.slice(2)): Promise<number> {
     (sum, result) => sum + result.violations.length,
     0,
   );
+  const totalWarnings = results.reduce(
+    (sum, result) => sum + result.warnings.length,
+    0,
+  );
 
   for (const result of results) {
     console.log(formatResult(result));
@@ -400,8 +446,21 @@ async function main(args = process.argv.slice(2)): Promise<number> {
 
   const exitCode = getExitCode(mode, totalViolations);
 
-  if (totalViolations === 0) {
+  if (totalViolations === 0 && totalWarnings === 0) {
     console.log('\x1b[32mResult: PASS\x1b[0m\n');
+    return exitCode;
+  }
+
+  if (totalViolations === 0 && totalWarnings > 0) {
+    console.log(
+      `\x1b[33mResult: PASS with warnings (${totalWarnings})\x1b[0m\n`,
+    );
+    for (const result of results) {
+      for (const warning of result.warnings) {
+        console.log(`  \x1b[33m⚠\x1b[0m ${result.filename}: ${warning}`);
+      }
+    }
+    console.log();
     return exitCode;
   }
 
@@ -418,6 +477,15 @@ async function main(args = process.argv.slice(2)): Promise<number> {
   for (const result of results) {
     for (const violation of result.violations) {
       console.log(`  \x1b[31m•\x1b[0m ${result.filename}: ${violation}`);
+    }
+  }
+
+  if (totalWarnings > 0) {
+    console.log();
+    for (const result of results) {
+      for (const warning of result.warnings) {
+        console.log(`  \x1b[33m⚠\x1b[0m ${result.filename}: ${warning}`);
+      }
     }
   }
 

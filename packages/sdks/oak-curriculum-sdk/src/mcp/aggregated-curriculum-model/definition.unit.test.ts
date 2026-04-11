@@ -9,39 +9,23 @@ import { describe, it, expect } from 'vitest';
 import { GET_CURRICULUM_MODEL_TOOL_DEF, GET_CURRICULUM_MODEL_INPUT_SCHEMA } from './definition.js';
 
 describe('GET_CURRICULUM_MODEL_TOOL_DEF', () => {
-  it('has description explaining its purpose', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.description).toContain('curriculum');
+  it('has description explaining its orientation purpose', () => {
+    expect(GET_CURRICULUM_MODEL_TOOL_DEF.description).toContain('orientation');
+    expect(GET_CURRICULUM_MODEL_TOOL_DEF.description).toContain('domain model');
   });
 
-  it('has readOnlyHint annotation set to true', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.readOnlyHint).toBe(true);
-  });
-
-  it('has destructiveHint annotation set to false', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.destructiveHint).toBe(false);
-  });
-
-  it('has idempotentHint annotation set to true', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.idempotentHint).toBe(true);
-  });
-
-  it('has openWorldHint annotation set to false', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.openWorldHint).toBe(false);
-  });
-
-  it('has title annotation', () => {
-    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations.title).toBeDefined();
-    expect(typeof GET_CURRICULUM_MODEL_TOOL_DEF.annotations.title).toBe('string');
+  it('has annotations marking it as read-only and idempotent', () => {
+    expect(GET_CURRICULUM_MODEL_TOOL_DEF.annotations).toEqual({
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+      openWorldHint: false,
+    });
   });
 });
 
 describe('GET_CURRICULUM_MODEL_INPUT_SCHEMA', () => {
-  it('accepts optional tool_name parameter', () => {
-    expect(GET_CURRICULUM_MODEL_INPUT_SCHEMA.properties.tool_name).toBeDefined();
-    expect(GET_CURRICULUM_MODEL_INPUT_SCHEMA.properties.tool_name.type).toBe('string');
-  });
-
-  it('does not allow additional properties', () => {
-    expect(GET_CURRICULUM_MODEL_INPUT_SCHEMA.additionalProperties).toBe(false);
+  it('is an empty shape because this tool takes no parameters', () => {
+    expect(GET_CURRICULUM_MODEL_INPUT_SCHEMA).toEqual({});
   });
 });

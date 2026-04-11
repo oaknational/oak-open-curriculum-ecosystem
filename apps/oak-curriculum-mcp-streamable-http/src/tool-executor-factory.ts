@@ -5,8 +5,6 @@
  * `createExecutor`) into a single factory that the DI interface can
  * expose. This eliminates the factories-of-factories pattern that
  * forced tests to re-implement the composition chain.
- *
- * @module
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';

@@ -1,5 +1,8 @@
 ---
-fitness_line_count: 400
+fitness_line_target: 410
+fitness_line_limit: 550
+fitness_char_limit: 33000
+fitness_line_length: 100
 split_strategy: "Extract examples to a companion examples file; split by test level (unit/integration/E2E) if needed"
 ---
 
@@ -266,6 +269,13 @@ describe('MCP Server E2E', () => {
 
 **Key Insight**: If tests lag behind code at ANY level, TDD was not followed at that level.
 
+**File-naming for RED specs**: Write RED-phase specs that
+specify not-yet-implemented behaviour in `*.e2e.test.ts`
+files, not `*.unit.test.ts`. The pre-commit hook runs only
+unit tests; a RED unit test blocks every commit until it
+goes green. E2E specs are gated at CI, so they can stay RED
+across multiple commits during the implementation phase.
+
 ## Common TDD Violations and Fixes
 
 ### Violation 1: Writing Code Before Tests
@@ -383,6 +393,10 @@ Every workspace `vitest.config.ts` MUST follow one of two patterns. Deviations c
 
 Workspaces with `*.e2e.test.ts` files MUST also have `vitest.e2e.config.ts` (extending `vitest.e2e.config.base.ts` or workspace-specific) and a `test:e2e` script in `package.json`.
 
+## Test Assertion Placement
+
+Keep E2E assertions on system/transport invariants; prove runtime stub semantics in SDK unit/integration tests, not by asserting server output against the same stub path.
+
 ## Test Configuration Gotchas
 
 - `tsconfig.json` `include` patterns `**/*.test.ts` and `**/*.spec.ts` do NOT match test utility files (harness, fixture builder). Add `tests/**/*.ts` to the include array when creating non-test utilities in test directories.
@@ -401,3 +415,17 @@ Tests that agree with code on the wrong contract are worse than no tests. The sn
 - Repeated multi-line test setup → extract scoped helper inside `describe` block (e.g. `registerWithOverrides`, `baseEnv`).
 - For large mechanical migrations (30+ files), use subagents to parallelise the work.
 - Bulk operation factories should accept `startIndex` rather than mutating readonly `_id` after creation.
+
+## Browser Proof Surfaces
+
+Four browser-specific proof categories for UI-shipping workspaces:
+
+1. **Accessibility audit** — Playwright + axe-core, WCAG 2.2 AA,
+   zero-tolerance, both themes. 9th quality gate (blocking).
+2. **Visual regression** — screenshot comparison baselines.
+3. **Responsive validation** — viewport and fluid layout coverage.
+4. **Theme/mode correctness** — light, dark, high-contrast passes.
+
+For MCP App HTML resources: serve content directly to Playwright
+(resource-level a11y), then verify via basic-host (integration-level).
+See ADR-147, `docs/governance/accessibility-practice.md`.

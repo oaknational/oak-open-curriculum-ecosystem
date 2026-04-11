@@ -13,6 +13,7 @@ describe('CLI smoke', () => {
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     expect(output).toContain('claude-agent-ops');
+    expect(output).toContain('health');
   });
 
   it('prints help for claude-agent-ops --help and -h aliases', () => {
@@ -42,6 +43,17 @@ describe('CLI smoke', () => {
     expect(
       output.includes('No matching Claude sessions found.') || output.includes('- session:'),
     ).toBe(true);
+  });
+
+  it('prints agent-infrastructure health output for claude-agent-ops health', () => {
+    const output = execSync('pnpm tsx src/bin/claude-agent-ops.ts health', {
+      cwd: process.cwd(),
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+
+    expect(output).toContain('Agent Infrastructure Health');
+    expect(output).toContain('Summary');
   });
 
   it('fails diff for an invalid agent id', () => {

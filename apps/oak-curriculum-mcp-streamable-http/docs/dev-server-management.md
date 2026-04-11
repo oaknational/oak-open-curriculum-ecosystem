@@ -15,6 +15,12 @@ This commonly happens when:
 2. Later try to test OAuth, but connect to the old server (no OAuth endpoints)
 3. Changes to server code aren't reflected (still running old process)
 
+The HTTP dev scripts now solve one older failure mode automatically: they run
+an initial widget build and regenerate `src/generated/widget-html-content.ts`
+(the committed TypeScript constant) before starting the server. You no longer
+need a separate manual `pnpm build:widget` just to satisfy the MCP App widget
+contract.
+
 ## The Solution
 
 ### Quick Restart Script (Recommended)
@@ -36,7 +42,7 @@ The script automatically:
 
 1. ✅ Kills any existing process on port 3333
 2. ✅ Verifies the port is free
-3. ✅ Starts the server in the specified mode
+3. ✅ Delegates to the package script for the specified mode
 
 ### Manual Process
 
@@ -64,6 +70,7 @@ pnpm dev:observe:noauth     # Auth DISABLED (testing only)
 
 - **Auth**: Enabled ✅
 - **Logging**: Console only
+- **Widget contract**: Initial build + watch handled automatically
 - **Use for**: Standard development
 
 ```bash
@@ -74,6 +81,7 @@ pnpm dev
 
 - **Auth**: Enabled ✅
 - **Logging**: Console + file (`.logs/http-dev-*.log`)
+- **Widget contract**: Initial build + watch handled automatically
 - **Use for**: Debugging OAuth flows, observability testing
 
 ```bash
@@ -86,6 +94,7 @@ Logs are written to timestamped files for later analysis.
 
 - **Auth**: Disabled ⚠️
 - **Logging**: Console + file (`.logs/http-dev-noauth-*.log`)
+- **Widget contract**: Initial build + watch handled automatically
 - **Use for**: Testing tool execution without OAuth overhead
 
 ```bash

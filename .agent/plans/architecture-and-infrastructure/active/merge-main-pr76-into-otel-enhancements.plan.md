@@ -5,7 +5,7 @@ overview: >
   ~78k insertions) into feat/otel_sentry_enhancements (7 commits, 36 files).
   4 text conflicts, 10 files changed on both sides, 96 files deleted by main
   (24 in the HTTP app). 6 hazards documented after Wilma and docs-ADR review.
-  ADR-144 numbering collision. PR #78 also landed on main (ADR-158), so our
+  ADR-158 numbering collision. PR #78 also landed on main (ADR-158), so our
   ADR renumbers to ADR-158.
 status: active
 last_updated: 2026-04-11
@@ -32,7 +32,7 @@ time — main's velocity means new ADRs may land between planning and execution.
 |------|-----------|
 | `.agent/plans/architecture-and-infrastructure/README.md` | Accept main structure, keep our updated status text and date |
 | `apps/oak-curriculum-mcp-streamable-http/src/application.ts` | **Semantic** — main restructured the app composition root (widget build pipeline, new `getWidgetHtml` param). Accept main, re-apply rate limiting wiring. |
-| `docs/architecture/architectural-decisions/README.md` | **ADR-144 collision** — both branches created ADR-144. Main: "Two-Threshold Fitness Model". Branch: "Multi-Layer Security and Rate Limiting". See Hazard 2 below. |
+| `docs/architecture/architectural-decisions/README.md` | **ADR-158 collision** — both branches created ADR-158. Main: "Two-Threshold Fitness Model". Branch: "Multi-Layer Security and Rate Limiting". See Hazard 2 below. |
 | `pnpm-lock.yaml` | Accept main, regenerate with `pnpm install` |
 
 ## Files Changed on Both Sides (10 files)
@@ -42,7 +42,7 @@ Most auto-merge cleanly. The risk zone:
 | File | Risk | Notes |
 |------|------|-------|
 | `application.ts` | **High** | Text conflict — main restructured composition root |
-| `ADR README.md` | **High** | ADR-144 numbering collision |
+| `ADR README.md` | **High** | ADR-158 numbering collision |
 | `plans/arch/README.md` | Low | Both updated status text |
 | `plans/arch/active/README.md` | Low | Both updated active plan list |
 | `plans/arch/current/README.md` | Low | Both updated queue status |
@@ -74,16 +74,16 @@ Fix: remove the `import { overrideToolsListHandler }` and its call from
 `core-endpoints.ts`. No replacement logic needed — the SDK pipeline now
 handles this end-to-end.
 
-### Hazard 2: ADR-144 numbering collision
+### Hazard 2: ADR-158 numbering collision
 
-Both branches independently created ADR-144:
+Both branches independently created ADR-158:
 - **Branch**: `144-multi-layer-security-and-rate-limiting.md`
 - **Main**: `144-two-threshold-fitness-model.md`
 
 Main also added ADR-145 through ADR-156. Both files have different filenames
 so Git merges them without conflict — but the numbering is broken.
 
-**Resolution**: Renumber our ADR-144 to the next available number after
+**Resolution**: Renumber our ADR-158 to the next available number after
 main's highest (ADR-156 → ours becomes **ADR-158**). Update the file, the
 ADR index, all internal references, and cross-references in plans, prompts,
 safety-and-security.md, and code comments.
@@ -123,9 +123,9 @@ main (branch didn't change it structurally), but the call site in
 `oauthRateLimiter` parameter to `setupOAuthAndCaching` and its call site.
 Same pattern as last merge — extend the function signature, update callers.
 
-### Hazard 6: ADR-144 renumbering scope (15 files)
+### Hazard 6: ADR-158 renumbering scope (15 files)
 
-Files referencing ADR-144 on this branch:
+Files referencing ADR-158 on this branch:
 
 1. `docs/architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md`
 2. `docs/architecture/architectural-decisions/README.md`
@@ -146,7 +146,7 @@ Files referencing ADR-144 on this branch:
 Use a `sed` sweep for the rename, with the file list as verification:
 
 ```bash
-git ls-files -z | xargs -0 sed -i '' 's/ADR-144/ADR-158/g'
+git ls-files -z | xargs -0 sed -i '' 's/ADR-158/ADR-158/g'
 git mv docs/architecture/architectural-decisions/144-multi-layer-security-and-rate-limiting.md \
        docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md
 ```
@@ -160,7 +160,7 @@ touch these interfaces. No action needed.
 ## Resolution Order
 
 1. **Trivial**: accept main for `pnpm-lock.yaml`, plan READMEs
-2. **ADR collision**: `sed` sweep ADR-144 → ADR-158, rename file, verify
+2. **ADR collision**: `sed` sweep ADR-158 → ADR-158, rename file, verify
 3. **Composition**: accept main's inlined `initializeCoreEndpoints`,
    delete branch's `core-endpoints.ts`
 4. **Semantic**: resolve `application.ts` — accept main's structure, then

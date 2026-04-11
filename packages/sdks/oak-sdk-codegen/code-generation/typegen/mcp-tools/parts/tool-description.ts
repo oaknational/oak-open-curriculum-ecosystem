@@ -97,7 +97,7 @@ NOTE: A response of limit=0, remaining=0, reset=0 indicates an unlimited API key
  */
 const ASSET_DOWNLOAD_NOTE = `
 
-NOTE: The asset \`url\` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. To generate a clickable download link for the user, call the \`download-asset\` tool with the lesson slug and asset type. If \`download-asset\` is not available (e.g. stdio transport), direct users to the lesson page on the Oak website — use the lesson's \`canonicalUrl\` (e.g. \`https://www.thenational.academy/teachers/lessons/{lessonSlug}\`).`;
+NOTE: The asset \`url\` fields returned by this tool are authenticated API endpoints and cannot be used as direct browser download links. To generate a clickable download link for the user, call the \`download-asset\` tool with the lesson slug and asset type. If \`download-asset\` is not available (e.g. stdio transport), direct users to the lesson page on the Oak website — use the lesson's \`oakUrl\` (e.g. \`https://www.thenational.academy/teachers/lessons/{lessonSlug}\`).`;
 
 function getToolDescriptionEnhancement(toolName: string): string | undefined {
   switch (toolName) {

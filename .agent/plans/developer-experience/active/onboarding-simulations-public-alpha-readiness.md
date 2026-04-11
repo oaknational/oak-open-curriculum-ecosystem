@@ -244,7 +244,7 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
 - [ ] **D3. Test-surface expectations are still easy to misread**
   - Evidence:
     - CI runs `pnpm test`; broader suites (`test:ui`, `test:e2e`, smoke) are
-      covered via other local surfaces (`pnpm qg`, `pnpm check`, hooks).
+      covered via other local surfaces (`pnpm check`, hooks).
   - Impact:
     - junior contributors may incorrectly assume CI is full-system coverage.
   - Recommended action:
@@ -572,9 +572,9 @@ No P0 blockers remain after owner dispositions.
   - Original claim: G1 evidence may not cover final release candidate.
   - **Owner disposition**: This is an agentic engineering project with one
     human contributor. There is no change advisory board or release freeze
-    process. `pnpm qg` will be run at the final state before release, but
+    process. `pnpm check` will be run at the final state before release, but
     a formal R0 commit freeze is not required.
-  - Action: Run `pnpm qg` before release. No formal R0 process.
+  - Action: Run `pnpm check` before release. No formal R0 process.
 
 #### P3 — Polish
 
@@ -1069,7 +1069,7 @@ pattern from previous rerun (R2) noted where applicable.
     `emit-index.ts`. Cast 1: `toStatusDiscriminant` replaced with per-tool
     `STATUS_DISCRIMINANTS` const map. Cast 2: `invoke` return changed to
     `unknown`. Zero non-const `as` assertions in generated tool files.
-    Two code patterns extracted to `.agent/memory/code-patterns/`.
+    Two patterns extracted to `.agent/memory/patterns/`.
 
 - [x] **N11. docs/README.md has no entry point for non-technical audiences**
   - Source: Product owner
@@ -1124,8 +1124,8 @@ pattern from previous rerun (R2) noted where applicable.
 - [ ] **N20. Known test failure in quality gates**
   - Source: Engineering manager
   - Evidence: Troubleshooting guide line 95 acknowledges
-    `widget-rendering.spec.ts` fails in `pnpm qg`. The M0 gate includes
-    "Quality gates green."
+    `widget-rendering.spec.ts` failing in the aggregate gate path. The M0 gate
+    includes "Canonical aggregate gate green."
 
 - [ ] **N21. GitHub Issues/Discussions links may not exist yet**
   - Source: Engineering manager

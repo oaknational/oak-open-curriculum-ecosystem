@@ -18,7 +18,12 @@ import {
   parsePhaseFromFilename,
   type BulkDataParseError,
 } from './bulk-data-parser';
-import { emitAllLessonSlugTypes, type ParsedBulkData } from './type-emitter';
+import {
+  buildLessonSlugDataset,
+  emitAllLessonSlugTypes,
+  emitLessonSlugDatasetTypes,
+  type ParsedBulkData,
+} from './type-emitter';
 import { emitGroundTruthSchemas } from './schema-emitter';
 
 // ============================================================================
@@ -325,13 +330,36 @@ export async function generateGroundTruthTypes(
   // Step 4: Generate and write files
   const filesWritten: string[] = [];
 
-  // Write lesson-slugs-by-subject.ts
+  const lessonSlugDataset = buildLessonSlugDataset(allData);
+
+  // Write lesson-slugs-by-subject loader + data files
   const typesContent = emitAllLessonSlugTypes(allData);
   const typesResult = writeOutputFile(outputDir, 'lesson-slugs-by-subject.ts', typesContent);
   if (!typesResult.ok) {
     return typesResult;
   }
   filesWritten.push(typesResult.value);
+
+  const datasetTypesContent = emitLessonSlugDatasetTypes();
+  const datasetTypesResult = writeOutputFile(
+    outputDir,
+    'lesson-slugs-by-subject.types.ts',
+    datasetTypesContent,
+  );
+  if (!datasetTypesResult.ok) {
+    return datasetTypesResult;
+  }
+  filesWritten.push(datasetTypesResult.value);
+
+  const datasetJsonResult = writeOutputFile(
+    outputDir,
+    'lesson-slugs-by-subject.data.json',
+    JSON.stringify(lessonSlugDataset, null, 2),
+  );
+  if (!datasetJsonResult.ok) {
+    return datasetJsonResult;
+  }
+  filesWritten.push(datasetJsonResult.value);
 
   // Write ground-truth-schemas.ts
   const schemasContent = emitGroundTruthSchemas(allData);

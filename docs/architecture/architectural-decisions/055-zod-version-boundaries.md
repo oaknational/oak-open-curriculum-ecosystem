@@ -93,11 +93,12 @@ If we ever replace `openapi-zod-client` (and `openapi3-ts`), the replacement mus
 
 ### Key Principle
 
-**The SDK exports Zod v4 schemas, generated at code-generation time.**
+**The SDK exports Zod v4 schemas and raw shapes, generated at code-generation time.**
 
 The SDK exports:
 
-- ✅ **Zod v4 schemas** for tool inputs (`flatZodSchema`, `toolMcpFlatInputSchema`)
+- ✅ **Zod v4 raw shapes and schemas** for tool inputs (`inputSchema` on authored
+  universal-tool entries, `toolMcpFlatInputSchema` on generated descriptors)
 - ✅ **Zod v4 schemas** for response validation (`zodOutputSchema`)
 - ✅ TypeScript types (derived from Zod schemas)
 - ✅ Constants (KEY_STAGES, SUBJECTS, etc.)
@@ -129,18 +130,21 @@ At code-generation time, the generator:
 
 ### MCP Registration Pattern
 
-Apps import Zod v4 schemas directly from the SDK:
+Apps import Zod v4 raw shapes and schemas directly from the SDK:
 
 ```typescript
 // app/src/handlers.ts
-import { listUniversalTools } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
+import {
+  listUniversalTools,
+  generatedToolRegistry,
+} from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
-for (const tool of listUniversalTools()) {
-  // tool.flatZodSchema is a Zod v4 ZodRawShape
+for (const tool of listUniversalTools(generatedToolRegistry)) {
+  // tool.inputSchema is a Zod v4 ZodRawShape
   server.registerTool(
     tool.name,
     {
-      inputSchema: tool.flatZodSchema, // Zod v4, compatible with MCP SDK
+      inputSchema: tool.inputSchema, // Zod v4 raw shape, compatible with MCP SDK
       description: tool.description,
     },
     handler,

@@ -13,7 +13,7 @@ See [active/README.md](active/README.md) for work in progress.
 
 | Priority | Plan | Milestone | Status |
 |----------|------|-----------|--------|
-| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | HTTP adoption complete (PR #73 merged), rate limiting complete (ADR-144); Search CLI adoption + deployment evidence pending. Branch: `feat/otel_sentry_enhancements`. |
+| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | HTTP adoption complete (PR #73 merged), rate limiting complete (ADR-158); Search CLI adoption + deployment evidence pending. Branch: `feat/otel_sentry_enhancements`. |
 
 Prompt entry:
 
@@ -23,17 +23,36 @@ Prompt entry:
 
 See [current/README.md](current/README.md) for the next-up queue.
 
+Documentation architecture excellence (from synthesis analysis):
+
+- [current/doc-architecture-phase-a-immediate.plan.md](current/doc-architecture-phase-a-immediate.plan.md) — QA register, fitness function ADR, ADR index, C4 diagrams, layer contract
+- [current/doc-architecture-phase-b-dependent.plan.md](current/doc-architecture-phase-b-dependent.plan.md) — Deduplication, operability, trade-off guidance, Practice Core integration
+
+Once the current improvement tranche closes, promote
+[future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
+as the next focused hardening sprint.
+
 ## Strategic Backlog (Future)
 
 See [future/README.md](future/README.md) for later work and umbrella planning.
+
+Roadmap:
+
+- [roadmap.md](roadmap.md)
 
 ## Active Plans
 
 | Plan | Status | Description |
 |------|--------|-------------|
-| [`ci-consolidation-and-gate-parity.plan.md`](active/ci-consolidation-and-gate-parity.plan.md) | ✅ Complete | CI consolidation, ESLint rule, widget deletion, documentation. Ready to archive after branch merge. |
 | [`eslint-disable-remediation.plan.md`](active/eslint-disable-remediation.plan.md) | 🟢 In progress | Remove ~64 remaining eslint-disable comments by fixing root causes. Extracted from CI plan. |
-| [`static-analysis-tool-promotion.plan.md`](static-analysis-tool-promotion.plan.md) | Pending | Triage knip + dependency-cruiser findings, then promote to blocking QG |
+| [`future/quality-gate-hardening.plan.md`](future/quality-gate-hardening.plan.md) | 📋 Next promotion candidate | First follow-on after the current improvement tranche; umbrella for static-analysis promotion, rule hardening, and broader gate enforcement work. |
+| [`static-analysis-tool-promotion.plan.md`](static-analysis-tool-promotion.plan.md) | 📎 Reference only | Background knip + dependency-cruiser triage detail retained until the hardening umbrella is promoted and absorbs execution. |
+
+## Recently Completed
+
+| Plan | Status | Description |
+|------|--------|-------------|
+| [`ci-consolidation-and-gate-parity.plan.md`](archive/completed/ci-consolidation-and-gate-parity.plan.md) | ✅ Complete | CI consolidation, ESLint rule, widget deletion, documentation. Archived after completion. |
 
 ## Documents
 
@@ -42,19 +61,25 @@ See [future/README.md](future/README.md) for later work and umbrella planning.
 | [`codegen/`](codegen/README.md) | Post-M1 | SDK codegen workspace decomposition — [strategic plan](codegen/future/sdk-codegen-workspace-decomposition.md) + [research](codegen/sdk-codegen-architecture-analysis.md). Temporary turbo overrides applied by [turbo boundary fix](../semantic-search/archive/completed/turbo-and-codegen-boundary-fix.plan.md) until decomposition completes. |
 | `active/sentry-otel-integration.execution.plan.md` | M2 | Active execution source for the Sentry + OTel foundation |
 | `current/config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
+| `future/oak-surface-isolation-and-generic-foundation-programme.plan.md` | Post-M2 | Strategic umbrella for extracting generic foundations and making Oak workspaces thin leaves |
 | `future/observability-and-quality-metrics.plan.md` | M2 + M3 | Strategic umbrella for the observability foundation, alerting, and quality dashboards |
 | `current/security-dependency-triage.plan.md` | M2 | Dependabot + CodeQL + outdated dependency triage (March 2026) |
 | `future/stdio-http-server-alignment.md` | M1 | Align STDIO and HTTP server configuration and behaviour |
 | `archive/completed/no-console-enforcement.plan.md` | M1 | Superseded 2026-03-04 — folded into `developer-experience/active/devx-strictness-convergence.plan.md` |
+| `roadmap.md` | M2 onward | Strategic sequence for active blockers, queued standardisation, and the new Oak/generic separation programme |
 
 ## Milestone Alignment
 
 - **Milestone 2** (open public alpha): server alignment,
   config standardisation, and the Sentry + OpenTelemetry observability
   foundation
-- **Post-M2**: SDK codegen workspace decomposition
+- **Post-M2**: Oak surface isolation and generic foundation programme,
+  including SDK codegen workspace decomposition
 - **Milestone 3** (pre-beta): alerting, quality metrics, and broader
   operational hardening on top of the foundation
+- **Next hardening follow-on**: promote
+  `future/quality-gate-hardening.plan.md` once the current improvement tranche
+  closes
 
 See [high-level-plan.md](../high-level-plan.md) for the strategic
 overview.

@@ -1,0 +1,174 @@
+{
+  "color": {
+    "ink-950": {
+      "$type": "color",
+      "$value": "#102033",
+      "$description": "Deep navy — darkest ink for backgrounds and inverse text"
+    },
+    "ink-800": {
+      "$type": "color",
+      "$value": "#31465f",
+      "$description": "Dark navy — panel surfaces in dark mode"
+    },
+    "ink-700": {
+      "$type": "color",
+      "$value": "#485d75",
+      "$description": "Mid navy — subtle borders in dark mode"
+    },
+    "ink-500": {
+      "$type": "color",
+      "$value": "#8498a9",
+      "$description": "Muted slate blue — borders on dark backgrounds (≥3:1 on ink surfaces)"
+    },
+    "paper-050": {
+      "$type": "color",
+      "$value": "#fcfbf8",
+      "$description": "Warm white — lightest paper for light backgrounds"
+    },
+    "paper-100": {
+      "$type": "color",
+      "$value": "#f4efe8",
+      "$description": "Light parchment — secondary text in dark mode"
+    },
+    "paper-400": {
+      "$type": "color",
+      "$value": "#8e7f6f",
+      "$description": "Warm taupe — borders in light mode (≥3:1 on paper surfaces)"
+    },
+    "oak-black": {
+      "$type": "color",
+      "$value": "#222222",
+      "$description": "Oak brand 'black' — primary text colour in light mode"
+    },
+    "oak-green-500": {
+      "$type": "color",
+      "$value": "#287c34",
+      "$description": "Oak brand green — primary accent (links, buttons) in light mode"
+    },
+    "oak-green-600": {
+      "$type": "color",
+      "$value": "#22692c",
+      "$description": "Darker oak green — hover/active accent in light mode"
+    },
+    "mint-300": {
+      "$type": "color",
+      "$value": "#bef2bd",
+      "$description": "Oak signature mint — accent surface colour in light mode"
+    },
+    "green-700": {
+      "$type": "color",
+      "$value": "#008237",
+      "$description": "Old Oak Green — accent surface colour in dark mode. Brand callback to early Oak sites."
+    },
+    "oak-green-300": {
+      "$type": "color",
+      "$value": "#78c85a",
+      "$description": "Oak logo green family — primary accent in dark mode (8.00:1 on ink-950, 4.70:1 on ink-800)"
+    },
+    "oak-green-200": {
+      "$type": "color",
+      "$value": "#8ad46c",
+      "$description": "Light oak green — hover/active accent in dark mode (9.18:1 on ink-950, 5.39:1 on ink-800)"
+    },
+    "sky-400": {
+      "$type": "color",
+      "$value": "#8ab6d6",
+      "$description": "Light blue — focus ring on dark backgrounds"
+    },
+    "sky-600": {
+      "$type": "color",
+      "$value": "#3d8fb5",
+      "$description": "Medium blue — focus ring on light backgrounds (≥3:1 on paper surfaces)"
+    },
+    "danger-300": {
+      "$type": "color",
+      "$value": "#f5a0a0",
+      "$description": "Soft salmon — error text on dark backgrounds (≥4.5:1 on ink surfaces)"
+    },
+    "danger-500": {
+      "$type": "color",
+      "$value": "#b43c31",
+      "$description": "Red — error states and destructive actions on light backgrounds"
+    }
+  },
+  "font": {
+    "family-body": {
+      "$type": "fontFamily",
+      "$value": "\"Lexend\", system-ui, sans-serif",
+      "$description": "Body typeface — Lexend (Oak brand). Shares the same typeface as family-display; kept as a separate seam for future typographic divergence."
+    },
+    "family-display": {
+      "$type": "fontFamily",
+      "$value": "\"Lexend\", system-ui, sans-serif",
+      "$description": "Display/heading typeface — Lexend (Oak brand). Intentionally the same as family-body for the current Oak brand; separate token preserved as a future divergence seam."
+    },
+    "size-200": {
+      "$type": "dimension",
+      "$value": "0.875rem",
+      "$description": "Small text (labels, captions)"
+    },
+    "size-300": { "$type": "dimension", "$value": "1rem", "$description": "Body text" },
+    "size-400": {
+      "$type": "dimension",
+      "$value": "1.25rem",
+      "$description": "Medium text — between body and heading"
+    },
+    "size-700": { "$type": "dimension", "$value": "2rem", "$description": "Heading text" },
+    "weight-light": {
+      "$type": "fontWeight",
+      "$value": "300",
+      "$description": "Light weight — Oak's default body weight (CSS font-weight: 300)"
+    },
+    "weight-bold": {
+      "$type": "fontWeight",
+      "$value": "700",
+      "$description": "Bold weight — Oak's emphasis weight for headings and strong text (CSS font-weight: 700)"
+    },
+    "line-height-300": {
+      "$type": "number",
+      "$value": "1.4",
+      "$description": "Compact line height for labels"
+    },
+    "line-height-400": {
+      "$type": "number",
+      "$value": "1.6",
+      "$description": "Comfortable line height for body text"
+    },
+    "line-height-700": {
+      "$type": "number",
+      "$value": "1.1",
+      "$description": "Tight line height for headings"
+    }
+  },
+  "space": {
+    "200": { "$type": "dimension", "$value": "0.5rem", "$description": "Tight spacing" },
+    "300": { "$type": "dimension", "$value": "0.75rem", "$description": "Compact spacing" },
+    "400": { "$type": "dimension", "$value": "1rem", "$description": "Standard spacing" },
+    "500": { "$type": "dimension", "$value": "1.5rem", "$description": "Comfortable spacing" },
+    "700": { "$type": "dimension", "$value": "2.5rem", "$description": "Generous spacing" }
+  },
+  "radius": {
+    "md": {
+      "$type": "dimension",
+      "$value": "0.9rem",
+      "$description": "Medium border radius for controls"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "1.4rem",
+      "$description": "Large border radius for panels"
+    },
+    "pill": {
+      "$type": "dimension",
+      "$value": "999px",
+      "$description": "Pill/stadium border radius"
+    }
+  },
+  "shadow": {
+    "card": {
+      "$type": "shadow",
+      "$value": "0 24px 50px rgba(16, 32, 51, 0.12)",
+      "$description": "Subtle card elevation shadow"
+    }
+  }
+}

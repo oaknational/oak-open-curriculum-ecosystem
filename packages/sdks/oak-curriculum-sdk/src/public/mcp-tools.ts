@@ -62,19 +62,14 @@ export { executeToolCall, McpToolError, McpParameterError } from '../mcp/execute
 export type { ToolExecutionResult } from '../mcp/execute-tool-call.js';
 
 export {
-  zodFromToolInputJsonSchema,
-  zodRawShapeFromToolInputJsonSchema,
-} from '../mcp/zod-input-schema.js';
-
-export {
   listUniversalTools,
   isUniversalToolName,
   isAggregatedToolName,
   createUniversalToolExecutor,
   generatedToolRegistry,
-  toRegistrationConfig,
-  toProtocolEntry,
+  isAppToolEntry,
   AGGREGATED_TOOL_DEFS,
+  type AppToolListEntry,
   type GeneratedToolRegistry,
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
@@ -96,14 +91,19 @@ export {
 } from '../mcp/curriculum-model-resource.js';
 
 export {
-  PREREQUISITE_GRAPH_RESOURCE,
-  getPrerequisiteGraphJson,
-} from '../mcp/prerequisite-graph-resource.js';
+  PRIOR_KNOWLEDGE_GRAPH_RESOURCE,
+  getPriorKnowledgeGraphJson,
+} from '../mcp/prior-knowledge-graph-resource.js';
 
 export {
   THREAD_PROGRESSIONS_RESOURCE,
   getThreadProgressionsJson,
 } from '../mcp/thread-progressions-resource.js';
+
+export {
+  MISCONCEPTION_GRAPH_RESOURCE,
+  getMisconceptionGraphJson,
+} from '../mcp/misconception-graph-resource.js';
 
 export { MCP_PROMPTS, getPromptMessages, type McpPrompt } from '../mcp/mcp-prompts.js';
 

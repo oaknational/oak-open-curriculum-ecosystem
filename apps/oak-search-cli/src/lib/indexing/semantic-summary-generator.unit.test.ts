@@ -27,7 +27,8 @@ function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): Searc
     downloadsAvailable: true,
     keyStageSlug: 'ks2',
     keyStageTitle: 'Key Stage 2',
-    canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
+    canonicalUrl: 'https://www.thenational.academy/teachers/lessons/lesson-slug',
+    oakUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
     ...overrides,
   };
   return lessonSummarySchema.parse(base);

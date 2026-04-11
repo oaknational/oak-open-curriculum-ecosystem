@@ -5,8 +5,6 @@ import { createHttpObservabilityOrThrow } from '../../src/observability/http-obs
 import { loadRuntimeConfig } from '../../src/runtime-config.js';
 
 export const STUB_ACCEPT_HEADER = 'application/json, text/event-stream';
-// No longer using bearer tokens - using auth bypass instead
-export const STUB_DEV_BEARER_TOKEN = ''; // Deprecated, kept for backward compatibility
 const STUB_API_KEY = 'stub-api-key';
 
 export interface StubbedHttpApp {
@@ -33,7 +31,11 @@ export async function createStubbedHttpApp(
   });
   const runtimeConfig = unwrap(result);
   const observability = createHttpObservabilityOrThrow(runtimeConfig);
-  const app = await createApp({ runtimeConfig, observability });
+  const app = await createApp({
+    runtimeConfig,
+    observability,
+    getWidgetHtml: () => '<!doctype html><html><body>stub-widget</body></html>',
+  });
 
   return { app };
 }

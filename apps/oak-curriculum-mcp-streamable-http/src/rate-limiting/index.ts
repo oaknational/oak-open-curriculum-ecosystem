@@ -5,7 +5,7 @@
  * pre-configured profiles ({@link MCP_RATE_LIMIT}, {@link OAUTH_RATE_LIMIT},
  * {@link ASSET_RATE_LIMIT}) for defence-in-depth behind CDN edge protection.
  *
- * @see ADR-144 for the multi-layer security architecture.
+ * @see ADR-158 for the multi-layer security architecture.
  * @module
  */
 export {

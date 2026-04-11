@@ -45,6 +45,7 @@ describe('Tool Handler Auth Error Interception (Integration)', () => {
       observability: createFakeHttpObservability(),
       overrides,
       searchRetrieval: createFakeSearchRetrieval(),
+      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
   }
 

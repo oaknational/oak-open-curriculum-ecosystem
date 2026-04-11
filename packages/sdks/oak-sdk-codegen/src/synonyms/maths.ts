@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- static maths synonym data file, structure requires length */
 /**
  * Mathematics concept synonyms.
  *
