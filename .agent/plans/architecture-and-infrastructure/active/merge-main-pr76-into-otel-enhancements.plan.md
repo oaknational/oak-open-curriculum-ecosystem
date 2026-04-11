@@ -82,16 +82,14 @@ main's highest (ADR-156 → ours becomes **ADR-157**). Update the file, the
 ADR index, all internal references, and cross-references in plans, prompts,
 safety-and-security.md, and code comments.
 
-### Hazard 3: `getWidgetHtml` DI chain propagation (Wilma finding)
+### Hazard 3: `getWidgetHtml` DI chain — NOT a merge hazard
 
-Main added `getWidgetHtml: () => string` throughout the DI chain:
-`CreateAppOptions` → `RegisterHandlersOptions` → `ResourceRegistrationOptions`
-→ `registerWidgetResource()`. Branch's `handlers.ts` and `RegisterHandlersOptions`
-do not have this field. After auto-merge, `application.ts` will pass
-`getWidgetHtml` to `registerHandlers()`, but the interface won't accept it.
-
-**Resolution**: Extend `RegisterHandlersOptions` in `handlers.ts` to include
-`getWidgetHtml`. This is a type-check blocker that auto-merge will not catch.
+Investigation reveals both sides preserve the `getWidgetHtml` injection
+pattern. Main added it in PR #76; it auto-merges cleanly because branch
+didn't touch the relevant interfaces. The original concern was about
+branch's `core-endpoints.ts` not having the field — but since we're
+accepting main's inlined pattern and deleting `core-endpoints.ts` (Hazard
+4 decision), this resolves automatically. **No action needed.**
 
 ### Hazard 4: `application.ts` composition pattern collision (Wilma finding)
 
@@ -154,13 +152,11 @@ after main's highest ADR).
    - Add `rateLimiterFactory` back to `CreateAppOptions`
    - Add `createRateLimiters()` helper
    - Pass limiters to route setup functions
-   - Ensure `getWidgetHtml` (main's new required field) is preserved
-   - Add `OAK_SERVER_BRANDING` spread to McpServer constructor (PR #76 added
-     this for branding metadata; branch's version doesn't have it)
+   - `getWidgetHtml` and `OAK_SERVER_BRANDING` auto-merge from main (no
+     action — branch didn't touch these interfaces)
 5. **Hazard 1**: remove `overrideToolsListHandler` import — main's Zod 4
    pipeline preserves examples end-to-end; no replacement needed
-6. **Hazard 3**: extend `RegisterHandlersOptions` with `getWidgetHtml`
-   and thread it through to `registerAllResources` / `registerWidgetResource`
+6. **Hazard 3**: no action — `getWidgetHtml` auto-merges from main
 7. **Hazard 5**: extend `setupOAuthAndCaching` with `oauthRateLimiter`
 8. **Non-conflicting adaptations**: check all auto-merged files for signature
    mismatches — especially test files calling `createApp` or `registerHandlers`.
@@ -195,11 +191,9 @@ After the merge is clean and gates pass:
 | `core-endpoints.ts` import break | High | Medium | Delete file, inline into main's pattern |
 | ADR numbering collision missed | High | Low | Explicit renumber with 15-file sweep |
 | `application.ts` merge error | Medium | High | Careful semantic merge, type-check gate |
-| `getWidgetHtml` DI chain break | High | Medium | Extend interfaces before type-check |
 | `setupOAuthAndCaching` signature | High | Medium | Re-apply rate limiter param |
 | Rate limiting wiring lost | Medium | Medium | Re-apply after accepting main |
 | Observability gap in new widget | Low | Medium | Post-merge gap analysis |
-| `OAK_SERVER_BRANDING` missing | Medium | Low | Add spread to McpServer constructor |
 
 ## Estimated Complexity
 
