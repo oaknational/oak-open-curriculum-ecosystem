@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-10
+last_updated: 2026-04-11
 ---
 
 # Session Continuation
@@ -40,11 +40,18 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Open Education Knowledge Surfaces — WS-0/1/2 DONE,
-  WS-3 (EEF evidence) is next.
+- **Workstream**: Gate hardening on `feat/gate_hardening_part1`.
+  The TS2430 gate failure is **FIXED** — `ToolDescriptor` now uses
+  `extends Omit<Tool, '_meta'>` instead of `extends Tool`, keeping
+  the library type while preventing `unknown` leaking from the
+  SDK's `Tool._meta`. `pnpm check` 88/88. Ready to commit.
 - **Active plans**:
+  - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-protocol-types-interface-to-type-fix.plan.md`
+    (**COMPLETE** — fix applied via `Omit<Tool, '_meta'>`, not the
+    original `interface→type` approach which was wrong)
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
-    (**PARENT** — WS-0/1/2 done, WS-3 next)
+    (**PARENT** — WS-0/1/2 done, namespace + type extraction done,
+    WS-3 next)
   - `.agent/plans/sdk-and-mcp-enhancements/active/eef-evidence-mcp-surface.plan.md`
     (**WS-3** — recommendation tool + R1-R8, all 12 findings resolved,
     ready for implementation)
@@ -52,53 +59,49 @@ git log --oneline --decorate -10
     (**WS-4** — smallest KG integration, ontology-derived)
   - `.agent/plans/sdk-and-mcp-enhancements/active/agent-guidance-consolidation.plan.md`
     (**WS-5** — consolidate after all surfaces)
-- **Current state**: WS-0/1/2 committed (`1eb302e8`) on
-  `planning/kg_eef_integration`. Prior knowledge graph renamed
-  (was "prerequisite graph"), 6 fragile tests deleted,
-  misconception-graph E2E assertions added. All 12 EEF plan
-  findings resolved with precise Zod schemas. `pnpm check` passes.
-- **Current objective**: Implement WS-3 (EEF evidence surface).
-  The EEF plan is fully resolved — ready for implementation.
+- **Completed Cursor plans**: deleted (delivered in prior sessions)
+- **Current state**: Branch `feat/gate_hardening_part1` at `779ab475`.
+  All type extraction, namespace, and gate-fix work is staged +
+  modified. `pnpm check` 88/88 clean. Ready to commit.
+- **Current objective**: Commit the gate fix, then classify quality
+  gate hardening options by effort and impact. Pick a small number
+  of low-effort, high-impact interventions.
 - **Hard invariants / non-goals**:
-  - Only `get-curriculum-model` is a prerequisite tool. All graph
-    tools are supplementary, loaded as needed — no prerequisite
-    guidance injected by the factory.
-  - Graph factory is SDK-internal, not publicly exported
-  - Registration lives in app layer (needs observability)
-  - URI scheme: all `curriculum://` with source-identifying segments
-  - EEF data is NOT generated from OpenAPI — lives in SDK, not codegen
-  - Separate framework from consumer (ADR-154) — factory is framework
-  - No `unknown`, no `Record<string, unknown>`, no type aliases
-  - Future graph sub-setting feature tracked in memory
-- **Recent surprises / corrections** (2026-04-11):
-  - Flaky E2E test `returns HTTP 401 for tools/list with fake Bearer
-    token` in `application-routing.e2e.test.ts` — fails during full
-    `pnpm check` concurrency, passes on isolated re-run. Tracked in
-    `project_flaky-test-tracker.md`.
-  - `replace_all` on lowercase `prerequisite` in a code-template file
-    corrupted `prerequisiteFor` and `prerequisiteGraph` camelCase
-    strings. Lesson: never use blanket `replace_all` on partial words
-    in files that contain code templates with mixed casing.
+  - Use library types (`Tool`) — never reinvent SDK types
+  - `Omit<Tool, '_meta'>` is the pattern for removing `unknown`
+    from SDK types while keeping the library relationship
+  - Spread at boundary (`{ ...tool._meta }`) when passing our
+    `ToolMeta` to SDK's `Record<string, unknown>` expectation
+  - No `unknown`, no `Record<string, unknown>`, no type erasure
+  - Non-API-derived types live in `mcp-protocol-types.ts`
+  - Namespace: no prefix (bulk API), `oak-kg-*` (ontology),
+    `eef-*` (EEF), no `nc-*` (ADR-157)
+  - Separate framework from consumer (ADR-154)
+- **Recent surprises / corrections** (2026-04-11f):
+  - **`interface→type` was the wrong fix**: three sessions attempted
+    it; the linter converts `type` back to `interface`. The real
+    problem was `unknown` leaking via `extends Tool`. The fix is
+    `extends Omit<Tool, '_meta'>` in the generator.
+  - **Verify edits survive the full pipeline**: edits can be
+    reverted by `lint:fix`. Always verify the edited file AFTER
+    `pnpm check`, not just after `type-check`.
+  - Boundary spread pattern: `{ ...tool._meta }` creates a fresh
+    object literal that TypeScript can verify against index sigs.
 - **Open questions / low-confidence areas**:
   - Whether WS-5 (guidance consolidation) should be a catalogue
-    abstraction or simpler validation test approach (barney
-    recommended the simpler path)
-- **Next safe step**: Implement WS-3 per the resolved EEF plan.
-  T1 (data loader, Zod), T2-T5 (resources, tool, guidance),
-  T6-T10 (registration, prompt), T11-T12 (ADR, E2E).
-- **Flaky test tracker**: see memory note
-  `project_flaky-test-tracker.md`. Two failures observed (auth
-  routing E2E, curriculum-model E2E). Suspected: turbo concurrency
-  or test coupling.
-- **Deep consolidation status**: completed this handoff —
-  deduplicated distilled.md (removed Vercel section, ADR-065
-  pointer, npm scope fact, duplicate "lead with narrative"),
-  promoted "pre-implementation plan review" to pattern file,
-  fixed stale MEMORY.md entries (widget, mcpjam reference),
-  updated all plan statuses with commit refs, fixed stale
-  file path in future plan.
+    abstraction or simpler validation test approach
+- **Tracked follow-ups** (not blocking current work):
+  - Consolidate `security-types.ts` with `mcp-protocol-types.ts`
+  - Note contract re-export surface change for semver
+- **Next safe step**: Classify gate hardening options by effort
+  and impact. Pick low-effort, high-impact interventions.
+- **Flaky test tracker**: see `project_flaky-test-tracker.md`.
+- **Deep consolidation status**: partially completed this handoff —
+  pattern extracted (`omit-unknown-from-library-types.md`), completed
+  plan archived, stale Cursor plans deleted. Napkin rotation deferred
+  (523 lines, over 500 threshold) — next session should rotate.
 
-## Active Workstreams (2026-04-11)
+## Active Workstreams (2026-04-11f)
 
 ### 1. Vercel Widget Crash Fix — COMPLETE
 

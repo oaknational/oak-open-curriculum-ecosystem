@@ -187,7 +187,11 @@ function registerTools(
     if (isAppToolEntry(tool)) {
       registerAppTool(server, tool.name, { ...config, _meta: { ...tool._meta } }, wrappedHandler);
     } else {
-      server.registerTool(tool.name, { ...config, _meta: tool._meta }, wrappedHandler);
+      server.registerTool(
+        tool.name,
+        { ...config, _meta: tool._meta ? { ...tool._meta } : undefined },
+        wrappedHandler,
+      );
     }
   }
 }

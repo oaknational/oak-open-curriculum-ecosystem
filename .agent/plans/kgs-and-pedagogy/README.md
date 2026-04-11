@@ -13,12 +13,14 @@ Learning Toolkit, bridged by the Oak Curriculum Ontology.
 | `future/evidence-integration-strategy.md` | Strategic brief | Impact requirements, three-layer architecture, integration levels, crosswalk design |
 | `future/oak-eef-technical-comparison.md` | Technical reference | Implementation-level comparison of EEF and Oak MCP stacks |
 | `future/eef-toolkit.json` | Data reference | Full EEF Toolkit dataset (30 strands, v0.2.0, April 2026) |
+| `future/ontology-integration-strategy.md` | Strategic brief | Moving from static ontology copies to dynamic integration (published package or workspace) |
 
 ## Read Order
 
 1. **Strategy first**: `future/evidence-integration-strategy.md`
-2. **Technical detail**: `future/oak-eef-technical-comparison.md`
-3. **Data reference**: `future/eef-toolkit.json` (when needed)
+2. **Ontology integration**: `future/ontology-integration-strategy.md`
+3. **Technical detail**: `future/oak-eef-technical-comparison.md`
+4. **Data reference**: `future/eef-toolkit.json` (when needed)
 
 ## Document Roles (DRY)
 
@@ -60,7 +62,7 @@ the KG alignment audit completes, or the EEF project reaches v0.5.
 ## Terminology Note
 
 This repo contains simple JSON derivations from bulk API data (ADR-059's
-curriculum concept map, the misconception graph, the prerequisite graph).
+curriculum concept map, the misconception graph, the prior knowledge graph).
 The Oak Curriculum Ontology is a formally modelled W3C-compliant
 knowledge graph — a different order of thing. Levels 1-3 work with
 bulk data. Levels 4/4b work with the formal ontology.

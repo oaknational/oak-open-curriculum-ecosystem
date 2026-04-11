@@ -13,8 +13,9 @@ import type { z } from 'zod';
 import type {
   ToolName,
   ToolDescriptorForName,
-  ToolDescriptor,
   SecurityScheme,
+  ToolAnnotations,
+  ToolMeta,
 } from '@oaknational/sdk-codegen/mcp-tools';
 import type { AGGREGATED_TOOL_DEFS } from './definitions.js';
 
@@ -79,30 +80,7 @@ export type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
  */
 export type UniversalToolName = AggregatedToolName | ToolName;
 
-/**
- * Contract-level ToolDescriptor with non-parametric properties.
- *
- * `annotations` and `_meta` on ToolDescriptor don't depend on any type
- * parameter — they define the structural shape that ALL tools (generated
- * and aggregated) conform to. We extract from the contract, not from
- * concrete instances, so we get `title?: string` rather than a union
- * of specific literal titles.
- */
-type ContractDescriptor = ToolDescriptor<string, never, never, never, never, string>;
-
-/**
- * MCP tool annotations — derived from the generated ToolDescriptor contract.
- *
- * @see https://spec.modelcontextprotocol.io/specification/server/tools/#annotations-object
- */
-export type ToolAnnotations = NonNullable<ContractDescriptor['annotations']>;
-
-/**
- * MCP Apps standard metadata — derived from the generated ToolDescriptor contract (ADR-141).
- *
- * @see https://modelcontextprotocol.io/extensions/apps/overview
- */
-export type ToolMeta = NonNullable<ContractDescriptor['_meta']>;
+export type { ToolAnnotations, ToolMeta };
 
 /**
  * Entry in the universal tools list for MCP registration.
@@ -143,7 +121,7 @@ export interface UniversalToolListEntry {
   readonly inputSchema: z.ZodRawShape;
   /** Security schemes required to invoke this tool */
   readonly securitySchemes?: readonly SecurityScheme[];
-  /** MCP annotations providing behavior hints */
+  /** MCP annotations providing behaviour hints */
   readonly annotations?: ToolAnnotations;
   /** MCP Apps standard metadata for UI integration (ADR-141) */
   readonly _meta?: ToolMeta;

@@ -27,6 +27,7 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { formatToolResponse } from './universal-tool-shared.js';
 import { SCOPES_SUPPORTED } from './scopes-supported.js';
+import type { SourceAttribution } from '@oaknational/sdk-codegen/mcp-tools';
 
 /**
  * Configuration for a graph MCP surface.
@@ -62,6 +63,13 @@ export interface GraphSurfaceConfig<T extends { readonly version: string }> {
   readonly sourceData: T;
   /** Summary line for tool response content[0]. */
   readonly summary: string;
+  /**
+   * Machine-readable source attribution (ADR-157 §Namespace Convention).
+   *
+   * When provided, embedded in the `_meta.attribution` field of resources
+   * and tools so downstream consumers can identify provenance programmatically.
+   */
+  readonly attribution?: SourceAttribution;
 }
 
 /**
@@ -81,6 +89,7 @@ export function createGraphResource<T extends { readonly version: string }>(
     readonly priority: 0.5 | 1.0;
     readonly audience: ('user' | 'assistant')[];
   };
+  readonly _meta?: { readonly attribution: SourceAttribution };
 } {
   return {
     name: config.name,
@@ -92,6 +101,7 @@ export function createGraphResource<T extends { readonly version: string }>(
       priority: config.priority ?? 0.5,
       audience: ['assistant'] satisfies ('user' | 'assistant')[],
     },
+    ...(config.attribution ? { _meta: { attribution: config.attribution } } : {}),
   };
 }
 
@@ -129,7 +139,7 @@ export function createGraphToolDef<T extends { readonly version: string }>(
     readonly idempotentHint: true;
     readonly openWorldHint: false;
   };
-  readonly _meta: undefined;
+  readonly _meta: { readonly attribution: SourceAttribution } | undefined;
 } {
   return {
     title: config.title,
@@ -144,7 +154,7 @@ export function createGraphToolDef<T extends { readonly version: string }>(
       openWorldHint: false as const,
     },
 
-    _meta: undefined,
+    _meta: config.attribution ? { attribution: config.attribution } : undefined,
   };
 }
 

@@ -35,8 +35,11 @@ requirements.
 ## Oak Curriculum Ontology
 
 The [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)
-is a W3C-compliant formal knowledge graph modelling the UK National Curriculum
-and Oak's teaching programmes. Primary author: Mark Hodierne.
+is Oak's formal semantic representation of curriculum structure, aligned to
+the National Curriculum for England (2014), using W3C standards (RDF, OWL,
+SKOS, SHACL). This is an Oak-developed representation and does not
+constitute an official DfE National Curriculum publication. Primary author:
+Mark Hodierne.
 
 - **Data** (`.ttl` files, SKOS/OWL/SHACL): Licensed under the
   [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)

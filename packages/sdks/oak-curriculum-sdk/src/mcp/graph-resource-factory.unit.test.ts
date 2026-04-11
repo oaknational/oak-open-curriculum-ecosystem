@@ -15,6 +15,7 @@ import {
   createGraphToolDef,
   createGraphToolExecutor,
 } from './graph-resource-factory.js';
+import { OAK_API_ATTRIBUTION } from './source-attribution.js';
 
 /**
  * Minimal typed test data matching the `{ readonly version: string }`
@@ -70,6 +71,18 @@ describe('createGraphResource', () => {
     const highPriority = createGraphResource({ ...TEST_CONFIG, priority: 1.0 });
     expect(highPriority.annotations.priority).toBe(1.0);
   });
+
+  it('omits _meta when no attribution is provided', () => {
+    expect(resource).not.toHaveProperty('_meta');
+  });
+
+  it('includes _meta.attribution when attribution is provided', () => {
+    const withAttribution = createGraphResource({
+      ...TEST_CONFIG,
+      attribution: OAK_API_ATTRIBUTION,
+    });
+    expect(withAttribution._meta).toEqual({ attribution: OAK_API_ATTRIBUTION });
+  });
 });
 
 describe('createGraphJsonGetter', () => {
@@ -105,6 +118,18 @@ describe('createGraphToolDef', () => {
 
   it('includes the description from config', () => {
     expect(toolDef.description).toContain('A test graph for unit testing.');
+  });
+
+  it('returns undefined _meta when no attribution is provided', () => {
+    expect(toolDef._meta).toBeUndefined();
+  });
+
+  it('returns _meta.attribution when attribution is provided', () => {
+    const withAttribution = createGraphToolDef({
+      ...TEST_CONFIG,
+      attribution: OAK_API_ATTRIBUTION,
+    });
+    expect(withAttribution._meta).toEqual({ attribution: OAK_API_ATTRIBUTION });
   });
 });
 

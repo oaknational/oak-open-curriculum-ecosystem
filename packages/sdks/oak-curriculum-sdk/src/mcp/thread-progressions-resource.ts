@@ -24,6 +24,7 @@ import type { ThreadProgressionGraph } from '@oaknational/sdk-codegen/vocab';
 import { threadProgressionGraph } from '@oaknational/sdk-codegen/vocab-data';
 import type { GraphSurfaceConfig } from './graph-resource-factory.js';
 import { createGraphResource, createGraphJsonGetter } from './graph-resource-factory.js';
+import { OAK_API_ATTRIBUTION } from './source-attribution.js';
 
 /**
  * Shared configuration for the thread progressions MCP surface.
@@ -39,6 +40,7 @@ export const THREAD_PROGRESSIONS_CONFIG: GraphSurfaceConfig<ThreadProgressionGra
   uriSegment: 'thread-progressions',
   sourceData: threadProgressionGraph,
   summary: `Thread progression graph loaded. Contains ${String(threadProgressionGraph.stats.threadCount)} threads across ${String(threadProgressionGraph.stats.subjectsCovered.length)} subjects with ordered unit sequences.`,
+  attribution: OAK_API_ATTRIBUTION,
 };
 
 /**

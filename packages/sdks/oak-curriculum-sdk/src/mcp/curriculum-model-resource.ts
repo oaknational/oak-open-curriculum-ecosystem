@@ -30,6 +30,8 @@
  */
 
 import { composeCurriculumModelData } from './curriculum-model-data.js';
+import type { SourceAttribution } from '@oaknational/sdk-codegen/mcp-tools';
+import { OAK_API_ATTRIBUTION } from './source-attribution.js';
 
 /**
  * Curriculum model resource definition for MCP registration.
@@ -37,7 +39,18 @@ import { composeCurriculumModelData } from './curriculum-model-data.js';
  * Priority 1.0 and audience ["assistant"] are MCP spec annotations
  * indicating this resource should be auto-injected for AI assistants.
  */
-export const CURRICULUM_MODEL_RESOURCE = {
+export const CURRICULUM_MODEL_RESOURCE: {
+  readonly name: string;
+  readonly uri: string;
+  readonly title: string;
+  readonly description: string;
+  readonly mimeType: 'application/json';
+  readonly annotations: {
+    readonly priority: number;
+    readonly audience: ('user' | 'assistant')[];
+  };
+  readonly _meta: { readonly attribution: SourceAttribution };
+} = {
   name: 'curriculum-model',
   uri: 'curriculum://model',
   title: 'Oak Curriculum Model',
@@ -48,6 +61,7 @@ export const CURRICULUM_MODEL_RESOURCE = {
     priority: 1.0,
     audience: ['assistant'] satisfies ('user' | 'assistant')[],
   },
+  _meta: { attribution: OAK_API_ATTRIBUTION },
 };
 
 /**

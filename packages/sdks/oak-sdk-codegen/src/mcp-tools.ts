@@ -44,15 +44,18 @@ export type {
   ToolResultForName,
 } from './types/generated/api-schema/mcp-tools/index.js';
 
-export { DOCUMENTED_ERROR_PREFIX } from './types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
+export { DOCUMENTED_ERROR_PREFIX } from './types/mcp-protocol-types.js';
 export type {
   SecuritySchemeType,
   NoAuthScheme,
   OAuth2Scheme,
   SecurityScheme,
+  SourceAttribution,
+  ToolAnnotations,
+  ToolMeta,
   StatusDiscriminant,
   InvokeResult,
-} from './types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
+} from './types/mcp-protocol-types.js';
 
 export { callTool } from './types/generated/api-schema/mcp-tools/runtime/execute.js';
 
