@@ -22,6 +22,8 @@ const config: KnipConfig = {
     '@stryker-mutator/core',
     '@stryker-mutator/typescript-checker',
     '@stryker-mutator/vitest-runner',
+    // Transitive dep of @stryker-mutator/core, used for type import in stryker.config.base.ts
+    '@stryker-mutator/api',
     // Used in CI or scripts, not directly imported
     'cloc',
     'shellcheck',
@@ -48,11 +50,10 @@ const config: KnipConfig = {
     // External tools not installed via npm
     'gitleaks',
     'playwright',
+    // System binaries used in package.json scripts for port/process checks
+    'lsof',
+    'ps',
   ],
-
-  // Root workspace
-  entry: ['scripts/**/*.{ts,mjs}'],
-  project: ['scripts/**/*.{ts,mjs}'],
 
   // Plugin configuration
   eslint: true,
@@ -61,12 +62,24 @@ const config: KnipConfig = {
 
   // Workspace definitions
   workspaces: {
+    '.': {
+      entry: [
+        'scripts/**/*.{ts,mjs}',
+        'vitest.field-integrity.config.ts',
+        'stryker.config.base.ts',
+      ],
+      project: [
+        'scripts/**/*.{ts,mjs}',
+        'vitest.field-integrity.config.ts',
+        'stryker.config.base.ts',
+      ],
+    },
     'agent-tools': {
       entry: ['src/cli/**/*.ts', 'src/index.ts'],
       project: ['src/**/*.ts'],
     },
     'apps/oak-curriculum-mcp-streamable-http': {
-      entry: ['src/index.ts', 'widget/src/main.tsx'],
+      entry: ['src/index.ts', 'widget/src/main.tsx', 'smoke-tests/**/*.ts'],
       project: [
         'src/**/*.ts',
         'e2e-tests/**/*.ts',
@@ -89,7 +102,12 @@ const config: KnipConfig = {
       ],
     },
     'apps/oak-search-cli': {
-      entry: ['bin/oaksearch.ts', 'scripts/**/*.ts', 'evaluation/**/*.ts'],
+      entry: [
+        'bin/oaksearch.ts',
+        'scripts/**/*.ts',
+        'evaluation/**/*.ts',
+        'ground-truths/generation/**/*.ts',
+      ],
       project: [
         'src/**/*.ts',
         'e2e-tests/**/*.ts',
@@ -160,6 +178,10 @@ const config: KnipConfig = {
       entry: ['src/index.ts', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
       project: ['src/**/*.ts', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
       ignoreDependencies: ['@zod/core'],
+    },
+    'packages/libs/sentry-mcp': {
+      entry: ['src/index.ts', 'tests/**/*.typecheck.ts'],
+      project: ['src/**/*.ts', 'tests/**/*.ts'],
     },
     'packages/sdks/oak-search-sdk': {
       entry: ['src/index.ts'],

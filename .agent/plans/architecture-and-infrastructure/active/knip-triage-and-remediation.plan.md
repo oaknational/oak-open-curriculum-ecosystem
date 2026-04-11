@@ -7,7 +7,7 @@ todos:
     status: completed
   - id: triage-unused-files
     content: "Phase 1: Triage unused files (53) — investigate each, verify consumption, remediate."
-    status: pending
+    status: completed
   - id: triage-unused-exports
     content: "Phase 2: Triage unused exports (630) — investigate by workspace, verify each, remediate."
     status: pending
@@ -22,7 +22,7 @@ todos:
 # Knip Triage and Remediation
 
 **Last Updated**: 2026-04-11
-**Status**: Active — Phase 0 complete, Phase 1 next
+**Status**: Active — Phase 0 + 1 complete, Phase 2 next
 **Scope**: Run knip, triage all findings, design and apply remediations,
 promote to blocking quality gate.
 **Parent**: [quality-gate-hardening.plan.md](../current/quality-gate-hardening.plan.md)
@@ -52,9 +52,9 @@ sensitivity is a gate weakness, not a fix.
 |---|---|---|---|
 | Unused dependencies | 2 | **0** | P0 — resolved |
 | Unused devDependencies | 9 | **0** | P0 — resolved |
-| Unlisted binaries | 2 | 2 | P1 — operational gap |
-| Unused files | 96 | **53** | P1 — investigate each |
-| Unused exports | 515+234 | **630** | P2 — investigate each |
+| Unlisted binaries | 2 | **0** | P1 — resolved |
+| Unused files | 96 | **0** | P1 — resolved |
+| Unused exports | 515+234 | **614** | P2 — investigate each |
 | Duplicate exports | 1 | 0 | P2 — resolved |
 | Configuration hints | 45 | **~40** | P1 — stale config, foundation |
 | **Total** | **904** | **~725** | |
@@ -75,6 +75,25 @@ sensitivity is a gate weakness, not a fix.
   corrected to `bin/oaksearch.ts`.
 - **13 documentation files updated** to remove stale stdio references.
 - **3 legacy-stdio agent rules deleted**.
+
+### Phase 1 Resolution (2026-04-11j)
+
+- **38 genuinely dead files deleted** across 5 sub-groups:
+  streamable-http barrels/duplicates/fixtures (5), oak-search-cli dead
+  library code (15), ES setup CLI cluster (8), ground-truth archive
+  dead leaf files (9), root empty/dead files (4).
+- **13 non-standard consumption patterns fixed** via `knip.config.ts`:
+  smoke-tests as entries for streamable-http, root workspace moved to
+  `workspaces["."]`, generation scripts as entries for oak-search-cli,
+  sentry-mcp workspace added with typecheck test entry.
+- **`bulk-data-manifest` consumption bug fixed**: wired through
+  `generated/index.ts` barrel into `validate-ground-truth.ts` with
+  new manifest completeness validation check.
+- **2 unlisted binaries resolved**: `lsof` and `ps` added to
+  `ignoreBinaries` (system utilities for port/process checks).
+- **`smoke:dev:auth` script added** to streamable-http `package.json`.
+- **`typedoc.json` updated** to remove references to deleted files.
+- Architecture reviewers consulted on all barrel file decisions.
 
 ### Unused Dependencies (2) — P0
 

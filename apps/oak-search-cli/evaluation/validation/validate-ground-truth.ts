@@ -45,8 +45,10 @@ import {
   ALL_LESSON_SLUGS,
   TOTAL_LESSON_SLUG_COUNT,
   getSubjectForSlug,
-} from '../../ground-truths/generated/lesson-slugs-by-subject.js';
-import { validateGroundTruthQuery } from '../../ground-truths/generated/ground-truth-schemas.js';
+  validateGroundTruthQuery,
+  BULK_DATA_MANIFEST,
+  SUBJECT_PHASE_COUNT,
+} from '../../ground-truths/generated/index.js';
 import type { GroundTruthQuery } from '../../src/lib/search-quality/ground-truth-archive/types.js';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
@@ -555,6 +557,29 @@ function checkZodSchema(entry: string, query: GroundTruthQuery, issues: Validati
   }
 }
 
+/**
+ * Validate ground truth completeness against the bulk data manifest.
+ *
+ * Every subject/phase combination in the bulk data should have
+ * corresponding ground truth entries in the registry.
+ */
+function checkManifestCompleteness(
+  registryKeys: ReadonlySet<string>,
+  issues: ValidationIssue[],
+): void {
+  for (const row of BULK_DATA_MANIFEST) {
+    const key = `${row.subject}/${row.phase}`;
+    if (!registryKeys.has(key)) {
+      issues.push({
+        severity: 'error',
+        entry: key,
+        category: 'manifest-completeness',
+        message: `Bulk data contains ${row.lessonCount} lessons for ${key} but no ground truth entry exists`,
+      });
+    }
+  }
+}
+
 // ============================================================================
 // Main Validation
 // ============================================================================
@@ -562,7 +587,8 @@ function checkZodSchema(entry: string, query: GroundTruthQuery, issues: Validati
 /**
  * Validate all ground truth entries.
  *
- * Runs 16 validation checks:
+ * Runs 17 validation checks:
+ * - 1 manifest-level check (bulk data completeness)
  * - 2 entry-level checks (duplicate queries, category coverage)
  * - 14 per-query checks (slug existence, scores, etc.)
  *
@@ -572,6 +598,9 @@ function checkZodSchema(entry: string, query: GroundTruthQuery, issues: Validati
 function validateGroundTruths(): readonly ValidationIssue[] {
   const entries = getAllGroundTruthEntries();
   const allIssues: ValidationIssue[] = [];
+
+  const registryKeys = new Set(entries.map((entry) => `${entry.subject}/${entry.phase}`));
+  checkManifestCompleteness(registryKeys, allIssues);
 
   for (const entry of entries) {
     const entryKey = `${entry.subject}/${entry.phase}`;
@@ -703,7 +732,9 @@ function main(): void {
     process.exit(1);
   }
 
-  console.log(`Validating against ${TOTAL_LESSON_SLUG_COUNT} valid slugs from bulk data...\n`);
+  console.log(
+    `Validating against ${TOTAL_LESSON_SLUG_COUNT} valid slugs from ${SUBJECT_PHASE_COUNT} subject/phase combinations...\n`,
+  );
 
   const issues = validateGroundTruths();
   const summary = computeSummary(issues);

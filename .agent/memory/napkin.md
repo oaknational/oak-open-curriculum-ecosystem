@@ -167,3 +167,26 @@ only traces dependency trees from `entry` points. Standalone scripts
 invoked via `tsx` (not imported by the main entry) must also be
 listed as entries. Project just defines the workspace file set;
 entry defines the dependency graph roots.
+
+### Session 2026-04-11j: Knip Phase 1 — triage 53 unused files
+
+**Result: 53 → 0 unused files. Phase 1 complete.**
+- Batch A: deleted 38 genuinely dead files (5 sub-groups)
+- Batch B: fixed 13 non-standard consumption patterns via `knip.config.ts`
+- Batch C: wired `bulk-data-manifest` consumption (was a bug, not dead code)
+
+**Architecture reviewer guidance (Barney + Betty):**
+Both agreed: delete barrels 1-5 (dead convenience layers).
+Diverged on barrel 6 (`generated/index.ts`):
+- Barney: keep it, route through it (generator emits it deliberately)
+- Betty: delete it, import directly (coupling trap with heavyweight data)
+Decision: followed Barney — barrel is generated, serves as sentinel,
+and rewiring is smaller than updating generator + sentinel logic.
+
+**Knip root workspace config:**
+Top-level `entry`/`project` fields are ignored when `workspaces` is
+defined. Must use `workspaces["."]` for root workspace entries.
+This is a knip behaviour, not documented prominently.
+
+**Remaining knip scope:** 614 unused exports, 2 unlisted binaries,
+config hints. Phase 2 (exports) is next.

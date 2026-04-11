@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-11i
+last_updated: 2026-04-11j
 ---
 
 # Session Continuation
@@ -44,22 +44,26 @@ git log --oneline --decorate -10
   remediation.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
-    (**PRIMARY** — Phase 0 complete, ~725 findings remaining,
-    Phase 1 next)
+    (**PRIMARY** — Phase 0 + 1 complete, 614 unused exports
+    remaining, Phase 2 next)
   - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
     (**PARENT** — promoted from future/ to current/, owner decisions
     resolved, ADR-121 reconciled, `enable-knip` item in progress)
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
     (**PARKED** — WS-0/1/2 done, WS-3 next, not current focus)
-- **Current state**: Phase 0 (unused deps) is complete. Stdio
-  workspace deleted entirely per ADR-128. 4 root devDeps removed.
-  Knip config refined (oak-search-cli entries, streamable-http
-  widget patterns, 2 documented ignoreDependencies). All quality
-  gates pass. ~725 findings remain across 4 categories.
-- **Current objective**: Execute the knip triage plan phase by
-  phase. Phase 1 (unused files, 53 remaining) next. End state:
-  `pnpm knip` exits 0, knip added to all four gate surfaces
-  (pnpm check, pre-commit, pre-push, CI).
+- **Current state**: Phase 0 (unused deps) and Phase 1 (unused
+  files) are complete. Zero unused files, zero unlisted binaries,
+  zero unused dependencies. 614 unused exports and ~40 config
+  hints remain. `knip.config.ts` restructured: root workspace
+  moved to `workspaces["."]`, smoke-tests and generation scripts
+  added as entries, sentry-mcp workspace added. `bulk-data-manifest`
+  consumption bug fixed with completeness validation in
+  `validate-ground-truth.ts`. All quality gates pass.
+- **Current objective**: Execute Phase 2 of the knip triage plan
+  — triage 614 unused exports by workspace. Then Phase 3 (config
+  hints, ~40), Phase 4 (promote knip to all four gate surfaces).
+  End state: `pnpm knip` exits 0, knip added to pnpm check,
+  pre-commit, pre-push, and CI.
 - **Hard invariants / non-goals**:
   - No finding may be labelled as a false positive without
     evidence-based proof
@@ -69,17 +73,18 @@ git log --oneline --decorate -10
   - ESLint config standardisation must precede all lint-rule
     promotions (Tier 1, not Tier 3)
   - No `unknown`, no `Record<string, unknown>`, no type erasure
-- **Recent surprises / corrections** (2026-04-11i):
-  - Knip `entry` vs `project`: standalone scripts invoked via `tsx`
-    must be in `entry`, not just `project` — knip only traces
-    dependency trees from entry points
-  - Pre-existing bug: `knip.config.ts` had `src/bin/oaksearch.ts`
-    but actual CLI entry is `bin/oaksearch.ts` (no `src/` prefix)
-  - Two doc files still referenced deleted stdio workspace after
-    initial cleanup — found by code-reviewer
+- **Recent surprises / corrections** (2026-04-11j):
+  - Knip top-level `entry`/`project` are ignored when `workspaces`
+    is defined — must use `workspaces["."]` for root workspace
+  - Architecture reviewers diverged on generated barrel: Barney
+    (keep, route through) vs Betty (delete, import directly).
+    Followed Barney — barrel is generated, serves as sentinel,
+    rewiring is smaller than updating generator
+  - `bulk-data-manifest` was a consumption bug, not dead code —
+    owner correctly identified it should be in use
 - **Open questions / low-confidence areas**:
-  - Whether ground-truth-archive files are consumed via dynamic
-    discovery (open investigation for Phase 1)
+  - Phase 2 strategy: triage by workspace or by export type?
+    614 exports is large — need a systematic approach
   - Whether WS-5 (guidance consolidation) should be a catalogue
     abstraction or simpler validation test approach
 - **Tracked follow-ups** (not blocking current work):
@@ -88,15 +93,16 @@ git log --oneline --decorate -10
   - Generated tools have no human-friendly title (no plan)
   - Synonym builders should become codegen-time (no plan)
   - `static-content.ts` `process.cwd()` bug (tracked nowhere)
-- **Next safe step**: Begin Phase 1 of the knip triage plan —
-  investigate the 53 unused files, starting with
-  ground-truth-archive files in oak-search-cli.
-- **Deep consolidation status**: not due — Phase 0 is one step in
-  a multi-phase plan; no plan or milestone has closed. Napkin at
-  ~170 lines, well under rotation threshold. Surprises captured
-  in napkin.
+- **Next safe step**: Begin Phase 2 of the knip triage plan —
+  investigate the 614 unused exports, likely starting with
+  oak-search-cli (~350+ exports) as the largest contributor.
+  Create a child plan with workspace-by-workspace triage.
+- **Deep consolidation status**: not due — Phase 1 is one step
+  in a multi-phase plan; no plan or milestone has closed. Napkin
+  at ~193 lines, well under rotation threshold. Surprises
+  captured in napkin.
 
-## Active Workstreams (2026-04-11i)
+## Active Workstreams (2026-04-11j)
 
 ### 1. Vercel Widget Crash Fix — COMPLETE
 
