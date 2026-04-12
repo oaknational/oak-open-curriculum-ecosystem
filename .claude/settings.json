@@ -60,7 +60,9 @@
       "Bash(npm view:*)",
       "Bash(git clone:*)",
       "WebFetch(domain:docs.sentry.io)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "mcp__sentry-ooc-mcp__whoami",
+      "mcp__sentry-ooc-mcp__find_releases"
     ]
   },
   "hooks": {
