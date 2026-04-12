@@ -62,9 +62,10 @@ git log --oneline --decorate -10
   - `pnpm check` includes both `pnpm knip` and `pnpm depcruise`
   - Quality gate hardening parent plan has 2 of its major
     items complete; remaining items are ESLint-focused
-- **Current objective**: Quality gate hardening continues.
-  Next item is ESLint config standardisation (Tier 1
-  prerequisite for all lint-rule promotions).
+- **Current objective**: Interactive user search UI in the
+  MCP App (Phase 5 of the WS-3 widget rebuild). Quality
+  gate hardening continues as a secondary workstream —
+  next item there is ESLint config standardisation.
 - **Hard invariants / non-goals**:
   - Never weaken gates to solve testing problems
   - ESLint config standardisation must precede all lint-rule
@@ -97,10 +98,11 @@ git log --oneline --decorate -10
   - `static-content.ts` `process.cwd()` bug (tracked nowhere)
   - `ReturnType<typeof ...>` coupling in OakClient — pre-existing
   - `register-prompts.integration.test.ts` E2E naming — tracked
-- **Next safe step**: Pick next quality-gate-hardening item.
-  ESLint config standardisation is the Tier 1 prerequisite.
-  Or context-switch to WS-3 (MCP App rebuild) if that is
-  higher priority.
+- **Next safe step**: Build the interactive user search UI
+  view in the MCP App (Phase 5 of WS-3 widget rebuild).
+  The `feat/mcp_app_ui` branch has the widget crash fix
+  committed — push, verify Vercel preview, then start
+  Phase 5.
 - **Deep consolidation status**: due — depcruise milestone
   closed; napkin entries to process.
 
