@@ -60,8 +60,8 @@ function createTestEnv(
 ): SearchCliRuntimeConfig['env'] {
   const raw: Record<string, string | undefined> = {
     ELASTICSEARCH_URL: 'https://example-elasticsearch.test',
-    ELASTICSEARCH_API_KEY: 'test-es-key-12345',
-    OAK_API_KEY: 'test-api-key-12345',
+    ELASTICSEARCH_API_KEY: 'elastic-key-12345',
+    OAK_API_KEY: 'oak-key-12345',
     SEARCH_API_KEY: 'search-key-12345',
     SEARCH_INDEX_VERSION: 'v2026-01-01',
     SENTRY_MODE: mode,

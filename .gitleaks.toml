@@ -18,6 +18,12 @@ description = "Clerk publishable keys are public by design"
 regexTarget = "match"
 regexes = ['''pk_test_[A-Za-z0-9]+''', '''pk_live_[A-Za-z0-9]+''']
 
+# Test fixture API keys in unit/integration tests are not real secrets.
+# Pattern: 'oak-key-12345', 'elastic-key-12345', 'search-key-12345' etc.
+[[allowlists]]
+description = "Test fixture keys in test files"
+paths = ['''\.test\.ts$''']
+
 [[rules]]
 id = "oak-api-key-uuid"
 description = "Detect UUID-style OAK_API_KEY assignments"
