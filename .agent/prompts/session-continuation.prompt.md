@@ -40,55 +40,54 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Quality gate hardening — depcruise triage
-  and remediation. Knip plan fully complete.
+- **Workstream**: Quality gate hardening — depcruise plan
+  fully complete. Both knip and depcruise are blocking on
+  all four gate surfaces.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
-    (**ACTIVE** — Phase 0 complete, Phase 1 next)
+    (**COMPLETE** — all phases 0-4 resolved 2026-04-12)
   - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
-    (**PARENT** — `enable-knip` complete; `enable-depcruise` active)
+    (**PARENT** — `enable-knip` complete; `enable-depcruise`
+    complete; remaining items: ESLint config standardisation,
+    eslint-disable remediation, max-files-per-dir, type
+    assertion promotion)
   - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
     (**COMPLETE** — all phases 0-4 and 2.5 resolved 2026-04-12)
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
     (**PARKED** — WS-0/1/2 done, WS-3 next, not current focus)
-- **Current state**: Knip plan fully done (904 → 0, blocking
-  on all four surfaces). Depcruise Phase 0 deep audit complete
-  — all 12 assumptions verified with evidence, 6 hidden
-  assumptions discovered. 87 violations confirmed: 44 errors
-  (7 distinct cycle SCCs) and 43 warnings (4 orphan action
-  categories). Owner decisions resolved: strict end state
-  (all rules `error`), all four gate surfaces. Plan is
-  corrected and approved for execution.
-- **Current objective**: Execute depcruise Phases 1-4. Phase 1
-  (config fixes + dead code deletion) and Phase 2 (break 7
-  cycle SCCs) can run in parallel. Then Phase 2.5 (reconcile),
-  Phase 3 (remaining orphans), Phase 4 (promote `no-orphans`
-  to `error`, add to all gate surfaces).
+- **Current state**: Both static analysis tools are now
+  blocking gates on all four surfaces:
+  - Knip: 904 → 0 (complete 2026-04-12)
+  - Depcruise: 87 → 0 (complete 2026-04-12)
+  - `pnpm check` includes both `pnpm knip` and `pnpm depcruise`
+  - Quality gate hardening parent plan has 2 of its major
+    items complete; remaining items are ESLint-focused
+- **Current objective**: Quality gate hardening continues.
+  Next item is ESLint config standardisation (Tier 1
+  prerequisite for all lint-rule promotions).
 - **Hard invariants / non-goals**:
   - Never weaken gates to solve testing problems
   - ESLint config standardisation must precede all lint-rule
     promotions (Tier 1, not Tier 3)
   - No `unknown`, no `Record<string, unknown>`, no type erasure
   - Never edit generated files — edit the generators
-  - Run `pnpm sdk-codegen` after any SDK cycle-breaking work
-  - Strict end state: all depcruise rules are `error`, 0
-    findings, all four gate surfaces
+  - No type aliases — absolute rule
 - **Recent surprises / corrections** (2026-04-12):
-  - A11 falsified: depcruise already exits non-zero (code 44),
-    not 0 as the original plan assumed
-  - A1 partially falsified: 7 distinct SCCs, not ~5
-  - A5 falsified: 4 orphan categories, not ~3
-  - A12 partially falsified: `packages/docs/` crawled but is
-    not a workspace; `pathNot` gaps for Playwright, scripts
-  - 89% of circular dep errors (39/44) from just 2 clusters
-    (SCC-A at 16 errors, SCC-B1 at 20 errors)
+  - SCC-C (2 errors) collapsed when B1 was fixed — confirmed
+    by intermediate depcruise run (22 errors remaining)
+  - `@elastic/elasticsearch` became unused after dead file
+    deletion — cascading dep removal
+  - `oak-adapter.unit.test.ts` had 3 useless type-only tests
+    — deleted per test-reviewer finding
+  - `register-prompts.integration.test.ts` misnamed as
+    integration but behaves as E2E — pre-existing, tracked
+  - Type aliases were found in new leaf modules (DtcgTokenValue,
+    PairUnits, PromptArgs, TokenTier) — all fixed per principle
 - **Open questions / low-confidence areas**:
-  - Whether SCC-C (2 errors) collapses after B1 fix — likely
-    but not guaranteed (shares `types.ts` → `definitions.ts`)
-  - HA9: does depcruise exit 0 with warnings-only? Determines
-    Phase 4 sequencing (verify in Phase 4)
   - Whether WS-5 (guidance consolidation) should be a catalogue
     abstraction or simpler validation test approach
+  - Logger `types.ts` at 153 lines — monitor if it approaches
+    200 (Wilma finding)
 - **Tracked follow-ups** (not blocking current work):
   - GT archive retirement (future plan, discoverable)
   - Consolidate `security-types.ts` with `mcp-protocol-types.ts`
@@ -96,30 +95,28 @@ git log --oneline --decorate -10
   - Generated tools have no human-friendly title (no plan)
   - Synonym builders should become codegen-time (no plan)
   - `static-content.ts` `process.cwd()` bug (tracked nowhere)
-  - `packages/docs/_typedoc_src/` stale residue — investigate
-    for deletion separately
-- **Next safe step**: Execute Phase 1 (config fixes + dead code
-  deletion). The plan has detailed task breakdowns (1.1 exclude,
-  1.2 delete, 1.3 configure entry points) with acceptance
-  criteria. Phase 2 (cycle breaking) can run in parallel.
-- **Deep consolidation status**: completed this handoff —
-  Phase 0 milestone closed; pattern extracted; Cursor plan
-  content graduated to canonical plan.
+  - `ReturnType<typeof ...>` coupling in OakClient — pre-existing
+  - `register-prompts.integration.test.ts` E2E naming — tracked
+- **Next safe step**: Pick next quality-gate-hardening item.
+  ESLint config standardisation is the Tier 1 prerequisite.
+  Or context-switch to WS-3 (MCP App rebuild) if that is
+  higher priority.
+- **Deep consolidation status**: due — depcruise milestone
+  closed; napkin entries to process.
 
 ## Active Workstreams (2026-04-12)
 
-### 1. Quality Gate Hardening — depcruise execution
+### 1. Quality Gate Hardening — static analysis complete
 
 **Parent plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
-**Active child plan**: `.agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
-**Completed child plan**: `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
+**Completed child plans**:
+- `.agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
+- `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
 
-Knip complete (904 → 0, blocking on all four surfaces).
-Depcruise Phase 0 deep audit complete — 87 verified violations
-(44 errors in 7 SCCs, 43 orphan warnings in 4 categories). All
-12 assumptions verified, 6 hidden assumptions discovered. Owner
-decisions: strict end state (all rules `error`), all four gate
-surfaces. Phases 1-4 ready for execution.
+Both knip (904 → 0) and depcruise (87 → 0) complete and blocking
+on all four gate surfaces. Remaining items in the parent plan
+are ESLint-focused: config standardisation, eslint-disable
+remediation, max-files-per-dir, type assertion promotion.
 
 ### 2. WS3 MCP App Rebuild — MERGE PENDING
 

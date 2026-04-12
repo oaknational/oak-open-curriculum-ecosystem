@@ -7,25 +7,25 @@ todos:
     status: complete
   - id: phase-1-config
     content: "Phase 1: Fix depcruise config — exclude 16 generated non-source files, delete 5 dead-code files, configure 21 legitimate entry points, exclude packages/docs/."
-    status: pending
+    status: complete
   - id: phase-2-circular-deps
     content: "Phase 2: Resolve 7 circular dependency SCCs — B1 first (20 errors), then A (16), then small cycles (B2, C, D, E, F, G)."
-    status: pending
+    status: complete
   - id: phase-2.5-reconcile
     content: "Phase 2.5: Reconcile — re-run depcruise after cycle breaks, check for new orphans or cycles."
-    status: pending
+    status: complete
   - id: phase-3-remaining-orphans
     content: "Phase 3: Resolve any remaining orphans from Phase 2.5; verify 0 warnings."
-    status: pending
+    status: complete
   - id: phase-4-promote
     content: "Phase 4: Promote no-orphans to error severity, verify 0 errors + 0 warnings, add depcruise to all four gate surfaces."
-    status: pending
+    status: complete
 ---
 
 # Dependency-Cruiser Triage and Remediation
 
 **Last Updated**: 2026-04-12
-**Status**: Current — Phase 0 complete, Phase 1 next
+**Status**: Complete — all phases 0-4 resolved 2026-04-12
 **Scope**: Deep-audit all depcruise findings, verify every assumption, resolve
 circular dependencies and orphans, promote `no-orphans` to error severity,
 promote to blocking quality gate on all four surfaces.

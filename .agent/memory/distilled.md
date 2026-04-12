@@ -169,8 +169,7 @@ context with no natural permanent home.
   lint:fix). Missing overrides fall through to generic tasks
   with wrong inputs, causing stale cache hits.
 - `pnpm check` is the canonical aggregate gate and includes
-  `pnpm knip`. `pnpm depcruise` will be added after the
-  depcruise plan Phase 4 completes
+  `pnpm knip` and `pnpm depcruise` (added 2026-04-12)
 - Empty directories persist after file deletion — always
   rmdir after deleting the last file. The portability
   validator checks for SKILL.md presence, so empty skill

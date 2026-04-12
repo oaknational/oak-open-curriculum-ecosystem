@@ -4,7 +4,7 @@
  * This index stores ingestion metadata.
  */
 
-import type { EsFieldMapping } from '../es-field-config.js';
+import type { EsFieldMapping } from '../es-field-types.js';
 
 /**
  * Field overrides for the oak_meta index.

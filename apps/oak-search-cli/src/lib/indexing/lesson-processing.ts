@@ -6,7 +6,7 @@
 import type { SearchUnitSummary } from '../../types/oak';
 import type { AggregatedLesson } from './lesson-aggregation';
 import type { BulkOperations } from './bulk-operation-types';
-import type { PairBuildContext } from '../index-oak-helpers';
+import type { PairBuildContext } from '../index-oak-pair-types';
 import { buildLessonDocFromAggregated } from './lesson-document-builder';
 
 /** Adds a snippet to the rollup snippets map by unit slug. */

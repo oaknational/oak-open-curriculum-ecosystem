@@ -65,6 +65,9 @@ jobs:
       - name: Run knip (unused code detection)
         run: pnpm knip
 
+      - name: Run depcruise (circular deps, orphans, layer violations)
+        run: pnpm depcruise
+
       - name: Run root-level script tests
         run: pnpm test:root-scripts
 

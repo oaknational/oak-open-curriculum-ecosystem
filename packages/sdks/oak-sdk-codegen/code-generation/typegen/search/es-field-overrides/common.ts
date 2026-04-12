@@ -5,7 +5,7 @@
  * used across all index override modules.
  */
 
-import type { EsFieldMapping } from '../es-field-config.js';
+import type { EsFieldMapping } from '../es-field-types.js';
 import type { CompletionContextName } from '../completion-contexts.js';
 
 /**

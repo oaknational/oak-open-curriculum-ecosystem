@@ -101,6 +101,7 @@ for the full decision record.
 | subagents:check   | --         | Yes      | Yes         | Yes                     |
 | portability:check | --         | Yes      | Yes         | Yes                     |
 | knip              | Yes        | Yes      | Yes         | Yes                     |
+| depcruise         | Yes        | Yes      | Yes         | Yes                     |
 | test:root-scripts | --         | Yes      | Yes         | Yes                     |
 | type-check        | Yes        | Yes      | Yes         | Yes                     |
 | lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |

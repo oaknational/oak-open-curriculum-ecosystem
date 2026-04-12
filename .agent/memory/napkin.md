@@ -397,3 +397,68 @@ The pattern is clear enough to be a candidate for extraction to
 Verified every knip plan across both `.agent/plans/` and
 `.cursor/plans/`: 26/26 todos completed, 0 pending. No stale
 status anywhere.
+
+---
+
+### Session 2026-04-12e: Depcruise Phases 1-4 execution
+
+**Result: 87 → 0. Depcruise promoted to all four gate surfaces.**
+
+Executed all phases of the depcruise remediation plan in one
+session. 44 circular dep errors (7 SCCs) and 43 orphan
+warnings (4 categories) resolved to 0. `no-orphans` promoted
+from `warn` to `error`. `pnpm depcruise` added to pre-commit,
+pre-push, CI, and `pnpm check`. ADR-121 updated.
+
+**Phase 1 — config + dead code (43 warnings → 0)**
+Deleted 5 dead files (incl. 2 empty placeholders). Cascading
+dep removal: `@elastic/elasticsearch` from oak-sdk-codegen.
+Added 3 `exclude.path` entries and 6 `pathNot` patterns.
+
+**Phase 2 — 7 SCCs broken (44 errors → 0)**
+- SCC-B1 (20 errors): explicit `AggregatedToolName` union +
+  `satisfies Record<AggregatedToolName, ...>` guard. SCC-C
+  (2 errors) collapsed as predicted (shared back-edge).
+- SCC-A (16 errors): `es-field-types.ts` leaf extraction,
+  10 override files rewired.
+- 5 small SCCs (6 errors): leaf-type extraction pattern ×5.
+
+**Key architectural decision: explicit union + satisfies**
+The `AggregatedToolName` fix reverses the dependency direction
+— `definitions.ts` now depends on `types.ts` (framework types
+own the contract, consumer provides the data). The `satisfies`
+guard is bidirectional: catches both missing map entries and
+missing union members. This is architecturally superior to the
+previous `keyof typeof` derivation because it resolves the
+"Separate Framework from Consumer" violation.
+
+**Reviewer coverage (8 specialist sub-agents)**
+- Barney (mid-session + full): COMPLIANT; found 3 stale docs,
+  1 import path (fixed)
+- Betty (mid-session): COMPLIANT; zero hidden coupling
+- Wilma (full): COMPLIANT; logger types.ts growth (monitor)
+- Type-reviewer (2 passes): PromptArgs alias (fixed),
+  DtcgTokenValue/PairUnits/TokenTier aliases (all fixed)
+- Code-reviewer: APPROVED; OtelLogRecord readonly (fixed),
+  PromptMessageContent export (fixed), pre-commit --continue
+  (fixed), PromptMessage re-export removed
+- Assumptions-reviewer: PROPORTIONAL; 4 doc gaps (all fixed),
+  static-analysis plan marked SUPERSEDED
+- Test-reviewer: 1 useless test file deleted
+  (oak-adapter.unit.test.ts)
+
+**Surprises**
+- `@elastic/elasticsearch` cascading removal was the only
+  unexpected consequence of dead file deletion
+- 3 type alias violations found in the new leaf modules by
+  type-reviewer — the no-type-aliases principle is absolute,
+  even for small utility types like `DtcgTokenValue`
+- `oak-adapter.unit.test.ts` contained 3 tests that tested
+  local object literals, not product code — deleted
+
+**Pattern: leaf-type extraction for cycle breaking**
+The same structural pattern was applied 6 times across 5
+packages: extract shared types to a zero-dependency leaf
+module, have both cycle participants import from the leaf,
+re-export from the original location for API continuity.
+This is the standard depcruise cycle-breaking technique.

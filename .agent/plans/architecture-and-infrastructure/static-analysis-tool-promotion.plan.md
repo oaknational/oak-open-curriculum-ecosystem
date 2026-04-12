@@ -26,8 +26,11 @@ isProject: false
 
 # Static Analysis Tool Promotion
 
-**Last Updated**: 2026-03-26
-**Status**: Pending — tools installed, findings need triaging
+**Last Updated**: 2026-04-12
+**Status**: SUPERSEDED — both knip (904→0) and depcruise (87→0) are
+promoted to blocking gates on all four surfaces. See child plans:
+`knip-triage-and-remediation.plan.md` and
+`depcruise-triage-and-remediation.plan.md`.
 **Scope**: Resolve all pre-existing findings from knip and dependency-cruiser,
 then promote both to blocking quality gates.
 

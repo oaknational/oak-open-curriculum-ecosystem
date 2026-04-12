@@ -33,54 +33,9 @@ export {
   buildEsSettings,
 } from './es-analyzer-config.js';
 
-/**
- * Descriptor for a Zod type, used to determine the corresponding ES field type.
- */
-export interface ZodTypeDescriptor {
-  readonly type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
-  readonly items?: ZodTypeDescriptor;
-}
-
-/**
- * Elasticsearch field mapping configuration.
- * Supports all ES field types used in the search indexes.
- */
-export interface EsFieldMapping {
-  readonly type:
-    | 'keyword'
-    | 'text'
-    | 'integer'
-    | 'long'
-    | 'boolean'
-    | 'date'
-    | 'semantic_text'
-    | 'completion'
-    | 'search_as_you_type'
-    | 'object'
-    | 'dense_vector';
-  readonly normalizer?: string;
-  readonly analyzer?: string;
-  readonly search_analyzer?: string;
-  readonly ignore_above?: number;
-  readonly term_vector?: string;
-  readonly contexts?: readonly EsCompletionContext[];
-  readonly fields?: Readonly<Record<string, EsFieldMapping>>;
-  readonly enabled?: boolean;
-  /** Number of dimensions for dense_vector fields. */
-  readonly dims?: number;
-  /** Whether the dense_vector field is indexed for kNN search. */
-  readonly index?: boolean;
-  /** Similarity metric for dense_vector fields. */
-  readonly similarity?: 'cosine' | 'dot_product' | 'l2_norm';
-}
-
-/**
- * Completion field context configuration.
- */
-export interface EsCompletionContext {
-  readonly name: string;
-  readonly type: 'category';
-}
+// Re-export types from leaf module for API continuity
+export type { ZodTypeDescriptor, EsFieldMapping, EsCompletionContext } from './es-field-types.js';
+import type { ZodTypeDescriptor, EsFieldMapping } from './es-field-types.js';
 
 /**
  * Maps a Zod type descriptor to the corresponding ES field type.

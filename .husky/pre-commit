@@ -28,8 +28,15 @@ if ! pnpm knip; then
   exit 1
 fi
 
+echo "🔗 Running depcruise (circular deps, orphans, layer violations)..."
+if ! pnpm depcruise; then
+  echo "❌ Dependency-cruiser found violations!"
+  echo "💡 Run 'pnpm depcruise' to see details, then fix circular dependencies or orphan modules"
+  exit 1
+fi
+
 echo "🔤 Running quality gate checks..."
-pnpm turbo run type-check lint test
+pnpm turbo run --continue type-check lint test
 
 echo "✅ Pre-commit checks completed!"
 

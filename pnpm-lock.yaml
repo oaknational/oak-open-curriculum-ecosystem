@@ -917,9 +917,6 @@ importers:
 
   packages/sdks/oak-sdk-codegen:
     dependencies:
-      '@elastic/elasticsearch':
-        specifier: ^9.3.4
-        version: 9.3.4
       '@modelcontextprotocol/sdk':
         specifier: ^1.29.0
         version: 1.29.0(zod@4.3.6)

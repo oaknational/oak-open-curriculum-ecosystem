@@ -34,7 +34,7 @@ todos:
     status: completed
   - id: enable-depcruise
     content: "Resolve dependency-cruiser findings (circular deps, orphans) and promote to blocking QG, while keeping manifest-completeness enforcement separate."
-    status: pending
+    status: completed
   - id: enable-max-files-per-dir
     content: "Enable the max-files-per-dir ESLint rule across all workspaces and remediate violations."
     status: pending

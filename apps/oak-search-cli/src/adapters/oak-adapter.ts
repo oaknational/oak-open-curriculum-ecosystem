@@ -10,66 +10,34 @@
 import { createOakBaseClient } from '@oaknational/curriculum-sdk';
 import { createRedisClient, withRedisConnection } from './sdk-cache';
 import { cacheLogger } from '../lib/logger';
-import type { makeGetAllThreads, makeGetThreadUnits } from './oak-adapter-threads';
 import { createUncachedClient, createCachedClient, buildClientConfig } from './sdk-client-factory';
 import type {
   LessonGroupResponse,
   LessonsPaginationOptions,
   SubjectSequenceEntry,
+  OakClient,
+} from './oak-adapter-types';
+
+export type { LessonGroupResponse, LessonsPaginationOptions, SubjectSequenceEntry };
+export type {
   GetUnitsFn,
   GetTranscriptFn,
   GetLessonSummaryFn,
   GetUnitSummaryFn,
+} from './oak-adapter-types';
+export type {
   GetSubjectSequencesFn,
   GetSequenceUnitsFn,
   GetLessonsByKeyStageAndSubjectFn,
-  GetSubjectAssetsFn,
 } from './oak-adapter-types';
-
-export type { LessonGroupResponse, LessonsPaginationOptions, SubjectSequenceEntry };
-export type { GetUnitsFn, GetTranscriptFn, GetLessonSummaryFn, GetUnitSummaryFn };
-export type { GetSubjectSequencesFn, GetSequenceUnitsFn, GetLessonsByKeyStageAndSubjectFn };
-export type { GetSubjectAssetsFn };
+export type { GetSubjectAssetsFn } from './oak-adapter-types';
+export type { OakClient, CacheStats } from './oak-adapter-types';
 export type {
   ThreadEntry,
   ThreadUnitEntry,
   GetAllThreadsFn,
   GetThreadUnitsFn,
 } from './oak-adapter-threads';
-
-// =============================================================================
-// Types
-// =============================================================================
-
-/** Statistics about cache usage during the current session. */
-export interface CacheStats {
-  readonly hits: number;
-  readonly misses: number;
-  readonly connected: boolean;
-}
-
-/**
- * Oak client interface - unified API for curriculum data access.
- *
- * All methods return `Result<T, SdkFetchError>` per ADR-088.
- * Cache management methods are always present (no-op when caching disabled).
- */
-export interface OakClient {
-  getUnitsByKeyStageAndSubject: GetUnitsFn;
-  getLessonTranscript: GetTranscriptFn;
-  getLessonSummary: GetLessonSummaryFn;
-  getUnitSummary: GetUnitSummaryFn;
-  getSubjectSequences: GetSubjectSequencesFn;
-  getSequenceUnits: GetSequenceUnitsFn;
-  getAllThreads: ReturnType<typeof makeGetAllThreads>;
-  getThreadUnits: ReturnType<typeof makeGetThreadUnits>;
-  getLessonsByKeyStageAndSubject: GetLessonsByKeyStageAndSubjectFn;
-  /** Fetches all assets for a subject/keystage. Used for video availability check. */
-  getSubjectAssets: GetSubjectAssetsFn;
-  rateLimitTracker: ReturnType<typeof createOakBaseClient>['rateLimitTracker'];
-  getCacheStats: () => CacheStats;
-  disconnect: () => Promise<void>;
-}
 
 /** Environment config required to create an Oak client. */
 export interface OakClientEnv {

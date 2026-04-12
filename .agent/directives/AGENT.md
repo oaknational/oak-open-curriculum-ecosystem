@@ -186,7 +186,7 @@ pnpm fix            # Auto-fix: format, markdownlint, lint:fix
 pnpm doc-gen        # Generate documentation from TSDoc
 
 # All in one command (clean rebuild + full verification)
-pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, then ONE turbo run (sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, test:widget:ui, test:widget:a11y, smoke:dev:stub), then subagents:check, portability:check, knip, markdownlint:root, format:root
+pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, then ONE turbo run (sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, test:widget:ui, test:widget:a11y, smoke:dev:stub), then subagents:check, portability:check, knip, depcruise, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding

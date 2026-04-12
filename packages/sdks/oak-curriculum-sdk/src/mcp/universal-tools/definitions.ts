@@ -45,6 +45,7 @@ import {
   USER_SEARCH_QUERY_INPUT_SCHEMA,
 } from '../aggregated-user-search/index.js';
 import type { SecurityScheme } from '@oaknational/sdk-codegen/mcp-tools';
+import type { AggregatedToolName } from './types.js';
 
 /**
  * Structural shape that all aggregated tool definitions must conform to.
@@ -143,4 +144,4 @@ export const AGGREGATED_TOOL_DEFS = {
     ...USER_SEARCH_QUERY_TOOL_DEF,
     inputSchema: USER_SEARCH_QUERY_INPUT_SCHEMA,
   },
-} as const satisfies Record<string, AggregatedToolDefShape>;
+} as const satisfies Record<AggregatedToolName, AggregatedToolDefShape>;

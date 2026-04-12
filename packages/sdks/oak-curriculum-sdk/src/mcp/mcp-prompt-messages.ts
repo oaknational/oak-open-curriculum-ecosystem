@@ -9,23 +9,7 @@
  * compile time, complying with schema-first principles.
  */
 
-import type { PromptArgs } from './mcp-prompts.js';
-
-/**
- * Message content for prompt responses.
- */
-interface PromptMessageContent {
-  readonly type: 'text';
-  readonly text: string;
-}
-
-/**
- * Message in a prompt response.
- */
-export interface PromptMessage {
-  readonly role: 'user' | 'assistant';
-  readonly content: PromptMessageContent;
-}
+import type { PromptMessage } from './mcp-prompt-types.js';
 
 /**
  * Generates messages for the find-lessons prompt.
@@ -33,7 +17,9 @@ export interface PromptMessage {
  * @param args - User-provided arguments (topic, optional keyStage)
  * @returns Messages guiding the model to search with scope "lessons"
  */
-export function getFindLessonsMessages(args: PromptArgs): PromptMessage[] {
+export function getFindLessonsMessages(
+  args: Readonly<Record<string, string | undefined>>,
+): PromptMessage[] {
   const topic = args.topic ?? 'the topic';
   const keyStage = args.keyStage;
 
@@ -66,7 +52,9 @@ Please:
  * @param args - User-provided arguments (topic, yearGroup)
  * @returns Messages guiding the model through a full lesson planning flow
  */
-export function getLessonPlanningMessages(args: PromptArgs): PromptMessage[] {
+export function getLessonPlanningMessages(
+  args: Readonly<Record<string, string | undefined>>,
+): PromptMessage[] {
   const topic = args.topic ?? 'the topic';
   const yearGroup = args.yearGroup ?? 'the year group';
 
@@ -105,7 +93,9 @@ Please provide:
  * @param args - User-provided arguments (topic, optional subject)
  * @returns Messages guiding the model to use explore-topic for broad discovery
  */
-export function getExploreCurriculumMessages(args: PromptArgs): PromptMessage[] {
+export function getExploreCurriculumMessages(
+  args: Readonly<Record<string, string | undefined>>,
+): PromptMessage[] {
   const topic = args.topic ?? 'the topic';
   const subject = args.subject;
 
@@ -137,7 +127,9 @@ Please:
  * @param args - User-provided arguments (concept, subject)
  * @returns Messages guiding the model to map learning progressions via threads
  */
-export function getLearningProgressionMessages(args: PromptArgs): PromptMessage[] {
+export function getLearningProgressionMessages(
+  args: Readonly<Record<string, string | undefined>>,
+): PromptMessage[] {
   const concept = args.concept ?? 'the concept';
   const subject = args.subject ?? 'the subject';
 

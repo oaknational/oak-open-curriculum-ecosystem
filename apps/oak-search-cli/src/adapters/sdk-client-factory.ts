@@ -32,8 +32,9 @@ import {
   makeGetLessonsByKeyStageAndSubject,
   makeGetSubjectAssets,
 } from './sdk-api-methods';
-import type { OakClient, CacheStats } from './oak-adapter';
 import type {
+  OakClient,
+  CacheStats,
   GetUnitsFn,
   GetTranscriptFn,
   GetLessonSummaryFn,

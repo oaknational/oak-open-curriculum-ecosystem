@@ -56,6 +56,13 @@ if ! pnpm knip; then
   exit 1
 fi
 
+echo "🔗 Running depcruise (circular deps, orphans, layer violations)..."
+if ! pnpm depcruise; then
+  echo "❌ Dependency-cruiser found violations!"
+  echo "💡 Run 'pnpm depcruise' to see details, then fix circular dependencies or orphan modules"
+  exit 1
+fi
+
 echo "🧪 Running root-level script tests..."
 if ! pnpm test:root-scripts; then
   echo "❌ Root-level script tests failed!"
