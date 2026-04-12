@@ -37,7 +37,7 @@ export { describeCliObservabilityError } from './cli-observability-error.js';
 
 const DEFAULT_CLI_SERVICE_NAME = 'oak-search-cli';
 
-export interface CliSpanOptions<T> {
+interface CliSpanOptions<T> {
   readonly name: string;
   readonly attributes?: SpanAttributes;
   readonly run: () => Promise<T> | T;

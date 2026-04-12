@@ -59,6 +59,14 @@ todos:
     content: "Use Sentry.close() instead of flush() for CLI shutdown"
     status: pending
     note: "Depends on adapter-surface-extension (close on runtime). Noop in off/fixture mode."
+  - id: cli-log-level-di
+    content: "Investigate and fix currentLevel hardcoding in search-cli logger.ts — wire runtimeConfig.logLevel via DI per ADR-078"
+    status: pending
+    note: "PR #80 changed `let currentLevel` to `const currentLevel = 'INFO'` and deleted setLogLevel/getLogLevel mutators (knip dead). The merge was the moment to inject logLevel via SearchCliRuntimeConfig. Identified 2026-04-12 by assumptions reviewer as ADR-078 violation. Blocks: DEBUG logging requires code changes, not runtime config."
+  - id: cli-logger-di-audit
+    content: "Audit direct-import logger singletons (searchLogger etc.) against ADR-078 — track as known violation, plan remediation"
+    status: pending
+    note: "~35 files import searchLogger/ingestLogger etc. as module-level singletons. Assumptions reviewer confirmed: no documented ADR-078 exception exists for CLI loggers. Betty incorrectly classified this as 'conscious exception'. Must be tracked and remediated."
 ---
 
 # Sentry Canonical Alignment
