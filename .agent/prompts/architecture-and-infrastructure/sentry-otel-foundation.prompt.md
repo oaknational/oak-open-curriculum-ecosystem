@@ -94,11 +94,17 @@ Primary code surfaces:
 
 ## Restart Sequence
 
-1. **Search CLI adoption** — **COMPLETE** (2026-04-12).
-2. **Local credentials** — **COMPLETE** (2026-04-12b). Both apps.
-3. **Vercel credentials** — set on Vercel dashboard. Then deploy.
-4. **Deployment evidence** — depends on Vercel credentials being live.
-5. **Canonical alignment** — 6-gap plan ready for implementation.
+1. **Merge main (PR #80)** — merge plan ready at
+   `.agent/plans/architecture-and-infrastructure/active/merge-main-pr80.plan.md`.
+   7 conflicts, reviewed by 2 specialists, protocol-checked. Execute
+   first in the next session.
+2. **Search CLI adoption** — **COMPLETE** (2026-04-12).
+3. **Local credentials** — **COMPLETE** (2026-04-12b). Both apps.
+4. **Vercel credentials** — set on Vercel dashboard. Then deploy.
+5. **Deployment evidence** — depends on Vercel credentials being live.
+6. **Canonical alignment** — 6-gap plan (12 todos) ready for
+   implementation. Includes metrics (Gap 3.5), preload (Gap 1),
+   Express error handler (Gap 2), profiling, source maps.
    `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`.
 
 ## Authority Rule

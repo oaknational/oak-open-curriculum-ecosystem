@@ -63,9 +63,10 @@ git log --oneline --decorate -10
   (MEDIUM), adapter surface too narrow (MEDIUM). Sentry reviewer
   corrected two architecture assumptions: Express handler ordering and
   isolation scope model. Local credentials provisioned in 2026-04-12b.
-- **Current objective**: Two parallel tracks: (1) Vercel credential
-  provisioning + deployment evidence (closes parent plan), (2) Sentry
-  canonical alignment implementation (new plan, can follow or parallel).
+- **Current objective**: Merge main (PR #80) into branch, then two
+  parallel tracks: (1) Vercel credential provisioning + deployment
+  evidence (closes parent plan), (2) Sentry canonical alignment
+  implementation (new plan, can follow or parallel).
 - **Hard invariants / non-goals**:
   - `SENTRY_MODE=off` is the default and kill switch
   - ADR-078 DI everywhere, ADR-143 observability architecture
@@ -93,13 +94,14 @@ git log --oneline --decorate -10
   - Does tsup support `@sentry/bundler-plugin` for Debug ID injection?
   - Does `@sentry/profiling-node` native addon work on Vercel's ABI?
   - Trace propagation to ES and Oak API — security review needed
-- **Next safe step**: Set Vercel credentials, then deployment evidence.
-  Canonical alignment can begin in parallel (Gap 1 early init is
-  highest priority).
-- **Deep consolidation status**: completed this handoff — Search CLI
-  adoption plan closed, canonical alignment plan created. Sentry
-  corrections graduated to deployment runbook. Pattern extracted
-  (domain-specialist-final-say). Stale auto-memory cleaned.
+- **Next safe step**: Merge main (PR #80) using the merge plan at
+  `.agent/plans/architecture-and-infrastructure/active/merge-main-pr80.plan.md`.
+  7 conflicts (logger.ts is the only medium-risk one). Plan has been
+  reviewed by Wilma + assumptions reviewer and cross-checked against
+  the complex-merge protocol. After merge: set Vercel credentials,
+  then deployment evidence. Canonical alignment can begin in parallel.
+- **Deep consolidation status**: not due — merge plan created but no
+  plan closure or doctrine changes this sub-session.
 
 ## Active Workstreams (2026-04-12)
 
