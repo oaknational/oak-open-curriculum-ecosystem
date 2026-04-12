@@ -40,91 +40,85 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: MCP App UI regression — the gate-hardening
-  branch (`feat/gate_hardening_part1`) broke the MCP App
-  widget rendering on ALL environments (local, preview, prod-
-  equivalent). This is the highest priority bug fix.
+- **Workstream**: MCP Apps and tool metadata
+  (`feat/gate_hardening_part1` branch).
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-ui-preview-regression.plan.md`
-    (**ACTIVE** — Phase 0 investigation in progress, Tasks
-    0.1–0.3 complete, Task 0.4 is next)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
+    (PENDING — next workstream: build the interactive user search
+    MCP App. Two new pre-phase blockers added 2026-04-12.)
+  - `.agent/plans/sdk-and-mcp-enhancements/current/meta-oak-namespace-cleanup.plan.md`
+    (NOT STARTED — replace `_meta.securitySchemes` with Oak-namespaced
+    `oak-www` + `oak-guidance` fields; includes `buildToolMeta()`
+    factory. Co-requisite for Phase 5.)
   - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
-    (**PARENT** — `enable-knip` complete; `enable-depcruise`
-    complete; remaining: ESLint config standardisation,
-    eslint-disable remediation, max-files-per-dir, type
-    assertion promotion)
-- **Current state**: MCP App UI widget does not render when
-  calling `get-curriculum-model` on any server running this
-  branch's code. The tool call succeeds (returns 41.5 KB
-  data) but no widget appears. `oak-prod` (running `main`)
-  works fine in the same Cursor client. Investigation has
-  narrowed the issue:
-  - Local reproduction confirmed (not Vercel-specific)
-  - All existing tests pass (581/582, 1 unrelated timeout)
-  - Tool definition has correct `_meta.ui.resourceUri`
-  - Widget HTML is identical between prod and preview
-  - Cursor is not a variable (works on `oak-prod`)
-  - Remaining hypothesis: MCP SDK's SSE serialisation path
-    strips `_meta` due to a code/type change on this branch
-- **Current objective**: Write and run the composition test
-  (Task 0.4 / Task 2.1) that uses the real MCP client SDK
-  (`Client` + `StreamableHTTPClientTransport`) against a
-  running server. This will either pinpoint the root cause
-  (if `_meta` is absent) or narrow it further (if present).
+    (knip complete, depcruise complete; remaining: ESLint config
+    standardisation, eslint-disable remediation — parked)
+- **Current state**: Branch has uncommitted changes:
+  `get-curriculum-model` definition updated with explicit
+  `visibility: ['model', 'app']`. MCP Apps audit session complete.
+  `meta-oak-namespace-cleanup.plan.md` created in `current/`.
+  WS3 Phase 5 plan updated with 2 pre-phase blockers.
+- **Current objective**: Build the interactive user search MCP App
+  (WS3 Phase 5). First: resolve the pre-phase blockers (remove
+  `search` tool's `_meta.ui`, consolidate to one user-facing
+  search tool). Then implement the search view.
 - **Hard invariants / non-goals**:
   - Never weaken gates to solve testing problems
-  - The fix must address the root cause, not paper over it
   - No `unknown`, no `Record<string, unknown>`, no type erasure
   - Never edit generated files — edit the generators
-  - Cursor client is NOT a variable — `oak-prod` works fine
+  - `search` tool must NOT have `_meta.ui` — it is agent-only
 - **Recent surprises / corrections** (2026-04-12):
-  - MCP App UI regression reproduces locally — not a Vercel
-    or deployment issue; definitively a branch code change
-  - All existing E2E tests pass despite the feature being
-    broken — the "pieces vs composition" test gap from
-    `distilled.md` materialised exactly as predicted
-  - Cursor's MCP tool descriptor files (`mcps/*/tools/*.json`)
-    do NOT store `_meta` — they are not diagnostic for this
-  - `register-prompts.integration.test.ts` timeout is a
-    pre-existing issue, not related to this regression
+  - `_meta.securitySchemes` is unused — no host reads it, no
+    runtime code reads it. Top-level `securitySchemes` (used by
+    `toolRequiresAuth()`) is the functional field. The `_meta`
+    copy is dead weight.
+  - `search` tool incorrectly claims widget UI via `_meta.ui` —
+    should be agent-only. Only `user-search` should render the
+    interactive widget.
+  - Two user-facing search tools exist with `_meta.ui` when there
+    should be only one (`user-search`).
+  - `get-curriculum-model` lacked explicit `visibility` on
+    `_meta.ui` — now set to `['model', 'app']`.
+  - MCP Apps spec: `_meta.ui` for tools is just `resourceUri` +
+    `visibility`. `securitySchemes` is non-standard.
 - **Open questions / low-confidence areas**:
-  - Whether the `Omit<Tool, '_meta'>` type change (commit
-    `a03f3b32`) has runtime side-effects via the MCP SDK's
-    schema validation during SSE serialisation
-  - Whether the MCP SDK `StreamableHTTPServerTransport`
-    strips unknown `_meta` fields during SSE event emission
-  - Which specific commit (of `a03f3b32`, `23360be7`,
-    `d74c0b5d`) introduced the regression
-- **Next safe step**: Write the composition test in
-  `e2e-tests/mcp-app-composition.e2e.test.ts` using
-  `Client` + `StreamableHTTPClientTransport` against
-  `createStubbedHttpApp()` on a random port. Run it and
-  observe whether `_meta.ui.resourceUri` is present in
-  `listTools()`. The test result will identify the root cause.
-- **Deep consolidation status**: not due — active
-  investigation in progress; no milestone closed this session.
+  - Why do both `search` and `user-search` have `_meta.ui`? Was
+    `search` intended as a transitional widget tool?
+  - Should `meta-oak-namespace-cleanup` be done before or during
+    Phase 5? (Co-requisite — can interleave)
+- **Next safe step**: Start the next session with
+  `meta-oak-namespace-cleanup` Phase 0 (audit), then move to
+  Phase 5 pre-phase blockers (remove `search` from widget
+  allowlist, consolidate search tools).
+- **Deep consolidation status**: due — napkin at 672+ lines
+  (above 500 rotation threshold). Deferred to next session.
 
 ## Active Workstreams (2026-04-12)
 
-### 1. MCP App UI Regression — INVESTIGATING (HIGHEST PRIORITY)
+### 1. Interactive User Search MCP App (WS3 Phase 5) — NEXT
 
-**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-ui-preview-regression.plan.md`
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
 
-The gate-hardening branch broke MCP App UI rendering. Reproduces
-locally. Phase 0 investigation narrowed: all tests pass, tool def
-is correct, widget HTML is identical, Cursor is not a variable.
-Next: write composition test with real MCP client SDK to pinpoint
-whether `_meta` survives the SSE transport path.
+Build the user-facing interactive search widget. Two new pre-phase
+blockers: (a) remove `search` tool's false `_meta.ui` claim,
+(b) consolidate to single user-facing search tool.
 
-### 2. Quality Gate Hardening — static analysis complete
+### 2. `_meta` Namespace Cleanup — NOT STARTED (co-requisite)
 
-**Parent plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/current/meta-oak-namespace-cleanup.plan.md`
 
-Both knip (904 → 0) and depcruise (87 → 0) complete and blocking
-on all four gate surfaces. Remaining items are ESLint-focused.
-Note: this workstream's changes caused the MCP App UI regression.
+Replace unused `_meta.securitySchemes` with Oak-namespaced `oak-www`
+and `oak-guidance` fields. Includes `buildToolMeta()` factory.
+Co-requisite for Phase 5 — both address `_meta` architecture.
 
-### 3. Workspace Topology Exploration — FUTURE
+### 3. Quality Gate Hardening — parked
+
+**Plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
+
+Knip and depcruise complete. Remaining: ESLint config standardisation,
+eslint-disable remediation. Parked while MCP Apps work takes priority.
+
+### 4. Workspace Topology Exploration — FUTURE
 
 **Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
 

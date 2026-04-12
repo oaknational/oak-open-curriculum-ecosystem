@@ -224,3 +224,9 @@ context with no natural permanent home.
   `toolcancelled`, `hostcontextchanged`). The `on*` property
   setters are deprecated since ext-apps 1.5. `onteardown` and
   `onerror` are NOT deprecated (request handlers, not events).
+- **MCP App UI debugging: test with reference host first**.
+  Cursor caches MCP tool `_meta` and does not reliably refresh
+  on disconnect/reconnect. If the reference host (`ext-apps
+  basic-host`) renders the widget but Cursor doesn't, it's a
+  client cache issue, not a server bug. Hours were lost
+  investigating correct server code due to this.

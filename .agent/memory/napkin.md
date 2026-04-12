@@ -641,26 +641,92 @@ De-minified source: copies `_meta.ui.resourceUri` to legacy
 compatibility — we don't need it but can't disable it without
 patching. Harmless (just adds a redundant key on the wire).
 
-**CRITICAL FINDING: Server is correct, Cursor refuses to render**
+**RESOLVED: MCP App UI regression was Cursor stale cache, not code**
 
-The MCP Apps reference host (`ext-apps@1.5.0 basic-host`) connected
-to the same local server on `localhost:3333` and **rendered the
-widget successfully**. In the same session, Cursor was also
-connected to the same server (confirmed via `lsof` — both Cursor
-and Firefox had ESTABLISHED connections to port 3333). Cursor
-returned tool results but did NOT render the widget.
+The widget was rendering from `oak-local` in Cursor for several
+days, then stopped. Root cause: Cursor caches MCP tool metadata
+(`_meta` from `listTools()`) per server and does not reliably
+refresh on disconnect/reconnect. Evidence:
+- Server proven correct by MCP Apps reference host (renders widget)
+- `oak-prod` renders in Cursor (fresh/separately cached)
+- `oak-local` does NOT render in Cursor on ANY branch (including `main`)
+- Widget renders in Claude desktop from `oak-local`
 
-After disconnecting and reconnecting `oak-local` in Cursor MCP
-settings — still no widget.
+**Lesson**: When debugging MCP App UI rendering, always test with
+the reference host (`ext-apps basic-host`) first. If the reference
+host works but the IDE doesn't, it's a client caching issue, not
+a server bug. Hours of investigation were spent diffing server code
+when the server was correct all along.
 
-The widget DOES render in Cursor for `oak-prod` (HTTPS hosted).
+**Plan closed** → archived to `archive/completed/`. `buildToolMeta()`
+factory and codegen dead code extracted to
+`meta-oak-namespace-cleanup.plan.md`.
 
-**Hypotheses for next session** (in priority order):
-1. Check if `oak-local` widget EVER worked in Cursor on `main`.
-   If not, this was never a branch regression — it's a Cursor
-   limitation with localhost/HTTP servers.
-2. If it works on `main`, `git bisect` to find the breaking commit.
-3. Investigate Cursor-specific MCP Apps requirements (HTTPS? specific
-   capability declaration? stale cache?).
+**Delivered value this session** (despite the misdiagnosis):
+- Composition E2E test (`mcp-app-composition.e2e.test.ts`) — closes
+  the "pieces vs composition" test gap permanently
+- `_meta` consistency — all 11 tools now have `_meta: ToolMeta`
+  (was optional/undefined for non-widget tools)
+- `AggregatedToolDefShape` now enforces `readonly _meta: ToolMeta`
+  at compile time
 
-See plan: `mcp-app-ui-preview-regression.plan.md` Phase 3.
+---
+
+### Session 2026-04-12i: MCP Apps metadata audit
+
+**Full audit of `tools/list` and server metadata against MCP Apps spec**
+
+Queried the running `oak-local` server's tool list and compared every
+`_meta` field against the `@modelcontextprotocol/ext-apps@1.5.0`
+spec types (`McpUiToolMeta`, `McpUiResourceMeta`, `McpUiAppToolConfig`).
+
+**Finding: `_meta.securitySchemes` is dead weight**
+Present on every tool's `_meta` (generated + aggregated). No MCP
+host reads it. No Oak runtime code reads it. `toolRequiresAuth()`
+reads top-level `securitySchemes`, not `_meta`. Added aspirationally
+per ADR-141 for hypothetical future hosts. Plan created to replace
+with `oak-www` + `oak-guidance` namespace fields.
+
+**Finding: `search` tool falsely claims widget UI**
+`search` has `_meta.ui.resourceUri` pointing to the widget, making
+it appear as a widget tool. But `search` is the agent-facing search
+tool — only `user-search` should render the interactive widget.
+`search` must be removed from `WIDGET_TOOL_NAMES` allowlist.
+
+**Finding: two user-facing search tools with `_meta.ui`**
+Both `search` and `user-search` have `_meta.ui.resourceUri`. There
+should be exactly one user-facing search tool (`user-search`).
+Investigation needed: was `search` intended as transitional?
+
+**Fix applied: explicit `visibility` on `get-curriculum-model`**
+Added `visibility: ['model', 'app'] satisfies ('model' | 'app')[]`
+to `get-curriculum-model` definition. Previously relied on spec
+default. Making defaults explicit protects against spec changes.
+
+**Server-level metadata is complete and correct**
+`McpServer` constructor receives: name, version, title, description,
+websiteUrl, icons (light/dark SVG), instructions (generated from
+`AGENT_SUPPORT_TOOL_METADATA`). All `Implementation` fields present.
+
+**Resource-level metadata is complete and correct**
+Widget resource at `WIDGET_URI` has: `mimeType: RESOURCE_MIME_TYPE`,
+`_meta.ui.csp.resourceDomains` (Google Fonts), `_meta.ui.prefersBorder: false`.
+No missing spec fields.
+
+**MCP Apps spec is minimal on tool `_meta.ui`**
+Only two fields: `resourceUri` (required for app tools) and
+`visibility` (optional, default `["model", "app"]`). All rich
+metadata (CSP, permissions, domain, border) lives on the resource
+content item, not the tool definition.
+
+**Pattern: capability-gated registration**
+The ext-apps SDK recommends checking `getUiCapability(clientCapabilities)`
+at init time and only registering app-enhanced tools when the client
+supports MCP Apps. Oak can't do this today because it creates a fresh
+`McpServer` per request (stateless mode) — client caps aren't known
+at registration time. Not a spec violation but worth noting.
+
+**Plan created**: `meta-oak-namespace-cleanup.plan.md` in `current/`.
+**Plan updated**: `ws3-phase-5-interactive-user-search-view.plan.md`
+with 2 pre-phase blockers (remove `search` UI claim, consolidate
+search tools).

@@ -92,6 +92,15 @@ pnpm sdk-codegen && pnpm build && pnpm type-check && pnpm lint && pnpm test
 - ❌ Changing the `_meta.ui` shape (already correct per MCP Apps spec)
 - ❌ Touching `_meta.attribution` (separate concern, already namespaced)
 
+**Extracted from `mcp-app-ui-preview-regression.plan.md`** (closed
+2026-04-12): Consider introducing a `buildToolMeta()` factory that
+derives `_meta` from tool name — uses `WIDGET_TOOL_NAMES.has(name)`
+for widget UI, always includes base metadata, returns `ToolMeta`
+(never `undefined`). This factory naturally fits this plan's scope
+since both address `_meta` architecture. Also: the `emit-index.ts`
+`WIDGET_TOOL_NAMES.has(toolName)` check for generated tools is dead
+code (no generated tool is a widget tool) — clean up or document.
+
 ---
 
 ## Foundation Document Commitment

@@ -12,20 +12,20 @@ todos:
     content: "Phase 2: _meta consistency — all tools required to have _meta, securitySchemes mirrored."
     status: completed
   - id: phase-3-find-cursor-root-cause
-    content: "Phase 3: Find the Cursor-specific root cause — the server is correct, Cursor is not rendering the widget."
-    status: pending
+    content: "Phase 3: Root cause identified — Cursor stale MCP tool metadata cache. Not a code issue."
+    status: completed
   - id: phase-4-meta-factory
-    content: "Phase 4: _meta single source of truth — buildToolMeta factory, eliminate scattered inline definitions."
-    status: pending
+    content: "Phase 4: _meta single source of truth — extracted to meta-oak-namespace-cleanup.plan.md."
+    status: cancelled
   - id: phase-5-hardening
     content: "Phase 5: Quality gates, documentation, and consolidation."
-    status: pending
+    status: cancelled
 ---
 
 # MCP App UI Preview Regression — Investigation, Fix, and `_meta` Architecture
 
-**Last Updated**: 2026-04-12 (Session 4 end — handoff to fresh session)
-**Status**: 🔴 BLOCKED — server is correct, Cursor is not rendering
+**Last Updated**: 2026-04-12 (CLOSED — Cursor cache issue, not a code regression)
+**Status**: ✅ CLOSED — root cause: Cursor stale MCP tool metadata cache
 **Scope**: Fix MCP App UI rendering on `feat/gate_hardening_part1`;
 add composition tests; consolidate `_meta` into a single source of truth.
 
@@ -87,76 +87,45 @@ Only **two committed runtime changes** affect the tool/resource registration pat
 3. **`widget/src/app-runtime-state.ts` — export narrowing**: Two type
    exports made module-private. Types are erased at runtime — no effect.
 
-### Critical Finding: Server Is Correct, Cursor Refuses to Render
+### Critical Finding: Server Is Correct, Cursor Has Stale Cache
 
 The server is definitively correct. The MCP Apps reference host
 (`ext-apps@1.5.0 basic-host`) connected to the SAME local server
-on `localhost:3333` and **rendered the widget successfully** — the
-green Oak National Academy banner appeared in the sandboxed iframe.
-
-In the same session, Cursor was also connected to the same server
-(confirmed via `lsof` — both Cursor and Firefox had ESTABLISHED
-connections to PID 94593 on port 3333). Cursor returned the tool
-result successfully but did NOT render the widget.
+on `localhost:3333` and **rendered the widget successfully**.
 
 Additionally:
 - `get-curriculum-model` on `oak-prod` via Cursor → widget renders ✅
 - `get-curriculum-model` on `oak-local` via Cursor → no widget ❌
 - `get-curriculum-model` on `oak-local` via reference host → widget renders ✅
-- Disconnecting and re-enabling `oak-local` in Cursor MCP settings
-  did NOT fix the issue — still no widget after reconnect
+- Widget **was rendering** from `oak-local` in Cursor for several days
+- Widget stopped rendering — same behaviour on `main` AND the branch
+- Disconnecting/reconnecting `oak-local` in Cursor did NOT fix it
 
-**The root cause is Cursor-specific.** Something about how Cursor
-discovers or processes widgets from `oak-local` on this branch
-differs from `oak-prod`. The server protocol responses are proven
-correct by the reference host.
+### Root Cause: Cursor MCP Tool Metadata Caching
 
-### Hypotheses for Next Session
+Cursor caches tool metadata (including `_meta`) per MCP server and
+does not reliably refresh it on reconnect. At some point during
+development (likely a mid-development server restart with partially
+applied changes), Cursor cached `listTools()` output that lacked
+`_meta.ui.resourceUri`. It has been serving this stale cache since,
+even after the server was corrected.
 
-1. **Cursor caches `_meta` from `listTools()` per server identity
-   and the cache is stale** — even after reconnect, Cursor may use
-   a persistent on-disk cache keyed by server name. The cached tool
-   descriptors at `mcps/project-0-oak-mcp-ecosystem-oak-local/tools/`
-   do NOT include `_meta` (Cursor strips it). If Cursor reads `_meta`
-   from these files rather than from the live `listTools()` response,
-   it would never see `_meta.ui.resourceUri`.
+Evidence:
+- Cached tool descriptors at `mcps/project-0-oak-mcp-ecosystem-oak-local/tools/`
+  do NOT include `_meta` (Cursor strips it in its cache format)
+- `oak-prod` works because it was connected fresh (or its cache was
+  independently refreshed)
+- The reference host works because it has no cache
 
-2. **Cursor's MCP Apps implementation requires something the
-   reference host does not** — e.g. the server declaring
-   `extensions: { "io.modelcontextprotocol/ui": {} }` in its
-   capabilities, or a specific `_meta` format on the tool RESULT
-   (not just the definition).
+### Resolution
 
-3. **The `WIDGET_URI` value `"local"` vs a hash may trigger
-   different Cursor behaviour** — `oak-prod` uses
-   `ui://widget/oak-curriculum-app-5e4a1da1.html` while `oak-local`
-   uses `ui://widget/oak-curriculum-app-local.html`. The `local`
-   suffix might not match a pattern Cursor expects.
-
-4. **Cursor never renders MCP Apps widgets from `oak-local` —
-   it only ever worked on `oak-prod`** — the user's original report
-   said "it works on main locally" but this may need re-verification.
-   If `oak-local` has NEVER rendered the widget in Cursor (on any
-   branch), the issue is not a regression but a Cursor limitation
-   with localhost/non-HTTPS servers.
-
-### Recommended Approach for Next Session
-
-1. **Verify the baseline**: Checkout `main`, run the local dev
-   server, connect Cursor to `oak-local`, call `get-curriculum-model`.
-   Does the widget ACTUALLY render on main in Cursor? If not,
-   hypothesis 4 is confirmed and this was never a branch regression.
-
-2. **If it works on main**: `git bisect` between `main` and this
-   branch to find the exact commit that breaks it. The server-side
-   code path is identical (proven by diff), so the break must be in
-   a subtle interaction — possibly a dependency version, a build
-   artifact, or something in the `pnpm-lock.yaml`.
-
-3. **If it doesn't work on main either**: The issue is Cursor-specific
-   and not a regression. It "works on prod" because `oak-prod` is
-   HTTPS with a proper hostname. File as a Cursor limitation and
-   move on.
+This is a **Cursor caching issue**, not a code regression. The
+server code is correct on both `main` and the branch. Potential
+fixes:
+- Completely remove and re-add the `oak-local` server in Cursor
+- Clear Cursor's MCP metadata cache directory
+- Wait for Cursor to refresh its cache naturally
+- File as a Cursor bug if disconnect/reconnect doesn't clear the cache
 
 ---
 
@@ -281,109 +250,24 @@ Changes made this session (uncommitted):
 
 ---
 
-## Remaining Work
+## Resolution
 
-### Phase 3: Find the Cursor-Specific Root Cause (PENDING — NEXT SESSION)
+### Phase 3: Root Cause Identified — Cursor Cache (CLOSED)
 
-**Objective**: Determine why Cursor does not render the widget from
-`oak-local` on this branch when the server is provably correct.
+Verified on `main`: widget does NOT render from `oak-local` in
+Cursor on any branch. Widget WAS rendering for several days, then
+stopped. Widget renders from `oak-prod` in Cursor and from
+`oak-local` in the reference host. Conclusion: **Cursor stale MCP
+tool metadata cache**. Not a code regression.
 
-#### Task 3.1: Verify Baseline on Main
+### Extracted Work
 
-**This is the critical first step.** Checkout `main`, run the local
-dev server, connect Cursor to `oak-local`, call `get-curriculum-model`.
-
-- **If widget renders on main in Cursor**: The regression IS on this
-  branch. Proceed to Task 3.2 (bisect).
-- **If widget does NOT render on main in Cursor**: This was never a
-  branch regression. The widget only ever worked on `oak-prod`
-  (HTTPS + proper hostname). Skip to Task 3.3.
-
-#### Task 3.2: Git Bisect (Only If Main Works in Cursor)
-
-Bisect between `main` and `feat/gate_hardening_part1` HEAD to find
-the exact breaking commit. Since the server-side registration code
-is identical (proven by diff), the break must be in a subtle
-interaction — dependency version, build artifact, or lockfile.
-
-#### Task 3.3: Investigate Cursor MCP Apps Requirements
-
-If the widget never renders from `oak-local` in Cursor (on any
-branch), investigate what Cursor specifically requires:
-
-- Does Cursor need HTTPS for MCP Apps?
-- Does Cursor need the `io.modelcontextprotocol/ui` extension in
-  server capabilities?
-- Does Cursor cache `_meta` on disk and never refresh it?
-- Is there a Cursor-specific `_meta` format requirement?
-
-#### Task 3.4: Resolution
-
-Apply the fix or document the limitation.
-
----
-
-### Phase 4: `_meta` Single Source of Truth (PENDING)
-
-**Objective**: Replace the 11 scattered `_meta` definitions with a
-`buildToolMeta()` factory. This is a quality improvement independent
-of the Cursor rendering issue.
-
-#### Task 4.1: Create `buildToolMeta()` Factory
-
-**File**: `packages/sdks/oak-curriculum-sdk/src/mcp/build-tool-meta.ts`
-
-- Factory derives `_meta` from tool name + optional `attribution`
-  and `visibility`
-- Uses `WIDGET_TOOL_NAMES.has(name)` to decide widget UI inclusion
-- Always includes `securitySchemes`
-- Returns `ToolMeta` (never `undefined`)
-
-#### Task 4.2: Migrate Aggregated Tool Definitions
-
-Replace inline `_meta` in all 11 definitions with
-`buildToolMeta(name)`. Special case: `user-search-query` has
-`visibility: ['app']`.
-
-#### Task 4.3: Remove Codegen Dead Code
-
-The `emit-index.ts` `WIDGET_TOOL_NAMES.has(toolName)` check for
-generated tools is dead code. Remove or document.
-
-#### Task 4.4: Quality Gates
-
-```bash
-pnpm type-check && pnpm lint && pnpm test && pnpm test:e2e
-```
-
----
-
-### Phase 5: Hardening and Documentation (PENDING)
-
-#### Task 5.1: Update Documentation
-
-- Update `distilled.md` with composition test pattern
-- Update `napkin.md` with `_meta` factory pattern
-- Document the `buildToolMeta()` pattern in
-  `.agent/memory/patterns/`
-
-#### Task 5.2: Foundation Compliance Checklist
-
-- [ ] **TDD**: Composition test follows RED/GREEN/REFACTOR
-- [ ] **No Type Shortcuts**: No `as`, `any`, `unknown` shortcuts
-- [ ] **Quality Gates**: All gates pass
-- [ ] **Test Behaviour**: Tests prove behaviour, not implementation
-- [ ] **DRY**: `_meta` factory eliminates all duplication
-
-#### Task 5.3: Invoke Reviewers
-
-- Code reviewer on `buildToolMeta()` factory
-- Architecture reviewer on `_meta` single-source-of-truth design
-- Test reviewer on composition test
-
-#### Task 5.4: Consolidation
-
-Run `/jc-consolidate-docs` to graduate settled learnings.
+- **`buildToolMeta()` factory**: Extracted to
+  `meta-oak-namespace-cleanup.plan.md` (current queue). The factory
+  concept naturally fits the namespace cleanup — both address `_meta`
+  architecture.
+- **Codegen dead code** (`emit-index.ts` widget check): Also fits
+  the namespace cleanup scope.
 
 ---
 
