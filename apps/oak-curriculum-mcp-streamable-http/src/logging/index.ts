@@ -37,7 +37,7 @@ export interface HttpLoggerOptions {
   readonly stdoutSink?: LogSink;
 }
 
-export interface ErrorLoggerObservability {
+interface ErrorLoggerObservability {
   captureHandledError(error: unknown, context?: LogContextInput): void;
 }
 
@@ -186,5 +186,3 @@ export function createEnrichedErrorLogger(
     next(err);
   };
 }
-
-export type { Logger } from '@oaknational/logger';

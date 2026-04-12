@@ -16,10 +16,6 @@ import type { GroundTruthQuery } from './types';
 import { SYNONYM_DIAGNOSTIC_QUERIES } from './diagnostic-synonym-queries';
 import { MULTI_CONCEPT_DIAGNOSTIC_QUERIES } from './diagnostic-multi-concept-queries';
 
-// Re-export for backwards compatibility
-export { SYNONYM_DIAGNOSTIC_QUERIES } from './diagnostic-synonym-queries';
-export { MULTI_CONCEPT_DIAGNOSTIC_QUERIES } from './diagnostic-multi-concept-queries';
-
 /**
  * All diagnostic queries for fine-grained failure mode analysis.
  *

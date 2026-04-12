@@ -10,14 +10,14 @@ import { describe, it, expect } from 'vitest';
 import {
   LESSON_GROUND_TRUTHS,
   CROSS_SUBJECT_LESSON_GROUND_TRUTHS,
-  APPLE_LESSONS,
-  MATHS_PRIMARY,
-  MATHS_SECONDARY,
   getLessonGroundTruth,
   getLessonGroundTruthsForSubject,
   getLessonGroundTruthsForPhase,
-  subjectPhaseKey,
 } from './index';
+import { APPLE_LESSONS } from './cross-subject/apple-lessons';
+import { MATHS_PRIMARY } from './entries/maths-primary';
+import { MATHS_SECONDARY } from './entries/maths-secondary';
+import { subjectPhaseKey } from './types';
 
 // =============================================================================
 // subjectPhaseKey — Pure function tests

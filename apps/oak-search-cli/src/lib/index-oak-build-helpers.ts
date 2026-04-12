@@ -1,5 +1,5 @@
 import type { SearchUnitSummary } from '../types/oak';
-import type { PairBuildContext, PairUnits } from './index-oak-helpers';
+import type { PairBuildContext, PairUnit } from './index-oak-pair-types';
 import type { BulkOperations } from './indexing/bulk-operation-types';
 import { fetchAllLessonsByUnit } from './indexing/fetch-all-lessons';
 import { processLessonForIndexing } from './indexing/lesson-processing';
@@ -12,7 +12,7 @@ import { ingestLogger } from './logger';
  */
 export async function fetchAggregatedLessonsForPair(
   context: PairBuildContext,
-  units: PairUnits,
+  units: readonly PairUnit[],
 ): Promise<Map<string, AggregatedLesson>> {
   const { client, ks, subject } = context;
   const unitSlugs = units.map((unit) => unit.unitSlug);

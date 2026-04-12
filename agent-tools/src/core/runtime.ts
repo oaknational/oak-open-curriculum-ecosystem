@@ -6,10 +6,8 @@ import { shouldSkipCompactAgent } from './session-tools';
 import { escapedRepoPath, isSessionId } from './runtime-paths';
 import { isHistoryRow, isMetaRow, readJsonLines } from './json-parsing';
 import { writeErrorLine } from './terminal-output';
-export { escapedRepoPath } from './runtime-paths';
 export { listAgentShortIds, resolveAgentJsonlPath } from './runtime-agent-index';
 export { readAgentEvents } from './runtime-agent-events';
-export type { AgentEvents } from './runtime-agent-events';
 /** File-system contract used by runtime helpers for dependency injection in tests. */
 interface RuntimeFileSystem {
   /** Check whether the path exists. */
@@ -155,7 +153,7 @@ export function readDirectoryFiles(
 ): { name: string; content: string }[] {
   return readDirectoryFilesWithFs(directoryPath, predicate, nodeRuntimeFileSystem);
 }
-export function readDirectoryFilesWithFs(
+function readDirectoryFilesWithFs(
   directoryPath: string,
   predicate: (name: string) => boolean,
   fileSystem: RuntimeFileSystem,

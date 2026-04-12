@@ -5,12 +5,11 @@ Next status: public alpha
 
 This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It uses **stateless session management** (no server-side state) and is designed for Vercel's serverless Node runtime. Responses are streamed using Server-Sent Events (SSE) as per the MCP specification.
 
-> **Canonical MCP server workspace**. Active Oak MCP server evolution now
-> belongs in `apps/oak-curriculum-mcp-streamable-http`. The standalone stdio
-> workspace, `apps/oak-curriculum-mcp-stdio`, is legacy and is no longer being
-> actively maintained. The intended direction is to generalise this workspace so
-> it can later provide a separate stdio entry point as well. See
+> **Canonical MCP server workspace**. This is the sole MCP server workspace.
+> The legacy stdio workspace was removed per
 > [ADR-128](../../docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
+> Future stdio transport support will be added as a separate entry point within
+> this workspace.
 
 **Architecture**: This server imports all MCP tool definitions from `@oaknational/curriculum-sdk`. The tools are generated at compile time from the OpenAPI schema - no manual tool definitions exist in this application. When the API changes, `pnpm sdk-codegen` updates the SDK, and this server automatically has access to new/changed tools.
 
@@ -252,25 +251,11 @@ Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads 
 
 ## Cursor (legacy local stdio) configuration
 
-The checked-in `.mcp.json` and `.cursor/mcp.json` now point at the HTTP
-server, not the legacy stdio workspace.
-
-If you still need a manual local stdio setup during the transition,
-point your client at:
-
-```json
-{
-  "command": "pnpm",
-  "args": ["exec", "tsx", "apps/oak-curriculum-mcp-stdio/bin/oak-curriculum-mcp.ts"]
-}
-```
-
-If tools do not appear, check `.logs/oak-curriculum-mcp-startup/startup.log`
-for diagnostics.
-
-This is a transitional arrangement. The long-term plan is for this HTTP
-workspace to provide its own stdio entry point so local stdio clients no longer
-depend on the separate legacy workspace.
+The checked-in `.mcp.json` and `.cursor/mcp.json` point at the HTTP server.
+The legacy stdio workspace has been removed per
+[ADR-128](../../docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
+Future stdio transport support will be added as a separate entry point within
+this workspace.
 
 ## Authentication
 

@@ -2,13 +2,13 @@
  * Bulk data manifest with generation metadata.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-04-02T14:20:30.829Z
+ * Generated at: 2026-04-12T07:25:00.705Z
  */
 
 /**
  * Metadata for a subject/phase combination.
  */
-export interface SubjectPhaseMetadata {
+interface SubjectPhaseMetadata {
   readonly subject: string;
   readonly phase: 'primary' | 'secondary';
   readonly sequenceSlug: string;
@@ -201,11 +201,5 @@ export const BULK_DATA_MANIFEST: readonly SubjectPhaseMetadata[] = [
   },
 ] as const;
 
-/** Total number of lessons across all subjects */
-export const TOTAL_LESSON_COUNT = 12391 as const;
-
 /** Number of subject/phase combinations */
 export const SUBJECT_PHASE_COUNT = 30 as const;
-
-/** Generation timestamp */
-export const GENERATED_AT = '2026-04-02T14:20:30.829Z' as const;

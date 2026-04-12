@@ -1,7 +1,7 @@
 import { normalizeError, startTimer } from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
 
-export type AuthSetupStep =
+type AuthSetupStep =
   | 'auth.disabled.register'
   | 'clerkMiddleware.create'
   | 'clerkMiddleware.install'

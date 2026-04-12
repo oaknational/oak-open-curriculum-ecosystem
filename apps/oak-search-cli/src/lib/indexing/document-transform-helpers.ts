@@ -11,19 +11,10 @@ import {
   extractThreadInfo,
   extractPedagogicalData,
   createEnrichedRollupText,
-  type ThreadInfo,
-  type PedagogicalData,
 } from './thread-and-pedagogical-extractors';
 import type { AggregatedUnitContext } from './ks4-context-builder';
 
-// Re-export thread and pedagogical extractors
-export {
-  extractThreadInfo,
-  extractPedagogicalData,
-  createEnrichedRollupText,
-  type ThreadInfo,
-  type PedagogicalData,
-};
+export { extractPedagogicalData, createEnrichedRollupText };
 
 /**
  * KS4 fields for Elasticsearch documents.
@@ -62,11 +53,6 @@ export function extractKs4DocumentFields(ks4Context: AggregatedUnitContext): Ks4
     ks4_options: nonEmptyOrUndefined(ks4Context.ks4Options),
     ks4_option_titles: nonEmptyOrUndefined(ks4Context.ks4OptionTitles),
   };
-}
-
-export interface UnitLessonInfo {
-  readonly lessonSlug: string;
-  readonly lessonTitle: string;
 }
 
 type LessonDocumentSummaryInput = SearchLessonSummary;
@@ -222,7 +208,7 @@ export function extractRollupDocumentFields(
 }
 
 /** Extracted unit enrichment fields for document creation. */
-export interface UnitEnrichmentFields {
+interface UnitEnrichmentFields {
   description?: string;
   why_this_why_now?: string;
   categories?: string[];

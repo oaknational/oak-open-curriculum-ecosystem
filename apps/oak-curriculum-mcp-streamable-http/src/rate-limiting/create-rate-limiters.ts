@@ -18,7 +18,7 @@ import {
 } from './index.js';
 
 /** Rate limiter middleware instances for all three route profiles. */
-export interface RateLimiters {
+interface RateLimiters {
   readonly mcpRateLimiter: RequestHandler;
   readonly oauthRateLimiter: RequestHandler;
   readonly assetRateLimiter: RequestHandler;

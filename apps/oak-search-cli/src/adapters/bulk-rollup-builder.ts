@@ -137,7 +137,7 @@ export function collectLessonSnippets(lessons: readonly Lesson[]): Map<string, s
  * @param keyStage - The key stage slug (e.g., 'ks2', 'ks3')
  * @returns The subject programmes URL
  */
-export function getSubjectProgrammesUrl(subjectSlug: string, keyStage: string): string {
+function getSubjectProgrammesUrl(subjectSlug: string, keyStage: string): string {
   return generateSubjectProgrammesUrl(subjectSlug, keyStage);
 }
 
@@ -147,7 +147,7 @@ export function getSubjectProgrammesUrl(subjectSlug: string, keyStage: string): 
  * @param sequenceSlug - The sequence slug (e.g., 'maths-primary')
  * @returns A valid KeyStage
  */
-export function deriveKeyStageFromSequence(sequenceSlug: string): KeyStage {
+function deriveKeyStageFromSequence(sequenceSlug: string): KeyStage {
   const phase = derivePhaseSlugFromSequence(sequenceSlug);
   const defaultKs = phase === 'primary' ? 'ks2' : 'ks3';
   return isKeyStage(defaultKs) ? defaultKs : 'ks2';

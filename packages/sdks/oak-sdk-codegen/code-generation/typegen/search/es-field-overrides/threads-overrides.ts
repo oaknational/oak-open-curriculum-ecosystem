@@ -9,7 +9,7 @@
  * @see THREADS_COMPLETION_CONTEXTS - Contexts for completion suggestions
  */
 
-import type { EsFieldMapping } from '../es-field-config.js';
+import type { EsFieldMapping } from '../es-field-types.js';
 import { THREADS_COMPLETION_CONTEXTS } from '../completion-contexts.js';
 import {
   createCompletionContexts,

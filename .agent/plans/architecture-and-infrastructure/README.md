@@ -28,9 +28,9 @@ Documentation architecture excellence (from synthesis analysis):
 - [current/doc-architecture-phase-a-immediate.plan.md](current/doc-architecture-phase-a-immediate.plan.md) — QA register, fitness function ADR, ADR index, C4 diagrams, layer contract
 - [current/doc-architecture-phase-b-dependent.plan.md](current/doc-architecture-phase-b-dependent.plan.md) — Deduplication, operability, trade-off guidance, Practice Core integration
 
-Once the current improvement tranche closes, promote
-[future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
-as the next focused hardening sprint.
+Quality gate hardening has been promoted to current (2026-04-11):
+[current/quality-gate-hardening.plan.md](current/quality-gate-hardening.plan.md).
+Active child plan: [active/knip-triage-and-remediation.plan.md](active/knip-triage-and-remediation.plan.md).
 
 ## Strategic Backlog (Future)
 
@@ -45,7 +45,7 @@ Roadmap:
 | Plan | Status | Description |
 |------|--------|-------------|
 | [`eslint-disable-remediation.plan.md`](active/eslint-disable-remediation.plan.md) | 🟢 In progress | Remove ~64 remaining eslint-disable comments by fixing root causes. Extracted from CI plan. |
-| [`future/quality-gate-hardening.plan.md`](future/quality-gate-hardening.plan.md) | 📋 Next promotion candidate | First follow-on after the current improvement tranche; umbrella for static-analysis promotion, rule hardening, and broader gate enforcement work. |
+| [`current/quality-gate-hardening.plan.md`](current/quality-gate-hardening.plan.md) | 🟢 Current | Promoted 2026-04-11. Umbrella for static-analysis promotion, rule hardening, gate enforcement. Active child: knip triage. |
 | [`static-analysis-tool-promotion.plan.md`](static-analysis-tool-promotion.plan.md) | 📎 Reference only | Background knip + dependency-cruiser triage detail retained until the hardening umbrella is promoted and absorbs execution. |
 
 ## Recently Completed
@@ -78,9 +78,9 @@ Roadmap:
   including SDK codegen workspace decomposition
 - **Milestone 3** (pre-beta): alerting, quality metrics, and broader
   operational hardening on top of the foundation
-- **Next hardening follow-on**: promote
-  `future/quality-gate-hardening.plan.md` once the current improvement tranche
-  closes
+- **Quality gate hardening**: promoted to
+  `current/quality-gate-hardening.plan.md` (2026-04-11); active child
+  plan `active/knip-triage-and-remediation.plan.md`
 
 See [high-level-plan.md](../high-level-plan.md) for the strategic
 overview.

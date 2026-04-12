@@ -13,10 +13,10 @@ import type { z } from 'zod';
 import type {
   ToolName,
   ToolDescriptorForName,
-  ToolDescriptor,
   SecurityScheme,
+  ToolAnnotations,
+  ToolMeta,
 } from '@oaknational/sdk-codegen/mcp-tools';
-import type { AGGREGATED_TOOL_DEFS } from './definitions.js';
 
 /**
  * Subset of ToolDescriptor fields that the universal-tools layer accesses.
@@ -35,7 +35,7 @@ export interface ToolRegistryDescriptor {
   readonly toolMcpFlatInputSchema: ToolDescriptorForName<ToolName>['toolMcpFlatInputSchema'];
   readonly securitySchemes?: readonly SecurityScheme[];
   readonly annotations?: ToolAnnotations;
-  readonly _meta?: ToolMeta;
+  readonly _meta: ToolMeta;
   readonly requiresDomainContext?: boolean;
 }
 
@@ -63,13 +63,28 @@ export interface GeneratedToolRegistry {
 }
 
 /**
- * Aggregated tool names derived from the aggregated tool definitions.
+ * Aggregated tool names — hand-written tools that combine multiple API
+ * calls into a single operation.
  *
- * These are hand-written tools that combine multiple API calls into
- * a single operation. Currently defined at runtime but will eventually
- * move to sdk-codegen time.
+ * @remarks This is an explicit union rather than derived from
+ * `keyof typeof AGGREGATED_TOOL_DEFS` to break the circular dependency
+ * between `types.ts` and `definitions.ts`. Compile-time safety is
+ * maintained by the `satisfies Record<AggregatedToolName, ...>` guard
+ * in `definitions.ts` — adding a tool to the map without updating
+ * this union (or vice versa) is a type error.
  */
-export type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
+export type AggregatedToolName =
+  | 'search'
+  | 'fetch'
+  | 'get-curriculum-model'
+  | 'get-thread-progressions'
+  | 'get-prior-knowledge-graph'
+  | 'get-misconception-graph'
+  | 'browse-curriculum'
+  | 'explore-topic'
+  | 'download-asset'
+  | 'user-search'
+  | 'user-search-query';
 
 /**
  * Union of all tool names combining aggregated and generated tools.
@@ -79,30 +94,7 @@ export type AggregatedToolName = keyof typeof AGGREGATED_TOOL_DEFS;
  */
 export type UniversalToolName = AggregatedToolName | ToolName;
 
-/**
- * Contract-level ToolDescriptor with non-parametric properties.
- *
- * `annotations` and `_meta` on ToolDescriptor don't depend on any type
- * parameter — they define the structural shape that ALL tools (generated
- * and aggregated) conform to. We extract from the contract, not from
- * concrete instances, so we get `title?: string` rather than a union
- * of specific literal titles.
- */
-type ContractDescriptor = ToolDescriptor<string, never, never, never, never, string>;
-
-/**
- * MCP tool annotations — derived from the generated ToolDescriptor contract.
- *
- * @see https://spec.modelcontextprotocol.io/specification/server/tools/#annotations-object
- */
-export type ToolAnnotations = NonNullable<ContractDescriptor['annotations']>;
-
-/**
- * MCP Apps standard metadata — derived from the generated ToolDescriptor contract (ADR-141).
- *
- * @see https://modelcontextprotocol.io/extensions/apps/overview
- */
-export type ToolMeta = NonNullable<ContractDescriptor['_meta']>;
+export type { ToolAnnotations, ToolMeta };
 
 /**
  * Entry in the universal tools list for MCP registration.
@@ -143,10 +135,10 @@ export interface UniversalToolListEntry {
   readonly inputSchema: z.ZodRawShape;
   /** Security schemes required to invoke this tool */
   readonly securitySchemes?: readonly SecurityScheme[];
-  /** MCP annotations providing behavior hints */
+  /** MCP annotations providing behaviour hints */
   readonly annotations?: ToolAnnotations;
   /** MCP Apps standard metadata for UI integration (ADR-141) */
-  readonly _meta?: ToolMeta;
+  readonly _meta: ToolMeta;
 }
 
 /**

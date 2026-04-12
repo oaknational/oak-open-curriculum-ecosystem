@@ -21,7 +21,7 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     const output = generateCompleteMcpTools(schemaWithPathParams);
 
     const contractFile = output.contract['tool-descriptor.contract.ts'];
-    expect(contractFile).toContain('export type StatusDiscriminant<T extends string>');
+    expect(contractFile).toContain('StatusDiscriminant');
     expect(contractFile).toContain('export interface ToolDescriptor<');
     expect(contractFile).toContain('readonly documentedStatuses: readonly TDocumentedStatus[];');
     expect(output.data['definitions.ts']).toContain('export const MCP_TOOL_DESCRIPTORS');
@@ -85,24 +85,18 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     expect(output.index).toContain('undocumented-response-error');
   });
 
-  it('emits security types in generated contract', () => {
+  it('imports and re-exports security types from hand-authored module', () => {
     const output = generateCompleteMcpTools(schemaWithPathParams);
     const contractFile = output.contract['tool-descriptor.contract.ts'];
 
-    // Verify security types are present
-    expect(contractFile).toContain('export type SecuritySchemeType');
-    expect(contractFile).toContain('export interface NoAuthScheme');
-    expect(contractFile).toContain('export interface OAuth2Scheme');
-    expect(contractFile).toContain('export type SecurityScheme');
+    expect(contractFile).toContain("from '../../../../mcp-protocol-types.js'");
+    expect(contractFile).toContain('SecurityScheme');
+    expect(contractFile).toContain('SourceAttribution');
+    expect(contractFile).toContain('ToolAnnotations');
+    expect(contractFile).toContain('ToolMeta');
 
-    // Verify field in ToolDescriptor
     expect(contractFile).toContain('readonly securitySchemes?:');
     expect(contractFile).toContain('readonly SecurityScheme[]');
-
-    // Verify TSDoc is present
-    expect(contractFile).toContain('MCP security scheme types');
-    expect(contractFile).toContain('No authentication required');
-    expect(contractFile).toContain('OAuth 2.1 authentication required');
   });
 
   it('emits security metadata in generated tool files', () => {

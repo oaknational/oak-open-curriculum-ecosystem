@@ -18,7 +18,7 @@ import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
  * This type mirrors the generated schema but is defined here to avoid
  * circular dependencies before sdk-codegen runs.
  */
-export interface RefSubjectIndexDoc {
+interface RefSubjectIndexDoc {
   readonly subject_slug: SearchSubjectSlug;
   readonly subject_title: string;
   readonly key_stages: readonly string[];
@@ -32,7 +32,7 @@ export interface RefSubjectIndexDoc {
 /**
  * Document type for the oak_ref_key_stages index.
  */
-export interface RefKeyStageIndexDoc {
+interface RefKeyStageIndexDoc {
   readonly key_stage_slug: KeyStage;
   readonly key_stage_title: string;
   readonly phase: string;
@@ -45,7 +45,7 @@ export interface RefKeyStageIndexDoc {
 /**
  * Document type for the oak_curriculum_glossary index.
  */
-export interface CurriculumGlossaryIndexDoc {
+interface CurriculumGlossaryIndexDoc {
   readonly term: string;
   readonly term_slug: string;
   readonly definition: string | undefined;

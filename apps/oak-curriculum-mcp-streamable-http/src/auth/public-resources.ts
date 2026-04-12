@@ -29,7 +29,7 @@ import { DOCUMENTATION_RESOURCES, WIDGET_URI } from '@oaknational/curriculum-sdk
  *
  * Uses SDK-owned resource URIs as the single source of truth.
  */
-export const PUBLIC_RESOURCE_URIS = [
+const PUBLIC_RESOURCE_URIS = [
   ...DOCUMENTATION_RESOURCES.map((resource) => resource.uri),
   WIDGET_URI,
 ] as const;

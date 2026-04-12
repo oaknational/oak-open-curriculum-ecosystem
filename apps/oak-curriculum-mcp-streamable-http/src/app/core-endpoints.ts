@@ -32,7 +32,7 @@ import { addHealthEndpoints } from './health-endpoints.js';
  * fields the function actually needs, avoiding a circular type import
  * back to the composition root's `CreateAppOptions`.
  */
-export interface CoreEndpointOptions {
+interface CoreEndpointOptions {
   readonly runtimeConfig: RuntimeConfig;
   readonly observability: HttpObservability;
   readonly toolHandlerOverrides?: ToolHandlerOverrides;

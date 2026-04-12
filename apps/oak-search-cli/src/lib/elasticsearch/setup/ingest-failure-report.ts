@@ -6,8 +6,6 @@
  * enabling targeted re-ingestion of specific documents.
 
  */
-import { writeFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { ok, err, type Result } from '@oaknational/result';
 import {
   isBulkIndexAction,
@@ -38,53 +36,8 @@ function extractFailedDocumentInfo(
   return docs;
 }
 
-/**
- * Writes a JSON report of failed documents for targeted retry.
- *
- * @remarks
- * The report format is designed to be both human-readable and machine-parseable
- * for potential future `--retry-from` CLI functionality.
- */
-function writeFailureReport(result: BulkUploadResult, outputDir: string): string {
-  const failedDocs = extractFailedDocumentInfo(result.permanentlyFailed);
-  const timestamp = new Date().toISOString();
-  const filename = `failed-documents-${timestamp.replace(/[:.]/g, '-')}.json`;
-  const filepath = join(outputDir, filename);
-
-  const report = {
-    timestamp,
-    summary: {
-      successCount: result.successCount,
-      failedCount: failedDocs.length,
-    },
-    failedDocuments: failedDocs,
-  };
-
-  writeFileSync(filepath, JSON.stringify(report, null, 2));
-  return filepath;
-}
-
 /** Dependency hook for failure report writing, used for unit testing. */
-export type FailureReportWriter = (result: BulkUploadResult, outputDir: string) => string;
-
-/**
- * Handles post-upload logging and failure reporting.
- *
- * @param uploadResult - Result from the upload operation
- * @param bulkDir - Directory for failure report
- */
-export function handleUploadComplete(
-  uploadResult: BulkUploadResult,
-  bulkDir: string,
-  expectedDocumentCount: number,
-): Result<void, Error> {
-  return handleUploadCompleteWithWriter(
-    uploadResult,
-    bulkDir,
-    expectedDocumentCount,
-    writeFailureReport,
-  );
-}
+type FailureReportWriter = (result: BulkUploadResult, outputDir: string) => string;
 
 /**
  * Handles post-upload logging and failure reporting with an injected writer.

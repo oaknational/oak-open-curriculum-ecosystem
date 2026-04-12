@@ -24,6 +24,7 @@ import type { PriorKnowledgeGraph } from '@oaknational/sdk-codegen/vocab';
 import { priorKnowledgeGraph } from '@oaknational/sdk-codegen/vocab-data';
 import type { GraphSurfaceConfig } from './graph-resource-factory.js';
 import { createGraphResource, createGraphJsonGetter } from './graph-resource-factory.js';
+import { OAK_API_ATTRIBUTION } from './source-attribution.js';
 
 /**
  * Shared configuration for the prior knowledge graph MCP surface.
@@ -39,6 +40,7 @@ export const PRIOR_KNOWLEDGE_GRAPH_CONFIG: GraphSurfaceConfig<PriorKnowledgeGrap
   uriSegment: 'prior-knowledge-graph',
   sourceData: priorKnowledgeGraph,
   summary: `Prior knowledge graph loaded. Contains ${String(priorKnowledgeGraph.stats.unitsWithPrerequisites)} units with prior knowledge requirements and ${String(priorKnowledgeGraph.stats.totalEdges)} edges.`,
+  attribution: OAK_API_ATTRIBUTION,
 };
 
 /**

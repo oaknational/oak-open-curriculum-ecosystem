@@ -2,7 +2,7 @@
  * Field overrides for the oak_units index.
  */
 
-import type { EsFieldMapping } from '../es-field-config.js';
+import type { EsFieldMapping } from '../es-field-types.js';
 import { UNITS_COMPLETION_CONTEXTS } from '../completion-contexts.js';
 import { createCompletionContexts } from './common.js';
 

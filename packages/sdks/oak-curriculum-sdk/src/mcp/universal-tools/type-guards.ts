@@ -18,9 +18,9 @@ import type {
 /**
  * Type predicate for aggregated tool names.
  *
- * Derived from `AGGREGATED_TOOL_DEFS` so the guard stays in sync
- * with the definitions automatically. Adding a new aggregated tool
- * to the definitions map is sufficient — no manual update here.
+ * Checks `value in AGGREGATED_TOOL_DEFS` at runtime. Adding a new
+ * aggregated tool requires updating both the `AggregatedToolName` union
+ * in `types.ts` and the `AGGREGATED_TOOL_DEFS` map in `definitions.ts`.
  *
  * @param value - Value to check
  * @returns True if value is an aggregated tool name

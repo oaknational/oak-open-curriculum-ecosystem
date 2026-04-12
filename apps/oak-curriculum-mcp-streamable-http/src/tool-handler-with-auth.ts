@@ -24,7 +24,7 @@ import { validateResourceParameter } from './resource-parameter-validator.js';
  * Consolidates the previous 8 positional parameters into a single
  * options object for readability and maintenance safety.
  */
-export interface HandleToolOptions {
+interface HandleToolOptions {
   readonly tool: { readonly name: UniversalToolName };
   readonly params: unknown;
   readonly deps: ToolHandlerDependencies;

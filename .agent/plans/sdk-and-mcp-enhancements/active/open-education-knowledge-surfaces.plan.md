@@ -23,7 +23,7 @@ todos:
     content: "WS-3: EEF evidence MCP surface (recommendation tool + resources + prompt)"
     status: pending
   - id: ws-4-nc-taxonomy
-    content: "WS-4: NC knowledge taxonomy from ontology (smallest KG integration)"
+    content: "WS-4: Oak KG knowledge taxonomy from ontology (smallest KG integration)"
     status: pending
   - id: ws-5-guidance
     content: "WS-5: Agent guidance consolidation (after all new surfaces exist)"
@@ -49,9 +49,9 @@ education data sources** into the MCP server:
 
 1. **Oak Curriculum Ontology**
    ([oak-curriculum-ontology](https://github.com/oaknational/oak-curriculum-ontology))
-   — a W3C-compliant formal knowledge graph (RDF, OWL, SKOS, SHACL)
-   modelling the UK National Curriculum and Oak's teaching programmes.
-   Primary author: Mark Hodierne.
+   — Oak's formal semantic representation of curriculum structure,
+   aligned to the National Curriculum for England (2014), using W3C
+   standards (RDF, OWL, SKOS, SHACL). Primary author: Mark Hodierne.
 
 2. **EEF Teaching and Learning Toolkit**
    ([EEF](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit))
@@ -64,7 +64,7 @@ Together these three sources answer three questions that teachers ask:
 | Question | Source | What It Provides |
 |---|---|---|
 | **What content exists?** | Oak Open Curriculum API | Lessons, units, threads, sequences, quizzes, transcripts |
-| **How is the curriculum structured?** | Oak Curriculum Ontology | Formal NC knowledge taxonomy, progressions, concept relationships |
+| **How is the curriculum structured?** | Oak Curriculum Ontology | Oak's NC-aligned knowledge taxonomy (SKOS hierarchy), programme structures, concept relationships |
 | **What teaching approaches work?** | EEF Teaching and Learning Toolkit | Evidence-backed pedagogical recommendations with transparent scoring |
 
 **This is a strategic inflection point.** The repository moves from
@@ -85,9 +85,16 @@ vision document.
 
 This plan implements Levels 1-3 of the evidence integration strategy
 (EEF JSON + bulk data — no ontology dependency) plus the smallest
-meaningful KG integration (NC knowledge taxonomy — static extraction,
+meaningful KG integration (Oak KG knowledge taxonomy — static extraction,
 no Neo4j). The deeper ontology integration (Levels 4/4b) follows the
 KG alignment audit and is tracked separately.
+
+**Two graph derivation methods**: The graphs in this repo are property
+graphs derived from Oak bulk download data (codegen-time extraction).
+The ontology repo produces formal knowledge graphs (RDF/OWL). In cases
+of overlap (e.g. both repos produce a misconception graph), the
+resources are complementary — different views, different methods,
+different strengths. See ADR-157 §Two Graph Derivation Methods.
 
 ## Next Session Protocol
 
@@ -178,6 +185,42 @@ pre-filters 4 strands.
 4 graph resources verified working via `oak-local`. Rename fully
 propagated — no trace of old `prerequisite-graph` in running server.
 
+### Session Progress (2026-04-11c/d): Namespace convention + type extraction
+
+**Namespace and attribution DONE** (session 2026-04-11c):
+
+1. **ADR-157 §Namespace Convention formalised**: Three-tier prefix
+   convention (no prefix / `oak-kg-*` / `eef-*` / no `nc-*`), rationale
+   for provenance signalling, accepted unprefixed asymmetry.
+2. **`SourceAttribution` interface + factory extension**: Machine-readable
+   attribution metadata in `_meta.attribution`. Three shared constants
+   (Oak API, Oak KG, EEF). All existing graph resources and curriculum
+   model carry `OAK_API_ATTRIBUTION`. Four new unit tests.
+3. **Cursor plan**: `.cursor/plans/mcp_namespace_and_attribution_b1eb1019.plan.md` — COMPLETED.
+
+**Type extraction DONE** (session 2026-04-11d):
+
+1. **Separated generated and hand-authored type ownership**: Created
+   `packages/sdks/oak-sdk-codegen/src/types/mcp-protocol-types.ts`
+   (hand-authored, outside `src/types/generated/`) with all non-API-derived
+   types (`SecurityScheme`, `SourceAttribution`, `ToolAnnotations`,
+   `ToolMeta`, `StatusDiscriminant`, `InvokeResult`, `DOCUMENTED_ERROR_PREFIX`).
+2. **Generator updated**: Emits `import type` from the hand-authored
+   module. `ToolDescriptor` is the only locally defined type in the
+   generated contract.
+3. **Barrel cleaned up**: `src/mcp-tools.ts` exports non-API-derived
+   types from the hand-authored module directly, eliminating the
+   generated-contract bypass.
+4. **Downstream cleanup**: Removed duplicate `SourceAttribution` from
+   curriculum-sdk, reverted intersection type hack, updated imports.
+5. **Reviewed** by code-reviewer, type-reviewer, architecture-reviewer-betty.
+   All fixes applied. `pnpm check` passes.
+6. **Cursor plan**: `.cursor/plans/extract_mcp_protocol_types_b9d696d0.plan.md` — COMPLETED.
+
+**Tracked follow-up** (not blocking WS-3):
+- Consolidate `security-types.ts` with `mcp-protocol-types.ts` to
+  eliminate duplicate security scheme type definitions in sdk-codegen.
+
 **Next: WS-3 implementation** (next session)
 
 ## Execution Order
@@ -190,7 +233,7 @@ WS-1: Graph resource factory             ← shared infrastructure
   ↓
 WS-2: Misconception graph surface        ← first factory consumer
 WS-3: EEF evidence surface               ← recommendation tool + R1-R8
-WS-4: NC knowledge taxonomy surface      ← smallest KG integration
+WS-4: Oak KG knowledge taxonomy surface   ← smallest KG integration
   ↓ (WS-2, WS-3, WS-4 can partially overlap)
   ↓
 WS-5: Agent guidance consolidation       ← after all new surfaces exist
@@ -226,7 +269,7 @@ Write a new ADR covering:
   - [Oak Open Curriculum API](https://open-api.thenational.academy/)
     — OpenAPI-generated types, validators, tools
   - [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology)
-    — W3C RDF/OWL/SKOS/SHACL, NC knowledge taxonomy
+    — Oak's formal NC-aligned curriculum structure (W3C RDF/OWL/SKOS/SHACL)
   - [EEF Teaching and Learning Toolkit](https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit)
     — 30 evidence strands, impact/cost/evidence metrics
 - **Benefits**: curriculum content + curriculum structure + pedagogical
@@ -311,8 +354,8 @@ The smallest meaningful integration of the Oak Curriculum Ontology.
 Extract the SKOS knowledge taxonomy
 (Discipline → Strand → SubStrand → ContentDescriptor) from the
 ontology's `.ttl` files into a JSON data file at build time. Expose
-as `curriculum://nc-knowledge-taxonomy` resource + `get-nc-knowledge-taxonomy`
-tool using the graph factory.
+as `curriculum://oak-kg-knowledge-taxonomy` resource +
+`get-oak-kg-knowledge-taxonomy` tool using the graph factory.
 
 This is genuine ontology-derived data that does NOT exist in the bulk
 data. It provides structured NC content that teachers can use to verify
@@ -352,7 +395,7 @@ After all surfaces ship:
 |---|---|---|
 | Education Endowment Foundation | Always attribute when citing data | All EEF surfaces |
 | John Roberts `<john.roberts@thenational.academy>` | Add to authors list | When EEF surface ships (WS-3) |
-| Mark Hodierne `<mark@markhodierne.com>` | Add to authors list | When NC taxonomy ships (WS-4) |
+| Mark Hodierne `<mark@markhodierne.com>` | Add to authors list | When Oak KG taxonomy ships (WS-4) |
 
 ## Exit Criteria (Parent Plan)
 
@@ -360,7 +403,7 @@ After all surfaces ship:
 2. Root README prominently declares three data sources
 3. Graph factory exists and is used by all graph surfaces
 4. All 4 new MCP surfaces are live (misconceptions, EEF resources +
-   tool + prompt, NC taxonomy)
+   tool + prompt, Oak KG taxonomy)
 5. Agent guidance consolidated for the full tool surface
 6. ADR-123, VISION.md, and root README updated with final counts
 7. `pnpm check` passes

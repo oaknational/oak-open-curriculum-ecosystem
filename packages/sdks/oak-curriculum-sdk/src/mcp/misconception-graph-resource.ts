@@ -24,6 +24,7 @@ import type { MisconceptionGraph } from '@oaknational/sdk-codegen/vocab';
 import { misconceptionGraph } from '@oaknational/sdk-codegen/vocab-data';
 import type { GraphSurfaceConfig } from './graph-resource-factory.js';
 import { createGraphResource, createGraphJsonGetter } from './graph-resource-factory.js';
+import { OAK_API_ATTRIBUTION } from './source-attribution.js';
 
 /**
  * Shared configuration for the misconception graph MCP surface.
@@ -38,6 +39,7 @@ export const MISCONCEPTION_GRAPH_CONFIG: GraphSurfaceConfig<MisconceptionGraph> 
   uriSegment: 'misconception-graph',
   sourceData: misconceptionGraph,
   summary: `Misconception graph loaded. Contains ${String(misconceptionGraph.stats.totalMisconceptions)} misconceptions across ${String(misconceptionGraph.stats.subjectsCovered.length)} subjects.`,
+  attribution: OAK_API_ATTRIBUTION,
 };
 
 /**

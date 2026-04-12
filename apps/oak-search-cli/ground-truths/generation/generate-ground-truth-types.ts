@@ -247,7 +247,7 @@ function generateManifestFile(allData: readonly ParsedBulkData[]): string {
   lines.push('/**');
   lines.push(' * Metadata for a subject/phase combination.');
   lines.push(' */');
-  lines.push('export interface SubjectPhaseMetadata {');
+  lines.push('interface SubjectPhaseMetadata {');
   lines.push('  readonly subject: string;');
   lines.push("  readonly phase: 'primary' | 'secondary';");
   lines.push('  readonly sequenceSlug: string;');
@@ -270,17 +270,8 @@ function generateManifestFile(allData: readonly ParsedBulkData[]): string {
   lines.push('] as const;');
   lines.push('');
 
-  const totalLessons = allData.reduce((sum, d) => sum + d.lessonCount, 0);
-  lines.push(`/** Total number of lessons across all subjects */`);
-  lines.push(`export const TOTAL_LESSON_COUNT = ${totalLessons} as const;`);
-  lines.push('');
-
   lines.push(`/** Number of subject/phase combinations */`);
   lines.push(`export const SUBJECT_PHASE_COUNT = ${allData.length} as const;`);
-  lines.push('');
-
-  lines.push(`/** Generation timestamp */`);
-  lines.push(`export const GENERATED_AT = '${new Date().toISOString()}' as const;`);
 
   return lines.join('\n');
 }
@@ -362,7 +353,7 @@ export async function generateGroundTruthTypes(
   filesWritten.push(datasetJsonResult.value);
 
   // Write ground-truth-schemas.ts
-  const schemasContent = emitGroundTruthSchemas(allData);
+  const schemasContent = emitGroundTruthSchemas();
   const schemasResult = writeOutputFile(outputDir, 'ground-truth-schemas.ts', schemasContent);
   if (!schemasResult.ok) {
     return schemasResult;

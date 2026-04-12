@@ -44,7 +44,7 @@ export type RuntimeConfig = AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig
  * Wraps the underlying `EnvResolutionError` with a human-readable message
  * and per-key diagnostics.
  */
-export interface ConfigError {
+interface ConfigError {
   readonly message: string;
   readonly diagnostics: EnvResolutionError['diagnostics'];
 }
@@ -52,7 +52,7 @@ export interface ConfigError {
 /**
  * Options for loading runtime configuration.
  */
-export interface LoadRuntimeConfigOptions {
+interface LoadRuntimeConfigOptions {
   readonly processEnv: Readonly<Record<string, string | undefined>>;
   readonly startDir: string;
 }

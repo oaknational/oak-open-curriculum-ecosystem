@@ -24,13 +24,13 @@ export interface SessionMatchInput {
 }
 
 /** Scoring result describing match confidence and the signal source. */
-export interface SessionMatchResult {
+interface SessionMatchResult {
   score: number;
   source: string;
 }
 
 /** Inputs used to generate a handover bundle for Cursor takeover. */
-export interface TakeoverBundleInput {
+interface TakeoverBundleInput {
   sessionId: string;
   timestampIso: string;
   repoPath: string;

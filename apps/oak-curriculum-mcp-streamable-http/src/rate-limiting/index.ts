@@ -9,7 +9,6 @@
  */
 export {
   type RateLimiterFactory,
-  type RateLimiterOptions,
   createDefaultRateLimiterFactory,
 } from './rate-limiter-factory.js';
 

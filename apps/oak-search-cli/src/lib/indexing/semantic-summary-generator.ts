@@ -125,7 +125,7 @@ export function generateUnitSemanticSummary(
  *
  * @see ADR-139 Sequence Semantic Contract and Ownership
  */
-export interface GenerateSequenceSemanticParams {
+interface GenerateSequenceSemanticParams {
   /** The sequence title (e.g., 'Mathematics Primary'). */
   readonly sequenceTitle: string;
   /** The subject title (e.g., 'Mathematics'). */

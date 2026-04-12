@@ -55,18 +55,11 @@ git log --oneline --decorate -10
     (**COMPLETE** — 10 steps executed 2026-04-12)
   - `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
     (**entry point** — restart sequence, current state, authority rule)
-- **Current state**: Gap analysis (2026-04-12c) identified 6 deviations
-  between our Sentry adapter layer and canonical Sentry practices.
-  Canonical alignment plan created and reviewed by 5 specialists
-  (Fred, Wilma, Betty, sentry-reviewer, config-reviewer). Key findings:
-  early init missing (HIGH), Express error handler not canonical
-  (MEDIUM), adapter surface too narrow (MEDIUM). Sentry reviewer
-  corrected two architecture assumptions: Express handler ordering and
-  isolation scope model. Local credentials provisioned in 2026-04-12b.
-- **Current objective**: Merge main (PR #80) into branch, then two
-  parallel tracks: (1) Vercel credential provisioning + deployment
-  evidence (closes parent plan), (2) Sentry canonical alignment
-  implementation (new plan, can follow or parallel).
+- **Current state**: Main (PR #80) merged. Knip violations from merge
+  fixed. All code foundations complete. Local credentials provisioned.
+- **Current objective**: Two parallel tracks: (1) Vercel credential
+  provisioning + deployment evidence (closes parent plan), (2) Sentry
+  canonical alignment implementation.
 - **Hard invariants / non-goals**:
   - `SENTRY_MODE=off` is the default and kill switch
   - ADR-078 DI everywhere, ADR-143 observability architecture
@@ -74,91 +67,41 @@ git log --oneline --decorate -10
   - MCP App UIs are NOT covered by Sentry (browser context, not server)
   - `sendDefaultPii: false` hardcoded — no override path
   - Adapter pattern preserved (redaction hooks + fixture mode justify it)
-- **Recent surprises / corrections** (2026-04-12c):
-  - Sentry Express error handler ordering: Sentry handler goes BEFORE
-    custom error middleware (corrects Wilma's terminal-handler
-    assumption — verified against official Sentry docs)
-  - `@sentry/node` v8+ isolation scopes: per-request scope forking
-    makes ambient `setUser()`/`setTag()` safe in concurrent Express
-    (corrects Betty's `withScope` redesign — verified against official
-    Sentry docs)
-  - `tracePropagationTargets: []` is an active opt-out of the SDK
-    default (propagate to everything), not a neutral default
-  - Sentry now uses Debug IDs for source map matching, not
-    release-based matching — mitigates release ID consistency risk
-  - `Sentry.close()` is more appropriate than `flush()` for CLI
-    (drains transport AND prevents further sends)
-  - `instrument.ts` needs explicit tsup entry point and `--import` in
-    both start script and dev runner
-- **Open questions / low-confidence areas**:
-  - Does tsup support `@sentry/bundler-plugin` for Debug ID injection?
-  - Does `@sentry/profiling-node` native addon work on Vercel's ABI?
-  - Trace propagation to ES and Oak API — security review needed
-- **Next safe step**: Merge main (PR #80) using the merge plan at
-  `.agent/plans/architecture-and-infrastructure/active/merge-main-pr80.plan.md`.
-  7 conflicts (logger.ts is the only medium-risk one). Plan has been
-  reviewed by Wilma + assumptions reviewer and cross-checked against
-  the complex-merge protocol. After merge: set Vercel credentials,
-  then deployment evidence. Canonical alignment can begin in parallel.
-- **Deep consolidation status**: not due — merge plan created but no
-  plan closure or doctrine changes this sub-session.
+- **Next safe step**: Set Vercel credentials, then deployment evidence.
+  Canonical alignment can begin in parallel.
+- **Deep consolidation status**: not due.
 
 ## Active Workstreams (2026-04-12)
 
-### 1. Vercel Widget Crash Fix — COMPLETE
+### 1. Interactive User Search MCP App (WS3 Phase 5) — NEXT
 
-**Plan**: `.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md`
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
 
-All phases executed. Widget HTML is now a committed TypeScript
-constant (`src/generated/widget-html-content.ts`), consumed via
-DI (ADR-156). Filesystem-based code deleted. All quality gates
-green. ADR-156 created and indexed. The branch is 4 commits ahead
-of origin locally; next step is push plus Vercel preview
-verification.
+Build the user-facing interactive search widget. Two new pre-phase
+blockers: (a) remove `search` tool's false `_meta.ui` claim,
+(b) consolidate to single user-facing search tool.
 
-### 2. WS3 MCP App Rebuild — MERGE PENDING
+### 2. `_meta` Namespace Cleanup — NOT STARTED (co-requisite)
 
-**Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/current/meta-oak-namespace-cleanup.plan.md`
 
-Local gates green on `feat/mcp_app_ui`. Widget crash fix complete
-locally and committed. Next: push, verify Vercel preview, then
-merge.
-Phase 5 (interactive user search view) queued post-merge.
+Replace unused `_meta.securitySchemes` with Oak-namespaced `oak-www`
+and `oak-guidance` fields. Includes `buildToolMeta()` factory.
+Co-requisite for Phase 5 — both address `_meta` architecture.
 
-### 3. Frontend Practice Integration — COMPLETE
+### 3. Quality Gate Hardening — parked
 
-**Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md`
+**Plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
 
-Complete. Three ADR-129 agent triplets (accessibility-reviewer,
-design-system-reviewer, react-component-reviewer) with full platform
-adapters. Three review rounds passed. Design token infrastructure
-cancelled as out of scope — belongs in WS3 or a dedicated plan.
+Knip and depcruise complete. Remaining: ESLint config standardisation,
+eslint-disable remediation. Parked while MCP Apps work takes priority.
 
-### 4. Continuity Adoption — COMPLETE
-
-**Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md`
-
-Wave 1 closed with an explicit `promote` decision on 3 April 2026. The
-outgoing continuity note landed and the same-day Practice Core promotion is
-recorded separately in `.agent/practice-core/*`.
-
-### 5. Assumptions Reviewer — COMPLETE
-
-ADR-146 accepted, triplet deployed, platform adapters created.
-
-### 6. URL Naming Collision Remediation — COMPLETE
-
-Completed 2026-04-01.
-
-### 7. Workspace Topology Exploration — FUTURE
+### 4. Workspace Topology Exploration — FUTURE
 
 **Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
 
-Four-tier layered architecture (primitives, infrastructure, codegen-time,
-runtime). Lifecycle classification of all workspaces complete. Phase 2
-(function-level analysis with knip + dependency-cruiser) pending.
-Informed by the Oak Surface Isolation Programme
-(`.agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md`).
+Four-tier layered architecture. Lifecycle classification complete.
+Phase 2 pending.
 
 ## Core Invariants
 
@@ -174,5 +117,8 @@ Informed by the Oak Surface Isolation Programme
 
 - Run the required gates one at a time while iterating.
 - Run `pnpm fix` to apply auto-fixes.
-- Run `pnpm check` as the canonical aggregate readiness gate before push/merge.
-- Keep this prompt concise and operational; do not duplicate plan authority.
+- Run `pnpm check` as the canonical aggregate readiness gate before
+  push/merge. It now includes `pnpm knip`. After depcruise Phase 4,
+  it will also include `pnpm depcruise`.
+- Keep this prompt concise and operational; do not duplicate plan
+  authority.

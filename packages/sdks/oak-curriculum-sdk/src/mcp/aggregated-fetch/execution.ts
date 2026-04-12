@@ -48,7 +48,9 @@ Use format "type:slug" (e.g., "lesson:add-fractions-with-the-same-denominator", 
     idempotentHint: true,
     openWorldHint: false,
   },
-  _meta: undefined,
+  _meta: {
+    securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }],
+  },
 } as const;
 
 export interface FetchArgs {

@@ -15,7 +15,7 @@ import { createProgram } from './ingest-cli-program.js';
 import { ALL_KEY_STAGES, resolveSubjects } from './ingest-cli-validators.js';
 
 /** Parsed CLI arguments for ingestion. */
-export interface CliArgs {
+interface CliArgs {
   readonly subjects: SearchSubjectSlug[];
   readonly keyStages: KeyStage[];
   readonly indexes: SearchIndexKind[];
@@ -133,12 +133,4 @@ export function parseArgs(args: readonly string[]): CliArgs {
 
   const opts = program.opts<ParsedOptions>();
   return buildCliArgs(opts);
-}
-
-/**
- * Print help text (delegates to commander).
- */
-export function printHelp(): void {
-  const program = createProgram();
-  program.outputHelp();
 }

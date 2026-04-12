@@ -8,7 +8,7 @@ type ZeroHitScope = SearchScope;
 /**
  * Represents a single zero-hit telemetry event stored for dashboard consumption.
  */
-export interface ZeroHitEvent {
+interface ZeroHitEvent {
   timestamp: number;
   scope: ZeroHitScope;
   query: string;

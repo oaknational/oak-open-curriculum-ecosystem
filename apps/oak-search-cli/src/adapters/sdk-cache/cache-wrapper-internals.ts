@@ -11,7 +11,7 @@ import {
   serializeTranscriptCacheEntry,
 } from './transcript-cache-types';
 
-export interface CachedNegativeResult<T> {
+interface CachedNegativeResult<T> {
   readonly result: Result<T, SdkFetchError> | null;
   readonly statsUpdated: boolean;
 }

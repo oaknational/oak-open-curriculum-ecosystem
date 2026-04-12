@@ -1,10 +1,10 @@
-export interface PhaseDetectionInput {
+interface PhaseDetectionInput {
   stopReason: string;
   toolNames: string[];
   bashCommands: string[];
 }
 
-export interface ResolveDiffCwdInput {
+interface ResolveDiffCwdInput {
   repoRoot: string;
   requestedAgentId: string | undefined;
   resolvedWorktreePath: string | null;

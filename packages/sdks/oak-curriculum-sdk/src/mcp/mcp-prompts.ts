@@ -10,7 +10,7 @@
  * file within ESLint max-lines limits.
  */
 
-import type { PromptMessage } from './mcp-prompt-messages.js';
+import type { PromptMessage } from './mcp-prompt-types.js';
 import {
   getFindLessonsMessages,
   getLessonPlanningMessages,
@@ -121,13 +121,6 @@ export const MCP_PROMPTS: readonly McpPrompt[] = [
 ] as const;
 
 /**
- * Prompt arguments are string values that may or may not be provided.
- *
- * This type accurately reflects that accessing a key may return undefined.
- */
-export type PromptArgs = Readonly<Record<string, string | undefined>>;
-
-/**
  * Generates prompt messages for a given prompt name and arguments.
  *
  * Returns an array of messages that guide the model to use the appropriate
@@ -137,7 +130,10 @@ export type PromptArgs = Readonly<Record<string, string | undefined>>;
  * @param args - Arguments provided by the user (may be partially filled)
  * @returns Array of prompt messages, or empty array if prompt not found
  */
-export function getPromptMessages(promptName: string, args: PromptArgs): PromptMessage[] {
+export function getPromptMessages(
+  promptName: string,
+  args: Readonly<Record<string, string | undefined>>,
+): PromptMessage[] {
   switch (promptName) {
     case 'find-lessons':
       return getFindLessonsMessages(args);

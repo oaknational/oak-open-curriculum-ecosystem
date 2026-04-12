@@ -13,13 +13,9 @@ import { createConditionalClerkMiddleware } from './conditional-clerk-middleware
 import type { McpServerFactory } from './mcp-request-context.js';
 import { rewriteAuthServerMetadata, type UpstreamAuthServerMetadata } from './oauth-proxy/index.js';
 import type { HttpObservability } from './observability/http-observability.js';
-import {
-  deriveSelfOrigin,
-  hostValidationErrorMessage,
-  type HostValidationError,
-} from './host-validation-error.js';
+import { deriveSelfOrigin, hostValidationErrorMessage } from './host-validation-error.js';
 
-export { deriveSelfOrigin, hostValidationErrorMessage, type HostValidationError };
+export { deriveSelfOrigin };
 
 /**
  * Registers unauthenticated MCP routes (when DANGEROUSLY_DISABLE_AUTH=true).

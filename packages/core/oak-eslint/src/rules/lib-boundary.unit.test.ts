@@ -250,7 +250,6 @@ describe('createLibBoundaryRules', () => {
     const groups = patterns.flatMap((pattern) => pattern.group);
 
     expect(groups).toContain('@oaknational/oak-curriculum-mcp-streamable-http');
-    expect(groups).toContain('@oaknational/oak-curriculum-mcp-stdio/**');
     expect(groups).toContain('@oaknational/search-cli/*');
   });
 

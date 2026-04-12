@@ -26,7 +26,7 @@ import {
 export type { OAuthProxyConfig } from './oauth-proxy-handlers.js';
 
 /** Options for creating the OAuth proxy router, including rate limiting. */
-export interface CreateOAuthProxyRoutesOptions {
+interface CreateOAuthProxyRoutesOptions {
   readonly config: OAuthProxyConfig;
   /** Per-IP rate limiter applied to all three OAuth proxy routes. */
   readonly oauthRateLimiter: RequestHandler;

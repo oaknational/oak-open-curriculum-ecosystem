@@ -88,6 +88,23 @@ Representative execution surfaces:
 | Skills                | [`.agent/skills/`](skills/)                             | [`napkin`](skills/napkin/SKILL.md), [`patterns`](skills/patterns/SKILL.md), [`chatgpt-report-normalisation`](skills/chatgpt-report-normalisation/SKILL.md), [`systematic-debugging`](skills/systematic-debugging/SKILL.md), [`start-right-quick`](skills/start-right-quick/SKILL.md), [`start-right-thorough`](skills/start-right-thorough/SKILL.md)                                                                    | On-demand expertise and multi-step workflows                  |
 | Session prompts       | [`.agent/prompts/`](prompts/)                           | [`session-continuation.prompt.md`](prompts/session-continuation.prompt.md), [`gt-review.md`](prompts/archive/gt-review.md), [`semantic-search/semantic-search.prompt.md`](prompts/semantic-search/semantic-search.prompt.md)                                                                                                                                                                                       | Stateful session entry points tied to active plans or domains |
 
+## Memory and Patterns
+
+Institutional memory accumulates across sessions and distils into
+reusable knowledge:
+
+| Artefact | Location | Purpose |
+| --- | --- | --- |
+| Distilled learnings | [`memory/distilled.md`](memory/distilled.md) | Hard-won rules — read before every session |
+| Pattern library | [`memory/patterns/`](memory/patterns/README.md) | 56 abstract solutions to recurring design problems |
+| Session napkin | [`memory/napkin.md`](memory/napkin.md) | Current session observations, written continuously |
+| Napkin archive | [`memory/archive/`](memory/archive/) | Rotated napkins (historical record) |
+
+The patterns skill ([`.agent/skills/patterns/SKILL.md`](skills/patterns/SKILL.md))
+teaches agents to check the pattern library before inventing new approaches.
+Platform adapters exist at `.cursor/skills/patterns/`, `.claude/skills/patterns/`,
+and `.agents/skills/patterns/`.
+
 ## Artefact Directories
 
 | Location                                                                                      | What lives there                                                            |

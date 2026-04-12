@@ -19,9 +19,13 @@ Strategic analysis (parent of Phase A and B):
 
 - [architectural-documentation-excellence-synthesis.plan.md](./architectural-documentation-excellence-synthesis.plan.md) — multi-part report synthesising internal docs against external research
 
-Planned follow-on after the current improvement tranche:
+Quality gate hardening (promoted from future/ 2026-04-11):
 
-- [../future/quality-gate-hardening.plan.md](../future/quality-gate-hardening.plan.md) — first promotion candidate once the current active and queued improvement work is complete
+| Priority | Plan | Scope | Status |
+|----------|------|-------|--------|
+| P0 | [quality-gate-hardening.plan.md](./quality-gate-hardening.plan.md) | Unified plan for all pending quality gate promotions and enforcement hardening | Owner decisions resolved, ADR-121 reconciled |
+| P0 | [knip-triage-and-remediation.plan.md](../active/knip-triage-and-remediation.plan.md) | Child plan: run knip, investigate findings with evidence, remediate | **Complete** (all phases resolved 2026-04-12) |
+| P1 | [depcruise-triage-and-remediation.plan.md](./depcruise-triage-and-remediation.plan.md) | Child plan: triage depcruise findings, resolve circular deps and orphans, promote to blocking gate | Queued |
 
 Related strategic umbrella:
 

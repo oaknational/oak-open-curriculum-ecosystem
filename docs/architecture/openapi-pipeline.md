@@ -134,7 +134,6 @@ The primary implementation uses the Oak National Academy Curriculum API:
 - **Generated SDK**: `@oaknational/curriculum-sdk`
 - **MCP Servers**:
   - `apps/oak-curriculum-mcp-streamable-http` (canonical MCP server workspace)
-  - `apps/oak-curriculum-mcp-stdio` (legacy standalone stdio workspace)
 - **Applications**:
   - `apps/oak-search-cli` (hybrid search)
   - Admin tools, status pages, telemetry

@@ -344,7 +344,7 @@ describe('createSdkBoundaryRules', () => {
       const patterns = getRestrictedImportPatterns(rules);
       const groups = patterns.flatMap((p) => p.group);
 
-      expect(groups).toContain('@oaknational/oak-curriculum-mcp-stdio');
+      expect(groups).toContain('@oaknational/oak-curriculum-mcp-streamable-http');
     });
 
     it('blocks tooling package specifier imports', () => {

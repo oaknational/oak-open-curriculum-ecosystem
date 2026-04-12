@@ -36,7 +36,7 @@ interface BulkResponseItem {
 /**
  * Represents a bulk response from Elasticsearch.
  */
-export interface BulkResponse {
+interface BulkResponse {
   readonly errors: boolean;
   readonly items: readonly BulkResponseItem[];
 }

@@ -10,7 +10,7 @@
  * - `took_ms`: long type (not integer) to handle potentially large timing values
  */
 
-import type { EsFieldMapping } from '../es-field-config.js';
+import type { EsFieldMapping } from '../es-field-types.js';
 
 /**
  * Field overrides for the oak_zero_hit_telemetry index.

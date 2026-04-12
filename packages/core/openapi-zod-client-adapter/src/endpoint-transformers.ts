@@ -17,7 +17,7 @@ import type {
 /**
  * Type guard for raw parameter objects.
  */
-export function isRawParameter(value: unknown): value is RawParameter {
+function isRawParameter(value: unknown): value is RawParameter {
   if (!value || typeof value !== 'object') {
     return false;
   }
@@ -34,7 +34,7 @@ export function isRawParameter(value: unknown): value is RawParameter {
 /**
  * Type guard for raw error objects.
  */
-export function isRawError(value: unknown): value is RawError {
+function isRawError(value: unknown): value is RawError {
   if (!value || typeof value !== 'object') {
     return false;
   }
@@ -87,7 +87,7 @@ function transformSchemaToV4(schema: unknown): string {
 /**
  * Transforms a raw parameter to an EndpointParameter with Zod v4 schema.
  */
-export function transformParameter(param: RawParameter): EndpointParameter {
+function transformParameter(param: RawParameter): EndpointParameter {
   return {
     name: param.name,
     type: param.type,
@@ -98,7 +98,7 @@ export function transformParameter(param: RawParameter): EndpointParameter {
 /**
  * Transforms a raw error to an EndpointError with Zod v4 schema.
  */
-export function transformError(error: RawError): EndpointError {
+function transformError(error: RawError): EndpointError {
   return {
     status: error.status,
     description: typeof error.description === 'string' ? error.description : undefined,

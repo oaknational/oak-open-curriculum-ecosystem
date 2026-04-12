@@ -34,8 +34,8 @@ Lane indexes:
   [future/oak-surface-isolation-and-generic-foundation-programme.plan.md](future/oak-surface-isolation-and-generic-foundation-programme.plan.md),
   now defines the later programme for separating generic foundations from Oak
   leaves across all affected workspaces.
-- [future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
-  remains in `future/` today, but it is now the explicit first promotion
+- [current/quality-gate-hardening.plan.md](current/quality-gate-hardening.plan.md)
+  has been promoted to `current/` (2026-04-11) and is the explicit first
   candidate once the current improvement tranche is complete.
 - The existing nested codegen plan,
   [codegen/future/sdk-codegen-workspace-decomposition.md](codegen/future/sdk-codegen-workspace-decomposition.md),
@@ -52,8 +52,8 @@ Milestone 3: Pre-beta hardening      📋 LATER
 ```
 
 For high-level milestone framing, see [../high-level-plan.md](../high-level-plan.md).
-The first planned hardening promotion after the current improvement tranche is
-[future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md).
+The quality gate hardening plan has been promoted to current (2026-04-11):
+[current/quality-gate-hardening.plan.md](current/quality-gate-hardening.plan.md).
 
 ---
 
@@ -109,11 +109,11 @@ Phase 4: Quality/operations hardening                 📋 future
 ### Phase 4 — Quality and Operational Hardening
 
 - Strategic umbrellas:
-  - [future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
+  - [current/quality-gate-hardening.plan.md](current/quality-gate-hardening.plan.md) (promoted 2026-04-11)
   - [future/test-suite-audit-and-triage.plan.md](future/test-suite-audit-and-triage.plan.md)
   - [future/observability-and-quality-metrics.plan.md](future/observability-and-quality-metrics.plan.md)
-- First promotion candidate after the current improvement tranche:
-  [future/quality-gate-hardening.plan.md](future/quality-gate-hardening.plan.md)
+- Quality gate hardening (promoted to current/ 2026-04-11):
+  [current/quality-gate-hardening.plan.md](current/quality-gate-hardening.plan.md)
 - Historical alignment reference:
   [future/stdio-http-server-alignment.md](future/stdio-http-server-alignment.md)
 - Done when:

@@ -31,20 +31,8 @@ import {
   createUnitFacets,
 } from './rrf-query-helpers';
 
-// Re-export ablation builders for backwards compatibility
-export {
-  buildLessonBm25StructureOnlyRequest,
-  buildLessonElserStructureOnlyRequest,
-  buildUnitBm25StructureOnlyRequest,
-  buildUnitElserStructureOnlyRequest,
-  buildLessonContentHybridRequest,
-  buildLessonStructureHybridRequest,
-  buildUnitContentHybridRequest,
-  buildUnitStructureHybridRequest,
-} from './ablation-query-builders';
-
 /** Common parameters for lesson search requests. */
-export interface LessonSearchParams {
+interface LessonSearchParams {
   query: string;
   size: number;
   subject?: SearchSubjectSlug;
@@ -117,7 +105,7 @@ export function buildLessonElserOnlyRequest(params: LessonSearchParams): EsSearc
 }
 
 /** Common parameters for unit search requests. */
-export interface UnitSearchParams {
+interface UnitSearchParams {
   query: string;
   size: number;
   subject?: SearchSubjectSlug;

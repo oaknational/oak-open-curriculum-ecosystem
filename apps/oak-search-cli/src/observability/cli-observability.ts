@@ -33,7 +33,6 @@ import { withActiveSpan, type SpanAttributes } from '@oaknational/observability'
 import type { SearchCliRuntimeConfig } from '../runtime-config.js';
 import type { CliObservabilityError } from './cli-observability-error.js';
 
-export type { CliObservabilityError } from './cli-observability-error.js';
 export { describeCliObservabilityError } from './cli-observability-error.js';
 
 const DEFAULT_CLI_SERVICE_NAME = 'oak-search-cli';
@@ -55,7 +54,7 @@ export interface CliObservability {
   flush(timeoutMs?: number): Promise<Result<void, SentryFlushError>>;
 }
 
-export interface CreateCliObservabilityOptions {
+interface CreateCliObservabilityOptions {
   readonly serviceName?: string;
   readonly sentrySdk?: SentryNodeSdk;
   readonly fixtureStore?: FixtureSentryStore;

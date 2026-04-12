@@ -2,7 +2,7 @@ import type { SearchLessonSummary } from '../../types/oak';
 import { extractLessonPlanningFields, extractPassage } from './document-transforms';
 
 /** Parameters for selecting a formatted lesson-planning snippet. */
-export interface SelectLessonPlanningSnippetParams {
+interface SelectLessonPlanningSnippetParams {
   summary: SearchLessonSummary;
   transcript: string;
 }

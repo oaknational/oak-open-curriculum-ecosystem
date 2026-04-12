@@ -183,22 +183,3 @@ export async function writeIndexMeta(
     return err(createErrorFromException(error));
   }
 }
-
-/**
- * Gets the current index version, or a fallback if none exists.
- * This is the function apps should use to get the version for cache keys.
- *
- * Note: This function unwraps the Result and throws on error for backwards
- * compatibility. New code should use readIndexMeta directly.
- */
-export async function getIndexVersion(client: Client): Promise<string> {
-  const result = await readIndexMeta(client);
-  if (!result.ok) {
-    throw new Error(`Failed to read index version: ${result.error.message}`);
-  }
-  if (result.value) {
-    return result.value.version;
-  }
-  // Fallback to timestamp-based version if no metadata exists
-  return generateVersionFromTimestamp();
-}

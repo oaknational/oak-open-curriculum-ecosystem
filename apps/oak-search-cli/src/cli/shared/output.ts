@@ -39,16 +39,6 @@ export function printInfo(message: string): void {
 }
 
 /**
- * Print a warning message to stderr.
- *
- * @param message - The warning message to display
- * @returns void
- */
-export function printWarning(message: string): void {
-  process.stderr.write(chalk.yellow(`⚠ ${message}`) + '\n');
-}
-
-/**
  * Print data as formatted JSON to stdout.
  *
  * @param data - The data to serialise and print

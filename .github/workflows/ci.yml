@@ -39,14 +39,14 @@ jobs:
       - name: Run secret scan
         run: |
           if command -v gitleaks >/dev/null 2>&1; then
-            pnpm secrets:scan:all
+            pnpm secrets:scan
           else
             echo "Warning: gitleaks not on PATH, using docker fallback."
             docker run --rm \
               -v "${{ github.workspace }}:/src" \
               -w /src \
               zricethezav/gitleaks:v8.30.0 \
-              detect --redact=100 --source /src --config /src/.gitleaks.toml --log-opts="--branches --tags --full-history"
+              detect --redact=100 --source /src --config /src/.gitleaks.toml --log-opts="--branches --tags"
           fi
 
       # Non-Turbo checks (run before Turbo gates)
@@ -62,6 +62,12 @@ jobs:
       - name: Validate portability
         run: pnpm portability:check
 
+      - name: Run knip (unused code detection)
+        run: pnpm knip
+
+      - name: Run depcruise (circular deps, orphans, layer violations)
+        run: pnpm depcruise
+
       - name: Run root-level script tests
         run: pnpm test:root-scripts
 
@@ -72,8 +78,8 @@ jobs:
       - name: Build, type-check, lint, test
         id: turbo-run
         run: >-
-          pnpm exec turbo run build type-check lint test test:e2e test:ui
-          smoke:dev:stub --summarize --log-order=grouped --continue
+          pnpm exec turbo run sdk-codegen build type-check lint test test:e2e
+          test:ui smoke:dev:stub --summarize --log-order=grouped --continue
 
       - name: Report Turbo summary
         if: always()

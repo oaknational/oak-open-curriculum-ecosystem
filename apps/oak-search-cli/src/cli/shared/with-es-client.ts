@@ -31,7 +31,7 @@ import { normalizeError, sanitiseForJson, type Logger } from '@oaknational/logge
 import type { LogContextInput } from '@oaknational/logger';
 
 /** Minimal contract for an ES client that can be closed. */
-export interface CloseableEsClient {
+interface CloseableEsClient {
   close(): Promise<void>;
 }
 

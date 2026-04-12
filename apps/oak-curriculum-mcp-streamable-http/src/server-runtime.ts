@@ -24,7 +24,7 @@ export interface HttpServerLike {
   listen(port: number, callback: () => void): void;
 }
 
-export interface StartConfiguredHttpServerDeps {
+interface StartConfiguredHttpServerDeps {
   readonly runtimeConfig: RuntimeConfig;
   readonly observability: HttpObservability;
   readonly createApp: CreateAppFn;

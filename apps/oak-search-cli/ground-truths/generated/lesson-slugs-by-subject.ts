@@ -5,7 +5,7 @@
  * Uses a JSON-backed loader to avoid monolithic generated TypeScript data files.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-04-02T14:20:30.825Z
+ * Generated at: 2026-04-12T07:25:00.701Z
  */
 
 import rawLessonSlugData from './lesson-slugs-by-subject.data.json';
@@ -42,16 +42,6 @@ function loadLessonSlugData(): LessonSlugDataset {
 
 const lessonSlugData = loadLessonSlugData();
 
-export type { LessonSlugDataset, LessonSlugDatasetSequenceData } from './lesson-slugs-by-subject.types.js';
-
-/**
- * Branded string type for validated lesson slugs.
- *
- * Use isValidLessonSlug() to validate and narrow strings to this type.
- *
- * @generated
- */
-export type AnyLessonSlug = string & { readonly __brand: 'LessonSlug' };
 
 function getSequenceData(sequenceSlug: string): LessonSlugDatasetSequenceData {
   const sequenceData = lessonSlugData.sequences[sequenceSlug];
@@ -70,23 +60,6 @@ function getSequenceData(sequenceSlug: string): LessonSlugDatasetSequenceData {
  */
 export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set(lessonSlugData.allLessonSlugs);
 
-/**
- * Type guard to check if a string is a valid lesson slug.
- *
- * @param value - String to check
- * @returns True if value is a valid lesson slug
- *
- * @example
- * ```typescript
- * if (isValidLessonSlug('adding-fractions')) {
- *   // value is narrowed to AnyLessonSlug
- * }
- * ```
- */
-export function isValidLessonSlug(value: string): value is AnyLessonSlug {
-  return ALL_LESSON_SLUGS.has(value);
-}
-
 /** Total lessons across all subjects */
 export const TOTAL_LESSON_SLUG_COUNT = 12391 as const;
 
@@ -101,7 +74,7 @@ function buildSlugToSubjectMap(): Map<string, string> {
   return map;
 }
 
-export const SLUG_TO_SUBJECT: ReadonlyMap<string, string> = buildSlugToSubjectMap();
+const SLUG_TO_SUBJECT: ReadonlyMap<string, string> = buildSlugToSubjectMap();
 
 /**
  * Get the subject for a given lesson slug.

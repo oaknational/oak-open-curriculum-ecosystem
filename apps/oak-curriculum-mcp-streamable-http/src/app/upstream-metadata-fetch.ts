@@ -22,7 +22,7 @@ export type FetchFn = (
   init?: { signal?: AbortSignal },
 ) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>;
 
-export interface FetchUpstreamOptions {
+interface FetchUpstreamOptions {
   /** Per-attempt timeout in milliseconds. Defaults to 10 000 (10 s). */
   readonly timeoutMs?: number;
   /** Total number of attempts (first try + retries). Defaults to 3. */

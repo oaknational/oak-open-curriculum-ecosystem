@@ -23,7 +23,7 @@ import { generatedToolRegistry } from '@oaknational/curriculum-sdk/public/mcp-to
  * `createClient` and `executeToolCall` without exposing the client
  * type to callers of the DI interface.
  */
-export interface RequestExecutorConfig<TClient> {
+interface RequestExecutorConfig<TClient> {
   /** API key for the Oak Curriculum API. */
   readonly apiKey: string;
   /** Search retrieval service (shared across requests). */
@@ -118,7 +118,7 @@ interface InternalFactoryConfig extends ToolExecutorFactoryConfig {
 }
 
 /** Stub-mode configuration for {@link createStubRequestExecutor}. */
-export interface StubRequestExecutorConfig {
+interface StubRequestExecutorConfig {
   readonly factoryConfig: InternalFactoryConfig;
   /** Stub adapter from `createStubToolExecutionAdapter()`. */
   readonly stubExecutor: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;

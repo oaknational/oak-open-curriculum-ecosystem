@@ -15,7 +15,7 @@ import type {
 } from '../rate-limiting/rate-limiter-factory.js';
 
 /** A recorded invocation of the fake rate limiter factory. */
-export interface RecordedRateLimiterCall {
+interface RecordedRateLimiterCall {
   readonly options: RateLimiterOptions;
 }
 

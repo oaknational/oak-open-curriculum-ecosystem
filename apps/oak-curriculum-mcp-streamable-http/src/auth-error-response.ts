@@ -25,7 +25,7 @@ export type AuthErrorType =
  * Extends CallToolResult to preserve type information and ensure compatibility
  * with MCP SDK expectations.
  */
-export interface AuthErrorResponse extends CallToolResult {
+interface AuthErrorResponse extends CallToolResult {
   content: { type: 'text'; text: string }[];
   isError: true;
   _meta: {

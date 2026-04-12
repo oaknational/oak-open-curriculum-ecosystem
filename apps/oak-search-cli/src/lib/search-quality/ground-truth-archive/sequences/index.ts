@@ -17,8 +17,6 @@
  * - `get-subjects-sequences` for sequence slugs per subject
  */
 
-export type { SequenceGroundTruthQuery } from './types';
-
 import { SEQUENCE_STANDARD_QUERIES } from './standard-queries';
 import { SEQUENCE_HARD_QUERIES } from './hard-queries';
 import type { SequenceGroundTruthQuery } from './types';
@@ -38,13 +36,3 @@ export const SEQUENCE_GROUND_TRUTH_QUERIES: readonly SequenceGroundTruthQuery[] 
  */
 export const SEQUENCE_HARD_GROUND_TRUTH_QUERIES: readonly SequenceGroundTruthQuery[] =
   SEQUENCE_HARD_QUERIES;
-
-/**
- * All sequence ground truth queries (standard + hard).
- *
- * Total: 41 queries
- */
-export const SEQUENCE_ALL_GROUND_TRUTH_QUERIES: readonly SequenceGroundTruthQuery[] = [
-  ...SEQUENCE_GROUND_TRUTH_QUERIES,
-  ...SEQUENCE_HARD_GROUND_TRUTH_QUERIES,
-] as const;

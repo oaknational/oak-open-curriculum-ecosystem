@@ -50,7 +50,7 @@ export interface BatchIngestionContext {
 }
 
 /** Options for ingestion. */
-export interface IngestionOptions {
+interface IngestionOptions {
   readonly dryRun?: boolean;
   readonly verbose?: boolean;
 }
@@ -64,7 +64,7 @@ interface BatchProcessingState {
 }
 
 /** Result of a bulk ingestion. */
-export interface BulkIngestionResult {
+interface BulkIngestionResult {
   readonly operations: BulkOperations;
   readonly summary: {
     readonly target: SearchIndexTarget;
@@ -94,7 +94,7 @@ export function mergeDataIntegrityReport(
 /**
  * Formats a human-readable label for a batch.
  */
-export function formatBatchLabel(batch: IngestionBatch): string {
+function formatBatchLabel(batch: IngestionBatch): string {
   if (batch.kind === 'threads') {
     return 'threads';
   }
@@ -110,7 +110,7 @@ export function formatBatchLabel(batch: IngestionBatch): string {
 /**
  * Process a single batch: filter, dispatch, and update state.
  */
-export async function processSingleBatch(
+async function processSingleBatch(
   batch: IngestionBatch,
   context: BatchIngestionContext,
   state: BatchProcessingState,
@@ -141,7 +141,7 @@ export async function processSingleBatch(
 /**
  * Creates initial batch processing state.
  */
-export function createBatchProcessingState(): BatchProcessingState {
+function createBatchProcessingState(): BatchProcessingState {
   return {
     allOps: [],
     dataIntegrityReport: createDataIntegrityCollector(),
@@ -153,7 +153,7 @@ export function createBatchProcessingState(): BatchProcessingState {
 /**
  * Builds the final ingestion result and logs summary.
  */
-export function buildIngestionResult(
+function buildIngestionResult(
   context: BatchIngestionContext,
   state: BatchProcessingState,
   metrics: IngestBulkMetrics,

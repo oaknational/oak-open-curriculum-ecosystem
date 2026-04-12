@@ -1,6 +1,6 @@
 import type { McpObservationRecorder, MergedMcpObservation } from './types.js';
 
-export interface InMemoryMcpObservationRecorder extends McpObservationRecorder {
+interface InMemoryMcpObservationRecorder extends McpObservationRecorder {
   readonly observations: readonly MergedMcpObservation[];
 }
 

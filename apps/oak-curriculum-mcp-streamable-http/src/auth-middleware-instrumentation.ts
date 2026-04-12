@@ -16,7 +16,7 @@ type AuthInstrumentationResponse = Response<unknown, AuthInstrumentationLocals>;
 /**
  * Creates a child logger with auth-specific context.
  */
-export function createAuthScopedLogger(
+function createAuthScopedLogger(
   parentLog: Logger,
   name: string,
   req: Request,
@@ -41,7 +41,7 @@ export function createAuthScopedLogger(
 /**
  * Starts a timer that logs if middleware takes too long.
  */
-export function startPendingTimer(log: Logger, name: string, startedAt: number): NodeJS.Timeout {
+function startPendingTimer(log: Logger, name: string, startedAt: number): NodeJS.Timeout {
   return setTimeout(() => {
     log.debug(`${name} pending`, { durationMs: Date.now() - startedAt });
   }, PENDING_LOG_DELAY_MS);
@@ -50,7 +50,7 @@ export function startPendingTimer(log: Logger, name: string, startedAt: number):
 /**
  * Clears a pending timer.
  */
-export function clearPendingTimer(timer: NodeJS.Timeout | undefined): void {
+function clearPendingTimer(timer: NodeJS.Timeout | undefined): void {
   if (timer !== undefined) {
     clearTimeout(timer);
   }
@@ -59,7 +59,7 @@ export function clearPendingTimer(timer: NodeJS.Timeout | undefined): void {
 /**
  * Wraps the next() callback to log when middleware completes or errors.
  */
-export function createWrappedNext(
+function createWrappedNext(
   downstreamNext: NextFunction,
   log: Logger,
   name: string,
@@ -97,7 +97,7 @@ export function createWrappedNext(
 /**
  * Logs if response closes before middleware calls next().
  */
-export function logEarlyResponseClose(
+function logEarlyResponseClose(
   res: AuthInstrumentationResponse,
   log: Logger,
   name: string,
@@ -119,7 +119,7 @@ export function logEarlyResponseClose(
 /**
  * Executes middleware with error handling.
  */
-export function executeMiddleware(
+function executeMiddleware(
   middleware: RequestHandler,
   req: Request,
   res: AuthInstrumentationResponse,

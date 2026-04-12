@@ -37,15 +37,3 @@ export const HISTORY_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
   combineGroundTruth(HISTORY_PRIMARY_CROSS_TOPIC_QUERY, HISTORY_PRIMARY_CROSS_TOPIC_EXPECTED),
   combineGroundTruth(HISTORY_PRIMARY_CROSS_TOPIC_2_QUERY, HISTORY_PRIMARY_CROSS_TOPIC_2_EXPECTED),
 ] as const;
-
-// Re-export query definitions and expected relevance
-export { HISTORY_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
-export { HISTORY_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
-export { HISTORY_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
-export { HISTORY_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
-export { HISTORY_PRIMARY_CROSS_TOPIC_2_QUERY } from './cross-topic-2.query';
-export { HISTORY_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
-export { HISTORY_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
-export { HISTORY_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
-export { HISTORY_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
-export { HISTORY_PRIMARY_CROSS_TOPIC_2_EXPECTED } from './cross-topic-2.expected';

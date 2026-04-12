@@ -21,7 +21,7 @@ import { authInfoSchema } from './auth-info-schema.js';
  * Production callers omit the `deps` parameter — defaults bind to the real
  * Clerk SDK functions. Tests inject fakes as plain objects.
  */
-export interface CreateMcpAuthClerkDeps {
+interface CreateMcpAuthClerkDeps {
   readonly getAuth: (
     req: Request,
     opts: { acceptsToken: 'oauth_token' },

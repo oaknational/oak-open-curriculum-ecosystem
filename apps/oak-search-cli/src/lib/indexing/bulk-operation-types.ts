@@ -126,13 +126,6 @@ export function isBulkCreateAction(value: unknown): value is BulkCreateAction {
 }
 
 /**
- * Type guard for any indexing action (index or create).
- */
-export function isBulkIndexingAction(value: unknown): value is BulkIndexAction | BulkCreateAction {
-  return isBulkIndexAction(value) || isBulkCreateAction(value);
-}
-
-/**
  * Helper to check if delete metadata is valid.
  */
 function isValidDeleteMetadata(deleteProp: unknown): deleteProp is { _index: string; _id: string } {
@@ -154,13 +147,6 @@ export function isBulkDeleteAction(value: unknown): value is BulkDeleteAction {
     return false;
   }
   return isValidDeleteMetadata(value.delete);
-}
-
-/**
- * Type guard to check if a value is a bulk action (index, create, or delete).
- */
-export function isBulkAction(value: unknown): value is BulkAction {
-  return isBulkIndexAction(value) || isBulkCreateAction(value) || isBulkDeleteAction(value);
 }
 
 /**

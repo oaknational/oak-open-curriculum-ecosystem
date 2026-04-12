@@ -25,7 +25,7 @@ const CLI_LOG_LEVELS = ['trace', 'debug', 'info', 'warn', 'error'] as const;
  *
  * Composed from shared schemas with CLI-specific overrides and extensions.
  */
-export const SearchCliBaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
+const SearchCliBaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
   .extend(BulkDataEnvSchema.shape)
   .extend(LoggingEnvSchema.shape)
   .extend(SentryEnvSchema.shape)

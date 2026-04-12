@@ -22,6 +22,7 @@
     "prod:requests": "node scripts/run-requests.js",
     "prod:diagnostics": "pnpm build && pnpm prod:harness",
     "smoke:dev:stub": "tsx smoke-tests/smoke-dev-stub.ts",
+    "smoke:dev:auth": "tsx smoke-tests/smoke-dev-auth.ts",
     "smoke:dev:live": "tsx smoke-tests/smoke-dev-live.ts",
     "smoke:dev:live:auth": "tsx smoke-tests/smoke-dev-live-auth.ts",
     "smoke:oauth-inspector": "tsx smoke-tests/smoke-oauth-mcp-inspector.ts",

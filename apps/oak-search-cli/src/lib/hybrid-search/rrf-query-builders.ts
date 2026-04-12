@@ -10,7 +10,6 @@
 
 import {
   buildSequenceRetriever,
-  buildThreadRetriever,
   buildLessonRetriever,
   buildUnitRetriever,
   removeNoisePhrases,
@@ -34,7 +33,7 @@ import type { estypes } from '@elastic/elasticsearch';
 type QueryContainer = estypes.QueryDslQueryContainer;
 
 /** Parameters for sequence RRF search. */
-export interface SequenceRrfParams {
+interface SequenceRrfParams {
   query: string;
   size: number;
   subject?: SearchSubjectSlug;
@@ -42,15 +41,8 @@ export interface SequenceRrfParams {
   keyStage?: KeyStage;
 }
 
-/** Parameters for thread RRF search. */
-export interface ThreadRrfParams {
-  query: string;
-  size: number;
-  subjectSlug?: string;
-}
-
 /** Parameters for lesson RRF search including KS4 metadata filters. */
-export interface LessonRrfParams extends SearchFilterOptions {
+interface LessonRrfParams extends SearchFilterOptions {
   query: string;
   size: number;
   includeHighlights?: boolean;
@@ -58,7 +50,7 @@ export interface LessonRrfParams extends SearchFilterOptions {
 }
 
 /** Parameters for unit RRF search including KS4 metadata filters. */
-export interface UnitRrfParams extends SearchFilterOptions {
+interface UnitRrfParams extends SearchFilterOptions {
   query: string;
   size: number;
   includeHighlights?: boolean;
@@ -147,22 +139,6 @@ export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequ
 }
 
 /**
- * Builds a two-way RRF request for threads (BM25 + ELSER).
- *
- * Delegates retriever construction to the SDK's `buildThreadRetriever` (ADR-134).
- */
-export function buildThreadRrfRequest(params: ThreadRrfParams): EsSearchRequest {
-  const { query, size, subjectSlug } = params;
-  const filters = createThreadFilters(subjectSlug);
-  const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
-  return {
-    index: resolveCurrentSearchIndexName('threads'),
-    size,
-    retriever: buildThreadRetriever(query, filterClause),
-  };
-}
-
-/**
  * Creates Elasticsearch filter clauses for sequence queries.
  *
  * @param subject - Optional subject slug to filter by
@@ -183,19 +159,6 @@ function createSequenceFilters(
   }
   if (keyStage) {
     filters.push({ term: { key_stages: keyStage } });
-  }
-  return filters;
-}
-
-/**
- * Creates filters for thread queries.
- *
- * @param subjectSlug - Optional subject to filter by (threads use subject_slugs array field)
- */
-function createThreadFilters(subjectSlug?: string): QueryContainer[] {
-  const filters: QueryContainer[] = [];
-  if (subjectSlug) {
-    filters.push({ term: { subject_slugs: subjectSlug } });
   }
   return filters;
 }

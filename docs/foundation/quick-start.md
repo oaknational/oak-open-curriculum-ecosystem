@@ -109,11 +109,6 @@ pnpm check   # Canonical full verification gate
 # 3. Start the canonical MCP dev server
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
 
-# Legacy transition only: the standalone stdio workspace still exists, but
-# development is halted there and future stdio support should move into the
-# HTTP workspace as a separate entry point.
-# pnpm -C apps/oak-curriculum-mcp-stdio dev
-
 # Search workflows are command-driven (no long-running `dev` script).
 # See apps/oak-search-cli/README.md for search setup and CLI commands.
 ```
@@ -315,7 +310,7 @@ If `pnpm check` fails locally, check [Troubleshooting → Known Gate Caveats](..
 
 ```bash
 pnpm --filter @oaknational/curriculum-sdk test
-pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
 ```
 
 ### Debug Type Generation
@@ -352,7 +347,6 @@ oak-open-curriculum-ecosystem/
 │   ├── core/                          # Shared low-level code (result, env schemas, type-helpers, ESLint plugin)
 │   └── libs/                          # Shared libraries (logger, env-resolution)
 ├── apps/
-│   ├── oak-curriculum-mcp-stdio/      # Legacy standalone stdio MCP workspace
 │   ├── oak-curriculum-mcp-streamable-http/  # Canonical MCP server workspace
 │   └── oak-search-cli/               # Semantic search CLI
 ├── agent-tools/                      # Agent workflow CLIs and runtime helpers

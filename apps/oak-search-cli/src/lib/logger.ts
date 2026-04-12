@@ -3,20 +3,6 @@
  * Centralised creation ensures a single logger configuration.
  *
  * Supports dual-sink logging (stdout + file) for CLI ingestion runs.
- *
- * @example
- * ```typescript
- * import { ingestLogger, setLogLevel, enableFileSink } from './logger.js';
- *
- * // Enable verbose logging for CLI
- * setLogLevel('DEBUG');
- *
- * // Enable file logging for ingestion (CLI only)
- * enableFileSink('logs/ingest-2025-12-20.log');
- *
- * ingestLogger.info('Processing', { subject: 'maths' });
- * ingestLogger.debug('Detailed progress', { step: 1, total: 10 });
- * ```
  */
 
 import { logLevelToSeverityNumber, type LogSink } from '@oaknational/logger';
@@ -32,10 +18,10 @@ import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import { ok, err, type Result } from '@oaknational/result';
 
 /** Valid log levels for the semantic search logger. */
-export type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
+type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
 
 /** Current minimum log level. Defaults to INFO. */
-let currentLevel: LogLevel = 'INFO';
+const currentLevel: LogLevel = 'INFO';
 
 /** Current file sink path. Null means no file logging. */
 let currentFilePath: string | null = null;
@@ -47,7 +33,7 @@ let activeFileSink: FileSinkInterface | null = null;
 let additionalSinks: readonly LogSink[] = [];
 
 /** Cached logger instances. Recreated when level, file sink, or additional sinks change. */
-type LoggerKey = 'search' | 'suggest' | 'ingest' | 'cache' | 'admin' | 'observe';
+type LoggerKey = 'search' | 'ingest' | 'cache' | 'admin' | 'observe';
 type LoggerCache = { base: UnifiedLogger } & Record<LoggerKey, Logger>;
 let loggerCache: LoggerCache | null = null;
 
@@ -97,7 +83,6 @@ function getLoggers(): NonNullable<typeof loggerCache> {
   loggerCache = {
     base,
     search: createChild('HybridSearch'),
-    suggest: createChild('Suggestions'),
     ingest: createChild('IngestHarness'),
     cache: createChild('SdkCache'),
     admin: createChild('Admin'),
@@ -107,43 +92,8 @@ function getLoggers(): NonNullable<typeof loggerCache> {
   return loggerCache;
 }
 
-/** Sets the minimum log level. Invalidates cached loggers. */
-export function setLogLevel(level: LogLevel): void {
-  if (level !== currentLevel) {
-    currentLevel = level;
-    loggerCache = null; // Force recreation on next access
-  }
-}
-
-/** Gets the current log level. */
-export function getLogLevel(): LogLevel {
-  return currentLevel;
-}
-
-/** Enables file logging to the specified path. Returns the path or null on failure. */
-export function enableFileSink(filePath: string): string | null {
-  // Close existing file sink if any
-  if (activeFileSink !== null) {
-    activeFileSink.end();
-    activeFileSink = null;
-  }
-
-  currentFilePath = filePath;
-  loggerCache = null; // Force recreation on next access
-
-  // Eagerly create the sink to validate the path
-  activeFileSink = createLogFileSink(filePath);
-
-  if (activeFileSink === null) {
-    currentFilePath = null;
-    return null;
-  }
-
-  return filePath;
-}
-
 /** Error from closing the file sink. */
-export interface FileSinkCloseError {
+interface FileSinkCloseError {
   readonly type: 'file_sink_close_failed';
   readonly message: string;
 }
@@ -189,11 +139,6 @@ export function clearAdditionalSinks(): void {
   }
 }
 
-/** Gets the current file sink path, or null if file logging is disabled. */
-export function getFileSinkPath(): string | null {
-  return currentFilePath;
-}
-
 /** Creates a lazy-bound logger proxy for a given logger key. */
 function createLoggerProxy(key: LoggerKey): Logger {
   const get = () => getLoggers()[key];
@@ -223,7 +168,6 @@ function createLoggerProxy(key: LoggerKey): Logger {
 }
 
 export const searchLogger: Logger = createLoggerProxy('search');
-export const suggestLogger: Logger = createLoggerProxy('suggest');
 export const ingestLogger: Logger = createLoggerProxy('ingest');
 export const cacheLogger: Logger = createLoggerProxy('cache');
 export const adminLogger: Logger = createLoggerProxy('admin');

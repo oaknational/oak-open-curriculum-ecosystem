@@ -1,7 +1,7 @@
 import { Client } from '@elastic/elasticsearch';
 
 /** Minimal config required to create an ES client. */
-export interface EsClientConfig {
+interface EsClientConfig {
   readonly ELASTICSEARCH_URL: string;
   readonly ELASTICSEARCH_API_KEY: string;
 }
@@ -22,14 +22,6 @@ export function initializeEsClient(config: EsClientConfig): void {
     return;
   }
   _client = new Client({
-    node: config.ELASTICSEARCH_URL,
-    auth: { apiKey: config.ELASTICSEARCH_API_KEY },
-  });
-}
-
-/** Factory to create an ES client from config. Use when not using the singleton. */
-export function createEsClient(config: EsClientConfig): Client {
-  return new Client({
     node: config.ELASTICSEARCH_URL,
     auth: { apiKey: config.ELASTICSEARCH_API_KEY },
   });

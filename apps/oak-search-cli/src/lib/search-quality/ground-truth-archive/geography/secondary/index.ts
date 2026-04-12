@@ -37,13 +37,3 @@ export const GEOGRAPHY_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
     GEOGRAPHY_SECONDARY_CROSS_TOPIC_EXPECTED,
   ),
 ] as const;
-
-// Re-export query definitions and expected relevance
-export { GEOGRAPHY_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
-export { GEOGRAPHY_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
-export { GEOGRAPHY_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
-export { GEOGRAPHY_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
-export { GEOGRAPHY_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
-export { GEOGRAPHY_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
-export { GEOGRAPHY_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
-export { GEOGRAPHY_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
