@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-11l
+last_updated: 2026-04-12
 ---
 
 # Session Continuation
@@ -40,73 +40,75 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Quality gate hardening — knip triage and
-  remediation (Phase 2.5 follow-ups).
+- **Workstream**: Quality gate hardening — depcruise triage
+  and remediation. Knip plan fully complete.
 - **Active plans**:
-  - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
-    (**PRIMARY** — Phases 0-4 complete. Phase 2.5 follow-ups remain.)
-  - `.agent/plans/architecture-and-infrastructure/active/knip-phase-2.5-follow-ups.plan.md`
-    (**CHILD** — detailed plan for the 4 follow-ups)
+  - `.agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
+    (**ACTIVE** — Phase 0 deep audit is next)
   - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
-    (**PARENT** — `enable-knip` item complete)
+    (**PARENT** — `enable-knip` complete; `enable-depcruise` active)
+  - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
+    (**COMPLETE** — all phases 0-4 and 2.5 resolved 2026-04-12)
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
     (**PARKED** — WS-0/1/2 done, WS-3 next, not current focus)
-- **Current state**: Phases 0-4 all complete. `pnpm knip` exits 0
-  across all categories (904 findings remediated). Knip promoted
-  to all four gate surfaces: pre-commit, pre-push, CI, `pnpm
-  check`. ADR-121 coverage matrix updated. Full `pnpm check`
-  passes. Parent plan `enable-knip` marked complete. Phase 2.5
-  has 4 follow-ups from Phase 2, each needing owner decision
-  (action or defer with rationale).
-- **Current objective**: Phase 2.5 — resolve 4 follow-ups from
-  Phase 2. Each needs detailed investigation and owner decision.
-  See child plan for the detailed execution approach.
+- **Current state**: Knip plan fully done (904 findings → 0,
+  blocking on all four gate surfaces). Depcruise plan drafted
+  with 5 phases (0-4). Phase 0 is a deep audit that questions
+  all 12 assumptions in the plan before any code changes. Initial
+  `pnpm depcruise` shows 87 violations (44 errors, 43 warnings)
+  but these counts and groupings are unverified assumptions.
+- **Current objective**: Execute Phase 0 deep audit of the
+  depcruise plan — re-run depcruise, verify every cycle and
+  orphan classification, question all plan assumptions, correct
+  before acting.
 - **Hard invariants / non-goals**:
-  - No finding may be labelled as a false positive without
-    evidence-based proof
-  - Fix consumption patterns to be standard rather than adding
-    knip ignores — reducing sensitivity is a gate weakness
   - Never weaken gates to solve testing problems
   - ESLint config standardisation must precede all lint-rule
     promotions (Tier 1, not Tier 3)
   - No `unknown`, no `Record<string, unknown>`, no type erasure
-- **Recent surprises / corrections** (2026-04-11l):
-  - `build-system.md` has a coverage matrix copy that must be
-    kept in sync with ADR-121 — docs-adr reviewer caught this
-  - `CONTRIBUTING.md` `pnpm check` description needs updating
-    when gate composition changes
-  - `pnpm check` runs knip after turbo (post-build), while CI
-    runs knip before turbo (pre-build) — both work because knip
-    analyses source, not build output
+  - Never edit generated files — edit the generators
+  - Every depcruise plan assumption must be verified with
+    evidence before any code changes (lesson from knip 2.5)
+- **Recent surprises / corrections** (2026-04-12):
+  - Phase 2.5 plan had 3 of 4 assumptions materially wrong:
+    auth helpers had no duplication (only dead code), GT barrels
+    were 39 not 54, CLI barrel had 17 consumers not zero
+  - `SubjectPhaseMetadata` in manifest generator was an
+    unreported dead export — caught when regeneration exposed it
+  - Removing `AnyLessonSlugSchema` from schema-emitter made the
+    `allData` parameter unused — cascading API surface change
 - **Open questions / low-confidence areas**:
-  - Phase 2.5 follow-ups: owner decision needed on scope for
-    each (action vs defer with rationale)
+  - All 12 assumptions in the depcruise plan (A1-A12) are
+    unverified — Phase 0 audit exists specifically to verify them
   - Whether WS-5 (guidance consolidation) should be a catalogue
     abstraction or simpler validation test approach
 - **Tracked follow-ups** (not blocking current work):
+  - GT archive retirement (future plan, discoverable)
   - Consolidate `security-types.ts` with `mcp-protocol-types.ts`
   - Note contract re-export surface change for semver
   - Generated tools have no human-friendly title (no plan)
   - Synonym builders should become codegen-time (no plan)
   - `static-content.ts` `process.cwd()` bug (tracked nowhere)
-- **Next safe step**: Phase 2.5 — read the child plan, gather
-  evidence for each follow-up, present options with
-  recommendations to the owner for decision.
-- **Deep consolidation status**: completed this handoff — Phase 4
-  complete, napkin updated, session prompt refreshed. Napkin at
-  ~260 lines (under rotation threshold).
+- **Next safe step**: Begin Phase 0 deep audit of the depcruise
+  plan. Re-run `pnpm depcruise`, capture full output, verify
+  every cycle and orphan classification against the 12 listed
+  assumptions. Correct the plan before proceeding to Phase 1.
+- **Deep consolidation status**: not due — no plan or milestone
+  closed this session; depcruise plan created but not yet started.
 
-## Active Workstreams (2026-04-11l)
+## Active Workstreams (2026-04-12)
 
-### 1. Quality Gate Hardening — knip IN PROGRESS
+### 1. Quality Gate Hardening — depcruise NEXT
 
 **Parent plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
-**Child plan**: `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
+**Active child plan**: `.agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
+**Completed child plan**: `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
 
-Phases 0-4 complete. 904 knip findings remediated to 0. Knip
-promoted to all four gate surfaces. Phase 2.5 (4 architectural
-follow-ups) remains. After Phase 2.5, the `enable-knip` item
-in the parent plan is fully done.
+Knip complete (904 → 0, blocking on all four surfaces).
+Depcruise plan drafted with deep audit Phase 0 as first action.
+87 violations reported (44 errors, 43 warnings) but all counts
+and groupings are unverified plan assumptions. Phase 0 verifies
+every assumption before any code changes.
 
 ### 2. WS3 MCP App Rebuild — MERGE PENDING
 

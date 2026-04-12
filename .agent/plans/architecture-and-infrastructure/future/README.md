@@ -13,6 +13,7 @@ queue item, then to `../active/` when implementation starts.
 | P0 | [observability-and-quality-metrics.plan.md](./observability-and-quality-metrics.plan.md) | Strategic umbrella for the M2 observability foundation plus M3 alerting and quality-metrics hardening |
 | -- | ~~quality-gate-hardening.plan.md~~ | Promoted to [current/](../current/quality-gate-hardening.plan.md) 2026-04-11 |
 | P1 | [test-suite-audit-and-triage.plan.md](./test-suite-audit-and-triage.plan.md) | Deep test-suite audit before stricter enforcement and mutation-testing rollout |
+| P1 | [ground-truth-archive-retirement.plan.md](./ground-truth-archive-retirement.plan.md) | Delete old 120-query ground-truth-archive/ and wire evaluation pipeline to canonical ground-truth/ model |
 | P2 | [stdio-http-server-alignment.md](./stdio-http-server-alignment.md) | Historical/server-alignment strategy reference; not an active observability adoption lane |
 
 Companion future plan in the nested codegen lane:

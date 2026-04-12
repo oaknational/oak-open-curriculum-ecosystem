@@ -4,28 +4,28 @@ overview: "Investigate and resolve 4 architectural follow-ups from knip Phase 2.
 todos:
   - id: investigate-auth-helpers
     content: "Follow-up 2.5.1: Investigate auth-response-helpers consolidation with mcp-auth.ts — gather evidence, present options."
-    status: pending
+    status: completed
   - id: investigate-gt-barrels
     content: "Follow-up 2.5.2: Investigate ground-truth barrel hierarchy — map current structure, assess nesting, present options."
-    status: pending
+    status: completed
   - id: investigate-schema-emitter
     content: "Follow-up 2.5.3: Investigate schema-emitter unused generation — identify what it emits that has zero consumers, present options."
-    status: pending
+    status: completed
   - id: investigate-cli-shared
     content: "Follow-up 2.5.4: Investigate cli/shared barrel — verify zero importers, present options."
-    status: pending
+    status: completed
   - id: implement-decisions
     content: "Implement owner decisions for all 4 follow-ups."
-    status: pending
+    status: completed
   - id: verify-gates
     content: "Verify pnpm knip still exits 0 and pnpm check passes after all changes."
-    status: pending
+    status: completed
 ---
 
 # Knip Phase 2.5: Resolve Phase 2 Follow-ups
 
-**Last Updated**: 2026-04-11
-**Status**: Active — not yet started
+**Last Updated**: 2026-04-12
+**Status**: Complete — all 4 follow-ups resolved. Execution plan: `.cursor/plans/knip_phase_2.5_execution_e7e98c41.plan.md`
 **Scope**: Investigate and resolve 4 architectural follow-ups
 surfaced during Phase 2 of the knip triage.
 **Parent**: [knip-triage-and-remediation.plan.md](./knip-triage-and-remediation.plan.md)

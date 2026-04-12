@@ -71,45 +71,23 @@ The validator performs 12 checks:
 
 ```typescript
 import {
-  // Type guard
-  isValidLessonSlug,
-
-  // Branded type
-  type AnyLessonSlug,
-
-  // All valid slugs (12,320 total)
   ALL_LESSON_SLUGS,
-
-  // Per-subject Sets
-  MATHS_PRIMARY_LESSON_SLUGS,
-  SCIENCE_SECONDARY_LESSON_SLUGS,
-  // etc.
+  TOTAL_LESSON_SLUG_COUNT,
+  getSubjectForSlug,
 } from '../ground-truths/generated';
 
-import {
-  // Zod schemas
-  GroundTruthQuerySchema,
-  RelevanceScoreSchema,
-  AnyLessonSlugSchema,
-
-  // Validation function
-  validateGroundTruthQuery,
-} from '../ground-truths/generated';
+import { validateGroundTruthQuery } from '../ground-truths/generated';
 ```
+
+Zod schemas (`RelevanceScoreSchema`, `QueryCategorySchema`, etc.) are internal
+building blocks of `validateGroundTruthQuery` and are not directly exported.
+Re-exporting is a one-line emitter change if a future consumer needs direct access.
 
 ## Design Decisions
 
-### Branded String Types
-
-We use branded string types (`AnyLessonSlug`) instead of massive union types because:
-
-- TypeScript crashes with 12,000+ element unions
-- Branded types + runtime validation provides equivalent safety
-- Set lookups are O(1) for validation
-
 ### Runtime Validation
 
-Zod schemas provide runtime validation:
+Zod schemas provide runtime validation via `validateGroundTruthQuery`:
 
 - Schema validation at ground truth load time
 - Detailed error messages for debugging

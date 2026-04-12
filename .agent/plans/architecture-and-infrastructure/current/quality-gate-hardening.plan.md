@@ -579,16 +579,20 @@ pre-commit, pre-push, CI, and `pnpm check`. ADR-121 coverage matrix
 updated. See child plan
 `knip-triage-and-remediation.plan.md` for full resolution details.
 
-### 5. Enable dependency-cruiser as a Blocking `pnpm check` Gate
+### 5. Enable dependency-cruiser as a Blocking Quality Gate
 
 **Problem**: dependency-cruiser finds circular dependencies and orphan modules.
 These need resolution before promotion. It does not currently police package
 manifests, so it cannot be relied on to catch undeclared direct dependencies or
 missing type-only devDependencies.
 
-**Fix**: Resolve circular deps (refactor or mark as intentional). Exclude genuinely external orphans. Add `pnpm depcruise` to the `pnpm check` script.
+**Fix**: Resolve circular deps (refactor or mark as intentional). Exclude genuinely external orphans. Add `pnpm depcruise` to all four gate surfaces.
 
-**Remediation**: See static-analysis-tool-promotion.plan.md.
+**Remediation**: Child plan: [depcruise-triage-and-remediation.plan.md](depcruise-triage-and-remediation.plan.md).
+
+**Verified findings (2026-04-12)**: 87 violations (44 circular dependency
+errors collapsing to ~5 distinct cycles, 43 orphan warnings mostly from
+generated docs and test files). 1,940 modules cruised.
 
 ### 6. Enable max-files-per-dir
 

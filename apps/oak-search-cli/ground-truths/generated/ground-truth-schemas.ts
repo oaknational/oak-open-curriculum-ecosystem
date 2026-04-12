@@ -4,11 +4,12 @@
  * Provides runtime validation for ground truth entries.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-04-02T14:20:30.829Z
+ * Generated at: 2026-04-12T07:25:00.705Z
  */
 
 import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
+
 // ============================================================================
 // Core Validation Schemas
 // ============================================================================

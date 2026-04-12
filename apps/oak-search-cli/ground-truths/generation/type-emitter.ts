@@ -243,18 +243,6 @@ export function emitAllLessonSlugTypes(allData: readonly ParsedBulkData[]): stri
   lines.push('');
   lines.push('const lessonSlugData = loadLessonSlugData();');
   lines.push('');
-  lines.push(
-    "export type { LessonSlugDataset, LessonSlugDatasetSequenceData } from './lesson-slugs-by-subject.types.js';",
-  );
-  lines.push('');
-  lines.push('/**');
-  lines.push(' * Branded string type for validated lesson slugs.');
-  lines.push(' *');
-  lines.push(' * Use isValidLessonSlug() to validate and narrow strings to this type.');
-  lines.push(' *');
-  lines.push(' * @generated');
-  lines.push(' */');
-  lines.push("export type AnyLessonSlug = string & { readonly __brand: 'LessonSlug' };");
   lines.push('');
   lines.push('function getSequenceData(sequenceSlug: string): LessonSlugDatasetSequenceData {');
   lines.push('  const sequenceData = lessonSlugData.sequences[sequenceSlug];');
@@ -276,23 +264,6 @@ export function emitAllLessonSlugTypes(allData: readonly ParsedBulkData[]): stri
     'export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set(lessonSlugData.allLessonSlugs);',
   );
   lines.push('');
-  lines.push('/**');
-  lines.push(' * Type guard to check if a string is a valid lesson slug.');
-  lines.push(' *');
-  lines.push(' * @param value - String to check');
-  lines.push(' * @returns True if value is a valid lesson slug');
-  lines.push(' *');
-  lines.push(' * @example');
-  lines.push(' * ```typescript');
-  lines.push(" * if (isValidLessonSlug('adding-fractions')) {");
-  lines.push(' *   // value is narrowed to AnyLessonSlug');
-  lines.push(' * }');
-  lines.push(' * ```');
-  lines.push(' */');
-  lines.push('export function isValidLessonSlug(value: string): value is AnyLessonSlug {');
-  lines.push('  return ALL_LESSON_SLUGS.has(value);');
-  lines.push('}');
-  lines.push('');
   lines.push('/** Total lessons across all subjects */');
   lines.push(`export const TOTAL_LESSON_SLUG_COUNT = ${totalCount} as const;`);
   lines.push('');
@@ -307,9 +278,7 @@ export function emitAllLessonSlugTypes(allData: readonly ParsedBulkData[]): stri
   lines.push('  return map;');
   lines.push('}');
   lines.push('');
-  lines.push(
-    'export const SLUG_TO_SUBJECT: ReadonlyMap<string, string> = buildSlugToSubjectMap();',
-  );
+  lines.push('const SLUG_TO_SUBJECT: ReadonlyMap<string, string> = buildSlugToSubjectMap();');
   lines.push('');
   lines.push('/**');
   lines.push(' * Get the subject for a given lesson slug.');

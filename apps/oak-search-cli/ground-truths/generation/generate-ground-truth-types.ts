@@ -247,7 +247,7 @@ function generateManifestFile(allData: readonly ParsedBulkData[]): string {
   lines.push('/**');
   lines.push(' * Metadata for a subject/phase combination.');
   lines.push(' */');
-  lines.push('export interface SubjectPhaseMetadata {');
+  lines.push('interface SubjectPhaseMetadata {');
   lines.push('  readonly subject: string;');
   lines.push("  readonly phase: 'primary' | 'secondary';");
   lines.push('  readonly sequenceSlug: string;');
@@ -353,7 +353,7 @@ export async function generateGroundTruthTypes(
   filesWritten.push(datasetJsonResult.value);
 
   // Write ground-truth-schemas.ts
-  const schemasContent = emitGroundTruthSchemas(allData);
+  const schemasContent = emitGroundTruthSchemas();
   const schemasResult = writeOutputFile(outputDir, 'ground-truth-schemas.ts', schemasContent);
   if (!schemasResult.ok) {
     return schemasResult;

@@ -263,3 +263,77 @@ marked complete. Section 4 text updated to reflect completion.
 **Phase 2.5 is next:** 4 follow-ups from Phase 2, each needing
 owner decision. This will require a detailed investigation plan
 for the next session.
+
+---
+
+### Session 2026-04-12: Knip Phase 2.5 — follow-up implementation
+
+**Result: all 4 Phase 2.5 follow-ups resolved. Knip plan fully complete.**
+
+Implemented the 4 decisions from the prior session's investigation:
+- 2.5.1: Deleted `auth-response-helpers.ts` + 2 test files (dead,
+  redundant with `check-mcp-client-auth.ts`)
+- 2.5.2: No code change — barrel hierarchy kept, GT archive
+  retirement tracked as separate future plan
+- 2.5.3: Fixed 3 generator files (schema-emitter, type-emitter,
+  generate-ground-truth-types), updated 2 test files, regenerated
+  6 output files, updated README
+- 2.5.4: Closed as no-action (plan was wrong)
+
+**Surprise: plan assumptions were wrong for 3 of 4 follow-ups**
+(Captured in prior session's investigation, but worth noting as a
+pattern: investigation BEFORE implementation consistently reveals
+materially different ground truth than plan assumptions.)
+
+**Surprise: cascading API surface changes from schema de-export**
+Removing `AnyLessonSlugSchema` from `schema-emitter.ts` removed
+the only consumer of the `allData` parameter in
+`emitGroundTruthSchemas()`. This required updating: the function
+signature, the generator call site, and 11 test call sites. Also,
+regeneration exposed a previously unreported dead export
+(`SubjectPhaseMetadata` in manifest generator). Lesson: when
+narrowing a generator's output API, always regenerate and run
+knip to catch secondary dead exports.
+
+**Process observation: "never edit generated files" is load-bearing**
+The entire 2.5.3 footgun existed because Phase 2 hand-trimmed
+generated files instead of fixing generators. The fix was
+straightforward once the correct approach (edit generators, not
+output) was applied. This principle from `principles.md` is not
+advisory — it prevents a real class of regeneration footguns.
+
+**Milestone: knip plan fully complete**
+All 904 findings remediated. All phases (0-4 and 2.5) done.
+Knip is a blocking gate on all four surfaces. The `enable-knip`
+item in `quality-gate-hardening.plan.md` is fully closed.
+
+---
+
+### Session 2026-04-12b: Depcruise plan deep-audit revision
+
+**Key correction: plan must start with assumption verification**
+The initial depcruise plan (drafted from a single `pnpm depcruise`
+run) jumped straight to config fixes and remediation. User
+correctly flagged this as the same anti-pattern that plagued the
+knip Phase 2.5 follow-ups — acting on unverified assumptions.
+
+Revised the plan to insert Phase 0: Deep Audit before any code
+changes. Added an explicit "Assumptions to Verify" table with 12
+specific assumptions (A1-A12), each with risk-if-wrong and
+how-to-verify. All subsequent phases (renumbered 1-4) are now
+gated on Phase 0's verified evidence.
+
+**Pattern: plans from single tool runs inherit framing bias**
+This is now a repeated observation across 3 instances:
+1. Quality gate hardening plan (session 2026-04-11g) — planned
+   from assumptions, rejected by user
+2. Knip Phase 2.5 follow-ups — 3 of 4 assumptions materially wrong
+3. Depcruise plan — jumped to remediation without audit
+
+The pattern is clear enough to be a candidate for extraction to
+`.agent/memory/patterns/` at next consolidation.
+
+**Confirmed: all knip plans fully complete**
+Verified every knip plan across both `.agent/plans/` and
+`.cursor/plans/`: 26/26 todos completed, 0 pending. No stale
+status anywhere.

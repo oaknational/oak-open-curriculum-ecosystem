@@ -13,7 +13,7 @@ todos:
     status: completed
   - id: resolve-phase2-followups
     content: "Phase 2.5: Resolve follow-ups from Phase 2 — consolidate auth helpers, restructure ground-truth barrels, fix schema-emitter, resolve cli/shared barrel."
-    status: pending
+    status: completed
   - id: triage-config-hints
     content: "Phase 3: Triage configuration hints (43) — fix knip.config.ts entry/project patterns and stale ignore entries."
     status: completed
@@ -24,8 +24,8 @@ todos:
 
 # Knip Triage and Remediation
 
-**Last Updated**: 2026-04-11
-**Status**: Active — Phases 0-4 complete (`pnpm knip` exits 0, promoted to all gate surfaces). Phase 2.5 follow-ups remain.
+**Last Updated**: 2026-04-12
+**Status**: Complete — All phases (0-4 and 2.5) resolved. `pnpm knip` exits 0, promoted to all gate surfaces. Phase 2.5 follow-ups resolved 2026-04-12.
 **Scope**: Run knip, triage all findings, design and apply remediations,
 promote to blocking quality gate.
 **Parent**: [quality-gate-hardening.plan.md](../current/quality-gate-hardening.plan.md)
@@ -156,6 +156,30 @@ Knip promoted to all four gate surfaces:
 - **Parent plan** (`quality-gate-hardening.plan.md`): `enable-knip` marked complete
 
 Config-reviewer and docs-adr-reviewer invoked. All findings addressed.
+
+### Phase 2.5 Resolution (2026-04-12)
+
+Four architectural follow-ups from Phase 2, each resolved with owner decision:
+
+- **2.5.1 Auth helpers**: Deleted `auth-response-helpers.ts` and both test files
+  (`create-auth-log-context.unit.test.ts`, `auth-response-helpers.unit.test.ts`).
+  Functions had zero production consumers and were redundant with existing auth
+  success logging in `check-mcp-client-auth.ts`.
+- **2.5.2 GT barrels**: Kept barrel hierarchy as-is (knip is clean). The
+  `ground-truth-archive/` is a poorly removed remnant of the old approach; its
+  deletion and migration to the canonical `ground-truth/` model is tracked as a
+  separate future plan: `ground-truth-archive-retirement.plan.md`.
+- **2.5.3 Schema emitter**: Fixed `schema-emitter.ts` and `type-emitter.ts` to
+  de-export unused schemas (kept as internal `const` building blocks). Removed
+  `AnyLessonSlugSchema`, `isValidLessonSlug`, `AnyLessonSlug` branded type, and
+  `SLUG_TO_SUBJECT` from the exported API. Also de-exported `SubjectPhaseMetadata`
+  from `generateManifestFile`. Updated emitter unit tests to assert the consumed
+  contract. Regenerated all files via `pnpm bulk:codegen`. Updated
+  `ground-truths/README.md` to document the narrowed API.
+- **2.5.4 CLI/shared barrel**: Closed as no-action. The plan was factually
+  incorrect — the barrel has 17 active consumers.
+
+Child execution plan: `.cursor/plans/knip_phase_2.5_execution_e7e98c41.plan.md`
 
 ### Unused Dependencies (2) — P0
 

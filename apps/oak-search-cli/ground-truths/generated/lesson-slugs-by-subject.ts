@@ -5,7 +5,7 @@
  * Uses a JSON-backed loader to avoid monolithic generated TypeScript data files.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-04-02T14:20:30.825Z
+ * Generated at: 2026-04-12T07:25:00.701Z
  */
 
 import rawLessonSlugData from './lesson-slugs-by-subject.data.json';
@@ -43,14 +43,6 @@ function loadLessonSlugData(): LessonSlugDataset {
 const lessonSlugData = loadLessonSlugData();
 
 
-/**
- * Branded string type for validated lesson slugs.
- *
- * Use isValidLessonSlug() to validate and narrow strings to this type.
- *
- * @generated
- */
-
 function getSequenceData(sequenceSlug: string): LessonSlugDatasetSequenceData {
   const sequenceData = lessonSlugData.sequences[sequenceSlug];
   if (sequenceData === undefined) {
@@ -67,15 +59,6 @@ function getSequenceData(sequenceSlug: string): LessonSlugDatasetSequenceData {
  * @generated
  */
 export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set(lessonSlugData.allLessonSlugs);
-
-/**
- * Type guard to check if a string is a valid lesson slug.
- *
- * @param value - String to check
- * @returns True if value is a valid lesson slug
- *
- * @example
- */
 
 /** Total lessons across all subjects */
 export const TOTAL_LESSON_SLUG_COUNT = 12391 as const;
