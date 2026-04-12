@@ -309,6 +309,66 @@ item in `quality-gate-hardening.plan.md` is fully closed.
 
 ---
 
+### Session 2026-04-12d: Cross-platform discoverability fixes
+
+**Patterns skill made universal across all platforms:**
+Added `.claude/skills/patterns/SKILL.md` adapter — the last missing
+platform. Also added `Skill(patterns)` to `.claude/settings.json`
+allowlist. Patterns skill now discoverable on Cursor, Claude Code,
+and Codex.
+
+**Memory section added to AGENT.md:**
+All vendors read AGENT.md as the entry point. Previously, the
+memory/patterns directory was not linked from AGENT.md — agents
+would only find it by following practice-index.md deeply. Added
+a "Memory and Patterns" section with direct links to distilled.md,
+patterns/README.md, and napkin.md.
+
+**Cross-platform artefact creation recipes documented:**
+`artefact-inventory.md` previously listed WHERE things go but not
+HOW to create them. Added "How to Create New Artefacts" section
+with exact adapter formats for skills, commands, rules, and
+sub-agents across all four platforms. This eliminates the need to
+grep through existing instances to discover the correct pattern.
+
+**Session-continuation prompt discoverability gap:**
+The prompt still says to read it as the first thing, but doesn't
+mention the patterns library. The "Ground First" section should
+include patterns checking as part of the grounding sequence. Not
+fixed this session — minor and not blocking.
+
+---
+
+### Session 2026-04-12c: Plan consolidation and owner decisions
+
+**Owner decisions resolved:**
+- Strict end state: all depcruise rules promoted to `error`
+  severity (including `no-orphans` from `warn` → `error`). The
+  clean baseline is 0 errors, 0 warnings — no warning-level
+  rules remain.
+- All four gate surfaces: `pnpm check`, pre-commit, pre-push, CI.
+
+**Cursor plan graduated to canonical plan:**
+Merged all detailed Phase 0 audit content from
+`.cursor/plans/depcruise_phase_0_audit_18246fac.plan.md` into
+the canonical plan at `.agent/plans/.../depcruise-triage-and-remediation.plan.md`.
+The canonical plan now contains full per-SCC analysis (traced
+imports, key tensions, reviewer-endorsed fixes), detailed
+orphan inventory (all 43 files classified with paths), hidden
+assumptions table, and owner decisions section.
+
+**Session-continuation prompt was stale:**
+The prompt still pointed to Phase 0 as next despite Phase 0
+being complete. Updated all fields: current state, current
+objective, recent surprises, open questions, next safe step.
+The "Active Workstreams" section was also stale. Pattern: the
+session-continuation prompt tends to lag behind the plan —
+always verify both are in sync during handoff.
+
+**No code changes this session** — planning and documentation only.
+
+---
+
 ### Session 2026-04-12b: Depcruise plan deep-audit revision
 
 **Key correction: plan must start with assumption verification**

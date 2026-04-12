@@ -100,6 +100,19 @@ across scopes per Claude Code merge semantics. The portability validator
 adapter has a corresponding `Skill()` permission entry in the project
 settings.
 
+## Memory and Patterns
+
+Institutional memory lives in `.agent/memory/`:
+
+- [distilled.md](../memory/distilled.md) — hard-won rules extracted from
+  session napkins. Read before every session.
+- [patterns/](../memory/patterns/README.md) — 56 abstract, reusable
+  solutions to recurring design problems across code, architecture,
+  process, testing, and agent infrastructure. Before inventing a new
+  approach, check the pattern library for a known solution.
+- [napkin.md](../memory/napkin.md) — current session observations
+  (written continuously, distilled periodically).
+
 ## Essential Links
 
 **Important**: These documents must be read.

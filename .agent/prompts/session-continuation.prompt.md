@@ -44,42 +44,49 @@ git log --oneline --decorate -10
   and remediation. Knip plan fully complete.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
-    (**ACTIVE** — Phase 0 deep audit is next)
+    (**ACTIVE** — Phase 0 complete, Phase 1 next)
   - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
     (**PARENT** — `enable-knip` complete; `enable-depcruise` active)
   - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
     (**COMPLETE** — all phases 0-4 and 2.5 resolved 2026-04-12)
   - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
     (**PARKED** — WS-0/1/2 done, WS-3 next, not current focus)
-- **Current state**: Knip plan fully done (904 findings → 0,
-  blocking on all four gate surfaces). Depcruise plan drafted
-  with 5 phases (0-4). Phase 0 is a deep audit that questions
-  all 12 assumptions in the plan before any code changes. Initial
-  `pnpm depcruise` shows 87 violations (44 errors, 43 warnings)
-  but these counts and groupings are unverified assumptions.
-- **Current objective**: Execute Phase 0 deep audit of the
-  depcruise plan — re-run depcruise, verify every cycle and
-  orphan classification, question all plan assumptions, correct
-  before acting.
+- **Current state**: Knip plan fully done (904 → 0, blocking
+  on all four surfaces). Depcruise Phase 0 deep audit complete
+  — all 12 assumptions verified with evidence, 6 hidden
+  assumptions discovered. 87 violations confirmed: 44 errors
+  (7 distinct cycle SCCs) and 43 warnings (4 orphan action
+  categories). Owner decisions resolved: strict end state
+  (all rules `error`), all four gate surfaces. Plan is
+  corrected and approved for execution.
+- **Current objective**: Execute depcruise Phases 1-4. Phase 1
+  (config fixes + dead code deletion) and Phase 2 (break 7
+  cycle SCCs) can run in parallel. Then Phase 2.5 (reconcile),
+  Phase 3 (remaining orphans), Phase 4 (promote `no-orphans`
+  to `error`, add to all gate surfaces).
 - **Hard invariants / non-goals**:
   - Never weaken gates to solve testing problems
   - ESLint config standardisation must precede all lint-rule
     promotions (Tier 1, not Tier 3)
   - No `unknown`, no `Record<string, unknown>`, no type erasure
   - Never edit generated files — edit the generators
-  - Every depcruise plan assumption must be verified with
-    evidence before any code changes (lesson from knip 2.5)
+  - Run `pnpm sdk-codegen` after any SDK cycle-breaking work
+  - Strict end state: all depcruise rules are `error`, 0
+    findings, all four gate surfaces
 - **Recent surprises / corrections** (2026-04-12):
-  - Phase 2.5 plan had 3 of 4 assumptions materially wrong:
-    auth helpers had no duplication (only dead code), GT barrels
-    were 39 not 54, CLI barrel had 17 consumers not zero
-  - `SubjectPhaseMetadata` in manifest generator was an
-    unreported dead export — caught when regeneration exposed it
-  - Removing `AnyLessonSlugSchema` from schema-emitter made the
-    `allData` parameter unused — cascading API surface change
+  - A11 falsified: depcruise already exits non-zero (code 44),
+    not 0 as the original plan assumed
+  - A1 partially falsified: 7 distinct SCCs, not ~5
+  - A5 falsified: 4 orphan categories, not ~3
+  - A12 partially falsified: `packages/docs/` crawled but is
+    not a workspace; `pathNot` gaps for Playwright, scripts
+  - 89% of circular dep errors (39/44) from just 2 clusters
+    (SCC-A at 16 errors, SCC-B1 at 20 errors)
 - **Open questions / low-confidence areas**:
-  - All 12 assumptions in the depcruise plan (A1-A12) are
-    unverified — Phase 0 audit exists specifically to verify them
+  - Whether SCC-C (2 errors) collapses after B1 fix — likely
+    but not guaranteed (shares `types.ts` → `definitions.ts`)
+  - HA9: does depcruise exit 0 with warnings-only? Determines
+    Phase 4 sequencing (verify in Phase 4)
   - Whether WS-5 (guidance consolidation) should be a catalogue
     abstraction or simpler validation test approach
 - **Tracked follow-ups** (not blocking current work):
@@ -89,26 +96,30 @@ git log --oneline --decorate -10
   - Generated tools have no human-friendly title (no plan)
   - Synonym builders should become codegen-time (no plan)
   - `static-content.ts` `process.cwd()` bug (tracked nowhere)
-- **Next safe step**: Begin Phase 0 deep audit of the depcruise
-  plan. Re-run `pnpm depcruise`, capture full output, verify
-  every cycle and orphan classification against the 12 listed
-  assumptions. Correct the plan before proceeding to Phase 1.
-- **Deep consolidation status**: not due — no plan or milestone
-  closed this session; depcruise plan created but not yet started.
+  - `packages/docs/_typedoc_src/` stale residue — investigate
+    for deletion separately
+- **Next safe step**: Execute Phase 1 (config fixes + dead code
+  deletion). The plan has detailed task breakdowns (1.1 exclude,
+  1.2 delete, 1.3 configure entry points) with acceptance
+  criteria. Phase 2 (cycle breaking) can run in parallel.
+- **Deep consolidation status**: completed this handoff —
+  Phase 0 milestone closed; pattern extracted; Cursor plan
+  content graduated to canonical plan.
 
 ## Active Workstreams (2026-04-12)
 
-### 1. Quality Gate Hardening — depcruise NEXT
+### 1. Quality Gate Hardening — depcruise execution
 
 **Parent plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
 **Active child plan**: `.agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
 **Completed child plan**: `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
 
 Knip complete (904 → 0, blocking on all four surfaces).
-Depcruise plan drafted with deep audit Phase 0 as first action.
-87 violations reported (44 errors, 43 warnings) but all counts
-and groupings are unverified plan assumptions. Phase 0 verifies
-every assumption before any code changes.
+Depcruise Phase 0 deep audit complete — 87 verified violations
+(44 errors in 7 SCCs, 43 orphan warnings in 4 categories). All
+12 assumptions verified, 6 hidden assumptions discovered. Owner
+decisions: strict end state (all rules `error`), all four gate
+surfaces. Phases 1-4 ready for execution.
 
 ### 2. WS3 MCP App Rebuild — MERGE PENDING
 
@@ -141,6 +152,7 @@ pending.
 - Run the required gates one at a time while iterating.
 - Run `pnpm fix` to apply auto-fixes.
 - Run `pnpm check` as the canonical aggregate readiness gate before
-  push/merge. It now includes `pnpm knip`.
+  push/merge. It now includes `pnpm knip`. After depcruise Phase 4,
+  it will also include `pnpm depcruise`.
 - Keep this prompt concise and operational; do not duplicate plan
   authority.

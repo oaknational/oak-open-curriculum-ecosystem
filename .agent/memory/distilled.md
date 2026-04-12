@@ -73,7 +73,8 @@ context with no natural permanent home.
   effort/impact or propose interventions from stale counts or
   napkin memories. Run the actual tools, read the actual files,
   verify the actual state BEFORE drafting a plan. Plans built
-  on assumptions get rejected. (Session 2026-04-11g failure.)
+  on assumptions get rejected. See also pattern
+  `patterns/tool-output-framing-bias.md`.
 - **Review scope separation**: when a comprehensive review spans
   multiple commits, separate in-scope findings from pre-existing
   issues. Fix in-scope, track pre-existing as a gated follow-up.
@@ -168,8 +169,8 @@ context with no natural permanent home.
   lint:fix). Missing overrides fall through to generic tasks
   with wrong inputs, causing stale cache hits.
 - `pnpm check` is the canonical aggregate gate and includes
-  `pnpm knip`. `pnpm depcruise` is not included unless a
-  plan explicitly requires it
+  `pnpm knip`. `pnpm depcruise` will be added after the
+  depcruise plan Phase 4 completes
 - Empty directories persist after file deletion — always
   rmdir after deleting the last file. The portability
   validator checks for SKILL.md presence, so empty skill
