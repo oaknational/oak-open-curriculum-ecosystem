@@ -38,7 +38,13 @@ Do NOT use for:
     idempotentHint: true,
     openWorldHint: false,
   },
-  _meta: { ui: { resourceUri: WIDGET_URI } },
+  _meta: {
+    ui: {
+      resourceUri: WIDGET_URI,
+      visibility: ['model', 'app'] satisfies ('model' | 'app')[],
+    },
+    securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }],
+  },
 } as const;
 
 /**

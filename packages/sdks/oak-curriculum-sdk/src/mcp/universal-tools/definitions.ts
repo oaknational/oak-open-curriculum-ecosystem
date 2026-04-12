@@ -44,7 +44,7 @@ import {
   USER_SEARCH_QUERY_TOOL_DEF,
   USER_SEARCH_QUERY_INPUT_SCHEMA,
 } from '../aggregated-user-search/index.js';
-import type { SecurityScheme } from '@oaknational/sdk-codegen/mcp-tools';
+import type { SecurityScheme, ToolMeta } from '@oaknational/sdk-codegen/mcp-tools';
 import type { AggregatedToolName } from './types.js';
 
 /**
@@ -52,7 +52,7 @@ import type { AggregatedToolName } from './types.js';
  *
  * This compile-time guard catches drift between hand-authored and generated
  * tool shapes. Every entry in AGGREGATED_TOOL_DEFS must have title,
- * description, securitySchemes, annotations, and inputSchema at minimum.
+ * description, securitySchemes, annotations, inputSchema, and _meta.
  * No-input tools still provide `inputSchema: {}` so registration stays uniform.
  */
 interface AggregatedToolDefShape {
@@ -66,6 +66,7 @@ interface AggregatedToolDefShape {
     readonly openWorldHint: boolean;
   };
   readonly inputSchema: z.ZodRawShape;
+  readonly _meta: ToolMeta;
 }
 
 /**
@@ -83,13 +84,12 @@ interface AggregatedToolDefShape {
  * Annotations match generated tools: read-only, non-destructive, idempotent.
  *
  * **`_meta` contract (ADR-141)**:
- * - Widget tools (`search`, `get-curriculum-model`) declare
- *   `_meta: { ui: { resourceUri: WIDGET_URI } }`.
- * - All other aggregated tools declare `_meta: undefined` (no widget UI).
- * - Aggregated tools do not include `_meta.securitySchemes` — that mirror
- *   is emitted only by the generator for generated tools. Aggregated tools
- *   expose `securitySchemes` at the top level of their definition.
- * - The allowlist is defined in `WIDGET_TOOL_NAMES` (cross-domain-constants.ts).
+ * - Widget tools (`search`, `get-curriculum-model`, `user-search`,
+ *   `user-search-query`) declare `_meta: { ui: { resourceUri: WIDGET_URI }, securitySchemes }`.
+ * - All other aggregated tools declare `_meta: { securitySchemes }` (no widget UI).
+ * - All aggregated tools mirror `securitySchemes` into `_meta` for clients
+ *   that only read `_meta`, matching the generated tools' pattern.
+ * - The widget allowlist is defined in `WIDGET_TOOL_NAMES` (cross-domain-constants.ts).
  *
  * @example
  * ```typescript

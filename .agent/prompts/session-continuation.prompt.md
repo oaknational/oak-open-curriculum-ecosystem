@@ -40,101 +40,96 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Quality gate hardening — depcruise plan
-  fully complete. Both knip and depcruise are blocking on
-  all four gate surfaces.
+- **Workstream**: MCP App UI regression — the gate-hardening
+  branch (`feat/gate_hardening_part1`) broke the MCP App
+  widget rendering on ALL environments (local, preview, prod-
+  equivalent). This is the highest priority bug fix.
 - **Active plans**:
-  - `.agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
-    (**COMPLETE** — all phases 0-4 resolved 2026-04-12)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-ui-preview-regression.plan.md`
+    (**ACTIVE** — Phase 0 investigation in progress, Tasks
+    0.1–0.3 complete, Task 0.4 is next)
   - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
     (**PARENT** — `enable-knip` complete; `enable-depcruise`
-    complete; remaining items: ESLint config standardisation,
+    complete; remaining: ESLint config standardisation,
     eslint-disable remediation, max-files-per-dir, type
     assertion promotion)
-  - `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
-    (**COMPLETE** — all phases 0-4 and 2.5 resolved 2026-04-12)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
-    (**PARKED** — WS-0/1/2 done, WS-3 next, not current focus)
-- **Current state**: Both static analysis tools are now
-  blocking gates on all four surfaces:
-  - Knip: 904 → 0 (complete 2026-04-12)
-  - Depcruise: 87 → 0 (complete 2026-04-12)
-  - `pnpm check` includes both `pnpm knip` and `pnpm depcruise`
-  - Quality gate hardening parent plan has 2 of its major
-    items complete; remaining items are ESLint-focused
-- **Current objective**: Interactive user search UI in the
-  MCP App (Phase 5 of the WS-3 widget rebuild). Quality
-  gate hardening continues as a secondary workstream —
-  next item there is ESLint config standardisation.
+- **Current state**: MCP App UI widget does not render when
+  calling `get-curriculum-model` on any server running this
+  branch's code. The tool call succeeds (returns 41.5 KB
+  data) but no widget appears. `oak-prod` (running `main`)
+  works fine in the same Cursor client. Investigation has
+  narrowed the issue:
+  - Local reproduction confirmed (not Vercel-specific)
+  - All existing tests pass (581/582, 1 unrelated timeout)
+  - Tool definition has correct `_meta.ui.resourceUri`
+  - Widget HTML is identical between prod and preview
+  - Cursor is not a variable (works on `oak-prod`)
+  - Remaining hypothesis: MCP SDK's SSE serialisation path
+    strips `_meta` due to a code/type change on this branch
+- **Current objective**: Write and run the composition test
+  (Task 0.4 / Task 2.1) that uses the real MCP client SDK
+  (`Client` + `StreamableHTTPClientTransport`) against a
+  running server. This will either pinpoint the root cause
+  (if `_meta` is absent) or narrow it further (if present).
 - **Hard invariants / non-goals**:
   - Never weaken gates to solve testing problems
-  - ESLint config standardisation must precede all lint-rule
-    promotions (Tier 1, not Tier 3)
+  - The fix must address the root cause, not paper over it
   - No `unknown`, no `Record<string, unknown>`, no type erasure
   - Never edit generated files — edit the generators
-  - No type aliases — absolute rule
+  - Cursor client is NOT a variable — `oak-prod` works fine
 - **Recent surprises / corrections** (2026-04-12):
-  - SCC-C (2 errors) collapsed when B1 was fixed — confirmed
-    by intermediate depcruise run (22 errors remaining)
-  - `@elastic/elasticsearch` became unused after dead file
-    deletion — cascading dep removal
-  - `oak-adapter.unit.test.ts` had 3 useless type-only tests
-    — deleted per test-reviewer finding
-  - `register-prompts.integration.test.ts` misnamed as
-    integration but behaves as E2E — pre-existing, tracked
-  - Type aliases were found in new leaf modules (DtcgTokenValue,
-    PairUnits, PromptArgs, TokenTier) — all fixed per principle
+  - MCP App UI regression reproduces locally — not a Vercel
+    or deployment issue; definitively a branch code change
+  - All existing E2E tests pass despite the feature being
+    broken — the "pieces vs composition" test gap from
+    `distilled.md` materialised exactly as predicted
+  - Cursor's MCP tool descriptor files (`mcps/*/tools/*.json`)
+    do NOT store `_meta` — they are not diagnostic for this
+  - `register-prompts.integration.test.ts` timeout is a
+    pre-existing issue, not related to this regression
 - **Open questions / low-confidence areas**:
-  - Whether WS-5 (guidance consolidation) should be a catalogue
-    abstraction or simpler validation test approach
-  - Logger `types.ts` at 153 lines — monitor if it approaches
-    200 (Wilma finding)
-- **Tracked follow-ups** (not blocking current work):
-  - GT archive retirement (future plan, discoverable)
-  - Consolidate `security-types.ts` with `mcp-protocol-types.ts`
-  - Note contract re-export surface change for semver
-  - Generated tools have no human-friendly title (no plan)
-  - Synonym builders should become codegen-time (no plan)
-  - `static-content.ts` `process.cwd()` bug (tracked nowhere)
-  - `ReturnType<typeof ...>` coupling in OakClient — pre-existing
-  - `register-prompts.integration.test.ts` E2E naming — tracked
-- **Next safe step**: Build the interactive user search UI
-  view in the MCP App (Phase 5 of WS-3 widget rebuild).
-  The `feat/mcp_app_ui` branch has the widget crash fix
-  committed — push, verify Vercel preview, then start
-  Phase 5.
-- **Deep consolidation status**: due — depcruise milestone
-  closed; napkin entries to process.
+  - Whether the `Omit<Tool, '_meta'>` type change (commit
+    `a03f3b32`) has runtime side-effects via the MCP SDK's
+    schema validation during SSE serialisation
+  - Whether the MCP SDK `StreamableHTTPServerTransport`
+    strips unknown `_meta` fields during SSE event emission
+  - Which specific commit (of `a03f3b32`, `23360be7`,
+    `d74c0b5d`) introduced the regression
+- **Next safe step**: Write the composition test in
+  `e2e-tests/mcp-app-composition.e2e.test.ts` using
+  `Client` + `StreamableHTTPClientTransport` against
+  `createStubbedHttpApp()` on a random port. Run it and
+  observe whether `_meta.ui.resourceUri` is present in
+  `listTools()`. The test result will identify the root cause.
+- **Deep consolidation status**: not due — active
+  investigation in progress; no milestone closed this session.
 
 ## Active Workstreams (2026-04-12)
 
-### 1. Quality Gate Hardening — static analysis complete
+### 1. MCP App UI Regression — INVESTIGATING (HIGHEST PRIORITY)
+
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/mcp-app-ui-preview-regression.plan.md`
+
+The gate-hardening branch broke MCP App UI rendering. Reproduces
+locally. Phase 0 investigation narrowed: all tests pass, tool def
+is correct, widget HTML is identical, Cursor is not a variable.
+Next: write composition test with real MCP client SDK to pinpoint
+whether `_meta` survives the SSE transport path.
+
+### 2. Quality Gate Hardening — static analysis complete
 
 **Parent plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
-**Completed child plans**:
-- `.agent/plans/architecture-and-infrastructure/current/depcruise-triage-and-remediation.plan.md`
-- `.agent/plans/architecture-and-infrastructure/active/knip-triage-and-remediation.plan.md`
 
 Both knip (904 → 0) and depcruise (87 → 0) complete and blocking
-on all four gate surfaces. Remaining items in the parent plan
-are ESLint-focused: config standardisation, eslint-disable
-remediation, max-files-per-dir, type assertion promotion.
-
-### 2. WS3 MCP App Rebuild — MERGE PENDING
-
-**Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
-
-Local gates green on `feat/mcp_app_ui`. Widget crash fix complete
-locally and committed. Next: push, verify Vercel preview, then
-merge. Phase 5 (interactive user search view) queued post-merge.
+on all four gate surfaces. Remaining items are ESLint-focused.
+Note: this workstream's changes caused the MCP App UI regression.
 
 ### 3. Workspace Topology Exploration — FUTURE
 
 **Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
 
 Four-tier layered architecture. Lifecycle classification complete.
-Phase 2 (function-level analysis with knip + dependency-cruiser)
-pending.
+Phase 2 pending.
 
 ## Core Invariants
 

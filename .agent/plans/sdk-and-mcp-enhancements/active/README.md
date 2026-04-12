@@ -34,8 +34,13 @@ Execution order:
 
 ## MCP App UI
 
+- [mcp-app-ui-preview-regression.plan.md](mcp-app-ui-preview-regression.plan.md) —
+  **BUG**. MCP App UI broken on preview deployment; composition test
+  gap allowed it to ship silently. Investigation + fix + structural
+  test hardening.
 - [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
   **PENDING**. Interactive user-search MCP App view. Post-merge.
+  Depends on regression fix above.
 
 ## Exploration
 

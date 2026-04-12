@@ -35,7 +35,7 @@ export interface ToolRegistryDescriptor {
   readonly toolMcpFlatInputSchema: ToolDescriptorForName<ToolName>['toolMcpFlatInputSchema'];
   readonly securitySchemes?: readonly SecurityScheme[];
   readonly annotations?: ToolAnnotations;
-  readonly _meta?: ToolMeta;
+  readonly _meta: ToolMeta;
   readonly requiresDomainContext?: boolean;
 }
 
@@ -138,7 +138,7 @@ export interface UniversalToolListEntry {
   /** MCP annotations providing behaviour hints */
   readonly annotations?: ToolAnnotations;
   /** MCP Apps standard metadata for UI integration (ADR-141) */
-  readonly _meta?: ToolMeta;
+  readonly _meta: ToolMeta;
 }
 
 /**

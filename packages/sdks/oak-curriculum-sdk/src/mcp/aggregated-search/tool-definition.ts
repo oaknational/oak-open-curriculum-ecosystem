@@ -75,5 +75,8 @@ CROSS-TOOL WORKFLOWS:
     idempotentHint: true,
     openWorldHint: false,
   },
-  _meta: { ui: { resourceUri: WIDGET_URI } },
+  _meta: {
+    ui: { resourceUri: WIDGET_URI },
+    securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }],
+  },
 } as const;

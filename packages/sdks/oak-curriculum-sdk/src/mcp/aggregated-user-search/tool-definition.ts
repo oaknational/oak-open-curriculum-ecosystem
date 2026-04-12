@@ -56,7 +56,10 @@ Do NOT use for:
     idempotentHint: true,
     openWorldHint: false,
   },
-  _meta: { ui: { resourceUri: WIDGET_URI } },
+  _meta: {
+    ui: { resourceUri: WIDGET_URI },
+    securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }],
+  },
 } as const;
 
 /**
@@ -83,7 +86,10 @@ with search controls directly.`,
     idempotentHint: true,
     openWorldHint: false,
   },
-  _meta: { ui: { resourceUri: WIDGET_URI, visibility: ['app'] as const } },
+  _meta: {
+    ui: { resourceUri: WIDGET_URI, visibility: ['app'] satisfies ('model' | 'app')[] },
+    securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }],
+  },
 } as const;
 
 import { USER_SEARCH_SCOPES } from './types.js';

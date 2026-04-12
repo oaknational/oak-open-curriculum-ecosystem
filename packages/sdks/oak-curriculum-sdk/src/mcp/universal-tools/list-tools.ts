@@ -70,7 +70,7 @@ export function listUniversalTools(registry: GeneratedToolRegistry): UniversalTo
         inputSchema: def.inputSchema,
         securitySchemes: def.securitySchemes,
         annotations: def.annotations,
-        _meta: '_meta' in def ? def._meta : undefined,
+        _meta: def._meta,
       };
     },
   );

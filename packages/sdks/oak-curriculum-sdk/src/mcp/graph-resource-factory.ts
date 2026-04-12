@@ -139,7 +139,12 @@ export function createGraphToolDef<T extends { readonly version: string }>(
     readonly idempotentHint: true;
     readonly openWorldHint: false;
   };
-  readonly _meta: { readonly attribution: SourceAttribution } | undefined;
+  readonly _meta: {
+    readonly securitySchemes: readonly [
+      { readonly type: 'oauth2'; readonly scopes: readonly string[] },
+    ];
+    readonly attribution?: SourceAttribution;
+  };
 } {
   return {
     title: config.title,
@@ -154,7 +159,10 @@ export function createGraphToolDef<T extends { readonly version: string }>(
       openWorldHint: false as const,
     },
 
-    _meta: config.attribution ? { attribution: config.attribution } : undefined,
+    _meta: {
+      securitySchemes: [{ type: 'oauth2' as const, scopes: SCOPES_SUPPORTED }],
+      ...(config.attribution ? { attribution: config.attribution } : {}),
+    },
   };
 }
 

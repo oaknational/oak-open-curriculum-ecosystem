@@ -70,7 +70,7 @@ describe('generateToolDescriptorFile', () => {
 
     expect(generated).toContain('readonly securitySchemes?: readonly SecurityScheme[]');
     expect(generated).toContain('readonly annotations?: ToolAnnotations');
-    expect(generated).toContain('readonly _meta?: ToolMeta');
+    expect(generated).toContain('readonly _meta: ToolMeta');
     expect(generated).toContain(
       'readonly invoke: (client: TClient, args: TArgs) => InvokeResult | Promise<InvokeResult>',
     );

@@ -76,7 +76,7 @@ export interface ToolDescriptor<
    */
   readonly requiresDomainContext: boolean;
   readonly annotations?: ToolAnnotations;
-  readonly _meta?: ToolMeta;
+  readonly _meta: ToolMeta;
   readonly validateOutput: (value: unknown) =>
     | { readonly ok: true; readonly data: TResult; readonly status: TStatus }
     | {

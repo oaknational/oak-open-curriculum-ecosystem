@@ -120,16 +120,19 @@ describe('createGraphToolDef', () => {
     expect(toolDef.description).toContain('A test graph for unit testing.');
   });
 
-  it('returns undefined _meta when no attribution is provided', () => {
-    expect(toolDef._meta).toBeUndefined();
+  it('includes securitySchemes in _meta when no attribution is provided', () => {
+    expect(toolDef._meta).toBeDefined();
+    expect(toolDef._meta.securitySchemes).toBeDefined();
+    expect(toolDef._meta).not.toHaveProperty('attribution');
   });
 
-  it('returns _meta.attribution when attribution is provided', () => {
+  it('includes both securitySchemes and attribution in _meta when attribution is provided', () => {
     const withAttribution = createGraphToolDef({
       ...TEST_CONFIG,
       attribution: OAK_API_ATTRIBUTION,
     });
-    expect(withAttribution._meta).toEqual({ attribution: OAK_API_ATTRIBUTION });
+    expect(withAttribution._meta.securitySchemes).toBeDefined();
+    expect(withAttribution._meta.attribution).toEqual(OAK_API_ATTRIBUTION);
   });
 });
 

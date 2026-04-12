@@ -462,3 +462,205 @@ packages: extract shared types to a zero-dependency leaf
 module, have both cycle participants import from the leaf,
 re-export from the original location for API continuity.
 This is the standard depcruise cycle-breaking technique.
+
+---
+
+### Session 2026-04-12f: MCP App UI preview regression discovered
+
+**Bug**: MCP App UI renders on `oak-prod` but not on `oak-preview`
+(Vercel preview deployment for `feat/gate_hardening_part1`). Tool
+call succeeds (41.5 KB returned) but widget doesn't appear. Vercel
+logs show GET `/mcp` SSE connection timing out at 300s.
+
+**Irony**: The gate-hardening branch (knip, depcruise) broke a key
+feature that the hardened gates didn't catch.
+
+**Root cause (unverified)**: Possibly SSE transport failure, barrel
+deletion side-effect, or `_meta` handling change. Phase 0
+investigation required before fixing.
+
+**Structural insight — composition test gap materialised**: The
+distilled learning at line 151 ("pieces vs composition") predicted
+this exact failure class. E2E tests prove individual links
+(`_meta.ui` → `tools/list`, widget HTML → `resources/read`) but no
+test proves the full MCP client session lifecycle. The gap allowed
+39 files of changes (knip + depcruise cleanup) to silently break
+the MCP App UI.
+
+**Plan created**: `mcp-app-ui-preview-regression.plan.md` in
+`active/`. Four phases: investigate, fix, composition tests, harden.
+
+**Metacognitive observation**: The "pieces vs composition" entry has
+been in distilled.md since 2026-04-10 but was never acted on. It
+took a real regression to provide the forcing function. Distilled
+learnings without enforcement mechanisms are advisory, not
+structural. The composition test in Phase 2 is the enforcement.
+
+---
+
+### Session 2026-04-12h: MCP App UI regression — plan overhaul + composition test
+
+**4 specialist reviewers invoked (assumptions, MCP, test, code)**
+
+All four converged on key corrections:
+1. The "supertest POST vs SSE transport" framing was overstated —
+   existing E2E already parses SSE envelopes. The real gap is the
+   full MCP client SDK lifecycle (connect → listTools → readResource).
+2. The SDK's `StreamableHTTPServerTransport` does NOT strip `_meta`.
+3. The `Omit<Tool, '_meta'>` is compile-time only; not credible runtime cause.
+4. Knip/depcruise cleanup was underweight as a hypothesis — user
+   confirmed this is the most likely cause.
+
+**Critical test infrastructure finding**: The no-network E2E setup
+(`test.setup.no-network.ts`) replaces `globalThis.fetch` with a
+blocking stub. The MCP SDK's `StreamableHTTPClientTransport` uses
+`fetch` internally (confirmed in SDK source: `(this._fetch ?? fetch)`).
+Fix: pass `globalThis.__ORIGINAL_FETCH__` to the transport constructor
+(SDK accepts custom `fetch` option), avoiding global state mutation.
+
+**Composition test written**: `mcp-app-composition.e2e.test.ts` with
+debug instrumentation. Server-side instrumentation added to
+`handlers.ts` (tool registration) and `register-widget-resource.ts`
+(widget resource registration). Test exercises full Client SDK
+lifecycle against `createStubbedHttpApp()` on random port.
+
+**Test design corrections from reviewers**:
+- No `as AddressInfo` → runtime narrowing
+- `await once(server, 'listening')` before reading address
+- Promisified `server.close()` for clean teardown
+- Vacuous pass guard: assert `WIDGET_TOOL_NAMES.size > 0`
+
+**If test passes**: pivot to Cursor-specific or resource-read analysis
+**If test fails**: root cause found — fix the server code
+
+---
+
+### Session 2026-04-12g: MCP App UI regression — deep investigation
+
+**Confirmed: regression is branch-code, not environment**
+Called `get-curriculum-model` on `oak-local` (local dev server
+running this branch). UI did NOT render. Same tool on `oak-prod`
+(`main`) renders fine. This eliminates Vercel, network, and Cursor
+as variables. The bug is in source control on this branch.
+
+**All existing tests pass — the composition gap is real**
+Ran the full test suite for `oak-curriculum-mcp-streamable-http`:
+581 of 582 tests pass (1 unrelated timeout in
+`register-prompts.integration.test.ts`). `widget-metadata.e2e.test.ts`
+passes — it verifies `_meta.ui.resourceUri` is present in the
+`tools/list` JSON-RPC response via supertest POST. But the real MCP
+client (Cursor) connects via SSE GET + POST, a different transport
+path that no test exercises.
+
+**Key diagnostic insight: supertest vs MCP client SDK**
+Supertest sends a direct HTTP POST and parses the SSE text envelope.
+The real MCP client (`StreamableHTTPClientTransport`) first
+establishes an SSE GET connection, then sends POST requests. The
+response goes through the MCP SDK's `StreamableHTTPServerTransport`
+serialisation. If the SDK's `Tool` schema strips `_meta` during SSE
+serialisation, supertest would never notice — it bypasses that layer.
+
+**Suspicious commits narrowed to 3**
+- `a03f3b32`: `ToolDescriptor` changed from `extends Tool` to
+  `extends Omit<Tool, '_meta'>` — type-level change, but the MCP
+  SDK uses Zod schemas for wire serialisation and `Tool` schema
+  validation might interact with this
+- `23360be7`: 850 unused exports removed (knip Phase 2+3)
+- `d74c0b5d`: 87 depcruise violations resolved
+
+**Composition test approach designed**
+Use `Client` + `StreamableHTTPClientTransport` from
+`@modelcontextprotocol/sdk` against `createStubbedHttpApp()` on a
+random port. Call `listTools()` and check `_meta.ui.resourceUri`.
+This is both the diagnostic (Phase 0) and the permanent guard
+(Phase 2). Full design in the plan.
+
+**Pattern: supertest E2E tests have a transport blind spot**
+Supertest tests the JSON-RPC contract but not the SSE transport
+serialisation. For MCP servers, the transport layer IS part of the
+product contract — `_meta` fields, session lifecycle, and event
+streaming all happen there. A test that bypasses the transport
+layer cannot catch transport-layer regressions. This may warrant
+extraction to a pattern if it recurs.
+
+---
+
+### Session 2026-04-12 (cont): Deep investigation and `_meta` architecture
+
+**Composition test passes — server-side is correct**
+The `mcp-app-composition.e2e.test.ts` using real MCP client SDK
+(`Client` + `StreamableHTTPClientTransport`) confirms:
+- `listTools()` returns `_meta.ui.resourceUri === WIDGET_URI` for
+  all tools in `WIDGET_TOOL_NAMES`
+- `readResource(WIDGET_URI)` returns HTML with correct MIME type
+- Widget HTML fetched from `oak-local` and `oak-prod` via
+  `FetchMcpResource` is byte-identical
+
+**Exhaustive git diff: no runtime change in app tool path**
+Compared `main..HEAD` for every file in the registration chain:
+- `handlers.ts`: the `if (isAppToolEntry)` branch is IDENTICAL
+  between main and branch — both use `registerAppTool(server,
+  tool.name, { ...config, _meta: { ...tool._meta } }, handler)`
+- `listUniversalTools`, `isAppToolEntry`, `register-widget-resource.ts`,
+  `application.ts` — all unchanged vs main
+- Only the `else` branch (non-app tools) has a committed runtime
+  change: `_meta: tool._meta` → `_meta: tool._meta ? { ...tool._meta } : undefined`
+
+**`_meta` architecture finding: scattered with no single source**
+- `_meta` values hand-written in 11 aggregated definitions + codegen
+- Widget membership duplicated: `WIDGET_TOOL_NAMES` (codegen) vs
+  inline `_meta.ui` in each aggregated definition
+- Before this session, some tools had `_meta: undefined` — compile
+  time did not enforce its presence
+- `securitySchemes` was repeated verbatim in every definition
+- Codegen `emit-index.ts` stamps `_meta.ui.resourceUri` for generated
+  tools in `WIDGET_TOOL_NAMES` — currently dead code (all widget
+  tools are aggregated)
+
+**Fix: `AggregatedToolDefShape` now requires `_meta: ToolMeta`**
+Changed from optional to required. All 11 aggregated tools now
+define `_meta` with `securitySchemes`. This may be the root cause
+fix — if some tools having `_meta: undefined` caused the MCP SDK
+or Cursor to skip `_meta` processing for the entire tool list.
+
+**Proposed pattern: `buildToolMeta()` factory**
+Derives `_meta` from tool name using `WIDGET_TOOL_NAMES.has(name)`.
+Eliminates all five architectural problems (duplication, scattered
+values, missing enforcement, dead code, DRY violation).
+
+**URI consistency verified**
+All 27 files referencing `WIDGET_URI` import the same constant from
+`@oaknational/sdk-codegen/widget-constants`. The chain:
+`cross-domain-constants.ts` → `generate-widget-constants.ts` →
+`widget-constants.ts` (generated) → re-exported by SDK → consumed
+by tool definitions, resource registration, and auth bypass.
+
+**`registerAppTool` from ext-apps@1.5.0 normalises `_meta`**
+De-minified source: copies `_meta.ui.resourceUri` to legacy
+`_meta["ui/resourceUri"]` key. This is the library's backward
+compatibility — we don't need it but can't disable it without
+patching. Harmless (just adds a redundant key on the wire).
+
+**CRITICAL FINDING: Server is correct, Cursor refuses to render**
+
+The MCP Apps reference host (`ext-apps@1.5.0 basic-host`) connected
+to the same local server on `localhost:3333` and **rendered the
+widget successfully**. In the same session, Cursor was also
+connected to the same server (confirmed via `lsof` — both Cursor
+and Firefox had ESTABLISHED connections to port 3333). Cursor
+returned tool results but did NOT render the widget.
+
+After disconnecting and reconnecting `oak-local` in Cursor MCP
+settings — still no widget.
+
+The widget DOES render in Cursor for `oak-prod` (HTTPS hosted).
+
+**Hypotheses for next session** (in priority order):
+1. Check if `oak-local` widget EVER worked in Cursor on `main`.
+   If not, this was never a branch regression — it's a Cursor
+   limitation with localhost/HTTP servers.
+2. If it works on `main`, `git bisect` to find the breaking commit.
+3. Investigate Cursor-specific MCP Apps requirements (HTTPS? specific
+   capability declaration? stale cache?).
+
+See plan: `mcp-app-ui-preview-regression.plan.md` Phase 3.
