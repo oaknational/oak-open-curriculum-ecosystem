@@ -49,7 +49,7 @@ type DispatchBulkFn = (
  * @param prepareBulkIngestion - Override for testing
  * @param dispatchBulk - Override for testing
  */
-export interface RunVersionedIngestDeps {
+interface RunVersionedIngestDeps {
   readonly oakClient: OakClient;
   readonly esTransport: EsTransport;
   readonly target: SearchIndexTarget;

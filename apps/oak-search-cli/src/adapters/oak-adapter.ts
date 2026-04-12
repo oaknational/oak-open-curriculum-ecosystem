@@ -10,75 +10,34 @@
 import { createOakBaseClient } from '@oaknational/curriculum-sdk';
 import { createRedisClient, withRedisConnection } from './sdk-cache';
 import { cacheLogger } from '../lib/logger';
-import type { makeGetAllThreads, makeGetThreadUnits } from './oak-adapter-threads';
 import { createUncachedClient, createCachedClient, buildClientConfig } from './sdk-client-factory';
 import type {
-  UnitListEntry,
   LessonGroupResponse,
   LessonsPaginationOptions,
   SubjectSequenceEntry,
-  SubjectAssetEntry,
+  OakClient,
+} from './oak-adapter-types';
+
+export type { LessonGroupResponse, LessonsPaginationOptions, SubjectSequenceEntry };
+export type {
   GetUnitsFn,
   GetTranscriptFn,
   GetLessonSummaryFn,
   GetUnitSummaryFn,
+} from './oak-adapter-types';
+export type {
   GetSubjectSequencesFn,
   GetSequenceUnitsFn,
   GetLessonsByKeyStageAndSubjectFn,
-  GetSubjectAssetsFn,
 } from './oak-adapter-types';
-
-// Re-export types for consumers
-export type { UnitListEntry, LessonGroupResponse, LessonsPaginationOptions, SubjectSequenceEntry };
-export type {
-  SubjectAssetEntry,
-  GetUnitsFn,
-  GetTranscriptFn,
-  GetLessonSummaryFn,
-  GetUnitSummaryFn,
-};
-export type { GetSubjectSequencesFn, GetSequenceUnitsFn, GetLessonsByKeyStageAndSubjectFn };
-export type { GetSubjectAssetsFn };
+export type { GetSubjectAssetsFn } from './oak-adapter-types';
+export type { OakClient, CacheStats } from './oak-adapter-types';
 export type {
   ThreadEntry,
   ThreadUnitEntry,
   GetAllThreadsFn,
   GetThreadUnitsFn,
 } from './oak-adapter-threads';
-
-// =============================================================================
-// Types
-// =============================================================================
-
-/** Statistics about cache usage during the current session. */
-export interface CacheStats {
-  readonly hits: number;
-  readonly misses: number;
-  readonly connected: boolean;
-}
-
-/**
- * Oak client interface - unified API for curriculum data access.
- *
- * All methods return `Result<T, SdkFetchError>` per ADR-088.
- * Cache management methods are always present (no-op when caching disabled).
- */
-export interface OakClient {
-  getUnitsByKeyStageAndSubject: GetUnitsFn;
-  getLessonTranscript: GetTranscriptFn;
-  getLessonSummary: GetLessonSummaryFn;
-  getUnitSummary: GetUnitSummaryFn;
-  getSubjectSequences: GetSubjectSequencesFn;
-  getSequenceUnits: GetSequenceUnitsFn;
-  getAllThreads: ReturnType<typeof makeGetAllThreads>;
-  getThreadUnits: ReturnType<typeof makeGetThreadUnits>;
-  getLessonsByKeyStageAndSubject: GetLessonsByKeyStageAndSubjectFn;
-  /** Fetches all assets for a subject/keystage. Used for video availability check. */
-  getSubjectAssets: GetSubjectAssetsFn;
-  rateLimitTracker: ReturnType<typeof createOakBaseClient>['rateLimitTracker'];
-  getCacheStats: () => CacheStats;
-  disconnect: () => Promise<void>;
-}
 
 /** Environment config required to create an Oak client. */
 export interface OakClientEnv {
@@ -178,29 +137,6 @@ function resolveCacheBypass(options: CreateOakClientOptions): boolean {
   return options.caching?.ignoreCached404 ?? false;
 }
 
-/** Clear all cached SDK responses from Redis. */
-export async function clearSdkCache(env: OakClientEnv): Promise<number> {
-  if (!env.SDK_CACHE_ENABLED) {
-    cacheLogger.info('SDK caching not enabled, nothing to clear');
-    return 0;
-  }
-
-  return withRedisConnection(
-    env.SDK_CACHE_REDIS_URL ?? 'redis://localhost:6379',
-    0,
-    async (redis) => {
-      const keys = await redis.keys(`${CACHE_KEY_PREFIX}*`);
-      if (keys.length === 0) {
-        cacheLogger.info('No cached entries to clear');
-        return 0;
-      }
-      const deleted = await redis.del(...keys);
-      cacheLogger.info('Cleared cached entries', { count: deleted });
-      return deleted;
-    },
-  );
-}
-
 /**
  * SDK cache connection status.
  * Used by {@link getSdkCacheStatus} to report cache availability.
@@ -227,9 +163,4 @@ export async function getSdkCacheStatus(env: OakClientEnv): Promise<CacheStatus>
       return { enabled: true, connected: true, keyCount: keys.length };
     },
   );
-}
-
-/** Reset singleton for testing purposes. @internal */
-export function resetClientSingleton(): void {
-  clientSingleton = null;
 }

@@ -11,33 +11,8 @@ export type { KeyStage, Subject as SearchSubjectSlug } from '@oaknational/curric
 // Subject hierarchy types for ADR-101 (KS4 science variants)
 export type { AllSubjectSlug, ParentSubjectSlug } from '@oaknational/curriculum-sdk';
 
-// Search schemas, constants, factories, and type guards from sdk-codegen
-export { SEARCH_SCOPES } from '@oaknational/sdk-codegen/search';
-
 export type {
-  SearchStructuredRequest,
-  SearchStructuredScope,
-  SearchNaturalLanguageRequest,
-  SearchParsedQuery,
-  SearchParsedIntent,
   SearchScope,
-  SearchScopeWithAll,
-  SearchSuggestionItem,
-  SearchSuggestionResponse,
-  SearchSuggestionRequest,
-  SearchLessonResult,
-  SearchLessonsResponse,
-  SearchLessonsSuggestions,
-  SearchLessonsSuggestionCache,
-  SearchUnitResult,
-  SearchUnitsResponse,
-  SearchSequenceResult,
-  SearchSequencesResponse,
-  SearchMultiScopeBucket,
-  SearchMultiScopeResponse,
-  SequenceFacetUnit,
-  SequenceFacet,
-  SearchFacets,
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,
   SearchUnitRollupDoc,

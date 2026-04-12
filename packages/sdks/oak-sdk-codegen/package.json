@@ -88,7 +88,6 @@
     "scan:sitemap": "tsx code-generation/sitemap-scanner.ts"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^9.3.4",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@oaknational/logger": "workspace:^",
     "@oaknational/observability": "workspace:*",

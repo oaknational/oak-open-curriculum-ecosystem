@@ -6,12 +6,6 @@ import type {
   HealthStatus,
 } from './health-probe-types';
 
-export type {
-  AgentInfrastructureHealthReport,
-  HealthCheckResult,
-  HealthStatus,
-} from './health-probe-types';
-
 export function evaluateAgentInfrastructureHealth(
   repoRoot: string,
   now: Date = new Date(),

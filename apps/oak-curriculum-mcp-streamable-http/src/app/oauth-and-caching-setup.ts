@@ -8,12 +8,10 @@ import {
   deriveUpstreamOAuthBaseUrl,
   type UpstreamAuthServerMetadata,
 } from '../oauth-proxy/index.js';
-import type { MetadataFetchError } from './metadata-fetch-error.js';
 import type { HttpObservability } from '../observability/http-observability.js';
 import { fetchUpstreamMetadata } from './upstream-metadata-fetch.js';
 
-export type { MetadataFetchError };
-export type { FetchFn, FetchUpstreamOptions } from './upstream-metadata-fetch.js';
+export type { FetchFn } from './upstream-metadata-fetch.js';
 export { fetchUpstreamMetadata } from './upstream-metadata-fetch.js';
 
 /**

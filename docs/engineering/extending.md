@@ -26,8 +26,8 @@ MCP tools are generated from the OpenAPI schema — you do not write tool defini
 
 For tools that combine multiple API calls or add natural-language processing:
 
-1. Define the tool in `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/definitions.ts`
-2. Add to `AGGREGATED_TOOL_DEFS` — the type `AggregatedToolName` automatically extends
+1. Add the tool name to the `AggregatedToolName` union in `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/types.ts`
+2. Add the entry to `AGGREGATED_TOOL_DEFS` in `definitions.ts` — the `satisfies Record<AggregatedToolName, ...>` guard catches mismatches at compile time
 3. Implement the handler (aggregated tools return `Promise<CallToolResult>` directly)
 4. Register in the MCP server's tool registration
 5. Write tests at all levels (unit, integration, E2E)

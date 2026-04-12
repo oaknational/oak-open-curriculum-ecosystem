@@ -11,21 +11,18 @@
  */
 
 import { err, ok, type Result } from '@oaknational/result';
-import { SearchCliBaseEnvSchema, SearchCliEnvSchema } from '../env.js';
+import { SearchCliEnvSchema } from '../env.js';
 import type { SearchCliEnv } from '../env.js';
 
-/** Backward-compatible base schema alias (canonical source: `src/env.ts`). */
-export const BaseEnvSchema = SearchCliBaseEnvSchema;
-/** Backward-compatible full schema alias (canonical source: `src/env.ts`). */
-export const EnvSchema = SearchCliEnvSchema;
+const EnvSchema = SearchCliEnvSchema;
 
-export type Env = SearchCliEnv;
+type Env = SearchCliEnv;
 
 type EnvResult = Env & { OAK_EFFECTIVE_KEY: string };
 /**
  * Parse-env failure details for explicit caller handling.
  */
-export interface ParseEnvError {
+interface ParseEnvError {
   readonly message: string;
 }
 

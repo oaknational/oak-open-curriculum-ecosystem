@@ -10,7 +10,7 @@
  * @see CURRICULUM_GLOSSARY_INDEX_FIELDS - Glossary field definitions
  */
 
-import type { EsFieldMapping } from '../es-field-config.js';
+import type { EsFieldMapping } from '../es-field-types.js';
 import { textFieldWithAnalyzers, KEYWORD_SUBFIELD, SEARCH_AS_YOU_TYPE_SUBFIELD } from './common.js';
 
 /**

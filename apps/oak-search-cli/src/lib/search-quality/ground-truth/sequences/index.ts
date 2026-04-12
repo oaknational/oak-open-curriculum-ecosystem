@@ -7,31 +7,11 @@
  *
  * Note: With only ~30 documents, sequences may be better served by navigation/filters
  * than search. This ground truth validates the mechanism works.
- *
- * ## Usage
- *
- * ```typescript
- * import { SEQUENCE_GROUND_TRUTHS, getSequenceGroundTruth } from './sequences';
- *
- * // Get all sequence ground truths
- * for (const gt of SEQUENCE_GROUND_TRUTHS) {
- *   console.log(`${gt.subject}/${gt.phase}: ${gt.query}`);
- * }
- *
- * // Get specific ground truth
- * const mathsSec = getSequenceGroundTruth('maths', 'secondary');
- * ```
  */
 
-import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
+import type { SequenceGroundTruth } from './types';
 
-import type { Phase, SequenceGroundTruth } from './types';
-
-export type { SequenceGroundTruth, Phase, RelevanceScore, ExpectedRelevance } from './types';
-
-// =============================================================================
-// Ground Truth Entries
-// =============================================================================
+export type { SequenceGroundTruth } from './types';
 
 import { MATHS_SECONDARY } from './entries/maths-secondary';
 
@@ -43,46 +23,3 @@ import { MATHS_SECONDARY } from './entries/maths-secondary';
  * is sufficient to validate the mechanism.
  */
 export const SEQUENCE_GROUND_TRUTHS: readonly SequenceGroundTruth[] = [MATHS_SECONDARY] as const;
-
-// Re-export individual entries for direct access
-export { MATHS_SECONDARY } from './entries/maths-secondary';
-
-// =============================================================================
-// Accessors
-// =============================================================================
-
-/**
- * Get a sequence ground truth by subject and phase.
- *
- * @param subject - The subject slug
- * @param phase - The phase (primary or secondary)
- * @returns The ground truth if found, undefined otherwise
- */
-export function getSequenceGroundTruth(
-  subject: AllSubjectSlug,
-  phase: Phase,
-): SequenceGroundTruth | undefined {
-  return SEQUENCE_GROUND_TRUTHS.find((gt) => gt.subject === subject && gt.phase === phase);
-}
-
-/**
- * Get all sequence ground truths for a subject.
- *
- * @param subject - The subject slug
- * @returns Array of ground truths for that subject
- */
-export function getSequenceGroundTruthsForSubject(
-  subject: AllSubjectSlug,
-): readonly SequenceGroundTruth[] {
-  return SEQUENCE_GROUND_TRUTHS.filter((gt) => gt.subject === subject);
-}
-
-/**
- * Get all sequence ground truths for a phase.
- *
- * @param phase - The phase (primary or secondary)
- * @returns Array of ground truths for that phase
- */
-export function getSequenceGroundTruthsForPhase(phase: Phase): readonly SequenceGroundTruth[] {
-  return SEQUENCE_GROUND_TRUTHS.filter((gt) => gt.phase === phase);
-}

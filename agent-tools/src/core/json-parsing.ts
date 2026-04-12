@@ -21,8 +21,6 @@ interface JsonCandidate {
   agentType?: unknown;
 }
 
-export type { HistoryRow, MetaRow };
-
 const maxJsonLinesBytesRead = 5 * 1024 * 1024;
 
 /** Read a JSONL file, returning only lines that pass the type guard. */

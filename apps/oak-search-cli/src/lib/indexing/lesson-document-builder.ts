@@ -27,7 +27,7 @@ import { createBulkAction } from './bulk-action-factory';
  * Aggregated lesson with all unit relationships.
  * Input for lesson-centric document building.
  */
-export interface AggregatedLessonInput {
+interface AggregatedLessonInput {
   readonly lessonSlug: string;
   readonly lessonTitle: string;
   /** ALL unit slugs this lesson belongs to - we preserve complete relationships */
@@ -37,7 +37,7 @@ export interface AggregatedLessonInput {
 /**
  * Result of building a single lesson document.
  */
-export interface LessonBuildResult {
+interface LessonBuildResult {
   readonly lessonSlug: string;
   readonly ops: readonly BulkOperationEntry[];
   readonly snippet: string;

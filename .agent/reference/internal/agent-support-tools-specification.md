@@ -179,9 +179,9 @@ agentSupport: {
 },
 ```
 
-#### 1.2 Type Derivation (Automatic)
+#### 1.2 Type Registration (Manual)
 
-`AggregatedToolName` is **derived from `AGGREGATED_TOOL_DEFS` keys** at compile time. Adding a tool to `AGGREGATED_TOOL_DEFS` (Phase 2.1) automatically extends the type union and the `isAggregatedToolName` type guard. No manual type updates needed.
+`AggregatedToolName` is an **explicit string literal union** in `types.ts`. Adding a new aggregated tool requires adding the tool name to this union AND to `AGGREGATED_TOOL_DEFS`. The `satisfies Record<AggregatedToolName, ...>` guard in `definitions.ts` catches any mismatch at compile time. The `isAggregatedToolName` type guard uses `value in AGGREGATED_TOOL_DEFS` at runtime.
 
 #### 1.3 Create Tool Data File
 
@@ -256,7 +256,7 @@ export const AGGREGATED_TOOL_DEFS = {
 
 **File:** `packages/sdks/oak-curriculum-sdk/src/mcp/universal-tools/type-guards.ts`
 
-`isAggregatedToolName` is **derived from `AGGREGATED_TOOL_DEFS` keys**. Adding a tool to `AGGREGATED_TOOL_DEFS` automatically extends the type guard. No manual updates needed.
+`isAggregatedToolName` checks `value in AGGREGATED_TOOL_DEFS` at runtime. Adding a new tool requires both: (1) adding the name to the `AggregatedToolName` union in `types.ts`, and (2) adding the entry to `AGGREGATED_TOOL_DEFS`. The `satisfies` guard catches mismatches.
 
 #### 2.3 Universal Tools Executor
 
@@ -471,7 +471,7 @@ it('returns identical data on repeated calls (idempotent)', () => {
 
 Required assertions:
 
-The `aggregatedNames` array is now **derived from `AGGREGATED_TOOL_DEFS`** via `typeSafeKeys()`. Adding a tool to `AGGREGATED_TOOL_DEFS` automatically includes it in integration tests.
+The `aggregatedNames` array is **derived from `AGGREGATED_TOOL_DEFS`** via `typeSafeKeys()`. Adding a tool to `AGGREGATED_TOOL_DEFS` includes it in integration tests. Note: the `AggregatedToolName` union in `types.ts` must also be updated — the `satisfies` guard catches mismatches.
 
 ```typescript
 const aggregatedNames = typeSafeKeys(AGGREGATED_TOOL_DEFS);

@@ -53,6 +53,7 @@ const sampleDescriptor: ToolRegistryDescriptor = {
   },
   securitySchemes: [],
   requiresDomainContext: false,
+  _meta: { securitySchemes: [] },
   toolMcpFlatInputSchema: z.object({
     params: z.object({
       path: z.object({

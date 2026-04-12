@@ -206,7 +206,7 @@ git checkout -b fix/bug-description
 Before committing, run the comprehensive quality gate:
 
 ```bash
-pnpm check    # Full suite: clean, codegen, build, type-check, lint, test, e2e, smoke, format
+pnpm check    # Full suite: clean, codegen, build, type-check, lint, test, e2e, smoke, knip, format
 ```
 
 This single command runs every quality gate in the correct order. If it

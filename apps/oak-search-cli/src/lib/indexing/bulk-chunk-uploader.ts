@@ -33,7 +33,7 @@ import {
 } from './bulk-index-counts';
 
 // Re-export for consumers
-export type { EsTransport, ChunkUploadResult } from './retry';
+export type { EsTransport } from './retry';
 export type { IndexOperationCounts } from './bulk-index-counts';
 
 /**

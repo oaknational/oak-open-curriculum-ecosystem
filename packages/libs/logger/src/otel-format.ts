@@ -10,7 +10,10 @@
 import { createHash } from 'crypto';
 import type { ActiveSpanContextSnapshot } from '@oaknational/observability';
 import type { LogLevel } from './log-levels';
-import type { LogContext, NormalizedError } from './types';
+import type { LogContext, NormalizedError, OtelLogRecord, ResourceAttributes } from './types';
+
+// Re-export OtelLogRecord for API continuity (consumed by index.ts, node.ts, test-helpers)
+export type { OtelLogRecord };
 
 /**
  * OpenTelemetry severity number mapping
@@ -26,49 +29,9 @@ const SEVERITY_NUMBER_MAP: Record<LogLevel, number> = {
 };
 
 /**
- * Resource attributes for service identification
- */
-export interface ResourceAttributes {
-  'service.name': string;
-  'service.version': string;
-  'deployment.environment': string;
-  'host.name'?: string;
-  'host.id'?: string;
-  'cloud.provider'?: string;
-  'cloud.region'?: string;
-}
-
-/**
- * OpenTelemetry log record structure
- * @see https://opentelemetry.io/docs/specs/otel/logs/data-model/
- */
-export interface OtelLogRecord {
-  /** Timestamp when the event occurred (ISO 8601) */
-  Timestamp: string;
-  /** Timestamp when the event was observed by the logger (ISO 8601) */
-  ObservedTimestamp: string;
-  /** Severity number (1-24) */
-  SeverityNumber: number;
-  /** Severity text (DEBUG, INFO, WARN, ERROR, FATAL) */
-  SeverityText: string;
-  /** Log message */
-  Body: string;
-  /** Context attributes */
-  Attributes: LogContext;
-  /** Resource identification attributes */
-  Resource: ResourceAttributes;
-  /** W3C Trace ID (32-character hex string) */
-  TraceId?: string;
-  /** W3C Span ID (16-character hex string) */
-  SpanId?: string;
-  /** W3C Trace flags */
-  TraceFlags?: number;
-}
-
-/**
  * Options for formatting an OpenTelemetry log record
  */
-export interface FormatOtelLogRecordOptions {
+interface FormatOtelLogRecordOptions {
   /** Log level */
   readonly level: LogLevel;
   /** Log message */
@@ -136,6 +99,37 @@ function extractErrorAttributes(error: NormalizedError): LogContext {
 }
 
 /**
+ * Resolves trace context fields for an OtelLogRecord.
+ *
+ * Active span context takes precedence. Falls back to correlationId-derived
+ * TraceId if no active span is available.
+ */
+function resolveTraceFields(
+  activeSpanContext: ActiveSpanContextSnapshot | undefined,
+  context: LogContext,
+): { readonly TraceId?: string; readonly SpanId?: string; readonly TraceFlags?: number } {
+  if (activeSpanContext) {
+    return {
+      TraceId: activeSpanContext.traceId,
+      SpanId: activeSpanContext.spanId,
+      TraceFlags: activeSpanContext.traceFlags,
+    };
+  }
+
+  const correlationId =
+    typeof context.correlationId === 'string' ? context.correlationId : undefined;
+
+  if (correlationId !== undefined) {
+    const traceId = correlationIdToTraceId(correlationId);
+    if (traceId !== undefined) {
+      return { TraceId: traceId };
+    }
+  }
+
+  return {};
+}
+
+/**
  * Format a log record according to OpenTelemetry Logs Data Model
  *
  * Creates a structured log record with all required OpenTelemetry fields:
@@ -159,12 +153,10 @@ export function formatOtelLogRecord(options: FormatOtelLogRecordOptions): OtelLo
   const attributes: LogContext =
     error === undefined ? { ...context } : { ...context, ...extractErrorAttributes(error) };
 
-  // Extract correlationId if present
-  const correlationId =
-    typeof context.correlationId === 'string' ? context.correlationId : undefined;
+  // Resolve trace context — active span takes precedence over correlationId
+  const traceFields = resolveTraceFields(activeSpanContext, context);
 
-  // Build base record
-  const record: OtelLogRecord = {
+  return {
     Timestamp: timestamp,
     ObservedTimestamp: timestamp,
     SeverityNumber: logLevelToSeverityNumber(level),
@@ -172,18 +164,6 @@ export function formatOtelLogRecord(options: FormatOtelLogRecordOptions): OtelLo
     Body: message,
     Attributes: attributes,
     Resource: resourceAttributes,
+    ...traceFields,
   };
-
-  if (activeSpanContext) {
-    record.TraceId = activeSpanContext.traceId;
-    record.SpanId = activeSpanContext.spanId;
-    record.TraceFlags = activeSpanContext.traceFlags;
-  } else if (correlationId !== undefined) {
-    const traceId = correlationIdToTraceId(correlationId);
-    if (traceId !== undefined) {
-      record.TraceId = traceId;
-    }
-  }
-
-  return record;
 }

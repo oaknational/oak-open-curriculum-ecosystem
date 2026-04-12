@@ -25,7 +25,7 @@ import { extractUnitsForKeyStage } from './sequence-unit-extraction';
 /**
  * Unit data returned from pattern-aware fetching.
  */
-export interface PatternFetchedUnit {
+interface PatternFetchedUnit {
   readonly unitSlug: string;
   readonly unitTitle: string;
   /** Sequence the unit was fetched from (for sequence-units traversal) */
@@ -35,7 +35,7 @@ export interface PatternFetchedUnit {
 /**
  * Result of pattern-aware data fetching.
  */
-export interface PatternFetchResult {
+interface PatternFetchResult {
   readonly units: readonly PatternFetchedUnit[];
   readonly pattern: PatternConfig;
   readonly skipped: boolean;

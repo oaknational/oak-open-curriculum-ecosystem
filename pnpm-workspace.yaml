@@ -1,6 +1,5 @@
 packages:
   - agent-tools
-  # - apps/oak-curriculum-mcp-stdio # legacy workspace, no longer actively maintained
   - apps/oak-curriculum-mcp-streamable-http
   - apps/oak-search-cli
   - packages/core/oak-eslint

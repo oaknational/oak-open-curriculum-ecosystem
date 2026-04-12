@@ -107,7 +107,7 @@ export function createAssetDownloadRoute(deps: AssetDownloadRouteDeps): RequestH
 }
 
 /** Default TTL for download URLs: 5 minutes. */
-export const DOWNLOAD_TTL_MS = 5 * 60 * 1000;
+const DOWNLOAD_TTL_MS = 5 * 60 * 1000;
 
 /** Creates the URL factory function for generating signed download URLs. */
 export function createAssetDownloadUrlFactory(

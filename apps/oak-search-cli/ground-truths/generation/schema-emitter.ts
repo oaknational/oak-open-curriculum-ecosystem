@@ -45,10 +45,9 @@ export function emitSlugEnumSchema(data: ParsedBulkData): string {
 /**
  * Generates complete Zod schema file for ground truth validation.
  *
- * @param allData - Parsed bulk data for all subjects/phases
  * @returns Complete TypeScript source file content
  */
-export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): string {
+export function emitGroundTruthSchemas(): string {
   const lines: string[] = [];
 
   // File header
@@ -63,7 +62,6 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
   lines.push('');
   lines.push("import { typeSafeKeys } from '@oaknational/type-helpers';");
   lines.push("import { z } from 'zod';");
-  lines.push("import { ALL_LESSON_SLUGS } from './lesson-slugs-by-subject';");
   lines.push('');
 
   // Core schemas
@@ -78,19 +76,18 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
   lines.push(' *');
   lines.push(' * @generated');
   lines.push(' */');
-  lines.push('export const RelevanceScoreSchema = z.union([');
+  lines.push('const RelevanceScoreSchema = z.union([');
   lines.push('  z.literal(1),');
   lines.push('  z.literal(2),');
   lines.push('  z.literal(3),');
   lines.push(']);');
-  lines.push('export type RelevanceScore = z.infer<typeof RelevanceScoreSchema>;');
   lines.push('');
 
   // QueryCategory - outcome-oriented framework (2026-01-09), future-intent added 2026-01-24
   lines.push(
     '/** Query categories. Standard: precise-topic, natural-expression, imprecise-input, cross-topic, future-intent. Legacy (deprecated): naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based. @generated */',
   );
-  lines.push('export const QueryCategorySchema = z.enum([');
+  lines.push('const QueryCategorySchema = z.enum([');
   lines.push(
     "  'precise-topic', 'natural-expression', 'imprecise-input', 'cross-topic', 'future-intent',",
   ); // Standard categories
@@ -98,7 +95,6 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
     "  'naturalistic', 'misspelling', 'synonym', 'multi-concept', 'colloquial', 'intent-based',",
   ); // Legacy
   lines.push(']);');
-  lines.push('export type QueryCategory = z.infer<typeof QueryCategorySchema>;');
   lines.push('');
 
   // QueryPriority
@@ -107,13 +103,12 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
   lines.push(' *');
   lines.push(' * @generated');
   lines.push(' */');
-  lines.push('export const QueryPrioritySchema = z.enum([');
+  lines.push('const QueryPrioritySchema = z.enum([');
   lines.push("  'critical',");
   lines.push("  'high',");
   lines.push("  'medium',");
   lines.push("  'exploratory',");
   lines.push(']);');
-  lines.push('export type QueryPriority = z.infer<typeof QueryPrioritySchema>;');
   lines.push('');
 
   // KeyStage
@@ -122,13 +117,12 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
   lines.push(' *');
   lines.push(' * @generated');
   lines.push(' */');
-  lines.push('export const KeyStageSchema = z.enum([');
+  lines.push('const KeyStageSchema = z.enum([');
   lines.push("  'ks1',");
   lines.push("  'ks2',");
   lines.push("  'ks3',");
   lines.push("  'ks4',");
   lines.push(']);');
-  lines.push('export type KeyStage = z.infer<typeof KeyStageSchema>;');
   lines.push('');
 
   // GroundTruthQuery schema
@@ -143,7 +137,7 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
   lines.push(' *');
   lines.push(' * @generated');
   lines.push(' */');
-  lines.push('export const GroundTruthQuerySchema = z.object({');
+  lines.push('const GroundTruthQuerySchema = z.object({');
   lines.push('  query: z.string().min(1).refine(');
   lines.push('    (q) => {');
   lines.push('      const wordCount = q.trim().split(/\\s+/).length;');
@@ -160,37 +154,9 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
   lines.push('  priority: QueryPrioritySchema.optional(),');
   lines.push('  keyStage: KeyStageSchema.optional(),');
   lines.push('});');
-  lines.push('export type GroundTruthQuery = z.infer<typeof GroundTruthQuerySchema>;');
   lines.push('');
 
-  // Slug validation section
-  lines.push('// ============================================================================');
-  lines.push('// Lesson Slug Validation');
-  lines.push('// ============================================================================');
-  lines.push('');
-
-  // Add import comment - actual import will be added at top
-  lines.push('// Import ALL_LESSON_SLUGS from ./lesson-slugs-by-subject for runtime validation');
-  lines.push('');
-
-  const totalSlugs = allData.reduce((sum, d) => sum + d.lessonCount, 0);
-  lines.push('/**');
-  lines.push(' * Zod schema for validating lesson slugs against bulk data.');
-  lines.push(' *');
-  lines.push(
-    ` * Validates against ${totalSlugs} known slugs from ${allData.length} subject/phase combinations.`,
-  );
-  lines.push(' * Uses runtime Set lookup (not union type) for efficiency.');
-  lines.push(' *');
-  lines.push(' * @generated');
-  lines.push(' */');
-  lines.push('export const AnyLessonSlugSchema = z.string().refine(');
-  lines.push('  (slug) => ALL_LESSON_SLUGS.has(slug),');
-  lines.push("  { message: 'Invalid lesson slug - not found in bulk data' }");
-  lines.push(');');
-  lines.push('');
-
-  // Validation functions
+  // Validation functions section
   lines.push('// ============================================================================');
   lines.push('// Validation Functions');
   lines.push('// ============================================================================');
@@ -198,7 +164,7 @@ export function emitGroundTruthSchemas(allData: readonly ParsedBulkData[]): stri
 
   lines.push('/** Return type for validateGroundTruthQuery */');
   lines.push(
-    'export type GroundTruthQueryValidationResult = ReturnType<typeof GroundTruthQuerySchema.safeParse>;',
+    'type GroundTruthQueryValidationResult = ReturnType<typeof GroundTruthQuerySchema.safeParse>;',
   );
   lines.push('');
   lines.push('/**');

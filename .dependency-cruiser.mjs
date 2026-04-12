@@ -13,7 +13,7 @@ export default {
     },
     {
       name: 'no-orphans',
-      severity: 'warn',
+      severity: 'error',
       comment: 'Orphan modules are not reachable from any entry point. They may be dead code.',
       from: {
         orphan: true,
@@ -33,6 +33,17 @@ export default {
           'src/types/generated/',
           // Ground truths (data files)
           'ground-truths/',
+          // Intentional off-graph analysis documentation
+          'bucket-c-analysis\\.ts',
+          // Test files are standalone entry points (Vitest + Playwright)
+          '\\.(test|spec)\\.(ts|js)$',
+          // Standalone scripts invoked directly via tsx
+          'scripts/',
+          'operations/utilities/',
+          // SDK subpath-export barrels consumed via package.json "exports"
+          'oak-sdk-codegen/src/(admin|zod|query-parser|observability)\\.ts$',
+          // SDK and TypeDoc entry points consumed via tsup + typedoc.json
+          'oak-curriculum-sdk/src/types/(schema-bridge|public-types)\\.ts$',
         ],
       },
       to: {},
@@ -132,6 +143,12 @@ export default {
         '\\.agent/',
         '\\.cursor/',
         '\\.claude/',
+        // TypeDoc-generated JS assets (not source code)
+        'docs/api/assets/',
+        // TypeDoc source shims (generated, not authored)
+        'docs/_typedoc_src/',
+        // Non-workspace stale residue (no package.json)
+        'packages/docs/',
       ],
     },
     tsPreCompilationDeps: true,

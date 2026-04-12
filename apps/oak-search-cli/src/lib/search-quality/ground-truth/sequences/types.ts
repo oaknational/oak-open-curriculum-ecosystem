@@ -15,7 +15,7 @@
 import type { AllSubjectSlug } from '@oaknational/curriculum-sdk';
 import type { Phase, ExpectedRelevance } from '../types';
 
-export type { Phase, RelevanceScore, ExpectedRelevance } from '../types';
+export type { ExpectedRelevance } from '../types';
 
 /**
  * A ground truth entry for sequence search.

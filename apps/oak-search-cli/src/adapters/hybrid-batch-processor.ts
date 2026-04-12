@@ -18,7 +18,7 @@ import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '@oaknational/oak-search-sdk/admin';
 
 /** Result of processing multiple bulk files */
-export interface BatchProcessingResult {
+interface BatchProcessingResult {
   /** All generated bulk operations */
   readonly operations: readonly BulkOperationEntry[];
   /** Aggregate statistics */

@@ -16,7 +16,7 @@ type ThreadEntry = NonNullable<SearchUnitSummary['threads']>[number];
 /**
  * Thread information extracted from unit summary.
  */
-export interface ThreadInfo {
+interface ThreadInfo {
   /** Thread slugs (e.g., 'number-thread', 'algebra-thread') */
   readonly slugs: string[] | undefined;
   /** Thread titles (e.g., 'Number', 'Algebra') */
@@ -28,7 +28,7 @@ export interface ThreadInfo {
 /**
  * Pedagogical data extracted from unit summary.
  */
-export interface PedagogicalData {
+interface PedagogicalData {
   /** Prior knowledge requirements for the unit */
   readonly priorKnowledge: string[] | undefined;
   /** National curriculum content covered by the unit */

@@ -47,15 +47,3 @@ export const COMPUTING_SECONDARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
     COMPUTING_SECONDARY_FUTURE_INTENT_EXPECTED,
   ),
 ] as const;
-
-// Re-export query definitions and expected relevance
-export { COMPUTING_SECONDARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
-export { COMPUTING_SECONDARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
-export { COMPUTING_SECONDARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
-export { COMPUTING_SECONDARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
-export { COMPUTING_SECONDARY_FUTURE_INTENT_QUERY } from './future-intent.query';
-export { COMPUTING_SECONDARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
-export { COMPUTING_SECONDARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
-export { COMPUTING_SECONDARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
-export { COMPUTING_SECONDARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';
-export { COMPUTING_SECONDARY_FUTURE_INTENT_EXPECTED } from './future-intent.expected';

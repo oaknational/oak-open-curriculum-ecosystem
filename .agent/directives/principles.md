@@ -259,6 +259,12 @@ paths, setup files) don't apply.
   cause, never work around it.
 - **Fix things** - All quality gates are blocking at all times,
   regardless of location, cause, or context.
+- **Never weaken a gate to solve a testing problem** - If a test
+  needs content that a gate forbids (e.g. an `eslint-disable`
+  comment to test the `no-eslint-disable` rule), solve via string
+  construction, fixtures, or test infrastructure — never exempt the
+  test from the gate. The purpose of hardening is strictness; any
+  exemption undermines the gate for all future code.
 - **Never prefix variables with an underscore** - This is a hack,
   AND IT DOES NOT WORK. Figure out why the variable is unused and
   fix the root cause. Either use the variable, or delete it.

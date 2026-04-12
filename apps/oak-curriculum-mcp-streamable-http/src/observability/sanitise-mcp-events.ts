@@ -7,9 +7,9 @@ import type {
 
 type SentryRequest = SentryErrorEvent['request'];
 
-export type HttpPostRedactionHooks = SentryPostRedactionHooks;
+type HttpPostRedactionHooks = SentryPostRedactionHooks;
 
-export function decodeUrlValue(value: string): string {
+function decodeUrlValue(value: string): string {
   try {
     return decodeURIComponent(value);
   } catch {
@@ -17,7 +17,7 @@ export function decodeUrlValue(value: string): string {
   }
 }
 
-export function extractMcpRoute(value: string | undefined): string | undefined {
+function extractMcpRoute(value: string | undefined): string | undefined {
   if (!value) {
     return undefined;
   }
@@ -45,7 +45,7 @@ export function extractMcpRoute(value: string | undefined): string | undefined {
   return undefined;
 }
 
-export function isMcpRoute(route: string | undefined): route is '/mcp' {
+function isMcpRoute(route: string | undefined): route is '/mcp' {
   return route === '/mcp';
 }
 

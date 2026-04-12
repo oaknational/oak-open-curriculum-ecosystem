@@ -163,7 +163,7 @@ export const EMPTY_AGGREGATED_CONTEXT: AggregatedUnitContext = {
 };
 
 /** Removes duplicates from an array while preserving order. */
-export function deduplicateArray(arr: readonly string[]): readonly string[] {
+function deduplicateArray(arr: readonly string[]): readonly string[] {
   return [...new Set(arr)];
 }
 
@@ -204,9 +204,4 @@ export function toAggregated(context: UnitContext): AggregatedUnitContext {
 /** Extracts Ks4Option from sequence info. */
 export function extractKs4Option(seq: SubjectSequenceInfo): Ks4Option | null {
   return seq.ks4Options ? { slug: seq.ks4Options.slug, title: seq.ks4Options.title } : null;
-}
-
-/** Checks if a sequence is KS4. */
-export function isKs4Sequence(examBoard: ExamBoard | null, ks4Option: Ks4Option | null): boolean {
-  return examBoard !== null || ks4Option !== null;
 }

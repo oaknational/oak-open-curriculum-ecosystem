@@ -15,7 +15,7 @@ import { resolve, isAbsolute } from 'node:path';
 import { ok, err, type Result } from '@oaknational/result';
 
 /** Error from bulk directory resolution or validation. */
-export interface BulkDirError {
+interface BulkDirError {
   readonly type: 'bulk_dir_not_found' | 'bulk_dir_empty';
   readonly message: string;
 }
@@ -27,7 +27,7 @@ export interface FsPredicates {
 }
 
 /** Inputs for resolving bulk dir from CLI/env precedence. */
-export interface ResolveBulkDirFromInputs {
+interface ResolveBulkDirFromInputs {
   /** Optional `--bulk-dir` CLI flag value. */
   readonly bulkDirFlag: string | undefined;
   /** Optional `BULK_DOWNLOAD_DIR` env value. */

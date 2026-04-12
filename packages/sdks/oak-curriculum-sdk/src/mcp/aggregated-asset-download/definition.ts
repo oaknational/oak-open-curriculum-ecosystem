@@ -41,7 +41,9 @@ Do NOT use for:
     idempotentHint: true,
     openWorldHint: false,
   },
-  _meta: undefined,
+  _meta: {
+    securitySchemes: [{ type: 'oauth2', scopes: [...SCOPES_SUPPORTED] }],
+  },
 } as const;
 
 /**

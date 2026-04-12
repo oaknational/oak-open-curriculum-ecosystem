@@ -6,7 +6,7 @@
  *
  * @remarks Type hierarchy:
  * - ToolName: Generated from OpenAPI spec (sdk-codegen output)
- * - AggregatedToolName: Derived from `AGGREGATED_TOOL_DEFS` (single source of truth)
+ * - AggregatedToolName: Explicit union in `types.ts` (kept in sync via `satisfies` guard)
  * - AllToolName: Union of both
  */
 

@@ -171,7 +171,7 @@ describe('type-emitter', () => {
       expect(output).toContain('function getSequenceData(sequenceSlug: string)');
     });
 
-    it('generates branded type for validated slugs', () => {
+    it('does not export branded type or type guard (unused by consumers)', () => {
       const allData: readonly ParsedBulkData[] = [
         {
           subject: 'maths',
@@ -184,7 +184,8 @@ describe('type-emitter', () => {
 
       const output = emitAllLessonSlugTypes(allData);
 
-      expect(output).toContain('export type AnyLessonSlug = string & { readonly __brand:');
+      expect(output).not.toContain('AnyLessonSlug');
+      expect(output).not.toContain('isValidLessonSlug');
       expect(output).toContain('function parseLessonSlugPhase(');
       expect(output).toContain('const lessonSlugData = loadLessonSlugData();');
     });
@@ -217,13 +218,13 @@ describe('type-emitter', () => {
     it('handles empty data array', () => {
       const output = emitAllLessonSlugTypes([]);
 
-      expect(output).toContain('export type AnyLessonSlug = string & { readonly __brand:');
       expect(output).toContain(
         'export const ALL_LESSON_SLUGS: ReadonlySet<string> = new Set(lessonSlugData.allLessonSlugs)',
       );
+      expect(output).not.toContain('AnyLessonSlug');
     });
 
-    it('generates type guard function', () => {
+    it('keeps SLUG_TO_SUBJECT as internal (not exported)', () => {
       const allData: readonly ParsedBulkData[] = [
         {
           subject: 'maths',
@@ -236,9 +237,8 @@ describe('type-emitter', () => {
 
       const output = emitAllLessonSlugTypes(allData);
 
-      expect(output).toContain('export function isValidLessonSlug(');
-      expect(output).toContain('value is AnyLessonSlug');
-      expect(output).toContain('ALL_LESSON_SLUGS.has(value)');
+      expect(output).toContain('const SLUG_TO_SUBJECT: ReadonlyMap<string, string>');
+      expect(output).not.toContain('export const SLUG_TO_SUBJECT');
     });
 
     it('generates total count constant', () => {

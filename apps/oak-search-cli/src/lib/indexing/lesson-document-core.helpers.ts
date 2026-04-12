@@ -1,6 +1,6 @@
 import type { KeyStage } from '../../types/oak';
 
-export interface LessonUnitReference {
+interface LessonUnitReference {
   readonly unitSlug: string;
   readonly unitTitle: string;
   readonly oakUrl: string;

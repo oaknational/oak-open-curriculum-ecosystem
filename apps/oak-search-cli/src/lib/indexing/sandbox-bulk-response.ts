@@ -43,7 +43,7 @@ export const BulkResponseSchema = z.object({
 });
 
 export type BulkResponse = z.infer<typeof BulkResponseSchema>;
-export type BulkResponseItem = z.infer<typeof BulkResponseItemSchema>;
+type BulkResponseItem = z.infer<typeof BulkResponseItemSchema>;
 
 /** Get the action result from a bulk response item. */
 function getActionResult(item: BulkResponseItem): z.infer<typeof ActionResultSchema> | undefined {

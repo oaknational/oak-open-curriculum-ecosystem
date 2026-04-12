@@ -33,13 +33,12 @@ import type { HttpSpanOptions, HttpSyncSpanOptions, SpanFunctions } from './span
 import { createSpanFunctions } from './span-helpers.js';
 import { createHttpPostRedactionHooks } from './sanitise-mcp-events.js';
 
-export type { HttpObservabilityError } from './http-observability-error.js';
 export { describeHttpObservabilityError } from './http-observability-error.js';
 export type { HttpSpanHandle, HttpSpanOptions, HttpSyncSpanOptions } from './span-helpers.js';
 
 const DEFAULT_HTTP_SERVICE_NAME = 'oak-curriculum-mcp-streamable-http';
 
-export interface CreateHttpObservabilityOptions {
+interface CreateHttpObservabilityOptions {
   readonly serviceName?: string;
   readonly sentrySdk?: SentryNodeSdk;
   readonly fixtureStore?: FixtureSentryStore;

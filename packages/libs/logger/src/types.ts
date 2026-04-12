@@ -3,9 +3,54 @@
  */
 
 import type { LogLevel } from './log-levels.js';
-import type { OtelLogRecord } from './otel-format.js';
 
 export type { LogLevel };
+
+/**
+ * Resource attributes for service identification.
+ *
+ * @remarks Defined here (rather than in `otel-format.ts`) to break the
+ * circular dependency between `types.ts` and `otel-format.ts`.
+ */
+export interface ResourceAttributes {
+  'service.name': string;
+  'service.version': string;
+  'deployment.environment': string;
+  'host.name'?: string;
+  'host.id'?: string;
+  'cloud.provider'?: string;
+  'cloud.region'?: string;
+}
+
+/**
+ * OpenTelemetry log record structure.
+ *
+ * @see https://opentelemetry.io/docs/specs/otel/logs/data-model/
+ * @remarks Defined here (rather than in `otel-format.ts`) to break the
+ * circular dependency between `types.ts` and `otel-format.ts`.
+ */
+export interface OtelLogRecord {
+  /** Timestamp when the event occurred (ISO 8601) */
+  readonly Timestamp: string;
+  /** Timestamp when the event was observed by the logger (ISO 8601) */
+  readonly ObservedTimestamp: string;
+  /** Severity number (1-24) */
+  readonly SeverityNumber: number;
+  /** Severity text (DEBUG, INFO, WARN, ERROR, FATAL) */
+  readonly SeverityText: string;
+  /** Log message */
+  readonly Body: string;
+  /** Context attributes */
+  readonly Attributes: LogContext;
+  /** Resource identification attributes */
+  readonly Resource: ResourceAttributes;
+  /** W3C Trace ID (32-character hex string) */
+  readonly TraceId?: string;
+  /** W3C Span ID (16-character hex string) */
+  readonly SpanId?: string;
+  /** W3C Trace flags */
+  readonly TraceFlags?: number;
+}
 
 /**
  * JSON object type for logger payloads.

@@ -184,18 +184,6 @@ export interface CrossSubjectLessonGroundTruth {
  * - Secondary: ~18 subjects (including KS4 science variants)
  * - Total: ~33 ground truths
  */
-export interface SubjectPhasePair {
-  readonly subject: AllSubjectSlug;
-  readonly phase: Phase;
-}
-
-/**
- * A subject-phase key created by {@link subjectPhaseKey}.
- *
- * Preserves type information rather than widening to `string`.
- */
-export type SubjectPhaseKey = `${AllSubjectSlug}-${Phase}`;
-
 /**
  * Create a unique key for a subject-phase pair.
  *

@@ -18,7 +18,29 @@ todos:
 # WS3 Phase 5: Interactive User Search View
 
 **Status**: PENDING — blocked on PR #76 merge; Phase 4.5 prerequisite is complete
-**Last Updated**: 2026-04-09
+**Last Updated**: 2026-04-12
+
+## Pre-Phase Blockers (from 2026-04-12 MCP Apps audit)
+
+These items must be resolved before or during Phase 5 implementation:
+
+1. **Remove `search` tool's `_meta.ui` claim.** The agent-facing `search`
+   tool currently declares `_meta.ui.resourceUri` (widget UI), but ordinary
+   search should NOT be a widget tool. Only `user-search` should render the
+   interactive search UI. Remove `search` from the `WIDGET_TOOL_NAMES`
+   allowlist and from its aggregated definition's `_meta.ui`. Cross-ref:
+   `meta-oak-namespace-cleanup.plan.md` (same `_meta` architecture scope).
+
+2. **Consolidate to a single user-facing search tool.** The server currently
+   registers both `user-search` and `search` as model-visible tools with
+   widget UI. There should be only ONE user-facing search tool (`user-search`)
+   that renders the interactive widget. `search` should remain as an
+   agent-only tool (no `_meta.ui`). Investigate why both exist with UI
+   metadata and unify.
+
+See also: `.agent/plans/sdk-and-mcp-enhancements/current/meta-oak-namespace-cleanup.plan.md`
+for the broader `_meta` architecture cleanup that is a prerequisite or
+co-requisite for this work.
 
 ## Required Inputs
 

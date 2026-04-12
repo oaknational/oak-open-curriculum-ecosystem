@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-10
+last_updated: 2026-04-12
 ---
 
 # Session Continuation
@@ -40,120 +40,90 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Open Education Knowledge Surfaces — WS-0/1/2 DONE,
-  WS-3 (EEF evidence) is next.
+- **Workstream**: MCP Apps and tool metadata
+  (`feat/gate_hardening_part1` branch).
 - **Active plans**:
-  - `.agent/plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md`
-    (**PARENT** — WS-0/1/2 done, WS-3 next)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/eef-evidence-mcp-surface.plan.md`
-    (**WS-3** — recommendation tool + R1-R8, all 12 findings resolved,
-    ready for implementation)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/nc-knowledge-taxonomy-surface.plan.md`
-    (**WS-4** — smallest KG integration, ontology-derived)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/agent-guidance-consolidation.plan.md`
-    (**WS-5** — consolidate after all surfaces)
-- **Current state**: WS-0/1/2 committed (`1eb302e8`) on
-  `planning/kg_eef_integration`. Prior knowledge graph renamed
-  (was "prerequisite graph"), 6 fragile tests deleted,
-  misconception-graph E2E assertions added. All 12 EEF plan
-  findings resolved with precise Zod schemas. `pnpm check` passes.
-- **Current objective**: Implement WS-3 (EEF evidence surface).
-  The EEF plan is fully resolved — ready for implementation.
+  - `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
+    (PENDING — next workstream: build the interactive user search
+    MCP App. Two new pre-phase blockers added 2026-04-12.)
+  - `.agent/plans/sdk-and-mcp-enhancements/current/meta-oak-namespace-cleanup.plan.md`
+    (NOT STARTED — replace `_meta.securitySchemes` with Oak-namespaced
+    `oak-www` + `oak-guidance` fields; includes `buildToolMeta()`
+    factory. Co-requisite for Phase 5.)
+  - `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
+    (knip complete, depcruise complete; remaining: ESLint config
+    standardisation, eslint-disable remediation — parked)
+- **Current state**: Branch has uncommitted changes:
+  `get-curriculum-model` definition updated with explicit
+  `visibility: ['model', 'app']`. MCP Apps audit session complete.
+  `meta-oak-namespace-cleanup.plan.md` created in `current/`.
+  WS3 Phase 5 plan updated with 2 pre-phase blockers.
+- **Current objective**: Build the interactive user search MCP App
+  (WS3 Phase 5). First: resolve the pre-phase blockers (remove
+  `search` tool's `_meta.ui`, consolidate to one user-facing
+  search tool). Then implement the search view.
 - **Hard invariants / non-goals**:
-  - Only `get-curriculum-model` is a prerequisite tool. All graph
-    tools are supplementary, loaded as needed — no prerequisite
-    guidance injected by the factory.
-  - Graph factory is SDK-internal, not publicly exported
-  - Registration lives in app layer (needs observability)
-  - URI scheme: all `curriculum://` with source-identifying segments
-  - EEF data is NOT generated from OpenAPI — lives in SDK, not codegen
-  - Separate framework from consumer (ADR-154) — factory is framework
-  - No `unknown`, no `Record<string, unknown>`, no type aliases
-  - Future graph sub-setting feature tracked in memory
-- **Recent surprises / corrections** (2026-04-11):
-  - Flaky E2E test `returns HTTP 401 for tools/list with fake Bearer
-    token` in `application-routing.e2e.test.ts` — fails during full
-    `pnpm check` concurrency, passes on isolated re-run. Tracked in
-    `project_flaky-test-tracker.md`.
-  - `replace_all` on lowercase `prerequisite` in a code-template file
-    corrupted `prerequisiteFor` and `prerequisiteGraph` camelCase
-    strings. Lesson: never use blanket `replace_all` on partial words
-    in files that contain code templates with mixed casing.
+  - Never weaken gates to solve testing problems
+  - No `unknown`, no `Record<string, unknown>`, no type erasure
+  - Never edit generated files — edit the generators
+  - `search` tool must NOT have `_meta.ui` — it is agent-only
+- **Recent surprises / corrections** (2026-04-12):
+  - `_meta.securitySchemes` is unused — no host reads it, no
+    runtime code reads it. Top-level `securitySchemes` (used by
+    `toolRequiresAuth()`) is the functional field. The `_meta`
+    copy is dead weight.
+  - `search` tool incorrectly claims widget UI via `_meta.ui` —
+    should be agent-only. Only `user-search` should render the
+    interactive widget.
+  - Two user-facing search tools exist with `_meta.ui` when there
+    should be only one (`user-search`).
+  - `get-curriculum-model` lacked explicit `visibility` on
+    `_meta.ui` — now set to `['model', 'app']`.
+  - MCP Apps spec: `_meta.ui` for tools is just `resourceUri` +
+    `visibility`. `securitySchemes` is non-standard.
 - **Open questions / low-confidence areas**:
-  - Whether WS-5 (guidance consolidation) should be a catalogue
-    abstraction or simpler validation test approach (barney
-    recommended the simpler path)
-- **Next safe step**: Implement WS-3 per the resolved EEF plan.
-  T1 (data loader, Zod), T2-T5 (resources, tool, guidance),
-  T6-T10 (registration, prompt), T11-T12 (ADR, E2E).
-- **Flaky test tracker**: see memory note
-  `project_flaky-test-tracker.md`. Two failures observed (auth
-  routing E2E, curriculum-model E2E). Suspected: turbo concurrency
-  or test coupling.
-- **Deep consolidation status**: completed this handoff —
-  deduplicated distilled.md (removed Vercel section, ADR-065
-  pointer, npm scope fact, duplicate "lead with narrative"),
-  promoted "pre-implementation plan review" to pattern file,
-  fixed stale MEMORY.md entries (widget, mcpjam reference),
-  updated all plan statuses with commit refs, fixed stale
-  file path in future plan.
+  - Why do both `search` and `user-search` have `_meta.ui`? Was
+    `search` intended as a transitional widget tool?
+  - Should `meta-oak-namespace-cleanup` be done before or during
+    Phase 5? (Co-requisite — can interleave)
+- **Next safe step**: Start the next session with
+  `meta-oak-namespace-cleanup` Phase 0 (audit), then move to
+  Phase 5 pre-phase blockers (remove `search` from widget
+  allowlist, consolidate search tools).
+- **Deep consolidation status**: due — napkin at 672+ lines
+  (above 500 rotation threshold). Deferred to next session.
 
-## Active Workstreams (2026-04-11)
+## Active Workstreams (2026-04-12)
 
-### 1. Vercel Widget Crash Fix — COMPLETE
+### 1. Interactive User Search MCP App (WS3 Phase 5) — NEXT
 
-**Plan**: `.agent/plans/sdk-and-mcp-enhancements/archive/completed/embed-widget-html-at-build-time.plan.md`
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
 
-All phases executed. Widget HTML is now a committed TypeScript
-constant (`src/generated/widget-html-content.ts`), consumed via
-DI (ADR-156). Filesystem-based code deleted. All quality gates
-green. ADR-156 created and indexed. The branch is 4 commits ahead
-of origin locally; next step is push plus Vercel preview
-verification.
+Build the user-facing interactive search widget. Two new pre-phase
+blockers: (a) remove `search` tool's false `_meta.ui` claim,
+(b) consolidate to single user-facing search tool.
 
-### 2. WS3 MCP App Rebuild — MERGE PENDING
+### 2. `_meta` Namespace Cleanup — NOT STARTED (co-requisite)
 
-**Parent plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-widget-clean-break-rebuild.plan.md`
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/current/meta-oak-namespace-cleanup.plan.md`
 
-Local gates green on `feat/mcp_app_ui`. Widget crash fix complete
-locally and committed. Next: push, verify Vercel preview, then
-merge.
-Phase 5 (interactive user search view) queued post-merge.
+Replace unused `_meta.securitySchemes` with Oak-namespaced `oak-www`
+and `oak-guidance` fields. Includes `buildToolMeta()` factory.
+Co-requisite for Phase 5 — both address `_meta` architecture.
 
-### 3. Frontend Practice Integration — COMPLETE
+### 3. Quality Gate Hardening — parked
 
-**Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/frontend-practice-integration-and-specialist-agents.plan.md`
+**Plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
 
-Complete. Three ADR-129 agent triplets (accessibility-reviewer,
-design-system-reviewer, react-component-reviewer) with full platform
-adapters. Three review rounds passed. Design token infrastructure
-cancelled as out of scope — belongs in WS3 or a dedicated plan.
+Knip and depcruise complete. Remaining: ESLint config standardisation,
+eslint-disable remediation. Parked while MCP Apps work takes priority.
 
-### 4. Continuity Adoption — COMPLETE
-
-**Plan**: `.agent/plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md`
-
-Wave 1 closed with an explicit `promote` decision on 3 April 2026. The
-outgoing continuity note landed and the same-day Practice Core promotion is
-recorded separately in `.agent/practice-core/*`.
-
-### 5. Assumptions Reviewer — COMPLETE
-
-ADR-146 accepted, triplet deployed, platform adapters created.
-
-### 6. URL Naming Collision Remediation — COMPLETE
-
-Completed 2026-04-01.
-
-### 7. Workspace Topology Exploration — FUTURE
+### 4. Workspace Topology Exploration — FUTURE
 
 **Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
 
-Four-tier layered architecture (primitives, infrastructure, codegen-time,
-runtime). Lifecycle classification of all workspaces complete. Phase 2
-(function-level analysis with knip + dependency-cruiser) pending.
-Informed by the Oak Surface Isolation Programme
-(`.agent/plans/architecture-and-infrastructure/future/oak-surface-isolation-and-generic-foundation-programme.plan.md`).
+Four-tier layered architecture. Lifecycle classification complete.
+Phase 2 pending.
 
 ## Core Invariants
 
@@ -169,5 +139,8 @@ Informed by the Oak Surface Isolation Programme
 
 - Run the required gates one at a time while iterating.
 - Run `pnpm fix` to apply auto-fixes.
-- Run `pnpm check` as the canonical aggregate readiness gate before push/merge.
-- Keep this prompt concise and operational; do not duplicate plan authority.
+- Run `pnpm check` as the canonical aggregate readiness gate before
+  push/merge. It now includes `pnpm knip`. After depcruise Phase 4,
+  it will also include `pnpm depcruise`.
+- Keep this prompt concise and operational; do not duplicate plan
+  authority.

@@ -68,7 +68,7 @@ export const DEFAULT_CHUNK_DELAY_MS = 8000;
 /**
  * Represents an action-document pair in Elasticsearch bulk format.
  */
-export interface OperationPair {
+interface OperationPair {
   readonly action: BulkOperationEntry;
   readonly document: BulkOperationEntry;
 }

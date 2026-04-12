@@ -20,22 +20,4 @@
 
 export { createRedisClient, withRedisConnection } from './redis-connection';
 export { calculateTtlWithJitter } from './ttl-jitter';
-export {
-  withCache,
-  withCacheAndNegative,
-  buildCacheKey,
-  type CacheStats,
-  type CacheOperations,
-} from './cache-wrapper';
-
-// Transcript cache categorization types (ADR-092)
-export {
-  type TranscriptCacheStatus,
-  type TranscriptCacheEntry,
-  type TranscriptCacheEntryAvailable,
-  type TranscriptCacheEntryNoVideo,
-  type TranscriptCacheEntryNotFound,
-  isTranscriptCacheEntry,
-  serializeTranscriptCacheEntry,
-  deserializeTranscriptCacheEntry,
-} from './transcript-cache-types';
+export { withCache, withCacheAndNegative, type CacheOperations } from './cache-wrapper';

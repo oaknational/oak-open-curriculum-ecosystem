@@ -43,35 +43,3 @@ export const SCIENCE_KS4_ALL_QUERIES: readonly GroundTruthQuery[] = [
     SCIENCE_KS4_COMBINED_SCIENCE_FILTER_EXPECTED,
   ),
 ] as const;
-
-// Subject-specific exports for granular testing
-export const SCIENCE_KS4_BIOLOGY_QUERIES: readonly GroundTruthQuery[] = [
-  combineGroundTruth(SCIENCE_KS4_BIOLOGY_FILTER_QUERY, SCIENCE_KS4_BIOLOGY_FILTER_EXPECTED),
-] as const;
-
-export const SCIENCE_KS4_CHEMISTRY_QUERIES: readonly GroundTruthQuery[] = [
-  combineGroundTruth(SCIENCE_KS4_CHEMISTRY_FILTER_QUERY, SCIENCE_KS4_CHEMISTRY_FILTER_EXPECTED),
-] as const;
-
-export const SCIENCE_KS4_PHYSICS_QUERIES: readonly GroundTruthQuery[] = [
-  combineGroundTruth(SCIENCE_KS4_PHYSICS_FILTER_QUERY, SCIENCE_KS4_PHYSICS_FILTER_EXPECTED),
-] as const;
-
-export const SCIENCE_KS4_COMBINED_SCIENCE_QUERIES: readonly GroundTruthQuery[] = [
-  combineGroundTruth(
-    SCIENCE_KS4_COMBINED_SCIENCE_FILTER_QUERY,
-    SCIENCE_KS4_COMBINED_SCIENCE_FILTER_EXPECTED,
-  ),
-] as const;
-
-// Re-export query definitions
-export { SCIENCE_KS4_BIOLOGY_FILTER_QUERY } from './biology-filter.query';
-export { SCIENCE_KS4_CHEMISTRY_FILTER_QUERY } from './chemistry-filter.query';
-export { SCIENCE_KS4_PHYSICS_FILTER_QUERY } from './physics-filter.query';
-export { SCIENCE_KS4_COMBINED_SCIENCE_FILTER_QUERY } from './combined-science-filter.query';
-
-// Re-export expected relevance
-export { SCIENCE_KS4_BIOLOGY_FILTER_EXPECTED } from './biology-filter.expected';
-export { SCIENCE_KS4_CHEMISTRY_FILTER_EXPECTED } from './chemistry-filter.expected';
-export { SCIENCE_KS4_PHYSICS_FILTER_EXPECTED } from './physics-filter.expected';
-export { SCIENCE_KS4_COMBINED_SCIENCE_FILTER_EXPECTED } from './combined-science-filter.expected';

@@ -7,7 +7,7 @@
  * Uses two-way hybrid search (BM25 + ELSER) per ADR-075 - dense vectors removed.
  */
 
-import type { EsFieldMapping } from '../es-field-config.js';
+import type { EsFieldMapping } from '../es-field-types.js';
 import { LESSONS_COMPLETION_CONTEXTS } from '../completion-contexts.js';
 import {
   createCompletionContexts,

@@ -5,39 +5,26 @@
 
 import { generateSubjectProgrammesUrl } from '@oaknational/curriculum-sdk';
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../types/oak';
-import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter';
-import type { SequenceFacetSource } from './indexing/sequence-facets';
+import type { OakClient } from '../adapters/oak-adapter';
 import { buildSequenceFacetOps } from './indexing/sequence-facet-index';
 import { buildRollupDocuments, buildUnitDocuments } from './indexing/index-bulk-helpers';
 import { buildSequenceOps } from './indexing/sequence-bulk-helpers';
 import { ingestLogger } from './logger';
-import type { DataIntegrityReport } from './indexing/data-integrity-report';
 import type { UnitContextMap } from './indexing/ks4-context-builder';
 import type { BulkOperations } from './indexing/bulk-operation-types';
 import { buildLessonsByUnit } from './indexing/lesson-aggregation';
 import { fetchUnitsPatternAware } from './indexing/pattern-aware-fetcher';
 import { buildLessonOpsForPair, fetchAggregatedLessonsForPair } from './index-oak-build-helpers';
 
-/** Context for building a subject/keystage pair. */
-export interface PairBuildContext {
-  readonly client: OakClient;
-  readonly ks: KeyStage;
-  readonly subject: SearchSubjectSlug;
-  readonly subjectSequences: readonly SubjectSequenceEntry[];
-  readonly sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
-  /** KS4 metadata context for units (tiers, exam boards, etc.) per ADR-080 */
-  readonly unitContextMap: UnitContextMap;
-  readonly dataIntegrityReport: DataIntegrityReport;
-}
-
-/** Unit type for pair data. */
-export type PairUnits = readonly { unitSlug: string; unitTitle: string }[];
+// Re-export PairBuildContext for API continuity (consumed by index-batch-helpers)
+export type { PairBuildContext } from './index-oak-pair-types';
+import type { PairBuildContext, PairUnit } from './index-oak-pair-types';
 
 /**
  * Result of fetching pair data with pattern awareness.
  */
-export interface PairDataResult {
-  readonly units: PairUnits;
+interface PairDataResult {
+  readonly units: readonly PairUnit[];
   readonly skipped: boolean;
   readonly skipReason?: string;
 }
@@ -92,7 +79,7 @@ function getSubjectProgrammesUrl(subject: SearchSubjectSlug, ks: KeyStage): stri
 /** Build unit documents and return summaries for lesson derivation. */
 async function buildUnitsWithSummaries(
   context: PairBuildContext,
-  units: PairUnits,
+  units: readonly PairUnit[],
   subjectProgrammesUrl: string,
   lessonsByUnit: ReadonlyMap<string, readonly string[]>,
 ): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: BulkOperations }> {
@@ -152,7 +139,7 @@ function buildRollupOpsForPair(params: {
 /** Build unit, lesson, and rollup operations with progress logging. */
 async function buildCoreDocumentOps(
   context: PairBuildContext,
-  units: PairUnits,
+  units: readonly PairUnit[],
   subjectProgrammesUrl: string,
 ): Promise<{
   unitOps: BulkOperations;
@@ -200,7 +187,7 @@ async function buildCoreDocumentOps(
 /** Build all document operations for a subject/keystage pair. */
 export async function buildPairDocuments(
   context: PairBuildContext,
-  units: PairUnits,
+  units: readonly PairUnit[],
 ): Promise<BulkOperations> {
   const { ks, subject, subjectSequences, sequenceSources } = context;
   const subjectProgrammesUrl = getSubjectProgrammesUrl(subject, ks);

@@ -34,13 +34,3 @@ export const GEOGRAPHY_PRIMARY_ALL_QUERIES: readonly GroundTruthQuery[] = [
   ),
   combineGroundTruth(GEOGRAPHY_PRIMARY_CROSS_TOPIC_QUERY, GEOGRAPHY_PRIMARY_CROSS_TOPIC_EXPECTED),
 ] as const;
-
-// Re-export query definitions and expected relevance
-export { GEOGRAPHY_PRIMARY_PRECISE_TOPIC_QUERY } from './precise-topic.query';
-export { GEOGRAPHY_PRIMARY_NATURAL_EXPRESSION_QUERY } from './natural-expression.query';
-export { GEOGRAPHY_PRIMARY_IMPRECISE_INPUT_QUERY } from './imprecise-input.query';
-export { GEOGRAPHY_PRIMARY_CROSS_TOPIC_QUERY } from './cross-topic.query';
-export { GEOGRAPHY_PRIMARY_PRECISE_TOPIC_EXPECTED } from './precise-topic.expected';
-export { GEOGRAPHY_PRIMARY_NATURAL_EXPRESSION_EXPECTED } from './natural-expression.expected';
-export { GEOGRAPHY_PRIMARY_IMPRECISE_INPUT_EXPECTED } from './imprecise-input.expected';
-export { GEOGRAPHY_PRIMARY_CROSS_TOPIC_EXPECTED } from './cross-topic.expected';

@@ -4,12 +4,11 @@
  * Provides runtime validation for ground truth entries.
  *
  * @generated - DO NOT EDIT
- * Generated at: 2026-04-02T14:20:30.829Z
+ * Generated at: 2026-04-12T07:25:00.705Z
  */
 
 import { typeSafeKeys } from '@oaknational/type-helpers';
 import { z } from 'zod';
-import { ALL_LESSON_SLUGS } from './lesson-slugs-by-subject';
 
 // ============================================================================
 // Core Validation Schemas
@@ -20,45 +19,41 @@ import { ALL_LESSON_SLUGS } from './lesson-slugs-by-subject';
  *
  * @generated
  */
-export const RelevanceScoreSchema = z.union([
+const RelevanceScoreSchema = z.union([
   z.literal(1),
   z.literal(2),
   z.literal(3),
 ]);
-export type RelevanceScore = z.infer<typeof RelevanceScoreSchema>;
 
 /** Query categories. Standard: precise-topic, natural-expression, imprecise-input, cross-topic, future-intent. Legacy (deprecated): naturalistic, misspelling, synonym, multi-concept, colloquial, intent-based. @generated */
-export const QueryCategorySchema = z.enum([
+const QueryCategorySchema = z.enum([
   'precise-topic', 'natural-expression', 'imprecise-input', 'cross-topic', 'future-intent',
   'naturalistic', 'misspelling', 'synonym', 'multi-concept', 'colloquial', 'intent-based',
 ]);
-export type QueryCategory = z.infer<typeof QueryCategorySchema>;
 
 /**
  * Priority weighting for test scenarios.
  *
  * @generated
  */
-export const QueryPrioritySchema = z.enum([
+const QueryPrioritySchema = z.enum([
   'critical',
   'high',
   'medium',
   'exploratory',
 ]);
-export type QueryPriority = z.infer<typeof QueryPrioritySchema>;
 
 /**
  * Key stage values.
  *
  * @generated
  */
-export const KeyStageSchema = z.enum([
+const KeyStageSchema = z.enum([
   'ks1',
   'ks2',
   'ks3',
   'ks4',
 ]);
-export type KeyStage = z.infer<typeof KeyStageSchema>;
 
 /**
  * Ground truth query with validation.
@@ -71,7 +66,7 @@ export type KeyStage = z.infer<typeof KeyStageSchema>;
  *
  * @generated
  */
-export const GroundTruthQuerySchema = z.object({
+const GroundTruthQuerySchema = z.object({
   query: z.string().min(1).refine(
     (q) => {
       const wordCount = q.trim().split(/\s+/).length;
@@ -88,33 +83,13 @@ export const GroundTruthQuerySchema = z.object({
   priority: QueryPrioritySchema.optional(),
   keyStage: KeyStageSchema.optional(),
 });
-export type GroundTruthQuery = z.infer<typeof GroundTruthQuerySchema>;
-
-// ============================================================================
-// Lesson Slug Validation
-// ============================================================================
-
-// Import ALL_LESSON_SLUGS from ./lesson-slugs-by-subject for runtime validation
-
-/**
- * Zod schema for validating lesson slugs against bulk data.
- *
- * Validates against 12391 known slugs from 30 subject/phase combinations.
- * Uses runtime Set lookup (not union type) for efficiency.
- *
- * @generated
- */
-export const AnyLessonSlugSchema = z.string().refine(
-  (slug) => ALL_LESSON_SLUGS.has(slug),
-  { message: 'Invalid lesson slug - not found in bulk data' }
-);
 
 // ============================================================================
 // Validation Functions
 // ============================================================================
 
 /** Return type for validateGroundTruthQuery */
-export type GroundTruthQueryValidationResult = ReturnType<typeof GroundTruthQuerySchema.safeParse>;
+type GroundTruthQueryValidationResult = ReturnType<typeof GroundTruthQuerySchema.safeParse>;
 
 /**
  * Validates a ground truth query object.

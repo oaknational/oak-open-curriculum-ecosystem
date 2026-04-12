@@ -282,5 +282,4 @@ async function fetchLesson(lessonSlug: string) {
 - [Logger Package README](../../../libs/logger/README.md)
 - [Logging Guidance](../../../../docs/governance/logging-guidance.md)
 - [HTTP Server README](../../../../apps/oak-curriculum-mcp-streamable-http/README.md)
-- [Legacy Stdio Server README](../../../../apps/oak-curriculum-mcp-stdio/README.md)
 - [Testing Strategy](../../../../.agent/directives/testing-strategy.md)

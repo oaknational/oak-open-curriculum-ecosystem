@@ -11,7 +11,7 @@ import { isAllowedHostname, isValidHostHeader } from './host-header-validation.j
 /**
  * Error types returned by {@link deriveSelfOrigin} when host validation fails.
  */
-export type HostValidationError =
+type HostValidationError =
   | { readonly type: 'missing_host' }
   | { readonly type: 'invalid_format'; readonly host: string }
   | { readonly type: 'not_allowed'; readonly hostname: string };

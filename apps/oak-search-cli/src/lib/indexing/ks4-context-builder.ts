@@ -25,15 +25,7 @@ import {
   type Ks4Logger,
 } from './ks4-context-types';
 
-// Re-export types for consumers
-export type {
-  ExamBoard,
-  Ks4Option,
-  UnitContext,
-  AggregatedUnitContext,
-  UnitContextMap,
-  SubjectSequenceInfo,
-};
+export type { UnitContext, AggregatedUnitContext, UnitContextMap, SubjectSequenceInfo };
 
 /**
  * Creates an empty UnitContextMap with proper typing.

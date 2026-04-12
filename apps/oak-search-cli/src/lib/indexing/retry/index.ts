@@ -24,18 +24,9 @@
  * @see ADR-096 ES Bulk Retry Strategy
  */
 
-// Types - public interfaces for retry configuration and results
-export type { DocumentRetryConfig, DocumentRetryResult } from './types';
-
 // HTTP-level retry (Tier 1)
-export type { EsTransport, ChunkUploadResult, HttpRetryConfig } from './http-retry';
+export type { EsTransport } from './http-retry';
 export { attemptChunkUpload, uploadChunkWithRetry } from './http-retry';
 
 // Document-level retry (Tier 2)
 export { executeDocumentRetry } from './document-retry';
-
-// Re-export progressive chunk delay utilities for consumers
-export {
-  calculateProgressiveChunkDelay,
-  DOCUMENT_RETRY_CHUNK_DELAY_MULTIPLIER,
-} from '../bulk-chunk-utils';

@@ -10,20 +10,15 @@ composition root, then injected into tool/runtime modules.
 
 ## Composition Roots (Current)
 
-- Legacy stdio server composition root:
-  [`apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`](../../apps/oak-curriculum-mcp-stdio/src/app/wiring.ts)
-- Legacy stdio runtime configuration loader:
-  [`apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`](../../apps/oak-curriculum-mcp-stdio/src/runtime-config.ts)
 - Streamable HTTP composition root:
   [`apps/oak-curriculum-mcp-streamable-http/src/application.ts`](../../apps/oak-curriculum-mcp-streamable-http/src/application.ts)
 - Streamable HTTP runtime configuration loader:
   [`apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`](../../apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts)
 
-The stdio composition roots remain documented because the legacy workspace still
-exists, but active Oak MCP server evolution should now happen in the HTTP
-workspace. Future stdio support should be reintroduced there as an additional
-entry point rather than through continued parallel workspace maintenance. See
+The legacy stdio workspace was removed per
 [ADR-128](./architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
+Future stdio support will be reintroduced in the HTTP workspace as a separate
+entry point.
 
 ## Provider Model
 

@@ -90,30 +90,35 @@ point in the development lifecycle. See
 [ADR-121](../architecture/architectural-decisions/121-quality-gate-surfaces.md)
 for the full decision record.
 
-| Check             | pre-commit | pre-push     | CI workflow     | pnpm check        |
-| ----------------- | ---------- | ------------ | --------------- | ----------------- |
-| secrets:scan:all  | --         | Yes          | Yes             | Yes               |
-| clean             | --         | --           | --              | Yes               |
-| sdk-codegen       | --         | Yes (turbo)  | Yes (via build) | Yes               |
-| build             | --         | Yes          | Yes             | Yes               |
-| format-check      | Yes        | Yes          | Yes             | Yes (format:root) |
-| markdownlint      | Yes        | Yes          | Yes             | Yes               |
-| subagents:check   | --         | --           | Yes             | Yes               |
-| portability:check | --         | --           | Yes             | Yes               |
-| test:root-scripts | --         | --           | Yes             | Yes               |
-| type-check        | Yes        | Yes          | Yes             | Yes               |
-| lint              | Yes        | Yes          | Yes             | Yes               |
-| test              | Yes        | Yes          | Yes             | Yes               |
-| test:widget       | --         | --           | --              | Yes               |
-| test:e2e          | --         | Yes (--only) | --              | Yes               |
-| test:ui           | --         | --           | --              | Yes               |
-| test:a11y         | --         | --           | --              | Yes               |
-| smoke:dev:stub    | --         | --           | --              | Yes               |
-| doc-gen           | --         | --           | --              | Yes               |
+| Check             | pre-commit | pre-push | CI workflow | pnpm check              |
+| ----------------- | ---------- | -------- | ----------- | ----------------------- |
+| secrets:scan      | --         | Yes      | Yes         | Yes                     |
+| clean             | --         | --       | --          | Yes                     |
+| sdk-codegen       | --         | Yes      | Yes         | Yes                     |
+| build             | --         | Yes      | Yes         | Yes                     |
+| format-check      | Yes        | Yes      | Yes         | Yes (format:root)       |
+| markdownlint      | Yes        | Yes      | Yes         | Yes (markdownlint:root) |
+| subagents:check   | --         | Yes      | Yes         | Yes                     |
+| portability:check | --         | Yes      | Yes         | Yes                     |
+| knip              | Yes        | Yes      | Yes         | Yes                     |
+| depcruise         | Yes        | Yes      | Yes         | Yes                     |
+| test:root-scripts | --         | Yes      | Yes         | Yes                     |
+| type-check        | Yes        | Yes      | Yes         | Yes                     |
+| lint              | Yes        | Yes      | Yes         | Yes (lint:fix)          |
+| test              | Yes        | Yes      | Yes         | Yes                     |
+| test:widget       | --         | --       | --          | Yes                     |
+| test:widget:ui    | --         | --       | --          | Yes                     |
+| test:widget:a11y  | --         | --       | --          | Yes                     |
+| test:e2e          | --         | Yes      | Yes         | Yes                     |
+| test:ui           | --         | Yes      | Yes         | Yes                     |
+| test:a11y         | --         | --       | --          | Yes                     |
+| smoke:dev:stub    | --         | Yes      | Yes         | Yes                     |
+| doc-gen           | --         | --       | --          | Yes                     |
 
-**Key principle**: no check runs only in CI. Every CI check is reproducible
-locally via pre-push or `pnpm check`. See ADR-121 for the rationale behind
-each exclusion.
+**Key principle**: pre-push and CI run the same check set. A CI-only failure
+indicates an environmental or configuration issue, not a missing check.
+`pnpm check` is the broadest surface, adding clean rebuild, doc-gen, widget
+tests, a11y tests, and fix-mode commands. See ADR-121 for the full rationale.
 
 ## Quality Gate Commands
 
@@ -145,7 +150,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan:all && pnpm clean && pnpm test:root-scripts && pnpm sdk-codegen build && pnpm type-check && pnpm doc-gen && pnpm lint:fix && pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm markdownlint:root && pnpm format:root
+pnpm secrets:scan && pnpm clean && pnpm test:root-scripts && turbo run --continue sdk-codegen build type-check doc-gen lint:fix test test:widget test:e2e test:ui test:a11y test:widget:ui test:widget:a11y smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm knip && pnpm markdownlint:root && pnpm format:root
 ```
 
 `pnpm check` is the only canonical aggregate verification command. The former

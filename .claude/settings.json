@@ -36,6 +36,8 @@
       "Skill(jc-review:*)",
       "Skill(jc-chatgpt-report-normalisation)",
       "Skill(jc-chatgpt-report-normalisation:*)",
+      "Skill(patterns)",
+      "Skill(patterns:*)",
       "mcp__claude_ai_Oak_National_Academy__get-curriculum-model",
       "mcp__claude_ai_Oak_National_Academy__get-threads-units",
       "mcp__claude_ai_Oak_National_Academy__get-sequences-units",

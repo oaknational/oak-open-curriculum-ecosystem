@@ -11,7 +11,7 @@ import { resolvePrimarySearchIndexName } from '../search-index-target';
 import type { BulkOperations } from './bulk-operation-types';
 import { createBulkAction } from './bulk-action-factory';
 
-export type SequenceUnitsFetcher = (sequenceSlug: string) => Promise<unknown>;
+type SequenceUnitsFetcher = (sequenceSlug: string) => Promise<unknown>;
 
 export interface SequenceFacetProcessingMetrics {
   readonly sequenceSlug: string;
@@ -21,7 +21,7 @@ export interface SequenceFacetProcessingMetrics {
   readonly included: boolean;
 }
 
-export interface SequenceFacetInstrumentationDelegate {
+interface SequenceFacetInstrumentationDelegate {
   record(details: SequenceFacetProcessingMetrics): void;
 }
 

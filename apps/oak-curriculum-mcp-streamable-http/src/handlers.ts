@@ -53,7 +53,7 @@ export type { McpHandlerRequest, McpHandlerResponse } from './mcp-handler.js';
  * });
  * ```
  */
-export interface RegisterHandlersOptions {
+interface RegisterHandlersOptions {
   readonly overrides?: ToolHandlerOverrides;
   readonly runtimeConfig: RuntimeConfig;
   readonly logger: Logger;
@@ -187,7 +187,7 @@ function registerTools(
     if (isAppToolEntry(tool)) {
       registerAppTool(server, tool.name, { ...config, _meta: { ...tool._meta } }, wrappedHandler);
     } else {
-      server.registerTool(tool.name, { ...config, _meta: tool._meta }, wrappedHandler);
+      server.registerTool(tool.name, { ...config, _meta: { ...tool._meta } }, wrappedHandler);
     }
   }
 }

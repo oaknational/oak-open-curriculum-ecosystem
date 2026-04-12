@@ -53,6 +53,15 @@ the enforcement mechanism — not these files.
 
 ## What if I'm curious?
 
+The most readable parts of `.agent/` for humans:
+
+- [memory/patterns/](memory/patterns/README.md) — 56 reusable solutions
+  to recurring design problems, with anti-patterns and evidence
+- [memory/distilled.md](memory/distilled.md) — hard-won rules from
+  accumulated session experience
+- [directives/principles.md](directives/principles.md) — the code
+  quality and architecture rules that govern all work
+
 If you want to understand how the practice works:
 
 - [How the Agentic Engineering System Works](../docs/foundation/agentic-engineering-system.md)

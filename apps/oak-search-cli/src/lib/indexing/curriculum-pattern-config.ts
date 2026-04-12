@@ -89,16 +89,16 @@ export const PATTERN_SUBJECTS = [
 export const PATTERN_KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
 
 /** A subject slug used in pattern configuration. */
-export type PatternSubject = (typeof PATTERN_SUBJECTS)[number];
+type PatternSubject = (typeof PATTERN_SUBJECTS)[number];
 
 /** A key stage slug used in pattern configuration. */
-export type PatternKeyStage = (typeof PATTERN_KEY_STAGES)[number];
+type PatternKeyStage = (typeof PATTERN_KEY_STAGES)[number];
 
 /**
  * Key for a subject × key stage combination, derived from the
  * constituent subject and key stage literal types.
  */
-export type SubjectKeyStageKey = `${PatternSubject}:${PatternKeyStage}`;
+type SubjectKeyStageKey = `${PatternSubject}:${PatternKeyStage}`;
 
 /**
  * Complete pattern configuration map for all 68 subject × key stage combinations.

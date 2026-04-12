@@ -29,7 +29,7 @@ export type BootstrapPhaseName =
   | 'initializeCoreEndpoints'
   | 'setupAuthRoutes';
 
-export interface BootstrapPhaseContext extends LogContextInput {
+interface BootstrapPhaseContext extends LogContextInput {
   readonly appId: number;
   readonly phase: BootstrapPhaseName;
 }

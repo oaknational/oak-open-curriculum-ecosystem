@@ -9,7 +9,7 @@
  *
  * @packageDocumentation
  */
-import type { DtcgTokenTree } from './index.js';
+import type { DtcgTokenTree } from './dtcg-types.js';
 
 /**
  * Anchored DTCG token reference pattern — matches a full-string reference.

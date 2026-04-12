@@ -184,5 +184,5 @@ pnpm check
 
 - `packages/core/oak-eslint/src/rules/no-eslint-disable.ts`
 - `packages/core/oak-eslint/src/configs/recommended.ts`
-- `.agent/plans/architecture-and-infrastructure/future/quality-gate-hardening.plan.md` (item 3 depends on this)
+- `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md` (item 3 depends on this)
 - `.agent/plans/developer-experience/active/devx-strictness-convergence.plan.md` (overlapping test-fakes scope)

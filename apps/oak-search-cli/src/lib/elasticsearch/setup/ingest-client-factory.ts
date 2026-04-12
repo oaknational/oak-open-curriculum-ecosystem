@@ -14,7 +14,7 @@ import {
 import { ingestLogger } from '../../logger';
 
 /** Error thrown when cache is required but unavailable. */
-export class CacheRequiredError extends Error {
+class CacheRequiredError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'CacheRequiredError';
@@ -22,7 +22,7 @@ export class CacheRequiredError extends Error {
 }
 
 /** Options for creating an ingestion client. */
-export interface IngestionClientOptions {
+interface IngestionClientOptions {
   /** Validated env from loadRuntimeConfig. Required. */
   readonly env: OakClientEnv;
   /** If true, allow ingestion without cache. Default: false (cache required). */

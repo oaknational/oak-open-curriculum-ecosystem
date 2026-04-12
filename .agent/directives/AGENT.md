@@ -100,6 +100,19 @@ across scopes per Claude Code merge semantics. The portability validator
 adapter has a corresponding `Skill()` permission entry in the project
 settings.
 
+## Memory and Patterns
+
+Institutional memory lives in `.agent/memory/`:
+
+- [distilled.md](../memory/distilled.md) — hard-won rules extracted from
+  session napkins. Read before every session.
+- [patterns/](../memory/patterns/README.md) — 56 abstract, reusable
+  solutions to recurring design problems across code, architecture,
+  process, testing, and agent infrastructure. Before inventing a new
+  approach, check the pattern library for a known solution.
+- [napkin.md](../memory/napkin.md) — current session observations
+  (written continuously, distilled periodically).
+
 ## Essential Links
 
 **Important**: These documents must be read.
@@ -173,7 +186,7 @@ pnpm fix            # Auto-fix: format, markdownlint, lint:fix
 pnpm doc-gen        # Generate documentation from TSDoc
 
 # All in one command (clean rebuild + full verification)
-pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, then ONE turbo run (sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, test:widget:ui, test:widget:a11y, smoke:dev:stub), then subagents:check, portability:check, markdownlint:root, format:root
+pnpm check          # Canonical aggregate gate: secrets:scan:all, clean, test:root-scripts, then ONE turbo run (sdk-codegen, build, type-check, doc-gen, lint:fix, test, test:widget, test:e2e, test:ui, test:a11y, test:widget:ui, test:widget:a11y, smoke:dev:stub), then subagents:check, portability:check, knip, depcruise, markdownlint:root, format:root
 ```
 
 ## Architectural Understanding

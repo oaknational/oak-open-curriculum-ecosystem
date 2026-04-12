@@ -20,7 +20,7 @@ import type {
  * Minimal transport fake for handler tests.
  * Satisfies `McpRequestTransport` structurally — only `handleRequest` and `close`.
  */
-export function createFakeStreamableTransport(
+function createFakeStreamableTransport(
   handleRequestImpl?: McpRequestTransport['handleRequest'],
 ): McpRequestTransport {
   return {
@@ -33,7 +33,7 @@ export function createFakeStreamableTransport(
  * Minimal server fake for handler integration tests.
  * Satisfies `McpRequestServer` structurally — only `connect` and `close`.
  */
-export function createFakeMcpServer(): McpRequestServer {
+function createFakeMcpServer(): McpRequestServer {
   return {
     connect: vi.fn(() => Promise.resolve()),
     close: vi.fn(),

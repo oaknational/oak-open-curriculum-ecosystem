@@ -17,7 +17,7 @@ import type {
   SequenceUnitsResponse,
 } from '../types/oak';
 import type { Result } from '@oaknational/result';
-import type { SdkFetchError } from '@oaknational/curriculum-sdk';
+import type { SdkFetchError, createOakBaseClient } from '@oaknational/curriculum-sdk';
 
 // ============================================================================
 // Data Types
@@ -118,5 +118,39 @@ export type GetSubjectAssetsFn = (
   subject: SearchSubjectSlug,
 ) => Promise<Result<readonly SubjectAssetEntry[], SdkFetchError>>;
 
-// NOTE: OakClient interface is defined in oak-adapter.ts
-// It includes all the above function types plus cache management methods.
+// ---------------------------------------------------------------------------
+// OakClient and CacheStats — moved here to break the circular dependency
+// between oak-adapter.ts and sdk-client-factory.ts.
+// ---------------------------------------------------------------------------
+
+import type { makeGetAllThreads, makeGetThreadUnits } from './oak-adapter-threads';
+
+/** Statistics about cache usage during the current session. */
+export interface CacheStats {
+  readonly hits: number;
+  readonly misses: number;
+  readonly connected: boolean;
+}
+
+/**
+ * Oak client interface - unified API for curriculum data access.
+ *
+ * All methods return `Result<T, SdkFetchError>` per ADR-088.
+ * Cache management methods are always present (no-op when caching disabled).
+ */
+export interface OakClient {
+  getUnitsByKeyStageAndSubject: GetUnitsFn;
+  getLessonTranscript: GetTranscriptFn;
+  getLessonSummary: GetLessonSummaryFn;
+  getUnitSummary: GetUnitSummaryFn;
+  getSubjectSequences: GetSubjectSequencesFn;
+  getSequenceUnits: GetSequenceUnitsFn;
+  getAllThreads: ReturnType<typeof makeGetAllThreads>;
+  getThreadUnits: ReturnType<typeof makeGetThreadUnits>;
+  getLessonsByKeyStageAndSubject: GetLessonsByKeyStageAndSubjectFn;
+  /** Fetches all assets for a subject/keystage. Used for video availability check. */
+  getSubjectAssets: GetSubjectAssetsFn;
+  rateLimitTracker: ReturnType<typeof createOakBaseClient>['rateLimitTracker'];
+  getCacheStats: () => CacheStats;
+  disconnect: () => Promise<void>;
+}

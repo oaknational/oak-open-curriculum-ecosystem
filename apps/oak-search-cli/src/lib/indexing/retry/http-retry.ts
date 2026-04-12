@@ -44,7 +44,7 @@ export interface ChunkUploadResult {
 }
 
 /** Resolved HTTP retry configuration. */
-export interface HttpRetryConfig {
+interface HttpRetryConfig {
   readonly maxRetries: number;
   readonly baseRetryDelayMs: number;
 }

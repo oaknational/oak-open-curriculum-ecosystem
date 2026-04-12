@@ -8,7 +8,6 @@ import {
 import type { CodexAgentRegistration } from './codex-project-agent-registry';
 
 export { parseCodexAgentRegistrations } from './codex-project-agent-registry';
-export type { CodexAgentRegistration } from './codex-project-agent-registry';
 
 const DEVELOPER_INSTRUCTIONS_PATTERN = /^developer_instructions\s*=\s*"""\r?\n([\s\S]*?)\r?\n"""/mu;
 const CANONICAL_PATH_PATTERN = /`(\.agent\/[^`]+)`/gu;

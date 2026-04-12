@@ -919,5 +919,4 @@ logger.fatal('Database connection lost', normalizeError(error)); // FATAL: criti
 - [Logger Package README](../../packages/libs/logger/README.md) - Complete API documentation
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) - How to test logging code
 - [HTTP Server README](../../apps/oak-curriculum-mcp-streamable-http/README.md) - HTTP logging patterns
-- [Legacy Stdio Server README](../../apps/oak-curriculum-mcp-stdio/README.md) - Deprecated stdio logging patterns (workspace no longer actively maintained)
 - [Production Debugging Runbook](../operations/production-debugging-runbook.md) - Using logs for debugging

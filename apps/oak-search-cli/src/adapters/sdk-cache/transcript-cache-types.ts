@@ -38,7 +38,7 @@
  * semantically distinct: 404 means "does not exist", 451 means "exists
  * but legally inaccessible".
  */
-export type TranscriptCacheStatus = 'available' | 'no_video' | 'not_found' | 'legally_restricted';
+type TranscriptCacheStatus = 'available' | 'no_video' | 'not_found' | 'legally_restricted';
 
 /**
  * Structured cache entry for transcript availability.

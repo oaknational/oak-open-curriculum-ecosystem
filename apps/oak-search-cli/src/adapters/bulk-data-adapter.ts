@@ -24,17 +24,9 @@ import {
   generateUnitOakUrlFromSequence,
   normaliseYearsFromUnit,
 } from './bulk-transform-helpers.js';
-import {
-  transformBulkLessonToESDoc,
-  type LessonUnitInfo,
-  type BulkToESLessonParams,
-} from './bulk-lesson-transformer.js';
-import { transformBulkUnitToESDoc, type BulkToESUnitParams } from './bulk-unit-transformer.js';
+import { transformBulkLessonToESDoc, type LessonUnitInfo } from './bulk-lesson-transformer.js';
+import { transformBulkUnitToESDoc } from './bulk-unit-transformer.js';
 import type { CategoryMap } from './category-supplementation';
-
-// Re-export transform functions and types for external use
-export { transformBulkLessonToESDoc, type BulkToESLessonParams, type LessonUnitInfo };
-export { transformBulkUnitToESDoc, type BulkToESUnitParams };
 
 // ============================================================================
 // Types
@@ -49,7 +41,7 @@ export interface BulkIndexAction {
 }
 
 /** Interface for the bulk data adapter */
-export interface BulkDataAdapter {
+interface BulkDataAdapter {
   readonly sequenceSlug: string;
   readonly subjectTitle: string;
   getUnits(): readonly Unit[];

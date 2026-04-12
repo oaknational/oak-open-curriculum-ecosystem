@@ -58,11 +58,6 @@ export function resolvePrimarySearchIndexName(kind: SearchIndexKind): string {
   return resolveSearchIndexName(kind, 'primary');
 }
 
-/** Config shape for resolving search index target. */
-export interface SearchIndexTargetConfig {
-  readonly SEARCH_INDEX_TARGET?: SearchIndexTarget;
-}
-
 interface SearchIndexTargetConfigCandidate {
   readonly SEARCH_INDEX_TARGET?: unknown;
 }

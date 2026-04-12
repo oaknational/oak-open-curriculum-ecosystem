@@ -6,22 +6,10 @@
  * `REFERENCE_PATTERN` in `contrast-validation.ts` (anchored variant). Both
  * must be updated together if the DTCG reference syntax changes.
  */
+import type { DtcgTokenLeaf, DtcgTokenTree } from './dtcg-types.js';
+export type { DtcgTokenTree, DtcgTokenLeaf } from './dtcg-types.js';
+
 const TOKEN_REFERENCE_PATTERN = /\{([a-z0-9-]+(?:\.[a-z0-9-]+)*)\}/giu;
-
-type TokenTier = 'palette' | 'semantic' | 'component';
-
-type DtcgTokenValue = boolean | number | string;
-
-interface DtcgTokenLeaf {
-  readonly $type?: string;
-  readonly $value: DtcgTokenValue;
-  readonly $description?: string;
-}
-
-export interface DtcgTokenTree {
-  readonly $description?: string;
-  readonly [key: string]: DtcgTokenLeaf | DtcgTokenTree | string | undefined;
-}
 
 export interface FlattenedDesignToken {
   readonly path: readonly string[];
@@ -41,7 +29,7 @@ function isDtcgTokenTree(value: unknown): value is DtcgTokenTree {
   return isTokenObject(value) && !('$value' in value);
 }
 
-function getTokenTier(path: readonly string[]): TokenTier {
+function getTokenTier(path: readonly string[]): 'palette' | 'semantic' | 'component' {
   const [rootSegment] = path;
 
   if (rootSegment === 'semantic') {
@@ -66,7 +54,7 @@ function toCssVariable(path: readonly string[]): string {
   return `--oak-${path.map(normalizePathSegment).join('-')}`;
 }
 
-function extractTokenReferences(value: DtcgTokenValue): readonly string[][] {
+function extractTokenReferences(value: boolean | number | string): readonly string[][] {
   if (typeof value !== 'string') {
     return [];
   }
@@ -74,7 +62,7 @@ function extractTokenReferences(value: DtcgTokenValue): readonly string[][] {
   return [...value.matchAll(TOKEN_REFERENCE_PATTERN)].map((match) => match[1].split('.'));
 }
 
-function resolveCssValue(value: DtcgTokenValue): string {
+function resolveCssValue(value: boolean | number | string): string {
   if (typeof value !== 'string') {
     return String(value);
   }
@@ -86,7 +74,7 @@ function resolveCssValue(value: DtcgTokenValue): string {
 }
 
 function validateTokenReferenceDirection(
-  tokenTier: TokenTier,
+  tokenTier: 'palette' | 'semantic' | 'component',
   references: readonly string[][],
 ): void {
   if (tokenTier === 'palette' && references.length > 0) {

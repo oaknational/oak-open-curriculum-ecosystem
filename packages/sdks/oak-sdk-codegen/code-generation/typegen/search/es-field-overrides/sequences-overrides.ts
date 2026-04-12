@@ -2,7 +2,7 @@
  * Field overrides for the oak_sequences index.
  */
 
-import type { EsFieldMapping } from '../es-field-config.js';
+import type { EsFieldMapping } from '../es-field-types.js';
 import { SEQUENCES_COMPLETION_CONTEXTS } from '../completion-contexts.js';
 import {
   createCompletionContexts,
