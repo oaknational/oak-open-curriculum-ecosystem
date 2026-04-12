@@ -58,7 +58,9 @@
       "Bash(git check-ignore:*)",
       "Bash(echo \"exit: $?\")",
       "Bash(npm view:*)",
-      "Bash(git clone:*)"
+      "Bash(git clone:*)",
+      "WebFetch(domain:docs.sentry.io)",
+      "WebFetch(domain:github.com)"
     ]
   },
   "hooks": {

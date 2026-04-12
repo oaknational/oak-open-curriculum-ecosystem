@@ -3,7 +3,7 @@ prompt_id: architecture-sentry-otel-foundation
 title: "Sentry + OpenTelemetry Foundation Session Entry Point"
 type: handover
 status: active
-last_updated: 2026-04-11
+last_updated: 2026-04-12
 ---
 
 # Sentry + OpenTelemetry Foundation — Session Entry Point
@@ -27,7 +27,7 @@ the process.
 See [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
 for the architectural decision.
 
-## Current State (2026-04-11)
+## Current State (2026-04-12)
 
 PR #73 **MERGED** to main (2026-03-31). Rate limiting **COMPLETE**
 (ADR-158). Continuation branch: `feat/otel_sentry_enhancements`.
@@ -38,32 +38,25 @@ PR #73 **MERGED** to main (2026-03-31). Rate limiting **COMPLETE**
   ADR-143, cleanup resilience, multi-layer security architecture
 - Rate limiting (ADR-158) — `express-rate-limit` on 6 routes, 3
   profiles, `trust proxy` configured
+- **Search CLI adoption** (2026-04-12) — 10-step TDD implementation,
+  22 new tests (999 total), 7 reviewer passes, all findings addressed.
+  `pnpm check` 88/88 green. All 6 critical gaps closed.
 
-### Merge from main — COMPLETE (2026-04-11)
-
-Main merged (commits `da26c4bf`, `9e6ed327`). PR #76 (React MCP App,
-977 files), PR #78 (open education, ADR-157), releases 1.3.0-1.5.0
-integrated. ADR-144 renumbered to ADR-158. Rate limiting re-applied
-with extracted `CoreEndpointOptions`. 6 specialist reviewers passed.
-`pnpm check` green. `registerWidgetResource` confirmed using
-`wrapResourceHandler` (observability intact). Integration sweep
-verified no main work lost.
+- **Sentry credential provisioning** (2026-04-12b) — local `.env.local`
+  configured for both apps. Vercel dashboard credentials pending.
+  Org: `oak-national-academy`, region: `de.sentry.io`.
 
 ### What comes next
 
-1. **Search CLI adoption** (`apps/oak-search-cli`) — 6 critical gaps:
-   no Sentry init, no sinks, no env config, no command spans, no
-   flush, no error capture. Detailed session plan at
-   `.agent/plans/architecture-and-infrastructure/active/search-cli-observability-adoption.plan.md`.
-   Reference implementation: HTTP server observability.
-2. **Sentry credential provisioning** (owner action) — once all code
-   foundations are in place, the owner will configure real Sentry DSN
-   credentials in `.env.local` and the Vercel dashboard per
-   `docs/operations/sentry-deployment-runbook.md`. No `.env.local`
-   currently has Sentry variables — the code defaults to
-   `SENTRY_MODE=off` (fail-closed, safe).
-3. **Deployment evidence bundle** — verify release/source maps,
-   alerting baseline, MCP Insights. Depends on real credentials.
+1. **Vercel credential provisioning** — set `SENTRY_MODE`, `SENTRY_DSN`,
+   `SENTRY_TRACES_SAMPLE_RATE` on the Vercel dashboard for the HTTP
+   server. `SENTRY_RELEASE` and `SENTRY_ENVIRONMENT` auto-resolve.
+2. **Deployment evidence bundle** — verify release/source maps,
+   alerting baseline, MCP Insights. Depends on Vercel credentials.
+3. **Sentry canonical alignment** — 6 gaps between our adapter layer
+   and canonical Sentry practices. Detailed plan at
+   `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`.
+   10 todos, shaped by 5 specialist reviewers.
 
 ### Deferred
 
@@ -79,8 +72,9 @@ verified no main work lost.
 ## Read First
 
 1. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) — main execution plan (phases, contracts, scope)
-2. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md) — observability architectural decision
-3. [ADR-158](../../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md) — multi-layer security and rate limiting
+2. [sentry-canonical-alignment.plan.md](../../plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md) — canonical alignment (6 gaps, 10 todos)
+3. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md) — observability architectural decision
+4. [ADR-158](../../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md) — multi-layer security and rate limiting
 
 Primary code surfaces:
 
@@ -100,11 +94,12 @@ Primary code surfaces:
 
 ## Restart Sequence
 
-1. **Search CLI adoption** — 6 critical gaps. Session plan at
-   `.agent/plans/architecture-and-infrastructure/active/search-cli-observability-adoption.plan.md`.
-   TDD throughout.
-2. **Sentry credentials** — owner configures real DSN after code is ready.
-3. **Deployment evidence** — depends on real credentials being live.
+1. **Search CLI adoption** — **COMPLETE** (2026-04-12).
+2. **Local credentials** — **COMPLETE** (2026-04-12b). Both apps.
+3. **Vercel credentials** — set on Vercel dashboard. Then deploy.
+4. **Deployment evidence** — depends on Vercel credentials being live.
+5. **Canonical alignment** — 6-gap plan ready for implementation.
+   `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`.
 
 ## Authority Rule
 

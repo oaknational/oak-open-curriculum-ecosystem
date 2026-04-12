@@ -19,7 +19,7 @@
  * ```
  */
 
-import { logLevelToSeverityNumber } from '@oaknational/logger';
+import { logLevelToSeverityNumber, type LogSink } from '@oaknational/logger';
 import {
   UnifiedLogger,
   buildResourceAttributes,
@@ -43,7 +43,10 @@ let currentFilePath: string | null = null;
 /** Active file sink instance. */
 let activeFileSink: FileSinkInterface | null = null;
 
-/** Cached logger instances. Recreated when level or file sink changes. */
+/** Additional sinks registered at runtime (e.g. Sentry log sink). */
+let additionalSinks: readonly LogSink[] = [];
+
+/** Cached logger instances. Recreated when level, file sink, or additional sinks change. */
 type LoggerKey = 'search' | 'suggest' | 'ingest' | 'cache' | 'admin' | 'observe';
 type LoggerCache = { base: UnifiedLogger } & Record<LoggerKey, Logger>;
 let loggerCache: LoggerCache | null = null;
@@ -73,8 +76,8 @@ function getLoggers(): NonNullable<typeof loggerCache> {
   }
 
   const sinks = activeFileSink
-    ? [createNodeStdoutSink(), activeFileSink]
-    : [createNodeStdoutSink()];
+    ? [createNodeStdoutSink(), activeFileSink, ...additionalSinks]
+    : [createNodeStdoutSink(), ...additionalSinks];
 
   const base = new UnifiedLogger({
     minSeverity: logLevelToSeverityNumber(currentLevel),
@@ -104,20 +107,7 @@ function getLoggers(): NonNullable<typeof loggerCache> {
   return loggerCache;
 }
 
-/**
- * Sets the minimum log level for all loggers.
- * Calling this invalidates cached loggers, which are recreated on next access.
- *
- * @param level - The minimum log level to output
- *
- * @example
- * ```typescript
- * // In CLI entry point
- * if (args.verbose) {
- *  setLogLevel('DEBUG');
- * }
- * ```
- */
+/** Sets the minimum log level. Invalidates cached loggers. */
 export function setLogLevel(level: LogLevel): void {
   if (level !== currentLevel) {
     currentLevel = level;
@@ -125,34 +115,12 @@ export function setLogLevel(level: LogLevel): void {
   }
 }
 
-/**
- * Gets the current log level.
- *
- * @returns The current minimum log level
- */
+/** Gets the current log level. */
 export function getLogLevel(): LogLevel {
   return currentLevel;
 }
 
-/**
- * Enables file logging to the specified path.
- *
- * Creates the parent directory if it doesn't exist. All subsequent log
- * messages will be written to both stdout and the specified file.
- *
- * @param filePath - Path to the log file (relative to cwd or absolute)
- * @returns The resolved file path, or null if creation failed
- *
- * @example
- * ```typescript
- * // In CLI ingestion entry point
- * const logPath = `logs/ingest-${Date.now()}.log`;
- * const resolvedPath = enableFileSink(logPath);
- * if (resolvedPath) {
- *   ingestLogger.info('Logging to file', { path: resolvedPath });
- * }
- * ```
- */
+/** Enables file logging to the specified path. Returns the path or null on failure. */
 export function enableFileSink(filePath: string): string | null {
   // Close existing file sink if any
   if (activeFileSink !== null) {
@@ -180,11 +148,7 @@ export interface FileSinkCloseError {
   readonly message: string;
 }
 
-/**
- * Disables file logging and closes the file sink.
- *
- * @returns `ok(undefined)` on success, or `err(FileSinkCloseError)` if `end()` throws
- */
+/** Disables file logging and closes the file sink. */
 export function disableFileSink(): Result<void, FileSinkCloseError> {
   let closeError: FileSinkCloseError | null = null;
   if (activeFileSink !== null) {
@@ -201,6 +165,28 @@ export function disableFileSink(): Result<void, FileSinkCloseError> {
   currentFilePath = null;
   loggerCache = null;
   return closeError ? err(closeError) : ok(undefined);
+}
+
+/**
+ * Register an additional log sink (e.g. Sentry structured log sink).
+ *
+ * Invalidates the logger cache so subsequent log calls include the new sink.
+ */
+export function registerAdditionalSink(sink: LogSink): void {
+  additionalSinks = [...additionalSinks, sink];
+  loggerCache = null;
+}
+
+/**
+ * Remove all additional sinks and invalidate the logger cache.
+ *
+ * Called during shutdown to ensure clean teardown.
+ */
+export function clearAdditionalSinks(): void {
+  if (additionalSinks.length > 0) {
+    additionalSinks = [];
+    loggerCache = null;
+  }
 }
 
 /** Gets the current file sink path, or null if file logging is disabled. */

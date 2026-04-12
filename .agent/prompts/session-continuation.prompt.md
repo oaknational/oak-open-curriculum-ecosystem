@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-11
+last_updated: 2026-04-12
 ---
 
 # Session Continuation
@@ -41,57 +41,67 @@ git log --oneline --decorate -10
 ## Live Continuity Contract
 
 - **Workstream**: Sentry + OTel Observability Foundation
-  (`feat/otel_sentry_enhancements`). Merge complete, Search CLI
-  adoption is next.
+  (`feat/otel_sentry_enhancements`). All code foundations complete.
+  Local credentials provisioned. Canonical alignment plan created.
+  Vercel credentials and deployment evidence remain.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
-    (**authoritative** — phases 0-3 HTTP complete, Search CLI next)
+    (**authoritative** — phases 0-3 complete, phase 4 pending Vercel
+    credentials)
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
+    (**new** — 6 gaps, 10 todos, 5 specialist reviewers, ready for
+    implementation)
   - `.agent/plans/architecture-and-infrastructure/active/search-cli-observability-adoption.plan.md`
-    (**session plan** — 10 implementation steps, TDD throughout)
+    (**COMPLETE** — 10 steps executed 2026-04-12)
   - `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
     (**entry point** — restart sequence, current state, authority rule)
-- **Current state**: Main merged into branch (commits `da26c4bf`,
-  `9e6ed327`, `f005a4ad`). PR #76 (React MCP App, 977 files), PR #78
-  (open education, ADR-157), releases 1.3.0-1.5.0 all integrated.
-  ADR-144 renumbered to ADR-158. Rate limiting re-applied with
-  extracted `CoreEndpointOptions`. `pnpm check` green. 6 specialist
-  reviewers complete, all findings addressed. Integration sweep
-  confirms no main work lost. Merge plan archived. Session plan for
-  Search CLI adoption written and approved.
-- **Current objective**: Search CLI observability adoption — implement
-  the 10 steps in the session plan. 6 critical gaps to close: Sentry
-  init, sinks, env config, command spans, flush, error capture.
+- **Current state**: Gap analysis (2026-04-12c) identified 6 deviations
+  between our Sentry adapter layer and canonical Sentry practices.
+  Canonical alignment plan created and reviewed by 5 specialists
+  (Fred, Wilma, Betty, sentry-reviewer, config-reviewer). Key findings:
+  early init missing (HIGH), Express error handler not canonical
+  (MEDIUM), adapter surface too narrow (MEDIUM). Sentry reviewer
+  corrected two architecture assumptions: Express handler ordering and
+  isolation scope model. Local credentials provisioned in 2026-04-12b.
+- **Current objective**: Two parallel tracks: (1) Vercel credential
+  provisioning + deployment evidence (closes parent plan), (2) Sentry
+  canonical alignment implementation (new plan, can follow or parallel).
 - **Hard invariants / non-goals**:
   - `SENTRY_MODE=off` is the default and kill switch
-  - No `vi.mock`, no `process.env` mutation in tests
-  - TDD at all levels, Result pattern for config/init
   - ADR-078 DI everywhere, ADR-143 observability architecture
-  - CLI observability is lighter than HTTP (no MCP wrapping needed)
-  - Owner configures real Sentry DSN after all code foundations land
   - `apps/oak-curriculum-mcp-stdio` is NOT an adoption target
-  - Observability failure must not block the CLI (non-fatal init)
-  - Flush must happen before `process.exit` in all exit paths
-- **Recent surprises / corrections** (2026-04-11):
-  - `sed` sweep for ADR renumbering caught main's ADR-144 (Two-Threshold)
-    references — must use targeted file lists, not blanket sweeps
-  - `mcp-rate-limit.integration.test.ts` timed out because it lacked
-    `upstreamMetadata` DI — `createApp` tries to fetch Clerk metadata
-    over the network without it
-  - Prettier reformats compact function calls, so `max-lines-per-function`
-    compliance must be checked after formatting, not before
-  - `max-lines: 250` is enforced via shared `recommended` config in
-    `@oaknational/eslint-plugin-standards`, not workspace-level config
+  - MCP App UIs are NOT covered by Sentry (browser context, not server)
+  - `sendDefaultPii: false` hardcoded — no override path
+  - Adapter pattern preserved (redaction hooks + fixture mode justify it)
+- **Recent surprises / corrections** (2026-04-12c):
+  - Sentry Express error handler ordering: Sentry handler goes BEFORE
+    custom error middleware (corrects Wilma's terminal-handler
+    assumption — verified against official Sentry docs)
+  - `@sentry/node` v8+ isolation scopes: per-request scope forking
+    makes ambient `setUser()`/`setTag()` safe in concurrent Express
+    (corrects Betty's `withScope` redesign — verified against official
+    Sentry docs)
+  - `tracePropagationTargets: []` is an active opt-out of the SDK
+    default (propagate to everything), not a neutral default
+  - Sentry now uses Debug IDs for source map matching, not
+    release-based matching — mitigates release ID consistency risk
+  - `Sentry.close()` is more appropriate than `flush()` for CLI
+    (drains transport AND prevents further sends)
+  - `instrument.ts` needs explicit tsup entry point and `--import` in
+    both start script and dev runner
 - **Open questions / low-confidence areas**:
-  - `app/` directory still lacks barrel `index.ts` (Barney finding) —
-    acceptable as fast-follow, not blocking
-- **Next safe step**: Execute Search CLI adoption session plan Step 1
-  (add `@oaknational/sentry-node` dep) then Step 2 (extend env schema
-  with `SentryEnvSchema`, TDD). Use `jc-start-right-quick` or
-  `jc-go` to ground, then implement sequentially.
-- **Deep consolidation status**: due — merge plan completed and
-  archived; consolidation gate fires on plan closure.
+  - Does tsup support `@sentry/bundler-plugin` for Debug ID injection?
+  - Does `@sentry/profiling-node` native addon work on Vercel's ABI?
+  - Trace propagation to ES and Oak API — security review needed
+- **Next safe step**: Set Vercel credentials, then deployment evidence.
+  Canonical alignment can begin in parallel (Gap 1 early init is
+  highest priority).
+- **Deep consolidation status**: completed this handoff — Search CLI
+  adoption plan closed, canonical alignment plan created. Sentry
+  corrections graduated to deployment runbook. Pattern extracted
+  (domain-specialist-final-say). Stale auto-memory cleaned.
 
-## Active Workstreams (2026-04-11)
+## Active Workstreams (2026-04-12)
 
 ### 1. Vercel Widget Crash Fix — COMPLETE
 

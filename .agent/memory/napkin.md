@@ -184,6 +184,57 @@ Using `SearchCliRuntimeConfig` is consistent with the HTTP server
 pattern and carries both `env` and `version` in one object. Resolved
 in favour of `runtimeConfig`.
 
+---
+
+### Session 2026-04-12: Search CLI Observability Adoption (Implementation)
+
+**Session scope**: Full 10-step TDD implementation of Search CLI
+observability, following the session plan written in 2026-04-11b.
+
+**Correction: logger test is integration, not unit**
+`logger.unit.test.ts` exercises module-level mutable state
+(`additionalSinks`, `loggerCache`) and triggers real stdout IO via
+`createNodeStdoutSink`. Test-reviewer correctly flagged this as
+integration-level. Renamed to `.integration.test.ts`. Rule: any test
+that touches module-level singletons with IO must be classified as
+integration, even if it injects DI fakes for the new behaviour.
+
+**Correction: process.exitCode leaks between tests**
+`with-loaded-cli-env.unit.test.ts` asserted `process.exitCode === 1`
+without an `afterEach` cleanup. This leaves a non-zero exit code for
+subsequent tests in the same Vitest worker. Always reset
+`process.exitCode = undefined` in afterEach when testing code that
+sets it, or inject `setExitCode` as a DI dependency (the
+`withEsClient` pattern).
+
+**Correction: vi.fn() type doesn't satisfy narrow interface fields**
+`ReturnType<typeof vi.fn>` produces a broad mock type that doesn't
+match narrow optional function signatures like
+`(error: unknown, context?: LogContextInput) => void`. Fix: type the
+override parameter with the actual function signature and use
+conditional spreading (`...(override ? { field: override } : {})`).
+
+**Pattern: pre-implementation architecture review saves rework**
+Running `architecture-reviewer-betty` before writing any code caught
+two design issues: (1) `CliSpanOptions` must inject `tracer: undefined`
+explicitly when calling `withActiveSpan`, (2) use `flushSentry` helper
+instead of direct `sentryRuntime.flush` for consistency. Both would
+have required post-hoc fixes without the review.
+
+**Pattern: 7 reviewers across ideation + development + review**
+Used specialist reviewers at 3 stages: pre-implementation (betty
+cohesion review), mid-implementation (none needed — plan was solid),
+post-implementation (6-reviewer sweep). The pre-implementation review
+was highest ROI — it caught issues before any code was written.
+
+**Observation: HTTP E2E flaky under turbo concurrency is pre-existing**
+`@oaknational/oak-curriculum-mcp-streamable-http#test` failed once
+during `pnpm check` but passed on re-run and on isolated execution.
+This is a known pre-existing issue (also noted in session 2026-04-11).
+Tracked in `project_flaky-test-tracker.md`.
+
+---
+
 **Pattern: EEF data structure is more varied than plan assumed**
 Detailed JSON analysis revealed: (a) strand fields have high optionality
 (6 optional top-level fields, 3 rare `implementation_requirements` fields),
@@ -192,3 +243,94 @@ schema) — typing it fully would be excessive, (c) `pp_relevance` has only
 3 values (`moderate`, `high`, `very_high`), (d) `closing_disadvantage_gap`
 in priorities matches the plan (no "the"), but `closing_the_disadvantage_gap`
 IS a separate strand field (2/30 strands). These are distinct concepts.
+
+---
+
+### Session 2026-04-12b: Sentry Credential Provisioning
+
+**Session scope**: Provision Sentry credentials for the HTTP MCP server.
+No code changes — `.env.local` and plan/runbook updates only.
+
+**Facts established via Sentry MCP server**:
+- Org: `oak-national-academy`, Project: `oak-open-curriculum-mcp`
+- Region: `de.sentry.io` (EU data centre)
+- Project is empty: 0 releases, 0 issues (correct pre-provisioning state)
+- DSN from wizard output in `sentry-reference-setup.md` used for local config
+
+**Local `.env.local` provisioned** with:
+`SENTRY_MODE=sentry`, `SENTRY_DSN=<project DSN>`,
+`SENTRY_TRACES_SAMPLE_RATE=1.0`, `SENTRY_RELEASE=local-dev`,
+`SENTRY_ENVIRONMENT=development`, `SENTRY_ENABLE_LOGS=true`.
+
+**Remaining for credential provisioning**: set `SENTRY_MODE`,
+`SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` on Vercel dashboard at
+`https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp`.
+`SENTRY_RELEASE` and `SENTRY_ENVIRONMENT` auto-resolve from
+`VERCEL_GIT_COMMIT_SHA` and `VERCEL_ENV` respectively.
+
+**Decision: Sentry observability boundary excludes MCP App UIs**
+The MCP server serves React widgets as encoded HTML strings via
+`ui://` resources. These render in sandboxed iframes in the host's
+browser context, not in the Node.js process. Sentry covers server-side
+only (Express app, tool execution, MCP protocol, API calls). Client-
+side widget errors are out of scope. If needed in future, a separate
+browser Sentry SDK in the widget HTML would require its own ADR.
+Recorded in execution plan (scope section) and deployment runbook
+(new "Observability Boundary" section).
+
+**Fact: two separate Sentry projects provisioned**
+HTTP MCP server: `oak-open-curriculum-mcp` (DSN in HTTP `.env.local`).
+Search CLI: `oak-open-curriculum-search-cli` (DSN in CLI `.env.local`).
+Both under org `oak-national-academy`, region `de.sentry.io`. Each app
+gets its own DSN for isolated issues, traces, and logs per service.
+
+**Observation: Sentry MCP server is project-scoped**
+The `sentry-ooc-mcp` server in `.cursor/mcp.json` is scoped to
+`oak-national-academy/oak-open-curriculum-mcp` via the URL path.
+This means all queries through it are pre-filtered to the project —
+useful for monitoring once events start flowing.
+
+---
+
+### Session 2026-04-12c: Sentry Canonical Alignment Plan
+
+**Session scope**: Gap analysis between our Sentry adapter and canonical
+Sentry practices. Created alignment plan. 5 specialist reviewers.
+
+**Pattern: domain specialists correct generalist assumptions**
+Architecture reviewers (Betty, Wilma) made two incorrect assumptions
+about Sentry SDK behaviour: (1) Betty assumed ambient `setUser()` leaks
+scope between concurrent requests — incorrect for `@sentry/node` v8+
+which auto-forks isolation scopes per Express request, (2) Wilma assumed
+`setupExpressErrorHandler` is a terminal handler — Sentry docs say it
+passes control onward. The sentry domain specialist corrected both by
+checking official docs. Lesson: on domain-specific SDK behaviour, the
+domain specialist has final say over the architecture generalists. Use
+generalists for structural concerns, specialists for SDK semantics.
+
+**Pattern: Sentry onboarding wizard defaults are not always correct**
+The Sentry Express wizard suggests `sendDefaultPii: true` — unsafe for
+an education platform under UK data protection. It also suggests
+`@sentry/profiling-node` by default — a native addon with ~5% CPU
+overhead, inappropriate to add without load testing. Wizard output
+should be reviewed against project requirements, not applied verbatim.
+
+**Correction: tracePropagationTargets [] is active opt-out**
+Setting `tracePropagationTargets: []` is not a neutral default — the
+`@sentry/node` SDK default propagates trace headers to ALL outbound
+requests. Our `[]` is a deliberate override. This was documented in
+the parent execution plan but the plan text said "deny-by-default"
+which obscured that we're overriding the SDK's own default.
+
+**Correction: Sentry Debug IDs replace release-based source maps**
+Sentry now uses Debug IDs injected at build time for source map
+matching, not release-string-based matching. This mitigates the
+concern about release ID mismatch between build and runtime. Need to
+verify if tsup supports `@sentry/bundler-plugin` for Debug ID
+injection.
+
+**Observation: multi-round review catches more than single-round**
+Round 1 (3 architecture reviewers) shaped the plan structure. Round 2
+(sentry + config specialists) corrected domain-specific assumptions
+from round 1. Neither round alone would have produced the correct plan.
+This pattern is worth repeating for plans that span domain boundaries.

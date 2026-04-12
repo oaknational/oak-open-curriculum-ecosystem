@@ -58,6 +58,7 @@
     "@oaknational/oak-search-sdk": "workspace:*",
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
+    "@oaknational/sentry-node": "workspace:*",
     "@oaknational/sdk-codegen": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "chalk": "^5.6.2",

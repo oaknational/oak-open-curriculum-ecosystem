@@ -364,6 +364,9 @@ importers:
       '@oaknational/sdk-codegen':
         specifier: workspace:*
         version: link:../../packages/sdks/oak-sdk-codegen
+      '@oaknational/sentry-node':
+        specifier: workspace:*
+        version: link:../../packages/libs/sentry-node
       '@oaknational/type-helpers':
         specifier: workspace:*
         version: link:../../packages/core/type-helpers

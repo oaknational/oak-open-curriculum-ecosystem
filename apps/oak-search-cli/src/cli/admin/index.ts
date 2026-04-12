@@ -20,6 +20,7 @@
  */
 
 import { Command } from 'commander';
+import type { CliObservability } from '../../observability/index.js';
 import type { SearchCliEnvLoader } from '../shared/index.js';
 import {
   registerSetupCmd,
@@ -64,7 +65,12 @@ import {
  * program.addCommand(adminCommand(cliEnv));
  * ```
  */
-export function adminCommand(cliEnvLoader: SearchCliEnvLoader): Command {
+export function adminCommand(
+  cliEnvLoader: SearchCliEnvLoader,
+  observability?: CliObservability,
+): Command {
+  // TODO(observability): thread observability to admin sub-registrations
+  void observability;
   const cmd = new Command('admin').description(
     'Elasticsearch setup, ingestion, and index management',
   );

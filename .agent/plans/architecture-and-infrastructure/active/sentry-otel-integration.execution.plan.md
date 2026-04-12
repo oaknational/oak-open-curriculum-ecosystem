@@ -45,11 +45,12 @@ todos:
     note: "PR #73 merged to main (2026-03-31). All 21 findings resolved, C1/C2 regex fixed, ADR-143 renumbered."
   - id: search-cli-adoption
     content: "Adopt the foundation in oak-search-cli with runtime-config-driven logger composition, command init, spans, and shutdown flush"
-    status: pending
+    status: completed
+    note: "Completed 2026-04-12. 10-step TDD implementation, 22 new tests (999 total), 7 reviewer passes (all findings addressed). pnpm check 88/88 green."
   - id: sentry-credential-provisioning
     content: "Provision real Sentry DSN credentials in .env.local (HTTP app) and deployment platform (Vercel). Owner will configure once all code foundations are in place."
-    status: blocked
-    note: "Blocked on: search-cli-adoption completion. Owner configures credentials from Sentry dashboard per docs/operations/sentry-deployment-runbook.md."
+    status: in_progress
+    note: "Both local .env.local files provisioned (2026-04-12). HTTP MCP server: DSN from oak-open-curriculum-mcp project. Search CLI: DSN from oak-open-curriculum-search-cli project. Both set SENTRY_MODE=sentry, SENTRY_TRACES_SAMPLE_RATE=1.0, SENTRY_RELEASE=local-dev, SENTRY_ENVIRONMENT=development, SENTRY_ENABLE_LOGS=true. Remaining: set SENTRY_MODE, SENTRY_DSN, SENTRY_TRACES_SAMPLE_RATE on Vercel dashboard at https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp (SENTRY_RELEASE and SENTRY_ENVIRONMENT auto-resolve from VERCEL_GIT_COMMIT_SHA and VERCEL_ENV). Search CLI has no Vercel deployment — credentials are set via local .env.local or CI env."
   - id: deployment-and-evidence
     content: "Verify release/source maps, alerting baseline, MCP Insights, and produce a date-stamped evidence bundle"
     status: pending
@@ -83,7 +84,7 @@ Phase 3 should be judged against that outcome. New wiring only counts if it
 improves supportability and release confidence while preserving the redaction
 and capture boundaries established in Phase 1 and Phase 2.
 
-## Current Execution Snapshot (2026-04-11)
+## Current Execution Snapshot (2026-04-12)
 
 ### Lane and state
 
@@ -92,8 +93,10 @@ and capture boundaries established in Phase 1 and Phase 2.
 - Phases 0-2: complete (governance, shared contracts, shared foundation)
 - Phase 3 HTTP adoption: **COMPLETE** — all findings resolved, merged
 - Rate limiting: **COMPLETE** (ADR-158, 6 routes, 3 profiles)
-- Phase 3 Search CLI adoption: **NEXT** — unblocked, 6 critical gaps identified
-- Phase 4 evidence/deployment: **pending**
+- Phase 3 Search CLI adoption: **COMPLETE** — 10-step TDD, 22 new
+  tests, 7 reviewer passes, all findings addressed, `pnpm check` 88/88
+- Credential provisioning: **in progress** — local `.env.local` done (2026-04-12); Vercel dashboard pending
+- Phase 4 evidence/deployment: **pending** (unblocked by credential provisioning)
 
 ### Merge from main — COMPLETE (2026-04-11)
 
@@ -107,7 +110,8 @@ no main work lost. Merge plan archived.
 
 ### Quality gate status
 
-Green after merge. Last verified: 2026-04-11.
+Green after Search CLI adoption. Last verified: 2026-04-12.
+`pnpm check` 88/88 tasks successful.
 
 ### Remediation status
 
@@ -326,7 +330,17 @@ Explicitly out of scope for implementation:
 
 1. `apps/oak-curriculum-mcp-stdio` — deprecated per ADR-128
 2. Browser or edge Sentry runtimes
-3. Separate OpenTelemetry SDK providers or auto-instrumentation packages
+3. MCP App UIs — the React widgets served as encoded HTML strings via
+   `ui://` resources run inside sandboxed iframes in the consuming host
+   (e.g. Claude Desktop). They execute in the host's browser context, not
+   in the Node.js server process. Sentry observability covers the
+   server-side Express app only: tool execution, resource serving, MCP
+   protocol handling, and API calls. Client-side errors within rendered
+   MCP App views are outside this foundation's boundary. If client-side
+   observability is needed in future, it would require a separate browser
+   Sentry SDK initialised within the widget HTML, which is a distinct
+   workstream requiring its own ADR.
+4. Separate OpenTelemetry SDK providers or auto-instrumentation packages
 
 ### Problem Statement
 

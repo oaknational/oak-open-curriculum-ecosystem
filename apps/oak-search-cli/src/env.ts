@@ -15,6 +15,7 @@ import {
   ElasticsearchEnvSchema,
   LoggingEnvSchema,
   BulkDataEnvSchema,
+  SentryEnvSchema,
 } from '@oaknational/env';
 
 const CLI_LOG_LEVELS = ['trace', 'debug', 'info', 'warn', 'error'] as const;
@@ -27,6 +28,7 @@ const CLI_LOG_LEVELS = ['trace', 'debug', 'info', 'warn', 'error'] as const;
 export const SearchCliBaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
   .extend(BulkDataEnvSchema.shape)
   .extend(LoggingEnvSchema.shape)
+  .extend(SentryEnvSchema.shape)
   .extend({
     ELASTICSEARCH_URL: z.url(),
     ELASTICSEARCH_API_KEY: z.string().min(10),

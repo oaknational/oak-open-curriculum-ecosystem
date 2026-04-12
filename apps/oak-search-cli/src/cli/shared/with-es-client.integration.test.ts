@@ -29,11 +29,17 @@ function createFakeLogger() {
 }
 
 /** Minimal fake deps for withEsClient. */
-function createFakeDeps(overrides?: { logger?: ReturnType<typeof createFakeLogger> }) {
+function createFakeDeps(overrides?: {
+  logger?: ReturnType<typeof createFakeLogger>;
+  captureHandledError?: (error: unknown, context?: Record<string, unknown>) => void;
+}) {
   return {
     logger: overrides?.logger ?? createFakeLogger(),
     printError: vi.fn(),
     setExitCode: vi.fn(),
+    ...(overrides?.captureHandledError
+      ? { captureHandledError: overrides.captureHandledError }
+      : {}),
   };
 }
 
@@ -188,5 +194,40 @@ describe('withEsClient', () => {
       },
       deps,
     );
+  });
+
+  it('calls captureHandledError when handler throws and capture is provided', async () => {
+    const esClient = createFakeEsClient();
+    const captureHandledError = vi.fn();
+    const deps = createFakeDeps({ captureHandledError });
+
+    await withEsClient(
+      esClient,
+      async () => {
+        throw new Error('handler boom');
+      },
+      deps,
+    );
+
+    expect(captureHandledError).toHaveBeenCalledWith(
+      expect.any(Error),
+      expect.objectContaining({ boundary: 'cli_command_error' }),
+    );
+  });
+
+  it('does not throw when captureHandledError is undefined', async () => {
+    const esClient = createFakeEsClient();
+    const deps = createFakeDeps();
+
+    await withEsClient(
+      esClient,
+      async () => {
+        throw new Error('handler boom');
+      },
+      deps,
+    );
+
+    // Should reach here without additional errors
+    expect(deps.setExitCode).toHaveBeenCalledWith(1);
   });
 });

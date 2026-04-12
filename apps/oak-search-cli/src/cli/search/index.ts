@@ -18,6 +18,7 @@
 
 import { Command } from 'commander';
 import { createRetrievalService } from '@oaknational/oak-search-sdk/read';
+import type { CliObservability } from '../../observability/index.js';
 import {
   createEsClient,
   withEsClient,
@@ -52,7 +53,11 @@ interface SubjectKeyStageOpts {
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-function registerLessonsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
+function registerLessonsCmd(
+  parent: Command,
+  cliEnvLoader: SearchCliEnvLoader,
+  observability?: CliObservability,
+): void {
   parent
     .command('lessons')
     .description('Search lessons using hybrid BM25 + ELSER retrieval')
@@ -86,6 +91,7 @@ function registerLessonsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): 
             searchDeps,
           );
         },
+        observability,
       ),
     );
 }
@@ -96,7 +102,11 @@ function registerLessonsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): 
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-function registerUnitsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
+function registerUnitsCmd(
+  parent: Command,
+  cliEnvLoader: SearchCliEnvLoader,
+  observability?: CliObservability,
+): void {
   parent
     .command('units')
     .description('Search units using hybrid BM25 + ELSER retrieval')
@@ -130,6 +140,7 @@ function registerUnitsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): vo
             searchDeps,
           );
         },
+        observability,
       ),
     );
 }
@@ -140,7 +151,11 @@ function registerUnitsCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): vo
  * @param parent - The parent Commander command to register under
  * @param cliEnv - Validated CLI environment values
  */
-function registerSequencesCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader): void {
+function registerSequencesCmd(
+  parent: Command,
+  cliEnvLoader: SearchCliEnvLoader,
+  observability?: CliObservability,
+): void {
   parent
     .command('sequences')
     .description('Search sequences (subject-phase programmes)')
@@ -172,6 +187,7 @@ function registerSequencesCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader)
             searchDeps,
           );
         },
+        observability,
       ),
     );
 }
@@ -182,14 +198,17 @@ function registerSequencesCmd(parent: Command, cliEnvLoader: SearchCliEnvLoader)
  * @param cliEnv - Validated CLI environment values
  * @returns A Commander `Command` with search subcommands registered
  */
-export function searchCommand(cliEnvLoader: SearchCliEnvLoader): Command {
+export function searchCommand(
+  cliEnvLoader: SearchCliEnvLoader,
+  observability?: CliObservability,
+): Command {
   const cmd = new Command('search').description(
     'Query lessons, units, sequences, threads, and suggestions',
   );
 
-  registerLessonsCmd(cmd, cliEnvLoader);
-  registerUnitsCmd(cmd, cliEnvLoader);
-  registerSequencesCmd(cmd, cliEnvLoader);
+  registerLessonsCmd(cmd, cliEnvLoader, observability);
+  registerUnitsCmd(cmd, cliEnvLoader, observability);
+  registerSequencesCmd(cmd, cliEnvLoader, observability);
   registerThreadsCmd(cmd, cliEnvLoader);
   registerSuggestCmd(cmd, cliEnvLoader);
   registerFacetsCmd(cmd, cliEnvLoader);

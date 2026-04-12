@@ -4,11 +4,11 @@ How to enable live Sentry error capture and tracing for Oak runtimes.
 
 **Status**: The observability foundation code is in the HTTP MCP server
 (PR #73, merged 2026-03-31). Rate limiting is in place (ADR-158).
-Search CLI adoption is pending. No Sentry credentials are configured
-in `.env.local` or the Vercel dashboard yet — the code defaults to
-`SENTRY_MODE=off` (fail-closed, safe). This runbook covers the
-operational steps to go from `off` to `sentry` once all code
-foundations are in place.
+Search CLI adoption is complete (2026-04-12). Local `.env.local`
+credentials are provisioned for the HTTP MCP server (2026-04-12).
+Vercel dashboard credentials are pending — set them at
+<https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp/settings/environment-variables>.
+This runbook covers the operational steps to go from `off` to `sentry`.
 
 ## Prerequisites
 
@@ -21,8 +21,8 @@ foundations are in place.
 
 1. Log in to [sentry.io](https://sentry.io).
 2. Create a **separate project** for each runtime:
-   - `oak-curriculum-mcp-streamable-http` (platform: Node.js)
-   - `oak-search-cli` (platform: Node.js) — when adoption is complete
+   - `oak-open-curriculum-mcp` (platform: Node.js) — HTTP MCP server
+   - `oak-open-curriculum-search-cli` (platform: Node.js) — Search CLI
 3. Note each project's **DSN** from Project Settings > Client Keys.
 
 Each app uses its own DSN so issues, traces, and logs are isolated per
@@ -34,7 +34,7 @@ Set the following **per app** in the deployment platform:
 
 ### HTTP MCP server (Vercel)
 
-In the Vercel dashboard under Settings > Environment Variables:
+In the [Vercel dashboard](https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp/settings/environment-variables) under Settings > Environment Variables:
 
 | Variable                    | Value                | Notes                                  |
 | --------------------------- | -------------------- | -------------------------------------- |
@@ -70,8 +70,9 @@ Set in the execution environment (CI, local `.env.local`, or shell):
 | `SENTRY_RELEASE`            | Set explicitly (no Vercel auto-resolution) |
 | `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                                      |
 
-**Note**: Search CLI Sentry adoption is not yet wired. These variables
-will be consumed once the `search-cli-adoption` work is complete.
+**Note**: Search CLI Sentry adoption is complete (2026-04-12). Local
+`.env.local` credentials provisioned. The Search CLI has no Vercel
+deployment — credentials are set via local `.env.local` or CI env.
 
 ## Step 3: Verify Release and Source Maps
 
@@ -140,6 +141,45 @@ This is a future evaluation, not a current recommendation.
 | `off`     | Not initialised      | stdout only              | Noop                    | Synthetic (context only) | Noop                      |
 | `fixture` | Not initialised      | stdout + in-memory store | In-memory store         | Synthetic (context only) | Noop                      |
 | `sentry`  | Initialised with DSN | stdout + Sentry logger   | Live `captureException` | Real OTel spans          | Bounded flush at shutdown |
+
+## Observability Boundary
+
+Sentry observability covers the **server-side Node.js process only**:
+tool execution, resource serving, MCP protocol handling, and upstream
+API calls.
+
+The MCP server also serves React-based MCP App UIs as encoded HTML
+strings via `ui://` resources. These widgets render inside sandboxed
+iframes in the consuming MCP host (e.g. Claude Desktop) — they execute
+in the host's browser context, not in the Node.js server process.
+**Client-side errors within rendered MCP App views are not captured by
+this Sentry integration.** If client-side widget observability is needed
+in future, it would require a separate browser Sentry SDK initialised
+within the widget HTML — a distinct workstream requiring its own ADR.
+
+## Known Deviations from Canonical Sentry
+
+The Oak integration wraps `@sentry/node` behind a DI adapter
+(`@oaknational/sentry-node`) for testability and redaction safety.
+This deviates from the canonical Sentry setup in several documented
+ways. See
+`.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
+for the full gap analysis and remediation plan.
+
+Key facts verified against official Sentry docs (2026-04-12):
+
+- **Express error handler ordering**: `setupExpressErrorHandler` must
+  be registered BEFORE other error middleware (not after).
+- **Isolation scopes**: `@sentry/node` v8+ auto-forks an isolation
+  scope per Express request. Ambient `setUser()`/`setTag()` are safe
+  in concurrent Express — no `withScope` wrapper needed.
+- **`tracePropagationTargets: []`** is an active opt-out of the SDK
+  default (which propagates to all outbound requests).
+- **Debug IDs**: Sentry now uses build-injected Debug IDs for source
+  map matching, not release-string-based matching.
+- **`Sentry.close()`** is more appropriate than `flush()` for
+  short-lived CLI processes (drains transport and prevents further
+  sends).
 
 ## Redaction
 

@@ -28,6 +28,7 @@
  */
 
 import { normalizeError, sanitiseForJson, type Logger } from '@oaknational/logger/node';
+import type { LogContextInput } from '@oaknational/logger';
 
 /** Minimal contract for an ES client that can be closed. */
 export interface CloseableEsClient {
@@ -42,6 +43,8 @@ export interface WithEsClientDeps {
   readonly printError: (message: string) => void;
   /** Exit code setter — composition root passes `(c) => { process.exitCode = c; }`. */
   readonly setExitCode: (code: number) => void;
+  /** Optional Sentry error capture — injected when observability is active. */
+  readonly captureHandledError?: (error: unknown, context?: LogContextInput) => void;
 }
 
 /**
@@ -67,6 +70,7 @@ export async function withEsClient(
   } catch (error: unknown) {
     deps.logger.error('Command failed', normalizeError(error));
     deps.printError(error instanceof Error ? error.message : String(error));
+    deps.captureHandledError?.(error, { boundary: 'cli_command_error' });
     deps.setExitCode(1);
   } finally {
     try {

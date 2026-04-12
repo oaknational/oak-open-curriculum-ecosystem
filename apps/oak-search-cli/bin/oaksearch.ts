@@ -18,34 +18,85 @@
  */
 
 import { Command } from 'commander';
-import { createSearchCliEnvLoader } from '../src/runtime-config.js';
+import { loadRuntimeConfig, createSearchCliEnvLoader } from '../src/runtime-config.js';
 import { searchCommand } from '../src/cli/search/index.js';
 import { adminCommand } from '../src/cli/admin/index.js';
 import { evalCommand } from '../src/cli/eval/index.js';
 import { observeCommand } from '../src/cli/observe/index.js';
-import { disableFileSink } from '../src/lib/logger.js';
+import {
+  disableFileSink,
+  registerAdditionalSink,
+  clearAdditionalSinks,
+} from '../src/lib/logger.js';
+import {
+  createCliObservability,
+  describeCliObservabilityError,
+  type CliObservability,
+} from '../src/observability/index.js';
 
-const cliEnvLoader = createSearchCliEnvLoader({
+const loadOptions = {
   processEnv: process.env,
   startDir: import.meta.dirname,
-});
+};
+
+const cliEnvLoader = createSearchCliEnvLoader(loadOptions);
+
+/* ------------------------------------------------------------------ */
+/* Observability init (non-fatal — SENTRY_MODE=off is default)        */
+/* ------------------------------------------------------------------ */
+
+let cliObservability: CliObservability | undefined;
+
+const configResult = loadRuntimeConfig(loadOptions);
+if (configResult.ok) {
+  const obsResult = createCliObservability(configResult.value);
+  if (obsResult.ok) {
+    cliObservability = obsResult.value;
+    if (cliObservability.sentrySink) {
+      registerAdditionalSink(cliObservability.sentrySink);
+    }
+  } else {
+    process.stderr.write(
+      `Warning: observability init failed (${describeCliObservabilityError(obsResult.error)}), continuing without Sentry\n`,
+    );
+  }
+} else {
+  // Config failure is non-fatal here: --help and --version still work.
+  // Actual env validation error fires via withLoadedCliEnv when a command runs.
+  process.stderr.write('Warning: config load failed, observability disabled\n');
+}
+
+/* ------------------------------------------------------------------ */
+/* Command registration                                               */
+/* ------------------------------------------------------------------ */
 
 const program = new Command()
   .name('oaksearch')
   .description('Oak National Academy — curriculum semantic search CLI')
   .version(process.env.npm_package_version ?? '0.0.0');
 
-program.addCommand(searchCommand(cliEnvLoader));
-program.addCommand(adminCommand(cliEnvLoader));
-program.addCommand(evalCommand(cliEnvLoader));
-program.addCommand(observeCommand(cliEnvLoader));
+program.addCommand(searchCommand(cliEnvLoader, cliObservability));
+program.addCommand(adminCommand(cliEnvLoader, cliObservability));
+program.addCommand(evalCommand(cliEnvLoader, cliObservability));
+program.addCommand(observeCommand(cliEnvLoader, cliObservability));
+
+/* ------------------------------------------------------------------ */
+/* Execute and clean up                                               */
+/* ------------------------------------------------------------------ */
 
 try {
   await program.parseAsync();
 } finally {
+  if (cliObservability) {
+    const flushResult = await cliObservability.flush();
+    if (!flushResult.ok) {
+      process.stderr.write('Warning: Sentry flush failed\n');
+    }
+  }
   const sinkResult = disableFileSink();
   if (!sinkResult.ok) {
     process.stderr.write(`Warning: ${sinkResult.error.message}\n`);
   }
+  clearAdditionalSinks();
   process.exit(process.exitCode ?? 0);
 }

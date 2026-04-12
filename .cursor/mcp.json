@@ -1,5 +1,9 @@
 {
   "mcpServers": {
+    "sentry-ooc-mcp": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/mcp/oak-national-academy/oak-open-curriculum-mcp"
+    },
     "oak-prod": {
       "type": "http",
       "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"

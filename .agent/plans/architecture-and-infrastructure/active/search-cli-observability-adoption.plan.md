@@ -1,17 +1,21 @@
-# Plan: Search CLI Observability Adoption
+# Plan: Search CLI Observability Adoption — COMPLETE
+
+## Status: COMPLETE (2026-04-12)
+
+All 10 implementation steps executed with TDD throughout. 22 new tests
+(999 total in workspace). 7 reviewer passes (pre-implementation betty,
+then code-reviewer, sentry-reviewer, test-reviewer, architecture-fred,
+security-reviewer, architecture-betty). All findings addressed.
+`pnpm check` 88/88 green.
 
 ## Context
 
 Branch `feat/otel_sentry_enhancements` carries the production observability
 foundation — a Milestone 2 blocker. The main merge is COMPLETE (commits
 `da26c4bf`, `9e6ed327`, `f005a4ad`). The HTTP MCP server has full Sentry +
-OTel observability. The Search CLI (`apps/oak-search-cli`) has **6 critical
+OTel observability. The Search CLI (`apps/oak-search-cli`) had **6 critical
 gaps**: no Sentry init, no sinks, no env config, no command spans, no flush,
-no error capture.
-
-This plan closes all 6 gaps using TDD throughout, following the patterns
-established in the HTTP server while keeping the module lighter (short-lived
-CLI process, no MCP wrapping, no live OTel tracer).
+no error capture. All 6 gaps are now closed.
 
 ---
 

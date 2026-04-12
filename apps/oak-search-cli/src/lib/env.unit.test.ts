@@ -111,4 +111,44 @@ describe('parseEnv', () => {
     expect(result.value.SDK_CACHE_REDIS_URL).toBe('redis://custom:6380');
     expect(result.value.SDK_CACHE_TTL_DAYS).toBe(14);
   });
+
+  it('defaults SENTRY_MODE to off when not provided', () => {
+    const result = parseEnv(withBaseEnv({}));
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.SENTRY_MODE).toBe('off');
+  });
+
+  it('accepts SENTRY_MODE=fixture', () => {
+    const result = parseEnv(withBaseEnv({ SENTRY_MODE: 'fixture' }));
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.SENTRY_MODE).toBe('fixture');
+  });
+
+  it('accepts SENTRY_MODE=sentry with DSN and release', () => {
+    const result = parseEnv(
+      withBaseEnv({
+        SENTRY_MODE: 'sentry',
+        SENTRY_DSN: 'https://public@example.ingest.sentry.io/123456',
+        SENTRY_RELEASE: 'release-123',
+        SENTRY_TRACES_SAMPLE_RATE: '1.0',
+      }),
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    expect(result.value.SENTRY_MODE).toBe('sentry');
+    expect(result.value.SENTRY_DSN).toBe('https://public@example.ingest.sentry.io/123456');
+  });
+
+  it('rejects invalid SENTRY_MODE', () => {
+    const result = parseEnv(withBaseEnv({ SENTRY_MODE: 'bogus' }));
+    expect(result.ok).toBe(false);
+  });
 });

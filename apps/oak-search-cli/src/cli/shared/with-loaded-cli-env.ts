@@ -6,18 +6,24 @@
  */
 
 import type { SearchCliEnv } from '../../env.js';
+import type { CliObservability } from '../../observability/index.js';
 import { printConfigError, type SearchCliEnvLoader } from '../../runtime-config.js';
 
 /**
  * Wrap a Commander action so it loads validated env on demand.
  *
+ * When observability is provided, the action runs inside a command-level
+ * span. When omitted, the action runs directly (backward compatible).
+ *
  * @param cliEnvLoader - Cached loader created at the composition root
  * @param action - Action body that requires validated CLI env
+ * @param observability - Optional CLI observability for span wrapping
  * @returns Commander-compatible async action
  */
 export function withLoadedCliEnv<TArgs extends readonly unknown[]>(
   cliEnvLoader: SearchCliEnvLoader,
   action: (cliEnv: SearchCliEnv, ...args: TArgs) => Promise<void> | void,
+  observability?: CliObservability,
 ): (...args: TArgs) => Promise<void> {
   return async (...args: TArgs): Promise<void> => {
     const envResult = cliEnvLoader.load();
@@ -27,6 +33,14 @@ export function withLoadedCliEnv<TArgs extends readonly unknown[]>(
       return;
     }
 
-    await action(envResult.value, ...args);
+    const runAction = async (): Promise<void> => {
+      await action(envResult.value, ...args);
+    };
+
+    if (observability) {
+      await observability.withSpan({ name: 'oak.cli.command', run: runAction });
+    } else {
+      await runAction();
+    }
   };
 }
