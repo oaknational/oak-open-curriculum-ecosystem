@@ -12,8 +12,8 @@ export default defineConfig({
     environment: 'node',
     setupFiles: ['./test.setup.ts'],
     include: ['**/*.unit.test.ts', '**/*.integration.test.ts'],
-    // Restored to proper isolation after completing DI refactoring.
-    // Tests no longer mutate global state.
+    // DI refactoring mostly complete. Logger module-level state
+    // (configureLogLevel) remains — tracked as cli-logger-di-audit.
     // See: test-isolation-architecture-fix.md
     isolate: true,
     pool: 'forks',

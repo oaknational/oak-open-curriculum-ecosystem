@@ -18,12 +18,14 @@
  */
 
 import { Command } from 'commander';
+import { parseLogLevel } from '@oaknational/logger';
 import { loadRuntimeConfig, createSearchCliEnvLoader } from '../src/runtime-config.js';
 import { searchCommand } from '../src/cli/search/index.js';
 import { adminCommand } from '../src/cli/admin/index.js';
 import { evalCommand } from '../src/cli/eval/index.js';
 import { observeCommand } from '../src/cli/observe/index.js';
 import {
+  configureLogLevel,
   disableFileSink,
   registerAdditionalSink,
   clearAdditionalSinks,
@@ -49,6 +51,7 @@ let cliObservability: CliObservability | undefined;
 
 const configResult = loadRuntimeConfig(loadOptions);
 if (configResult.ok) {
+  configureLogLevel(parseLogLevel(configResult.value.logLevel));
   const obsResult = createCliObservability(configResult.value);
   if (obsResult.ok) {
     cliObservability = obsResult.value;
@@ -88,15 +91,15 @@ try {
   await program.parseAsync();
 } finally {
   if (cliObservability) {
-    const flushResult = await cliObservability.flush();
-    if (!flushResult.ok) {
-      process.stderr.write('Warning: Sentry flush failed\n');
+    const closeResult = await cliObservability.close();
+    if (!closeResult.ok) {
+      process.stderr.write('Warning: Sentry close failed\n');
     }
   }
+  clearAdditionalSinks();
   const sinkResult = disableFileSink();
   if (!sinkResult.ok) {
     process.stderr.write(`Warning: ${sinkResult.error.message}\n`);
   }
-  clearAdditionalSinks();
   process.exit(process.exitCode ?? 0);
 }

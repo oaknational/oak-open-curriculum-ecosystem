@@ -12,7 +12,6 @@ import {
 } from '@oaknational/logger';
 
 import { createCorrelationMiddleware } from '../correlation/middleware.js';
-import { createEnrichedErrorLogger } from '../logging/index.js';
 import { redactHeaders } from '../logging/header-redaction.js';
 import type { HttpObservability } from '../observability/http-observability.js';
 
@@ -133,13 +132,13 @@ export async function runAsyncBootstrapPhase<T>(
 }
 
 /**
- * Sets up base Express middleware (JSON parsing, correlation, logging, error handling).
+ * Sets up base Express middleware (JSON parsing, correlation, request logging).
+ *
+ * @remarks Error handling middleware is registered separately via
+ * {@link setupErrorHandlers} after all routes, per Sentry's requirement
+ * that error handlers are added "after all controllers."
  */
-export function setupBaseMiddleware(
-  app: Express,
-  log: Logger,
-  observability?: Pick<HttpObservability, 'captureHandledError'>,
-): void {
+export function setupBaseMiddleware(app: Express, log: Logger): void {
   app.use(expressJson({ limit: '1mb' }));
   app.use(createCorrelationMiddleware(log));
 
@@ -152,7 +151,6 @@ export function setupBaseMiddleware(
       }),
     );
   }
-  app.use(createEnrichedErrorLogger(log, observability));
 }
 
 /**

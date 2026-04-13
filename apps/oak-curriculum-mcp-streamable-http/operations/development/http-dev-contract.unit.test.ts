@@ -56,7 +56,7 @@ describe('resolveHttpDevExecutionPlan', () => {
     expect(plan.server).toStrictEqual({
       label: 'http-dev-server',
       command: join(workspaceRoot, 'node_modules', '.bin', 'tsx'),
-      args: ['src/index.ts'],
+      args: ['--import', '@sentry/node/preload', 'src/index.ts'],
       cwd: workspaceRoot,
       env: {
         ...parentEnv,

@@ -25,6 +25,7 @@ import {
   initialiseSentry,
   type FixtureSentryStore,
   type ParsedSentryConfig,
+  type SentryCloseError,
   type SentryFlushError,
   type SentryNodeRuntime,
   type SentryNodeSdk,
@@ -52,6 +53,13 @@ export interface CliObservability {
   withSpan<T>(options: CliSpanOptions<T>): Promise<T>;
   captureHandledError(error: unknown, context?: LogContextInput): void;
   flush(timeoutMs?: number): Promise<Result<void, SentryFlushError>>;
+  /**
+   * Close the Sentry transport — drains pending events AND disables the SDK.
+   *
+   * @remarks Preferred over {@link flush} for CLI shutdown. `close()`
+   * is the Sentry-recommended shutdown for short-lived processes.
+   */
+  close(timeoutMs?: number): Promise<Result<void, SentryCloseError>>;
 }
 
 interface CreateCliObservabilityOptions {
@@ -94,6 +102,10 @@ function buildCliObservability(params: BuildCliObservabilityParams): CliObservab
 
     async flush(timeoutMs): Promise<Result<void, SentryFlushError>> {
       return await flushSentry(sentryRuntime, timeoutMs);
+    },
+
+    async close(timeoutMs): Promise<Result<void, SentryCloseError>> {
+      return await sentryRuntime.close(timeoutMs);
     },
   };
 }

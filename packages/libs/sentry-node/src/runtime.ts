@@ -16,9 +16,12 @@ import type {
   InitialiseSentryError,
   InitialiseSentryOptions,
   ParsedSentryConfig,
+  SentryCloseError,
+  SentryContextPayload,
   SentryFlushError,
   SentryNodeRuntime,
   SentryNodeSdk,
+  SentryUser,
 } from './types.js';
 
 function createNoopRuntime(
@@ -33,6 +36,18 @@ function createNoopRuntime(
     },
     async flush(): Promise<Result<void, SentryFlushError>> {
       return ok(undefined);
+    },
+    async close(): Promise<Result<void, SentryCloseError>> {
+      return ok(undefined);
+    },
+    setUser(): void {
+      // Kill switch mode never sets scope.
+    },
+    setTag(): void {
+      // Kill switch mode never sets scope.
+    },
+    setContext(): void {
+      // Kill switch mode never sets scope.
     },
   };
 }
@@ -63,7 +78,43 @@ function createFixtureRuntime(
     async flush(): Promise<Result<void, SentryFlushError>> {
       return ok(undefined);
     },
+    async close(): Promise<Result<void, SentryCloseError>> {
+      return ok(undefined);
+    },
+    setUser(user: SentryUser | null): void {
+      store.push({ kind: 'set_user', user });
+    },
+    setTag(key: string, value: string): void {
+      store.push({ kind: 'set_tag', key, value });
+    },
+    setContext(name: string, context: SentryContextPayload | null): void {
+      store.push({ kind: 'set_context', name, context });
+    },
   };
+}
+
+async function flushSdk(
+  sdk: SentryNodeSdk,
+  timeoutMs: number,
+): Promise<Result<void, SentryFlushError>> {
+  try {
+    const flushed = await sdk.flush(timeoutMs);
+    return flushed ? ok(undefined) : err({ kind: 'sentry_flush_timeout', timeoutMs });
+  } catch (error) {
+    return err({ kind: 'sentry_flush_failed', message: describeUnknownError(error) });
+  }
+}
+
+async function closeSdk(
+  sdk: SentryNodeSdk,
+  timeoutMs: number,
+): Promise<Result<void, SentryCloseError>> {
+  try {
+    const closed = await sdk.close(timeoutMs);
+    return closed ? ok(undefined) : err({ kind: 'sentry_close_timeout', timeoutMs });
+  } catch (error) {
+    return err({ kind: 'sentry_close_failed', message: describeUnknownError(error) });
+  }
 }
 
 function createLiveRuntime(
@@ -91,23 +142,21 @@ function createLiveRuntime(
     async flush(
       timeoutMs = DEFAULT_SENTRY_FLUSH_TIMEOUT_MS,
     ): Promise<Result<void, SentryFlushError>> {
-      try {
-        const flushed = await sdk.flush(timeoutMs);
-
-        if (!flushed) {
-          return err({
-            kind: 'sentry_flush_timeout',
-            timeoutMs,
-          });
-        }
-
-        return ok(undefined);
-      } catch (error) {
-        return err({
-          kind: 'sentry_flush_failed',
-          message: describeUnknownError(error),
-        });
-      }
+      return await flushSdk(sdk, timeoutMs);
+    },
+    async close(
+      timeoutMs = DEFAULT_SENTRY_FLUSH_TIMEOUT_MS,
+    ): Promise<Result<void, SentryCloseError>> {
+      return await closeSdk(sdk, timeoutMs);
+    },
+    setUser(user: SentryUser | null): void {
+      sdk.setUser(user);
+    },
+    setTag(key: string, value: string): void {
+      sdk.setTag(key, value);
+    },
+    setContext(name: string, context: SentryContextPayload | null): void {
+      sdk.setContext(name, context);
     },
   };
 }

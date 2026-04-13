@@ -16,6 +16,10 @@ import {
   initializeAppInstance,
   type ExpressWithAppId,
 } from './app/bootstrap-helpers.js';
+import {
+  setupErrorHandlers,
+  type SentryExpressErrorHandlerSetup,
+} from './app/bootstrap-error-handlers.js';
 import { setupSecurityMiddleware } from './app/bootstrap-security.js';
 import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 import { mountStaticContentRoutes } from './app/static-content.js';
@@ -67,6 +71,18 @@ export interface CreateAppOptions {
    * @see ADR-158 for the multi-layer security architecture
    */
   readonly rateLimiterFactory?: RateLimiterFactory;
+  /**
+   * Sentry Express error handler registration function. When provided,
+   * registers Sentry-native error capture middleware before the enriched
+   * error logger. Production callers pass `setupExpressErrorHandler` from
+   * `@sentry/node`; tests omit this or inject a recording fake.
+   *
+   * @remarks Only provide when `SENTRY_MODE !== 'off'` — the handler is
+   * inert without `Sentry.init()` but registration is unnecessary overhead.
+   *
+   * @see ADR-078 for the dependency injection rationale
+   */
+  readonly setupSentryErrorHandler?: SentryExpressErrorHandlerSetup;
 }
 
 let appCounter = 0;
@@ -84,7 +100,7 @@ function setupPreAuthPhases(
     'setupBaseMiddleware',
     appId,
     () => {
-      setupBaseMiddleware(app, log, options.observability);
+      setupBaseMiddleware(app, log);
     },
     options.observability,
   );
@@ -140,6 +156,9 @@ function setupPostAuthPhases(
     },
     options.observability,
   );
+
+  // Error handlers must be registered AFTER all routes (Sentry docs requirement)
+  setupErrorHandlers(app, log, options.observability, options.setupSentryErrorHandler);
 }
 
 /** Logs the final bootstrap summary: route count, timing, and registered paths. */
@@ -156,7 +175,7 @@ function logBootstrapSummary(
 
 /**
  * Creates and configures an Express application instance for MCP over HTTP.
- * Middleware order: base → security → rate limiters → OAuth → auth context → core → static → /mcp → auth routes.
+ * Middleware order: base → security → rate limiters → OAuth → auth context → core → static → /mcp → auth routes → error handlers.
  */
 export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
   const log =

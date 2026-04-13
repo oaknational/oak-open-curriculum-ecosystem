@@ -46,6 +46,7 @@ describe('withLoadedCliEnv span wrapping', () => {
       },
       captureHandledError: vi.fn(),
       flush: vi.fn().mockResolvedValue(ok(undefined)),
+      close: vi.fn().mockResolvedValue(ok(undefined)),
     };
 
     const action = vi.fn<(env: SearchCliEnv) => Promise<void>>().mockResolvedValue(undefined);
@@ -80,6 +81,7 @@ describe('withLoadedCliEnv span wrapping', () => {
       },
       captureHandledError: vi.fn(),
       flush: vi.fn().mockResolvedValue(ok(undefined)),
+      close: vi.fn().mockResolvedValue(ok(undefined)),
     };
 
     const action = vi.fn().mockRejectedValue(new Error('boom'));

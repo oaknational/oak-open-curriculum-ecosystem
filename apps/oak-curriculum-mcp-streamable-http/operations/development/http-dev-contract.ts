@@ -115,7 +115,7 @@ export function resolveHttpDevExecutionPlan({
     server: {
       label: 'http-dev-server',
       command: resolveWorkspaceBinary(workspaceRoot, 'tsx'),
-      args: ['src/index.ts'],
+      args: ['--import', '@sentry/node/preload', 'src/index.ts'],
       cwd: workspaceRoot,
       env: resolveServerEnv(parentEnv, mode),
       output: resolveServerOutput(mode, workspaceRoot, now),

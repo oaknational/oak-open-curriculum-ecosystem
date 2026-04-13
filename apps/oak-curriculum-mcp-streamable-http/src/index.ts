@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { setupExpressErrorHandler } from '@sentry/node';
 
 import { WIDGET_HTML_CONTENT } from './generated/widget-html-content.js';
 import { createApp } from './application.js';
@@ -32,7 +33,13 @@ const observability = observabilityResult.value;
 await startConfiguredHttpServer({
   runtimeConfig: config,
   observability,
-  createApp: (opts) => createApp({ ...opts, getWidgetHtml: () => WIDGET_HTML_CONTENT }),
+  createApp: (opts) =>
+    createApp({
+      ...opts,
+      getWidgetHtml: () => WIDGET_HTML_CONTENT,
+      setupSentryErrorHandler:
+        config.env.SENTRY_MODE !== 'off' ? setupExpressErrorHandler : undefined,
+    }),
   bootstrapApp,
   createServer: (app) => {
     /**

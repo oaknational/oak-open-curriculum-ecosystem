@@ -1,12 +1,22 @@
 import {
   captureException,
   captureMessage,
+  close,
   flush,
   init,
   logger,
+  setContext as sentrySetContext,
+  setTag as sentrySetTag,
+  setUser as sentrySetUser,
   type NodeOptions,
 } from '@sentry/node';
-import type { SentryLiveConfig, SentryNodeSdk, SentryPostRedactionHooks } from './types.js';
+import type {
+  SentryContextPayload,
+  SentryLiveConfig,
+  SentryNodeSdk,
+  SentryPostRedactionHooks,
+  SentryUser,
+} from './types.js';
 import {
   redactSentryBreadcrumb,
   redactSentryEvent,
@@ -88,6 +98,18 @@ export const defaultSentryNodeSdk: SentryNodeSdk = {
   },
   flush(timeoutMs): Promise<boolean> {
     return flush(timeoutMs);
+  },
+  close(timeoutMs): Promise<boolean> {
+    return close(timeoutMs);
+  },
+  setUser(user: SentryUser | null): void {
+    sentrySetUser(user);
+  },
+  setTag(key: string, value: string): void {
+    sentrySetTag(key, value);
+  },
+  setContext(name: string, context: SentryContextPayload | null): void {
+    sentrySetContext(name, context);
   },
   logger,
 };

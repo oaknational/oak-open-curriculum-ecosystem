@@ -5,7 +5,12 @@
  * Supports dual-sink logging (stdout + file) for CLI ingestion runs.
  */
 
-import { logLevelToSeverityNumber, type LogSink } from '@oaknational/logger';
+import {
+  logLevelToSeverityNumber,
+  parseLogLevel,
+  type LogLevel,
+  type LogSink,
+} from '@oaknational/logger';
 import {
   UnifiedLogger,
   buildResourceAttributes,
@@ -17,11 +22,8 @@ import {
 import { getActiveSpanContextSnapshot } from '@oaknational/observability';
 import { ok, err, type Result } from '@oaknational/result';
 
-/** Valid log levels for the semantic search logger. */
-type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
-
 /** Current minimum log level. Defaults to INFO. */
-const currentLevel: LogLevel = 'INFO';
+let currentLevel = parseLogLevel('INFO');
 
 /** Current file sink path. Null means no file logging. */
 let currentFilePath: string | null = null;
@@ -137,6 +139,23 @@ export function clearAdditionalSinks(): void {
     additionalSinks = [];
     loggerCache = null;
   }
+}
+
+/**
+ * Set the minimum log level for the search CLI logger.
+ *
+ * @remarks Invalidates the logger cache so existing lazy-bound proxies
+ * pick up the new level on their next call. Called once from the
+ * composition root (`oaksearch.ts`) after runtime config is loaded.
+ * Multiple calls are safe (matches the `registerAdditionalSink` /
+ * `clearAdditionalSinks` pattern).
+ *
+ * @param level - Validated log level (use `parseLogLevel` at the call
+ *   site to convert from env strings)
+ */
+export function configureLogLevel(level: LogLevel): void {
+  currentLevel = level;
+  loggerCache = null;
 }
 
 /** Creates a lazy-bound logger proxy for a given logger key. */

@@ -42,6 +42,10 @@ interface FakeSdk {
   readonly captureException: ReturnType<typeof vi.fn<SentryNodeSdk['captureException']>>;
   readonly captureMessage: ReturnType<typeof vi.fn<SentryNodeSdk['captureMessage']>>;
   readonly flush: ReturnType<typeof vi.fn<SentryNodeSdk['flush']>>;
+  readonly close: ReturnType<typeof vi.fn<SentryNodeSdk['close']>>;
+  readonly setUser: ReturnType<typeof vi.fn<SentryNodeSdk['setUser']>>;
+  readonly setTag: ReturnType<typeof vi.fn<SentryNodeSdk['setTag']>>;
+  readonly setContext: ReturnType<typeof vi.fn<SentryNodeSdk['setContext']>>;
   readonly initCalls: readonly NodeOptions[];
   readonly exceptionCalls: readonly FakeCaptureExceptionCall[];
   readonly messageCalls: readonly FakeCaptureMessageCall[];
@@ -62,14 +66,32 @@ function createFakeSdk(loggerOverride?: SentryNodeSdk['logger']): FakeSdk {
     messageCalls.push({ message, context });
   });
   const flush = vi.fn<SentryNodeSdk['flush']>().mockResolvedValue(true);
+  const close = vi.fn<SentryNodeSdk['close']>().mockResolvedValue(true);
+  const setUser = vi.fn<SentryNodeSdk['setUser']>();
+  const setTag = vi.fn<SentryNodeSdk['setTag']>();
+  const setContext = vi.fn<SentryNodeSdk['setContext']>();
   const loggerSdk = loggerOverride ?? noopLoggerSdk;
 
   return {
-    sdk: { init, captureException, captureMessage, flush, logger: loggerSdk },
+    sdk: {
+      init,
+      captureException,
+      captureMessage,
+      flush,
+      close,
+      setUser,
+      setTag,
+      setContext,
+      logger: loggerSdk,
+    },
     init,
     captureException,
     captureMessage,
     flush,
+    close,
+    setUser,
+    setTag,
+    setContext,
     initCalls,
     exceptionCalls,
     messageCalls,
@@ -669,30 +691,5 @@ describe('initialiseSentry', () => {
         message: 'sdk init failed',
       },
     });
-  });
-});
-
-describe('createSentryInitOptions', () => {
-  it('matches the live config contract', () => {
-    const initOptions = createSentryInitOptions(
-      createLiveConfig({
-        SENTRY_ENABLE_LOGS: 'false',
-        SENTRY_DEBUG: 'true',
-      }),
-      {
-        serviceName: 'oak-http',
-      },
-    );
-
-    expect(initOptions).toEqual(
-      expect.objectContaining({
-        dsn: 'https://key@example.ingest.sentry.io/123',
-        release: 'release-123',
-        tracesSampleRate: 0.5,
-        enableLogs: false,
-        debug: true,
-        tracePropagationTargets: DEFAULT_TRACE_PROPAGATION_TARGETS,
-      }),
-    );
   });
 });

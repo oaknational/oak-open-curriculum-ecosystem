@@ -38,6 +38,10 @@ function createFakeSentrySdk(): FakeSentrySdk {
   const captureException = vi.fn<SentryNodeSdk['captureException']>();
   const captureMessage = vi.fn<SentryNodeSdk['captureMessage']>();
   const flush = vi.fn<SentryNodeSdk['flush']>().mockResolvedValue(true);
+  const close = vi.fn<SentryNodeSdk['close']>().mockResolvedValue(true);
+  const setUser = vi.fn<SentryNodeSdk['setUser']>();
+  const setTag = vi.fn<SentryNodeSdk['setTag']>();
+  const setContext = vi.fn<SentryNodeSdk['setContext']>();
 
   return {
     sdk: {
@@ -45,6 +49,10 @@ function createFakeSentrySdk(): FakeSentrySdk {
       captureException,
       captureMessage,
       flush,
+      close,
+      setUser,
+      setTag,
+      setContext,
       logger: noopLogger,
     },
     init,

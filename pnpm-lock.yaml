@@ -195,6 +195,9 @@ importers:
       '@opentelemetry/api':
         specifier: ^1.9.0
         version: 1.9.1
+      '@sentry/node':
+        specifier: ^10.47.0
+        version: 10.47.0
       cors:
         specifier: ^2.8.6
         version: 2.8.6

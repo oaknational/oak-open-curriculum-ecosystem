@@ -110,6 +110,34 @@ export type SentryFlushError =
   | { readonly kind: 'sentry_flush_timeout'; readonly timeoutMs: number }
   | { readonly kind: 'sentry_flush_failed'; readonly message: string };
 
+/** Error from {@link SentryNodeRuntime.close} failing to drain the event queue. */
+export type SentryCloseError =
+  | { readonly kind: 'sentry_close_timeout'; readonly timeoutMs: number }
+  | { readonly kind: 'sentry_close_failed'; readonly message: string };
+
+/**
+ * User identity attached to the Sentry scope.
+ *
+ * @remarks Narrower than Sentry's upstream `User` which has `[key: string]: any`.
+ * Constrained to `id` (required, string-only) and optional `username`.
+ * No PII fields (email, ip_address) to enforce `sendDefaultPii: false`.
+ */
+export interface SentryUser {
+  readonly id: string;
+  readonly username?: string;
+}
+
+/** Primitive value types safe for Sentry scope and metric payloads. */
+export type SentryPrimitiveValue = string | number | boolean | undefined;
+
+/**
+ * Structured context payload for {@link SentryNodeRuntime.setContext}.
+ *
+ * @remarks Open-keyed but value-narrowed. The key space is unbounded
+ * (user-defined context names) but values are constrained to safe primitives.
+ */
+export type SentryContextPayload = Readonly<Record<string, SentryPrimitiveValue>>;
+
 export interface FixtureSentryLogCapture {
   readonly kind: 'log';
   readonly level: LogEvent['level'];
@@ -131,7 +159,29 @@ export interface FixtureSentryExceptionCapture {
   readonly release: string;
 }
 
-export type FixtureSentryCapture = FixtureSentryLogCapture | FixtureSentryExceptionCapture;
+export interface FixtureSentryUserCapture {
+  readonly kind: 'set_user';
+  readonly user: SentryUser | null;
+}
+
+export interface FixtureSentryTagCapture {
+  readonly kind: 'set_tag';
+  readonly key: string;
+  readonly value: string;
+}
+
+export interface FixtureSentryContextCapture {
+  readonly kind: 'set_context';
+  readonly name: string;
+  readonly context: SentryContextPayload | null;
+}
+
+export type FixtureSentryCapture =
+  | FixtureSentryLogCapture
+  | FixtureSentryExceptionCapture
+  | FixtureSentryUserCapture
+  | FixtureSentryTagCapture
+  | FixtureSentryContextCapture;
 
 export interface FixtureSentryStore {
   readonly captures: readonly FixtureSentryCapture[];
@@ -153,6 +203,10 @@ export interface SentryNodeSdk {
   captureException(error: Error, context?: CaptureContext): void;
   captureMessage(message: string, context?: CaptureContext): void;
   flush(timeoutMs?: number): Promise<boolean>;
+  close(timeoutMs?: number): Promise<boolean>;
+  setUser(user: SentryUser | null): void;
+  setTag(key: string, value: string): void;
+  setContext(name: string, context: SentryContextPayload | null): void;
   readonly logger: SentryLoggerSdk;
 }
 
@@ -182,4 +236,8 @@ export interface SentryNodeRuntime {
   readonly fixtureStore?: FixtureSentryStore;
   captureHandledError(error: NormalizedError, context?: LogContext): void;
   flush(timeoutMs?: number): Promise<Result<void, SentryFlushError>>;
+  close(timeoutMs?: number): Promise<Result<void, SentryCloseError>>;
+  setUser(user: SentryUser | null): void;
+  setTag(key: string, value: string): void;
+  setContext(name: string, context: SentryContextPayload | null): void;
 }
