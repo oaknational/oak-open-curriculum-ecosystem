@@ -29,11 +29,11 @@
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@types/node": "^25.5.2",
+    "@types/node": "^25.6.0",
     "eslint": "^10.2.0",
-    "globals": "^17.4.0",
+    "globals": "^17.5.0",
     "tsup": "^8.5.1",
-    "typescript": "^5",
+    "typescript": "^6",
     "vitest": "^4.1.3"
   },
   "repository": {
