@@ -102,3 +102,87 @@ to keep the pipe open during long hook runs.
 properly diagnosing the hook failure. Reverted and diagnosed
 properly. The rule is absolute — never bypass hooks without
 explicit user request.
+
+### Session 2026-04-13c: Graphify analysis for Oak + Practice
+
+**Graphify is a derived navigation layer here, not a truth layer.**
+Analysed `safishamsi/graphify` against the repo's graph work, MCP
+surfaces, ADRs, and Practice docs. Strong conceptual alignment:
+Graphify's persistent graph, path/query/explain model, and
+EXTRACTED/INFERRED/AMBIGUOUS evidence labelling fit Oak's
+concept-centric Practice and evidence-based claims direction.
+
+**Important boundary:** do not adopt Graphify via its repo-mutating
+installer model (`AGENTS.md`/hook writes) in this repo. Oak already
+has a canonical-first Practice with `.agent/` as source and thin
+adapters elsewhere. Direct install would risk creating a second
+instruction hierarchy.
+
+**Empirical sizing check using Graphify's own `detect()` logic:**
+- Repo root: 2446 files / ~1.09M words -> large-corpus warning
+- `.agent/`: 1327 files / ~2.01M words -> large-corpus warning
+- `.agent/practice-core/` and `.agent/directives/`: small enough
+  that Graphify says a graph may not be needed
+- `docs/architecture/architectural-decisions/`: plausible sweet spot
+
+**Behaviour change:** if we trial Graphify-like tooling here, start
+with scoped corpora (ADRs, research bundles, graph/MCP lanes), not
+the whole repo. If the concepts prove useful, implement them in
+Oak-native surfaces (`agent-tools/`, `.agent/skills/`, ADRs) with
+explicit attribution to Graphify as inspiration.
+
+**User preference:** if we adopt external concepts, the attribution
+must be explicit and include direct links to the upstream source, not
+just a general acknowledgement.
+
+**Correction from user:** saying Graphify would "compete with the
+Practice" was too blunt. Better framing: if the existing memory files
+are included in the graph, it becomes an additional, orthogonal memory
+layer — a derived topology/retrieval surface over canonical memory,
+not an alternative source of truth.
+
+**Further correction on framing:** this is pure exploration, not a
+decision. Preserve multiple plausible paths in the write-up:
+- run Graphify as an explicit external dependency/binary lane, which
+  would make Python 3 an explicit requirement
+- adapt selected code from Graphify into Oak-native mechanisms
+- adopt selected concepts into existing systems
+- or combine these approaches
+Avoid recommendation language that implies Oak has chosen a route.
+
+### Session 2026-04-13d: Graph memory exploration plan wired in
+
+Created a future strategic plan at
+`.agent/plans/agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md`.
+It explicitly preserves the "pure exploration" framing:
+- no decision yet
+- multiple paths remain open
+- graph memory is treated as a derived, orthogonal layer over canonical
+  memory artefacts
+- attribution to Graphify/Safi Shamsi with direct source links is
+  non-negotiable
+
+Also created the missing collection-local
+`.agent/plans/agentic-engineering-enhancements/future/README.md` and wired
+discoverability through the collection `README.md`, `roadmap.md`,
+`current/README.md`, and `active/README.md`. This collection previously had
+future plans on disk but no future index; that gap is now closed.
+
+### Session 2026-04-13e: Session handoff + bounded consolidation
+
+Ran `session-handoff` with the consolidation gate. The gate did fire:
+- the new attribution requirement was still only in ephemeral memory
+- the new Graphify future plan was not yet on the session prompt watchlist
+- `distilled.md` remains above its line limit
+
+Bounded consolidation completed in this handoff:
+- graduated the attribution preference to `AGENTS.md`
+- added the Graphify future plan to
+  `.agent/prompts/session-continuation.prompt.md`
+- updated the prompt's deep consolidation status
+- reran `pnpm practice:fitness:informational`
+
+Remaining fitness debt is unchanged and intentionally deferred:
+`.agent/directives/principles.md`,
+`.agent/directives/testing-strategy.md`, and
+`.agent/memory/distilled.md` still need later convergence work.

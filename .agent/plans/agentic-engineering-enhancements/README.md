@@ -5,6 +5,7 @@ Plans and research for hardening the agentic engineering practice through physic
 **Collection Roadmap**: [roadmap.md](roadmap.md)
 **Active Execution Index**: [active/README.md](active/README.md)
 **Current / Source Plans**: [current/README.md](current/README.md)
+**Later Plans**: [future/README.md](future/README.md)
 
 ## Documents
 
@@ -13,6 +14,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `roadmap.md` | Roadmap | Strategic phase sequence and dependencies for this collection |
 | `current/README.md` | Current Index | Strategic source plans and adjacent capability work (queued or in progress) |
 | `active/README.md` | Active Index | Atomic executable plans for roadmap phases plus adjacent active closeout work |
+| `future/README.md` | Future Index | Deferred strategic backlog and later exploratory capability work |
 | ~~`active/practice-convergence.plan.md`~~ | Plan (Completed) | Convergence closeout for Practice Core, local surfaces, and outgoing Context — **COMPLETE** (deleted) |
 | `documentation-sync-log.md` | Tracking Log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `current/elasticsearch-specialist-capability.plan.md` | Plan | Strategic source plan for a canonical Elasticsearch reviewer, skill, and situational rule grounded in official Elastic docs and Elastic Serverless applicability |
@@ -47,6 +49,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `archive/completed/agent-collaboration-incoming-practice-context-integration.plan.md` | Plan (Completed) | Completed rollout for incoming `agent-collaboration` Practice Context integration, local doctrine capture, workspace-task honesty repair, and targeted write-back |
 | `future/adapter-generation.plan.md` | Plan (Future) | Manifest-driven platform adapter generation — replace 100+ manual wrapper files with a single manifest + build script |
 | `future/agent-classification-taxonomy.plan.md` | Plan (Future) | Comprehensive agent reclassification, rename, and mode composition (ADR-135) |
+| `future/graphify-and-graph-memory-exploration.plan.md` | Plan (Future) | Explore Graphify-inspired graph memory as an orthogonal, derived memory layer over canonical Practice artefacts without choosing an implementation path yet |
 
 ## Read Order
 
@@ -54,8 +57,17 @@ Plans and research for hardening the agentic engineering practice through physic
 2. **Active execution first**: [active/README.md](active/README.md), then
    [current/README.md](current/README.md) for strategic source plans and
    adjacent capability work (queued or in progress)
-3. **Strategic source plans**: hallucination/evidence guards -> enforcement -> mutation testing -> continuity/surprise adoption (archived reference) -> Reviewer Gateway -> Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade -> Express -> security/privacy cluster (cyber security -> web/API security -> privacy -> web/API GDPR) -> OOCE -> Planning -> TDD -> DevX -> Repair Workflow Wording Hazard Detection -> Adapter Generation -> Agent Classification Taxonomy
-4. **Research as evidence base**: augmented safety -> augmented practices -> standardisation landscape
+3. **Later backlog**: [future/README.md](future/README.md) for deferred
+   strategic work and exploratory capability plans
+4. **Strategic source plans**: hallucination/evidence guards -> enforcement ->
+   mutation testing -> continuity/surprise adoption (archived reference) ->
+   Reviewer Gateway -> Elasticsearch specialist -> Clerk specialist -> Sentry
+   -> MCP upgrade -> Express -> security/privacy cluster (cyber security ->
+   web/API security -> privacy -> web/API GDPR) -> OOCE -> Graph memory
+   exploration -> Planning -> TDD -> DevX -> Repair Workflow Wording Hazard
+   Detection -> Adapter Generation -> Agent Classification Taxonomy
+5. **Research as evidence base**: augmented safety -> augmented practices ->
+   standardisation landscape
 
 ## Document Roles (DRY)
 
@@ -63,6 +75,8 @@ Plans and research for hardening the agentic engineering practice through physic
 - **Current plans (`current/*.md`)**: strategic source plans and adjacent
   capability plans that are either queued or in progress prior to active execution.
 - **Active plans (`active/*.md`)**: authoritative executable tasks and deterministic validation.
+- **Future plans (`future/*.md`)**: deferred strategic backlog and exploratory
+  capability work (LATER), not yet executable.
 - **Strategic source plans (`*.plan.md`)**: policy intent, rationale, success criteria, and phase design; execution is delegated to active plans.
 - **Research docs (`*.research.md`)**: evidence base only; not execution instructions.
 - **Tracking artefacts** (`documentation-sync-log.md`, `evidence/`): proof of documentation propagation and claim evidence.

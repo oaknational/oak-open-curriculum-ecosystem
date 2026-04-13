@@ -37,6 +37,11 @@ git log --oneline --decorate -10
   [cross-vendor-session-sidecars.plan.md](../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
   tracks a local-first, cross-vendor sidecar model for durable session
   metadata beyond vendor-native session titles.
+- Strategic only, not active for the current workstream:
+  [graphify-and-graph-memory-exploration.plan.md](../plans/agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md)
+  tracks a pure-exploration lane for Graphify-inspired graph memory. No
+  implementation path is chosen; explicit attribution with direct upstream
+  links is required for any future adoption.
 
 ## Live Continuity Contract
 
@@ -63,7 +68,8 @@ git log --oneline --decorate -10
   awaiting owner decision on OQ1 (`.strip()` vs `.passthrough()`).
   Pre-commit hook fixed: `--output-logs=errors-only` + error guard
   on turbo step. Two commits on `feat/otel_sentry_enhancements`
-  ahead of remote.
+  ahead of remote. Separate strategic Graphify exploration is now
+  parked in a future plan plus research report for later revisit.
 - **Current objective**: Three tracks: (1) Vercel credential
   provisioning + deployment evidence (closes parent plan), (2) Sentry
   canonical alignment implementation (15 todos), (3) schema
@@ -113,11 +119,13 @@ git log --oneline --decorate -10
   resolve OQ1, then implement `.strip()` migration in codegen. (3)
   Upstream API reference metadata: design complete, 7 todos pending.
   Vercel credential provisioning deferred until local work is complete.
-- **Deep consolidation status**: not due — napkin at 104 lines
-  (rotated earlier today), no plan closed, no settled doctrine in
-  ephemeral locations. Deferred items from last consolidation still
-  pending: (1) principles.md and testing-strategy.md line-wrapping;
-  (2) distilled graduation (ES entries, terminology, turbo).
+- **Deep consolidation status**: completed this handoff —
+  graph-memory future plan added to the session watchlist,
+  stable attribution preference graduated to `AGENTS.md`, and
+  `pnpm practice:fitness:informational` rerun. Remaining fitness
+  debt is still deferred in `.agent/directives/principles.md`,
+  `.agent/directives/testing-strategy.md`, and
+  `.agent/memory/distilled.md`.
 
 ## Active Workstreams (2026-04-13, updated session handoff)
 

@@ -163,6 +163,13 @@ the current understanding.
 - Keep pushed checkpoint state and local worktree state explicitly
   separate in plans/prompts/checkpoints.
 
+## Terminology
+
+- "Build time" is ambiguous — both codegen-time and runtime have
+  build steps. Say "codegen time" for SDK generation pipeline
+  steps, "runtime build" for app compilation. Never use "build
+  time" unqualified.
+
 ## Related Documentation
 
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) - TDD approach at all levels

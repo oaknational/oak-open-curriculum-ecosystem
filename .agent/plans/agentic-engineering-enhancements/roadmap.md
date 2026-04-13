@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; Codex parity ✅ complete; Practice convergence ✅ complete; Phase 1 ready to start
-**Last Updated**: 2026-04-05
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; Phase 1 ready to start
+**Last Updated**: 2026-04-13
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -9,8 +9,19 @@
 ## Purpose
 
 This roadmap is the strategic phase sequence for the
-`agentic-engineering-enhancements` collection. Execution detail lives in
-`active/` plans with atomic tasks and deterministic validation.
+`agentic-engineering-enhancements` collection while keeping detail in lifecycle
+lanes:
+
+- `active/` — now
+- `current/` — next
+- `future/` — later
+- `archive/completed/` — historical evidence
+
+Lane indexes:
+
+1. [active/README.md](active/README.md)
+2. [current/README.md](current/README.md)
+3. [future/README.md](future/README.md)
 
 Strategic source plans remain authoritative for intent/rationale; active plans
 are authoritative for execution tasks.
@@ -74,7 +85,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -106,6 +117,7 @@ Adjacent:
   PRV:  Privacy specialist capability                📋 PLANNED
   WGD:  Web/API GDPR specialist capability           📋 PLANNED
   OOCE: Oak Open Curriculum Ecosystem specialist     📋 PLANNED
+  GME:  Graph memory exploration                     📋 STRATEGIC
   PLN:  Planning specialist capability               📋 PLANNED
   TDD:  TDD specialist capability                    📋 PLANNED
   DVX:  Developer experience specialist              📋 PLANNED

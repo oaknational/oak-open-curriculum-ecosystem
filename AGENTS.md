@@ -19,6 +19,7 @@ Primary agent workflow CLIs live in `agent-tools/` and are invoked from repo roo
 - `.env.local` files must mirror the structure of `.env.example` (same section headers, ordering, documentation comments)
 - Scope changes precisely — when asked for "only config, no code", respect that boundary strictly
 - For long or multi-phase work (including GO-style cadence), invoke specialist reviewers (code-reviewer, architecture reviewers, and other relevant reviewers) repeatedly during the work, not only at the end.
+- When external concepts are adopted or adapted, attribution must be explicit and include direct links to the upstream source.
 
 ## Learned Workspace Facts
 

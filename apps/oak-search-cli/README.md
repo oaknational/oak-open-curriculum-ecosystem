@@ -314,6 +314,24 @@ pnpm eval:diagnostic
 pnpm vitest run --config vitest.smoke.config.ts four-retriever-ablation
 ```
 
+## Elasticsearch Development Gotchas
+
+- ES client v9: `document` not `body` for `client.index()`
+- ES client v9: spread readonly arrays before passing to
+  mutable params (`[...synonymSet.synonyms_set]`)
+- Classify network errors by `error.name` (e.g.
+  `'AbortError'`, `'TypeError'`), not `error.message` —
+  `message.includes('abort')` is too broad
+- EsCurric MCP API key needs `feature_actions.read` Kibana
+  privilege (in addition to `feature_agentBuilder.read`) for
+  the `platform_core_search` tool to work
+- ES Serverless shifts `_primary_term` during normal
+  operation; OCC-based updates (lease renewal) must retry
+  after fetching fresh `_seq_no`/`_primary_term` on 409
+- Lifecycle wrappers (`withLifecycleLease`) must return the
+  execution result when execution succeeds, even if the
+  side-channel (renewal) failed — leases are defence-in-depth
+
 ---
 
 ## System Topology

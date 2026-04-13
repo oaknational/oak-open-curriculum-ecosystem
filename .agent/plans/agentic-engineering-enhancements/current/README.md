@@ -9,7 +9,7 @@ plans when scheduled.
 ## Source Plans
 
 | Source Plan | Serves | Status |
-|---|---|---|
+| --- | --- | --- |
 | [hallucination-and-evidence-guard-adoption.plan.md](hallucination-and-evidence-guard-adoption.plan.md) | Phases 1 & 2 (hallucination guarding + evidence-based claims) | REFERENCE |
 | [architectural-enforcement-adoption.plan.md](architectural-enforcement-adoption.plan.md) | Phase 3 (architectural enforcement) | REFERENCE |
 | [mutation-testing-implementation.plan.md](mutation-testing-implementation.plan.md) | Phase 5 (mutation testing) | REFERENCE |
@@ -22,5 +22,7 @@ Strategic context: [roadmap.md](../roadmap.md)
 Archived context: [../archive/completed/](../archive/completed/)
 
 In-progress execution: [active/README.md](../active/README.md)
+Later backlog: [future/README.md](../future/README.md)
+
 Documentation tracking for all phases:
 [documentation-sync-log.md](../documentation-sync-log.md)

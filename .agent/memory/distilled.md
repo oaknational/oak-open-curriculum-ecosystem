@@ -150,24 +150,6 @@ context with no natural permanent home.
   `z.preprocess()` fields lose `.meta()` when `io='input'`
   (per-field, not per-object — only 3 year params affected).
 
-## Elasticsearch
-
-- ES client v9: `document` not `body` for `client.index()`
-- ES client v9: spread readonly arrays before passing to
-  mutable params (`[...synonymSet.synonyms_set]`)
-- Classify network errors by `error.name` (e.g.
-  `'AbortError'`, `'TypeError'`), not `error.message` —
-  `message.includes('abort')` is too broad
-- EsCurric MCP API key needs `feature_actions.read` Kibana
-  privilege (in addition to `feature_agentBuilder.read`) for
-  the `platform_core_search` tool to work
-- ES Serverless shifts `_primary_term` during normal
-  operation; OCC-based updates (lease renewal) must retry
-  after fetching fresh `_seq_no`/`_primary_term` on 409
-- Lifecycle wrappers (`withLifecycleLease`) must return the
-  execution result when execution succeeds, even if the
-  side-channel (renewal) failed — leases are defence-in-depth
-
 ## Testing (Domain-Specific)
 
 - `ensurePathsOnSchema` creates a new object (spread) —
@@ -199,20 +181,8 @@ context with no natural permanent home.
   (`Client` + `StreamableHTTPClientTransport`) for full-
   fidelity E2E tests alongside supertest.
 
-## Terminology
-
-- "Build time" is ambiguous — both codegen-time and runtime
-  have build steps. Say "codegen time" for SDK generation
-  pipeline steps, "runtime build" for app compilation. Never
-  use "build time" unqualified.
-
 ## Build System (Domain-Specific)
 
-- **Turbo overrides need ALL task types**: if a workspace
-  has any `@package#task` override, it needs overrides for
-  every task type it uses (build, test, type-check, lint,
-  lint:fix). Missing overrides fall through to generic tasks
-  with wrong inputs, causing stale cache hits.
 - `pnpm check` is the canonical aggregate gate and includes
   `pnpm knip` and `pnpm depcruise` (added 2026-04-12)
 - Empty directories persist after file deletion — always

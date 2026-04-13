@@ -80,6 +80,11 @@ All packages use a unified `build` script. Turbo's `^build` dependency ensures p
 > downstream type-check. Verify overrides with
 > `turbo run <task> --filter=@package --dry=json` and inspect
 > `resolvedTaskDefinition`.
+>
+> **Corollary**: if a workspace has any `@package#task` override,
+> it needs overrides for every task type it uses (build, test,
+> type-check, lint, lint:fix). Missing overrides fall through to
+> generic tasks with wrong inputs, causing stale cache hits.
 
 Core packages (`oak-eslint`, `openapi-zod-client-adapter`) are leaf nodes with no workspace dependencies, so they build first. Other packages depend on them via `devDependencies` or `dependencies`, ensuring the correct build order without manual configuration.
 

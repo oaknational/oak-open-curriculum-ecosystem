@@ -5,7 +5,7 @@ collection define policy/rationale; these active plans are the execution source
 of truth.
 
 | Phase | Active Plan | Scope | Status |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 0 | ~~phase-0-templates-and-components-foundation.md~~ | Template/component system hardening | ✅ Complete (archived) |
 | 1 | [phase-1-hallucination-guarding-execution.md](phase-1-hallucination-guarding-execution.md) | Hallucination guard policy and workflow integration | 📋 Planned |
 | 2 | [phase-2-evidence-based-claims-execution.md](phase-2-evidence-based-claims-execution.md) | Evidence bundle adoption and merge-readiness evidence checks | 📋 Planned |
@@ -18,6 +18,9 @@ of truth.
 | PC | ~~practice-convergence.plan.md~~ | Align Practice Core, local surfaces, and outgoing Context so documented standards are enforced | ✅ Complete (deleted) |
 
 Strategic context: [roadmap.md](../roadmap.md)
+
+Next-up queue: [current/README.md](../current/README.md)
+Later backlog: [future/README.md](../future/README.md)
 
 Documentation tracking for all phases:
 [documentation-sync-log.md](../documentation-sync-log.md)
