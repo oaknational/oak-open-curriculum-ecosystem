@@ -186,3 +186,23 @@ Remaining fitness debt is unchanged and intentionally deferred:
 `.agent/directives/principles.md`,
 `.agent/directives/testing-strategy.md`, and
 `.agent/memory/distilled.md` still need later convergence work.
+
+### Session 2026-04-13f: Practice doc finessing + Sentry focus
+
+Completed the deferred practice doc finessing:
+
+- Confirmed principles.md needs no wrapping (max prose 97 chars)
+- testing-strategy.md wrapping already committed from earlier session
+  (56 lines wrapped, only irreducible ADR links + table rows remain)
+- Graduated 3 distilled.md blocks to permanent homes:
+  - ES gotchas (6 items) → oak-search-cli README
+  - "Build time" terminology → development-practice.md
+  - Turbo "ALL task types" corollary → build-system.md
+- Net: 30 insertions, 30 deletions. distilled.md 303→273 lines
+- docs-adr-reviewer validated all 3 placements
+
+Updated session continuation prompt and sentry canonical alignment
+plan to function together as standalone entry point for next
+session. Sentry canonical alignment is now the PRIMARY workstream
+(15 todos, all local). Recommended starting sequence: Gap 1 spike
+→ Gap 1 + Gap 2 parallel → Gap 3 → downstream items.

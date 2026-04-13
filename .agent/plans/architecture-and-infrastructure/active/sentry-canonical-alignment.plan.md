@@ -745,8 +745,10 @@ Gap 6 (source maps)          — must be working before first prod errors
 Gap 1 CLI (early init)       — low priority, after HTTP is proven
 ```
 
-12 todos, all active. Gaps 5 and 6 are pre-release requirements,
-not post-release evaluations.
+15 todos, all pending. Gaps 5 and 6 are pre-release requirements,
+not post-release evaluations. The 15 items are the original 12 gap
+items plus 3 from the merge session: `cli-log-level-di`,
+`cli-logger-di-audit`, `cli-shutdown-ordering`.
 
 **This plan does not block the parent plan** — Vercel credential
 provisioning and deployment evidence can proceed independently.

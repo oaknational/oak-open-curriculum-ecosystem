@@ -63,18 +63,19 @@ git log --oneline --decorate -10
     (**PENDING** — design complete, 7 todos, user-requested)
   - `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
     (**entry point** — restart sequence, current state, authority rule)
-- **Current state**: Main (PR #80) merged. Schema resilience plan
-  created and integrated into discovery surfaces (2026-04-13) —
-  awaiting owner decision on OQ1 (`.strip()` vs `.passthrough()`).
-  Pre-commit hook fixed: `--output-logs=errors-only` + error guard
-  on turbo step. Two commits on `feat/otel_sentry_enhancements`
-  ahead of remote. Separate strategic Graphify exploration is now
-  parked in a future plan plus research report for later revisit.
-- **Current objective**: Three tracks: (1) Vercel credential
-  provisioning + deployment evidence (closes parent plan), (2) Sentry
-  canonical alignment implementation (15 todos), (3) schema
-  resilience plan — OQ1 decision then `.strip()` migration,
-  schema drift health endpoint, `additionalContext` flag.
+- **Current state**: Main (PR #80) merged. All code foundations
+  complete. Practice doc finessing done (2026-04-13): testing-
+  strategy.md wrapped, 3 distilled.md entries graduated to
+  permanent homes (ES gotchas → search-cli README, terminology
+  → development-practice.md, Turbo corollary → build-system.md).
+  Graphify exploration parked in a future plan. Schema resilience
+  plan awaiting owner decision on OQ1.
+- **Current objective**: **Sentry canonical alignment** is the
+  primary track. 15 todos, all local, no Vercel credentials
+  needed. The plan is well-structured with clear sequencing and
+  acceptance criteria per gap. Secondary tracks (schema resilience,
+  Vercel credential provisioning) are parked pending owner
+  decisions or external dependencies.
 - **Hard invariants / non-goals**:
   - `SENTRY_MODE=off` is the default and kill switch
   - ADR-078 DI everywhere, ADR-143 observability architecture
@@ -112,62 +113,48 @@ git log --oneline --decorate -10
   - `fakes.ts` cast — what is the architecturally correct solution?
   - Does tsup support `@sentry/bundler-plugin` for Debug ID injection?
   - Does `@sentry/profiling-node` native addon work on Vercel's ABI?
-- **Next safe step**: Three tracks: (1) Sentry canonical alignment
-  local priorities: `cli-log-level-di`, `cli-shutdown-ordering`,
-  `early-init-http`, `express-error-handler`, `adapter-surface-extension`.
-  All local, no Vercel credentials needed. (2) Schema resilience:
-  resolve OQ1, then implement `.strip()` migration in codegen. (3)
-  Upstream API reference metadata: design complete, 7 todos pending.
-  Vercel credential provisioning deferred until local work is complete.
-- **Deep consolidation status**: completed this handoff —
-  graph-memory future plan added to the session watchlist,
-  stable attribution preference graduated to `AGENTS.md`, and
-  `pnpm practice:fitness:informational` rerun. Remaining fitness
-  debt is still deferred in `.agent/directives/principles.md`,
-  `.agent/directives/testing-strategy.md`, and
-  `.agent/memory/distilled.md`.
+- **Next safe step**: Read the Sentry canonical alignment plan
+  (`.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`)
+  and begin with the "NEXT PRIORITIES" block in the frontmatter.
+  Recommended sequence: (1) `early-init-http` spike — 2-minute
+  local test converts the highest-impact assumption to fact.
+  (2) `express-error-handler` — can parallel Gap 1. (3) The two
+  small independent fixes (`cli-log-level-di`,
+  `cli-shutdown-ordering`) are quick wins. (4) `adapter-surface-
+  extension` unblocks 4 downstream items.
+- **Deep consolidation status**: not due — graduations completed
+  this session, napkin at ~170 lines (well under 500), no new
+  patterns or doctrine to extract. Remaining informational fitness:
+  principles.md chars 25,628 > 24,000; testing-strategy.md line
+  inflation from wrapping (564 > 550, chars well within limit).
 
-## Active Workstreams (2026-04-13, updated session handoff)
+## Active Workstreams (2026-04-13)
 
-### 1. Interactive User Search MCP App (WS3 Phase 5) — NEXT
+### 1. Sentry Canonical Alignment — PRIMARY
 
-**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/ws3-phase-5-interactive-user-search-view.plan.md`
+**Plan**: `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
+**Parent**: `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
 
-Build the user-facing interactive search widget. Two new pre-phase
-blockers: (a) remove `search` tool's false `_meta.ui` claim,
-(b) consolidate to single user-facing search tool.
+15 todos closing 6 gaps between Oak's Sentry integration and
+canonical Node.js/Express patterns. All "NEXT PRIORITIES" are
+local (no Vercel credentials needed). Sequencing: Gap 1 spike
+→ Gap 1 + Gap 2 in parallel → Gap 3 → downstream items. Plan
+preserves DI/testability/redaction invariants throughout.
 
-### 2. `_meta` Namespace Cleanup — NOT STARTED (co-requisite)
-
-**Plan**: `.agent/plans/sdk-and-mcp-enhancements/current/meta-oak-namespace-cleanup.plan.md`
-
-Replace unused `_meta.securitySchemes` with Oak-namespaced `oak-www`
-and `oak-guidance` fields. Includes `buildToolMeta()` factory.
-Co-requisite for Phase 5 — both address `_meta` architecture.
-
-### 3. Quality Gate Hardening — parked
-
-**Plan**: `.agent/plans/architecture-and-infrastructure/current/quality-gate-hardening.plan.md`
-
-Knip and depcruise complete. Remaining: ESLint config standardisation,
-eslint-disable remediation. Parked while MCP Apps work takes priority.
-
-### 4. Schema Resilience and Response Architecture — PENDING (open questions)
+### 2. Schema Resilience — PENDING (owner decision)
 
 **Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md`
 
-Upstream schema validation fragility exposed by third-party consumer.
-OQ1 (`.strip()` vs `.passthrough()`) requires owner decision before
-implementation. Schema drift health endpoint (Sentry-monitored),
-`additionalContext` flag, and `upstreamApi` metadata are dependent
-follow-ons. Vercel deploy hook for auto-rebuild noted as future.
+Blocked on OQ1 (`.strip()` vs `.passthrough()`). Not active
+until owner decides.
 
-### 5. Workspace Topology Exploration — FUTURE
+### 3. Other workstreams — PARKED
 
-**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
-
-Four-tier layered architecture. Lifecycle classification complete.
-Phase 2 pending.
+- Interactive User Search MCP App (WS3 Phase 5)
+- `_meta` Namespace Cleanup
+- Quality Gate Hardening (knip/depcruise done, ESLint remaining)
+- Workspace Topology Exploration
+- Upstream API Reference Metadata (design complete, 7 todos)
 
 ## Core Invariants
 
@@ -184,7 +171,6 @@ Phase 2 pending.
 - Run the required gates one at a time while iterating.
 - Run `pnpm fix` to apply auto-fixes.
 - Run `pnpm check` as the canonical aggregate readiness gate before
-  push/merge. It now includes `pnpm knip`. After depcruise Phase 4,
-  it will also include `pnpm depcruise`.
+  push/merge. It includes `pnpm knip` and `pnpm depcruise`.
 - Keep this prompt concise and operational; do not duplicate plan
   authority.
