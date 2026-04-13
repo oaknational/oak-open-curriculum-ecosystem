@@ -11,42 +11,42 @@ overview: >
 parent_plan: "sentry-otel-integration.execution.plan.md"
 source_analysis: "Sentry reviewer gap analysis (2026-04-12)"
 todos:
-  # === NEXT PRIORITIES (local, no Vercel credentials needed) ===
+  # === COMPLETED (2026-04-13, commit c8b66648) ===
   - id: cli-log-level-di
     content: "Wire runtimeConfig.logLevel into search-cli logger.ts via DI per ADR-078"
-    status: pending
+    status: done
     priority: next
-    note: "Small, targeted. PR #80 changed `let currentLevel` to `const currentLevel = 'INFO'` and deleted setLogLevel/getLogLevel mutators (knip dead). Wire via SearchCliRuntimeConfig. Assumptions reviewer flagged as ADR-078 violation (2026-04-12)."
+    note: "Implemented 2026-04-13. configureLogLevel(LogLevel) with cache invalidation. Type-tightened from string to LogLevel per code-reviewer. Controlled ADR-078 violation tracked as cli-logger-di-audit."
   - id: cli-shutdown-ordering
     content: "Reorder CLI shutdown: clearAdditionalSinks before disableFileSink in oaksearch.ts finally block"
-    status: pending
+    status: done
     priority: next
-    note: "One-line defensive fix. disableFileSink nulls logger cache; any log call between it and clearAdditionalSinks would rebuild loggers with Sentry sink still registered but transport already flushed. Sentry reviewer (2026-04-12)."
+    note: "Implemented 2026-04-13. clearAdditionalSinks now precedes disableFileSink. Sentry-reviewer confirmed ordering correct."
   - id: early-init-http
     content: "Spike preload locally, then add --import @sentry/node/preload to HTTP server start script and dev runner"
-    status: pending
+    status: done
     priority: next
-    note: "Highest-impact single change — enables auto-instrumentation for Express routes and outbound HTTP. 2-minute local spike first to verify preload + tsup ESM + Node 24 works. No credentials needed."
+    note: "Implemented 2026-04-13. Spike confirmed: Node 24 + tsup ESM + tsx all work. @sentry/node promoted to direct dependency. Both start script and dev runner updated."
   - id: express-error-handler
     content: "Adopt Sentry.setupExpressErrorHandler BEFORE createEnrichedErrorLogger"
-    status: pending
+    status: done
     priority: next
-    note: "Can run in parallel with early-init-http (Barney: no hard dependency). Express 5 confirmed supported. Add integration test. No credentials needed."
+    note: "Implemented 2026-04-13. DI seam on CreateAppOptions (per Barney). Error handlers moved to setupPostAuthPhases (after routes). Extracted to bootstrap-error-handlers.ts. 6 in-memory integration tests. 5-reviewer pre-implementation review."
   - id: adapter-surface-extension
     content: "Add setUser, setTag, setContext, close to SentryNodeRuntime and SentryNodeSdk"
-    status: pending
+    status: done
     priority: next
-    note: "Unblocks cli-close-instead-of-flush, cli-context-enrichment, and cli-metrics. All testable locally in off/fixture mode. Simplified per sentry reviewer: isolation scopes make ambient calls safe."
+    note: "Implemented 2026-04-13. All three modes (off/fixture/live). SentryUser, SentryContextPayload, SentryCloseError types. 9 unit tests. flushSdk/closeSdk extracted as helpers."
   - id: cli-close-instead-of-flush
     content: "Use Sentry.close() instead of flush() for CLI shutdown"
-    status: pending
+    status: done
     priority: next
-    note: "Depends on adapter-surface-extension (close on runtime). Noop in off/fixture mode. Local only."
+    note: "Implemented 2026-04-13. close() on CliObservability delegates to sentryRuntime.close(). Sentry-reviewer confirmed correct for short-lived processes."
   - id: cli-logger-di-audit
     content: "Audit direct-import logger singletons (searchLogger etc.) against ADR-078 — track as known violation, plan remediation"
-    status: pending
+    status: done
     priority: next
-    note: "Investigation, not implementation. ~35 files import logger singletons. No documented ADR-078 exception exists. Assess scope and propose remediation approach."
+    note: "Investigated 2026-04-13. 15 files import logger singletons directly. Remediation: createSearchLogger(config) factory at composition root (matches HTTP server pattern). ~15-file refactor, scoped to search CLI."
   # === AFTER ADAPTER EXTENSION (still local) ===
   - id: cli-context-enrichment
     content: "Add command-level context enrichment to CLI via setTag/setContext"

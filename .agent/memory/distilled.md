@@ -87,7 +87,8 @@ context with no natural permanent home.
   on the meaning established by the previous one.
 - **Review plans, not just code**: see pattern
   `patterns/pre-implementation-plan-review.md`. Proven across
-  2 sessions (19 findings caught before implementation).
+  3 sessions (19+ findings caught before implementation; Gap 2
+  session caught 5 structural corrections from 5 reviewers).
 - **Narrative sections drift first**: when syncing plan state,
   inspect body status lines, decision tables, and current-state
   prose, not just frontmatter and todo checkboxes.
@@ -173,6 +174,14 @@ context with no natural permanent home.
   any test that touches module-level singletons with IO must
   be `*.integration.test.ts`, even if it injects DI fakes
   for the new behaviour.
+- **Supertest is E2E, not integration**: supertest creates an
+  in-process HTTP server with real socket IO. By the testing
+  strategy definitions, this is an E2E test. The existing
+  `error-handling.integration.test.ts` using supertest is a
+  pre-existing misclassification. For middleware composition
+  tests, call Express directly with mock objects — no HTTP,
+  no IO. Materialised 2026-04-13: test-reviewer caught this
+  during pre-implementation review of Gap 2.
 - **Supertest E2E has a transport blind spot**: supertest
   tests JSON-RPC but not SSE transport serialisation. For
   MCP servers, the transport layer IS part of the product

@@ -63,19 +63,22 @@ git log --oneline --decorate -10
     (**PENDING** — design complete, 7 todos, user-requested)
   - `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
     (**entry point** — restart sequence, current state, authority rule)
-- **Current state**: Main (PR #80) merged. All code foundations
-  complete. Practice doc finessing done (2026-04-13): testing-
-  strategy.md wrapped, 3 distilled.md entries graduated to
-  permanent homes (ES gotchas → search-cli README, terminology
-  → development-practice.md, Turbo corollary → build-system.md).
-  Graphify exploration parked in a future plan. Schema resilience
-  plan awaiting owner decision on OQ1.
-- **Current objective**: **Sentry canonical alignment** is the
-  primary track. 15 todos, all local, no Vercel credentials
-  needed. The plan is well-structured with clear sequencing and
-  acceptance criteria per gap. Secondary tracks (schema resilience,
-  Vercel credential provisioning) are parked pending owner
-  decisions or external dependencies.
+- **Current state**: Main (PR #80) merged. **Sentry canonical
+  alignment session completed 2026-04-13**: 7 of 15 todos done
+  (c8b66648). Gaps 1-3 implemented: preload, Express error handler
+  (DI seam on CreateAppOptions, 5-reviewer pre-implementation
+  review), adapter surface extension (setUser/setTag/setContext/
+  close, 3 modes). CLI: close instead of flush, shutdown reordered,
+  log level wired via DI. Logger DI audit: 15 singleton violations
+  identified, remediation scoped. 20 new tests, 88/88 turbo tasks
+  green. Schema resilience plan still awaiting owner decision OQ1.
+- **Current objective**: **Sentry canonical alignment** continues
+  with 8 remaining todos. Next priorities are downstream items
+  that depend on the adapter extension: cli-context-enrichment,
+  custom-metrics, cli-metrics. Secondary: cli-early-init (preload
+  for CLI), trace propagation, profiling, source maps. The sentry
+  closing reviewer also flagged adding close() to HttpObservability
+  for HTTP server shutdown (currently uses flush()).
 - **Hard invariants / non-goals**:
   - `SENTRY_MODE=off` is the default and kill switch
   - ADR-078 DI everywhere, ADR-143 observability architecture
@@ -86,24 +89,22 @@ git log --oneline --decorate -10
   - No `as` casts — one known exception in `fakes.ts` (not yet solved)
   - Search schemas stay `.strict()` (we control the index)
 - **Recent surprises / corrections** (2026-04-13):
-  - **`.strict()` on all Zod response schemas is a latent fragility.**
-    All generated response schemas use `.strict()` via
-    `strictObjects: true` in codegen. Upstream API adding any field
-    breaks validation. Not currently reproducible but third-party
-    consumer hit it and disabled three tools.
-  - **Schema cache version-only comparison is a gap.** The upstream
-    API can change response shapes without bumping `info.version`.
-    `schema-cache.ts` only diffs the version string.
-  - **Third-party consumer bypassed MCP SDK entirely.** They use raw
-    `fetch()` + SSE parsing and strip `oakContextHint`, `status`,
-    and the `data` envelope — signals that our response wrapper adds
-    friction for machine consumers.
-  - **Pre-commit hook turbo step lacked output control and error
-    guard.** Cached log replay (7000+ lines) overwhelmed git hook
-    subprocess pipe. Fixed with `--output-logs=errors-only` and
-    `if/fi` guard. Cursor-specific: `git commit` needs `| cat`.
-  - `fakes.ts` `as OakApiPathBasedClient` cast: not yet solved.
-    Generated type requires all 27 paths, tests provide 1.
+  - **`setupExpressErrorHandler` CANNOT go in `setupBaseMiddleware`.**
+    5-reviewer pre-implementation review caught this: it runs before
+    routes. Sentry docs require error handler AFTER all controllers.
+    Moved to end of `setupPostAuthPhases` in `application.ts`.
+  - **`@sentry/node` must be a direct dependency** for `--import`
+    to resolve. pnpm strict hoisting means transitive deps are not
+    accessible from the app workspace. Discovered during spike.
+  - **`Logger.warn` does not accept `NormalizedError`** — only
+    `Logger.error` has that overload. Catch block uses
+    `normalizeError` then extracts `errorName`/`errorMessage`.
+  - **Test-reviewer: no supertest for middleware composition tests.**
+    Supertest is IO (creates HTTP server) — violates integration
+    test rules. Test Express in-memory with mock objects instead.
+  - Pre-existing from earlier sessions (unchanged):
+    `.strict()` fragility, schema cache gap, third-party MCP
+    bypass, `fakes.ts` cast.
 - **Open questions / low-confidence areas**:
   - OQ1: `.strip()` vs `.passthrough()` for upstream response schemas
     — recommended `.strip()`, awaiting owner decision
@@ -113,20 +114,21 @@ git log --oneline --decorate -10
   - `fakes.ts` cast — what is the architecturally correct solution?
   - Does tsup support `@sentry/bundler-plugin` for Debug ID injection?
   - Does `@sentry/profiling-node` native addon work on Vercel's ABI?
-- **Next safe step**: Read the Sentry canonical alignment plan
-  (`.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`)
-  and begin with the "NEXT PRIORITIES" block in the frontmatter.
-  Recommended sequence: (1) `early-init-http` spike — 2-minute
-  local test converts the highest-impact assumption to fact.
-  (2) `express-error-handler` — can parallel Gap 1. (3) The two
-  small independent fixes (`cli-log-level-di`,
-  `cli-shutdown-ordering`) are quick wins. (4) `adapter-surface-
-  extension` unblocks 4 downstream items.
-- **Deep consolidation status**: not due — graduations completed
-  this session, napkin at ~170 lines (well under 500), no new
-  patterns or doctrine to extract. Remaining informational fitness:
-  principles.md chars 25,628 > 24,000; testing-strategy.md line
-  inflation from wrapping (564 > 550, chars well within limit).
+- **Next safe step**: Continue Sentry canonical alignment with
+  the remaining 8 todos. Recommended sequence: (1) `cli-context-
+  enrichment` — setTag/setContext in withLoadedCliEnv (depends on
+  adapter extension, now done). (2) `custom-metrics` — expose
+  Sentry.metrics on adapter (same two-layer pattern). (3) `cli-
+  metrics` — wire CLI command execution counts. (4) `cli-early-
+  init` — add `--import @sentry/node/preload` to tsx invocations.
+  (5) Closing reviewer also flagged: add close() to
+  HttpObservability for HTTP server shutdown. Items 5-8 (trace
+  propagation, profiling, source maps) need credentials or are
+  pre-release evaluation.
+- **Deep consolidation status**: due — 7 todos completed, settled
+  patterns from 5-reviewer pre-implementation review process, new
+  test-reviewer correction (no supertest in integration tests) is
+  doctrine-level. Napkin needs session entries.
 
 ## Active Workstreams (2026-04-13)
 

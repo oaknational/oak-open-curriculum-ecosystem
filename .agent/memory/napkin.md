@@ -206,3 +206,52 @@ plan to function together as standalone entry point for next
 session. Sentry canonical alignment is now the PRIMARY workstream
 (15 todos, all local). Recommended starting sequence: Gap 1 spike
 → Gap 1 + Gap 2 parallel → Gap 3 → downstream items.
+
+### Session 2026-04-13g: Sentry canonical alignment implementation
+
+**7 of 15 todos implemented** (commit c8b66648, 23 files, 774
+insertions). Gaps 1-3 done: preload, Express error handler, adapter
+surface extension. CLI: close/flush, shutdown ordering, log level
+DI. Logger DI audit: 15 singleton violations in search CLI.
+
+**Pre-implementation review is high-value for structural changes.**
+5 reviewers (Barney, test-reviewer, type-reviewer, code-reviewer,
+Wilma) evaluated the Gap 2 approach BEFORE code was written. Key
+corrections:
+
+- `setupExpressErrorHandler` cannot go in `setupBaseMiddleware`
+  (runs before routes; Sentry requires after routes)
+- No supertest in integration tests — Express apps are callable
+  in-memory with mock objects
+- DI seam belongs on `CreateAppOptions` (consistent with existing
+  clerkMiddlewareFactory, rateLimiterFactory)
+- Use `normalizeError` in catch blocks, not inline error.message
+- Mode guard at composition root (index.ts), not inside function
+
+**`@sentry/node` must be a direct pnpm dependency for `--import`
+to resolve.** pnpm strict hoisting: transitive deps are not
+accessible from consumer workspaces. Spike caught this before
+any code was committed.
+
+**`Logger.warn` has no `NormalizedError` overload.** Only
+`Logger.error` accepts `(message, NormalizedError, context?)`.
+`Logger.warn` is `(message, context?)`. Must extract fields from
+`normalizeError(error)` and pass as context object.
+
+**Sentry `setupExpressErrorHandler` DOES call `next(err)`.** The
+sentry-reviewer verified by reading the installed SDK source at
+line 98 of `express.js`. Errors propagate to downstream error
+handlers. The Sentry docs description ("before any other error-
+handling middlewares") means registration order, not that it
+swallows errors.
+
+**Sentry `close()` vs `flush()` for shutdown**: closing reviewer
+flagged that the HTTP server shutdown handler also uses `flush()`
+followed by `process.exit()` — should use `close()` for the same
+reasons as the CLI. Track as a follow-up todo.
+
+**Type-reviewer: `SentryContextPayload` Readonly assignability.**
+`Readonly<Record<string, V>>` is structurally assignable to
+`{ [key: string]: unknown }` under current tsconfig. No compile
+error in practice, but the reviewer flagged it as a potential
+issue under stricter settings. Monitor.
