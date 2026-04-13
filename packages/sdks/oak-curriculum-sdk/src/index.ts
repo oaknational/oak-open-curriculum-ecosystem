@@ -68,7 +68,7 @@ export { DEFAULT_RETRY_CONFIG } from './config/retry-config.js';
 
 export {
   isValidPath,
-  isAllowedMethod,
+  isApiHttpMethod,
   isKeyStage,
   isSubject,
   isAssetType,

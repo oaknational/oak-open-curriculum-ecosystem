@@ -4,14 +4,14 @@
 * Response validator map built from OpenAPI schema at compile-time.
 */
 import { curriculumSchemas, type CurriculumSchemaDefinition } from '../zod/curriculumZodSchemas.js';
-import { type AllowedMethods, type AllowedMethodsForPath, type OperationId, type ValidNumericResponseCode, type ValidPath, type ValidResponseCode, getOperationIdByPathAndMethod } from './path-parameters.js';
+import { type ApiHttpMethod, type AllowedMethodsForPath, type OperationId, type ValidNumericResponseCode, type ValidPath, type ValidResponseCode, getOperationIdByPathAndMethod } from './path-parameters.js';
 const RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS: Record<string, {
   readonly schema: CurriculumSchemaDefinition;
   readonly operationId: OperationId | '*';
   readonly status: ValidResponseCode | ValidNumericResponseCode;
   readonly path: ValidPath | '*';
   readonly colonPath: string;
-  readonly method: AllowedMethods | '*';
+  readonly method: ApiHttpMethod | '*';
   readonly source: 'component' | 'inline' | 'void';
   readonly zodIdentifier?: string;
   readonly jsonSchema?: unknown;
@@ -1373,7 +1373,7 @@ export function getResponseSchemaByPathAndMethodAndStatus(path: ValidPath, metho
   throw new TypeError('Invalid operationId: ' + String(operationId));
 }
 
-export function getResponseSchemaForEndpoint(method: AllowedMethods, path: ValidPath): CurriculumSchemaDefinition {
+export function getResponseSchemaForEndpoint(method: ApiHttpMethod, path: ValidPath): CurriculumSchemaDefinition {
   const operationId = getOperationIdByPathAndMethod(path, method);
   if (!operationId) {
     throw new TypeError('Method not allowed for path: ' + String(method) + ' ' + String(path));
@@ -1395,7 +1395,7 @@ export function getResponseDescriptorSchema(operationId: OperationId, statusCode
   return RESPONSE_DESCRIPTOR_JSON[key];
 }
 
-export function getDescriptorSchemaForEndpoint(method: AllowedMethods, path: ValidPath): { readonly zod: CurriculumSchemaDefinition; readonly json: unknown } {
+export function getDescriptorSchemaForEndpoint(method: ApiHttpMethod, path: ValidPath): { readonly zod: CurriculumSchemaDefinition; readonly json: unknown } {
   const zod = getResponseSchemaForEndpoint(method, path);
   const operationId = getOperationIdByPathAndMethod(path, method);
   if (typeof operationId !== 'string') {

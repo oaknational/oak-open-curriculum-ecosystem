@@ -6,13 +6,13 @@
  */
 
 import { defineConfig } from 'eslint/config';
-import oakStandards, {
+import {
+  configs,
   ignores,
   testRules,
   createImportResolverSettings,
   createSdkBoundaryRules,
 } from '@oaknational/eslint-plugin-standards';
-import type { Linter } from 'eslint';
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
@@ -41,7 +41,7 @@ const config = defineConfig(
   },
 
   // Use recommended and strict configs from standards plugin
-  ...(oakStandards.configs!.strict as Linter.Config[]),
+  ...configs.strict,
 
   {
     files: ['**/*.ts'],
@@ -68,25 +68,11 @@ const config = defineConfig(
       '**/*.spec.ts',
       '**/*.spec.tsx',
       '**/test-*.ts',
+      '**/test-helpers/**',
       '**/__tests__/**',
     ],
     rules: {
       ...testRules,
-    },
-  },
-  // Config files
-  {
-    files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.e2e.config.ts', 'tsup.config.ts'],
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: thisDir,
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-non-null-assertion': 'off',
-      '@typescript-eslint/consistent-type-assertions': 'off',
-      'import-x/no-named-as-default-member': 'off',
     },
   },
   {
@@ -99,16 +85,6 @@ const config = defineConfig(
     files: ['src/response-augmentation.ts'],
     rules: {
       '@typescript-eslint/no-restricted-types': 'off',
-    },
-  },
-  {
-    files: [
-      'src/mcp/universal-tools-executor.integration.test.ts',
-      'src/test-helpers/fakes.ts',
-      'src/validation/request-validators.unit.test.ts',
-    ],
-    rules: {
-      '@typescript-eslint/consistent-type-assertions': 'off',
     },
   },
 );

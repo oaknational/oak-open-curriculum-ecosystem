@@ -59,6 +59,10 @@ todos:
     content: "Use Sentry.close() instead of flush() for CLI shutdown"
     status: pending
     note: "Depends on adapter-surface-extension (close on runtime). Noop in off/fixture mode."
+  - id: cli-shutdown-ordering
+    content: "Reorder CLI shutdown: clearAdditionalSinks before disableFileSink in oaksearch.ts finally block"
+    status: pending
+    note: "Sentry reviewer (2026-04-12): disableFileSink nulls logger cache. If any log call occurs between disableFileSink and clearAdditionalSinks, loggers rebuild with Sentry sink still registered but transport already flushed. Defensive reorder eliminates the window. Low risk but correct hygiene."
   - id: cli-log-level-di
     content: "Investigate and fix currentLevel hardcoding in search-cli logger.ts — wire runtimeConfig.logLevel via DI per ADR-078"
     status: pending

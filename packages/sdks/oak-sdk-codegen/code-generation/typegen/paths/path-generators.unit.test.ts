@@ -80,31 +80,45 @@ describe('Path Generators', () => {
   });
 
   describe('generateRuntimeSchemaChecks', () => {
-    it('should generate runtime schema check functions', () => {
+    it('should export POSSIBLE_HTTP_METHODS as a static as-const tuple', () => {
+      const result = generateRuntimeSchemaChecks();
+
+      expect(result).toContain('POSSIBLE_HTTP_METHODS');
+      expect(result).toContain('as const');
+      expect(result).toContain('PossibleHttpMethod');
+      expect(result).toContain('isPossibleHttpMethod');
+    });
+
+    it('should export API_HTTP_METHODS derived from schema.paths at runtime', () => {
+      const result = generateRuntimeSchemaChecks();
+
+      expect(result).toContain('API_HTTP_METHODS');
+      expect(result).toContain('schema.paths');
+      expect(result).toContain('ApiHttpMethod');
+      expect(result).toContain('isApiHttpMethod');
+    });
+
+    it('should derive ApiHttpMethod via distributive MethodKeysOf', () => {
+      const result = generateRuntimeSchemaChecks();
+
+      expect(result).toContain('MethodKeysOf');
+      expect(result).toContain('Extract<keyof T, PossibleHttpMethod>');
+    });
+
+    it('should export RawPaths, isValidPath, and apiPaths', () => {
       const result = generateRuntimeSchemaChecks();
 
       expect(result).toContain('type RawPaths = Schema["paths"]');
       expect(result).toContain('export function isValidPath(value: string): value is ValidPath');
       expect(result).toContain('export const apiPaths: RawPaths = schema.paths');
-      expect(result).toContain('type AllowedMethods = keyof (RawPaths[keyof RawPaths])');
-      expect(result).toContain('export const allowedMethods: AllowedMethods[]');
-      expect(result).toContain('export function isAllowedMethod');
     });
 
-    it('should include type guards implementation', () => {
+    it('should use PossibleHttpMethod instead of hardcoded HttpMethodKeys', () => {
       const result = generateRuntimeSchemaChecks();
 
-      expect(result).toContain('return paths.includes(value)');
-      expect(result).toContain('return methods.includes(maybeMethod)');
-    });
-
-    it('should handle method extraction logic', () => {
-      const result = generateRuntimeSchemaChecks();
-
-      expect(result).toContain('allowedMethodsSet = new Set<AllowedMethods>()');
-      expect(result).toContain('for (const path in schema.paths)');
-      expect(result).toContain('if (!isValidPath(path))');
-      expect(result).toContain('throw new TypeError');
+      expect(result).toContain('AllowedMethodsForPath');
+      expect(result).toContain('PossibleHttpMethod');
+      expect(result).not.toContain('HttpMethodKeys');
     });
 
     it('should generate JsonBody200 using direct Paths indexing for eager evaluation', () => {

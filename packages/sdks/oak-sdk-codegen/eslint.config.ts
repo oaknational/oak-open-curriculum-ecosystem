@@ -6,13 +6,13 @@
  */
 
 import { defineConfig } from 'eslint/config';
-import oakStandards, {
+import {
+  configs,
   ignores,
   testRules,
   createImportResolverSettings,
   createSdkBoundaryRules,
 } from '@oaknational/eslint-plugin-standards';
-import type { Linter } from 'eslint';
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
@@ -33,7 +33,7 @@ const config = defineConfig(
     ],
   },
 
-  ...(oakStandards.configs!.strict as Linter.Config[]),
+  ...configs.strict,
 
   {
     files: ['**/*.ts'],
@@ -127,9 +127,6 @@ const config = defineConfig(
   {
     files: ['src/types/generated/**'],
     rules: {
-      '@typescript-eslint/consistent-type-assertions': 'off',
-      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
-      '@typescript-eslint/no-unnecessary-type-conversion': 'off',
       '@typescript-eslint/no-unnecessary-condition': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
@@ -152,21 +149,6 @@ const config = defineConfig(
     files: ['e2e-tests/**/*.ts'],
     rules: {
       'no-console': 'off',
-    },
-  },
-
-  {
-    files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.e2e.config.ts', 'tsup.config.ts'],
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: thisDir,
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-non-null-assertion': 'off',
-      '@typescript-eslint/consistent-type-assertions': 'off',
-      'import-x/no-named-as-default-member': 'off',
     },
   },
 );

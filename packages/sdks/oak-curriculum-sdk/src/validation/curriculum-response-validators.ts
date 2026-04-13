@@ -9,7 +9,7 @@ import { isValidationFailure, parseWithCurriculumSchemaInstance } from './types.
 import {
   getOperationIdByPathAndMethod,
   isValidPath,
-  isAllowedMethod,
+  isApiHttpMethod,
   isValidResponseCode,
   getResponseSchemaByOperationIdAndStatus,
   type ValidPath,
@@ -150,7 +150,7 @@ function resolveOperationContext<P extends ValidPath, M extends AllowedMethodsFo
   if (!isValidPath(path)) {
     throw new TypeError('Invalid path: ' + String(path));
   }
-  if (!isAllowedMethod(method)) {
+  if (!isApiHttpMethod(method)) {
     throw new TypeError('Invalid method: ' + method);
   }
 

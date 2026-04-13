@@ -69,32 +69,33 @@ export function isValidPath(value: string): value is ValidPath {
   return paths.includes(value);
 }
 export const apiPaths: RawPaths = schema.paths;`;
-  const allowed = `
-export type AllowedMethods = keyof (RawPaths[keyof RawPaths]);
-const allowedMethodsSet = new Set<AllowedMethods>();
-for (const path in schema.paths) {
-  if (!isValidPath(path)) { throw new TypeError(\`Invalid path: \${path}\`); }
-  const methods = Object.keys(schema.paths[path]);
-  for (const method of methods) {
-    if (method === 'get' || method === 'post' || method === 'put' || method === 'delete' || method === 'patch' || method === 'head' || method === 'options') {
-      // AllowedMethods is keyof (RawPaths[keyof RawPaths]) — a schema-derived type that
-      // reduces to a subset of HTTP method literals at compile time. The guard above narrows
-      // method to the same literal union, but TypeScript treats the two as structurally
-      // separate because one is computed from the schema and the other is an inline literal
-      // union. This single cast bridges that gap inside the validated branch.
-      allowedMethodsSet.add(method as AllowedMethods);
-    }
-  }
+  const httpMethods = `
+// 1. All standard HTTP methods (the OpenAPI 3.1 vocabulary)
+export const POSSIBLE_HTTP_METHODS = [
+  "delete", "get", "head", "options", "patch", "post", "put", "trace"
+] as const;
+export type PossibleHttpMethod = (typeof POSSIBLE_HTTP_METHODS)[number];
+export function isPossibleHttpMethod(value: string): value is PossibleHttpMethod {
+  const methods: readonly string[] = POSSIBLE_HTTP_METHODS;
+  return methods.includes(value);
 }
-export const allowedMethods: AllowedMethods[] = [...allowedMethodsSet];
-export function isAllowedMethod(maybeMethod: string): maybeMethod is AllowedMethods {
-  const methods: readonly string[] = allowedMethods;
+
+// 2. API methods — derived from the runtime schema, exact type from the schema type system
+type MethodKeysOf<T> = T extends unknown ? Extract<keyof T, PossibleHttpMethod> : never;
+export type ApiHttpMethod = MethodKeysOf<RawPaths[keyof RawPaths]>;
+const possibleMethodSet: ReadonlySet<string> = new Set(POSSIBLE_HTTP_METHODS);
+export const API_HTTP_METHODS: readonly ApiHttpMethod[] = [...new Set(
+  Object.values(schema.paths).flatMap((p) =>
+    Object.keys(p).filter((k): k is ApiHttpMethod => possibleMethodSet.has(k))
+  ),
+)].sort();
+export function isApiHttpMethod(maybeMethod: string): maybeMethod is ApiHttpMethod {
+  const methods: readonly string[] = API_HTTP_METHODS;
   return methods.includes(maybeMethod);
 }`;
   const tail = `
 // Helper types derived from schema for path/method/response typing
-export type HttpMethodKeys = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
-export type AllowedMethodsForPath<P extends ValidPath> = Extract<keyof Paths[P], HttpMethodKeys>;
+export type AllowedMethodsForPath<P extends ValidPath> = Extract<keyof Paths[P], PossibleHttpMethod>;
 
 /**
  * Extract the JSON body from a 200 response for a given path and method.
@@ -143,7 +144,7 @@ export type GetArrayResponseBody = Extract<GetResponseBody, readonly unknown[]>;
 /** Element type of array-valued GET 200 response bodies. */
 export type GetArrayResponseElement =
   GetArrayResponseBody extends readonly (infer E)[] ? E : never;`;
-  return [header, allowed, tail].join('\n');
+  return [header, httpMethods, tail].join('\n');
 }
 
 /**

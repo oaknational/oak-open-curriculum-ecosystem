@@ -4,7 +4,7 @@
  * Request parameter schemas derived from the OpenAPI specification.
  */
 import { z } from 'zod';
-import type { AllowedMethods, ValidPath } from '../path-parameters.js';
+import type { ApiHttpMethod, ValidPath } from '../path-parameters.js';
 
 export const REQUEST_PARAMETER_SCHEMAS = {
   "GET:/sequences/:sequence/units": z.object({
@@ -112,7 +112,7 @@ function isRequestParameterKey(key: string): key is RequestParameterKey {
 }
 
 export function getRequestParameterSchema(
-  method: AllowedMethods,
+  method: ApiHttpMethod,
   path: ValidPath,
 ): RequestParameterSchemas[RequestParameterKey] | undefined {
   const key = method.toUpperCase() + ':' + path;
