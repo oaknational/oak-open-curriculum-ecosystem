@@ -58,13 +58,12 @@ git log --oneline --decorate -10
     (**PENDING** — design complete, 7 todos, user-requested)
   - `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
     (**entry point** — restart sequence, current state, authority rule)
-- **Current state**: Main (PR #80) merged. AllowedMethods refactored
-  to two constants (POSSIBLE_HTTP_METHODS + API_HTTP_METHODS) with
-  exact types from schema. ESLint configs hardened, auth-error tests
-  rewritten as unit tests. `pnpm check` 88/88 green. Committed.
-  Schema resilience plan created and integrated into discovery
-  surfaces (2026-04-13) — awaiting owner decision on OQ1
-  (`.strip()` vs `.passthrough()`).
+- **Current state**: Main (PR #80) merged. Schema resilience plan
+  created and integrated into discovery surfaces (2026-04-13) —
+  awaiting owner decision on OQ1 (`.strip()` vs `.passthrough()`).
+  Pre-commit hook fixed: `--output-logs=errors-only` + error guard
+  on turbo step. Two commits on `feat/otel_sentry_enhancements`
+  ahead of remote.
 - **Current objective**: Three tracks: (1) Vercel credential
   provisioning + deployment evidence (closes parent plan), (2) Sentry
   canonical alignment implementation (15 todos), (3) schema
@@ -92,6 +91,10 @@ git log --oneline --decorate -10
     `fetch()` + SSE parsing and strip `oakContextHint`, `status`,
     and the `data` envelope — signals that our response wrapper adds
     friction for machine consumers.
+  - **Pre-commit hook turbo step lacked output control and error
+    guard.** Cached log replay (7000+ lines) overwhelmed git hook
+    subprocess pipe. Fixed with `--output-logs=errors-only` and
+    `if/fi` guard. Cursor-specific: `git commit` needs `| cat`.
   - `fakes.ts` `as OakApiPathBasedClient` cast: not yet solved.
     Generated type requires all 27 paths, tests provide 1.
 - **Open questions / low-confidence areas**:
@@ -110,7 +113,7 @@ git log --oneline --decorate -10
   resolve OQ1, then implement `.strip()` migration in codegen. (3)
   Upstream API reference metadata: design complete, 7 todos pending.
   Vercel credential provisioning deferred until local work is complete.
-- **Deep consolidation status**: not due — napkin at 75 lines
+- **Deep consolidation status**: not due — napkin at 104 lines
   (rotated earlier today), no plan closed, no settled doctrine in
   ephemeral locations. Deferred items from last consolidation still
   pending: (1) principles.md and testing-strategy.md line-wrapping;
