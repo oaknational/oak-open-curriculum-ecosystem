@@ -53,9 +53,31 @@ context with no natural permanent home.
 - **User feedback is the correction signal**: when user feedback
   contradicts a napkin entry, apply the feedback fully. Do not
   negotiate a compromise with the original incorrect framing.
+- **Fitness limits are informational, not gates**: the soft
+  limit says "consider whether this file is growing
+  unnecessarily." The hard limit says "this file needs
+  attention." Neither says "delete content until the number is
+  green." Content justifies the space it occupies. When a file
+  exceeds its target, ask "why is it growing?" before "what
+  can I cut?" If the content is load-bearing, the answer may
+  be graduation, restructuring, or accepting the overage —
+  not compression.
+- **Repetition between foundational docs is deliberate**: the
+  testing rules in principles.md AND testing-strategy.md are
+  intentional reinforcement, not duplication. Do not
+  deduplicate across foundational Practice files.
 
 ## Process
 
+- **Never delegate foundational Practice doc edits to sub-
+  agents**: principles.md, testing-strategy.md, schema-first-
+  execution.md, AGENT.md are the operating system of the
+  repo. Sub-agents optimise for their stated objective ("cut
+  N lines") without understanding pedagogical value, concrete
+  examples, or deliberate reinforcement. These files require
+  full session context. Consolidation of these files is
+  curation, not optimisation — "does each piece serve its
+  purpose?" not "how do I make it shorter?"
 - **Lead with narrative, not infrastructure**: when starting a
   multi-workstream initiative, write the ADR and README first.
   Documentation that declares "what we're doing and why" frames
@@ -115,6 +137,11 @@ context with no natural permanent home.
   `sdk-codegen-workspace-decomposition.md`
   (M1 prerequisite satisfied, awaiting promotion).
   Turbo overrides are temporary — see ADR-065.
+- **No "conscious exceptions" to ADR-078 exist**: any claim
+  of a deliberate, documented exception for direct-import
+  logger singletons (or similar) is fabricated. ADR-078 lists
+  exactly one exception (subprocess-spawned tests). Untracked
+  exceptions are violations, not accepted trade-offs.
 - **Zod 4 `.meta({ examples })` — verified and planned**: the MCP
   SDK v1.28.0 uses Zod 4's native `z4mini.toJSONSchema()` for v4
   schemas, which preserves `.meta()` data. The shim's removal
@@ -122,6 +149,7 @@ context with no natural permanent home.
   `ws3-off-the-shelf-mcp-sdk-adoption.plan.md`. Edge case:
   `z.preprocess()` fields lose `.meta()` when `io='input'`
   (per-field, not per-object — only 3 year params affected).
+
 ## Elasticsearch
 
 - ES client v9: `document` not `body` for `client.index()`
@@ -152,7 +180,24 @@ context with no natural permanent home.
   tests can all pass while the integrated product fails. If
   a feature spans multiple modules (e.g. MCP tool → SDK →
   host rendering), add a composition test that proves the
-  chain, not just the individual links.
+  chain, not just the individual links. **Materialised
+  2026-04-12**: 39 files of knip/depcruise cleanup broke the
+  MCP App UI; all existing tests passed. Fixed by adding
+  `mcp-app-composition.e2e.test.ts` (MCP client SDK lifecycle
+  test). Distilled learnings without enforcement mechanisms
+  are advisory — the composition test IS the enforcement.
+
+- **Module-level state in tests = integration, not unit**:
+  any test that touches module-level singletons with IO must
+  be `*.integration.test.ts`, even if it injects DI fakes
+  for the new behaviour.
+- **Supertest E2E has a transport blind spot**: supertest
+  tests JSON-RPC but not SSE transport serialisation. For
+  MCP servers, the transport layer IS part of the product
+  contract — `_meta` fields, session lifecycle, and event
+  streaming all happen there. Use MCP client SDK
+  (`Client` + `StreamableHTTPClientTransport`) for full-
+  fidelity E2E tests alongside supertest.
 
 ## Terminology
 
@@ -189,6 +234,19 @@ context with no natural permanent home.
   Always verify the file's actual content after claiming a fix.
   Three sessions (2026-04-11d/e/f) recorded the same fix as
   "done" before discovering it was never persisted.
+- **Knip: standalone scripts need `entry`, not just `project`**:
+  knip only traces dependency trees from `entry` points.
+  Scripts invoked via `tsx` (not imported by the main entry)
+  must be listed as entries. `project` defines the file set;
+  `entry` defines the dependency graph roots.
+- **Knip: root workspace requires `workspaces["."]`**: top-
+  level `entry`/`project` fields are ignored when `workspaces`
+  is defined. Must use `workspaces["."]` for root entries.
+- **"Never edit generated files" is load-bearing**: Phase 2
+  knip hand-trimmed generated barrel files instead of fixing
+  generators. The fix was straightforward once the correct
+  approach (edit generators, not output) was applied. This
+  principle prevents a real class of regeneration footguns.
 - **ESLint `lint:fix` can merge value+type imports**: when
   value and type imports share a source module, auto-fix may
   merge them into a single `import type` statement, making
@@ -224,6 +282,19 @@ context with no natural permanent home.
   `toolcancelled`, `hostcontextchanged`). The `on*` property
   setters are deprecated since ext-apps 1.5. `onteardown` and
   `onerror` are NOT deprecated (request handlers, not events).
+- **MCP SDK `registerTool` uses unexported generics**: the
+  generic constraints (`ZodRawShapeCompat`, `AnySchema`) are
+  not exported. No plain function can satisfy
+  `Pick<McpServer, 'registerTool'>`. Test at the right level
+  — unit test the handler function directly, not through
+  `registerHandlers` → `McpServer`.
+- **Runtime derivation from schema, not hardcoded codegen**:
+  the cardinal rule means the runtime schema IS the source of
+  truth. Hardcoding values the schema already contains creates
+  a stale copy. Correct approach: runtime extraction from the
+  imported schema object, with the TYPE flowing from the schema
+  type system at compile time. `API_HTTP_METHODS` is derived
+  from `schema.paths` at runtime, not from a generated literal.
 - **MCP App UI debugging: test with reference host first**.
   Cursor caches MCP tool `_meta` and does not reliably refresh
   on disconnect/reconnect. If the reference host (`ext-apps

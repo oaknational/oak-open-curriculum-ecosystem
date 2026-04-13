@@ -37,6 +37,20 @@ Execution order:
 - [ws3-phase-5-interactive-user-search-view.plan.md](ws3-phase-5-interactive-user-search-view.plan.md) —
   **PENDING**. Interactive user-search MCP App view. Post-merge.
 
+## Codegen Enhancements
+
+- [schema-resilience-and-response-architecture.plan.md](schema-resilience-and-response-architecture.plan.md) —
+  **PENDING (open questions)**. Address upstream schema validation
+  fragility: `.strict()` → `.strip()` or `.passthrough()` migration
+  (OQ1 pending owner decision), schema drift health endpoint
+  (Sentry-monitored), response `additionalContext` flag, and direct
+  API access guidance. Vercel deploy hook for auto-rebuild noted as
+  future option.
+- [upstream-api-reference-metadata.plan.md](upstream-api-reference-metadata.plan.md) —
+  **PENDING**. Add `upstreamApi` field to generated tool descriptors
+  with full upstream API URL, parameters, and statuses. For users who
+  discover tools via MCP then call the API directly.
+
 ## Exploration
 
 - [workspace_topology_exploration.plan.md](workspace_topology_exploration.plan.md) —

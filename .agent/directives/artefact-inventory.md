@@ -50,19 +50,9 @@ Run `pnpm portability:check` after adding to verify parity.
 5. **Claude settings**: add `Skill(<name>)` to
    `.claude/settings.json` `permissions.allow`
 
-Adapter format (identical for Cursor, Claude, Codex):
-
-```yaml
----
-name: <name>
-description: >-
-  One-line description of what the skill does.
----
-
-# <Name> (<Platform>)
-
-Read and follow `.agent/skills/<name>/SKILL.md`.
-```
+Adapter (same for Cursor/Claude/Codex): YAML front-matter with
+`name` + `description`, body = `Read and follow
+.agent/skills/<name>/SKILL.md`.
 
 ### New Command
 
@@ -74,45 +64,12 @@ Read and follow `.agent/skills/<name>/SKILL.md`.
 6. **Claude settings**: add `Skill(jc-<name>)` and
    `Skill(jc-<name>:*)` to `.claude/settings.json`
 
-Cursor format:
+Adapter bodies all delegate: `Read and follow .agent/commands/<name>.md`.
 
-```markdown
-# <Title>
-
-Read and follow @.agent/commands/<name>.md
-```
-
-Claude format:
-
-```yaml
----
-description: One-line description
-allowed-tools: Read, Bash
----
-
-Read and follow `.agent/commands/<name>.md`.
-```
-
-Codex format:
-
-```yaml
----
-name: jc-<name>
-description: >-
-  One-line description.
----
-
-# <Name> (Codex)
-
-Read and follow `.agent/commands/<name>.md`.
-```
-
-Gemini format:
-
-```toml
-description = "One-line description"
-prompt = "Read and follow .agent/commands/<name>.md"
-```
+- **Cursor**: plain markdown heading + `@.agent/commands/<name>.md`
+- **Claude**: YAML front-matter (`description`, `allowed-tools: Read, Bash`)
+- **Codex**: YAML front-matter (`name: jc-<name>`, `description`)
+- **Gemini**: TOML (`description`, `prompt`)
 
 ### New Rule
 
@@ -120,22 +77,10 @@ prompt = "Read and follow .agent/commands/<name>.md"
 2. **Cursor**: `.cursor/rules/<name>.mdc`
 3. **Claude Code**: `.claude/rules/<name>.md`
 
-Cursor `.mdc` format:
-
-```yaml
----
-description: One-line description.
-alwaysApply: true
----
-
-Read and follow `.agent/rules/<name>.md`.
-```
-
-Claude format (plain text):
-
-```text
-Read and follow `.agent/rules/<name>.md`.
-```
+- **Cursor `.mdc`**: YAML front-matter (`description`,
+  `alwaysApply: true`), body = `Read and follow
+  .agent/rules/<name>.md`.
+- **Claude**: plain text — `Read and follow .agent/rules/<name>.md`.
 
 ### New Sub-agent
 

@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-12
+last_updated: 2026-04-13
 ---
 
 # Session Continuation
@@ -41,25 +41,35 @@ git log --oneline --decorate -10
 ## Live Continuity Contract
 
 - **Workstream**: Sentry + OTel Observability Foundation
-  (`feat/otel_sentry_enhancements`). All code foundations complete.
-  Local credentials provisioned. Canonical alignment plan created.
-  Vercel credentials and deployment evidence remain.
+  (`feat/otel_sentry_enhancements`). Main merged (PR #80). HTTP
+  method constants refactored. All code foundations complete.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
     (**authoritative** — phases 0-3 complete, phase 4 pending Vercel
     credentials)
   - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-    (**new** — 6 gaps, 10 todos, 5 specialist reviewers, ready for
-    implementation)
+    (15 todos — original 12 + 3 from merge session: cli-log-level-di,
+    cli-logger-di-audit, cli-shutdown-ordering)
   - `.agent/plans/architecture-and-infrastructure/active/search-cli-observability-adoption.plan.md`
     (**COMPLETE** — 10 steps executed 2026-04-12)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md`
+    (**PENDING** — open questions, owner decisions needed)
+  - `.agent/plans/sdk-and-mcp-enhancements/active/upstream-api-reference-metadata.plan.md`
+    (**PENDING** — design complete, 7 todos, user-requested)
   - `.agent/prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md`
     (**entry point** — restart sequence, current state, authority rule)
-- **Current state**: Main (PR #80) merged. Knip violations from merge
-  fixed. All code foundations complete. Local credentials provisioned.
-- **Current objective**: Two parallel tracks: (1) Vercel credential
+- **Current state**: Main (PR #80) merged. AllowedMethods refactored
+  to two constants (POSSIBLE_HTTP_METHODS + API_HTTP_METHODS) with
+  exact types from schema. ESLint configs hardened, auth-error tests
+  rewritten as unit tests. `pnpm check` 88/88 green. Committed.
+  Schema resilience plan created and integrated into discovery
+  surfaces (2026-04-13) — awaiting owner decision on OQ1
+  (`.strip()` vs `.passthrough()`).
+- **Current objective**: Three tracks: (1) Vercel credential
   provisioning + deployment evidence (closes parent plan), (2) Sentry
-  canonical alignment implementation.
+  canonical alignment implementation (15 todos), (3) schema
+  resilience plan — OQ1 decision then `.strip()` migration,
+  schema drift health endpoint, `additionalContext` flag.
 - **Hard invariants / non-goals**:
   - `SENTRY_MODE=off` is the default and kill switch
   - ADR-078 DI everywhere, ADR-143 observability architecture
@@ -67,11 +77,46 @@ git log --oneline --decorate -10
   - MCP App UIs are NOT covered by Sentry (browser context, not server)
   - `sendDefaultPii: false` hardcoded — no override path
   - Adapter pattern preserved (redaction hooks + fixture mode justify it)
-- **Next safe step**: Set Vercel credentials, then deployment evidence.
-  Canonical alignment can begin in parallel.
-- **Deep consolidation status**: not due.
+  - No `as` casts — one known exception in `fakes.ts` (not yet solved)
+  - Search schemas stay `.strict()` (we control the index)
+- **Recent surprises / corrections** (2026-04-13):
+  - **`.strict()` on all Zod response schemas is a latent fragility.**
+    All generated response schemas use `.strict()` via
+    `strictObjects: true` in codegen. Upstream API adding any field
+    breaks validation. Not currently reproducible but third-party
+    consumer hit it and disabled three tools.
+  - **Schema cache version-only comparison is a gap.** The upstream
+    API can change response shapes without bumping `info.version`.
+    `schema-cache.ts` only diffs the version string.
+  - **Third-party consumer bypassed MCP SDK entirely.** They use raw
+    `fetch()` + SSE parsing and strip `oakContextHint`, `status`,
+    and the `data` envelope — signals that our response wrapper adds
+    friction for machine consumers.
+  - `fakes.ts` `as OakApiPathBasedClient` cast: not yet solved.
+    Generated type requires all 27 paths, tests provide 1.
+- **Open questions / low-confidence areas**:
+  - OQ1: `.strip()` vs `.passthrough()` for upstream response schemas
+    — recommended `.strip()`, awaiting owner decision
+  - OQ2: should `additionalProperties: false` be removed from JSON
+    Schema output for response schemas?
+  - OQ3: awaiting specific lesson slugs from third-party consumer
+  - `fakes.ts` cast — what is the architecturally correct solution?
+  - Does tsup support `@sentry/bundler-plugin` for Debug ID injection?
+  - Does `@sentry/profiling-node` native addon work on Vercel's ABI?
+- **Next safe step**: Three tracks: (1) Sentry canonical alignment
+  local priorities: `cli-log-level-di`, `cli-shutdown-ordering`,
+  `early-init-http`, `express-error-handler`, `adapter-surface-extension`.
+  All local, no Vercel credentials needed. (2) Schema resilience:
+  resolve OQ1, then implement `.strip()` migration in codegen. (3)
+  Upstream API reference metadata: design complete, 7 todos pending.
+  Vercel credential provisioning deferred until local work is complete.
+- **Deep consolidation status**: not due — napkin at 75 lines
+  (rotated earlier today), no plan closed, no settled doctrine in
+  ephemeral locations. Deferred items from last consolidation still
+  pending: (1) principles.md and testing-strategy.md line-wrapping;
+  (2) distilled graduation (ES entries, terminology, turbo).
 
-## Active Workstreams (2026-04-12)
+## Active Workstreams (2026-04-13, updated session handoff)
 
 ### 1. Interactive User Search MCP App (WS3 Phase 5) — NEXT
 
@@ -96,7 +141,17 @@ Co-requisite for Phase 5 — both address `_meta` architecture.
 Knip and depcruise complete. Remaining: ESLint config standardisation,
 eslint-disable remediation. Parked while MCP Apps work takes priority.
 
-### 4. Workspace Topology Exploration — FUTURE
+### 4. Schema Resilience and Response Architecture — PENDING (open questions)
+
+**Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md`
+
+Upstream schema validation fragility exposed by third-party consumer.
+OQ1 (`.strip()` vs `.passthrough()`) requires owner decision before
+implementation. Schema drift health endpoint (Sentry-monitored),
+`additionalContext` flag, and `upstreamApi` metadata are dependent
+follow-ons. Vercel deploy hook for auto-rebuild noted as future.
+
+### 5. Workspace Topology Exploration — FUTURE
 
 **Plan**: `.agent/plans/sdk-and-mcp-enhancements/active/workspace_topology_exploration.plan.md`
 

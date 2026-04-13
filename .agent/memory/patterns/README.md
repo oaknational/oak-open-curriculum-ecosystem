@@ -1,6 +1,12 @@
 # Patterns
 
-Abstract, reusable patterns proven by real implementation. Each pattern captures a principle that is too concrete for a rule but too abstract for source code. Patterns span five categories: **code** (implementation techniques), **architecture** (system structure and boundaries), **process** (engineering workflows and decision-making), **testing** (verification strategies), and **agent** (agentic infrastructure design).
+Abstract, reusable patterns proven by real implementation. Each
+pattern captures a principle that is too concrete for a rule but
+too abstract for source code. Patterns span five categories:
+**code** (implementation techniques), **architecture** (system
+structure and boundaries), **process** (engineering workflows and
+decision-making), **testing** (verification strategies), and
+**agent** (agentic infrastructure design).
 
 ## Taxonomy
 
@@ -62,7 +68,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 
 ## Pattern Index
 
-### Code (19)
+### Code (20)
 
 - **Additive-Only Schema Decoration** -- Use this when: a decorator or enrichment pass modifies a third-party schema and must not overwrite properties that the upstream source already defines. → [additive-only-schema-decoration.md](additive-only-schema-decoration.md)
 - **Boundary Narrowing for Schema Types** -- Use this when: a schema type is optional but at a specific call site the value is known to exist, and a non-null assertion or runtime throw is tempting. → [boundary-narrowing-for-schema-types.md](boundary-narrowing-for-schema-types.md)
@@ -77,6 +83,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **JSON Loader for Large Datasets** -- Use this when: a generated dataset exceeds TypeScript's max-lines threshold or literal-type serialisation limits. → [json-loader-for-large-datasets.md](json-loader-for-large-datasets.md)
 - **Library Types Before Local Shapes** -- Use this when: An integration parses third-party SDK responses or errors and custom local `*Like` shapes are being considered. → [library-types-before-local-shapes.md](library-types-before-local-shapes.md)
 - **Narrow Re-Exports at Boundaries** -- Use this when: a wrapper library re-exports types from an underlying SDK. → [narrow-re-exports-at-boundaries.md](narrow-re-exports-at-boundaries.md)
+- **Omit Unknown-Carrying Fields from Library Types** -- Use this when: extending a library type that carries `Record<string, unknown>` or `any` on one or more fields, while the rest of the type is valuable. → [omit-unknown-from-library-types.md](omit-unknown-from-library-types.md)
 - **Preprocess for Type-Preserving Coercion** -- Use this when: a Zod schema needs to accept multiple input types but preserve a narrow output type, and z.union with .transform() would widen the output. → [preprocess-for-type-preserving-coercion.md](preprocess-for-type-preserving-coercion.md)
 - **String-Based Codegen Type-Safety Gap** -- Use this when: a code generator emits code as string templates and the output includes API calls with specific argument names. → [string-codegen-type-safety-gap.md](string-codegen-type-safety-gap.md)
 - **Pure Leaf Module Extraction** -- Use this when: pure functions and I/O functions coexist in a module, and other modules need only the pure functions. → [pure-leaf-extraction.md](pure-leaf-extraction.md)
@@ -93,7 +100,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (14)
+### Process (22)
 
 - **Check Driven Development** -- Use this when: writing TDD RED-phase assertions in a codebase with multiple quality gates. → [check-driven-development.md](check-driven-development.md)
 - **ChatGPT Report Normalisation** -- Use this when: recovering an LLM-exported report from markdown, DOCX, and PDF copies into durable repo-quality markdown. → [chatgpt-report-normalisation.md](chatgpt-report-normalisation.md)
@@ -109,16 +116,26 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Cross-Session Pattern Emergence** -- Use this when: running consolidation after multiple sessions on the same workstream, or when insights from separate sessions form a larger picture. → [cross-session-pattern-emergence.md](cross-session-pattern-emergence.md)
 - **Scoped Gitignore for Colliding Directory Names** -- Use this when: a generically named directory (`reference`, `data`, `output`) appears in multiple subtrees with different ignore intent and a broad `**/dirname/*` rule causes surprise ignores or negation sprawl. → [scoped-gitignore-for-colliding-directory-names.md](scoped-gitignore-for-colliding-directory-names.md)
 - **Tool Output Framing Bias** -- Use this when: building a plan from a single tool run and the tool's groupings, counts, or categories are being adopted as plan structure without independent verification. → [tool-output-framing-bias.md](tool-output-framing-bias.md)
+- **Domain Specialist Has Final Say on SDK Semantics** -- Use this when: architecture reviewers make assumptions about SDK-specific behaviour that have not been verified against official documentation. → [domain-specialist-final-say.md](domain-specialist-final-say.md)
+- **Evidence Before Classification** -- Use this when: a static analysis tool reports findings and you need to treat every finding as unclassified until evidence proves otherwise. → [evidence-before-classification.md](evidence-before-classification.md)
+- **Fix at Source, Not Consumer** -- Use this when: multiple workaround attempts fail at the consumer because the producer's type/function/interface is wrong. → [fix-at-source-not-consumer.md](fix-at-source-not-consumer.md)
+- **Pre-implementation Plan Review** -- Use this when: complex implementation work needs specialist review at the plan stage, not just at the code stage. → [pre-implementation-plan-review.md](pre-implementation-plan-review.md)
+- **Re-evaluate Removal Conditions on Workarounds** -- Use this when: a workaround documents its own removal conditions and conditions may be met long before anyone checks. → [re-evaluate-removal-conditions.md](re-evaluate-removal-conditions.md)
+- **Review Intentions, Not Just Code** -- Use this when: you want specialist reviewers to assess design intent before implementation. → [review-intentions-not-just-code.md](review-intentions-not-just-code.md)
+- **UX Predates Visual Design** -- Use this when: user experience decisions accumulate in CLIs, SDKs, APIs, documentation, and error messages long before any visual UI exists. → [ux-predates-visual-design.md](ux-predates-visual-design.md)
+- **Verify Claims Against Primary Sources Before Propagating** -- Use this when: writing technical claims into plans, TSDoc, or governance documents. → [verify-before-propagating.md](verify-before-propagating.md)
 
-### Testing (5)
+### Testing (6)
 
 - **Accessibility as a Blocking Gate** -- Use this when: a project ships user-facing HTML and needs to prove WCAG compliance automatically. → [accessibility-as-blocking-gate.md](accessibility-as-blocking-gate.md)
 - **Conformance Tests for Library Adoption** -- Use this when: replacing hand-rolled code with a library import and keeping existing unit tests as library contract guards. → [conformance-tests-for-library-adoption.md](conformance-tests-for-library-adoption.md)
 - **Interface Segregation for Test Fakes** -- Use this when: test fakes cannot satisfy a complex generated type without type assertions. → [interface-segregation-for-test-fakes.md](interface-segregation-for-test-fakes.md)
 - **Plain-Node Built-Artefact Proof** -- Use this when: a workspace runs source with a dev loader locally but ships built JavaScript under plain Node, and dev success may mask production-startup defects. → [plain-node-built-artifact-proof.md](plain-node-built-artifact-proof.md)
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
+- **Don't Test SDK Internals** -- Use this when: tests must prove product behaviour, not third-party SDK internal normalisation or compatibility logic. → [dont-test-sdk-internals.md](dont-test-sdk-internals.md)
 
-### Agent (2)
+### Agent (3)
 
 - **Agentic Surface Separation** -- Use this when: designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters. → [agentic-surface-separation.md](agentic-surface-separation.md)
 - **Reviewer Widening Is Always Wrong** -- Use this when: a sub-agent reviewer recommends replacing one type construct with a wider one; the fix widens the type, which is never the answer. → [reviewer-widening-is-always-wrong.md](reviewer-widening-is-always-wrong.md)
+- **Platform Configuration Is Infrastructure** -- Use this when: AI platform settings (permissions, hooks, plugin state) that define the agentic system contract must be tracked in version control, not gitignored. → [platform-config-is-infrastructure.md](platform-config-is-infrastructure.md)

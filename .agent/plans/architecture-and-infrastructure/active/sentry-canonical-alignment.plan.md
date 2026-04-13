@@ -11,30 +11,68 @@ overview: >
 parent_plan: "sentry-otel-integration.execution.plan.md"
 source_analysis: "Sentry reviewer gap analysis (2026-04-12)"
 todos:
+  # === NEXT PRIORITIES (local, no Vercel credentials needed) ===
+  - id: cli-log-level-di
+    content: "Wire runtimeConfig.logLevel into search-cli logger.ts via DI per ADR-078"
+    status: pending
+    priority: next
+    note: "Small, targeted. PR #80 changed `let currentLevel` to `const currentLevel = 'INFO'` and deleted setLogLevel/getLogLevel mutators (knip dead). Wire via SearchCliRuntimeConfig. Assumptions reviewer flagged as ADR-078 violation (2026-04-12)."
+  - id: cli-shutdown-ordering
+    content: "Reorder CLI shutdown: clearAdditionalSinks before disableFileSink in oaksearch.ts finally block"
+    status: pending
+    priority: next
+    note: "One-line defensive fix. disableFileSink nulls logger cache; any log call between it and clearAdditionalSinks would rebuild loggers with Sentry sink still registered but transport already flushed. Sentry reviewer (2026-04-12)."
   - id: early-init-http
     content: "Spike preload locally, then add --import @sentry/node/preload to HTTP server start script and dev runner"
     status: pending
-    note: "First action: 2-minute spike to verify preload + tsup ESM + Node 24 works (assumptions reviewer). Then one-line change per script."
+    priority: next
+    note: "Highest-impact single change — enables auto-instrumentation for Express routes and outbound HTTP. 2-minute local spike first to verify preload + tsup ESM + Node 24 works. No credentials needed."
   - id: express-error-handler
     content: "Adopt Sentry.setupExpressErrorHandler BEFORE createEnrichedErrorLogger"
     status: pending
-    note: "Can run in parallel with Gap 1 (Barney: no hard dependency). Express 5 confirmed supported (@opentelemetry/instrumentation-express >=4.0.0 <6). Add Express 5 integration test."
+    priority: next
+    note: "Can run in parallel with early-init-http (Barney: no hard dependency). Express 5 confirmed supported. Add integration test. No credentials needed."
   - id: adapter-surface-extension
     content: "Add setUser, setTag, setContext, close to SentryNodeRuntime and SentryNodeSdk"
     status: pending
-    note: "Simplified per sentry reviewer: isolation scopes make ambient calls safe. close() for CLI shutdown (sentry reviewer)."
+    priority: next
+    note: "Unblocks cli-close-instead-of-flush, cli-context-enrichment, and cli-metrics. All testable locally in off/fixture mode. Simplified per sentry reviewer: isolation scopes make ambient calls safe."
+  - id: cli-close-instead-of-flush
+    content: "Use Sentry.close() instead of flush() for CLI shutdown"
+    status: pending
+    priority: next
+    note: "Depends on adapter-surface-extension (close on runtime). Noop in off/fixture mode. Local only."
+  - id: cli-logger-di-audit
+    content: "Audit direct-import logger singletons (searchLogger etc.) against ADR-078 — track as known violation, plan remediation"
+    status: pending
+    priority: next
+    note: "Investigation, not implementation. ~35 files import logger singletons. No documented ADR-078 exception exists. Assess scope and propose remediation approach."
+  # === AFTER ADAPTER EXTENSION (still local) ===
+  - id: cli-context-enrichment
+    content: "Add command-level context enrichment to CLI via setTag/setContext"
+    status: pending
+    note: "Depends on adapter-surface-extension. Tag with command name, index target, version."
   - id: custom-metrics
     content: "Expose Sentry.metrics (count, gauge, distribution) on the adapter with beforeSendMetric hook"
     status: pending
-    note: "Via adapter (sentry reviewer: DI seam needed, direct import would require vi.mock). enableMetrics defaults true, no init change. Wire beforeSendMetric into redaction layer."
+    note: "Via adapter (sentry reviewer: DI seam needed). enableMetrics defaults true, no init change. Wire beforeSendMetric into redaction layer."
+  - id: cli-metrics
+    content: "Wire CLI command execution metrics via Sentry.metrics.count"
+    status: pending
+    note: "Depends on custom-metrics (shared adapter). Emit command name, index target as attributes."
+  - id: cli-early-init
+    content: "Add --import @sentry/node/preload to CLI tsx invocations"
+    status: pending
+    note: "Same preload pattern as HTTP server. Lower priority — no central dev runner, requires individual script edits."
+  # === NEEDS CREDENTIALS OR EXTERNAL (defer until Vercel provisioned) ===
   - id: trace-propagation-es
     content: "Add Elasticsearch host to tracePropagationTargets (low-ceremony, Oak-controlled)"
     status: pending
-    note: "ES is our own instance. Split from Oak API per assumptions reviewer. No formal security review needed."
+    note: "ES is our own instance. No formal security review needed. Can implement locally but verify with live traces."
   - id: trace-propagation-oak-api
     content: "Evaluate trace propagation to Oak API (third-party, security review required)"
     status: pending
-    note: "open-api.thenational.academy is third-party from our perspective. Security reviewer must sign off."
+    note: "open-api.thenational.academy is third-party. Security reviewer must sign off."
   - id: profiling-evaluation
     content: "Evaluate @sentry/profiling-node for the HTTP server before production release"
     status: pending
@@ -42,35 +80,7 @@ todos:
   - id: source-maps-automation
     content: "Automate source map upload before production release — investigate Debug IDs vs release-based matching"
     status: pending
-    note: "Must be working BEFORE first production errors arrive. Sentry Debug IDs (build-injected) or Vercel integration. Source maps already generated by tsup."
-  - id: cli-early-init
-    content: "Add --import @sentry/node/preload to CLI tsx invocations"
-    status: pending
-    note: "Same preload pattern as HTTP server. Lower priority. No central dev runner — requires individual script edits."
-  - id: cli-context-enrichment
-    content: "Add command-level context enrichment to CLI via setTag/setContext"
-    status: pending
-    note: "Depends on adapter-surface-extension. Tag with command name, index target, version."
-  - id: cli-metrics
-    content: "Wire CLI command execution metrics via Sentry.metrics.count"
-    status: pending
-    note: "Depends on custom-metrics (shared adapter). Emit command name, index target as attributes."
-  - id: cli-close-instead-of-flush
-    content: "Use Sentry.close() instead of flush() for CLI shutdown"
-    status: pending
-    note: "Depends on adapter-surface-extension (close on runtime). Noop in off/fixture mode."
-  - id: cli-shutdown-ordering
-    content: "Reorder CLI shutdown: clearAdditionalSinks before disableFileSink in oaksearch.ts finally block"
-    status: pending
-    note: "Sentry reviewer (2026-04-12): disableFileSink nulls logger cache. If any log call occurs between disableFileSink and clearAdditionalSinks, loggers rebuild with Sentry sink still registered but transport already flushed. Defensive reorder eliminates the window. Low risk but correct hygiene."
-  - id: cli-log-level-di
-    content: "Investigate and fix currentLevel hardcoding in search-cli logger.ts — wire runtimeConfig.logLevel via DI per ADR-078"
-    status: pending
-    note: "PR #80 changed `let currentLevel` to `const currentLevel = 'INFO'` and deleted setLogLevel/getLogLevel mutators (knip dead). The merge was the moment to inject logLevel via SearchCliRuntimeConfig. Identified 2026-04-12 by assumptions reviewer as ADR-078 violation. Blocks: DEBUG logging requires code changes, not runtime config."
-  - id: cli-logger-di-audit
-    content: "Audit direct-import logger singletons (searchLogger etc.) against ADR-078 — track as known violation, plan remediation"
-    status: pending
-    note: "~35 files import searchLogger/ingestLogger etc. as module-level singletons. Assumptions reviewer confirmed: no documented ADR-078 exception exists for CLI loggers. Betty incorrectly classified this as 'conscious exception'. Must be tracked and remediated."
+    note: "Must be working BEFORE first production errors arrive. Sentry Debug IDs (build-injected) or Vercel integration."
 ---
 
 # Sentry Canonical Alignment

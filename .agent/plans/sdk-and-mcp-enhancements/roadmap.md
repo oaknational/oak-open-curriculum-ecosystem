@@ -118,6 +118,8 @@ WS3: fresh React MCP App rebuild            ▶ active
   Phase 6b: post-Phase 5 docs/gates         ⏳ pending
 C8: auth metadata invariant hardening       ✓ complete
 Output schemas follow-up                    ⏳ current
+Schema resilience + response architecture   ⏳ pending (user-requested, high priority, OQ1 open)
+Upstream API reference metadata             ⏳ pending (user-requested, high priority)
 Future additive feature backlog             ⏳ blocked on remaining canonical work
 ```
 
@@ -151,6 +153,26 @@ Complete on 31 March 2026. These plans remain the closure evidence:
 
 - [archive/completed/auth-safety-correction.plan.md](archive/completed/auth-safety-correction.plan.md)
 - [archive/completed/auth-boundary-type-safety.plan.md](archive/completed/auth-boundary-type-safety.plan.md)
+
+### Schema resilience and response architecture — USER-REQUESTED, HIGH PRIORITY
+
+[active/schema-resilience-and-response-architecture.plan.md](active/schema-resilience-and-response-architecture.plan.md)
+addresses the upstream schema validation fragility exposed by a
+third-party MCP consumer. Covers: `.strict()` migration (open
+question: `.strip()` vs `.passthrough()`), schema drift health
+endpoint on the MCP server (Sentry-monitored), `additionalContext`
+response flag, and direct API access guidance. Vercel deploy hook
+for auto-rebuild on drift noted as future option. Blocked on owner
+decision for OQ1. No dependencies on MCP Apps work.
+
+### Upstream API reference metadata — USER-REQUESTED, HIGH PRIORITY
+
+[active/upstream-api-reference-metadata.plan.md](active/upstream-api-reference-metadata.plan.md)
+adds an `upstreamApi` field to every generated tool descriptor, providing
+the full upstream Oak API URL template, HTTP method, separated path/query
+parameters, and documented statuses. Enables users who discover tools via
+MCP to call the API directly. No dependencies on MCP Apps work — can
+proceed independently on any branch.
 
 ### Output schema follow-up
 

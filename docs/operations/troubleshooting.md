@@ -10,7 +10,9 @@ split_strategy: 'Extract workspace-specific troubleshooting to workspace READMEs
 
 ## Overview
 
-This guide helps diagnose and resolve common issues with the Oak Open Curriculum Ecosystem. Follow the steps in order for each issue.
+This guide helps diagnose and resolve common issues with the
+Oak Open Curriculum Ecosystem. Follow the steps in order for
+each issue.
 
 ## Quick Diagnostics
 
@@ -111,7 +113,8 @@ ingest will have correct values:
 
 All `generate*OakUrl()` functions are defined in `oak-url-convenience.ts`
 (in `@oaknational/curriculum-sdk`) and called from the respective document
-builders/cores listed below. See [ADR-145](../architecture/architectural-decisions/145-oak-url-naming-collision-remediation.md)
+builders/cores listed below. See
+[ADR-145](../architecture/architectural-decisions/145-oak-url-naming-collision-remediation.md)
 for the rename from `canonicalUrl` to `oakUrl`.
 
 | Field          | Source file                    | Status                                               |
@@ -146,10 +149,12 @@ run the following from the `apps/oak-search-cli` workspace to refresh the
 indices.
 
 **Authoritative source**: The complete ingestion workflow, CLI flags, and
-architecture details are documented in
-[apps/oak-search-cli/operations/ingestion/README.md](../../apps/oak-search-cli/operations/ingestion/README.md).
-The commands below are a summary — consult the ingestion README for the full
-reference.
+architecture details are documented in the
+[ingestion README][ingestion-readme].
+The commands below are a summary — consult the ingestion
+README for the full reference.
+
+[ingestion-readme]: ../../apps/oak-search-cli/operations/ingestion/README.md
 
 **Full re-ingest** (replaces all documents):
 
@@ -226,29 +231,43 @@ pnpm test:ui
 pnpm smoke:dev:stub
 ```
 
-Each gate may fix issues for subsequent gates (e.g. `format:root` fixes formatting that `lint:fix` then passes).
+Each gate may fix issues for subsequent gates (e.g.
+`format:root` fixes formatting that `lint:fix` then passes).
 
 ### CI Passes Locally but Fails in CI
 
-Check CI logs for "cache hit, replaying logs" — stale remote Turbo cache. Ensure `turbo.json` `inputs` use `**/*.ts` not directory enumeration.
+Check CI logs for "cache hit, replaying logs" — stale remote
+Turbo cache. Ensure `turbo.json` `inputs` use `**/*.ts` not
+directory enumeration.
 
 ### Pre-Commit Hook Output Too Large
 
-Turbo replays all cached logs during the hook. Redirect output to a file and read the end for the actual error.
+Turbo replays all cached logs during the hook. Redirect output
+to a file and read the end for the actual error.
 
 ### Pre-Commit Blocks Partial Fixes
 
-The hook runs full `type-check lint test` across all packages. On lint-red branches, fix ALL lint errors before attempting any commit — partial fixes will still be blocked by errors elsewhere.
+The hook runs full `type-check lint test` across all packages.
+On lint-red branches, fix ALL lint errors before attempting
+any commit — partial fixes will still be blocked by errors
+elsewhere.
 
 ### ESLint Complexity Threshold on Short Functions
 
-`??` and `?.` each count as branches toward the complexity limit. A 15-line function can hit complexity 10 from nullish coalescing alone. Extract an options-resolver helper to move the coalescing out of the main function.
+`??` and `?.` each count as branches toward the complexity
+limit. A 15-line function can hit complexity 10 from nullish
+coalescing alone. Extract an options-resolver helper to move
+the coalescing out of the main function.
 
 ## File Move and Refactoring Issues
 
 ### ESLint Rule Overrides After File Moves
 
-When moving files between workspaces, ESLint rule overrides must also move — otherwise lint errors appear silently in the destination. Also check that relative links in README files adjust for directory depth changes (e.g. `../../../docs/` may become `../../../../docs/`).
+When moving files between workspaces, ESLint rule overrides
+must also move — otherwise lint errors appear silently in the
+destination. Also check that relative links in README files
+adjust for directory depth changes (e.g. `../../../docs/` may
+become `../../../../docs/`).
 
 ### Stale tsup Entry Points
 
@@ -256,33 +275,50 @@ Stale tsup entries match nothing silently after file moves — remove dead entry
 
 ### Stale ADR File Paths
 
-ADR Implementation sections have file paths that go stale when packages are moved. Always grep ADRs for old paths after a move. Similarly, check TSDoc `@see` links for old GitHub repo URLs when removing a workspace.
+ADR Implementation sections have file paths that go stale
+when packages are moved. Always grep ADRs for old paths after
+a move. Similarly, check TSDoc `@see` links for old GitHub
+repo URLs when removing a workspace.
 
 ### Cross-Package Function Moves
 
-After moving functions between packages (e.g. from `search-cli` to `curriculum-sdk`), rebuild the source package (`pnpm --filter <pkg> build`) before downstream tests will see the new exports via `dist/`. Turborepo cache may hide the issue until a clean build.
+After moving functions between packages (e.g. from
+`search-cli` to `curriculum-sdk`), rebuild the source package
+(`pnpm --filter <pkg> build`) before downstream tests will
+see the new exports via `dist/`. Turborepo cache may hide the
+issue until a clean build.
 
 ### Second-Level Barrels
 
-When migrating facade imports, check for second-level barrels (e.g. `oak.ts` re-exporting from the facade) — they add hidden consumers that do not appear in a direct grep for the facade file.
+When migrating facade imports, check for second-level barrels
+(e.g. `oak.ts` re-exporting from the facade) — they add
+hidden consumers that do not appear in a direct grep for the
+facade file.
 
 ### TS2209 rootDir Ambiguity
 
-When `tsconfig.build.json` narrows `include` from a wide base, add explicit `rootDir: "./src"` for export map resolution.
+When `tsconfig.build.json` narrows `include` from a wide
+base, add explicit `rootDir: "./src"` for export map
+resolution.
 
 ### Vitest v4 Test Filtering
 
-`--testPathPattern` fails in vitest v4. Use file paths as positional args instead: `pnpm vitest run path/to/test.ts`.
+`--testPathPattern` fails in vitest v4. Use file paths as
+positional args instead:
+`pnpm vitest run path/to/test.ts`.
 
 ## Agent Workflow Issues
 
 ### Background Reviewer Agents Not Returned
 
-Reviewer sub-agents dispatched near the end of a conversation turn may be lost when the turn completes. Re-invoke in the next session.
+Reviewer sub-agents dispatched near the end of a conversation
+turn may be lost when the turn completes. Re-invoke in the
+next session.
 
 ### MCP Tool Call Fails with Wrong Param Type
 
-Always read tool descriptors before calling — parameter types are explicit in the schema. Do not guess parameter shapes.
+Always read tool descriptors before calling — parameter types
+are explicit in the schema. Do not guess parameter shapes.
 
 ### Commitlint Rejects Commit
 
@@ -290,11 +326,17 @@ See CONTRIBUTING.md §Code Standards for `subject-case` and `body-max-line-lengt
 
 ### Worktree Agent Patches Don't Apply to Feature Branch
 
-Worktree agents branch from `main`, not the current feature branch. When `main` and feature have diverged, manual file copy and reconciliation is needed.
+Worktree agents branch from `main`, not the current feature
+branch. When `main` and feature have diverged, manual file
+copy and reconciliation is needed.
 
 ### Codex Reviewer Not Resolved
 
-Resolve every reviewer with `pnpm agent-tools:codex-reviewer-resolve <name>` before trusting a Codex review. The underlying `tsx` call may need escalation because it opens a local IPC pipe under `/var/folders/...`.
+Resolve every reviewer with
+`pnpm agent-tools:codex-reviewer-resolve <name>` before
+trusting a Codex review. The underlying `tsx` call may need
+escalation because it opens a local IPC pipe under
+`/var/folders/...`.
 
 ### `git merge --abort` Wipes Staged Changes
 
@@ -317,11 +359,16 @@ The turbo cache itself may be the problem.
 
 ### StrReplace Fails on Plan Files
 
-Unicode quotes (U+2019, U+201C/D) block exact string matching. Copy the target string from the file rather than typing it.
+Unicode quotes (U+2019, U+201C/D) block exact string
+matching. Copy the target string from the file rather than
+typing it.
 
 ### Reviewer Reports Failures That Seem Wrong
 
-Re-run specific gates to verify — reviewers may read stale output. Verify reviewer claims with `glob` or `ls`; they produce consistent false positives on file names and repo names.
+Re-run specific gates to verify — reviewers may read stale
+output. Verify reviewer claims with `glob` or `ls`; they
+produce consistent false positives on file names and repo
+names.
 
 ## TSDoc Issues
 
@@ -329,6 +376,14 @@ Re-run specific gates to verify — reviewers may read stale output. Verify revi
 - Braces `{ }` in TSDoc trigger malformed inline tag errors.
 - `>` in TSDoc examples needs backslash escape.
 - Never use `\x00` in regex — use string-based placeholders (e.g. `___TSDOC_SAFE_N___`).
-- `openapiTS` emits `@constant` as both single-line (`/** @constant */`) and multi-line — regex must handle both forms.
-- ESLint plugins using dynamic file resolution (`@microsoft/tsdoc-config`) must be marked `external` in tsup bundles.
-- `tsdoc.json` `extends` works with `@microsoft/tsdoc-config` 0.18.0; `TSDocConfigFile.findConfigPathForFolder` stops at `package.json`/`tsconfig.json` boundaries — each workspace needs its own `tsdoc.json` with `extends`.
+- `openapiTS` emits `@constant` as both single-line
+  (`/** @constant */`) and multi-line — regex must handle
+  both forms.
+- ESLint plugins using dynamic file resolution
+  (`@microsoft/tsdoc-config`) must be marked `external` in
+  tsup bundles.
+- `tsdoc.json` `extends` works with
+  `@microsoft/tsdoc-config` 0.18.0;
+  `TSDocConfigFile.findConfigPathForFolder` stops at
+  `package.json`/`tsconfig.json` boundaries — each workspace
+  needs its own `tsdoc.json` with `extends`.

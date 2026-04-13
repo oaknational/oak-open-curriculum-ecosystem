@@ -22,12 +22,19 @@ By participating in this project, you agree to abide by our
 
 ## Architecture Guidelines
 
-Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth. These foundational ADRs define the constraints you must follow when contributing — all code generation, types, and validation flow from the OpenAPI schema:
+Architectural Decision Records (ADRs) define how the system should
+work and are the architectural source of truth. These foundational
+ADRs define the constraints you must follow when contributing — all
+code generation, types, and validation flow from the OpenAPI schema:
 
-- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
-- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
-- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
-- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) — Shared parsing helper pattern
+- [ADR-029](docs/architecture/architectural-decisions/029-no-manual-api-data.md)
+  — No manual API data structures
+- [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md)
+  — SDK as single source of truth
+- [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md)
+  — Generation-time extraction
+- [ADR-048](docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md)
+  — Shared parsing helper pattern
 
 See the [ADR index](docs/architecture/architectural-decisions/) for the full list.
 
@@ -54,7 +61,11 @@ This repository is fundamentally about **code generation from OpenAPI schemas**.
 - Re-validate or re-parse in runtime code (use generated helpers)
 - Widen types or add fallbacks for "missing" descriptors
 
-> **Critical**: Read [Schema-First Execution Directive](.agent/directives/schema-first-execution.md) before working on MCP tool execution, argument validation, or response handling. All runtime behaviour must flow from generated artefacts.
+> **Critical**: Read [Schema-First Execution
+> Directive](.agent/directives/schema-first-execution.md) before
+> working on MCP tool execution, argument validation, or response
+> handling. All runtime behaviour must flow from generated
+> artefacts.
 
 ### Layer Boundaries
 
@@ -67,7 +78,9 @@ The architecture flows in one direction: **OpenAPI -> Generation -> Runtime**
 5. **Core Infrastructure** (`packages/core/`)
 6. **Infrastructure Libraries** (`packages/libs/`)
 
-For practical guidance on adding new MCP tools, search indices, SDK helpers, and core packages, see the [Extension Points Guide](docs/engineering/extending.md).
+For practical guidance on adding new MCP tools, search indices, SDK
+helpers, and core packages, see the
+[Extension Points Guide](docs/engineering/extending.md).
 
 ---
 
@@ -180,7 +193,9 @@ workspace READMEs for detailed setup instructions.
 
 ## Development Process
 
-For the complete development lifecycle — branching, TDD, quality gates, CI, AI review, human review, merge, and release — see the [Development Workflow](docs/engineering/workflow.md).
+For the complete development lifecycle — branching, TDD, quality
+gates, CI, AI review, human review, merge, and release — see the
+[Development Workflow](docs/engineering/workflow.md).
 
 ### 1. Create a Feature Branch
 
