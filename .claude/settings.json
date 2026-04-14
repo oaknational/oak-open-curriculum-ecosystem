@@ -64,7 +64,8 @@
       "WebFetch(domain:docs.sentry.io)",
       "WebFetch(domain:github.com)",
       "mcp__sentry-ooc-mcp__whoami",
-      "mcp__sentry-ooc-mcp__find_releases"
+      "mcp__sentry-ooc-mcp__find_releases",
+      "WebFetch(domain:support.claude.com)"
     ]
   },
   "hooks": {

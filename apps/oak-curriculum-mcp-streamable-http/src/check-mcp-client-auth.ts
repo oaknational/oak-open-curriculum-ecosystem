@@ -18,7 +18,7 @@ import type { UniversalToolName } from '@oaknational/curriculum-sdk/public/mcp-t
 import type { RuntimeConfig } from './runtime-config.js';
 import type { ResourceValidationResult } from './resource-parameter-validator.js';
 import { createAuthErrorResponse } from './auth-error-response.js';
-import { z } from 'zod';
+import { authInfoExtraSchema } from './auth/mcp-auth/auth-info-schema.js';
 
 /**
  * Injected dependencies for {@link checkMcpClientAuth}.
@@ -34,19 +34,6 @@ export interface CheckMcpClientAuthDeps {
     logger: Logger,
   ) => ResourceValidationResult;
 }
-
-/**
- * Zod schema for safely accessing `AuthInfo.extra.userId`.
- *
- * Uses `.loose()` to preserve unknown properties from `AuthInfo.extra`
- * without rejecting them — the extra field is `Record<string, unknown>` by
- * design, so unknown keys are expected but should not be stripped.
- *
- * Note: `.loose()` is the Zod v4 equivalent of `.passthrough()` in Zod v3.
- *
- * @see auth/mcp-auth/auth-info-schema.ts — shared schema for the full AuthInfo boundary
- */
-const authInfoExtraSchema = z.object({ userId: z.string().optional() }).loose();
 
 /**
  * Checks MCP client authentication for a tool.

@@ -1,10 +1,4 @@
-import {
-  normalizeError,
-  sanitiseObject,
-  type LogContextInput,
-  type Logger,
-  type LogSink,
-} from '@oaknational/logger';
+import { type LogContextInput, type Logger, type LogSink } from '@oaknational/logger';
 import { err, type Result } from '@oaknational/result';
 import {
   createInMemoryMcpObservationRecorder,
@@ -15,15 +9,19 @@ import {
 import {
   createSentryConfig,
   createSentryLogSink,
-  flushSentry,
   initialiseSentry,
   type FixtureSentryStore,
-  type SentryFlushError,
   type SentryNodeRuntime,
   type SentryNodeSdk,
 } from '@oaknational/sentry-node';
 import { trace, type Tracer } from '@opentelemetry/api';
-import type { WithActiveSpanOptions } from '@oaknational/observability';
+import type {
+  ObservabilityCloseError,
+  ObservabilityContextPayload,
+  ObservabilityFlushError,
+  ObservabilityUser,
+  WithActiveSpanOptions,
+} from '@oaknational/observability';
 import type { HttpLoggerOptions } from '../logging/index.js';
 import { createHttpLogger } from '../logging/index.js';
 import type { RuntimeConfig } from '../runtime-config.js';
@@ -32,6 +30,7 @@ import { describeHttpObservabilityError } from './http-observability-error.js';
 import type { HttpSpanOptions, HttpSyncSpanOptions, SpanFunctions } from './span-helpers.js';
 import { createSpanFunctions } from './span-helpers.js';
 import { createHttpPostRedactionHooks } from './sanitise-mcp-events.js';
+import { createSentryDelegates } from './sentry-observability-delegates.js';
 
 export { describeHttpObservabilityError } from './http-observability-error.js';
 export type { HttpSpanHandle, HttpSpanOptions, HttpSyncSpanOptions } from './span-helpers.js';
@@ -60,7 +59,39 @@ export interface HttpObservability extends McpObservationRuntime {
   withSpan<T>(options: HttpSpanOptions<T>): Promise<T>;
   withSpanSync<T>(options: HttpSyncSpanOptions<T>): T;
   captureHandledError(error: unknown, context?: LogContextInput): void;
-  flush(timeoutMs?: number): Promise<Result<void, SentryFlushError>>;
+  /**
+   * Set the user identity on the current isolation scope.
+   *
+   * @remarks Called per-request from the MCP handler when auth context
+   * is available. Sentry v8+ forks an isolation scope per Express
+   * request, so this writes to the request's scope only. Pass `null`
+   * to clear user context.
+   */
+  setUser(user: ObservabilityUser | null): void;
+  /**
+   * Set a tag on the current isolation scope.
+   *
+   * @remarks Tags are string-only. Sentry serialises tag values as
+   * strings; number/boolean would add no value and mislead callers
+   * into expecting typed filtering.
+   */
+  setTag(key: string, value: string): void;
+  /**
+   * Set structured context on the current isolation scope.
+   *
+   * @remarks Pass `null` to clear a named context.
+   */
+  setContext(name: string, context: ObservabilityContextPayload | null): void;
+  flush(timeoutMs?: number): Promise<Result<void, ObservabilityFlushError>>;
+  /**
+   * Close the observability transport — drains pending events AND disables the SDK.
+   *
+   * @remarks Preferred over {@link flush} for process shutdown. `close()`
+   * drains the event queue and then disables the SDK, which is the correct
+   * semantic when the process is about to exit. All three shutdown paths
+   * (SIGTERM, server error, bootstrap failure) should use this method.
+   */
+  close(timeoutMs?: number): Promise<Result<void, ObservabilityCloseError>>;
 }
 
 const noopMcpObservationRecorder: McpObservationRecorder = {
@@ -105,6 +136,7 @@ interface BuildObservabilityParams {
 
 function buildObservabilityObject(params: BuildObservabilityParams): HttpObservability {
   const spanFunctions = createSpanFunctions(params.tracer);
+  const delegates = createSentryDelegates(params.sentryRuntime);
 
   const observability: HttpObservability = {
     service: params.serviceName,
@@ -139,15 +171,7 @@ function buildObservabilityObject(params: BuildObservabilityParams): HttpObserva
     },
     withSpan: spanFunctions.withSpan,
     withSpanSync: spanFunctions.withSpanSync,
-    captureHandledError(error, captureContext): void {
-      params.sentryRuntime.captureHandledError(
-        normalizeError(error),
-        sanitiseObject(captureContext) ?? undefined,
-      );
-    },
-    async flush(timeoutMs): Promise<Result<void, SentryFlushError>> {
-      return await flushSentry(params.sentryRuntime, timeoutMs);
-    },
+    ...delegates,
   };
 
   return observability;

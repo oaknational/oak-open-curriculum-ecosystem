@@ -91,7 +91,7 @@ function registerLessonsCmd(
             searchDeps,
           );
         },
-        observability,
+        observability ? { observability, commandName: 'search.lessons' } : undefined,
       ),
     );
 }
@@ -140,7 +140,7 @@ function registerUnitsCmd(
             searchDeps,
           );
         },
-        observability,
+        observability ? { observability, commandName: 'search.units' } : undefined,
       ),
     );
 }
@@ -187,7 +187,7 @@ function registerSequencesCmd(
             searchDeps,
           );
         },
-        observability,
+        observability ? { observability, commandName: 'search.sequences' } : undefined,
       ),
     );
 }

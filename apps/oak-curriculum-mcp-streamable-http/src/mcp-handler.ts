@@ -15,6 +15,7 @@ import { normalizeError } from '@oaknational/logger';
 import type { Logger } from '@oaknational/logger';
 import type { AuthInfo } from '@modelcontextprotocol/sdk/server/auth/types.js';
 import type { McpServerFactory } from './mcp-request-context.js';
+import { authInfoExtraSchema } from './auth/mcp-auth/auth-info-schema.js';
 import { createChildLogger } from './logging/index.js';
 import type { HttpObservability } from './observability/http-observability.js';
 
@@ -134,6 +135,27 @@ function registerCleanupHandler(
 }
 
 /**
+ * Enrich the Sentry isolation scope with MCP method and user identity.
+ *
+ * @remarks Called early in the request lifecycle before transport handling.
+ * Uses Zod safeParse for safe userId extraction from `AuthInfo.extra`.
+ */
+function enrichObservabilityScope(
+  req: McpHandlerRequest,
+  observability: HttpObservability,
+  mcpMethod: string | undefined,
+): void {
+  if (mcpMethod) {
+    observability.setTag('mcp.method', mcpMethod);
+  }
+  const extraResult = authInfoExtraSchema.safeParse(req.auth?.extra);
+  const userId = extraResult.success ? extraResult.data.userId : undefined;
+  if (userId) {
+    observability.setUser({ id: userId });
+  }
+}
+
+/**
  * Per-request MCP handler (stateless pattern).
  *
  * Uses narrow request/response interfaces so test fakes satisfy the types
@@ -152,6 +174,8 @@ export function createMcpHandler(
         : undefined;
     const mcpMethod = extractMcpMethod(req.body);
     log?.debug('MCP request received', { method: req.method, path: req.path, mcpMethod });
+
+    enrichObservabilityScope(req, observability, mcpMethod);
 
     const { server, transport } = mcpFactory();
     await server.connect(transport);

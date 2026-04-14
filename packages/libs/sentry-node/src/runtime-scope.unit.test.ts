@@ -56,7 +56,11 @@ function createFakeSdk(): {
 
 function expectOk<T>(result: { readonly ok: boolean; readonly value?: T }): T {
   expect(result.ok).toBe(true);
-  return (result as { readonly value: T }).value;
+  const { value } = result;
+  if (value === undefined) {
+    throw new Error('Expected result to have a value');
+  }
+  return value;
 }
 
 function createOffConfig(): Extract<ParsedSentryConfig, { readonly mode: 'off' }> {

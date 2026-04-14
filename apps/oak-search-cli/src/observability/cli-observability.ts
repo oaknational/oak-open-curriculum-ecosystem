@@ -21,16 +21,21 @@ import { err, ok, type Result } from '@oaknational/result';
 import {
   createSentryConfig,
   createSentryLogSink,
-  flushSentry,
   initialiseSentry,
+  mapCloseError,
+  mapFlushError,
   type FixtureSentryStore,
   type ParsedSentryConfig,
-  type SentryCloseError,
-  type SentryFlushError,
   type SentryNodeRuntime,
   type SentryNodeSdk,
 } from '@oaknational/sentry-node';
-import { withActiveSpan, type SpanAttributes } from '@oaknational/observability';
+import {
+  withActiveSpan,
+  type ObservabilityCloseError,
+  type ObservabilityContextPayload,
+  type ObservabilityFlushError,
+  type SpanAttributes,
+} from '@oaknational/observability';
 import type { SearchCliRuntimeConfig } from '../runtime-config.js';
 import type { CliObservabilityError } from './cli-observability-error.js';
 
@@ -52,14 +57,28 @@ export interface CliObservability {
   readonly fixtureStore?: FixtureSentryStore;
   withSpan<T>(options: CliSpanOptions<T>): Promise<T>;
   captureHandledError(error: unknown, context?: LogContextInput): void;
-  flush(timeoutMs?: number): Promise<Result<void, SentryFlushError>>;
   /**
-   * Close the Sentry transport — drains pending events AND disables the SDK.
+   * Set a tag on the current scope.
+   *
+   * @remarks Tags are string-only. Used for CLI command enrichment
+   * (e.g. `cli.command`, `cli.index_target`).
+   */
+  setTag(key: string, value: string): void;
+  /**
+   * Set structured context on the current scope.
+   *
+   * @remarks Pass `null` to clear a named context.
+   */
+  setContext(name: string, context: ObservabilityContextPayload | null): void;
+  flush(timeoutMs?: number): Promise<Result<void, ObservabilityFlushError>>;
+  /**
+   * Close the observability transport — drains pending events AND disables the SDK.
    *
    * @remarks Preferred over {@link flush} for CLI shutdown. `close()`
-   * is the Sentry-recommended shutdown for short-lived processes.
+   * is the recommended shutdown for short-lived processes: it drains the
+   * event queue and then disables the SDK.
    */
-  close(timeoutMs?: number): Promise<Result<void, SentryCloseError>>;
+  close(timeoutMs?: number): Promise<Result<void, ObservabilityCloseError>>;
 }
 
 interface CreateCliObservabilityOptions {
@@ -100,12 +119,27 @@ function buildCliObservability(params: BuildCliObservabilityParams): CliObservab
       );
     },
 
-    async flush(timeoutMs): Promise<Result<void, SentryFlushError>> {
-      return await flushSentry(sentryRuntime, timeoutMs);
+    setTag(key, value): void {
+      sentryRuntime.setTag(key, value);
+    },
+    setContext(name, ctx): void {
+      sentryRuntime.setContext(name, ctx);
     },
 
-    async close(timeoutMs): Promise<Result<void, SentryCloseError>> {
-      return await sentryRuntime.close(timeoutMs);
+    async flush(timeoutMs): Promise<Result<void, ObservabilityFlushError>> {
+      const result = await sentryRuntime.flush(timeoutMs);
+      if (!result.ok) {
+        return err(mapFlushError(result.error));
+      }
+      return result;
+    },
+
+    async close(timeoutMs): Promise<Result<void, ObservabilityCloseError>> {
+      const result = await sentryRuntime.close(timeoutMs);
+      if (!result.ok) {
+        return err(mapCloseError(result.error));
+      }
+      return result;
     },
   };
 }

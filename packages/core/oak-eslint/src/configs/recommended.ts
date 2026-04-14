@@ -119,13 +119,10 @@ export const recommended: Linter.Config[] = [
       'import-x/no-useless-path-segments': ['error'],
       'import-x/no-named-as-default': 'error',
 
-      // Check suppression — eslint-disable is banned unless user-approved
-      // TODO: Promote to 'error' after Phase 3 eslint-disable remediation is complete
-      // See: .agent/plans/architecture-and-infrastructure/archive/completed/ci-consolidation-and-gate-parity.plan.md
-      '@oaknational/no-eslint-disable': 'warn',
+      '@oaknational/no-eslint-disable': 'error',
 
       // TSDoc
-      'tsdoc/syntax': 'warn',
+      'tsdoc/syntax': 'error',
 
       // Prevent export *
       'no-restricted-syntax': [

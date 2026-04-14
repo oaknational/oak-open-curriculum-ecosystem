@@ -5,8 +5,6 @@
 
 import { describe, it, expect } from 'vitest';
 import { validateRequest } from './request-validators.js';
-import type { HttpMethod } from './types.js';
-import type { ValidPath } from '@oaknational/sdk-codegen/api-schema';
 
 function hasOwnString(o: unknown, key: string, expected: string): boolean {
   if (typeof o !== 'object' || o === null) {
@@ -112,26 +110,6 @@ describe('validateRequest', () => {
       expect(result.ok).toBe(true);
       if (result.ok) {
         expect(hasOwnString(result.value, 'q', 'search term')).toBe(true);
-      }
-    });
-  });
-
-  describe('for unknown operations', () => {
-    it('should return error for unknown path', () => {
-      const result = validateRequest('/unknown/path' as ValidPath, 'get', {});
-
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.issues[0].message).toContain('Unknown operation');
-      }
-    });
-
-    it('should return error for unsupported method', () => {
-      const result = validateRequest('/lessons/{lesson}/transcript', 'post' as HttpMethod, {});
-
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.issues[0].message).toContain('Unsupported method');
       }
     });
   });

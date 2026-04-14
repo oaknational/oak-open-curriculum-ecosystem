@@ -163,6 +163,7 @@ function registerTools(
     const wrappedHandler = wrapToolHandler(
       tool.name,
       async (params: unknown, extra: Parameters<ToolCallback>[0]) => {
+        options.observability.setTag('mcp.tool_name', tool.name);
         return handleToolWithAuthInterception({
           tool,
           params,

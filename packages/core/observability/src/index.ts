@@ -19,6 +19,11 @@ export {
 } from './span-context.js';
 export type {
   ActiveSpanContextSnapshot,
+  ObservabilityCloseError,
+  ObservabilityContextPayload,
+  ObservabilityFlushError,
+  ObservabilityPrimitiveValue,
+  ObservabilityUser,
   SpanAttributes,
   SpanAttributeValue,
   TelemetryScalar,

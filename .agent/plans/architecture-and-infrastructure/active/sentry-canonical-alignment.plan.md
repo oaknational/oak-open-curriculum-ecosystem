@@ -47,22 +47,22 @@ todos:
     status: done
     priority: next
     note: "Investigated 2026-04-13. 15 files import logger singletons directly. Remediation: createSearchLogger(config) factory at composition root (matches HTTP server pattern). ~15-file refactor, scoped to search CLI."
-  # === NEXT: CONTEXT ENRICHMENT + CLEAN SHUTDOWN (local) ===
+  # === COMPLETED (2026-04-14, Sentry last mile session) ===
   - id: http-close-on-shutdown
     content: "Add close() to HttpObservability, switch all 3 shutdown paths from flush to close"
-    status: pending
+    status: done
     priority: next
-    note: "New item from sentry closing reviewer (2026-04-13). All three paths in server-runtime.ts (SIGTERM, server error, bootstrap failure). Use provider-neutral ObservabilityCloseError, not SentryCloseError."
+    note: "Implemented 2026-04-14. Provider-neutral ObservabilityCloseError + ObservabilityFlushError types in packages/core/observability/. Both flush() and close() return types migrated from Sentry-specific to provider-neutral (Fred finding). createFlushObservability renamed to createShutdownObservability. Error mappers extracted to sentry-observability-delegates.ts. 4-reviewer validated plan."
   - id: cli-context-enrichment
     content: "Add command-level context enrichment to CLI via setTag/setContext"
-    status: pending
+    status: done
     priority: next
-    note: "Adapter surface done. Wire via WithLoadedCliEnvOptions bag (Betty + type-reviewer + code-reviewer converge). Enumerate ALL withLoadedCliEnv call sites including threads, suggest, facets. Use provider-neutral types at app layer."
+    note: "Implemented 2026-04-14. setTag/setContext added to CliObservability. WithLoadedCliEnvOptions bag replaces bare 3rd param. 5 call sites converted with explicit commandName (search.lessons, search.units, search.sequences, observe.telemetry, observe.summary). Default commandName 'oak.cli.command'. Admin/eval sites not yet threaded (additive, not blocking)."
   - id: http-context-enrichment
     content: "Wire setUser/setTag/setContext on HttpObservability for MCP handler enrichment"
-    status: pending
+    status: done
     priority: next
-    note: "New item split from adapter-surface-extension. Surface methods using provider-neutral ObservabilityUser type (not SentryUser). Wire in mcp-handler.ts (user ID from Clerk, mcp.method tag) and handlers.ts (mcp.tool_name tag). Add scope isolation test."
+    note: "Implemented 2026-04-14. setUser/setTag/setContext on HttpObservability via provider-neutral types from @oaknational/observability (Fred: single source of truth, not per-app). mcp-handler.ts sets mcp.method tag + user from req.auth.extra.userId. handlers.ts sets mcp.tool_name tag inside per-request callback. Sentry delegation extracted to sentry-observability-delegates.ts. Code-reviewer + sentry-reviewer approved. Test gap: enrichment call sites not yet covered by targeted tests."
   # === ENHANCEMENTS (deferred, not needed for 'working') ===
   - id: custom-metrics
     content: "Expose Sentry.metrics (count, gauge, distribution) on the adapter with beforeSendMetric hook"
@@ -93,7 +93,7 @@ todos:
     content: "Automate source map upload via sentry-cli post-build step"
     status: pending
     priority: next
-    note: "CRITICAL for production. @sentry/esbuild-plugin does NOT work with tsup (GitHub egoist/tsup#1260). Use sentry-cli sourcemaps inject + upload as post-build step. Spike first. Consider whether tsup itself should be replaced — see build tooling evaluation."
+    note: "CRITICAL for production. Build tooling decision (2026-04-14): keep tsup, use sentry-cli post-build (Betty + Barney + assumptions-reviewer converge). Spike sentry-cli sourcemaps inject on tsup ESM output first. Needs SENTRY_AUTH_TOKEN. Independent of context enrichment work. See approved plan at ~/.claude/plans/cuddly-swinging-ocean.md."
 ---
 
 # Sentry Canonical Alignment

@@ -38,17 +38,17 @@ function resolvePort(runtimeConfig: RuntimeConfig): number {
   return runtimeConfig.env.PORT ? Number(runtimeConfig.env.PORT) : 3333;
 }
 
-function createFlushObservability(
+function createShutdownObservability(
   observability: HttpObservability,
   bootstrapLog: Logger,
 ): (exitReason: string) => Promise<void> {
   return async (exitReason: string): Promise<void> => {
-    const flushResult = await observability.flush();
+    const closeResult = await observability.close();
 
-    if (!flushResult.ok) {
-      bootstrapLog.warn('observability.flush.failed', {
+    if (!closeResult.ok) {
+      bootstrapLog.warn('observability.close.failed', {
         exitReason,
-        error: flushResult.error.kind,
+        error: closeResult.error.kind,
       });
     }
   };
@@ -58,7 +58,7 @@ function createServerErrorHandler(
   port: number,
   bootstrapLog: Logger,
   observability: HttpObservability,
-  flushObservability: (exitReason: string) => Promise<void>,
+  shutdownObservability: (exitReason: string) => Promise<void>,
   exit: (code: number) => void,
 ): (error: NodeJS.ErrnoException) => void {
   return (error: NodeJS.ErrnoException): void => {
@@ -76,7 +76,7 @@ function createServerErrorHandler(
         boundary: 'server_listen_error',
         port,
       });
-      await flushObservability('server_error');
+      await shutdownObservability('server_error');
       exit(1);
     })();
   };
@@ -84,7 +84,7 @@ function createServerErrorHandler(
 
 function createShutdownHandler(
   bootstrapLog: Logger,
-  flushObservability: (exitReason: string) => Promise<void>,
+  shutdownObservability: (exitReason: string) => Promise<void>,
   exit: StartConfiguredHttpServerDeps['exit'],
 ): (signal: ShutdownSignal) => void {
   let shuttingDown = false;
@@ -96,7 +96,7 @@ function createShutdownHandler(
     shuttingDown = true;
     void (async () => {
       bootstrapLog.info('shutdown.signal.received', { signal });
-      await flushObservability(signal);
+      await shutdownObservability(signal);
       exit(0);
     })();
   };
@@ -118,7 +118,7 @@ export async function startConfiguredHttpServer(
   deps: StartConfiguredHttpServerDeps,
 ): Promise<HttpServerLike> {
   const bootstrapLog = deps.observability.createLogger({ name: 'streamable-http:bootstrap' });
-  const flushObservability = createFlushObservability(deps.observability, bootstrapLog);
+  const shutdownObservability = createShutdownObservability(deps.observability, bootstrapLog);
   const bootstrappedApp = await (deps.bootstrapApp ?? bootstrapApp)({
     startApp: async () =>
       await deps.createApp({
@@ -127,7 +127,7 @@ export async function startConfiguredHttpServer(
       }),
     logger: bootstrapLog,
     onStartupFailure: async () => {
-      await flushObservability('bootstrap_failure');
+      await shutdownObservability('bootstrap_failure');
     },
     exit: deps.exit,
   });
@@ -139,10 +139,16 @@ export async function startConfiguredHttpServer(
 
   server.on(
     'error',
-    createServerErrorHandler(port, bootstrapLog, deps.observability, flushObservability, deps.exit),
+    createServerErrorHandler(
+      port,
+      bootstrapLog,
+      deps.observability,
+      shutdownObservability,
+      deps.exit,
+    ),
   );
 
-  const handleShutdown = createShutdownHandler(bootstrapLog, flushObservability, deps.exit);
+  const handleShutdown = createShutdownHandler(bootstrapLog, shutdownObservability, deps.exit);
   deps.onSignal('SIGINT', () => handleShutdown('SIGINT'));
   deps.onSignal('SIGTERM', () => handleShutdown('SIGTERM'));
 

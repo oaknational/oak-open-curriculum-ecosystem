@@ -298,3 +298,74 @@ Requirements: performant, standards-compliant, processes TS
 directly or via tsc, broad adoption, idiomatic infrastructure.
 This affects source maps (blocked by tsup incompatibility)
 and potentially other build concerns.
+
+### Session 2026-04-14: Sentry last mile + build tooling decision
+
+**Build tooling decision: keep tsup.** 4 reviewers (Betty,
+Barney, Fred, assumptions-reviewer) all converge: replacing tsup
+across 17 workspaces is unnecessary churn. The two real problems
+(no composable config, Sentry plugin incompatibility) have
+direct fixes. Betty: "the reversible decision (shared config)
+before the irreversible decision (tool migration)." Barney: 3
+factory functions, not 4 — merge lib patterns (externals is an
+optional parameter, not a pattern boundary). Sentry-cli
+post-build is architecturally correct — separates sourcemap
+upload (deployment concern) from build (compilation concern).
+
+**Provider-neutral types must live in core/observability, not
+per-app** (Fred critical finding). Single source of truth for
+`ObservabilityUser`, `ObservabilityFlushError`,
+`ObservabilityCloseError`, `ObservabilityContextPayload`,
+`ObservabilityPrimitiveValue`. Both apps import from
+`@oaknational/observability`. The delegation factory maps to
+adapter types internally. This also fixes the pre-existing
+`SentryFlushError` leak through the interface boundary — both
+`flush()` and `close()` now return provider-neutral error types.
+
+**Tracks don't block each other** (assumptions-reviewer critical
+finding). The plan initially sequenced Track 1 (build tooling)
+before Track 2 (Sentry last mile) "because composable config
+reduces diff surface for source maps." This was a false
+dependency: `sentry-cli sourcemaps inject` operates on emitted
+files, not build configs. Decoupling saved an entire session of
+unnecessary prerequisite work.
+
+**tsconfig `$schema` is NOT inherited via `extends`.** Only
+`agent-tools/` has it. All other ~37 workspace tsconfig files
+(both `tsconfig.json` and `tsconfig.build.json`) need it added.
+This is a JSON annotation for IDE intellisense, not a
+TypeScript compiler option.
+
+**File/function length limits drive correct extraction.** After
+adding enrichment methods, `http-observability.ts` hit 291 lines
+(limit 250) and `buildObservabilityObject` hit 69 lines (limit
+50). Extracting `createSentryDelegates` to
+`sentry-observability-delegates.ts` was the structurally correct
+split — the delegation bridge became a separately testable module
+with a single responsibility. The lint constraint forced the
+right architectural decision.
+
+**Assumptions-reviewer: reviewer plan proportionality.** The
+initial plan proposed 10+ specialist reviewers across 4 phases.
+Assumptions-reviewer trimmed to 4-5: config-reviewer +
+sentry-reviewer pre-implementation, test-reviewer during,
+code-reviewer gateway post-implementation, on-demand specialists
+only if gateway flags. This is proportional to the code change
+size (~300 insertions across 14 files).
+
+**Code-reviewer finding: enrichment call site test gap.** The
+Sentry adapter layer is well-tested (fixture mode captures,
+off-mode noops, live-mode delegation). But the wiring in
+`mcp-handler.ts` and `handlers.ts` that calls `setTag`/`setUser`
+with the right values under the right conditions has no targeted
+test coverage. The plumbing is proven but the integration is not.
+Follow-up: add targeted tests for the 3 call sites.
+
+**Sentry-reviewer: all patterns are correct.** Tag naming
+(`mcp.method`, `mcp.tool_name`, `cli.command`) is idiomatic.
+User enrichment is correct for Sentry v10 with Express isolation
+scopes. `close()` is correct for all 3 HTTP shutdown paths (all
+terminal, all followed by `process.exit()`). `flush()` correctly
+retained for non-terminal use. Suggestion: consider adding
+`mcp_request` structured context alongside tags for richer error
+detail view.

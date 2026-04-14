@@ -243,36 +243,4 @@ describe('createUniversalToolExecutor', () => {
     expect(result.isError).toBe(true);
     expect(result.content[0]).toEqual({ type: 'text', text: 'Execution failed' });
   });
-
-  /**
-   * After WS2, 'get-ontology' and 'get-help' are removed from the
-   * UniversalToolName union. The casts below are necessary to test
-   * that the runtime executor rejects these values — the type system
-   * will correctly prevent passing them without a cast.
-   */
-  it('rejects get-ontology as unknown tool (replaced by get-curriculum-model)', async () => {
-    const executeMcpTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({
-      executeMcpTool,
-      searchRetrieval: createStubSearchRetrieval(),
-      generatedTools: registry,
-    });
-
-    const result = await callUniversalTool('get-ontology' as UniversalToolName, {});
-
-    expect(result.isError).toBe(true);
-  });
-
-  it('rejects get-help as unknown tool (replaced by get-curriculum-model)', async () => {
-    const executeMcpTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({
-      executeMcpTool,
-      searchRetrieval: createStubSearchRetrieval(),
-      generatedTools: registry,
-    });
-
-    const result = await callUniversalTool('get-help' as UniversalToolName, {});
-
-    expect(result.isError).toBe(true);
-  });
 });

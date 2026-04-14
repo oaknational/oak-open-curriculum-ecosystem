@@ -1,16 +1,17 @@
 /**
- * Shared Zod schema for the MCP SDK's AuthInfo type.
+ * Shared Zod schemas for the MCP SDK's AuthInfo type.
  *
  * Validates auth data at the Clerk/MCP boundary in `createMcpAuthClerk`.
- * `check-mcp-client-auth.ts` has its own `authInfoExtraSchema` for
- * safely accessing `AuthInfo.extra.userId`.
+ * `authInfoExtraSchema` is shared by `check-mcp-client-auth.ts` (tool-level
+ * auth checking) and `mcp-handler.ts` (Sentry user enrichment).
  *
- * Uses `.strict()` to reject unknown fields — if a future SDK version
- * adds fields, the Zod parse fails fast, prompting an intentional
+ * Uses `.strict()` on the full schema to reject unknown fields — if a future
+ * SDK version adds fields, the Zod parse fails fast, prompting an intentional
  * schema update rather than silently accepting drift.
  *
  * @see mcp-auth-clerk.ts — validates verifyClerkToken output before setting req.auth
  * @see ../../check-mcp-client-auth.ts — tool-level auth checking
+ * @see ../../mcp-handler.ts — Sentry user enrichment
  */
 
 import { z } from 'zod';
@@ -44,3 +45,19 @@ export const authInfoSchema = z
     extra: z.record(z.string(), z.unknown()).optional(),
   })
   .strict();
+
+/**
+ * Zod schema for safely accessing `AuthInfo.extra.userId`.
+ *
+ * @remarks Uses `.loose()` (Zod v4 equivalent of `.passthrough()`) to
+ * preserve unknown properties from `AuthInfo.extra` without rejecting
+ * them — the extra field is `Record<string, unknown>` by design, so
+ * unknown keys are expected but should not be stripped.
+ *
+ * Shared by:
+ * - `check-mcp-client-auth.ts` — tool-level auth checking
+ * - `mcp-handler.ts` — Sentry user enrichment
+ *
+ * @see authInfoSchema — full AuthInfo boundary validation
+ */
+export const authInfoExtraSchema = z.object({ userId: z.string().optional() }).loose();

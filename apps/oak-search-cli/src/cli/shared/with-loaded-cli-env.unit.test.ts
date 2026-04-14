@@ -45,6 +45,8 @@ describe('withLoadedCliEnv span wrapping', () => {
         return await options.run();
       },
       captureHandledError: vi.fn(),
+      setTag: vi.fn(),
+      setContext: vi.fn(),
       flush: vi.fn().mockResolvedValue(ok(undefined)),
       close: vi.fn().mockResolvedValue(ok(undefined)),
     };
@@ -52,12 +54,16 @@ describe('withLoadedCliEnv span wrapping', () => {
     const action = vi.fn<(env: SearchCliEnv) => Promise<void>>().mockResolvedValue(undefined);
     const loader = createFakeEnvLoader(ok(fakeEnv));
 
-    const wrappedAction = withLoadedCliEnv(loader, action, fakeObservability);
+    const wrappedAction = withLoadedCliEnv(loader, action, {
+      observability: fakeObservability,
+      commandName: 'test.command',
+    });
     await wrappedAction();
 
     expect(action).toHaveBeenCalledWith(fakeEnv);
     expect(spanNames).toHaveLength(1);
-    expect(spanNames[0]).toMatch(/^oak\.cli\.command/);
+    expect(spanNames[0]).toBe('test.command');
+    expect(fakeObservability.setTag).toHaveBeenCalledWith('cli.command', 'test.command');
   });
 
   it('runs action directly when observability is undefined', async () => {
@@ -80,6 +86,8 @@ describe('withLoadedCliEnv span wrapping', () => {
         return await options.run();
       },
       captureHandledError: vi.fn(),
+      setTag: vi.fn(),
+      setContext: vi.fn(),
       flush: vi.fn().mockResolvedValue(ok(undefined)),
       close: vi.fn().mockResolvedValue(ok(undefined)),
     };
@@ -87,8 +95,11 @@ describe('withLoadedCliEnv span wrapping', () => {
     const action = vi.fn().mockRejectedValue(new Error('boom'));
     const loader = createFakeEnvLoader(ok(fakeEnv));
 
-    const wrappedAction = withLoadedCliEnv(loader, action, fakeObservability);
+    const wrappedAction = withLoadedCliEnv(loader, action, {
+      observability: fakeObservability,
+    });
     await expect(wrappedAction()).rejects.toThrow('boom');
+    expect(fakeObservability.setTag).toHaveBeenCalledWith('cli.command', 'oak.cli.command');
   });
 
   it('still sets exit code on env load failure without observability', async () => {

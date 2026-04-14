@@ -26,7 +26,7 @@ interface ServerHarness {
     readonly errorCalls: LogCall[];
     readonly debugCalls: LogCall[];
   };
-  readonly flushCalls: number;
+  readonly closeCalls: number;
   readonly server: HttpServerLike;
   readonly serverHandlers: ReadonlyMap<string, (error: NodeJS.ErrnoException) => void>;
   readonly signalHandlers: ReadonlyMap<'SIGINT' | 'SIGTERM', () => void>;
@@ -117,7 +117,7 @@ function createServerHarness(): ServerHarness {
   const observability = createFakeHttpObservability();
   const logger = createFakeLogger();
   const handledErrors: { readonly error: unknown; readonly context?: unknown }[] = [];
-  let flushCalls = 0;
+  let closeCalls = 0;
   let bootstrapArgs:
     | {
         readonly onStartupFailure?: (error: unknown) => Promise<void> | void;
@@ -145,8 +145,8 @@ function createServerHarness(): ServerHarness {
     },
     handledErrors,
     logger,
-    get flushCalls() {
-      return flushCalls;
+    get closeCalls() {
+      return closeCalls;
     },
     server,
     serverHandlers,
@@ -160,8 +160,20 @@ function createServerHarness(): ServerHarness {
           captureHandledError(error, context): void {
             handledErrors.push({ error, context });
           },
+          setUser() {
+            // No-op in test harness.
+          },
+          setTag() {
+            // No-op in test harness.
+          },
+          setContext() {
+            // No-op in test harness.
+          },
           async flush() {
-            flushCalls += 1;
+            return { ok: true, value: undefined };
+          },
+          async close() {
+            closeCalls += 1;
             return { ok: true, value: undefined };
           },
         },
@@ -202,7 +214,7 @@ describe('startConfiguredHttpServer', () => {
     await harness.bootstrapArgs?.onStartupFailure?.(new Error('bootstrap failure'));
 
     expect(exitCodes).toEqual([]);
-    expect(harness.flushCalls).toBe(1);
+    expect(harness.closeCalls).toBe(1);
     expect(harness.bootstrapAppCalls).toBe(1);
   });
 
@@ -233,7 +245,7 @@ describe('startConfiguredHttpServer', () => {
         },
       },
     ]);
-    expect(harness.flushCalls).toBe(1);
+    expect(harness.closeCalls).toBe(1);
     expect(exitCodes).toEqual([1]);
   });
 
@@ -256,7 +268,7 @@ describe('startConfiguredHttpServer', () => {
     sigtermHandler();
     await flushMicrotasks();
 
-    expect(harness.flushCalls).toBe(1);
+    expect(harness.closeCalls).toBe(1);
     expect(exitCodes).toEqual([0]);
     expect(harness.logger.infoCalls).toContainEqual({
       message: 'shutdown.signal.duplicate',
@@ -281,7 +293,7 @@ describe('startConfiguredHttpServer', () => {
     sigtermHandler();
     await flushMicrotasks();
 
-    expect(harness.flushCalls).toBe(1);
+    expect(harness.closeCalls).toBe(1);
     expect(exitCodes).toEqual([0]);
     expect(harness.logger.infoCalls).toContainEqual({
       message: 'shutdown.signal.received',

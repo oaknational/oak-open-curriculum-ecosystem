@@ -17,15 +17,16 @@ import {
 
 /** Creates a recording logger fake with spied methods. */
 function createFakeLogger(): Logger {
-  return {
+  const logger: Logger = {
     trace: vi.fn(),
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
     fatal: vi.fn(),
-    child: vi.fn(),
-  } as unknown as Logger;
+    child: () => logger,
+  };
+  return logger;
 }
 
 /** Creates a recording observability fake matching the Pick used by setupErrorHandlers. */

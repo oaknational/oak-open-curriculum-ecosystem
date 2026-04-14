@@ -83,7 +83,7 @@ function registerTelemetryCmd(
             observeDeps,
           );
         },
-        observability,
+        observability ? { observability, commandName: 'observe.telemetry' } : undefined,
       ),
     );
 }
@@ -119,7 +119,7 @@ function registerSummaryCmd(
             observeDeps,
           );
         },
-        observability,
+        observability ? { observability, commandName: 'observe.summary' } : undefined,
       ),
     );
 }

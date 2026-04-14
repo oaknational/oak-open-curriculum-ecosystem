@@ -118,16 +118,14 @@ export const ignores = [
 /**
  * Common rules for test files.
  *
- * Structural limits (max-lines, max-lines-per-function) are relaxed for
- * test files because describe blocks legitimately grow.
+ * ALL of these exceptions are problems, and need removing at the earliest opportunity.
+ *
+ * Structural limits (max-lines, max-lines-per-function) are temporarily relaxed for
+ * test files.
  *
  * Tests may import workspace-local devDependencies, but they still must
  * declare those packages in the workspace manifest rather than relying on
  * the repo root toolchain.
- *
- * Type-safety and global-state rules are set to 'warn' pending promotion
- * to 'error'. See e2e-vi-mock-clerk-removal.plan.md for the phased
- * promotion schedule.
  *
  * @see ADR-078 for the dependency injection rationale behind the vi.mock ban
  * @see principles.md "No type shortcuts" — applies to test code equally
@@ -135,12 +133,6 @@ export const ignores = [
 export const testRules = {
   'max-lines': ['error', 700],
   'max-lines-per-function': ['error', 1000],
-  '@typescript-eslint/consistent-type-assertions': [
-    'warn',
-    {
-      assertionStyle: 'never',
-    },
-  ],
   '@typescript-eslint/consistent-indexed-object-style': 'off',
   '@typescript-eslint/consistent-type-definitions': 'off',
   '@typescript-eslint/no-restricted-types': 'off',
