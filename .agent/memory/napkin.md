@@ -255,3 +255,46 @@ reasons as the CLI. Track as a follow-up todo.
 `{ [key: string]: unknown }` under current tsconfig. No compile
 error in practice, but the reviewer flagged it as a potential
 issue under stricter settings. Monitor.
+
+### Session 2026-04-13h: Plan review + build tooling question
+
+**Means goals create busywork.** "Close 15 gaps" sounds
+productive but leads to implementing features nobody needs
+(custom metrics, profiling, CLI preload) before the basics work.
+The end goal is "developers can debug production errors." The
+test: error happens → appears in Sentry → developer can
+understand it → they fix it. Items that don't serve that chain
+don't belong in the immediate plan.
+
+**`--import @sentry/node/preload` for CLI is dropped.** User
+correction: putting critical infrastructure in CLI flags that
+someone must remember to type is fragile. The HTTP server start
+script is acceptable (canonical entry point in package.json),
+but per-script CLI flags are not code — they're traps.
+
+**`@sentry/esbuild-plugin` does NOT work with tsup.** GitHub
+issue egoist/tsup#1260 (open Dec 2024): plugin's file-globbing
+runs before tsup writes to disk. Assumptions-reviewer caught
+this before any code was written. Must use sentry-cli post-build
+step instead. This also raises the broader question: should tsup
+be replaced?
+
+**Provider-neutral types at app layer** (4-reviewer convergence):
+HttpObservability and CliObservability should NOT import
+SentryUser, SentryCloseError, SentryContextPayload directly.
+Define provider-neutral aliases (ObservabilityUser,
+ObservabilityCloseError) at the app layer. Delegation inside
+the factory maps to adapter types. Future provider migration
+touches only the factory, not callers.
+
+**Options bag for withLoadedCliEnv** (3-reviewer convergence):
+Adding bare `commandName?` parameter creates signature growth
+and silent no-op path (commandName without observability).
+Use WithLoadedCliEnvOptions from the start.
+
+**Build tooling evaluation requested.** User noted tsup was
+chosen "because it was easy" and is open to replacing it.
+Requirements: performant, standards-compliant, processes TS
+directly or via tsc, broad adoption, idiomatic infrastructure.
+This affects source maps (blocked by tsup incompatibility)
+and potentially other build concerns.

@@ -106,29 +106,37 @@ git log --oneline --decorate -10
     `.strict()` fragility, schema cache gap, third-party MCP
     bypass, `fakes.ts` cast.
 - **Open questions / low-confidence areas**:
-  - OQ1: `.strip()` vs `.passthrough()` for upstream response schemas
-    — recommended `.strip()`, awaiting owner decision
-  - OQ2: should `additionalProperties: false` be removed from JSON
-    Schema output for response schemas?
+  - OQ1: `.strip()` vs `.passthrough()` for upstream response
+    schemas — recommended `.strip()`, awaiting owner decision
+  - OQ2: should `additionalProperties: false` be removed from
+    JSON Schema output for response schemas?
   - OQ3: awaiting specific lesson slugs from third-party consumer
-  - `fakes.ts` cast — what is the architecturally correct solution?
-  - Does tsup support `@sentry/bundler-plugin` for Debug ID injection?
-  - Does `@sentry/profiling-node` native addon work on Vercel's ABI?
-- **Next safe step**: Continue Sentry canonical alignment with
-  the remaining 8 todos. Recommended sequence: (1) `cli-context-
-  enrichment` — setTag/setContext in withLoadedCliEnv (depends on
-  adapter extension, now done). (2) `custom-metrics` — expose
-  Sentry.metrics on adapter (same two-layer pattern). (3) `cli-
-  metrics` — wire CLI command execution counts. (4) `cli-early-
-  init` — add `--import @sentry/node/preload` to tsx invocations.
-  (5) Closing reviewer also flagged: add close() to
-  HttpObservability for HTTP server shutdown. Items 5-8 (trace
-  propagation, profiling, source maps) need credentials or are
-  pre-release evaluation.
-- **Deep consolidation status**: due — 7 todos completed, settled
-  patterns from 5-reviewer pre-implementation review process, new
-  test-reviewer correction (no supertest in integration tests) is
-  doctrine-level. Napkin needs session entries.
+  - `fakes.ts` cast — architecturally correct solution?
+  - **tsup + @sentry/esbuild-plugin incompatibility**: confirmed
+    by assumptions-reviewer. GitHub egoist/tsup#1260. The
+    plugin's glob phase runs before tsup writes to disk. Must
+    use sentry-cli post-build instead, OR evaluate replacing
+    tsup entirely with a standard build tool.
+  - **Build tooling evaluation**: user has requested exploration
+    of whether tsup should be replaced. Requirements: performant,
+    standards-compliant, processes TS directly or via tsc, broad
+    adoption, idiomatic. Next session should explore this.
+  - Does `@sentry/profiling-node` native addon work on Vercel?
+- **Next safe step**: Two parallel tracks for next session:
+  (1) **Build tooling evaluation** — should tsup be replaced?
+  This affects source maps (blocked by tsup#1260) and long-term
+  infrastructure. Explore alternatives: esbuild directly, Rollup,
+  tsc + bundler, or other standards-compliant options.
+  (2) **Sentry last mile** (approved plan at
+  `~/.claude/plans/expressive-zooming-thacker.md`): HTTP close()
+  on shutdown, context enrichment (provider-neutral types, MCP
+  handler + CLI command tags), source maps (contingent on build
+  tooling decision). All 4 reviewers validated the plan.
+- **Deep consolidation status**: completed this handoff —
+  napkin entries written, distilled.md updated (supertest
+  classification, pre-implementation review pattern count),
+  plan todos updated, session prompt refreshed, findings
+  recorded. Napkin at ~270 lines (under 500).
 
 ## Active Workstreams (2026-04-13)
 

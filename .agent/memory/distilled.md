@@ -85,6 +85,13 @@ context with no natural permanent home.
   infrastructure's-sake. WS-0 (narrative) before WS-1 (factory)
   before WS-2+ (consumers) is not arbitrary; each stage depends
   on the meaning established by the previous one.
+- **End goals over means goals**: frame work as "what does the
+  user ultimately need?" not "what does the plan say?" A means
+  goal like "close 15 gaps" generates busywork; the end goal
+  "developer can debug a production error" filters to what
+  matters. See pattern `patterns/end-goals-over-means-goals.md`.
+  Materialised 2026-04-13: only 3 of 15 Sentry items were
+  needed for "working."
 - **Review plans, not just code**: see pattern
   `patterns/pre-implementation-plan-review.md`. Proven across
   3 sessions (19+ findings caught before implementation; Gap 2

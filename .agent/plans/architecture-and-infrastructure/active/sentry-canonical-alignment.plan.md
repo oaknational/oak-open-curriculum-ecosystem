@@ -47,40 +47,53 @@ todos:
     status: done
     priority: next
     note: "Investigated 2026-04-13. 15 files import logger singletons directly. Remediation: createSearchLogger(config) factory at composition root (matches HTTP server pattern). ~15-file refactor, scoped to search CLI."
-  # === AFTER ADAPTER EXTENSION (still local) ===
+  # === NEXT: CONTEXT ENRICHMENT + CLEAN SHUTDOWN (local) ===
+  - id: http-close-on-shutdown
+    content: "Add close() to HttpObservability, switch all 3 shutdown paths from flush to close"
+    status: pending
+    priority: next
+    note: "New item from sentry closing reviewer (2026-04-13). All three paths in server-runtime.ts (SIGTERM, server error, bootstrap failure). Use provider-neutral ObservabilityCloseError, not SentryCloseError."
   - id: cli-context-enrichment
     content: "Add command-level context enrichment to CLI via setTag/setContext"
     status: pending
-    note: "Depends on adapter-surface-extension. Tag with command name, index target, version."
+    priority: next
+    note: "Adapter surface done. Wire via WithLoadedCliEnvOptions bag (Betty + type-reviewer + code-reviewer converge). Enumerate ALL withLoadedCliEnv call sites including threads, suggest, facets. Use provider-neutral types at app layer."
+  - id: http-context-enrichment
+    content: "Wire setUser/setTag/setContext on HttpObservability for MCP handler enrichment"
+    status: pending
+    priority: next
+    note: "New item split from adapter-surface-extension. Surface methods using provider-neutral ObservabilityUser type (not SentryUser). Wire in mcp-handler.ts (user ID from Clerk, mcp.method tag) and handlers.ts (mcp.tool_name tag). Add scope isolation test."
+  # === ENHANCEMENTS (deferred, not needed for 'working') ===
   - id: custom-metrics
     content: "Expose Sentry.metrics (count, gauge, distribution) on the adapter with beforeSendMetric hook"
     status: pending
-    note: "Via adapter (sentry reviewer: DI seam needed). enableMetrics defaults true, no init change. Wire beforeSendMetric into redaction layer."
+    note: "Enhancement. Via adapter (sentry reviewer: DI seam needed). enableMetrics defaults true, no init change."
   - id: cli-metrics
     content: "Wire CLI command execution metrics via Sentry.metrics.count"
     status: pending
-    note: "Depends on custom-metrics (shared adapter). Emit command name, index target as attributes."
+    note: "Enhancement. Depends on custom-metrics."
   - id: cli-early-init
     content: "Add --import @sentry/node/preload to CLI tsx invocations"
-    status: pending
-    note: "Same preload pattern as HTTP server. Lower priority — no central dev runner, requires individual script edits."
+    status: dropped
+    note: "Dropped 2026-04-13. User correction: moves critical infrastructure outside of code. Per-script CLI flags are fragile. CLI uses manual spans and does not need auto-instrumentation."
   # === NEEDS CREDENTIALS OR EXTERNAL (defer until Vercel provisioned) ===
   - id: trace-propagation-es
     content: "Add Elasticsearch host to tracePropagationTargets (low-ceremony, Oak-controlled)"
     status: pending
-    note: "ES is our own instance. No formal security review needed. Can implement locally but verify with live traces."
+    note: "Enhancement. ES is our own instance. No formal security review needed."
   - id: trace-propagation-oak-api
     content: "Evaluate trace propagation to Oak API (third-party, security review required)"
     status: pending
-    note: "open-api.thenational.academy is third-party. Security reviewer must sign off."
+    note: "Enhancement. open-api.thenational.academy is third-party. Security reviewer must sign off."
   - id: profiling-evaluation
     content: "Evaluate @sentry/profiling-node for the HTTP server before production release"
     status: pending
-    note: "Evaluate with local or preview load. ~5% CPU overhead. Native addon — verify Vercel ABI. Ship or reject before release."
+    note: "Enhancement. ~5% CPU overhead. Native addon — verify Vercel ABI."
   - id: source-maps-automation
-    content: "Automate source map upload before production release — investigate Debug IDs vs release-based matching"
+    content: "Automate source map upload via sentry-cli post-build step"
     status: pending
-    note: "Must be working BEFORE first production errors arrive. Sentry Debug IDs (build-injected) or Vercel integration."
+    priority: next
+    note: "CRITICAL for production. @sentry/esbuild-plugin does NOT work with tsup (GitHub egoist/tsup#1260). Use sentry-cli sourcemaps inject + upload as post-build step. Spike first. Consider whether tsup itself should be replaced — see build tooling evaluation."
 ---
 
 # Sentry Canonical Alignment
