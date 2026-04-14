@@ -52,17 +52,17 @@ todos:
     content: "Add close() to HttpObservability, switch all 3 shutdown paths from flush to close"
     status: done
     priority: next
-    note: "Implemented 2026-04-14. Provider-neutral ObservabilityCloseError + ObservabilityFlushError types in packages/core/observability/. Both flush() and close() return types migrated from Sentry-specific to provider-neutral (Fred finding). createFlushObservability renamed to createShutdownObservability. Error mappers extracted to sentry-observability-delegates.ts. 4-reviewer validated plan."
+    note: "Implemented 2026-04-14, committed 3962b5d0. Provider-neutral types in packages/core/observability/. Error mappers extracted to @oaknational/sentry-node/runtime-error.ts (Fred ruling — adapter knows both sides). Delegates tested (9 unit tests). close() tested in all 3 shutdown paths (server-runtime.unit.test.ts). CLI close() + fixture setTag/setContext tests added."
   - id: cli-context-enrichment
     content: "Add command-level context enrichment to CLI via setTag/setContext"
     status: done
     priority: next
-    note: "Implemented 2026-04-14. setTag/setContext added to CliObservability. WithLoadedCliEnvOptions bag replaces bare 3rd param. 5 call sites converted with explicit commandName (search.lessons, search.units, search.sequences, observe.telemetry, observe.summary). Default commandName 'oak.cli.command'. Admin/eval sites not yet threaded (additive, not blocking)."
+    note: "Implemented 2026-04-14, committed 3962b5d0. setTag/setContext added. Options bag with 5 call sites. setTag assertions added to with-loaded-cli-env.unit.test.ts (explicit + default command name). Admin/eval sites not yet threaded (additive, not blocking)."
   - id: http-context-enrichment
     content: "Wire setUser/setTag/setContext on HttpObservability for MCP handler enrichment"
     status: done
     priority: next
-    note: "Implemented 2026-04-14. setUser/setTag/setContext on HttpObservability via provider-neutral types from @oaknational/observability (Fred: single source of truth, not per-app). mcp-handler.ts sets mcp.method tag + user from req.auth.extra.userId. handlers.ts sets mcp.tool_name tag inside per-request callback. Sentry delegation extracted to sentry-observability-delegates.ts. Code-reviewer + sentry-reviewer approved. Test gap: enrichment call sites not yet covered by targeted tests."
+    note: "Implemented 2026-04-14, committed 3962b5d0. mcp-handler.ts: Zod authInfoExtraSchema for userId extraction (shared with check-mcp-client-auth.ts), enrichObservabilityScope helper extracted (complexity fix). handlers.ts: mcp.tool_name tag. 6 mcp-handler unit tests (setTag/setUser, auth matrix). Code-reviewer + sentry-reviewer approved."
   # === ENHANCEMENTS (deferred, not needed for 'working') ===
   - id: custom-metrics
     content: "Expose Sentry.metrics (count, gauge, distribution) on the adapter with beforeSendMetric hook"

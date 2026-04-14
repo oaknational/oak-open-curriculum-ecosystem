@@ -369,3 +369,80 @@ terminal, all followed by `process.exit()`). `flush()` correctly
 retained for non-terminal use. Suggestion: consider adding
 `mcp_request` structured context alongside tags for richer error
 detail view.
+
+### Session 2026-04-14b: Reviewer findings, commit, lint hardening
+
+**Committed 3962b5d0**: 33 files, +1126/-263. Context enrichment,
+clean shutdown, auth fix, type assertion enforcement. All gates
+green: build, type-check, lint, knip, depcruise (1913 modules,
+0 violations), tests across 19 packages.
+
+**Warning severity hides violations.** `testRules` in oak-eslint
+had `@typescript-eslint/consistent-type-assertions` at `'warn'`
+instead of `'error'`. This effectively disabled the rule — lint
+passed, warnings scrolled past, and 13 type assertions across 4
+workspaces accumulated silently. Fixed by promoting to `'error'`.
+The redundant override was then removed entirely (recommended
+config already has `'error'`). Lesson: any rule at `'warn'` is a
+rule that's off. If it matters, it's `'error'`.
+
+**`@ts-expect-error` is the smell, not the solution.** Tests for
+removed tool names (`get-ontology`, `get-help`) used
+`@ts-expect-error` to pass values the type system forbids.
+User correction: these test the absence of things — the type
+system already prevents invalid names at compile time. The
+`@ts-expect-error` was the signal that the test was wrong, not
+that the type system needed bypassing. Deleted both tests and
+two `@ts-expect-error` tests in request-validators for the same
+reason (unknown path, unsupported method — the type system
+prevents these).
+
+**Self-justifying eslint-disable comments embed incorrect
+assumptions.** Comments like "unavoidable: partial test fake
+bridging incompatible types" rationalise the violation instead
+of questioning the root cause. The right response: WHY are the
+types incompatible? The `isPartialClient` type guard in
+`fakes.ts` claims any non-null object is an
+`OakApiPathBasedClient` — that's a lie. The real question is
+whether the function under test should accept `Pick<>` instead
+of the full generated type.
+
+**Complexity in tests = architectural problem or bad test.**
+The handlers-observability `setTag` test required: typed capture
+arrays, type predicate hacks, mockImplementation bridges, and
+CapturedTool interfaces — all to prove a single `setTag` call.
+Root cause: MCP SDK `registerTool` uses unexported generics, so
+there's no clean DI seam. The test was fighting the architecture.
+Correct answer: delete the test. The `setTag` call is trivial
+delegation already proven at the adapter level. E2E covers the
+full path.
+
+**`vi.fn()` leaks `any` through `mock.calls`.** Bare `vi.fn()`
+returns `Mock<any>`, so `mock.calls[0]` propagates `any` into
+every downstream variable. Typing the mock `vi.fn<TypedFn>()`
+fixes `mock.calls` but breaks structural assignability to
+complex generic interfaces (like `McpServer.registerTool`). Two
+clean alternatives: (1) use `toHaveBeenCalledWith` with matchers
+instead of accessing `mock.calls`; (2) type the mock
+implementation to capture into a separate typed array.
+
+**Don't run commands repeatedly with different filters.** Run
+once, pipe to file, analyse the file. Each command invocation
+costs tokens and wall-clock time. Three grep variants on the
+same lint output is wasteful when one `> /tmp/file` + `Read`
+would suffice.
+
+**Auth extraction: Zod safeParse over manual narrowing.** The
+manual `typeof req.auth.extra === 'object' && 'userId' in
+req.auth.extra` narrowing in `mcp-handler.ts` was replaced with
+shared `authInfoExtraSchema.safeParse`. The schema already
+existed in `check-mcp-client-auth.ts` — extracted to
+`auth-info-schema.ts` for shared use. Zod `.loose()` is correct
+for `AuthInfo.extra` (open `Record<string, unknown>`).
+
+**Error mappers belong in the adapter lib (confirmed).** Fred
+ruling from prior session materialised: `mapFlushError` and
+`mapCloseError` moved from both apps to
+`packages/libs/sentry-node/src/runtime-error.ts`. Both apps
+now import from `@oaknational/sentry-node`. The duplication was
+verbatim — 21 identical lines in each app.
