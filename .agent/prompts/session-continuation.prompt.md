@@ -45,85 +45,77 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Sentry + Build Tooling on
-  `feat/otel_sentry_enhancements`. Build tooling complete,
-  Sentry items in progress. 9 items remain before PR.
+- **Workstream**: Two concurrent on `feat/otel_sentry_enhancements`.
+  (A) Sentry + Build Tooling — build tooling complete, 9 Sentry
+  items remain. (B) Compliance — plan complete, codegen fixes
+  committed, upstream API requests drafted.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-    (12 of 20 todos done; 8 remaining — includes 3 new items
-    added 2026-04-14c)
-  - `.agent/plans/architecture-and-infrastructure/active/build-tooling-composability.plan.md`
-    (**COMPLETE** — all 7 todos done 2026-04-14c)
-  - `~/.claude/plans/cuddly-swinging-ocean.md` (Track 1
-    complete, Track 2 complete)
+    (12 of 20 todos done; 8 remaining)
   - `.agent/plans/compliance/current/claude-and-chatgpt-app-submission-compliance.plan.md`
-    (reviewed, ready for promotion to `active/`)
+    (**reviewed by 7 specialists**, ready for promotion)
   - `.agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md`
     (**PENDING** — open questions, owner decisions needed)
-- **Current state**: **Session 2026-04-14c completed build
-  tooling and 2 Sentry items.** `tsup.config.base.ts` with 3
-  factory functions, 16 workspace configs migrated, turbo.json
-  updated, ADR-010 revised, 37 tsconfig `$schema` annotations
-  added. `describeConfigError` extracted to sentry-node (TDD).
-  Preload `--import` moved to documented shell script.
-  Holistic Sentry review (Barney + sentry-reviewer) completed:
-  native `wrapMcpServerWithSentry()` is highest-value next item.
-  `SENTRY_AUTH_TOKEN` provisioned (org-level, one per app).
-- **Current objective**: Complete 9 remaining items on this
-  branch before PR. Highest priority: `wrapMcpServerWithSentry()`
-  adoption, then metrics, trace propagation, source maps, and
-  reviewer-gated items.
+- **Current state**: **Compliance session (2026-04-14e).**
+  Audited MCP server against Anthropic + OpenAI directory
+  policies. Created `compliance/` plan collection (8 workstreams,
+  7 specialist reviews). Fixed codegen: removed silent schema
+  cache fallback (fail-fast), removed OAK_API_KEY gate (swagger
+  is public), full-content cache comparison (not version-only),
+  removed dotenv dependency. Added CI advisory schema drift
+  check. Confirmed limit/offset description swap is an upstream
+  API bug (live spec verified). Upstream API requests doc
+  drafted (limit/offset swap + asset pagination).
+- **Current objective**: Promote compliance plan to `active/`
+  and begin WS1 (governance docs) when ready. Sentry 9 items
+  remain.
 - **Hard invariants / non-goals**:
-  - All Sentry invariants unchanged (SENTRY_MODE=off, ADR-078,
-    no `as` casts, provider-neutral types, sendDefaultPii: false)
-  - `wrapMcpServerWithSentry()` compatible with
-    `sendDefaultPii: false` (confirmed by reading SDK source)
-  - `@oaknational/sentry-mcp` retained for fixture mode only;
-    native wrapper replaces per-handler wrapping in sentry mode
-  - `--import @sentry/node/preload` is canonical ESM
-    requirement (Node.js, not Sentry) — lives in documented
-    shell script, not bare package.json
-- **Recent surprises / corrections** (2026-04-14c):
-  - **`--import` flag is the canonical approach for ESM.** No
-    pure-code alternative preserves full auto-instrumentation.
-    The user accepted the flag but requires it in a documented
-    shell script, not a bare package.json entry.
-  - **`wrapMcpServerWithSentry()` is a superset.** The native
-    wrapper provides transport-level correlation, JSON-RPC error
-    classification, session tracking, and 20+ OTel MCP semantic
-    convention attributes. Our custom sentry-mcp wrappers are
-    now custom plumbing (Barney: "a violation").
-  - **`sendDefaultPii: true` in Sentry MCP docs is example,
-    not requirement.** Security-reviewer: LOW RISK. The flag
-    controls `recordInputs`/`recordOutputs` fallback defaults
-    only. Structural span data works regardless.
-  - **`esbuild` types not accessible in pnpm strict hoisting.**
-    `import type { Plugin } from 'esbuild'` in repo root config
-    failed type-check across all workspaces. Fix: inline plugin
-    definition, no esbuild type import. `tsup` added as root
-    devDependency for `defineConfig`/`Options` types.
-  - **Barney: "3 items not 8" but sentry-reviewer disagrees.**
-    Custom metrics are NOT redundant (spans ≠ metrics, different
-    Sentry UI surface). User decision: defer nothing, all items
-    in this PR, split across sessions for focus.
-  - Prior corrections (unchanged): warning severity,
-    `@ts-expect-error`, self-justifying eslint-disable,
-    complexity in tests, `vi.fn()` leaks `any`.
+  - All Sentry invariants unchanged
+  - Compliance: no `unknown` in filter accessor types
+  - Compliance: principles are field-agnostic, rule carries
+    MCP specifics
+  - Compliance: oakContextHint rationale in ADR only
+  - All graph tools must support filtering (factory invariant)
+- **Recent surprises / corrections** (2026-04-14e):
+  - **Silent fallback is not a fallback, it's a lie.** Codegen
+    fell back to stale cache without API key. The swagger
+    endpoint is public — no key needed at all. The "fallback"
+    hid stale data for months. Fixed: local codegen always
+    fetches live; CI uses cache; no middle ground.
+  - **Version-only cache comparison misses content fixes.**
+    `writeSchemaCacheIfChanged` compared version strings only.
+    Upstream can fix descriptions without bumping versions.
+    Fixed: full serialised content comparison.
+  - **WebFetch model summaries can misreport raw data.**
+    First extraction reported the live spec had correct
+    descriptions. Subsequent raw verification proved the live
+    spec has them swapped. Always verify raw data before
+    changing plans based on a model summary.
+  - **A function used in tests is not a reason to keep it.**
+    Only product-code usage justifies keeping a function.
+    Test usage justifies investigating whether the test is
+    testing behaviour or implementation.
+  - **Tests that constrain implementation, not behaviour.**
+    "skips writing when same version" tested the version-only
+    comparison mechanism, not the desired behaviour (skip when
+    content identical). Replaced with two tests: identical
+    content skips, different content writes regardless of
+    version.
+  - Prior Sentry corrections unchanged.
 - **Open questions / low-confidence areas**:
-  - OQ1-OQ3 from prior sessions unchanged
-  - getsentry/sentry-javascript#19233: transport-level session
-    correlation may fail with certain transport abstractions.
-    Streamable HTTP transport needs testing.
-  - Double-span risk when native wrapper + per-handler wrappers
-    both active — must gate wrapping on mode
-- **Next safe step**: Adopt `wrapMcpServerWithSentry()` at the
-  composition root. Mode-conditional: sentry mode uses native
-  wrapper (skip per-handler `wrapToolHandler`), fixture mode
-  keeps existing per-handler wrappers. Then: custom metrics (3),
-  CLI metrics (4), trace propagation (5), `mcp_request` context
-  (10), source maps spike (1), Betty (8) and Wilma (9) reviews.
-- **Deep consolidation status**: completed this handoff —
-  build tooling plan marked complete, 2 patterns extracted
+  - OQ1-OQ3 from Sentry workstream unchanged
+  - oakContextHint expiry depends on external MCP SDK feature
+  - `principles.md` fitness: 519/525 lines, trimming candidate
+    identified but not executed
+  - `codegen-once.mock.ts` uses `vi.mock` (prohibited pattern)
+    and tests the old cache-fallback path — needs updating
+- **Next safe step**: Choose workstream:
+  **(A) Sentry**: `wrapMcpServerWithSentry()` adoption, then
+  metrics, trace propagation, source maps, reviews.
+  **(B) Compliance**: promote plan to `active/`, begin WS1
+  (ADR-159, safety-and-security.md, 3 principles, 1 rule).
+- **Deep consolidation status**: not due — session findings
+  captured in napkin and plan. Codegen fixes committed.
   (prefer-native-sdk-over-custom-plumbing, pnpm-strict-
   hoisting-type-resolution), active README updated. Napkin at
   570 lines (rotation due next session). distilled.md at 289
@@ -145,11 +137,16 @@ Build tooling complete. 9 Sentry items remain. Highest priority:
 `wrapMcpServerWithSentry()` adoption (native wrapper replaces
 custom per-handler wrapping in sentry mode).
 
-### 2. Compliance — PLAN COMPLETE, READY FOR EXECUTION
+### 2. Compliance — PLAN COMPLETE + CODEGEN FIXES COMMITTED
 
 **Plan**: `.agent/plans/compliance/current/claude-and-chatgpt-app-submission-compliance.plan.md`
+**Companion**: `.agent/plans/compliance/current/upstream-api-requests.md`
 
-Ready for promotion to `active/`. Not on this branch.
+Plan reviewed by 7 specialists, all findings addressed. Codegen
+fixes committed (56e92b0d): silent fallback removed, full-content
+cache comparison, dotenv removed, CI drift check added. Upstream
+API requests drafted (limit/offset swap + asset pagination).
+Ready for promotion to `active/`.
 
 ### 3. Schema Resilience — PENDING (owner decision)
 

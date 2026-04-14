@@ -425,6 +425,47 @@ from workspace scope in pnpm. Fix: inline plugin definition in
 the esbuildOptions callback, no esbuild type import needed.
 tsup itself provides the callback typing.
 
+### Session 2026-04-14e: Codegen fixes + external audit
+
+**Silent fallback is not a fallback, it's a lie.** Codegen's
+`loadSchema()` had three paths: CI (cache), API key set (live
+fetch), no API key (silent cache fallback). The third path
+used stale data without telling anyone. The swagger endpoint is
+public — no API key needed. Fixed: two paths only (CI → cache,
+local → live fetch), both fail fast. The `dotenv` dependency and
+`OAK_API_KEY` gate were unnecessary.
+
+**Version-only cache comparison misses content changes.** The
+upstream API can fix descriptions without bumping the schema
+version. `writeSchemaCacheIfChanged` used `extractSchemaVersion`
+to decide — same version meant skip. A description fix (like the
+limit/offset swap correction) would be silently ignored. Fixed:
+full serialised content comparison. The old test "skips writing
+when same version" tested the mechanism, not the behaviour.
+Replaced with "skips when content identical" + "writes when
+content differs even if version unchanged."
+
+**External client-side audit reported missing annotations.** All
+34 tools have annotations in server code (`readOnlyHint`,
+`destructiveHint`, `idempotentHint`, `openWorldHint`, `title`)
+and registration wires them correctly. The auditor's MCP client
+likely didn't surface the `annotations` field. Plan includes E2E
+test proving annotations on the wire.
+
+**limit/offset swap is upstream, not us.** The live spec at
+`open-api.thenational.academy/api/v0/swagger.json` has the
+descriptions transposed on the lessons endpoint. Our codegen
+faithfully reproduces it. Earlier investigation incorrectly
+attributed this to a stale cache (a WebFetch model summary
+misreported the raw spec data). Always verify raw data.
+
+**Verify raw data before changing plans.** A model processing
+fetched content reported "descriptions are correct in the live
+spec." Based on that, I changed the plan from "upstream bug" to
+"stale cache" to "codegen bug" — all wrong. Raw JSON from the
+live spec confirmed the original finding: upstream bug. The
+lesson: model summaries of fetched data are not raw data.
+
 ### Session 2026-04-14c: Compliance planning (Claude + ChatGPT)
 
 **Audited MCP server against two directory policies.** Both the

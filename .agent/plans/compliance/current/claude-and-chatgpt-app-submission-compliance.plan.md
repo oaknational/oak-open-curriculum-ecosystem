@@ -61,7 +61,7 @@ verification, and has stricter commerce prohibitions.
 | Missing privacy policy link | 3.A | Privacy section | BLOCKER | Us |
 | Graph token efficiency | 5.B | Response minimization | ADVISORY | Us |
 | Asset tools lack pagination | 5.B | Response minimization | MEDIUM | Upstream API |
-| limit/offset descriptions swapped | 2.B | Tools / Descriptions | MEDIUM | Stale schema cache — refresh |
+| limit/offset descriptions swapped | 2.B | Tools / Descriptions | MEDIUM | Upstream API bug |
 | Annotations not visible to clients | 5.E | Tools / Annotation | INVESTIGATE | Us (verify wire format) |
 | Test credentials | 3.D | Authentication section | PROCESS | Us |
 | Screenshots for submission | N/A | App Fundamentals | PROCESS | Us |
@@ -773,33 +773,26 @@ Add an E2E test asserting that `tools/list` JSON-RPC responses include
 the `annotations` object on every tool. This provides verifiable
 evidence for directory reviewers.
 
-### 5.4: Refresh schema cache and fix silent fallback
+### 5.4: limit/offset description swap — upstream API bug
 
 The `get-key-stages-subject-lessons` tool has `limit` and `offset`
-parameter descriptions transposed. Investigation traced this to a
-**stale cached OpenAPI spec** at
-`src/types/generated/api-schema/api-schema-original.json`. The live
-spec has the correct descriptions — the upstream team already fixed
-this, but our cache was never refreshed.
+parameter descriptions transposed. Verified against the live spec
+at `open-api.thenational.academy/api/v0/swagger.json` on 2026-04-14:
+the **live spec itself has them swapped**. This is an upstream API
+bug, not a stale cache or codegen issue. Our codegen faithfully
+reproduces the upstream spec.
 
-**Root cause**: `codegen.ts:131-156` silently falls back to the
-committed cache when `OAK_API_KEY` is not set. This violates "Keep
-it strict" and "Fail FAST" — codegen should fail with a clear error
-when the API key is missing (outside CI mode), not silently use
-potentially stale data. The cache exists for CI determinism, not as
-a silent local fallback.
+Tracked in the companion document
+[upstream-api-requests.md](upstream-api-requests.md) as Request 1.
+No action on our side until the upstream spec is fixed — running
+`pnpm sdk-codegen` will pick up the correction automatically.
 
-**Two fixes**:
-
-1. **Immediate**: run `pnpm sdk-codegen` with `OAK_API_KEY` set to
-   refresh the cache. Verify the generated file has correct
-   descriptions. Diff the refreshed cache against the current one
-   to find any other stale descriptions.
-2. **Structural** (DONE): changed the non-CI, no-API-key path in
-   `codegen.ts` from silent cache fallback to a fast fail with a
-   helpful error message. Codegen already loads from root `.env` or
-   `.env.e2e` via dotenv (lines 51-57). The cache fallback is now
-   only used in CI mode (lines 132-134).
+**Separately** (DONE, committed 56e92b0d): the codegen silent cache
+fallback and version-only comparison bugs were fixed regardless.
+Local codegen now always fetches the live spec (the swagger endpoint
+is public, no API key needed). `writeSchemaCacheIfChanged` compares
+full content, not just the version string. Advisory CI drift check
+added.
 
 ### 5.5: Asset tool description guidance
 

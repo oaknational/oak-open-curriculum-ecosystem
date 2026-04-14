@@ -5,20 +5,56 @@
 **To**: Remy and Aakesh
 **Context**: We are preparing the Oak MCP server for listing in the
 Anthropic Claude and OpenAI ChatGPT app directories. Both directories
-have published compliance policies that our server must satisfy. One
-issue requires an upstream API change.
+have published compliance policies that our server must satisfy. Two
+issues require upstream API changes.
 
 ---
 
 ## Background
 
-Both Anthropic and OpenAI require that **tool response size is
-proportionate to task complexity** (Anthropic §5B, OpenAI "Response
-Minimization").
+Both Anthropic and OpenAI require that tool descriptions **precisely
+match actual functionality** (Anthropic §2B, OpenAI "Descriptions
+Matching Behavior"), and that **tool response size is proportionate to
+task complexity** (Anthropic §5B, OpenAI "Response Minimization").
 
 ---
 
-## Request: Add Pagination to Asset Endpoints
+## Request 1: Fix Swapped limit/offset Descriptions
+
+**Endpoint**: `GET /api/v1/key-stages/{keyStage}/subjects/{subject}/lessons`
+
+**Issue**: The `limit` and `offset` parameter descriptions are transposed
+in the OpenAPI specification. Verified against the live spec at
+`open-api.thenational.academy/api/v0/swagger.json` on 14 April 2026.
+
+**Current (incorrect)**:
+
+| Parameter | Current description |
+|-----------|-------------------|
+| `offset` | "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted." |
+| `limit` | "Offset applied to lessons within each unit (not to the unit list)." |
+
+Note: the defaults are correct (`offset`: 0, `limit`: 10) — only the
+description text is swapped.
+
+**Expected (correct)**:
+
+| Parameter | Correct description |
+|-----------|-------------------|
+| `offset` | "Offset applied to lessons within each unit (not to the unit list)." |
+| `limit` | "Limit the number of lessons returned per unit. Units with zero lessons after limiting are omitted." |
+
+**Impact**: The MCP server generates tool definitions directly from the
+OpenAPI spec. AI assistants reading these descriptions will misuse the
+parameters. Both Anthropic and OpenAI require that tool parameter
+descriptions precisely match actual functionality.
+
+**Suggested fix**: Swap the `description` fields for `limit` and `offset`
+on this endpoint in the OpenAPI specification.
+
+---
+
+## Request 2: Add Pagination to Asset Endpoints
 
 **Endpoints**:
 
@@ -57,26 +93,16 @@ endpoints.
 
 ## Priority
 
-This request is driven by external compliance requirements for directory
-listing. It is not blocking our current development, but will likely be
-flagged during directory review. We can work around it temporarily with
-description guidance in tool descriptions, but the upstream fix would be
-the correct resolution.
+Both requests are driven by external compliance requirements for
+directory listing. Request 1 (description swap) is a straightforward
+metadata fix. Request 2 (pagination) is a feature addition that brings
+asset endpoints into parity with existing question endpoints.
+
+Neither request is blocking our current development, but both will
+likely be flagged during directory review.
 
 ## Questions
 
-This request is based on our reading of the directory compliance
-policies. We are happy to discuss whether this change is appropriate
-or whether an alternative approach would be preferred.
-
----
-
-## Note: limit/offset Description Swap (Resolved)
-
-During this audit we discovered that the `limit` and `offset` parameter
-descriptions appeared swapped on the `get-key-stages-subject-lessons`
-MCP tool. Investigation traced this to a stale cached copy of the OpenAPI
-spec on our side. The live spec at
-`open-api.thenational.academy/api/v0/swagger.json` has the correct
-descriptions — thank you for fixing that. We will refresh our schema
-cache to pick up the correction.
+These requests are based on our reading of the directory compliance
+policies. We are happy to discuss whether these changes are appropriate
+or whether alternative approaches would be preferred.
