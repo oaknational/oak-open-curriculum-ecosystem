@@ -950,9 +950,6 @@ importers:
       '@zod/core':
         specifier: ^0.11.6
         version: 0.11.6
-      dotenv:
-        specifier: ^17.4.1
-        version: 17.4.1
       openapi-fetch:
         specifier: ^0.17.0
         version: 0.17.0

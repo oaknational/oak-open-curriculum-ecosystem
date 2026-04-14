@@ -14,27 +14,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { config as dotenvConfig } from 'dotenv';
-
 import { generateSchemaArtifacts } from './codegen-core.js';
 import { writeSchemaCacheIfChanged } from './schema-cache.js';
 import { createOpenCurriculumSchema, saveSchemaToFile } from './schema-separation-core.js';
 import { validateOpenApiDocument } from './schema-validator.js';
 import { generateWidgetConstants, generateSubjectHierarchy } from './typegen/index.js';
 import { runSitemapValidation } from './typegen/routing/validate-canonical-urls.js';
-import { normalizeError } from '@oaknational/logger';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { createCodegenLogger } from './create-codegen-logger.js';
 
 const logger = createCodegenLogger('codegen');
-
-// Load environment variables from workspace .env.local if OAK_API_KEY is not
-// already set. The workspace directory is the codegen package root
-// (packages/sdks/oak-sdk-codegen/). See .env.example for required variables.
-if (!process.env.OAK_API_KEY) {
-  const workspaceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-  dotenvConfig({ path: path.join(workspaceRoot, '.env.local') });
-}
 
 const thisDirectory = path.dirname(fileURLToPath(import.meta.url));
 const rootDirectory = path.resolve(thisDirectory, '..');
@@ -72,39 +61,25 @@ async function readCachedSchemaOrThrow(): Promise<OpenAPIObject> {
   return validateOpenApiDocument(parsed);
 }
 
-async function fetchSchemaOnlineOrNull(url: string, apiKey: string): Promise<object | null> {
+async function fetchSchemaOnline(url: string): Promise<object> {
   logger.info('Fetching OpenAPI schema', { url });
-  try {
-    const headers = new Headers();
-    headers.set('Accept', 'application/json');
-    headers.set('Authorization', `Bearer ${apiKey}`);
-    const response = await fetch(url, { headers });
-    if (!response.ok) {
-      const status = String(response.status);
-      const statusText = response.statusText;
-      logger.error(`Error fetching API schema: HTTP ${status} ${statusText}`, { url });
-      return null;
-    }
-    const parsedJson = await response.json();
-    if (parsedJson === null || typeof parsedJson !== 'object') {
-      logger.error('Schema response was not an object');
-      return null;
-    }
-    return parsedJson;
-  } catch (error: unknown) {
-    logger.error(`Error fetching API schema from ${url}`, normalizeError(error));
-    return null;
+  const response = await fetch(url, {
+    headers: { Accept: 'application/json' },
+  });
+  if (!response.ok) {
+    const status = String(response.status);
+    const statusText = response.statusText;
+    throw new Error(`Failed to fetch OpenAPI schema: HTTP ${status} ${statusText} from ${url}`);
   }
+  const parsedJson: unknown = await response.json();
+  if (parsedJson === null || typeof parsedJson !== 'object') {
+    throw new Error('OpenAPI schema response was not an object');
+  }
+  return parsedJson;
 }
 
-async function fetchValidatedSchema(
-  apiSchemaUrl: string,
-  apiKey: string,
-): Promise<OpenAPIObject | null> {
-  const raw = await fetchSchemaOnlineOrNull(apiSchemaUrl, apiKey);
-  if (!raw) {
-    return null;
-  }
+async function fetchValidatedSchema(apiSchemaUrl: string): Promise<OpenAPIObject> {
+  const raw = await fetchSchemaOnline(apiSchemaUrl);
   return validateOpenApiDocument(raw);
 }
 
@@ -115,28 +90,10 @@ async function loadSchema(): Promise<LoadedSchema> {
   }
 
   const apiSchemaUrl = 'https://open-api.thenational.academy/api/v0/swagger.json';
-  const apiKey = process.env.OAK_API_KEY;
-  if (!apiKey) {
-    throw new Error(
-      'OAK_API_KEY is required for local codegen. ' +
-        'Set it in the environment or in .env.local in this workspace ' +
-        '(see .env.example). ' +
-        'The schema cache is only used in CI mode (CI=true).',
-    );
-  }
-
-  const live = await fetchValidatedSchema(apiSchemaUrl, apiKey);
-  if (live) {
-    await writeSchemaCacheIfChanged(schemaCacheFilePath, live);
-    logger.info('Schema fetched successfully');
-    return createOpenCurriculumSchema(live);
-  }
-
-  throw new Error(
-    'Failed to fetch OpenAPI schema from upstream. ' +
-      'Check OAK_API_KEY is valid and the API is reachable at ' +
-      apiSchemaUrl,
-  );
+  const live = await fetchValidatedSchema(apiSchemaUrl);
+  await writeSchemaCacheIfChanged(schemaCacheFilePath, live);
+  logger.info('Schema fetched successfully');
+  return createOpenCurriculumSchema(live);
 }
 logger.info('Generating type artifacts...');
 

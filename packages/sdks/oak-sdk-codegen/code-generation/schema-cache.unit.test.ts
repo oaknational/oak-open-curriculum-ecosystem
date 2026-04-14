@@ -36,16 +36,24 @@ describe('schema cache helpers', () => {
     });
   });
 
-  it('skips writing when the cached schema has the same version', async () => {
+  it('skips writing when the content is identical', async () => {
+    await writeSchemaCacheIfChanged(cachePath, baseSchema);
+
+    const wroteCache = await writeSchemaCacheIfChanged(cachePath, baseSchema);
+
+    expect(wroteCache).toBe(false);
+  });
+
+  it('writes when content differs even if version is unchanged', async () => {
     await writeSchemaCacheIfChanged(cachePath, baseSchema);
 
     const wroteCache = await writeSchemaCacheIfChanged(cachePath, {
       ...baseSchema,
-      info: { ...baseSchema.info, description: 'No version change' },
+      info: { ...baseSchema.info, description: 'Fixed a description' },
     });
 
-    expect(wroteCache).toBe(false);
+    expect(wroteCache).toBe(true);
     const cachedSchema = await readSchemaCacheOrNull(cachePath);
-    expect(cachedSchema?.info.version).toBe('1.0.0');
+    expect(cachedSchema?.info.description).toBe('Fixed a description');
   });
 });
