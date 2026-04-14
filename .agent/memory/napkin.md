@@ -370,6 +370,128 @@ retained for non-terminal use. Suggestion: consider adding
 `mcp_request` structured context alongside tags for richer error
 detail view.
 
+### Session 2026-04-14d: Build tooling + Sentry holistic review
+
+**Build tooling composability complete.** `tsup.config.base.ts`
+at repo root with 3 factory functions (lib, SDK, app). 16
+workspace configs migrated in 4 batches, verified after each.
+Config-reviewer findings applied: `splitting: false` in shared
+defaults, `target` documented as factory-specific, design-tokens
+build task excluded from turbo input updates. `tsup` added as
+root devDependency (pnpm strict hoisting: transitive dep not
+accessible for type resolution from repo root). 37 tsconfig
+`$schema` annotations added. ADR-010 revised.
+
+**`describeConfigError` extracted to sentry-node (TDD).** Verbatim
+duplicate across both apps — pure function over
+`ObservabilityConfigError` discriminated union. 7 unit tests.
+Both apps now import from `@oaknational/sentry-node`. Follows
+same pattern as `mapFlushError`/`mapCloseError` (Fred ruling:
+error mappers belong in adapter lib).
+
+**`wrapMcpServerWithSentry()` is the centrepiece.** Native Sentry
+function wraps McpServer at transport level. Sentry-reviewer
+confirmed by reading `@sentry/core@10.47.0` source. Compatible
+with `sendDefaultPii: false` — the flag only controls
+`recordInputs`/`recordOutputs` fallback defaults. Security-
+reviewer: LOW RISK. Barney: custom `sentry-mcp` per-handler
+wrappers are now "custom plumbing where a library provides the
+mechanism." Retain sentry-mcp for fixture mode only.
+
+**Preload `--import` flag is canonical for ESM.** No pure-code
+alternative preserves full auto-instrumentation. User accepted
+the flag but required it in a documented shell script
+(`scripts/start-server.sh`) rather than a bare package.json
+entry. Dev runner retains inline `--import` with comment
+pointing to script for full rationale. ESM-without-import
+approach exists (import instrument.mjs as first import) but
+restricts to native Node.js API instrumentation only.
+
+**SENTRY_AUTH_TOKEN provisioned.** Org-level, one per app for
+granular rotation. Source maps spike is now unblocked.
+
+**Barney vs sentry-reviewer tension.** Barney: "3 items not 8"
+— drop custom metrics, CLI metrics, mcp_request context.
+Sentry-reviewer: custom metrics are NOT redundant (spans ≠
+metrics, different Sentry UI surface); mcp_request context is
+marginal but populates a different UI surface (issue sidebar).
+User decision: defer nothing, all items in this PR, split
+across sessions for focus management.
+
+**esbuild type import fails under pnpm strict hoisting.** The
+base config initially imported `type { Plugin } from 'esbuild'`.
+esbuild is a transitive dep of tsup but not directly accessible
+from workspace scope in pnpm. Fix: inline plugin definition in
+the esbuildOptions callback, no esbuild type import needed.
+tsup itself provides the callback typing.
+
+### Session 2026-04-14c: Compliance planning (Claude + ChatGPT)
+
+**Audited MCP server against two directory policies.** Both the
+Anthropic Software Directory Policy and the OpenAI ChatGPT App
+Submission Guidelines. Server largely compliant. 5 gaps found:
+missing privacy policy link (both), graph token efficiency
+(both), test credentials (both), screenshots (OpenAI), developer
+verification (OpenAI).
+
+**Three-layer governance architecture for policy compliance.**
+Layer 1: universal principles in principles.md (model-facing
+response discipline, token-proportionate data design, input
+minimality). Layer 2: MCP-specific rule operationalising those
+principles. Layer 3: ADR-159 with dual-policy mapping and
+domain-specific requirements. Follows existing pattern:
+`no-type-shortcuts.md` rule references `principles.md` sections.
+
+**Principles must be field-agnostic.** Docs reviewer caught that
+the initial "model-facing response discipline" principle named
+MCP-specific fields (`structuredContent`, `_meta`). Universal
+principles use universal vocabulary. MCP field names belong in
+the Layer 2 rule only. The principle is the analog; the rule is
+the instance.
+
+**`unknown` in factory generics contradicts the factory's own
+design.** 3 of 4 architecture reviewers independently caught
+this. `GraphSurfaceConfig<T>` preserves concrete types via
+generic — proposed filter accessors used `(node: unknown)` which
+destroys that invariant. Fix: use `NodeOf<T>` / `EdgeOf<T>`
+conditional types derived from the existing generic.
+
+**Named exceptions in rules erode the principle.** Fred: putting
+"oakContextHint is a permitted exception" directly in the rule
+creates precedent for every future workaround to request its own
+carve-out. The exception belongs in ADR-159 where it has full
+rationale, stated removal condition, and expiry trigger.
+
+**oakContextHint is necessary, not a workaround to apologise for.**
+User correction: MCP clients don't support push notifications yet.
+Without the hint, the model cannot be reliably guided to load
+pedagogical context, which substantially reduces data value. When
+push notifications arrive, the hint becomes a one-time context
+push on session start. The removal condition is externally gated.
+
+**Non-architectural items don't belong in ADRs.** Fred: age
+appropriateness, no advertising, no financial transactions are
+product/policy constraints. ADRs record structural decisions,
+not product rules. These go in the governance doc and checklist.
+
+**ThreadNode shape mismatch caught by assumptions reviewer.**
+`ThreadNode.subjects` is `string[]` (plural — a thread spans
+french/german/spanish). `ThreadNode` has no `keyStage`, only
+`firstYear`/`lastYear`. Plan initially assumed uniform shape
+across all three graphs. Caught before any code was written.
+
+**Filter validation contract must be explicit in tests.** Wilma:
+"returns empty results" is ambiguous — could mean empty graph
+structure, an error, or silent fallback to full graph. WS3 tests
+must codify: zero-match returns `{nodes: [], edges: [], stats:
+{zeroed}}` with a summary, NOT an error, NOT the full graph.
+
+**Stats recomputation is a silent inconsistency vector.** Wilma:
+if summary mode reports recomputed stats but the recomputation
+has a bug, summary-mode numbers diverge from full-mode numbers
+silently. Fix: extract `recomputeStats` as a pure function tested
+independently; assert consistency between modes.
+
 ### Session 2026-04-14b: Reviewer findings, commit, lint hardening
 
 **Committed 3962b5d0**: 33 files, +1126/-263. Context enrichment,

@@ -115,6 +115,10 @@ export function resolveHttpDevExecutionPlan({
     server: {
       label: 'http-dev-server',
       command: resolveWorkspaceBinary(workspaceRoot, 'tsx'),
+      // --import @sentry/node/preload: required Node.js ESM hook for Sentry
+      // auto-instrumentation. Registers import-in-the-middle loader hooks
+      // BEFORE application modules load. See scripts/start-server.sh for
+      // the full rationale and Sentry doc references.
       args: ['--import', '@sentry/node/preload', 'src/index.ts'],
       cwd: workspaceRoot,
       env: resolveServerEnv(parentEnv, mode),

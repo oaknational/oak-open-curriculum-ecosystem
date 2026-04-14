@@ -18,6 +18,7 @@ Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 | [architecture-and-infrastructure/](architecture-and-infrastructure/) | Cross-cutting architecture, system quality, observability | 📋 Planned |
 | [agentic-engineering-enhancements/](agentic-engineering-enhancements/) | Architectural enforcement, hallucination/evidence guards, agent artefact portability (ADR-125), mutation testing, and practice-convergence closeout | 🔄 Active + queued execution |
 | [security-and-privacy/](security-and-privacy/) | MCP security hardening, claim/evidence safeguards, and protocol/auth/tool governance baselines | 🔄 Active execution |
+| [compliance/](compliance/) | External policy compliance, directory listing requirements, regulatory alignment | 📋 Planned |
 | [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 🔄 Active + queued execution |
 | [external/](external/) | Upstream API wishlist | 📋 Reference |
 | [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |

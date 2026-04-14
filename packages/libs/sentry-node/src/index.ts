@@ -1,6 +1,6 @@
 export { createSentryConfig, resolveSentryEnvironment, resolveSentryRelease } from './config.js';
 export { createFixtureSentryStore } from './fixture.js';
-export { mapCloseError, mapFlushError } from './runtime-error.js';
+export { describeConfigError, mapCloseError, mapFlushError } from './runtime-error.js';
 export {
   createSentryInitOptions,
   defaultSentryNodeSdk,

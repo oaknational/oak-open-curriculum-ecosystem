@@ -7,6 +7,12 @@ immediate blocker for Open Public Alpha readiness.
 |---|---|---|
 | [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation (parent plan) | HTTP adoption + rate limiting complete (PR #73 merged, ADR-158). Search CLI + deployment pending. Branch: `feat/otel_sentry_enhancements` |
 
+Build tooling:
+
+| Plan | Scope | Status |
+|---|---|---|
+| [build-tooling-composability.plan.md](./build-tooling-composability.plan.md) | Composable tsup base config + tsconfig `$schema` cleanup | **Complete** — all 7 todos done 2026-04-14 |
+
 Companion remediation and merge plans archived to `archive/completed/`.
 
 Prompt entry point:

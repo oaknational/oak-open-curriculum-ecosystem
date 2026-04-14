@@ -1589,6 +1589,21 @@ export const PATH_OPERATIONS = [
           "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
           "example": "art"
         }
+      },
+      {
+        "in": "query",
+        "name": "examBoard",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "aqa",
+            "edexcel",
+            "eduqas",
+            "ocr",
+            "wjec",
+            "edexcelb"
+          ]
+        }
       }
     ],
     "responses": {

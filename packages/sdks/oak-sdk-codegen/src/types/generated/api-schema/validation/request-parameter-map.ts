@@ -60,6 +60,7 @@ export const REQUEST_PARAMETER_SCHEMAS = {
   "GET:/key-stages/:keyStage/subject/:subject/units": z.object({
     "keyStage": z.enum(["ks1", "ks2", "ks3", "ks4"]),
     "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]),
+    "examBoard": z.enum(["aqa", "edexcel", "eduqas", "ocr", "wjec", "edexcelb"]).optional(),
   }),
   "GET:/keywords": z.object({
     "subject": z.enum(["art", "citizenship", "computing", "cooking-nutrition", "design-technology", "english", "french", "geography", "german", "history", "maths", "music", "physical-education", "religious-education", "rshe-pshe", "science", "spanish"]).optional(),

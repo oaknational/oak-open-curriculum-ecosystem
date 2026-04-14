@@ -17,7 +17,7 @@ import { readFile } from 'node:fs/promises';
 import { config as dotenvConfig } from 'dotenv';
 
 import { generateSchemaArtifacts } from './codegen-core.js';
-import { readSchemaCacheOrNull, writeSchemaCacheIfChanged } from './schema-cache.js';
+import { writeSchemaCacheIfChanged } from './schema-cache.js';
 import { createOpenCurriculumSchema, saveSchemaToFile } from './schema-separation-core.js';
 import { validateOpenApiDocument } from './schema-validator.js';
 import { generateWidgetConstants, generateSubjectHierarchy } from './typegen/index.js';
@@ -28,32 +28,12 @@ import { createCodegenLogger } from './create-codegen-logger.js';
 
 const logger = createCodegenLogger('codegen');
 
-// Load environment variables from repo root .env (or .env.e2e) if not set
-function findRepoRoot(startDir: string): string {
-  let current = startDir;
-  for (;;) {
-    const workspace = path.join(current, 'pnpm-workspace.yaml');
-    const gitDir = path.join(current, '.git');
-    if (existsSync(workspace) || existsSync(gitDir)) {
-      return current;
-    }
-    const parent = path.dirname(current);
-    if (parent === '/') {
-      throw new Error('Could not find repo root. Iterated to `/`');
-    }
-    if (parent === current) {
-      return current;
-    }
-    current = parent;
-  }
-}
-
+// Load environment variables from workspace .env.local if OAK_API_KEY is not
+// already set. The workspace directory is the codegen package root
+// (packages/sdks/oak-sdk-codegen/). See .env.example for required variables.
 if (!process.env.OAK_API_KEY) {
-  const repoRoot = findRepoRoot(process.cwd());
-  const envE2EPath = path.join(repoRoot, '.env.e2e');
-  const envPath = path.join(repoRoot, '.env');
-  const chosen = existsSync(envE2EPath) ? envE2EPath : envPath;
-  dotenvConfig({ path: chosen });
+  const workspaceRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+  dotenvConfig({ path: path.join(workspaceRoot, '.env.local') });
 }
 
 const thisDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -136,23 +116,27 @@ async function loadSchema(): Promise<LoadedSchema> {
 
   const apiSchemaUrl = 'https://open-api.thenational.academy/api/v0/swagger.json';
   const apiKey = process.env.OAK_API_KEY;
-  if (apiKey) {
-    const live = await fetchValidatedSchema(apiSchemaUrl, apiKey);
-    if (live) {
-      await writeSchemaCacheIfChanged(schemaCacheFilePath, live);
-      logger.info('Schema fetched successfully');
-      return createOpenCurriculumSchema(live);
-    }
+  if (!apiKey) {
+    throw new Error(
+      'OAK_API_KEY is required for local codegen. ' +
+        'Set it in the environment or in .env.local in this workspace ' +
+        '(see .env.example). ' +
+        'The schema cache is only used in CI mode (CI=true).',
+    );
   }
 
-  const cached = await readSchemaCacheOrNull(schemaCacheFilePath);
-  if (cached) {
-    const validated = validateOpenApiDocument(cached);
-    return createOpenCurriculumSchema(validated);
+  const live = await fetchValidatedSchema(apiSchemaUrl, apiKey);
+  if (live) {
+    await writeSchemaCacheIfChanged(schemaCacheFilePath, live);
+    logger.info('Schema fetched successfully');
+    return createOpenCurriculumSchema(live);
   }
 
-  const validated = await readCachedSchemaOrThrow();
-  return createOpenCurriculumSchema(validated);
+  throw new Error(
+    'Failed to fetch OpenAPI schema from upstream. ' +
+      'Check OAK_API_KEY is valid and the API is reachable at ' +
+      apiSchemaUrl,
+  );
 }
 logger.info('Generating type artifacts...');
 

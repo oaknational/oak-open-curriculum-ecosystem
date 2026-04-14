@@ -4,6 +4,10 @@
       "type": "http",
       "url": "https://mcp.sentry.dev/mcp/oak-national-academy/oak-open-curriculum-mcp"
     },
+    "sentry-ooc-search-cli": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/mcp/oak-national-academy/oak-open-curriculum-search-cli"
+    },
     "oak-prod": {
       "type": "http",
       "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"

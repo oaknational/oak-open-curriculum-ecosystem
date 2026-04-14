@@ -63,20 +63,37 @@ todos:
     status: done
     priority: next
     note: "Implemented 2026-04-14, committed 3962b5d0. mcp-handler.ts: Zod authInfoExtraSchema for userId extraction (shared with check-mcp-client-auth.ts), enrichObservabilityScope helper extracted (complexity fix). handlers.ts: mcp.tool_name tag. 6 mcp-handler unit tests (setTag/setUser, auth matrix). Code-reviewer + sentry-reviewer approved."
-  # === ENHANCEMENTS (deferred, not needed for 'working') ===
+  # === COMPLETED (2026-04-14c, session c) ===
+  - id: describe-config-error-extraction
+    content: "Extract describeConfigError to @oaknational/sentry-node"
+    status: done
+    note: "Implemented 2026-04-14c. TDD (7 unit tests). Both apps now import from sentry-node. Eliminates verbatim duplication."
+  - id: preload-refactor
+    content: "Move --import @sentry/node/preload from package.json to documented shell script"
+    status: done
+    note: "Implemented 2026-04-14c. scripts/start-server.sh with extensive documentation (why, what happens when off, references). Dev runner retains inline --import with comment pointing to script for rationale."
+  # === REMAINING (this branch, before PR) ===
+  - id: wrap-mcp-server
+    content: "Adopt Sentry.wrapMcpServerWithSentry() — mode-conditional at composition root"
+    status: pending
+    priority: next
+    note: "Highest value remaining item. Native wrapper is superset of sentry-mcp per-handler wrappers (transport correlation, JSON-RPC error classification, session tracking, 20+ OTel MCP semantic convention attributes). Compatible with sendDefaultPii: false. Mode-conditional: sentry mode uses native, fixture mode keeps per-handler. Sentry-reviewer + Barney reviewed. Double-span risk: skip wrapToolHandler when native wrapper is active."
   - id: custom-metrics
     content: "Expose Sentry.metrics (count, gauge, distribution) on the adapter with beforeSendMetric hook"
     status: pending
-    note: "Enhancement. Via adapter (sentry reviewer: DI seam needed). enableMetrics defaults true, no init change."
+    note: "Enhancement. Sentry-reviewer: spans ≠ metrics (different UI surface). Via adapter with DI seam. enableMetrics defaults true."
   - id: cli-metrics
     content: "Wire CLI command execution metrics via Sentry.metrics.count"
     status: pending
     note: "Enhancement. Depends on custom-metrics."
+  - id: mcp-request-context
+    content: "Add Sentry.setContext('mcp_request', ...) for richer error detail in Sentry sidebar"
+    status: pending
+    note: "Sentry-reviewer: span attributes (from native wrapper) populate a different UI surface than setContext sidebar. Marginal but useful for error triage."
   - id: cli-early-init
     content: "Add --import @sentry/node/preload to CLI tsx invocations"
     status: dropped
     note: "Dropped 2026-04-13. User correction: moves critical infrastructure outside of code. Per-script CLI flags are fragile. CLI uses manual spans and does not need auto-instrumentation."
-  # === NEEDS CREDENTIALS OR EXTERNAL (defer until Vercel provisioned) ===
   - id: trace-propagation-es
     content: "Add Elasticsearch host to tracePropagationTargets (low-ceremony, Oak-controlled)"
     status: pending
@@ -92,8 +109,7 @@ todos:
   - id: source-maps-automation
     content: "Automate source map upload via sentry-cli post-build step"
     status: pending
-    priority: next
-    note: "CRITICAL for production. Build tooling decision (2026-04-14): keep tsup, use sentry-cli post-build (Betty + Barney + assumptions-reviewer converge). Spike sentry-cli sourcemaps inject on tsup ESM output first. Needs SENTRY_AUTH_TOKEN. Independent of context enrichment work. See approved plan at ~/.claude/plans/cuddly-swinging-ocean.md."
+    note: "CRITICAL for production. SENTRY_AUTH_TOKEN provisioned (org-level, one per app). Spike sentry-cli sourcemaps inject on tsup ESM output. Independent of context enrichment."
 ---
 
 # Sentry Canonical Alignment

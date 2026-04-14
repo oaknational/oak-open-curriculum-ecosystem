@@ -18,6 +18,9 @@ const config: KnipConfig = {
     // supertest and ts-morph used in scripts/
     'supertest',
     'ts-morph',
+    // tsup at root provides type resolution for tsup.config.base.ts
+    // (workspace configs import factory functions from the base config)
+    'tsup',
   ],
   ignoreBinaries: [
     // External tools not installed via npm
@@ -41,7 +44,13 @@ const config: KnipConfig = {
       project: ['src/**/*.ts'],
     },
     'apps/oak-curriculum-mcp-streamable-http': {
-      entry: ['widget/src/main.tsx', 'smoke-tests/**/*.ts', 'e2e-tests/**/*.ts'],
+      entry: [
+        'src/index.ts',
+        'src/application.ts',
+        'widget/src/main.tsx',
+        'smoke-tests/**/*.ts',
+        'e2e-tests/**/*.ts',
+      ],
       project: [
         'src/**/*.ts',
         'e2e-tests/**/*.ts',
@@ -94,6 +103,9 @@ const config: KnipConfig = {
     'packages/core/openapi-zod-client-adapter': {
       project: ['src/**/*.ts'],
     },
+    'packages/core/observability': {
+      project: ['src/**/*.ts'],
+    },
     'packages/core/env': {
       project: ['src/**/*.ts'],
     },
@@ -112,7 +124,21 @@ const config: KnipConfig = {
     'packages/libs/search-contracts': {
       project: ['src/**/*.ts'],
     },
+    'packages/libs/sentry-node': {
+      project: ['src/**/*.ts'],
+    },
     'packages/sdks/oak-curriculum-sdk': {
+      // Knip cannot resolve entries through createSdkConfig() factory.
+      // Explicit entries match the tsup.config.ts entry patterns.
+      entry: [
+        'src/*.ts',
+        'src/client/**/*.ts',
+        'src/config/**/*.ts',
+        'src/types/**/*.ts',
+        'src/public/**/*.ts',
+        'src/mcp/**/*.ts',
+        'src/validation/**/*.ts',
+      ],
       project: ['src/**/*.ts'],
       ignoreDependencies: [
         // @zod/core is a transitive dep of zod, required at runtime
@@ -120,7 +146,8 @@ const config: KnipConfig = {
       ],
     },
     'packages/sdks/oak-sdk-codegen': {
-      entry: ['code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
+      // Knip cannot resolve entries through createSdkConfig() factory.
+      entry: ['src/**/*.ts', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
       project: ['src/**/*.ts', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
       ignoreDependencies: ['@zod/core'],
     },
@@ -129,6 +156,19 @@ const config: KnipConfig = {
       project: ['src/**/*.ts', 'tests/**/*.ts'],
     },
     'packages/sdks/oak-search-sdk': {
+      // Knip cannot resolve entries through createSdkConfig() factory.
+      entry: [
+        'src/index.ts',
+        'src/read.ts',
+        'src/admin.ts',
+        'src/create-search-sdk.ts',
+        'src/create-search-retrieval.ts',
+        'src/types/**/*.ts',
+        'src/retrieval/**/*.ts',
+        'src/admin/**/*.ts',
+        'src/observability/**/*.ts',
+        'src/internal/**/*.ts',
+      ],
       project: ['src/**/*.ts'],
     },
   },

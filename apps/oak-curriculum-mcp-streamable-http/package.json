@@ -17,7 +17,7 @@
     "dev:widget-in-host": "bash scripts/dev-widget-in-host.sh",
     "inspect:oauth": "tsx smoke-tests/smoke-oauth-mcp-inspector.ts",
     "trace:oauth": "tsx smoke-tests/auth/capture-browser-trace.ts",
-    "start": "node --import @sentry/node/preload dist/index.js",
+    "start": "bash scripts/start-server.sh",
     "prod:harness": "node scripts/server-harness.js",
     "prod:requests": "node scripts/run-requests.js",
     "prod:diagnostics": "pnpm build && pnpm prod:harness",

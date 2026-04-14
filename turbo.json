@@ -51,6 +51,7 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsup.config.base.ts",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",
@@ -66,6 +67,7 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsup.config.base.ts",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",
@@ -81,6 +83,7 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
+        "$TURBO_ROOT$/tsup.config.base.ts",
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",

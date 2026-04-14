@@ -1,33 +1,14 @@
-import { defineConfig } from 'tsup';
+import { createLibConfig } from '../../../tsup.config.base.js';
 
-export default defineConfig({
-  entry: {
-    index: 'src/index.ts',
-  },
-  format: ['esm'],
+export default createLibConfig({
   dts: true,
-  splitting: false,
-  sourcemap: true,
-  clean: true,
-  target: 'es2022',
-  minify: false,
-  bundle: true,
-  tsconfig: './tsconfig.build.json',
-  // Exclude test files from build
-  ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],
-  outDir: 'dist',
-  treeshake: true,
   external: [
-    // Node built-ins
     'fs',
     'path',
     'node:fs',
     'node:path',
-    // Core tools - consumers provide these
     'eslint',
     'typescript',
-    // ESLint plugins and configs - no need to bundle, they're runtime dependencies
-    // Bundling them causes eval warnings from browserslist (used for browser targets)
     '@eslint/js',
     '@next/eslint-plugin-next',
     '@typescript-eslint/eslint-plugin',

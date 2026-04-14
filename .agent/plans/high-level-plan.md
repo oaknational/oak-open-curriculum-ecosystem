@@ -297,6 +297,7 @@ Strategic architecture remains anchored in:
 | `semantic-search/` | Search quality roadmap and SDK integration | 📋 M3 Public Beta | [semantic-search/roadmap.md](semantic-search/roadmap.md) |
 | `agentic-engineering-enhancements/` | Architectural constraints, AI guardrails, mutation testing | 📋 M3 Public Beta | [agentic-engineering-enhancements/README.md](agentic-engineering-enhancements/README.md) |
 | `security-and-privacy/` | Security hardening, hallucination guards, evidence-backed claims | 📋 M3 Public Beta | [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md) |
+| `compliance/` | External policy compliance, directory listing requirements | 📋 M2 Open Public Alpha | [compliance/roadmap.md](compliance/roadmap.md) |
 | `architecture-and-infrastructure/` | Cross-cutting architecture, observability, system quality | 📋 M3 Public Beta | [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md) |
 | `user-experience/` | Persona-level outcome contracts | 📋 M1-M2 | [user-experience/README.md](user-experience/README.md) |
 | `developer-experience/` | SDK publishing, generated docs, tooling | 📋 M1-M3 mixed lanes | [active/README.md](developer-experience/active/README.md) |

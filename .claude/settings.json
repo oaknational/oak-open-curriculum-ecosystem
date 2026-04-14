@@ -65,7 +65,15 @@
       "WebFetch(domain:github.com)",
       "mcp__sentry-ooc-mcp__whoami",
       "mcp__sentry-ooc-mcp__find_releases",
-      "WebFetch(domain:support.claude.com)"
+      "WebFetch(domain:support.claude.com)",
+      "WebFetch(domain:developers.openai.com)",
+      "WebFetch(domain:sentry.io)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(echo \"type-check exit: $?\")",
+      "mcp__sentry-ooc-mcp__search_docs",
+      "mcp__sentry-ooc-mcp__get_doc",
+      "Bash(chmod +x /Users/jim/code/oak/oak-open-curriculum-ecosystem/apps/oak-curriculum-mcp-streamable-http/scripts/start-server.sh)",
+      "WebFetch(domain:open-api.thenational.academy)"
     ]
   },
   "hooks": {

@@ -168,6 +168,7 @@
     "shellcheck": "^4.1.0",
     "supertest": "^7.2.2",
     "ts-morph": "^27.0.2",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "turbo": "^2.9.5",
     "typescript": "^5",
