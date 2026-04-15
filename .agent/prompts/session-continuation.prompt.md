@@ -99,12 +99,11 @@ git log --oneline --decorate -10
   - `codegen-once.mock.ts` uses `vi.mock` (prohibited pattern)
     and tests the old cache-fallback path — needs updating
   - Upstream fix branch exists in oak-openapi but not submitted
-- **Uncommitted doc changes**: 7 files (6 modified + 1 new
-  napkin archive) from sessions 2026-04-14f and 2026-04-14g.
-  All are docs/plans/memory — no code changes. Commit these
-  first before starting new work.
-- **Next safe step**: **(0) Commit** pending doc changes
-  (see above). Then choose workstream:
+- **Docs handoff state**: the 7-file docs/plans/memory handoff
+  landed in `ee3423ce` (`docs(sentry): sync native wrapper
+  investigation handoff`). The worktree was clean at session
+  start; there is no pending pre-investigation docs commit.
+- **Next safe step**:
   **(A) Sentry**: run the native wrapper investigation
   (6 questions in plan, code reading + spike, no
   implementation until answered). Then adopt based on

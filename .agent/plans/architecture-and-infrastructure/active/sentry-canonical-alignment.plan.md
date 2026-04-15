@@ -477,9 +477,12 @@ The package exports more than `wrapToolHandler`. All three handler
 types are wrapped, plus a recorder and observation types are used
 in test infrastructure. The investigation must answer:
 
-1. **Native wrapper scope**: does `wrapMcpServerWithSentry()` cover
-   tools, resources, AND prompts? Our custom wrappers provide all
-   three and all three are used.
+1. **Native wrapper scope**: does `wrapMcpServerWithSentry()`
+   instrument tools, resources, AND prompts in Oak's actual
+   `McpServer` + Streamable HTTP path, and what transport/client
+   spans does it add beyond the current per-handler wrappers? Our
+   custom wrappers provide all three primitives, but the native
+   wrapper also claims transport-level monitoring.
 2. **`sentry-mcp` export audit**: `createInMemoryMcpObservationRecorder`
    and the `McpObservation*` types — are these coupled to the
    per-handler wrappers, or do they have independent value?
@@ -488,7 +491,9 @@ in test infrastructure. The investigation must answer:
    and `http-observability.ts` fixture mode). If per-handler wrappers
    are removed, does this recorder still serve a purpose?
 4. **Call-site surface**: at least 8 files import from `sentry-mcp`.
-   Map the full removal surface.
+   Map the full removal surface and classify each import as runtime,
+   fixture/test-only, package-internal, or config-only. Do not let
+   "used in tests" collapse into "must survive as a package".
 5. **Off-mode safety**: when `Sentry.init()` is never called, does
    `wrapMcpServerWithSentry()` degrade gracefully or error?
 6. **`sendDefaultPii: false` interaction**: confirmed compatible in
@@ -499,9 +504,26 @@ in test infrastructure. The investigation must answer:
 
 - Each question has a verified answer (code reading or spike, not
   assumption)
+- Each answer records its evidence source explicitly (file path,
+  upstream doc/source, or spike command/result). "Seems fine" is not
+  evidence.
+- Wrapper-scope evidence includes at least one local spike through
+  Oak's actual Streamable HTTP server covering a tool call and one
+  non-tool primitive (resource or prompt), plus any transport/client
+  spans added by the native wrapper.
+- Off-mode and capture-policy evidence includes a no-init run proving
+  the wrapper does not break server behaviour, plus verification that
+  `sendDefaultPii: false` leaves MCP inputs/outputs unrecorded unless
+  `recordInputs`/`recordOutputs` are explicitly enabled.
 - Clear recommendation: remove `sentry-mcp` entirely, reduce it, or
   (with genuine justification based on evidence) retain specific parts
-- If removal: list affected files and test infrastructure migration
+- Any retained `@oaknational/sentry-mcp` surface has a named
+  post-migration consumer that is not just test convenience; test-only
+  needs must be compared against app-local fakes or
+  `@oaknational/sentry-node` fixture support before retaining the
+  package.
+- If removal: list affected files and test infrastructure migration,
+  distinguishing runtime, fixture, test, and config surfaces
 - If retention: state exactly what is retained and why, with evidence
   that the justification is not sunk-cost
 

@@ -77,9 +77,48 @@ criteria. Updated sequencing.
 - When a user explicitly invokes `start-right-thorough`, treat the
   current branch's continuation prompt and active plan as part of the
   grounding pass, not optional extra reading
-- On this branch, the worktree is already dirty with doc/plan/memory
-  changes. Treat them as pre-existing context and do not tidy or
-  overwrite them while grounding
-- Current safe next step from the continuation prompt remains:
-  commit the pending doc-only changes before starting new Sentry or
-  compliance work
+- Grounding must verify prompt state against live git state. In this
+  session the prompt still said 7 doc files were uncommitted, but
+  `git status --short` was clean and `ee3423ce` already contained the
+  handoff. Treat stale continuity notes as candidate false blockers,
+  not instructions to repeat work.
+- For anti-sunk-cost investigations, the acceptance criteria need an
+  explicit burden of proof for retention. "Tests use it" is evidence
+  of a migration surface, not evidence that a package should survive.
+- Native `wrapMcpServerWithSentry()` is materially broader than
+  `@oaknational/sentry-mcp`: it wraps `tool`/`resource`/`prompt`
+  registration, transport `onmessage`/`send`/`onclose`/`onerror`,
+  request-response span correlation, initialize/session metadata, and
+  protocol/transport error capture. Treat per-handler wrappers as only
+  one slice of the current observability behaviour.
+- `sendDefaultPii: false` does not disable native MCP instrumentation;
+  it drives the default `recordInputs`/`recordOutputs` values to
+  `false` and filters only network-PII span fields (client
+  address/port, resource URI). Other MCP metadata still records unless
+  explicitly removed elsewhere.
+
+## Session: 2026-04-15 — Native wrapper compatibility gap
+
+### What Was Verified
+- `wrapMcpServerWithSentry()` patches `connect` plus the deprecated
+  `tool`/`resource`/`prompt` methods, and its validation gate checks
+  only for those method names on the server instance
+- MCP SDK v1.29.0 implements `registerTool`,
+  `registerResource`, and `registerPrompt` as separate public methods,
+  not aliases that forward through `tool`/`resource`/`prompt`
+- Oak's HTTP server registers every tool, resource, and prompt through
+  `register*`, including `registerAppTool()`, which delegates to
+  `server.registerTool(...)`
+- Runtime spike confirmed the patch surface: after wrapping a real
+  `McpServer`, `tool`/`resource`/`prompt` changed identity while
+  `registerTool`/`registerResource`/`registerPrompt` did not
+
+### Consequence
+- This is a real compatibility blocker for replacing Oak's
+  per-handler wrappers. Transport wrapping still creates request spans
+  and captures transport / JSON-RPC error responses, but it does not
+  wrap the handlers Oak actually registers. Tool exceptions are
+  especially important: the SDK converts them into `CallToolResult`
+  `{ isError: true }` responses before transport error capture sees a
+  JSON-RPC error, so without handler wrapping those failures lose the
+  native wrapper's explicit exception capture path.
