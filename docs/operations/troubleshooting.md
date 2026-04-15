@@ -315,6 +315,14 @@ Reviewer sub-agents dispatched near the end of a conversation
 turn may be lost when the turn completes. Re-invoke in the
 next session.
 
+### MCP App UI Not Rendering in Client
+
+Test with the reference host (`ext-apps basic-host`) first.
+Cursor caches MCP tool `_meta` and does not reliably refresh
+on disconnect/reconnect. If the reference host renders the
+widget but Cursor doesn't, it's a client cache issue, not a
+server bug.
+
 ### MCP Tool Call Fails with Wrong Param Type
 
 Always read tool descriptors before calling — parameter types

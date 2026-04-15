@@ -73,11 +73,15 @@ todos:
     status: done
     note: "Implemented 2026-04-14c. scripts/start-server.sh with extensive documentation (why, what happens when off, references). Dev runner retains inline --import with comment pointing to script for rationale."
   # === REMAINING (this branch, before PR) ===
-  - id: wrap-mcp-server
-    content: "Adopt Sentry.wrapMcpServerWithSentry() — mode-conditional at composition root"
+  - id: wrap-mcp-server-investigation
+    content: "Investigate wrapMcpServerWithSentry() and audit @oaknational/sentry-mcp for removal"
     status: pending
     priority: next
-    note: "Highest value remaining item. Native wrapper is superset of sentry-mcp per-handler wrappers (transport correlation, JSON-RPC error classification, session tracking, 20+ OTel MCP semantic convention attributes). Compatible with sendDefaultPii: false. Mode-conditional: sentry mode uses native, fixture mode keeps per-handler. Sentry-reviewer + Barney reviewed. Double-span risk: skip wrapToolHandler when native wrapper is active."
+    note: "INVESTIGATE BEFORE IMPLEMENTING. The native wrapper is a superset of our custom per-handler wrappers. The prior 'retain sentry-mcp for fixture mode' framing was sunk-cost rationalisation — we chose the native approach then invented reasons to keep the old one. Fixture mode tests the adapter surface, not a parallel wrapping mechanism. Investigation must determine: (1) native wrapper scope (tools, resources, prompts?), (2) sentry-mcp export audit — what survives?, (3) test infrastructure impact, (4) off-mode safety. See 'Native MCP Server Wrapping' plan section."
+  - id: wrap-mcp-server-adopt
+    content: "Adopt wrapMcpServerWithSentry() — replace per-handler wrapping based on investigation findings"
+    status: pending
+    note: "Blocked on wrap-mcp-server-investigation. Implementation scope depends on investigation findings. May include full removal of @oaknational/sentry-mcp or reduction to a smaller surface."
   - id: custom-metrics
     content: "Expose Sentry.metrics (count, gauge, distribution) on the adapter with beforeSendMetric hook"
     status: pending
@@ -439,6 +443,70 @@ completes, which happens after `createHttpObservability`. No race.
 
 ---
 
+## Native MCP Server Wrapping — Investigation Required
+
+### Metacognitive Correction (2026-04-14)
+
+The prior framing of this item contained sunk-cost rationalisation.
+The sequence was:
+
+1. Discovered `wrapMcpServerWithSentry()` — a native Sentry function
+   that wraps the MCP server at the transport level
+2. Barney confirmed it's a superset of our custom `sentry-mcp`
+   per-handler wrappers ("custom plumbing where a library provides
+   the mechanism")
+3. Instead of concluding "the custom wrapping is superseded," the
+   plan said "retain sentry-mcp for fixture mode"
+4. This invented a reason to keep code that had been replaced
+
+The "fixture mode needs it" justification doesn't hold: fixture mode
+tests the **adapter surface** (setTag, setUser, setContext, close).
+It does not need a parallel wrapping mechanism that isn't used in
+production. Testing a different code path in test mode than in
+production proves the test path works, not the production path.
+
+### Correct Framing
+
+`wrapMcpServerWithSentry()` **replaces** per-handler wrapping. The
+question is not "how do we make both coexist?" but "what (if
+anything) from `@oaknational/sentry-mcp` survives this replacement?"
+
+### Investigation (before any code)
+
+The package exports more than `wrapToolHandler`. All three handler
+types are wrapped, plus a recorder and observation types are used
+in test infrastructure. The investigation must answer:
+
+1. **Native wrapper scope**: does `wrapMcpServerWithSentry()` cover
+   tools, resources, AND prompts? Our custom wrappers provide all
+   three and all three are used.
+2. **`sentry-mcp` export audit**: `createInMemoryMcpObservationRecorder`
+   and the `McpObservation*` types — are these coupled to the
+   per-handler wrappers, or do they have independent value?
+3. **Test infrastructure**: the app's test helpers use
+   `createInMemoryMcpObservationRecorder` (in `observability-fakes.ts`
+   and `http-observability.ts` fixture mode). If per-handler wrappers
+   are removed, does this recorder still serve a purpose?
+4. **Call-site surface**: at least 8 files import from `sentry-mcp`.
+   Map the full removal surface.
+5. **Off-mode safety**: when `Sentry.init()` is never called, does
+   `wrapMcpServerWithSentry()` degrade gracefully or error?
+6. **`sendDefaultPii: false` interaction**: confirmed compatible in
+   principle (sentry-reviewer, SDK source). Verify the specific
+   interaction with `recordInputs`/`recordOutputs` defaults.
+
+### Investigation Acceptance Criteria
+
+- Each question has a verified answer (code reading or spike, not
+  assumption)
+- Clear recommendation: remove `sentry-mcp` entirely, reduce it, or
+  (with genuine justification based on evidence) retain specific parts
+- If removal: list affected files and test infrastructure migration
+- If retention: state exactly what is retained and why, with evidence
+  that the justification is not sunk-cost
+
+---
+
 ## Gap 3.5 — Custom Metrics (MEDIUM)
 
 ### Problem
@@ -759,25 +827,24 @@ events after flush).
 
 ## Sequencing
 
+Gaps 1–3 and CLI close/enrichment/shutdown are DONE.
+
 ```text
-Gap 1 HTTP (early init)      — spike first, then one-line change
-Gap 2 (error handler)        — can run in PARALLEL with Gap 1
-Gap 3 (adapter ext)          — independent of Gaps 1-2
-  └─ Gap 3.5 (metrics)       — depends on Gap 3 (same adapter pattern)
-  └─ CLI enrichment          — depends on Gap 3 (setTag/setContext)
-  └─ CLI metrics             — depends on Gap 3.5
-  └─ CLI close()             — depends on Gap 3 (close on runtime)
-Gap 4a (ES propagation)      — independent, low-ceremony
-Gap 4b (Oak API propagation) — independent, security review gates it
-Gap 5 (profiling)            — evaluate before release, ship or reject
-Gap 6 (source maps)          — must be working before first prod errors
-Gap 1 CLI (early init)       — low priority, after HTTP is proven
+NEXT: Native wrapper investigation  — before any wrapping code changes
+  └─ Native wrapper adoption        — blocked on investigation findings
+Gap 3.5 (metrics)                   — independent of native wrapper
+  └─ CLI metrics                    — depends on Gap 3.5
+mcp_request context                 — independent, low-ceremony
+Gap 4a (ES propagation)             — independent, low-ceremony
+Gap 4b (Oak API propagation)        — independent, security review gates
+Gap 5 (profiling)                   — evaluate before release
+Gap 6 (source maps)                 — must be working before first prod errors
 ```
 
-15 todos, all pending. Gaps 5 and 6 are pre-release requirements,
-not post-release evaluations. The 15 items are the original 12 gap
-items plus 3 from the merge session: `cli-log-level-di`,
-`cli-logger-di-audit`, `cli-shutdown-ordering`.
+The investigation gate is critical: it determines whether
+`@oaknational/sentry-mcp` is removed entirely (changing ~8 files)
+or reduced. Implementation without investigation risks building on
+a false premise again.
 
 **This plan does not block the parent plan** — Vercel credential
 provisioning and deployment evidence can proceed independently.

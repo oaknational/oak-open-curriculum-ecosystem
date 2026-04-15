@@ -164,8 +164,6 @@ context with no natural permanent home.
   use `toStrictEqual` not `toBe` for structural equality
 - `server.e2e.test.ts` has a hardcoded aggregated tools
   list — must be updated when adding new aggregated tools
-- Capturing calls in a typed array (`const calls: T[] = []`)
-  beats `vi.fn().mock.calls` which leaks `any`
 - **Test pyramid gap: pieces vs composition**: unit + E2E
   tests can all pass while the integrated product fails. If
   a feature spans multiple modules (e.g. MCP tool → SDK →
@@ -196,6 +194,20 @@ context with no natural permanent home.
   streaming all happen there. Use MCP client SDK
   (`Client` + `StreamableHTTPClientTransport`) for full-
   fidelity E2E tests alongside supertest.
+
+## Linting and Code Quality
+
+- **Any rule at `'warn'` is a rule that's off.** Warnings
+  scroll past; only `'error'` enforces. Materialised: 13 type
+  assertions accumulated silently under `'warn'` severity.
+- **`@ts-expect-error` is the smell, not the solution.** If a
+  test needs `@ts-expect-error` to compile, the test is wrong —
+  the type system already enforces the constraint. Delete the
+  test, don't suppress the types.
+- **Self-justifying eslint-disable comments embed false
+  assumptions.** "unavoidable: bridging incompatible types"
+  rationalises the violation. Ask: WHY are the types
+  incompatible?
 
 ## Build System (Domain-Specific)
 
@@ -246,8 +258,6 @@ context with no natural permanent home.
   — they do NOT go through `ToolExecutionResult`
 - `AggregatedToolName` type derives from
   `keyof typeof AGGREGATED_TOOL_DEFS`
-- ADR-108 bans search-sdk → curriculum-sdk dependency.
-  Shared data lives in `@oaknational/sdk-codegen/synonyms`
 - When removing an entry from `LIB_PACKAGES`, check ALL
   packages that called `createLibBoundaryRules` with that
   name — zone uses `../${otherLib}/**` relative paths
@@ -259,31 +269,6 @@ context with no natural permanent home.
   still work in non-MCP-Apps hosts (Claude Code, CLI). The
   host ignores `_meta.ui` and the tool returns text content
   normally. No fallback code needed — the protocol handles it.
-- **`_meta.ui.visibility` is an array**: `["model"]`,
-  `["app"]`, or `["model", "app"]`. Controls who can call
-  the tool. Missing = both. `registerAppTool` normalises both
-  nested `_meta.ui.resourceUri` and legacy flat key formats.
-- **MCP Apps handler composition**: use `addEventListener`
-  for all notification events (`toolinput`, `toolresult`,
-  `toolcancelled`, `hostcontextchanged`). The `on*` property
-  setters are deprecated since ext-apps 1.5. `onteardown` and
-  `onerror` are NOT deprecated (request handlers, not events).
-- **MCP SDK `registerTool` uses unexported generics**: the
-  generic constraints (`ZodRawShapeCompat`, `AnySchema`) are
-  not exported. No plain function can satisfy
-  `Pick<McpServer, 'registerTool'>`. Test at the right level
-  — unit test the handler function directly, not through
-  `registerHandlers` → `McpServer`.
-- **Runtime derivation from schema, not hardcoded codegen**:
-  the cardinal rule means the runtime schema IS the source of
-  truth. Hardcoding values the schema already contains creates
-  a stale copy. Correct approach: runtime extraction from the
-  imported schema object, with the TYPE flowing from the schema
-  type system at compile time. `API_HTTP_METHODS` is derived
-  from `schema.paths` at runtime, not from a generated literal.
-- **MCP App UI debugging: test with reference host first**.
-  Cursor caches MCP tool `_meta` and does not reliably refresh
-  on disconnect/reconnect. If the reference host (`ext-apps
-  basic-host`) renders the widget but Cursor doesn't, it's a
-  client cache issue, not a server bug. Hours were lost
-  investigating correct server code due to this.
+- **MCP SDK `registerTool` uses unexported generics**: test
+  handler functions directly, not through `registerHandlers`
+  → `McpServer`.

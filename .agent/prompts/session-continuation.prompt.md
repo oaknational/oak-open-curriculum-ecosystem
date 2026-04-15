@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-14
+last_updated: 2026-04-15
 ---
 
 # Session Continuation
@@ -47,28 +47,29 @@ git log --oneline --decorate -10
 
 - **Workstream**: Two concurrent on `feat/otel_sentry_enhancements`.
   (A) Sentry + Build Tooling — build tooling complete, 9 Sentry
-  items remain. (B) Compliance — plan complete, codegen fixes
-  committed, upstream API requests drafted.
+  items remain (plan overhauled). (B) Compliance — plan complete,
+  codegen fixes committed, upstream API requests drafted, upstream
+  offset/limit fix applied locally.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-    (12 of 20 todos done; 8 remaining)
+    (12 of 22 todos done, 1 dropped, 9 pending — plan overhauled
+    2026-04-14g)
   - `.agent/plans/compliance/current/claude-and-chatgpt-app-submission-compliance.plan.md`
     (**reviewed by 7 specialists**, ready for promotion)
   - `.agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md`
     (**PENDING** — open questions, owner decisions needed)
-- **Current state**: **Compliance session (2026-04-14e).**
-  Audited MCP server against Anthropic + OpenAI directory
-  policies. Created `compliance/` plan collection (8 workstreams,
-  7 specialist reviews). Fixed codegen: removed silent schema
-  cache fallback (fail-fast), removed OAK_API_KEY gate (swagger
-  is public), full-content cache comparison (not version-only),
-  removed dotenv dependency. Added CI advisory schema drift
-  check. Confirmed limit/offset description swap is an upstream
-  API bug (live spec verified). Upstream API requests doc
-  drafted (limit/offset swap + asset pagination).
-- **Current objective**: Promote compliance plan to `active/`
-  and begin WS1 (governance docs) when ready. Sentry 9 items
-  remain.
+- **Current state**: **Metacognitive correction session
+  (2026-04-14g).** Discovered sunk-cost rationalisation in the
+  `wrapMcpServerWithSentry()` plan item. The prior framing
+  ("retain sentry-mcp for fixture mode") kept the old approach
+  alongside the new one and invented justifications. Overhauled
+  the plan: split `wrap-mcp-server` into investigation +
+  adoption todos, added "Native MCP Server Wrapping —
+  Investigation Required" section with 6 questions, updated
+  sequencing. No code changes — plan correction only.
+- **Current objective**: Sentry native wrapper investigation
+  (highest priority), then remaining Sentry items, then
+  compliance promotion.
 - **Hard invariants / non-goals**:
   - All Sentry invariants unchanged
   - Compliance: no `unknown` in filter accessor types
@@ -76,51 +77,43 @@ git log --oneline --decorate -10
     MCP specifics
   - Compliance: oakContextHint rationale in ADR only
   - All graph tools must support filtering (factory invariant)
-- **Recent surprises / corrections** (2026-04-14e):
-  - **Silent fallback is not a fallback, it's a lie.** Codegen
-    fell back to stale cache without API key. The swagger
-    endpoint is public — no key needed at all. The "fallback"
-    hid stale data for months. Fixed: local codegen always
-    fetches live; CI uses cache; no middle ground.
-  - **Version-only cache comparison misses content fixes.**
-    `writeSchemaCacheIfChanged` compared version strings only.
-    Upstream can fix descriptions without bumping versions.
-    Fixed: full serialised content comparison.
-  - **WebFetch model summaries can misreport raw data.**
-    First extraction reported the live spec had correct
-    descriptions. Subsequent raw verification proved the live
-    spec has them swapped. Always verify raw data before
-    changing plans based on a model summary.
-  - **A function used in tests is not a reason to keep it.**
-    Only product-code usage justifies keeping a function.
-    Test usage justifies investigating whether the test is
-    testing behaviour or implementation.
-  - **Tests that constrain implementation, not behaviour.**
-    "skips writing when same version" tested the version-only
-    comparison mechanism, not the desired behaviour (skip when
-    content identical). Replaced with two tests: identical
-    content skips, different content writes regardless of
-    version.
-  - Prior Sentry corrections unchanged.
+- **Recent surprises / corrections** (2026-04-14g):
+  - **Sunk-cost rationalisation in native wrapper plan.** We
+    chose `wrapMcpServerWithSentry()` as the better approach,
+    kept the old per-handler wrappers, then invented "fixture
+    mode needs it" to justify both. Fixture mode tests the
+    adapter surface — it doesn't need a parallel wrapping
+    mechanism. The correct question is "what survives
+    replacement?" not "how do we make both coexist?"
+  - **"Gate on mode" was sophistication on a false premise.**
+    Building conditional wrapping logic assumed both approaches
+    should coexist. The mode-gating was the wrong question —
+    it made a sunk-cost decision look like engineering prudence.
+  - Prior corrections unchanged.
 - **Open questions / low-confidence areas**:
   - OQ1-OQ3 from Sentry workstream unchanged
+  - Native wrapper investigation (6 questions in plan section)
   - oakContextHint expiry depends on external MCP SDK feature
   - `principles.md` fitness: 519/525 lines, trimming candidate
     identified but not executed
   - `codegen-once.mock.ts` uses `vi.mock` (prohibited pattern)
     and tests the old cache-fallback path — needs updating
-- **Next safe step**: Choose workstream:
-  **(A) Sentry**: `wrapMcpServerWithSentry()` adoption, then
-  metrics, trace propagation, source maps, reviews.
-  **(B) Compliance**: promote plan to `active/`, begin WS1
-  (ADR-159, safety-and-security.md, 3 principles, 1 rule).
-- **Deep consolidation status**: not due — session findings
-  captured in napkin and plan. Codegen fixes committed.
-  (prefer-native-sdk-over-custom-plumbing, pnpm-strict-
-  hoisting-type-resolution), active README updated. Napkin at
-  570 lines (rotation due next session). distilled.md at 289
-  lines (graduation due next session). 4 pre-existing fitness
-  violations unchanged.
+  - Upstream fix branch exists in oak-openapi but not submitted
+- **Uncommitted doc changes**: 7 files (6 modified + 1 new
+  napkin archive) from sessions 2026-04-14f and 2026-04-14g.
+  All are docs/plans/memory — no code changes. Commit these
+  first before starting new work.
+- **Next safe step**: **(0) Commit** pending doc changes
+  (see above). Then choose workstream:
+  **(A) Sentry**: run the native wrapper investigation
+  (6 questions in plan, code reading + spike, no
+  implementation until answered). Then adopt based on
+  findings. **(B) Compliance**: promote plan to `active/`,
+  begin WS1 (ADR-159, safety-and-security.md, 3 principles,
+  1 rule).
+- **Deep consolidation status**: completed this handoff —
+  new pattern extracted, napkin updated, prompt and plan
+  synced.
 
 ## Active Workstreams (2026-04-14)
 
@@ -129,13 +122,14 @@ git log --oneline --decorate -10
 **Plans**:
 
 - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-  (12 of 20 todos done; 8 remaining on this branch)
+  (12 of 22 todos done, 1 dropped, 9 pending — plan overhauled)
 - `.agent/plans/architecture-and-infrastructure/active/build-tooling-composability.plan.md`
   (**COMPLETE** — all 7 todos done)
 
 Build tooling complete. 9 Sentry items remain. Highest priority:
-`wrapMcpServerWithSentry()` adoption (native wrapper replaces
-custom per-handler wrapping in sentry mode).
+native wrapper **investigation** (6 questions, code reading +
+spike). Prior "mode-conditional" framing was sunk-cost
+rationalisation — corrected 2026-04-14g.
 
 ### 2. Compliance — PLAN COMPLETE + CODEGEN FIXES COMMITTED
 
