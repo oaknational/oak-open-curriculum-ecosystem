@@ -73,7 +73,11 @@
       "mcp__sentry-ooc-mcp__search_docs",
       "mcp__sentry-ooc-mcp__get_doc",
       "Bash(chmod +x /Users/jim/code/oak/oak-open-curriculum-ecosystem/apps/oak-curriculum-mcp-streamable-http/scripts/start-server.sh)",
-      "WebFetch(domain:open-api.thenational.academy)"
+      "WebFetch(domain:open-api.thenational.academy)",
+      "WebFetch(domain:educationendowmentfoundation.org.uk)",
+      "WebFetch(domain:eef.dev)",
+      "WebFetch(domain:d2tic4wvo1iusb.cloudfront.net)",
+      "WebFetch(domain:www.nationalarchives.gov.uk)"
     ]
   },
   "hooks": {

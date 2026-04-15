@@ -7,6 +7,7 @@ child_plans:
   - "misconception-graph-mcp-surface.plan.md"
   - "eef-evidence-mcp-surface.plan.md"
   - "nc-knowledge-taxonomy-surface.plan.md"
+  - "education-skills-mcp-surface.plan.md"
   - "agent-guidance-consolidation.plan.md"
 specialist_reviewer: "mcp-reviewer, code-reviewer, docs-adr-reviewer, architecture-reviewer-betty"
 todos:

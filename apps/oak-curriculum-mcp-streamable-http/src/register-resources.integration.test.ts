@@ -28,7 +28,6 @@ import {
   registerAllResources,
   type ResourceRegistrationOptions,
 } from './register-resources.js';
-import { createFakeHttpObservability } from './test-helpers/fakes.js';
 
 const TEST_WIDGET_HTML = '<!doctype html><html><body>Oak Curriculum App</body></html>';
 
@@ -233,14 +232,11 @@ function expectJsonContent(content: McpUiReadResourceResult['contents'][number] 
   }).not.toThrow();
 }
 
-/** Shared observability options for all registration tests. */
+/** Shared options for all registration tests. */
 function createTestOptions(
   getWidgetHtml: ResourceRegistrationOptions['getWidgetHtml'] = () => TEST_WIDGET_HTML,
 ): ResourceRegistrationOptions {
-  return {
-    observability: createFakeHttpObservability(),
-    getWidgetHtml,
-  };
+  return { getWidgetHtml };
 }
 
 describe('registerDocumentationResources', () => {
@@ -249,7 +245,6 @@ describe('registerDocumentationResources', () => {
   let registrationCalls: RegisteredResourceCapture[];
   let readResource: (uri: string) => Promise<ReadResourceCapture>;
   let flush: () => Promise<void>;
-  let observability: ResourceRegistrationOptions['observability'];
 
   beforeEach(() => {
     const mock = createMockServer();
@@ -258,11 +253,10 @@ describe('registerDocumentationResources', () => {
     registrationCalls = mock.registrationCalls;
     readResource = mock.readResource;
     flush = mock.flush;
-    observability = createFakeHttpObservability();
   });
 
   it('all documentation resources have text/markdown MIME type', async () => {
-    registerDocumentationResources(server, observability);
+    registerDocumentationResources(server);
     await flush();
     expectAllDocumentationResourcesRegistered(registeredResources, registrationCalls);
 
@@ -273,7 +267,7 @@ describe('registerDocumentationResources', () => {
   });
 
   it('all documentation resources forward title in metadata', async () => {
-    registerDocumentationResources(server, observability);
+    registerDocumentationResources(server);
     await flush();
     expectAllDocumentationResourcesRegistered(registeredResources, registrationCalls);
 
@@ -283,7 +277,7 @@ describe('registerDocumentationResources', () => {
   });
 
   it('forwards the expected title for each documentation resource URI', async () => {
-    registerDocumentationResources(server, observability);
+    registerDocumentationResources(server);
     await flush();
     expectAllDocumentationResourcesRegistered(registeredResources, registrationCalls);
 
@@ -295,7 +289,7 @@ describe('registerDocumentationResources', () => {
   });
 
   it('provides generated content for each documentation resource URI', async () => {
-    registerDocumentationResources(server, observability);
+    registerDocumentationResources(server);
     await flush();
     expectAllDocumentationResourcesRegistered(registeredResources, registrationCalls);
 
@@ -316,7 +310,6 @@ describe('registerCurriculumModelResource forwards annotations', () => {
   let registeredResources: RegisteredResourceMap;
   let readResource: (uri: string) => Promise<ReadResourceCapture>;
   let flush: () => Promise<void>;
-  let observability: ResourceRegistrationOptions['observability'];
 
   beforeEach(() => {
     const mock = createMockServer();
@@ -324,11 +317,10 @@ describe('registerCurriculumModelResource forwards annotations', () => {
     registeredResources = mock.registeredResources;
     readResource = mock.readResource;
     flush = mock.flush;
-    observability = createFakeHttpObservability();
   });
 
   it('forwards annotations to server.registerResource', async () => {
-    registerCurriculumModelResource(server, observability);
+    registerCurriculumModelResource(server);
     await flush();
 
     const resource = registeredResources.get('curriculum://model');
@@ -339,7 +331,7 @@ describe('registerCurriculumModelResource forwards annotations', () => {
   });
 
   it('forwards title to server.registerResource', async () => {
-    registerCurriculumModelResource(server, observability);
+    registerCurriculumModelResource(server);
     await flush();
 
     const resource = registeredResources.get('curriculum://model');
@@ -350,7 +342,7 @@ describe('registerCurriculumModelResource forwards annotations', () => {
   });
 
   it('registers parseable JSON content', async () => {
-    registerCurriculumModelResource(server, observability);
+    registerCurriculumModelResource(server);
     await flush();
 
     const resource = await readResource('curriculum://model');

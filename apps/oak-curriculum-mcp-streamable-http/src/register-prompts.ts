@@ -20,15 +20,12 @@
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { getPromptMessages } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
-import { wrapPromptHandler } from '@oaknational/sentry-mcp';
 import {
   findLessonsArgsSchema,
   lessonPlanningArgsSchema,
   exploreCurriculumArgsSchema,
   learningProgressionArgsSchema,
 } from './prompt-schemas.js';
-import type { HttpObservability } from './observability/http-observability.js';
-
 const PROMPT_REGISTRATIONS = [
   {
     name: 'find-lessons',
@@ -102,9 +99,7 @@ interface PromptRegistrar {
  * registerPrompts(server, observability);
  * ```
  */
-export function registerPrompts(server: PromptRegistrar, observability: HttpObservability): void {
-  const mcpObservation = observability.createMcpObservationOptions();
-
+export function registerPrompts(server: PromptRegistrar): void {
   for (const prompt of PROMPT_REGISTRATIONS) {
     const handler = (args: Readonly<Record<string, string | undefined>>) =>
       formatPromptResponse(prompt.name, args);
@@ -116,7 +111,7 @@ export function registerPrompts(server: PromptRegistrar, observability: HttpObse
         description: prompt.description,
         argsSchema: prompt.argsSchema,
       },
-      wrapPromptHandler(prompt.name, handler, mcpObservation),
+      handler,
     );
   }
 }

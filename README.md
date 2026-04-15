@@ -268,9 +268,10 @@ over time rather than eroding.
 ## Credits and Attribution
 
 This repository brings together work from multiple contributors and open
-education organisations:
+education organisations. See [ATTRIBUTION.md](ATTRIBUTION.md) for full
+details, citations, and licence terms for each source.
 
-- **[Education Endowment Foundation](https://educationendowmentfoundation.org.uk/)** — Teaching and Learning Toolkit data (citation required when using EEF-derived outputs; see [LICENCE-DATA.md](LICENCE-DATA.md))
+- **[Education Endowment Foundation](https://educationendowmentfoundation.org.uk/)** — Teaching and Learning Toolkit data. Citation: Higgins, S., Katsipataki, M., Kokotsaki, D., Coleman, R., Major, L.E., & Coe, R. _Teaching and Learning Toolkit_. Education Endowment Foundation.
 - **Mark Hodierne** — [Oak Curriculum Ontology](https://github.com/oaknational/oak-curriculum-ontology), primary author
 - **John Roberts** — EEF MCP server prototype
 
@@ -293,5 +294,6 @@ commit conventions, and quality expectations.
 - Issues: <https://github.com/oaknational/oak-open-curriculum-ecosystem/issues>
 - Licence (code): MIT — see [LICENCE](LICENCE)
 - Licence (curriculum data): see [LICENCE-DATA.md](LICENCE-DATA.md) for upstream terms
+- Attribution: see [ATTRIBUTION.md](ATTRIBUTION.md) for credits and citations
 - Branding is copyright Oak National Academy: [BRANDING.md](BRANDING.md)
 - Security: [SECURITY.md](SECURITY.md)

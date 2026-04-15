@@ -2,12 +2,14 @@
 name: "Sentry Canonical Alignment"
 overview: >
   Close the gaps between Oak's custom Sentry integration layer and the
-  canonical Sentry Node.js/Express setup. The existing foundation
-  (ADR-143, @oaknational/sentry-node adapter) prioritised DI testability
-  and redaction safety but deferred several canonical Sentry capabilities.
-  This plan addresses 6 specific deviations identified by gap analysis,
-  ordered by impact. Each item preserves the DI/testability/redaction
-  invariants while adopting idiomatic Sentry patterns.
+  canonical Sentry Node.js/Express setup so real production failures are
+  diagnosable in Sentry with trustworthy, redaction-safe signal and the
+  minimum permanent Oak-specific observability machinery. The existing
+  foundation (ADR-143, @oaknational/sentry-node adapter) prioritised DI
+  testability and redaction safety but deferred several canonical Sentry
+  capabilities. This plan addresses those deviations while keeping
+  off-the-shelf Sentry as the baseline and adding only the Oak-specific
+  value that native coverage does not currently provide.
 parent_plan: "sentry-otel-integration.execution.plan.md"
 source_analysis: "Sentry reviewer gap analysis (2026-04-12)"
 todos:
@@ -74,56 +76,66 @@ todos:
     note: "Implemented 2026-04-14c. scripts/start-server.sh with extensive documentation (why, what happens when off, references). Dev runner retains inline --import with comment pointing to script for rationale."
   # === REMAINING (this branch, before PR) ===
   - id: wrap-mcp-server-investigation
-    content: "Investigate wrapMcpServerWithSentry() and audit @oaknational/sentry-mcp for removal"
-    status: pending
+    content: "Define the required live-path MCP observability signal and verify native Sentry's baseline versus Oak's gap"
+    status: done
     priority: next
-    note: "INVESTIGATE BEFORE IMPLEMENTING. The native wrapper is a superset of our custom per-handler wrappers. The prior 'retain sentry-mcp for fixture mode' framing was sunk-cost rationalisation — we chose the native approach then invented reasons to keep the old one. Fixture mode tests the adapter surface, not a parallel wrapping mechanism. Investigation must determine: (1) native wrapper scope (tools, resources, prompts?), (2) sentry-mcp export audit — what survives?, (3) test infrastructure impact, (4) off-mode safety. See 'Native MCP Server Wrapping' plan section."
+    note: "Completed 2026-04-15. Verified that native Sentry is the correct off-the-shelf baseline for the live MCP path, but it does not currently provide first-class exception capture on Oak's real register* path. Historical pre-reframe snapshot preserved in archive/superseded for comparison."
   - id: wrap-mcp-server-adopt
-    content: "Adopt wrapMcpServerWithSentry() — replace per-handler wrapping based on investigation findings"
+    content: "Adopt native Sentry as the canonical MCP live-path baseline and add only the minimum Oak-specific register* gap closure required for production debugging value"
     status: pending
-    note: "Blocked on wrap-mcp-server-investigation. Implementation scope depends on investigation findings. May include full removal of @oaknational/sentry-mcp or reduction to a smaller surface."
+    note: "Do not optimise for package fate. Optimise for trustworthy production debugging signal with minimum permanent custom machinery. Native Sentry owns transport/session/protocol tracing; Oak adds only the missing live-path failure signal. Implement the Oak-specific gap closure in the HTTP app, not as new shared package surface. No duplicate custom MCP span system."
+  - id: sentry-mcp-collapse
+    content: "Re-home fixture/test support and remove @oaknational/sentry-mcp only when deletion is low-risk"
+    status: pending
+    note: "Non-blocking cleanup after the authoritative HTTP live path is proven. Keep the package frozen; do not add responsibilities."
   - id: custom-metrics
     content: "Expose Sentry.metrics (count, gauge, distribution) on the adapter with beforeSendMetric hook"
-    status: pending
-    note: "Enhancement. Sentry-reviewer: spans ≠ metrics (different UI surface). Via adapter with DI seam. enableMetrics defaults true."
+    status: dropped
+    note: "Tracked in sentry-observability-expansion.plan.md (EXP-A). Explicitly out of this child plan."
   - id: cli-metrics
     content: "Wire CLI command execution metrics via Sentry.metrics.count"
-    status: pending
-    note: "Enhancement. Depends on custom-metrics."
+    status: dropped
+    note: "Tracked in sentry-cli-observability-extension.plan.md (CLI-1). Explicitly out of this child plan."
   - id: mcp-request-context
     content: "Add Sentry.setContext('mcp_request', ...) for richer error detail in Sentry sidebar"
-    status: pending
-    note: "Sentry-reviewer: span attributes (from native wrapper) populate a different UI surface than setContext sidebar. Marginal but useful for error triage."
+    status: dropped
+    note: "Tracked in sentry-observability-expansion.plan.md (EXP-B). Explicitly out of this child plan."
   - id: cli-early-init
     content: "Add --import @sentry/node/preload to CLI tsx invocations"
     status: dropped
-    note: "Dropped 2026-04-13. User correction: moves critical infrastructure outside of code. Per-script CLI flags are fragile. CLI uses manual spans and does not need auto-instrumentation."
+    note: "Tracked as explicit option in sentry-cli-observability-extension.plan.md (CLI-3) with decision gate and fallback path."
   - id: trace-propagation-es
     content: "Add Elasticsearch host to tracePropagationTargets (low-ceremony, Oak-controlled)"
-    status: pending
-    note: "Enhancement. ES is our own instance. No formal security review needed."
+    status: dropped
+    note: "Tracked in sentry-observability-expansion.plan.md (EXP-C1) and CLI mirror track (CLI-2)."
   - id: trace-propagation-oak-api
     content: "Evaluate trace propagation to Oak API (third-party, security review required)"
-    status: pending
-    note: "Enhancement. open-api.thenational.academy is third-party. Security reviewer must sign off."
+    status: dropped
+    note: "Tracked in sentry-observability-expansion.plan.md (EXP-C2) with explicit security gate."
   - id: profiling-evaluation
     content: "Evaluate @sentry/profiling-node for the HTTP server before production release"
-    status: pending
-    note: "Enhancement. ~5% CPU overhead. Native addon — verify Vercel ABI."
+    status: dropped
+    note: "Tracked in sentry-observability-expansion.plan.md (EXP-D) with benchmark gate."
   - id: source-maps-automation
     content: "Automate source map upload via sentry-cli post-build step"
-    status: pending
-    note: "CRITICAL for production. SENTRY_AUTH_TOKEN provisioned (org-level, one per app). Spike sentry-cli sourcemaps inject on tsup ESM output. Independent of context enrichment."
+    status: dropped
+    note: "Tracked in parent plan WS6 and in sentry-observability-expansion.plan.md (EXP-E) for implementation options and acceptance evidence."
 ---
 
 # Sentry Canonical Alignment
 
 ## Role
 
-This plan closes the gaps between Oak's Sentry integration and canonical
-Sentry Node.js/Express practices. It is a child of the parent execution
-plan (`sentry-otel-integration.execution.plan.md`) and inherits its
+This plan closes the remaining **HTTP MCP live-path** gaps between Oak's
+Sentry integration and canonical Sentry Node.js practices so real MCP
+failures are diagnosable in production with trustworthy, actionable
+signal. It is a child of the parent execution plan
+(`sentry-otel-integration.execution.plan.md`) and inherits its
 redaction, DI, and safety invariants.
+
+Historical comparison snapshot preserved for traceability:
+
+- [pre-value-reframe snapshot](../archive/superseded/sentry-canonical-alignment.plan.pre-value-reframe-2026-04-15.md)
 
 ## Motivation
 
@@ -143,13 +155,18 @@ The existing integration was designed around three priorities:
 These priorities are correct and must be preserved. The gaps are about
 capabilities that were deferred, not about the architecture being wrong.
 
+The point of this plan is not canonical compliance for its own sake. The
+point is operational value: off-the-shelf Sentry should own the baseline
+live path wherever it can, and Oak should add only the minimum extra
+functionality required where native coverage stops short.
+
 ## Relationship to Parent Plan
 
-**This plan does not block the parent plan.** The parent execution
-plan's remaining items (Vercel credential provisioning and deployment
-evidence bundle) can proceed independently. This child plan is
-enhancement work that improves the quality of the observability
-foundation, not a prerequisite for closing the parent.
+**This plan does not block the parent plan.** The parent execution plan
+remains authoritative for shared foundation concerns, credential
+provisioning, source-map automation, and deployment evidence. This child
+plan is authoritative only for the remaining HTTP MCP runtime-alignment
+decisions on the live path.
 
 ## Hard Invariants
 
@@ -225,11 +242,12 @@ Oak, `Http,Express` is a reasonable starting point.
 quality, not a defect fix. No incidents have been reported from
 missing auto-instrumentation. However, the system hasn't been in
 production yet, and auto-instrumentation is the foundation that makes
-Gap 2's error grouping and Gap 4's distributed tracing useful. Kept
+Gap 2's error grouping and broader downstream tracing useful. Kept
 as first priority because it's a one-line change with broad impact.
 
-**Scope**: Both apps. The `--import` flag works with both `node` (HTTP
-server) and `tsx` (CLI dev scripts).
+**Scope**: HTTP server only. The child-plan target is the HTTP MCP live
+path. Search CLI keeps explicit per-command init under the parent-plan
+contract and is not part of this plan's execution scope.
 
 ### First action: spike
 
@@ -333,8 +351,9 @@ unchanged in Express 5. Add an integration test to confirm.
 - Existing `createEnrichedErrorLogger` behaviour unchanged
 - Redaction hooks still fire on error events
 - Registration ordering documented in code comments
-- Registration wrapped in try-catch in bootstrap (Wilma: if it throws
-  during registration, the app must still start)
+- Registration failure policy must be explicit and documented; if
+  startup is allowed to continue in `SENTRY_MODE=sentry`, record this as
+  a temporary non-canonical divergence with a follow-up removal path
 - Integration test verifying Express 5 error handler compatibility
 
 ### Files
@@ -443,451 +462,267 @@ completes, which happens after `createHttpObservability`. No race.
 
 ---
 
-## Native MCP Server Wrapping — Investigation Required
+## MCP Live-Path Observability — Native Baseline plus Oak Gap Closure
 
-### Metacognitive Correction (2026-04-14)
+### Value and Impact
 
-The prior framing of this item contained sunk-cost rationalisation.
-The sequence was:
+The goal of this track is not package removal, wrapper purity, or
+"canonical" adoption as an end in itself. The goal is operational:
 
-1. Discovered `wrapMcpServerWithSentry()` — a native Sentry function
-   that wraps the MCP server at the transport level
-2. Barney confirmed it's a superset of our custom `sentry-mcp`
-   per-handler wrappers ("custom plumbing where a library provides
-   the mechanism")
-3. Instead of concluding "the custom wrapping is superseded," the
-   plan said "retain sentry-mcp for fixture mode"
-4. This invented a reason to keep code that had been replaced
+- real MCP failures on Oak's live path must produce fast, trustworthy,
+  actionable Sentry signal
+- that signal must remain redaction-safe and compatible with
+  `SENTRY_MODE=off`
+- off-the-shelf Sentry should own the canonical production path
+  wherever it already provides value
+- Oak should add only the minimum extra functionality needed where the
+  native surface stops short
+- package shape follows from that outcome; it is not the objective
 
-The "fixture mode needs it" justification doesn't hold: fixture mode
-tests the **adapter surface** (setTag, setUser, setContext, close).
-It does not need a parallel wrapping mechanism that isn't used in
-production. Testing a different code path in test mode than in
-production proves the test path works, not the production path.
+### Metacognitive Correction
 
-### Correct Framing
+Two framing errors showed up in sequence:
 
-`wrapMcpServerWithSentry()` **replaces** per-handler wrapping. The
-question is not "how do we make both coexist?" but "what (if
-anything) from `@oaknational/sentry-mcp` survives this replacement?"
+1. **Sunk-cost rationalisation**: the earlier plan discovered the native
+   wrapper, then invented "retain `sentry-mcp` for fixture mode" as a
+   reason to keep a path that production no longer needed.
+2. **Mechanism-first drift**: the investigation then recentred on
+   "what survives of `@oaknational/sentry-mcp`?" instead of the
+   underlying production value.
 
-### Investigation (before any code)
+The correct question is:
 
-The package exports more than `wrapToolHandler`. All three handler
-types are wrapped, plus a recorder and observation types are used
-in test infrastructure. The investigation must answer:
+> What live-path observability signal does Oak need beyond native
+> Sentry, and where should that responsibility live with the least
+> permanent custom machinery?
 
-1. **Native wrapper scope**: does `wrapMcpServerWithSentry()`
-   instrument tools, resources, AND prompts in Oak's actual
-   `McpServer` + Streamable HTTP path, and what transport/client
-   spans does it add beyond the current per-handler wrappers? Our
-   custom wrappers provide all three primitives, but the native
-   wrapper also claims transport-level monitoring.
-2. **`sentry-mcp` export audit**: `createInMemoryMcpObservationRecorder`
-   and the `McpObservation*` types — are these coupled to the
-   per-handler wrappers, or do they have independent value?
-3. **Test infrastructure**: the app's test helpers use
-   `createInMemoryMcpObservationRecorder` (in `observability-fakes.ts`
-   and `http-observability.ts` fixture mode). If per-handler wrappers
-   are removed, does this recorder still serve a purpose?
-4. **Call-site surface**: at least 8 files import from `sentry-mcp`.
-   Map the full removal surface and classify each import as runtime,
-   fixture/test-only, package-internal, or config-only. Do not let
-   "used in tests" collapse into "must survive as a package".
-5. **Off-mode safety**: when `Sentry.init()` is never called, does
-   `wrapMcpServerWithSentry()` degrade gracefully or error?
-6. **`sendDefaultPii: false` interaction**: confirmed compatible in
-   principle (sentry-reviewer, SDK source). Verify the specific
-   interaction with `recordInputs`/`recordOutputs` defaults.
+### Required Live-Path Outcome
 
-### Investigation Acceptance Criteria
+For the HTTP MCP server, the authoritative production path must satisfy
+all of the following:
 
-- Each question has a verified answer (code reading or spike, not
-  assumption)
-- Each answer records its evidence source explicitly (file path,
-  upstream doc/source, or spike command/result). "Seems fine" is not
-  evidence.
-- Wrapper-scope evidence includes at least one local spike through
-  Oak's actual Streamable HTTP server covering a tool call and one
-  non-tool primitive (resource or prompt), plus any transport/client
-  spans added by the native wrapper.
-- Off-mode and capture-policy evidence includes a no-init run proving
-  the wrapper does not break server behaviour, plus verification that
-  `sendDefaultPii: false` leaves MCP inputs/outputs unrecorded unless
-  `recordInputs`/`recordOutputs` are explicitly enabled.
-- Clear recommendation: remove `sentry-mcp` entirely, reduce it, or
-  (with genuine justification based on evidence) retain specific parts
-- Any retained `@oaknational/sentry-mcp` surface has a named
-  post-migration consumer that is not just test convenience; test-only
-  needs must be compared against app-local fakes or
-  `@oaknational/sentry-node` fixture support before retaining the
-  package.
-- If removal: list affected files and test infrastructure migration,
-  distinguishing runtime, fixture, test, and config surfaces
-- If retention: state exactly what is retained and why, with evidence
-  that the justification is not sunk-cost
+- native Sentry owns transport/session/protocol tracing and correlation
+  on the live path
+- thrown handler failures on Oak's real `register*` path appear as
+  first-class Sentry failure signal, not only as transactions or MCP
+  error payloads
+- non-throwing tool failures that legitimately return
+  `CallToolResult.isError = true` are explicitly classified (captured vs
+  log-only) and proven by test
+- `sendDefaultPii: false` continues to suppress MCP payload capture by
+  default
+- `SENTRY_MODE=off` remains inert and safe
+- no parallel custom MCP tracing system remains once the native
+  baseline adoption is complete
 
----
+### Verified Baseline and Gap (2026-04-15)
 
-## Gap 3.5 — Custom Metrics (MEDIUM)
+#### 1. What native Sentry already gives Oak
 
-### Problem
+- **Source reading**: `wrapMcpServerWithSentry()` patches `connect`
+  and the deprecated `tool` / `resource` / `prompt` methods, then
+  wraps transport `onmessage` / `send` / `onclose` / `onerror`.
+- **Oak-path spike**: wrapping the real `McpServer` on Oak's actual
+  `createMcpHandler` + `StreamableHTTPServerTransport` path emitted
+  native `mcp.server` transactions for:
+  `tools/call get-curriculum-model`,
+  `prompts/get find-lessons`,
+  `resources/read docs://oak/getting-started.md`.
+- **Safety spike**: no-init/off-mode runs remained safe; wrapped
+  tool/resource/prompt calls still completed without wrapper failures.
+- **Capture-policy spikes**: with `sendDefaultPii: false`, native MCP
+  tracing still recorded method/target/transport/protocol metadata
+  while omitting request arguments and payload bodies by default.
 
-The `SentryNodeSdk` adapter does not expose `Sentry.metrics`. The
-Sentry onboarding wizard includes `Sentry.metrics.count('test_counter', 1)`
-as a standard verification step. Custom metrics (`count`, `gauge`,
-`distribution`) are available in `@sentry/node` v10.25.0+ (our SDK is
-`^10.47.0`) and require no special init options.
+#### 2. The verified live-path gap
 
-Without metrics, we have no way to track operational counters and
-distributions in Sentry:
+- Oak's real registration path is `registerTool` /
+  `registerResource` / `registerPrompt`; native Sentry does **not**
+  patch those methods.
+- The decisive error-parity spike proved the gap:
+  `registerTool('boom')` and deprecated `tool('boom')` both emitted a
+  `tools/call boom` transaction, but only the deprecated `tool()` path
+  produced a captured exception event.
+- Conclusion: native Sentry is the right baseline, but it does not yet
+  provide the full failure signal Oak needs on the live `register*`
+  path.
 
-- Request counts per MCP tool
-- Elasticsearch query latency distributions
-- CLI command execution counts
-- Cache hit/miss ratios
-- Zero-hit query rates
+#### 3. Current Oak-specific surface and migration burden
 
-### Fix
+- `@oaknational/sentry-mcp` currently mixes two separate concerns:
+  runtime handler wrapping and fixture/test recorder support.
+- The runtime consumer is the HTTP app; the remaining surface is
+  fixture/test or package-internal.
+- Conclusion: live-path gap closure and fixture/test support must be
+  treated as separate design problems. "Tests use it" is migration
+  surface, not architectural justification.
 
-Expose `Sentry.metrics` on the `SentryNodeSdk` and `SentryNodeRuntime`
-interfaces. Three metric types are available (v10.25.0+):
+### Plan Direction
 
-```typescript
-export interface SentryMetrics {
-  count(name: string, value?: number, attributes?: MetricAttributes): void;
-  gauge(name: string, value: number, attributes?: MetricAttributes): void;
-  distribution(name: string, value: number, attributes?: MetricAttributes): void;
-}
+- Native Sentry is the canonical off-the-shelf baseline for the live
+  MCP path.
+- Oak must add the minimum additional functionality needed to preserve
+  the missing live-path value; today that is first-class exception
+  capture on the real `register*` path.
+- Any Oak-owned addition must stay narrow:
+  - capture missing failure signal only
+  - not recreate transport/session/protocol tracing
+  - not create a second custom MCP span system
+- For this branch, the Oak-specific gap closure should live in
+  `apps/oak-curriculum-mcp-streamable-http`, not in a renewed shared
+  wrapper package. Revisit only if a second live MCP server consumer
+  appears.
+- Freeze `@oaknational/sentry-mcp` as an expansion surface; do not add
+  new responsibilities there.
+- Historical comparison context is preserved in:
+  [pre-value-reframe snapshot](../archive/superseded/sentry-canonical-alignment.plan.pre-value-reframe-2026-04-15.md)
 
-export interface MetricAttributes {
-  readonly [key: string]: string | number | boolean | undefined;
-}
-```
+### Next Execution Track
 
-Note: there is no `set` type — it was removed in the v8→v9 migration.
+1. **Adopt the native baseline on the real server path**
+   - Wrap the real `McpServer` at composition root with
+     `wrapMcpServerWithSentry()`.
+   - Make native transport/session/protocol tracing the authoritative
+     production path.
 
-In off mode, metrics are noops.
-In fixture mode, metrics record to the fixture store.
-In sentry mode, metrics delegate to `Sentry.metrics.*`.
+2. **Add the minimum Oak-specific `register*` gap closure**
+   - Preserve first-class error capture for thrown
+     `registerTool` failures on the real HTTP path.
+   - Treat `registerResource` / `registerPrompt` extension as proof-
+     triggered only. Add explicit capture only if characterisation tests
+     show native protocol-error capture is insufficient.
+   - Own this gap-closure layer in the HTTP app.
+   - Do not emit custom Oak tracing spans in the gap-closure layer.
 
-**Why via adapter, not direct import** (Barney suggested bypassing
-adapter; sentry reviewer overruled): direct `import * as Sentry`
-at the app layer would require `vi.mock` in tests — violates ADR-078.
-The DI seam provides off-mode noop and fixture capture.
+3. **Separate fixture/test support from runtime signal**
+   - Move recorder/types into the HTTP app unless a genuinely shared
+     runtime consumer appears during implementation.
+   - Replace wrapper-characterisation tests with tests for the chosen
+     authoritative live path.
+   - Keep only the fixtures needed to prove the rewritten architecture.
 
-**`enableMetrics`** (sentry reviewer): defaults to `true` in the SDK,
-no init-option change needed. No `SENTRY_ENABLE_METRICS` env var
-required — the kill switch is `SENTRY_MODE=off`.
+4. **Collapse obsolete packaging**
+   - Remove or collapse `@oaknational/sentry-mcp` only after runtime
+     gap closure and fixture/test migration are complete.
+   - Treat package removal as an outcome of simplification, not a
+     primary success criterion.
 
-**`beforeSendMetric`** (sentry reviewer): should be wired into the
-redaction hook layer in `createSentryHooks` for consistency with
-`beforeSend`, `beforeSendLog`, `beforeSendSpan`, etc. Metrics
-attributes could contain sensitive values.
+### Acceptance Criteria for This Track
 
-**No dependency on early init** — metrics work with standard
-`Sentry.init()`, so this can be implemented independently of Gap 1.
-
-**Depends on Gap 3** (adapter surface extension) — the metrics
-interface follows the same two-layer extension pattern
-(SDK interface + runtime interface).
-
-### Acceptance criteria
-
-- `SentryNodeRuntime` exposes `metrics` property with `count`,
-  `gauge`, `distribution`
-- `SentryNodeSdk` exposes the same for DI testability
-- `beforeSendMetric` wired into `createSentryHooks` redaction layer
-- HTTP server emits at least: tool invocation count, request latency
-  distribution
-- CLI emits at least: command execution count
-- Off/fixture modes are noop/fixture-captured
-- `MetricAttributes` uses narrow named type (not `Record<string, unknown>`)
-
-### Files
-
-- Modified: `packages/libs/sentry-node/src/types.ts`
-- Modified: `packages/libs/sentry-node/src/runtime.ts`
-- Modified: `packages/libs/sentry-node/src/runtime-sdk.ts`
-- Modified: `apps/oak-curriculum-mcp-streamable-http/src/observability/`
-  (emit tool metrics)
-- Modified: `apps/oak-search-cli/src/observability/` (emit command
-  metrics)
+- Real HTTP-path success case: native `mcp.server` transactions exist
+  for tool, prompt, and resource requests.
+- Real HTTP-path thrown `registerTool` failure: Sentry captures both
+  the transaction and a first-class exception event.
+- Real HTTP-path non-throwing tool failure that returns
+  `CallToolResult.isError` is explicitly classified (captured vs
+  log-only) and validated by test.
+- Stateless Streamable HTTP behaviour is preserved on the authoritative
+  path (no session-id requirement introduced by observability changes).
+- `sendDefaultPii: false` continues to omit MCP inputs/outputs by
+  default.
+- `SENTRY_MODE=off` remains inert.
+- No duplicate Oak-specific MCP tracing spans remain on the
+  authoritative live path.
+- Fixture/test coverage proves the chosen architecture rather than the
+  superseded wrapper package.
 
 ---
 
-## Gap 4 — Trace Propagation Targets (MEDIUM, DELIBERATE)
-
-### Problem
-
-`tracePropagationTargets` is an empty array. **Sentry reviewer
-clarification**: this is an **active opt-out**, not a neutral default.
-The `@sentry/node` SDK default is to propagate trace context to ALL
-outbound requests. Our `[]` overrides this to propagate to none.
-
-This was a **deliberate** policy decision documented in the parent
-execution plan. Outbound HTTP calls to Elasticsearch and the Oak API
-do not carry `sentry-trace` or `baggage` headers, so distributed
-traces break at the Oak server boundary.
-
-### Fix — split into two targets (assumptions reviewer)
-
-**4a. Elasticsearch (low-ceremony, Oak-controlled)**
-
-ES Serverless (`*.elastic.cloud`) is our own instance. Adding it to
-`tracePropagationTargets` enables distributed traces from MCP server
-→ Elasticsearch queries. No formal security review needed — this is
-Oak infrastructure. Trace IDs leaking to our own ES instance has no
-blast radius.
-
-**4b. Oak API (security review required)**
-
-`open-api.thenational.academy` is third-party from our perspective.
-Trace propagation headers would leak trace IDs to Oak's API
-infrastructure. The security reviewer must assess:
-
-1. Does the Oak API accept/log trace headers? (If not, propagation is
-   pointless overhead)
-2. What is the blast radius if trace IDs leak? (Medium — third-party
-   could correlate our request patterns)
-3. Does the Oak API support W3C `traceparent` or Sentry-proprietary
-   `sentry-trace`?
-
-### Acceptance criteria
-
-- 4a: ES host added to `tracePropagationTargets`, distributed trace
-  continuity verified in Sentry
-- 4b: security review completed and documented
-- If 4b approved: add Oak API host, verify traces
-- If 4b denied: document rationale and close as "accepted"
-
-### Files
-
-- Modified: `packages/libs/sentry-node/src/runtime-sdk.ts` (or config)
-- May need: per-app `tracePropagationTargets` config in env schema
-
----
-
-## Gap 5 — Profiling (LOW)
-
-### Problem
-
-No `@sentry/profiling-node` integration. No CPU flame graphs in Sentry.
-
-### Fix
-
-Evaluate with local or preview deployment load before production
-release. Profiling adds ~5% CPU overhead and a native Node.js addon
-dependency. The decision to ship or reject profiling should be made
-before release, not after — the first production performance issues
-are the ones most worth profiling.
-
-### Acceptance criteria
-
-- Benchmark with and without profiling under simulated MCP load
-- If overhead is acceptable: add `nodeProfilingIntegration()` to init
-  options, gated behind an env flag
-- If overhead is too high: document and close as "deferred"
-
-### Files (config reviewer detail)
-
-- Modified: `packages/libs/sentry-node/src/runtime-sdk.ts`
-  (`createSentryInitOptions`)
-- Modified: `packages/core/env/src/schemas/sentry.ts` — add
-  `SENTRY_ENABLE_PROFILING: SENTRY_BOOLEAN_FLAGS.optional()`
-- New dep: `@sentry/profiling-node` in HTTP server `dependencies`
-  (native addon — Vercel ABI compatibility to be verified)
-
----
-
-## Gap 6 — Source Map Automation (LOW)
-
-### Problem
-
-Source map upload is manual. The deployment runbook notes "not yet
-automated in CI". Without source maps, Sentry stack traces show
-minified code. **Config reviewer note**: both tsup configs already have
-`sourcemap: true` — source maps are generated today. The gap is upload
-automation, not generation.
-
-### Fix
-
-Two options (not mutually exclusive):
-
-1. **Sentry Vercel Integration** — install from Vercel Marketplace,
-   auto-uploads source maps on each deploy
-2. **`@sentry/wizard` in CI** — `npx @sentry/wizard -i sourcemaps`
-   adds a build plugin
-
-The Vercel integration is simpler for the HTTP server. The CLI may need
-the wizard approach for any bundled distribution.
-
-**Debug IDs** (sentry reviewer finding — mitigates release ID risk):
-Sentry now uses **Debug IDs** injected at build time to link source
-maps, not release-based matching. This is independent of the release
-string. If the build toolchain (tsup) supports Sentry Debug ID
-injection (via `@sentry/bundler-plugin` or similar), the release ID
-consistency concern (Wilma's finding) is largely mitigated.
-
-**Investigation needed**: Does tsup support `@sentry/bundler-plugin`
-for Debug ID injection? If so, this is the preferred approach over
-release-based matching.
-
-**Fallback — release ID consistency** (Wilma finding):
-If Debug IDs are not supported with tsup, the release-based approach
-remains. In that case: either (a) the Vercel integration handles this
-automatically (it uses the deploy's git SHA for both), or (b) add a
-CI step that compares the build release ID with the deployed release
-ID and fails if they
-diverge. Option (a) is preferred.
-
-### Acceptance criteria
-
-- Source maps appear in Sentry UI under the correct release
-- Stack traces in production errors show readable TypeScript
-- Release ID is consistent between build-time upload and runtime
-  resolution (verified by CI or by the Vercel integration)
-
-### Files
-
-- Sentry Vercel integration config (external)
-- Possibly: `apps/oak-curriculum-mcp-streamable-http/tsup.config.ts`
-  (source map generation)
-- CI: release ID consistency check (if not using Vercel integration)
-
----
-
-## Search CLI Gap Analysis
-
-The Search CLI shares the same adapter layer (`@oaknational/sentry-node`)
-as the HTTP server, so Gaps 3, 4, and 5 apply identically. But the CLI
-has different operational characteristics that affect the other gaps:
-
-### Gap 1 (early init) — LOWER IMPACT for CLI
-
-The CLI is a short-lived process. Commands run sequentially. The main
-outbound HTTP calls (Elasticsearch) happen after `createCliObservability`
-has already called `Sentry.init()`. Auto-instrumentation of `node:http`
-would still be missed (the import happens before init via transitive
-dependencies), but the practical impact is smaller:
-
-- No Express route transactions needed (no web server)
-- Outbound ES calls happen after init, but `node:http` is already
-  loaded so the monkey-patch won't apply
-
-**Assessment**: The same `--import @sentry/node/preload` flag can be
-added to `tsx` invocations: `tsx --import @sentry/node/preload bin/oaksearch.ts`.
-Lower priority than the HTTP server. Note: the CLI has no central dev
-runner — `--import` adoption requires individual script edits in the
-CLI's `package.json` (config reviewer finding).
-
-### Gap 2 (Express error handler) — NOT APPLICABLE
-
-The CLI has no Express. Error capture is via `captureHandledError` in
-`withEsClient`'s catch block, which is the correct pattern for a CLI.
-
-### Gap 3 (adapter surface) — APPLICABLE but different context
-
-The CLI has no per-request user context (no auth). `setUser` is not
-useful. `setTag` and `setContext` could be used for:
-
-- Command name (`oaksearch search lessons`)
-- Index target (`primary`/`sandbox`)
-- Search index version
-
-This would improve error triage in Sentry by tagging CLI errors with
-the command and environment that triggered them.
-
-### Gap 4 (trace propagation) — APPLICABLE
-
-Same assessment as HTTP server. CLI outbound calls to Elasticsearch
-could carry trace context if the deny-by-default policy is revised.
-
-### Gap 5 (profiling) — NOT APPLICABLE
-
-Short-lived CLI process. Profiling overhead is irrelevant and the data
-would be too sparse to be useful.
-
-### Gap 6 (source maps) — LOWER PRIORITY
-
-The CLI is bundled via tsup. Source maps would help with production
-error stack traces, but the CLI is typically run by operators who have
-access to the source. Lower priority than the HTTP server.
-
-### CLI-specific gap: command-level context enrichment
-
-The CLI should tag Sentry events with the active command name. This
-is not a canonical Sentry gap but an operational gap — when an error
-arrives in Sentry from the CLI, the operator needs to know which
-command was running.
-
-**Fix**: In `withLoadedCliEnv`, wrap the span callback in
-`observability.withEnrichedScope({ tags: { 'cli.command': commandName } }, ...)`.
-This depends on Gap 3 (adapter surface extension).
-
-### CLI-specific gap: `Sentry.close()` instead of `flush()` (sentry reviewer)
-
-The CLI currently calls `flush()` before exit. For short-lived
-processes, `Sentry.close()` is more appropriate — it drains the
-transport AND prevents further sends, giving a cleaner shutdown.
-
-**Fix**: Add `close()` to the `SentryNodeRuntime` interface. The CLI
-entry point calls `close()` instead of `flush()`. The HTTP server
-continues using `flush()` (long-lived process, may need to send more
-events after flush).
-
-### CLI-specific acceptance criteria
-
-- CLI errors in Sentry are tagged with the command name
-- CLI errors include index target and search index version as context
-- `setTag`/`setContext` called in `withLoadedCliEnv` when observability
-  is provided
-- `close()` called instead of `flush()` at CLI exit
-- Off/fixture modes are noop/captured
+## Scope Deliberately Excluded From This Child Plan
+
+These items are valid but are not required to complete HTTP MCP
+live-path alignment and therefore are explicitly moved out of this child
+plan:
+
+- CLI enhancements (including CLI metrics and CLI preload options):
+  `sentry-cli-observability-extension.plan.md`
+- Metrics expansion (`Sentry.metrics` / `beforeSendMetric`):
+  `sentry-observability-expansion.plan.md`
+- Propagation expansion to Elasticsearch or third-party Oak API hosts:
+  `sentry-observability-expansion.plan.md`
+- Profiling adoption (`@sentry/profiling-node`):
+  `sentry-observability-expansion.plan.md`
+- Source-map automation and deployment evidence:
+  parent-plan WS6 plus `sentry-observability-expansion.plan.md`
+
+Authoritative tracking for source maps, credentials, and deployment
+proof remains in:
+`sentry-otel-integration.execution.plan.md`.
+
+Lossless comparison map against the superseded plan and this narrowed plan:
+`sentry-observability-translation-crosswalk.plan.md`.
 
 ---
 
 ## Sequencing
 
-Gaps 1–3 and CLI close/enrichment/shutdown are DONE.
-
 ```text
-NEXT: Native wrapper investigation  — before any wrapping code changes
-  └─ Native wrapper adoption        — blocked on investigation findings
-Gap 3.5 (metrics)                   — independent of native wrapper
-  └─ CLI metrics                    — depends on Gap 3.5
-mcp_request context                 — independent, low-ceremony
-Gap 4a (ES propagation)             — independent, low-ceremony
-Gap 4b (Oak API propagation)        — independent, security review gates
-Gap 5 (profiling)                   — evaluate before release
-Gap 6 (source maps)                 — must be working before first prod errors
+DONE:
+  - Gap 1 (HTTP preload)
+  - Gap 2 (Express error handler ordering)
+  - Gap 3 (adapter surface extension + context enrichment)
+  - Investigation of native MCP baseline versus Oak register* gap
+
+NEXT (child-plan authority):
+  1) Adopt native MCP wrapper baseline on the real HTTP server path
+  2) Add minimum app-local register* gap closure for first-class failure signal
+  3) Re-home fixture/test support to smallest justified owner
+  4) Remove @oaknational/sentry-mcp only if deletion is low-risk after proof
+
+PARENT PLAN HANDOFF (not owned here):
+  - Credential provisioning completion
+  - Source-map upload automation
+  - Deployment evidence bundle
 ```
 
-The investigation gate is critical: it determines whether
-`@oaknational/sentry-mcp` is removed entirely (changing ~8 files)
-or reduced. Implementation without investigation risks building on
-a false premise again.
+The adoption gate is now: preserve required live-path debugging value
+with the smallest architecture, not package-fate optimisation.
 
-**This plan does not block the parent plan** — Vercel credential
-provisioning and deployment evidence can proceed independently.
+---
 
 ## Verification
 
-1. Deploy with `SENTRY_MODE=sentry` after Gaps 1-3
-2. Trigger a test error — verify it appears in Sentry with:
+1. Deploy with `SENTRY_MODE=sentry` on the HTTP server path after the
+   MCP live-path adoption changes.
+2. Trigger a successful MCP request and verify:
+   - native `mcp.server` transaction exists for tool, prompt, and
+     resource calls
+   - method/target/transport/protocol metadata is present
+   - no MCP request/response payload bodies when `sendDefaultPii: false`
+3. Trigger a thrown `registerTool` failure and verify:
+   - first-class exception event captured
+   - correlated `mcp.server` transaction present
+   - no raw MCP payload bodies, tokens, or PII
+4. Trigger one non-throwing tool failure that returns
+   `CallToolResult.isError = true` and verify the explicit classification
+   decision (captured vs log-only) is applied as designed.
+5. Characterise prompt/resource failure behaviour before extending
+   custom gap closure:
+   - one thrown `registerPrompt` failure path
+   - one thrown `registerResource` failure path
+   - if native protocol-error capture is insufficient for either path,
+     implement explicit capture and re-run verification before closure
+6. Verify off-mode/no-init remains inert on the same path.
+7. Verify no duplicate Oak-specific MCP tracing spans remain on the
+   authoritative live path.
+8. Verify MCP wire behaviour for `tools/call` is unchanged by
+   observability changes (success and `isError` envelopes preserved).
+9. `pnpm check` remains green.
 
-   - Express route transaction name
-   - Request context (method, URL, route)
-   - Outbound HTTP spans (Elasticsearch call)
-   - User ID (if authenticated)
+---
 
-3. Verify redaction: no MCP payload bodies, no tokens, no PII
-4. CLI: verify command tags appear on CLI errors, `close()` drains
-5. `pnpm check` green throughout
+## Parent-Plan Handoff Criteria
+
+When this child plan's verification is complete, the remaining finish
+work must continue in the parent plan:
+
+1. complete platform credential provisioning,
+2. complete source-map upload automation with repo-specific proof, and
+3. complete the deployment evidence bundle.
 
 ## Review Attribution
 
-This plan was shaped by 5 specialist reviewers across 2 rounds:
+This plan was shaped by specialist reviewers across 3 rounds:
 
 **Round 1 — architecture reviewers (plan structure)**:
 
@@ -909,6 +744,18 @@ This plan was shaped by 5 specialist reviewers across 2 rounds:
 - **Config reviewer**: tsup entry point, dev runner args, start script
   format, profiling native addon risk, env schema gap, source maps
   already generated
+
+**Round 3 — framing correction (2026-04-15)**:
+
+- **Barney**: corrected the objective from package fate to production
+  debugging value; native Sentry is the live-path baseline, Oak should
+  add only the minimum missing signal
+- **Assumptions reviewer**: corrected the lingering false dichotomy;
+  the primary decision is which live-path signal must survive on
+  `register*` and where that responsibility should live
+- **Sentry reviewer + MCP reviewer**: validated the decisive
+  `registerTool('boom')` parity gap between native transactions and
+  first-class exception capture
 
 The domain specialists corrected two assumptions made by the
 architecture reviewers — demonstrating the value of multi-specialist

@@ -1,13 +1,10 @@
 /**
- * Characterisation Test: Tool handler observability wrapping
+ * Integration Test: Handler registration completeness
  *
- * Verifies that `registerHandlers` wraps each tool handler with `wrapToolHandler`
- * from `@oaknational/sentry-mcp`. This is the branch's core observability
- * contribution to `handlers.ts` and the integration seam most at risk during
- * the merge with main's inline tool registration changes.
- *
- * Safety net for merge — captures branch's observability behaviour so that
- * regressions from the semantic merge in `handlers.ts` are caught immediately.
+ * Verifies that `registerHandlers` registers tools, resources, and prompts
+ * with the MCP server. Native Sentry (`wrapMcpServerWithSentry`) handles
+ * handler error capture and transport tracing at the server level — individual
+ * handler wrapping is no longer needed.
  *
  * Uses DI and simple fakes — no `vi.mock`, no global state.
  */
@@ -22,7 +19,7 @@ import {
 import type { AuthDisabledRuntimeConfig } from './runtime-config.js';
 
 /**
- * Minimal fake RuntimeConfig for characterisation tests.
+ * Minimal fake RuntimeConfig for integration tests.
  * Auth is disabled so Clerk keys are not required.
  */
 function createFakeRuntimeConfig(): AuthDisabledRuntimeConfig {
@@ -56,35 +53,14 @@ function createRecordingMcpServer() {
   };
 }
 
-describe('registerHandlers — observability characterisation', () => {
-  it('creates MCP observation options from the observability parameter', () => {
-    const observability = createFakeHttpObservability();
-    const createMcpSpy = vi.fn(observability.createMcpObservationOptions.bind(observability));
-    const scopedObservability = { ...observability, createMcpObservationOptions: createMcpSpy };
-
-    const server = createRecordingMcpServer();
-
-    registerHandlers(server, {
-      runtimeConfig: createFakeRuntimeConfig(),
-      logger: createFakeLogger(),
-      observability: scopedObservability,
-      searchRetrieval: createFakeSearchRetrieval(),
-      getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
-    });
-
-    // Called once in registerHandlers (tools), once per resource via
-    // wrapResourceHandler, and once in registerPrompts.
-    expect(createMcpSpy).toHaveBeenCalled();
-  });
-
+describe('registerHandlers — registration completeness', () => {
   it('registers at least one tool with the MCP server', () => {
-    const observability = createFakeHttpObservability();
     const server = createRecordingMcpServer();
 
     registerHandlers(server, {
       runtimeConfig: createFakeRuntimeConfig(),
       logger: createFakeLogger(),
-      observability,
+      observability: createFakeHttpObservability(),
       searchRetrieval: createFakeSearchRetrieval(),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
@@ -92,23 +68,17 @@ describe('registerHandlers — observability characterisation', () => {
     expect(server.registerTool).toHaveBeenCalled();
   });
 
-  it('passes observability to registerAllResources and registerPrompts', () => {
-    const observability = createFakeHttpObservability();
+  it('registers resources and prompts alongside tools', () => {
     const server = createRecordingMcpServer();
 
     registerHandlers(server, {
       runtimeConfig: createFakeRuntimeConfig(),
       logger: createFakeLogger(),
-      observability,
+      observability: createFakeHttpObservability(),
       searchRetrieval: createFakeSearchRetrieval(),
       getWidgetHtml: () => '<!doctype html><html><body>test-widget</body></html>',
     });
 
-    // registerAllResources and registerPrompts are called by registerHandlers.
-    // The server.registerResource and server.registerPrompt fakes confirm they
-    // were invoked (resources and prompts are registered as part of the handler
-    // setup). The observability parameter threading is tested more directly in
-    // the resource/prompt characterisation test below.
     expect(server.registerResource).toHaveBeenCalled();
     expect(server.registerPrompt).toHaveBeenCalled();
   });

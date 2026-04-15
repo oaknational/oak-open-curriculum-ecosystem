@@ -55,6 +55,34 @@ todos:
     content: "Verify release/source maps, alerting baseline, MCP Insights, and produce a date-stamped evidence bundle"
     status: pending
     note: "Depends on sentry-credential-provisioning. Cannot verify live capture without real DSN."
+  - id: integrated-http-live-path-alignment
+    content: "Close remaining authoritative HTTP MCP live-path runtime alignment in the child plan"
+    status: pending
+    note: "Owner lane: sentry-canonical-alignment.plan.md (wrap-mcp-server-adopt, sentry-mcp-collapse). Mirrors Integrated Execution Order step 1."
+  - id: integrated-cli-architecture-hygiene
+    content: "Complete CLI architecture hygiene prerequisites before CLI capability expansion"
+    status: pending
+    note: "Owner lane: sentry-cli-observability-extension.plan.md (CLI-0, CLI-4). Mirrors Integrated Execution Order step 3."
+  - id: integrated-shared-expansion-foundations
+    content: "Deliver shared expansion foundations for metrics, MCP context enrichment, and Oak-controlled propagation"
+    status: pending
+    note: "Owner lane: sentry-observability-expansion.plan.md (EXP-A, EXP-B, EXP-C1). Mirrors Integrated Execution Order step 4."
+  - id: integrated-cli-expansion-lanes
+    content: "Deliver CLI feature expansion lanes for metrics, propagation, and preload decision"
+    status: pending
+    note: "Owner lane: sentry-cli-observability-extension.plan.md (CLI-1, CLI-2, CLI-3). Mirrors Integrated Execution Order step 5."
+  - id: integrated-gated-capability-decisions
+    content: "Complete gated higher-cost capability decisions for third-party propagation, profiling, and source-map automation"
+    status: pending
+    note: "Owner lane: sentry-observability-expansion.plan.md (EXP-C2, EXP-D, EXP-E), with source-map evidence aligned to parent WS6. Mirrors Integrated Execution Order step 6."
+  - id: integrated-operationalisation-and-strategy
+    content: "Operationalise observability with alerting/runbooks and close strategy selection across expansion options"
+    status: pending
+    note: "Owner lanes: sentry-observability-expansion.plan.md (EXP-F, EXP-G) and sentry-cli-observability-extension.plan.md (CLI-5, CLI-6). Mirrors Integrated Execution Order step 7."
+  - id: integrated-translation-completeness-gate
+    content: "Enforce translation-completeness gate before closure so removed scope remains mapped to owned acceptance lanes"
+    status: pending
+    note: "Owner lane: sentry-observability-translation-crosswalk.plan.md. Mirrors Integrated Execution Order step 8."
 ---
 
 # Sentry and OpenTelemetry Foundation
@@ -177,28 +205,103 @@ Two rounds of specialist reviews ran during the remediation sessions:
 
 - **F18** — span helper DRY between core and app (YAGNI)
 
-### Next steps (2026-04-11)
+### Next steps (2026-04-15)
 
-1. **Search CLI adoption** (`search-cli-adoption` todo) — 6 critical gaps.
-   Detailed session plan at
-   `.agent/plans/architecture-and-infrastructure/active/search-cli-observability-adoption.plan.md`.
-   Implementation order: dependency → env schema → CliObservability module →
-   logger sink registration → entry point wiring → command spans → error
-   capture → quality gates → reviewer sweep.
-2. **Deployment evidence bundle** (`deployment-and-evidence` todo)
+1. **Remaining HTTP runtime alignment** — tracked in the child plan
+   [sentry-canonical-alignment.plan.md](./sentry-canonical-alignment.plan.md).
+   The foundation direction is now: native Sentry is the authoritative
+   live-path baseline, and Oak adds only the minimum extra functionality
+   needed where native coverage currently stops short.
+2. **Credential provisioning** (`sentry-credential-provisioning` todo) —
+   complete the Vercel dashboard configuration for the HTTP deployment.
+3. **Deployment evidence bundle** (`deployment-and-evidence` todo) —
+   prove release/source-map alignment, alerting baseline, MCP Insights, and
+   scrubbed evidence capture against the authoritative live path.
+4. **Post-baseline expansion lanes** — track expanded Sentry capability and
+   CLI-specific maturity in:
+   - [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
+   - [sentry-cli-observability-extension.plan.md](./sentry-cli-observability-extension.plan.md)
+   - [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md)
+
+### Integrated Execution Order (Single Checklist)
+
+Use this as the orchestration checklist across parent, child, and companion
+plans. Detailed implementation and acceptance remain in each owner plan.
+Each step is mirrored in frontmatter metadata todos using the
+`integrated-*` ids.
+
+1. **Stabilise authoritative HTTP live path**  
+   Owner: `sentry-canonical-alignment.plan.md`
+   - complete native MCP baseline adoption + minimum `register*` gap closure
+   - keep `SENTRY_MODE=off` inert behaviour and redaction invariants intact
+
+2. **Complete platform readiness gates**  
+   Owner: this parent plan (`sentry-credential-provisioning`,
+   `deployment-and-evidence`)
+   - finish Vercel Sentry env provisioning
+   - produce deployment evidence bundle on authoritative live path
+
+3. **Complete CLI architecture hygiene before feature expansion**  
+   Owner: `sentry-cli-observability-extension.plan.md` (`CLI-0`, `CLI-4`)
+   - close ADR-078 logger DI remediation (`createSearchLogger(config)` lane)
+   - finish command-context completeness across command families
+
+4. **Land shared expansion foundations**  
+   Owner: `sentry-observability-expansion.plan.md` (`EXP-A`, `EXP-B`,
+   `EXP-C1`)
+   - add adapter-level metrics + metric redaction lane
+   - add safe MCP request context enrichment
+   - enable Oak-controlled propagation path(s) with proof
+
+5. **Land CLI feature expansion lanes**  
+   Owner: `sentry-cli-observability-extension.plan.md` (`CLI-1`, `CLI-2`,
+   `CLI-3`)
+   - consume shared metrics surface in CLI
+   - apply CLI propagation policy
+   - close preload decision gate (explicitly documented option outcome)
+
+6. **Run gated higher-cost capability decisions**  
+   Owner: `sentry-observability-expansion.plan.md` (`EXP-C2`, `EXP-D`,
+   `EXP-E`)
+   - security-gated third-party propagation decision
+   - profiling benchmark decision (HTTP default scope)
+   - source-map automation and Debug ID evidence alignment with parent WS6
+
+7. **Operationalise and lock strategy**  
+   Owner: `sentry-observability-expansion.plan.md` (`EXP-F`, `EXP-G`) +
+   `sentry-cli-observability-extension.plan.md` (`CLI-5`, `CLI-6`)
+   - alerting/dashboard/runbook baseline
+   - source-map/release strategy completion for CLI contexts
+   - explicit strategy selection across "other options"
+
+8. **Perform translation-completeness gate before closure**  
+   Owner: `sentry-observability-translation-crosswalk.plan.md`
+   - verify every removed scope item has an owner + acceptance lane
+   - update crosswalk in the same change set for any scope move
+   - do not close the parent lane while crosswalk maintenance is pending
 
 ### Authority and review state
 
-1. This active plan is authoritative for implementation facts and execution
-   detail.
-2. The review checkpoint is authoritative for whether the handover bundle has
+1. This active plan is authoritative for the shared observability foundation,
+   credential provisioning, release/source-map evidence requirements, and
+   deployment-proof contract.
+2. The child plan
+   [sentry-canonical-alignment.plan.md](./sentry-canonical-alignment.plan.md)
+   is authoritative for the remaining HTTP MCP runtime-alignment decisions on
+   the live path.
+3. Companion plans are authoritative for scope intentionally removed from the
+   narrowed child plan:
+   - [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
+   - [sentry-cli-observability-extension.plan.md](./sentry-cli-observability-extension.plan.md)
+   - [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md)
+4. The review checkpoint is authoritative for whether the handover bundle has
    been reviewed and cleared:
    [sentry-otel-foundation.review-checkpoint-2026-03-27.md](./sentry-otel-foundation.review-checkpoint-2026-03-27.md)
-3. The prompt is an operational entry point only; it must not restate plan
+5. The prompt is an operational entry point only; it must not restate plan
    facts beyond minimal restart framing.
-4. The napkin records session learnings and caveats; it is not a parallel fact
+6. The napkin records session learnings and caveats; it is not a parallel fact
    authority.
-5. Do not trust compressed session memory over this file.
+7. Do not trust compressed session memory over this file.
 
 ### Governance and authority work already landed
 
@@ -254,8 +357,11 @@ Two rounds of specialist reviews ran during the remediation sessions:
      sink helpers, and bounded flush helpers.
    - the reviewed Phase 1 config and type gaps are closed.
 5. `packages/libs/sentry-mcp`
-   - the workspace exists and remains transport-agnostic.
-   - the reviewed `vi.mock(...)` gap is closed.
+   - the workspace exists as a migration surface, not a renewed long-term
+     runtime authority.
+   - runtime wrapping is being superseded by the native Sentry MCP baseline on
+     the HTTP live path; any remaining fixture/test helpers or temporary
+     gap-closure responsibility are tracked in the child alignment plan.
 6. Focused validation
    - `lint`, `test`, and `type-check` are green for `@oaknational/logger`,
      `@oaknational/env`, `@oaknational/observability`,
@@ -302,7 +408,8 @@ Implementation targets:
 1. `packages/libs/logger`
 2. `packages/core/observability`
 3. `packages/libs/sentry-node`
-4. `packages/libs/sentry-mcp`
+4. `packages/libs/sentry-mcp` as a migration surface only while remaining
+   fixture/test helpers and any temporary MCP gap-closure logic are re-homed
 5. `packages/core/env`
 6. `apps/oak-curriculum-mcp-streamable-http`
 7. `apps/oak-search-cli`
@@ -472,13 +579,15 @@ Deterministic validation commands:
 
 Status: HTTP adoption **complete** (PR #73 merged 2026-03-31, all 21 findings
 resolved, all gates green). Rate limiting complete (ADR-158). Search CLI
-adoption pending.
+adoption complete. Remaining runtime-alignment work continues in
+`sentry-canonical-alignment.plan.md`.
 
 Adopt the shared foundation in the in-scope runtimes only:
 
-1. HTTP MCP server: cold-start init, stdout JSON retained, per-request MCP
-   wrapping, manual spans for bootstrap, asset-download proxy, and OAuth
-   upstream flows.
+1. HTTP MCP server: cold-start init, stdout JSON retained, native MCP
+   live-path instrumentation as the authoritative baseline, minimum
+   app-local `register*` failure gap closure, and targeted manual spans
+   for bootstrap, asset-download proxy, and OAuth upstream flows.
 2. Search CLI: runtime-config-driven logger composition, command-scope Sentry
    init, ingest root/phase spans, bounded flush on success/failure/interrupted
    exits.
@@ -723,21 +832,30 @@ Additional rules:
 
 ### Node Runtime Init Strategy
 
-For v1, Oak chooses **manual tracing plus explicit composition-root init**, not
-automatic preload-based Node instrumentation.
+For v1, Oak chooses **explicit composition-root init in both runtimes**, and
+uses the off-the-shelf Sentry runtime surface wherever it provides real value.
+For HTTP that means `@sentry/node/preload` plus native MCP server wrapping on
+the live path. For Search CLI that still means explicit per-command init and
+targeted manual spans.
 
 Required consequences:
 
-1. HTTP initialises Sentry in its composition root before app creation and
-   before the MCP server factory is exercised.
+1. HTTP preloads Sentry module wrapping before app creation, then initialises
+   Sentry in its composition root before the MCP server factory is exercised.
 2. Search CLI initialises Sentry once per command entry point before the
-   command body runs.
-3. Success criteria for tracing are limited to explicit manual spans and MCP
-   wrapper spans defined in this plan.
-4. If Oak later wants automatic Node instrumentation, that work requires a new
-   ADR or ADR amendment covering preload-module strategy, changed success
-   criteria, and the interaction with Oak's "no auto-instrumentation packages"
-   rule.
+   command body runs; no CLI preload requirement is introduced by this plan.
+   Any later preload change is explicitly treated as post-foundation extension
+   work owned by `sentry-cli-observability-extension.plan.md`.
+3. Success criteria for tracing are:
+   - native HTTP route, transport, and MCP tracing where the off-the-shelf SDK
+     already provides it
+   - targeted Oak-owned manual spans only for bootstrap, asset-download proxy,
+     OAuth upstream, and other gaps not covered natively
+   - first-class failure capture on the real HTTP `register*` path where the
+     native MCP surface currently stops short
+4. The official Sentry preload entrypoint is the accepted mechanism for HTTP
+   module wrapping in this plan. Separate OpenTelemetry auto-instrumentation
+   packages remain out of scope.
 
 ### Redaction and Outbound Telemetry Contract
 
@@ -813,8 +931,9 @@ Required invariants:
   - `@oaknational/sentry-node` is an adapter library above `logger`, so the
     architecture and ESLint rules must encode that relationship explicitly
     instead of relying on per-package allow-lists
-  - `@oaknational/sentry-mcp` should depend only on `core` observability
-    primitives and MCP abstractions
+  - `@oaknational/sentry-mcp` is a temporary migration surface only; freeze
+    expansion, keep any remaining helpers transport-agnostic, and collapse or
+    remove it once no authoritative runtime or fixture value remains
 - `@oaknational/observability` (`packages/core/observability`)
   - provider-neutral helpers
   - shared telemetry redaction
@@ -826,9 +945,11 @@ Required invariants:
   - fixture-mode no-network capture helpers
   - release resolution and config builder
 - `@oaknational/sentry-mcp`
-  - MCP wrapping helpers
-  - deny-by-default capture policy helpers
+  - temporary migration helpers only
+  - deny-by-default capture policy and recorder support may remain only while
+    they are being re-homed
   - must stay transport-agnostic and depend on MCP server abstractions only
+  - must not become the long-term authority for the HTTP live path
   - must not depend on Express or `StreamableHTTPServerTransport`
 
 ## Runtime Acceptance Matrix
@@ -836,8 +957,8 @@ Required invariants:
 | Runtime | Mode | Required behaviour |
 |---|---|---|
 | HTTP MCP server | `off` | stdout JSON only; no Sentry init; no Sentry sinks; no outbound delivery; no trace propagation |
-| HTTP MCP server | `fixture` | stdout JSON plus fixture sink/adapter; no network; MCP wrapper active with metadata-only capture via local fallback adapter; provider-neutral manual spans and correlation still exercised locally; raw `/mcp` envelopes suppressed or sanitised before request capture |
-| HTTP MCP server | `sentry` | stdout JSON retained; live Sentry sink/adapter; manual spans for bootstrap, asset-download proxy, OAuth upstream; MCP wrapper active; outbound trace propagation remains deny-by-default unless explicitly allowlisted; raw `/mcp` envelopes suppressed or sanitised before request capture |
+| HTTP MCP server | `fixture` | stdout JSON plus fixture sink/adapter; no network; the same MCP metadata/redaction contract is exercised locally; targeted manual spans still cover bootstrap/OAuth gaps; any temporary `register*` gap-closure helper must stay minimal and must not create a second authoritative tracing path; raw `/mcp` envelopes suppressed or sanitised before request capture |
+| HTTP MCP server | `sentry` | stdout JSON retained; live Sentry sink/adapter; `@sentry/node/preload` plus native MCP transport/session/protocol tracing are authoritative on the live path; targeted manual spans remain only for bootstrap, asset-download proxy, and OAuth upstream; minimal Oak-owned `register*` failure capture may remain unless a future SDK release extends native coverage to the registration API; outbound trace propagation remains deny-by-default unless explicitly allowlisted; raw `/mcp` envelopes suppressed or sanitised before request capture |
 | Search CLI | `off` | local logger only; no Sentry init; no Sentry sinks; no outbound delivery; no trace propagation |
 | Search CLI | `fixture` | local logger plus fixture sink/adapter; no network; root/phase spans exercised through local fallback adapters; bounded shutdown path still executed |
 | Search CLI | `sentry` | live Sentry init once per command; root/phase spans for ingest; bounded flush on success, failure, and interrupted exits; outbound trace propagation remains deny-by-default unless explicitly allowlisted |
@@ -873,12 +994,14 @@ Required invariants:
 
 ### WS4: HTTP MCP Server Adoption
 
-1. Initialise Sentry at cold start in the composition root before app creation.
+1. Initialise Sentry at cold start in the composition root before app
+   creation, using `@sentry/node/preload` on the HTTP server path.
 2. Keep stdout JSON logging as the canonical local log surface.
 3. Add Sentry sink(s) and handled-error capture.
-4. Wrap each per-request MCP server inside `mcpFactory`.
-5. Add targeted manual spans for cold-start bootstrap, asset-download proxy,
-   and OAuth upstream flows.
+4. Make the native Sentry MCP live path authoritative and add only the minimum
+   Oak-owned `register*` gap closure needed for first-class failure capture.
+5. Keep targeted manual spans for cold-start bootstrap, asset-download proxy,
+   and OAuth upstream flows, where native coverage is not the primary signal.
 6. Keep Sentry lifecycle at the process boundary only:
    - never initialise Sentry inside per-request MCP server creation
    - never flush or shut down Sentry on per-request server/transport teardown
@@ -935,8 +1058,9 @@ The foundation is not complete until automated verification includes:
 4. runtime integration tests for both in-scope runtimes across
    `off | fixture | sentry`
 5. compile-time/type enforcement for `logger.error` and `logger.fatal`
-6. trace-correlation proof that logs emitted during wrapped MCP tool, resource,
-   and prompt calls share the same trace context as the corresponding MCP span
+6. trace-correlation proof that logs emitted during authoritative MCP tool,
+   resource, and prompt calls share the same trace context as the corresponding
+   MCP transaction/span on the live path
 7. sink failure isolation and protocol-safety proof
 8. explicit kill-switch proof that `SENTRY_MODE=off` disables Sentry init,
    sink registration, outbound delivery, and trace propagation
@@ -952,14 +1076,15 @@ The evidence bundle must show:
 1. one info log
 2. one handled error
 3. one unhandled exception
-4. one traced MCP call
-5. correct release tag
-6. resolved source-map stack trace
-7. alerting baseline wiring
-8. kill-switch rehearsal (`SENTRY_MODE=off`)
-9. MCP Insights populated with metadata only
-10. release-resolution source used by the shared builder
-11. evidence hygiene notes confirming that only scrubbed artefacts were stored
+4. one HTTP request showing route context plus outbound dependency tracing
+5. one traced MCP call on the authoritative live path
+6. correct release tag
+7. resolved source-map stack trace
+8. alerting baseline wiring
+9. kill-switch rehearsal (`SENTRY_MODE=off`)
+10. MCP Insights populated with metadata only
+11. release-resolution source used by the shared builder
+12. evidence hygiene notes confirming that only scrubbed artefacts were stored
 
 ## External Dependencies
 

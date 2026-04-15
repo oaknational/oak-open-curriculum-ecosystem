@@ -12,6 +12,7 @@
 import type { Express, RequestHandler } from 'express';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { wrapMcpServerWithSentry } from '@sentry/node';
 import type { Logger } from '@oaknational/logger';
 import {
   SERVER_INSTRUCTIONS,
@@ -84,6 +85,18 @@ export function initializeCoreEndpoints(
       { name: 'oak-curriculum-http', version: '0.1.0', ...OAK_SERVER_BRANDING },
       { instructions: SERVER_INSTRUCTIONS },
     );
+
+    /**
+     * Native Sentry MCP wrapping: patches `registerTool`, `registerResource`,
+     * `registerPrompt`, and `connect` for handler error capture and transport
+     * tracing. Unconditional — inert when `Sentry.init()` was never called
+     * (`SENTRY_MODE=off`). `recordInputs` / `recordOutputs` default to the
+     * client's `sendDefaultPii` option, which Oak pins to `false`.
+     *
+     * @see {@link https://docs.sentry.io/product/insights/ai/mcp/getting-started/}
+     */
+    wrapMcpServerWithSentry(server);
+
     registerHandlers(server, handlerOptions);
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
     return { server, transport };

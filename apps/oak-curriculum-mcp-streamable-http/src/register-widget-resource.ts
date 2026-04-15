@@ -14,11 +14,7 @@
 import { registerAppResource, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import { WIDGET_URI } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
-import {
-  wrapResourceHandler,
-  type ResourceRegistrar,
-  type ResourceRegistrationOptions,
-} from './register-resource-helpers.js';
+import { type ResourceRegistrar } from './register-resource-helpers.js';
 
 /**
  * MCP App UI metadata for the widget resource.
@@ -44,17 +40,12 @@ const WIDGET_UI_META = {
  * `text/html;profile=mcp-app` resource per the MCP Apps standard.
  * `registerAppResource` defaults the MIME type to `RESOURCE_MIME_TYPE`.
  *
- * The callback is wrapped with `wrapResourceHandler` for Sentry
- * observability tracing, matching all other registered resources.
- *
  * @param server - MCP server instance
  * @param getWidgetHtml - Sync function returning the built widget HTML (DI per ADR-078)
- * @param observability - Observability for resource handler tracing
  */
 export function registerWidgetResource(
   server: ResourceRegistrar,
-  getWidgetHtml: ResourceRegistrationOptions['getWidgetHtml'],
-  observability: ResourceRegistrationOptions['observability'],
+  getWidgetHtml: () => string,
 ): void {
   registerAppResource(
     server,
@@ -63,19 +54,15 @@ export function registerWidgetResource(
     {
       description: 'Interactive Oak curriculum MCP App for search and curriculum exploration.',
     },
-    wrapResourceHandler(
-      'widget-oak-curriculum-app',
-      () => ({
-        contents: [
-          {
-            uri: WIDGET_URI,
-            mimeType: RESOURCE_MIME_TYPE,
-            text: getWidgetHtml(),
-            _meta: { ui: WIDGET_UI_META },
-          },
-        ],
-      }),
-      observability,
-    ),
+    () => ({
+      contents: [
+        {
+          uri: WIDGET_URI,
+          mimeType: RESOURCE_MIME_TYPE,
+          text: getWidgetHtml(),
+          _meta: { ui: WIDGET_UI_META },
+        },
+      ],
+    }),
   );
 }

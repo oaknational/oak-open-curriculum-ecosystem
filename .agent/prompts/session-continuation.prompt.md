@@ -45,92 +45,80 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Two concurrent on `feat/otel_sentry_enhancements`.
-  (A) Sentry + Build Tooling — build tooling complete, 9 Sentry
-  items remain (plan overhauled). (B) Compliance — plan complete,
-  codegen fixes committed, upstream API requests drafted, upstream
-  offset/limit fix applied locally.
+- **Workstream**: Sentry/OTel completion on `feat/otel_sentry_enhancements`,
+  with parent-plan orchestration now split cleanly across child and companion
+  plans.
 - **Active plans**:
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
+    (parent authority + integrated execution order + mirrored metadata todos)
   - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-    (12 of 22 todos done, 1 dropped, 9 pending — plan overhauled
-    2026-04-14g)
-  - `.agent/plans/compliance/current/claude-and-chatgpt-app-submission-compliance.plan.md`
-    (**reviewed by 7 specialists**, ready for promotion)
-  - `.agent/plans/sdk-and-mcp-enhancements/active/schema-resilience-and-response-architecture.plan.md`
-    (**PENDING** — open questions, owner decisions needed)
-- **Current state**: **Metacognitive correction session
-  (2026-04-14g).** Discovered sunk-cost rationalisation in the
-  `wrapMcpServerWithSentry()` plan item. The prior framing
-  ("retain sentry-mcp for fixture mode") kept the old approach
-  alongside the new one and invented justifications. Overhauled
-  the plan: split `wrap-mcp-server` into investigation +
-  adoption todos, added "Native MCP Server Wrapping —
-  Investigation Required" section with 6 questions, updated
-  sequencing. No code changes — plan correction only.
-- **Current objective**: Sentry native wrapper investigation
-  (highest priority), then remaining Sentry items, then
-  compliance promotion.
+    (remaining HTTP MCP live-path runtime alignment)
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-expansion.plan.md`
+    (full post-baseline Sentry capability expansion)
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-cli-observability-extension.plan.md`
+    (CLI-specific expansion and ADR-078 hygiene)
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-translation-crosswalk.plan.md`
+    (lossless recovery mapping for removed scope)
+- **Current state**: Plan architecture has been reconciled and made
+  metadata-complete. Parent plan now includes both integrated prose execution
+  order and `integrated-*` frontmatter todos for all planned lanes. No Sentry
+  implementation code has been added in this handoff cycle.
+- **Current objective**: Begin execution of integrated step 1 by starting RED
+  work on authoritative HTTP live-path alignment (`wrap-mcp-server-adopt`
+  branch of the child plan), while preserving the now-established plan/prompt
+  restart contract.
 - **Hard invariants / non-goals**:
-  - All Sentry invariants unchanged
-  - Compliance: no `unknown` in filter accessor types
-  - Compliance: principles are field-agnostic, rule carries
-    MCP specifics
-  - Compliance: oakContextHint rationale in ADR only
-  - All graph tools must support filtering (factory invariant)
-- **Recent surprises / corrections** (2026-04-14g):
-  - **Sunk-cost rationalisation in native wrapper plan.** We
-    chose `wrapMcpServerWithSentry()` as the better approach,
-    kept the old per-handler wrappers, then invented "fixture
-    mode needs it" to justify both. Fixture mode tests the
-    adapter surface — it doesn't need a parallel wrapping
-    mechanism. The correct question is "what survives
-    replacement?" not "how do we make both coexist?"
-  - **"Gate on mode" was sophistication on a false premise.**
-    Building conditional wrapping logic assumed both approaches
-    should coexist. The mode-gating was the wrong question —
-    it made a sunk-cost decision look like engineering prudence.
-  - Prior corrections unchanged.
+  - Native Sentry remains the baseline; Oak adds only minimum missing
+    `register*` failure signal.
+  - `sendDefaultPii: false`, `SENTRY_MODE=off`, DI/testability, and redaction
+    invariants are non-negotiable.
+  - No duplicate custom MCP tracing system on the authoritative live path.
+  - Scope moves must update the translation crosswalk in the same change set.
+- **Recent surprises / corrections**:
+  - Narrowing without explicit companion ownership caused ambiguity; resolved by
+    adding expansion + CLI plans and a crosswalk.
+  - Prose-only orchestration was insufficient; user correction required every
+    planned lane to exist in metadata too (`integrated-*` todos now in parent).
+  - Parent/README status drift can misroute execution; corrected to reflect CLI
+    adoption complete and current blockers accurately.
 - **Open questions / low-confidence areas**:
-  - OQ1-OQ3 from Sentry workstream unchanged
-  - Native wrapper investigation (6 questions in plan section)
-  - oakContextHint expiry depends on external MCP SDK feature
-  - `principles.md` fitness: 519/525 lines, trimming candidate
-    identified but not executed
-  - `codegen-once.mock.ts` uses `vi.mock` (prohibited pattern)
-    and tests the old cache-fallback path — needs updating
-  - Upstream fix branch exists in oak-openapi but not submitted
-- **Docs handoff state**: the 7-file docs/plans/memory handoff
-  landed in `ee3423ce` (`docs(sentry): sync native wrapper
-  investigation handoff`). The worktree was clean at session
-  start; there is no pending pre-investigation docs commit.
-- **Next safe step**:
-  **(A) Sentry**: run the native wrapper investigation
-  (6 questions in plan, code reading + spike, no
-  implementation until answered). Then adopt based on
-  findings. **(B) Compliance**: promote plan to `active/`,
-  begin WS1 (ADR-159, safety-and-security.md, 3 principles,
-  1 rule).
-- **Deep consolidation status**: completed this handoff —
-  new pattern extracted, napkin updated, prompt and plan
-  synced.
+  - Exact minimal app-local `register*` gap-closure shape on the real server
+    path.
+  - Whether prompt/resource thrown failures require explicit capture beyond
+    native protocol-error handling.
+  - Final re-homing destination for recorder/types fixtures before
+    `@oaknational/sentry-mcp` collapse.
+  - Ordering and depth decisions for EXP/CLI follow-on tracks after step 1.
+- **Next safe step**: Start RED tests for child-plan HTTP live-path adoption
+  and `register*` failure signal parity, then implement the minimum app-local
+  closure needed to satisfy child-plan acceptance criteria.
+- **Deep consolidation status**: not due — no plan closed this handoff, no
+  practice-box incoming files, napkin remains below rotation trigger, and
+  session corrections are captured.
 
-## Active Workstreams (2026-04-14)
+## Active Workstreams (2026-04-15)
 
-### 1. Sentry + Build Tooling — IN PROGRESS (same branch/PR)
+### 1. Sentry + OTel Alignment — IN PROGRESS (same branch/PR)
 
 **Plans**:
 
 - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-  (12 of 22 todos done, 1 dropped, 9 pending — plan overhauled)
-- `.agent/plans/architecture-and-infrastructure/active/build-tooling-composability.plan.md`
-  (**COMPLETE** — all 7 todos done)
+  (13 todos done, 1 dropped, 9 pending — investigation complete,
+  next step is live-path implementation)
+- `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
+  (shared foundation authoritative; Vercel credential provisioning and
+  deployment evidence still pending)
 
-Build tooling complete. 9 Sentry items remain. Highest priority:
-native wrapper **investigation** (6 questions, code reading +
-spike). Prior "mode-conditional" framing was sunk-cost
-rationalisation — corrected 2026-04-14g.
+Highest priority next: commit the current docs/plan changes, then
+start RED for HTTP live-path alignment on the real server path:
+native baseline adoption plus the minimal app-local `register*` gap
+closure.
 
-### 2. Compliance — PLAN COMPLETE + CODEGEN FIXES COMMITTED
+### 2. User-Facing Search UI — NEXT
+
+Interactive search MCP App widget. Queued after Sentry completes.
+
+### 3. Compliance — READY / PARKED
 
 **Plan**: `.agent/plans/compliance/current/claude-and-chatgpt-app-submission-compliance.plan.md`
 **Companion**: `.agent/plans/compliance/current/upstream-api-requests.md`
@@ -139,13 +127,14 @@ Plan reviewed by 7 specialists, all findings addressed. Codegen
 fixes committed (56e92b0d): silent fallback removed, full-content
 cache comparison, dotenv removed, CI drift check added. Upstream
 API requests drafted (limit/offset swap + asset pagination).
-Ready for promotion to `active/`.
+Ready for promotion to `active/` once Sentry work is no longer the
+current branch priority.
 
-### 3. Schema Resilience — PENDING (owner decision)
+### 4. Schema Resilience — PENDING (owner decision)
 
 Blocked on OQ1 (`.strip()` vs `.passthrough()`).
 
-### 4. Other workstreams — PARKED
+### 5. Other workstreams — PARKED
 
 - Interactive User Search MCP App (WS3 Phase 5)
 - `_meta` Namespace Cleanup

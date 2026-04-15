@@ -34,7 +34,7 @@
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
-    "@sentry/node": "^10.47.0"
+    "@sentry/node": "^10.48.0"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
