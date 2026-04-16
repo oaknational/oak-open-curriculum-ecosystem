@@ -16,9 +16,9 @@ function createFakeRuntime(): SentryNodeRuntime {
     config: {
       mode: 'fixture',
       environment: 'test',
-      environmentSource: 'NODE_ENV',
+      environmentSource: 'SENTRY_ENVIRONMENT_OVERRIDE',
       release: 'test',
-      releaseSource: 'local-dev',
+      releaseSource: 'APP_VERSION_OVERRIDE',
       enableLogs: false,
       sendDefaultPii: false,
       debug: false,

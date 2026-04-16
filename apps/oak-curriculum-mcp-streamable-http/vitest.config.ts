@@ -4,6 +4,10 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: [
+      'build-scripts/**/*.unit.test.ts',
+      'build-scripts/**/*.integration.test.ts',
+      'build-scripts/**/*.unit.test.mjs',
+      'build-scripts/**/*.integration.test.mjs',
       'operations/**/*.unit.test.ts',
       'operations/**/*.integration.test.ts',
       'src/**/*.unit.test.ts',

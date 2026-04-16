@@ -5,6 +5,7 @@
     "incremental": false
   },
   "include": [
+    "build-scripts/**/*.ts",
     "operations/**/*.ts",
     "src/**/*.ts",
     "scripts/**/*.ts",

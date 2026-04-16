@@ -47,6 +47,9 @@ describe('MCP route rate limiting', () => {
       upstreamMetadata: TEST_UPSTREAM_METADATA,
     });
 
+    // Full app bootstrap can take longer under concurrent turbo load.
+    // Make the timeout explicit so this integration proof is stable in gates.
+
     // First request — allowed; verify rate limit headers are present
     const res1 = await request(app)
       .post('/mcp')
@@ -75,5 +78,5 @@ describe('MCP route rate limiting', () => {
       error: 'Too Many Requests',
       message: 'Rate limit exceeded. Try again later.',
     });
-  });
+  }, 15_000);
 });

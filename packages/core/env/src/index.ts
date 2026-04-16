@@ -17,6 +17,7 @@ export {
   NODE_ENVS,
   SENTRY_MODES,
 } from './schemas/index.js';
+export { ROOT_PACKAGE_VERSION } from './root-package-version.js';
 export type {
   OakApiKeyEnv,
   ElasticsearchEnv,

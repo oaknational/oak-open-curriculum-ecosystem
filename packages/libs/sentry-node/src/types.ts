@@ -8,37 +8,29 @@ export type SentryBooleanFlagName =
   | 'SENTRY_SEND_DEFAULT_PII'
   | 'SENTRY_DEBUG';
 
-export type SentryEnvironmentSource =
-  | 'SENTRY_ENVIRONMENT'
-  | 'VERCEL_ENV'
-  | 'NODE_ENV'
-  | 'development';
+export type SentryEnvironmentSource = 'SENTRY_ENVIRONMENT_OVERRIDE' | 'VERCEL_ENV' | 'development';
 
-export type SentryReleaseSource =
-  | 'SENTRY_RELEASE'
-  | 'VERCEL_GIT_COMMIT_SHA'
-  | 'GITHUB_SHA'
-  | 'COMMIT_SHA'
-  | 'SOURCE_VERSION'
-  | 'npm_package_version'
-  | 'local-dev';
+export type ApplicationVersionSource = 'APP_VERSION_OVERRIDE' | 'root_package_json';
+
+export type SentryReleaseSource = 'SENTRY_RELEASE_OVERRIDE' | ApplicationVersionSource;
+
+export type GitShaSource = 'GIT_SHA_OVERRIDE' | 'VERCEL_GIT_COMMIT_SHA';
 
 export interface SentryConfigEnvironment {
   readonly SENTRY_MODE?: string;
   readonly SENTRY_DSN?: string;
-  readonly SENTRY_ENVIRONMENT?: string;
-  readonly SENTRY_RELEASE?: string;
+  readonly SENTRY_ENVIRONMENT_OVERRIDE?: string;
+  readonly SENTRY_RELEASE_OVERRIDE?: string;
   readonly SENTRY_TRACES_SAMPLE_RATE?: string;
   readonly SENTRY_ENABLE_LOGS?: string;
   readonly SENTRY_SEND_DEFAULT_PII?: string;
   readonly SENTRY_DEBUG?: string;
   readonly VERCEL_ENV?: string;
-  readonly NODE_ENV?: string;
+  readonly APP_VERSION?: string;
+  readonly APP_VERSION_SOURCE?: ApplicationVersionSource;
+  readonly GIT_SHA?: string;
+  readonly GIT_SHA_SOURCE?: GitShaSource;
   readonly VERCEL_GIT_COMMIT_SHA?: string;
-  readonly GITHUB_SHA?: string;
-  readonly COMMIT_SHA?: string;
-  readonly SOURCE_VERSION?: string;
-  readonly npm_package_version?: string;
 }
 
 export interface ResolvedSentryEnvironment {
@@ -57,6 +49,8 @@ export interface SentryOffConfig {
   readonly environmentSource: SentryEnvironmentSource;
   readonly release: string;
   readonly releaseSource: SentryReleaseSource;
+  readonly gitSha?: string;
+  readonly gitShaSource?: GitShaSource;
   readonly enableLogs: false;
   readonly sendDefaultPii: false;
   readonly debug: false;
@@ -68,6 +62,8 @@ export interface SentryFixtureConfig {
   readonly environmentSource: SentryEnvironmentSource;
   readonly release: string;
   readonly releaseSource: SentryReleaseSource;
+  readonly gitSha?: string;
+  readonly gitShaSource?: GitShaSource;
   readonly enableLogs: boolean;
   readonly sendDefaultPii: false;
   readonly debug: boolean;
@@ -80,6 +76,8 @@ export interface SentryLiveConfig {
   readonly environmentSource: SentryEnvironmentSource;
   readonly release: string;
   readonly releaseSource: SentryReleaseSource;
+  readonly gitSha?: string;
+  readonly gitShaSource?: GitShaSource;
   readonly tracesSampleRate: number;
   readonly enableLogs: boolean;
   readonly sendDefaultPii: false;
@@ -95,11 +93,13 @@ export type ObservabilityConfigError =
       readonly name: SentryBooleanFlagName;
       readonly value: string;
     }
+  | { readonly kind: 'missing_app_version' }
+  | { readonly kind: 'invalid_app_version'; readonly value: string }
   | { readonly kind: 'missing_sentry_dsn' }
   | { readonly kind: 'invalid_sentry_dsn'; readonly value: string }
   | { readonly kind: 'invalid_traces_sample_rate'; readonly value: string }
   | { readonly kind: 'send_default_pii_forbidden' }
-  | { readonly kind: 'missing_release_for_live_mode' };
+  | { readonly kind: 'invalid_git_sha'; readonly value: string };
 
 export interface InitialiseSentryError {
   readonly kind: 'sentry_sdk_init_failed';

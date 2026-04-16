@@ -135,7 +135,7 @@ describe('parseEnv', () => {
       withBaseEnv({
         SENTRY_MODE: 'sentry',
         SENTRY_DSN: 'https://public@example.ingest.sentry.io/123456',
-        SENTRY_RELEASE: 'release-123',
+        SENTRY_RELEASE_OVERRIDE: 'release-123',
         SENTRY_TRACES_SAMPLE_RATE: '1.0',
       }),
     );

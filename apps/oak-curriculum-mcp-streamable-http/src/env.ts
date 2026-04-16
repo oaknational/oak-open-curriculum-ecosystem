@@ -34,6 +34,8 @@ const BaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.shape)
     VERCEL_BRANCH_URL: z.string().optional(),
     VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
     VERCEL_GIT_COMMIT_SHA: z.string().optional(),
+    APP_VERSION_OVERRIDE: z.string().optional(),
+    GIT_SHA_OVERRIDE: z.string().optional(),
     OAK_API_BASE_URL: z.url().optional(),
   });
 

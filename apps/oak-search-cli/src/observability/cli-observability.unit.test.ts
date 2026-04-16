@@ -84,7 +84,7 @@ function createTestEnv(
     ...(mode === 'sentry'
       ? {
           SENTRY_DSN: 'https://public@example.ingest.sentry.io/123456',
-          SENTRY_RELEASE: 'release-123',
+          SENTRY_RELEASE_OVERRIDE: 'release-123',
           SENTRY_TRACES_SAMPLE_RATE: '1',
         }
       : {}),
@@ -105,6 +105,7 @@ function createRuntimeConfig(
     env: createTestEnv(mode, envOverrides),
     logLevel: 'info',
     version: '1.0.0-test',
+    versionSource: 'APP_VERSION_OVERRIDE',
   };
 }
 

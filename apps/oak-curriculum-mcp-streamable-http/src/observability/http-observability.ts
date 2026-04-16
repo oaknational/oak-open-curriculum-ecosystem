@@ -1,10 +1,12 @@
 import { type LogContextInput, type Logger, type LogSink } from '@oaknational/logger';
-import { err, type Result } from '@oaknational/result';
+import { err, ok, type Result } from '@oaknational/result';
 import {
   createSentryConfig,
   createSentryLogSink,
   initialiseSentry,
   type FixtureSentryStore,
+  type InitialiseSentryError,
+  type ParsedSentryConfig,
   type SentryNodeRuntime,
   type SentryNodeSdk,
 } from '@oaknational/sentry-node';
@@ -151,19 +153,36 @@ function resolveTracer(mode: string, serviceName: string, version: string): Trac
   return mode === 'sentry' ? trace.getTracer(serviceName, version) : undefined;
 }
 
-export function createHttpObservability(
+function createSentryConfigEnvironment(runtimeConfig: RuntimeConfig) {
+  return {
+    ...runtimeConfig.env,
+    APP_VERSION: runtimeConfig.version,
+    APP_VERSION_SOURCE: runtimeConfig.versionSource,
+    ...(runtimeConfig.gitSha
+      ? { GIT_SHA: runtimeConfig.gitSha, GIT_SHA_SOURCE: runtimeConfig.gitShaSource }
+      : {}),
+  };
+}
+
+function initialiseHttpSentryRuntime(
   runtimeConfig: RuntimeConfig,
-  options?: CreateHttpObservabilityOptions,
-): Result<HttpObservability, HttpObservabilityError> {
-  const sentryConfigResult = createSentryConfig(runtimeConfig.env);
+  options: CreateHttpObservabilityOptions | undefined,
+): Result<
+  {
+    readonly config: ParsedSentryConfig;
+    readonly runtime: SentryNodeRuntime;
+    readonly serviceName: string;
+  },
+  InitialiseSentryError | HttpObservabilityError
+> {
+  const sentryConfigResult = createSentryConfig(createSentryConfigEnvironment(runtimeConfig));
 
   if (!sentryConfigResult.ok) {
     return err(sentryConfigResult.error);
   }
 
-  const sentryConfig = sentryConfigResult.value;
   const serviceName = options?.serviceName ?? DEFAULT_HTTP_SERVICE_NAME;
-  const sentryRuntimeResult = initialiseSentry(sentryConfig, {
+  const sentryRuntimeResult = initialiseSentry(sentryConfigResult.value, {
     serviceName,
     sdk: options?.sentrySdk,
     fixtureStore: options?.fixtureStore,
@@ -174,13 +193,35 @@ export function createHttpObservability(
     return err(sentryRuntimeResult.error);
   }
 
+  return ok({
+    config: sentryConfigResult.value,
+    runtime: sentryRuntimeResult.value,
+    serviceName,
+  });
+}
+
+export function createHttpObservability(
+  runtimeConfig: RuntimeConfig,
+  options?: CreateHttpObservabilityOptions,
+): Result<HttpObservability, HttpObservabilityError> {
+  const sentryInitialisationResult = initialiseHttpSentryRuntime(runtimeConfig, options);
+
+  if (!sentryInitialisationResult.ok) {
+    return sentryInitialisationResult;
+  }
+
+  const {
+    config: sentryConfig,
+    runtime: sentryRuntime,
+    serviceName,
+  } = sentryInitialisationResult.value;
   const tracer = resolveTracer(sentryConfig.mode, serviceName, runtimeConfig.version);
 
   return {
     ok: true,
     value: buildObservabilityObject({
       runtimeConfig,
-      sentryRuntime: sentryRuntimeResult.value,
+      sentryRuntime,
       serviceName,
       environment: sentryConfig.environment,
       release: sentryConfig.release,

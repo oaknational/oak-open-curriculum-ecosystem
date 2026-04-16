@@ -1,40 +1,24 @@
 import { err, ok, type Result } from '@oaknational/result';
 import { trimToUndefined } from './config-parsing.js';
 import type {
+  GitShaSource,
   ObservabilityConfigError,
   ResolvedSentryEnvironment,
   ResolvedSentryRelease,
   SentryConfigEnvironment,
   SentryEnvironmentSource,
-  SentryMode,
-  SentryReleaseSource,
 } from './types.js';
 
 const ENVIRONMENT_PRECEDENCE = [
-  'SENTRY_ENVIRONMENT',
+  'SENTRY_ENVIRONMENT_OVERRIDE',
   'VERCEL_ENV',
-  'NODE_ENV',
 ] as const satisfies readonly SentryEnvironmentSource[];
 
 const RELEASE_PRECEDENCE = [
-  'SENTRY_RELEASE',
-  'VERCEL_GIT_COMMIT_SHA',
-  'GITHUB_SHA',
-  'COMMIT_SHA',
-  'SOURCE_VERSION',
-  'npm_package_version',
-] as const satisfies readonly Exclude<SentryReleaseSource, 'local-dev'>[];
+  'SENTRY_RELEASE_OVERRIDE',
+] as const satisfies readonly 'SENTRY_RELEASE_OVERRIDE'[];
 
-function getReleaseValue(
-  input: SentryConfigEnvironment,
-  source: (typeof RELEASE_PRECEDENCE)[number],
-): string | undefined {
-  if (source === 'npm_package_version') {
-    return trimToUndefined(input.npm_package_version);
-  }
-
-  return trimToUndefined(input[source]);
-}
+const GIT_SHA_PRECEDENCE = ['GIT_SHA', 'VERCEL_GIT_COMMIT_SHA'] as const;
 
 function getEnvironmentValue(
   input: SentryConfigEnvironment,
@@ -63,12 +47,28 @@ export function resolveSentryEnvironment(
   };
 }
 
+function resolveAppVersion(
+  input: SentryConfigEnvironment,
+): Result<ResolvedSentryRelease, ObservabilityConfigError> {
+  const version = trimToUndefined(input.APP_VERSION);
+
+  if (!version) {
+    return err({
+      kind: 'missing_app_version',
+    });
+  }
+
+  return ok({
+    value: version,
+    source: input.APP_VERSION_SOURCE ?? 'root_package_json',
+  });
+}
+
 export function resolveSentryRelease(
-  mode: SentryMode,
   input: SentryConfigEnvironment,
 ): Result<ResolvedSentryRelease, ObservabilityConfigError> {
   for (const source of RELEASE_PRECEDENCE) {
-    const value = getReleaseValue(input, source);
+    const value = trimToUndefined(input[source]);
 
     if (value) {
       return ok({
@@ -78,14 +78,43 @@ export function resolveSentryRelease(
     }
   }
 
-  if (mode === 'sentry') {
-    return err({
-      kind: 'missing_release_for_live_mode',
+  return resolveAppVersion(input);
+}
+
+function isValidGitSha(value: string): boolean {
+  return /^[0-9a-f]{7,40}$/iu.test(value);
+}
+
+export function resolveGitSha(
+  input: SentryConfigEnvironment,
+): Result<
+  { readonly value: string; readonly source: GitShaSource } | undefined,
+  ObservabilityConfigError
+> {
+  for (const source of GIT_SHA_PRECEDENCE) {
+    const value = trimToUndefined(
+      source === 'GIT_SHA' ? input.GIT_SHA : input.VERCEL_GIT_COMMIT_SHA,
+    );
+
+    if (!value) {
+      continue;
+    }
+
+    if (!isValidGitSha(value)) {
+      return err({
+        kind: 'invalid_git_sha',
+        value,
+      });
+    }
+
+    return ok({
+      value,
+      source:
+        source === 'GIT_SHA'
+          ? (input.GIT_SHA_SOURCE ?? 'GIT_SHA_OVERRIDE')
+          : 'VERCEL_GIT_COMMIT_SHA',
     });
   }
 
-  return ok({
-    value: 'local-dev',
-    source: 'local-dev',
-  });
+  return ok(undefined);
 }

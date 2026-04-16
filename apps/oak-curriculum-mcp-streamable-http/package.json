@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsup",
+    "build": "node ../../scripts/validate-root-application-version.mjs && tsup",
     "build:widget": "vite build --config widget/vite.config.ts && node scripts/embed-widget-html.js",
     "clean": "rm -rf dist .turbo .widget-build",
     "dev": "tsx operations/development/http-dev.ts dev",
@@ -48,6 +48,7 @@
     "@elastic/elasticsearch": "^9.3.4",
     "@modelcontextprotocol/ext-apps": "^1.5.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@oaknational/build-metadata": "workspace:*",
     "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/env": "workspace:*",
     "@oaknational/env-resolution": "workspace:*",

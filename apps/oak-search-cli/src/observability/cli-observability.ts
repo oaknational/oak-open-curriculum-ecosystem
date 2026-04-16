@@ -148,7 +148,14 @@ export function createCliObservability(
   runtimeConfig: SearchCliRuntimeConfig,
   options?: CreateCliObservabilityOptions,
 ): Result<CliObservability, CliObservabilityError> {
-  const sentryConfigResult = createSentryConfig(runtimeConfig.env);
+  const sentryConfigResult = createSentryConfig({
+    ...runtimeConfig.env,
+    APP_VERSION: runtimeConfig.version,
+    APP_VERSION_SOURCE: runtimeConfig.versionSource,
+    ...(runtimeConfig.gitSha
+      ? { GIT_SHA: runtimeConfig.gitSha, GIT_SHA_SOURCE: runtimeConfig.gitShaSource }
+      : {}),
+  });
 
   if (!sentryConfigResult.ok) {
     return err(sentryConfigResult.error);

@@ -17,6 +17,7 @@
  * ```
  */
 
+import { ROOT_PACKAGE_VERSION } from '@oaknational/env';
 import { Command } from 'commander';
 import { parseLogLevel } from '@oaknational/logger';
 import { loadRuntimeConfig, createSearchCliEnvLoader } from '../src/runtime-config.js';
@@ -76,7 +77,7 @@ if (configResult.ok) {
 const program = new Command()
   .name('oaksearch')
   .description('Oak National Academy — curriculum semantic search CLI')
-  .version(process.env.npm_package_version ?? '0.0.0');
+  .version(ROOT_PACKAGE_VERSION);
 
 program.addCommand(searchCommand(cliEnvLoader, cliObservability));
 program.addCommand(adminCommand(cliEnvLoader, cliObservability));

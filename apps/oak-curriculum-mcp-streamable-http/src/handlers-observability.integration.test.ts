@@ -34,6 +34,7 @@ function createFakeRuntimeConfig(): AuthDisabledRuntimeConfig {
     dangerouslyDisableAuth: true,
     useStubTools: false,
     version: '0.0.0-test',
+    versionSource: 'APP_VERSION_OVERRIDE',
     vercelHostnames: [],
   };
 }

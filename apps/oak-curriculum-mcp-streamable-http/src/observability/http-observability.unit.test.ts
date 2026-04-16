@@ -34,6 +34,7 @@ function createRuntimeConfig(
     dangerouslyDisableAuth: true,
     useStubTools: false,
     version: '1.2.3-test',
+    versionSource: 'APP_VERSION_OVERRIDE',
     vercelHostnames: [],
     env: {
       OAK_API_KEY: 'test-api-key',
@@ -41,12 +42,11 @@ function createRuntimeConfig(
       ELASTICSEARCH_API_KEY: 'test-es-key',
       DANGEROUSLY_DISABLE_AUTH: 'true',
       LOG_LEVEL: 'info',
-      NODE_ENV: 'test',
       SENTRY_MODE: mode,
       ...(mode === 'sentry'
         ? {
             SENTRY_DSN: 'https://public@example.ingest.sentry.io/123456',
-            SENTRY_RELEASE: 'release-123',
+            SENTRY_RELEASE_OVERRIDE: 'release-123',
             SENTRY_TRACES_SAMPLE_RATE: '1',
           }
         : {}),

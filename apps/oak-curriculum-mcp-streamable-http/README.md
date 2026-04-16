@@ -181,6 +181,21 @@ surface.
 - `sentry` — live Sentry mode. Stdout JSON is still retained, and the app adds
   the Sentry sink, live error capture, and tracing.
 
+Release and metadata are intentionally simple:
+
+- release defaults to the root repo `package.json` version
+- `SENTRY_RELEASE_OVERRIDE` exists only as an explicit override
+- environment resolves as `SENTRY_ENVIRONMENT_OVERRIDE` then `VERCEL_ENV` then
+  `development`
+- git SHA is attached as metadata from `GIT_SHA_OVERRIDE` or
+  `VERCEL_GIT_COMMIT_SHA`
+
+The root package version is only bumped by the GitHub release workflow, so
+preview and local builds can legitimately contain commits newer than the current
+release version. On Vercel production, repo-owned build gating cancels
+non-release builds before they run, so deployed production releases do not drift
+forward under an old semantic-release version number.
+
 The HTTP telemetry boundary is metadata-only:
 
 - generic `/mcp` request capture is reduced to safe method and route metadata
@@ -227,11 +242,34 @@ at the process boundary: bootstrap failure, server listen error, `SIGINT`, and
   - `LOG_LEVEL` (default `info`, use `debug` for staging)
   - `SENTRY_MODE` — `off` (default), `fixture`, or `sentry`
   - `SENTRY_DSN` — required when `SENTRY_MODE=sentry`
-  - `SENTRY_RELEASE` — required when `SENTRY_MODE=sentry`
-  - `SENTRY_TRACES_SAMPLE_RATE` — optional numeric trace sample rate for live Sentry mode
+  - `SENTRY_TRACES_SAMPLE_RATE` — required numeric trace sample rate for live Sentry mode
+  - `SENTRY_ENVIRONMENT_OVERRIDE` — explicit environment override only
+  - `SENTRY_RELEASE_OVERRIDE` — explicit release override only
+  - `APP_VERSION_OVERRIDE` — explicit application-version override only
+  - `GIT_SHA_OVERRIDE` — explicit git-SHA override only
   - `REMOTE_MCP_MODE` (default `stateless`, recommended for Vercel — see `docs/vercel-environment-config.md`)
 
 Environment loading uses `resolveEnv` from `@oaknational/env-resolution`: reads `.env` < `.env.local` < `process.env`, validates against a Zod schema with conditional Clerk key requirements, and returns `Result<RuntimeConfig, ConfigError>`. See `src/runtime-config.ts`.
+
+Runtime metadata is resolved fail-fast:
+
+- application version comes from the root repo `package.json` unless
+  `APP_VERSION_OVERRIDE` is set
+- release comes from `SENTRY_RELEASE_OVERRIDE` or that resolved application
+  version
+- git SHA metadata comes from `GIT_SHA_OVERRIDE` or `VERCEL_GIT_COMMIT_SHA`
+- invalid override values and missing application version are startup errors
+- the build also fails early if the root package version is missing or invalid
+
+Vercel production builds have an additional repo-owned gate:
+
+- previews and development builds always continue
+- production continues only when the root repo `package.json` version is greater
+  than the previous successful production deployment version
+- production builds that would reuse the previous semantic-release version are
+  cancelled via `vercel.json` `ignoreCommand`, rather than failing during build
+- the gate reads the previous deployed root `package.json` via
+  `VERCEL_GIT_PREVIOUS_SHA`
 
 **Important**: This server uses **stateless mode** by default, which is correct for Vercel's serverless architecture. Session state is not maintained between requests. See `docs/vercel-environment-config.md` for detailed explanation of transport modes.
 

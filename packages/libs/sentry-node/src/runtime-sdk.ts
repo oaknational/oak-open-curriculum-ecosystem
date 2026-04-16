@@ -80,6 +80,7 @@ export function createSentryInitOptions(
         service: options.serviceName,
         environment: config.environment,
         release: config.release,
+        ...(config.gitSha ? { git_sha: config.gitSha } : {}),
       },
     },
     ...createSentryHooks(options.postRedactionHooks),

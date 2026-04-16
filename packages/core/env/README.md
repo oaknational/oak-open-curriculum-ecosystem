@@ -49,6 +49,19 @@ const AppSchema = OakApiKeyEnvSchema.extend(LoggingEnvSchema.shape);
 Fields: `LOG_LEVEL` (trace/debug/info/warn/error/fatal), `NODE_ENV`
 (development/production/test), `ENVIRONMENT_OVERRIDE` (freeform string).
 
+### `SentryEnvSchema`
+
+Contract for shared Sentry configuration.
+
+Fields:
+`SENTRY_MODE`, `SENTRY_DSN`, `SENTRY_ENVIRONMENT_OVERRIDE`,
+`SENTRY_RELEASE_OVERRIDE`, `SENTRY_TRACES_SAMPLE_RATE`,
+`SENTRY_ENABLE_LOGS`, `SENTRY_SEND_DEFAULT_PII`, `SENTRY_DEBUG`.
+
+The `*_OVERRIDE` names are deliberate: these values are only ever explicit
+overrides. Any non-override release/version policy belongs in the consumer
+runtime config, not in the shared raw-env schema.
+
 ### Composing schemas
 
 ```typescript

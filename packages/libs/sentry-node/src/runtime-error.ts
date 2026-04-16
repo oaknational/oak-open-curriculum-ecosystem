@@ -3,6 +3,15 @@ import type { ObservabilityCloseError, ObservabilityFlushError } from '@oaknatio
 import { redactJsonObject, redactText } from './runtime-telemetry.js';
 import type { ObservabilityConfigError, SentryCloseError, SentryFlushError } from './types.js';
 
+type ValueConfigError = Extract<
+  ObservabilityConfigError,
+  | { readonly kind: 'invalid_sentry_mode' }
+  | { readonly kind: 'invalid_boolean_flag' }
+  | { readonly kind: 'invalid_app_version' }
+  | { readonly kind: 'invalid_traces_sample_rate' }
+  | { readonly kind: 'invalid_git_sha' }
+>;
+
 /**
  * Describe an observability configuration error as a human-readable message.
  *
@@ -11,22 +20,52 @@ import type { ObservabilityConfigError, SentryCloseError, SentryFlushError } fro
  * discriminated union is defined here — consumers should not duplicate the
  * switch. Exhaustive switch ensures new error kinds produce a compile error.
  */
-export function describeConfigError(error: ObservabilityConfigError): string {
+function isValueConfigError(error: ObservabilityConfigError): error is ValueConfigError {
+  switch (error.kind) {
+    case 'invalid_sentry_mode':
+    case 'invalid_boolean_flag':
+    case 'invalid_app_version':
+    case 'invalid_traces_sample_rate':
+    case 'invalid_git_sha':
+      return true;
+    default:
+      return false;
+  }
+}
+
+function describeValueConfigError(error: ValueConfigError): string {
   switch (error.kind) {
     case 'invalid_sentry_mode':
       return `Invalid SENTRY_MODE value: ${error.value}`;
     case 'invalid_boolean_flag':
       return `Invalid ${error.name} value: ${error.value}`;
+    case 'invalid_app_version':
+      return `Invalid application version value: ${error.value}`;
+    case 'invalid_traces_sample_rate':
+      return `Invalid SENTRY_TRACES_SAMPLE_RATE value: ${error.value}`;
+    case 'invalid_git_sha':
+      return `Invalid git SHA value: ${error.value}`;
+    default: {
+      const exhaustive: never = error;
+      throw new Error(`Unhandled value config error kind: ${String(exhaustive)}`);
+    }
+  }
+}
+
+export function describeConfigError(error: ObservabilityConfigError): string {
+  if (isValueConfigError(error)) {
+    return describeValueConfigError(error);
+  }
+
+  switch (error.kind) {
+    case 'missing_app_version':
+      return 'Application version is required for Sentry release resolution';
     case 'missing_sentry_dsn':
       return 'SENTRY_DSN is required when SENTRY_MODE=sentry';
     case 'invalid_sentry_dsn':
       return 'Invalid SENTRY_DSN value';
-    case 'invalid_traces_sample_rate':
-      return `Invalid SENTRY_TRACES_SAMPLE_RATE value: ${error.value}`;
     case 'send_default_pii_forbidden':
       return 'SENTRY_SEND_DEFAULT_PII=true is not allowed';
-    case 'missing_release_for_live_mode':
-      return 'A release value is required when SENTRY_MODE=sentry';
     default: {
       const exhaustive: never = error;
       throw new Error(`Unhandled config error kind: ${String(exhaustive)}`);

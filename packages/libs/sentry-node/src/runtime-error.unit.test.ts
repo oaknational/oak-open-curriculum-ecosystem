@@ -19,6 +19,23 @@ describe('describeConfigError', () => {
     expect(describeConfigError(error)).toBe('Invalid SENTRY_ENABLE_LOGS value: maybe');
   });
 
+  it('describes missing_app_version', () => {
+    const error: ObservabilityConfigError = { kind: 'missing_app_version' };
+
+    expect(describeConfigError(error)).toBe(
+      'Application version is required for Sentry release resolution',
+    );
+  });
+
+  it('describes invalid_app_version', () => {
+    const error: ObservabilityConfigError = {
+      kind: 'invalid_app_version',
+      value: 'not-a-version',
+    };
+
+    expect(describeConfigError(error)).toBe('Invalid application version value: not-a-version');
+  });
+
   it('describes missing_sentry_dsn', () => {
     const error: ObservabilityConfigError = { kind: 'missing_sentry_dsn' };
 
@@ -46,10 +63,10 @@ describe('describeConfigError', () => {
     expect(describeConfigError(error)).toBe('SENTRY_SEND_DEFAULT_PII=true is not allowed');
   });
 
-  it('describes missing_release_for_live_mode', () => {
-    const error: ObservabilityConfigError = { kind: 'missing_release_for_live_mode' };
+  it('describes invalid_git_sha', () => {
+    const error: ObservabilityConfigError = { kind: 'invalid_git_sha', value: 'not-a-sha' };
 
-    expect(describeConfigError(error)).toBe('A release value is required when SENTRY_MODE=sentry');
+    expect(describeConfigError(error)).toBe('Invalid git SHA value: not-a-sha');
   });
 });
 

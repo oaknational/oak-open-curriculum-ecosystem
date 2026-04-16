@@ -11,7 +11,7 @@
     "node": "24.x"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "node ../../scripts/validate-root-application-version.mjs && tsup",
     "clean": "rm -rf dist .turbo",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^9.3.4",
+    "@oaknational/build-metadata": "workspace:*",
     "@oaknational/curriculum-sdk": "workspace:*",
     "@oaknational/env": "workspace:*",
     "@oaknational/env-resolution": "workspace:*",

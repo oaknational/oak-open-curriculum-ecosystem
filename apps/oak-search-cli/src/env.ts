@@ -56,6 +56,8 @@ const SearchCliBaseEnvSchema = OakApiKeyEnvSchema.extend(ElasticsearchEnvSchema.
       .transform((value) => value === true || value === 'true'),
     SDK_CACHE_REDIS_URL: z.string().default('redis://localhost:6379'),
     SDK_CACHE_TTL_DAYS: z.coerce.number().int().min(1).max(60).default(14),
+    APP_VERSION_OVERRIDE: z.string().optional(),
+    GIT_SHA_OVERRIDE: z.string().optional(),
   });
 
 /**

@@ -36,6 +36,7 @@ export function createMockRuntimeConfig(): AuthEnabledRuntimeConfig {
     useStubTools: false,
     dangerouslyDisableAuth: false,
     version: '0.0.0-test',
+    versionSource: 'APP_VERSION_OVERRIDE',
     vercelHostnames: [],
   };
 }

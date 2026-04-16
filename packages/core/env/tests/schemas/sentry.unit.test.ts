@@ -19,8 +19,8 @@ describe('SentryEnvSchema', () => {
       SentryEnvSchema.parse({
         SENTRY_MODE: 'sentry',
         SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
-        SENTRY_ENVIRONMENT: 'preview',
-        SENTRY_RELEASE: 'abcdef123',
+        SENTRY_ENVIRONMENT_OVERRIDE: 'preview',
+        SENTRY_RELEASE_OVERRIDE: 'abcdef123',
         SENTRY_TRACES_SAMPLE_RATE: '0.5',
         SENTRY_ENABLE_LOGS: 'true',
         SENTRY_SEND_DEFAULT_PII: 'false',
@@ -29,8 +29,8 @@ describe('SentryEnvSchema', () => {
     ).toStrictEqual({
       SENTRY_MODE: 'sentry',
       SENTRY_DSN: 'https://key@example.ingest.sentry.io/123',
-      SENTRY_ENVIRONMENT: 'preview',
-      SENTRY_RELEASE: 'abcdef123',
+      SENTRY_ENVIRONMENT_OVERRIDE: 'preview',
+      SENTRY_RELEASE_OVERRIDE: 'abcdef123',
       SENTRY_TRACES_SAMPLE_RATE: '0.5',
       SENTRY_ENABLE_LOGS: 'true',
       SENTRY_SEND_DEFAULT_PII: 'false',
@@ -43,15 +43,15 @@ describe('SentryEnvSchema', () => {
       SentryEnvSchema.parse({
         SENTRY_MODE: 'off',
         SENTRY_DSN: '',
-        SENTRY_ENVIRONMENT: '',
-        SENTRY_RELEASE: '',
+        SENTRY_ENVIRONMENT_OVERRIDE: '',
+        SENTRY_RELEASE_OVERRIDE: '',
         SENTRY_TRACES_SAMPLE_RATE: '',
       }),
     ).toStrictEqual({
       SENTRY_MODE: 'off',
       SENTRY_DSN: '',
-      SENTRY_ENVIRONMENT: '',
-      SENTRY_RELEASE: '',
+      SENTRY_ENVIRONMENT_OVERRIDE: '',
+      SENTRY_RELEASE_OVERRIDE: '',
       SENTRY_TRACES_SAMPLE_RATE: '',
     });
   });

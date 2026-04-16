@@ -5,6 +5,7 @@ packages:
   - packages/core/oak-eslint
   - packages/core/observability
   - packages/core/openapi-zod-client-adapter
+  - packages/core/build-metadata
   - packages/core/env
   - packages/core/result
   - packages/core/type-helpers

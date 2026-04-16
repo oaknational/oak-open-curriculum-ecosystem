@@ -58,7 +58,9 @@ This repository currently provides:
 2. `package.json` with `"main": "dist/index.js"`
 3. a build pipeline that emits the server bundle (widget HTML is a committed
    codegen constant embedded in the bundle)
-4. no repo-local rewrite list or separate Vercel-only adapter file
+4. a repo-owned Vercel `ignoreCommand` that cancels production non-release
+   builds before the build runs
+5. no repo-local rewrite list or separate Vercel-only adapter file
 
 This means the deployment contract in-repo is intentionally small: build the
 Node bundle at `dist/index.js`, point the package main field at it, and let
@@ -71,7 +73,8 @@ Vercel's Express framework integration handle the platform-side wiring.
 ```json
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "express"
+  "framework": "express",
+  "ignoreCommand": "node build-scripts/vercel-ignore-production-non-release-build.mjs"
 }
 ```
 
@@ -123,6 +126,9 @@ This repo guarantees:
    embedded in the server bundle — no filesystem dependency at runtime
 4. the MCP runtime remains per-request at the transport layer (see
    `src/application.ts` / ADR-112)
+5. Vercel production deployments are cancelled before build when the root repo
+   `package.json` version has not advanced beyond the previous successful
+   production deployment
 
 Platform-specific Express framework behaviour beyond those points is owned by
 Vercel, not reimplemented in this repository.

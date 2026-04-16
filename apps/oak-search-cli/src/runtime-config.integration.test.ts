@@ -77,9 +77,9 @@ describe('loadRuntimeConfig', () => {
       expect(result.value.env.ZERO_HIT_PERSISTENCE_ENABLED).toBe(false);
     });
 
-    it('includes version from processEnv npm_package_version', () => {
+    it('uses APP_VERSION_OVERRIDE when present', () => {
       const result = loadRuntimeConfig({
-        processEnv: { ...VALID_ENV, npm_package_version: '1.2.3' },
+        processEnv: { ...VALID_ENV, APP_VERSION_OVERRIDE: '1.2.3' },
         startDir: isolatedStartDir,
       });
 
@@ -89,9 +89,10 @@ describe('loadRuntimeConfig', () => {
       }
 
       expect(result.value.version).toBe('1.2.3');
+      expect(result.value.versionSource).toBe('APP_VERSION_OVERRIDE');
     });
 
-    it('defaults version to 0.0.0 when npm_package_version is absent', () => {
+    it('uses the root package.json version when no override is present', () => {
       const result = loadRuntimeConfig({
         processEnv: { ...VALID_ENV },
         startDir: isolatedStartDir,
@@ -102,7 +103,26 @@ describe('loadRuntimeConfig', () => {
         return;
       }
 
-      expect(result.value.version).toBe('0.0.0');
+      expect(result.value.version).toBe('1.5.0');
+      expect(result.value.versionSource).toBe('root_package_json');
+    });
+
+    it('captures git SHA metadata from Vercel when present', () => {
+      const result = loadRuntimeConfig({
+        processEnv: {
+          ...VALID_ENV,
+          VERCEL_GIT_COMMIT_SHA: '3ad6f452abc123def4567890abc123def4567890',
+        },
+        startDir: isolatedStartDir,
+      });
+
+      expect(result.ok).toBe(true);
+      if (!result.ok) {
+        return;
+      }
+
+      expect(result.value.gitSha).toBe('3ad6f452abc123def4567890abc123def4567890');
+      expect(result.value.gitShaSource).toBe('VERCEL_GIT_COMMIT_SHA');
     });
   });
 
@@ -136,6 +156,20 @@ describe('loadRuntimeConfig', () => {
       });
 
       expect(result.ok).toBe(false);
+    });
+
+    it('returns Err when APP_VERSION_OVERRIDE is invalid', () => {
+      const result = loadRuntimeConfig({
+        processEnv: { ...VALID_ENV, APP_VERSION_OVERRIDE: 'not-a-version' },
+        startDir: isolatedStartDir,
+      });
+
+      expect(result.ok).toBe(false);
+      if (result.ok) {
+        return;
+      }
+
+      expect(result.error.message).toContain('Invalid APP_VERSION_OVERRIDE value');
     });
   });
 });

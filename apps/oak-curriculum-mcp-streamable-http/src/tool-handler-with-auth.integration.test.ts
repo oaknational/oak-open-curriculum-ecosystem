@@ -82,6 +82,7 @@ function createMockRuntimeConfig(
       dangerouslyDisableAuth: true,
       useStubTools: false,
       version: '1.0.0-test',
+      versionSource: 'APP_VERSION_OVERRIDE',
       vercelHostnames: [],
     } satisfies AuthDisabledRuntimeConfig;
   }
@@ -92,6 +93,7 @@ function createMockRuntimeConfig(
     dangerouslyDisableAuth: false,
     useStubTools: false,
     version: '1.0.0-test',
+    versionSource: 'APP_VERSION_OVERRIDE',
     vercelHostnames: [],
   } satisfies AuthEnabledRuntimeConfig;
 }

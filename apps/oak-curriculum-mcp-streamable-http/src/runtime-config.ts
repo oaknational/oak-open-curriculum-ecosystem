@@ -1,80 +1,86 @@
-import { resolveEnv, type EnvResolutionError } from '@oaknational/env-resolution';
+import { resolveEnv } from '@oaknational/env-resolution';
 import { ok, err, type Result } from '@oaknational/result';
-import { HttpEnvSchema, type Env, type AuthEnabledEnv, type AuthDisabledEnv } from './env.js';
+import { HttpEnvSchema, type Env } from './env.js';
+import {
+  getDisplayHostname,
+  resolveApplicationVersion,
+  resolveGitSha,
+  type AuthDisabledRuntimeConfig,
+  type AuthEnabledRuntimeConfig,
+  type ConfigError,
+  type LoadRuntimeConfigOptions,
+  type RuntimeConfig,
+  type SharedRuntimeFields,
+} from './runtime-config-support.js';
 
-/**
- * Runtime configuration when authentication is enabled.
- *
- * Clerk keys are guaranteed present as `string`.
- */
-export interface AuthEnabledRuntimeConfig {
-  readonly env: AuthEnabledEnv;
-  readonly dangerouslyDisableAuth: false;
-  readonly useStubTools: boolean;
-  readonly version: string;
-  readonly vercelHostnames: readonly string[];
-  readonly displayHostname?: string;
-}
-
-/**
- * Runtime configuration when authentication is disabled.
- *
- * Clerk keys may be absent.
- */
-export interface AuthDisabledRuntimeConfig {
-  readonly env: AuthDisabledEnv;
-  readonly dangerouslyDisableAuth: true;
-  readonly useStubTools: boolean;
-  readonly version: string;
-  readonly vercelHostnames: readonly string[];
-  readonly displayHostname?: string;
-}
-
-/**
- * Discriminated union on `dangerouslyDisableAuth`.
- *
- * After narrowing on `dangerouslyDisableAuth`, the compiler knows whether
- * Clerk keys are guaranteed present (`string`) or possibly absent.
- */
-export type RuntimeConfig = AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig;
-
-/**
- * Structured error from the configuration pipeline.
- *
- * Wraps the underlying `EnvResolutionError` with a human-readable message
- * and per-key diagnostics.
- */
-interface ConfigError {
-  readonly message: string;
-  readonly diagnostics: EnvResolutionError['diagnostics'];
-}
-
-/**
- * Options for loading runtime configuration.
- */
-interface LoadRuntimeConfigOptions {
-  readonly processEnv: Readonly<Record<string, string | undefined>>;
-  readonly startDir: string;
-}
+export type {
+  AuthEnabledRuntimeConfig,
+  AuthDisabledRuntimeConfig,
+  RuntimeConfig,
+} from './runtime-config-support.js';
 
 function toBooleanFlag(value: string | undefined): boolean {
   return value === 'true';
 }
 
-/**
- * Determines the preferred hostname for display purposes.
- *
- * In production: Uses VERCEL_PROJECT_PRODUCTION_URL (custom domain).
- * In preview/dev: Uses VERCEL_URL (deployment-specific URL).
- */
-function getDisplayHostname(env: Env): string | undefined {
-  if (env.VERCEL_ENV === 'production' && env.VERCEL_PROJECT_PRODUCTION_URL) {
-    return env.VERCEL_PROJECT_PRODUCTION_URL.toLowerCase();
+function resolveValidatedEnv(options: LoadRuntimeConfigOptions): Result<Env, ConfigError> {
+  const envResult = resolveEnv({
+    schema: HttpEnvSchema,
+    processEnv: options.processEnv,
+    startDir: options.startDir,
+  });
+
+  if (!envResult.ok) {
+    return err({
+      message: envResult.error.message,
+      diagnostics: envResult.error.diagnostics,
+    });
   }
-  if (env.VERCEL_URL) {
-    return env.VERCEL_URL.toLowerCase();
+
+  return ok(envResult.value);
+}
+
+function resolveSharedRuntimeFields(
+  env: Env,
+  processEnv: Readonly<Record<string, string | undefined>>,
+): Result<SharedRuntimeFields, ConfigError> {
+  const versionResult = resolveApplicationVersion(processEnv);
+
+  if (!versionResult.ok) {
+    return versionResult;
   }
-  return undefined;
+
+  const gitShaResult = resolveGitSha(env);
+
+  if (!gitShaResult.ok) {
+    return gitShaResult;
+  }
+
+  const vercelHostnames = [env.VERCEL_URL, env.VERCEL_BRANCH_URL, env.VERCEL_PROJECT_PRODUCTION_URL]
+    .filter((url): url is string => Boolean(url))
+    .map((url) => url.toLowerCase());
+
+  return ok({
+    useStubTools: toBooleanFlag(env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS),
+    version: versionResult.value.value,
+    versionSource: versionResult.value.source,
+    ...(gitShaResult.value
+      ? { gitSha: gitShaResult.value.value, gitShaSource: gitShaResult.value.source }
+      : {}),
+    vercelHostnames,
+    displayHostname: getDisplayHostname(env),
+  });
+}
+
+function buildAuthEnabledRuntimeConfig(
+  env: Env & { readonly CLERK_PUBLISHABLE_KEY: string; readonly CLERK_SECRET_KEY: string },
+  shared: SharedRuntimeFields,
+): AuthEnabledRuntimeConfig {
+  return {
+    ...shared,
+    env,
+    dangerouslyDisableAuth: false,
+  };
 }
 
 /**
@@ -91,33 +97,21 @@ function getDisplayHostname(env: Env): string | undefined {
 export function loadRuntimeConfig(
   options: LoadRuntimeConfigOptions,
 ): Result<RuntimeConfig, ConfigError> {
-  const envResult = resolveEnv({
-    schema: HttpEnvSchema,
-    processEnv: options.processEnv,
-    startDir: options.startDir,
-  });
+  const envResult = resolveValidatedEnv(options);
 
   if (!envResult.ok) {
-    return err({
-      message: envResult.error.message,
-      diagnostics: envResult.error.diagnostics,
-    });
+    return envResult;
   }
 
   const env = envResult.value;
+  const sharedResult = resolveSharedRuntimeFields(env, options.processEnv);
 
-  const vercelHostnames = [env.VERCEL_URL, env.VERCEL_BRANCH_URL, env.VERCEL_PROJECT_PRODUCTION_URL]
-    .filter((url): url is string => Boolean(url))
-    .map((url) => url.toLowerCase());
+  if (!sharedResult.ok) {
+    return sharedResult;
+  }
 
   const disableAuth = toBooleanFlag(env.DANGEROUSLY_DISABLE_AUTH);
-
-  const shared = {
-    useStubTools: toBooleanFlag(env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS),
-    version: options.processEnv.npm_package_version ?? '0.0.0',
-    vercelHostnames,
-    displayHostname: getDisplayHostname(env),
-  };
+  const shared = sharedResult.value;
 
   if (disableAuth) {
     return ok({ ...shared, env, dangerouslyDisableAuth: true } satisfies AuthDisabledRuntimeConfig);
@@ -133,9 +127,10 @@ export function loadRuntimeConfig(
     });
   }
 
-  return ok({
-    ...shared,
-    env: { ...env, CLERK_PUBLISHABLE_KEY: clerkPublishableKey, CLERK_SECRET_KEY: clerkSecretKey },
-    dangerouslyDisableAuth: false,
-  } satisfies AuthEnabledRuntimeConfig);
+  return ok(
+    buildAuthEnabledRuntimeConfig(
+      { ...env, CLERK_PUBLISHABLE_KEY: clerkPublishableKey, CLERK_SECRET_KEY: clerkSecretKey },
+      shared,
+    ),
+  );
 }

@@ -63,6 +63,7 @@ export function createMockRuntimeConfig(
   const shared = {
     useStubTools: false,
     version: '0.0.0-test',
+    versionSource: 'APP_VERSION_OVERRIDE' as const,
     vercelHostnames: [],
     ...restOverrides,
   };
@@ -77,7 +78,6 @@ export function createMockRuntimeConfig(
         ELASTICSEARCH_API_KEY: 'fake-api-key-for-mock-config',
         SENTRY_MODE: 'off' as const,
         LOG_LEVEL: 'error' as const,
-        NODE_ENV: 'test' as const,
         DANGEROUSLY_DISABLE_AUTH: 'true' as const,
         ...envOverrides,
       },
@@ -95,7 +95,6 @@ export function createMockRuntimeConfig(
       ELASTICSEARCH_API_KEY: 'fake-api-key-for-mock-config',
       SENTRY_MODE: 'off' as const,
       LOG_LEVEL: 'error' as const,
-      NODE_ENV: 'test' as const,
       ...envOverrides,
     },
   } satisfies AuthEnabledRuntimeConfig;

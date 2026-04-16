@@ -38,6 +38,7 @@ function createRuntimeConfig(): AuthDisabledRuntimeConfig {
     dangerouslyDisableAuth: true,
     useStubTools: false,
     version: '1.2.3-test',
+    versionSource: 'APP_VERSION_OVERRIDE',
     vercelHostnames: [],
     env: {
       OAK_API_KEY: 'test-api-key',
@@ -45,7 +46,6 @@ function createRuntimeConfig(): AuthDisabledRuntimeConfig {
       ELASTICSEARCH_API_KEY: 'test-es-key',
       DANGEROUSLY_DISABLE_AUTH: 'true',
       LOG_LEVEL: 'info',
-      NODE_ENV: 'test',
       SENTRY_MODE: 'off',
       PORT: '3333',
     },

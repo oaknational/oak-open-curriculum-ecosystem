@@ -154,6 +154,12 @@ const config = defineConfig(
       },
     },
     {
+      files: ['build-scripts/**/*.ts'],
+      rules: {
+        'no-console': 'off',
+      },
+    },
+    {
       files: ['scripts/**/*.ts', 'smoke-tests/**/*.ts'],
       rules: {
         'no-console': 'off',
@@ -167,6 +173,17 @@ const config = defineConfig(
         'import-x/no-restricted-paths': 'off',
         '@typescript-eslint/no-restricted-imports': 'off',
         'max-lines-per-function': ['error', { max: 220, skipComments: true, skipBlankLines: true }],
+      },
+    },
+    {
+      files: ['build-scripts/**/*.js', 'build-scripts/**/*.mjs'],
+      rules: {
+        complexity: 'off',
+        'import-x/no-relative-parent-imports': 'off',
+        'max-lines': 'off',
+        'max-lines-per-function': 'off',
+        'max-statements': 'off',
+        'no-console': 'off',
       },
     },
     {

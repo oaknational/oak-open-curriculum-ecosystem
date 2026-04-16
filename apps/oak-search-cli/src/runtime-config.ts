@@ -10,41 +10,18 @@
  */
 
 import process from 'node:process';
-import { resolveEnv, type EnvResolutionError } from '@oaknational/env-resolution';
+import { resolveEnv } from '@oaknational/env-resolution';
 import { ok, err, type Result } from '@oaknational/result';
 import { SearchCliEnvSchema, type SearchCliEnv } from './env.js';
+import {
+  resolveApplicationVersion,
+  resolveGitSha,
+  type ConfigError,
+  type LoadRuntimeConfigOptions,
+  type SearchCliRuntimeConfig,
+} from './runtime-config-support.js';
 
-/**
- * Runtime configuration derived from validated environment variables.
- *
- * All fields are guaranteed valid by Zod schema validation in `resolveEnv`.
- */
-export interface SearchCliRuntimeConfig {
-  /** Validated environment variables */
-  readonly env: SearchCliEnv;
-  /** Validated log level (defaults to `'info'`) */
-  readonly logLevel: SearchCliEnv['LOG_LEVEL'];
-  /** Application version from `npm_package_version` (defaults to `'0.0.0'`) */
-  readonly version: string;
-}
-
-/**
- * Structured error from the configuration pipeline.
- */
-export interface ConfigError {
-  readonly message: string;
-  readonly diagnostics: EnvResolutionError['diagnostics'];
-}
-
-/**
- * Options for loading runtime configuration.
- */
-export interface LoadRuntimeConfigOptions {
-  /** The process environment object (typically `process.env`) */
-  readonly processEnv: Readonly<Record<string, string | undefined>>;
-  /** Directory from which to begin searching for app and repo roots */
-  readonly startDir: string;
-}
+export type { ConfigError, LoadRuntimeConfigOptions, SearchCliRuntimeConfig };
 
 /**
  * Cached loader for validated CLI environment configuration.
@@ -88,11 +65,26 @@ export function loadRuntimeConfig(
   }
 
   const env = envResult.value;
+  const versionResult = resolveApplicationVersion(options.processEnv);
+
+  if (!versionResult.ok) {
+    return versionResult;
+  }
+
+  const gitShaResult = resolveGitSha(options.processEnv);
+
+  if (!gitShaResult.ok) {
+    return gitShaResult;
+  }
 
   return ok({
     env,
     logLevel: env.LOG_LEVEL,
-    version: options.processEnv.npm_package_version ?? '0.0.0',
+    version: versionResult.value.value,
+    versionSource: versionResult.value.source,
+    ...(gitShaResult.value
+      ? { gitSha: gitShaResult.value.value, gitShaSource: gitShaResult.value.source }
+      : {}),
   });
 }
 
