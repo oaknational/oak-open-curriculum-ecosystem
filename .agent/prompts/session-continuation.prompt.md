@@ -45,69 +45,42 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Sentry/OTel completion on `feat/otel_sentry_enhancements`,
-  with parent-plan orchestration split across child and companion plans.
+- **Workstream**: Report-normalisation workflow hardening and teacher-memory
+  strategic planning.
 - **Active plans**:
-  - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
-    (parent authority + parent closure order + companion continuation order)
-  - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-    (completed HTTP MCP live-path runtime alignment record)
-  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-expansion.plan.md`
-    (full post-baseline Sentry capability expansion)
-  - `.agent/plans/architecture-and-infrastructure/active/search-observability.plan.md`
-    (later-session companion for search observability beyond work
-    explicitly confined to the MCP server)
-  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-translation-crosswalk.plan.md`
-    (lossless recovery mapping for removed scope)
-- **Current state**: Native MCP wrapping fully adopted. `wrapMcpServerWithSentry()`
-  is wired in the per-request factory. All custom `@oaknational/sentry-mcp`
-  handler wrappers are gone, the package is deleted, the circular justification
-  chain is broken, and the parent/child/companion plans now split ownership
-  explicitly. Latest recorded aggregate state: `pnpm check` green, knip clean,
-  depcruise clean. This session refreshed the continuity surfaces again so the
-  collection README, roadmap, architecture prompt, active plan, and session
-  prompt all agree on the next sequence: validate current HTTP foundation
-  first, then continue with MCP-server-confined expansion, then defer broader
-  search follow-on work.
-- **Current objective**: Branch is deployment-ready for the MCP server.
-  Remaining branch-critical work is Vercel credential provisioning (human
-  action) and the deployment evidence bundle. After that validation pass,
-  continue with `sentry-observability-expansion.plan.md`. Defer
-  `search-observability.plan.md` to a later session/PR unless the work is
-  explicitly confined to the MCP server.
+  - `.agent/plans/architecture-and-infrastructure/future/teacher-memory-store-solid-vs-user-keyed-private-store.plan.md`
+    (new future strategic brief; not executable yet)
+- **Current state**: The Solid distributed filesystem research report was
+  normalised into a sibling clean copy and validated for no drift against the
+  source markdown. The normalisation skill and command now enforce sibling
+  `*-clean.md` output and "never overwrite source". A new future plan was added
+  to compare Solid Pods against a user-keyed private store for long-term
+  teacher preferences and memory.
+- **Current objective**: Keep future planning discoverable and ready for
+  promotion by producing an evidence-backed architecture comparison and ADR
+  pre-read.
 - **Hard invariants / non-goals**:
-  - `sendDefaultPii: false`, `SENTRY_MODE=off`, DI/testability, and redaction
-    invariants are non-negotiable.
-  - No duplicate custom MCP tracing system on the authoritative live path.
-  - Scope moves must update the translation crosswalk in the same change set.
-  - Tests must prove product behaviour, not removed logic.
-  - All gates are blocking at all times. No "pre-existing" exceptions.
+  - Report normalisation is a faithful repair task, not a rewrite.
+  - Always write sibling `*-clean.md` outputs; never overwrite source markdown.
+  - Source markdown is structural authority; DOCX/pandoc are citation-recovery
+    authority.
+  - Future plan remains strategic only; no implementation work in this lane yet.
 - **Recent surprises / corrections**:
-  - Updating the child plan was not enough; the parent plan, collection index,
-    strategic index, and continuation prompts all needed a coordinated sweep
-    before the restart story became trustworthy again.
-  - I initially over-inferred that search work should be next after validation.
-    The user corrected the sequence: validate first, then do the
-    MCP-server-confined expansion lane, and defer broader search work to a
-    later session and PR.
-  - A later consolidation sweep still found stale collection-level index files
-    teaching the pre-split "Search CLI adoption next" story. The collection
-    README/current/roadmap layer now matches the active plan set.
-  - The MCP rate-limit integration proof was stable in isolation but timed out
-    under the commit hook's concurrent turbo run. The test now has an explicit
-    integration-appropriate timeout instead of relying on the default.
+  - Ambiguous output-contract wording in the normalisation skill allowed
+    in-place overwrite by interpretation. The workflow is now explicit:
+    sibling-only clean outputs plus mandatory drift proof.
+  - Clear distinction between "success signals" and "promotion trigger" was
+    needed in the new future plan to reduce governance ambiguity.
 - **Open questions / low-confidence areas**:
-  - Exact execution order inside `sentry-observability-expansion.plan.md` once
-    validation closes cleanly.
-  - Whether any apparently "search-shaped" follow-on task is actually confined
-    tightly enough to the MCP server to stay in this branch/PR.
-- **Next safe step**: Vercel credential provisioning (human action),
-  then deployment evidence bundle, then `sentry-observability-expansion.plan.md`.
-- **Deep consolidation status**: completed this handoff — repeated authority
-  corrections across plan, prompt, collection-index, and strategic-index
-  surfaces were swept together; practice-box incoming is empty; fitness
-  validation ran in informational mode and only reported pre-existing
-  foundational-doc pressure.
+  - Which memory architecture (Solid vs user-keyed private store) best balances
+    teacher control guarantees, operational complexity, and teacher value.
+  - Minimum data taxonomy needed across short/medium/long planning horizons.
+- **Next safe step**: Build the comparison pack and ADR pre-read from
+  `teacher-memory-store-solid-vs-user-keyed-private-store.plan.md`, then
+  promote to a `current/` executable plan if promotion triggers are met.
+- **Deep consolidation status**: not due — no plan or milestone closure, no
+  incoming practice-box content, and no additional consolidation triggers beyond
+  this lightweight handoff.
 
 ## Active Workstreams (2026-04-16)
 

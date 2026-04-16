@@ -201,3 +201,24 @@ Behaviour change:
 For broad integration tests that boot the full app and prove boundary
 behaviour, set an explicit timeout that matches the real gate environment
 instead of relying on the default unit-test-oriented timeout.
+
+## Session 2026-04-16 — Report normalisation contract hardening
+
+### Surprise
+
+Expected:
+The report-normalisation skill already enforced sibling clean-file output and
+source preservation strongly enough to prevent in-place overwrite ambiguity.
+
+Actual:
+The skill and command wording still allowed in-place edits by interpretation,
+which caused avoidable confusion about "validation against original markdown."
+
+Why expectation failed:
+The output contract was presented as optional modes instead of a hard invariant
+set. The guidance mixed flexible phrasing with strict validation language.
+
+Behaviour change:
+For this workflow, encode non-negotiable invariants directly: always emit
+`*-clean.md`, never overwrite source, source markdown defines structure, DOCX
+repairs citations/links, and drift proof compares clean vs source.

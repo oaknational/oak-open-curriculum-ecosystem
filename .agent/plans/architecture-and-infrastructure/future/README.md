@@ -11,6 +11,7 @@ queue item, then to `../active/` when implementation starts.
 |---|---|---|
 | P0 | [oak-surface-isolation-and-generic-foundation-programme.plan.md](./oak-surface-isolation-and-generic-foundation-programme.plan.md) | Strategic umbrella for separating Oak-specific leaves from generic foundations across runtime, design, tooling, SDK/codegen, search, and app surfaces |
 | P0 | [observability-and-quality-metrics.plan.md](./observability-and-quality-metrics.plan.md) | Strategic umbrella for the M2 observability foundation plus M3 alerting and quality-metrics hardening |
+| P1 | [teacher-memory-store-solid-vs-user-keyed-private-store.plan.md](./teacher-memory-store-solid-vs-user-keyed-private-store.plan.md) | Strategic comparison brief for long-term teacher memory storage: Solid Pods vs a user-keyed private store pattern |
 | -- | ~~quality-gate-hardening.plan.md~~ | Promoted to [current/](../current/quality-gate-hardening.plan.md) 2026-04-11 |
 | P1 | [test-suite-audit-and-triage.plan.md](./test-suite-audit-and-triage.plan.md) | Deep test-suite audit before stricter enforcement and mutation-testing rollout |
 | P1 | [ground-truth-archive-retirement.plan.md](./ground-truth-archive-retirement.plan.md) | Delete old 120-query ground-truth-archive/ and wire evaluation pipeline to canonical ground-truth/ model |
