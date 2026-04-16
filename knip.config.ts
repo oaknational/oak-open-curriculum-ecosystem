@@ -148,10 +148,6 @@ const config: KnipConfig = {
       project: ['src/**/*.ts', 'code-generation/**/*.ts', 'vocab-gen/**/*.ts'],
       ignoreDependencies: ['@zod/core'],
     },
-    'packages/libs/sentry-mcp': {
-      entry: ['tests/**/*.typecheck.ts'],
-      project: ['src/**/*.ts', 'tests/**/*.ts'],
-    },
     'packages/sdks/oak-search-sdk': {
       // Knip cannot resolve entries through createSdkConfig() factory.
       entry: [

@@ -260,7 +260,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 - `apps/` – runnable apps that provide services to users
 - `agent-tools/` – agent workflow CLIs (`@oaknational/agent-tools`)
 - `packages/libs/` – libraries (logger, env-resolution,
-  search-contracts, sentry-node, sentry-mcp)
+  search-contracts, sentry-node)
 - `packages/sdks/` – SDKs (curriculum-sdk, oak-search-sdk,
   sdk-codegen)
 - `packages/core/` – shared low-level code (eslint-plugin,

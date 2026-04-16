@@ -70,10 +70,11 @@ git log --oneline --decorate -10
   unused devDep removed (knip fix). 611 tests pass. `pnpm check` 88/88 green.
   knip clean. depcruise clean. 4 specialist reviewers approved/compliant.
   Parent plan updated with explicit "Road to Provably Working Sentry" table.
-- **Current objective**: Delete the orphaned `@oaknational/sentry-mcp`
-  package (zero production consumers). Then the branch is deployment-ready
-  — remaining work is Vercel credential provisioning (human action) and
-  deployment evidence bundle.
+- **Current objective**: `@oaknational/sentry-mcp` deleted. Branch is
+  deployment-ready for the MCP server. Remaining: Vercel credential
+  provisioning (human action) and deployment evidence bundle. This PR is
+  scoped to the MCP server only. Follow-on: CLI Sentry enablement,
+  Elastic search operations observability.
 - **Hard invariants / non-goals**:
   - `sendDefaultPii: false`, `SENTRY_MODE=off`, DI/testability, and redaction
     invariants are non-negotiable.
@@ -94,11 +95,11 @@ git log --oneline --decorate -10
   - knip caught `@oaknational/type-helpers` as unused devDependency after
     removing the `typeSafeKeys` import. Removed — all gates must pass.
 - **Open questions / low-confidence areas**:
-  - Whether any workspace besides the HTTP app imports `@oaknational/sentry-mcp`
-    (expected: no, but must verify before deleting the package).
   - Ordering and depth decisions for EXP/CLI follow-on tracks.
-- **Next safe step**: Delete `@oaknational/sentry-mcp` package directory,
-  remove its workspace entry and boundary rules, run `pnpm check`.
+  - Whether a new plan is needed for Elastic search operations
+    observability or whether it belongs in the existing expansion plan.
+- **Next safe step**: Vercel credential provisioning (human action),
+  then deployment evidence bundle.
 - **Deep consolidation status**: due — napkin has accumulated 10+ session
   entries since last rotation, and a significant plan has been updated.
 
@@ -109,14 +110,15 @@ git log --oneline --decorate -10
 **Plans**:
 
 - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-  (15 todos done, 7 dropped, 1 in-progress: `sentry-mcp-collapse`)
+  (16 todos done, 7 dropped — child plan complete)
 - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
   (parent authority — "Road to Provably Working Sentry" table added;
   Vercel credential provisioning and deployment evidence still pending)
 
-**Remaining code work**: delete orphaned `@oaknational/sentry-mcp`
-package. Then the branch is deployment-ready. Vercel credential
-provisioning and deployment evidence bundle are human actions.
+**No remaining code work for this PR.** Branch is deployment-ready
+for the MCP server. Vercel credential provisioning and deployment
+evidence bundle are human actions. Follow-on plans: CLI Sentry,
+Elastic search operations observability (plan needed).
 
 ### 2. User-Facing Search UI — NEXT
 

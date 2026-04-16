@@ -71,6 +71,9 @@ jobs:
       - name: Run root-level script tests
         run: pnpm test:root-scripts
 
+      - name: Lint shell scripts
+        run: pnpm lint:shell
+
       - name: Install Playwright browsers for test:ui
         run: pnpm exec playwright install --with-deps chromium
 

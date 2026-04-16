@@ -111,15 +111,9 @@ function getMatchingPatternGroups(
 
 describe('createLibBoundaryRules', () => {
   it('keeps observability out of the library inventory', () => {
-    expect(LIB_PACKAGES).toEqual([
-      'env-resolution',
-      'logger',
-      'search-contracts',
-      'sentry-node',
-      'sentry-mcp',
-    ]);
+    expect(LIB_PACKAGES).toEqual(['env-resolution', 'logger', 'search-contracts', 'sentry-node']);
     expect(FOUNDATION_LIB_PACKAGES).toEqual(['env-resolution', 'logger', 'search-contracts']);
-    expect(ADAPTER_LIB_PACKAGES).toEqual(['sentry-node', 'sentry-mcp']);
+    expect(ADAPTER_LIB_PACKAGES).toEqual(['sentry-node']);
   });
 
   it('blocks foundation libraries from importing any other library', () => {
@@ -132,7 +126,6 @@ describe('createLibBoundaryRules', () => {
     expect(blockedLibs).toEqual([
       '../env-resolution/**',
       '../search-contracts/**',
-      '../sentry-mcp/**',
       '../sentry-node/**',
     ]);
     expect(zones.some((zone) => zone.message.includes('Foundation library'))).toBe(true);
@@ -145,7 +138,6 @@ describe('createLibBoundaryRules', () => {
     const blockedLibPrefixes = [
       '@oaknational/env-resolution',
       '@oaknational/search-contracts',
-      '@oaknational/sentry-mcp',
       '@oaknational/sentry-node',
     ] as const;
     const blockedImports = patterns
@@ -160,9 +152,6 @@ describe('createLibBoundaryRules', () => {
       '@oaknational/search-contracts',
       '@oaknational/search-contracts/*',
       '@oaknational/search-contracts/**',
-      '@oaknational/sentry-mcp',
-      '@oaknational/sentry-mcp/*',
-      '@oaknational/sentry-mcp/**',
       '@oaknational/sentry-node',
       '@oaknational/sentry-node/*',
       '@oaknational/sentry-node/**',
@@ -182,35 +171,19 @@ describe('createLibBoundaryRules', () => {
       .filter((zone) => zone.from.startsWith('../') && !zone.from.startsWith('../../../'))
       .map((zone) => zone.from);
 
-    expect(blockedLibs).toEqual(['../sentry-mcp/**']);
-    expect(
-      zones.some(
-        (zone) => zone.from === '../sentry-mcp/**' && zone.message.includes('Adapter library'),
-      ),
-    ).toBe(true);
+    expect(blockedLibs).toEqual([]);
     expect(zones.some((zone) => zone.from === '../../../apps/**')).toBe(true);
     expect(zones.some((zone) => zone.from === '../../../agent-tools/**')).toBe(true);
   });
 
-  it('allows adapter libraries to import foundation package specifiers but blocks adapter package specifiers', () => {
+  it('allows adapter libraries to import foundation package specifiers', () => {
     const patterns = getRestrictedImportPatterns(createLibBoundaryRules('sentry-node'));
     const blockedImports = patterns
       .flatMap((pattern) => pattern.group)
-      .filter((group) => group.startsWith('@oaknational/sentry-mcp'))
+      .filter((group) => group.startsWith('@oaknational/sentry-node'))
       .sort();
 
-    expect(blockedImports).toEqual([
-      '@oaknational/sentry-mcp',
-      '@oaknational/sentry-mcp/*',
-      '@oaknational/sentry-mcp/**',
-    ]);
-    expect(
-      patterns.some(
-        (pattern) =>
-          pattern.group.includes('@oaknational/sentry-mcp') &&
-          pattern.message?.includes('Adapter library'),
-      ),
-    ).toBe(true);
+    expect(blockedImports).toEqual([]);
   });
 
   it('blocks libraries from importing SDK package specifiers', () => {

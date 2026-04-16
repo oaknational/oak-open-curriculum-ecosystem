@@ -31,7 +31,7 @@ todos:
     content: "Rewrite @oaknational/logger around a single LogSink[] model with explicit error overloads and active-span correlation"
     status: completed
   - id: shared-observability-packages
-    content: "Add shared observability, Sentry Node, and Sentry MCP packages with Result-based init/config surfaces"
+    content: "Add shared observability and Sentry Node packages with Result-based init/config surfaces"
     status: completed
   - id: phase-1-blocker-remediation
     content: "Resolve the current Phase 1 blocker bundle before any runtime adoption or further Phase 1 expansion"
@@ -57,8 +57,8 @@ todos:
     note: "Depends on sentry-credential-provisioning. Cannot verify live capture without real DSN."
   - id: integrated-http-live-path-alignment
     content: "Close remaining authoritative HTTP MCP live-path runtime alignment in the child plan"
-    status: in_progress
-    note: "wrap-mcp-server-adopt DONE (2026-04-16). sentry-mcp-collapse in progress — package has zero production consumers, deletion is next. Owner lane: sentry-canonical-alignment.plan.md. Mirrors Integrated Execution Order step 1."
+    status: done
+    note: "Complete 2026-04-16. wrap-mcp-server-adopt done, sentry-mcp-collapse done (package deleted). Owner lane: sentry-canonical-alignment.plan.md. Mirrors Integrated Execution Order step 1."
   - id: integrated-cli-architecture-hygiene
     content: "Complete CLI architecture hygiene prerequisites before CLI capability expansion"
     status: pending
@@ -216,26 +216,27 @@ Two rounds of specialist reviews ran during the remediation sessions:
 
 **What remains before Sentry is provably working on this branch:**
 
-1. **Delete `@oaknational/sentry-mcp` package** — zero production
-   consumers remain. Verify no other workspace imports it, then remove
-   the package directory, workspace entry, and boundary rules. Tracked
-   as `sentry-mcp-collapse` in the child plan.
-2. **Credential provisioning** (`sentry-credential-provisioning` todo) —
+1. **Credential provisioning** (`sentry-credential-provisioning` todo) —
    set `SENTRY_MODE`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` on the
    Vercel dashboard for the HTTP deployment. This is the gate for live
    verification.
-3. **Deployment evidence bundle** (`deployment-and-evidence` todo) —
+2. **Deployment evidence bundle** (`deployment-and-evidence` todo) —
    deploy with `SENTRY_MODE=sentry`, trigger success/failure MCP
    requests, and produce the date-stamped evidence bundle proving:
    native `mcp.server` transactions, thrown handler exception capture,
    `isError` classification, redaction, source-map stack traces, release
    tag, alerting baseline, kill-switch rehearsal, MCP Insights. This is
    the proof that Sentry works end-to-end.
-4. **Post-baseline expansion lanes** — NOT required for "provably
-   working", but tracked for maturity:
-   - [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
-   - [sentry-cli-observability-extension.plan.md](./sentry-cli-observability-extension.plan.md)
-   - [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md)
+3. **This PR is scoped to the MCP server.** Follow-on work is tracked
+   in separate plans:
+   - Complete Sentry integration for the MCP server (metrics, context
+     enrichment, propagation):
+     [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
+   - Enable Sentry for the Search CLI:
+     [sentry-cli-observability-extension.plan.md](./sentry-cli-observability-extension.plan.md)
+   - Integrate Sentry into Elastic search operations: plan needed
+   - Translation completeness:
+     [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md)
 
 ### Road to Provably Working Sentry (this branch)
 
@@ -246,7 +247,7 @@ the branch can merge and Sentry can be called "working":
 |------|------|--------|-------|
 | 1 | Native MCP wrapping adopted, custom wrappers removed | **DONE** | `wrapMcpServerWithSentry()` in factory, 611 tests pass, 4 specialist reviewers approved |
 | 2 | Dead code chain broken, sentry-mcp decoupled from HTTP app | **DONE** | Zero sentry-mcp imports in app, knip clean, depcruise clean |
-| 3 | Delete orphaned `@oaknational/sentry-mcp` package | **NEXT** | Package directory removed, workspace entry removed, boundary rules updated, `pnpm check` green |
+| 3 | Delete orphaned `@oaknational/sentry-mcp` package | **DONE** | Package directory removed, workspace entry removed, boundary rules updated, knip config updated |
 | 4 | Vercel Sentry credential provisioning | **PENDING** | `SENTRY_MODE=sentry`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` set on Vercel dashboard |
 | 5 | Deploy with `SENTRY_MODE=sentry` and produce evidence bundle | **PENDING** | Date-stamped evidence bundle proving all 12 manual/deployment proof items (see Phase 4) |
 
@@ -387,12 +388,10 @@ Each step is mirrored in frontmatter metadata todos using the
    - the workspace exists with discriminated config building, fixture runtime,
      sink helpers, and bounded flush helpers.
    - the reviewed Phase 1 config and type gaps are closed.
-5. `packages/libs/sentry-mcp`
-   - the workspace has **zero production consumers** as of 2026-04-16.
-   - runtime wrapping fully superseded by native `wrapMcpServerWithSentry()`.
-   - `HttpObservability` no longer extends `McpObservationRuntime`.
-   - HTTP app `package.json` no longer lists `@oaknational/sentry-mcp`.
-   - package deletion is tracked as `sentry-mcp-collapse` in the child plan.
+5. `packages/libs/sentry-mcp` — **DELETED** (2026-04-16).
+   Runtime wrapping fully superseded by native `wrapMcpServerWithSentry()`.
+   Package directory, workspace entry, boundary rules, and knip config
+   all removed.
 6. Focused validation
    - `lint`, `test`, and `type-check` are green for `@oaknational/logger`,
      `@oaknational/env`, `@oaknational/observability`,
@@ -439,9 +438,7 @@ Implementation targets:
 1. `packages/libs/logger`
 2. `packages/core/observability`
 3. `packages/libs/sentry-node`
-4. `packages/libs/sentry-mcp` as a migration surface only while remaining
-   fixture/test helpers and any temporary MCP gap-closure logic are re-homed
-5. `packages/core/env`
+4. `packages/core/env`
 6. `apps/oak-curriculum-mcp-streamable-http`
 7. `apps/oak-search-cli`
 
@@ -599,10 +596,7 @@ Deterministic validation commands:
 7. `pnpm --filter @oaknational/sentry-node test`
 8. `pnpm --filter @oaknational/sentry-node type-check`
 9. `pnpm --filter @oaknational/sentry-node lint`
-10. `pnpm --filter @oaknational/sentry-mcp test`
-11. `pnpm --filter @oaknational/sentry-mcp type-check`
-12. `pnpm --filter @oaknational/sentry-mcp lint`
-13. `pnpm --filter @oaknational/env test`
+10. `pnpm --filter @oaknational/env test`
 14. `pnpm --filter @oaknational/env type-check`
 15. `pnpm --filter @oaknational/env lint`
 
@@ -612,8 +606,7 @@ Status: HTTP adoption **complete** (PR #73 merged 2026-03-31, all 21 findings
 resolved, all gates green). Rate limiting complete (ADR-158). Search CLI
 adoption complete. Native MCP wrapping adopted — `wrapMcpServerWithSentry()`
 wired in factory, custom handler wrappers removed, `@oaknational/sentry-mcp`
-decoupled from HTTP app (zero imports, zero dependencies). Remaining: delete
-the orphaned `sentry-mcp` package and produce the deployment evidence bundle.
+package deleted. Remaining: produce the deployment evidence bundle.
 
 Adopt the shared foundation in the in-scope runtimes only:
 
@@ -964,9 +957,6 @@ Required invariants:
   - `@oaknational/sentry-node` is an adapter library above `logger`, so the
     architecture and ESLint rules must encode that relationship explicitly
     instead of relying on per-package allow-lists
-  - `@oaknational/sentry-mcp` is a temporary migration surface only; freeze
-    expansion, keep any remaining helpers transport-agnostic, and collapse or
-    remove it once no authoritative runtime or fixture value remains
 - `@oaknational/observability` (`packages/core/observability`)
   - provider-neutral helpers
   - shared telemetry redaction
@@ -977,13 +967,6 @@ Required invariants:
   - handled-error capture adapters
   - fixture-mode no-network capture helpers
   - release resolution and config builder
-- `@oaknational/sentry-mcp`
-  - temporary migration helpers only
-  - deny-by-default capture policy and recorder support may remain only while
-    they are being re-homed
-  - must stay transport-agnostic and depend on MCP server abstractions only
-  - must not become the long-term authority for the HTTP live path
-  - must not depend on Express or `StreamableHTTPServerTransport`
 
 ## Runtime Acceptance Matrix
 

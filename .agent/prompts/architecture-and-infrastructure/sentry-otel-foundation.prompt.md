@@ -16,13 +16,13 @@ diagnosable during open public alpha. It is a **Milestone 2 blocker**.
 The original branch `feat/full-sentry-otel-support` merged as PR #73.
 
 The branch rewrites the logger around a coherent `LogSink[]` fan-out
-model, adds three shared packages (`@oaknational/sentry-node`,
-`@oaknational/sentry-mcp`, `@oaknational/observability`), and wires the
-HTTP MCP server for Sentry-backed error capture, structured logging via
-the `Sentry.logger.*` API, metadata-only MCP observations, targeted
-manual spans, and a three-mode kill switch (`off`/`fixture`/`sentry`).
-All telemetry passes through a shared redaction barrier before leaving
-the process.
+model, adds shared packages (`@oaknational/sentry-node`,
+`@oaknational/observability`), and wires the HTTP MCP server for
+Sentry-backed error capture, native MCP server wrapping via
+`wrapMcpServerWithSentry()`, structured logging via the
+`Sentry.logger.*` API, targeted manual spans, and a three-mode kill
+switch (`off`/`fixture`/`sentry`). All telemetry passes through a
+shared redaction barrier before leaving the process.
 
 See [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
 for the architectural decision.
@@ -80,7 +80,6 @@ Primary code surfaces:
 
 - `packages/libs/sentry-node/src/` — Sentry config, runtime, sinks,
   redaction, fixture, types
-- `packages/libs/sentry-mcp/src/` — MCP observation wrappers
 - `packages/core/observability/src/` — shared redaction, span context
 - `apps/oak-curriculum-mcp-streamable-http/src/observability/` — 4
   modules (http-observability, span-helpers, sanitise-mcp-events,

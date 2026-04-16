@@ -10,7 +10,7 @@ OpenTelemetry documentation**, not merely against what this repo already does.
 ### Triggering Scenarios
 
 - Reviewing or modifying `@sentry/node` initialisation or options
-- Reviewing or modifying `@oaknational/sentry-node` or `@oaknational/sentry-mcp`
+- Reviewing or modifying `@oaknational/sentry-node`
 - Reviewing or modifying Sentry log sinks, handled-error capture, or
   breadcrumb policy
 - Reviewing or modifying OpenTelemetry span helpers or active trace-context

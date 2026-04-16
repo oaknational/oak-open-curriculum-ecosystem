@@ -13,10 +13,18 @@
 #   ./scripts/restart-dev-server.sh noauth   # Start without auth (for testing)
 #
 
-set -e  # Exit on error
+set -euo pipefail
 
 PORT=${PORT:-3333}
 MODE=${1:-dev}
+
+if ! command -v lsof >/dev/null 2>&1; then
+  echo "❌ ERROR: required command 'lsof' is not installed."
+  echo "   macOS: lsof is usually pre-installed."
+  echo "   Linux (Debian/Ubuntu): sudo apt install lsof"
+  echo "   Source/build instructions: https://github.com/lsof-org/lsof"
+  exit 1
+fi
 
 echo "🔍 Checking for existing processes on port $PORT..."
 

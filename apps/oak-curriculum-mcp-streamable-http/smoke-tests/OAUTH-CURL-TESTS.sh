@@ -1,8 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # OAuth Discovery curl Tests
 # These tests validate that the OAuth discovery chain works correctly
 
-set -e
+set -euo pipefail
+
+require_command() {
+  local command_name="$1"
+  local install_url="$2"
+
+  if command -v "${command_name}" >/dev/null 2>&1; then
+    return 0
+  fi
+
+  echo "❌ Missing required command: ${command_name}"
+  echo "   Install instructions: ${install_url}"
+  exit 1
+}
+
+require_command "curl" "https://curl.se/download.html"
+require_command "jq" "https://jqlang.github.io/jq/download/"
 
 echo "═══════════════════════════════════════════════════════"
 echo "🧪 OAuth Discovery curl Tests"
@@ -81,7 +97,7 @@ echo ""
 
 # Test 4: OAuth metadata accessible
 echo -e "${BLUE}Test 4: OAuth metadata returns 200 OK${NC}"
-echo "Command: curl -I http://localhost:3333/.well-known/oauth-protected-resource"
+echo "Command: curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3333/.well-known/oauth-protected-resource"
 echo ""
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3333/.well-known/oauth-protected-resource)
 

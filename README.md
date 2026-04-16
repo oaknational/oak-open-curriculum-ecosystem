@@ -71,6 +71,9 @@ and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-reti
 
 - **Node.js 24.x** — install via [nvm](https://github.com/nvm-sh/nvm) or [fnm](https://github.com/Schniz/fnm), then run `nvm use` or `fnm use` to activate the version in `.nvmrc`
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
+- **bun** (optional, for `pnpm dev:widget-in-host`) — install via [bun.sh](https://bun.sh/docs/installation)
+- **jq** (optional, for `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:oauth-curl`) — install via [jqlang.github.io/jq/download](https://jqlang.github.io/jq/download/)
+- **lsof** (optional, for `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`) — install/build via [github.com/lsof-org/lsof](https://github.com/lsof-org/lsof)
 
 ### Install and verify
 
@@ -194,7 +197,6 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | [`@oaknational/env-resolution`](packages/libs/env-resolution/README.md)     | Environment resolution pipeline — `.env` discovery, validation, and injection |
 | [`@oaknational/search-contracts`](packages/libs/search-contracts/README.md) | Canonical semantic-search field and stage contracts                           |
 | [`@oaknational/sentry-node`](packages/libs/sentry-node/README.md)           | Shared Sentry Node config, sinks, fixture runtime, and flush helpers          |
-| [`@oaknational/sentry-mcp`](packages/libs/sentry-mcp/README.md)             | Metadata-only MCP observation wrappers                                        |
 
 **Design:**
 

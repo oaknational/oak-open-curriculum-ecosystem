@@ -26,16 +26,24 @@ MCP_SERVER_PORT="${MCP_SERVER_PORT:-3333}"
 MCP_SERVER_URL="http://localhost:${MCP_SERVER_PORT}/mcp"
 EXT_APPS_DIR="${TMPDIR:-/tmp}/mcp-ext-apps"
 
-# --- Check bun ---
-if ! command -v bun >/dev/null 2>&1; then
-  echo "Error: bun is required for the MCP Apps reference host."
-  echo ""
-  echo "Install: npm install -g bun  (or see https://bun.sh)"
-  echo ""
-  echo "Alternative: pnpm dev:widget serves the widget standalone"
-  echo "at http://localhost:5173/ without needing bun."
+require_command() {
+  local command_name="$1"
+  local install_url="$2"
+
+  if command -v "${command_name}" >/dev/null 2>&1; then
+    return 0
+  fi
+
+  echo "Error: required command '${command_name}' is not installed."
+  echo "Install instructions: ${install_url}"
   exit 1
-fi
+}
+
+# --- Check required external tools ---
+require_command "bun" "https://bun.sh/docs/installation"
+require_command "curl" "https://curl.se/download.html"
+require_command "git" "https://git-scm.com/downloads"
+require_command "npm" "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
 
 # --- Check MCP server is reachable (healthz, not /mcp which requires POST) ---
 HEALTHZ_URL="http://localhost:${MCP_SERVER_PORT}/healthz"

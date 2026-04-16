@@ -16,8 +16,7 @@ Invoke `sentry-reviewer` when the change involves:
 - shared telemetry redaction used for forwarded events or transactions
 - Sentry MCP wrapping, MCP Insights, or capture-policy changes
 - release resolution, source-map wiring, or Sentry alerting/evidence flows
-- `@oaknational/observability`, `@oaknational/sentry-node`, or
-  `@oaknational/sentry-mcp`
+- `@oaknational/observability` or `@oaknational/sentry-node`
 
 ## Non-Goals
 

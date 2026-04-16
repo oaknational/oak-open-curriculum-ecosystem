@@ -86,8 +86,8 @@ todos:
     note: "Completed 2026-04-15. Commit d7cf028b: wired wrapMcpServerWithSentry in factory, removed all sentry-mcp wrapper usage from production code. Cleanup commit 2: deleted dead tests (trace-context block, mcp-server-internal-access), removed dead HttpObservability members (createMcpObservationOptions, mcpRecorder, McpObservationRuntime extension), removed sentry-mcp from production deps, added integration tests proving native wrapping order. 612 tests pass, gates green."
   - id: sentry-mcp-collapse
     content: "Re-home fixture/test support and remove @oaknational/sentry-mcp only when deletion is low-risk"
-    status: in_progress
-    note: "Circular justification chain broken: HttpObservability no longer extends McpObservationRuntime, sentry-mcp has zero production consumers in the HTTP app. Package still exists in packages/libs/sentry-mcp/ with its own internal tests. Full deletion is now low-risk — next step is to verify no other workspace imports it and remove."
+    status: done
+    note: "Completed 2026-04-16. Package deleted: directory removed, workspace entry removed, boundary rules updated, knip config updated. Native wrapMcpServerWithSentry() fully supersedes all custom wrappers."
   - id: custom-metrics
     content: "Expose Sentry.metrics (count, gauge, distribution) on the adapter with beforeSendMetric hook"
     status: dropped
