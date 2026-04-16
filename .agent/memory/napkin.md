@@ -26,6 +26,29 @@ Previous rotation: 2026-04-14 at 641 lines.
 
 ## Session 2026-04-16 — Sentry handoff refresh
 
+## Session 2026-04-16 — OAuth supported-scope split for dynamic clients
+
+### Surprise
+
+Expected:
+The existing OAuth metadata tests would already protect the distinction between
+required tool scopes and PRM-advertised supported scopes.
+
+Actual:
+The security policy used one source of truth for both concerns, and the test
+suite had encoded the now-stale assumption that `openid` must never appear in
+`scopes_supported`.
+
+Why expectation failed:
+We had optimised around an earlier Clerk invalid-scope incident and baked that
+ workaround into generation, tests, docs, and ADR narrative instead of keeping
+tool-enforcement scope separate from dynamic-client compatibility scope.
+
+Behaviour change:
+Keep protected-tool required scopes minimal, but model PRM-advertised supported
+scopes as a separate generated contract and regression-test both surfaces so
+Codex/client fixes do not break other OAuth consumers.
+
 ### Surprise
 
 Expected:

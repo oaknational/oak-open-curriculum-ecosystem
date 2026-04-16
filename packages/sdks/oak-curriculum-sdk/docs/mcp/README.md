@@ -51,13 +51,15 @@ Security policy is defined in:
 The policy specifies:
 
 - **PUBLIC_TOOLS**: Tools that do not require authentication (e.g., `get-changelog`, `get-rate-limit`)
-- **DEFAULT_AUTH_SCHEME**: OAuth 2.1 configuration for protected tools
+- **DEFAULT_AUTH_SCHEME**: Required OAuth 2.1 scopes for protected tools
+- **SUPPORTED_OAUTH_SCOPES**: Broader optional scopes advertised in RFC 9728 protected resource metadata for dynamic client registration
 
 Current configuration:
 
 - Public tools: `get-changelog`, `get-changelog-latest`, `get-rate-limit`
 - Protected tools: All others
-- Required scopes: `openid`, `email`
+- Required tool scopes: `email`
+- Advertised supported scopes: `openid`, `profile`, `email`, `offline_access`, `public_metadata`, `private_metadata`
 
 ### Making a Tool Public
 
@@ -91,7 +93,7 @@ securitySchemes: [{ type: 'noauth' }];
 **Protected tools**:
 
 ```typescript
-securitySchemes: [{ type: 'oauth2', scopes: ['openid', 'email'] }];
+securitySchemes: [{ type: 'oauth2', scopes: ['email'] }];
 ```
 
 Runtime uses this metadata to enforce per-tool authorization.

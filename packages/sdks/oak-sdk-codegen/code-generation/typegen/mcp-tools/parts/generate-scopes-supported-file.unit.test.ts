@@ -9,7 +9,8 @@ describe('generateScopesSupportedFile', () => {
 
   it('includes the correct scopes from security policy', () => {
     const result = generateScopesSupportedFile();
-    expect(result).toContain("['email']");
+    expect(result).toContain("'openid'");
+    expect(result).toContain("'email'");
   });
 
   it('has as const assertion for type narrowing', () => {

@@ -134,7 +134,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
   });
 
   describe('scopes_supported field', () => {
-    it('returns scopes_supported without openid (Clerk dynamic clients reject it)', async () => {
+    it('returns scopes_supported with optional Clerk/OIDC scopes for dynamic clients', async () => {
       const app = await createTestApp();
 
       const res = await request(app)
@@ -144,7 +144,11 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
       expect(res.status).toBe(200);
 
       expect(res.body).toHaveProperty('scopes_supported', expect.arrayContaining(['email']));
-      expect(res.body).not.toHaveProperty('scopes_supported', expect.arrayContaining(['openid']));
+      expect(res.body).toHaveProperty('scopes_supported', expect.arrayContaining(['openid']));
+      expect(res.body).toHaveProperty(
+        'scopes_supported',
+        expect.arrayContaining(['profile', 'offline_access']),
+      );
     });
   });
 

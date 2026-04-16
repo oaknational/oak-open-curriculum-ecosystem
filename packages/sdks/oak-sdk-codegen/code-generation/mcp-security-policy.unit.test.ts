@@ -7,6 +7,7 @@ import { describe, it, expect } from 'vitest';
 import {
   PUBLIC_TOOLS,
   DEFAULT_AUTH_SCHEME,
+  SUPPORTED_OAUTH_SCOPES,
   toolRequiresAuth,
   getScopesSupported,
 } from './mcp-security-policy.js';
@@ -39,8 +40,22 @@ describe('MCP Security Policy Configuration', () => {
       expect(DEFAULT_AUTH_SCHEME.scopes).toContain('email');
     });
 
-    it('does not include openid scope (Clerk rejects it for DCR clients)', () => {
+    it('does not require openid scope for protected tools', () => {
       expect(DEFAULT_AUTH_SCHEME.scopes).not.toContain('openid');
+    });
+  });
+
+  describe('SUPPORTED_OAUTH_SCOPES', () => {
+    it('includes openid for DCR clients that request OIDC identity scopes', () => {
+      expect(SUPPORTED_OAUTH_SCOPES).toContain('openid');
+    });
+
+    it('includes email for resource access', () => {
+      expect(SUPPORTED_OAUTH_SCOPES).toContain('email');
+    });
+
+    it('includes profile and refresh-token support scopes', () => {
+      expect(SUPPORTED_OAUTH_SCOPES).toEqual(expect.arrayContaining(['profile', 'offline_access']));
     });
   });
 
@@ -86,9 +101,16 @@ describe('MCP Security Policy Configuration', () => {
   });
 
   describe('getScopesSupported', () => {
-    it('returns scopes from DEFAULT_AUTH_SCHEME', () => {
+    it('returns advertised supported scopes, not only required tool scopes', () => {
       const scopes = getScopesSupported();
-      expect(scopes).toEqual(['email']);
+      expect(scopes).toEqual([
+        'email',
+        'offline_access',
+        'openid',
+        'private_metadata',
+        'profile',
+        'public_metadata',
+      ]);
     });
 
     it('returns sorted array', () => {

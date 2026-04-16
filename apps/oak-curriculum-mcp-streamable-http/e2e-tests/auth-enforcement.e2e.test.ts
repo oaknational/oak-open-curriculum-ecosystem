@@ -383,8 +383,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
 
       const scopes = body.scopes_supported ?? [];
       expect(scopes).toEqual(expect.arrayContaining(['email']));
-      expect(scopes).not.toContain('openid');
-      expect(scopes).toHaveLength(1);
+      expect(scopes).toEqual(expect.arrayContaining(['openid', 'profile', 'offline_access']));
     });
   });
 });

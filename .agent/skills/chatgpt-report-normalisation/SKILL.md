@@ -39,7 +39,6 @@ This skill is for **repair**, not editorial rewrite or summary generation.
 - The markdown contains `cite`, `filecite`, `turn...`, or other internal
   export markers
 - The DOCX appears to preserve live links that the markdown has lost
-- The document contains time-sensitive claims that need an accuracy sweep
 - The report currently sits in a scratch or import lane and needs either a
   clean sibling copy there or a later promotion into tracked canon
 
@@ -60,8 +59,8 @@ structural decisions or choosing a rebuild strategy.
   Mermaid/code fences, and comparison-table shape.
 - Treat the DOCX as the authority for the real external URLs hidden behind
   broken export markers.
-- Follow the user's output contract explicitly: in-place repair, sibling clean
-  copy, or later promotion into tracked canon.
+- **Always write to a sibling clean file (`*-clean.md`). Never overwrite the
+  source markdown.**
 - Limit changes to faithful-copy repair work: citation-link recovery,
   export-artefact removal, broken markdown repair, deduplicating obvious export
   junk, and light formatting cleanup.
@@ -71,12 +70,13 @@ structural decisions or choosing a rebuild strategy.
 ## Workflow
 
 1. Inventory the available copies.
-   - When a paired `.md` and `.docx` both exist, assume the markdown is the
-     editing target and structural scaffold unless proved otherwise.
+   - When a paired `.md` and `.docx` both exist, treat the markdown as the
+     read-only structural source scaffold.
    - Prefer the `.docx` for hyperlink recovery, not for rewriting the text.
    - Prefer the existing markdown if its structure is already better than a
      fresh conversion.
-   - Use the PDF as a tie-breaker for pagination, formatting, or missing text.
+   - Use the PDF only as a verification surface for missing or ambiguous
+     fragments; do not let PDF extraction re-drive structure or section order.
 
 2. Inspect the strong layers with local tools.
    - `textutil -convert txt -stdout report.docx` for visible text
@@ -119,10 +119,10 @@ structural decisions or choosing a rebuild strategy.
    `[\ue200-\ue2ff]` in regex.
 
 3. Choose the canonical editing target.
-   - The editing target is the source-faithful clean copy.
-   - In the normal paired-export case, edit the existing markdown in place
-     unless the user has explicitly asked to preserve the raw markdown and
-     write a sibling clean copy.
+   - The editing target is the source-faithful clean sibling copy
+     (`*-clean.md`).
+   - In the normal paired-export case, always preserve the original markdown
+     untouched and write repairs into the sibling clean file.
    - Keep the markdown's section order, paragraphing, tables, lists, Mermaid
      blocks, and local prose rhythm whenever they are already readable.
    - Use the DOCX relationship table and, if needed, pandoc output as a lookup
@@ -130,13 +130,10 @@ structural decisions or choosing a rebuild strategy.
      the markdown.
    - If the repo already has a readable markdown scaffold under
      `.agent/research/`, `.agent/reference/`, or another tracked doc estate,
-     clean and upgrade it in place.
-   - If the current copy sits in an ignored staging lane, do not assume that
-     promotion is required. Follow the user's requested landing zone: either
-     write a sibling clean copy there and defer promotion, or promote into a
-     tracked path if that is the task.
-   - When raw inputs must remain re-importable, prefer sibling outputs such as
-     `*-clean.md` over overwriting the raw markdown by default.
+     use it as the structural source and emit a sibling clean copy.
+   - If the current copy sits in an ignored staging lane, keep source inputs
+     untouched and write the clean sibling copy in the same lane unless the
+     task explicitly requests promotion.
    - Do not replace a better hand-edited structure with a worse direct
      conversion.
    - Do not promote a DOCX-first or pandoc-first rebuild over an existing
@@ -184,18 +181,13 @@ structural decisions or choosing a rebuild strategy.
    - Do not attach broad bundles of recovered links to one sentence just
      because they were adjacent in the DOCX export.
    - Do not add new citations to previously uncited prose unless needed to
-     repair a broken citation, support a corrected factual claim, or document
-     an accuracy-sweep rewrite.
+     repair a broken citation.
    - Prefer local relative links for repo artefacts
    - Use direct site URLs for external sources, de-noised and stable
 
-6. Sweep unstable claims before calling the document canonical.
-   - Versions, release dates, licences, Python support, API behaviour, pricing,
-     or policy claims
-   - Verify against primary sources first: official docs, official package
-     metadata, and official repositories
-   - Anchor brittle claims to exact dates or rewrite them to age more
-     gracefully
+6. Keep the repair faithful; do not run an editorial or factual sweep.
+   - Normalisation is a repair task, not an analysis pass.
+   - If factual updates are needed, raise a follow-on task explicitly.
 
 7. Finish with a short editorial pass.
    - Preserve tables, code fences, Mermaid blocks, and list structure
@@ -209,8 +201,8 @@ structural decisions or choosing a rebuild strategy.
      boundary (but do not collapse intentional indentation inside code fences
      or Mermaid blocks)
    - Match repo conventions such as British spelling when they apply
-   - Add a dated accuracy note when you perform a sweep
-   - Summarise unresolved gaps rather than hiding uncertainty
+   - Do not rewrite claims for freshness; preserve source wording.
+   - Summarise unresolved repair ambiguities rather than hiding uncertainty.
 
 8. Run local validation on the final markdown.
    - Use the repo-appropriate markdown validation surface for the edited file
@@ -220,9 +212,11 @@ structural decisions or choosing a rebuild strategy.
      `utm_source=chatgpt.com` markers when the export started noisy
    - Scan for remaining PUA characters (U+E200 to U+E2FF range) — these are
      invisible to normal grep and the Read tool but remain in file bytes
-   - Strip the clean copy of all citation markup and compare against the
-     original (also stripped) to confirm text identity — the two texts must
-     be character-identical after normalising whitespace
+   - Apply the same normalisation function to both files for drift proof:
+     `strip_citations(text)` removes PUA citation blocks/marker artefacts from
+     source markdown and removes `[[N]](URL)` citations from clean markdown.
+     Then normalise whitespace and confirm the two texts are
+     character-identical.
 
 ## Validation
 
@@ -238,12 +232,10 @@ Before closing the task, confirm:
 - Tables are still real markdown tables, and adjacent prose has not been
   accidentally pulled into them
 - The references support the claims they are attached to
-- Time-sensitive claims were either verified or softened
-- Text identity confirmed: the clean copy stripped of citations is
-  character-identical to the original stripped of PUA citation blocks
-- The cleaned output landed in the agreed destination: tracked canon when
-  promotion was requested, or the agreed repair lane when promotion was
-  explicitly deferred
+- Text identity confirmed: both files pass the same strip/normalise comparison
+  and are character-identical
+- The cleaned output was written to a sibling `*-clean.md` file while keeping
+  the original markdown unchanged
 
 ## Guardrails
 
@@ -273,8 +265,8 @@ Before closing the task, confirm:
   document clearer.
 - Do not introduce GitHub blob links when a repo-local path is the canonical
   target.
-- Do not assume that ignored staging inputs must be overwritten or promoted.
-  Follow the explicit output contract for the task.
+- Do not overwrite the source markdown. Always emit a sibling `*-clean.md`
+  output and preserve the source file unchanged.
 
 ## Escalate
 
