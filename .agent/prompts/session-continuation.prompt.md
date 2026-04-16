@@ -64,10 +64,11 @@ git log --oneline --decorate -10
   handler wrappers are gone, the package is deleted, the circular justification
   chain is broken, and the parent/child/companion plans now split ownership
   explicitly. Latest recorded aggregate state: `pnpm check` green, knip clean,
-  depcruise clean. This session refreshed the continuity surfaces so the
-  plan, architecture prompt, and session prompt all agree on the next sequence:
-  validate current HTTP foundation first, then continue with MCP-server-confined
-  expansion, then defer broader search follow-on work.
+  depcruise clean. This session refreshed the continuity surfaces again so the
+  collection README, roadmap, architecture prompt, active plan, and session
+  prompt all agree on the next sequence: validate current HTTP foundation
+  first, then continue with MCP-server-confined expansion, then defer broader
+  search follow-on work.
 - **Current objective**: Branch is deployment-ready for the MCP server.
   Remaining branch-critical work is Vercel credential provisioning (human
   action) and the deployment evidence bundle. After that validation pass,
@@ -89,6 +90,12 @@ git log --oneline --decorate -10
     The user corrected the sequence: validate first, then do the
     MCP-server-confined expansion lane, and defer broader search work to a
     later session and PR.
+  - A later consolidation sweep still found stale collection-level index files
+    teaching the pre-split "Search CLI adoption next" story. The collection
+    README/current/roadmap layer now matches the active plan set.
+  - The MCP rate-limit integration proof was stable in isolation but timed out
+    under the commit hook's concurrent turbo run. The test now has an explicit
+    integration-appropriate timeout instead of relying on the default.
 - **Open questions / low-confidence areas**:
   - Exact execution order inside `sentry-observability-expansion.plan.md` once
     validation closes cleanly.
@@ -96,9 +103,11 @@ git log --oneline --decorate -10
     tightly enough to the MCP server to stay in this branch/PR.
 - **Next safe step**: Vercel credential provisioning (human action),
   then deployment evidence bundle, then `sentry-observability-expansion.plan.md`.
-- **Deep consolidation status**: due — repeated authority corrections across
-  plan, prompt, and strategic index surfaces now warrant deeper convergence,
-  but that work is not well-bounded for this lightweight handoff.
+- **Deep consolidation status**: completed this handoff — repeated authority
+  corrections across plan, prompt, collection-index, and strategic-index
+  surfaces were swept together; practice-box incoming is empty; fitness
+  validation ran in informational mode and only reported pre-existing
+  foundational-doc pressure.
 
 ## Active Workstreams (2026-04-16)
 

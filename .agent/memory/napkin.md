@@ -133,3 +133,48 @@ Behaviour change:
 For reusable Vercel deployment policy, keep the policy engine in a core
 workspace and leave each app with a minimal local adapter script that matches
 Vercel's entrypoint contract.
+
+## Session 2026-04-16 — Collection-level observability drift sweep
+
+### Surprise
+
+Expected:
+The earlier observability handoff sweep had already brought the relevant
+restart surfaces into alignment.
+
+Actual:
+Collection-level index files such as
+`architecture-and-infrastructure/README.md`,
+`architecture-and-infrastructure/current/README.md`, and
+`architecture-and-infrastructure/roadmap.md` still taught the pre-split story
+that Search CLI adoption was the next implementation step.
+
+Why expectation failed:
+I corrected the parent plan, child/companion plans, and session prompts first
+but did not complete the same sweep across the collection index layer.
+
+Behaviour change:
+When a workstream is repartitioned or re-sequenced, sweep collection README and
+roadmap indexes alongside the active plans and prompts before declaring the
+continuity story clean.
+
+## Session 2026-04-16 — Turbo-sensitive MCP rate-limit proof
+
+### Surprise
+
+Expected:
+Because the MCP rate-limit integration test passed in isolation, the same test
+would remain stable inside the commit hook's concurrent turbo run.
+
+Actual:
+The test timed out only under the hook's broader concurrent gate load even
+though the behaviour under test was correct.
+
+Why expectation failed:
+The assertion was valid, but the default per-test timeout underrepresented the
+cost of full-app bootstrap inside the repo's real gate topology.
+
+Behaviour change:
+For broad integration tests that boot the full app and prove boundary
+behaviour, set an explicit timeout that matches the real gate environment
+instead of relying on the default unit-test-oriented timeout.

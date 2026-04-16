@@ -3,7 +3,7 @@
 Cross-cutting architecture, system quality, and observability plans.
 
 **Status**: 🔄 Active backlog (Milestone 2 and Milestone 3 work)
-**Last Updated**: 2026-04-11
+**Last Updated**: 2026-04-16
 
 ---
 
@@ -13,7 +13,7 @@ See [active/README.md](active/README.md) for work in progress.
 
 | Priority | Plan | Milestone | Status |
 |----------|------|-----------|--------|
-| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | HTTP adoption complete (PR #73 merged), rate limiting complete (ADR-158); Search CLI adoption + deployment evidence pending. Branch: `feat/otel_sentry_enhancements`. |
+| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | HTTP MCP and Search CLI implementation complete. Remaining M2 blocker: Vercel credential provisioning + deployment evidence. Next in-branch lane after validation: MCP-server-confined expansion. Branch: `feat/otel_sentry_enhancements`. |
 
 Prompt entry:
 

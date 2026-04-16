@@ -13,7 +13,7 @@ Current queued work for this collection.
 
 Active execution:
 
-- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — HTTP adoption + rate limiting complete; Search CLI adoption next. Branch: `feat/otel_sentry_enhancements`
+- [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md) — HTTP MCP and Search CLI implementation complete; remaining live validation is Vercel credential provisioning plus the deployment evidence bundle. After that validation pass, continue with the MCP-server-confined expansion lane. Branch: `feat/otel_sentry_enhancements`
 
 Strategic analysis (parent of Phase A and B):
 

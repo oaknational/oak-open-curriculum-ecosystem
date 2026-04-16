@@ -40,6 +40,9 @@ observability closure work after PR #73 merged to `main` on 2026-03-31.
   Vercel credential provisioning plus the deployment evidence bundle.
 - Follow-on capability work is intentionally split into companion plans:
   MCP-server expansion, search observability, and translation maintenance.
+- The supporting continuity surfaces have been swept so the collection README,
+  roadmap, architecture prompt, and session prompt all tell the same
+  validation-first sequence.
 - Current user-directed sequence is: validate what exists, then continue with
   the MCP-server-confined expansion plan, and defer broader search work to a
   later session and PR.
