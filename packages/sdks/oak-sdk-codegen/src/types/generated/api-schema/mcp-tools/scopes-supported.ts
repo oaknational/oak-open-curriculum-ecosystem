@@ -4,7 +4,7 @@
  * OAuth scopes supported by this MCP server.
  * Generated from mcp-security-policy.ts at sdk-codegen time.
  *
- * To modify supported scopes, update SUPPORTED_OAUTH_SCOPES in:
+ * To modify supported scopes, update DEFAULT_AUTH_SCHEME in:
  * code-generation/mcp-security-policy.ts
  *
  * Then run: pnpm sdk-codegen
@@ -17,7 +17,7 @@
  * Generator reads security policy and emits this constant during sdk-codegen.
  */
 
-export const SCOPES_SUPPORTED = ['email', 'offline_access', 'openid', 'private_metadata', 'profile', 'public_metadata'] as const;
+export const SCOPES_SUPPORTED = ['email'] as const;
 
 /**
  * Type representing the supported OAuth scopes.

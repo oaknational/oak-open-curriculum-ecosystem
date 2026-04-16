@@ -960,7 +960,7 @@ const RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS: Record<string, {
     method: 'get',
     source: 'component',
     zodIdentifier: undefined,
-    jsonSchema: {"type":"array","items":{"type":"object","properties":{"title":{"type":"string","description":"The thread title"},"slug":{"type":"string","description":"The thread slug identifier"},"oakUrl":{"type":"null","description":"Threads are data concepts without Oak URLs on the website. Always null for thread resources."}},"required":["title","slug"],"additionalProperties":false},"example":[{"title":"Number: Multiplication and division","slug":"number-multiplication-and-division"}]},
+    jsonSchema: {"type":"array","items":{"type":"object","properties":{"title":{"type":"string","description":"The thread title"},"slug":{"type":"string","description":"The thread slug identifier"},"unitCount":{"type":"number","description":"The number of published units in the thread"},"oakUrl":{"type":"null","description":"Threads are data concepts without Oak URLs on the website. Always null for thread resources."}},"required":["title","slug","unitCount"],"additionalProperties":false},"example":[{"title":"Number: Multiplication and division","slug":"number-multiplication-and-division","unitCount":78}]},
   },
   'getThreads-getAllThreads:400': {
     schema: curriculumSchemas.error_BAD_REQUEST,

@@ -45,39 +45,47 @@ git log --oneline --decorate -10
 
 ## Live Continuity Contract
 
-- **Workstream**: Report-normalisation workflow hardening and teacher-memory
-  strategic planning.
+- **Workstream**: Sentry validation closure for the HTTP MCP server, with a
+  separate future follow-up for Codex compatibility.
 - **Active plans**:
-  - `.agent/plans/architecture-and-infrastructure/future/teacher-memory-store-solid-vs-user-keyed-private-store.plan.md`
-    (new future strategic brief; not executable yet)
-- **Current state**: The Solid distributed filesystem research report was
-  normalised into a sibling clean copy and validated for no drift against the
-  source markdown. The normalisation skill and command now enforce sibling
-  `*-clean.md` output and "never overwrite source". A new future plan was added
-  to compare Solid Pods against a user-keyed private store for long-term
-  teacher preferences and memory.
-- **Current objective**: Keep future planning discoverable and ready for
-  promotion by producing an evidence-backed architecture comparison and ADR
-  pre-read.
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
+    (authoritative parent; active closure lane)
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-expansion.plan.md`
+    (next MCP-server-confined lane after parent closure; still blocked)
+  - `.agent/plans/architecture-and-infrastructure/future/codex-mcp-server-compatibility.plan.md`
+    (strategic follow-up only; not executable yet)
+- **Current state**: Local and Vercel credential prerequisites are now in place
+  for the HTTP MCP server, and the branch preview exists. The remaining active
+  work is to validate the live Sentry path on the preview deployment, assemble
+  the scrubbed evidence bundle, and update the parent-plan closure state.
+  Separately, the attempted Codex auth fix was rolled back after it failed to
+  unblock Codex and regressed Cursor; that investigation is now isolated in its
+  own future plan rather than being mixed into the Sentry lane.
+- **Current objective**: Close the HTTP MCP validation lane cleanly:
+  confirm the preview deployment evidence, gather the date-stamped Sentry
+  bundle, and only then resume MCP-server-confined expansion work.
 - **Hard invariants / non-goals**:
-  - Report normalisation is a faithful repair task, not a rewrite.
-  - Always write sibling `*-clean.md` outputs; never overwrite source markdown.
-  - Source markdown is structural authority; DOCX/pandoc are citation-recovery
-    authority.
-  - Future plan remains strategic only; no implementation work in this lane yet.
+  - Parent-plan authority stays with
+    `sentry-otel-integration.execution.plan.md` for credential and evidence
+    closure.
+  - No broader search-observability work unless it is explicitly confined to
+    the MCP server.
+  - Codex compatibility is a separate follow-up lane; do not reopen shared auth
+    configuration speculatively inside the Sentry validation pass.
+  - Preserve working-client compatibility while investigating Codex.
 - **Recent surprises / corrections**:
-  - Ambiguous output-contract wording in the normalisation skill allowed
-    in-place overwrite by interpretation. The workflow is now explicit:
-    sibling-only clean outputs plus mandatory drift proof.
-  - Clear distinction between "success signals" and "promotion trigger" was
-    needed in the new future plan to reduce governance ambiguity.
+  - Broader `scopes_supported` advertising did not fix Codex and did regress
+    Cursor, so shared auth metadata is not a safe speculative fix surface.
+  - Restart surfaces had drifted and were teaching different priorities; the
+    prompt, collection indexes, and plan set needed a coordinated sweep.
 - **Open questions / low-confidence areas**:
-  - Which memory architecture (Solid vs user-keyed private store) best balances
-    teacher control guarantees, operational complexity, and teacher value.
-  - Minimum data taxonomy needed across short/medium/long planning horizons.
-- **Next safe step**: Build the comparison pack and ADR pre-read from
-  `teacher-memory-store-solid-vs-user-keyed-private-store.plan.md`, then
-  promote to a `current/` executable plan if promotion triggers are met.
+  - Whether the preview deployment will show the full expected Sentry evidence
+    set, including release/source-map proof and kill-switch rehearsal.
+  - Whether Codex ultimately needs a server-owned compatibility layer, a Clerk
+    configuration change, or an upstream-client escalation.
+- **Next safe step**: Run the preview validation flow against the current HTTP
+  deployment, capture the scrubbed Sentry evidence bundle, and update the
+  parent plan before touching the separate Codex follow-up lane.
 - **Deep consolidation status**: not due — no plan or milestone closure, no
   incoming practice-box content, and no additional consolidation triggers beyond
   this lightweight handoff.

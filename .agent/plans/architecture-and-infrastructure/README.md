@@ -39,6 +39,8 @@ See [future/README.md](future/README.md) for later work and umbrella planning.
 Roadmap:
 
 - [roadmap.md](roadmap.md)
+- Follow-up after Sentry validation:
+  [future/codex-mcp-server-compatibility.plan.md](future/codex-mcp-server-compatibility.plan.md)
 
 ## Active Plans
 
@@ -64,6 +66,7 @@ Roadmap:
 | `current/config-architecture-standardisation-plan.md` | M1 | Unified config DI pattern via `@oaknational/mcp-config` |
 | `future/oak-surface-isolation-and-generic-foundation-programme.plan.md` | Post-M2 | Strategic umbrella for extracting generic foundations and making Oak workspaces thin leaves |
 | `future/observability-and-quality-metrics.plan.md` | M2 + M3 | Strategic umbrella for the observability foundation, alerting, and quality dashboards |
+| `future/codex-mcp-server-compatibility.plan.md` | Post-M2 branch follow-up | Strategic brief for Codex-specific MCP auth compatibility work after Sentry validation closes |
 | `future/teacher-memory-store-solid-vs-user-keyed-private-store.plan.md` | Post-M2 | Strategic comparison of Solid Pods vs user-keyed private store architecture for long-term teacher preferences and memory |
 | `current/security-dependency-triage.plan.md` | M2 | Dependabot + CodeQL + outdated dependency triage (March 2026) |
 | `future/stdio-http-server-alignment.md` | M1 | Align STDIO and HTTP server configuration and behaviour |

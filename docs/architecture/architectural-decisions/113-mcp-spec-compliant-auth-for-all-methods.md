@@ -135,21 +135,12 @@ Server-side logs will show nothing wrong. The flow appears to stop after the ini
 
 ### Resolution
 
-Protected tool requirements and PRM-advertised supported scopes are now treated
-as separate concerns:
+Two changes prevent compliant clients from requesting the `openid` scope:
 
-1. **Tool enforcement**: `DEFAULT_AUTH_SCHEME.scopes` stays minimal in
-   `mcp-security-policy.ts`, so protected tools require only the scopes Oak
-   actually checks.
-2. **Dynamic client registration compatibility**: RFC 9728
-   `scopes_supported` is generated from a broader `SUPPORTED_OAUTH_SCOPES`
-   list so dynamically registered Clerk clients can request standard OIDC and
-   refresh-token scopes without making every tool require them.
+1. **Source of truth**: `openid` removed from `DEFAULT_AUTH_SCHEME.scopes` in `mcp-security-policy.ts`. Cascaded via `pnpm sdk-codegen` to all generated tool security metadata.
+2. **PRM**: `scopes_supported` no longer advertises `openid`, so compliant clients (RFC 9728) do not request it.
 
-The OAuth proxy remains transparent -- it forwards all parameters (including
-`scope`) and all upstream AS metadata capability fields unchanged. The PRM is
-the Oak-owned contract that advertises which scopes a resource client may
-request for this MCP server.
+The OAuth proxy is fully transparent -- it forwards all parameters (including `scope`) and all upstream AS metadata fields (including `scopes_supported`) unchanged. No filtering is applied at the proxy layer. If a non-compliant client reads `openid` from Clerk's AS metadata and requests it, Clerk will reject it with `error=invalid_scope`.
 
 ### Broader Lesson
 

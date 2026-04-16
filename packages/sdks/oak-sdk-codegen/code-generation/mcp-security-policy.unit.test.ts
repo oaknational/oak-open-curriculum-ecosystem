@@ -7,7 +7,6 @@ import { describe, it, expect } from 'vitest';
 import {
   PUBLIC_TOOLS,
   DEFAULT_AUTH_SCHEME,
-  SUPPORTED_OAUTH_SCOPES,
   toolRequiresAuth,
   getScopesSupported,
 } from './mcp-security-policy.js';
@@ -36,26 +35,18 @@ describe('MCP Security Policy Configuration', () => {
       expect(Array.isArray(DEFAULT_AUTH_SCHEME.scopes)).toBe(true);
     });
 
-    it('includes required email scope', () => {
-      expect(DEFAULT_AUTH_SCHEME.scopes).toContain('email');
+    it('declares at least one required scope', () => {
+      expect(DEFAULT_AUTH_SCHEME.scopes.length).toBeGreaterThan(0);
     });
 
-    it('does not require openid scope for protected tools', () => {
+    it('has only non-empty scope strings', () => {
+      for (const scope of DEFAULT_AUTH_SCHEME.scopes) {
+        expect(scope.length).toBeGreaterThan(0);
+      }
+    });
+
+    it('does not require openid scope for protected tool access', () => {
       expect(DEFAULT_AUTH_SCHEME.scopes).not.toContain('openid');
-    });
-  });
-
-  describe('SUPPORTED_OAUTH_SCOPES', () => {
-    it('includes openid for DCR clients that request OIDC identity scopes', () => {
-      expect(SUPPORTED_OAUTH_SCOPES).toContain('openid');
-    });
-
-    it('includes email for resource access', () => {
-      expect(SUPPORTED_OAUTH_SCOPES).toContain('email');
-    });
-
-    it('includes profile and refresh-token support scopes', () => {
-      expect(SUPPORTED_OAUTH_SCOPES).toEqual(expect.arrayContaining(['profile', 'offline_access']));
     });
   });
 
@@ -101,16 +92,9 @@ describe('MCP Security Policy Configuration', () => {
   });
 
   describe('getScopesSupported', () => {
-    it('returns advertised supported scopes, not only required tool scopes', () => {
+    it('returns the same scope set as DEFAULT_AUTH_SCHEME.scopes', () => {
       const scopes = getScopesSupported();
-      expect(scopes).toEqual([
-        'email',
-        'offline_access',
-        'openid',
-        'private_metadata',
-        'profile',
-        'public_metadata',
-      ]);
+      expect(scopes).toEqual([...DEFAULT_AUTH_SCHEME.scopes].sort());
     });
 
     it('returns sorted array', () => {

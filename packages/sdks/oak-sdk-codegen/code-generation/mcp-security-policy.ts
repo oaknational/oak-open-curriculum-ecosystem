@@ -35,36 +35,24 @@ export const PUBLIC_TOOLS: readonly string[] = [
  * Applied to all tools NOT in PUBLIC_TOOLS list.
  *
  * @remarks
- * Protected MCP tools require only the minimum scope needed by the
- * server-side auth checks. Additional optional scopes are advertised via
- * {@link SUPPORTED_OAUTH_SCOPES} so dynamically registered clients can
- * request standard Clerk/OIDC scopes without making every tool require
- * them.
+ * **Why `openid` is excluded**: Clerk rejects the `openid` (OIDC) scope for
+ * dynamically registered clients (RFC 7591 DCR). Clerk accepts `openid` during
+ * client registration but returns `error=invalid_scope` during authorisation.
+ * This error is routed via redirect to the client's callback URL (per RFC 6749
+ * Section 4.1.2.1), bypassing the server entirely and causing a silent failure
+ * in clients like Cursor. MCP only needs an OAuth access token, not an OIDC ID
+ * token, so `openid` is not required.
+ *
+ * Because `openid` is not in our PRM `scopes_supported`, compliant clients
+ * (RFC 9728) will not request it. The proxy forwards all scopes transparently
+ * without filtering.
+ *
+ * @see ADR-113 Troubleshooting section (docs/architecture/architectural-decisions/113-mcp-spec-compliant-auth-for-all-methods.md)
  */
 export const DEFAULT_AUTH_SCHEME = {
   type: 'oauth2',
   scopes: ['email'],
 } as const;
-
-/**
- * OAuth scopes advertised in RFC 9728 protected resource metadata.
- *
- * These scopes are allowed for dynamically registered clients even when the
- * MCP tools themselves do not require them. Clerk-based clients commonly
- * request standard OIDC identity scopes plus refresh-token access.
- *
- * Keep `DEFAULT_AUTH_SCHEME.scopes` minimal for tool enforcement and expand
- * this list only when the authorisation server and client flows need broader
- * optional scope support.
- */
-export const SUPPORTED_OAUTH_SCOPES = [
-  'openid',
-  'profile',
-  'email',
-  'offline_access',
-  'public_metadata',
-  'private_metadata',
-] as const;
 
 /**
  * Determines if a tool requires authentication based on policy.
@@ -106,5 +94,5 @@ export function toolRequiresAuth(toolName: string): boolean {
  */
 export function getScopesSupported(): readonly string[] {
   // Sort for consistency in RFC 9728 metadata responses
-  return [...SUPPORTED_OAUTH_SCOPES].sort();
+  return [...DEFAULT_AUTH_SCHEME.scopes].sort();
 }

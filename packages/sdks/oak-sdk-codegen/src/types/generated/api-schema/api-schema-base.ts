@@ -8,7 +8,7 @@ export const schemaBase = {
   "openapi": "3.1.0",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.6.0-aec894d4130d45480324515f1eefb62f210a345e"
+    "version": "0.6.0-00e72e8d3260acea8a6b5177272f2d523c8f69f5"
   },
   "servers": [
     {
@@ -8139,6 +8139,10 @@ export const schemaBase = {
               "type": "string",
               "description": "The thread slug identifier"
             },
+            "unitCount": {
+              "type": "number",
+              "description": "The number of published units in the thread"
+            },
             "oakUrl": {
               "type": "null",
               "description": "Threads are data concepts without Oak URLs on the website. Always null for thread resources."
@@ -8146,14 +8150,16 @@ export const schemaBase = {
           },
           "required": [
             "title",
-            "slug"
+            "slug",
+            "unitCount"
           ],
           "additionalProperties": false
         },
         "example": [
           {
             "title": "Number: Multiplication and division",
-            "slug": "number-multiplication-and-division"
+            "slug": "number-multiplication-and-division",
+            "unitCount": 78
           }
         ]
       },

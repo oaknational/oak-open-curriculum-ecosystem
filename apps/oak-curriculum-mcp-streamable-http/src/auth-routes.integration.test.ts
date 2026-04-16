@@ -5,6 +5,7 @@ import { createApp } from './application.js';
 import { createHttpObservabilityOrThrow } from './observability/http-observability.js';
 import { loadRuntimeConfig } from './runtime-config.js';
 import { TEST_UPSTREAM_METADATA } from '../e2e-tests/helpers/upstream-metadata-fixture.js';
+import { SCOPES_SUPPORTED } from '@oaknational/curriculum-sdk/public/mcp-tools.js';
 
 describe('OAuth Protected Resource Metadata (Integration)', () => {
   const createTestApp = async (
@@ -134,7 +135,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
   });
 
   describe('scopes_supported field', () => {
-    it('returns scopes_supported with optional Clerk/OIDC scopes for dynamic clients', async () => {
+    it('returns the generated advertised scopes_supported contract', async () => {
       const app = await createTestApp();
 
       const res = await request(app)
@@ -142,13 +143,8 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
         .set('Host', 'example.com');
 
       expect(res.status).toBe(200);
-
-      expect(res.body).toHaveProperty('scopes_supported', expect.arrayContaining(['email']));
-      expect(res.body).toHaveProperty('scopes_supported', expect.arrayContaining(['openid']));
-      expect(res.body).toHaveProperty(
-        'scopes_supported',
-        expect.arrayContaining(['profile', 'offline_access']),
-      );
+      expect(Array.isArray(res.body.scopes_supported)).toBe(true);
+      expect(res.body).toHaveProperty('scopes_supported', [...SCOPES_SUPPORTED]);
     });
   });
 

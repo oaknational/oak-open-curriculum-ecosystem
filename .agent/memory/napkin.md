@@ -222,3 +222,27 @@ Behaviour change:
 For this workflow, encode non-negotiable invariants directly: always emit
 `*-clean.md`, never overwrite source, source markdown defines structure, DOCX
 repairs citations/links, and drift proof compares clean vs source.
+
+## Session 2026-04-16 — Codex follow-up lane separated from Sentry validation
+
+### Surprise
+
+Expected:
+The next planning move after the failed Codex auth experiment would fit inside
+the active Sentry observability lane because both touched the same preview
+deployment.
+
+Actual:
+The Codex issue proved to be a separate client-compatibility problem. The
+attempted shared auth-metadata change did not unblock Codex and regressed
+Cursor, so folding it into the Sentry closure lane would have mixed two
+different decision surfaces and muddied the restart story.
+
+Why expectation failed:
+I over-grouped by deployment target instead of by decision boundary. Shared
+preview infrastructure does not mean shared plan ownership.
+
+Behaviour change:
+When a client-specific compatibility issue emerges during an active deployment
+validation lane, spin it out into its own follow-up plan and restore the
+restart surfaces so the active lane remains operationally crisp.

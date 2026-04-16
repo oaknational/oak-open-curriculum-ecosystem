@@ -3077,7 +3077,8 @@ export interface components {
          * @example [
          *       \{
          *         "title": "Number: Multiplication and division",
-         *         "slug": "number-multiplication-and-division"
+         *         "slug": "number-multiplication-and-division",
+         *         "unitCount": 78
          *       \}
          *     ]
          */
@@ -3086,6 +3087,8 @@ export interface components {
             title: string;
             /** The thread slug identifier */
             slug: string;
+            /** The number of published units in the thread */
+            unitCount: number;
             /** Threads are data concepts without Oak URLs on the website. Always null for thread resources. */
             oakUrl?: null;
         }[];

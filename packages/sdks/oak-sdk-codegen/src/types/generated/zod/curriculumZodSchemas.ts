@@ -1610,6 +1610,7 @@ const AllThreadsResponseSchema = z.array(
     .object({
       title: z.string(),
       slug: z.string(),
+      unitCount: z.number(),
       oakUrl: z.null().optional(),
     })
     .strict()

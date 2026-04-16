@@ -6,7 +6,7 @@ const BANNER = `/**
  * OAuth scopes supported by this MCP server.
  * Generated from mcp-security-policy.ts at sdk-codegen time.
  *
- * To modify supported scopes, update SUPPORTED_OAUTH_SCOPES in:
+ * To modify supported scopes, update DEFAULT_AUTH_SCHEME in:
  * code-generation/mcp-security-policy.ts
  *
  * Then run: pnpm sdk-codegen
