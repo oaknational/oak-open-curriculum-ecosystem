@@ -73,7 +73,7 @@ and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-reti
 - **pnpm** — run `corepack enable` (ships with Node.js) to auto-install the pinned version
 - **bun** (optional, for `pnpm dev:widget-in-host`) — install via [bun.sh](https://bun.sh/docs/installation)
 - **jq** (optional, for `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:oauth-curl`) — install via [jqlang.github.io/jq/download](https://jqlang.github.io/jq/download/)
-- **lsof** (optional, for `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`) — install/build via [github.com/lsof-org/lsof](https://github.com/lsof-org/lsof)
+- **lsof** (optional, for `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`) — pre-installed on macOS; on Debian/Ubuntu use `sudo apt install lsof`; source/build instructions at [github.com/lsof-org/lsof](https://github.com/lsof-org/lsof)
 
 ### Install and verify
 

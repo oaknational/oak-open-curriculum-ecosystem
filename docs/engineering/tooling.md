@@ -28,6 +28,22 @@ All tooling MUST use the latest versions, use `pnpm outdated` to check for updat
 - [tsx](https://www.npmjs.com/package/tsx) for directly running the TypeScript
 - [Node.js](https://nodejs.org) 24.x for running the compiled JavaScript
 
+## External System Tools
+
+These tools are not managed by pnpm but are required by specific workflows:
+
+- [gitleaks](https://github.com/gitleaks/gitleaks) — required for secrets scanning
+  in push workflows
+- [bun](https://bun.sh/docs/installation) — optional, required for
+  `pnpm dev:widget-in-host`
+- [jq](https://jqlang.github.io/jq/download/) — optional, required for
+  `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:oauth-curl`
+- [lsof](https://github.com/lsof-org/lsof) — optional, used by
+  `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`
+
+Scripts that require these tools should emit explicit installation guidance when
+the command is missing.
+
 ## Publishing
 
 - [npm](https://www.npmjs.com) - Packages are published to npm with semantic versions.

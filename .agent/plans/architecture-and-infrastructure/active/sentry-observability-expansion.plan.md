@@ -22,8 +22,8 @@ todos:
     priority: next
   - id: track-c1-propagation-es
     content: "Enable and verify trace propagation for Oak-controlled Elasticsearch targets"
-    status: pending
-    priority: next
+    status: dropped
+    note: "Moved to search-observability.plan.md (ES-PROP). Elasticsearch propagation is a search infrastructure concern, not MCP-specific."
   - id: track-c2-propagation-third-party
     content: "Run security-gated propagation decision for non-Oak third-party hosts (including Oak API)"
     status: pending
@@ -56,16 +56,18 @@ The following removed items are explicitly owned here:
 
 1. `custom-metrics`
 2. `mcp-request-context`
-3. `trace-propagation-es`
-4. `trace-propagation-oak-api`
-5. `profiling-evaluation`
-6. `source-maps-automation` (implementation strategy and evidence shape; final
+3. `trace-propagation-oak-api`
+4. `profiling-evaluation`
+5. `source-maps-automation` (implementation strategy and evidence shape; final
    deployment authority remains in parent plan WS6)
+
+`trace-propagation-es` was part of the removed scope initially, but ownership
+has now moved to `search-observability.plan.md` as ES-PROP.
 
 ## Related Plans and Dependencies
 
 Downstream consumer plan:
-`sentry-cli-observability-extension.plan.md`.
+`search-observability.plan.md`.
 
 Execution dependency policy:
 
@@ -115,20 +117,22 @@ capturing payload bodies or violating redaction doctrine.
 
 ## EXP-C — Distributed Trace Propagation
 
-### EXP-C1 (Oak-controlled hosts)
+### EXP-C1 (Oak-controlled hosts) — MOVED
 
-Enable propagation to Elasticsearch hosts under Oak control and prove trace
-continuity in Sentry transaction graphs.
+Moved to `search-observability.plan.md` (ES-PROP). Elasticsearch
+propagation is a search infrastructure concern that applies to both
+the CLI and the HTTP server.
 
 ### EXP-C2 (third-party hosts)
 
-Run a security review for non-Oak hosts (including Oak API from this service
-boundary perspective) before any propagation allowlist addition.
+Run a security review for non-Oak hosts (including Oak API from this
+MCP service boundary perspective) before any propagation allowlist
+addition.
 
 ### Acceptance
 
-1. C1: trace continuity proven end-to-end for at least one ES request path.
-2. C2: explicit allow/deny decision is documented with reviewer attribution.
+1. C2: explicit allow/deny decision is documented with reviewer
+   attribution.
 
 ## EXP-D — Profiling
 
@@ -209,7 +213,7 @@ Prevent accidental lock-in or scope drift by explicitly evaluating options.
 ## Sequencing
 
 1. Track A first (unlocks metrics consumers consistently).
-2. Track B and C1 in parallel.
+2. Track B next (C1 moved to search-observability.plan.md as ES-PROP).
 3. Track D and E after baseline deployment credentials are complete.
 4. Track F after A-E signal is live.
 5. Track G closes with a strategy decision before broad rollout.

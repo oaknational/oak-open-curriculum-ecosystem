@@ -130,7 +130,7 @@
   "prettier.configPath": ".prettierrc.json",
   "editor.formatOnSave": true,
   "[typescriptreact]": {
-    "editor.defaultFormatter": "prettier.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "cSpell.language": "en-GB"
 }

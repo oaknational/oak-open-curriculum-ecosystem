@@ -95,7 +95,7 @@ todos:
   - id: cli-metrics
     content: "Wire CLI command execution metrics via Sentry.metrics.count"
     status: dropped
-    note: "Tracked in sentry-cli-observability-extension.plan.md (CLI-1). Explicitly out of this child plan."
+    note: "Tracked in search-observability.plan.md (CLI-MET). Explicitly out of this child plan."
   - id: mcp-request-context
     content: "Add Sentry.setContext('mcp_request', ...) for richer error detail in Sentry sidebar"
     status: dropped
@@ -103,11 +103,11 @@ todos:
   - id: cli-early-init
     content: "Add --import @sentry/node/preload to CLI tsx invocations"
     status: dropped
-    note: "Tracked as explicit option in sentry-cli-observability-extension.plan.md (CLI-3) with decision gate and fallback path."
+    note: "Tracked as explicit option in search-observability.plan.md (CLI-PRELOAD) with decision gate and fallback path."
   - id: trace-propagation-es
     content: "Add Elasticsearch host to tracePropagationTargets (low-ceremony, Oak-controlled)"
     status: dropped
-    note: "Tracked in sentry-observability-expansion.plan.md (EXP-C1) and CLI mirror track (CLI-2)."
+    note: "Tracked in search-observability.plan.md (ES-PROP). Moved from EXP-C1 on 2026-04-16."
   - id: trace-propagation-oak-api
     content: "Evaluate trace propagation to Oak API (third-party, security review required)"
     status: dropped
@@ -165,8 +165,8 @@ functionality required where native coverage stops short.
 **This plan does not block the parent plan.** The parent execution plan
 remains authoritative for shared foundation concerns, credential
 provisioning, source-map automation, and deployment evidence. This child
-plan is authoritative only for the remaining HTTP MCP runtime-alignment
-decisions on the live path.
+plan is now the authoritative record of the completed HTTP MCP
+runtime-alignment work and its acceptance boundary on the live path.
 
 ## Hard Invariants
 
@@ -547,15 +547,16 @@ all of the following:
   provide the full failure signal Oak needs on the live `register*`
   path.
 
-#### 3. Current Oak-specific surface and migration burden
+#### 3. Historical Oak-specific surface and migration burden
 
-- `@oaknational/sentry-mcp` currently mixes two separate concerns:
-  runtime handler wrapping and fixture/test recorder support.
-- The runtime consumer is the HTTP app; the remaining surface is
+- `@oaknational/sentry-mcp` mixed two separate concerns before the
+  migration: runtime handler wrapping and fixture/test recorder support.
+- The runtime consumer was the HTTP app; the remaining surface was
   fixture/test or package-internal.
-- Conclusion: live-path gap closure and fixture/test support must be
-  treated as separate design problems. "Tests use it" is migration
-  surface, not architectural justification.
+- Conclusion carried forward into implementation: live-path gap closure
+  and fixture/test support had to be treated as separate design
+  problems. "Tests use it" was migration surface, not architectural
+  justification.
 
 ### Plan Direction
 
@@ -572,40 +573,36 @@ all of the following:
   `apps/oak-curriculum-mcp-streamable-http`, not in a renewed shared
   wrapper package. Revisit only if a second live MCP server consumer
   appears.
-- Freeze `@oaknational/sentry-mcp` as an expansion surface; do not add
-  new responsibilities there.
+- `@oaknational/sentry-mcp` is now deleted. Any future shared
+  abstraction would require a new consumer and a fresh justification.
 - Historical comparison context is preserved in:
   [pre-value-reframe snapshot](../archive/superseded/sentry-canonical-alignment.plan.pre-value-reframe-2026-04-15.md)
 
-### Next Execution Track
+### Completed Execution Track
 
-1. **Adopt the native baseline on the real server path**
-   - Wrap the real `McpServer` at composition root with
+1. **Adopted the native baseline on the real server path**
+   - The real `McpServer` is wrapped at composition root with
      `wrapMcpServerWithSentry()`.
-   - Make native transport/session/protocol tracing the authoritative
+   - Native transport/session/protocol tracing is now the authoritative
      production path.
 
-2. **Add the minimum Oak-specific `register*` gap closure**
-   - Preserve first-class error capture for thrown
-     `registerTool` failures on the real HTTP path.
-   - Treat `registerResource` / `registerPrompt` extension as proof-
-     triggered only. Add explicit capture only if characterisation tests
-     show native protocol-error capture is insufficient.
-   - Own this gap-closure layer in the HTTP app.
-   - Do not emit custom Oak tracing spans in the gap-closure layer.
+2. **Added the minimum Oak-specific `register*` gap closure**
+   - First-class error capture is preserved for the real HTTP
+     `register*` path.
+   - The gap-closure layer lives in the HTTP app and does not create a
+     parallel custom MCP tracing system.
 
-3. **Separate fixture/test support from runtime signal**
-   - Move recorder/types into the HTTP app unless a genuinely shared
-     runtime consumer appears during implementation.
-   - Replace wrapper-characterisation tests with tests for the chosen
-     authoritative live path.
-   - Keep only the fixtures needed to prove the rewritten architecture.
+3. **Separated fixture/test support from runtime signal**
+   - Runtime wrapper ownership and fixture/test support were treated as
+     distinct design problems during the migration.
+   - The authoritative live path is now proven directly rather than via
+     superseded wrapper-characterisation logic.
 
-4. **Collapse obsolete packaging**
-   - Remove or collapse `@oaknational/sentry-mcp` only after runtime
-     gap closure and fixture/test migration are complete.
-   - Treat package removal as an outcome of simplification, not a
-     primary success criterion.
+4. **Collapsed obsolete packaging**
+   - `@oaknational/sentry-mcp` was removed once runtime gap closure and
+     fixture/test migration proved deletion was low-risk.
+   - Package removal was the result of simplification, not the primary
+     success criterion.
 
 ### Acceptance Criteria for This Track
 
@@ -635,11 +632,12 @@ live-path alignment and therefore are explicitly moved out of this child
 plan:
 
 - CLI enhancements (including CLI metrics and CLI preload options):
-  `sentry-cli-observability-extension.plan.md`
+  `search-observability.plan.md`
 - Metrics expansion (`Sentry.metrics` / `beforeSendMetric`):
   `sentry-observability-expansion.plan.md`
 - Propagation expansion to Elasticsearch or third-party Oak API hosts:
-  `sentry-observability-expansion.plan.md`
+  `search-observability.plan.md` for Elasticsearch,
+  `sentry-observability-expansion.plan.md` for third-party Oak API hosts
 - Profiling adoption (`@sentry/profiling-node`):
   `sentry-observability-expansion.plan.md`
 - Source-map automation and deployment evidence:
@@ -662,12 +660,10 @@ DONE:
   - Gap 2 (Express error handler ordering)
   - Gap 3 (adapter surface extension + context enrichment)
   - Investigation of native MCP baseline versus Oak register* gap
-
-NEXT (child-plan authority):
-  1) Adopt native MCP wrapper baseline on the real HTTP server path
-  2) Add minimum app-local register* gap closure for first-class failure signal
-  3) Re-home fixture/test support to smallest justified owner
-  4) Remove @oaknational/sentry-mcp only if deletion is low-risk after proof
+  - Native MCP wrapper baseline adopted on the real HTTP server path
+  - Minimum app-local register* gap closure landed
+  - Fixture/test support reduced to the smallest justified owner
+  - @oaknational/sentry-mcp removed after proof
 
 PARENT PLAN HANDOFF (not owned here):
   - Credential provisioning completion

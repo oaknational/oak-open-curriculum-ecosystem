@@ -7,7 +7,7 @@ overview: >
   quality dashboards, and longer-horizon operational metrics.
 todos:
   - id: sentry-foundation
-    content: "Deliver the Sentry and OpenTelemetry foundation through the active child execution plan for the HTTP MCP server and Search CLI"
+    content: "Deliver the Sentry and OpenTelemetry foundation through the active execution plan set for the HTTP MCP server and Search CLI"
     status: in_progress
   - id: logging-standards
     content: "Converge on enforced structured logging, redaction, and trace-correlation standards"
@@ -27,7 +27,7 @@ todos:
 This is the strategic umbrella plan for observability in the
 `architecture-and-infrastructure` collection. It lives in `future/` because it
 describes later-phase sequencing and ownership boundaries; live execution
-belongs in the active child plan.
+belongs in the active plan set.
 
 ## Intent
 
@@ -82,9 +82,11 @@ Authoritative execution source:
 [sentry-otel-integration.execution.plan.md](../active/sentry-otel-integration.execution.plan.md)
 
 Status note:
-the foundation slice has been promoted into the active child plan and is the
-immediate execution focus, but it must stay `pending` here until runtime
-implementation, evidence, and deployment verification are actually complete.
+the foundation slice has been promoted into the active plan set and is the
+immediate execution focus. Runtime implementation is complete in the active
+plan set, but this umbrella lane remains in progress until credential
+provisioning, deployment evidence, and the public-alpha verification bundle are
+complete.
 
 ### Extended Observability and Quality Metrics (M3 hardening)
 
@@ -94,26 +96,30 @@ implementation, evidence, and deployment verification are actually complete.
 - duplication and quality-regression signals
 - quality and support dashboards
 
-## Current State (verified 2026-03-28)
+## Current State (verified 2026-04-16)
 
 - Structured OpenTelemetry JSON logging exists via `@oaknational/logger`
   (ADR-051)
-- The logger foundation rewrite is complete in the active child plan; the
+- The logger foundation rewrite is complete in the active plan set; the
   previous `stdoutSink` / `fileSink` model has been replaced by the coherent
   `readonly LogSink[]` fan-out contract
-- The active child plan now reflects the pushed Phase 1 foundation state on
-  `feat/full-sentry-otel-support` through `44d8d74d`. Runtime adoption is the
-  active execution step now that the clean handover confirmation rerun is
-  recorded in the checkpoint
-- No runtime adoption is complete yet in the HTTP MCP server or Search CLI,
-  so the public-alpha supportability value has not been realised yet
+- Runtime adoption is complete in both in-scope runtimes:
+  HTTP MCP server and Search CLI
+- Native MCP wrapping is complete on the HTTP live path and
+  `@oaknational/sentry-mcp` has been deleted after the migration
+- The remaining blocker for calling the foundation operationally complete is
+  not implementation but live verification: Vercel credential provisioning and
+  the deployment evidence bundle
 - Shared telemetry redaction now exists in `@oaknational/observability`; live
-  runtime adoption and evidence collection remain the unfinished steps
+  deployment verification and evidence collection remain the unfinished steps
 - Quality metrics dashboards are not yet implemented
 - The active Sentry + OTel foundation workstream now has a dedicated prompt and
   active execution lane to survive session compression cleanly
 - The umbrella observability plan now lives in `future/` as the strategic
-  parent plan; the live execution work is isolated in the active child plan
+  parent plan; the live execution work is isolated in the active plan set
+- Follow-on observability capability work is now split across companion plans
+  for MCP-server expansion, search observability, and scope-translation
+  maintenance
 
 ## Phase Order
 

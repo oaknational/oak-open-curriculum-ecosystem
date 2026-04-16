@@ -61,28 +61,28 @@ todos:
     note: "Complete 2026-04-16. wrap-mcp-server-adopt done, sentry-mcp-collapse done (package deleted). Owner lane: sentry-canonical-alignment.plan.md. Mirrors Integrated Execution Order step 1."
   - id: integrated-cli-architecture-hygiene
     content: "Complete CLI architecture hygiene prerequisites before CLI capability expansion"
-    status: pending
-    note: "Owner lane: sentry-cli-observability-extension.plan.md (CLI-0, CLI-4). Mirrors Integrated Execution Order step 3."
+    status: dropped
+    note: "Companion-owned continuation lane in search-observability.plan.md (CLI-0, CLI-CTX, ES-PROP). Tracked here for visibility only and not required for parent foundation closure."
   - id: integrated-shared-expansion-foundations
-    content: "Deliver shared expansion foundations for metrics, MCP context enrichment, and Oak-controlled propagation"
-    status: pending
-    note: "Owner lane: sentry-observability-expansion.plan.md (EXP-A, EXP-B, EXP-C1). Mirrors Integrated Execution Order step 4."
+    content: "Deliver shared expansion foundations for metrics and MCP context enrichment"
+    status: dropped
+    note: "Companion-owned continuation lane in sentry-observability-expansion.plan.md (EXP-A, EXP-B). Tracked here for visibility only and not required for parent foundation closure."
   - id: integrated-cli-expansion-lanes
     content: "Deliver CLI feature expansion lanes for metrics, propagation, and preload decision"
-    status: pending
-    note: "Owner lane: sentry-cli-observability-extension.plan.md (CLI-1, CLI-2, CLI-3). Mirrors Integrated Execution Order step 5."
+    status: dropped
+    note: "Companion-owned continuation lane in search-observability.plan.md (ES-INST, ES-BULK, ES-HEALTH, CLI-MET, CLI-PRELOAD, CLI-SRCMAP). Tracked here for visibility only and not required for parent foundation closure."
   - id: integrated-gated-capability-decisions
     content: "Complete gated higher-cost capability decisions for third-party propagation, profiling, and source-map automation"
-    status: pending
-    note: "Owner lane: sentry-observability-expansion.plan.md (EXP-C2, EXP-D, EXP-E), with source-map evidence aligned to parent WS6. Mirrors Integrated Execution Order step 6."
+    status: dropped
+    note: "Companion-owned continuation lane in sentry-observability-expansion.plan.md (EXP-C2, EXP-D, EXP-E), with source-map evidence aligned to parent WS6. Tracked here for visibility only and not required for parent foundation closure."
   - id: integrated-operationalisation-and-strategy
     content: "Operationalise observability with alerting/runbooks and close strategy selection across expansion options"
-    status: pending
-    note: "Owner lanes: sentry-observability-expansion.plan.md (EXP-F, EXP-G) and sentry-cli-observability-extension.plan.md (CLI-5, CLI-6). Mirrors Integrated Execution Order step 7."
+    status: dropped
+    note: "Companion-owned continuation lanes in sentry-observability-expansion.plan.md (EXP-F, EXP-G) and search-observability.plan.md (RQ-ZERO, RQ-LAT, RQ-QUALITY, CLI-EVID). Tracked here for visibility only and not required for parent foundation closure."
   - id: integrated-translation-completeness-gate
     content: "Enforce translation-completeness gate before closure so removed scope remains mapped to owned acceptance lanes"
-    status: pending
-    note: "Owner lane: sentry-observability-translation-crosswalk.plan.md. Mirrors Integrated Execution Order step 8."
+    status: dropped
+    note: "Companion-owned maintenance lane in sentry-observability-translation-crosswalk.plan.md. Tracked here for visibility only and not required for parent foundation closure."
 ---
 
 # Sentry and OpenTelemetry Foundation
@@ -232,11 +232,19 @@ Two rounds of specialist reviews ran during the remediation sessions:
    - Complete Sentry integration for the MCP server (metrics, context
      enrichment, propagation):
      [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
-   - Enable Sentry for the Search CLI:
-     [sentry-cli-observability-extension.plan.md](./sentry-cli-observability-extension.plan.md)
-   - Integrate Sentry into Elastic search operations: plan needed
+   - Extend Search CLI observability beyond the completed foundation:
+     [search-observability.plan.md](./search-observability.plan.md)
+   - Integrate Sentry into Elastic search operations:
+     [search-observability.plan.md](./search-observability.plan.md) Layer 2
    - Translation completeness:
      [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md)
+
+Current user-directed sequence after this validation pass:
+
+1. finish validating the current foundation on the authoritative HTTP path,
+2. continue with `sentry-observability-expansion.plan.md`, and
+3. leave search-related work that is not explicitly confined to the MCP
+   server to a later session and PR.
 
 ### Road to Provably Working Sentry (this branch)
 
@@ -252,15 +260,13 @@ the branch can merge and Sentry can be called "working":
 | 5 | Deploy with `SENTRY_MODE=sentry` and produce evidence bundle | **PENDING** | Date-stamped evidence bundle proving all 12 manual/deployment proof items (see Phase 4) |
 
 Steps 4-5 require human action (Vercel dashboard access, deployment
-trigger). Steps 1-3 are code work on this branch. Step 3 is the only
-remaining code task before the branch is deployment-ready.
+trigger). Steps 1-3 are now complete, so no further code work is
+required on this branch before deployment verification.
 
-### Integrated Execution Order (Single Checklist)
+### Parent Closure Order
 
-Use this as the orchestration checklist across parent, child, and companion
-plans. Detailed implementation and acceptance remain in each owner plan.
-Each step is mirrored in frontmatter metadata todos using the
-`integrated-*` ids.
+Use this checklist to close the parent foundation lane itself. These are the
+remaining parent-owned closure steps on this branch.
 
 1. **Stabilise authoritative HTTP live path**  
    Owner: `sentry-canonical-alignment.plan.md`
@@ -273,44 +279,43 @@ Each step is mirrored in frontmatter metadata todos using the
    - finish Vercel Sentry env provisioning
    - produce deployment evidence bundle on authoritative live path
 
-3. **Complete CLI architecture hygiene before feature expansion**  
-   Owner: `sentry-cli-observability-extension.plan.md` (`CLI-0`, `CLI-4`)
-   - close ADR-078 logger DI remediation (`createSearchLogger(config)` lane)
-   - finish command-context completeness across command families
+The parent foundation lane can close once the authoritative HTTP live path is
+stable and the platform readiness gates are complete.
 
-4. **Land shared expansion foundations**  
-   Owner: `sentry-observability-expansion.plan.md` (`EXP-A`, `EXP-B`,
-   `EXP-C1`)
+### Companion Continuation Order
+
+These tracks remain valuable. The current user-directed sequencing is to finish
+validation first, then continue with the MCP-server-confined expansion lane,
+while deferring broader search work to a later session and PR.
+
+3. **Land MCP server expansion foundations**  
+   Owner: `sentry-observability-expansion.plan.md` (`EXP-A`, `EXP-B`)
    - add adapter-level metrics + metric redaction lane
    - add safe MCP request context enrichment
-   - enable Oak-controlled propagation path(s) with proof
 
-5. **Land CLI feature expansion lanes**  
-   Owner: `sentry-cli-observability-extension.plan.md` (`CLI-1`, `CLI-2`,
-   `CLI-3`)
-   - consume shared metrics surface in CLI
-   - apply CLI propagation policy
-   - close preload decision gate (explicitly documented option outcome)
-
-6. **Run gated higher-cost capability decisions**  
+4. **Run gated higher-cost capability decisions**  
    Owner: `sentry-observability-expansion.plan.md` (`EXP-C2`, `EXP-D`,
    `EXP-E`)
    - security-gated third-party propagation decision
    - profiling benchmark decision (HTTP default scope)
    - source-map automation and Debug ID evidence alignment with parent WS6
 
-7. **Operationalise and lock strategy**  
-   Owner: `sentry-observability-expansion.plan.md` (`EXP-F`, `EXP-G`) +
-   `sentry-cli-observability-extension.plan.md` (`CLI-5`, `CLI-6`)
+5. **Operationalise and lock MCP-server-side strategy**  
+   Owner: `sentry-observability-expansion.plan.md` (`EXP-F`, `EXP-G`)
    - alerting/dashboard/runbook baseline
-   - source-map/release strategy completion for CLI contexts
    - explicit strategy selection across "other options"
 
-8. **Perform translation-completeness gate before closure**  
+6. **Perform translation-completeness gate before closure**  
    Owner: `sentry-observability-translation-crosswalk.plan.md`
    - verify every removed scope item has an owner + acceptance lane
    - update crosswalk in the same change set for any scope move
-   - do not close the parent lane while crosswalk maintenance is pending
+   - keep scope translation current as companion ownership evolves
+
+7. **Deferred broader search follow-on lane (later session/PR)**  
+   Owner: `search-observability.plan.md`
+   - CLI runtime prerequisites and ES trace propagation
+   - search feature expansion lanes
+   - retrieval quality observability and search evidence
 
 ### Authority and review state
 
@@ -319,12 +324,12 @@ Each step is mirrored in frontmatter metadata todos using the
    deployment-proof contract.
 2. The child plan
    [sentry-canonical-alignment.plan.md](./sentry-canonical-alignment.plan.md)
-   is authoritative for the remaining HTTP MCP runtime-alignment decisions on
-   the live path.
+   is authoritative for the completed HTTP MCP runtime-alignment record and its
+   acceptance boundary on the live path.
 3. Companion plans are authoritative for scope intentionally removed from the
    narrowed child plan:
    - [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
-   - [sentry-cli-observability-extension.plan.md](./sentry-cli-observability-extension.plan.md)
+   - [search-observability.plan.md](./search-observability.plan.md)
    - [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md)
 4. The review checkpoint is authoritative for whether the handover bundle has
    been reviewed and cleared:
@@ -386,7 +391,7 @@ Each step is mirrored in frontmatter metadata todos using the
    - URL username/password redaction is covered.
 4. `packages/libs/sentry-node`
    - the workspace exists with discriminated config building, fixture runtime,
-     sink helpers, and bounded flush helpers.
+     sink helpers, and bounded close/flush helpers.
    - the reviewed Phase 1 config and type gaps are closed.
 5. `packages/libs/sentry-mcp` — **DELETED** (2026-04-16).
    Runtime wrapping fully superseded by native `wrapMcpServerWithSentry()`.
@@ -395,7 +400,7 @@ Each step is mirrored in frontmatter metadata todos using the
 6. Focused validation
    - `lint`, `test`, and `type-check` are green for `@oaknational/logger`,
      `@oaknational/env`, `@oaknational/observability`,
-     `@oaknational/sentry-node`, and `@oaknational/sentry-mcp`.
+     `@oaknational/sentry-node` (sentry-mcp deleted 2026-04-16).
    - canary `type-check` is green for `@oaknational/sdk-codegen`,
      `@oaknational/oak-curriculum-mcp-streamable-http`, and
      `@oaknational/search-cli`.
@@ -575,8 +580,8 @@ Status: complete on the current pushed branch.
 
 Implement the shared packages and logger rewrite:
 
-1. Add `@oaknational/observability`, `@oaknational/sentry-node`, and
-   `@oaknational/sentry-mcp`.
+1. Add `@oaknational/observability` and `@oaknational/sentry-node`
+   (sentry-mcp subsequently deleted 2026-04-16).
 2. Rewrite `@oaknational/logger` around `readonly LogSink[]`.
 3. Add discriminated-union Sentry env parsing and shared config building.
 4. Centralise telemetry redaction, active-span correlation, and release
@@ -615,7 +620,7 @@ Adopt the shared foundation in the in-scope runtimes only:
    app-local `register*` failure gap closure, and targeted manual spans
    for bootstrap, asset-download proxy, and OAuth upstream flows.
 2. Search CLI: runtime-config-driven logger composition, command-scope Sentry
-   init, ingest root/phase spans, bounded flush on success/failure/interrupted
+   init, ingest root/phase spans, bounded close on success/failure/interrupted
    exits.
 
 Deterministic validation commands:
@@ -871,7 +876,7 @@ Required consequences:
 2. Search CLI initialises Sentry once per command entry point before the
    command body runs; no CLI preload requirement is introduced by this plan.
    Any later preload change is explicitly treated as post-foundation extension
-   work owned by `sentry-cli-observability-extension.plan.md`.
+   work owned by `search-observability.plan.md`.
 3. Success criteria for tracing are:
    - native HTTP route, transport, and MCP tracing where the off-the-shelf SDK
      already provides it
@@ -893,7 +898,8 @@ surface:
 3. Sentry `beforeSendTransaction`
 4. Sentry `beforeSendSpan`
 5. Sentry `beforeSendLog`
-6. breadcrumb filtering
+6. Sentry `beforeSendMetric`
+7. breadcrumb filtering
 
 Coverage must be recursive and include:
 
@@ -904,7 +910,8 @@ Coverage must be recursive and include:
 5. request and response bodies
 6. CLI arguments
 7. env-derived config
-8. breadcrumb extras, event extras, span attributes, and forwarded log payloads
+8. breadcrumb extras, event extras, span attributes, metric attributes, and
+   forwarded log payloads
 
 Outbound propagation policy:
 
@@ -977,7 +984,7 @@ Required invariants:
 | HTTP MCP server | `sentry` | stdout JSON retained; live Sentry sink/adapter; `@sentry/node/preload` plus native MCP transport/session/protocol tracing are authoritative on the live path; targeted manual spans remain only for bootstrap, asset-download proxy, and OAuth upstream; minimal Oak-owned `register*` failure capture may remain unless a future SDK release extends native coverage to the registration API; outbound trace propagation remains deny-by-default unless explicitly allowlisted; raw `/mcp` envelopes suppressed or sanitised before request capture |
 | Search CLI | `off` | local logger only; no Sentry init; no Sentry sinks; no outbound delivery; no trace propagation |
 | Search CLI | `fixture` | local logger plus fixture sink/adapter; no network; root/phase spans exercised through local fallback adapters; bounded shutdown path still executed |
-| Search CLI | `sentry` | live Sentry init once per command; root/phase spans for ingest; bounded flush on success, failure, and interrupted exits; outbound trace propagation remains deny-by-default unless explicitly allowlisted |
+| Search CLI | `sentry` | live Sentry init once per command; root/phase spans for ingest; bounded close on success, failure, and interrupted exits; outbound trace propagation remains deny-by-default unless explicitly allowlisted |
 
 ## Workstreams
 
@@ -1057,6 +1064,7 @@ Required invariants:
    - `beforeSendTransaction`
    - `beforeSendSpan`
    - `beforeSendLog`
+   - `beforeSendMetric`
    - breadcrumb filtering
 5. Evidence artefacts stored in-repo must be scrubbed summaries only. Do not
    store raw event exports, raw payload dumps, captured tokens, cookies, or

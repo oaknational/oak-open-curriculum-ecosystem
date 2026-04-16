@@ -43,6 +43,7 @@ require_command() {
 require_command "bun" "https://bun.sh/docs/installation"
 require_command "curl" "https://curl.se/download.html"
 require_command "git" "https://git-scm.com/downloads"
+# ext-apps basic-host uses npm scripts in the upstream example workspace.
 require_command "npm" "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm"
 
 # --- Check MCP server is reachable (healthz, not /mcp which requires POST) ---

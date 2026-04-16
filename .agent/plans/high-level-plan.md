@@ -3,7 +3,7 @@ plan_id: high-level-plan
 title: "High-Level Plan"
 type: strategic-index
 status: active
-last_updated: 2026-03-13
+last_updated: 2026-04-16
 ---
 
 # High-Level Plan
@@ -31,11 +31,15 @@ Milestone 1: Invite-Only Alpha                   ✅ COMPLETE
   → Repo public, server live at curriculum-mcp-alpha.oaknational.dev, v1.0.0
 
 Milestone 2: Open Public Alpha                   🔄 NEXT
-  → ES re-index + search quality validation
-  → Replace OpenAI app with MCP Apps infrastructure
-  → Knowledge graph alignment audit
-  → Sentry + OTel foundation for HTTP + Search CLI
-  → Dev Clerk remains; search and graph are the gates
+
+> Dev Clerk remains; search, graph, and final Sentry evidence are the gates
+
+  → ES re-index + search quality validation DONE
+  → Replace OpenAI app with MCP Apps infrastructure DONE
+  → Knowledge graph alignment audit DONE
+  → Sentry + OTel foundation deployment evidence for HTTP MCP app IN PROGRESS (95%)
+  -> Build user facing MCP App search experience NOT STARTED (5%)
+
 
 Milestone 3: Public Beta                         📋 PLANNED
   → Production Clerk integration (social providers, public sign-up)
@@ -59,7 +63,13 @@ Milestone 3: Public Beta                         📋 PLANNED
 
 ## Immediate Next Intentions
 
-The next execution sequence is currently:
+The active branch-critical closure sequence remains:
+
+1. Complete Sentry credential provisioning for the HTTP MCP deployment.
+2. Produce the deployment evidence bundle required to close the M2
+   observability foundation lane.
+
+Beyond that active branch closure, the broader repo queue is currently:
 
 1. ~~Implement oak-preview MCP snagging and deploy the resulting fixes.~~
    ✅ COMPLETE — all phases done, branch deployed. Archived to
@@ -188,6 +198,9 @@ Graph-augmented curriculum navigation begins to surface.
      [observability-and-quality-metrics.plan.md](architecture-and-infrastructure/future/observability-and-quality-metrics.plan.md)
    - Scope: HTTP MCP server + Search CLI, shared logger foundation, Sentry
      runtime integration, telemetry redaction, release/source-map evidence
+   - Current state: runtime implementation is complete; remaining M2 work is
+     HTTP credential provisioning plus the deployment evidence bundle, with
+     follow-on search observability tracked in companion active plans
    - Note: deprecated standalone stdio MCP workspace is not an adoption target
 
 ---
@@ -306,55 +319,16 @@ Strategic architecture remains anchored in:
 
 ---
 
-## Recent Completions
+## Potential Short-Term Enhancements
 
-Canonical completion index:
+### MCP Features
 
-- [completed-plans.md](completed-plans.md)
+- Incorporate Claude Education Skills as a user facing feature
+- Incorporate EEF Evidence as a user facing feature (JR's demo)
+- Combine EEF Evidence and Education Skills as a user facing feature (clear labelling as experiment, not endorsement, until pedagogical evaluation is complete)
 
-**Milestone 0 completion** (2026-03-03):
+### Practice Capabilities
 
-- `feat/semantic_search_deployment` merged to `main` (2026-03-02)
-- Repository made public on GitHub (2026-03-03)
-- Server live at `curriculum-mcp-alpha.oaknational.dev`
-- ESLint OOM resolved (graph data dedup, vocab/vocab-data split)
-- Release workflow fixed (Turborepo CI pattern)
-- All 4 onboarding reruns complete, no P0 blockers
-- 32 MCP tools validated against oak-remote-preview
-
-See [release-plan-m1.plan.md](archive/completed/release-plan-m1.plan.md) for full history.
-
----
-
-## Quality Gates
-
-From repo root, in order:
-
-```bash
-pnpm clean
-pnpm sdk-codegen
-pnpm build
-pnpm type-check
-pnpm format:root
-pnpm markdownlint:root
-pnpm subagents:check
-pnpm lint:fix
-pnpm test
-pnpm test:ui
-pnpm test:e2e
-pnpm smoke:dev:stub
-```
-
----
-
-## Foundation Recommitment
-
-Before starting any plan execution phase:
-
-1. [principles.md](../directives/principles.md)
-2. [testing-strategy.md](../directives/testing-strategy.md)
-3. [schema-first-execution.md](../directives/schema-first-execution.md)
-
-First question:
-
-- Could it be simpler without compromising quality?
+- Incorporate useful practices and processes from <https://github.com/microsoft/agent-governance-toolkit?tab=readme-ov-file>
+- Incorporate useful concepts from <https://github.com/safishamsi/graphify> (additional cross-cutting memory and learning layer)
+- Consider how the MCP server could feed into development tooling. That might be a separate MCP app, providing expertise and guidance in using our SDKs, including the knowledge graphs and ontology. This is related to of building bundles of skills, rules, tools etc <https://claude.com/plugins>

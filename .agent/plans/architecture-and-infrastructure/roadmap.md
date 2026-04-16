@@ -84,7 +84,7 @@ Phase 4: Quality/operations hardening                 📋 future
   [../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
 - Done when:
   the HTTP MCP server and Search CLI have the shared observability foundation,
-  evidence is recorded, and the active child plan can close
+  evidence is recorded, and the active foundation lane can close
 
 ### Phase 2 — Cross-App Standardisation
 

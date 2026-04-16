@@ -10,6 +10,9 @@ Fast-track guide for developers who want to understand and contribute to infrast
 > **Audience**: junior-to-mid-level human developers.
 >
 > **AI agents**: start with the `start-right-quick` workflow first (command, shared workflow, or skill), then continue with [AGENT.md](../../.agent/directives/AGENT.md).
+>
+> **Prerequisites**: see [README prerequisites](../../README.md#prerequisites)
+> for required and optional external tools.
 
 Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth. Understanding these decisions helps you navigate the codebase — they explain why things are structured the way they are:
 

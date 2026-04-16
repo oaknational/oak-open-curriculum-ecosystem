@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-15
+last_updated: 2026-04-16
 ---
 
 # Session Continuation
@@ -49,32 +49,31 @@ git log --oneline --decorate -10
   with parent-plan orchestration split across child and companion plans.
 - **Active plans**:
   - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
-    (parent authority + integrated execution order + mirrored metadata todos)
+    (parent authority + parent closure order + companion continuation order)
   - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-    (remaining HTTP MCP live-path runtime alignment)
+    (completed HTTP MCP live-path runtime alignment record)
   - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-expansion.plan.md`
     (full post-baseline Sentry capability expansion)
-  - `.agent/plans/architecture-and-infrastructure/active/sentry-cli-observability-extension.plan.md`
-    (CLI-specific expansion and ADR-078 hygiene)
+  - `.agent/plans/architecture-and-infrastructure/active/search-observability.plan.md`
+    (later-session companion for search observability beyond work
+    explicitly confined to the MCP server)
   - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-translation-crosswalk.plan.md`
     (lossless recovery mapping for removed scope)
-  - Execution plan for this session:
-    `~/.claude/plans/federated-exploring-fern.md`
-- **Current state**: Native MCP wrapping fully adopted. Cleanup commit 2
-  done and committed. `wrapMcpServerWithSentry()` wired in per-request
-  factory. All custom `@oaknational/sentry-mcp` handler wrappers removed.
-  Circular justification chain broken. `HttpObservability` no longer extends
-  `McpObservationRuntime`. Dead members removed. `@oaknational/sentry-mcp`
-  removed from HTTP app dependencies (zero imports). `WithActiveSpanOptions`
-  tracer-field fix applied (`Omit<..., 'tracer'>`). `@oaknational/type-helpers`
-  unused devDep removed (knip fix). 611 tests pass. `pnpm check` 88/88 green.
-  knip clean. depcruise clean. 4 specialist reviewers approved/compliant.
-  Parent plan updated with explicit "Road to Provably Working Sentry" table.
-- **Current objective**: `@oaknational/sentry-mcp` deleted. Branch is
-  deployment-ready for the MCP server. Remaining: Vercel credential
-  provisioning (human action) and deployment evidence bundle. This PR is
-  scoped to the MCP server only. Follow-on: CLI Sentry enablement,
-  Elastic search operations observability.
+- **Current state**: Native MCP wrapping fully adopted. `wrapMcpServerWithSentry()`
+  is wired in the per-request factory. All custom `@oaknational/sentry-mcp`
+  handler wrappers are gone, the package is deleted, the circular justification
+  chain is broken, and the parent/child/companion plans now split ownership
+  explicitly. Latest recorded aggregate state: `pnpm check` green, knip clean,
+  depcruise clean. This session refreshed the continuity surfaces so the
+  plan, architecture prompt, and session prompt all agree on the next sequence:
+  validate current HTTP foundation first, then continue with MCP-server-confined
+  expansion, then defer broader search follow-on work.
+- **Current objective**: Branch is deployment-ready for the MCP server.
+  Remaining branch-critical work is Vercel credential provisioning (human
+  action) and the deployment evidence bundle. After that validation pass,
+  continue with `sentry-observability-expansion.plan.md`. Defer
+  `search-observability.plan.md` to a later session/PR unless the work is
+  explicitly confined to the MCP server.
 - **Hard invariants / non-goals**:
   - `sendDefaultPii: false`, `SENTRY_MODE=off`, DI/testability, and redaction
     invariants are non-negotiable.
@@ -83,25 +82,23 @@ git log --oneline --decorate -10
   - Tests must prove product behaviour, not removed logic.
   - All gates are blocking at all times. No "pre-existing" exceptions.
 - **Recent surprises / corrections**:
-  - `getActiveSpanContext` and `withActiveSpan` ARE load-bearing (logging +
-    span propagation) but do NOT need `McpObservationRuntime` as type source.
-    Both types come from `@oaknational/observability`, already a dependency.
-  - `WithActiveSpanOptions<T>` includes a `tracer` field that
-    `HttpObservability.withActiveSpan` ignores (tracer captured via closure).
-    Fixed with `Omit<WithActiveSpanOptions<T>, 'tracer'>` per Barney.
-  - Test-reviewer correctly identified that the initial wrapping-order test
-    claimed to detect ordering regressions but could not. Rewritten to
-    honestly document what it proves (inertness without init).
-  - knip caught `@oaknational/type-helpers` as unused devDependency after
-    removing the `typeSafeKeys` import. Removed — all gates must pass.
+  - Updating the child plan was not enough; the parent plan, collection index,
+    strategic index, and continuation prompts all needed a coordinated sweep
+    before the restart story became trustworthy again.
+  - I initially over-inferred that search work should be next after validation.
+    The user corrected the sequence: validate first, then do the
+    MCP-server-confined expansion lane, and defer broader search work to a
+    later session and PR.
 - **Open questions / low-confidence areas**:
-  - Ordering and depth decisions for EXP/CLI follow-on tracks.
-  - Whether a new plan is needed for Elastic search operations
-    observability or whether it belongs in the existing expansion plan.
+  - Exact execution order inside `sentry-observability-expansion.plan.md` once
+    validation closes cleanly.
+  - Whether any apparently "search-shaped" follow-on task is actually confined
+    tightly enough to the MCP server to stay in this branch/PR.
 - **Next safe step**: Vercel credential provisioning (human action),
-  then deployment evidence bundle.
-- **Deep consolidation status**: due — napkin has accumulated 10+ session
-  entries since last rotation, and a significant plan has been updated.
+  then deployment evidence bundle, then `sentry-observability-expansion.plan.md`.
+- **Deep consolidation status**: due — repeated authority corrections across
+  plan, prompt, and strategic index surfaces now warrant deeper convergence,
+  but that work is not well-bounded for this lightweight handoff.
 
 ## Active Workstreams (2026-04-16)
 
@@ -115,10 +112,13 @@ git log --oneline --decorate -10
   (parent authority — "Road to Provably Working Sentry" table added;
   Vercel credential provisioning and deployment evidence still pending)
 
-**No remaining code work for this PR.** Branch is deployment-ready
-for the MCP server. Vercel credential provisioning and deployment
-evidence bundle are human actions. Follow-on plans: CLI Sentry,
-Elastic search operations observability (plan needed).
+**Immediate code work is paused pending validation.** Branch is
+deployment-ready for the MCP server. Vercel credential provisioning
+and deployment evidence bundle are the next actions. After that, the
+next implementation lane for this branch/PR is
+`sentry-observability-expansion.plan.md`. Broader
+`search-observability.plan.md` work is deferred to a later session/PR
+unless it is explicitly confined to the MCP server.
 
 ### 2. User-Facing Search UI — NEXT
 

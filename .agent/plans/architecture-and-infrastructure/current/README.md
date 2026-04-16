@@ -29,6 +29,6 @@ Quality gate hardening (promoted from future/ 2026-04-11):
 
 Related strategic umbrella:
 
-- [observability-and-quality-metrics.plan.md](../future/observability-and-quality-metrics.plan.md) — strategic parent plan whose first slice is currently being executed by the active child plan
+- [observability-and-quality-metrics.plan.md](../future/observability-and-quality-metrics.plan.md) — strategic parent plan whose first slice is currently being executed by the active parent/child/companion plan set
 
 Strategic context: [../roadmap.md](../roadmap.md)

@@ -5,10 +5,10 @@ immediate blocker for Open Public Alpha readiness.
 
 | Plan | Scope | Status |
 |---|---|---|
-| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation (parent plan) | HTTP adoption + rate limiting + Search CLI adoption complete. Remaining: Vercel credential completion, deployment evidence, and child-plan HTTP MCP runtime alignment. Branch: `feat/otel_sentry_enhancements` |
-| [sentry-canonical-alignment.plan.md](./sentry-canonical-alignment.plan.md) | Narrow HTTP MCP live-path alignment (child plan) | In progress — native baseline adoption + minimum `register*` gap closure |
-| [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md) | Full post-baseline Sentry capability envelope (metrics, propagation, profiling, source maps, operations, option strategy) | New — pending |
-| [sentry-cli-observability-extension.plan.md](./sentry-cli-observability-extension.plan.md) | Search CLI observability expansion (metrics, propagation, preload decision, context completion, evidence) | New — pending |
+| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation (parent plan) | HTTP adoption + rate limiting + Search CLI adoption complete. Remaining: Vercel credential completion and deployment evidence. Companion plans track post-foundation follow-on lanes. Branch: `feat/otel_sentry_enhancements` |
+| [sentry-canonical-alignment.plan.md](./sentry-canonical-alignment.plan.md) | HTTP MCP live-path alignment (child plan) | Complete — native wrapping adopted, sentry-mcp deleted |
+| [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md) | MCP server Sentry expansion (metrics, MCP context, profiling, source maps, alerting, strategy) | Pending |
+| [search-observability.plan.md](./search-observability.plan.md) | End-to-end search observability: CLI Sentry runtime, Elasticsearch operations, retrieval quality, trace propagation | Pending — deferred to a later session/PR except work explicitly confined to the MCP server |
 | [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md) | Lossless mapping from superseded broad plan to current plan set | New — crosswalk audit complete |
 
 Build tooling:

@@ -93,6 +93,10 @@ Before making changes, start with the quick start guide:
 2. **pnpm**
 3. Service credentials for the areas you are touching (Oak Curriculum API keys,
    Elasticsearch Serverless API keys). See workspace READMEs for details.
+4. Some scripts require additional external tools (`bun`, `jq`, `lsof`) that are
+   not managed via `package.json`. See [README prerequisites](README.md#prerequisites).
+   Scripts that require these commands emit installation instructions when they
+   are missing.
 
 ### Setup
 
