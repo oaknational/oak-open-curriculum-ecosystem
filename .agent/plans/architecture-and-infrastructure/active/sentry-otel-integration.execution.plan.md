@@ -57,8 +57,8 @@ todos:
     note: "Depends on sentry-credential-provisioning. Cannot verify live capture without real DSN."
   - id: integrated-http-live-path-alignment
     content: "Close remaining authoritative HTTP MCP live-path runtime alignment in the child plan"
-    status: pending
-    note: "Owner lane: sentry-canonical-alignment.plan.md (wrap-mcp-server-adopt, sentry-mcp-collapse). Mirrors Integrated Execution Order step 1."
+    status: in_progress
+    note: "wrap-mcp-server-adopt DONE (2026-04-16). sentry-mcp-collapse in progress — package has zero production consumers, deletion is next. Owner lane: sentry-canonical-alignment.plan.md. Mirrors Integrated Execution Order step 1."
   - id: integrated-cli-architecture-hygiene
     content: "Complete CLI architecture hygiene prerequisites before CLI capability expansion"
     status: pending
@@ -112,7 +112,7 @@ Phase 3 should be judged against that outcome. New wiring only counts if it
 improves supportability and release confidence while preserving the redaction
 and capture boundaries established in Phase 1 and Phase 2.
 
-## Current Execution Snapshot (2026-04-12)
+## Current Execution Snapshot (2026-04-16)
 
 ### Lane and state
 
@@ -123,8 +123,15 @@ and capture boundaries established in Phase 1 and Phase 2.
 - Rate limiting: **COMPLETE** (ADR-158, 6 routes, 3 profiles)
 - Phase 3 Search CLI adoption: **COMPLETE** — 10-step TDD, 22 new
   tests, 7 reviewer passes, all findings addressed, `pnpm check` 88/88
-- Credential provisioning: **in progress** — local `.env.local` done (2026-04-12); Vercel dashboard pending
-- Phase 4 evidence/deployment: **pending** (unblocked by credential provisioning)
+- Native MCP wrapping: **COMPLETE** — `wrapMcpServerWithSentry()` wired
+  in per-request factory (commit `d7cf028b`), custom sentry-mcp handler
+  wrappers removed from production code, circular justification chain
+  broken, `@oaknational/sentry-mcp` removed from HTTP app dependencies,
+  dead code deleted, integration tests proving wrapping inertness added
+- Credential provisioning: **in progress** — local `.env.local` done
+  (2026-04-12); Vercel dashboard pending
+- Phase 4 evidence/deployment: **pending** (unblocked by credential
+  provisioning)
 
 ### Merge from main — COMPLETE (2026-04-11)
 
@@ -138,8 +145,8 @@ no main work lost. Merge plan archived.
 
 ### Quality gate status
 
-Green after Search CLI adoption. Last verified: 2026-04-12.
-`pnpm check` 88/88 tasks successful.
+Green after native MCP wrapping cleanup. Last verified: 2026-04-16.
+`pnpm check` 88/88 tasks successful. knip clean. depcruise clean.
 
 ### Remediation status
 
@@ -205,23 +212,47 @@ Two rounds of specialist reviews ran during the remediation sessions:
 
 - **F18** — span helper DRY between core and app (YAGNI)
 
-### Next steps (2026-04-15)
+### Next steps (2026-04-16)
 
-1. **Remaining HTTP runtime alignment** — tracked in the child plan
-   [sentry-canonical-alignment.plan.md](./sentry-canonical-alignment.plan.md).
-   The foundation direction is now: native Sentry is the authoritative
-   live-path baseline, and Oak adds only the minimum extra functionality
-   needed where native coverage currently stops short.
+**What remains before Sentry is provably working on this branch:**
+
+1. **Delete `@oaknational/sentry-mcp` package** — zero production
+   consumers remain. Verify no other workspace imports it, then remove
+   the package directory, workspace entry, and boundary rules. Tracked
+   as `sentry-mcp-collapse` in the child plan.
 2. **Credential provisioning** (`sentry-credential-provisioning` todo) —
-   complete the Vercel dashboard configuration for the HTTP deployment.
+   set `SENTRY_MODE`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` on the
+   Vercel dashboard for the HTTP deployment. This is the gate for live
+   verification.
 3. **Deployment evidence bundle** (`deployment-and-evidence` todo) —
-   prove release/source-map alignment, alerting baseline, MCP Insights, and
-   scrubbed evidence capture against the authoritative live path.
-4. **Post-baseline expansion lanes** — track expanded Sentry capability and
-   CLI-specific maturity in:
+   deploy with `SENTRY_MODE=sentry`, trigger success/failure MCP
+   requests, and produce the date-stamped evidence bundle proving:
+   native `mcp.server` transactions, thrown handler exception capture,
+   `isError` classification, redaction, source-map stack traces, release
+   tag, alerting baseline, kill-switch rehearsal, MCP Insights. This is
+   the proof that Sentry works end-to-end.
+4. **Post-baseline expansion lanes** — NOT required for "provably
+   working", but tracked for maturity:
    - [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
    - [sentry-cli-observability-extension.plan.md](./sentry-cli-observability-extension.plan.md)
    - [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md)
+
+### Road to Provably Working Sentry (this branch)
+
+This is why the branch exists. Everything below must be true before
+the branch can merge and Sentry can be called "working":
+
+| Step | What | Status | Proof |
+|------|------|--------|-------|
+| 1 | Native MCP wrapping adopted, custom wrappers removed | **DONE** | `wrapMcpServerWithSentry()` in factory, 611 tests pass, 4 specialist reviewers approved |
+| 2 | Dead code chain broken, sentry-mcp decoupled from HTTP app | **DONE** | Zero sentry-mcp imports in app, knip clean, depcruise clean |
+| 3 | Delete orphaned `@oaknational/sentry-mcp` package | **NEXT** | Package directory removed, workspace entry removed, boundary rules updated, `pnpm check` green |
+| 4 | Vercel Sentry credential provisioning | **PENDING** | `SENTRY_MODE=sentry`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` set on Vercel dashboard |
+| 5 | Deploy with `SENTRY_MODE=sentry` and produce evidence bundle | **PENDING** | Date-stamped evidence bundle proving all 12 manual/deployment proof items (see Phase 4) |
+
+Steps 4-5 require human action (Vercel dashboard access, deployment
+trigger). Steps 1-3 are code work on this branch. Step 3 is the only
+remaining code task before the branch is deployment-ready.
 
 ### Integrated Execution Order (Single Checklist)
 
@@ -357,11 +388,11 @@ Each step is mirrored in frontmatter metadata todos using the
      sink helpers, and bounded flush helpers.
    - the reviewed Phase 1 config and type gaps are closed.
 5. `packages/libs/sentry-mcp`
-   - the workspace exists as a migration surface, not a renewed long-term
-     runtime authority.
-   - runtime wrapping is being superseded by the native Sentry MCP baseline on
-     the HTTP live path; any remaining fixture/test helpers or temporary
-     gap-closure responsibility are tracked in the child alignment plan.
+   - the workspace has **zero production consumers** as of 2026-04-16.
+   - runtime wrapping fully superseded by native `wrapMcpServerWithSentry()`.
+   - `HttpObservability` no longer extends `McpObservationRuntime`.
+   - HTTP app `package.json` no longer lists `@oaknational/sentry-mcp`.
+   - package deletion is tracked as `sentry-mcp-collapse` in the child plan.
 6. Focused validation
    - `lint`, `test`, and `type-check` are green for `@oaknational/logger`,
      `@oaknational/env`, `@oaknational/observability`,
@@ -579,8 +610,10 @@ Deterministic validation commands:
 
 Status: HTTP adoption **complete** (PR #73 merged 2026-03-31, all 21 findings
 resolved, all gates green). Rate limiting complete (ADR-158). Search CLI
-adoption complete. Remaining runtime-alignment work continues in
-`sentry-canonical-alignment.plan.md`.
+adoption complete. Native MCP wrapping adopted — `wrapMcpServerWithSentry()`
+wired in factory, custom handler wrappers removed, `@oaknational/sentry-mcp`
+decoupled from HTTP app (zero imports, zero dependencies). Remaining: delete
+the orphaned `sentry-mcp` package and produce the deployment evidence bundle.
 
 Adopt the shared foundation in the in-scope runtimes only:
 

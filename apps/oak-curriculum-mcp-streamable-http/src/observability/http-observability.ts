@@ -1,12 +1,6 @@
 import { type LogContextInput, type Logger, type LogSink } from '@oaknational/logger';
 import { err, type Result } from '@oaknational/result';
 import {
-  createInMemoryMcpObservationRecorder,
-  type McpObservationOptions,
-  type McpObservationRecorder,
-  type McpObservationRuntime,
-} from '@oaknational/sentry-mcp';
-import {
   createSentryConfig,
   createSentryLogSink,
   initialiseSentry,
@@ -16,6 +10,7 @@ import {
 } from '@oaknational/sentry-node';
 import { trace, type Tracer } from '@opentelemetry/api';
 import type {
+  ActiveSpanContextSnapshot,
   ObservabilityCloseError,
   ObservabilityContextPayload,
   ObservabilityFlushError,
@@ -44,18 +39,15 @@ interface CreateHttpObservabilityOptions {
   readonly stdoutSink?: LogSink;
 }
 
-export interface HttpObservability extends McpObservationRuntime {
+export interface HttpObservability {
+  readonly getActiveSpanContext: () => ActiveSpanContextSnapshot | undefined;
+  withActiveSpan<T>(options: Omit<WithActiveSpanOptions<T>, 'tracer'>): Promise<T>;
   readonly service: string;
   readonly environment: string;
   readonly release: string;
   readonly tracer: Tracer | undefined;
-  readonly mcpRecorder: McpObservationRecorder;
   readonly fixtureStore?: FixtureSentryStore;
   createLogger(options?: HttpLoggerOptions): Logger;
-  createMcpObservationOptions(): Pick<
-    McpObservationOptions,
-    'environment' | 'recorder' | 'release' | 'runtime' | 'service' | 'tracer'
-  >;
   withSpan<T>(options: HttpSpanOptions<T>): Promise<T>;
   withSpanSync<T>(options: HttpSyncSpanOptions<T>): T;
   captureHandledError(error: unknown, context?: LogContextInput): void;
@@ -94,16 +86,6 @@ export interface HttpObservability extends McpObservationRuntime {
   close(timeoutMs?: number): Promise<Result<void, ObservabilityCloseError>>;
 }
 
-const noopMcpObservationRecorder: McpObservationRecorder = {
-  record(): void {
-    // Intentionally empty: off and live sentry mode do not keep an in-memory MCP transcript.
-  },
-};
-
-function createMcpRecorder(mode: SentryNodeRuntime['config']['mode']): McpObservationRecorder {
-  return mode === 'fixture' ? createInMemoryMcpObservationRecorder() : noopMcpObservationRecorder;
-}
-
 function createLoggerFactory(
   runtimeConfig: RuntimeConfig,
   sentryRuntime: SentryNodeRuntime,
@@ -130,7 +112,6 @@ interface BuildObservabilityParams {
   readonly environment: string;
   readonly release: string;
   readonly tracer: Tracer | undefined;
-  readonly mcpRecorder: McpObservationRecorder;
   readonly stdoutSink?: LogSink;
 }
 
@@ -143,10 +124,9 @@ function buildObservabilityObject(params: BuildObservabilityParams): HttpObserva
     environment: params.environment,
     release: params.release,
     tracer: params.tracer,
-    mcpRecorder: params.mcpRecorder,
     fixtureStore: params.sentryRuntime.fixtureStore,
     getActiveSpanContext: spanFunctions.getActiveSpanContext,
-    async withActiveSpan<T>(options: WithActiveSpanOptions<T>): Promise<T> {
+    async withActiveSpan<T>(options: Omit<WithActiveSpanOptions<T>, 'tracer'>): Promise<T> {
       return await spanFunctions.withSpan({
         name: options.name,
         attributes: options.attributes,
@@ -159,16 +139,6 @@ function buildObservabilityObject(params: BuildObservabilityParams): HttpObserva
       spanFunctions.getActiveSpanContext,
       params.stdoutSink,
     ),
-    createMcpObservationOptions() {
-      return {
-        service: params.serviceName,
-        environment: params.environment,
-        release: params.release,
-        recorder: params.mcpRecorder,
-        runtime: observability,
-        tracer: params.tracer,
-      };
-    },
     withSpan: spanFunctions.withSpan,
     withSpanSync: spanFunctions.withSpanSync,
     ...delegates,
@@ -215,7 +185,6 @@ export function createHttpObservability(
       environment: sentryConfig.environment,
       release: sentryConfig.release,
       tracer,
-      mcpRecorder: createMcpRecorder(sentryRuntimeResult.value.config.mode),
       stdoutSink: options?.stdoutSink,
     }),
   };

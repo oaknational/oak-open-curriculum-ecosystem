@@ -6,8 +6,6 @@ const config: KnipConfig = {
     '@stryker-mutator/core',
     '@stryker-mutator/typescript-checker',
     '@stryker-mutator/vitest-runner',
-    // Used in CI or scripts, not directly imported
-    'cloc',
     // Commitlint is wired via husky hooks, not direct import
     '@commitlint/cli',
     // ESLint ecosystem: consumed transitively via typescript-eslint flat config
@@ -15,9 +13,8 @@ const config: KnipConfig = {
     '@typescript-eslint/parser',
     'eslint-config-prettier',
     'eslint-plugin-prettier',
-    // supertest and ts-morph used in scripts/
+    // supertest used in scripts/
     'supertest',
-    'ts-morph',
     // tsup at root provides type resolution for tsup.config.base.ts
     // (workspace configs import factory functions from the base config)
     'tsup',

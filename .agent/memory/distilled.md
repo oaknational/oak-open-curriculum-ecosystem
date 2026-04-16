@@ -113,6 +113,20 @@ context with no natural permanent home.
   gitignored research or staging lanes, use `rg -uu` or run the
   search from inside the target directory; otherwise ignore rules
   can create false-clean hygiene checks.
+- **Reconcile parent when child changes runtime truth**: when
+  a child plan evolves the runtime architecture, reconcile the
+  parent plan and the closure proof in the same session. Otherwise
+  the repo teaches two incompatible architectures simultaneously.
+- **All gates blocking, no "pre-existing" exceptions**: never
+  dismiss a gate failure as "pre-existing." The principle is
+  long-term architectural excellence — a violation introduced
+  last month is the same as one introduced today. Fix it or
+  track it as a blocking item. Language like "no new issues"
+  rationalises letting quality decay.
+- **"Tests use it" is migration surface, not justification**:
+  when tests are the sole consumers of production code, the chain
+  is circular. See pattern
+  `patterns/circular-test-justification.md`.
 
 ## Architecture (Agent Infrastructure)
 
@@ -138,25 +152,18 @@ context with no natural permanent home.
   `apps/oak-search-cli/docs/INDEXING.md` (*Operational CLI* section).
 - From `packages/sdks/oak-curriculum-sdk/`, repo root is
   `../../../` not `../../`
-- `src/bulk/generators/` duplicates `vocab-gen/generators/`
-  files — both must be updated in parallel until resolved.
-  **Decomposition**: strategic plan at
-  `.agent/plans/architecture-and-infrastructure/codegen/future/`
-  `sdk-codegen-workspace-decomposition.md`
-  (M1 prerequisite satisfied, awaiting promotion).
-  Turbo overrides are temporary — see ADR-065.
-- **No "conscious exceptions" to ADR-078 exist**: any claim
-  of a deliberate, documented exception for direct-import
-  logger singletons (or similar) is fabricated. ADR-078 lists
-  exactly one exception (subprocess-spawned tests). Untracked
-  exceptions are violations, not accepted trade-offs.
-- **Zod 4 `.meta({ examples })` — verified and planned**: the MCP
-  SDK v1.28.0 uses Zod 4's native `z4mini.toJSONSchema()` for v4
-  schemas, which preserves `.meta()` data. The shim's removal
-  condition #1 is met. Adoption plan at
-  `ws3-off-the-shelf-mcp-sdk-adoption.plan.md`. Edge case:
-  `z.preprocess()` fields lose `.meta()` when `io='input'`
-  (per-field, not per-object — only 3 year params affected).
+- `src/bulk/generators/` duplicates `vocab-gen/generators/` —
+  update both in parallel. Decomposition plan at
+  `codegen/future/sdk-codegen-workspace-decomposition.md`.
+- **No "conscious exceptions" to ADR-078 exist**: ADR-078
+  lists exactly one exception (subprocess-spawned tests). Any
+  other claimed exception is fabricated — untracked exceptions
+  are violations, not accepted trade-offs.
+- **Zod 4 `.meta({ examples })` — verified and planned**: MCP
+  SDK v1.28.0 preserves `.meta()` via `z4mini.toJSONSchema()`.
+  Plan: `ws3-off-the-shelf-mcp-sdk-adoption.plan.md`. Edge case:
+  `z.preprocess()` fields lose `.meta()` with `io='input'`
+  (3 year params only).
 
 ## Testing (Domain-Specific)
 
