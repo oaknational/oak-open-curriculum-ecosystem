@@ -55,19 +55,9 @@ context with no natural permanent home.
   (`healthy`/`soft`/`hard`/`critical`). Operational rule here:
   ask "why is it growing?" before "what can I cut?" Graduation
   and restructuring are valid responses alongside compression.
-- **Repetition between foundational docs is deliberate**: the
-  testing rules in principles.md AND testing-strategy.md are
-  intentional reinforcement, not duplication. Do not
-  deduplicate across foundational Practice files.
 
 ## Process
 
-- **Never delegate foundational Practice doc edits to sub-
-  agents**: principles.md, testing-strategy.md, schema-first-
-  execution.md, AGENT.md are the operating system of the repo.
-  Sub-agents optimise for "cut N lines" without understanding
-  pedagogical value or deliberate reinforcement. Consolidation
-  is curation, not optimisation.
 - **Lead with narrative, not infrastructure**: on a multi-workstream
   initiative, write the ADR and README first. WS-0 (narrative) →
   WS-1 (factory) → WS-2+ (consumers).

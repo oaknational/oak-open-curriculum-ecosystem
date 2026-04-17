@@ -102,6 +102,18 @@ git log --oneline --decorate -10
   - **TSDoc-extension-point-only for future providers**. L-10
     (feature flags) and L-11 (AI instrumentation) resolved as
     stub-with-TSDoc, not barrel re-exports.
+  - **Adjacent (non-Sentry) — Finnish national curriculum API
+    future brief authored** (2026-04-17). New strategic brief at
+    `.agent/plans/sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md`
+    names Tranche 4 (SDK/codegen) of the Oak Surface Isolation and
+    Generic Foundation Programme as its hard pre-requisite, and
+    positions the Opetushallitus public APIs as an international
+    curriculum comparator inside the Open Education Knowledge
+    Surfaces narrative. Discoverability wired into the SDK/MCP
+    future README, the architecture future README, and the
+    high-level plan's MCP Features section. Does not change Sentry
+    sequencing; recorded here only so the next session sees it
+    exists.
 - **Open questions / low-confidence areas**:
   - Widget bundle-size measurement once `@sentry/browser` lands
     (L-12) — no budget set; owner chose measure-and-note.
@@ -129,9 +141,17 @@ git log --oneline --decorate -10
   `enrichMcpRequestContext` into the MCP app; partition L-7 into
   sibling scripts; tighten RED framing across L-1/L-4b/L-6/L-7/L-0/L-DOC;
   add missing documentation propagation targets), then open L-0 RED.
-- **Deep consolidation status**: completed this handoff — napkin
-  extended with eight new entries from the maximisation pivot session;
-  three patterns extracted (`ground-before-framing`,
+- **Deep consolidation status**: not due — this handoff closes a
+  lightweight adjacent documentation session (Finnish national
+  curriculum API future brief + discoverability wiring) on top of
+  the still-authoritative maximisation-pivot consolidation from
+  earlier 2026-04-17. No Sentry-lane progress this session; no new
+  doctrine stable enough to graduate; napkin rotated earlier today
+  and extended in-session with one adjacent entry; no practice-box
+  activity; no ADR-shaped learning emerged. Prior consolidation
+  state still stands: napkin extended with eight entries from the
+  maximisation pivot session; three patterns extracted
+  (`ground-before-framing`,
   `tsdoc-extension-point-for-future-consumers`,
   `non-leading-reviewer-prompts`); settled CI-pipeline-boundary
   doctrine graduated to `docs/operations/sentry-cli-usage.md`; two
@@ -142,8 +162,8 @@ git log --oneline --decorate -10
   (`ws-review-adrs-160-161`) on the active plan flags both ADRs for
   owner review before Phase 1 opens; L-0 has been rewritten to
   implement ADR-160's test gate rather than author the ADR.
-  `pnpm practice:fitness` state captured under Current State —
-  this session introduced zero new violations.
+  `pnpm practice:fitness` state captured under Current State — this
+  session introduced zero new violations.
 
 ## Current State (2026-04-17)
 

@@ -109,6 +109,8 @@ and `.agents/skills/patterns/`.
 
 | Location                                                                                      | What lives there                                                            |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [`.agent/practice-core/`](practice-core/)                                                     | Portable Practice Core — the eight-file plasmid trinity + companions        |
+| [`.agent/practice-decision-records/`](practice-decision-records/)                             | Portable governance decisions about the Practice itself (PDRs)              |
 | [`.agent/directives/`](directives/)                                                           | Principles, rules, and operational directives                               |
 | [`.agent/plans/`](plans/)                                                                     | Work planning — active, paused, archived, and optional supporting templates |
 | [`.agent/memory/`](memory/)                                                                   | Institutional memory — napkin, distilled learnings, and code patterns       |

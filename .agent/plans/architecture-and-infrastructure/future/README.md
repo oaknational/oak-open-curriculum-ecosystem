@@ -24,6 +24,10 @@ Companion future plan in the nested codegen lane:
 
 - [../codegen/future/sdk-codegen-workspace-decomposition.md](../codegen/future/sdk-codegen-workspace-decomposition.md) — strategic split of mixed OpenAPI/codegen and bulk-data lineages; tranche 4 of the new programme must absorb rather than duplicate this direction
 
+Downstream demonstrations of the programme (in other collections):
+
+- [sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](../../sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md) — route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline once tranche 4 lands; first external consumer of the generic foundation
+
 Strategic context: [../roadmap.md](../roadmap.md)
 In-progress execution: [../active/README.md](../active/README.md)
 Next-up queue: [../current/README.md](../current/README.md)

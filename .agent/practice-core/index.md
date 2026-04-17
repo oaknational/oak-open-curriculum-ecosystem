@@ -8,7 +8,7 @@ Follow `.agent/directives/AGENT.md` and `.agent/directives/principles.md`. That 
 
 ## The Practice Core Files
 
-The Practice Core travels between repos as a package of eight required files. The three **plasmid trinity** files encode the blueprint; the **verification companion** proves the build is operational; the **entry points** provide orientation; the **changelog** records what changed; the **provenance file** tracks evolution history. It may be accompanied by an optional `.agent/practice-context/` directory, but that directory is not part of the Core.
+The Practice Core travels between repos as a package of eight required files. The three **plasmid trinity** files encode the blueprint; the **verification companion** proves the build is operational; the **entry points** provide orientation; the **changelog** records what changed; the **provenance file** tracks evolution history. It may be accompanied by two optional peer directories — `.agent/practice-context/` (sender-maintained support material) and `.agent/practice-decision-records/` (portable governance decisions about the Practice itself, provisional staging layer pending eventual Core refinements) — but neither is part of the Core.
 
 | File                                           | Role                                                                     |
 | ---------------------------------------------- | ------------------------------------------------------------------------ |
@@ -52,6 +52,13 @@ If `.agent/practice-context/` exists, read `README.md` and `incoming/` as
 received support during hydration or integration. `incoming/` is transient and
 should be cleared after integration. Local `outgoing/` may persist.
 
+If `.agent/practice-decision-records/` exists, read its `README.md` and every
+PDR file. PDRs are authoritative governance decisions about the Practice
+itself and are expected to survive between repos. The directory is a
+provisional peer to the Core; stable PDRs are intended to integrate into the
+Core plasmid trinity as refinements over time (see the PDR directory's
+README for the graduation intent).
+
 If the local repo spans multiple agent platforms, maintain an explicit local
 surface contract in `.agent/reference/cross-platform-agent-surface-matrix.md`
 and expose it from `../practice-index.md`. Supported and unsupported states
@@ -69,3 +76,7 @@ Then follow the Growing a Practice section in [practice-lineage.md](practice-lin
 
 If `.agent/practice-context/` exists, read `incoming/` before adapting the
 Practice. It may contain useful framing from the sending repo.
+
+If `.agent/practice-decision-records/` exists, read every PDR before adapting
+the Practice. PDRs carry portable governance decisions that constrain how the
+Practice behaves in any repo, not just the sending one.

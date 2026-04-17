@@ -1,3 +1,153 @@
+## 2026-04-17 — Consolidation pass after PDR directory establishment
+
+Second `jc-consolidate-docs` run of the session, following the PDR
+directory work. What moved:
+
+- **Graduated out of distilled.md** (entries now formally carried
+  by the new PDRs, so their distilled-layer duplication would be
+  contrary to "no duplication across tiers"):
+  - "Repetition between foundational docs is deliberate" →
+    PDR-002 (Pedagogical Reinforcement).
+  - "Never delegate foundational Practice doc edits to sub-agents"
+    → PDR-003 (Sub-Agent Protection).
+- **Rule refactor**: `.agent/rules/subagent-practice-core-protection.md`
+  now cites PDR-003 as its substantive authority (short "Why"
+  section, delegating the three-component rationale to the PDR).
+  Also added two paths the rule had been missing —
+  `.agent/practice-core/` (the actual Core, curiously absent from
+  the original rule) and `.agent/practice-decision-records/` (the
+  new peer). Upstream ADR citations retained for historical
+  authority chain.
+- **Outgoing broadcast drafted**:
+  `.agent/practice-context/outgoing/practice-decision-records-peer-directory.md`.
+  Describes the structural innovation for other repos in the
+  Practice network: problem it solves, decision shape, three-layer
+  peer model, first three PDRs, adoption notes. Frames the layer
+  as optional and provisional so receiving repos can decline
+  without breaking the Core contract.
+
+Fitness state at closure: distilled.md back from 265 to 255 lines
+(still soft; 20 under hard limit 275; 55 over target 200). The
+three hard-zone directives (AGENT.md / principles.md /
+testing-strategy.md) remain per the user's earlier deferral. No
+further graduation attempted — remaining distilled entries are
+mostly repo/domain-specific and correctly placed.
+
+Scan for new ADR/PDR candidates (step 7a): none new beyond the
+three already recorded. The two watchlist candidates ("self-
+referential doctrine needs its own home decided first" and the
+emerging "portable decisions mark host-local context in explicit
+Notes sections" convention) stay on watchlist — single instance
+each, not stable yet.
+
+Practice box state: both incoming directories empty. No integration
+work required.
+
+Napkin length after this entry: ~325 lines; under rotation threshold
+(500). No rotation needed.
+
+Deferred (carried forward explicitly):
+
+- Retroactive migration of the six existing Practice-governance
+  ADRs (119/124/127/131/144/150) into the PDR directory. Needs its
+  own planning pass; touches several cross-references.
+- Fitness remediation of AGENT.md / principles.md / testing-strategy.md.
+  User has deferred; honour that.
+- `practice-lineage.md` narrative absorption of the PDR layer;
+  sufficient discovery surface is already in place via
+  README/index/verification.
+
+## 2026-04-17 — Practice Decision Records directory established (resolved)
+
+User decided: a new peer directory `.agent/practice-decision-records/`,
+alongside `practice-core/` and `practice-context/`. Described as
+"clumsy but functional for now," with the explicit expectation that
+stable PDRs eventually integrate into the Core as refinements.
+
+Implemented in this session:
+
+- Created `.agent/practice-decision-records/` with a README that
+  names the layer's role, portability constraint, numbering
+  convention, and provisional/graduation intent.
+- Recorded PDR-001 "Location of Practice Decision Records" — the
+  self-referential meta-decision that establishes the directory.
+  Accepted; carries the full four-option analysis.
+- Recorded PDR-002 "Pedagogical Reinforcement in Foundational
+  Practice Docs" (was Candidate #1 from the consolidate-docs
+  surface).
+- Recorded PDR-003 "Sub-Agent Protection of Foundational Practice
+  Docs" (was Candidate #2). Operationalises PDR-002's substance.
+- Wired into Core entry points: `practice-core/README.md`,
+  `practice-core/index.md`, `practice-core/practice-verification.md`.
+- Added CHANGELOG entry dated 2026-04-17.
+- Added PDR directory to the host-repo bridge `practice-index.md`.
+
+Deferred (not addressed in this pass):
+
+- Retroactive migration of the six existing Practice-governance
+  ADRs (119/124/127/131/144/150) from `docs/architecture/
+  architectural-decisions/` into the PDR directory. Migration
+  touches rule-file citations (at least
+  `subagent-practice-core-protection.md`). Flag for the next
+  consolidate-docs run or a dedicated migration PDR.
+- Refactoring the host-repo rule `subagent-practice-core-protection.md`
+  to cite PDR-003 as its authority chain rather than restating
+  rationale. PDR-003 Notes anticipates this.
+- Touching `practice-lineage.md` with an explicit PDR-layer
+  narrative. Current wiring via README/index/verification is
+  sufficient for discovery; the lineage document can absorb the
+  layer when its next substantive revision comes round.
+
+Candidate pattern (watchlist): **self-referential doctrine needs
+its own home decided first**. Validated once here (the location
+decision had to be PDR-001 by construction). Not stable yet —
+surfaces when the second instance appears.
+
+---
+
+## 2026-04-17 — Finnish national curriculum API future plan
+
+Created `sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md`
+as a `future/` strategic brief, not executable. Uses the
+previously-normalised Opetushallitus research report as the citation
+target. First lane is the three anonymous public APIs (ePerusteet
+external, TOTSU/Amosaa external, OPS/Ylops external) because they ship
+raw retrievable OpenAPI 3.x JSON and declare no security schemes — the
+cleanest possible test that the generalised pipeline can consume a
+non-Oak OpenAPI document without Oak-specific code. Three authenticated
+surfaces (Kouta External, Organisaatiopalvelu, Koski) explicitly
+deferred to a second lane.
+
+Hard pre-requisite named explicitly: **Tranche 4 of the Oak Surface
+Isolation and Generic Foundation Programme** (SDK and codegen) must
+have landed with enforced package-boundary tests before promotion is
+appropriate. Plan absorbs the companion
+`architecture-and-infrastructure/codegen/future/sdk-codegen-workspace-decomposition.md`
+direction rather than competing with it.
+
+Positioned adjacent to the active **Open Education Knowledge Surfaces**
+narrative: Finnish APIs slot in as an international curriculum
+comparator next to Oak API + Oak ontology + EEF Toolkit, strengthening
+the multi-source open-education story.
+
+Wired into discoverability surfaces:
+
+- `sdk-and-mcp-enhancements/future/README.md` — row added with
+  explicit Tranche 4 blocker link.
+- `architecture-and-infrastructure/future/README.md` — new
+  "Downstream demonstrations" callout referencing the plan as the
+  first external consumer of the generalised pipeline.
+- `high-level-plan.md` (MCP Features section) — one-line mention of
+  international curriculum comparator with links to both the plan and
+  the adjacent Open Education Knowledge Surfaces narrative.
+
+Pattern to watch: strategic brief that depends on a tranche of a
+bigger programme should cite the tranche by number and name in its
+promotion trigger, not paraphrase the dependency. That keeps the
+upstream plan's scope as the source of truth.
+
+---
+
 ## Napkin rotation — 2026-04-17
 
 Rotated at 679 lines after ~16 sessions spanning 2026-04-16 through

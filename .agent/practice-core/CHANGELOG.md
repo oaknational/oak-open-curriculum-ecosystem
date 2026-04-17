@@ -4,6 +4,42 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-17 — Practice Decision Records as Third Peer Directory
+
+- Introduced a new peer directory alongside `.agent/practice-core/`
+  and `.agent/practice-context/`: `.agent/practice-decision-records/`.
+  Practice Decision Records (PDRs) capture authoritative decisions
+  that govern the Practice itself — its structure, its doctrine, its
+  own governance — as distinct from decisions that govern a host
+  repo's product architecture.
+- Motivation: decisions that govern a portable Practice must travel
+  with it. Placing Practice-governance decisions in a host repo's
+  product-ADR folder fails the travel test. The new peer directory
+  preserves the eight-file Core contract while giving Practice
+  doctrine a portable home.
+- The arrangement is provisional. The intent is that stable PDRs
+  integrate into the Core plasmid trinity as refinements over time;
+  the PDR directory is a staging ground, not a permanent fixture.
+- Wired into the Core entry points (`README.md`, `index.md`) and
+  the verification companion (`practice-verification.md`) as an
+  optional peer directory. The Core itself remains the eight-file
+  package.
+- First three PDRs recorded in the new directory:
+  - PDR-001 — Location of Practice Decision Records (self-
+    referential meta-decision that establishes the directory).
+  - PDR-002 — Pedagogical Reinforcement in Foundational Practice
+    Docs (substantive doctrine: cross-document rule repetition in
+    foundational documents is deliberate reinforcement, not
+    duplication).
+  - PDR-003 — Sub-Agent Protection of Foundational Practice Docs
+    (operational enforcement: sub-agents MUST NOT edit foundational
+    documents; records the rationale that host-repo permission
+    rules can now cite).
+- Deferred: retroactive migration of existing Practice-governance
+  decisions from host-repo product-ADR folders into the PDR
+  directory. Migration touches cross-references in rule files and
+  is a separate decision.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-05 — Concept Exchange, ADR Bootstrap, Self-Containment
 
 - Promoted "concepts are the unit of exchange" as a foundational
