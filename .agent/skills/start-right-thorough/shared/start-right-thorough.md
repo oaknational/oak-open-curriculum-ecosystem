@@ -96,6 +96,10 @@ pnpm test:widget:ui
 pnpm test:widget:a11y
 pnpm smoke:dev:stub
 
-# Informational practice health (three-zone model, ADR-144)
+# Practice health — three-zone model, ADR-144
 pnpm practice:fitness:informational  # Four-zone report (always exit 0)
+# Consolidation-closure gate (used by jc-consolidate-docs step 8):
+#   pnpm practice:fitness:strict-hard
+# Vocabulary consistency (ADR-144 §Key Principles #1):
+#   pnpm practice:vocabulary
 ```

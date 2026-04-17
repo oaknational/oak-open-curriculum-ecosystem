@@ -54,7 +54,7 @@ Together these sources enable **evidence-grounded curriculum discovery**: AI age
 
 The MCP servers expose curriculum data through the three [MCP primitive types](https://modelcontextprotocol.io/docs/learn/server-concepts):
 
-- **Tools** (model-controlled): 31 curriculum tools (23 generated from the OpenAPI schema, 8 aggregated) including orientation via `get-curriculum-model` and `download-asset`. The AI decides when to use them.
+- **Tools** (model-controlled): 34 curriculum tools (24 generated from the OpenAPI schema, 8 aggregated, plus a user-search pair) including orientation via `get-curriculum-model` and `download-asset`. The AI decides when to use them. See [`apps/oak-curriculum-mcp-streamable-http/README.md`](apps/oak-curriculum-mcp-streamable-http/README.md) as the canonical count.
 - **Resources** (application-controlled): Curriculum model, prior knowledge graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
 - **Prompts** (user-controlled): Four workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`) that guide users through common curriculum tasks.
 
@@ -159,7 +159,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 | `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |
 | `packages/design/` | Design token pipeline: DTCG source format, CSS custom property generation, WCAG AA contrast validation                   |
 | `agent-tools/`     | Agent workflow CLIs: `claude-agent-ops`, `cursor-session-from-claude-session`, and `codex-reviewer-resolve`              |
-| `docs/`            | Developer documentation, guides, and 155+ ADRs                                                                           |
+| `docs/`            | Developer documentation, guides, and the full ADR index                                                                  |
 
 ### Workspace Summaries
 
@@ -167,7 +167,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 | Workspace                                                                        | Purpose                                                                                                                                                                                                      |
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 31 curriculum tools, resources, prompts, and MCP App widget                                                                             |
+| [`oak-curriculum-mcp-streamable-http`](apps/oak-curriculum-mcp-streamable-http/) | Canonical MCP server — Streamable HTTP transport, Vercel deployment, 34 curriculum tools, resources, prompts, and MCP App widget                                                                             |
 | [`oak-search-cli`](apps/oak-search-cli/)                                         | Search CLI — admin operations, bulk ingestion, blue/green index lifecycle ([ADR-130](docs/architecture/architectural-decisions/130-blue-green-index-swapping.md)), evaluation, and ground-truth benchmarking |
 
 **SDKs:**

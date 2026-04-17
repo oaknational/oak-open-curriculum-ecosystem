@@ -28,6 +28,15 @@ See the [ADR index](../architecture/architectural-decisions/README.md) for the f
 
 AI agents working with this codebase should read [AGENT.md](../../.agent/directives/AGENT.md) as their canonical entry point. It links to rules, testing strategy, and schema-first directives.
 
+## Where to Make Changes
+
+- **Adding an MCP tool, a new SDK helper, or a new search index?** See [docs/engineering/extending.md](../engineering/extending.md) — the canonical "extension points" guide.
+- **Authoring a new rule, skill, command, sub-agent, or ADR?** See [.agent/directives/artefact-inventory.md § How to Create New Artefacts](../../.agent/directives/artefact-inventory.md#how-to-create-new-artefacts).
+- **Adding a new ADR?** See the [ADR index template section](../architecture/architectural-decisions/README.md#template) plus the full [ADR index](../architecture/architectural-decisions/README.md).
+- **Changing the Sentry setup or source-map upload?** See [docs/operations/sentry-deployment-runbook.md](../operations/sentry-deployment-runbook.md), [docs/operations/sentry-cli-usage.md](../operations/sentry-cli-usage.md), [ADR-143](../architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md), and [ADR-159](../architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md).
+- **Adopting a new vendor CLI (Clerk, anything else)?** See [docs/engineering/vendor-cli-adoption.md](../engineering/vendor-cli-adoption.md) and [ADR-159](../architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md).
+- **Changing how fitness thresholds or the Practice-vocabulary scanner behave?** See [ADR-144](../architecture/architectural-decisions/144-two-threshold-fitness-model.md) and `scripts/validate-practice-fitness.mjs` / `scripts/validate-fitness-vocabulary.mjs`.
+
 ## Architecture TL;DR
 
 This repository makes Oak's openly-licensed curriculum accessible to AI agents and searchable for teachers. The architectural foundation is a type-safe, compile-time pipeline:
@@ -393,9 +402,11 @@ test('MCP server lists all generated tools', async () => {
 ### Documentation
 
 1. **Architecture**: [OpenAPI Pipeline](../architecture/openapi-pipeline.md)
-2. **Curriculum Data**: [Data Variances](../domain/DATA-VARIANCES.md)
-3. **Setup**: [Environment Variables](../operations/environment-variables.md)
-4. **Contributing**: [CONTRIBUTING.md](../../CONTRIBUTING.md)
+2. **Extension points**: [Adding MCP tools, SDK helpers, search indexes, rules, and ADRs](../engineering/extending.md)
+3. **Curriculum Data**: [Data Variances](../domain/DATA-VARIANCES.md)
+4. **Setup**: [Environment Variables](../operations/environment-variables.md)
+5. **Observability**: [Sentry deployment runbook](../operations/sentry-deployment-runbook.md), [Sentry CLI usage](../operations/sentry-cli-usage.md), [ADR-143](../architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md), [ADR-159](../architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)
+6. **Contributing**: [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
 ### Troubleshooting
 

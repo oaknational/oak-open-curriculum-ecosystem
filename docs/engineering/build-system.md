@@ -155,7 +155,9 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
 Secret scanning, clean rebuild, and full verification:
 
 ```bash
-pnpm secrets:scan && pnpm clean && pnpm test:root-scripts && turbo run --continue sdk-codegen build type-check doc-gen lint:fix test test:widget test:e2e test:ui test:a11y test:widget:ui test:widget:a11y smoke:dev:stub && pnpm subagents:check && pnpm portability:check && pnpm knip && pnpm markdownlint:root && pnpm format:root
+# The authoritative expansion lives in package.json "scripts.check".
+# Reproduce from there if you ever need to run the stages manually.
+pnpm check
 ```
 
 `pnpm check` is the only canonical aggregate verification command. The former

@@ -149,7 +149,10 @@ content in `.agent/`, thin platform adapters in
 `.cursor/`/`.claude/`/`.gemini/`/`.agents/`/`.codex/`, and
 entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For
 the full inventory see
-[artefact-inventory.md](./artefact-inventory.md).
+[artefact-inventory.md](./artefact-inventory.md). To author a
+new rule, skill, command, sub-agent, or ADR, see
+[artefact-inventory.md § How to Create New Artefacts](./artefact-inventory.md#how-to-create-new-artefacts)
+and [docs/engineering/extending.md](../../docs/engineering/extending.md).
 
 **Platform configuration split (Claude Code)**:
 `.claude/settings.json` (tracked) defines the system contract;
@@ -249,7 +252,10 @@ pnpm test:widget:ui      # Widget Playwright visual tests
 pnpm test:widget:a11y    # Widget WCAG 2.2 AA a11y tests
 pnpm test:e2e            # E2E tests (built-server)
 pnpm smoke:dev:stub      # Local smoke tests
-pnpm practice:fitness    # Strict fitness validation
+pnpm practice:fitness              # Three-zone, exits 1 on critical (ADR-144)
+pnpm practice:fitness:strict-hard  # Consolidation-closure gate: exits 1 on hard or critical
+pnpm practice:fitness:informational # Four-zone report, never blocks
+pnpm practice:vocabulary           # Three-zone vocabulary consistency check
 pnpm make                # Build + lint + format + doc-gen
 pnpm fix                 # Auto-fix: format, lint, markdownlint
 pnpm doc-gen             # Generate docs from TSDoc

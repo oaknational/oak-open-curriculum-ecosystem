@@ -16,7 +16,7 @@ last_reviewed: 2026-03-12
 - **Evaluating the project?** → [Strategic Overview](foundation/strategic-overview.md) — vision, roadmap, engineering approach, and handoff readiness in one reading path
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language
 - **New to the repo?** → [Quick Start Guide](foundation/quick-start.md) — architecture, setup, key concepts, and development workflows
-- **Working with AI?** → Start with [`start-right-quick` command](../.cursor/commands/jc-start-right-quick.md), shared workflow ([`start-right.md`](../.agent/skills/start-right-quick/shared/start-right.md)), or skill ([`start-right-quick/SKILL.md`](../.agent/skills/start-right-quick/SKILL.md)), then [AGENT.md](../.agent/directives/AGENT.md)
+- **Working with AI?** → Start with the canonical [`start-right-quick` shared workflow](../.agent/skills/start-right-quick/shared/start-right.md) (or invoke it via your platform: `/jc-start-right-quick` in Cursor and Claude Code, `jc-start-right-quick` skill in Codex, `/jc-start-right-quick` in Gemini), then [AGENT.md](../.agent/directives/AGENT.md).
 - **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
 
 ## Core Documentation

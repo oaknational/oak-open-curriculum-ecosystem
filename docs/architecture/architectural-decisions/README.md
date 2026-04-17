@@ -1,6 +1,6 @@
 # Architectural Decisions Records
 
-> **Navigation**: [Architecture Home](../README.md) | [Architecture Map (archived)](../../archive/ARCHITECTURE_MAP.md) | [Architecture Overview (archived)](../../archive/architecture-overview.md)
+> **Navigation**: [Architecture Home](../README.md) | [OpenAPI Pipeline](../openapi-pipeline.md)
 
 This file is an index of architectural decisions made during the development of this repository.
 
@@ -52,14 +52,14 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-034: System Boundaries and Type Assertions](034-system-boundaries-and-type-assertions.md)
 - [ADR-035: Unified SDK-MCP Code Generation](035-unified-sdk-mcp-code-generation.md)
 - [ADR-036: Data-Driven Code Generation](036-data-driven-code-generation.md)
-- [ADR-037: Embedded Tool Information](037-embedded-tool-information.md)
+- [ADR-037: Embedded Tool Information](037-embedded-tool-information.md) ← **Superseded by [ADR-038](038-compilation-time-revolution.md)**
 - [ADR-038: Compilation Time Revolution](038-compilation-time-revolution.md)
 - [ADR-040: Neutral Architecture and Identity Allowlist](040-neutral-architecture-and-identity-allowlist.md)
 - [ADR-041: Workspace Structure Option A](041-workspace-structure-option-a.md)
 - [ADR-042: Runtime Adapters Folder](042-runtime-adapters-folder.md)
 - [ADR-043: Codegen in Build and CI](043-codegen-in-build-and-ci.md)
-- [ADR-044: NL Delegates to Structured Search and Caching Ownership](044-nl-delegates-to-structured-search-and-caching-ownership.md)
-- [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md)
+- [ADR-044: NL Delegates to Structured Search and Caching Ownership](044-nl-delegates-to-structured-search-and-caching-ownership.md) ← **Superseded by [ADR-107](107-deterministic-sdk-nl-in-mcp-boundary.md)**
+- [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md) ← **Superseded by [ADR-151](151-mcp-app-styling-independence.md)**
 - [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md) ← **Superseded by [ADR-141](141-mcp-apps-standard-primary.md)**
 - [ADR-047: Canonical URL Generation at Code-Gen Time](047-canonical-url-generation-at-codegen-time.md) ← **Partially Superseded** by ADR-145
 - [ADR-048: Shared Parse Schema Helper](048-shared-parse-schema-helper.md)
@@ -78,12 +78,12 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-061: Widget Call-to-Action System](061-widget-cta-system.md) _(superseded)_
 - [ADR-062: Knowledge Graph SVG Visualization](062-knowledge-graph-svg-visualization.md)
 - [ADR-063: SDK Domain Synonyms Source of Truth](063-sdk-domain-synonyms-source-of-truth.md)
-- [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md)
+- [ADR-064: Elasticsearch Index Mapping Organization](064-elasticsearch-mapping-organization.md) ← **Superseded by [ADR-067](067-sdk-generated-elasticsearch-mappings.md)**
 - [ADR-065: Turbo Task Dependencies](065-turbo-task-dependencies.md)
 - [ADR-066: SDK Response Caching](066-sdk-response-caching.md)
 - [ADR-067: SDK Generated Elasticsearch Mappings](067-sdk-generated-elasticsearch-mappings.md)
 - [ADR-068: Per-Index Completion Context Enforcement](068-per-index-completion-context-enforcement.md)
-- [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md)
+- [ADR-069: Systematic Ingestion with Progress Tracking](069-systematic-ingestion-progress-tracking.md) ← **Superseded by [ADR-087](087-batch-atomic-ingestion.md)**
 - [ADR-070: SDK Rate Limiting and Exponential Backoff Retry](070-sdk-rate-limiting-and-retry.md)
 - [ADR-071: Widget URI Cache-Busting Simplification](071-widget-uri-cache-busting-simplification.md)
 - [ADR-074: Elastic-Native-First Philosophy](074-elastic-native-first-philosophy.md)
@@ -195,6 +195,7 @@ For understanding authentication, authorization, and observability:
 - **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk)
 - **[ADR-143](143-coherent-structured-fan-out-for-observability.md)** - Coherent structured fan-out for the Sentry and OpenTelemetry foundation
 - **[ADR-158](158-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting
+- **[ADR-159](159-per-workspace-vendor-cli-ownership.md)** - Per-workspace vendor CLI ownership with repo-tracked configuration (formalises the Sentry CLI adoption pattern; applies to all future vendor CLIs)
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 
