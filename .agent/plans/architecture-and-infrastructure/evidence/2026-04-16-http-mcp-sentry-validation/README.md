@@ -40,7 +40,7 @@ The parent plan at
 | 5 | One traced MCP call on the authoritative live path | **MET** | Same preview traces (`1.5.0`) — MCP transactions span `POST /mcp` → tool-level `mcp.server` spans, matching the wrapper instrumentation from `wrapMcpServerWithSentry()`. |
 | 6 | Correct release tag | **MET** | Preview events tagged `release: 1.5.0` (auto-resolved from `APP_VERSION` / root `package.json`). Local-trigger events tagged with the session release tag above via `SENTRY_RELEASE_OVERRIDE`, demonstrating the override path. |
 | 7 | Resolved source-map stack trace | **MET** | Source maps uploaded with `sentry sourcemap upload --release <tag> dist/` (2 artefacts). Live events resolve to `../src/__test-tools__/register-test-error-tool.ts` rather than `dist/index.js`. Script at `apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`, wired via `pnpm sourcemaps:upload`. Uses the modern `sentry` CLI (<https://cli.sentry.dev/>). |
-| 8 | Alerting baseline wiring | **OWNER ACTION REQUIRED** | Sentry MCP tools (`find_issues`, `search_events`, `search_issues`, `get_sentry_resource`) expose neither the alert-rule API nor a listing primitive. Alert rule configuration lives in the Sentry UI (`/alerts/rules/`) and the Alerts API (`/api/0/projects/{org}/{project}/alert-rules/`). Owner must confirm at least one production alert rule (recommended: `event.type:error AND environment:production` over 5m with a reasonable threshold). This item is the only remaining blocker. |
+| 8 | Alerting baseline wiring | **MET** | Rule `521866` on `oak-national-academy/oak-open-curriculum-mcp`: `status: active`, `projects: ["oak-open-curriculum-mcp"]`, `FirstSeenEventCondition` trigger, `SlackNotifyServiceAction` to `#sentry-alert-testing`. CLI-validated 2026-04-17 via `sentry api projects/.../rules/521866/` — see [`alerting-baseline-enumeration-note.md` § "Outcome (validated 2026-04-17)"](./alerting-baseline-enumeration-note.md). Rule is currently a smoke-testing shape; tightening it towards a production-grade signal (env/severity gating, frequency, channel) is tracked as a non-blocking follow-up in the `sentry-observability-expansion.plan.md` EXP-F lane, not as a gate on the wiring claim. |
 | 9 | Kill-switch rehearsal (`SENTRY_MODE=off`) | **MET** | Same local build + test tool, restarted with `SENTRY_MODE=off` and release tag `evidence-2026-04-16-http-mcp-sentry-validation-KILLSWITCH`. All three error modes triggered; Sentry Explore returns zero events for that release. |
 | 10 | MCP Insights populated with metadata only | **MET** | Preview traces populate MCP Insights (`mcp.server` spans with tool name, method, duration, status) with no JSON-RPC envelope content. Confirmed via `search_events` on the preview; event payloads contain only metadata. |
 | 11 | Release-resolution source used by the shared builder | **MET** | Preview events show `release: 1.5.0` from the `root_package_json` source; local-trigger events show `release: evidence-2026-04-16-http-mcp-sentry-validation` from the `SENTRY_RELEASE_OVERRIDE` source. Both precedence branches in `resolveSentryRelease` are now demonstrated on live events. |
@@ -116,12 +116,18 @@ fully gated by `SENTRY_MODE`.
 
 ## Outstanding owner action
 
-The only remaining item for closure is **#8 alerting baseline wiring**. The
-parent plan owner (or a designated Sentry admin) needs to confirm at least
-one error-level alert rule is active on
-`oak-national-academy/oak-open-curriculum-mcp` for the production
-environment, and record the rule id here. Everything else is MET on the
-authoritative fresh preview plus the local-trigger lane.
+None. All 12 claims are MET as of 2026-04-17.
+
+Item 8 closed when the owner created rule `521866` on
+`oak-national-academy/oak-open-curriculum-mcp` and the next-session
+CLI validation confirmed the alerting wiring is active and scoped to
+the project. See
+[`alerting-baseline-enumeration-note.md` § "Outcome (validated 2026-04-17)"](./alerting-baseline-enumeration-note.md).
+The rule's current shape (no environment/severity gating, long
+`frequency`, `#sentry-alert-testing` channel) is intentionally a
+smoke-testing baseline; promoting it to a production-grade signal is
+a non-blocking follow-up in the
+`sentry-observability-expansion.plan.md` EXP-F lane.
 
 ## Hygiene Notes
 

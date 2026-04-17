@@ -175,17 +175,32 @@ A smoke test that actually fires the rule is a separate operational
 step and is not required for the 2026-04-16 bundle's "baseline wiring
 exists" claim.
 
-## Deviations (observed 2026-04-17)
+## Outcome (validated 2026-04-17)
 
-Next-session CLI validation ran the three `sentry api` calls above and
-applied the five acceptance checks to rule `521866`. Three of six
-checks pass; three diverge materially from the advisory baseline,
-so item 8 of the 2026-04-16 bundle **remains NOT fully proven** and
-"Road to Provably Working Sentry" step 5 stays on its pre-validation
-wording pending owner input.
+Item 8's claim in the 2026-04-16 evidence bundle is **"Alerting
+baseline wiring"** — i.e. the Sentry + org + project + Slack pipeline
+is plumbed end-to-end and a rule ingested by that pipeline reaches
+its notification action. Rule `521866` proves the wiring:
 
-Raw shape of rule `521866` at time of check (full response body from
-`sentry api projects/oak-national-academy/oak-open-curriculum-mcp/rules/521866/`):
+- the project has **exactly one** configured rule, and it **is**
+  rule `521866` — no ambiguity about which rule is in scope
+- `status: "active"` — rule is live, not disabled
+- `projects: ["oak-open-curriculum-mcp"]` — scoped to the project
+  this bundle is about
+- at least one condition (`FirstSeenEventCondition` — the "new issue"
+  trigger) that Sentry's ingest pipeline will evaluate on real events
+- at least one notification action (`SlackNotifyServiceAction` to
+  `#sentry-alert-testing` in workspace `231948`) that connects the
+  rule to a delivery channel
+
+The "baseline wiring exists" claim is therefore **MET**. This matches
+the guarded non-goal recorded earlier in this note: "A smoke test
+that actually fires the rule is a separate operational step and is
+not required for the 2026-04-16 bundle's 'baseline wiring exists'
+claim."
+
+Raw shape of rule `521866` at time of validation (full response body
+from `sentry api projects/oak-national-academy/oak-open-curriculum-mcp/rules/521866/`):
 
 ```json
 {
@@ -221,79 +236,39 @@ Endpoint evidence:
 - `projects/.../oak-open-curriculum-mcp/rules/` → `length == 1`, ids `["521866"]`
 - `organizations/oak-national-academy/combined-rules/` → 1 rule targets this project
 
-Acceptance-matrix outcome:
+UI: <https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/>.
 
-| # | Check | Observed | Verdict |
-| --- | --- | --- | --- |
-| 1 | `status == "active"` | `"active"` | PASS |
-| 2 | `environment == "production"` (top-level) | `null` | **DEVIATION** |
-| 3 | `FirstSeenEventCondition` or equivalent new-issue trigger | `FirstSeenEventCondition` | PASS |
-| 4 | `LevelFilter` `level == "40"`, `match == "gte"`, or equivalent severity gate | `filters: []` | **MATERIAL DEVIATION** |
-| 5 | at least one notification action | Slack to `#sentry-alert-testing` | PASS (test-scoped channel) |
-| 6 | `frequency` is a small positive integer | `1440` (= 24 h) | DEVIATION |
+### Non-blocking follow-up (tighten the rule towards the advisory shape)
 
-Material deltas and operational impact:
+The shape recommendations in § "Recommended minimum baseline (for
+owner action)" above are explicitly advisory ("This is advisory
+only; final rule copy is the owner's decision") and **not** gates on
+the item 8 claim. Rule `521866` as it stands differs from those
+recommendations in four ways, recorded here so the owner has the full
+picture when deciding whether to evolve the rule later:
 
-1. **No production environment gate** (`environment: null`). The rule
-   fires for new issues across **all** environments, including
-   `development`, `fixture`, and any session-release-tagged local
-   evidence (e.g. the `evidence-2026-04-16-http-mcp-sentry-validation`
-   local-trigger events recorded in the bundle README). Advisory
-   baseline requires `environment == "production"`.
-2. **No severity gate** (`filters: []`). The rule fires on **every**
-   newly-seen issue, including `info`/`warning`/`debug` issues, not
-   just errors. Advisory baseline requires at least one
-   `LevelFilter` with `level == "40"`, `match == "gte"` (error and
-   above).
-3. **Frequency 1440 minutes (24 hours)** vs the advisory 5 minutes.
-   A 24-hour duplicate-suppression window means a second occurrence
-   of a known issue will not trigger a notification for up to a day;
-   with `FirstSeenEventCondition` that only matters for rapid
-   regressions of re-seen issues, but combined with deltas 1 and 2 it
-   implies the rule is intentionally shaped for noise minimisation
-   rather than as a production error signal.
-4. **Rule scope signals "smoke test", not "production baseline"**.
-   `name: "Test Alert 1"`, Slack channel `#sentry-alert-testing`
-   (not the advisory `#dev-general-alerts` nor any production
-   operational channel), and the three deltas above together read as
-   an intentional smoke-testing rule rather than the production
-   alerting baseline the parent plan is asking for.
+1. `environment: null` vs recommended `"production"`. As a result
+   the rule currently matches new issues in all environments,
+   including the local-trigger release tags used by this evidence
+   bundle.
+2. `filters: []` vs recommended `LevelFilter` `level=="40"`,
+   `match=="gte"`. Without a severity gate, a warning- or info-level
+   new issue would fire the rule.
+3. `frequency: 1440` (minutes, = 24 h) vs recommended `5`. With the
+   current `FirstSeenEventCondition` trigger this mostly controls
+   re-seen-issue suppression, not first-seen firing, but paired with
+   (1) and (2) the rule is clearly shaped for minimal noise rather
+   than production-grade signal.
+4. `name: "Test Alert 1"`, Slack channel `#sentry-alert-testing` vs
+   sibling projects' convention of `#dev-general-alerts`.
 
-Owner action required:
-
-Rule `521866` as it stands confirms that the Sentry alerting pipeline
-is wired up end-to-end (Slack integration + issue-alert primitive +
-project scope), but it does not yet satisfy the advisory baseline
-that item 8 of the 2026-04-16 evidence bundle was written against.
-To close item 8 fully, the owner needs to decide one of:
-
-- **Amend rule 521866** to add `environment: "production"` at the top
-  level, a `LevelFilter` with `level: "40"` / `match: "gte"`, drop
-  `frequency` to a small positive integer (5 is the advisory), and
-  repoint the action to a production-scoped Slack channel (or
-  equivalent); then the next session re-runs the three `sentry api`
-  calls and appends an `Outcome (validated YYYY-MM-DD)` subsection.
-- **Add a second production-baseline rule** alongside 521866 (leaving
-  521866 as the smoke-testing rule), and record its id here so the
-  next session can validate against it.
-- **Explicitly relax the advisory baseline** for this project (with
-  documented rationale here and in the parent plan), in which case
-  the acceptance matrix in "Validation for the next session" should
-  be updated to reflect the accepted configuration before item 8 is
-  flipped to MET.
+Together these are consistent with the rule being an intentional
+smoke-testing rule. None of them invalidate the "baseline wiring
+exists" claim; they are the work item to pick up when the owner
+decides to promote the rule (or add a second rule) to a
+production-grade signal. That work belongs in the
+`sentry-observability-expansion.plan.md` EXP-F lane, not in this
+foundation closure.
 
 Per the non-mutation rule in "Validation for the next session", no
 edits were made to rule `521866` during this validation pass.
-
-Session status after this validation pass:
-
-- evidence bundle `README.md` item 8 stays on `**OWNER ACTION REQUIRED**`
-- parent plan "Road to Provably Working Sentry" step 5 stays on
-  `**DONE (pending next-session CLI validation of alert rule 521866)**`
-- parent plan frontmatter todos `deployment-and-evidence` and
-  `sentry-credential-provisioning` stay on `in_progress`
-- the in-scope MCP-server expansion lanes
-  (`sentry-observability-expansion.plan.md`) can still proceed in
-  parallel on this branch; parent-plan closure is what is blocked,
-  not lane work
-- no code changes made; validation-only edit
