@@ -104,20 +104,34 @@ git log --oneline --decorate -10
   Codex auth fix was rolled back after it failed to unblock Codex and
   regressed Cursor; that investigation stays isolated in its own
   future plan.
-- **Current objective (next session)**: merge / push boundary. Commit
-  `40b212d4` ("feat(practice,sentry): three-zone fitness + Sentry CLI
-  hygiene + enforce-edge tightening") has landed on
-  `feat/otel_sentry_enhancements` — 92 files changed, 4,112 insertions,
-  635 deletions. Pre-commit hooks (prettier, markdownlint, knip,
-  depcruise, 74 turbo tasks) all passed. Consolidation side-effects
-  (napkin rotation, distilled update, 2 pattern extractions, ADR-159
-  graduation) also landed on branch but are in a follow-up uncommitted
-  state pending a tidy consolidation commit. The one remaining
-  owner-only action is unchanged: create the first production alert
-  rule on `oak-national-academy/oak-open-curriculum-mcp` (CLI
-  enumeration confirms zero rules exist). After push + merge, the
-  next implementation lane is
-  `sentry-observability-expansion.plan.md`.
+- **Current objective (next session)**: CLI validation of alert rule
+  `521866`, then continue the in-scope expansion lanes on this same
+  branch before opening the PR. Commits `40b212d4`
+  ("feat(practice,sentry): three-zone fitness + Sentry CLI hygiene +
+  enforce-edge tightening") and `9c3044ff` ("docs(practice): rotate
+  napkin, graduate patterns, refresh continuity contract") have
+  landed on `feat/otel_sentry_enhancements` and are pushed. Pre-commit
+  hooks (prettier, markdownlint, knip, depcruise, turbo tasks) all
+  passed. **Owner action update (2026-04-17)**: the first production
+  issue-alert rule on `oak-national-academy/oak-open-curriculum-mcp`
+  now exists — **rule id `521866`**
+  (<https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/>).
+  Next-session sequence is:
+  1. one-shot CLI validation of rule `521866` against the advisory
+     baseline; exact `sentry api` commands and five acceptance checks
+     recorded in
+     `.agent/plans/architecture-and-infrastructure/evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`
+     § "Validation for the next session";
+  2. close the parent plan — flip step 5 of "Road to Provably Working
+     Sentry" to `DONE`, `deployment-and-evidence` from `in_progress`
+     to `completed`, and record closure state;
+  3. resume
+     [`sentry-observability-expansion.plan.md`](../plans/architecture-and-infrastructure/active/sentry-observability-expansion.plan.md)
+     on this **same** branch (`EXP-A`/`B`/`C2`/`D`/`E`/`F`/`G`); the
+     expansion plan is in-scope for this PR, not a follow-on;
+  4. only then open / push the PR covering both the foundation
+     closure AND the expansion lanes. Search-related work outside the
+     MCP server stays deferred to a later session/PR.
 - **Hard invariants / non-goals**:
   - Parent-plan authority stays with
     `sentry-otel-integration.execution.plan.md` for credential and evidence
@@ -138,12 +152,15 @@ git log --oneline --decorate -10
   - Broader `scopes_supported` advertising did not fix Codex and did regress
     Cursor, so shared auth metadata is not a safe speculative fix surface.
   - Alert-rule enumeration via `sentry api` is reachable with the existing
-    org auth token and directly answers item 8 of the evidence bundle: the
-    project currently has **zero** configured alert rules (all three
-    surfaces — `/rules/`, `/alert-rules/`, org-level `/combined-rules/`
-    filtered to this project — return empty). The open question therefore
-    becomes an owner rule-creation action, not a research question. See
-    `evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`.
+    org auth token and directly answers item 8 of the evidence bundle.
+    The project had zero configured alert rules when enumerated on
+    2026-04-17; owner then created the first issue-alert rule (id
+    `521866`, URL
+    <https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/>).
+    Next-session CLI validation against the advisory baseline closes
+    item 8 fully — procedure and acceptance checks in
+    `evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`
+    § "Validation for the next session".
   - `sentry-cli` and `sentry` both read ancestor `.sentryclirc` with
     nearest-wins composition, so workspace-local pinning of
     `org/project/url` via a committed `.sentryclirc` is a clean

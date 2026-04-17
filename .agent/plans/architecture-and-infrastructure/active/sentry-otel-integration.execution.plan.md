@@ -53,8 +53,8 @@ todos:
     note: "Both local .env.local files provisioned (2026-04-12). HTTP MCP server: DSN from oak-open-curriculum-mcp project. Search CLI: DSN from oak-open-curriculum-search-cli project. Both set SENTRY_MODE=sentry, SENTRY_TRACES_SAMPLE_RATE=1.0, SENTRY_RELEASE=local-dev, SENTRY_ENVIRONMENT=development, SENTRY_ENABLE_LOGS=true. Owner-provided evidence now indicates the Vercel dashboard contains SENTRY_MODE, SENTRY_DSN, and SENTRY_TRACES_SAMPLE_RATE for poc-oak-open-curriculum-mcp. Remaining: confirm a fresh preview deployment has picked up the current rolled-back auth state before treating Vercel credential provisioning as closed. Search CLI has no Vercel deployment — credentials are set via local .env.local or CI env."
   - id: deployment-and-evidence
     content: "Verify release/source maps, alerting baseline, MCP Insights, and produce a date-stamped evidence bundle"
-    status: pending
-    note: "Depends on sentry-credential-provisioning. Baseline remote smoke against the current preview passed health/auth-challenge checks on 2026-04-16, but the tested preview still served broadened OAuth scope metadata inconsistent with the rolled-back local source, so it cannot yet be treated as the authoritative validation target."
+    status: in_progress
+    note: "Date-stamped bundle landed at evidence/2026-04-16-http-mcp-sentry-validation/. 11 of 12 claims proven end-to-end on the authoritative fresh oak-preview deployment plus the local-trigger lane. Item 8 alerting-baseline: owner created the first issue-alert rule 2026-04-17 (rule id 521866 on oak-national-academy/oak-open-curriculum-mcp); next-session task is CLI validation against the advisory baseline using the procedure in alerting-baseline-enumeration-note.md § 'Validation for the next session'. Closes when that validation is recorded."
   - id: integrated-http-live-path-alignment
     content: "Close remaining authoritative HTTP MCP live-path runtime alignment in the child plan"
     status: done
@@ -227,9 +227,9 @@ Two rounds of specialist reviews ran during the remediation sessions:
 
 - **F18** — span helper DRY between core and app (YAGNI)
 
-### Next steps (2026-04-16)
+### Next steps (2026-04-17)
 
-**What remains before Sentry is provably working on this branch:**
+**What remains before this branch can merge:**
 
 1. **Credential provisioning** (`sentry-credential-provisioning` todo) —
    confirm the Vercel env configuration has been applied to a fresh
@@ -238,30 +238,42 @@ Two rounds of specialist reviews ran during the remediation sessions:
    freshness and alignment with the branch's real source of truth.
 2. **Deployment evidence bundle** (`deployment-and-evidence` todo) —
    use that fresh preview deployment with `SENTRY_MODE=sentry`, trigger
-   success/failure MCP
-   requests, and produce the date-stamped evidence bundle proving:
-   native `mcp.server` transactions, thrown handler exception capture,
-   `isError` classification, redaction, source-map stack traces, release
-   tag, alerting baseline, kill-switch rehearsal, MCP Insights. This is
-   the proof that Sentry works end-to-end.
-3. **This PR is scoped to the MCP server.** Follow-on work is tracked
-   in separate plans:
-   - Complete Sentry integration for the MCP server (metrics, context
-     enrichment, propagation):
-     [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
-   - Extend Search CLI observability beyond the completed foundation:
-     [search-observability.plan.md](./search-observability.plan.md)
-   - Integrate Sentry into Elastic search operations:
-     [search-observability.plan.md](./search-observability.plan.md) Layer 2
+   success/failure MCP requests, and produce the date-stamped evidence
+   bundle proving: native `mcp.server` transactions, thrown handler
+   exception capture, `isError` classification, redaction, source-map
+   stack traces, release tag, alerting baseline, kill-switch rehearsal,
+   MCP Insights. This is the proof that Sentry works end-to-end.
+3. **In-scope expansion lanes on this same branch / PR.** The PR
+   scope covers both the foundation closure above AND the MCP-server
+   expansion lanes owned by
+   [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
+   (`EXP-A` adapter-level metrics + metric redaction, `EXP-B` safe MCP
+   request-context enrichment, `EXP-C2` security-gated third-party
+   propagation decision, `EXP-D` profiling benchmark + default-scope
+   decision, `EXP-E` source-map automation + Debug ID evidence
+   alignment — note the HTTP upload script already landed in the
+   hygiene lane, `EXP-F` alerting/dashboard/runbook baseline — rule
+   521866 seeds this, `EXP-G` strategy selection across "other
+   options"). The expansion plan remains authoritative for its own
+   todos, acceptance criteria, and reviewer coverage; the parent plan
+   only tracks those lanes at the "dropped (companion-owned)" level
+   for visibility.
+4. **Explicitly deferred to later sessions / PRs**:
+   - Extend Search CLI observability beyond the completed foundation,
+     including Elastic search operation integration:
+     [search-observability.plan.md](./search-observability.plan.md).
    - Translation completeness:
-     [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md)
+     [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md).
 
-Current user-directed sequence after this validation pass:
+Current user-directed sequence:
 
-1. finish validating the current foundation on the authoritative HTTP path,
-2. continue with `sentry-observability-expansion.plan.md`, and
-3. leave search-related work that is not explicitly confined to the MCP
-   server to a later session and PR.
+1. finish validating the current foundation on the authoritative HTTP
+   path (CLI validation of alert rule 521866 is the last open item),
+2. continue on this same branch with the MCP-server-confined lanes in
+   `sentry-observability-expansion.plan.md`, and
+3. only then open the PR, covering both the foundation closure and the
+   expansion lanes. Search-related work that is not explicitly
+   confined to the MCP server is not part of this PR.
 
 ### Road to Provably Working Sentry (this branch)
 
@@ -274,13 +286,23 @@ the branch can merge and Sentry can be called "working":
 | 2 | Dead code chain broken, sentry-mcp decoupled from HTTP app | **DONE** | Zero sentry-mcp imports in app, knip clean, depcruise clean |
 | 3 | Delete orphaned `@oaknational/sentry-mcp` package | **DONE** | Package directory removed, workspace entry removed, boundary rules updated, knip config updated |
 | 4 | Vercel Sentry credential provisioning | **DONE** | Owner evidence shows `SENTRY_MODE=sentry`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` set on the Vercel dashboard; fresh `oak-preview` deployment (`oak-preview` ↔ branch HEAD `0f9245f5`) confirmed OAuth scopes rolled back to `["email"]` and release `1.5.0` live in Sentry |
-| 5 | Deploy with `SENTRY_MODE=sentry` and produce evidence bundle | **DONE (pending alerting wiring)** | Date-stamped bundle at [`evidence/2026-04-16-http-mcp-sentry-validation/`](../evidence/2026-04-16-http-mcp-sentry-validation/README.md). 11 of 12 claims MET on the authoritative fresh preview + local-trigger lane. Item 8 (alerting baseline wiring) CLI-enumerated 2026-04-17 as **empty** (see sibling note `alerting-baseline-enumeration-note.md`): the owner now has a concrete rule-creation action, not an open research question. |
+| 5 | Deploy with `SENTRY_MODE=sentry` and produce evidence bundle | **DONE (pending next-session CLI validation of alert rule 521866)** | Date-stamped bundle at [`evidence/2026-04-16-http-mcp-sentry-validation/`](../evidence/2026-04-16-http-mcp-sentry-validation/README.md). 11 of 12 claims MET on the authoritative fresh preview + local-trigger lane. Item 8 (alerting baseline wiring): owner created the first issue-alert rule on `oak-national-academy/oak-open-curriculum-mcp` on 2026-04-17 ([rule 521866](https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/)); next-session CLI validation against the advisory baseline recorded in sibling note `alerting-baseline-enumeration-note.md` § "Validation for the next session" closes the item fully. |
 
-Steps 1-5 are code-complete. Closure of step 5 is gated only on owner
-creation of at least one production-environment error alert rule on
-`oak-national-academy/oak-open-curriculum-mcp` (see bundle §8 plus the
-2026-04-17 sibling enumeration note); no further code work is required on
-this branch.
+Steps 1-5 are code-complete for the foundation. Closure of step 5 is
+now gated only on a next-session CLI validation that alert rule
+[521866](https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/)
+is active and configured against the advisory baseline. The validation
+procedure is recorded in
+[`evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`](../evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md)
+§ "Validation for the next session". No further foundation code work
+is required on this branch.
+
+The branch itself is **not** merge-ready at foundation closure: the
+in-scope MCP-server expansion lanes owned by
+[sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
+still run on this same branch before the PR opens. See
+[Companion Continuation Order](#companion-continuation-order) for
+the sequencing.
 
 Source-map upload was brought forward from the expansion plan (EXP-E) into
 this branch as part of the closure pass: see
@@ -331,11 +353,16 @@ What landed:
 - **CLI-driven alerting enumeration**: `sentry api` was used to exhaust
   the project-scoped (`/rules/`, `/alert-rules/`) and org-level
   (`/combined-rules/`) endpoints for
-  `oak-national-academy/oak-open-curriculum-mcp`. Zero rules are
-  configured today; result recorded in
+  `oak-national-academy/oak-open-curriculum-mcp`. Zero rules were
+  configured at the time of enumeration; result recorded in
   [`evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`](../evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md).
-  That upgrades step-5 item 8 from "MCP tools cannot enumerate it" to
+  That upgraded step-5 item 8 from "MCP tools cannot enumerate it" to
   "CLI confirms empty; owner action is a one-click rule creation".
+  **Owner action landed 2026-04-17**: rule
+  [521866](https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/)
+  now exists. CLI validation procedure for the next session is
+  captured under `§ Validation for the next session` in the same
+  sibling note.
 - **Cross-reference**: Clerk-CLI work remains its own strategic brief at
   [`../future/clerk-cli-adoption.plan.md`](../future/clerk-cli-adoption.plan.md)
   and was deliberately **not** expanded into this lane.
@@ -389,9 +416,12 @@ stable and the platform readiness gates are complete.
 
 ### Companion Continuation Order
 
-These tracks remain valuable. The current user-directed sequencing is to finish
-validation first, then continue with the MCP-server-confined expansion lane,
-while deferring broader search work to a later session and PR.
+Sequencing splits into two groups: MCP-server expansion lanes that
+run on **this same branch before the PR opens**, and search-related
+work that is **explicitly deferred** to a later session and PR.
+
+**In scope for this PR (same branch, sequenced after parent-plan
+closure):**
 
 3. **Land MCP server expansion foundations**  
    Owner: `sentry-observability-expansion.plan.md` (`EXP-A`, `EXP-B`)
@@ -403,12 +433,16 @@ while deferring broader search work to a later session and PR.
    `EXP-E`)
    - security-gated third-party propagation decision
    - profiling benchmark decision (HTTP default scope)
-   - source-map automation and Debug ID evidence alignment with parent WS6
+   - source-map automation and Debug ID evidence alignment with parent
+     WS6 (note: the HTTP upload script itself already landed in the
+     hygiene lane; automation and broader Debug-ID alignment remain)
 
 5. **Operationalise and lock MCP-server-side strategy**  
    Owner: `sentry-observability-expansion.plan.md` (`EXP-F`, `EXP-G`)
-   - alerting/dashboard/runbook baseline
+   - alerting/dashboard/runbook baseline (rule 521866 seeds this)
    - explicit strategy selection across "other options"
+
+**Deferred to later sessions / PRs (NOT part of this PR):**
 
 6. **Perform translation-completeness gate before closure**  
    Owner: `sentry-observability-translation-crosswalk.plan.md`
