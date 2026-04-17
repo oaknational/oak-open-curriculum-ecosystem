@@ -62,16 +62,33 @@ git log --oneline --decorate -10
     pattern to Clerk's CLI once the Sentry hygiene lane lands)
 - **Current state**: Validation closure pass complete on this branch.
   Sentry CLI hygiene follow-up lane also complete on the same branch
-  on 2026-04-17. Fresh `oak-preview` deployment confirmed
-  (`scopes_supported: ["email"]`, release `1.5.0` live in Sentry with
-  `mcp.server`, `http.client`, and `bootstrap` spans). Source-map
-  upload operational via `pnpm sourcemaps:upload`, now backed by
-  `pnpm exec sentry-cli sourcemaps upload` with per-workspace
+  on 2026-04-17, including a finishing-pass re-review. Fresh
+  `oak-preview` deployment confirmed (`scopes_supported: ["email"]`,
+  release `1.5.0` live in Sentry with `mcp.server`, `http.client`, and
+  `bootstrap` spans). Source-map upload operational via
+  `pnpm sourcemaps:upload`, now backed by `pnpm exec sentry-cli
+  sourcemaps inject && pnpm exec sentry-cli sourcemaps upload` (two-step
+  Debug ID flow) with a `//# debugId=` post-condition check, per-workspace
   `@sentry/cli` devDependency + committed `.sentryclirc` in each of
-  the three Sentry-touching workspaces. Local-trigger lane produced
-  handled, rejected-promise, and unhandled events under session
-  release tag `evidence-2026-04-16-http-mcp-sentry-validation`, with
-  frames resolved to TypeScript source. Kill-switch rehearsal
+  the three Sentry-touching workspaces, and `@sentry/cli` declared in
+  `onlyBuiltDependencies` / `knip.config.ts` `ignoreDependencies` for
+  each owning workspace. The pattern is now formalised as
+  [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked
+  Configuration](../../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md),
+  cross-linked from ADR-010, ADR-143, ADR-154 (Related), the
+  deployment runbook, the Sentry CLI usage doc, the execution plan,
+  and the Clerk CLI adoption plan. Finishing-pass reviewers
+  (sentry-reviewer, docs-adr-reviewer, code-reviewer) re-invoked in
+  parallel on the updated diff — all 10 new findings (pnpm-local vs
+  user-global preflight shape in ADR-159 point 6, runbook Step 3
+  verification surface, README sentry-bullet example split,
+  ADR-143 ↔ ADR-159 back-link, runbook/plan citing ADR-159, ADR-159
+  top-matter including ADR-154, ADR-159 dropping `~/.clerk/`
+  speculation, `require_command` stderr routing) resolved on branch.
+  Local-trigger lane produced handled, rejected-promise, and unhandled
+  events under session release tag
+  `evidence-2026-04-16-http-mcp-sentry-validation`, with frames
+  resolved to TypeScript source. Kill-switch rehearsal
   (`SENTRY_MODE=off`) under
   `evidence-2026-04-16-http-mcp-sentry-validation-KILLSWITCH` returned
   zero events. Temporary `__test_generate_errors` tool removed before
@@ -80,38 +97,26 @@ git log --oneline --decorate -10
   with two 2026-04-17 sibling notes:
   `sentry-cli-reverify-note.md` (rewritten upload script re-verified
   end-to-end) and `alerting-baseline-enumeration-note.md` (CLI
-  confirms zero alert rules on `oak-open-curriculum-mcp`).
-  Separately, the attempted Codex auth fix was rolled back after it
-  failed to unblock Codex and regressed Cursor; that investigation
-  stays isolated in its own future plan.
-- **Current objective (next session)**: commit boundary. Two lanes have
-  landed on this branch on top of the Sentry closure:
-  (1) **Sentry CLI hygiene** — ADR-159 (Per-Workspace Vendor CLI
-  Ownership) + `docs/operations/sentry-cli-usage.md` + per-workspace
-  `@sentry/cli` + `.sentryclirc` + rewritten `upload-sourcemaps.sh`.
-  Specialist reviewers (sentry-reviewer, docs-adr-reviewer,
-  code-reviewer) were re-invoked and all findings resolved.
-  (2) **Practice enforce-edge tightening** (2026-04-17) — ADR-144
-  rewritten as the three-zone model (`healthy`/`soft`/`hard`/`critical`,
-  `CRITICAL_RATIO = 1.5`), validator extended with `--strict-hard` mode
-  and four-zone output, 23 unit tests green. Surface-consistency sweep
-  landed: `consolidate-docs.md`, `distilled.md`, this prompt,
-  `practice-core/practice.md`/`practice-bootstrap.md`/`practice-lineage.md`,
-  and the outgoing `three-dimension-fitness-functions.md` +
-  `validate-practice-fitness.ts` all adopt the zone vocabulary. WS3
-  ADR-grounding: AGENT.md/README.md/quick-start/start-right-thorough/this
-  prompt route agents to the ADR index with a "5 ADRs in 15 Minutes"
-  scan mandate. `session-handoff.md` now cites ADR-150 and names the
-  `capture → distil → graduate → enforce` pipeline. ADR-125 has the
-  2026-04-17 thin-wrapper-scope amendment. WS5 rule-citation backfill:
-  every eligible rule now cites its establishing ADR. WS6:
-  `consolidate-docs.md` step 7 has the explicit 7a "scan for ADR-shaped
-  doctrine" substep. WS7 napkin meta-observation captured.
-  Sit at the commit boundary for owner approval of both lanes and of
-  the one remaining owner-only action: creating the first production
-  alert rule on `oak-national-academy/oak-open-curriculum-mcp` (CLI
-  enumeration confirms zero rules exist there today). After the
-  commit/merge, the next implementation lane is
+  confirms zero alert rules on `oak-open-curriculum-mcp`; advisory
+  baseline uses structured `LevelFilter` / top-level `environment`
+  syntax, not query-string filters). `pnpm check` from repo root
+  green: 19/19 + 88/88 turbo tasks, exit 0. Separately, the attempted
+  Codex auth fix was rolled back after it failed to unblock Codex and
+  regressed Cursor; that investigation stays isolated in its own
+  future plan.
+- **Current objective (next session)**: merge / push boundary. Commit
+  `40b212d4` ("feat(practice,sentry): three-zone fitness + Sentry CLI
+  hygiene + enforce-edge tightening") has landed on
+  `feat/otel_sentry_enhancements` — 92 files changed, 4,112 insertions,
+  635 deletions. Pre-commit hooks (prettier, markdownlint, knip,
+  depcruise, 74 turbo tasks) all passed. Consolidation side-effects
+  (napkin rotation, distilled update, 2 pattern extractions, ADR-159
+  graduation) also landed on branch but are in a follow-up uncommitted
+  state pending a tidy consolidation commit. The one remaining
+  owner-only action is unchanged: create the first production alert
+  rule on `oak-national-academy/oak-open-curriculum-mcp` (CLI
+  enumeration confirms zero rules exist). After push + merge, the
+  next implementation lane is
   `sentry-observability-expansion.plan.md`.
 - **Hard invariants / non-goals**:
   - Parent-plan authority stays with
@@ -165,15 +170,35 @@ git log --oneline --decorate -10
 - **Open questions / low-confidence areas**:
   - Whether Codex ultimately needs a server-owned compatibility layer, a Clerk
     configuration change, or an upstream-client escalation.
-- **Next safe step**: run `pnpm check`, `pnpm markdownlint:root`, and
-  per-workspace `type-check`/`lint` for the three touched workspaces,
-  then stop at the commit boundary and surface the hygiene-lane diff
-  for owner approval. Do not expand scope into Clerk CLI work — that
-  has its own strategic brief at
+- **Next safe step**: commit the consolidation follow-up (napkin
+  rotation + distilled update + 2 new patterns), then push
+  `feat/otel_sentry_enhancements` and open the PR. Do not expand
+  scope into Clerk CLI work — that has its own strategic brief at
   `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`.
-- **Deep consolidation status**: not due — no plan or milestone closure, no
-  incoming practice-box content, and no additional consolidation triggers beyond
-  this lightweight handoff.
+  Do not edit `.agent/directives/principles.md` or
+  `.agent/directives/testing-strategy.md` to chase their pre-existing
+  hard-zone violations — those require owner-scoped work per the
+  "Never delegate foundational Practice doc edits" rule.
+- **Deep consolidation status**: completed this handoff —
+  napkin rotated (679 → ~54 lines; archived to
+  `archive/napkin-2026-04-17.md`); 6 new high-signal entries merged
+  into `distilled.md` and redundant entries pruned against permanent
+  homes (distilled.md 278 → 265 lines, under hard limit 275);
+  3 new patterns extracted (`patterns/adr-by-reusability-not-diff-size.md`,
+  `patterns/route-reviewers-by-abstraction-layer.md`,
+  `patterns/governance-claim-needs-a-scanner.md`); ADR-shaped doctrine
+  graduated to ADR-159. Practice-core incoming empty; outgoing pair
+  refreshed for the three-zone model. `pnpm practice:fitness --strict-hard`
+  exits 1 on **pre-existing** foundational-doc hard-zone violations:
+  `.agent/directives/principles.md` characters 25628 > 24000, and
+  `.agent/directives/testing-strategy.md` lines 564 > 550 + two prose
+  lines above 100 chars. Neither was introduced by this branch. Per
+  the "Never delegate foundational Practice doc edits" rule,
+  remediation requires owner-scoped work (compress/restructure within
+  limits, follow each file's `split_strategy` frontmatter, or a
+  user-approved limit raise with rationale). These are surfaced as the
+  only remaining blocker for a `strict-hard` clean closure; routine
+  strict mode (critical-only) exits 0.
 
 ## Active Workstreams (2026-04-17)
 

@@ -100,7 +100,9 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (22)
+### Process (23)
+
+- **ADR by Reusability, Not Diff Size** -- Use this when: closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR. → [adr-by-reusability-not-diff-size.md](adr-by-reusability-not-diff-size.md)
 
 - **Check Driven Development** -- Use this when: writing TDD RED-phase assertions in a codebase with multiple quality gates. → [check-driven-development.md](check-driven-development.md)
 - **ChatGPT Report Normalisation** -- Use this when: recovering an LLM-exported report from markdown, DOCX, and PDF copies into durable repo-quality markdown. → [chatgpt-report-normalisation.md](chatgpt-report-normalisation.md)
@@ -134,8 +136,10 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
 - **Don't Test SDK Internals** -- Use this when: tests must prove product behaviour, not third-party SDK internal normalisation or compatibility logic. → [dont-test-sdk-internals.md](dont-test-sdk-internals.md)
 
-### Agent (3)
+### Agent (5)
 
 - **Agentic Surface Separation** -- Use this when: designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters. → [agentic-surface-separation.md](agentic-surface-separation.md)
+- **Governance Claim Needs a Scanner** -- Use this when: an ADR or governance document asserts a universal property across a set of live surfaces (one vocabulary, a required citation, a mandatory field, platform-adapter parity) and prose alone is the only enforcement. → [governance-claim-needs-a-scanner.md](governance-claim-needs-a-scanner.md)
 - **Reviewer Widening Is Always Wrong** -- Use this when: a sub-agent reviewer recommends replacing one type construct with a wider one; the fix widens the type, which is never the answer. → [reviewer-widening-is-always-wrong.md](reviewer-widening-is-always-wrong.md)
 - **Platform Configuration Is Infrastructure** -- Use this when: AI platform settings (permissions, hooks, plugin state) that define the agentic system contract must be tracked in version control, not gitignored. → [platform-config-is-infrastructure.md](platform-config-is-infrastructure.md)
+- **Route Reviewers by Abstraction Layer, Not File Scope** -- Use this when: dispatching specialist reviewers on a finishing pass over a mixed code + docs + ADR lane and choosing which reviewers to invoke. → [route-reviewers-by-abstraction-layer.md](route-reviewers-by-abstraction-layer.md)

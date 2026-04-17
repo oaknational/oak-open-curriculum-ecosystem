@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-16.md`
-(sessions 2026-02-10 to 2026-04-16).
+`napkin-2026-02-24.md` through `napkin-2026-04-17.md`
+(sessions 2026-02-10 to 2026-04-17).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -25,45 +25,36 @@ context with no natural permanent home.
 
 ## User Preferences
 
-- British spelling, grammar, and date formats
-- Plans must be **discoverable** (linked from README,
-  roadmap, AND session prompt)
-- Plans must be **actionable** (status tracking tables,
-  completion checklists, resolved open questions)
-- Archive docs are historical records — never update them
-- When a plan is blocking a merge, simplify ruthlessly —
-  do minimum to unblock CI, capture rest as future work
-- Listen to user priorities, not document structure
-- Try it before assuming it will not work
-- Risk acceptance is a human decision. Agents classify
-  severity and describe impact; agents do not accept risks
-  or defer items on behalf of the owner
+- Plans must be **discoverable** (linked from README, roadmap,
+  AND session prompt) AND **actionable** (status tracking tables,
+  completion checklists, resolved open questions).
+- Archive docs are historical records — never update them.
+- When a plan is blocking a merge, simplify ruthlessly — minimum
+  to unblock CI, capture rest as future work.
+- Listen to user priorities, not document structure. Try it
+  before assuming it will not work.
+- Risk acceptance is a human decision. Agents classify severity
+  and describe impact; agents do not accept risks or defer items
+  on behalf of the owner.
 - Onboarding simulations must be discovery-based: start at
   README.md only, no prescribed reading list, no access to
-  the onboarding planning documents. Describe personas by
-  their motivations ("anxious about looking foolish",
-  "sceptical by default"), not by focus areas
+  onboarding planning documents. Describe personas by motivations
+  ("anxious about looking foolish", "sceptical by default"), not
+  by focus areas.
 
 ## Fitness Management
 
-- **Char limit is the honest volume constraint**: after wrapping
-  prose to 100 chars, line count inflates from short lines, headers,
-  blank lines. The char limit tracks actual content volume regardless
-  of formatting choices. Use it as the primary volume metric.
+- **Char limit is the honest volume constraint** (not lines).
+  Prose wrapping inflates line count; char count tracks real
+  content volume. Use it as the primary volume metric.
 - **User feedback is the correction signal**: when user feedback
   contradicts a napkin entry, apply the feedback fully. Do not
   negotiate a compromise with the original incorrect framing.
-- **Fitness is a four-zone scale, not a gate** (ADR-144):
-  `healthy` → `soft` ("think about it") → `hard` ("do something
-  soon") → `critical` ("loop failure signal"). Critical is
-  `hard limit × 1.5`. Soft never blocks; hard blocks at
-  consolidation closure (`pnpm practice:fitness --strict-hard`);
-  critical always blocks and triggers the three-question
-  post-mortem in ADR-144 §Loop Health. Content justifies the
-  space it occupies — when a file drifts, ask "why is it
-  growing?" before "what can I cut?" Graduation, restructuring,
-  or accepting the overage are all valid responses; compression
-  is not automatic.
+- **Fitness is the four-zone scale defined by
+  [ADR-144](../../docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md)**
+  (`healthy`/`soft`/`hard`/`critical`). Operational rule here:
+  ask "why is it growing?" before "what can I cut?" Graduation
+  and restructuring are valid responses alongside compression.
 - **Repetition between foundational docs is deliberate**: the
   testing rules in principles.md AND testing-strategy.md are
   intentional reinforcement, not duplication. Do not
@@ -73,62 +64,64 @@ context with no natural permanent home.
 
 - **Never delegate foundational Practice doc edits to sub-
   agents**: principles.md, testing-strategy.md, schema-first-
-  execution.md, AGENT.md are the operating system of the
-  repo. Sub-agents optimise for their stated objective ("cut
-  N lines") without understanding pedagogical value, concrete
-  examples, or deliberate reinforcement. These files require
-  full session context. Consolidation of these files is
-  curation, not optimisation — "does each piece serve its
-  purpose?" not "how do I make it shorter?"
-- **Lead with narrative, not infrastructure**: when starting a
-  multi-workstream initiative, write the ADR and README first.
-  Documentation that declares "what we're doing and why" frames
-  all subsequent technical work and prevents infrastructure-for-
-  infrastructure's-sake. WS-0 (narrative) before WS-1 (factory)
-  before WS-2+ (consumers) is not arbitrary; each stage depends
-  on the meaning established by the previous one.
+  execution.md, AGENT.md are the operating system of the repo.
+  Sub-agents optimise for "cut N lines" without understanding
+  pedagogical value or deliberate reinforcement. Consolidation
+  is curation, not optimisation.
+- **Lead with narrative, not infrastructure**: on a multi-workstream
+  initiative, write the ADR and README first. WS-0 (narrative) →
+  WS-1 (factory) → WS-2+ (consumers).
 - **End goals over means goals**: frame work as "what does the
-  user ultimately need?" not "what does the plan say?" A means
-  goal like "close 15 gaps" generates busywork; the end goal
-  "developer can debug a production error" filters to what
-  matters. See pattern `patterns/end-goals-over-means-goals.md`.
-  Materialised 2026-04-13: only 3 of 15 Sentry items were
-  needed for "working."
+  user ultimately need?" A means goal like "close 15 gaps"
+  generates busywork. See pattern
+  `patterns/end-goals-over-means-goals.md`.
 - **Review plans, not just code**: see pattern
-  `patterns/pre-implementation-plan-review.md`. Proven across
-  3 sessions (19+ findings caught before implementation; Gap 2
-  session caught 5 structural corrections from 5 reviewers).
+  `patterns/pre-implementation-plan-review.md`.
 - **Narrative sections drift first**: when syncing plan state,
   inspect body status lines, decision tables, and current-state
-  prose, not just frontmatter and todo checkboxes.
-- **Ground plans in verified data, not memory**: never classify
-  effort/impact or propose interventions from stale counts or
-  napkin memories. Run the actual tools, read the actual files,
-  verify the actual state BEFORE drafting a plan. Plans built
-  on assumptions get rejected. See also pattern
-  `patterns/tool-output-framing-bias.md`.
-- **Review scope separation**: when a comprehensive review spans
-  multiple commits, separate in-scope findings from pre-existing
-  issues. Fix in-scope, track pre-existing as a gated follow-up.
-  Never conflate scope by fixing everything in one session.
+  prose — not just frontmatter and todo checkboxes.
+- **Ground plans in verified data, not memory**: run the actual
+  tools, read the actual files, verify the actual state BEFORE
+  drafting a plan. See pattern `patterns/tool-output-framing-bias.md`.
+- **Review scope separation**: separate in-scope findings from
+  pre-existing issues. Fix in-scope, track pre-existing as gated
+  follow-up.
 - **Ignored estates need explicit sweeps**: when validating
-  gitignored research or staging lanes, use `rg -uu` or run the
-  search from inside the target directory; otherwise ignore rules
-  can create false-clean hygiene checks.
-- **Reconcile parent when child changes runtime truth**: when
-  a child plan evolves the runtime architecture, reconcile the
-  parent plan and the closure proof in the same session. Otherwise
-  the repo teaches two incompatible architectures simultaneously.
+  gitignored lanes, use `rg -uu` or run from inside the target
+  directory; otherwise ignore rules create false-clean checks.
+- **Reconcile parent when child changes runtime truth**: a child
+  plan that evolves runtime architecture must reconcile the parent
+  plan and closure proof in the same session.
 - **All gates blocking, no "pre-existing" exceptions**: never
-  dismiss a gate failure as "pre-existing." The principle is
-  long-term architectural excellence — a violation introduced
-  last month is the same as one introduced today. Fix it or
-  track it as a blocking item. Language like "no new issues"
-  rationalises letting quality decay.
+  dismiss a gate failure as "pre-existing." Fix it or track it as
+  a blocking item. "No new issues" rationalises quality decay.
 - **"Tests use it" is migration surface, not justification**:
   when tests are the sole consumers of production code, the chain
   is circular. See pattern
   `patterns/circular-test-justification.md`.
+- **CLI-first enumeration before owner questions**: research
+  the generic REST surface (`sentry api`, `clerk api`, vendor-
+  equivalent) before raising any owner question about observability
+  or infrastructure state. "The specialist tool doesn't surface X"
+  ≠ "X is unknowable from automation."
+- **Validation closures: produce locally-producible evidence
+  first**. For deployment validation lanes, generate every
+  locally-producible proof under a session-specific release tag
+  before asking. Only ask for owner action when tooling cannot
+  reach the artefact.
+- **Split client-compatibility out of deployment-validation
+  lanes**: a client-specific compat issue emerging in an active
+  deployment-validation lane spins into its own follow-up plan.
+  Shared preview infra ≠ shared plan ownership.
+- **ADR-worthiness scopes by reusability, not diff size**: at
+  lane closure ask "will the next adopter re-derive this same
+  decision?" See pattern `patterns/adr-by-reusability-not-diff-size.md`.
+  Materialised 2026-04-17 as ADR-159 from a tight hygiene lane.
+- **Route reviewers by abstraction layer, not file scope**: on
+  finishing passes over mixed code + docs + ADR lanes, book one
+  reviewer per layer (domain-semantics, docs/ADR mesh, code
+  polish); expect disjoint findings. See pattern
+  `patterns/route-reviewers-by-abstraction-layer.md`.
 
 ## Architecture (Agent Infrastructure)
 
