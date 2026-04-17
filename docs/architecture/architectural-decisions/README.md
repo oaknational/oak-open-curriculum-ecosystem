@@ -171,6 +171,8 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md)
 - [ADR-158: Multi-Layer Security Architecture and Application Rate Limiting](158-multi-layer-security-and-rate-limiting.md)
 - [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked Configuration](159-per-workspace-vendor-cli-ownership.md)
+- [ADR-160: Non-Bypassable Redaction Barrier as Principle](160-non-bypassable-redaction-barrier-as-principle.md) (supersedes ADR-143 §6 in part)
+- [ADR-161: Network-Free PR-Check CI Boundary](161-network-free-pr-check-ci-boundary.md)
 
 ## Key Architectural Decisions
 
@@ -193,9 +195,11 @@ For understanding authentication, authorization, and observability:
 - **[ADR-052](052-oauth-2.1-for-mcp-http-authentication.md)** - OAuth 2.1 for MCP HTTP server authentication
 - **[ADR-053](053-clerk-as-identity-provider.md)** - Clerk as Identity Provider and Authorization Server
 - **[ADR-115](115-proxy-oauth-as-for-cursor.md)** - Proxy OAuth AS for Cursor compatibility (transparent passthrough to Clerk)
-- **[ADR-143](143-coherent-structured-fan-out-for-observability.md)** - Coherent structured fan-out for the Sentry and OpenTelemetry foundation
+- **[ADR-143](143-coherent-structured-fan-out-for-observability.md)** - Coherent structured fan-out for the Sentry and OpenTelemetry foundation (§6 superseded in part by ADR-160)
 - **[ADR-158](158-multi-layer-security-and-rate-limiting.md)** - Multi-layer security architecture and application rate limiting
 - **[ADR-159](159-per-workspace-vendor-cli-ownership.md)** - Per-workspace vendor CLI ownership with repo-tracked configuration (formalises the Sentry CLI adoption pattern; applies to all future vendor CLIs)
+- **[ADR-160](160-non-bypassable-redaction-barrier-as-principle.md)** - Non-bypassable redaction barrier as principle (generalises ADR-143 §6 from enumerated list to closure property + test gate; covers every current and future fan-out path)
+- **[ADR-161](161-network-free-pr-check-ci-boundary.md)** - Network-free PR-check CI boundary (PR-check CI runs unit + integration + E2E without network; Vercel deploy and smoke tests own network-capable work)
 - **[ADR-051](051-opentelemetry-compliant-logging.md)** - OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
 - **[ADR-033](033-centralised-log-level-configuration.md)** - Centralised log level configuration
 

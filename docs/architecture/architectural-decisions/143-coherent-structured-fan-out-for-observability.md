@@ -141,6 +141,15 @@ If no active span exists, the logger falls back to correlation-id hashing for
 
 ### 6. Shared redaction barrier
 
+> **Note (2026-04-17)**: the enumerated list in this section is
+> **superseded in part** by
+> [ADR-160: Non-Bypassable Redaction Barrier as Principle](160-non-bypassable-redaction-barrier-as-principle.md).
+> The principle — one shared redactor, applied before any sink
+> receives data — remains in force; the enumeration below is retained
+> for historical context but is no longer canonical. For the
+> authoritative closure property, hook contract non-uniformity, and
+> test gate, read ADR-160.
+
 The logger must apply one shared telemetry redaction policy before any sink
 receives data.
 

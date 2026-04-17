@@ -33,7 +33,7 @@ todos:
     content: "Enable and verify trace propagation for Oak-controlled Elasticsearch targets"
     status: pending
     priority: next
-    note: "Moved from sentry-observability-expansion.plan.md EXP-C1. Applies to both CLI and HTTP search paths."
+    note: "Moved from archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md (now succeeded by sentry-observability-maximisation-mcp.plan.md) EXP-C1. Applies to both CLI and HTTP search paths."
   - id: es-request-instrumentation
     content: "Add request/response instrumentation on the Elasticsearch client for latency, error rate, and timeout tracking"
     status: pending
@@ -63,7 +63,7 @@ todos:
   - id: cli-metrics
     content: "Add CLI command metrics using adapter-level Sentry metrics surface"
     status: pending
-    note: "Depends on sentry-observability-expansion.plan.md EXP-A (metrics foundation)."
+    note: "Depends on archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md (now succeeded by sentry-observability-maximisation-mcp.plan.md) EXP-A (metrics foundation)."
   - id: cli-ops-evidence
     content: "Produce search observability evidence checklist and runbook updates"
     status: pending
@@ -102,7 +102,7 @@ health assessment exists but results are not captured in telemetry.
 
 - **Parent**: `sentry-otel-integration.execution.plan.md` (shared
   foundation authority)
-- **Peer**: `sentry-observability-expansion.plan.md` (MCP server
+- **Peer**: `archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md (now succeeded by sentry-observability-maximisation-mcp.plan.md)` (MCP server
   expansion — metrics foundation, MCP context enrichment, profiling,
   source maps, alerting, strategy)
 - **Dependency**: EXP-A (metrics foundation) must land before CLI
@@ -156,7 +156,7 @@ span through to Elasticsearch dependency spans. This applies to both
 the CLI (ingest, admin, eval) and the HTTP MCP server (search
 retrieval).
 
-Moved from `sentry-observability-expansion.plan.md` EXP-C1.
+Moved from `archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md (now succeeded by sentry-observability-maximisation-mcp.plan.md)` EXP-C1.
 
 ### ES-INST — Request/Response Instrumentation
 
@@ -248,7 +248,7 @@ Track result quality indicators over time:
 ### CLI-MET — CLI Command Metrics
 
 Emit command execution counters and key latency distributions.
-Depends on `sentry-observability-expansion.plan.md` EXP-A (metrics
+Depends on `archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md (now succeeded by sentry-observability-maximisation-mcp.plan.md)` EXP-A (metrics
 foundation).
 
 - Command-start and command-complete counters

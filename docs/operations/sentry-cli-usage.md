@@ -410,6 +410,31 @@ sourcemaps:upload`.
 The committed `.sentryclirc` is identical across both paths, which
 is the whole point of the hygiene lane.
 
+### Pipeline boundary: where `sentry-cli` runs — and where it does not
+
+Vendor CLI invocations (including `sentry-cli`) carry network side
+effects. The repo's testing taxonomy separates side-effectful
+operations from deterministic gates; `sentry-cli` invocations must
+respect that separation.
+
+| Pipeline                                                     | Runs `sentry-cli`?      | Reason                                                                                                                                                                                                                                                                                                                              |
+| ------------------------------------------------------------ | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GitHub Actions PR / push checks (unit + integration)         | **No**                  | Per [testing-strategy.md](../../.agent/directives/testing-strategy.md), unit and integration tests do not trigger IO and have no side effects. Any `sentry-cli` invocation would violate that contract: it makes outbound network calls to Sentry, and a Sentry outage would break PR gating for reasons unrelated to code quality. |
+| E2E tests (`*.e2e.test.ts`)                                  | **No**                  | Per testing-strategy.md, E2E tests run against an in-process running system with stdio IO only — not filesystem or network IO. `sentry-cli` invokes network. Anything involving `sentry-cli` belongs in a smoke test, not an E2E test.                                                                                              |
+| Vercel deploy pipeline (predeploy / postdeploy hooks)        | **Yes**                 | Source-map upload, release-commit linkage, and deploy registration are deploy-time concerns that genuinely need to reach Sentry. `SENTRY_AUTH_TOKEN` is set on the Vercel project environment.                                                                                                                                      |
+| Local evidence generation                                    | **Yes**                 | Operator-initiated; token loaded from `.env.local`.                                                                                                                                                                                                                                                                                 |
+| Smoke tests (explicitly invoked, never on the PR-check path) | **Yes, on-demand only** | Per testing-strategy.md, smoke tests verify a fully running system locally or deployed, can trigger all IO types, and have side effects. A smoke test that exercises `sentry-cli send-event` or similar is legitimate here but must be explicitly triggered, never attached to the PR gate.                                         |
+
+This is not Sentry-specific — the same boundary applies to any
+vendor CLI that touches the network (`clerk`, future ES management
+CLI, any other marketplace CLI). Keep PR-check pipelines network-free
+regardless of vendor.
+
+Operationally: when a PR-check run logs a Sentry event because a
+`sentry-cli` call happened, that is a pipeline-boundary defect. Fix
+by moving the invocation into the deploy pipeline or behind a
+manual flag; do not silence the log.
+
 ## Cross-references
 
 - [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked

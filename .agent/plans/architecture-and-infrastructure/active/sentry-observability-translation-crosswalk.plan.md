@@ -7,7 +7,7 @@ overview: >
 source_plan: "archive/superseded/sentry-canonical-alignment.plan.pre-value-reframe-2026-04-15.md"
 target_plans:
   - "sentry-canonical-alignment.plan.md"
-  - "sentry-observability-expansion.plan.md"
+  - "sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)"
   - "search-observability.plan.md"
   - "sentry-otel-integration.execution.plan.md"
 todos:
@@ -41,14 +41,14 @@ Source for this table: dropped todo items in
 
 | Removed item from narrowed child plan | New authoritative owner |
 |---|---|
-| `custom-metrics` | `sentry-observability-expansion.plan.md` — EXP-A |
+| `custom-metrics` | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` — EXP-A |
 | `cli-metrics` | `search-observability.plan.md` — CLI-MET |
-| `mcp-request-context` | `sentry-observability-expansion.plan.md` — EXP-B |
+| `mcp-request-context` | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` — EXP-B |
 | `cli-early-init` | `search-observability.plan.md` — CLI-PRELOAD decision lane (intentional reframing, not mandatory preload) |
 | `trace-propagation-es` | `search-observability.plan.md` — ES-PROP (moved from EXP-C1 on 2026-04-16) |
-| `trace-propagation-oak-api` | `sentry-observability-expansion.plan.md` — EXP-C2 |
-| `profiling-evaluation` | `sentry-observability-expansion.plan.md` — EXP-D |
-| `source-maps-automation` | Parent WS6 (`sentry-otel-integration.execution.plan.md`) + `sentry-observability-expansion.plan.md` EXP-E |
+| `trace-propagation-oak-api` | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` — EXP-C2 |
+| `profiling-evaluation` | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` — EXP-D |
+| `source-maps-automation` | Parent WS6 (`sentry-otel-integration.execution.plan.md`) + `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` EXP-E |
 
 ## Section-Level Mapping (Superseded Plan to Current Plan Set)
 
@@ -61,10 +61,10 @@ Source for this table: sections from
 | Gap 2 — Express Error Handler | `sentry-canonical-alignment.plan.md` (completed) |
 | Gap 3 — Adapter Surface Extension | `sentry-canonical-alignment.plan.md` (completed) |
 | Native MCP Server Wrapping investigation/adoption | `sentry-canonical-alignment.plan.md` (completed) |
-| Gap 3.5 — Custom Metrics | `sentry-observability-expansion.plan.md` EXP-A |
-| Gap 4 — Trace Propagation Targets | `sentry-observability-expansion.plan.md` EXP-C2 (third-party) + `search-observability.plan.md` ES-PROP (Elasticsearch) |
-| Gap 5 — Profiling | `sentry-observability-expansion.plan.md` EXP-D |
-| Gap 6 — Source Map Automation | Parent WS6 + `sentry-observability-expansion.plan.md` EXP-E |
+| Gap 3.5 — Custom Metrics | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` EXP-A |
+| Gap 4 — Trace Propagation Targets | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` EXP-C2 (third-party) + `search-observability.plan.md` ES-PROP (Elasticsearch) |
+| Gap 5 — Profiling | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` EXP-D |
+| Gap 6 — Source Map Automation | Parent WS6 + `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` EXP-E |
 | Search CLI Gap Analysis | `search-observability.plan.md` (all 4 layers) |
 | CLI command context enrichment | `search-observability.plan.md` CLI-CTX |
 | CLI logger singleton DI remediation (from `cli-logger-di-audit` note) | `search-observability.plan.md` CLI-0 |
@@ -74,14 +74,14 @@ Source for this table: sections from
 
 | Capability family | Plan owner | Provenance |
 |---|---|---|
-| Error capture and request context | `sentry-canonical-alignment.plan.md`, `sentry-observability-expansion.plan.md` | Migrated |
+| Error capture and request context | `sentry-canonical-alignment.plan.md`, `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` | Migrated |
 | Tracing and transport/session MCP signal | `sentry-canonical-alignment.plan.md` | Migrated |
-| Metrics | `sentry-observability-expansion.plan.md` and `search-observability.plan.md` | Migrated |
-| Profiling | `sentry-observability-expansion.plan.md` | Migrated |
-| Source maps and release linkage | Parent plan WS6 + `sentry-observability-expansion.plan.md` | Migrated |
+| Metrics | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` and `search-observability.plan.md` | Migrated |
+| Profiling | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` | Migrated |
+| Source maps and release linkage | Parent plan WS6 + `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` | Migrated |
 | CLI-specific observability maturity | `search-observability.plan.md` | Migrated |
-| Alerting and runbook operations | `sentry-observability-expansion.plan.md` EXP-F | New expansion scope |
-| Architecture options ("other options") | `sentry-observability-expansion.plan.md` EXP-G | New expansion scope |
+| Alerting and runbook operations | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` EXP-F | New expansion scope |
+| Architecture options ("other options") | `sentry-observability-maximisation-mcp.plan.md (successor to archived sentry-observability-expansion.plan.md)` EXP-G | New expansion scope |
 
 ## Verification Rule
 

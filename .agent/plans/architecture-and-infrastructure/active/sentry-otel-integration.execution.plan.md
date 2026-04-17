@@ -241,22 +241,23 @@ on this same branch before the PR opens.
 
 **What remains before this branch can merge:**
 
-1. **In-scope expansion lanes on this same branch / PR.** The PR
+1. **In-scope maximisation lanes on this same branch / PR.** The PR
    scope covers both the closed foundation above AND the MCP-server
-   expansion lanes owned by
-   [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
-   (`EXP-A` adapter-level metrics + metric redaction, `EXP-B` safe MCP
-   request-context enrichment, `EXP-C2` security-gated third-party
-   propagation decision, `EXP-D` profiling benchmark + default-scope
-   decision, `EXP-E` source-map automation + Debug ID evidence
-   alignment — note the HTTP upload script already landed in the
-   hygiene lane, `EXP-F` alerting/dashboard/runbook baseline — rule
-   521866 seeds this and hardening of its shape is owned here, not in
-   the foundation, `EXP-G` strategy selection across "other options").
-   The expansion plan remains authoritative for its own todos,
-   acceptance criteria, and reviewer coverage; the parent plan only
-   tracks those lanes at the "dropped (companion-owned)" level for
-   visibility.
+   maximisation lanes owned by
+   [sentry-observability-maximisation-mcp.plan.md](./sentry-observability-maximisation-mcp.plan.md)
+   (strategic parent: [../future/sentry-observability-maximisation.plan.md](../future/sentry-observability-maximisation.plan.md)),
+   which supersedes the archived `sentry-observability-expansion.plan.md`
+   and broadens the scope to close every available Sentry product loop
+   across the MCP app (server + browser widget). Each of the old
+   EXP lanes is mapped into an L-loop in the maximisation plan:
+   `EXP-A → L-4a/L-4b` (span metrics + dedicated metrics beta),
+   `EXP-B → L-3`, `EXP-C2 → L-14`, `EXP-D → L-6`,
+   `EXP-E → L-7 / L-8` (release linkage + bundler-plugin evaluation;
+   source-map upload itself already shipped in this parent branch),
+   `EXP-F → L-13`, `EXP-G → L-15`. The maximisation plan remains
+   authoritative for its own todos, acceptance criteria, and reviewer
+   coverage; the parent plan only tracks those lanes at the "dropped
+   (companion-owned)" level for visibility.
 2. **Explicitly deferred to later sessions / PRs**:
    - Extend Search CLI observability beyond the completed foundation,
      including Elastic search operation integration:
@@ -268,10 +269,13 @@ Current user-directed sequence:
 
 1. foundation closed (2026-04-17),
 2. continue on this same branch with the MCP-server-confined lanes in
-   `sentry-observability-expansion.plan.md`, and
+   `sentry-observability-maximisation-mcp.plan.md`
+   (supersedes `sentry-observability-expansion.plan.md`, archived
+   2026-04-17), and
 3. only then open the PR, covering both the foundation closure and the
-   expansion lanes. Search-related work that is not explicitly
-   confined to the MCP server is not part of this PR.
+   maximisation lanes. Search-related work that is not explicitly
+   confined to the MCP server is not part of this PR; the Search CLI
+   maximisation mirror opens on its own branch afterwards.
 
 ### Road to Provably Working Sentry (this branch)
 
@@ -302,8 +306,9 @@ Closure record: [`evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseli
 § "Outcome (validated 2026-04-17)".
 
 The branch itself is **not** merge-ready at foundation closure: the
-in-scope MCP-server expansion lanes owned by
-[sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
+in-scope MCP-server maximisation lanes owned by
+[sentry-observability-maximisation-mcp.plan.md](./sentry-observability-maximisation-mcp.plan.md)
+(supersedes the archived `sentry-observability-expansion.plan.md`)
 still run on this same branch before the PR opens. See
 [Companion Continuation Order](#companion-continuation-order) for
 the sequencing.
@@ -431,22 +436,28 @@ work that is **explicitly deferred** to a later session and PR.
 **In scope for this PR (same branch, sequenced after parent-plan
 closure):**
 
-3. **Land MCP server expansion foundations**  
-   Owner: `sentry-observability-expansion.plan.md` (`EXP-A`, `EXP-B`)
-   - add adapter-level metrics + metric redaction lane
-   - add safe MCP request context enrichment
+3. **Land MCP server maximisation lanes**  
+   Owner: `sentry-observability-maximisation-mcp.plan.md`
+   (supersedes archived `sentry-observability-expansion.plan.md`)
+   - Phase 1 (L-0/L-1/L-2/L-DOC/L-EH): ADR-143 amendment, free-signal
+     integrations, shared delegates extraction, documentation
+     inventory, ESLint cause-preservation rule
+   - Phase 2 (L-3/L-4a/L-4b/L-5/L-6/L-7/L-8): MCP request context
+     enrichment, span metrics convention, dedicated metrics adapter,
+     dynamic sampling, profiling, release + deploy linkage, bundler
+     source-map evaluation
 
 4. **Run gated higher-cost capability decisions**  
-   Owner: `sentry-observability-expansion.plan.md` (`EXP-C2`, `EXP-D`,
-   `EXP-E`)
-   - security-gated third-party propagation decision
-   - profiling benchmark decision (HTTP default scope)
-   - source-map automation and Debug ID evidence alignment with parent
-     WS6 (note: the HTTP upload script itself already landed in the
-     hygiene lane; automation and broader Debug-ID alignment remain)
+   Owner: `sentry-observability-maximisation-mcp.plan.md`
+   (L-14 + L-6 + L-7 + L-8)
+   - security-gated third-party propagation decision (L-14)
+   - profiling benchmark decision (L-6)
+   - release + deploy linkage closing the regression-detection loop
+     (L-7); bundler source-map evaluation (L-8)
 
 5. **Operationalise and lock MCP-server-side strategy**  
-   Owner: `sentry-observability-expansion.plan.md` (`EXP-F`, `EXP-G`)
+   Owner: `sentry-observability-maximisation-mcp.plan.md`
+   (Phase 3 L-9/L-10/L-11/L-12 and Phase 4 L-13/L-15)
    - alerting/dashboard/runbook baseline (rule 521866 seeds this)
    - explicit strategy selection across "other options"
 

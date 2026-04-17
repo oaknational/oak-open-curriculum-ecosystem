@@ -13,7 +13,8 @@ See [active/README.md](active/README.md) for work in progress.
 
 | Priority | Plan | Milestone | Status |
 |----------|------|-----------|--------|
-| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | HTTP MCP and Search CLI implementation complete. Remaining M2 blocker: Vercel credential provisioning + deployment evidence. Next in-branch lane after validation: MCP-server-confined expansion. Branch: `feat/otel_sentry_enhancements`. |
+| P0 | [sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md) | **M2 blocker** | Foundation closure DONE 2026-04-17. Branch: `feat/otel_sentry_enhancements`. Next in-branch lane: [sentry-observability-maximisation-mcp.plan.md](active/sentry-observability-maximisation-mcp.plan.md). |
+| P0 | [sentry-observability-maximisation-mcp.plan.md](active/sentry-observability-maximisation-mcp.plan.md) | **M2 blocker (follow-on)** | Close every available Sentry product loop for the MCP app (server + widget) on the same branch before PR. Strategic parent: [future/sentry-observability-maximisation.plan.md](future/sentry-observability-maximisation.plan.md). Supersedes archived `sentry-observability-expansion.plan.md` (2026-04-17). |
 
 Prompt entry:
 

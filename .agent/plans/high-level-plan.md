@@ -72,12 +72,15 @@ The active branch-critical closure sequence remains:
 Beyond that active branch closure, the broader repo queue is currently:
 
 Once the observability evidence bundle closes cleanly, the next implementation
-lane on the same branch is the MCP-server-confined companion plan
-[sentry-observability-expansion.plan.md](architecture-and-infrastructure/active/sentry-observability-expansion.plan.md).
+lane on the same branch is the MCP-server-confined executable plan
+[sentry-observability-maximisation-mcp.plan.md](architecture-and-infrastructure/active/sentry-observability-maximisation-mcp.plan.md)
+(strategic parent:
+[sentry-observability-maximisation.plan.md](architecture-and-infrastructure/future/sentry-observability-maximisation.plan.md)),
+which supersedes the archived `sentry-observability-expansion.plan.md`.
 Broader search observability stays in
 [search-observability.plan.md](architecture-and-infrastructure/active/search-observability.plan.md)
-and is deferred to a later session/PR unless the work is explicitly confined
-to the MCP server.
+and is deferred to the next branch (Search CLI maximisation mirror opens
+there).
 
 1. ~~Implement oak-preview MCP snagging and deploy the resulting fixes.~~
    ✅ COMPLETE — all phases done, branch deployed. Archived to

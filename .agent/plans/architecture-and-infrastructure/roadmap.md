@@ -1,7 +1,7 @@
 # Architecture and Infrastructure Roadmap
 
 **Status**: Active M2 blocker execution, queued cross-app standardisation, and an agreed next hardening promotion after the current improvement tranche.
-**Last Updated**: 2026-04-16
+**Last Updated**: 2026-04-17
 **Session Entry**: [../../prompts/session-continuation.prompt.md](../../prompts/session-continuation.prompt.md)
 
 ---
@@ -31,13 +31,15 @@ Lane indexes:
   but implementation is now complete in both in-scope runtimes. Remaining
   closure work is live validation: Vercel credential provisioning plus the
   deployment evidence bundle.
-- After that validation pass, the next in-branch implementation lane is the
-  MCP-server-confined companion plan
-  [active/sentry-observability-expansion.plan.md](active/sentry-observability-expansion.plan.md).
-- Broader search observability work is now tracked in
+- Foundation closure is done (2026-04-17). The next in-branch implementation
+  lane is the MCP-server-confined executable plan
+  [active/sentry-observability-maximisation-mcp.plan.md](active/sentry-observability-maximisation-mcp.plan.md)
+  (strategic parent: [future/sentry-observability-maximisation.plan.md](future/sentry-observability-maximisation.plan.md)),
+  which supersedes the archived `sentry-observability-expansion.plan.md`.
+- Broader search observability work is tracked in
   [active/search-observability.plan.md](active/search-observability.plan.md)
-  and is deferred to a later session/PR unless the work is explicitly confined
-  to the MCP server.
+  and is deferred to the next branch — the Search CLI maximisation mirror
+  opens on that branch after the MCP branch merges.
 - Cross-app config standardisation and security dependency triage remain the
   next queued executable items in [current/README.md](current/README.md).
 - A new strategic umbrella,
@@ -92,12 +94,16 @@ Phase 4: Quality/operations hardening                 📋 future
   [active/sentry-otel-integration.execution.plan.md](active/sentry-otel-integration.execution.plan.md)
 - Companion prompt:
   [../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
-- Immediate next lane after validation:
-  [active/sentry-observability-expansion.plan.md](active/sentry-observability-expansion.plan.md)
+- Immediate next lane (same branch):
+  [active/sentry-observability-maximisation-mcp.plan.md](active/sentry-observability-maximisation-mcp.plan.md)
+  — closes every Sentry product loop for the MCP app before PR.
+- Strategic envelope parent:
+  [future/sentry-observability-maximisation.plan.md](future/sentry-observability-maximisation.plan.md)
 - Done when:
-  the HTTP MCP server and Search CLI have the shared observability foundation,
-  Vercel credential provisioning is complete, the deployment evidence bundle is
-  recorded, and the active foundation lane can close cleanly
+  the HTTP MCP server has the full maximised observability surface (Phase 1–4
+  of the MCP plan closed), the Search CLI maximisation mirror opens on its
+  own branch, Vercel credential provisioning remains in place, and the
+  active foundation lane closes cleanly
 
 ### Phase 2 — Cross-App Standardisation
 

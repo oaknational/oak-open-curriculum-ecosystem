@@ -99,3 +99,99 @@ e2e test has shown sensitivity to turbo + `smoke:dev:stub` concurrency
 on at least one run. If it flakes again during expansion-lane work,
 treat it as a legitimate defect to investigate rather than shrugging
 it off as load-related.
+
+---
+
+## 2026-04-17 — Sentry observability maximisation pivot + reviewer round
+
+Pivoted `sentry-observability-expansion.plan.md` (EXP-A-shaped,
+"add a metrics surface") into `sentry-observability-maximisation-mcp.plan.md`
+(L-0..L-15 + cross-cutting L-EH / L-DOC, product-loop-shaped). Strategic
+parent at `future/sentry-observability-maximisation.plan.md`. Outgoing
+plan archived under `archive/superseded/...pre-maximisation-pivot-2026-04-17.md`.
+
+**Big surprise — `wrapMcpServerWithSentry` was already wired.** My
+first summary to the user named it as "the single most important
+finding (we're not using it)." It is wired at
+`apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts:98`
+with a clear TSDoc block explaining the behaviour. I inferred scope
+from the SDK's export surface without reading the composition root.
+Reviewers didn't catch it because my prompt pre-supposed the gap.
+Corrective rule: **ground before framing** — read the composition
+root before proposing integration pivots. Added to the session prompt
+as an invariant for the fresh session. Candidate for pattern extraction.
+
+**Reviewer-prompt discipline produced qualitatively different findings.**
+I ran two reviewer rounds. The first (intent check, four reviewers)
+asked leading questions; findings clustered on my framing. The second
+(non-leading, seven reviewers after plan + prompt were written) surfaced
+a wider spread: ~25 distinct factual/structural findings, 11 owner
+questions, three incompatible-with-precedent calls (ADR-143 amendment
+convention, delegates-seam divergence semantics, L-7 script
+partitioning). The second round produced the appendix that now
+governs the fresh session. Worth extracting: **reviewer prompts that
+pre-suppose an answer narrow the finding surface**.
+
+**CI pipeline framing had never been named explicitly.** The user
+flagged "checks in github should not have to make real network calls"
+in response to L-7. That's the correct invariant and it IS implicit in
+`testing-strategy.md` (unit + integration only, no IO) — but nowhere
+is it stated as "GitHub Actions PR checks run unit+integration; the
+Vercel deploy pipeline runs everything that has side effects." That
+three-way separation (PR check / deploy hook / E2E-smoke) is a durable
+piece of doctrine that should graduate into
+`docs/operations/sentry-cli-usage.md` or
+`docs/operations/sentry-deployment-runbook.md`. Potential ADR if it
+applies to more than Sentry (it does — any `sentry-cli`, `clerk`
+CLI, `@sentry/cli releases deploys`, ES mgmt CLI, etc.). Graduating
+now to a permanent home.
+
+**"Scaffolding without barrel exports" was the right shape for
+future-provider lanes.** Reviewers pushed back on L-10 (feature flags)
+and L-11 (AI instrumentation) exporting wrappers before a real
+consumer exists. Owner resolved both as "TSDoc extension-point only —
+no barrel re-exports." The principle: when the provider or consumer
+shape isn't chosen yet, document the attachment point; do not commit
+a public API surface. Candidate for pattern extraction.
+
+**Appendix-as-handoff-protocol.** The plan authored this session ends
+with an Appendix A (factual corrections, structural corrections, owner
+decisions, reviewer closing posture). It makes the fresh session
+start from settled ground rather than re-litigating. This is a
+handoff shape worth naming — when a plan is authored and reviewed in
+the same session, the appendix is the authoritative handoff surface.
+
+**Feedback-tool privacy-by-construction.** The `submit-feedback` MCP
+tool (L-9) ships with a closed-set Zod enum (`good | bad | neutral`)
+and a closed-set reason enum. No free-text input anywhere. Redaction
+barrier still applies as defence in depth but the primary control is
+the schema. Private alpha, privacy is a primary concern. Pattern:
+**privacy-by-construction beats privacy-by-redaction** for
+user-submitted surfaces where the value space is small.
+
+**Bundler-plugin adoption decision.** `@sentry/esbuild-plugin` would
+require replacing `tsup` with direct `esbuild`. Owner willing to do
+it, but only with a good reason. Current shell-script flow is simple,
+offline-capable, auditable. L-8 parked as a future enhancement
+(dropped status with rationale). Pattern: **do not swap build tooling
+for integration-ergonomics wins alone**.
+
+**Reviewer-surfaced fabrications in my own plan.** Sentry-reviewer
+caught: (a) "eight default runtime metrics" stated as fact without a
+docs citation (the count has drifted across 10.x minors); (b) L-6
+profiling env var `SENTRY_PROFILES_SAMPLE_RATE` reflects the v9 API
+shape; v10 `@sentry/profiling-node` uses `profileSessionSampleRate` +
+`profileLifecycle`. Both encoded in Appendix A.1 for the fresh session
+to correct. Lesson: **do not assert numbers, versions, or API shapes
+in plan prose without a citation**. The second-order lesson: **I'm as
+capable of fabricating authoritative-sounding facts as any LLM** —
+reviewers' ability to catch this is why the reviewer discipline
+matters structurally, not just as a polish pass.
+
+**Sentry Metrics second-wave-after-2024-deprecation context.** The
+adapter pivot discussion assumed `Sentry.metrics.*` was "the API."
+sentry-reviewer pointed out: the *first-generation* Sentry Metrics
+was deprecated in 2024; the current `metrics.*` export is a
+second-wave beta product. Dual-pattern framing (span metrics as
+production path, dedicated metrics as beta opt-in) is right, and the
+history strengthens it. Recorded in Appendix A.1.

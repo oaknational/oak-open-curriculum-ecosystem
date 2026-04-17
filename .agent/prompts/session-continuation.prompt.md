@@ -19,8 +19,25 @@ last_updated: 2026-04-17
    block in the ADR index, and open any ADR whose slug matches your current
    workstream from the [full ADR index](../../docs/architecture/architectural-decisions/README.md).
 3. Read `.agent/memory/distilled.md` and `.agent/memory/napkin.md`
-4. Read the active plan for your workstream (see below)
-5. Re-establish live branch state:
+4. Read the active plan for your workstream (see below) — **read
+   Appendix A in full before anything else**
+5. Read the Sentry-relevant ADRs you will touch on day one:
+   - [`docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md`](../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
+   - [`docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md`](../../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)
+   - [`docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md`](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
+   - [`docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md`](../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md)
+6. Read the existing Sentry surface docs:
+   - [`packages/libs/sentry-node/README.md`](../../packages/libs/sentry-node/README.md)
+     (currently a 4-line stub — L-DOC will expand it, not write it new)
+   - [`docs/operations/sentry-cli-usage.md`](../../docs/operations/sentry-cli-usage.md)
+   - [`docs/operations/sentry-deployment-runbook.md`](../../docs/operations/sentry-deployment-runbook.md)
+7. **Read the actual composition root before framing observability work.**
+   Specifically: `apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts`
+   and `apps/oak-curriculum-mcp-streamable-http/src/index.ts`. What Sentry
+   already does for this app must be inferred from code, not from SDK
+   documentation alone. This session added that rule to distilled after
+   a false-miss on `wrapMcpServerWithSentry`.
+8. Re-establish live branch state:
 
 ```bash
 git status --short
@@ -34,252 +51,284 @@ git log --oneline --decorate -10
   and validation.
 - If prompt text conflicts with active plans, active plans win.
 
-## Future Strategic Watchlist
-
-- Strategic only, not active for the current workstream:
-  [cross-vendor-session-sidecars.plan.md](../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
-  tracks a local-first, cross-vendor sidecar model for durable session
-  metadata beyond vendor-native session titles.
-- Strategic only, not active for the current workstream:
-  [graphify-and-graph-memory-exploration.plan.md](../plans/agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md)
-  tracks a pure-exploration lane for Graphify-inspired graph memory. No
-  implementation path is chosen; explicit attribution with direct upstream
-  links is required for any future adoption.
-
 ## Live Continuity Contract
 
-- **Workstream**: Sentry validation closure for the HTTP MCP server, with a
-  separate future follow-up for Codex compatibility.
-- **Active plans**:
+- **Workstream**: Sentry Observability Maximisation — MCP app (server +
+  browser widget) on the current branch; Search CLI mirror on the next
+  branch.
+- **Branch**: `feat/otel_sentry_enhancements`.
+- **Active executable plan**:
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-maximisation-mcp.plan.md`
+    (authoritative execution source for the MCP branch).
+- **Strategic parent brief**:
+  - `.agent/plans/architecture-and-infrastructure/future/sentry-observability-maximisation.plan.md`
+    (full envelope across both runtimes).
+- **Parent foundation authority**:
   - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
-    (authoritative parent; active closure lane)
-  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-expansion.plan.md`
-    (next MCP-server-confined lane after parent closure; still blocked)
+    (closure lane — foundation done 2026-04-17; alert rule 521866 validated).
+- **Superseded**:
+  - `.agent/plans/architecture-and-infrastructure/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md`
+    — replaced 2026-04-17 by the maximisation pivot. Do not use for
+    decisions.
+- **Related**:
+  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-translation-crosswalk.plan.md`
+    (will be updated to reference the maximisation plan as successor).
+  - `.agent/plans/architecture-and-infrastructure/active/search-observability.plan.md`
+    (sibling; owns ES-PROP + CLI-metrics; search branch will gain its own
+    maximisation plan).
   - `.agent/plans/architecture-and-infrastructure/future/codex-mcp-server-compatibility.plan.md`
-    (strategic follow-up only; not executable yet)
+    (strategic follow-up; not executable yet; separate branch).
   - `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`
-    (strategic follow-up: extend the Sentry CLI-as-infrastructure
-    pattern to Clerk's CLI once the Sentry hygiene lane lands)
-- **Current state**: Validation closure pass complete on this branch.
-  Sentry CLI hygiene follow-up lane also complete on the same branch
-  on 2026-04-17, including a finishing-pass re-review. Fresh
-  `oak-preview` deployment confirmed (`scopes_supported: ["email"]`,
-  release `1.5.0` live in Sentry with `mcp.server`, `http.client`, and
-  `bootstrap` spans). Source-map upload operational via
-  `pnpm sourcemaps:upload`, now backed by `pnpm exec sentry-cli
-  sourcemaps inject && pnpm exec sentry-cli sourcemaps upload` (two-step
-  Debug ID flow) with a `//# debugId=` post-condition check, per-workspace
-  `@sentry/cli` devDependency + committed `.sentryclirc` in each of
-  the three Sentry-touching workspaces, and `@sentry/cli` declared in
-  `onlyBuiltDependencies` / `knip.config.ts` `ignoreDependencies` for
-  each owning workspace. The pattern is now formalised as
-  [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked
-  Configuration](../../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md),
-  cross-linked from ADR-010, ADR-143, ADR-154 (Related), the
-  deployment runbook, the Sentry CLI usage doc, the execution plan,
-  and the Clerk CLI adoption plan. Finishing-pass reviewers
-  (sentry-reviewer, docs-adr-reviewer, code-reviewer) re-invoked in
-  parallel on the updated diff — all 10 new findings (pnpm-local vs
-  user-global preflight shape in ADR-159 point 6, runbook Step 3
-  verification surface, README sentry-bullet example split,
-  ADR-143 ↔ ADR-159 back-link, runbook/plan citing ADR-159, ADR-159
-  top-matter including ADR-154, ADR-159 dropping `~/.clerk/`
-  speculation, `require_command` stderr routing) resolved on branch.
-  Local-trigger lane produced handled, rejected-promise, and unhandled
-  events under session release tag
-  `evidence-2026-04-16-http-mcp-sentry-validation`, with frames
-  resolved to TypeScript source. Kill-switch rehearsal
-  (`SENTRY_MODE=off`) under
-  `evidence-2026-04-16-http-mcp-sentry-validation-KILLSWITCH` returned
-  zero events. Temporary `__test_generate_errors` tool removed before
-  commit boundary. Date-stamped bundle at
-  `.agent/plans/architecture-and-infrastructure/evidence/2026-04-16-http-mcp-sentry-validation/README.md`
-  with two 2026-04-17 sibling notes:
-  `sentry-cli-reverify-note.md` (rewritten upload script re-verified
-  end-to-end) and `alerting-baseline-enumeration-note.md` (CLI
-  confirms zero alert rules on `oak-open-curriculum-mcp`; advisory
-  baseline uses structured `LevelFilter` / top-level `environment`
-  syntax, not query-string filters). `pnpm check` from repo root
-  green: 19/19 + 88/88 turbo tasks, exit 0. Separately, the attempted
-  Codex auth fix was rolled back after it failed to unblock Codex and
-  regressed Cursor; that investigation stays isolated in its own
-  future plan.
-- **Current objective (next session)**: start the in-scope expansion
-  lanes on this same branch before opening the PR. Foundation closure
-  (steps 1–5 of "Road to Provably Working Sentry") is **DONE** as of
-  2026-04-17: alert rule `521866`
-  (<https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/>)
-  was validated via `sentry api` against the five acceptance checks
-  recorded in
-  `.agent/plans/architecture-and-infrastructure/evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`
-  § "Outcome (validated 2026-04-17)"; wiring claim MET. Commits
-  `40b212d4` (practice,sentry) and `9c3044ff` (practice rotation)
-  landed on `feat/otel_sentry_enhancements` and are pushed.
-  Next-session sequence:
-  1. Resume
-     [`sentry-observability-expansion.plan.md`](../plans/architecture-and-infrastructure/active/sentry-observability-expansion.plan.md)
-     on this **same** branch. Sequencing per §Sequencing in that plan:
-     EXP-A (metrics) → EXP-B (MCP context) → EXP-D (profiling) →
-     EXP-F (alerting/ops hardening) → EXP-G (strategy). EXP-E (source
-     maps) already shipped; EXP-C1 moved to `search-observability.plan.md`;
-     EXP-C2 (third-party-host propagation) blocks on security review.
-  2. Open / push the PR covering both the foundation closure AND the
-     expansion lanes. Search-related work outside the MCP server stays
-     deferred to a later session/PR.
-- **Hard invariants / non-goals**:
-  - Parent-plan authority stays with
-    `sentry-otel-integration.execution.plan.md` for credential and evidence
-    closure.
-  - No broader search-observability work unless it is explicitly confined to
-    the MCP server.
-  - Codex compatibility is a separate follow-up lane; do not reopen shared auth
-    configuration speculatively inside the Sentry validation pass.
-  - Preserve working-client compatibility while investigating Codex.
-  - **Vendor CLI adoption discipline**: pnpm-first install, repo-tracked
-    config (no user-global state), per-workspace ownership for pipeline
-    CLIs, shared libraries never pin `project`. See
-    [ADR-159](../../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)
-    for the full eight-point decision and
-    [docs/operations/sentry-cli-usage.md](../../docs/operations/sentry-cli-usage.md)
-    for the worked Sentry example.
-- **Recent surprises / corrections**:
-  - Broader `scopes_supported` advertising did not fix Codex and did regress
-    Cursor, so shared auth metadata is not a safe speculative fix surface.
-  - Alert-rule enumeration via `sentry api` is reachable with the existing
-    org auth token and directly answers item 8 of the evidence bundle.
-    The project had zero configured alert rules when enumerated on
-    2026-04-17; owner then created the first issue-alert rule (id
-    `521866`, URL
-    <https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/>).
-    Next-session CLI validation against the advisory baseline closes
-    item 8 fully — procedure and acceptance checks in
-    `evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`
-    § "Validation for the next session".
-  - `sentry-cli` and `sentry` both read ancestor `.sentryclirc` with
-    nearest-wins composition, so workspace-local pinning of
-    `org/project/url` via a committed `.sentryclirc` is a clean
-    replacement for user-global `~/.sentry/cli.db` state. Documented in
-    `docs/operations/sentry-cli-usage.md`.
-  - `practice:fitness` uses the four-zone scale (ADR-144):
-    `healthy` → `soft` → `hard` → `critical`. Routine commits are
-    not blocked by `soft` or `hard`; consolidation closure runs
-    `pnpm practice:fitness --strict-hard` which blocks on `hard`
-    and `critical`; `critical` always blocks and triggers the
-    loop-health post-mortem. At commit boundaries: read the
-    output, act only on genuinely new issues the branch
-    introduced, and schedule larger fitness-driven work as its
-    own session unless a file has reached `critical`.
-  - `@sentry/cli` emits a pnpm "Ignored build scripts" warning on first
-    install; listing it in `pnpm-workspace.yaml`'s
-    `onlyBuiltDependencies` silences it and allows its postinstall
-    binary-download to run on subsequent installs.
-  - The current `SENTRY_AUTH_TOKEN` embeds `sentry.io` as its region,
-    which overrides the `.sentryclirc`-configured `de.sentry.io`. Both
-    points resolve to the same `oak-national-academy` org and upload
-    artefacts are visible end-to-end; token rotation to a de.sentry.io
-    scope is a low-priority follow-up.
+    (strategic follow-up extending the ADR-159 pattern to Clerk; separate
+    lane after Sentry work).
+- **Current objective**: apply Appendix A.2 structural corrections to
+  the executable plan, then begin L-0 RED (author ADR-160 as the
+  successor to ADR-143 §6). Phase 1 delivery follows: L-1 free-signal
+  integrations, L-2 delegates extraction, L-DOC initial slice, L-EH
+  initial slice.
+- **Recent surprises / corrections (2026-04-17 maximisation pivot
+  session)**:
+  - **Ground before framing**. `wrapMcpServerWithSentry` was already
+    wired (`core-endpoints.ts:98`); claimed as missing in the first
+    pivot summary due to inference from SDK exports rather than
+    reading the composition root. Rule added to the prompt's "Ground
+    First" step 7.
+  - **Reviewer-prompt discipline**. Non-leading reviewer prompts
+    (second round) produced a qualitatively wider finding surface
+    than leading prompts (first round). Captured in the napkin.
+  - **CI pipeline framing**. PR checks network-free (unit +
+    integration); Vercel deploy pipeline network-capable (`sentry-cli`
+    there); E2E / smoke out-of-band. Encoded in L-7 and A.3 answer 7.
+  - **TSDoc-extension-point-only for future providers**. L-10
+    (feature flags) and L-11 (AI instrumentation) resolved as
+    stub-with-TSDoc, not barrel re-exports.
 - **Open questions / low-confidence areas**:
-  - Whether Codex ultimately needs a server-owned compatibility layer, a Clerk
-    configuration change, or an upstream-client escalation.
-- **Next safe step**: commit the consolidation follow-up (napkin
-  rotation + distilled update + 2 new patterns), then push
-  `feat/otel_sentry_enhancements` and open the PR. Do not expand
-  scope into Clerk CLI work — that has its own strategic brief at
-  `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`.
-  Do not edit `.agent/directives/principles.md` or
-  `.agent/directives/testing-strategy.md` to chase their pre-existing
-  hard-zone violations — those require owner-scoped work per the
-  "Never delegate foundational Practice doc edits" rule.
-- **Deep consolidation status**: completed this handoff —
-  napkin rotated (679 → ~54 lines; archived to
-  `archive/napkin-2026-04-17.md`); 6 new high-signal entries merged
-  into `distilled.md` and redundant entries pruned against permanent
-  homes (distilled.md 278 → 265 lines, under hard limit 275);
-  3 new patterns extracted (`patterns/adr-by-reusability-not-diff-size.md`,
-  `patterns/route-reviewers-by-abstraction-layer.md`,
-  `patterns/governance-claim-needs-a-scanner.md`); ADR-shaped doctrine
-  graduated to ADR-159. Practice-core incoming empty; outgoing pair
-  refreshed for the three-zone model. `pnpm practice:fitness --strict-hard`
-  exits 1 on **pre-existing** foundational-doc hard-zone violations:
-  `.agent/directives/principles.md` characters 25628 > 24000, and
-  `.agent/directives/testing-strategy.md` lines 564 > 550 + two prose
-  lines above 100 chars. Neither was introduced by this branch. Per
-  the "Never delegate foundational Practice doc edits" rule,
-  remediation requires owner-scoped work (compress/restructure within
-  limits, follow each file's `split_strategy` frontmatter, or a
-  user-approved limit raise with rationale). These are surfaced as the
-  only remaining blocker for a `strict-hard` clean closure; routine
-  strict mode (critical-only) exits 0.
+  - Widget bundle-size measurement once `@sentry/browser` lands
+    (L-12) — no budget set; owner chose measure-and-note.
+  - `nodeRuntimeMetricsIntegration` default metric count varies
+    across 10.x minors — cite Sentry docs page live when the lane
+    opens rather than fixing a number in plan prose.
+  - `@sentry/profiling-node` v10 API knobs
+    (`profileSessionSampleRate` + `profileLifecycle`) have not yet
+    been exercised locally; L-6 RED will confirm shape before code.
+  - **Testing vocabulary deliberation** (raised 2026-04-17). The
+    repo's `testing-strategy.md` uses `unit` / `integration` / `E2E`
+    / `smoke` with local definitions: `integration` = in-process
+    collaboration tests (not the industry-typical
+    "integration-against-a-live-service"); `E2E` = running system
+    stdio-only, no network; `smoke` = fully running system, all IO.
+    Owner flagged this is atypical and may be confusingly named
+    relative to industry convention. Open question: should we adopt
+    industry-standard naming (without weakening the actual pipeline
+    separation captured by ADR-161)? Not a Sentry-plan concern;
+    tracked here for a separate deliberation. Relevant files:
+    `.agent/directives/testing-strategy.md`, ADR-161, ADR-078.
+- **Next safe step**: in a fresh session, apply Appendix A.2
+  structural corrections (rewrite L-0 as "author ADR-160"; split
+  L-DOC / L-EH into phased pairs; relocate
+  `enrichMcpRequestContext` into the MCP app; partition L-7 into
+  sibling scripts; tighten RED framing across L-1/L-4b/L-6/L-7/L-0/L-DOC;
+  add missing documentation propagation targets), then open L-0 RED.
+- **Deep consolidation status**: completed this handoff — napkin
+  extended with eight new entries from the maximisation pivot session;
+  three patterns extracted (`ground-before-framing`,
+  `tsdoc-extension-point-for-future-consumers`,
+  `non-leading-reviewer-prompts`); settled CI-pipeline-boundary
+  doctrine graduated to `docs/operations/sentry-cli-usage.md`; two
+  new ADRs drafted (status: Proposed): ADR-160 "Non-Bypassable
+  Redaction Barrier as Principle" (supersedes ADR-143 §6 in part)
+  and ADR-161 "Network-Free PR-Check CI Boundary". ADR index updated;
+  ADR-143 §6 carries the supersession note. A todo
+  (`ws-review-adrs-160-161`) on the active plan flags both ADRs for
+  owner review before Phase 1 opens; L-0 has been rewritten to
+  implement ADR-160's test gate rather than author the ADR.
+  `pnpm practice:fitness` state captured under Current State —
+  this session introduced zero new violations.
+
+## Current State (2026-04-17)
+
+Foundation closure is done on `feat/otel_sentry_enhancements`:
+
+- Steps 1–5 of "Road to Provably Working Sentry" closed 2026-04-17.
+- Alert rule 521866 validated via `sentry api`.
+- Commits `40b212d4` / `9c3044ff` / `5356bffc` / `f1869840` / `8f33cfc0` /
+  `9c0ad424` / `724c1523` pushed.
+- Source-map upload operational via `pnpm sourcemaps:upload`
+  (two-step Debug ID flow).
+- MCP server is auto-instrumented via `wrapMcpServerWithSentry` at
+  `apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts:98`.
+- Shared redaction barrier covers `beforeSend` / `beforeSendTransaction`
+  / `beforeSendSpan` / `beforeSendLog` / `beforeBreadcrumb` (ADR-143 §6).
+- `setupExpressErrorHandler` is wired at `index.ts:40-41` when
+  `SENTRY_MODE !== 'off'`.
+
+The PR opens after the maximisation lanes on this plan all close.
+
+## Corrective Learning (2026-04-17)
+
+The session that authored this plan initially claimed
+`wrapMcpServerWithSentry` was missing. It was not — it was at
+`core-endpoints.ts:98` with clear TSDoc. The miss came from inferring
+scope from SDK exports rather than reading the composition root. The
+corrective lesson is now doctrine in this plan:
+
+- **Grounding precedes framing.** Before proposing an integration
+  pivot, read the composition root.
+- **Documentation is part of the loop.** The fact that the wiring was
+  not discoverable from workspace READMEs is itself a defect — L-DOC
+  exists to close it.
+
+## Objective for This Session
+
+**A.3 owner decisions are settled** (Appendix A.3 of the executable
+plan, resolved 2026-04-17). Do not re-open them. Notable settlements:
+
+- Single PR on this branch for all 17 lanes (future work smaller, not
+  this).
+- L-10 and L-11 are **TSDoc extension-point stubs only** — no adapter
+  barrel exports, no wired integrations.
+- L-9 `submit-feedback` MCP tool ships with a **closed-set Zod enum**
+  input — no free-text fields (privacy invariant).
+- L-7 runs in the **Vercel deploy pipeline only**, never in GitHub
+  Actions PR checks. Uses **explicit `--commit $GIT_SHA`** form.
+- L-8 bundler-plugin adoption is **parked** (would require tsup →
+  esbuild swap).
+- L-13 replaces alert 521866 (which was smoke-test shape only).
+- L-5/L-6 rollback is env-flag-off; alpha, no SLA.
+
+**First two actions of the fresh session, in order**:
+
+1. **Apply Appendix A.2 structural corrections** to the plan before
+   any code is written. The non-trivial ones: write ADR-160 as a
+   **successor ADR** to ADR-143 §6 (not an in-place amendment); split
+   L-0 / L-DOC / L-EH into phased pairs; move `enrichMcpRequestContext`
+   to the MCP app (L-3 belongs in the app, not the shared lib);
+   extract a browser-safe redactor core before L-12 opens; tighten
+   RED phases to test product behaviour rather than config shape;
+   add the missing documentation propagation targets
+   (`docs/operations/sentry-deployment-runbook.md`,
+   `docs/operations/sentry-cli-usage.md`,
+   `docs/operations/production-debugging-runbook.md`,
+   `docs/operations/environment-variables.md`, app README,
+   `.agent/directives/AGENT.md § Essential Links`).
+2. **Begin L-0 RED** against the corrected plan: author ADR-160
+   (non-bypassable redaction barrier as principle, with a closure
+   property and a test gate).
+
+Then continue into L-1, L-2, L-DOC (initial), L-EH (initial) as the
+Phase 1 delivery. TDD first at every step. Run the reviewer matrix
+per the plan at the end of Phase 1 with **non-leading prompts** (do
+not pre-suppose the answer inside the question). Treat reviewer
+findings as action items unless explicitly rejected with written
+rationale.
+
+## Hard Invariants / Non-Goals
+
+- Parent-plan authority stays with
+  `sentry-otel-integration.execution.plan.md` for credential and evidence
+  closure.
+- No broader search-observability work unless it is explicitly confined
+  to the MCP server; the Search CLI lane opens on a new branch after
+  this one merges.
+- Codex compatibility is a separate follow-up lane; do not reopen shared
+  auth configuration speculatively inside the Sentry validation pass.
+- Preserve working-client compatibility while investigating Codex.
+- **Vendor CLI adoption discipline** (ADR-159): pnpm-first install,
+  repo-tracked config, per-workspace ownership for pipeline CLIs,
+  shared libraries never pin `project`. See
+  [docs/operations/sentry-cli-usage.md](../../docs/operations/sentry-cli-usage.md).
+- `sendDefaultPii: false` remains invariant. Shared redaction barrier
+  remains non-bypassable.
+- ADR-078 DI discipline applies to every new surface (no `process.env`
+  reads in library product code; config threaded through parameters).
+- `Result<T, E>` is strongly preferred; all new or changed code MUST
+  use it where practical. Constructed errors inside a `catch` MUST pass
+  `{ cause }`. See `.agent/rules/use-result-pattern.md` (expanding in
+  L-EH).
+- Practice fitness zones per ADR-144. Routine commits not blocked by
+  `soft` or `hard`. Consolidation closure runs
+  `pnpm practice:fitness --strict-hard`.
+- **Never delegate foundational Practice doc edits** to sub-agents:
+  `principles.md`, `testing-strategy.md`, `schema-first-execution.md`,
+  `AGENT.md` are owner-edited.
+
+## Reviewer Discipline
+
+Run specialist reviewers per phase per the matrix in the executable
+plan. Prompts must be:
+
+- **Self-contained** — the reviewer sees nothing from this conversation.
+- **Non-leading** — pose questions, do not pre-suppose answers.
+- **Scoped** — word-capped, with a clear review lens.
+
+Findings are actioned unless explicitly rejected with written
+rationale. Reviewer results that contradict this prompt or the plan
+win.
+
+## Future Strategic Watchlist
+
+- `../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md`
+  — durable cross-vendor session metadata (strategic; not active).
+- `../plans/agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md`
+  — graph-memory exploration (strategic; not active; explicit
+  attribution required on any future adoption).
 
 ## Active Workstreams (2026-04-17)
 
-### 1. Sentry + OTel Alignment — CLOSURE + HYGIENE COMPLETE (same branch/PR)
+### 1. Sentry Observability Maximisation — MCP branch (this branch)
 
-**Plans**:
+**Plan**:
+`active/sentry-observability-maximisation-mcp.plan.md`
 
-- `.agent/plans/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md`
-  (child plan — 16 todos done, 7 dropped; archived 2026-04-17)
-- `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
-  (parent authority — "Road to Provably Working Sentry" table now shows
-  steps 1-5 **DONE (pending alerting wiring)**; validation evidence bundle
-  landed at `evidence/2026-04-16-http-mcp-sentry-validation/` with two
-  2026-04-17 sibling notes)
+Four phases (foundation uplift → measurement → breadth → operations).
+Closes every available Sentry product loop for the MCP app (server +
+browser widget) before PR. See the plan for sequencing, TDD cycles,
+acceptance, and the reviewer matrix.
 
-**Closure pass and Sentry CLI hygiene lane both complete on this
-branch.** Remaining before merge: quality-gate pass + owner rule
-creation on `oak-national-academy/oak-open-curriculum-mcp` (CLI
-enumeration 2026-04-17 confirms zero rules exist). After the
-commit/merge, the next implementation lane for this branch/PR is
-`sentry-observability-expansion.plan.md`. EXP-E (source-map upload)
-was brought forward into this branch during the closure pass and is
-already shipped; the hygiene lane only changed *how* we invoke the
-uploader (now `pnpm exec sentry-cli` inside each workspace with
-committed `.sentryclirc`), not whether uploads happen. Broader
-`search-observability.plan.md` work is deferred to a later session/PR
-unless it is explicitly confined to the MCP server.
+### 2. Sentry Observability Maximisation — Search CLI (next branch)
 
-### 2. User-Facing Search UI — NEXT
+Mirrors the MCP plan on a new branch after the MCP branch merges. The
+sibling `search-observability.plan.md` owns ES-PROP and CLI-metrics;
+the next-branch maximisation plan will share the same structure.
 
-Interactive search MCP App widget. Queued after Sentry completes.
+### 3. User-Facing Search UI — QUEUED AFTER SENTRY
 
-### 3. Compliance — READY / PARKED
+Interactive search MCP App widget. Queued after Sentry close-out.
 
-**Plan**: `.agent/plans/compliance/current/claude-and-chatgpt-app-submission-compliance.plan.md`
-**Companion**: `.agent/plans/compliance/current/upstream-api-requests.md`
+### 4. Compliance — READY / PARKED
 
-Plan reviewed by 7 specialists, all findings addressed. Codegen
-fixes committed (56e92b0d): silent fallback removed, full-content
-cache comparison, dotenv removed, CI drift check added. Upstream
-API requests drafted (limit/offset swap + asset pagination).
-Ready for promotion to `active/` once Sentry work is no longer the
-current branch priority.
+`compliance/current/claude-and-chatgpt-app-submission-compliance.plan.md`
+— reviewed, ready for promotion once Sentry is no longer current.
 
-### 4. Schema Resilience — PENDING (owner decision)
+### 5. Schema Resilience — PENDING (owner decision)
 
 Blocked on OQ1 (`.strip()` vs `.passthrough()`).
 
-### 5. Other workstreams — PARKED
+### 6. Parked
 
 - Interactive User Search MCP App (WS3 Phase 5)
 - `_meta` Namespace Cleanup
-- Quality Gate Hardening (knip/depcruise done, ESLint remaining)
-- Upstream API Reference Metadata (design complete, 7 todos)
+- Quality Gate Hardening (knip/depcruise done, ESLint remaining —
+  partly absorbed by L-EH)
+- Upstream API Reference Metadata (design complete)
 
 ## Core Invariants
 
+- DI is always used — enables testing with trivial fakes (ADR-078).
+- `principles.md` is the source of truth; rules operationalise it.
+- Separate framework from consumer in all new work (ADR-154).
+- Decompose at tensions rather than classifying around compromises.
+- Apps are thin interfaces over SDK/codegen capabilities.
 - Widget HTML is generated metadata — same codegen constant pattern
-  as `WIDGET_URI`, tool descriptions, documentation content
-- DI is always used — enables testing with trivial fakes (ADR-078)
-- `principles.md` is the source of truth; rules operationalise it
-- Separate framework from consumer in all new work
-- Decompose at tensions rather than classifying around compromises
-- Apps are thin interfaces over SDK/codegen capabilities
+  as `WIDGET_URI`, tool descriptions, documentation content.
 
 ## Durable Guidance
 
-- Run the required gates one at a time while iterating.
+- **The quality-gate criterion is always `pnpm check` from the repo
+  root, with no filtering, green.** Individual gates may be invoked
+  one at a time while iterating to narrow a failure, but the
+  phase-boundary and merge criterion is `pnpm check` exit 0 with no
+  filter. No exceptions; no "pre-existing" dismissals.
 - Run `pnpm fix` to apply auto-fixes.
-- Run `pnpm check` as the canonical aggregate readiness gate before
-  push/merge. It includes `pnpm knip` and `pnpm depcruise`.
 - Keep this prompt concise and operational; do not duplicate plan
   authority.
