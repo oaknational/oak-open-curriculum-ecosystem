@@ -104,34 +104,28 @@ git log --oneline --decorate -10
   Codex auth fix was rolled back after it failed to unblock Codex and
   regressed Cursor; that investigation stays isolated in its own
   future plan.
-- **Current objective (next session)**: CLI validation of alert rule
-  `521866`, then continue the in-scope expansion lanes on this same
-  branch before opening the PR. Commits `40b212d4`
-  ("feat(practice,sentry): three-zone fitness + Sentry CLI hygiene +
-  enforce-edge tightening") and `9c3044ff` ("docs(practice): rotate
-  napkin, graduate patterns, refresh continuity contract") have
-  landed on `feat/otel_sentry_enhancements` and are pushed. Pre-commit
-  hooks (prettier, markdownlint, knip, depcruise, turbo tasks) all
-  passed. **Owner action update (2026-04-17)**: the first production
-  issue-alert rule on `oak-national-academy/oak-open-curriculum-mcp`
-  now exists — **rule id `521866`**
-  (<https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/>).
-  Next-session sequence is:
-  1. one-shot CLI validation of rule `521866` against the advisory
-     baseline; exact `sentry api` commands and five acceptance checks
-     recorded in
-     `.agent/plans/architecture-and-infrastructure/evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`
-     § "Validation for the next session";
-  2. close the parent plan — flip step 5 of "Road to Provably Working
-     Sentry" to `DONE`, `deployment-and-evidence` from `in_progress`
-     to `completed`, and record closure state;
-  3. resume
+- **Current objective (next session)**: start the in-scope expansion
+  lanes on this same branch before opening the PR. Foundation closure
+  (steps 1–5 of "Road to Provably Working Sentry") is **DONE** as of
+  2026-04-17: alert rule `521866`
+  (<https://oak-national-academy.sentry.io/issues/alerts/rules/oak-open-curriculum-mcp/521866/details/>)
+  was validated via `sentry api` against the five acceptance checks
+  recorded in
+  `.agent/plans/architecture-and-infrastructure/evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`
+  § "Outcome (validated 2026-04-17)"; wiring claim MET. Commits
+  `40b212d4` (practice,sentry) and `9c3044ff` (practice rotation)
+  landed on `feat/otel_sentry_enhancements` and are pushed.
+  Next-session sequence:
+  1. Resume
      [`sentry-observability-expansion.plan.md`](../plans/architecture-and-infrastructure/active/sentry-observability-expansion.plan.md)
-     on this **same** branch (`EXP-A`/`B`/`C2`/`D`/`E`/`F`/`G`); the
-     expansion plan is in-scope for this PR, not a follow-on;
-  4. only then open / push the PR covering both the foundation
-     closure AND the expansion lanes. Search-related work outside the
-     MCP server stays deferred to a later session/PR.
+     on this **same** branch. Sequencing per §Sequencing in that plan:
+     EXP-A (metrics) → EXP-B (MCP context) → EXP-D (profiling) →
+     EXP-F (alerting/ops hardening) → EXP-G (strategy). EXP-E (source
+     maps) already shipped; EXP-C1 moved to `search-observability.plan.md`;
+     EXP-C2 (third-party-host propagation) blocks on security review.
+  2. Open / push the PR covering both the foundation closure AND the
+     expansion lanes. Search-related work outside the MCP server stays
+     deferred to a later session/PR.
 - **Hard invariants / non-goals**:
   - Parent-plan authority stays with
     `sentry-otel-integration.execution.plan.md` for credential and evidence
@@ -223,8 +217,8 @@ git log --oneline --decorate -10
 
 **Plans**:
 
-- `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-  (16 todos done, 7 dropped — child plan complete)
+- `.agent/plans/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md`
+  (child plan — 16 todos done, 7 dropped; archived 2026-04-17)
 - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
   (parent authority — "Road to Provably Working Sentry" table now shows
   steps 1-5 **DONE (pending alerting wiring)**; validation evidence bundle

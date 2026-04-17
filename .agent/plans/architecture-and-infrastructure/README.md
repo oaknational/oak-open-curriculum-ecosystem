@@ -30,7 +30,8 @@ Documentation architecture excellence (from synthesis analysis):
 
 Quality gate hardening has been promoted to current (2026-04-11):
 [current/quality-gate-hardening.plan.md](current/quality-gate-hardening.plan.md).
-Active child plan: [active/knip-triage-and-remediation.plan.md](active/knip-triage-and-remediation.plan.md).
+Knip triage child plan completed 2026-04-12 and archived to
+[archive/completed/knip-triage-and-remediation.plan.md](archive/completed/knip-triage-and-remediation.plan.md).
 
 ## Strategic Backlog (Future)
 
@@ -83,8 +84,9 @@ Roadmap:
 - **Milestone 3** (pre-beta): alerting, quality metrics, and broader
   operational hardening on top of the foundation
 - **Quality gate hardening**: promoted to
-  `current/quality-gate-hardening.plan.md` (2026-04-11); active child
-  plan `active/knip-triage-and-remediation.plan.md`
+  `current/quality-gate-hardening.plan.md` (2026-04-11); knip child plan
+  completed 2026-04-12 and archived to
+  `archive/completed/knip-triage-and-remediation.plan.md`.
 
 See [high-level-plan.md](../high-level-plan.md) for the strategic
 overview.

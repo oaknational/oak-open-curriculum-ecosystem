@@ -181,8 +181,9 @@ The Oak integration wraps `@sentry/node` behind a DI adapter
 (`@oaknational/sentry-node`) for testability and redaction safety.
 This deviates from the canonical Sentry setup in several documented
 ways. See
-`.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
-for the full gap analysis and remediation plan.
+`.agent/plans/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md`
+for the full gap analysis and remediation plan (completed 2026-04-17,
+archived on the same date).
 
 Key facts verified against official Sentry docs (2026-04-12):
 

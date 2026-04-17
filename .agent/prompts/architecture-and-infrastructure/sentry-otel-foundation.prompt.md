@@ -22,7 +22,8 @@ observability closure work after PR #73 merged to `main` on 2026-03-31.
 ## Read First
 
 1. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
-2. [sentry-canonical-alignment.plan.md](../../plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md)
+2. [sentry-canonical-alignment.plan.md](../../plans/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md)
+   (archived 2026-04-17 — read for historical context on the child-plan scope)
 3. [sentry-observability-expansion.plan.md](../../plans/architecture-and-infrastructure/active/sentry-observability-expansion.plan.md)
 4. [search-observability.plan.md](../../plans/architecture-and-infrastructure/active/search-observability.plan.md)
 5. [sentry-observability-translation-crosswalk.plan.md](../../plans/architecture-and-infrastructure/active/sentry-observability-translation-crosswalk.plan.md)

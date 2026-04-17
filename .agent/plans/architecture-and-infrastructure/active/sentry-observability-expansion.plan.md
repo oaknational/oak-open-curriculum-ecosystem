@@ -10,7 +10,7 @@ depends_on:
   - "sentry-otel-integration.execution.plan.md"
 source_references:
   - "archive/superseded/sentry-canonical-alignment.plan.pre-value-reframe-2026-04-15.md"
-  - "active/sentry-canonical-alignment.plan.md"
+  - "archive/completed/sentry-canonical-alignment.plan.md"
 todos:
   - id: track-a-metrics-foundation
     content: "Add adapter-level Sentry metrics surface (count, gauge, distribution) and metric redaction hook"
