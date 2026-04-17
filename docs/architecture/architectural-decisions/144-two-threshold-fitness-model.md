@@ -42,8 +42,8 @@ model replaces the cliff with a graduated scale.
 
 The model has four **zone labels** (`healthy`, `soft`, `hard`, `critical`) but
 **three actionable zones** on top of the default healthy state. The name
-"three-zone" refers to the graduated severity scale — *think about it* → *do
-something soon* → *loop failure* — that sits above `healthy`. Fitness results
+"three-zone" refers to the graduated severity scale — _think about it_ → _do
+something soon_ → _loop failure_ — that sits above `healthy`. Fitness results
 land in one of the four zone labels per metric, derived from the declared
 thresholds and a single global ratio.
 

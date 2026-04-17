@@ -3,7 +3,7 @@ fitness_line_target: 160
 fitness_line_limit: 220
 fitness_char_limit: 10000
 fitness_line_length: 100
-split_strategy: "Keep concise — this is the operational checklist. Extract worked examples to docs/operations/<vendor>-cli-usage.md."
+split_strategy: 'Keep concise — this is the operational checklist. Extract worked examples to docs/operations/<vendor>-cli-usage.md.'
 ---
 
 # Vendor CLI Adoption
