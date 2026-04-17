@@ -28,12 +28,20 @@ import {
 export const DEFAULT_SENTRY_FLUSH_TIMEOUT_MS = 2_000;
 export const DEFAULT_TRACE_PROPAGATION_TARGETS: readonly string[] = Object.freeze([]);
 
-function createSentryHooks(
-  postRedactionHooks?: SentryPostRedactionHooks,
-): Pick<
+/**
+ * The shape of the redaction hook-set composed into `NodeOptions`.
+ *
+ * @remarks Exported so ADR-160 conformance tests can constrain bypass
+ * helpers to the exact same key-set the adapter wires — any new hook
+ * wired in {@link createSentryHooks} without a matching test-registry
+ * update is caught at `pnpm type-check` rather than at runtime.
+ */
+export type SentryRedactionHooks = Pick<
   NodeOptions,
   'beforeBreadcrumb' | 'beforeSend' | 'beforeSendLog' | 'beforeSendSpan' | 'beforeSendTransaction'
-> {
+>;
+
+function createSentryHooks(postRedactionHooks?: SentryPostRedactionHooks): SentryRedactionHooks {
   return {
     beforeSend(event, hint) {
       const redactedEvent = redactSentryEvent(event);

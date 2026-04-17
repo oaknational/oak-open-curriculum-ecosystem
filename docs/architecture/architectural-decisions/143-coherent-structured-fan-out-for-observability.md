@@ -2,9 +2,9 @@
 
 ## Status
 
-Accepted (2026-03-27)
+Accepted (2026-03-27) — **Superseded in part by [ADR-160](160-non-bypassable-redaction-barrier-as-principle.md) (§6 only; 2026-04-17)**. The rest of ADR-143 (sink model, `OtelLogRecord` currency, workspace scope, other out-of-scope clauses) remains in force.
 
-**Related**: [ADR-051 (OpenTelemetry-Compliant Single-Line JSON Logging)](051-opentelemetry-compliant-logging.md), [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-128 (Retire the Standalone STDIO Workspace)](128-stdio-workspace-retirement-and-http-transport-consolidation.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md)
+**Related**: [ADR-051 (OpenTelemetry-Compliant Single-Line JSON Logging)](051-opentelemetry-compliant-logging.md), [ADR-078 (Dependency Injection for Testability)](078-dependency-injection-for-testability.md), [ADR-128 (Retire the Standalone STDIO Workspace)](128-stdio-workspace-retirement-and-http-transport-consolidation.md), [ADR-129 (Domain Specialist Capability Pattern)](129-domain-specialist-capability-pattern.md), [ADR-160 (Non-Bypassable Redaction Barrier as Principle)](160-non-bypassable-redaction-barrier-as-principle.md)
 
 ## Context
 

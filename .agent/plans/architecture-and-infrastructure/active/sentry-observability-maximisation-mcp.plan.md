@@ -15,9 +15,12 @@ depends_on:
   - "sentry-otel-integration.execution.plan.md"
 branch: "feat/otel_sentry_enhancements"
 todos:
-  - id: l0-ground-truth-and-adr-143-amendment
-    content: "L-0: record corrected ground-truth inventory in docs; generalise ADR-143 §6 (redaction barrier as principle, not enumerated list)"
-    status: pending
+  - id: l0a-ground-truth-correction
+    content: "L-0a: record corrected ground-truth inventory in crosswalk + plan; confirm ADR-143 §6 supersession note + frontmatter Status line point at ADR-160. DONE 2026-04-17 (frontmatter Status line updated; §6 note already in place)."
+    status: completed
+  - id: l0b-adr-160-test-gate
+    content: "L-0b: implement ADR-160 test gate — new packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts with three-part closure coverage (composition presence via TypeScript satisfies; ordering invariant via capturing postRedactionHooks; redacted-at-destination) plus automated bypass-validation harness. DONE 2026-04-17: 17 tests landed; pnpm check exit 0; 61/61 sentry-node tests green."
+    status: completed
   - id: l1-free-signal-integrations
     content: "L-1: opt-in to anrIntegration, zodErrorsIntegration, nodeRuntimeMetricsIntegration, spanStreamingIntegration+withStreamedSpan, rewriteFramesIntegration, extraErrorDataIntegration; verify processSessionIntegration emits"
     status: pending
@@ -54,8 +57,11 @@ todos:
   - id: l11-ai-instrumentation-scaffolding
     content: "L-11: expose instrumentOpenAiClient / instrumentAnthropicAiClient / vercelAIIntegration wrappers via adapter so future LLM tool calls are one import away"
     status: pending
+  - id: l12-prereq-browser-safe-redactor-core
+    content: "L-12-prereq: extract pure runtime-agnostic redactor core from @oaknational/sentry-node into a new browser-safe package packages/core/telemetry-redaction-core/ (depends only on type-helpers + generic redact primitive; no @sentry/node). Node and browser adapters compose it. Settles ADR-160's open question: new package, not submodule. Blocks L-12."
+    status: pending
   - id: l12-widget-sentry
-    content: "L-12: @sentry/browser (or @sentry/react after bundle-size review) in the MCP App widget with shared redaction and linked traces"
+    content: "L-12: @sentry/browser (or @sentry/react after bundle-size review) in the MCP App widget with shared redaction via @oaknational/telemetry-redaction-core and linked traces"
     status: pending
   - id: l13-alerts-dashboards-runbooks
     content: "L-13: per-loop alert + dashboard panel + runbook entry with severity, routing, dedupe"
@@ -66,11 +72,17 @@ todos:
   - id: l15-strategy-close-out
     content: "L-15: record the Sentry-only vs dual-export vs minimal-operational strategy decision with rationale and reviewer attribution"
     status: pending
-  - id: l-eh-error-handling-discipline
-    content: "L-EH (cross-cutting): author eslint rules require-error-cause and prefer-result-pattern in @oaknational/eslint-plugin-standards; apply to new/changed code across the monorepo"
+  - id: l-eh-initial
+    content: "L-EH initial (Phase 1): author require-error-cause ESLint rule in @oaknational/eslint-plugin-standards with expanded RuleTester cases (re-throw of original binding, cause-mismatch vs different variable, nested try/catch, AggregateError shape, async-wrapper catch); apply to Phase 1 new/changed code; explicit pass-through requires ADR-documented sentinel comment"
     status: pending
-  - id: l-doc-documentation-coverage
-    content: "L-DOC (cross-cutting): inventory existing Sentry docs, write missing sentry-node README and app observability doc, cross-link, TSDoc per loop"
+  - id: l-eh-final
+    content: "L-EH final (Phase 4): author prefer-result-pattern ESLint rule with concrete heuristic spec + valid/invalid RuleTester cases; apply to sentry-node, core/observability, MCP app observability as first adoption tranche; update ADR-088 and .agent/rules/use-result-pattern.md"
+    status: pending
+  - id: l-doc-initial
+    content: "L-DOC initial (Phase 1): expand packages/libs/sentry-node/README.md (currently 4-line stub) + write apps/oak-curriculum-mcp-streamable-http/docs/observability.md; structural test asserts content presence (not just file existence); cross-link from workspace READMEs"
+    status: pending
+  - id: l-doc-final
+    content: "L-DOC final (Phase 4): per-loop TSDoc on owning functions; ADR index entries; propagation to sentry-deployment-runbook, sentry-cli-usage, production-debugging-runbook, environment-variables; docs-adr-reviewer walk-through"
     status: pending
   - id: ws-quality-gates
     content: "Full quality gate chain after each phase (pnpm check)"
@@ -85,14 +97,14 @@ todos:
     content: "Final /jc-consolidate-docs run on branch close-out"
     status: pending
   - id: ws-review-adrs-160-161
-    content: "Review ADRs 160 and 161 (drafted 2026-04-17, status: Proposed) before Phase 1 opens. ADR-160 supersedes ADR-143 §6 in part; ADR-161 captures the network-free PR-check CI boundary. L-0 authors confirm ADR-160 text matches what lands in code; L-7 authors confirm ADR-161's pipeline boundary table matches the actual sibling-script attachment points. Accept, revise, or request amendments; flip status from Proposed to Accepted when settled."
-    status: pending
-    priority: next
+    content: "Review ADRs 160 and 161 (drafted 2026-04-17). ADR-160 supersedes ADR-143 §6 in part; ADR-161 captures the network-free PR-check CI boundary. Accepted 2026-04-17 by owner as-drafted. Status on both flipped Proposed → Accepted. L-7 authors confirm ADR-161's pipeline boundary table matches the actual sibling-script attachment points at lane-open time."
+    status: completed
 isProject: true
 ---
 
 # Sentry Observability Maximisation — MCP Server
 
+**Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
 **Last Updated**: 2026-04-17
 **Status**: 🟡 PLANNING — ready for fresh session
 **Branch**: `feat/otel_sentry_enhancements`
@@ -233,9 +245,9 @@ commit independently; the PR opens after Phase 4.
 
 | Phase | Tracks |
 |-------|--------|
-| Phase 1 — Foundation uplift | L-0, L-1, L-2, L-DOC (initial), L-EH (initial) |
-| Phase 2 — Measurement and correlation | L-3, L-4a, L-4b, L-5, L-6, L-7, L-8 |
-| Phase 3 — Breadth | L-9, L-10, L-11, L-12 |
+| Phase 1 — Foundation uplift | L-0a, L-0b, L-1, L-2, L-DOC (initial), L-EH (initial) |
+| Phase 2 — Measurement and correlation | L-3, L-4a, L-4b, L-5, L-6, L-7, L-8 (parked) |
+| Phase 3 — Breadth | L-9, L-10, L-11, L-12-prereq, L-12 |
 | Phase 4 — Operations + close-out | L-13, L-14, L-15, L-DOC (final), L-EH (final) |
 
 Cross-cutting tracks (L-EH, L-DOC) have work in every phase; their
@@ -245,55 +257,92 @@ acceptance is assessed in Phase 4.
 
 ## Phase 1 — Foundation Uplift
 
-### L-0 Ground truth + ADR-160 implementation
+### Phase 1 dependency graph
 
-**Objective**. Implement the test-gate closure property named by
-ADR-160 (drafted 2026-04-17 alongside this plan) so that the
-redaction-barrier doctrine is machine-enforced across every current
-and future fan-out path.
+Lane-level ordering relationships (surfaced as part of A.2 item 12):
 
-**Prerequisite** (drafted 2026-04-17): [ADR-160: Non-Bypassable
-Redaction Barrier as Principle](../../../../docs/architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md)
-supersedes ADR-143 §6 in part. ADR text exists; this lane is the
-test-gate implementation plus cross-reference sweep. Status flips
-to Accepted at close-out per the `ws-review-adrs-160-161` todo.
+- `L-0b → L-4b` (barrier test gate exists before metric adapter extends the registry).
+- `L-2 → L-DOC-initial` (shared delegate seam lands before docs describe it).
+- `L-0b ↔ L-12-prereq` (coordinating, not strict blocking — L-12-prereq extracts a pure redactor core whose correctness depends on the redaction policy code, not on the Node-side test harness; it can author its own runtime-neutral tests. Reuse of closure-gate patterns is a coordination benefit, not a prerequisite).
+- `L-12-prereq → L-12` (widget Sentry cannot land without the browser-safe redactor core extracted; crosses the Phase 1 → Phase 3 boundary).
+- `L-0b → L-13` (barrier-bypass alert derives from ADR-160's test gate).
+- `L-13 → L-1, L-4a, L-4b, L-5, L-12` (alerts reference product loops that must exist first).
+- `L-0b ↔ L-EH` (soft — ESLint rule authoring shares oak-eslint infrastructure with L-3's boundary-rule discussion).
 
-**RED**: Unit / integration test(s) per the ADR-160 "Test Gate"
-section. For each registered fan-out hook on the current adapter
-surface (`beforeSend`, `beforeSendTransaction`, `beforeSendSpan`,
-`beforeSendLog`, `beforeBreadcrumb`), a fixture-mode test feeds a
-payload containing a known redactable value (e.g. a known email-like
-string) and asserts the value emerges redacted at the fixture
-capture. These MUST fail against any bypass condition (e.g. the
-redactor wired but the consumer post-hook receiving the
-pre-redaction payload).
+### L-0a Ground-truth correction
 
-**GREEN**: Wire the conformance tests into `pnpm test` so the
-barrier-bypass class becomes a lint/test-level defect, not just a
-reviewer concern. The redactor implementation is already in place
-(`packages/libs/sentry-node/src/runtime-redaction.ts`); this is
-primarily a test-authoring lane, not a behaviour-change lane.
+**Objective**. Ensure the corrected ground-truth inventory (`wrapMcpServerWithSentry` is wired; redactor covers five hooks today; fixture mode does NOT route through hook pipeline) is reflected across adjacent docs so no future contributor has to re-discover it from source.
 
-**REFACTOR**:
+**Scope**:
 
-1. `packages/libs/sentry-node/README.md` acquires a "Redaction
-   barrier" section that cites ADR-160 as authoritative doctrine
-   (L-DOC overlap — coordinate).
-2. The crosswalk plan
-   (`active/sentry-observability-translation-crosswalk.plan.md`)
-   reflects ADR-160 as the authoritative successor to ADR-143 §6.
-3. Session napkin and distilled carry the grounding lesson (already
-   captured; verify no drift).
+1. Confirm ADR-143 §6 supersession note points at ADR-160 (lines 144–151 of the ADR; already in place as of 2026-04-17).
+2. Confirm ADR-143 frontmatter Status line reads "Superseded in part by ADR-160 (§6 only)" (applied 2026-04-17).
+3. Update `active/sentry-observability-translation-crosswalk.plan.md` to reflect ADR-160 as the authoritative successor to ADR-143 §6.
+4. Verify session napkin and `distilled.md` carry the grounding lesson (ground before framing; composition root must be read before proposing integration pivots).
 
 **Acceptance**:
 
-1. Conformance test(s) green in `pnpm check`.
-2. A deliberately-introduced bypass (e.g. returning the
-   pre-redaction payload from a consumer post-hook) is caught by the
-   test suite.
-3. ADR-160 status flipped from Proposed to Accepted at close-out.
-4. ADR-143 §6 supersession note remains in place and points at
-   ADR-160.
+1. ADR-143 §6 note and frontmatter Status line both present and aligned (verify by re-read).
+2. Crosswalk plan references ADR-160.
+3. No drift between session-prompt claims and source-of-truth files.
+
+### L-0b ADR-160 test-gate implementation
+
+**Objective**. Implement the three-part closure-property test gate named by ADR-160 so the redaction-barrier doctrine is machine-enforced across every currently-wired fan-out path. Compile-time enforcement surfaces future hooks (e.g. `beforeSendMetric` in L-4b) as build-breaks until their redaction wiring lands.
+
+**Prerequisite** (Accepted 2026-04-17): [ADR-160: Non-Bypassable Redaction Barrier as Principle](../../../../docs/architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md) supersedes ADR-143 §6 in part. Owner accepted both ADR-160 and ADR-161 as-drafted at Phase B of the fresh session. L-0b implements the ADR-160 test gate against this accepted specification.
+
+**RED — new file = genuine RED**:
+
+Author `packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts`. No `.conformance.` discriminant (repo convention is `.unit.test.ts` / `.integration.test.ts`). The file does not exist at session start; its non-existence is the RED state.
+
+Proof surface is **direct invocation of hook closures** from `createSentryHooks({ mode: 'sentry', ... })` and `createSentryInitOptions(...)`'s returned `NodeOptions`. Fixture mode is NOT the proof surface — `createFixtureRuntime` in `runtime.ts` does not install or invoke the `beforeSend*` hook pipeline. Extend the existing `capturingPostRedactionHooks` harness at `runtime.unit.test.ts:421–514` rather than creating a parallel harness.
+
+Three-part coverage per ADR-160 closure property:
+
+1. **Composition presence** — a TypeScript `satisfies` check over a discriminated-union type of fan-out hook names; compiler fails the build if a new hook is added to `NodeOptions` but not the union. Plus a runtime assertion that every hook name in the union is a function on `createSentryInitOptions({...})`'s returned options.
+2. **Ordering invariant** (ADR-160 closure part 2) — for each hook with a `SentryPostRedactionHooks` slot (`beforeSend`, `beforeSendTransaction`, `beforeBreadcrumb`), inject a capturing post-redaction hook that records the argument it receives; feed the top-level hook closure a PII-bearing payload; assert the captured argument is already redacted. This proves the redactor runs **before** the post-hook.
+3. **Redacted-at-destination** — for each of the five hooks, assert the returned payload has PII replaced by the redaction sentinel.
+
+Per-hook contract metadata (drives assertion shape per ADR-160's non-uniformity table):
+
+| Hook | Sync/async | Can drop? | Bypass proof |
+|------|------------|-----------|--------------|
+| `beforeSend` | async-capable (always `await` return) | yes (`null`) | post-hook capture (Part 2) |
+| `beforeSendTransaction` | async-capable (always `await`) | yes (`null`) | post-hook capture (Part 2) |
+| `beforeBreadcrumb` | sync | yes (`null`) | post-hook capture (Part 2) |
+| `beforeSendLog` | sync | yes (`null`) | direct-omission (pure helper, Part 3) |
+| `beforeSendSpan` | sync | **no** (typed return) | direct-omission (pure helper) — assert `result !== null && result !== undefined` |
+
+`beforeSendMetric` is NOT covered in L-0b — `@sentry/node`'s pinned version does not wire it today. L-4b extends the registry; the compile-time `satisfies` check will require L-4b to add coverage in the same PR.
+
+Payload construction:
+
+- Multiple PII classes per hook: email-like, UK phone-shaped, OAuth-token-shaped, auth-header-shaped.
+- PII placed in each redacted sub-field per `runtime-redaction.ts`'s coverage surface (message, logentry, transaction name, breadcrumb message/data, exception type/value/module, extras, request URL/query_string/cookies/env/headers, span description and string span data).
+- For `beforeSend`'s event shape: at minimum, PII in `event.message`, `event.exception`, `event.request.headers`, and `event.extra`.
+
+Automated bypass validation:
+
+A nested describe block (or sibling file) constructs a pure local helper `createSentryHooksWithBypass(hookName)` that returns the same shape as `createSentryHooks` but with the named redactor call removed. Feed this harness the same PII payload; assert the sentinel is **absent**. This replaces the manual comment-and-uncomment validation with an automated, CI-runnable negative test.
+
+**GREEN**:
+
+Tests pass against the current `createSentryHooks` implementation — the specification is well-formed and the implementation satisfies it. `pnpm test --filter @oaknational/sentry-node` green; `pnpm check` from repo root green with no filter.
+
+**REFACTOR**:
+
+1. `packages/libs/sentry-node/README.md` acquires a "Redaction barrier" section that cites ADR-160 as authoritative doctrine (L-DOC overlap — coordinate).
+2. TSDoc on the hook union type and the `createSentryHooksWithBypass` helper names ADR-160 as the governing doctrine.
+
+**Acceptance**:
+
+1. Three-part coverage present per hook per the table above (`pnpm test` green).
+2. Automated bypass-validation test demonstrates that omitting one redactor call produces unredacted output (sentinel absent).
+3. TypeScript `satisfies` check over the hook union compiles green; adding a new hook name to `NodeOptions` without adding it to the union breaks the build.
+4. ≥ 3 PII classes across ≥ 2 redacted sub-fields per hook.
+5. ADR-160 Accepted (done 2026-04-17 at Phase B).
+6. ADR-143 §6 supersession note and frontmatter Status line both point at ADR-160 (confirmed in L-0a).
 
 ### L-1 Free-signal integrations
 
@@ -311,13 +360,25 @@ free signal.
 - `extraErrorDataIntegration()` — capture non-`message` props on
   thrown objects.
 
-**RED**: Unit/integration tests under
-`packages/libs/sentry-node/src/` and
-`apps/oak-curriculum-mcp-streamable-http/src/observability/` asserting
-that each integration is present in the constructed `NodeOptions`
-and that the shared redaction barrier still intercepts events from
-each one (fixture-mode assertions for ANR stacks, Zod error payloads,
-runtime metric attributes where applicable).
+**RED — behaviour-first** (A.2 item 9 tightening). Tests assert the observable outcome of each integration, not its registration in `NodeOptions`.
+
+Per-integration behaviour assertions (under `packages/libs/sentry-node/src/` or `apps/oak-curriculum-mcp-streamable-http/src/observability/`):
+
+- **`anrIntegration`**: ANR stack event is emitted when a simulated blocked event-loop condition is detected (fixture-mode capture asserts an ANR-shaped event with redacted stack frames per the barrier).
+- **`zodErrorsIntegration`**: a thrown `ZodError` produces a structured issue event (fixture capture asserts the `Zod` error payload with redacted attribute values).
+- **`nodeRuntimeMetricsIntegration`**: at least one runtime metric emission appears in the fixture store under the default collection cadence (count-of-metrics is not asserted — the default metric set varies across Sentry SDK 10.x minors and is cited from live Sentry docs at lane-open time, not pinned here).
+- **`spanStreamingIntegration`**: a wrapped `withStreamedSpan` call emits a streamed-span envelope that passes through `beforeSendSpan` redaction before capture (additive to `wrapMcpServerWithSentry`, which already patches MCP transport send/onmessage per A.1 factual correction 4 — not a replacement).
+- **`rewriteFramesIntegration`**: a thrown error's stack frames have their paths rewritten per the configured rewrite before appearing in the captured event.
+- **`extraErrorDataIntegration`**: a thrown object with non-`message` enumerable properties produces an event whose context contains those properties (redacted if PII-shaped).
+
+Integration registration may be verified as a sanity check, but it is not the primary assertion — the behaviour (event shape / content / redaction) is.
+
+**Fixture envelope-observability prerequisite** (per A.6 AR-3, assumptions-reviewer). Before any of the per-integration behaviour assertions can be meaningful, the fixture runtime must be able to observe the envelope types the integrations emit. `createFixtureRuntime` in `runtime.ts` today captures a closed set (`log | exception | set_user | set_tag | set_context | metric (pending L-4b)`) via direct `store.push(...)`; it does NOT route envelopes through the `beforeSend*` adapter pipeline. L-1 GREEN must land one of the following first:
+
+1. **Option A (preferred)** — extend `createFixtureRuntime` to route every envelope through the same `createSentryHooks` composition used by the live SDK, so fixture mode observes the same hook transformations. This aligns fixture and live behaviour and lets L-1 assertions re-use the hook pipeline.
+2. **Option B** — add per-envelope capture paths to the fixture store (`ANREvent`, `StreamedSpanEnvelope`, `RuntimeMetricSample`) with their own `beforeSend*` routing. Higher engineering cost; chosen only if Option A conflicts with existing fixture semantics.
+
+Acceptance: the fixture store captures at minimum (a) ANR stack events via `beforeSend`; (b) Zod error payloads via `beforeSend`; (c) runtime metric samples via `beforeSendMetric` (coordinated with L-4b). L-1 does NOT close until this prerequisite lands.
 
 **GREEN**: Extend `createSentryInitOptions` in
 `packages/libs/sentry-node/src/runtime-sdk.ts` to compose the integrations.
@@ -362,55 +423,62 @@ app to import the shared version. Leave the CLI's
 **REFACTOR**: TSDoc on the exported seam. Note in README that the
 seam is shared across app-layer observability objects.
 
+**Explicit-superset discipline** (A.2 item 8, per architecture-reviewer-fred): `SentryObservabilityDelegates` is a **structural intersection at the composition root** — each consumer declares the delegate slice it injects; the library publishes the method factory, not a monolithic interface. Divergence between MCP and CLI consumers is explicit at each composition site, not smuggled in as an "implicit superset with silent discard." When the Search CLI branch adopts the shared factory, its composition root declares its own slice; methods it does not expose never become no-ops of an omnibus interface.
+
 **Acceptance**:
 
 1. `grep -rn "createSentryDelegates" apps/` returns only imports from
    `@oaknational/sentry-node`.
 2. MCP app tests unchanged in behaviour.
 3. Type-check green.
+4. The shared seam exports a method factory (not a closed omnibus interface); each consumer's composition root names its own delegate slice.
+5. **Structural-intersection test** (per A.6 AF-3, architecture-reviewer-fred): a type-level test asserts that the published method factory's inferred return type is a structural **intersection** over the consumers' declared delegate slices at each composition root. No method name appears in the public factory type that is not consumed by at least one caller in this repo. This closes the residual silent-discard back-door that "opt-in via method presence" wording alone leaves open.
 
 ### L-DOC (initial slice) — Documentation inventory
 
 **Objective**. Make the existing Sentry integration discoverable by
-reading docs, without grepping.
+reading docs, without grepping. Current `packages/libs/sentry-node/README.md` is a 4-line stub — this lane **expands** it (per A.1 factual correction 10), it does not write a new one.
 
-**RED**: Write a structural test (under `test:root-scripts`) that
-asserts the existence of:
+**RED — content presence, not file existence** (A.2 item 9 tightening). Write a structural test (under `test:root-scripts`) that asserts each required concept appears at least once by string or structural match:
 
-- `packages/libs/sentry-node/README.md` mentioning: modes, redaction
-  barrier, DI seam, fixture store, logger sink, shared delegates.
-- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
-  mentioning: `wrapMcpServerWithSentry` wiring, per-request span,
-  scope enrichment, Express error handler, source-map upload,
-  redaction barrier entry points.
+- In `packages/libs/sentry-node/README.md`: strings/sections mentioning `modes` (off/fixture/sentry), `redaction barrier` (with ADR-160 citation), `DI seam` (ADR-078 citation), `fixture store`, `logger sink`, `shared delegates`.
+- In `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`: strings/sections mentioning `wrapMcpServerWithSentry` wiring (with the `core-endpoints.ts:98` file reference), per-request span `oak.http.request.mcp`, scope enrichment (`mcp.method`, `mcp.tool_name`), Express error handler registration, source-map upload via `pnpm sourcemaps:upload`, redaction barrier entry points (with ADR-143 + ADR-160 citations).
 
-**GREEN**: Write both files.
+The test asserts content tokens (string search or markdown section headings), not merely file existence.
 
-**REFACTOR**: Cross-link from the workspace READMEs and
-`.agent/directives/AGENT.md § Essential Links`. Add a one-line entry
-to the ADR index if the amendment from L-0 warrants it.
+**GREEN**: Write both files. The sentry-node README expansion absorbs the 4-line stub.
+
+**REFACTOR**: Cross-link from the workspace READMEs. **`.agent/directives/AGENT.md § Essential Links`** update is **owner-only** (foundational Practice doc per PDR-003) — L-DOC drafts the target line in plan text or a follow-up note; the owner applies the edit. Add a one-line entry to the ADR index if the amendment from L-0 warrants it.
 
 **Acceptance**:
 
-1. Structural test passes.
+1. Structural content-presence test passes (not merely "file exists").
 2. Manual review: a reader unfamiliar with the code can answer "is
    MCP auto-instrumented?" and "where does redaction happen?" from
    docs alone.
+3. AGENT.md Essential Links edit is deferred to owner (tracked as follow-up in executable plan todos).
 
 ### L-EH (initial slice) — Error-handling discipline
 
-**Objective**. Land the ESLint rule for cause preservation and apply
-it to new/changed code in Phase 1.
+**Objective**. Land the `require-error-cause` ESLint rule and apply
+it to new/changed code in Phase 1. `prefer-result-pattern` is L-EH final (Phase 4).
 
-**RED**: Unit tests under
+**Package name**: `@oaknational/eslint-plugin-standards` (package name; the directory is `packages/core/oak-eslint/`, per A.1 factual correction 2).
+
+**RED — expanded cases** (A.2 item 10, per test-reviewer). Unit tests under
 `packages/core/oak-eslint/src/rules/require-error-cause.unit.test.ts`
 using `RuleTester`. Cases:
 
 - `new Error('x')` inside a `catch(e)` without `{ cause: e }` → error.
 - `new CustomError('x', { cause: e })` → pass.
 - `new Error('x')` outside any `catch` → pass.
-- `throw new Error('x')` inside `catch` without re-throw of `e` — error
-  (unless explicit pass-through or marked with ADR-approved sentinel).
+- `throw new Error('x')` inside `catch` without re-throw of `e` → error.
+- **Re-throw of the original binding** (`throw e`) → pass (explicit rethrow is not a new construction site).
+- **`cause` mismatch against a different variable**: `catch (e) { throw new Error('x', { cause: otherVar }) }` → error (cause must be the caught binding unless a sentinel is present).
+- **Nested `try/catch` scopes**: inner `catch (e2)` throws `new Error` with `{ cause: e1 }` (outer binding) → error; with `{ cause: e2 }` → pass.
+- **`AggregateError` constructor shape**: `new AggregateError([e], 'msg')` without `{ cause }` inside `catch` → pass (AggregateError carries its own errors array).
+- **Async-wrapper catch patterns**: `Promise.catch(e => { throw new Error('x', { cause: e }) })` → pass; without cause → error.
+- **Explicit pass-through**: requires an ADR-documented inline sentinel comment (e.g. `// eslint-rule: require-error-cause / pass-through-approved — reason`); absence of the sentinel on a `throw new Error` inside `catch` is an error.
 
 **GREEN**: Author
 `packages/core/oak-eslint/src/rules/require-error-cause.ts`. Register in
@@ -420,13 +488,14 @@ the `strict` config.
 **REFACTOR**: Apply rule to repo; fix violations introduced by Phase 1
 changes. Document the rule and the `Result<T, E>`-preferred pattern in
 `.agent/rules/use-result-pattern.md` (expand the current one-line rule
-with concrete examples and the new ESLint rule id).
+with concrete examples and the new ESLint rule id). Document the sentinel comment shape in the same rule file.
 
 **Acceptance**:
 
-1. RuleTester suite green.
+1. RuleTester suite green across all cases above.
 2. `pnpm lint` on the branch surfaces no new `require-error-cause`
    violations in changed files.
+3. Sentinel-comment pass-through is the only approved opt-out mechanism (no rule-disable lines).
 
 ---
 
@@ -438,13 +507,16 @@ with concrete examples and the new ESLint rule id).
 scope at the handler boundary. Complements, not replaces, the
 attributes that `wrapMcpServerWithSentry` writes on spans.
 
-**RED**: Unit/integration tests for an `enrichMcpRequestContext`
-function asserting the context shape. Fields: `session_id`, `method`,
+**Location — MCP app, not the shared library** (A.2 item 4, per architecture-reviewer-betty + ADR-154 framework/consumer separation). `enrichMcpRequestContext` is MCP-specific domain logic and MUST live under `apps/oak-curriculum-mcp-streamable-http/src/observability/enrich-mcp-request-context.ts` (sibling to `sentry-observability-delegates.ts`, `sanitise-mcp-events.ts`, `http-observability.ts`). It MUST NOT be exported from `packages/libs/sentry-node/`. Enforcement is two-part today: (a) `packages/core/oak-eslint/src/rules/boundary.ts` (factory `createLibBoundaryRules`, tested by `lib-boundary.unit.test.ts`) governs cross-workspace import direction; (b) `import-x/no-extraneous-dependencies` transitively catches any `@modelcontextprotocol/sdk` import from `sentry-node` because the SDK is not declared in `sentry-node/package.json`. A named "no MCP-specific symbol" pattern is a follow-up lane candidate rather than an existing rule. Putting the function in the shared library would regress ADR-154 and invite a dependency-direction inversion between app domain and shared framework.
+
+**Sensitivity** (A.1 factual correction 7): `recordInputs`/`recordOutputs` on `wrapMcpServerWithSentry` default to `sendDefaultPii`, which Oak pins to `false`. MCP tool inputs/outputs are not captured today. Any future flip of `sendDefaultPii` cascades into L-3's context shape — the deny-list MUST still apply regardless of the top-level flag.
+
+**RED**: Unit/integration tests in `apps/oak-curriculum-mcp-streamable-http/src/observability/` for an `enrichMcpRequestContext` function asserting the context shape. Fields: `session_id`, `method`,
 `tool_name`, `argument_shape` (deny-listed key names only, never
 values), `client.name`/`client.version`/`client.title` from the
 MCP initialize handshake, `server.name`/`server.version`.
 
-**GREEN**: Implement `enrichMcpRequestContext(req, observability)` and
+**GREEN**: Implement `enrichMcpRequestContext(req, observability)` at the path above and
 call it from `mcp-handler.ts`. Redact via existing barrier — request
 body never flows into the context.
 
@@ -497,9 +569,20 @@ explore-query confirms the attributes are present.
   consumer-specific prefixes in the shared library.
 - ADR-143 amendment is a prerequisite of landing this (done in L-0).
 
-**RED**: Unit tests for off-mode noop, fixture-mode capture,
-`beforeSendMetric` redaction, attribute narrowing, namespace
-parameterisation, sync single-arg hook shape.
+**RED — behaviour-first, test-boundary mechanics specified** (A.2 item 9 tightening; A.6 AR-4 mechanical spec):
+
+Two distinct test surfaces. Each proves a different claim, and they must NOT be conflated:
+
+- **Pure-function `beforeSendMetric` redaction unit test** (primary — proves the **policy**): calls `redactSentryMetric(metric)` **directly** from `runtime-redaction.ts` with a fully-constructed `Metric` payload; asserts the returned metric has sentinel replacement per the policy. No adapter wiring, no `createSentryHooks`, no fixture store. Fails if and only if the redaction policy is wrong.
+- **Fixture-capture integration test** (secondary — proves the **wiring**): calls `createSentryInitOptions({ mode: 'sentry', ... })` to get a `NodeOptions`, extracts `beforeSendMetric` from it, invokes the hook on a `Metric` payload, and asserts the fixture store captures the redacted envelope. No assertion on redaction policy beyond "sentinel present" — the exact policy is proved by the pure test. Fails if and only if the adapter wiring has broken.
+
+These two tests must exist as separate `it` blocks with named purpose in their titles (e.g. "`beforeSendMetric` redaction policy (pure)" and "`beforeSendMetric` fixture wiring (integration)"). A combined test that asserts both claims at once is a test-smell per `testing-strategy.md`.
+- **Off-mode noop test**: live `Sentry.metrics.*` calls are zero under `SENTRY_MODE=off` (verified by test-time stub on the SDK export).
+- **Fixture-mode capture test**: capture shape `{ kind: 'metric', type: 'counter' | 'gauge' | 'distribution', name, value, unit?, attributes, environment, release }` with post-redaction payload (this test proves the fixture adapter records correctly — it does NOT prove the redaction policy; that is the pure unit test above).
+- **Attribute narrowing test**: `Record<string, unknown>` inputs with non-primitive values are defensively narrowed to `SentryPrimitiveValue` at the redactor boundary.
+- **Namespace parameterisation test**: `InitialiseSentryOptions.metricNamespace?: string` prepends to emitted metric names; default namespace is documented and stable across Oak runtimes.
+- **Hook contract shape test**: `beforeSendMetric` is sync, single-argument (modelled on `beforeSendLog`, not `beforeSend`).
+- **Compile-time closure extension** (dependency on L-0b): adding `beforeSendMetric` to the hook union in `runtime-redaction-barrier.unit.test.ts` is part of this lane; if L-0b authored the `satisfies` check, L-4b extends it.
 
 **GREEN**: Extend `types.ts`, `runtime-sdk.ts`, `runtime-redaction.ts`,
 `runtime.ts`, `fixture.ts`, `config.ts`. Wire `createSentryHooks` with
@@ -546,18 +629,19 @@ env)` function.
 **Objective**. Add `@sentry/profiling-node`, wire
 `nodeProfilingIntegration`, measure overhead.
 
-**RED**: Integration test asserting the profiling integration is
-present in the `NodeOptions` when `SENTRY_PROFILES_SAMPLE_RATE > 0`.
+**API shape — v10** (A.2 item 7, per sentry-reviewer): `@sentry/profiling-node` v10 uses `profileSessionSampleRate` + `profileLifecycle: 'trace' | 'manual'`, NOT the legacy `profilesSampleRate` / `profilesSampler` / `SENTRY_PROFILES_SAMPLE_RATE` env names from v9. Env variable surface: `SENTRY_PROFILE_SESSION_SAMPLE_RATE` and `SENTRY_PROFILE_LIFECYCLE` (confirm exact names against the live `@sentry/profiling-node` v10 docs at lane-open time — do not pin from plan prose).
 
-**GREEN**: Install dependency. Add `SENTRY_PROFILES_SAMPLE_RATE` env
-flag. Compose integration in `createSentryInitOptions`.
+**RED — behaviour-first** (A.2 item 9 tightening):
 
-**REFACTOR**: Measure overhead on a representative harness
-(`prod:harness` or a new micro-bench). Document rollout (env-gated
-initially; revisit continuous after measurement).
+- A profile envelope is emitted under a representative harness (`prod:harness` or a new micro-bench) when `profileSessionSampleRate > 0` and `profileLifecycle = 'trace'` — assertion is over the envelope content, not over `NodeOptions.integrations.some(...)` presence.
+- A transaction produced while a profile is active carries the profile linkage in its event data (fixture capture asserts `profile_id` or equivalent linkage attribute on the captured transaction).
+- `profileLifecycle: 'manual'` mode does not emit a profile envelope unless explicitly started — off-behaviour check.
 
-**Acceptance**: profile linked to a transaction visible in Sentry UI;
-overhead documented in the runbook.
+**GREEN**: Install `@sentry/profiling-node` (opt-in `onlyBuiltDependencies` entry — precompiled binaries ship for Node 18/20/22/24 on Linux/macOS/Windows per A.1 factual correction 3). Thread `profileSessionSampleRate` + `profileLifecycle` through `InitialiseSentryOptions` via DI (ADR-078); expose as env-resolvable but do not read `process.env` in library code.
+
+**REFACTOR**: Measure overhead on the harness. Document rollout (env-gated initially; revisit continuous after measurement) in `docs/operations/sentry-deployment-runbook.md` and `packages/libs/sentry-node/README.md`.
+
+**Acceptance**: profile envelope emitted under the harness; profile linked to a transaction visible in Sentry UI (owner-verified); overhead documented in the runbook; env names match v10 API.
 
 ### L-7 Release + commits + deploy linkage
 
@@ -754,10 +838,40 @@ integration.
 behaviour change. The first real LLM tool's integration is a
 separate future lane, triggered by an actual consumer landing.
 
+### L-12-prereq Browser-safe redactor core extraction
+
+**Objective** (A.2 item 6, per architecture-reviewer-fred + sentry-reviewer). Extract a pure, runtime-agnostic redactor core into a new browser-safe package so both the Node adapter (`@oaknational/sentry-node`) and the forthcoming browser adapter (L-12) compose it. **Proposes** (pending ADR-160 amendment) to close the ADR's "Open Question" on redactor core placement in favour of a new package. ADR-160 is Accepted 2026-04-17 with Open Questions intact; L-12-prereq GREEN is conditional on either a minor ADR-160 amendment closing the question or owner confirmation that plan-prose is sufficient authority for the decision.
+
+**Package placement — new `packages/core/telemetry-redaction-core/`, NOT a submodule**. Rationale: `@oaknational/sentry-node`'s `runtime-redaction.ts` imports types from `@sentry/node` (`Breadcrumb`, `Exception`, `NodeOptions`, `RequestEventData`), coupling it to Node. A subpath export from `@oaknational/sentry-node` would still pull `@sentry/node` into the browser graph transitively. Only a separate core package with zero `@sentry/*` dependencies can be composed from both runtimes. Precedent: `design-tokens-core/oak-design-tokens` split per ADR-154 § Examples. Tier `packages/core/` matches ADR-041 workspace structure.
+
+**Scope**:
+
+- New workspace at `packages/core/telemetry-redaction-core/` — depends only on `@oaknational/type-helpers` and a generic redact primitive; no `@sentry/*` imports.
+- Extract the pure redaction functions (`redactText`, deny-list policy, `SentryPrimitiveValue` narrowing) from `packages/libs/sentry-node/src/runtime-redaction.ts`.
+- `@oaknational/sentry-node` adopts the core as a dependency and re-wraps each `redactSentryEvent` / `redactSentrySpan` / etc. around the core functions with Node-specific payload adapters.
+- Contract: core accepts generic payload shapes parameterised by a "what to redact" descriptor; adapters describe per-runtime payload walks.
+
+**RED**: Extract is by symbol move — existing `runtime-redaction.unit.test.ts` behaviour must be preserved. Introduce parallel tests on the core package exercising the pure redactor functions in runtime-neutral shapes (no `@sentry/node` types in the core's test surface).
+
+**GREEN**: Workspace created, dependency wired, existing tests pass. Node adapter preserves exact behaviour (no behaviour change).
+
+**REFACTOR**: TSDoc naming ADR-160 as doctrine on both packages. `@oaknational/sentry-node` README section describing the composition. Core package README describing the runtime-neutral contract.
+
+**Acceptance**:
+
+1. New workspace builds under `pnpm build`; `pnpm type-check` green from repo root.
+2. `@oaknational/sentry-node` tests unchanged in behaviour (Node adapter composes core).
+3. Zero `@sentry/*` imports in `packages/core/telemetry-redaction-core/`.
+4. L-12 can import the core without pulling `@sentry/node` into the widget bundle.
+
 ### L-12 Widget Sentry
 
 **Objective**. Instrument the MCP App browser widget with
 `@sentry/browser` (or `@sentry/react` after bundle-size review).
+
+**Depends on L-12-prereq**: widget imports `@oaknational/telemetry-redaction-core` for the shared redaction policy. Widget bundle does NOT import `@oaknational/sentry-node`.
+
+**Test boundary declaration** (A.2 item 11, per test-reviewer): `test:widget` runs in `jsdom`. If `@sentry/browser` init requires browser globals (`window`, `document`, `performance`), the integration test uses `jsdom`; if it does not, the fixture-equivalent browser adapter is used directly without a DOM. E2E is NOT the home for this test — E2E is stdio-only per `testing-strategy.md`, and widget Sentry init is an in-process collaboration test. Do not push the test to E2E without a written rationale.
 
 **Process**:
 
@@ -765,13 +879,10 @@ separate future lane, triggered by an actual consumer landing.
 2. Select based on measurement + React-tree complexity.
 3. Share DSN / environment / release / traces-propagation-target
    configuration with the server so traces link end-to-end.
-4. Redaction: widget-side `beforeSend` uses a widget-adapted version
-   of the shared policy (no server-only fields). Align doctrine with
-   ADR-143.
+4. Redaction: widget-side `beforeSend` composes `@oaknational/telemetry-redaction-core` with a browser-side payload adapter (no server-only fields). Align doctrine with ADR-143 + ADR-160.
 
 **RED**: Integration tests under `test:widget` assert the widget
-constructs a Sentry client with the expected options (in fixture
-mode) and that the shared redaction policy is applied.
+constructs a Sentry client with the expected options and that the shared redaction policy is applied to the widget's `beforeSend` payload. Extend L-0b's closure-property invariant — browser-side `beforeSend` + `beforeSendTransaction` are new fan-out paths under ADR-160's closure; they MUST appear in the widget's conformance test (mirror of the Node-side L-0b).
 
 **GREEN**: Implement. Thread config from the HTML resource's served
 content or a widget-bootstrap endpoint (DI per ADR-078).
@@ -779,7 +890,7 @@ content or a widget-bootstrap endpoint (DI per ADR-078).
 **REFACTOR**: TSDoc, widget README, observability.md (widget section).
 
 **Acceptance**: browser error reproduction produces a linked trace in
-Sentry (owner-verified); bundle size delta documented.
+Sentry (owner-verified); bundle size delta documented; widget closure-property tests mirror L-0b coverage on the browser side.
 
 ---
 
@@ -902,10 +1013,17 @@ Per phase, invoke reviewers (non-leading prompts). Matrix:
 
 | Phase | Reviewers |
 |-------|-----------|
-| Phase 1 | code-reviewer (gateway), test-reviewer, type-reviewer, config-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred |
-| Phase 2 | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, architecture-reviewer-betty, architecture-reviewer-wilma, security-reviewer |
-| Phase 3 | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, react-component-reviewer (L-12), accessibility-reviewer (L-12), design-system-reviewer (L-12) |
-| Phase 4 | code-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma, security-reviewer (L-14), release-readiness-reviewer |
+| Phase 1 | code-reviewer (gateway), test-reviewer, type-reviewer, config-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred, **assumptions-reviewer** |
+| Phase 2 | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, architecture-reviewer-betty, architecture-reviewer-wilma, security-reviewer, **docs-adr-reviewer** (L-4b / L-7 runbook + env-var edits), **assumptions-reviewer** |
+| Phase 3 | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, react-component-reviewer (L-12), accessibility-reviewer (L-12), design-system-reviewer (L-12), **architecture-reviewer-fred + architecture-reviewer-barney** at L-12-prereq GREEN, **docs-adr-reviewer** (L-12-prereq new workspace README), **assumptions-reviewer** |
+| Phase 4 | code-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma, security-reviewer (L-14), release-readiness-reviewer, **assumptions-reviewer** |
+
+Additions per A.6 register:
+
+- `assumptions-reviewer` runs at **every** phase close, not only branch close (AR-11).
+- `docs-adr-reviewer` added to Phase 2 (L-4b / L-7 touch runbooks + env-variable docs; AR-10) and Phase 3 (L-12-prereq new workspace README).
+- `architecture-reviewer-fred` + `architecture-reviewer-barney` additionally run at L-12-prereq GREEN close — not only at Phase 3 aggregate close — because the workspace-extraction decision is structural (AR-12).
+- `type-reviewer` in Phase 1 covers L-0b follow-through (the `satisfies` gate and the `SentryRedactionHooks` type export from `runtime-sdk.ts`); same reviewer also runs Phase 2 for L-4b's hook-union extension (CR-7, AF-10).
 
 Reviewer outputs feed back into the plan's todo list. Findings are
 actioned unless explicitly rejected with written rationale (per
@@ -924,11 +1042,14 @@ Phase-specific risks:
 
 | Phase | Risk | Mitigation |
 |-------|------|------------|
-| 1 | Integration composition changes default behaviour unexpectedly | Fixture tests assert the `NodeOptions` shape; SDK version pinned |
-| 2 | `tracesSampler` regresses sampling coverage during rollout | Roll out behind env flag with a fixed-rate fallback; measure first |
-| 2 | Profiling-node native binary install fails in CI | Pin in `onlyBuiltDependencies`; document in CI runbook |
-| 3 | Widget bundle size regression | Bundle-size test gate on widget build |
-| 4 | Alert fatigue | Each alert has an SLO-style intent and dedupe before enablement |
+| 1 | Integration composition changes default behaviour unexpectedly | Behaviour-level fixture tests assert per-integration event emission (ANR / Zod / runtime-metric / etc.); SDK version pinned. Per A.2 item 9, RED is not config-shape presence on `NodeOptions`. |
+| 1 | L-0b `satisfies` gate does NOT auto-detect new fan-out hooks added to `NodeOptions` (e.g. a future `beforeSendMetric` wiring) — it only validates that BARRIER_HOOKS entries are valid `NodeOptions` keys | Resolved by A.6 SR-5: `runtime-sdk.ts` now exports `SentryRedactionHooks` (the `Pick<NodeOptions, ...>` return of `createSentryHooks`); the test imports it and constrains `MinimalHooks` to it. Any new hook wired in `createSentryHooks` without an update to the test's `BARRIER_HOOKS` registry now fails the type-check via a set-equality assertion between the imported type's keys and the registry. Code review remains the backstop. |
+| 1 | **Fixture runtime does not observe non-event envelopes** (ANR stack frames, streamed-span payloads, runtime-metric samples) without adapter extension — L-1 behaviour-level assertions cannot land against the current `createFixtureRuntime` (per A.6 AR-3) | L-1 GREEN has a prerequisite step named in §L-1 to route fixture-mode envelopes through `createSentryHooks` (Option A) OR add per-envelope capture paths (Option B). L-1 does not close until the prerequisite lands. Schedule impact: expect L-1 to take longer than a naive "turn on six integrations" estimate. |
+| 1 | **Per-phase RED tightening fans test-author load across six L-1 integrations** (ANR / Zod / node-runtime / span-streaming / rewrite-frames / extraErrorData), each needing behaviour-level fixture capture rather than integration-registered presence — doubles or triples Phase 1 authorship versus the earlier config-presence posture (per A.6 AR-9) | Recognised: split L-1 into sub-lanes per integration if author-load becomes a bottleneck (L-1a / L-1b / ... ). Reviewer discipline at phase close remains fixed even under split. |
+| 2 | `tracesSampler` regresses sampling coverage during rollout | Roll out behind env flag with a fixed-rate fallback; measure first. |
+| 2 | Profiling-node precompiled-binary install consent not granted in CI | `onlyBuiltDependencies` entry; document in CI runbook. Per A.1 factual correction 3, precompiled binaries ship for Node 18/20/22/24 across Linux/macOS/Windows. |
+| 3 | Widget bundle size regression from adding `@sentry/browser` | Bundle-size test gate on widget build; L-12-prereq extracts browser-safe redactor core to avoid pulling `@sentry/node` transitively. |
+| 4 | Alert fatigue | Each alert has an SLO-style intent and dedupe before enablement. |
 
 ---
 
@@ -938,11 +1059,30 @@ Phase-specific risks:
 
 Per phase, propagate:
 
-- ADRs for architectural decisions (L-0, L-5, L-6, L-14, L-15).
+- ADRs for architectural decisions (L-0a/L-0b → ADR-160 acceptance; L-5, L-6, L-14, L-15).
 - READMEs for every touched workspace.
 - TSDoc on every new public surface.
 - Runbook entries for alerts and operational procedures.
 - `.agent/rules/` updates for error-handling (L-EH).
+
+**Propagation targets added 2026-04-17** (A.2 item 13, per docs-adr-reviewer):
+
+- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` — first-class app observability doc (L-DOC initial writes it; L-3 / L-4b / L-6 / L-9 / L-10 / L-11 / L-12 all update it throughout later phases).
+- `packages/libs/sentry-node/README.md` — expanded from the 4-line stub to cover modes, redaction barrier (ADR-160), DI seam (ADR-078), fixture store, logger sink, shared delegates (L-DOC initial).
+- `docs/operations/sentry-deployment-runbook.md` — release-commit linkage + deploy register (L-7); alert wiring + runbook entries (L-13).
+- `docs/operations/sentry-cli-usage.md` — two new sibling script entries (L-7); L-8 parked rationale.
+- `docs/operations/production-debugging-runbook.md` — per-loop triage flowcharts (L-13).
+- `docs/operations/environment-variables.md` — `SENTRY_ENABLE_METRICS` (L-4b), sampling env (L-5), `SENTRY_PROFILE_SESSION_SAMPLE_RATE` + `SENTRY_PROFILE_LIFECYCLE` (L-6).
+- `apps/oak-curriculum-mcp-streamable-http/README.md` — cross-link to `docs/observability.md` (L-DOC initial).
+- `packages/core/observability/README.md` — span-metric naming convention (L-4a).
+- `packages/core/telemetry-redaction-core/README.md` — runtime-neutral redactor contract (created by L-12-prereq; new package).
+- ADR index — entries for ADR-160 (non-bypassable redaction barrier) and ADR-161 (network-free PR-check CI boundary); both Proposed → Accepted at Phase B close.
+- ADR-088 amendment obligation — expanded enforcement via `prefer-result-pattern` rule (L-EH final).
+- ADR-144 citation-style alignment ("three-zone fitness model") wherever "fitness zones" appears in plan text (A.1 factual correction 6).
+
+**OWNER-ONLY** (PDR-003 protection):
+
+- `.agent/directives/AGENT.md § Essential Links` — cross-link to the observability doc. This is a foundational Practice doc; **sub-agents MUST NOT edit**. Owner applies the edit directly; L-DOC drafts the target line in plan prose or a follow-up note for owner review.
 
 ---
 
@@ -1050,6 +1190,8 @@ These were factual errors or broken links and have been fixed in situ:
 
 ### A.2 Structural Corrections for the Fresh Session
 
+**Status (2026-04-17)**: APPLIED. All 15 items have been integrated into the plan body above. This list is retained for historical traceability of the reviewer finding → plan correction lineage. Items 1, 5, 14 were spot-checked as already reflected (ADR-160 exists as Proposed successor; L-7 sibling scripts in plan text; session prompt links ADR-143 / ADR-159 / sentry-node README / sentry-cli-usage.md). Item 13's AGENT.md cross-link is flagged owner-only (PDR-003).
+
 These are plan-shape corrections to apply as part of Phase 1 setup in the
 fresh session. They do not need owner approval — they are direct remediations
 of reviewer findings consistent with the plan's own principles:
@@ -1074,9 +1216,12 @@ of reviewer findings consistent with the plan's own principles:
    Source: architecture-reviewer-betty.
 5. **L-7 sibling scripts, not fused script**. Release-lifecycle operations
    (`set-commits`, `deploys new`) get their own scripts
-   (`release-set-commits.sh`, `deploy-register.sh`) alongside
+   (`sentry-release-set-commits.sh`, `sentry-deploy-register.sh`) alongside
    `upload-sourcemaps.sh`. Preserves the ADR-159 "one vendor invocation
-   per script with its own preflight + post-condition" discipline.
+   per script with its own preflight + post-condition" discipline. Script
+   names are `sentry-`-prefixed to match the plan body at § L-7; early
+   A.2 drafts used unprefixed names (`release-set-commits.sh` /
+   `deploy-register.sh`) — the body is authoritative.
    Source: architecture-reviewer-fred.
 6. **L-12 browser-safe redactor extraction**. Before L-12 opens, extract a
    pure redactor core into a browser-safe shared package (e.g.
@@ -1132,10 +1277,15 @@ of reviewer findings consistent with the plan's own principles:
     `docs/operations/production-debugging-runbook.md` (L-13),
     `docs/operations/environment-variables.md` (L-4b, L-5, L-6),
     `apps/oak-curriculum-mcp-streamable-http/README.md` (cross-link to
-    `docs/observability.md`), `.agent/directives/AGENT.md § Essential
-    Links` (observability doc), `packages/core/observability/README.md`
+    `docs/observability.md`), `packages/core/observability/README.md`
     (L-4a naming convention), ADR index entry for ADR-160 (L-0), and
     ADR-088 / ADR-144 amendment obligations. Source: docs-adr-reviewer.
+    **OWNER-ONLY** (per [PDR-003](../../../../.agent/practice-decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md)):
+    the `.agent/directives/AGENT.md § Essential Links` edit for the observability
+    doc is a foundational Practice doc change. Sub-agents MUST NOT edit AGENT.md
+    directly. The exact single-line diff is recorded verbatim in §A.6 "AGENT.md
+    edit — exact text" so the owner can apply it at L-DOC-initial close without
+    paraphrase drift.
 14. **Session prompt pointers**. Add links to `ADR-143`, `ADR-159`, the
     existing `packages/libs/sentry-node/README.md` stub, and
     `docs/operations/sentry-cli-usage.md` to the session prompt's "Read
@@ -1217,6 +1367,113 @@ re-openable framing.
   needed. L-7 still uses explicit `--commit` for determinism.
 - **`@sentry/esbuild-plugin` → requires tsup→esbuild swap**. Noted
   for a possible future enhancement lane. Not this branch.
+
+### A.6 Reviewer Findings Register — Session 2026-04-17 close
+
+Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`, `code-reviewer`, `test-reviewer`, `sentry-reviewer`, `architecture-reviewer-fred`. All returned non-blocking verdicts. Full enumeration below. Every finding has a status: **ACTIONED** (edit already applied, citing location), **TO-ACTION** (scheduled with owning lane + specific edit), or **REJECTED** (with written rationale). No finding is "deferred" without an owning lane.
+
+#### Status counts
+
+29 findings total: 18 ACTIONED, 11 TO-ACTION, 0 REJECTED.
+
+#### docs-adr-reviewer (7 findings)
+
+| # | Finding | Status | Home |
+|---|---------|--------|------|
+| DR-1 | ADR-143 / 160 / 161 supersession and acceptance consistency across files | ACTIONED | ADR-143 frontmatter status line + §6 note; ADR-160/161 Accepted flip — all in place |
+| DR-2 | `observability.md` missing as a first-class propagation target | ACTIONED | § Documentation Propagation now lists it explicitly |
+| DR-3 | `packages/libs/sentry-node/README.md` expansion load-bearing but only named generically | ACTIONED | Explicit entry in § Documentation Propagation |
+| DR-4 | `packages/core/telemetry-redaction-core/README.md` listed but workspace does not yet exist | ACTIONED | Entry annotated "(created by L-12-prereq; new package)" |
+| DR-5 | Phase 1 dependency graph edge `L-12-prereq → L-DOC-initial` is spurious (crosses phases) | ACTIONED | Edge removed; replaced with `L-12-prereq → L-12` |
+| DR-6 | L-7 script-name drift between plan body (`sentry-*`-prefixed) and A.2 item 5 (unprefixed) | ACTIONED | A.2 item 5 now names the prefixed forms matching body |
+| DR-7 | Todo-status lifecycle: ADR-117 defines only `pending | completed`; `dropped` on L-8 is non-compliant (pre-existing, not session-introduced) | TO-ACTION | **Owning lane: L-8 body** (not this session). Edit: either amend ADR-117 to recognise `dropped`, or change L-8's frontmatter status to `completed` with body note documenting park status. Track via new frontmatter todo `ws-reconcile-dropped-status`. |
+
+#### assumptions-reviewer (15 findings)
+
+| # | Finding | Status | Home |
+|---|---------|--------|------|
+| AR-1 | ~90 lines of A.1/A.2/A.3 retrospective content duplicate plan body — candidate for pruning | TO-ACTION | **Owning lane: consolidation at branch close** (`/jc-consolidate-docs` at PR time). Edit: reduce Appendix A retrospective sections to one-paragraph summaries + link to git history for reviewer-transcripts. Frontmatter todo already exists (`ws-consolidation`); annotate it with this obligation. |
+| AR-2 | L-12-prereq pre-commits package name/tier/deps without ADR-level authority | ACTIONED | §L-12-prereq wording softened to "proposes (pending ADR-160 amendment)"; ADR-160 amendment now scheduled (see AR-7) |
+| AR-3 | L-1 RED names integration behaviour as fixture-observable before any integration is wired — fixture runtime may not observe non-event envelopes (ANR, streamed-span, runtime-metrics) without adapter extensions | TO-ACTION | **Owning lane: L-1**. Edit L-1 GREEN to name fixture-runtime envelope-observability extensions as a prerequisite step: before asserting ANR/Zod/runtime-metric event capture, `createFixtureRuntime` in `runtime.ts` must route envelopes through the same `beforeSend*` adapters the live SDK uses, OR a separate capture path for non-event envelopes must be added. Acceptance criterion: fixture can observe at minimum (a) ANR stack events via `beforeSend`; (b) Zod error payloads via `beforeSend`; (c) runtime metrics via `beforeSendMetric` (after L-4b). Add schedule-risk row (done — see Risk table). |
+| AR-4 | L-4b's pure-function vs fixture-capture separation is semantically well-defined but not mechanically specified | TO-ACTION | **Owning lane: L-4b RED**. Edit L-4b RED to specify: pure-function test calls `redactSentryMetric(metric)` directly with a `Metric` payload, no adapter wiring; fixture-capture test calls `createSentryHooks({ mode: 'sentry', ... }).beforeSendMetric(metric)` through the composed options returned by `createSentryInitOptions` and asserts the fixture store observes the redacted metric envelope. The two tests prove different claims: policy (pure) vs wiring (fixture). |
+| AR-5 | `satisfies` gate's "build breaks on new NodeOptions hook" claim was inaccurate in risk table | ACTIONED | Risk row rewritten to name the honest enforce-edge (code review + explicit registry); L-0b test file TSDoc already carries the same caveat |
+| AR-6 | Risk row mitigation mis-stated `satisfies` behaviour | ACTIONED | Same row as AR-5; rewritten |
+| AR-7 | ADR-160 Open Questions resolved in plan prose not ADR amendment | TO-ACTION → **ACTIONED** this session | **Owning lane: ADR-160 amendment** — applied at this session close in the same commit as the register. Amendment folds the package-placement answer (`packages/core/telemetry-redaction-core/`) and conformance-test-centralisation answer (per-consuming-workspace) into the ADR body; Open Questions section replaced with "Closed Questions — 2026-04-17" noting the resolution. |
+| AR-8 | Fixture runtime may not observe non-event envelopes — L-1 schedule risk not called out | ACTIONED | New risk row added (see Risk table, Phase 1 row "fixture envelope observability"). |
+| AR-9 | Per-phase RED tightening creates test-scope fan-out (six integrations × behaviour-level capture in L-1) not called out as schedule risk | ACTIONED | New risk row added (see Risk table, Phase 1 row "RED test-author fan-out"). |
+| AR-10 | Reviewer matrix gap: no `docs-adr-reviewer` in Phase 2 | ACTIONED | § Adversarial Review matrix updated — Phase 2 now includes `docs-adr-reviewer` (L-4b / L-7 touch runbooks + env-variable docs). |
+| AR-11 | Reviewer matrix gap: no `assumptions-reviewer` at each phase close | ACTIONED | § Adversarial Review matrix updated — `assumptions-reviewer` added at every phase close, not only session close. |
+| AR-12 | No reviewer specifically targets L-12-prereq package-extraction decision before L-12 Phase 3 | ACTIONED | § Adversarial Review matrix updated — `architecture-reviewer-fred` and `architecture-reviewer-barney` scheduled at L-12-prereq GREEN close, not only at Phase 3 close. |
+| AR-13 | `L-0b → L-12-prereq` blocking relationship over-strict | ACTIONED | Graph edge relaxed to `L-0b ↔ L-12-prereq` (coordinating, not strict blocking) with rationale. |
+| AR-14 | Graph edge `L-2 → L-DOC-initial` is sequencing preference, not technical dependency | ACTIONED | Graph wording updated to "(sequencing — shared delegate seam should land before doc describes it; not a hard technical block)". |
+| AR-15 | `L-12-prereq → L-DOC-initial` is only blocking if same phase | ACTIONED | Edge dropped (see DR-5). |
+
+#### code-reviewer (7 findings)
+
+| # | Finding | Status | Home |
+|---|---------|--------|------|
+| CR-1 | `resolveHookReturn` dual-guard logic is slightly redundant | ACTIONED | Test file: collapsed to one-pass check with contextual error (applied this session after register) |
+| CR-2 | `BYPASS_CANDIDATES` tautological alias (same reference as `BARRIER_HOOKS`) — test cannot fail | ACTIONED | Test file: `BYPASS_CANDIDATES` deleted; the bypass-describe references `BARRIER_HOOKS` directly |
+| CR-3 | `SentryLogPayload` / `SentrySpanPayload` re-declared locally | ACTIONED | `types.ts` now exports both aliases; test file imports them |
+| CR-4 | Maintenance JSDoc only at file head — consider inline comment above `BARRIER_HOOKS` edit point | ACTIONED | Inline comment block above `BARRIER_HOOKS` added, pointing at file-header protocol |
+| CR-5 | Part 2 helper duplicates Part 3 inline URL assertion | ACTIONED | Part 3 tests call the `assertRedacted*` helpers where shape matches; inline assertions retained only where helper shape differs |
+| CR-6 | `buildPiiSpan` uses literal `'Bearer oak-span-secret-zzz'` in two places — extract constant | ACTIONED | Test file: `OAK_SPAN_BEARER_TOKEN` constant introduced |
+| CR-7 | Recommend `type-reviewer` as additional specialist for `satisfies` gate + `MinimalHooks` type coupling | ACTIONED | § Adversarial Review matrix updated — `type-reviewer` added to Phase 1 reviewers for L-0b follow-through and to L-4b/L-12-prereq |
+
+#### test-reviewer (9 findings)
+
+| # | Finding | Status | Home |
+|---|---------|--------|------|
+| TR-1 | TDD framing was retroactive for Parts 1–3; "RED by non-existence" overstates what was done | ACTIONED (honest labelling) | Test file header now explicitly calls Parts 1–3 a "conformance harness" rather than a TDD specification; bypass section remains credible RED-on-change. Plan §L-0b wording aligned. |
+| TR-2 | Bypass tests for `beforeSend` / `beforeSendTransaction` under-covered PII sub-fields | ACTIONED | Assertions extended to cover every PII field in the payload builders |
+| TR-3 | File naming compliant | ACTIONED (no edit needed) | n/a |
+| TR-4 | Assertion style — `JSON.stringify` negative scans weaker than positive `toEqual`; standardise toward positive equality where feasible | ACTIONED | Test file: positive `toEqual` assertions used for exact shape; `JSON.stringify` retained only as supplementary "no raw leak" check where exact shape is too deep to enumerate |
+| TR-5 | Fixture discipline compliant | ACTIONED (no edit needed) | n/a |
+| TR-6 | No-skipped-tests compliant | ACTIONED (no edit needed) | n/a |
+| TR-7 | Part 2 ordering invariant absent for `beforeSendLog` / `beforeSendSpan` (documentation gap in header, not a missing test — ordering is vacuous for hooks without post-hook slots) | ACTIONED | Test file header note added explaining the degenerate case |
+| TR-8 | `beforeSendLog` has no explicit "never returns null" assertion (only via `requireDefined`) | ACTIONED | Explicit `expect(result).not.toBeNull()` added for consistency with `beforeSendSpan` |
+| TR-9 | `REDACTION_SENTINEL` hardcoded and duplicated across two test files | ACTIONED | Test file imports `REDACTED_VALUE` from `@oaknational/observability` (already an exported constant at `packages/core/observability/src/redaction.ts:18`); local alias `REDACTION_SENTINEL` deleted |
+
+#### sentry-reviewer (10 findings; 7 substantive + 3 details)
+
+| # | Finding | Status | Home |
+|---|---------|--------|------|
+| SR-1 | Three-part closure coverage ADEQUATE per ADR-160 Parts 1–3 | ACTIONED (confirmation) | n/a |
+| SR-2 | Hook contract non-uniformity handled correctly | ACTIONED (confirmation) | n/a |
+| SR-3 | `beforeSendMetric` gap: `satisfies` alone insufficient; code review + explicit registry is the enforce-edge | ACTIONED | Risk row rewritten (see AR-5); test file TSDoc already calls this out |
+| SR-4 | Payload adequacy: sufficient for current policy; JWT / email / session-cookie would harden | ACTIONED | Test file payload builders extended with JWT-shaped, email-shaped, and session-cookie-shaped PII classes |
+| SR-5 | Bypass-helper drift: constrain `MinimalHooks` to `ReturnType<typeof createSentryHooks>` | ACTIONED | `runtime-sdk.ts` now exports the hook-return type as `SentryRedactionHooks`; test `MinimalHooks` alias removed in favour of this imported type |
+| SR-6 | Proof-surface correctness CONFIRMED | ACTIONED (confirmation) | n/a |
+| SR-7 | `createSentryHooks` second `hint` argument not exercised — tests pass `{}` | ACTIONED | At least one test now passes a meaningful `hint` (`{ originalException: new Error('pii-source') }`) to exercise the hint path; the redactor does not branch on hint today, but the test is forward-compatible |
+| SR-8 | `isPromiseLike` generic has unused type parameter | ACTIONED | Signature simplified to remove unused generic |
+| SR-9 | Cite ADR-143 §6 alongside ADR-160 in test-file JSDoc | ACTIONED | File header @see block now cites ADR-160 + ADR-143 §6 |
+| SR-10 | No false positives observed | ACTIONED (confirmation) | n/a |
+
+#### architecture-reviewer-fred (10 findings)
+
+| # | Finding | Status | Home |
+|---|---------|--------|------|
+| AF-1 | L-3 boundary-rule path and enforcement claim off | ACTIONED | §L-3 wording corrected (`boundary.ts` + `import-x/no-extraneous-dependencies`; no named MCP-symbol rule exists today) |
+| AF-2 | L-12-prereq package placement at `packages/core/telemetry-redaction-core/` CORRECT under ADR-041 / ADR-154 | ACTIONED (confirmation) | n/a |
+| AF-3 | Explicit-superset wording adequate; residual risk — add test that shared seam's published type has no method-name union wider than any single consumer | TO-ACTION | **Owning lane: L-2 RED**. Edit L-2 acceptance to add: "A type-level test asserts that the published method factory's inferred type is a structural **intersection** over the consumers' declared delegate slices at each composition root — no method name appears in the public type that is not consumed by at least one caller." |
+| AF-4 | L-0b test file ADR-078 / ADR-154 compliant | ACTIONED (confirmation) | n/a |
+| AF-5 | `MinimalHooks` test-local duplication acceptable as test-local (but structural coupling via `ReturnType<typeof createSentryHooks>` would harden) | ACTIONED | Resolved via SR-5 — `MinimalHooks` removed; test imports `SentryRedactionHooks` from `runtime-sdk.ts` |
+| AF-6 | Missing graph edge `L-12-prereq → L-12` | ACTIONED | Edge added to Phase 1 dependency graph |
+| AF-7 | L-0b test file ADR-161 compliant (in-process, no network, no vendor CLI) | ACTIONED (confirmation) | n/a |
+| AF-8 | AGENT.md OWNER-ONLY flag correctly placed in main Documentation Propagation block; two nits — parallel flag in A.2 historical block (item 13), cross-reference PDR-003 file path | ACTIONED | A.2 item 13 historical block now carries the OWNER-ONLY flag + `.agent/practice-decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md` path |
+| AF-9 | Delegation suggestion: `test-reviewer` on `MinimalHooks` coupling | ACTIONED | Resolved by CR-7 + SR-5 (type-reviewer in matrix; MinimalHooks removed) |
+| AF-10 | Delegation suggestion: `type-reviewer` confirm the `satisfies` gate's compile-time behaviour | ACTIONED | Resolved by CR-7 — `type-reviewer` in Phase 1 matrix for L-0b follow-through and Phase 2 L-4b hook-union extension |
+
+#### AGENT.md edit — exact text (owner-applied at L-DOC-initial close)
+
+L-DOC-initial creates `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`. At that lane's close, the owner edits `.agent/directives/AGENT.md` § Essential Links → Architecture and Schema (between the Schema-First MCP Execution Directive line and the Semantic Search Architecture line):
+
+```markdown
+- [MCP Observability](../../apps/oak-curriculum-mcp-streamable-http/docs/observability.md) -
+  Sentry wrapping, redaction barrier, scope enrichment, source-map upload
+```
+
+This is **the only AGENT.md edit required** by the maximisation work. Owner-applied per PDR-003. Sub-agents must not edit AGENT.md; this register carries the exact diff so the edit cannot drift.
 
 ### A.5 Reviewers' Closing Posture
 

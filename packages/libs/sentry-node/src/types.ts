@@ -215,6 +215,8 @@ export type SentryTransactionEvent = Parameters<
   NonNullable<NodeOptions['beforeSendTransaction']>
 >[0];
 export type SentryBreadcrumb = Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0];
+export type SentryLogPayload = Parameters<NonNullable<NodeOptions['beforeSendLog']>>[0];
+export type SentrySpanPayload = Parameters<NonNullable<NodeOptions['beforeSendSpan']>>[0];
 
 export interface SentryPostRedactionHooks {
   readonly beforeSend?: NodeOptions['beforeSend'];

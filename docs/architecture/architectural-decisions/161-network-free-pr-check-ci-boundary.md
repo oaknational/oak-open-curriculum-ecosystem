@@ -1,6 +1,6 @@
 # ADR-161: Network-Free PR-Check CI Boundary
 
-**Status**: Proposed
+**Status**: Accepted (2026-04-17)
 **Date**: 2026-04-17
 **Related**: [ADR-078](078-dependency-injection-for-testability.md) — the DI
 discipline that makes in-process tests deterministic;

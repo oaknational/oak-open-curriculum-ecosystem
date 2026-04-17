@@ -1,6 +1,6 @@
 # ADR-160: Non-Bypassable Redaction Barrier as Principle
 
-**Status**: Proposed
+**Status**: Accepted (2026-04-17)
 **Date**: 2026-04-17
 **Supersedes in part**: [ADR-143 §6](143-coherent-structured-fan-out-for-observability.md#6-shared-redaction-barrier)
 (the enumerated list of hook types; the rest of ADR-143 remains in force)
@@ -180,17 +180,32 @@ the level of principle, `OtelLogRecord` currency, workspace scope,
 out-of-scope clauses) remains in force. ADR-143 should carry a note
 at the top of §6 pointing here.
 
-## Open Questions
+## Closed Questions (2026-04-17)
 
-- Whether the runtime-agnostic redactor core warrants its own
-  package (`@oaknational/telemetry-redaction-core`) or an internal
-  submodule of `@oaknational/observability`. Settled at L-12 planning
-  time.
-- Whether the conformance test belongs in each consuming workspace
-  or is centralised in the adapter. Current preference: in each
-  consuming workspace, because the "destination" is consumer-specific
-  — the test asserts what the consumer sees, not what the adapter
-  emits.
+Both questions originally raised at drafting have been resolved in the
+`sentry-observability-maximisation-mcp.plan.md` Phase A + Phase C lanes:
+
+- **Runtime-agnostic redactor core placement — RESOLVED as a new
+  package.** The core will live at `packages/core/telemetry-redaction-core/`
+  rather than as a submodule of `@oaknational/observability` or
+  `@oaknational/sentry-node`. Rationale: `@oaknational/sentry-node` carries
+  a transitive `@sentry/node` dependency that the browser adapter cannot
+  tolerate; only a separate package with zero `@sentry/*` dependencies can
+  be composed from both runtimes. Precedent: `design-tokens-core` /
+  `oak-design-tokens` per ADR-154. Tier `packages/core/` matches ADR-041.
+  Implemented by L-12-prereq in the maximisation plan.
+- **Conformance-test location — RESOLVED as per-consuming-workspace.**
+  Each consumer (Node adapter in `packages/libs/sentry-node/`; future
+  browser adapter in the widget package) owns its own conformance test
+  because the "destination" the closure property asserts against is
+  consumer-specific — the test asserts what the consumer sees at its
+  fixture capture, not what the adapter emits in isolation. Implemented
+  by L-0b (Node-side) and L-12 RED (browser-side) in the maximisation
+  plan.
+
+The first Node-side conformance test is
+[`packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts`](../../../packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts)
+(landed 2026-04-17, 17 tests).
 
 ## Enforcement
 
