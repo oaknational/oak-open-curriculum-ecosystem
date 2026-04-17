@@ -21,6 +21,11 @@ debugging the system.
   fixes
 - [Elasticsearch Ingest Lifecycle](./elasticsearch-ingest-lifecycle.md) -
   Blue/green index lifecycle validation and ingest procedure
+- [Sentry Deployment Runbook](./sentry-deployment-runbook.md) - How to
+  enable live Sentry error capture and tracing for Oak runtimes
+- [Sentry CLI Usage](./sentry-cli-usage.md) - When to use `sentry-cli`
+  (automation) vs the dev `sentry` CLI, `.sentryclirc` composition,
+  per-workspace ownership
 
 ## Relationship to Engineering Docs
 

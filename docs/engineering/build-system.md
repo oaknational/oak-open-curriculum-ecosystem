@@ -146,7 +146,7 @@ pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check &&
 3. Root-only fixes:
    - `subagents:check` - validate sub-agent wrapper/template standards
    - `portability:check` - validate canonical/adaptor and hook parity
-   - `practice:fitness:informational` - soft-ceiling report (not a blocking gate)
+   - `practice:fitness:informational` — four-zone report (ADR-144), always exits 0
    - `markdownlint:root` - fix markdown in root
    - `format:root` - format root files
 

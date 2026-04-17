@@ -1,5 +1,7 @@
 # Pre-Merge Divergence Analysis
 
+Operationalises [ADR-121 (Quality Gate Surfaces)](../../docs/architecture/architectural-decisions/121-quality-gate-surfaces.md) — pre-merge type-check is a canonical surface — and [ADR-117 (Plan Templates and Reusable Plan Components)](../../docs/architecture/architectural-decisions/117-plan-templates-and-components.md) — plan-level merge strategy lives in active plans.
+
 When merging branches that have diverged significantly (100+ files changed
 on either side, or 10+ conflicts in a dry-run merge), follow the
 [Pre-Merge Divergence Analysis](../../docs/engineering/pre-merge-analysis.md)

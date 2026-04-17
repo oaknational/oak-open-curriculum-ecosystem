@@ -71,6 +71,8 @@
     "portability:check": "node scripts/validate-portability.mjs",
     "practice:fitness": "node scripts/validate-practice-fitness.mjs",
     "practice:fitness:informational": "node scripts/validate-practice-fitness.mjs --informational",
+    "practice:fitness:strict-hard": "node scripts/validate-practice-fitness.mjs --strict-hard",
+    "practice:vocabulary": "node scripts/validate-fitness-vocabulary.mjs",
     "qa:oauth": "cd apps/oak-curriculum-mcp-streamable-http && LOG_LEVEL=debug node dist/index.js",
     "make": "pnpm i && turbo run build type-check doc-gen lint:fix && pnpm subagents:check && pnpm portability:check && pnpm practice:fitness:informational && pnpm markdownlint:root && pnpm format:root",
     "re-build": "pnpm clean && pnpm install && turbo run build",

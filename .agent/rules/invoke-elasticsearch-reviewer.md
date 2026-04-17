@@ -1,5 +1,7 @@
 # Invoke Elasticsearch Reviewer
 
+Operationalises [ADR-129 (Domain Specialist Capability Pattern)](../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md) and [ADR-074 (Elastic-Native-First Philosophy)](../../docs/architecture/architectural-decisions/074-elastic-native-first-philosophy.md).
+
 When changes touch Elasticsearch-specific concerns, invoke the `elasticsearch-reviewer` specialist in addition to the standard `code-reviewer` gateway.
 
 ## Trigger Conditions

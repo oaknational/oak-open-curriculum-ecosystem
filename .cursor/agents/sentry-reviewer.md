@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints, WebFetch, WebSearch
 name: sentry-reviewer
-model: gpt-5.4-medium
+model: gpt-5.4
 description: Sentry and OpenTelemetry specialist reviewer grounded in current official Sentry and OpenTelemetry documentation for Oak's Vercel Node.js runtime, HTTP MCP server, and Search CLI observability foundation.
 readonly: true
 ---

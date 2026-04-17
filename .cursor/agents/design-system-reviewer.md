@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints, WebFetch, WebSearch
 name: design-system-reviewer
-model: gpt-5.4-xhigh
+model: claude-opus-4-7
 description: Design token and visual consistency reviewer for DTCG JSON, CSS custom properties, colour palettes, spacing scales, and theming in UI-shipping workspaces.
 readonly: true
 ---

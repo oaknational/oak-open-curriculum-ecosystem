@@ -50,11 +50,11 @@ todos:
   - id: sentry-credential-provisioning
     content: "Provision real Sentry DSN credentials in .env.local (HTTP app) and deployment platform (Vercel). Owner will configure once all code foundations are in place."
     status: in_progress
-    note: "Both local .env.local files provisioned (2026-04-12). HTTP MCP server: DSN from oak-open-curriculum-mcp project. Search CLI: DSN from oak-open-curriculum-search-cli project. Both set SENTRY_MODE=sentry, SENTRY_TRACES_SAMPLE_RATE=1.0, SENTRY_RELEASE=local-dev, SENTRY_ENVIRONMENT=development, SENTRY_ENABLE_LOGS=true. Remaining: set SENTRY_MODE, SENTRY_DSN, SENTRY_TRACES_SAMPLE_RATE on Vercel dashboard at https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp (SENTRY_RELEASE and SENTRY_ENVIRONMENT auto-resolve from VERCEL_GIT_COMMIT_SHA and VERCEL_ENV). Search CLI has no Vercel deployment — credentials are set via local .env.local or CI env."
+    note: "Both local .env.local files provisioned (2026-04-12). HTTP MCP server: DSN from oak-open-curriculum-mcp project. Search CLI: DSN from oak-open-curriculum-search-cli project. Both set SENTRY_MODE=sentry, SENTRY_TRACES_SAMPLE_RATE=1.0, SENTRY_RELEASE=local-dev, SENTRY_ENVIRONMENT=development, SENTRY_ENABLE_LOGS=true. Owner-provided evidence now indicates the Vercel dashboard contains SENTRY_MODE, SENTRY_DSN, and SENTRY_TRACES_SAMPLE_RATE for poc-oak-open-curriculum-mcp. Remaining: confirm a fresh preview deployment has picked up the current rolled-back auth state before treating Vercel credential provisioning as closed. Search CLI has no Vercel deployment — credentials are set via local .env.local or CI env."
   - id: deployment-and-evidence
     content: "Verify release/source maps, alerting baseline, MCP Insights, and produce a date-stamped evidence bundle"
     status: pending
-    note: "Depends on sentry-credential-provisioning. Cannot verify live capture without real DSN."
+    note: "Depends on sentry-credential-provisioning. Baseline remote smoke against the current preview passed health/auth-challenge checks on 2026-04-16, but the tested preview still served broadened OAuth scope metadata inconsistent with the rolled-back local source, so it cannot yet be treated as the authoritative validation target."
   - id: integrated-http-live-path-alignment
     content: "Close remaining authoritative HTTP MCP live-path runtime alignment in the child plan"
     status: done
@@ -112,7 +112,7 @@ Phase 3 should be judged against that outcome. New wiring only counts if it
 improves supportability and release confidence while preserving the redaction
 and capture boundaries established in Phase 1 and Phase 2.
 
-## Current Execution Snapshot (2026-04-16)
+## Current Execution Snapshot (2026-04-17)
 
 ### Lane and state
 
@@ -129,9 +129,20 @@ and capture boundaries established in Phase 1 and Phase 2.
   broken, `@oaknational/sentry-mcp` removed from HTTP app dependencies,
   dead code deleted, integration tests proving wrapping inertness added
 - Credential provisioning: **in progress** — local `.env.local` done
-  (2026-04-12); Vercel dashboard pending
-- Phase 4 evidence/deployment: **pending** (unblocked by credential
-  provisioning)
+  (2026-04-12); owner evidence indicates the Vercel dashboard now has
+  the required Sentry env vars, but closure still depends on a fresh
+  preview deployment picking up the current auth rollback state
+- Phase 4 evidence/deployment: **pending** — remote baseline smoke
+  against the tested preview passed health and auth-challenge checks,
+  but the preview was stale on OAuth metadata and not yet the
+  authoritative validation target
+- Follow-up hygiene lane: **COMPLETE** (2026-04-17) — Sentry CLI
+  research doctrine, per-workspace `@sentry/cli` devDependency +
+  `.sentryclirc`, `pnpm exec sentry-cli`-driven source-map upload,
+  root README prerequisites, and CLI-driven alert-rule enumeration all
+  landed on this branch. See "Follow-up hygiene — CLOSED (2026-04-17)"
+  below and the two sibling evidence notes in
+  `evidence/2026-04-16-http-mcp-sentry-validation/`
 
 ### Merge from main — COMPLETE (2026-04-11)
 
@@ -147,6 +158,10 @@ no main work lost. Merge plan archived.
 
 Green after native MCP wrapping cleanup. Last verified: 2026-04-16.
 `pnpm check` 88/88 tasks successful. knip clean. depcruise clean.
+2026-04-17 hygiene-lane `pnpm practice:fitness` shows only pre-existing
+governance-file violations outside this lane's edit scope, recorded as
+candidate follow-up rather than fixed in lane per the lane's advisory
+boundary.
 
 ### Remediation status
 
@@ -217,11 +232,13 @@ Two rounds of specialist reviews ran during the remediation sessions:
 **What remains before Sentry is provably working on this branch:**
 
 1. **Credential provisioning** (`sentry-credential-provisioning` todo) —
-   set `SENTRY_MODE`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` on the
-   Vercel dashboard for the HTTP deployment. This is the gate for live
-   verification.
+   confirm the Vercel env configuration has been applied to a fresh
+   preview deployment built from the current rolled-back auth state.
+   The dashboard appears configured; the remaining gate is deployment
+   freshness and alignment with the branch's real source of truth.
 2. **Deployment evidence bundle** (`deployment-and-evidence` todo) —
-   deploy with `SENTRY_MODE=sentry`, trigger success/failure MCP
+   use that fresh preview deployment with `SENTRY_MODE=sentry`, trigger
+   success/failure MCP
    requests, and produce the date-stamped evidence bundle proving:
    native `mcp.server` transactions, thrown handler exception capture,
    `isError` classification, redaction, source-map stack traces, release
@@ -256,12 +273,99 @@ the branch can merge and Sentry can be called "working":
 | 1 | Native MCP wrapping adopted, custom wrappers removed | **DONE** | `wrapMcpServerWithSentry()` in factory, 611 tests pass, 4 specialist reviewers approved |
 | 2 | Dead code chain broken, sentry-mcp decoupled from HTTP app | **DONE** | Zero sentry-mcp imports in app, knip clean, depcruise clean |
 | 3 | Delete orphaned `@oaknational/sentry-mcp` package | **DONE** | Package directory removed, workspace entry removed, boundary rules updated, knip config updated |
-| 4 | Vercel Sentry credential provisioning | **PENDING** | `SENTRY_MODE=sentry`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` set on Vercel dashboard |
-| 5 | Deploy with `SENTRY_MODE=sentry` and produce evidence bundle | **PENDING** | Date-stamped evidence bundle proving all 12 manual/deployment proof items (see Phase 4) |
+| 4 | Vercel Sentry credential provisioning | **DONE** | Owner evidence shows `SENTRY_MODE=sentry`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE` set on the Vercel dashboard; fresh `oak-preview` deployment (`oak-preview` ↔ branch HEAD `0f9245f5`) confirmed OAuth scopes rolled back to `["email"]` and release `1.5.0` live in Sentry |
+| 5 | Deploy with `SENTRY_MODE=sentry` and produce evidence bundle | **DONE (pending alerting wiring)** | Date-stamped bundle at [`evidence/2026-04-16-http-mcp-sentry-validation/`](../evidence/2026-04-16-http-mcp-sentry-validation/README.md). 11 of 12 claims MET on the authoritative fresh preview + local-trigger lane. Item 8 (alerting baseline wiring) CLI-enumerated 2026-04-17 as **empty** (see sibling note `alerting-baseline-enumeration-note.md`): the owner now has a concrete rule-creation action, not an open research question. |
 
-Steps 4-5 require human action (Vercel dashboard access, deployment
-trigger). Steps 1-3 are now complete, so no further code work is
-required on this branch before deployment verification.
+Steps 1-5 are code-complete. Closure of step 5 is gated only on owner
+creation of at least one production-environment error alert rule on
+`oak-national-academy/oak-open-curriculum-mcp` (see bundle §8 plus the
+2026-04-17 sibling enumeration note); no further code work is required on
+this branch.
+
+Source-map upload was brought forward from the expansion plan (EXP-E) into
+this branch as part of the closure pass: see
+`apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh` and
+the `pnpm sourcemaps:upload` script. Live events now resolve to TypeScript
+source on the authoritative preview and the local-trigger lane. The script
+was rewrapped around `pnpm exec sentry-cli` on 2026-04-17 as part of the
+hygiene-lane closure (see sibling note `sentry-cli-reverify-note.md`); the
+end-to-end behaviour is unchanged and the symbolication proof stands.
+
+### Follow-up hygiene — CLOSED (2026-04-17)
+
+The hygiene lane originally carved out for the "next session" ran on this
+same branch (`feat/otel_sentry_enhancements`) on 2026-04-17 and is closed.
+Every principle-bearing bullet below has landed as code/docs on this
+branch; the sole remaining follow-up is the owner-owned alert-rule
+creation, which is now recorded against `Road to Provably Working
+Sentry` step 5.
+
+What landed:
+
+- **Sentry CLI research doctrine**: durable side-by-side matrix for
+  `sentry-cli` and `sentry` now lives at
+  [`docs/operations/sentry-cli-usage.md`](../../../../docs/operations/sentry-cli-usage.md),
+  cross-linked from `docs/operations/README.md` and the deployment runbook.
+  The matrix confirms the purpose split (automation vs interactive /
+  `sentry api`), documents `.sentryclirc` ancestor-discovery and
+  nearest-wins composition, and is the reference all other bullets cite.
+- **Rule 3.5 compliance on the upload path**:
+  `apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`
+  is rewritten against `pnpm exec sentry-cli sourcemaps upload`, with a
+  `require_command` fail-fast preflight. Re-verified end-to-end under a
+  fresh session release tag; see
+  [`evidence/2026-04-16-http-mcp-sentry-validation/sentry-cli-reverify-note.md`](../evidence/2026-04-16-http-mcp-sentry-validation/sentry-cli-reverify-note.md).
+- **Per-workspace ownership**: `@sentry/cli` is now a workspace-local
+  `devDependency` in each of the three Sentry-touching workspaces
+  (`apps/oak-curriculum-mcp-streamable-http`, `apps/oak-search-cli`,
+  `packages/libs/sentry-node`). Each workspace carries its own
+  `.sentryclirc` pinning `org`, `project`, and `url`, so commands run
+  from that workspace cannot reach into another project. The
+  user-global `~/.sentry/cli.db` project pin was cleared.
+- **Root README prerequisites**: the dev `sentry` CLI is added to the
+  root README prerequisites section with an install link and the
+  standard `require_command` fail-fast guidance for any future scripts
+  that drive it. `pnpm`-installable tooling continues to be
+  `pnpm`-installed; non-pnpm tooling is declared as an explicit
+  prereq.
+- **CLI-driven alerting enumeration**: `sentry api` was used to exhaust
+  the project-scoped (`/rules/`, `/alert-rules/`) and org-level
+  (`/combined-rules/`) endpoints for
+  `oak-national-academy/oak-open-curriculum-mcp`. Zero rules are
+  configured today; result recorded in
+  [`evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`](../evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md).
+  That upgrades step-5 item 8 from "MCP tools cannot enumerate it" to
+  "CLI confirms empty; owner action is a one-click rule creation".
+- **Cross-reference**: Clerk-CLI work remains its own strategic brief at
+  [`../future/clerk-cli-adoption.plan.md`](../future/clerk-cli-adoption.plan.md)
+  and was deliberately **not** expanded into this lane.
+- **Pattern formalised as an ADR**: the per-workspace vendor CLI
+  ownership pattern encoded by the bullets above (workspace-local
+  `devDependency`, repo-tracked `.sentryclirc`, `onlyBuiltDependencies`
+  + `knip` ignore wiring, shared-library "no default project" rule,
+  fail-fast preflight, Debug-ID post-condition, user-global carve-out
+  for interactive CLIs) is captured as
+  [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked
+  Configuration](../../../../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md).
+  The planned Clerk CLI adoption plan now cites ADR-159 as the
+  canonical decision it implements.
+
+Principles encoded by the closure (carry forward to the expansion lane):
+
+1. Every CLI dependency must be owned by the workspace that uses it
+   (`pnpm devDependency` + committed workspace-local config), not by a
+   developer machine or a user-global CLI profile.
+2. Any non-pnpm developer tool must be declared as a root-README
+   prerequisite and guarded at the top of any script that uses it with
+   a `require_command` fail-fast check.
+3. Before asking a human to confirm observability state, exhaust the
+   CLI/API enumeration path and record the result in the evidence
+   bundle; only raise an owner question if enumeration genuinely
+   cannot observe the state.
+4. `practice:fitness` is advisory at commit boundaries for lanes whose
+   edits don't touch the governance docs it watches; the lane fixes
+   only the violations it introduces and leaves pre-existing ones as
+   candidate follow-ups.
 
 ### Parent Closure Order
 
@@ -276,8 +380,9 @@ remaining parent-owned closure steps on this branch.
 2. **Complete platform readiness gates**  
    Owner: this parent plan (`sentry-credential-provisioning`,
    `deployment-and-evidence`)
-   - finish Vercel Sentry env provisioning
-   - produce deployment evidence bundle on authoritative live path
+   - confirm the next preview deployment has the final Vercel Sentry env
+     state and the rolled-back auth metadata state
+   - produce deployment evidence bundle on that authoritative live path
 
 The parent foundation lane can close once the authoritative HTTP live path is
 stable and the platform readiness gates are complete.

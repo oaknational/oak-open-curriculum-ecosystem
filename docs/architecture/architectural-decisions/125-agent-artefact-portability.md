@@ -320,6 +320,23 @@ Agents may not follow "Read and follow X" instructions in thin wrappers, skippin
 
 Platform adapter directories may contain externally installed content (e.g., Clerk skills) alongside canonical wrappers. Validation scripts must exclude non-canonical content to avoid false positives.
 
+## Amendments
+
+### 2026-04-17 — Thin-wrapper scope clarification
+
+The "thin wrapper" contract established in §Layer 2 applies to **platform
+adapters wrapping canonical content**, not to canonical command-to-skill
+relationships. Commands (`.agent/commands/`) and skills (`.agent/skills/`)
+are sibling Layer 1 artefacts; a canonical command that orchestrates
+skills or invokes logic of its own is not a thin wrapper, and it does not
+violate this ADR's thin-wrapper requirement. A "thick" orchestrating
+command is a valid Layer 1 artefact — see ADR-135's `process_executor`
+classification for the worked example.
+
+This clarification graduated from `.agent/memory/distilled.md` (2026-04-16
+observation) as part of the enforce-edge tightening pass alongside
+ADR-144's three-zone model revision.
+
 ## References
 
 - `.agent/skills/` — canonical skills (12: 2 active, 10 passive)
@@ -327,3 +344,4 @@ Platform adapter directories may contain externally installed content (e.g., Cle
 - `.agent/directives/` — canonical rules
 - `.agent/sub-agents/` — canonical sub-agent prompts (ADR-114), personas, and components
 - `.cursor/`, `.claude/`, `.gemini/`, `.agents/` — platform adapters
+- [ADR-135](135-agent-classification-taxonomy.md) — agent classification taxonomy referenced in the 2026-04-17 amendment

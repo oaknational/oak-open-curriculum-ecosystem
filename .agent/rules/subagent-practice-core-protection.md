@@ -1,5 +1,7 @@
 # Subagents Must Not Modify the Practice Core
 
+Operationalises [ADR-119 (Agentic Engineering Practice)](../../docs/architecture/architectural-decisions/119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](../../docs/architecture/architectural-decisions/124-practice-propagation-model.md), and [ADR-127 (Documentation as Foundational Infrastructure)](../../docs/architecture/architectural-decisions/127-documentation-as-foundational-infrastructure.md).
+
 ## Rule
 
 Sub-agents (background workers, worktree-isolated agents, batch unit agents)

@@ -5,8 +5,22 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const repoRoot = process.cwd();
-const FITNESS_MODE_STRICT = 'strict';
-const FITNESS_MODE_INFORMATIONAL = 'informational';
+
+export const FITNESS_MODE_STRICT = 'strict';
+export const FITNESS_MODE_STRICT_HARD = 'strict-hard';
+export const FITNESS_MODE_INFORMATIONAL = 'informational';
+
+/**
+ * Ratio above `fitness_*_limit` that triggers the `critical` zone.
+ *
+ * See `docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md`
+ * §Decision. The ratio is deliberately global: per-file critical overrides
+ * would invent optionality that the current evidence does not justify
+ * (`principles.md` §Strict). Adjusting a file's hard limit is the correct
+ * response when its legitimate role outgrows the declared ceiling.
+ */
+export const CRITICAL_RATIO = 1.5;
+
 const EXCLUDED_DIRECTORY_NAMES = new Set(['.git', 'coverage', 'dist', 'node_modules']);
 const EXCLUDED_PATH_PREFIXES = [
   '.agent/practice-context-backup-',
@@ -15,6 +29,13 @@ const EXCLUDED_PATH_PREFIXES = [
   '.agent/practice-core/incoming/',
 ];
 const EXCLUDED_PATH_SEGMENTS = ['/archive/'];
+
+const ZONE_RANK = Object.freeze({
+  healthy: 0,
+  soft: 1,
+  hard: 2,
+  critical: 3,
+});
 
 // --- Helpers ---
 
@@ -69,35 +90,63 @@ export function shouldInspectFitnessPath(relPath) {
 }
 
 /**
- * Recursively discover candidate markdown files in the repo.
+ * Classify a single metric count against its target and hard limit according
+ * to the three-zone fitness model (ADR-144).
  *
- * @param {string} relDir
- * @returns {Promise<string[]>}
+ * Returns one of:
+ * - `healthy` — count is at or below the target (or at or below the hard
+ *   limit when no target is declared).
+ * - `soft` — count is above the target but at or below the hard limit.
+ * - `hard` — count is above the hard limit but within the critical ratio.
+ * - `critical` — count exceeds the hard limit times the critical ratio; loop
+ *   failure signal.
+ * - `null` — neither a target nor a hard limit is declared.
+ *
+ * @param {number} count - observed count
+ * @param {number | null} target - soft target (null if the metric has no target, e.g. char-limit-only)
+ * @param {number | null} hardLimit - hard limit (null if no hard limit is declared)
+ * @param {number} [criticalRatio=CRITICAL_RATIO] - override for testing only
+ * @returns {'healthy' | 'soft' | 'hard' | 'critical' | null}
  */
-async function discoverMarkdownFiles(relDir = '.') {
-  const absDir = path.join(repoRoot, relDir);
-  const dirEntries = await fs.readdir(absDir, { withFileTypes: true });
-  const sortedEntries = dirEntries.toSorted((left, right) => left.name.localeCompare(right.name));
-  const markdownFiles = [];
+export function classifyFitnessZone(count, target, hardLimit, criticalRatio = CRITICAL_RATIO) {
+  if (hardLimit == null && target == null) {
+    return null;
+  }
 
-  for (const entry of sortedEntries) {
-    const relPath = relDir === '.' ? entry.name : path.join(relDir, entry.name);
-
-    if (entry.isDirectory()) {
-      if (shouldSkipDirectory(relPath)) {
-        continue;
-      }
-
-      markdownFiles.push(...(await discoverMarkdownFiles(relPath)));
-      continue;
+  if (hardLimit != null) {
+    if (count > hardLimit * criticalRatio) {
+      return 'critical';
     }
-
-    if (entry.isFile() && shouldInspectFitnessPath(relPath)) {
-      markdownFiles.push(normalizeRelativePath(relPath));
+    if (count > hardLimit) {
+      return 'hard';
     }
   }
 
-  return markdownFiles;
+  if (target != null && count > target) {
+    return 'soft';
+  }
+
+  return 'healthy';
+}
+
+/**
+ * Return the worst zone in an array of zones. `null` entries are ignored.
+ *
+ * Ordering: `healthy` < `soft` < `hard` < `critical`. An empty or all-null
+ * array returns `healthy`.
+ *
+ * @param {Array<'healthy' | 'soft' | 'hard' | 'critical' | null>} zones
+ * @returns {'healthy' | 'soft' | 'hard' | 'critical'}
+ */
+export function worstZone(zones) {
+  let worst = 'healthy';
+  for (const zone of zones) {
+    if (zone == null) continue;
+    if (ZONE_RANK[zone] > ZONE_RANK[worst]) {
+      worst = zone;
+    }
+  }
+  return worst;
 }
 
 /**
@@ -172,17 +221,18 @@ function classifyLines(content) {
 }
 
 /**
- * Check a single fitness-managed file against the two-threshold model (ADR-144).
+ * Check a single fitness-managed file against the three-zone fitness model
+ * (ADR-144).
  *
  * Fitness thresholds measure content only, excluding YAML frontmatter.
+ * Each declared metric is classified into one of four zones — `healthy`,
+ * `soft`, `hard`, or `critical` — based on the relationship between the
+ * observed count, the declared target/limit, and `CRITICAL_RATIO`.
  *
- * Line count has two thresholds:
- * - `fitness_line_target` — soft ceiling. Exceeding it is a warning, not a violation.
- * - `fitness_line_limit` — hard ceiling. Exceeding it is a blocking violation.
- *
- * Character count and prose line width have single hard limits:
- * - `fitness_char_limit` — hard ceiling for total characters.
- * - `fitness_line_length` — hard ceiling for individual prose line width.
+ * Line count uses both a target (`fitness_line_target`) and a hard limit
+ * (`fitness_line_limit`). Character count (`fitness_char_limit`) and prose
+ * line width (`fitness_line_length`) use only a hard limit, so their zones
+ * are `healthy`, `hard`, or `critical` (no `soft`).
  *
  * @param {string} relPath
  * @param {string} content
@@ -198,12 +248,11 @@ function classifyLines(content) {
  *   limitLines: number | null,
  *   limitChars: number | null,
  *   maxProseLineWidth: number | null,
- *   targetOk: boolean,
- *   limitOk: boolean,
- *   charsOk: boolean,
- *   proseOk: boolean,
- *   warnings: string[],
- *   violations: string[],
+ *   lineZone: 'healthy' | 'soft' | 'hard' | 'critical' | null,
+ *   charZone: 'healthy' | 'hard' | 'critical' | null,
+ *   proseZone: 'healthy' | 'hard' | 'critical' | null,
+ *   overallZone: 'healthy' | 'soft' | 'hard' | 'critical',
+ *   zoneMessages: { zone: 'soft' | 'hard' | 'critical', metric: 'lines' | 'chars' | 'prose', text: string }[],
  * }}
  */
 export function evaluateFitnessFile(relPath, content) {
@@ -237,28 +286,57 @@ export function evaluateFitnessFile(relPath, content) {
     }
   }
 
-  const warnings = [];
-  const violations = [];
+  const lineZone = classifyFitnessZone(totalLines, targetLines, limitLines);
+  const charZone = classifyFitnessZone(totalChars, null, limitChars);
+  const proseZone = classifyFitnessZone(maxProseLen, null, maxProseLineWidth);
+  const overallZone = worstZone([lineZone, charZone, proseZone]);
 
-  const targetOk = targetLines == null || totalLines <= targetLines;
-  const limitOk = limitLines == null || totalLines <= limitLines;
+  const zoneMessages = [];
 
-  if (!limitOk) {
-    violations.push(`Lines: ${totalLines} exceeds limit ${limitLines}`);
-  } else if (!targetOk) {
-    warnings.push(`Lines: ${totalLines} exceeds target ${targetLines} (limit ${limitLines})`);
+  if (lineZone === 'soft') {
+    zoneMessages.push({
+      zone: 'soft',
+      metric: 'lines',
+      text: `Lines: ${totalLines} above target ${targetLines} (limit ${limitLines})`,
+    });
+  } else if (lineZone === 'hard') {
+    zoneMessages.push({
+      zone: 'hard',
+      metric: 'lines',
+      text: `Lines: ${totalLines} above hard limit ${limitLines} (critical ${Math.floor((limitLines ?? 0) * CRITICAL_RATIO)})`,
+    });
+  } else if (lineZone === 'critical') {
+    zoneMessages.push({
+      zone: 'critical',
+      metric: 'lines',
+      text: `Lines: ${totalLines} above critical threshold ${Math.floor((limitLines ?? 0) * CRITICAL_RATIO)} — loop failure signal`,
+    });
   }
 
-  const charsOk = limitChars == null || totalChars <= limitChars;
-  if (!charsOk) {
-    violations.push(`Characters: ${totalChars} exceeds limit ${limitChars}`);
+  if (charZone === 'hard') {
+    zoneMessages.push({
+      zone: 'hard',
+      metric: 'chars',
+      text: `Characters: ${totalChars} above hard limit ${limitChars}`,
+    });
+  } else if (charZone === 'critical') {
+    zoneMessages.push({
+      zone: 'critical',
+      metric: 'chars',
+      text: `Characters: ${totalChars} above critical threshold ${Math.floor((limitChars ?? 0) * CRITICAL_RATIO)} — loop failure signal`,
+    });
   }
 
-  const proseOk = maxProseLineWidth == null || maxProseLen <= maxProseLineWidth;
-  if (!proseOk) {
-    violations.push(
-      `Prose line width: ${proseViolations.length} line(s) exceed ${maxProseLineWidth} chars (longest: ${maxProseLen} at line ${maxProseLineNum})`,
-    );
+  if (proseZone === 'hard' || proseZone === 'critical') {
+    const label = proseZone === 'critical' ? 'critical threshold' : 'hard limit';
+    const critical = Math.floor((maxProseLineWidth ?? 0) * CRITICAL_RATIO);
+    const threshold = proseZone === 'critical' ? critical : maxProseLineWidth;
+    const suffix = proseZone === 'critical' ? ' — loop failure signal' : '';
+    zoneMessages.push({
+      zone: proseZone,
+      metric: 'prose',
+      text: `Prose line width: ${proseViolations.length} line(s) above ${label} ${threshold} (longest ${maxProseLen} at line ${maxProseLineNum})${suffix}`,
+    });
   }
 
   return {
@@ -273,12 +351,11 @@ export function evaluateFitnessFile(relPath, content) {
     limitLines,
     limitChars,
     maxProseLineWidth,
-    targetOk,
-    limitOk,
-    charsOk,
-    proseOk,
-    warnings,
-    violations,
+    lineZone,
+    charZone,
+    proseZone,
+    overallZone,
+    zoneMessages,
   };
 }
 
@@ -303,24 +380,59 @@ async function discoverFitnessFiles() {
   return fitnessFiles.toSorted((left, right) => left.localeCompare(right));
 }
 
+/**
+ * Recursively discover candidate markdown files in the repo.
+ *
+ * @param {string} relDir
+ * @returns {Promise<string[]>}
+ */
+async function discoverMarkdownFiles(relDir = '.') {
+  const absDir = path.join(repoRoot, relDir);
+  const dirEntries = await fs.readdir(absDir, { withFileTypes: true });
+  const sortedEntries = dirEntries.toSorted((left, right) => left.name.localeCompare(right.name));
+  const markdownFiles = [];
+
+  for (const entry of sortedEntries) {
+    const relPath = relDir === '.' ? entry.name : path.join(relDir, entry.name);
+
+    if (entry.isDirectory()) {
+      if (shouldSkipDirectory(relPath)) {
+        continue;
+      }
+
+      markdownFiles.push(...(await discoverMarkdownFiles(relPath)));
+      continue;
+    }
+
+    if (entry.isFile() && shouldInspectFitnessPath(relPath)) {
+      markdownFiles.push(normalizeRelativePath(relPath));
+    }
+  }
+
+  return markdownFiles;
+}
+
 // --- Format output ---
 
-function passIndicator() {
-  return '\x1b[32m✓\x1b[0m';
-}
-
-function failIndicator() {
-  return '\x1b[31m✗\x1b[0m';
-}
-
-function warnIndicator() {
-  return '\x1b[33m⚠\x1b[0m';
+function zoneGlyph(zone) {
+  switch (zone) {
+    case 'healthy':
+      return '\x1b[32m✓\x1b[0m';
+    case 'soft':
+      return '\x1b[33m⚠ soft\x1b[0m';
+    case 'hard':
+      return '\x1b[31m⚠ hard\x1b[0m';
+    case 'critical':
+      return '\x1b[35m🚨 critical\x1b[0m';
+    default:
+      return '';
+  }
 }
 
 function formatLineStatus(result) {
   const count = String(result.totalLines).padStart(6);
 
-  if (result.targetLines == null && result.limitLines == null) {
+  if (result.lineZone == null) {
     return `    Lines:            ${count}  (no threshold)`;
   }
 
@@ -328,46 +440,40 @@ function formatLineStatus(result) {
   const limitPart = result.limitLines != null ? `limit ${result.limitLines}` : '';
   const thresholds = [targetPart, limitPart].filter(Boolean).join(' / ');
 
-  if (!result.limitOk) {
-    return `    Lines:            ${count} / ${thresholds}  ${failIndicator()}`;
-  }
-
-  if (!result.targetOk) {
-    return `    Lines:            ${count} / ${thresholds}  ${warnIndicator()} above target`;
-  }
-
-  return `    Lines:            ${count} / ${thresholds}  ${passIndicator()}`;
+  return `    Lines:            ${count} / ${thresholds}  ${zoneGlyph(result.lineZone)}`;
 }
 
 function formatResult(result) {
   const lines = [];
-  lines.push(`  ${result.filename}`);
+  lines.push(`  ${result.filename}  ${zoneGlyph(result.overallZone)}`);
 
   lines.push(formatLineStatus(result));
 
-  if (result.limitChars != null) {
-    const charIndicator = result.charsOk ? passIndicator() : failIndicator();
+  if (result.charZone != null) {
     lines.push(
-      `    Characters:       ${String(result.totalChars).padStart(6)} / ${result.limitChars}  ${charIndicator}`,
+      `    Characters:       ${String(result.totalChars).padStart(6)} / ${result.limitChars}  ${zoneGlyph(result.charZone)}`,
     );
   } else {
     lines.push(`    Characters:       ${String(result.totalChars).padStart(6)}  (no limit)`);
   }
 
-  if (result.maxProseLineWidth != null) {
-    const detail = result.proseOk
-      ? ''
-      : ` (${result.proseViolationCount} violations, longest at line ${result.maxProseLineNum})`;
-    const proseInd = result.proseOk ? passIndicator() : failIndicator();
+  if (result.proseZone != null) {
+    const detail =
+      result.proseZone === 'healthy'
+        ? ''
+        : ` (${result.proseViolationCount} lines, longest at line ${result.maxProseLineNum})`;
     lines.push(
-      `    Max prose line:   ${String(result.maxProseLen).padStart(6)} / ${result.maxProseLineWidth}  ${proseInd}${detail}`,
+      `    Max prose line:   ${String(result.maxProseLen).padStart(6)} / ${result.maxProseLineWidth}  ${zoneGlyph(result.proseZone)}${detail}`,
     );
   } else {
     lines.push(`    Max prose line:   ${String(result.maxProseLen).padStart(6)}  (no limit)`);
   }
 
-  if (!result.proseOk && result.proseViolations.length > 0) {
-    lines.push('    Prose violations:');
+  if (
+    (result.proseZone === 'hard' || result.proseZone === 'critical') &&
+    result.proseViolations.length > 0
+  ) {
+    lines.push('    Prose zone lines:');
     for (const violation of result.proseViolations) {
       lines.push(
         `      line ${String(violation.lineNumber).padStart(3)}: ${violation.text.length} chars`,
@@ -384,23 +490,64 @@ function formatResult(result) {
 
 // --- Main ---
 
-function getMode(args) {
-  return args.includes('--informational') ? FITNESS_MODE_INFORMATIONAL : FITNESS_MODE_STRICT;
+/**
+ * Parse CLI args into a validator mode.
+ *
+ * @param {string[]} args
+ * @returns {'informational' | 'strict' | 'strict-hard'}
+ */
+export function getMode(args) {
+  if (args.includes('--informational')) return FITNESS_MODE_INFORMATIONAL;
+  if (args.includes('--strict-hard')) return FITNESS_MODE_STRICT_HARD;
+  return FITNESS_MODE_STRICT;
 }
 
 /**
- * Convert the current result set into a process exit code.
+ * Derive the process exit code from the mode and the set of overall zones
+ * observed across all inspected files.
  *
- * @param {'strict' | 'informational'} mode
- * @param {number} totalViolations
+ * The blocking zones differ by mode (see ADR-144 §Decision):
+ * - `informational` — nothing blocks (always exits 0)
+ * - `strict` — only `critical` blocks
+ * - `strict-hard` — `hard` or `critical` blocks (used at consolidation closure)
+ *
+ * @param {'strict' | 'strict-hard' | 'informational'} mode
+ * @param {Array<'healthy' | 'soft' | 'hard' | 'critical'>} overallZones
  * @returns {number}
  */
-export function getExitCode(mode, totalViolations) {
-  if (mode === FITNESS_MODE_INFORMATIONAL) {
-    return 0;
+export function getExitCode(mode, overallZones) {
+  if (mode === FITNESS_MODE_INFORMATIONAL) return 0;
+  const blocking = mode === FITNESS_MODE_STRICT_HARD ? ['hard', 'critical'] : ['critical'];
+  return overallZones.some((zone) => blocking.includes(zone)) ? 1 : 0;
+}
+
+function summariseResults(results) {
+  const counts = { healthy: 0, soft: 0, hard: 0, critical: 0 };
+  for (const result of results) {
+    counts[result.overallZone] += 1;
+  }
+  return counts;
+}
+
+function formatSummary(mode, counts) {
+  const nonHealthy = counts.soft + counts.hard + counts.critical;
+  if (nonHealthy === 0) {
+    return '\x1b[32mResult: PASS — all files healthy\x1b[0m\n';
   }
 
-  return totalViolations === 0 ? 0 : 1;
+  const suffix = mode === FITNESS_MODE_INFORMATIONAL ? ' — informational mode' : '';
+  const label =
+    counts.critical > 0
+      ? '\x1b[35mResult: CRITICAL'
+      : counts.hard > 0
+        ? '\x1b[31mResult: HARD'
+        : '\x1b[33mResult: SOFT';
+
+  const parts = [];
+  if (counts.critical > 0) parts.push(`${counts.critical} critical`);
+  if (counts.hard > 0) parts.push(`${counts.hard} hard`);
+  if (counts.soft > 0) parts.push(`${counts.soft} soft`);
+  return `${label} (${parts.join(', ')})${suffix}\x1b[0m\n`;
 }
 
 /**
@@ -413,59 +560,42 @@ async function main(args = process.argv.slice(2)) {
   const mode = getMode(args);
   const fitnessFiles = await discoverFitnessFiles();
 
-  console.log('\nPractice Fitness Check');
-  console.log('══════════════════════════════════════\n');
+  console.log('\nPractice Fitness Check (ADR-144 three-zone model)');
+  console.log('══════════════════════════════════════════════════\n');
 
   const results = await Promise.all(
     fitnessFiles.map(async (relPath) => evaluateFitnessFile(relPath, await readText(relPath))),
   );
-  const totalViolations = results.reduce((sum, result) => sum + result.violations.length, 0);
-  const totalWarnings = results.reduce((sum, result) => sum + result.warnings.length, 0);
 
   for (const result of results) {
     console.log(formatResult(result));
     console.log();
   }
 
-  const exitCode = getExitCode(mode, totalViolations);
-
-  if (totalViolations === 0 && totalWarnings === 0) {
-    console.log('\x1b[32mResult: PASS\x1b[0m\n');
-    return exitCode;
-  }
-
-  if (totalViolations === 0 && totalWarnings > 0) {
-    console.log(
-      `\x1b[33mResult: PASS with ${totalWarnings} warning${totalWarnings === 1 ? '' : 's'} (target exceeded)\x1b[0m\n`,
-    );
-    for (const result of results) {
-      for (const warning of result.warnings) {
-        console.log(`  \x1b[33m⚠\x1b[0m ${result.filename}: ${warning}`);
-      }
-    }
-    console.log();
-    return exitCode;
-  }
-
-  const summaryColour = mode === FITNESS_MODE_INFORMATIONAL ? '\x1b[33m' : '\x1b[31m';
-  const summaryLabel = mode === FITNESS_MODE_INFORMATIONAL ? 'WARN' : 'FAIL';
-  const summarySuffix = mode === FITNESS_MODE_INFORMATIONAL ? ' — informational mode' : '';
-
-  console.log(
-    `${summaryColour}Result: ${summaryLabel} (${totalViolations} violation${totalViolations === 1 ? '' : 's'}${totalWarnings > 0 ? `, ${totalWarnings} warning${totalWarnings === 1 ? '' : 's'}` : ''})${summarySuffix}\x1b[0m\n`,
-  );
+  const overallZones = results.map((result) => result.overallZone);
+  const counts = summariseResults(results);
+  console.log(formatSummary(mode, counts));
 
   for (const result of results) {
-    for (const violation of result.violations) {
-      console.log(`  \x1b[31m•\x1b[0m ${result.filename}: ${violation}`);
+    if (result.overallZone === 'healthy') continue;
+    for (const message of result.zoneMessages) {
+      console.log(`  ${zoneGlyph(message.zone)} ${result.filename}: ${message.text}`);
     }
-    for (const warning of result.warnings) {
-      console.log(`  \x1b[33m⚠\x1b[0m ${result.filename}: ${warning}`);
-    }
+  }
+
+  if (counts.critical > 0) {
+    console.log(
+      '\n\x1b[35mCritical zone detected. Per ADR-144 §Loop Health, a short post-mortem is required:\x1b[0m',
+    );
+    console.log('  1. Why did the earlier zones not fire?');
+    console.log("  2. Was the limit set incorrectly for this file's role?");
+    console.log(
+      '  3. Is the file a symptom of a missing graduation (ADR, governance doc, README)?',
+    );
   }
 
   console.log();
-  return exitCode;
+  return getExitCode(mode, overallZones);
 }
 
 const currentFilePath = fileURLToPath(import.meta.url);

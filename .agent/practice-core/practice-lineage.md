@@ -27,10 +27,10 @@ See §Frontmatter and §Plasmid Exchange below.
 ## Frontmatter
 
 The trinity files carry YAML frontmatter with `provenance` (pointer to
-`provenance.yml`) and four fitness thresholds (two-threshold model):
+`provenance.yml`) and four fitness thresholds (three-zone model):
 `fitness_line_target` (soft), `fitness_line_limit` (hard),
 `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100).
-All measure content only — frontmatter excluded. See §Fitness Functions.
+All measure content only. See §Fitness Functions.
 
 ### Provenance (provenance.yml)
 
@@ -271,24 +271,25 @@ The three-part bar governs what enters but not cumulative growth. Without
 fitness limits, files bloat — compounded by plasmid exchange adding content
 across repos.
 
-### Thresholds (Two-Threshold Model)
+### Thresholds (Three-Zone Model)
 
 Four fitness fields govern each tracked file. All measure content only
 (frontmatter excluded). Width applies to prose only (code blocks, tables,
 frontmatter excluded).
 
-| Frontmatter key        | Threshold | What it guards                                  |
-| ---------------------- | --------- | ----------------------------------------------- |
-| `fitness_line_target`  | Soft      | Content lines — signal to refine; agents may extend modestly |
-| `fitness_line_limit`   | Hard      | Content lines — cannot exceed without user approval          |
-| `fitness_char_limit`   | Hard      | Content characters — honest volume (ungameable)              |
-| `fitness_line_length`  | Hard      | Prose line width — readability and diff quality; always 100  |
+| Frontmatter key       | Threshold | What it guards                                                        |
+| --------------------- | --------- | --------------------------------------------------------------------- |
+| `fitness_line_target` | Soft      | Content lines — signal to refine; agents may extend modestly          |
+| `fitness_line_limit`  | Hard      | Content lines — cannot exceed without user approval                   |
+| `fitness_char_limit`  | Hard      | Content characters — honest volume (ungameable)                       |
+| `fitness_line_length` | Hard      | Prose line width — readability and diff quality; always 100           |
 
-Target exceedance warns; limit exceedance blocks. Only the user may raise
-hard limits. The four fields form a constraint triangle — gaming one
-dimension (fewer lines via reflowing) triggers another (characters or
-width). All governed files carry all four fields. Only shallow entry
-points (root README, quickstart, VISION) are exempt.
+Metrics land in `healthy`/`soft`/`hard`/`critical` where `critical` =
+`hard limit × 1.5`. `soft` never blocks; `hard` blocks at consolidation
+closure; `critical` blocks always and triggers the ADR-144 §Loop Health
+post-mortem. Only the user raises hard limits. All governed files carry
+all four fields; shallow entry points (README, quickstart, VISION) are
+exempt.
 
 ### Growth Governance
 
@@ -543,7 +544,7 @@ validated across 3+ repos.
   outgoing content, incoming integration, two-way comparison — operates
   at the concept level: what something is, how it works, why it
   matters. Not at the file level, not at the pointer level. A name
-  like "the two-threshold fitness model" is better than "ADR-144", but
+  like "the three-zone fitness model" is better than "ADR-144", but
   a name alone is still a pointer — the substance must travel. Two
   repos may implement the same concept under different names and
   structures; concept-level comparison reveals equivalences that

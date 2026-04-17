@@ -1,5 +1,7 @@
 # Invoke React Component Reviewer
 
+Operationalises [ADR-149 (Frontend Specialist Reviewer Gateway Cluster)](../../docs/architecture/architectural-decisions/149-frontend-specialist-reviewer-gateway-cluster.md) and [ADR-129 (Domain Specialist Capability Pattern)](../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md).
+
 When changes touch React component architecture, hook patterns, or component composition, invoke the `react-component-reviewer` specialist in addition to the standard `code-reviewer` gateway.
 
 ## Trigger Conditions

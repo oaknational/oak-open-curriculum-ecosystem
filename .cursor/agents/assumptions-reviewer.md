@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints
 name: assumptions-reviewer
-model: claude-4.6-opus-max-thinking
+model: gpt-5.4
 description: Meta-level plan reviewer for proportionality, assumption validity, and blocking legitimacy. Use when plans are marked decision-complete, propose 3+ agents, or assert blocking relationships.
 readonly: true
 ---

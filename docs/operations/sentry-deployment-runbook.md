@@ -76,15 +76,33 @@ deployment — credentials are set via local `.env.local` or CI env.
 
 ## Step 3: Verify Release and Source Maps
 
-Sentry needs source maps to show readable stack traces:
+Sentry needs source maps with embedded Debug IDs to show readable
+stack traces. The canonical upstream flow is a two-step CLI pipeline
+(`sourcemaps inject` then `sourcemaps upload`), which the wrapper
+script performs automatically. See
+[Sentry CLI Usage](./sentry-cli-usage.md) for the full CLI split,
+`.sentryclirc` composition rules, artefact-bundle-vs-release model,
+and troubleshooting.
 
 1. Ensure `SENTRY_RELEASE` resolves to the deployed commit SHA.
-2. Upload source maps using the Sentry CLI or a build plugin.
-3. Confirm in Sentry UI: Settings > Source Maps > the release shows
-   uploaded artefacts.
+2. Run the workspace-local wrapper to inject Debug IDs and upload the
+   artefact bundle:
+   [`upload-sourcemaps.sh`](../../apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh).
+   The script fails fast if Debug ID injection did not produce at
+   least one `//# debugId=` comment in `dist/`.
+3. Confirm in Sentry UI: **Project Settings → Source Maps → Artifact
+   Bundles** — this is the authoritative Debug-ID-keyed surface and is
+   the primary evidence that symbolication will resolve at event time.
+   Release visibility (Releases → source maps on the release page) is
+   a secondary, convenience check — useful when `--release` is passed
+   but NOT a substitute for the Artifact Bundles listing, because the
+   match key at event time is the Debug ID, not the release string.
 
-Source map upload is not yet automated in CI. This is tracked as part
-of the `deployment-and-evidence` todo in the execution plan.
+Source map upload is automated for local evidence generation via
+`RELEASE=<tag> pnpm sourcemaps:upload` inside
+`apps/oak-curriculum-mcp-streamable-http`. CI-triggered upload on
+Vercel deploys is still tracked as part of the
+`deployment-and-evidence` todo in the execution plan.
 
 ## Step 4: Deploy and Smoke Test
 
@@ -198,6 +216,8 @@ See `packages/core/observability/src/redaction.ts` and
 ## Related Documentation
 
 - [ADR-143: Coherent Structured Fan-Out](../architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
+- [ADR-159: Per-Workspace Vendor CLI Ownership](../architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)
+- [Sentry CLI Usage](./sentry-cli-usage.md)
 - [Logging Guidance](../governance/logging-guidance.md)
 - [Vercel Environment Configuration](../../apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md)
 - [Production Debugging Runbook](./production-debugging-runbook.md)

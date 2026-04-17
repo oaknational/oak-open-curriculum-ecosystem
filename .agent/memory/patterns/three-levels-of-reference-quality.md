@@ -26,16 +26,17 @@ or unintelligible when it moves to a new context.
    access to the host repo's specific artefact system. Fails completely
    in any other context.
 
-2. **Descriptive name**: "The two-threshold fitness model." Better —
+2. **Descriptive name**: "The three-zone fitness model." Better —
    the reader knows what the concept is about. But if they have never
    encountered the concept, the name alone is insufficient. A pointer
    with a better label is still a pointer.
 
-3. **Exported concept**: "The fitness model uses two thresholds:
-   a target (where to aim) and a limit (where to act). Content stays
-   between them; crossing the limit triggers compression." The
-   substance travels with the reference. The reader can act on it
-   without access to the original source.
+3. **Exported concept**: "The fitness model uses a four-zone scale —
+   `healthy`, `soft`, `hard`, `critical` — where `critical` is
+   `hard limit × 1.5`. `soft` is a refinement signal; `hard` blocks at
+   consolidation closure; `critical` always blocks and triggers a
+   loop-health post-mortem." The substance travels with the reference.
+   The reader can act on it without access to the original source.
 
 ## Pattern
 

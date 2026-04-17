@@ -1,5 +1,7 @@
 # Invoke Accessibility Reviewer
 
+Operationalises [ADR-149 (Frontend Specialist Reviewer Gateway Cluster)](../../docs/architecture/architectural-decisions/149-frontend-specialist-reviewer-gateway-cluster.md), [ADR-147 (Browser Accessibility as a Blocking Quality Gate)](../../docs/architecture/architectural-decisions/147-browser-accessibility-as-blocking-quality-gate.md), and [ADR-129 (Domain Specialist Capability Pattern)](../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md).
+
 When changes touch rendered UI, accessibility attributes, or browser-facing interaction patterns, invoke the `accessibility-reviewer` specialist in addition to the standard `code-reviewer` gateway.
 
 ## Trigger Conditions

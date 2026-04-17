@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints
 name: architecture-reviewer-wilma
-model: composer-1.5
+model: composer-2
 description: Adversarial architecture reviewer focused on resilience, failure modes, and hidden coupling risks. Use proactively when changes may affect reliability, edge-case behaviour, operational safety, or boundary robustness under stress.
 readonly: true
 ---

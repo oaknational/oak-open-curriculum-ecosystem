@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-16
+last_updated: 2026-04-17
 ---
 
 # Session Continuation
@@ -15,9 +15,12 @@ last_updated: 2026-04-16
    - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
-2. Read `.agent/memory/distilled.md` and `.agent/memory/napkin.md`
-3. Read the active plan for your workstream (see below)
-4. Re-establish live branch state:
+2. Scan the [Start Here: 5 ADRs in 15 Minutes](../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
+   block in the ADR index, and open any ADR whose slug matches your current
+   workstream from the [full ADR index](../../docs/architecture/architectural-decisions/README.md).
+3. Read `.agent/memory/distilled.md` and `.agent/memory/napkin.md`
+4. Read the active plan for your workstream (see below)
+5. Re-establish live branch state:
 
 ```bash
 git status --short
@@ -54,16 +57,62 @@ git log --oneline --decorate -10
     (next MCP-server-confined lane after parent closure; still blocked)
   - `.agent/plans/architecture-and-infrastructure/future/codex-mcp-server-compatibility.plan.md`
     (strategic follow-up only; not executable yet)
-- **Current state**: Local and Vercel credential prerequisites are now in place
-  for the HTTP MCP server, and the branch preview exists. The remaining active
-  work is to validate the live Sentry path on the preview deployment, assemble
-  the scrubbed evidence bundle, and update the parent-plan closure state.
-  Separately, the attempted Codex auth fix was rolled back after it failed to
-  unblock Codex and regressed Cursor; that investigation is now isolated in its
-  own future plan rather than being mixed into the Sentry lane.
-- **Current objective**: Close the HTTP MCP validation lane cleanly:
-  confirm the preview deployment evidence, gather the date-stamped Sentry
-  bundle, and only then resume MCP-server-confined expansion work.
+  - `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`
+    (strategic follow-up: extend the Sentry CLI-as-infrastructure
+    pattern to Clerk's CLI once the Sentry hygiene lane lands)
+- **Current state**: Validation closure pass complete on this branch.
+  Sentry CLI hygiene follow-up lane also complete on the same branch
+  on 2026-04-17. Fresh `oak-preview` deployment confirmed
+  (`scopes_supported: ["email"]`, release `1.5.0` live in Sentry with
+  `mcp.server`, `http.client`, and `bootstrap` spans). Source-map
+  upload operational via `pnpm sourcemaps:upload`, now backed by
+  `pnpm exec sentry-cli sourcemaps upload` with per-workspace
+  `@sentry/cli` devDependency + committed `.sentryclirc` in each of
+  the three Sentry-touching workspaces. Local-trigger lane produced
+  handled, rejected-promise, and unhandled events under session
+  release tag `evidence-2026-04-16-http-mcp-sentry-validation`, with
+  frames resolved to TypeScript source. Kill-switch rehearsal
+  (`SENTRY_MODE=off`) under
+  `evidence-2026-04-16-http-mcp-sentry-validation-KILLSWITCH` returned
+  zero events. Temporary `__test_generate_errors` tool removed before
+  commit boundary. Date-stamped bundle at
+  `.agent/plans/architecture-and-infrastructure/evidence/2026-04-16-http-mcp-sentry-validation/README.md`
+  with two 2026-04-17 sibling notes:
+  `sentry-cli-reverify-note.md` (rewritten upload script re-verified
+  end-to-end) and `alerting-baseline-enumeration-note.md` (CLI
+  confirms zero alert rules on `oak-open-curriculum-mcp`).
+  Separately, the attempted Codex auth fix was rolled back after it
+  failed to unblock Codex and regressed Cursor; that investigation
+  stays isolated in its own future plan.
+- **Current objective (next session)**: commit boundary. Two lanes have
+  landed on this branch on top of the Sentry closure:
+  (1) **Sentry CLI hygiene** — ADR-159 (Per-Workspace Vendor CLI
+  Ownership) + `docs/operations/sentry-cli-usage.md` + per-workspace
+  `@sentry/cli` + `.sentryclirc` + rewritten `upload-sourcemaps.sh`.
+  Specialist reviewers (sentry-reviewer, docs-adr-reviewer,
+  code-reviewer) were re-invoked and all findings resolved.
+  (2) **Practice enforce-edge tightening** (2026-04-17) — ADR-144
+  rewritten as the three-zone model (`healthy`/`soft`/`hard`/`critical`,
+  `CRITICAL_RATIO = 1.5`), validator extended with `--strict-hard` mode
+  and four-zone output, 23 unit tests green. Surface-consistency sweep
+  landed: `consolidate-docs.md`, `distilled.md`, this prompt,
+  `practice-core/practice.md`/`practice-bootstrap.md`/`practice-lineage.md`,
+  and the outgoing `three-dimension-fitness-functions.md` +
+  `validate-practice-fitness.ts` all adopt the zone vocabulary. WS3
+  ADR-grounding: AGENT.md/README.md/quick-start/start-right-thorough/this
+  prompt route agents to the ADR index with a "5 ADRs in 15 Minutes"
+  scan mandate. `session-handoff.md` now cites ADR-150 and names the
+  `capture → distil → graduate → enforce` pipeline. ADR-125 has the
+  2026-04-17 thin-wrapper-scope amendment. WS5 rule-citation backfill:
+  every eligible rule now cites its establishing ADR. WS6:
+  `consolidate-docs.md` step 7 has the explicit 7a "scan for ADR-shaped
+  doctrine" substep. WS7 napkin meta-observation captured.
+  Sit at the commit boundary for owner approval of both lanes and of
+  the one remaining owner-only action: creating the first production
+  alert rule on `oak-national-academy/oak-open-curriculum-mcp` (CLI
+  enumeration confirms zero rules exist there today). After the
+  commit/merge, the next implementation lane is
+  `sentry-observability-expansion.plan.md`.
 - **Hard invariants / non-goals**:
   - Parent-plan authority stays with
     `sentry-otel-integration.execution.plan.md` for credential and evidence
@@ -73,40 +122,83 @@ git log --oneline --decorate -10
   - Codex compatibility is a separate follow-up lane; do not reopen shared auth
     configuration speculatively inside the Sentry validation pass.
   - Preserve working-client compatibility while investigating Codex.
+  - **Vendor CLI adoption discipline**: pnpm-first install, repo-tracked
+    config (no user-global state), per-workspace ownership for pipeline
+    CLIs, shared libraries never pin `project`. See
+    [ADR-159](../../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)
+    for the full eight-point decision and
+    [docs/operations/sentry-cli-usage.md](../../docs/operations/sentry-cli-usage.md)
+    for the worked Sentry example.
 - **Recent surprises / corrections**:
   - Broader `scopes_supported` advertising did not fix Codex and did regress
     Cursor, so shared auth metadata is not a safe speculative fix surface.
-  - Restart surfaces had drifted and were teaching different priorities; the
-    prompt, collection indexes, and plan set needed a coordinated sweep.
+  - Alert-rule enumeration via `sentry api` is reachable with the existing
+    org auth token and directly answers item 8 of the evidence bundle: the
+    project currently has **zero** configured alert rules (all three
+    surfaces — `/rules/`, `/alert-rules/`, org-level `/combined-rules/`
+    filtered to this project — return empty). The open question therefore
+    becomes an owner rule-creation action, not a research question. See
+    `evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`.
+  - `sentry-cli` and `sentry` both read ancestor `.sentryclirc` with
+    nearest-wins composition, so workspace-local pinning of
+    `org/project/url` via a committed `.sentryclirc` is a clean
+    replacement for user-global `~/.sentry/cli.db` state. Documented in
+    `docs/operations/sentry-cli-usage.md`.
+  - `practice:fitness` uses the four-zone scale (ADR-144):
+    `healthy` → `soft` → `hard` → `critical`. Routine commits are
+    not blocked by `soft` or `hard`; consolidation closure runs
+    `pnpm practice:fitness --strict-hard` which blocks on `hard`
+    and `critical`; `critical` always blocks and triggers the
+    loop-health post-mortem. At commit boundaries: read the
+    output, act only on genuinely new issues the branch
+    introduced, and schedule larger fitness-driven work as its
+    own session unless a file has reached `critical`.
+  - `@sentry/cli` emits a pnpm "Ignored build scripts" warning on first
+    install; listing it in `pnpm-workspace.yaml`'s
+    `onlyBuiltDependencies` silences it and allows its postinstall
+    binary-download to run on subsequent installs.
+  - The current `SENTRY_AUTH_TOKEN` embeds `sentry.io` as its region,
+    which overrides the `.sentryclirc`-configured `de.sentry.io`. Both
+    points resolve to the same `oak-national-academy` org and upload
+    artefacts are visible end-to-end; token rotation to a de.sentry.io
+    scope is a low-priority follow-up.
 - **Open questions / low-confidence areas**:
-  - Whether the preview deployment will show the full expected Sentry evidence
-    set, including release/source-map proof and kill-switch rehearsal.
   - Whether Codex ultimately needs a server-owned compatibility layer, a Clerk
     configuration change, or an upstream-client escalation.
-- **Next safe step**: Run the preview validation flow against the current HTTP
-  deployment, capture the scrubbed Sentry evidence bundle, and update the
-  parent plan before touching the separate Codex follow-up lane.
+- **Next safe step**: run `pnpm check`, `pnpm markdownlint:root`, and
+  per-workspace `type-check`/`lint` for the three touched workspaces,
+  then stop at the commit boundary and surface the hygiene-lane diff
+  for owner approval. Do not expand scope into Clerk CLI work — that
+  has its own strategic brief at
+  `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`.
 - **Deep consolidation status**: not due — no plan or milestone closure, no
   incoming practice-box content, and no additional consolidation triggers beyond
   this lightweight handoff.
 
-## Active Workstreams (2026-04-16)
+## Active Workstreams (2026-04-17)
 
-### 1. Sentry + OTel Alignment — NEAR COMPLETION (same branch/PR)
+### 1. Sentry + OTel Alignment — CLOSURE + HYGIENE COMPLETE (same branch/PR)
 
 **Plans**:
 
 - `.agent/plans/architecture-and-infrastructure/active/sentry-canonical-alignment.plan.md`
   (16 todos done, 7 dropped — child plan complete)
 - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
-  (parent authority — "Road to Provably Working Sentry" table added;
-  Vercel credential provisioning and deployment evidence still pending)
+  (parent authority — "Road to Provably Working Sentry" table now shows
+  steps 1-5 **DONE (pending alerting wiring)**; validation evidence bundle
+  landed at `evidence/2026-04-16-http-mcp-sentry-validation/` with two
+  2026-04-17 sibling notes)
 
-**Immediate code work is paused pending validation.** Branch is
-deployment-ready for the MCP server. Vercel credential provisioning
-and deployment evidence bundle are the next actions. After that, the
-next implementation lane for this branch/PR is
-`sentry-observability-expansion.plan.md`. Broader
+**Closure pass and Sentry CLI hygiene lane both complete on this
+branch.** Remaining before merge: quality-gate pass + owner rule
+creation on `oak-national-academy/oak-open-curriculum-mcp` (CLI
+enumeration 2026-04-17 confirms zero rules exist). After the
+commit/merge, the next implementation lane for this branch/PR is
+`sentry-observability-expansion.plan.md`. EXP-E (source-map upload)
+was brought forward into this branch during the closure pass and is
+already shipped; the hygiene lane only changed *how* we invoke the
+uploader (now `pnpm exec sentry-cli` inside each workspace with
+committed `.sentryclirc`), not whether uploads happen. Broader
 `search-observability.plan.md` work is deferred to a later session/PR
 unless it is explicitly confined to the MCP server.
 

@@ -1,5 +1,7 @@
 # Invoke Sentry Reviewer
 
+Operationalises [ADR-129 (Domain Specialist Capability Pattern)](../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md) and [ADR-143 (Coherent Structured Fan-Out for Sentry and OpenTelemetry)](../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md).
+
 When changes touch Sentry-specific or OpenTelemetry-observability-specific
 concerns, invoke the `sentry-reviewer` specialist in addition to the standard
 `code-reviewer` gateway.

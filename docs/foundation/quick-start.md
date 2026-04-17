@@ -14,14 +14,15 @@ Fast-track guide for developers who want to understand and contribute to infrast
 > **Prerequisites**: see [README prerequisites](../../README.md#prerequisites)
 > for required and optional external tools.
 
-Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth. Understanding these decisions helps you navigate the codebase — they explain why things are structured the way they are:
+Architectural Decision Records (ADRs) define how the system should work and are the architectural source of truth. Understanding these decisions helps you navigate the codebase — they explain why things are structured the way they are. Start with the [five foundational ADRs](../architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes):
 
 - [ADR-029](../architecture/architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
 - [ADR-030](../architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
 - [ADR-031](../architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
 - [ADR-048](../architecture/architectural-decisions/048-shared-parse-schema-helper.md) — Shared parsing helper pattern
+- [ADR-107](../architecture/architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) — Deterministic SDK / NL-in-MCP boundary
 
-See the [ADR index](../architecture/architectural-decisions/) for the full list.
+See the [ADR index](../architecture/architectural-decisions/README.md) for the full list.
 
 ## Working with AI Agents
 
@@ -129,7 +130,7 @@ See [environment variables guide](../operations/environment-variables.md) for co
 - [ ] `pnpm type-check` reports no errors
 - [ ] `pnpm lint` reports no remaining issues
 - [ ] `gitleaks version` runs (required for push — install via `brew install gitleaks`)
-- [ ] You have read the three foundational ADRs (029, 030, 031)
+- [ ] You have read the [five foundational ADRs](../architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) (029, 030, 031, 048, 107)
 - [ ] You know which area you are working on (SDK, MCP server, search, or docs)
 
 For any current `pnpm check` caveats, see [Troubleshooting → Known Gate Caveats](../operations/troubleshooting.md#known-gate-caveats).

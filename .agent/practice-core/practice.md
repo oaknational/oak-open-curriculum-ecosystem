@@ -134,7 +134,7 @@ graph LR
 | **Capture**  | Napkin                                  | Current session                         | ~500 lines → distillation                                                                         |
 | **Refine**   | Distilled learnings                     | Future agents                           | ~200 lines → extraction to permanent docs                                                         |
 | **Graduate** | ADRs, governance docs, READMEs, TSDoc   | Everyone — humans and agents            | Per-file fitness frontmatter → split by responsibility                                            |
-| **Enforce**  | Rules, directives, always-applied rules | All agents, automatically               | `fitness_line_target`/`fitness_line_limit` frontmatter on directives (two-threshold fitness model) |
+| **Enforce**  | Rules, directives, always-applied rules | All agents, automatically               | `fitness_line_target`/`fitness_line_limit` frontmatter on directives (three-zone fitness model)    |
 | **Inform**   | Code patterns                           | Engineers facing a recognised situation  | Barrier: broadly applicable, proven, recurring, stable. Practice-relevant patterns may travel via the exchange pack |
 
 Not everything in the napkin survives distillation, and not everything distilled graduates to
@@ -151,10 +151,13 @@ simply moves the accumulation problem downstream.
   high-signal patterns, archive the rest
 - **Distilled** → target <200 lines; the primary reduction mechanism is extracting settled
   entries to permanent docs, not compression
-- **Permanent docs** → each file declares four fitness fields (two-threshold model):
-  `fitness_line_target` (soft), `fitness_line_limit` (hard),
-  `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100).
-  Target exceedance is a warning; limit exceedance is blocking
+- **Permanent docs** → each file declares four fitness fields (three-zone model,
+  ADR-144): `fitness_line_target` (soft), `fitness_line_limit` (hard),
+  `fitness_char_limit` (hard), `fitness_line_length` (hard, always 100). Each
+  metric lands in one of four zones: `healthy` → `soft` → `hard` → `critical`,
+  where `critical` is `hard limit × 1.5`. `soft` is a refinement signal;
+  `hard` blocks at consolidation closure; `critical` always blocks and triggers
+  a loop-health post-mortem
 - **Practice Core** → the trinity files carry all four fields. See
   [practice-lineage.md §Fitness Functions](practice-lineage.md#fitness-functions).
 

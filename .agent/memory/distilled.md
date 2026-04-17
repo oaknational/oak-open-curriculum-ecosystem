@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-11.md`
-(sessions 2026-02-10 to 2026-04-11g).
+`napkin-2026-02-24.md` through `napkin-2026-04-16.md`
+(sessions 2026-02-10 to 2026-04-16).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -53,15 +53,17 @@ context with no natural permanent home.
 - **User feedback is the correction signal**: when user feedback
   contradicts a napkin entry, apply the feedback fully. Do not
   negotiate a compromise with the original incorrect framing.
-- **Fitness limits are informational, not gates**: the soft
-  limit says "consider whether this file is growing
-  unnecessarily." The hard limit says "this file needs
-  attention." Neither says "delete content until the number is
-  green." Content justifies the space it occupies. When a file
-  exceeds its target, ask "why is it growing?" before "what
-  can I cut?" If the content is load-bearing, the answer may
-  be graduation, restructuring, or accepting the overage —
-  not compression.
+- **Fitness is a four-zone scale, not a gate** (ADR-144):
+  `healthy` → `soft` ("think about it") → `hard` ("do something
+  soon") → `critical` ("loop failure signal"). Critical is
+  `hard limit × 1.5`. Soft never blocks; hard blocks at
+  consolidation closure (`pnpm practice:fitness --strict-hard`);
+  critical always blocks and triggers the three-question
+  post-mortem in ADR-144 §Loop Health. Content justifies the
+  space it occupies — when a file drifts, ask "why is it
+  growing?" before "what can I cut?" Graduation, restructuring,
+  or accepting the overage are all valid responses; compression
+  is not automatic.
 - **Repetition between foundational docs is deliberate**: the
   testing rules in principles.md AND testing-strategy.md are
   intentional reinforcement, not duplication. Do not
@@ -130,11 +132,6 @@ context with no natural permanent home.
 
 ## Architecture (Agent Infrastructure)
 
-- **ADR-125 thin wrapper scope**: the thin wrapper contract applies
-  to platform adapters wrapping canonical content, NOT to canonical
-  command-to-skill relationships. Commands and skills are sibling
-  Layer 1 artifacts. A "thick" orchestrating command is sound per
-  ADR-135's process_executor example.
 - **Full triplet portability requires 7 adapter types**: Cursor
   agents + skills + rules, Claude Code agents + rules, Codex
   agents + config, Gemini commands. Easy to miss one — always

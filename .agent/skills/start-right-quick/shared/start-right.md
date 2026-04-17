@@ -83,6 +83,6 @@ pnpm test:widget:ui
 pnpm test:widget:a11y
 pnpm smoke:dev:stub
 
-# Informational practice health
-pnpm practice:fitness:informational  # Soft-ceiling report; not a blocking gate
+# Informational practice health (three-zone model, ADR-144)
+pnpm practice:fitness:informational  # Four-zone report (always exit 0)
 ```

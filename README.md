@@ -26,7 +26,7 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 ## Developers and AI agents
 
 - **Developers** — continue to [Quick Start](#quick-start) below
-- **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md)
+- **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md), then scan the [five foundational ADRs](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) — the architectural source of truth
 
 ## What This Repo Provides
 
@@ -74,6 +74,7 @@ and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-reti
 - **bun** (optional, for `pnpm dev:widget-in-host`) — install via [bun.sh](https://bun.sh/docs/installation)
 - **jq** (optional, for `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:oauth-curl`) — install via [jqlang.github.io/jq/download](https://jqlang.github.io/jq/download/)
 - **lsof** (optional, for `apps/oak-curriculum-mcp-streamable-http/scripts/restart-dev-server.sh`) — pre-installed on macOS; on Debian/Ubuntu use `sudo apt install lsof`; source/build instructions at [github.com/lsof-org/lsof](https://github.com/lsof-org/lsof)
+- **sentry** (optional, for dev-time Sentry issue triage, event inspection, and Sentry Seer via `sentry issue list` / `sentry api`) — install via [cli.sentry.dev](https://cli.sentry.dev/) (`curl https://cli.sentry.dev/install -fsS | bash`) or `brew install getsentry/tools/sentry`. Required only for humans and agents using Seer or `sentry api` locally; CI, build automation, and the `pnpm sourcemaps:upload` script use the pnpm-installed `sentry-cli` instead. Any script that invokes the dev `sentry` CLI must wrap the invocation in the `require_command "sentry" "https://cli.sentry.dev/"` fail-fast pattern; each script currently defines `require_command` inline — see [`apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh`](apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh) for the canonical dev-`sentry` helper. The pnpm-local `sentry-cli` variant uses the same `require_command` pattern to guard `pnpm` + `pnpm exec sentry-cli` — see [`apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`](apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh). Both patterns and the full `sentry-cli` vs dev-`sentry` split are documented in [docs/operations/sentry-cli-usage.md](docs/operations/sentry-cli-usage.md) (see also [ADR-159](docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)).
 
 ### Install and verify
 
@@ -211,7 +212,7 @@ Architectural Decision Records (ADRs) are the architectural source of truth. The
 - [ADR-030](docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
 - [ADR-031](docs/architecture/architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
 
-See the [full ADR index](docs/architecture/architectural-decisions/) for all decisions.
+See the [full ADR index](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) for all decisions (start with the "5 ADRs in 15 Minutes" block).
 
 ## Engineering Practice
 

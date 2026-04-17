@@ -1,5 +1,14 @@
 # Session Handoff
 
+**Governance**: This command operationalises
+[ADR-150 (Continuity Surfaces, Session Handoff, and Surprise Pipeline)](../../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md).
+ADR-150 names the learning path for surprise and correction as
+`capture → distil → graduate → enforce`, with the napkin as the capture
+surface, `distilled.md` as the refinement surface, `consolidate-docs` as
+the graduation convergence point, and ADRs / rules / permanent docs as
+the enforcement surface. Session handoff is the regular touch-point
+that keeps this pipeline moving.
+
 Lightweight end-of-session continuity update with a conditional
 consolidation gate.
 

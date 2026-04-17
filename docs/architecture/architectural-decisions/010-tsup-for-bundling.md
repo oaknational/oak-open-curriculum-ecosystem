@@ -46,7 +46,11 @@ Use tsup as the bundling tool for the project.
 - Depends on esbuild which may have edge case issues
 - `@sentry/esbuild-plugin` does not work with tsup (egoist/tsup#1260):
   plugin file-globbing runs before tsup writes to disk. Source map
-  upload uses `sentry-cli` post-build instead.
+  upload uses `sentry-cli` post-build instead; see
+  [docs/operations/sentry-cli-usage.md](../../operations/sentry-cli-usage.md)
+  for the CLI split, `.sentryclirc` composition, and the two-step
+  `sourcemaps inject` → `sourcemaps upload` workflow this ADR relies
+  on.
 
 ## Implementation
 
@@ -97,8 +101,13 @@ Workspace configs become 2-5 line imports from the base.
 
 - `turbo.json`: `$TURBO_ROOT$/tsup.config.base.ts` added to all
   build task input arrays to prevent stale cache hits.
-- Source map upload: `sentry-cli sourcemaps inject` post-build,
-  separating upload (deployment concern) from build (compilation).
+- Source map upload: `sentry-cli sourcemaps inject` then
+  `sentry-cli sourcemaps upload` post-build, separating upload
+  (deployment concern) from build (compilation). See
+  [docs/operations/sentry-cli-usage.md](../../operations/sentry-cli-usage.md)
+  for the canonical invocation, Debug ID semantics, and artefact
+  bundle model; the runnable wrapper lives at
+  [`apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`](../../../apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh).
 
 ### Review Attribution
 

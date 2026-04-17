@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints
 name: security-reviewer
-model: gpt-5.3-codex-xhigh
+model: gpt-5.4
 description: Security and privacy review specialist. Use proactively for auth/authz, OAuth, secrets handling, PII exposure, injection risk, and threat-focused analysis after security-sensitive changes.
 readonly: true
 ---

@@ -267,3 +267,23 @@ The implementation is expected to:
 6. treat the HTTP server and Search CLI as the adoption targets,
 7. leave the deprecated standalone stdio workspace untouched except for any
    unavoidable compile-preserving compatibility edits.
+
+## Related Documentation
+
+- [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked
+  Configuration](159-per-workspace-vendor-cli-ownership.md) —
+  formalises how the source map upload decision in this ADR (and any
+  future vendor CLI in the observability/auth pipeline) is realised:
+  pnpm-installed devDep, per-workspace `.sentryclirc`, shared-library
+  "no default project" rule, and fail-fast preflights.
+- [Sentry Deployment Runbook](../../operations/sentry-deployment-runbook.md)
+  — live runbook for release correlation, source map uploads, and
+  production verification.
+- [Sentry CLI Usage](../../operations/sentry-cli-usage.md) — canonical
+  documentation for the `sentry-cli` vs dev `sentry` split,
+  `.sentryclirc` composition, per-workspace ownership, and the
+  two-step `sourcemaps inject` → `sourcemaps upload` flow that this
+  ADR's source map decision assumes.
+- [Sentry + OpenTelemetry Integration Execution Plan](../../../.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
+  — the execution plan under which the observability adoption,
+  per-workspace CLI scoping, and alerting baseline were landed.

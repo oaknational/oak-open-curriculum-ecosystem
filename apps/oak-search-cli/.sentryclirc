@@ -1,0 +1,19 @@
+; Workspace-local Sentry CLI configuration for the Search CLI.
+; Read by both `sentry-cli` (https://docs.sentry.io/cli/configuration/)
+; and the dev `sentry` CLI (https://cli.sentry.dev/configuration/) using
+; identical INI semantics with nearest-wins ancestor discovery.
+;
+; Scope: this file pins the Sentry project for any CLI invocation whose
+; current working directory is inside this workspace. Running an upload
+; here cannot touch the HTTP MCP server's Sentry project.
+;
+; Auth tokens are never committed here. Provide `SENTRY_AUTH_TOKEN` via
+; the environment (or `~/.sentryclirc [auth] token` for interactive use).
+;
+; See docs/operations/sentry-cli-usage.md for the full CLI usage matrix
+; and the composition rules we rely on.
+
+[defaults]
+org = oak-national-academy
+project = oak-open-curriculum-search-cli
+url = https://de.sentry.io

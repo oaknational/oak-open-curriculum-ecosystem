@@ -19,6 +19,7 @@ packages:
   - packages/sdks/oak-search-sdk
 
 onlyBuiltDependencies:
+  - '@sentry/cli'
   - core-js
   - esbuild
   - sharp

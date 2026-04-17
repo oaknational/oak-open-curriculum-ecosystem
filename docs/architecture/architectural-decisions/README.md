@@ -155,7 +155,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-141: MCP Apps Standard as Only UI Surface](141-mcp-apps-standard-primary.md)
 - [ADR-142: `@clerk/mcp-tools` Adopt-or-Explain Decision](142-clerk-mcp-tools-adopt-or-explain.md)
 - [ADR-143: Coherent Structured Fan-Out for the Sentry and OpenTelemetry Foundation](143-coherent-structured-fan-out-for-observability.md)
-- [ADR-144: Two-Threshold Fitness Model](144-two-threshold-fitness-model.md)
+- [ADR-144: Three-Zone Fitness Model](144-two-threshold-fitness-model.md)
 - [ADR-145: Oak URL Naming Collision Remediation](145-oak-url-naming-collision-remediation.md)
 - [ADR-146: Assumptions Reviewer — Meta-Level Plan Assessment](146-assumptions-reviewer-meta-level-plan-assessment.md)
 - [ADR-147: Browser Accessibility as a Blocking Quality Gate](147-browser-accessibility-as-blocking-quality-gate.md)
@@ -170,6 +170,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-156: Embed Widget HTML as Committed TypeScript Constant](156-embed-widget-html-at-build-time.md)
 - [ADR-157: Multi-Source Open Education Knowledge Integration](157-multi-source-open-education-integration.md)
 - [ADR-158: Multi-Layer Security Architecture and Application Rate Limiting](158-multi-layer-security-and-rate-limiting.md)
+- [ADR-159: Per-Workspace Vendor CLI Ownership with Repo-Tracked Configuration](159-per-workspace-vendor-cli-ownership.md)
 
 ## Key Architectural Decisions
 
@@ -208,7 +209,7 @@ For understanding the agentic engineering practice:
 - **[ADR-137](137-specialist-operational-tooling-layer.md)** - Specialist operational tooling layer: optional fourth layer for agent-accessible CLI/MCP interaction with live domain systems
 - **[ADR-131](131-self-reinforcing-improvement-loop.md)** - Self-reinforcing improvement loop: knowledge flow, consolidation hub, self-referential governance, inter-repo propagation
 - **[ADR-135](135-agent-classification-taxonomy.md)** - Agent classification taxonomy: domain_expert, process_executor, specialist; operational modes; Practice domain trio
-- **[ADR-144](144-two-threshold-fitness-model.md)** - Two-threshold fitness model: target (soft, agent-extendable) vs limit (hard, user-approval) with consistent character and line-width governance
+- **[ADR-144](144-two-threshold-fitness-model.md)** - Three-zone fitness model: `healthy` / `soft` / `hard` / `critical` graduated scale with `CRITICAL_RATIO = 1.5`; `critical` is a loop-failure signal requiring a three-question post-mortem (§Loop Health)
 - **[ADR-146](146-assumptions-reviewer-meta-level-plan-assessment.md)** - Assumptions reviewer: independent proportionality and plan-assumption challenge with an inverted doctrine hierarchy
 - **[ADR-150](150-continuity-surfaces-session-handoff-and-surprise-pipeline.md)** - Continuity surfaces, lightweight session handoff, conditional deep consolidation, and the surprise pipeline
 - **[ADR-147](147-browser-accessibility-as-blocking-quality-gate.md)** - Browser accessibility as a 9th blocking quality gate: WCAG 2.2 AA, Playwright + axe-core, two-level MCP App testing

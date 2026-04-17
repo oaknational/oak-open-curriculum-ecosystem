@@ -45,8 +45,13 @@ live in `.agent/skills/start-right-*/shared/`. Platform
 adapters in `.cursor/`, `.claude/`, `.codex/` directories.
 
 ADRs define how the system should work and are the
-architectural source of truth. Start with the
-[ADR index](../../docs/architecture/architectural-decisions/).
+architectural source of truth. Before substantive work,
+scan the [5-ADR starter block][adr-5] and open any ADR
+that matches your current work area from the
+[ADR index][adr-index].
+
+[adr-5]: ../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes
+[adr-index]: ../../docs/architecture/architectural-decisions/README.md
 
 ## First Question
 

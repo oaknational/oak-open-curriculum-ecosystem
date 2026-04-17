@@ -18,6 +18,9 @@ Read and internalise these documents:
 2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
 3. @.agent/directives/testing-strategy.md — TDD at all levels
 4. @.agent/directives/schema-first-execution.md — Types flow from schema
+5. Scan the [Start Here: 5 ADRs in 15 Minutes](../../../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
+   block in the ADR index. Open any ADR whose slug matches your current
+   work area from the [full ADR index](../../../../docs/architecture/architectural-decisions/README.md).
 
 **Plans must include regularly re-reading and re-committing to these foundation documents.**
 
@@ -93,6 +96,6 @@ pnpm test:widget:ui
 pnpm test:widget:a11y
 pnpm smoke:dev:stub
 
-# Informational practice health
-pnpm practice:fitness:informational  # Soft-ceiling report; not a blocking gate
+# Informational practice health (three-zone model, ADR-144)
+pnpm practice:fitness:informational  # Four-zone report (always exit 0)
 ```

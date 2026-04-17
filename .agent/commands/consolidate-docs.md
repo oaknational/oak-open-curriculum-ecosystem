@@ -51,7 +51,17 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
    e. **Start fresh** — create a new `.agent/memory/napkin.md` with a session heading documenting the distillation.
 
    Target: `distilled.md` should stay under 200 lines of high-signal content. Every entry earns its place by being specific, actionable, non-obvious, and terse. Do not distil mid-session, do not distil if the napkin is under 400 lines, and do not distil "What Was Done" sections — those are session history, not learnings.
-7. **Graduate settled content from distilled.md.** For each entry in `distilled.md`, apply two criteria:
+7. **Graduate settled content from distilled.md.** This is the "enforce" edge of the knowledge flow (ADR-131 §Interaction Points, ADR-150 §Decision §5 — capture → distil → **graduate → enforce**). Treat it as a structural step, not a pass-through.
+
+   **7a. Scan for ADR-shaped doctrine** (do this *before* applying the three outcomes below). Walk every entry in `distilled.md` and every recent napkin surprise and ask: is this ADR-shaped? An entry is ADR-shaped when:
+
+   - It names an **architectural constraint, trade-off, or boundary** (not just an operational convention);
+   - It is **stable across sessions** (has survived at least one subsequent session without correction);
+   - It has **no existing governance home** (no ADR, no `docs/governance/` doc, no README section that already covers it).
+
+   Surface ADR candidates explicitly to the user as a numbered list with a one-line justification each. The user decides which to promote to ADRs, which to send to governance docs, and which to leave distilled for further validation. **Do not silently leave ADR-shaped doctrine unpromoted** — that is the enforce-edge failure mode ADR-131 §Self-Referential Property warns about. If nothing qualifies, say so and move on.
+
+   **7b. Apply graduation to each distilled entry.** For each entry, apply two criteria:
 
    a. **Stable?** — not contradicted by recent work.
    b. **Natural home?** — an existing permanent doc (ADR, governance doc, README, TSDoc) where it belongs.
@@ -62,13 +72,17 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
    - **Stable but no natural home** — do not leave it in distilled.md indefinitely. Raise this with the user: the content may justify *creating* a new permanent home (a new doc section, a new ADR, a new governance page). The conversation is the point — stable knowledge without a home is a signal that the documentation structure has a gap.
    - **Not yet stable** — leave in distilled.md for further validation.
 
-   Always graduate useful understanding — fitness limits are never a reason to defer. If graduating creates fitness pressure on the target doc, step 8 handles it (compress, split, or extend). The barrier is "stable and useful enough to place," not "no longer agent-operational." Common destinations: rules codified in `.agent/directives/principles.md`, patterns documented in ADRs, tooling documented in `docs/engineering/build-system.md`, workspace-specific gotchas in workspace READMEs. Meta-principles about the Practice itself can graduate to `.agent/practice-core/practice-lineage.md` Learned Principles. Practice Core structural changes (new sections, reorganisation, new artefact types) are rare but valid — they require user approval. This **closes the loop** on the knowledge gained from sessions.
-8. **Actively manage fitness thresholds** (ADR-144). Run `pnpm practice:fitness` (or `pnpm practice:fitness:informational` for a non-blocking report). The validator discovers every live markdown file that declares `fitness_line_target` in YAML frontmatter, excluding archives, backups, and incoming practice boxes. Two threshold levels:
+   Always graduate useful understanding — fitness pressure on the target doc is handled in step 8 via the three-zone scale, never by deferring graduation. The barrier is "stable and useful enough to place," not "no longer agent-operational." Common destinations: rules codified in `.agent/directives/principles.md`, patterns documented in ADRs, tooling documented in `docs/engineering/build-system.md`, workspace-specific gotchas in workspace READMEs. Meta-principles about the Practice itself can graduate to `.agent/practice-core/practice-lineage.md` Learned Principles. Practice Core structural changes (new sections, reorganisation, new artefact types) are rare but valid — they require user approval. This **closes the loop** on the knowledge gained from sessions.
 
-   - *Target exceeded* (warning, non-blocking): the file signals refinement.
-   - *Limit exceeded* (violation, blocking): the file must be reduced before merge.
+   **Every new or amended rule in `.agent/rules/`** MUST cite the ADR(s) it operationalises at the top of the file. Every new or amended command in `.agent/commands/`** SHOULD cite its establishing ADR. This is the enforce-edge reinforcement: enforcement surfaces that cannot name their source ADR cannot evolve with their source ADR.
+8. **Actively manage fitness thresholds** (ADR-144 three-zone model). Run `pnpm practice:fitness` (or `pnpm practice:fitness:informational` for a non-blocking report). The validator discovers every live markdown file that declares `fitness_line_target` in YAML frontmatter, excluding archives, backups, and incoming practice boxes. Every declared metric lands in one of four zones:
 
-   For files at or approaching either threshold:
+   - `healthy`: within design envelope. No action.
+   - `soft` ("think about it"): above target, within hard limit. Consider refinement at this consolidation or the next natural boundary. Never blocks.
+   - `hard` ("do something soon"): above hard limit but within `hard limit × CRITICAL_RATIO` (1.5). Remediate before closing the current consolidation. Advisory at routine commit; blocking at consolidation closure via `pnpm practice:fitness --strict-hard`.
+   - `critical` ("loop failure signal"): above `hard limit × CRITICAL_RATIO`. Stop routine work and open a remediation lane — see ADR-144 §Loop Health. Blocking always in strict mode.
+
+   For any file in `soft`, `hard`, or `critical`:
 
    a. **Analyse** — is the content appropriately dense, or has it accumulated low-value entries?
    b. **Refine** — compress, deduplicate, remove entries covered elsewhere.
@@ -76,7 +90,9 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
    d. **Extend target** — agents may raise `fitness_line_target` modestly with rationale.
    e. **Extend limit** — only the user may raise `fitness_line_limit`, `fitness_char_limit`, or `fitness_line_length`.
 
-   Changes to fitness thresholds are self-documenting via frontmatter. An ADR amendment is only needed if the fitness system itself changes.
+   For any file in `critical`, also run the short three-question post-mortem from ADR-144 §Loop Health: why the earlier zones did not fire, whether the hard limit is set correctly for the file's role, and whether the file is a symptom of a missing graduation (ADR, governance doc, README) elsewhere. Record the answers in the consolidation output.
+
+   At consolidation closure, run `pnpm practice:fitness --strict-hard` so that `hard`-zone files cannot slip past the closure boundary. Changes to fitness thresholds are self-documenting via frontmatter. An ADR amendment is only needed if the fitness system itself changes.
 9. **Manage the practice exchange.** Two directions:
 
    **Incoming**: If `.agent/practice-core/incoming/` contains files, follow the integration flow in `.agent/practice-core/practice-lineage.md`. **Practice evolution is not linear** — an incoming Practice can be behind in some areas and ahead in others. Never dismiss an incoming as "stale" because one file or section is older than the current version. Compare bidirectionally, file by file and section by section. Key steps: (a) check the provenance chain in the YAML frontmatter; (b) compare across the full Practice system bidirectionally; (c) apply the three-part bar (validated by real work? prevents recurring mistakes? stable?); (d) present specific proposals to the user; (e) clear the box only after integration is complete and user-approved. Do not clear the box unilaterally. If distilled.md entries have matured into meta-principles about the Practice itself, they may graduate to the Learned Principles section in `.agent/practice-core/practice-lineage.md`.

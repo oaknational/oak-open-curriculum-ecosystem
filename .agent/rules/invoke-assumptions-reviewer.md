@@ -1,5 +1,7 @@
 # Invoke Assumptions Reviewer
 
+Operationalises [ADR-146 (Assumptions Reviewer — Meta-Level Plan Assessment)](../../docs/architecture/architectural-decisions/146-assumptions-reviewer-meta-level-plan-assessment.md) and [ADR-129 (Domain Specialist Capability Pattern)](../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md).
+
 When plans, designs, or architectural proposals are being finalised, invoke the `assumptions-reviewer` specialist in addition to the standard `code-reviewer` gateway.
 
 ## Trigger Conditions

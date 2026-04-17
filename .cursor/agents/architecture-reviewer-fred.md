@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints
 name: architecture-reviewer-fred
-model: claude-4.6-opus-max-thinking
+model: claude-opus-4-7
 description: Principles-first architecture reviewer focused on strict ADR compliance and boundary discipline. Use proactively when decisions touch architectural rules, package boundaries, dependency direction, or non-compliant patterns need corrective guidance.
 readonly: true
 ---
