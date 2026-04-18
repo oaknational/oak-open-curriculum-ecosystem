@@ -26,10 +26,13 @@ extraction, napkin rotation, fitness management, and practice exchange.
 
 Before marking a plan as complete or archiving it, extract ALL documentation content to permanent locations:
 
-- **Architectural decisions** -> ADRs in `docs/architecture/architectural-decisions/`
+- **Host-repo architectural decisions** -> ADRs in `docs/architecture/architectural-decisions/`
+- **Practice-governance decisions** -> PDRs in `.agent/practice-core/decision-records/` (portable; travels with Core)
+- **General abstract engineering patterns** (ecosystem-agnostic) -> `.agent/practice-core/patterns/` (via synthesis)
+- **Specific engineering pattern instances** -> `.agent/memory/patterns/` (repo-local)
 - **System behaviour documentation** -> READMEs in the relevant workspace
 - **Technical reference** (data shapes, APIs, edge cases) -> TSDoc in source files or workspace READMEs
-- **Patterns and gotchas** -> `distilled.md` (if not already in permanent docs)
+- **Patterns and gotchas not yet graduated** -> `distilled.md` (short-term staging only; they graduate in step 7)
 
 If documentation exists ONLY in a plan, it is at risk. Extract it first, then mark the plan complete.
 
@@ -39,7 +42,13 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
 2. Make sure all plans and prompts are fully up to date (status lines, completion markers, cross-references). After archive/delete moves, explicitly sweep for the two most common stale-link classes: `active/` or `current/` plan paths that should now point at `archive/completed/`, and deleted platform-plan paths such as `.cursor/plans/*.plan.md` that should now point at the canonical repo artefact they delivered.
 3. Identify any content in ephemeral locations (prompts, napkin, distilled.md, **platform-specific memory**) that now functions as settled documentation, and move it to non-ephemeral locations such as ADRs, `/docs/`, or READMEs. Platform-specific memory locations to check: Claude Code auto-memory (`~/.claude/projects/<project>/memory/`), and any platform-equivalent session logs. These are platform-specific napkin analogues — insights captured there should flow into the canonical napkin or distilled.md if they have cross-platform value.
 4. Check whether `.agent/experience/` files contain applied technical patterns that have matured into settled practice — if so, extract the technical content to permanent documentation or `distilled.md`, and replace the experience file with a brief reflective stub.
-5. **Extract reusable patterns.** Review completed work for patterns that meet the barrier: broadly applicable, proven by implementation, prevents a recurring mistake, and stable. This covers all types of learning — code patterns, process patterns, architecture patterns, structural observations, agent operational concerns, behavioural rules, domain-specific gotchas — anything reusable that would change behaviour if read before similar work. Extract qualifying patterns to `.agent/memory/patterns/` (one pattern per file, markdown with frontmatter). Patterns are abstract — they describe the principle and anti-pattern, not the domain-specific implementation. See `.agent/memory/patterns/README.md` for the frontmatter schema, category options, and barrier criteria.
+5. **Extract reusable patterns.** Review completed work for patterns that meet the barrier: broadly applicable, proven by implementation, prevents a recurring mistake, and stable. This covers all types of learning — code patterns, process patterns, architecture patterns, structural observations, agent operational concerns, behavioural rules, domain-specific gotchas — anything reusable that would change behaviour if read before similar work. Extract qualifying patterns to `.agent/memory/patterns/` as specific ecosystem-grounded instances (one pattern per file, markdown with frontmatter). See `.agent/memory/patterns/README.md` for the frontmatter schema, category options, and barrier criteria.
+
+   **Three destinations, not one** (per PDR-007). The substance shape determines the home:
+
+   - **Engineering instance, ecosystem-specific** → `.agent/memory/patterns/`. TypeScript/Zod/Vitest/SDK-specific patterns live here. Each entry is proven in a concrete repo context. Most pattern candidates land here.
+   - **Engineering abstraction, ecosystem-agnostic** → `.agent/practice-core/patterns/` (via **synthesis**, not move). When ≥2 instance patterns across repos or ecosystems express the same underlying general principle, consider authoring a general abstract pattern in `practice-core/patterns/` that cites the instances. **Instances stay in `memory/patterns/`** — synthesis authors the general form fresh; it does not move the instances. See `.agent/practice-core/patterns/README.md` for the synthesised-pattern frontmatter schema and the three-part inclusion criterion (ecosystem-agnostic / engineering-substance-not-governance / ≥2 instances).
+   - **Practice governance** (review discipline, planning discipline, knowledge-flow discipline, reviewer authority, agent infrastructure, etc.) → **not a pattern; it is PDR-shaped.** Surface the candidate under step 7a (PDR scan) instead. Practice-governance patterns absorbed into PDRs keep their instance files in `memory/patterns/` with `related_pdr: PDR-NNN` frontmatter linking to the general governance form.
 
    **Cross-session scan**: Read napkin entries from the current rotation window as a chronological sequence, not just the latest session. The most important patterns often emerge from the *interaction* of observations across sessions — a correction in session 4 may reframe an observation from session 1, or a recurring mistake across sessions may reveal a structural cause invisible in any single session. Ask: "What do these sessions know together that none knows alone?" See `patterns/cross-session-pattern-emergence.md`.
 6. **Rotate the napkin if needed.** If `.agent/memory/napkin.md` exceeds ~500 lines, perform the distillation rotation:
@@ -53,13 +62,25 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
    Target: `distilled.md` should stay under 200 lines of high-signal content. Every entry earns its place by being specific, actionable, non-obvious, and terse. Do not distil mid-session, do not distil if the napkin is under 400 lines, and do not distil "What Was Done" sections — those are session history, not learnings.
 7. **Graduate settled content from distilled.md.** This is the "enforce" edge of the knowledge flow (ADR-131 §Interaction Points, ADR-150 §Decision §5 — capture → distil → **graduate → enforce**). Treat it as a structural step, not a pass-through.
 
-   **7a. Scan for ADR-shaped doctrine** (do this *before* applying the three outcomes below). Walk every entry in `distilled.md` and every recent napkin surprise and ask: is this ADR-shaped? An entry is ADR-shaped when:
+   **7a. Scan for ADR-shaped and PDR-shaped doctrine** (do this *before* applying the three outcomes below). Walk every entry in `distilled.md` and every recent napkin surprise and ask two questions:
+
+   **Is this ADR-shaped?** An entry is ADR-shaped when:
 
    - It names an **architectural constraint, trade-off, or boundary** (not just an operational convention);
    - It is **stable across sessions** (has survived at least one subsequent session without correction);
-   - It has **no existing governance home** (no ADR, no `docs/governance/` doc, no README section that already covers it).
+   - It has **no existing governance home** (no ADR, no `docs/governance/` doc, no README section that already covers it);
+   - It shapes **this repo's product architecture** (the next contributor in this repo would re-derive this decision without an ADR).
 
-   Surface ADR candidates explicitly to the user as a numbered list with a one-line justification each. The user decides which to promote to ADRs, which to send to governance docs, and which to leave distilled for further validation. **Do not silently leave ADR-shaped doctrine unpromoted** — that is the enforce-edge failure mode ADR-131 §Self-Referential Property warns about. If nothing qualifies, say so and move on.
+   **Is this PDR-shaped?** An entry is PDR-shaped when:
+
+   - It names a **decision about how the Practice itself operates** (review discipline, planning discipline, knowledge-flow discipline, reviewer authority, consolidation discipline, agent infrastructure, cross-platform architecture, etc.) — substance about the Practice as a system, not about a specific repo's product;
+   - It is **stable across sessions**;
+   - It has **no existing Practice-governance home** (no PDR in `.agent/practice-core/decision-records/`, no section in the trinity that already covers it);
+   - It would be **re-derived across repos** in the Practice network if not recorded. The adopter scope test: ADR adopter = next contributor in this repo; PDR adopter = next Practice-bearing repo that hydrates the Core. Decisions that would be re-derived across repos are PDRs; decisions re-derived within this repo are ADRs. See PDR-019 for the full reusability test.
+
+   Pattern-shaped governance (e.g. reviewer dispatch patterns, review-discipline patterns) takes the PDR shape with `pdr_kind: pattern` frontmatter, not a memory/patterns entry. See PDR-007.
+
+   Surface ADR candidates and PDR candidates explicitly to the user as two separate numbered lists, with a one-line justification each. The user decides which to promote, which to send to other governance surfaces, and which to leave distilled for further validation. **Do not silently leave ADR- or PDR-shaped doctrine unpromoted** — that is the enforce-edge failure mode ADR-131 §Self-Referential Property warns about. If nothing qualifies in a given category, say so and move on.
 
    **7b. Apply graduation to each distilled entry.** For each entry, apply two criteria:
 
@@ -72,10 +93,50 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
    - **Stable but no natural home** — do not leave it in distilled.md indefinitely. Raise this with the user: the content may justify *creating* a new permanent home (a new doc section, a new ADR, a new governance page). The conversation is the point — stable knowledge without a home is a signal that the documentation structure has a gap.
    - **Not yet stable** — leave in distilled.md for further validation.
 
-   Always graduate useful understanding — fitness pressure on the target doc is handled in step 8 via the three-zone scale, never by deferring graduation. The barrier is "stable and useful enough to place," not "no longer agent-operational." Common destinations: rules codified in `.agent/directives/principles.md`, patterns documented in ADRs, tooling documented in `docs/engineering/build-system.md`, workspace-specific gotchas in workspace READMEs. Meta-principles about the Practice itself can graduate to `.agent/practice-core/practice-lineage.md` Learned Principles. Practice Core structural changes (new sections, reorganisation, new artefact types) are rare but valid — they require user approval. This **closes the loop** on the knowledge gained from sessions.
+   Always graduate useful understanding — fitness pressure on the target doc is handled in step 9 via the three-zone scale, never by deferring graduation. The barrier is "stable and useful enough to place," not "no longer agent-operational." Common destinations:
 
-   **Every new or amended rule in `.agent/rules/`** MUST cite the ADR(s) it operationalises at the top of the file. Every new or amended command in `.agent/commands/`** SHOULD cite its establishing ADR. This is the enforce-edge reinforcement: enforcement surfaces that cannot name their source ADR cannot evolve with their source ADR.
-8. **Actively manage fitness thresholds** (ADR-144 three-zone model). Run `pnpm practice:fitness` (or `pnpm practice:fitness:informational` for a non-blocking report). The validator discovers every live markdown file that declares `fitness_line_target` in YAML frontmatter, excluding archives, backups, and incoming practice boxes. Every declared metric lands in one of four zones:
+   - **Rules / principles** codified in `.agent/directives/principles.md`.
+   - **Host-repo architectural decisions** → ADRs in `docs/architecture/architectural-decisions/` (or host equivalent).
+   - **Practice-governance decisions** → PDRs in `.agent/practice-core/decision-records/` (portable; travels with Core). Pattern-shaped governance uses `pdr_kind: pattern` frontmatter.
+   - **General abstract engineering patterns** (ecosystem-agnostic, synthesised from ≥2 instances) → `.agent/practice-core/patterns/` (portable; travels with Core; authored fresh via synthesis — instances stay in `memory/patterns/`).
+   - **Specific engineering pattern instances** → `.agent/memory/patterns/` (repo-local, ecosystem-grounded).
+   - **Tooling documentation** → `docs/engineering/build-system.md` or equivalent.
+   - **Workspace-specific gotchas** → workspace READMEs.
+   - **Meta-principles about the Practice itself** → `.agent/practice-core/practice-lineage.md` Learned Principles section, OR (when substantial enough) a dedicated PDR in `decision-records/`.
+
+   Practice Core structural changes (new sections, reorganisation, new artefact types, new Core directories) are rare but valid — they require user approval and are typically captured as PDRs against the Core contract. This **closes the loop** on the knowledge gained from sessions.
+
+   **Every new or amended rule in `.agent/rules/`** MUST cite the ADR(s) AND/OR PDR(s) it operationalises at the top of the file. Every new or amended command in `.agent/commands/`** SHOULD cite its establishing ADR(s) and/or PDR(s). This is the enforce-edge reinforcement: enforcement surfaces that cannot name their source decision cannot evolve with it. Rules operationalising Practice-governance substance (review discipline, planning discipline, etc.) cite the relevant PDR — they do not need to cite a host ADR if the substance lives only as Practice governance.
+8. **Review the Practice Core for upstream refinement.** The previous step moves new knowledge *into* permanent homes (downstream). This step does the opposite: reads *existing* Practice Core content against current practice and surfaces refinement opportunities (upstream). Without this step, the Core carries intent, mechanisms, examples, and templates that drift from current practice as everything around them evolves. Session learning that contradicts, extends, or refines existing Core substance must reach the Core or the Core stagnates.
+
+   **Surfaces reviewed**:
+
+   - **Trinity** (`.agent/practice-core/practice.md`, `practice-lineage.md`, `practice-bootstrap.md`) — blueprint prose: artefact map, knowledge flow, evolution rules, bootstrap templates.
+   - **Entry points** (`.agent/practice-core/README.md`, `index.md`) — orientation and hydration guidance.
+   - **Verification and operational** (`.agent/practice-core/practice-verification.md`, `CHANGELOG.md`) — bootstrap checklist, acceptance criteria, change log.
+   - **Decision Records** (`.agent/practice-core/decision-records/`) — every existing PDR (001 onward).
+   - **General patterns** (`.agent/practice-core/patterns/`) — every authored abstraction.
+
+   **What to review for**:
+
+   - **Contradiction**: session learning directly contradicts a trinity claim, a PDR's rationale, or a pattern's decision. The session is more recent evidence; the Core content must be updated or the session evidence explicitly rejected with written rationale.
+   - **Extension**: session learning extends a Core substance — new instance of a pattern, new consequence of a PDR, new case the bootstrap template did not cover. The extension belongs in the existing Core surface (amendment), not as a separate new document, if it is genuinely an extension.
+   - **Refinement**: session learning sharpens the Core's existing statement — a looser rule becomes tighter; an abstract principle gains a concrete example; a template acquires a clarified variant. Refinement lands as an in-place edit to the existing surface.
+   - **Supersession**: session learning renders a Core substance obsolete or partially superseded. Old PDRs use `Status: Superseded in part by PDR-NNN` or `Superseded by <Core section>` rather than being deleted. Trinity sections that no longer match current practice are rewritten with a reference to the superseding substance.
+   - **Drift detection**: does the trinity still describe how work actually happens? Do bootstrap templates still reflect current stack decisions? Do PDR Notes sections (the host-local context fences) still match repo reality? Drift is more common than contradiction; it accumulates silently and surfaces only on deliberate review.
+
+   **How to run the review**:
+
+   1. Enumerate Core surfaces. For each, the question is: does recent session content (this session's work, the rotated napkin entries, the graduated PDRs) contradict, extend, refine, or supersede anything here?
+   2. Surface candidates to the user as a numbered list. For each candidate: Core surface affected + type of change (contradict / extend / refine / supersede) + one-sentence summary of the evidence and proposed amendment.
+   3. **Owner approves each amendment before editing Core surfaces.** Per PDR-003 and the care-and-consult posture on dense Core content: the main agent drafts; the owner reviews each diff; no ad-hoc sub-agent dispatch for Core edits. PDRs in `decision-records/` follow the same discipline as the trinity.
+   4. Apply approved amendments as diffs. If substantive, amendments are captured in the Core `CHANGELOG.md` with a short summary.
+
+   **When nothing qualifies**: say so and move on. Not every consolidation produces Core refinement. But "nothing qualifies" is a conclusion reached by review, not by skipping review.
+
+   **Scope signal**: if a single consolidation surfaces many Core amendments (> 3), the rate of structural change is high and warrants a deliberate pause-and-stabilise posture before any further Core restructuring. This is the diagnostic signal ADR-131 §Self-Referential Property and the session-continuation prompt's "rate of structural change" note flag.
+
+9. **Actively manage fitness thresholds** (ADR-144 three-zone model). Run `pnpm practice:fitness` (or `pnpm practice:fitness:informational` for a non-blocking report). The validator discovers every live markdown file that declares `fitness_line_target` in YAML frontmatter, excluding archives, backups, and incoming practice boxes. Every declared metric lands in one of four zones:
 
    - `healthy`: within design envelope. No action.
    - `soft` ("think about it"): above target, within hard limit. Consider refinement at this consolidation or the next natural boundary. Never blocks.
@@ -93,9 +154,18 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
    For any file in `critical`, also run the short three-question post-mortem from ADR-144 §Loop Health: why the earlier zones did not fire, whether the hard limit is set correctly for the file's role, and whether the file is a symptom of a missing graduation (ADR, governance doc, README) elsewhere. Record the answers in the consolidation output.
 
    At consolidation closure, run `pnpm practice:fitness --strict-hard` so that `hard`-zone files cannot slip past the closure boundary. Changes to fitness thresholds are self-documenting via frontmatter. An ADR amendment is only needed if the fitness system itself changes.
-9. **Manage the practice exchange.** Two directions:
+10. **Manage the practice exchange.** Two directions:
 
-   **Incoming**: If `.agent/practice-core/incoming/` contains files, follow the integration flow in `.agent/practice-core/practice-lineage.md`. **Practice evolution is not linear** — an incoming Practice can be behind in some areas and ahead in others. Never dismiss an incoming as "stale" because one file or section is older than the current version. Compare bidirectionally, file by file and section by section. Key steps: (a) check the provenance chain in the YAML frontmatter; (b) compare across the full Practice system bidirectionally; (c) apply the three-part bar (validated by real work? prevents recurring mistakes? stable?); (d) present specific proposals to the user; (e) clear the box only after integration is complete and user-approved. Do not clear the box unilaterally. If distilled.md entries have matured into meta-principles about the Practice itself, they may graduate to the Learned Principles section in `.agent/practice-core/practice-lineage.md`.
+   **Incoming**: If `.agent/practice-core/incoming/` contains files, follow the integration flow in `.agent/practice-core/practice-lineage.md`. **Practice evolution is not linear** — an incoming Practice can be behind in some areas and ahead in others. Never dismiss an incoming as "stale" because one file or section is older than the current version. Compare bidirectionally, file by file and section by section. Key steps: (a) check the provenance chain in the YAML frontmatter; (b) compare across the full Practice system bidirectionally — including `practice-core/decision-records/` (PDRs) and `practice-core/patterns/` (general abstractions), which are now first-class Core surfaces per PDR-007; (c) apply the three-part bar (validated by real work? prevents recurring mistakes? stable?); (d) present specific proposals to the user; (e) clear the box only after integration is complete and user-approved. Do not clear the box unilaterally. If distilled.md entries have matured into meta-principles about the Practice itself, they may graduate to the Learned Principles section in `.agent/practice-core/practice-lineage.md` or (when substantial) to a dedicated PDR.
 
-   **Outgoing**: Check whether completed work has produced insights that would benefit other repos in the Practice network. Not everything belongs in Practice Core — domain-specific observations, structural notes, process learnings, and patterns that are useful but not universal go to `.agent/practice-context/outgoing/` for broadcast via the plasmid exchange. Content appropriate for Practice Core itself (new Learned Principles, structural proposals, bootstrap template improvements) should be proposed as Practice Core changes with user approval.
-10. *(Optional)* If the session involved meaningful work, consider recording a brief experience in `.agent/experience/`. This should be about what the work was like, not what was done. See `.agent/directives/metacognition.md` and `.agent/experience/README.md`.
+   **Outgoing**: PDR-007 narrowed `.agent/practice-context/outgoing/` to **ephemeral exchange only** — transient sender→receiver notes that expire after integration. Substance with durable value has four proper homes:
+
+   - **Portable Practice governance** (review/planning/consolidation/etc. discipline) → PDR in `practice-core/decision-records/` (travels with Core; no outgoing copy needed).
+   - **General abstract patterns** (ecosystem-agnostic, ≥2 instance synthesis) → `practice-core/patterns/` (travels with Core; authored fresh via synthesis).
+   - **Host-local reference material** (platform-specific notes, ecosystem-specific examples, scripts) → `.agent/reference/` (host-local; does not travel).
+   - **Ephemeral exchange context** (framing notes, short-lived write-back packs targeted at a specific receiver) → `.agent/practice-context/outgoing/`.
+
+   At consolidation, any `outgoing/` file whose substance exists nowhere else is a **defect** (per PDR-007): it must promote to one of the three durable homes or be deleted as a staging artefact that never graduated. New insights from completed work route to the appropriate home by substance shape, not by legacy "put it in outgoing" habit.
+
+   Practice Core structural changes (new Core directories, changes to the contract) are proposed as PDRs against the Core contract, with user approval.
+11. *(Optional)* If the session involved meaningful work, consider recording a brief experience in `.agent/experience/`. This should be about what the work was like, not what was done. See `.agent/directives/metacognition.md` and `.agent/experience/README.md`.
