@@ -55,6 +55,22 @@ not "is the grounding accurate?". The corrective rule was added to
 the session prompt's "Ground First" step so future sessions read the
 composition root explicitly.
 
+**2026-04-17 Sentry L-0b close — `satisfies` gate overclaim**
+(commit `d08c6969`). The first session plan asserted that a
+TypeScript `satisfies readonly (keyof NodeOptions)[]` check would
+"fail the build when a new hook is added to `NodeOptions`." It
+would not — the `satisfies` constraint only validates that each
+listed name is a valid `NodeOptions` key, not that every
+`NodeOptions` hook key is listed. The authored test file's own
+TSDoc acknowledged the limitation; the plan prose overclaimed.
+Both assumptions-reviewer and sentry-reviewer caught the gap. The
+corrective edit reframed the risk-row mitigation to "code review
+plus the explicit registry" — the honest enforce-edge. General
+lesson: when writing plan prose about compiler-enforced gates,
+ground the claim in the actual type behaviour (e.g. by asking "what
+concrete change would fail this gate?") before asserting what the
+compiler will catch.
+
 ## When to Apply
 
 - Any scope proposal that asserts "we're not using X" or "X is missing".

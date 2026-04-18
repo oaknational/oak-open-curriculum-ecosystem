@@ -1,4 +1,101 @@
-## 2026-04-17 — Consolidation pass after PDR directory establishment
+## 2026-04-17 — L-0a/b + reviewer-findings register session (commit d08c6969)
+
+Session executed the fresh-session plan: applied Appendix A.2's 15
+structural corrections to the executable plan, accepted ADR-160 +
+ADR-161, authored the L-0b barrier conformance test
+(`packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts`,
+18 tests). `pnpm check` 88/88 exit 0. Single commit landed.
+
+Five structured surprises / corrections surfaced through the session
+via owner pushback and reviewer findings.
+
+**Surprise 1 — "Stretch" is not scope.** The first session plan
+labelled L-1 / L-2 / L-DOC-initial / L-EH-initial as a "stretch" phase
+and then "dropped" them when the assumptions-reviewer flagged pacing.
+Owner correction: those are Phase 1 features of the executable plan,
+not optional add-ons. Nothing was dropped — the session simply
+un-started them. Framing matters because "stretch" hides which
+feature lanes remain open; "un-started" makes the remaining work
+visible. The session plan was reworded. Candidate doctrine: **feature
+lanes are features; non-feature work is non-features; there is no
+"stretch" category that hides feature debt**.
+
+**Surprise 2 — Nothing is deferred without a named lane.** The first
+A.6 findings block split reviewer findings into "actioned" and
+"deferred as follow-ups." Owner correction: plan to address **all**
+findings unless explicitly rejected as incorrect; each to-action
+finding must have an owning lane + specific edit. "Deferred /
+follow-up TBD" is a smuggled drop. Register was rewritten as
+ACTIONED / TO-ACTION (with owning lane) / REJECTED (with rationale).
+Candidate doctrine: **a deferred finding without a lane is a dropped
+finding in disguise; reviewer findings must route to a lane or a
+rejection, nothing else**. Pattern worth extracting once validated
+once more.
+
+**Surprise 3 — "RED by new-file non-existence" overstates TDD when
+the implementation already exists.** The L-0b test file's parts 1–3
+are assertion against existing `createSentryHooks` behaviour. The
+session plan framed this as "genuine RED because the file doesn't
+exist yet." Test-reviewer correctly identified that as retroactive
+assertion, not TDD. The bypass-validation describe block is genuine
+RED-on-change (the `createSentryHooksWithBypass` helper is novel
+and its negative assertions would fail if the redactor were not
+run). File header now labels the conformance harness honestly. The
+corrective lesson: **file non-existence is RED only when the
+implementation also doesn't exist; retrofitting a test against
+existing behaviour is a conformance harness, not TDD**.
+
+**Surprise 4 — Settle-vs-propose for ADR Open Questions.** ADR-160
+was Accepted as-drafted with its Open Questions section intact
+("package placement TBD at L-12 planning time"; "conformance test
+centralisation preference stated, not locked"). The session plan
+then asserted `packages/core/telemetry-redaction-core/` as settled
+in executable-plan prose. Assumptions-reviewer flagged the
+procedural inversion: an Open Question resolved only in plan prose
+can drift when the plan is archived; the normative home for the
+decision is the ADR. Resolution: ADR-160 amended this session,
+Open Questions section replaced with "Closed Questions (2026-04-17)"
+recording the settled answers. Candidate doctrine: **if a plan
+settles an ADR Open Question, amend the ADR in the same change set
+— do not let plan prose carry load-bearing normative decisions**.
+
+**Surprise 5 — Tautological assertions are not assertions.**
+`BYPASS_CANDIDATES: readonly BarrierHookName[] = BARRIER_HOOKS;`
+followed by `expect(new Set(BYPASS_CANDIDATES)).toEqual(new Set(BARRIER_HOOKS))`
+is structurally always true. Code-reviewer called this an assertion
+that could never fail. Replaced with a type-level set-equality gate
+against `keyof SentryRedactionHooks` (the return type of
+`createSentryHooks`, now exported) — that check genuinely fails at
+`pnpm type-check` when the adapter adds or removes a hook without a
+`BARRIER_HOOKS` update. The corrective lesson is tiny but sharp:
+**when two names point at the same constant, comparing them tests
+aliasing, not behaviour — trace the invariant you want to enforce
+back to something structurally independent**. Candidate pattern:
+"tautological-assertions-are-not-tests" alongside the existing
+`reviewer-prompts-that-pre-suppose-narrow-findings`.
+
+**Meta-observation on reviewer-matrix discipline.** The
+close-of-session reviewer pass (six reviewers, non-leading prompts)
+produced 29 findings against a session that had already passed
+`pnpm check` exit 0. Going through every finding and assigning it
+ACTIONED / TO-ACTION / REJECTED — rather than triaging some as
+"low priority deferred" — surfaced the two biggest procedural
+issues (surprise 2 above + the ADR-prose drift of surprise 4). Cost
+of discipline: ~30 minutes of plan-text editing plus a second
+`pnpm check`. Benefit: the register survives the session as a
+durable artefact that the next session can verify against, and
+nothing is quietly lost. The discipline is worth the cost. Pattern
+confirmed: **reviewer findings that the session can action
+immediately should be actioned; findings the session cannot
+immediately action should be attached to a named lane, not parked**.
+
+Napkin length after this entry: ~450 lines (approaching rotation
+threshold 500). Rotation not required this handoff; flag for next
+consolidation pass.
+
+---
+
+
 
 Second `jc-consolidate-docs` run of the session, following the PDR
 directory work. What moved:

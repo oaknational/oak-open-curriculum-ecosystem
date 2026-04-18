@@ -81,108 +81,168 @@ git log --oneline --decorate -10
   - `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`
     (strategic follow-up extending the ADR-159 pattern to Clerk; separate
     lane after Sentry work).
-- **Current objective**: apply Appendix A.2 structural corrections to
-  the executable plan, then begin L-0 RED (author ADR-160 as the
-  successor to ADR-143 §6). Phase 1 delivery follows: L-1 free-signal
-  integrations, L-2 delegates extraction, L-DOC initial slice, L-EH
-  initial slice.
-- **Recent surprises / corrections (2026-04-17 maximisation pivot
-  session)**:
-  - **Ground before framing**. `wrapMcpServerWithSentry` was already
-    wired (`core-endpoints.ts:98`); claimed as missing in the first
-    pivot summary due to inference from SDK exports rather than
-    reading the composition root. Rule added to the prompt's "Ground
-    First" step 7.
-  - **Reviewer-prompt discipline**. Non-leading reviewer prompts
-    (second round) produced a qualitatively wider finding surface
-    than leading prompts (first round). Captured in the napkin.
-  - **CI pipeline framing**. PR checks network-free (unit +
-    integration); Vercel deploy pipeline network-capable (`sentry-cli`
-    there); E2E / smoke out-of-band. Encoded in L-7 and A.3 answer 7.
-  - **TSDoc-extension-point-only for future providers**. L-10
-    (feature flags) and L-11 (AI instrumentation) resolved as
-    stub-with-TSDoc, not barrel re-exports.
-  - **Adjacent (non-Sentry) — Finnish national curriculum API
-    future brief authored** (2026-04-17). New strategic brief at
-    `.agent/plans/sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md`
-    names Tranche 4 (SDK/codegen) of the Oak Surface Isolation and
-    Generic Foundation Programme as its hard pre-requisite, and
-    positions the Opetushallitus public APIs as an international
-    curriculum comparator inside the Open Education Knowledge
-    Surfaces narrative. Discoverability wired into the SDK/MCP
-    future README, the architecture future README, and the
-    high-level plan's MCP Features section. Does not change Sentry
-    sequencing; recorded here only so the next session sees it
-    exists.
+- **Current state (2026-04-17, commit `d08c6969`)**: L-0a (ground-truth
+  correction) and L-0b (ADR-160 test gate) both closed. ADR-160 and
+  ADR-161 Accepted. ADR-143 §6 status line records supersession.
+  Appendix A.2's 15 structural corrections applied. §A.6 Reviewer
+  Findings Register records all 29 findings from the close-of-session
+  reviewer matrix (18 ACTIONED, 11 TO-ACTION with owning lane, 0
+  REJECTED). `pnpm check` from repo root exit 0, 88/88 tasks green.
+  `packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts`
+  landed (18 tests). `SentryRedactionHooks` exported from
+  `runtime-sdk.ts`; `SentryLogPayload` / `SentrySpanPayload` exported
+  from `types.ts`.
+- **Current objective**: open L-1 (free-signal integrations) next.
+  L-1 has a prerequisite step named in its body (per A.6 AR-3): fixture
+  runtime must route non-event envelopes through the same `beforeSend*`
+  composition the live SDK uses before the integration behaviour
+  assertions can land. Expect L-1 to take longer than a naive "turn on
+  six integrations" estimate.
+- **Phase 1 remainder scheduled** (all lanes un-started, none dropped):
+  - **L-1** free-signal integrations (ANR, Zod, node-runtime, span-
+    streaming, rewrite-frames, extraErrorData) — opens first; has
+    fixture envelope-observability prerequisite.
+  - **L-2** `createSentryDelegates` extraction into
+    `@oaknational/sentry-node` — structural-intersection acceptance
+    test required (A.6 AF-3).
+  - **L-DOC initial** expand `packages/libs/sentry-node/README.md`
+    from 4-line stub + write `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`.
+    Owner-only edit to `.agent/directives/AGENT.md § Essential Links`
+    at lane close (exact diff recorded in §A.6 of the executable plan).
+  - **L-EH initial** author `require-error-cause` ESLint rule with
+    expanded RuleTester cases.
+- **Recent surprises / corrections (2026-04-17)**:
+  - **"Stretch" is not scope.** First summary labelled L-1 / L-2 /
+    L-DOC-initial / L-EH-initial as "stretch" and then "dropped" them
+    under pacing pressure. Owner correction: they are Phase 1 features
+    of the executable plan, not optional add-ons; "un-started" is the
+    honest framing. Session plan reworded.
+  - **Nothing is deferred without a named lane.** First A.6 draft
+    used a "deferred as follow-ups" block for 11 reviewer findings.
+    Owner correction: plan to address all findings unless explicitly
+    rejected; each gets an owning lane + specific edit. Register
+    rewritten as ACTIONED / TO-ACTION / REJECTED.
+  - **Test-file "RED by non-existence" overstates TDD.** Reviewer
+    pointed out that parts 1–3 of the L-0b conformance test were
+    retroactive assertion against existing code, not TDD. Bypass
+    section remains credible RED-on-change. File header now
+    explicitly labels the conformance harness honestly.
+  - **Settle-vs-propose for ADR Open Questions.** Accepting an ADR
+    as-drafted while the plan body settles its Open Questions in
+    prose is a procedural inversion. Resolution: ADR-160 Open
+    Questions now closed in the ADR itself (package placement + per-
+    consuming-workspace conformance).
+  - **Tautological tests are not tests.** `BYPASS_CANDIDATES` aliased
+    `BARRIER_HOOKS` and the set-equality assertion could never fail.
+    Replaced with a type-level set-equality gate against
+    `keyof SentryRedactionHooks`.
+  - **Ground before framing** (carried): `wrapMcpServerWithSentry`
+    at `core-endpoints.ts:98` — read the composition root before
+    framing integration pivots.
+  - **Fixture runtime does not route through hooks.** Discovered via
+    sentry-reviewer + test-reviewer: `createFixtureRuntime` in
+    `runtime.ts` captures directly via `store.push(...)`; it does NOT
+    install or invoke the `beforeSend*` pipeline. Proof surface for
+    hook behaviour is direct `createSentryInitOptions(...)` return
+    invocation, not `SENTRY_MODE=fixture`. L-1 absorbs this as its
+    envelope-observability prerequisite.
 - **Open questions / low-confidence areas**:
   - Widget bundle-size measurement once `@sentry/browser` lands
     (L-12) — no budget set; owner chose measure-and-note.
   - `nodeRuntimeMetricsIntegration` default metric count varies
-    across 10.x minors — cite Sentry docs page live when the lane
-    opens rather than fixing a number in plan prose.
+    across 10.x minors — cite Sentry docs page live when L-1 opens
+    rather than fixing a number in plan prose.
   - `@sentry/profiling-node` v10 API knobs
     (`profileSessionSampleRate` + `profileLifecycle`) have not yet
     been exercised locally; L-6 RED will confirm shape before code.
-  - **Testing vocabulary deliberation** (raised 2026-04-17). The
-    repo's `testing-strategy.md` uses `unit` / `integration` / `E2E`
-    / `smoke` with local definitions: `integration` = in-process
-    collaboration tests (not the industry-typical
-    "integration-against-a-live-service"); `E2E` = running system
-    stdio-only, no network; `smoke` = fully running system, all IO.
-    Owner flagged this is atypical and may be confusingly named
-    relative to industry convention. Open question: should we adopt
-    industry-standard naming (without weakening the actual pipeline
-    separation captured by ADR-161)? Not a Sentry-plan concern;
-    tracked here for a separate deliberation. Relevant files:
-    `.agent/directives/testing-strategy.md`, ADR-161, ADR-078.
-- **Next safe step**: in a fresh session, apply Appendix A.2
-  structural corrections (rewrite L-0 as "author ADR-160"; split
-  L-DOC / L-EH into phased pairs; relocate
-  `enrichMcpRequestContext` into the MCP app; partition L-7 into
-  sibling scripts; tighten RED framing across L-1/L-4b/L-6/L-7/L-0/L-DOC;
-  add missing documentation propagation targets), then open L-0 RED.
-- **Deep consolidation status**: not due — this handoff closes a
-  lightweight adjacent documentation session (Finnish national
-  curriculum API future brief + discoverability wiring) on top of
-  the still-authoritative maximisation-pivot consolidation from
-  earlier 2026-04-17. No Sentry-lane progress this session; no new
-  doctrine stable enough to graduate; napkin rotated earlier today
-  and extended in-session with one adjacent entry; no practice-box
-  activity; no ADR-shaped learning emerged. Prior consolidation
-  state still stands: napkin extended with eight entries from the
-  maximisation pivot session; three patterns extracted
-  (`ground-before-framing`,
-  `tsdoc-extension-point-for-future-consumers`,
-  `non-leading-reviewer-prompts`); settled CI-pipeline-boundary
-  doctrine graduated to `docs/operations/sentry-cli-usage.md`; two
-  new ADRs drafted (status: Proposed): ADR-160 "Non-Bypassable
-  Redaction Barrier as Principle" (supersedes ADR-143 §6 in part)
-  and ADR-161 "Network-Free PR-Check CI Boundary". ADR index updated;
-  ADR-143 §6 carries the supersession note. A todo
-  (`ws-review-adrs-160-161`) on the active plan flags both ADRs for
-  owner review before Phase 1 opens; L-0 has been rewritten to
-  implement ADR-160's test gate rather than author the ADR.
-  `pnpm practice:fitness` state captured under Current State — this
-  session introduced zero new violations.
+  - **L-1 envelope-observability approach**: Option A (route fixture-
+    mode envelopes through `createSentryHooks`) vs Option B (per-
+    envelope capture paths). Option A is preferred in plan text;
+    implementer confirms at lane open.
+  - **Testing vocabulary deliberation** (carried from 2026-04-17).
+    `testing-strategy.md` uses `unit` / `integration` / `E2E` /
+    `smoke` with local definitions. Owner flagged atypical naming
+    relative to industry convention. Separate deliberation, not a
+    Sentry-plan concern. Relevant files: `.agent/directives/testing-strategy.md`,
+    ADR-161, ADR-078.
+- **Next safe step**: open L-1 in a fresh session. Begin with the
+  fixture envelope-observability prerequisite (named in §L-1 of the
+  executable plan); land the plumbing that routes non-event envelopes
+  through `createSentryHooks`; then assert per-integration behaviour
+  via fixture capture. Phase 1 per-phase reviewer matrix runs at
+  phase close — do NOT bundle L-1/L-2/L-DOC-initial/L-EH-initial in
+  a single un-reviewed pass.
+- **Deep consolidation status**: **completed this handoff** — user
+  invoked `/jc-consolidate-docs` explicitly after session-handoff
+  reported "not due". Full pass ran 2026-04-17 post-commit
+  `d08c6969`. Outputs:
+  - **Step 5 (patterns)**: one new pattern extracted —
+    `patterns/findings-route-to-lane-or-rejection.md`. Evidence
+    entries appended to `patterns/ground-before-framing.md`
+    (satisfies-gate overclaim instance) and
+    `patterns/test-claim-assertion-parity.md` (BYPASS_CANDIDATES
+    tautology instance). Three today's napkin surprises remain
+    single-instance and stay in the napkin for cross-session
+    validation: "stretch is not scope"; "RED-by-new-file overstates
+    TDD when implementation exists"; "ADR Open Questions close in
+    the ADR, not in plan prose".
+  - **Step 6 (napkin)**: no rotation — 444 lines, under 500 threshold.
+  - **Step 7 (graduation)**: `distilled.md` "Review scope separation"
+    entry replaced with pointer to new `findings-route-to-lane-or-rejection`
+    pattern. No ADR-shaped doctrine surfaced from today's observations;
+    surviving ADR candidates (`@ts-expect-error` policy;
+    `eslint-disable` self-justification) remain owner-deferred per
+    earlier decisions.
+  - **Step 8 (fitness)**: `pnpm practice:fitness:strict-hard` exit 1
+    — three foundational directives remain in the hard zone
+    (`AGENT.md` lines+prose-width; `principles.md` chars;
+    `testing-strategy.md` lines+prose-width). All owner-deferred
+    per earlier decisions; this session introduced zero new hard
+    violations. `distilled.md` at 263 lines (soft zone, target 200,
+    limit 275). Eight soft-zone files unchanged.
+  - **Step 9 (practice exchange)**: incoming boxes empty (both
+    `.agent/practice-core/incoming/` and
+    `.agent/practice-context/incoming/` carry only `.gitkeep`).
+    Outgoing broadcast drafted:
+    `.agent/practice-context/outgoing/findings-route-to-lane-or-rejection.md`.
+  - **Step 10 (experience)**: brief reflection recorded at
+    `.agent/experience/2026-04-17-the-language-that-hides-scope.md`
+    covering the owner-pushback rhythm (stretch → deferred) and the
+    shift from triage-mindset to routing-mindset.
+  - **Commit state**: consolidation edits not yet committed; working
+    tree carries the new pattern file, pattern annotations, distilled
+    edit, outgoing broadcast, experience entry, and continuity-contract
+    updates on top of commit `d08c6969`.
 
-## Current State (2026-04-17)
+## Current State (2026-04-17, post-L-0 session)
 
-Foundation closure is done on `feat/otel_sentry_enhancements`:
+Foundation closure + L-0 (barrier-gate conformance) done on `feat/otel_sentry_enhancements`:
 
-- Steps 1–5 of "Road to Provably Working Sentry" closed 2026-04-17.
+- Steps 1–5 of "Road to Provably Working Sentry" closed.
 - Alert rule 521866 validated via `sentry api`.
-- Commits `40b212d4` / `9c3044ff` / `5356bffc` / `f1869840` / `8f33cfc0` /
-  `9c0ad424` / `724c1523` pushed.
+- Commits landed (most recent first): `d08c6969` (l-0b + reviewer
+  register), `ded99224`, `e215a879`, `724c1523`, `9c0ad424`,
+  `8f33cfc0`, `f1869840`, `5356bffc`, `9c3044ff`, `40b212d4`.
+  Branch is one commit ahead of remote; push pending owner
+  instruction.
 - Source-map upload operational via `pnpm sourcemaps:upload`
   (two-step Debug ID flow).
 - MCP server is auto-instrumented via `wrapMcpServerWithSentry` at
   `apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts:98`.
 - Shared redaction barrier covers `beforeSend` / `beforeSendTransaction`
-  / `beforeSendSpan` / `beforeSendLog` / `beforeBreadcrumb` (ADR-143 §6).
+  / `beforeSendSpan` / `beforeSendLog` / `beforeBreadcrumb` — now
+  governed by ADR-160 (supersedes ADR-143 §6 in part, Accepted
+  2026-04-17) and enforced by
+  `packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts`
+  (18 tests, three-part closure + automated bypass validation).
 - `setupExpressErrorHandler` is wired at `index.ts:40-41` when
   `SENTRY_MODE !== 'off'`.
+- ADR-160 and ADR-161 Accepted; ADR-160 Open Questions closed
+  (new `packages/core/telemetry-redaction-core/` package for
+  browser-safe core; per-consuming-workspace conformance tests).
 
-The PR opens after the maximisation lanes on this plan all close.
+The PR opens after the remaining Phase 1 lanes (L-1, L-2, L-DOC
+initial, L-EH initial) and Phases 2–4 of the executable plan close.
 
 ## Corrective Learning (2026-04-17)
 
@@ -216,24 +276,25 @@ plan, resolved 2026-04-17). Do not re-open them. Notable settlements:
 - L-13 replaces alert 521866 (which was smoke-test shape only).
 - L-5/L-6 rollback is env-flag-off; alpha, no SLA.
 
-**First two actions of the fresh session, in order**:
+**First action of the next session**: open **L-1** (free-signal
+integrations). Before asserting integration behaviour, land the
+fixture envelope-observability prerequisite named in §L-1 of the
+executable plan: route non-event envelopes (ANR, streamed-span,
+runtime-metrics) through `createSentryHooks` so fixture-mode tests
+observe the same transformations the live SDK applies. Option A
+(preferred) extends `createFixtureRuntime` to route every envelope
+through the adapter hook composition; Option B adds per-envelope
+capture paths. Owner confirms choice at lane open. Then compose
+`anrIntegration`, `zodErrorsIntegration`, `nodeRuntimeMetricsIntegration`,
+`spanStreamingIntegration` + `withStreamedSpan`, `rewriteFramesIntegration`,
+and `extraErrorDataIntegration`, asserting behaviour-level capture per
+§L-1 RED.
 
-1. **Apply Appendix A.2 structural corrections** to the plan before
-   any code is written. The non-trivial ones: write ADR-160 as a
-   **successor ADR** to ADR-143 §6 (not an in-place amendment); split
-   L-0 / L-DOC / L-EH into phased pairs; move `enrichMcpRequestContext`
-   to the MCP app (L-3 belongs in the app, not the shared lib);
-   extract a browser-safe redactor core before L-12 opens; tighten
-   RED phases to test product behaviour rather than config shape;
-   add the missing documentation propagation targets
-   (`docs/operations/sentry-deployment-runbook.md`,
-   `docs/operations/sentry-cli-usage.md`,
-   `docs/operations/production-debugging-runbook.md`,
-   `docs/operations/environment-variables.md`, app README,
-   `.agent/directives/AGENT.md § Essential Links`).
-2. **Begin L-0 RED** against the corrected plan: author ADR-160
-   (non-bypassable redaction barrier as principle, with a closure
-   property and a test gate).
+Do NOT bundle L-1/L-2/L-DOC-initial/L-EH-initial in a single
+un-reviewed pass. Per the updated reviewer matrix (plan §Adversarial
+Review), `assumptions-reviewer` runs at every phase close, and Phase 1
+close requires the full seven-reviewer roster (code, test, type,
+config, docs-adr, sentry, architecture-fred, plus assumptions).
 
 Then continue into L-1, L-2, L-DOC (initial), L-EH (initial) as the
 Phase 1 delivery. TDD first at every step. Run the reviewer matrix

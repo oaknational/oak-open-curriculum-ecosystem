@@ -73,9 +73,11 @@ context with no natural permanent home.
 - **Ground plans in verified data, not memory**: run the actual
   tools, read the actual files, verify the actual state BEFORE
   drafting a plan. See pattern `patterns/tool-output-framing-bias.md`.
-- **Review scope separation**: separate in-scope findings from
-  pre-existing issues. Fix in-scope, track pre-existing as gated
-  follow-up.
+- **Findings route to a lane or a rejection**: separate in-scope
+  findings from pre-existing; every reviewer finding is ACTIONED,
+  TO-ACTION (named lane + specific edit), or REJECTED (written
+  rationale). "Deferred without a lane" is a smuggled drop. See
+  pattern `patterns/findings-route-to-lane-or-rejection.md`.
 - **Ignored estates need explicit sweeps**: when validating
   gitignored lanes, use `rg -uu` or run from inside the target
   directory; otherwise ignore rules create false-clean checks.
