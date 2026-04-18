@@ -222,6 +222,19 @@ Despite a mature foundation, meaningful Sentry capabilities are unused:
 
 ## MVP Classification
 
+> **Status note (2026-04-18)**. As of this plan revision, **none of
+> the MVP observability code has been written**. Foundation work is in
+> place (`@oaknational/sentry-node` three-mode adapter,
+> `@oaknational/logger`, shared redaction barrier + ADR-160 test gate
+> at L-0b, `wrapMcpServerWithSentry` wired in the MCP composition
+> root, alert 521866 validated, source-map upload operational). Every
+> L-lane after L-0b, every MVP event schema, and every workspace named
+> in cross-references below (notably `packages/core/observability-events/`
+> and `packages/core/telemetry-redaction-core/`) **exists as planned
+> work, not as code**. Cross-references in this plan link planning
+> authority, not current runtime state. Workspaces land when their
+> owning `current/` plans enter `active/` lifecycle and execute.
+
 This plan ships as one PR, but not every lane is launch-blocking for the
 public-beta release that ADR-162 frames as the MVP envelope. The table
 below classifies every lane as **MVP-in** (launch-blocking) or
@@ -662,6 +675,8 @@ explicit and auditable. Extend the shared redaction barrier with
 `beforeSendMetric`. Emitted metric names are catalogued alongside
 event schemas in
 [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+(planned — `packages/core/observability-events/` does not yet exist
+as code)
 per ADR-162's event-schema contract — `metrics.*` emissions are part
 of the downstream-analytics contract, not a Sentry-internal concern.
 
@@ -1262,6 +1277,15 @@ Per phase, propagate:
 - ADR-144 citation-style alignment ("three-zone fitness model") wherever "fitness zones" appears in plan text (A.1 factual correction 6).
 
 **Cross-plan propagation — sibling MVP plans (added 2026-04-18 per restructure Phase 4)**:
+
+> **Status note**. Every target below is a **`current/` (queued)**
+> plan — not `active/`, not code. Workspaces named within them
+> (`packages/core/observability-events/`,
+> `packages/core/telemetry-redaction-core/`) **do not yet exist on
+> disk**. Each sibling plan must be promoted to `active/` and executed
+> for its workspace to materialise. Cross-references link planning
+> authority, not current runtime state; readers who need runtime
+> state should consult each sibling plan's frontmatter status.
 
 Under ADR-162's five-axis principle, several lanes of this plan carry
 obligations that are discharged in sibling `current/` plans. The
