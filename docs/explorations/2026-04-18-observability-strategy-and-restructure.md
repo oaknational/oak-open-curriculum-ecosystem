@@ -1,7 +1,7 @@
 ---
 title: Observability Strategy and Restructure — Session Context and Derived Direction
 date: 2026-04-18
-status: informs-plan-observability-strategy-restructure informs-adr-162
+status: informed-plan-observability-strategy-restructure informed-adr-162
 ---
 
 # Observability Strategy and Restructure — Session Context and Derived Direction

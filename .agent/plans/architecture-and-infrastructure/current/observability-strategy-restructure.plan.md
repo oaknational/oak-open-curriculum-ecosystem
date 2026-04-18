@@ -505,7 +505,13 @@ compliance; clarity of informed-plan linkage.
   `L-4b → L-4a` (span-metrics adopts only after `metrics.*` adapter
   stable).
 - Risk table new row: "Sentry `metrics.*` API shifts during beta" —
-  adapter insulates; conservative version-pin; changelog-watch task.
+  adapter insulates consumers; conservative version-pin in
+  `packages/libs/sentry-node`; changelog review is tied to a concrete
+  trigger: "re-read the Sentry Node SDK `metrics.*` changelog at (a)
+  every L-4b closure milestone and (b) the next monthly dependency-
+  audit cadence, whichever fires first; raise any breaking-shape change
+  as a new risk row immediately." Owner: L-4b implementer at each
+  milestone review.
 
 ### P4.2 Mark MVP vs MVP-deferred per lane
 
@@ -524,8 +530,45 @@ PR):
 - All other lanes (L-0a/b done; L-1, L-2, L-3, L-4b, L-7, L-9, L-12,
   L-12-prereq, L-13, L-DOC initial/final, L-EH initial/final, L-15).
 
-Add a § "MVP classification" section near the top of the plan body with
-this table and the rationale.
+Add a § "MVP classification" section near the top of the plan body
+containing **a table with three columns**:
+
+1. **Lane ID** (L-NN).
+2. **MVP-in / MVP-deferred**.
+3. **Axis-applicability rationale**. For MVP-deferred lanes, this
+   column MUST cite [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md)'s
+   clause "Omission is explicit and justified, not incidental" and
+   state WHY the lane's axis obligation is either (a) not applicable
+   at MVP (e.g. L-10 has no provider selected; no runtime capability
+   exists to emit from), (b) satisfied by a simpler surface at MVP
+   (e.g. L-5 fixed-rate sampling satisfies engineering axis
+   observability without dynamic sampling), or (c) a decision, not a
+   runtime capability (e.g. L-14).
+
+Without this rationale column, the Phase 5 ADR-162 axis-coverage audit
+will find an unjustified omission. The column is load-bearing, not
+optional.
+
+### P4.2b Update Foundation Alignment in the maximisation plan
+
+**Edit to `observability/active/sentry-observability-maximisation-mcp.plan.md`**:
+
+The maximisation plan's § Foundation Alignment list (lines ~223–237)
+enumerates the ADRs it aligns to but currently omits the two ADRs
+that govern its MVP classification and its redaction posture most
+directly:
+
+- Add [ADR-160](../../../../docs/architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md)
+  — Non-Bypassable Redaction Barrier as Principle. Already referenced
+  in-body (L-0b conformance) but absent from the canonical alignment
+  list.
+- Add [ADR-162](../../../../docs/architecture/architectural-decisions/162-observability-first.md)
+  — Observability-First, five axes, vendor-independence clause. This
+  is the governing ADR for the MVP classification added in §P4.2;
+  listing it in Foundation Alignment is not optional.
+
+Without this update, the maximisation plan's alignment list is stale
+relative to the principle Phase 4 is enforcing.
 
 ### P4.3 Cross-reference new MVP lanes
 
@@ -533,10 +576,23 @@ Update maximisation plan's § Documentation Propagation + specific lane
 bodies to cross-reference:
 
 - L-0/L-1/L-3 → `observability-events-workspace.plan.md` for schemas.
+- L-4b → `observability-events-workspace.plan.md` for the metric-names
+  catalog. `metrics.*` emissions are part of the downstream-analytics
+  schema contract per ADR-162; metric names the adapter emits
+  (e.g. `oak.mcp.handler.request.count`, `oak.mcp.tool.duration_ms`)
+  must be catalogued alongside event schemas.
 - L-7 → `synthetic-monitoring.plan.md` for uptime/working probe.
+- L-7 → `multi-sink-vendor-independence-conformance.plan.md` to
+  document the release-linkage carve-out (release linkage is
+  Sentry-coupled by nature; the conformance plan's scope explicitly
+  acknowledges this as a signal that need not survive `SENTRY_MODE=off`).
 - L-9 → `observability-events-workspace.plan.md` for `feedback-submitted`.
 - L-12 → `accessibility-observability.plan.md` for widget-side a11y
   signal.
+- L-12 → `multi-sink-vendor-independence-conformance.plan.md` —
+  the widget is a second emitting workspace that the conformance plan
+  lists as a consuming workspace; the lane body must acknowledge the
+  vendor-independence compose-in obligation.
 - L-13 → `security-observability.plan.md` + `accessibility-observability.plan.md`
   for per-axis alerts.
 
@@ -547,9 +603,14 @@ bodies to cross-reference:
 **Reviewer matrix**:
 
 - `sentry-reviewer` — `metrics.*` priority swap correctness; beta-API
-  risk mitigation sufficiency.
-- `architecture-reviewer-fred` — MVP classification boundary; cross-
-  reference correctness.
+  risk mitigation sufficiency; `beforeSendMetric` shape compatibility
+  with the changelog-watch trigger named in §P4.1.
+- `architecture-reviewer-fred` — MVP classification boundary;
+  axis-applicability rationale correctness; cross-reference
+  completeness including the three additions in §P4.3.
+- `docs-adr-reviewer` — Foundation Alignment list completeness after
+  §P4.2b; MVP classification section presence at plan head; ADR
+  cross-reference health across the revised plan.
 
 **Phase 4 commit**: single commit with subject
 `docs(observability): revise maximisation plan — metrics.* primary, mvp classification, cross-refs`.
