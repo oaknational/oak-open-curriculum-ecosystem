@@ -1,12 +1,38 @@
-# Patterns
+# Repo-Local Pattern Instances
 
-Abstract, reusable patterns proven by real implementation. Each
-pattern captures a principle that is too concrete for a rule but
-too abstract for source code. Patterns span five categories:
+Specific, ecosystem-grounded instances of engineering patterns
+proven by real implementation in this repository. Each entry
+captures a concrete pattern proven in a specific TypeScript/Zod/
+Vitest/MCP context (or other specific ecosystem context present
+here).
+
+## Relationship to Practice Core
+
+This directory holds **specific instances**. General, ecosystem-
+agnostic abstractions live in `.agent/practice-core/patterns/` and
+are authored through synthesis from multiple instances. Patterns
+describing Practice-governance (review, planning, consolidation,
+etc.) live as PDRs in `.agent/practice-core/decision-records/`.
+
+An instance here may have a `related_pdr: PDR-NNN` or
+`related_pattern: <name>` frontmatter pointer linking it to the
+general form. The instance stays in place regardless: instance-
+level proof continues to live at the repo level after general
+abstraction is authored.
+
+## Categories
+
+Patterns span five categories:
 **code** (implementation techniques), **architecture** (system
 structure and boundaries), **process** (engineering workflows and
 decision-making), **testing** (verification strategies), and
 **agent** (agentic infrastructure design).
+
+Note: Practice-governance patterns that were in this directory
+before 2026-04-18 have been **absorbed as PDRs** (PDR-012 through
+PDR-023) under the Core contract established by PDR-007. The
+instance files remain here with `related_pdr` frontmatter pointing
+at the general PDR form.
 
 ## Taxonomy
 

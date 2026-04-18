@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-019
 name: "ADR by Reusability, Not Diff Size"
 use_this_when: "closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR"
 category: process

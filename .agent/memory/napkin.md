@@ -1,3 +1,66 @@
+## 2026-04-18 — PDR-007 Core contract change + batch Practice-governance PDRs (PDR-008 through PDR-023)
+
+Continuation of 2026-04-18 session. Practice track pulled forward
+ahead of Sentry/OTel work because an external repo was waiting on
+the enhanced Practice. Track executed end-to-end in one session.
+
+**Substantive outputs**:
+
+- **PDR-007** redefined the Core contract: "bounded package of
+  files + required directories." Added `practice-core/decision-records/`
+  and `practice-core/patterns/` as first-class Core directories.
+- **PDR-008** canonical quality-gate naming across the network
+  (bare=verify, :fix=apply, :ci=non-mutating-CI; `check` ergonomic
+  exception aliases `check:fix`).
+- **PDR-009** canonical-first cross-platform agent architecture
+  (three-layer: canonical/adapter/entry-point; activation triggers
+  as distinct artefact type).
+- **PDR-010** domain-specialist capability pattern (four-layer
+  triplet + optional operational tooling; classification taxonomy
+  domain_expert/process_executor/specialist; three operational
+  modes; inverted-hierarchy variant).
+- **PDR-011** continuity surfaces + surprise pipeline (three
+  continuity types; split-loop; named contract; capture→distil→
+  graduate→enforce).
+- **PDR-012 through PDR-023** batch Practice-governance PDRs
+  absorbing ~29 memory/patterns/ entries into coherent grouped PDRs:
+  review-findings routing, grounding/framing, consolidation/
+  knowledge-flow, reviewer authority/dispatch, claim propagation,
+  workaround hygiene, planning discipline, ADR scope, check-driven
+  development, test validity, governance scanners, documentation
+  structure.
+
+**Migration executed**: 12 outgoing duplicates deleted; outgoing/
+patterns/ subdirectory retired; 4 files moved to `.agent/reference/`;
+29 memory/patterns/ entries gained `related_pdr: PDR-NNN`
+frontmatter; trinity edits + entry-point edits completed; cross-
+reference sweep zero stale paths; fitness check green (no new
+criticals).
+
+**Corrective learning — seam definition**: initial migration plan
+proposed moving ~53 patterns to `practice-core/patterns/` based on
+a universal-vs-local classification. Owner interrupt caught that
+this was a distinction-without-a-difference: the real seam is
+**governance vs engineering**, and within engineering, **general
+abstract vs specific instance**. Practice-governance patterns
+became PDRs (pattern-shaped governance); general abstractions
+will be authored via synthesis (not move); specific instances
+stay in memory/patterns/ with `related_pdr` frontmatter. The
+practice-core/patterns/ directory was created empty with a
+scoping README to receive future-synthesised general patterns.
+
+**Rate of structural change**: extremely high — 17 new PDRs in
+one session (PDR-007 through PDR-023). This session was
+deliberate Practice consolidation on owner direction; expect next
+session's deliberate-pause-and-stabilise posture flagged in the
+prior handoff still applies to any FURTHER structural work.
+
+**Next priority**: Practice track closed; revert to Sentry/OTel
+priority sequence. Phase 1 of observability-strategy-restructure
+plan (ADR-162 draft) is the opener.
+
+---
+
 ## 2026-04-18 — Practice structural observations: generalisation discipline, third genesis scenario, PDR-as-first-class question (commits 3466840a, 709e504c, fb20bc4a)
 
 Continuation of 2026-04-18. After the observability reframe + Core

@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-014
 name: "Current Plan Promotion"
 use_this_when: "A review or planning pass has resolved 'what comes next' and the repo needs a concrete next-session entry point rather than a mere intended future direction"
 category: process

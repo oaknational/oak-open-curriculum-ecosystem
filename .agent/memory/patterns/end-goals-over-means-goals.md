@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-018
 name: end-goals-over-means-goals
 category: process
 barrier_met: true

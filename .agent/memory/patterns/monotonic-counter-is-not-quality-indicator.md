@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-016
 name: "Monotonic Counter Is Not a Quality Indicator"
 use_this_when: "Comparing two versions of a document or artefact that each carry a sequence counter"
 category: process

@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-012
 name: "Nothing Unplanned Without a Promotion Trigger"
 category: process
 status: proven

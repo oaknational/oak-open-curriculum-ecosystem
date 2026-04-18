@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-021
 name: circular-test-justification
 category: testing
 proven_by: "Sentry MCP wrapper removal (2026-04-15/16)"

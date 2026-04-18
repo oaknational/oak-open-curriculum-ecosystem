@@ -1,8 +1,8 @@
 # Practice Decision Records
 
-**Status**: Provisional — clumsy but functional.
-**Established**: 2026-04-17.
-**Established by**: [PDR-001](PDR-001-location-of-practice-decision-records.md).
+**Status**: First-class Core directory (promoted from peer-directory per PDR-007).
+**Established**: 2026-04-17 (as peer directory per PDR-001); promoted to Core 2026-04-18 (PDR-007).
+**Established by**: [PDR-001](PDR-001-location-of-practice-decision-records.md); current shape defined by [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md).
 
 ## What This Is
 
@@ -19,18 +19,17 @@ and authoritative in any repo that hydrates the same Practice.
 
 ## Relationship to the Practice Core and Context
 
-The Practice is organised into three peer layers under `.agent/`:
+Under the PDR-007 Core contract, PDRs are a **first-class Core
+directory**. The Practice is organised with one always-required
+Core package and one optional peer companion:
 
 | Layer | Path | Role | Travels with Practice |
 |---|---|---|---|
-| **Core** | `.agent/practice-core/` | The eight-file plasmid trinity + verification + entry points. The memotype. | Always — required. |
-| **Context** | `.agent/practice-context/` | Optional companion. Sender-maintained `outgoing/`; transient receiver-side `incoming/`. | Optional — travels when sender chooses to include. |
-| **Decision Records** | `.agent/practice-decision-records/` | Authoritative governance decisions about the Practice itself. | Travels with the Practice; carried alongside Core when hydrating. |
+| **Core** | `.agent/practice-core/` | The Core package: trinity + verification + entry points + changelog + provenance + `decision-records/` (this directory) + `patterns/` + `incoming/`. The memotype. | Always — required. |
+| **Context** | `.agent/practice-context/` | Optional ephemeral-exchange companion (sharpened under PDR-007). Sender-maintained `outgoing/`; transient receiver-side `incoming/`. | Optional — travels when sender chooses to include. |
 
-PDRs are **not** part of the eight-file Core contract. They are a
-peer directory. The Core remains the compact, always-required
-package. PDRs are the "why we decided it is this shape" layer
-surrounding the Core.
+`decision-records/` is inside the Core package; PDRs travel with
+the Core by construction.
 
 ## Intended Evolution
 
@@ -100,3 +99,20 @@ marked as host-local context and not carrying decision substance.
 | [PDR-004](PDR-004-explorations-as-durable-design-space-tier.md) | Explorations as Durable Design-Space Tier | Accepted |
 | [PDR-005](PDR-005-wholesale-practice-transplantation.md) | Wholesale Practice Transplantation as a Third Genesis Scenario | Accepted |
 | [PDR-006](PDR-006-dev-tooling-per-ecosystem.md) | Dev Tooling Per Ecosystem — Leading-Edge Reference Repos | Accepted |
+| [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md) | Promoting PDRs and Universal Patterns to First-Class Core Infrastructure | Accepted |
+| [PDR-008](PDR-008-canonical-quality-gate-naming.md) | Canonical Quality-Gate Naming | Accepted |
+| [PDR-009](PDR-009-canonical-first-cross-platform-architecture.md) | Canonical-First Cross-Platform Architecture for Agent Artefacts | Accepted |
+| [PDR-010](PDR-010-domain-specialist-capability-pattern.md) | Domain Specialist Capability Pattern — Adding New Expertise to the Agent Ecosystem | Accepted |
+| [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md) | Continuity Surfaces and the Surprise Pipeline | Accepted |
+| [PDR-012](PDR-012-review-findings-routing-discipline.md) | Review-Findings Routing Discipline | Accepted |
+| [PDR-013](PDR-013-grounding-and-framing-discipline.md) | Grounding and Framing Discipline | Accepted |
+| [PDR-014](PDR-014-consolidation-and-knowledge-flow-discipline.md) | Consolidation and Knowledge-Flow Discipline | Accepted |
+| [PDR-015](PDR-015-reviewer-authority-and-dispatch.md) | Reviewer Authority and Dispatch Discipline | Accepted |
+| [PDR-016](PDR-016-claim-propagation-and-reference-quality.md) | Claim Propagation and Reference Quality | Accepted |
+| [PDR-017](PDR-017-workaround-hygiene-and-fix-discipline.md) | Workaround Hygiene and Fix-at-Source Discipline | Accepted |
+| [PDR-018](PDR-018-planning-discipline.md) | Planning Discipline — End Goals and Workflow Contracts | Accepted |
+| [PDR-019](PDR-019-adr-scope-by-reusability.md) | ADR Scope by Reusability, Not Diff Size | Accepted |
+| [PDR-020](PDR-020-check-driven-development.md) | Check-Driven Development — Gates as Assertions | Accepted |
+| [PDR-021](PDR-021-test-validity-discipline.md) | Test Validity Discipline — Circular Justification and Claim-Assertion Parity | Accepted |
+| [PDR-022](PDR-022-governance-enforcement-scanners.md) | Governance Enforcement Requires a Scanner | Accepted |
+| [PDR-023](PDR-023-documentation-structure-discipline.md) | Documentation Structure Discipline — README as Index | Accepted |

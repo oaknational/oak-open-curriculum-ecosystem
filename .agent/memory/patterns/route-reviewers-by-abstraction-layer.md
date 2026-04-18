@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-015
 name: "Route Reviewers by Abstraction Layer, Not File Scope"
 use_this_when: "dispatching specialist reviewers on a finishing pass over a mixed code + docs + ADR lane and choosing which reviewers to invoke"
 category: agent

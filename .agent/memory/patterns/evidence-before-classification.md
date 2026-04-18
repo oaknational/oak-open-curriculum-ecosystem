@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-013
 name: evidence-before-classification
 category: process
 status: active

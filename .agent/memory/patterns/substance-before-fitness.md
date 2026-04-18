@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-014
 name: Substance Before Fitness
 use_this_when: Writing concepts to files that have size/fitness limits
 category: process

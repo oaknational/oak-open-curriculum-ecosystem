@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-016
 name: "Comments About External Behaviour Degrade"
 use_this_when: "Code comments describe the behaviour of an external library, SDK, or service, especially when they assert what the library does NOT support"
 category: process

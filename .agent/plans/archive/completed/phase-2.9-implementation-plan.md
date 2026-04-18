@@ -20,7 +20,7 @@ This plan outlines the systematic approach to analyzing the oak-notion-mcp codeb
 
 **Tasks**:
 
-1. Install analysis tools (madge, ts-morph)
+1. Install analysis tools (dependency-cruiser, ts-morph)
 2. Generate dependency graphs
 3. Create initial module inventory
 4. Set up analysis directory structure
@@ -105,13 +105,16 @@ This plan outlines the systematic approach to analyzing the oak-notion-mcp codeb
 
 ```bash
 # Install analysis dependencies (dev only)
-pnpm add -D madge ts-morph cloc
+pnpm add -D dependency-cruiser ts-morph cloc
 
-# Generate dependency graph
-npx madge src/ --circular --image .agent/analyses/dependency-graph.svg
+# Enforce dependency rules (paths must match .dependency-cruiser config)
+pnpm exec depcruise apps packages agent-tools
 
-# Find circular dependencies
-npx madge src/ --circular > .agent/analyses/circular-dependencies.txt
+# DOT graph for Graphviz or editor plugins
+pnpm exec depcruise apps packages agent-tools --output-type dot > .agent/analyses/dependency-graph.dot
+
+# Text report (includes circular dependency detail per config)
+pnpm exec depcruise apps packages agent-tools --output-type text > .agent/analyses/depcruise-report.txt
 
 # Generate file structure
 find src -name "*.ts" -not -path "*/node_modules/*" | sort > .agent/analyses/file-inventory.txt

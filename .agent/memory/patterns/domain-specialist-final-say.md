@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-015
 name: "Domain Specialist Has Final Say on SDK Semantics"
 use_this_when: "Architecture reviewers make assumptions about SDK-specific behaviour (scope models, handler ordering, API semantics) that have not been verified against official documentation"
 category: process

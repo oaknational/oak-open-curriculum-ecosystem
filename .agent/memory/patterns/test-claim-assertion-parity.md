@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-021
 name: test-claim-assertion-parity
 category: testing
 proven_by: "Sentry wrapping-order test rewrite (2026-04-16)"

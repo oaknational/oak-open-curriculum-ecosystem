@@ -1,36 +1,39 @@
-# Outgoing Practice Context
+# Outgoing Practice Context — Ephemeral Exchange Only
 
-This directory carries sender-maintained supporting context for Practice
-exchange.
+**Updated 2026-04-18 under PDR-007.** This directory is sharpened to
+**ephemeral exchange context only**. Substance has four proper
+homes:
 
-It is not canonical. The canonical portable package remains the eight files
-in `.agent/practice-core/`.
+- **Portable Practice governance** (decisions about how the Practice
+  itself operates) → `.agent/practice-core/decision-records/` (PDRs).
+- **General abstract patterns** (ecosystem-agnostic engineering
+  patterns) → `.agent/practice-core/patterns/`.
+- **Host-local reference material** (ecosystem-specific examples,
+  platform-specific notes, scripts) → `.agent/reference/`.
+- **Ephemeral exchange context** (transient sender→receiver notes
+  that expire after integration) → here.
 
-Use these files to explain:
+Files whose substance lives nowhere else are **defects** under
+PDR-007: they must either promote to one of the three substantive
+homes, or be deleted as staging artefacts.
 
-- why recent Practice changes were made
-- which local adaptations are specific to this repo
-- which false starts or corrections are worth reusing elsewhere
-- how to adopt repo-specific platform support that is too detailed for the Core
+## What belongs here
 
-If a change is significant enough to enter the practice-core changelog,
-consider whether the changelog alone is too thin and whether a supporting note
-or report here would help a receiving repo.
+Two patterns are legitimate:
 
-Keep this directory small. If something is already obvious from the eight-file
-Core package, its changelog, or the sender repo's canonical permanent docs, do
-not duplicate it here.
-
-This directory may be built up over time. When material is shared to another
-repo, copy the relevant files into that repo's `.agent/practice-context/incoming/`.
+1. **Introduction / framing notes** — short files explaining context
+   around an outbound Core package (e.g. "this Core includes
+   PDR-007; here is how the contract change affects integration").
+2. **Repo-targeted write-back packs** — notes from a specific
+   integration round that will land in a receiver's `incoming/`,
+   be integrated, and then expire.
 
 ## Structure
 
-- Keep broadly reusable support notes as flat files at this level.
-- Use repo-targeted subdirectories when the write-back is specific to one
-  source repo or one exchange round.
-- Give each repo-targeted subdirectory its own `README.md` so a receiver can
-  copy the whole pack without reverse-engineering intent.
+- Flat files at this level for transient broadcasts.
+- Repo-targeted subdirectories (with their own `README.md`) for
+  write-back packs specific to one source repo or one exchange
+  round.
 
 ## Current Outgoing Set
 
@@ -40,53 +43,80 @@ repo, copy the relevant files into that repo's `.agent/practice-context/incoming
 | ---- | ------- |
 | `agent-collaboration/` | Focused write-back from OOCE's 2026-04-05 integration of incoming `agent-collaboration` notes; captures the strongest gate/workspace-adoption signals and outgoing-pack hygiene feedback |
 
-### Structural Evolution Guide
+### Future-PDR Candidates (substance not yet captured; drafting pending)
+
+Each file here has substance that warrants a PDR but is not yet
+drafted. The file remains as staged material; the named PDR slot is
+reserved for when drafting happens.
+
+| File | Reserved PDR | Substance shape |
+| ---- | ------------ | --------------- |
+| `three-dimension-fitness-functions.md` | PDR-024 (Three-Zone Fitness Model) | Fitness-zone discipline; CRITICAL_RATIO; loop-health diagnostic |
+| `cross-repo-transfer-operations.md` | PDR-025 (Transfer Operations) | Operational lessons for cross-repo Practice transfers |
+| `seeding-protocol-guidance.md` | PDR-025 (candidate to merge with transfer ops) | Seeding-bundle composition; sender-side discipline |
+| `two-way-merge-methodology.md` | PDR-026 (Core Integration Mechanics) | Two-way merge; ancestor tracking; divergence reconciliation |
+| `practice-maturity-framework.md` | PDR-027 (Practice Maturity Diagnostic) | Four-level depth-vs-scope model |
+
+### Future-Pattern Candidates (pattern-shaped; need frontmatter addition to graduate)
+
+Substance is pattern-shaped and ecosystem-agnostic; awaits
+frontmatter reshape for graduation to `practice-core/patterns/`.
+Until graduated, remains here as staged material.
+
+| File | Target | Pending |
+| ---- | ------ | ------- |
+| `reviewer-gateway-operations.md` | `practice-core/patterns/` | Pattern frontmatter; reshape to use-this-when format |
+| `production-reviewer-scaling.md` | `practice-core/patterns/` | Pattern frontmatter; reshape |
+| `plan-lifecycle-four-stage.md` | `practice-core/patterns/` | Pattern frontmatter; reshape |
+
+### Genuinely Ephemeral Exchange
+
+Transient material whose expiry is part of its design. Stays here
+until the associated exchange round completes.
 
 | File | Purpose |
 | ---- | ------- |
-| `practice-core-structural-evolution.md` | How the Core grew from 5 to 8 files, why each was added, and step-by-step adoption instructions for repos with older versions |
+| `design-token-governance-for-self-contained-ui.md` | Domain-specific (UI tokens) — short-lived cross-repo exchange context |
+| `starter-templates.md` | Minimum-viable-reviewer templates as starter material for new repos |
+| `health-probe-and-policy-spine.md` | Operational exchange note; domain-specific; not yet matured into pattern |
 
-### Write-Back Notes (2026-04-03 promotion round)
+## What was removed 2026-04-18 (under PDR-007)
 
-These notes capture the next set of portable learnings promoted after the
-continuity decision and the platform-config hardening pass.
+Files whose substance has been captured in Core and therefore no
+longer live here:
 
-| File | Purpose |
-| ---- | ------- |
-| `continuity-handoff-and-surprise-pipeline.md` | Split-loop continuity model: lightweight `session-handoff`, deep convergence in `consolidate-docs`, and surprise as a capture → distil → graduate → enforce pipeline |
-| `platform-config-is-infrastructure.md` | Tracked project platform settings as part of the agentic system contract; local overrides stay gitignored and additive |
-| `reviewer-gateway-operations.md` | Operational reviewer doctrine for large rosters: layered triage, explicit `focused`/`deep` depth, delegation snapshots, and reintegration discipline |
-| `health-probe-and-policy-spine.md` | Summary-first agent-infrastructure health probing with a four-layer Policy Spine and drift checks for command parity, hooks, continuity, and practice-box state |
-| `frontend-review-cluster-pattern.md` | Gateway-routed browser/UI reviewer cluster pattern with overlap boundaries and host-boundary rules |
-| `design-token-governance-for-self-contained-ui.md` | CSS-first token governance and styling independence for self-contained HTML/iframe surfaces |
+- Substance absorbed by PDR-004 (`explorations-documentation-tier`),
+  PDR-007 (`practice-core-structural-evolution`,
+  `practice-decision-records-peer-directory`), PDR-009
+  (`cross-platform-surface-integration-guide`), PDR-010
+  (`assumption-auditing-meta-level-capability`,
+  `frontend-review-cluster-pattern`), PDR-011
+  (`continuity-handoff-and-surprise-pipeline`,
+  `handover-prompts-vs-session-skills`) — all deleted.
+- `architectural-excellence-and-layer-topology` — self-declared
+  substance already in `practice-lineage.md` — deleted.
+- `unknown-is-type-destruction` — rule already exists in
+  `.agent/rules/` — deleted.
+- `reviewer-system-guide` — substance absorbed by PDR-009 (three-
+  layer architecture) + PDR-010 (triplet / classification / modes)
+  — deleted.
+- `platform-config-is-infrastructure` — duplicate of
+  `memory/patterns/platform-config-is-infrastructure.md` which in
+  turn has substance in PDR-009 — deleted here.
+- `outgoing/patterns/` subdirectory — entire subdirectory deleted
+  under PDR-007 (Pattern Exchange folds into Core travel; portable
+  patterns travel because they are Core content, not via a
+  separate transport surface).
 
-### Write-Back Notes (2026-03-23 integration round)
+Files moved to `.agent/reference/` (host-local, not exchange):
 
-These notes carry innovations from oak-mcp-ecosystem that the incoming
-Practice from algo-experiments did not have. They are designed to improve
-the Practice in the originating repo and any downstream receivers.
+- `claude-code-hook-activation.md` → `.agent/reference/platform-notes/`
+- `validation-scripts.md` → `.agent/reference/practice-validation-scripts.md`
+- `validate-practice-fitness.ts` → `.agent/reference/examples/validate-practice-fitness.example.ts`
+- `platform-adapter-reference.md` → `.agent/reference/platform-adapter-formats.md`
 
-| File | Purpose |
-| ---- | ------- |
-| `practice-maturity-framework.md` | 4-level diagnostic framework for Practice depth (Structural → Operational → Self-Correcting → Evolving). Prevents "not even wrong" installations |
-| `handover-prompts-vs-session-skills.md` | Architectural distinction between state-free session-entry skills and stateful domain-specific handover prompts. Refinement to the prompts-to-skills migration |
-| `two-way-merge-methodology.md` | Operational method for Practice integration when both sides evolved independently. Start from incoming, merge local back. Character ceiling and fitness rename blast radius learnings |
-| `architectural-excellence-and-layer-topology.md` | Two universal principles proven by CLI-SDK retriever drift incident. Active tier (1 repo validation). Applicable to any multi-package architecture |
-| `pattern-schema-for-discoverability.md` | Richer frontmatter schema (`use_this_when`, `barrier` checklist) vs the simpler Core schema. Backwards-compatible convergence path |
-| `production-reviewer-scaling.md` | Three-layer composition (components → templates → wrappers) for scaling to 17+ reviewers. Architecture persona pattern (4 distinct perspectives) |
-| `cross-platform-surface-integration-guide.md` | How to port the surface matrix, wrapper parity checks, and explicit unsupported states into a receiving repo without forcing symmetry |
-| `claude-code-hook-activation.md` | Concrete note on thin native Claude Code hook activation: tracked project `PreToolUse` wiring, canonical policy in `.agent/hooks/`, repo-local runtime in `scripts/`, advisory hooks documented-only |
+File absorbed into permanent documentation:
 
-### Earlier Notes (pre-integration)
-
-| File | Purpose |
-| ---- | ------- |
-| `three-dimension-fitness-functions.md` | Three-dimension fitness constraint and the split adoption model: trinity files carry all three dimensions while other docs may declare only `fitness_line_count` |
-| `validate-practice-fitness.ts` | TypeScript mirror of the live zero-dependency validator (`scripts/validate-practice-fitness.mjs`) |
-| `validation-scripts.md` | Reference check, self-containment check, agent dependency check scripts |
-| `reviewer-system-guide.md` | Full three-layer reviewer architecture with roster, composition, and portability validation |
-| `platform-adapter-reference.md` | How platform adapters reference canonical content |
-| `cross-repo-transfer-operations.md` | Operational guide for Practice Core transfers |
-| `plan-lifecycle-four-stage.md` | Plan lifecycle: active → current → paused → archive |
-| `seeding-protocol-guidance.md` | First-time Practice hydration protocol |
-| `starter-templates.md` | Starter templates for common Practice artefacts (reviewer-template pack in this repo; see repo-targeted hygiene feedback for the naming collision with incoming hydration seed templates) |
+- `pattern-schema-for-discoverability.md` — richer frontmatter
+  schema now lives in
+  `.agent/practice-core/patterns/README.md` §Frontmatter Schema.

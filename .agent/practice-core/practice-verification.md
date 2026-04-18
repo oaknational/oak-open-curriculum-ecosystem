@@ -23,13 +23,17 @@ portable validation checks.
 
 After creating all files, validate:
 
-1. `.agent/practice-core/` contains all eight Practice Core files and
-   `incoming/.gitkeep`. Two optional peer directories may accompany the
-   Core but are not required: `.agent/practice-context/` (sender-
-   maintained support material; `incoming/` there is transient) and
-   `.agent/practice-decision-records/` (portable governance decisions
-   about the Practice itself; provisional staging layer pending
-   eventual Core refinements).
+1. `.agent/practice-core/` contains the full Practice Core package:
+   the eight files (trinity + verification + entry points + changelog
+   + provenance), plus the three required directories —
+   `decision-records/` (with its README and any PDRs),
+   `patterns/` (with its README and any general abstract patterns),
+   and `incoming/.gitkeep`. The contract is the **set of surfaces
+   and their roles**, not a file count; growth by explicit decision
+   per PDR-007. One optional peer directory may accompany the Core:
+   `.agent/practice-context/` (sender-maintained ephemeral exchange
+   material; `incoming/` there is transient; `outgoing/` sharpened
+   under PDR-007 to ephemeral-exchange-only).
 2. `.agent/practice-index.md` exists, all its links resolve, and its
    sections match the format specified in
    [practice-bootstrap.md](practice-bootstrap.md).

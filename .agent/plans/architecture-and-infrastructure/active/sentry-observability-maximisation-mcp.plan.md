@@ -1280,7 +1280,7 @@ of reviewer findings consistent with the plan's own principles:
     `docs/observability.md`), `packages/core/observability/README.md`
     (L-4a naming convention), ADR index entry for ADR-160 (L-0), and
     ADR-088 / ADR-144 amendment obligations. Source: docs-adr-reviewer.
-    **OWNER-ONLY** (per [PDR-003](../../../../.agent/practice-decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md)):
+    **OWNER-ONLY** (per [PDR-003](../../../../.agent/practice-core/decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md)):
     the `.agent/directives/AGENT.md § Essential Links` edit for the observability
     doc is a foundational Practice doc change. Sub-agents MUST NOT edit AGENT.md
     directly. The exact single-line diff is recorded verbatim in §A.6 "AGENT.md
@@ -1460,7 +1460,7 @@ Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`,
 | AF-5 | `MinimalHooks` test-local duplication acceptable as test-local (but structural coupling via `ReturnType<typeof createSentryHooks>` would harden) | ACTIONED | Resolved via SR-5 — `MinimalHooks` removed; test imports `SentryRedactionHooks` from `runtime-sdk.ts` |
 | AF-6 | Missing graph edge `L-12-prereq → L-12` | ACTIONED | Edge added to Phase 1 dependency graph |
 | AF-7 | L-0b test file ADR-161 compliant (in-process, no network, no vendor CLI) | ACTIONED (confirmation) | n/a |
-| AF-8 | AGENT.md OWNER-ONLY flag correctly placed in main Documentation Propagation block; two nits — parallel flag in A.2 historical block (item 13), cross-reference PDR-003 file path | ACTIONED | A.2 item 13 historical block now carries the OWNER-ONLY flag + `.agent/practice-decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md` path |
+| AF-8 | AGENT.md OWNER-ONLY flag correctly placed in main Documentation Propagation block; two nits — parallel flag in A.2 historical block (item 13), cross-reference PDR-003 file path | ACTIONED | A.2 item 13 historical block now carries the OWNER-ONLY flag + `.agent/practice-core/decision-records/PDR-003-sub-agent-protection-of-foundational-practice-docs.md` path |
 | AF-9 | Delegation suggestion: `test-reviewer` on `MinimalHooks` coupling | ACTIONED | Resolved by CR-7 + SR-5 (type-reviewer in matrix; MinimalHooks removed) |
 | AF-10 | Delegation suggestion: `type-reviewer` confirm the `satisfies` gate's compile-time behaviour | ACTIONED | Resolved by CR-7 — `type-reviewer` in Phase 1 matrix for L-0b follow-through and Phase 2 L-4b hook-union extension |
 

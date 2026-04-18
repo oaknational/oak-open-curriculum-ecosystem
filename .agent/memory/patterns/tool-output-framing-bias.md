@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-013
 name: "Tool Output Framing Bias"
 use_this_when: "building a plan from a single tool run and the tool's groupings, counts, or categories are being adopted as plan structure without independent verification"
 category: process

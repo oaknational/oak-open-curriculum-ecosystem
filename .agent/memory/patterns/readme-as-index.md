@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-023
 name: "README as Index"
 use_this_when: "A plan-directory README is growing to contain session instructions, outcome narratives, or design rationale that duplicates or replaces .plan.md content"
 category: process

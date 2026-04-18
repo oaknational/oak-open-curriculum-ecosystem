@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-014
 name: "Cross-Session Pattern Emergence"
 use_this_when: "Running consolidation after multiple sessions on the same workstream, or when a user observes that insights from separate sessions form a larger picture"
 category: process

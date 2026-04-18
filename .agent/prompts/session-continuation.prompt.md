@@ -123,11 +123,14 @@ git log --oneline --decorate -10
     tests the generalisation discipline against today's patterns;
     concludes Option C (pointer annotations now, consolidation at
     next pass).
-- **Current objective** (next session — choose one explicitly at
-  session open):
+- **Current objective** (next session): **resume observability
+  product work**. The Practice track completed 2026-04-18 with the
+  PDR-007 Core contract change plus PDR-008–PDR-023 landing as a
+  batch (17 new PDRs this session across two phases). The Practice
+  track that had blocked work on an external repo is now closed;
+  the priority sequence reverts to Sentry/OTel → search UI.
 
-  **Option A — resume observability product work**: open Phase 1 of
-  the restructure plan at
+  **Next action**: open Phase 1 of the restructure plan at
   `.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`.
   Phase 1: draft ADR-162 (Observability-First) in Proposed status
   with the vendor-independence clause; create
@@ -135,19 +138,8 @@ git log --oneline --decorate -10
   `high-level-observability-plan.md` skeleton; move six existing
   observability plans; sweep cross-references to zero stale paths.
 
-  **Option B — author PDR-007 (Practice architecture)**: Practice-
-  governance meta-work addressing the pattern/outgoing/PDR
-  structural inconsistency surfaced at session close. Authors PDR-007
-  Promoting PDRs to First-Class Core Infrastructure; does not
-  execute the migration (that's a follow-on session).
-
-  Default recommendation: **Option A** — the product work has launch-
-  horizon dependencies; the Practice restructure can absorb another
-  session of delay. But if the structural-change rate of the last
-  session feels like it needs closing, Option B is equally valid.
-
-  L-1 of the maximisation plan is **not** next in either option — it
-  opens only after Phases 1-5 of the observability restructure close.
+  L-1 of the maximisation plan is **not** next — it opens only
+  after Phases 1-5 of the observability restructure close.
 - **Restructure phase map** (from the restructure plan):
   - **Phase 1** Structural skeleton — ADR-162 Proposed, directories,
     moves, cross-references. **Next action.**
@@ -263,37 +255,22 @@ Carried from 2026-04-17 (still relevant):
   Starter statement for the next session is at
   `temp-session-start.tmp.md` in the repo root, with reading order
   and carried invariants specified per option.
-- **Proposed PDR-007 — Promoting PDRs to First-Class Core
-  Infrastructure** (not written yet). Context: the session surfaced
-  that `.agent/memory/patterns/`, `.agent/practice-context/outgoing/`,
-  and `.agent/practice-decision-records/` have overlapping purposes;
-  outgoing/ in particular holds PDR-shaped knowledge material
-  alongside genuine ephemeral support, and pattern duplicates span
-  patterns/ and outgoing/patterns/. The cleanest resolution is:
-
-  1. Promote PDRs to first-class Core infrastructure (not peer
-     directory). `.agent/practice-core/decisions/` holds all
-     portable Practice-governance knowledge.
-  2. Governance-shaped cross-ecosystem patterns promote from
-     `.agent/memory/patterns/` into `practice-core/decisions/` with
-     a `pdr_kind: pattern` frontmatter annotation.
-  3. `.agent/memory/patterns/` retains repo-specific technical
-     patterns only (ecosystem-local under the portability gradient).
-  4. Outgoing is sharpened to ephemeral support material ONLY —
-     any file carrying substance found nowhere else is a defect to
-     promote or relocate.
-  5. Pattern exchange mechanism (currently in `practice-lineage.md
-     § Pattern Exchange`) folds into PDR travel — portable patterns
-     travel with the Core because they ARE PDRs.
-
-  Migration is mechanical once PDR-007 is Accepted: ~25-30 files
-  move/promote; ~6 deleted (duplicates); 4-6 rewritten (READMEs +
-  practice-core trinity cross-references). The graduation-path
-  ladder becomes: memory/patterns/ → PDR (when portable) →
-  Core trinity (when axiomatic).
-
-  See napkin 2026-04-18 "Structural observation 3" for the full
-  reasoning.
+- **PDR-007 landed 2026-04-18** — Core contract redefined as
+  "bounded package of files plus required directories." New
+  directories `practice-core/decision-records/` (PDRs) and
+  `practice-core/patterns/` (general ecosystem-agnostic abstract
+  patterns) became first-class Core. Full batch of PDR-008 through
+  PDR-023 landed in the same session, absorbing ~29 Practice-
+  governance patterns from `memory/patterns/`. See
+  `.agent/practice-core/CHANGELOG.md` (2026-04-18 entry) for the
+  executed: 12 outgoing duplicates deleted, outgoing/patterns/
+  subdirectory retired, 4 files moved to `.agent/reference/`, 29
+  memory/patterns/ entries updated with `related_pdr` pointers,
+  trinity edits + entry-point edits completed, cross-reference
+  sweep zero stale. The graduation-path ladder is now:
+  memory/patterns/ → practice-core/patterns/ (general pattern via
+  synthesis) OR practice-core/decision-records/ (when Practice-
+  governance-shaped PDR).
 
 - **Deep consolidation status**: **completed this handoff (2026-04-18
   second pass)** — consolidation after the structural-change-heavy

@@ -381,21 +381,48 @@ cumulative evolution as a coherent whole) and merge local additions
 back. Verify by diffing backup against result. Fitness checks are
 mandatory — two-way merges frequently push files over their ceilings.
 
-### Pattern Exchange
+### Pattern and Decision Travel
 
-Proven patterns (`.agent/memory/patterns/`) may travel alongside the
-Practice Core as optional Practice Context — exchange context, one
-step beyond the outgoing notes.
+Under PDR-007, portable patterns and portable Practice-governance
+decisions travel **as Core content**, not via a separate transport
+surface. The previous `practice-context/outgoing/patterns/` route is
+retired.
 
-- **Sender**: copy Practice-relevant, cross-repo-applicable patterns
-  to `.agent/practice-context/outgoing/patterns/`. The consolidation
-  command's pattern-extraction step is the natural trigger.
-- **Receiver**: incoming patterns land in
-  `.agent/practice-context/incoming/patterns/`. Apply the same
-  three-part bar. Adopted patterns move to local
-  `.agent/memory/patterns/`; rejected ones are recorded in the napkin.
-- **Format**: self-contained `.md` with YAML frontmatter. See
-  `practice-bootstrap.md` §Reusable Patterns for the template.
+**General patterns** live in `.agent/practice-core/patterns/` and
+travel with the Core package. They are ecosystem-agnostic
+abstractions synthesised from multiple specific instances.
+**Specific instances** live in `.agent/memory/patterns/` and remain
+local; they are the proof that supports the general abstraction.
+
+**Practice Decision Records (PDRs)** live in
+`.agent/practice-core/decision-records/` and travel with the Core
+package. Pattern-shaped governance (reviewer discipline, planning
+discipline, knowledge-flow discipline, etc.) takes the PDR shape,
+not the pattern shape.
+
+The graduation ladder:
+
+```
+napkin (ephemeral)
+  → distilled (settled, local)
+    → memory/patterns (repo-specific pattern instances)
+         → practice-core/patterns (general abstraction via synthesis)
+    → host ADRs (local architectural decisions)
+    → practice-core/decision-records (portable Practice governance) [PDRs]
+```
+
+A general pattern is **authored fresh** in `practice-core/patterns/`
+when instance accumulation makes the general form legible; the
+instances remain as proof. A PDR is **authored fresh** in
+`practice-core/decision-records/` when a Practice-governance
+decision needs to travel; its instance patterns (if any) remain in
+`memory/patterns/` with `related_pdr: PDR-NNN` frontmatter.
+
+**Format**: PDRs use the template documented in
+`practice-core/decision-records/README.md`. General patterns use
+the template documented in `practice-core/patterns/README.md`.
+Specific instances use the existing pattern template (see
+`practice-bootstrap.md` §Reusable Patterns).
 
 ## Growing a Practice from This Blueprint
 
@@ -417,7 +444,7 @@ The Practice arrives in a new repo by one of three paths:
    receiving Practice absorbs concepts via §Integration Flow.
 3. **Wholesale transplantation** — a fully-hydrated applied Practice
    from a source repo is transplanted into a Practice-free destination.
-   Governed by [PDR-005](../practice-decision-records/PDR-005-wholesale-practice-transplantation.md);
+   Governed by [PDR-005](decision-records/PDR-005-wholesale-practice-transplantation.md);
    requires a classification-first transplant manifest (as an
    exploration per PDR-004) and a four-audit close (foreign-antigen,
    completeness, cohesion, manifest-closure). The transplant manifest

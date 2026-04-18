@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-016
 name: "Three Levels of Reference Quality"
 use_this_when: "Documentation, portable content, or cross-repo material references concepts from another context — choose the right level of self-containment"
 category: process

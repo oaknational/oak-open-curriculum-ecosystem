@@ -4,6 +4,54 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-18 — PDR-007 Core Contract Change + Batch Practice-Governance PDRs
+
+- **PDR-007** redefined the Practice Core contract from "eight files"
+  to "a bounded package of files plus required directories." Added
+  two first-class Core directories: `decision-records/` (absorbing
+  the former `.agent/practice-decision-records/` peer) and
+  `patterns/` (for general ecosystem-agnostic abstract patterns
+  synthesised from specific instances).
+- **PDR-008** codified canonical quality-gate naming across the
+  Practice network — convention: bare = verify, `:fix` = apply,
+  `:ci` = non-mutating CI form; `check` aliases `check:fix` as the
+  one deliberate ergonomic exception.
+- **PDR-009** codified canonical-first cross-platform agent
+  architecture: canonical content in `.agent/` + thin platform
+  adapters + entry points, with activation triggers distinct from
+  policies.
+- **PDR-010** codified the domain specialist capability pattern:
+  four-layer structure (reviewer + skill + rule + optional
+  operational tooling), agent classification taxonomy
+  (domain_expert / process_executor / specialist), three operational
+  modes (explore / advise / review), and the inverted-hierarchy
+  variant for proportionality reviewers.
+- **PDR-011** codified continuity surfaces and the surprise
+  pipeline: three types of continuity (operational / epistemic /
+  institutional), split-loop workflow (session-handoff vs
+  consolidate-docs with consolidation gate), named continuity
+  contract, surprise pipeline (capture → distil → graduate →
+  enforce).
+- **PDR-012 through PDR-023** batch-authored as Practice-governance
+  decisions, absorbing ~29 Practice-governance patterns from
+  `memory/patterns/` into coherent grouped PDRs: review-findings
+  routing, grounding and framing, consolidation/knowledge-flow,
+  reviewer authority and dispatch, claim propagation and reference
+  quality, workaround hygiene and fix-at-source, planning
+  discipline, ADR scope by reusability, check-driven development,
+  test validity, governance enforcement scanners, documentation
+  structure. Instance files remain in `memory/patterns/` with
+  `related_pdr: PDR-NNN` frontmatter pointing at the general form.
+- `.agent/practice-context/outgoing/` sharpened per PDR-007 to
+  ephemeral exchange only: 12 PDR-shaped topic notes deleted
+  (substance now in PDRs), `outgoing/patterns/` subdirectory
+  retired (pattern exchange folds into Core travel), 4 files moved
+  to `.agent/reference/` (host-local), 1 absorbed into the
+  practice-core/patterns/ README.
+- Trinity files updated to describe the new Core contract; Pattern
+  Exchange section in `practice-lineage.md` rewritten to describe
+  PDR/pattern travel as Core content.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-18 — Transplantation + Generalisation Discipline + Portability Gradient
 
 - **PDR-005 Wholesale Practice Transplantation** recorded as the third

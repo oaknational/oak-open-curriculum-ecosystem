@@ -507,16 +507,37 @@ content (add, skip duplicates, update refinements, investigate
 contradictions), prune graduated entries, archive, start fresh. See
 §Consolidation Workflow step 4.
 
-### Reusable Patterns (.agent/memory/patterns/)
+### Reusable Patterns — Two Homes
 
-Reusable patterns proven by real work — code, process, architecture,
-structural, behavioural, agent operational, and domain-specific. More
-concrete than rules, more portable than source code.
+Patterns live in one of two homes depending on their level of
+abstraction:
 
-**Barrier to entry**: a pattern belongs here only when it is (a) broadly
-applicable or clearly reusable, (b) proven by implementation,
-(c) protective against a recurring mistake, and (d) stable enough to teach
-without immediate churn.
+**`.agent/memory/patterns/`** — **Specific instances**. Concrete,
+ecosystem-grounded patterns proven in this repo (TypeScript, Zod,
+Vitest, MCP, or whichever ecosystem applies locally). Instance files
+may carry a `related_pdr: PDR-NNN` or `related_pattern: <name>`
+frontmatter pointer linking them to their general form (if one has
+been authored).
+
+**`.agent/practice-core/patterns/`** — **General abstract patterns**
+(portable; travels with Core). Ecosystem-agnostic abstractions
+synthesised from multiple specific instances. Authored fresh when
+instance accumulation makes the general form legible across
+multiple contexts. Specific instances remain in
+`memory/patterns/`; they are not moved or copied.
+
+**Barrier to entry for either home**: a pattern belongs as a
+persisted entry only when it is (a) broadly applicable or clearly
+reusable, (b) proven by implementation, (c) protective against a
+recurring mistake, and (d) stable enough to teach without immediate
+churn.
+
+**Additional criteria for `practice-core/patterns/`**:
+(e) ecosystem-agnostic — stated without dependence on any specific
+language, framework, or toolchain; (f) engineering-substance, not
+Practice-governance (Practice-governance patterns take PDR shape in
+`practice-core/decision-records/`); (g) synthesised from ≥2 specific
+instances.
 
 **File format**: one `.md` per pattern with YAML frontmatter:
 
@@ -542,10 +563,13 @@ Body sections: **Principle** (one-paragraph statement), **Pattern**
 **Index**: maintain a `README.md` in `.agent/memory/patterns/` with a
 short description for each pattern.
 
-**Cross-repo exchange**: copy Practice-relevant patterns to
-`.agent/practice-context/outgoing/patterns/` for exchange. Receiving
-repos apply the same three-part bar; adopted patterns move to local
-`.agent/memory/patterns/`.
+**Cross-repo exchange**: portable patterns travel as Core content.
+General, ecosystem-agnostic abstractions that apply across the
+network are authored in `.agent/practice-core/patterns/` via
+synthesis and travel with the Core package. Specific instances
+remain in `.agent/memory/patterns/` as proof; they do not travel.
+Under PDR-007, the previous `outgoing/patterns/` transport route is
+retired — there is no separate exchange surface for patterns.
 
 ### Design-Space Explorations (docs/explorations/ or host equivalent)
 

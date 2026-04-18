@@ -188,7 +188,13 @@ hadn't surfaced — different work, different mistakes, different discoveries.
 
 - **Napkin** — `.agent/memory/napkin.md` — written continuously during every session
 - **Distilled** — `.agent/memory/distilled.md` — curated rulebook, read at session start
-- **Code patterns** — `.agent/memory/patterns/` — abstract proven patterns
+- **Pattern instances (repo-local)** — `.agent/memory/patterns/` — specific,
+  ecosystem-grounded instances of engineering patterns proven in this repo
+- **General patterns (portable)** — `.agent/practice-core/patterns/` —
+  ecosystem-agnostic abstract patterns synthesised from multiple instances;
+  travel with the Core
+- **Practice Decision Records (portable)** — `.agent/practice-core/decision-records/`
+  — portable governance decisions about the Practice itself; travel with the Core
 - **Rules** — `.agent/directives/principles.md` (authoritative policies) + platform trigger
   adapters (e.g. `.cursor/rules/*.mdc`, `.claude/rules/*.md`)
 - **Experience** — `.agent/experience/` — qualitative records of shifts in understanding
@@ -267,9 +273,9 @@ graph LR
 | Location                                                                   | What lives there                                                                                                                                                |
 | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `.agent/directives/`                                                       | Principles, rules, and operational directives                                                                                                                   |
-| `.agent/practice-core/`                                                    | Practice Core files: plasmid trinity, entry points (README, index), changelog, provenance, and Practice Box                                                     |
+| `.agent/practice-core/`                                                    | Practice Core package: plasmid trinity, entry points, changelog, provenance, and required directories (`decision-records/` for portable Practice governance / PDRs, `patterns/` for general abstract patterns, `incoming/` for the Practice Box) |
 | `.agent/plans/`                                                            | Work planning — active, paused, archived, research, and optional supporting templates                                                                           |
-| `.agent/memory/`                                                           | Institutional memory — napkin, distilled learnings, and code patterns                                                                                           |
+| `.agent/memory/`                                                           | Institutional memory — napkin, distilled learnings, and repo-local ecosystem-specific pattern instances                                                         |
 | `.agent/experience/`                                                       | Experiential records across sessions                                                                                                                            |
 | `.agent/skills/`                                                           | Canonical skills — session workflows and passive capabilities (platform-agnostic)                                                                               |
 | `.agent/sub-agents/`                                                       | Canonical reviewer / domain-expert prompt architecture (optional until installed)                                                                                |
@@ -296,12 +302,21 @@ acceptance criteria.
 ## Plasmid Exchange
 
 The Practice is not confined to a single repo. The portable part travels
-as the Practice Core: eight files in `.agent/practice-core/` — the
+as the **Practice Core package**: a bounded set of files plus required
+directories in `.agent/practice-core/`. The contract comprises the
 plasmid trinity (this file, practice-lineage, practice-bootstrap),
-verification, entry points, changelog, and provenance. See
-[index.md](index.md) for the full inventory. The trinity evolves through
-real work; the remaining files prove, orient, record, and trace. Each
-repo carries its own Practice instance — there is no hierarchy.
+the verification companion, two entry points (README for humans, index
+for agents), the changelog, the provenance file, and three required
+directories: `decision-records/` (portable Practice-governance decisions
+as PDRs), `patterns/` (general ecosystem-agnostic abstract patterns),
+and `incoming/` (the Practice Box).
+
+The Core contract is the **set of surfaces and their roles**, not a
+file count. Growth by explicit decision (future PDR); no accretion.
+See [index.md](index.md) for the full inventory. The trinity evolves
+through real work; the remaining files prove, orient, record, and
+trace. Each repo carries its own Practice instance — there is no
+hierarchy.
 
 The trinity files carry YAML frontmatter with a `provenance` pointer
 and the four fitness thresholds described in §Fitness Functions above.
@@ -309,10 +324,11 @@ The provenance file always travels with the Core package.
 
 The mechanism is documented in [practice-lineage.md](practice-lineage.md), which serves as both
 the reference for how exchange works and the source template for outbound propagation. Optional
-exchange context may travel separately in `.agent/practice-context/`, with sender-maintained
-`outgoing/` material copied into receiver-side `incoming/` when needed. Proven code patterns may
-also travel as part of the exchange pack — see
-[practice-lineage.md §Pattern Exchange](practice-lineage.md#pattern-exchange).
+exchange context may travel separately in `.agent/practice-context/`, sharpened under PDR-007 to
+ephemeral sender-maintained `outgoing/` material copied into receiver-side `incoming/` when
+needed. Portable patterns and governance decisions travel as **Core content** (in
+`practice-core/patterns/` and `practice-core/decision-records/` respectively), not via separate
+transport surfaces.
 
 **Self-containment**: all travelling content must carry the concept
 itself — what it is, how it works, why it matters — never a pointer to

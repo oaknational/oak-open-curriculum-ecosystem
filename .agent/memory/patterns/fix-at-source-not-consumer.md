@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-017
 name: "Fix at source, not consumer"
 use_this_when: "Multiple workaround attempts fail at the consumer because the producer's type/function/interface is wrong"
 category: process

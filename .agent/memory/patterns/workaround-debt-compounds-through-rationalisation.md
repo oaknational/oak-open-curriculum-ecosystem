@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-017
 name: "Workaround Debt Compounds Through Rationalisation"
 use_this_when: "A workaround exists in the codebase and someone is explaining why it's justified, necessary, or acceptable — especially when the explanation invokes 'different purposes' or 'separate concerns'"
 category: architecture

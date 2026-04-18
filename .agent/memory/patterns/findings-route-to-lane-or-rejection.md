@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-012
 name: "Findings Route to a Lane or a Rejection"
 category: process
 status: proven

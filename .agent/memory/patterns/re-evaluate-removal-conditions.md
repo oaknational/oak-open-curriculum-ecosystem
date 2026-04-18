@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-017
 name: Re-evaluate removal conditions on workarounds
 category: process
 barrier: proven by implementation, prevents recurring mistake, stable

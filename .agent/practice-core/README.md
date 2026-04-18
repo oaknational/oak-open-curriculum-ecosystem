@@ -4,7 +4,9 @@ The Practice is a system of principles, guardrails, skills, and a self-teaching 
 
 This directory is the Practice Core, the self-contained heart of the system. The Core is transferable to other repos, see below. The Core integrates into a specific repo via a stable link to the `practice-index.md` file.
 
-The Core has two optional peer companions that may travel alongside it: `.agent/practice-context/` (sender-maintained support material) and `.agent/practice-decision-records/` (portable governance decisions about the Practice itself — see that directory's README for scope and numbering convention).
+The Core is a **bounded package of files plus required directories**: the plasmid trinity (practice, lineage, bootstrap), verification, entry points (this README, index), changelog, provenance, plus three required directories — `decision-records/` (Practice Decision Records — portable governance), `patterns/` (general ecosystem-agnostic abstract patterns), and `incoming/` (the Practice Box). The contract is the **set of surfaces and their roles**, not a file count; growth by explicit decision only.
+
+The Core has one optional peer companion: `.agent/practice-context/` (sender-maintained ephemeral exchange context). Under PDR-007, PDRs and patterns previously held as peer directories are now first-class inside Core.
 
 The Practice is the integrated local application of the Core within a specific repo, and the Core-informed quality gates, rules, commands, optional reviewer/domain-expert agents, skills, and other artefacts that are used to enforce the principles and guardrails.
 
@@ -24,12 +26,12 @@ This was inspired by the concept of [genetic plasmid exchange](https://en.wikipe
 
 ### Bringing the Practice to a New Repo
 
-To bring the Practice to a new repo, transfer the Practice Core: three core blueprints (the "plasmid trinity"), a verification companion, two entry points (this README and an agent-facing index), a changelog, and a provenance file — eight files in total. It may be accompanied by two optional peer directories, neither of which is part of the Core: `.agent/practice-context/` (sender-maintained `outgoing/` support material and transient receiver-side `incoming/`) and `.agent/practice-decision-records/` (portable governance decisions about the Practice itself). Copy relevant Context files into the receiving repo's `incoming/`, use them during integration, then clear `incoming/`. Practice Decision Records travel as a complete directory when the sender chooses to include them. To hydrate into a new repository:
+To bring the Practice to a new repo, transfer the Practice Core package: the plasmid trinity (practice, lineage, bootstrap), verification, two entry points (this README + the agent-facing index), changelog, provenance, and the three required directories (`decision-records/` with its PDRs, `patterns/` with any general abstract patterns, `incoming/` empty). The `.agent/practice-context/` directory is an optional companion for ephemeral exchange context. To hydrate into a new repository:
 
 1. Create a directory: `.agent/practice-core/` (or `practice_core` if you prefer underscores).
-2. Drop the eight Core files into it.
-3. Check `.agent/practice-context/README.md` and `incoming/` if they exist; check `.agent/practice-decision-records/README.md` and any PDR files if they travelled alongside the Core.
-4. Ask your agent to read and understand all the files in the directory, explain what it is all about, and tell you what should happen next.
+2. Drop the Core package into it — the eight files + the three directories.
+3. Check `.agent/practice-context/README.md` and `incoming/` if they exist (ephemeral exchange context).
+4. Ask your agent to read and understand the Core package, explain what it is all about, and tell you what should happen next.
 
 The agent will survey your repo's existing tooling, standards, and norms, then adapt the Practice to fit -- the Practice enables excellence; it does not replace what you already have. See [practice-lineage.md](practice-lineage.md) for the full story of how the Practice propagates and evolves.
 

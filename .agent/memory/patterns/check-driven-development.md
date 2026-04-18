@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-020
 name: "Check Driven Development"
 use_this_when: "Writing TDD RED-phase assertions in a codebase with multiple quality gates"
 category: process

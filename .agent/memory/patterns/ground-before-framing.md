@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-013
 name: "Ground Before Framing"
 category: process
 status: proven

@@ -1,4 +1,5 @@
 ---
+related_pdr: PDR-018
 name: "Repair workflow contract clarity"
 use_this_when: "A workflow repairs or transforms the same content across multiple artefacts or locations, and ambiguous verbs could trigger rewrite or promotion drift"
 category: process
