@@ -11,6 +11,9 @@ parent_plan: "sentry-otel-integration.execution.plan.md"
 depends_on:
   - "sentry-otel-integration.execution.plan.md"
 supersedes: "sentry-cli-observability-extension.plan.md (renamed and expanded 2026-04-16)"
+related_plans:
+  - "./observability-events-workspace.plan.md"
+  - "../active/sentry-observability-maximisation-mcp.plan.md"
 todos:
   # === SEARCH CLI SENTRY RUNTIME ===
   - id: cli-logger-di-remediation
@@ -33,7 +36,7 @@ todos:
     content: "Enable and verify trace propagation for Oak-controlled Elasticsearch targets"
     status: pending
     priority: next
-    note: "Moved from archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md (now succeeded by sentry-observability-maximisation-mcp.plan.md) EXP-C1. Applies to both CLI and HTTP search paths."
+    note: "Inherited from the pre-maximisation-pivot archived plan (EXP-C1); now owned here since propagation is a search-infrastructure concern. Applies to both CLI and HTTP search paths."
   - id: es-request-instrumentation
     content: "Add request/response instrumentation on the Elasticsearch client for latency, error rate, and timeout tracking"
     status: pending
@@ -63,7 +66,7 @@ todos:
   - id: cli-metrics
     content: "Add CLI command metrics using adapter-level Sentry metrics surface"
     status: pending
-    note: "Depends on archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md (now succeeded by sentry-observability-maximisation-mcp.plan.md) EXP-A (metrics foundation)."
+    note: "Depends on sentry-observability-maximisation-mcp.plan.md § L-4b (Sentry.metrics.* adapter surface) landing first."
   - id: cli-ops-evidence
     content: "Produce search observability evidence checklist and runbook updates"
     status: pending
@@ -98,18 +101,59 @@ responses but not traced. The SDK's zero-hit recording mechanism
 exists but is not wired into the MCP server's search tools. Index
 health assessment exists but results are not captured in telemetry.
 
+## MVP Classification (per ADR-162)
+
+This plan is **MVP for the Search CLI branch** — its promotion to
+`active/` opens on the next branch after the current
+`sentry-observability-maximisation-mcp.plan.md` PR merges. Relocated
+to `observability/current/` on 2026-04-18 per the
+[observability strategy restructure](../../architecture-and-infrastructure/current/observability-strategy-restructure.plan.md).
+
+MVP-in (launch-blocking for public beta of the Search CLI surface):
+
+- **Search CLI Sentry runtime** (Layer 1) — CLI-0, CLI-CTX.
+- **Elasticsearch operations observability** (Layer 2) — ES-PROP,
+  ES-INST subset.
+- **Retrieval quality** (Layer 3) — RQ-ZERO (wiring SDK recordZeroHit
+  into MCP tools; closes an already-existing capability gap).
+- **`search_query` event emission** conforming to the schema in
+  [`observability-events-workspace.plan.md`](./observability-events-workspace.plan.md).
+  This is the product-axis MVP contribution of the Search estate per
+  ADR-162 §Five Axes Product.
+
+MVP-deferred (planned, not launch-blocking):
+
+- CLI-PRELOAD decision (operational detail; current no-preload is
+  acceptable for beta).
+- CLI-SRCMAP (development-surface quality; adequate stack traces exist
+  without source-map upload for the beta window).
+- ES-BULK / ES-HEALTH (instrumentation beyond request-level; value
+  appears once a sustained indexing cadence exists).
+- RQ-LAT / RQ-QUALITY (post-MVP signal quality work once baseline
+  data collection starts).
+- CLI-MET (metrics surface; depends on `sentry-observability-maximisation-mcp.plan.md § L-4b` metrics adapter landing first).
+- CLI-EVID (evidence checklist; follow-on runbook work).
+
 ## Relationship to Other Plans
 
 - **Parent**: `sentry-otel-integration.execution.plan.md` (shared
-  foundation authority)
-- **Peer**: `archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md (now succeeded by sentry-observability-maximisation-mcp.plan.md)` (MCP server
-  expansion — metrics foundation, MCP context enrichment, profiling,
-  source maps, alerting, strategy)
-- **Dependency**: EXP-A (metrics foundation) must land before CLI
-  metrics can consume the adapter surface
+  foundation authority; remains in
+  [`architecture-and-infrastructure/active/`](../../architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
+  per the 2026-04-18 restructure).
+- **Peer**: [`../active/sentry-observability-maximisation-mcp.plan.md`](../active/sentry-observability-maximisation-mcp.plan.md)
+  — MCP server + widget observability on the current branch. Supersedes
+  the pre-maximisation-pivot archived plan referenced in earlier
+  drafts. This plan mirrors that structure on the Search CLI branch.
+- **Peer (new MVP)**: [`./observability-events-workspace.plan.md`](./observability-events-workspace.plan.md)
+  — defines the `search_query` schema that this plan's emission sites
+  conform to. RQ-ZERO emits a conformant `search_query` event with
+  zero-hit flag.
+- **Dependency**: `sentry-observability-maximisation-mcp.plan.md § L-4b`
+  (`Sentry.metrics.*` adapter surface) must land before CLI-MET can
+  consume it — per the 2026-04-18 `metrics.*` priority swap.
 
 This plan absorbs the Elasticsearch trace propagation track (formerly
-EXP-C1 in the MCP expansion plan) because propagation is a search
+EXP-C1 in the pre-pivot archived plan) because propagation is a search
 infrastructure concern, not MCP-specific.
 
 ---

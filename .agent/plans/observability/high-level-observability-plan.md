@@ -1,7 +1,6 @@
 ---
 title: "High-Level Observability Plan"
-status: skeleton
-phase_filled: 2
+status: active
 last_updated: 2026-04-18
 foundational_adr: "docs/architecture/architectural-decisions/162-observability-first.md"
 direction_session: "docs/explorations/2026-04-18-observability-strategy-and-restructure.md"
@@ -10,61 +9,200 @@ execution_plan: ".agent/plans/architecture-and-infrastructure/current/observabil
 
 # High-Level Observability Plan
 
-> **Status: skeleton.** This document was created in Phase 1 of the
-> observability strategy restructure to establish the destination. Its
-> substantive content is authored in Phase 2. Each section below is a
-> placeholder with the intended scope noted.
+Authoritative index for observability across the Oak Open Curriculum
+Ecosystem. Every observability-related plan, ADR, and exploration is
+reachable from here.
 
-## Purpose
+---
 
-Authoritative index for observability across the repo. Every
-observability-related plan, ADR, and exploration is reachable from
-here.
+## Observability Principle (condensed from ADR-162)
 
-## Observability Principle
+Every runtime capability emits structured events covering the five
+axes — **engineering, product, usability, accessibility, security** —
+as applicable. Events are emitted in documented stable schemas the
+downstream analytics pipelines depend on. Every emission passes
+through the [ADR-160](../../../docs/architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md) redaction barrier before any sink
+receives it. Consumers couple to `@oaknational/observability` and
+`@oaknational/observability-events`, never directly to vendor SDKs
+(feature code; composition-root DI wiring carve-out per ADR-078).
+Minimum functionality (stdout/err via `@oaknational/logger`) persists
+in the absence of any third-party backend.
 
-(Filled in Phase 2.) Condensed restatement of [ADR-162](../../../docs/architecture/architectural-decisions/162-observability-first.md) §Principle.
+Full text: [ADR-162](../../../docs/architecture/architectural-decisions/162-observability-first.md).
+
+---
 
 ## Five Axes — MVP Scope
 
-(Filled in Phase 2.) For each of the five axes — engineering, product,
-usability, accessibility, security — list:
+| Axis | MVP deliverable | Owning plan | Post-MVP | Explorations informing |
+|---|---|---|---|---|
+| **Engineering** | Error capture + tracing + release linkage + free-signal integrations (ANR, event-loop delay, Zod validation failures) + widget error capture + alert suite + runbooks | [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) (L-0..L-13 lanes) | [`future/cross-system-correlated-tracing.plan.md`](future/cross-system-correlated-tracing.plan.md), [`future/deployment-impact-bisection.plan.md`](future/deployment-impact-bisection.plan.md), [`future/slo-and-error-budget.plan.md`](future/slo-and-error-budget.plan.md) | Exploration 2 (Sentry-as-PaaS) |
+| **Product** | `packages/core/observability-events/` workspace + `tool_invoked` emission + `search_query` emission + event catalog | [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md), [`current/search-observability.plan.md`](current/search-observability.plan.md) | [`future/curriculum-content-observability.plan.md`](future/curriculum-content-observability.plan.md), [`future/feature-flag-provider-selection.plan.md`](future/feature-flag-provider-selection.plan.md), [`future/ai-telemetry-wiring.plan.md`](future/ai-telemetry-wiring.plan.md) | Exploration 1 (Sentry vs PostHog), Exploration 4 (event schemas) |
+| **Usability** | Tool-call success/failure breakdown + feedback capture (L-9) + `widget_session_outcome` events | [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) (L-9, L-12), [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) | Absorbed into SLO + accessibility-phase-2 lanes | Exploration 4 (stage vocabulary for session-outcome) |
+| **Accessibility** | `a11y_preference_tag` + frustration proxies + incomplete-flow correlation + keyboard-only boolean | [`current/accessibility-observability.plan.md`](current/accessibility-observability.plan.md) | (open question; see exploration 3) | Exploration 3 (a11y at runtime — **blocks MVP**) |
+| **Security** | `auth_failure` + `rate_limit_triggered` events | [`current/security-observability.plan.md`](current/security-observability.plan.md) | [`future/security-observability-phase-2.plan.md`](future/security-observability-phase-2.plan.md) | Exploration 5 (trace propagation), Exploration 6 (Cloudflare+Sentry), Exploration 7 (static analysis) |
 
-- MVP deliverable names + owning plan(s).
-- Post-MVP deliverable names + owning future plan(s).
-- Explorations informing scope.
+Operational concerns (synthetic monitoring, vendor-independence
+conformance) are cross-axis MVP and owned by:
+
+- [`current/synthetic-monitoring.plan.md`](current/synthetic-monitoring.plan.md)
+- [`current/multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md)
+
+---
 
 ## Launch Criteria
 
-(Filled in Phase 2.) The data-scientist / engineer / product-owner /
-a11y-reviewer test: can each answer their first-order questions from
-telemetry alone on launch day?
+MVP criterion per the direction-setting session (§5): **on the day
+public beta opens, a data scientist, an engineer, a product owner,
+and an a11y reviewer can each answer their first-order questions
+from telemetry alone.**
+
+Concretely:
+
+- **Data scientist** can answer "what is used most/least; what tools
+  correlate with use of which others; which subjects/key-stages/
+  keywords are most requested" from the events workspace emissions +
+  the event catalog.
+- **Engineer** can diagnose any runtime issue using tracing, release
+  linkage, error capture, and alerts (ADR-162 engineering axis MVP
+  set).
+- **Product owner** can see tool-call outcome distribution, feedback
+  capture, and widget-session-outcome trends — all from events
+  workspace emissions.
+- **A11y reviewer** can see preference-tag distribution, keyboard-
+  only session share, and frustration-proxy incidence via
+  `accessibility-observability.plan.md` emissions.
+
+---
 
 ## MVP Gate Summary
 
-(Filled in Phase 2.) Which lanes must close before public beta launch
-vs which can close post-launch.
+**Pre-launch (launch-blocking)**:
+
+- [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) — the maximisation plan's MVP-in lanes
+  (L-0..L-4b, L-7, L-9, L-12, L-12-prereq, L-13, L-DOC initial/final,
+  L-EH initial/final, L-15). See plan's own §MVP classification (landed
+  in Phase 4 of the restructure).
+- [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) — without this, product/usability/a11y/security
+  axes have no schema contract.
+- [`current/synthetic-monitoring.plan.md`](current/synthetic-monitoring.plan.md) — without this, internal-only observability cannot detect
+  fully-deployed-but-broken.
+- [`current/security-observability.plan.md`](current/security-observability.plan.md) — security-axis MVP.
+- [`current/accessibility-observability.plan.md`](current/accessibility-observability.plan.md) — accessibility-axis MVP.
+- [`current/multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) — proves ADR-162's vendor-
+  independence clause programmatically.
+
+**Post-launch (scheduled via promotion trigger)**:
+
+- See [§ Plan Map](#plan-map) below.
+
+---
 
 ## Plan Map
 
-(Filled in Phase 2.) Full list of `active/` + `current/` + `future/`
-observability plans with one-line summaries and promotion triggers
-where applicable.
+### `active/`
+
+| Plan | One-line summary |
+|---|---|
+| [`sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) | MCP server + widget: close every Sentry product loop (17 lanes) |
+| [`sentry-observability-translation-crosswalk.plan.md`](active/sentry-observability-translation-crosswalk.plan.md) | Lossless map from pre-pivot plan to current plan set |
+
+### `current/`
+
+| Plan | One-line summary |
+|---|---|
+| [`observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) | `packages/core/observability-events/` — Zod-first schema contract |
+| [`synthetic-monitoring.plan.md`](current/synthetic-monitoring.plan.md) | External uptime + working-probe against production |
+| [`security-observability.plan.md`](current/security-observability.plan.md) | App-layer auth-failure + rate-limit-triggered emission |
+| [`accessibility-observability.plan.md`](current/accessibility-observability.plan.md) | Widget-side preference tags + frustration proxies + outcomes |
+| [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) | Programmatic proof of ADR-162 vendor-independence clause |
+| [`search-observability.plan.md`](current/search-observability.plan.md) | Search estate observability (CLI + ES + retrieval quality); next-branch MVP |
+
+### `future/` (each with promotion trigger)
+
+| Plan | Promotion trigger |
+|---|---|
+| [`ai-telemetry-wiring.plan.md`](future/ai-telemetry-wiring.plan.md) | First LLM-calling MCP tool lands |
+| [`feature-flag-provider-selection.plan.md`](future/feature-flag-provider-selection.plan.md) | First A/B experiment proposed OR first feature-flag-using feature lands |
+| [`cross-system-correlated-tracing.plan.md`](future/cross-system-correlated-tracing.plan.md) | Debug session shows the gap OR Search CLI obs merged + cross-system incident |
+| [`curriculum-content-observability.plan.md`](future/curriculum-content-observability.plan.md) | First data-science request requiring curriculum-metadata joins |
+| [`slo-and-error-budget.plan.md`](future/slo-and-error-budget.plan.md) | ≥30 days of post-launch baseline data collected |
+| [`statuspage-integration.plan.md`](future/statuspage-integration.plan.md) | Readiness to publish operational state to external users |
+| [`cost-and-capacity-telemetry.plan.md`](future/cost-and-capacity-telemetry.plan.md) | First cost-pressure OR capacity-risk event |
+| [`deployment-impact-bisection.plan.md`](future/deployment-impact-bisection.plan.md) | L-7 release linkage stable + manual-regression-attribution event |
+| [`second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md) | Named Sentry gap (from exploration 1 or 2) with evidence |
+| [`customer-facing-status-page.plan.md`](future/customer-facing-status-page.plan.md) | Statuspage integration completes |
+| [`security-observability-phase-2.plan.md`](future/security-observability-phase-2.plan.md) | Exploration 6 or 7 conclusions OR first app-level security incident |
+| [`sentry-observability-maximisation.plan.md`](future/sentry-observability-maximisation.plan.md) | (Strategic parent brief across both runtimes; remains for cross-branch context) |
+
+### `archive/superseded/`
+
+| Plan | Archival note |
+|---|---|
+| [`sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md`](archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md) | Replaced by the maximisation plan 2026-04-17 |
+
+---
 
 ## Explorations Map
 
-(Filled in Phase 2.) Eight initial explorations + status + which plan
-each informs.
+Eight initial explorations at [`docs/explorations/`](../../../docs/explorations/).
+Two are full-text (blocking Phase 2 scoping); six are stubs authored
+in Phase 3 of the restructure.
+
+| # | Exploration | Status | Informs |
+|---|---|---|---|
+| 1 | `2026-04-18-sentry-vs-posthog-capability-matrix.md` | Phase 3 stub | `future/second-backend-evaluation.plan.md` |
+| 2 | `2026-04-18-how-far-does-sentry-go-as-paas.md` | Phase 3 stub | ADR-162; future lanes |
+| 3 | `2026-04-18-accessibility-observability-at-runtime.md` | Phase 3 full | **blocks** `current/accessibility-observability.plan.md` |
+| 4 | `2026-04-18-structured-event-schemas-for-curriculum-analytics.md` | Phase 3 full | **blocks** `current/observability-events-workspace.plan.md` MVP schema set |
+| 5 | `2026-04-18-trust-boundary-trace-propagation-risk-analysis.md` | Phase 3 stub | `sentry-observability-maximisation-mcp.plan.md § L-14` + `future/cross-system-correlated-tracing.plan.md` |
+| 6 | `2026-04-18-cloudflare-plus-sentry-security-observability.md` | Phase 3 stub | `current/security-observability.plan.md` scope; `future/security-observability-phase-2.plan.md` |
+| 7 | `2026-04-18-static-analysis-augmentation.md` | Phase 3 stub | `future/security-observability-phase-2.plan.md` |
+| 8 | `2026-04-18-vendor-independence-conformance-test-shape.md` | Phase 3 stub | `current/multi-sink-vendor-independence-conformance.plan.md` |
+
+---
 
 ## Vendor-Independence Invariants
 
-(Filled in Phase 2.) Short list of tests that prove ADR-162's
-vendor-independence clause programmatically.
+Per ADR-162, vendor-independence is tested programmatically by
+[`current/multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md).
+The tests enumerate:
+
+1. **Emission-persistence test** — MCP server + widget + Search CLI
+   run in `SENTRY_MODE=off`; structural event information persists
+   via stdout/err.
+2. **Structural import lint** (`no-vendor-observability-import`) —
+   ESLint rule; vendor SDK imports only permitted in adapter
+   libraries, core observability packages, and composition-root
+   files.
+
+Both tests are authored in Phase 5 of the restructure plan as part of
+ADR-162 flipping Proposed → Accepted.
+
+---
 
 ## Coordination Points With Non-Observability Workstreams
 
-(Filled in Phase 2.) Where other plans (search, auth, rate-limit,
-curriculum) emit events into the schema workspace.
+Observability emissions originate outside this directory tree. Key
+coordination points:
+
+| Emission site | Owned by | Emits |
+|---|---|---|
+| MCP tool handler boundary | `apps/oak-curriculum-mcp-streamable-http/` | `tool_invoked` |
+| Search-result handler | `apps/oak-curriculum-mcp-streamable-http/` + `apps/oak-search-cli/` | `search_query` |
+| Auth middleware | `packages/libs/mcp-auth/` | `auth_failure` |
+| Rate-limit middleware | Existing rate-limit surface (ADR-158) | `rate_limit_triggered` |
+| Widget load + session lifecycle | MCP App widget bundle | `a11y_preference_tag`, `widget_session_outcome` |
+| Feedback tool (L-9) | MCP tool | `feedback_submitted` |
+
+Each emission site's owning plan is responsible for:
+
+1. Composing the `@oaknational/observability-events` conformance
+   helper into its test suite.
+2. Passing through the ADR-160 redaction barrier.
+3. Respecting the composition-root carve-out per ADR-162.
+
+---
 
 ## Related
 
@@ -73,3 +211,4 @@ curriculum) emit events into the schema workspace.
 - [Direction-setting session report](../../../docs/explorations/2026-04-18-observability-strategy-and-restructure.md)
 - [Observability strategy restructure plan](../../../.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md)
 - [Repo-wide plan index](../high-level-plan.md)
+- [Parent foundation plan](../architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md) (cross-cutting; not moved)
