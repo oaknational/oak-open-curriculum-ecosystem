@@ -4,6 +4,55 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-18 — PDR-024 Vital Integration Surfaces + Consolidate-Docs Upstream-Review Wiring
+
+- **PDR-024** names the vital bidirectional integration surfaces
+  between repo and Practice Core as required, not optional. Five
+  categories: (A) Core→Repo orientation — entry-point chain,
+  practice-index bridge, start-flow skills, pattern discovery skill,
+  rule activation; (B) Repo→Core feedback — capture, refinement,
+  graduation, upstream Core review, Practice Box inbound, ephemeral
+  exchange outbound; (C) Bootstrap / hydration / transplantation
+  genesis paths; (D) Cross-cutting canonical contracts —
+  artefact architecture (PDR-009), gate naming (PDR-008), specialist
+  pattern (PDR-010), continuity surfaces (PDR-011), ecosystem
+  tooling (PDR-006); (E) Defensive integrations — owner-edited
+  foundations (PDR-003), pedagogical reinforcement (PDR-002),
+  explorations tier (PDR-004). A Practice instance missing any vital
+  surface is structurally present but inert (Practice Maturity
+  Level 1).
+- `consolidate-docs` command wired for PDRs and the new Core
+  surfaces: step 5 (pattern extraction) distinguishes three
+  destinations by substance shape (memory/patterns instances vs
+  practice-core/patterns general abstractions vs PDR-shaped
+  governance); step 7a (doctrine scan) now scans for ADR- AND
+  PDR-shaped doctrine with adopter-scope test; step 7b (graduation
+  destinations) names PDRs + practice-core/patterns as first-class
+  homes; step 8 NEW — upstream Core review surfaces contradiction,
+  extension, refinement, supersession, and drift candidates against
+  existing Core for owner approval; step 10 (practice exchange)
+  updated per PDR-007 outgoing-narrowing.
+- `session-handoff` command now cites PDR-011 alongside ADR-150.
+- `skills/patterns/SKILL.md` updated to point at both
+  practice-core/patterns (general abstractions, first) and
+  memory/patterns (instances, second); notes Practice-governance
+  substance lives in PDRs, not patterns.
+- `practice-verification.md` Bootstrap Checklist: item 9 cites
+  PDR-008 canonical gate names; item 11 cites PDR-009 portability;
+  new item 13 + new §Vital Integration Surfaces section enumerates
+  every required surface from categories A, B, D, E per PDR-024.
+- `practice.md` §Minimum Operational Estate gains §Vital Integration
+  Surfaces subsection describing the bidirectional flow structure
+  and linking PDR-024 + the verification checklist. §Self-Teaching
+  Property refined to note dependency on Category A orientation
+  surfaces.
+- `practice-lineage.md`: new Learned Principle "Integrations must be
+  named to be verified" added to Active Principles. §Growing a
+  Practice cold-start gains step 11 verifying every vital surface
+  from PDR-024.
+- Distilled graduation: 9 entries pruned (substance graduated to
+  PDRs 012-023 in the preceding session).
+
 ## [oak-open-curriculum-ecosystem] 2026-04-18 — PDR-007 Core Contract Change + Batch Practice-Governance PDRs
 
 - **PDR-007** redefined the Practice Core contract from "eight files"

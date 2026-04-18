@@ -386,6 +386,15 @@ same rules that guided its creation.
 The napkin captures what went wrong, distillation extracts rules, and the rules
 prevent repetition.
 
+This self-teaching chain depends on the **Core → Repo orientation
+surfaces** (Category A of the vital integration surfaces per
+PDR-024): the entry-point chain, the practice-index bridge, the
+start-flow skills, the pattern discovery skill, and rule activation.
+Without them, the links between files exist on disk but are not
+followed — the Practice is structurally present but inert. The
+self-teaching property is not a property of the Core in isolation;
+it is a property of Core + orientation surfaces operating together.
+
 The Practice Maturity model (see [practice-lineage.md §Practice
 Maturity](practice-lineage.md#practice-maturity)) provides diagnostic
 criteria — from Level 1 (structurally present but inert) through

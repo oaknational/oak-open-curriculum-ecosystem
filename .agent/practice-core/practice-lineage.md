@@ -513,6 +513,20 @@ deviations. Preserve and integrate them.
     that `.agent/practice-index.md` links resolve, and that broader Practice files
     (directives, rules, skills, commands) are aligned with the Core. Contradictions
     and stale descriptions degrade silently.
+11. **Verify vital integration surfaces** (per PDR-024). Confirm every
+    Core→Repo orientation surface (entry-point chain, practice-index
+    bridge, start-flow skills, pattern discovery skill, rule
+    activation), every Repo→Core feedback surface (capture,
+    refinement, graduation workflow, upstream Core review, Practice
+    Box, ephemeral exchange), every cross-cutting contract (canonical
+    artefact architecture, canonical quality-gate naming, specialist
+    capability pattern, continuity surfaces, ecosystem dev tooling),
+    and every defensive integration (owner-edited foundations,
+    pedagogical reinforcement, explorations tier) is present and
+    operational. A complete cold-start produces every vital surface;
+    missing any makes the Practice structurally present but inert.
+    See `practice-verification.md` §Vital Integration Surfaces for
+    the full checklist.
 
 ## Validation
 
@@ -729,3 +743,19 @@ validated across 3+ repos.
   Each artefact in the applied Practice has a default position on the
   gradient, and individual instances may deviate — classification is
   explicit, not implicit.
+- **Integrations must be named to be verified.** The Practice binds to
+  its host repo through specific bidirectional surfaces: Core → Repo
+  (entry-point chain, practice-index bridge, start-flows, pattern
+  discovery, rule activation) and Repo → Core (capture, refinement,
+  graduation, upstream Core review, Practice Box, ephemeral exchange).
+  Cross-cutting canonical contracts (artefact architecture, quality-
+  gate names, specialist capability pattern, continuity surfaces,
+  ecosystem dev tooling) make the flows coherent across repos.
+  Unnamed integrations fail silently — present on disk, broken in
+  practice — producing Practice instances that are structurally
+  complete but inert (Practice Maturity Level 1). See PDR-024 for
+  the full enumeration and
+  `practice-verification.md` §Vital Integration Surfaces for the
+  verification checklist. The Practice ensures its own integrations
+  exist: hydration, consolidation, and transplantation all verify
+  each vital surface.
