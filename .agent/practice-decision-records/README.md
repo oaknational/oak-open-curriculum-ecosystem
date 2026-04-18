@@ -98,3 +98,10 @@ marked as host-local context and not carrying decision substance.
 | [PDR-002](PDR-002-pedagogical-reinforcement-in-foundational-practice-docs.md) | Pedagogical Reinforcement in Foundational Practice Docs | Accepted |
 | [PDR-003](PDR-003-sub-agent-protection-of-foundational-practice-docs.md) | Sub-Agent Protection of Foundational Practice Docs | Accepted |
 | [PDR-004](PDR-004-explorations-as-durable-design-space-tier.md) | Explorations as Durable Design-Space Tier | Accepted |
+| [PDR-006](PDR-006-dev-tooling-per-ecosystem.md) | Dev Tooling Per Ecosystem — Leading-Edge Reference Repos | Accepted |
+
+PDR-005 is **reserved** for the third genesis scenario (wholesale
+Practice transplantation into a Practice-free repo with all the
+adaptation that implies). Draft pending owner review of the
+portability-gradient vocabulary. Reserved rather than skipped so
+numbers are not reused.
