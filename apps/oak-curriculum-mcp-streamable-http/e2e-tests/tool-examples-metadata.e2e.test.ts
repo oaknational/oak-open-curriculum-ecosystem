@@ -1,9 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
-import { unwrap } from '@oaknational/result';
 import { createApp } from '../src/application.js';
-import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 /**
  * E2E tests for parameter examples metadata in MCP tools.
  *
@@ -26,19 +24,6 @@ import { loadRuntimeConfig } from '../src/runtime-config.js';
  */
 
 const ACCEPT = 'application/json, text/event-stream';
-
-/**
- * Isolated test environment with auth bypassed.
- * No global `process.env` mutation — see ADR-078.
- */
-const testEnv: NodeJS.ProcessEnv = {
-  NODE_ENV: 'test',
-  DANGEROUSLY_DISABLE_AUTH: 'true',
-  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test',
-  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
-  ELASTICSEARCH_URL: 'http://fake-es:9200',
-  ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-};
 
 interface JsonRpcEnvelope {
   jsonrpc?: string;
@@ -112,12 +97,11 @@ function getPropertyExamples(tool: McpTool, propName: string): readonly unknown[
 }
 
 async function createTestApp() {
-  const result = loadRuntimeConfig({
-    processEnv: testEnv,
-    startDir: process.cwd(),
+  const runtimeConfig = createMockRuntimeConfig({
+    dangerouslyDisableAuth: true,
+    env: { ALLOWED_HOSTS: 'localhost,127.0.0.1,::1' },
   });
-  const runtimeConfig = unwrap(result);
-  const observability = createHttpObservabilityOrThrow(runtimeConfig);
+  const observability = createMockObservability(runtimeConfig);
   return await createApp({
     runtimeConfig,
     observability,

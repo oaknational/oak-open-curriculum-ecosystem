@@ -1,24 +1,14 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { UnifiedLogger, normalizeError } from '@oaknational/logger';
-import { unwrap } from '@oaknational/result';
 
 import { createHttpLogger, createChildLogger, extractCorrelationId } from './index.js';
-import { loadRuntimeConfig, type RuntimeConfig } from '../runtime-config.js';
+import type { RuntimeConfig } from '../runtime-config.js';
+import type { Env } from '../env.js';
+import { createMockRuntimeConfig } from '../test-helpers/auth-error-test-helpers.js';
 import { createMockExpressResponse } from '../test-helpers/fakes.js';
 
-function createRuntimeConfig(overrides: Record<string, string> = {}): RuntimeConfig {
-  const baseEnv: NodeJS.ProcessEnv = {
-    OAK_API_KEY: 'test-key',
-    CLERK_PUBLISHABLE_KEY: 'pk_test_value',
-    CLERK_SECRET_KEY: 'sk_test_value',
-    ELASTICSEARCH_URL: 'http://fake-es:9200',
-    ELASTICSEARCH_API_KEY: 'fake-api-key',
-  };
-  const result = loadRuntimeConfig({
-    processEnv: { ...baseEnv, ...overrides },
-    startDir: process.cwd(),
-  });
-  return unwrap(result);
+function createRuntimeConfig(envOverrides: Partial<Env> = {}): RuntimeConfig {
+  return createMockRuntimeConfig({ env: envOverrides });
 }
 
 describe('createHttpLogger', () => {

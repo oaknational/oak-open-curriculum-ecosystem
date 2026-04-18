@@ -11,32 +11,19 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
-import { unwrap } from '@oaknational/result';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
-import { createHttpObservabilityOrThrow } from '../src/observability/http-observability.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;
 
   beforeAll(async () => {
-    // Create isolated env with auth DISABLED (DX helper validation)
-    const testEnv: NodeJS.ProcessEnv = {
-      NODE_ENV: 'test',
-      // Configure for auth bypass – this suite proves the DX helper works.
-      // Auth enforcement is asserted in auth-enforcement.e2e.test.ts and smoke-dev-auth.
-      DANGEROUSLY_DISABLE_AUTH: 'true',
-      OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
-      ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
-      ELASTICSEARCH_URL: 'http://fake-es:9200',
-      ELASTICSEARCH_API_KEY: 'fake-api-key-for-e2e',
-    };
-
-    const result = loadRuntimeConfig({
-      processEnv: testEnv,
-      startDir: process.cwd(),
+    // Auth bypass DX helper validation.
+    // Auth enforcement is asserted in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+    const runtimeConfig = createMockRuntimeConfig({
+      dangerouslyDisableAuth: true,
+      env: { ALLOWED_HOSTS: 'localhost,127.0.0.1,::1' },
     });
-    const runtimeConfig = unwrap(result);
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const observability = createMockObservability(runtimeConfig);
     app = await createApp({
       runtimeConfig,
       observability,

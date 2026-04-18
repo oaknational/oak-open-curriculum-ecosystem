@@ -4,27 +4,18 @@
  */
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
-import { unwrap } from '@oaknational/result';
 
 import { createApp } from '../application.js';
 import { createDefaultRateLimiterFactory } from './rate-limiter-factory.js';
-import { createHttpObservabilityOrThrow } from '../observability/http-observability.js';
-import { loadRuntimeConfig } from '../runtime-config.js';
+import { createFakeHttpObservability } from '../test-helpers/observability-fakes.js';
+import { createMockRuntimeConfig } from '../test-helpers/auth-error-test-helpers.js';
 import { TEST_UPSTREAM_METADATA } from '../../e2e-tests/helpers/upstream-metadata-fixture.js';
 
 function createTestRuntimeConfig() {
-  const result = loadRuntimeConfig({
-    processEnv: {
-      NODE_ENV: 'test',
-      OAK_API_KEY: 'test-api-key',
-      DANGEROUSLY_DISABLE_AUTH: 'true',
-      ELASTICSEARCH_URL: 'http://fake-es:9200',
-      ELASTICSEARCH_API_KEY: 'fake-api-key',
-      ALLOWED_HOSTS: 'localhost,127.0.0.1',
-    },
-    startDir: process.cwd(),
+  return createMockRuntimeConfig({
+    dangerouslyDisableAuth: true,
+    env: { ALLOWED_HOSTS: 'localhost,127.0.0.1' },
   });
-  return unwrap(result);
 }
 
 /** Creates a factory that overrides all profiles to a low limit for fast testing. */
@@ -38,7 +29,7 @@ function createLowLimitFactory(limit: number) {
 describe('MCP route rate limiting', () => {
   it('returns 429 with correct body and headers after exceeding the per-IP limit', async () => {
     const runtimeConfig = createTestRuntimeConfig();
-    const observability = createHttpObservabilityOrThrow(runtimeConfig);
+    const observability = createFakeHttpObservability();
     const app = await createApp({
       runtimeConfig,
       observability,

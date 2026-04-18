@@ -127,8 +127,23 @@ export const ignores = [
  * declare those packages in the workspace manifest rather than relying on
  * the repo root toolchain.
  *
+ * The rules below enforce the test-immediate-fails checklist
+ * (`.agent/rules/test-immediate-fails.md`) at compile time. Zero-violation
+ * patterns (process.env, process.cwd, loadRuntimeConfig and observability
+ * factory imports) are `error`. The `vi.mock` family is `warn` during the
+ * migration tracked by
+ * `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`
+ * and will be escalated to `error` once the backlog reaches zero.
+ *
+ * Workspaces that legitimately host the tests FOR `loadRuntimeConfig` or
+ * `createHttpObservabilityOrThrow` (i.e. `runtime-config.*.test.ts`,
+ * `http-observability.*.test.ts`) add a file-glob override disabling
+ * `no-restricted-imports` for those specific files in their workspace
+ * `eslint.config.ts`.
+ *
  * @see ADR-078 for the dependency injection rationale behind the vi.mock ban
  * @see principles.md "No type shortcuts" — applies to test code equally
+ * @see `.agent/rules/test-immediate-fails.md` — the authoritative checklist
  */
 export const testRules = {
   'max-lines': ['error', 700],
@@ -147,6 +162,79 @@ export const testRules = {
     },
   ],
   'import-x/no-named-as-default-member': 'off',
+  // Hermetic-test enforcement: process.env / process.cwd access is
+  // prohibited. Re-includes the ExportAllDeclaration selector from
+  // `recommended` because per-file rule values replace rather than merge.
+  'no-restricted-syntax': [
+    'error',
+    {
+      selector: 'ExportAllDeclaration',
+      message:
+        'Avoid export * from "module" syntax to improve tree shaking. Use named exports instead.',
+    },
+    {
+      selector: "MemberExpression[object.name='process'][property.name='env']",
+      message:
+        'Tests must not read or write process.env. Pass literal inputs via dependency injection (ADR-078). See .agent/rules/test-immediate-fails.md.',
+    },
+    {
+      selector: "CallExpression[callee.object.name='process'][callee.property.name='cwd']",
+      message:
+        'Tests must not consume process.cwd(). Anchor paths at import.meta.dirname. See .agent/rules/test-immediate-fails.md.',
+    },
+  ],
+  // Module-cache / global-state manipulation: prohibited by ADR-078 and
+  // .agent/rules/no-global-state-in-tests.md. Currently `warn` during the
+  // audit-and-migrate backlog per
+  // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`;
+  // escalates to `error` once the backlog is cleared.
+  'no-restricted-properties': [
+    'warn',
+    {
+      object: 'vi',
+      property: 'mock',
+      message:
+        'vi.mock mutates the module cache and violates ADR-078 (DI-for-testability). Use dependency injection instead. See .agent/rules/test-immediate-fails.md.',
+    },
+    {
+      object: 'vi',
+      property: 'doMock',
+      message:
+        'vi.doMock mutates the module cache and violates ADR-078. Use dependency injection instead. See .agent/rules/test-immediate-fails.md.',
+    },
+    {
+      object: 'vi',
+      property: 'stubGlobal',
+      message:
+        'vi.stubGlobal mutates global state. Use dependency injection or explicit parameter passing (ADR-078). See .agent/rules/test-immediate-fails.md.',
+    },
+  ],
+  // Production-factory ceremony: tests must not import factories that
+  // route through runtime disk/env resolution or real SDK initialisation.
+  // Currently `warn` during the migration backlog tracked by
+  // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`;
+  // escalates to `error` once the backlog is cleared.
+  //
+  // Workspaces that host the tests FOR these modules add a file-glob
+  // override disabling this rule on their specific runtime-config /
+  // http-observability test files.
+  'no-restricted-imports': [
+    'warn',
+    {
+      patterns: [
+        {
+          group: ['**/runtime-config', '**/runtime-config.js'],
+          message:
+            'Tests must not import loadRuntimeConfig or its siblings — that function reads .env files from disk, merging them into the test input. Construct a RuntimeConfig literal via a test helper (e.g. createMockRuntimeConfig from test-helpers). See .agent/rules/test-immediate-fails.md.',
+        },
+        {
+          group: ['**/observability/http-observability', '**/observability/http-observability.js'],
+          message:
+            'Tests must not import createHttpObservability / createHttpObservabilityOrThrow — those factories route through real Sentry initialisation and register process listeners. Inject createFakeHttpObservability from test-helpers/observability-fakes instead. See .agent/rules/test-immediate-fails.md.',
+        },
+      ],
+    },
+  ],
 } as const satisfies Linter.RulesRecord;
 
 export default plugin;

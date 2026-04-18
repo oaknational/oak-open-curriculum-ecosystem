@@ -37,6 +37,7 @@ Before auditing any tests, you MUST also read and internalise these domain-speci
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/testing-strategy.md` | **THE AUTHORITATIVE TEST QUALITY REFERENCE** and baseline for TDD/BDD enforcement |
+| `.agent/rules/test-immediate-fails.md` | **IMMEDIATE-FAIL CHECKLIST** — first-pass screen; any single item rejects the test |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf for test recommendations |
 | `docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md` | DI constraints for test design |
 
@@ -64,7 +65,13 @@ For each test file:
 - Verify the naming convention matches the classification (`*.unit.test.ts`, `*.integration.test.ts`, `*.e2e.test.ts`)
 - Flag any mismatches between name and actual test type
 
-### Step 3: Assess Against Checklist
+### Step 3: Apply Immediate-Fail Screen (first-pass)
+
+Run every test in scope against `.agent/rules/test-immediate-fails.md`.
+Any single hit is an immediate fail — record it and block approval.
+No deeper analysis is needed for a test that triggers an immediate fail.
+
+### Step 4: Assess Against Checklist (for tests that pass the screen)
 
 For each test, evaluate:
 
@@ -73,7 +80,7 @@ For each test, evaluate:
 - **Test value**: each test proves something useful about product code
 - **TDD compliance**: evidence of test-first approach
 
-### Step 4: Report Findings
+### Step 5: Report Findings
 
 Produce the structured output below. Include deletion recommendations for tests that only test mocks, test code, or types. Include refactoring recommendations for overly complex tests.
 

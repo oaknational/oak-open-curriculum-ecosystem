@@ -154,6 +154,29 @@ const config = defineConfig(
       },
     },
     {
+      // The tests FOR loadRuntimeConfig and createHttpObservability legitimately
+      // import those functions — they are the subject under test. The repo-wide
+      // no-restricted-imports rule (in @oaknational/eslint-plugin-standards'
+      // testRules) is disabled for this small allowlisted set.
+      files: [
+        'src/runtime-config.unit.test.ts',
+        'src/observability/http-observability.unit.test.ts',
+      ],
+      rules: {
+        'no-restricted-imports': 'off',
+      },
+    },
+    {
+      // Smoke tests are explicitly permitted real IO per ADR-161 (on-demand
+      // pipeline, out of CI). The hermetic-test restrictions do not apply.
+      files: ['smoke-tests/**/*.test.ts', '**/*.smoke.test.ts'],
+      rules: {
+        'no-restricted-syntax': 'off',
+        'no-restricted-properties': 'off',
+        'no-restricted-imports': 'off',
+      },
+    },
+    {
       files: ['build-scripts/**/*.ts'],
       rules: {
         'no-console': 'off',

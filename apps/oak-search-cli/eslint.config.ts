@@ -92,6 +92,27 @@ const eslintConfig = defineConfig(
     rules: { ...testRules },
   },
 
+  // The tests FOR loadRuntimeConfig are the subject under test; they
+  // legitimately import and call it. Disable the repo-wide
+  // no-restricted-imports rule for this allowlisted file only.
+  {
+    files: ['src/runtime-config.integration.test.ts'],
+    rules: {
+      'no-restricted-imports': 'off',
+    },
+  },
+
+  // Smoke tests are explicitly permitted real IO per ADR-161 (on-demand
+  // pipeline, out of CI). The hermetic-test restrictions do not apply.
+  {
+    files: ['**/smoke-tests/**/*.test.ts', '**/*.smoke.test.ts'],
+    rules: {
+      'no-restricted-syntax': 'off',
+      'no-restricted-properties': 'off',
+      'no-restricted-imports': 'off',
+    },
+  },
+
   // Evaluation scripts - same standards as src/ but allow console.log
   {
     files: ['evaluation/**/*.ts'],

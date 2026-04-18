@@ -1,14 +1,20 @@
 import { execSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 
 import { describe, expect, it } from 'vitest';
 
+// Anchored at this file's directory so the test stays hermetic with respect
+// to the caller's cwd — tests must not consume `process.cwd()` as an
+// implicit input. This file lives at `agent-tools/tests/`; the workspace
+// root is one directory up.
+const WORKSPACE_ROOT = resolve(import.meta.dirname, '..');
+
 describe('CLI smoke', () => {
   it('prints help for claude-agent-ops', () => {
     const output = execSync('pnpm tsx src/bin/claude-agent-ops.ts help', {
-      cwd: process.cwd(),
+      cwd: WORKSPACE_ROOT,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
@@ -18,12 +24,12 @@ describe('CLI smoke', () => {
 
   it('prints help for claude-agent-ops --help and -h aliases', () => {
     const longHelpOutput = execSync('pnpm tsx src/bin/claude-agent-ops.ts --help', {
-      cwd: process.cwd(),
+      cwd: WORKSPACE_ROOT,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     const shortHelpOutput = execSync('pnpm tsx src/bin/claude-agent-ops.ts -h', {
-      cwd: process.cwd(),
+      cwd: WORKSPACE_ROOT,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
@@ -35,7 +41,7 @@ describe('CLI smoke', () => {
     const output = execSync(
       'pnpm tsx src/bin/cursor-session-from-claude-session.ts find --last-hours 1',
       {
-        cwd: process.cwd(),
+        cwd: WORKSPACE_ROOT,
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],
       },
@@ -47,7 +53,7 @@ describe('CLI smoke', () => {
 
   it('prints agent-infrastructure health output for claude-agent-ops health', () => {
     const output = execSync('pnpm tsx src/bin/claude-agent-ops.ts health', {
-      cwd: process.cwd(),
+      cwd: WORKSPACE_ROOT,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
@@ -58,7 +64,7 @@ describe('CLI smoke', () => {
 
   it('fails diff for an invalid agent id', () => {
     const result = spawnSync('pnpm', ['tsx', 'src/bin/claude-agent-ops.ts', 'diff', '../bad'], {
-      cwd: process.cwd(),
+      cwd: WORKSPACE_ROOT,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
@@ -70,7 +76,7 @@ describe('CLI smoke', () => {
 
   it('inspects a valid session ID outside the find time window', () => {
     const root = execSync('git rev-parse --show-toplevel', {
-      cwd: process.cwd(),
+      cwd: WORKSPACE_ROOT,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     })
@@ -95,7 +101,7 @@ describe('CLI smoke', () => {
     const output = execSync(
       `pnpm tsx src/bin/cursor-session-from-claude-session.ts inspect ${sessionId.slice(0, 8)} --last-hours 1 --history-path "${historyPath}" --projects-root "${projectsRoot}"`,
       {
-        cwd: process.cwd(),
+        cwd: WORKSPACE_ROOT,
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],
       },
@@ -106,7 +112,7 @@ describe('CLI smoke', () => {
 
   it('keeps find filtering tied to explicit needles only', () => {
     const root = execSync('git rev-parse --show-toplevel', {
-      cwd: process.cwd(),
+      cwd: WORKSPACE_ROOT,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     })
@@ -131,7 +137,7 @@ describe('CLI smoke', () => {
     const noNeedleOutput = execSync(
       `pnpm tsx src/bin/cursor-session-from-claude-session.ts find --last-hours 1 --history-path "${historyPath}" --projects-root "${projectsRoot}"`,
       {
-        cwd: process.cwd(),
+        cwd: WORKSPACE_ROOT,
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],
       },
@@ -141,7 +147,7 @@ describe('CLI smoke', () => {
     const withNeedleOutput = execSync(
       `pnpm tsx src/bin/cursor-session-from-claude-session.ts find --file "does/not/exist.ts" --last-hours 1 --history-path "${historyPath}" --projects-root "${projectsRoot}"`,
       {
-        cwd: process.cwd(),
+        cwd: WORKSPACE_ROOT,
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],
       },
@@ -151,7 +157,7 @@ describe('CLI smoke', () => {
     const matchingNeedleOutput = execSync(
       `pnpm tsx src/bin/cursor-session-from-claude-session.ts find --file "README.md" --last-hours 1 --history-path "${historyPath}" --projects-root "${projectsRoot}"`,
       {
-        cwd: process.cwd(),
+        cwd: WORKSPACE_ROOT,
         encoding: 'utf8',
         stdio: ['ignore', 'pipe', 'pipe'],
       },

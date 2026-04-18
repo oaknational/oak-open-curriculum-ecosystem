@@ -4,10 +4,9 @@ import type {
   AuthEnabledRuntimeConfig,
   RuntimeConfig,
 } from '../../src/runtime-config.js';
-import {
-  createHttpObservabilityOrThrow,
-  type HttpObservability,
-} from '../../src/observability/http-observability.js';
+import type { Env } from '../../src/env.js';
+import type { HttpObservability } from '../../src/observability/http-observability.js';
+import { createFakeHttpObservability } from '../../src/test-helpers/observability-fakes.js';
 
 /**
  * Creates a no-op Clerk middleware factory for E2E tests.
@@ -52,11 +51,15 @@ export function createNoOpClerkMiddleware(): () => RequestHandler {
  * When `dangerouslyDisableAuth` is true, Clerk keys are omitted.
  * When false (or not specified), Clerk keys are included.
  *
+ * @remarks Fully hermetic: no filesystem reads, no `process.env` access, no
+ * network. Callers pass all non-default values through `overrides`. Env
+ * overrides are partial — hermetic defaults supply the rest.
+ *
  * @param overrides - Optional partial config to override defaults
  * @returns A complete RuntimeConfig with test-appropriate values
  */
 export function createMockRuntimeConfig(
-  overrides?: Partial<RuntimeConfig>,
+  overrides?: Omit<Partial<RuntimeConfig>, 'env'> & { readonly env?: Partial<Env> },
 ): AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig {
   const { env: envOverrides, dangerouslyDisableAuth, ...restOverrides } = overrides ?? {};
 
@@ -100,6 +103,20 @@ export function createMockRuntimeConfig(
   } satisfies AuthEnabledRuntimeConfig;
 }
 
-export function createMockObservability(runtimeConfig: RuntimeConfig): HttpObservability {
-  return createHttpObservabilityOrThrow(runtimeConfig);
+/**
+ * Returns a plain fake {@link HttpObservability} for tests.
+ *
+ * @remarks The `runtimeConfig` parameter is kept for call-site compatibility
+ * with the previous factory-delegating signature, but is intentionally
+ * ignored — the fake is independent of runtime config. Tests do not exercise
+ * observability behaviour via this helper; if a test needs to assert on
+ * observability interactions it should import {@link createFakeHttpObservability}
+ * directly and spy on the returned object. The production factory
+ * `createHttpObservabilityOrThrow` is deliberately NOT imported here because
+ * tests must not pull in production observability wiring as incidental
+ * infrastructure.
+ */
+export function createMockObservability(runtimeConfig?: RuntimeConfig): HttpObservability {
+  void runtimeConfig;
+  return createFakeHttpObservability();
 }

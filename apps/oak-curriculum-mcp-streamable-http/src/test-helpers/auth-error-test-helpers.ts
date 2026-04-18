@@ -7,7 +7,8 @@
 
 import { vi, expect } from 'vitest';
 import type { Logger } from '@oaknational/logger';
-import type { AuthEnabledRuntimeConfig } from '../runtime-config.js';
+import type { AuthDisabledRuntimeConfig, AuthEnabledRuntimeConfig } from '../runtime-config.js';
+import type { Env } from '../env.js';
 import { authLogContextSchema } from '../auth-log-context.js';
 import { createFakeLogger } from './fakes.js';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
@@ -22,23 +23,72 @@ export function createMockLogger(): Logger {
   return createFakeLogger();
 }
 
-/** Creates a mock runtime config for testing. */
-export function createMockRuntimeConfig(): AuthEnabledRuntimeConfig {
+interface MockRuntimeConfigOverrides {
+  /**
+   * Env overrides merged onto the mock env.
+   *
+   * @remarks Values override the hermetic defaults below. Do not read from
+   * `process.env` to compose overrides — tests must pass literal values so
+   * outcomes do not depend on the developer's local environment or shell
+   * state.
+   */
+  readonly env?: Partial<Env>;
+  /**
+   * When true, returns an `AuthDisabledRuntimeConfig` (Clerk keys omitted).
+   */
+  readonly dangerouslyDisableAuth?: boolean;
+}
+
+const BASE_MOCK_ENV = {
+  OAK_API_KEY: 'test-key',
+  ELASTICSEARCH_URL: 'http://fake-es:9200',
+  ELASTICSEARCH_API_KEY: 'fake-api-key',
+  SENTRY_MODE: 'off' as const,
+};
+
+const BASE_CLERK_KEYS = {
+  CLERK_PUBLISHABLE_KEY: 'test-clerk-pub',
+  CLERK_SECRET_KEY: 'test-clerk-secret',
+};
+
+const BASE_SHARED_FIELDS = {
+  useStubTools: false,
+  version: '0.0.0-test',
+  versionSource: 'APP_VERSION_OVERRIDE',
+  vercelHostnames: [],
+} as const;
+
+/**
+ * Creates a mock runtime config for testing.
+ *
+ * @remarks Entirely hermetic: no filesystem reads, no `process.env` access,
+ * no network. Callers pass all non-default values through `overrides`.
+ * `SENTRY_MODE` is pinned to `'off'` so `initialiseSentry` returns the noop
+ * runtime and real `Sentry.init()` is never reachable from tests
+ * (prevents process-listener accumulation).
+ */
+export function createMockRuntimeConfig(
+  overrides: MockRuntimeConfigOverrides & { dangerouslyDisableAuth: true },
+): AuthDisabledRuntimeConfig;
+export function createMockRuntimeConfig(
+  overrides?: MockRuntimeConfigOverrides & { dangerouslyDisableAuth?: false },
+): AuthEnabledRuntimeConfig;
+export function createMockRuntimeConfig(
+  overrides: MockRuntimeConfigOverrides = {},
+): AuthEnabledRuntimeConfig | AuthDisabledRuntimeConfig {
+  if (overrides.dangerouslyDisableAuth === true) {
+    return {
+      env: { ...BASE_MOCK_ENV, ...overrides.env },
+      ...BASE_SHARED_FIELDS,
+      dangerouslyDisableAuth: true,
+    } satisfies AuthDisabledRuntimeConfig;
+  }
+
   return {
-    env: {
-      OAK_API_KEY: 'test-key',
-      CLERK_PUBLISHABLE_KEY: 'test-clerk-pub',
-      CLERK_SECRET_KEY: 'test-clerk-secret',
-      ELASTICSEARCH_URL: 'http://fake-es:9200',
-      ELASTICSEARCH_API_KEY: 'fake-api-key',
-      SENTRY_MODE: 'off',
-    },
-    useStubTools: false,
+    env: { ...BASE_MOCK_ENV, ...BASE_CLERK_KEYS, ...overrides.env },
+    ...BASE_SHARED_FIELDS,
     dangerouslyDisableAuth: false,
-    version: '0.0.0-test',
-    versionSource: 'APP_VERSION_OVERRIDE',
-    vercelHostnames: [],
-  };
+  } satisfies AuthEnabledRuntimeConfig;
 }
 
 /** Creates a ToolExecutionResult with an auth error. */
