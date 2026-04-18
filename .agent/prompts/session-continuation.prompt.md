@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-17
+last_updated: 2026-04-18
 ---
 
 # Session Continuation
@@ -86,49 +86,88 @@ git log --oneline --decorate -10
   - `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`
     (strategic follow-up extending the ADR-159 pattern to Clerk; separate
     lane after Sentry work).
-- **Current state (2026-04-18, commit `fb20bc4a`)**: extensive
-  Practice-layer evolution landed on top of the observability reframe.
-  Branch now **eight commits ahead of remote** (all Practice /
-  observability / architecture docs changes; no product-code changes
-  beyond `d08c6969`'s L-0b test file). `pnpm check` from repo root
-  exit 0 across all commits.
+- **Current state (2026-04-18, commit `8a38ab42`)**: Practice track
+  **closed end-to-end** in this session, resuming directly after the
+  observability reframe. Branch **13 commits ahead of remote**, all
+  docs/governance changes (no product-code changes beyond
+  `d08c6969`'s L-0b test file carried from prior session).
+  `pnpm check` from repo root exit 0 across all commits. Next
+  session's priority reverts to Sentry/OTel observability work.
 
-  Key Practice changes in this session window:
-  - **Observability restructure plan** (`2319a614`) with session
-    report exploration.
-  - **Consolidation + handoff** (`b0a6f6ae`) after the reframe.
-  - **Explorations tier established** as new documentation home
-    between napkin and ADR; inaugural entry is the observability
-    session report (`3466840a`).
-  - **Practice Core enhancements** (`3466840a`): Five Audiences (was
-    Three); Active Principles graduated (findings-routing;
-    planning-triggers; compressed-labels-smuggle-scope; implicit-
-    intent-not-enforced-principle; explorations-sit-sideways); three
-    new Always-Applied Rules; Design-Space Explorations section in
-    practice-bootstrap.md; PDR-004 Explorations as Durable Design-
-    Space Tier; outgoing patterns subdirectory established; docs/
-    architecture historical/ restructure.
-  - **PDR-006 Dev Tooling Per Ecosystem** (`709e504c`) — leading-
-    edge reference repos; nomination/supersession; gaps visible.
-  - **PDR-005 Wholesale Practice Transplantation** (`fb20bc4a`) —
-    third genesis scenario alongside cold-start and plasmid
-    integration; portability gradient vocabulary; classification-
-    first process with four-audit close.
-  - **Two new Active Learned Principles** (`fb20bc4a`): "generalise
-    where generalisation doesn't cost utility" (extraction-depth
-    discipline); "portability is a gradient, not a binary"
-    (consumed by PDR-005).
-  - **First real use of explorations tier** for design-space work:
-    `docs/explorations/2026-04-18-depth-of-generalisation-in-pattern-extraction.md`
-    tests the generalisation discipline against today's patterns;
-    concludes Option C (pointer annotations now, consolidation at
-    next pass).
-- **Current objective** (next session): **resume observability
-  product work**. The Practice track completed 2026-04-18 with the
-  PDR-007 Core contract change plus PDR-008–PDR-023 landing as a
-  batch (17 new PDRs this session across two phases). The Practice
-  track that had blocked work on an external repo is now closed;
-  the priority sequence reverts to Sentry/OTel → search UI.
+  Practice track outputs this session (commits `d726a1d8` →
+  `8a38ab42`):
+  - **PDR-007** redefined the Core contract from "eight files" to
+    "a bounded package of files plus required directories." New
+    first-class Core directories: `practice-core/decision-records/`
+    (all PDRs, absorbing the former peer directory) and
+    `practice-core/patterns/` (general ecosystem-agnostic
+    abstractions authored via synthesis).
+  - **PDR-008 Canonical Quality-Gate Naming** — `clean`/`build`/
+    `format`/`format:fix`/`lint`/`lint:fix`/`typecheck`/`test`/
+    `check` (alias for `check:fix`)/`check:fix`/`check:ci`/`fix`/
+    `dev` across ecosystems. Convention: bare = verify, `:fix` =
+    apply, `:ci` = non-mutating CI form. `check` alias-for-`check:fix`
+    is the one deliberate ergonomic exception.
+  - **PDR-009 Canonical-First Cross-Platform Architecture** —
+    three-layer canonical/adapter/entry-point model; thin-wrapper
+    contract; activation triggers distinct from policies.
+  - **PDR-010 Domain Specialist Capability Pattern** — four-layer
+    triplet (reviewer + skill + rule + optional operational tooling);
+    classification taxonomy (domain_expert / process_executor /
+    specialist) × three modes (explore / advise / review); inverted-
+    hierarchy variant for proportionality reviewers.
+  - **PDR-011 Continuity Surfaces and Surprise Pipeline** — three
+    continuity types (operational / epistemic / institutional);
+    split-loop handoff/consolidate with gate; named continuity
+    contract; capture→distil→graduate→enforce pipeline.
+  - **PDR-012 through PDR-023** (batched) — twelve Practice-governance
+    PDRs absorbing ~29 instance patterns from `memory/patterns/`:
+    review-findings routing (012), grounding/framing (013),
+    consolidation/knowledge-flow (014), reviewer authority/dispatch
+    (015), claim propagation/reference quality (016), workaround
+    hygiene (017), planning discipline (018), ADR scope by
+    reusability (019), check-driven development (020), test validity
+    (021), governance scanners (022), docs structure (023).
+  - **PDR-024 Vital Integration Surfaces** — names the required
+    bidirectional repo↔Core bindings in five categories: Core→Repo
+    orientation, Repo→Core feedback, genesis paths, cross-cutting
+    contracts (PDR-008/009/010/011/006), defensive integrations
+    (PDR-003/002/004). Practice Maturity Level 1 = "structurally
+    present but inert" — missing any vital surface triggers this.
+    Verification enforced at hydration close, routine consolidation
+    (step 8 of consolidate-docs), and transplant close.
+  - **Consolidate-docs + session-handoff wired** for PDRs and new
+    Core surfaces: step 5 pattern-extraction distinguishes three
+    destinations; step 7a scans for ADR- AND PDR-shaped doctrine;
+    step 7b graduation names practice-core/decision-records and
+    practice-core/patterns as first-class homes; step 8 NEW upstream
+    Core review; step 10 practice-exchange per PDR-007. Rules
+    now cite ADR(s) AND/OR PDR(s).
+  - **29 memory/patterns/ entries** gained `related_pdr: PDR-NNN`
+    frontmatter linking instance to general governance.
+  - **12 outgoing/ duplicates deleted** + outgoing/patterns/
+    subdirectory retired; 4 host-local files moved to
+    `.agent/reference/`; outgoing/README rewritten as ephemeral-
+    exchange-only surface with explicit future-PDR reservations
+    (025-028).
+  - **Trinity + entry points + practice-verification + CHANGELOG**
+    updated for new Core contract and vital-surface verification.
+  - **New Learned Principle**: "Integrations must be named to be
+    verified" (practice-lineage §Active Principles).
+  - **Consolidation passes**: two run this session. 9 distilled
+    entries graduated to PDRs (Process-section pruning); 5 upstream
+    Core-review amendments applied (Learned Principle, cold-start
+    step 11, Self-Teaching refinement, CHANGELOG entry, bootstrap
+    drift-check clean).
+  - **Experience entry**: `2026-04-18-seam-definition-precedes-migration.md`
+    captures the mid-session corrective arc (owner interrupt caught
+    a migration classifying against the wrong axis).
+- **Current objective** (next session): **resume OTel + Sentry
+  observability product work**. Practice track is closed; the
+  external repo waiting on the enhanced Practice is unblocked. PDRs
+  007-024 landed this session (18 new PDRs total). The priority
+  sequence reverts to its pre-Practice-track ordering: Sentry/OTel →
+  search UI → discuss what's next.
 
   **Next action**: open Phase 1 of the restructure plan at
   `.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`.
@@ -140,6 +179,15 @@ git log --oneline --decorate -10
 
   L-1 of the maximisation plan is **not** next — it opens only
   after Phases 1-5 of the observability restructure close.
+- **Deep consolidation status**: **completed this handoff — two
+  passes this session**. First pass (commit `50c90bf1`): distilled
+  graduation (9 entries pruned as substance absorbed by PDRs
+  012-023) + experience entry authored. Second pass (commit
+  `8a38ab42`, after PDR-024 + wiring): five upstream Core-review
+  amendments applied (Learned Principle, cold-start step 11,
+  Self-Teaching refinement, CHANGELOG entry, bootstrap drift-check
+  clean) + migration plan archived. Both passes run formally through
+  `consolidate-docs`. No further consolidation due at handoff.
 - **Restructure phase map** (from the restructure plan):
   - **Phase 1** Structural skeleton — ADR-162 Proposed, directories,
     moves, cross-references. **Next action.**
@@ -163,7 +211,32 @@ git log --oneline --decorate -10
   - **L-DOC initial** expand sentry-node README + write app observability doc.
   - **L-EH initial** `require-error-cause` ESLint rule with expanded
     RuleTester cases.
-- **Recent surprises / corrections (2026-04-18 observability reframe)**:
+- **Recent surprises / corrections (2026-04-18 Practice-track close)**:
+  - **Seam definition precedes mechanical migration.** Migration
+    plan had ~53 patterns queued for move based on universal-vs-
+    local classification. Owner interrupt caught the real seam was
+    different: governance-vs-engineering, and within engineering,
+    general-vs-instance. Moving files around a loose seam would
+    have actively made the system worse. The corrective produced
+    PDR-024 indirectly by surfacing that intent/audience/meaning
+    distinctions must be explicit before file moves. Experience
+    entry at `.agent/experience/2026-04-18-seam-definition-precedes-migration.md`.
+  - **Upstream Core review is a distinct flow from graduation.**
+    Owner observed that consolidate-docs had downstream wiring
+    (session → Core) but no upstream review (existing Core ← current
+    practice). Added as new step 8 of consolidate-docs. The two
+    flows are distinct design concerns: graduation adds new content;
+    upstream review amends existing content.
+  - **Integrations must be named to be verified.** Owner's final
+    observation of the session: repo↔Core bindings flow in both
+    directions (orientation via entry-point/bridge/start-flows;
+    feedback via capture/refinement/graduation/upstream-review).
+    These are vital — without them, the Practice is structurally
+    present but inert. PDR-024 named them as required and wired
+    verification into Bootstrap Checklist + consolidate-docs step 8
+    + transplant close. Landed as an Active Learned Principle.
+
+- **Earlier surprises / corrections (2026-04-18 observability reframe)**:
   - **MVP is a function of launch context.** Initial MVP framing
     assumed private-alpha. Owner clarified: public beta, long-lived,
     important — **MVP is materially larger**, spanning engineering +
