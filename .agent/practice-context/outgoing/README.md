@@ -51,11 +51,11 @@ reserved for when drafting happens.
 
 | File | Reserved PDR | Substance shape |
 | ---- | ------------ | --------------- |
-| `three-dimension-fitness-functions.md` | PDR-024 (Three-Zone Fitness Model) | Fitness-zone discipline; CRITICAL_RATIO; loop-health diagnostic |
-| `cross-repo-transfer-operations.md` | PDR-025 (Transfer Operations) | Operational lessons for cross-repo Practice transfers |
-| `seeding-protocol-guidance.md` | PDR-025 (candidate to merge with transfer ops) | Seeding-bundle composition; sender-side discipline |
-| `two-way-merge-methodology.md` | PDR-026 (Core Integration Mechanics) | Two-way merge; ancestor tracking; divergence reconciliation |
-| `practice-maturity-framework.md` | PDR-027 (Practice Maturity Diagnostic) | Four-level depth-vs-scope model |
+| `three-dimension-fitness-functions.md` | PDR-025 (Three-Zone Fitness Model) | Fitness-zone discipline; CRITICAL_RATIO; loop-health diagnostic |
+| `cross-repo-transfer-operations.md` | PDR-026 (Transfer Operations) | Operational lessons for cross-repo Practice transfers |
+| `seeding-protocol-guidance.md` | PDR-026 (candidate to merge with transfer ops) | Seeding-bundle composition; sender-side discipline |
+| `two-way-merge-methodology.md` | PDR-027 (Core Integration Mechanics) | Two-way merge; ancestor tracking; divergence reconciliation |
+| `practice-maturity-framework.md` | PDR-028 (Practice Maturity Diagnostic) | Four-level depth-vs-scope model |
 
 ### Future-Pattern Candidates (pattern-shaped; need frontmatter addition to graduate)
 

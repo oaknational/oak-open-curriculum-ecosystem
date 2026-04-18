@@ -45,18 +45,101 @@ After creating all files, validate:
    `testing-strategy.md`.
 7. The `start-right-quick` skill references all foundation documents.
 8. The napkin rule points to a napkin skill that exists.
-9. Quality gates (`type-check`, `lint`, `build`, `test`) are wired in
-   `package.json`.
+9. **Canonical quality gates** (per PDR-008) are wired in
+   `package.json` (or the host ecosystem's script-layer equivalent):
+   `clean`, `build`, `dev`, `format`, `format:fix`, `lint`, `lint:fix`,
+   `typecheck`, `test`, `check` (alias for `check:fix`), `check:fix`,
+   `check:ci`, `fix`. Semantics follow PDR-008: bare = verify, `:fix`
+   = apply, `:ci` = non-mutating CI form. Per-ecosystem adaptations
+   wrap the ecosystem's idiomatic invocations under these canonical
+   names.
 10. The project builds.
-11. **Artefact portability**: canonical skills and commands in `.agent/`
-    contain no platform-specific syntax. All platform adapters are thin
-    wrappers. Validate adapter-to-canonical consistency and authorisation
-    parity in tracked project config with a portability check or manual
-    review.
+11. **Artefact portability** (per PDR-009): canonical skills,
+    commands, rules, and sub-agents live in `.agent/`; all platform
+    adapters are thin wrappers with activation metadata + pointer +
+    invocation syntax only. Validate adapter-to-canonical consistency
+    AND authorisation parity in tracked project config — a portability
+    check (per PDR-022 scanner discipline) that walks every canonical
+    surface and confirms platform coverage.
 12. **Cohesion audit**: all Practice Core files are internally consistent,
     practice-index.md links resolve, and all broader Practice files
     (directives, rules, commands, skills) are aligned with the Core. No
     stale descriptions, no contradictions, no outdated wording.
+13. **Vital integration surfaces** (per PDR-024): confirm every
+    vital surface exists in some form per the categories below. A
+    Practice instance missing any vital surface is structurally
+    present but inert (Practice Maturity Level 1).
+
+## Vital Integration Surfaces
+
+Per [PDR-024](decision-records/PDR-024-vital-integration-surfaces.md),
+a Practice-bearing repo couples to its Core through specific
+integration surfaces in both directions. The Practice ensures these
+surfaces exist; verification runs at hydration close, routine
+consolidation, and transplantation close.
+
+### Category A — Core → Repo (orientation)
+
+- **Entry-point chain**: each supported agent platform has a root
+  entry-point file (e.g. `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`)
+  pointing at the canonical Practice directives (typically
+  `.agent/directives/AGENT.md`).
+- **Practice-index bridge**: `.agent/practice-index.md` exists and
+  provides the one permitted Core → local external link; all its
+  links resolve.
+- **Start-flow skills**: canonical session-start workflows exist
+  (typically `start-right-quick`, `start-right-thorough`) with
+  platform adapters per PDR-009.
+- **Pattern discovery skill**: canonical `patterns` skill exists
+  pointing at both `practice-core/patterns/` (general abstractions)
+  and `memory/patterns/` (instances).
+- **Rule activation**: canonical rules in `.agent/rules/` have
+  platform-native activation triggers (per-platform per PDR-009).
+
+### Category B — Repo → Core (feedback)
+
+- **Capture surface**: session-local observation storage (napkin or
+  equivalent) exists and is used.
+- **Refinement surface**: settled-rules surface (distilled.md or
+  equivalent) exists and is read at session start.
+- **Graduation workflow**: `consolidate-docs` (or equivalent)
+  workflow exists with steps covering pattern extraction, doctrine
+  scan (ADR- and PDR-shaped), graduation to permanent homes, and
+  upstream Core review.
+- **Practice Box (inbound)**: `practice-core/incoming/` exists
+  (typically with `.gitkeep`) as the receiver for inbound Core
+  packages.
+- **Ephemeral exchange (outbound)**: `practice-context/outgoing/`
+  exists (optional) scoped to ephemeral exchange only per PDR-007.
+
+### Category D — Cross-cutting contracts
+
+- **Canonical agent artefact architecture** (PDR-009): canonical
+  locations + thin adapters + entry points verified.
+- **Canonical quality-gate naming** (PDR-008): script-layer exposes
+  the canonical set (item 9 above).
+- **Domain specialist capability pattern** (PDR-010): if specialists
+  are installed, each follows the triplet + optional tooling shape
+  with classification and mode.
+- **Continuity surfaces** (PDR-011): named continuity contract on a
+  canonical location; split-loop handoff/consolidate workflows
+  present.
+- **Dev tooling per ecosystem** (PDR-006): if this repo is a
+  leading-edge reference, `docs/dev-tooling.md` or equivalent
+  documents the stack.
+
+### Category E — Defensive
+
+- **Owner-edited foundations** (PDR-003): a host rule enforces that
+  sub-agents cannot edit Core files.
+- **Pedagogical reinforcement** (PDR-002): consolidation discipline
+  does not mechanically deduplicate deliberate cross-document
+  repetition.
+- **Explorations tier** (PDR-004): `docs/explorations/` (or host
+  equivalent) exists for design-space work between napkin and ADR.
+
+Any absence is surfaced at consolidation per the upstream-review
+step in `consolidate-docs`.
 
 ## Post-Installation Health Check
 

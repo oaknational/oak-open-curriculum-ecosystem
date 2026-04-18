@@ -299,6 +299,25 @@ Estate](practice-verification.md#minimum-operational-estate) for the
 full specification including mandatory surfaces and the fresh-checkout
 acceptance criteria.
 
+### Vital Integration Surfaces
+
+The Practice Core binds to the host repo through named integration
+surfaces that create flows in both directions: Core → Repo
+(orientation, via the entry-point chain, practice-index bridge,
+start-flow skills, pattern discovery skill, rule activation) and Repo
+→ Core (feedback, via capture/refinement/graduation surfaces, Practice
+Box inbound, ephemeral exchange outbound). Cross-cutting canonical
+contracts (agent artefact architecture, quality-gate naming,
+specialist capability pattern, continuity surfaces, ecosystem dev
+tooling) make the bidirectional flows coherent across the Practice
+network. Defensive integrations (owner-edited foundations, pedagogical
+reinforcement, explorations tier) protect against specific failure
+modes. See
+[PDR-024](decision-records/PDR-024-vital-integration-surfaces.md)
+for the full enumeration and `practice-verification.md` §Vital
+Integration Surfaces for the verification checklist. A Practice
+instance missing any vital surface is structurally present but inert.
+
 ## Plasmid Exchange
 
 The Practice is not confined to a single repo. The portable part travels
