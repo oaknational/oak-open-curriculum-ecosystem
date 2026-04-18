@@ -609,6 +609,62 @@ outgoing broadcast describing the explorations tier (problem, home,
 frontmatter, document shape, relationship to other tiers) is a
 legitimate Practice Context contribution.
 
+### Transplant Manifest (exploration variant)
+
+Wholesale Practice transplantation (PDR-005) uses a specialised
+exploration: the **transplant manifest**. It is authored in the
+destination repo's `docs/explorations/` before any file is copied
+from the source repo.
+
+Filename: `YYYY-MM-DD-transplant-from-<source-repo>.md`.
+
+Additional frontmatter field:
+
+```yaml
+status: transplant-in-progress
+                            # or transplant-completed / transplant-aborted
+```
+
+Body sections:
+
+1. **Problem statement** — which source repo; why transplant rather
+   than cold-start; what the destination expects to inherit.
+2. **Gradient classification** — a table with one row per source
+   file or file-group:
+
+   | Source path | Gradient | Destination path | Adaptation note |
+   |---|---|---|---|
+   | `.agent/directives/principles.md` | portable-with-adaptation | same | rewrite test-framework references; keep universal rules verbatim |
+   | `.agent/practice-index.md` | local | create-from-scratch | bridge file is host-specific by design |
+   | `.agent/memory/distilled.md` | hybrid | same | preserve universal entries; drop source-repo-domain entries |
+   | `docs/architecture/ADR-XXX-*.md` | hybrid | rewrite | decision shape portable; decision substance host-specific |
+   | ... | ... | ... | ... |
+
+   Gradient values: **fully-portable** / **portable-with-adaptation**
+   / **hybrid** / **local** / **rejected** (with rationale).
+3. **Research questions** — ambiguous rows where classification
+   requires owner input.
+4. **Execution plan** — the order in which rows are processed;
+   typically fully-portable first, then portable-with-adaptation,
+   then hybrid, then local.
+5. **Four-audit close** — a checklist recording that each audit has
+   been performed and passed:
+   - Foreign-antigen audit (grep for source-repo names, paths, ADR
+     numbers; all hits resolved or documented).
+   - Completeness audit (every source concept has a destination
+     representative or is recorded as intentionally omitted).
+   - Cohesion audit (no self-contradictions in the destination
+     Practice).
+   - Manifest-closure audit (every row reached a completed or
+     explicitly-rejected state).
+6. **Informs** — the destination's practice-index, the destination's
+   `CHANGELOG.md` entry, any new PDRs the transplantation surfaced.
+
+The manifest is retained permanently in the destination's
+`docs/explorations/` — it is the reasoning trail for the
+destination's initial Practice shape and the record future agents
+use to understand why certain adaptations were made.
+
 ### Consolidation Workflow
 
 The consolidation command drives the Knowledge Flow's graduation cycle —

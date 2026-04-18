@@ -405,6 +405,28 @@ sections to remove), and a third needed complete rewrite or deletion. The mixed 
 labour-intensive — it requires line-by-line judgement about what is universal and what is local.
 Budget accordingly.
 
+### Three genesis scenarios
+
+The Practice arrives in a new repo by one of three paths:
+
+1. **Cold-start hydration** — Core arrives in a Practice-free repo; the
+   hydrating agent grows a Practice from the templates below. See
+   §Restructuring an Existing Practice for the step-by-step.
+2. **Plasmid integration** — Core arrives via
+   `.agent/practice-core/incoming/` in a Practice-bearing repo; the
+   receiving Practice absorbs concepts via §Integration Flow.
+3. **Wholesale transplantation** — a fully-hydrated applied Practice
+   from a source repo is transplanted into a Practice-free destination.
+   Governed by [PDR-005](../practice-decision-records/PDR-005-wholesale-practice-transplantation.md);
+   requires a classification-first transplant manifest (as an
+   exploration per PDR-004) and a four-audit close (foreign-antigen,
+   completeness, cohesion, manifest-closure). The transplant manifest
+   survives in the destination's history. Transplantation consumes the
+   portability gradient vocabulary from the Learned Principles above.
+
+Know which scenario applies before beginning; the process differs
+materially across the three.
+
 ### Restructuring an Existing Practice
 
 When the target repo has a mature Practice (platform-locked or otherwise), survey existing Practice
@@ -656,3 +678,27 @@ validated across 3+ repos.
   the sideways tier that carries the reasoning trail ADRs compress
   out. Host-repo home convention: `docs/explorations/` with
   timestamped filenames.
+- **Generalise where generalisation doesn't cost utility.** When
+  extracting or restating a principle, pattern, rule, or example,
+  prefer the most general form that still carries the behaviour-change
+  power. Specificity should be the feature, not the accident of first
+  observation. Test the candidate form against at least three
+  unrelated contexts before committing to a pitch: if it produces
+  correct behaviour in all of them, generalise; if it produces vacuous
+  or incorrect behaviour in any, specificity was carrying the utility
+  and must stay. A single-instance extraction is provisional by
+  construction; a pattern proven across many contexts is canonical.
+  This discipline raises the knowledge flow's output quality and
+  reduces the ecosystem-specific-orphan problem that transplantation
+  (PDR-005) would otherwise have to fix retroactively.
+- **Portability is a gradient, not a binary.** The Practice Core is
+  portability-disciplined at the file level; the rest of the applied
+  Practice sits on a gradient — fully-portable, portable-with-
+  adaptation, hybrid, local. Naming the gradient makes transplantation
+  tractable (PDR-005) and helps authors pitch new rules at the correct
+  level of abstraction at writing time. Fully-portable content carries
+  universal substance; local content carries intentional host-
+  specificity; the middle positions require explicit classification.
+  Each artefact in the applied Practice has a default position on the
+  gradient, and individual instances may deviate — classification is
+  explicit, not implicit.

@@ -4,6 +4,53 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-18 — Transplantation + Generalisation Discipline + Portability Gradient
+
+- **PDR-005 Wholesale Practice Transplantation** recorded as the third
+  genesis scenario (alongside cold-start hydration and plasmid
+  integration). Names the portability gradient vocabulary
+  (fully-portable / portable-with-adaptation / hybrid / local); the
+  classification-first three-phase process (manifest exploration →
+  execution → four-audit close); and success criteria stronger than
+  cold-start's (foreign-antigen audit, completeness audit, cohesion
+  audit, manifest-closure audit).
+- **PDR-006 Dev Tooling Per Ecosystem** recorded (same day) naming
+  leading-edge reference repos and the nomination / supersession
+  discipline.
+- `practice-lineage.md` additions:
+  - Two new Active Learned Principles: **generalise where
+    generalisation doesn't cost utility** (naming the depth
+    parameter of knowledge-flow extraction; specifying the context-
+    test); **portability is a gradient, not a binary** (the
+    gradient vocabulary consumed by PDR-005).
+  - New §Three genesis scenarios sub-section in Growing a Practice,
+    naming cold-start, plasmid integration, and wholesale
+    transplantation, with pointers to PDR-005 for transplantation.
+- `practice-bootstrap.md` adds the **Transplant Manifest** template
+  as a specialised exploration shape, with frontmatter variant,
+  gradient-classification table format, and the four-audit checklist.
+- First use of the explorations tier established earlier today:
+  `docs/explorations/2026-04-18-depth-of-generalisation-in-pattern-extraction.md`
+  tests the generalisation discipline against three patterns
+  extracted today and concludes with Option C (pointer annotations
+  now, consolidation at next pass).
+- Two existing patterns
+  (`findings-route-to-lane-or-rejection.md`,
+  `nothing-unplanned-without-a-promotion-trigger.md`) carry new
+  `informs_deeper_pattern: no-smuggled-drops (pending consolidation)`
+  frontmatter, making the deeper pattern discoverable before the
+  consolidation executes.
+- Motivation: the owner observed that wholesale transplantation has
+  been performed manually several times and produces "surprise
+  leftovers, incomplete transitions, contradictions" — a pattern
+  indicator that codification is needed. The observation also
+  surfaced a companion claim: Practice items that look ecosystem-
+  specific are sometimes under-generalised extractions from their
+  origin instance. Both observations produce Active Principles and
+  the two PDRs; the generalisation discipline reduces the ecosystem-
+  specific-orphan problem that transplantation would otherwise have
+  to fix retroactively.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-18 — Explorations as Durable Design-Space Tier + Active Principles Graduation
 
 - Added **explorations** as a named documentation tier in the Practice

@@ -5,6 +5,7 @@ status: proven
 discovered: 2026-04-18
 proven_in: "Observability strategy restructure (commit 2319a614) — fourteen previously-unplanned items each absorbed into a current/ plan (MVP) or a future/ plan with a named, testable promotion trigger"
 related_pattern: findings-route-to-lane-or-rejection.md
+informs_deeper_pattern: "no-smuggled-drops (pending consolidation — see docs/explorations/2026-04-18-depth-of-generalisation-in-pattern-extraction.md)"
 ---
 
 # Nothing Unplanned Without a Promotion Trigger

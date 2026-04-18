@@ -4,6 +4,7 @@ category: process
 status: proven
 discovered: 2026-04-17
 proven_in: "Sentry L-0b reviewer findings register (commit d08c6969) + prior scope-separation doctrine from the maximisation-pivot session"
+informs_deeper_pattern: "no-smuggled-drops (pending consolidation — see docs/explorations/2026-04-18-depth-of-generalisation-in-pattern-extraction.md)"
 ---
 
 # Findings Route to a Lane or a Rejection
