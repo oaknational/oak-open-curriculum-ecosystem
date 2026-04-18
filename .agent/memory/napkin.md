@@ -1,3 +1,95 @@
+## 2026-04-18 — Practice structural observations: generalisation discipline, third genesis scenario, PDR-as-first-class question (commits 3466840a, 709e504c, fb20bc4a)
+
+Continuation of 2026-04-18. After the observability reframe + Core
+enhancements commit (3466840a), the session surfaced two further
+structural observations that produced PDR-005, PDR-006, two new Active
+Learned Principles, and a proposed PDR-007 on Core architecture.
+
+**Structural observation 1 — wholesale transplantation is a distinct
+third genesis scenario.** Owner has done this manually "a few times"
+and consistently hits surprise-leftover / incomplete-transition /
+contradiction failure modes. Root cause: the Core is file-level-
+portable; the applied Practice sits on an unnamed portability
+gradient. Transplantation forces the gradient to become explicit —
+and without a vocabulary for it, the explicit-making happens by
+eyeball and fails silently. Named the gradient (fully-portable /
+portable-with-adaptation / hybrid / local); specified classification-
+first process with four-audit close; landed as PDR-005.
+
+**Structural observation 2 — the generalisation discipline was
+operating implicitly throughout today.** User observation: "sometimes
+an example or even a principle seems ecosystem specific, purely
+because it has only been seen in that ecosystem and has not yet been
+properly generalised." This parses as a meta-principle about the
+knowledge flow's extraction step: the extraction has a depth
+parameter that has never been named. Tested against today's three
+pattern extractions — all three (findings-routing, planning-trigger,
+compressed-labels) pass context-tests at higher abstraction layers
+than pitched. Graduated as an Active Learned Principle ("generalise
+where generalisation doesn't cost utility; test candidate forms
+against three unrelated contexts"). First real use of the
+explorations tier established earlier today — wrote
+`docs/explorations/2026-04-18-depth-of-generalisation-in-pattern-extraction.md`
+to weigh options for retroactive consolidation. Concluded Option C
+(pointer annotations now, full consolidation at next pass).
+
+**Structural observation 3 (emerged while auditing outgoing) —
+PDRs may be first-class Core infrastructure, not a provisional
+peer.** Observation: outgoing/ contains PDR-shaped topic notes
+(explorations-documentation-tier, practice-decision-records-peer-
+directory, three-dimension-fitness-functions) alongside genuine
+ephemeral support material. Also contains pattern duplicates from
+memory/patterns/. The three homes (memory/patterns, outgoing,
+PDRs) have overlapping purposes, and the overlap generates drift.
+
+Proposed resolution (pending PDR-007): collapse three homes to two.
+`practice-core/decisions/` becomes first-class Core directory holding
+all portable Practice-governance knowledge (current PDRs plus
+governance-shaped cross-ecosystem patterns promoted in).
+`memory/patterns/` holds repo-specific patterns only (technical,
+ecosystem-specific). Outgoing sharpened to ephemeral support only —
+any file in it that carries substance found nowhere else is a
+defect.
+
+PDRs currently have a uniform shape (Context/Decision/Rationale/
+Consequences); pattern-shaped promotions would use a pattern-shaped
+template body. Unified home, template-variant bodies. Would add a
+`pdr_kind` frontmatter field (governance / pattern / constraint).
+
+This is proposed as PDR-007 — not executed today. The restructure is
+substantive and deserves authorship in a dedicated session. The
+current state (3 homes) remains valid; the proposed state (2 homes)
+is cleaner.
+
+**Rate of structural change is high.** Three PDRs today (004, 005,
+006); PDR-007 proposed. Two new Active Learned Principles.
+Explorations tier established and used. Knowledge-flow depth
+parameter named. This is a lot of Practice-layer change for one
+session. At some point the right move will be to pause structural
+evolution and consolidate — but the work keeps producing productive
+structural questions, so continuing feels correct for now. Flag for
+awareness next session: if structural-change rate doesn't slow, it
+may warrant a deliberate pause-and-consolidate pass.
+
+**Session commits (most recent first)**:
+
+- `fb20bc4a` — PDR-005 (transplantation) + generalisation discipline
+  + portability gradient Active Principles + exploration + pattern
+  annotations.
+- `709e504c` — PDR-006 (dev tooling per ecosystem).
+- `3466840a` — Practice Core enhancements (Five Audiences,
+  explorations tier, PDR-004, Active Principles, outgoing
+  restructure, docs/architecture historical/).
+- `b0a6f6ae` — Handoff + consolidation from observability reframe.
+- `2319a614` — Session report + restructure plan (observability).
+- `bdffc770` — Consolidation pass from L-0b close.
+- `d08c6969` — L-0b redaction barrier conformance + reviewer
+  register.
+
+Branch is 8 commits ahead of remote; push pending owner instruction.
+
+---
+
 ## Napkin rotation — 2026-04-18
 
 Rotated at 557 lines after a dense two-day session window covering the
