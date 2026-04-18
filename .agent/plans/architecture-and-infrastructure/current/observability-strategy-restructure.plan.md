@@ -667,6 +667,19 @@ RuleTester cases:
 `warn`. Document the sentinel-comment opt-out for legitimate non-
 emission cases.
 
+**Wave-2 dependency** (2026-04-18 reshape, per sentry-reviewer
+TO-ACTION): the rule's "schema usage" acceptance path depends on
+`@oaknational/observability-events` existing as a workspace. Wave 1
+authors the rule and its `logger.*` / `Sentry.*` detection paths;
+RuleTester cases for the schema-usage path must be either (a)
+stubbed/skipped with a named "Wave 2 unlocks" note until the
+workspace exists, or (b) authored with a test-fixture workspace
+stand-in (if the existing RuleTester infra supports it). Do NOT
+author RuleTester cases that import from `@oaknational/observability-events`
+as if it resolves in Wave 1 — it does not. Re-enable the schema-
+usage path's tests + assertions in the Wave 2 events-workspace plan
+(WS5 adversarial review is the correct closure gate).
+
 **REFACTOR**: `.agent/rules/` update; ADR-162 § Enforcement references
 the rule by name and file.
 
@@ -700,6 +713,62 @@ check, and test-pass).
 
 **Phase 5 commit**: single commit with subject
 `feat(observability): adr-162 accepted — require-observability-emission rule landed`.
+
+> **2026-04-18 reshape — Phase 5 is now Wave 1 of the broader
+> observability MVP execution.** Restructure Phase 5 authors the
+> `require-observability-emission` ESLint rule; the broader execution
+> reshape makes that rule a Wave 1 deliverable that lands BEFORE any
+> maximisation plan emitter writes a new function. See
+> §Post-Phase-5 Execution Plan below for the cross-plan wave
+> structure.
+
+---
+
+## Post-Phase-5 Execution Plan — Cross-plan Wave Structure
+
+Phases 1–5 of this restructure are structural plan-text work (Phase 4
+committed 2026-04-18; Phase 5 next). Once Phase 5 closes (ADR-162
+Accepted), the observability MVP moves from planning into execution.
+
+The execution order is NOT "run the maximisation plan's four phases
+in sequence, then run the sibling `current/` plans in parallel". That
+ordering lands emitters before schemas and runs compile-time gates
+after the code they would have policed. The owner-approved
+2026-04-18 reshape interleaves the maximisation plan's lanes with
+the five sibling MVP `current/` plans into five **execution waves**:
+
+| Wave | Purpose | Work |
+|------|---------|------|
+| **1. Gates & Foundation Extractions** | Compile-time gates + extracted workspaces before any emission site. | Maximisation lanes: L-0a / L-0b (done); L-EH initial; L-DOC initial; **L-12-prereq moved here**; **L-7 moved here**. Restructure Phase 5 work (`require-observability-emission` rule + ADR-162 Accepted) folds into this wave. |
+| **2. Schema Foundation** | Events workspace + vendor-independence structural lint. | Sibling `observability-events-workspace.plan.md` WS1–WS6. Sibling `multi-sink-vendor-independence-conformance.plan.md` WS1 carve-out (`no-vendor-observability-import` ESLint rule only). |
+| **3. Primary Emitters (Server)** | Server-side emission consumes Wave 2 schemas by import. | Maximisation lanes: L-1, L-2, L-3, L-4b, L-9. |
+| **4. Cross-axis & Widget** | Second emitting runtime + axis-specific emission plans. | Maximisation lane L-12; sibling `security-observability.plan.md`; sibling `accessibility-observability.plan.md`. Can parallelise within wave. |
+| **5. Operations + Conformance + Close-out** | Alerts + emission-persistence test + MVP-deferred lanes + close-out ADRs. | Maximisation lanes: L-13, L-14, L-15, L-DOC final, L-EH final; MVP-deferred (L-4a, L-5, L-6, L-10, L-11). Sibling `multi-sink-vendor-independence-conformance.plan.md` WS2+ (emission-persistence test). Sibling `synthetic-monitoring.plan.md`. |
+
+**Architectural rationale**:
+
+1. **Schemas before emitters** — Wave 2 creates `packages/core/observability-events/` before any L-1 / L-3 / L-4b / L-9 / L-12 fixture test imports from it. No retrofit.
+2. **Rules before code** — `require-error-cause` (Wave 1, L-EH initial), `require-observability-emission` (Wave 1, restructure Phase 5 carve-out), `no-vendor-observability-import` (Wave 2, vendor-independence plan carve-out) all land before any emission site is written.
+3. **Redactor core extracted once** — L-12-prereq in Wave 1 gives server + widget + future Search CLI a shared `packages/core/telemetry-redaction-core/`. No refactor underneath emitters.
+4. **Release linkage early** — L-7 in Wave 1 means every subsequent lane's owner-verified smoke test is tagged and attributable.
+5. **Vendor-independence runs pre-launch** — the conformance plan's emission-persistence test was structurally blocked on the events workspace; Wave 2 unblocks it; Wave 5 runs it before PR open.
+
+**Cross-plan authoritative index**: see
+[`.agent/plans/observability/high-level-observability-plan.md §Execution Waves`](../../observability/high-level-observability-plan.md#execution-waves--cross-plan-mvp-order).
+
+**Within-plan index**: see
+[`.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md §Phase Structure`](../../observability/active/sentry-observability-maximisation-mcp.plan.md#phase-structure).
+
+**Non-change**: the A.3 single-PR commitment is unchanged. Waves are
+within-branch commit ordering, not PR boundaries. The PR opens after
+Wave 5 closes.
+
+**Scope of this restructure**: Phases 1–5 of THIS plan do not execute
+the waves. This plan closes when Phase 5 lands (ADR-162 Accepted +
+the `require-observability-emission` rule authored at `warn`). Wave
+1's remaining items (L-EH initial, L-DOC initial, L-12-prereq, L-7)
+and all subsequent waves are owned by the maximisation plan + sibling
+current/ plans; they execute after this restructure is archived.
 
 ---
 

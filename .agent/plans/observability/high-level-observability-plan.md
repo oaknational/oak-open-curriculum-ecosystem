@@ -82,7 +82,8 @@ Concretely:
 - [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) — the maximisation plan's MVP-in lanes
   (L-0..L-4b, L-7, L-9, L-12, L-12-prereq, L-13, L-DOC initial/final,
   L-EH initial/final, L-15). See plan's own §MVP classification (landed
-  in Phase 4 of the restructure).
+  in Phase 4 of the restructure) and §Execution Waves below for
+  the authoritative cross-plan ordering.
 - [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) — without this, product/usability/a11y/security
   axes have no schema contract.
 - [`current/synthetic-monitoring.plan.md`](current/synthetic-monitoring.plan.md) — without this, internal-only observability cannot detect
@@ -95,6 +96,75 @@ Concretely:
 **Post-launch (scheduled via promotion trigger)**:
 
 - See [§ Plan Map](#plan-map) below.
+
+---
+
+## Execution Waves — Cross-plan MVP Order
+
+**Authoritative cross-plan execution order** for the MVP observability
+work (owner-approved 2026-04-18). The maximisation plan controls the
+lane order of its own L-N sections; this table is the cross-plan index
+that interleaves the maximisation lanes with the five sibling MVP
+`current/` plans so the whole MVP envelope is ordered consistently.
+
+**Architectural rationale**: schemas before emitters; rules before the
+code they police; extracted cores before the emitters that use them;
+release linkage before the smoke tests that benefit from it;
+vendor-independence conformance runs pre-launch rather than post-hoc.
+
+| Wave | Purpose | Work |
+|------|---------|------|
+| **1. Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces. Every line written after Wave 1 is gate-conformant at write-time. | Maximisation: L-0a / L-0b (done); L-EH initial (`require-error-cause` ESLint rule); L-DOC initial (sentry-node README expansion + app observability doc); **L-12-prereq moved here** (extract `packages/core/telemetry-redaction-core/`); **L-7 moved here** (release/deploy linkage scripts). Restructure Phase 5 carve-out: author `require-observability-emission` ESLint rule at `warn`; flip ADR-162 Proposed → Accepted. |
+| **2. Schema Foundation** | Event-schema contract + vendor-independence structural lint. Every downstream-analytics obligation exists as code before any consumer imports it. | Sibling plan [`observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) WS1–WS6 — creates `packages/core/observability-events/` with Zod schemas for the 7 MVP events + conformance helper + event catalog. Sibling plan [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) WS1 carve-out — `no-vendor-observability-import` ESLint rule landed at `warn`; the emission-persistence test itself is Wave 5. |
+| **3. Primary Emitters (Server)** | Server-side emission sites consume Wave 2 schemas by import. Each lane's RED asserts schema conformance via the events-workspace conformance helper. | Maximisation: L-1 (free-signal integrations with fixture envelope-observability prereq), L-2 (delegates extraction), L-3 (MCP request context enrichment), L-4b (primary `Sentry.metrics.*` adapter), L-9 (feedback pipeline + `submit-feedback` MCP tool). |
+| **4. Cross-axis & Widget** | Second emitting runtime + axis-specific plans. Can parallelise within wave. | Maximisation: L-12 (widget Sentry; uses `telemetry-redaction-core`; emits widget-session-outcome and a11y events). Sibling plan [`security-observability.plan.md`](current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered` events. Sibling plan [`accessibility-observability.plan.md`](current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome`. |
+| **5. Operations + Conformance + Close-out** | Alerts can land because emission landscape is real. Vendor-independence conformance runs pre-launch. MVP-deferred lanes cluster for clean branch close. | Maximisation: L-13 (alerts + dashboards + runbooks), L-14 (trust-boundary ADR), L-15 (strategy close-out ADR), L-DOC final (per-loop TSDoc + ADR index + runbook propagation), L-EH final (`prefer-result-pattern` ESLint rule), MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11. Sibling plan [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) WS2+ — emission-persistence test runs MCP server + widget + Search CLI in `SENTRY_MODE=off`; Wave 5 escalates the ESLint rule severity to `error`. Sibling plan [`synthetic-monitoring.plan.md`](current/synthetic-monitoring.plan.md) — uptime + working-probe deployment. |
+
+**Wave close semantics** (2026-04-18 per fred-review TO-ACTION —
+cross-plan scheduling is only a real dependency if it is named):
+
+- **Wave close** = every maximisation lane in the wave's row GREEN
+  (per that lane's Acceptance section) AND every sibling `current/`
+  plan listed in the wave GREEN (per its own Acceptance summary) AND
+  the reviewer matrix for that wave discharged (findings ACTIONED or
+  REJECTED with written rationale per PDR-012).
+- **Cross-plan convener** = the maximisation plan owner. Sibling
+  plans report readiness to the maximisation owner; the maximisation
+  owner signals wave close. Consistent with A.3's single-PR
+  commitment (one PR, one convener).
+- **Slippage protocol**: if a sibling plan slips, the wave does not
+  close and downstream waves do not open. The maximisation plan
+  owner records the slip as a RISK row (not a silent deferral per
+  PDR-012) and either (a) renegotiates wave contents with the owner,
+  (b) promotes the slipping plan to a blocker explicitly, or (c)
+  re-scopes the wave content. Slippage is a named event, not a
+  silent delay.
+- **Wave-to-wave handoff** = acceptance evidence for the closing
+  wave is captured in the maximisation plan's Appendix A-equivalent
+  (reviewer findings + ACTIONED/REJECTED disposition) before the
+  next wave opens. No in-flight work crosses wave boundaries except
+  where a lane explicitly spans waves (e.g., L-EH and L-DOC have
+  "initial" in Wave 1 and "final" in Wave 5 — this is permitted; the
+  initial-slice lane closes independently of the final-slice lane).
+
+**PR boundary**: single PR on this branch for every lane + every
+sibling MVP plan completed. A.3 settlement (single PR) is unchanged by
+the reshape; waves are within-branch commit ordering, not PR
+boundaries. The PR opens after Wave 5 closes.
+
+**Search CLI mirror**: runs on the next branch post-merge. The Search
+CLI maximisation plan will mirror the wave structure; its own current/
+plan (`search-observability.plan.md`) interleaves into Wave 3 or Wave
+4 of the next branch's execution order.
+
+**Post-reshape rationale** (summary): pre-reshape ordering landed
+emitters before schemas and ran compile-time gates after the code they
+would have policed — both are retrofit-heavy architectural anti-
+patterns. The reshape moves three things forward (events workspace
+schemas; extracted telemetry-redaction-core; release linkage) and
+moves two things later (MVP-deferred lanes cluster; operations
+follow emission). Net effect: every emitter lands against stable
+foundations, not moving targets.
 
 ---
 

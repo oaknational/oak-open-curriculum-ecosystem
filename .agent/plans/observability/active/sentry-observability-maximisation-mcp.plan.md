@@ -76,13 +76,13 @@ todos:
     content: "L-EH initial (Phase 1): author require-error-cause ESLint rule in @oaknational/eslint-plugin-standards with expanded RuleTester cases (re-throw of original binding, cause-mismatch vs different variable, nested try/catch, AggregateError shape, async-wrapper catch); apply to Phase 1 new/changed code; explicit pass-through requires ADR-documented sentinel comment"
     status: pending
   - id: l-eh-final
-    content: "L-EH final (Phase 4): author prefer-result-pattern ESLint rule with concrete heuristic spec + valid/invalid RuleTester cases; apply to sentry-node, core/observability, MCP app observability as first adoption tranche; update ADR-088 and .agent/rules/use-result-pattern.md"
+    content: "L-EH final (Phase 5 per 2026-04-18 reshape; was Phase 4 pre-reshape): author prefer-result-pattern ESLint rule with concrete heuristic spec + valid/invalid RuleTester cases; apply to sentry-node, core/observability, MCP app observability as first adoption tranche; update ADR-088 and .agent/rules/use-result-pattern.md"
     status: pending
   - id: l-doc-initial
     content: "L-DOC initial (Phase 1): expand packages/libs/sentry-node/README.md (currently 4-line stub) + write apps/oak-curriculum-mcp-streamable-http/docs/observability.md; structural test asserts content presence (not just file existence); cross-link from workspace READMEs"
     status: pending
   - id: l-doc-final
-    content: "L-DOC final (Phase 4): per-loop TSDoc on owning functions; ADR index entries; propagation to sentry-deployment-runbook, sentry-cli-usage, production-debugging-runbook, environment-variables; docs-adr-reviewer walk-through"
+    content: "L-DOC final (Phase 5 per 2026-04-18 reshape; was Phase 4 pre-reshape): per-loop TSDoc on owning functions; ADR index entries; propagation to sentry-deployment-runbook, sentry-cli-usage, production-debugging-runbook, environment-variables; docs-adr-reviewer walk-through"
     status: pending
   - id: ws-quality-gates
     content: "Full quality gate chain after each phase (pnpm check)"
@@ -313,31 +313,104 @@ Read before each phase and at the start of each RED cycle:
 
 ## Phase Structure
 
-The plan has four phases. Each phase runs a full RED → GREEN → REFACTOR
-→ QUALITY GATE → SPECIALIST REVIEW cycle before the next begins. Phases
-commit independently; the PR opens after Phase 4.
+> **Execution order reshape 2026-04-18** (per owner direction, following
+> the observation that the initial phase ordering emitted through
+> ad-hoc shapes and ran compile-time gates after the code they would
+> have policed). The plan now has **five execution phases**, ordered
+> to maximise long-term architectural excellence by landing
+> foundations (gates, extractions, schemas) before emitters, and
+> interleaving sibling MVP `current/` plans as cross-branch
+> dependencies of the maximisation lanes.
+>
+> **The table below is authoritative for execution order.** Lane
+> sections below retain their historical authoring clusters under
+> named `##` headers (Foundation Uplift / Measurement and
+> Correlation / Breadth / Operations + Close-out) — these are NOT
+> phase numbers, they are cluster names preserved so cross-references
+> continue to resolve. Each lane carries a "**Execution phase**" note
+> at its head indicating its execution-phase assignment. Phase
+> labelling and historical clustering are explicitly decoupled —
+> trust the table and the per-lane notes, never the `##` header.
+>
+> **Dual-frame sunset**: at branch close (Wave 5 completion), the
+> four historical-grouping `##` headers collapse into a single
+> §Historical Grouping appendix so the plan exits single-frame.
 
-| Phase | Tracks |
-|-------|--------|
-| Phase 1 — Foundation uplift | L-0a, L-0b, L-1, L-2, L-DOC (initial), L-EH (initial) |
-| Phase 2 — Measurement and correlation | L-3, L-4a, L-4b, L-5, L-6, L-7, L-8 (parked) |
-| Phase 3 — Breadth | L-9, L-10, L-11, L-12-prereq, L-12 |
-| Phase 4 — Operations + close-out | L-13, L-14, L-15, L-DOC (final), L-EH (final) |
+Each phase runs a full RED → GREEN → REFACTOR → QUALITY GATE →
+SPECIALIST REVIEW cycle before the next begins. Phases commit
+independently; the PR opens after all five phases close. The
+single-PR commitment (A.3) is unchanged; the reshape affects
+commit order within this branch, not PR boundaries.
 
-Cross-cutting tracks (L-EH, L-DOC) have work in every phase; their
-acceptance is assessed in Phase 4.
+**Execution order (authoritative)**:
+
+| Execution phase | Purpose | Maximisation lanes | Sibling `current/` plans |
+|-----------------|---------|---------------------|---------------------------|
+| **Phase 1 — Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces before any new emission site. Every line written after Phase 1 is compile-time-gated. | L-0a, L-0b (both complete 2026-04-17); L-EH initial (`require-error-cause`); L-DOC initial; L-12-prereq (moved from old Phase 3 — extract `packages/core/telemetry-redaction-core/`); L-7 (moved from old Phase 2 — release/deploy linkage scripts unlock regression attribution for every subsequent smoke test); restructure Phase 5 carve-out (`require-observability-emission` ESLint rule + ADR-162 Proposed → Accepted; authored here rather than after emitters land) | — |
+| **Phase 2 — Schema Foundation** | Every downstream-analytics contract exists as code before any emitter consumes it. | — | [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md) WS1–WS6 (create `packages/core/observability-events/` + 7 MVP schemas + conformance helper); [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS1 carve-out (`no-vendor-observability-import` ESLint rule only; emission-persistence test deferred to Phase 5) |
+| **Phase 3 — Primary Emitters (Server)** | Server-side emission sites consume the Phase 2 schemas by import. Each lane's RED asserts schema conformance via the events-workspace helper. | L-1 (moved from old Phase 1 — free-signal integrations); L-2 (moved from old Phase 1 — delegates extraction); L-3 (was old Phase 2 — MCP request context enrichment); L-4b (moved within old Phase 2 — primary `Sentry.metrics.*` adapter); L-9 (was old Phase 3 — feedback pipeline) | — |
+| **Phase 4 — Cross-axis & Widget** | Widget = second emitting runtime under ADR-162's vendor-independence clause. Security + a11y sibling plans emit their axis events using Phase 2 schemas. Can parallelise within-phase. | L-12 (moved from old Phase 3 — widget Sentry) | [`security-observability.plan.md`](../current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered`; [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome` |
+| **Phase 5 — Operations + Conformance + Close-out** | Alerts can land because the emission landscape is real. Vendor-independence conformance runs pre-launch (previously blocked by schema foundation). MVP-deferred lanes cluster for clean branch close. | L-13 (was old Phase 4 — alerts + dashboards + runbooks); L-14 (was old Phase 4 — trust-boundary ADR); L-15 (was old Phase 4 — strategy close-out ADR); L-DOC final (was old Phase 4); L-EH final (was old Phase 4 — `prefer-result-pattern`); MVP-deferred lanes: L-4a (was old Phase 2 — transitional span-metrics), L-5 (was old Phase 2 — dynamic sampling), L-6 (was old Phase 2 — profiling), L-10 (was old Phase 3 — feature-flag TSDoc), L-11 (was old Phase 3 — AI-instrumentation TSDoc); L-8 (parked) | [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS2+ (emission-persistence test runs MCP server + widget + Search CLI in `SENTRY_MODE=off`); [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md) |
+
+Cross-cutting tracks (L-EH, L-DOC) retain "initial + final" structure.
+Initial slices land in Phase 1; final slices in Phase 5. Acceptance
+of the cross-cutting tracks is assessed at branch close, not per
+phase.
+
+**Architectural rationale for this ordering** (summary):
+
+1. **Schemas before emitters** — every L-1 / L-3 / L-4b / L-9 / L-12 fixture assertion imports from `packages/core/observability-events/`. No retrofit.
+2. **Rules before code** — `require-error-cause`, `require-observability-emission`, `no-vendor-observability-import` all land in Phases 1–2, before any emission site is authored.
+3. **Redactor core extracted once** — L-12-prereq in Phase 1 gives server + widget + future Search CLI a shared `packages/core/telemetry-redaction-core/` they all compose.
+4. **Release linkage early** — L-7 in Phase 1 means every subsequent lane's owner-verified smoke test is tagged and attributable.
+5. **Vendor-independence runs pre-launch** — the conformance plan's emission-persistence test was blocked on the events workspace; Phase 2 unblocks it; Phase 5 runs it before PR open.
+
+**ADR-162 Proposed → Accepted sequencing** (2026-04-18 per
+fred-review TO-ACTION — explicit to remove interpretive ambiguity):
+ADR-162 is Proposed at Phase 1 open; Phase 1 flips it Accepted as
+part of the restructure Phase 5 carve-out (`require-observability-emission`
+rule authored + status flip). **Wave 1 deliverables other than the
+flip itself** (L-EH initial, L-DOC initial, L-12-prereq, L-7) land
+under ADR-162 Proposed and reference its principle without requiring
+Accepted status. Waves 2–5 open **after** the Accepted flip and
+reference ADR-162 as Accepted. The only circular dependency that
+could have existed — Wave 1 deliverables requiring Accepted status —
+does not hold; Wave 1 discharges principle-level obligations under
+Proposed, and Wave 1's own closure flips the ADR.
 
 ---
 
-## Phase 1 — Foundation Uplift
+## Lane sections authored during Foundation Uplift (historical grouping)
 
-### Phase 1 dependency graph
+> **Dual frame — physical grouping vs execution phase**. This `##` header
+> names the historical authoring cluster; it is NOT a phase number.
+> The authoritative execution phase for each lane below is stated in
+> its "**Execution phase**" note at the lane head and summarised in
+> §Phase Structure above. The dual frame is **transitional**: at
+> branch close (Wave 5 completion), this header and its siblings
+> collapse into a single §Historical Grouping appendix so the plan
+> exits single-frame. Until then, trust the table and the per-lane
+> notes — not the `##` section header.
 
-Lane-level ordering relationships (surfaced as part of A.2 item 12):
+### Lane-level dependency graph (authoritative)
 
-- `L-0b → L-4b` (barrier test gate exists before metric adapter extends the registry).
-- `L-4b → L-4a` (primary `Sentry.metrics.*` adapter stable before transitional span-metrics convention adopts; restructure Phase 4 priority swap 2026-04-18).
-- `L-2 → L-DOC-initial` (shared delegate seam lands before docs describe it).
+Dependencies cross execution phases, not physical groupings.
+Execution-phase assignments are stated in parentheses for clarity.
+
+- `L-0b (Phase 1) → L-4b (Phase 3)` — barrier test gate exists before the primary metric adapter extends the hook registry.
+- `L-4b (Phase 3) → L-4a (Phase 5, MVP-deferred)` — primary `Sentry.metrics.*` adapter stable before the transitional span-metrics convention adopts (restructure Phase 4 priority swap 2026-04-18).
+- `L-2 (Phase 3) → L-DOC-initial (Phase 1)` — **swap direction from the pre-reshape graph**: under the reshape, L-DOC initial is authored in Phase 1 as documentation for the pre-reshape delegate seam. L-2's Phase 3 delegates extraction will subsequently update the docs in a small follow-up within its own lane. The pre-reshape `L-2 → L-DOC-initial` edge no longer applies.
+- `L-0b (Phase 1) ↔ L-12-prereq (Phase 1)` — coordinating, not strict blocking (both in Phase 1 now — L-12-prereq extracts pure redactor core whose correctness depends on the redaction policy code, not on the Node-side test harness; it authors its own runtime-neutral tests).
+- `L-12-prereq (Phase 1) → L-12 (Phase 4)` — widget Sentry cannot land without the browser-safe redactor core extracted (crosses Phase 1 → Phase 4 boundary in the reshape; still a strict blocking edge).
+- `L-0b (Phase 1) → L-13 (Phase 5)` — barrier-bypass alert derives from ADR-160's test gate.
+- `L-13 (Phase 5) → L-1, L-4b (Phase 3); L-12 (Phase 4); security-observability, accessibility-observability (Phase 4)` — alerts reference product loops and axis events that must exist first. (Superseded from the pre-reshape edge that only referenced L-1/L-4a/L-4b/L-5/L-12.)
+- `L-0b (Phase 1) ↔ L-EH initial (Phase 1)` — soft — ESLint rule authoring shares `oak-eslint` infrastructure with L-3's boundary-rule discussion and the Phase 1 gate-landing cluster.
+- **NEW** `require-observability-emission (Phase 1, from restructure Phase 5) → every emitting lane (Phase 3, 4)` — compile-time gate for emission presence is authored before any emission site is written; every Phase 3/4 lane lands through the gate.
+- **NEW** `no-vendor-observability-import (Phase 2, from vendor-independence plan WS1 carve-out) → every emitting lane (Phase 3, 4)` — structural import lint is authored before any emission site is written; every Phase 3/4 lane is gate-conformant at write-time.
+- **NEW** `observability-events-workspace (Phase 2) → L-1, L-3, L-4b, L-9 (Phase 3); L-12 (Phase 4); security-observability, accessibility-observability (Phase 4)` — schemas exist before any emitter imports them.
+- **NEW** `L-12-prereq (Phase 1) → L-12 (Phase 4); observability-events-workspace runtime consumer (Phase 3+)` — `telemetry-redaction-core` extraction is a Phase 1 precondition for every payload that passes through the redaction barrier on either runtime.
+
+### Lanes originally clustered under Foundation Uplift
 - `L-0b ↔ L-12-prereq` (coordinating, not strict blocking — L-12-prereq extracts a pure redactor core whose correctness depends on the redaction policy code, not on the Node-side test harness; it can author its own runtime-neutral tests. Reuse of closure-gate patterns is a coordination benefit, not a prerequisite).
 - `L-12-prereq → L-12` (widget Sentry cannot land without the browser-safe redactor core extracted; crosses the Phase 1 → Phase 3 boundary).
 - `L-0b → L-13` (barrier-bypass alert derives from ADR-160's test gate).
@@ -428,6 +501,11 @@ Tests pass against the current `createSentryHooks` implementation — the specif
 
 ### L-1 Free-signal integrations
 
+**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
+Emitters (Server)**. Depends on Phase 2 events-workspace schemas
+(L-1's ANR, Zod, runtime-metric, streamed-span events all emit
+through schemas the events workspace catalogues).
+
 **Objective**. Enable the opt-in Sentry Node integrations that ship
 free signal.
 
@@ -497,6 +575,12 @@ contract):
   catalogues.
 
 ### L-2 Delegates extraction
+
+**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
+Emitters (Server)**. L-2 lands alongside the emission cluster
+because the shared delegate seam is the injection point every Phase
+3 lane consumes. The seam must be stable before Phase 4 (widget)
+adopts it through the telemetry-redaction-core composition.
 
 **Objective**. Extract `createSentryDelegates` from the MCP app into
 `@oaknational/sentry-node` so both the MCP app and (next branch) the
@@ -592,9 +676,23 @@ with concrete examples and the new ESLint rule id). Document the sentinel commen
 
 ---
 
-## Phase 2 — Measurement and Correlation
+## Lane sections authored during Measurement and Correlation (historical grouping)
+
+> See §Phase Structure above for authoritative execution-phase
+> assignments. Lanes clustered here have migrated: L-3 and L-4b →
+> execution Phase 3; L-4a, L-5, L-6 → execution Phase 5 (MVP-deferred);
+> L-7 → execution Phase 1; L-8 remains parked. This header is a
+> historical grouping, not a phase number.
+
+### Lanes originally clustered under Measurement and Correlation
 
 ### L-3 MCP request context enrichment
+
+**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
+Emitters (Server)**. Unchanged from the pre-reshape assignment (was
+old Phase 2; the reshape retains Phase 3 but renumbers). L-3's
+context shape is the correlation substrate for `tool_invoked`
+events defined in Phase 2's events workspace.
 
 **Objective**. Populate a typed `mcp_request` context on the Sentry
 scope at the handler boundary. Complements, not replaces, the
@@ -629,6 +727,11 @@ with the expected shape and no argument values.
 
 ### L-4a Transitional span metrics convention
 
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out** (MVP-deferred). L-4a moves with the other
+MVP-deferred lanes to the close-out cluster. It opens only after
+L-4b's primary adapter lands in Phase 3.
+
 **Priority** (2026-04-18 — restructure Phase 4 swap). L-4a is now the
 **transitional** metric surface, adopted only for narrow
 span-attribution-unique cases where a metric must share the enclosing
@@ -657,6 +760,11 @@ README.
 explore-query confirms the attributes are present.
 
 ### L-4b Primary metrics emission via `Sentry.metrics.*`
+
+**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
+Emitters (Server)**. L-4b is the primary metric emitter and lands
+in the emission cluster, after Phase 2's events workspace
+catalogues the metric-names contract.
 
 **Priority** (2026-04-18 — restructure Phase 4 swap). L-4b is the
 **primary** production metrics surface. `Sentry.metrics.*` supersedes
@@ -728,6 +836,11 @@ Metric emission guide in `observability.md`.
 3. Sentry mode: at least one counter and one distribution visible in
    Sentry under the branch release tag (owner-verified, informational
    not merge-gate).
+4. **Metric-names catalog conformance** (2026-04-18 reshape, per
+   sentry-reviewer TO-ACTION): fixture-capture metric names are
+   validated against the `@oaknational/observability-events`
+   metric-names catalog (Wave 2 deliverable) via the conformance
+   helper; unlisted names fail RED.
 
 **Cross-references** (per ADR-162 event-schema contract; consistent
 with other lane-body cross-reference blocks):
@@ -741,6 +854,11 @@ with other lane-body cross-reference blocks):
   catalogues the names the adapter emits.
 
 ### L-5 Dynamic sampling
+
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out** (MVP-deferred). Fixed-rate sampling meets
+the engineering-axis MVP obligation; dynamic sampling is a
+post-primary-emitter optimisation.
 
 **Objective**. Replace fixed `tracesSampleRate` with a `tracesSampler`
 function.
@@ -765,6 +883,12 @@ env)` function.
 
 ### L-6 Profiling
 
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out** (MVP-deferred). On-demand profiling meets
+the engineering-axis MVP obligation; continuous profiling is a
+post-launch enablement.
+
+
 **Objective**. Add `@sentry/profiling-node`, wire
 `nodeProfilingIntegration`, measure overhead.
 
@@ -784,6 +908,13 @@ env)` function.
 
 ### L-7 Release + commits + deploy linkage
 
+**Execution phase** (2026-04-18 reshape): **Phase 1 — Gates &
+Foundation Extractions**. Moved from the pre-reshape Phase 2 to
+Phase 1: release linkage unlocks regression attribution for every
+subsequent lane's owner-verified smoke test. Every Phase 3/4/5 lane
+that tests against a live Sentry release benefits from L-7 being in
+place first.
+
 **Objective**. Close the regression-detection loop.
 
 **Pipeline discipline** (settled 2026-04-17 with owner): L-7 runs in
@@ -799,10 +930,18 @@ workspace:
 - `scripts/sentry-release-set-commits.sh` — invokes
   `sentry-cli releases set-commits "$RELEASE" --commit "oaknational/oak-open-curriculum-ecosystem@$GIT_SHA"`.
   Uses the **explicit `--commit`** form for determinism and to keep
-  the script testable without Sentry org-side state. (The Sentry
-  GitHub integration is installed for the org and enables `--auto`;
-  we use explicit anyway so the CLI has no implicit dependency on
-  the integration remaining installed.)
+  the script testable without Sentry org-side state. The Sentry
+  GitHub integration is installed for the org and enables `--auto`.
+  **Integration coupling** (2026-04-18 per sentry-reviewer TO-ACTION):
+  the explicit `--commit org/repo@sha` form still requires the
+  GitHub integration to resolve the repo identifier against the
+  Sentry org's registered repositories. If the integration is
+  uninstalled, fall back to raw commit metadata via the API or use
+  `--ignore-missing`. We use the explicit form anyway because it
+  narrows the failure mode (integration uninstall becomes a script
+  error rather than silent `--auto` inference), but we do not claim
+  to be independent of the integration — we claim to surface the
+  dependency explicitly at invocation.
 - `scripts/sentry-deploy-register.sh` — invokes
   `sentry-cli releases deploys "$RELEASE" new -e "$SENTRY_ENVIRONMENT"`.
 
@@ -878,9 +1017,24 @@ No acceptance criterion — this lane is deferred, not delivered.
 
 ---
 
-## Phase 3 — Breadth
+## Lane sections authored during Breadth (historical grouping)
+
+> See §Phase Structure above for authoritative execution-phase
+> assignments. Lanes clustered here have migrated: L-9 stays in
+> execution Phase 3; L-12-prereq → execution Phase 1; L-12 →
+> execution Phase 4; L-10, L-11 → execution Phase 5 (MVP-deferred
+> scaffolding). This header is a historical grouping, not a phase
+> number.
+
+### Lanes originally clustered under Breadth
 
 ### L-9 Feedback pipeline
+
+**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
+Emitters (Server)**. Unchanged from the pre-reshape assignment (was
+old Phase 3; the reshape retains Phase 3). L-9's `feedback_submitted`
+event schema is authored in Phase 2's events workspace; L-9 emits
+through it by import.
 
 **Objective**. `captureFeedback` wired end-to-end, plus an MCP tool
 `submit-feedback` with a **fixed, closed-set input schema**. Privacy
@@ -935,6 +1089,11 @@ describing how to query feedback and the fixed schema.
 
 ### L-10 Feature-flag scaffolding — TSDoc extension point only
 
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out** (MVP-deferred — scaffolding only, no
+runtime capability, ADR-162 §Principle "(a) not applicable at MVP"
+rationale).
+
 **Objective** (settled 2026-04-17 with owner). Document the
 future-provider extension point without wiring
 `featureFlagsIntegration()` or exposing any helper on the adapter
@@ -967,6 +1126,11 @@ behaviour change. The first real feature-flag provider's integration
 is a separate future lane.
 
 ### L-11 AI-instrumentation scaffolding — TSDoc extension point only
+
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out** (MVP-deferred — scaffolding only, no
+runtime capability, ADR-162 §Principle "(a) not applicable at MVP"
+rationale).
 
 **Objective** (settled 2026-04-17 with owner). Document the future-LLM
 extension point without exporting wrappers from the adapter barrel.
@@ -1003,6 +1167,14 @@ separate future lane, triggered by an actual consumer landing.
 
 ### L-12-prereq Browser-safe redactor core extraction
 
+**Execution phase** (2026-04-18 reshape): **Phase 1 — Gates &
+Foundation Extractions**. Moved from the pre-reshape Phase 3 to
+Phase 1: `packages/core/telemetry-redaction-core/` is a shared
+workspace every subsequent emission site (server-side and widget)
+depends on through the redaction barrier. Extracting it in Phase 1
+means no retrofit when Phase 3 server emitters and Phase 4 widget
+Sentry land.
+
 **Objective** (A.2 item 6, per architecture-reviewer-fred + sentry-reviewer). Extract a pure, runtime-agnostic redactor core into a new browser-safe package so both the Node adapter (`@oaknational/sentry-node`) and the forthcoming browser adapter (L-12) compose it. **Proposes** (pending ADR-160 amendment) to close the ADR's "Open Question" on redactor core placement in favour of a new package. ADR-160 is Accepted 2026-04-17 with Open Questions intact; L-12-prereq GREEN is conditional on either a minor ADR-160 amendment closing the question or owner confirmation that plan-prose is sufficient authority for the decision.
 
 **Package placement — new `packages/core/telemetry-redaction-core/`, NOT a submodule**. Rationale: `@oaknational/sentry-node`'s `runtime-redaction.ts` imports types from `@sentry/node` (`Breadcrumb`, `Exception`, `NodeOptions`, `RequestEventData`), coupling it to Node. A subpath export from `@oaknational/sentry-node` would still pull `@sentry/node` into the browser graph transitively. Only a separate core package with zero `@sentry/*` dependencies can be composed from both runtimes. Precedent: `design-tokens-core/oak-design-tokens` split per ADR-154 § Examples. Tier `packages/core/` matches ADR-041 workspace structure.
@@ -1028,6 +1200,13 @@ separate future lane, triggered by an actual consumer landing.
 4. L-12 can import the core without pulling `@sentry/node` into the widget bundle.
 
 ### L-12 Widget Sentry
+
+**Execution phase** (2026-04-18 reshape): **Phase 4 — Cross-axis &
+Widget**. Moved from the pre-reshape Phase 3 to Phase 4: widget is
+the second emitting runtime under ADR-162's vendor-independence
+clause and runs in the same phase as the sibling cross-axis plans
+(security-observability and accessibility-observability). All three
+consume Phase 2's events workspace schemas.
 
 **Objective**. Instrument the MCP App browser widget with
 `@sentry/browser` (or `@sentry/react` after bundle-size review).
@@ -1074,9 +1253,24 @@ vendor-independence clause):
 
 ---
 
-## Phase 4 — Operations + Close-out
+## Lane sections authored during Operations + Close-out (historical grouping)
+
+> See §Phase Structure above for authoritative execution-phase
+> assignments. All lanes clustered here have migrated to execution
+> Phase 5 (Operations + Conformance + Close-out). Execution Phase 4
+> of the reshape is now Cross-axis & Widget (L-12 + sibling plans
+> security-observability + accessibility-observability). This header
+> is a historical grouping, not a phase number.
+
+### Lanes originally clustered under Operations + Close-out
 
 ### L-13 Alerts + dashboards + runbooks
+
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out**. Unchanged in principle (was old Phase 4;
+renumbered to Phase 5 in the reshape). L-13 can only land after the
+Phase 3 + Phase 4 emission landscape is real — every alert
+references an event that Phases 2–4 produce.
 
 **Objective**. Per product loop, define baseline alert + dashboard
 panel + runbook entry + routing + escalation.
@@ -1112,6 +1306,12 @@ every axis, not only engineering):
 
 ### L-14 Third-party trace propagation (security-gated)
 
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out**. Renumbered in the reshape (was old Phase
+4). Per the Phase 4 MVP classification, L-14 is MVP-deferred with a
+latent security-axis emission obligation discharged in
+`security-observability.plan.md`.
+
 **Objective**. Decide allow/deny for non-Oak host propagation,
 including the Oak API from the MCP server boundary.
 
@@ -1128,6 +1328,11 @@ attribution.
 
 ### L-15 Strategy close-out
 
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out**. Renumbered (was old Phase 4). L-15 ADR
+is authored after all emission lanes land so the close-out compares
+the three strategy options against observed operational value.
+
 **Objective**. Record the Sentry-only vs dual-export vs
 minimal-operational decision.
 
@@ -1138,6 +1343,11 @@ value from Phases 1–3. Record decision as an ADR.
 obligation is discharged.
 
 ### L-EH (final) — Error-handling discipline
+
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out**. Renumbered (was old Phase 4). `prefer-
+result-pattern` rule lands after all Phase 3/4 emitter lanes have
+settled on the `Result<T, E>` return shape in situ.
 
 **Objective**. Land the opt-in `prefer-result-pattern` rule scoped
 incrementally per workspace, and apply Phase-4 corrections across all
@@ -1159,6 +1369,12 @@ with the new enforcement.
 **Acceptance**: rule landed; first adoption tranche lint-clean.
 
 ### L-DOC (final) — Documentation coverage
+
+**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
+Conformance + Close-out**. Renumbered (was old Phase 4). L-DOC
+final sweeps per-loop TSDoc, ADR index entries, runbook entries,
+and AGENT.md Essential Links (owner-only per PDR-003) at the end of
+the branch.
 
 **Objective**. Every product loop in the taxonomy is discoverable from
 docs.
@@ -1204,21 +1420,26 @@ gate is failing, the phase does not close.
 
 > See [Adversarial Review component](../../templates/components/adversarial-review.md)
 
-Per phase, invoke reviewers (non-leading prompts). Matrix:
+Per phase, invoke reviewers (non-leading prompts). Matrix below uses
+the **2026-04-18 reshape execution phases**, not the historical
+physical groupings in the document body.
 
-| Phase | Reviewers |
-|-------|-----------|
-| Phase 1 | code-reviewer (gateway), test-reviewer, type-reviewer, config-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred, **assumptions-reviewer** |
-| Phase 2 | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, architecture-reviewer-betty, architecture-reviewer-wilma, security-reviewer, **docs-adr-reviewer** (L-4b / L-7 runbook + env-var edits), **assumptions-reviewer** |
-| Phase 3 | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, react-component-reviewer (L-12), accessibility-reviewer (L-12), design-system-reviewer (L-12), **architecture-reviewer-fred + architecture-reviewer-barney** at L-12-prereq GREEN, **docs-adr-reviewer** (L-12-prereq new workspace README), **assumptions-reviewer** |
-| Phase 4 | code-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma, security-reviewer (L-14), release-readiness-reviewer, **assumptions-reviewer** |
+| Execution phase | Reviewers |
+|-----------------|-----------|
+| **Phase 1 — Gates & Foundation Extractions** | code-reviewer (gateway), test-reviewer, type-reviewer, config-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred (L-12-prereq workspace extraction is structural; runs at GREEN close too), architecture-reviewer-barney (L-12-prereq boundary; workspace creation), **assumptions-reviewer** |
+| **Phase 2 — Schema Foundation** | code-reviewer, docs-adr-reviewer (schema/contract completeness), type-reviewer (Zod 4 usage; io='input' vs 'output' semantics), sentry-reviewer (schema/emission fit), architecture-reviewer-fred (workspace boundary), **assumptions-reviewer**; the vendor-independence `no-vendor-observability-import` ESLint carve-out lands here — type-reviewer + architecture-reviewer-fred |
+| **Phase 3 — Primary Emitters (Server)** | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, architecture-reviewer-betty, architecture-reviewer-wilma, security-reviewer (L-3 context shape), **docs-adr-reviewer** (L-4b / L-7-linked env-var edits — L-7 already landed in Phase 1), **assumptions-reviewer** |
+| **Phase 4 — Cross-axis & Widget** | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, react-component-reviewer (L-12), accessibility-reviewer (L-12 + accessibility-observability plan), design-system-reviewer (L-12), security-reviewer (security-observability plan), **architecture-reviewer-fred + architecture-reviewer-barney** (2026-04-18 reshape per fred-review TO-ACTION: Phase 4 touches three concurrent architectural boundaries — browser bundle, auth middleware, widget runtime — all composing the Wave 1 telemetry-redaction-core through Wave 2 events-workspace schemas; Fred for ADR-162 vendor-independence-clause compliance + events-workspace import direction; Barney for cross-plan boundary cartography), **docs-adr-reviewer** (widget README, cross-axis plan READMEs), **assumptions-reviewer** |
+| **Phase 5 — Operations + Conformance + Close-out** | code-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma, security-reviewer (L-14 + vendor-independence emission-persistence test), release-readiness-reviewer, **assumptions-reviewer** |
 
-Additions per A.6 register:
+Additions per A.6 register (pre-reshape) — still apply under reshape:
 
 - `assumptions-reviewer` runs at **every** phase close, not only branch close (AR-11).
-- `docs-adr-reviewer` added to Phase 2 (L-4b / L-7 touch runbooks + env-variable docs; AR-10) and Phase 3 (L-12-prereq new workspace README).
-- `architecture-reviewer-fred` + `architecture-reviewer-barney` additionally run at L-12-prereq GREEN close — not only at Phase 3 aggregate close — because the workspace-extraction decision is structural (AR-12).
-- `type-reviewer` in Phase 1 covers L-0b follow-through (the `satisfies` gate and the `SentryRedactionHooks` type export from `runtime-sdk.ts`); same reviewer also runs Phase 2 for L-4b's hook-union extension (CR-7, AF-10).
+- `architecture-reviewer-fred` + `architecture-reviewer-barney` run at L-12-prereq GREEN close within Phase 1 (structural workspace extraction; AR-12).
+- `type-reviewer` in Phase 1 covers L-0b follow-through (the `satisfies` gate and the `SentryRedactionHooks` type export from `runtime-sdk.ts`); same reviewer also runs Phase 3 for L-4b's hook-union extension (CR-7, AF-10).
+- Reshape-specific additions:
+  - `docs-adr-reviewer` runs at Phase 2 close (events-workspace schema completeness + vendor-independence ESLint-rule documentation health) AND at Phase 4 close (cross-axis plan READMEs and the widget observability doc).
+  - `assumptions-reviewer` runs at the **reshape commit** itself (this plan revision) to verify proportionality of the lane migrations across phases.
 
 Reviewer outputs feed back into the plan's todo list. Findings are
 actioned unless explicitly rejected with written rationale (per
@@ -1233,19 +1454,28 @@ principles.md).
 Covered in the strategic brief at
 [future/sentry-observability-maximisation.plan.md § Risks and Unknowns](../future/sentry-observability-maximisation.plan.md#risks-and-unknowns).
 
-Phase-specific risks:
+Phase-specific risks (phase numbers are the **2026-04-18 reshape
+execution phases**, not the historical physical groupings in the
+document body):
 
-| Phase | Risk | Mitigation |
-|-------|------|------------|
-| 1 | Integration composition changes default behaviour unexpectedly | Behaviour-level fixture tests assert per-integration event emission (ANR / Zod / runtime-metric / etc.); SDK version pinned. Per A.2 item 9, RED is not config-shape presence on `NodeOptions`. |
+| Execution Phase | Risk | Mitigation |
+|-----------------|------|------------|
 | 1 | L-0b `satisfies` gate does NOT auto-detect new fan-out hooks added to `NodeOptions` (e.g. a future `beforeSendMetric` wiring) — it only validates that BARRIER_HOOKS entries are valid `NodeOptions` keys | Resolved by A.6 SR-5: `runtime-sdk.ts` now exports `SentryRedactionHooks` (the `Pick<NodeOptions, ...>` return of `createSentryHooks`); the test imports it and constrains `MinimalHooks` to it. Any new hook wired in `createSentryHooks` without an update to the test's `BARRIER_HOOKS` registry now fails the type-check via a set-equality assertion between the imported type's keys and the registry. Code review remains the backstop. |
-| 1 | **Fixture runtime does not observe non-event envelopes** (ANR stack frames, streamed-span payloads, runtime-metric samples) without adapter extension — L-1 behaviour-level assertions cannot land against the current `createFixtureRuntime` (per A.6 AR-3) | L-1 GREEN has a prerequisite step named in §L-1 to route fixture-mode envelopes through `createSentryHooks` (Option A) OR add per-envelope capture paths (Option B). L-1 does not close until the prerequisite lands. Schedule impact: expect L-1 to take longer than a naive "turn on six integrations" estimate. |
-| 1 | **Per-phase RED tightening fans test-author load across six L-1 integrations** (ANR / Zod / node-runtime / span-streaming / rewrite-frames / extraErrorData), each needing behaviour-level fixture capture rather than integration-registered presence — doubles or triples Phase 1 authorship versus the earlier config-presence posture (per A.6 AR-9) | Recognised: split L-1 into sub-lanes per integration if author-load becomes a bottleneck (L-1a / L-1b / ... ). Reviewer discipline at phase close remains fixed even under split. |
-| 2 | **Sentry `metrics.*` API shifts during the beta window** (L-4b is the primary metric surface per the restructure Phase 4 swap; the beta API may introduce breaking-shape changes within the `^10.x` caret range `packages/libs/sentry-node/package.json` currently pins) | Adapter insulates consumers (consumers never import `Sentry.metrics.*` directly); conservative version-pin in `packages/libs/sentry-node`. **Concrete changelog-review trigger**: re-read the Sentry Node SDK `metrics.*` changelog at (a) every L-4b closure milestone, (b) the next monthly dependency-audit cadence, and (c) any `@sentry/node` minor-or-major bump inside the 10.x range (patch bumps within the current range can still ship shape changes under beta conventions), whichever fires first; raise any breaking-shape change as a new risk row immediately. Owner: L-4b implementer at each milestone review; dependency auditor at each bump. |
-| 2 | `tracesSampler` regresses sampling coverage during rollout | Roll out behind env flag with a fixed-rate fallback; measure first. |
-| 2 | Profiling-node precompiled-binary install consent not granted in CI | `onlyBuiltDependencies` entry; document in CI runbook. Per A.1 factual correction 3, precompiled binaries ship for Node 18/20/22/24 across Linux/macOS/Windows. |
-| 3 | Widget bundle size regression from adding `@sentry/browser` | Bundle-size test gate on widget build; L-12-prereq extracts browser-safe redactor core to avoid pulling `@sentry/node` transitively. |
-| 4 | Alert fatigue | Each alert has an SLO-style intent and dedupe before enablement. |
+| 1 | **L-12-prereq extraction may accidentally couple the new `telemetry-redaction-core` workspace to Node-specific payload types** if the pure redactor functions' signatures leak `@sentry/node` generics | Run `architecture-reviewer-fred` + `architecture-reviewer-barney` at L-12-prereq GREEN close specifically on boundary and zero `@sentry/*` imports in the new workspace; a dedicated test asserts zero `@sentry/*` imports in `packages/core/telemetry-redaction-core/**`. |
+| 1 | **L-7 scripts run in Vercel deploy pipeline only** (ADR-161); accidental CI PR-check invocation would reintroduce network calls to PR-check runs | Explicit pipeline-attachment documentation in deployment runbook; GitHub Actions workflows grep-audited for zero `sentry-cli` references at L-7 acceptance (already named in L-7's acceptance criterion 3). |
+| 1 | **Three ESLint rules in quick succession** (`require-error-cause`, `require-observability-emission`, `no-vendor-observability-import`) in Phases 1–2 create authorship load | Accepted: upfront authorship cost buys compile-time-gated quality for all Phases 3–5. Rules land at `warn` severity initially so Phase 3/4 code does not block on early drafts; escalate to `error` at Phase 5 close per the `warning-severity-is-off-severity` pattern. |
+| 2 | **Events workspace schema drift between authoring (Phase 2) and first emission (Phase 3)** — if Phase 2 authors schemas from exploration 4 alone without a Phase 3 consumer in the loop, schemas may not match real emission shapes | Run `sentry-reviewer` + `docs-adr-reviewer` at Phase 2 close against the specific MVP event set; Phase 3 emitters import schemas by type, so any drift breaks type-check (compile-time gate). |
+| 2 | **Vendor-independence carve-out** (`no-vendor-observability-import` ESLint rule authored in Phase 2, emission-persistence test authored in Phase 5) — the ESLint rule alone does not prove the stdout-sink property; a consumer could pass the import lint while still emitting only to a vendor | Accepted: the ESLint rule is a structural gate (prevents import leakage); the emission-persistence test in Phase 5 is the behavioural gate (proves the stdout-sink property). Both are required for ADR-162 Mechanism #4 + #5 satisfaction. Phase 5 is still pre-launch, not post-launch. |
+| 3 | Integration composition changes default behaviour unexpectedly (L-1) | Behaviour-level fixture tests assert per-integration event emission (ANR / Zod / runtime-metric / etc.); SDK version pinned. Per A.2 item 9, RED is not config-shape presence on `NodeOptions`. |
+| 3 | **Fixture runtime does not observe non-event envelopes** (ANR stack frames, streamed-span payloads, runtime-metric samples) without adapter extension — L-1 behaviour-level assertions cannot land against the current `createFixtureRuntime` (per A.6 AR-3) | L-1 GREEN has a prerequisite step named in §L-1 to route fixture-mode envelopes through `createSentryHooks` (Option A) OR add per-envelope capture paths (Option B). L-1 does not close until the prerequisite lands. Schedule impact: expect L-1 to take longer than a naive "turn on six integrations" estimate. |
+| 3 | **Per-phase RED tightening fans test-author load across six L-1 integrations** (ANR / Zod / node-runtime / span-streaming / rewrite-frames / extraErrorData), each needing behaviour-level fixture capture rather than integration-registered presence — doubles or triples Phase 3 authorship versus the earlier config-presence posture (per A.6 AR-9) | Recognised: split L-1 into sub-lanes per integration if author-load becomes a bottleneck (L-1a / L-1b / ... ). Reviewer discipline at phase close remains fixed even under split. |
+| 3 | **Sentry `metrics.*` API shifts during the beta window** (L-4b is the primary metric surface per the restructure Phase 4 swap; the beta API may introduce breaking-shape changes within the `^10.x` caret range `packages/libs/sentry-node/package.json` currently pins) | Adapter insulates consumers (consumers never import `Sentry.metrics.*` directly); conservative version-pin in `packages/libs/sentry-node`. **Concrete changelog-review trigger**: re-read the Sentry Node SDK `metrics.*` changelog at (a) every L-4b closure milestone, (b) the next monthly dependency-audit cadence, and (c) any `@sentry/node` minor-or-major bump inside the 10.x range (patch bumps within the current range can still ship shape changes under beta conventions), whichever fires first; raise any breaking-shape change as a new risk row immediately. Owner: L-4b implementer at each milestone review; dependency auditor at each bump. |
+| 4 | Widget bundle size regression from adding `@sentry/browser` | Bundle-size test gate on widget build; L-12-prereq extracts browser-safe redactor core to avoid pulling `@sentry/node` transitively (L-12-prereq landed in Phase 1 under the reshape, so widget never risks transitively pulling `@sentry/node`). |
+| 4 | **Cross-axis plan coordination** — security-observability + accessibility-observability + L-12 all emit to the events workspace concurrently | Phase 2 events-workspace schemas were authored with all three consumers in the loop; schemas are stable before any consumer imports them. Reviewer matrix includes `accessibility-reviewer` + `security-reviewer` at Phase 4 close. |
+| 5 | `tracesSampler` regresses sampling coverage during rollout (L-5, MVP-deferred) | Roll out behind env flag with a fixed-rate fallback; measure first. |
+| 5 | Profiling-node precompiled-binary install consent not granted in CI (L-6, MVP-deferred) | `onlyBuiltDependencies` entry; document in CI runbook. Per A.1 factual correction 3, precompiled binaries ship for Node 18/20/22/24 across Linux/macOS/Windows. |
+| 5 | Alert fatigue (L-13) | Each alert has an SLO-style intent and dedupe before enablement. |
+| 5 | **Emission-persistence test shape TBD** (vendor-independence conformance runs MCP server + widget + Search CLI in `SENTRY_MODE=off`; test scaffolding is non-trivial and exploration 8 deliberately left shape open) | Exploration 8 closure is a Phase 5 prerequisite; if the emission-persistence test shape cannot be resolved in time, Phase 5 close documents the gap as a launch caveat (never silently deferred per PDR-012). |
 
 ---
 
