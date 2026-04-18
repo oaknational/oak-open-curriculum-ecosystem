@@ -30,8 +30,8 @@ todos:
   - id: ws4-migrate-by-pattern
     content: "WS4: migrate tests off each pattern, one pattern at a time. Expose the DI seam in product code where missing. Replace the production-factory import with a fake. Each pattern-level migration closes a cohort of tests simultaneously."
     status: pending
-  - id: ws5-flip-severities
-    content: "WS5: once a rule's backlog reaches zero, flip its ESLint severity from `warn` to `error` in `@oaknational/eslint-plugin-standards` `testRules`. Remove any workspace-level exception overrides that were added for legitimate subject-under-test cases and which are now the only remaining allowances."
+  - id: ws5-shrink-allowlists-to-zero
+    content: "WS5: ESLint rules land at `error` severity from day one (aligned with `patterns/warning-severity-is-off-severity.md` — never warn: fix or allowlist-with-deadline). Existing violations are explicit per-file allowlists in each workspace's eslint.config.ts, making the backlog physically visible. Each file migration deletes a line from the allowlist. WS5 closes when every workspace backlog allowlist is empty (legitimate subject-under-test overrides for runtime-config / http-observability own tests remain in place)."
     status: pending
   - id: ws6-report
     content: "WS6: final report — before/after violation counts per rule, pattern list extracted to `.agent/memory/patterns/`, lessons for future test authorship."

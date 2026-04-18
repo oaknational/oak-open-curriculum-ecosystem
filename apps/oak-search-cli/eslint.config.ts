@@ -113,6 +113,24 @@ const eslintConfig = defineConfig(
     },
   },
 
+  // Test-ceremony migration backlog — see
+  // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`.
+  // Each entry is a known violation; delete as files migrate.
+  {
+    files: [
+      // production-factory imports (not subject under test)
+      'src/cli/shared/with-loaded-cli-env.unit.test.ts',
+      'src/observability/cli-observability.unit.test.ts',
+      // vi.mock family
+      'src/adapters/hybrid-data-source.integration.test.ts',
+      'src/lib/elastic-http.unit.test.ts',
+    ],
+    rules: {
+      'no-restricted-properties': 'off',
+      'no-restricted-imports': 'off',
+    },
+  },
+
   // Evaluation scripts - same standards as src/ but allow console.log
   {
     files: ['evaluation/**/*.ts'],

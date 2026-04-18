@@ -21,10 +21,12 @@ todos:
     note: "Executed 2026-04-18. ADR-162 Proposed at docs/architecture/architectural-decisions/162-observability-first.md; observability/ directory tree + README + high-level-observability-plan.md skeleton created; five git mv moves applied (sentry-otel-integration.execution.plan.md deliberately not moved); cross-reference sweep returned zero stale paths."
   - id: phase-2-mvp-scope-pass
     content: "Phase 2: fill high-level-observability-plan.md (MVP across five axes, launch criteria, plan map). Author six new current/ plans (observability-events-workspace, synthetic-monitoring, security-observability, accessibility-observability, multi-sink-vendor-independence-conformance — search-observability already moved). Author eleven new future/ plans each with promotion trigger."
-    status: pending
+    status: completed
+    note: "Executed 2026-04-18 (commit 231046fe). High-level plan filled: principle, five-axis MVP table, launch criteria, MVP gate summary, plan map, explorations map, vendor-independence invariants, coordination points. Five new current/ plans authored at skeleton level (exact scope fills at Phase 3 explorations). Eleven future/ plans authored each with a named testable promotion trigger. search-observability audited for MVP classification. Out-of-plan architectural fix also landed (commit 276ea9bd): tests migrated off loadRuntimeConfig/createHttpObservabilityOrThrow ceremony to hermetic helpers, root-causing a MaxListenersExceededWarning that surfaced during Phase 2 authoring. New rule .agent/rules/test-immediate-fails.md + platform adapters + ESLint gates in @oaknational/eslint-plugin-standards testRules + sibling plan test-ceremony-production-factory-audit.plan.md tracks backlog migration."
   - id: phase-3-exploration-kickoff
     content: "Phase 3: write explorations 3 (accessibility-observability-at-runtime) and 4 (structured-event-schemas-for-curriculum-analytics) in full — blocking on MVP plan scope. Stub other six explorations (sentry-vs-posthog, sentry-as-paas, trust-boundary-propagation, cloudflare-plus-sentry, static-analysis-augmentation, vendor-independence-conformance-test-shape) with problem statement + research questions."
     status: pending
+    priority: next
   - id: phase-4-executable-plan-revision
     content: "Phase 4: revise sentry-observability-maximisation-mcp.plan.md — swap L-4a/L-4b priorities (metrics.* primary, span-metrics transitional); mark lanes MVP vs MVP-deferred; cross-reference new MVP lanes (events workspace, synthetic, a11y, security, vendor-independence). Risk row update for metrics.* beta-API shift."
     status: pending
@@ -50,7 +52,7 @@ isProject: true
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
 **Last Updated**: 2026-04-18
-**Status**: 🟢 Phase 1 complete 2026-04-18; Phases 2–5 pending
+**Status**: 🟢 Phases 1–2 complete 2026-04-18; Phase 3 next; Phases 4–5 pending
 **Branch**: `feat/otel_sentry_enhancements`
 **Session rationale**: `docs/explorations/2026-04-18-observability-strategy-and-restructure.md`
 

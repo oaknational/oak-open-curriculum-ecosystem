@@ -1,3 +1,107 @@
+## 2026-04-18 — Observability Phases 1–2 + test-ceremony architectural fix (commits 502af060, 231046fe, 276ea9bd)
+
+Fresh session opened Phase 1 of the observability strategy restructure
+and drove through Phase 2 before hitting an unexpected architectural
+rabbit hole surfaced by a `MaxListenersExceededWarning` in the test
+suite. Diagnosis pulled the thread: three commits landed the work.
+
+**Substantive outputs**:
+
+- **ADR-162 (Proposed)** — Observability-First principle across five
+  axes (engineering, product, usability, accessibility, security) +
+  vendor-independence clause + composition-root carve-out + five
+  enforcement mechanisms. Gated on Phase 5 for acceptance.
+- **`.agent/plans/observability/`** scaffolded — lifecycle sub-dirs,
+  area README, high-level-observability-plan (skeleton → full in
+  Phase 2), five `git mv` moves (parent foundation plan
+  `sentry-otel-integration.execution.plan.md` stays in
+  architecture-and-infrastructure/).
+- **17 new plans** — 5 MVP `current/` + 11 `future/` strategic briefs
+  each with a named testable promotion trigger + search-observability
+  audited for MVP classification.
+- **MaxListeners root-cause fix** — 11 integration/e2e test files
+  migrated off `loadRuntimeConfig` + `createHttpObservabilityOrThrow`
+  ceremony. New helpers: `createFakeHttpObservability` (existed but
+  unused), `createMockRuntimeConfig` extended with typed overloads.
+- **`.agent/rules/test-immediate-fails.md`** — 21-item
+  test-reviewer first-pass checklist across Boundary, Side-Effect,
+  Mock/Stub, Structural, Pipeline categories. Platform adapters.
+  Test-reviewer template wired to apply it first.
+- **ESLint quality gates** in
+  `@oaknational/eslint-plugin-standards` `testRules`: 
+  `no-restricted-syntax` (error) on process.env + process.cwd();
+  `no-restricted-properties` (warn) on vi.mock family;
+  `no-restricted-imports` (warn) on production-factory imports.
+- **New current/ plan** —
+  `architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`
+  — tracks the warn→error migration with pattern-based cohort
+  remediation.
+
+**Surprises / corrections this session**:
+
+1. **Tests import production factories as ceremony.** The common
+   pattern "construct a full `createApp` for integration coverage"
+   led tests to pull in `loadRuntimeConfig` + `createHttpObservabilityOrThrow`
+   not because those functions were under test, but because they
+   produced the objects `createApp` needed. Incidental infrastructure,
+   not subject. Architectural principle extracted:
+   **tests must never import product code they are not directly
+   testing**. If a production factory is incidental, replace with a
+   DI-injected fake.
+
+2. **`.env.local` silently enters test inputs via disk reads.** Any
+   test calling `loadRuntimeConfig({processEnv: ..., startDir: ...})`
+   triggers `resolveEnv` which reads repo-root and app-root `.env`
+   and `.env.local` from disk and merges them under the passed
+   processEnv. A developer's local `SENTRY_MODE=sentry` (for manual
+   dev testing) flowed into every integration test, unconditionally
+   triggering real `Sentry.init()`. The fix is to bypass
+   `loadRuntimeConfig` in tests — construct a RuntimeConfig literal.
+
+3. **Symptom-level fixes can violate their own principles.** First
+   attempted fix: `process.env.SENTRY_MODE = 'off'` in test.setup.ts.
+   Mutates global state in tests — exactly what ADR-078 forbids.
+   Owner corrected immediately: "tests must not touch OR consume
+   process.env". Captured in memory as `feedback_tests_no_global_state.md`.
+
+4. **The immediate-fails checklist was overdue.** Existing
+   `.agent/rules/no-global-state-in-tests.md` was one item of a
+   larger family. Owner enumerated six; I expanded to 21 across five
+   categories. The checklist + ESLint encoding together form a
+   durable enforcement surface.
+
+5. **Complex test code = product-code design problem.** The 19 test
+   files using `vi.mock` are not test-authorship failures; they're
+   signals that product code lacks DI seams. Each migration is also
+   a product-code refactor. Pattern-based cohort migration (not
+   file-by-file whack-a-mole) is the right shape.
+
+6. **ESLint rule severity as migration mechanic.** Rules land at
+   `warn` for patterns with existing violations (drives the backlog),
+   at `error` for zero-violation patterns (prevents regression).
+   Flip-to-error when backlog hits zero. Mirrors the ADR-162 Phase 5
+   ESLint-rule roll-out pattern.
+
+**Candidate patterns for future extraction**:
+
+- **"Production factories in tests are always ceremony unless they
+  ARE the subject under test"** — strong candidate; validated once
+  this session; needs a second unrelated context.
+- **"Warn-severity with backlog plan + flip-to-error at zero" as the
+  migration pattern** — validated twice now (ADR-162 + test-ceremony
+  plans). Could graduate if third instance surfaces.
+- **"Symptom-level fixes often violate the principle they are
+  addressing"** — met in Practice sessions too; the specific
+  instance here (global-state mutation to fix a global-state problem)
+  is the crispest example.
+
+**Deep consolidation due at session close** — structural-change
+volume this session is significant (new rule, new plan, ESLint-gate
+shape, test architecture shift). Handoff flags `due`; consolidate-docs
+runs if well-bounded for this closeout.
+
+---
+
 ## 2026-04-18 — PDR-007 Core contract change + batch Practice-governance PDRs (PDR-008 through PDR-023)
 
 Continuation of 2026-04-18 session. Practice track pulled forward

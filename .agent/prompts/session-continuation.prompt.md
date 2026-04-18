@@ -89,13 +89,37 @@ git log --oneline --decorate -10
   - `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`
     (strategic follow-up extending the ADR-159 pattern to Clerk; separate
     lane after Sentry work).
-- **Current state (2026-04-18, commit `8a38ab42`)**: Practice track
-  **closed end-to-end** in this session, resuming directly after the
-  observability reframe. Branch **13 commits ahead of remote**, all
-  docs/governance changes (no product-code changes beyond
-  `d08c6969`'s L-0b test file carried from prior session).
-  `pnpm check` from repo root exit 0 across all commits. Next
-  session's priority reverts to Sentry/OTel observability work.
+- **Current state (2026-04-18, commit `276ea9bd`)**: Observability
+  strategy restructure **Phases 1–2 complete**. Branch **16 commits
+  ahead of remote** on `feat/otel_sentry_enhancements`; `pnpm check`
+  from repo root exit 0. **Zero MaxListenersExceededWarning** in the
+  test suite (was 38 before the hermetic-test migration). Next phase
+  is Phase 3 — explorations 3 and 4 in full + six exploration stubs.
+
+  This session shipped three commits on top of the Phase 1 starting
+  point (`502af060`):
+
+  - `502af060` — Phase 1 structural skeleton: ADR-162 Proposed;
+    `.agent/plans/observability/` directory with lifecycle sub-dirs,
+    area README, high-level-observability-plan skeleton; five `git mv`
+    moves; cross-reference sweep zero stale.
+  - `231046fe` — Phase 2 MVP scope: filled high-level-observability-plan
+    (principle, five-axis MVP table, launch criteria, plan map,
+    explorations map, vendor-independence invariants, coordination
+    points); authored five new MVP `current/` plans (skeleton-level,
+    Phase 3 explorations fill exact scope); eleven `future/` plans
+    each with a named testable promotion trigger; audited
+    `search-observability.plan.md` for MVP classification.
+  - `276ea9bd` — Hermetic-test architectural fix: 11 integration/E2E
+    tests migrated off `loadRuntimeConfig` + `createHttpObservabilityOrThrow`
+    ceremony to `createMockRuntimeConfig` + `createFakeHttpObservability`;
+    new `.agent/rules/test-immediate-fails.md` (21-item checklist) +
+    Claude/Cursor adapters + test-reviewer template wiring; ESLint
+    `no-restricted-syntax` (error), `no-restricted-properties` and
+    `no-restricted-imports` (warn during backlog) added to
+    `@oaknational/eslint-plugin-standards` `testRules`; sibling plan
+    `test-ceremony-production-factory-audit.plan.md` tracks the
+    warn→error migration.
 
   Practice track outputs this session (commits `d726a1d8` →
   `8a38ab42`):
@@ -165,41 +189,48 @@ git log --oneline --decorate -10
   - **Experience entry**: `2026-04-18-seam-definition-precedes-migration.md`
     captures the mid-session corrective arc (owner interrupt caught
     a migration classifying against the wrong axis).
-- **Current objective** (next session): **resume OTel + Sentry
-  observability product work**. Practice track is closed; the
-  external repo waiting on the enhanced Practice is unblocked. PDRs
-  007-024 landed this session (18 new PDRs total). The priority
-  sequence reverts to its pre-Practice-track ordering: Sentry/OTel →
-  search UI → discuss what's next.
+- **Current objective** (next session): **Phase 3 of the observability
+  strategy restructure — exploration kickoff**. Phases 1 and 2 of the
+  restructure are complete; Phase 3 is the next gate before the
+  executable-plan revisions (Phase 4) and ADR-162 acceptance (Phase 5).
 
-  **Next action**: open Phase 1 of the restructure plan at
+  **Next action**: open Phase 3 of the restructure plan at
   `.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`.
-  Phase 1: draft ADR-162 (Observability-First) in Proposed status
-  with the vendor-independence clause; create
-  `.agent/plans/observability/` with lifecycle sub-dirs + README +
-  `high-level-observability-plan.md` skeleton; move six existing
-  observability plans; sweep cross-references to zero stale paths.
+  Phase 3: write **two explorations in full** — (3)
+  `docs/explorations/2026-04-18-accessibility-observability-at-runtime.md`
+  (blocks `current/accessibility-observability.plan.md` MVP scope)
+  and (4) `docs/explorations/2026-04-18-structured-event-schemas-for-curriculum-analytics.md`
+  (blocks `current/observability-events-workspace.plan.md` MVP schema
+  set). Stub the other six explorations with problem statement +
+  research questions: sentry-vs-posthog, sentry-as-paas,
+  trust-boundary-propagation, cloudflare-plus-sentry,
+  static-analysis-augmentation, vendor-independence-conformance-test-shape.
+  Reviewer matrix at phase close: `docs-adr-reviewer`. Single commit.
 
   L-1 of the maximisation plan is **not** next — it opens only
-  after Phases 1-5 of the observability restructure close.
-- **Deep consolidation status**: **completed this handoff — two
-  passes this session**. First pass (commit `50c90bf1`): distilled
-  graduation (9 entries pruned as substance absorbed by PDRs
-  012-023) + experience entry authored. Second pass (commit
-  `8a38ab42`, after PDR-024 + wiring): five upstream Core-review
-  amendments applied (Learned Principle, cold-start step 11,
-  Self-Teaching refinement, CHANGELOG entry, bootstrap drift-check
-  clean) + migration plan archived. Both passes run formally through
-  `consolidate-docs`. No further consolidation due at handoff.
+  after Phases 1–5 of the observability restructure close.
+
+  **Sibling backlog work** (concurrent / not blocking Phase 3):
+  `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`
+  — migrate remaining test files off `loadRuntimeConfig` +
+  `createHttpObservabilityOrThrow` ceremony; flip ESLint
+  `no-restricted-properties` and `no-restricted-imports` from `warn`
+  to `error` when backlog reaches zero. ~34 total violations today.
+- **Deep consolidation status**: **due — new session-level surprises
+  (test-ceremony architectural drift, immediate-fails rule as a
+  first-class artefact, MaxListeners root-cause lineage) and a new
+  current/ plan (test-ceremony-production-factory-audit) landed this
+  session. Check triggers via consolidate-docs next session opener, or
+  execute now if well-bounded.**
 - **Restructure phase map** (from the restructure plan):
   - **Phase 1** Structural skeleton — ADR-162 Proposed, directories,
-    moves, cross-references. **Next action.**
-  - **Phase 2** MVP scope pass — fill high-level plan; author six new
-    `current/` plans + eleven new `future/` plans with promotion
-    triggers.
+    moves, cross-references. ✅ **Complete 2026-04-18** (commit `502af060`).
+  - **Phase 2** MVP scope pass — filled high-level plan; authored 5
+    new `current/` plans + 11 `future/` plans with promotion triggers.
+    ✅ **Complete 2026-04-18** (commit `231046fe`).
   - **Phase 3** Exploration kickoff — two full explorations
     (accessibility at runtime; event schemas for curriculum
-    analytics) + six stubs.
+    analytics) + six stubs. **Next action.**
   - **Phase 4** Executable plan revision — swap L-4a/L-4b; MVP
     classification; cross-refs.
   - **Phase 5** ADR-162 acceptance — land `require-observability-emission`
@@ -214,7 +245,56 @@ git log --oneline --decorate -10
   - **L-DOC initial** expand sentry-node README + write app observability doc.
   - **L-EH initial** `require-error-cause` ESLint rule with expanded
     RuleTester cases.
-- **Recent surprises / corrections (2026-04-18 Practice-track close)**:
+- **Recent surprises / corrections (2026-04-18 observability Phases 1–2 + test hygiene session)**:
+  - **Tests import production factories as ceremony — and it hides
+    bugs.** The session opened with a `MaxListenersExceededWarning`
+    of ambiguous origin; trace-warnings showed Sentry's `init()` at
+    `runtime-sdk.ts:100`. Root cause: integration + e2e tests
+    routinely pulled in `loadRuntimeConfig` and
+    `createHttpObservabilityOrThrow` as incidental infrastructure to
+    satisfy `createApp`'s signature. With a developer-local
+    `.env.local` setting `SENTRY_MODE=sentry`, each test triggered
+    real Sentry init; listeners accumulated across test cases until
+    Node tripped its 10-listener cap. The bug was a symptom of
+    architectural drift, not a Sentry bug. Rule:
+    **tests must never import product code they are not directly
+    testing**.
+  - **`.env.local` silently leaks into tests that look hermetic.**
+    Integration tests passed curated `processEnv` objects — but
+    `loadRuntimeConfig` still calls `resolveEnv` which reads
+    `.env.local` from disk and merges it. Any test that calls
+    `loadRuntimeConfig` is exposed. The fix is to bypass
+    `loadRuntimeConfig` entirely in tests — construct a `RuntimeConfig`
+    literal via a test-helper.
+  - **Symptom-level fixes can violate their own principles.** First
+    attempted fix set `process.env.SENTRY_MODE = 'off'` in
+    `test.setup.ts`. That mutates global state in tests — exactly
+    what ADR-078 forbids. Correction: tests must not touch OR consume
+    `process.env`. New memory entry
+    `feedback_tests_no_global_state.md` captures this.
+  - **Immediate-fails checklist earns first-class status.** Owner
+    codified 6 items for test-reviewer; expanded to 21 covering
+    Boundary, Side-Effect, Mock/Stub, Structural, Pipeline
+    categories. Lives at `.agent/rules/test-immediate-fails.md` with
+    Claude/Cursor adapters and test-reviewer first-pass screen.
+    Complements (not replaces) the existing
+    `no-global-state-in-tests.md`.
+  - **Quality gates encode the checklist at compile time.** Once the
+    rule existed, encoding as ESLint rules in
+    `@oaknational/eslint-plugin-standards` `testRules` was natural:
+    `no-restricted-syntax` (error) for the zero-violation patterns,
+    `no-restricted-properties` + `no-restricted-imports` (warn) for
+    the ~34-violation backlog tracked via the new
+    `test-ceremony-production-factory-audit.plan.md`.
+  - **Production factories can be legitimate subjects under test.**
+    `runtime-config.unit.test.ts` and
+    `http-observability.unit.test.ts` legitimately import the factory
+    they test. The ESLint rule handles this via file-glob allowlists
+    in each workspace's own `eslint.config.ts` — not via a repo-wide
+    rule relaxation. Per-file discipline; exceptions declared
+    explicitly.
+
+- **Recent surprises / corrections (2026-04-18 Practice-track close)** (historical):
   - **Seam definition precedes mechanical migration.** Migration
     plan had ~53 patterns queued for move based on universal-vs-
     local classification. Owner interrupt caught the real seam was
@@ -325,12 +405,14 @@ Carried from 2026-04-17 (still relevant):
     relative to industry convention. Separate deliberation, not a
     Sentry-plan concern. Relevant files: `.agent/directives/testing-strategy.md`,
     ADR-161, ADR-078.
-- **Next safe step**: see **Current objective** above — choose
-  between Option A (observability Phase 1) and Option B (PDR-007
-  authorship). Either is valid; owner selects at session open.
-  Starter statement for the next session is at
-  `temp-session-start.tmp.md` in the repo root, with reading order
-  and carried invariants specified per option.
+- **Next safe step**: open Phase 3 of the observability strategy
+  restructure per **Current objective** above. Primary deliverables:
+  (3) accessibility-observability-at-runtime exploration in full, (4)
+  structured-event-schemas-for-curriculum-analytics exploration in
+  full, plus six exploration stubs. Reviewer: `docs-adr-reviewer`.
+  Single commit. Sibling backlog work on
+  `test-ceremony-production-factory-audit.plan.md` is concurrent and
+  not blocking Phase 3.
 - **PDR-007 landed 2026-04-18** — Core contract redefined as
   "bounded package of files plus required directories." New
   directories `practice-core/decision-records/` (PDRs) and

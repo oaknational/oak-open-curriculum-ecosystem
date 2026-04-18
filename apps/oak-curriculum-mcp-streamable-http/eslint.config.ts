@@ -177,6 +177,39 @@ const config = defineConfig(
       },
     },
     {
+      // Test-ceremony migration backlog (per
+      // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`).
+      // Each file listed here is a known violation of the hermetic-test
+      // boundary rules — either importing a production factory it does not
+      // test (runtime-config / http-observability) or using vi.mock /
+      // vi.stubGlobal / vi.doMock. Delete a line as each file migrates.
+      // Flip to empty allowlist at plan WS5 close.
+      files: [
+        // production-factory imports (not subject under test)
+        'src/oauth-proxy/oauth-proxy-routes.integration.test.ts',
+        'src/handlers-observability.integration.test.ts',
+        'src/app/setup-error-handlers.integration.test.ts',
+        'src/app/oauth-and-caching-setup.unit.test.ts',
+        'src/app/bootstrap-helpers.unit.test.ts',
+        'src/handlers-mcp-span.integration.test.ts',
+        'src/asset-download/asset-download-route.integration.test.ts',
+        'src/check-mcp-client-auth.di.integration.test.ts',
+        'src/server-runtime.unit.test.ts',
+        'src/tool-handler-with-auth.integration.test.ts',
+        'src/handlers.integration.test.ts',
+        // vi.mock family
+        'src/auth/mcp-auth/mcp-auth-clerk.integration.test.ts',
+        'src/correlation/middleware.integration.test.ts',
+        'src/handlers-tool-registration.integration.test.ts',
+        'src/observability/sentry-observability-delegates.unit.test.ts',
+        'src/register-resources-observability.integration.test.ts',
+      ],
+      rules: {
+        'no-restricted-properties': 'off',
+        'no-restricted-imports': 'off',
+      },
+    },
+    {
       files: ['build-scripts/**/*.ts'],
       rules: {
         'no-console': 'off',

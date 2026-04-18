@@ -184,12 +184,16 @@ export const testRules = {
     },
   ],
   // Module-cache / global-state manipulation: prohibited by ADR-078 and
-  // .agent/rules/no-global-state-in-tests.md. Currently `warn` during the
-  // audit-and-migrate backlog per
-  // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`;
-  // escalates to `error` once the backlog is cleared.
+  // .agent/rules/no-global-state-in-tests.md. Applies repo-wide at
+  // `error`. Workspaces carrying existing violations add a per-file
+  // allowlist in their own `eslint.config.ts`; the backlog is therefore
+  // physically visible in the config and each migration is a one-line
+  // deletion. Tracked by
+  // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`.
+  // Aligned with `patterns/warning-severity-is-off-severity.md` (never
+  // warn: fix or allowlist-with-deadline).
   'no-restricted-properties': [
-    'warn',
+    'error',
     {
       object: 'vi',
       property: 'mock',
@@ -211,26 +215,30 @@ export const testRules = {
   ],
   // Production-factory ceremony: tests must not import factories that
   // route through runtime disk/env resolution or real SDK initialisation.
-  // Currently `warn` during the migration backlog tracked by
-  // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`;
-  // escalates to `error` once the backlog is cleared.
+  // Applies at `error`. Workspaces carrying existing violations add a
+  // per-file allowlist in their own `eslint.config.ts`; the backlog is
+  // physically visible in config and each migration deletes a line.
+  // Tracked by
+  // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`.
   //
-  // Workspaces that host the tests FOR these modules add a file-glob
-  // override disabling this rule on their specific runtime-config /
-  // http-observability test files.
+  // Workspaces that host the tests FOR these modules (runtime-config /
+  // http-observability subject-under-test) also declare file-glob
+  // overrides disabling this rule on those specific files.
   'no-restricted-imports': [
-    'warn',
+    'error',
     {
       patterns: [
         {
           group: ['**/runtime-config', '**/runtime-config.js'],
+          allowTypeImports: true,
           message:
-            'Tests must not import loadRuntimeConfig or its siblings — that function reads .env files from disk, merging them into the test input. Construct a RuntimeConfig literal via a test helper (e.g. createMockRuntimeConfig from test-helpers). See .agent/rules/test-immediate-fails.md.',
+            'Tests must not import loadRuntimeConfig or its siblings — that function reads .env files from disk, merging them into the test input. Construct a RuntimeConfig literal via a test helper (e.g. createMockRuntimeConfig from test-helpers). Type-only imports (`import type { RuntimeConfig }`) are permitted. See .agent/rules/test-immediate-fails.md.',
         },
         {
           group: ['**/observability/http-observability', '**/observability/http-observability.js'],
+          allowTypeImports: true,
           message:
-            'Tests must not import createHttpObservability / createHttpObservabilityOrThrow — those factories route through real Sentry initialisation and register process listeners. Inject createFakeHttpObservability from test-helpers/observability-fakes instead. See .agent/rules/test-immediate-fails.md.',
+            'Tests must not import createHttpObservability / createHttpObservabilityOrThrow — those factories route through real Sentry initialisation and register process listeners. Inject createFakeHttpObservability from test-helpers/observability-fakes instead. Type-only imports (`import type { HttpObservability }`) are permitted. See .agent/rules/test-immediate-fails.md.',
         },
       ],
     },
