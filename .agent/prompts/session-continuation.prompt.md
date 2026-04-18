@@ -216,12 +216,15 @@ git log --oneline --decorate -10
   `createHttpObservabilityOrThrow` ceremony; flip ESLint
   `no-restricted-properties` and `no-restricted-imports` from `warn`
   to `error` when backlog reaches zero. ~34 total violations today.
-- **Deep consolidation status**: **due — new session-level surprises
-  (test-ceremony architectural drift, immediate-fails rule as a
-  first-class artefact, MaxListeners root-cause lineage) and a new
-  current/ plan (test-ceremony-production-factory-audit) landed this
-  session. Check triggers via consolidate-docs next session opener, or
-  execute now if well-bounded.**
+- **Deep consolidation status**: **completed this handoff** (commit
+  `5013eb97`). New pattern
+  `patterns/production-factories-in-tests-are-ceremony.md` extracted.
+  ESLint gate severity corrected (warn→error with explicit per-file
+  allowlists as physical backlog). No napkin rotation (under 500-line
+  threshold). No distilled.md graduation (no new ADR/PDR candidates
+  reached sufficient stability this pass). No Practice Core
+  amendments (nothing qualified). Fitness state unchanged (6 hard /
+  7 soft, all owner-deferred per existing posture).
 - **Restructure phase map** (from the restructure plan):
   - **Phase 1** Structural skeleton — ADR-162 Proposed, directories,
     moves, cross-references. ✅ **Complete 2026-04-18** (commit `502af060`).
