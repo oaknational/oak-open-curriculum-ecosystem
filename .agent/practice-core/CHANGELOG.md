@@ -4,6 +4,46 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-18 — Explorations as Durable Design-Space Tier + Active Principles Graduation
+
+- Added **explorations** as a named documentation tier in the Practice
+  Core. Explorations sit sideways between napkin (ephemeral
+  observation) and ADR (committed decision) — option-weighing
+  design-space documents that inform ADRs or plans without being
+  refined rules. The tier filled a documentation gap: between
+  captured observations and committed decisions there was previously
+  no named home for durable research that hadn't yet crystallised
+  into a decision. Host-repo convention: `docs/explorations/` with
+  timestamped filenames.
+- `practice.md` updates: Three Audiences renamed to **Five
+  Audiences** with a new row for the Explore stage; Artefact
+  Locations adds `docs/explorations/`; Artefact Map adds entry for
+  host-repo explorations home; rationale paragraph added explaining
+  explorations sit sideways to the main knowledge flow.
+- `practice-lineage.md` updates: six new Active Principles captured —
+  findings-route-to-lane-or-rejection (review-layer no-smuggled-drops);
+  nothing-unplanned-without-a-promotion-trigger (planning-layer
+  sibling); compressed-neutral-labels-smuggle-scope (generalisation
+  across stretch/deferred/follow-up); implicit-architectural-intent-
+  is-not-enforced-principle (naming is the upgrade path); explorations-
+  sit-between-observation-and-decision (the new tier's principle
+  form). Three new Always-Applied Rules: findings routing; planning
+  trigger discipline; compressed-label correction.
+- `practice-bootstrap.md` updates: new section **Design-Space
+  Explorations** with required frontmatter, document shape,
+  relationship to other tiers, creation triggers, and cross-repo
+  exchange notes.
+- PDR-004 recorded: Explorations as Durable Design-Space Tier. The
+  PDR captures why the tier warrants Core-level naming and carries
+  the graduation intent (stable concepts integrate into the Core
+  trinity as refinements).
+- Motivation: the receiving session established
+  `docs/explorations/` to fill a real gap while reframing a
+  single-branch observability expansion into a project-wide five-
+  axis principle. The reasoning trail that shaped the reframe would
+  not have survived the session without a durable home. Naming the
+  tier in the Core makes the innovation portable.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-17 — Practice Decision Records as Third Peer Directory
 
 - Introduced a new peer directory alongside `.agent/practice-core/`

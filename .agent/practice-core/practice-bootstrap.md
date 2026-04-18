@@ -547,6 +547,68 @@ short description for each pattern.
 repos apply the same three-part bar; adopted patterns move to local
 `.agent/memory/patterns/`.
 
+### Design-Space Explorations (docs/explorations/ or host equivalent)
+
+Explorations are durable option-weighing documents that sit between
+session observations (napkin) and committed decisions (ADRs). They are
+not refinement of napkin entries; they are research-shaped design-space
+analyses that inform which ADR to write or which plan to promote. An
+exploration may remain `active` indefinitely if the question is not yet
+ripe — that is acceptable. An exploration that has reached a
+conclusion but has not graduated to ADR or plan is not.
+
+**Home**: host-repo convention is `docs/explorations/` at the top of
+the documentation tree, with a README defining the shape. Alternative
+locations are valid provided the tier is named explicitly in the host
+repo's practice-index.
+
+**Filename convention**: `YYYY-MM-DD-<kebab-slug>.md`. The date prefix
+preserves chronological order without requiring metadata reads.
+
+**Required frontmatter**:
+
+```yaml
+---
+title: {Title}
+date: YYYY-MM-DD
+status: active                       # or informed-adr-<N> / informed-plan-<name> /
+                                     # superseded-by-<ref> / undecided-pending-<trigger>
+---
+```
+
+**Document shape**:
+
+1. **Frontmatter** as above.
+2. **Problem statement** — what's under exploration and why now.
+3. **Options considered** — each with pros, cons, evidence, failure modes.
+4. **Research questions still open** — what we don't yet know.
+5. **Informs** — the ADR / plan / decision this feeds into if known.
+6. **References** — external sources cited.
+
+**Relationship to other tiers**: napkin captures observations;
+explorations weigh options; ADRs commit decisions; plans execute. The
+exploration survives as the evidence trail the ADR or plan cites; it
+does not substitute for either. A single session may produce multiple
+explorations as different research questions surface; each gets its
+own timestamped file.
+
+**When to create one**: whenever design-space work requires more
+durability than a napkin entry but is not yet ready to commit to a
+decision. Trigger examples: "should we dual-export to a second
+telemetry backend?"; "what's the event schema shape data scientists
+actually need?"; "how far does vendor X take us across these axes
+before we hit a gap?"
+
+**When NOT to create one**: routine implementation decisions with
+obvious right answers; session-internal observations (use the napkin);
+committed decisions (use an ADR); execution instructions (use a plan).
+
+**Cross-repo exchange**: explorations are typically too host-specific
+to travel verbatim, but the *shape* of explorations is portable — an
+outgoing broadcast describing the explorations tier (problem, home,
+frontmatter, document shape, relationship to other tiers) is a
+legitimate Practice Context contribution.
+
 ### Consolidation Workflow
 
 The consolidation command drives the Knowledge Flow's graduation cycle —

@@ -23,7 +23,7 @@ The repository historically used a Greek-nomenclature biological model (Moria/Hi
    - `.agent/roles/**`
    - `.claude/**`
    - `.vscode/**`
-   - `docs/architecture/greek-ecosystem-deprecation.md`
+   - `docs/architecture/historical/greek-ecosystem-deprecation.md`
 
 ## Consequences
 
@@ -40,4 +40,4 @@ The repository historically used a Greek-nomenclature biological model (Moria/Hi
 
 - Plan: `.agent/plans/standardising-architecture-part2.md`
 - High-level: `.agent/plans/standardising-architecture-high-level-plan.md`
-- Reference: `docs/architecture/greek-ecosystem-deprecation.md`
+- Reference: `docs/architecture/historical/greek-ecosystem-deprecation.md`

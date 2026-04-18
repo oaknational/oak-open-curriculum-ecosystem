@@ -202,6 +202,9 @@ adapter formats:
 - Where the reviewer layer is installed, invoke code reviewers after non-trivial changes
 - Apps are thin interfaces; never duplicate domain logic from libraries/SDKs
 - Architectural excellence over expediency — no cross-layer shortcuts
+- Reviewer findings route to a lane or a rejection; never deferred without a home
+- Every `future/` plan carries a named, testable promotion trigger
+- Compressed neutral labels ("stretch", "deferred", "follow-up") are corrected to explicit forms
 
 ### The Knowledge Flow
 
@@ -614,3 +617,42 @@ validated across 3+ repos.
   depend on creates a broken install that false-greens on parity checks. The
   order is: canonical → activation → validation. Reversing it is a structural
   bug.
+- **Findings route to a lane or a rejection.** Every reviewer finding is
+  ACTIONED (with the edit cited), attached to a named owning lane with a
+  specific scheduled edit, or explicitly REJECTED with written rationale.
+  "Deferred as follow-up" without a named home is a smuggled drop. Parking
+  accumulates silently; routing surfaces structural gaps. Applies at review
+  layer and at planning layer (see next principle).
+- **Nothing unplanned without a promotion trigger.** After gap analysis or
+  scope-spanning audit, every identified item becomes: actioned now, MVP
+  (`current/` plan with acceptance criteria), future (`future/` plan with
+  named testable promotion trigger), or rejected with rationale. Items
+  without triggers are speculation dressed as plans. The trigger-naming
+  exercise frequently reveals that "future" items are either MVP in
+  disguise, or items nobody genuinely needs.
+- **Compressed neutral labels smuggle scope and uncertainty.**
+  "Stretch", "deferred", "follow-up", "nice to have", "maybe later"
+  sound procedurally neutral but hide scope debt and uncertainty the
+  author could not resolve. The corrective is to write the explicit
+  form: "un-started because pacing limited us"; "routed to lane X
+  because Y is the acceptance criterion"; "watchlist pending trigger
+  Z." Explicit forms are heavier but cannot hide weight; the weight
+  often surfaces a genuine gap that needed filling or an uncertainty
+  the author had been avoiding.
+- **Implicit architectural intent is not enforced principle.** Adapter
+  patterns, dependency injection, and boundary separation may
+  structurally enable an architectural property (e.g. vendor
+  independence) without naming it as a first-class principle. The
+  naming is the upgrade path — it turns accidental architecture into a
+  testable invariant with a conformance gate. When a structural
+  property matters, write it down with a test, not just with an
+  implication. Implicit intent plus adapter code is not enforcement.
+- **Explorations sit between observation and decision.** Between napkin
+  (ephemeral observation) and ADR (committed decision) sits a durable
+  tier: option-weighing design-space documents that inform ADRs or
+  plans without being refined rules. Explorations may remain `active`
+  indefinitely if the question is not yet ripe. The knowledge flow has
+  captured → distilled → graduated as its main axis; explorations are
+  the sideways tier that carries the reasoning trail ADRs compress
+  out. Host-repo home convention: `docs/explorations/` with
+  timestamped filenames.

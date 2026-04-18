@@ -17,7 +17,7 @@ The Oak Curriculum SDK serves multiple consuming applications (HTTP MCP server, 
 The canonical URL generation logic was scattered across:
 
 - HTTP MCP server (`apps/http-mcp-server/src/url-helpers.ts`)
-- Former OpenAI connector surface (directory subsequently removed; see `docs/architecture/openai-connector-deprecation.md`)
+- Former OpenAI connector surface (directory subsequently removed; see `docs/architecture/historical/openai-connector-deprecation.md`)
 - Various test files
 
 ## Decision

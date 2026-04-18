@@ -127,7 +127,7 @@ graph LR
     P -->|"inform"| W
 ```
 
-### Three Audiences
+### Five Audiences
 
 | Stage        | Artefact                                | Audience                                | Fitness governor                                                                                  |
 | ------------ | --------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------- |
@@ -136,11 +136,16 @@ graph LR
 | **Graduate** | ADRs, governance docs, READMEs, TSDoc   | Everyone — humans and agents            | Per-file fitness frontmatter → split by responsibility                                            |
 | **Enforce**  | Rules, directives, always-applied rules | All agents, automatically               | `fitness_line_target`/`fitness_line_limit` frontmatter on directives (three-zone fitness model)    |
 | **Inform**   | Code patterns                           | Engineers facing a recognised situation  | Barrier: broadly applicable, proven, recurring, stable. Practice-relevant patterns may travel via the exchange pack |
+| **Explore**  | Design-space explorations               | Future decision-makers (human + agent)   | Host-repo fitness on the explorations file; stable `active` / `informed-adr-<N>` / `informed-plan-<name>` / `superseded-by-<ref>` status lines |
 
 Not everything in the napkin survives distillation, and not everything distilled graduates to
-permanent documentation. Each transition raises the bar. The `/jc-consolidate-docs` command drives
-the graduation step — it checks which distilled entries have settled into permanent Practice
-artefacts and moves them to their discoverable permanent home.
+permanent documentation. Each transition raises the bar. Explorations sit **sideways** — they are
+option-weighing design-space documents between observation and decision. An exploration may inform
+an ADR, inform a plan, or remain `active` indefinitely pending a triggering event. They are
+durable (unlike napkin) and structured (unlike chat), and their conclusions graduate to ADRs or
+plans — the exploration file remains as the reasoning trail the decision cites. The
+`/jc-consolidate-docs` command drives graduation — it checks which distilled entries have settled
+into permanent Practice artefacts and moves them to their discoverable permanent home.
 
 ### Fitness Functions
 
@@ -187,6 +192,7 @@ hadn't surfaced — different work, different mistakes, different discoveries.
 - **Rules** — `.agent/directives/principles.md` (authoritative policies) + platform trigger
   adapters (e.g. `.cursor/rules/*.mdc`, `.claude/rules/*.md`)
 - **Experience** — `.agent/experience/` — qualitative records of shifts in understanding
+- **Explorations** — `docs/explorations/` (or host-repo equivalent) — durable design-space documents; cited by ADRs and plans
 
 ## The Review System
 
@@ -270,6 +276,7 @@ graph LR
 | `.agent/commands/`                                                         | Canonical commands (platform-agnostic)                                                                                                                          |
 | `.agent/prompts/`                                                          | Domain-specific handover prompts — stateful session context (local adaptation)                                                                                  |
 | `.agent/research/`                                                         | Research documents and analysis                                                                                                                                 |
+| `docs/explorations/` (or host equivalent)                                  | Design-space explorations — option-weighing documents that inform ADRs and plans                                                                                |
 | `.agent/reference/` (or equivalent)                                        | Supporting reference material                                                                                                                                   |
 | `.cursor/`, `.claude/`, `.gemini/`, `.github/`, `.agents/`, `.codex/`      | Platform adapters: thin wrappers and project config referencing canonical content                                                                                |
 | Repo's ADR directory                                                       | Permanent architectural decision records (path varies by repo; see [practice-index](../practice-index.md))                                                      |

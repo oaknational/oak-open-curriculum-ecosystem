@@ -97,3 +97,4 @@ marked as host-local context and not carrying decision substance.
 | [PDR-001](PDR-001-location-of-practice-decision-records.md) | Location of Practice Decision Records | Accepted |
 | [PDR-002](PDR-002-pedagogical-reinforcement-in-foundational-practice-docs.md) | Pedagogical Reinforcement in Foundational Practice Docs | Accepted |
 | [PDR-003](PDR-003-sub-agent-protection-of-foundational-practice-docs.md) | Sub-Agent Protection of Foundational Practice Docs | Accepted |
+| [PDR-004](PDR-004-explorations-as-durable-design-space-tier.md) | Explorations as Durable Design-Space Tier | Accepted |

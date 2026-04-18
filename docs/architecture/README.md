@@ -3,21 +3,21 @@ boundary: B2-Architecture
 doc_role: index
 authority: architecture-navigation
 status: active
-last_reviewed: 2026-03-28
+last_reviewed: 2026-04-18
 ---
 
 # Architecture
 
-**Last Updated**: 2026-03-28
+**Last Updated**: 2026-04-18
 **Status**: Active architectural index
 
 ## Start Here
 
-1. **→ OpenAPI Pipeline Architecture** ([openapi-pipeline.md](./openapi-pipeline.md)) - **Read this first** to understand the core pattern
-2. **→ Current Architecture Overview (this page)** - Standard structure and boundaries
-3. **→ Historical Context: Greek Ecosystem Deprecation** ([deprecation doc](./greek-ecosystem-deprecation.md))
+1. **→ OpenAPI Pipeline Architecture** ([openapi-pipeline.md](./openapi-pipeline.md)) — **read this first** to understand the core pattern.
+2. **→ Current Architecture Overview** (this page) — standard structure and boundaries.
+3. **→ [ADR index](./architectural-decisions/)** — the architectural source of truth; start from the ADRs listed below.
 
-ADRs define how the system should work and are the architectural source of truth. Start with the [ADR index](./architectural-decisions/), then these foundational decisions that shape the entire codebase:
+The foundational ADRs that shape the entire codebase:
 
 - [ADR-029](./architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
 - [ADR-030](./architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
@@ -75,4 +75,17 @@ ADRs define how the system should work and are the architectural source of truth
 - [Architectural Refinements Plan (completed)](../../.agent/plans/archive/completed/architectural-refinements-plan.md)
 - [Workspace Structure Options (completed analysis)](../../.agent/plans/archive/completed/workspace-structure-options.md)
 - [Serverless Hosting Plan (deferred)](../../.agent/plans/icebox/serverless-hosting-plan.md)
-- [OpenAI Connector Alias Removal](./openai-connector-deprecation.md)
+
+## Historical Context
+
+Prior architectural states retained for traceability — evidence trails
+cited from current ADRs, not current guidance. See
+[historical/README.md](./historical/README.md) for scope and
+contents. Do not read these to learn how the system works today.
+
+## Related Design Space
+
+- [Explorations](../explorations/) — option-weighing and research
+  documents that sit between session observations and committed ADRs.
+  Some inform ADRs that live in this directory; others inform plans
+  that live under `.agent/plans/`.
