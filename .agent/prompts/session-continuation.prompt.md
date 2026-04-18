@@ -63,22 +63,25 @@ git log --oneline --decorate -10
   branch.
 - **Branch**: `feat/otel_sentry_enhancements`.
 - **Active executable plan**:
-  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-maximisation-mcp.plan.md`
+  - `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
     (authoritative execution source for the MCP branch).
 - **Strategic parent brief**:
-  - `.agent/plans/architecture-and-infrastructure/future/sentry-observability-maximisation.plan.md`
+  - `.agent/plans/observability/future/sentry-observability-maximisation.plan.md`
     (full envelope across both runtimes).
 - **Parent foundation authority**:
   - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
     (closure lane — foundation done 2026-04-17; alert rule 521866 validated).
+    Remains in `architecture-and-infrastructure/` per the 2026-04-18
+    observability restructure (parent foundation is cross-cutting, not
+    observability-scoped).
 - **Superseded**:
-  - `.agent/plans/architecture-and-infrastructure/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md`
+  - `.agent/plans/observability/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md`
     — replaced 2026-04-17 by the maximisation pivot. Do not use for
     decisions.
 - **Related**:
-  - `.agent/plans/architecture-and-infrastructure/active/sentry-observability-translation-crosswalk.plan.md`
+  - `.agent/plans/observability/active/sentry-observability-translation-crosswalk.plan.md`
     (will be updated to reference the maximisation plan as successor).
-  - `.agent/plans/architecture-and-infrastructure/active/search-observability.plan.md`
+  - `.agent/plans/observability/current/search-observability.plan.md`
     (sibling; owns ES-PROP + CLI-metrics; search branch will gain its own
     maximisation plan).
   - `.agent/plans/architecture-and-infrastructure/future/codex-mcp-server-compatibility.plan.md`

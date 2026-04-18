@@ -24,11 +24,11 @@ observability closure work after PR #73 merged to `main` on 2026-03-31.
 1. [sentry-otel-integration.execution.plan.md](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
 2. [sentry-canonical-alignment.plan.md](../../plans/architecture-and-infrastructure/archive/completed/sentry-canonical-alignment.plan.md)
    (archived 2026-04-17 — read for historical context on the child-plan scope)
-3. [sentry-observability-maximisation-mcp.plan.md](../../plans/architecture-and-infrastructure/active/sentry-observability-maximisation-mcp.plan.md)
-   (executable) and [future/sentry-observability-maximisation.plan.md](../../plans/architecture-and-infrastructure/future/sentry-observability-maximisation.plan.md)
+3. [sentry-observability-maximisation-mcp.plan.md](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
+   (executable) and [future/sentry-observability-maximisation.plan.md](../../plans/observability/future/sentry-observability-maximisation.plan.md)
    (strategic parent) — replaces the archived `sentry-observability-expansion.plan.md` from 2026-04-17
-4. [search-observability.plan.md](../../plans/architecture-and-infrastructure/active/search-observability.plan.md)
-5. [sentry-observability-translation-crosswalk.plan.md](../../plans/architecture-and-infrastructure/active/sentry-observability-translation-crosswalk.plan.md)
+4. [search-observability.plan.md](../../plans/observability/current/search-observability.plan.md)
+5. [sentry-observability-translation-crosswalk.plan.md](../../plans/observability/active/sentry-observability-translation-crosswalk.plan.md)
 6. [ADR-143](../../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
 7. [ADR-158](../../../docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md)
 

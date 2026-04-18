@@ -166,7 +166,7 @@ Consequences:
   [`docs/operations/sentry-cli-usage.md § "Pipeline boundary: where
 sentry-cli runs — and where it does not"`](../../operations/sentry-cli-usage.md#pipeline-boundary-where-sentry-cli-runs--and-where-it-does-not).
 - Cross-referenced from
-  [`sentry-observability-maximisation-mcp.plan.md § L-7 Release + commits + deploy linkage`](../../../.agent/plans/architecture-and-infrastructure/active/sentry-observability-maximisation-mcp.plan.md).
+  [`sentry-observability-maximisation-mcp.plan.md § L-7 Release + commits + deploy linkage`](../../../.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md).
 - Will be cross-referenced from
   [`clerk-cli-adoption.plan.md`](../../../.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md)
   when Clerk CLI work lands.

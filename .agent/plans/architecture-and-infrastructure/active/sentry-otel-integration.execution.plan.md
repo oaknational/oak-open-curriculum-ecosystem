@@ -8,6 +8,11 @@ overview: >
   Insights, and defines measurable success evidence. Blocker for Milestone 2
   (Open Public Alpha).
 source_strategy: "../future/observability-and-quality-metrics.plan.md"
+child_plans:
+  - "../../observability/active/sentry-observability-maximisation-mcp.plan.md"
+  - "../../observability/current/search-observability.plan.md"
+  - "../../observability/active/sentry-observability-translation-crosswalk.plan.md"
+  - "../../observability/future/sentry-observability-maximisation.plan.md"
 todos:
   - id: audit-current-state
     content: "Audit the existing logger, app runtime, and starter-app-spike observability patterns"
@@ -244,8 +249,8 @@ on this same branch before the PR opens.
 1. **In-scope maximisation lanes on this same branch / PR.** The PR
    scope covers both the closed foundation above AND the MCP-server
    maximisation lanes owned by
-   [sentry-observability-maximisation-mcp.plan.md](./sentry-observability-maximisation-mcp.plan.md)
-   (strategic parent: [../future/sentry-observability-maximisation.plan.md](../future/sentry-observability-maximisation.plan.md)),
+   [sentry-observability-maximisation-mcp.plan.md](../../observability/active/sentry-observability-maximisation-mcp.plan.md)
+   (strategic parent: [observability/future/sentry-observability-maximisation.plan.md](../../observability/future/sentry-observability-maximisation.plan.md)),
    which supersedes the archived `sentry-observability-expansion.plan.md`
    and broadens the scope to close every available Sentry product loop
    across the MCP app (server + browser widget). Each of the old
@@ -261,9 +266,9 @@ on this same branch before the PR opens.
 2. **Explicitly deferred to later sessions / PRs**:
    - Extend Search CLI observability beyond the completed foundation,
      including Elastic search operation integration:
-     [search-observability.plan.md](./search-observability.plan.md).
+     [search-observability.plan.md](../../observability/current/search-observability.plan.md).
    - Translation completeness:
-     [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md).
+     [sentry-observability-translation-crosswalk.plan.md](../../observability/active/sentry-observability-translation-crosswalk.plan.md).
 
 Current user-directed sequence:
 
@@ -300,14 +305,14 @@ via the project's Slack integration. That proves the wiring claim the
 2026-04-16 evidence bundle was written against. Production-grade
 rule-shape hardening (env/severity gates, shorter frequency, a
 production alerts channel) is tracked as non-blocking follow-up in
-[sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
+[sentry-observability-expansion.plan.md](../../observability/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md)
 EXP-F. No further foundation code work is required on this branch.
 Closure record: [`evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md`](../evidence/2026-04-16-http-mcp-sentry-validation/alerting-baseline-enumeration-note.md)
 § "Outcome (validated 2026-04-17)".
 
 The branch itself is **not** merge-ready at foundation closure: the
 in-scope MCP-server maximisation lanes owned by
-[sentry-observability-maximisation-mcp.plan.md](./sentry-observability-maximisation-mcp.plan.md)
+[sentry-observability-maximisation-mcp.plan.md](../../observability/active/sentry-observability-maximisation-mcp.plan.md)
 (supersedes the archived `sentry-observability-expansion.plan.md`)
 still run on this same branch before the PR opens. See
 [Companion Continuation Order](#companion-continuation-order) for
@@ -486,9 +491,9 @@ closure):**
    acceptance boundary on the live path.
 3. Companion plans are authoritative for scope intentionally removed from the
    narrowed child plan:
-   - [sentry-observability-expansion.plan.md](./sentry-observability-expansion.plan.md)
-   - [search-observability.plan.md](./search-observability.plan.md)
-   - [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md)
+   - [sentry-observability-expansion.plan.md](../../observability/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md)
+   - [search-observability.plan.md](../../observability/current/search-observability.plan.md)
+   - [sentry-observability-translation-crosswalk.plan.md](../../observability/active/sentry-observability-translation-crosswalk.plan.md)
 4. The review checkpoint is authoritative for whether the handover bundle has
    been reviewed and cleared:
    [sentry-otel-foundation.review-checkpoint-2026-03-27.md](./sentry-otel-foundation.review-checkpoint-2026-03-27.md)

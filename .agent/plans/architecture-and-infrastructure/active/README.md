@@ -3,12 +3,17 @@
 Active execution lives here. The Sentry + OpenTelemetry foundation is the
 immediate blocker for Open Public Alpha readiness.
 
+> **Observability plans moved 2026-04-18.** Every observability-scoped
+> plan now lives under [`../../observability/`](../../observability/)
+> per the
+> [observability strategy restructure](../current/observability-strategy-restructure.plan.md).
+> The parent foundation plan (`sentry-otel-integration.execution.plan.md`)
+> stays here because it is cross-cutting (shared Sentry + OTel
+> primitives), not observability-scoped.
+
 | Plan | Scope | Status |
 |---|---|---|
-| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation (parent plan) | Foundation (steps 1–5 of "Road to Provably Working Sentry") **DONE** 2026-04-17. Maximisation lanes run on the same branch before PR. Branch: `feat/otel_sentry_enhancements`. |
-| [sentry-observability-maximisation-mcp.plan.md](./sentry-observability-maximisation-mcp.plan.md) | MCP server + widget: close every available Sentry product loop (errors, logs, traces, performance, profiling, measurement, release linkage, feedback, feature-flag scaffolding, AI scaffolding, widget Sentry, alerts, runbooks); cross-cutting L-EH (Result<T, E> + cause preservation via ESLint) and L-DOC (documentation coverage). | Active — ready for fresh session. Strategic parent: [../future/sentry-observability-maximisation.plan.md](../future/sentry-observability-maximisation.plan.md). Supersedes `sentry-observability-expansion.plan.md` (archived 2026-04-17 under `../archive/superseded/`). |
-| [sentry-observability-translation-crosswalk.plan.md](./sentry-observability-translation-crosswalk.plan.md) | Lossless mapping from superseded broad plan to current plan set | Reference — crosswalk audit complete. Update pending: reference the maximisation plan as the authoritative successor. |
-| [search-observability.plan.md](./search-observability.plan.md) | End-to-end search observability: CLI Sentry runtime, Elasticsearch operations, retrieval quality, trace propagation | Pending — deferred to the next branch (Search CLI maximisation mirrors on that branch). |
+| [sentry-otel-integration.execution.plan.md](./sentry-otel-integration.execution.plan.md) | Shared Sentry + OTel foundation (parent plan) | Foundation (steps 1–5 of "Road to Provably Working Sentry") **DONE** 2026-04-17. Maximisation lanes run on the same branch before PR. Branch: `feat/otel_sentry_enhancements`. Child lanes live in [`../../observability/`](../../observability/). |
 
 Build tooling:
 

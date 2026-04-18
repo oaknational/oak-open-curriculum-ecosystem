@@ -17,8 +17,8 @@ branch: "feat/otel_sentry_enhancements"
 todos:
   - id: phase-1-structural-skeleton
     content: "Phase 1: ADR-162 Proposed, docs/explorations/ + README (done — session report is inaugural entry), plans/observability/ + lifecycle sub-dirs + README, move six existing observability plans, update cross-references (session prompt, crosswalk, high-level-plan, archived-plan back-pointers)."
-    status: pending
-    priority: next
+    status: completed
+    note: "Executed 2026-04-18. ADR-162 Proposed at docs/architecture/architectural-decisions/162-observability-first.md; observability/ directory tree + README + high-level-observability-plan.md skeleton created; five git mv moves applied (sentry-otel-integration.execution.plan.md deliberately not moved); cross-reference sweep returned zero stale paths."
   - id: phase-2-mvp-scope-pass
     content: "Phase 2: fill high-level-observability-plan.md (MVP across five axes, launch criteria, plan map). Author six new current/ plans (observability-events-workspace, synthetic-monitoring, security-observability, accessibility-observability, multi-sink-vendor-independence-conformance — search-observability already moved). Author eleven new future/ plans each with promotion trigger."
     status: pending
@@ -50,7 +50,7 @@ isProject: true
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
 **Last Updated**: 2026-04-18
-**Status**: 🟡 PLANNING — ready to begin Phase 1
+**Status**: 🟢 Phase 1 complete 2026-04-18; Phases 2–5 pending
 **Branch**: `feat/otel_sentry_enhancements`
 **Session rationale**: `docs/explorations/2026-04-18-observability-strategy-and-restructure.md`
 
@@ -217,28 +217,31 @@ skeleton in place; `.gitkeep` files in empty sub-dirs if needed.
 
 ### P1.4 Move six existing observability plans
 
-**Moves** (use `git mv`):
+**Status**: ✅ **Executed 2026-04-18** (the paths below are historical
+record of the move; they do not represent live references).
 
-1. `architecture-and-infrastructure/active/sentry-observability-maximisation-mcp.plan.md`
-   → `observability/active/sentry-observability-maximisation-mcp.plan.md`.
-2. `architecture-and-infrastructure/active/search-observability.plan.md`
-   → `observability/current/search-observability.plan.md`
+**Moves performed** (via `git mv`; source paths were under the
+architecture-and-infrastructure collection prior to 2026-04-18):
+
+1. `sentry-observability-maximisation-mcp.plan.md`
+   → [`observability/active/sentry-observability-maximisation-mcp.plan.md`](../../observability/active/sentry-observability-maximisation-mcp.plan.md).
+2. `search-observability.plan.md`
+   → [`observability/current/search-observability.plan.md`](../../observability/current/search-observability.plan.md)
    (lifecycle change: `active/` → `current/` as it's no longer on this
-   branch's critical path but is the next-branch priority). **Confirm
-   with owner** whether `current/` or `active/` is the right lifecycle
-   here — "active" in the session report framing implies MVP, but the
-   existing `active/` placement was for branch-execution work.
-3. `architecture-and-infrastructure/active/sentry-observability-translation-crosswalk.plan.md`
-   → `observability/active/sentry-observability-translation-crosswalk.plan.md`.
-4. `architecture-and-infrastructure/future/sentry-observability-maximisation.plan.md`
-   → `observability/future/sentry-observability-maximisation.plan.md`.
-5. `architecture-and-infrastructure/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md`
-   → `observability/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md`.
-6. `architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
-   — **DO NOT MOVE**. This is the parent foundation plan that spans both
-   observability and the broader OTel integration; it retains its
-   architecture-and-infrastructure home. Instead, add a cross-reference
-   from `observability/README.md` back to it.
+   branch's critical path but is the next-branch priority). Owner
+   confirmed `current/` as the correct lifecycle 2026-04-18.
+3. `sentry-observability-translation-crosswalk.plan.md`
+   → [`observability/active/sentry-observability-translation-crosswalk.plan.md`](../../observability/active/sentry-observability-translation-crosswalk.plan.md).
+4. `sentry-observability-maximisation.plan.md` (strategic brief)
+   → [`observability/future/sentry-observability-maximisation.plan.md`](../../observability/future/sentry-observability-maximisation.plan.md).
+5. `sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md`
+   → [`observability/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md`](../../observability/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md).
+6. [`architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`](../active/sentry-otel-integration.execution.plan.md)
+   — **NOT MOVED** (as specified). This is the parent foundation plan
+   that spans both observability and the broader OTel integration; it
+   retains its architecture-and-infrastructure home. Cross-reference
+   from [`observability/README.md`](../../observability/README.md)
+   added.
 
 **Cross-reference updates** after moves:
 

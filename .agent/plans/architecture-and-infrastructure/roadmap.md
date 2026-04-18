@@ -33,11 +33,14 @@ Lane indexes:
   deployment evidence bundle.
 - Foundation closure is done (2026-04-17). The next in-branch implementation
   lane is the MCP-server-confined executable plan
-  [active/sentry-observability-maximisation-mcp.plan.md](active/sentry-observability-maximisation-mcp.plan.md)
-  (strategic parent: [future/sentry-observability-maximisation.plan.md](future/sentry-observability-maximisation.plan.md)),
+  [`observability/active/sentry-observability-maximisation-mcp.plan.md`](../observability/active/sentry-observability-maximisation-mcp.plan.md)
+  (strategic parent: [`observability/future/sentry-observability-maximisation.plan.md`](../observability/future/sentry-observability-maximisation.plan.md)),
   which supersedes the archived `sentry-observability-expansion.plan.md`.
+  Observability plans moved to [`../observability/`](../observability/) on 2026-04-18
+  per the
+  [observability strategy restructure](current/observability-strategy-restructure.plan.md).
 - Broader search observability work is tracked in
-  [active/search-observability.plan.md](active/search-observability.plan.md)
+  [`observability/current/search-observability.plan.md`](../observability/current/search-observability.plan.md)
   and is deferred to the next branch — the Search CLI maximisation mirror
   opens on that branch after the MCP branch merges.
 - Cross-app config standardisation and security dependency triage remain the
@@ -95,10 +98,10 @@ Phase 4: Quality/operations hardening                 📋 future
 - Companion prompt:
   [../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md](../../prompts/architecture-and-infrastructure/sentry-otel-foundation.prompt.md)
 - Immediate next lane (same branch):
-  [active/sentry-observability-maximisation-mcp.plan.md](active/sentry-observability-maximisation-mcp.plan.md)
+  [`observability/active/sentry-observability-maximisation-mcp.plan.md`](../observability/active/sentry-observability-maximisation-mcp.plan.md)
   — closes every Sentry product loop for the MCP app before PR.
 - Strategic envelope parent:
-  [future/sentry-observability-maximisation.plan.md](future/sentry-observability-maximisation.plan.md)
+  [`observability/future/sentry-observability-maximisation.plan.md`](../observability/future/sentry-observability-maximisation.plan.md)
 - Done when:
   the HTTP MCP server has the full maximised observability surface (Phase 1–4
   of the MCP plan closed), the Search CLI maximisation mirror opens on its

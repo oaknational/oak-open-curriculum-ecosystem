@@ -75,6 +75,7 @@ New pattern extracted:
 Evidence sections appended to two existing patterns
 (`ground-before-framing.md`, `test-claim-assertion-parity.md`) with
 today's second instances. Full reviewer register carried in
-`.agent/plans/architecture-and-infrastructure/active/sentry-observability-maximisation-mcp.plan.md`
+`.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
+(relocated from `architecture-and-infrastructure/active/` 2026-04-18 per the observability restructure)
 §A.6. Outgoing broadcast at
 `.agent/practice-context/outgoing/findings-route-to-lane-or-rejection.md`.
