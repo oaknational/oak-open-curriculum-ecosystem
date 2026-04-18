@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-17.md`
-(sessions 2026-02-10 to 2026-04-17).
+`napkin-2026-02-24.md` through `napkin-2026-04-18.md`
+(sessions 2026-02-10 to 2026-04-18).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -114,8 +114,25 @@ context with no natural permanent home.
   reviewer per layer (domain-semantics, docs/ADR mesh, code
   polish); expect disjoint findings. See pattern
   `patterns/route-reviewers-by-abstraction-layer.md`.
+- **Compressed neutral labels smuggle scope and uncertainty**
+  ("stretch", "deferred", "follow-up", "maybe later"). Corrective:
+  write the explicit form. See patterns
+  `findings-route-to-lane-or-rejection.md` (review layer) and
+  `nothing-unplanned-without-a-promotion-trigger.md` (planning layer).
+- **Nothing unplanned without a promotion trigger**: every `future/`
+  plan carries a named, testable promotion trigger. See pattern
+  `patterns/nothing-unplanned-without-a-promotion-trigger.md`.
 
 ## Architecture (Agent Infrastructure)
+
+- **Implicit architectural intent is not enforced principle**.
+  Adapters + DI + boundary separation may structurally enable a
+  property (e.g. vendor independence) without naming it. Naming is
+  the upgrade path — turns accidental architecture into a testable
+  invariant. Materialised 2026-04-18: vendor-independence was
+  implicit in ADR-078 / 143 / 154 but unnamed until ADR-162
+  (scheduled). Rule: when a structural property matters, write it
+  down with a test, not an implication.
 
 - **Full triplet portability requires 7 adapter types**: Cursor
   agents + skills + rules, Claude Code agents + rules, Codex
@@ -154,28 +171,22 @@ context with no natural permanent home.
 - `server.e2e.test.ts` has a hardcoded aggregated tools
   list — must be updated when adding new aggregated tools
 - **Test pyramid gap: pieces vs composition**: unit + E2E
-  tests can all pass while the integrated product fails. If
-  a feature spans multiple modules (e.g. MCP tool → SDK →
-  host rendering), add a composition test that proves the
-  chain, not just the individual links. **Materialised
-  2026-04-12**: 39 files of knip/depcruise cleanup broke the
-  MCP App UI; all existing tests passed. Fixed by adding
-  `mcp-app-composition.e2e.test.ts` (MCP client SDK lifecycle
-  test). Distilled learnings without enforcement mechanisms
-  are advisory — the composition test IS the enforcement.
+  tests can all pass while the integrated product fails. For
+  features spanning multiple modules (MCP tool → SDK → host),
+  add a composition test. Materialised 2026-04-12:
+  `mcp-app-composition.e2e.test.ts` caught knip/depcruise
+  cleanup that broke the UI — the composition test IS the
+  enforcement.
 
 - **Module-level state in tests = integration, not unit**:
   any test that touches module-level singletons with IO must
   be `*.integration.test.ts`, even if it injects DI fakes
   for the new behaviour.
-- **Supertest is E2E, not integration**: supertest creates an
-  in-process HTTP server with real socket IO. By the testing
-  strategy definitions, this is an E2E test. The existing
-  `error-handling.integration.test.ts` using supertest is a
-  pre-existing misclassification. For middleware composition
-  tests, call Express directly with mock objects — no HTTP,
-  no IO. Materialised 2026-04-13: test-reviewer caught this
-  during pre-implementation review of Gap 2.
+- **Supertest is E2E, not integration**: supertest's in-process
+  HTTP server does real socket IO. Existing
+  `error-handling.integration.test.ts` is a pre-existing
+  misclassification. For middleware tests, call Express directly
+  with mocks.
 - **Supertest E2E has a transport blind spot**: supertest
   tests JSON-RPC but not SSE transport serialisation. For
   MCP servers, the transport layer IS part of the product

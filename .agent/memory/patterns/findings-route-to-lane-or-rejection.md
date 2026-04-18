@@ -81,6 +81,9 @@ legitimate home; "deferred without a gate" is not.
 
 ## Related Patterns
 
+- `nothing-unplanned-without-a-promotion-trigger.md` — the planning-layer
+  sibling. Same "no smuggled drops" principle applied to planning-level
+  decisions rather than to reviewer findings.
 - `route-reviewers-by-abstraction-layer.md` — which reviewers to invoke.
 - `reviewer-widening-is-always-wrong.md` — when to reject a reviewer's
   specific recommendation.
@@ -88,3 +91,21 @@ legitimate home; "deferred without a gate" is not.
   useful findings in the first place.
 - `review-intentions-not-just-code.md` — review before implementation,
   where findings have more lanes available to route to.
+
+## Further Evidence
+
+**2026-04-18 Observability restructure** (commit `2319a614`). A
+comprehensive gap analysis surfaced fourteen unplanned observability
+items. The same "no smuggled drops" principle that governs review
+findings was applied at the planning layer: every item was absorbed
+into either a MVP `current/` plan or a `future/` plan with a named,
+testable promotion trigger. No item was parked as a vague "future
+enhancement." The exercise of routing each item surfaced procedural
+gaps that vague-backlog framing would have hidden (e.g. that
+"business metrics pipeline" was actually MVP, not future; that
+"synthetic monitoring" split into an MVP narrow scope and a future
+broader exploration). This is the pattern applied one level up the
+abstraction hierarchy, validating the underlying principle across
+two different artefact types (review findings, planning items).
+Extracted as its own pattern at
+`patterns/nothing-unplanned-without-a-promotion-trigger.md`.
