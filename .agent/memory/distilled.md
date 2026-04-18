@@ -61,23 +61,9 @@ context with no natural permanent home.
 - **Lead with narrative, not infrastructure**: on a multi-workstream
   initiative, write the ADR and README first. WS-0 (narrative) →
   WS-1 (factory) → WS-2+ (consumers).
-- **End goals over means goals**: frame work as "what does the
-  user ultimately need?" A means goal like "close 15 gaps"
-  generates busywork. See pattern
-  `patterns/end-goals-over-means-goals.md`.
-- **Review plans, not just code**: see pattern
-  `patterns/pre-implementation-plan-review.md`.
 - **Narrative sections drift first**: when syncing plan state,
   inspect body status lines, decision tables, and current-state
   prose — not just frontmatter and todo checkboxes.
-- **Ground plans in verified data, not memory**: run the actual
-  tools, read the actual files, verify the actual state BEFORE
-  drafting a plan. See pattern `patterns/tool-output-framing-bias.md`.
-- **Findings route to a lane or a rejection**: separate in-scope
-  findings from pre-existing; every reviewer finding is ACTIONED,
-  TO-ACTION (named lane + specific edit), or REJECTED (written
-  rationale). "Deferred without a lane" is a smuggled drop. See
-  pattern `patterns/findings-route-to-lane-or-rejection.md`.
 - **Ignored estates need explicit sweeps**: when validating
   gitignored lanes, use `rg -uu` or run from inside the target
   directory; otherwise ignore rules create false-clean checks.
@@ -87,10 +73,6 @@ context with no natural permanent home.
 - **All gates blocking, no "pre-existing" exceptions**: never
   dismiss a gate failure as "pre-existing." Fix it or track it as
   a blocking item. "No new issues" rationalises quality decay.
-- **"Tests use it" is migration surface, not justification**:
-  when tests are the sole consumers of production code, the chain
-  is circular. See pattern
-  `patterns/circular-test-justification.md`.
 - **CLI-first enumeration before owner questions**: research
   the generic REST surface (`sentry api`, `clerk api`, vendor-
   equivalent) before raising any owner question about observability
@@ -105,23 +87,13 @@ context with no natural permanent home.
   lanes**: a client-specific compat issue emerging in an active
   deployment-validation lane spins into its own follow-up plan.
   Shared preview infra ≠ shared plan ownership.
-- **ADR-worthiness scopes by reusability, not diff size**: at
-  lane closure ask "will the next adopter re-derive this same
-  decision?" See pattern `patterns/adr-by-reusability-not-diff-size.md`.
-  Materialised 2026-04-17 as ADR-159 from a tight hygiene lane.
-- **Route reviewers by abstraction layer, not file scope**: on
-  finishing passes over mixed code + docs + ADR lanes, book one
-  reviewer per layer (domain-semantics, docs/ADR mesh, code
-  polish); expect disjoint findings. See pattern
-  `patterns/route-reviewers-by-abstraction-layer.md`.
-- **Compressed neutral labels smuggle scope and uncertainty**
-  ("stretch", "deferred", "follow-up", "maybe later"). Corrective:
-  write the explicit form. See patterns
-  `findings-route-to-lane-or-rejection.md` (review layer) and
-  `nothing-unplanned-without-a-promotion-trigger.md` (planning layer).
-- **Nothing unplanned without a promotion trigger**: every `future/`
-  plan carries a named, testable promotion trigger. See pattern
-  `patterns/nothing-unplanned-without-a-promotion-trigger.md`.
+
+Practice-governance Process rules graduated to PDRs 2026-04-18 —
+see `.agent/practice-core/decision-records/` for: review-findings
+routing (PDR-012), grounding and framing (PDR-013), reviewer
+authority and dispatch (PDR-015), workaround hygiene (PDR-017),
+planning discipline end-goals/workflow contracts (PDR-018), ADR
+scope by reusability (PDR-019), test validity (PDR-021).
 
 ## Architecture (Agent Infrastructure)
 
