@@ -30,11 +30,11 @@ todos:
   - id: l3-mcp-context-enrichment
     content: "L-3: type and populate mcp_request context (session, method, tool, argument-shape deny-list, client/server party info)"
     status: pending
-  - id: l4a-span-metrics-convention
-    content: "L-4a: publish span-metric naming convention oak.<runtime>.<feature>.<metric>; instrument acceptance tracers on existing spans"
-    status: pending
   - id: l4b-dedicated-metrics-adapter
-    content: "L-4b: dedicated Sentry.metrics.* adapter surface with SENTRY_ENABLE_METRICS flag, beforeSendMetric redaction, fixture capture, narrow SentryPrimitiveValue attributes"
+    content: "L-4b (primary): Sentry.metrics.* is the primary production metrics surface; opt-in behind SENTRY_ENABLE_METRICS during beta; adapter insulates consumers from the beta API; includes beforeSendMetric redaction, fixture capture, narrow SentryPrimitiveValue attributes"
+    status: pending
+  - id: l4a-span-metrics-convention
+    content: "L-4a (transitional): span-metric naming convention oak.<runtime>.<feature>.<metric> for narrow span-attribution-unique cases only; adopted only after L-4b metrics.* adapter is stable"
     status: pending
   - id: l5-dynamic-sampling
     content: "L-5: replace fixed tracesSampleRate with tracesSampler (100% errors, 100% >P95 latency, sampled happy path, elevated cold-boot and auth-proxy)"
@@ -220,6 +220,59 @@ Despite a mature foundation, meaningful Sentry capabilities are unused:
 
 ---
 
+## MVP Classification
+
+This plan ships as one PR, but not every lane is launch-blocking for the
+public-beta release that ADR-162 frames as the MVP envelope. The table
+below classifies every lane as **MVP-in** (launch-blocking) or
+**MVP-deferred** (planned, shipped in the same PR, but not launch-
+blocking). Governing authority is
+[ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle):
+
+> **Not all axes apply to every capability. Omission is explicit and
+> justified, not incidental.**
+
+Every MVP-deferred lane therefore carries an explicit
+axis-applicability rationale naming one of three families:
+
+- **(a) not applicable at MVP** — the axis obligation does not bind
+  because no runtime capability exists from which to emit (e.g. L-10
+  has no feature-flag provider selected; there is nothing to observe).
+- **(b) satisfied by a simpler surface at MVP** — a narrower mechanism
+  already meets the axis obligation at launch (e.g. fixed-rate
+  sampling for the engineering axis; dynamic sampling is a
+  post-launch optimisation).
+- **(c) a decision, not a runtime capability** — the lane records an
+  architectural choice rather than a capability to observe (e.g. L-14
+  records an allow/deny propagation decision; any wiring that follows
+  is post-MVP).
+
+This table is **load-bearing**: Phase 5's ADR-162 axis-coverage audit
+(per the restructure plan) will treat any unjustified omission as a
+finding. Update this table if a lane's classification changes.
+
+| Lane ID | MVP-in / MVP-deferred | Axis-applicability rationale |
+|---------|------------------------|------------------------------|
+| L-0a, L-0b | MVP-in | Engineering-axis foundation (ground-truth correction + ADR-160 redaction-barrier test gate). Complete 2026-04-17. |
+| L-1 | MVP-in | Engineering axis — free-signal error and runtime telemetry (ANR, Zod, runtime metrics, span streaming, rewrite-frames, extra-error-data). |
+| L-2 | MVP-in | Engineering axis — shared delegate seam required before the Search CLI branch can mirror this maximisation plan. |
+| L-3 | MVP-in | Engineering + product axes — typed MCP-request context enrichment. |
+| **L-4a** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(b) satisfied by a simpler surface at MVP**. L-4b provides the primary metric surface; L-4a's span-metrics convention is retained only for narrow span-attribution-unique cases and adopts only after L-4b is stable (see §Phase 2 dependency graph `L-4b → L-4a`). |
+| L-4b | MVP-in | Engineering axis — **primary metric emission surface** via `Sentry.metrics.*`. Launch-blocking because the five-axis observability principle requires a working metric pipeline on launch day. |
+| **L-5** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(b) satisfied by a simpler surface at MVP**. A fixed `tracesSampleRate` meets the engineering-axis observability obligation at launch; dynamic `tracesSampler` is a post-launch optimisation once traffic shape is known. |
+| **L-6** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(b) satisfied by a simpler surface at MVP**. On-demand profiling (env-gated manual activation) meets the engineering-axis obligation; continuous profiling is a post-launch enablement. |
+| L-7 | MVP-in | Engineering axis — release / commit / deploy linkage is launch-blocking. Without it, a regression cannot be attributed to a specific release in Sentry; regression-detection is an MVP obligation. |
+| L-9 | MVP-in | Usability axis — the `feedback-submitted` pipeline is the product-launch feedback loop. |
+| **L-10** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(a) not applicable at MVP**. No feature-flag provider is selected; no runtime capability exists from which to emit flag context. L-10 ships scaffolding only (TSDoc extension point) per owner decision 2026-04-17; the first real provider's integration is a separate lane. |
+| **L-11** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(a) not applicable at MVP**. No Oak MCP tool currently calls an LLM. L-11 ships scaffolding only (TSDoc extension point) per owner decision 2026-04-17; the first real LLM tool's integration is a separate lane. |
+| L-12-prereq, L-12 | MVP-in | Engineering + usability + accessibility axes — widget instrumentation. Widget is a second emitting workspace under ADR-162's vendor-independence clause. |
+| L-13 | MVP-in | Engineering + usability + security + accessibility axes — per-loop alerts are the launch-day operational surface. |
+| **L-14** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(c) a decision, not a runtime capability, with a latent security-axis emission obligation**. L-14 records an allow/deny trust-boundary propagation decision per outbound host (Oak API, Clerk, Elastic) with security-reviewer attribution. Any `allow` decision recorded here creates a post-MVP security-axis emission obligation (who propagated to whom, with what trust-boundary classification) that is discharged in [`security-observability.plan.md`](../current/security-observability.plan.md); any runtime wiring that follows the decision is therefore post-MVP but not unbounded. |
+| L-15 | MVP-in | Close-out / strategy ADR — required to discharge the parent plan's strategy-close-out obligation. |
+| L-DOC (initial + final), L-EH (initial + final) | MVP-in | Cross-axis discipline — documentation coverage and error-handling standards bind on every axis. |
+
+---
+
 ## Foundation Alignment
 
 > See [Foundation Alignment component](../../templates/components/foundation-alignment.md)
@@ -233,7 +286,15 @@ Read before each phase and at the start of each RED cycle:
   ADR-112 (per-request MCP transport), ADR-128 (STDIO retirement),
   ADR-143 (redaction barrier), ADR-144 (fitness zones),
   ADR-154 (framework vs consumer), ADR-158 (multi-layer security),
-  ADR-159 (per-workspace vendor CLI ownership).
+  ADR-159 (per-workspace vendor CLI ownership),
+  [ADR-160](../../../../docs/architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md)
+  (non-bypassable redaction barrier as principle — supersedes ADR-143
+  §6 in part; already operationalised by L-0b and cited throughout
+  this plan; listed here for canonical alignment),
+  [ADR-162](../../../../docs/architecture/architectural-decisions/162-observability-first.md)
+  (observability-first across five axes + vendor-independence clause
+  — governs the §MVP Classification above and the cross-references
+  to sibling MVP plans in §Documentation Propagation below).
 
 ---
 
@@ -262,6 +323,7 @@ acceptance is assessed in Phase 4.
 Lane-level ordering relationships (surfaced as part of A.2 item 12):
 
 - `L-0b → L-4b` (barrier test gate exists before metric adapter extends the registry).
+- `L-4b → L-4a` (primary `Sentry.metrics.*` adapter stable before transitional span-metrics convention adopts; restructure Phase 4 priority swap 2026-04-18).
 - `L-2 → L-DOC-initial` (shared delegate seam lands before docs describe it).
 - `L-0b ↔ L-12-prereq` (coordinating, not strict blocking — L-12-prereq extracts a pure redactor core whose correctness depends on the redaction policy code, not on the Node-side test harness; it can author its own runtime-neutral tests. Reuse of closure-gate patterns is a coordination benefit, not a prerequisite).
 - `L-12-prereq → L-12` (widget Sentry cannot land without the browser-safe redactor core extracted; crosses the Phase 1 → Phase 3 boundary).
@@ -344,6 +406,13 @@ Tests pass against the current `createSentryHooks` implementation — the specif
 5. ADR-160 Accepted (done 2026-04-17 at Phase B).
 6. ADR-143 §6 supersession note and frontmatter Status line both point at ADR-160 (confirmed in L-0a).
 
+**Cross-references** (per ADR-162 event-schema contract):
+
+- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+  — the redaction barrier L-0b closes is the gate every schema-
+  conformant emission passes through; the events workspace depends
+  on this barrier being non-bypassable for its redaction invariant.
+
 ### L-1 Free-signal integrations
 
 **Objective**. Enable the opt-in Sentry Node integrations that ship
@@ -402,6 +471,17 @@ frames from `anrIntegration`.
    barrier.
 2. Live-mode smoke (optional, owner-run) confirms ANR, Zod, and runtime
    metric events appear in Sentry under the test release tag.
+
+**Cross-references** (per ADR-162 five-axis principle + event-schema
+contract):
+
+- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+  — authoritative home for the downstream-analytics event-schema
+  contract. ANR events, Zod-error events, runtime-metric samples, and
+  streamed-span envelopes that L-1 turns on must conform to the
+  schemas defined there when those schemas exist; L-1 does not
+  itself author schemas, but emits through paths the events workspace
+  catalogues.
 
 ### L-2 Delegates extraction
 
@@ -525,11 +605,29 @@ body never flows into the context.
 **Acceptance**: fixture-mode captures include the `mcp_request` context
 with the expected shape and no argument values.
 
-### L-4a Span metrics convention
+**Cross-references** (per ADR-162 event-schema contract):
+
+- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+  — the `mcp_request` context shape (session id, method, tool name,
+  argument-shape deny-list, client/server party info) is the
+  correlation substrate for `tool_invoked` events; the events
+  workspace schema for `tool_invoked` depends on these field names
+  remaining stable.
+
+### L-4a Transitional span metrics convention
+
+**Priority** (2026-04-18 — restructure Phase 4 swap). L-4a is now the
+**transitional** metric surface, adopted only for narrow
+span-attribution-unique cases where a metric must share the enclosing
+span's trace context inline. The primary metric surface is L-4b
+(`Sentry.metrics.*`). L-4a opens only after L-4b's adapter is stable
+— see Phase 2 dependency graph (`L-4b → L-4a`).
 
 **Objective**. Publish `oak.<runtime>.<feature>.<metric>` as the
-convention for metric-shaped signals on existing spans (production-safe
-Sentry-recommended path).
+convention for the narrow set of metric-shaped signals that belong on
+existing spans (cases where the metric's value is indivisible from
+its span's trace context, e.g. span-tagged tool-execution duration).
+Most metric emissions go through L-4b; L-4a documents the exception.
 
 **RED**: Unit tests asserting that a `recordSpanMetric(span, name,
 value, attributes?)` helper in `@oaknational/observability` writes the
@@ -545,12 +643,27 @@ README.
 **Acceptance**: tests verify attributes on spans; manual Sentry
 explore-query confirms the attributes are present.
 
-### L-4b Dedicated metrics adapter surface (beta)
+### L-4b Primary metrics emission via `Sentry.metrics.*`
+
+**Priority** (2026-04-18 — restructure Phase 4 swap). L-4b is the
+**primary** production metrics surface. `Sentry.metrics.*` supersedes
+span-metrics (L-4a) as the default path for new metric emissions;
+span-metrics is retained only for narrow span-attribution-unique
+cases (see L-4a). The adapter insulates consumers from the
+underlying beta API — consumers depend on `@oaknational/sentry-node`
+and `@oaknational/observability`, never on `Sentry.metrics.*`
+directly.
 
 **Objective**. Add `metrics: { count, gauge, distribution }` to
-`SentryNodeSdk` and `SentryNodeRuntime`. Gate live emission behind
-`SENTRY_ENABLE_METRICS`. Extend the shared redaction barrier with
-`beforeSendMetric`.
+`SentryNodeSdk` and `SentryNodeRuntime` as the primary production
+metric emission path. Gate live emission behind
+`SENTRY_ENABLE_METRICS` during the Sentry beta window so rollout is
+explicit and auditable. Extend the shared redaction barrier with
+`beforeSendMetric`. Emitted metric names are catalogued alongside
+event schemas in
+[`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+per ADR-162's event-schema contract — `metrics.*` emissions are part
+of the downstream-analytics contract, not a Sentry-internal concern.
 
 **Ground-truth corrections** (from sentry-reviewer, 2026-04-17):
 - Fixture `type: 'counter'` (not `'count'`).
@@ -600,6 +713,17 @@ Metric emission guide in `observability.md`.
 3. Sentry mode: at least one counter and one distribution visible in
    Sentry under the branch release tag (owner-verified, informational
    not merge-gate).
+
+**Cross-references** (per ADR-162 event-schema contract; consistent
+with other lane-body cross-reference blocks):
+
+- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+  — metric-names catalog. `Sentry.metrics.*` metric names emitted by
+  this adapter (e.g. `oak.mcp.handler.request.count`,
+  `oak.mcp.tool.duration_ms`) are part of the downstream-analytics
+  schema contract per ADR-162 and are catalogued alongside event
+  schemas. L-4b publishes the adapter; the events workspace
+  catalogues the names the adapter emits.
 
 ### L-5 Dynamic sampling
 
@@ -700,6 +824,22 @@ section (refer to both scripts).
    verified by grepping the GitHub Actions workflow files for
    `sentry-cli` invocations (expected: zero).
 
+**Cross-references** (per ADR-162 five-axis principle +
+vendor-independence clause):
+
+- [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md)
+  — the external uptime + external working-probe lanes are the
+  runtime-side complement of L-7's release-linkage: deploy events
+  registered by L-7 are the reference frame against which synthetic
+  probes attribute regressions.
+- [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
+  — L-7 carries an explicit **release-linkage carve-out** from the
+  vendor-independence clause. Release linkage is Sentry-coupled by
+  nature (Sentry's own release/deploy primitives); the conformance
+  plan's scope explicitly acknowledges this signal as one that need
+  NOT survive `SENTRY_MODE=off`. The carve-out is documented
+  there, not re-derived per-consumer.
+
 ### L-8 Bundler-side source maps — PARKED (2026-04-17)
 
 **Status**. Not in this plan's delivery scope.
@@ -769,6 +909,14 @@ describing how to query feedback and the fixed schema.
 3. Live Sentry UI shows at least one submitted feedback item under
    the branch release tag, with rating + reason visible, no free
    text (owner-verified).
+
+**Cross-references** (per ADR-162 event-schema contract):
+
+- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+  — the `feedback_submitted` event is in the MVP event set owned by
+  the events workspace. L-9's closed-set Zod enum inputs map directly
+  to the schema defined there; any enum evolution is a coordinated
+  change across both plans.
 
 ### L-10 Feature-flag scaffolding — TSDoc extension point only
 
@@ -892,6 +1040,23 @@ content or a widget-bootstrap endpoint (DI per ADR-078).
 **Acceptance**: browser error reproduction produces a linked trace in
 Sentry (owner-verified); bundle size delta documented; widget closure-property tests mirror L-0b coverage on the browser side.
 
+**Cross-references** (per ADR-162 five-axis principle +
+vendor-independence clause):
+
+- [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md)
+  — widget is the primary runtime surface for the accessibility-axis
+  signal set (preference-media-query tags, frustration proxies,
+  incomplete-flow correlation, keyboard-only session detection).
+  L-12 provides the Sentry transport; the accessibility plan
+  authors the events and schemas the widget emits.
+- [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
+  — the widget is the **second emitting workspace** under ADR-162's
+  vendor-independence clause (the MCP server being the first). The
+  conformance plan lists the widget as a consuming workspace; L-12
+  must compose the shared conformance helper (not bypass it) so
+  widget-side emissions are proven to persist via stdout/err under
+  `SENTRY_MODE=off`.
+
 ---
 
 ## Phase 4 — Operations + Close-out
@@ -914,6 +1079,21 @@ panel + runbook entry + routing + escalation.
 
 **Acceptance**: alerts configured via `sentry api` with evidence;
 dashboards snapshot captured; runbook entries present.
+
+**Cross-references** (per ADR-162 five-axis principle — alerts cover
+every axis, not only engineering):
+
+- [`security-observability.plan.md`](../current/security-observability.plan.md)
+  — security-axis alerts (auth-failure spike, rate-limit-triggered
+  anomaly) derive from events the security-observability plan
+  emits. L-13 authors the alert rules; the security plan authors
+  the underlying events + thresholds.
+- [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md)
+  — accessibility-axis alerts (frustration-proxy spike,
+  incomplete-flow anomaly, keyboard-only session failure) derive
+  from widget-side events the accessibility plan emits. L-13
+  authors the alert rules; the accessibility plan authors the
+  underlying events + thresholds.
 
 ### L-14 Third-party trace propagation (security-gated)
 
@@ -1046,6 +1226,7 @@ Phase-specific risks:
 | 1 | L-0b `satisfies` gate does NOT auto-detect new fan-out hooks added to `NodeOptions` (e.g. a future `beforeSendMetric` wiring) — it only validates that BARRIER_HOOKS entries are valid `NodeOptions` keys | Resolved by A.6 SR-5: `runtime-sdk.ts` now exports `SentryRedactionHooks` (the `Pick<NodeOptions, ...>` return of `createSentryHooks`); the test imports it and constrains `MinimalHooks` to it. Any new hook wired in `createSentryHooks` without an update to the test's `BARRIER_HOOKS` registry now fails the type-check via a set-equality assertion between the imported type's keys and the registry. Code review remains the backstop. |
 | 1 | **Fixture runtime does not observe non-event envelopes** (ANR stack frames, streamed-span payloads, runtime-metric samples) without adapter extension — L-1 behaviour-level assertions cannot land against the current `createFixtureRuntime` (per A.6 AR-3) | L-1 GREEN has a prerequisite step named in §L-1 to route fixture-mode envelopes through `createSentryHooks` (Option A) OR add per-envelope capture paths (Option B). L-1 does not close until the prerequisite lands. Schedule impact: expect L-1 to take longer than a naive "turn on six integrations" estimate. |
 | 1 | **Per-phase RED tightening fans test-author load across six L-1 integrations** (ANR / Zod / node-runtime / span-streaming / rewrite-frames / extraErrorData), each needing behaviour-level fixture capture rather than integration-registered presence — doubles or triples Phase 1 authorship versus the earlier config-presence posture (per A.6 AR-9) | Recognised: split L-1 into sub-lanes per integration if author-load becomes a bottleneck (L-1a / L-1b / ... ). Reviewer discipline at phase close remains fixed even under split. |
+| 2 | **Sentry `metrics.*` API shifts during the beta window** (L-4b is the primary metric surface per the restructure Phase 4 swap; the beta API may introduce breaking-shape changes within the `^10.x` caret range `packages/libs/sentry-node/package.json` currently pins) | Adapter insulates consumers (consumers never import `Sentry.metrics.*` directly); conservative version-pin in `packages/libs/sentry-node`. **Concrete changelog-review trigger**: re-read the Sentry Node SDK `metrics.*` changelog at (a) every L-4b closure milestone, (b) the next monthly dependency-audit cadence, and (c) any `@sentry/node` minor-or-major bump inside the 10.x range (patch bumps within the current range can still ship shape changes under beta conventions), whichever fires first; raise any breaking-shape change as a new risk row immediately. Owner: L-4b implementer at each milestone review; dependency auditor at each bump. |
 | 2 | `tracesSampler` regresses sampling coverage during rollout | Roll out behind env flag with a fixed-rate fallback; measure first. |
 | 2 | Profiling-node precompiled-binary install consent not granted in CI | `onlyBuiltDependencies` entry; document in CI runbook. Per A.1 factual correction 3, precompiled binaries ship for Node 18/20/22/24 across Linux/macOS/Windows. |
 | 3 | Widget bundle size regression from adding `@sentry/browser` | Bundle-size test gate on widget build; L-12-prereq extracts browser-safe redactor core to avoid pulling `@sentry/node` transitively. |
@@ -1079,6 +1260,22 @@ Per phase, propagate:
 - ADR index — entries for ADR-160 (non-bypassable redaction barrier) and ADR-161 (network-free PR-check CI boundary); both Proposed → Accepted at Phase B close.
 - ADR-088 amendment obligation — expanded enforcement via `prefer-result-pattern` rule (L-EH final).
 - ADR-144 citation-style alignment ("three-zone fitness model") wherever "fitness zones" appears in plan text (A.1 factual correction 6).
+
+**Cross-plan propagation — sibling MVP plans (added 2026-04-18 per restructure Phase 4)**:
+
+Under ADR-162's five-axis principle, several lanes of this plan carry
+obligations that are discharged in sibling `current/` plans. The
+authoritative cross-references live in the lane bodies; listing
+them here gives docs-adr-reviewer a single surface to audit:
+
+- **L-0/L-0b/L-1/L-3 → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — the downstream-analytics event-schema authority. L-0b's redaction barrier gates every schema-conformant emission; L-1's free-signal integrations emit events that the workspace will catalogue; L-3's `mcp_request` context is the correlation substrate for `tool_invoked`.
+- **L-4b → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — metric-names catalog. `Sentry.metrics.*` emissions are part of the downstream-analytics schema contract per ADR-162; metric names the adapter emits (e.g. `oak.mcp.handler.request.count`, `oak.mcp.tool.duration_ms`) are catalogued alongside event schemas.
+- **L-7 → [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md)** — deploy events registered by L-7 are the reference frame against which synthetic probes attribute regressions.
+- **L-7 → [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)** — documents the release-linkage carve-out. Release linkage is Sentry-coupled by nature; the conformance plan's scope explicitly acknowledges this signal as one that need NOT survive `SENTRY_MODE=off`.
+- **L-9 → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — `feedback_submitted` event schema. L-9's closed-set Zod enum maps directly to the schema defined there.
+- **L-12 → [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md)** — widget-side a11y signal (preference tags, frustration proxies, incomplete-flow correlation, keyboard-only detection).
+- **L-12 → [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)** — widget is the **second emitting workspace** under the vendor-independence clause; the conformance plan lists it as a consuming workspace.
+- **L-13 → [`security-observability.plan.md`](../current/security-observability.plan.md)** + **[`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md)** — per-axis alert derivations. L-13 authors the Sentry alert rules; the sibling plans author the underlying events and thresholds for the security and accessibility axes.
 
 **OWNER-ONLY** (PDR-003 protection):
 
