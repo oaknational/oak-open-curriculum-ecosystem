@@ -117,3 +117,4 @@ marked as host-local context and not carrying decision substance.
 | [PDR-022](PDR-022-governance-enforcement-scanners.md) | Governance Enforcement Requires a Scanner | Accepted |
 | [PDR-023](PDR-023-documentation-structure-discipline.md) | Documentation Structure Discipline — README as Index | Accepted |
 | [PDR-024](PDR-024-vital-integration-surfaces.md) | Vital Integration Surfaces Between Repo and Practice Core | Accepted |
+| [PDR-025](PDR-025-quality-gate-dismissal-discipline.md) | Quality-Gate Dismissal Discipline | Accepted |

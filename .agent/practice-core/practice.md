@@ -2,7 +2,7 @@
 provenance: provenance.yml
 fitness_line_target: 375
 fitness_line_limit: 500
-fitness_char_limit: 23000
+fitness_char_limit: 29000
 fitness_line_length: 100
 ---
 
@@ -198,7 +198,8 @@ hadn't surfaced — different work, different mistakes, different discoveries.
 - **Rules** — `.agent/directives/principles.md` (authoritative policies) + platform trigger
   adapters (e.g. `.cursor/rules/*.mdc`, `.claude/rules/*.md`)
 - **Experience** — `.agent/experience/` — qualitative records of shifts in understanding
-- **Explorations** — `docs/explorations/` (or host-repo equivalent) — durable design-space documents; cited by ADRs and plans
+- **Explorations** — `docs/explorations/` (or host-repo equivalent) —
+  durable design-space documents; cited by ADRs and plans
 
 ## The Review System
 

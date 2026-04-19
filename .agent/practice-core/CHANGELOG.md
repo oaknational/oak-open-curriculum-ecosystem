@@ -4,6 +4,59 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-19 — PDR-025 Quality-Gate Dismissal + Compressed-Labels Principle Extended to Document-Structure Layer
+
+- **PDR-025** graduates the distilled rule "all gates blocking, no
+  'pre-existing' exceptions" into a full PDR covering quality-gate
+  dismissal discipline. Three failure modes named: pre-existing
+  dismissal; "no new issues" rationalisation; undocumented CI
+  exception-lists. Decision: every gate failure routes to in-scope
+  fix or a named lane with acceptance + owner + trigger; "pre-
+  existing" is metadata, not a dismissal; CI exception-lists are
+  tracked lanes, not shadow gates. Related to PDR-008 (gate
+  naming), PDR-012 (findings routing), PDR-017 (workaround
+  hygiene), PDR-020 (check-driven development) — composes without
+  replacing.
+- **practice-lineage.md** Active Learned Principle
+  `Compressed neutral labels smuggle scope and uncertainty`
+  extended to cover the document-structure layer as a third
+  sibling (alongside review and planning). Trigger: 2026-04-19
+  observability plan reshape surfaced a dual-frame drift trap
+  (historical §Phase N headers + new §Execution Waves table + per-
+  lane inline notes forming three authoritative frames for the
+  same ordering). Document-structure layer instances go to the
+  new `.agent/memory/patterns/collapse-authoritative-frames-when-settled.md`.
+- Distilled graduation (2026-04-19 pass): 1 entry pruned
+  (`All gates blocking, no "pre-existing" exceptions` → PDR-025);
+  1 entry refined (`@ts-expect-error` narrowed to emphasise test-
+  design scope distinct from PDR-020's RED-phase framing); 1
+  watchlist entry added (forward-pointing planning references need
+  "planned, not yet code" markers — single-instance hold pending
+  cross-session validation).
+- Host-local memory: three new patterns in `.agent/memory/patterns/`:
+  `stage-what-you-commit.md` (2 cross-session instances — git
+  index as durable state); `foundations-before-consumers.md`
+  (owner-approved — multi-emitter plan wave ordering);
+  `collapse-authoritative-frames-when-settled.md` (owner-approved
+  — companion to the extended compressed-labels principle).
+- **Fitness — Core trinity limits raised, deferred refinement
+  acknowledged.** Step-9 fitness check surfaced three hard-zone
+  Core trinity files (practice-bootstrap, practice-lineage,
+  practice.md) alongside the three known-deferred directives.
+  Per owner direction ("raise somewhat, not totally; defer full
+  refinement and reflection of the Core to another session"),
+  limits raised modestly with ~10% headroom over current content:
+  practice-bootstrap `fitness_line_target` 590 → 680 /
+  `fitness_line_limit` 750 → 830 / `fitness_char_limit` 31000 →
+  40500; practice-lineage 590 → 680 / 725 → 830 / 36000 → 48500;
+  practice.md `fitness_char_limit` 23000 → 29000 (lines unchanged).
+  Practice.md prose-line-width violation at line 201 fixed by
+  wrapping. Trinity files now soft-zone, not hard. Full refinement
+  (compression, graduation, split decisions) deferred to a future
+  dedicated session. Post-raise strict-hard state: three hard items
+  matching the known-deferred AGENT.md / principles.md /
+  testing-strategy.md — no new hard violations introduced.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-18 — PDR-024 Vital Integration Surfaces + Consolidate-Docs Upstream-Review Wiring
 
 - **PDR-024** names the vital bidirectional integration surfaces

@@ -70,9 +70,6 @@ context with no natural permanent home.
 - **Reconcile parent when child changes runtime truth**: a child
   plan that evolves runtime architecture must reconcile the parent
   plan and closure proof in the same session.
-- **All gates blocking, no "pre-existing" exceptions**: never
-  dismiss a gate failure as "pre-existing." Fix it or track it as
-  a blocking item. "No new issues" rationalises quality decay.
 - **CLI-first enumeration before owner questions**: research
   the generic REST surface (`sentry api`, `clerk api`, vendor-
   equivalent) before raising any owner question about observability
@@ -87,6 +84,12 @@ context with no natural permanent home.
   lanes**: a client-specific compat issue emerging in an active
   deployment-validation lane spins into its own follow-up plan.
   Shared preview infra ≠ shared plan ownership.
+- **Forward-pointing planning references need "planned, not yet
+  code" markers** (watchlist; single instance 2026-04-19). Plans
+  that cross-reference workspaces, files, or workspaces that do
+  not yet exist on disk must label those references explicitly.
+  Readers should not infer existence from a reference. Re-evaluate
+  on a second instance in a different planning context.
 
 Practice-governance Process rules graduated to PDRs 2026-04-18 —
 see `.agent/practice-core/decision-records/` for: review-findings
@@ -94,6 +97,8 @@ routing (PDR-012), grounding and framing (PDR-013), reviewer
 authority and dispatch (PDR-015), workaround hygiene (PDR-017),
 planning discipline end-goals/workflow contracts (PDR-018), ADR
 scope by reusability (PDR-019), test validity (PDR-021).
+Quality-gate dismissal discipline graduated 2026-04-19 — see
+PDR-025.
 
 ## Architecture (Agent Infrastructure)
 
@@ -172,10 +177,12 @@ scope by reusability (PDR-019), test validity (PDR-021).
 - **Any rule at `'warn'` is a rule that's off.** Warnings
   scroll past; only `'error'` enforces. Materialised: 13 type
   assertions accumulated silently under `'warn'` severity.
-- **`@ts-expect-error` is the smell, not the solution.** If a
-  test needs `@ts-expect-error` to compile, the test is wrong —
-  the type system already enforces the constraint. Delete the
-  test, don't suppress the types.
+- **`@ts-expect-error` in a test means the test is testing what
+  types already enforce.** If a test needs `@ts-expect-error` to
+  compile, the type system is already asserting the constraint;
+  the test is redundant. Delete the test, don't suppress the
+  types. (PDR-020 covers the RED-phase counterpart: never suppress
+  to hide a RED-phase type-check failure.)
 - **Self-justifying eslint-disable comments embed false
   assumptions.** "unavoidable: bridging incompatible types"
   rationalises the violation. Ask: WHY are the types

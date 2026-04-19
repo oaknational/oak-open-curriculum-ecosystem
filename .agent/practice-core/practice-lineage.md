@@ -1,8 +1,8 @@
 ---
 provenance: provenance.yml
-fitness_line_target: 590
-fitness_line_limit: 725
-fitness_char_limit: 36000
+fitness_line_target: 680
+fitness_line_limit: 830
+fitness_char_limit: 48500
 fitness_line_length: 100
 ---
 
@@ -693,15 +693,20 @@ validated across 3+ repos.
   without triggers are speculation dressed as plans. The trigger-naming
   exercise frequently reveals that "future" items are either MVP in
   disguise, or items nobody genuinely needs.
-- **Compressed neutral labels smuggle scope and uncertainty.**
-  "Stretch", "deferred", "follow-up", "nice to have", "maybe later"
-  sound procedurally neutral but hide scope debt and uncertainty the
-  author could not resolve. The corrective is to write the explicit
-  form: "un-started because pacing limited us"; "routed to lane X
-  because Y is the acceptance criterion"; "watchlist pending trigger
-  Z." Explicit forms are heavier but cannot hide weight; the weight
-  often surfaces a genuine gap that needed filling or an uncertainty
-  the author had been avoiding.
+- **Compressed neutral labels smuggle scope and uncertainty; at
+  the document-structure layer, multiple authoritative frames
+  smuggle drift.** Labels like "stretch", "deferred", "follow-up",
+  "nice to have", "maybe later" sound procedurally neutral but hide
+  scope debt and uncertainty the author could not resolve. Correct
+  by writing the explicit form: "un-started because pacing limited
+  us"; "routed to lane X because Y is the acceptance criterion";
+  "watchlist pending trigger Z." The document-structure sibling: a
+  document carrying two or more authoritative frames for one
+  concept (historical headings + new table + per-item inline notes;
+  "transitional dual-frame with sunset note") invites drift — frames
+  acquire edits independently and diverge. Correct by collapsing to
+  a single authoritative frame when the decision is settled.
+  Heavier to author; cannot hide weight.
 - **Implicit architectural intent is not enforced principle.** Adapter
   patterns, dependency injection, and boundary separation may
   structurally enable an architectural property (e.g. vendor

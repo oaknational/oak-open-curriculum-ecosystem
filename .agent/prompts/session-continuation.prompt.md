@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-18
+last_updated: 2026-04-19
 ---
 
 # Session Continuation
@@ -89,12 +89,15 @@ git log --oneline --decorate -10
   - `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`
     (strategic follow-up extending the ADR-159 pattern to Clerk; separate
     lane after Sentry work).
-- **Current state (2026-04-18, commit `276ea9bd`)**: Observability
-  strategy restructure **Phases 1–2 complete**. Branch **16 commits
-  ahead of remote** on `feat/otel_sentry_enhancements`; `pnpm check`
-  from repo root exit 0. **Zero MaxListenersExceededWarning** in the
-  test suite (was 38 before the hermetic-test migration). Next phase
-  is Phase 3 — explorations 3 and 4 in full + six exploration stubs.
+- **Current state (2026-04-19, commit `2e8a140d`)**: Observability
+  strategy restructure **Phases 1–4 complete**; **execution-order
+  5-wave reshape complete**; maximisation plan is now **single-frame
+  physically** (no more historical-grouping dual frames). Branch
+  **25 commits ahead of remote** on `feat/otel_sentry_enhancements`;
+  `pnpm check` from repo root exit 0. **Phase 5 of the restructure
+  is pending and is also Wave 1 of execution**: author
+  `require-observability-emission` ESLint rule + flip ADR-162
+  Proposed → Accepted. This is the next code-producing work.
 
   This session shipped three commits on top of the Phase 1 starting
   point (`502af060`):
@@ -189,42 +192,87 @@ git log --oneline --decorate -10
   - **Experience entry**: `2026-04-18-seam-definition-precedes-migration.md`
     captures the mid-session corrective arc (owner interrupt caught
     a migration classifying against the wrong axis).
-- **Current objective** (next session): **Phase 3 of the observability
-  strategy restructure — exploration kickoff**. Phases 1 and 2 of the
-  restructure are complete; Phase 3 is the next gate before the
-  executable-plan revisions (Phase 4) and ADR-162 acceptance (Phase 5).
+- **Current objective** (next session): **Phase 5 of the
+  observability strategy restructure — ADR-162 Acceptance**. This is
+  the first code-producing work in the observability track. Under
+  the 2026-04-18 reshape, restructure Phase 5 == execution Wave 1.
 
-  **Next action**: open Phase 3 of the restructure plan at
+  **Next action**: open Phase 5 of the restructure plan at
   `.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`.
-  Phase 3: write **two explorations in full** — (3)
-  `docs/explorations/2026-04-18-accessibility-observability-at-runtime.md`
-  (blocks `current/accessibility-observability.plan.md` MVP scope)
-  and (4) `docs/explorations/2026-04-18-structured-event-schemas-for-curriculum-analytics.md`
-  (blocks `current/observability-events-workspace.plan.md` MVP schema
-  set). Stub the other six explorations with problem statement +
-  research questions: sentry-vs-posthog, sentry-as-paas,
-  trust-boundary-propagation, cloudflare-plus-sentry,
-  static-analysis-augmentation, vendor-independence-conformance-test-shape.
-  Reviewer matrix at phase close: `docs-adr-reviewer`. Single commit.
+  Phase 5 deliverables:
 
-  L-1 of the maximisation plan is **not** next — it opens only
-  after Phases 1–5 of the observability restructure close.
+  1. **Author `require-observability-emission` ESLint rule** in
+     `packages/core/oak-eslint/src/rules/require-observability-emission.ts`
+     + RuleTester cases at
+     `packages/core/oak-eslint/src/rules/require-observability-emission.unit.test.ts`.
+     RuleTester coverage per restructure plan §P5.2: exported async
+     function in `apps/**` without emission → flagged; with
+     `logger.*` / `Sentry.*` / `@oaknational/observability-events`
+     schema usage → pass; private function → pass; test file → pass;
+     edge cases for delegate-call pattern. **Important**: per
+     sentry-reviewer TO-ACTION, the schema-usage detection path is
+     Wave-2-dependent (`@oaknational/observability-events` workspace
+     does not exist yet). RuleTester cases for that path must be
+     stubbed/skipped with a "Wave 2 unlocks" note until the
+     workspace exists. Authorship of the rule is still Wave 1; full
+     test coverage activates in Wave 2 close.
+  2. **Codify reviewer-matrix question** "Does this capability have a
+     loop across each applicable axis?" in
+     `.agent/rules/invoke-code-reviewers.md` (or equivalent).
+  3. **Flip ADR-162 status** Proposed → Accepted at
+     `docs/architecture/architectural-decisions/162-observability-first.md`.
+  4. **Update restructure plan Phase 5 todo** `pending` → `completed`
+     with commit SHA note.
 
-  **Sibling backlog work** (concurrent / not blocking Phase 3):
+  Single commit with subject
+  `feat(observability): adr-162 accepted — require-observability-emission rule landed`.
+  Reviewer matrix at phase close per restructure plan §P5.4:
+  `architecture-reviewer-fred` (enforcement-mechanism completeness;
+  ADR-162 Accepted-status readiness) + `type-reviewer` (ESLint rule
+  type correctness; RuleTester case coverage).
+
+  **After Phase 5 closes**, the 5-wave execution can open: Wave 1's
+  remaining items (L-EH initial, L-DOC initial, L-12-prereq, L-7) +
+  all subsequent waves per the maximisation plan's §Phase Structure.
+  This is the first time the observability track moves from plan
+  text to code.
+
+  **Sibling backlog work** (concurrent / not blocking Phase 5):
   `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`
   — migrate remaining test files off `loadRuntimeConfig` +
   `createHttpObservabilityOrThrow` ceremony; flip ESLint
   `no-restricted-properties` and `no-restricted-imports` from `warn`
   to `error` when backlog reaches zero. ~34 total violations today.
-- **Deep consolidation status**: **completed this handoff** (commit
-  `5013eb97`). New pattern
-  `patterns/production-factories-in-tests-are-ceremony.md` extracted.
-  ESLint gate severity corrected (warn→error with explicit per-file
-  allowlists as physical backlog). No napkin rotation (under 500-line
-  threshold). No distilled.md graduation (no new ADR/PDR candidates
-  reached sufficient stability this pass). No Practice Core
-  amendments (nothing qualified). Fitness state unchanged (6 hard /
-  7 soft, all owner-deferred per existing posture).
+- **Deep consolidation status**: **completed this session
+  (2026-04-19)** — bounded pass after the four-commit window
+  (`2e0be715`, `f1f2c259`, `7f5b18e7`, `2e8a140d`). Outputs:
+  - **Three new memory/patterns**: `stage-what-you-commit.md`
+    (2 cross-session instances), `foundations-before-consumers.md`
+    (owner-approved; multi-emitter wave ordering),
+    `collapse-authoritative-frames-when-settled.md` (owner-approved;
+    third-layer sibling of the no-smuggled-drops family).
+  - **PDR-025 Quality-Gate Dismissal Discipline** graduated from
+    the distilled entry "All gates blocking, no pre-existing
+    exceptions" (owner-approved). Composes with PDR-008/012/017/020.
+  - **practice-lineage.md** Active Learned Principle
+    `Compressed neutral labels smuggle scope and uncertainty`
+    extended to cover the document-structure layer as a third
+    sibling (owner-approved).
+  - **Distilled refinements**: `@ts-expect-error` sharpened to
+    test-design-specific scope; forward-pointing-refs added as
+    single-instance watchlist.
+  - **Core trinity fitness limits raised modestly** per owner
+    direction (practice-bootstrap / practice-lineage / practice.md):
+    soft + hard line + char limits up ~10%. Full refinement and
+    reflection of the Core explicitly deferred to a future session.
+    Strict-hard state post-raise: 3 hard items (AGENT.md,
+    principles.md, testing-strategy.md) matching the known-deferred
+    directives; Core trinity now soft-zone, not hard.
+  - **Outgoing reservations** shifted +1 (PDR-025 claimed; slots
+    026–029 remain open).
+  - **Plan hygiene**: observability-strategy-restructure.plan.md
+    status line + Phase 3 & 4 todo notes corrected.
+  - **Napkin rotated**: 2026-04-19 archive + fresh napkin file.
 - **Restructure phase map** (from the restructure plan):
   - **Phase 1** Structural skeleton — ADR-162 Proposed, directories,
     moves, cross-references. ✅ **Complete 2026-04-18** (commit `502af060`).
@@ -233,12 +281,17 @@ git log --oneline --decorate -10
     ✅ **Complete 2026-04-18** (commit `231046fe`).
   - **Phase 3** Exploration kickoff — two full explorations
     (accessibility at runtime; event schemas for curriculum
-    analytics) + six stubs. **Next action.**
+    analytics) + six stubs. ✅ **Complete 2026-04-18** (commit
+    `bae88488`).
   - **Phase 4** Executable plan revision — swap L-4a/L-4b; MVP
-    classification; cross-refs.
+    classification; cross-refs. ✅ **Complete 2026-04-18** (commit
+    `2e0be715`). Followed by status markers (`f1f2c259`), 5-wave
+    execution reshape (`7f5b18e7`), and physical reorder of lanes to
+    match execution order single-frame (`2e8a140d`, 2026-04-19).
   - **Phase 5** ADR-162 acceptance — land `require-observability-emission`
     ESLint rule at `warn`; codify reviewer-matrix question; flip ADR
-    Proposed → Accepted.
+    Proposed → Accepted. **Next action**: this is Wave 1 of the
+    broader observability MVP execution. First code-producing step.
 - **Post-restructure Phase 1 work** (still scheduled, not started —
   carries forward from prior handoff):
   - **L-1** free-signal integrations with fixture envelope-observability
@@ -248,7 +301,48 @@ git log --oneline --decorate -10
   - **L-DOC initial** expand sentry-node README + write app observability doc.
   - **L-EH initial** `require-error-cause` ESLint rule with expanded
     RuleTester cases.
-- **Recent surprises / corrections (2026-04-18 observability Phases 1–2 + test hygiene session)**:
+- **Recent surprises / corrections (2026-04-18 → 2026-04-19 planning restructure Phase 4 + reshape + physical reorder)**:
+  - **"We are building containers for things without actually
+    building them"** — owner observation mid-session. The planning
+    work created cross-references to plans for workspaces that don't
+    yet exist on disk (`packages/core/observability-events/`,
+    `packages/core/telemetry-redaction-core/`). The containers (plans,
+    classification tables, cross-refs) were real; the contents (code,
+    schemas, workspaces) were planned. Fix: status markers ("planned,
+    not yet code") landed at forward-pointing references; deeper fix:
+    planning work at this scale should interleave with thin slices of
+    implementation so the plan-vs-code gap doesn't accumulate.
+  - **Schemas-before-emitters is a load-bearing ordering principle.**
+    Initial plan ordering had emitters (L-1, L-3, L-4b, L-9) landing
+    before the events-workspace schemas they would emit through. This
+    guarantees retrofit: every fixture assertion emits through ad-hoc
+    shapes, then gets rewritten when schemas land. The 5-wave
+    reshape fixed it by putting the events workspace in Wave 2
+    before any Wave 3 emitter. Related principles: rules-before-code;
+    extracted-cores-early. Generalises: when a plan has N emitters
+    depending on a shared schema, authoring the schema is the gate.
+  - **Dual-frame labels invite drift; collapse them before the
+    reader encounters them.** My initial 5-wave reshape kept
+    historical `## Phase N` headers + per-lane "**Execution phase**"
+    notes + an authoritative §Phase Structure table. Owner corrected:
+    "we shouldn't allow inaccurate plans to persist." Rule: a
+    document with multiple authoritative frames for the same concept
+    is a drift trap; resolve to one frame when the decision is
+    settled. "Transitional dual-frame with sunset note" is not
+    stable — the sunset never fires in practice.
+  - **`git commit` after `git add <file>` includes pre-existing
+    staged changes.** When `git status` shows `MM` on unrelated
+    files, plain `git commit` after staging my own file bundles the
+    already-staged work into the commit. Commit message described
+    only my change; commit content carried more. Rule: inspect the
+    index state (`git diff --cached` or careful two-letter-code
+    read) before committing; unstage unrelated with `git restore
+    --staged <path>`.
+  - **Commit-msg header 100-char limit catches em-dash-heavy
+    subjects.** Auto-mode retry handled it, but commit subjects
+    should target ≤80 chars for safety margin.
+
+- **Recent surprises / corrections (2026-04-18 observability Phases 1–2 + test hygiene session)** (historical):
   - **Tests import production factories as ceremony — and it hides
     bugs.** The session opened with a `MaxListenersExceededWarning`
     of ambiguous origin; trace-warnings showed Sentry's `init()` at
@@ -408,14 +502,20 @@ Carried from 2026-04-17 (still relevant):
     relative to industry convention. Separate deliberation, not a
     Sentry-plan concern. Relevant files: `.agent/directives/testing-strategy.md`,
     ADR-161, ADR-078.
-- **Next safe step**: open Phase 3 of the observability strategy
-  restructure per **Current objective** above. Primary deliverables:
-  (3) accessibility-observability-at-runtime exploration in full, (4)
-  structured-event-schemas-for-curriculum-analytics exploration in
-  full, plus six exploration stubs. Reviewer: `docs-adr-reviewer`.
-  Single commit. Sibling backlog work on
-  `test-ceremony-production-factory-audit.plan.md` is concurrent and
-  not blocking Phase 3.
+- **Next safe step**: open Phase 5 of the observability strategy
+  restructure per **Current objective** above. This is the first
+  code-producing step on the observability track: author
+  `require-observability-emission` ESLint rule + codify the
+  reviewer-matrix question + flip ADR-162 Proposed → Accepted.
+  Reviewer matrix: `architecture-reviewer-fred` + `type-reviewer`.
+  Single commit with subject
+  `feat(observability): adr-162 accepted — require-observability-emission rule landed`.
+  Deep consolidation pass ran 2026-04-19 (see §Deep consolidation
+  status above); Phase 5 now opens on a clean slate. Sibling backlog
+  work on `test-ceremony-production-factory-audit.plan.md` remains
+  concurrent and not blocking Phase 5. Owner may also choose a
+  dedicated Core-trinity refinement session (compression + reflection)
+  deferred from this consolidation pass — separate from Phase 5.
 - **PDR-007 landed 2026-04-18** — Core contract redefined as
   "bounded package of files plus required directories." New
   directories `practice-core/decision-records/` (PDRs) and
