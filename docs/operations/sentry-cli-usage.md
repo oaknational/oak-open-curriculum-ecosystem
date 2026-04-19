@@ -295,6 +295,9 @@ pnpm exec sentry-cli sourcemaps upload --release "$RELEASE" "$DIST_DIR"
 
 - The workspace `.sentryclirc` supplies `org`, `project`, and `url`.
 - `SENTRY_AUTH_TOKEN` is read from the environment.
+- `$RELEASE` is the root repo `package.json` semver (never the git
+  SHA). See
+  [ADR-163 §1–§2](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
 - `--release` is a convenience tag (surfaces the bundle in the
   release UI and drives weak association); the match key is the
   Debug ID.
@@ -308,6 +311,48 @@ pnpm exec sentry-cli sourcemaps upload --release "$RELEASE" "$DIST_DIR"
 > step and aborts if none is found. Without this check, "upload
 > succeeded" is a necessary but not sufficient signal for working
 > symbolication.
+
+### Release → commit → deploy linkage (automation)
+
+**Authoritative mechanism**:
+[ADR-163](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)
+§6 specifies the exact sequence and per-step error-handling posture.
+This reference exists so contributors can locate the CLI commands
+without reading the ADR end-to-end; the ADR wins on any divergence.
+
+Runs inside the Vercel Build Command only, via the orchestrator
+`apps/oak-curriculum-mcp-streamable-http/scripts/sentry-release-and-deploy.sh`
+(authored by L-7):
+
+```bash
+# Inside the orchestrator, after preflight + pnpm build:
+
+pnpm exec sentry-cli releases new "$VERSION"
+# abort on non-zero — subsequent steps have nothing to attach to.
+
+pnpm exec sentry-cli releases set-commits "$VERSION" \
+  --commit "oaknational/oak-open-curriculum-ecosystem@$VERCEL_GIT_COMMIT_SHA"
+# warn + continue on non-zero — commit metadata is useful but not blocking.
+
+# Two-step sourcemap pipeline (see "Upload source maps" above):
+pnpm exec sentry-cli sourcemaps inject "$DIST_DIR"
+pnpm exec sentry-cli sourcemaps upload --release "$VERSION" "$DIST_DIR"
+# abort on non-zero — symbolication breaks without these.
+
+pnpm exec sentry-cli releases finalize "$VERSION"
+# warn + continue on non-zero — release UI is useful but not blocking.
+
+pnpm exec sentry-cli deploys new --release "$VERSION" -e "$DERIVED_ENV"
+# warn + continue on non-zero — deploy timeline is useful but not blocking.
+```
+
+- `$VERSION` is the root `package.json` semver.
+- `$VERCEL_GIT_COMMIT_SHA` is metadata; it is never used as the
+  release identifier.
+- `$DERIVED_ENV` is computed from `VERCEL_ENV` + `VERCEL_GIT_COMMIT_REF`
+  per the [ADR-163 §3 truth table](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain).
+- The legacy form `sentry-cli releases deploys "$VERSION" new -e $ENV`
+  is not used. One form only: `sentry-cli deploys new --release …`.
 
 ### Enumerate alert rules (ad-hoc)
 

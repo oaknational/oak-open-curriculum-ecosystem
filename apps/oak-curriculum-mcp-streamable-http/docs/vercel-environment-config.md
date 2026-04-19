@@ -18,21 +18,23 @@ This reference lists the environment variables and platform settings required to
 
 ## Optional Environment Variables
 
-| Variable                      | Default Behaviour                                                                                 | Usage                                                                                    |
-| ----------------------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `ALLOWED_HOSTS`               | Localhost allow-list, or all Vercel deployment URLs + localhost entries if any Vercel URL present | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
-| `REMOTE_MCP_MODE`             | `stateless` (recommended)                                                                         | See "MCP Transport Modes" section below for detailed explanation                         |
-| `LOG_LEVEL`                   | `info`                                                                                            | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
-| `DANGEROUSLY_DISABLE_AUTH`    | **Must remain unset/`false`**                                                                     | Local development only; never enable in Vercel environments                              |
-| `SENTRY_MODE`                 | `off`                                                                                             | Set to `sentry` for live error capture and tracing (requires DSN, release, sample rate)  |
-| `SENTRY_DSN`                  | —                                                                                                 | Required when `SENTRY_MODE=sentry`; Sentry project DSN                                   |
-| `SENTRY_TRACES_SAMPLE_RATE`   | —                                                                                                 | Numeric 0.0–1.0; required for live mode                                                  |
-| `SENTRY_ENVIRONMENT_OVERRIDE` | Falls back to `VERCEL_ENV` → `development`                                                        | Explicit override only; `NODE_ENV` is intentionally ignored                              |
-| `SENTRY_RELEASE_OVERRIDE`     | Falls back to the root repo `package.json` version                                                | Explicit override only; use when you need a release value different from the app version |
-| `APP_VERSION_OVERRIDE`        | Falls back to the root repo `package.json` version                                                | Explicit override only; build and startup fail if neither yields a valid version         |
-| `GIT_SHA_OVERRIDE`            | Falls back to `VERCEL_GIT_COMMIT_SHA`                                                             | Explicit override only; attached to Sentry metadata/tags                                 |
-| `SENTRY_ENABLE_LOGS`          | `true` when live                                                                                  | Enable Sentry structured logs via `Sentry.logger.*` API                                  |
-| `SENTRY_DEBUG`                | `false`                                                                                           | Enable Sentry SDK debug output                                                           |
+| Variable                               | Default Behaviour                                                                                 | Usage                                                                                                                                                                                                                            |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ALLOWED_HOSTS`                        | Localhost allow-list, or all Vercel deployment URLs + localhost entries if any Vercel URL present | Override to provide a custom DNS allow-list for the DNS-rebinding guard                                                                                                                                                          |
+| `REMOTE_MCP_MODE`                      | `stateless` (recommended)                                                                         | See "MCP Transport Modes" section below for detailed explanation                                                                                                                                                                 |
+| `LOG_LEVEL`                            | `info`                                                                                            | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog                                                                                                                                         |
+| `DANGEROUSLY_DISABLE_AUTH`             | **Must remain unset/`false`**                                                                     | Local development only; never enable in Vercel environments                                                                                                                                                                      |
+| `SENTRY_MODE`                          | `off`                                                                                             | Set to `sentry` for live error capture and tracing (requires DSN, release, sample rate)                                                                                                                                          |
+| `SENTRY_DSN`                           | —                                                                                                 | Required when `SENTRY_MODE=sentry`; Sentry project DSN                                                                                                                                                                           |
+| `SENTRY_TRACES_SAMPLE_RATE`            | —                                                                                                 | Numeric 0.0–1.0; required for live mode                                                                                                                                                                                          |
+| `SENTRY_ENVIRONMENT_OVERRIDE`          | Falls back to `VERCEL_ENV` → `development`                                                        | Explicit override only; `NODE_ENV` is intentionally ignored                                                                                                                                                                      |
+| `SENTRY_RELEASE_OVERRIDE`              | Falls back to the root repo `package.json` version                                                | Explicit override only; use when you need a release value different from the app version                                                                                                                                         |
+| `APP_VERSION_OVERRIDE`                 | Falls back to the root repo `package.json` version                                                | Explicit override only; build and startup fail if neither yields a valid version                                                                                                                                                 |
+| `GIT_SHA_OVERRIDE`                     | Falls back to `VERCEL_GIT_COMMIT_SHA`                                                             | Explicit override only; attached as the `git.commit.sha` Sentry tag and via `releases set-commits`. Never the release identifier. See ADR-163 §2.                                                                                |
+| `VERCEL_GIT_COMMIT_REF`                | Consumed read-only from Vercel system env                                                         | Branch name. Required to match `main` before `VERCEL_ENV=production` results in a `production` Sentry environment (ADR-163 §3). Missing branch on a production build is treated as a mislabel guard and downgrades to `preview`. |
+| `SENTRY_RELEASE_REGISTRATION_OVERRIDE` | Unset                                                                                             | Set to `1` together with `SENTRY_RELEASE_OVERRIDE` to enable Sentry release + deploy registration from a local context (UAT evidence). One without the other is a startup error. See ADR-163 §4.                                 |
+| `SENTRY_ENABLE_LOGS`                   | `true` when live                                                                                  | Enable Sentry structured logs via `Sentry.logger.*` API                                                                                                                                                                          |
+| `SENTRY_DEBUG`                         | `false`                                                                                           | Enable Sentry SDK debug output                                                                                                                                                                                                   |
 
 CORS is unconditionally permissive (all origins allowed). Security is enforced by OAuth authentication, not by origin restrictions. There are no CORS-related environment variables to configure.
 
@@ -159,20 +161,33 @@ Shared dependencies (Elasticsearch client, runtime configuration) are created on
 
 ## Sentry metadata policy
 
+**Authoritative source**:
+[ADR-163 Sentry Release Identifier, Source-Map Attachment, and Vercel
+Production Attribution](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
+
 The MCP server intentionally avoids broad fallback chains.
 
-- Environment: `SENTRY_ENVIRONMENT_OVERRIDE` -> `VERCEL_ENV` -> `development`
-- Release: `SENTRY_RELEASE_OVERRIDE` -> root repo `package.json` version
-- Git SHA metadata: `GIT_SHA_OVERRIDE` -> `VERCEL_GIT_COMMIT_SHA`
+- Environment: `SENTRY_ENVIRONMENT_OVERRIDE` → `VERCEL_ENV` →
+  `development`, **constrained by `VERCEL_GIT_COMMIT_REF` for production**
+  — a `VERCEL_ENV=production` build from a non-main branch is downgraded
+  to `preview`. See the
+  [ADR-163 §3 truth table](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain).
+- Release: `SENTRY_RELEASE_OVERRIDE` → root repo `package.json` version
+  (semver; never the git SHA).
+- Git SHA metadata: `GIT_SHA_OVERRIDE` → `VERCEL_GIT_COMMIT_SHA` —
+  attached as the `git.commit.sha` Sentry tag, indexed and filterable.
+- Local-dev registration override: both
+  `SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` and
+  `SENTRY_RELEASE_OVERRIDE=<version>` must be set together (ADR-163 §4).
 
 `NODE_ENV` is not used for Sentry environment resolution because deployment
 systems frequently override it opaquely. The root repo `package.json` version
 is the canonical application version for now. It is updated by the GitHub
-release workflow. Preview and local builds can therefore legitimately share the
-same release version across multiple commits, with git SHA metadata
-distinguishing them. Production avoids ghost releases by cancelling builds whose
-root `package.json` version has not advanced beyond the previous successful
-production deployment.
+`semantic-release` workflow. Preview and local builds can therefore
+legitimately share the same release version across multiple commits,
+with git SHA metadata distinguishing them. Production avoids ghost
+releases by cancelling builds whose root `package.json` version has not
+advanced beyond the previous successful production deployment.
 
 ## Production build gating
 

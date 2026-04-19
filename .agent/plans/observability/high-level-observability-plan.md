@@ -6,7 +6,7 @@ foundational_adr: "docs/architecture/architectural-decisions/162-observability-f
 direction_session: "docs/explorations/2026-04-18-observability-strategy-and-restructure.md"
 execution_plan: ".agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md"
 adr_162_status: "Accepted (2026-04-19)"
-wave_1_state: "partially opened — require-observability-emission rule landed at warn; L-EH initial / L-DOC initial / L-12-prereq / L-7 pending"
+wave_1_state: "L-EH initial ✅ + L-DOC initial ✅ + L-12-prereq ✅ (closed by primitives-consolidation 2026-04-19). Only L-7 remains — ADR-163 Accepted 2026-04-19 and implementation authorised; ready to execute."
 ---
 
 # High-Level Observability Plan
@@ -116,10 +116,10 @@ vendor-independence conformance runs pre-launch rather than post-hoc.
 
 | Wave | Purpose | Work |
 |------|---------|------|
-| **1. Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces. Every line written after Wave 1 is gate-conformant at write-time. | Maximisation: L-0a / L-0b (done); L-EH initial (ESLint built-in `preserve-caught-error` at `warn` — supersedes original `require-error-cause` custom-rule plan; landed 2026-04-19); L-DOC initial (sentry-node README expansion + app observability doc); **L-12-prereq blocked 2026-04-19** by [`architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`](../architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md) — scaffolded extraction surfaced core→lib boundary violation + over-decomposition; architecture review (fred + barney) resolved toward folding primitives into `@oaknational/observability` rather than a new core workspace; L-12-prereq becomes a trivial confirmation step once consolidation closes; **L-7 moved here** (release/deploy linkage scripts). Restructure Phase 5 carve-out: author `require-observability-emission` ESLint rule at `warn`; flip ADR-162 Proposed → Accepted. |
+| **1. Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces. Every line written after Wave 1 is gate-conformant at write-time. | Maximisation: L-0a / L-0b (done); L-EH initial (done 2026-04-19); L-DOC initial (done 2026-04-19); **L-12-prereq closed 2026-04-19** via the [observability-primitives-consolidation lane](../architecture-and-infrastructure/archive/completed/observability-primitives-consolidation.plan.md) — primitives folded into `@oaknational/observability` rather than extracted into a new core workspace; browser-safety structurally enforced by `no-node-only-imports.unit.test.ts`. **L-7 remains open** (release/deploy linkage scripts — blocked on owner adjudication). Restructure Phase 5 carve-out: author `require-observability-emission` ESLint rule at `warn`; flip ADR-162 Proposed → Accepted. |
 | **2. Schema Foundation** | Event-schema contract + vendor-independence structural lint. Every downstream-analytics obligation exists as code before any consumer imports it. | Sibling plan [`observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) WS1–WS6 — creates `packages/core/observability-events/` with Zod schemas for the 7 MVP events + conformance helper + event catalog. Sibling plan [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) WS1 carve-out — `no-vendor-observability-import` ESLint rule landed at `warn`; the emission-persistence test itself is Wave 5. |
 | **3. Primary Emitters (Server)** | Server-side emission sites consume Wave 2 schemas by import. Each lane's RED asserts schema conformance via the events-workspace conformance helper. | Maximisation: L-1 (free-signal integrations with fixture envelope-observability prereq), L-2 (delegates extraction), L-3 (MCP request context enrichment), L-4b (primary `Sentry.metrics.*` adapter), L-9 (feedback pipeline + `submit-feedback` MCP tool). |
-| **4. Cross-axis & Widget** | Second emitting runtime + axis-specific plans. Can parallelise within wave. | Maximisation: L-12 (widget Sentry; uses `telemetry-redaction-core`; emits widget-session-outcome and a11y events). Sibling plan [`security-observability.plan.md`](current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered` events. Sibling plan [`accessibility-observability.plan.md`](current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome`. |
+| **4. Cross-axis & Widget** | Second emitting runtime + axis-specific plans. Can parallelise within wave. | Maximisation: L-12 (widget Sentry; composes the redaction primitives directly from `@oaknational/observability`; emits widget-session-outcome and a11y events). Sibling plan [`security-observability.plan.md`](current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered` events. Sibling plan [`accessibility-observability.plan.md`](current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome`. |
 | **5. Operations + Conformance + Close-out** | Alerts can land because emission landscape is real. Vendor-independence conformance runs pre-launch. MVP-deferred lanes cluster for clean branch close. | Maximisation: L-13 (alerts + dashboards + runbooks), L-14 (trust-boundary ADR), L-15 (strategy close-out ADR), L-DOC final (per-loop TSDoc + ADR index + runbook propagation), L-EH final (`prefer-result-pattern` ESLint rule), MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11. Sibling plan [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) WS2+ — emission-persistence test runs MCP server + widget + Search CLI in `SENTRY_MODE=off`; Wave 5 escalates the ESLint rule severity to `error`. Sibling plan [`synthetic-monitoring.plan.md`](current/synthetic-monitoring.plan.md) — uptime + working-probe deployment. |
 
 **Wave close semantics** (2026-04-18 per fred-review TO-ACTION —
@@ -163,10 +163,11 @@ plan (`search-observability.plan.md`) interleaves into Wave 3 or Wave
 emitters before schemas and ran compile-time gates after the code they
 would have policed — both are retrofit-heavy architectural anti-
 patterns. The reshape moves three things forward (events workspace
-schemas; extracted telemetry-redaction-core; release linkage) and
-moves two things later (MVP-deferred lanes cluster; operations
-follow emission). Net effect: every emitter lands against stable
-foundations, not moving targets.
+schemas; redaction primitives consolidated into
+`@oaknational/observability`; release linkage) and moves two things
+later (MVP-deferred lanes cluster; operations follow emission). Net
+effect: every emitter lands against stable foundations, not moving
+targets.
 
 ---
 

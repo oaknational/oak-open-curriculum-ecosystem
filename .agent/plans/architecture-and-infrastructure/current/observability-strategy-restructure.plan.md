@@ -750,7 +750,7 @@ the five sibling MVP `current/` plans into five **execution waves**:
 
 1. **Schemas before emitters** — Wave 2 creates `packages/core/observability-events/` before any L-1 / L-3 / L-4b / L-9 / L-12 fixture test imports from it. No retrofit.
 2. **Rules before code** — ESLint built-in `preserve-caught-error` (Wave 1, L-EH initial — supersedes original `require-error-cause` custom-rule plan; landed 2026-04-19), custom `require-observability-emission` (Wave 1, restructure Phase 5 carve-out), custom `no-vendor-observability-import` (Wave 2, vendor-independence plan carve-out) all land before any emission site is written.
-3. **Redactor core extracted once** — L-12-prereq in Wave 1 gives server + widget + future Search CLI a shared `packages/core/telemetry-redaction-core/`. No refactor underneath emitters.
+3. **Redactor core consolidated once** — L-12-prereq in Wave 1 (closed 2026-04-19 via the observability-primitives-consolidation lane) folds the redaction primitives + JSON sanitisation + canonical `JsonValue`/`JsonObject` type into `@oaknational/observability`. Server + widget + future Search CLI all compose from this single canonical home; no refactor underneath emitters.
 4. **Release linkage early** — L-7 in Wave 1 means every subsequent lane's owner-verified smoke test is tagged and attributable.
 5. **Vendor-independence runs pre-launch** — the conformance plan's emission-persistence test was structurally blocked on the events workspace; Wave 2 unblocks it; Wave 5 runs it before PR open.
 

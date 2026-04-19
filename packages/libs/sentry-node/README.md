@@ -157,6 +157,10 @@ emits stdout JSON normally.
 - [ADR-160 Non-Bypassable Redaction Barrier](../../../docs/architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md)
 - [ADR-161 Network-Free PR-Check CI Boundary](../../../docs/architecture/architectural-decisions/161-network-free-pr-check-ci-boundary.md)
 - [ADR-162 Observability-First](../../../docs/architecture/architectural-decisions/162-observability-first.md)
+- [ADR-163 Sentry Release Identifier, Source-Map Attachment, and Vercel Production Attribution](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)
+  — authoritative mechanism for release = semver, SHA as metadata,
+  `VERCEL_ENV` + branch check for production attribution, and the
+  deploy-time orchestrator sequence.
 - [`apps/oak-curriculum-mcp-streamable-http/docs/observability.md`](../../../apps/oak-curriculum-mcp-streamable-http/docs/observability.md)
   — app-level observability wiring and per-request span documentation.
 - [`what-the-system-emits-today.md`](../../../.agent/plans/observability/what-the-system-emits-today.md)

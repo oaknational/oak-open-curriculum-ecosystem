@@ -43,15 +43,27 @@
 #
 # WHEN TO RUN
 # -----------
+# Release identity per ADR-163 §1–§2 is the root package.json semver —
+# never the git SHA, never a session tag for production artefacts. Callers
+# set RELEASE to that semver. The SHA is attached separately as metadata
+# (via the release-and-deploy orchestrator) and is NOT passed to this
+# script.
+#
 # - Locally, when generating Sentry evidence for the HTTP MCP server:
 #     pnpm build
-#     RELEASE=<session-tag> pnpm sourcemaps:upload
+#     RELEASE=$(node -p "require('../../package.json').version") pnpm sourcemaps:upload
 #     pnpm start
 #
-# - In CI / Vercel pre-deploy (future): invoke immediately after `pnpm build`
-#   with `RELEASE=$VERCEL_GIT_COMMIT_SHA` (or the root package.json version,
-#   matching the resolution precedence documented in
-#   `packages/libs/sentry-node/src/config-resolution.ts`).
+#   (For ad-hoc UAT against a bespoke release name, set both
+#   SENTRY_RELEASE_REGISTRATION_OVERRIDE=1 and SENTRY_RELEASE_OVERRIDE=<name>
+#   at runtime per ADR-163 §4, and pass the same <name> as RELEASE to this
+#   script so the uploaded bundle's weak-release association matches.)
+#
+# - In the Vercel Build Command (L-7 scope): invoked by
+#   scripts/sentry-release-and-deploy.sh immediately after `pnpm build`
+#   with RELEASE set to the semver read from the repo root
+#   package.json. Abort on failure — symbolication will be broken
+#   without the injected Debug IDs and uploaded bundle.
 #
 # REQUIRED ENVIRONMENT
 # --------------------
@@ -60,9 +72,9 @@
 #                        `sentry-cli` accepts this via env only in CI-safe
 #                        use; do not commit tokens to `.sentryclirc`.
 # - `RELEASE`            The release string events will be tagged with at
-#                        runtime. Must match whatever
-#                        `resolveSentryRelease` produces for the process
-#                        that will generate the events.
+#                        runtime. MUST be the root package.json semver
+#                        (e.g. `1.5.0`), matching what `resolveSentryRelease`
+#                        returns via APP_VERSION. See ADR-163 §1.
 #
 # REFERENCES
 # ----------

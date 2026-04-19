@@ -84,12 +84,6 @@ context with no natural permanent home.
   lanes**: a client-specific compat issue emerging in an active
   deployment-validation lane spins into its own follow-up plan.
   Shared preview infra ≠ shared plan ownership.
-- **Forward-pointing planning references need "planned, not yet
-  code" markers** (watchlist; single instance 2026-04-19). Plans
-  that cross-reference workspaces, files, or workspaces that do
-  not yet exist on disk must label those references explicitly.
-  Readers should not infer existence from a reference. Re-evaluate
-  on a second instance in a different planning context.
 - **Externally-verifiable-output beats internal-plan-compliance
   for forward-motion assurance** (watchlist; single-instance
   observation 2026-04-19, L-EH close). "Are we following the plan"
@@ -113,6 +107,15 @@ context with no natural permanent home.
   Graduation trigger: second cross-session instance of a precedent-
   match producing a reviewer-caught wrong default.
 
+- **Reviewer findings applied in-close, not deferred** (three
+  cross-session instances 2026-04-19). The closing atomic commit
+  is the default home for actionable reviewer findings; deferral
+  requires written rationale. **Candidate for PDR-012 amendment**.
+- **Duplicate type becomes load-bearing at three consumers**. Two-
+  workspace type duplication is tolerated stably; the would-be third
+  consumer forces canonicalisation. Use the three-consumer pressure
+  as the planning trigger for consolidation.
+
 Practice-governance Process rules graduated to PDRs 2026-04-18 —
 see `.agent/practice-core/decision-records/` for: review-findings
 routing (PDR-012), grounding and framing (PDR-013), reviewer
@@ -124,14 +127,8 @@ PDR-025.
 
 ## Architecture (Agent Infrastructure)
 
-- **Implicit architectural intent is not enforced principle**.
-  Adapters + DI + boundary separation may structurally enable a
-  property (e.g. vendor independence) without naming it. Naming is
-  the upgrade path — turns accidental architecture into a testable
-  invariant. Materialised 2026-04-18: vendor-independence was
-  implicit in ADR-078 / 143 / 154 but unnamed until ADR-162
-  (scheduled). Rule: when a structural property matters, write it
-  down with a test, not an implication.
+<!-- "Implicit architectural intent is not enforced principle" graduated
+2026-04-19 — codified as ADR-162 (Observability-First), now Accepted. -->
 
 - **Full triplet portability requires 7 adapter types**: Cursor
   agents + skills + rules, Claude Code agents + rules, Codex

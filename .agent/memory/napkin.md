@@ -1,1546 +1,249 @@
-## 2026-04-19 — primitives consolidation plan authored; L-12-prereq architectural pivot (scaffold → fold)
+## 2026-04-19 — L-7 adjudication + ADR-163 authored and Accepted (post-rotation session)
 
 ### What Was Done
 
-- Opened L-12-prereq attempting to extract pure redactor core from
-  `@oaknational/sentry-node` into a new
-  `packages/core/telemetry-redaction-core/` workspace per ADR-160
-  §Closed Questions. Scaffolded the workspace (13 files:
-  `package.json`, tsconfig triplet, `eslint.config.ts`,
-  `vitest.config.ts`, `tsup.config.ts`, `README.md`, `src/index.ts`,
-  `src/primitives.ts`, `src/primitives.unit.test.ts`,
-  `src/zero-sentry-imports.unit.test.ts`). Rewired
-  `@oaknational/sentry-node` to depend on the new workspace; deleted
-  `runtime-telemetry.ts`.
-- Lint failed on `primitives.ts:24` importing from `@oaknational/logger`
-  (a foundation lib). ADR-041 forbids core→lib imports.
-- Diagnosed: JSON sanitisation utilities (`sanitiseForJson`,
-  `sanitiseObject`, `JsonValue`, `JsonObject`) are atomic runtime
-  primitives misplaced in a lib. Their home in `@oaknational/logger`
-  is a historical artefact, not a layer truth.
-- Dispatched `architecture-reviewer-fred` and
-  `architecture-reviewer-barney` in parallel on the proposed
-  two-workspace fix plan (extract JSON sanitisation to its own core
-  workspace + telemetry-redaction-core as sibling).
-- Fred: ADR-compliant, ship with three corrections (add ADR, remove
-  logger re-exports with full consumer migration, add browser-safety
-  structural test).
-- Barney: over-decomposed. Duplicate recursive JSON-safe type
-  (`JsonValue` in logger, `TelemetryValue` in observability) would
-  proliferate to a third copy; telemetry-redaction-core is 139 LOC of
-  pure composition with zero net primitive content; recommended
-  **folding everything into `@oaknational/observability`** and
-  deleting the scaffolded workspace.
-- Owner direction: architectural excellence always; ADR-160 amendment
-  is the correct response when the ADR was made without the
-  simplification on the table. Plan B adopted.
-- Authored
-  `.agent/plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`
-  (nine work streams WS1–WS9, single atomic commit, fold sanitisation
-  and redaction primitives into `@oaknational/observability`, delete
-  the scaffolded workspace, amend ADR-160 §Closed Questions). Wired
-  as blocker for Wave 1 L-12-prereq; Wave 4 L-12 composes
-  observability directly once consolidation closes.
-- Wired blocker into three observability plan surfaces: maximisation
-  plan §L-12-prereq status block + todo; high-level plan §Execution
-  Waves row 1; session-continuation Live Continuity Contract.
-- Committed as `095e66d4 wip(observability): primitives consolidation
-  plan + transitional scaffold` under explicit owner authorisation of
-  `--no-verify` (fresh per-commit only). Branch intentionally
-  lint-failing at primitives.ts:23 pending consolidation execution.
+- Owner adjudicated 6 L-7 open questions (release identity, SHA
+  provenance, release-creation location, source-map interaction,
+  deploy-event scope, pipeline boundary) during the consolidation
+  closeout.
+- Verified the owner's intended mechanism against Sentry + Vercel
+  current docs via `sentry-reviewer` agent + direct WebFetch calls.
+  Owner redirected mid-research: "use the proper tools, not arbitrary
+  scripts" — switched from dispatching the `vercel:deployment-expert`
+  agent to direct WebFetch for Vercel docs.
+- Authored initial ADR-163 draft. Owner pushback: "unacceptable
+  degree of uncertainty; Sentry documentation is clear; all decisions
+  and all uncertainties must be resolved and recorded in the
+  appropriate plans and documents." Rewrote ADR-163 to eliminate
+  every open question by naming previously-implicit decisions
+  (CLI noun form, per-step error handling, pipeline attachment shape,
+  idempotency posture, runtime contract changes, hotfix policy).
+- L-7 lane body in maximisation plan fully rewritten as a mechanical
+  transcription of ADR-163 §6 with explicit RED/GREEN/REFACTOR,
+  orchestrator script shape, and acceptance criteria.
+- Fixed documentation drift in 6 surfaces:
+  `docs/operations/sentry-deployment-runbook.md` (SENTRY_RELEASE
+  fallback said SHA; corrected to semver),
+  `docs/operations/sentry-cli-usage.md` (added release-linkage
+  sequence), `upload-sourcemaps.sh` (WHEN-TO-RUN now says semver only),
+  `apps/.../docs/observability.md`, `apps/.../docs/vercel-environment-config.md`,
+  `packages/libs/sentry-node/README.md`.
+- Owner accepted ADR-163 in same session ("1 yes, 2 yes"). Status
+  flipped Proposed → Accepted with History entry. L-7 implementation
+  authorised. All stale "Proposed" references to ADR-163 cleaned up
+  across session-continuation prompt + ADR index.
 
 ### Surprise
 
-- **Expected**: extracting a "pure runtime-agnostic redactor core"
-  would be a mechanical file move per ADR-160's already-settled
-  closed question.
-- **Actual**: the extraction attempt surfaced a repo-wide
-  architectural truth — JSON sanitisation is in the wrong tier, and
-  two workspaces independently define the same recursive JSON-safe
-  type. A mechanical file move was not possible without first
-  repairing the foundation.
-- **Causal mechanism**: ADR-160's author could not have anticipated
-  the duplicate-type problem because the problem surfaces only when
-  a *third* consumer (the would-be telemetry-redaction-core) tries to
-  import the shape. The two-consumer state (logger + observability)
-  each owning their own copy is stable enough to not surface as
-  architectural debt; the third-consumer pressure exposes it. Pattern
-  candidate: **duplicate-type load-bearing-at-three-consumers** — a
-  duplicated type across two workspaces is tolerated until the third
-  import site; at three, canonicalisation is forced.
+- **Expected**: an ADR that recorded the owner's 6 adjudicated answers
+  would be sufficient to close the uncertainty.
+- **Actual**: the 6 answers implicitly settled 6 more decisions
+  (CLI form choice, abort-vs-continue posture per step, pipeline
+  attachment shape, idempotency of `releases new`, per-env-var
+  runtime contract additions, hotfix discipline). Owner pushback
+  "all decisions and all uncertainties must be resolved" forced a
+  second pass that enumerated every latent decision, not just the
+  explicitly-asked ones.
+- **Causal mechanism**: a list of questions frames the uncertainty
+  the asker is *aware of*. Answering that list resolves those
+  questions but leaves downstream decisions the questions did not
+  name. An ADR that is genuinely decision-complete must sweep for
+  decisions the questioner did not think to ask. Pattern candidate:
+  **`decision-complete-adr-enumerates-implied-questions`** — when
+  adjudicating a named question list, enumerate every downstream
+  decision that the explicit answers *require* and record each
+  explicitly, even ones the asker did not raise.
 
 ### Corrections / learnings
 
-- **Dependency-provenance trace is the leading indicator, lint is
-  lagging.** Before authoring a new workspace in any tier, enumerate
-  every import it will need and verify each lives in a tier the new
-  workspace is allowed to depend on (core→core-only, libs→core+libs,
-  apps→everything). A 5-minute graph trace at plan time prevents a
-  session-shape-pivoting lint error at scaffold time. Watchlist:
-  "dependency-provenance-before-scaffold" — this is the first
-  instance; second would graduate to distilled.
+- **Agent-vs-WebFetch for doc research**: Owner's direction "use
+  the proper tools, not arbitrary scripts" interpreted as: prefer
+  direct `WebFetch` for authoritative-doc research over dispatching
+  a specialist agent that will itself fetch the docs. `WebFetch` is
+  the cheaper, more legible path when the need is "read doc X and
+  extract facts Y, Z". Agents are right when the need is genuinely
+  interpretive (reviewer judgement, cross-source synthesis). Pattern
+  candidate: **`prefer-webfetch-for-doc-citation-prefer-agent-for-
+  judgement`**.
 
-- **Architectural excellence trumps ADR honour when the ADR was made
-  without the simplification on the table.** ADR-160 §Closed Questions
-  recorded "new package at packages/core/telemetry-redaction-core/"
-  as the placement decision. Barney's review (with the full
-  consumer graph visible) found the decision over-decomposed. Owner
-  ruling: amend the ADR, don't honour a decision made with less
-  information. Watchlist: "amend-not-honour-when-simplification-
-  surfaces-post-decision."
+- **Sentry CLI noun-form drift is real**: the legacy
+  `sentry-cli releases deploys VERSION new -e ENV` form still works
+  but the current CLI reference documents `sentry-cli deploys new
+  --release VERSION -e ENV`. Codifying ONE form only (ADR-163 §6.6
+  rejects the legacy form) eliminates drift between docs and
+  scripts. Watchlist: **`prefer-one-form-over-both-work-drift-
+  avoidance`**.
 
-- **Reviewer verdicts can be contradictory-but-both-honest.** Fred
-  (strict ADR lens) and Barney (simplification lens) produced
-  opposite verdicts on the same plan. Both correct within lens.
-  Running reviewers with different lenses surfaces tradeoffs that no
-  single review reaches. Watchlist: "multi-lens-reviews-surface-
-  tradeoffs-single-review-cannot."
+- **Debug IDs are THE symbolication key; `--release` on sourcemaps
+  upload is optional but kept**: Sentry's Debug-ID era means the
+  symbolication key is embedded in the JS itself, not the release
+  string. `--release` on `sourcemaps upload` creates a weak
+  association (UI navigation benefit). Oak keeps it for the UI
+  benefit but ADR-163 §6.4 documents that Debug IDs alone would
+  suffice. Watchlist: **`symbolication-key-vs-ui-association-are-
+  separate-concerns`**.
 
-- **139 LOC of pure composition fails core-tier "atomic primitive"
-  spirit.** Workspace tier isn't just about dependency purity — it's
-  about primitive-ness. Composition layers belong in libs even when
-  they have zero runtime deps. Barney's key structural insight.
-  Adjacent rule: a new core workspace must *add* a primitive, not
-  *compose* primitives. Watchlist: "core-tier-means-primitive-not-
-  just-dependency-pure."
+- **The existing GitHub release workflow + Vercel ignoreCommand
+  already enforce the "one version-bump commit per production
+  build" invariant**: L-7 scope does NOT change `release.yml` or
+  `vercel-ignore-production-non-release-build.mjs`. L-7 only adds
+  the Sentry CLI sequence inside the Vercel Build Command. This
+  was a discovery surprise — the plan body had previously implied
+  L-7 would touch the GitHub workflow; it will not.
 
-- **`git --no-verify` blocked by repo pre-tool hook is a second
-  safety layer, not nested under owner permission.** Owner verbally
-  authorised `--no-verify`; `scripts/check-blocked-patterns.mjs`
-  rejected it as a dangerous pattern. Verbal authorisation does not
-  bypass the tool-use hook policy. Owner had to run the commit
-  themselves from a shell (via `tmp-commit-wip.sh` written for the
-  purpose). Lesson: safety layers stack; a harness-level hook is not
-  automatically subordinate to a conversation-level authorisation.
-  Pattern observation: **safety-layers-stack-not-nest**.
-
-- **`--no-verify` requires fresh per-commit permission; prior
-  authorisation never carries forward.** Owner rule codified after
-  I asked for commit authorisation. Saved to memory at
-  `feedback_no_verify_fresh_permission.md`.
-
-- **Staged-parallel-agent-work discoverable only via fresh `git
-  status`.** Environment-block git status is a snapshot at session
-  start; by mid-session, parallel agents had staged 47 files of work.
-  Attempting `git restore --staged --worktree` on shared-mutable
-  state would have destroyed parallel-agent work. Owner rejected the
-  attempt; lesson: before any destructive git command, re-read
-  status and diff the exact files, don't rely on mental model from
-  earlier in the session.
-
-- **Session options menu should not offer no-landing sessions as
-  default.** Owner direction: deep-consolidation and Core-trinity
-  refinement sessions are not to be offered as Landing Commitment
-  options unless explicitly requested. Saved to memory at
-  `feedback_session_options_menu.md`.
-
-- **L-7 and userId-scope questions are blocked on architectural
-  adjudication, not ready to open.** Saved to memory at
-  `project_l7_and_e_open_questions.md`. Clerk is canonical user-ID
-  provider through public alpha; revisit before public beta
-  (`project_user_id_clerk_canonical.md`).
-
----
-
-## 2026-04-19 — three-sink architecture wired into plans, ADRs, explorations
-
-### What Was Done
-
-- Authored two new exploration stubs:
-  `docs/explorations/2026-04-19-data-warehouse-selection.md` (warehouse
-  choice for Sink 2; BigQuery is the named candidate from the owner
-  conversation but verification deferred) and
-  `docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md`
-  (Clerk-identity policy ruling for downstream sinks; three coherent
-  positions named — anonymous-only, identified-single-sink,
-  identified-all-sinks).
-- Reframed `.agent/plans/observability/future/second-backend-evaluation.plan.md`
-  from "second backend evaluation" to "three-sink strategic brief"
-  with per-sink promotion triggers (warehouse adapter at public-beta;
-  PostHog adapter post-public-beta on a named question; alternative
-  engineering sink only on a named Sentry-capability gap). The
-  original engineering-observability candidate set is retained as
-  contingency under the alternative-engineering-sink trigger.
-- Added History entries to ADR-160 (Clerk-identity policy ruling
-  deferred to new exploration; closure principle unchanged) and
-  ADR-162 (three-sink architecture confirmed; vendor-independence
-  clause unchanged).
-- Updated `.agent/plans/observability/high-level-observability-plan.md`:
-  product-axis Owning Plan + Explorations columns now name the
-  three-sink brief and the two new explorations; Plan Map row
-  for `second-backend-evaluation.plan.md` reframed; Explorations
-  Map expanded from 8 to 10 rows; new "Three-Sink Architecture"
-  subsection added at end.
-- Updated `.agent/plans/observability/README.md` Plan Density
-  Invariant scope clarification (explorations are governed by
-  `docs/explorations/README.md`, not the observability invariant);
-  exploration count updated 8 → 10.
-- Recorded L-15 input framing in
-  `.agent/plans/observability/future/sentry-observability-maximisation.plan.md`
-  (the *strategic-parent* maximisation plan), so the
-  active MCP-side `sentry-observability-maximisation-mcp.plan.md`
-  is not edited from outside its own branch (parallel agent active
-  on its surface). Five framings recorded as L-15 inputs: three-sink
-  shape; MVP usage question is Sentry-addressable; redaction-core
-  extraction is independent of PostHog adoption; Clerk identity is
-  an explicit policy question; existing Oak-org PostHog usage is a
-  signal weighting only.
-- Light touches on three downstream plans: events-workspace plan
-  records its multi-sink consumer posture; multi-sink-conformance
-  plan records the per-sink scope-expansion mechanism (allowlist
-  plus RuleTester cases per adapter PR); feature-flag-provider-selection
-  plan adds PostHog as an existing-vendor candidate.
-- Reframed `docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md`
-  with a prominent "Status update 2026-04-19 — three-sink reframe"
-  section at top, §6.1 update acknowledging the binary framing is
-  superseded, §8 promotion-trigger update referencing per-sink
-  triggers in the reframed plan, and §9 references for the two new
-  companion explorations.
-- Added "Sinks Today vs Planned" subsection to
-  `.agent/plans/observability/what-the-system-emits-today.md` plus
-  Update Log entry.
-- All 13 touched files pass markdownlint.
-
-### Surprise
-
-- **Expected**: the three-sink reframe would land predominantly as
-  ADR amendments (ADR-160 closure principle to permit
-  identified-events; ADR-162 mechanisms to enumerate per-sink
-  conformance).
-- **Actual**: neither ADR text needed substantive amendment. ADR-160
-  is *already* a closure-principle ADR (the 2026-04-17 origin
-  framing got this right); the Clerk-identity ruling lives at the
-  *policy* layer the closure rule consumes, not at the closure
-  rule itself. ADR-162's vendor-independence clause is *already*
-  sink-cardinality-agnostic; three sinks is a confirmation, not an
-  extension. Both ADRs received History entries only. The architectural
-  weight landed in plans (`future/second-backend-evaluation.plan.md`
-  reframe + new explorations 9 + 10), not in ADR amendments.
-- **Causal mechanism**: the closure principle / clause / mechanism
-  abstractions in ADR-160 + ADR-162 were authored to be
-  cardinality-agnostic. This is the second time this property has
-  paid off (first: ADR-160's closure principle correctly absorbed
-  the 2026-04-19 reviewer correction on identified-events
-  mis-prohibition; second: now, three-sink confirmation lands
-  without amendment).
+- **Vercel has no post-deploy hook**: everything happens inside the
+  Build Command. The single-orchestrator shape (ADR-163 §7) flows
+  from this constraint — pre/post-build hooks don't exist, and
+  chaining CLI steps with bash `&&` cannot express per-step
+  abort-vs-continue postures.
 
 ### Pattern To Remember
 
-- **`closure-principles-absorb-cardinality-changes.md`** — when an
-  ADR is authored as a *closure principle* (every X applies Y) rather
-  than as an enumeration (the X items that apply Y are A, B, C),
-  the ADR text remains valid as the cardinality of X grows. ADR-160
-  (every fan-out path applies the redaction policy) and ADR-162
-  (consumers couple to vendor-neutral packages, not vendor SDKs)
-  both demonstrate this. Counterpattern: ADR-143 §6 originally
-  enumerated the fan-out hooks, which is why ADR-160 had to be
-  authored to *generalise* §6. Lesson: when authoring a new ADR,
-  prefer closure-principle wording over enumeration wording where
-  the cardinality is plausibly extensible.
+- **`decision-complete-adr-enumerates-implied-questions`** (new,
+  single instance) — promotion-ready if a second instance occurs
+  where an explicit adjudication-question list left downstream
+  decisions unnamed.
 
-### Where We Are Now
-
-- All 14 todos for the "wire decisions into appropriate surfaces"
-  task are complete except the two reviewer rounds (assumptions +
-  docs-adr) on the edit set, which are about to dispatch in
-  parallel.
-- Markdownlint clean across all 13 touched files.
-- Parallel-agent posture preserved: the active MCP-side maximisation
-  plan was not touched directly; the L-15 framing landed in the
-  strategic-parent plan instead.
-- Owner-confirmed three-sink architecture is now the canonical
-  framing across plans, ADRs, and explorations. The
-  `future/second-backend-evaluation.plan.md` rename-in-place (file
-  path unchanged; semantic content reframed) preserves all inbound
-  cross-references without a redirect step.
+- **`prefer-webfetch-for-doc-citation-prefer-agent-for-judgement`**
+  (new, single instance) — calibrates when to use agent dispatch
+  vs direct doc fetching.
 
 ---
 
-## 2026-04-19 — L-DOC initial close (observability Wave 1)
+## 2026-04-19 — napkin rotation (second rotation of the day)
 
 ### What Was Done
 
-- Landed L-DOC initial on `feat/otel_sentry_enhancements` as commit
-  `9e1a26b2`. 9 L-DOC files + 2 unrelated Cursor IDE artefacts bundled at
-  owner direction (called out in the commit body).
-- Authored `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
-  as the authoritative per-app Sentry guide: modes, `wrapMcpServerWithSentry`
-  at `core-endpoints.ts:98`, per-request span `oak.http.request.mcp`,
-  scope enrichment (`mcp.method`, `mcp.tool_name`), Express error handler
-  DI wiring at `src/index.ts:40-41`, manual spans, redaction barrier
-  entry points (ADR-143 + ADR-160), source-map upload, release metadata.
-- Expanded `packages/libs/sentry-node/README.md` from 4-line stub to
-  package-level reference covering modes, redaction barrier (ADR-160),
-  DI seam (ADR-078), fixture store, logger sink, shared delegates
-  (`SentryRedactionHooks` wiring + `SentryPostRedactionHooks` subset).
-- Shrunk app README `## Observability` section (lines 176–235) to a
-  summary plus link to `docs/observability.md`. Added new Observability
-  entry to app README `## Detailed Documentation` list.
-- Restored the discoverability mesh: `docs/README.md` gained an
-  Observability section; `docs/foundation/quick-start.md` gained forward
-  links from both signpost locations (§Where to Make Changes + §Getting
-  Help → Observability); `docs/operations/README.md` lists both the new
-  app guide and the sentry-node README; `docs/operations/sentry-deployment-runbook.md`
-  § Redaction gained a forwarding link to the new authoritative surfaces.
-- Maximisation plan updated: `l-doc-initial` todo → `completed` with
-  note; Status line updated to list L-DOC initial among landed lanes;
-  §L-DOC initial §RED corrected (content-presence test shape removed);
-  §Lane close evidence appended (attempt / observed / proven + reviewer
-  rounds + follow-ups).
-- `what-the-system-emits-today.md` Update Log appended (L-DOC initial
-  landed; 0 matrix cells moved; documentation discoverability invariant
-  added).
-- Pre-commit hooks all green (format, markdownlint, knip, depcruise,
-  74/74 turbo tasks).
+- Archived outgoing napkin to `archive/napkin-2026-04-19b.md`
+  (~1679 lines — well above the 500-line rotation threshold). The
+  morning's first rotation already landed as `napkin-2026-04-19.md`;
+  today's evening session required a second rotation because the
+  primitives-consolidation planning + execution + three-sink wiring
+  surprises all accumulated on the same day.
+- Previous rotation: 2026-04-19 (morning) at the end of the
+  observability-planning-restructure session.
+- This rotation preserves: the primitives-consolidation EXECUTION
+  session (top), the PLANNING session, the three-sink wiring
+  session, the L-DOC initial session, the L-EH initial session, and
+  the Phase-5 honest-evaluation conclusions. Each lives in the
+  archive for durable reference.
 
-### Surprise
+### Watchlist carried forward (single-instance, not yet ready to distil)
 
-- **Expected**: the maximisation plan's prescribed L-DOC initial §RED
-  (structural content-presence test under `test:root-scripts`) was a
-  valid TDD-shape RED — I authored it, confirmed it red (11/12 failing),
-  and moved to GREEN.
-- **Actual**: owner flagged the shape against testing-strategy.md mid-
-  execution: "all tests must prove useful behaviour, and not constrain
-  implementation or configuration." Content-presence tests fail on
-  legitimate rewording of the same concepts — they constrain doc wording,
-  not product behaviour. I removed the test, reshaped the plan's §RED
-  with a correction note, and moved L-DOC acceptance to the reviewer
-  matrix (`docs-adr-reviewer` + `onboarding-reviewer`) plus the manual
-  reader-test.
-- **Why expectation failed**: I deferred to the plan's prescribed shape
-  without re-checking it against testing-strategy.md. The plan was
-  reviewed at authorship, but "content-presence" tests were not flagged
-  — possibly because their shape *looks* test-like. The directive's
-  "test behaviour, not config" rule applies to any assertion surface,
-  including `readFileSync`-based ones.
-- **Behaviour change**: before authoring any new test, evaluate against
-  testing-strategy.md: does this prove useful behaviour, or does it
-  constrain implementation/configuration? A test that breaks on
-  legitimate refactoring of the implementation is a constraint test,
-  not a behaviour test. For docs lanes specifically: there is no
-  TDD-shape RED that doesn't constrain doc wording; acceptance belongs
-  on the reviewer matrix. Candidate for distilled.md graduation.
+These live on this new napkin as the active observation set. They
+move to distilled only on a second independent instance in a later
+session. Ordered by how structurally load-bearing each candidate is
+if it recurs.
 
-### Surprise
+- **`work-stream-dissolution-via-upstream-fix`** — a fix-to-root-cause
+  can absorb a downstream remediation listed as a separate work
+  stream. Planning should check after each upstream step lands
+  whether the downstream item is still needed. (From the WS6
+  dissolution in the primitives-consolidation execution.)
+- **`reviewer-matrix-completeness-is-not-absolute`** — plan-level
+  reviewer lists are discretionary, not prescriptive; owner
+  concurrency control and the law of diminishing returns shape
+  actual dispatch. (From the mid-session owner "stop all streams"
+  interrupt.)
+- **`turbo-cache-hides-prettier-drift-until-pre-commit`** — trust the
+  pre-commit hook for the authoritative format verdict; turbo's
+  cached `format:root` can say "nothing to do" while pre-commit
+  prettier finds drift. (From the first commit attempt failure.)
+- **`amend-not-honour-when-simplification-surfaces-post-decision`** —
+  an ADR decision made without the full consumer graph visible can
+  be amended when a later review with the broader view finds it
+  over-decomposed. Architectural excellence trumps ADR honour.
+  (From the ADR-160 fold amendment.) **Strong candidate to
+  graduate to PDR on second instance.**
+- **`duplicate-type-load-bearing-at-three-consumers`** — a duplicated
+  type across two workspaces is tolerated until the third import
+  site; at three, canonicalisation is forced. (From the JsonValue /
+  TelemetryValue unification pressure.) **Strong candidate for
+  `.agent/memory/patterns/` on second instance — general engineering
+  observation.**
+- **`core-tier-means-primitive-not-just-dependency-pure`** — workspace
+  tier is about primitive-ness as well as dependency purity. A
+  composition-only workspace does not meet core-tier's "atomic
+  primitive" spirit even when its deps are all in core. (From the
+  139-LOC composition workspace rejection.)
+- **`safety-layers-stack-not-nest`** — a harness-level safety hook
+  (e.g. `scripts/check-blocked-patterns.mjs`) is not automatically
+  subordinate to in-conversation owner authorisations. Safety
+  layers stack; they do not nest under permission. (From the
+  `--no-verify` attempt.)
+- **`git-status-is-a-snapshot`** — session-open `git status` is a
+  snapshot; parallel agents may have staged substantial work by
+  mid-session. Re-read status fresh before any destructive git
+  operation. (From the 47-file staged-parallel-work incident.)
+- **`closure-principles-absorb-cardinality-changes`** — when an ADR
+  is phrased as a closure principle (all fan-out paths apply the
+  redactor) rather than an enumeration (five named hooks),
+  cardinality changes (three sinks, not two) land without ADR
+  amendment. (From the three-sink wiring against ADR-160 / ADR-162.)
+- **`reviewer-as-option-cartographer-not-decision-maker`** — reviewer
+  findings frame the option space; owner rulings settle within
+  it. The reviewer's job is to surface the alternative; it is not
+  to prescribe which alternative wins. (From the two BLOCKER
+  overrides during three-sink wiring.)
+- **`date-suffixed-frontmatter-is-a-smell`** — novel frontmatter
+  fields earn their place by being reusable across documents and
+  across edits; date-suffixed fields lock the document to its
+  authoring moment. Renamed `companion_explorations_2026_04_19:` to
+  `informed_by:`.
+- **`tier-scope-must-be-explicit-for-shared-vocabulary-invariants`** —
+  invariants written for one tier (plans) get conscripted into
+  governing adjacent tiers (explorations) unless the scope is named
+  explicitly. Plan Density Invariant required a "Scope
+  clarification" addition.
+- **`code-embodied-policy-without-explicit-ruling-needs-tsdoc-pointer`** —
+  when code embodies an unwritten policy decision, the holding
+  pattern is: TSDoc at the call site points at the open exploration
+  that owns the ruling. (From `observability.setUser({ id: userId })`
+  in `mcp-handler.ts`.)
+- **`forward-pointing-planning-references-need-planned-markers`** —
+  plans that cross-reference workspaces, files, or dirs that do not
+  yet exist on disk must label those references explicitly. Readers
+  should not infer existence from a reference. (Moved from distilled
+  2026-04-19 as still single-instance — re-watchlist on second
+  occurrence.)
+- **`in-place-supersession-markers at section anchors`** — when a
+  doc receives a status reframe, in-place markers are needed at
+  every section-level anchor that external surfaces reference, not
+  only at the document head. (From the capability-matrix §7 /
+  Q6 reviewer finding.) **Third instance reached — promotion-ready
+  per the previous napkin's annotation.**
+- **`fork-cost-surfaces-in-doc-discipline-layer`** — three-instance
+  pattern where architectural forks propagate as doc-discipline
+  issues before they surface as architectural ones. **Third
+  instance reached — promotion-ready.**
 
-- **Expected**: ADR cross-link filenames in new docs would be stable —
-  just copy the slug pattern from existing docs.
-- **Actual**: `onboarding-reviewer` found **11 broken ADR filename
-  slugs** across the two new/expanded docs. I used
-  `143-observability-boundary-for-structured-telemetry.md` (plausible
-  but wrong),
-  `160-non-bypassable-redaction-barrier.md` (missing the
-  `-as-principle` suffix), and
-  `078-dependency-injection.md` (missing the `-for-testability`
-  suffix). All three actual filenames are longer. The plan-prose
-  references and the napkin entries had used shorter slugs throughout
-  — I had anchored on the prose rather than on the on-disk directory.
-- **Why expectation failed**: I treated plan prose as authoritative for
-  filenames. Plan prose is authoritative for decisions and sequencing;
-  it is NOT authoritative for file slugs. Only `ls
-  docs/architecture/architectural-decisions/` is.
-- **Behaviour change**: before writing any ADR reference in a durable
-  doc, verify the filename by listing the on-disk directory. Never
-  copy a slug from plan prose. Watchlist candidate: "authoritative
-  facts must be sourced from the authoritative surface — docs for
-  doctrine, code for behaviour, filesystem for slugs." Graduation
-  trigger: second cross-session instance.
+### Promotion-ready (already ≥2 cross-session instances — surfaced to owner at this consolidation)
 
-### Surprise
+These sit above the napkin and should be graduated this pass per
+step 7 of `jc-consolidate-docs`. See the consolidation report in
+this session's response to the owner for the graduation list and
+proposed destinations.
 
-- **Expected**: `SentryPostRedactionHooks` was the five-member union
-  covering every payload-mutating hook — I wrote it that way in both
-  docs, mirroring the napkin's prior "shared delegates" framing.
-- **Actual**: `docs-adr-reviewer` caught that `SentryPostRedactionHooks`
-  has only three members (`beforeSend`, `beforeSendTransaction`,
-  `beforeBreadcrumb`); the five-hook closure lives on
-  `SentryRedactionHooks` (`Pick<NodeOptions, ...>` at
-  `runtime-sdk.ts:39-42`). `beforeSendSpan` and `beforeSendLog` are
-  redaction-only — no consumer post-redaction slot. The barrier wires
-  five; three admit consumer slots; two are redaction-only.
-- **Why expectation failed**: I read the name and assumed its scope
-  from the name alone ("post-redaction hooks" → "hooks that run after
-  redaction" → "all five"). The actual shape is "the consumer-slot
-  subset of the barrier's hooks." Naming is not always authoritative.
-- **Behaviour change**: when writing package-level docs, open the
-  `src/types.ts` file and grep the actual interface membership. Do not
-  infer from the exported-name vocabulary. Compose-time types in
-  TypeScript are the ground truth, not the prose that refers to them.
-
-### Surprise
-
-- **Expected**: `userId` was "intentionally excluded from observability
-  payloads by Oak policy, regardless of mode" — the framing I carried
-  from prior session context.
-- **Actual**: `docs-adr-reviewer` traced
-  `apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts:153-155`
-  and found `observability.setUser({ id: userId })` is explicitly
-  called when an authenticated `userId` is present. The
-  `clientId`/`scopeCount`/`hasUserContext` fields I cited as "what
-  the scope retains" are actually stdout JSON logger fields from
-  `src/check-mcp-client-auth.ts`, not Sentry scope values. My doc
-  claim was contradicted by the code.
-- **Why expectation failed**: I carried the "userId excluded" framing
-  from prior prompt text without tracing the actual scope-enrichment
-  code. The framing may reflect an intended architecture that was
-  never implemented, OR it may be stale relative to current code.
-- **Behaviour change**: when a doc claims a privacy/security
-  exclusion, trace the claim to the actual call-site. Either the code
-  matches the claim (doc is correct), the code contradicts the claim
-  (code is a defect, open a lane), or the claim is aspirational (doc
-  must say "intended" not "is"). Follow-up recorded in the plan:
-  architectural question whether `userId` should reach the Sentry
-  scope or be excluded there.
-
-### Pattern observation (not a new surprise — ≥2 instances)
-
-- **"Reviewer real-code audit catches a plan's own blind spot"** now
-  has three cross-session instances:
-  1. Phase 5 span-predicate gap (`fetchUpstreamMetadata`,
-     `proxyUpstreamAsset` via `withSpan` — missed by synthetic
-     RuleTester cases, caught by fred's real-code audit).
-  2. L-EH initial warn→error flip (`warning-severity-is-off-severity`
-     against the plan's own severity choice — caught by fred).
-  3. L-DOC initial — four sub-instances in one lane (content-presence
-     test shape violating testing-strategy; 11 broken ADR slugs; type
-     conflation; `userId` scope). Caught by `docs-adr-reviewer` and
-     `onboarding-reviewer` together.
-- Promotion candidate for distilled.md this consolidation: "reviewer
-  dispatch with real-code audit is a load-bearing gate; plan prose is
-  not self-validating." The existing distilled watchlist entry
-  "externally-verifiable-output-beats-plan-compliance" captures part
-  of this; the third instance confirms the underlying pattern.
-
-### Meta-observation
-
-- Reviewer-driven fix cycles on docs lanes are cheaper and more
-  thorough than I expected. Two parallel reviewer runs surfaced 11
-  P1-critical issues in under ~5 minutes of real time; the fixes took
-  ~10 minutes. A docs lane without reviewer dispatch would have
-  shipped with broken ADR links, a type misdescription that misleads
-  future readers, and a scope-enrichment claim contradicted by the
-  code. The reviewer matrix is not ceremony — it is the acceptance
-  gate (confirmed by removing the automated content-presence test).
-
-## 2026-04-19 — Governance-concept integration lane closeout
-
-### What Was Done
-
-- Closed the governance-concept integration lane as a docs/plans-only slice by
-  adding
-  `active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md`,
-  marking the source plan complete, and updating the collection lifecycle
-  surfaces (`active/README.md`, `current/README.md`, collection `README.md`,
-  `roadmap.md`).
-- Tightened the evidence lane so it extracts concrete value from the governance
-  comparison rather than just moving wording:
-  `current/hallucination-and-evidence-guard-adoption.plan.md`,
-  `active/phase-2-evidence-based-claims-execution.md`, and
-  `evidence-bundle.template.md` now distinguish `attempt`, `observed outcome`,
-  and `proven result`.
-- Tightened the operational-awareness lane so it explicitly frames itself as
-  the bounded work-plane pilot for `supervised execution`, without widening
-  scope into the broader runtime-governance model.
-- Tightened the reviewer-gateway lane so it explicitly treats the gateway as
-  one layer in the `layered-safeguard stack` and names review-signal inputs,
-  including `relationship-confidence signals`.
-- Tightened the future mechanism-taxonomy lane so the remaining abstraction
-  debt now has one explicit future home: `action-governance boundary`,
-  `boundary model`, `signal ecology`, `residual-risk surface`, and
-  `governance-plane vocabulary`.
-- Repaired the late closeout defects so the lane is auditable end to end:
-  corrected stale relative links in the governance and operational-awareness
-  plans, added explicit routing mention for
-  `agentic-mechanism-inventory-baseline.md`, and aligned deferred concepts so
-  `Graduated authority` and `Adoption ladder` are marked `defer` and named as
-  explicitly deferred future-taxonomy items.
-- Refreshed `.agent/prompts/session-continuation.prompt.md` so the live
-  continuity contract now points at the governance-lane closeout rather than a
-  stale branch-specific workstream, and marked deep consolidation as due
-  instead of pretending the prompt is already converged.
-- Recorded doctrine no-change rationale in the collection sync surface instead
-  of touching canon.
-
-### What Was Deliberately Deferred or Rejected
-
-- `graduated authority` stays explicitly deferred. The repo does not yet have
-  enough operational-awareness or reviewer-gateway evidence to justify a
-  formal authority ladder.
-- `adoption ladder` stays explicitly deferred. The repo has not yet moved a
-  mechanism family far enough from repo-local pilot to doctrine candidate to
-  need staged uptake machinery.
-- `layered safeguard stack` does NOT become fresh taxonomy debt. It stays in the
-  reference/deep-dive lane plus the reviewer-gateway's local manifestation.
-- No edits were made to `docs/foundation/agentic-engineering-system.md`,
-  `.agent/practice-core/practice.md`, ADR-119, ADR-150, or any PDR. That was
-  deliberate: the findings remain repo-local routing and evidence-shape work,
-  not settled canon.
-
-### Why This Counted as Real Extraction
-
-- I added a value-extraction rule to the lane: a concept only counted if it
-  changed a local contract, evidence shape, routing rule, future-slice
-  boundary, or explicit defer/reject decision.
-- I also made room for concepts that did **not** already have a clean local
-  equivalent. Net-new abstractions from the source material and reflective
-  ideas produced by comparing both corpora still counted, but only when they
-  earned a clear local definition and home.
-- This prevented "routing only" from being treated as success. The practical
-  test became: what concrete local surface behaves differently now because the
-  source material was mined?
-
-### Validation and Review Record
-
-- Ran the repo-defined quality gates for this lane's closeout surface:
-  `pnpm markdownlint-check:root` passed, and
-  `pnpm practice:fitness:informational` exited `0` while reporting the same
-  pre-existing repo-wide `Result: HARD (2 hard, 12 soft) — informational
-  mode` posture outside this lane's scope.
-- Prior planning findings from `docs-adr-reviewer` and
-  `architecture-reviewer-fred` were absorbed before editing.
-- Execution-time repair rounds absorbed findings from `assumptions-reviewer`,
-  `docs-adr-reviewer`, and `architecture-reviewer-fred` covering the evidence
-  example overclaim, unrouted net-new concepts, residual-risk routing,
-  three-plane and awareness-plane homes, propagation-surface naming, and the
-  need for an explicit closure record.
-- Final reruns of `assumptions-reviewer`, `docs-adr-reviewer`, and
-  `architecture-reviewer-fred` all returned clean after the defer-status,
-  routing, link, and validation-wording repairs.
-
-### Surprise — Validation Scope
-
-- **Expected**: The repo-defined gates plus the lane's local checks were enough
-  to describe the closeout as validated end to end.
-- **Actual**: The closeout record had to separate root-package gate results
-  from reviewer/manual verification because root `markdownlint` intentionally
-  excludes `.agent/**`.
-- **Why expectation failed**: I treated verification evidence and quality-gate
-  coverage as if they were interchangeable.
-- **Behaviour change**: For docs-heavy `.agent/**` work, state gate scope
-  explicitly and record reviewer/manual verification as a separate proof line.
-
-### Surprise — Defer Discipline
-
-- **Expected**: Once the future lane prose said `Graduated authority` and
-  `Adoption ladder` were deferred, the closeout was internally consistent.
-- **Actual**: The authoritative concept register and baseline still said
-  `missing`, which made the closeout over-claim defer discipline.
-- **Why expectation failed**: I updated narrative routing before checking the
-  canonical status tables.
-- **Behaviour change**: When a lane defines a concept-record contract, verify
-  the register rows and baseline inventory before claiming defer/reject
-  completeness.
-
-### Follow-Up Slices
-
-- Promote the operational-awareness plan into active execution once the
-  markdown-first pilot lane is accepted.
-- Promote the reviewer-gateway plan when the taxonomy rename mechanics or live
-  review-noise evidence justify it.
-- Use the updated evidence lane to implement the attempt / observed outcome /
-  proven result structure in real Phase 2 execution work.
-- Promote the future mechanism-taxonomy plan only after adjacent lanes produce
-  enough evidence for a bounded first executable slice.
-
-## 2026-04-19 — Phase 5 ESLint rule landing (observability track)
-
-### What Was Done
-
-- Authored `require-observability-emission` ESLint rule at
-  `packages/core/oak-eslint/src/rules/` with 20 valid + 6 invalid
-  RuleTester cases. Rule tracks *export declaration anchors* rather
-  than inner function nodes. Scope filter uses regex path-segment
-  anchors, not minimatch globs. Sentinel opt-out:
-  `// observability-emission-exempt: <reason>`.
-- Registered rule in inline `@oaknational` plugin in `recommended.ts`.
-  Wired at `warn` in all 5 `apps/*` and `packages/sdks/*` workspace
-  `eslint.config.ts` files — 96 coverage-gap warnings surface
-  (each is a lane surface for Wave 3+ emitter work to close).
-- Codified axis-coverage question in
-  `.agent/directives/invoke-code-reviewers.md §Coverage Tracking`.
-- Flipped ADR-162 Proposed → Accepted (2026-04-19). Added History
-  block recording Wave-1 scope + Wave-2-deferred mechanisms.
-- Commit `fc0a0602` landed; reviewer matrix dispatched
-  (architecture-reviewer-fred + type-reviewer); 4 TO-ACTION
-  findings all ACTIONED in-place.
-- Parallel-agent docs work committed as `3455d26c` at session close
-  (53 files; agentic-engineering corpus scaffolding).
-
-### Patterns to Remember
-
-- **TSESLint vs core Rule typing is contravariant at the plugin slot.**
-  A `TSESLint.RuleModule<'messageId'>` fails to satisfy
-  `ESLint.Plugin.rules` when embedded in `Linter.Config.plugins`
-  because TSESLint's rule context has more methods than core ESLint's,
-  and TypeScript's contravariance rejects the substitution. For a
-  rule that must live in `recommended.ts`'s inline `@oaknational`
-  plugin, type it as core `Rule.RuleModule` (ESTree node types from
-  `estree`). For a rule that only lives in the plugin's `rules`
-  export (not a preset plugin), TSESLint typing works (e.g.
-  `no-export-trivial-type-aliases`). Trade-off: lose typed
-  messageIds; gain structural compatibility.
-- **`MaybeNamedFunctionDeclaration` subtyping friction on default
-  exports.** ESTree's `ExportDefaultDeclaration.declaration` is
-  `MaybeNamedFunctionDeclaration | MaybeNamedClassDeclaration |
-  Expression`. `MaybeNamedFunctionDeclaration` is a SUPERTYPE of
-  `FunctionDeclaration` (non-nullable id widened to nullable); not
-  assignable to an `ESTree.Node`-typed slot. Fix by tracking
-  *export declaration anchors* (the wrapper nodes) rather than the
-  inner function; ancestor-walk identifies the anchor regardless
-  of inner sub-type. Behaviourally equivalent, sidesteps friction
-  entirely.
-- **ESLint rule scope filters must not assume repo-root cwd.**
-  `context.cwd` is the WORKSPACE root under per-workspace lint,
-  not the repo root. A glob like `apps/*/src/**/*` matched against
-  a workspace-relative `src/foo.ts` never fires. Fix with regex
-  path-segment anchors (`(?:^|/)apps/[^/]+/src/`) that work for
-  both absolute and relative POSIX paths. One-instance observation;
-  watch for a second rule hitting this.
-- **Emission predicates validated only against synthetic RuleTester
-  cases miss real shapes.** fred's reviewer pass caught two real
-  sites (`fetchUpstreamMetadata`, `proxyUpstreamAsset`) emitting
-  solely via `observability.withSpan` — a legitimate engineering-
-  axis emission that the initial predicate didn't cover. Rule: for
-  any new lint rule with a behavioural predicate, audit the
-  predicate against real call sites in-tree before escalating
-  severity. Don't escalate `warn` → `error` on synthetic-test
-  confidence alone.
-- **`@types/estree` is not transitively self-declaring.** A
-  workspace that imports `import type * as ESTree from 'estree'`
-  needs `@types/estree` in its own `devDependencies` — knip flags
-  the unlisted dep. Small but live instance.
-- **SHA references in the commit that creates them are unstable.**
-  Amending a commit to record the commit's own SHA shifts the SHA
-  again, recursively. Owner's correction: don't couple plan docs
-  to commit SHAs. Keep cross-references symbolic (phase names,
-  lane IDs). Watchlist candidate for pattern extraction if a
-  second instance surfaces. File-level candidate name:
-  `plan-and-commit-are-independent-systems`.
-- **Commitlint body-max-line-length: 100 enforces wrap in message
-  bodies.** A commit message body with 100+ char lines (e.g. full
-  plan file paths) is rejected. Convention: use unqualified file
-  names in commit bodies when the context is clear; full paths
-  only when disambiguation matters and can be broken across lines.
-
-### Mistakes Made
-
-- **Initial plan over-counted files (11 vs 12).** My plan table
-  listed 6 plugin+governance + 5 workspace = 11 files. Actual:
-  12 (I had forgotten to count `recommended.ts`'s edit as separate
-  from the new-file pair). Added `@types/estree` dep-declaration
-  edit during execution → 14 staged. Lesson: when enumerating
-  files to touch during planning, walk the import graph too, not
-  just the semantic deliverables.
-- **First commit subject had plan-file paths in the body that
-  exceeded 100 chars.** Commitlint rejected. Retry with shortened
-  paths was clean. Could have caught this by eyeballing line
-  lengths before invoking commit.
-- **Amended to add SHA, then had to amend again to remove SHA.**
-  Three amend cycles before settling on "delete the SHA entirely."
-  Owner's course-correction arrived on the third, made the
-  principle obvious in retrospect. Could have asked before the
-  first amend.
-
-### Key Insight
-
-**Reviewer audit of real code beats synthetic test confidence.**
-Phase 5's test suite was 16 valid + 5 invalid cases — structurally
-complete but synthetic. fred's review of actual emitter shapes
-surfaced a real false positive (span-based emission) that the tests
-didn't cover. Before escalating any behavioural lint rule from `warn`
-to `error`, audit the predicate against real in-tree call sites. The
-`warn` phase exists precisely so this audit can happen before the
-rule blocks CI.
-
-### Watch Items
-
-- **E2E flakiness under parallel `pnpm check` load.** Two separate
-  `pnpm check` runs produced two DIFFERENT E2E test failures
-  (`enum-validation-failure.e2e.test.ts` timeout;
-  `built-server.e2e.test.ts` unexpected 404), each passing cleanly
-  in isolated e2e runs (all 24 files, 161 tests green in ~4s). Not
-  caused by Phase 5 (lint-only). Pattern: parallel-load inter-test
-  race (shared port? cache invalidation?). Per PDR-025 this is a
-  test-stability lane, not a pre-existing dismissal. Watchlist —
-  named lane if a second session confirms.
-- **Asymmetric rule registration in `recommended.ts`'s inline
-  plugin.** `no-export-trivial-type-aliases` is exported from the
-  plugin's `rules` record (src/index.ts) but NOT registered in the
-  inline `@oaknational` plugin in `recommended.ts` — so it's
-  name-resolvable only if a workspace imports the plugin's default
-  export. Cosmetic inconsistency; mention to docs-adr-reviewer if
-  it compounds.
+- **`reviewer-findings-applied-in-close` (three instances: L-EH
+  initial, L-DOC initial, primitives consolidation execution)** —
+  reviewer findings land in the closing atomic commit as the
+  default, not as follow-up queue items. Deferral requires written
+  rationale.
+- **`E2E-flakiness-under-parallel-pnpm-check-load` (three cross-
+  session instances)** — first aggregate `pnpm check` run fails on
+  an E2E test; isolation rerun passes 161/161; second aggregate
+  run passes. Third instance 2026-04-19. **Name a test-stability
+  lane.**
+- **`reviewer-catches-plan-blind-spot` (≥2 instances, now
+  promotion-ready)** — reviewer real-code audit catches a plan's
+  own blind spot that the plan's decomposition did not anticipate.
+- **`externally-verifiable-output-beats-plan-compliance` (already in
+  distilled from single-instance observation; now multiple
+  confirmations)** — forward-motion assurance is an external
+  artefact (cell populated, test passes, command exits 0), not
+  plan-compliance narrative.
 
 ---
 
-## 2026-04-19 — Docs-hygiene parallel track (3 reviewer rounds, fix-and-ship)
-
-### What Was Done
-
-Three rounds of reviewer-driven docs hygiene on the
-onboarding/Practice surface, layered on top of the observability
-work-in-progress branch (`feat/otel_sentry_enhancements`,
-working tree on top of `d0cfaeea`). Round 1 dispatched the
-onboarding-reviewer + docs-adr-reviewer at the root README;
-Round 2 fixed everything Round 1 surfaced, then re-dispatched
-onboarding-reviewer; Round 3 fixed everything Round 2 surfaced.
-Substantive outputs:
-
-- PDR-001 supersession marker present in both Status block and
-  Decision section; Related field deduped; ADR-131/ADR-144 titles
-  in host-local context corrected.
-- AGENT.md back inside its `fitness_line_limit` (268/275 fitness
-  lines) after a Round 1 condensation pass that overshot to 287
-  and a Round 2 prose-line-width fix at line 143.
-- `practice-index.md` surface counts refreshed against actual
-  filesystem (25 rules / 12 commands / 23 skills).
-- Legacy stdio mentions removed from onboarding paths
-  (`README.md` directory table, `quick-start.md` architecture
-  diagram, `troubleshooting.md`, `environment-variables.md`).
-- E2E (mocks/DI, no creds) explicitly separated from credential-
-  requiring smoke / search / OAuth workflows in
-  `troubleshooting.md` and `environment-variables.md`.
-- `apps/oak-curriculum-mcp-streamable-http/README.md` and
-  `apps/oak-search-cli/README.md` gained "New here?" repo-
-  onboarding signposts at the top (Round 3 reciprocity fix).
-- Stale CLI commands repaired:
-  - `pnpm qg` → `pnpm check` in `apps/oak-search-cli/README.md`
-    (the `qg` script does not exist; canonical is `check`).
-  - `pnpm es:setup reset` → `pnpm es:reset` in
-    `troubleshooting.md` (the `reset` positional arg was never
-    a real script form; the alias is `es:reset`).
-- ADR-144 filename/title divergence (`-two-threshold-fitness-model.md`
-  filename + "Three-Zone Fitness Model" title) annotated in the
-  ADR index so path-based navigation does not surprise readers.
-
-`pnpm practice:fitness` baseline unchanged: `HARD: 2 hard, 12
-soft`. Both hards (`principles.md` characters,
-`testing-strategy.md` lines + 2 prose-width lines) are
-pre-existing and untouched by this work.
-
-### Surprise
-
-- **Expected**: a single round of reviewer-driven docs cleanup
-  would clear the Practice/onboarding surface to defensible.
-- **Actual**: three rounds were required, and each round caught
-  something the previous round did not, including
-  self-inflicted regressions from the previous round's own
-  fixes (Round 2 caught a 106-char prose-line-width violation
-  Round 1 introduced; Round 3 caught a stale `pnpm qg` reference
-  in a workspace README that no prior round had visited).
-- **Why expectation failed**: docs hygiene work has the same
-  shape as code refactoring — fixes can introduce new defects
-  whose discovery surface is not the same as the original
-  defect's discovery surface. A reviewer scoped to "the root
-  README onboarding journey" will not naturally walk into a
-  workspace README, and a reviewer scoped to "the file we just
-  edited" will not catch a width violation introduced by the
-  edit unless explicitly asked.
-- **Behaviour change**: when a docs-hygiene pass touches more
-  than ~5 files, plan for ≥2 review rounds from the outset, and
-  on each round dispatch the reviewer to the *path* (entry
-  point → leaf), not to the *files known to have changed*.
-
-### Surprise
-
-- **Expected**: numbered claims in Practice surface docs (rule
-  count, command count, skill count, pattern count) would
-  drift one or two at a time, caught reactively when they
-  failed a sanity check.
-- **Actual**: four numbered claims drifted simultaneously and
-  silently in a single document (`practice-index.md`): pattern
-  count (claimed 56/57, actual 77 — a previous session caught
-  this); rule count (claimed 34, actual 25); stable command
-  count (claimed 10, actual 12); skill count (claimed 27,
-  actual 23). All four lived together for an unknown but
-  non-trivial number of sessions.
-- **Why expectation failed**: no fitness function ties a
-  written numeric claim to its source enumeration (the
-  filesystem). Numbered claims are write-once and never
-  re-validated against reality unless a human reads them
-  carefully. The mental model of "numbers drift one at a time"
-  was wrong; they drift in clusters because the same writer
-  often updates several at once and then nobody re-checks.
-- **Behaviour change**: when authoring or editing a numbered
-  claim about a filesystem-discoverable population (rules,
-  skills, commands, patterns, ADRs, PDRs), include the count
-  in the same edit as a verification command (e.g.
-  `ls .agent/rules/*.md | wc -l`) and either commit the
-  command output as a comment or replace the literal count
-  with a script-rendered placeholder. Watch-list candidate
-  for pattern extraction if a second cross-session instance
-  surfaces; extraction trigger = next consolidation finds a
-  third or later occurrence.
-
-### Surprise
-
-- **Expected**: workspace READMEs and root-level onboarding
-  docs would already form a closed loop, since the root README
-  routes into them.
-- **Actual**: routing was one-way. Root README →
-  `apps/*/README.md` worked, but the workspace READMEs had no
-  back-link to `CONTRIBUTING.md`, `quick-start.md`, or
-  `AGENT.md`. A contributor who lands in a workspace README
-  via an external link or a `cd` from the terminal loses the
-  global onboarding context.
-- **Why expectation failed**: I assumed reciprocity because
-  the first hop was present. Reciprocity is a property of the
-  *pair*, not of either side; verifying the outgoing link does
-  not verify the return link.
-- **Behaviour change**: when adding a cross-link from A to B,
-  also check whether B should reciprocate to A (or to A's
-  parent index). If the link is part of an onboarding mesh,
-  the answer is almost always yes. Other apps in this repo
-  (e.g. `apps/oak-curriculum-mcp-stdio`-style workspaces if
-  any future ones are added) should default-include a
-  back-link block.
-
----
-
-## 2026-04-19 — Surprises from the consolidation pass itself
-
-Two corrective observations surfaced while running the 2026-04-19 deep
-consolidation (commits 2dc4d40b + d0cfaeea):
-
-1. **The "known-deferred hard zone" was under-counted.** Prior handoffs
-   tracked three foundational directives (AGENT.md, principles.md,
-   testing-strategy.md) as the deferred hard-zone population. Step 9
-   fitness surfaced three more: the Core trinity (practice-bootstrap,
-   practice-lineage, practice.md) was also hard, and had been for
-   multiple sessions without explicit acknowledgement in the handoff
-   chain. Owner-directed resolution: raise limits modestly; defer
-   full Core refinement to a dedicated future session. Rule extracted:
-   fitness-state claims in handoffs must enumerate EVERY hard-zone
-   file by name, not summarise as "the three deferred directives".
-   Incomplete enumeration lets new hard-zone members accumulate
-   silently. Watchlist for pattern extraction if a second instance
-   surfaces.
-
-2. **Outgoing PDR reservations create a soft coupling that can be
-   missed under consolidation.** My PDR-025 draft (Quality-Gate
-   Dismissal Discipline) conflicted with a slot reserved in
-   `.agent/practice-context/outgoing/README.md` for
-   Three-Zone Fitness Model. The reservation was authored 2026-04-18
-   and not surfaced to me before I drafted. Resolved by shifting
-   reservations to 026-029. Candidate rule: any consolidation that
-   may produce a new PDR should grep outgoing/ for reserved PDR
-   numbers before choosing the next-in-sequence. Single instance;
-   watchlist.
-
-Both surprises are consolidation-meta — observations ABOUT running the
-pass — rather than direction-correcting for the technical tracks.
-They're recorded here so the capture→distil→graduate→enforce pipeline
-can process them next consolidation if a second instance surfaces.
-
----
-
-## 2026-04-19 — Napkin rotation after deep consolidation pass
-
-Rotated at 533 lines after a structural-change-heavy window covering
-four commits on the observability strategy restructure (2e0be715 Phase
-4, f1f2c259 status markers, 7f5b18e7 5-wave reshape, 2e8a140d physical
-reorder) plus parallel ChatGPT research normalisation work. Archived
-to [`archive/napkin-2026-04-19.md`](archive/napkin-2026-04-19.md).
-
-High-signal entries absorbed this rotation:
-
-- **Patterns extracted** (three new files in
-  [`.agent/memory/patterns/`](patterns/)):
-  - `stage-what-you-commit.md` — 2 cross-session instances (2026-03-24
-    + 2026-04-19). Git index is durable state between edits; inspect
-    `git diff --cached` before committing.
-  - `foundations-before-consumers.md` — owner-approved. Multi-emitter
-    plans must land foundations (schemas, ESLint rules, extracted
-    cores) in earlier waves than their consumers, or every consumer
-    retrofits. Related: `warning-severity-is-off-severity`.
-  - `collapse-authoritative-frames-when-settled.md` — owner-approved.
-    Document-structure-layer instance of the no-smuggled-drops
-    principle: multiple authoritative frames for the same concept are
-    a drift trap; "transitional dual-frame with sunset note" is
-    unstable.
-- **Distilled additions**:
-  - Forward-pointing planning references need "planned, not yet code"
-    markers (watchlist; single instance pending cross-session
-    validation).
-- **Step 7 graduations applied**:
-  - `@ts-expect-error` distilled entry **refined** (owner chose
-    refine-and-keep) to emphasise the test-design-specific scope
-    distinct from PDR-020's RED-phase framing.
-  - `All gates blocking, no "pre-existing" exceptions` distilled
-    entry **graduated to PDR-025 Quality-Gate Dismissal Discipline**
-    (owner-approved). Distilled entry pruned; PDR-025 pointer added
-    to the distilled pointer block.
-- **Step 8 Core amendment applied**:
-  - `practice-lineage.md` Active Learned Principle
-    `Compressed neutral labels smuggle scope and uncertainty`
-    **extended** (owner-approved) to cover the document-structure
-    layer as a third sibling alongside review and planning layers.
-    Paired with the new `collapse-authoritative-frames-when-settled`
-    pattern as the concrete application.
-
-**Plans and prompts touched this rotation**:
-
-- `.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`
-  — Status line + Phase 3 todo note corrected to reflect completion;
-  Phase 4 todo note extended with the three post-Phase-4 hardening
-  commits (status markers; 5-wave reshape; physical reorder).
-- `.agent/practice-core/decision-records/README.md` — PDR-025 entry.
-- `.agent/practice-core/CHANGELOG.md` — 2026-04-19 entry recording
-  PDR-025, principle extension, pattern authorship, fitness limit
-  raises.
-- `.agent/practice-context/outgoing/README.md` — future-PDR
-  reservations shifted +1 (PDR-025 claimed by Quality-Gate Dismissal;
-  fitness-functions / transfer-operations / merge-methodology /
-  practice-maturity reservations now 026–029).
-
-**Fitness state at rotation closure (post step 9)**:
-
-- **Core trinity limits raised modestly** per owner direction
-  ("raise somewhat, not totally; defer full refinement and
-  reflection of the Core to another session"):
-  - `practice-bootstrap.md`: target 590 → 680, limit 750 → 830,
-    chars 31000 → 40500.
-  - `practice-lineage.md`: target 590 → 680, limit 725 → 830,
-    chars 36000 → 48500.
-  - `practice.md`: chars 23000 → 29000 (lines unchanged at 375/500);
-    prose-line-width violation at line 201 fixed by wrapping.
-- **Post-raise strict-hard state**: 3 hard items (AGENT.md,
-  principles.md, testing-strategy.md) — matching the known-deferred
-  directives; no new hard violations introduced. Trinity files now
-  soft-zone, not hard.
-- **Deferred to future session**: full refinement and reflection of
-  the Core trinity (compression, graduation, split decisions);
-  remediation of the three deferred directives.
-- `distilled.md` final at ~253 lines (soft zone, target 200, limit
-  275) after prune + refine + watchlist-add.
-- `napkin.md` starts fresh at this rotation record.
-
-**Previous rotation**: 2026-04-18 at 557 lines →
-[`archive/napkin-2026-04-18.md`](archive/napkin-2026-04-18.md).
-
----
-
-## 2026-04-19 — Agentic corpus discoverability review
-
-### Patterns to Remember
-
-- `AGENT.md` already points to ADRs generally (starter block, ADR index, and a
-  few specific ADR anchors), but that is not the same as surfacing the
-  practice-specific ADR cluster explicitly. If the intent is "agentic doctrine
-  should be impossible to miss", add a dedicated practice-ADR cluster rather
-  than assuming the general ADR entry path is enough.
-- `.agent/reference/README.md` currently omits
-  `agentic-engineering/workbench-agent-operating-topology.md`, and there is no
-  `agentic-engineering/README.md`. A source corpus can exist without becoming
-  discoverable; directory-local indexes matter.
-- `docs/README.md`, `docs/foundation/README.md`, `docs/governance/README.md`,
-  `docs/engineering/README.md`, `docs/architecture/README.md`, and
-  `docs/explorations/README.md` already form a useful human-facing discovery
-  mesh. A future agentic hub should index these as source/discovery surfaces
-  rather than trying to replace them.
-
-## 2026-04-19 — Agentic corpus implementation notes
-
-- The first implementation batch created the local `.agent` mesh:
-  source/current plan, active execution plan, hub README, seed deep dives,
-  research lanes, reports lanes, and reciprocal links from the key `.agent`
-  indexes.
-- Multiple agents are editing the repo concurrently. Before touching any
-  overlapping docs surface, re-read the live file and inspect the diff rather
-  than assuming the earlier snapshot is still current. Materialised here on
-  `docs/foundation/README.md`, `docs/governance/README.md`, and
-  `docs/architecture/architectural-decisions/README.md`.
-- Treat concurrent edits as a merge problem, not a justification to pause the
-  whole lane. Only escalate if the overlapping change directly changes the same
-  concept contract this lane needs to edit.
-- Closure state for this lane:
-  - `pnpm markdownlint:root` passed.
-  - `pnpm practice:fitness:informational` still reports the known pre-existing
-    directive/core-document issues rather than anything introduced here.
-  - `pnpm check` reached `knip` and then failed on an unrelated concurrent code
-    change in `packages/core/oak-eslint/src/rules/require-observability-emission.ts`
-    (`estree` unlisted dependency). Treat that as out of scope for the
-    documentation lane unless the owning implementation asks for help.
-  - Final `docs-adr-reviewer` pass was requested after the validation run so the
-    review reflects the true end state plus the validation caveat.
-  - Follow-up `docs-adr-reviewer` confirmation after the last fixes reported no
-    remaining documentation findings in the touched lane files.
-
-## 2026-04-19 — Operational awareness planning notes
-
-### Patterns to Remember
-
-- The continuation prompt's size and mixed content are at least partly the
-  result of utility. Treat the current surface as evidence of a missing
-  operational-awareness layer, not as a hygiene failure to be "cleaned up"
-  blindly.
-- Multi-agent continuity hygiene must be thread-aware. A single shared mutable
-  prompt is the wrong default home for tactical coordination once parallel
-  tracks are normal.
-- The missing layer is short-horizon operational awareness, not a replacement
-  memory doctrine. Tactical state that changes understanding should promote
-  into the existing learning loop rather than evolving into a second memory
-  system.
-
-## 2026-04-19 — Workbench topology extraction notes
-
-### Patterns to Remember
-
-- `workbench-agent-operating-topology.md` is broader than the continuity
-  problem that first pulled it into view. It is a compact map of interaction
-  planes, control-loop stages, posture selection, temporary work ledgers,
-  authority order, and special feeds.
-- Utility-rich surfaces bloat when the underlying mechanism family lacks a
-  named home. The continuation prompt absorbed a work ledger; reviewer gateway
-  work is absorbing posture selection and signal routing; evidence discipline
-  is split across several surfaces.
-- The right response is routing, not flattening:
-  - operational-awareness plan for work-ledger and precedence concerns
-  - reviewer-gateway plan for review posture and signal routing
-  - future mechanism-taxonomy plan for the broader abstraction work
-
-## 2026-04-19 — L-EH initial lane (preserve-caught-error enable)
-
-### What Was Done
-
-- Re-scoped L-EH initial from authoring a custom `require-error-cause`
-  ESLint rule in `@oaknational/eslint-plugin-standards` to enabling
-  ESLint core's built-in `preserve-caught-error` (added in 9.35.0,
-  a documented superset). Owner prompt "please look at the built-in
-  first" triggered the survey; finding: repo already runs
-  eslint@^10.2.0 and @eslint/js@^10.0.1, so the rule was available.
-- Enabled at `error` severity with `requireCatchParameter: true`
-  scoped to `src/**/*.ts` in the 5 Wave-1 workspaces. Pre-enable
-  audit: **0 violations** across all 5 workspaces.
-- Reviewer matrix: code-reviewer + architecture-reviewer-fred.
-  Fred's primary TO-ACTION flipped `warn` → `error` mid-lane (audit
-  condition pre-satisfied; `warn` with no named backlog trigger
-  violates `warning-severity-is-off-severity.md`). ACTIONED.
-- Incidental: my first-draft preamble comment referenced the literal
-  `eslint-disable-next-line` directive syntax and the
-  `@oaknational/no-eslint-disable` rule name — both matched the
-  `@oaknational/no-eslint-disable` rule's own matcher regex when
-  present in a comment. Rewrote to reference ADR-162 History for the
-  opt-out protocol instead.
-- Docs propagation: maximisation plan (multiple sections), high-level
-  plan, restructure plan, strategic parent, ADR-162 History,
-  `use-result-pattern.md` expanded 5→20 lines.
-- `pnpm check` exit 0 (88/88 tasks) at `error` severity.
-- Commit pending owner approval. 12 files in scope, isolated from
-  the parallel agentic-engineering track.
-
-### Surprise
-
-- **Expected**: L-EH initial would be a straightforward reuse of the
-  Phase 5 `Rule.RuleModule` authoring pattern — write a custom
-  `require-error-cause` rule mirroring `require-observability-emission`.
-- **Actual**: before I opened the rule file, owner surfaced
-  `preserve-caught-error` as an ESLint-core built-in added in 9.35.0.
-  It is a documented **superset** of the planned custom rule's
-  predicate — catching missing cause, cause-mismatch, destructured-
-  parameter loss, and variable shadowing; the planned custom rule
-  would have covered only the first two.
-- **Why expectation failed**: I read the Phase 5 handoff's "natural
-  first-pick: reuses the validated authoring pattern" as a
-  *recommendation* when it was actually the handoff author's
-  *convenience ranking*, not an architectural assertion that the
-  authoring was required. A 30-second check of ESLint's recent
-  releases would have surfaced the built-in before the plan
-  committed to authorship.
-- **Behaviour change**: before authoring any custom rule (ESLint,
-  typescript-eslint, or any upstream tool), spend the 30 seconds
-  needed to scan the upstream's recent release notes and rule/feature
-  index. "Custom authorship is the default because Phase 5 did it"
-  is a wrong default. Phase 5's custom rule has no upstream
-  equivalent; L-EH initial did. The distinction is visible only when
-  you check.
-
-### Surprise
-
-- **Expected**: a comment in an `eslint.config.ts` that describes a
-  rule's opt-out protocol (`// eslint-disable-next-line <rule-name>
-  -- <reason>`) is benign — comments are not parsed as code.
-- **Actual**: `pnpm check` failed with 2 errors per workspace from
-  `@oaknational/no-eslint-disable`. The rule's matcher regex
-  (`/eslint-disable(?!d)(?:-next-line|-line)?(?!\w)/u`) scans comment
-  *text* and matched the literal string inside my explanatory
-  comment. The rule also matched `@oaknational/no-eslint-disable`
-  itself (i.e. the rule's own name referenced in the same comment)
-  because the regex matches `eslint-disable` regardless of what
-  precedes it.
-- **Why expectation failed**: I treated the rule's scan surface as
-  "actionable suppression directives in comments" when the actual
-  scan surface is "any comment text matching the regex, with an
-  approval-marker exception."
-- **Behaviour change**: code-configuration comments that document a
-  rule's opt-out syntax, or that name the rule itself, must avoid
-  the literal trigger strings. Use references to external docs
-  (ADR sections, URLs) instead. Single-instance pattern candidate;
-  second instance would promote to `.agent/memory/patterns/` as
-  "code config must not reference its own suppression syntax in
-  comments."
-
-### Surprise
-
-- **Expected**: a lint rule landed at `warn` with "escalate once
-  audit is clean" as the escalation trigger is a defensible soft-
-  launch shape, matching the Phase 5 `require-observability-emission`
-  precedent.
-- **Actual**: architecture-reviewer-fred's TO-ACTION applied
-  `warning-severity-is-off-severity.md` and
-  `foundations-before-consumers.md` against my own plan text. The
-  pattern is explicit: a lint configuration should contain only
-  `'error'` and `'off'`. With 0 violations and no concrete backlog
-  trigger, the `warn`-with-deadline was vacuous before the rule even
-  shipped. `warn` would have left Wave 3's future catch-throw-new
-  code at risk of landing non-conformant and scrolling past in CI
-  output.
-- **Why expectation failed**: I defaulted to the Phase 5 precedent
-  (warn with named escalation trigger = "Phase 2 emitter lanes land")
-  without checking whether L-EH initial had an analogous trigger. It
-  didn't. Phase 5 was a precedent-match for rule *infrastructure*;
-  it was not a precedent-match for *severity semantics*. Two
-  different axes of decision, conflated.
-- **Behaviour change**: when mirroring a precedent, decompose the
-  precedent into its constituent decisions before reusing. Phase 5's
-  severity choice, scope choice, and wiring pattern are three
-  independent decisions that happened to land together. Reuse each
-  only if its rationale applies in the new lane. Second instance of
-  "reviewer real-code audit catches a plan's own blind spot" (first
-  instance: Phase 5 span-predicate gap). Promotion candidate to
-  distilled.md.
-
-### Observation (not a surprise — a positive signal)
-
-- **Expected**: at audit time, find violations needing fixes.
-- **Actual**: 0 violations across 5 workspaces' src/. Sample of 3
-  real catch+throw-new sites in `oak-curriculum-sdk` all passed
-  `{ cause }` correctly.
-- **Interpretation**: ADR-088 Result pattern + the (previously 5-line)
-  `.agent/rules/use-result-pattern.md` are observably followed in
-  practice without being compile-time-enforced. The compile-time gate
-  now ratifies existing behaviour rather than correcting it — the
-  *good* case for foundations-before-consumers. Worth noting because
-  it's easy to assume unenforced rules are routinely violated; in
-  this case, the evidence says otherwise.
-
-### Post-lane meta-move: forward-motion assurance mechanisms
-
-After L-EH initial closed and I wrote an honest-evaluation section
-flagging "five of six axes are schema-less promises," owner asked the
-meta question: **how do we create reasonable assurance that we are
-moving forward?** The session then produced 6 mechanisms + 1 watchlist
-entry as plan and governance changes:
-
-1. `what-the-system-emits-today.md` (externally verifiable 5×3 axis/
-   runtime matrix; 3/13 cells populated today).
-2. Plan-density cap on the observability tree until Wave 2 opens.
-3. Lane Close Evidence Pattern (attempt / observed / proven) in
-   maximisation plan.
-4. Wave 1 close external-demonstration criterion (≤5-min recording).
-5. Per-Session Landing Commitment field in session-continuation
-   prompt.
-6. Retroactive application of attempt/observed/proven to L-EH close.
-7. Watchlist entries in distilled: externally-verifiable-output-
-   beats-plan-compliance, decompose-precedents-before-reusing.
-
-### Surprise (about session shape, not substance)
-
-- **Expected**: a session with a specific lane target (L-EH initial)
-  produces one lane's worth of work. Anything beyond is scope creep.
-- **Actual**: the session's single-lane landing (L-EH initial) + an
-  honest-evaluation question from the owner + 6 assurance-mechanism
-  edits + a composite commit. The mechanism-adoption work was directly
-  provoked by the evaluation pass, which was directly provoked by the
-  lane close.
-- **Why expectation failed**: I treated "landing target" and "session
-  scope" as synonymous. They aren't. A landing target is the
-  externally-verifiable outcome the session commits to; session scope
-  is the full work-surface exposed by pursuing that target honestly.
-  The two can diverge when the landing surfaces a meta-level question
-  whose answer needs to be *acted on* rather than merely noted.
-- **Behaviour change**: the landing-commitment mechanism I just added
-  should explicitly permit "the landing is X, plus any mechanism edit
-  directly provoked by doing X honestly." Otherwise the mechanism
-  creates pressure to under-report scope at open, which defeats the
-  honesty it's supposed to enforce. Noted implicitly via the
-  exceptions clause in the prompt's §Per-Session Landing Commitment;
-  watch for a second instance that sharpens the rule.
-
-## 2026-04-19 — Abstract governance-concept extraction notes
-
-### Patterns to Remember
-
-- When importing ideas from an external governance corpus, the durable value is
-  usually the **mechanism semantics**, not the source taxonomy. If the repo
-  keeps the source names, the work has not really been integrated.
-- The most useful comparative insights here were governance-plane concepts:
-  decision layers outside reasoning, boundary models, layered safeguards,
-  supervised execution, attempt / observed outcome / proven result structure,
-  residual-risk surfaces, adoption ladders, and signal ecology.
-- Many "new" concepts are actually local capabilities that are already present
-  but unnamed. The route is often `present but unnamed` or `partial`, not
-  `missing`.
-- A good abstracted import pass must force a destination for every concept:
-  existing plan, future plan, reference/deep dive, doctrine candidate, or
-  explicit no adoption. Otherwise the work becomes a clever but homeless
-  comparison exercise.
-
-## 2026-04-19 — Sentry vs PostHog overlay + canonical exploration body
-
-### What Was Done
-
-- Authored Oak-overlay companion at
-  `.agent/research/sentry-and-posthog/Sentry and PostHog-oak.md` reframing
-  the LLM-exported `Sentry and PostHog-clean.md` for Oak's five-axis,
-  ADR-160/162 frame as a *possibility-shaped* (not usage-justified) body.
-- Authored full-text body for canonical exploration
-  `docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md`
-  in §2–§8 (problem statement preserved as §1; promotion trigger
-  preserved in §8; references in §9; original stub citations in §10),
-  with `body_state`, `overlay_source`, `plan_of_record`, `constraints`,
-  and `informs_with_scope_widening` frontmatter.
-- Plan executed: `.cursor/plans/sentry-posthog-oak-overlay_6a16ff6e.plan.md`
-  (the plan file itself was not edited per owner instruction).
-- Stream A (repo grounding) + Stream B (Stream B web verification dated
-  2026-04-19) + Stream D (seven assumption stress tests in overlay §10)
-  completed; Stream C (Sentry MCP queries beyond static project-config)
-  deliberately skipped — parallel agent active on the maximisation-plan
-  surface, and private-alpha traffic insufficient for load-bearing reads.
-  PostHog MCP queries explicitly out-of-scope (no Oak PostHog account on
-  this project).
-- Reviewer choreography: two rounds of parallel `assumptions-reviewer`
-  alongside `docs-adr-reviewer`. Round 1 against the overlay (dispositions in
-  overlay §14.1); Round 2 against the canonical exploration body in
-  plan-citing context (`future/second-backend-evaluation.plan.md`,
-  `future/feature-flag-provider-selection.plan.md`,
-  `active/sentry-observability-maximisation-mcp.plan.md`).
-
-### Surprise — ADR-160 closure-property vs categorical prohibition
-
-- **Expected**: ADR-160 forbids identified events reaching any sink
-  beyond stdout, so the PostHog candidate slice is *categorically*
-  anonymous-only.
-- **Actual**: Round 1 reviewers caught that ADR-160 is a closure-
-  property principle (every fan-out path applies the shared redaction
-  policy), not a categorical prohibition on identified data. The
-  PostHog *anonymous-events* slice in Oak's context is a *derived*
-  constraint, not an ADR-160 mandate — it follows from three facts
-  together: (a) the MCP server's current identity model, (b) the
-  redaction-policy posture, (c) ADR-160's closure rule applied to
-  any new sink. The overlay incorrectly paraphrased ADR-160 as
-  "forbids identified events"; this was corrected in §6 of the
-  overlay and propagated to the body's §3 Product row, §4 Q6,
-  §5 Risks and unknowns, §6.1 sequencing, and §7 framing.
-- **Why expectation failed**: I conflated "the binding constraint
-  for Oak's PostHog adapter" with "what ADR-160's text says." The
-  binding constraint is real; the source of bindingness is the
-  three-fact chain, not ADR-160 alone. Naming the wrong source
-  weakens the doctrine and overstates the ADR.
-- **Behaviour change**: when paraphrasing an ADR's effect on a
-  downstream decision, distinguish the ADR's *text* from the
-  *combined consequence* of the ADR plus other state. State the
-  combination explicitly. The codebase already emits
-  `observability.setUser({ id: userId })` from
-  `apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts` —
-  this *is* identified context flowing into Sentry's per-request
-  scope, not into event-data envelopes; that distinction matters
-  for any future second-sink decision.
-
-### Surprise — possibility-shaped body still smuggles plan-precommit
-
-- **Expected**: a section explicitly titled "Decision recommendation
-  framing" with the lead-in "makes no vendor-pick decisions" would
-  successfully avoid pre-committing the upstream plans.
-- **Actual**: Round 2 assumptions-reviewer flagged that the section
-  still slipped into recommendation through imperative "Adopt the
-  sequencing constraint / Adopt the identity-model precondition /
-  Adopt the three evaluation criteria" wording — exactly the kind
-  of plan-precommit the brief warned against. Reframed every
-  "Adopt …" bullet as "The exploration identifies …" or "The plan
-  may choose to adopt …".
-- **Why expectation failed**: I wrote the framing section's lead-in
-  correctly but then lapsed into imperative bullets because they
-  read more decisively. Decisive prose at the bullet level
-  contradicts deferential prose at the lead-in level; the bullet-
-  level imperative wins for the reader.
-- **Behaviour change**: when authoring a possibility-shaped section,
-  carry the discipline through to bullet-level wording, not just to
-  the lead-in. "Identify" / "may choose to adopt" / "the plan
-  owner decides" are the right verbs; "adopt" / "use" / "treat" are
-  wrong even when the prose around them disclaims authority.
-
-### Surprise — "needs traffic" buckets non-traffic decisions
-
-- **Expected**: the architectural-decisions-decidable-now-vs-traffic
-  split would cleanly partition each plan's open items into two
-  buckets.
-- **Actual**: Round 2 assumptions-reviewer caught that two items
-  classified as "Genuinely needs traffic" were actually decidable
-  without traffic — they just needed *plan-owner scope acceptance*
-  (admitting PostHog as a candidate) or a *real flag consumer*
-  (the feature-flag-provider-selection plan's actual trigger). The
-  binary partition was insufficient; a third category — "requires
-  plan-owner scope acceptance" / "requires real consumer" — was
-  needed. Body §6.1 and §6.2 now use the three-way split.
-- **Why expectation failed**: I anchored on the binary
-  decidable-from-doctrine vs needs-traffic frame from the plan
-  brief without testing it against each upstream plan's actual
-  promotion trigger. Triggers are heterogeneous: some are traffic-
-  shaped, some are consumer-shaped, some are owner-acceptance-
-  shaped.
-- **Behaviour change**: when classifying a plan's open items by
-  what would unblock them, read the plan's actual promotion
-  trigger before classifying. Don't reuse a binary frame across
-  plans whose triggers have different shapes.
-
-### Patterns to Remember
-
-- Two reviewer rounds were load-bearing. Round 1 caught the ADR-
-  160 paraphrase overreach + OpenFeature seam pre-commitment +
-  schema-shape over-prescription. Round 2 caught the
-  recommendation-discipline lapse, the binary-partition error,
-  the missing §5 Risks and unknowns section, and the cost-caveat
-  burial. Round 1 alone would have shipped a body that mis-
-  classifies plan triggers and breaks plan-precommit discipline.
-- "Reviewer real-code audit catches a plan's own blind spot" has
-  *another* cross-session instance: the assumptions-reviewer
-  found `observability.setUser({ id: userId })` in the codebase
-  contradicting the overlay's "no identity flow" framing, mirroring
-  the L-DOC initial finding from earlier this session. Now four
-  cross-session instances; this is well past distilled.md
-  graduation territory.
-- For documents that explicitly inform multiple downstream plans
-  with heterogeneous trigger shapes, name each plan's trigger
-  shape *separately* (traffic-shaped, consumer-shaped, owner-
-  acceptance-shaped, doctrine-shaped) before attempting any
-  decidable-now vs needs-X partition.
-
-### 2026-04-19 — Three-sink reframe: reviewer round + applied fixes
-
-- After wiring the three-sink architecture into 13 documents
-  (plans, ADRs, explorations, snapshot), ran assumptions-reviewer
-  and docs-adr-reviewer in parallel.
-- Assumptions reviewer surfaced two BLOCKERS: (1) `Sink 3 — PostHog`
-  was written as a settled choice across multiple surfaces,
-  collapsing two distinct decisions (do we need an interactive
-  product-analytics sink? and is PostHog the right one?) into one;
-  (2) "PostHog adapter blocked on warehouse landing" was framed as
-  a hard blocker but the stated reason was sequencing convenience,
-  not technical dependency.
-- Owner ruling (2026-04-19): both BLOCKERS were resolved by
-  *strengthening* the commitment rather than softening — PostHog
-  *is* settled as the vendor for Sink 3 on the strength of existing
-  Oak-org usage; warehouse-before-PostHog *is* a non-negotiable
-  hard blocker. Recorded as explicit decision records in
-  `future/second-backend-evaluation.plan.md`'s § Decision record
-  table, with the doctrine vs preference distinction made explicit
-  in the dependencies section.
-- Pattern: "soften because the document overcommits" and "harden
-  because the owner does commit" reach the same surface from
-  opposite directions. The reviewer-flagged document was unclear
-  about whether the commitment was the author's editorial choice
-  or the owner's stated position. Naming the owner's decision
-  explicitly resolves the ambiguity in either direction. The
-  half-conditioned framing the reviewer caught was the actual
-  defect, not the commitment itself.
-- Docs-ADR reviewer surfaced 5 IMPORTANTs (no BLOCKERs): the §4 Q6
-  derivation lacked an in-place supersession marker (file-top
-  status update isn't enough for anchor-arrived readers); §7
-  Decision recommendation framing posed the now-settled scope-
-  widening question as still open; novel `companion_explorations_2026_04_19`
-  frontmatter field with no precedent in `docs/explorations/`;
-  `docs/explorations/README.md` Document-shape didn't describe the
-  established Stubs convention; `.agent/plans/observability/README.md`
-  Plan Density Invariant exclusion lacked an exploration-density
-  brake.
-- Pattern: a file-top "Status update" telling readers a section is
-  superseded is necessary but not sufficient — readers arriving via
-  search, anchor link, or skim land on the section without seeing
-  the file-top notice. **In-place markers at the section header are
-  load-bearing for anchor-arrived readers.** Same fix pattern works
-  for any "this section is superseded but retained for evidence"
-  case.
-- Applied 12 fixes across the same 11 files; one TS edit added a
-  TSDoc note near `observability.setUser` pointing to ADR-160 §
-  History 2026-04-19 + the Clerk-identity exploration, so the
-  privacy posture is discoverable from the code, not only from
-  docs. Markdownlint surfaced 4 emphasis-style warnings (asterisk
-  vs underscore) introduced by `*timing*` / `*Settled …*` wording;
-  fixed by switching to underscores per repo convention.
-- Repo-level `pnpm markdownlint-check:root` passes; `ReadLints` on
-  all 11 touched files is clean.
-- Pattern bookmark for `.agent/memory/patterns/`: when an
-  exploration body is reframed (not rewritten) and the original
-  analysis is retained for evidence, every section the reframe
-  marks as superseded needs an *inline* status callout at its
-  heading, not only a file-top notice. The file-top notice is for
-  linear readers; inline callouts are for anchor-arrived readers
-  and skim-readers. This is the third instance of "fork-cost
-  surfaces in the doc-discipline layer" in this session.
-
-### 2026-04-19 — Ontology report navigation + boundary hygiene
-
-- Wrote a detailed report at
-  `.agent/reports/oak-ontology-mcp-search-integration-report-2026-04-19.md`
-  plus a short fresh-perspective follow-on plan at
-  `.agent/plans/kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md`.
-- Reviewer pass from `docs-adr-reviewer` + `onboarding-reviewer`
-  surfaced a recurring documentation hygiene rule: keep research,
-  promoted reports, and executable plans in distinct lanes even
-  when they need to cross-link heavily. "Easy to find" should not
-  become "same document type."
-- Another load-bearing pattern: a synthesis report should not
-  silently overturn a strategy document. If the report surfaces a
-  better-seeming option (here: subtree-style vendoring vs the
-  existing submodule-first interim strategy), phrase it as an
-  explicit comparison or revisit request unless the strategy doc
-  itself is being updated in the same pass.
-- On discoverability, collection-root READMEs need to be treated as
-  actual navigation, not mention lists. Backticked file paths were
-  enough to confuse the onboarding reviewer even though the docs
-  existed and were otherwise well-scoped.
-
-## 2026-04-19 — chatgpt-report-normalisation: kg-neo4j-stardog-product-creation
-
-### What Was Done
-
-- Applied the chatgpt-report-normalisation skill to the paired export
-  under `.agent/research/kg-neo4j-stardog-product-creation/` (`.md` +
-  `.docx`, no PDF). Wrote a sibling clean copy at
-  `kg-neo4j-stardog-product-creation-clean.md`; left the source `.md`
-  and `.docx` untouched on disk.
-- Used the existing markdown as the structural authority and the DOCX
-  via `pandoc -t gfm` as the citation positional layer with the DOCX
-  `_rels` URL set as the canonical citation set.
-- Replaced 103 PUA-wrapped citation blocks with positional `[[N]](#ref-N)`
-  anchors (positional matching against the pandoc body, no
-  marker-string-to-URL lookup table) and rendered a thematic
-  `## References` section grouped under *Oak curriculum ontology
-  repository*, *Neo4j product and documentation*, *Stardog product
-  and documentation*.
-- Validation passed: zero PUA chars, zero `citeturn`/`turn…view…`
-  remnants, zero `utm_source=chatgpt.com`, structural parity (9 body
-  headings, 71 table rows, 4 fences, 2 mermaid blocks identical to
-  source), and the `strip_citations` + whitespace-normalise drift
-  proof produced character-identical bodies (39,960 chars on both
-  sides).
-
-### Citation-set audit
-
-- Source-markdown `turn…` refs: **324 total / 55 unique** (ChatGPT
-  internal search funnel).
-- Distinct PUA citation blocks at prose positions: **103**.
-- DOCX `_rels` unique external URLs: **24**.
-- Pandoc body emit: **103 numbered citation positions** dedupling to
-  **24 unique URLs**, identical to the DOCX `_rels` set.
-- PDF surface: **not present** in this export pair, so the
-  three-surface agreement check (DOCX `_rels` ↔ PDF annotations ↔
-  Sources panel) is reduced to a two-surface check between DOCX
-  `_rels` and pandoc body emit. Those two surfaces **agree exactly**
-  (24 URLs, set-identical). No anomaly to chase; the funnel from 55
-  unique `turn…` refs down to 24 cited URLs is the source's editorial
-  selection step, not loss.
-
-### Surprise
-
-- **Expected**: a small handful of unmatched citation positions in
-  table cells given pandoc table normalisation.
-- **Actual**: all 103 PUA blocks resolved cleanly once the matcher
-  (a) treated pandoc citation markers as transparent for anchor
-  matching while still tracking their normalised position for
-  consumption, (b) collapsed table-separator dash runs (`---` vs
-  `----`), and (c) collapsed double spaces left by marker stripping
-  in the anchor view.
-- **Causal mechanism**: pandoc widens narrow table-separator rows to
-  align column widths in its gfm output. The skill's "positional
-  matching against pandoc" rule is robust as long as the matcher
-  treats both the pandoc citation markers and the dash-run width
-  changes as wildcards — neither is content, both are rendering
-  artefacts. Fix lives in the throwaway scratch script under
-  `/tmp/kg-norm/`; if this becomes a recurring need, lift it into a
-  repo-tracked normaliser.
-
-## 2026-04-19 — KG hub reframe and move-propagation cleanup
-
-### What Was Done
-
-- Reframed `.agent/plans/knowledge-graph-integration/README.md` so the
-  collection reads as ontology/knowledge-graph work first, with EEF
-  positioned as a sibling lane rather than the collection identity.
-- Tightened the decision framing across the KG strategy, audit plan,
-  and platform-comparison note so **direct ontology use is the
-  baseline** and the platform answer is explicitly `neither`, `Neo4j`,
-  `Stardog`, or `both` only after bounded evidence.
-- Fixed stale moved links after the KG material migrated into
-  `knowledge-graph-integration/`: semantic-search indexes, SDK/MCP
-  indexes, the ontology report, KG future plans, high-level plan, and
-  related active KG plans now point to the moved research and active
-  plan surfaces instead of dead `semantic-search/current/`,
-  `kgs-and-pedagogy/`, or `sdk-and-mcp-enhancements/active/` targets.
-- Corrected the moved KG active plans' `Foundation Alignment` links:
-  the active collection lives one directory deeper than before, so
-  those links needed `../../../directives/...` rather than
-  `../../directives/...`.
-- Ran `pnpm markdownlint:root` twice successfully: once after the main
-  reframe/link sweep and again after reviewer-driven fixes.
-
-### Reviewer Rounds
-
-- `architecture-reviewer-betty`: found two real framing defects.
-  Applied both.
-  1. `oak-ontology-graph-opportunities.strategy.md` still leaned
-     Neo4j-first in its action section. Fixed by making serving-layer
-     foundation conditional and rewording the quick-win/bottom-line
-     sections around the direct-use baseline.
-  2. `kg-alignment-audit.execution.plan.md` still treated
-     semantic-search as the audit artefact's canonical home. Fixed by
-     moving the durable-home wording back to the KG collection and
-     making semantic-search a consumer navigation surface.
-- `assumptions-reviewer`: surfaced the same two issues plus a later
-  default-hypothesis paragraph in the research note. Fixed the
-  remaining Neo4j-default wording in
-  `kg-neo4j-stardog-product-creation-clean.md`.
-- `code-reviewer`: found broken moved links for the canonical research
-  synthesis and the active KG umbrella/workstream plans. Fixed all
-  reported targets by repointing the research chain to
-  `knowledge-graph-integration/research/` and the active plan chain to
-  `knowledge-graph-integration/active/`.
-- `docs-adr-reviewer`: confirmed the same move-propagation defects and
-  also caught broken `Foundation Alignment` links in two moved active
-  plans. Fixed those relative paths.
-- `onboarding-reviewer`: no findings. Discovery surfaces now steer a
-  fresh reader to the report and direct-use/platform-comparison plan
-  without collapsing the lane back to EEF-only or search/Neo4j-only.
-
-### Surprise
-
-- **Expected**: the main cleanup would be wording-heavy, with only a
-  few obvious path fixes in readmes.
-- **Actual**: once the KG collection became the authoritative home,
-  the broken-link surface spread across three different move classes:
-  `semantic-search/current/*`, `kgs-and-pedagogy/future/*`, and the
-  moved KG active plans still being advertised out of
-  `sdk-and-mcp-enhancements/active/*`.
-- **Causal mechanism**: discovery surfaces had been updated
-  incrementally around individual outputs (report, fresh-perspective
-  plan, platform note), so the move never had one single propagation
-  pass. A collection move creates a mesh of coupled relative links; if
-  the propagation pass is partial, the docs can look coherent in prose
-  while still dead-ending at the exact points new readers follow.
-
-## 2026-04-19 — session-handoff owner correction
-
-### Correction
-
-- For this handoff, the owner explicitly requested: **record what needs
-  recording, compact nothing, remove nothing, ignore fitness
-  functions**.
-
-### Behaviour change
-
-- Treat the handoff update as additive. Preserve existing continuity
-  surfaces, append a later-session addendum instead of rewriting or
-  compressing the current contract, and mark deep consolidation
-  `not due` for this closeout without invoking fitness-driven
-  escalation.
+Previous rotation: 2026-04-19 (morning) at ~500 lines.
+Today's second rotation: 2026-04-19 (evening) at ~1679 lines.

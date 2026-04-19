@@ -94,57 +94,65 @@ commit.
 ## Live Continuity Contract
 
 - **Workstream**: Observability Wave 1 on `feat/otel_sentry_enhancements`.
-  Two Wave 1 lanes landed this 2026-04-19 session (L-EH initial ✅ +
-  L-DOC initial ✅); two lanes remain (L-12-prereq, L-7). In parallel
-  on the same branch, the **three-sink architecture wiring** (Sentry +
-  data warehouse + PostHog as adapters on a single vendor-neutral
-  pipeline) closed end-to-end 2026-04-19 across plans/ADRs/explorations,
-  with two reviewer rounds (assumptions + docs-adr) and owner overrides
-  applied on two BLOCKER findings (PostHog kept as settled Sink 3
-  vendor; warehouse-before-PostHog kept as hard blocker). A parallel
-  agentic-engineering thread owns the operational-awareness plan and is
-  not this session's primary concern.
+  Three Wave 1 lanes have now landed across the 2026-04-19 series of
+  sessions (L-EH initial ✅ + L-DOC initial ✅ + primitives
+  consolidation ✅ — the latter closed L-12-prereq as a side effect
+  since the original extraction was resolved by fold-into-observability
+  rather than a new core workspace). L-7 is the only Wave 1 item still
+  open and is **blocked on owner adjudication** of the build /
+  releases / Sentry interaction. The three-sink architecture wiring
+  landed earlier in the day as a documentation milestone only. All
+  non-observability threads (knowledge-graph, semantic-search,
+  research, sdk-and-mcp-enhancements) are **paused at owner direction**
+  until explicitly picked back up; their in-flight edits were bundled
+  into commit `e09918a8` per owner instruction.
 - **Active plans**:
   - `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
-    — lane-level execution authority. §L-DOC initial close evidence + §RED
-    correction recorded 2026-04-19.
+    — lane-level execution authority. §L-12-prereq flipped to
+    **completed** this session. §L-7 fully rewritten against
+    [ADR-163](../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md);
+    adjudication complete, implementation awaits authorisation.
   - `.agent/plans/observability/high-level-observability-plan.md`
-    — five-axis MVP framing + wave sequencing; updated 2026-04-19 with
-    three-sink architecture subsection + 2 new exploration rows.
+    — five-axis MVP framing + wave sequencing; three-sink architecture
+    subsection + Exploration rows landed 2026-04-19.
   - `.agent/plans/observability/future/second-backend-evaluation.plan.md`
-    — **reframed 2026-04-19** from "second backend evaluation" into the
-    three-sink strategic brief. Carries the explicit decision record
-    (PostHog = settled Sink 3 vendor; warehouse-before-PostHog =
+    — three-sink strategic brief (reframed 2026-04-19). Decision record:
+    PostHog = settled Sink 3 vendor; warehouse-before-PostHog =
     owner-confirmed hard blocker; warehouse vendor + identity envelope
-    = open).
+    = open pending Explorations 9 + 10.
   - `.agent/plans/observability/what-the-system-emits-today.md`
-    — externally-verifiable emits-today snapshot; 3 of 13 cells populated;
-    Update Log carries L-DOC initial close entry + Sinks Today vs Planned
-    subsection.
-  - `.agent/plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`
-    — **next landing target** for the observability-execution lane (nine
-    work streams WS1–WS9, single atomic commit, fold sanitisation +
-    redaction primitives into `@oaknational/observability`, delete the
-    scaffolded `packages/core/telemetry-redaction-core/`, amend ADR-160
-    §Closed Questions).
+    — externally-verifiable emits-today snapshot; 3 of 13 cells
+    populated. Update Log entries through 2026-04-19 include L-DOC
+    initial close, Sinks Today vs Planned, and the primitives-
+    consolidation-landed attempt / observed / proven record.
+  - `.agent/plans/architecture-and-infrastructure/archive/completed/observability-primitives-consolidation.plan.md`
+    — **LANDED 2026-04-19** as commit `e09918a8`. All nine work streams
+    closed. Plan kept in `current/` through this consolidation pass
+    only; archive move + stale-link sweep happens during
+    `jc-consolidate-docs` step 1–2.
   - `.agent/plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md`
-    — parallel-thread follow-up (QUEUED); not this session's primary.
-- **Current state**: Branch `feat/otel_sentry_enhancements` post-consolidation-landing.
-  Branch is **back to mergeable (`pnpm check` exit 0)**. The
-  primitives consolidation landed as a single atomic commit in the
-  2026-04-19 continuation session; ADR-041 core→lib violation at
-  the old `primitives.ts:23` is gone (file and workspace deleted).
-  `packages/core/telemetry-redaction-core/` no longer exists;
-  `pnpm-workspace.yaml` and `pnpm-lock.yaml` are clean of it.
-  `@oaknational/observability` now owns redaction primitives + JSON
-  sanitisation + canonical `JsonValue`/`JsonObject` type;
-  `@oaknational/sentry-node` composes directly from observability
-  (no intermediate workspace hop); browser-safety invariant is
-  structurally enforced by `no-node-only-imports.unit.test.ts`.
+    — parallel-thread follow-up (QUEUED, paused); not this session's
+    primary.
+- **Current state**: Branch `feat/otel_sentry_enhancements` at HEAD
+  `e09918a8` (post-consolidation-landing). Six commits ahead of
+  `origin/feat/otel_sentry_enhancements` (push deferred — non-
+  automated). Working tree clean. Branch is **back to mergeable
+  (`pnpm check` exit 0)**. Test totals from the landing gate:
+  observability 58/58, sentry-node 61/61 (behavioural safety net
+  preserved), logger 140/140, oak-search-sdk 262/262, oak-
+  curriculum-mcp-streamable-http 615/615, search-cli 1006/1006; E2E
+  161/161 in isolation. `packages/core/telemetry-redaction-core/`
+  no longer exists; `@oaknational/observability` owns redaction
+  primitives + JSON sanitisation + canonical `JsonValue`/`JsonObject`
+  type; `@oaknational/sentry-node` composes directly from
+  observability (no intermediate workspace hop); browser-safety
+  invariant structurally enforced by `no-node-only-imports.unit.test.ts`.
+  - `e09918a8` refactor(observability): fold redaction primitives;
+    delete telemetry-redaction-core (WS1–WS9 atomic; bundled parallel-
+    agent edits across knowledge-graph / semantic-search /
+    sdk-and-mcp-enhancements / research per owner direction)
   - `095e66d4` wip(observability): primitives consolidation plan +
-    transitional scaffold (also absorbs three-sink wiring across
-    observability plans, ADRs, mcp-handler TSDoc, explorations,
-    knowledge-graph reorg, and napkin entries — flagged in commit body)
+    transitional scaffold
   - `9e1a26b2` feat(observability): l-doc initial — authoritative app
     observability docs
   - `08989388` docs(agentic-engineering): governance-concept integration
@@ -152,14 +160,24 @@ commit.
   - `7efd0a43` feat: l-eh initial + wave-1 assurance mechanisms +
     governance-concept lane
 - **Current objective**: Consolidation is **LANDED 2026-04-19** per
-  [`architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`](../plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md).
+  [`architecture-and-infrastructure/archive/completed/observability-primitives-consolidation.plan.md`](../plans/architecture-and-infrastructure/archive/completed/observability-primitives-consolidation.plan.md).
   L-12-prereq is now **completed** (see status flip in the
-  maximisation plan). The next primary objective is **resuming the
-  Sentry observability wiring** per the maximisation plan — all
-  other active threads (knowledge-graph, semantic-search, research,
-  sdk-and-mcp-enhancements README updates) are paused at owner
-  direction until explicitly picked back up. L-7 remains blocked
-  on owner adjudication of the build/releases/Sentry interaction.
+  maximisation plan). The next primary objective is the **L-7
+  release + commits + deploy linkage lane**. All other active threads
+  (knowledge-graph, semantic-search, research, sdk-and-mcp-enhancements
+  README updates) are paused at owner direction until explicitly
+  picked back up. L-7 has **completed adjudication AND ADR-163 is
+  Accepted** 2026-04-19 — the mechanism is fully specified in
+  [ADR-163](../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)
+  (Accepted) and the L-7 lane body in the maximisation plan.
+  Release = semver from root `package.json`; SHA = metadata via
+  `releases set-commits` + `git.commit.sha` tag; production
+  attribution requires both `VERCEL_ENV=production` AND
+  `VERCEL_GIT_COMMIT_REF=main`; local-dev skipped unless override
+  env-pair set. Existing GitHub `release.yml` + Vercel `ignoreCommand`
+  machinery is unchanged; L-7 adds a single orchestrator script inside
+  the Vercel Build Command. **Implementation authorised** 2026-04-19;
+  ready to execute on session resume.
   The three-sink wiring is **closed as a documentation milestone** —
   no further three-sink plan-edits are expected until either (a)
   Exploration 9 (warehouse vendor) closes with a settled vendor,
@@ -179,6 +197,68 @@ commit.
   Docs-content tests violate testing-strategy.md; acceptance on docs
   lanes sits on the reviewer matrix, not automated content-presence checks.
   Tests must prove behaviour, not constrain implementation/config.
+- **Recent surprises / corrections** (2026-04-19 primitives-consolidation EXECUTION session):
+  - **Type unification dissolved a work-stream boundary.** WS6 was
+    listed as a standalone "eliminate `requireJsonObject` runtime
+    throw" work stream. Once WS1's type unification (delete
+    `TelemetryRecord` / `TelemetryValue`, canonicalise `JsonObject` /
+    `JsonValue`) landed, the `requireJsonObject` workaround became
+    structurally unjustified — the outer `sanitiseObject` pass was
+    already provably redundant against a typed `JsonObject → JsonObject`
+    redaction signature. WS6 completed as side-effect of WS1. Pattern
+    candidate: `work-stream-dissolution-via-upstream-fix` — a
+    fix-to-root-cause can absorb a downstream remediation listed as
+    separate work.
+  - **Owner stop-all-streams mid-reviewer-dispatch is a legitimate
+    override of plan prescription.** The plan's WS8 listed ten
+    specialist reviewers. I launched four in parallel (code-reviewer,
+    fred, barney, type-reviewer); the owner interrupted with "stop all
+    other streams, include all files in the next commit". Two reviews
+    completed (barney + type-reviewer, both with actionable P2/P3
+    findings that were applied in-close); two were rejected. Lesson:
+    reviewer dispatch scale is discretionary, not prescriptive; owner
+    concurrency control trumps plan-level matrix completeness. Pattern
+    candidate: `reviewer-matrix-completeness-is-not-absolute`.
+  - **Turbo-cached `format:root` is not a reliable proxy for
+    pre-commit prettier's verdict.** Ran `pnpm format:root` after
+    reviewer edits — turbo reported "all cached unchanged". Committed.
+    Pre-commit hook re-ran prettier on the staged file and found
+    actual drift in `apps/oak-search-cli/src/observability/cli-observability.ts`.
+    Turbo's cache reflected input-hash equivalence, not current
+    prettier state. Running `pnpm format:root` a second time DID fix
+    the file. Pattern candidate: `turbo-cache-hides-prettier-drift-
+    until-pre-commit` — run format unconditionally before commit; or
+    trust the pre-commit hook to catch it.
+  - **E2E flakiness under parallel `pnpm check` load — third cross-
+    session instance.** First `pnpm check` during the landing gate
+    hit an E2E failure in `apps/oak-curriculum-mcp-streamable-http`.
+    Re-run with `pnpm --filter @oaknational/oak-curriculum-mcp-
+    streamable-http test:e2e` in isolation: 161/161 green. Second
+    `pnpm check` full run: all 88 tasks green. This is the third
+    cross-session instance of the same pattern (per the prior
+    session's watchlist, "Name a test-stability lane if a third
+    session confirms the pattern"). **Promotion-ready** to an actual
+    test-stability lane.
+  - **Reviewer findings applied in close, not deferred.** Barney's P2
+    (README clarification on historical type names) and type-reviewer's
+    P3-1 (`isTelemetryObject` → `isJsonObject` rename) and P3-2
+    (redundant post-redaction guard in `express-middleware.ts` removed)
+    all landed in the atomic commit rather than being queued as
+    follow-up work. The plan's acceptance criterion "findings are
+    action items unless explicitly rejected with written rationale"
+    was honoured structurally. Deferred: two P3 pre-existing-shape
+    observations (`ValueConfigError` indirection; `PlainObjectValue`
+    `WeakKey` union) recorded in the plan Close Evidence as out-of-
+    scope. Pattern confirmation: `reviewer-findings-are-action-items-
+    by-default` still holds; deferral requires named rationale.
+  - **Owner override: "include all files" legitimises cross-thread
+    bundled commit.** Memory feedback established the default
+    (`git add specific files`, not `-A`). This session the owner
+    explicitly overrode: "include all files in the next commit". The
+    override is the controlling instruction; the default applies when
+    no explicit instruction is given. Worth preserving the distinction
+    so the next session doesn't read the memory entry as a hard rule.
+
 - **Recent surprises / corrections** (2026-04-19 primitives-consolidation planning session):
   - **Dependency-provenance trace is the leading indicator; lint is
     lagging.** L-12-prereq scaffolded a new core workspace before
@@ -380,53 +460,46 @@ commit.
     combined — not testable at the Oak boundary alone. Candidate for a
     future lane when the events-workspace (Wave 2) provides assertion
     shapes.
-- **Next safe step**: Resume the Sentry observability wiring per
+- **Next safe step**: Execute L-7 per
+  [ADR-163](../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)
+  and the L-7 lane body in
   [`observability/active/sentry-observability-maximisation-mcp.plan.md`](../plans/observability/active/sentry-observability-maximisation-mcp.plan.md).
-  Remaining Wave 1 / Phase 1 surface after the consolidation close:
-  L-7 (release/deploy linkage — blocked on owner adjudication of
-  the build/releases/Sentry interaction). Phase 2 lanes (events
-  workspace, multi-sink conformance, feature-flag provider
-  selection) sit behind that. Wave 4 L-12 (widget Sentry)
-  substrate is now ready (observability is browser-safe by
+  Scope: add `VERCEL_GIT_COMMIT_REF` + `SENTRY_RELEASE_REGISTRATION_OVERRIDE`
+  to `SentryConfigEnvironment`; extend `resolveSentryEnvironment` to
+  implement the ADR-163 §3 truth table; add `git.commit.sha` tag to
+  `initialiseSentry` `initialScope.tags`; author
+  `apps/oak-curriculum-mcp-streamable-http/scripts/sentry-release-and-deploy.sh`
+  orchestrator + its fake-CLI tests; add `build:vercel` npm script;
+  update the Vercel Project Build Command setting. Plus the reviewer
+  matrix per the lane's acceptance criteria. Wave 1 closes when L-7
+  lands (plus the Phase 1 close external-demonstration criterion).
+  Phase 2 lanes (events workspace, multi-sink conformance, feature-
+  flag provider selection) sit behind that. Wave 4 L-12 (widget
+  Sentry) substrate is now ready (observability is browser-safe by
   construction), but the widget lane itself is a Wave 4 item, not
   the next forward-motion target.
   **Alternative landing targets** (if the next session is owner-
   adjudication-shaped rather than code-shaped): close Exploration 10
-  (Clerk identity policy ruling) — this unblocks warehouse adapter
-  authoring downstream and resolves the open `mcp-handler.ts` TSDoc
-  pointer. Or close Exploration 9 (warehouse vendor) on the identity-
-  independent criteria, leaving the identity-sensitive checks for
-  when Exploration 10 closes.
-- **Deep consolidation status**: **due — not well-bounded for this
-  closeout** (now carrying primitives-consolidation-planning substance
-  + three-sink wiring substance on top of the already-deferred L-DOC
-  initial + L-EH initial + Phase-5 surprises). distilled.md is at
-  275/275 (hard limit); napkin.md is now ~1400 lines (well over 500
-  rotation threshold) with the primitives-consolidation-planning
-  session adding seven new watchlist candidates (dependency-
-  provenance-before-scaffold; amend-not-honour-when-simplification-
-  surfaces-post-decision; multi-lens-reviews-surface-tradeoffs-single-
-  review-cannot; core-tier-means-primitive-not-just-dependency-pure;
-  duplicate-type-load-bearing-at-three-consumers; safety-layers-stack-
-  not-nest; git-status-is-a-snapshot-reread-before-destructive-ops)
-  plus the three-sink session's six (closure-principle-absorbs-
-  cardinality; reviewer-as-option-cartographer; in-place-supersession-
-  markers third-instance promotion-ready; date-suffixed-frontmatter-
-  is-a-smell; tier-scope-must-be-explicit-for-shared-vocabulary-
-  invariants; code-embodied-policy-without-explicit-ruling-needs-
-  tsdoc-pointer). Three previously single-instance watchlist items
-  have now reached ≥2 cross-session instances and are promotion
-  candidates (reviewer-catches-plan-blind-spot, externally-verifiable-
-  output-beats-plan-compliance, decompose-precedents-before-reusing).
-  The "fork-cost-surfaces-in-doc-discipline-layer" pattern reached a
-  third instance in the three-sink session and is promotion-ready.
-  Running consolidate-docs would now be the fifth structural-change
-  pass of the day (morning consolidation; L-EH initial; L-DOC initial;
-  three-sink wiring; primitives-consolidation planning); pattern-
-  inflation risk is compounded per ADR-131 §Self-Referential Property.
-  The next session opens the deep pass deliberately OR commits to
-  another forward-motion lane (primitives consolidation execution;
-  Exploration 9 or 10 closure) and defers again.
+  (Clerk identity policy ruling); close Exploration 9 (warehouse
+  vendor) on identity-independent criteria. (ADR-163 acceptance +
+  L-7 authorisation both settled 2026-04-19, so those are no longer
+  alternative targets.)
+- **Deep consolidation status**: **in progress this handoff — owner
+  explicitly requested `jc-consolidate-docs` after the primitives
+  consolidation landed**. Triggers that fire: plan closed (primitives
+  consolidation + L-12-prereq); settled doctrine in ephemeral
+  artefacts (architectural-excellence-over-ADR-honour; amend-not-
+  honour-when-simplification-surfaces; type-unification-dissolves-
+  work-streams); repeated surprises across sessions (E2E flakiness
+  reaching third instance is promotion-ready; reviewer-findings-
+  applied-in-close pattern confirmed across L-EH / L-DOC /
+  primitives-consolidation; reviewer-matrix-completeness-is-not-
+  absolute new); documentation drift (plan entries in `current/` now
+  belong in `archive/completed/`; transient workspace name
+  references in a few plan bodies). Fitness pressure is acute —
+  `distilled.md` was at 275/275 (hard limit) before this session;
+  `napkin.md` is ~1400 lines (well over the 500-line rotation
+  threshold).
 
 ### Later Handoff Addendum — 2026-04-19 (KG reframe + shared-worktree state)
 
@@ -440,7 +513,7 @@ commit.
   semantic-search, SDK/MCP, report, and high-level-plan discovery
   surfaces.
 - **Active plans**:
-  - `.agent/plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`
+  - `.agent/plans/architecture-and-infrastructure/archive/completed/observability-primitives-consolidation.plan.md`
     remains the next observability landing target and the branch's main
     blocker-clearing lane.
   - `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`

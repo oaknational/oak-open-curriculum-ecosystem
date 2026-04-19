@@ -149,9 +149,11 @@ sink lands.
 
 - L-12-prereq in
   [`active/sentry-observability-maximisation-mcp.plan.md`](../active/sentry-observability-maximisation-mcp.plan.md)
-  — extract `packages/core/telemetry-redaction-core/`. Independent
-  architectural commitment per the workspace-extraction posture
-  (owner statement 2026-04-19); not contingent on this plan.
+  — **CLOSED 2026-04-19** via the observability-primitives-consolidation
+  lane (primitives folded into `@oaknational/observability` rather than
+  extracted to a new workspace; browser-safety structurally enforced).
+  Downstream adapters compose the redaction primitives directly from
+  `@oaknational/observability`.
 - [`current/observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
   — vendor-neutral schemas are the input the warehouse adapter
   consumes.
@@ -164,9 +166,9 @@ sink lands.
 
 - [`current/observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
   has landed (vendor-neutral schemas exist).
-- L-12-prereq has landed (`packages/core/telemetry-redaction-core/`
-  is extracted; the closure-rule patterns the adapter composes
-  exist as a reusable module).
+- L-12-prereq has closed (the redaction primitives live in
+  `@oaknational/observability`; the closure-rule patterns the
+  adapter composes exist as a reusable module there).
 - The multi-sink vendor-independence conformance harness exists in
   code and the warehouse adapter has demonstrated a sink-addition
   pattern (PR-shape precedent).
@@ -314,8 +316,9 @@ Grafana+Loki+Tempo, self-hosted OTel); evaluate; decide.
 `packages/libs/<vendor>-exporter/` workspace):
 
 - Consumes `@oaknational/observability-events` schemas as input.
-- Composes the redaction policy via `@oaknational/telemetry-redaction-core`
-  (post-L-12-prereq).
+- Composes the redaction policy via `@oaknational/observability`
+  (redaction primitives + sanitisation consolidated here per the
+  2026-04-19 primitives-consolidation lane).
 - Emits to the sink via that vendor's SDK or its OTel-compatible
   ingest endpoint.
 - Registers in the composition root only (per ADR-078); never in
@@ -324,8 +327,8 @@ Grafana+Loki+Tempo, self-hosted OTel); evaluate; decide.
   conformance test.
 - Documents per-sink alert / dashboard / runbook ownership.
 
-**Cross-sink concerns** (owned at the events-workspace + redaction-core
-level, not per adapter):
+**Cross-sink concerns** (owned at the events-workspace +
+`@oaknational/observability` level, not per adapter):
 
 - Vendor-neutral correlation keys (`session_id`, `trace_id`,
   `release`).

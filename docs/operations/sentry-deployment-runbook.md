@@ -44,10 +44,11 @@ In the [Vercel dashboard](https://vercel.com/oak-national-academy/poc-oak-open-c
 
 Auto-resolved (no need to set on Vercel):
 
-| Variable             | Falls back to           |
-| -------------------- | ----------------------- |
-| `SENTRY_RELEASE`     | `VERCEL_GIT_COMMIT_SHA` |
-| `SENTRY_ENVIRONMENT` | `VERCEL_ENV`            |
+| Variable             | Falls back to                                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SENTRY_RELEASE`     | Root repo `package.json` semver (resolved via `APP_VERSION` in `resolveSentryRelease`). **Not** the git SHA — the SHA is metadata, attached separately. See [ADR-163](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) §1–§2.                                                                                           |
+| `SENTRY_ENVIRONMENT` | `VERCEL_ENV` **constrained by** `VERCEL_GIT_COMMIT_REF` per the [ADR-163 §3 truth table](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain). A `VERCEL_ENV=production` build from a non-main branch is downgraded to `preview`. |
+| git SHA (Sentry tag) | `VERCEL_GIT_COMMIT_SHA` — attached to every event as the `git.commit.sha` Sentry tag, and to the release itself via `sentry-cli releases set-commits --commit oaknational/oak-open-curriculum-ecosystem@<sha>`.                                                                                                                                                                    |
 
 Optional:
 
@@ -84,7 +85,10 @@ script performs automatically. See
 `.sentryclirc` composition rules, artefact-bundle-vs-release model,
 and troubleshooting.
 
-1. Ensure `SENTRY_RELEASE` resolves to the deployed commit SHA.
+1. Ensure `SENTRY_RELEASE` resolves to the deployed root `package.json`
+   semver. The SHA is attached separately as a Sentry tag and via
+   `releases set-commits`. See
+   [ADR-163 §1–§2](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
 2. Run the workspace-local wrapper to inject Debug IDs and upload the
    artefact bundle:
    [`upload-sourcemaps.sh`](../../apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh).
@@ -99,10 +103,85 @@ and troubleshooting.
    match key at event time is the Debug ID, not the release string.
 
 Source map upload is automated for local evidence generation via
-`RELEASE=<tag> pnpm sourcemaps:upload` inside
+`RELEASE=<semver> pnpm sourcemaps:upload` inside
 `apps/oak-curriculum-mcp-streamable-http`. CI-triggered upload on
-Vercel deploys is still tracked as part of the
-`deployment-and-evidence` todo in the execution plan.
+Vercel deploys is the scope of
+[L-7 in the maximisation plan](../../.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md#l-7-release--commits--deploy-linkage),
+which wraps this script into the orchestrator described below.
+
+## Step 3b: Release → commit → deploy linkage (Vercel build-time)
+
+**Authoritative mechanism**:
+[ADR-163: Sentry Release Identifier, Source-Map Attachment, and Vercel
+Production Attribution](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
+This section transcribes ADR-163 for operational use; if this section
+and ADR-163 disagree, the ADR wins.
+
+**Preceding GitHub + Vercel machinery — already wired**:
+
+1. `.github/workflows/release.yml` runs `semantic-release` on
+   successful CI on `main`. `semantic-release` bumps the root
+   `package.json` version and creates a commit back to `main`.
+2. `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+   is wired as `ignoreCommand` in the workspace `vercel.json`. It
+   cancels production builds that do not advance the root
+   `package.json` version beyond the previous successful production
+   deployment.
+
+Net effect: Vercel's production Build Command only ever runs on a
+`semantic-release` version-bump commit. Preview builds run on every
+commit pushed to a branch with an open PR.
+
+**Inside the Vercel Build Command** (L-7 scope): the workspace
+`build:vercel` npm script runs `pnpm build` followed by
+`scripts/sentry-release-and-deploy.sh`. That orchestrator runs the
+preflight + six-step sequence per ADR-163 §6 + §7.
+
+```bash
+# Preflight (orchestrator fails non-zero on any):
+#
+#   VERSION      = node -p "require('./package.json').version"
+#   DERIVED_ENV  = per ADR-163 §3 truth table using VERCEL_ENV +
+#                  VERCEL_GIT_COMMIT_REF
+#   requires VERCEL_GIT_COMMIT_SHA ∈ /[0-9a-f]{7,40}/i
+#   requires SENTRY_AUTH_TOKEN non-empty
+#   requires dist/ non-empty
+
+sentry-cli releases new "$VERSION"                          # §6.1 abort on fail
+
+sentry-cli releases set-commits "$VERSION" \                # §6.2 warn-continue
+  --commit "oaknational/oak-open-curriculum-ecosystem@$VERCEL_GIT_COMMIT_SHA"
+
+RELEASE="$VERSION" ./scripts/upload-sourcemaps.sh           # §6.3–§6.4 abort on fail
+
+sentry-cli releases finalize "$VERSION"                     # §6.5 warn-continue
+
+sentry-cli deploys new --release "$VERSION" -e "$DERIVED_ENV"  # §6.6 warn-continue
+```
+
+**Environment-attribution rule** (ADR-163 §3):
+
+| `VERCEL_ENV`  | `VERCEL_GIT_COMMIT_REF` | Sentry environment | Registered? | Warning              |
+| ------------- | ----------------------- | ------------------ | ----------- | -------------------- |
+| `production`  | `main`                  | `production`       | yes         | no                   |
+| `production`  | any other / missing     | `preview`          | yes         | yes (mislabel guard) |
+| `preview`     | any                     | `preview`          | yes         | no                   |
+| `development` | any                     | `development`      | no          | no                   |
+| unset         | any                     | `development`      | no          | no                   |
+
+Local-dev builds skip registration unless BOTH
+`SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` AND `SENTRY_RELEASE_OVERRIDE=<version>`
+are set (ADR-163 §4).
+
+**Verification**:
+
+1. `sentry api organizations/oak-national-academy/releases/<semver>/commits/`
+   lists the build-commit under the release.
+2. `sentry api organizations/oak-national-academy/releases/<semver>/deploys/`
+   lists the deploy for the resolved environment.
+3. One release entry in the Sentry UI covers both preview and
+   production deploys of the same version (one release → many
+   deploys).
 
 ## Step 4: Deploy and Smoke Test
 

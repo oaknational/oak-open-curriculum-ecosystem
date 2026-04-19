@@ -43,7 +43,7 @@ todos:
     content: "L-6 (Phase 5, MVP-deferred): add @sentry/profiling-node, wire nodeProfilingIntegration, evaluate overhead, document rollout"
     status: pending
   - id: l7-release-deploy-linkage
-    content: "L-7 (Phase 1): sentry-cli releases set-commits --auto and releases deploys new wired into CI/deploy flow; close regression-detection loop. Moved from old Phase 2 to Phase 1 under 2026-04-18 reshape so every subsequent lane's smoke test is release-tagged."
+    content: "L-7 (Phase 1): release + commits + deploy linkage per ADR-163 (Accepted 2026-04-19). Single orchestrator script in the Vercel Build Command: explicit `releases set-commits --commit org/repo@sha` (not --auto), `sourcemaps inject + upload --release`, `releases finalize`, `deploys new --release -e` (new CLI noun form, not legacy). Release identifier = root package.json semver; SHA = metadata; production attribution requires both VERCEL_ENV=production AND VERCEL_GIT_COMMIT_REF=main; local-dev skipped unless SENTRY_RELEASE_REGISTRATION_OVERRIDE env-pair set. Runtime contract adds VERCEL_GIT_COMMIT_REF + SENTRY_RELEASE_REGISTRATION_OVERRIDE to SentryConfigEnvironment and extends resolveSentryEnvironment with the ADR-163 §3 truth table. Implementation authorised 2026-04-19."
     status: pending
   - id: l8-bundler-source-maps
     content: "L-8: PARKED — bundler source-map plugin deferred. @sentry/esbuild-plugin would require replacing tsup with esbuild; the current shell-script flow is simpler, offline-capable, and auditable. Revisit only if script complexity grows or a specific driver emerges."
@@ -745,13 +745,21 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
 
 ### L-12-prereq Browser-safe redactor core extraction
 
-> **Status (2026-04-19)**: 🔴 **BLOCKED by [`architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`](../../architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md)**.
+> **Status (2026-04-19)**: ✅ **CLOSED** via the observability-primitives-consolidation lane (archived at [`architecture-and-infrastructure/archive/completed/observability-primitives-consolidation.plan.md`](../../architecture-and-infrastructure/archive/completed/observability-primitives-consolidation.plan.md); commit `e09918a8`).
 >
-> A scaffolded extraction into `packages/core/telemetry-redaction-core/` surfaced a core→lib boundary violation (sanitisation primitives live in `@oaknational/logger`, a lib) and an over-decomposition signal (the new workspace was 139 LOC of pure composition over `@oaknational/observability`'s existing primitives). Architecture review (fred + barney, 2026-04-19) resolved the tension toward **folding primitives into `@oaknational/observability`** rather than a new core workspace. The consolidation plan supersedes this lane's body below; L-12-prereq becomes a trivial confirmation step once consolidation closes.
+> The original brief for this lane was to extract a pure, runtime-agnostic redactor core into a new `packages/core/telemetry-redaction-core/` workspace. A 2026-04-19 scaffolded attempt surfaced a core→lib boundary violation (sanitisation primitives were in `@oaknational/logger`, a lib) and an over-decomposition signal (the new workspace was 139 LOC of pure composition over `@oaknational/observability`'s existing primitives). Architecture review (fred + barney) resolved the tension by **folding the primitives into `@oaknational/observability`** rather than creating a new core workspace. The substantive goal of L-12-prereq — a browser-safe home for the redaction primitives that Wave 4 L-12 (widget Sentry) can compose — was achieved by that fold without any new workspace.
 >
-> **What L-12-prereq will check at re-open** (post-consolidation): `@oaknational/observability` owns redaction primitives + sanitisation + unified recursive JSON-safe type; `@oaknational/sentry-node` composes directly from observability; zero `@sentry/*` and zero `node:*` in observability `src/`; `packages/core/telemetry-redaction-core/` does not exist; Wave 4 widget Sentry can compose observability without a prerequisite extraction.
+> **What has been checked post-consolidation** (all satisfied as of 2026-04-19):
 >
-> **Original body retained below** as the record of the scaffolded attempt that surfaced the architectural repair. The decomposition rationale here is partly stale (new-package placement superseded); read the consolidation plan for the current shape.
+> - `@oaknational/observability` owns redaction primitives + JSON sanitisation + unified recursive JSON-safe type (`JsonValue`/`JsonObject`).
+> - `@oaknational/sentry-node` composes directly from observability (no intermediate workspace hop).
+> - Zero `@sentry/*` and zero `node:*` in observability runtime `src/` (structurally enforced by `packages/core/observability/src/no-node-only-imports.unit.test.ts`).
+> - `packages/core/telemetry-redaction-core/` does not exist (workspace entry removed from `pnpm-workspace.yaml`; lockfile clean).
+> - Wave 4 widget Sentry can compose observability without a prerequisite extraction.
+>
+> ADR-160 §Closed Questions carries the amended placement decision + dated history entry.
+>
+> **Original body retained below** as the record of the scaffolded attempt that surfaced the architectural repair. The extraction-focused decomposition rationale is historical; the actual landing shape is the fold documented above.
 
 **Objective** (A.2 item 6, per architecture-reviewer-fred + sentry-reviewer). Extract a pure, runtime-agnostic redactor core into a new browser-safe package so both the Node adapter (`@oaknational/sentry-node`) and the forthcoming browser adapter (L-12) compose it. **Proposes** (pending ADR-160 amendment) to close the ADR's "Open Question" on redactor core placement in favour of a new package. ADR-160 is Accepted 2026-04-17 with Open Questions intact; L-12-prereq GREEN is conditional on either a minor ADR-160 amendment closing the question or owner confirmation that plan-prose is sufficient authority for the decision.
 
@@ -779,84 +787,207 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
 
 ### L-7 Release + commits + deploy linkage
 
-**Objective**. Close the regression-detection loop.
+**Authoritative mechanism**: see
+[ADR-163: Sentry Release Identifier, Source-Map Attachment, and Vercel
+Production Attribution](../../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
+This lane is a mechanical transcription of the ADR; any divergence
+between the lane and the ADR is a lane bug.
 
-**Pipeline discipline** (settled 2026-04-17 with owner): L-7 runs in
-the **Vercel deploy pipeline only**, not in GitHub Actions PR / push
-checks. PR checks stay network-free per `testing-strategy.md`. The
-deploy pipeline already has `SENTRY_AUTH_TOKEN` available; CI PR
-checks do not.
+**Objective**. Close the regression-detection loop. Every emitted
+event carries a semver release tag and a git SHA tag; every release
+has a timeline of deploys across `preview` and `production`
+environments; every deploy carries the commit SHA that was built.
 
-**Script partitioning**: the existing `scripts/upload-sourcemaps.sh`
-stays as-is (source-map concern). Add **sibling scripts** in the same
-workspace:
+**Pipeline discipline** (ADR-161 + ADR-163 §7): L-7 scripts run inside
+the **Vercel Build Command** only, via a dedicated orchestrator
+invoked as part of the single Vercel build step. PR checks stay
+network-free per ADR-161. Local-dev builds do not register Sentry
+releases or deploys unless the `SENTRY_RELEASE_REGISTRATION_OVERRIDE=1`
++ `SENTRY_RELEASE_OVERRIDE=<version>` env pair is set (ADR-163 §4).
 
-- `scripts/sentry-release-set-commits.sh` — invokes
-  `sentry-cli releases set-commits "$RELEASE" --commit "oaknational/oak-open-curriculum-ecosystem@$GIT_SHA"`.
-  Uses the **explicit `--commit`** form for determinism and to keep
-  the script testable without Sentry org-side state. The Sentry
-  GitHub integration is installed for the org and enables `--auto`.
-  **Integration coupling** (2026-04-18 per sentry-reviewer TO-ACTION):
-  the explicit `--commit org/repo@sha` form still requires the
-  GitHub integration to resolve the repo identifier against the
-  Sentry org's registered repositories. If the integration is
-  uninstalled, fall back to raw commit metadata via the API or use
-  `--ignore-missing`. We use the explicit form anyway because it
-  narrows the failure mode (integration uninstall becomes a script
-  error rather than silent `--auto` inference), but we do not claim
-  to be independent of the integration — we claim to surface the
-  dependency explicitly at invocation.
-- `scripts/sentry-deploy-register.sh` — invokes
-  `sentry-cli releases deploys "$RELEASE" new -e "$SENTRY_ENVIRONMENT"`.
+**Preceding machinery — already wired, no L-7 work required**:
 
-Each script follows the ADR-159 shape: fail-fast preflight + one
-vendor invocation + post-condition check.
+- `.github/workflows/release.yml` runs `semantic-release` on successful
+  CI on `main`. `semantic-release` creates a bump-commit to `main` with
+  the advanced root `package.json` version. `concurrency: release`
+  with `cancel-in-progress: false` serialises release workflows, so
+  competing version-bump commits cannot be produced in parallel.
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+  is wired as `ignoreCommand` in `apps/oak-curriculum-mcp-streamable-http/vercel.json`.
+  It cancels production builds whose root `package.json` version has
+  NOT advanced beyond the previous successful deployed version. Only
+  the `semantic-release` bump-commit triggers a production Vercel
+  build.
 
-**RED**: Behaviour tests (not shell grep). For each sibling script,
-write a deterministic validation that runs against a fake
-`sentry-cli` binary placed on `PATH` and asserts the argument vector
-the script emits (including explicit commit SHA and environment).
-Optionally: an integration test against a recorded Sentry API
-response under `nock` or equivalent — but only in a workspace that
-already runs network-isolated integration tests; otherwise keep the
-fake-CLI approach.
+L-7 does **not** change either of these. L-7 attaches steps inside the
+Vercel Build Command that runs on the version-bump commit.
 
-**GREEN**: Author the two sibling scripts. Wire both into the Vercel
-predeploy/postdeploy hook (release linkage in predeploy after
-source-map upload; deploy register in postdeploy after traffic
-switches). Document the hook attachment in the deployment runbook.
+**Script partitioning** (ADR-163 §7): one orchestrator, three
+underlying building blocks.
 
-**REFACTOR**: Update `docs/operations/sentry-deployment-runbook.md`
-(new section: "Release → commit → deploy linkage"),
-`docs/operations/sentry-cli-usage.md` (add the two new script
-entries), and the `packages/libs/sentry-node/README.md` release
-section (refer to both scripts).
+- `apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`
+  — **stays as-is except for a doc comment update** (see "WHEN TO RUN"
+  in the existing script). This script runs the Debug-ID + upload pair
+  (§6.3–§6.4 of ADR-163).
+- `apps/oak-curriculum-mcp-streamable-http/scripts/sentry-release-and-deploy.sh`
+  (new) — the **single orchestrator** owning steps §6.1, §6.2, §6.5,
+  and §6.6 of ADR-163, plus calling `upload-sourcemaps.sh` for §6.3
+  and §6.4. Per-step error-handling posture matches ADR-163 exactly
+  (abort on §6.1, warn-continue on §6.2, abort on §6.3–§6.4, warn-
+  continue on §6.5 and §6.6). No partitioning into multiple orchestrator
+  scripts: per-step exit-code inspection requires the single-script
+  shape per ADR-163 §7.
+- `apps/oak-curriculum-mcp-streamable-http/package.json` gains a
+  `build:vercel` script that runs `pnpm build` followed by
+  `scripts/sentry-release-and-deploy.sh`. The Vercel Build Command
+  setting is updated to invoke
+  `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http run build:vercel`.
+  Local `pnpm build` remains unchanged (tsup only, no side effects).
+
+**Preflight computed by the orchestrator** (ADR-163 §6 preflight):
+
+1. `VERSION = $(node -p "require('./package.json').version")` read
+   from the repo root `package.json`.
+2. Verify `VERCEL_ENV` is one of `production`, `preview`, or
+   `development`. If `development` (or unset), exit 0 without
+   registering unless `SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` AND
+   `SENTRY_RELEASE_OVERRIDE` is set.
+3. Compute `DERIVED_ENV` per ADR-163 §3 truth table. Log the derived
+   value and the branch warning (if any) before any sentry-cli call.
+4. Verify `VERCEL_GIT_COMMIT_SHA` is set and matches `/^[0-9a-f]{7,40}$/i`.
+5. Verify `SENTRY_AUTH_TOKEN` is set (non-empty). Do not print it.
+6. Verify `dist/` exists and is non-empty.
+
+Any preflight failure → exit non-zero → Vercel build fails.
+
+**CLI sequence** (copy of ADR-163 §6):
+
+```bash
+sentry-cli releases new "$VERSION"                          # §6.1 abort on fail
+
+sentry-cli releases set-commits "$VERSION" \                # §6.2 warn-continue
+  --commit "oaknational/oak-open-curriculum-ecosystem@$VERCEL_GIT_COMMIT_SHA"
+
+# §6.3 + §6.4 = existing upload-sourcemaps.sh, abort on fail
+RELEASE="$VERSION" ./scripts/upload-sourcemaps.sh
+
+sentry-cli releases finalize "$VERSION"                     # §6.5 warn-continue
+
+sentry-cli deploys new --release "$VERSION" -e "$DERIVED_ENV"  # §6.6 warn-continue
+```
+
+**Runtime contract changes** (ADR-163 §8): adds
+`VERCEL_GIT_COMMIT_REF?: string` and
+`SENTRY_RELEASE_REGISTRATION_OVERRIDE?: string` to
+`packages/libs/sentry-node/src/types.ts#SentryConfigEnvironment`.
+Extends `resolveSentryEnvironment` to implement the ADR-163 §3 truth
+table. `resolveSentryRelease` unchanged.
+
+**Additional SDK scope contract**: `initialiseSentry` in
+`packages/libs/sentry-node/src/runtime.ts` gains one additional tag
+on the SDK's `initialScope.tags` map: `git.commit.sha = <sha>`
+(resolved via the existing `resolveGitSha` in `config-resolution.ts`).
+This is the tag described in ADR-163 §2.
+
+**RED** (TDD per `.agent/rules/tdd-for-refactoring.md`):
+
+1. **Unit tests in `config-resolution.unit.test.ts`** — parametrised
+   test with one row per row of the ADR-163 §3 truth table. Assert
+   `resolveSentryEnvironment(...)` returns the expected `{ value,
+   source }` pair AND that a warning-intent marker is returned
+   alongside when the branch check fires.
+2. **Unit tests for the `VERCEL_GIT_COMMIT_REF` input surface** —
+   `SentryConfigEnvironment` type now includes the field; test that
+   `createSentryConfig` validates + forwards it end-to-end into the
+   resolved config.
+3. **Unit tests for the override-pair behaviour** — both env vars
+   required together; one without the other is a startup error per
+   ADR-163 §4.
+4. **Orchestrator-script argument-vector tests** — against a fake
+   `sentry-cli` binary placed on `PATH`, invoke the orchestrator with
+   representative `VERCEL_ENV` / `VERCEL_GIT_COMMIT_REF` /
+   `VERCEL_GIT_COMMIT_SHA` combinations and assert the exact argument
+   vectors emitted (one assertion per CLI step). The fake-CLI harness
+   follows the ADR-159 shape already used by
+   `upload-sourcemaps.sh`'s tests.
+5. **Per-step error-handling tests** — the fake CLI returns non-zero
+   for a given step; assert orchestrator either exits non-zero (§6.1,
+   §6.3, §6.4) or logs a warning and continues (§6.2, §6.5, §6.6) per
+   ADR-163.
+
+All tests run in-process with no network (ADR-161 compliant). No
+smoke test dependency on Sentry SDK state.
+
+**GREEN**:
+
+1. Extend `SentryConfigEnvironment` per ADR-163 §8.
+2. Implement the branch-check in `resolveSentryEnvironment`.
+3. Add the `git.commit.sha` tag to `initialiseSentry`.
+4. Author `scripts/sentry-release-and-deploy.sh` with the preflight
+   + CLI sequence + per-step error handling.
+5. Author `scripts/sentry-release-and-deploy.unit.test.ts` (or `.sh`
+   equivalent harness) exercising the fake-CLI paths.
+6. Add `build:vercel` to `apps/oak-curriculum-mcp-streamable-http/package.json`.
+7. Update the Vercel Project Settings Build Command override to
+   `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http run build:vercel`.
+   Document the exact value in
+   `docs/operations/sentry-deployment-runbook.md` §Build Command (new
+   subsection).
+
+**REFACTOR / Documentation updates** (ADR-163 §Enforcement.3):
+
+- `docs/operations/sentry-deployment-runbook.md` — fix the SENTRY_RELEASE
+  auto-resolved row (semver, not SHA); add a new "Release → commit →
+  deploy linkage" section transcribing ADR-163 §6.
+- `docs/operations/sentry-cli-usage.md` — add the release-linkage
+  sequence as a named invocation pattern; reference ADR-163.
+- `apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`
+  — update WHEN TO RUN to say `RELEASE=$VERSION_FROM_PACKAGE_JSON`
+  only; remove the SHA alternative.
+- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` —
+  link to ADR-163 as the release/deploy authoritative source.
+- `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`
+  — link to ADR-163 §3 truth table; add `VERCEL_GIT_COMMIT_REF` to the
+  enumerated runtime-config env vars.
+- `packages/libs/sentry-node/README.md` — point at ADR-163 for
+  release/deploy semantics.
 
 **Acceptance**:
 
-1. Sentry UI shows the branch release tagged with the commit SHA
-   (verify via `sentry api` against `organizations/.../releases/<rel>/commits/`).
-2. Sentry UI shows a deploy event for the preview environment
-   (verify via `sentry api` against `organizations/.../releases/<rel>/deploys/`).
-3. No Sentry network calls originate from PR-check CI runs —
-   verified by grepping the GitHub Actions workflow files for
-   `sentry-cli` invocations (expected: zero).
+1. **Runtime**: `config-resolution.unit.test.ts` parametrised tests
+   pass for every row of ADR-163 §3. Override-pair startup errors
+   pass.
+2. **Build pipeline**: orchestrator script unit tests green for each
+   CLI step (§6.1–§6.6), each error-handling posture, each preflight
+   failure mode.
+3. **End-to-end demonstration** (piggybacks on the Phase 1 close
+   demonstration artefact below): a preview deploy of the
+   version-bump commit shows:
+   - Sentry UI: release `<semver>` tagged with commit SHA (verify via
+     `sentry api organizations/oak-national-academy/releases/<semver>/commits/`).
+   - Sentry UI: deploy event for `preview` environment (verify via
+     `sentry api organizations/.../releases/<semver>/deploys/`).
+   - Sentry UI: an event emitted post-deploy carries both `release =
+     <semver>` and `git.commit.sha = <sha>` tags.
+4. **Pipeline-boundary invariant** (ADR-161): grep of
+   `.github/workflows/*.yml` returns zero `sentry-cli` invocations.
 
 **Cross-references** (per ADR-162 five-axis principle +
 vendor-independence clause):
 
+- [ADR-163](../../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md)
+  — authoritative mechanism.
+- [ADR-161](../../../../docs/architecture/architectural-decisions/161-network-free-pr-check-ci-boundary.md)
+  — pipeline boundary.
 - [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md)
-  — the external uptime + external working-probe lanes are the
-  runtime-side complement of L-7's release-linkage: deploy events
-  registered by L-7 are the reference frame against which synthetic
-  probes attribute regressions.
+  — external uptime + working-probe lanes; deploy events registered
+  by L-7 are the reference frame against which synthetic probes
+  attribute regressions.
 - [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
   — L-7 carries an explicit **release-linkage carve-out** from the
   vendor-independence clause. Release linkage is Sentry-coupled by
-  nature (Sentry's own release/deploy primitives); the conformance
-  plan's scope explicitly acknowledges this signal as one that need
-  NOT survive `SENTRY_MODE=off`. The carve-out is documented
-  there, not re-derived per-consumer.
+  nature; the conformance plan's scope explicitly acknowledges this
+  signal as one that need NOT survive `SENTRY_MODE=off`.
 
 ---
 

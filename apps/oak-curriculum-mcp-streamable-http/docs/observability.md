@@ -202,22 +202,35 @@ which remains network-free per ADR-161.
 
 ## Release and metadata resolution
 
+**Authoritative source**:
+[ADR-163 Sentry Release Identifier, Source-Map Attachment, and Vercel
+Production Attribution](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
+
 Release and environment resolve fail-fast at startup:
 
-- release defaults to the root repo `package.json` version
-- `SENTRY_RELEASE_OVERRIDE` is the only explicit release override
-- environment resolves as `SENTRY_ENVIRONMENT_OVERRIDE` → `VERCEL_ENV` →
-  `development`
-- git SHA is attached as metadata from `GIT_SHA_OVERRIDE` or
-  `VERCEL_GIT_COMMIT_SHA`
+- **Release = root repo `package.json` semver.** `SENTRY_RELEASE_OVERRIDE`
+  is the only explicit override. See ADR-163 §1.
+- **Git SHA is metadata, not the release identifier.** Resolves from
+  `GIT_SHA_OVERRIDE` or `VERCEL_GIT_COMMIT_SHA`, attached as the
+  `git.commit.sha` Sentry tag and via `releases set-commits`. See
+  ADR-163 §2.
+- **Environment = `VERCEL_ENV` constrained by `VERCEL_GIT_COMMIT_REF`
+  for production.** A production build from a non-main branch is
+  downgraded to `preview` and a warning is emitted. See
+  [ADR-163 §3 truth table](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain).
+- **Local-dev builds do not register Sentry releases or deploys**
+  unless both `SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` and
+  `SENTRY_RELEASE_OVERRIDE=<version>` are set. See ADR-163 §4.
 
 Invalid override values and missing root `package.json` version are startup
 errors (fail-fast, not silent drift).
 
-The root package version is only bumped by the semantic-release workflow, so
-preview and local builds can legitimately contain commits newer than the
-current release version. On Vercel production, repo-owned build gating
-cancels non-release builds before they run via `vercel.json` `ignoreCommand`,
+The root package version is only bumped by the `semantic-release`
+workflow (`.github/workflows/release.yml`). Preview and local builds
+can legitimately contain commits newer than the current release
+version; the `git.commit.sha` tag distinguishes them within a single
+release. On Vercel production, repo-owned build gating cancels non-
+release builds before they run via `vercel.json` `ignoreCommand`,
 preventing version drift under an old semantic-release tag.
 
 ## Related
