@@ -148,6 +148,9 @@ Use pilot results to tune strictness before wider enforcement.
 
 Create a minimal, repeatable evidence format for engineering claims:
 
+- attempt recorded
+- observed outcome recorded
+- proven result recorded
 - command executed
 - captured output excerpt
 - file span references (`path:line`)
@@ -157,6 +160,16 @@ Create a minimal, repeatable evidence format for engineering claims:
 Initial template artifact:
 
 - [Evidence Bundle Template](evidence-bundle.template.md)
+
+This evidence lane also owns the distinction between:
+
+- **attempt** — what was tried, intended, or used as a verification step
+- **observed outcome** — what the command, check, review, or inspection
+  actually produced
+- **proven result** — the claim the available evidence justifies making
+
+That separation strengthens evidence quality inside the existing evidence lane.
+It does **not** create a second governance or reporting lane.
 
 ### B2. Standardise evidence placement
 
@@ -168,6 +181,10 @@ Define where evidence lives for consistency:
 - review handoff notes
 
 The objective is reproducibility, not verbosity.
+
+Evidence bundles should preserve the difference between an attempted check, the
+observed outcome of that check, and the narrower proven result that can be
+claimed from the evidence.
 
 File naming convention for this collection:
 
@@ -195,6 +212,8 @@ If uncertain, the correct behaviour is explicit abstention and follow-up verific
 - 0 accepted "tests pass" claims without command/output evidence
 - Downward trend in unsupported-claim findings across review cycles
 - Reviewers can validate claims without reconstructing context from scratch
+- Attempt, observed outcome, and proven result are distinguishable in evidence
+  bundles where they are not identical
 
 ## 8. Documentation Propagation Requirement
 

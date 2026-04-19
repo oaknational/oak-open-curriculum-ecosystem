@@ -73,8 +73,9 @@ todos:
     content: "L-15 (Phase 5): record the Sentry-only vs dual-export vs minimal-operational strategy decision with rationale and reviewer attribution"
     status: pending
   - id: l-eh-initial
-    content: "L-EH initial (Phase 1): author require-error-cause ESLint rule in @oaknational/eslint-plugin-standards with expanded RuleTester cases (re-throw of original binding, cause-mismatch vs different variable, nested try/catch, AggregateError shape, async-wrapper catch); apply to Phase 1 new/changed code; explicit pass-through requires ADR-documented sentinel comment"
-    status: pending
+    content: "L-EH initial (Phase 1 / Wave 1 per 2026-04-18 reshape): enable ESLint built-in `preserve-caught-error` (added in 9.35.0) with `requireCatchParameter: true` at `error` severity in `src/**/*.ts` of the 5 Wave-1 workspaces. Supersedes the originally planned custom `require-error-cause` rule — the built-in is a documented superset covering missing cause, cause-mismatch, destructured-parameter loss, variable shadowing, and re-throw / nested / AggregateError / async-wrapper cases by construction. Audit (2026-04-19): 0 violations in-scope; enforcement landed at `error` per `warning-severity-is-off-severity` (with no violations to clean up, `warn`-with-deadline would be vacuous)."
+    status: completed
+    note: "Landed 2026-04-19. Rule wired in each of the 5 workspace `eslint.config.ts` files as a sibling block to the `require-observability-emission` block, scoped to `src/**/*.ts`. Pre-enable audit: 0 violations (MCP app 0; search-cli 0; curriculum-sdk 0; search-sdk 0; sdk-codegen 0) — consistent with ADR-088 + `.agent/rules/use-result-pattern.md` discipline already in practice. pnpm check exit 0 post-enable at `error`. Architecture-reviewer-fred TO-ACTION driving the `warn` → `error` flip actioned in the same lane closure; comment preamble updated with trust-boundary rationale."
   - id: l-eh-final
     content: "L-EH final (Phase 5 per 2026-04-18 reshape; was Phase 4 pre-reshape): author prefer-result-pattern ESLint rule with concrete heuristic spec + valid/invalid RuleTester cases; apply to sentry-node, core/observability, MCP app observability as first adoption tranche; update ADR-088 and .agent/rules/use-result-pattern.md"
     status: pending
@@ -106,7 +107,7 @@ isProject: true
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
 **Last Updated**: 2026-04-19
-**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces. Remaining Wave 1 lanes pending: L-EH initial (`require-error-cause`), L-DOC initial (sentry-node README + app observability doc), L-12-prereq (extract `packages/core/telemetry-redaction-core/`), L-7 (release/deploy linkage).
+**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one). Remaining Wave 1 lanes pending: L-DOC initial (sentry-node README + app observability doc), L-12-prereq (extract `packages/core/telemetry-redaction-core/`), L-7 (release/deploy linkage).
 **Branch**: `feat/otel_sentry_enhancements`
 **Scope**: Close every available Sentry product loop for the MCP app (server + widget) on this branch before PR. Search CLI mirrors on the next branch.
 
@@ -324,7 +325,7 @@ opens after Phase 5 closes.
 
 | Execution phase | Purpose | Maximisation lanes | Sibling `current/` plans |
 |-----------------|---------|---------------------|---------------------------|
-| **Phase 1 — Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces before any new emission site. Every line written after Phase 1 is compile-time-gated. | L-0a, L-0b (both complete 2026-04-17); L-EH initial (`require-error-cause`); L-DOC initial; L-12-prereq (moved from old Phase 3 — extract `packages/core/telemetry-redaction-core/`); L-7 (moved from old Phase 2 — release/deploy linkage scripts unlock regression attribution for every subsequent smoke test); restructure Phase 5 carve-out (`require-observability-emission` ESLint rule + ADR-162 Proposed → Accepted; authored here rather than after emitters land) | — |
+| **Phase 1 — Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces before any new emission site. Every line written after Phase 1 is compile-time-gated. | L-0a, L-0b (both complete 2026-04-17); L-EH initial (ESLint built-in `preserve-caught-error` — supersedes original `require-error-cause` custom-rule plan; landed 2026-04-19); L-DOC initial; L-12-prereq (moved from old Phase 3 — extract `packages/core/telemetry-redaction-core/`); L-7 (moved from old Phase 2 — release/deploy linkage scripts unlock regression attribution for every subsequent smoke test); restructure Phase 5 carve-out (`require-observability-emission` ESLint rule + ADR-162 Proposed → Accepted; authored here rather than after emitters land) | — |
 | **Phase 2 — Schema Foundation** | Every downstream-analytics contract exists as code before any emitter consumes it. | — | [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md) WS1–WS6 (create `packages/core/observability-events/` + 7 MVP schemas + conformance helper); [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS1 carve-out (`no-vendor-observability-import` ESLint rule only; emission-persistence test deferred to Phase 5) |
 | **Phase 3 — Primary Emitters (Server)** | Server-side emission sites consume the Phase 2 schemas by import. Each lane's RED asserts schema conformance via the events-workspace helper. | L-1 (moved from old Phase 1 — free-signal integrations); L-2 (moved from old Phase 1 — delegates extraction); L-3 (was old Phase 2 — MCP request context enrichment); L-4b (moved within old Phase 2 — primary `Sentry.metrics.*` adapter); L-9 (was old Phase 3 — feedback pipeline) | — |
 | **Phase 4 — Cross-axis & Widget** | Widget = second emitting runtime under ADR-162's vendor-independence clause. Security + a11y sibling plans emit their axis events using Phase 2 schemas. Can parallelise within-phase. | L-12 (moved from old Phase 3 — widget Sentry) | [`security-observability.plan.md`](../current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered`; [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome` |
@@ -338,7 +339,7 @@ phase.
 **Architectural rationale for this ordering** (summary):
 
 1. **Schemas before emitters** — every L-1 / L-3 / L-4b / L-9 / L-12 fixture assertion imports from `packages/core/observability-events/`. No retrofit.
-2. **Rules before code** — `require-error-cause`, `require-observability-emission`, `no-vendor-observability-import` all land in Phases 1–2, before any emission site is authored.
+2. **Rules before code** — ESLint built-in `preserve-caught-error` (L-EH initial, supersedes `require-error-cause`), custom `require-observability-emission` (restructure Phase 5), and custom `no-vendor-observability-import` (Phase 2) all land in Phases 1–2, before any emission site is authored.
 3. **Redactor core extracted once** — L-12-prereq in Phase 1 gives server + widget + future Search CLI a shared `packages/core/telemetry-redaction-core/` they all compose.
 4. **Release linkage early** — L-7 in Phase 1 means every subsequent lane's owner-verified smoke test is tagged and attributable.
 5. **Vendor-independence runs pre-launch** — the conformance plan's emission-persistence test was blocked on the events workspace; Phase 2 unblocks it; Phase 5 runs it before PR open.
@@ -355,6 +356,41 @@ reference ADR-162 as Accepted. The only circular dependency that
 could have existed — Phase 1 deliverables requiring Accepted status —
 does not hold; Phase 1 discharges principle-level obligations under
 Proposed, and Phase 1's own closure flips the ADR.
+
+---
+
+## Lane Close Evidence Pattern
+
+Every lane close in this plan states its outcome in three distinct
+parts. This shape is consistent with the evidence-bundle template
+landing in the governance-concept integration lane
+(`.agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md`)
+and forces the plan-versus-reality gap into view at every close.
+
+1. **Attempt** — what the lane edited / enabled / authored. The
+   verb-phrase description of what was *done*.
+2. **Observed outcome** — what happened when the edit was exercised:
+   specific lint counts, test output, `pnpm check` exit code, a
+   recorded artefact (commit SHA, video link, sentry-cli response,
+   etc.). Anything externally verifiable.
+3. **Proven result** — the specific invariant that now holds,
+   stated as a property that would fail if the change were reverted.
+   E.g. "catch-throw-new sites without `{ cause }` now fail `pnpm
+   check` at error severity in the 5 Wave-1 workspaces." Not "the
+   rule is enabled" (which is an attempt) and not "the lint passed"
+   (which is an observation). An invariant statement about system
+   behaviour.
+
+**Why the third leg is load-bearing**. Without the proven-result
+statement, a lane close is a self-report of intent; with it, a lane
+close is a claim about the running system that a reader can
+independently verify by attempting to violate it.
+
+**Linked forward-motion evidence**:
+[`what-the-system-emits-today.md`](../what-the-system-emits-today.md)
+is updated with the proven-result content at every lane close. The
+two documents compose: the maximisation plan is the lane inventory;
+the emits-today artefact is the running-system snapshot.
 
 ---
 
@@ -462,42 +498,112 @@ Tests pass against the current `createSentryHooks` implementation — the specif
 
 ### L-EH (initial slice) — Error-handling discipline
 
-**Objective**. Land the `require-error-cause` ESLint rule and apply
-it to new/changed code in Phase 1. `prefer-result-pattern` is L-EH final (Phase 5).
+**Objective**. Enable ESLint's built-in
+[`preserve-caught-error`](https://eslint.org/docs/latest/rules/preserve-caught-error)
+rule (added in ESLint 9.35.0) with `requireCatchParameter: true` at
+`error` in `src/**/*.ts` of the 5 Wave-1 workspaces, and audit the
+in-tree surface. `prefer-result-pattern` remains L-EH final (Phase 5).
 
-**Package name**: `@oaknational/eslint-plugin-standards` (package name; the directory is `packages/core/oak-eslint/`, per A.1 factual correction 2).
+**Re-scoping note (2026-04-19)**. The original plan authored a custom
+`require-error-cause` rule in `@oaknational/eslint-plugin-standards`.
+Before execution, surveyed ESLint 10.x and found
+`preserve-caught-error` as a built-in superset: it covers missing
+cause, cause-mismatch against a different variable, destructured-
+parameter loss, variable shadowing, and every wrapping shape
+(AggregateError, async `.catch`, nested try/catch) by construction.
+Re-throw of the original binding (`throw err`) is trivially allowed
+because it is not a new constructor site. The plan therefore reuses
+the built-in instead of authoring a worse wheel. The opt-out path is
+ESLint's standard `// eslint-disable-next-line preserve-caught-error
+-- <reason>` comment, which composes with the existing
+`@oaknational/no-eslint-disable` governance (requires a reason).
 
-**RED — expanded cases** (A.2 item 10, per test-reviewer). Unit tests under
-`packages/core/oak-eslint/src/rules/require-error-cause.unit.test.ts`
-using `RuleTester`. Cases:
+**Package change**: none. Built-in rule requires no plugin registration.
+No new files under `packages/core/oak-eslint/src/rules/`.
 
-- `new Error('x')` inside a `catch(e)` without `{ cause: e }` → error.
-- `new CustomError('x', { cause: e })` → pass.
-- `new Error('x')` outside any `catch` → pass.
-- `throw new Error('x')` inside `catch` without re-throw of `e` → error.
-- **Re-throw of the original binding** (`throw e`) → pass (explicit rethrow is not a new construction site).
-- **`cause` mismatch against a different variable**: `catch (e) { throw new Error('x', { cause: otherVar }) }` → error (cause must be the caught binding unless a sentinel is present).
-- **Nested `try/catch` scopes**: inner `catch (e2)` throws `new Error` with `{ cause: e1 }` (outer binding) → error; with `{ cause: e2 }` → pass.
-- **`AggregateError` constructor shape**: `new AggregateError([e], 'msg')` without `{ cause }` inside `catch` → pass (AggregateError carries its own errors array).
-- **Async-wrapper catch patterns**: `Promise.catch(e => { throw new Error('x', { cause: e }) })` → pass; without cause → error.
-- **Explicit pass-through**: requires an ADR-documented inline sentinel comment (e.g. `// eslint-rule: require-error-cause / pass-through-approved — reason`); absence of the sentinel on a `throw new Error` inside `catch` is an error.
+**Files to touch (exactly 5)**, each adding a sibling rule block
+next to the existing `@oaknational/require-observability-emission`
+block, scoped to `src/**/*.ts`:
 
-**GREEN**: Author
-`packages/core/oak-eslint/src/rules/require-error-cause.ts`. Register in
-`packages/core/oak-eslint/src/index.ts`'s `rules` record. Include in
-the `strict` config.
+- `apps/oak-curriculum-mcp-streamable-http/eslint.config.ts`
+- `apps/oak-search-cli/eslint.config.ts`
+- `packages/sdks/oak-curriculum-sdk/eslint.config.ts`
+- `packages/sdks/oak-search-sdk/eslint.config.ts`
+- `packages/sdks/oak-sdk-codegen/eslint.config.ts`
 
-**REFACTOR**: Apply rule to repo; fix violations introduced by Phase 1
-changes. Document the rule and the `Result<T, E>`-preferred pattern in
-`.agent/rules/use-result-pattern.md` (expand the current one-line rule
-with concrete examples and the new ESLint rule id). Document the sentinel comment shape in the same rule file.
+Rule invocation:
+
+```ts
+{
+  files: ['src/**/*.ts'],
+  rules: {
+    'preserve-caught-error': ['error', { requireCatchParameter: true }],
+  },
+},
+```
+
+**RED (evidence)**. Run `pnpm lint` from repo root after enabling.
+Record per-workspace violation counts — this is the audit surface.
+No synthetic RuleTester suite authored in this lane; built-in rule's
+own test suite (ESLint core) is the proven behaviour; real-code
+audit is the RED evidence per `tdd-for-refactoring.md`.
+
+**GREEN**. The edit is the enable block. If the audit surfaces
+violations, categorise as (a) real missing cause, (b) legitimate
+pass-through (annotated with `// eslint-disable-next-line
+preserve-caught-error -- <reason>`), or (c) destructured /
+shadowed / no-param that needs a small structural rewrite. Fix
+each in minimal per-file edits — no unrelated refactors.
+
+**REFACTOR**. Cross-link `preserve-caught-error` from
+`.agent/rules/use-result-pattern.md` (the rule file expands from
+a 5-line pointer to mention the compile-time gate for `{ cause }`).
+No `recommended.ts` edit — rule is per-workspace enabled only, not
+preset-level (matches the Phase 5 pattern, so the escalation
+trigger is discoverable per-workspace).
+
+**Execution result (2026-04-19)**, stated in the three-part shape
+(see §Lane Close Evidence Pattern):
+
+- **Attempt**: enable ESLint core's built-in `preserve-caught-error`
+  (added in 9.35.0) at `error` severity with
+  `requireCatchParameter: true`, scoped to `src/**/*.ts`, as a
+  sibling rule block next to `@oaknational/require-observability-emission`
+  in each of the 5 Wave-1 workspace `eslint.config.ts` files.
+- **Observed outcome**: pre-enable audit at `warn` across the 5
+  workspaces returned **0 violations** (MCP app 0; search-cli 0;
+  curriculum-sdk 0; search-sdk 0; sdk-codegen 0). Sample of 3 real
+  `catch`+`throw new` sites in
+  `packages/sdks/oak-curriculum-sdk/src/validation/curriculum-response-validators.ts`
+  and `src/mcp/stub-tool-executor.ts` all pass `{ cause: error }`
+  correctly, confirming ADR-088 + `use-result-pattern.md` discipline
+  is followed in practice. `pnpm check` exit 0 at `error` severity
+  (88/88 tasks; pre-existing 96 `require-observability-emission`
+  warnings unchanged). Architecture-reviewer-fred TO-ACTION
+  flipped `warn` → `error` mid-lane (with 0 violations and no
+  backlog trigger, `warn` violates `warning-severity-is-off-severity`).
+- **Proven result**: in `src/**/*.ts` of the 5 Wave-1 workspaces,
+  any newly-authored or edited `throw new Error(...)` inside a
+  `catch` block that does not attach the caught binding as
+  `{ cause }` now fails `pnpm check` at `error` severity. Any
+  `catch` block declared without a parameter also fails. Any
+  destructured or shadowed caught binding that loses the original
+  error reference also fails. These invariants are enforced at
+  write-time by ESLint core, not by convention; reverting the
+  enable blocks in the 5 `eslint.config.ts` files is the only way
+  to break them.
 
 **Acceptance**:
 
-1. RuleTester suite green across all cases above.
-2. `pnpm lint` on the branch surfaces no new `require-error-cause`
-   violations in changed files.
-3. Sentinel-comment pass-through is the only approved opt-out mechanism (no rule-disable lines).
+1. Each of the 5 workspace `eslint.config.ts` files has the rule
+   block with `preserve-caught-error: ['error', { requireCatchParameter: true }]`
+   scoped to `src/**/*.ts`.
+2. `pnpm lint` reports zero `preserve-caught-error` violations
+   repo-wide.
+3. `pnpm check` from repo root exits 0 with no filtering.
+4. Audit counts recorded in the commit body.
+5. `.agent/rules/use-result-pattern.md` cross-references the
+   built-in rule as the compile-time gate.
 
 ### L-DOC (initial slice) — Documentation inventory
 
@@ -629,6 +735,65 @@ vendor-independence clause):
   plan's scope explicitly acknowledges this signal as one that need
   NOT survive `SENTRY_MODE=off`. The carve-out is documented
   there, not re-derived per-consumer.
+
+---
+
+## Phase 1 (Wave 1) Close — External Demonstration Criterion
+
+Added 2026-04-19 as a forward-motion assurance mechanism. At the
+point Wave 1 formally closes (L-EH initial ✅ + L-DOC initial +
+L-12-prereq + L-7 all landed + restructure Phase 5 carve-out ✅), a
+**recorded end-to-end demonstration** is a required acceptance
+artefact. Not a replacement for the lint/test gates; a
+complement. Rationale: gates prove absence of known failures;
+demonstration proves presence of the wired pipeline.
+
+**Scope**: one ≤5-minute recording (screen + narration OR
+annotated transcript) that shows:
+
+1. MCP server boot under `SENTRY_MODE=sentry` (or fixture, whichever
+   matches the Wave 1 post-close state).
+2. One MCP tool invocation flowing through the server — any real
+   tool, not a synthetic test.
+3. Sentry capture of a deliberately-introduced exception in the tool
+   path, visible in the Sentry UI with source-map-resolved stack.
+4. Structured emission visible via `@oaknational/logger` stdout at
+   the same moment, demonstrating the ADR-162 minimum-functionality
+   property at engineering-axis scope.
+5. Redaction barrier observable — a payload containing a
+   redaction-trigger token emitted and the post-barrier form visible
+   in both sinks.
+
+**Location**: link from this plan's Acceptance Summary section, and
+from [`what-the-system-emits-today.md`](../what-the-system-emits-today.md)
+Update Log. The artefact itself may live in owner-controlled storage;
+the plan records the link and the date.
+
+**Why this is cheap**: every step is already wired in code today —
+`wrapMcpServerWithSentry` at `core-endpoints.ts:98`, the Express
+error handler at `index.ts:40-41`, `runtime-redaction-barrier`
+closure tests, the logger sink. The demo is not new behaviour; it
+is a recorded trace of existing behaviour that an external observer
+can replay. The step that is *not* available today (vendor-
+independence at `SENTRY_MODE=off` across all runtimes) is
+explicitly out of Wave 1 scope and handled by
+[`current/multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
+Wave 5.
+
+**Failure mode this blocks**: "the gates are green so the system
+works" — true at the axis Wave 1 addresses (engineering), but
+nothing in the lint/test gates asserts that a human-initiated
+invocation actually produces the expected observable trace. The
+recording does.
+
+**Nearer-term partial analogue** (proposal, not yet lane-scoped):
+a **minimum-viable conformance test** at MCP-server-only scope,
+engineering axis only, `SENTRY_MODE=off`, asserting one tool
+invocation produces event information via stdout. Authorable
+against the existing logger + adapter without the events workspace;
+converts ADR-162's vendor-independence claim to a tested invariant
+at current scope before Wave 2 opens. Raised in
+[`what-the-system-emits-today.md §Vendor-Independence Status`](../what-the-system-emits-today.md).
 
 ---
 
@@ -1357,7 +1522,7 @@ Phase-specific risks:
 | 1 | L-0b `satisfies` gate does NOT auto-detect new fan-out hooks added to `NodeOptions` (e.g. a future `beforeSendMetric` wiring) — it only validates that BARRIER_HOOKS entries are valid `NodeOptions` keys | Resolved by A.6 SR-5: `runtime-sdk.ts` now exports `SentryRedactionHooks` (the `Pick<NodeOptions, ...>` return of `createSentryHooks`); the test imports it and constrains `MinimalHooks` to it. Any new hook wired in `createSentryHooks` without an update to the test's `BARRIER_HOOKS` registry now fails the type-check via a set-equality assertion between the imported type's keys and the registry. Code review remains the backstop. |
 | 1 | **L-12-prereq extraction may accidentally couple the new `telemetry-redaction-core` workspace to Node-specific payload types** if the pure redactor functions' signatures leak `@sentry/node` generics | Run `architecture-reviewer-fred` + `architecture-reviewer-barney` at L-12-prereq GREEN close specifically on boundary and zero `@sentry/*` imports in the new workspace; a dedicated test asserts zero `@sentry/*` imports in `packages/core/telemetry-redaction-core/**`. |
 | 1 | **L-7 scripts run in Vercel deploy pipeline only** (ADR-161); accidental CI PR-check invocation would reintroduce network calls to PR-check runs | Explicit pipeline-attachment documentation in deployment runbook; GitHub Actions workflows grep-audited for zero `sentry-cli` references at L-7 acceptance (already named in L-7's acceptance criterion 3). |
-| 1 | **Three ESLint rules in quick succession** (`require-error-cause`, `require-observability-emission`, `no-vendor-observability-import`) in Phases 1–2 create authorship load | Accepted: upfront authorship cost buys compile-time-gated quality for all Phases 3–5. Rules land at `warn` severity initially so Phase 3/4 code does not block on early drafts; escalate to `error` at Phase 5 close per the `warning-severity-is-off-severity` pattern. |
+| 1 | **Two custom ESLint rules in quick succession** (`require-observability-emission` in Wave 1 / restructure Phase 5; `no-vendor-observability-import` in Wave 2) create authorship load | Accepted: upfront authorship cost buys compile-time-gated quality for all Phases 3–5. Rules land at `warn` severity initially so Phase 3/4 code does not block on early drafts; escalate to `error` once in-tree audit is clean per the `warning-severity-is-off-severity` pattern. L-EH initial's third authorship slot is reclaimed by ESLint built-in `preserve-caught-error` (added in 9.35.0), which supersedes the planned `require-error-cause` custom rule at a fraction of the authoring cost and with strictly-better coverage (adds destructured-parameter loss and variable shadowing). |
 | 2 | **Events workspace schema drift between authoring (Phase 2) and first emission (Phase 3)** — if Phase 2 authors schemas from exploration 4 alone without a Phase 3 consumer in the loop, schemas may not match real emission shapes | Run `sentry-reviewer` + `docs-adr-reviewer` at Phase 2 close against the specific MVP event set; Phase 3 emitters import schemas by type, so any drift breaks type-check (compile-time gate). |
 | 2 | **Vendor-independence carve-out** (`no-vendor-observability-import` ESLint rule authored in Phase 2, emission-persistence test authored in Phase 5) — the ESLint rule alone does not prove the stdout-sink property; a consumer could pass the import lint while still emitting only to a vendor | Accepted: the ESLint rule is a structural gate (prevents import leakage); the emission-persistence test in Phase 5 is the behavioural gate (proves the stdout-sink property). Both are required for ADR-162 Mechanism #4 + #5 satisfaction. Phase 5 is still pre-launch, not post-launch. |
 | 3 | Integration composition changes default behaviour unexpectedly (L-1) | Behaviour-level fixture tests assert per-integration event emission (ANR / Zod / runtime-metric / etc.); SDK version pinned. Per A.2 item 9, RED is not config-shape presence on `NodeOptions`. |
@@ -1597,14 +1762,22 @@ of reviewer findings consistent with the plan's own principles:
    in a shell-script string; for L-0 no "docs test" — the ADR is
    authored and the successor ADR number is registered. Source:
    test-reviewer.
-10. **L-EH edge-case coverage**. `require-error-cause` RuleTester must
-    cover re-throw of the original binding, `cause` mismatch against a
-    different variable, nested `try/catch` scopes, `AggregateError`
-    constructor shape, and async-wrapper catch patterns. Explicit
-    pass-through requires a sentinel (e.g. ADR-documented inline
-    comment), not an absence of the rule. `prefer-result-pattern` needs a
-    concrete heuristic spec — which function signatures fall under it —
-    and valid/invalid RuleTester cases. Source: test-reviewer.
+10. **L-EH edge-case coverage** (historical — superseded 2026-04-19).
+    Originally required a custom `require-error-cause` RuleTester suite
+    covering re-throw of the original binding, cause-mismatch against
+    a different variable, nested `try/catch` scopes, `AggregateError`
+    constructor shape, and async-wrapper catch patterns. Superseded by
+    ESLint built-in `preserve-caught-error` (added in 9.35.0), which
+    covers each of these cases by construction and additionally catches
+    destructured-parameter loss and variable shadowing. The built-in's
+    own test suite (ESLint core) is the proven behaviour; RED evidence
+    in-tree is the audit count. Explicit pass-through uses the standard
+    `// eslint-disable-next-line preserve-caught-error -- <reason>`
+    comment, which composes with the existing
+    `@oaknational/no-eslint-disable` governance (requires a reason).
+    `prefer-result-pattern` (L-EH final) still needs a concrete
+    heuristic spec and valid/invalid RuleTester cases. Source:
+    test-reviewer (original); re-scoping rationale captured 2026-04-19.
 11. **L-12 test-boundary**. Settle the widget Sentry test location before
     the RED is written: `test:widget` is in-process with `jsdom`; if
     `@sentry/browser` init requires browser globals, the integration

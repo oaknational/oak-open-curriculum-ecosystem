@@ -19,9 +19,14 @@ It complements, rather than replaces:
 - [deep-dive-syntheses/README.md](./deep-dive-syntheses/README.md)
   — formal report versions of concept deep dives
 
+## Current Promoted Synthesis
+
+- [governance-concepts-and-integration-report.md](./deep-dive-syntheses/governance-concepts-and-integration-report.md)
+  — abstracted findings on governance planes, trust boundaries, supervised
+  execution, signal ecology, and the local routing map for those concepts
+
 ## Current Posture
 
 The structure exists now so future audit and synthesis outputs have a stable
 home. Most current authoritative source material still lives in research and
 analysis until a later promotion pass selects specific report artefacts.
-

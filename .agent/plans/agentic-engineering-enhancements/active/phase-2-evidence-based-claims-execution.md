@@ -1,11 +1,15 @@
 ---
 name: "Phase 2 - Evidence-Based Claims Execution"
 overview: >
-  Standardise evidence artifacts and enforce evidence-backed claims as a
-  merge-readiness requirement.
+  Standardise evidence artifacts, distinguish attempt from observed outcome
+  and proven result, and enforce evidence-backed claims as a merge-readiness
+  requirement.
 todos:
   - id: p2-template-adoption
     content: "Adopt evidence bundle template in target plans and workflows."
+    status: pending
+  - id: p2-verification-trace
+    content: "Add attempt, observed outcome, and proven result structure to the evidence lane."
     status: pending
   - id: p2-storage-convention
     content: "Enforce evidence storage and naming conventions."
@@ -76,7 +80,29 @@ task execution:
    - Run: `rg -n "evidence-bundle.template.md" .agent/plans/agentic-engineering-enhancements/*.md`
    - Expected: at least 3 matches across distinct plan files
 
-### Task 2.2: Storage and Naming Convention
+### Task 2.2: Attempt, Observed Outcome, and Proven Result Structure
+
+- Output:
+  - the evidence lane distinguishes attempted verification work from observed
+    outcomes and the narrower proven result
+- Deterministic validation:
+  - `rg -n "attempt|observed outcome|proven result" .agent/plans/agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md .agent/plans/agentic-engineering-enhancements/active/phase-2-evidence-based-claims-execution.md .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md`
+
+#### Steps
+
+1. **Update the evidence source plan**
+   - File: `current/hallucination-and-evidence-guard-adoption.plan.md`
+   - Change: make the attempt -> observed outcome -> proven result structure
+     an explicit evidence-lane enhancement, not a second governance lane
+2. **Update the evidence bundle template**
+   - File: `evidence-bundle.template.md`
+   - Change: add explicit attempt / observed outcome / proven result fields
+     or registers
+3. **Validate**
+   - Run: `rg -n "attempt|observed outcome|proven result" .agent/plans/agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md .agent/plans/agentic-engineering-enhancements/active/phase-2-evidence-based-claims-execution.md .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md`
+   - Expected: at least 1 match in each file
+
+### Task 2.3: Storage and Naming Convention
 
 - Output:
   - evidence storage guidance present and discoverable
@@ -95,7 +121,7 @@ task execution:
    - Run: `test -f .agent/plans/agentic-engineering-enhancements/evidence/README.md && echo "EXISTS"`
    - Expected: `EXISTS`
 
-### Task 2.3: Template/Component Integration
+### Task 2.4: Template/Component Integration
 
 - Output:
   - evidence/claims guidance reusable in template system
@@ -118,7 +144,7 @@ task execution:
    - Expected: at least 1 match
 4. **If any check fails**, create the missing artefact per the blocked protocol
 
-### Task 2.4: Merge-Readiness Enforcement
+### Task 2.5: Merge-Readiness Enforcement
 
 - Output:
   - explicit rule that unsupported non-trivial claims block merge-ready state
@@ -137,7 +163,7 @@ task execution:
    - Run: `rg -c "not merge-ready|No evidence for non-trivial claim" .agent/plans/agentic-engineering-enhancements .agent/plans/templates/components/evidence-and-claims.md`
    - Expected: 2+ matches across files
 
-### Task 2.5: Adoption Metrics
+### Task 2.6: Adoption Metrics
 
 - Output:
   - periodic metrics note in evidence artefacts or plan updates
@@ -156,7 +182,7 @@ task execution:
    - Run: `ls .agent/plans/agentic-engineering-enhancements/evidence/*adoption-metrics* 2>/dev/null | head -1`
    - Expected: at least 1 file path
 
-### Task 2.6: Documentation Synchronisation
+### Task 2.7: Documentation Synchronisation
 
 - Output:
   - Phase 2 entry updated in documentation sync log
@@ -184,6 +210,8 @@ task execution:
 
 - Every non-trivial claim in this phase must map to evidence IDs in the phase
   evidence bundle.
+- Where they are not identical, evidence bundles in this phase must separate
+  the attempt, the observed outcome, and the proven result.
 
 ## Foundation Alignment
 
@@ -192,9 +220,11 @@ task execution:
 ## Done When
 
 1. Evidence template and component are embedded in planning workflow.
-2. Storage and naming conventions are consistently used.
-3. Merge-readiness rule is explicit and evidence-backed.
-4. Plan-compliance check is integrated into adversarial-review component.
-5. Adoption metrics baseline is captured.
-6. Documentation sync entry is complete for Phase 2.
-7. No blocked-protocol items remain unresolved.
+2. Attempt, observed outcome, and proven result are standardised across the
+   source plan, active plan, and evidence bundle template.
+3. Storage and naming conventions are consistently used.
+4. Merge-readiness rule is explicit and evidence-backed.
+5. Plan-compliance check is integrated into adversarial-review component.
+6. Adoption metrics baseline is captured.
+7. Documentation sync entry is complete for Phase 2.
+8. No blocked-protocol items remain unresolved.

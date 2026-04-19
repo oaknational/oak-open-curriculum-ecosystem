@@ -90,6 +90,28 @@ context with no natural permanent home.
   not yet exist on disk must label those references explicitly.
   Readers should not infer existence from a reference. Re-evaluate
   on a second instance in a different planning context.
+- **Externally-verifiable-output beats internal-plan-compliance
+  for forward-motion assurance** (watchlist; single-instance
+  observation 2026-04-19, L-EH close). "Are we following the plan"
+  is internally verifiable and vulnerable to self-deception; "what
+  does the running system emit today that a stranger can observe"
+  is externally verifiable and narrows the drift surface. Every
+  lane close should produce an externally-verifiable artefact
+  (command output, test result, recorded demo, populated cell in
+  `what-the-system-emits-today.md`) — not just an "attempted" note.
+  Applies: any initiative where planning density has outpaced
+  execution density. Graduation trigger: second cross-session
+  instance of external-evidence-surfaces-a-gap-that-plan-tracking-
+  missed.
+- **Decompose precedents before reusing them** (watchlist; single
+  instance 2026-04-19, L-EH initial vs Phase 5). A precedent is
+  typically a bundle of independent decisions that happened to
+  land together — severity, scope, wiring pattern, opt-out protocol,
+  authorship venue. Reuse each only where its rationale applies in
+  the new lane. "Mirroring the precedent" as a single decision is
+  a failure mode that smuggles wrong defaults across contexts.
+  Graduation trigger: second cross-session instance of a precedent-
+  match producing a reviewer-caught wrong default.
 
 Practice-governance Process rules graduated to PDRs 2026-04-18 —
 see `.agent/practice-core/decision-records/` for: review-findings

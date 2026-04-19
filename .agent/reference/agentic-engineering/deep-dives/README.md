@@ -10,6 +10,7 @@ material behind it.
 - [operating-model-and-topology.md](./operating-model-and-topology.md)
 - [continuity-and-knowledge-flow.md](./continuity-and-knowledge-flow.md)
 - [operational-awareness-and-state-surfaces.md](./operational-awareness-and-state-surfaces.md)
+- [governance-planes-trust-boundaries-and-runtime-supervision.md](./governance-planes-trust-boundaries-and-runtime-supervision.md)
 - [reviewer-system-and-review-operations.md](./reviewer-system-and-review-operations.md)
 - [portability-and-platform-surfaces.md](./portability-and-platform-surfaces.md)
 - [derived-memory-and-graph-navigation.md](./derived-memory-and-graph-navigation.md)

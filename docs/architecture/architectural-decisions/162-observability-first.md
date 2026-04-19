@@ -341,3 +341,26 @@ In summary:
   the `no-vendor-observability-import` structural import lint
   (Enforcement Mechanism #5) are Phase-2-plan deliverables, not
   blockers for acceptance.
+- **2026-04-19** (later same day) — Wave-1 L-EH initial landed. The
+  engineering-axis error-cause gate was re-scoped from a planned
+  custom `require-error-cause` rule in
+  `@oaknational/eslint-plugin-standards` to ESLint core's built-in
+  [`preserve-caught-error`](https://eslint.org/docs/latest/rules/preserve-caught-error)
+  (added in ESLint 9.35.0; available at the repo's current
+  `eslint@^10.2.0`). The built-in is a documented superset covering
+  missing cause, cause-mismatch, destructured-parameter loss, and
+  variable shadowing; re-throw of the original binding / nested
+  try-catch / AggregateError / async-wrapper catch cases all fall
+  out of the predicate by construction. Wired at `error` severity
+  with `requireCatchParameter: true`, scoped to `src/**/*.ts` in the
+  same five Wave-1 workspaces as `require-observability-emission`.
+  Pre-enable audit: 0 violations in-scope; `pnpm check` exit 0 post-
+  enable. Enforcement landed at `error` rather than `warn` per
+  `.agent/memory/patterns/warning-severity-is-off-severity.md` —
+  with no violations to clean up, the escalation trigger the
+  `warn`-with-deadline pattern protects against was vacuous;
+  enforcing from day one is the architecturally correct baseline.
+  Consequence: the engineering-axis error-cause gate is now
+  ESLint-core-owned rather than `@oaknational`-owned, enforcing at
+  `error` across apps + SDKs, reducing custom-rule authorship load
+  without loss of coverage.

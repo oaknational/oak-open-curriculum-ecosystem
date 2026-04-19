@@ -52,6 +52,17 @@ Allowed `Difference Type` values:
 
 Allowed statuses: `verified`, `partially verified`, `unverified`.
 
+## 2A. Attempt / Observed Outcome / Proven Result Register
+
+Use this register when a verification step attempts more than the evidence
+finally proves, or when an observed outcome is narrower than the attempted
+check.
+
+| Trace ID | Attempt | Observed Outcome | Proven Result | Evidence Refs |
+|---|---|---|---|---|
+| T-001 | `Run the targeted tests for the changed path` | `The targeted tests passed` | `The targeted test run passed for the inspected path` | E-001, E-002 |
+| T-002 | `Check whether the public API stayed stable` | `No public-export diff was found in the changed files` | `No API change was observed in the inspected surface` | E-005 |
+
 ## 3. Evidence Index
 
 | Evidence ID | Type | Summary | Location |
@@ -84,6 +95,8 @@ Use precise file spans for implementation and test evidence.
 - Known uncertainty: `[what remains uncertain]`
 - Risk impact: `[none/low/medium/high + rationale]`
 - Evidence level: `[direct repo evidence / direct external evidence / Oak-side inference]`
+- Attempt / observed outcome / proven result divergence:
+  `[none]` or `[trace ids + reason they differ]`
 
 ## 7. Open Items (if any)
 
@@ -96,6 +109,8 @@ Use precise file spans for implementation and test evidence.
 - [ ] Every non-trivial claim has at least one evidence reference
 - [ ] No "tests pass" claim without command/output evidence
 - [ ] Behaviour claims anchored to test or runtime evidence
+- [ ] Attempt, observed outcome, and proven result are separated where they are
+  not identical
 - [ ] Remaining uncertainty is explicit and tracked
 - [ ] Research-derived proposals include an adoption-register row with proof and a disconfirming case
 

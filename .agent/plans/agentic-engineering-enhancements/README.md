@@ -26,6 +26,8 @@ Plans and research for hardening the agentic engineering practice through physic
 | `current/hallucination-and-evidence-guard-adoption.plan.md` | Plan | Prioritised safety adoption: hallucination guards first, evidence-based claims second |
 | `current/harness-concepts-adoption.plan.md` | Plan | Evaluate and adopt concepts from harness-engineering model (docs freshness, entropy cleanup, quality scoring) |
 | `current/operational-awareness-and-continuity-surface-separation.plan.md` | Plan | Source strategy for separating the canonical continuity contract, workstream resumption briefs, and thread-aware tactical track cards via markdown-first repo-local state surfaces |
+| `current/governance-concepts-and-agentic-mechanism-integration.plan.md` | Plan | Source strategy for abstract governance-plane concept extraction, mechanism-gap mapping, and routing into existing plans, deep dives, reports, and doctrine-adjacent surfaces without copying source-specific naming |
+| `active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md` | Active Plan | Execution closeout for governance-concept routing, adjacent-plan reconciliation, and doctrine no-change capture |
 | `archive/completed/continuity-and-surprise-practice-adoption.plan.md` | Plan (Completed) | Repo-local continuity surfaces, session-handoff rollout, GO alignment, and surprise pipeline adoption completed with an explicit `promote` decision on 3 April 2026 |
 | `evidence-bundle.template.md` | Template | Standard claim/evidence artifact format for non-trivial engineering claims |
 | `evidence/README.md` | Reference | Storage and naming convention for collection evidence artefacts |
@@ -67,12 +69,12 @@ Plans and research for hardening the agentic engineering practice through physic
    strategic work and exploratory capability plans
 5. **Strategic source plans**: hallucination/evidence guards -> enforcement ->
    mutation testing -> continuity/surprise adoption (archived reference) ->
-   operational-awareness surface separation -> Reviewer Gateway ->
-   Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade ->
-   Express -> security/privacy cluster (cyber security -> web/API security ->
-   privacy -> web/API GDPR) -> OOCE -> Graph memory exploration -> Planning ->
-   TDD -> DevX -> Repair Workflow Wording Hazard Detection -> Adapter
-   Generation -> Agent Classification Taxonomy
+   operational-awareness surface separation -> governance-concept integration
+   -> Reviewer Gateway -> Elasticsearch specialist -> Clerk specialist ->
+   Sentry -> MCP upgrade -> Express -> security/privacy cluster (cyber
+   security -> web/API security -> privacy -> web/API GDPR) -> OOCE -> Graph
+   memory exploration -> Planning -> TDD -> DevX -> Repair Workflow Wording
+   Hazard Detection -> Adapter Generation -> Agent Classification Taxonomy
 6. **Research as evidence base**: augmented safety -> augmented practices ->
    standardisation landscape
 

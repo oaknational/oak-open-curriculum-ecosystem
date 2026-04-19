@@ -9,6 +9,10 @@ theme graduates beyond index notes and source routing.
 - [research/agentic-engineering/README.md](../../../research/agentic-engineering/README.md)
 - [analysis/README.md](../../../analysis/README.md)
 
+## Current Reports
+
+- [governance-concepts-and-integration-report.md](./governance-concepts-and-integration-report.md)
+
 ## Promotion Rule
 
 Seed deep dives in `.agent/reference/agentic-engineering/deep-dives/` remain
@@ -20,4 +24,3 @@ lightweight concept extracts. Promote a topic here only when it needs:
 
 Back to the [agentic-engineering reports lane](../README.md) and the
 [hub README](../../../reference/agentic-engineering/README.md).
-

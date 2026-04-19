@@ -15,8 +15,17 @@ and practice questions.
     triggers after the continuity rollout.
 - `continuity-operational-awareness-baseline.md`
   - Baseline classification of the continuation prompt, adjacent continuity
-    surfaces, and the repo-local operational-awareness gap created by parallel
-    agent tracks.
+  surfaces, and the repo-local operational-awareness gap created by parallel
+  agent tracks.
+- `agentic-mechanism-inventory-baseline.md`
+  - Baseline inventory of interaction planes, control loops, posture
+    selection, work-ledger patterns, authority order, signals/alerts/feeds,
+    evidence surfaces, and renewal triggers surfaced by the workbench topology
+    note.
+- `governance-concepts-and-mechanism-gap-baseline.md`
+  - Abstract comparison baseline for governance planes, boundary models,
+    authority gradients, supervised execution, signal ecology, residual-risk
+    surfaces, and the local mechanism gaps they expose.
 
 Promoted audits and formal syntheses belong in
 [`.agent/reports/agentic-engineering/`](../reports/agentic-engineering/README.md).

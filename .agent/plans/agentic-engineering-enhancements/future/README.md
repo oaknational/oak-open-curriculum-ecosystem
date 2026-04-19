@@ -24,6 +24,7 @@ execution slice are clear.
 | Later | [adapter-generation.plan.md](adapter-generation.plan.md) | Manifest-driven platform adapter generation to replace many manual wrapper files | Adapter structure stable enough to encode in a single manifest |
 | Later | [agent-classification-taxonomy.plan.md](agent-classification-taxonomy.plan.md) | Comprehensive agent reclassification, rename, and mode composition work | Downstream consumers ready for rename and mode-composition changes |
 | Later | [agent-infrastructure-coherence-audit.plan.md](agent-infrastructure-coherence-audit.plan.md) | Audit command/skill/rule/adapter coherence and identify single-consumer abstractions or drift | Visible coherence debt or adapter drift justifies a dedicated audit pass |
+| Later | [operating-model-mechanism-taxonomy.plan.md](operating-model-mechanism-taxonomy.plan.md) | Define abstract mechanism families for governance-plane vocabulary, boundary models, signal ecology, residual-risk surfaces, planes, loops, precedence, artefact economy, and renewal triggers across the agentic operating model | Bounded first slice chosen and adjacent evidence available from operational-awareness or reviewer-gateway work |
 
 Strategic context: [roadmap.md](../roadmap.md)
 

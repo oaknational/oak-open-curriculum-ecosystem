@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-19-phase5-close
+last_updated: 2026-04-19-l-eh-initial-close
 ---
 
 # Session Continuation
@@ -56,6 +56,46 @@ git log --oneline --decorate -10
   and validation.
 - If prompt text conflicts with active plans, active plans win.
 
+## Per-Session Landing Commitment
+
+Every session opens by stating what it **will land** (a concrete,
+externally-verifiable outcome) or explicitly naming that no landing
+is targeted and why. A landing target is a specific invariant
+achieved in code — a rule enabled, a test added, a file authored, a
+commit made, a deployment registered — not a plan edit or a "lane
+opened." If the session completes without the landing, the close
+records what prevented it and what the next session will re-attempt.
+
+**Why this matters**: auto-mode makes it easy to spend a session
+refining plans, updating prompts, and opening review loops without
+leaving any externally-observable change in the system. Naming the
+landing target at open forces the session's work to compose toward
+it; reviewing against it at close distinguishes "session produced
+evidence" from "session produced more plans."
+
+**Structure at open**:
+
+> Target: `<lane-id or artefact>` — `<specific outcome>`.
+> If no target is appropriate: "no-landing session — reason: `<reason>`."
+
+**Structure at close**:
+
+> Landed: `<outcome>` — `<evidence link>`.
+> If unlanded: `<what was attempted>` — `<what prevented>` —
+> `<what next session re-attempts>`.
+
+**Exceptions**: deep-consolidation sessions, Core-trinity refinement
+sessions, and root-cause investigation sessions legitimately have
+no code-landing target; they record their exception reason up-front
+and close with a shape-specific artefact (consolidation commit,
+trinity diff, investigation report).
+
+This field composes with
+[`what-the-system-emits-today.md`](../plans/observability/what-the-system-emits-today.md)
+for observability work specifically: if the landing moved a matrix
+cell from empty to populated, update the artefact in the same
+commit.
+
 ## Live Continuity Contract
 
 - **Workstream**: Sentry Observability Maximisation — MCP app (server +
@@ -95,12 +135,20 @@ git log --oneline --decorate -10
   (2026-04-19). **Wave 1 partially opened**: the
   `require-observability-emission` ESLint rule landed at `warn` in
   all `apps/*` and `packages/sdks/*` workspaces (5 wirings, 96
-  coverage-gap warnings surface). Wave 1 remaining: L-EH initial
-  (`require-error-cause` rule), L-DOC initial (sentry-node README
-  + app observability doc), L-12-prereq (extract
-  `packages/core/telemetry-redaction-core/`), L-7 (release/deploy
-  linkage). Wave 2 (`packages/core/observability-events/`) is the
-  schema-foundation layer that unlocks Wave-3-onwards emitter lanes.
+  coverage-gap warnings surface). **L-EH initial landed 2026-04-19
+  (later same day)**: ESLint core built-in `preserve-caught-error`
+  enabled at `error` severity with `requireCatchParameter: true`,
+  scoped to `src/**/*.ts` in the same 5 workspaces. Re-scoped from
+  the originally planned custom `require-error-cause` rule when
+  surveys found the ESLint 9.35.0 built-in is a documented
+  superset; pre-enable audit returned 0 violations in-scope, so
+  enforcement landed at `error` from day one per
+  `warning-severity-is-off-severity`. Wave 1 remaining: L-DOC
+  initial (sentry-node README + app observability doc), L-12-prereq
+  (extract `packages/core/telemetry-redaction-core/`), L-7
+  (release/deploy linkage). Wave 2 (`packages/core/observability-events/`)
+  is the schema-foundation layer that unlocks Wave-3-onwards
+  emitter lanes.
 
   **Commits landed this session, newest first**:
   - `3455d26c` — `docs(agentic-engineering): discoverability hub +
@@ -211,19 +259,21 @@ git log --oneline --decorate -10
     a migration classifying against the wrong axis).
 - **Current objective** (next session): **Continue Wave 1 of the
   observability MVP execution**. Phase 5 of the restructure is
-  closed; ADR-162 is Accepted. Four Wave-1 lanes remain, each
-  authored independently in the maximisation plan
+  closed; ADR-162 is Accepted; **L-EH initial landed** (ESLint core
+  `preserve-caught-error` at `error`, 0 violations). Three Wave-1
+  lanes remain, each authored independently in the maximisation plan
   (`.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`):
 
-  1. **L-EH initial** — author `require-error-cause` ESLint rule
-     in `packages/core/oak-eslint/src/rules/require-error-cause.ts`
-     with RuleTester cases for re-throw of original binding,
-     cause-mismatch, nested try/catch, AggregateError shape, and
-     async-wrapper catch. Apply to Phase 1 new/changed code. Uses
-     the same core `Rule.RuleModule` typing pattern as
-     `require-observability-emission.ts` (see the file's TSDoc for
-     the rationale — TSESLint.RuleModule is contravariant with
-     ESLint.Plugin in the `Linter.Config.plugins` slot).
+  1. **L-EH initial** — ✅ **LANDED 2026-04-19**. Re-scoped from
+     custom `require-error-cause` to ESLint core's built-in
+     [`preserve-caught-error`](https://eslint.org/docs/latest/rules/preserve-caught-error)
+     (added in 9.35.0; a documented superset of the planned custom
+     rule additionally catching destructured-parameter loss and
+     variable shadowing). Wired at `error` with
+     `requireCatchParameter: true`, scoped to `src/**/*.ts` in the
+     same 5 workspaces as `require-observability-emission`.
+     Pre-enable audit: 0 violations in-scope; `pnpm check` exit 0
+     post-enable. ADR-162 History block records the re-scope.
   2. **L-DOC initial** — expand `packages/libs/sentry-node/README.md`
      (currently a 4-line stub) and author
      `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`.
@@ -276,23 +326,52 @@ git log --oneline --decorate -10
   `no-restricted-properties` and `no-restricted-imports` from `warn`
   to `error` when backlog reaches zero. ~34 total violations today.
 - **Deep consolidation status**: **due — not-well-bounded for this
-  closeout**. The Phase 5 closure + ADR-162 Acceptance is a real
-  milestone trigger (session-handoff gate checklist item #1).
-  distilled.md sits at 253 lines (soft zone, target 200, limit 275)
-  and would benefit from a refinement pass (session-handoff gate
-  checklist item #4). However, the afternoon's Phase 5 substance
-  is all single-instance and not yet stable enough for graduation:
-  contravariance-at-plugin-slot, MaybeNamedFunctionDeclaration
-  subtyping workaround, workspace-cwd regex-vs-glob, and
-  real-code-audit-over-synthetic-tests are each candidate patterns
-  pending a second cross-session instance. A second deep pass the
-  same day as the morning's consolidation (`2dc4d40b`) would
-  compound pattern-inflation risk (the rate-of-structural-change
-  concern flagged in the morning's napkin rotation). Next session
-  opens the deep pass deliberately: process Phase 5 surprises into
-  stable patterns/ADRs/PDRs, graduate any that have matured,
-  refine distilled.md, and consider a Core-trinity refinement
-  session (also deferred from the morning pass). The completed-pass
+  closeout** (now carrying L-EH initial substance on top of the
+  already-deferred Phase-5 surprises). L-EH initial closed 2026-04-19
+  is a lane-close milestone (session-handoff gate checklist item #1);
+  the built-in-superset discovery + reviewer-driven warn→error flip
+  + the self-referencing-comment-trigger observation are all
+  single-instance-but-substantive candidates. **distilled.md is now
+  at 275 lines — exactly the hard limit** (target 200, limit 275)
+  after adding two L-EH-session watchlist entries (externally-
+  verifiable-output beats plan-compliance; decompose-precedents-
+  before-reusing). The next consolidation MUST refine; the file
+  has no further soft headroom. BUT running consolidate-docs now
+  would be the third structural-change pass in a single day
+  (morning: `2dc4d40b`; Phase 5 close: already-deferred; L-EH initial
+  now): pattern-inflation risk is compounded, not reduced. The
+  structural-change-rate diagnostic from ADR-131 §Self-Referential
+  Property explicitly warns against this. Next session opens the
+  deep pass deliberately. Content to process when it opens:
+  - Phase 5 carried substance (already captured):
+    contravariance-at-plugin-slot, MaybeNamedFunctionDeclaration
+    subtyping workaround, workspace-cwd regex-vs-glob,
+    real-code-audit-over-synthetic-tests.
+  - L-EH initial new substance:
+    - **ESLint-built-in-supersedes-planned-custom-rule** — the
+      owner's "check the upstream tool first" reflex caught a
+      custom-rule authorship that would have been a worse wheel;
+      single-instance, candidate pattern for "survey the ecosystem
+      before authoring custom infrastructure"
+    - **Self-referential-comment-trigger** — a lint rule's
+      enforcement regex matched against a comment that *documented*
+      the rule's opt-out syntax; single-instance, candidate pattern
+      for "code config must not reference its own suppression
+      syntax in comments"
+    - **Reviewer-driven severity-correction** — fred's TO-ACTION
+      flipped warn→error using `warning-severity-is-off-severity`
+      against the plan's own evidence (audit=0 violations); second
+      instance of "reviewer real-code audit catches a plan's own
+      blind spot" (first instance: Phase 5's span-predicate gap).
+      Promotion candidate to distilled.md as a general principle.
+    - **ADR-088 discipline is observably followed in practice** —
+      0 violations across 5 workspaces' src/, 3 sampled real
+      catch+throw-new sites all pass `{ cause }` correctly.
+      Evidence that the existing rule + ADR actually shapes behaviour
+      without custom gating. Worth noting but not yet a pattern.
+  - distilled.md compression back toward 200-line target.
+  - Core-trinity refinement (still deferred from morning pass).
+  The completed-pass
   entry below remains authoritative for the morning's consolidation
   (commits `2e0be715` → `2e8a140d`):
   - **Three new memory/patterns**: `stage-what-you-commit.md`
@@ -344,10 +423,8 @@ git log --oneline --decorate -10
     the MVP execution reshape; formally Wave 1 stays "partially
     opened" until L-EH initial / L-DOC initial / L-12-prereq / L-7
     all land.
-- **Wave 1 remaining work** (next session):
-  - **L-EH initial** `require-error-cause` ESLint rule with expanded
-    RuleTester cases (re-throw, cause-mismatch, nested try/catch,
-    AggregateError, async-wrapper catch).
+- **Wave 1 remaining work** (next session — L-EH initial landed
+  2026-04-19; three lanes remain):
   - **L-DOC initial** expand sentry-node README + write app
     observability doc; structural test asserts content presence.
   - **L-12-prereq** extract `packages/core/telemetry-redaction-core/`
@@ -674,15 +751,15 @@ Carried from 2026-04-17 (still relevant):
     relative to industry convention. Separate deliberation, not a
     Sentry-plan concern. Relevant files: `.agent/directives/testing-strategy.md`,
     ADR-161, ADR-078.
-- **Next safe step**: pick one of the four remaining Wave-1 lanes
-  (see **Current objective** above) and author it end-to-end:
-  L-EH initial (`require-error-cause` ESLint rule; mirrors the
-  Phase-5 `Rule.RuleModule` pattern), L-DOC initial (sentry-node
-  README expansion + app observability doc), L-12-prereq (extract
-  `packages/core/telemetry-redaction-core/`), or L-7 (Vercel-only
-  release/deploy linkage). None blocks another; pick the one the
-  owner prioritises or start with L-EH because it uses the
-  freshly-validated ESLint rule authoring pattern from Phase 5.
+- **Next safe step**: **L-EH initial landed 2026-04-19**. Pick one of
+  the three remaining Wave-1 lanes and author it end-to-end:
+  L-DOC initial (sentry-node README expansion + app observability
+  doc), L-12-prereq (extract `packages/core/telemetry-redaction-core/`),
+  or L-7 (Vercel-only release/deploy linkage). None blocks another;
+  L-DOC initial is the natural next pick because it keeps the
+  discoverability-of-existing-integration gap (a real defect today —
+  `wrapMcpServerWithSentry` is not findable from workspace READMEs)
+  in the lane sequence before Wave 2 schema foundation opens.
   Each lane closes with its own reviewer matrix per the
   maximisation plan §P1.4. The sibling `test-ceremony-
   production-factory-audit.plan.md` backlog remains concurrent

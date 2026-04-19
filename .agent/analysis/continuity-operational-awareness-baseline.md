@@ -5,6 +5,12 @@
 workstream resumption state, and thread-aware tactical awareness into distinct
 surfaces.
 
+**Related broader baseline**:
+[agentic-mechanism-inventory-baseline.md](./agentic-mechanism-inventory-baseline.md)
+captures the wider operating-model, signal, and control mechanisms surfaced by
+the workbench topology note. This file stays focused on the continuity and
+operational-awareness slice of that broader estate.
+
 ## Core Diagnosis
 
 The current continuation prompt grew because it was useful, not because it was
@@ -70,7 +76,7 @@ The existing continuity split still holds:
 - institutional continuity
 
 What is missing is a short-horizon, thread-aware, multi-agent
-**operational-awareness plane**. It should sit between plans and learning
+**awareness plane**. It should sit between plans and learning
 surfaces rather than replacing either.
 
 ### 4. The sidecars plan is adjacent, not the default answer

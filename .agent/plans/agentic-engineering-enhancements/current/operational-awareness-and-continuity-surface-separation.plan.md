@@ -26,17 +26,23 @@ todos:
 
 **Last Updated**: 2026-04-19
 **Status**: QUEUED
-**Scope**: Repo-local operational-awareness plane, continuity-surface
+**Scope**: Repo-local awareness plane, continuity-surface
 separation, and portable-candidate extraction criteria for later promotion.
 
 **Baseline analysis**:
 [continuity-operational-awareness-baseline.md](../../analysis/continuity-operational-awareness-baseline.md)
+
+**Broader mechanism baseline**:
+[agentic-mechanism-inventory-baseline.md](../../analysis/agentic-mechanism-inventory-baseline.md)
 
 **Concept extract**:
 [operational-awareness-and-state-surfaces.md](../../reference/agentic-engineering/deep-dives/operational-awareness-and-state-surfaces.md)
 
 **Related future plan**:
 [cross-vendor-session-sidecars.plan.md](../future/cross-vendor-session-sidecars.plan.md)
+
+**Adjacent future plan**:
+[operating-model-mechanism-taxonomy.plan.md](../future/operating-model-mechanism-taxonomy.plan.md)
 
 **Promotion note**: promote this source plan into `active/` when the repo owner
 accepts the markdown-first delivery shape and a bounded pilot lane is chosen.
@@ -64,9 +70,22 @@ The problem now is **scope collision**:
 - historical tactical notes accumulate inside the same surface meant for cheap
   resumption
 
-This plan introduces a repo-local operational-awareness plane without changing
+This plan introduces a repo-local awareness plane without changing
 the top-level continuity doctrine or jumping straight to a cross-vendor sidecar
 store.
+
+In local mechanism language, this lane is the bounded work-plane pilot for
+**supervised execution**. It owns how short-horizon operational state is
+observed, refreshed, handed off, redirected, and closed without claiming the
+whole runtime-governance model.
+
+Metacognitive review of
+[workbench-agent-operating-topology.md](../../reference/agentic-engineering/workbench-agent-operating-topology.md)
+shows that this prompt collision is one local symptom of a broader operating
+model. This lane intentionally absorbs only the work-ledger, precedence, and
+thread-aware coordination parts of that model. The broader interaction-plane,
+signal-taxonomy, and renewal-trigger work is routed to adjacent plans rather
+than smuggled into this rollout.
 
 ## Goal
 
@@ -79,6 +98,10 @@ Create a repo-local state model that:
   main mutable state host
 - routes promotable signals back into the existing learning loop rather than
   inventing a second memory doctrine
+- carries forward the workbench note's work-ledger and authority-order
+  insights without trying to solve the full operating-model taxonomy here
+- treats the awareness plane as the repo-local pilot for supervised
+  execution semantics at the work-plane level
 
 ## Non-Goals
 
@@ -88,6 +111,25 @@ Create a repo-local state model that:
 - No replacement of plans, `napkin.md`, or `distilled.md`
 - No blind trimming of the current continuation prompt before mining the value
   it currently carries
+- No attempt to codify the full interaction-plane, signal/sensor, or
+  renewal-trigger taxonomy in this lane; that belongs to the adjacent
+  operating-model mechanism taxonomy work
+
+## Bounded Uptake from Workbench Topology
+
+- **In scope here**:
+  the temporary work-ledger concept, precedence/disagreement handling, and
+  thread-aware tactical coordination surfaces
+- **Design constraint here**:
+  the new continuity and awareness surfaces are execution-channel artefacts;
+  the visible exchange should summarise them, not become the state host
+- **Adjacent but not owned here**:
+  posture selection, private-feed classification, special-feed taxonomy,
+  evidence-surface abstraction, artefact-economy rules, and renewal triggers
+- **Routing rule**:
+  no topology concept is left homeless; if it does not land here, it must land
+  in the reviewer gateway plan, the evidence lane, or the future operating-model
+  taxonomy plan
 
 ## Design Contract
 
@@ -95,6 +137,10 @@ Create a repo-local state model that:
 
 The later active execution plan must implement exactly three repo-local state
 surfaces:
+
+All three are execution-channel state surfaces. They are read by workflows and
+summarised in visible exchange, but they are not themselves user-facing
+conversation surfaces.
 
 1. **Canonical continuity surface**
    - default target: `.agent/state/repo-continuity.md`
@@ -163,6 +209,9 @@ two narrower operational loops:
 - **Promotion edge**:
   `awareness/workstream signal -> napkin/distilled/permanent docs`
 
+Taken together, these loops are the lane's bounded supervised-execution model:
+observe, refresh, hand off, redirect when needed, and close cleanly.
+
 ## Phase 0 — Baseline and Constraints
 
 ### Task 0.1: Freeze the baseline
@@ -188,6 +237,21 @@ two narrower operational loops:
   - the plan keeps the existing operational / epistemic / institutional split
   - the plan records sidecars as adjacent future work, not the default delivery
     mechanism
+
+### Task 0.3: Route the broader topology mechanisms without overloading this lane
+
+- Inputs:
+  - the workbench topology note
+  - the broader mechanism baseline
+  - the reviewer gateway plan
+- Required output:
+  - explicit statement of which mechanisms are absorbed here
+    (`work ledger`, precedence, tactical coordination)
+  - explicit routing of posture-selection and broader signal-taxonomy work to
+    adjacent plans
+- Validation:
+  - this plan stays bounded to continuity and operational-awareness surfaces
+  - no topology concept is left un-routed
 
 ## Phase 1 — State-Surface Design
 

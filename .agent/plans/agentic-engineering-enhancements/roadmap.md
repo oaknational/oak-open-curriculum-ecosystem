@@ -1,6 +1,6 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation ⏭️ queued; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; Phase 1 ready to start
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation ⏭️ queued; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; Phase 1 ready to start
 **Last Updated**: 2026-04-19
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
@@ -47,6 +47,7 @@ Active adjacent execution sources:
 5. ~~continuity-and-surprise-practice-adoption.plan.md~~ ✅ Complete (archived in `archive/completed/` for reference)
 6. ~~practice-convergence.plan.md~~ ✅ Complete (deleted; backup trees removed, all workstreams done)
 7. [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](active/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md) (agentic corpus discoverability hub — ✅ complete)
+8. [governance-concepts-and-agentic-mechanism-integration.execution.plan.md](active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md) (governance-concept routing closeout — ✅ complete)
 
 ---
 
@@ -86,7 +87,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), governance-concept integration (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -109,6 +110,7 @@ Adjacent:
   HC-0: Harness concepts baseline metrics            📋 PLANNED
   CTY:  Continuity/session-handoff adoption          ✅ COMPLETE
   OAW:  Operational awareness separation             ⏭️ QUEUED
+  GCM:  Governance-concept integration               ✅ COMPLETE
   PCI:  Incoming Practice integration                ✅ COMPLETE
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 🔄 ACTIVE
@@ -128,6 +130,7 @@ Adjacent:
   SSC:  Cross-vendor session sidecars                📋 STRATEGIC
   AGN:  Manifest-driven adapter generation           📋 PLANNED
   ACT:  Agent classification taxonomy                📋 STRATEGIC
+  OMT:  Operating-model mechanism taxonomy           📋 STRATEGIC
   OPS:  Specialist operational tooling layer         📋 STRATEGIC (ADR-137)
 ```
 
@@ -278,6 +281,33 @@ Adjacent:
   - the default proof path is repo-local first, portable candidate second
   - initial non-goals explicitly exclude SQLite sidecars, AGENT changes, and
     blind prompt trimming
+
+### Adjacent — Governance Concepts and Agentic Mechanism Integration
+
+- Active plan:
+  [governance-concepts-and-agentic-mechanism-integration.execution.plan.md](active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md)
+- Source strategy:
+  [governance-concepts-and-agentic-mechanism-integration.plan.md](current/governance-concepts-and-agentic-mechanism-integration.plan.md)
+- Goal:
+  - extract governance-plane, boundary, authority, supervision, and
+    signal-routing concepts from a compared governance corpus using fully local
+    naming
+  - record a baseline, deep dive, and formal report without copying source
+    names or wording
+  - route each concept to an existing plan, future plan, reference lane,
+    report lane, doctrine candidate, or explicit reject/defer decision
+  - identify high-impact next-step candidates without prematurely mutating
+    Practice Core, ADRs, or PDRs
+- Status: ✅ Complete
+- Notes:
+  - complements the operational-awareness and reviewer-gateway lanes instead of
+    replacing them
+  - the evidence lane now owns the attempt -> observed outcome -> proven
+    result split
+  - the future mechanism-taxonomy lane now holds the remaining boundary-model,
+    signal-ecology, residual-risk, and governance-plane abstraction debt
+  - doctrine-adjacent canon was reviewed and intentionally left unchanged in
+    this closeout
 
 ### Adjacent — Agentic Corpus Discoverability Hub
 

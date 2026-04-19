@@ -157,6 +157,49 @@ still require a **deep** review.
 - Process escalation recommendations from sentinel reports
 - Invoke deep specialists where sentinels flagged concerns beyond their scope
 
+### Gateway as posture selector and signal router
+
+The gateway is also one concrete implementation of the broader operating-model
+mechanisms described in
+[`workbench-agent-operating-topology.md`](../../../reference/agentic-engineering/workbench-agent-operating-topology.md).
+For review work, the gateway acts as a **posture selector** and
+**signal router**.
+
+It should also be described as one layer in the repo's
+**layered-safeguard stack**. Rules shape authoring behaviour, the gateway
+routes and scales review effort, quality gates verify outputs, and continuity
+plus evidence surfaces preserve short-horizon state and proof. The gateway is
+therefore a safeguard layer, not the whole governance system.
+
+Its important inputs are:
+
+- direct user instruction and plan checkpoints
+- change-category and domain signals from the diff
+- quality-gate failures and other risk alerts
+- sentinel escalation recommendations
+- missing-coverage alerts from earlier review rounds
+
+These inputs are the gateway's main **review-signal** family. Some of them are
+also **relationship-confidence signals**: signals that change scrutiny or
+latitude because of context rather than file content alone. Examples include
+direct user correction, repeated sentinel escalation from one track, unclear
+ownership between adjacent reviewers, or a plan checkpoint that demands
+broader traceability. They change routing and depth, but they do not create a
+formal authority ladder in this lane.
+
+Its outputs are:
+
+- whether the turn should be sweep-first, directly specialist-led, or gateway
+  only
+- which specialists to invoke
+- what review depth each specialist should use
+- when the review should happen
+
+This plan should therefore be treated as the review-system home for
+posture-selection and signal-routing semantics. It does not own the whole
+repo's signal taxonomy, but it should provide the strongest concrete example of
+that wider mechanism family.
+
 ### Platform Invocation Constraint
 
 All orchestration goes through the primary session agent (or a general-purpose
@@ -198,6 +241,10 @@ should be renamed to match the directive rename.
   gateway's expanded role; the taxonomy plan provides the *execution mechanics*
   of the rename itself. The taxonomy plan now includes the three-tier model
   and fast-agent generalization that this gateway consumes.
+- **Operating-Model Mechanism Taxonomy**: The gateway is one concrete
+  implementation of posture selection, signal routing, and escalation
+  semantics. The future taxonomy work should generalise those concepts, not
+  replace this lane's review-specific design.
 - **Review Depth Dimension (WS6)**: The gateway is the primary consumer of
   depth selection guidance — it decides which tier each specialist review
   should run at.

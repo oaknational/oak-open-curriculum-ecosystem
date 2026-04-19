@@ -194,11 +194,17 @@ Two tracks span every loop:
 - All new or changed code MUST use `Result<T, E>` where practical.
 - All constructed errors MUST preserve the cause chain via the native
   `cause` option.
-- ESLint enforcement authored in `@oaknational/eslint-plugin-standards`:
-  - `require-error-cause`: when a new `Error` is constructed inside a
-    `catch` clause, the caught value MUST be passed as `{ cause }`.
-  - `prefer-result-pattern` (opt-in in specific scopes): flags functions
-    whose signature could return `Result<T, E>` but instead relies on
+- ESLint enforcement:
+  - `preserve-caught-error` (ESLint core, built-in from 9.35.0 —
+    supersedes the originally planned `require-error-cause` custom
+    rule; landed 2026-04-19 in the MCP branch's L-EH initial lane):
+    when a new `Error` is constructed inside a `catch` clause, the
+    caught value MUST be passed as `{ cause }`. Covers missing cause,
+    cause-mismatch, destructured-parameter loss, and variable
+    shadowing by construction.
+  - `prefer-result-pattern` (opt-in in specific scopes; custom rule in
+    `@oaknational/eslint-plugin-standards`): flags functions whose
+    signature could return `Result<T, E>` but instead relies on
     thrown exceptions for the error path. Apply incrementally per
     workspace, not globally on day one.
 - Complements, does not replace, existing community rules
@@ -243,7 +249,7 @@ Two tracks span every loop:
 | Cardinality drift in metric attributes | Medium | High | Naming convention TSDoc + lint suggestion; tests prove attribute values for acceptance metrics remain closed-set |
 | Bundler-plugin source maps regress the current shell-script flow | Low | Medium | Evaluate on a branch; only adopt if the plugin simplifies CI without losing Debug ID post-condition check |
 | `@sentry/profiling-node` adds native binary build cost to CI | Medium | Low | Pin version in `pnpm-workspace.yaml` `onlyBuiltDependencies`; measure install time delta |
-| ESLint `require-error-cause` produces noisy false positives at first run | High | Low | Author with test suite and apply in batches; allow explicit `/* preserve-cause: handled */` sentinel for acknowledged exceptions documented in ADR |
+| ESLint error-cause rule produces noisy false positives at first run | Superseded (2026-04-19) | Low | Resolved by re-scoping to ESLint built-in `preserve-caught-error` in the MCP branch's L-EH initial. Initial audit returned 0 in-tree violations; warn severity preserves CI until opt-in escalation to error. Standard `// eslint-disable-next-line preserve-caught-error -- <reason>` handles legitimate pass-through. |
 | Widget `@sentry/browser` bloats the widget bundle | Medium | Medium | Measure bundle size delta; scope to minimal integrations; consider `@sentry/react` only if the React tree grows |
 | Trace propagation to third-party hosts exposes user data | High if mishandled | High | Security review before any non-Oak allowlist addition (EXP-C2, now L-14) |
 | Alert coverage becomes noisy / fatigue-inducing | Medium | Medium | Define each alert with SLO-style intent, severity, routing, and dedupe in the runbook before enabling |

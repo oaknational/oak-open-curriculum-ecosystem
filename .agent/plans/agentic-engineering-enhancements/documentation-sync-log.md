@@ -185,6 +185,65 @@ round. The plan now lives in `archive/completed/`.
   (unlisted `estree` dependency), so the documentation lane closes with a
   recorded workspace-gate caveat rather than a local content defect.
 
+## Governance Concepts and Agentic Mechanism Integration (Adjacent Work)
+
+- Status: complete (2026-04-19)
+- ADR-119 update or rationale: No-change — this lane closed repo-local
+  routing, evidence-shape, and future-slice boundaries. It did not settle a
+  new practice boundary or canon-level governance decision.
+- practice.md update or rationale: No-change — `.agent/practice-core/practice.md`
+  remains the canonical operational map. This lane extracted value by changing
+  adjacent planning and evidence surfaces rather than altering the core map.
+- prog-frame update or rationale: No-change — the human-facing explanation in
+  `docs/foundation/agentic-engineering-system.md` was reviewed and left
+  untouched because the governance-plane vocabulary remains repo-local and not
+  yet ready for doctrine promotion.
+- Other ADR/docs/README updates:
+  - Added the active execution plan and closed the source-plan lifecycle in
+    `active/README.md`, `current/README.md`, the collection `README.md`, and
+    `roadmap.md`
+  - Updated the evidence source plan, the Phase 2 active evidence plan, and
+    the shared evidence bundle template so the evidence lane now distinguishes
+    `attempt`, `observed outcome`, and `proven result`
+  - Updated the operational-awareness plan so it explicitly carries the
+    supervised-execution framing for the bounded work-plane pilot
+  - Updated the reviewer-gateway plan so it explicitly frames the gateway as
+    one layer in the layered-safeguard stack and names review-signal inputs,
+    including relationship-confidence signals
+  - Updated the future mechanism-taxonomy plan and `future/README.md` so the
+    remaining abstraction debt now has one future home:
+    `action-governance boundary`, `boundary model`, `signal ecology`,
+    `residual-risk surface`, and `governance-plane vocabulary`
+  - Explicit defer retained in the future taxonomy lane for `graduated
+    authority` and `adoption ladder`
+  - No further change needed in `.agent/analysis/README.md`,
+    `.agent/reference/agentic-engineering/README.md`,
+    `.agent/reference/agentic-engineering/deep-dives/README.md`,
+    `.agent/reports/README.md`, `.agent/reports/agentic-engineering/README.md`,
+    or `.agent/reports/agentic-engineering/deep-dive-syntheses/README.md`
+  - Inspected and intentionally left unchanged:
+    `docs/foundation/agentic-engineering-system.md`,
+    `docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md`
+- Consolidation review (`jc-consolidate-docs`): complete — manual equivalent
+  review performed; no additional graduation beyond the updated lane-local
+  plans, execution surface, and evidence template was justified.
+- Validation record:
+  - `pnpm markdownlint-check:root` passed. The root markdownlint surface
+    intentionally excludes `.agent/**` per repo configuration.
+  - `pnpm practice:fitness:informational` exited `0` and reported the same
+    pre-existing repo-wide `Result: HARD (2 hard, 12 soft) — informational
+    mode` posture outside this lane's scope.
+  - Reviewer history recorded in the active execution plan: prior planning
+    findings were absorbed before editing, and the execution rounds absorbed
+    findings from `assumptions-reviewer`, `docs-adr-reviewer`, and
+    `architecture-reviewer-fred`.
+- Notes: Value extraction was treated as a hard constraint in this closeout.
+  Concepts only counted when they changed a local contract, evidence shape,
+  routing rule, future-slice boundary, or explicit defer decision. Net-new
+  concepts and reflective synthesis concepts also counted when they were given
+  a bounded local home rather than being dropped for lacking a prior
+  equivalent. Pure wording relocation did not count as completion.
+
 ## Phase 5 — Mutation Testing
 
 - Status: pending

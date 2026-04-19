@@ -15,6 +15,9 @@ research notes or investigation logs.
 
 - [agentic-engineering/README.md](./agentic-engineering/README.md) — formal
   report lane for agentic-engineering audits and deep-dive syntheses
+- [agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md](./agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md)
+  — abstracted report on governance-plane concepts, mechanism gaps, and local
+  integration routes
 - [oak-openapi-bug-report-2026-03-07.md](./oak-openapi-bug-report-2026-03-07.md)
   — existing standalone report
 
@@ -23,4 +26,3 @@ research notes or investigation logs.
 - [analysis evidence lane](../analysis/README.md)
 - [research index](../research/README.md)
 - [agentic-engineering hub](../reference/agentic-engineering/README.md)
-

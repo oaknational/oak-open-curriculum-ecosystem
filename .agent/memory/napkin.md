@@ -1,3 +1,86 @@
+## 2026-04-19 — Governance-concept integration lane closeout
+
+### What Was Done
+
+- Closed the governance-concept integration lane as a docs/plans-only slice by
+  adding
+  `active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md`,
+  marking the source plan complete, and updating the collection lifecycle
+  surfaces (`active/README.md`, `current/README.md`, collection `README.md`,
+  `roadmap.md`).
+- Tightened the evidence lane so it extracts concrete value from the governance
+  comparison rather than just moving wording:
+  `current/hallucination-and-evidence-guard-adoption.plan.md`,
+  `active/phase-2-evidence-based-claims-execution.md`, and
+  `evidence-bundle.template.md` now distinguish `attempt`, `observed outcome`,
+  and `proven result`.
+- Tightened the operational-awareness lane so it explicitly frames itself as
+  the bounded work-plane pilot for `supervised execution`, without widening
+  scope into the broader runtime-governance model.
+- Tightened the reviewer-gateway lane so it explicitly treats the gateway as
+  one layer in the `layered-safeguard stack` and names review-signal inputs,
+  including `relationship-confidence signals`.
+- Tightened the future mechanism-taxonomy lane so the remaining abstraction
+  debt now has one explicit future home: `action-governance boundary`,
+  `boundary model`, `signal ecology`, `residual-risk surface`, and
+  `governance-plane vocabulary`.
+- Recorded doctrine no-change rationale in the collection sync surface instead
+  of touching canon.
+
+### What Was Deliberately Deferred or Rejected
+
+- `graduated authority` stays explicitly deferred. The repo does not yet have
+  enough operational-awareness or reviewer-gateway evidence to justify a
+  formal authority ladder.
+- `adoption ladder` stays explicitly deferred. The repo has not yet moved a
+  mechanism family far enough from repo-local pilot to doctrine candidate to
+  need staged uptake machinery.
+- `layered safeguards` do NOT become fresh taxonomy debt. They stay in the
+  reference/deep-dive lane plus the reviewer-gateway's local manifestation.
+- No edits were made to `docs/foundation/agentic-engineering-system.md`,
+  `.agent/practice-core/practice.md`, ADR-119, ADR-150, or any PDR. That was
+  deliberate: the findings remain repo-local routing and evidence-shape work,
+  not settled canon.
+
+### Why This Counted as Real Extraction
+
+- I added a value-extraction rule to the lane: a concept only counted if it
+  changed a local contract, evidence shape, routing rule, future-slice
+  boundary, or explicit defer/reject decision.
+- I also made room for concepts that did **not** already have a clean local
+  equivalent. Net-new abstractions from the source material and reflective
+  ideas produced by comparing both corpora still counted, but only when they
+  earned a clear local definition and home.
+- This prevented "routing only" from being treated as success. The practical
+  test became: what concrete local surface behaves differently now because the
+  source material was mined?
+
+### Validation and Review Record
+
+- Ran the repo-defined quality gates for this lane's closeout surface:
+  `pnpm markdownlint-check:root` passed, and
+  `pnpm practice:fitness:informational` exited `0` while reporting the same
+  pre-existing repo-wide `Result: HARD (2 hard, 12 soft) — informational
+  mode` posture outside this lane's scope.
+- Prior planning findings from `docs-adr-reviewer` and
+  `architecture-reviewer-fred` were absorbed before editing.
+- Execution-time repair rounds absorbed findings from `assumptions-reviewer`,
+  `docs-adr-reviewer`, and `architecture-reviewer-fred` covering the evidence
+  example overclaim, unrouted net-new concepts, residual-risk routing,
+  three-plane and awareness-plane homes, propagation-surface naming, and the
+  need for an explicit closure record.
+
+### Follow-Up Slices
+
+- Promote the operational-awareness plan into active execution once the
+  markdown-first pilot lane is accepted.
+- Promote the reviewer-gateway plan when the taxonomy rename mechanics or live
+  review-noise evidence justify it.
+- Use the updated evidence lane to implement the attempt / observed outcome /
+  proven result structure in real Phase 2 execution work.
+- Promote the future mechanism-taxonomy plan only after adjacent lanes produce
+  enough evidence for a bounded first executable slice.
+
 ## 2026-04-19 — Phase 5 ESLint rule landing (observability track)
 
 ### What Was Done
@@ -454,3 +537,147 @@ High-signal entries absorbed this rotation:
   - operational-awareness plan for work-ledger and precedence concerns
   - reviewer-gateway plan for review posture and signal routing
   - future mechanism-taxonomy plan for the broader abstraction work
+
+## 2026-04-19 — L-EH initial lane (preserve-caught-error enable)
+
+### What Was Done
+
+- Re-scoped L-EH initial from authoring a custom `require-error-cause`
+  ESLint rule in `@oaknational/eslint-plugin-standards` to enabling
+  ESLint core's built-in `preserve-caught-error` (added in 9.35.0,
+  a documented superset). Owner prompt "please look at the built-in
+  first" triggered the survey; finding: repo already runs
+  eslint@^10.2.0 and @eslint/js@^10.0.1, so the rule was available.
+- Enabled at `error` severity with `requireCatchParameter: true`
+  scoped to `src/**/*.ts` in the 5 Wave-1 workspaces. Pre-enable
+  audit: **0 violations** across all 5 workspaces.
+- Reviewer matrix: code-reviewer + architecture-reviewer-fred.
+  Fred's primary TO-ACTION flipped `warn` → `error` mid-lane (audit
+  condition pre-satisfied; `warn` with no named backlog trigger
+  violates `warning-severity-is-off-severity.md`). ACTIONED.
+- Incidental: my first-draft preamble comment referenced the literal
+  `eslint-disable-next-line` directive syntax and the
+  `@oaknational/no-eslint-disable` rule name — both matched the
+  `@oaknational/no-eslint-disable` rule's own matcher regex when
+  present in a comment. Rewrote to reference ADR-162 History for the
+  opt-out protocol instead.
+- Docs propagation: maximisation plan (multiple sections), high-level
+  plan, restructure plan, strategic parent, ADR-162 History,
+  `use-result-pattern.md` expanded 5→20 lines.
+- `pnpm check` exit 0 (88/88 tasks) at `error` severity.
+- Commit pending owner approval. 12 files in scope, isolated from
+  the parallel agentic-engineering track.
+
+### Surprise
+
+- **Expected**: L-EH initial would be a straightforward reuse of the
+  Phase 5 `Rule.RuleModule` authoring pattern — write a custom
+  `require-error-cause` rule mirroring `require-observability-emission`.
+- **Actual**: before I opened the rule file, owner surfaced
+  `preserve-caught-error` as an ESLint-core built-in added in 9.35.0.
+  It is a documented **superset** of the planned custom rule's
+  predicate — catching missing cause, cause-mismatch, destructured-
+  parameter loss, and variable shadowing; the planned custom rule
+  would have covered only the first two.
+- **Why expectation failed**: I read the Phase 5 handoff's "natural
+  first-pick: reuses the validated authoring pattern" as a
+  *recommendation* when it was actually the handoff author's
+  *convenience ranking*, not an architectural assertion that the
+  authoring was required. A 30-second check of ESLint's recent
+  releases would have surfaced the built-in before the plan
+  committed to authorship.
+- **Behaviour change**: before authoring any custom rule (ESLint,
+  typescript-eslint, or any upstream tool), spend the 30 seconds
+  needed to scan the upstream's recent release notes and rule/feature
+  index. "Custom authorship is the default because Phase 5 did it"
+  is a wrong default. Phase 5's custom rule has no upstream
+  equivalent; L-EH initial did. The distinction is visible only when
+  you check.
+
+### Surprise
+
+- **Expected**: a comment in an `eslint.config.ts` that describes a
+  rule's opt-out protocol (`// eslint-disable-next-line <rule-name>
+  -- <reason>`) is benign — comments are not parsed as code.
+- **Actual**: `pnpm check` failed with 2 errors per workspace from
+  `@oaknational/no-eslint-disable`. The rule's matcher regex
+  (`/eslint-disable(?!d)(?:-next-line|-line)?(?!\w)/u`) scans comment
+  *text* and matched the literal string inside my explanatory
+  comment. The rule also matched `@oaknational/no-eslint-disable`
+  itself (i.e. the rule's own name referenced in the same comment)
+  because the regex matches `eslint-disable` regardless of what
+  precedes it.
+- **Why expectation failed**: I treated the rule's scan surface as
+  "actionable suppression directives in comments" when the actual
+  scan surface is "any comment text matching the regex, with an
+  approval-marker exception."
+- **Behaviour change**: code-configuration comments that document a
+  rule's opt-out syntax, or that name the rule itself, must avoid
+  the literal trigger strings. Use references to external docs
+  (ADR sections, URLs) instead. Single-instance pattern candidate;
+  second instance would promote to `.agent/memory/patterns/` as
+  "code config must not reference its own suppression syntax in
+  comments."
+
+### Surprise
+
+- **Expected**: a lint rule landed at `warn` with "escalate once
+  audit is clean" as the escalation trigger is a defensible soft-
+  launch shape, matching the Phase 5 `require-observability-emission`
+  precedent.
+- **Actual**: architecture-reviewer-fred's TO-ACTION applied
+  `warning-severity-is-off-severity.md` and
+  `foundations-before-consumers.md` against my own plan text. The
+  pattern is explicit: a lint configuration should contain only
+  `'error'` and `'off'`. With 0 violations and no concrete backlog
+  trigger, the `warn`-with-deadline was vacuous before the rule even
+  shipped. `warn` would have left Wave 3's future catch-throw-new
+  code at risk of landing non-conformant and scrolling past in CI
+  output.
+- **Why expectation failed**: I defaulted to the Phase 5 precedent
+  (warn with named escalation trigger = "Phase 2 emitter lanes land")
+  without checking whether L-EH initial had an analogous trigger. It
+  didn't. Phase 5 was a precedent-match for rule *infrastructure*;
+  it was not a precedent-match for *severity semantics*. Two
+  different axes of decision, conflated.
+- **Behaviour change**: when mirroring a precedent, decompose the
+  precedent into its constituent decisions before reusing. Phase 5's
+  severity choice, scope choice, and wiring pattern are three
+  independent decisions that happened to land together. Reuse each
+  only if its rationale applies in the new lane. Second instance of
+  "reviewer real-code audit catches a plan's own blind spot" (first
+  instance: Phase 5 span-predicate gap). Promotion candidate to
+  distilled.md.
+
+### Observation (not a surprise — a positive signal)
+
+- **Expected**: at audit time, find violations needing fixes.
+- **Actual**: 0 violations across 5 workspaces' src/. Sample of 3
+  real catch+throw-new sites in `oak-curriculum-sdk` all passed
+  `{ cause }` correctly.
+- **Interpretation**: ADR-088 Result pattern + the (previously 5-line)
+  `.agent/rules/use-result-pattern.md` are observably followed in
+  practice without being compile-time-enforced. The compile-time gate
+  now ratifies existing behaviour rather than correcting it — the
+  *good* case for foundations-before-consumers. Worth noting because
+  it's easy to assume unenforced rules are routinely violated; in
+  this case, the evidence says otherwise.
+
+## 2026-04-19 — Abstract governance-concept extraction notes
+
+### Patterns to Remember
+
+- When importing ideas from an external governance corpus, the durable value is
+  usually the **mechanism semantics**, not the source taxonomy. If the repo
+  keeps the source names, the work has not really been integrated.
+- The most useful comparative insights here were governance-plane concepts:
+  decision layers outside reasoning, boundary models, layered safeguards,
+  supervised execution, attempt / observed outcome / proven result structure,
+  residual-risk surfaces, adoption ladders, and signal ecology.
+- Many "new" concepts are actually local capabilities that are already present
+  but unnamed. The route is often `present but unnamed` or `partial`, not
+  `missing`.
+- A good abstracted import pass must force a destination for every concept:
+  existing plan, future plan, reference/deep dive, doctrine candidate, or
+  explicit no adoption. Otherwise the work becomes a clever but homeless
+  comparison exercise.

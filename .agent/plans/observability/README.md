@@ -7,11 +7,42 @@ engineering, product, usability, accessibility, and security.
 
 **Status**: 🔄 Active (post-2026-04-18 restructure)
 **Foundational ADR**: [ADR-162 Observability-First](../../../docs/architecture/architectural-decisions/162-observability-first.md)
-(Proposed — flips to Accepted at Phase 5 of the restructure plan).
+(**Accepted** 2026-04-19 at Phase 5 close).
 **Direction-setting session**: [`docs/explorations/2026-04-18-observability-strategy-and-restructure.md`](../../../docs/explorations/2026-04-18-observability-strategy-and-restructure.md)
 **Execution plan**: [`architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`](../architecture-and-infrastructure/current/observability-strategy-restructure.plan.md).
-**High-level plan**: [`high-level-observability-plan.md`](./high-level-observability-plan.md)
-(skeleton in Phase 1; filled in Phase 2).
+**High-level plan**: [`high-level-observability-plan.md`](./high-level-observability-plan.md).
+**Forward-motion evidence**: [`what-the-system-emits-today.md`](./what-the-system-emits-today.md)
+— externally verifiable snapshot of what actually emits in code today
+per axis and per runtime. Updated at every lane close. Read this
+first if the question is "are we really making progress."
+
+---
+
+## Plan Density Invariant
+
+**No new plan in this directory lands without an existing plan
+archiving in the same pass** until Wave 2 opens. The tree currently
+carries 2 `active/` + 6 `current/` + 11 `future/` plans + 8
+explorations under `docs/explorations/`. Planning density has
+materially outpaced execution density; the forward-motion risk is
+another restructure rather than another emitter.
+
+**Enforcement**: any author proposing a new plan in this directory
+(including future/ strategic briefs) must name an existing plan that
+closes in the same commit. If no such plan exists, the proposal is
+rejected — the substance either lands in an existing plan's body or
+goes to a napkin entry for later promotion.
+
+**Exit condition**: rule lifts when
+[`current/observability-events-workspace.plan.md`](./current/observability-events-workspace.plan.md)
+moves from `current/` to `active/` (i.e. Wave 2 opens). At that
+point the events workspace is being built, not planned, and the
+ratio of execution-to-planning shifts.
+
+**Rationale**: prevents the "perfect-planning trap" — planning work
+substituting for forward motion. Pairs with the forward-motion
+evidence artefact: plans propose; `what-the-system-emits-today.md`
+observes.
 
 ---
 
@@ -57,19 +88,24 @@ application's — cross-reference
 
 ## Restructure Phase Map
 
-The five-phase restructure (owned by the execution plan above) lays
-this directory down progressively:
+The five-phase restructure (owned by the execution plan above)
+completed 2026-04-19 with all phases landed:
 
-1. **Phase 1** — directory skeleton + ADR-162 Proposed + move five existing observability plans.
-2. **Phase 2** — populate `high-level-observability-plan.md`, author
+1. **Phase 1** ✅ — directory skeleton + ADR-162 Proposed + move five existing observability plans.
+2. **Phase 2** ✅ — populated `high-level-observability-plan.md`, authored
    six MVP `current/` plans + eleven `future/` plans each with a named
    promotion trigger.
-3. **Phase 3** — two full explorations + six stubs under
+3. **Phase 3** ✅ — two full explorations + six stubs under
    [`docs/explorations/`](../../../docs/explorations/).
-4. **Phase 4** — revise `active/sentry-observability-maximisation-mcp.plan.md`
+4. **Phase 4** ✅ — revised `active/sentry-observability-maximisation-mcp.plan.md`
    for MVP classification and the `metrics.*` priority swap.
-5. **Phase 5** — ADR-162 flip Proposed → Accepted; land
+5. **Phase 5** ✅ — ADR-162 flipped Proposed → Accepted; landed
    `require-observability-emission` ESLint rule at `warn`.
+
+Execution now proceeds through the five-wave MVP ordering (see
+[`high-level-observability-plan.md` §Execution Waves](./high-level-observability-plan.md#execution-waves--cross-plan-mvp-order)).
+Wave 1 is partially open as of 2026-04-19 — L-EH initial landed;
+three lanes remain (L-DOC initial, L-12-prereq, L-7).
 
 ---
 
