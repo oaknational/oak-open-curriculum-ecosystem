@@ -1,9 +1,28 @@
-# Analysis Reports
+# Analysis
 
-Purpose: consolidated, focussed reports on product, repo, and practice
-investigations.
+Purpose: consolidated, focussed investigations and evidence on product, repo,
+and practice questions.
 
-## Reports
+## Agentic Engineering Investigations and Evidence
+
+- [../reference/agentic-engineering/README.md](../reference/agentic-engineering/README.md)
+  — concept hub routing back into evidence and source lanes
+- `continuity-adoption-baseline.md`
+  - Pre-rollout baseline for continuity, session handoff, and deep
+    consolidation boundaries in the MCP App lane.
+- `continuity-adoption-evidence.md`
+  - Live evidence log for resumptions, `GO` sessions, and deep-consolidation
+    triggers after the continuity rollout.
+- `continuity-operational-awareness-baseline.md`
+  - Baseline classification of the continuation prompt, adjacent continuity
+    surfaces, and the repo-local operational-awareness gap created by parallel
+    agent tracks.
+
+Promoted audits and formal syntheses belong in
+[`.agent/reports/agentic-engineering/`](../reports/agentic-engineering/README.md).
+This directory remains the authoritative lane for investigations and evidence.
+
+## Other Investigations
 
 - `legacy-search-report.md`
   - Legacy deployed search (OWA + search-api), end-to-end flow, filters, tech stack, gaps, env wiring, and data-flow diagram.
@@ -15,12 +34,6 @@ investigations.
   - Scenario-based request/response pairs for legacy and semantic search endpoints.
 - `feature-goals-roadmap-alignment.md`
   - Parity and exceed feature goals, extra high-impact work, and alignment to the roadmap.
-- `continuity-adoption-baseline.md`
-  - Pre-rollout baseline for continuity, session handoff, and deep
-    consolidation boundaries in the MCP App lane.
-- `continuity-adoption-evidence.md`
-  - Live evidence log for resumptions, `GO` sessions, and deep-consolidation
-    triggers after the continuity rollout.
 
 ## Suggested reading order
 

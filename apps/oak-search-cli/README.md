@@ -1,5 +1,12 @@
 # Oak Search CLI (`@oaknational/search-cli`)
 
+> **New here?** Start at the
+> [repo root README](../../README.md), the
+> [contributor guide](../../CONTRIBUTING.md), and the
+> [foundation quick-start](../../docs/foundation/quick-start.md)
+> before diving into this workspace. AI agents should also read
+> [`.agent/directives/AGENT.md`](../../.agent/directives/AGENT.md).
+
 The operator CLI for Oak's semantic search system. Consumes `@oaknational/oak-search-sdk` to provide commands for searching, administration, evaluation, and observability. Ingests Oak Curriculum content via the official SDK, stores enriched documents across **Elasticsearch Serverless indices**, and provides **server-side RRF** (lexical + semantic) search with suggestions, facets, and observability telemetry.
 
 > **All curriculum data flows through `@oaknational/curriculum-sdk`; types and validators are generated via `pnpm sdk-codegen` from the OpenAPI schema.** When the API changes, `pnpm sdk-codegen` regenerates types, and this workspace automatically uses the updated definitions. No manual type definitions exist — everything imports from the generated SDK.
@@ -199,8 +206,8 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
 3. **Run the standard quality gates**
 
    ```bash
-   pnpm make   # install → build/code-generation → type-check → doc-gen → lint:fix → subagents:check → portability:check → practice:fitness:informational → markdownlint:root → format:root
-   pnpm qg     # format-check:root → markdownlint-check:root → subagents:check → portability:check → test:root-scripts → type-check → lint → unit/int/ui tests → smoke
+   pnpm make    # install → build/code-generation → type-check → doc-gen → lint:fix → subagents:check → portability:check → practice:fitness:informational → markdownlint:root → format:root
+   pnpm check   # secrets:scan → clean → test:root-scripts → sdk-codegen → build → type-check → doc-gen → lint:fix → unit/int/ui/e2e/a11y/widget tests → smoke:dev:stub → lint:shell → subagents:check → portability:check → knip → depcruise → markdownlint:root → format:root
    ```
 
 4. **Bootstrap Elasticsearch (mappings, synonyms, indices)**

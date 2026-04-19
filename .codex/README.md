@@ -43,5 +43,5 @@ That command prints the exact `.codex/agents/*.toml` adapter and canonical `.age
 ## Entry Points
 
 - [AGENTS.md](../AGENTS.md) — Codex entry point, links to AGENT.md
-- [AGENT.md](.agent/directives/AGENT.md) — Operational directives and rules
-- [Practice Core](.agent/practice-core/index.md) — The full Practice system
+- [AGENT.md](../.agent/directives/AGENT.md) — Operational directives and rules
+- [Practice Core](../.agent/practice-core/index.md) — The full Practice system

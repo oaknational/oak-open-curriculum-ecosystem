@@ -28,6 +28,19 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 - **Developers** — continue to [Quick Start](#quick-start) below
 - **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md), then scan the [five foundational ADRs](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) — the architectural source of truth
 
+**Browse the documentation by section**:
+[Foundation](docs/foundation/README.md) (mission, onboarding, the
+Practice) ·
+[Governance](docs/governance/README.md) (development, TypeScript,
+testing, accessibility, security) ·
+[Architecture](docs/architecture/README.md) (ADRs, OpenAPI pipeline,
+provider system) ·
+[Engineering](docs/engineering/README.md) (workflow, tooling,
+extending) ·
+[Operations](docs/operations/README.md) (env vars, troubleshooting) ·
+[Domain](docs/domain/README.md) (curriculum data) ·
+[Docs index](docs/README.md).
+
 ## What This Repo Provides
 
 Three capabilities, powered by three open education data sources:
@@ -58,12 +71,16 @@ The MCP servers expose curriculum data through the three [MCP primitive types](h
 - **Resources** (application-controlled): Curriculum model, prior knowledge graph, and learning progressions as pre-loadable context for MCP clients that support resource injection.
 - **Prompts** (user-controlled): Four workflow templates (`find-lessons`, `lesson-planning`, `explore-curriculum`, `learning-progression`) that guide users through common curriculum tasks.
 
-The standalone stdio workspace is now a legacy transitional surface. Future
-stdio support should come from a separate stdio entry point generalised from the
-HTTP MCP server workspace rather than from continued parallel maintenance of the
-standalone stdio app. See the [HTTP MCP server README](apps/oak-curriculum-mcp-streamable-http/README.md),
+The standalone stdio workspace has been retired and removed. The
+canonical MCP server workspace is now
+[`apps/oak-curriculum-mcp-streamable-http/`](apps/oak-curriculum-mcp-streamable-http/README.md);
+any future stdio support is expected to come from a separate stdio
+entry point generalised from that workspace rather than a parallel
+standalone app. See the
+[HTTP MCP server README](apps/oak-curriculum-mcp-streamable-http/README.md),
 [ADR-123](docs/architecture/architectural-decisions/123-mcp-server-primitives-strategy.md),
-and [ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
+and
+[ADR-128](docs/architecture/architectural-decisions/128-stdio-workspace-retirement-and-http-transport-consolidation.md).
 
 ## Quick Start
 
@@ -153,7 +170,7 @@ Search uses Elasticsearch with 4-way reciprocal rank fusion (ELSER sparse vector
 
 | Directory          | Purpose                                                                                                                  |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| `apps/`            | The canonical HTTP MCP server, the legacy stdio MCP workspace, and the semantic search CLI                               |
+| `apps/`            | The canonical HTTP MCP server and the semantic search CLI                                                                |
 | `packages/sdks/`   | Curriculum SDK (code-generation, MCP metadata) and Search SDK (ES retrieval)                                             |
 | `packages/core/`   | Foundational packages: `Result<T, E>` type, env schema contracts, observability primitives, type helpers, ESLint configs |
 | `packages/libs/`   | Shared libraries: env-resolution, structured logging, search contracts, and Sentry adapters                              |

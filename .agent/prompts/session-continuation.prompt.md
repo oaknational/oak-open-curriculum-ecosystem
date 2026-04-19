@@ -89,15 +89,33 @@ git log --oneline --decorate -10
   - `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`
     (strategic follow-up extending the ADR-159 pattern to Clerk; separate
     lane after Sentry work).
-- **Current state (2026-04-19, commit `2e8a140d`)**: Observability
-  strategy restructure **Phases 1–4 complete**; **execution-order
-  5-wave reshape complete**; maximisation plan is now **single-frame
-  physically** (no more historical-grouping dual frames). Branch
-  **25 commits ahead of remote** on `feat/otel_sentry_enhancements`;
-  `pnpm check` from repo root exit 0. **Phase 5 of the restructure
-  is pending and is also Wave 1 of execution**: author
+- **Current state (2026-04-19, working tree on top of commit
+  `d0cfaeea`)**: Observability strategy restructure **Phases 1–4
+  complete**; **execution-order 5-wave reshape complete**;
+  maximisation plan is now **single-frame physically** (no more
+  historical-grouping dual frames). Branch ahead of remote on
+  `feat/otel_sentry_enhancements`. **Phase 5 of the restructure is
+  pending and is also Wave 1 of execution**: author
   `require-observability-emission` ESLint rule + flip ADR-162
   Proposed → Accepted. This is the next code-producing work.
+
+  **Parallel docs-hygiene track (uncommitted)**: a 3-round
+  onboarding/Practice docs review-and-fix session ran 2026-04-19
+  on top of `d0cfaeea` and is sitting in the working tree. Touches
+  ~38 modified files across `.agent/`, `docs/`, `apps/*/README.md`,
+  and root README/CONTRIBUTING. Substantively: PDR-001 supersession
+  marked in Status + Decision; surface counts refreshed (25 rules /
+  12 commands / 23 skills / 77 patterns); legacy stdio mentions
+  removed from onboarding paths; AGENT.md back inside its
+  fitness_line_limit; ADR-144 filename/title divergence noted in
+  the index; E2E vs credential workflows separated in
+  troubleshooting/env-vars; workspace READMEs gained "New here?"
+  signposts to repo onboarding; stale `pnpm qg` and
+  `pnpm es:setup reset` commands corrected. `pnpm practice:fitness`
+  unchanged from baseline (`HARD: 2 hard, 12 soft`; both hards are
+  pre-existing in `principles.md` and `testing-strategy.md`,
+  untouched by this work). Owner has not yet committed; not part of
+  the observability commit chain.
 
   This session shipped three commits on top of the Phase 1 starting
   point (`502af060`):
@@ -243,9 +261,17 @@ git log --oneline --decorate -10
   `createHttpObservabilityOrThrow` ceremony; flip ESLint
   `no-restricted-properties` and `no-restricted-imports` from `warn`
   to `error` when backlog reaches zero. ~34 total violations today.
-- **Deep consolidation status**: **completed this session
-  (2026-04-19)** — bounded pass after the four-commit window
-  (`2e0be715`, `f1f2c259`, `7f5b18e7`, `2e8a140d`). Outputs:
+- **Deep consolidation status**: **not due — 2026-04-19 docs-hygiene
+  track (uncommitted)**. Lightweight session: 3 reviewer rounds +
+  fix-and-ship docs hygiene on top of the already-completed
+  consolidation pass listed below. No plan or milestone closed; no
+  practice-box exchange; no fitness pressure (all introduced
+  violations resolved in-session, baseline `HARD: 2 hard, 12 soft`
+  unchanged with the two hards pre-existing); no Core or PDR
+  graduation. Numbered-claim-drift watchlist captured to napkin for
+  cross-session validation. The completed-pass entry below remains
+  authoritative for the prior post-restructure consolidation
+  (commits `2e0be715` → `2e8a140d`):
   - **Three new memory/patterns**: `stage-what-you-commit.md`
     (2 cross-session instances), `foundations-before-consumers.md`
     (owner-approved; multi-emitter wave ordering),
@@ -301,6 +327,37 @@ git log --oneline --decorate -10
   - **L-DOC initial** expand sentry-node README + write app observability doc.
   - **L-EH initial** `require-error-cause` ESLint rule with expanded
     RuleTester cases.
+- **Recent surprises / corrections (2026-04-19 docs-hygiene parallel track)**:
+  - **Numbered-claim drift is a recurring failure mode.** Three
+    independent reviewer rounds on the onboarding/Practice surface
+    surfaced four separate instances of "live document asserts a
+    count that no longer matches reality": pattern count (claimed
+    56/57, actual 77 — fixed earlier session); rule count (claimed
+    34, actual 25); stable command count (claimed 10, actual 12);
+    skill count (claimed 27, actual 23). All four lived in
+    `practice-index.md` simultaneously. Mechanism: when a numbered
+    claim is written, no fitness function ties it to its source
+    enumeration, so divergence is silent. Watch-list candidate for
+    pattern extraction if a second cross-session instance surfaces;
+    until then, the napkin entry is the capture surface.
+  - **Subagent-driven review rounds catch self-inflicted regressions.**
+    Round 2 of the docs review caught a 106-char prose-line-width
+    violation introduced by Round 1's own AGENT.md condensation
+    work, plus stale ADR titles I copy-pasted into PDR-001's
+    host-local context. Pattern (already known): "fix-and-review
+    cycles must include the diff the fix introduced, not just the
+    target it was repairing." Restated, applied, no new pattern
+    file needed.
+  - **Workspace READMEs are an asymmetric onboarding hop.** Root
+    README + CONTRIBUTING route into workspace READMEs, but
+    workspace READMEs did not route back. Reciprocity gap caught
+    only when a reviewer walked the path from inside out. Fixed
+    with "New here?" signpost blocks in
+    `apps/oak-curriculum-mcp-streamable-http/README.md` and
+    `apps/oak-search-cli/README.md`. Watch-list: any other workspace
+    README without a back-link to repo-level onboarding is a latent
+    instance of the same shape.
+
 - **Recent surprises / corrections (2026-04-18 → 2026-04-19 planning restructure Phase 4 + reshape + physical reorder)**:
   - **"We are building containers for things without actually
     building them"** — owner observation mid-session. The planning

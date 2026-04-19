@@ -6,6 +6,7 @@ Plans and research for hardening the agentic engineering practice through physic
 **Active Execution Index**: [active/README.md](active/README.md)
 **Current / Source Plans**: [current/README.md](current/README.md)
 **Later Plans**: [future/README.md](future/README.md)
+**Agentic Corpus Hub**: [../../reference/agentic-engineering/README.md](../../reference/agentic-engineering/README.md)
 
 ## Documents
 
@@ -15,6 +16,8 @@ Plans and research for hardening the agentic engineering practice through physic
 | `current/README.md` | Current Index | Strategic source plans and adjacent capability work (queued or in progress) |
 | `active/README.md` | Active Index | Atomic executable plans for roadmap phases plus adjacent active closeout work |
 | `future/README.md` | Future Index | Deferred strategic backlog and later exploratory capability work |
+| `current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md` | Plan | Source strategy for the index-only hub, research/report lanes, docs cross-links, and seed deep dives |
+| `active/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md` | Active Plan | Execution plan for the agentic corpus discoverability hub and lane rollout |
 | ~~`active/practice-convergence.plan.md`~~ | Plan (Completed) | Convergence closeout for Practice Core, local surfaces, and outgoing Context — **COMPLETE** (deleted) |
 | `documentation-sync-log.md` | Tracking Log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `current/elasticsearch-specialist-capability.plan.md` | Plan | Strategic source plan for a canonical Elasticsearch reviewer, skill, and situational rule grounded in official Elastic docs and Elastic Serverless applicability |
@@ -22,6 +25,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `current/mutation-testing-implementation.plan.md` | Plan | Stryker mutation testing across all workspaces |
 | `current/hallucination-and-evidence-guard-adoption.plan.md` | Plan | Prioritised safety adoption: hallucination guards first, evidence-based claims second |
 | `current/harness-concepts-adoption.plan.md` | Plan | Evaluate and adopt concepts from harness-engineering model (docs freshness, entropy cleanup, quality scoring) |
+| `current/operational-awareness-and-continuity-surface-separation.plan.md` | Plan | Source strategy for separating the canonical continuity contract, workstream resumption briefs, and thread-aware tactical track cards via markdown-first repo-local state surfaces |
 | `archive/completed/continuity-and-surprise-practice-adoption.plan.md` | Plan (Completed) | Repo-local continuity surfaces, session-handoff rollout, GO alignment, and surprise pipeline adoption completed with an explicit `promote` decision on 3 April 2026 |
 | `evidence-bundle.template.md` | Template | Standard claim/evidence artifact format for non-trivial engineering claims |
 | `evidence/README.md` | Reference | Storage and naming convention for collection evidence artefacts |
@@ -57,16 +61,19 @@ Plans and research for hardening the agentic engineering practice through physic
 2. **Active execution first**: [active/README.md](active/README.md), then
    [current/README.md](current/README.md) for strategic source plans and
    adjacent capability work (queued or in progress)
-3. **Later backlog**: [future/README.md](future/README.md) for deferred
+3. **Corpus hub for concept routing**:
+   [../../reference/agentic-engineering/README.md](../../reference/agentic-engineering/README.md)
+4. **Later backlog**: [future/README.md](future/README.md) for deferred
    strategic work and exploratory capability plans
-4. **Strategic source plans**: hallucination/evidence guards -> enforcement ->
+5. **Strategic source plans**: hallucination/evidence guards -> enforcement ->
    mutation testing -> continuity/surprise adoption (archived reference) ->
-   Reviewer Gateway -> Elasticsearch specialist -> Clerk specialist -> Sentry
-   -> MCP upgrade -> Express -> security/privacy cluster (cyber security ->
-   web/API security -> privacy -> web/API GDPR) -> OOCE -> Graph memory
-   exploration -> Planning -> TDD -> DevX -> Repair Workflow Wording Hazard
-   Detection -> Adapter Generation -> Agent Classification Taxonomy
-5. **Research as evidence base**: augmented safety -> augmented practices ->
+   operational-awareness surface separation -> Reviewer Gateway ->
+   Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade ->
+   Express -> security/privacy cluster (cyber security -> web/API security ->
+   privacy -> web/API GDPR) -> OOCE -> Graph memory exploration -> Planning ->
+   TDD -> DevX -> Repair Workflow Wording Hazard Detection -> Adapter
+   Generation -> Agent Classification Taxonomy
+6. **Research as evidence base**: augmented safety -> augmented practices ->
    standardisation landscape
 
 ## Document Roles (DRY)
@@ -80,6 +87,7 @@ Plans and research for hardening the agentic engineering practice through physic
 - **Strategic source plans (`*.plan.md`)**: policy intent, rationale, success criteria, and phase design; execution is delegated to active plans.
 - **Research docs (`*.research.md`)**: evidence base only; not execution instructions.
 - **Tracking artefacts** (`documentation-sync-log.md`, `evidence/`): proof of documentation propagation and claim evidence.
+- **Agentic corpus hub** (`../../reference/agentic-engineering/README.md`): concept-routing surface only; routes back to canon, research, evidence, reports, and docs entry points.
 
 If strategy and execution disagree, update the active plan first, then reconcile
 the strategic source plan and roadmap.

@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; Phase 1 ready to start
-**Last Updated**: 2026-04-13
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation ⏭️ queued; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; Phase 1 ready to start
+**Last Updated**: 2026-04-19
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -46,6 +46,7 @@ Active adjacent execution sources:
 4. Clerk specialist capability — ✅ Complete (no execution plan needed; single-session delivery)
 5. ~~continuity-and-surprise-practice-adoption.plan.md~~ ✅ Complete (archived in `archive/completed/` for reference)
 6. ~~practice-convergence.plan.md~~ ✅ Complete (deleted; backup trees removed, all workstreams done)
+7. [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](active/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md) (agentic corpus discoverability hub — ✅ complete)
 
 ---
 
@@ -85,7 +86,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), specialist operational tooling layer (ADR-137, strategic)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -107,6 +108,7 @@ Adjacent:
   CX:   Codex platform parity                       ✅ COMPLETE
   HC-0: Harness concepts baseline metrics            📋 PLANNED
   CTY:  Continuity/session-handoff adoption          ✅ COMPLETE
+  OAW:  Operational awareness separation             ⏭️ QUEUED
   PCI:  Incoming Practice integration                ✅ COMPLETE
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 🔄 ACTIVE
@@ -254,8 +256,50 @@ Adjacent:
 - Notes:
   - intentionally outside the numbered phase sequence
   - Wave 1 closed with an explicit `promote` decision on 2026-04-03
-  - the outgoing portable note and same-day follow-on Practice Core promotion
+- the outgoing portable note and same-day follow-on Practice Core promotion
     both landed after the evidence window closed
+
+### Adjacent — Operational Awareness and Continuity Surface Separation
+
+- Strategic plan:
+  [operational-awareness-and-continuity-surface-separation.plan.md](current/operational-awareness-and-continuity-surface-separation.plan.md)
+- Goal:
+  - separate the canonical continuity contract, workstream resumption state,
+    and thread-aware tactical coordination into distinct repo-local surfaces
+  - keep the continuation prompt as a behavioural entry surface only
+  - prove a markdown-first model before promoting any broader sidecar-store
+    design
+  - define portability criteria without mutating Practice Core in the initial
+    lane
+- Status: ⏭️ Queued reference (`current/`)
+- Notes:
+  - adjacent to the completed continuity-adoption lane and the future
+    cross-vendor sidecars plan
+  - the default proof path is repo-local first, portable candidate second
+  - initial non-goals explicitly exclude SQLite sidecars, AGENT changes, and
+    blind prompt trimming
+
+### Adjacent — Agentic Corpus Discoverability Hub
+
+- Active plan:
+  [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](active/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md)
+- Source strategy:
+  [agentic-corpus-discoverability-and-deep-dive-hub.plan.md](current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md)
+- Goal:
+  - add an index-only hub under `.agent/reference/agentic-engineering/`
+  - create named research and reports lanes with reciprocal README links
+  - make selected `/docs/**` entry points route into the wider source corpus
+    without changing canon location
+  - seed five deep-dive extracts that route back to canon, evidence, and
+    source lanes
+- Status: ✅ Complete
+- Notes:
+  - intentionally outside the numbered roadmap phase sequence
+  - analysis remains the authoritative investigation/evidence lane; reports are
+    formal promoted outputs only
+  - final workspace gate caveat was external to this lane: `pnpm check`
+    reached `knip` and then failed on an unrelated `estree` dependency issue
+    in the concurrent `oak-eslint` change set
 
 ### Adjacent — Incoming Practice Context Integration and Write-Back
 

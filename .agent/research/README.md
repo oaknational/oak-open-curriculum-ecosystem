@@ -1,6 +1,6 @@
 # Research Documents Index
 
-**Last Updated**: 6 April 2026  
+**Last Updated**: 19 April 2026  
 **Purpose**: Permanent record of research, discoveries, and insights  
 **Maintained By**: AI agents and human collaborators
 
@@ -11,6 +11,8 @@
 | Document Type | Location | Nature | Purpose |
 |---------------|----------|--------|---------|
 | **Research** | `.agent/research/` | Permanent | Record discoveries, insights, analysis |
+| **Analysis** | `.agent/analysis/` | Evidence | Hold investigations, baselines, and evidence bundles |
+| **Reports** | `.agent/reports/` | Promoted | Stable audits and formal syntheses once promoted |
 | **Reference** | `.agent/reference/` | Permanent | Long-lived supporting material for agents and developers (not ADRs) |
 | **Plans** | `.agent/plans/` | Ephemeral | Track work in progress, acceptance criteria |
 | **Prompts** | `.agent/prompts/` | Entry points | Start new sessions with context |
@@ -81,11 +83,15 @@ developer-experience inputs used to improve Oak's agentic engineering system.
 
 | Document | Purpose | Key Insights |
 |----------|---------|--------------|
+| **[agentic-engineering/](agentic-engineering/README.md)** | Agentic-engineering lane index | Theme-based routing for operating model, reviewer systems, safety/evidence, continuity, and graph-memory research |
 | **[developer-experience/](developer-experience/)** | Developer-experience research index | Onboarding, enforcement, and external research guide |
 | ├─ [README.md](developer-experience/README.md) | Developer-experience index | Entry point for local DX research and the local novel repair lane |
 | ├─ [architectural-enforcement-playbook.md](developer-experience/architectural-enforcement-playbook.md) | Architectural enforcement | Guardrails, prompts, and enforcement posture |
 | ├─ [2026-02-20-onboarding-review.md](developer-experience/2026-02-20-onboarding-review.md) | Onboarding review | Friction points and onboarding improvements |
 | └─ local `developer-experience/novel/` lane | Ignored repair lane | Raw imports and sibling clean copies; stable promotion deferred |
+| [graphify-oak-practice-analysis.md](graphify-oak-practice-analysis.md) | Derived graph memory exploration | Navigation layer over the practice estate, explicit attribution requirement |
+| [mcp_agent_guidance_provision.md](mcp_agent_guidance_provision.md) | MCP help-surface design | Start-here resources, help tools, and prompt-oriented discoverability |
+| [openai_claude_gemini_apps_sdk_comparison.md](openai_claude_gemini_apps_sdk_comparison.md) | Cross-vendor app surface comparison | Host/UI surface differences around MCP and embedded experiences |
 
 ### 🔐 Authentication & Security
 

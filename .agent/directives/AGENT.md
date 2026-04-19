@@ -29,15 +29,14 @@ engineering practice** — the self-reinforcing system of
 principles, structures, specialist reviewers, and tooling
 that governs how work happens in this repository. The
 practice teaches itself through use: follow the links from
-here and the system reveals itself. For orientation, see
-[practice-core/index.md](../practice-core/index.md). For
-the local bridge from the portable Practice Core into this
-repo's live surfaces, see
-[practice-index.md](../practice-index.md). For the full
-map, see [practice.md](../practice-core/practice.md). For
-cross-repo propagation and the plasmid exchange mechanism,
-see
-[practice-lineage.md](../practice-core/practice-lineage.md).
+here and the system reveals itself. Start with
+[practice-core/index.md](../practice-core/index.md)
+(orientation), then
+[practice-index.md](../practice-index.md) (local bridge into
+this repo's live surfaces),
+[practice.md](../practice-core/practice.md) (full map), and
+[practice-lineage.md](../practice-core/practice-lineage.md)
+(cross-repo propagation and the plasmid exchange mechanism).
 
 Agent onboarding starts with the `start-right-quick` or
 `start-right-thorough` workflow. Shared workflow definitions
@@ -101,27 +100,17 @@ invocation matrix, timing guidance, triage checklist, and
 worked examples, see the
 [invoke-code-reviewers directive](./invoke-code-reviewers.md).
 
-#### Standard Quality Roster
-
-`code-reviewer` (gateway),
-`architecture-reviewer-barney`,
-`architecture-reviewer-fred`,
-`architecture-reviewer-betty`,
-`architecture-reviewer-wilma`, `test-reviewer`,
-`type-reviewer`, `config-reviewer`,
-`security-reviewer`, `docs-adr-reviewer`
-
-#### UI/Frontend Cluster (ADR-149)
-
-`accessibility-reviewer`, `design-system-reviewer`, `react-component-reviewer`
-
-#### Specialist On-Demand
-
-`ground-truth-designer`, `subagent-architect`,
-`release-readiness-reviewer`, `onboarding-reviewer`,
-`mcp-reviewer`, `elasticsearch-reviewer`,
-`clerk-reviewer`, `sentry-reviewer`,
-`assumptions-reviewer`
+- **Standard quality roster**: `code-reviewer` (gateway),
+  `architecture-reviewer-barney`/`-fred`/`-betty`/`-wilma`,
+  `test-reviewer`, `type-reviewer`, `config-reviewer`,
+  `security-reviewer`, `docs-adr-reviewer`.
+- **UI/frontend cluster (ADR-149)**: `accessibility-reviewer`,
+  `design-system-reviewer`, `react-component-reviewer`.
+- **Specialist on-demand**: `ground-truth-designer`,
+  `subagent-architect`, `release-readiness-reviewer`,
+  `onboarding-reviewer`, `mcp-reviewer`,
+  `elasticsearch-reviewer`, `clerk-reviewer`,
+  `sentry-reviewer`, `assumptions-reviewer`.
 
 **Cursor-specific**: Invoke via the Task tool with
 `subagent_type` parameter. Other tooling: invoke by name
@@ -149,10 +138,10 @@ content in `.agent/`, thin platform adapters in
 `.cursor/`/`.claude/`/`.gemini/`/`.agents/`/`.codex/`, and
 entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For
 the full inventory see
-[artefact-inventory.md](./artefact-inventory.md). To author a
-new rule, skill, command, sub-agent, or ADR, see
-[artefact-inventory.md § How to Create New Artefacts](./artefact-inventory.md#how-to-create-new-artefacts)
-and [docs/engineering/extending.md](../../docs/engineering/extending.md).
+[artefact-inventory.md](./artefact-inventory.md) (see § Create
+New Artefacts to author a new rule, skill, command, sub-agent,
+or ADR) and
+[docs/engineering/extending.md](../../docs/engineering/extending.md).
 
 **Platform configuration split (Claude Code)**:
 `.claude/settings.json` (tracked) defines the system contract;
@@ -166,7 +155,7 @@ Institutional memory lives in `.agent/memory/`:
 
 - [distilled.md](../memory/distilled.md) — hard-won rules extracted from
   session napkins. Read before every session.
-- [patterns/](../memory/patterns/README.md) — 57 abstract, reusable
+- [patterns/](../memory/patterns/README.md) — 77 abstract, reusable
   solutions to recurring design problems across code, architecture,
   process, testing, and agent infrastructure. Before inventing a new
   approach, check the pattern library for a known solution.
@@ -226,10 +215,8 @@ Institutional memory lives in `.agent/memory/`:
 
 ## Development Commands
 
-From the repo root:
-
-Quality gate policy: run gates one at a time while iterating. If you need the
-canonical aggregate verification command, ALWAYS use `pnpm check`.
+From the repo root. Quality-gate policy: run gates one at a time
+while iterating; for canonical aggregate verification, use `pnpm check`.
 
 ```bash
 pnpm install             # Setup
@@ -281,7 +268,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 ## Remember
 
 1. Periodically re-ground using [GO](../skills/go/shared/go.md)
-   (ACTION/REVIEW/GROUNDING cadence)
-2. When in doubt, **make it simpler**
-3. Think in layers: functions → modules → packages
-4. Step back and reflect: is this the simplest approach?
+   (ACTION/REVIEW/GROUNDING cadence).
+2. When in doubt, **make it simpler**. Think in layers (functions →
+   modules → packages) and step back to ask: is this the simplest
+   approach?

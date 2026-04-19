@@ -13,6 +13,7 @@ of truth.
 | 4 | ~~phase-4-cross-agent-standardisation-execution.md~~ | ~~Cross-agent standardisation~~ **Superseded** by [ADR-125 (Agent Artefact Portability)](../../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md) | ⛔ Superseded (archived) |
 | 5 | [phase-5-mutation-testing-execution.md](phase-5-mutation-testing-execution.md) | Mutation testing phases 0-3 execution | 📋 Planned |
 | HC-0 | [phase-0-baseline-metrics.plan.md](phase-0-baseline-metrics.plan.md) | Harness concepts: baseline metrics capture | 📋 Planned |
+| ACH | [agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md](agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md) | Agentic corpus hub, research/report lanes, selected docs cross-links, and seed deep dives | ✅ Complete |
 | ES | ~~[elasticsearch-specialist-capability.execution.plan.md](../archive/completed/elasticsearch-specialist-capability.execution.plan.md)~~ | Elasticsearch reviewer + skill + rule triplet following ADR-129 | ✅ Complete (archived) |
 | PCS | [plan-collection-structural-consistency.plan.md](plan-collection-structural-consistency.plan.md) | Bring all plan collections to canonical lifecycle structure (ADR-117) | 📋 Planned (audit complete, execution deferred) |
 | PC | ~~practice-convergence.plan.md~~ | Align Practice Core, local surfaces, and outgoing Context so documented standards are enforced | ✅ Complete (deleted) |

@@ -139,7 +139,51 @@ Do not mark a phase complete without an entry.
   (`~/.claude/plans/flickering-pondering-simon.md` and
   `~/.claude/plans/rippling-meandering-canyon.md`) were reviewed during
   consolidation and did not contain additional uncaptured doctrine for this
-  round. The plan now lives in `archive/completed/`.
+round. The plan now lives in `archive/completed/`.
+
+## Agentic Corpus Discoverability Hub (Adjacent Work)
+
+- Status: complete (2026-04-19)
+- ADR-119 update or rationale: No-change — the new hub, deep dives, and lane
+  READMEs are discoverability/index surfaces only. They route back to existing
+  canon and do not change the practice's name, boundary, or three-layer model.
+- practice.md update or rationale: No-change — `.agent/practice-core/practice.md`
+  remains the canonical operational map. This lane indexes it more clearly but
+  does not change its mechanics or doctrine.
+- prog-frame update or rationale: No-change — progression framing and the
+  internal progression document set were not changed by this discoverability
+  restructure.
+- Other ADR/docs/README updates:
+  - Added `.agent/reference/agentic-engineering/README.md`, the deep-dives
+    index, and five seed deep-dive extracts
+  - Added `.agent/research/agentic-engineering/README.md` plus five named lane
+    READMEs
+  - Added `.agent/reports/README.md` and the formal
+    `.agent/reports/agentic-engineering/` report lane READMEs
+  - Updated `.agent/reference/README.md`, `.agent/research/README.md`,
+    `.agent/analysis/README.md`, `.agent/practice-index.md`, and the
+    `agentic-engineering-enhancements` collection indexes/roadmap for
+    reciprocal routing
+  - Updated `docs/README.md`, `docs/foundation/README.md`, and
+    `docs/foundation/agentic-engineering-system.md` so human-facing entry
+    points can reach the hub without going through `AGENT.md`
+  - No lane-owned change required in `docs/governance/README.md` or
+    `docs/architecture/architectural-decisions/README.md`; the docs-facing
+    route is sufficient without additional hub links there, and unrelated
+    concurrent edits were already in progress on both files
+- Consolidation review (`jc-consolidate-docs`): complete — no additional
+  graduation required because the settled outcomes of this lane are already
+  captured directly in the new hub, deep dives, lane READMEs, plan files, and
+  docs entry points.
+- Notes: `.agent/analysis/` remains the authoritative investigation/evidence
+  lane. `.agent/reports/` now exists as the promotion-only lane for formal
+  audits and syntheses. Experience files were left untouched and are only
+  referenced as source material for concept extraction. Final docs review
+  findings were absorbed. `pnpm check` reached `knip` and then failed on an
+  unrelated concurrent code change in
+  `packages/core/oak-eslint/src/rules/require-observability-emission.ts`
+  (unlisted `estree` dependency), so the documentation lane closes with a
+  recorded workspace-gate caveat rather than a local content defect.
 
 ## Phase 5 — Mutation Testing
 

@@ -55,7 +55,7 @@ the enforcement mechanism — not these files.
 
 The most readable parts of `.agent/` for humans:
 
-- [memory/patterns/](memory/patterns/README.md) — 56 reusable solutions
+- [memory/patterns/](memory/patterns/README.md) — 77 reusable solutions
   to recurring design problems, with anti-patterns and evidence
 - [memory/distilled.md](memory/distilled.md) — hard-won rules from
   accumulated session experience

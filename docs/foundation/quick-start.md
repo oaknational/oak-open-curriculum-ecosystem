@@ -1,11 +1,11 @@
 # Quick Start Guide
 
-**Last Updated**: 2026-03-28
+**Last Updated**: 2026-04-19
 **Status**: Active quick-reference guide
 
 Fast-track guide for developers who want to understand and contribute to infrastructure for Oak's openly-licensed curriculum — SDKs, MCP servers, and semantic search.
 
-> **New here?** This guide gets you running quickly. For the full architecture, see the [OpenAPI pipeline](../architecture/openapi-pipeline.md). For documentation navigation, see [docs/README.md](../README.md).
+> **New here?** This guide gets you running quickly. For the full architecture, see the [OpenAPI pipeline](../architecture/openapi-pipeline.md). For documentation navigation, see [docs/README.md](../README.md). For day-to-day standards (development practice, TypeScript, testing, accessibility, security), see the [Governance index](../governance/README.md).
 >
 > **Audience**: junior-to-mid-level human developers.
 >
@@ -53,7 +53,7 @@ TypeScript SDK      MCP Tools             Search Type Generators
  Zod schemas)      input/output shapes)    search constants)
     ↓                    ↓                           ↓
 Runtime Apps        MCP Servers            Semantic Search
-(admin, CLI)      (HTTP, legacy stdio)    (4-way RRF hybrid)
+(admin, CLI)      (HTTP, canonical)       (4-way RRF hybrid)
 ```
 
 **Key Insight**: The OpenAPI schema is the only definition. Everything else is generated. If the API changes, `pnpm sdk-codegen` updates everything automatically.
@@ -143,6 +143,17 @@ See [environment variables guide](../operations/environment-variables.md) for co
 - [ ] You know which area you are working on (SDK, MCP server, search, or docs)
 
 For any current `pnpm check` caveats, see [Troubleshooting → Known Gate Caveats](../operations/troubleshooting.md#known-gate-caveats).
+
+### Where to read next
+
+Once your toolchain is green, browse documentation by section:
+
+- [Foundation](README.md) — mission, vision, this guide, and how the agentic engineering system works
+- [Governance](../governance/README.md) — [Development Practice](../governance/development-practice.md), TypeScript, testing, accessibility, security, design tokens, MCP App styling
+- [Architecture](../architecture/README.md) and the [ADR index](../architecture/architectural-decisions/README.md)
+- [Engineering](../engineering/README.md) — workflow, tooling, extension points
+- [Operations](../operations/README.md) — environment variables, troubleshooting
+- [Domain](../domain/README.md) — curriculum data structure and variances
 
 ## Key Concepts
 

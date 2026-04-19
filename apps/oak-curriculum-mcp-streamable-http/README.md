@@ -3,6 +3,13 @@
 Status: private alpha
 Next status: public alpha
 
+> **New here?** Start at the
+> [repo root README](../../README.md), the
+> [contributor guide](../../CONTRIBUTING.md), and the
+> [foundation quick-start](../../docs/foundation/quick-start.md)
+> before diving into this workspace. AI agents should also read
+> [`.agent/directives/AGENT.md`](../../.agent/directives/AGENT.md).
+
 This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It uses **stateless session management** (no server-side state) and is designed for Vercel's serverless Node runtime. Responses are streamed using Server-Sent Events (SSE) as per the MCP specification.
 
 > **Canonical MCP server workspace**. This is the sole MCP server workspace.

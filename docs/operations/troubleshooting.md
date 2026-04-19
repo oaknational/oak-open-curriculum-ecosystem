@@ -42,7 +42,7 @@ Use `.env.example` and other docs as placeholders.
 
 **Steps**:
 
-1. Ensure `OAK_API_KEY` is set in root `.env` (or `.env.e2e`)
+1. Ensure `OAK_API_KEY` is set in root `.env`
 2. Check network access to `open-api.thenational.academy`
 3. Run `pnpm clean && pnpm sdk-codegen` for a fresh generation
 
@@ -60,12 +60,18 @@ Use `.env.example` and other docs as placeholders.
 
 **Symptoms**: `pnpm test:e2e` fails with connection or auth errors.
 
+E2E tests use mocks and dependency injection with isolated config, so
+they do not require real API keys. If they fail with credential-shaped
+errors, the most likely cause is a build artefact or port issue rather
+than missing env vars.
+
 **Steps**:
 
 1. Ensure the app builds successfully: `pnpm build`
-2. For streamable-http E2E tests: no env vars needed (tests use DI with isolated config)
-3. For smoke tests: ensure `OAK_API_KEY` and `CLERK_*` keys are set
-4. Check that no other process is using port 3333 (streamable-http default)
+2. Check that no other process is using port 3333 (streamable-http default)
+3. If a Clerk-related error appears, confirm you are running
+   `pnpm test:e2e` (not `pnpm smoke:*` — smoke tests do require
+   credentials; see the next section)
 
 ### Smoke Tests Fail
 
@@ -170,7 +176,7 @@ pnpm bulk:download
 pnpm bulk:codegen
 
 # 4. Reset indices and re-create mappings from current schema
-pnpm es:setup reset
+pnpm es:reset
 
 # 5. Full re-ingest all subjects (API mode)
 pnpm es:ingest -- --api --all --verbose

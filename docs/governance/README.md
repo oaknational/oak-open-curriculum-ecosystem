@@ -3,12 +3,14 @@ boundary: B1-Governance
 doc_role: index
 authority: governance-navigation
 status: active
-last_reviewed: 2026-02-25
+last_reviewed: 2026-04-19
 ---
 
 # Governance Documentation
 
 This repository contains more governance documentation than a typical codebase. That is intentional: this project is built through agentic engineering, where AI agents are primary contributors alongside human engineers. The repository is not just code — it is the project context. Rules, quality gates, testing strategy, and architectural decisions are explicit because they must be discoverable by any contributor, human or AI, without external instruction.
+
+The wider system that governs how the documents below are authored, propagated, and reviewed is **the Practice** — see [Practice Core](../../.agent/practice-core/index.md) for the portable definition and [Practice Index](../../.agent/practice-index.md) for this repository's local bridge. The engineering-lens explanation lives in [How the Agentic Engineering System Works](../foundation/agentic-engineering-system.md).
 
 If this is your first time here, the 5-minute reading path is:
 

@@ -1,14 +1,18 @@
 ---
 title: How the Agentic Engineering System Works
 status: active
-last_reviewed: 2026-03-12
+last_reviewed: 2026-04-19
 ---
 
 # How the Agentic Engineering System Works
 
 **Audience**: Engineers interested in how the agentic engineering principles of [the Practice](../../.agent/practice-core/README.md) are applied, embodied, and codified in this repository. This is an engineering explanation, not a how-to guide.
 
-**What this document is**: This is the Practice — the same system documented in [`.agent/practice-core/practice.md`](../../.agent/practice-core/practice.md) — explained through an engineering lens for human readers. The agent-facing blueprint tells agents what to do; this document explains how and why the interacting pieces form a coherent system. [ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md) records the naming and framing decision. [ADR-131](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) documents the interaction map and self-referential property.
+**What this document is**: This document explains the Practice through an engineering lens for human readers. Canonical doctrine remains in the ADRs, Practice Core, and the permanent `/docs/**` surfaces they link together. The agent-facing blueprint tells agents what to do; this page explains how and why the interacting pieces form a coherent system. [ADR-119](../architecture/architectural-decisions/119-agentic-engineering-practice.md) records the naming and framing decision. [ADR-131](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md) documents the interaction map and self-referential property.
+
+For the wider source corpus — reference notes, concept deep dives, research
+lanes, evidence surfaces, and formal report lanes — use the
+[Agentic Engineering Hub](../../.agent/reference/agentic-engineering/README.md).
 
 ## What This System Does
 
@@ -75,14 +79,14 @@ The loop is **self-referential**: rules about rule creation, patterns about dist
 
 Different mechanisms serve different time horizons:
 
-| Mechanism                                           | Time horizon    | Purpose                                           |
-| --------------------------------------------------- | --------------- | ------------------------------------------------- |
-| [Napkin](../../.agent/memory/napkin.md)             | Current session | Raw capture of mistakes, discoveries, corrections |
-| [Distilled](../../.agent/memory/distilled.md)       | Cross-session   | Curated patterns, read at session start           |
-| [Session prompts](../../.agent/prompts/)            | Domain-scoped   | Reusable playbooks carrying operational context   |
-| [Execution plans](../../.agent/plans/)              | Weeks to months | Phased work with acceptance criteria and evidence |
-| [ADRs](../architecture/architectural-decisions/)    | Permanent       | Architectural decisions and their rationale       |
-| [Code patterns](../../.agent/memory/code-patterns/) | Permanent       | Proven abstractions for recurring situations      |
+| Mechanism                                          | Time horizon    | Purpose                                             |
+| -------------------------------------------------- | --------------- | --------------------------------------------------- |
+| [Napkin](../../.agent/memory/napkin.md)            | Current session | Raw capture of mistakes, discoveries, corrections   |
+| [Distilled](../../.agent/memory/distilled.md)      | Cross-session   | Curated patterns, read at session start             |
+| [Session prompts](../../.agent/prompts/)           | Domain-scoped   | Reusable playbooks carrying operational context     |
+| [Execution plans](../../.agent/plans/)             | Weeks to months | Phased work with acceptance criteria and evidence   |
+| [ADRs](../architecture/architectural-decisions/)   | Permanent       | Architectural decisions and their rationale         |
+| [Patterns](../../.agent/memory/patterns/README.md) | Permanent       | Reusable abstractions for recurring design problems |
 
 Plans follow a lifecycle (`future/` → `current/` → `active/` → `archive/completed/`) and carry value traceability: every non-trivial plan states the outcome sought, the impact it should create, and the mechanism by which that creates value. Plans with acceptance criteria and deterministic validation commands make completion objective rather than subjective.
 
@@ -112,6 +116,7 @@ The system degrades when:
 ## Further Reading
 
 - [The Practice — human-friendly introduction](../../.agent/practice-core/README.md)
+- [Agentic Engineering Hub — source lanes and deep dives](../../.agent/reference/agentic-engineering/README.md)
 - [ADR-119 — naming, boundary, and three-layer model](../architecture/architectural-decisions/119-agentic-engineering-practice.md)
 - [ADR-131 — the improvement loop and interaction map](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)
 - [ADR-124 — how the Practice travels between repos](../architecture/architectural-decisions/124-practice-propagation-model.md)

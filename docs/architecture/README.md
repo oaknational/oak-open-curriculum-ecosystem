@@ -3,12 +3,12 @@ boundary: B2-Architecture
 doc_role: index
 authority: architecture-navigation
 status: active
-last_reviewed: 2026-04-18
+last_reviewed: 2026-04-19
 ---
 
 # Architecture
 
-**Last Updated**: 2026-04-18
+**Last Updated**: 2026-04-19
 **Status**: Active architectural index
 
 ## Start Here
@@ -17,11 +17,14 @@ last_reviewed: 2026-04-18
 2. **→ Current Architecture Overview** (this page) — standard structure and boundaries.
 3. **→ [ADR index](./architectural-decisions/)** — the architectural source of truth; start from the ADRs listed below.
 
-The foundational ADRs that shape the entire codebase:
+The foundational ADRs that shape the entire codebase — the canonical
+[Start Here: 5 ADRs in 15 Minutes](./architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
+block in the ADR index:
 
 - [ADR-029](./architectural-decisions/029-no-manual-api-data.md) — No manual API data structures
 - [ADR-030](./architectural-decisions/030-sdk-single-source-truth.md) — SDK as single source of truth
 - [ADR-031](./architectural-decisions/031-generation-time-extraction.md) — Generation-time extraction
+- [ADR-048](./architectural-decisions/048-shared-parse-schema-helper.md) — Shared parsing helper pattern
 - [ADR-107](./architectural-decisions/107-deterministic-sdk-nl-in-mcp-boundary.md) — Deterministic SDK and NL boundary
 
 ## Reference Documentation
@@ -36,7 +39,7 @@ The foundational ADRs that shape the entire codebase:
 - Boundaries enforced by custom ESLint rules in `packages/core/oak-eslint`
 - Provider composition is app-local (logger/clock/storage/search retrieval), then injected into server/tool layers
 - Apps load runtime config at entry boundaries and inject dependencies (DI) into servers and tools
-- A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so every transport (`/mcp`, stdio) shares the same schema-derived contract
+- A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so the canonical Streamable HTTP transport (`/mcp`) — and any future stdio entry point generalised from it — share the same schema-derived contract
 - **Key implementation detail**: All MCP tools are generated at compile time from the OpenAPI schema - see [Programmatic Tool Generation](./programmatic-tool-generation.md) and [OpenAPI Pipeline](./openapi-pipeline.md)
 - Provider architecture: see [Provider System](./provider-system.md) and [Provider Contracts](./provider-contracts.md)
 - Getting started: see [Quick Start Guide](../foundation/quick-start.md)
@@ -65,6 +68,13 @@ The foundational ADRs that shape the entire codebase:
 - [All ADRs](./architectural-decisions/) - Complete decision record (historical ADRs preserved)
 
 ## Related Agent Guidance
+
+The wider system that governs how the architectural decisions and
+guidance below are authored, propagated, and reviewed is **the
+Practice** — see [Practice Core](../../.agent/practice-core/index.md)
+for the portable definition and
+[Practice Index](../../.agent/practice-index.md) for this
+repository's local bridge.
 
 - [Development Practice](../governance/development-practice.md)
 - [Testing Strategy](../../.agent/directives/testing-strategy.md)

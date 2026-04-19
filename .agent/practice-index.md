@@ -29,7 +29,7 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 
 The governance layer is larger than a single file:
 
-- **34 canonical rules** live in [`.agent/rules/`](rules/)
+- **25 canonical rules** live in [`.agent/rules/`](rules/)
 - Thin platform adapters live in [`.cursor/rules/`](../.cursor/rules/) and
   [`.claude/rules/`](../.claude/rules/)
 - The canonical hook policy lives in [`.agent/hooks/policy.json`](hooks/policy.json)
@@ -69,13 +69,21 @@ ADRs referenced by the Practice Core files. The full index is at `docs/architect
 | [ADR-150](../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md) | Continuity surfaces, session handoff, and surprise pipeline                |
 | [ADR-152](../docs/architecture/architectural-decisions/152-provenance-uuid-migration.md)                        | Provenance UUID migration — `index` → `id` in travelling provenance chains        |
 
+## Agentic Corpus Hub
+
+For concept-driven routing across canon, research, evidence, plans, reflective
+sources, and deep dives, use
+[`.agent/reference/agentic-engineering/README.md`](reference/agentic-engineering/README.md).
+This hub is index-only and routes back to the authoritative ADRs, Practice
+Core, `/docs/**` surfaces, and supporting source lanes.
+
 ## Commands, Skills, and Prompts
 
 The execution surface is intentionally split by role:
 
-- **10 stable canonical commands** in [`.agent/commands/`](commands/)
+- **12 stable canonical commands** in [`.agent/commands/`](commands/)
 - **3 experimental commands** in [`.agent/commands/experiments/`](commands/experiments/)
-- **27 canonical skills** in [`.agent/skills/`](skills/)
+- **23 canonical skills** in [`.agent/skills/`](skills/)
 - **Prompt library** in [`.agent/prompts/`](prompts/) with the active index at
   [`.agent/prompts/README.md`](prompts/README.md)
 
@@ -96,7 +104,7 @@ reusable knowledge:
 | Artefact | Location | Purpose |
 | --- | --- | --- |
 | Distilled learnings | [`memory/distilled.md`](memory/distilled.md) | Hard-won rules — read before every session |
-| Pattern library | [`memory/patterns/`](memory/patterns/README.md) | 56 abstract solutions to recurring design problems |
+| Pattern library | [`memory/patterns/`](memory/patterns/README.md) | 77 abstract solutions to recurring design problems |
 | Session napkin | [`memory/napkin.md`](memory/napkin.md) | Current session observations, written continuously |
 | Napkin archive | [`memory/archive/`](memory/archive/) | Rotated napkins (historical record) |
 
@@ -119,6 +127,8 @@ and `.agents/skills/patterns/`.
 | [`.agent/skills/`](skills/)                                                                   | Canonical skills (platform-agnostic)                                        |
 | [`.agent/commands/`](commands/)                                                               | Canonical commands (platform-agnostic)                                      |
 | [`.agent/research/`](research/)                                                               | Research documents and analysis                                             |
+| [`.agent/analysis/`](analysis/)                                                               | Investigations and evidence                                                 |
+| [`.agent/reports/`](reports/)                                                                 | Promoted formal audits and syntheses                                        |
 | [`.agent/reference/`](reference/)                                                             | Supporting reference material, including the cross-platform surface matrix  |
 | [`.cursor/`](../.cursor/)                                                                     | Cursor platform adapters (thin wrappers)                                    |
 | [`.claude/`](../.claude/)                                                                     | Claude Code platform adapters (thin wrappers)                               |
