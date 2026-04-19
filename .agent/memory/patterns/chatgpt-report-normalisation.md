@@ -35,9 +35,12 @@ as interchangeable with the skill’s normal workflow.
 In the common paired-export case, the strongest surviving layer is usually:
 
 - the existing markdown for structure and content
-- the DOCX (via `pandoc` conversion) for the real external links — the DOCX
-  rels file often contains very few URLs in ChatGPT deep-research exports;
-  the pandoc conversion is the primary citation recovery surface
+- the DOCX `_rels` file for the canonical citation **URL set** — empirically
+  this matches the PDF annotation set and the ChatGPT Sources panel for
+  ChatGPT deep-research exports
+- the DOCX body via `pandoc` conversion for the **positions** at which each
+  citation belongs in the prose (numbered `[[N]](URL)` links anchored to the
+  right text spans)
 
 ## Pattern
 
@@ -98,11 +101,51 @@ In the common paired-export case, the strongest surviving layer is usually:
    markers for inline linked citation numbers before escalating to heavier
    editorial structures.
 11. When recovered numeric citations come from DOCX or pandoc output, normalise
-   them to readable markdown such as `[[12]](https://example.com)` instead of
-   leaving heavily escaped link text in the final copy. If a DOCX or `pandoc`
-   conversion attaches a recovered URL to a visible entity name instead of the
-   citation-marker position, treat that inline link as suspect and keep the
-   entity text plain unless the source clearly supports it.
+   them to readable markdown. The default rendering convention is **inline
+   anchor links + a thematically grouped `## References` section at the end**
+   of the clean file:
+   - Build an ordered map of unique URLs (after `utm_*` stripping) in
+     first-occurrence order; assign sequential ref numbers.
+   - Inline form is `[[N]](#ref-N)` so the same URL at three positions reuses
+     one number — the reader can see reuse.
+   - Bibliography entries are `- <a id="ref-N"></a>**[N]** <https://url/>`
+     grouped under thematic subheadings driven by source family
+     (e.g. *Sentry product documentation*, *PostHog pricing*, *Third-party
+     reviews & community*). Order groups so the report's primary subject leads.
+   - Do not invent titles or dates that are not present in the inputs; URLs
+     alone are honest.
+   - If a DOCX or `pandoc` conversion attaches a recovered URL to a visible
+     entity name instead of the citation-marker position, treat that inline
+     link as suspect and keep the entity text plain unless the source clearly
+     supports it.
+
+11a. **Audit the citation set and record the diagnostic in the agent
+    napkin** (`.agent/memory/napkin.md`), not in the clean file. The clean
+    file stays a faithful copy of the report plus its references table;
+    the audit is agent-side meta-information that helps the next pass
+    detect anomalies quickly. Required counts: `turn…` refs in source
+    markdown (total + unique), citation blocks at distinct prose
+    positions, unique external URLs in the DOCX `_rels`, unique URI
+    annotations in the PDF if present (extract via `pypdf`, ignoring
+    obvious export-branding footer links), and numbered citations the
+    body emitted (total + unique). State in plain language whether the
+    DOCX `_rels`, PDF annotations, and Sources panel agree on the
+    citation set.
+
+11b. **The funnel is the source's editorial choice, not a rendering bug.**
+    Empirically across ChatGPT deep-research exports: the source-markdown
+    `turn…` set is the model's wide internal search funnel; the DOCX
+    `_rels` URL set, the PDF annotation URI set (minus the
+    `chatgpt.com/?utm_src=deep-research-pdf` branding link), and the
+    ChatGPT Sources panel for the conversation **all agree** on the
+    canonical cited URL set, which is much smaller. Verified on the
+    Sentry/PostHog research pair on 2026-04-19: 318 turn refs (115 unique)
+    in source markdown, 36 unique URLs in DOCX `_rels`, 36 unique
+    citation URIs in PDF annotations, 36 citations in the Sources panel
+    screenshot — three independent surfaces agreeing exactly. So do not
+    describe the funnel as loss; surface the diagnostic and treat any
+    **disagreement** between the three citation surfaces as the real
+    signal worth chasing.
 12. Do not let DOCX-first or pandoc-first conversions overrule a better
     markdown scaffold merely because they surface more URLs.
 13. After automated conversion, restore markdown block boundaries around
@@ -138,6 +181,22 @@ In the common paired-export case, the strongest surviving layer is usually:
   URL appendices in what is supposed to be the clean copy
 - Globally reassigning citations from heuristic matching and ending up with
   giant citation bundles or misattached links
+- Inferring that a low DOCX-URL count vs a high source `turn…` count means
+  citations were lost. The `turn…` set is the model's internal search
+  funnel; the DOCX `_rels`, PDF annotations, and Sources panel agree on the
+  canonical citation set, which is intentionally smaller. Frame the
+  diagnostic as an audit of those three agreeing surfaces, not as a
+  ceiling representing loss
+- Embedding the citation-set audit, diagnostic counts, or any
+  `### Recovery notes` block inside the clean file. The clean file is a
+  faithful copy of the report plus its references table; the audit lives
+  in the agent napkin only
+- Sprinkling full external URLs inline in the prose when the references-table
+  convention applies — long URLs in markdown table cells are the worst spot
+  for them; use `[[N]](#ref-N)` inline and keep full URLs in `## References`
+- Inventing source titles, authors, or dates for the references section that
+  are not present in the inputs; bare URLs are honest, fabricated metadata is
+  not
 - Building a citeturn-marker-to-URL lookup table — the same marker string
   maps to different citations at different positions; use positional matching
 - Matching line-by-line against pandoc output when pandoc wraps long lines;
