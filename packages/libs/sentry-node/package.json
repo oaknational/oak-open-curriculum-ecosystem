@@ -33,7 +33,6 @@
     "@oaknational/logger": "workspace:*",
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
-    "@oaknational/telemetry-redaction-core": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
     "@sentry/node": "^10.48.0"
   },

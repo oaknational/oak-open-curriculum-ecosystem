@@ -69,8 +69,8 @@ between misconceptions and curriculum content that the bulk data does not.
 This plan exposes the **bulk-data-derived** misconception graph (12,858
 items extracted from the Oak API bulk download). It is independently
 valuable and does not depend on the ontology. However, as KG integration
-matures (see `.agent/plans/kgs-and-pedagogy/` and
-`.agent/plans/semantic-search/current/kg-alignment-audit.execution.plan.md`),
+matures (see `.agent/plans/knowledge-graph-integration/` and
+`.agent/plans/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md`),
 this MCP surface may eventually source from the ontology instead of bulk
 data, gaining richer relational context. That is a future consideration,
 not a current dependency.

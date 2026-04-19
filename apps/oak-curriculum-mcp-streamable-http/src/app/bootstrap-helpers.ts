@@ -5,11 +5,11 @@ import {
   logLevelToSeverityNumber,
   createPhasedTimer,
   normalizeError,
-  sanitiseForJson,
   type Logger,
   type LogContextInput,
   type PhasedTimer,
 } from '@oaknational/logger';
+import { sanitiseForJson } from '@oaknational/observability';
 
 import { createCorrelationMiddleware } from '../correlation/middleware.js';
 import { redactHeaders } from '../logging/header-redaction.js';

@@ -2,9 +2,14 @@
  * Shared field extraction helpers for logger error normalisation.
  */
 
+import {
+  sanitiseForJson,
+  sanitiseObject,
+  type JsonObject,
+  type JsonValue,
+} from '@oaknational/observability';
 import { typeSafeEntries, typeSafeFromEntries, typeSafeKeys } from '@oaknational/type-helpers';
-import { sanitiseForJson, sanitiseObject } from './json-sanitisation.js';
-import type { JsonObject, JsonValue, LogContext } from './types.js';
+import type { LogContext } from './types.js';
 
 const RESERVED_ERROR_KEYS = new Set([
   '__oakNormalizedError',

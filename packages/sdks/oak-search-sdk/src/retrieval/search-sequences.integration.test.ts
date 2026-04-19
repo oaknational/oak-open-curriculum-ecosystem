@@ -5,7 +5,8 @@
  * without network calls.
  */
 
-import type { JsonObject, Logger } from '@oaknational/logger';
+import type { Logger } from '@oaknational/logger';
+import type { JsonObject } from '@oaknational/observability';
 import { describe, it, expect, vi } from 'vitest';
 import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
 import type { EsSearchRequest, EsSearchResponse } from '../internal/types.js';

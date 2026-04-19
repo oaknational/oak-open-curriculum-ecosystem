@@ -1,8 +1,12 @@
-# Knowledge Graphs and Pedagogy
+# Knowledge Graph Integration
 
-Evidence-grounded curriculum discovery: integrating Oak's curriculum
-infrastructure with pedagogical evidence from the EEF Teaching and
-Learning Toolkit, bridged by the Oak Curriculum Ontology.
+Ontology and knowledge-graph hub for Oak's formal curriculum model,
+direct ontology-backed surfaces, search projections, QA/governance
+work, downstream graph-serving evaluation, and adjacent evidence or
+pedagogy integrations.
+
+The EEF and pedagogy work is an important sibling lane here, but it is
+not the identity of the collection.
 
 **Later Plans**: [future/](future/)
 
@@ -15,24 +19,34 @@ Learning Toolkit, bridged by the Oak Curriculum Ontology.
 | [future/eef-toolkit.json](future/eef-toolkit.json) | Data reference | Full EEF Toolkit dataset (30 strands, v0.2.0, April 2026) |
 | [future/ontology-integration-strategy.md](future/ontology-integration-strategy.md) | Strategic brief | Moving from static ontology copies to dynamic integration (published package or workspace) |
 | [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md) | Short future plan | Re-read the official ontology repo from an upstream-first starting point and write up what that fresh pass changes |
+| [future/direct-ontology-use-and-graph-serving-prototypes.plan.md](future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Strategic future plan | Start with direct ontology use as the control case, then compare bounded Neo4j and Stardog serving prototypes against the same Oak use cases |
 | [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis tying the official ontology to MCP orientation, direct ontology resources, search projections, and governance/update needs |
+| [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md) | Research note | Direct-use baseline plus Neo4j/Stardog serving-platform comparison for external user-facing graph features |
 
 ## Read Order
 
-1. **Strategy first**: [future/evidence-integration-strategy.md](future/evidence-integration-strategy.md)
-2. **Ontology integration**: [future/ontology-integration-strategy.md](future/ontology-integration-strategy.md)
-3. **Current formal synthesis**:
+1. **Current formal synthesis**:
    [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+2. **Direct-use versus platform comparison**:
+   [future/direct-ontology-use-and-graph-serving-prototypes.plan.md](future/direct-ontology-use-and-graph-serving-prototypes.plan.md)
+3. **Ontology source strategy**:
+   [future/ontology-integration-strategy.md](future/ontology-integration-strategy.md)
 4. **Fresh-perspective follow-on**:
    [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md)
-5. **Technical detail**: [future/oak-eef-technical-comparison.md](future/oak-eef-technical-comparison.md)
-6. **Data reference**: [future/eef-toolkit.json](future/eef-toolkit.json) (when needed)
+5. **Search-adjacent graph strategy**:
+   [oak-ontology-graph-opportunities.strategy.md](oak-ontology-graph-opportunities.strategy.md)
+6. **Platform research note**:
+   [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
+7. **Evidence integration strategy**:
+   [future/evidence-integration-strategy.md](future/evidence-integration-strategy.md)
+8. **Technical detail**: [future/oak-eef-technical-comparison.md](future/oak-eef-technical-comparison.md)
+9. **Data reference**: [future/eef-toolkit.json](future/eef-toolkit.json) (when needed)
 
 ## Document Roles (DRY)
 
-- **Strategy**: intent, impact requirements, integration levels, goals
-  comparison, strategic questions. The authoritative document for *why*
-  and *what*.
+- **Ontology and platform strategy**: intent, impact requirements,
+  integration levels, platform-decision framing, and strategic
+  questions. The authoritative document for *why* and *what*.
 - **Technical comparison**: implementation detail, scoring algorithm,
   data model, evidence map. The authoritative document for *how* the
   prototype works.
@@ -41,28 +55,40 @@ Learning Toolkit, bridged by the Oak Curriculum Ontology.
 - **Formal report**: promoted synthesis tying the official ontology to
   current MCP orientation, direct ontology surfaces, search projections,
   QA, and governance/update implications.
+- **Research note**: evidence-backed platform comparison and workload framing
+  for direct ontology use versus Neo4j and Stardog downstream serving.
+- **Prototype comparison plan**: strategic brief for testing the same use
+  cases through direct use, Neo4j, and Stardog before any platform
+  commitment is promoted into executable work.
 - **Fresh-perspective review plan**: short follow-on plan for re-reading
   the official ontology repo upstream-first so local assumptions can be
   tested rather than inherited.
 
-## The Core Thesis
+## The Core Threads
 
-Oak answers "what curriculum content exists?" EEF answers "what does
-evidence say about effective teaching?" Neither alone delivers what
-teachers need. The composition — evidence-grounded curriculum
-discovery — enables a new class of AI-assisted teaching support:
+This collection now carries two connected but distinct threads:
 
-1. **What** content exists for this topic/phase
-2. **How** it should be taught, based on evidence
-3. **Why** those approaches (transparent scoring, evidence strength)
-4. **What caveats** apply (honest confidence calibration)
-5. **Where** teacher professional judgement must override the model
+1. **Ontology and knowledge-graph work**: treat the official Oak
+   ontology as a first-class structural asset for MCP orientation,
+   standalone `oak-kg-*` surfaces, search projections, QA, and later
+   serving-platform evaluation.
+2. **Evidence and pedagogy integration**: compose EEF and related
+   pedagogical sources with Oak's curriculum surfaces once the
+   structural ontology boundary is clear.
 
-The Oak Curriculum Ontology provides the structural bridge: formal
-vocabulary (Discipline → Strand → SubStrand → ContentDescriptor) for
-mapping evidence to curriculum content.
+The governing baseline is:
+
+1. use pinned ontology artefacts directly where they already create value
+2. evaluate `neither`, `Neo4j`, `Stardog`, or `both` only after the direct-use
+   baseline is explicit
+3. let EEF and pedagogy work enrich the lane without redefining it as an
+   EEF-only programme
 
 ## Promotion Triggers
+
+**Direct ontology work** (report follow-on, audit, direct-use baseline,
+platform comparison): can promote independently whenever ontology-serving,
+QA, or search-projection questions need execution.
 
 **Levels 1-3** (EEF resources, recommendation tool, prompts): ready
 to promote to `current/` now. These use EEF JSON data directly and
@@ -95,9 +121,9 @@ add JR and/or MH to the authors list.
 
 | System | Status | Role |
 |---|---|---|
-| Oak MCP ecosystem (Layer 1) | Production | Tool surface and deployment |
-| Oak Curriculum Ontology (Layer 2) | v0.1.0, stable | Structural bridge vocabulary |
-| EEF Toolkit data (Layer 3) | v0.2.0, 30 strands | Evidence source |
+| Oak MCP ecosystem | Production | Tool surface, deployment, and discovery surfaces |
+| Oak Curriculum Ontology | v0.1.0, stable | Structural source for direct ontology use and later serving evaluation |
+| EEF Toolkit data | v0.2.0, 30 strands | Evidence source for the sibling pedagogy lane |
 
 ## Foundation Documents (Mandatory Re-read)
 

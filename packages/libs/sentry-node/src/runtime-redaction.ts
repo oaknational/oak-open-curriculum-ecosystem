@@ -4,7 +4,7 @@ import {
   redactStringRecord,
   redactText,
   redactUnknownValue,
-} from '@oaknational/telemetry-redaction-core';
+} from '@oaknational/observability';
 import { typeSafeEntries } from '@oaknational/type-helpers';
 
 type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];

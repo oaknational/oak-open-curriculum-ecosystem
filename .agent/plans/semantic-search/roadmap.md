@@ -104,8 +104,8 @@ Cross-boundary strategic plans:
 Cross-stream queued references:
 
 - [current/bulk-metadata-quick-wins.execution.plan.md](current/bulk-metadata-quick-wins.execution.plan.md)
-- [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md)
-- [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
+- [../knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md](../knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
+- [../knowledge-graph-integration/current/kg-integration-quick-wins.plan.md](../knowledge-graph-integration/current/kg-integration-quick-wins.plan.md)
 - [current/sequence-retrieval-architecture-followup.plan.md](current/sequence-retrieval-architecture-followup.plan.md)
 
 ---

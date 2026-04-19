@@ -19,7 +19,6 @@ import type { LogEvent, LogSink } from './types.js';
 
 export { mergeLogContext } from './context-merging.js';
 export { buildNormalizedError, isNormalizedError, normalizeError } from './error-normalisation.js';
-export { sanitiseForJson, isJsonValue, sanitiseObject } from './json-sanitisation.js';
 export {
   createRequestLogger,
   createErrorLogger,
@@ -135,8 +134,6 @@ export type {
   RequestLoggerOptions,
 } from './express-middleware.js';
 export type {
-  JsonObject,
-  JsonValue,
   LogContext,
   LogContextInput,
   LogContextInputValue,

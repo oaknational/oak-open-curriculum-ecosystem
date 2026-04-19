@@ -27,8 +27,9 @@
  * @see ADR-133 CLI Resource Lifecycle Management
  */
 
-import { normalizeError, sanitiseForJson, type Logger } from '@oaknational/logger/node';
+import { normalizeError, type Logger } from '@oaknational/logger/node';
 import type { LogContextInput } from '@oaknational/logger';
+import { sanitiseForJson } from '@oaknational/observability';
 
 /** Minimal contract for an ES client that can be closed. */
 interface CloseableEsClient {

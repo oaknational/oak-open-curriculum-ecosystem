@@ -1,7 +1,8 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import type { Logger, JsonObject } from '@oaknational/logger';
+import type { Logger } from '@oaknational/logger';
+import type { JsonObject } from '@oaknational/observability';
 
 import type { JsonRpcEnvelope } from './common.js';
 import type { SmokeContext } from './types.js';

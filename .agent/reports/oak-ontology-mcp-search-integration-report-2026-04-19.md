@@ -52,7 +52,7 @@ search-only concern.
   orientation structure in
   [ontology-data.ts](../../packages/sdks/oak-curriculum-sdk/src/mcp/ontology-data.ts).
 - `WS-4` refers to the fourth workstream in
-  [open-education-knowledge-surfaces.plan.md](../plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md),
+   [open-education-knowledge-surfaces.plan.md](../plans/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md),
   currently scoped around an initial ontology-backed taxonomy surface.
 - `OWA` refers to the Oak web application and nearby Oak API-aligned curriculum
   surfaces already discussed in this repo's existing research and search docs.
@@ -359,12 +359,12 @@ simple authority matrix that answers:
 | --- | --- | --- |
 | [curriculum-ontology.md](../research/curriculum-ontology.md) | Historical repo-local ontology framing and sequence/programme distinction | Should now be read as local/P0 context, not as the official ontology |
 | [official-api-ontology-comparison.md](../research/official-api-ontology-comparison.md) | API versus ontology framing | Still useful; now needs the newer subject-coverage and join-key caveats from this report |
-| [open-education-knowledge-surfaces.plan.md](../plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md) | MCP umbrella for multi-source surfaces | WS-4 should widen from one taxonomy slice to a small official ontology surface family |
-| [nc-knowledge-taxonomy-surface.plan.md](../plans/sdk-and-mcp-enhancements/active/nc-knowledge-taxonomy-surface.plan.md) | First safe MCP ontology slice | Still valid, but too narrow to stand alone as "the ontology integration plan" |
-| [ontology-integration-strategy.md](../plans/kgs-and-pedagogy/future/ontology-integration-strategy.md) | Source-management strategy | Should be revisited explicitly to compare the current submodule-first interim path with subtree-style vendoring arguments elsewhere in the repo, rather than letting this report silently decide the source-management direction |
-| [kg-alignment-audit.execution.plan.md](../plans/semantic-search/current/kg-alignment-audit.execution.plan.md) | Join-key and mismatch evidence plan | Should explicitly classify thread joins as strongest first candidate and unit/lesson/programme joins as blocked pending evidence |
-| [kg-integration-quick-wins.plan.md](../plans/semantic-search/current/kg-integration-quick-wins.plan.md) | Search/graph quick-win parent plan | Quick wins should narrow around projection-safe slices before live traversal ambitions |
-| [oak-ontology-graph-opportunities.strategy.md](../plans/semantic-search/oak-ontology-graph-opportunities.strategy.md) | Strategic search/graph stance | Good strategy, but this report adds stronger evidence on coverage limits and non-search consumers |
+| [open-education-knowledge-surfaces.plan.md](../plans/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) | MCP umbrella for multi-source surfaces | WS-4 should widen from one taxonomy slice to a small official ontology surface family |
+| [nc-knowledge-taxonomy-surface.plan.md](../plans/knowledge-graph-integration/active/nc-knowledge-taxonomy-surface.plan.md) | First safe MCP ontology slice | Still valid, but too narrow to stand alone as "the ontology integration plan" |
+| [ontology-integration-strategy.md](../plans/knowledge-graph-integration/future/ontology-integration-strategy.md) | Source-management strategy | Should be revisited explicitly to compare the current submodule-first interim path with subtree-style vendoring arguments elsewhere in the repo, rather than letting this report silently decide the source-management direction |
+| [kg-alignment-audit.execution.plan.md](../plans/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md) | Join-key and mismatch evidence plan | Should explicitly classify thread joins as strongest first candidate and unit/lesson/programme joins as blocked pending evidence |
+| [kg-integration-quick-wins.plan.md](../plans/knowledge-graph-integration/current/kg-integration-quick-wins.plan.md) | Search/graph quick-win parent plan | Quick wins should narrow around projection-safe slices before live traversal ambitions |
+| [oak-ontology-graph-opportunities.strategy.md](../plans/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md) | Strategic search/graph stance | Good strategy, but this report adds stronger evidence on coverage limits, non-search consumers, and the direct-use baseline |
 | [apps/oak-search-cli/docs/SYNONYMS.md](../../apps/oak-search-cli/docs/SYNONYMS.md) | Existing service documentation | Needs wording updates once vocabulary ownership is formally split |
 
 ## What Not To Do
@@ -389,7 +389,7 @@ documentation: README, standards-compliance, Neo4j export architecture,
 and CONTRIBUTING guide.
 
 The original plan is at
-[ontology-repo-fresh-perspective-review.plan.md](../plans/kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md).
+[ontology-repo-fresh-perspective-review.plan.md](../plans/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md).
 
 ### Upstream Use-Case Coverage Gap
 
@@ -526,10 +526,10 @@ report gave them:
 
 | Plan | Recommendation |
 | --- | --- |
-| [open-education-knowledge-surfaces.plan.md](../plans/sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md) | **Leave alone.** WS-4 scope is appropriate for a first integration. The wider `oak-kg-*` family recommended in this report naturally follows as WS-4 proves the pattern. |
-| [ontology-integration-strategy.md](../plans/kgs-and-pedagogy/future/ontology-integration-strategy.md) | **Widen.** Add JSON-LD GitHub Release consumption as a candidate alongside npm package and git submodule. Add a watchlist note for the SPARQL endpoint roadmap item. |
-| [kg-alignment-audit.execution.plan.md](../plans/semantic-search/current/kg-alignment-audit.execution.plan.md) | **Leave alone.** The audit's Phase 0 scope lock will independently re-read the ontology from first principles. This addendum's findings should be available as context but should not pre-empt the audit's own methodology. |
-| [oak-ontology-graph-opportunities.strategy.md](../plans/semantic-search/oak-ontology-graph-opportunities.strategy.md) | **Narrow framing caveat.** Add one sentence acknowledging that "search-first, graph-augmented" is a scoping decision for this repo, not a statement about the ontology's own priorities. |
+| [open-education-knowledge-surfaces.plan.md](../plans/knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) | **Leave alone.** WS-4 scope is appropriate for a first integration. The wider `oak-kg-*` family recommended in this report naturally follows as WS-4 proves the pattern. |
+| [ontology-integration-strategy.md](../plans/knowledge-graph-integration/future/ontology-integration-strategy.md) | **Widen.** Add JSON-LD GitHub Release consumption as a candidate alongside npm package and git submodule. Add a watchlist note for the SPARQL endpoint roadmap item. |
+| [kg-alignment-audit.execution.plan.md](../plans/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md) | **Leave alone.** The audit's Phase 0 scope lock will independently re-read the ontology from first principles. This addendum's findings should be available as context but should not pre-empt the audit's own methodology. |
+| [oak-ontology-graph-opportunities.strategy.md](../plans/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md) | **Narrow framing caveat.** Keep the search-first framing as a repo-local optimisation only, with direct ontology use as the baseline and platform choice still open. |
 
 ## Closing Position
 

@@ -5,15 +5,24 @@
 ## Start Here
 
 - Session entry: [semantic-search.prompt.md](../../prompts/semantic-search/archive/semantic-search.prompt.md)
+- Knowledge-graph hub: [../knowledge-graph-integration/README.md](../knowledge-graph-integration/README.md)
 - Strategic sequence: [roadmap.md](roadmap.md)
 - Research index: [research-index.md](research-index.md)
 - Cross-boundary ontology report:
   [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
   (important because the ontology is not a search-only asset)
+- Graph-serving architecture research note:
+  [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
+  (use this when deciding whether a live graph platform is needed at all,
+  or whether search should consume ontology projections directly)
 - Fresh-perspective follow-on:
-  [../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md](../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md)
+  [../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md)
   (use this when you need to re-open the ontology repo without letting
   semantic search become the default frame)
+- Direct-use and serving-platform comparison plan:
+  [../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md)
+  (use this when the question is `neither`, `Neo4j`, `Stardog`, or `both`,
+  rather than just "how should search consume graph context?")
 
 ## Active
 
@@ -30,14 +39,14 @@ Recently archived:
 - [current/search-contract-followup.plan.md](current/search-contract-followup.plan.md) (S4/S5 source; executing via remediation plan)
 - [current/semantic-search-scheduled-refresh.operations.plan.md](current/semantic-search-scheduled-refresh.operations.plan.md) (deferred; out of migration-complete scope)
 - [current/bulk-metadata-quick-wins.execution.plan.md](current/bulk-metadata-quick-wins.execution.plan.md)
-- [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md)
+- [../knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md](../knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
 - [current/search-sdk-args-extraction.plan.md](current/search-sdk-args-extraction.plan.md)
 - [current/category-integration-remediation.md](current/category-integration-remediation.md) (superseded by the F2 fix; retained for traceability)
 - [current/bulk_data_for_semantic_search.feature_request.md](current/bulk_data_for_semantic_search.feature_request.md)
 - [current/m2-public-alpha-auth-rate-limits.execution.plan.md](current/m2-public-alpha-auth-rate-limits.execution.plan.md)
 - [current/keyword-definition-assets.execution.plan.md](current/keyword-definition-assets.execution.plan.md)
 - [current/thread-sequence-semantic-surfaces.execution.plan.md](current/thread-sequence-semantic-surfaces.execution.plan.md)
-- [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md)
+- [../knowledge-graph-integration/current/kg-integration-quick-wins.plan.md](../knowledge-graph-integration/current/kg-integration-quick-wins.plan.md)
 
 ## Future (Strategic)
 

@@ -9,7 +9,6 @@ import {
   DEFAULT_SENTRY_FLUSH_TIMEOUT_MS,
   DEFAULT_TRACE_PROPAGATION_TARGETS,
 } from './runtime-sdk.js';
-import { describeUnknownError } from '@oaknational/telemetry-redaction-core';
 import { redactLogContext, redactNormalizedError, toNativeError } from './runtime-error.js';
 import type {
   FixtureSentryStore,
@@ -101,7 +100,10 @@ async function flushSdk(
     const flushed = await sdk.flush(timeoutMs);
     return flushed ? ok(undefined) : err({ kind: 'sentry_flush_timeout', timeoutMs });
   } catch (error) {
-    return err({ kind: 'sentry_flush_failed', message: describeUnknownError(error) });
+    return err({
+      kind: 'sentry_flush_failed',
+      message: error instanceof Error ? error.message : String(error),
+    });
   }
 }
 
@@ -113,7 +115,10 @@ async function closeSdk(
     const closed = await sdk.close(timeoutMs);
     return closed ? ok(undefined) : err({ kind: 'sentry_close_timeout', timeoutMs });
   } catch (error) {
-    return err({ kind: 'sentry_close_failed', message: describeUnknownError(error) });
+    return err({
+      kind: 'sentry_close_failed',
+      message: error instanceof Error ? error.message : String(error),
+    });
   }
 }
 
@@ -186,7 +191,7 @@ export function initialiseSentry(
   } catch (error) {
     return err({
       kind: 'sentry_sdk_init_failed',
-      message: describeUnknownError(error),
+      message: error instanceof Error ? error.message : String(error),
     });
   }
 }

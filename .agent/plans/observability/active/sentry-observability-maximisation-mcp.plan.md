@@ -58,8 +58,8 @@ todos:
     content: "L-11 (Phase 5, MVP-deferred): expose instrumentOpenAiClient / instrumentAnthropicAiClient / vercelAIIntegration wrappers via adapter so future LLM tool calls are one import away"
     status: pending
   - id: l12-prereq-browser-safe-redactor-core
-    content: "L-12-prereq (Phase 1): BLOCKED 2026-04-19 by architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md. Scaffolded extraction surfaced core→lib boundary violation + over-decomposition signal; architecture review (fred + barney) resolved toward folding primitives into @oaknational/observability rather than a new core workspace. Reopens as a trivial confirmation step once consolidation closes. Still blocks L-12."
-    status: blocked
+    content: "L-12-prereq (Phase 1): CLOSED 2026-04-19 by the observability-primitives-consolidation lane. The originally planned browser-safe redactor core extraction was resolved by folding the primitives into @oaknational/observability rather than standing up a new core workspace — architecture review (fred + barney) surfaced the core→lib boundary violation the original plan would have required plus a third duplicate of the recursive JSON-safe type. Post-consolidation state satisfies L-12-prereq's substantive goal: @oaknational/observability owns the redaction primitives + sanitisation + unified JsonValue/JsonObject type; @oaknational/sentry-node composes directly from observability (no intermediate workspace hop); zero @sentry/* and zero node:* imports in observability runtime src (structurally enforced by no-node-only-imports.unit.test.ts). Wave 4 L-12 (widget Sentry) can now compose @oaknational/observability directly without a prerequisite extraction."
+    status: completed
   - id: l12-widget-sentry
     content: "L-12 (Phase 4): @sentry/browser (or @sentry/react after bundle-size review) in the MCP App widget with shared redaction via @oaknational/telemetry-redaction-core and linked traces"
     status: pending

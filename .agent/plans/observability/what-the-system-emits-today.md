@@ -160,6 +160,42 @@ Planned (not yet landed):
   named as deferred to exploration 10. Reflects the three-sink
   collapse owner-confirmed 2026-04-19 and recorded at ADR-162
   History.
+- **2026-04-19** — Observability-primitives-consolidation lane
+  landed (closes the Wave 1 L-12-prereq blocker). 0 matrix cells
+  moved (no new code emissions), but the substrate for Wave 4 L-12
+  (widget Sentry) is now correct: `@oaknational/observability` owns
+  the JSON sanitisation primitives, the value-level redaction
+  primitives (`redactText`, `redactUnknownValue`, `redactJsonObject`,
+  `redactStringRecord`), and the canonical recursive JSON-safe type
+  (`JsonValue`/`JsonObject`) — folded from `@oaknational/logger` and
+  the short-lived `packages/core/telemetry-redaction-core/` scaffold.
+  The Sentry-Node adapter composes primitives directly from
+  observability (no intermediate workspace hop).
+  - **Attempt**: primitives folded into observability; redaction-core
+    workspace deleted; canonical type unified; ADR-160 §Closed
+    Questions amended + History entry dated.
+  - **Observed**: `pnpm check` exit 0; observability 58/58 tests
+    green (including new `no-node-only-imports` structural guard);
+    sentry-node 61/61 tests green (behavioural safety net preserved);
+    logger 140/140 tests green; oak-search-sdk 262/262 tests green;
+    oak-curriculum-mcp-streamable-http 615/615 tests green; search-cli
+    1006/1006 tests green; E2E 161/161 in isolation (first aggregate
+    run hit the known flaky-under-parallel-load E2E; passed on
+    re-run, matching session-continuation's watchlist signal).
+  - **Proven**: `packages/core/**/src/**/*.ts` contains no import of
+    `@oaknational/logger` (core→lib direction restored); recursive
+    JSON-safe shape has exactly one definition in the repo;
+    `@oaknational/observability` is the single workspace owning both
+    the redaction policy and the primitives that compose it; browser-
+    safety invariant (`zero @sentry/*`, `zero node:*` in runtime src)
+    structurally enforced. Reverting would re-introduce all four.
+  - **Reviewer matrix**: `architecture-reviewer-barney` confirmed
+    simplification realised (P2: README clarification applied; P3:
+    two pre-existing-shape observations deferred). `type-reviewer`
+    confirmed type unification structurally equivalent + requireJsonObject
+    elimination type-safe (P3: `isTelemetryObject` renamed to
+    `isJsonObject`; redundant post-redaction guard in express-middleware
+    removed; third pre-existing-shape observation deferred).
 
 Each future update appends here: date + lane + cells populated +
 gates added.

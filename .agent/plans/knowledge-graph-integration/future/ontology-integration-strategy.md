@@ -3,8 +3,8 @@ name: "Ontology Integration Strategy"
 overview: "Strategy for moving from static ontology data copies to dynamic integration — either via a published package or by incorporating the ontology repo as a workspace."
 status: future
 related_plans:
-  - "../../../sdk-and-mcp-enhancements/active/nc-knowledge-taxonomy-surface.plan.md"
-  - "../../../sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md"
+  - "../active/nc-knowledge-taxonomy-surface.plan.md"
+  - "../active/open-education-knowledge-surfaces.plan.md"
   - "../../current/kg-alignment-audit.execution.plan.md"
 specialist_reviewer: "architecture-reviewer-betty, architecture-reviewer-barney, mcp-reviewer"
 ---

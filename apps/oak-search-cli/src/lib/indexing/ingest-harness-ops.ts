@@ -1,4 +1,5 @@
-import { sanitiseForJson, type Logger } from '@oaknational/logger';
+import { type Logger } from '@oaknational/logger';
+import { sanitiseForJson } from '@oaknational/observability';
 import type { SearchIndexKind, SearchIndexTarget, IndexResolverFn } from '../search-index-target';
 import { ingestLogger } from '../logger';
 import {

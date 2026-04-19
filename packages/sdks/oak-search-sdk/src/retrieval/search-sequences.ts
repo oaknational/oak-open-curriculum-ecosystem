@@ -8,7 +8,8 @@
  * the max-lines limit. Follows the same pattern as `search-threads.ts`.
  */
 
-import type { JsonObject, Logger } from '@oaknational/logger';
+import type { Logger } from '@oaknational/logger';
+import type { JsonObject } from '@oaknational/observability';
 import { ok, err, type Result } from '@oaknational/result';
 import type { SearchSequenceIndexDoc } from '@oaknational/sdk-codegen/search';
 import { typeSafeEntries, typeSafeFromEntries } from '@oaknational/type-helpers';

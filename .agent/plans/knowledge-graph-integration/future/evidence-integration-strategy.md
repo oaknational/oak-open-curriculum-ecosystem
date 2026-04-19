@@ -260,7 +260,7 @@ phase/subject matching. They do **not** depend on the KG alignment
 audit or the formal ontology and can proceed independently.
 
 Levels 4/4b require the formal ontology and depend on the KG
-alignment audit (`semantic-search/current/kg-alignment-audit.execution.plan.md`)
+alignment audit (`knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md`)
 to establish join keys and overlap measurement.
 
 | Level | What | Data Source | Depends On | Effort | Value |

@@ -6,13 +6,14 @@
  * types directly through the HttpObservability interface.
  */
 
-import { normalizeError, sanitiseObject, type LogContextInput } from '@oaknational/logger';
+import { normalizeError, type LogContextInput } from '@oaknational/logger';
 import { err, type Result } from '@oaknational/result';
-import type {
-  ObservabilityCloseError,
-  ObservabilityContextPayload,
-  ObservabilityFlushError,
-  ObservabilityUser,
+import {
+  sanitiseObject,
+  type ObservabilityCloseError,
+  type ObservabilityContextPayload,
+  type ObservabilityFlushError,
+  type ObservabilityUser,
 } from '@oaknational/observability';
 import { mapCloseError, mapFlushError, type SentryNodeRuntime } from '@oaknational/sentry-node';
 

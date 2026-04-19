@@ -50,7 +50,7 @@ todos:
 **Status**: PENDING — all 12 findings resolved, ready for implementation (WS-3)
 **Last Updated**: 2026-04-11
 **Branch**: `planning/kg_eef_integration`
-**Strategic context**: `.agent/plans/kgs-and-pedagogy/future/evidence-integration-strategy.md`
+**Strategic context**: `.agent/plans/knowledge-graph-integration/future/evidence-integration-strategy.md`
 (this plan implements Levels 2-3 of the evidence integration strategy)
 
 ## Pre-Implementation Review Findings — RESOLVED
@@ -95,7 +95,7 @@ Oak's established patterns — following the same approach as the
 misconception graph and prior knowledge graph surfaces.
 
 The EEF data file (`eef-toolkit.json`, v0.2.0) is already in the repo
-at `.agent/plans/kgs-and-pedagogy/future/eef-toolkit.json`. This plan
+at `.agent/plans/knowledge-graph-integration/future/eef-toolkit.json`. This plan
 copies it into the SDK as a static data asset.
 
 ## Impact-Preserving Requirements

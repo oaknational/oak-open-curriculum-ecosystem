@@ -1,10 +1,11 @@
 ---
 name: "KG Alignment Audit (Execution)"
-overview: "Measure and document the real overlap between the Oak curriculum ontology graph and this repo's search-facing entities before broader Neo4j or Elasticsearch graph integration work proceeds."
+overview: "Measure and document the real overlap between the Oak curriculum ontology graph and this repo's search-facing entities before broader ontology-serving, search-projection, or downstream graph-platform work proceeds."
 source_research:
-  - "../elasticsearch-neo4j-oak-ontology-synthesis.research.md"
+  - "../research/elasticsearch-neo4j-oak-ontology-synthesis.research.md"
   - "../oak-ontology-graph-opportunities.strategy.md"
   - "../current/kg-integration-quick-wins.plan.md"
+  - "../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md"
 todos:
   - id: phase-0-scope-lock
     content: "Phase 0: Lock the audited entity slices, source versions, operational representation, and exact report template before writing code or analysis scripts."
@@ -44,8 +45,8 @@ as the safest first graph-enablement slice.
 
 Reason for promotion:
 
-- later Neo4j and Elasticsearch integration work is high risk if it assumes
-  overlap that has not been measured
+- later direct ontology, search-projection, Neo4j, or Stardog work is high
+  risk if it assumes overlap that has not been measured
 - the ontology and this repo were built from similar but non-identical views of
   the curriculum domain
 - the ontology source RDF model and the exported Neo4j operational graph are
@@ -68,12 +69,13 @@ Read:
 2. `.agent/directives/principles.md`
 3. `.agent/directives/testing-strategy.md`
 4. `.agent/plans/semantic-search/research-index.md`
-5. `.agent/plans/semantic-search/elasticsearch-neo4j-oak-ontology-synthesis.research.md`
-6. `.agent/plans/semantic-search/oak-ontology-graph-opportunities.strategy.md`
-7. `.agent/plans/semantic-search/current/kg-integration-quick-wins.plan.md`
+5. `.agent/plans/knowledge-graph-integration/research/elasticsearch-neo4j-oak-ontology-synthesis.research.md`
+6. `.agent/plans/knowledge-graph-integration/oak-ontology-graph-opportunities.strategy.md`
+7. `.agent/plans/knowledge-graph-integration/current/kg-integration-quick-wins.plan.md`
 8. [oak-curriculum-ontology `README.md`](https://github.com/oaknational/oak-curriculum-ontology/blob/main/README.md)
 9. [oak-curriculum-ontology `scripts/export_to_neo4j.py`](https://github.com/oaknational/oak-curriculum-ontology/blob/main/scripts/export_to_neo4j.py)
 10. [oak-curriculum-ontology `scripts/export_to_neo4j_config.json`](https://github.com/oaknational/oak-curriculum-ontology/blob/main/scripts/export_to_neo4j_config.json)
+11. [.agent/research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
 
 ### Verify Current State
 
@@ -83,12 +85,13 @@ Run:
 git status --short
 git branch --show-current
 ls -1 .agent/plans/semantic-search/active
+ls -1 .agent/plans/knowledge-graph-integration/active
 ```
 
 Then read:
 
-1. `.agent/plans/semantic-search/active/README.md`
-2. `.agent/plans/semantic-search/current/README.md`
+1. `.agent/plans/knowledge-graph-integration/README.md`
+2. `.agent/plans/semantic-search/README.md`
 3. `.agent/plans/high-level-plan.md`
 
 ### First Session Goal
@@ -165,7 +168,9 @@ This plan is complete only when all of the following exist.
 
 ### 1. Canonical audit report
 
-Create a durable report in the semantic-search plan collection that includes:
+Create a durable report in the knowledge-graph-integration collection, then
+link it from semantic-search and any other consumer navigation surfaces. The
+report must include:
 
 - audited date
 - ontology repo commit or release reference
@@ -265,16 +270,14 @@ Once the first canonical audit outputs exist, update these documents.
 2. [current/kg-integration-quick-wins.plan.md](../current/kg-integration-quick-wins.plan.md)
    - reflect that the alignment audit has been executed or partially completed
    - narrow the remaining quick wins based on real match quality
-3. [current/README.md](../current/README.md)
-   - update queue notes so later queued graph work references the audit outputs
-4. [active/README.md](./README.md)
-   - reflect active status and eventual closure or supersession of this audit
+3. [README.md](../README.md)
+   - update hub navigation so later graph work references the audit outputs
+4. [semantic-search/README.md](../../semantic-search/README.md)
+   - update search-adjacent guidance from strategy-only to
+     strategy-plus-evidence
 5. [high-level-plan.md](../../high-level-plan.md)
    - update the immediate-next-intentions wording if the audit changes the next
      graph promotion target
-6. [semantic-search/README.md](../README.md)
-   - add the canonical audit report to the navigation chain
-   - update graph-work guidance from strategy-only to strategy-plus-evidence
 
 ### Likely updates if findings are strong enough
 
@@ -394,7 +397,8 @@ Minimum reviewers:
 ## Validation
 
 Run the relevant quality gates for any code or scripts added, and ensure the
-canonical report is linked from the semantic-search navigation docs.
+canonical report is linked from the knowledge-graph-integration navigation docs
+and the semantic-search consumer docs.
 
 Success criteria:
 
@@ -409,7 +413,7 @@ Success criteria:
 - Parent quick-win source:
   [current/kg-integration-quick-wins.plan.md](../current/kg-integration-quick-wins.plan.md)
 - Research synthesis:
-  [elasticsearch-neo4j-oak-ontology-synthesis.research.md](../elasticsearch-neo4j-oak-ontology-synthesis.research.md)
+  [elasticsearch-neo4j-oak-ontology-synthesis.research.md](../research/elasticsearch-neo4j-oak-ontology-synthesis.research.md)
 - Strategy:
   [oak-ontology-graph-opportunities.strategy.md](../oak-ontology-graph-opportunities.strategy.md)
 - Cross-collection sequencing:

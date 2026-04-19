@@ -31,8 +31,9 @@ architectural changes.
 | [archive/completed/mcp-runtime-boundary-simplification.plan.md](archive/completed/mcp-runtime-boundary-simplification.plan.md) | Completed plan | Canonical runtime descriptor surface and ingress-boundary simplification completed and archived |
 | [mcp-apps-support.research.md](mcp-apps-support.research.md) | Research | Canonical MCP Apps research summary for Oak. Active implementation is governed by the MCP Apps spec, `@modelcontextprotocol/ext-apps`, and the live executable plans |
 | [archive/completed/server-info-branding.plan.md](archive/completed/server-info-branding.plan.md) | Completed plan | MCP server branding alignment completed and archived |
-| [active/misconception-graph-mcp-surface.plan.md](active/misconception-graph-mcp-surface.plan.md) | Active plan | Expose misconception graph as MCP resource + tool (post-merge) |
-| [../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md](../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md) | Future cross-boundary plan | Re-read the ontology repo from an upstream-first starting point and write up what that fresh pass changes |
+| [../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md](../knowledge-graph-integration/active/misconception-graph-mcp-surface.plan.md) | Active plan | Expose misconception graph as MCP resource + tool (post-merge) |
+| [../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | Future cross-boundary plan | Re-read the ontology repo from an upstream-first starting point and write up what that fresh pass changes |
+| [../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Future cross-boundary plan | Test direct ontology use as the control case before any Neo4j, Stardog, or hybrid serving decision is promoted |
 | [future/mcp-protocol-adoption-roadmap.plan.md](future/mcp-protocol-adoption-roadmap.plan.md) | Future plan | Resource templates, prompt completion, curriculum downloads, per-primitive icons |
 | [future/README.md](future/README.md) | Future index | Deferred/later plans |
 
@@ -41,15 +42,16 @@ architectural changes.
 1. [roadmap.md](roadmap.md)
 2. [active/README.md](active/README.md)
 3. [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
-4. [../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md](../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md)
-5. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
-6. [archive/completed/ws3-widget-clean-break-rebuild.plan.md](archive/completed/ws3-widget-clean-break-rebuild.plan.md)
-7. [archive/completed/ws3-phase-6-docs-gates-review-commit.plan.md](archive/completed/ws3-phase-6-docs-gates-review-commit.plan.md)
-8. [archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md)
-9. [current/README.md](current/README.md)
-10. [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
-11. [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md)
-12. [future/README.md](future/README.md)
+4. [../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md)
+5. [../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md)
+6. [active/mcp-app-extension-migration.plan.md](active/mcp-app-extension-migration.plan.md)
+7. [archive/completed/ws3-widget-clean-break-rebuild.plan.md](archive/completed/ws3-widget-clean-break-rebuild.plan.md)
+8. [archive/completed/ws3-phase-6-docs-gates-review-commit.plan.md](archive/completed/ws3-phase-6-docs-gates-review-commit.plan.md)
+9. [archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md](archive/completed/ws3-phase-4.5-live-react-and-metadata-shape.plan.md)
+10. [current/README.md](current/README.md)
+11. [current/output-schemas-for-mcp-tools.plan.md](current/output-schemas-for-mcp-tools.plan.md)
+12. [archive/completed/ws3-design-token-prerequisite.plan.md](archive/completed/ws3-design-token-prerequisite.plan.md)
+13. [future/README.md](future/README.md)
 
 ## Source of Truth Model
 

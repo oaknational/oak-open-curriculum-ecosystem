@@ -66,25 +66,32 @@ export type ObservabilityCloseError =
   | { readonly kind: 'observability_close_failed'; readonly message: string };
 
 // ---------------------------------------------------------------------------
-// Telemetry types — redaction and span primitives
+// JSON-safe telemetry types — redaction and sanitisation primitives
 // ---------------------------------------------------------------------------
 
 /**
- * Primitive telemetry value that remains JSON-safe after redaction.
+ * JSON object shape used for structured telemetry payloads after sanitisation
+ * and redaction.
+ *
+ * @remarks This is the canonical recursive JSON-safe object shape for the
+ * entire observability pipeline — logs, spans, breadcrumbs, Sentry adapter
+ * input, CLI telemetry. Historically duplicated as `TelemetryRecord` here and
+ * `JsonObject` in `@oaknational/logger`; consolidated under this single name
+ * by the primitives-consolidation lane (ADR-160 §Closed Questions, dated
+ * history entry).
  */
-export type TelemetryScalar = string | number | boolean | null;
-
-/**
- * Recursive JSON-safe telemetry value used after redaction.
- */
-export interface TelemetryRecord {
-  readonly [key: string]: TelemetryValue;
+export interface JsonObject {
+  readonly [key: string]: JsonValue;
 }
 
 /**
- * Recursive JSON-safe telemetry value used after redaction.
+ * JSON-safe value used in structured telemetry payloads.
+ *
+ * @remarks Primitive scalars, nested JSON objects, or readonly arrays of
+ * JSON-safe values. Canonical name for the shape formerly split between
+ * `TelemetryValue` (observability) and `JsonValue` (logger).
  */
-export type TelemetryValue = TelemetryScalar | readonly TelemetryValue[] | TelemetryRecord;
+export type JsonValue = string | number | boolean | null | JsonObject | readonly JsonValue[];
 
 /**
  * Attribute values accepted by OpenTelemetry span helpers.

@@ -6,8 +6,8 @@ related_reports:
   - "../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md"
 related_plans:
   - "ontology-integration-strategy.md"
-  - "../../sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md"
-  - "../../semantic-search/current/kg-alignment-audit.execution.plan.md"
+  - "../active/open-education-knowledge-surfaces.plan.md"
+  - "../current/kg-alignment-audit.execution.plan.md"
 specialist_reviewer: "docs-adr-reviewer, assumptions-reviewer, onboarding-reviewer"
 todos:
   - id: fp-1-source-lock
@@ -87,8 +87,8 @@ Produce a short write-up that:
 
 1. [oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
 2. [ontology-integration-strategy.md](ontology-integration-strategy.md)
-3. [open-education-knowledge-surfaces.plan.md](../../sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md)
-4. [kg-alignment-audit.execution.plan.md](../../semantic-search/current/kg-alignment-audit.execution.plan.md)
+3. [open-education-knowledge-surfaces.plan.md](../active/open-education-knowledge-surfaces.plan.md)
+4. [kg-alignment-audit.execution.plan.md](../current/kg-alignment-audit.execution.plan.md)
 
 ## Completion Note
 

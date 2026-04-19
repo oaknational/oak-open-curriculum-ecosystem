@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@oaknational/logger": "workspace:*",
+    "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",
     "@oaknational/sdk-codegen": "workspace:*",
     "@oaknational/search-contracts": "workspace:*",

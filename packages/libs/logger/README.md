@@ -183,6 +183,10 @@ From `@oaknational/logger/node`:
 - `FileSinkInterface`
 - `DEFAULT_STDIO_SINK_CONFIG`
 
+## JSON types and sanitisation live in `@oaknational/observability`
+
+As of 2026-04-19 (see [ADR-160 history entry](../../../docs/architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md#history)), `JsonValue`, `JsonObject`, `sanitiseForJson`, `sanitiseObject`, and `isJsonValue` are owned by `@oaknational/observability`. Consumers that previously imported these from `@oaknational/logger` now import them from `@oaknational/observability` directly. The logger re-export surface was removed — there is no backwards-compatibility shim.
+
 ## Notes
 
 - `createNodeFileSink()` may return `null` if the file sink cannot be

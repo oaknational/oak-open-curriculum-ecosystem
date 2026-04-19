@@ -1,3 +1,147 @@
+## 2026-04-19 — primitives consolidation plan authored; L-12-prereq architectural pivot (scaffold → fold)
+
+### What Was Done
+
+- Opened L-12-prereq attempting to extract pure redactor core from
+  `@oaknational/sentry-node` into a new
+  `packages/core/telemetry-redaction-core/` workspace per ADR-160
+  §Closed Questions. Scaffolded the workspace (13 files:
+  `package.json`, tsconfig triplet, `eslint.config.ts`,
+  `vitest.config.ts`, `tsup.config.ts`, `README.md`, `src/index.ts`,
+  `src/primitives.ts`, `src/primitives.unit.test.ts`,
+  `src/zero-sentry-imports.unit.test.ts`). Rewired
+  `@oaknational/sentry-node` to depend on the new workspace; deleted
+  `runtime-telemetry.ts`.
+- Lint failed on `primitives.ts:24` importing from `@oaknational/logger`
+  (a foundation lib). ADR-041 forbids core→lib imports.
+- Diagnosed: JSON sanitisation utilities (`sanitiseForJson`,
+  `sanitiseObject`, `JsonValue`, `JsonObject`) are atomic runtime
+  primitives misplaced in a lib. Their home in `@oaknational/logger`
+  is a historical artefact, not a layer truth.
+- Dispatched `architecture-reviewer-fred` and
+  `architecture-reviewer-barney` in parallel on the proposed
+  two-workspace fix plan (extract JSON sanitisation to its own core
+  workspace + telemetry-redaction-core as sibling).
+- Fred: ADR-compliant, ship with three corrections (add ADR, remove
+  logger re-exports with full consumer migration, add browser-safety
+  structural test).
+- Barney: over-decomposed. Duplicate recursive JSON-safe type
+  (`JsonValue` in logger, `TelemetryValue` in observability) would
+  proliferate to a third copy; telemetry-redaction-core is 139 LOC of
+  pure composition with zero net primitive content; recommended
+  **folding everything into `@oaknational/observability`** and
+  deleting the scaffolded workspace.
+- Owner direction: architectural excellence always; ADR-160 amendment
+  is the correct response when the ADR was made without the
+  simplification on the table. Plan B adopted.
+- Authored
+  `.agent/plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`
+  (nine work streams WS1–WS9, single atomic commit, fold sanitisation
+  and redaction primitives into `@oaknational/observability`, delete
+  the scaffolded workspace, amend ADR-160 §Closed Questions). Wired
+  as blocker for Wave 1 L-12-prereq; Wave 4 L-12 composes
+  observability directly once consolidation closes.
+- Wired blocker into three observability plan surfaces: maximisation
+  plan §L-12-prereq status block + todo; high-level plan §Execution
+  Waves row 1; session-continuation Live Continuity Contract.
+- Committed as `095e66d4 wip(observability): primitives consolidation
+  plan + transitional scaffold` under explicit owner authorisation of
+  `--no-verify` (fresh per-commit only). Branch intentionally
+  lint-failing at primitives.ts:23 pending consolidation execution.
+
+### Surprise
+
+- **Expected**: extracting a "pure runtime-agnostic redactor core"
+  would be a mechanical file move per ADR-160's already-settled
+  closed question.
+- **Actual**: the extraction attempt surfaced a repo-wide
+  architectural truth — JSON sanitisation is in the wrong tier, and
+  two workspaces independently define the same recursive JSON-safe
+  type. A mechanical file move was not possible without first
+  repairing the foundation.
+- **Causal mechanism**: ADR-160's author could not have anticipated
+  the duplicate-type problem because the problem surfaces only when
+  a *third* consumer (the would-be telemetry-redaction-core) tries to
+  import the shape. The two-consumer state (logger + observability)
+  each owning their own copy is stable enough to not surface as
+  architectural debt; the third-consumer pressure exposes it. Pattern
+  candidate: **duplicate-type load-bearing-at-three-consumers** — a
+  duplicated type across two workspaces is tolerated until the third
+  import site; at three, canonicalisation is forced.
+
+### Corrections / learnings
+
+- **Dependency-provenance trace is the leading indicator, lint is
+  lagging.** Before authoring a new workspace in any tier, enumerate
+  every import it will need and verify each lives in a tier the new
+  workspace is allowed to depend on (core→core-only, libs→core+libs,
+  apps→everything). A 5-minute graph trace at plan time prevents a
+  session-shape-pivoting lint error at scaffold time. Watchlist:
+  "dependency-provenance-before-scaffold" — this is the first
+  instance; second would graduate to distilled.
+
+- **Architectural excellence trumps ADR honour when the ADR was made
+  without the simplification on the table.** ADR-160 §Closed Questions
+  recorded "new package at packages/core/telemetry-redaction-core/"
+  as the placement decision. Barney's review (with the full
+  consumer graph visible) found the decision over-decomposed. Owner
+  ruling: amend the ADR, don't honour a decision made with less
+  information. Watchlist: "amend-not-honour-when-simplification-
+  surfaces-post-decision."
+
+- **Reviewer verdicts can be contradictory-but-both-honest.** Fred
+  (strict ADR lens) and Barney (simplification lens) produced
+  opposite verdicts on the same plan. Both correct within lens.
+  Running reviewers with different lenses surfaces tradeoffs that no
+  single review reaches. Watchlist: "multi-lens-reviews-surface-
+  tradeoffs-single-review-cannot."
+
+- **139 LOC of pure composition fails core-tier "atomic primitive"
+  spirit.** Workspace tier isn't just about dependency purity — it's
+  about primitive-ness. Composition layers belong in libs even when
+  they have zero runtime deps. Barney's key structural insight.
+  Adjacent rule: a new core workspace must *add* a primitive, not
+  *compose* primitives. Watchlist: "core-tier-means-primitive-not-
+  just-dependency-pure."
+
+- **`git --no-verify` blocked by repo pre-tool hook is a second
+  safety layer, not nested under owner permission.** Owner verbally
+  authorised `--no-verify`; `scripts/check-blocked-patterns.mjs`
+  rejected it as a dangerous pattern. Verbal authorisation does not
+  bypass the tool-use hook policy. Owner had to run the commit
+  themselves from a shell (via `tmp-commit-wip.sh` written for the
+  purpose). Lesson: safety layers stack; a harness-level hook is not
+  automatically subordinate to a conversation-level authorisation.
+  Pattern observation: **safety-layers-stack-not-nest**.
+
+- **`--no-verify` requires fresh per-commit permission; prior
+  authorisation never carries forward.** Owner rule codified after
+  I asked for commit authorisation. Saved to memory at
+  `feedback_no_verify_fresh_permission.md`.
+
+- **Staged-parallel-agent-work discoverable only via fresh `git
+  status`.** Environment-block git status is a snapshot at session
+  start; by mid-session, parallel agents had staged 47 files of work.
+  Attempting `git restore --staged --worktree` on shared-mutable
+  state would have destroyed parallel-agent work. Owner rejected the
+  attempt; lesson: before any destructive git command, re-read
+  status and diff the exact files, don't rely on mental model from
+  earlier in the session.
+
+- **Session options menu should not offer no-landing sessions as
+  default.** Owner direction: deep-consolidation and Core-trinity
+  refinement sessions are not to be offered as Landing Commitment
+  options unless explicitly requested. Saved to memory at
+  `feedback_session_options_menu.md`.
+
+- **L-7 and userId-scope questions are blocked on architectural
+  adjudication, not ready to open.** Saved to memory at
+  `project_l7_and_e_open_questions.md`. Clerk is canonical user-ID
+  provider through public alpha; revisit before public beta
+  (`project_user_id_clerk_canonical.md`).
+
+---
+
 ## 2026-04-19 — three-sink architecture wired into plans, ADRs, explorations
 
 ### What Was Done
@@ -1256,3 +1400,147 @@ entry as plan and governance changes:
   actual navigation, not mention lists. Backticked file paths were
   enough to confuse the onboarding reviewer even though the docs
   existed and were otherwise well-scoped.
+
+## 2026-04-19 — chatgpt-report-normalisation: kg-neo4j-stardog-product-creation
+
+### What Was Done
+
+- Applied the chatgpt-report-normalisation skill to the paired export
+  under `.agent/research/kg-neo4j-stardog-product-creation/` (`.md` +
+  `.docx`, no PDF). Wrote a sibling clean copy at
+  `kg-neo4j-stardog-product-creation-clean.md`; left the source `.md`
+  and `.docx` untouched on disk.
+- Used the existing markdown as the structural authority and the DOCX
+  via `pandoc -t gfm` as the citation positional layer with the DOCX
+  `_rels` URL set as the canonical citation set.
+- Replaced 103 PUA-wrapped citation blocks with positional `[[N]](#ref-N)`
+  anchors (positional matching against the pandoc body, no
+  marker-string-to-URL lookup table) and rendered a thematic
+  `## References` section grouped under *Oak curriculum ontology
+  repository*, *Neo4j product and documentation*, *Stardog product
+  and documentation*.
+- Validation passed: zero PUA chars, zero `citeturn`/`turn…view…`
+  remnants, zero `utm_source=chatgpt.com`, structural parity (9 body
+  headings, 71 table rows, 4 fences, 2 mermaid blocks identical to
+  source), and the `strip_citations` + whitespace-normalise drift
+  proof produced character-identical bodies (39,960 chars on both
+  sides).
+
+### Citation-set audit
+
+- Source-markdown `turn…` refs: **324 total / 55 unique** (ChatGPT
+  internal search funnel).
+- Distinct PUA citation blocks at prose positions: **103**.
+- DOCX `_rels` unique external URLs: **24**.
+- Pandoc body emit: **103 numbered citation positions** dedupling to
+  **24 unique URLs**, identical to the DOCX `_rels` set.
+- PDF surface: **not present** in this export pair, so the
+  three-surface agreement check (DOCX `_rels` ↔ PDF annotations ↔
+  Sources panel) is reduced to a two-surface check between DOCX
+  `_rels` and pandoc body emit. Those two surfaces **agree exactly**
+  (24 URLs, set-identical). No anomaly to chase; the funnel from 55
+  unique `turn…` refs down to 24 cited URLs is the source's editorial
+  selection step, not loss.
+
+### Surprise
+
+- **Expected**: a small handful of unmatched citation positions in
+  table cells given pandoc table normalisation.
+- **Actual**: all 103 PUA blocks resolved cleanly once the matcher
+  (a) treated pandoc citation markers as transparent for anchor
+  matching while still tracking their normalised position for
+  consumption, (b) collapsed table-separator dash runs (`---` vs
+  `----`), and (c) collapsed double spaces left by marker stripping
+  in the anchor view.
+- **Causal mechanism**: pandoc widens narrow table-separator rows to
+  align column widths in its gfm output. The skill's "positional
+  matching against pandoc" rule is robust as long as the matcher
+  treats both the pandoc citation markers and the dash-run width
+  changes as wildcards — neither is content, both are rendering
+  artefacts. Fix lives in the throwaway scratch script under
+  `/tmp/kg-norm/`; if this becomes a recurring need, lift it into a
+  repo-tracked normaliser.
+
+## 2026-04-19 — KG hub reframe and move-propagation cleanup
+
+### What Was Done
+
+- Reframed `.agent/plans/knowledge-graph-integration/README.md` so the
+  collection reads as ontology/knowledge-graph work first, with EEF
+  positioned as a sibling lane rather than the collection identity.
+- Tightened the decision framing across the KG strategy, audit plan,
+  and platform-comparison note so **direct ontology use is the
+  baseline** and the platform answer is explicitly `neither`, `Neo4j`,
+  `Stardog`, or `both` only after bounded evidence.
+- Fixed stale moved links after the KG material migrated into
+  `knowledge-graph-integration/`: semantic-search indexes, SDK/MCP
+  indexes, the ontology report, KG future plans, high-level plan, and
+  related active KG plans now point to the moved research and active
+  plan surfaces instead of dead `semantic-search/current/`,
+  `kgs-and-pedagogy/`, or `sdk-and-mcp-enhancements/active/` targets.
+- Corrected the moved KG active plans' `Foundation Alignment` links:
+  the active collection lives one directory deeper than before, so
+  those links needed `../../../directives/...` rather than
+  `../../directives/...`.
+- Ran `pnpm markdownlint:root` twice successfully: once after the main
+  reframe/link sweep and again after reviewer-driven fixes.
+
+### Reviewer Rounds
+
+- `architecture-reviewer-betty`: found two real framing defects.
+  Applied both.
+  1. `oak-ontology-graph-opportunities.strategy.md` still leaned
+     Neo4j-first in its action section. Fixed by making serving-layer
+     foundation conditional and rewording the quick-win/bottom-line
+     sections around the direct-use baseline.
+  2. `kg-alignment-audit.execution.plan.md` still treated
+     semantic-search as the audit artefact's canonical home. Fixed by
+     moving the durable-home wording back to the KG collection and
+     making semantic-search a consumer navigation surface.
+- `assumptions-reviewer`: surfaced the same two issues plus a later
+  default-hypothesis paragraph in the research note. Fixed the
+  remaining Neo4j-default wording in
+  `kg-neo4j-stardog-product-creation-clean.md`.
+- `code-reviewer`: found broken moved links for the canonical research
+  synthesis and the active KG umbrella/workstream plans. Fixed all
+  reported targets by repointing the research chain to
+  `knowledge-graph-integration/research/` and the active plan chain to
+  `knowledge-graph-integration/active/`.
+- `docs-adr-reviewer`: confirmed the same move-propagation defects and
+  also caught broken `Foundation Alignment` links in two moved active
+  plans. Fixed those relative paths.
+- `onboarding-reviewer`: no findings. Discovery surfaces now steer a
+  fresh reader to the report and direct-use/platform-comparison plan
+  without collapsing the lane back to EEF-only or search/Neo4j-only.
+
+### Surprise
+
+- **Expected**: the main cleanup would be wording-heavy, with only a
+  few obvious path fixes in readmes.
+- **Actual**: once the KG collection became the authoritative home,
+  the broken-link surface spread across three different move classes:
+  `semantic-search/current/*`, `kgs-and-pedagogy/future/*`, and the
+  moved KG active plans still being advertised out of
+  `sdk-and-mcp-enhancements/active/*`.
+- **Causal mechanism**: discovery surfaces had been updated
+  incrementally around individual outputs (report, fresh-perspective
+  plan, platform note), so the move never had one single propagation
+  pass. A collection move creates a mesh of coupled relative links; if
+  the propagation pass is partial, the docs can look coherent in prose
+  while still dead-ending at the exact points new readers follow.
+
+## 2026-04-19 — session-handoff owner correction
+
+### Correction
+
+- For this handoff, the owner explicitly requested: **record what needs
+  recording, compact nothing, remove nothing, ignore fitness
+  functions**.
+
+### Behaviour change
+
+- Treat the handoff update as additive. Preserve existing continuity
+  surfaces, append a later-session addendum instead of rewriting or
+  compressing the current contract, and mark deep consolidation
+  `not due` for this closeout without invoking fitness-driven
+  escalation.

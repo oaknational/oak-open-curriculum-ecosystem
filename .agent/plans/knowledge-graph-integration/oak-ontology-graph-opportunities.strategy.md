@@ -1,6 +1,6 @@
 # Oak Ontology Graph Opportunities Strategy
 
-**Last Updated**: 2026-03-07
+**Last Updated**: 2026-04-19
 
 ## Purpose
 
@@ -8,7 +8,7 @@ This strategy translates the graph and knowledge-graph research into an
 Oak-specific direction of travel.
 
 It is based on the canonical synthesis in
-[`elasticsearch-neo4j-oak-ontology-synthesis.research.md`](elasticsearch-neo4j-oak-ontology-synthesis.research.md)
+[`elasticsearch-neo4j-oak-ontology-synthesis.research.md`](research/elasticsearch-neo4j-oak-ontology-synthesis.research.md)
 and assumes the current reality:
 
 - Oak has a published curriculum ontology in
@@ -38,17 +38,41 @@ Exploring the ontology repo adds four strategy-shaping facts:
 - the Neo4j deployment is produced by a transformation pipeline, not a raw RDF
   mirror
 
+## Scope Note
+
+This document defines the **search-adjacent** graph strategy, not the repo-wide
+ontology-serving or platform-selection decision.
+
+Two cross-boundary companions now matter when reading it:
+
+- the formal ontology integration report in
+  [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+- the direct-use versus Neo4j/Stardog comparison note in
+  [../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md)
+
+Read this strategy with one caveat: **direct ontology use without a live graph
+platform remains the baseline** for MCP surfaces, search projections, and QA.
+Neo4j and Stardog are downstream serving options to evaluate for specific
+workloads, not prerequisites for using the ontology in this repo.
+
 ## Strategic statement
 
-Oak should pursue a **search-first, graph-augmented** strategy.
+Within search-adjacent work, Oak should pursue a **search-first,
+graph-augmented** strategy as a local optimisation, while keeping direct
+ontology use as the starting point and platform choice explicitly open.
 
 That means:
 
-- `Neo4j + ontology triples` are the authoritative relationship layer
+- the canonical RDF ontology remains the source of truth for explicit
+  curriculum relationships
+- a live graph service is optional, and if used should be treated as a
+  downstream serving layer rather than the ontology itself
 - `Elasticsearch` remains the primary retrieval, ranking, filtering, and
   projection layer
 - value comes from careful alignment and bounded graph augmentation, not from
   forcing Elasticsearch to become the primary graph engine
+- the repo-wide platform answer remains `neither`, `Neo4j`, `Stardog`, or
+  `both` until the direct-use baseline and bounded prototypes say otherwise
 
 ## What the new synthesis adds
 
@@ -139,8 +163,10 @@ surfaces.
 
 ### Authoritative roles
 
-- `Neo4j + ontology triples`: authoritative for explicit curriculum
-  relationships
+- canonical RDF ontology: authoritative for published curriculum semantics and
+  explicit curriculum relationships
+- transformed Neo4j operational graph: authoritative only for the
+  traversal-oriented serving projection when that lane is actually used
 - `Elasticsearch`: authoritative for retrieval, ranking, filtering, and
   search-facing projections
 - application layer: authoritative for orchestration, alignment policy, and
@@ -198,7 +224,8 @@ Likely high-value operational join or projection fields to evaluate:
 
 ### 2. Query-time graph augmentation
 
-Run search first, then use ontology IDs to fetch a bounded subgraph from Neo4j.
+Run search first, then use ontology IDs to fetch a bounded subgraph from a
+downstream serving layer if one actually earns adoption.
 
 Potential value:
 
@@ -207,9 +234,10 @@ Potential value:
 - related-content suggestions
 - richer MCP responses
 
-Implementation should prefer the exported Neo4j shape for traversal, because
-the export pipeline already flattens inclusion structures to optimise graph
-queries.
+If the chosen serving layer is the transformed operational graph, use the
+exported Neo4j shape explicitly and document that choice. If no serving layer
+is chosen yet, keep this opportunity as a candidate rather than silently
+defaulting the lane to Neo4j.
 
 ### 3. Ontology projection indices in Elasticsearch
 
@@ -294,30 +322,40 @@ are related but not interchangeable contracts.
 Most users are likely to remain search-first. Graph should improve search,
 explanation, and navigation before it becomes a dominant interaction model.
 
+### Do not treat Neo4j as the unspoken default
+
+Neo4j is the most concrete transformed serving path Oak has explored so far,
+but that does not make it the default answer for this lane. Direct ontology use
+is the baseline, and Stardog or a split `both` outcome remain valid only if
+bounded evidence justifies them.
+
 ## Immediate strategic work
 
 The key design precursor remains the alignment audit below.
 
-Separately, the first delivery quick win should provision a separate Neo4j
-instance for this repo so the initial graph-augmented experiment can run
-against a real graph environment rather than remain theoretical.
+After that, the first delivery quick win should be chosen from the smallest
+prototype that answers a real question:
 
-### Delivery prerequisite: Neo4j quick-win foundation
+- direct ontology-backed explanation or projection if that is enough
+- a downstream serving-layer prototype only if the use case genuinely needs one
 
-Stand up a Neo4j instance to host the curriculum knowledge graph used by the
-first graph-augmented search experiment.
+### Delivery prerequisite: serving-layer foundation only if needed
+
+If a live serving-layer prototype is selected, stand up the minimum isolated
+environment needed for that prototype and state the chosen contract plainly.
 
 Primary outputs:
 
-- a running Neo4j instance owned by this workstream
-- the curriculum knowledge graph loaded into that instance
+- a running serving environment owned by this workstream
+- the chosen curriculum graph representation loaded into that environment
 - a documented loading and refresh path that can be repeated as ontology data
   evolves
-- a clear statement of whether the experiment uses the source ontology export,
-  the transformed operational graph, or both
+- a clear statement of whether the experiment uses direct ontology artefacts,
+  the transformed operational graph, an ontology-native semantic platform, or a
+  bounded combination
 
-This is an enabling delivery step for the first quick win, not a replacement
-for the alignment audit as the main architectural precursor.
+This is conditional enabling work, not a replacement for the alignment audit as
+the main architectural precursor.
 
 ### 1. Alignment audit
 
@@ -345,9 +383,10 @@ Success criteria:
 - the explanation path can be traced back to either source RDF semantics or the
   exported Neo4j shape without ambiguity
 
-The preferred first quick win is to combine this prototype with the Neo4j
-foundation above: provision the instance, load the graph, then use a bounded
-subgraph fetch to explain selected search results.
+The preferred first quick win is the smallest explanation prototype that proves
+value without preselecting the serving platform. If direct ontology projections
+can explain selected search results well enough, use them first. If not, treat
+the relevant serving-layer prototype as a follow-on comparison lane.
 
 ### 3. Ontology projection prototype
 
@@ -377,8 +416,8 @@ Oak should pause and review after the first prototypes answer these questions.
    further integration?
 4. Which graph-derived signals are stable and useful enough to project into
    Elasticsearch?
-5. Which user journeys truly need live Neo4j traversal rather than search-side
-   projection?
+5. Which user journeys truly need a live downstream serving layer rather than
+   direct ontology use or search-side projection?
 
 ## Bottom line
 
@@ -386,9 +425,10 @@ Oak should not frame this as a choice between Elasticsearch and Neo4j.
 
 The synthesis supports a different framing:
 
-- Neo4j already holds the most credible explicit curriculum relationship layer
-  through the ontology triples
+- canonical RDF is the authoritative curriculum relationship layer
 - Elasticsearch remains the strongest retrieval and projection layer
 - the main opportunity is a careful alignment and augmentation strategy that
   treats mismatch as normal and focuses first on explanation, enrichment, and
   bounded graph-aware retrieval
+- any live serving layer must earn its role after the direct-use baseline is
+  tested, rather than being assumed in advance

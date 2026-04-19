@@ -2,6 +2,7 @@
  * Shared types and utilities for the logger module.
  */
 
+import type { JsonObject, JsonValue } from '@oaknational/observability';
 import type { LogLevel } from './log-levels.js';
 
 export type { LogLevel };
@@ -51,18 +52,6 @@ export interface OtelLogRecord {
   /** W3C Trace flags */
   readonly TraceFlags?: number;
 }
-
-/**
- * JSON object type for logger payloads.
- */
-export interface JsonObject {
-  readonly [key: string]: JsonValue;
-}
-
-/**
- * JSON-safe value used in structured logger payloads.
- */
-export type JsonValue = string | number | boolean | null | JsonObject | readonly JsonValue[];
 
 /**
  * Internal marker attached to package-owned normalised errors.

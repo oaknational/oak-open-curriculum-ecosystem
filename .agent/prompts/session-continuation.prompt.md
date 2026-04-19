@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-19-l-doc-initial-close
+last_updated: 2026-04-19-primitives-consolidation-landed
 ---
 
 # Session Continuation
@@ -95,7 +95,13 @@ commit.
 
 - **Workstream**: Observability Wave 1 on `feat/otel_sentry_enhancements`.
   Two Wave 1 lanes landed this 2026-04-19 session (L-EH initial ✅ +
-  L-DOC initial ✅); two lanes remain (L-12-prereq, L-7). A parallel
+  L-DOC initial ✅); two lanes remain (L-12-prereq, L-7). In parallel
+  on the same branch, the **three-sink architecture wiring** (Sentry +
+  data warehouse + PostHog as adapters on a single vendor-neutral
+  pipeline) closed end-to-end 2026-04-19 across plans/ADRs/explorations,
+  with two reviewer rounds (assumptions + docs-adr) and owner overrides
+  applied on two BLOCKER findings (PostHog kept as settled Sink 3
+  vendor; warehouse-before-PostHog kept as hard blocker). A parallel
   agentic-engineering thread owns the operational-awareness plan and is
   not this session's primary concern.
 - **Active plans**:
@@ -103,33 +109,66 @@ commit.
     — lane-level execution authority. §L-DOC initial close evidence + §RED
     correction recorded 2026-04-19.
   - `.agent/plans/observability/high-level-observability-plan.md`
-    — five-axis MVP framing + wave sequencing.
+    — five-axis MVP framing + wave sequencing; updated 2026-04-19 with
+    three-sink architecture subsection + 2 new exploration rows.
+  - `.agent/plans/observability/future/second-backend-evaluation.plan.md`
+    — **reframed 2026-04-19** from "second backend evaluation" into the
+    three-sink strategic brief. Carries the explicit decision record
+    (PostHog = settled Sink 3 vendor; warehouse-before-PostHog =
+    owner-confirmed hard blocker; warehouse vendor + identity envelope
+    = open).
   - `.agent/plans/observability/what-the-system-emits-today.md`
     — externally-verifiable emits-today snapshot; 3 of 13 cells populated;
-    Update Log carries L-DOC initial close entry.
+    Update Log carries L-DOC initial close entry + Sinks Today vs Planned
+    subsection.
+  - `.agent/plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`
+    — **next landing target** for the observability-execution lane (nine
+    work streams WS1–WS9, single atomic commit, fold sanitisation +
+    redaction primitives into `@oaknational/observability`, delete the
+    scaffolded `packages/core/telemetry-redaction-core/`, amend ADR-160
+    §Closed Questions).
   - `.agent/plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md`
     — parallel-thread follow-up (QUEUED); not this session's primary.
-- **Current state**: Branch `feat/otel_sentry_enhancements` at `9e1a26b2`
-  (HEAD). Three commits ahead of `origin/feat/otel_sentry_enhancements`
-  (push deferred per non-automated rule). Working tree clean.
+- **Current state**: Branch `feat/otel_sentry_enhancements` post-consolidation-landing.
+  Branch is **back to mergeable (`pnpm check` exit 0)**. The
+  primitives consolidation landed as a single atomic commit in the
+  2026-04-19 continuation session; ADR-041 core→lib violation at
+  the old `primitives.ts:23` is gone (file and workspace deleted).
+  `packages/core/telemetry-redaction-core/` no longer exists;
+  `pnpm-workspace.yaml` and `pnpm-lock.yaml` are clean of it.
+  `@oaknational/observability` now owns redaction primitives + JSON
+  sanitisation + canonical `JsonValue`/`JsonObject` type;
+  `@oaknational/sentry-node` composes directly from observability
+  (no intermediate workspace hop); browser-safety invariant is
+  structurally enforced by `no-node-only-imports.unit.test.ts`.
+  - `095e66d4` wip(observability): primitives consolidation plan +
+    transitional scaffold (also absorbs three-sink wiring across
+    observability plans, ADRs, mcp-handler TSDoc, explorations,
+    knowledge-graph reorg, and napkin entries — flagged in commit body)
   - `9e1a26b2` feat(observability): l-doc initial — authoritative app
     observability docs
   - `08989388` docs(agentic-engineering): governance-concept integration
     lane closeout
   - `7efd0a43` feat: l-eh initial + wave-1 assurance mechanisms +
     governance-concept lane
-- **Current objective**: L-12-prereq is **BLOCKED 2026-04-19** by
+- **Current objective**: Consolidation is **LANDED 2026-04-19** per
   [`architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`](../plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md).
-  A scaffolded extraction of `packages/core/telemetry-redaction-core/`
-  surfaced a core→lib boundary violation (sanitisation primitives in
-  `@oaknational/logger`, a lib) and an over-decomposition signal (139
-  LOC of pure composition). Architecture review (fred + barney,
-  2026-04-19) resolved toward **folding primitives into
-  `@oaknational/observability`** rather than a new core workspace;
-  ADR-160 §Closed Questions amendment planned. The consolidation plan
-  is the next landing target; L-12-prereq becomes a trivial
-  confirmation step once it closes. L-7 remains blocked on owner
-  adjudication of the build/releases/Sentry interaction.
+  L-12-prereq is now **completed** (see status flip in the
+  maximisation plan). The next primary objective is **resuming the
+  Sentry observability wiring** per the maximisation plan — all
+  other active threads (knowledge-graph, semantic-search, research,
+  sdk-and-mcp-enhancements README updates) are paused at owner
+  direction until explicitly picked back up. L-7 remains blocked
+  on owner adjudication of the build/releases/Sentry interaction.
+  The three-sink wiring is **closed as a documentation milestone** —
+  no further three-sink plan-edits are expected until either (a)
+  Exploration 9 (warehouse vendor) closes with a settled vendor,
+  or (b) Exploration 10 (Clerk identity policy) closes with a
+  settled doctrine ruling, or (c) a promotion trigger from
+  `future/second-backend-evaluation.plan.md` fires (warehouse
+  adapter authoring within 8 weeks of public-beta commitment;
+  PostHog adapter authoring on a named question with ≥4 weeks of
+  telemetry available).
 - **Hard invariants / non-goals**: ADR-143 / ADR-160 / ADR-161 / ADR-162
   invariants hold. `sendDefaultPii: false` remains the floor; redaction
   barrier remains non-bypassable. `Result<T, E>` on new/changed code;
@@ -140,6 +179,160 @@ commit.
   Docs-content tests violate testing-strategy.md; acceptance on docs
   lanes sits on the reviewer matrix, not automated content-presence checks.
   Tests must prove behaviour, not constrain implementation/config.
+- **Recent surprises / corrections** (2026-04-19 primitives-consolidation planning session):
+  - **Dependency-provenance trace is the leading indicator; lint is
+    lagging.** L-12-prereq scaffolded a new core workspace before
+    tracing what its imports would transitively depend on. The
+    `@oaknational/logger` core→lib violation surfaced only when
+    ESLint ran on the new workspace. A 5-minute graph trace at plan
+    time — "enumerate every import the new workspace will need;
+    verify each lives in a tier it is allowed to depend on" — would
+    have surfaced the architectural repair before scaffolding began.
+    Watchlist candidate: `dependency-provenance-before-scaffold`.
+  - **Architectural excellence trumps ADR honour when the ADR was
+    made without the simplification on the table.** ADR-160 §Closed
+    Questions (2026-04-17) recorded "new package at
+    `packages/core/telemetry-redaction-core/`" as the placement
+    decision. Architecture-reviewer-barney's simplification review
+    (with the full consumer graph visible) surfaced that the decision
+    was over-decomposed: `JsonValue` (logger) and `TelemetryValue`
+    (observability) are the same recursive JSON-safe type with
+    different names; the new workspace would create a third copy;
+    the 139 LOC of primitives are pure composition with zero net
+    primitive content. Owner ruling: amend the ADR, do not honour a
+    decision made with less information. Watchlist candidate:
+    `amend-not-honour-when-simplification-surfaces-post-decision`.
+  - **Reviewer verdicts can be contradictory-but-both-honest.**
+    Fred (strict-ADR lens) approved the two-workspace plan with
+    three corrections. Barney (simplification-first lens) rejected
+    it as over-decomposed and recommended folding into
+    `@oaknational/observability` and deleting the scaffolded
+    workspace entirely. Both verdicts were correct within their
+    lens. Running reviewers with different lenses surfaces tradeoffs
+    that no single review can reach. Watchlist candidate:
+    `multi-lens-reviews-surface-tradeoffs-single-review-cannot`.
+  - **139 LOC of pure composition fails core-tier "atomic primitive"
+    spirit.** Workspace tier is not just about dependency purity —
+    it is about primitive-ness. Composition layers belong in libs
+    even when they have zero runtime deps. A new core workspace
+    must *add* a primitive, not *compose* primitives. Watchlist
+    candidate: `core-tier-means-primitive-not-just-dependency-pure`.
+  - **Duplicate types become load-bearing at three consumers.**
+    `JsonValue`/`JsonObject` (logger) and
+    `TelemetryValue`/`TelemetryRecord` (observability) — the same
+    recursive JSON-safe shape with different names — have coexisted
+    stably because only two consumers each knew their own copy. The
+    would-be third consumer (the scaffolded redactor core) forced
+    the canonicalisation question. Pattern candidate:
+    `duplicate-type-load-bearing-at-three-consumers` — a duplicated
+    type across two workspaces is tolerated until the third import
+    site; at three, canonicalisation is forced.
+  - **Safety layers stack, they do not nest under conversation-level
+    permission.** Owner verbally authorised `--no-verify`; the
+    repo's `scripts/check-blocked-patterns.mjs` pre-tool hook still
+    rejected it as a dangerous pattern. The owner had to run the
+    commit themselves from a shell. Harness-level hook policies are
+    not automatically subordinate to in-conversation authorisations.
+    Pattern candidate: `safety-layers-stack-not-nest`. Related new
+    memory entry: `--no-verify` requires fresh per-commit permission
+    and never carries forward
+    (`memory/feedback_no_verify_fresh_permission.md`).
+  - **Staged-parallel-agent-work is discoverable only via fresh
+    `git status`.** The session-open git status was a snapshot (4
+    dirty files); by mid-session, parallel agents had staged 47
+    files of concurrent work (three-sink wiring, knowledge-graph
+    reorg, explorations, ADR history entries, napkin entries).
+    Attempted `git restore --staged --worktree` would have
+    destroyed parallel-agent work; owner rejected the attempt.
+    Lesson: before any destructive git command, re-read status and
+    diff exact files; do not rely on mental model from earlier in
+    the session. Pattern candidate:
+    `git-status-is-a-snapshot-reread-before-destructive-ops`.
+- **Recent surprises / corrections** (2026-04-19 three-sink wiring session):
+  - **Closure-principle ADRs absorb cardinality changes without
+    amendment.** Going in, I expected the three-sink reframe to land
+    predominantly as ADR amendments — ADR-160 to permit identified
+    events, ADR-162 to enumerate per-sink conformance. Neither
+    materialised. ADR-160 is *already* a closure principle (every
+    fan-out path applies the redaction policy), so the Clerk identity
+    ruling lives at the *policy* layer the closure rule consumes, not
+    at the closure rule itself. ADR-162's vendor-independence clause is
+    *already* sink-cardinality-agnostic; three sinks is a confirmation,
+    not an extension. Both ADRs received History entries only. The
+    architectural weight landed in plans
+    (`future/second-backend-evaluation.plan.md` reframe + new
+    explorations 9 + 10), not in ADR amendments. Captured as new
+    pattern candidate: `closure-principles-absorb-cardinality-changes`
+    (single-instance; second instance would graduate).
+  - **Two reviewer rounds (assumptions + docs-adr) both surfaced
+    BLOCKERs that the owner explicitly chose to *override toward the
+    more aggressive position*, not toward the reviewer's softening
+    suggestion.** Reviewer (1): "PostHog over-named as Sink 3 — keep
+    as candidate, not vendor." Owner ruling: keep as settled vendor
+    (rationale: existing Oak-org PostHog usage discharges procurement
+    + governance + familiarity overhead; vendor decision is settled,
+    only adoption *timing* is gated). Reviewer (2): "warehouse-before-
+    PostHog is sequencing preference, not a hard dependency." Owner
+    ruling: keep as hard blocker (rationale: warehouse is the durable
+    analytical-SQL substrate; PostHog interactive analytics layers on
+    top of, or alongside, durable storage that already exists;
+    promoting PostHog before the warehouse would bypass the substrate
+    the org needs for cross-source SQL). Pattern observation: reviewer
+    findings frame the *option space*; owner rulings settle within
+    that space. The reviewer's job is to surface the alternative; it
+    is *not* to prescribe which alternative wins. Watchlist candidate:
+    "reviewer-as-option-cartographer-not-decision-maker."
+  - **In-place supersession markers at section headers are load-
+    bearing for anchor-arrived readers.** Docs-adr-reviewer caught
+    that `docs/explorations/2026-04-18-sentry-vs-posthog-capability-
+    matrix.md` carried a top-of-file "Status update 2026-04-19 —
+    three-sink reframe" callout but Q6 and §7 (the two sections most
+    likely to be linked-to from external surfaces) did not carry their
+    own in-place markers. A reader who lands on §7 via a fragment URL
+    would never see the top-of-file callout. The fix added
+    `Status 2026-04-19 (in-place marker)` headers inside Q6 and §7.
+    Generalisation: when a doc receives a status reframe, in-place
+    markers are needed at every section-level anchor that external
+    surfaces reference, not only at the document head. Third instance
+    in 2026-04-19 of "fork-cost surfaces in the doc-discipline layer"
+    (first: ADR-filename drift across new docs in L-DOC initial;
+    second: dual-frame labels invite drift in the planning restructure;
+    third: now). Promotion-ready for distilled.md.
+  - **Frontmatter field naming with date suffixes locks documents to
+    their authoring moment.** I introduced a novel frontmatter field
+    `companion_explorations_2026_04_19` on the capability-matrix
+    exploration. Docs-adr-reviewer flagged it: the date suffix turns
+    the field into a single-snapshot marker that no second pass would
+    reuse, defeating the purpose of structured frontmatter. Renamed to
+    `informed_by:` (a stable, reusable predicate). Adjacent rule:
+    novel frontmatter fields earn their place by being reusable across
+    documents and across edits; date-suffixed fields are a smell.
+  - **The "Plan Density Invariant" governs plans-folder density but
+    must explicitly disclaim explorations.** Reviewer pushback on the
+    observability README: the Plan Density Invariant (one
+    `current/`/`active/` plan per workstream slot) was being read as
+    governing exploration density too. It does not — explorations live
+    under `docs/explorations/` and have a different lifecycle. Fix:
+    added a "Scope clarification" line plus a separate
+    "Exploration-density brake" subsection (review old, unauthored
+    stubs every 6 weeks; either author, escalate to plan, or close
+    with rejection rationale). Pattern observation: invariants written
+    for one tier (plans) get conscripted into governing adjacent tiers
+    (explorations) unless the scope is named explicitly. Watchlist:
+    "tier-scope-must-be-explicit-for-shared-vocabulary-invariants."
+  - **`observability.setUser({ id: userId })` is real, present, and
+    needs an architectural ruling, not silent acceptance.** L-DOC
+    initial caught the doc/code mismatch (doc claimed userId was
+    excluded; code includes it). This session added a TSDoc note at
+    the call site (`apps/oak-curriculum-mcp-streamable-http/src/
+    mcp-handler.ts`) documenting the privacy posture and pointing at
+    `docs/explorations/2026-04-19-redaction-policy-clerk-identity-
+    downstream.md` as the open ruling. The TSDoc is a *holding
+    pattern*; the substantive ruling still requires owner adjudication.
+    Pattern observation: when code embodies an unwritten policy
+    decision, the holding pattern is "TSDoc points at the open
+    exploration that owns the ruling." Watchlist candidate: "code-
+    embodied-policy-without-explicit-ruling-needs-tsdoc-pointer."
 - **Recent surprises / corrections** (2026-04-19 L-DOC initial session):
   - Content-presence tests violate testing-strategy.md. The maximisation
     plan's prescribed L-DOC §RED shape (structural token-presence test)
@@ -165,36 +358,171 @@ commit.
     conflation + userId scope (3rd — four sub-instances in one lane).
     This pattern is now promotion-ready for distilled.md.
 - **Open questions / low-confidence areas**:
+  - **Exploration 9 (warehouse vendor selection)** — open. Owner
+    statement names BigQuery as the org-preferred candidate but
+    verification is deferred. Scope split into identity-independent
+    selection criteria (decidable now) and identity-sensitive
+    admissibility checks (gated on Exploration 10).
+  - **Exploration 10 (Clerk identity policy for downstream sinks)** —
+    open. Three coherent positions named: anonymous-only across all
+    sinks; identified single-sink (Sentry only); identified all sinks.
+    The latter two are "doctrine forks" requiring ADR clarification
+    (ADR-160 closure principle holds either way; the ruling lives at
+    the policy layer the closure rule consumes). Owner adjudication
+    needed before warehouse adapter authoring can begin.
   - Should `userId` reach the Sentry user scope, or is Oak's observability
-    boundary meant to exclude it? Needs fred/owner adjudication. Today
-    the code includes it; the docs now match the code.
+    boundary meant to exclude it? Today the code includes it; the docs
+    now match the code; a TSDoc note at `mcp-handler.ts` points at
+    Exploration 10 as the open ruling. Subsumed under Exploration 10.
   - MCP-specific telemetry shape (tool/resource/prompt observations
     retaining only kind/name/status/duration/trace) is a property of
     `wrapMcpServerWithSentry` + `sendDefaultPii: false` + Oak redaction
     combined — not testable at the Oak boundary alone. Candidate for a
     future lane when the events-workspace (Wave 2) provides assertion
     shapes.
-- **Next safe step**: Open
-  [`architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`](../plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md)
-  as the next landing target. Nine work streams WS1–WS9, single
-  atomic commit. Fold sanitisation + redaction primitives into
-  `@oaknational/observability`; delete `packages/core/telemetry-redaction-core/`;
-  amend ADR-160 §Closed Questions. Close with
-  attempt/observed/proven evidence per the same §Lane Close Evidence
-  Pattern. Once the consolidation lands, L-12-prereq reopens as a
-  confirmation step and Wave 1 can close after L-7 adjudication.
-- **Deep consolidation status**: due — not well-bounded for this
-  closeout. distilled.md is at 275/275 (hard limit); napkin.md is well
-  over 500 lines (rotation threshold) after L-EH initial + L-DOC initial
-  entries; three single-instance watchlist items from L-EH/L-DOC sessions
+- **Next safe step**: Resume the Sentry observability wiring per
+  [`observability/active/sentry-observability-maximisation-mcp.plan.md`](../plans/observability/active/sentry-observability-maximisation-mcp.plan.md).
+  Remaining Wave 1 / Phase 1 surface after the consolidation close:
+  L-7 (release/deploy linkage — blocked on owner adjudication of
+  the build/releases/Sentry interaction). Phase 2 lanes (events
+  workspace, multi-sink conformance, feature-flag provider
+  selection) sit behind that. Wave 4 L-12 (widget Sentry)
+  substrate is now ready (observability is browser-safe by
+  construction), but the widget lane itself is a Wave 4 item, not
+  the next forward-motion target.
+  **Alternative landing targets** (if the next session is owner-
+  adjudication-shaped rather than code-shaped): close Exploration 10
+  (Clerk identity policy ruling) — this unblocks warehouse adapter
+  authoring downstream and resolves the open `mcp-handler.ts` TSDoc
+  pointer. Or close Exploration 9 (warehouse vendor) on the identity-
+  independent criteria, leaving the identity-sensitive checks for
+  when Exploration 10 closes.
+- **Deep consolidation status**: **due — not well-bounded for this
+  closeout** (now carrying primitives-consolidation-planning substance
+  + three-sink wiring substance on top of the already-deferred L-DOC
+  initial + L-EH initial + Phase-5 surprises). distilled.md is at
+  275/275 (hard limit); napkin.md is now ~1400 lines (well over 500
+  rotation threshold) with the primitives-consolidation-planning
+  session adding seven new watchlist candidates (dependency-
+  provenance-before-scaffold; amend-not-honour-when-simplification-
+  surfaces-post-decision; multi-lens-reviews-surface-tradeoffs-single-
+  review-cannot; core-tier-means-primitive-not-just-dependency-pure;
+  duplicate-type-load-bearing-at-three-consumers; safety-layers-stack-
+  not-nest; git-status-is-a-snapshot-reread-before-destructive-ops)
+  plus the three-sink session's six (closure-principle-absorbs-
+  cardinality; reviewer-as-option-cartographer; in-place-supersession-
+  markers third-instance promotion-ready; date-suffixed-frontmatter-
+  is-a-smell; tier-scope-must-be-explicit-for-shared-vocabulary-
+  invariants; code-embodied-policy-without-explicit-ruling-needs-
+  tsdoc-pointer). Three previously single-instance watchlist items
   have now reached ≥2 cross-session instances and are promotion
   candidates (reviewer-catches-plan-blind-spot, externally-verifiable-
   output-beats-plan-compliance, decompose-precedents-before-reusing).
-  Running consolidate-docs is the third structural-change pass of the day
-  (morning consolidation; L-EH initial; L-DOC initial); pattern-inflation
-  risk is compounded per ADR-131 §Self-Referential Property. The next
-  session opens the deep pass deliberately OR commits to another forward-
-  motion lane and defers again.
+  The "fork-cost-surfaces-in-doc-discipline-layer" pattern reached a
+  third instance in the three-sink session and is promotion-ready.
+  Running consolidate-docs would now be the fifth structural-change
+  pass of the day (morning consolidation; L-EH initial; L-DOC initial;
+  three-sink wiring; primitives-consolidation planning); pattern-
+  inflation risk is compounded per ADR-131 §Self-Referential Property.
+  The next session opens the deep pass deliberately OR commits to
+  another forward-motion lane (primitives consolidation execution;
+  Exploration 9 or 10 closure) and defers again.
+
+### Later Handoff Addendum — 2026-04-19 (KG reframe + shared-worktree state)
+
+- **Workstream**: The branch still belongs to Observability Wave 1 on
+  `feat/otel_sentry_enhancements`, but a later 2026-04-19 session also
+  completed a knowledge-graph discovery-surface repair lane on the same
+  shared worktree. That docs lane reframed the
+  `knowledge-graph-integration` hub so it no longer reads as an EEF-only
+  lane, removed the lingering Neo4j-default framing from the KG
+  decision surfaces, and repaired moved-link propagation across the KG,
+  semantic-search, SDK/MCP, report, and high-level-plan discovery
+  surfaces.
+- **Active plans**:
+  - `.agent/plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`
+    remains the next observability landing target and the branch's main
+    blocker-clearing lane.
+  - `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
+    remains the authoritative lane-level execution surface for Wave 1.
+  - `.agent/plans/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md`
+    and
+    `.agent/reports/oak-ontology-mcp-search-integration-report-2026-04-19.md`
+    were discovery-wired and reframed in docs during the later handoff
+    session, but no KG execution plan was promoted or closed.
+  - No observability active plan status was changed by the KG docs lane;
+    plan authority remains where it already was.
+- **Current state**:
+  - `HEAD` is still `095e66d4`; no new commit was made in the later KG
+    docs session.
+  - The shared worktree is **not** in the earlier "only handoff-session
+    edits" state anymore. It now contains substantial in-progress
+    observability execution work in `@oaknational/observability`,
+    `@oaknational/logger`, `@oaknational/sentry-node`, related app
+    call-sites, workspace metadata, and deletions of
+    `packages/core/telemetry-redaction-core/`, alongside the KG docs
+    cleanup edits and napkin/prompt updates.
+  - Because multiple agents are working in the repo, the worktree must
+    be treated as shared mutable state. Re-read `git status --short`
+    before any edit or cleanup step; do not assume an earlier snapshot
+    is still true.
+- **Current objective**:
+  - For observability, the immediate objective is still to land the
+    primitives-consolidation plan cleanly and return the branch to a
+    coherent post-scaffold architecture before any merge attempt.
+  - For the KG lane, the objective of the later session is complete:
+    discovery surfaces now consistently route readers to the ontology
+    report, the direct-ontology/platform-comparison plan, and the moved
+    KG active/research surfaces without the old EEF-only or
+    Neo4j-by-default drift.
+- **Hard invariants / non-goals**:
+  - Do **not** discard surprising worktree changes. Shared-state safety
+    wins over local neatness.
+  - Do **not** let docs cleanup imply authority transfer: observability
+    active plans remain authoritative for observability scope; KG docs
+    changes were navigation and framing corrections only.
+  - Do **not** reopen deep consolidation from this handoff. The owner
+    explicitly requested: record what needs recording, compact nothing,
+    remove nothing, and ignore fitness functions for this closeout.
+- **Recent surprises / corrections**:
+  - The KG docs move had a wider broken-link surface than it first
+    appeared: three stale-path classes were active at once
+    (`semantic-search/current/*`, `kgs-and-pedagogy/future/*`, and KG
+    active plans still advertised from
+    `sdk-and-mcp-enhancements/active/*`), plus moved active-plan
+    `Foundation Alignment` links that were now off by one directory.
+    The docs reviewer and code reviewer both caught real defects that
+    were then fixed in-place.
+  - The later KG review round confirmed that wording drift and
+    navigation drift interact: the docs can "sound right" while still
+    dead-ending at the exact read-order surfaces a fresh reader follows.
+  - Owner correction for this handoff: preserve existing continuity
+    content in the prompt; add to it instead of compacting or deleting;
+    ignore fitness-function-driven escalation for this closeout.
+- **Open questions / low-confidence areas**:
+  - The observability execution work already present in the worktree may
+    have advanced the primitives-consolidation lane beyond the older
+    continuity snapshot. The next session should trust fresh disk state
+    and active plans over any stale prose here.
+  - The IDE still shows
+    `.agent/plans/kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md`
+    as an open tab, but the authoritative tracked file is now under
+    `knowledge-graph-integration/future/`. Treat the old path as stale
+    editor context, not authoritative repo structure.
+- **Next safe step**:
+  - Re-ground from the observability consolidation plan, then re-read
+    `git status --short` and the touched observability files on disk
+    before making any further edits. Assume other agents may have
+    advanced the fold from scaffold-removal into real implementation.
+  - If the next session is KG-facing instead, no new planning move is
+    required first; start by validating the repaired discovery surfaces
+    against whatever new concurrent edits landed after this handoff.
+- **Deep consolidation status**:
+  - **not due — owner-directed lightweight handoff only.** This
+    closeout records continuity additively, does not compact existing
+    prompt content, does not remove prior handoff material, and
+    intentionally ignores fitness functions and consolidation-triggered
+    escalation for this session.
 
 The older observability-specific sections below are historical branch context
 only. They are not the active handoff contract for the next session.

@@ -1,8 +1,7 @@
-import { REDACTED_VALUE } from '@oaknational/observability';
 import { describe, expect, it } from 'vitest';
 
+import { REDACTED_VALUE } from './redaction.js';
 import {
-  describeUnknownError,
   redactJsonObject,
   redactStringRecord,
   redactText,
@@ -71,17 +70,5 @@ describe('redactStringRecord', () => {
     });
     expect(output?.['authorization']).toBe(REDACTED_VALUE);
     expect(output?.['content-type']).toBe('application/json');
-  });
-});
-
-describe('describeUnknownError', () => {
-  it('returns the message of an Error instance', () => {
-    expect(describeUnknownError(new Error('boom'))).toBe('boom');
-  });
-
-  it('returns the stringified form of a non-Error value', () => {
-    expect(describeUnknownError('plain string')).toBe('plain string');
-    expect(describeUnknownError(42)).toBe('42');
-    expect(describeUnknownError({ toString: () => 'custom' })).toBe('custom');
   });
 });

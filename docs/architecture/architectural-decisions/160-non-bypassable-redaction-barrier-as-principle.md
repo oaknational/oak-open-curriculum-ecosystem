@@ -109,12 +109,16 @@ The MCP App browser widget will introduce `@sentry/browser` hooks
 alongside the existing `@sentry/node` ones. The shared redactor
 lives in `packages/libs/sentry-node/src/runtime-redaction.ts`, which
 is Node-only (depends on `@sentry/node` types). Satisfying this ADR
-for the browser side requires extracting a pure,
-runtime-agnostic redactor core into a browser-safe package (for
-example `@oaknational/telemetry-redaction-core`). Both the Node
-adapter and the browser adapter compose it. Failure to extract
-the core would force the widget to re-implement the redaction policy,
-violating this ADR's single-source-of-truth invariant.
+for the browser side requires the value-level redaction primitives
+to be available in a browser-safe package. They live in
+`@oaknational/observability`, which is browser-safe by construction
+(zero `@sentry/*` imports; zero `node:*` imports; enforced by a
+`no-node-only-imports` structural test co-located with the
+primitives). Both the Node adapter (`@oaknational/sentry-node`)
+and the future browser adapter compose these primitives directly.
+Failure to preserve the browser-safe boundary would force the
+widget to re-implement the redaction policy, violating this ADR's
+single-source-of-truth invariant.
 
 ## Test Gate
 
@@ -185,15 +189,30 @@ at the top of §6 pointing here.
 Both questions originally raised at drafting have been resolved in the
 `sentry-observability-maximisation-mcp.plan.md` Phase A + Phase C lanes:
 
-- **Runtime-agnostic redactor core placement — RESOLVED as a new
-  package.** The core will live at `packages/core/telemetry-redaction-core/`
-  rather than as a submodule of `@oaknational/observability` or
-  `@oaknational/sentry-node`. Rationale: `@oaknational/sentry-node` carries
-  a transitive `@sentry/node` dependency that the browser adapter cannot
-  tolerate; only a separate package with zero `@sentry/*` dependencies can
-  be composed from both runtimes. Precedent: `design-tokens-core` /
-  `oak-design-tokens` per ADR-154. Tier `packages/core/` matches ADR-041.
-  Implemented by L-12-prereq in the maximisation plan.
+- **Runtime-agnostic redactor core placement — RESOLVED as a fold into
+  `@oaknational/observability`.** Originally recorded (2026-04-17) as a new
+  `packages/core/telemetry-redaction-core/` package. An implementation
+  attempt on 2026-04-19 scaffolded that workspace and surfaced two
+  architectural facts that the original ruling had not anticipated: (1) the
+  value-level redaction primitives required JSON sanitisation helpers
+  (`sanitiseForJson`, `sanitiseObject`, `JsonValue`/`JsonObject`) that then
+  lived in `@oaknational/logger` (a foundation lib), forcing a forbidden
+  core→lib dependency direction per ADR-041; and (2) the proposed workspace
+  would have been 139 LOC of pure composition over
+  `@oaknational/observability`'s existing redaction policy, with zero net
+  primitive content, failing core-tier's "atomic foundational primitive"
+  spirit. A simplification-first architecture review (barney, 2026-04-19)
+  also noted that a new core workspace would have entrenched a third copy
+  of the recursive JSON-safe shape (already duplicated as `JsonValue` in
+  logger and `TelemetryValue` in observability) — at which point
+  canonicalisation becomes forced. The correct response was to fold JSON
+  sanitisation + the value-level redaction primitives into
+  `@oaknational/observability`, which already owned the redaction policy
+  they composed over, and delete the transitional workspace entirely. See
+  the 2026-04-19 history entry below for the full resolution. Browser
+  safety (zero `@sentry/*`, zero Node-only imports in
+  `@oaknational/observability`) is preserved by the `no-node-only-imports`
+  structural test co-located with the primitives.
 - **Conformance-test location — RESOLVED as per-consuming-workspace.**
   Each consumer (Node adapter in `packages/libs/sentry-node/`; future
   browser adapter in the widget package) owns its own conformance test
@@ -223,6 +242,33 @@ The first Node-side conformance test is
 
 - **2026-04-17** — Accepted (origin per the maximisation plan's
   Phase A; in-tree commit history is authoritative).
+- **2026-04-19** — Runtime-agnostic redactor core folded into
+  `@oaknational/observability` rather than standing up a separate
+  `packages/core/telemetry-redaction-core/` workspace.
+  **TL;DR**: closure principle unchanged; placement decision corrected
+  toward simplification. Background: the L-12-prereq implementation
+  attempt scaffolded the new workspace and immediately hit ADR-041's
+  core→lib boundary (the value-level primitives needed
+  `sanitiseForJson`/`sanitiseObject` from `@oaknational/logger`, a lib).
+  Architecture review (fred — strict ADR lens; barney —
+  simplification-first lens, 2026-04-19) produced contradictory-but-
+  both-honest verdicts: fred approved a two-workspace split with
+  corrections; barney rejected as over-decomposed (139 LOC of pure
+  composition in a candidate core package, plus a third copy of the
+  recursive JSON-safe shape that was already duplicated as
+  `JsonValue` in logger and `TelemetryValue` in observability). Owner
+  ruling: amend this ADR toward the simplification, on the principle
+  that the original placement decision was made without the full
+  consumer graph visible. The fold (a) unifies the JSON-safe type
+  under one canonical name (`JsonValue`/`JsonObject`), (b) co-locates
+  the primitives with the redaction policy that composes them, (c)
+  flattens the adapter dependency graph from `sentry-node →
+telemetry-redaction-core → observability` to `sentry-node →
+observability`, and (d) preserves browser-safety via a
+  `no-node-only-imports` structural test inside
+  `@oaknational/observability`. The closure principle of this ADR is
+  unaffected: every fan-out path still applies the redaction policy
+  before any sink reaches the network.
 - **2026-04-19** — Identity-envelope policy ruling deferred to a
   dedicated exploration.
   **TL;DR**: closure principle unchanged; identity-envelope policy

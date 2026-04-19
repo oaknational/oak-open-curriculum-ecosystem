@@ -206,7 +206,7 @@ git subtree pull \
 ```
 
 **Why subtree over submodule**: The ontology integration strategy
-(`.agent/plans/kgs-and-pedagogy/future/ontology-integration-strategy.md`)
+(`.agent/plans/knowledge-graph-integration/future/ontology-integration-strategy.md`)
 already evaluated these trade-offs. Subtree avoids `--recurse-submodules`
 pain in CI, changes are regular commits, and local modifications merge
 cleanly. The same reasoning applies here.
@@ -372,11 +372,11 @@ T8: E2E tests                                      ← quality gate
 ### Strategic Context
 
 - **Evidence integration strategy**
-  (`.agent/plans/kgs-and-pedagogy/future/evidence-integration-strategy.md`)
+  (`.agent/plans/knowledge-graph-integration/future/evidence-integration-strategy.md`)
   — education skills fulfil R5 (Implementation Guidance) and R6
   (Pedagogical Workflow Orchestration) at a level EEF data alone cannot
 - **Ontology integration strategy**
-  (`.agent/plans/kgs-and-pedagogy/future/ontology-integration-strategy.md`)
+  (`.agent/plans/knowledge-graph-integration/future/ontology-integration-strategy.md`)
   — the git subtree approach here is informed by the same trade-off
   analysis (subtree > submodule for content vendoring)
 
@@ -435,11 +435,11 @@ patterns.
 
 ## Foundation Alignment
 
-- [principles.md](../../directives/principles.md) — strict, complete,
+- [principles.md](../../../directives/principles.md) — strict, complete,
   schema-first
-- [testing-strategy.md](../../directives/testing-strategy.md) — TDD
+- [testing-strategy.md](../../../directives/testing-strategy.md) — TDD
   at all levels
-- [schema-first-execution.md](../../directives/schema-first-execution.md)
+- [schema-first-execution.md](../../../directives/schema-first-execution.md)
   — Zod validation at ingestion boundary
 
 First question: Could it be simpler without compromising quality?

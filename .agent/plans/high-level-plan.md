@@ -97,7 +97,7 @@ there). Observability plans moved into the dedicated
    [mcp-app-extension-migration.plan.md](sdk-and-mcp-enhancements/active/mcp-app-extension-migration.plan.md)
    and deploy that migration work.
 4. The first graph-enablement slice has now been promoted into
-   [kg-alignment-audit.execution.plan.md](semantic-search/current/kg-alignment-audit.execution.plan.md).
+   [kg-alignment-audit.execution.plan.md](knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md).
    Use its outputs to decide whether the next graph promotion is separate Neo4j
    provisioning, Elasticsearch projection work, or explanation-first graph
    augmentation.
@@ -200,7 +200,7 @@ Graph-augmented curriculum navigation begins to surface.
      metadata visible in Claude Desktop / ChatGPT tool listings)
 3. **Knowledge graph alignment audit** (intention #4)
    - First graph-enablement slice:
-     [kg-alignment-audit.execution.plan.md](semantic-search/current/kg-alignment-audit.execution.plan.md)
+     [kg-alignment-audit.execution.plan.md](knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
    - Outputs inform whether next graph promotion is separate Neo4j
      provisioning, Elasticsearch projection work, or explanation-first
      graph augmentation
@@ -251,7 +251,7 @@ platform reach.
      [architecture-and-infrastructure/README.md](architecture-and-infrastructure/README.md)
    - Reference implementation patterns exist in `starter-app-spike`
 3. **Knowledge graph alignment** (if not completed in M2)
-   - [kg-alignment-audit.execution.plan.md](semantic-search/current/kg-alignment-audit.execution.plan.md)
+   - [kg-alignment-audit.execution.plan.md](knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md)
 4. **Exemplar MCP App UI experience (`user_search` tool)**
    - New user-facing search tool (`user_search`/`userSearch`) with the same
      capabilities as the existing `search` tool but designed for interactive
@@ -339,7 +339,7 @@ Strategic architecture remains anchored in:
 - Incorporate Claude Education Skills as a user facing feature
 - Incorporate EEF Evidence as a user facing feature (JR's demo)
 - Combine EEF Evidence and Education Skills as a user facing feature (clear labelling as experiment, not endorsement, until pedagogical evaluation is complete)
-- International curriculum comparator: route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline as the first external consumer after Tranche 4 of the Oak Surface Isolation Programme lands — see [sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md); adjacent to the multi-source narrative in [sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md](sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md)
+- International curriculum comparator: route the Opetushallitus (Finnish) public curriculum APIs through the generalised OpenAPI → SDK → MCP pipeline as the first external consumer after Tranche 4 of the Oak Surface Isolation Programme lands — see [sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md](sdk-and-mcp-enhancements/future/finnish-national-curriculum-api-pipeline-demonstration.plan.md); adjacent to the multi-source narrative in [knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md](knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md)
 
 ### Practice Capabilities
 

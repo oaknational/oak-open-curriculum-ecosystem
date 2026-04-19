@@ -77,9 +77,10 @@ vision document.
 ## Strategic Context
 
 - **Evidence integration strategy**:
-  `.agent/plans/kgs-and-pedagogy/future/evidence-integration-strategy.md`
+  `.agent/plans/knowledge-graph-integration/future/evidence-integration-strategy.md`
   (R1-R8 impact-preserving requirements)
-- **KG alignment audit**: `.agent/plans/semantic-search/current/kg-alignment-audit.execution.plan.md`
+- **KG alignment audit**:
+  `.agent/plans/knowledge-graph-integration/current/kg-alignment-audit.execution.plan.md`
   (ACTIVE — measures ontology-search overlap for deeper integration later)
 - **M2 milestone**: `.agent/milestones/m2-extension-surfaces.md`
   (KG alignment is an M2 gate)
@@ -412,11 +413,11 @@ After all surfaces ship:
 
 ## Foundation Alignment
 
-- [principles.md](../../directives/principles.md) — strict, complete,
+- [principles.md](../../../directives/principles.md) — strict, complete,
   schema-first, separate framework from consumer
-- [testing-strategy.md](../../directives/testing-strategy.md) — TDD
+- [testing-strategy.md](../../../directives/testing-strategy.md) — TDD
   at all levels
-- [schema-first-execution.md](../../directives/schema-first-execution.md)
+- [schema-first-execution.md](../../../directives/schema-first-execution.md)
   — types flow from schema (EEF data gets typed at ingestion)
 
 First question: Could it be simpler without compromising quality?

@@ -50,6 +50,7 @@ Understanding Oak's curriculum structure and knowledge representation.
 | [curriculum-structure-3d-model.md](curriculum-structure-3d-model.md) | 3D curriculum visualization | Spatial metaphor for curriculum navigation |
 | [ONTOLOGY_RESEARCH_SUMMARY.md](ONTOLOGY_RESEARCH_SUMMARY.md) | Ontology research summary | |
 | [official-api-ontology-comparison.md](official-api-ontology-comparison.md) | API vs ontology comparison | |
+| [kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md](kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md) | Graph-serving platform comparison | Direct-use baseline plus Neo4j/Stardog strengths, weaknesses, unknowns, and prototype-worthy use cases for external features |
 | **[open-curriculum-concept-graph/](open-curriculum-concept-graph/)** | Concept graph research | |
 | **[ooc/](ooc/)** | Open Curriculum research | Bulk download analysis, data quality |
 | [threads-analysis.md](threads-analysis.md) | Thread structure analysis | 164 threads, cross-year progressions |
@@ -65,8 +66,10 @@ the ontology lane.
 
 | Surface | Type | Why it matters |
 |---------|------|----------------|
+| [../plans/knowledge-graph-integration/README.md](../plans/knowledge-graph-integration/README.md) | Collection hub | Main discovery surface for ontology integration, direct-use baseline, platform comparison, and adjacent pedagogy work |
 | [../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis of the official Oak ontology against current MCP orientation, direct ontology surfaces, search projections, QA, and governance/update needs |
-| [../plans/kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md](../plans/kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md) | Future short plan | Upstream-first neutral review plan for re-reading the ontology repo and testing current local assumptions |
+| [../plans/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md](../plans/knowledge-graph-integration/future/ontology-repo-fresh-perspective-review.plan.md) | Future short plan | Upstream-first neutral review plan for re-reading the ontology repo and testing current local assumptions |
+| [../plans/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md](../plans/knowledge-graph-integration/future/direct-ontology-use-and-graph-serving-prototypes.plan.md) | Future strategic plan | Direct-use-first comparison plan for testing whether Neo4j or Stardog adds enough downstream serving value to justify adoption |
 
 ### 🤖 AI & MCP
 

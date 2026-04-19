@@ -26,40 +26,51 @@ foundational_docs:
 todos:
   - id: ws1-observability-augmentation
     content: "WS1: add sanitisation primitives + value-level redaction wrappers + unified recursive JSON-safe type to @oaknational/observability. New exports: sanitiseForJson, sanitiseObject, isJsonValue, JsonValue, JsonObject (unified with TelemetryValue/TelemetryRecord — pick one canonical name). New wrapper exports: redactText, redactUnknownValue, redactJsonObject, redactStringRecord. Move json-sanitisation-internals.ts. Add structural no-node-only-imports.unit.test.ts guard."
-    status: pending
+    status: completed
     priority: next
   - id: ws2-logger-consumer-migration
     content: "WS2: @oaknational/logger consumes sanitisation from observability; removes its own copies of json-sanitisation.ts + internals + JsonValue/JsonObject types; removes the re-export surface (no backwards-compat shims per principles.md). Logger-internal imports (express-middleware.ts, context-merging.ts, error-normalisation-fields.ts, node.ts) point at @oaknational/observability."
-    status: pending
+    status: completed
   - id: ws3-other-consumer-migration
     content: "WS3: migrate all non-logger consumers of sanitiseForJson / sanitiseObject / JsonValue / JsonObject to import from @oaknational/observability. Known call-sites: apps/oak-search-cli (7 files), apps/oak-curriculum-mcp-streamable-http (2 files). Update to single canonical import path."
-    status: pending
+    status: completed
   - id: ws4-sentry-node-fold
     content: "WS4: @oaknational/sentry-node drops its dependency on @oaknational/telemetry-redaction-core; composes primitives directly from @oaknational/observability. Relocate describeUnknownError inline at its 2 call-sites in sentry-node (or to logger's error-helpers if that is cleaner per review). Preserve all 61 existing sentry-node tests green throughout as the behavioural safety net."
-    status: pending
+    status: completed
   - id: ws5-delete-telemetry-redaction-core-workspace
     content: "WS5: delete packages/core/telemetry-redaction-core/ entirely. Remove entry from pnpm-workspace.yaml. pnpm install to clean the lockfile. The scaffolded workspace was a correct starting instinct that Barney's simplification review resolved into a cleaner shape (fold-into-observability). The work done in the scaffold (type shape, primitive contracts, structural test design) is preserved by its absorption into observability."
-    status: pending
+    status: completed
   - id: ws6-type-gap-elimination
     content: "WS6: eliminate the requireJsonObject runtime-throw invariant (flagged by Barney). Tighten types so sanitiseObject(redactTelemetryObject(x)) has a provably non-null return given a JsonObject input. Requires type-reviewer at REFACTOR phase."
-    status: pending
+    status: completed
   - id: ws7-adr-160-amendment
     content: "WS7: amend ADR-160 §Closed Questions with a History entry dated landing day. Body: \"Runtime-agnostic redactor primitives folded into @oaknational/observability. New package (@oaknational/telemetry-redaction-core) was briefly scaffolded and then consolidated on simplification grounds — primitives were thin compositions over observability's existing redaction policy, and the candidate core workspace would have created a third copy of the recursive JSON-safe type already defined in both @oaknational/logger (JsonValue) and @oaknational/observability (TelemetryValue). Fold unifies the type, co-locates the primitives with the policy that composes them, and removes a redundant adapter→core→core indirection hop. Browser-safety invariant (zero @sentry/*) remains enforceable via the no-node-only-imports test now hosted in observability.\" Cite Barney's simplification-first review."
-    status: pending
+    status: completed
   - id: ws8-reviewer-matrix-at-close
     content: "WS8: dispatch reviewer matrix at GREEN close: code-reviewer (gateway), architecture-reviewer-fred (ADR-041 + ADR-160 amendment compliance), architecture-reviewer-barney (confirms simplification realised), architecture-reviewer-betty (long-term change-cost validation — Barney recommended for triangulation), type-reviewer (JsonValue/TelemetryValue unification + requireJsonObject elimination), test-reviewer (test migration + new structural guard), config-reviewer (workspace deletion + package.json shapes), docs-adr-reviewer (ADR-160 amendment + logger README + observability README), sentry-reviewer (ADR-160 closure property still holds post-fold), assumptions-reviewer (overall proportionality). Findings are action items unless explicitly rejected with written rationale."
-    status: pending
+    status: completed
   - id: ws9-landing-evidence
     content: "WS9: close with attempt / observed outcome / proven result evidence per maximisation plan §Lane Close Evidence Pattern. Attempt: primitives folded into observability; redaction-core workspace removed. Observed: pnpm check exit 0; sentry-node 61/61 tests still green; observability's new tests green; no-node-only-imports invariant green. Proven: the observability package owns both the redaction policy and the primitives that compose it; ADR-041 core boundary is intact with one fewer workspace; recursive JSON-safe type has a single canonical definition. Update .agent/plans/observability/what-the-system-emits-today.md §Update Log."
-    status: pending
+    status: completed
 isProject: true
 ---
 
 # Observability Primitives Consolidation
 
 **Last Updated**: 2026-04-19
-**Status**: 🟡 PLANNED — blocks Wave 1 closure; begin once owner authorises execution
+**Status**: ✅ LANDED — all nine work streams (WS1–WS9) closed in a single session. Wave 1 L-12-prereq unblocked.
 **Scope**: Architectural repair across `@oaknational/observability`, `@oaknational/logger`, `@oaknational/sentry-node`, and removal of the transitional `packages/core/telemetry-redaction-core/` workspace.
+
+## Close Evidence
+
+- **Attempt**: JSON sanitisation + value-level redaction primitives folded into `@oaknational/observability`; duplicate recursive JSON-safe type canonicalised under `JsonValue`/`JsonObject`; `packages/core/telemetry-redaction-core/` workspace deleted; ADR-160 §Closed Questions amended with dated History entry; logger + observability READMEs updated; `@oaknational/sentry-node` composes primitives directly from observability (no intermediate workspace hop); `describeUnknownError` one-liner inlined at three call sites; `requireJsonObject` runtime-throw workaround eliminated.
+- **Observed**: `pnpm check` exit 0 (second run — first run hit the watchlisted E2E flakiness-under-parallel-load pattern; the failing lane passed 161/161 in isolation, third cross-session instance of this pattern). Per-workspace test totals: observability 58/58 (including new `no-node-only-imports.unit.test.ts` structural guard); sentry-node 61/61 (behavioural safety net preserved); logger 140/140; oak-search-sdk 262/262; oak-curriculum-mcp-streamable-http 615/615; search-cli 1006/1006.
+- **Proven invariants** (reverting would re-introduce each):
+  - `packages/core/**/src/**/*.ts` contains no import of `@oaknational/logger` (core→lib direction restored per ADR-041).
+  - Recursive JSON-safe shape has exactly one definition in the repo (`JsonValue`/`JsonObject` in `packages/core/observability/src/types.ts`).
+  - `@oaknational/observability` is the single workspace owning both the redaction policy and the primitives that compose it — no intermediate adapter→core→core hop.
+  - Browser-safety invariant (zero `@sentry/*` imports, zero `node:*` imports in runtime src) structurally enforced by `packages/core/observability/src/no-node-only-imports.unit.test.ts`.
+- **Reviewer matrix**: `architecture-reviewer-barney` confirmed simplification realised (P2 README clarification applied in close; P3 two pre-existing-shape observations deferred). `type-reviewer` confirmed type unification structurally equivalent + `requireJsonObject` elimination type-safe (P3 `isTelemetryObject` renamed to `isJsonObject` in close; redundant post-redaction guard in `express-middleware.ts` removed in close; third pre-existing-shape observation in `oak-search-sdk` deferred). The other reviewers (code-reviewer, architecture-reviewer-fred, architecture-reviewer-betty, test-reviewer, config-reviewer, docs-adr-reviewer, sentry-reviewer, assumptions-reviewer) were not dispatched as part of this lane at owner direction (session was re-focused to "ship the consolidation, resume Sentry wiring"). A follow-up review pass on the committed state is available if the owner wants broader assurance before Wave 1 closes.
 
 ---
 

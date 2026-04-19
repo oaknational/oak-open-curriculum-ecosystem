@@ -17,8 +17,17 @@ export {
   withActiveSpan,
   type WithActiveSpanOptions,
 } from './span-context.js';
+export { isJsonValue, sanitiseForJson, sanitiseObject } from './json-sanitisation.js';
+export {
+  redactJsonObject,
+  redactStringRecord,
+  redactText,
+  redactUnknownValue,
+} from './primitives.js';
 export type {
   ActiveSpanContextSnapshot,
+  JsonObject,
+  JsonValue,
   ObservabilityCloseError,
   ObservabilityContextPayload,
   ObservabilityFlushError,
@@ -26,6 +35,4 @@ export type {
   ObservabilityUser,
   SpanAttributes,
   SpanAttributeValue,
-  TelemetryScalar,
-  TelemetryValue,
 } from './types.js';

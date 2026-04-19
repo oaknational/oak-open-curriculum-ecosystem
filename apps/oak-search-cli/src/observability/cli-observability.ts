@@ -11,12 +11,7 @@
  * - `sentry`: live Sentry SDK with error capture and structured logs
  */
 
-import {
-  normalizeError,
-  sanitiseObject,
-  type LogContextInput,
-  type LogSink,
-} from '@oaknational/logger';
+import { normalizeError, type LogContextInput, type LogSink } from '@oaknational/logger';
 import { err, ok, type Result } from '@oaknational/result';
 import {
   createSentryConfig,
@@ -30,6 +25,7 @@ import {
   type SentryNodeSdk,
 } from '@oaknational/sentry-node';
 import {
+  sanitiseObject,
   withActiveSpan,
   type ObservabilityCloseError,
   type ObservabilityContextPayload,
