@@ -7,6 +7,7 @@ import tsdocPlugin from 'eslint-plugin-tsdoc';
 import type { Linter, ESLint } from 'eslint';
 
 import { noEslintDisableRule } from '../rules/no-eslint-disable.js';
+import { requireObservabilityEmissionRule } from '../rules/require-observability-emission.js';
 
 /**
  * Inline plugin registration for the `@oaknational` namespace.
@@ -15,10 +16,17 @@ import { noEslintDisableRule } from '../rules/no-eslint-disable.js';
  * any consumer spreading `configs.recommended` automatically gets the
  * `@oaknational/*` rule namespace. Consumers should NOT separately register
  * the `@oaknational` plugin — the config provides it.
+ *
+ * `require-observability-emission` is registered here (rule available)
+ * but not activated in the recommended rule set. Per ADR-162 Phase 5
+ * acceptance, each `apps/*` and `packages/sdks/*` workspace enables the
+ * rule at `warn` in its own flat config. Preset-level activation is
+ * deliberately avoided so the rule never fires outside its intended scope.
  */
 const oakPlugin: ESLint.Plugin = {
   rules: {
     'no-eslint-disable': noEslintDisableRule,
+    'require-observability-emission': requireObservabilityEmissionRule,
   },
 };
 

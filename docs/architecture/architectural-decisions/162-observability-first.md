@@ -1,6 +1,6 @@
 # ADR-162: Observability-First — Every Capability Emits Across Five Axes
 
-**Status**: Proposed (2026-04-18)
+**Status**: Accepted (2026-04-19)
 **Date**: 2026-04-18
 **Related**:
 [ADR-051](051-opentelemetry-compliant-logging.md) — OpenTelemetry-compliant
@@ -322,3 +322,22 @@ In summary:
   `observability-events-workspace.plan.md` / the vendor-independence
   conformance plan in Phase 2; the decision is out of scope for Phase
   1.
+
+## History
+
+- **2026-04-18** — Proposed. Structural skeleton (Phase 1 of the
+  restructure plan) landed in commit `502af060`.
+- **2026-04-19** — Accepted. Phase 5 close: `require-observability-emission`
+  ESLint rule landed at `warn` in `packages/core/oak-eslint/src/rules/require-observability-emission.ts`
+  and wired at `warn` into every `apps/*` and `packages/sdks/*`
+  workspace's `eslint.config.ts`. Reviewer-matrix axis-coverage
+  question codified at
+  [`.agent/directives/invoke-code-reviewers.md §Coverage Tracking`](../../../.agent/directives/invoke-code-reviewers.md).
+  Wave-1 enforcement covers `logger.*` / `Sentry.*` / delegate-pattern
+  emission sites; the schema-usage detection path (Enforcement
+  Mechanism #3) remains deferred to Wave 2 when the
+  `@oaknational/observability-events` workspace lands. The
+  vendor-independence conformance test (Enforcement Mechanism #4) and
+  the `no-vendor-observability-import` structural import lint
+  (Enforcement Mechanism #5) are Phase-2-plan deliverables, not
+  blockers for acceptance.

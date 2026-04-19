@@ -1,5 +1,6 @@
 import { noExportTrivialTypeAliasesRule } from './rules/no-export-trivial-type-aliases.js';
 import { noEslintDisableRule } from './rules/no-eslint-disable.js';
+import { requireObservabilityEmissionRule } from './rules/require-observability-emission.js';
 // import { boundaryRules } from './rules/boundary.js'; // We will need to wrap the boundary logic in a rule or config export
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { createNodeResolver } from 'eslint-plugin-import-x';
@@ -23,6 +24,7 @@ export {
 export const rules = {
   'no-export-trivial-type-aliases': noExportTrivialTypeAliasesRule,
   'no-eslint-disable': noEslintDisableRule,
+  'require-observability-emission': requireObservabilityEmissionRule,
 };
 
 import { recommended } from './configs/recommended.js';

@@ -41,6 +41,17 @@ const config = defineConfig(
       ...createSdkBoundaryRules('search'),
     },
   },
+  // ADR-162 observability-first: require structured emission in newly
+  // exported async functions. Rule is path-scoped internally to apps/**
+  // and packages/sdks/**. Initial severity `warn`; escalates to `error`
+  // once Phase 2 of the observability restructure lands its first
+  // emission sites.
+  {
+    files: ['src/**/*.ts'],
+    rules: {
+      '@oaknational/require-observability-emission': 'warn',
+    },
+  },
 
   // Test file rules
   {

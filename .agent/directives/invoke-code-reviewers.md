@@ -176,6 +176,10 @@ Before marking the work complete, record:
 - which specialists were not needed and why
 - which reviewers ran `focused` versus `deep`
 - whether any delegated review result still needs reintegration
+- whether each new capability has an observability loop across each
+  applicable axis (engineering, product, usability, accessibility,
+  security) per [ADR-162](../../docs/architecture/architectural-decisions/162-observability-first.md).
+  Omission is explicit and justified, not incidental.
 
 ## Invocation
 
