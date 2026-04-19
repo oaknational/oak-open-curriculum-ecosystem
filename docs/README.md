@@ -68,6 +68,18 @@ last_reviewed: 2026-04-19
 - [Design Token Practice](governance/design-token-practice.md) - DTCG three-tier model, contrast validation, CSS output
 - [MCP App Styling](governance/mcp-app-styling.md) - CSS custom properties, host integration, font loading, CSP declarations
 
+## Observability
+
+- [MCP Server Observability Wiring](../apps/oak-curriculum-mcp-streamable-http/docs/observability.md) —
+  authoritative per-app guide: auto-instrumentation, per-request span, scope enrichment, Express error handler DI wiring, redaction barrier entry points, source-map upload
+- [Sentry Node Library](../packages/libs/sentry-node/README.md) —
+  package-level reference for `@oaknational/sentry-node`: modes, shared delegates (hook registry), fixture store, redaction barrier closure
+- [Sentry Deployment Runbook](operations/sentry-deployment-runbook.md) — deployment-side runbook
+- [Sentry CLI Usage](operations/sentry-cli-usage.md) — `sentry-cli` adoption and `.sentryclirc` composition
+- [ADR-143](architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md) — observability boundary
+- [ADR-160](architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md) — non-bypassable redaction barrier
+- [ADR-162](architecture/architectural-decisions/162-observability-first.md) — observability-first principle (five-axis, vendor-independence)
+
 ## Search Application
 
 For semantic search specific documentation:

@@ -109,6 +109,21 @@ Planned (not yet landed):
   runtime cells populated, vendor-independence is structural claim
   not tested invariant, 3 compile-time gates active + 4 planned.
   Triggered by honest-evaluation discussion after L-EH initial close.
+- **2026-04-19** — L-DOC initial landed. 0 matrix cells moved (docs
+  lane is meta), but the reader-side discoverability defect named in
+  the Phase 5 honest-evaluation pass is closed: the
+  `wrapMcpServerWithSentry` wiring at `core-endpoints.ts:98`,
+  redaction barrier, DI seam, per-request span, and scope enrichment
+  are now discoverable by reading workspace docs without grepping
+  source. New doc: `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
+  as the authoritative app-level guide. Expanded:
+  `packages/libs/sentry-node/README.md` from 4-line stub to package-
+  level reference. Shrunk: app README Observability section to a
+  summary + link. L-DOC initial §RED corrected during execution —
+  content-presence test shape was authored and removed after
+  testing-strategy.md review (tests must prove behaviour, not
+  constrain implementation wording); acceptance moved to the
+  reviewer matrix.
 
 Each future update appends here: date + lane + cells populated +
 gates added.

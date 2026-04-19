@@ -21,6 +21,13 @@ debugging the system.
   fixes
 - [Elasticsearch Ingest Lifecycle](./elasticsearch-ingest-lifecycle.md) -
   Blue/green index lifecycle validation and ingest procedure
+- [MCP Server Observability Wiring](../../apps/oak-curriculum-mcp-streamable-http/docs/observability.md) -
+  Per-app authoritative guide: auto-instrumentation, per-request span, scope
+  enrichment, Express error handler DI wiring, redaction barrier entry points,
+  source-map upload
+- [Sentry Node Library](../../packages/libs/sentry-node/README.md) -
+  Package-level reference for `@oaknational/sentry-node`: modes, shared
+  delegates (hook registry), fixture store, redaction barrier closure
 - [Sentry Deployment Runbook](./sentry-deployment-runbook.md) - How to
   enable live Sentry error capture and tracing for Oak runtimes
 - [Sentry CLI Usage](./sentry-cli-usage.md) - When to use `sentry-cli`

@@ -174,65 +174,24 @@ server at `http://localhost:3333/mcp` (requires `dev:observe:noauth` running).
 
 ## Observability
 
-The HTTP server now uses a single app-level observability bundle created at
-process start. In every mode, stdout JSON remains the canonical local log
-surface.
+See [`docs/observability.md`](./docs/observability.md) for the authoritative
+guide to Sentry instrumentation, the per-request `oak.http.request.mcp` span,
+scope enrichment (`mcp.method`, `mcp.tool_name`), the Express error handler
+DI wiring, the redaction barrier entry points (ADR-143 + ADR-160), release
+metadata resolution, and source-map upload.
 
-`SENTRY_MODE` controls the runtime behaviour:
+Summary:
 
-- `off` — default kill switch. No Sentry init, no Sentry sink, no outbound
-  delivery, and no in-memory MCP recorder.
-- `fixture` — no-network local verification mode. Stdout JSON is retained, and
-  MCP observations plus handled-error captures are recorded only in local
-  fixture stores used by tests and local validation.
-- `sentry` — live Sentry mode. Stdout JSON is still retained, and the app adds
-  the Sentry sink, live error capture, and tracing.
-
-Release and metadata are intentionally simple:
-
-- release defaults to the root repo `package.json` version
-- `SENTRY_RELEASE_OVERRIDE` exists only as an explicit override
-- environment resolves as `SENTRY_ENVIRONMENT_OVERRIDE` then `VERCEL_ENV` then
-  `development`
-- git SHA is attached as metadata from `GIT_SHA_OVERRIDE` or
-  `VERCEL_GIT_COMMIT_SHA`
-
-The root package version is only bumped by the GitHub release workflow, so
-preview and local builds can legitimately contain commits newer than the current
-release version. On Vercel production, repo-owned build gating cancels
-non-release builds before they run, so deployed production releases do not drift
-forward under an old semantic-release version number.
-
-The HTTP telemetry boundary is metadata-only:
-
-- generic `/mcp` request capture is reduced to safe method and route metadata
-- raw JSON-RPC envelopes, request bodies, query strings, cookies, and
-  authorisation headers are stripped before Sentry capture
-- MCP tool, resource, and prompt observations retain only kind, name, status,
-  duration, and trace identifiers
-- the shared redaction policy also treats raw
-  `application/x-www-form-urlencoded` OAuth payloads as sensitive input,
-  rather than relying on query-only redaction
-
-The app also adds targeted manual spans for:
-
-- bootstrap phases, including upstream OAuth metadata fetch
-- OAuth proxy upstream `register` and `token` calls
-- asset-download upstream fetch and stream lifecycle
-
-Handled-error capture is reserved for unexpected terminal boundaries such as
-bootstrap failure, server listen failure, Express error middleware, MCP cleanup
-failure, OAuth upstream timeout/network failure, and asset-download proxy
-failure. Expected validation, auth, and upstream-status branches remain logs
-plus span status only.
-
-Successful auth logs retain client/scoping context only (`clientId`,
-`scopeCount`, `hasUserContext`); `userId` is excluded from structured
-observability payloads.
-
-On shutdown and startup failure paths, the app performs bounded Sentry flushes
-at the process boundary: bootstrap failure, server listen error, `SIGINT`, and
-`SIGTERM`. Per-request MCP teardown never initialises or flushes Sentry.
+- `SENTRY_MODE=off` (default) / `SENTRY_MODE=fixture` / `SENTRY_MODE=sentry`
+  select runtime behaviour. Stdout JSON via `@oaknational/logger` is the
+  canonical local log surface in every mode.
+- MCP auto-instrumentation is wired via `wrapMcpServerWithSentry` at
+  [`src/app/core-endpoints.ts:98`](./src/app/core-endpoints.ts); inert under
+  `off` because `@sentry/node` is not initialised.
+- The Sentry Express error handler is DI-injected from `src/index.ts` when
+  `SENTRY_MODE !== 'off'`.
+- Every outbound payload passes through the non-bypassable redaction barrier
+  in [`@oaknational/sentry-node`](../../packages/libs/sentry-node/README.md).
 
 ## Vercel deployment
 
@@ -417,6 +376,7 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:widget:a11y
 ## Detailed Documentation
 
 - [MCP primitives: intention and intended audience](docs/mcp-primitives-intention-and-audience.md) - Internal guide to tool/resource/prompt boundaries, control model, and UAT expectations
+- [Observability](docs/observability.md) — Sentry instrumentation, per-request span, scope enrichment, redaction barrier, release metadata, source-map upload
 - [Operational Debugging](docs/operational-debugging.md) — request tracing, timing, diagnostics, error debugging, production logging
 - [Widget Rendering](docs/widget-rendering.md) — widget dispatch, rendering architecture, and sandbox details
 

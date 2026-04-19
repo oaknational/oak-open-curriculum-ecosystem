@@ -610,12 +610,29 @@ trigger is discoverable per-workspace).
 **Objective**. Make the existing Sentry integration discoverable by
 reading docs, without grepping. Current `packages/libs/sentry-node/README.md` is a 4-line stub — this lane **expands** it (per A.1 factual correction 10), it does not write a new one.
 
-**RED — content presence, not file existence** (A.2 item 9 tightening). Write a structural test (under `test:root-scripts`) that asserts each required concept appears at least once by string or structural match:
+**RED — reviewer-gate, not content-presence test** (corrected
+2026-04-19 during L-DOC initial execution). The prior shape prescribed a
+structural content-presence test asserting specific tokens appear in each
+doc. That shape violates
+[`.agent/directives/testing-strategy.md`](../../../directives/testing-strategy.md):
+the test constrains implementation (doc wording) rather than proving
+behaviour; legitimate rewording of the docs would fail the test. The
+authoring concept-checklist below is retained as the *authoring and
+reviewer walkthrough* guide, but it is not enforced by an automated test.
+Acceptance falls on the reviewer matrix (`docs-adr-reviewer`,
+`onboarding-reviewer`) plus the manual reader-test in Acceptance #2.
 
-- In `packages/libs/sentry-node/README.md`: strings/sections mentioning `modes` (off/fixture/sentry), `redaction barrier` (with ADR-160 citation), `DI seam` (ADR-078 citation), `fixture store`, `logger sink`, `shared delegates`.
-- In `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`: strings/sections mentioning `wrapMcpServerWithSentry` wiring (with the `core-endpoints.ts:98` file reference), per-request span `oak.http.request.mcp`, scope enrichment (`mcp.method`, `mcp.tool_name`), Express error handler registration, source-map upload via `pnpm sourcemaps:upload`, redaction barrier entry points (with ADR-143 + ADR-160 citations).
+Authoring concept checklist (for reviewer walkthrough, not automated):
 
-The test asserts content tokens (string search or markdown section headings), not merely file existence.
+- In `packages/libs/sentry-node/README.md`: modes (off/fixture/sentry),
+  redaction barrier (ADR-160), DI seam (ADR-078), fixture store, logger
+  sink, shared delegates.
+- In `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`:
+  `wrapMcpServerWithSentry` wiring (with the `core-endpoints.ts:98`
+  reference), per-request span `oak.http.request.mcp`, scope enrichment
+  (`mcp.method`, `mcp.tool_name`), Express error handler registration at
+  `src/index.ts:40-41`, source-map upload via `pnpm sourcemaps:upload`,
+  redaction barrier entry points (ADR-143 + ADR-160).
 
 **GREEN**: Write both files. The sentry-node README expansion absorbs the 4-line stub.
 
@@ -623,11 +640,107 @@ The test asserts content tokens (string search or markdown section headings), no
 
 **Acceptance**:
 
-1. Structural content-presence test passes (not merely "file exists").
+1. ~~Structural content-presence test passes.~~ **Superseded
+   2026-04-19**: content-presence tests violate testing-strategy.md;
+   replaced by reviewer-matrix pass (Acceptance #2).
 2. Manual review: a reader unfamiliar with the code can answer "is
    MCP auto-instrumented?" and "where does redaction happen?" from
-   docs alone.
+   docs alone. Verified by `docs-adr-reviewer` and `onboarding-reviewer`
+   specialist passes.
 3. AGENT.md Essential Links edit is deferred to owner (tracked as follow-up in executable plan todos).
+
+**Lane close evidence (2026-04-19)** — per §Lane Close Evidence Pattern:
+
+- **Attempt**: Expanded `packages/libs/sentry-node/README.md` from
+  4-line stub to package-level reference covering modes, redaction
+  barrier (ADR-160), DI seam (ADR-078), fixture store, logger sink,
+  shared delegates, and related ADRs. Authored new
+  `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` as
+  the authoritative app-level guide covering `wrapMcpServerWithSentry`
+  at `core-endpoints.ts:98`, per-request span `oak.http.request.mcp`,
+  scope enrichment (`mcp.method`, `mcp.tool_name`), Express error
+  handler DI wiring at `src/index.ts:40-41`, manual spans, redaction
+  barrier entry points (ADR-143 + ADR-160), source-map upload, and
+  release metadata. Shrunk the app README Observability section
+  (lines 176–235) to a summary plus link. Added the new doc to the
+  app README's Detailed Documentation list. Authored and then
+  **removed** a structural content-presence test under
+  `scripts/` after reconsidering against testing-strategy.md (see
+  §RED correction above). Appended an Update Log entry to
+  `what-the-system-emits-today.md`.
+- **Observed outcome**: `pnpm check` exit 0 from repo root with no
+  filter (PDR-025). Pre-commit hooks passed on Step 0 governance-lane
+  commit. Reviewer matrix (`docs-adr-reviewer`, `onboarding-reviewer`)
+  run at lane close; results recorded in the commit body.
+- **Proven result**: a reader unfamiliar with the code can answer
+  "is MCP auto-instrumented?" (yes — `wrapMcpServerWithSentry` named
+  at a specific file:line in the dedicated observability doc) and
+  "where does redaction happen?" (the ADR-160 barrier, with a link
+  to the enforcing test suite) from the docs alone. Reverting any of
+  the three touched files would regress the discoverability property
+  named in the Phase 5 honest-evaluation pass; the reviewer matrix
+  is the current enforcement gate (not an automated test, per the
+  testing-strategy correction).
+- **AGENT.md Essential Links draft** (owner-only per PDR-003): add
+  a pointer line under an Observability or Runtime Practice block
+  — suggested draft `[Sentry observability](../../apps/oak-curriculum-mcp-streamable-http/docs/observability.md)`
+  — for owner review before L-DOC final.
+
+**Reviewer rounds (2026-04-19)**:
+
+- `onboarding-reviewer` P1s actioned in-place: fixed 11 broken ADR
+  filename links (actual slugs `078-dependency-injection-for-testability`,
+  `143-coherent-structured-fan-out-for-observability`,
+  `160-non-bypassable-redaction-barrier-as-principle`); added forward
+  links from `docs/foundation/quick-start.md` (both signpost locations)
+  and `docs/operations/README.md` to the new doc pair; added an
+  Observability section to `docs/README.md`; added a forwarding link
+  from `docs/operations/sentry-deployment-runbook.md § Redaction` to
+  the new authoritative surfaces. Softened brittle line-number
+  citations to symbol names for `src/mcp-handler.ts` and
+  `src/handlers.ts`; retained the plan-required `core-endpoints.ts:98`
+  and `src/index.ts:40-41` references.
+- `docs-adr-reviewer` Critical Gaps actioned:
+  - ADR filename mismatches — fixed (shared with the onboarding P1).
+  - `SentryPostRedactionHooks` vs `SentryRedactionHooks` conflation —
+    corrected in both docs: the barrier wires five hooks as
+    `SentryRedactionHooks`; `SentryPostRedactionHooks` is the
+    three-member subset that admits consumer post-redaction slots.
+  - Scope enrichment + `userId` — corrected: the doc now states
+    `observability.setUser({ id: userId })` is called when an
+    authenticated `userId` is present, matching
+    `src/mcp-handler.ts`. The `clientId` / `scopeCount` /
+    `hasUserContext` fields are correctly attributed to the
+    stdout JSON auth-success log, not the Sentry scope.
+  - "stripped" → "deny-list-masked" wording correction applied.
+  - Two-layer span reconciliation added (manual
+    `oak.http.request.mcp` wrapper vs
+    `wrapMcpServerWithSentry`'s nested MCP-server spans).
+  - `SentryConfigEnvironment` / `SentryMode` framing corrected
+    (`live` → `sentry`; discriminated `ParsedSentryConfig`).
+  - L-7 plan-back link added; `:98` added to README summary for
+    consistency.
+
+**Follow-up items (not in this lane)**:
+
+1. **Architectural question raised by docs-adr-reviewer**: should
+   `userId` reach the Sentry user scope at all, or is Oak's
+   observability boundary meant to exclude it entirely? Today the
+   code sets `user.id = userId` via `observability.setUser` at
+   `src/mcp-handler.ts`. If the intent is exclusion, the `setUser`
+   call is a code defect; if inclusion is intended, ADR-143's
+   observability boundary should be clarified. Route: open a
+   bounded architecture-reviewer-fred question lane on the next
+   session, or raise via PR discussion.
+2. **MCP-specific telemetry shape is not tested at the Oak
+   boundary**: the claim that MCP observations retain only kind,
+   name, status, duration, and trace identifiers is a property of
+   `wrapMcpServerWithSentry` + `sendDefaultPii: false` + generic
+   redaction, not an Oak-side test. Candidate for a future lane
+   when the events-workspace (Wave 2) can provide assertion shapes.
+3. **CONTRIBUTING.md** has no observability reference (P3). Add
+   one bullet under "Where the documentation lives" pointing to
+   the new doc pair. Owner-gateable; small follow-up.
 
 ### L-12-prereq Browser-safe redactor core extraction
 

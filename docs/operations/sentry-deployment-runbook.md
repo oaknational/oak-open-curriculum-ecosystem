@@ -202,17 +202,21 @@ Key facts verified against official Sentry docs (2026-04-12):
 
 ## Redaction
 
-All telemetry passes through a shared redaction barrier before leaving
+For the authoritative locus of the non-bypassable redaction barrier (ADR-160)
+and the `SentryRedactionHooks` wiring, see
+[`packages/libs/sentry-node/README.md § Redaction barrier (ADR-160)`](../../packages/libs/sentry-node/README.md#redaction-barrier-adr-160)
+and
+[`apps/oak-curriculum-mcp-streamable-http/docs/observability.md § Redaction barrier entry points`](../../apps/oak-curriculum-mcp-streamable-http/docs/observability.md#redaction-barrier-entry-points).
+
+Operationally, all telemetry passes through the barrier before leaving
 the process:
 
 - Keys in `FULLY_REDACTED_KEYS` (tokens, secrets, API keys, DSN,
   cookies, authorisation headers)
 - URL username/password credentials
-- `/mcp` request payloads (stripped to method + route metadata only)
-- Sentry breadcrumbs for MCP routes (stripped to method + route)
-
-See `packages/core/observability/src/redaction.ts` and
-`apps/oak-curriculum-mcp-streamable-http/src/observability/sanitise-mcp-events.ts`.
+- `/mcp` request payloads (method + route metadata retained; other fields
+  deny-list-masked)
+- Sentry breadcrumbs for MCP routes (method + route retained)
 
 ## Related Documentation
 
