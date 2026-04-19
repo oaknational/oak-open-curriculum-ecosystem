@@ -1,6 +1,6 @@
 # Semantic Search Research Index
 
-**Last Updated**: 7 March 2026
+**Last Updated**: 19 April 2026
 
 ---
 
@@ -19,6 +19,17 @@ Use this index when you need to understand:
 - how thread and sequence documents could become more useful search targets
 - how graph-like curriculum assets could be operationalised in Elasticsearch
 - how the Oak ontology in Neo4j should complement Elasticsearch search surfaces
+
+## Companion Surfaces Outside Research
+
+These are not research artefacts, but they are useful adjacent entry points
+when you need promoted synthesis or follow-on planning around the ontology
+lane.
+
+| Surface | Type | Why it matters |
+|---------|------|----------------|
+| [Oak Ontology MCP and Search Integration Report](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis tying ontology findings to current MCP orientation, direct ontology resources, search projections, QA, and governance/update work |
+| [Ontology Repo Fresh-Perspective Review](../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md) | Future short plan | Follow-on plan for an upstream-first re-read of the ontology repo that is not anchored only in semantic-search assumptions |
 
 ---
 
@@ -55,8 +66,6 @@ Use this index when you need to understand:
 | Richer domain vocabulary and glossary assets | [Vocabulary, Glossary, and Mining Surfaces](future/03-vocabulary-and-semantic-assets/vocabulary-glossary-and-mining-surfaces.research.md) | [ADR-086](../../../docs/architecture/architectural-decisions/086-vocab-gen-graph-export-pattern.md) |
 | Thread and sequence search becoming more than title search | [Thread and Sequence Derived Surfaces](future/04-retrieval-quality-engine/thread-sequence-derived-surfaces.research.md) | [ADR-110](../../../docs/architecture/architectural-decisions/110-thread-search-architecture.md) |
 | High-level learning graph through the curriculum | [Learning Graph Surfaces](future/04-retrieval-quality-engine/learning-graph-surfaces.research.md) | [document-relationships.md](future/04-retrieval-quality-engine/document-relationships.md) |
-
----
 
 ## Cross-Boundary Strategic Plans
 

@@ -1,3 +1,283 @@
+## 2026-04-19 — three-sink architecture wired into plans, ADRs, explorations
+
+### What Was Done
+
+- Authored two new exploration stubs:
+  `docs/explorations/2026-04-19-data-warehouse-selection.md` (warehouse
+  choice for Sink 2; BigQuery is the named candidate from the owner
+  conversation but verification deferred) and
+  `docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md`
+  (Clerk-identity policy ruling for downstream sinks; three coherent
+  positions named — anonymous-only, identified-single-sink,
+  identified-all-sinks).
+- Reframed `.agent/plans/observability/future/second-backend-evaluation.plan.md`
+  from "second backend evaluation" to "three-sink strategic brief"
+  with per-sink promotion triggers (warehouse adapter at public-beta;
+  PostHog adapter post-public-beta on a named question; alternative
+  engineering sink only on a named Sentry-capability gap). The
+  original engineering-observability candidate set is retained as
+  contingency under the alternative-engineering-sink trigger.
+- Added History entries to ADR-160 (Clerk-identity policy ruling
+  deferred to new exploration; closure principle unchanged) and
+  ADR-162 (three-sink architecture confirmed; vendor-independence
+  clause unchanged).
+- Updated `.agent/plans/observability/high-level-observability-plan.md`:
+  product-axis Owning Plan + Explorations columns now name the
+  three-sink brief and the two new explorations; Plan Map row
+  for `second-backend-evaluation.plan.md` reframed; Explorations
+  Map expanded from 8 to 10 rows; new "Three-Sink Architecture"
+  subsection added at end.
+- Updated `.agent/plans/observability/README.md` Plan Density
+  Invariant scope clarification (explorations are governed by
+  `docs/explorations/README.md`, not the observability invariant);
+  exploration count updated 8 → 10.
+- Recorded L-15 input framing in
+  `.agent/plans/observability/future/sentry-observability-maximisation.plan.md`
+  (the *strategic-parent* maximisation plan), so the
+  active MCP-side `sentry-observability-maximisation-mcp.plan.md`
+  is not edited from outside its own branch (parallel agent active
+  on its surface). Five framings recorded as L-15 inputs: three-sink
+  shape; MVP usage question is Sentry-addressable; redaction-core
+  extraction is independent of PostHog adoption; Clerk identity is
+  an explicit policy question; existing Oak-org PostHog usage is a
+  signal weighting only.
+- Light touches on three downstream plans: events-workspace plan
+  records its multi-sink consumer posture; multi-sink-conformance
+  plan records the per-sink scope-expansion mechanism (allowlist
+  plus RuleTester cases per adapter PR); feature-flag-provider-selection
+  plan adds PostHog as an existing-vendor candidate.
+- Reframed `docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md`
+  with a prominent "Status update 2026-04-19 — three-sink reframe"
+  section at top, §6.1 update acknowledging the binary framing is
+  superseded, §8 promotion-trigger update referencing per-sink
+  triggers in the reframed plan, and §9 references for the two new
+  companion explorations.
+- Added "Sinks Today vs Planned" subsection to
+  `.agent/plans/observability/what-the-system-emits-today.md` plus
+  Update Log entry.
+- All 13 touched files pass markdownlint.
+
+### Surprise
+
+- **Expected**: the three-sink reframe would land predominantly as
+  ADR amendments (ADR-160 closure principle to permit
+  identified-events; ADR-162 mechanisms to enumerate per-sink
+  conformance).
+- **Actual**: neither ADR text needed substantive amendment. ADR-160
+  is *already* a closure-principle ADR (the 2026-04-17 origin
+  framing got this right); the Clerk-identity ruling lives at the
+  *policy* layer the closure rule consumes, not at the closure
+  rule itself. ADR-162's vendor-independence clause is *already*
+  sink-cardinality-agnostic; three sinks is a confirmation, not an
+  extension. Both ADRs received History entries only. The architectural
+  weight landed in plans (`future/second-backend-evaluation.plan.md`
+  reframe + new explorations 9 + 10), not in ADR amendments.
+- **Causal mechanism**: the closure principle / clause / mechanism
+  abstractions in ADR-160 + ADR-162 were authored to be
+  cardinality-agnostic. This is the second time this property has
+  paid off (first: ADR-160's closure principle correctly absorbed
+  the 2026-04-19 reviewer correction on identified-events
+  mis-prohibition; second: now, three-sink confirmation lands
+  without amendment).
+
+### Pattern To Remember
+
+- **`closure-principles-absorb-cardinality-changes.md`** — when an
+  ADR is authored as a *closure principle* (every X applies Y) rather
+  than as an enumeration (the X items that apply Y are A, B, C),
+  the ADR text remains valid as the cardinality of X grows. ADR-160
+  (every fan-out path applies the redaction policy) and ADR-162
+  (consumers couple to vendor-neutral packages, not vendor SDKs)
+  both demonstrate this. Counterpattern: ADR-143 §6 originally
+  enumerated the fan-out hooks, which is why ADR-160 had to be
+  authored to *generalise* §6. Lesson: when authoring a new ADR,
+  prefer closure-principle wording over enumeration wording where
+  the cardinality is plausibly extensible.
+
+### Where We Are Now
+
+- All 14 todos for the "wire decisions into appropriate surfaces"
+  task are complete except the two reviewer rounds (assumptions +
+  docs-adr) on the edit set, which are about to dispatch in
+  parallel.
+- Markdownlint clean across all 13 touched files.
+- Parallel-agent posture preserved: the active MCP-side maximisation
+  plan was not touched directly; the L-15 framing landed in the
+  strategic-parent plan instead.
+- Owner-confirmed three-sink architecture is now the canonical
+  framing across plans, ADRs, and explorations. The
+  `future/second-backend-evaluation.plan.md` rename-in-place (file
+  path unchanged; semantic content reframed) preserves all inbound
+  cross-references without a redirect step.
+
+---
+
+## 2026-04-19 — L-DOC initial close (observability Wave 1)
+
+### What Was Done
+
+- Landed L-DOC initial on `feat/otel_sentry_enhancements` as commit
+  `9e1a26b2`. 9 L-DOC files + 2 unrelated Cursor IDE artefacts bundled at
+  owner direction (called out in the commit body).
+- Authored `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
+  as the authoritative per-app Sentry guide: modes, `wrapMcpServerWithSentry`
+  at `core-endpoints.ts:98`, per-request span `oak.http.request.mcp`,
+  scope enrichment (`mcp.method`, `mcp.tool_name`), Express error handler
+  DI wiring at `src/index.ts:40-41`, manual spans, redaction barrier
+  entry points (ADR-143 + ADR-160), source-map upload, release metadata.
+- Expanded `packages/libs/sentry-node/README.md` from 4-line stub to
+  package-level reference covering modes, redaction barrier (ADR-160),
+  DI seam (ADR-078), fixture store, logger sink, shared delegates
+  (`SentryRedactionHooks` wiring + `SentryPostRedactionHooks` subset).
+- Shrunk app README `## Observability` section (lines 176–235) to a
+  summary plus link to `docs/observability.md`. Added new Observability
+  entry to app README `## Detailed Documentation` list.
+- Restored the discoverability mesh: `docs/README.md` gained an
+  Observability section; `docs/foundation/quick-start.md` gained forward
+  links from both signpost locations (§Where to Make Changes + §Getting
+  Help → Observability); `docs/operations/README.md` lists both the new
+  app guide and the sentry-node README; `docs/operations/sentry-deployment-runbook.md`
+  § Redaction gained a forwarding link to the new authoritative surfaces.
+- Maximisation plan updated: `l-doc-initial` todo → `completed` with
+  note; Status line updated to list L-DOC initial among landed lanes;
+  §L-DOC initial §RED corrected (content-presence test shape removed);
+  §Lane close evidence appended (attempt / observed / proven + reviewer
+  rounds + follow-ups).
+- `what-the-system-emits-today.md` Update Log appended (L-DOC initial
+  landed; 0 matrix cells moved; documentation discoverability invariant
+  added).
+- Pre-commit hooks all green (format, markdownlint, knip, depcruise,
+  74/74 turbo tasks).
+
+### Surprise
+
+- **Expected**: the maximisation plan's prescribed L-DOC initial §RED
+  (structural content-presence test under `test:root-scripts`) was a
+  valid TDD-shape RED — I authored it, confirmed it red (11/12 failing),
+  and moved to GREEN.
+- **Actual**: owner flagged the shape against testing-strategy.md mid-
+  execution: "all tests must prove useful behaviour, and not constrain
+  implementation or configuration." Content-presence tests fail on
+  legitimate rewording of the same concepts — they constrain doc wording,
+  not product behaviour. I removed the test, reshaped the plan's §RED
+  with a correction note, and moved L-DOC acceptance to the reviewer
+  matrix (`docs-adr-reviewer` + `onboarding-reviewer`) plus the manual
+  reader-test.
+- **Why expectation failed**: I deferred to the plan's prescribed shape
+  without re-checking it against testing-strategy.md. The plan was
+  reviewed at authorship, but "content-presence" tests were not flagged
+  — possibly because their shape *looks* test-like. The directive's
+  "test behaviour, not config" rule applies to any assertion surface,
+  including `readFileSync`-based ones.
+- **Behaviour change**: before authoring any new test, evaluate against
+  testing-strategy.md: does this prove useful behaviour, or does it
+  constrain implementation/configuration? A test that breaks on
+  legitimate refactoring of the implementation is a constraint test,
+  not a behaviour test. For docs lanes specifically: there is no
+  TDD-shape RED that doesn't constrain doc wording; acceptance belongs
+  on the reviewer matrix. Candidate for distilled.md graduation.
+
+### Surprise
+
+- **Expected**: ADR cross-link filenames in new docs would be stable —
+  just copy the slug pattern from existing docs.
+- **Actual**: `onboarding-reviewer` found **11 broken ADR filename
+  slugs** across the two new/expanded docs. I used
+  `143-observability-boundary-for-structured-telemetry.md` (plausible
+  but wrong),
+  `160-non-bypassable-redaction-barrier.md` (missing the
+  `-as-principle` suffix), and
+  `078-dependency-injection.md` (missing the `-for-testability`
+  suffix). All three actual filenames are longer. The plan-prose
+  references and the napkin entries had used shorter slugs throughout
+  — I had anchored on the prose rather than on the on-disk directory.
+- **Why expectation failed**: I treated plan prose as authoritative for
+  filenames. Plan prose is authoritative for decisions and sequencing;
+  it is NOT authoritative for file slugs. Only `ls
+  docs/architecture/architectural-decisions/` is.
+- **Behaviour change**: before writing any ADR reference in a durable
+  doc, verify the filename by listing the on-disk directory. Never
+  copy a slug from plan prose. Watchlist candidate: "authoritative
+  facts must be sourced from the authoritative surface — docs for
+  doctrine, code for behaviour, filesystem for slugs." Graduation
+  trigger: second cross-session instance.
+
+### Surprise
+
+- **Expected**: `SentryPostRedactionHooks` was the five-member union
+  covering every payload-mutating hook — I wrote it that way in both
+  docs, mirroring the napkin's prior "shared delegates" framing.
+- **Actual**: `docs-adr-reviewer` caught that `SentryPostRedactionHooks`
+  has only three members (`beforeSend`, `beforeSendTransaction`,
+  `beforeBreadcrumb`); the five-hook closure lives on
+  `SentryRedactionHooks` (`Pick<NodeOptions, ...>` at
+  `runtime-sdk.ts:39-42`). `beforeSendSpan` and `beforeSendLog` are
+  redaction-only — no consumer post-redaction slot. The barrier wires
+  five; three admit consumer slots; two are redaction-only.
+- **Why expectation failed**: I read the name and assumed its scope
+  from the name alone ("post-redaction hooks" → "hooks that run after
+  redaction" → "all five"). The actual shape is "the consumer-slot
+  subset of the barrier's hooks." Naming is not always authoritative.
+- **Behaviour change**: when writing package-level docs, open the
+  `src/types.ts` file and grep the actual interface membership. Do not
+  infer from the exported-name vocabulary. Compose-time types in
+  TypeScript are the ground truth, not the prose that refers to them.
+
+### Surprise
+
+- **Expected**: `userId` was "intentionally excluded from observability
+  payloads by Oak policy, regardless of mode" — the framing I carried
+  from prior session context.
+- **Actual**: `docs-adr-reviewer` traced
+  `apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts:153-155`
+  and found `observability.setUser({ id: userId })` is explicitly
+  called when an authenticated `userId` is present. The
+  `clientId`/`scopeCount`/`hasUserContext` fields I cited as "what
+  the scope retains" are actually stdout JSON logger fields from
+  `src/check-mcp-client-auth.ts`, not Sentry scope values. My doc
+  claim was contradicted by the code.
+- **Why expectation failed**: I carried the "userId excluded" framing
+  from prior prompt text without tracing the actual scope-enrichment
+  code. The framing may reflect an intended architecture that was
+  never implemented, OR it may be stale relative to current code.
+- **Behaviour change**: when a doc claims a privacy/security
+  exclusion, trace the claim to the actual call-site. Either the code
+  matches the claim (doc is correct), the code contradicts the claim
+  (code is a defect, open a lane), or the claim is aspirational (doc
+  must say "intended" not "is"). Follow-up recorded in the plan:
+  architectural question whether `userId` should reach the Sentry
+  scope or be excluded there.
+
+### Pattern observation (not a new surprise — ≥2 instances)
+
+- **"Reviewer real-code audit catches a plan's own blind spot"** now
+  has three cross-session instances:
+  1. Phase 5 span-predicate gap (`fetchUpstreamMetadata`,
+     `proxyUpstreamAsset` via `withSpan` — missed by synthetic
+     RuleTester cases, caught by fred's real-code audit).
+  2. L-EH initial warn→error flip (`warning-severity-is-off-severity`
+     against the plan's own severity choice — caught by fred).
+  3. L-DOC initial — four sub-instances in one lane (content-presence
+     test shape violating testing-strategy; 11 broken ADR slugs; type
+     conflation; `userId` scope). Caught by `docs-adr-reviewer` and
+     `onboarding-reviewer` together.
+- Promotion candidate for distilled.md this consolidation: "reviewer
+  dispatch with real-code audit is a load-bearing gate; plan prose is
+  not self-validating." The existing distilled watchlist entry
+  "externally-verifiable-output-beats-plan-compliance" captures part
+  of this; the third instance confirms the underlying pattern.
+
+### Meta-observation
+
+- Reviewer-driven fix cycles on docs lanes are cheaper and more
+  thorough than I expected. Two parallel reviewer runs surfaced 11
+  P1-critical issues in under ~5 minutes of real time; the fixes took
+  ~10 minutes. A docs lane without reviewer dispatch would have
+  shipped with broken ADR links, a type misdescription that misleads
+  future readers, and a scope-enrichment claim contradicted by the
+  code. The reviewer matrix is not ceremony — it is the acceptance
+  gate (confirmed by removing the automated content-presence test).
+
 ## 2026-04-19 — Governance-concept integration lane closeout
 
 ### What Was Done
@@ -761,3 +1041,218 @@ entry as plan and governance changes:
   existing plan, future plan, reference/deep dive, doctrine candidate, or
   explicit no adoption. Otherwise the work becomes a clever but homeless
   comparison exercise.
+
+## 2026-04-19 — Sentry vs PostHog overlay + canonical exploration body
+
+### What Was Done
+
+- Authored Oak-overlay companion at
+  `.agent/research/sentry-and-posthog/Sentry and PostHog-oak.md` reframing
+  the LLM-exported `Sentry and PostHog-clean.md` for Oak's five-axis,
+  ADR-160/162 frame as a *possibility-shaped* (not usage-justified) body.
+- Authored full-text body for canonical exploration
+  `docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md`
+  in §2–§8 (problem statement preserved as §1; promotion trigger
+  preserved in §8; references in §9; original stub citations in §10),
+  with `body_state`, `overlay_source`, `plan_of_record`, `constraints`,
+  and `informs_with_scope_widening` frontmatter.
+- Plan executed: `.cursor/plans/sentry-posthog-oak-overlay_6a16ff6e.plan.md`
+  (the plan file itself was not edited per owner instruction).
+- Stream A (repo grounding) + Stream B (Stream B web verification dated
+  2026-04-19) + Stream D (seven assumption stress tests in overlay §10)
+  completed; Stream C (Sentry MCP queries beyond static project-config)
+  deliberately skipped — parallel agent active on the maximisation-plan
+  surface, and private-alpha traffic insufficient for load-bearing reads.
+  PostHog MCP queries explicitly out-of-scope (no Oak PostHog account on
+  this project).
+- Reviewer choreography: two rounds of parallel `assumptions-reviewer`
+  alongside `docs-adr-reviewer`. Round 1 against the overlay (dispositions in
+  overlay §14.1); Round 2 against the canonical exploration body in
+  plan-citing context (`future/second-backend-evaluation.plan.md`,
+  `future/feature-flag-provider-selection.plan.md`,
+  `active/sentry-observability-maximisation-mcp.plan.md`).
+
+### Surprise — ADR-160 closure-property vs categorical prohibition
+
+- **Expected**: ADR-160 forbids identified events reaching any sink
+  beyond stdout, so the PostHog candidate slice is *categorically*
+  anonymous-only.
+- **Actual**: Round 1 reviewers caught that ADR-160 is a closure-
+  property principle (every fan-out path applies the shared redaction
+  policy), not a categorical prohibition on identified data. The
+  PostHog *anonymous-events* slice in Oak's context is a *derived*
+  constraint, not an ADR-160 mandate — it follows from three facts
+  together: (a) the MCP server's current identity model, (b) the
+  redaction-policy posture, (c) ADR-160's closure rule applied to
+  any new sink. The overlay incorrectly paraphrased ADR-160 as
+  "forbids identified events"; this was corrected in §6 of the
+  overlay and propagated to the body's §3 Product row, §4 Q6,
+  §5 Risks and unknowns, §6.1 sequencing, and §7 framing.
+- **Why expectation failed**: I conflated "the binding constraint
+  for Oak's PostHog adapter" with "what ADR-160's text says." The
+  binding constraint is real; the source of bindingness is the
+  three-fact chain, not ADR-160 alone. Naming the wrong source
+  weakens the doctrine and overstates the ADR.
+- **Behaviour change**: when paraphrasing an ADR's effect on a
+  downstream decision, distinguish the ADR's *text* from the
+  *combined consequence* of the ADR plus other state. State the
+  combination explicitly. The codebase already emits
+  `observability.setUser({ id: userId })` from
+  `apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts` —
+  this *is* identified context flowing into Sentry's per-request
+  scope, not into event-data envelopes; that distinction matters
+  for any future second-sink decision.
+
+### Surprise — possibility-shaped body still smuggles plan-precommit
+
+- **Expected**: a section explicitly titled "Decision recommendation
+  framing" with the lead-in "makes no vendor-pick decisions" would
+  successfully avoid pre-committing the upstream plans.
+- **Actual**: Round 2 assumptions-reviewer flagged that the section
+  still slipped into recommendation through imperative "Adopt the
+  sequencing constraint / Adopt the identity-model precondition /
+  Adopt the three evaluation criteria" wording — exactly the kind
+  of plan-precommit the brief warned against. Reframed every
+  "Adopt …" bullet as "The exploration identifies …" or "The plan
+  may choose to adopt …".
+- **Why expectation failed**: I wrote the framing section's lead-in
+  correctly but then lapsed into imperative bullets because they
+  read more decisively. Decisive prose at the bullet level
+  contradicts deferential prose at the lead-in level; the bullet-
+  level imperative wins for the reader.
+- **Behaviour change**: when authoring a possibility-shaped section,
+  carry the discipline through to bullet-level wording, not just to
+  the lead-in. "Identify" / "may choose to adopt" / "the plan
+  owner decides" are the right verbs; "adopt" / "use" / "treat" are
+  wrong even when the prose around them disclaims authority.
+
+### Surprise — "needs traffic" buckets non-traffic decisions
+
+- **Expected**: the architectural-decisions-decidable-now-vs-traffic
+  split would cleanly partition each plan's open items into two
+  buckets.
+- **Actual**: Round 2 assumptions-reviewer caught that two items
+  classified as "Genuinely needs traffic" were actually decidable
+  without traffic — they just needed *plan-owner scope acceptance*
+  (admitting PostHog as a candidate) or a *real flag consumer*
+  (the feature-flag-provider-selection plan's actual trigger). The
+  binary partition was insufficient; a third category — "requires
+  plan-owner scope acceptance" / "requires real consumer" — was
+  needed. Body §6.1 and §6.2 now use the three-way split.
+- **Why expectation failed**: I anchored on the binary
+  decidable-from-doctrine vs needs-traffic frame from the plan
+  brief without testing it against each upstream plan's actual
+  promotion trigger. Triggers are heterogeneous: some are traffic-
+  shaped, some are consumer-shaped, some are owner-acceptance-
+  shaped.
+- **Behaviour change**: when classifying a plan's open items by
+  what would unblock them, read the plan's actual promotion
+  trigger before classifying. Don't reuse a binary frame across
+  plans whose triggers have different shapes.
+
+### Patterns to Remember
+
+- Two reviewer rounds were load-bearing. Round 1 caught the ADR-
+  160 paraphrase overreach + OpenFeature seam pre-commitment +
+  schema-shape over-prescription. Round 2 caught the
+  recommendation-discipline lapse, the binary-partition error,
+  the missing §5 Risks and unknowns section, and the cost-caveat
+  burial. Round 1 alone would have shipped a body that mis-
+  classifies plan triggers and breaks plan-precommit discipline.
+- "Reviewer real-code audit catches a plan's own blind spot" has
+  *another* cross-session instance: the assumptions-reviewer
+  found `observability.setUser({ id: userId })` in the codebase
+  contradicting the overlay's "no identity flow" framing, mirroring
+  the L-DOC initial finding from earlier this session. Now four
+  cross-session instances; this is well past distilled.md
+  graduation territory.
+- For documents that explicitly inform multiple downstream plans
+  with heterogeneous trigger shapes, name each plan's trigger
+  shape *separately* (traffic-shaped, consumer-shaped, owner-
+  acceptance-shaped, doctrine-shaped) before attempting any
+  decidable-now vs needs-X partition.
+
+### 2026-04-19 — Three-sink reframe: reviewer round + applied fixes
+
+- After wiring the three-sink architecture into 13 documents
+  (plans, ADRs, explorations, snapshot), ran assumptions-reviewer
+  and docs-adr-reviewer in parallel.
+- Assumptions reviewer surfaced two BLOCKERS: (1) `Sink 3 — PostHog`
+  was written as a settled choice across multiple surfaces,
+  collapsing two distinct decisions (do we need an interactive
+  product-analytics sink? and is PostHog the right one?) into one;
+  (2) "PostHog adapter blocked on warehouse landing" was framed as
+  a hard blocker but the stated reason was sequencing convenience,
+  not technical dependency.
+- Owner ruling (2026-04-19): both BLOCKERS were resolved by
+  *strengthening* the commitment rather than softening — PostHog
+  *is* settled as the vendor for Sink 3 on the strength of existing
+  Oak-org usage; warehouse-before-PostHog *is* a non-negotiable
+  hard blocker. Recorded as explicit decision records in
+  `future/second-backend-evaluation.plan.md`'s § Decision record
+  table, with the doctrine vs preference distinction made explicit
+  in the dependencies section.
+- Pattern: "soften because the document overcommits" and "harden
+  because the owner does commit" reach the same surface from
+  opposite directions. The reviewer-flagged document was unclear
+  about whether the commitment was the author's editorial choice
+  or the owner's stated position. Naming the owner's decision
+  explicitly resolves the ambiguity in either direction. The
+  half-conditioned framing the reviewer caught was the actual
+  defect, not the commitment itself.
+- Docs-ADR reviewer surfaced 5 IMPORTANTs (no BLOCKERs): the §4 Q6
+  derivation lacked an in-place supersession marker (file-top
+  status update isn't enough for anchor-arrived readers); §7
+  Decision recommendation framing posed the now-settled scope-
+  widening question as still open; novel `companion_explorations_2026_04_19`
+  frontmatter field with no precedent in `docs/explorations/`;
+  `docs/explorations/README.md` Document-shape didn't describe the
+  established Stubs convention; `.agent/plans/observability/README.md`
+  Plan Density Invariant exclusion lacked an exploration-density
+  brake.
+- Pattern: a file-top "Status update" telling readers a section is
+  superseded is necessary but not sufficient — readers arriving via
+  search, anchor link, or skim land on the section without seeing
+  the file-top notice. **In-place markers at the section header are
+  load-bearing for anchor-arrived readers.** Same fix pattern works
+  for any "this section is superseded but retained for evidence"
+  case.
+- Applied 12 fixes across the same 11 files; one TS edit added a
+  TSDoc note near `observability.setUser` pointing to ADR-160 §
+  History 2026-04-19 + the Clerk-identity exploration, so the
+  privacy posture is discoverable from the code, not only from
+  docs. Markdownlint surfaced 4 emphasis-style warnings (asterisk
+  vs underscore) introduced by `*timing*` / `*Settled …*` wording;
+  fixed by switching to underscores per repo convention.
+- Repo-level `pnpm markdownlint-check:root` passes; `ReadLints` on
+  all 11 touched files is clean.
+- Pattern bookmark for `.agent/memory/patterns/`: when an
+  exploration body is reframed (not rewritten) and the original
+  analysis is retained for evidence, every section the reframe
+  marks as superseded needs an *inline* status callout at its
+  heading, not only a file-top notice. The file-top notice is for
+  linear readers; inline callouts are for anchor-arrived readers
+  and skim-readers. This is the third instance of "fork-cost
+  surfaces in the doc-discipline layer" in this session.
+
+### 2026-04-19 — Ontology report navigation + boundary hygiene
+
+- Wrote a detailed report at
+  `.agent/reports/oak-ontology-mcp-search-integration-report-2026-04-19.md`
+  plus a short fresh-perspective follow-on plan at
+  `.agent/plans/kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md`.
+- Reviewer pass from `docs-adr-reviewer` + `onboarding-reviewer`
+  surfaced a recurring documentation hygiene rule: keep research,
+  promoted reports, and executable plans in distinct lanes even
+  when they need to cross-link heavily. "Easy to find" should not
+  become "same document type."
+- Another load-bearing pattern: a synthesis report should not
+  silently overturn a strategy document. If the report surfaces a
+  better-seeming option (here: subtree-style vendoring vs the
+  existing submodule-first interim strategy), phrase it as an
+  explicit comparison or revisit request unless the strategy doc
+  itself is being updated in the same pass.
+- On discoverability, collection-root READMEs need to be treated as
+  actual navigation, not mention lists. Backticked file paths were
+  enough to confuse the onboarding reviewer even though the docs
+  existed and were otherwise well-scoped.

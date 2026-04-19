@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-19-governance-lane-handoff
+last_updated: 2026-04-19-l-doc-initial-close
 ---
 
 # Session Continuation
@@ -19,12 +19,24 @@ last_updated: 2026-04-19-governance-lane-handoff
    block in the ADR index, and open any ADR whose slug matches your current
    workstream from the [full ADR index](../../docs/architecture/architectural-decisions/README.md).
 3. Read `.agent/memory/distilled.md` and `.agent/memory/napkin.md`
-4. Read the current workstream artefacts before anything else:
-   - `.agent/plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md`
-   - `.agent/plans/agentic-engineering-enhancements/active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md`
-   - `.agent/analysis/governance-concepts-and-mechanism-gap-baseline.md`
-   - `.agent/reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md`
+4. Read the current workstream artefacts before anything else. The primary
+   workstream is the observability/Sentry lane on
+   `feat/otel_sentry_enhancements`; a parallel agentic-engineering thread
+   owns the follow-up operational-awareness plan.
+   - `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
+     — lane-level execution authority for Wave 1 and beyond.
+   - `.agent/plans/observability/what-the-system-emits-today.md`
+     — externally-verifiable emits-today snapshot; updated at every lane close.
+   - `.agent/plans/observability/high-level-observability-plan.md`
+     — five-axis MVP framing; wave sequencing.
+   - `docs/architecture/architectural-decisions/162-observability-first.md`
+     — Accepted; governs the whole workstream.
+   - `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
+     — authoritative app observability guide (L-DOC initial output).
+   - `packages/libs/sentry-node/README.md`
+     — package-level reference for the shared Sentry-Node library.
    - `.agent/plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md`
+     — parallel-thread follow-up; not the primary workstream here.
 5. Re-establish live branch state:
 
 ```bash
@@ -81,47 +93,108 @@ commit.
 
 ## Live Continuity Contract
 
-- **Workstream**: Governance-concept integration lane closeout on
-  `feat/otel_sentry_enhancements`.
+- **Workstream**: Observability Wave 1 on `feat/otel_sentry_enhancements`.
+  Two Wave 1 lanes landed this 2026-04-19 session (L-EH initial ✅ +
+  L-DOC initial ✅); two lanes remain (L-12-prereq, L-7). A parallel
+  agentic-engineering thread owns the operational-awareness plan and is
+  not this session's primary concern.
 - **Active plans**:
-  - `.agent/plans/agentic-engineering-enhancements/active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md`
-    — complete and authoritative for the pending docs-only closeout diff.
-  - `.agent/plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md`
-    — complete source plan for the same lane.
+  - `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
+    — lane-level execution authority. §L-DOC initial close evidence + §RED
+    correction recorded 2026-04-19.
+  - `.agent/plans/observability/high-level-observability-plan.md`
+    — five-axis MVP framing + wave sequencing.
+  - `.agent/plans/observability/what-the-system-emits-today.md`
+    — externally-verifiable emits-today snapshot; 3 of 13 cells populated;
+    Update Log carries L-DOC initial close entry.
   - `.agent/plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md`
-    — leading queued follow-up slice after this lane is fully put down.
-- **Current state**: Branch is `feat/otel_sentry_enhancements` at `7efd0a43`.
-  The worktree is dirty with the governance-lane closeout docs plus this
-  handoff update. The lane itself is complete: source plan, execution plan,
-  baseline, report, sync log, and napkin all reflect final routing, explicit
-  `defer` handling, corrected links, and clean reviewer reruns.
-- **Current objective**: Leave a truthful handoff for the uncommitted
-  governance-lane closeout changes without reopening the lane or widening into
-  deep consolidation during this close.
-- **Hard invariants / non-goals**: Keep the lane docs/plans-only; no canon
-  edits; no source-specific naming in durable artefacts; use only repo-defined
-  root quality gates as gates; root `markdownlint` intentionally does not
-  validate `.agent/**`; do not blur repo-defined gate results with
-  reviewer/manual verification.
-- **Recent surprises / corrections**:
-  - Validation wording had to distinguish repo-defined gate coverage from
-    reviewer/manual verification for touched `.agent/**` docs.
-  - `defer` decisions had to be encoded in the authoritative concept register
-    and baseline rows, not only in surrounding prose.
-  - Several current/active plan links were one directory short and required
-    live re-read before editing.
+    — parallel-thread follow-up (QUEUED); not this session's primary.
+- **Current state**: Branch `feat/otel_sentry_enhancements` at `9e1a26b2`
+  (HEAD). Three commits ahead of `origin/feat/otel_sentry_enhancements`
+  (push deferred per non-automated rule). Working tree clean.
+  - `9e1a26b2` feat(observability): l-doc initial — authoritative app
+    observability docs
+  - `08989388` docs(agentic-engineering): governance-concept integration
+    lane closeout
+  - `7efd0a43` feat: l-eh initial + wave-1 assurance mechanisms +
+    governance-concept lane
+- **Current objective**: L-12-prereq is **BLOCKED 2026-04-19** by
+  [`architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`](../plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md).
+  A scaffolded extraction of `packages/core/telemetry-redaction-core/`
+  surfaced a core→lib boundary violation (sanitisation primitives in
+  `@oaknational/logger`, a lib) and an over-decomposition signal (139
+  LOC of pure composition). Architecture review (fred + barney,
+  2026-04-19) resolved toward **folding primitives into
+  `@oaknational/observability`** rather than a new core workspace;
+  ADR-160 §Closed Questions amendment planned. The consolidation plan
+  is the next landing target; L-12-prereq becomes a trivial
+  confirmation step once it closes. L-7 remains blocked on owner
+  adjudication of the build/releases/Sentry interaction.
+- **Hard invariants / non-goals**: ADR-143 / ADR-160 / ADR-161 / ADR-162
+  invariants hold. `sendDefaultPii: false` remains the floor; redaction
+  barrier remains non-bypassable. `Result<T, E>` on new/changed code;
+  `{ cause }` on constructed errors in `catch` — now compile-time enforced
+  at `error` via `preserve-caught-error`. `pnpm check` from repo root with
+  no filter is the merge criterion (PDR-025). No `process.env` reads in
+  library product code; DI through parameters (ADR-078). No skipped tests.
+  Docs-content tests violate testing-strategy.md; acceptance on docs
+  lanes sits on the reviewer matrix, not automated content-presence checks.
+  Tests must prove behaviour, not constrain implementation/config.
+- **Recent surprises / corrections** (2026-04-19 L-DOC initial session):
+  - Content-presence tests violate testing-strategy.md. The maximisation
+    plan's prescribed L-DOC §RED shape (structural token-presence test)
+    was authored, confirmed red, then removed after owner flagged the
+    directive. Correction propagated to the plan; acceptance moved to
+    reviewer matrix.
+  - Cross-session ADR filename drift — 11 broken ADR slugs in new docs
+    caught by `onboarding-reviewer`. Pattern: new docs citing ADRs must
+    verify filenames against the on-disk directory, not against
+    plan-prose references.
+  - Type-conflation: `SentryPostRedactionHooks` (3 members) ≠
+    `SentryRedactionHooks` (5 members). Caught by `docs-adr-reviewer`.
+    The barrier wires five hooks; three admit consumer post-redaction
+    slots. Both docs now distinguish them.
+  - `userId` IS set on Sentry scope via `observability.setUser({ id:
+    userId })` at `src/mcp-handler.ts` — my doc claim that it was
+    "excluded by Oak policy" contradicted the code. Doc corrected;
+    architectural question (should `userId` reach Sentry scope?) raised
+    as a follow-up for owner/fred adjudication.
+  - Third instance of "reviewer real-code audit catches a plan's own
+    blind spot": Phase 5 span-predicate (1st), L-EH warn→error
+    (2nd), L-DOC content-presence test shape + ADR-filename drift + type
+    conflation + userId scope (3rd — four sub-instances in one lane).
+    This pattern is now promotion-ready for distilled.md.
 - **Open questions / low-confidence areas**:
-  - Whether to make a docs-only commit for this closeout on the observability
-    branch before returning to branch runtime work.
-  - Whether the older observability-historical prompt sections below should be
-    fully consolidated or trimmed in the next bounded docs pass.
-- **Next safe step**: Start with `git diff --stat` and the files shown by
-  `git status --short`; then decide whether to commit the governance-lane
-  closeout as a docs-only change or explicitly carry the diff into the next
-  branch task.
-- **Deep consolidation status**: due — a plan closed, and the continuation
-  prompt still contains older historical branch context that should be
-  deliberately consolidated or trimmed in a later bounded session.
+  - Should `userId` reach the Sentry user scope, or is Oak's observability
+    boundary meant to exclude it? Needs fred/owner adjudication. Today
+    the code includes it; the docs now match the code.
+  - MCP-specific telemetry shape (tool/resource/prompt observations
+    retaining only kind/name/status/duration/trace) is a property of
+    `wrapMcpServerWithSentry` + `sendDefaultPii: false` + Oak redaction
+    combined — not testable at the Oak boundary alone. Candidate for a
+    future lane when the events-workspace (Wave 2) provides assertion
+    shapes.
+- **Next safe step**: Open
+  [`architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`](../plans/architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md)
+  as the next landing target. Nine work streams WS1–WS9, single
+  atomic commit. Fold sanitisation + redaction primitives into
+  `@oaknational/observability`; delete `packages/core/telemetry-redaction-core/`;
+  amend ADR-160 §Closed Questions. Close with
+  attempt/observed/proven evidence per the same §Lane Close Evidence
+  Pattern. Once the consolidation lands, L-12-prereq reopens as a
+  confirmation step and Wave 1 can close after L-7 adjudication.
+- **Deep consolidation status**: due — not well-bounded for this
+  closeout. distilled.md is at 275/275 (hard limit); napkin.md is well
+  over 500 lines (rotation threshold) after L-EH initial + L-DOC initial
+  entries; three single-instance watchlist items from L-EH/L-DOC sessions
+  have now reached ≥2 cross-session instances and are promotion
+  candidates (reviewer-catches-plan-blind-spot, externally-verifiable-
+  output-beats-plan-compliance, decompose-precedents-before-reusing).
+  Running consolidate-docs is the third structural-change pass of the day
+  (morning consolidation; L-EH initial; L-DOC initial); pattern-inflation
+  risk is compounded per ADR-131 §Self-Referential Property. The next
+  session opens the deep pass deliberately OR commits to another forward-
+  motion lane and defers again.
 
 The older observability-specific sections below are historical branch context
 only. They are not the active handoff contract for the next session.

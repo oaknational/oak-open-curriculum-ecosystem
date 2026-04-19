@@ -56,6 +56,34 @@ a signal worth naming.
 
 ---
 
+## Sinks Today vs Planned
+
+The current emission surface fans out to **two sinks**: stdout
+(baseline, always-on) and Sentry (engineering observability). Per
+the three-sink architecture confirmed at
+[ADR-162 § History 2026-04-19](../../../docs/architecture/architectural-decisions/162-observability-first.md#history)
+and owned by
+[`future/second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md),
+the planned post-MVP sink set is:
+
+| Sink | Purpose | Status today | Owning plan / trigger |
+|---|---|---|---|
+| stdout (`@oaknational/logger`) | Vendor-independence baseline | **active** (per ADR-162) | n/a — always-on |
+| Sentry | Engineering observability | **active** (`wrapMcpServerWithSentry` at `core-endpoints.ts:98`; `setUser({ id: userId })` per-request) | [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) |
+| Data warehouse (Sink 2) | Durable analytical SQL | **planned** (public-beta target; vendor open) | [`future/second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md) — vendor open per [Exploration 9](../../../docs/explorations/2026-04-19-data-warehouse-selection.md); promotion additionally gated on identity-policy ruling ([Exploration 10](../../../docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md)) |
+| PostHog (Sink 3) | Interactive product analytics | **planned** (vendor settled per owner ruling 2026-04-19; timing open, post-public-beta) | [`future/second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md) — vendor decision settled on existing Oak-org usage; promotion (timing) gated on a named data-scientist or product-owner question + warehouse-adapter-shipped (owner-confirmed hard blocker) + identity-policy ruling |
+
+**Identity envelope**: today, Sentry per-request scope receives the
+opaque Clerk user ID via `observability.setUser({ id: userId })` in
+`apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts`. Whether
+that identifier flows into Sinks 2 and 3 is a policy ruling
+explicitly deferred to
+[Exploration 10 (redaction policy — Clerk identity downstream)](../../../docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md);
+the ADR-160 closure principle applies uniformly to whatever the
+ruling permits.
+
+---
+
 ## Vendor-Independence Status
 
 ADR-162's vendor-independence clause states: "Minimum functionality
@@ -124,6 +152,14 @@ Planned (not yet landed):
   testing-strategy.md review (tests must prove behaviour, not
   constrain implementation wording); acceptance moved to the
   reviewer matrix.
+- **2026-04-19** — Sinks subsection added. 0 matrix cells moved (no
+  new code emissions), but the architectural sink set is now
+  recorded as a first-class artefact: stdout + Sentry (active);
+  warehouse + PostHog (planned, gated on explorations 9 + 10 and
+  named-question triggers). Identity-envelope policy explicitly
+  named as deferred to exploration 10. Reflects the three-sink
+  collapse owner-confirmed 2026-04-19 and recorded at ADR-162
+  History.
 
 Each future update appends here: date + lane + cells populated +
 gates added.

@@ -36,7 +36,12 @@ integrate, and what the observability surface looks like.
 **In scope**:
 
 - Provider evaluation (Sentry feature-flag integration vs LaunchDarkly
-  vs GrowthBook vs OpenFeature + adapter).
+  vs GrowthBook vs OpenFeature + adapter vs **PostHog feature flags**).
+  Owner statement (2026-04-19): PostHog is already in use elsewhere in
+  the Oak org, which is a signal weighting in the candidate set — not
+  a pre-commitment. PostHog's feature-flag product also satisfies the
+  OpenFeature provider abstraction, so the choice cuts across the
+  abstraction question and the vendor question.
 - Flag-evaluation emission wiring (flag-evaluated event: flag name,
   variant, evaluation context categorical axes).
 - Integration with Sentry's feature-flag product for crash-linked
@@ -63,7 +68,13 @@ progressive rollout, canary).
 - `sentry-observability-maximisation-mcp.plan.md § L-10` — current
   scaffolding; replaced when this plan promotes.
 - `docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md`
-  — informs provider choice.
+  — informs provider choice; explicitly names PostHog flags as a
+  candidate that may already be present (Sink 3) by the time this
+  plan promotes.
+- `observability/future/second-backend-evaluation.plan.md` — if the
+  PostHog adapter (Sink 3) lands before this plan promotes, the
+  candidate set shifts: PostHog flags become a "use what's already
+  wired" option, weighted against vendor-independence preservation.
 
 ## Success Signals
 
@@ -98,8 +109,19 @@ decide with owner; wire the flag-evaluation emission.
 
 ## Implementation Sketch (for context, finalised at promotion)
 
-- OpenFeature SDK as the boundary; provider implementation behind
-  adapter per ADR-154.
+**Boundary options** (decided at promotion, not now):
+
+- *If* OpenFeature is chosen as the abstraction: OpenFeature SDK as
+  the boundary; provider implementation behind adapter per ADR-154.
+- *If* a provider-native SDK is chosen (e.g. PostHog feature flags,
+  Sentry feature-flag integration, LaunchDarkly directly): the
+  provider's own SDK behind a thin Oak-shaped adapter per ADR-154.
+- *Either way*: the abstraction question (OpenFeature vs
+  provider-native + thin adapter) is decided alongside the provider
+  choice at promotion, not pre-committed here.
+
+**Sink-side wiring** (independent of boundary choice):
+
 - Events workspace extended with `flag_evaluated` schema.
 - Sentry feature-flag integration wired for crash-context linkage
   (regardless of provider chosen above).

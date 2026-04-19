@@ -1,6 +1,6 @@
 import { buildNormalizedError, type LogContext, type NormalizedError } from '@oaknational/logger';
 import type { ObservabilityCloseError, ObservabilityFlushError } from '@oaknational/observability';
-import { redactJsonObject, redactText } from './runtime-telemetry.js';
+import { redactJsonObject, redactText } from '@oaknational/telemetry-redaction-core';
 import type { ObservabilityConfigError, SentryCloseError, SentryFlushError } from './types.js';
 
 type ValueConfigError = Extract<

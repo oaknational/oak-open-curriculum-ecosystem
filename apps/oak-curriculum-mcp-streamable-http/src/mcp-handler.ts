@@ -139,6 +139,19 @@ function registerCleanupHandler(
  *
  * @remarks Called early in the request lifecycle before transport handling.
  * Uses Zod safeParse for safe userId extraction from `AuthInfo.extra`.
+ *
+ * Privacy posture for the `setUser` call below: the `userId` is an
+ * opaque, stable Clerk-issued identifier. It flows into Sentry's
+ * per-request scope only — not into any structured event-data
+ * envelope a future second-sink adapter would emit. Whether this
+ * identifier is permitted to flow downstream of the redaction
+ * barrier into other sinks (data warehouse Sink 2, PostHog Sink 3)
+ * is an open policy ruling owned by
+ * `docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md`;
+ * see also ADR-160 § History 2026-04-19 entry. The ADR-160 closure
+ * principle (every fan-out path applies the redaction policy)
+ * remains in force unchanged; the open question is what the
+ * redaction policy itself permits.
  */
 function enrichObservabilityScope(
   req: McpHandlerRequest,

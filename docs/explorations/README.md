@@ -41,6 +41,31 @@ Every exploration file:
 5. Informs — the ADR, plan, or decision this feeds into (if known yet).
 6. References — external sources cited.
 
+### Stubs
+
+A _stub_ is an exploration authored to register a question and
+reserve its filename and chronological position before the body is
+written. Stubs are permitted and are the standard shape for
+questions that need to exist as named explorations (linkable from
+plans / ADRs / other explorations) but do not yet warrant the full
+options-considered analysis (§3 above).
+
+A stub may defer §3 (Options considered) and instead carry:
+
+- §Scope-when-authored — the scope the full body will cover when
+  the promotion trigger fires.
+- §Promotion trigger — the named, recordable event(s) that move
+  the stub to full authorship.
+
+A stub gets full authoring when its promotion trigger fires. The
+2026-04-18 Phase-3 stubs (`how-far-does-sentry-go-as-paas`,
+`trust-boundary-trace-propagation-risk-analysis`,
+`cloudflare-plus-sentry-security-observability`,
+`static-analysis-augmentation`,
+`vendor-independence-conformance-test-shape`) and the 2026-04-19
+stubs (`data-warehouse-selection`,
+`redaction-policy-clerk-identity-downstream`) are all examples.
+
 Explorations are timestamped at the filename level (`YYYY-MM-DD-<slug>.md`)
 so chronological order is preserved without requiring metadata reads.
 

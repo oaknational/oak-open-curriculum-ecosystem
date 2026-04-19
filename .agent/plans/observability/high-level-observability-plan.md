@@ -39,7 +39,7 @@ Full text: [ADR-162](../../../docs/architecture/architectural-decisions/162-obse
 | Axis | MVP deliverable | Owning plan | Post-MVP | Explorations informing |
 |---|---|---|---|---|
 | **Engineering** | Error capture + tracing + release linkage + free-signal integrations (ANR, event-loop delay, Zod validation failures) + widget error capture + alert suite + runbooks | [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) (L-0..L-13 lanes) | [`future/cross-system-correlated-tracing.plan.md`](future/cross-system-correlated-tracing.plan.md), [`future/deployment-impact-bisection.plan.md`](future/deployment-impact-bisection.plan.md), [`future/slo-and-error-budget.plan.md`](future/slo-and-error-budget.plan.md) | Exploration 2 (Sentry-as-PaaS) |
-| **Product** | `packages/core/observability-events/` workspace + `tool_invoked` emission + `search_query` emission + event catalog | [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md), [`current/search-observability.plan.md`](current/search-observability.plan.md) | [`future/curriculum-content-observability.plan.md`](future/curriculum-content-observability.plan.md), [`future/feature-flag-provider-selection.plan.md`](future/feature-flag-provider-selection.plan.md), [`future/ai-telemetry-wiring.plan.md`](future/ai-telemetry-wiring.plan.md) | Exploration 1 (Sentry vs PostHog), Exploration 4 (event schemas) |
+| **Product** | `packages/core/observability-events/` workspace + `tool_invoked` emission + `search_query` emission + event catalog | [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md), [`current/search-observability.plan.md`](current/search-observability.plan.md) | [`future/curriculum-content-observability.plan.md`](future/curriculum-content-observability.plan.md), [`future/feature-flag-provider-selection.plan.md`](future/feature-flag-provider-selection.plan.md), [`future/ai-telemetry-wiring.plan.md`](future/ai-telemetry-wiring.plan.md), [`future/second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md) (three-sink architecture: warehouse + PostHog) | Exploration 1 (Sentry vs PostHog), Exploration 4 (event schemas), Exploration 9 (warehouse selection), Exploration 10 (Clerk-identity downstream) |
 | **Usability** | Tool-call success/failure breakdown + feedback capture (L-9) + `widget_session_outcome` events | [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) (L-9, L-12), [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) | Absorbed into SLO + accessibility-phase-2 lanes | Exploration 4 (stage vocabulary for session-outcome) |
 | **Accessibility** | `a11y_preference_tag` + frustration proxies + incomplete-flow correlation + keyboard-only boolean | [`current/accessibility-observability.plan.md`](current/accessibility-observability.plan.md) | (open question; see exploration 3) | Exploration 3 (a11y at runtime — **blocks MVP**) |
 | **Security** | `auth_failure` + `rate_limit_triggered` events | [`current/security-observability.plan.md`](current/security-observability.plan.md) | [`future/security-observability-phase-2.plan.md`](future/security-observability-phase-2.plan.md) | Exploration 5 (trace propagation), Exploration 6 (Cloudflare+Sentry), Exploration 7 (static analysis) |
@@ -116,7 +116,7 @@ vendor-independence conformance runs pre-launch rather than post-hoc.
 
 | Wave | Purpose | Work |
 |------|---------|------|
-| **1. Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces. Every line written after Wave 1 is gate-conformant at write-time. | Maximisation: L-0a / L-0b (done); L-EH initial (ESLint built-in `preserve-caught-error` at `warn` — supersedes original `require-error-cause` custom-rule plan; landed 2026-04-19); L-DOC initial (sentry-node README expansion + app observability doc); **L-12-prereq moved here** (extract `packages/core/telemetry-redaction-core/`); **L-7 moved here** (release/deploy linkage scripts). Restructure Phase 5 carve-out: author `require-observability-emission` ESLint rule at `warn`; flip ADR-162 Proposed → Accepted. |
+| **1. Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces. Every line written after Wave 1 is gate-conformant at write-time. | Maximisation: L-0a / L-0b (done); L-EH initial (ESLint built-in `preserve-caught-error` at `warn` — supersedes original `require-error-cause` custom-rule plan; landed 2026-04-19); L-DOC initial (sentry-node README expansion + app observability doc); **L-12-prereq blocked 2026-04-19** by [`architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`](../architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md) — scaffolded extraction surfaced core→lib boundary violation + over-decomposition; architecture review (fred + barney) resolved toward folding primitives into `@oaknational/observability` rather than a new core workspace; L-12-prereq becomes a trivial confirmation step once consolidation closes; **L-7 moved here** (release/deploy linkage scripts). Restructure Phase 5 carve-out: author `require-observability-emission` ESLint rule at `warn`; flip ADR-162 Proposed → Accepted. |
 | **2. Schema Foundation** | Event-schema contract + vendor-independence structural lint. Every downstream-analytics obligation exists as code before any consumer imports it. | Sibling plan [`observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) WS1–WS6 — creates `packages/core/observability-events/` with Zod schemas for the 7 MVP events + conformance helper + event catalog. Sibling plan [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) WS1 carve-out — `no-vendor-observability-import` ESLint rule landed at `warn`; the emission-persistence test itself is Wave 5. |
 | **3. Primary Emitters (Server)** | Server-side emission sites consume Wave 2 schemas by import. Each lane's RED asserts schema conformance via the events-workspace conformance helper. | Maximisation: L-1 (free-signal integrations with fixture envelope-observability prereq), L-2 (delegates extraction), L-3 (MCP request context enrichment), L-4b (primary `Sentry.metrics.*` adapter), L-9 (feedback pipeline + `submit-feedback` MCP tool). |
 | **4. Cross-axis & Widget** | Second emitting runtime + axis-specific plans. Can parallelise within wave. | Maximisation: L-12 (widget Sentry; uses `telemetry-redaction-core`; emits widget-session-outcome and a11y events). Sibling plan [`security-observability.plan.md`](current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered` events. Sibling plan [`accessibility-observability.plan.md`](current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome`. |
@@ -202,7 +202,7 @@ foundations, not moving targets.
 | [`statuspage-integration.plan.md`](future/statuspage-integration.plan.md) | Readiness to publish operational state to external users |
 | [`cost-and-capacity-telemetry.plan.md`](future/cost-and-capacity-telemetry.plan.md) | First cost-pressure OR capacity-risk event |
 | [`deployment-impact-bisection.plan.md`](future/deployment-impact-bisection.plan.md) | L-7 release linkage stable + manual-regression-attribution event |
-| [`second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md) | Named Sentry gap (from exploration 1 or 2) with evidence |
+| [`second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md) | Three-sink strategic brief. **Vendor decisions**: warehouse settled as load-bearing (vendor open per Exploration 9); PostHog settled as the vendor for Sink 3 (per owner ruling 2026-04-19; timing open). **Sequencing**: warehouse adapter lands before PostHog adapter — owner-confirmed hard blocker. **Triggers**: warehouse adapter at public-beta (after warehouse-choice + identity-policy explorations close); PostHog adapter post-public-beta on a named question; alternative engineering sink only on a named Sentry gap (from exploration 1 or 2) with evidence |
 | [`customer-facing-status-page.plan.md`](future/customer-facing-status-page.plan.md) | Statuspage integration completes |
 | [`security-observability-phase-2.plan.md`](future/security-observability-phase-2.plan.md) | Exploration 6 or 7 conclusions OR first app-level security incident |
 | [`sentry-observability-maximisation.plan.md`](future/sentry-observability-maximisation.plan.md) | (Strategic parent brief across both runtimes; remains for cross-branch context) |
@@ -217,20 +217,26 @@ foundations, not moving targets.
 
 ## Explorations Map
 
-Eight initial explorations at [`docs/explorations/`](../../../docs/explorations/).
-Two are full-text (blocking Phase 2 scoping); six are stubs authored
-in Phase 3 of the restructure.
+Ten observability explorations at [`docs/explorations/`](../../../docs/explorations/).
+Two are full-text (blocking Phase 2 scoping); six were stubs authored
+in Phase 3 of the restructure; the Sentry-vs-PostHog stub was promoted
+to a full-body capability matrix in 2026-04-18..-19; two further stubs
+(warehouse selection; Clerk-identity redaction policy) landed
+2026-04-19 as immediate consequences of the three-sink architectural
+collapse.
 
 | # | Exploration | Status | Informs |
 |---|---|---|---|
-| 1 | `2026-04-18-sentry-vs-posthog-capability-matrix.md` | Phase 3 stub | `future/second-backend-evaluation.plan.md` |
-| 2 | `2026-04-18-how-far-does-sentry-go-as-paas.md` | Phase 3 stub | ADR-162; future lanes |
+| 1 | `2026-04-18-sentry-vs-posthog-capability-matrix.md` | Full-body (2026-04-19; three-sink reframe) | `future/second-backend-evaluation.plan.md` |
+| 2 | `2026-04-18-how-far-does-sentry-go-as-paas.md` | Phase 3 stub | ADR-162; future lanes; `future/second-backend-evaluation.plan.md` (alternative-engineering-sink trigger) |
 | 3 | `2026-04-18-accessibility-observability-at-runtime.md` | Phase 3 full | **blocks** `current/accessibility-observability.plan.md` |
 | 4 | `2026-04-18-structured-event-schemas-for-curriculum-analytics.md` | Phase 3 full | **blocks** `current/observability-events-workspace.plan.md` MVP schema set |
 | 5 | `2026-04-18-trust-boundary-trace-propagation-risk-analysis.md` | Phase 3 stub | `sentry-observability-maximisation-mcp.plan.md § L-14` + `future/cross-system-correlated-tracing.plan.md` |
 | 6 | `2026-04-18-cloudflare-plus-sentry-security-observability.md` | Phase 3 stub | `current/security-observability.plan.md` scope; `future/security-observability-phase-2.plan.md` |
 | 7 | `2026-04-18-static-analysis-augmentation.md` | Phase 3 stub | `future/security-observability-phase-2.plan.md` |
 | 8 | `2026-04-18-vendor-independence-conformance-test-shape.md` | Phase 3 stub | `current/multi-sink-vendor-independence-conformance.plan.md` |
+| 9 | `2026-04-19-data-warehouse-selection.md` | Stub (2026-04-19) | `future/second-backend-evaluation.plan.md` (warehouse-adapter sink-2 promotion trigger) |
+| 10 | `2026-04-19-redaction-policy-clerk-identity-downstream.md` | Stub (2026-04-19) | ADR-160 closure-rule projection per sink; `future/second-backend-evaluation.plan.md` identity envelope; explorations 1 and 9 |
 
 ---
 
@@ -250,6 +256,51 @@ The tests enumerate:
 
 Both tests are authored in Phase 5 of the restructure plan as part of
 ADR-162 flipping Proposed → Accepted.
+
+The conformance scope **expands per sink** as the three-sink
+architecture lands — warehouse adapter, then PostHog adapter — per
+[`future/second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md)
+sequencing. Each adapter PR ships its own conformance allowlist
+update + emission-persistence assertion update before merge.
+
+---
+
+## Three-Sink Architecture (Post-MVP Sink Sequencing)
+
+The post-MVP observability pipeline fans out to three sinks via the
+ADR-160 redaction barrier (closure principle):
+
+1. **Sink 1 — Sentry** (engineering observability; today; owned by
+   the maximisation plan).
+2. **Sink 2 — Data warehouse** (durable analytical SQL; public-beta
+   target; warehouse vendor open per
+   [Exploration 9](../../../docs/explorations/2026-04-19-data-warehouse-selection.md)).
+3. **Sink 3 — PostHog** (interactive product analytics; vendor
+   settled on existing Oak-org usage per the owner ruling
+   2026-04-19; adoption *timing* gated on a named question).
+
+**Decision record (2026-04-19, summary)**: data warehouse is settled
+as a load-bearing post-MVP sink (vendor open). PostHog is settled as
+the vendor for Sink 3 (timing open). Warehouse adapter lands before
+PostHog adapter — owner-confirmed hard blocker, not sequencing
+preference. Full decision record:
+[`future/second-backend-evaluation.plan.md` § Decision record](future/second-backend-evaluation.plan.md).
+
+Identity envelope per sink is governed by the ruling in
+[Exploration 10 (Clerk identity downstream)](../../../docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md).
+Sequencing, triggers, and adapter shape are owned by
+[`future/second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md).
+The three-sink framing supersedes the prior "Sentry vs PostHog"
+binary; all three sinks share the same vendor-neutral Zod schemas
+from
+[`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md).
+
+**Cardinality framing**: "three" is the *current roadmap*
+cardinality, not an architectural ceiling. ADR-162's
+vendor-independence clause is sink-cardinality agnostic; if a
+fourth sink is later justified (e.g. a separate data-residency or
+specialist-axis sink), it composes into the same architecture
+without re-opening this section.
 
 ---
 

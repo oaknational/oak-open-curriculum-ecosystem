@@ -58,8 +58,8 @@ todos:
     content: "L-11 (Phase 5, MVP-deferred): expose instrumentOpenAiClient / instrumentAnthropicAiClient / vercelAIIntegration wrappers via adapter so future LLM tool calls are one import away"
     status: pending
   - id: l12-prereq-browser-safe-redactor-core
-    content: "L-12-prereq (Phase 1): extract pure runtime-agnostic redactor core from @oaknational/sentry-node into a new browser-safe package packages/core/telemetry-redaction-core/ (depends only on type-helpers + generic redact primitive; no @sentry/node). Node and browser adapters compose it. Settles ADR-160's open question: new package, not submodule. Moved from old Phase 3 to Phase 1 under 2026-04-18 reshape. Blocks L-12."
-    status: pending
+    content: "L-12-prereq (Phase 1): BLOCKED 2026-04-19 by architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md. Scaffolded extraction surfaced core→lib boundary violation + over-decomposition signal; architecture review (fred + barney) resolved toward folding primitives into @oaknational/observability rather than a new core workspace. Reopens as a trivial confirmation step once consolidation closes. Still blocks L-12."
+    status: blocked
   - id: l12-widget-sentry
     content: "L-12 (Phase 4): @sentry/browser (or @sentry/react after bundle-size review) in the MCP App widget with shared redaction via @oaknational/telemetry-redaction-core and linked traces"
     status: pending
@@ -80,8 +80,9 @@ todos:
     content: "L-EH final (Phase 5 per 2026-04-18 reshape; was Phase 4 pre-reshape): author prefer-result-pattern ESLint rule with concrete heuristic spec + valid/invalid RuleTester cases; apply to sentry-node, core/observability, MCP app observability as first adoption tranche; update ADR-088 and .agent/rules/use-result-pattern.md"
     status: pending
   - id: l-doc-initial
-    content: "L-DOC initial (Phase 1): expand packages/libs/sentry-node/README.md (currently 4-line stub) + write apps/oak-curriculum-mcp-streamable-http/docs/observability.md; structural test asserts content presence (not just file existence); cross-link from workspace READMEs"
-    status: pending
+    content: "L-DOC initial (Phase 1): expand packages/libs/sentry-node/README.md + author apps/oak-curriculum-mcp-streamable-http/docs/observability.md + shrink app README Observability section to summary+link; cross-link from workspace READMEs and docs mesh (docs/README.md, quick-start.md, docs/operations/README.md, sentry-deployment-runbook § Redaction). DONE 2026-04-19."
+    status: completed
+    note: "Landed 2026-04-19 (commit 9e1a26b2). §RED reshaped mid-execution: the prescribed structural content-presence test was authored, run red, then removed after testing-strategy.md review (tests must prove behaviour, not constrain doc wording). Acceptance moved to the reviewer matrix (docs-adr-reviewer + onboarding-reviewer) plus the manual reader-test. Both reviewers returned; P1/Critical findings actioned in-place (11 broken ADR filename slugs, SentryPostRedactionHooks vs SentryRedactionHooks conflation, userId/setUser scope correction, discoverability mesh). Follow-ups recorded in lane close evidence."
   - id: l-doc-final
     content: "L-DOC final (Phase 5 per 2026-04-18 reshape; was Phase 4 pre-reshape): per-loop TSDoc on owning functions; ADR index entries; propagation to sentry-deployment-runbook, sentry-cli-usage, production-debugging-runbook, environment-variables; docs-adr-reviewer walk-through"
     status: pending
@@ -107,7 +108,7 @@ isProject: true
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
 **Last Updated**: 2026-04-19
-**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one). Remaining Wave 1 lanes pending: L-DOC initial (sentry-node README + app observability doc), L-12-prereq (extract `packages/core/telemetry-redaction-core/`), L-7 (release/deploy linkage).
+**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one); L-DOC initial landed (authoritative app observability doc + expanded sentry-node README + discoverability mesh; commit 9e1a26b2). Remaining Wave 1 lanes pending: L-12-prereq (extract `packages/core/telemetry-redaction-core/`), L-7 (release/deploy linkage).
 **Branch**: `feat/otel_sentry_enhancements`
 **Scope**: Close every available Sentry product loop for the MCP app (server + widget) on this branch before PR. Search CLI mirrors on the next branch.
 
@@ -743,6 +744,14 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
    the new doc pair. Owner-gateable; small follow-up.
 
 ### L-12-prereq Browser-safe redactor core extraction
+
+> **Status (2026-04-19)**: 🔴 **BLOCKED by [`architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md`](../../architecture-and-infrastructure/current/observability-primitives-consolidation.plan.md)**.
+>
+> A scaffolded extraction into `packages/core/telemetry-redaction-core/` surfaced a core→lib boundary violation (sanitisation primitives live in `@oaknational/logger`, a lib) and an over-decomposition signal (the new workspace was 139 LOC of pure composition over `@oaknational/observability`'s existing primitives). Architecture review (fred + barney, 2026-04-19) resolved the tension toward **folding primitives into `@oaknational/observability`** rather than a new core workspace. The consolidation plan supersedes this lane's body below; L-12-prereq becomes a trivial confirmation step once consolidation closes.
+>
+> **What L-12-prereq will check at re-open** (post-consolidation): `@oaknational/observability` owns redaction primitives + sanitisation + unified recursive JSON-safe type; `@oaknational/sentry-node` composes directly from observability; zero `@sentry/*` and zero `node:*` in observability `src/`; `packages/core/telemetry-redaction-core/` does not exist; Wave 4 widget Sentry can compose observability without a prerequisite extraction.
+>
+> **Original body retained below** as the record of the scaffolded attempt that surfaced the architectural repair. The decomposition rationale here is partly stale (new-package placement superseded); read the consolidation plan for the current shape.
 
 **Objective** (A.2 item 6, per architecture-reviewer-fred + sentry-reviewer). Extract a pure, runtime-agnostic redactor core into a new browser-safe package so both the Node adapter (`@oaknational/sentry-node`) and the forthcoming browser adapter (L-12) compose it. **Proposes** (pending ADR-160 amendment) to close the ADR's "Open Question" on redactor core placement in favour of a new package. ADR-160 is Accepted 2026-04-17 with Open Questions intact; L-12-prereq GREEN is conditional on either a minor ADR-160 amendment closing the question or owner confirmation that plan-prose is sufficient authority for the decision.
 

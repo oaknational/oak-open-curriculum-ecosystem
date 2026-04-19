@@ -8,6 +8,7 @@ packages:
   - packages/core/build-metadata
   - packages/core/env
   - packages/core/result
+  - packages/core/telemetry-redaction-core
   - packages/core/type-helpers
   - packages/design/*
   - packages/libs/env-resolution

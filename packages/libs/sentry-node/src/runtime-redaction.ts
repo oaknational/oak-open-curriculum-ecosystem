@@ -1,11 +1,11 @@
 import type { Breadcrumb, Exception, NodeOptions, RequestEventData } from '@sentry/node';
-import { typeSafeEntries } from '@oaknational/type-helpers';
 import {
   redactJsonObject,
   redactStringRecord,
   redactText,
   redactUnknownValue,
-} from './runtime-telemetry.js';
+} from '@oaknational/telemetry-redaction-core';
+import { typeSafeEntries } from '@oaknational/type-helpers';
 
 type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
 type SentryLogPayload = Parameters<NonNullable<NodeOptions['beforeSendLog']>>[0];

@@ -10,17 +10,23 @@ Learning Toolkit, bridged by the Oak Curriculum Ontology.
 
 | File | Type | Description |
 |------|------|-------------|
-| `future/evidence-integration-strategy.md` | Strategic brief | Impact requirements, three-layer architecture, integration levels, crosswalk design |
-| `future/oak-eef-technical-comparison.md` | Technical reference | Implementation-level comparison of EEF and Oak MCP stacks |
-| `future/eef-toolkit.json` | Data reference | Full EEF Toolkit dataset (30 strands, v0.2.0, April 2026) |
-| `future/ontology-integration-strategy.md` | Strategic brief | Moving from static ontology copies to dynamic integration (published package or workspace) |
+| [future/evidence-integration-strategy.md](future/evidence-integration-strategy.md) | Strategic brief | Impact requirements, three-layer architecture, integration levels, crosswalk design |
+| [future/oak-eef-technical-comparison.md](future/oak-eef-technical-comparison.md) | Technical reference | Implementation-level comparison of EEF and Oak MCP stacks |
+| [future/eef-toolkit.json](future/eef-toolkit.json) | Data reference | Full EEF Toolkit dataset (30 strands, v0.2.0, April 2026) |
+| [future/ontology-integration-strategy.md](future/ontology-integration-strategy.md) | Strategic brief | Moving from static ontology copies to dynamic integration (published package or workspace) |
+| [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md) | Short future plan | Re-read the official ontology repo from an upstream-first starting point and write up what that fresh pass changes |
+| [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis tying the official ontology to MCP orientation, direct ontology resources, search projections, and governance/update needs |
 
 ## Read Order
 
-1. **Strategy first**: `future/evidence-integration-strategy.md`
-2. **Ontology integration**: `future/ontology-integration-strategy.md`
-3. **Technical detail**: `future/oak-eef-technical-comparison.md`
-4. **Data reference**: `future/eef-toolkit.json` (when needed)
+1. **Strategy first**: [future/evidence-integration-strategy.md](future/evidence-integration-strategy.md)
+2. **Ontology integration**: [future/ontology-integration-strategy.md](future/ontology-integration-strategy.md)
+3. **Current formal synthesis**:
+   [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+4. **Fresh-perspective follow-on**:
+   [future/ontology-repo-fresh-perspective-review.plan.md](future/ontology-repo-fresh-perspective-review.plan.md)
+5. **Technical detail**: [future/oak-eef-technical-comparison.md](future/oak-eef-technical-comparison.md)
+6. **Data reference**: [future/eef-toolkit.json](future/eef-toolkit.json) (when needed)
 
 ## Document Roles (DRY)
 
@@ -32,6 +38,12 @@ Learning Toolkit, bridged by the Oak Curriculum Ontology.
   prototype works.
 - **Data file**: the actual EEF dataset. Authoritative for strand
   content, metrics, and coverage.
+- **Formal report**: promoted synthesis tying the official ontology to
+  current MCP orientation, direct ontology surfaces, search projections,
+  QA, and governance/update implications.
+- **Fresh-perspective review plan**: short follow-on plan for re-reading
+  the official ontology repo upstream-first so local assumptions can be
+  tested rather than inherited.
 
 ## The Core Thesis
 

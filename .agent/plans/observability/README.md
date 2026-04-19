@@ -22,7 +22,7 @@ first if the question is "are we really making progress."
 
 **No new plan in this directory lands without an existing plan
 archiving in the same pass** until Wave 2 opens. The tree currently
-carries 2 `active/` + 6 `current/` + 11 `future/` plans + 8
+carries 2 `active/` + 6 `current/` + 11 `future/` plans + 10
 explorations under `docs/explorations/`. Planning density has
 materially outpaced execution density; the forward-motion risk is
 another restructure rather than another emitter.
@@ -32,6 +32,24 @@ another restructure rather than another emitter.
 closes in the same commit. If no such plan exists, the proposal is
 rejected — the substance either lands in an existing plan's body or
 goes to a napkin entry for later promotion.
+
+**Scope clarification (2026-04-19)**: this invariant governs *plans*
+in the observability directory tree. *Explorations* under
+[`docs/explorations/`](../../../docs/explorations/) are governed by
+the [explorations directory README](../../../docs/explorations/README.md);
+explorations may land freely as their purpose is to weigh options
+*before* committing plan capacity. The 2026-04-19 addition of
+explorations 9 (warehouse selection) and 10 (Clerk-identity
+downstream) is in scope of the explorations directory's lifecycle,
+not this invariant.
+
+**Exploration-density brake**: explorations have their own
+lifecycle. A stub older than 90 days with no promotion-trigger
+fired and no body authored is reviewed for closure (graduate to a
+plan or ADR, supersede with newer evidence, or archive with
+rationale). Drift in exploration density is a separate concern from
+plan density and is named here only to flag that it is governed by
+a different rule, not by this invariant.
 
 **Exit condition**: rule lifts when
 [`current/observability-events-workspace.plan.md`](./current/observability-events-workspace.plan.md)

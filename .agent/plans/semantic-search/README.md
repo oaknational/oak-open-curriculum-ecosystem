@@ -1,12 +1,19 @@
 # Semantic Search — Navigation
 
-**Last Updated**: 2026-03-25
+**Last Updated**: 2026-04-19
 
 ## Start Here
 
 - Session entry: [semantic-search.prompt.md](../../prompts/semantic-search/archive/semantic-search.prompt.md)
 - Strategic sequence: [roadmap.md](roadmap.md)
 - Research index: [research-index.md](research-index.md)
+- Cross-boundary ontology report:
+  [../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+  (important because the ontology is not a search-only asset)
+- Fresh-perspective follow-on:
+  [../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md](../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md)
+  (use this when you need to re-open the ontology repo without letting
+  semantic search become the default frame)
 
 ## Active
 

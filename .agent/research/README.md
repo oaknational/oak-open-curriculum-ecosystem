@@ -58,6 +58,16 @@ Understanding Oak's curriculum structure and knowledge representation.
 | [sequence-vs-programme-analysis.md](sequence-vs-programme-analysis.md) | Detailed comparison | |
 | [owa-programme-slug-analysis.md](owa-programme-slug-analysis.md) | Programme slug patterns | |
 
+### Companion Surfaces Outside Research
+
+These are not research artefacts, but they are important adjacent documents for
+the ontology lane.
+
+| Surface | Type | Why it matters |
+|---------|------|----------------|
+| [../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md) | Formal report | Cross-boundary synthesis of the official Oak ontology against current MCP orientation, direct ontology surfaces, search projections, QA, and governance/update needs |
+| [../plans/kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md](../plans/kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md) | Future short plan | Upstream-first neutral review plan for re-reading the ontology repo and testing current local assumptions |
+
 ### 🤖 AI & MCP
 
 Research on AI integration, MCP tools, and agent patterns.

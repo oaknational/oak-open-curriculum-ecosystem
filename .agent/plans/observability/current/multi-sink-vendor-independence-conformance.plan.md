@@ -98,6 +98,34 @@ the regression.
   context; initial rule scope is apps/ + packages/sdks/ only.
   Widget-path lint added once `@sentry/browser` L-12 wiring stabilises.
 
+### Conformance Scope Expansion (recorded 2026-04-19)
+
+The initial conformance scope (above) covers **two sinks**: stdout
+(baseline) and Sentry (today). Per the three-sink architecture
+confirmed at
+[ADR-162 § History 2026-04-19](../../../../docs/architecture/architectural-decisions/162-observability-first.md#history)
+and owned by
+[`future/second-backend-evaluation.plan.md`](../future/second-backend-evaluation.plan.md),
+the conformance scope **expands per sink** as each adapter lands:
+
+- **Sink 2 (warehouse adapter)**: PR introducing the warehouse
+  adapter must extend the emission-persistence test to assert
+  schema-conformant payloads reach the warehouse sink (or the
+  warehouse-side capture harness in CI), and must extend the
+  `no-vendor-observability-import` allowlist to permit the
+  warehouse SDK only inside `packages/libs/<warehouse>-exporter/`
+  and the composition root.
+- **Sink 3 (PostHog adapter)**: same shape — PR extends both
+  conformance surfaces. PostHog SDK allowlisted only inside
+  `packages/libs/posthog-exporter/` and composition root.
+
+**Allowlist mechanism is the right shape**: `vendorPatterns` and
+`allowedPaths` already accept new entries; no rule-author work
+needed per sink, only configuration. RuleTester cases for each new
+vendor pattern land with that vendor's adapter PR. The
+emission-persistence harness is reusable across sinks because it
+asserts on captured payload shape, not on the sink mechanism.
+
 ---
 
 ## Dependencies
@@ -163,7 +191,7 @@ reasons.
 — reusable harness: `captureStdoutDuring(fn)` + `assertEventEmitted(schema, capture)`.
 
 **Consuming tests**: in each emitting workspace, compose the harness
-+ compose the events-workspace `assertEventConformance` helper.
+plus the events-workspace `assertEventConformance` helper.
 
 ### 2.2: ESLint rule
 

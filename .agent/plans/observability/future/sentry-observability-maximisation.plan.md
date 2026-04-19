@@ -270,6 +270,50 @@ Two tracks span every loop:
    Oak MCP tool actually calls an LLM? Defer the API shape until the
    first real consumer.
 
+## L-15 Input Framing (recorded 2026-04-19)
+
+The MCP-side strategy close-out lane (L-15 in
+`active/sentry-observability-maximisation-mcp.plan.md`) is the
+authoritative ADR moment for cross-cutting Sentry-strategy decisions
+on the current branch. The 2026-04-19 owner conversation (recorded in
+`.agent/memory/napkin.md`) settled five framings that L-15 *may*
+choose to incorporate. They are recorded here, in this strategic
+parent, so the active MCP plan is not edited from outside its owning
+branch:
+
+1. **Three-sink architecture is the post-MVP shape**, not "Sentry vs
+   PostHog". Sink 1 = Sentry (today); Sink 2 = data warehouse
+   (public beta); Sink 3 = PostHog (post-public-beta, gated on a
+   named question). Owned by
+   [`future/second-backend-evaluation.plan.md`](./second-backend-evaluation.plan.md).
+2. **MVP usage question is Sentry-addressable**. "How many people are
+   using the MCP and roughly for what" is answerable from Sentry
+   today via `wrapMcpServerWithSentry` traces + tool-call
+   distribution. PostHog is deferred until public beta + a named
+   question.
+3. **Redaction-core extraction (L-12-prereq) is independent of
+   PostHog adoption**. Per the workspace-extraction posture
+   (owner statement: "we need to extract all reusable modules into
+   their own workspaces regardless"), the redaction core is a
+   commitment to long-term architectural excellence, not a
+   contingent cost of any sink decision.
+4. **Clerk identity downstream is now an explicit policy question**.
+   All MCP users are logged-in via Clerk; the MCP server already
+   sets `user.id` into Sentry per-request scope. The
+   identity-envelope ruling for any second sink is owned by
+   [Exploration 10](../../../../docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md);
+   ADR-160's closure rule applies uniformly to whatever the policy
+   permits.
+5. **Existing Oak-org PostHog usage** reduces (but does not
+   eliminate) PostHog procurement and familiarity overhead. It is a
+   signal weighting in Sink 3 evaluation, not a pre-commitment.
+
+L-15's role is to land the close-out ADR for the MCP branch's
+Sentry-side strategy. These five framings are inputs the L-15 author
+*may* incorporate into that ADR; the L-15 owner has discretion to
+defer any of them to a separate ADR or to leave them at the
+exploration / strategic-brief level.
+
 ## Promotion Trigger
 
 Each per-branch executable lane (MCP now, Search CLI next) is promoted

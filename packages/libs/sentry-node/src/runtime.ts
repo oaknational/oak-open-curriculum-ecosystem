@@ -9,8 +9,8 @@ import {
   DEFAULT_SENTRY_FLUSH_TIMEOUT_MS,
   DEFAULT_TRACE_PROPAGATION_TARGETS,
 } from './runtime-sdk.js';
+import { describeUnknownError } from '@oaknational/telemetry-redaction-core';
 import { redactLogContext, redactNormalizedError, toNativeError } from './runtime-error.js';
-import { describeUnknownError } from './runtime-telemetry.js';
 import type {
   FixtureSentryStore,
   InitialiseSentryError,

@@ -1,8 +1,8 @@
 {
-  "name": "@oaknational/sentry-node",
+  "name": "@oaknational/telemetry-redaction-core",
   "version": "0.0.0-development",
   "private": true,
-  "description": "Shared Sentry Node configuration, fixture runtime, and log sink helpers",
+  "description": "Runtime-agnostic, browser-safe telemetry redaction primitives composed by Node and browser Sentry adapters (ADR-160)",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -31,15 +31,10 @@
   },
   "dependencies": {
     "@oaknational/logger": "workspace:*",
-    "@oaknational/observability": "workspace:*",
-    "@oaknational/result": "workspace:*",
-    "@oaknational/telemetry-redaction-core": "workspace:*",
-    "@oaknational/type-helpers": "workspace:*",
-    "@sentry/node": "^10.48.0"
+    "@oaknational/observability": "workspace:*"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
-    "@sentry/cli": "3.3.5",
     "@types/node": "^25.5.2",
     "eslint": "^10.2.0",
     "globals": "^17.4.0",
@@ -54,10 +49,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/oaknational/oak-open-curriculum-ecosystem.git",
-    "directory": "packages/libs/sentry-node"
+    "directory": "packages/core/telemetry-redaction-core"
   },
   "bugs": {
     "url": "https://github.com/oaknational/oak-open-curriculum-ecosystem/issues"
   },
-  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/libs/sentry-node#readme"
+  "homepage": "https://github.com/oaknational/oak-open-curriculum-ecosystem/tree/main/packages/core/telemetry-redaction-core#readme"
 }

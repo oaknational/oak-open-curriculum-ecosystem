@@ -2,6 +2,11 @@
 
 Executable plans that are in progress now.
 
+Cross-boundary context report:
+[../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md](../../../reports/oak-ontology-mcp-search-integration-report-2026-04-19.md)
+— formal synthesis of the official ontology's implications for MCP orientation,
+direct ontology resources, search projections, and service-level updates.
+
 ## Umbrellas
 
 - [mcp-app-extension-migration.plan.md](mcp-app-extension-migration.plan.md) —
@@ -31,6 +36,12 @@ Execution order:
 6. **WS-5**: [agent-guidance-consolidation.plan.md](agent-guidance-consolidation.plan.md) —
    **PENDING**. Consolidate agent guidance after all surfaces exist.
 7. **WS-6**: Documentation propagation (tracked in parent plan).
+
+Companion follow-on plan outside this collection:
+
+- [../../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md](../../kgs-and-pedagogy/future/ontology-repo-fresh-perspective-review.plan.md) —
+  short neutral review plan for re-reading the ontology repo without a
+  search-first frame.
 
 ## MCP App UI
 

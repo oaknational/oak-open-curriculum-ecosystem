@@ -364,3 +364,30 @@ In summary:
   ESLint-core-owned rather than `@oaknational`-owned, enforcing at
   `error` across apps + SDKs, reducing custom-rule authorship load
   without loss of coverage.
+- **2026-04-19** (later same day) — Three-sink architecture confirmed.
+  The 2026-04-19 owner conversation collapsed the prior
+  "Sentry vs PostHog" framing into a three-sink architecture: Sink 1
+  = Sentry (today); Sink 2 = data warehouse (public-beta target;
+  warehouse choice owned by
+  [Exploration 9](../../explorations/2026-04-19-data-warehouse-selection.md));
+  Sink 3 = PostHog (post-public-beta, gated on a named
+  data-scientist or product-owner question). All three sinks
+  consume the same vendor-neutral Zod schemas from
+  `@oaknational/observability-events` and apply the ADR-160
+  closure-rule redaction policy per sink. **This ADR's
+  vendor-independence clause is unchanged**; the three-sink shape is
+  a confirmation of the clause, not an extension of it. Sequencing
+  and per-sink promotion triggers are owned by
+  [`future/second-backend-evaluation.plan.md`](../../../.agent/plans/observability/future/second-backend-evaluation.plan.md)
+  (reframed 2026-04-19 from "second backend evaluation" to "three-sink
+  strategic brief"). The vendor-independence conformance scope
+  expands per sink as each adapter lands. The MVP usage question
+  ("how many people are using the MCP and roughly for what") is
+  Sentry-addressable via `wrapMcpServerWithSentry` traces +
+  tool-call distribution; the warehouse and PostHog adapters are
+  deferred to public beta (warehouse) and post-public-beta on a
+  named question (PostHog). Cross-referenced from the
+  [Sentry vs PostHog capability matrix exploration](../../explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md)
+  and the
+  [strategic-parent maximisation plan](../../../.agent/plans/observability/future/sentry-observability-maximisation.plan.md)
+  L-15 input framing.

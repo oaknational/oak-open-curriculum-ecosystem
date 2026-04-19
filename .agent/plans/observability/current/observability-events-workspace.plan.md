@@ -72,6 +72,24 @@ can add a new emission site with any shape and no tooling flags the drift.
 
 This workspace composes those primitives; it does not re-implement them.
 
+### Multi-Sink Consumer Posture (recorded 2026-04-19)
+
+Per the three-sink architecture confirmed in
+[ADR-162 § History 2026-04-19](../../../../docs/architecture/architectural-decisions/162-observability-first.md#history)
+and owned by
+[`future/second-backend-evaluation.plan.md`](../future/second-backend-evaluation.plan.md),
+the schemas this workspace authors are the **single vendor-neutral
+input** consumed by all three planned sinks: Sentry (today),
+warehouse adapter (Sink 2; public-beta target), and PostHog adapter
+(Sink 3; post-public-beta on a named question). The schema-shape
+constraint is therefore **vendor-neutrality across all three sinks**,
+not just Sentry-conformance. Vendor-specific projection (Sentry
+`metrics.*` adapter shape, PostHog capture-payload mapping,
+warehouse column projection) lives in each adapter package, not in
+the schemas themselves. The schema-set scope here is unchanged —
+seven MVP events — but its consumers expand sequentially as each
+adapter lands.
+
 ---
 
 ## Design Principles

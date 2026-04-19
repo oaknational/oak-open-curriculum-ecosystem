@@ -218,3 +218,36 @@ The first Node-side conformance test is
   [`sentry-observability-maximisation-mcp.plan.md`](../../../.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
   (L-0 authors this ADR; L-1 / L-4b / L-9 / L-12 are the first
   conformance targets).
+
+## History
+
+- **2026-04-17** — Accepted (origin per the maximisation plan's
+  Phase A; in-tree commit history is authoritative).
+- **2026-04-19** — Identity-envelope policy ruling deferred to a
+  dedicated exploration.
+  **TL;DR**: closure principle unchanged; identity-envelope policy
+  ruling deferred to
+  [Exploration: redaction policy — Clerk identity downstream (2026-04-19)](../../explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md).
+  Background: the 2026-04-19 owner
+  conversation surfaced that all Oak products use Clerk for auth,
+  the MCP server's users are all logged-in via Clerk, and a
+  consistent identifier may therefore be available across Oak
+  observability sinks subject to a policy ruling. Reviewer audit on
+  Exploration 1 (Sentry vs PostHog capability matrix) confirmed
+  that `apps/oak-curriculum-mcp-streamable-http/src/mcp-handler.ts`
+  already calls `observability.setUser({ id: userId })` for the
+  Sentry per-request scope. **The closure principle of this ADR is
+  unaffected**: every fan-out path applies the redaction policy
+  before any sink. What is now a named open question is _what the
+  redaction policy permits_ when the identifier is an opaque,
+  cross-product Clerk user ID — and whether the policy is uniform
+  across sinks (a single ruling) or per-sink (a per-sink projection
+  of the closure rule). The ruling is owned by
+  [`docs/explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md`](../../explorations/2026-04-19-redaction-policy-clerk-identity-downstream.md);
+  this ADR will receive a follow-up entry recording the ruling once
+  authored. Three coherent positions are named in the exploration:
+  anonymous-only (drop the Clerk ID at the barrier); identified
+  single-sink (Sentry scope only); identified all sinks (uniform
+  closure rule with explicit lawful basis and data-subject-rights
+  propagation). The ADR text and closure principle remain in force
+  unchanged.
