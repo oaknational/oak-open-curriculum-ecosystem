@@ -1,3 +1,134 @@
+## 2026-04-19 — Phase 5 ESLint rule landing (observability track)
+
+### What Was Done
+
+- Authored `require-observability-emission` ESLint rule at
+  `packages/core/oak-eslint/src/rules/` with 20 valid + 6 invalid
+  RuleTester cases. Rule tracks *export declaration anchors* rather
+  than inner function nodes. Scope filter uses regex path-segment
+  anchors, not minimatch globs. Sentinel opt-out:
+  `// observability-emission-exempt: <reason>`.
+- Registered rule in inline `@oaknational` plugin in `recommended.ts`.
+  Wired at `warn` in all 5 `apps/*` and `packages/sdks/*` workspace
+  `eslint.config.ts` files — 96 coverage-gap warnings surface
+  (each is a lane surface for Wave 3+ emitter work to close).
+- Codified axis-coverage question in
+  `.agent/directives/invoke-code-reviewers.md §Coverage Tracking`.
+- Flipped ADR-162 Proposed → Accepted (2026-04-19). Added History
+  block recording Wave-1 scope + Wave-2-deferred mechanisms.
+- Commit `fc0a0602` landed; reviewer matrix dispatched
+  (architecture-reviewer-fred + type-reviewer); 4 TO-ACTION
+  findings all ACTIONED in-place.
+- Parallel-agent docs work committed as `3455d26c` at session close
+  (53 files; agentic-engineering corpus scaffolding).
+
+### Patterns to Remember
+
+- **TSESLint vs core Rule typing is contravariant at the plugin slot.**
+  A `TSESLint.RuleModule<'messageId'>` fails to satisfy
+  `ESLint.Plugin.rules` when embedded in `Linter.Config.plugins`
+  because TSESLint's rule context has more methods than core ESLint's,
+  and TypeScript's contravariance rejects the substitution. For a
+  rule that must live in `recommended.ts`'s inline `@oaknational`
+  plugin, type it as core `Rule.RuleModule` (ESTree node types from
+  `estree`). For a rule that only lives in the plugin's `rules`
+  export (not a preset plugin), TSESLint typing works (e.g.
+  `no-export-trivial-type-aliases`). Trade-off: lose typed
+  messageIds; gain structural compatibility.
+- **`MaybeNamedFunctionDeclaration` subtyping friction on default
+  exports.** ESTree's `ExportDefaultDeclaration.declaration` is
+  `MaybeNamedFunctionDeclaration | MaybeNamedClassDeclaration |
+  Expression`. `MaybeNamedFunctionDeclaration` is a SUPERTYPE of
+  `FunctionDeclaration` (non-nullable id widened to nullable); not
+  assignable to an `ESTree.Node`-typed slot. Fix by tracking
+  *export declaration anchors* (the wrapper nodes) rather than the
+  inner function; ancestor-walk identifies the anchor regardless
+  of inner sub-type. Behaviourally equivalent, sidesteps friction
+  entirely.
+- **ESLint rule scope filters must not assume repo-root cwd.**
+  `context.cwd` is the WORKSPACE root under per-workspace lint,
+  not the repo root. A glob like `apps/*/src/**/*` matched against
+  a workspace-relative `src/foo.ts` never fires. Fix with regex
+  path-segment anchors (`(?:^|/)apps/[^/]+/src/`) that work for
+  both absolute and relative POSIX paths. One-instance observation;
+  watch for a second rule hitting this.
+- **Emission predicates validated only against synthetic RuleTester
+  cases miss real shapes.** fred's reviewer pass caught two real
+  sites (`fetchUpstreamMetadata`, `proxyUpstreamAsset`) emitting
+  solely via `observability.withSpan` — a legitimate engineering-
+  axis emission that the initial predicate didn't cover. Rule: for
+  any new lint rule with a behavioural predicate, audit the
+  predicate against real call sites in-tree before escalating
+  severity. Don't escalate `warn` → `error` on synthetic-test
+  confidence alone.
+- **`@types/estree` is not transitively self-declaring.** A
+  workspace that imports `import type * as ESTree from 'estree'`
+  needs `@types/estree` in its own `devDependencies` — knip flags
+  the unlisted dep. Small but live instance.
+- **SHA references in the commit that creates them are unstable.**
+  Amending a commit to record the commit's own SHA shifts the SHA
+  again, recursively. Owner's correction: don't couple plan docs
+  to commit SHAs. Keep cross-references symbolic (phase names,
+  lane IDs). Watchlist candidate for pattern extraction if a
+  second instance surfaces. File-level candidate name:
+  `plan-and-commit-are-independent-systems`.
+- **Commitlint body-max-line-length: 100 enforces wrap in message
+  bodies.** A commit message body with 100+ char lines (e.g. full
+  plan file paths) is rejected. Convention: use unqualified file
+  names in commit bodies when the context is clear; full paths
+  only when disambiguation matters and can be broken across lines.
+
+### Mistakes Made
+
+- **Initial plan over-counted files (11 vs 12).** My plan table
+  listed 6 plugin+governance + 5 workspace = 11 files. Actual:
+  12 (I had forgotten to count `recommended.ts`'s edit as separate
+  from the new-file pair). Added `@types/estree` dep-declaration
+  edit during execution → 14 staged. Lesson: when enumerating
+  files to touch during planning, walk the import graph too, not
+  just the semantic deliverables.
+- **First commit subject had plan-file paths in the body that
+  exceeded 100 chars.** Commitlint rejected. Retry with shortened
+  paths was clean. Could have caught this by eyeballing line
+  lengths before invoking commit.
+- **Amended to add SHA, then had to amend again to remove SHA.**
+  Three amend cycles before settling on "delete the SHA entirely."
+  Owner's course-correction arrived on the third, made the
+  principle obvious in retrospect. Could have asked before the
+  first amend.
+
+### Key Insight
+
+**Reviewer audit of real code beats synthetic test confidence.**
+Phase 5's test suite was 16 valid + 5 invalid cases — structurally
+complete but synthetic. fred's review of actual emitter shapes
+surfaced a real false positive (span-based emission) that the tests
+didn't cover. Before escalating any behavioural lint rule from `warn`
+to `error`, audit the predicate against real in-tree call sites. The
+`warn` phase exists precisely so this audit can happen before the
+rule blocks CI.
+
+### Watch Items
+
+- **E2E flakiness under parallel `pnpm check` load.** Two separate
+  `pnpm check` runs produced two DIFFERENT E2E test failures
+  (`enum-validation-failure.e2e.test.ts` timeout;
+  `built-server.e2e.test.ts` unexpected 404), each passing cleanly
+  in isolated e2e runs (all 24 files, 161 tests green in ~4s). Not
+  caused by Phase 5 (lint-only). Pattern: parallel-load inter-test
+  race (shared port? cache invalidation?). Per PDR-025 this is a
+  test-stability lane, not a pre-existing dismissal. Watchlist —
+  named lane if a second session confirms.
+- **Asymmetric rule registration in `recommended.ts`'s inline
+  plugin.** `no-export-trivial-type-aliases` is exported from the
+  plugin's `rules` record (src/index.ts) but NOT registered in the
+  inline `@oaknational` plugin in `recommended.ts` — so it's
+  name-resolvable only if a workspace imports the plugin's default
+  export. Cosmetic inconsistency; mention to docs-adr-reviewer if
+  it compounds.
+
+---
+
 ## 2026-04-19 — Docs-hygiene parallel track (3 reviewer rounds, fix-and-ship)
 
 ### What Was Done
@@ -306,3 +437,20 @@ High-signal entries absorbed this rotation:
   memory doctrine. Tactical state that changes understanding should promote
   into the existing learning loop rather than evolving into a second memory
   system.
+
+## 2026-04-19 — Workbench topology extraction notes
+
+### Patterns to Remember
+
+- `workbench-agent-operating-topology.md` is broader than the continuity
+  problem that first pulled it into view. It is a compact map of interaction
+  planes, control-loop stages, posture selection, temporary work ledgers,
+  authority order, and special feeds.
+- Utility-rich surfaces bloat when the underlying mechanism family lacks a
+  named home. The continuation prompt absorbed a work ledger; reviewer gateway
+  work is absorbing posture selection and signal routing; evidence discipline
+  is split across several surfaces.
+- The right response is routing, not flattening:
+  - operational-awareness plan for work-ledger and precedence concerns
+  - reviewer-gateway plan for review posture and signal routing
+  - future mechanism-taxonomy plan for the broader abstraction work

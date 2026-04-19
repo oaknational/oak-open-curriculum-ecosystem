@@ -106,7 +106,7 @@ isProject: true
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
 **Last Updated**: 2026-04-19
-**Status**: 🟡 PLANNING — ready for fresh session
+**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces. Remaining Wave 1 lanes pending: L-EH initial (`require-error-cause`), L-DOC initial (sentry-node README + app observability doc), L-12-prereq (extract `packages/core/telemetry-redaction-core/`), L-7 (release/deploy linkage).
 **Branch**: `feat/otel_sentry_enhancements`
 **Scope**: Close every available Sentry product loop for the MCP app (server + widget) on this branch before PR. Search CLI mirrors on the next branch.
 

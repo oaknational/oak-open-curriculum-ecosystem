@@ -1,10 +1,12 @@
 ---
 title: "High-Level Observability Plan"
 status: active
-last_updated: 2026-04-18
+last_updated: 2026-04-19
 foundational_adr: "docs/architecture/architectural-decisions/162-observability-first.md"
 direction_session: "docs/explorations/2026-04-18-observability-strategy-and-restructure.md"
 execution_plan: ".agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md"
+adr_162_status: "Accepted (2026-04-19)"
+wave_1_state: "partially opened — require-observability-emission rule landed at warn; L-EH initial / L-DOC initial / L-12-prereq / L-7 pending"
 ---
 
 # High-Level Observability Plan

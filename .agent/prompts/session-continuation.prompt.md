@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-19
+last_updated: 2026-04-19-phase5-close
 ---
 
 # Session Continuation
@@ -89,33 +89,32 @@ git log --oneline --decorate -10
   - `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`
     (strategic follow-up extending the ADR-159 pattern to Clerk; separate
     lane after Sentry work).
-- **Current state (2026-04-19, working tree on top of commit
-  `d0cfaeea`)**: Observability strategy restructure **Phases 1–4
-  complete**; **execution-order 5-wave reshape complete**;
-  maximisation plan is now **single-frame physically** (no more
-  historical-grouping dual frames). Branch ahead of remote on
-  `feat/otel_sentry_enhancements`. **Phase 5 of the restructure is
-  pending and is also Wave 1 of execution**: author
-  `require-observability-emission` ESLint rule + flip ADR-162
-  Proposed → Accepted. This is the next code-producing work.
+- **Current state (2026-04-19, HEAD at `3455d26c`, in sync with
+  `origin/feat/otel_sentry_enhancements`)**: Observability strategy
+  restructure **Phases 1–5 complete**. **ADR-162 Accepted**
+  (2026-04-19). **Wave 1 partially opened**: the
+  `require-observability-emission` ESLint rule landed at `warn` in
+  all `apps/*` and `packages/sdks/*` workspaces (5 wirings, 96
+  coverage-gap warnings surface). Wave 1 remaining: L-EH initial
+  (`require-error-cause` rule), L-DOC initial (sentry-node README
+  + app observability doc), L-12-prereq (extract
+  `packages/core/telemetry-redaction-core/`), L-7 (release/deploy
+  linkage). Wave 2 (`packages/core/observability-events/`) is the
+  schema-foundation layer that unlocks Wave-3-onwards emitter lanes.
 
-  **Parallel docs-hygiene track (uncommitted)**: a 3-round
-  onboarding/Practice docs review-and-fix session ran 2026-04-19
-  on top of `d0cfaeea` and is sitting in the working tree. Touches
-  ~38 modified files across `.agent/`, `docs/`, `apps/*/README.md`,
-  and root README/CONTRIBUTING. Substantively: PDR-001 supersession
-  marked in Status + Decision; surface counts refreshed (25 rules /
-  12 commands / 23 skills / 77 patterns); legacy stdio mentions
-  removed from onboarding paths; AGENT.md back inside its
-  fitness_line_limit; ADR-144 filename/title divergence noted in
-  the index; E2E vs credential workflows separated in
-  troubleshooting/env-vars; workspace READMEs gained "New here?"
-  signposts to repo onboarding; stale `pnpm qg` and
-  `pnpm es:setup reset` commands corrected. `pnpm practice:fitness`
-  unchanged from baseline (`HARD: 2 hard, 12 soft`; both hards are
-  pre-existing in `principles.md` and `testing-strategy.md`,
-  untouched by this work). Owner has not yet committed; not part of
-  the observability commit chain.
+  **Commits landed this session, newest first**:
+  - `3455d26c` — `docs(agentic-engineering): discoverability hub +
+    deep-dives + continuity plans` — 53-file agentic-engineering
+    corpus scaffolding (deep-dives, research directories, reports
+    scaffolding, 2 new plans, analysis baseline). Parallel-agent
+    work committed in a single pass at session close.
+  - `fc0a0602` — `feat(observability): adr-162 accepted —
+    require-emission rule at warn` — Phase 5 landing: ESLint rule
+    + 5 workspace wirings + reviewer-matrix axis-coverage question
+    in `.agent/directives/invoke-code-reviewers.md §Coverage
+    Tracking` + ADR-162 Proposed → Accepted with a History block
+    + restructure-plan Phase-5 todo flipped to completed. Pre-push
+    gates all green; pre-commit hooks all green.
 
   This session shipped three commits on top of the Phase 1 starting
   point (`502af060`):
@@ -210,67 +209,91 @@ git log --oneline --decorate -10
   - **Experience entry**: `2026-04-18-seam-definition-precedes-migration.md`
     captures the mid-session corrective arc (owner interrupt caught
     a migration classifying against the wrong axis).
-- **Current objective** (next session): **Phase 5 of the
-  observability strategy restructure — ADR-162 Acceptance**. This is
-  the first code-producing work in the observability track. Under
-  the 2026-04-18 reshape, restructure Phase 5 == execution Wave 1.
+- **Current objective** (next session): **Continue Wave 1 of the
+  observability MVP execution**. Phase 5 of the restructure is
+  closed; ADR-162 is Accepted. Four Wave-1 lanes remain, each
+  authored independently in the maximisation plan
+  (`.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`):
 
-  **Next action**: open Phase 5 of the restructure plan at
-  `.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`.
-  Phase 5 deliverables:
+  1. **L-EH initial** — author `require-error-cause` ESLint rule
+     in `packages/core/oak-eslint/src/rules/require-error-cause.ts`
+     with RuleTester cases for re-throw of original binding,
+     cause-mismatch, nested try/catch, AggregateError shape, and
+     async-wrapper catch. Apply to Phase 1 new/changed code. Uses
+     the same core `Rule.RuleModule` typing pattern as
+     `require-observability-emission.ts` (see the file's TSDoc for
+     the rationale — TSESLint.RuleModule is contravariant with
+     ESLint.Plugin in the `Linter.Config.plugins` slot).
+  2. **L-DOC initial** — expand `packages/libs/sentry-node/README.md`
+     (currently a 4-line stub) and author
+     `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`.
+     Structural test must assert content presence (not just file
+     existence).
+  3. **L-12-prereq** — extract pure runtime-agnostic redactor core
+     from `@oaknational/sentry-node` into new browser-safe package
+     `packages/core/telemetry-redaction-core/`. Depends only on
+     type-helpers + generic redact primitive; no `@sentry/node`.
+     Node and browser adapters compose it. Settles ADR-160's open
+     question: new package, not submodule. Blocks L-12.
+  4. **L-7** — wire `sentry-cli releases set-commits --auto` and
+     `releases deploys new` into CI/deploy flow. Closes
+     regression-detection loop. Vercel deploy pipeline only (not
+     GitHub Actions PR checks) per A.3 settlement. Uses explicit
+     `--commit $GIT_SHA` form.
 
-  1. **Author `require-observability-emission` ESLint rule** in
-     `packages/core/oak-eslint/src/rules/require-observability-emission.ts`
-     + RuleTester cases at
-     `packages/core/oak-eslint/src/rules/require-observability-emission.unit.test.ts`.
-     RuleTester coverage per restructure plan §P5.2: exported async
-     function in `apps/**` without emission → flagged; with
-     `logger.*` / `Sentry.*` / `@oaknational/observability-events`
-     schema usage → pass; private function → pass; test file → pass;
-     edge cases for delegate-call pattern. **Important**: per
-     sentry-reviewer TO-ACTION, the schema-usage detection path is
-     Wave-2-dependent (`@oaknational/observability-events` workspace
-     does not exist yet). RuleTester cases for that path must be
-     stubbed/skipped with a "Wave 2 unlocks" note until the
-     workspace exists. Authorship of the rule is still Wave 1; full
-     test coverage activates in Wave 2 close.
-  2. **Codify reviewer-matrix question** "Does this capability have a
-     loop across each applicable axis?" in
-     `.agent/rules/invoke-code-reviewers.md` (or equivalent).
-  3. **Flip ADR-162 status** Proposed → Accepted at
-     `docs/architecture/architectural-decisions/162-observability-first.md`.
-  4. **Update restructure plan Phase 5 todo** `pending` → `completed`
-     with commit SHA note.
+  These four can land in any order; none blocks another. Each is
+  a separate commit closed by the maximisation plan's reviewer
+  matrix (§P1.4 at phase close).
 
-  Single commit with subject
-  `feat(observability): adr-162 accepted — require-observability-emission rule landed`.
-  Reviewer matrix at phase close per restructure plan §P5.4:
-  `architecture-reviewer-fred` (enforcement-mechanism completeness;
-  ADR-162 Accepted-status readiness) + `type-reviewer` (ESLint rule
-  type correctness; RuleTester case coverage).
+  **Wave 1 is "partially opened" — it formally closes only when
+  all four remaining lanes land** plus the Phase-5 rule (already
+  landed) and the Wave-1 ESLint rules all pass `pnpm check` in
+  aggregate. Wave 2 (events workspace) must not open until Wave 1
+  closes; schemas-before-emitters is load-bearing.
 
-  **After Phase 5 closes**, the 5-wave execution can open: Wave 1's
-  remaining items (L-EH initial, L-DOC initial, L-12-prereq, L-7) +
-  all subsequent waves per the maximisation plan's §Phase Structure.
-  This is the first time the observability track moves from plan
-  text to code.
+  **Address the 96 coverage-gap warnings?** Not yet. Each is a
+  lane-surface for Wave 3+ emitter work. Triaging them now would
+  invert the wave ordering. Leave at `warn` until Wave 3 lanes
+  work through the emitter population or until owner signals a
+  coverage-closure lane.
 
-  **Sibling backlog work** (concurrent / not blocking Phase 5):
+  **Pending minor follow-ups from this session's reviewer matrix**:
+  - fred's out-of-scope note: `no-export-trivial-type-aliases` is
+    exported from the plugin's `rules` record but NOT registered
+    in the inline `@oaknational` plugin in `recommended.ts`
+    (asymmetric with `no-eslint-disable` and the newly-landed
+    `require-observability-emission`). Not a bug; cosmetic
+    inconsistency worth a tiny cleanup when next in the file.
+  - fred's Finding 2 positive: RuleTester case for sentinel
+    comment + unrelated comment adjacency is authored but minimal;
+    expand if the sentinel contract tightens during Wave-3 emitter
+    work.
+
+  **Sibling backlog work** (concurrent / not blocking Wave 1):
   `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`
   — migrate remaining test files off `loadRuntimeConfig` +
   `createHttpObservabilityOrThrow` ceremony; flip ESLint
   `no-restricted-properties` and `no-restricted-imports` from `warn`
   to `error` when backlog reaches zero. ~34 total violations today.
-- **Deep consolidation status**: **not due — 2026-04-19 docs-hygiene
-  track (uncommitted)**. Lightweight session: 3 reviewer rounds +
-  fix-and-ship docs hygiene on top of the already-completed
-  consolidation pass listed below. No plan or milestone closed; no
-  practice-box exchange; no fitness pressure (all introduced
-  violations resolved in-session, baseline `HARD: 2 hard, 12 soft`
-  unchanged with the two hards pre-existing); no Core or PDR
-  graduation. Numbered-claim-drift watchlist captured to napkin for
-  cross-session validation. The completed-pass entry below remains
-  authoritative for the prior post-restructure consolidation
+- **Deep consolidation status**: **due — not-well-bounded for this
+  closeout**. The Phase 5 closure + ADR-162 Acceptance is a real
+  milestone trigger (session-handoff gate checklist item #1).
+  distilled.md sits at 253 lines (soft zone, target 200, limit 275)
+  and would benefit from a refinement pass (session-handoff gate
+  checklist item #4). However, the afternoon's Phase 5 substance
+  is all single-instance and not yet stable enough for graduation:
+  contravariance-at-plugin-slot, MaybeNamedFunctionDeclaration
+  subtyping workaround, workspace-cwd regex-vs-glob, and
+  real-code-audit-over-synthetic-tests are each candidate patterns
+  pending a second cross-session instance. A second deep pass the
+  same day as the morning's consolidation (`2dc4d40b`) would
+  compound pattern-inflation risk (the rate-of-structural-change
+  concern flagged in the morning's napkin rotation). Next session
+  opens the deep pass deliberately: process Phase 5 surprises into
+  stable patterns/ADRs/PDRs, graduate any that have matured,
+  refine distilled.md, and consider a Core-trinity refinement
+  session (also deferred from the morning pass). The completed-pass
+  entry below remains authoritative for the morning's consolidation
   (commits `2e0be715` → `2e8a140d`):
   - **Three new memory/patterns**: `stage-what-you-commit.md`
     (2 cross-session instances), `foundations-before-consumers.md`
@@ -314,19 +337,111 @@ git log --oneline --decorate -10
     `2e0be715`). Followed by status markers (`f1f2c259`), 5-wave
     execution reshape (`7f5b18e7`), and physical reorder of lanes to
     match execution order single-frame (`2e8a140d`, 2026-04-19).
-  - **Phase 5** ADR-162 acceptance — land `require-observability-emission`
-    ESLint rule at `warn`; codify reviewer-matrix question; flip ADR
-    Proposed → Accepted. **Next action**: this is Wave 1 of the
-    broader observability MVP execution. First code-producing step.
-- **Post-restructure Phase 1 work** (still scheduled, not started —
-  carries forward from prior handoff):
-  - **L-1** free-signal integrations with fixture envelope-observability
-    prerequisite.
-  - **L-2** `createSentryDelegates` extraction with structural-
-    intersection acceptance test.
-  - **L-DOC initial** expand sentry-node README + write app observability doc.
+  - **Phase 5** ADR-162 acceptance — `require-observability-emission`
+    ESLint rule landed at `warn`; reviewer-matrix axis-coverage
+    question codified; ADR-162 flipped Proposed → Accepted. ✅
+    **Complete 2026-04-19** (commit `fc0a0602`). This is Wave 1 of
+    the MVP execution reshape; formally Wave 1 stays "partially
+    opened" until L-EH initial / L-DOC initial / L-12-prereq / L-7
+    all land.
+- **Wave 1 remaining work** (next session):
   - **L-EH initial** `require-error-cause` ESLint rule with expanded
-    RuleTester cases.
+    RuleTester cases (re-throw, cause-mismatch, nested try/catch,
+    AggregateError, async-wrapper catch).
+  - **L-DOC initial** expand sentry-node README + write app
+    observability doc; structural test asserts content presence.
+  - **L-12-prereq** extract `packages/core/telemetry-redaction-core/`
+    so Node and browser adapters compose a shared redactor core;
+    blocks L-12.
+  - **L-7** `sentry-cli releases set-commits --auto` +
+    `releases deploys new` in Vercel deploy pipeline.
+- **Recent surprises / corrections (2026-04-19 Phase 5 ESLint rule landing)**:
+  - **TSESLint vs core Rule typing is contravariant at the plugin slot.**
+    Authoring an ESLint rule with `TSESLint.RuleModule<'messageId'>`
+    typing (the typescript-eslint idiom, typed messageIds) is fine
+    at the rule source but fails to satisfy `ESLint.Plugin.rules`
+    when embedded in a `Linter.Config.plugins` slot — because
+    TSESLint's richer rule-context has more methods than core's,
+    and TypeScript's contravariance rejects the substitution. The
+    clean resolution is to type the rule as core `Rule.RuleModule`
+    (ESTree node types from `estree`), giving up compile-time
+    messageId typing in exchange for structural compatibility.
+    Mirrors the existing `no-eslint-disable.ts` pattern. Documented
+    in the new rule's TSDoc. Rule: for a new rule that must live in
+    `recommended.ts`'s inline `@oaknational` plugin, use core
+    `Rule.RuleModule`; for a rule that only lives in the plugin's
+    `rules` export (not the inline preset plugin), TSESLint
+    typing is fine (e.g. `no-export-trivial-type-aliases`).
+  - **`MaybeNamedFunctionDeclaration` subtyping friction on default
+    exports.** ESTree's `ExportDefaultDeclaration.declaration` is
+    typed `MaybeNamedFunctionDeclaration | MaybeNamedClassDeclaration
+    | Expression` where `MaybeNamedFunctionDeclaration` is a
+    supertype of `FunctionDeclaration` with `id: Identifier | null`.
+    Trying to narrow and then assign to an `ESTree.Node`-typed slot
+    fails without an assertion. Fix: track *export declaration
+    anchors* (`ExportNamedDeclaration` / `ExportDefaultDeclaration`
+    wrappers) rather than the inner function nodes; ancestor-walk
+    from the CallExpression finds the anchor identity regardless of
+    the inner function's sub-type. Behaviourally equivalent; side-
+    steps the subtyping friction entirely. Documented in the rule's
+    TSDoc.
+  - **Workspace-scope filter with glob fails under ESLint's per-
+    workspace cwd.** A rule using
+    `minimatch(rel, 'apps/*/src/**/*')` against
+    `context.physicalFilename` never matches — ESLint's `cwd` is
+    the WORKSPACE root, not the repo root, so the resolved relative
+    path is `src/foo.ts` (no `apps/` prefix). Fix: use regex with
+    path-segment anchors like `/(?:^|\/)apps\/[^/]+\/src\//u`,
+    which works on both absolute and repo-relative POSIX paths
+    regardless of cwd. Adds absolute-path RuleTester cases to
+    exercise the real-run code path. One-instance watchlist; may
+    be a general pattern if a second workspace-level rule hits it.
+  - **Fred caught a real false positive: span-based emission
+    predicates.** Two real sites (`fetchUpstreamMetadata`,
+    `proxyUpstreamAsset`) emit solely via `observability.withSpan`
+    — a legitimate engineering-axis emission per ADR-162's
+    Five-Axes table, but not in my initial predicate. Extended
+    CAPTURE_METHODS to include `withSpan`, `startSpan`,
+    `startActiveSpan`, `setAttribute`, `setAttributes`,
+    `recordException`, `addEvent`. False-positive count dropped
+    from 4 to 2 on the MCP app. Reviewer audit of real emitter
+    shapes before escalating a rule to `error` is load-bearing;
+    a predicate validated only against synthetic RuleTester cases
+    is a partial validation.
+  - **`@types/estree` is not a transitive dep that declares itself
+    in every workspace.** Importing `import type * as ESTree from
+    'estree'` surfaced as a knip "unlisted dependency" in the
+    oak-eslint package. Added `@types/estree: ^1.0.8` to
+    `devDependencies`. Small, but a live instance of the "knip
+    flags undeclared types" signal.
+  - **Pre-commit hook shapes the commit message.** Commitlint
+    enforces `body-max-line-length: 100` (matching the prose-
+    line-width config). Initial commit message had plan-file paths
+    over 100 chars; rejected. Fix: shorten + wrap. Subject kept
+    under 80 per prior napkin rule. Adjacent convention: plan file
+    paths in commit bodies should be unqualified file names, not
+    full `.agent/plans/.../foo.plan.md` paths.
+  - **SHA references in the very commit that creates them are
+    inherently unstable.** My first instinct was to amend the
+    restructure plan's Phase-5 todo note to include the commit SHA,
+    then amend the commit — but that just shifts the SHA again.
+    Owner's correction: delete the SHA from the doc entirely; plan
+    and git are independent systems. Keep cross-references between
+    them symbolic (phase names, lane IDs) rather than SHA-pinned.
+    Pattern candidate if a second instance surfaces; file-level
+    candidate name: `plan-and-commit-are-independent-systems`.
+  - **E2E flakiness under parallel `pnpm check` load.** Two
+    separate `pnpm check` runs during Phase 5 produced two
+    DIFFERENT E2E test failures
+    (`enum-validation-failure.e2e.test.ts` timeout;
+    `built-server.e2e.test.ts` unexpected 404), each passing
+    cleanly in three isolated e2e runs (all 24 files, 161 tests
+    green in ~4s). The pattern is parallel-load inter-test race
+    (shared port? cache invalidation?), not a deterministic bug
+    caused by Phase 5 (which is lint-only). Per PDR-025 this is a
+    test-stability lane rather than a "pre-existing dismissal";
+    name it explicitly if a second session confirms the pattern.
+
 - **Recent surprises / corrections (2026-04-19 docs-hygiene parallel track)**:
   - **Numbered-claim drift is a recurring failure mode.** Three
     independent reviewer rounds on the onboarding/Practice surface
@@ -559,20 +674,22 @@ Carried from 2026-04-17 (still relevant):
     relative to industry convention. Separate deliberation, not a
     Sentry-plan concern. Relevant files: `.agent/directives/testing-strategy.md`,
     ADR-161, ADR-078.
-- **Next safe step**: open Phase 5 of the observability strategy
-  restructure per **Current objective** above. This is the first
-  code-producing step on the observability track: author
-  `require-observability-emission` ESLint rule + codify the
-  reviewer-matrix question + flip ADR-162 Proposed → Accepted.
-  Reviewer matrix: `architecture-reviewer-fred` + `type-reviewer`.
-  Single commit with subject
-  `feat(observability): adr-162 accepted — require-observability-emission rule landed`.
-  Deep consolidation pass ran 2026-04-19 (see §Deep consolidation
-  status above); Phase 5 now opens on a clean slate. Sibling backlog
-  work on `test-ceremony-production-factory-audit.plan.md` remains
-  concurrent and not blocking Phase 5. Owner may also choose a
-  dedicated Core-trinity refinement session (compression + reflection)
-  deferred from this consolidation pass — separate from Phase 5.
+- **Next safe step**: pick one of the four remaining Wave-1 lanes
+  (see **Current objective** above) and author it end-to-end:
+  L-EH initial (`require-error-cause` ESLint rule; mirrors the
+  Phase-5 `Rule.RuleModule` pattern), L-DOC initial (sentry-node
+  README expansion + app observability doc), L-12-prereq (extract
+  `packages/core/telemetry-redaction-core/`), or L-7 (Vercel-only
+  release/deploy linkage). None blocks another; pick the one the
+  owner prioritises or start with L-EH because it uses the
+  freshly-validated ESLint rule authoring pattern from Phase 5.
+  Each lane closes with its own reviewer matrix per the
+  maximisation plan §P1.4. The sibling `test-ceremony-
+  production-factory-audit.plan.md` backlog remains concurrent
+  and not blocking Wave 1. Owner may also choose a dedicated
+  Core-trinity refinement session (compression + reflection)
+  deferred from the 2026-04-19 morning consolidation pass —
+  separate from Wave 1.
 - **PDR-007 landed 2026-04-18** — Core contract redefined as
   "bounded package of files plus required directories." New
   directories `practice-core/decision-records/` (PDRs) and
@@ -700,33 +817,18 @@ plan, resolved 2026-04-17). Do not re-open them. Notable settlements:
 - L-13 replaces alert 521866 (which was smoke-test shape only).
 - L-5/L-6 rollback is env-flag-off; alpha, no SLA.
 
-**First action of the next session**: open **Phase 1 of the
-restructure plan** (`.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`).
-Phase 1 is structural: draft ADR-162 (Observability-First with
-vendor-independence clause) in Proposed status; create
-`.agent/plans/observability/` with lifecycle sub-dirs (`active`,
-`current`, `future`, `archive`) + README +
-`high-level-observability-plan.md` skeleton; `git mv` the six existing
-observability plans (the maximisation executable plan moves to
-`observability/active/`; the strategic brief to `observability/future/`;
-the crosswalk to `observability/active/`; the search-observability
-plan to `observability/current/`; the pre-pivot archive to
-`observability/archive/superseded/`); sweep cross-references across
-all `.agent/**/*.md` and `docs/**/*.md` for the old paths until grep
-returns zero. Single Phase-1 commit. `docs-adr-reviewer` +
-`architecture-reviewer-fred` pass at phase close.
-
-**Do NOT jump straight to L-1** of the old maximisation plan — L-1
-opens only after Phase 4 of the restructure plan revises the
-maximisation plan's MVP classification and the `metrics.*`
-priority swap lands. The restructure is the gate.
-
-Then continue into L-1, L-2, L-DOC (initial), L-EH (initial) as the
-Phase 1 delivery. TDD first at every step. Run the reviewer matrix
-per the plan at the end of Phase 1 with **non-leading prompts** (do
-not pre-suppose the answer inside the question). Treat reviewer
-findings as action items unless explicitly rejected with written
-rationale.
+**First action of the next session**: the restructure is closed
+(Phases 1–5 complete 2026-04-19). Open the **maximisation plan**
+(`.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`)
+and pick a Wave 1 remaining lane: L-EH initial, L-DOC initial,
+L-12-prereq, or L-7. L-EH is the natural first-pick because its
+ESLint-rule authorship reuses the core `Rule.RuleModule` typing
+pattern just validated by Phase 5 — that rationale is in the new
+rule's TSDoc and in the napkin entry on
+contravariance-at-plugin-slot. TDD first at every step. Reviewer
+matrix per the maximisation plan §P1.4 at lane close with
+**non-leading prompts**. Treat reviewer findings as action items
+unless explicitly rejected with written rationale.
 
 ## Hard Invariants / Non-Goals
 
