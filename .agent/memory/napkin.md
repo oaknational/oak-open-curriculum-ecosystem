@@ -24,6 +24,16 @@
   debt now has one explicit future home: `action-governance boundary`,
   `boundary model`, `signal ecology`, `residual-risk surface`, and
   `governance-plane vocabulary`.
+- Repaired the late closeout defects so the lane is auditable end to end:
+  corrected stale relative links in the governance and operational-awareness
+  plans, added explicit routing mention for
+  `agentic-mechanism-inventory-baseline.md`, and aligned deferred concepts so
+  `Graduated authority` and `Adoption ladder` are marked `defer` and named as
+  explicitly deferred future-taxonomy items.
+- Refreshed `.agent/prompts/session-continuation.prompt.md` so the live
+  continuity contract now points at the governance-lane closeout rather than a
+  stale branch-specific workstream, and marked deep consolidation as due
+  instead of pretending the prompt is already converged.
 - Recorded doctrine no-change rationale in the collection sync surface instead
   of touching canon.
 
@@ -35,7 +45,7 @@
 - `adoption ladder` stays explicitly deferred. The repo has not yet moved a
   mechanism family far enough from repo-local pilot to doctrine candidate to
   need staged uptake machinery.
-- `layered safeguards` do NOT become fresh taxonomy debt. They stay in the
+- `layered safeguard stack` does NOT become fresh taxonomy debt. It stays in the
   reference/deep-dive lane plus the reviewer-gateway's local manifestation.
 - No edits were made to `docs/foundation/agentic-engineering-system.md`,
   `.agent/practice-core/practice.md`, ADR-119, ADR-150, or any PDR. That was
@@ -69,6 +79,33 @@
   example overclaim, unrouted net-new concepts, residual-risk routing,
   three-plane and awareness-plane homes, propagation-surface naming, and the
   need for an explicit closure record.
+- Final reruns of `assumptions-reviewer`, `docs-adr-reviewer`, and
+  `architecture-reviewer-fred` all returned clean after the defer-status,
+  routing, link, and validation-wording repairs.
+
+### Surprise — Validation Scope
+
+- **Expected**: The repo-defined gates plus the lane's local checks were enough
+  to describe the closeout as validated end to end.
+- **Actual**: The closeout record had to separate root-package gate results
+  from reviewer/manual verification because root `markdownlint` intentionally
+  excludes `.agent/**`.
+- **Why expectation failed**: I treated verification evidence and quality-gate
+  coverage as if they were interchangeable.
+- **Behaviour change**: For docs-heavy `.agent/**` work, state gate scope
+  explicitly and record reviewer/manual verification as a separate proof line.
+
+### Surprise — Defer Discipline
+
+- **Expected**: Once the future lane prose said `Graduated authority` and
+  `Adoption ladder` were deferred, the closeout was internally consistent.
+- **Actual**: The authoritative concept register and baseline still said
+  `missing`, which made the closeout over-claim defer discipline.
+- **Why expectation failed**: I updated narrative routing before checking the
+  canonical status tables.
+- **Behaviour change**: When a lane defines a concept-record contract, verify
+  the register rows and baseline inventory before claiming defer/reject
+  completeness.
 
 ### Follow-Up Slices
 
@@ -662,6 +699,49 @@ High-signal entries absorbed this rotation:
   *good* case for foundations-before-consumers. Worth noting because
   it's easy to assume unenforced rules are routinely violated; in
   this case, the evidence says otherwise.
+
+### Post-lane meta-move: forward-motion assurance mechanisms
+
+After L-EH initial closed and I wrote an honest-evaluation section
+flagging "five of six axes are schema-less promises," owner asked the
+meta question: **how do we create reasonable assurance that we are
+moving forward?** The session then produced 6 mechanisms + 1 watchlist
+entry as plan and governance changes:
+
+1. `what-the-system-emits-today.md` (externally verifiable 5×3 axis/
+   runtime matrix; 3/13 cells populated today).
+2. Plan-density cap on the observability tree until Wave 2 opens.
+3. Lane Close Evidence Pattern (attempt / observed / proven) in
+   maximisation plan.
+4. Wave 1 close external-demonstration criterion (≤5-min recording).
+5. Per-Session Landing Commitment field in session-continuation
+   prompt.
+6. Retroactive application of attempt/observed/proven to L-EH close.
+7. Watchlist entries in distilled: externally-verifiable-output-
+   beats-plan-compliance, decompose-precedents-before-reusing.
+
+### Surprise (about session shape, not substance)
+
+- **Expected**: a session with a specific lane target (L-EH initial)
+  produces one lane's worth of work. Anything beyond is scope creep.
+- **Actual**: the session's single-lane landing (L-EH initial) + an
+  honest-evaluation question from the owner + 6 assurance-mechanism
+  edits + a composite commit. The mechanism-adoption work was directly
+  provoked by the evaluation pass, which was directly provoked by the
+  lane close.
+- **Why expectation failed**: I treated "landing target" and "session
+  scope" as synonymous. They aren't. A landing target is the
+  externally-verifiable outcome the session commits to; session scope
+  is the full work-surface exposed by pursuing that target honestly.
+  The two can diverge when the landing surfaces a meta-level question
+  whose answer needs to be *acted on* rather than merely noted.
+- **Behaviour change**: the landing-commitment mechanism I just added
+  should explicitly permit "the landing is X, plus any mechanism edit
+  directly provoked by doing X honestly." Otherwise the mechanism
+  creates pressure to under-report scope at open, which defeats the
+  honesty it's supposed to enforce. Noted implicitly via the
+  exceptions clause in the prompt's §Per-Session Landing Commitment;
+  watch for a second instance that sharpens the rule.
 
 ## 2026-04-19 — Abstract governance-concept extraction notes
 

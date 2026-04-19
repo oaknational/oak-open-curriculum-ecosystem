@@ -29,8 +29,9 @@ isProject: false
 
 - [roadmap.md](../roadmap.md)
 - [current/governance-concepts-and-agentic-mechanism-integration.plan.md](../current/governance-concepts-and-agentic-mechanism-integration.plan.md)
-- [governance-concepts-and-mechanism-gap-baseline.md](../../analysis/governance-concepts-and-mechanism-gap-baseline.md)
-- [governance-concepts-and-integration-report.md](../../reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md)
+- [governance-concepts-and-mechanism-gap-baseline.md](../../../analysis/governance-concepts-and-mechanism-gap-baseline.md)
+- [agentic-mechanism-inventory-baseline.md](../../../analysis/agentic-mechanism-inventory-baseline.md)
+- [governance-concepts-and-integration-report.md](../../../reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md)
 
 ## Preflight
 
@@ -154,23 +155,25 @@ Moving wording between artefacts without one of those deltas does not count.
 - existing `docs-adr-reviewer` and `architecture-reviewer-fred` findings
   absorbed
 - fresh `assumptions-reviewer`, `docs-adr-reviewer`, and
-  `architecture-reviewer-fred` sweep on the full diff
-- docs-focused validation evidence
+  `architecture-reviewer-fred` sweep on the reviewed closeout diff
+- reviewer/manual verification evidence for the touched lane docs plus the
+  repo-defined quality-gate record
 
 **Deterministic validation**
 
 - `pnpm markdownlint-check:root`
 - `pnpm practice:fitness:informational`
 
-Use repo-defined quality gates only. Treat routing, provenance, and lifecycle
-checks as lane-local verification rather than substitute gates.
+Use repo-defined quality gates only. Treat routing, provenance, lifecycle, and
+reviewer/manual document checks as lane-local verification rather than
+substitute gates.
 
 ## Reviewer Checkpoints
 
 1. **Planning findings absorbed** — prior `docs-adr-reviewer` and
    `architecture-reviewer-fred` findings resolved in the lane design
 2. **Final sweep** — `assumptions-reviewer`, `docs-adr-reviewer`, and
-   `architecture-reviewer-fred` on the full diff before closeout
+   `architecture-reviewer-fred` on the reviewed closeout diff before closeout
 
 ## Evidence and Claims
 
@@ -187,7 +190,8 @@ checks as lane-local verification rather than substitute gates.
 
 These claims are supported by the adjacent-plan deltas, the
 documentation-sync entry, the napkin closeout, the recorded reviewer history,
-and the repo-defined gate results captured below.
+reviewer/manual verification of the touched lane docs, and the repo-defined
+gate results captured below.
 
 ## Review and Validation Record
 
@@ -198,6 +202,16 @@ and the repo-defined gate results captured below.
 - `pnpm practice:fitness:informational` — exited `0` and reported the same
   pre-existing repo-wide `Result: HARD (2 hard, 12 soft) — informational
   mode` posture outside this lane's scope.
+
+### Touched Lane-Doc Verification
+
+- The edited `.agent/**` closeout surfaces were verified through reviewer and
+  manual inspection rather than a repo-defined document-only gate, because the
+  root markdownlint surface intentionally excludes `.agent/**`.
+- The closeout diff was also checked against the lane's deterministic routing
+  confirmations for evidence structure, supervised-execution framing,
+  reviewer-gateway signal language, future-taxonomy routing, lifecycle
+  surfaces, documentation-sync entry, and napkin record.
 
 ### Reviewer History
 
@@ -214,6 +228,13 @@ and the repo-defined gate results captured below.
   - `architecture-reviewer-fred` surfaced the missing deep-dive home for
     three-plane framing, awareness-plane naming drift, and evidence-structure
     naming drift
+- Final rerun results after repair:
+  - `assumptions-reviewer` reported no materially blocking findings in the
+    current live diff
+  - `docs-adr-reviewer` reported no remaining material documentation or
+    lifecycle findings in the current live diff
+  - `architecture-reviewer-fred` reported no blocking or materially
+    misleading boundary, naming, or path issues in the current live diff
 
 This record captures the reviewer rounds that were run, the categories of
 findings that were absorbed, and the repo-defined gate results that were
@@ -239,6 +260,11 @@ Touched adjacent source/execution surfaces:
 - `current/reviewer-gateway-upgrade.plan.md`
 - `future/operating-model-mechanism-taxonomy.plan.md`
 - `future/README.md`
+
+Reviewed supporting analysis surfaces:
+
+- `governance-concepts-and-mechanism-gap-baseline.md`
+- `agentic-mechanism-inventory-baseline.md`
 
 Untouched but reviewed doctrine-adjacent surfaces:
 

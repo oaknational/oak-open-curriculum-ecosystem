@@ -13,7 +13,7 @@ families that are already present, emerging, or still under-specified:
 - governance planes around execution
 - boundary models and authority gradients
 - supervised execution and recovery semantics
-- layered safeguards across existing control surfaces
+- layered safeguard stack across existing control surfaces
 - attempt / observed outcome / proven result structure in evidence
 - residual-risk and limitation surfaces
 - adoption ladders and propagation surfaces
@@ -97,13 +97,13 @@ boundaries, not because they mirror wording from the compared corpus.
 | External decision layer | Deterministic steering and checks outside model reasoning | Explains how local control actually happens | directives, plans, reviewers, gates | present but unnamed | reference/deep dive |
 | Action-governance boundary | The distinction between shaping work and executing work | Clarifies what belongs in plans, reviewers, runtime checks, and evidence surfaces | directives, plans, reviewer routing | partial | future plan |
 | Boundary model | Named boundaries across human, agent, tool, work plane, and control plane | Makes responsibility and escalation clearer | scattered trust and continuity notes | missing | future plan |
-| Graduated authority | Authority that changes with risk, evidence, and context | Useful for review depth and tactical ownership | precedence and escalation hints | missing | future plan |
+| Graduated authority | Authority that changes with risk, evidence, and context | Useful for review depth and tactical ownership | precedence and escalation hints | defer | future plan |
 | Relationship-confidence signals | Signals that change how much scrutiny or latitude a track receives | Strengthens review routing and workstream awareness | change profile, user correction, review depth | partial | existing plan |
 | Layered safeguard stack | Rules, reviewers, gates, continuity, and runtime safeguards treated as one family | Explains defence in depth locally | current practice surfaces in aggregate | present but unnamed | reference/deep dive |
 | Attempt / observed outcome / proven result structure | Separate records for what was tried, what happened, and what is proven | Improves evidence quality and rollback reasoning | evidence bundles and validation outputs | partial | existing plan |
 | Supervised execution lifecycle | Observe, pause, recover, redirect, and close work cleanly | Gives operational awareness a stronger frame | continuity and awareness planning | partial | existing plan |
 | Residual-risk surface | Durable record of what remains uncertain or intentionally ungoverned | Prevents false completeness claims | plan risk tables and caveats | missing | future plan |
-| Adoption ladder | Staged uptake from minimal to mature use | Keeps rollout proportional | plan lifecycle, but not concept-specific | missing | future plan |
+| Adoption ladder | Staged uptake from minimal to mature use | Keeps rollout proportional | plan lifecycle, but not concept-specific | defer | future plan |
 | Propagation surface | Stable way to carry concepts outward through hubs, matrices, or packs | Builds discoverability without a second canon | hub, support matrix, outgoing packs | present | reference/deep dive |
 | Signal ecology | Named families of sensors, alerts, feedback loops, and routed signals | Makes hidden routing behaviour legible | gates, reviewers, fitness, probes | present but unnamed | future plan |
 | Awareness plane | Shared short-horizon operational state separate from continuity canon | Needed for multi-agent hygiene | awareness-plane design work | partial | existing plan |
@@ -129,8 +129,9 @@ boundaries, not because they mirror wording from the compared corpus.
   is the correct home for the broader abstraction work:
   - action-governance boundary
   - boundary model
+  - graduated authority (explicitly deferred inside that lane)
   - signal ecology
-  - adoption ladders
+  - adoption ladder (explicitly deferred inside that lane)
   - residual-risk surfaces
   - explicit governance-plane vocabulary
 
@@ -141,9 +142,12 @@ boundaries, not because they mirror wording from the compared corpus.
   as reference-level guidance rather than new doctrine.
 - [operating-model-and-topology.md](../../../reference/agentic-engineering/deep-dives/operating-model-and-topology.md)
   remains the broader operating-model route.
+- [agentic-mechanism-inventory-baseline.md](../../../analysis/agentic-mechanism-inventory-baseline.md)
+  should remain the supporting analysis-side inventory for mechanism-family
+  coverage and gap tracking across this lane.
 - [agentic-engineering-system.md](../../../../docs/foundation/agentic-engineering-system.md)
   is a future candidate for a clearer explanation of governance planes and
-  layered safeguards once the concepts stabilise.
+  layered safeguard stack once the concepts stabilise.
 
 ## High-Impact Next-Step Candidates
 

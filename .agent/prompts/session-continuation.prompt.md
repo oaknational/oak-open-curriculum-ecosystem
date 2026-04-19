@@ -3,7 +3,7 @@ prompt_id: session-continuation
 title: "Session Continuation"
 type: workflow
 status: active
-last_updated: 2026-04-19-l-eh-initial-close
+last_updated: 2026-04-19-governance-lane-handoff
 ---
 
 # Session Continuation
@@ -18,35 +18,18 @@ last_updated: 2026-04-19-l-eh-initial-close
 2. Scan the [Start Here: 5 ADRs in 15 Minutes](../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes)
    block in the ADR index, and open any ADR whose slug matches your current
    workstream from the [full ADR index](../../docs/architecture/architectural-decisions/README.md).
-   For this branch specifically, read the direction-setting session report
-   `docs/explorations/2026-04-18-observability-strategy-and-restructure.md`
-   (rationale for the observability reframe) and the execution plan
-   `.agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md`
-   (five-phase work to realise it).
 3. Read `.agent/memory/distilled.md` and `.agent/memory/napkin.md`
-4. Read the active plan for your workstream (see below) — **read
-   Appendix A in full before anything else**
-5. Read the Sentry-relevant ADRs you will touch on day one:
-   - [`docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md`](../../docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md)
-   - [`docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md`](../../docs/architecture/architectural-decisions/159-per-workspace-vendor-cli-ownership.md)
-   - [`docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md`](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md)
-   - [`docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md`](../../docs/architecture/architectural-decisions/088-result-pattern-for-error-handling.md)
-6. Read the existing Sentry surface docs:
-   - [`packages/libs/sentry-node/README.md`](../../packages/libs/sentry-node/README.md)
-     (currently a 4-line stub — L-DOC will expand it, not write it new)
-   - [`docs/operations/sentry-cli-usage.md`](../../docs/operations/sentry-cli-usage.md)
-   - [`docs/operations/sentry-deployment-runbook.md`](../../docs/operations/sentry-deployment-runbook.md)
-7. **Read the actual composition root before framing observability work.**
-   Specifically: `apps/oak-curriculum-mcp-streamable-http/src/app/core-endpoints.ts`
-   and `apps/oak-curriculum-mcp-streamable-http/src/index.ts`. What Sentry
-   already does for this app must be inferred from code, not from SDK
-   documentation alone. This session added that rule to distilled after
-   a false-miss on `wrapMcpServerWithSentry`.
-8. Re-establish live branch state:
+4. Read the current workstream artefacts before anything else:
+   - `.agent/plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md`
+   - `.agent/plans/agentic-engineering-enhancements/active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md`
+   - `.agent/analysis/governance-concepts-and-mechanism-gap-baseline.md`
+   - `.agent/reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md`
+   - `.agent/plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md`
+5. Re-establish live branch state:
 
 ```bash
 git status --short
-git log --oneline --decorate -10
+git log --oneline --decorate -5
 ```
 
 ## This Prompt's Role
@@ -98,135 +81,56 @@ commit.
 
 ## Live Continuity Contract
 
-- **Workstream**: Sentry Observability Maximisation — MCP app (server +
-  browser widget) on the current branch; Search CLI mirror on the next
-  branch.
-- **Branch**: `feat/otel_sentry_enhancements`.
-- **Active executable plan**:
-  - `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
-    (authoritative execution source for the MCP branch).
-- **Strategic parent brief**:
-  - `.agent/plans/observability/future/sentry-observability-maximisation.plan.md`
-    (full envelope across both runtimes).
-- **Parent foundation authority**:
-  - `.agent/plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md`
-    (closure lane — foundation done 2026-04-17; alert rule 521866 validated).
-    Remains in `architecture-and-infrastructure/` per the 2026-04-18
-    observability restructure (parent foundation is cross-cutting, not
-    observability-scoped).
-- **Superseded**:
-  - `.agent/plans/observability/archive/superseded/sentry-observability-expansion.plan.pre-maximisation-pivot-2026-04-17.md`
-    — replaced 2026-04-17 by the maximisation pivot. Do not use for
-    decisions.
-- **Related**:
-  - `.agent/plans/observability/active/sentry-observability-translation-crosswalk.plan.md`
-    (will be updated to reference the maximisation plan as successor).
-  - `.agent/plans/observability/current/search-observability.plan.md`
-    (sibling; owns ES-PROP + CLI-metrics; search branch will gain its own
-    maximisation plan).
-  - `.agent/plans/architecture-and-infrastructure/future/codex-mcp-server-compatibility.plan.md`
-    (strategic follow-up; not executable yet; separate branch).
-  - `.agent/plans/architecture-and-infrastructure/future/clerk-cli-adoption.plan.md`
-    (strategic follow-up extending the ADR-159 pattern to Clerk; separate
-    lane after Sentry work).
-- **Current state (2026-04-19, HEAD at `3455d26c`, in sync with
-  `origin/feat/otel_sentry_enhancements`)**: Observability strategy
-  restructure **Phases 1–5 complete**. **ADR-162 Accepted**
-  (2026-04-19). **Wave 1 partially opened**: the
-  `require-observability-emission` ESLint rule landed at `warn` in
-  all `apps/*` and `packages/sdks/*` workspaces (5 wirings, 96
-  coverage-gap warnings surface). **L-EH initial landed 2026-04-19
-  (later same day)**: ESLint core built-in `preserve-caught-error`
-  enabled at `error` severity with `requireCatchParameter: true`,
-  scoped to `src/**/*.ts` in the same 5 workspaces. Re-scoped from
-  the originally planned custom `require-error-cause` rule when
-  surveys found the ESLint 9.35.0 built-in is a documented
-  superset; pre-enable audit returned 0 violations in-scope, so
-  enforcement landed at `error` from day one per
-  `warning-severity-is-off-severity`. Wave 1 remaining: L-DOC
-  initial (sentry-node README + app observability doc), L-12-prereq
-  (extract `packages/core/telemetry-redaction-core/`), L-7
-  (release/deploy linkage). Wave 2 (`packages/core/observability-events/`)
-  is the schema-foundation layer that unlocks Wave-3-onwards
-  emitter lanes.
+- **Workstream**: Governance-concept integration lane closeout on
+  `feat/otel_sentry_enhancements`.
+- **Active plans**:
+  - `.agent/plans/agentic-engineering-enhancements/active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md`
+    — complete and authoritative for the pending docs-only closeout diff.
+  - `.agent/plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md`
+    — complete source plan for the same lane.
+  - `.agent/plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md`
+    — leading queued follow-up slice after this lane is fully put down.
+- **Current state**: Branch is `feat/otel_sentry_enhancements` at `7efd0a43`.
+  The worktree is dirty with the governance-lane closeout docs plus this
+  handoff update. The lane itself is complete: source plan, execution plan,
+  baseline, report, sync log, and napkin all reflect final routing, explicit
+  `defer` handling, corrected links, and clean reviewer reruns.
+- **Current objective**: Leave a truthful handoff for the uncommitted
+  governance-lane closeout changes without reopening the lane or widening into
+  deep consolidation during this close.
+- **Hard invariants / non-goals**: Keep the lane docs/plans-only; no canon
+  edits; no source-specific naming in durable artefacts; use only repo-defined
+  root quality gates as gates; root `markdownlint` intentionally does not
+  validate `.agent/**`; do not blur repo-defined gate results with
+  reviewer/manual verification.
+- **Recent surprises / corrections**:
+  - Validation wording had to distinguish repo-defined gate coverage from
+    reviewer/manual verification for touched `.agent/**` docs.
+  - `defer` decisions had to be encoded in the authoritative concept register
+    and baseline rows, not only in surrounding prose.
+  - Several current/active plan links were one directory short and required
+    live re-read before editing.
+- **Open questions / low-confidence areas**:
+  - Whether to make a docs-only commit for this closeout on the observability
+    branch before returning to branch runtime work.
+  - Whether the older observability-historical prompt sections below should be
+    fully consolidated or trimmed in the next bounded docs pass.
+- **Next safe step**: Start with `git diff --stat` and the files shown by
+  `git status --short`; then decide whether to commit the governance-lane
+  closeout as a docs-only change or explicitly carry the diff into the next
+  branch task.
+- **Deep consolidation status**: due — a plan closed, and the continuation
+  prompt still contains older historical branch context that should be
+  deliberately consolidated or trimmed in a later bounded session.
 
-  **Commits landed this session, newest first**:
-  - `3455d26c` — `docs(agentic-engineering): discoverability hub +
-    deep-dives + continuity plans` — 53-file agentic-engineering
-    corpus scaffolding (deep-dives, research directories, reports
-    scaffolding, 2 new plans, analysis baseline). Parallel-agent
-    work committed in a single pass at session close.
-  - `fc0a0602` — `feat(observability): adr-162 accepted —
-    require-emission rule at warn` — Phase 5 landing: ESLint rule
-    + 5 workspace wirings + reviewer-matrix axis-coverage question
-    in `.agent/directives/invoke-code-reviewers.md §Coverage
-    Tracking` + ADR-162 Proposed → Accepted with a History block
-    + restructure-plan Phase-5 todo flipped to completed. Pre-push
-    gates all green; pre-commit hooks all green.
+The older observability-specific sections below are historical branch context
+only. They are not the active handoff contract for the next session.
 
-  This session shipped three commits on top of the Phase 1 starting
-  point (`502af060`):
+## Historical Branch Context (Preserved Pending Consolidation)
 
-  - `502af060` — Phase 1 structural skeleton: ADR-162 Proposed;
-    `.agent/plans/observability/` directory with lifecycle sub-dirs,
-    area README, high-level-observability-plan skeleton; five `git mv`
-    moves; cross-reference sweep zero stale.
-  - `231046fe` — Phase 2 MVP scope: filled high-level-observability-plan
-    (principle, five-axis MVP table, launch criteria, plan map,
-    explorations map, vendor-independence invariants, coordination
-    points); authored five new MVP `current/` plans (skeleton-level,
-    Phase 3 explorations fill exact scope); eleven `future/` plans
-    each with a named testable promotion trigger; audited
-    `search-observability.plan.md` for MVP classification.
-  - `276ea9bd` — Hermetic-test architectural fix: 11 integration/E2E
-    tests migrated off `loadRuntimeConfig` + `createHttpObservabilityOrThrow`
-    ceremony to `createMockRuntimeConfig` + `createFakeHttpObservability`;
-    new `.agent/rules/test-immediate-fails.md` (21-item checklist) +
-    Claude/Cursor adapters + test-reviewer template wiring; ESLint
-    `no-restricted-syntax` (error), `no-restricted-properties` and
-    `no-restricted-imports` (warn during backlog) added to
-    `@oaknational/eslint-plugin-standards` `testRules`; sibling plan
-    `test-ceremony-production-factory-audit.plan.md` tracks the
-    warn→error migration.
-
-  Practice track outputs this session (commits `d726a1d8` →
-  `8a38ab42`):
-  - **PDR-007** redefined the Core contract from "eight files" to
-    "a bounded package of files plus required directories." New
-    first-class Core directories: `practice-core/decision-records/`
-    (all PDRs, absorbing the former peer directory) and
-    `practice-core/patterns/` (general ecosystem-agnostic
-    abstractions authored via synthesis).
-  - **PDR-008 Canonical Quality-Gate Naming** — `clean`/`build`/
-    `format`/`format:fix`/`lint`/`lint:fix`/`typecheck`/`test`/
-    `check` (alias for `check:fix`)/`check:fix`/`check:ci`/`fix`/
-    `dev` across ecosystems. Convention: bare = verify, `:fix` =
-    apply, `:ci` = non-mutating CI form. `check` alias-for-`check:fix`
-    is the one deliberate ergonomic exception.
-  - **PDR-009 Canonical-First Cross-Platform Architecture** —
-    three-layer canonical/adapter/entry-point model; thin-wrapper
-    contract; activation triggers distinct from policies.
-  - **PDR-010 Domain Specialist Capability Pattern** — four-layer
-    triplet (reviewer + skill + rule + optional operational tooling);
-    classification taxonomy (domain_expert / process_executor /
-    specialist) × three modes (explore / advise / review); inverted-
-    hierarchy variant for proportionality reviewers.
-  - **PDR-011 Continuity Surfaces and Surprise Pipeline** — three
-    continuity types (operational / epistemic / institutional);
-    split-loop handoff/consolidate with gate; named continuity
-    contract; capture→distil→graduate→enforce pipeline.
-  - **PDR-012 through PDR-023** (batched) — twelve Practice-governance
-    PDRs absorbing ~29 instance patterns from `memory/patterns/`:
-    review-findings routing (012), grounding/framing (013),
-    consolidation/knowledge-flow (014), reviewer authority/dispatch
-    (015), claim propagation/reference quality (016), workaround
-    hygiene (017), planning discipline (018), ADR scope by
-    reusability (019), check-driven development (020), test validity
-    (021), governance scanners (022), docs structure (023).
-  - **PDR-024 Vital Integration Surfaces** — names the required
-    bidirectional repo↔Core bindings in five categories: Core→Repo
-    orientation, Repo→Core feedback, genesis paths, cross-cutting
-    contracts (PDR-008/009/010/011/006), defensive integrations
+The material immediately below is retained as older branch context for a later
+bounded consolidation pass. It is not the live work contract for the next
+session.
     (PDR-003/002/004). Practice Maturity Level 1 = "structurally
     present but inert" — missing any vital surface triggers this.
     Verification enforced at hydration close, routine consolidation
@@ -751,22 +655,34 @@ Carried from 2026-04-17 (still relevant):
     relative to industry convention. Separate deliberation, not a
     Sentry-plan concern. Relevant files: `.agent/directives/testing-strategy.md`,
     ADR-161, ADR-078.
-- **Next safe step**: **L-EH initial landed 2026-04-19**. Pick one of
-  the three remaining Wave-1 lanes and author it end-to-end:
-  L-DOC initial (sentry-node README expansion + app observability
-  doc), L-12-prereq (extract `packages/core/telemetry-redaction-core/`),
-  or L-7 (Vercel-only release/deploy linkage). None blocks another;
-  L-DOC initial is the natural next pick because it keeps the
-  discoverability-of-existing-integration gap (a real defect today —
-  `wrapMcpServerWithSentry` is not findable from workspace READMEs)
-  in the lane sequence before Wave 2 schema foundation opens.
-  Each lane closes with its own reviewer matrix per the
-  maximisation plan §P1.4. The sibling `test-ceremony-
-  production-factory-audit.plan.md` backlog remains concurrent
-  and not blocking Wave 1. Owner may also choose a dedicated
-  Core-trinity refinement session (compression + reflection)
-  deferred from the 2026-04-19 morning consolidation pass —
-  separate from Wave 1.
+- **Next safe step**: **L-EH initial landed 2026-04-19 (commit
+  `7efd0a43` — composite with 7 forward-motion assurance
+  mechanisms and a parallel-track agentic-engineering lane)**.
+  Three Wave-1 lanes remain: L-DOC initial (sentry-node README
+  expansion + app observability doc), L-12-prereq (extract
+  `packages/core/telemetry-redaction-core/`), L-7 (Vercel-only
+  release/deploy linkage). None blocks another.
+  **Recommended next-session landing target: L-DOC initial**.
+  Rationale: (a) closes the reader-side discoverability defect
+  that the honest-evaluation pass named as the load-bearing
+  failure today (a new contributor cannot find what Sentry does
+  for this app by reading workspace READMEs even though
+  `wrapMcpServerWithSentry` sits at `core-endpoints.ts:98`);
+  (b) cheapest of the three lanes — text + a structural
+  content-presence test, no new code workspace, no deploy
+  pipeline work; (c) directly populates the Documentation row
+  of acceptance criteria across every future lane, discharging
+  doc debt while Wave 1 is still the current wave.
+  **Lane close shape**: per §Lane Close Evidence Pattern in the
+  maximisation plan, state attempt / observed outcome / proven
+  result; update `what-the-system-emits-today.md` if the landing
+  moves a cell. Each lane closes with its own reviewer matrix per
+  the maximisation plan §P1.4. The sibling
+  `test-ceremony-production-factory-audit.plan.md` backlog remains
+  concurrent and not blocking Wave 1. Owner may also choose a
+  dedicated Core-trinity refinement session (compression +
+  reflection) deferred from the 2026-04-19 morning consolidation
+  pass — separate from Wave 1.
 - **PDR-007 landed 2026-04-18** — Core contract redefined as
   "bounded package of files plus required directories." New
   directories `practice-core/decision-records/` (PDRs) and

@@ -32,13 +32,13 @@ integration routing across planning, reference, report, and
 doctrine-adjacent surfaces.
 
 **Baseline analysis**:
-[governance-concepts-and-mechanism-gap-baseline.md](../../analysis/governance-concepts-and-mechanism-gap-baseline.md)
+[governance-concepts-and-mechanism-gap-baseline.md](../../../analysis/governance-concepts-and-mechanism-gap-baseline.md)
 
 **Supporting deep dive**:
-[governance-planes-trust-boundaries-and-runtime-supervision.md](../../reference/agentic-engineering/deep-dives/governance-planes-trust-boundaries-and-runtime-supervision.md)
+[governance-planes-trust-boundaries-and-runtime-supervision.md](../../../reference/agentic-engineering/deep-dives/governance-planes-trust-boundaries-and-runtime-supervision.md)
 
 **Formal report**:
-[governance-concepts-and-integration-report.md](../../reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md)
+[governance-concepts-and-integration-report.md](../../../reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md)
 
 **Adjacent current plans**:
 [operational-awareness-and-continuity-surface-separation.plan.md](./operational-awareness-and-continuity-surface-separation.plan.md),
@@ -67,7 +67,8 @@ already partly uses or is starting to discover:
 - governance planes outside the model's reasoning loop
 - relationship boundaries and authority gradients
 - supervised execution and recovery semantics
-- layered safeguards across rules, reviewers, gates, continuity, and runtime
+- layered safeguard stack across rules, reviewers, gates, continuity, and
+  runtime
 - attempt / observed outcome / proven result structure as an evidence surface
 - residual-risk and limitations material as first-class design output
 - adoption ladders, propagation surfaces, and outward capability mapping
@@ -156,7 +157,7 @@ This lane uses abstract local language such as:
 - boundary model
 - graduated authority
 - relationship-confidence signals
-- layered safeguards
+- layered safeguard stack
 - supervised execution
 - residual-risk surface
 - adoption ladder
@@ -170,7 +171,7 @@ local language, it is not yet ready for durable capture.
 ### Task 0.1: Freeze the abstracted baseline
 
 - Output:
-  [governance-concepts-and-mechanism-gap-baseline.md](../../analysis/governance-concepts-and-mechanism-gap-baseline.md)
+  [governance-concepts-and-mechanism-gap-baseline.md](../../../analysis/governance-concepts-and-mechanism-gap-baseline.md)
 - Required content:
   - what the compared governance corpus is at a conceptual level
   - what it provides
@@ -187,7 +188,7 @@ local language, it is not yet ready for durable capture.
 ### Task 0.2: Publish the abstracted formal report
 
 - Output:
-  [governance-concepts-and-integration-report.md](../../reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md)
+  [governance-concepts-and-integration-report.md](../../../reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md)
 - Required content:
   - narrative explanation of what was discovered
   - the concept register in durable local language
@@ -263,10 +264,10 @@ local language, it is not yet ready for durable capture.
 ### Task 2.2: Route reference, report, and doctrine-adjacent candidates
 
 - Minimum target surfaces:
-  - [governance-planes-trust-boundaries-and-runtime-supervision.md](../../reference/agentic-engineering/deep-dives/governance-planes-trust-boundaries-and-runtime-supervision.md)
-  - [agentic-engineering-system.md](../../../docs/foundation/agentic-engineering-system.md)
-  - [operating-model-and-topology.md](../../reference/agentic-engineering/deep-dives/operating-model-and-topology.md)
-  - [agentic-mechanism-inventory-baseline.md](../../analysis/agentic-mechanism-inventory-baseline.md)
+  - [governance-planes-trust-boundaries-and-runtime-supervision.md](../../../reference/agentic-engineering/deep-dives/governance-planes-trust-boundaries-and-runtime-supervision.md)
+  - [agentic-engineering-system.md](../../../../docs/foundation/agentic-engineering-system.md)
+  - [operating-model-and-topology.md](../../../reference/agentic-engineering/deep-dives/operating-model-and-topology.md)
+  - [agentic-mechanism-inventory-baseline.md](../../../analysis/agentic-mechanism-inventory-baseline.md)
 - Required routing logic:
   - reference surfaces explain concepts
   - reports synthesise evidence and recommendations
@@ -328,11 +329,11 @@ local language, it is not yet ready for durable capture.
 ### Task 4.2: Define documentation propagation or no-change rationale
 
 - Surfaces to assess:
-  - [agentic-engineering-system.md](../../../docs/foundation/agentic-engineering-system.md)
-  - [README.md](../../reference/agentic-engineering/README.md)
-  - [README.md](../../reference/agentic-engineering/deep-dives/README.md)
-  - [README.md](../../analysis/README.md)
-  - [README.md](../../reports/agentic-engineering/README.md)
+  - [agentic-engineering-system.md](../../../../docs/foundation/agentic-engineering-system.md)
+  - [README.md](../../../reference/agentic-engineering/README.md)
+  - [README.md](../../../reference/agentic-engineering/deep-dives/README.md)
+  - [README.md](../../../analysis/README.md)
+  - [README.md](../../../reports/agentic-engineering/README.md)
 - Required rule:
   if a major surface is inspected but not changed, record why it is correct to
   leave it alone
@@ -370,11 +371,11 @@ This source lane is complete once:
 
 This plan follows:
 
-- [principles.md](../../directives/principles.md) by keeping one strong local
+- [principles.md](../../../directives/principles.md) by keeping one strong local
   abstraction per concept and avoiding duplication or compatibility layers
-- [testing-strategy.md](../../directives/testing-strategy.md) by using
+- [testing-strategy.md](../../../directives/testing-strategy.md) by using
   deterministic validation commands for documentary claims
-- [schema-first-execution.md](../../directives/schema-first-execution.md) by
+- [schema-first-execution.md](../../../directives/schema-first-execution.md) by
   leaving schema-first runtime doctrine untouched in this abstraction lane
 
 ## Documentation Propagation

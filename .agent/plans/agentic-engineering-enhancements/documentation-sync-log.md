@@ -233,10 +233,14 @@ round. The plan now lives in `archive/completed/`.
   - `pnpm practice:fitness:informational` exited `0` and reported the same
     pre-existing repo-wide `Result: HARD (2 hard, 12 soft) — informational
     mode` posture outside this lane's scope.
+  - Reviewer/manual verification for the touched `.agent/**` lane docs is
+    recorded in the active execution plan alongside the repo-defined gate
+    results.
   - Reviewer history recorded in the active execution plan: prior planning
-    findings were absorbed before editing, and the execution rounds absorbed
+    findings were absorbed before editing, the execution rounds absorbed
     findings from `assumptions-reviewer`, `docs-adr-reviewer`, and
-    `architecture-reviewer-fred`.
+    `architecture-reviewer-fred`, and a final rerun of all three reviewers
+    returned clean.
 - Notes: Value extraction was treated as a hard constraint in this closeout.
   Concepts only counted when they changed a local contract, evidence shape,
   routing rule, future-slice boundary, or explicit defer decision. Net-new

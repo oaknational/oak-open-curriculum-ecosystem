@@ -30,13 +30,13 @@ todos:
 separation, and portable-candidate extraction criteria for later promotion.
 
 **Baseline analysis**:
-[continuity-operational-awareness-baseline.md](../../analysis/continuity-operational-awareness-baseline.md)
+[continuity-operational-awareness-baseline.md](../../../analysis/continuity-operational-awareness-baseline.md)
 
 **Broader mechanism baseline**:
-[agentic-mechanism-inventory-baseline.md](../../analysis/agentic-mechanism-inventory-baseline.md)
+[agentic-mechanism-inventory-baseline.md](../../../analysis/agentic-mechanism-inventory-baseline.md)
 
 **Concept extract**:
-[operational-awareness-and-state-surfaces.md](../../reference/agentic-engineering/deep-dives/operational-awareness-and-state-surfaces.md)
+[operational-awareness-and-state-surfaces.md](../../../reference/agentic-engineering/deep-dives/operational-awareness-and-state-surfaces.md)
 
 **Related future plan**:
 [cross-vendor-session-sidecars.plan.md](../future/cross-vendor-session-sidecars.plan.md)
@@ -80,7 +80,7 @@ observed, refreshed, handed off, redirected, and closed without claiming the
 whole runtime-governance model.
 
 Metacognitive review of
-[workbench-agent-operating-topology.md](../../reference/agentic-engineering/workbench-agent-operating-topology.md)
+[workbench-agent-operating-topology.md](../../../reference/agentic-engineering/workbench-agent-operating-topology.md)
 shows that this prompt collision is one local symptom of a broader operating
 model. This lane intentionally absorbs only the work-ledger, precedence, and
 thread-aware coordination parts of that model. The broader interaction-plane,
@@ -217,7 +217,7 @@ observe, refresh, hand off, redirect when needed, and close cleanly.
 ### Task 0.1: Freeze the baseline
 
 - Output:
-  [continuity-operational-awareness-baseline.md](../../analysis/continuity-operational-awareness-baseline.md)
+  [continuity-operational-awareness-baseline.md](../../../analysis/continuity-operational-awareness-baseline.md)
 - Required content:
   - current surfaces classified by job, horizon, authority, expiry, and
     concurrency risk
@@ -259,7 +259,7 @@ observe, refresh, hand off, redirect when needed, and close cleanly.
 
 - Outputs:
   - this plan's Design Contract section
-  - [operational-awareness-and-state-surfaces.md](../../reference/agentic-engineering/deep-dives/operational-awareness-and-state-surfaces.md)
+  - [operational-awareness-and-state-surfaces.md](../../../reference/agentic-engineering/deep-dives/operational-awareness-and-state-surfaces.md)
 - The design must specify:
   - exact surface paths
   - required fields
