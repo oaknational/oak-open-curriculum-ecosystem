@@ -1,3 +1,11 @@
+## 2026-04-19 — ChatGPT report normalisation workflow clarity
+
+Tightened `.agent/skills/chatgpt-report-normalisation/SKILL.md` and the paired
+pattern so the default is always a **new** sibling `*-clean.md`, structural
+parity is checked against an agreed baseline (source `.md` or a declared
+stand-in), drift proof supplements that outline check, and the pattern’s
+optional accuracy sweep is explicitly out of scope unless the task asks for it.
+
 ## 2026-04-18 — Observability Phases 1–2 + test-ceremony architectural fix (commits 502af060, 231046fe, 276ea9bd)
 
 Fresh session opened Phase 1 of the observability strategy restructure

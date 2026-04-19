@@ -25,9 +25,12 @@ the document.
 The job is faithful-copy repair: preserve and reproduce the source content as
 closely as possible while repairing structure and restoring working links.
 
-The output contract must also be explicit: decide whether the task is an
-in-place repair, a sibling clean copy, or a promotion into tracked canon
-before editing.
+The **chatgpt-report-normalisation** skill defaults to a **new** sibling
+`*-clean.md` and leaves any export `.md` untouched on disk (see
+`.agent/skills/chatgpt-report-normalisation/SKILL.md`). Promotion into tracked
+canon, mutating DOCX/PDF inputs, or in-place repair of raw markdown belongs in
+an **explicitly scoped** task outside that default — do not treat those patterns
+as interchangeable with the skill’s normal workflow.
 
 In the common paired-export case, the strongest surviving layer is usually:
 
@@ -77,11 +80,20 @@ In the common paired-export case, the strongest surviving layer is usually:
    - tracking parameters such as `utm_source=chatgpt.com`
    - generic export metadata where relevant
    - double spaces left by PUA marker removal (except inside code fences)
-9. Make the output contract explicit before editing:
-   - overwrite the raw markdown only if that is the agreed landing pattern
-   - use a sibling clean copy (for example `*-clean.md`) when raw imports must
-     remain intact or re-importable
-   - promote into tracked canon only when the task actually includes promotion
+9. Output path and loss checks (mirror the skill workflow):
+   - Emit a **new** sibling `*-clean.md` (separate path). Do not edit the export
+     `.md` in place when one exists — full rules in the skill Deliverable and
+     Guardrails.
+   - Before closing, compare that clean copy’s **structure** (heading outline,
+     section order, tables, fences, major lists) to the **primary structural
+     baseline** (usually the source `.md`; if there is none, use an agreed
+     baseline such as the pre-bibliography `pandoc` body) so nothing was dropped
+     or reordered during repair.
+   - Run the citation-stripped `strip_citations` + whitespace-normalise drift
+     proof between that baseline markdown and `*-clean.md` as in the skill
+     workflow step 8 — the outline check does not replace this body-text
+     guardrail.
+   - Promote into tracked canon only when the task actually includes promotion.
 10. Preserve the original citation rhythm where possible. Swap broken inline
    markers for inline linked citation numbers before escalating to heavier
    editorial structures.
@@ -98,24 +110,16 @@ In the common paired-export case, the strongest surviving layer is usually:
     `Sources:` have not been accidentally absorbed into the row stream of a
     preceding table.
 
-14. Run an accuracy sweep for unstable claims:
-
-    - package versions and release dates
-    - licences
-    - Python-version support
-    - product or API behaviour that may have changed
-
-15. For the sweep, prefer primary sources:
-
-    - official docs
-    - official package metadata
-    - official repositories
-
-16. Where a claim is brittle, either verify it with an exact date or simplify
-   the wording so it ages more gracefully.
-17. Strip duplicated raw-URL appendices that some DOCX or PDF conversions emit
+14. Optional follow-on (only when the task explicitly asks for verification, not
+    part of the core repair-only skill): run an accuracy sweep for unstable
+    claims — package versions and release dates, licences, Python-version
+    support, product or API behaviour that may have changed. Prefer primary
+    sources (official docs, package metadata, repositories). Where a claim is
+    brittle, either verify it with an exact date or simplify the wording so it
+    ages more gracefully.
+15. Strip duplicated raw-URL appendices that some DOCX or PDF conversions emit
     after the real document content.
-18. Finish with the validation surface that actually applies to the target doc
+16. Finish with the validation surface that actually applies to the target doc
     estate. If the repo deliberately excludes that estate from markdownlint,
     use grep- and structure-based validation instead of forcing linting.
 
@@ -143,8 +147,9 @@ In the common paired-export case, the strongest surviving layer is usually:
   comparing it to the DOCX relationship targets
 - Rebuilding from a fresh conversion that worsens the document structure when a
   cleaner hand-curated markdown scaffold already exists
-- Treating promotion, in-place overwrite, and sibling clean-copy output as
-  interchangeable when the task has not declared which one is wanted
+- Treating promotion, in-place overwrite of export markdown, and the skill’s
+  default new sibling `*-clean.md` output as interchangeable when the task has
+  not declared which one is wanted
 - Keeping vague, time-sensitive claims such as "recent" or "latest" without
   either verifying them or anchoring them to a concrete date
 

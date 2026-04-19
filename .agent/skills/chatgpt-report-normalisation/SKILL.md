@@ -59,8 +59,12 @@ structural decisions or choosing a rebuild strategy.
   Mermaid/code fences, and comparison-table shape.
 - Treat the DOCX as the authority for the real external URLs hidden behind
   broken export markers.
-- **Always write to a sibling clean file (`*-clean.md`). Never overwrite the
-  source markdown.**
+- **Always write to a new sibling clean file (`*-clean.md`).** The clean
+  markdown is a **separate output path** created for this repair pass: do not
+  rename the source file into the clean name, do not edit the source markdown
+  in place, and do not replace an existing `*-clean.md` unless the task
+  explicitly says to refresh that artefact.
+- **Never overwrite the source markdown.**
 - Limit changes to faithful-copy repair work: citation-link recovery,
   export-artefact removal, broken markdown repair, deduplicating obvious export
   junk, and light formatting cleanup.
@@ -119,8 +123,8 @@ structural decisions or choosing a rebuild strategy.
    `[\ue200-\ue2ff]` in regex.
 
 3. Choose the canonical editing target.
-   - The editing target is the source-faithful clean sibling copy
-     (`*-clean.md`).
+   - The editing target is a **new** source-faithful clean sibling copy
+     (`*-clean.md`) on disk, not a mutating pass over the export markdown.
    - In the normal paired-export case, always preserve the original markdown
      untouched and write repairs into the sibling clean file.
    - Keep the markdown's section order, paragraphing, tables, lists, Mermaid
@@ -208,15 +212,29 @@ structural decisions or choosing a rebuild strategy.
    - Use the repo-appropriate markdown validation surface for the edited file
      or files. If the target doc estate intentionally excludes markdownlint,
      use structural validation instead of forcing it.
+   - **Structural parity vs the structural baseline:** before the automated drift
+     proof, compare the **new** `*-clean.md` to the **primary structural source**.
+     When a source `.md` exists, that baseline is the original markdown
+     scaffold: same heading sequence and depth (ATX `#` lines), same overall
+     section order, and no missing or merged tables, lists, code fences, or
+     Mermaid blocks relative to what you started from. When **no** source `.md`
+     exists, agree an explicit baseline first (for example the pre-bibliography
+     `pandoc` body) and apply the same outline checks against that baseline.
+     Use a side-by-side outline diff or extracted heading lists if that makes
+     gaps obvious. Structural repair is allowed only where the baseline was
+     already broken; otherwise mismatches mean content was lost or reordered and
+     must be fixed before closing.
    - Grep for leftover `cite`, `filecite`, `turn...`, and
      `utm_source=chatgpt.com` markers when the export started noisy
    - Scan for remaining PUA characters (U+E200 to U+E2FF range) — these are
      invisible to normal grep and the Read tool but remain in file bytes
    - Apply the same normalisation function to both files for drift proof:
      `strip_citations(text)` removes PUA citation blocks/marker artefacts from
-     source markdown and removes `[[N]](URL)` citations from clean markdown.
+     the baseline markdown and removes `[[N]](URL)` citations from clean markdown.
      Then normalise whitespace and confirm the two texts are
-     character-identical.
+     character-identical. Treat this drift proof as the **body-text** loss check
+     after citation normalisation; it does not replace the structural outline
+     comparison above.
 
 ## Validation
 
@@ -231,11 +249,19 @@ Before closing the task, confirm:
 - Every footnote used in the body is defined
 - Tables are still real markdown tables, and adjacent prose has not been
   accidentally pulled into them
-- The references support the claims they are attached to
-- Text identity confirmed: both files pass the same strip/normalise comparison
-  and are character-identical
-- The cleaned output was written to a sibling `*-clean.md` file while keeping
-  the original markdown unchanged
+- Citations are mechanically sound: each repair sits at the intended
+  export-marker position, there are no obvious misattached links or giant
+  citation bundles, and unresolved placement is visible in the clean copy
+  rather than silently guessed
+- Structural parity confirmed against the agreed baseline (normally the source
+  `.md` scaffold): heading outline, section order, and block-level shape
+  (tables, fenced code and Mermaid blocks, major list structures) match except
+  where the baseline was already irreparably broken and that scope was agreed
+- Text identity confirmed: baseline markdown (source `.md` when present, or the
+  agreed markdown stand-in for drift proof) and `*-clean.md` pass the same
+  strip/normalise comparison and are character-identical
+- The cleaned output was written to a **new** sibling `*-clean.md` file while
+  keeping the original markdown unchanged
 
 ## Guardrails
 
@@ -265,8 +291,10 @@ Before closing the task, confirm:
   document clearer.
 - Do not introduce GitHub blob links when a repo-local path is the canonical
   target.
-- Do not overwrite the source markdown. Always emit a sibling `*-clean.md`
-  output and preserve the source file unchanged.
+- Always emit a **new** sibling `*-clean.md` output (separate path). When an
+  export `.md` exists, never overwrite it in place. Compare the clean file’s
+  structure to the agreed baseline before finishing, and leave DOCX/PDF inputs
+  unchanged unless the task explicitly allows mutating them.
 
 ## Escalate
 

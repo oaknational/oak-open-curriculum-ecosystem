@@ -22,55 +22,55 @@ todos:
     content: "L-0b: implement ADR-160 test gate — new packages/libs/sentry-node/src/runtime-redaction-barrier.unit.test.ts with three-part closure coverage (composition presence via TypeScript satisfies; ordering invariant via capturing postRedactionHooks; redacted-at-destination) plus automated bypass-validation harness. DONE 2026-04-17: 17 tests landed; pnpm check exit 0; 61/61 sentry-node tests green."
     status: completed
   - id: l1-free-signal-integrations
-    content: "L-1: opt-in to anrIntegration, zodErrorsIntegration, nodeRuntimeMetricsIntegration, spanStreamingIntegration+withStreamedSpan, rewriteFramesIntegration, extraErrorDataIntegration; verify processSessionIntegration emits"
+    content: "L-1 (Phase 3): opt-in to anrIntegration, zodErrorsIntegration, nodeRuntimeMetricsIntegration, spanStreamingIntegration+withStreamedSpan, rewriteFramesIntegration, extraErrorDataIntegration; verify processSessionIntegration emits"
     status: pending
   - id: l2-delegates-extraction
-    content: "L-2: extract createSentryDelegates from the MCP app into @oaknational/sentry-node so the CLI call site can consume it in the next branch"
+    content: "L-2 (Phase 3): extract createSentryDelegates from the MCP app into @oaknational/sentry-node so the CLI call site can consume it in the next branch"
     status: pending
   - id: l3-mcp-context-enrichment
-    content: "L-3: type and populate mcp_request context (session, method, tool, argument-shape deny-list, client/server party info)"
+    content: "L-3 (Phase 3): type and populate mcp_request context (session, method, tool, argument-shape deny-list, client/server party info)"
     status: pending
   - id: l4b-dedicated-metrics-adapter
-    content: "L-4b (primary): Sentry.metrics.* is the primary production metrics surface; opt-in behind SENTRY_ENABLE_METRICS during beta; adapter insulates consumers from the beta API; includes beforeSendMetric redaction, fixture capture, narrow SentryPrimitiveValue attributes"
+    content: "L-4b (Phase 3, primary): Sentry.metrics.* is the primary production metrics surface; opt-in behind SENTRY_ENABLE_METRICS during beta; adapter insulates consumers from the beta API; includes beforeSendMetric redaction, fixture capture, narrow SentryPrimitiveValue attributes"
     status: pending
   - id: l4a-span-metrics-convention
-    content: "L-4a (transitional): span-metric naming convention oak.<runtime>.<feature>.<metric> for narrow span-attribution-unique cases only; adopted only after L-4b metrics.* adapter is stable"
+    content: "L-4a (Phase 5, MVP-deferred transitional): span-metric naming convention oak.<runtime>.<feature>.<metric> for narrow span-attribution-unique cases only; adopted only after L-4b metrics.* adapter is stable"
     status: pending
   - id: l5-dynamic-sampling
-    content: "L-5: replace fixed tracesSampleRate with tracesSampler (100% errors, 100% >P95 latency, sampled happy path, elevated cold-boot and auth-proxy)"
+    content: "L-5 (Phase 5, MVP-deferred): replace fixed tracesSampleRate with tracesSampler (100% errors, 100% >P95 latency, sampled happy path, elevated cold-boot and auth-proxy)"
     status: pending
   - id: l6-profiling
-    content: "L-6: add @sentry/profiling-node, wire nodeProfilingIntegration, evaluate overhead, document rollout"
+    content: "L-6 (Phase 5, MVP-deferred): add @sentry/profiling-node, wire nodeProfilingIntegration, evaluate overhead, document rollout"
     status: pending
   - id: l7-release-deploy-linkage
-    content: "L-7: sentry-cli releases set-commits --auto and releases deploys new wired into CI/deploy flow; close regression-detection loop"
+    content: "L-7 (Phase 1): sentry-cli releases set-commits --auto and releases deploys new wired into CI/deploy flow; close regression-detection loop. Moved from old Phase 2 to Phase 1 under 2026-04-18 reshape so every subsequent lane's smoke test is release-tagged."
     status: pending
   - id: l8-bundler-source-maps
     content: "L-8: PARKED — bundler source-map plugin deferred. @sentry/esbuild-plugin would require replacing tsup with esbuild; the current shell-script flow is simpler, offline-capable, and auditable. Revisit only if script complexity grows or a specific driver emerges."
     status: dropped
   - id: l9-feedback
-    content: "L-9: captureFeedback pipeline; optionally surface as an MCP tool"
+    content: "L-9 (Phase 3): captureFeedback pipeline; optionally surface as an MCP tool"
     status: pending
   - id: l10-feature-flag-scaffolding
-    content: "L-10: provider-TBD featureFlagsIntegration shim; context-on-error loop wired so any future provider pays for itself"
+    content: "L-10 (Phase 5, MVP-deferred): provider-TBD featureFlagsIntegration shim; context-on-error loop wired so any future provider pays for itself"
     status: pending
   - id: l11-ai-instrumentation-scaffolding
-    content: "L-11: expose instrumentOpenAiClient / instrumentAnthropicAiClient / vercelAIIntegration wrappers via adapter so future LLM tool calls are one import away"
+    content: "L-11 (Phase 5, MVP-deferred): expose instrumentOpenAiClient / instrumentAnthropicAiClient / vercelAIIntegration wrappers via adapter so future LLM tool calls are one import away"
     status: pending
   - id: l12-prereq-browser-safe-redactor-core
-    content: "L-12-prereq: extract pure runtime-agnostic redactor core from @oaknational/sentry-node into a new browser-safe package packages/core/telemetry-redaction-core/ (depends only on type-helpers + generic redact primitive; no @sentry/node). Node and browser adapters compose it. Settles ADR-160's open question: new package, not submodule. Blocks L-12."
+    content: "L-12-prereq (Phase 1): extract pure runtime-agnostic redactor core from @oaknational/sentry-node into a new browser-safe package packages/core/telemetry-redaction-core/ (depends only on type-helpers + generic redact primitive; no @sentry/node). Node and browser adapters compose it. Settles ADR-160's open question: new package, not submodule. Moved from old Phase 3 to Phase 1 under 2026-04-18 reshape. Blocks L-12."
     status: pending
   - id: l12-widget-sentry
-    content: "L-12: @sentry/browser (or @sentry/react after bundle-size review) in the MCP App widget with shared redaction via @oaknational/telemetry-redaction-core and linked traces"
+    content: "L-12 (Phase 4): @sentry/browser (or @sentry/react after bundle-size review) in the MCP App widget with shared redaction via @oaknational/telemetry-redaction-core and linked traces"
     status: pending
   - id: l13-alerts-dashboards-runbooks
-    content: "L-13: per-loop alert + dashboard panel + runbook entry with severity, routing, dedupe"
+    content: "L-13 (Phase 5): per-loop alert + dashboard panel + runbook entry with severity, routing, dedupe"
     status: pending
   - id: l14-third-party-trace-propagation
-    content: "L-14: security-gated trace propagation decision for non-Oak hosts (including Oak API boundary)"
+    content: "L-14 (Phase 5): security-gated trace propagation decision for non-Oak hosts (including Oak API boundary)"
     status: pending
   - id: l15-strategy-close-out
-    content: "L-15: record the Sentry-only vs dual-export vs minimal-operational strategy decision with rationale and reviewer attribution"
+    content: "L-15 (Phase 5): record the Sentry-only vs dual-export vs minimal-operational strategy decision with rationale and reviewer attribution"
     status: pending
   - id: l-eh-initial
     content: "L-EH initial (Phase 1): author require-error-cause ESLint rule in @oaknational/eslint-plugin-standards with expanded RuleTester cases (re-throw of original binding, cause-mismatch vs different variable, nested try/catch, AggregateError shape, async-wrapper catch); apply to Phase 1 new/changed code; explicit pass-through requires ADR-documented sentinel comment"
@@ -105,7 +105,7 @@ isProject: true
 # Sentry Observability Maximisation — MCP Server
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
-**Last Updated**: 2026-04-17
+**Last Updated**: 2026-04-19
 **Status**: 🟡 PLANNING — ready for fresh session
 **Branch**: `feat/otel_sentry_enhancements`
 **Scope**: Close every available Sentry product loop for the MCP app (server + widget) on this branch before PR. Search CLI mirrors on the next branch.
@@ -270,7 +270,7 @@ finding. Update this table if a lane's classification changes.
 | L-1 | MVP-in | Engineering axis — free-signal error and runtime telemetry (ANR, Zod, runtime metrics, span streaming, rewrite-frames, extra-error-data). |
 | L-2 | MVP-in | Engineering axis — shared delegate seam required before the Search CLI branch can mirror this maximisation plan. |
 | L-3 | MVP-in | Engineering + product axes — typed MCP-request context enrichment. |
-| **L-4a** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(b) satisfied by a simpler surface at MVP**. L-4b provides the primary metric surface; L-4a's span-metrics convention is retained only for narrow span-attribution-unique cases and adopts only after L-4b is stable (see §Phase 2 dependency graph `L-4b → L-4a`). |
+| **L-4a** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(b) satisfied by a simpler surface at MVP**. L-4b provides the primary metric surface; L-4a's span-metrics convention is retained only for narrow span-attribution-unique cases and adopts only after L-4b is stable (see §Phase 1 dependency graph `L-4b → L-4a`). |
 | L-4b | MVP-in | Engineering axis — **primary metric emission surface** via `Sentry.metrics.*`. Launch-blocking because the five-axis observability principle requires a working metric pipeline on launch day. |
 | **L-5** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(b) satisfied by a simpler surface at MVP**. A fixed `tracesSampleRate` meets the engineering-axis observability obligation at launch; dynamic `tracesSampler` is a post-launch optimisation once traffic shape is known. |
 | **L-6** | **MVP-deferred** | [ADR-162 §Principle](../../../../docs/architecture/architectural-decisions/162-observability-first.md#the-principle): omission justified — **(b) satisfied by a simpler surface at MVP**. On-demand profiling (env-gated manual activation) meets the engineering-axis obligation; continuous profiling is a post-launch enablement. |
@@ -313,34 +313,12 @@ Read before each phase and at the start of each RED cycle:
 
 ## Phase Structure
 
-> **Execution order reshape 2026-04-18** (per owner direction, following
-> the observation that the initial phase ordering emitted through
-> ad-hoc shapes and ran compile-time gates after the code they would
-> have policed). The plan now has **five execution phases**, ordered
-> to maximise long-term architectural excellence by landing
-> foundations (gates, extractions, schemas) before emitters, and
-> interleaving sibling MVP `current/` plans as cross-branch
-> dependencies of the maximisation lanes.
->
-> **The table below is authoritative for execution order.** Lane
-> sections below retain their historical authoring clusters under
-> named `##` headers (Foundation Uplift / Measurement and
-> Correlation / Breadth / Operations + Close-out) — these are NOT
-> phase numbers, they are cluster names preserved so cross-references
-> continue to resolve. Each lane carries a "**Execution phase**" note
-> at its head indicating its execution-phase assignment. Phase
-> labelling and historical clustering are explicitly decoupled —
-> trust the table and the per-lane notes, never the `##` header.
->
-> **Dual-frame sunset**: at branch close (Wave 5 completion), the
-> four historical-grouping `##` headers collapse into a single
-> §Historical Grouping appendix so the plan exits single-frame.
-
-Each phase runs a full RED → GREEN → REFACTOR → QUALITY GATE →
-SPECIALIST REVIEW cycle before the next begins. Phases commit
-independently; the PR opens after all five phases close. The
-single-PR commitment (A.3) is unchanged; the reshape affects
-commit order within this branch, not PR boundaries.
+The plan has **five execution phases**. Physical section order below
+matches execution order; the `## Phase N — <name>` headers are
+authoritative. Each phase runs a full RED → GREEN → REFACTOR → QUALITY
+GATE → SPECIALIST REVIEW cycle before the next begins. Phases commit
+independently; the single-PR commitment (A.3) is unchanged — the PR
+opens after Phase 5 closes.
 
 **Execution order (authoritative)**:
 
@@ -369,33 +347,23 @@ phase.
 fred-review TO-ACTION — explicit to remove interpretive ambiguity):
 ADR-162 is Proposed at Phase 1 open; Phase 1 flips it Accepted as
 part of the restructure Phase 5 carve-out (`require-observability-emission`
-rule authored + status flip). **Wave 1 deliverables other than the
+rule authored + status flip). **Phase 1 deliverables other than the
 flip itself** (L-EH initial, L-DOC initial, L-12-prereq, L-7) land
 under ADR-162 Proposed and reference its principle without requiring
-Accepted status. Waves 2–5 open **after** the Accepted flip and
+Accepted status. Phases 2–5 open **after** the Accepted flip and
 reference ADR-162 as Accepted. The only circular dependency that
-could have existed — Wave 1 deliverables requiring Accepted status —
-does not hold; Wave 1 discharges principle-level obligations under
-Proposed, and Wave 1's own closure flips the ADR.
+could have existed — Phase 1 deliverables requiring Accepted status —
+does not hold; Phase 1 discharges principle-level obligations under
+Proposed, and Phase 1's own closure flips the ADR.
 
 ---
 
-## Lane sections authored during Foundation Uplift (historical grouping)
+## Phase 1 — Gates & Foundation Extractions
 
-> **Dual frame — physical grouping vs execution phase**. This `##` header
-> names the historical authoring cluster; it is NOT a phase number.
-> The authoritative execution phase for each lane below is stated in
-> its "**Execution phase**" note at the lane head and summarised in
-> §Phase Structure above. The dual frame is **transitional**: at
-> branch close (Wave 5 completion), this header and its siblings
-> collapse into a single §Historical Grouping appendix so the plan
-> exits single-frame. Until then, trust the table and the per-lane
-> notes — not the `##` section header.
+### Phase 1 dependency graph (lane-level, authoritative)
 
-### Lane-level dependency graph (authoritative)
-
-Dependencies cross execution phases, not physical groupings.
-Execution-phase assignments are stated in parentheses for clarity.
+Dependencies cross execution phases. Execution-phase assignments are
+stated in parentheses for clarity.
 
 - `L-0b (Phase 1) → L-4b (Phase 3)` — barrier test gate exists before the primary metric adapter extends the hook registry.
 - `L-4b (Phase 3) → L-4a (Phase 5, MVP-deferred)` — primary `Sentry.metrics.*` adapter stable before the transitional span-metrics convention adopts (restructure Phase 4 priority swap 2026-04-18).
@@ -403,19 +371,12 @@ Execution-phase assignments are stated in parentheses for clarity.
 - `L-0b (Phase 1) ↔ L-12-prereq (Phase 1)` — coordinating, not strict blocking (both in Phase 1 now — L-12-prereq extracts pure redactor core whose correctness depends on the redaction policy code, not on the Node-side test harness; it authors its own runtime-neutral tests).
 - `L-12-prereq (Phase 1) → L-12 (Phase 4)` — widget Sentry cannot land without the browser-safe redactor core extracted (crosses Phase 1 → Phase 4 boundary in the reshape; still a strict blocking edge).
 - `L-0b (Phase 1) → L-13 (Phase 5)` — barrier-bypass alert derives from ADR-160's test gate.
-- `L-13 (Phase 5) → L-1, L-4b (Phase 3); L-12 (Phase 4); security-observability, accessibility-observability (Phase 4)` — alerts reference product loops and axis events that must exist first. (Superseded from the pre-reshape edge that only referenced L-1/L-4a/L-4b/L-5/L-12.)
+- `L-13 (Phase 5) → L-1, L-4b (Phase 3); L-12 (Phase 4); security-observability, accessibility-observability (Phase 4)` — alerts reference product loops and axis events that must exist first.
 - `L-0b (Phase 1) ↔ L-EH initial (Phase 1)` — soft — ESLint rule authoring shares `oak-eslint` infrastructure with L-3's boundary-rule discussion and the Phase 1 gate-landing cluster.
-- **NEW** `require-observability-emission (Phase 1, from restructure Phase 5) → every emitting lane (Phase 3, 4)` — compile-time gate for emission presence is authored before any emission site is written; every Phase 3/4 lane lands through the gate.
-- **NEW** `no-vendor-observability-import (Phase 2, from vendor-independence plan WS1 carve-out) → every emitting lane (Phase 3, 4)` — structural import lint is authored before any emission site is written; every Phase 3/4 lane is gate-conformant at write-time.
-- **NEW** `observability-events-workspace (Phase 2) → L-1, L-3, L-4b, L-9 (Phase 3); L-12 (Phase 4); security-observability, accessibility-observability (Phase 4)` — schemas exist before any emitter imports them.
-- **NEW** `L-12-prereq (Phase 1) → L-12 (Phase 4); observability-events-workspace runtime consumer (Phase 3+)` — `telemetry-redaction-core` extraction is a Phase 1 precondition for every payload that passes through the redaction barrier on either runtime.
-
-### Lanes originally clustered under Foundation Uplift
-- `L-0b ↔ L-12-prereq` (coordinating, not strict blocking — L-12-prereq extracts a pure redactor core whose correctness depends on the redaction policy code, not on the Node-side test harness; it can author its own runtime-neutral tests. Reuse of closure-gate patterns is a coordination benefit, not a prerequisite).
-- `L-12-prereq → L-12` (widget Sentry cannot land without the browser-safe redactor core extracted; crosses the Phase 1 → Phase 3 boundary).
-- `L-0b → L-13` (barrier-bypass alert derives from ADR-160's test gate).
-- `L-13 → L-1, L-4a, L-4b, L-5, L-12` (alerts reference product loops that must exist first).
-- `L-0b ↔ L-EH` (soft — ESLint rule authoring shares oak-eslint infrastructure with L-3's boundary-rule discussion).
+- `require-observability-emission (Phase 1, from restructure Phase 5) → every emitting lane (Phase 3, 4)` — compile-time gate for emission presence is authored before any emission site is written; every Phase 3/4 lane lands through the gate.
+- `no-vendor-observability-import (Phase 2, from vendor-independence plan WS1 carve-out) → every emitting lane (Phase 3, 4)` — structural import lint is authored before any emission site is written; every Phase 3/4 lane is gate-conformant at write-time.
+- `observability-events-workspace (Phase 2) → L-1, L-3, L-4b, L-9 (Phase 3); L-12 (Phase 4); security-observability, accessibility-observability (Phase 4)` — schemas exist before any emitter imports them.
+- `L-12-prereq (Phase 1) → L-12 (Phase 4); observability-events-workspace runtime consumer (Phase 3+)` — `telemetry-redaction-core` extraction is a Phase 1 precondition for every payload that passes through the redaction barrier on either runtime.
 
 ### L-0a Ground-truth correction
 
@@ -499,146 +460,10 @@ Tests pass against the current `createSentryHooks` implementation — the specif
   conformant emission passes through; the events workspace depends
   on this barrier being non-bypassable for its redaction invariant.
 
-### L-1 Free-signal integrations
-
-**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
-Emitters (Server)**. Depends on Phase 2 events-workspace schemas
-(L-1's ANR, Zod, runtime-metric, streamed-span events all emit
-through schemas the events workspace catalogues).
-
-**Objective**. Enable the opt-in Sentry Node integrations that ship
-free signal.
-
-**Targets**:
-
-- `anrIntegration()` — blocked event-loop detection.
-- `zodErrorsIntegration()` — structured Zod error issues.
-- `nodeRuntimeMetricsIntegration()` — eight default runtime metrics.
-- `spanStreamingIntegration()` + explicit `withStreamedSpan` wrapping
-  around the MCP streamable-HTTP transport's `handleRequest` path.
-- `rewriteFramesIntegration()` — cleaner stack frames.
-- `extraErrorDataIntegration()` — capture non-`message` props on
-  thrown objects.
-
-**RED — behaviour-first** (A.2 item 9 tightening). Tests assert the observable outcome of each integration, not its registration in `NodeOptions`.
-
-Per-integration behaviour assertions (under `packages/libs/sentry-node/src/` or `apps/oak-curriculum-mcp-streamable-http/src/observability/`):
-
-- **`anrIntegration`**: ANR stack event is emitted when a simulated blocked event-loop condition is detected (fixture-mode capture asserts an ANR-shaped event with redacted stack frames per the barrier).
-- **`zodErrorsIntegration`**: a thrown `ZodError` produces a structured issue event (fixture capture asserts the `Zod` error payload with redacted attribute values).
-- **`nodeRuntimeMetricsIntegration`**: at least one runtime metric emission appears in the fixture store under the default collection cadence (count-of-metrics is not asserted — the default metric set varies across Sentry SDK 10.x minors and is cited from live Sentry docs at lane-open time, not pinned here).
-- **`spanStreamingIntegration`**: a wrapped `withStreamedSpan` call emits a streamed-span envelope that passes through `beforeSendSpan` redaction before capture (additive to `wrapMcpServerWithSentry`, which already patches MCP transport send/onmessage per A.1 factual correction 4 — not a replacement).
-- **`rewriteFramesIntegration`**: a thrown error's stack frames have their paths rewritten per the configured rewrite before appearing in the captured event.
-- **`extraErrorDataIntegration`**: a thrown object with non-`message` enumerable properties produces an event whose context contains those properties (redacted if PII-shaped).
-
-Integration registration may be verified as a sanity check, but it is not the primary assertion — the behaviour (event shape / content / redaction) is.
-
-**Fixture envelope-observability prerequisite** (per A.6 AR-3, assumptions-reviewer). Before any of the per-integration behaviour assertions can be meaningful, the fixture runtime must be able to observe the envelope types the integrations emit. `createFixtureRuntime` in `runtime.ts` today captures a closed set (`log | exception | set_user | set_tag | set_context | metric (pending L-4b)`) via direct `store.push(...)`; it does NOT route envelopes through the `beforeSend*` adapter pipeline. L-1 GREEN must land one of the following first:
-
-1. **Option A (preferred)** — extend `createFixtureRuntime` to route every envelope through the same `createSentryHooks` composition used by the live SDK, so fixture mode observes the same hook transformations. This aligns fixture and live behaviour and lets L-1 assertions re-use the hook pipeline.
-2. **Option B** — add per-envelope capture paths to the fixture store (`ANREvent`, `StreamedSpanEnvelope`, `RuntimeMetricSample`) with their own `beforeSend*` routing. Higher engineering cost; chosen only if Option A conflicts with existing fixture semantics.
-
-Acceptance: the fixture store captures at minimum (a) ANR stack events via `beforeSend`; (b) Zod error payloads via `beforeSend`; (c) runtime metric samples via `beforeSendMetric` (coordinated with L-4b). L-1 does NOT close until this prerequisite lands.
-
-**GREEN**: Extend `createSentryInitOptions` in
-`packages/libs/sentry-node/src/runtime-sdk.ts` to compose the integrations.
-Compose via injected parameters (ADR-078) — no hardcoded list in the
-library beyond documented defaults. Expose an
-`additionalIntegrations?: Integration[]` option and a
-`disableDefaults?: readonly IntegrationName[]` option to preserve
-tunability.
-
-**REFACTOR**: TSDoc on every new integration option; update
-`packages/libs/sentry-node/README.md` (new — see L-DOC).
-
-**Redaction verification**: `beforeSendLog` still redacts log
-attributes from `zodErrorsIntegration`; `beforeSendSpan` redacts span
-attributes from `spanStreamingIntegration`; `beforeSend` redacts stack
-frames from `anrIntegration`.
-
-**Acceptance**:
-
-1. Fixture tests prove each integration emits through the shared
-   barrier.
-2. Live-mode smoke (optional, owner-run) confirms ANR, Zod, and runtime
-   metric events appear in Sentry under the test release tag.
-
-**Cross-references** (per ADR-162 five-axis principle + event-schema
-contract):
-
-- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
-  — authoritative home for the downstream-analytics event-schema
-  contract. ANR events, Zod-error events, runtime-metric samples, and
-  streamed-span envelopes that L-1 turns on must conform to the
-  schemas defined there when those schemas exist; L-1 does not
-  itself author schemas, but emits through paths the events workspace
-  catalogues.
-
-### L-2 Delegates extraction
-
-**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
-Emitters (Server)**. L-2 lands alongside the emission cluster
-because the shared delegate seam is the injection point every Phase
-3 lane consumes. The seam must be stable before Phase 4 (widget)
-adopts it through the telemetry-redaction-core composition.
-
-**Objective**. Extract `createSentryDelegates` from the MCP app into
-`@oaknational/sentry-node` so both the MCP app and (next branch) the
-Search CLI import the same function. Removes the duplicated delegation
-seam.
-
-**RED**: Move the existing `sentry-observability-delegates.unit.test.ts`
-into `packages/libs/sentry-node/src/`. Make it fail by removing the MCP
-app's local implementation before moving.
-
-**GREEN**: Create `packages/libs/sentry-node/src/delegates.ts` exporting
-`createSentryDelegates(runtime: SentryNodeRuntime):
-SentryObservabilityDelegates`. Export from the barrel. Update the MCP
-app to import the shared version. Leave the CLI's
-`buildCliObservability` untouched for now — the next branch picks it up.
-
-**REFACTOR**: TSDoc on the exported seam. Note in README that the
-seam is shared across app-layer observability objects.
-
-**Explicit-superset discipline** (A.2 item 8, per architecture-reviewer-fred): `SentryObservabilityDelegates` is a **structural intersection at the composition root** — each consumer declares the delegate slice it injects; the library publishes the method factory, not a monolithic interface. Divergence between MCP and CLI consumers is explicit at each composition site, not smuggled in as an "implicit superset with silent discard." When the Search CLI branch adopts the shared factory, its composition root declares its own slice; methods it does not expose never become no-ops of an omnibus interface.
-
-**Acceptance**:
-
-1. `grep -rn "createSentryDelegates" apps/` returns only imports from
-   `@oaknational/sentry-node`.
-2. MCP app tests unchanged in behaviour.
-3. Type-check green.
-4. The shared seam exports a method factory (not a closed omnibus interface); each consumer's composition root names its own delegate slice.
-5. **Structural-intersection test** (per A.6 AF-3, architecture-reviewer-fred): a type-level test asserts that the published method factory's inferred return type is a structural **intersection** over the consumers' declared delegate slices at each composition root. No method name appears in the public factory type that is not consumed by at least one caller in this repo. This closes the residual silent-discard back-door that "opt-in via method presence" wording alone leaves open.
-
-### L-DOC (initial slice) — Documentation inventory
-
-**Objective**. Make the existing Sentry integration discoverable by
-reading docs, without grepping. Current `packages/libs/sentry-node/README.md` is a 4-line stub — this lane **expands** it (per A.1 factual correction 10), it does not write a new one.
-
-**RED — content presence, not file existence** (A.2 item 9 tightening). Write a structural test (under `test:root-scripts`) that asserts each required concept appears at least once by string or structural match:
-
-- In `packages/libs/sentry-node/README.md`: strings/sections mentioning `modes` (off/fixture/sentry), `redaction barrier` (with ADR-160 citation), `DI seam` (ADR-078 citation), `fixture store`, `logger sink`, `shared delegates`.
-- In `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`: strings/sections mentioning `wrapMcpServerWithSentry` wiring (with the `core-endpoints.ts:98` file reference), per-request span `oak.http.request.mcp`, scope enrichment (`mcp.method`, `mcp.tool_name`), Express error handler registration, source-map upload via `pnpm sourcemaps:upload`, redaction barrier entry points (with ADR-143 + ADR-160 citations).
-
-The test asserts content tokens (string search or markdown section headings), not merely file existence.
-
-**GREEN**: Write both files. The sentry-node README expansion absorbs the 4-line stub.
-
-**REFACTOR**: Cross-link from the workspace READMEs. **`.agent/directives/AGENT.md § Essential Links`** update is **owner-only** (foundational Practice doc per PDR-003) — L-DOC drafts the target line in plan text or a follow-up note; the owner applies the edit. Add a one-line entry to the ADR index if the amendment from L-0 warrants it.
-
-**Acceptance**:
-
-1. Structural content-presence test passes (not merely "file exists").
-2. Manual review: a reader unfamiliar with the code can answer "is
-   MCP auto-instrumented?" and "where does redaction happen?" from
-   docs alone.
-3. AGENT.md Essential Links edit is deferred to owner (tracked as follow-up in executable plan todos).
-
 ### L-EH (initial slice) — Error-handling discipline
 
 **Objective**. Land the `require-error-cause` ESLint rule and apply
-it to new/changed code in Phase 1. `prefer-result-pattern` is L-EH final (Phase 4).
+it to new/changed code in Phase 1. `prefer-result-pattern` is L-EH final (Phase 5).
 
 **Package name**: `@oaknational/eslint-plugin-standards` (package name; the directory is `packages/core/oak-eslint/`, per A.1 factual correction 2).
 
@@ -674,246 +499,57 @@ with concrete examples and the new ESLint rule id). Document the sentinel commen
    violations in changed files.
 3. Sentinel-comment pass-through is the only approved opt-out mechanism (no rule-disable lines).
 
----
+### L-DOC (initial slice) — Documentation inventory
 
-## Lane sections authored during Measurement and Correlation (historical grouping)
+**Objective**. Make the existing Sentry integration discoverable by
+reading docs, without grepping. Current `packages/libs/sentry-node/README.md` is a 4-line stub — this lane **expands** it (per A.1 factual correction 10), it does not write a new one.
 
-> See §Phase Structure above for authoritative execution-phase
-> assignments. Lanes clustered here have migrated: L-3 and L-4b →
-> execution Phase 3; L-4a, L-5, L-6 → execution Phase 5 (MVP-deferred);
-> L-7 → execution Phase 1; L-8 remains parked. This header is a
-> historical grouping, not a phase number.
+**RED — content presence, not file existence** (A.2 item 9 tightening). Write a structural test (under `test:root-scripts`) that asserts each required concept appears at least once by string or structural match:
 
-### Lanes originally clustered under Measurement and Correlation
+- In `packages/libs/sentry-node/README.md`: strings/sections mentioning `modes` (off/fixture/sentry), `redaction barrier` (with ADR-160 citation), `DI seam` (ADR-078 citation), `fixture store`, `logger sink`, `shared delegates`.
+- In `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`: strings/sections mentioning `wrapMcpServerWithSentry` wiring (with the `core-endpoints.ts:98` file reference), per-request span `oak.http.request.mcp`, scope enrichment (`mcp.method`, `mcp.tool_name`), Express error handler registration, source-map upload via `pnpm sourcemaps:upload`, redaction barrier entry points (with ADR-143 + ADR-160 citations).
 
-### L-3 MCP request context enrichment
+The test asserts content tokens (string search or markdown section headings), not merely file existence.
 
-**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
-Emitters (Server)**. Unchanged from the pre-reshape assignment (was
-old Phase 2; the reshape retains Phase 3 but renumbers). L-3's
-context shape is the correlation substrate for `tool_invoked`
-events defined in Phase 2's events workspace.
+**GREEN**: Write both files. The sentry-node README expansion absorbs the 4-line stub.
 
-**Objective**. Populate a typed `mcp_request` context on the Sentry
-scope at the handler boundary. Complements, not replaces, the
-attributes that `wrapMcpServerWithSentry` writes on spans.
-
-**Location — MCP app, not the shared library** (A.2 item 4, per architecture-reviewer-betty + ADR-154 framework/consumer separation). `enrichMcpRequestContext` is MCP-specific domain logic and MUST live under `apps/oak-curriculum-mcp-streamable-http/src/observability/enrich-mcp-request-context.ts` (sibling to `sentry-observability-delegates.ts`, `sanitise-mcp-events.ts`, `http-observability.ts`). It MUST NOT be exported from `packages/libs/sentry-node/`. Enforcement is two-part today: (a) `packages/core/oak-eslint/src/rules/boundary.ts` (factory `createLibBoundaryRules`, tested by `lib-boundary.unit.test.ts`) governs cross-workspace import direction; (b) `import-x/no-extraneous-dependencies` transitively catches any `@modelcontextprotocol/sdk` import from `sentry-node` because the SDK is not declared in `sentry-node/package.json`. A named "no MCP-specific symbol" pattern is a follow-up lane candidate rather than an existing rule. Putting the function in the shared library would regress ADR-154 and invite a dependency-direction inversion between app domain and shared framework.
-
-**Sensitivity** (A.1 factual correction 7): `recordInputs`/`recordOutputs` on `wrapMcpServerWithSentry` default to `sendDefaultPii`, which Oak pins to `false`. MCP tool inputs/outputs are not captured today. Any future flip of `sendDefaultPii` cascades into L-3's context shape — the deny-list MUST still apply regardless of the top-level flag.
-
-**RED**: Unit/integration tests in `apps/oak-curriculum-mcp-streamable-http/src/observability/` for an `enrichMcpRequestContext` function asserting the context shape. Fields: `session_id`, `method`,
-`tool_name`, `argument_shape` (deny-listed key names only, never
-values), `client.name`/`client.version`/`client.title` from the
-MCP initialize handshake, `server.name`/`server.version`.
-
-**GREEN**: Implement `enrichMcpRequestContext(req, observability)` at the path above and
-call it from `mcp-handler.ts`. Redact via existing barrier — request
-body never flows into the context.
-
-**REFACTOR**: TSDoc + observability.md update.
-
-**Acceptance**: fixture-mode captures include the `mcp_request` context
-with the expected shape and no argument values.
-
-**Cross-references** (per ADR-162 event-schema contract):
-
-- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
-  — the `mcp_request` context shape (session id, method, tool name,
-  argument-shape deny-list, client/server party info) is the
-  correlation substrate for `tool_invoked` events; the events
-  workspace schema for `tool_invoked` depends on these field names
-  remaining stable.
-
-### L-4a Transitional span metrics convention
-
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out** (MVP-deferred). L-4a moves with the other
-MVP-deferred lanes to the close-out cluster. It opens only after
-L-4b's primary adapter lands in Phase 3.
-
-**Priority** (2026-04-18 — restructure Phase 4 swap). L-4a is now the
-**transitional** metric surface, adopted only for narrow
-span-attribution-unique cases where a metric must share the enclosing
-span's trace context inline. The primary metric surface is L-4b
-(`Sentry.metrics.*`). L-4a opens only after L-4b's adapter is stable
-— see Phase 2 dependency graph (`L-4b → L-4a`).
-
-**Objective**. Publish `oak.<runtime>.<feature>.<metric>` as the
-convention for the narrow set of metric-shaped signals that belong on
-existing spans (cases where the metric's value is indivisible from
-its span's trace context, e.g. span-tagged tool-execution duration).
-Most metric emissions go through L-4b; L-4a documents the exception.
-
-**RED**: Unit tests asserting that a `recordSpanMetric(span, name,
-value, attributes?)` helper in `@oaknational/observability` writes the
-attribute under the published naming scheme and narrow attribute types.
-
-**GREEN**: Author the helper. Document the convention in the package
-README.
-
-**REFACTOR**: Instrument acceptance tracers:
-- `oak.mcp.handler.request.count` incremented at handler start.
-- `oak.mcp.tool.duration_ms` on the active tool-execution span.
-
-**Acceptance**: tests verify attributes on spans; manual Sentry
-explore-query confirms the attributes are present.
-
-### L-4b Primary metrics emission via `Sentry.metrics.*`
-
-**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
-Emitters (Server)**. L-4b is the primary metric emitter and lands
-in the emission cluster, after Phase 2's events workspace
-catalogues the metric-names contract.
-
-**Priority** (2026-04-18 — restructure Phase 4 swap). L-4b is the
-**primary** production metrics surface. `Sentry.metrics.*` supersedes
-span-metrics (L-4a) as the default path for new metric emissions;
-span-metrics is retained only for narrow span-attribution-unique
-cases (see L-4a). The adapter insulates consumers from the
-underlying beta API — consumers depend on `@oaknational/sentry-node`
-and `@oaknational/observability`, never on `Sentry.metrics.*`
-directly.
-
-**Objective**. Add `metrics: { count, gauge, distribution }` to
-`SentryNodeSdk` and `SentryNodeRuntime` as the primary production
-metric emission path. Gate live emission behind
-`SENTRY_ENABLE_METRICS` during the Sentry beta window so rollout is
-explicit and auditable. Extend the shared redaction barrier with
-`beforeSendMetric`. Emitted metric names are catalogued alongside
-event schemas in
-[`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
-(planned — `packages/core/observability-events/` does not yet exist
-as code)
-per ADR-162's event-schema contract — `metrics.*` emissions are part
-of the downstream-analytics contract, not a Sentry-internal concern.
-
-**Ground-truth corrections** (from sentry-reviewer, 2026-04-17):
-- Fixture `type: 'counter'` (not `'count'`).
-- `beforeSendMetric` is **synchronous, single-argument** `(metric) =>
-  Metric | null` — model on `beforeSendLog`, not `beforeSend`.
-- Do NOT manually snapshot trace context — the SDK attaches
-  `trace_id`/`span_id` automatically to emitted metrics.
-- Redactor must defensively handle non-primitive attribute values
-  because upstream `Metric.attributes` is `Record<string, unknown>`.
-
-**Ground-truth corrections** (from architecture-reviewer-fred):
-- `SentryOffConfig.enableMetrics: false` as a literal (mirror
-  `enableLogs`).
-- Parameterise the metric namespace via
-  `InitialiseSentryOptions.metricNamespace?: string` — do not hardcode
-  consumer-specific prefixes in the shared library.
-- ADR-143 amendment is a prerequisite of landing this (done in L-0).
-
-**RED — behaviour-first, test-boundary mechanics specified** (A.2 item 9 tightening; A.6 AR-4 mechanical spec):
-
-Two distinct test surfaces. Each proves a different claim, and they must NOT be conflated:
-
-- **Pure-function `beforeSendMetric` redaction unit test** (primary — proves the **policy**): calls `redactSentryMetric(metric)` **directly** from `runtime-redaction.ts` with a fully-constructed `Metric` payload; asserts the returned metric has sentinel replacement per the policy. No adapter wiring, no `createSentryHooks`, no fixture store. Fails if and only if the redaction policy is wrong.
-- **Fixture-capture integration test** (secondary — proves the **wiring**): calls `createSentryInitOptions({ mode: 'sentry', ... })` to get a `NodeOptions`, extracts `beforeSendMetric` from it, invokes the hook on a `Metric` payload, and asserts the fixture store captures the redacted envelope. No assertion on redaction policy beyond "sentinel present" — the exact policy is proved by the pure test. Fails if and only if the adapter wiring has broken.
-
-These two tests must exist as separate `it` blocks with named purpose in their titles (e.g. "`beforeSendMetric` redaction policy (pure)" and "`beforeSendMetric` fixture wiring (integration)"). A combined test that asserts both claims at once is a test-smell per `testing-strategy.md`.
-- **Off-mode noop test**: live `Sentry.metrics.*` calls are zero under `SENTRY_MODE=off` (verified by test-time stub on the SDK export).
-- **Fixture-mode capture test**: capture shape `{ kind: 'metric', type: 'counter' | 'gauge' | 'distribution', name, value, unit?, attributes, environment, release }` with post-redaction payload (this test proves the fixture adapter records correctly — it does NOT prove the redaction policy; that is the pure unit test above).
-- **Attribute narrowing test**: `Record<string, unknown>` inputs with non-primitive values are defensively narrowed to `SentryPrimitiveValue` at the redactor boundary.
-- **Namespace parameterisation test**: `InitialiseSentryOptions.metricNamespace?: string` prepends to emitted metric names; default namespace is documented and stable across Oak runtimes.
-- **Hook contract shape test**: `beforeSendMetric` is sync, single-argument (modelled on `beforeSendLog`, not `beforeSend`).
-- **Compile-time closure extension** (dependency on L-0b): adding `beforeSendMetric` to the hook union in `runtime-redaction-barrier.unit.test.ts` is part of this lane; if L-0b authored the `satisfies` check, L-4b extends it.
-
-**GREEN**: Extend `types.ts`, `runtime-sdk.ts`, `runtime-redaction.ts`,
-`runtime.ts`, `fixture.ts`, `config.ts`. Wire `createSentryHooks` with
-`beforeSendMetric`.
-
-**REFACTOR**: TSDoc on every new surface. Convention note in README.
-Metric emission guide in `observability.md`.
+**REFACTOR**: Cross-link from the workspace READMEs. **`.agent/directives/AGENT.md § Essential Links`** update is **owner-only** (foundational Practice doc per PDR-003) — L-DOC drafts the target line in plan text or a follow-up note; the owner applies the edit. Add a one-line entry to the ADR index if the amendment from L-0 warrants it.
 
 **Acceptance**:
 
-1. Off mode: zero `Sentry.metrics.*` calls verified by test-time stub.
-2. Fixture mode: captures `{ kind: 'metric', type: 'counter' | 'gauge'
-   | 'distribution', name, value, unit?, attributes, environment,
-   release }` with post-redaction payload.
-3. Sentry mode: at least one counter and one distribution visible in
-   Sentry under the branch release tag (owner-verified, informational
-   not merge-gate).
-4. **Metric-names catalog conformance** (2026-04-18 reshape, per
-   sentry-reviewer TO-ACTION): fixture-capture metric names are
-   validated against the `@oaknational/observability-events`
-   metric-names catalog (Wave 2 deliverable) via the conformance
-   helper; unlisted names fail RED.
+1. Structural content-presence test passes (not merely "file exists").
+2. Manual review: a reader unfamiliar with the code can answer "is
+   MCP auto-instrumented?" and "where does redaction happen?" from
+   docs alone.
+3. AGENT.md Essential Links edit is deferred to owner (tracked as follow-up in executable plan todos).
 
-**Cross-references** (per ADR-162 event-schema contract; consistent
-with other lane-body cross-reference blocks):
+### L-12-prereq Browser-safe redactor core extraction
 
-- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
-  — metric-names catalog. `Sentry.metrics.*` metric names emitted by
-  this adapter (e.g. `oak.mcp.handler.request.count`,
-  `oak.mcp.tool.duration_ms`) are part of the downstream-analytics
-  schema contract per ADR-162 and are catalogued alongside event
-  schemas. L-4b publishes the adapter; the events workspace
-  catalogues the names the adapter emits.
+**Objective** (A.2 item 6, per architecture-reviewer-fred + sentry-reviewer). Extract a pure, runtime-agnostic redactor core into a new browser-safe package so both the Node adapter (`@oaknational/sentry-node`) and the forthcoming browser adapter (L-12) compose it. **Proposes** (pending ADR-160 amendment) to close the ADR's "Open Question" on redactor core placement in favour of a new package. ADR-160 is Accepted 2026-04-17 with Open Questions intact; L-12-prereq GREEN is conditional on either a minor ADR-160 amendment closing the question or owner confirmation that plan-prose is sufficient authority for the decision.
 
-### L-5 Dynamic sampling
+**Package placement — new `packages/core/telemetry-redaction-core/`, NOT a submodule**. Rationale: `@oaknational/sentry-node`'s `runtime-redaction.ts` imports types from `@sentry/node` (`Breadcrumb`, `Exception`, `NodeOptions`, `RequestEventData`), coupling it to Node. A subpath export from `@oaknational/sentry-node` would still pull `@sentry/node` into the browser graph transitively. Only a separate core package with zero `@sentry/*` dependencies can be composed from both runtimes. Precedent: `design-tokens-core/oak-design-tokens` split per ADR-154 § Examples. Tier `packages/core/` matches ADR-041 workspace structure.
 
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out** (MVP-deferred). Fixed-rate sampling meets
-the engineering-axis MVP obligation; dynamic sampling is a
-post-primary-emitter optimisation.
+**Scope**:
 
-**Objective**. Replace fixed `tracesSampleRate` with a `tracesSampler`
-function.
+- New workspace at `packages/core/telemetry-redaction-core/` — depends only on `@oaknational/type-helpers` and a generic redact primitive; no `@sentry/*` imports.
+- Extract the pure redaction functions (`redactText`, deny-list policy, `SentryPrimitiveValue` narrowing) from `packages/libs/sentry-node/src/runtime-redaction.ts`.
+- `@oaknational/sentry-node` adopts the core as a dependency and re-wraps each `redactSentryEvent` / `redactSentrySpan` / etc. around the core functions with Node-specific payload adapters.
+- Contract: core accepts generic payload shapes parameterised by a "what to redact" descriptor; adapters describe per-runtime payload walks.
 
-**Policy**:
+**RED**: Extract is by symbol move — existing `runtime-redaction.unit.test.ts` behaviour must be preserved. Introduce parallel tests on the core package exercising the pure redactor functions in runtime-neutral shapes (no `@sentry/node` types in the core's test surface).
 
-- Errored transactions: 100%.
-- Transactions whose root-span duration exceeds the rolling P95
-  threshold: 100% (approximate via static threshold initially,
-  revisit).
-- Cold-boot + auth-proxy transactions: elevated rate (e.g. 50%).
-- Default happy-path: configurable sampling rate (default 10%).
+**GREEN**: Workspace created, dependency wired, existing tests pass. Node adapter preserves exact behaviour (no behaviour change).
 
-**RED**: Unit tests over a pure `decideSampleRate(samplingContext,
-env)` function.
+**REFACTOR**: TSDoc naming ADR-160 as doctrine on both packages. `@oaknational/sentry-node` README section describing the composition. Core package README describing the runtime-neutral contract.
 
-**GREEN**: Wire into `createSentryInitOptions`.
+**Acceptance**:
 
-**REFACTOR**: TSDoc, README update, runbook entry.
-
-**Acceptance**: tests green; documentation reflects the policy.
-
-### L-6 Profiling
-
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out** (MVP-deferred). On-demand profiling meets
-the engineering-axis MVP obligation; continuous profiling is a
-post-launch enablement.
-
-
-**Objective**. Add `@sentry/profiling-node`, wire
-`nodeProfilingIntegration`, measure overhead.
-
-**API shape — v10** (A.2 item 7, per sentry-reviewer): `@sentry/profiling-node` v10 uses `profileSessionSampleRate` + `profileLifecycle: 'trace' | 'manual'`, NOT the legacy `profilesSampleRate` / `profilesSampler` / `SENTRY_PROFILES_SAMPLE_RATE` env names from v9. Env variable surface: `SENTRY_PROFILE_SESSION_SAMPLE_RATE` and `SENTRY_PROFILE_LIFECYCLE` (confirm exact names against the live `@sentry/profiling-node` v10 docs at lane-open time — do not pin from plan prose).
-
-**RED — behaviour-first** (A.2 item 9 tightening):
-
-- A profile envelope is emitted under a representative harness (`prod:harness` or a new micro-bench) when `profileSessionSampleRate > 0` and `profileLifecycle = 'trace'` — assertion is over the envelope content, not over `NodeOptions.integrations.some(...)` presence.
-- A transaction produced while a profile is active carries the profile linkage in its event data (fixture capture asserts `profile_id` or equivalent linkage attribute on the captured transaction).
-- `profileLifecycle: 'manual'` mode does not emit a profile envelope unless explicitly started — off-behaviour check.
-
-**GREEN**: Install `@sentry/profiling-node` (opt-in `onlyBuiltDependencies` entry — precompiled binaries ship for Node 18/20/22/24 on Linux/macOS/Windows per A.1 factual correction 3). Thread `profileSessionSampleRate` + `profileLifecycle` through `InitialiseSentryOptions` via DI (ADR-078); expose as env-resolvable but do not read `process.env` in library code.
-
-**REFACTOR**: Measure overhead on the harness. Document rollout (env-gated initially; revisit continuous after measurement) in `docs/operations/sentry-deployment-runbook.md` and `packages/libs/sentry-node/README.md`.
-
-**Acceptance**: profile envelope emitted under the harness; profile linked to a transaction visible in Sentry UI (owner-verified); overhead documented in the runbook; env names match v10 API.
+1. New workspace builds under `pnpm build`; `pnpm type-check` green from repo root.
+2. `@oaknational/sentry-node` tests unchanged in behaviour (Node adapter composes core).
+3. Zero `@sentry/*` imports in `packages/core/telemetry-redaction-core/`.
+4. L-12 can import the core without pulling `@sentry/node` into the widget bundle.
 
 ### L-7 Release + commits + deploy linkage
-
-**Execution phase** (2026-04-18 reshape): **Phase 1 — Gates &
-Foundation Extractions**. Moved from the pre-reshape Phase 2 to
-Phase 1: release linkage unlocks regression attribution for every
-subsequent lane's owner-verified smoke test. Every Phase 3/4/5 lane
-that tests against a live Sentry release benefits from L-7 being in
-place first.
 
 **Objective**. Close the regression-detection loop.
 
@@ -994,47 +630,270 @@ vendor-independence clause):
   NOT survive `SENTRY_MODE=off`. The carve-out is documented
   there, not re-derived per-consumer.
 
-### L-8 Bundler-side source maps — PARKED (2026-04-17)
+---
 
-**Status**. Not in this plan's delivery scope.
+## Phase 2 — Schema Foundation
 
-**Rationale** (settled with owner 2026-04-17): `@sentry/esbuild-plugin`
-would require replacing `tsup` with direct `esbuild` — a toolchain
-swap. The current shell-script flow is:
+> **Phase 2 is owned by sibling `current/` plans, not by maximisation
+> lanes.** This phase-body is a reference pointer; execution happens
+> in the sibling plans named below when they promote to `active/`.
+> Wave-close semantics per the high-level observability plan:
+> maximisation plan owner signals Phase 2 closure after BOTH sibling
+> plans GREEN + reviewer matrix discharged.
 
-- Simple (≈150 lines of bash).
-- Offline-capable (devs can `pnpm build` without `SENTRY_AUTH_TOKEN`).
-- Auditable (we own the script; Sentry plugin updates cannot break
-  our build).
-- Already working and proven on this branch.
+**Work**:
 
-The plugin option stays parked as a **future enhancement**. Revisit
-only if (a) the shell script's complexity grows materially, (b) a
-specific operational requirement emerges, or (c) the tsup→esbuild
-swap becomes desirable for unrelated reasons.
+- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+  WS1–WS6 — creates `packages/core/observability-events/` as a new
+  workspace with Zod schemas for the seven MVP events (`tool_invoked`,
+  `search_query`, `feedback_submitted`, `auth_failure`,
+  `rate_limit_triggered`, `widget_session_outcome`,
+  `a11y_preference_tag`), a correlation-keys contract, a
+  `conformance.ts` helper every consuming workspace composes, and an
+  `event-catalog.md` data-scientist-facing reference.
 
-No acceptance criterion — this lane is deferred, not delivered.
+- [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
+  WS1 carve-out — authors the `no-vendor-observability-import` ESLint
+  rule in `@oaknational/eslint-plugin-standards` at `warn` severity.
+  Forbids `@sentry/*` imports outside the allowlisted adapter +
+  core-observability + composition-root paths per ADR-162 Mechanism #5.
+  The **emission-persistence test** (the behavioural gate) is deferred
+  to Phase 5 (see §Phase 5 below).
+
+**Why Phase 2 matters**: every Phase 3/4 emitter imports schemas from
+`@oaknational/observability-events` and is compile-time-gated by
+`no-vendor-observability-import`. Landing both before Phase 3 opens
+means every subsequent emission site is schema-conformant and vendor-
+independent by construction, not by audit.
 
 ---
 
-## Lane sections authored during Breadth (historical grouping)
+## Phase 3 — Primary Emitters (Server)
 
-> See §Phase Structure above for authoritative execution-phase
-> assignments. Lanes clustered here have migrated: L-9 stays in
-> execution Phase 3; L-12-prereq → execution Phase 1; L-12 →
-> execution Phase 4; L-10, L-11 → execution Phase 5 (MVP-deferred
-> scaffolding). This header is a historical grouping, not a phase
-> number.
+### L-1 Free-signal integrations
 
-### Lanes originally clustered under Breadth
+**Objective**. Enable the opt-in Sentry Node integrations that ship
+free signal.
+
+**Targets**:
+
+- `anrIntegration()` — blocked event-loop detection.
+- `zodErrorsIntegration()` — structured Zod error issues.
+- `nodeRuntimeMetricsIntegration()` — eight default runtime metrics.
+- `spanStreamingIntegration()` + explicit `withStreamedSpan` wrapping
+  around the MCP streamable-HTTP transport's `handleRequest` path.
+- `rewriteFramesIntegration()` — cleaner stack frames.
+- `extraErrorDataIntegration()` — capture non-`message` props on
+  thrown objects.
+
+**RED — behaviour-first** (A.2 item 9 tightening). Tests assert the observable outcome of each integration, not its registration in `NodeOptions`.
+
+Per-integration behaviour assertions (under `packages/libs/sentry-node/src/` or `apps/oak-curriculum-mcp-streamable-http/src/observability/`):
+
+- **`anrIntegration`**: ANR stack event is emitted when a simulated blocked event-loop condition is detected (fixture-mode capture asserts an ANR-shaped event with redacted stack frames per the barrier).
+- **`zodErrorsIntegration`**: a thrown `ZodError` produces a structured issue event (fixture capture asserts the `Zod` error payload with redacted attribute values).
+- **`nodeRuntimeMetricsIntegration`**: at least one runtime metric emission appears in the fixture store under the default collection cadence (count-of-metrics is not asserted — the default metric set varies across Sentry SDK 10.x minors and is cited from live Sentry docs at lane-open time, not pinned here).
+- **`spanStreamingIntegration`**: a wrapped `withStreamedSpan` call emits a streamed-span envelope that passes through `beforeSendSpan` redaction before capture (additive to `wrapMcpServerWithSentry`, which already patches MCP transport send/onmessage per A.1 factual correction 4 — not a replacement).
+- **`rewriteFramesIntegration`**: a thrown error's stack frames have their paths rewritten per the configured rewrite before appearing in the captured event.
+- **`extraErrorDataIntegration`**: a thrown object with non-`message` enumerable properties produces an event whose context contains those properties (redacted if PII-shaped).
+
+Integration registration may be verified as a sanity check, but it is not the primary assertion — the behaviour (event shape / content / redaction) is.
+
+**Fixture envelope-observability prerequisite** (per A.6 AR-3, assumptions-reviewer). Before any of the per-integration behaviour assertions can be meaningful, the fixture runtime must be able to observe the envelope types the integrations emit. `createFixtureRuntime` in `runtime.ts` today captures a closed set (`log | exception | set_user | set_tag | set_context | metric (pending L-4b)`) via direct `store.push(...)`; it does NOT route envelopes through the `beforeSend*` adapter pipeline. L-1 GREEN must land one of the following first:
+
+1. **Option A (preferred)** — extend `createFixtureRuntime` to route every envelope through the same `createSentryHooks` composition used by the live SDK, so fixture mode observes the same hook transformations. This aligns fixture and live behaviour and lets L-1 assertions re-use the hook pipeline.
+2. **Option B** — add per-envelope capture paths to the fixture store (`ANREvent`, `StreamedSpanEnvelope`, `RuntimeMetricSample`) with their own `beforeSend*` routing. Higher engineering cost; chosen only if Option A conflicts with existing fixture semantics.
+
+Acceptance: the fixture store captures at minimum (a) ANR stack events via `beforeSend`; (b) Zod error payloads via `beforeSend`; (c) runtime metric samples via `beforeSendMetric` (coordinated with L-4b). L-1 does NOT close until this prerequisite lands.
+
+**GREEN**: Extend `createSentryInitOptions` in
+`packages/libs/sentry-node/src/runtime-sdk.ts` to compose the integrations.
+Compose via injected parameters (ADR-078) — no hardcoded list in the
+library beyond documented defaults. Expose an
+`additionalIntegrations?: Integration[]` option and a
+`disableDefaults?: readonly IntegrationName[]` option to preserve
+tunability.
+
+**REFACTOR**: TSDoc on every new integration option; update
+`packages/libs/sentry-node/README.md` (new — see L-DOC).
+
+**Redaction verification**: `beforeSendLog` still redacts log
+attributes from `zodErrorsIntegration`; `beforeSendSpan` redacts span
+attributes from `spanStreamingIntegration`; `beforeSend` redacts stack
+frames from `anrIntegration`.
+
+**Acceptance**:
+
+1. Fixture tests prove each integration emits through the shared
+   barrier.
+2. Live-mode smoke (optional, owner-run) confirms ANR, Zod, and runtime
+   metric events appear in Sentry under the test release tag.
+
+**Cross-references** (per ADR-162 five-axis principle + event-schema
+contract):
+
+- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+  — authoritative home for the downstream-analytics event-schema
+  contract. ANR events, Zod-error events, runtime-metric samples, and
+  streamed-span envelopes that L-1 turns on must conform to the
+  schemas defined there when those schemas exist; L-1 does not
+  itself author schemas, but emits through paths the events workspace
+  catalogues.
+
+### L-2 Delegates extraction
+
+**Objective**. Extract `createSentryDelegates` from the MCP app into
+`@oaknational/sentry-node` so both the MCP app and (next branch) the
+Search CLI import the same function. Removes the duplicated delegation
+seam.
+
+**RED**: Move the existing `sentry-observability-delegates.unit.test.ts`
+into `packages/libs/sentry-node/src/`. Make it fail by removing the MCP
+app's local implementation before moving.
+
+**GREEN**: Create `packages/libs/sentry-node/src/delegates.ts` exporting
+`createSentryDelegates(runtime: SentryNodeRuntime):
+SentryObservabilityDelegates`. Export from the barrel. Update the MCP
+app to import the shared version. Leave the CLI's
+`buildCliObservability` untouched for now — the next branch picks it up.
+
+**REFACTOR**: TSDoc on the exported seam. Note in README that the
+seam is shared across app-layer observability objects.
+
+**Explicit-superset discipline** (A.2 item 8, per architecture-reviewer-fred): `SentryObservabilityDelegates` is a **structural intersection at the composition root** — each consumer declares the delegate slice it injects; the library publishes the method factory, not a monolithic interface. Divergence between MCP and CLI consumers is explicit at each composition site, not smuggled in as an "implicit superset with silent discard." When the Search CLI branch adopts the shared factory, its composition root declares its own slice; methods it does not expose never become no-ops of an omnibus interface.
+
+**Acceptance**:
+
+1. `grep -rn "createSentryDelegates" apps/` returns only imports from
+   `@oaknational/sentry-node`.
+2. MCP app tests unchanged in behaviour.
+3. Type-check green.
+4. The shared seam exports a method factory (not a closed omnibus interface); each consumer's composition root names its own delegate slice.
+5. **Structural-intersection test** (per A.6 AF-3, architecture-reviewer-fred): a type-level test asserts that the published method factory's inferred return type is a structural **intersection** over the consumers' declared delegate slices at each composition root. No method name appears in the public factory type that is not consumed by at least one caller in this repo. This closes the residual silent-discard back-door that "opt-in via method presence" wording alone leaves open.
+
+### L-3 MCP request context enrichment
+
+**Objective**. Populate a typed `mcp_request` context on the Sentry
+scope at the handler boundary. Complements, not replaces, the
+attributes that `wrapMcpServerWithSentry` writes on spans.
+
+**Location — MCP app, not the shared library** (A.2 item 4, per architecture-reviewer-betty + ADR-154 framework/consumer separation). `enrichMcpRequestContext` is MCP-specific domain logic and MUST live under `apps/oak-curriculum-mcp-streamable-http/src/observability/enrich-mcp-request-context.ts` (sibling to `sentry-observability-delegates.ts`, `sanitise-mcp-events.ts`, `http-observability.ts`). It MUST NOT be exported from `packages/libs/sentry-node/`. Enforcement is two-part today: (a) `packages/core/oak-eslint/src/rules/boundary.ts` (factory `createLibBoundaryRules`, tested by `lib-boundary.unit.test.ts`) governs cross-workspace import direction; (b) `import-x/no-extraneous-dependencies` transitively catches any `@modelcontextprotocol/sdk` import from `sentry-node` because the SDK is not declared in `sentry-node/package.json`. A named "no MCP-specific symbol" pattern is a follow-up lane candidate rather than an existing rule. Putting the function in the shared library would regress ADR-154 and invite a dependency-direction inversion between app domain and shared framework.
+
+**Sensitivity** (A.1 factual correction 7): `recordInputs`/`recordOutputs` on `wrapMcpServerWithSentry` default to `sendDefaultPii`, which Oak pins to `false`. MCP tool inputs/outputs are not captured today. Any future flip of `sendDefaultPii` cascades into L-3's context shape — the deny-list MUST still apply regardless of the top-level flag.
+
+**RED**: Unit/integration tests in `apps/oak-curriculum-mcp-streamable-http/src/observability/` for an `enrichMcpRequestContext` function asserting the context shape. Fields: `session_id`, `method`,
+`tool_name`, `argument_shape` (deny-listed key names only, never
+values), `client.name`/`client.version`/`client.title` from the
+MCP initialize handshake, `server.name`/`server.version`.
+
+**GREEN**: Implement `enrichMcpRequestContext(req, observability)` at the path above and
+call it from `mcp-handler.ts`. Redact via existing barrier — request
+body never flows into the context.
+
+**REFACTOR**: TSDoc + observability.md update.
+
+**Acceptance**: fixture-mode captures include the `mcp_request` context
+with the expected shape and no argument values.
+
+**Cross-references** (per ADR-162 event-schema contract):
+
+- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+  — the `mcp_request` context shape (session id, method, tool name,
+  argument-shape deny-list, client/server party info) is the
+  correlation substrate for `tool_invoked` events; the events
+  workspace schema for `tool_invoked` depends on these field names
+  remaining stable.
+
+### L-4b Primary metrics emission via `Sentry.metrics.*`
+
+**Priority** (2026-04-18 — restructure Phase 4 swap). L-4b is the
+**primary** production metrics surface. `Sentry.metrics.*` supersedes
+span-metrics (L-4a, Phase 5 MVP-deferred) as the default path for new
+metric emissions; span-metrics is retained only for narrow
+span-attribution-unique cases (see L-4a). The adapter insulates
+consumers from the underlying beta API — consumers depend on
+`@oaknational/sentry-node` and `@oaknational/observability`, never on
+`Sentry.metrics.*` directly.
+
+**Objective**. Add `metrics: { count, gauge, distribution }` to
+`SentryNodeSdk` and `SentryNodeRuntime` as the primary production
+metric emission path. Gate live emission behind
+`SENTRY_ENABLE_METRICS` during the Sentry beta window so rollout is
+explicit and auditable. Extend the shared redaction barrier with
+`beforeSendMetric`. Emitted metric names are catalogued alongside
+event schemas in
+[`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+(planned — `packages/core/observability-events/` does not yet exist
+as code)
+per ADR-162's event-schema contract — `metrics.*` emissions are part
+of the downstream-analytics contract, not a Sentry-internal concern.
+
+**Ground-truth corrections** (from sentry-reviewer, 2026-04-17):
+- Fixture `type: 'counter'` (not `'count'`).
+- `beforeSendMetric` is **synchronous, single-argument** `(metric) =>
+  Metric | null` — model on `beforeSendLog`, not `beforeSend`.
+- Do NOT manually snapshot trace context — the SDK attaches
+  `trace_id`/`span_id` automatically to emitted metrics.
+- Redactor must defensively handle non-primitive attribute values
+  because upstream `Metric.attributes` is `Record<string, unknown>`.
+
+**Ground-truth corrections** (from architecture-reviewer-fred):
+- `SentryOffConfig.enableMetrics: false` as a literal (mirror
+  `enableLogs`).
+- Parameterise the metric namespace via
+  `InitialiseSentryOptions.metricNamespace?: string` — do not hardcode
+  consumer-specific prefixes in the shared library.
+- ADR-143 amendment is a prerequisite of landing this (done in L-0).
+
+**RED — behaviour-first, test-boundary mechanics specified** (A.2 item 9 tightening; A.6 AR-4 mechanical spec):
+
+Two distinct test surfaces. Each proves a different claim, and they must NOT be conflated:
+
+- **Pure-function `beforeSendMetric` redaction unit test** (primary — proves the **policy**): calls `redactSentryMetric(metric)` **directly** from `runtime-redaction.ts` with a fully-constructed `Metric` payload; asserts the returned metric has sentinel replacement per the policy. No adapter wiring, no `createSentryHooks`, no fixture store. Fails if and only if the redaction policy is wrong.
+- **Fixture-capture integration test** (secondary — proves the **wiring**): calls `createSentryInitOptions({ mode: 'sentry', ... })` to get a `NodeOptions`, extracts `beforeSendMetric` from it, invokes the hook on a `Metric` payload, and asserts the fixture store captures the redacted envelope. No assertion on redaction policy beyond "sentinel present" — the exact policy is proved by the pure test. Fails if and only if the adapter wiring has broken.
+
+These two tests must exist as separate `it` blocks with named purpose in their titles (e.g. "`beforeSendMetric` redaction policy (pure)" and "`beforeSendMetric` fixture wiring (integration)"). A combined test that asserts both claims at once is a test-smell per `testing-strategy.md`.
+- **Off-mode noop test**: live `Sentry.metrics.*` calls are zero under `SENTRY_MODE=off` (verified by test-time stub on the SDK export).
+- **Fixture-mode capture test**: capture shape `{ kind: 'metric', type: 'counter' | 'gauge' | 'distribution', name, value, unit?, attributes, environment, release }` with post-redaction payload (this test proves the fixture adapter records correctly — it does NOT prove the redaction policy; that is the pure unit test above).
+- **Attribute narrowing test**: `Record<string, unknown>` inputs with non-primitive values are defensively narrowed to `SentryPrimitiveValue` at the redactor boundary.
+- **Namespace parameterisation test**: `InitialiseSentryOptions.metricNamespace?: string` prepends to emitted metric names; default namespace is documented and stable across Oak runtimes.
+- **Hook contract shape test**: `beforeSendMetric` is sync, single-argument (modelled on `beforeSendLog`, not `beforeSend`).
+- **Compile-time closure extension** (dependency on L-0b): adding `beforeSendMetric` to the hook union in `runtime-redaction-barrier.unit.test.ts` is part of this lane; if L-0b authored the `satisfies` check, L-4b extends it.
+
+**GREEN**: Extend `types.ts`, `runtime-sdk.ts`, `runtime-redaction.ts`,
+`runtime.ts`, `fixture.ts`, `config.ts`. Wire `createSentryHooks` with
+`beforeSendMetric`.
+
+**REFACTOR**: TSDoc on every new surface. Convention note in README.
+Metric emission guide in `observability.md`.
+
+**Acceptance**:
+
+1. Off mode: zero `Sentry.metrics.*` calls verified by test-time stub.
+2. Fixture mode: captures `{ kind: 'metric', type: 'counter' | 'gauge'
+   | 'distribution', name, value, unit?, attributes, environment,
+   release }` with post-redaction payload.
+3. Sentry mode: at least one counter and one distribution visible in
+   Sentry under the branch release tag (owner-verified, informational
+   not merge-gate).
+4. **Metric-names catalog conformance** (2026-04-18 reshape, per
+   sentry-reviewer TO-ACTION): fixture-capture metric names are
+   validated against the `@oaknational/observability-events`
+   metric-names catalog (Phase 2 deliverable) via the conformance
+   helper; unlisted names fail RED.
+
+**Cross-references** (per ADR-162 event-schema contract; consistent
+with other lane-body cross-reference blocks):
+
+- [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)
+  — metric-names catalog. `Sentry.metrics.*` metric names emitted by
+  this adapter (e.g. `oak.mcp.handler.request.count`,
+  `oak.mcp.tool.duration_ms`) are part of the downstream-analytics
+  schema contract per ADR-162 and are catalogued alongside event
+  schemas. L-4b publishes the adapter; the events workspace
+  catalogues the names the adapter emits.
 
 ### L-9 Feedback pipeline
-
-**Execution phase** (2026-04-18 reshape): **Phase 3 — Primary
-Emitters (Server)**. Unchanged from the pre-reshape assignment (was
-old Phase 3; the reshape retains Phase 3). L-9's `feedback_submitted`
-event schema is authored in Phase 2's events workspace; L-9 emits
-through it by import.
 
 **Objective**. `captureFeedback` wired end-to-end, plus an MCP tool
 `submit-feedback` with a **fixed, closed-set input schema**. Privacy
@@ -1087,126 +946,11 @@ describing how to query feedback and the fixed schema.
   to the schema defined there; any enum evolution is a coordinated
   change across both plans.
 
-### L-10 Feature-flag scaffolding — TSDoc extension point only
+---
 
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out** (MVP-deferred — scaffolding only, no
-runtime capability, ADR-162 §Principle "(a) not applicable at MVP"
-rationale).
-
-**Objective** (settled 2026-04-17 with owner). Document the
-future-provider extension point without wiring
-`featureFlagsIntegration()` or exposing any helper on the adapter
-barrel. No provider is selected yet, and pre-committing a shape
-before a real consumer risks locking in a wrong API.
-
-**Scope**:
-
-- TSDoc on the adapter's public surface describing where a flag
-  context helper will attach when a provider is chosen. Name the
-  Sentry integration (`featureFlagsIntegration` or `growthbookIntegration`)
-  as candidates.
-- No code change to `createSentryInitOptions`.
-- No new exports from `@oaknational/sentry-node`.
-- A README section in `packages/libs/sentry-node/README.md`:
-  "Feature-flag context — future extension".
-
-**RED**: Docs structural test asserting the TSDoc block exists on the
-agreed extension anchor (e.g. a dedicated comment block at the top
-of `runtime-sdk.ts`). This is not a behaviour test; it is an
-integrity test for the documentation contract — acknowledged
-explicitly per test-reviewer's finding.
-
-**GREEN**: Author the TSDoc + README section.
-
-**REFACTOR**: Cross-link from `observability.md` (app doc).
-
-**Acceptance**: TSDoc and README section in place; no runtime
-behaviour change. The first real feature-flag provider's integration
-is a separate future lane.
-
-### L-11 AI-instrumentation scaffolding — TSDoc extension point only
-
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out** (MVP-deferred — scaffolding only, no
-runtime capability, ADR-162 §Principle "(a) not applicable at MVP"
-rationale).
-
-**Objective** (settled 2026-04-17 with owner). Document the future-LLM
-extension point without exporting wrappers from the adapter barrel.
-No Oak MCP tool currently calls an LLM; pre-committing the public
-surface shape before a real consumer risks a breaking change when
-the first LLM tool arrives.
-
-**Scope**:
-
-- TSDoc on the adapter's public surface describing where LLM
-  instrumentation will attach. Name the Sentry-shipped integrations
-  (`instrumentAnthropicAiClient`, `instrumentOpenAiClient`,
-  `instrumentGoogleGenAIClient`, `vercelAIIntegration`,
-  `anthropicAIIntegration`, `langChainIntegration`,
-  `langGraphIntegration`) as candidates.
-- No re-exports from `@oaknational/sentry-node`.
-- No new helpers on `HttpObservability`.
-- A README section in `packages/libs/sentry-node/README.md`:
-  "LLM instrumentation — future extension".
-
-**RED**: Docs structural test asserting the TSDoc block exists on the
-agreed extension anchor.
-
-**GREEN**: Author the TSDoc + README section.
-
-**REFACTOR**: Cross-link from `observability.md` (app doc); note the
-Vercel AI SDK version-range caveat from the sentry-reviewer (v4 vs
-v5 semantics diverged) so a future author reaches for the right
-integration.
-
-**Acceptance**: TSDoc and README section in place; no runtime
-behaviour change. The first real LLM tool's integration is a
-separate future lane, triggered by an actual consumer landing.
-
-### L-12-prereq Browser-safe redactor core extraction
-
-**Execution phase** (2026-04-18 reshape): **Phase 1 — Gates &
-Foundation Extractions**. Moved from the pre-reshape Phase 3 to
-Phase 1: `packages/core/telemetry-redaction-core/` is a shared
-workspace every subsequent emission site (server-side and widget)
-depends on through the redaction barrier. Extracting it in Phase 1
-means no retrofit when Phase 3 server emitters and Phase 4 widget
-Sentry land.
-
-**Objective** (A.2 item 6, per architecture-reviewer-fred + sentry-reviewer). Extract a pure, runtime-agnostic redactor core into a new browser-safe package so both the Node adapter (`@oaknational/sentry-node`) and the forthcoming browser adapter (L-12) compose it. **Proposes** (pending ADR-160 amendment) to close the ADR's "Open Question" on redactor core placement in favour of a new package. ADR-160 is Accepted 2026-04-17 with Open Questions intact; L-12-prereq GREEN is conditional on either a minor ADR-160 amendment closing the question or owner confirmation that plan-prose is sufficient authority for the decision.
-
-**Package placement — new `packages/core/telemetry-redaction-core/`, NOT a submodule**. Rationale: `@oaknational/sentry-node`'s `runtime-redaction.ts` imports types from `@sentry/node` (`Breadcrumb`, `Exception`, `NodeOptions`, `RequestEventData`), coupling it to Node. A subpath export from `@oaknational/sentry-node` would still pull `@sentry/node` into the browser graph transitively. Only a separate core package with zero `@sentry/*` dependencies can be composed from both runtimes. Precedent: `design-tokens-core/oak-design-tokens` split per ADR-154 § Examples. Tier `packages/core/` matches ADR-041 workspace structure.
-
-**Scope**:
-
-- New workspace at `packages/core/telemetry-redaction-core/` — depends only on `@oaknational/type-helpers` and a generic redact primitive; no `@sentry/*` imports.
-- Extract the pure redaction functions (`redactText`, deny-list policy, `SentryPrimitiveValue` narrowing) from `packages/libs/sentry-node/src/runtime-redaction.ts`.
-- `@oaknational/sentry-node` adopts the core as a dependency and re-wraps each `redactSentryEvent` / `redactSentrySpan` / etc. around the core functions with Node-specific payload adapters.
-- Contract: core accepts generic payload shapes parameterised by a "what to redact" descriptor; adapters describe per-runtime payload walks.
-
-**RED**: Extract is by symbol move — existing `runtime-redaction.unit.test.ts` behaviour must be preserved. Introduce parallel tests on the core package exercising the pure redactor functions in runtime-neutral shapes (no `@sentry/node` types in the core's test surface).
-
-**GREEN**: Workspace created, dependency wired, existing tests pass. Node adapter preserves exact behaviour (no behaviour change).
-
-**REFACTOR**: TSDoc naming ADR-160 as doctrine on both packages. `@oaknational/sentry-node` README section describing the composition. Core package README describing the runtime-neutral contract.
-
-**Acceptance**:
-
-1. New workspace builds under `pnpm build`; `pnpm type-check` green from repo root.
-2. `@oaknational/sentry-node` tests unchanged in behaviour (Node adapter composes core).
-3. Zero `@sentry/*` imports in `packages/core/telemetry-redaction-core/`.
-4. L-12 can import the core without pulling `@sentry/node` into the widget bundle.
+## Phase 4 — Cross-axis & Widget
 
 ### L-12 Widget Sentry
-
-**Execution phase** (2026-04-18 reshape): **Phase 4 — Cross-axis &
-Widget**. Moved from the pre-reshape Phase 3 to Phase 4: widget is
-the second emitting runtime under ADR-162's vendor-independence
-clause and runs in the same phase as the sibling cross-axis plans
-(security-observability and accessibility-observability). All three
-consume Phase 2's events workspace schemas.
 
 **Objective**. Instrument the MCP App browser widget with
 `@sentry/browser` (or `@sentry/react` after bundle-size review).
@@ -1251,26 +995,26 @@ vendor-independence clause):
   widget-side emissions are proven to persist via stdout/err under
   `SENTRY_MODE=off`.
 
+### Sibling `current/` plans in Phase 4
+
+- [`security-observability.plan.md`](../current/security-observability.plan.md)
+  — emits `auth_failure` and `rate_limit_triggered` events using Phase
+  2 schemas. Security axis MVP.
+- [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md)
+  — emits `a11y_preference_tag`, frustration proxies, incomplete-flow
+  correlation, and `widget_session_outcome` from the widget runtime.
+  Accessibility axis MVP.
+
+Can parallelise within Phase 4. Wave-close semantics per the high-level
+observability plan: maximisation plan owner signals Phase 4 closure
+after L-12 GREEN + both sibling plans GREEN + reviewer matrix
+discharged.
+
 ---
 
-## Lane sections authored during Operations + Close-out (historical grouping)
-
-> See §Phase Structure above for authoritative execution-phase
-> assignments. All lanes clustered here have migrated to execution
-> Phase 5 (Operations + Conformance + Close-out). Execution Phase 4
-> of the reshape is now Cross-axis & Widget (L-12 + sibling plans
-> security-observability + accessibility-observability). This header
-> is a historical grouping, not a phase number.
-
-### Lanes originally clustered under Operations + Close-out
+## Phase 5 — Operations + Conformance + Close-out
 
 ### L-13 Alerts + dashboards + runbooks
-
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out**. Unchanged in principle (was old Phase 4;
-renumbered to Phase 5 in the reshape). L-13 can only land after the
-Phase 3 + Phase 4 emission landscape is real — every alert
-references an event that Phases 2–4 produce.
 
 **Objective**. Per product loop, define baseline alert + dashboard
 panel + runbook entry + routing + escalation.
@@ -1306,11 +1050,9 @@ every axis, not only engineering):
 
 ### L-14 Third-party trace propagation (security-gated)
 
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out**. Renumbered in the reshape (was old Phase
-4). Per the Phase 4 MVP classification, L-14 is MVP-deferred with a
-latent security-axis emission obligation discharged in
-`security-observability.plan.md`.
+Per the §MVP Classification, L-14 is **MVP-deferred** with a latent
+security-axis emission obligation discharged in
+[`security-observability.plan.md`](../current/security-observability.plan.md).
 
 **Objective**. Decide allow/deny for non-Oak host propagation,
 including the Oak API from the MCP server boundary.
@@ -1328,29 +1070,39 @@ attribution.
 
 ### L-15 Strategy close-out
 
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out**. Renumbered (was old Phase 4). L-15 ADR
-is authored after all emission lanes land so the close-out compares
-the three strategy options against observed operational value.
-
 **Objective**. Record the Sentry-only vs dual-export vs
 minimal-operational decision.
 
 **Process**: compare the three options against observed operational
-value from Phases 1–3. Record decision as an ADR.
+value from Phases 1–4. Record decision as an ADR.
 
 **Acceptance**: ADR merged; the parent plan's strategy-close-out
 obligation is discharged.
 
+### L-DOC (final) — Documentation coverage
+
+**Objective**. Every product loop in the taxonomy is discoverable from
+docs.
+
+**Deliverables**:
+
+- `packages/libs/sentry-node/README.md` — adapter contract, modes,
+  redaction barrier, metric surface, delegates seam.
+- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` —
+  MCP wrapper wiring, Express error handler, scope enrichment, span
+  model, feedback, feature-flag and AI scaffolding, widget.
+- Per-loop TSDoc on the owning function.
+- ADR index includes L-0 amendment and any Phase-5 ADRs.
+- `.agent/directives/AGENT.md § Essential Links` cross-links the
+  observability doc.
+
+**Acceptance**: structural test (from L-DOC initial) green on the full
+inventory; manual walk-through by a reviewer (docs-adr-reviewer).
+
 ### L-EH (final) — Error-handling discipline
 
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out**. Renumbered (was old Phase 4). `prefer-
-result-pattern` rule lands after all Phase 3/4 emitter lanes have
-settled on the `Result<T, E>` return shape in situ.
-
 **Objective**. Land the opt-in `prefer-result-pattern` rule scoped
-incrementally per workspace, and apply Phase-4 corrections across all
+incrementally per workspace, and apply Phase-5 corrections across all
 new/changed code.
 
 **RED**: Unit tests for `prefer-result-pattern` flagging functions
@@ -1368,31 +1120,177 @@ with the new enforcement.
 
 **Acceptance**: rule landed; first adoption tranche lint-clean.
 
-### L-DOC (final) — Documentation coverage
+### L-4a Transitional span metrics convention (MVP-deferred)
 
-**Execution phase** (2026-04-18 reshape): **Phase 5 — Operations +
-Conformance + Close-out**. Renumbered (was old Phase 4). L-DOC
-final sweeps per-loop TSDoc, ADR index entries, runbook entries,
-and AGENT.md Essential Links (owner-only per PDR-003) at the end of
-the branch.
+**Priority** (2026-04-18 — restructure Phase 4 swap). L-4a is the
+**transitional** metric surface, adopted only for narrow
+span-attribution-unique cases where a metric must share the enclosing
+span's trace context inline. The primary metric surface is L-4b
+(`Sentry.metrics.*`, Phase 3). L-4a opens only after L-4b's adapter
+is stable — see §Phase 1 dependency graph (`L-4b → L-4a`).
 
-**Objective**. Every product loop in the taxonomy is discoverable from
-docs.
+**Objective**. Publish `oak.<runtime>.<feature>.<metric>` as the
+convention for the narrow set of metric-shaped signals that belong on
+existing spans (cases where the metric's value is indivisible from
+its span's trace context, e.g. span-tagged tool-execution duration).
+Most metric emissions go through L-4b; L-4a documents the exception.
 
-**Deliverables**:
+**RED**: Unit tests asserting that a `recordSpanMetric(span, name,
+value, attributes?)` helper in `@oaknational/observability` writes the
+attribute under the published naming scheme and narrow attribute types.
 
-- `packages/libs/sentry-node/README.md` — adapter contract, modes,
-  redaction barrier, metric surface, delegates seam.
-- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` —
-  MCP wrapper wiring, Express error handler, scope enrichment, span
-  model, feedback, feature-flag and AI scaffolding, widget.
-- Per-loop TSDoc on the owning function.
-- ADR index includes L-0 amendment and any Phase-4 ADRs.
-- `.agent/directives/AGENT.md § Essential Links` cross-links the
-  observability doc.
+**GREEN**: Author the helper. Document the convention in the package
+README.
 
-**Acceptance**: structural test (from L-DOC initial) green on the full
-inventory; manual walk-through by a reviewer (docs-adr-reviewer).
+**REFACTOR**: Instrument acceptance tracers:
+- `oak.mcp.handler.request.count` incremented at handler start.
+- `oak.mcp.tool.duration_ms` on the active tool-execution span.
+
+**Acceptance**: tests verify attributes on spans; manual Sentry
+explore-query confirms the attributes are present.
+
+### L-5 Dynamic sampling (MVP-deferred)
+
+**Objective**. Replace fixed `tracesSampleRate` with a `tracesSampler`
+function.
+
+**Policy**:
+
+- Errored transactions: 100%.
+- Transactions whose root-span duration exceeds the rolling P95
+  threshold: 100% (approximate via static threshold initially,
+  revisit).
+- Cold-boot + auth-proxy transactions: elevated rate (e.g. 50%).
+- Default happy-path: configurable sampling rate (default 10%).
+
+**RED**: Unit tests over a pure `decideSampleRate(samplingContext,
+env)` function.
+
+**GREEN**: Wire into `createSentryInitOptions`.
+
+**REFACTOR**: TSDoc, README update, runbook entry.
+
+**Acceptance**: tests green; documentation reflects the policy.
+
+### L-6 Profiling (MVP-deferred)
+
+**Objective**. Add `@sentry/profiling-node`, wire
+`nodeProfilingIntegration`, measure overhead.
+
+**API shape — v10** (A.2 item 7, per sentry-reviewer): `@sentry/profiling-node` v10 uses `profileSessionSampleRate` + `profileLifecycle: 'trace' | 'manual'`, NOT the legacy `profilesSampleRate` / `profilesSampler` / `SENTRY_PROFILES_SAMPLE_RATE` env names from v9. Env variable surface: `SENTRY_PROFILE_SESSION_SAMPLE_RATE` and `SENTRY_PROFILE_LIFECYCLE` (confirm exact names against the live `@sentry/profiling-node` v10 docs at lane-open time — do not pin from plan prose).
+
+**RED — behaviour-first** (A.2 item 9 tightening):
+
+- A profile envelope is emitted under a representative harness (`prod:harness` or a new micro-bench) when `profileSessionSampleRate > 0` and `profileLifecycle = 'trace'` — assertion is over the envelope content, not over `NodeOptions.integrations.some(...)` presence.
+- A transaction produced while a profile is active carries the profile linkage in its event data (fixture capture asserts `profile_id` or equivalent linkage attribute on the captured transaction).
+- `profileLifecycle: 'manual'` mode does not emit a profile envelope unless explicitly started — off-behaviour check.
+
+**GREEN**: Install `@sentry/profiling-node` (opt-in `onlyBuiltDependencies` entry — precompiled binaries ship for Node 18/20/22/24 on Linux/macOS/Windows per A.1 factual correction 3). Thread `profileSessionSampleRate` + `profileLifecycle` through `InitialiseSentryOptions` via DI (ADR-078); expose as env-resolvable but do not read `process.env` in library code.
+
+**REFACTOR**: Measure overhead on the harness. Document rollout (env-gated initially; revisit continuous after measurement) in `docs/operations/sentry-deployment-runbook.md` and `packages/libs/sentry-node/README.md`.
+
+**Acceptance**: profile envelope emitted under the harness; profile linked to a transaction visible in Sentry UI (owner-verified); overhead documented in the runbook; env names match v10 API.
+
+### L-10 Feature-flag scaffolding — TSDoc extension point only (MVP-deferred)
+
+**Objective** (settled 2026-04-17 with owner). Document the
+future-provider extension point without wiring
+`featureFlagsIntegration()` or exposing any helper on the adapter
+barrel. No provider is selected yet, and pre-committing a shape
+before a real consumer risks locking in a wrong API.
+
+**Scope**:
+
+- TSDoc on the adapter's public surface describing where a flag
+  context helper will attach when a provider is chosen. Name the
+  Sentry integration (`featureFlagsIntegration` or `growthbookIntegration`)
+  as candidates.
+- No code change to `createSentryInitOptions`.
+- No new exports from `@oaknational/sentry-node`.
+- A README section in `packages/libs/sentry-node/README.md`:
+  "Feature-flag context — future extension".
+
+**RED**: Docs structural test asserting the TSDoc block exists on the
+agreed extension anchor (e.g. a dedicated comment block at the top
+of `runtime-sdk.ts`). This is not a behaviour test; it is an
+integrity test for the documentation contract — acknowledged
+explicitly per test-reviewer's finding.
+
+**GREEN**: Author the TSDoc + README section.
+
+**REFACTOR**: Cross-link from `observability.md` (app doc).
+
+**Acceptance**: TSDoc and README section in place; no runtime
+behaviour change. The first real feature-flag provider's integration
+is a separate future lane.
+
+### L-11 AI-instrumentation scaffolding — TSDoc extension point only (MVP-deferred)
+
+**Objective** (settled 2026-04-17 with owner). Document the future-LLM
+extension point without exporting wrappers from the adapter barrel.
+No Oak MCP tool currently calls an LLM; pre-committing the public
+surface shape before a real consumer risks a breaking change when
+the first LLM tool arrives.
+
+**Scope**:
+
+- TSDoc on the adapter's public surface describing where LLM
+  instrumentation will attach. Name the Sentry-shipped integrations
+  (`instrumentAnthropicAiClient`, `instrumentOpenAiClient`,
+  `instrumentGoogleGenAIClient`, `vercelAIIntegration`,
+  `anthropicAIIntegration`, `langChainIntegration`,
+  `langGraphIntegration`) as candidates.
+- No re-exports from `@oaknational/sentry-node`.
+- No new helpers on `HttpObservability`.
+- A README section in `packages/libs/sentry-node/README.md`:
+  "LLM instrumentation — future extension".
+
+**RED**: Docs structural test asserting the TSDoc block exists on the
+agreed extension anchor.
+
+**GREEN**: Author the TSDoc + README section.
+
+**REFACTOR**: Cross-link from `observability.md` (app doc); note the
+Vercel AI SDK version-range caveat from the sentry-reviewer (v4 vs
+v5 semantics diverged) so a future author reaches for the right
+integration.
+
+**Acceptance**: TSDoc and README section in place; no runtime
+behaviour change. The first real LLM tool's integration is a
+separate future lane, triggered by an actual consumer landing.
+
+### L-8 Bundler-side source maps — PARKED (2026-04-17)
+
+**Status**. Not in this plan's delivery scope.
+
+**Rationale** (settled with owner 2026-04-17): `@sentry/esbuild-plugin`
+would require replacing `tsup` with direct `esbuild` — a toolchain
+swap. The current shell-script flow is:
+
+- Simple (≈150 lines of bash).
+- Offline-capable (devs can `pnpm build` without `SENTRY_AUTH_TOKEN`).
+- Auditable (we own the script; Sentry plugin updates cannot break
+  our build).
+- Already working and proven on this branch.
+
+The plugin option stays parked as a **future enhancement**. Revisit
+only if (a) the shell script's complexity grows materially, (b) a
+specific operational requirement emerges, or (c) the tsup→esbuild
+swap becomes desirable for unrelated reasons.
+
+No acceptance criterion — this lane is deferred, not delivered.
+
+### Sibling `current/` plans in Phase 5
+
+- [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
+  WS2+ — emission-persistence test runs MCP server + widget + Search
+  CLI in `SENTRY_MODE=off`, asserting structural event information
+  persists via stdout/err. Phase 5 escalates the
+  `no-vendor-observability-import` ESLint rule severity from `warn`
+  to `error`.
+- [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md)
+  — external uptime + external working-probe against production;
+  alerts integrate with L-13's alert suite.
 
 ---
 
@@ -1420,16 +1318,14 @@ gate is failing, the phase does not close.
 
 > See [Adversarial Review component](../../templates/components/adversarial-review.md)
 
-Per phase, invoke reviewers (non-leading prompts). Matrix below uses
-the **2026-04-18 reshape execution phases**, not the historical
-physical groupings in the document body.
+Per phase, invoke reviewers (non-leading prompts). Matrix:
 
 | Execution phase | Reviewers |
 |-----------------|-----------|
 | **Phase 1 — Gates & Foundation Extractions** | code-reviewer (gateway), test-reviewer, type-reviewer, config-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred (L-12-prereq workspace extraction is structural; runs at GREEN close too), architecture-reviewer-barney (L-12-prereq boundary; workspace creation), **assumptions-reviewer** |
 | **Phase 2 — Schema Foundation** | code-reviewer, docs-adr-reviewer (schema/contract completeness), type-reviewer (Zod 4 usage; io='input' vs 'output' semantics), sentry-reviewer (schema/emission fit), architecture-reviewer-fred (workspace boundary), **assumptions-reviewer**; the vendor-independence `no-vendor-observability-import` ESLint carve-out lands here — type-reviewer + architecture-reviewer-fred |
 | **Phase 3 — Primary Emitters (Server)** | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, architecture-reviewer-betty, architecture-reviewer-wilma, security-reviewer (L-3 context shape), **docs-adr-reviewer** (L-4b / L-7-linked env-var edits — L-7 already landed in Phase 1), **assumptions-reviewer** |
-| **Phase 4 — Cross-axis & Widget** | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, react-component-reviewer (L-12), accessibility-reviewer (L-12 + accessibility-observability plan), design-system-reviewer (L-12), security-reviewer (security-observability plan), **architecture-reviewer-fred + architecture-reviewer-barney** (2026-04-18 reshape per fred-review TO-ACTION: Phase 4 touches three concurrent architectural boundaries — browser bundle, auth middleware, widget runtime — all composing the Wave 1 telemetry-redaction-core through Wave 2 events-workspace schemas; Fred for ADR-162 vendor-independence-clause compliance + events-workspace import direction; Barney for cross-plan boundary cartography), **docs-adr-reviewer** (widget README, cross-axis plan READMEs), **assumptions-reviewer** |
+| **Phase 4 — Cross-axis & Widget** | code-reviewer, test-reviewer, type-reviewer, sentry-reviewer, react-component-reviewer (L-12), accessibility-reviewer (L-12 + accessibility-observability plan), design-system-reviewer (L-12), security-reviewer (security-observability plan), **architecture-reviewer-fred + architecture-reviewer-barney** (2026-04-18 reshape per fred-review TO-ACTION: Phase 4 touches three concurrent architectural boundaries — browser bundle, auth middleware, widget runtime — all composing the Phase 1 telemetry-redaction-core through Phase 2 events-workspace schemas; Fred for ADR-162 vendor-independence-clause compliance + events-workspace import direction; Barney for cross-plan boundary cartography), **docs-adr-reviewer** (widget README, cross-axis plan READMEs), **assumptions-reviewer** |
 | **Phase 5 — Operations + Conformance + Close-out** | code-reviewer, docs-adr-reviewer, sentry-reviewer, architecture-reviewer-fred, architecture-reviewer-wilma, security-reviewer (L-14 + vendor-independence emission-persistence test), release-readiness-reviewer, **assumptions-reviewer** |
 
 Additions per A.6 register (pre-reshape) — still apply under reshape:
@@ -1454,9 +1350,7 @@ principles.md).
 Covered in the strategic brief at
 [future/sentry-observability-maximisation.plan.md § Risks and Unknowns](../future/sentry-observability-maximisation.plan.md#risks-and-unknowns).
 
-Phase-specific risks (phase numbers are the **2026-04-18 reshape
-execution phases**, not the historical physical groupings in the
-document body):
+Phase-specific risks:
 
 | Execution Phase | Risk | Mitigation |
 |-----------------|------|------------|
@@ -1539,7 +1433,7 @@ them here gives docs-adr-reviewer a single surface to audit:
 
 ## Consolidation
 
-After Phase 4, run `/jc-consolidate-docs` to graduate settled content,
+After Phase 5, run `/jc-consolidate-docs` to graduate settled content,
 extract reusable patterns, rotate the napkin, manage fitness, and
 update the practice exchange.
 
@@ -1659,7 +1553,7 @@ of reviewer findings consistent with the plan's own principles:
    from the ADR-160 authorship — they are different risk classes.
    Source: architecture-reviewer-barney.
 3. **Split L-DOC and L-EH into phased pairs in the todos list** — they are
-   effectively four lanes across Phase 1 and Phase 4. Source:
+   effectively four lanes across Phase 1 and Phase 5. Source:
    architecture-reviewer-barney.
 4. **L-3 `enrichMcpRequestContext` lives in the MCP app**, not in
    `@oaknational/sentry-node`. It is MCP-specific domain logic; keeping it
@@ -1806,8 +1700,8 @@ re-openable framing.
 11. **L-15 timing and the broader sequence**. **Sequence is fixed:
     (1) this MCP observability push completes → (2) user-facing
     search tool (MCP App widget) → (3) Search CLI observability on
-    the next branch.** L-15 strategy close-out happens in Phase 4 of
-    this plan, informed by Phase 1-3 operational data, before the
+    the next branch.** L-15 strategy close-out happens in Phase 5 of
+    this plan, informed by Phase 1-4 operational data, before the
     user-facing-search work begins.
 
 ### A.4 Additional Owner Direction (2026-04-17)
