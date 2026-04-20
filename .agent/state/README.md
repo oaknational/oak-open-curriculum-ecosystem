@@ -15,6 +15,12 @@ surfaces with explicit authority, writers, readers, and expiry semantics.
 | [`repo-continuity.md`](repo-continuity.md) | Canonical repo-level continuity contract | Current session to a few sessions | `session-handoff` | Canonical for continuity contract; subordinate to active plans for scope |
 | [`workstreams/<slug>.md`](workstreams/README.md) | Short-horizon lane resumption brief (one per active workstream) | Days to weeks | `session-handoff`; optionally `GO` when a workstream boundary is crossed | Lane-level short-horizon state; subordinate to both continuity contract and plans |
 
+Runtime tactical track cards live at
+[`.agent/runtime/tracks/`](../runtime/README.md) and are **also
+git-tracked**. They coordinate across agents, devs, and locations
+through the normal git channel — a collaborative track creates
+multiple single-writer cards, disambiguated by filename.
+
 ## Authority Order
 
 When surfaces disagree, the order is:

@@ -4,9 +4,14 @@
 track cards are authored during OAC Phase 3 pilot.
 
 This directory holds **runtime** (thread-aware, short-horizon) state
-surfaces. Unlike `.agent/state/`, which is tracked, runtime surfaces are
-gitignored so they do not propagate tactical coordination state across
-checkouts or agents.
+surfaces. Track cards are **git-tracked**: multi-agent and multi-location
+collaboration on a track happens through the normal git channel. A dev in
+one location, an agent in another session, and a second dev in a third
+checkout can all read and coordinate off the same track cards.
+
+Single-writer-per-card still holds. Multiple writers on the same
+conceptual track create multiple cards, disambiguated by the
+`<workstream>--<agent>--<branch>.md` naming convention.
 
 ## Surfaces
 
@@ -30,18 +35,29 @@ Every track card must cover:
 - **`promotion_needed`** — flag for signals that should graduate into
   the learning loop or the owning workstream brief.
 
-## Single-Writer Rule
+## Single-Writer Per Card
 
-Track cards are single-writer by default. Multiple agents operating in
-the same workstream MUST use distinct track cards (by agent + branch
-disambiguator). Shared-writer cards are an anti-pattern — they recreate
-the prompt-as-state-host collision the OAC lane exists to resolve.
+Each card is single-writer. A collaborative track creates multiple
+cards — one per agent/dev — each with its own writer. Readers
+consume the set. Shared-writer cards are an anti-pattern; they
+recreate the prompt-as-state-host collision the OAC lane exists to
+resolve.
 
-## Gitignore
+The writer is the agent or dev named in the card's
+`<workstream>--<agent>--<branch>` filename. Another agent wanting
+to coordinate creates its own card with a distinct identity
+segment; it does not write to someone else's card.
 
-`tracks/*.md` is gitignored. `.gitkeep` and this README are tracked so
-the directory structure and convention remain discoverable on a fresh
-checkout.
+## Tracked, Not Gitignored
+
+`tracks/*.md` is git-tracked. The `.gitkeep` preserves the directory
+when no cards exist. Collaboration across agents, devs, and locations
+happens through normal git operations: commits, pulls, merges.
+
+Cards should be created, updated, resolved, and deleted through the
+same cadence as any other tracked file — commit when you create or
+meaningfully update; don't leave uncommitted card edits across session
+boundaries.
 
 ## Expiry Discipline
 

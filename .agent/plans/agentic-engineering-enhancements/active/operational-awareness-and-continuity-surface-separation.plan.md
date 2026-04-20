@@ -19,7 +19,8 @@ todos:
     note: "Task 2.2 scaffolding created 2026-04-20: .agent/state/README.md, .agent/state/repo-continuity.md (skeleton), .agent/state/workstreams/README.md, .agent/runtime/README.md, .agent/runtime/tracks/.gitkeep, plus .gitignore rule for runtime/tracks/*.md (README and .gitkeep remain tracked). Task 2.1 workflow-doc updates landed in session-handoff.md (new OAC Pilot section describing refresh order for repo-continuity + workstream brief + track card), GO skill (new OAC Pilot read order before Live continuity contract), and session-continuation.prompt.md (OAC pilot transition note at §This Prompt's Role). Switchover timing: state surfaces remain un-populated until OAC Phase 3 pilot scenarios exercise them; Live continuity contract section of prompt retires at OAC Phase 4 rollout. No compatibility layer created — pilot-phase-only parallel operation is bounded by Phase 3's explicit promote/adjust/reject decision."
   - id: oa-phase-3-pilot
     content: "Phase 3: Pilot the markdown-first model with parallel tracks and collect evidence."
-    status: pending
+    status: completed
+    note: "Single-session dogfooding ran scenarios 1, 4, 5, 6 on 2026-04-20. Evidence at .agent/analysis/operational-awareness-pilot-evidence.md. All four scenarios PASSED. Mid-pilot owner correction inverted the gitignore decision: tracks are git-tracked (not gitignored) because multi-agent + multi-location collaboration flows through the normal git channel. Scenarios 2 and 3 are no longer hard to simulate — they are naturally exercised by any multi-session branch life. Calibration decision: PROMOTE. Refinements folded into Phase 4: (a) rename repo-continuity 'Primary workstream brief' to 'Branch-primary workstream brief' + add 'Current session focus'; (b) clarify authority order as tiebreaker for same-scope conflict not gating-rule for different-scope claims; (c) candidate expiry-check helper; (d) candidate napkin-promotion helper. Portability criteria partially met (single-agent scenarios evidenced; multi-agent evidence will accumulate organically)."
   - id: oa-phase-4-rollout
     content: "Phase 4: Roll out, close documentation propagation, and decide whether portability promotion is justified."
     status: pending
@@ -159,7 +160,10 @@ conversation surfaces.
 3. **Tactical track-card surfaces**
    - default target:
      `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md`
-   - purpose: thread-aware tactical coordination, gitignored by default
+   - purpose: thread-aware tactical coordination, **git-tracked** so
+     multi-agent and multi-location collaboration happens through
+     the normal git channel; single-writer-per-card, multiple cards
+     per collaborative track disambiguated by filename
 
 ### Authority order
 

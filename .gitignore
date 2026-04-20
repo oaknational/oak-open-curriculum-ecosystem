@@ -49,12 +49,12 @@ packages/sdks/oak-sdk-codegen/reference/*.json
 .agent/reference-local/**/*
 !.agent/reference-local/.gitignore
 
-# Runtime tactical track cards (OAC Phase 2 scaffolding, 2026-04-20).
-# Track cards are single-writer, thread-aware, short-horizon coordination
-# surfaces. They must not propagate across checkouts or agents.
-# The directory structure and README convention are tracked; the cards
-# themselves are not. See .agent/runtime/README.md.
-.agent/runtime/tracks/*.md
+# Runtime tactical track cards are *tracked*, not gitignored: multi-agent
+# and multi-location collaboration on a track happens via git, the same
+# coordination channel the rest of the repo uses. Single-writer-per-card
+# still holds; multiple cards disambiguate multiple writers via the
+# <workstream>--<agent>--<branch>.md naming convention.
+# See .agent/runtime/README.md.
 
 # Logs
 *.log
