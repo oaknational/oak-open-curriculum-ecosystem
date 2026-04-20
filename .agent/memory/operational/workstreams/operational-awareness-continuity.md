@@ -31,10 +31,11 @@ Phase 3 with explicit promote / adjust / reject decision. Then Phase
 - **Phase 2** (workflow integration): COMPLETE. Scaffolding created
   at `.agent/memory/operational/`, `.agent/memory/operational/tracks/` (commit `ffcad2aa`).
   Workflow doc updates landed in `session-handoff.md`, `GO` skill, and
-  `session-continuation.prompt.md`. Initial pilot-phase framing has
-  since been retired — as of 2026-04-20 (Phase 4.1) the state surfaces
-  are the primary continuity host and the prompt is a behavioural
-  entry surface only.
+  (historically) `session-continuation.prompt.md`. Initial pilot-phase
+  framing was retired in Phase 4.1; the prompt itself was then
+  dissolved later on 2026-04-20 (doctrine to PDR-026 + orientation
+  directive; rituals to start-right-quick and session-handoff).
+  Operational memory is the sole continuity host.
 - **Phase 3** (self-hosted pilot): COMPLETE. Evidence at
   `.agent/analysis/operational-awareness-pilot-evidence.md`.
   Scenarios 1, 4, 5, 6 all PASS. Calibration decision: **PROMOTE**.

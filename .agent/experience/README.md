@@ -17,10 +17,10 @@ This provides a Chronos time bridge between Kairos time sessions. The more direc
 Use this as a fast ritual to preserve and extend continuity across sessions.
 
 1. Ground on primary references
+   - Read: [start-right-quick](../skills/start-right-quick/shared/start-right.md)
    - Read: [GO workflow](../skills/go/shared/go.md)
-   - Read: [session-continuation.prompt.md](../prompts/session-continuation.prompt.md)
    - Read: [AGENT.md](../directives/AGENT.md)
-   - Skim: [principles.md](../directives/principles.md), [TypeScript practice](../../docs/governance/typescript-practice.md)
+   - Skim: [principles.md](../directives/principles.md), [orientation.md](../directives/orientation.md), [TypeScript practice](../../docs/governance/typescript-practice.md)
 
 2. Sample recent experience
    - Skim 1–3 relevant files below (Highlights). Note tags, decisions, open questions.

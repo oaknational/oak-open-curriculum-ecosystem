@@ -5,19 +5,9 @@ import { tmpdir } from 'node:os';
 export interface HealthyRepoOptions {
   readonly omitCommandAdapters?: readonly string[];
   readonly practiceBoxFiles?: readonly string[];
-  readonly continuityPracticeBoxCount?: number;
-  readonly removeContinuityField?: ContinuityField;
+  readonly continuityLastRefreshed?: string;
+  readonly omitContinuityContract?: boolean;
 }
-type ContinuityField =
-  | 'Workstream'
-  | 'Active plans'
-  | 'Current state'
-  | 'Current objective'
-  | 'Hard invariants / non-goals'
-  | 'Recent surprises / corrections'
-  | 'Open questions / low-confidence areas'
-  | 'Next safe step'
-  | 'Deep consolidation status';
 
 const HOOK_POLICY_FIXTURE = JSON.stringify(
   {
@@ -69,11 +59,6 @@ export function createHealthyRepo(options: HealthyRepoOptions = {}): string {
   const repoRoot = mkdtempSync(join(tmpdir(), 'agent-health-'));
   const omitCommandAdapters = new Set(options.omitCommandAdapters ?? []);
   const practiceBoxFiles = options.practiceBoxFiles ?? [];
-  const continuityPracticeBoxCount = options.continuityPracticeBoxCount ?? practiceBoxFiles.length;
-  const continuityLines = buildContinuityLines(
-    continuityPracticeBoxCount,
-    options.removeContinuityField,
-  );
 
   writeRepoFile(repoRoot, '.agent/commands/review.md', '# review');
   writeRepoFile(repoRoot, '.agent/commands/gates.md', '# gates');
@@ -86,25 +71,20 @@ export function createHealthyRepo(options: HealthyRepoOptions = {}): string {
     writeRepoFile(repoRoot, `.agent/practice-core/incoming/${fileName}`, '# incoming');
   }
 
-  writeContinuityPrompt(repoRoot, continuityLines);
+  if (!options.omitContinuityContract) {
+    writeContinuityContract(repoRoot, options.continuityLastRefreshed ?? '2026-04-03');
+  }
 
   return repoRoot;
 }
-function buildContinuityLines(
-  continuityPracticeBoxCount: number,
-  removeContinuityField: ContinuityField | undefined,
-): string[] {
-  return [
-    '- **Workstream**: health probe',
-    '- **Active plans**: none',
-    '- **Current state**: aligned',
-    '- **Current objective**: stay aligned',
-    '- **Hard invariants / non-goals**: none',
-    '- **Recent surprises / corrections**: none',
-    '- **Open questions / low-confidence areas**: none',
-    '- **Next safe step**: continue',
-    `- **Deep consolidation status**: practice box has ${continuityPracticeBoxCount} items awaiting integration`,
-  ].filter((line) => !removeContinuityField || !line.includes(`**${removeContinuityField}**`));
+function writeContinuityContract(repoRoot: string, lastRefreshed: string): void {
+  // Minimal continuity contract — the probe checks presence + freshness
+  // only; structural assertions belong to the write-side (session-handoff).
+  writeRepoFile(
+    repoRoot,
+    '.agent/memory/operational/repo-continuity.md',
+    ['# Repo Continuity', '', `**Last refreshed**: ${lastRefreshed}`, ''].join('\n'),
+  );
 }
 function writeCommandAdapters(repoRoot: string, omitCommandAdapters: ReadonlySet<string>): void {
   writeAdapterIfEnabled(
@@ -146,13 +126,13 @@ function writeCommandAdapters(repoRoot: string, omitCommandAdapters: ReadonlySet
   writeAdapterIfEnabled(
     repoRoot,
     '.agents/skills/jc-review/SKILL.md',
-    'Read and follow `.agent/commands/review.md`.',
+    '---\nname: jc-review\ndescription: Review a pull request\n---\n',
     omitCommandAdapters,
   );
   writeAdapterIfEnabled(
     repoRoot,
     '.agents/skills/jc-gates/SKILL.md',
-    'Read and follow `.agent/commands/gates.md`.',
+    '---\nname: jc-gates\ndescription: Run quality gates\n---\n',
     omitCommandAdapters,
   );
 }
@@ -199,28 +179,6 @@ function initialisePracticeBox(repoRoot: string): void {
   mkdirSync(join(repoRoot, '.agent/practice-core/incoming'), { recursive: true });
   writeRepoFile(repoRoot, '.agent/practice-core/incoming/.gitkeep', '');
 }
-function writeContinuityPrompt(repoRoot: string, continuityLines: readonly string[]): void {
-  writeRepoFile(
-    repoRoot,
-    '.agent/prompts/session-continuation.prompt.md',
-    [
-      '---',
-      'prompt_id: session-continuation',
-      'title: "Session Continuation"',
-      'type: workflow',
-      'status: active',
-      'last_updated: 2026-04-03',
-      '---',
-      '',
-      '# Session Continuation',
-      '',
-      '## Live Continuity Contract',
-      '',
-      ...continuityLines,
-      '',
-    ].join('\n'),
-  );
-}
 function writeAdapterIfEnabled(
   repoRoot: string,
   relativePath: string,
@@ -234,6 +192,7 @@ function writeAdapterIfEnabled(
   writeRepoFile(repoRoot, relativePath, content);
 }
 function writeRepoFile(repoRoot: string, relativePath: string, content: string): void {
-  mkdirSync(join(repoRoot, relativePath, '..'), { recursive: true });
-  writeFileSync(join(repoRoot, relativePath), content, 'utf8');
+  const absolutePath = join(repoRoot, relativePath);
+  mkdirSync(join(absolutePath, '..'), { recursive: true });
+  writeFileSync(absolutePath, content);
 }

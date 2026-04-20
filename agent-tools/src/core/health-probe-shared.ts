@@ -14,18 +14,7 @@ export const HOOK_POLICY_PATH = '.agent/hooks/policy.json';
 export const CLAUDE_SETTINGS_PATH = '.claude/settings.json';
 export const SURFACE_MATRIX_PATH = '.agent/memory/executive/cross-platform-agent-surface-matrix.md';
 export const PRACTICE_BOX_DIR = '.agent/practice-core/incoming';
-export const CONTINUITY_PROMPT_PATH = '.agent/prompts/session-continuation.prompt.md';
-export const REQUIRED_CONTINUITY_FIELDS = [
-  'Workstream',
-  'Active plans',
-  'Current state',
-  'Current objective',
-  'Hard invariants / non-goals',
-  'Recent surprises / corrections',
-  'Open questions / low-confidence areas',
-  'Next safe step',
-  'Deep consolidation status',
-] as const;
+export const CONTINUITY_CONTRACT_PATH = '.agent/memory/operational/repo-continuity.md';
 export const FRESHNESS_WARNING_DAYS = 7;
 
 const SUPERSEDED_COMMANDS = new Set(['experience']);
@@ -119,11 +108,6 @@ export function readFrontmatterValue(content: string, key: string): string | nul
   const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
   const valueMatch = match[1].match(new RegExp(`^${escapedKey}:\\s*(.+)$`, 'mu'));
   return valueMatch?.[1]?.trim().replace(/^['"]|['"]$/gu, '') ?? null;
-}
-
-export function readPromptPracticeBoxCount(promptText: string): number | null {
-  const match = promptText.match(/practice box has (\d+) items? awaiting integration/iu);
-  return match?.[1] ? Number.parseInt(match[1], 10) : null;
 }
 
 export function calculateAgeDays(isoDate: string, now: Date): number | null {

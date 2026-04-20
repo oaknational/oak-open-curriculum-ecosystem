@@ -5,11 +5,24 @@ needs carried-forward execution context, domain-specific sequencing, or a
 plan-tied playbook. Use commands and skills for generic workflows; use prompts
 when the session needs a focused operational brief.
 
+**General session orientation** is no longer prompt-hosted. What was
+`session-continuation.prompt.md` has been dissolved (2026-04-20): its
+doctrine moved to
+[PDR-026 (Per-Session Landing Commitment)](../practice-core/decision-records/PDR-026-per-session-landing-commitment.md)
+and
+[`orientation.md`](../directives/orientation.md) (layering contract);
+its ritual moved to
+[`start-right-quick`](../skills/start-right-quick/shared/start-right.md)
+(session open) and
+[`session-handoff`](../commands/session-handoff.md) (session close).
+Live state lives in
+[`.agent/memory/operational/`](../memory/operational/). Remaining
+prompts below are domain-specific handover briefs for focused work.
+
 ## Active Prompt Index
 
 | Prompt | Type | Purpose | Primary plan/reference |
 |---|---|---|---|
-| [session-continuation.prompt.md](session-continuation.prompt.md) | workflow | Behavioural entry surface for every session — grounding read order, per-session landing commitment, reviewer discipline, core invariants, durable guidance. State lives in `.agent/memory/operational/*` and `.agent/memory/operational/tracks/*`, not in this prompt. | [memory/operational/repo-continuity.md](../memory/operational/repo-continuity.md), [memory/operational/workstreams/](../memory/operational/workstreams/), [memory/operational/tracks/README.md](../memory/operational/tracks/README.md) |
 | [agentic-engineering/governance-planes-research-and-reporting.prompt.md](agentic-engineering/governance-planes-research-and-reporting.prompt.md) | handover | Session-entry prompt for turning the governance-planes seed note into deeper research, sharper local analysis, and promoted reporting | [governance-planes-and-supervision/README.md](../research/agentic-engineering/governance-planes-and-supervision/README.md), [governance-concepts-and-agentic-mechanism-integration.plan.md](../plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md), [governance-concepts-and-integration-report.md](../reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md) |
 | [gt-review.md](gt-review.md) | handover | Ground-truth evaluation session prompt for exhaustive review against both MCP tools and bulk data | [ground-truth-review-checklist.md](../plans/semantic-search/archive/completed/ground-truth-review-checklist.md), [ground-truth-session-template.md](../plans/semantic-search/templates/ground-truth-session-template.md) |
 | [semantic-search/semantic-search.prompt.md](semantic-search/semantic-search.prompt.md) | handover | Primary semantic-search session entry point — dormant, all plans archived | [active/README.md](../plans/semantic-search/active/README.md) |

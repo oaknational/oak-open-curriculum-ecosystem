@@ -1,11 +1,13 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-20 (session handoff — docs iteration
-closed; continuity surfaces re-synced to the landed L-8 plan state)
-**Status**: Authoritative for the fields below. The `Live continuity
-contract` section of `.agent/prompts/session-continuation.prompt.md` is
-retired. The prompt is now a behavioural entry surface only; state
-lives in this file, `workstreams/<slug>.md`, and `../memory/operational/tracks/*.md`.
+**Last refreshed**: 2026-04-20 (memory-taxonomy restructure + prompt
+dissolution landed; operational memory is now the sole state host)
+**Status**: Authoritative for the fields below. The continuation
+prompt has been dissolved; its doctrine moved to
+[PDR-026](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md)
++ [`orientation.md`](../../directives/orientation.md); its rituals
+moved to `start-right-quick` and `session-handoff`. State lives in
+this file, `workstreams/<slug>.md`, and `tracks/*.md`.
 
 ## Active workstreams
 

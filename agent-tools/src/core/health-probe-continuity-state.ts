@@ -1,123 +1,106 @@
 import {
   calculateAgeDays,
-  CONTINUITY_PROMPT_PATH,
+  CONTINUITY_CONTRACT_PATH,
   FRESHNESS_WARNING_DAYS,
   readFrontmatterValue,
   readOptionalText,
-  readPromptPracticeBoxCount,
-  REQUIRED_CONTINUITY_FIELDS,
 } from './health-probe-shared';
 import type { HealthCheckResult } from './health-probe-types';
 
-export function evaluateContinuityPromptFreshness(
+const CHECK_KEY = 'continuity-contract-freshness';
+const CHECK_LABEL = 'Continuity contract freshness';
+
+/**
+ * Behaviour-level check: does operational memory carry a recent
+ * continuity contract at the canonical path?
+ *
+ * This probe asserts presence and freshness only. The structure of
+ * the contract (sections, fields) is the write-side responsibility
+ * of `session-handoff`; duplicating structural checks here would be
+ * configuration-assertion (see `.agent/directives/testing-strategy.md`).
+ */
+export function evaluateContinuityContractFreshness(
   repoRoot: string,
   now: Date,
-  practiceBoxFileCount: number,
 ): HealthCheckResult {
-  const promptText = readOptionalText(repoRoot, CONTINUITY_PROMPT_PATH);
-  if (promptText === null) {
-    return {
-      key: 'continuity-prompt-freshness',
-      label: 'Continuity prompt freshness',
-      status: 'fail',
-      summary: `${CONTINUITY_PROMPT_PATH} is missing.`,
-      details: [`The live continuity contract must exist at ${CONTINUITY_PROMPT_PATH}.`],
-    };
+  const contractText = readOptionalText(repoRoot, CONTINUITY_CONTRACT_PATH);
+  if (contractText === null) {
+    return missingContractResult();
   }
 
-  const failureDetails = collectContinuityFailureDetails(promptText, now);
-  if (failureDetails.length > 0) {
-    return {
-      key: 'continuity-prompt-freshness',
-      label: 'Continuity prompt freshness',
-      status: 'fail',
-      summary: 'The continuity prompt is missing required structural contract data.',
-      details: failureDetails,
-    };
+  const lastRefreshed = readContinuityLastRefreshed(contractText);
+  if (!lastRefreshed) {
+    return missingFreshnessMarkerResult();
   }
 
-  const warningDetails = collectContinuityWarningDetails(promptText, now, practiceBoxFileCount);
-  if (warningDetails.length > 0) {
-    return {
-      key: 'continuity-prompt-freshness',
-      label: 'Continuity prompt freshness',
-      status: 'warn',
-      summary: getContinuityWarningSummary(warningDetails),
-      details: warningDetails,
-    };
+  const ageDays = calculateAgeDays(lastRefreshed, now);
+  if (ageDays === null) {
+    return invalidFreshnessDateResult(lastRefreshed);
+  }
+
+  if (ageDays > FRESHNESS_WARNING_DAYS) {
+    return staleContractResult(lastRefreshed, ageDays);
   }
 
   return {
-    key: 'continuity-prompt-freshness',
-    label: 'Continuity prompt freshness',
+    key: CHECK_KEY,
+    label: CHECK_LABEL,
     status: 'pass',
-    summary: 'The live continuity contract is present, recent, and structurally complete.',
+    summary: 'The live continuity contract is present and recent.',
     details: [],
   };
 }
 
-function collectContinuityFailureDetails(promptText: string, now: Date): string[] {
-  const failureDetails: string[] = [];
-
-  if (!promptText.includes('## Live Continuity Contract')) {
-    failureDetails.push('The prompt is missing the `Live Continuity Contract` section.');
-  }
-
-  for (const field of REQUIRED_CONTINUITY_FIELDS) {
-    if (!promptText.includes(`**${field}**`)) {
-      failureDetails.push(`The continuity contract is missing the required field \`${field}\`.`);
-    }
-  }
-
-  const lastUpdated = readFrontmatterValue(promptText, 'last_updated');
-  if (!lastUpdated) {
-    failureDetails.push('The prompt frontmatter is missing `last_updated`.');
-    return failureDetails;
-  }
-
-  const ageDays = calculateAgeDays(lastUpdated, now);
-  if (ageDays === null) {
-    failureDetails.push(
-      `The prompt \`last_updated\` value \`${lastUpdated}\` is not a valid ISO date.`,
-    );
-  }
-
-  return failureDetails;
+function missingContractResult(): HealthCheckResult {
+  return {
+    key: CHECK_KEY,
+    label: CHECK_LABEL,
+    status: 'fail',
+    summary: `${CONTINUITY_CONTRACT_PATH} is missing.`,
+    details: [
+      `The live continuity contract must exist at ${CONTINUITY_CONTRACT_PATH} (operational memory).`,
+    ],
+  };
 }
 
-function collectContinuityWarningDetails(
-  promptText: string,
-  now: Date,
-  practiceBoxFileCount: number,
-): string[] {
-  const warningDetails: string[] = [];
-  const lastUpdated = readFrontmatterValue(promptText, 'last_updated');
-
-  if (lastUpdated) {
-    const ageDays = calculateAgeDays(lastUpdated, now);
-    if (ageDays !== null && ageDays > FRESHNESS_WARNING_DAYS) {
-      warningDetails.push(
-        `\`${CONTINUITY_PROMPT_PATH}\` last_updated: ${lastUpdated} (${ageDays} days old).`,
-      );
-    }
-  }
-
-  const promptPracticeBoxCount = readPromptPracticeBoxCount(promptText);
-  if (promptPracticeBoxCount !== null && promptPracticeBoxCount !== practiceBoxFileCount) {
-    warningDetails.push(
-      `Prompt says the practice box has ${promptPracticeBoxCount} incoming item(s); the filesystem currently has ${practiceBoxFileCount}.`,
-    );
-  }
-
-  return warningDetails;
+function missingFreshnessMarkerResult(): HealthCheckResult {
+  return {
+    key: CHECK_KEY,
+    label: CHECK_LABEL,
+    status: 'fail',
+    summary: 'The continuity contract has no `Last refreshed` marker.',
+    details: [
+      'Add a `**Last refreshed**: YYYY-MM-DD` line (or a `last_updated:` frontmatter field) so freshness can be tracked.',
+    ],
+  };
 }
 
-function getContinuityWarningSummary(warningDetails: readonly string[]): string {
-  if (warningDetails.length > 1) {
-    return 'The continuity prompt is structurally valid but needs a freshness refresh.';
-  }
+function invalidFreshnessDateResult(lastRefreshed: string): HealthCheckResult {
+  return {
+    key: CHECK_KEY,
+    label: CHECK_LABEL,
+    status: 'fail',
+    summary: 'The continuity contract freshness marker is not a valid ISO date.',
+    details: [`\`Last refreshed\` value \`${lastRefreshed}\` is not a valid ISO date.`],
+  };
+}
 
-  return warningDetails[0]?.includes('practice box')
-    ? 'The continuity prompt no longer matches the live practice-box state.'
-    : 'The continuity prompt is older than the freshness target and should be refreshed.';
+function staleContractResult(lastRefreshed: string, ageDays: number): HealthCheckResult {
+  return {
+    key: CHECK_KEY,
+    label: CHECK_LABEL,
+    status: 'warn',
+    summary: 'The continuity contract is older than the freshness target and should be refreshed.',
+    details: [
+      `\`${CONTINUITY_CONTRACT_PATH}\` Last refreshed: ${lastRefreshed} (${ageDays} days old).`,
+    ],
+  };
+}
+
+function readContinuityLastRefreshed(contractText: string): string | null {
+  const match = contractText.match(/\*\*Last refreshed\*\*:\s*([0-9]{4}-[0-9]{2}-[0-9]{2})/);
+  if (match?.[1]) {
+    return match[1];
+  }
+  return readFrontmatterValue(contractText, 'last_updated');
 }
