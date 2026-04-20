@@ -94,7 +94,7 @@ Observability plans in this directory build on that foundation.
 |---|---|---|
 | Engineering | Errors, performance, health | `active/sentry-observability-maximisation-mcp.plan.md` |
 | Product | What is used, by whom, how | `current/search-observability.plan.md` + (Phase 2) `current/observability-events-workspace.plan.md` |
-| Usability | Did the user succeed | `active/sentry-observability-maximisation-mcp.plan.md` (L-9, L-12) + (Phase 2) widget-session-outcome emission |
+| Usability | Did the user succeed | `active/sentry-observability-maximisation-mcp.plan.md` (L-9, L-12 — both **deferred to public beta 2026-04-20**; L-9 pending user-facing feedback surface, L-12 pending host-compat evidence for agentic-client runtimes) + (Phase 2) widget-session-outcome emission |
 | Accessibility | Preferences, frustration proxies, incomplete-flow correlation | (Phase 2) `current/accessibility-observability.plan.md` |
 | Security | Trust-boundary events (auth failure, rate-limit triggered) | (Phase 2) `current/security-observability.plan.md` |
 

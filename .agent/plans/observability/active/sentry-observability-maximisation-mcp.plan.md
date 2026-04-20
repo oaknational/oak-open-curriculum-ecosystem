@@ -52,7 +52,8 @@ todos:
     note: "UN-DROPPED 2026-04-20. Prior rationale (commit history, superseded) claimed tsup-vs-esbuild swap made the plugin path costlier than the shell-script flow; owner identified that the bespoke orchestrator landed at ~900 lines across four files plus 21 tests plus two build-config overrides plus ADR amendments — materially more complexity than the tsup -> esbuild swap. The sunk-cost framing now visible in the prior 'PARKED' note is itself an instance of the guardrail installed in commit 4bccba71. Forward path: author task #22 migration plan, run plan-time assumptions-reviewer pass pre-ExitPlanMode per new triggering scenarios, then execute."
   - id: l9-feedback
     content: "L-9 (Phase 3): captureFeedback pipeline; optionally surface as an MCP tool"
-    status: pending
+    status: deferred
+    note: "Deferred to public beta 2026-04-20. Feedback pipeline requires a user-facing collection surface that does not yet exist in alpha. Reopen when an alpha/beta user feedback path is defined."
   - id: l10-feature-flag-scaffolding
     content: "L-10 (Phase 5, MVP-deferred): provider-TBD featureFlagsIntegration shim; context-on-error loop wired so any future provider pays for itself"
     status: pending
@@ -64,13 +65,16 @@ todos:
     status: completed
   - id: l12-widget-sentry
     content: "L-12 (Phase 4): @sentry/browser (or @sentry/react after bundle-size review) in the MCP App widget with shared redaction via @oaknational/telemetry-redaction-core and linked traces"
-    status: pending
+    status: deferred
+    note: "Deferred to public beta 2026-04-20. The widget runtime surface is an agentic client (ChatGPT, Claude Desktop, etc.), not a standard browser. Sentry instrumentation behaviour inside those hosts is unverified and would need probing before committing to an integration shape. Reopen when host-compatibility evidence is available."
   - id: l13-alerts-dashboards-runbooks
     content: "L-13 (Phase 5): per-loop alert + dashboard panel + runbook entry with severity, routing, dedupe"
-    status: pending
+    status: deferred
+    note: "Deferred to public beta 2026-04-20. Alerts + dashboards require real signal distributions from L-1/L-3/L-4b; designing thresholds before seeing alpha noise/signal is premature optimisation that produces alert fatigue. Reopen when L-1/L-3/L-4b have accumulated enough alpha traffic to observe real distributions."
   - id: l14-third-party-trace-propagation
     content: "L-14 (Phase 5): security-gated trace propagation decision for non-Oak hosts (including Oak API boundary)"
-    status: pending
+    status: deferred
+    note: "Deferred to public beta 2026-04-20. Security-gated trace propagation to non-Oak hosts requires a deliberate policy decision that should not be rushed pre-alpha. Reopen when the trust-boundary policy owner is identified and an explicit decision surface (ADR) is ready."
   - id: l15-strategy-close-out
     content: "L-15 (Phase 5): record the Sentry-only vs dual-export vs minimal-operational strategy decision with rationale and reviewer attribution"
     status: pending
@@ -86,8 +90,8 @@ todos:
     status: completed
     note: "Landed 2026-04-19 (commit 9e1a26b2). §RED reshaped mid-execution: the prescribed structural content-presence test was authored, run red, then removed after testing-strategy.md review (tests must prove behaviour, not constrain doc wording). Acceptance moved to the reviewer matrix (docs-adr-reviewer + onboarding-reviewer) plus the manual reader-test. Both reviewers returned; P1/Critical findings actioned in-place (11 broken ADR filename slugs, SentryPostRedactionHooks vs SentryRedactionHooks conflation, userId/setUser scope correction, discoverability mesh). Follow-ups recorded in lane close evidence."
   - id: l-doc-final
-    content: "L-DOC final (Phase 5 per 2026-04-18 reshape; was Phase 4 pre-reshape): per-loop TSDoc on owning functions; ADR index entries; propagation to sentry-deployment-runbook, sentry-cli-usage, production-debugging-runbook, environment-variables; docs-adr-reviewer walk-through"
-    status: pending
+    content: "L-DOC final: DISSOLVED 2026-04-20. Docs are definition-of-done on every lane, not a separate phase — a separate L-DOC-final lane creates a drift window where code lands in Phases 3 and 4 without matching docs, which violates the repo's no-drift discipline. Each lane's REFACTOR phase now gates on: per-loop TSDoc on owning functions; ADR index entries for any new ADR touched; propagation to `sentry-deployment-runbook.md`, `sentry-cli-usage.md`, `production-debugging-runbook.md`, and `environment-variables.md` for the specific signals that lane emits; `docs-adr-reviewer` close review. `documentation-sync-log.md` entries land per-lane at lane close, not in a final sweep."
+    status: dissolved
   - id: ws-quality-gates
     content: "Full quality gate chain after each phase (pnpm check)"
     status: pending
@@ -330,14 +334,20 @@ opens after Phase 5 closes.
 |-----------------|---------|---------------------|---------------------------|
 | **Phase 1 — Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces before any new emission site. Every line written after Phase 1 is compile-time-gated. | L-0a, L-0b (both complete 2026-04-17); L-EH initial (ESLint built-in `preserve-caught-error` — supersedes original `require-error-cause` custom-rule plan; landed 2026-04-19); L-DOC initial; L-12-prereq (moved from old Phase 3 — extract `packages/core/telemetry-redaction-core/`); L-7 (moved from old Phase 2 — release/deploy linkage scripts unlock regression attribution for every subsequent smoke test); restructure Phase 5 carve-out (`require-observability-emission` ESLint rule + ADR-162 Proposed → Accepted; authored here rather than after emitters land) | — |
 | **Phase 2 — Schema Foundation** | Every downstream-analytics contract exists as code before any emitter consumes it. | — | [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md) WS1–WS6 (create `packages/core/observability-events/` + 7 MVP schemas + conformance helper); [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS1 carve-out (`no-vendor-observability-import` ESLint rule only; emission-persistence test deferred to Phase 5) |
-| **Phase 3 — Primary Emitters (Server)** | Server-side emission sites consume the Phase 2 schemas by import. Each lane's RED asserts schema conformance via the events-workspace helper. | L-1 (moved from old Phase 1 — free-signal integrations); L-2 (moved from old Phase 1 — delegates extraction); L-3 (was old Phase 2 — MCP request context enrichment); L-4b (moved within old Phase 2 — primary `Sentry.metrics.*` adapter); L-9 (was old Phase 3 — feedback pipeline) | — |
-| **Phase 4 — Cross-axis & Widget** | Widget = second emitting runtime under ADR-162's vendor-independence clause. Security + a11y sibling plans emit their axis events using Phase 2 schemas. Can parallelise within-phase. | L-12 (moved from old Phase 3 — widget Sentry) | [`security-observability.plan.md`](../current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered`; [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome` |
-| **Phase 5 — Operations + Conformance + Close-out** | Alerts can land because the emission landscape is real. Vendor-independence conformance runs pre-launch (previously blocked by schema foundation). MVP-deferred lanes cluster for clean branch close. | L-13 (was old Phase 4 — alerts + dashboards + runbooks); L-14 (was old Phase 4 — trust-boundary ADR); L-15 (was old Phase 4 — strategy close-out ADR); L-DOC final (was old Phase 4); L-EH final (was old Phase 4 — `prefer-result-pattern`); MVP-deferred lanes: L-4a (was old Phase 2 — transitional span-metrics), L-5 (was old Phase 2 — dynamic sampling), L-6 (was old Phase 2 — profiling), L-10 (was old Phase 3 — feature-flag TSDoc), L-11 (was old Phase 3 — AI-instrumentation TSDoc); L-8 (parked) | [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS2+ (emission-persistence test runs MCP server + widget + Search CLI in `SENTRY_MODE=off`); [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md) |
+| **Phase 3 — Primary Emitters (Server)** | Server-side emission sites consume the Phase 2 schemas by import. Each lane's RED asserts schema conformance via the events-workspace helper. | L-1 (free-signal integrations); L-2 (delegates extraction); L-3 (MCP request context enrichment); L-4b (primary `Sentry.metrics.*` adapter). **Deferred to public beta**: L-9 (feedback pipeline — user-facing surface not yet defined in alpha). | — |
+| **Phase 4 — Cross-axis** | Security + a11y sibling plans emit their axis events using Phase 2 schemas. Can parallelise within-phase. **Deferred to public beta**: L-12 (widget Sentry — runtime surface is agentic clients like ChatGPT/Claude Desktop, not a standard browser; instrumentation behaviour in those hosts is unverified). | — | [`security-observability.plan.md`](../current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered`; [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome` |
+| **Phase 5 — Operations + Conformance + Close-out** | Vendor-independence conformance runs pre-launch (previously blocked by schema foundation). Strategy close-out and error-handling final land while experience is fresh. | L-15 (strategy close-out ADR); L-EH final (`prefer-result-pattern` ESLint rule + first-tranche adoption); MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11; L-8 (now UN-DROPPED — see body). **Deferred to public beta**: L-13 (alerts/dashboards/runbooks — require real signal distributions from L-1/L-3/L-4b before threshold design is meaningful); L-14 (third-party trace propagation — security-gated policy decision). | [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS2+; [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md) |
 
-Cross-cutting tracks (L-EH, L-DOC) retain "initial + final" structure.
-Initial slices land in Phase 1; final slices in Phase 5. Acceptance
-of the cross-cutting tracks is assessed at branch close, not per
-phase.
+**Docs are definition-of-done on every lane — not a separate phase.**
+The original Phase 5 "L-DOC final" lane has been dissolved (2026-04-20).
+Every lane's REFACTOR gate includes: per-loop TSDoc on owning functions;
+ADR index entries for any new ADR touched; propagation to the operational
+runbooks and `environment-variables.md` for the specific signals that
+lane emits; `docs-adr-reviewer` close review; a `documentation-sync-log.md`
+entry for the lane. Docs drift is not permitted between lanes.
+
+L-EH retains its "initial + final" structure (rule enablement in Phase 1;
+authored `prefer-result-pattern` rule + first-tranche adoption in Phase 5).
 
 **Architectural rationale for this ordering** (summary):
 
@@ -1327,6 +1337,12 @@ with other lane-body cross-reference blocks):
 
 ### L-9 Feedback pipeline
 
+**Status**: 🔵 **DEFERRED to public beta** (2026-04-20). Feedback
+pipeline requires a user-facing collection surface that does not yet
+exist in alpha. Reopen when an alpha/beta user feedback path is
+defined. Body below preserved for continuity; not executed this
+branch.
+
 **Objective**. `captureFeedback` wired end-to-end, plus an MCP tool
 `submit-feedback` with a **fixed, closed-set input schema**. Privacy
 is a primary concern: the feedback pipeline MUST NOT accept free-text
@@ -1380,9 +1396,17 @@ describing how to query feedback and the fixed schema.
 
 ---
 
-## Phase 4 — Cross-axis & Widget
+## Phase 4 — Cross-axis
 
 ### L-12 Widget Sentry
+
+**Status**: 🔵 **DEFERRED to public beta** (2026-04-20). The widget
+runtime surface is an agentic client (ChatGPT, Claude Desktop, etc.),
+not a standard browser. Sentry instrumentation behaviour inside
+those hosts is unverified and would need probing before committing
+to an integration shape. Reopen when host-compatibility evidence is
+available. Body below preserved for continuity; not executed this
+branch.
 
 **Objective**. Instrument the MCP App browser widget with
 `@sentry/browser` (or `@sentry/react` after bundle-size review).
@@ -1448,6 +1472,14 @@ discharged.
 
 ### L-13 Alerts + dashboards + runbooks
 
+**Status**: 🔵 **DEFERRED to public beta** (2026-04-20). Alerts +
+dashboards require real signal distributions from L-1/L-3/L-4b to
+design thresholds meaningfully; picking thresholds before seeing
+alpha noise/signal is premature optimisation that produces alert
+fatigue. Reopen when L-1/L-3/L-4b have accumulated enough alpha
+traffic to observe real distributions. Body below preserved for
+continuity; not executed this branch.
+
 **Objective**. Per product loop, define baseline alert + dashboard
 panel + runbook entry + routing + escalation.
 
@@ -1482,9 +1514,14 @@ every axis, not only engineering):
 
 ### L-14 Third-party trace propagation (security-gated)
 
-Per the §MVP Classification, L-14 is **MVP-deferred** with a latent
-security-axis emission obligation discharged in
-[`security-observability.plan.md`](../current/security-observability.plan.md).
+**Status**: 🔵 **DEFERRED to public beta** (2026-04-20). Security-
+gated trace propagation to non-Oak hosts requires a deliberate
+policy decision that should not be rushed pre-alpha. Reopen when
+the trust-boundary policy owner is identified and an explicit
+decision surface (ADR) is ready. Latent security-axis emission
+obligation in
+[`security-observability.plan.md`](../current/security-observability.plan.md)
+continues regardless. Body below preserved for continuity.
 
 **Objective**. Decide allow/deny for non-Oak host propagation,
 including the Oak API from the MCP server boundary.
@@ -1511,25 +1548,39 @@ value from Phases 1–4. Record decision as an ADR.
 **Acceptance**: ADR merged; the parent plan's strategy-close-out
 obligation is discharged.
 
-### L-DOC (final) — Documentation coverage
+### L-DOC (final) — DISSOLVED 2026-04-20
 
-**Objective**. Every product loop in the taxonomy is discoverable from
-docs.
+**Status**: 🔴 **DISSOLVED**. Docs are now definition-of-done on
+every lane, not a separate phase. Batching documentation to a final
+phase creates a drift window during Phases 3 and 4 where code lands
+with only initial docs — a violation of the repo's no-drift
+discipline that the rest of the observability lane is authored
+against.
 
-**Deliverables**:
+**Distributed obligations** (now carried per-lane REFACTOR):
 
-- `packages/libs/sentry-node/README.md` — adapter contract, modes,
-  redaction barrier, metric surface, delegates seam.
-- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` —
-  MCP wrapper wiring, Express error handler, scope enrichment, span
-  model, feedback, feature-flag and AI scaffolding, widget.
-- Per-loop TSDoc on the owning function.
-- ADR index includes L-0 amendment and any Phase-5 ADRs.
-- `.agent/directives/AGENT.md § Essential Links` cross-links the
-  observability doc.
+- **Per-loop TSDoc on the owning function** — owned by each lane
+  that introduces the loop.
+- **ADR index entries** — updated in the lane that authors or
+  amends the ADR.
+- **Propagation to operational runbooks** (`sentry-deployment-
+  runbook.md`, `sentry-cli-usage.md`,
+  `production-debugging-runbook.md`,
+  `environment-variables.md`) — per-lane for the specific signals
+  that lane emits.
+- **`packages/libs/sentry-node/README.md`** — expanded per-lane as
+  each lane adds to the adapter contract; no single final sweep.
+- **`apps/oak-curriculum-mcp-streamable-http/docs/observability.md`**
+  — expanded per-lane as each lane lands a server-side wiring
+  change.
+- **`.agent/directives/AGENT.md § Essential Links`** — updated in
+  the lane that establishes the link target.
+- **`docs-adr-reviewer` close review** — runs at every lane close,
+  not once at the end.
+- **`documentation-sync-log.md`** — entry per lane, not per phase.
 
-**Acceptance**: structural test (from L-DOC initial) green on the full
-inventory; manual walk-through by a reviewer (docs-adr-reviewer).
+**Acceptance**: each lane's close criteria include the items above
+that apply to it. No lane closes with unmatched docs.
 
 ### L-EH (final) — Error-handling discipline
 

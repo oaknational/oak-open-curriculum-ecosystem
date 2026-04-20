@@ -1,3 +1,46 @@
+## 2026-04-20 (late) — The original note turned out to be the right structural brief
+
+### What Was Done
+
+- After the fourth, more audience-shaped update missed the owner's desired
+  feel, created a fifth document at
+  `.agent/reference/work-to-date/oak-ecosystem-work-to-date-summary-2026-04-20.md`
+  by returning much more directly to the original note's structure.
+- Removed the research-instruction wrapper, kept the note-style sectioning
+  (`Already done`, `Currently working on`, `Next directions`, `Future`),
+  added only a small number of highlights surfaced by the longer report,
+  and lightly tidied the wording.
+
+### Lesson
+
+- **When the owner provides a note-shaped brief, the note's structure may
+  itself be part of the requirement**: later editorial "improvements" can
+  solve the wrong problem if they replace the original organising shape
+  instead of clarifying it.
+
+---
+
+## 2026-04-20 (late) — Audience-first update needed a fresh artefact, not more patching
+
+### What Was Done
+
+- Implemented a fourth document at
+  `.agent/reference/work-to-date/oak-ecosystem-progress-update-2026-04-20.md`
+  as the new audience-facing progress update, written from scratch
+  rather than by iterating again on the snapshot.
+- Updated the outward reader routes in `README.md` and
+  `docs/foundation/README.md` so the main guidance now points at the
+  new update instead of the heavier report.
+
+### Lesson
+
+- **When the audience model changes, the document often needs to change
+  identity as well as wording**: a patch can improve tone, but if the
+  underlying frame is still repo-first the result keeps pulling back
+  towards insider language and structure. Fresh artefact, fresh frame.
+
+---
+
 ## 2026-04-20 (late) — Separate value layers must be named, even in short docs
 
 ### What Was Done

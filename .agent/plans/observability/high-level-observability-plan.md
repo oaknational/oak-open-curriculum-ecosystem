@@ -82,10 +82,15 @@ Concretely:
 **Pre-launch (launch-blocking)**:
 
 - [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) — the maximisation plan's MVP-in lanes
-  (L-0..L-4b, L-7, L-9, L-12, L-12-prereq, L-13, L-DOC initial/final,
-  L-EH initial/final, L-15). See plan's own §MVP classification (landed
-  in Phase 4 of the restructure) and §Execution Waves below for
-  the authoritative cross-plan ordering.
+  (L-0..L-4b, L-7, L-8, L-12-prereq, L-EH initial/final, L-15).
+  **Deferred to public beta 2026-04-20**: L-9 (feedback — no user-facing
+  collection surface in alpha), L-12 (widget Sentry — agentic-client
+  runtime host-compat unverified), L-13 (alerts — need real signal
+  distributions first), L-14 (trust-boundary trace propagation — needs
+  deliberate policy decision). **L-DOC split dissolved 2026-04-20** —
+  docs are now definition-of-done on every lane, not a separate lane.
+  See plan's own §Phase Structure for the authoritative cross-plan
+  ordering and §L-N frontmatter entries for status notes.
 - [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) — without this, product/usability/a11y/security
   axes have no schema contract.
 - [`current/synthetic-monitoring.plan.md`](current/synthetic-monitoring.plan.md) — without this, internal-only observability cannot detect
