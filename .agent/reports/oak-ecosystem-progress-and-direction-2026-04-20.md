@@ -7,170 +7,227 @@ audience: mixed (technical edtech, AI, engineering leadership)
 
 # Oak Open Curriculum Ecosystem — Progress and Direction (April 2026)
 
-## Framing
+## Why this exists
 
-The [oak-open-curriculum-ecosystem](https://github.com/oaknational/oak-open-curriculum-ecosystem)
-turns Oak National Academy's open curriculum data into AI-native infrastructure
-that is straightforward to build on, and is itself an exemplar of safe,
-high-throughput agentic engineering. The thesis is leverage: one infrastructure
-investment supporting many downstream tools — for teachers inside the AI
-clients they already use, and for edtech and AI developers inside the
-environments they already work in. The repository code is released under an
-open MIT licence so the wider education, edtech, and AI sectors can benefit
-directly; curriculum content licensing remains governed by upstream Oak / OGL
-terms (see [docs/foundation/VISION.md](../../docs/foundation/VISION.md) and
-[LICENCE-DATA.md](../../LICENCE-DATA.md)). The repository has a deliberate
-dual identity: a production product surface, and a working demonstration of
-the agentic engineering Practice that built it.
+Oak National Academy publishes a deeply resourced, fully sequenced UK
+curriculum through a public, open-licensed API. The Oak Open Curriculum
+Ecosystem is a small, disciplined project that turns that public asset into
+AI-native infrastructure: typed SDKs, a standards-compliant MCP server, a
+benchmarked hybrid semantic search service, and an MCP App user interface —
+all released under an open MIT licence so the wider education, edtech, and AI
+sectors can build on it directly. It is also a working demonstration of what
+agentic engineering can deliver when the engineering system around the agents
+is taken as seriously as the agents themselves.
 
-## What we have delivered
+What follows is a snapshot of what has been built, what is being built right
+now, what is intended next, and the impact this is set up to have. There are
+four equally important arenas of achievement here. None of them is the
+headline.
 
-Two milestones are complete: M0 (open private alpha — repository public on
-GitHub) and M1 (invite-only alpha — live HTTP MCP server at
-`curriculum-mcp-alpha.oaknational.dev`, v1.0.0 released). Per the
-[high-level plan](../plans/high-level-plan.md) and
-[milestone summaries](../milestones/README.md), the delivered work clusters
-into three reinforcing layers.
+## Achievement arena 1 — Products that move the sector
 
-**Product surfaces.** A strict, type-safe TypeScript Curriculum SDK generated
-end-to-end from the upstream OpenAPI schema, so any upstream API change flows
-through `pnpm sdk-codegen` into all dependent workspaces; a fully
-standards-compliant MCP server (HTTP and stdio) exposing Oak's curriculum to
-ChatGPT, Claude, Cursor, and other MCP-capable clients; a hybrid semantic
-search service on Elasticsearch Serverless with all the code needed to
-recreate it for internal or external use, plus its own SDK and MCP tools so
-the Oak corpus is fully discoverable from natural-language requests; an MCP
-Apps UI extension surface delivering a deeper visual experience aimed at
-teachers; and Clerk-managed authentication and authorisation. The search
-service is benchmarked through a ground-truth protocol (MRR 0.983 on lessons,
-41 ground truths across four indices) and matches or exceeds the existing
-product search surface.
+The ecosystem now ships a working, end-to-end stack that lets two distinct
+audiences use Oak's curriculum data on their own terms.
 
-**Engineering exemplar.** The monorepo is organised along disciplined lines —
-core packages do one job and have no dependencies, libraries compose core
-packages without importing each other, apps consume libraries and export
-nothing. Every third-party integration (Sentry, Elasticsearch, Clerk) is held
-behind a local adapter so the system degrades gracefully when a provider is
-unavailable and provider switches stay cheap. The repo carries 130+ ADRs, 21
-specialist sub-agent reviewers, and an always-blocking quality-gate suite
-(see [docs/foundation/strategic-overview.md](../../docs/foundation/strategic-overview.md)),
-with a dedicated onboarding flow and progressive-disclosure documentation. A
-schema-first cardinal rule ensures that all static types, validators, and
-guards flow from the OpenAPI schema, removing entire classes of drift.
+For **teachers**, there is a fully standards-compliant Model Context Protocol
+(MCP) server, deployed and live, that exposes Oak's high-quality, fully
+sequenced curriculum directly inside the AI tools they already use for
+planning — ChatGPT, Claude, Cursor, and any other MCP-capable client. Where
+those clients support richer interaction, an MCP App UI extension provides a
+deeper visual experience designed for teachers rather than for agents.
 
-**The Practice.** A self-reinforcing agentic engineering framework spanning
-research, planning, development, validation, release, and self-improvement.
-Control loops (gates, reviewers, strict rules) maintain quality within
-seconds of authoring; learning loops (napkin → distilled → ADRs/governance
-via `jc-consolidate-docs`) compound knowledge into permanent doctrine;
-continuity mechanisms preserve context across multiple time horizons (see
-[docs/foundation/agentic-engineering-system.md](../../docs/foundation/agentic-engineering-system.md)).
-A portable Practice Core travels between repositories via the
-[plasmid exchange model](../../docs/architecture/architectural-decisions/124-practice-propagation-model.md),
-so improvements developed in one repo flow back to others — the
-self-improvement is local *and* distributed, and accelerates as more repos
-join the exchange.
+For **edtech and AI developers**, the same MCP server (plus the underlying
+SDKs) makes Oak's curriculum trivial to bring into their own products, IDEs,
+and agent workflows. The cost of adopting Oak data has fallen by an order of
+magnitude, and the rate at which the wider sector can innovate on top of it
+has correspondingly risen.
 
-## What we are doing now (Milestone 2 in flight)
+Underneath both audiences sits a **hybrid semantic search service** built on
+Elasticsearch Serverless from Oak's bulk data, with all the code needed to
+recreate it for internal or external use. It has been benchmarked through a
+formal ground-truth protocol and reaches Mean Reciprocal Rank of 0.983 on
+lessons across 41 ground truths in four indices — matching, and typically
+exceeding, the existing Oak product search service. It has its own SDK, and
+MCP tools built on that SDK so the entire Oak corpus is fully discoverable to
+any agent through natural-language requests.
 
-Four lanes are currently open against the open-public-alpha gate.
+Authentication and authorisation are managed through Clerk so the service can
+be operated safely with real users, and the service is currently in
+invite-only alpha at `curriculum-mcp-alpha.oaknational.dev` with v1.0.0
+released.
 
-The **Sentry and OpenTelemetry foundation** is being deployed under the
-five-axis observability principle (engineering, product, usability,
-accessibility, security) ratified in
-[ADR-162](../../docs/architecture/architectural-decisions/162-observability-first.md).
-Runtime integration is complete; the remaining work is credential
-provisioning and the deployment evidence bundle for the HTTP MCP server. The
-collection's plan-density invariant is itself part of the discipline:
-planning capacity is governed alongside execution capacity (see
-[.agent/plans/observability/README.md](../plans/observability/README.md)).
+## Achievement arena 2 — Developer tooling that lowers the cost of building on Oak
 
-The **user-facing MCP App search experience** introduces a `user_search`
-surface that demonstrates the MCP Apps standard end-to-end and gives
-teachers a self-directed semantic search experience inside their AI client of
-choice. Together with the observability evidence bundle, this is the second
-of the two M2 / public-alpha blockers.
+The most quietly consequential thing in the repository may be the SDKs.
 
-The **knowledge graph alignment audit** runs the first canonical overlap
-check between the formally modelled Oak Curriculum Ontology and the
-search-facing records, with a deliberate direct-use-first stance: any
-commitment to Neo4j, Stardog, or another serving platform is held back
-until a real direct-use baseline and prototype comparison exist (see
-[.agent/plans/knowledge-graph-integration/README.md](../plans/knowledge-graph-integration/README.md)).
+The **Curriculum SDK** is a strict, type-safe TypeScript client for Oak's
+public API and bulk data. Crucially, it is *generated* end-to-end from the
+upstream OpenAPI schema — when Oak updates the API, the SDK (types,
+validators, type guards, and tool metadata alike) regenerates on its next
+build. There are no hand-maintained data structures to drift, and no manual
+catch-up cost for downstream consumers. This is enforced as a cardinal rule
+in the repository.
 
-The **Practice itself continues to evolve**: governance-plane concept
-integration, operational-awareness surface separation, hallucination and
-evidence-guard adoption, mutation testing, the Reviewer Gateway upgrade,
-and a growing roster of specialist capability triplets (Elasticsearch,
-Sentry, and Clerk shipped or in flight; Express, cyber/web-API security,
-privacy/GDPR, OOCE-internal, planning, TDD, and DevX queued).
+The **search SDK** does the same job for the semantic search service, and the
+MCP tools that power agent-facing search are themselves generated on top of
+it. The result is a clean, layered toolkit — API SDK, search SDK, MCP server
+— each of which can be adopted independently or composed together.
 
-## Adjacent threads worth naming
+For external developers, this means typed, validated, low-friction access to
+Oak from day one. For internal teams, it means new Oak capabilities can be
+integrated once and then exposed consistently across SDK and MCP surfaces.
+That property — *integrate once, expose everywhere* — is the quiet engine
+behind the ecosystem's leverage thesis.
 
-Several threads sit beyond the headline lanes and deserve to be visible.
+## Achievement arena 3 — Engineering as exemplar
 
-**Open education knowledge surfaces.** The
-[knowledge-graph-integration collection](../plans/knowledge-graph-integration/README.md)
-composes Oak with EEF Toolkit evidence, Education Skills surfaces, and an
-international comparator that routes the Finnish Opetushallitus public
-curriculum API through the same OpenAPI → SDK → MCP pipeline as the first
-external consumer. That second source is a deliberate test of the pipeline's
-portability claim — if the framework only fits Oak it is not a framework.
+The engineering bar in this repository is deliberately high, because in
+agentic development low quality compounds fast and the system can collapse
+suddenly when disorder becomes dominant. Several things are notable.
 
-**Aila complementarity.** The relationship with Oak's AI lesson-planning
-assistant is explicit and reinforcing rather than overlapping: shared
-curriculum retrieval, a shared knowledge-graph path, and shared safety
-patterns. Infrastructure work here strengthens product work there, and
-vice versa.
+**Disciplined, enforced architecture.** Core packages do one job and have no
+dependencies. Libraries compose core packages but never import each other —
+when functionality needs to be shared across libraries, it is factored out
+into a new core package. Apps consume libraries and export nothing. This is
+ordinary good practice taken seriously, and it pays back twice: the codebase
+stays comprehensible, and the orthogonal, independent parts can be remixed
+into new capabilities and new apps very quickly.
 
-**Continuity and institutional memory.** The napkin → distilled → patterns →
-ADR layering, the experience records, and the dated reports surface together
-form an answer to a question this kind of work raises directly: *where does
-institutional knowledge live when agents do most of the coding?* It lives
-in the repository, where both humans and agents read it.
+**Adapter-wrapped third-party services.** Every third-party integration —
+Sentry, Elasticsearch, Clerk — sits behind a small local adapter. The two
+benefits compound: if any service is unauthorised or unavailable the rest of
+the system keeps working, and switching providers later is cheap rather than
+catastrophic.
 
-**Plan governance.** The planning system is itself governed. Plans move
-through `future/` → `current/` → `active/` → `archive/` lifecycles, every
-plan carries activation triggers, and density invariants (such as the one in
-the observability collection) prevent planning capacity from outrunning
-execution capacity. A large research backlog is therefore an asset, not a
-liability.
+**More forms of automated checking than most projects carry.** The repository
+runs a wide, orthogonal quality-gate suite — type-check, lint, build, format,
+markdown lint, multiple test surfaces (unit, integration, UI, accessibility,
+end-to-end, smoke), and several specialised checks for portability,
+sub-agent definitions, and Practice fitness. All of them are always
+blocking. Their orthogonality is the point: they catch different classes of
+drift, and together they prevent low-grade entropy from accumulating.
 
-## Impact and value
+**Documentation as a first-class surface.** The repository carries 130+
+Architectural Decision Records (ADRs) so that "why was it done this way?" is
+almost always answerable, a dedicated onboarding flow for new contributors,
+TSDoc-driven generated docs, and a progressive-disclosure documentation
+hierarchy. One of the explicit roles of this repository is to be an exemplar
+of good software engineering practice.
 
-The intended impact compounds through three orders of effect, drawn from the
-[vision](../../docs/foundation/VISION.md). First-order: Oak can deliver
-SDK, MCP, and search infrastructure safely and quickly under the Practice.
-Second-order: Oak teams and external developers can build faster on typed
-APIs, search primitives, and MCP access to curriculum data. Third-order: the
-tools and workflows those builders create reduce teacher planning workload
-and improve teaching quality at scale. The MIT licence acts as a force
-multiplier across each order — every adopter is a potential contributor of
-patterns, evidence, and improvements back into the ecosystem.
+## Achievement arena 4 — Agentic engineering, and the Practice
+
+Most of the code, configuration, and documentation in this repository was
+authored by AI agents, directed by a single engineer. That this is possible
+at this quality level is itself a result. The path from there to here ran
+through several pioneering steps that are now consolidated into one
+framework.
+
+**Guardrails as part of the agent loop.** Traditional engineering guardrails
+— automated tests, linters, type-checkers — were repurposed as first-class,
+reliable feedback for agents, not just for humans. Failing a gate is an
+event the agent can observe, reason about, and correct, and gates are wired
+into the workflow at the right points to make that loop tight.
+
+**Stabilising frameworks for longer-horizon work.** Several frameworks were
+built and tested for the things long-running agentic work tends to break:
+session-state memory, learning loops, reusable rules, plan lifecycles, and
+continuity across sessions.
+
+**The Practice.** All of the above was then consolidated, extended, and
+hardened into *the Practice* — a complete agentic engineering framework
+covering research, planning, development, validation, release, guardrails,
+multiple forms of memory and feedback loop, and self-improvement. Three
+properties matter:
+
+1. It is **portable**. A small Practice Core travels between repositories
+   through a deliberate exchange mechanism, so each repo can carry its own
+   Practice instance. There is no hierarchy.
+2. It is **self-improving**, both locally — the napkin → distilled →
+   permanent doctrine flow turns lived mistakes into governance — and
+   **distributed**, because improvements proven in one Practice repo can
+   travel back into the others.
+3. It is **self-referential**. Rules about rule creation, patterns about
+   distillation quality, and learnings about consolidation all flow through
+   the same loop.
+
+The compounding effect is real: as more repositories run the Practice, the
+rate of practice improvement accelerates.
+
+## Currently in flight
+
+Public alpha is now blocked on two specific things, both already largely
+delivered. The first is **observability**: a Sentry and OpenTelemetry
+integration grounded in a five-axis observability principle covering
+engineering, product, usability, accessibility, and security signals.
+Runtime integration is in place; what remains is credential provisioning
+and a deployment evidence bundle for the HTTP MCP server.
+
+The second is the **user-facing MCP App search experience** — a polished,
+self-directed semantic search surface for teachers that simultaneously
+demonstrates the full capabilities of the search service and exemplifies how
+the new MCP Apps standard should be used.
+
+In parallel, two other lanes are progressing. The first **knowledge graph
+alignment audit** runs the first canonical overlap check between the formal
+Oak Curriculum Ontology and the search-facing records, with a deliberate
+direct-use-first stance: any commitment to Neo4j, Stardog, or another
+serving platform is held back until a real direct-use baseline and prototype
+comparison exist. And the **Practice itself** continues to evolve —
+governance-plane integration, hallucination and evidence-guard adoption,
+mutation testing, a Reviewer Gateway upgrade, and an expanding roster of
+specialist sub-agent reviewers (Elasticsearch, Sentry, and Clerk shipped or
+in flight; Express, security, privacy/GDPR, planning, TDD, and DevX queued).
 
 ## Next directions
 
-In the near term, closing M2 unlocks the open public alpha: the deployment
-evidence bundle for Sentry + OTel, and the user-facing MCP App search
-experience. M3 / public beta is scoped around production Clerk migration
-(social providers, public sign-up, edge rate limiting), exemplar UI
-hardening, operational alerting on the observability foundation, and a
-PostHog integration that has already been researched and planned. Beyond
-the milestone gates, two longer arcs are explicit: making the search
-service available from the upstream Oak API so its discovery affordances
-flow directly into Oak's primary product surface, and continuing to deepen
-the Practice — expanding the specialist roster, hardening continuity and
-memory systems, and nurturing the cross-repo Practice ecosystem so
-improvements travel both ways.
+In the near term, closing the two M2 lanes opens **public alpha** to anyone
+on the internet. Beyond that, **public beta** is scoped around production
+Clerk migration (social providers, public sign-up, edge rate limiting),
+operational alerting on the observability foundation, hardening of the
+exemplar UI, and PostHog integration — all already researched and planned.
 
-## On the backlog (and why that is healthy)
+Two longer arcs sit beyond the milestone gates. The first is to make the
+**search service available from the upstream Oak API itself**, so its
+discovery affordances flow into Oak's primary product surface and into every
+downstream tool that already consumes that API. The second is to keep
+**deepening the Practice and its memory and continuity systems**. Agents do
+the work with the repository, so the project context must live *in* the
+repository. Institutional knowledge about what was done no longer sits
+mostly with developers — they are doing less and less of the actual coding.
+The Practice is how that institutional knowledge continues to exist, and how
+it stays useful to both developers and agents.
 
-The repository carries a large body of research spanning product,
-engineering, and agentic-interaction work — enough to keep the project at
-the frontier for years. That is governed depth, not bloat. Nothing is
-promoted into a plan without an activation trigger, multiple plan classes
-have their own validation mechanisms, and dormant plans either fire,
-evolve, or close. The repository is designed to be self-explanatory; the
-fastest way to understand any of the threads above in detail is to read
-[docs/foundation/strategic-overview.md](../../docs/foundation/strategic-overview.md)
-and ask the repo about itself.
+## What lives in the backlog, and why that is a strength
+
+The repository carries a substantial body of research spanning product,
+engineering, agentic interactions, and open-education ecosystem
+opportunities — including, for example, an international curriculum
+comparator that routes the Finnish Opetushallitus public curriculum API
+through the same OpenAPI → SDK → MCP pipeline as a real second consumer
+of the framework, and several pedagogy-evidence integrations alongside
+Oak's own data. There is enough material here to keep the project at the
+frontier for years.
+
+This is not bloat or a useless backlog. Nothing is promoted into a plan
+without explicit triggers to activate or drop it, multiple plan classes
+each carry their own validation mechanism, and dormant plans either fire,
+evolve, or close on a schedule. The depth is governed.
+
+## Impact
+
+The intended impact compounds in three orders. First, Oak can now deliver
+SDK, MCP, and search infrastructure safely and quickly under the Practice.
+Second, Oak teams and external developers can build new things faster on
+typed APIs, search primitives, MCP access, and (soon) graph-augmented
+navigation. Third, the tools and workflows those builders create reduce
+teacher planning workload and improve teaching quality — which is Oak's
+stated mission.
+
+The open MIT licence is a deliberate amplifier across all three orders.
+Every adopter is a potential contributor of patterns, evidence, and
+improvements back into the ecosystem; every external use of the framework
+makes the framework itself more robust. Combine that with the
+self-improving Practice that propagates between repositories, and the value
+of the investment compounds rather than depreciates. There is, candidly, a
+lot more in here than first appearance suggests — the repository is built
+to teach itself to anyone who reads it.
