@@ -129,10 +129,16 @@ Outstanding triggers:
   graduation assessment.
 - Repeated surprise pattern — the three-day tsup-vs-esbuild drift has
   graduated the owner-beats-plan invariant into repo-continuity; still
-  to do is a PDR/rule drafting pass for the **perturbation mechanism**
-  candidates named in the 2026-04-20 evening napkin entry (non-goal
-  re-ratification ritual, standing-decision register, first-principles
-  metacognition prompt). Picking one and landing it is the single
+  to do is a PDR/rule drafting pass for the **perturbation mechanisms**
+  named in the 2026-04-20 evening napkin entry. The three candidates
+  — non-goal re-ratification ritual, standing-decision register,
+  first-principles metacognition prompt — are complements (not
+  alternatives): each fires at a different session phase and catches
+  a different failure mode. Defence in depth is appropriate here
+  because single-layer failure is costly, and variety of
+  perturbations is itself a perturbation (routinising a single
+  ritual blunts its jogging effect). Drafting all three as a bundle,
+  with a layered-model PDR plus three lightweight artefacts, is the
   highest-value governance output of the next consolidation pass.
 - Sunk-cost detector second-instance and the tracks-gitignored /
   menu-ification corrections from the earlier napkin.

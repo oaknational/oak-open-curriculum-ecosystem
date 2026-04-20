@@ -249,18 +249,27 @@ the agent answered "No, keep tsup" — precisely backwards.
 3. **Friction-ratchet should count owner-contradicts-plan as a
    first-class signal.** Currently counts tactical friction against a
    shape. Should also count "owner has said X, plan says not-X".
-4. **Perturbation mechanism needed** to jog the agent out of plan-text-
-   inherited local minima. Candidate shapes:
-   - **Non-goal re-ratification ritual**: every session starting work
-     against a plan must list the plan's non-goals and explicitly
-     confirm each with the owner, or surface any contradiction found
-     in recent conversation.
-   - **Standing-decision register**: a repo-local surface that records
-     owner decisions with expiry conditions. Read BEFORE the plan.
-   - **"What would I be doing if I hadn't read the plan?"**
-     metacognition prompt: describe the ideal path from first
-     principles, then compare against the plan, then reconcile
-     explicitly.
+4. **Perturbation mechanisms needed** (plural, complementary) to jog
+   the agent out of plan-text-inherited local minima. The three
+   candidates below address DIFFERENT failure modes at DIFFERENT
+   session phases and are **complements, not alternatives**. Variety
+   of perturbations is itself a perturbation — routinising a single
+   ritual blunts its jogging effect over time.
+
+   | Mechanism | Fires when | Failure mode caught |
+   | --- | --- | --- |
+   | First-principles metacognition prompt — "what would I be doing if I hadn't read the plan?" | Before reading anything in the session | Framing collapse before the agent's own reasoning is primed |
+   | Standing-decision register — a repo-local surface recording owner decisions with expiry conditions, read BEFORE the plan | During grounding, before plan read | Owner decisions stated in conversation that haven't landed in a plan yet |
+   | Non-goal re-ratification ritual — for each plan with a non-goals section, list the non-goals and confirm against recent owner direction | While reading a plan, per non-goal encountered | Non-goals inherited from prior plan drafts that contradict current owner direction (this session's specific failure mode) |
+
+   **Rationale for "all three, not one"**: defence in depth against a
+   class of drift that is costly when it slips through; each
+   mechanism addresses a distinct failure mode the others don't
+   cover; use-time selection lets sessions apply what fits; empirical
+   use picks favourites better than design-time reasoning.
+   Earlier framing of this entry said "pick one" — that was
+   premature optimisation for parsimony when the real target is
+   preventing a class of drift.
 
 ### Promotion candidates
 
@@ -268,14 +277,17 @@ the agent answered "No, keep tsup" — precisely backwards.
   direction outranks any plan's non-goals, design decisions, or scope.
   When a plan and the owner disagree, the plan is wrong."* LANDED at
   `.agent/state/repo-continuity.md §Repo-wide invariants` this session.
-- **RULE candidate** (always-applied): a rule forcing a non-goal
+- **RULE candidate** (always-applied): a rule forcing the non-goal
   re-ratification ritual before execution against any plan with a
   non-goals section. Draft for next consolidation pass.
 - **PRINCIPLE candidate** (`principles.md`): generalise the owner-
   beats-plan invariant into a Practice-level principle about standing
   decisions vs. artefact text.
-- **PDR candidate**: promote "Standing-decision register + non-goal
-  re-ratification" to Practice Core as a portable anti-drift pattern.
+- **PDR candidates** (all three, drafted as complements): promote
+  the three perturbation mechanisms to Practice Core as a bundle —
+  one PDR for the layered model itself (defence-in-depth against
+  plan-inherited framing) plus three lightweight artefacts (one per
+  mechanism). Next consolidation pass owns this drafting.
 
 ---
 
