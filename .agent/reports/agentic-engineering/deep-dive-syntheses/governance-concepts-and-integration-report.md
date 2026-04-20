@@ -145,6 +145,12 @@ boundaries, not because they mirror wording from the compared corpus.
 - [agentic-mechanism-inventory-baseline.md](../../../analysis/agentic-mechanism-inventory-baseline.md)
   should remain the supporting analysis-side inventory for mechanism-family
   coverage and gap tracking across this lane.
+- [practice-aligned-direction-and-gap-baseline.md](../../../analysis/practice-aligned-direction-and-gap-baseline.md)
+  is the companion analysis baseline for ecosystem direction-of-travel
+  signals (governance projects, practice-methodology primitives, adjacent
+  enablers). Pair-read with this report when assessing whether external
+  trajectory has moved a previously deferred mechanism into the actionable
+  zone.
 - [agentic-engineering-system.md](../../../../docs/foundation/agentic-engineering-system.md)
   is a future candidate for a clearer explanation of governance planes and
   layered safeguard stack once the concepts stabilise.

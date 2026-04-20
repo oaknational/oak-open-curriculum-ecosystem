@@ -149,3 +149,12 @@ evidence later proves otherwise:
 - **Reject any import that only changes naming without changing clarity.** New
   vocabulary must earn its place by making routing, design, or review
   decisions easier.
+
+## Companion Baseline
+
+- [practice-aligned-direction-and-gap-baseline.md](./practice-aligned-direction-and-gap-baseline.md)
+  re-uses this baseline's vocabulary (status legend, mechanism-gap matrix
+  shape, what-not-to-import discipline) to map ecosystem direction-of-travel
+  signals to repo-local Practice intentions. Pair-read this baseline (abstract
+  governance vocabulary) with that one (ecosystem direction-of-travel) when
+  assessing whether a deferred concept has become applicable.

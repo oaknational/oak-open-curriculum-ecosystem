@@ -1,3 +1,124 @@
+## 2026-04-20 — practice-aligned project-directions research (broad-before-deep)
+
+### What Was Done
+
+- Implemented the `practice-aligned_project_directions_research_ea215686.plan.md`
+  end-to-end across four slices + analysis baseline + routing.
+- Slice A: trajectory analysis for 15 governance-plane projects with
+  five cross-project trajectory patterns and per-project repo-local
+  implications. Roadmaps/RFC/SEP records preferred; release notes as
+  fallback; `trajectory weak` flagged where neither present (Prow,
+  Bee/Beeai).
+- Slice B: practice-methodology ecosystem reconnaissance (AGENTS.md,
+  Agent Skills as the open standard, plugin marketplaces, AAIF as
+  steward, cross-tool path normalisation). One note in
+  `operating-model-and-platforms/`; no new lane.
+- Slice D: adjacent-enabler reconnaissance (evals/scorers, context
+  engineering, agent-native observability, agent-native code review,
+  agent-native VCS). One cross-cutting note in
+  `operating-model-and-platforms/` with explicit per-lane
+  cross-references. No new lane.
+- Slice C: cross-lane survey at the lane root, one section per
+  existing lane, evidence linked back to A/B/D source notes rather
+  than re-cited.
+- Phase 2: `practice-aligned-direction-and-gap-baseline.md` analysis
+  with two matrices (direction-signal × practice-intention; lane ×
+  signal coverage) re-using the
+  `governance-concepts-and-mechanism-gap-baseline.md` status legend
+  and shape so the two baselines compose.
+- Phase 3: explicit decision to produce **no new report this
+  session**, with prerequisites named (no upstream
+  direction-of-travel deep dive yet; baseline untested by any plan).
+- Phase 4: routing surfaces updated (research lane README,
+  governance-planes README, operating-model README, analysis README,
+  governance integration report back-link, governance-concepts
+  baseline back-link).
+
+### Surprise
+
+- **Expected**: Slice A's 15 governance-plane projects would show
+  divergent direction signals; the research would have to pick winners.
+- **Actual**: Five direction signals recur across all four slices —
+  hardened persistence, schema-first declarative surfaces, identity/
+  OAuth modernisation, three-primitive convergence under AAIF, and
+  telemetry/evals/supervision merging. The ecosystem is converging,
+  not diverging. The repo's intention surface is **directionally
+  well-aligned** with the convergence; the interesting work is
+  mechanism uplift, not direction change.
+- **Causal mechanism**: the slices were chosen to cut the same
+  ecosystem from four angles (governance-plane projects;
+  practice-methodology primitives; adjacent enablers; cross-lane
+  re-routing). Convergent signals across all four cuts is stronger
+  evidence than convergence inside any single cut.
+
+### Corrections / learnings
+
+- **Assumptions-reviewer pre-pass paid off twice**: (i) it caught
+  proportionality drift in the original four-way fan-out and forced
+  parent-led reconnaissance with deferred subagent use, saving
+  significant agent dispatch; (ii) it added the "no new lane until
+  evidence proves it stable, non-overlapping, and beneficial for
+  discovery" fence, which in turn justified placing Slice B and Slice
+  D in `operating-model-and-platforms/` instead of inventing two new
+  lanes that would have churned the lane map.
+- **The Practice five-file package is conceptually a plugin**: Claude
+  Code and Cursor independently arrived at: manifest at root,
+  namespaced skills, bundled artefacts, marketplace with manual
+  review, team-controlled subset. The bootstrap-script propagation in
+  ADR-124 sits in the same conceptual category as the plugin format.
+  This is a noted-but-not-acted-on alignment opportunity (Slice B
+  routing recommendation only).
+- **Two principles transferable without external dependency**:
+  "treat persisted state as untrusted by default" (MS Agent Framework
+  `1.0.1`, LangGraph `4.0.2`, Dapr April 2026) and "policy engine
+  performs no normalisation; normalise once at the perimeter" (Dapr).
+  Both are recorded as principles in the analysis baseline; both
+  are deferred until applicability surfaces emerge.
+- **`derived-memory-and-graph-navigation` lane has the thinnest
+  external direction signal of any lane**: not because the lane is
+  undirected, but because the four slices under-sample the
+  graph-memory ecosystem. A future research pass scoped specifically
+  to that ecosystem would close the gap. Recorded as a routing
+  recommendation only.
+
+### Watchlist (single-instance, not yet ready to distil)
+
+- **`assumptions-reviewer-pre-pass-shrinks-fan-out-and-tightens-fences`** —
+  running an assumptions-reviewer pass on a multi-slice research plan
+  before launch produces (a) proportionality reduction and (b)
+  doctrine fences that pay off during execution. Not yet a pattern
+  candidate; needs a second instance.
+- **`convergent-direction-across-multiple-research-cuts-is-stronger-evidence`** —
+  when four parallel research slices all surface the same direction
+  signals, the convergence itself is the finding. Repeat criterion:
+  observe a second cross-cut research effort whose convergent
+  patterns match this one, then promote.
+- **`practice-five-file-package-is-conceptually-a-plugin`** —
+  watchlist for whether plugin-format wrappers should ship alongside
+  the bootstrap script. Trigger condition: a downstream consumer
+  asks for plugin-marketplace install of the Practice package.
+- **`reviewer-systems-cluster-is-the-densest-uplift-cluster`** —
+  three high-signal candidates (machine-readable handoff, per-team
+  learning loop, RFC 9728 audit) all point at the same plan
+  (`reviewer-gateway-upgrade.plan.md`). If the plan absorbs them
+  cleanly, the cluster shape itself is a routing pattern worth
+  promoting.
+
+### Pattern To Remember
+
+- All four candidates above are **single-instance** observations from
+  this session and stay on the watchlist. Not yet promotion-ready.
+
+### Unresolved
+
+- **Top unresolved question** (recorded in the analysis baseline):
+  is the existing `agentic-engineering-enhancements/` plans surface
+  sized to absorb the eight high-impact uplift candidates without
+  churning into low-signal work? A scope-and-sequencing pass on the
+  plans surface should precede picking up any candidate.
+
+---
+
 ## 2026-04-20 — reflection on "repos as governance planes"
 
 ### What Was Done

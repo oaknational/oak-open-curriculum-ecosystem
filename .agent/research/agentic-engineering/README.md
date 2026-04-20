@@ -18,10 +18,21 @@ group them for wider synthesis.
 | [continuity-memory-and-knowledge-flow/README.md](./continuity-memory-and-knowledge-flow/README.md) | Continuity, split loops, knowledge flow | continuity practice, analysis evidence, continuity ADRs |
 | [derived-memory-and-graph-navigation/README.md](./derived-memory-and-graph-navigation/README.md) | Graph memory and corpus navigation | Graphify analysis, future graph-memory exploration plan |
 
+## Cross-Lane Notes
+
+- [cross-lane-direction-survey.md](./cross-lane-direction-survey.md) —
+  Slice C umbrella: re-reads direction-of-travel evidence (Slice A
+  governance projects, Slice B practice-methodology primitives,
+  Slice D adjacent enablers) routed by lane, with per-lane
+  recommendations.
+
 ## Related Surfaces
 
 - [agentic-engineering hub](../../reference/agentic-engineering/README.md)
-- [analysis evidence lane](../../analysis/README.md)
+- [analysis evidence lane](../../analysis/README.md) — see
+  [`practice-aligned-direction-and-gap-baseline.md`](../../analysis/practice-aligned-direction-and-gap-baseline.md)
+  for the analysis-grade comparison matrix that pairs with the
+  cross-lane survey above
 - [formal reports lane](../../reports/agentic-engineering/README.md)
 - [plans collection](../../plans/agentic-engineering-enhancements/README.md)
 

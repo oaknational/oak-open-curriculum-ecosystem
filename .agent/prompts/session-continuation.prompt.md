@@ -597,6 +597,142 @@ commit.
     intentionally ignores fitness functions and consolidation-triggered
     escalation for this session.
 
+### Later Handoff Addendum — 2026-04-20 (practice-aligned project-directions research closeout)
+
+- **Workstream**: A parallel agentic-engineering thread completed a
+  broad-before-deep direction-of-travel research session on
+  2026-04-20. The observability Wave 1 lane (L-7) and the
+  knowledge-graph discovery surfaces are unchanged by this thread.
+  The next handover for this thread is:
+  `.agent/prompts/agentic-engineering/governance-planes-research-and-reporting.prompt.md`
+  (rewritten 2026-04-20 from "research" to "plan-surface
+  integration"). That prompt is now the authoritative entry point
+  for the agentic-engineering thread; the rest of the live contract
+  above remains authoritative for the observability and KG threads.
+- **Active plans**:
+  - All observability and KG plan authority above is unchanged.
+  - `.cursor/plans/practice-aligned_project_directions_research_ea215686.plan.md`
+    is **complete end-to-end**; this session ran every phase
+    (assumptions-pass + Slices A/B/C/D + analysis baseline + report
+    decision + routing + closeout). The plan file itself was not
+    edited per owner instruction.
+  - `.agent/plans/agentic-engineering-enhancements/current/governance-concepts-and-agentic-mechanism-integration.plan.md`
+    remains the closest existing plan-surface neighbour; the next
+    session evaluates it (and the other plans in that lane) as
+    candidate absorbers for the eight uplift candidates the analysis
+    baseline named.
+- **Current state**:
+  - Branch / HEAD / commits unchanged by this thread (research-only
+    session; no commits made).
+  - Five new durable artefacts on disk (one analysis, one
+    cross-lane synthesis, three reconnaissance notes) and six
+    routing surfaces updated (research-lane README; governance-
+    planes README; operating-model-and-platforms README; analysis
+    README; existing baseline; existing integration report). All
+    artefacts and updates are listed in the closeout block of the
+    napkin entry below.
+  - `.agent/memory/napkin.md` grew from ~377 to 408 lines with the
+    2026-04-20 entry. Distilled.md is unchanged at 272/200 (target)
+    / 275 (hard limit) — soft-zone, no graduation surfaced this
+    session.
+- **Current objective** (next session for this thread): Examine the
+  `agentic-engineering-enhancements/` plans surface and decide how
+  to absorb the eight uplift candidates without churning the plans
+  surface into low-signal work. The framing question — recorded in
+  the rewritten prompt and the napkin closeout — is **not** "which
+  candidate do we adopt?" but "is the existing plans surface sized
+  to absorb these candidates?". Adoption decisions follow the
+  scope-and-sequencing answer.
+- **Hard invariants / non-goals**:
+  - All observability / KG invariants above hold.
+  - Research-thread fences inherited: no doctrine edits (ADRs,
+    `/docs/**`, Practice Core, directives, principles, canonical
+    adapter content); no product code; no quality-gate runs beyond
+    markdownlint where required.
+  - Added for the next session: no new plan created without owner
+    approval; no silent candidate adoption; spinning up a new plan
+    is itself the kind of churn the next session is meant to assess.
+- **Recent surprises / corrections** (2026-04-20):
+  - **Convergence-not-divergence across all four research slices.**
+    Five direction signals (Agent Skills as cross-tool standard;
+    plugins as distribution layer; reviewer-systems as the densest
+    underdeveloped neighbour; durable-orchestration as the dominant
+    platform pivot; OTel GenAI semconv as the only obvious sole-
+    standard) repeated across Slices A/B/D and re-routed cleanly
+    through Slice C. The repo is **already aligned** with the
+    direction of travel on most of these; the work is uplift, not
+    pivot. This shifts the planning conversation from "what to
+    build" to "where to absorb without churn".
+  - **Conceptual alignment of the Practice five-file package as a
+    plugin** — not an adoption signal, but a vocabulary signal. The
+    ecosystem now has stable language ("plugin", "skill",
+    "AGENTS.md") for substance the Practice has carried for months
+    in a different vocabulary. Routing the Practice package
+    externally with the ecosystem-shared terms is candidate 4
+    (cross-platform surface matrix refresh) and overlaps with
+    candidate 3 (continuity-lane vocabulary alignment).
+  - **Two transferable principles from external systems**: (i) treat
+    untrusted-context state as untrusted (Anthropic context
+    engineering applied to compaction); (ii) policy-engine purity as
+    a cleavage boundary (OPA's separation between authoring and
+    enforcement). Neither is a new mechanism; both sharpen reasoning
+    about existing mechanisms when they next get edited.
+  - **`assumptions-reviewer` pre-pass paid off twice over.** The
+    amendments (parent-led WebFetch first; Slice A guaranteed, B/D
+    reconnaissance-first, C synthesised after; "no new lane until
+    evidence proves it" fence) prevented two wasted lanes
+    (`practice-methodology-ecosystem`, `adjacent-enablers`) and an
+    over-large multi-agent fan-out. Pattern candidate:
+    `assumptions-reviewer-on-broad-research-plans-prevents-lane-
+    inflation`.
+  - **No consolidation graduation surfaced.** The watchlist items
+    from this session are all single-instance observations
+    (transferable principles, vocabulary-alignment hint,
+    derived-memory under-signal, planning-surface absorption
+    capacity). None has crossed the "stable across sessions" bar.
+    Distilled.md and ADR/PDR scans both produced "nothing
+    qualifies"; this is itself the finding, not a skipped step.
+- **Open questions / low-confidence areas**:
+  - The framing question above — capacity of the existing
+    `agentic-engineering-enhancements/` plans surface to absorb
+    eight uplift candidates without low-signal churn. Cannot be
+    answered until the next session reads the plans-surface state.
+  - Whether the OTel GenAI semconv stability ladder (events
+    Stable; metrics Development; agents Experimental) deserves an
+    explicit telemetry-shape entry in the existing observability
+    plan, or sits comfortably below planning attention until a
+    metric class promotes. Watchlist item.
+  - Whether the derived-memory lane's weak external signal
+    (graph-construction ecosystem move toward LLM-driven; no
+    obvious agent-as-graph-navigator standard to track) merits a
+    deliberate "no candidates this round, watch list X / Y / Z"
+    note inside that lane. Watchlist item.
+- **Next safe step**:
+  - Open the rewritten prompt
+    (`governance-planes-research-and-reporting.prompt.md`), then
+    read the analysis baseline first, then the cross-lane survey,
+    then the existing plans surface in
+    `.agent/plans/agentic-engineering-enhancements/`. Surface the
+    plans-surface scope-and-sequencing observations as a numbered
+    decision list before proposing any candidate adoption.
+  - For the observability and KG threads, the prior live-contract
+    next safe step is unchanged.
+- **Deep consolidation status**:
+  - **completed this handoff — owner explicitly requested
+    `jc-consolidate-docs` after the practice-aligned research
+    landed**. Triggers evaluated: napkin pressure soft (408/500,
+    just over the 400-line floor; below rotation threshold);
+    distilled fitness soft (272/200 target, 272/275 hard — soft
+    zone); no plan or milestone closed in product surfaces (the
+    research plan is in `.cursor/plans/`, not the repo plans
+    surface); no settled doctrine in ephemeral artefacts; no
+    repeated cross-session corrections that warrant a new rule;
+    no documentation drift. Consolidation ran with explicit
+    "nothing qualifies" findings on PDR scan, ADR scan, pattern
+    extraction, and Core upstream review. No graduation moves
+    landed; no fitness threshold edits. Recorded as a deliberate
+    "review reached" rather than "review skipped".
+
 The older observability-specific sections below are historical branch context
 only. They are not the active handoff contract for the next session.
 

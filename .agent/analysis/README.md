@@ -26,6 +26,13 @@ and practice questions.
   - Abstract comparison baseline for governance planes, boundary models,
     authority gradients, supervised execution, signal ecology, residual-risk
     surfaces, and the local mechanism gaps they expose.
+- `practice-aligned-direction-and-gap-baseline.md`
+  - Analysis-grade comparison matrix mapping ecosystem direction-of-travel
+    signals to repo-local Practice intentions, current mechanism state, and
+    routing targets. Derived from the four direction-of-travel research notes
+    (Slice A governance projects, Slice B practice-methodology primitives,
+    Slice C cross-lane survey, Slice D adjacent enablers). Pairs with the
+    governance-concepts baseline above.
 
 Promoted audits and formal syntheses belong in
 [`.agent/reports/agentic-engineering/`](../reports/agentic-engineering/README.md).
