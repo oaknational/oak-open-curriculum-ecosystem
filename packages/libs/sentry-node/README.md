@@ -37,11 +37,16 @@ to every consuming runtime.
   `beforeBreadcrumb`. `beforeSendSpan` and `beforeSendLog` are
   redaction-only (no consumer slot).
 - **Configuration**: `createSentryConfig`, `resolveSentryEnvironment`,
-  `resolveSentryRelease` — strict parsing returns a discriminated
-  `ParsedSentryConfig` (`SentryOffConfig | SentryFixtureConfig |
-SentryLiveConfig`, tagged by `mode: 'off' | 'fixture' | 'sentry'`).
-  `SentryConfigEnvironment` is the env-var input interface consumed by
-  `createSentryConfig`.
+  `resolveSentryRegistrationPolicy`, `resolveSentryRelease` — strict
+  parsing returns a discriminated `ParsedSentryConfig` (`SentryOffConfig
+  | SentryFixtureConfig | SentryLiveConfig`, tagged by `mode: 'off' |
+'fixture' | 'sentry'`). `SentryConfigEnvironment` is the env-var input
+  interface consumed by `createSentryConfig`.
+  `resolveSentryRegistrationPolicy` implements the ADR-163 §3 truth
+  table (environment + `VERCEL_GIT_COMMIT_REF` → `{registerRelease,
+  warning?}`) plus §4 override-pair validation for local-dev release
+  registration. The deploy-time orchestrator in the MCP app consumes
+  this sibling resolver; the runtime does not.
 - **Error mapping**: `describeConfigError`, `mapCloseError`, `mapFlushError`
   — `Result<T, E>` error adapters for the shutdown and configuration paths.
 
@@ -65,6 +70,22 @@ runtime. It is parsed once at startup and never re-read.
 No other values are accepted; `createSentryConfig` returns
 `Result<ParsedSentryConfig, ObservabilityConfigError>` for strict validation
 at the trust boundary.
+
+## Git SHA tag key (ADR-163 §2)
+
+The git commit SHA is attached to every captured event as a Sentry tag
+under the key **`git.commit.sha`**, matching the OpenTelemetry
+`code.git.commit.sha` semantic convention. This is emitted on
+`initialScope.tags` at SDK init and again on per-event tags via the
+logger sink. The SHA is metadata (ADR-163 §2); it is never used as the
+Sentry release identifier — the release is the root `package.json`
+semver (ADR-163 §1).
+
+> **Migration note (2026-04-20)**: this key was previously `git_sha`.
+> The rename to `git.commit.sha` landed during Wave 1 of the
+> observability maximisation lane. Historical events captured before
+> the rename retain the legacy key in Sentry's retention window. Update
+> any saved-search / dashboard queries that filter on `git_sha`.
 
 ## DI seam (ADR-078)
 

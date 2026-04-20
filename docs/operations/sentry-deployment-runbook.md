@@ -6,7 +6,12 @@ How to enable live Sentry error capture and tracing for Oak runtimes.
 (PR #73, merged 2026-03-31). Rate limiting is in place (ADR-158).
 Search CLI adoption is complete (2026-04-12). Local `.env.local`
 credentials are provisioned for the HTTP MCP server (2026-04-12).
-Vercel dashboard credentials are pending — set them at
+L-7 release + commits + deploy linkage landed 2026-04-20 — the Vercel
+Build Command orchestrator (`build:vercel` →
+`build-scripts/sentry-release-and-deploy-cli.ts`) is live; no Dashboard
+UI action is required (`vercel.json.buildCommand` overrides the
+Dashboard per Vercel's official precedence rules). Set Vercel
+environment variables at
 <https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp/settings/environment-variables>.
 This runbook covers the operational steps to go from `off` to `sentry`.
 
@@ -36,11 +41,12 @@ Set the following **per app** in the deployment platform:
 
 In the [Vercel dashboard](https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp/settings/environment-variables) under Settings > Environment Variables:
 
-| Variable                    | Value                | Notes                                  |
-| --------------------------- | -------------------- | -------------------------------------- |
-| `SENTRY_MODE`               | `sentry`             | Enables live Sentry                    |
-| `SENTRY_DSN`                | `https://public@...` | HTTP server project DSN from Step 1    |
-| `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                | Start at 1.0, reduce if volume is high |
+| Variable                    | Value                | Notes                                                                                       |
+| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
+| `SENTRY_MODE`               | `sentry`             | Enables live Sentry                                                                         |
+| `SENTRY_DSN`                | `https://public@...` | HTTP server project DSN from Step 1                                                         |
+| `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                | Start at 1.0, reduce if volume is high                                                      |
+| `SENTRY_AUTH_TOKEN`         | `sntrys-...`         | Organisation auth token. Required at **build time** by the §6 orchestrator. See ADR-163 §6. |
 
 Auto-resolved (no need to set on Vercel):
 
@@ -48,7 +54,7 @@ Auto-resolved (no need to set on Vercel):
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SENTRY_RELEASE`     | Root repo `package.json` semver (resolved via `APP_VERSION` in `resolveSentryRelease`). **Not** the git SHA — the SHA is metadata, attached separately. See [ADR-163](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) §1–§2.                                                                                           |
 | `SENTRY_ENVIRONMENT` | `VERCEL_ENV` **constrained by** `VERCEL_GIT_COMMIT_REF` per the [ADR-163 §3 truth table](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain). A `VERCEL_ENV=production` build from a non-main branch is downgraded to `preview`. |
-| git SHA (Sentry tag) | `VERCEL_GIT_COMMIT_SHA` — attached to every event as the `git.commit.sha` Sentry tag, and to the release itself via `sentry-cli releases set-commits --commit oaknational/oak-open-curriculum-ecosystem@<sha>`.                                                                                                                                                                    |
+| git SHA (Sentry tag) | `VERCEL_GIT_COMMIT_SHA` — attached to every event as the `git.commit.sha` Sentry tag, and to the release itself via `sentry-cli releases set-commits --commit $VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG@<sha>` (the orchestrator derives the slug from Vercel env vars, falling back to the monorepo literal `oaknational/oak-open-curriculum-ecosystem`).                      |
 
 Optional:
 
@@ -104,10 +110,9 @@ and troubleshooting.
 
 Source map upload is automated for local evidence generation via
 `RELEASE=<semver> pnpm sourcemaps:upload` inside
-`apps/oak-curriculum-mcp-streamable-http`. CI-triggered upload on
-Vercel deploys is the scope of
-[L-7 in the maximisation plan](../../.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md#l-7-release--commits--deploy-linkage),
-which wraps this script into the orchestrator described below.
+`apps/oak-curriculum-mcp-streamable-http`. Vercel-triggered upload is
+wired by the L-7 orchestrator (landed 2026-04-20), which invokes the
+same script from within the build-time sequence described below.
 
 ## Step 3b: Release → commit → deploy linkage (Vercel build-time)
 
@@ -133,24 +138,40 @@ Net effect: Vercel's production Build Command only ever runs on a
 commit pushed to a branch with an open PR.
 
 **Inside the Vercel Build Command** (L-7 scope): the workspace
-`build:vercel` npm script runs `pnpm build` followed by
-`scripts/sentry-release-and-deploy.sh`. That orchestrator runs the
-preflight + six-step sequence per ADR-163 §6 + §7.
+`build:vercel` npm script runs `pnpm build` followed by the
+TypeScript orchestrator `build-scripts/sentry-release-and-deploy-cli.ts`
+(invoked via `tsx`). That orchestrator runs the preflight + §6.0 probe
+
+- six-step sequence per ADR-163 §6 + §7 (see the 2026-04-20 amendment
+  for the §6.0 probe mechanism). `vercel.json.buildCommand` points at
+  `build:vercel`; no Dashboard UI action is required — per Vercel's
+  official docs, `vercel.json.buildCommand` overrides the Project
+  Settings dashboard value.
 
 ```bash
 # Preflight (orchestrator fails non-zero on any):
 #
-#   VERSION      = node -p "require('./package.json').version"
-#   DERIVED_ENV  = per ADR-163 §3 truth table using VERCEL_ENV +
-#                  VERCEL_GIT_COMMIT_REF
+#   Policy      : per ADR-163 §3/§4 via resolveSentryRegistrationPolicy
+#                 (short-circuits to exit 0 / kind=skipped in development
+#                 without the override pair — no credentials required).
+#   VERSION     : node -p "require('./package.json').version"
+#   DERIVED_ENV : per ADR-163 §3 truth table using VERCEL_ENV +
+#                 VERCEL_GIT_COMMIT_REF.
 #   requires VERCEL_GIT_COMMIT_SHA ∈ /[0-9a-f]{7,40}/i
 #   requires SENTRY_AUTH_TOKEN non-empty
-#   requires dist/ non-empty
+#   requires dist/ contains at least one .js.map artefact
+
+sentry-cli releases info "$VERSION"                         # §6.0 idempotency probe
+
+# If §6.0 exits 0 (release exists) §6.1 AND §6.2 are SKIPPED to preserve
+# the original deploy's commit attribution. Re-running set-commits would
+# overwrite the SHA binding and orphan prior regression-traceability
+# (ADR-163 amendment 2026-04-20; matches §5 "one release → many deploys").
 
 sentry-cli releases new "$VERSION"                          # §6.1 abort on fail
 
 sentry-cli releases set-commits "$VERSION" \                # §6.2 warn-continue
-  --commit "oaknational/oak-open-curriculum-ecosystem@$VERCEL_GIT_COMMIT_SHA"
+  --commit "$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG@$VERCEL_GIT_COMMIT_SHA"
 
 RELEASE="$VERSION" ./scripts/upload-sourcemaps.sh           # §6.3–§6.4 abort on fail
 
@@ -172,6 +193,19 @@ sentry-cli deploys new --release "$VERSION" -e "$DERIVED_ENV"  # §6.6 warn-cont
 Local-dev builds skip registration unless BOTH
 `SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` AND `SENTRY_RELEASE_OVERRIDE=<version>`
 are set (ADR-163 §4).
+
+**Grepping orchestrator output in Vercel build logs**:
+
+The orchestrator emits five log-surface patterns (one on stdout, four on
+stderr). These form the operational contract for troubleshooting:
+
+| Pattern                                           | Channel | Meaning                                                                                          |
+| ------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| `[sentry-release] skipped:`                       | stdout  | Registration policy returned `registerRelease=false` (dev without override pair). No-op.         |
+| `[sentry-release] warning: <code>`                | stderr  | Preflight emitted a §3 warning (e.g. `production_env_with_non_main_branch`). Continues.          |
+| `[sentry-release] release <ver> already exists;`  | stderr  | §6.0 probe found the release. §6.1 + §6.2 skipped to protect original commit attribution.        |
+| `[sentry-release] WARN step <id> (<reason>)`      | stderr  | §6.2 / §6.5 / §6.6 failed. Warn-and-continue posture per §6. Deploy is still live.               |
+| `[sentry-release] FAIL kind=<k> step=<id>: <why>` | stderr  | Hard abort: §6.1 (new release failed) or §6.3+6.4 (sourcemap upload failed). Deploy was blocked. |
 
 **Verification**:
 

@@ -181,24 +181,34 @@ flushes at the process boundary: bootstrap failure, server listen error,
 `SIGINT`, and `SIGTERM`. Per-request MCP teardown never initialises or
 flushes Sentry.
 
-## Source-map upload
+## Source-map upload and release/commit/deploy linkage
 
-Production Sentry stack traces are symbolicated via source-map upload during
-the Vercel build pipeline:
+Production Sentry stack traces are symbolicated via source-map upload, and
+every production build registers a Sentry release + commit + deploy event,
+all inside the Vercel Build Command. Both are orchestrated by the L-7
+TypeScript orchestrator
+[`build-scripts/sentry-release-and-deploy-cli.ts`](../build-scripts/sentry-release-and-deploy-cli.ts)
+(invoked via `tsx` from the `build:vercel` npm script; wired as
+`vercel.json.buildCommand`). Landed 2026-04-20.
+
+The §6.0 preflight probe (`sentry-cli releases info`) skips §6.1/§6.2 when
+the release already exists, preserving the original deploy's commit
+attribution across Vercel manual redeploys. The explicit `--commit
+org/repo@sha` form is used for `set-commits` (the `--auto` form was
+rejected in ADR-163 Alternative 8).
+
+The underlying two-step Debug-ID source-map pipeline (`inject` + `upload
+--release`) is invoked by
+[`scripts/upload-sourcemaps.sh`](../scripts/upload-sourcemaps.sh), which
+can also be run locally for evidence generation:
 
 ```bash
-pnpm sourcemaps:upload
+RELEASE=$(node -p "require('../../package.json').version") pnpm sourcemaps:upload
 ```
 
-The script follows the two-step Debug ID flow (inject + upload). Release
-metadata is attached by Sentry using the resolved release value (see
-below).
-
-Release/commit linkage (`sentry-cli releases set-commits --auto` and
-`releases deploys new`) is planned under L-7 in the
-[maximisation plan](../../../.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
-and will run in the Vercel deploy pipeline only — never in PR-check CI,
-which remains network-free per ADR-161.
+The orchestrator runs only in the Vercel Build Command — never in PR-check
+CI, which remains network-free per ADR-161. Operational flow + log-grep
+patterns: [sentry-deployment-runbook.md § 3b](../../../docs/operations/sentry-deployment-runbook.md).
 
 ## Release and metadata resolution
 

@@ -321,7 +321,7 @@ build command: pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http run
 2. The §6 sentry-cli sequence, via a TypeScript orchestrator invoked
    with `tsx` (`build-scripts/sentry-release-and-deploy-cli.ts` in the
    MCP workspace). Amendment 2026-04-20 — originally authored as a
-   single bash file; implemented as a three-file TypeScript module
+   single bash file; implemented as a four-file TypeScript module
    (types + preflight + orchestrator + CLI composition root) for
    unit-testability under ADR-161 (no subprocess spawn in tests).
 

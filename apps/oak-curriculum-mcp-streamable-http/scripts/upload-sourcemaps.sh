@@ -60,10 +60,15 @@
 #   script so the uploaded bundle's weak-release association matches.)
 #
 # - In the Vercel Build Command (L-7 scope): invoked by
-#   scripts/sentry-release-and-deploy.sh immediately after `pnpm build`
-#   with RELEASE set to the semver read from the repo root
-#   package.json. Abort on failure — symbolication will be broken
-#   without the injected Debug IDs and uploaded bundle.
+#   build-scripts/sentry-release-and-deploy-cli.ts (TypeScript, via tsx)
+#   immediately after `pnpm build` with RELEASE set to the semver read
+#   from the repo root package.json. Abort on failure — symbolication
+#   will be broken without the injected Debug IDs and uploaded bundle.
+#   Invoked regardless of whether the preflight probe found the release
+#   already exists — artefact bundles are keyed by Debug ID, not by
+#   release creation, so re-running inject+upload against an existing
+#   release is additive (sourcemap-upload-deduplication is handled by
+#   Sentry's checksum logic server-side).
 #
 # REQUIRED ENVIRONMENT
 # --------------------

@@ -320,18 +320,24 @@ pnpm exec sentry-cli sourcemaps upload --release "$RELEASE" "$DIST_DIR"
 This reference exists so contributors can locate the CLI commands
 without reading the ADR end-to-end; the ADR wins on any divergence.
 
-Runs inside the Vercel Build Command only, via the orchestrator
-`apps/oak-curriculum-mcp-streamable-http/scripts/sentry-release-and-deploy.sh`
-(authored by L-7):
+Runs inside the Vercel Build Command only, via the TypeScript
+orchestrator
+`apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy-cli.ts`
+(authored by L-7, invoked via `tsx`):
 
 ```bash
-# Inside the orchestrator, after preflight + pnpm build:
+# Inside the orchestrator, after preflight + pnpm build.
+
+pnpm exec sentry-cli releases info "$VERSION"
+# §6.0 idempotency probe. If exit 0 (release exists), §6.1 AND §6.2 are
+# skipped to preserve original commit attribution (ADR-163 amendment
+# 2026-04-20). If non-zero (not found), continue through §6.1/§6.2.
 
 pnpm exec sentry-cli releases new "$VERSION"
 # abort on non-zero — subsequent steps have nothing to attach to.
 
 pnpm exec sentry-cli releases set-commits "$VERSION" \
-  --commit "oaknational/oak-open-curriculum-ecosystem@$VERCEL_GIT_COMMIT_SHA"
+  --commit "$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG@$VERCEL_GIT_COMMIT_SHA"
 # warn + continue on non-zero — commit metadata is useful but not blocking.
 
 # Two-step sourcemap pipeline (see "Upload source maps" above):

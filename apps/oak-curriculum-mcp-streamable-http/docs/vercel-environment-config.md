@@ -10,11 +10,12 @@ This reference lists the environment variables and platform settings required to
 
 ## Required Environment Variables
 
-| Variable                | Production | Preview | Notes                                                |
-| ----------------------- | ---------- | ------- | ---------------------------------------------------- |
-| `CLERK_PUBLISHABLE_KEY` | ✅         | ✅      | Clerk publishable key for the deployed application   |
-| `CLERK_SECRET_KEY`      | ✅         | ✅      | Clerk secret key used by server-side auth middleware |
-| `OAK_API_KEY`           | ✅         | ✅      | Oak Curriculum API key for live data                 |
+| Variable                | Production | Preview | Notes                                                                                                                                                                                                                                                             |
+| ----------------------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CLERK_PUBLISHABLE_KEY` | ✅         | ✅      | Clerk publishable key for the deployed application                                                                                                                                                                                                                |
+| `CLERK_SECRET_KEY`      | ✅         | ✅      | Clerk secret key used by server-side auth middleware                                                                                                                                                                                                              |
+| `OAK_API_KEY`           | ✅         | ✅      | Oak Curriculum API key for live data                                                                                                                                                                                                                              |
+| `SENTRY_AUTH_TOKEN`     | ✅         | ✅      | Sentry organisation auth token. Required at **build time** by the release-and-deploy orchestrator (ADR-163 §6). Scoped to the `oak-national-academy` org; never commit to `.sentryclirc`. Runtime Sentry SDK does NOT need it — events are delivered via the DSN. |
 
 ## Optional Environment Variables
 
@@ -37,6 +38,29 @@ This reference lists the environment variables and platform settings required to
 | `SENTRY_DEBUG`                         | `false`                                                                                           | Enable Sentry SDK debug output                                                                                                                                                                                                   |
 
 CORS is unconditionally permissive (all origins allowed). Security is enforced by OAuth authentication, not by origin restrictions. There are no CORS-related environment variables to configure.
+
+## Sentry environment derivation (ADR-163 §3 truth table)
+
+The derived Sentry `environment` and release-registration policy are a
+function of `VERCEL_ENV` + `VERCEL_GIT_COMMIT_REF`. This table is the
+authoritative operator-facing reference; the code source of truth is
+`resolveSentryEnvironment` + `resolveSentryRegistrationPolicy` in
+`@oaknational/sentry-node`.
+
+| `VERCEL_ENV`  | `VERCEL_GIT_COMMIT_REF` | Sentry `environment` | Release registered? | Warning emitted                       |
+| ------------- | ----------------------- | -------------------- | ------------------- | ------------------------------------- |
+| `production`  | `main`                  | `production`         | yes                 | —                                     |
+| `production`  | any other branch        | `preview`            | yes (as preview)    | `production_env_with_non_main_branch` |
+| `production`  | unset / empty           | `preview`            | yes (as preview)    | `production_env_with_missing_branch`  |
+| `preview`     | any                     | `preview`            | yes                 | —                                     |
+| `development` | any                     | `development`        | no (default)        | —                                     |
+| unset         | any                     | `development`        | no                  | —                                     |
+
+The §3 guard downgrades `VERCEL_ENV=production` on a non-`main` branch
+to `preview`, so feature-branch preview builds never pollute the
+production Sentry bucket. Local-dev registration is enabled only by the
+`SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` + `SENTRY_RELEASE_OVERRIDE=<version>`
+pair (ADR-163 §4).
 
 ## Preview vs Production Notes
 
