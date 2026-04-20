@@ -1,3 +1,31 @@
+## 2026-04-21 (open) — Fourth `inherited-framing-without-first-principles-check` instance caught BEFORE code was written
+
+### Surprise
+
+**What was expected**: execute §L-8 WS1 RED by authoring the three test files the spec lists. Mechanical translation of the spec.
+
+**What actually happened**: while reading the spec against the testing-strategy directive, I noticed all three tests would assert *configuration* or *vendor behaviour*, not Oak-authored product behaviour. I was about to mitigate by inventing a `buildMcpAppEsbuildOptions(env, pluginFactory)` wrapper with an injected fake plugin factory — the exact "complex test setup signals architectural problem" trap the testing-strategy warns against. Owner caught it in-flight before any code was written, citing the same testing-strategy and asking for the "most canonical, idiomatic" esbuild config possible.
+
+**Why the expectation failed**: the spec's three-test framing was itself an inherited shape — the prior session authored §L-8 WS1 with the assumption that integration tests at the build-config boundary were the right level of proof. They are not. The Oak-authored logic worth testing is just the env-to-plugin-config translator (a pure function). The build itself is canonical vendor wiring whose proof is a Vercel preview deployment + Sentry UI state, not an in-process build assertion.
+
+### Pattern instance count
+
+- This is the **fourth** instance of `inherited-framing-without-first-principles-check` across two sessions.
+- Three were product-code/test-shape; one was assertion-kind in a probe rewrite.
+- Pattern is **graduated** — it has earned a permanent home in `.agent/memory/active/patterns/`. Next consolidation pass owns the move.
+
+### What behaviour should change next time
+
+Before authoring tests prescribed by a plan body, run a one-line first-principles check: *"What Oak-authored behaviour does this test prove? Could a single pure-function unit test prove the same thing simpler?"* If the answer is "no Oak behaviour, just configuration or vendor wiring," the test belongs in a smoke phase against the live system, not in a RED phase that drives in-process implementation.
+
+### Action this session
+
+- Pause WS1 RED execution.
+- Dispatch test-reviewer + architecture-reviewer-betty + assumptions-reviewer in parallel as intent-reviews against the proposed simplification (one pure-function unit test + canonical esbuild config; smoke evidence in WS4/WS5).
+- Resume execution against the revised plan once findings synthesised.
+
+---
+
 ## 2026-04-20 (evening close) — Memory taxonomy, prompt dissolution, and the testing-strategy violation caught mid-flight
 
 ### Surprise

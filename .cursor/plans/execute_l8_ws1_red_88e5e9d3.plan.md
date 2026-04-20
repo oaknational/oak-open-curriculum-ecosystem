@@ -4,16 +4,16 @@ overview: Session-scoped operational plan to author and commit the three failing
 todos:
   - id: reread-spec
     content: Re-read §L-8 WS1 in the maximisation plan; confirm no drift since opener authored
-    status: in_progress
+    status: completed
   - id: test-plugin-output
     content: Author plugin-build-output.integration.test.ts (Debug IDs in dist + plugin lifecycle log evidence)
     status: pending
   - id: test-policy
     content: Author policy-invocation.integration.test.ts (resolveSentryEnvironment + resolveSentryRegistrationPolicy invoked once per build, outputs feed plugin config)
-    status: pending
+    status: cancelled
   - id: test-equivalence
     content: "Author build-output-equivalence.integration.test.ts (contract-surface diff vs tsup baseline; sourcemap: 'hidden' divergence acknowledged)"
-    status: pending
+    status: cancelled
   - id: verify-red
     content: Run tests; confirm all three fail for expected reason; confirm no existing tests broken
     status: pending
@@ -22,7 +22,7 @@ todos:
     status: pending
   - id: test-reviewer
     content: "Invoke test-reviewer (readonly): challenge assertion-kind, vendor-neutrality, no process.env reads"
-    status: pending
+    status: cancelled
   - id: apply-findings
     content: Apply test-reviewer findings in place
     status: pending

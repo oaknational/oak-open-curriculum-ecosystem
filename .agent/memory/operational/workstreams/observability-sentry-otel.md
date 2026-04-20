@@ -1,9 +1,9 @@
 # Workstream Brief — Observability (Sentry + OTel)
 
-**Last refreshed**: 2026-04-20 (session close — §L-8 re-plan ready
-for execution at WS1 RED; deferral decisions recorded; Phase 3a/3b
-split propagated; memory taxonomy + prompt dissolution landed
-around this workstream without advancing it)
+**Last refreshed**: 2026-04-21 (final handoff — §L-8 WS1 RED
+attempted and paused after a testing-strategy violation was
+caught in the WS1 spec itself; three-reviewer intent-review is the
+next safe step before resuming)
 **Branch**: `feat/otel_sentry_enhancements`
 
 ## Owning plan(s)
@@ -58,10 +58,16 @@ is execution at WS1 RED.
 
 ## Next safe step
 
-Begin §L-8 WS1 RED in
-`sentry-observability-maximisation-mcp.plan.md`. The corrected
-solution-class framing is already in place and the WS0 reviewer notes
-have already been applied.
+**Dispatch three reviewers on the simplified §L-8 WS1 shape** (see
+2026-04-21 napkin entry for the specific trap caught). Parallel
+intent-review: `test-reviewer`, `architecture-reviewer-betty`,
+`assumptions-reviewer`. Synthesise findings, amend §L-8 WS1 in the
+maximisation plan to replace the three-integration-test shape with
+(a) a pure-function unit test over the env-to-plugin-config
+translator and (b) canonical `@sentry/esbuild-plugin` wiring with
+smoke evidence at WS4/WS5 (Vercel preview deployment producing the
+expected Sentry UI state). Resume execution against the revised
+shape.
 
 After §L-8 closes, alpha-gate emitters land next per the 2026-04-20
 Phase 3 re-sequencing: **Phase 3a (L-1 free-signal + L-2 delegates

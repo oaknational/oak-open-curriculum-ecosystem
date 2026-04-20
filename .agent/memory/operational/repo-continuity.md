@@ -1,8 +1,9 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-20 (session close — memory taxonomy +
-prompt dissolution + §L-8 esbuild-native re-plan landed; deferrals
-recorded; wiring review applied)
+**Last refreshed**: 2026-04-21 (final handoff — after 2026-04-20
+infra landings and a 2026-04-21 §L-8 WS1 RED pause catching the
+4th instance of `inherited-framing-without-first-principles-check`
+before any test code was written)
 **Status**: Authoritative for the fields below. Operational memory
 is the sole continuity-state host. Session orientation doctrine lives
 in [`orientation.md`](../../directives/orientation.md); landing
@@ -98,11 +99,20 @@ Non-goals for next session:
 
 ## Next safe step
 
-**Begin §L-8 execution at WS1 RED** in
-`observability/active/sentry-observability-maximisation-mcp.plan.md`.
-The re-plan is complete; plan-time `assumptions-reviewer` pass
-returned ACCEPT WITH NOTES and findings are applied. No separate
-migration plan exists.
+**Dispatch three reviewers on the simplified §L-8 WS1 shape, then
+revise the plan body and execute.** Per the 2026-04-21 napkin
+entry, the three-integration-test shape prescribed by §L-8 WS1
+asserts vendor / configuration behaviour, not Oak-authored product
+behaviour — a testing-strategy violation caught before code was
+written. Revised shape: one pure-function unit test over the
+env-to-plugin-config translator + canonical `@sentry/esbuild-plugin`
+wiring in `esbuild.config.mjs` + smoke evidence at WS4 / WS5 via a
+Vercel preview deployment showing the expected Sentry UI state.
+
+Reviewers to dispatch in parallel as intent-review:
+`test-reviewer`, `architecture-reviewer-betty`,
+`assumptions-reviewer`. Synthesise findings; amend §L-8 WS1 in the
+maximisation plan; then resume execution against the revised shape.
 
 After §L-8 closes, the alpha-gate emitter work (Phase 3a: L-1 + L-2
 + L-3, all schema-independent, can land in parallel) brings the MCP
@@ -113,17 +123,36 @@ conditions documented in the maximisation plan.
 
 ## Deep consolidation status
 
-**Partially discharged this session; one dedicated pass remains.**
-Discharged: prompt-fitness pressure (1628 → 145 lines dissolution);
-documentation drift on the `docs/foundation/` boundary; PDR-011
-alignment; PDR-026 landing-commitment doctrine; orientation
-directive; memory taxonomy restructure; reviewer catalogue re-homed
-to executive memory.
+**Due — pattern graduation now overdue; dedicated consolidation
+pass required.** Discharged across the 2026-04-20/21 arc: prompt-
+fitness pressure (1628 → 145 lines dissolution); documentation
+drift on the `docs/foundation/` boundary; PDR-011 alignment;
+PDR-026 landing-commitment doctrine; orientation directive; memory
+taxonomy restructure; reviewer catalogue re-homed to executive
+memory.
 
-Outstanding: perturbation-mechanism PDR/rule drafting (napkin logs
-all three candidates — non-goal re-ratification, standing-decision
-register, first-principles metacognition — as complementary layers
-to land as a bundle). Next consolidation pass owns this.
+Outstanding (must land at next consolidation pass):
+
+- **`inherited-framing-without-first-principles-check` pattern
+  extraction** to `.agent/memory/active/patterns/`. Four instances
+  now documented in napkin (three on 2026-04-20, one on
+  2026-04-21 caught before any code was written). Well past the
+  repeats bar.
+- **Perturbation-mechanism bundle** as a PDR plus three lightweight
+  artefacts: non-goal re-ratification ritual, standing-decision
+  register, first-principles metacognition prompt. All three are
+  complementary layers; landing them as a bundle is the design.
+- **`practice.md` Artefact Map refresh** to reflect the three-mode
+  memory taxonomy.
+- **Portability decision** on the three-mode taxonomy (portable
+  Practice doctrine via PDR, or explicitly host-local).
+
+The broader gap — feedback loops across memory planes, emergent-
+whole observation, executive-memory drift detection — is captured
+as a strategic plan at
+[`agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md).
+Promotion trigger: second concrete drift instance OR owner-direct
+OR Sentry alpha-gate lands.
 
 ## Next-session opening statement
 
