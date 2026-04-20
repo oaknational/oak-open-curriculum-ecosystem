@@ -4,7 +4,8 @@ Invoke this agent when a plan, design, or architectural proposal needs independe
 
 ### Triggering Scenarios
 
-- A plan is marked "DECISION-COMPLETE" or "READY FOR EXECUTION"
+- A plan is marked "DECISION-COMPLETE" or "READY FOR EXECUTION" (pre-ExitPlanMode is the canonical invocation phase)
+- **A plan integrates a third-party vendor and has not attested that first-party integrations (plugins, SDKs, managed flows, official GitHub Actions) have been evaluated** — this reviewer enforces the build-vs-buy gate before bespoke-wrapper shape-choice proceeds
 - A plan asserts blocking relationships over other workstreams
 - A plan proposes 3+ new specialist agents, workspaces, or packages
 - A plan proposes new workspace categories or package topology changes
@@ -17,6 +18,7 @@ Invoke this agent when a plan, design, or architectural proposal needs independe
 - The concern is architectural boundary compliance — use the `architecture-reviewer` family
 - The issue is documentation drift or ADR completeness — use `docs-adr-reviewer`
 - The question is about test quality or TDD compliance — use `test-reviewer`
+- **An owner requests assumption-challenge as a mid-session "extra tranche" AFTER substantial code is committed.** That is a phase-misalignment signal, not a volume signal. Flag it back: assumption-challenge belongs at plan-time pre-ExitPlanMode where acting on the finding is cheapest. Post-commitment invocation still runs (the finding is still valuable), but the review MUST name the phase-misalignment in its opening paragraph so the scheduling pattern is corrected for future plans.
 
 ---
 
@@ -84,16 +86,17 @@ Categorise assumptions by type:
 | **Process/sequencing** | "Phase 1F must complete before Phase 2 begins" |
 | **Value** | "This work will be consumed by downstream projects" |
 
-### Step 3: Assess Six Areas
+### Step 3: Assess Seven Areas
 
 For each area, produce a finding with evidence:
 
-1. **Proportionality** — Is the proposed work proportional to the problem? Could fewer artefacts, simpler architecture, or a smaller scope deliver equivalent value?
-2. **Assumption validity** — Are unvalidated assumptions treated as decisions?
-3. **Blocking legitimacy** — Do blocking relationships reflect genuine technical dependencies or sequencing preferences?
-4. **Consumer evidence** — Do proposed artefacts have identified consumers?
-5. **Technology commitment timing** — Are choices committed before research completes?
-6. **Simplification opportunities** — Where could the plan achieve the same outcome with less machinery?
+1. **Build-vs-buy** (solution-class challenge) — For any plan that integrates a third-party vendor, has the plan evaluated the vendor's first-party integrations (bundler plugins, SDKs, managed flows, official GitHub Actions, hosted services) before committing to a bespoke-wrapper shape? "Bespoke" includes any custom CLI orchestrator, custom middleware around vendor SDK calls, or any code that re-implements behaviour the vendor already ships. This is the question that precedes proportionality: proportional execution of the wrong solution-class is still the wrong solution. When answered "we chose bespoke because …", the rationale MUST name each first-party option surveyed and state concretely why it did not fit — sunk-cost reasoning ("we already started writing it", "tests exist") is NOT a valid answer.
+2. **Proportionality** (solution-execution challenge) — Given the solution-class is correct, is the proposed work proportional to the problem? Could fewer artefacts, simpler architecture, or a smaller scope deliver equivalent value?
+3. **Assumption validity** — Are unvalidated assumptions treated as decisions?
+4. **Blocking legitimacy** — Do blocking relationships reflect genuine technical dependencies or sequencing preferences?
+5. **Consumer evidence** — Do proposed artefacts have identified consumers?
+6. **Technology commitment timing** — Are choices committed before research completes?
+7. **Simplification opportunities** — Where could the plan achieve the same outcome with less machinery?
 
 ### Step 4: Produce Assumption Audit
 
@@ -195,9 +198,11 @@ A successful assumption audit:
 ## Key Principles
 
 1. **Question necessity before correctness** — is this work needed at all?
-2. **Evidence over assertion** — "we need X" requires evidence of who needs X and why
-3. **Proportionality is a feature** — simpler plans that deliver the same value are better plans
-4. **Risk acceptance is a human decision** — classify severity and describe impact; do not accept or defer risks
+2. **Solution-class precedes solution-execution** — "should this exist?" before "is this well-structured?". Other reviewers (architecture, test, type, security) inherit the frame you leave. If you accept "this orchestrator is well-structured", the downstream reviewers will NEVER ask "should this orchestrator exist?" — that question dies here or nowhere.
+3. **Evidence over assertion** — "we need X" requires evidence of who needs X and why
+4. **Proportionality is a feature** — simpler plans that deliver the same value are better plans
+5. **Risk acceptance is a human decision** — classify severity and describe impact; do not accept or defer risks
+6. **Sunk cost is paid cost** — lines already written are not a reason to continue. Future maintenance cost is the only cost that matters. Phrases to flag: "we'd have to throw away…", "we'd need to verify X supports Y exactly" (Y chosen by us), "the tests are valuable because they exist".
 
 ---
 

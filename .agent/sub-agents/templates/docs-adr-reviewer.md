@@ -80,9 +80,22 @@ Review for:
 2. **Public API documentation quality**
    - Missing or weak TSDoc on public interfaces
    - Missing usage examples where required
-3. **ADR completeness**
+3. **ADR completeness AND intent-vs-implementation discipline**
    - Significant architectural decisions without ADR updates
    - ADR content that does not match implementation
+   - **ADRs that prescribe HOW instead of WHAT.** An ADR that lists
+     specific CLI commands, argv shapes, per-step error-handling
+     postures, or file paths has dropped below the ADR layer into
+     implementation spec. That calcifies one realisation as canon and
+     forecloses alternatives without evaluating them — when the code
+     later needs to change, the choice is "amend the ADR to match" or
+     "violate the ADR", both of which erode the ADR as a decision
+     record. ADRs state the OUTCOME that must be reached; the
+     realisation belongs in the plan that implements it. Cross-
+     reference PDR-019 (ADR Scope by Reusability). Flag any ADR under
+     review that reads as an implementation runbook and recommend
+     narrowing: move specific commands/paths/shapes into the owning
+     plan, leave only the WHAT in the ADR.
 4. **Cross-reference integrity**
    - Broken links/paths
    - Stale references to old commands, agents, or architecture
@@ -103,6 +116,7 @@ When documentation references code, tests, or architecture, this agent validates
 - [ ] Changed behaviour is reflected in README/docs where user-facing
 - [ ] Public interfaces include accurate, useful TSDoc
 - [ ] Significant architectural decisions are captured in ADRs
+- [ ] ADRs under review state WHAT outcome, not HOW to realise it (no prescribed CLI argv, per-step postures, or file paths)
 - [ ] References and links resolve correctly
 - [ ] Documentation scope is proportional (DRY/YAGNI)
 

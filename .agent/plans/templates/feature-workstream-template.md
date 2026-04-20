@@ -62,6 +62,79 @@ the SDK, existing tools, or infrastructure already provide.]
 
 ---
 
+## Build-vs-Buy Attestation (REQUIRED before ExitPlanMode)
+
+Complete this section for any plan that integrates a third-party vendor
+(observability, auth, DB, bundler, CI/CD, hosting, payments, analytics,
+search, storage, queueing, LLM provider). Delete the section if the plan
+is purely internal.
+
+**Vendor**: [e.g. Sentry / Vercel / Clerk / Elasticsearch / …]
+
+**First-party integrations surveyed**:
+
+| Integration shipped by vendor | Evaluated? | Adopted / ruled out + reason |
+|--|--|--|
+| [e.g. `@sentry/esbuild-plugin`] | [yes / no] | [adopted / "ruled out because X" — "X" must be concrete, not sunk-cost reasoning] |
+| [e.g. official GitHub Action] | [yes / no] | [adopted / concrete reason ruled out] |
+| [e.g. managed service / hosted flow] | [yes / no] | [adopted / concrete reason ruled out] |
+
+**If bespoke wrapper is chosen**: state explicitly what the first-party
+options cannot do that the bespoke shape can. "We already started
+writing it", "we have tests for the current approach", or "switching
+would be expensive" are SUNK-COST reasoning — not valid answers. Future
+maintenance cost of the bespoke shape is the only relevant cost.
+
+**Reviewer**: `assumptions-reviewer` MUST run against this attestation
+pre-ExitPlanMode for any vendor-integration plan (see Reviewer
+Scheduling below).
+
+---
+
+## Reviewer Scheduling (phase-aligned)
+
+Reviewers are scheduled in three phases, chosen by what they challenge:
+
+### Plan-phase (PRE-ExitPlanMode) — challenges solution-class
+
+These reviewers ask "should this work exist at all, in this shape?"
+They are cheapest to act on because no commitment has been made.
+
+- `assumptions-reviewer` — proportionality, build-vs-buy attestation,
+  phase-alignment, blocking legitimacy, sunk-cost reasoning detection
+- [specialist reviewer for vendor, if applicable — e.g. `sentry-reviewer`,
+  `clerk-reviewer`, `elasticsearch-reviewer`, `mcp-reviewer`] — first-
+  party integration surface, canonical idiom for this vendor
+
+If `assumptions-reviewer` is requested mid-session AFTER code is
+committed, that is a phase-misalignment signal, not a volume signal —
+the invocation still runs, but the review MUST name the misalignment so
+the scheduling pattern is corrected next time.
+
+### Mid-cycle (DURING execution) — challenges solution-execution
+
+These reviewers ask "is this well-structured within the chosen shape?"
+They fire at natural checkpoints (after RED, after GREEN, after
+integration wiring).
+
+- `test-reviewer`, `type-reviewer` — after each RED/GREEN cycle
+- `architecture-reviewer-*` (barney/betty/fred/wilma) — after
+  structural changes
+- `security-reviewer` — after trust-boundary changes
+- `code-reviewer` — gateway; routes to missing specialists; fires the
+  friction-ratchet counter when 3+ independent friction signals
+  accumulate against the same shape (see code-reviewer template)
+
+### Close (POST-execution) — verifies coherence
+
+These reviewers ask "is the landed state internally consistent?"
+
+- `docs-adr-reviewer` — documentation drift; ADR intent-vs-implementation
+- `onboarding-reviewer` — contributor first-contact quality
+- `release-readiness-reviewer` — GO / GO-WITH-CONDITIONS / NO-GO
+
+---
+
 ## WS1 — [Test Specification] (RED)
 
 All tests MUST FAIL at the end of WS1.

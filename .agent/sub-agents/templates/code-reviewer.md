@@ -139,6 +139,51 @@ For each issue:
 - [ ] No inappropriate coupling introduced
 - [ ] Consistent with established patterns
 
+## Escalation Triggers — Shape Reconsideration
+
+Code-reviewer sees every diff in the session. That makes it the natural detector
+for two aggregate signals that per-file checks will miss — both of which require
+escalation to `assumptions-reviewer` with a "shape reconsideration" frame, not
+another tactical fix within the current shape.
+
+### Friction-ratchet counter
+
+When three or more INDEPENDENT friction signals have fired against the same
+solution shape across this session or the prior commits being reviewed, STOP and
+recommend invoking `assumptions-reviewer` for a solution-class review. Counting
+each of these as one signal:
+
+- Lint size cap (max-lines, max-lines-per-function, max-statements, complexity)
+- Dependency cycle caught by depcruise or type-import cycles
+- Reviewer finding that required MORE code to resolve (a probe, a validator, a
+  new file, a tolerance path) rather than less
+- ADR amendment authored to match the implementation (rather than the
+  implementation authored to match the ADR)
+- Vendor-rule exception added (eslint-config ignores entry, tsconfig include
+  patch, prettier-ignore, new `.sentryclirc` entry, etc.)
+- Split/merge churn on the same file-set within one workstream
+
+Each individual tactical fix may be correct. Their accumulation against the
+same shape is NOT — the shape itself is likely wrong. Do not silently approve
+the third fix; surface the ratchet count in the review output and recommend
+solution-class re-review.
+
+### Sunk-cost phrase detector
+
+Flag as "Important" any reasoning in the change description, commit messages,
+or plan prose that includes:
+
+- "we'd have to throw away X"
+- "we'd need to verify that Y supports Z exactly" — where Z is a shape WE chose
+- "the tests are valuable BECAUSE they exist"
+- "we've already committed to this approach"
+- "switching now would waste the work already done"
+
+These are cost-accounting for paid costs. The cost of changing direction is
+measured in future maintenance saved, not keystrokes already spent. Flagging
+does not mean rejecting the change — it means naming the reasoning pattern so
+the owner can distinguish genuine trade-offs from sunk-cost preservation.
+
 ## Boundaries
 
 This agent reviews code quality and provides feedback. It does NOT:

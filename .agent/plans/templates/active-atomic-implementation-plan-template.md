@@ -37,7 +37,22 @@ Before any non-planning edits:
    - `.agent/directives/principles.md`
    - `.agent/directives/testing-strategy.md`
    - `.agent/directives/schema-first-execution.md`
-2. Capture baseline signal:
+2. **Build-vs-Buy attestation** (REQUIRED if this plan integrates a
+   third-party vendor). State vendor, list first-party integrations
+   evaluated (plugins, SDKs, managed flows, official Actions), and
+   name why bespoke was chosen OR which first-party option was
+   adopted. Sunk-cost reasoning is not a valid answer. See
+   `feature-workstream-template.md` §Build-vs-Buy Attestation for the
+   canonical prose. `assumptions-reviewer` must run against this
+   attestation before the plan is marked READY FOR EXECUTION.
+3. **Reviewer phase-alignment**: plan-phase reviewers
+   (`assumptions-reviewer`, vendor specialist) fire PRE-execution;
+   mid-cycle reviewers (`test-reviewer`, `type-reviewer`, architecture
+   family, `code-reviewer`) fire DURING; close reviewers
+   (`docs-adr-reviewer`, `onboarding-reviewer`,
+   `release-readiness-reviewer`) fire POST. Scheduling all reviewers
+   at close is a phase-misalignment anti-pattern.
+4. Capture baseline signal:
 
 ```bash
 [deterministic baseline command]
