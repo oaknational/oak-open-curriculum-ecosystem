@@ -1,56 +1,50 @@
-# Track: OAC Phase 4 + Plugin Migration
+# Track: Sanitise tsup-framed planning + re-plan §L-8 esbuild-native
 
 **Agent**: Claude (this session, opus-4-7)
 **Branch**: `feat/otel_sentry_enhancements`
 **Created**: 2026-04-20
-**Expires_at**: 2026-04-23
+**Expires_at**: 2026-04-21
 
 ## Claimed territory
 
-- `.agent/prompts/session-continuation.prompt.md` — retire `Live Continuity
-  Contract` and ephemeral session-state sections.
-- `.agent/prompts/archive/` — archive the retired prompt sections.
-- `.agent/skills/go/shared/go.md` — retire OAC-pilot framing, promote state
-  surfaces to baseline read order.
-- `.agent/commands/session-handoff.md` — retire OAC-pilot framing, rewrite
-  step 1 to target state surfaces directly.
-- `.agent/state/repo-continuity.md` — pilot-evidence refinements (a).
-- `.agent/state/README.md` — fix stale gitignored claim (line 47–48) +
-  writer/authority updates.
-- `.agent/plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md`
-  — Phase 4 execution notes + authority-order refinement (b).
-- `.agent/plans/observability/current/sentry-esbuild-plugin-migration.plan.md`
-  — plan-density resolution (fold vs pair-archive).
-- `apps/oak-curriculum-mcp-streamable-http/build-scripts/*` — WS1 deletion
-  scope.
+- `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
+  — §L-8 re-plan (or re-fold) from the esbuild-native decision.
+- `.agent/plans/observability/current/` — plan-density invariant
+  resolution (re-fold into §L-8 vs standalone + pair-archive).
+- `.agent/state/repo-continuity.md` — keep sanitised; do not
+  reintroduce tsup-framing.
+- `.agent/runtime/tracks/` — this card; resolved at session close.
 
 ## Current task
 
-OAC Phase 4.1 — retire legacy prompt sections and align workflow docs with
-the three-surface model.
+Author a clean plan for the §L-8 esbuild-native migration per
+`.agent/commands/plan.md`. No implementation this session.
 
 ## Blocker
 
-None. Owner-set sequencing: Phase 4 close → plugin migration → Sentry
-integration. Sequencing is an in-flight-drift-reduction choice, not a
-technical block — the plugin-migration plan's actual dependency is OAC
-Phase 2 scaffolding (already landed at `ffcad2aa`). Framing corrected
-after `assumptions-reviewer` flagged it during Phase 4.3 closeout.
+None. The tsup-retention non-goal from the prior standalone draft was
+the mechanical block; it has been removed from `repo-continuity.md`
+non-goals and overridden by the owner-beats-plan invariant now in the
+authoritative invariants list.
 
 ## Handoff note
 
-Owner pushed back on the "stop reading the legacy prompt section" patch
-and asked for the retirement itself. Phase 4.1 retired the section
-(1628 → ~145 lines). Phase 4.2 recorded no-promotion portability
-decision. Phase 4.3 propagated to ADR-150, `continuity-practice.md`,
-`practice-bootstrap.md`, and the operational-awareness deep-dive;
-reviewer findings were applied (ADR-150 rationale/consequences/§4
-alignment; OAC plan §Goal + §Task 2.2 gitignored vestiges corrected;
-repo-continuity + workstream brief staleness cleared; track card
-blocking-chain overstatement corrected). PDR-011 alignment + the deep
-consolidation pass remain as follow-up.
+Prior session work landed cleanly: OAC Phase 4 closed at `d876506c`.
+A follow-up fold of the standalone `sentry-esbuild-plugin-migration`
+plan into §L-8 proceeded under the wrong frame (tsup-retention),
+contradicting the owner's three-day-old standing esbuild decision.
+The plugin + tsup path is independently known-broken at runtime
+(`sentry-javascript-bundler-plugins` issues 608 + 614 and tsup
+issue 1260). §L-8 fold has been reverted via `git checkout HEAD`;
+standalone file stays deleted; `repo-continuity.md` sanitised. A
+clean re-plan is the next output and the owner-beats-plan invariant
+is now authoritative.
 
 ## Promotion needed
 
-None yet. If the prompt retirement surfaces a durable pattern worth
-promoting (e.g. "retire, don't patch, legacy surfaces"), record it here.
+- **Perturbation-mechanism PDR candidate** (already flagged in the
+  2026-04-20 evening napkin entry): pick one of non-goal-
+  re-ratification, standing-decision register, or first-principles
+  metacognition prompt, and draft as a Practice Core PDR at the next
+  consolidation pass. This is the governance output that prevents the
+  three-day drift from recurring.
