@@ -501,6 +501,20 @@ commit.
   `napkin.md` is ~1400 lines (well over the 500-line rotation
   threshold).
 
+### Handoff Addendum — 2026-04-20 end of day (L-7 bespoke landed, plugin pivot, guardrails installed)
+
+- **Current state supersedes the 2026-04-19 contract above on these fields only.** Earlier fields that are unchanged still apply.
+- **HEAD**: `89bf86ab`. Branch nine commits ahead of origin. Working tree clean. `pnpm check` green via turbo full cache.
+- **L-7 bespoke orchestrator landed** (commits `7f3b17e9` sentry-node resolver/tag, `6f5acd17` 4-file orchestrator + 21 integration tests, `ecee9801` Vercel wiring + ADR-163 amendment). **Then flagged for replacement** by `@sentry/esbuild-plugin`: owner question "would we still need all this if we switched from tsup to esbuild?" surfaced that the bespoke code was written without evaluating the vendor's first-party bundler plugin. Pivot decision made; migration plan pending.
+- **Guardrails installed** (commit `4bccba71`). Six metacognition lessons integrated into four surfaces: `assumptions-reviewer` (build-vs-buy trigger + solution-class framing + phase-misalignment detection + sunk-cost principle), `code-reviewer` (friction-ratchet counter + sunk-cost phrase detector), `docs-adr-reviewer` (ADR intent-vs-implementation check), three plan templates (Build-vs-Buy Attestation + phase-aligned Reviewer Scheduling sections). No new rules/PDRs/skills — integration chosen tight at existing surfaces.
+- **Sentry doc-drift snapshot committed** (`89bf86ab`). Deliberate short-lived snapshot at pre-plugin-migration boundary; documents bespoke orchestrator state for historical legibility; plugin migration will rewrite most of this prose.
+- **Research thread committed** (`162f767e`). Cross-lane direction-of-travel research across governance planes, operating model, adjacent enablers — owner-authored, bundled.
+- **Current objective (next session)**: (1) find + apply the session-continuation-prompt decomposition plan — this file is 1545 lines and its complexity itself adds self-referential drift risk; (2) consolidate observability/sentry plans around the plugin direction; (3) draft the plugin-migration plan USING the new templates (the plan will itself test whether the guardrails work in practice).
+- **Hard invariants (additions)**: Build-vs-buy attestation now required pre-ExitPlanMode for any vendor-integration plan. Friction-ratchet counter fires after 3+ independent signals against the same shape → escalate to assumptions-reviewer, do not add another tactical fix. Sunk-cost phrases ("we'd have to throw away…", "we'd need to verify X supports Y exactly" where Y is chosen by us, "tests are valuable because they exist") are now flagged signals, not justifications.
+- **Open questions**: (a) does `@sentry/esbuild-plugin` cover §6.6 deploy-event registration cleanly? Verify during plan-time, not post-commitment. (b) is the continuation-prompt decomposition plan already drafted somewhere, or does it need authoring? — search first.
+- **Next safe step**: start fresh session. Run `jc-start-right-quick` or thorough grounding. Address tasks in order: #20 (decomposition plan → apply to this file) → #21 (observability plan consolidation) → #22 (plugin migration plan).
+- **Deep consolidation status**: **due — not-well-bounded for this closeout.** Triggers firing: governance change (guardrails landed need PDR graduation assessment), repeated surprise pattern (L-7 sunk-cost reinforces build-vs-buy lesson), fitness pressure (this prompt at 1545 lines is the exemplar of what owner asked to decompose), pattern candidates not yet graduated. Deferred to next session's deliberate consolidation pass after the continuation-prompt decomposition, since that decomposition itself is the natural carrier for the consolidation work.
+
 ### Later Handoff Addendum — 2026-04-19 (KG reframe + shared-worktree state)
 
 - **Workstream**: The branch still belongs to Observability Wave 1 on

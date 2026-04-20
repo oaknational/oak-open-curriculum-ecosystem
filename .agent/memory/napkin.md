@@ -1,3 +1,40 @@
+## 2026-04-20 — L-7 bespoke orchestrator built then pivoted + guardrails installed
+
+### What Was Done
+
+- Landed L-7 Sentry release/commits/deploy linkage bespoke orchestrator (commits `7f3b17e9` + `6f5acd17` + `ecee9801`): resolver split (`resolveSentryEnvironment` + `resolveSentryRegistrationPolicy`), OTel tag rename `git_sha` → `git.commit.sha`, four-file TypeScript orchestrator invoked by `tsx` from Vercel Build Command, 21 integration tests with fakes-as-arguments, ADR-163 §6.0 probe amendment, Vercel wiring. ~900 lines total.
+- Owner surfaced in one question that `@sentry/esbuild-plugin` (the vendor's first-party bundler plugin) would eliminate most of this bespoke code. Pivot decision: delete the orchestrator, switch to the plugin. Bespoke commits kept as signal; plugin-migration plan queued.
+- Installed six metacognition lessons as process guardrails (commit `4bccba71`) across four repo surfaces: `assumptions-reviewer`, `code-reviewer`, `docs-adr-reviewer`, three plan templates.
+- Committed research-thread cross-lane direction-of-travel work (commit `162f767e`, owner-authored).
+- Committed sentry doc-drift snapshot (`89bf86ab`) before plugin migration — signal, not throwaway.
+
+### Patterns to Remember
+
+- **Build-vs-buy precedes build-shape.** Weighed `.sh` vs `.mjs` vs `.ts` at plan time. Three bespoke shapes. Never asked "should we write our own?" The vendor plugin was the cheapest option and was never on the list. ADR-163 §6's six CLI commands were inherited as the problem statement rather than questioned as one realisation of a spec.
+- **ADRs that prescribe HOW not WHAT foreclose alternatives.** ADR-163 §6 listed six specific `sentry-cli` invocations with per-step abort/warn postures. Once written, "amend the ADR to match implementation" became the path of least resistance. When the ADR was amended for the §6.0 probe, the calcification deepened. ADRs should state the outcome the vendor must reach; the realisation belongs in the implementing plan.
+- **Friction is aggregate signal, not per-point friction.** Five ratchets fired against the bespoke shape: lint size/complexity caps triggering file splits; type-import cycle; reviewer finding requiring MORE code (the §6.0 probe); ADR amendment; eslint-config ignores exception. Each was individually principled; cumulatively they were the repo telling me the shape was wrong. A counter at three+ would have fired.
+- **Sunk-cost reasoning leaks into recommendations.** Final defence was "we'd need to verify the plugin supports our `--release + -e <env>` combination exactly" — protecting the shape of argv we chose. Argv shape was never the requirement; Sentry UI state was. When hedging on whether vendor-canonical meets a spec we invented, that's sunk-cost framing in recommendation form.
+- **Review phase matters as much as review volume.** Plan had every reviewer tranche scheduled post-commitment. `assumptions-reviewer` was LAST (after docs). Owner had to request a mid-session "extra tranche" which caught the commit-attribution-overwrite issue — but even that ran inside the frame "is this orchestrator sound?" not "should this orchestrator exist?". Owner's extra-tranche request was a phase-misalignment signal, not a volume signal.
+- **Vercel `vercel.json.buildCommand` overrides the Dashboard UI.** Per official docs: "This value overrides the Build Command in Project Settings." One reviewer agent earlier had muddled this and I repeated it unchecked. Verified in the actual Vercel docs page, corrected. Lesson: reviewer output is not authoritative on vendor behaviour — always check the vendor's own docs before asserting.
+
+### Mistakes Made
+
+- Inherited ADR-163's implementation framing without questioning whether the ADR was asking the right question. The whole orchestrator was wrong-shape; every reviewer I invoked operated inside that frame; none asked "should this exist?"
+- Scheduled `assumptions-reviewer` last in the plan's reviewer matrix. That is maximally expensive to act on a shape finding. Owner had to manually request it mid-session.
+- Defended argv shape as if it were the requirement, when it was an implementation detail I had chosen. Sunk-cost preservation disguised as technical rigour.
+
+### Key Insight
+
+**The reviewer tranche the caller dispatches inherits the caller's frame.** If the frame is "is this orchestrator well-structured?", downstream reviewers answer that question. "Should this orchestrator exist?" dies at the dispatch point or nowhere. Solution-class challenge must be framed by the caller, and must happen pre-ExitPlanMode, because that is the only phase where acting on "this should not exist" is cheap. Installing this as a rule (assumptions-reviewer new Triggering Scenarios + Key Principles + "Not This Agent When" mid-session rejection) is the structural fix.
+
+### Lessons for Next Session
+
+- The session-continuation prompt is now 1545 lines — its own complexity is the self-referential drift risk the owner flagged. First task next session: find + apply the decomposition plan.
+- Deep consolidation is DUE. Not running it in this handoff per owner direction to move to a fresh session. The decomposition work in the next session is the natural carrier for the consolidation pass — do both together.
+- Plugin-migration plan MUST use the new `feature-workstream-template.md` with Build-vs-Buy Attestation + Reviewer Scheduling filled in. This tests whether the guardrails work in practice.
+
+---
+
 ## 2026-04-20 — practice-aligned project-directions research (broad-before-deep)
 
 ### What Was Done
