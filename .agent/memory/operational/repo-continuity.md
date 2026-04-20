@@ -127,5 +127,7 @@ to land as a bundle). Next consolidation pass owns this.
 
 ## Next-session opening statement
 
-See the dedicated section below this file — landed as part of this
-session's close.
+See [`next-session-opener.md`](next-session-opener.md) — landing
+target is §L-8 WS1 RED (Sentry integration for public alpha);
+standing decisions (owner-beats-plan) are listed; grounding order
+and session shape specified.
