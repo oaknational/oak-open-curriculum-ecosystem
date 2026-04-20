@@ -45,7 +45,7 @@ describe('shouldInspectFile', () => {
   });
 
   it('excludes archived files', () => {
-    expect(shouldInspectFile('.agent/memory/archive/napkin-2026-03-21.md')).toBe(false);
+    expect(shouldInspectFile('.agent/memory/active/archive/napkin-2026-03-21.md')).toBe(false);
     expect(
       shouldInspectFile('.agent/plans/agentic-engineering-enhancements/archive/completed/foo.md'),
     ).toBe(false);

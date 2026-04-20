@@ -25,8 +25,8 @@ the gaming problem but introduced a semantic cliff. In practice the binary
   "address at the next refinement" from "emergency, stop everything".
 - Because "blocking" felt disproportionate for moderate overages, the live
   Practice drifted into teaching that fitness is advisory, not a blocking gate.
-  `.agent/memory/napkin.md` (2026-04-16), `.agent/prompts/session-continuation.prompt.md`,
-  and `.agent/memory/distilled.md` §Fitness Management all arrived at "limits
+  `.agent/memory/active/napkin.md` (2026-04-16), `.agent/prompts/session-continuation.prompt.md`,
+  and `.agent/memory/active/distilled.md` §Fitness Management all arrived at "limits
   are informational, not gates". The ADR said blocking; the Practice said
   advisory; three incompatible teachings lived in the repo simultaneously.
 - The original framing treated the loop-failure case (content vastly
@@ -85,7 +85,7 @@ the required remediation.
 
 1. **One scale, one vocabulary everywhere.** The four zone names (`healthy`,
    `soft`, `hard`, `critical`) are used verbatim in the validator output, in
-   `.agent/commands/consolidate-docs.md`, in `.agent/memory/distilled.md`, in
+   `.agent/commands/consolidate-docs.md`, in `.agent/memory/active/distilled.md`, in
    `.agent/prompts/session-continuation.prompt.md`, in the outgoing
    practice-context file, and in any future fitness-related surface. One
    concept = one name (`.agent/directives/principles.md` §Code Design).
@@ -130,7 +130,7 @@ to local remediation — a short post-mortem:
    declared ceiling?
 3. **Is the file a symptom of a missing graduation?** Content accumulation
    often signals that a governance home (ADR, governance doc, README) is
-   missing for material that `.agent/memory/distilled.md` or the napkin has
+   missing for material that `.agent/memory/active/distilled.md` or the napkin has
    been holding.
 
 The post-mortem is short by design — three questions, not a full session. Its

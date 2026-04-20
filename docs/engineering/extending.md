@@ -96,7 +96,7 @@ Core packages live in `packages/core/` and provide foundational abstractions.
 Rules, skills, commands, and sub-agents follow the three-layer artefact model
 (canonical content in `.agent/`, thin platform adapters in
 `.cursor/`/`.claude/`/`.agents/`/`.gemini/`). The canonical how-to lives in
-[`.agent/directives/artefact-inventory.md`](../../.agent/directives/artefact-inventory.md#how-to-create-new-artefacts)
+[`.agent/memory/executive/artefact-inventory.md`](../../.agent/memory/executive/artefact-inventory.md#how-to-create-new-artefacts)
 — step-by-step recipes for each artefact type, plus the platform-adapter
 parity required to keep `pnpm portability:check` green.
 
@@ -142,7 +142,7 @@ Steps:
 Governance claims that assert a property holds "universally" (e.g. "every
 rule cites its ADR", "one vocabulary everywhere") should be backed by a
 scanner — see pattern
-[`governance-claim-needs-a-scanner`](../../.agent/memory/patterns/governance-claim-needs-a-scanner.md)
+[`governance-claim-needs-a-scanner`](../../.agent/memory/active/patterns/governance-claim-needs-a-scanner.md)
 and the four live validators under `scripts/`.
 
 ## Adopting a New Vendor CLI

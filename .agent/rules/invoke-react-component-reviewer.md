@@ -40,4 +40,4 @@ Do not invoke `react-component-reviewer` for:
 
 ## Invocation
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `react-component-reviewer` canonical template is at `.agent/sub-agents/templates/react-component-reviewer.md`.
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `react-component-reviewer` canonical template is at `.agent/sub-agents/templates/react-component-reviewer.md`.

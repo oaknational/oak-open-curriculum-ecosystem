@@ -33,9 +33,9 @@ Can the next session answer:
 Primary surfaces:
 
 - active plans
-- `.agent/state/repo-continuity.md` — canonical continuity contract
-- `.agent/state/workstreams/<slug>.md` — per-lane resumption brief
-- `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md` — single-writer
+- `.agent/memory/operational/repo-continuity.md` — canonical continuity contract
+- `.agent/memory/operational/workstreams/<slug>.md` — per-lane resumption brief
+- `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md` — single-writer
   tactical coordination card
 - `session-handoff` — the workflow that refreshes the above
 
@@ -114,7 +114,7 @@ able to continue into the deeper loop at natural convergence boundaries.
 
 ## Continuity Contract
 
-The live continuity contract belongs in `.agent/state/repo-continuity.md`.
+The live continuity contract belongs in `.agent/memory/operational/repo-continuity.md`.
 
 `session-handoff` refreshes it in place using these exact fields:
 
@@ -127,9 +127,9 @@ The live continuity contract belongs in `.agent/state/repo-continuity.md`.
 - `Deep consolidation status`
 
 Per-lane short-horizon state is carried separately in
-`.agent/state/workstreams/<slug>.md` using the fields specified in
-`.agent/state/README.md`. Tactical coordination lives in
-`.agent/runtime/tracks/*.md`.
+`.agent/memory/operational/workstreams/<slug>.md` using the fields specified in
+`.agent/memory/operational/README.md`. Tactical coordination lives in
+`.agent/memory/operational/tracks/*.md`.
 
 `.agent/prompts/session-continuation.prompt.md` is a behavioural entry
 surface (grounding read order, per-session landing commitment, reviewer
@@ -151,7 +151,7 @@ Use it after `start-right-quick` for longer MCP App work, especially when:
 `GO` should start from:
 
 - `start-right-quick`
-- `.agent/state/repo-continuity.md` (and the relevant workstream brief +
+- `.agent/memory/operational/repo-continuity.md` (and the relevant workstream brief +
   track card it links to)
 - the active plan set for the current lane
 

@@ -12,7 +12,7 @@ For the full architecture, see
 [ADR-125 (Agent Artefact
 Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 For the live platform support matrix, see
-[cross-platform-agent-surface-matrix.md](../reference/cross-platform-agent-surface-matrix.md).
+[cross-platform-agent-surface-matrix.md](../memory/executive/cross-platform-agent-surface-matrix.md).
 
 ## Canonical Content (Layer 1)
 
@@ -23,7 +23,7 @@ For the live platform support matrix, see
 | `.agent/commands/*.md` | Canonical commands |
 | `.agent/directives/*.md` | Policy documents (AGENT.md, principles.md, etc.) |
 | `.agent/sub-agents/templates/*.md` | Canonical sub-agent prompts (ADR-114) |
-| `.agent/memory/patterns/` | Reusable solutions ([README](../memory/patterns/README.md)) |
+| `.agent/memory/active/patterns/` | Reusable solutions ([README](../memory/active/patterns/README.md)) |
 | `.agent/plans/` | Implementation plans, execution tracking |
 | `agent-tools/` | Agent workflow CLIs |
 

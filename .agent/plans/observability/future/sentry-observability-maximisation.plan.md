@@ -276,7 +276,7 @@ The MCP-side strategy close-out lane (L-15 in
 `active/sentry-observability-maximisation-mcp.plan.md`) is the
 authoritative ADR moment for cross-cutting Sentry-strategy decisions
 on the current branch. The 2026-04-19 owner conversation (recorded in
-`.agent/memory/napkin.md`) settled five framings that L-15 *may*
+`.agent/memory/active/napkin.md`) settled five framings that L-15 *may*
 choose to incorporate. They are recorded here, in this strategic
 parent, so the active MCP plan is not edited from outside its owning
 branch:

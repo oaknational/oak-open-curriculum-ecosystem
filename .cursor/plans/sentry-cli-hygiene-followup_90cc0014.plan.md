@@ -158,7 +158,7 @@ Edit exactly these files, nothing else:
   - Update the Road to Provably Working Sentry step 5 row to "**DONE**" **only if** Phase 5 resolves item 8 via the CLI path.
   - Update the 2026-04-16 execution snapshot "Next steps" so the next restart reads: validation lane cleared → `sentry-observability-expansion.plan.md` resumes.
 - [`.agent/prompts/session-continuation.prompt.md`](.agent/prompts/session-continuation.prompt.md): refresh `Current state`, `Current objective`, and `Next safe step` to reflect closure of the Sentry CLI hygiene lane and the pivot back to the expansion plan.
-- [`.agent/memory/napkin.md`](.agent/memory/napkin.md): one session entry in the surprise/behaviour-change format per the [napkin skill](.agent/skills/napkin/SKILL.md).
+- [`.agent/memory/active/napkin.md`](.agent/memory/active/napkin.md): one session entry in the surprise/behaviour-change format per the [napkin skill](.agent/skills/napkin/SKILL.md).
 
 The 2026-04-16 evidence bundle `README.md` is **not** edited; any item-8 update is recorded in the sibling follow-up note file created in Phase 3/5.
 

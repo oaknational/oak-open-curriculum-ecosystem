@@ -72,7 +72,7 @@ The overlay is the working scratchpad with all original research, dated arithmet
 
 - **Create**: `.agent/research/sentry-and-posthog/Sentry and PostHog-oak.md` (working draft; ~600–1000 lines; matches existing space-in-filename convention).
 - **Modify**: [`docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md`](docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md) — flip status from `stub` to `active`, replace §2–§5 with full-text content; preserve §1 problem statement and §6 references; expand frontmatter promotion-trigger record.
-- **Append**: `.agent/memory/napkin.md` — provenance audit (web fetches dated, Sentry MCP queries cited, reviewer rounds recorded), per the napkin discipline.
+- **Append**: `.agent/memory/active/napkin.md` — provenance audit (web fetches dated, Sentry MCP queries cited, reviewer rounds recorded), per the napkin discipline.
 - **Do not touch**: the original `Sentry and PostHog-clean.md` (faithful copy, leave intact).
 
 ## Original-research streams (parallel where possible)

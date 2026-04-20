@@ -452,7 +452,7 @@ Runtime re-execution of the same rule engine does not extend it.
 
 Each question names a calibration trigger or decision owner — no vague
 intent (per
-[`patterns/nothing-unplanned-without-a-promotion-trigger.md`](../../.agent/memory/patterns/nothing-unplanned-without-a-promotion-trigger.md)).
+[`patterns/nothing-unplanned-without-a-promotion-trigger.md`](../../.agent/memory/active/patterns/nothing-unplanned-without-a-promotion-trigger.md)).
 
 ### 5.1 Frustration-proxy thresholds
 
@@ -583,12 +583,12 @@ This exploration is the evidence base for:
   shape (followed by this document).
 - [`docs/explorations/2026-04-18-observability-strategy-and-restructure.md § 3.12`](./2026-04-18-observability-strategy-and-restructure.md#312-accessibility-observability--best-effort--open-question)
   — direction-setting session, owner framing for this exploration.
-- [`patterns/findings-route-to-lane-or-rejection.md`](../../.agent/memory/patterns/findings-route-to-lane-or-rejection.md)
+- [`patterns/findings-route-to-lane-or-rejection.md`](../../.agent/memory/active/patterns/findings-route-to-lane-or-rejection.md)
   — every rejected option in §4 carries an explicit rationale; nothing
   is deferred without a home.
-- [`patterns/nothing-unplanned-without-a-promotion-trigger.md`](../../.agent/memory/patterns/nothing-unplanned-without-a-promotion-trigger.md)
+- [`patterns/nothing-unplanned-without-a-promotion-trigger.md`](../../.agent/memory/active/patterns/nothing-unplanned-without-a-promotion-trigger.md)
   — every open question in §5 carries a named trigger.
-- [`patterns/ground-before-framing.md`](../../.agent/memory/patterns/ground-before-framing.md)
+- [`patterns/ground-before-framing.md`](../../.agent/memory/active/patterns/ground-before-framing.md)
   — the recommendation set follows from the actual widget composition
   root, not from SDK-surface speculation.
 

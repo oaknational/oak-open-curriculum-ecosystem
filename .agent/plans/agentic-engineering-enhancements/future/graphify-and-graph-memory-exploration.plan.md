@@ -8,8 +8,8 @@
 ## Problem and Intent
 
 The repo already has canonical memory surfaces such as
-[`napkin.md`](../../../memory/napkin.md),
-[`distilled.md`](../../../memory/distilled.md), patterns, plans, ADRs, and
+[`napkin.md`](../../../memory/active/napkin.md),
+[`distilled.md`](../../../memory/active/distilled.md), patterns, plans, ADRs, and
 implementation code. It also already has graph-shaped SDK and MCP work.
 
 What it does not yet have is a derived graph layer for path/query/explain

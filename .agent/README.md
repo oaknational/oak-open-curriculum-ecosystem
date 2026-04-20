@@ -53,10 +53,10 @@ created as needed.
 
 ### Knowledge: napkin → distilled → patterns → graduated
 
-Session observations are captured in [`memory/napkin.md`](memory/napkin.md).
+Session observations are captured in [`memory/active/napkin.md`](memory/active/napkin.md).
 Periodic distillation extracts high-signal learnings into
-[`memory/distilled.md`](memory/distilled.md). Abstract, reusable solutions
-are extracted to the [pattern library](memory/patterns/README.md) (77
+[`memory/active/distilled.md`](memory/active/distilled.md). Abstract, reusable solutions
+are extracted to the [pattern library](memory/active/patterns/README.md) (77
 patterns across code, architecture, process, testing, and agent categories).
 Settled knowledge graduates into permanent documentation (ADRs, governance
 docs, READMEs) via the consolidation workflow.
@@ -86,7 +86,7 @@ docs, READMEs) via the consolidation workflow.
 
 | Directory | Purpose |
 | --- | --- |
-| `memory/` | Session learning: [`napkin.md`](memory/napkin.md) (observations), [`distilled.md`](memory/distilled.md) (hard-won rules), [`patterns/`](memory/patterns/README.md) (77 reusable solutions) |
+| `memory/` | Session learning: [`napkin.md`](memory/active/napkin.md) (observations), [`distilled.md`](memory/active/distilled.md) (hard-won rules), [`patterns/`](memory/active/patterns/README.md) (77 reusable solutions) |
 | `experience/` | Qualitative records of what work was like across sessions — see [experience/HUMAN.md](experience/HUMAN.md) |
 | `research/` | Research proposals and analysis |
 | `analysis/` | Technical analysis artefacts (API investigations, reranking assessments, etc.) |

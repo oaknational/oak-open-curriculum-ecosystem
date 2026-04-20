@@ -319,7 +319,7 @@ the agent answered "No, keep tsup" — precisely backwards.
 - **INVARIANT** (authoritative, repo-continuity): *"Owner's stated
   direction outranks any plan's non-goals, design decisions, or scope.
   When a plan and the owner disagree, the plan is wrong."* LANDED at
-  `.agent/state/repo-continuity.md §Repo-wide invariants` this session.
+  `.agent/memory/operational/repo-continuity.md §Repo-wide invariants` this session.
 - **RULE candidate** (always-applied): a rule forcing the non-goal
   re-ratification ritual before execution against any plan with a
   non-goals section. Draft for next consolidation pass.
@@ -372,7 +372,7 @@ the agent answered "No, keep tsup" — precisely backwards.
   active plans (sentry-otel-integration, doc-architecture phase A,
   onboarding-simulations), and both onboarding-reviewer adapter
   templates (`.agent/sub-agents/templates/` and `.claude/agents/`).
-  Historical material in `.agent/memory/archive/`, `.agent/plans/archive/`,
+  Historical material in `.agent/memory/active/archive/`, `.agent/plans/archive/`,
   and `.agent/research/documentation-audit-report.md` deliberately
   left untouched as historical record.
 - Closed a discoverability gap from the deletion by adding a
@@ -467,8 +467,8 @@ prescription survived a link-only pass.
   (un-dropped as the forward lane). L-8 section body rewritten to name
   the prior `PARKED` rationale as the sunk-cost framing the `4bccba71`
   guardrails are designed to catch.
-- Executed OAC Phase 2 (`ffcad2aa`): created `.agent/state/`
-  (`repo-continuity.md` + `workstreams/`) + `.agent/runtime/tracks/`
+- Executed OAC Phase 2 (`ffcad2aa`): created `.agent/memory/operational/`
+  (`repo-continuity.md` + `workstreams/`) + `.agent/memory/operational/tracks/`
   scaffolding, added OAC-Pilot sections to `session-handoff` + `GO` +
   `session-continuation.prompt.md` with explicit pilot-phase framing.
 - Drafted sentry-esbuild-plugin migration plan (`4cbc8843`) as task #22
@@ -576,7 +576,7 @@ instance before promoting.
 
 ### Lessons for next session
 
-- Resume from `.agent/state/repo-continuity.md`, not from
+- Resume from `.agent/memory/operational/repo-continuity.md`, not from
   `.agent/prompts/session-continuation.prompt.md`'s `Live continuity
   contract`. The prompt's contract section is legacy as of OAC Phase 3
   PROMOTE decision; the state surfaces are authoritative.
@@ -948,7 +948,7 @@ if it recurs.
   type across two workspaces is tolerated until the third import
   site; at three, canonicalisation is forced. (From the JsonValue /
   TelemetryValue unification pressure.) **Strong candidate for
-  `.agent/memory/patterns/` on second instance — general engineering
+  `.agent/memory/active/patterns/` on second instance — general engineering
   observation.**
 - **`core-tier-means-primitive-not-just-dependency-pure`** — workspace
   tier is about primitive-ness as well as dependency purity. A

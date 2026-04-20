@@ -39,7 +39,7 @@ promotion_triggers:
 [ADR-162](../../../../docs/architecture/architectural-decisions/162-observability-first.md)'s
 vendor-independence clause structurally supports any number of sinks.
 The 2026-04-19 owner conversation (recorded in
-[`.agent/memory/napkin.md` § 2026-04-19 — Sentry vs PostHog overlay + canonical exploration body](../../../memory/napkin.md))
+[`.agent/memory/active/napkin.md` § 2026-04-19 — Sentry vs PostHog overlay + canonical exploration body](../../../memory/active/napkin.md))
 collapsed the prior "Sentry vs PostHog" framing into a
 **three-sink architecture**:
 

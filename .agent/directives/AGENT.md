@@ -97,8 +97,8 @@ wasted effort on the wrong approach.
 Specialist sub-agents provide targeted reviews and insights.
 Use them proactively for quality assurance. For the full
 invocation matrix, timing guidance, triage checklist, and
-worked examples, see the
-[invoke-code-reviewers directive](./invoke-code-reviewers.md).
+worked examples, see the reviewer catalogue in executive memory:
+[`invoke-code-reviewers.md`](../memory/executive/invoke-code-reviewers.md).
 
 - **Standard quality roster**: `code-reviewer` (gateway),
   `architecture-reviewer-barney`/`-fred`/`-betty`/`-wilma`,
@@ -138,7 +138,7 @@ content in `.agent/`, thin platform adapters in
 `.cursor/`/`.claude/`/`.gemini/`/`.agents/`/`.codex/`, and
 entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For
 the full inventory see
-[artefact-inventory.md](./artefact-inventory.md) (see § Create
+[artefact-inventory.md](../memory/executive/artefact-inventory.md) (see § Create
 New Artefacts to author a new rule, skill, command, sub-agent,
 or ADR) and
 [docs/engineering/extending.md](../../docs/engineering/extending.md).
@@ -146,20 +146,20 @@ or ADR) and
 **Platform configuration split (Claude Code)**:
 `.claude/settings.json` (tracked) defines the system contract;
 `.claude/settings.local.json` (gitignored) holds user-local
-overrides. See [artefact-inventory.md](./artefact-inventory.md)
+overrides. See [artefact-inventory.md](../memory/executive/artefact-inventory.md)
 for the full split policy and portability validator details.
 
 ## Memory and Patterns
 
 Institutional memory lives in `.agent/memory/`:
 
-- [distilled.md](../memory/distilled.md) — hard-won rules extracted from
+- [distilled.md](../memory/active/distilled.md) — hard-won rules extracted from
   session napkins. Read before every session.
-- [patterns/](../memory/patterns/README.md) — 77 abstract, reusable
+- [patterns/](../memory/active/patterns/README.md) — 77 abstract, reusable
   solutions to recurring design problems across code, architecture,
   process, testing, and agent infrastructure. Before inventing a new
   approach, check the pattern library for a known solution.
-- [napkin.md](../memory/napkin.md) — current session observations
+- [napkin.md](../memory/active/napkin.md) — current session observations
   (written continuously, distilled periodically).
 
 ## Essential Links

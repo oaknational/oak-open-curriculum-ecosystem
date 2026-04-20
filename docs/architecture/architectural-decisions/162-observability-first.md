@@ -143,7 +143,7 @@ Phase 5 of the
      from `@oaknational/observability-events`.
    - **Initial severity**: `warn`. Escalates to `error` once Phase 2 of
      the restructure plan lands its first emission sites (per
-     [`patterns/warning-severity-is-off-severity.md`](../../../.agent/memory/patterns/warning-severity-is-off-severity.md)
+     [`patterns/warning-severity-is-off-severity.md`](../../../.agent/memory/active/patterns/warning-severity-is-off-severity.md)
      this is a deliberate soft-launch with a named escalation trigger,
      not a permanent warn-severity state).
    - **Opt-out**: a sentinel comment justifies a legitimate
@@ -332,7 +332,7 @@ In summary:
   and wired at `warn` into every `apps/*` and `packages/sdks/*`
   workspace's `eslint.config.ts`. Reviewer-matrix axis-coverage
   question codified at
-  [`.agent/directives/invoke-code-reviewers.md §Coverage Tracking`](../../../.agent/directives/invoke-code-reviewers.md).
+  [`.agent/memory/executive/invoke-code-reviewers.md §Coverage Tracking`](../../../.agent/memory/executive/invoke-code-reviewers.md).
   Wave-1 enforcement covers `logger.*` / `Sentry.*` / delegate-pattern
   emission sites; the schema-usage detection path (Enforcement
   Mechanism #3) remains deferred to Wave 2 when the
@@ -356,7 +356,7 @@ In summary:
   same five Wave-1 workspaces as `require-observability-emission`.
   Pre-enable audit: 0 violations in-scope; `pnpm check` exit 0 post-
   enable. Enforcement landed at `error` rather than `warn` per
-  `.agent/memory/patterns/warning-severity-is-off-severity.md` —
+  `.agent/memory/active/patterns/warning-severity-is-off-severity.md` —
   with no violations to clean up, the escalation trigger the
   `warn`-with-deadline pattern protects against was vacuous;
   enforcing from day one is the architecturally correct baseline.

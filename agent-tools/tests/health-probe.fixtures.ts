@@ -191,7 +191,7 @@ function writeHookFixtures(repoRoot: string): void {
   writeRepoFile(repoRoot, '.claude/settings.json', CLAUDE_SETTINGS_FIXTURE);
   writeRepoFile(
     repoRoot,
-    '.agent/reference/cross-platform-agent-surface-matrix.md',
+    '.agent/memory/executive/cross-platform-agent-surface-matrix.md',
     HOOK_SURFACE_MATRIX_FIXTURE,
   );
 }

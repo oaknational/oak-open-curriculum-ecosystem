@@ -42,6 +42,6 @@ Do not invoke `sentry-reviewer` for:
 
 ## Invocation
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer
 catalogue and invocation policy. The `sentry-reviewer` canonical template is
 at `.agent/sub-agents/templates/sentry-reviewer.md`.

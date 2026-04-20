@@ -21,7 +21,7 @@ todos:
     content: "Validate: no leftover citeturn/PUA, structural parity vs source, character-identical strip-citations drift proof"
     status: completed
   - id: napkin-audit
-    content: Record citation-set audit in .agent/memory/napkin.md (counts + two-surface agreement note + no-PDF caveat)
+    content: Record citation-set audit in .agent/memory/active/napkin.md (counts + two-surface agreement note + no-PDF caveat)
     status: completed
 isProject: false
 ---
@@ -69,7 +69,7 @@ flowchart LR
    - No PUA characters remain (`grep -P '[\x{e200}-\x{e2ff}]'`).
    - Structural parity vs source: identical heading outline, section order, table count, fenced-code/mermaid block count.
    - Body-text drift proof: apply the same `strip_citations` + whitespace-normalise to source and clean copy and confirm character-identical output.
-8. Record the citation-set audit in [.agent/memory/napkin.md](.agent/memory/napkin.md) (today's session entry only — not in the clean file): source-markdown `turn…` total/unique (324 / 55), distinct PUA citation blocks (103), DOCX `_rels` unique URLs (24), pandoc body-emit unique URL count, and a one-line statement on whether the two available citation surfaces (DOCX `_rels` vs pandoc body) agree, plus an explicit note that no PDF was present so the third-surface check could not be run.
+8. Record the citation-set audit in [.agent/memory/active/napkin.md](.agent/memory/active/napkin.md) (today's session entry only — not in the clean file): source-markdown `turn…` total/unique (324 / 55), distinct PUA citation blocks (103), DOCX `_rels` unique URLs (24), pandoc body-emit unique URL count, and a one-line statement on whether the two available citation surfaces (DOCX `_rels` vs pandoc body) agree, plus an explicit note that no PDF was present so the third-surface check could not be run.
 
 ## Guardrails
 

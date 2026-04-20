@@ -5,7 +5,7 @@ closed; continuity surfaces re-synced to the landed L-8 plan state)
 **Status**: Authoritative for the fields below. The `Live continuity
 contract` section of `.agent/prompts/session-continuation.prompt.md` is
 retired. The prompt is now a behavioural entry surface only; state
-lives in this file, `workstreams/<slug>.md`, and `../runtime/tracks/*.md`.
+lives in this file, `workstreams/<slug>.md`, and `../memory/operational/tracks/*.md`.
 
 ## Active workstreams
 

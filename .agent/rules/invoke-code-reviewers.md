@@ -7,4 +7,4 @@ remains the current gateway reviewer: triage what changed, choose the
 specialists and review depth needed, capture findings explicitly, and act on
 them before considering the work complete.
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy.
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy.

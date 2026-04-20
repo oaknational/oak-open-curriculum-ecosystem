@@ -46,7 +46,7 @@ This skill is for **repair**, not editorial rewrite or summary generation.
 
 Treat the export as a recovery artefact, not as canonical source material.
 
-Read `.agent/memory/patterns/chatgpt-report-normalisation.md` before making
+Read `.agent/memory/active/patterns/chatgpt-report-normalisation.md` before making
 structural decisions or choosing a rebuild strategy.
 
 ## Deliverable
@@ -235,7 +235,7 @@ structural decisions or choosing a rebuild strategy.
 7. Audit the citation set and record the diagnostic in the agent napkin.
 
    Before closing, run a citation-set audit and record it in
-   `.agent/memory/napkin.md` (today's session entry). This is required
+   `.agent/memory/active/napkin.md` (today's session entry). This is required
    tooling hygiene, not part of the deliverable: the clean file stays a
    faithful copy of the report; the audit is agent-side meta-information
    that helps the next normalisation pass detect anomalies quickly.
@@ -347,7 +347,7 @@ Before closing the task, confirm:
   meta-commentary about the recovery pass
 - The citation-set audit (source-`turn…`, DOCX `_rels`, PDF annotation, and
   body-emit counts, plus a one-line statement about whether the three
-  citation surfaces agree) is recorded in `.agent/memory/napkin.md` for the
+  citation surfaces agree) is recorded in `.agent/memory/active/napkin.md` for the
   current session
 - Structural parity confirmed against the agreed baseline (normally the source
   `.md` scaffold): heading outline, section order, and block-level shape

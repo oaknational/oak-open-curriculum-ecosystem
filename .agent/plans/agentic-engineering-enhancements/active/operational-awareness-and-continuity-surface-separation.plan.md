@@ -16,7 +16,7 @@ todos:
   - id: oa-phase-2-integration
     content: "Phase 2: Integrate repo-local state surfaces into prompts, commands, and workflow docs."
     status: completed
-    note: "Task 2.2 scaffolding created 2026-04-20: .agent/state/README.md, .agent/state/repo-continuity.md (skeleton), .agent/state/workstreams/README.md, .agent/runtime/README.md, .agent/runtime/tracks/.gitkeep, plus .gitignore rule for runtime/tracks/*.md (README and .gitkeep remain tracked). Task 2.1 workflow-doc updates landed in session-handoff.md (new OAC Pilot section describing refresh order for repo-continuity + workstream brief + track card), GO skill (new OAC Pilot read order before Live continuity contract), and session-continuation.prompt.md (OAC pilot transition note at §This Prompt's Role). Switchover timing: state surfaces remain un-populated until OAC Phase 3 pilot scenarios exercise them; Live continuity contract section of prompt retires at OAC Phase 4 rollout. No compatibility layer created — pilot-phase-only parallel operation is bounded by Phase 3's explicit promote/adjust/reject decision."
+    note: "Task 2.2 scaffolding created 2026-04-20: .agent/memory/operational/README.md, .agent/memory/operational/repo-continuity.md (skeleton), .agent/memory/operational/workstreams/README.md, .agent/memory/operational/tracks/README.md, .agent/memory/operational/tracks/.gitkeep, plus .gitignore rule for memory/operational/tracks/*.md (README and .gitkeep remain tracked). Task 2.1 workflow-doc updates landed in session-handoff.md (new OAC Pilot section describing refresh order for repo-continuity + workstream brief + track card), GO skill (new OAC Pilot read order before Live continuity contract), and session-continuation.prompt.md (OAC pilot transition note at §This Prompt's Role). Switchover timing: state surfaces remain un-populated until OAC Phase 3 pilot scenarios exercise them; Live continuity contract section of prompt retires at OAC Phase 4 rollout. No compatibility layer created — pilot-phase-only parallel operation is bounded by Phase 3's explicit promote/adjust/reject decision."
   - id: oa-phase-3-pilot
     content: "Phase 3: Pilot the markdown-first model with parallel tracks and collect evidence."
     status: completed
@@ -155,14 +155,14 @@ summarised in visible exchange, but they are not themselves user-facing
 conversation surfaces.
 
 1. **Canonical continuity surface**
-   - default target: `.agent/state/repo-continuity.md`
+   - default target: `.agent/memory/operational/repo-continuity.md`
    - purpose: repo-level continuity contract only
 2. **Workstream brief surfaces**
-   - default target: `.agent/state/workstreams/<slug>.md`
+   - default target: `.agent/memory/operational/workstreams/<slug>.md`
    - purpose: short-horizon lane resumption state
 3. **Tactical track-card surfaces**
    - default target:
-     `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md`
+     `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md`
    - purpose: thread-aware tactical coordination, **git-tracked** so
      multi-agent and multi-location collaboration happens through
      the normal git channel; single-writer-per-card, multiple cards
@@ -209,7 +209,7 @@ When surfaces disagree on the same field:
 - active track links
 - promotion watchlist
 
-`runtime/tracks/*.md` must cover:
+`memory/operational/tracks/*.md` must cover:
 
 - agent or thread
 - branch or worktree
@@ -331,11 +331,11 @@ observe, refresh, hand off, redirect when needed, and close cleanly.
 ### Task 2.2: Define tracked and ignored scaffolding
 
 - Expected future tracked surfaces:
-  - `.agent/state/README.md`
-  - `.agent/state/repo-continuity.md`
-  - `.agent/state/workstreams/README.md`
-  - `.agent/runtime/README.md`
-  - `.agent/runtime/tracks/` — git-tracked (corrected mid-Phase-3
+  - `.agent/memory/operational/README.md`
+  - `.agent/memory/operational/repo-continuity.md`
+  - `.agent/memory/operational/workstreams/README.md`
+  - `.agent/memory/operational/tracks/README.md`
+  - `.agent/memory/operational/tracks/` — git-tracked (corrected mid-Phase-3
     2026-04-20; the initial Phase 2 scaffolding treated cards as
     gitignored session-local state, but multi-agent and multi-location
     collaboration requires the normal git channel)
@@ -420,8 +420,8 @@ Rationale against each criterion:
 
 Only one of four criteria is met. Promotion is not warranted. The lane
 stays a portable candidate; Practice Core doctrine (PDR-011) continues to
-describe the portable contract, and this repo's `.agent/state/` +
-`.agent/runtime/tracks/` is one implementation of it.
+describe the portable contract, and this repo's `.agent/memory/operational/` +
+`.agent/memory/operational/tracks/` is one implementation of it.
 
 **Follow-up triggers for re-evaluation**:
 
@@ -434,7 +434,7 @@ describe the portable contract, and this repo's `.agent/state/` +
 **Optional helpers (refinements c and d)**: both marked as **future work,
 not built now**:
 
-- `(c)` expiry-check helper — a script that scans `.agent/runtime/tracks/`
+- `(c)` expiry-check helper — a script that scans `.agent/memory/operational/tracks/`
   for cards whose `expires_at` has passed and reports them. Value: surfaces
   stale cards. Cost: low, but not load-bearing for Phase 4 rollout. Build
   only if expiry drift becomes a real signal.

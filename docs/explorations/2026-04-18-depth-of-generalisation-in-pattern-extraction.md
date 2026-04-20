@@ -214,7 +214,7 @@ generalisation doesn't cost utility` (today's addition; this
   consolidation pass, using this exploration as the evidence it
   cites. The deferred work is itself a scheduled item, not a
   smuggled drop (recursive check passes).
-- Next consolidation's remit: walk `.agent/memory/patterns/` for
+- Next consolidation's remit: walk `.agent/memory/active/patterns/` for
   any other pair of patterns that share a deeper principle;
   apply the same test; consolidate where the test passes.
 
@@ -222,13 +222,13 @@ generalisation doesn't cost utility` (today's addition; this
 
 - `practice-lineage.md § Learned Principles` — the source principle
   being tested.
-- `.agent/memory/patterns/findings-route-to-lane-or-rejection.md` —
+- `.agent/memory/active/patterns/findings-route-to-lane-or-rejection.md` —
   today's review-layer pattern.
-- `.agent/memory/patterns/nothing-unplanned-without-a-promotion-trigger.md` —
+- `.agent/memory/active/patterns/nothing-unplanned-without-a-promotion-trigger.md` —
   today's planning-layer pattern.
-- `.agent/memory/patterns/ground-before-framing.md` — retroactive-
+- `.agent/memory/active/patterns/ground-before-framing.md` — retroactive-
   check candidate for later consolidation.
-- `.agent/memory/distilled.md § Process — Compressed neutral labels
+- `.agent/memory/active/distilled.md § Process — Compressed neutral labels
 smuggle scope` — today's distilled entry tested above.
 - PDR-005 (transplantation) — explicit use-case for the
   generalisation discipline, which reduces ecosystem-specific-

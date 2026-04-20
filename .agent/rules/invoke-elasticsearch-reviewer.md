@@ -36,4 +36,4 @@ Do not invoke `elasticsearch-reviewer` for:
 
 ## Invocation
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `elasticsearch-reviewer` canonical template is at `.agent/sub-agents/templates/elasticsearch-reviewer.md`.
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `elasticsearch-reviewer` canonical template is at `.agent/sub-agents/templates/elasticsearch-reviewer.md`.

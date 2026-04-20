@@ -4,7 +4,7 @@
 briefs are authored during OAC Phase 3 pilot.
 
 Each active workstream gets one tracked brief at
-`.agent/state/workstreams/<slug>.md`. The brief is a short-horizon
+`.agent/memory/operational/workstreams/<slug>.md`. The brief is a short-horizon
 resumption surface: enough context for a freshly-resumed agent to pick
 up the workstream without reading the whole plan.
 
@@ -21,7 +21,7 @@ Every brief must cover:
 - **Blockers / low-confidence areas** — explicit; empty lists allowed.
 - **Next safe step** — the action a resuming agent can execute.
 - **Active track links** — pointers to
-  `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md` files for
+  `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md` files for
   any tactical coordination in progress.
 - **Promotion watchlist** — signals that may warrant graduation into
   the learning loop (`napkin` → `distilled` → permanent docs).
@@ -46,4 +46,4 @@ learning loop; the rest is not preserved.
 - Not a second memory doctrine. Durable learnings route through
   `napkin` and `distilled` as they always have.
 - Not a tactical coordination surface. That is
-  `.agent/runtime/tracks/*.md`.
+  `.agent/memory/operational/tracks/*.md`.

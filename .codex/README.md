@@ -28,7 +28,7 @@ Reviewer sub-agents are **not** skills. They require `sandbox_mode = "read-only"
 
 All 16 reviewers are registered in `config.toml`, alongside the non-reviewer helper agents `ground-truth-designer` and `subagent-architect`. Each `.toml` adapter in `agents/` is a self-describing project-scoped custom agent: it declares `name`, `description`, the required Codex execution settings, and `developer_instructions` that point to the canonical reviewer template in `.agent/sub-agents/templates/`. The architecture-reviewer variants additionally reference an individual persona component in `.agent/sub-agents/components/personas/`.
 
-For the full reviewer invocation matrix and timing guidance, see `.agent/directives/invoke-code-reviewers.md`.
+For the full reviewer invocation matrix and timing guidance, see `.agent/memory/executive/invoke-code-reviewers.md`.
 
 ## Resolver Workflow
 

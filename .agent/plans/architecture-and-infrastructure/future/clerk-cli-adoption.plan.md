@@ -164,7 +164,7 @@ finalised during promotion to `current/`/`active/`.
 After promotion and completion, run `/jc-consolidate-docs` to:
 
 - Extract any durable CLI-as-infrastructure patterns into
-  `.agent/memory/patterns/`.
+  `.agent/memory/active/patterns/`.
 - Update the Clerk skills with lessons learned.
 - Reconcile with the Sentry hygiene lane's patterns so both vendor CLIs
   share a single operating doctrine.

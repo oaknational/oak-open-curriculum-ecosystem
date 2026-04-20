@@ -34,4 +34,4 @@ Do not invoke `assumptions-reviewer` for:
 
 ## Invocation
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `assumptions-reviewer` canonical template is at `.agent/sub-agents/templates/assumptions-reviewer.md`.
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `assumptions-reviewer` canonical template is at `.agent/sub-agents/templates/assumptions-reviewer.md`.

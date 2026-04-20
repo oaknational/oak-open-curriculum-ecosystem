@@ -6,7 +6,7 @@ research that explains why the portability model looks the way it does.
 ## Best Starting Points
 
 - [workbench-agent-operating-topology.md](../../../reference/agentic-engineering/workbench-agent-operating-topology.md)
-- [cross-platform-agent-surface-matrix.md](../../../reference/cross-platform-agent-surface-matrix.md)
+- [cross-platform-agent-surface-matrix.md](../../../memory/executive/cross-platform-agent-surface-matrix.md)
 - [platform-adapter-formats.md](../../../reference/platform-adapter-formats.md)
 - [2026-02-21-cross-agent-standardisation-landscape.research.md](../../../plans/agentic-engineering-enhancements/2026-02-21-cross-agent-standardisation-landscape.research.md)
 - [openai_claude_gemini_apps_sdk_comparison.md](../../openai_claude_gemini_apps_sdk_comparison.md)

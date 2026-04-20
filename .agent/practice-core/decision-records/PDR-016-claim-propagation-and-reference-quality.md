@@ -217,16 +217,16 @@ Alternatives rejected:
 
 Proven instances retained with `related_pdr: PDR-016`:
 
-- `.agent/memory/patterns/verify-before-propagating.md` — originated
+- `.agent/memory/active/patterns/verify-before-propagating.md` — originated
   from repeated incidents where claims were cited through citation
   chains without primary-source verification.
-- `.agent/memory/patterns/monotonic-counter-is-not-quality-indicator.md`
+- `.agent/memory/active/patterns/monotonic-counter-is-not-quality-indicator.md`
   — originated from comparing independently-generated schema
   versions where the higher counter was incorrectly assumed to be
   the newer/better one.
-- `.agent/memory/patterns/comments-about-externals-degrade.md` —
+- `.agent/memory/active/patterns/comments-about-externals-degrade.md` —
   originated from discovered stale comments about SDK behaviour
   that no longer matched current library versions.
-- `.agent/memory/patterns/three-levels-of-reference-quality.md` —
+- `.agent/memory/active/patterns/three-levels-of-reference-quality.md` —
   originated from Practice Core portability review where opaque
   pointers were found in portable content.

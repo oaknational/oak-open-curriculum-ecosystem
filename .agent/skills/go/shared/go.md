@@ -25,16 +25,16 @@ testing strategy, schema-first execution).
 
 Then read the live state surfaces in authority order:
 
-1. `.agent/state/repo-continuity.md` — canonical continuity contract
+1. `.agent/memory/operational/repo-continuity.md` — canonical continuity contract
    (current objective, repo-wide invariants, next safe step, deep-consolidation
    status).
-2. `.agent/state/workstreams/<slug>.md` — the relevant workstream brief
+2. `.agent/memory/operational/workstreams/<slug>.md` — the relevant workstream brief
    (lane-level current state, blockers, promotion watchlist).
-3. `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md` — the current
+3. `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md` — the current
    tactical track card, if one exists.
 
-See [`.agent/state/README.md`](../../../state/README.md) and
-[`.agent/runtime/README.md`](../../../runtime/README.md) for the authority
+See [`.agent/memory/operational/README.md`](../../../memory/operational/README.md) and
+[`.agent/memory/operational/tracks/README.md`](../../../memory/operational/tracks/README.md) for the authority
 order and contracts. The continuation prompt is a behavioural entry surface;
 it does not host continuity state.
 
@@ -50,7 +50,7 @@ discoverable.
 For MCP App work, start from these three surfaces in order:
 
 1. `start-right-quick`
-2. `.agent/state/repo-continuity.md`
+2. `.agent/memory/operational/repo-continuity.md`
 3. the active MCP App plan set
 
 ## When to Use GO

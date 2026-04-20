@@ -17,7 +17,11 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 | [testing-strategy.md](directives/testing-strategy.md)             | TDD at all levels                                         |
 | [schema-first-execution.md](directives/schema-first-execution.md) | Types flow from the OpenAPI schema                        |
 | [metacognition.md](directives/metacognition.md)                   | Reflective thinking before planning                       |
-| [invoke-code-reviewers.md](directives/invoke-code-reviewers.md)   | Specialist reviewer invocation matrix and timing guidance |
+| [orientation.md](directives/orientation.md)                       | Layering contract: directives / memory / reference / practice-core; authority order |
+
+(The reviewer invocation matrix previously listed here has moved to
+[`memory/executive/invoke-code-reviewers.md`](memory/executive/invoke-code-reviewers.md)
+as executive memory — it is operational reference, not doctrine.)
 
 ### Architecture Guidance (docs/agent-guidance/)
 
@@ -35,7 +39,7 @@ The governance layer is larger than a single file:
 - The canonical hook policy lives in [`.agent/hooks/policy.json`](hooks/policy.json)
 - The narrative hook explainer lives in [`.agent/hooks/README.md`](hooks/README.md)
 - The live platform-support map lives in
-  [`.agent/reference/cross-platform-agent-surface-matrix.md`](reference/cross-platform-agent-surface-matrix.md)
+  [`.agent/memory/executive/cross-platform-agent-surface-matrix.md`](memory/executive/cross-platform-agent-surface-matrix.md)
 
 Representative rules:
 
@@ -53,7 +57,7 @@ Hook support:
 | Canonical hook policy         | [`.agent/hooks/policy.json`](hooks/policy.json)                                                               | Source of truth                                                                                                         |
 | Hook explainer                | [`.agent/hooks/README.md`](hooks/README.md)                                                                   | Human-readable scope and porting notes                                                                                  |
 | Native Claude activation      | [`.claude/settings.json`](../.claude/settings.json)                                                           | Tracked Claude Code project settings; wires `PreToolUse` on fresh checkout, with additive local overrides in `.claude/settings.local.json` |
-| Cross-platform support matrix | [`.agent/reference/cross-platform-agent-surface-matrix.md`](reference/cross-platform-agent-surface-matrix.md) | Records supported vs unsupported surfaces                                                                               |
+| Cross-platform support matrix | [`.agent/memory/executive/cross-platform-agent-surface-matrix.md`](memory/executive/cross-platform-agent-surface-matrix.md) | Records supported vs unsupported surfaces                                                                               |
 
 ## Architectural Decisions
 
@@ -103,10 +107,10 @@ reusable knowledge:
 
 | Artefact | Location | Purpose |
 | --- | --- | --- |
-| Distilled learnings | [`memory/distilled.md`](memory/distilled.md) | Hard-won rules — read before every session |
-| Pattern library | [`memory/patterns/`](memory/patterns/README.md) | 77 abstract solutions to recurring design problems |
-| Session napkin | [`memory/napkin.md`](memory/napkin.md) | Current session observations, written continuously |
-| Napkin archive | [`memory/archive/`](memory/archive/) | Rotated napkins (historical record) |
+| Distilled learnings | [`memory/active/distilled.md`](memory/active/distilled.md) | Hard-won rules — read before every session |
+| Pattern library | [`memory/active/patterns/`](memory/active/patterns/README.md) | 77 abstract solutions to recurring design problems |
+| Session napkin | [`memory/active/napkin.md`](memory/active/napkin.md) | Current session observations, written continuously |
+| Napkin archive | [`memory/active/archive/`](memory/active/archive/) | Rotated napkins (historical record) |
 
 The patterns skill ([`.agent/skills/patterns/SKILL.md`](skills/patterns/SKILL.md))
 teaches agents to check the pattern library before inventing new approaches.
@@ -118,9 +122,9 @@ and `.agents/skills/patterns/`.
 | Location                                                                                      | What lives there                                                            |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | [`.agent/practice-core/`](practice-core/)                                                     | Portable Practice Core package — trinity + entry points + CHANGELOG + provenance + `decision-records/` (PDRs) + `patterns/` (general abstractions) + `incoming/` (Practice Box) |
-| [`.agent/directives/`](directives/)                                                           | Principles, rules, and operational directives                               |
+| [`.agent/directives/`](directives/)                                                           | Doctrine — read-and-internalise; sets stance (AGENT.md, principles, testing-strategy, schema-first-execution, metacognition, orientation) |
 | [`.agent/plans/`](plans/)                                                                     | Work planning — active, paused, archived, and optional supporting templates |
-| [`.agent/memory/`](memory/)                                                                   | Institutional memory — napkin, distilled learnings, and code patterns       |
+| [`.agent/memory/`](memory/)                                                                   | Three-mode memory: [`active/`](memory/active/) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/operational/) (continuity — repo-continuity, workstreams, tracks), [`executive/`](memory/executive/) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |
 | [`.agent/experience/`](experience/)                                                           | Experiential records across sessions                                        |
 | [`.agent/prompts/`](prompts/)                                                                 | Domain-specific handover prompts — stateful session context                 |
 | [`.agent/sub-agents/`](sub-agents/)                                                           | Reviewer prompt architecture (components, templates)                        |

@@ -227,6 +227,6 @@ The Practice Core (portable blueprint) and the applied Practice (this repo's ope
 - `.agent/sub-agents/README.md` — three-layer prompt composition
 - `.agent/sub-agents/templates/` — canonical agent templates
 - `.agent/sub-agents/components/` — reusable prompt components
-- `.agent/directives/invoke-code-reviewers.md` — invocation guidance (to be renamed)
+- `.agent/memory/executive/invoke-code-reviewers.md` — invocation guidance (to be renamed)
 - `.agent/practice-core/` — Practice Core files
 - `scripts/validate-subagents.mjs` — sub-agent validation script

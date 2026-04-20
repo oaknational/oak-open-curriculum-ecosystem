@@ -183,7 +183,7 @@ Alternatives rejected:
 
 Proven instance retained with `related_pdr: PDR-022`:
 
-- `.agent/memory/patterns/governance-claim-needs-a-scanner.md` —
+- `.agent/memory/active/patterns/governance-claim-needs-a-scanner.md` —
   proven in `scripts/validate-fitness-vocabulary.mjs` (enforces
   that the zone vocabulary appears on every live surface).
   Additional scanners in the host repo:

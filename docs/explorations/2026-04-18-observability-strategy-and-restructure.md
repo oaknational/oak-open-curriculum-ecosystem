@@ -662,7 +662,7 @@ restructure:
 - **ADR-162** (to be drafted in Phase 1): carries the committed principle
   - enforcement mechanisms. This document is the reasoning trail it
     cites.
-- **Session napkin**: `/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/memory/napkin.md`
+- **Session napkin**: `/Users/jim/code/oak/oak-open-curriculum-ecosystem/.agent/memory/active/napkin.md`
   has this session's structured entries (L-0b close + consolidation pass
   - the restructure dialogue). Napkin is ephemeral; this document is
     durable.

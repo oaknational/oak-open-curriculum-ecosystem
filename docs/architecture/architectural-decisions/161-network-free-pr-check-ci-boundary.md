@@ -160,7 +160,7 @@ Consequences:
 ## Related Work
 
 - Graduated from the 2026-04-17 maximisation pivot session's
-  distillation (see `.agent/memory/napkin.md` § "CI pipeline framing
+  distillation (see `.agent/memory/active/napkin.md` § "CI pipeline framing
   had never been named explicitly").
 - Operationalises
   [`docs/operations/sentry-cli-usage.md § "Pipeline boundary: where

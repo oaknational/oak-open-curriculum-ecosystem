@@ -206,7 +206,7 @@ a file-glob allowlist covering `packages/libs/sentry-*/**`,
 `apps/**/src/app/*.ts` files.
 
 Register at severity `warn` initially per
-[`patterns/warning-severity-is-off-severity.md`](../../../memory/patterns/warning-severity-is-off-severity.md) — escalates to `error` once the
+[`patterns/warning-severity-is-off-severity.md`](../../../memory/active/patterns/warning-severity-is-off-severity.md) — escalates to `error` once the
 existing composition-root imports are allowlisted.
 
 ---

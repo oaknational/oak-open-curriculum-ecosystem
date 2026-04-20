@@ -186,9 +186,9 @@ hadn't surfaced — different work, different mistakes, different discoveries.
 
 ### Artefact Locations
 
-- **Napkin** — `.agent/memory/napkin.md` — written continuously during every session
-- **Distilled** — `.agent/memory/distilled.md` — curated rulebook, read at session start
-- **Pattern instances (repo-local)** — `.agent/memory/patterns/` — specific,
+- **Napkin** — `.agent/memory/active/napkin.md` — written continuously during every session
+- **Distilled** — `.agent/memory/active/distilled.md` — curated rulebook, read at session start
+- **Pattern instances (repo-local)** — `.agent/memory/active/patterns/` — specific,
   ecosystem-grounded instances of engineering patterns proven in this repo
 - **General patterns (portable)** — `.agent/practice-core/patterns/` —
   ecosystem-agnostic abstract patterns synthesised from multiple instances;

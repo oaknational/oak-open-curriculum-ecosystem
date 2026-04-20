@@ -192,13 +192,13 @@ Alternatives rejected:
 
 Proven instances retained with `related_pdr: PDR-014`:
 
-- `.agent/memory/patterns/cross-session-pattern-emergence.md` —
+- `.agent/memory/active/patterns/cross-session-pattern-emergence.md` —
   WS3 SDK adoption (4 sessions: investigation → planning → Phase
   1 → Phase 2); the "workaround debt compounds" pattern was only
   visible across all four.
-- `.agent/memory/patterns/substance-before-fitness.md` — proven
+- `.agent/memory/active/patterns/substance-before-fitness.md` — proven
   during Practice Core authoring (2026-04-05); also cited directly
   in `practice.md` §Substance before fitness.
-- `.agent/memory/patterns/current-plan-promotion.md` — statistical
+- `.agent/memory/active/patterns/current-plan-promotion.md` — statistical
   roadmap review plus observational tranche promotion (2026-03-22,
   algo-experiments).

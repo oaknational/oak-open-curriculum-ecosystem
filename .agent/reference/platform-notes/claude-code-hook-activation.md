@@ -52,7 +52,7 @@ check that three artefacts stay aligned:
 
 1. `.agent/hooks/policy.json`
 2. `.claude/settings.json`
-3. `.agent/reference/cross-platform-agent-surface-matrix.md`
+3. `.agent/memory/executive/cross-platform-agent-surface-matrix.md`
 
 Policy, tracked activation, and matrix parity are all enforced. Clean clones
 must carry the tracked `.claude/settings.json`; local overrides remain optional.

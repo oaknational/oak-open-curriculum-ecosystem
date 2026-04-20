@@ -27,7 +27,7 @@ asks for more, this command must not trigger:
 ## Steps
 
 1. **Refresh the canonical continuity contract.** Update
-   `.agent/state/repo-continuity.md` using its documented field set:
+   `.agent/memory/operational/repo-continuity.md` using its documented field set:
 
    - `Active workstreams`
    - `Branch-primary workstream brief`
@@ -40,13 +40,13 @@ asks for more, this command must not trigger:
    scope, sequencing, acceptance criteria, and validation.
 
 2. **Refresh the relevant workstream brief.** Update
-   `.agent/state/workstreams/<slug>.md` for any lane that moved this session.
+   `.agent/memory/operational/workstreams/<slug>.md` for any lane that moved this session.
    Required fields: `Owning plan(s)`, `Current objective`, `Current state`,
    `Blockers / low-confidence areas`, `Next safe step`, `Active track links`,
    `Promotion watchlist`.
 
 3. **Resolve, promote, or delete any tactical track cards.** Cards in
-   `.agent/runtime/tracks/` are short-horizon. At session close, each card is
+   `.agent/memory/operational/tracks/` are short-horizon. At session close, each card is
    either: resolved (deleted), promoted (signal routed into the workstream
    brief's promotion watchlist or napkin), or deleted if no longer relevant.
 
@@ -56,14 +56,14 @@ asks for more, this command must not trigger:
 
 5. **Capture surprises and corrections.** Record any new surprises,
    corrections, or expectation failures from this session in
-   `.agent/memory/napkin.md`. Use the structured surprise format from the
+   `.agent/memory/active/napkin.md`. Use the structured surprise format from the
    napkin skill.
 
 6. **Run the consolidation gate.** Check the trigger checklist in
    `.agent/commands/consolidate-docs.md`.
 
    - If no trigger fires, set `Deep consolidation status` to
-     `not due — <reason>` in `.agent/state/repo-continuity.md` and stop here.
+     `not due — <reason>` in `.agent/memory/operational/repo-continuity.md` and stop here.
    - If one or more triggers fire, set `Deep consolidation status` to
      `due — <reason>` and continue to step 7.
 

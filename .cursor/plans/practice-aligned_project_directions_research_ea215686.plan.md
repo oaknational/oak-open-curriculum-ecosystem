@@ -123,7 +123,7 @@ The closing decision must be justified in the closeout, not assumed up front.
 - Separate evidence from inference explicitly.
 - Name the most important unresolved question.
 - Declare whether the work changed only research/reporting/discovery surfaces, or whether findings imply future doctrine/planning follow-up (and if so, where the recommendation is filed — never edited into doctrine in this session).
-- Update [.agent/memory/napkin.md](.agent/memory/napkin.md) with surprises and watchlist candidates.
+- Update [.agent/memory/active/napkin.md](.agent/memory/active/napkin.md) with surprises and watchlist candidates.
 
 ## Out of Scope (explicit fences)
 

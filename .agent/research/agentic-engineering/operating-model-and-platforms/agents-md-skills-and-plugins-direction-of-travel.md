@@ -5,7 +5,7 @@
 > Lives in `operating-model-and-platforms/` rather than a new lane because
 > the material is the cross-platform surface story this lane already owns
 > (see [`platform-adapter-formats.md`](../../../reference/platform-adapter-formats.md),
-> [`cross-platform-agent-surface-matrix.md`](../../../reference/cross-platform-agent-surface-matrix.md),
+> [`cross-platform-agent-surface-matrix.md`](../../../memory/executive/cross-platform-agent-surface-matrix.md),
 > ADR-124, ADR-125).
 
 ## Why this note exists

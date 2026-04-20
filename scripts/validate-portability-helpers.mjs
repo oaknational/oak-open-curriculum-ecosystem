@@ -1,6 +1,6 @@
 export const HOOK_POLICY_PATH = '.agent/hooks/policy.json';
 export const CLAUDE_SETTINGS_PATH = '.claude/settings.json';
-export const SURFACE_MATRIX_PATH = '.agent/reference/cross-platform-agent-surface-matrix.md';
+export const SURFACE_MATRIX_PATH = '.agent/memory/executive/cross-platform-agent-surface-matrix.md';
 export const CLAUDE_HOOK_COMMAND = 'node scripts/check-blocked-patterns.mjs';
 
 function isObject(value) {

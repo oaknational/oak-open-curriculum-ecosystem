@@ -168,10 +168,10 @@ Alternatives rejected:
 
 Proven instances retained with `related_pdr: PDR-018`:
 
-- `.agent/memory/patterns/end-goals-over-means-goals.md` —
+- `.agent/memory/active/patterns/end-goals-over-means-goals.md` —
   originated from knip-triage planning where "close 96 unused
   exports" was the means-framed plan; the end-goal-framed
   rewrite was materially smaller and more targeted.
-- `.agent/memory/patterns/repair-workflow-contract-clarity.md` —
+- `.agent/memory/active/patterns/repair-workflow-contract-clarity.md` —
   originated from repair workflows using ambiguous verbs that
   produced divergent outcomes across artefacts.

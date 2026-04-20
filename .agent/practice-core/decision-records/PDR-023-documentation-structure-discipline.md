@@ -99,7 +99,7 @@ The principle generalises beyond `.agent/plans/`. Any
 directory-level `README.md` serving as a navigation surface
 follows the same discipline:
 
-- `.agent/memory/patterns/README.md` indexes patterns; substance
+- `.agent/memory/active/patterns/README.md` indexes patterns; substance
   lives in pattern files.
 - `.agent/practice-core/decision-records/README.md` indexes PDRs;
   substance lives in PDRs.
@@ -176,7 +176,7 @@ Alternatives rejected:
 
 Proven instance retained with `related_pdr: PDR-023`:
 
-- `.agent/memory/patterns/readme-as-index.md` — Plan architecture
+- `.agent/memory/active/patterns/readme-as-index.md` — Plan architecture
   refactor (2026-03-23, algo-experiments); READMEs had
   accumulated session instructions and outcome narratives that
   drifted across tranche boundaries; the index-only discipline

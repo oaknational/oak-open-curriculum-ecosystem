@@ -26,7 +26,7 @@ adapters — same architecture this PDR inherits);
   field set restructured into a portable minimum plus optional
   epistemic fields; §Host-local context updated to reflect the
   state-surface split (`repo-continuity.md` + `workstreams/<slug>.md`
-  + `runtime/tracks/*.md`). The portable doctrine and the contract's
+  + `memory/operational/tracks/*.md`). The portable doctrine and the contract's
   authority-subordinate role to active plans are unchanged.
 
 ## Context
@@ -388,23 +388,23 @@ the PDR `Superseded by <Core section>` and retains it as provenance.
 At the time of the 2026-04-20 amendment, the repo where this PDR was
 authored carries a **split-surface host**:
 
-- Canonical continuity contract: `.agent/state/repo-continuity.md`
+- Canonical continuity contract: `.agent/memory/operational/repo-continuity.md`
   (portable minimum fields + "Current session focus" when distinct
   from branch-primary).
-- Per-lane resumption briefs: `.agent/state/workstreams/<slug>.md`
+- Per-lane resumption briefs: `.agent/memory/operational/workstreams/<slug>.md`
   (owning plan(s), current objective, current state, blockers, next
   safe step, active track links, promotion watchlist).
 - Single-writer tactical track cards:
-  `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md`
+  `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md`
   (git-tracked; collaborative tracks create multiple cards
   disambiguated by filename).
 - Session-handoff workflow: canonical in `.agent/commands/` with
   platform adapters.
 - Consolidate-docs workflow: canonical in `.agent/commands/` with
   platform adapters.
-- Ephemeral memory: `.agent/memory/napkin.md` (rotates at ~500
+- Ephemeral memory: `.agent/memory/active/napkin.md` (rotates at ~500
   lines).
-- Refined memory: `.agent/memory/distilled.md` (target 200 lines).
+- Refined memory: `.agent/memory/active/distilled.md` (target 200 lines).
 - Experience records: `.agent/experience/`.
 - Mid-session re-grounding: canonical `GO` skill with platform
   adapters.

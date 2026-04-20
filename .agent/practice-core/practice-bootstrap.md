@@ -89,7 +89,7 @@ the canonical source. Add a portability validation script to the quality
 gates to enforce this.
 
 Where a repo supports multiple agent platforms, keep a local surface matrix
-(e.g. `.agent/reference/cross-platform-agent-surface-matrix.md`) recording
+(e.g. `.agent/memory/executive/cross-platform-agent-surface-matrix.md`) recording
 supported and unsupported mappings explicitly.
 
 **Cross-platform integration order** — never reverse this sequence:
@@ -445,7 +445,7 @@ contract defines what that surface must provide.
 
 One explicit canonical host surface must carry the live continuity
 contract. Typical hosts include a dedicated state file (e.g.
-`.agent/state/repo-continuity.md`) or a section of a continuation prompt
+`.agent/memory/operational/repo-continuity.md`) or a section of a continuation prompt
 — the choice is host-local. Whatever the host is, `go`, `session-handoff`,
 and start-right must all point to it. The key rule: **if any workflow
 references a continuity surface, that surface must exist on a fresh
@@ -478,8 +478,8 @@ usual graduation bar.
 
 The napkin is the capture stage of the learning loop. It is always active.
 
-**Session start**: Read `.agent/memory/distilled.md` (if exists), then
-`.agent/memory/napkin.md` (if exists; create if not).
+**Session start**: Read `.agent/memory/active/distilled.md` (if exists), then
+`.agent/memory/active/napkin.md` (if exists; create if not).
 
 **Continuous updates**: Write whenever you learn something worth
 recording -- errors you figure out, user corrections, your own mistakes,
@@ -519,7 +519,7 @@ contradictions), prune graduated entries, archive, start fresh. See
 Patterns live in one of two homes depending on their level of
 abstraction:
 
-**`.agent/memory/patterns/`** — **Specific instances**. Concrete,
+**`.agent/memory/active/patterns/`** — **Specific instances**. Concrete,
 ecosystem-grounded patterns proven in this repo (TypeScript, Zod,
 Vitest, MCP, or whichever ecosystem applies locally). Instance files
 may carry a `related_pdr: PDR-NNN` or `related_pattern: <name>`
@@ -531,7 +531,7 @@ been authored).
 synthesised from multiple specific instances. Authored fresh when
 instance accumulation makes the general form legible across
 multiple contexts. Specific instances remain in
-`memory/patterns/`; they are not moved or copied.
+`memory/active/patterns/`; they are not moved or copied.
 
 **Barrier to entry for either home**: a pattern belongs as a
 persisted entry only when it is (a) broadly applicable or clearly
@@ -567,14 +567,14 @@ Body sections: **Principle** (one-paragraph statement), **Pattern**
 (steps), **Anti-pattern** (what not to do), **When to Apply**
 (trigger).
 
-**Index**: maintain a `README.md` in `.agent/memory/patterns/` with a
+**Index**: maintain a `README.md` in `.agent/memory/active/patterns/` with a
 short description for each pattern.
 
 **Cross-repo exchange**: portable patterns travel as Core content.
 General, ecosystem-agnostic abstractions that apply across the
 network are authored in `.agent/practice-core/patterns/` via
 synthesis and travel with the Core package. Specific instances
-remain in `.agent/memory/patterns/` as proof; they do not travel.
+remain in `.agent/memory/active/patterns/` as proof; they do not travel.
 Under PDR-007, the previous `outgoing/patterns/` transport route is
 retired — there is no separate exchange surface for patterns.
 
@@ -667,7 +667,7 @@ Body sections:
    |---|---|---|---|
    | `.agent/directives/principles.md` | portable-with-adaptation | same | rewrite test-framework references; keep universal rules verbatim |
    | `.agent/practice-index.md` | local | create-from-scratch | bridge file is host-specific by design |
-   | `.agent/memory/distilled.md` | hybrid | same | preserve universal entries; drop source-repo-domain entries |
+   | `.agent/memory/active/distilled.md` | hybrid | same | preserve universal entries; drop source-repo-domain entries |
    | `docs/architecture/ADR-XXX-*.md` | hybrid | rewrite | decision shape portable; decision substance host-specific |
    | ... | ... | ... | ... |
 

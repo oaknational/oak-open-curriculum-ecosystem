@@ -92,7 +92,7 @@ Authoritative reference: [docs/foundation/VISION.md](docs/foundation/VISION.md).
 
 ## Link redirections (active surfaces only)
 
-Archived material (`.agent/memory/archive/`, `.agent/plans/archive/`, `.cursor/plans/`) is left alone — it is historical record.
+Archived material (`.agent/memory/active/archive/`, `.agent/plans/archive/`, `.cursor/plans/`) is left alone — it is historical record.
 
 Files that need link updates:
 

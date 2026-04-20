@@ -430,7 +430,7 @@ No P0 blockers remain after owner dispositions.
 - [x] **R8. `.agent/experience/` files (88) publicly visible**
   - Source: CEO
   - Evidence: 88 git-tracked files with titles using metaphorical language.
-    `.agent/memory/napkin.md` contains "Mistakes and corrections" sections.
+    `.agent/memory/active/napkin.md` contains "Mistakes and corrections" sections.
   - **Owner disposition**: Add explanatory documentation. Specifically:
     1. Add a note in `.agent/README.md` explaining that these are
        non-technical experience logs capturing the history of the repo in an
@@ -1069,7 +1069,7 @@ pattern from previous rerun (R2) noted where applicable.
     `emit-index.ts`. Cast 1: `toStatusDiscriminant` replaced with per-tool
     `STATUS_DISCRIMINANTS` const map. Cast 2: `invoke` return changed to
     `unknown`. Zero non-const `as` assertions in generated tool files.
-    Two patterns extracted to `.agent/memory/patterns/`.
+    Two patterns extracted to `.agent/memory/active/patterns/`.
 
 - [x] **N11. docs/README.md has no entry point for non-technical audiences**
   - Source: Product owner

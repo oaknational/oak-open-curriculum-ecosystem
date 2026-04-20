@@ -34,7 +34,7 @@ todos:
     content: "WS5: ESLint rules land at `error` severity from day one (aligned with `patterns/warning-severity-is-off-severity.md` — never warn: fix or allowlist-with-deadline). Existing violations are explicit per-file allowlists in each workspace's eslint.config.ts, making the backlog physically visible. Each file migration deletes a line from the allowlist. WS5 closes when every workspace backlog allowlist is empty (legitimate subject-under-test overrides for runtime-config / http-observability own tests remain in place)."
     status: pending
   - id: ws6-report
-    content: "WS6: final report — before/after violation counts per rule, pattern list extracted to `.agent/memory/patterns/`, lessons for future test authorship."
+    content: "WS6: final report — before/after violation counts per rule, pattern list extracted to `.agent/memory/active/patterns/`, lessons for future test authorship."
     status: pending
 isProject: true
 ---
@@ -219,7 +219,7 @@ before/after counts per rule, patterns extracted, product-code DI
 seams added, list of `eslint.config.ts` overrides removed.
 
 **GREEN**: if a repeated pattern is worth future reuse, extract to
-`.agent/memory/patterns/`.
+`.agent/memory/active/patterns/`.
 
 ---
 
@@ -264,7 +264,7 @@ seams added, list of `eslint.config.ts` overrides removed.
 ## Documentation Propagation
 
 - Audit inventory + report under `.agent/evidence/`.
-- Patterns to `.agent/memory/patterns/` as they emerge.
+- Patterns to `.agent/memory/active/patterns/` as they emerge.
 - ESLint rule severity changes in release notes.
 - Cross-link from `test-suite-audit-and-triage.plan.md` (sibling brief)
   once this plan completes.

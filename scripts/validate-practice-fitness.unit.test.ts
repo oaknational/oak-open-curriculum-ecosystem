@@ -251,7 +251,9 @@ describe('shouldInspectFitnessPath', () => {
     expect(shouldInspectFitnessPath('.agent/practice-core-backup-2026-03-23/practice.md')).toBe(
       false,
     );
-    expect(shouldInspectFitnessPath('.agent/memory/archive/napkin-2026-03-21.md')).toBe(false);
+    expect(shouldInspectFitnessPath('.agent/memory/active/archive/napkin-2026-03-21.md')).toBe(
+      false,
+    );
     expect(shouldInspectFitnessPath('.agent/practice-core/incoming/practice.md')).toBe(false);
   });
 });

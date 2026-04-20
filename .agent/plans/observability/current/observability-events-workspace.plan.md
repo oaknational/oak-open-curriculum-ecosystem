@@ -82,7 +82,7 @@ can add a new emission site with any shape and no tooling flags the drift.
 - `@oaknational/result` provides the Result pattern for error flows.
 - Zod 4 (via `z4mini`) is available for schema authoring; MCP SDK
   preserves `.meta({ examples })` via `toJSONSchema()` (see
-  `.agent/memory/distilled.md` § Zod 4 `.meta({ examples })`).
+  `.agent/memory/active/distilled.md` § Zod 4 `.meta({ examples })`).
 
 This workspace composes those primitives; it does not re-implement them.
 

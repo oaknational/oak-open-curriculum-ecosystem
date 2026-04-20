@@ -129,7 +129,7 @@ Rules have two conceptually distinct layers:
 
 2. **Activation triggers** (`.cursor/rules/*.mdc`, entry-point chains) — platform-specific mechanisms that determine _when_ and _how_ policies surface during a session. These are not thin wrappers for `principles.md` in the way command wrappers point at commands. They are a separate artefact type: a trigger mechanism that activates specific policies, directives, or skills at the right moment.
 
-Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-reviewers.mdc` → `.agent/directives/invoke-code-reviewers.md`). Others activate skills (e.g., `napkin-always-active.mdc` → `.agent/skills/napkin/SKILL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
+Some triggers activate policies from `principles.md` via a canonical rule (e.g., `apply-architectural-principles.mdc` → `.agent/rules/apply-architectural-principles.md` → `principles.md`). Others activate standalone directives (e.g., `invoke-code-reviewers.mdc` → `.agent/memory/executive/invoke-code-reviewers.md`). Others activate skills (e.g., `napkin-always-active.mdc` → `.agent/skills/napkin/SKILL.md`). The trigger is not the policy — it is the mechanism that surfaces the policy.
 
 #### Many-to-One Consolidation Pattern
 
@@ -176,7 +176,7 @@ canonical rules and triggers, not the number of layers.
 | `napkin-always-active`           | `.agent/skills/napkin/SKILL.md`                                                           |
 | `use-start-right-skills`         | `.agent/skills/start-right-quick/SKILL.md`, `.agent/skills/start-right-thorough/SKILL.md` |
 | `follow-the-practice`            | Practice reading, which leads to skills                                                   |
-| `invoke-code-reviewers`          | All registered reviewers via `.agent/directives/invoke-code-reviewers.md`                 |
+| `invoke-code-reviewers`          | All registered reviewers via `.agent/memory/executive/invoke-code-reviewers.md`           |
 | `lint-after-edit`                | Lint checking (file-scoped to `*.ts`)                                                     |
 
 #### Trigger Content Contract
@@ -333,7 +333,7 @@ violate this ADR's thin-wrapper requirement. A "thick" orchestrating
 command is a valid Layer 1 artefact — see ADR-135's `process_executor`
 classification for the worked example.
 
-This clarification graduated from `.agent/memory/distilled.md` (2026-04-16
+This clarification graduated from `.agent/memory/active/distilled.md` (2026-04-16
 observation) as part of the enforce-edge tightening pass alongside
 ADR-144's three-zone model revision.
 

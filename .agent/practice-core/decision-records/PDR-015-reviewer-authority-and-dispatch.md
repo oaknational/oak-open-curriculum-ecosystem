@@ -228,18 +228,18 @@ Alternatives rejected:
 
 Proven instances retained with `related_pdr: PDR-015`:
 
-- `.agent/memory/patterns/domain-specialist-final-say.md` — Sentry
+- `.agent/memory/active/patterns/domain-specialist-final-say.md` — Sentry
   canonical alignment plan (2026-04-12); architecture generalists
   made assumptions about Sentry scope behaviour that the Sentry
   specialist corrected against official SDK documentation.
-- `.agent/memory/patterns/route-reviewers-by-abstraction-layer.md` —
+- `.agent/memory/active/patterns/route-reviewers-by-abstraction-layer.md` —
   Sentry OTel integration hygiene closure (2026-04-17); three
   reviewers on the same lane produced disjoint findings when routed
   by layer.
-- `.agent/memory/patterns/reviewer-widening-is-always-wrong.md` —
+- `.agent/memory/active/patterns/reviewer-widening-is-always-wrong.md` —
   session 2026-04-06; type-reviewer recommended `z.unknown()` to
   satisfy a rule forbidding `Record<string, unknown>`; fix was
   wrong despite valid rule citation.
-- `.agent/memory/patterns/review-intentions-not-just-code.md` —
+- `.agent/memory/active/patterns/review-intentions-not-just-code.md` —
   WS3 Phase 4 brand banner; 5 specialist reviewers invoked
   before implementation.

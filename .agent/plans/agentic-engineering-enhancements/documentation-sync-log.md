@@ -95,8 +95,8 @@ Do not mark a phase complete without an entry.
     - Created `.cursor/skills/mcp-expert/SKILL.md` (Cursor wrapper)
     - Created `.agents/skills/mcp-expert/SKILL.md` (Codex wrapper)
     - Wrapper parity audit complete — all reviewer, rule, and skill wrappers exist across Cursor/Claude/Codex
-    - Added MCP quick-triage question (#9) to `.agent/directives/invoke-code-reviewers.md`
-    - Added MCP worked example to `.agent/directives/invoke-code-reviewers.md`
+    - Added MCP quick-triage question (#9) to `.agent/memory/executive/invoke-code-reviewers.md`
+    - Added MCP worked example to `.agent/memory/executive/invoke-code-reviewers.md`
   - Validation evidence:
     - `pnpm subagents:check` passed (17 wrappers, 14 templates)
     - `pnpm portability:check` passed (21 skills, 28 rules, 30 Cursor triggers)
@@ -118,8 +118,8 @@ Do not mark a phase complete without an entry.
     index, roadmap, and session continuation prompt during execution, then
     archived it after the closeout pass
   - Added the local process pattern
-    `.agent/memory/patterns/shared-strictness-requires-workspace-adoption.md`
-    and indexed it in `.agent/memory/patterns/README.md`
+    `.agent/memory/active/patterns/shared-strictness-requires-workspace-adoption.md`
+    and indexed it in `.agent/memory/active/patterns/README.md`
   - Updated `docs/engineering/build-system.md` with the aggregate-gate
     doctrine (`pnpm check` as executable truth, one package-graph run as the
     design target, and workspace-task-export bounded claims)
@@ -263,8 +263,8 @@ round. The plan now lives in `archive/completed/`.
 Plan: [operational-awareness-and-continuity-surface-separation.plan.md](active/operational-awareness-and-continuity-surface-separation.plan.md).
 Driver: retire `.agent/prompts/session-continuation.prompt.md`'s `Live
 continuity contract` section in favour of the three repo-local state
-surfaces (`.agent/state/repo-continuity.md` +
-`.agent/state/workstreams/<slug>.md` + `.agent/runtime/tracks/*.md`).
+surfaces (`.agent/memory/operational/repo-continuity.md` +
+`.agent/memory/operational/workstreams/<slug>.md` + `.agent/memory/operational/tracks/*.md`).
 
 - Status: in progress (this session).
 - ADR update: `docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md`
@@ -295,10 +295,10 @@ surfaces (`.agent/state/repo-continuity.md` +
 - Workflow doc updates: `.agent/skills/go/shared/go.md` and
   `.agent/commands/session-handoff.md` retired OAC-pilot framing and now
   read/write the state surfaces directly, not the prompt section.
-  `.agent/state/README.md` corrected: line about track cards being
+  `.agent/memory/operational/README.md` corrected: line about track cards being
   "gitignored single-writer surfaces" replaced with git-tracked model;
   authority order re-described as a same-scope tiebreaker (refinement b).
-  `.agent/state/repo-continuity.md` field renamed "Primary workstream
+  `.agent/memory/operational/repo-continuity.md` field renamed "Primary workstream
   brief" → "Branch-primary workstream brief" + added "Current session
   focus" (refinement a).
 - Prompt retirement: `.agent/prompts/session-continuation.prompt.md`
@@ -335,10 +335,10 @@ surfaces (`.agent/state/repo-continuity.md` +
   - OAC plan §Goal (L105) and §Task 2.2 Expected surfaces (L328-340)
     "gitignored" vestige corrected to git-tracked with
     filename-disambiguation note.
-  - `state/repo-continuity.md` stale Status line, Option-A/B
+  - `memory/operational/repo-continuity.md` stale Status line, Option-A/B
     next-safe-step menu, and fitness-pressure note on the retired
     1545-line prompt all cleared.
-  - `state/workstreams/operational-awareness-continuity.md` Phase 2
+  - `memory/operational/workstreams/operational-awareness-continuity.md` Phase 2
     bullet updated to reflect retired pilot-phase framing.
   - Track card handoff note rewritten to remove
     "Phase 4 unblocks plugin WS0" overstatement. Plugin-migration plan's
@@ -380,7 +380,7 @@ surfaces (`.agent/state/repo-continuity.md` +
 - A deliberate deep consolidation pass is still due (governance change
   guardrails `4bccba71` graduation assessment; L-7 sunk-cost + tracks-
   gitignored + menu-ification surprise graduation). Recorded in
-  `state/repo-continuity.md §Deep consolidation status`. Scheduled for
+  `memory/operational/repo-continuity.md §Deep consolidation status`. Scheduled for
   explicit session rather than smuggled into the next commit.
 - Independent assumption reviewer noted that the PDR-011 amendment
   itself would benefit from a second-pass read once settled, to verify

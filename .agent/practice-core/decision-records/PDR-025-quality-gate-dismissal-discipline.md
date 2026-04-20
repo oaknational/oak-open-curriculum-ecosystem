@@ -172,7 +172,7 @@ is unrealistic at any non-greenfield scale.
   or session closure.
 - CI exception entries without a linked remediation lane.
 - ESLint rules at `warn` severity for new zero-violation patterns
-  (per `.agent/memory/patterns/warning-severity-is-off-severity.md`;
+  (per `.agent/memory/active/patterns/warning-severity-is-off-severity.md`;
   `warn` is permitted as a migration mechanic with a named
   flip-to-error trigger, not as a default).
 
@@ -195,7 +195,7 @@ Proven application surfaces:
 - Distilled entry (now pruned) — `"All gates blocking, no
   'pre-existing' exceptions"` — the instance form that graduated
   to this PDR.
-- Pattern `.agent/memory/patterns/warning-severity-is-off-severity.md`
+- Pattern `.agent/memory/active/patterns/warning-severity-is-off-severity.md`
   — companion discipline on ESLint severity as a migration
   mechanic. PDR-025 §Forbidden restates the pattern's invariant.
 - PDR-008 §Canonical Gate Naming defines the gate surface this

@@ -591,4 +591,4 @@ plan's Phase 4 (consolidate generators) — if generators are already inside
 - [Session Continuation](../../../prompts/archive/session-continuation.prompt.md)
 - [Schema-First Execution](../../../directives/schema-first-execution.md)
 - [Rules](../../../directives/principles.md)
-- [Distilled Learnings](../../../memory/distilled.md) — generator duplication noted
+- [Distilled Learnings](../../../memory/active/distilled.md) — generator duplication noted

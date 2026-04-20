@@ -39,4 +39,4 @@ Do not invoke `design-system-reviewer` for:
 
 ## Invocation
 
-See `.agent/directives/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `design-system-reviewer` canonical template is at `.agent/sub-agents/templates/design-system-reviewer.md`.
+See `.agent/memory/executive/invoke-code-reviewers.md` for the full reviewer catalogue and invocation policy. The `design-system-reviewer` canonical template is at `.agent/sub-agents/templates/design-system-reviewer.md`.

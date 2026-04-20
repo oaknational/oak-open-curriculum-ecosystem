@@ -165,7 +165,7 @@ Alternatives rejected:
 
 Proven instance retained with `related_pdr: PDR-020`:
 
-- `.agent/memory/patterns/check-driven-development.md` —
+- `.agent/memory/active/patterns/check-driven-development.md` —
   originated from SDK canonical-descriptor unit tests
   (2026-03-26) where runtime property-existence checks were
   initially written to avoid breaking type-check; refactored to

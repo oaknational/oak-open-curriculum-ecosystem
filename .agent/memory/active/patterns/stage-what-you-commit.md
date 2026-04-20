@@ -2,7 +2,7 @@
 name: "Stage What You Commit, Commit What You Staged"
 use_this_when: "about to run `git commit` with unrelated changes visible in `git status` — the index may carry work the commit message does not describe."
 category: process
-proven_in: ".agent/memory/archive/napkin-2026-03-24.md (session 2026-03-24); .agent/memory/napkin.md (session 2026-04-19, commit bundling during observability restructure close-out)"
+proven_in: ".agent/memory/active/archive/napkin-2026-03-24.md (session 2026-03-24); .agent/memory/active/napkin.md (session 2026-04-19, commit bundling during observability restructure close-out)"
 proven_date: 2026-04-19
 barrier:
   broadly_applicable: true

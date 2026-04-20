@@ -2,7 +2,7 @@
 name: napkin
 classification: passive
 description: >-
-  Maintain a per-repo napkin file at .agent/memory/napkin.md that tracks
+  Maintain a per-repo napkin file at .agent/memory/active/napkin.md that tracks
   mistakes, corrections, surprises, and what works. Always active, every
   session, unconditionally. Read distilled.md and napkin.md before doing
   anything. Write to the napkin continuously as you work. Log your own
@@ -21,14 +21,14 @@ update it continuously as you work.
 
 First thing, every session — read both files before doing anything:
 
-1. **`.agent/memory/distilled.md`** — Curated rules, patterns,
+1. **`.agent/memory/active/distilled.md`** — Curated rules, patterns,
    and troubleshooting. This is the high-signal reference.
    Internalise and apply silently.
-2. **`.agent/memory/napkin.md`** — Recent session log. Scan for
+2. **`.agent/memory/active/napkin.md`** — Recent session log. Scan for
    context from the most recent sessions.
 
 If neither file exists, create `napkin.md` at
-`.agent/memory/napkin.md` with a session heading and start
+`.agent/memory/active/napkin.md` with a session heading and start
 logging. The distillation rotation in the
 [consolidation command](../../commands/consolidate-docs.md)
 handles creating `distilled.md` at rotation time.

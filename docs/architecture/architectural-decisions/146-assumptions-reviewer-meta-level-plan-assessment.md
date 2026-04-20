@@ -78,5 +78,5 @@ The six assessment areas (proportionality, assumption validity, blocking legitim
 - `.agent/sub-agents/templates/assumptions-reviewer.md` — reviewer template
 - `.agent/skills/assumptions-expert/SKILL.md` — active workflow skill
 - `.agent/rules/invoke-assumptions-reviewer.md` — situational invocation rule
-- `.agent/directives/invoke-code-reviewers.md` — reviewer invocation guidance
+- `.agent/memory/executive/invoke-code-reviewers.md` — reviewer invocation guidance
 - `.agent/directives/principles.md` — project principles (first question, simplicity)

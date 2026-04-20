@@ -219,7 +219,7 @@ Update automated checks to enforce the new model.
 Update all references to old agent names across the entire repo.
 
 - [ ] Update `.agent/directives/AGENT.md` — agent roster, sub-agent section
-- [ ] Update `.agent/directives/invoke-code-reviewers.md` — rename to `invoke-agents.md` or equivalent, update all agent references
+- [ ] Update `.agent/memory/executive/invoke-code-reviewers.md` — rename to `invoke-agents.md` or equivalent, update all agent references
 - [ ] Update all `.agent/rules/*.md` that reference agent names (e.g. `invoke-code-reviewers.md`, `invoke-elasticsearch-reviewer.md`, `invoke-clerk-reviewer.md`, `invoke-sentry-reviewer.md`)
 - [ ] Update all `.claude/rules/*.md` and `.cursor/rules/*.mdc` that reference agent names
 - [ ] Update ADRs that reference agent names by old names (ADR-114, ADR-119, ADR-125, ADR-129, ADR-131, ADR-137)

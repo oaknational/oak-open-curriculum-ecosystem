@@ -1,13 +1,20 @@
-# Runtime Surfaces
+# Tactical Track Cards (Operational Memory)
 
-**Status**: Scaffolding created by OAC Phase 2 (2026-04-20). First
-track cards are authored during OAC Phase 3 pilot.
+**Status**: Active. Scaffolded by OAC Phase 2 (2026-04-20); cards are
+authored per-session during OAC Phase 3+ work. Moved from the legacy
+top-level `runtime/tracks/` location into this path during the
+memory-taxonomy restructure (2026-04-20) — tracks are now
+operational memory alongside the continuity contract and workstream
+briefs.
 
-This directory holds **runtime** (thread-aware, short-horizon) state
-surfaces. Track cards are **git-tracked**: multi-agent and multi-location
-collaboration on a track happens through the normal git channel. A dev in
-one location, an agent in another session, and a second dev in a third
-checkout can all read and coordinate off the same track cards.
+This directory holds **thread-aware, short-horizon operational memory
+cards**. See [`.agent/memory/README.md`](../../README.md) for the
+three-mode memory taxonomy.
+
+Track cards are **git-tracked**: multi-agent and multi-location
+collaboration on a track happens through the normal git channel. A
+dev in one location, an agent in another session, and a second dev in
+a third checkout can all read and coordinate off the same track cards.
 
 Single-writer-per-card still holds. Multiple writers on the same
 conceptual track create multiple cards, disambiguated by the
@@ -73,10 +80,12 @@ belongs to the learning loop, not to this runtime surface.
 
 ## Non-Goals
 
-- Not a memory surface. Durable learnings graduate through the
-  existing learning loop.
+- Not a **learning-loop** memory surface. Track cards are operational
+  memory (short-horizon, ephemeral); durable learnings graduate
+  through the active-memory pipeline (napkin → distilled → permanent
+  docs) at [`.agent/memory/active/`](../../active/).
 - Not a plan replacement or a workstream-brief replacement.
 - Not a sidecar store. If markdown-first track cards prove
   insufficient under real concurrency, the adjacent
-  [cross-vendor-session-sidecars.plan.md](../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
+  [cross-vendor-session-sidecars.plan.md](../../../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
   is the forward path.

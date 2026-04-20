@@ -7,7 +7,7 @@ toolchain, language, or framework.
 
 **Scope**: this directory holds **general abstract patterns only**.
 Specific, ecosystem-grounded instances live in
-`.agent/memory/patterns/` and remain there as proof. Patterns here
+`.agent/memory/active/patterns/` and remain there as proof. Patterns here
 are authored through **synthesis** from multiple specific
 instances — not moved or copied from repo memory.
 
@@ -26,16 +26,16 @@ The shapes differ; the test is whether the substance is engineering
 General patterns are synthesised when the pattern becomes legible
 across multiple specific instances. The workflow:
 
-1. **Instances accumulate** in `.agent/memory/patterns/` as concrete
+1. **Instances accumulate** in `.agent/memory/active/patterns/` as concrete
    engineering-level observations proven in specific code.
 2. **A general form becomes legible** — the same underlying shape
    appears across instances from different ecosystems, toolchains,
    or problem domains.
 3. **The general pattern is authored** here, citing the specific
    instances in its Notes section as proof. The instance files in
-   `memory/patterns/` gain a `related_pattern: <name>` frontmatter
+   `memory/active/patterns/` gain a `related_pattern: <name>` frontmatter
    pointer linking them to the general form.
-4. **Instances remain in `memory/patterns/`** — they are not moved
+4. **Instances remain in `memory/active/patterns/`** — they are not moved
    or copied. Instance-level proof continues to live at the repo
    level even after the general abstraction is authored.
 
@@ -81,7 +81,7 @@ barrier:
 ---
 ```
 
-Differences from the `memory/patterns/` schema:
+Differences from the `memory/active/patterns/` schema:
 
 - `synthesised_from` replaces `proven_in`; lists multiple instance
   sources.
@@ -102,7 +102,7 @@ have yet been authored. The first candidates for synthesis (when
 instance accumulation supports them) include strict-types-at-
 boundaries (across multiple TS/Zod/JSON-Schema instances),
 infrastructure-never-masks-business (already well-stated in
-memory/patterns/; candidate for lift-and-abstract), rate-limit-
+memory/active/patterns/; candidate for lift-and-abstract), rate-limit-
 amplification-vectors (architecture principle), and explicit-DI-over-
 ambient-state (architecture principle). Authorship of these awaits
 a deliberate synthesis pass that confirms legibility across ≥2
@@ -113,7 +113,7 @@ ecosystems.
 - **`../decision-records/`** — Practice Decision Records; governance
   decisions including pattern-shaped governance (PDRs with
   `pdr_kind: pattern` frontmatter).
-- **`../../memory/patterns/`** — Specific, ecosystem-grounded
+- **`../../memory/active/patterns/`** — Specific, ecosystem-grounded
   instance patterns proven in this repo. Instance files may point
   at their general form here via `related_pattern` frontmatter.
 - **`../../practice-context/outgoing/`** — Ephemeral exchange

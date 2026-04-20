@@ -53,7 +53,7 @@ The system prevents entropy through interlocking negative feedback loops.
 
 **Quality gates** are the primary enforcement mechanism. Every change must pass: type-check, lint, build, test, format, markdownlint. The critical design choice: **all gates are always blocking** — there is no "non-blocking warning" category inside the gate set. This is enforced through [architectural principles](../../.agent/directives/principles.md) (§Code Quality) that fire on every agent interaction and the canonical `pnpm check` command. Informational health checks such as `pnpm practice:fitness:informational` sit outside `pnpm check`; they surface drift without redefining it as a quality gate. Gates catch entropy within seconds.
 
-**Specialist reviewers** provide targeted review after non-trivial changes. The [specialist roster](../../.agent/directives/invoke-code-reviewers.md) includes a gateway reviewer (`code-reviewer`) that triages to specialists: architecture reviewers (4, each with a different lens), test-reviewer, type-reviewer, security-reviewer, config-reviewer, docs-adr-reviewer, and domain specialists. Reviewers catch entropy within the session — they assess not just code correctness but architectural alignment with the Practice itself.
+**Specialist reviewers** provide targeted review after non-trivial changes. The [specialist roster](../../.agent/memory/executive/invoke-code-reviewers.md) includes a gateway reviewer (`code-reviewer`) that triages to specialists: architecture reviewers (4, each with a different lens), test-reviewer, type-reviewer, security-reviewer, config-reviewer, docs-adr-reviewer, and domain specialists. Reviewers catch entropy within the session — they assess not just code correctness but architectural alignment with the Practice itself.
 
 **Strict rules** ([`principles.md`](../../.agent/directives/principles.md)) encode non-negotiable constraints: TDD at all levels, no type shortcuts, fail fast with helpful errors, no disabled checks, no compatibility layers. These are not guidelines — they are enforced by lint rules, compiler checks, and reviewer scrutiny. Rules catch entropy at authoring time.
 
@@ -79,14 +79,14 @@ The loop is **self-referential**: rules about rule creation, patterns about dist
 
 Different mechanisms serve different time horizons:
 
-| Mechanism                                          | Time horizon    | Purpose                                             |
-| -------------------------------------------------- | --------------- | --------------------------------------------------- |
-| [Napkin](../../.agent/memory/napkin.md)            | Current session | Raw capture of mistakes, discoveries, corrections   |
-| [Distilled](../../.agent/memory/distilled.md)      | Cross-session   | Curated patterns, read at session start             |
-| [Session prompts](../../.agent/prompts/)           | Domain-scoped   | Reusable playbooks carrying operational context     |
-| [Execution plans](../../.agent/plans/)             | Weeks to months | Phased work with acceptance criteria and evidence   |
-| [ADRs](../architecture/architectural-decisions/)   | Permanent       | Architectural decisions and their rationale         |
-| [Patterns](../../.agent/memory/patterns/README.md) | Permanent       | Reusable abstractions for recurring design problems |
+| Mechanism                                                 | Time horizon    | Purpose                                             |
+| --------------------------------------------------------- | --------------- | --------------------------------------------------- |
+| [Napkin](../../.agent/memory/active/napkin.md)            | Current session | Raw capture of mistakes, discoveries, corrections   |
+| [Distilled](../../.agent/memory/active/distilled.md)      | Cross-session   | Curated patterns, read at session start             |
+| [Session prompts](../../.agent/prompts/)                  | Domain-scoped   | Reusable playbooks carrying operational context     |
+| [Execution plans](../../.agent/plans/)                    | Weeks to months | Phased work with acceptance criteria and evidence   |
+| [ADRs](../architecture/architectural-decisions/)          | Permanent       | Architectural decisions and their rationale         |
+| [Patterns](../../.agent/memory/active/patterns/README.md) | Permanent       | Reusable abstractions for recurring design problems |
 
 Plans follow a lifecycle (`future/` → `current/` → `active/` → `archive/completed/`) and carry value traceability: every non-trivial plan states the outcome sought, the impact it should create, and the mechanism by which that creates value. Plans with acceptance criteria and deterministic validation commands make completion objective rather than subjective.
 

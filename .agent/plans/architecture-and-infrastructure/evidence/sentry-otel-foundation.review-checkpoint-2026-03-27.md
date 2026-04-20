@@ -12,7 +12,7 @@ This checkpoint records review status for the active **handover bundle**:
 6. `.agent/plans/architecture-and-infrastructure/current/README.md`
 7. `.agent/plans/architecture-and-infrastructure/future/README.md`
 8. `.agent/prompts/README.md`
-9. `.agent/memory/napkin.md`
+9. `.agent/memory/active/napkin.md`
 10. `docs/architecture/architectural-decisions/041-workspace-structure-option-a.md`
 11. `docs/architecture/architectural-decisions/117-plan-templates-and-components.md`
 12. `docs/architecture/architectural-decisions/143-coherent-structured-fan-out-for-observability.md`

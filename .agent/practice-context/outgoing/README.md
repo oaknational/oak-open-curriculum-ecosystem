@@ -105,7 +105,7 @@ longer live here:
   layer architecture) + PDR-010 (triplet / classification / modes)
   — deleted.
 - `platform-config-is-infrastructure` — duplicate of
-  `memory/patterns/platform-config-is-infrastructure.md` which in
+  `memory/active/patterns/platform-config-is-infrastructure.md` which in
   turn has substance in PDR-009 — deleted here.
 - `outgoing/patterns/` subdirectory — entire subdirectory deleted
   under PDR-007 (Pattern Exchange folds into Core travel; portable

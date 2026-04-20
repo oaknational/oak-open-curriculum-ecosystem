@@ -102,8 +102,8 @@ Per-lane short-horizon state (current objective, blockers, promotion
 watchlist) is carried in a per-workstream brief surface, and tactical
 coordination in single-writer track cards. The exact file paths are a
 host-local implementation detail. _(Illustrative only, non-normative:_
-_this repository implements the surface set under `.agent/state/` and_
-_`.agent/runtime/tracks/`; see the state scaffolding docs for the_
+_this repository implements the surface set under `.agent/memory/operational/` and_
+_`.agent/memory/operational/tracks/`; see the state scaffolding docs for the_
 _realising paths.)_
 
 The continuity surface set is operational only. Active plans remain

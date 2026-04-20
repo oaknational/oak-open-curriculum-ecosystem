@@ -146,8 +146,8 @@ Read and internalise:
 
 1. `.agent/directives/AGENT.md`
 2. `.agent/directives/principles.md`
-3. `.agent/memory/distilled.md`
-4. `.agent/memory/napkin.md` (the 2026-04-20 entry on
+3. `.agent/memory/active/distilled.md`
+4. `.agent/memory/active/napkin.md` (the 2026-04-20 entry on
    practice-aligned project-directions research is the immediate
    context)
 
@@ -227,7 +227,7 @@ At the end of the session:
 - Say whether the work changed only plans / discovery surfaces, or
   whether owner-approved next steps have begun any doctrine /
   product-code follow-up.
-- Update `.agent/memory/napkin.md` with surprises and watchlist
+- Update `.agent/memory/active/napkin.md` with surprises and watchlist
   candidates.
 
 ## Out of Scope (explicit fences)

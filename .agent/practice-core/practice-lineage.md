@@ -391,7 +391,7 @@ retired.
 **General patterns** live in `.agent/practice-core/patterns/` and
 travel with the Core package. They are ecosystem-agnostic
 abstractions synthesised from multiple specific instances.
-**Specific instances** live in `.agent/memory/patterns/` and remain
+**Specific instances** live in `.agent/memory/active/patterns/` and remain
 local; they are the proof that supports the general abstraction.
 
 **Practice Decision Records (PDRs)** live in
@@ -416,7 +416,7 @@ when instance accumulation makes the general form legible; the
 instances remain as proof. A PDR is **authored fresh** in
 `practice-core/decision-records/` when a Practice-governance
 decision needs to travel; its instance patterns (if any) remain in
-`memory/patterns/` with `related_pdr: PDR-NNN` frontmatter.
+`memory/active/patterns/` with `related_pdr: PDR-NNN` frontmatter.
 
 **Format**: PDRs use the template documented in
 `practice-core/decision-records/README.md`. General patterns use

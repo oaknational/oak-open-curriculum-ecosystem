@@ -46,7 +46,7 @@ the Practice into a hydrating repo. Neither is Core. Both exist because
 the eight-file contract could not absorb them at the time they emerged.
 
 **Observation 2 — Pattern duplication across homes.** The
-`.agent/memory/patterns/` directory holds ~70 patterns proven by real
+`.agent/memory/active/patterns/` directory holds ~70 patterns proven by real
 implementation. A subset — roughly a third — is universally applicable
 across ecosystems (`findings-route-to-lane-or-rejection`,
 `substance-before-fitness`, `ground-before-framing`,
@@ -85,7 +85,7 @@ opposite of what the Core was designed to guarantee.
 **Redefine the Practice Core contract from "eight files" to "a bounded
 package of required files and required directories." Add two
 first-class Core directories: `decision-records/` and `patterns/`.
-Sharpen `.agent/memory/patterns/` and `.agent/practice-context/outgoing/`
+Sharpen `.agent/memory/active/patterns/` and `.agent/practice-context/outgoing/`
 to their remaining roles. Fold Pattern Exchange into Core travel.**
 
 ### The new Core contract
@@ -144,7 +144,7 @@ JSON-Schema instances that instantiate it.
 **Authorship model: synthesis, not migration.** General patterns are
 **authored fresh** in `practice-core/patterns/` by synthesising
 substance from multiple specific instances. The specific instances
-**remain in `.agent/memory/patterns/`**; they are not moved or
+**remain in `.agent/memory/active/patterns/`**; they are not moved or
 copied. A general pattern and its specific instances co-exist: the
 Core surface holds the abstraction; the repo surface holds the
 proofs. This respects the bottom-up flow of pattern knowledge —
@@ -174,9 +174,9 @@ Patterns use the existing pattern template (`name`, `use_this_when`,
 carries forward unchanged. `proven_in` for a Core pattern cites the
 specific instances it synthesises from.
 
-### `memory/patterns/` — specific instances
+### `memory/active/patterns/` — specific instances
 
-`.agent/memory/patterns/` holds **specific, ecosystem-grounded
+`.agent/memory/active/patterns/` holds **specific, ecosystem-grounded
 instances** of engineering patterns. Each entry is proven in a
 concrete context (TypeScript, Zod, Vitest, MCP, etc.) and remains
 valuable as instance-level proof — even after a general form is
@@ -186,13 +186,13 @@ linking them to the general abstraction they instantiate.
 
 Specific instances depend on their ecosystem context (toolchain,
 language, framework). They do not travel as Core content. Receiving
-repos grow their own `memory/patterns/` against their own ecosystems.
+repos grow their own `memory/active/patterns/` against their own ecosystems.
 
 Patterns that describe **Practice-governance** (review discipline,
 planning discipline, knowledge-flow discipline, reviewer authority,
 etc.) are **not** pattern-shaped under this contract — they are
 decision-shaped and migrate to `decision-records/` as PDRs. The
-memory/patterns/ entries for those become pointers with
+memory/active/patterns/ entries for those become pointers with
 `related_pdr: PDR-NNN` frontmatter while remaining in place as
 instance-level proof.
 
@@ -224,7 +224,7 @@ describes a separate transport path for portable patterns via
 patterns travel because they are **Core content**, not because a
 separate transport mechanism carries them. The Pattern Exchange
 section is rewritten to describe graduation into `practice-core/patterns/`
-as the canonical flow, with `memory/patterns/` as the local candidate
+as the canonical flow, with `memory/active/patterns/` as the local candidate
 pool and the graduation criterion as the barrier.
 
 ## Rationale
@@ -232,7 +232,7 @@ pool and the graduation criterion as the barrier.
 Five options were considered for resolving the three-home drift.
 
 **Option A — Keep three homes unchanged.** Accept the duplication
-between `outgoing/patterns/` and `memory/patterns/`, and the peer-
+between `outgoing/patterns/` and `memory/active/patterns/`, and the peer-
 directory status of `practice-decision-records/`. Rejected: the drift
 is already material (multiple pattern duplicates diverging silently),
 and PDR-001 named the peer-directory arrangement as provisional
@@ -285,17 +285,17 @@ serve, the invariant is the part that yields.
 - `.agent/practice-decision-records/` contents move verbatim to
   `.agent/practice-core/decision-records/`. Filenames, numbering,
   and cross-references preserve. The README moves with them.
-- `.agent/memory/patterns/` is audited against the four-part
+- `.agent/memory/active/patterns/` is audited against the four-part
   universal-pattern criterion. Matching entries move to
   `.agent/practice-core/patterns/`. Non-matching entries remain in
-  `.agent/memory/patterns/`.
+  `.agent/memory/active/patterns/`.
 - `.agent/practice-context/outgoing/` is swept: files whose substance
   exists nowhere else either promote to `decision-records/` or
   `patterns/` (if they meet the graduation criteria) or are deleted
   (if they were staging artefacts that never graduated). The
   `outgoing/patterns/` subdirectory is eliminated; its contents
   either graduated to `practice-core/patterns/` or are removed as
-  duplicates of `memory/patterns/`.
+  duplicates of `memory/active/patterns/`.
 - The trinity (`practice.md`, `practice-lineage.md`,
   `practice-bootstrap.md`) is edited to describe the new Core
   contract, the two new surfaces, and the folded Pattern Exchange
@@ -328,8 +328,8 @@ serve, the invariant is the part that yields.
   `pdr_kind: pattern` inside `decision-records/`, not a duplicate in
   `patterns/`.
 - Duplicating substance across `practice-core/patterns/` and
-  `memory/patterns/`. Graduation is a move, not a copy. A graduated
-  pattern leaves `memory/patterns/` when it enters
+  `memory/active/patterns/`. Graduation is a move, not a copy. A graduated
+  pattern leaves `memory/active/patterns/` when it enters
   `practice-core/patterns/`.
 - Expanding the Core contract indefinitely by accretion. A new
   first-class Core surface requires a PDR that names its role and
@@ -428,7 +428,7 @@ In the repo where this PDR was authored:
   itself on acceptance).
 - Candidate universal patterns (to be classified in the migration
   plan): approximately 20-25 entries from the current ~73-file
-  `memory/patterns/`, concentrated in the `process` and `agent`
+  `memory/active/patterns/`, concentrated in the `process` and `agent`
   categories.
 - Outgoing files for explicit resolution during migration:
   `explorations-documentation-tier.md`,

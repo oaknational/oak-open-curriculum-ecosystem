@@ -203,15 +203,15 @@ Alternatives rejected:
 The Practice-governance patterns this PDR absorbs, with file paths
 preserved as proven instances:
 
-- `.agent/memory/patterns/findings-route-to-lane-or-rejection.md` —
+- `.agent/memory/active/patterns/findings-route-to-lane-or-rejection.md` —
   proven in Sentry L-0b reviewer findings register (commit `d08c6969`).
-- `.agent/memory/patterns/nothing-unplanned-without-a-promotion-trigger.md`
+- `.agent/memory/active/patterns/nothing-unplanned-without-a-promotion-trigger.md`
   — proven in observability strategy restructure (commit `2319a614`),
   fourteen items each absorbed into current/ or future/-with-trigger.
-- `.agent/memory/patterns/non-leading-reviewer-prompts.md` — proven
+- `.agent/memory/active/patterns/non-leading-reviewer-prompts.md` — proven
   in Sentry maximisation pivot, two reviewer rounds with different
   framings.
-- `.agent/memory/patterns/pre-implementation-plan-review.md` — proven
+- `.agent/memory/active/patterns/pre-implementation-plan-review.md` — proven
   2026-04-10 (7 blocking findings) and 2026-04-11 (12 findings
   resolved at plan stage).
 

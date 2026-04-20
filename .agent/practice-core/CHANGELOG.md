@@ -25,7 +25,7 @@ Practice Core package.
   (historical §Phase N headers + new §Execution Waves table + per-
   lane inline notes forming three authoritative frames for the
   same ordering). Document-structure layer instances go to the
-  new `.agent/memory/patterns/collapse-authoritative-frames-when-settled.md`.
+  new `.agent/memory/active/patterns/collapse-authoritative-frames-when-settled.md`.
 - Distilled graduation (2026-04-19 pass): 1 entry pruned
   (`All gates blocking, no "pre-existing" exceptions` → PDR-025);
   1 entry refined (`@ts-expect-error` narrowed to emphasise test-
@@ -33,7 +33,7 @@ Practice Core package.
   watchlist entry added (forward-pointing planning references need
   "planned, not yet code" markers — single-instance hold pending
   cross-session validation).
-- Host-local memory: three new patterns in `.agent/memory/patterns/`:
+- Host-local memory: three new patterns in `.agent/memory/active/patterns/`:
   `stage-what-you-commit.md` (2 cross-session instances — git
   index as durable state); `foundations-before-consumers.md`
   (owner-approved — multi-emitter plan wave ordering);
@@ -136,13 +136,13 @@ Practice Core package.
   enforce).
 - **PDR-012 through PDR-023** batch-authored as Practice-governance
   decisions, absorbing ~29 Practice-governance patterns from
-  `memory/patterns/` into coherent grouped PDRs: review-findings
+  `memory/active/patterns/` into coherent grouped PDRs: review-findings
   routing, grounding and framing, consolidation/knowledge-flow,
   reviewer authority and dispatch, claim propagation and reference
   quality, workaround hygiene and fix-at-source, planning
   discipline, ADR scope by reusability, check-driven development,
   test validity, governance enforcement scanners, documentation
-  structure. Instance files remain in `memory/patterns/` with
+  structure. Instance files remain in `memory/active/patterns/` with
   `related_pdr: PDR-NNN` frontmatter pointing at the general form.
 - `.agent/practice-context/outgoing/` sharpened per PDR-007 to
   ephemeral exchange only: 12 PDR-shaped topic notes deleted

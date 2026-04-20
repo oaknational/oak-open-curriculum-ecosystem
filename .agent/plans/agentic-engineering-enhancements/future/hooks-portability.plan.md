@@ -10,7 +10,7 @@ ADR-125 established the three-layer model for agent artefacts: canonical content
 
 This plan describes a **target portability architecture**, not the current
 repo-local hook baseline. The authoritative local contract remains
-[`cross-platform-agent-surface-matrix.md`](../../../reference/cross-platform-agent-surface-matrix.md),
+[`cross-platform-agent-surface-matrix.md`](../../../memory/executive/cross-platform-agent-surface-matrix.md),
 which currently records only Claude Code `PreToolUse` as wired in this repo.
 
 Target-state platform posture:

@@ -527,7 +527,7 @@ closure):**
    - `.cursor/skills/sentry-expert/SKILL.md`
 3. **Workflow and reviewer discovery alignment**
    - `.agent/directives/AGENT.md`
-   - `.agent/directives/invoke-code-reviewers.md`
+   - `.agent/memory/executive/invoke-code-reviewers.md`
    - `.agent/practice-context/outgoing/reviewer-system-guide.md`
    - `docs/engineering/workflow.md`
    - `docs/governance/development-practice.md`

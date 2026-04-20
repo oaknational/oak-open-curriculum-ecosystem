@@ -92,7 +92,7 @@ fragmentation that has measurably eased.
 ### Repo-local implications and routing
 
 - The
-  [`cross-platform-agent-surface-matrix.md`](../../reference/cross-platform-agent-surface-matrix.md)
+  [`cross-platform-agent-surface-matrix.md`](../../memory/executive/cross-platform-agent-surface-matrix.md)
   is now slightly **out-of-date in shape**: it pre-dates the skills
   convergence and the plugin-marketplace direction. A refresh that
   collapses the surface columns into the current convergent primitives

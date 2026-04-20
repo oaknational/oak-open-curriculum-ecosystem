@@ -29,7 +29,7 @@ Phase 3 with explicit promote / adjust / reject decision. Then Phase
   cover three-surface model, authority order, mandatory field
   contracts, loop model.
 - **Phase 2** (workflow integration): COMPLETE. Scaffolding created
-  at `.agent/state/`, `.agent/runtime/tracks/` (commit `ffcad2aa`).
+  at `.agent/memory/operational/`, `.agent/memory/operational/tracks/` (commit `ffcad2aa`).
   Workflow doc updates landed in `session-handoff.md`, `GO` skill, and
   `session-continuation.prompt.md`. Initial pilot-phase framing has
   since been retired — as of 2026-04-20 (Phase 4.1) the state surfaces
@@ -67,7 +67,7 @@ Phase 3 with explicit promote / adjust / reject decision. Then Phase
 
 Begin Phase 4. Start with doc propagation of the four pilot-evidence
 refinements (a) and (b) — both are in-file edits to
-`repo-continuity.md`, `.agent/state/README.md`, and the OAC plan's
+`repo-continuity.md`, `.agent/memory/operational/README.md`, and the OAC plan's
 Design Contract. Refinements (c) and (d) are optional and can be
 recorded as future-work candidates rather than implemented in Phase
 4. Close Phase 4 with portability-posture decision and doc

@@ -128,7 +128,7 @@ Edit exactly these files:
 - [session-continuation.prompt.md](.agent/prompts/session-continuation.prompt.md):
   - Rewrite the Live Continuity Contract `Current state`, `Current objective`, and `Next safe step` blocks to reflect whichever closure state was achieved.
   - Drop the stale-preview caveat; keep the Codex split invariant.
-- `.agent/memory/napkin.md` — add one session entry for the validation pass (surprise/behaviour change format per [napkin skill](.agent/skills/napkin/SKILL.md)).
+- `.agent/memory/active/napkin.md` — add one session entry for the validation pass (surprise/behaviour change format per [napkin skill](.agent/skills/napkin/SKILL.md)).
 
 No other surfaces touched. Child plan `sentry-canonical-alignment.plan.md`, companion plans `sentry-observability-expansion.plan.md` / `search-observability.plan.md`, and the Codex follow-up plan remain unchanged.
 

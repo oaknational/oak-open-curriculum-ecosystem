@@ -9,7 +9,7 @@ depth, and reintegration discipline.
 - [ADR-129](../../../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md)
 - [ADR-146](../../../../docs/architecture/architectural-decisions/146-assumptions-reviewer-meta-level-plan-assessment.md)
 - [ADR-149](../../../../docs/architecture/architectural-decisions/149-frontend-specialist-reviewer-gateway-cluster.md)
-- [invoke-code-reviewers.md](../../../directives/invoke-code-reviewers.md)
+- [invoke-code-reviewers.md](../../../memory/executive/invoke-code-reviewers.md)
 
 ## Operational and Canon-Adjacent Sources
 

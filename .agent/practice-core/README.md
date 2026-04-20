@@ -12,7 +12,7 @@ The Practice is the integrated local application of the Core within a specific r
 
 When a repo supports multiple agent platforms, keep the portable Core concise
 and record supported versus unsupported local surface mappings in a local
-reference such as `.agent/reference/cross-platform-agent-surface-matrix.md`.
+reference such as `.agent/memory/executive/cross-platform-agent-surface-matrix.md`.
 
 The Practice will naturally evolve over time; using it will cause it to adapt to suit the context of its current repo.
 

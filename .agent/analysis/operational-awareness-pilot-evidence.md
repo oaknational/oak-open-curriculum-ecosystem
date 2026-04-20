@@ -28,9 +28,9 @@ inversion strengthens the model:
 ## Pilot framing
 
 The OAC plan Phase 3 asks for a six-scenario pilot exercising the
-three-surface model (`.agent/state/repo-continuity.md` +
-`.agent/state/workstreams/<slug>.md` +
-`.agent/runtime/tracks/<...>.md`). Scenarios 2 and 3 require actual
+three-surface model (`.agent/memory/operational/repo-continuity.md` +
+`.agent/memory/operational/workstreams/<slug>.md` +
+`.agent/memory/operational/tracks/<...>.md`). Scenarios 2 and 3 require actual
 multi-agent parallelism and cannot be honestly simulated from a
 single session. They are deferred to the first organic multi-agent
 moment (next session that opens a parallel worktree or dispatches a
@@ -47,10 +47,10 @@ order.
 
 **Actions**:
 
-1. Read `.agent/state/repo-continuity.md` (63 lines populated).
-2. Read `.agent/state/workstreams/observability-sentry-otel.md`
+1. Read `.agent/memory/operational/repo-continuity.md` (63 lines populated).
+2. Read `.agent/memory/operational/workstreams/observability-sentry-otel.md`
    (the primary workstream brief per repo-continuity).
-3. Read `.agent/runtime/tracks/operational-awareness-continuity--claude-opus-4-7--feat-otel-sentry-enhancements.md`
+3. Read `.agent/memory/operational/tracks/operational-awareness-continuity--claude-opus-4-7--feat-otel-sentry-enhancements.md`
    (the current tactical track card).
 
 **Result**: **PASS.** All recovery-relevant state is present across
@@ -109,7 +109,7 @@ are for different scopes:
   next action for the workstream as a whole, regardless of which
   session picks it up.
 
-Authority order (from `.agent/state/README.md`) applies when
+Authority order (from `.agent/memory/operational/README.md`) applies when
 surfaces make **mutually incompatible claims about the same scope**.
 When claims are same-named fields but different-scope, there is no
 conflict to resolve — both are correct for their level.
@@ -149,7 +149,7 @@ refinement for Phase 4.
 exercise the resolve / promote / delete discipline.
 
 **Action**: Create
-`.agent/runtime/tracks/expired-test--pilot-fixture--feat-otel-sentry-enhancements.md`
+`.agent/memory/operational/tracks/expired-test--pilot-fixture--feat-otel-sentry-enhancements.md`
 with `expires_at: 2026-04-19T00:00:00Z` (yesterday). The card is a
 pilot fixture — no real work behind it.
 
@@ -169,7 +169,7 @@ promote (fixture only). **Delete** is the correct action.
 **Execution**:
 
 ```bash
-rm .agent/runtime/tracks/expired-test--pilot-fixture--feat-otel-sentry-enhancements.md
+rm .agent/memory/operational/tracks/expired-test--pilot-fixture--feat-otel-sentry-enhancements.md
 ```
 
 **Result**: **PASS.** Discipline is mechanical; the three options
@@ -201,10 +201,10 @@ composes with multi-lane briefs or needs adjustment".
 **Routing**:
 
 1. **Track card** → observation captured in `promotion_needed`.
-2. **Workstream brief** → moved to `.agent/state/workstreams/operational-awareness-continuity.md`
+2. **Workstream brief** → moved to `.agent/memory/operational/workstreams/operational-awareness-continuity.md`
    `## Promotion watchlist` (already present as
    `workstream-brief-is-compact-state-of-resumption`).
-3. **Napkin** → route to `.agent/memory/napkin.md` as an entry
+3. **Napkin** → route to `.agent/memory/active/napkin.md` as an entry
    titled "2026-04-20 — OAC Phase 3 pilot evidence". The napkin
    entry captures the pilot-scenario observations alongside the
    usual surprise/correction narrative.

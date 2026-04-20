@@ -169,7 +169,7 @@ Alternatives rejected:
 
 Proven instance retained with `related_pdr: PDR-019`:
 
-- `.agent/memory/patterns/adr-by-reusability-not-diff-size.md` —
+- `.agent/memory/active/patterns/adr-by-reusability-not-diff-size.md` —
   materialised as ADR-159 (per-workspace vendor CLI ownership)
   from a tight hygiene lane; small diff, ADR-worthy because the
   decision pattern would be re-derived by every next vendor CLI

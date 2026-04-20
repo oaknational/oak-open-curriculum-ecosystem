@@ -71,7 +71,7 @@ as evidence that review was a polish pass. It isn't.
 ## Technical content
 
 New pattern extracted:
-`.agent/memory/patterns/findings-route-to-lane-or-rejection.md`.
+`.agent/memory/active/patterns/findings-route-to-lane-or-rejection.md`.
 Evidence sections appended to two existing patterns
 (`ground-before-framing.md`, `test-claim-assertion-parity.md`) with
 today's second instances. Full reviewer register carried in

@@ -120,7 +120,7 @@ In the common paired-export case, the strongest surviving layer is usually:
      supports it.
 
 11a. **Audit the citation set and record the diagnostic in the agent
-    napkin** (`.agent/memory/napkin.md`), not in the clean file. The clean
+    napkin** (`.agent/memory/active/napkin.md`), not in the clean file. The clean
     file stays a faithful copy of the report plus its references table;
     the audit is agent-side meta-information that helps the next pass
     detect anomalies quickly. Required counts: `turn…` refs in source

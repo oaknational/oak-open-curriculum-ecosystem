@@ -36,7 +36,7 @@ shaped; they all sit together because they all govern the
 Practice), a clearer model of patterns (general abstractions
 synthesised from instances, not moved from instances), and a
 redefinition of the migration itself (nothing moves from
-memory/patterns/ because patterns-in-the-Practice are authored
+memory/active/patterns/ because patterns-in-the-Practice are authored
 fresh via synthesis).
 
 ## What this felt like

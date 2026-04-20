@@ -91,7 +91,7 @@ This specialist is unique — its primary authority is **internal**, not externa
 2. **Internal package source** — the actual implementation and types
 3. **Repository ADRs** — ADR-078 (DI), ADR-108 (search/curriculum boundary),
    ADR-051 (OTel logging), and others that govern internal patterns
-4. **Distilled learnings** — `.agent/memory/distilled.md` entries about
+4. **Distilled learnings** — `.agent/memory/active/distilled.md` entries about
    internal package gotchas
 5. **Testing strategy** — `.agent/directives/testing-strategy.md` for how
    internal packages should be tested

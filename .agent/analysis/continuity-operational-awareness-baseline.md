@@ -36,8 +36,8 @@ host it.
 | Active plan(s) | Scope, sequencing, acceptance criteria, validation | Days to weeks | Canonical for execution scope | Archive on completion | Medium | Strong on execution truth, heavier than ideal for ordinary resume |
 | `.agent/commands/session-handoff.md` | Lightweight closeout workflow | Session boundary | Canonical workflow, not canonical state | No persistent state | Medium | Refreshes continuity but has no dedicated tactical-awareness surface to target |
 | `.agent/skills/go/shared/go.md` | Mid-session re-grounding workflow | In-session | Canonical workflow, not canonical state | No persistent state | Low | Depends on continuity and plans remaining legible |
-| `.agent/memory/napkin.md` | Raw surprise and correction capture | Current rotation window | Canonical for raw capture | Rotates at threshold | Medium | Correct home for learning signals, not for day-to-day tactical coordination |
-| `.agent/memory/distilled.md` | Refined cross-session learnings | Cross-session | Canonical for refined learnings | Extract on consolidation when stable | Low | Learning layer, not tactical state |
+| `.agent/memory/active/napkin.md` | Raw surprise and correction capture | Current rotation window | Canonical for raw capture | Rotates at threshold | Medium | Correct home for learning signals, not for day-to-day tactical coordination |
+| `.agent/memory/active/distilled.md` | Refined cross-session learnings | Cross-session | Canonical for refined learnings | Extract on consolidation when stable | Low | Learning layer, not tactical state |
 | `docs/governance/continuity-practice.md` + ADR-150 | Normative continuity doctrine | Permanent | Canonical doctrine | None | Low | Defines the three continuity types and split-loop model |
 | `.agent/plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md` | Future broad sidecar strategy | Strategic | Non-authoritative for current repo state | Promotion-trigger based | Low | Valuable adjacent concept, but intentionally broader than the repo-local need |
 

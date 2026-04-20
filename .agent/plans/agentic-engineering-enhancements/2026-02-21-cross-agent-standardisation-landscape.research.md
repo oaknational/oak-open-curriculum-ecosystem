@@ -329,7 +329,7 @@ The cost of adding a new platform is one line of markdown.
 | Skills | 1 in `skills/` | 4 in `skills/` | — | 7 in `.agents/skills/` (Clerk) |
 | Always-applied rules | — | 13 in `rules/` | — | 1 in `.windsurf/rules/` |
 | Slash commands | — | 10 in `commands/` | 9 in `commands/` | — |
-| Memory/learning | `memory/napkin.md`, `distilled.md` | — | — | — |
+| Memory/learning | `memory/active/napkin.md`, `distilled.md` | — | — | — |
 | Plans | `plans/` | `plans/` (Cursor-managed) | — | — |
 | Prompts | `prompts/` | — | — | — |
 | Experience | `experience/` | — | — | — |

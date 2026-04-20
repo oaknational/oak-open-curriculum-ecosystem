@@ -64,11 +64,11 @@ Core package.
 
 Read `patterns/README.md` and any general abstract patterns present.
 These are ecosystem-agnostic patterns synthesised from specific instances;
-they travel with the Core. Specific instances remain in `.agent/memory/patterns/`
+they travel with the Core. Specific instances remain in `.agent/memory/active/patterns/`
 in each host repo.
 
 If the local repo spans multiple agent platforms, maintain an explicit local
-surface contract in `.agent/reference/cross-platform-agent-surface-matrix.md`
+surface contract in `.agent/memory/executive/cross-platform-agent-surface-matrix.md`
 and expose it from `../practice-index.md`. Supported and unsupported states
 should be written down explicitly rather than inferred from missing files.
 

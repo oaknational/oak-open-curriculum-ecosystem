@@ -634,7 +634,7 @@ shape); mapping audit at WS2 GREEN.
   artefact.
 - [`docs/explorations/2026-04-18-accessibility-observability-at-runtime.md`](./2026-04-18-accessibility-observability-at-runtime.md)
   — exploration 3; `a11y_preference_tag` field enumeration.
-- [`.agent/memory/distilled.md § Zod 4 .meta({ examples })`](../../.agent/memory/distilled.md) —
+- [`.agent/memory/active/distilled.md § Zod 4 .meta({ examples })`](../../.agent/memory/active/distilled.md) —
   the `z.preprocess()` / `.meta()` edge case referenced in §5.6.
 
 ### External conventions

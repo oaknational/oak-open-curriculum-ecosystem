@@ -3,7 +3,7 @@
 **Status**: active
 
 This directory holds design-space explorations — option-weighing documents that
-sit between captured observations (`.agent/memory/napkin.md`) and committed
+sit between captured observations (`.agent/memory/active/napkin.md`) and committed
 decisions (`docs/architecture/architectural-decisions/`).
 
 ## What belongs here
@@ -24,8 +24,8 @@ decisions (`docs/architecture/architectural-decisions/`).
   ADR and leave this document in place as the evidence trail.
 - **Execution instructions** — those are plans (`.agent/plans/**`).
 - **Session observations** — those are napkin entries
-  (`.agent/memory/napkin.md`) distilled into rules
-  (`.agent/memory/distilled.md`) and patterns (`.agent/memory/patterns/`).
+  (`.agent/memory/active/napkin.md`) distilled into rules
+  (`.agent/memory/active/distilled.md`) and patterns (`.agent/memory/active/patterns/`).
 - **Reference documentation** — those are READMEs and TSDoc.
 
 ## Document shape

@@ -202,13 +202,13 @@ substance better than the pattern shape would.
 Proven instances, retained as pattern files with `related_pdr:
 PDR-013`:
 
-- `.agent/memory/patterns/ground-before-framing.md` — Sentry
+- `.agent/memory/active/patterns/ground-before-framing.md` — Sentry
   observability maximisation pivot: `wrapMcpServerWithSentry` was
   already wired at `core-endpoints.ts:98` but claimed missing until
   the composition root was read.
-- `.agent/memory/patterns/tool-output-framing-bias.md` — depcruise
+- `.agent/memory/active/patterns/tool-output-framing-bias.md` — depcruise
   triage plan (2026-04-12): 3 of 4 knip assumptions and 4 of 12
   depcruise assumptions were materially wrong when investigated.
-- `.agent/memory/patterns/evidence-before-classification.md` — Knip
+- `.agent/memory/active/patterns/evidence-before-classification.md` — Knip
   triage plan (2026-04-11): 96 unused files and 749 unused exports
   initially labelled without investigation; owner-corrected.

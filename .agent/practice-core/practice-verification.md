@@ -92,7 +92,7 @@ consolidation, and transplantation close.
   platform adapters per PDR-009.
 - **Pattern discovery skill**: canonical `patterns` skill exists
   pointing at both `practice-core/patterns/` (general abstractions)
-  and `memory/patterns/` (instances).
+  and `memory/active/patterns/` (instances).
 - **Rule activation**: canonical rules in `.agent/rules/` have
   platform-native activation triggers (per-platform per PDR-009).
 
@@ -193,8 +193,8 @@ and the Practice is structurally present but inert.
 1. **Core and local bridge** — `.agent/practice-core/` (the portable Core
    package), `.agent/directives/AGENT.md` (repo entry point), and
    `.agent/practice-index.md` (local bridge from Core to live estate).
-2. **Memory layer** — `.agent/memory/napkin.md`,
-   `.agent/memory/distilled.md`, `.agent/memory/patterns/README.md`. If
+2. **Memory layer** — `.agent/memory/active/napkin.md`,
+   `.agent/memory/active/distilled.md`, `.agent/memory/active/patterns/README.md`. If
    always-active skills reference these files, they must exist on first
    real use.
 3. **Continuity host** — one explicit surface for the continuity contract

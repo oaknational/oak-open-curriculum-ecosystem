@@ -13,13 +13,13 @@ and operating instructions. It does **not** host continuity state.
 
 State lives in three repo-local surfaces, in authority order:
 
-1. `.agent/state/repo-continuity.md` — canonical continuity contract.
-2. `.agent/state/workstreams/<slug>.md` — per-lane resumption brief.
-3. `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md` — single-writer
+1. `.agent/memory/operational/repo-continuity.md` — canonical continuity contract.
+2. `.agent/memory/operational/workstreams/<slug>.md` — per-lane resumption brief.
+3. `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md` — single-writer
    tactical coordination card (optional, session-scoped).
 
-See [`.agent/state/README.md`](../state/README.md) and
-[`.agent/runtime/README.md`](../runtime/README.md) for the contracts.
+See [`.agent/memory/operational/README.md`](../memory/operational/README.md) and
+[`.agent/memory/operational/tracks/README.md`](../memory/operational/tracks/README.md) for the contracts.
 
 ## Ground First
 
@@ -32,16 +32,16 @@ See [`.agent/state/README.md`](../state/README.md) and
    block in the ADR index, and open any ADR whose slug matches your current
    workstream from the [full ADR index](../../docs/architecture/architectural-decisions/README.md).
 3. Read the learning-loop surfaces:
-   - `.agent/memory/distilled.md`
-   - `.agent/memory/napkin.md`
+   - `.agent/memory/active/distilled.md`
+   - `.agent/memory/active/napkin.md`
 4. Read the live state surfaces, in authority order:
-   - `.agent/state/repo-continuity.md` — active workstreams, branch-primary
+   - `.agent/memory/operational/repo-continuity.md` — active workstreams, branch-primary
      workstream brief, repo-wide invariants, next safe step, deep-consolidation
      status.
-   - `.agent/state/workstreams/<slug>.md` — the workstream brief for the lane
+   - `.agent/memory/operational/workstreams/<slug>.md` — the workstream brief for the lane
      you are about to resume. Follow the "Active track links" field to any
      live tactical track card(s).
-   - `.agent/runtime/tracks/*.md` — any relevant tactical track card(s).
+   - `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s).
 5. Read the active plan(s) named in the workstream brief. Plans are
    authoritative for scope, sequencing, acceptance, and validation.
 6. Re-establish live branch state:

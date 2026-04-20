@@ -219,7 +219,7 @@ choice.
 
 ### Directive Updates
 
-`.agent/directives/invoke-code-reviewers.md` should be renamed and restructured
+`.agent/memory/executive/invoke-code-reviewers.md` should be renamed and restructured
 to reflect the gateway's broader role. The current content is good but needs:
 
 1. Rename to `invoke-reviewers.md` (or equivalent — decided during taxonomy work)
@@ -258,7 +258,7 @@ should be renamed to match the directive rename.
 
 This plan does NOT create new files from scratch — it upgrades existing ones:
 
-1. Redesign the triage model in `.agent/directives/invoke-code-reviewers.md`
+1. Redesign the triage model in `.agent/memory/executive/invoke-code-reviewers.md`
    (layered triage, depth selection, coverage tracking)
 2. Expand the worked examples for the full specialist roster
 3. Update the gateway agent template (currently `code-reviewer`) to reflect
