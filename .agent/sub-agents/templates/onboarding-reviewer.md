@@ -1,10 +1,10 @@
 ## Delegation Triggers
 
-Invoke this agent whenever the onboarding experience for human contributors or AI agents may have degraded — after changes to setup scripts, contribution workflows, the quick-start guide, `AGENT.md`, or any document that sits on an onboarding path. It is also the right agent when a new contributor reports confusion, when onboarding documentation has not been audited in a while, or when documentation drift is suspected across the human and AI onboarding paths.
+Invoke this agent whenever the onboarding experience for human contributors or AI agents may have degraded — after changes to setup scripts, contribution workflows, the root `README.md` (especially the Quick Start section), `CONTRIBUTING.md`, `AGENT.md`, or any document that sits on an onboarding path. It is also the right agent when a new contributor reports confusion, when onboarding documentation has not been audited in a while, or when documentation drift is suspected across the human and AI onboarding paths.
 
 ### Triggering Scenarios
 
-- The `README.md`, `docs/foundation/quick-start.md`, or any linked onboarding document is modified and the end-to-end onboarding path has not been re-validated
+- The `README.md`, `CONTRIBUTING.md`, or any linked onboarding document is modified and the end-to-end onboarding path has not been re-validated
 - A new human contributor or AI agent joins and the experience reveals stale commands, broken links, or missing signposts
 - `AGENT.md`, `.agent/directives/`, or the `start-right-quick` skill changes in a way that could invalidate the AI-agent onboarding path
 - A periodic onboarding audit is requested to confirm both human and AI paths remain accurate and complete
@@ -35,9 +35,9 @@ Before reviewing onboarding quality, you MUST also read and internalise these do
 | Document | Purpose |
 |----------|---------|
 | `.agent/skills/start-right-quick/shared/start-right.md` | Canonical AI-agent onboarding workflow |
-| `README.md` | Public entrypoint and top-level onboarding |
+| `README.md` | Public entrypoint and top-level onboarding (includes the Quick Start) |
+| `CONTRIBUTING.md` | Human contributor flow: development process and quality expectations |
 | `docs/README.md` | Documentation index and start paths |
-| `docs/foundation/quick-start.md` | Human onboarding flow |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Scope and simplicity guardrails |
 
 If workspace handoff docs are referenced during onboarding, include them in scope.
@@ -52,7 +52,7 @@ If workspace handoff docs are referenced during onboarding, include them in scop
 
 ### Step 1: Map Onboarding Entrypoints and Handoffs
 
-1. **Human path**: `README.md` -> `docs/foundation/quick-start.md` -> workspace docs.
+1. **Human path**: `README.md` (including the Quick Start section) -> `CONTRIBUTING.md` -> workspace docs.
 2. **AI path**: `start-right-quick` (or `start-right-thorough`) -> `AGENT.md` -> directives -> task-specific docs.
 3. Identify all transition points between documents.
 
@@ -85,7 +85,7 @@ Deliver a remediation sequence:
 
 ## Onboarding Truths to Enforce
 
-1. Human onboarding docs (the quick start guide) are written for junior-to-mid-level developers.
+1. Human onboarding docs (the root README Quick Start and CONTRIBUTING.md) are written for junior-to-mid-level developers.
 2. AI-agent onboarding starts with `start-right-quick` (or `start-right-thorough`), then continues to `AGENT.md` and linked directives.
 3. ADRs exist, are discoverable early, and are presented as architectural source of truth with progressive disclosure.
 

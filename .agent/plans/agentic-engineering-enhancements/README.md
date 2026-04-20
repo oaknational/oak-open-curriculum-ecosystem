@@ -17,7 +17,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `active/README.md` | Active Index | Atomic executable plans for roadmap phases plus adjacent active closeout work |
 | `future/README.md` | Future Index | Deferred strategic backlog and later exploratory capability work |
 | `current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md` | Plan | Source strategy for the index-only hub, research/report lanes, docs cross-links, and seed deep dives |
-| `active/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md` | Active Plan | Execution plan for the agentic corpus discoverability hub and lane rollout |
+| `archive/completed/agentic-corpus-discoverability-and-deep-dive-hub.execution.plan.md` | Plan (Completed) | Execution plan for the agentic corpus discoverability hub and lane rollout — **COMPLETE** (archived 2026-04-20) |
 | ~~`active/practice-convergence.plan.md`~~ | Plan (Completed) | Convergence closeout for Practice Core, local surfaces, and outgoing Context — **COMPLETE** (deleted) |
 | `documentation-sync-log.md` | Tracking Log | Per-phase record of required ADR/directive/reference-doc and README updates |
 | `current/elasticsearch-specialist-capability.plan.md` | Plan | Strategic source plan for a canonical Elasticsearch reviewer, skill, and situational rule grounded in official Elastic docs and Elastic Serverless applicability |
@@ -27,7 +27,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `current/harness-concepts-adoption.plan.md` | Plan | Evaluate and adopt concepts from harness-engineering model (docs freshness, entropy cleanup, quality scoring) |
 | `active/operational-awareness-and-continuity-surface-separation.plan.md` | Active Plan | Repo-local awareness plane: separate canonical continuity contract, workstream resumption briefs, and thread-aware tactical track cards via markdown-first repo-local state surfaces (promoted 2026-04-20) |
 | `current/governance-concepts-and-agentic-mechanism-integration.plan.md` | Plan | Source strategy for abstract governance-plane concept extraction, mechanism-gap mapping, and routing into existing plans, deep dives, reports, and doctrine-adjacent surfaces without copying source-specific naming |
-| `active/governance-concepts-and-agentic-mechanism-integration.execution.plan.md` | Active Plan | Execution closeout for governance-concept routing, adjacent-plan reconciliation, and doctrine no-change capture |
+| `archive/completed/governance-concepts-and-agentic-mechanism-integration.execution.plan.md` | Plan (Completed) | Execution closeout for governance-concept routing, adjacent-plan reconciliation, and doctrine no-change capture — **COMPLETE** (archived 2026-04-20) |
 | `archive/completed/continuity-and-surprise-practice-adoption.plan.md` | Plan (Completed) | Repo-local continuity surfaces, session-handoff rollout, GO alignment, and surprise pipeline adoption completed with an explicit `promote` decision on 3 April 2026 |
 | `evidence-bundle.template.md` | Template | Standard claim/evidence artifact format for non-trivial engineering claims |
 | `evidence/README.md` | Reference | Storage and naming convention for collection evidence artefacts |
@@ -47,7 +47,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `future/privacy-specialist-capability.plan.md` | Plan (Future) | Broad-remit privacy capability — privacy by design, minimisation, retention, redaction, and trust posture |
 | `future/web-api-gdpr-specialist-capability.plan.md` | Plan (Future) | Narrow-remit web/API GDPR capability — personal-data obligations, consent, deletion/export, and retention semantics at API boundaries |
 | `future/ooce-specialist-capability.plan.md` | Plan (Future) | Oak Open Curriculum Ecosystem specialist — the repo's own avatar; internal library contracts, composition patterns, workspace usage |
-| `future/planning-specialist-capability.plan.md` | Plan (Future) | Planning specialist — plan architecture, lifecycle, discoverability, documentation sync |
+| `current/planning-specialist-capability.plan.md` | Plan | Planning specialist — plan architecture, lifecycle, discoverability, integration routing, and documentation sync (promoted from future/ 2026-04-20) |
 | `future/tdd-specialist-capability.plan.md` | Plan (Future) | TDD specialist — multi-level TDD guidance scaled to task size; refined test level definitions |
 | `future/devx-specialist-capability.plan.md` | Plan (Future) | Developer experience specialist — code, repo, SDK, and CLI ergonomics and friction |
 | `future/repair-workflow-wording-hazard-detection.plan.md` | Plan (Future) | Detect ambiguous wording and missing output contracts in multi-artefact repair workflows before they trigger rewrite or promotion drift |
@@ -55,6 +55,7 @@ Plans and research for hardening the agentic engineering practice through physic
 | `archive/completed/agent-collaboration-incoming-practice-context-integration.plan.md` | Plan (Completed) | Completed rollout for incoming `agent-collaboration` Practice Context integration, local doctrine capture, workspace-task honesty repair, and targeted write-back |
 | `future/adapter-generation.plan.md` | Plan (Future) | Manifest-driven platform adapter generation — replace 100+ manual wrapper files with a single manifest + build script |
 | `future/agent-classification-taxonomy.plan.md` | Plan (Future) | Comprehensive agent reclassification, rename, and mode composition (ADR-135) |
+| `future/mcp-governance-deep-dive.plan.md` | Plan (Future) | Deep dive into MCP `2025-11-25` governance, identity (RFC 9728), durable-tasks, SDK tiering, and JSON Schema 2020-12 implications — trigger: MCP server upgrade enters planning surface |
 | `future/graphify-and-graph-memory-exploration.plan.md` | Plan (Future) | Explore Graphify-inspired graph memory as an orthogonal, derived memory layer over canonical Practice artefacts without choosing an implementation path yet |
 
 ## Read Order
@@ -120,6 +121,22 @@ no-change rationale) for ADR-119, `.agent/practice-core/practice.md`, and any
 additionally impacted ADRs/docs/READMEs. Apply the
 [`jc-consolidate-docs` workflow](../../../.cursor/commands/jc-consolidate-docs.md)
 before phase closure.
+
+## Direction-of-Travel Integration (2026-04-20)
+
+The practice-aligned direction-of-travel research produced an analysis
+baseline with 8 high-impact uplift candidates. A plan-surface integration
+session routed each candidate to its correct disposition. The durable
+record is the **integration routing register** in:
+
+- [practice-aligned-direction-and-gap-baseline.md](../../analysis/practice-aligned-direction-and-gap-baseline.md) §Integration routing register
+
+Future direction-of-travel candidates should be routed through the same
+register rather than creating new plans. The companion baselines and
+research notes provide context:
+
+- [governance-concepts-and-mechanism-gap-baseline.md](../../analysis/governance-concepts-and-mechanism-gap-baseline.md) — abstract governance vocabulary
+- [cross-lane-direction-survey.md](../../research/agentic-engineering/cross-lane-direction-survey.md) — per-lane routing recommendations
 
 ## Dependencies
 

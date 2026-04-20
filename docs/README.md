@@ -3,19 +3,19 @@ boundary: cross-boundary
 doc_role: index
 authority: docs-root-navigation
 status: active
-last_reviewed: 2026-04-19
+last_reviewed: 2026-04-20
 ---
 
 # Documentation for Oak Open Curriculum Ecosystem
 
-**Last Updated**: 2026-04-19
+**Last Updated**: 2026-04-20
 **Status**: Active index
 
 ## Getting Started
 
-- **Evaluating the project?** → [Strategic Overview](foundation/strategic-overview.md) — vision, roadmap, engineering approach, and handoff readiness in one reading path
+- **Evaluating the project?** → [VISION.md](foundation/VISION.md) for the timeless framing, then the latest snapshot in the [reports surface](../.agent/reports/) and the live [high-level plan](../.agent/plans/high-level-plan.md)
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language
-- **New to the repo?** → [Quick Start Guide](foundation/quick-start.md) — architecture, setup, key concepts, and development workflows
+- **New to the repo?** → [Root README Quick Start](../README.md#quick-start) for setup, then [CONTRIBUTING.md](../CONTRIBUTING.md) for the development process
 - **Working with AI?** → Start with the canonical [`start-right-quick` shared workflow](../.agent/skills/start-right-quick/shared/start-right.md) (or invoke it via your platform: `/jc-start-right-quick` in Cursor and Claude Code, `jc-start-right-quick` skill in Codex, `/jc-start-right-quick` in Gemini), then [AGENT.md](../.agent/directives/AGENT.md).
 - **Need an optional map of the wider agentic corpus?** → [Agentic Engineering Hub](../.agent/reference/agentic-engineering/README.md) — index-only discovery hub linking canon, deep dives, research, evidence, reports, and docs surfaces
 - **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
@@ -35,7 +35,8 @@ last_reviewed: 2026-04-19
 
 ### Development
 
-- [Quick Start Guide](foundation/quick-start.md) - Architecture, setup, and development workflows for new contributors
+- [Root README Quick Start](../README.md#quick-start) — install, verify, and key commands for new contributors
+- [CONTRIBUTING.md](../CONTRIBUTING.md) — development process, conventions, and quality expectations
 - [Development Workflow](engineering/workflow.md) - Complete lifecycle: branching, TDD, CI, review, merge, release
 - [Environment Variables](operations/environment-variables.md) - Complete setup guide
 - [Extension Points](engineering/extending.md) - How to add new MCP tools, search indices, SDK helpers

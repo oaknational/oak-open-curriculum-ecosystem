@@ -1,8 +1,10 @@
 # Planning Specialist Capability — Strategic Plan
 
-**Status**: NOT STARTED
+**Status**: QUEUED
 **Domain**: Agentic Engineering Enhancements
 **Pattern**: [ADR-129 (Domain Specialist Capability Pattern)](../../../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md)
+**Promoted**: 2026-04-20 — owner approved promotion after plan-surface
+integration session demonstrated specialist-level plan-routing complexity
 
 ## Problem and Intent
 
@@ -75,10 +77,47 @@ frequently:
 9. **Scope**: Is the plan focused and executable, not bloated?
 10. **Dependencies**: Are dependencies and sequencing explicit?
 
-## Promotion Trigger
+## Promotion Evidence (2026-04-20)
 
-This plan promotes to `current/` when:
+All three promotion criteria are met:
 
-1. Plan quality issues are recurring across multiple sessions
-2. The planning architecture has stabilised (no structural changes pending)
-3. No conflicting work is in progress on the agent artefact layer
+1. **Plan quality issues are recurring** — the plan-surface integration
+   session (2026-04-20) required routing 8 candidates across a 60-artefact
+   surface, classifying each across 5 disposition types, updating 7 files,
+   archiving 2 plans, creating 1 new plan, and recording a durable routing
+   register. Owner observed this is the level of complexity that justifies
+   a specialist. The `docs-adr-reviewer` handles documentation quality but
+   lacks the plan-architecture lens (lifecycle stages, promotion triggers,
+   scope-and-sequencing, density invariants, absorption-vs-new-plan
+   decisions). Additionally, this session produced a new pattern candidate
+   (`defer-decisions-must-live-where-the-candidate-lives`) that a planning
+   specialist would catch structurally.
+2. **Planning architecture has stabilised** — ADR-117 lifecycle, roadmap +
+   active/current/future structure, status legend, documentation sync
+   discipline are all stable and exercised across multiple collections.
+3. **No conflicting work in progress** — the agent artefact layer is
+   stable; the OAC plan is the only active plan and does not touch the
+   specialist triplet surface.
+
+## Scope Expansion: Plan-Surface Integration Routing
+
+In addition to the original review checklist, the planning specialist
+should cover:
+
+11. **Integration routing**: When direction-of-travel or research work
+    produces uplift candidates, does the routing register exist and is
+    each candidate correctly classified (absorb / new plan / record-and-
+    defer / route out)?
+12. **Trigger condition durability**: For deferred candidates, is the
+    trigger condition recorded co-located with the candidate (not only
+    in a session plan or conversation)?
+13. **Archival hygiene**: Are completed plans moved to `archive/completed/`
+    promptly? Are their README entries updated?
+14. **Backlog health**: Is the `future/` queue growing faster than items
+    are being promoted or pruned?
+
+## Next Execution Trigger
+
+Promote to `active/` when the next available execution slot opens
+(after OAC Phase 4 or in parallel if the agent artefact layer has
+capacity).

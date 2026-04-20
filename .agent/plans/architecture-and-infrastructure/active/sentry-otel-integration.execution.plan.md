@@ -528,7 +528,6 @@ closure):**
    - `.agent/milestones/README.md`
    - `.agent/milestones/m2-extension-surfaces.md`
    - `.agent/milestones/m3-tech-debt-and-hardening.md`
-   - `docs/foundation/strategic-overview.md`
    - `docs/foundation/VISION.md`
    - `.agent/plans/user-experience/public-alpha-experience-contract.md`
    - `.agent/plans/user-experience/roadmap.md`

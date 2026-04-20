@@ -1,7 +1,7 @@
 ---
 title: How the Agentic Engineering System Works
 status: active
-last_reviewed: 2026-04-19
+last_reviewed: 2026-04-20
 ---
 
 # How the Agentic Engineering System Works

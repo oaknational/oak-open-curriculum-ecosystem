@@ -224,7 +224,7 @@ This pattern is formalized in several ADRs:
 
 - [Programmatic Tool Generation](./programmatic-tool-generation.md) - Details on MCP tool generation
 - [SDK Documentation](../../packages/sdks/oak-curriculum-sdk/README.md) - Runtime usage of the generated SDK
-- [Quick Start Guide](../foundation/quick-start.md) - Getting started guide
+- [Root README Quick Start](../../README.md#quick-start) - Getting started guide
 
 ## Execution Model: Schema-First Tool Invocation
 

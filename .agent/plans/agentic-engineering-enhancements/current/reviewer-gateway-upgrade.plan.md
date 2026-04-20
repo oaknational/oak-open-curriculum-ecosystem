@@ -276,10 +276,71 @@ This plan does NOT create new files from scratch — it upgrades existing ones:
 - The depth selection integration depends on WS6 (review depth dimension)
   being designed first
 
+## Direction-of-Travel Scope Expansion (2026-04-20)
+
+Three high-impact uplift candidates from the practice-aligned direction-of-
+travel research ([practice-aligned-direction-and-gap-baseline.md](../../../analysis/practice-aligned-direction-and-gap-baseline.md))
+route to this plan as natural scope expansions. All three belong to the
+**reviewer-systems cluster** — the densest uplift cluster in the baseline,
+with evidence from agent-native code review (Greptile), identity/OAuth
+modernisation (RFC 9728), and the cross-lane direction survey.
+
+### Expansion 1: Machine-readable reviewer-suggestion artefact
+
+**Status**: Scoped, not yet executing
+**Evidence**: Greptile "Fix in X" model — machine-readable handoff with
+explicit file paths and line numbers, cross-tool integration
+(Claude Code, Codex, Cursor, Devin).
+
+Reviewer subagents currently return prose; the main agent implements
+informally. This expansion scopes whether the reviewer-suggestion
+output should grow a structured schema (file-path + line-number +
+suggested-change) so the gateway can route suggestions mechanically
+rather than relying on the main agent to parse prose.
+
+**Relationship to existing scope**: Extends the gateway's handoff contract
+(Deliverable 3) and the tier-aware orchestration model (sentinel
+escalation recommendations already structured; reviewer suggestions
+are not).
+
+### Expansion 2: Per-team learning loop
+
+**Status**: Scoped, not yet executing
+**Evidence**: Greptile per-team learning — 👍/👎 reactions and replies
+"teach Greptile what matters" with explicit 2-3 week stabilisation
+period for per-team noise calibration.
+
+Reviewers currently do not learn from accept/reject signals. This
+expansion scopes whether reviewer-suggestion outcomes (accepted,
+rejected-with-rationale, partially-accepted) should feed back into
+reviewer prompts as calibration context.
+
+**Relationship to existing scope**: Extends review coverage tracking
+(Scope Expansion item 6) from "which specialists were invoked" to
+"what happened to their suggestions".
+
+### Expansion 3: RFC 9728 PRM audit
+
+**Status**: Scoped, not yet executing
+**Evidence**: MCP `2025-11-25` adds OIDC Discovery 1.0, OAuth Client
+ID Metadata, RFC 9728 alignment. Backstage v1.50 fixes MCP OAuth 2.0
+PRM endpoint. No recorded audit of this repo's MCP PRM endpoint
+against RFC 9728.
+
+One-off scope addition: schedule a Clerk/MCP-reviewer joint pass
+against the MCP server's Protected Resource Metadata endpoint to
+verify RFC 9728 compliance.
+
+**Relationship to existing scope**: Extends the domain cluster (Clerk +
+MCP signals) with a concrete audit task. Not blocking for gateway
+redesign; can be scheduled independently.
+
 ## Next Promotion Trigger
 
 Promote this plan into explicit active execution when:
 
 1. the taxonomy rename mechanics are ready to coordinate with it, or
 2. the current flat checklist causes repeated coverage misses or review-noise
-   churn in live sessions
+   churn in live sessions, or
+3. direction-of-travel scope expansions (above) create sufficient pull to
+   justify independent execution ahead of the taxonomy rename

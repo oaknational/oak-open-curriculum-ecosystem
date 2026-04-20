@@ -167,9 +167,9 @@ Run updated onboarding simulations against current repository state for:
 
 ### Rerun Inputs
 
-- [README.md](../../../README.md)
+- [README.md](../../../README.md) (includes Quick Start)
+- [CONTRIBUTING.md](../../../CONTRIBUTING.md)
 - [docs/README.md](../../../docs/README.md)
-- [docs/foundation/quick-start.md](../../../docs/foundation/quick-start.md)
 - [docs/foundation/VISION.md](../../../docs/foundation/VISION.md)
 - [high-level-plan.md](../high-level-plan.md)
 - [user-experience/public-alpha-experience-contract.md](../user-experience/public-alpha-experience-contract.md)
@@ -248,8 +248,9 @@ Status key: `[ ]` not started, `[~]` in progress, `[x]` complete.
   - Impact:
     - junior contributors may incorrectly assume CI is full-system coverage.
   - Recommended action:
-    - add a concise test-surface matrix in onboarding and quick-start docs with
-      plain-language intent per surface.
+    - add a concise test-surface matrix in the root `README.md` Quick Start /
+      Key Commands area and `CONTRIBUTING.md`, with plain-language intent per
+      surface.
   - Classification: docs-only.
 
 Notes:
@@ -892,9 +893,8 @@ Run onboarding simulations against the current repository state for
 
 ### Rerun Inputs
 
-- [README.md](../../../README.md) (restructured)
+- [README.md](../../../README.md) (restructured; Quick Start now lives here)
 - [CONTRIBUTING.md](../../../CONTRIBUTING.md) (updated)
-- [docs/foundation/quick-start.md](../../../docs/foundation/quick-start.md) (updated)
 - [docs/foundation/VISION.md](../../../docs/foundation/VISION.md) (updated)
 - [docs/governance/README.md](../../../docs/governance/README.md) (enhanced)
 - [.agent/README.md](../../README.md) (new)
@@ -1097,12 +1097,16 @@ pattern from previous rerun (R2) noted where applicable.
   - Evidence: README says "install via nvm or fnm" but does not say
     `nvm install` or `nvm use`.
 
-- [ ] **N15. Repetition of clone/setup steps across README, quick-start,
+- [x] **N15. Repetition of clone/setup steps across README, quick-start,
   CONTRIBUTING**
   - Source: Junior developer
   - Evidence: Three documents repeat the same instructions with slight
     variations. Creates maintenance burden (and multiple locations for the
     repo-name string).
+  - **Resolved 2026-04-20**: foundation overhaul deleted
+    `docs/foundation/quick-start.md`; canonical setup now lives only in the
+    root `README.md` Quick Start section and `CONTRIBUTING.md`. Duplication
+    eliminated.
 
 - [x] **N16. Repository title "Oak Open Curriculum Ecosystem" assumes MCP knowledge**
   - Source: Product owner

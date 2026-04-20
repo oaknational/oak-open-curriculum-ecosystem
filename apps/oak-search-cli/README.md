@@ -1,9 +1,8 @@
 # Oak Search CLI (`@oaknational/search-cli`)
 
 > **New here?** Start at the
-> [repo root README](../../README.md), the
-> [contributor guide](../../CONTRIBUTING.md), and the
-> [foundation quick-start](../../docs/foundation/quick-start.md)
+> [repo root README](../../README.md) and the
+> [contributor guide](../../CONTRIBUTING.md)
 > before diving into this workspace. AI agents should also read
 > [`.agent/directives/AGENT.md`](../../.agent/directives/AGENT.md).
 

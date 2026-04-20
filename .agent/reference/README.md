@@ -7,6 +7,7 @@ Supporting reference material for AI agents and developers.
 | Need | Location |
 | ---- | -------- |
 | **Shared, long-lived reference** (not a natural fit for ADRs or `docs/`) | This directory — `.agent/reference/` |
+| **Time-bound work-to-date notes and syntheses** | [`.agent/reference/work-to-date/`](./work-to-date/) |
 | **Investigations and evidence** | [`.agent/analysis/`](../analysis/README.md) — authoritative investigation/evidence lane |
 | **Promoted audits and syntheses** | [`.agent/reports/`](../reports/README.md) — stable formal reports once promoted |
 | **Generated SDK validation data** (sitemap-derived maps) | [`packages/sdks/oak-sdk-codegen/reference/`](../../packages/sdks/oak-sdk-codegen/reference/README.md) — JSON outputs are git-ignored; see that README |

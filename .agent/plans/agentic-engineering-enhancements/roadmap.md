@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation ⏭️ queued; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; Phase 1 ready to start
-**Last Updated**: 2026-04-19
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; planning specialist ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
+**Last Updated**: 2026-04-20
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -122,7 +122,7 @@ Adjacent:
   WGD:  Web/API GDPR specialist capability           📋 PLANNED
   OOCE: Oak Open Curriculum Ecosystem specialist     📋 PLANNED
   GME:  Graph memory exploration                     📋 STRATEGIC
-  PLN:  Planning specialist capability               📋 PLANNED
+  PLN:  Planning specialist capability               ⏭️ QUEUED
   TDD:  TDD specialist capability                    📋 PLANNED
   DVX:  Developer experience specialist              📋 PLANNED
   RWD:  Repair workflow wording hazard detection     📋 PLANNED
@@ -538,15 +538,21 @@ Adjacent:
 ### Adjacent — Planning Specialist Capability
 
 - Strategic plan:
-  [planning-specialist-capability.plan.md](future/planning-specialist-capability.plan.md)
+  [planning-specialist-capability.plan.md](current/planning-specialist-capability.plan.md)
 - Goal:
   - add a canonical planning reviewer, skill, and situational rule (ADR-129 triplet)
-  - specialist in plan architecture, lifecycle, discoverability, and documentation
-    sync requirements
+  - specialist in plan architecture, lifecycle, discoverability, integration
+    routing, and documentation sync requirements
   - enforce: correct template usage, required sections, phase gates, cross-reference
-    maintenance, plan-vs-docs separation
+    maintenance, plan-vs-docs separation, integration routing register durability,
+    archival hygiene, backlog health
   - authority source is plan templates, collection READMEs, and practice-core docs
-- Status: 📋 PLANNED (future/)
+- Status: ⏭️ QUEUED (promoted from future/ 2026-04-20)
+- Promotion evidence:
+  - plan-surface integration session (2026-04-20) required routing 8 candidates
+    across a 60-artefact surface — specialist-level plan-routing complexity
+  - planning architecture is stable (ADR-117, status legend, sync discipline)
+  - owner approved promotion
 - Notes:
   - intentionally outside the numbered phase sequence
   - complements docs-adr-reviewer (which owns ADR content) — this specialist

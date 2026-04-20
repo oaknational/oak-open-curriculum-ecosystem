@@ -50,8 +50,7 @@ local bridge).
 Most of what you need as a contributor is grouped by section under
 [`docs/`](docs/README.md):
 
-- [Foundation](docs/foundation/README.md) — mission,
-  [Quick Start](docs/foundation/quick-start.md), and how the
+- [Foundation](docs/foundation/README.md) — mission and how the
   agentic engineering system works
 - [Governance](docs/governance/README.md) —
   [Development Practice](docs/governance/development-practice.md),
@@ -131,8 +130,8 @@ helpers, and core packages, see the
 
 ---
 
-Before making changes, start with the quick start guide:
-[docs/foundation/quick-start.md](docs/foundation/quick-start.md)
+Before making changes, follow the install and verify steps in the
+[root README Quick Start](README.md#quick-start).
 
 ### Prerequisites
 

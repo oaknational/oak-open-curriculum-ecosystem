@@ -36,7 +36,7 @@ authored from the esbuild decision as the standing starting point.
 
 Documentation report revision — not a registered workstream.
 This session deepened the progress-and-direction report
-([`.agent/reports/oak-ecosystem-progress-and-direction-2026-04-20.md`](../reports/oak-ecosystem-progress-and-direction-2026-04-20.md))
+([`.agent/reference/work-to-date/oak-ecosystem-progress-and-direction-2026-04-20.md`](../reference/work-to-date/oak-ecosystem-progress-and-direction-2026-04-20.md))
 via a metacognitive examination of the repo, surfacing novel
 mechanisms and underconveyed depth across all four achievement
 arenas. Quantitative search-quality claims (MRR figures) were

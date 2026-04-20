@@ -42,4 +42,4 @@ If this is your first time here, the 5-minute reading path is:
 
 ## Starting Point
 
-New AI agents should read [AGENT.md](../../.agent/directives/AGENT.md) first; it links to rules, testing strategy, and all directives. Human contributors should start with the [root README](../../README.md) and [quick-start guide](../foundation/quick-start.md).
+New AI agents should read [AGENT.md](../../.agent/directives/AGENT.md) first; it links to rules, testing strategy, and all directives. Human contributors should start with the [root README](../../README.md) and its [Quick Start](../../README.md#quick-start) section.

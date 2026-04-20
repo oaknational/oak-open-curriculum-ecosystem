@@ -42,7 +42,7 @@ block in the ADR index:
 - A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so the canonical Streamable HTTP transport (`/mcp`) — and any future stdio entry point generalised from it — share the same schema-derived contract
 - **Key implementation detail**: All MCP tools are generated at compile time from the OpenAPI schema - see [Programmatic Tool Generation](./programmatic-tool-generation.md) and [OpenAPI Pipeline](./openapi-pipeline.md)
 - Provider architecture: see [Provider System](./provider-system.md) and [Provider Contracts](./provider-contracts.md)
-- Getting started: see [Quick Start Guide](../foundation/quick-start.md)
+- Getting started: see the [root README Quick Start](../../README.md#quick-start)
 
 #### Rules & Relationships
 

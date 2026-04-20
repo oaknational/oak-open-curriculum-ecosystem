@@ -2,7 +2,7 @@
 
 Tools for building AI applications on the [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), using a generated, type-safe TypeScript SDK and [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) servers, and semantic search over the curriculum data powered by Elasticsearch Serverless.
 
-**Strategic Overview**: For the vision, delivery roadmap, and engineering approach, see the [Strategic Overview](docs/foundation/strategic-overview.md).
+**Vision and direction**: For the timeless framing of what this repository is for, see [VISION.md](docs/foundation/VISION.md). For the live delivery roadmap, see the [high-level plan](.agent/plans/high-level-plan.md).
 
 ---
 
@@ -19,9 +19,9 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 
 **Product owners, school leaders, non-technical evaluators** — you do not need to read the technical content below. Start with:
 
-- [Strategic Overview](docs/foundation/strategic-overview.md) — reading guide connecting vision, roadmap, and engineering approach
 - [VISION.md](docs/foundation/VISION.md) — what this project delivers, why it matters, and the investment case
 - [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
+- [Latest progress report](.agent/reference/work-to-date/oak-ecosystem-progress-and-direction-2026-04-20.md) — current status snapshot and direction
 
 ## Developers and AI agents
 
@@ -29,8 +29,8 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 - **AI agents** — read the [start-right-quick workflow](.agent/skills/start-right-quick/shared/start-right.md), then [AGENT.md](.agent/directives/AGENT.md), then scan the [five foundational ADRs](docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes) — the architectural source of truth
 
 **Browse the documentation by section**:
-[Foundation](docs/foundation/README.md) (mission, onboarding, the
-Practice) ·
+[Foundation](docs/foundation/README.md) (vision and the agentic
+engineering system) ·
 [Governance](docs/governance/README.md) (development, TypeScript,
 testing, accessibility, security) ·
 [Architecture](docs/architecture/README.md) (ADRs, OpenAPI pipeline,
@@ -122,7 +122,9 @@ See [environment variables guide](docs/operations/environment-variables.md) for 
 
 ### Next steps
 
-The full [Quick Start Guide](docs/foundation/quick-start.md) covers architecture, key concepts, and development workflows. Each workspace README provides area-specific setup (see links in the capability table above).
+The [Architecture](#architecture) section below summarises the schema-first design and key directories. For the development process, commit conventions, and quality expectations, see [CONTRIBUTING.md](CONTRIBUTING.md). Each workspace README provides area-specific setup (see links in the capability table above).
+
+For the shape of the curriculum data and per-key-stage variance, see the [Curriculum Guide](docs/domain/curriculum-guide.md) and [Data Variances](docs/domain/DATA-VARIANCES.md). For how MCP tools execute against the OpenAPI schema at runtime, see [openapi-pipeline.md → Schema-First Tool Invocation](docs/architecture/openapi-pipeline.md#execution-model-schema-first-tool-invocation).
 
 ## Key Commands
 

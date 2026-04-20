@@ -1,3 +1,398 @@
+## 2026-04-20 (late) — Separate value layers must be named, even in short docs
+
+### What Was Done
+
+- Re-read the note, long report, and compact snapshot after owner
+  feedback that the snapshot still underplayed two distinct value
+  layers: the deliberately modular engineering structure as leverage
+  for future innovation, and the Practice as a transferable agentic
+  engineering support system in its own right.
+- Revised the snapshot to name both explicitly without letting the
+  document expand back into report form.
+
+### Lesson
+
+- **Compactness is not the same as flattening**: a short synthesis can
+  stay light and upbeat while still naming the separate sources of
+  value, as long as each is expressed once, clearly, and in the right
+  place.
+
+---
+
+## 2026-04-20 (late) — Snapshot != report
+
+### What Was Done
+
+- Re-read the original work-to-date note and the longer progress report
+  after owner feedback that the report had missed the brief.
+- Authored a third artefact,
+  `.agent/reference/work-to-date/oak-ecosystem-progress-snapshot-2026-04-20.md`,
+  designed as the thing the note had actually asked for: compact,
+  upbeat, accurate, and lighter in tone.
+
+### Lesson
+
+- **Document form must match the job, not just the available insight**:
+  a concise progress snapshot and a flagship report are different
+  artefacts, even when they draw on the same underlying understanding.
+  Better insight should sharpen a light document, not automatically turn
+  it into a heavier one.
+
+---
+
+## 2026-04-20 (late) — Work-to-date artefacts consolidated under reference
+
+### What Was Done
+
+- Moved the current progress report and the original request note into
+  `.agent/reference/work-to-date/` so the "work to date" artefacts now
+  live together.
+- Updated live references in root surfaces, continuity, and active plan
+  artefacts to point at the new paths.
+
+---
+
+## 2026-04-20 (late) — Plan-surface integration for 8 direction-of-travel uplift candidates
+
+### What Was Done
+
+- Executed plan-surface integration session against the prompt at
+  `.agent/prompts/agentic-engineering/governance-planes-research-and-reporting.prompt.md`.
+  Answered the top unresolved question from the practice-aligned
+  direction-of-travel research: "is the existing
+  `agentic-engineering-enhancements/` plans surface sized to absorb
+  the 8 uplift candidates?"
+- Answer: **yes — because 6 of 8 are not plan-shaped work.** Only
+  Candidate 1 (reviewer-systems cluster) expands an existing plan's
+  scope. Only Candidate 6 (MCP governance deep dive) justifies a new
+  plan file. The other 6 are research notes, scope checks, artefact
+  refreshes, or route to a different lane.
+- Landed 6 actions:
+  1. Expanded `reviewer-gateway-upgrade.plan.md` with three
+     direction-of-travel scope items (machine-readable reviewer
+     artefact, per-team learning loop, RFC 9728 PRM audit)
+  2. Archived two completed execution plans (ACH, GCM) from
+     `active/` to `archive/completed/`
+  3. Created `future/mcp-governance-deep-dive.plan.md` with
+     explicit promotion trigger
+  4. Routed vocabulary-alignment candidate to OAC Phase 4 Task 4.3
+  5. Added durable integration routing register to the analysis
+     baseline (8-row table with dispositions and trigger conditions)
+  6. Added direction-of-travel integration section to lane README
+
+### Correction — "defer" is not durable without recording
+
+**What I initially proposed**: "defer with trigger condition" as a
+disposition — but with the trigger condition recorded only in the
+plan file, not in any durable surface the deferred candidate lives in.
+
+**Owner correction**: "defer needs to be record and defer, otherwise
+the information will be lost."
+
+**Causal mechanism**: a "defer" decision that exists only in the
+session plan file or conversation is ephemeral. The next session
+working on the analysis baseline or plans surface won't find the
+trigger condition because it's in a different file (the plan) that
+isn't on the read path for that surface. The fix: record the trigger
+condition in the analysis baseline itself, co-located with the
+candidate it governs.
+
+**Pattern candidate**:
+**`defer-decisions-must-live-where-the-candidate-lives`** — when
+deferring a candidate, record the trigger condition in the same
+artefact that defines the candidate, not in a session plan or
+conversation. Single-instance observation; repeats criterion is a
+second deferred candidate whose trigger condition was discovered
+missing from its home artefact.
+
+### Surprise — Planning complexity may justify the planning specialist
+
+**Expected**: the 60-artefact plans surface is manageable with manual
+routing and the existing `docs-adr-reviewer` for documentation aspects.
+
+**Actual**: this integration session required reading all 60 artefacts,
+classifying 8 candidates across 5 disposition types, updating 7 files,
+archiving 2 plans, creating 1 new plan, and recording a durable
+routing register. The `docs-adr-reviewer` handles documentation quality
+but lacks the plan-architecture lens (lifecycle stages, promotion
+triggers, scope-and-sequencing, density invariants, absorption-vs-new-
+plan decisions). Owner observed this is the level of complexity that
+justifies a specialist planning sub-agent.
+
+**Evidence for promotion of `future/planning-specialist-capability.plan.md`**:
+The plan's prerequisites are "recurring plan-quality issues plus a
+stable planning architecture." This session provides one data point
+for "recurring plan-quality issues" (plan-surface routing is complex
+enough to benefit from specialist review). The planning architecture
+itself is stable (ADR-117 lifecycle, roadmap + active/current/future
+structure, status legend, documentation sync discipline). A second
+plan-surface integration session that independently surfaces the same
+need would meet the repeats criterion.
+
+### Additional action — Planning specialist promoted
+
+Owner approved promotion of `planning-specialist-capability.plan.md`
+from `future/` to `current/` (QUEUED). Scope expanded to include
+integration routing, trigger condition durability, archival hygiene,
+and backlog health. Promotion evidence, scope expansion, and next
+execution trigger recorded in the plan. Roadmap, lane README, current/
+README, and future/ README all updated.
+
+### Watchlist
+
+- **`defer-decisions-must-live-where-the-candidate-lives`** — single
+  instance. Repeats criterion: second deferred candidate whose trigger
+  condition is found missing from its home artefact.
+
+---
+
+## 2026-04-20 (final) — Metacognitive report revision
+
+### What Was Done
+
+- Deep metacognitive examination of the repo using five parallel
+  exploration agents (Practice/memory, agent infrastructure, technical
+  architecture/ADRs, product/search/MCP implementation, research
+  pipeline). Identified significant underconveyed novelty across all
+  four achievement arenas.
+- Revised `.agent/reference/work-to-date/oak-ecosystem-progress-and-direction-2026-04-20.md`
+  to surface mechanisms behind claimed properties: plasmid exchange
+  with provenance chain, three-type continuity model, fitness functions
+  on governance documents, experience records, compile-time
+  accessibility compliance, MCP-aware Sentry rewriting, Result-type
+  exhaustiveness, non-mutating env resolution, non-bypassable
+  redaction barrier, friction-ratchet counter, cross-platform session
+  takeover, automated portability enforcement. Added new "research
+  pipeline" section with scale figures and notable future directions
+  (Finnish curriculum, EEF evidence, knowledge graphs).
+- Replaced quantitative MRR claims with qualitative descriptions per
+  owner direction that ground-truth/evaluation systems are still being
+  refined.
+
+### Correction
+
+- **Quantitative search claims are premature**: owner flagged that MRR
+  figures are approximate and should not be reported until the
+  ground-truth and related systems are refined. Replaced with
+  qualitative language ("strong retrieval quality", "reliably surfacing
+  the correct lesson in the top results"). This applies to any
+  future external-facing document.
+
+### Lessons
+
+- **Metacognition as a report-quality tool**: the metacognitive process
+  (thoughts → reflections → insights) surfaced the gap between
+  "describing properties" and "revealing mechanisms" — the distance
+  between a pitch and evidence. Reports that claim self-improvement
+  or portability without naming the engineering that makes the claim
+  true read as aspirational. The revised report names specific
+  mechanisms for every claim.
+- **Five parallel exploration agents is an effective examination
+  strategy**: dividing exploration by concern (Practice, agent infra,
+  technical arch, product depth, research pipeline) produced
+  complementary findings with minimal overlap. Each agent found things
+  the others missed.
+
+---
+
+## 2026-04-20 (evening) — Owner-beats-plan invariant + perturbation-mechanism learning
+
+### Surprise
+
+**What was expected**: a session running with the `4bccba71` guardrails
+(build-vs-buy attestation, friction-ratchet, sunk-cost-phrase detector,
+plan-time reviewer scheduling) would resist drifting back into the
+sunk-cost protection of a prior plan's non-goals.
+
+**What actually happened**: the agent (this session) folded a drafted
+plan whose non-goals included *"Do NOT replace tsup with raw esbuild"*
+and carried that non-goal forward as a constraint, despite the owner
+having stated for three days that the decision is to switch to esbuild.
+When the owner asked "just checking the intent is to switch to esbuild"
+the agent answered "No, keep tsup" — precisely backwards.
+
+**Why the expectation failed**:
+
+1. The plan file's drafted non-goals outweighed the owner's stated
+   decision in conversation. Mechanism: each new agent session loads
+   the plan text fresh and treats its non-goals as inherited
+   constraints; the owner's standing decision lives in conversation
+   history that the plan file does not reference.
+2. "No more fantasising optionalities" was mis-read as "stick to the
+   plan as written." The owner meant the opposite — stop generating
+   tsup-retention alternatives against the esbuild decision.
+3. Asymmetric burden of proof: "keep tsup" became the default requiring
+   no argument, "switch to esbuild" became the change requiring
+   justification. The owner had already decided; the asymmetry should
+   have been the opposite.
+4. Sunk-cost detector applied to one half ("953 lines of bespoke is not
+   a retention reason") but blinded to the other half ("tsup config
+   already exists is not a retention reason when the plugin doesn't
+   work with it"). Same anti-pattern, caught on one side only.
+5. Verification stopped at API surface ("tsup exposes `esbuildPlugins:
+   Plugin[]`"), missing the runtime integration failure the owner had
+   lived through for three days. Confirmed via GitHub issues
+   sentry-bundler #614, #608, tsup #1260 — stub resolution breaks plus
+   source-map upload silently uploads nothing because `onEnd` fires
+   before tsup writes files.
+
+### What behaviour should change next time
+
+1. **Owner's word beats plan. Always.** When a plan's non-goals, design
+   decisions, or scope contradict an owner statement, the owner wins
+   without argument. Non-goals are not load-bearing against owner
+   direction.
+2. **Non-goals are suspect by default.** Non-goals are where previous
+   agent sessions' sunk-cost reasoning hides. Every session executing
+   against a plan with non-goals must re-read them with the owner
+   before acting.
+3. **Friction-ratchet should count owner-contradicts-plan as a
+   first-class signal.** Currently counts tactical friction against a
+   shape. Should also count "owner has said X, plan says not-X".
+4. **Perturbation mechanism needed** to jog the agent out of plan-text-
+   inherited local minima. Candidate shapes:
+   - **Non-goal re-ratification ritual**: every session starting work
+     against a plan must list the plan's non-goals and explicitly
+     confirm each with the owner, or surface any contradiction found
+     in recent conversation.
+   - **Standing-decision register**: a repo-local surface that records
+     owner decisions with expiry conditions. Read BEFORE the plan.
+   - **"What would I be doing if I hadn't read the plan?"**
+     metacognition prompt: describe the ideal path from first
+     principles, then compare against the plan, then reconcile
+     explicitly.
+
+### Promotion candidates
+
+- **INVARIANT** (authoritative, repo-continuity): *"Owner's stated
+  direction outranks any plan's non-goals, design decisions, or scope.
+  When a plan and the owner disagree, the plan is wrong."* LANDED at
+  `.agent/state/repo-continuity.md §Repo-wide invariants` this session.
+- **RULE candidate** (always-applied): a rule forcing a non-goal
+  re-ratification ritual before execution against any plan with a
+  non-goals section. Draft for next consolidation pass.
+- **PRINCIPLE candidate** (`principles.md`): generalise the owner-
+  beats-plan invariant into a Practice-level principle about standing
+  decisions vs. artefact text.
+- **PDR candidate**: promote "Standing-decision register + non-goal
+  re-ratification" to Practice Core as a portable anti-drift pattern.
+
+---
+
+## 2026-04-20 (later) — `docs/foundation/` overhaul to timeless-only + ecosystem progress report delivered
+
+### What Was Done
+
+- Authored `.agent/reference/work-to-date/oak-ecosystem-progress-and-direction-2026-04-20.md`
+  end-to-end: synthesised vision / plans / roadmaps / Practice
+  surfaces into a self-contained, public-audience progress and
+  direction report. Two reviewer passes (`docs-adr-reviewer` +
+  `assumptions-reviewer`) caught factual errors (M2 lane status,
+  KG audit, Clerk shipped/specialist confusion, version number,
+  Practice fitness gate, gate classifications) and tonal drift
+  (overclaim softening; safeguarding scope reframed as a current
+  roadmap boundary; "frontier for years" softened to "multi-year
+  option pipeline"; leverage phrasing made punchier without
+  overclaim).
+- Overhauled `docs/foundation/` to a **timeless-only** boundary
+  per owner direction. Deleted `strategic-overview.md` (subsumed
+  by `VISION.md` + reports + plan) and `quick-start.md` (redundant
+  with root `README.md` Quick Start + `CONTRIBUTING.md`).
+  Surgically rewrote `VISION.md` to remove all dated content
+  (capability status table, "What Changes At Public Alpha" section,
+  Current-baselines snapshot, ADR/MRR/gate counts) while keeping
+  the timeless mission/audience/value/non-goals/three-orders/
+  positioning frame. Added the no-learner-facing-surfaces boundary
+  to the non-goals list. Slimmed `docs/foundation/README.md` to a
+  30-line index pointing at `VISION.md` + `agentic-engineering-system.md`
+  + Practice surfaces. Bumped `last_reviewed` on the Practice doc.
+- Redirected ~17 active surfaces away from the deleted docs:
+  root `README.md`, `CONTRIBUTING.md`, `docs/README.md`,
+  `docs/architecture/README.md`, `docs/architecture/openapi-pipeline.md`,
+  `docs/operations/environment-variables.md`,
+  `docs/governance/README.md`, `docs/domain/curriculum-guide.md`,
+  `docs/engineering/build-system.md`,
+  `apps/oak-curriculum-mcp-streamable-http/README.md`,
+  `apps/oak-search-cli/README.md`, `.agent/HUMANS.md`, three
+  active plans (sentry-otel-integration, doc-architecture phase A,
+  onboarding-simulations), and both onboarding-reviewer adapter
+  templates (`.agent/sub-agents/templates/` and `.claude/agents/`).
+  Historical material in `.agent/memory/archive/`, `.agent/plans/archive/`,
+  and `.agent/research/documentation-audit-report.md` deliberately
+  left untouched as historical record.
+- Closed a discoverability gap from the deletion by adding a
+  pointer in the root `README.md` "Next steps" block to
+  `docs/domain/DATA-VARIANCES.md` and the schema-first execution
+  section of `docs/architecture/openapi-pipeline.md`.
+
+### Surprise — Active plans contain residual prescriptions, not just links
+
+**Expected**: redirecting cross-document links would close the
+overhaul. After updating ~14 surfaces with simple link fixes I
+was ready to declare done.
+
+**Actual**: the second-pass `docs-adr-reviewer` flagged that two
+active plans (`doc-architecture-phase-a-immediate.plan.md` and
+`onboarding-simulations-public-alpha-readiness.md`) didn't just
+*link* to the deleted `quick-start.md` — they *prescribed edits
+against it* (where to place a C4 diagram; which doc owned a
+quality-attribute register; an open finding `N15` whose
+remediation target was the deleted file). Pure link-redirection
+would have left those plans pointing future contributors at a
+file that no longer exists.
+
+**Causal mechanism**: link redirection treats every reference as
+a navigation target. But active plans use references in two
+distinct modes: navigation (where to read context) and
+prescription (where to edit). Prescriptive references against a
+deleted file silently turn into "do impossible thing"
+instructions. The first pass swept for the navigation mode and
+missed the prescription mode entirely.
+
+**Pattern candidate**:
+**`when-deleting-a-doc-sweep-active-plans-for-prescriptions-not-just-links`**
+— before declaring a doc-deletion done, search active plans
+specifically for instructions whose *target* is the deleted file
+(not just whose context mentions it). Single-instance
+observation; repeats criterion is a second deletion where a
+prescription survived a link-only pass.
+
+### Corrections / learnings
+
+- **Reviewer phasing for documentation work mirrors the code-work
+  pattern**: dispatching `docs-adr-reviewer` and
+  `architecture-reviewer-barney` *in parallel* against the new
+  structure caught complementary classes of finding —
+  docs-adr-reviewer found residual references and discoverability
+  gaps; architecture-reviewer-barney challenged whether the
+  reduction was real or merely displaced. Single dispatch would
+  have caught one class only.
+- **Cursor-side plans are platform-ephemeral, canonical artefact
+  is the deliverable**: the foundation-overhaul and progress-report
+  plans live in `.cursor/plans/`. Per the consolidate-docs
+  guidance ("delivered platform plans should be referenced as
+  canonical artefact, not as the plan path"), these plans are
+  delivered evidence; future references should point at the
+  `docs/foundation/` shape and the report file, not the plan
+  paths.
+- **Markdownlint `--fix` runs across staged area**: running
+  markdownlint on a small set of files actually fixed several
+  unrelated repo-wide whitespace nits. Not a problem; worth
+  knowing that the fix flag has wider blast radius than the
+  argv list suggests.
+
+### Out of scope (explicit non-actions)
+
+- Did **not** touch the OAC Phase 4 / plugin-migration lane.
+- Did **not** trigger deep consolidation; the existing "due"
+  status with OAC/observability framing is unchanged and the
+  consolidation pass should be run deliberately from that lane.
+- Did **not** edit ADRs, the high-level plan, or any other
+  governance content beyond the `docs/foundation/` boundary and
+  link-target updates.
+
+---
+
 ## 2026-04-20 (evening) — OAC Phase 1–3 executed; tracks-are-tracked correction; plugin-migration plan drafted
 
 ### What Was Done

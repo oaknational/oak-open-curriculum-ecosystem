@@ -353,7 +353,8 @@ After renaming or adding commands in `package.json`:
 2. Update every non-archive match to the new name
 3. Run `pnpm markdownlint:root` to verify markdown integrity
 4. Verify onboarding-path docs specifically:
-   - `docs/foundation/quick-start.md`
+   - `README.md` (root, especially the Quick Start section)
+   - `CONTRIBUTING.md`
    - `docs/governance/development-practice.md`
    - `.agent/directives/AGENT.md`
    - `.claude/commands/jc-quality-gates.md`
@@ -390,8 +391,8 @@ The documentation follows a progressive disclosure pattern. Verify this
 chain is intact after structural changes:
 
 ```text
-README.md
-  → docs/foundation/quick-start.md
+README.md (root, including the Quick Start section)
+  → CONTRIBUTING.md
     → workspace READMEs (packages/*, apps/*)
       → deep docs, ADRs, architecture docs
 ```

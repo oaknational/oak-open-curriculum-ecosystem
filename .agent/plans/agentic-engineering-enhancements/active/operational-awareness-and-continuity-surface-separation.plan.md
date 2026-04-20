@@ -447,6 +447,23 @@ not built now**:
 Both helpers are recorded here so they are discoverable when a trigger
 fires; neither is scheduled.
 
+### Routed candidate: Vocabulary-alignment pass (from direction-of-travel research)
+
+**Source**: Candidate 3 from [practice-aligned-direction-and-gap-baseline.md](../../../analysis/practice-aligned-direction-and-gap-baseline.md)
+
+Rename mechanism surfaces (napkin, distilled) externally with the
+ecosystem-shared vocabulary from Anthropic's context-engineering
+framing: "compaction" (napkin rotation/distillation), "structured
+note-taking" (napkin continuous recording), "just-in-time retrieval"
+(sub-agent dispatch for context). Explicitly no behaviour change —
+vocabulary alignment only. Surfaces to update: continuity lane
+README, napkin SKILL.md, distilled surfaces.
+
+Routed here because Phase 4's documentation propagation (Task 4.3) is
+the natural carrier for continuity-lane vocabulary updates. Can also
+be executed as a standalone lightweight task in a continuity-focused
+session if Phase 4 is deferred.
+
 ### Task 4.3: Documentation propagation and review closeout
 
 - Mandatory documentation surfaces:

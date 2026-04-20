@@ -242,6 +242,6 @@ pnpm test:e2e       # E2E tests (uses mocks and DI — no env vars needed)
 
 ## Related Documentation
 
-- [Quick Start Guide](../foundation/quick-start.md) - Getting started with development
+- [Root README Quick Start](../../README.md#quick-start) - Getting started with development
 - [Root README](../../README.md) - Repository overview
 - [CONTRIBUTING.md](../../CONTRIBUTING.md) - Contribution guidelines

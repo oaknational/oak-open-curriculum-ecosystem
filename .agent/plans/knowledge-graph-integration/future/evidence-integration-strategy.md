@@ -323,7 +323,7 @@ This is the authoritative data reference for this plan collection.
 | Primary audience | Developers, AI agents, teachers | Teachers (through AI), school leaders |
 | Scope | Entire curriculum (~12,700 lessons) | 30 evidence strands (curated) |
 | Architecture priority | Platform correctness | Domain integrity |
-| Maturity | Production (130+ ADRs, 11 gates) | Prototype (no tests, no auth) |
+| Maturity | Production (160+ ADRs, 11 gates) | Prototype (no tests, no auth) |
 | Update cadence | Continuous (API → sdk-codegen) | Periodic (~2x/year living review) |
 
 ### What the combined system uniquely answers

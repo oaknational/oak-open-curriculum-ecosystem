@@ -19,6 +19,7 @@ plans when scheduled.
 | [reviewer-gateway-upgrade.plan.md](reviewer-gateway-upgrade.plan.md) | Adjacent: layered gateway triage, review depth selection, and coverage tracking | QUEUED |
 | [agentic-corpus-discoverability-and-deep-dive-hub.plan.md](agentic-corpus-discoverability-and-deep-dive-hub.plan.md) | Adjacent: index-only hub, named research/report lanes, selected docs cross-links, and seed deep dives | REFERENCE |
 | [governance-concepts-and-agentic-mechanism-integration.plan.md](governance-concepts-and-agentic-mechanism-integration.plan.md) | Adjacent: abstract governance-plane concept extraction, local mechanism-gap mapping, and routing into plans, deep dives, reports, and doctrine-adjacent surfaces | REFERENCE |
+| [planning-specialist-capability.plan.md](planning-specialist-capability.plan.md) | Adjacent: planning reviewer, skill, and rule triplet for plan architecture, lifecycle, discoverability, and integration routing | QUEUED |
 
 Strategic context: [roadmap.md](../roadmap.md)
 Archived context: [../archive/completed/](../archive/completed/)

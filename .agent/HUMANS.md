@@ -19,9 +19,9 @@ overview.
 
 Almost certainly not. If you are a human developer:
 
-- **Start with the [README](../README.md)** at the repository root
-- **Follow the [Quick Start](../docs/foundation/quick-start.md)** for
-  setup and development workflows
+- **Start with the [README](../README.md)** at the repository root —
+  the [Quick Start](../README.md#quick-start) section covers setup and
+  the key commands
 - **Read [CONTRIBUTING.md](../CONTRIBUTING.md)** for contribution
   guidelines and code standards
 - **Browse the [docs/](../docs/)** directory for architecture,

@@ -1693,57 +1693,596 @@ separate future lane, triggered by an actual consumer landing.
 
 ### L-8 Bundler-side source maps + release/deploy linkage (UN-DROPPED 2026-04-20 — forward lane)
 
-**Status**. Forward lane for release + commits + deploy + source-map linkage.
-Supersedes L-7 bespoke orchestrator. Authoring is task #22.
+**Status**. 🟡 PLANNING (pre-ExitPlanMode). Forward lane for release,
+commits, deploy, and source-map linkage. Supersedes L-7 bespoke
+orchestrator. Plan-time `assumptions-reviewer` + `sentry-reviewer`
+dispatch required before WS1 begins.
 
-**Rationale** (2026-04-20): `@sentry/esbuild-plugin` is the vendor's
-first-party bundler plugin. Wiring it replaces the ~900-line bespoke
-orchestrator landed in L-7 (four orchestrator files + 21 integration
-tests + build:vercel custom script + vercel.json.buildCommand override +
-ADR-163 §6 amendment + ESLint/tsconfig exceptions) with a small plugin
-registration inside the esbuild build. The tsup → esbuild swap itself
-is cheap.
+**Scope**. Switch the MCP app's build tool from `tsup` to **raw
+esbuild** and register `@sentry/esbuild-plugin` directly. Delete the
+~900-line L-7 bespoke orchestrator and all its scaffolding
+(`build:vercel` script, `vercel.json.buildCommand` override,
+`@sentry/cli` devDependency, ESLint/tsconfig exceptions,
+`upload-sourcemaps.sh`). Amend ADR-163 §6 from HOW (`sentry-cli`
+invocations) to WHAT (Sentry UI outcome).
+
+**Why the tool swap is load-bearing** (not a preference): the
+`@sentry/esbuild-plugin` has documented integration breakage with
+`tsup` at runtime. Two independent defects:
+
+1. Stub module resolution fails — the plugin references
+   `_sentry-release-injection-stub` and `_sentry-debug-id-injection-stub`
+   as bare specifiers; tsup's esbuild wrapper treats them as npm
+   packages and the build errors with `ERR_MODULE_NOT_FOUND` (Sentry
+   issue 614, closed 2025-08-08 *"not planned — no one blocked"*; the
+   `noExternal` workaround fixes this single symptom only).
+2. Source-map upload silently uploads nothing — the plugin's `onEnd`
+   hook fires before tsup writes files to disk, so the plugin's glob
+   for `.map` files returns `[]` (Sentry issue 608; tsup issue 1260,
+   open since 2024-12). No known workaround within tsup. The Dec 2024
+   reporter resolved by switching build tools.
+
+The raw esbuild path avoids both defects by removing the tsup wrapper
+that introduces them. Only the MCP app switches; every other workspace
+stays on tsup (libs, SDKs, other app).
+
+**Rationale** (2026-04-20). `@sentry/esbuild-plugin` is the vendor's
+first-party bundler plugin for esbuild builds and the canonical path
+per current Sentry documentation
+(`platforms/javascript/guides/node/sourcemaps/uploading/esbuild.md`).
+Wiring it directly replaces the L-7 bespoke orchestrator (953 lines
+across 5 files plus build-config overrides, ESLint exception, and an
+ADR HOW-prescription) with a small plugin registration inside a raw
+esbuild config.
 
 The prior `PARKED` rationale (2026-04-17) — "shell-script flow is
-simpler, offline-capable, auditable" — is a historical artefact and
-is now understood as the sunk-cost framing the commit `4bccba71`
-guardrails are designed to catch. Specifically:
+simpler, offline-capable, auditable" — was sunk-cost framing the
+commit `4bccba71` guardrails are designed to catch. Specifically:
 
 - "Already working and proven on this branch" was not yet true on
-  2026-04-17 (the bespoke orchestrator had not landed). The statement
-  was describing the pre-L-7 shell-script flow, not the shape L-7 was
-  about to build.
-- "Offline-capable without SENTRY_AUTH_TOKEN" is not a requirement the
-  plugin fails to meet; the plugin is a build-time concern and
-  SENTRY_AUTH_TOKEN is already required for any release registration
-  path.
-- "Auditable because we own the script" protects the shape of code we
-  chose, not the outcome Sentry must reach.
+  2026-04-17 (the bespoke orchestrator had not landed).
+- "Offline-capable without `SENTRY_AUTH_TOKEN`" is not a requirement
+  the plugin fails to meet; `SENTRY_AUTH_TOKEN` is already required
+  for any release-registration path.
+- "Auditable because we own the script" protects the shape chosen,
+  not the outcome Sentry must reach.
 
-**Forward work (authored in task #22, not here)**:
+The prior "land the plugin inside tsup" framing (2026-04-20 morning,
+in the now-deleted standalone plan at commit `4cbc8843`) was a
+separate sunk-cost: it protected the existing tsup config from
+change despite the known runtime-breakage evidence above. That
+framing has been sanitised in commit `363037af`. The standing
+decision is raw esbuild for this app.
 
-- Switch `tsup` → `esbuild` in the MCP app build config.
-- Register `@sentry/esbuild-plugin` with release + sourcemap + deploy
-  configuration derived from `resolveSentryEnvironment` +
-  `resolveSentryRegistrationPolicy` (both in `@oaknational/sentry-node`
-  and kept as vendor-agnostic policy).
-- Delete the four L-7 orchestrator files in
-  `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-registration/`.
-- Delete the 21 L-7 integration tests.
-- Delete `build:vercel` custom script.
-- Revert `vercel.json.buildCommand` override to Vercel-default build.
-- Remove ESLint + tsconfig exceptions carried for the bespoke shape.
-- Amend ADR-163 §6 to state the outcome Sentry must reach (release +
-  commits + deploy-per-env in Sentry UI) rather than the specific
-  `sentry-cli` invocations chosen. ADRs state WHAT not HOW per the
-  `docs-adr-reviewer` guardrail installed in `4bccba71`.
+#### L-8 L-7 Current State (2026-04-20)
 
-**Template**: task #22 uses `.agent/plans/templates/feature-workstream-template.md`
-with Build-vs-Buy Attestation + phase-aligned Reviewer Scheduling
-sections filled in. Plan-time `assumptions-reviewer` pass fires
-pre-ExitPlanMode per the new triggering scenarios (vendor-integration
-plan). This lane is itself the self-test of whether the installed
-guardrails produce the intended planning behaviour.
+The L-7 bespoke orchestrator landed across three commits
+(`7f3b17e9` + `6f5acd17` + `ecee9801`) and carries:
+
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy.ts` (157 lines)
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy-cli.ts` (153 lines)
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy-preflight.ts` (201 lines)
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy-types.ts` (41 lines)
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy.integration.test.ts` (401 lines, 22 test cases)
+
+Total: **953 lines across 5 files**, plus:
+
+- `apps/oak-curriculum-mcp-streamable-http/package.json` —
+  `build:vercel` script invoking
+  `tsx build-scripts/sentry-release-and-deploy-cli.ts`
+- `apps/oak-curriculum-mcp-streamable-http/vercel.json` —
+  `buildCommand` override pointing at `build:vercel`
+- `apps/oak-curriculum-mcp-streamable-http/eslint.config.ts` (~line
+  137) — `process.env` allowance for the CLI entry point
+- `@sentry/cli` as a devDependency (3.3.5)
+- `@sentry/node` SDK already present (required version: ≥ 7.47.0 for
+  source-map support per Sentry docs)
+- `apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`
+  — legacy shell-script fallback
+- ADR-163 §6 — six-step `sentry-cli` invocation prose
+
+**Retained capabilities**: `resolveSentryEnvironment` and
+`resolveSentryRegistrationPolicy` in `packages/libs/sentry-node/src/`
+— pure vendor-agnostic policy functions encoding Oak's Vercel
+env-pair truth table (ADR-163 §3). Reused by the new esbuild config
+at build-config-load time. Unchanged by this lane.
+
+#### L-8 Design Principles
+
+1. **Vendor plugin owns the Sentry lifecycle** — release registration,
+   commit attribution, source-map upload with Debug IDs, deploy
+   events. No Oak code reimplements any of these.
+2. **Local code owns policy, not mechanism** —
+   `resolveSentryEnvironment` and `resolveSentryRegistrationPolicy`
+   remain because they encode Oak's Vercel env-pair truth table
+   (ADR-163 §3). They are pure functions with no `@sentry/*` imports.
+3. **Raw esbuild for this app; tsup everywhere else** — the swap is
+   scoped to the MCP app because `@sentry/esbuild-plugin` + tsup is
+   runtime-broken. No other workspace is affected.
+4. **Delete aggressively, preserve nothing of the bespoke shape** —
+   no compatibility layer, no shell-script fallback, no parallel
+   path. Per `principles.md`: "replace old approaches with new
+   approaches, never create compatibility layers".
+5. **ADRs state WHAT, not HOW** — WS3 rewrites ADR-163 §6 to state
+   the Sentry UI state Sentry must reach and lets the plugin config
+   live in code and in this plan body.
+
+**Non-Goals** (YAGNI):
+
+- **Do NOT migrate any other workspace off tsup.** Only the MCP app
+  needs `@sentry/esbuild-plugin`. Libs, SDKs, and the search CLI
+  stay on tsup.
+- **Do NOT preserve `@sentry/cli` as a devDependency anywhere in the
+  workspace.** The plugin is the sole mechanism. WS2.4 clears the
+  MCP app's `@sentry/cli` entry and also the dormant copy in
+  `apps/oak-search-cli/` (no consumer; present only because it was
+  pre-wired alongside the MCP app's bespoke orchestrator).
+- **Do NOT retain `upload-sourcemaps.sh` as a fallback.** Delete.
+- **Do NOT defer the ADR-163 §6 rewrite.** The HOW-vs-WHAT
+  calcification IS the lesson installed by `4bccba71`; leaving the
+  bespoke CLI sequence documented as authoritative re-enables the
+  calcification this lane exists to resolve.
+
+#### L-8 Build-vs-Buy Attestation (REQUIRED before ExitPlanMode)
+
+**Vendor**: Sentry.
+
+**First-party integrations surveyed**:
+
+| Integration shipped by vendor | Evaluated? | Adopted / ruled out + reason |
+|---|---|---|
+| `@sentry/esbuild-plugin` wired into **raw esbuild** | yes | **ADOPTED.** Canonical first-party bundler plugin per current Sentry docs (`platforms/javascript/guides/node/sourcemaps/uploading/esbuild.md`). Covers release registration, commit attribution, source-map upload with Debug IDs, and deploy-event emission as a single unit. |
+| `@sentry/esbuild-plugin` wired **inside tsup** | yes | **RULED OUT on runtime-compatibility grounds.** Two documented defects: (i) Sentry issue 614 — stub specifiers fail to resolve through tsup's esbuild wrapper; (ii) Sentry issue 608 / tsup issue 1260 — plugin `onEnd` fires before tsup writes files, so source-map upload silently uploads nothing. Neither has a known in-tsup fix; the Sentry issue was closed "not planned" in 2025-08-08 for lack of a blocked user willing to PR a major-version-breaking fix. Verified 2026-04-20 against the `@sentry/esbuild-plugin` CHANGELOG up through 5.2.0: neither defect has a dedicated fix entry across the 3.x, 4.x, or 5.x majors. Defect reports remain the current public state; no re-test against 5.x is attested here because the raw-esbuild path is the minimum-change route that avoids the wrapper layer where the defects arise. |
+| `@sentry/wizard` (`npx @sentry/wizard -i sourcemaps`) | yes | **N/A — setup-time tool, not a runtime mechanism.** The wizard generates plugin config interactively for first-time integrators; the runtime mechanism under review is what the generated config produces, which is already assessed in the esbuild-plugin rows above. |
+| Sentry official `getsentry/action-release` GitHub Action | yes | **RULED OUT on deploy-surface grounds.** Oak's deploy surface is Vercel Build Command, not GitHub Actions. Adopting a GitHub Action path would multiply deploy surfaces for no gain. If Oak ever moves deploys to GitHub Actions (independent decision), this integration would be re-evaluated. |
+| `@sentry/webpack-plugin` | yes | N/A — the MCP app does not use webpack. |
+| `@sentry/vite-plugin` | yes | N/A — the MCP app does not use Vite. |
+| `@sentry/rollup-plugin` via unbuild | yes | **RULED OUT.** Would require adopting a new build tool (unbuild) with no Oak precedent. Raw esbuild is more proportional: same underlying tool tsup wraps, direct plugin support, zero new tooling. |
+| `@sentry/cli` invoked from a bespoke orchestrator | yes | **RULED OUT on solution-class grounds.** `@sentry/cli` invoked from a bespoke orchestrator replicates behaviours the first-party bundler plugin ships. Bespoke orchestration only justifies itself when the vendor offers no first-party mechanism; `@sentry/esbuild-plugin` is that mechanism. The 953 lines already written are a cost-to-delete, not a reason to retain — per commit `4bccba71` guardrails sunk cost is explicitly not a valid retention reason. |
+| Sentry-hosted release finalizer API | yes | N/A. The plugin handles finalization via `release.finalize: true`. |
+| Sentry GitHub App for commit attribution | yes | **RULED OUT for this lane.** Oak's commit attribution already runs through semantic-release + Vercel env pairs (ADR-163 §3 truth table). The plugin reads `VERCEL_GIT_COMMIT_SHA` directly via `release.setCommits.commit`; no GitHub App wiring needed. |
+
+**Bespoke wrapper retention**: NONE. The bespoke orchestrator is
+deleted in WS2. The only local code that remains is
+`resolveSentryEnvironment` and `resolveSentryRegistrationPolicy`,
+which are vendor-agnostic policy functions — not a wrapper around
+Sentry behaviour.
+
+**Reviewer**: `assumptions-reviewer` MUST run against this attestation
+pre-ExitPlanMode. Documentation check: Sentry canonical-idiom
+already confirmed via `mcp__sentry-ooc-mcp__search_docs` +
+`get_doc` + direct inspection of
+`sentry-javascript-bundler-plugins/packages/bundler-plugin-core/src/types.ts`.
+`sentry-reviewer` MAY be invoked for a second-pass verification if
+solution-class doubt returns.
+
+#### L-8 Reviewer Scheduling (phase-aligned)
+
+**Plan-phase (PRE-ExitPlanMode)** — challenges solution-class. Before
+WS1 begins:
+
+- **`assumptions-reviewer`** — challenge the Build-vs-Buy Attestation
+  rows (are any "RULED OUT" reasons sunk-cost rather than concrete?
+  Any vendor integrations not named?). Challenge scope proportionality
+  (is raw esbuild the right blast radius, or should more workspaces
+  migrate?). Expected finding: attestation holds; scope is right.
+- **`sentry-reviewer`** (optional, second-pass) — verify the
+  esbuild-plugin config shape (release, setCommits, deploy, sourcemaps)
+  matches the canonical types in the plugin repo and that no fields
+  are missing for Oak's required outcomes.
+
+**Mid-cycle (DURING execution)** — challenges solution-execution:
+
+- **`test-reviewer`** — after WS1 RED; challenge whether tests assert
+  product behaviour (build output carries Debug IDs; plugin logs
+  release-registration + upload + deploy) rather than asserting
+  plugin internals.
+- **`type-reviewer`** — after WS2 esbuild config lands; challenge any
+  type widening at the plugin config boundary (must use
+  `@sentry/esbuild-plugin` and `esbuild` vendor types; no `as
+  unknown` escapes).
+- **`architecture-reviewer-fred`** — after WS2 file deletions;
+  challenge boundary discipline around `@oaknational/sentry-node`
+  now that the policy functions are the sole remaining Oak
+  contribution to the release/deploy surface.
+- **`code-reviewer`** — gateway after WS2; triggers the
+  friction-ratchet counter if 3+ independent friction signals
+  accumulate against the esbuild-native shape. If friction accrues,
+  escalate to `assumptions-reviewer` for a solution-class re-review
+  — do not tactical-patch.
+
+**Close (POST-execution)** — verifies coherence:
+
+- **`docs-adr-reviewer`** — verify ADR-163 §6 rewrite states WHAT
+  not HOW; verify runbook + `observability.md` +
+  `sentry-cli-usage.md` (archived) are internally consistent with
+  the landed esbuild config.
+- **`release-readiness-reviewer`** — GO / GO-WITH-CONDITIONS / NO-GO
+  before merge, with evidence that a Vercel preview deployment
+  produced the expected Sentry UI state (release registered,
+  commits attached, deploy event).
+
+#### L-8 WS0 — Plan-Time Review (PRE-ExitPlanMode)
+
+Dispatch `assumptions-reviewer` against this §L-8 body. Record
+findings in an L-8 WS0 Findings sub-section. Amend this section in
+response to findings before proceeding to WS1.
+
+**Block type**: WS0 is a **process block**, not a technical
+dependency. WS1's tests would compile and run without it; the block
+exists to ensure solution-class challenge lands at the cheapest
+phase per `.agent/sub-agents/templates/assumptions-reviewer.md`.
+
+**Acceptance Criteria**:
+
+1. `assumptions-reviewer` returns without rejecting the solution-class
+   or returns a refined shape that this section adopts.
+2. Build-vs-Buy Attestation rows are all concrete (no sunk-cost
+   reasoning, no undefined "X unavailable" hand-waves).
+3. Scope is proportional (raw esbuild for this app only; no creep
+   into other workspaces beyond the orphaned search-CLI `@sentry/cli`
+   cleanup in WS2.4).
+
+**WS0 Findings** (2026-04-20, dispatched against an earlier draft of
+this §L-8 body):
+
+`assumptions-reviewer` returned **ACCEPT WITH NOTES**. Four Important
+findings + three nits were all applied to this plan body before
+commit:
+
+- (a) Attestation completeness — added rows for `@sentry/wizard`
+  (N/A: setup-time tool) and `getsentry/action-release` (RULED OUT:
+  Vercel-vs-GitHub-Actions deploy surface).
+- (b) 2.x vs 5.x currency — added a sentence to the
+  `@sentry/esbuild-plugin` + `tsup` ruling-out row explicitly
+  noting that verification against the plugin CHANGELOG up through
+  5.2.0 shows no fix for either defect, and that the raw-esbuild
+  path is the minimum-change route avoiding the wrapper layer.
+- (c) Dormant `@sentry/cli` in `apps/oak-search-cli/` — added WS2.4
+  to clear the orphaned devDep + `.sentryclirc` from the search
+  CLI alongside the MCP-app cleanup. Non-goal rewritten to reflect
+  workspace-wide `@sentry/cli` removal (was: MCP-app only).
+- (d) ADR-first ordering foreclosure — WS3.1 now explicitly forbids
+  landing before WS2 as well as after WS2, locking the
+  same-commit/same-PR atomicity.
+- (nit) WS1.2 equivalence-test invariant list now names `format`
+  (esm), `target` (es2022), and `platform` (node).
+- (nit) `sourcemap: 'hidden'` deliberate divergence from tsup's
+  `sourcemap: true` acknowledged in WS1.2.
+- (nit) WS0 itself re-labelled as process block rather than
+  technical dependency.
+
+Sunk-cost phrase scan returned zero matches. Proportionality:
+in-bounds. Blocking-chain: process-level only, acknowledged.
+
+#### L-8 WS1 — Test Specification (RED)
+
+All tests MUST FAIL at the end of WS1. See
+[TDD Phases component](../../templates/components/tdd-phases.md).
+
+**1.1: Build-output integration tests**
+
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/plugin-build-output.integration.test.ts`
+  — asserts that `pnpm build` (now backed by raw esbuild) with
+  `SENTRY_AUTH_TOKEN=<fake>` and the Vercel env-pair inputs (per
+  ADR-163 §3) produces dist bundles that carry Debug IDs (scannable
+  in the bundle) and source-map files written to disk; asserts that
+  the plugin's release-registration + sourcemap-upload +
+  deploy-event emission are invoked (log scrape) during build.
+- `packages/libs/sentry-node/src/policy-invocation.integration.test.ts`
+  — asserts that `resolveSentryEnvironment` and
+  `resolveSentryRegistrationPolicy` are invoked exactly once per
+  build and that their outputs are passed to the plugin config.
+
+**1.2: Verify tsup → esbuild build equivalence (no behaviour regression)**
+
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/build-output-equivalence.integration.test.ts`
+  — asserts the post-swap dist bundle entry shape matches the
+  pre-swap tsup output for known-stable invariants: entry-point
+  filenames, external-package boundary (only `node_modules/*` are
+  external), top-level exports surface, source-map presence and
+  linkage, module format (`esm`), compile target (`es2022`),
+  platform (`node`). Not a byte-for-byte diff; a contract-surface
+  diff. Test is a guard against the esbuild config accidentally
+  changing the runtime shape of the deployed app.
+  Note: `sourceMappingURL` comment presence is deliberately NOT
+  part of the equivalence contract. Esbuild's `sourcemap: 'hidden'`
+  emits `.map` files without the URL comment, per Sentry's
+  recommended hidden-source-map posture (the plugin uploads the
+  map server-side; runtime consumers don't need the URL comment).
+  This is a deliberate divergence from tsup's `sourcemap: true`,
+  not a regression.
+
+**Acceptance Criteria**:
+
+1. Tests compile and run.
+2. All new tests fail for the expected reason (no esbuild config yet;
+   no plugin wired yet).
+3. No existing tests broken.
+
+#### L-8 WS2 — Implementation (GREEN)
+
+All tests MUST PASS at the end of WS2.
+
+**2.1: Create raw esbuild config for the MCP app**
+
+**File**: `apps/oak-curriculum-mcp-streamable-http/esbuild.config.mjs`
+(or `.ts` — decide at implementation time based on whether the
+config itself benefits from type-checking).
+
+**Content**:
+
+- `entryPoints: ['src/index.ts', 'src/application.ts']`
+- `bundle: true`, `platform: 'node'`, `format: 'esm'`,
+  `target: 'es2022'`
+- `sourcemap: 'hidden'` (per Sentry docs recommendation; plugin
+  uploads and plugin-specified `filesToDeleteAfterUpload` handles
+  retention)
+- `external: [/node_modules/*/]` (match the MCP app's current tsup
+  boundary exactly)
+- `outdir: 'dist'`
+- `plugins: [sentryEsbuildPlugin({...})]` (Sentry plugin last in the
+  array per Sentry docs)
+- `sentryEsbuildPlugin` config derived from
+  `resolveSentryEnvironment(process.env)` +
+  `resolveSentryRegistrationPolicy(process.env)` at
+  config-construction time. Include: `org`, `project`, `authToken`,
+  `release: { name, finalize: true, setCommits: { auto: false,
+  commit, repo }, deploy: { env } }`, `sourcemaps: {
+  filesToDeleteAfterUpload: ['dist/**/*.js.map'] }`, `telemetry:
+  false`.
+
+**Pre-edit verification**: read `resolveSentryEnvironment` and
+`resolveSentryRegistrationPolicy` return types in
+`packages/libs/sentry-node/src/`. Cross-check field names against
+plugin input keys (`release.name`, `release.setCommits.commit`,
+`release.setCommits.repo`, `release.deploy.env`,
+`policy.shouldRegister`). If the policy functions use different
+names, rename the policy-function fields (vendor-neutral) rather
+than renaming at the plugin call site.
+
+**Minimum plugin version**: pin `@sentry/esbuild-plugin` at an
+explicit version compatible with the workspace's `@sentry/node` SDK
+(≥ 7.47.0 per Sentry docs). Record the pinned version in
+`package.json` and cite it in the runbook (WS3.2).
+
+**2.2: Update `package.json` build script and dependencies**
+
+- Replace `"build"` script from `tsup` invocation to
+  `node esbuild.config.mjs` (or equivalent).
+- Delete `"build:vercel"` script.
+- Add `@sentry/esbuild-plugin` devDependency (pinned version).
+- Delete `@sentry/cli` devDependency.
+- Delete `tsx` devDependency if no other consumer remains in the
+  MCP app.
+- Delete `tsup` from the MCP app's devDependencies if no other
+  script references it (check for lingering `tsup.config.ts` usage
+  first). Other workspaces keep their own `tsup` pin.
+
+**2.4: Clear dormant `@sentry/cli` from the search CLI**
+
+Files amended:
+
+- `apps/oak-search-cli/package.json` — delete `@sentry/cli` devDep
+  (dormant; no consumer in this package).
+- `apps/oak-search-cli/.sentryclirc` — delete.
+
+Rationale: the non-goal above scopes L-8 to the MCP app, but the
+`@sentry/cli` devDep in the search CLI is an orphaned artefact from
+when the same CLI tool was pre-wired alongside the MCP app's bespoke
+orchestrator. Leaving it after L-8 lands violates the
+"delete aggressively, preserve nothing of the bespoke shape"
+principle. No other workspace changes.
+
+**2.3: Delete the tsup config for this app and the L-7 bespoke
+orchestrator + wiring**
+
+Files deleted:
+
+- `apps/oak-curriculum-mcp-streamable-http/tsup.config.ts` (replaced
+  by esbuild.config.mjs)
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy.ts`
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy-cli.ts`
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy-preflight.ts`
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy-types.ts`
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-and-deploy.integration.test.ts`
+- `apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`
+
+Files amended:
+
+- `apps/oak-curriculum-mcp-streamable-http/vercel.json` — remove
+  `buildCommand` override. Vercel falls back to the workspace's
+  `build` script (now esbuild).
+- `apps/oak-curriculum-mcp-streamable-http/eslint.config.ts` —
+  remove the `build-scripts/sentry-release-and-deploy-cli.ts`
+  exception block (line numbers drift — check fresh before edit).
+- `apps/oak-curriculum-mcp-streamable-http/tsconfig.build.json` —
+  adjust if tsup-specific options become irrelevant under esbuild
+  (verify; may be no-op).
+
+**Deterministic Validation**:
+
+```bash
+rg -n "sentry-release-and-deploy|build:vercel|@sentry/cli|upload-sourcemaps\.sh" \
+  apps/oak-curriculum-mcp-streamable-http/
+# Expected: 0 matches.
+ls apps/oak-curriculum-mcp-streamable-http/build-scripts/
+# Expected: only vercel-ignore-production-non-release-build.mjs + .d.ts remain.
+SENTRY_AUTH_TOKEN=fake VERCEL_ENV=preview VERCEL_GIT_COMMIT_SHA=abc123 \
+  VERCEL_GIT_REPO_SLUG=test pnpm --filter \
+  @oaknational/oak-curriculum-mcp-streamable-http run build
+# Expected: build exits 0; dist contains .js + .js.map files;
+# plugin logs confirm release-registration + upload + deploy-event emission.
+```
+
+#### L-8 WS3 — Documentation and Polish (REFACTOR)
+
+**3.1: Amend ADR-163 §6 to state outcome, not HOW** (atomic with WS2).
+
+Replace §6's six-step `sentry-cli` invocation prescription with an
+outcome statement: *"For each successful production or preview
+build, the Sentry UI MUST reflect (a) a release keyed by the root
+package.json semver, (b) the build commit attached to that release,
+(c) a deploy event recorded under the appropriate environment. The
+mechanism is the vendor's first-party bundler plugin
+(`@sentry/esbuild-plugin`) registered in
+`apps/oak-curriculum-mcp-streamable-http/esbuild.config.mjs`."*
+
+Add a History entry recording the 2026-04-20 plugin migration and
+the supersession of the bespoke-CLI prose.
+
+**ATOMIC COMMIT REQUIREMENT**: WS2 (plugin wiring + bespoke deletion)
+and WS3.1 (ADR amendment) MUST land in the same commit or at
+minimum the same PR. Intermediate state where the ADR still asserts
+the deleted CLI path is a documentation-vs-code drift the lane
+exists to prevent.
+
+**WS3.1 MUST NOT land before WS2 either** — an ADR claiming an
+outcome the code does not yet deliver is the inverse drift.
+Same-commit or same-PR is the only correct order.
+
+**3.2: Update operational docs**
+
+- `docs/operations/sentry-deployment-runbook.md` — replace bespoke
+  orchestrator references with plugin-based guidance; troubleshooting
+  steps reference plugin logs. Record pinned
+  `@sentry/esbuild-plugin` version.
+- `docs/operations/sentry-cli-usage.md` — delete or archive; the
+  CLI is no longer an operational surface.
+- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md` —
+  update the release-attribution section to reference the plugin.
+- `packages/libs/sentry-node/README.md` — note that
+  `resolveSentryEnvironment` and `resolveSentryRegistrationPolicy`
+  are consumed by the app's esbuild config at build time.
+
+**3.3: Update this plan's L-7 section**
+
+- L-7's status `completed` note updated to: *"migrated to plugin via
+  §L-8 (landed YYYY-MM-DD, commit <sha>)"*.
+- L-7 body section supersession note pointing at the landed L-8
+  commit.
+
+**3.4: TSDoc**
+
+- Update `@remarks` on `resolveSentryEnvironment` and
+  `resolveSentryRegistrationPolicy` to name the esbuild config as
+  the sole consumer at build time.
+
+#### L-8 WS4 — Quality Gates
+
+```bash
+pnpm clean && pnpm sdk-codegen && pnpm build && pnpm type-check && \
+pnpm format:root && pnpm markdownlint:root && pnpm lint:fix && \
+pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub
+```
+
+**Additional release-state verification** (not a gate, but a
+blocker for WS5's `release-readiness-reviewer`): push branch to
+GitHub; Vercel preview deployment completes green; Sentry UI shows
+the preview-env release registered with commits attached and a
+deploy event.
+
+#### L-8 WS5 — Adversarial Review
+
+Invoke reviewers per the Reviewer Scheduling section above. Record
+findings inline in this section. Any BLOCKER finding halts the
+lane; FIX-BEFORE-MERGE findings land inside the same PR.
+
+#### L-8 WS6 — Documentation Propagation
+
+- ADR-163 (amended in WS3.1; History entry)
+- ADR index (update §Observability entry)
+- `docs/operations/sentry-deployment-runbook.md`
+- `docs/operations/sentry-cli-usage.md` (archive or delete)
+- `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
+- `packages/libs/sentry-node/README.md`
+- `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`
+  L-7 + L-8 status + section bodies (this file)
+- `.agent/plans/observability/documentation-sync-log.md`
+
+#### L-8 Risk Assessment
+
+| Risk | Mitigation |
+|---|---|
+| Raw esbuild config misses a tsup-provided behaviour the MCP app relied on (e.g. entry-point convention, external resolution, specific target flag) | WS1.2 "build-output equivalence" contract-surface test catches regression before WS2 lands. If a gap is found, name the specific tsup option and its esbuild equivalent in the plan before proceeding. |
+| `@sentry/esbuild-plugin` version upgrade later breaks the build | Pin plugin version explicitly in `package.json`; document the upgrade path in the runbook; rely on the existing gate chain to catch upgrade regressions. |
+| Vercel preview deployment fails on first build after `vercel.json.buildCommand` removed | Preview failures are cheap; a fresh branch re-run with the override restored is one commit. Production is gated by `vercel-ignore-production-non-release-build.mjs` + the version-bump invariant. |
+| Sentry UI does not show a distinct deploy event, only release metadata | Per `@sentry/esbuild-plugin` types (`DeployOptions`), setting `release.deploy.env` is the canonical path; if UI shows only metadata, the WS5 `release-readiness-reviewer` flags it and we escalate to `sentry-reviewer` for canonical-idiom re-check. |
+| ADR-163 §6 rewrite is perceived as rewriting history | History entry records the 2026-04-20 supersession and the reason (HOW-vs-WHAT calcification lesson from `4bccba71`). Prior §6 prose stays as a versioned History entry in the ADR itself. |
+| Other workspaces break because they shared a tsup config surface the MCP app relied on | Not applicable — `tsup.config.base.ts` is untouched; the MCP app's `tsup.config.ts` deletion removes a call site, not the shared base. Other workspaces continue to consume the base unchanged. |
+
+#### L-8 Dependencies
+
+**Blocking**:
+
+- L-7 bespoke orchestrator landed (DONE: `7f3b17e9` + `6f5acd17` +
+  `ecee9801`). The migration deletes it; it must exist to be deleted.
+- OAC Phase 2 scaffolding landed (DONE: `ffcad2aa`). This lane is
+  authored against the decomposed state surfaces.
+
+**Environment**:
+
+- Vercel project settings already expose `SENTRY_AUTH_TOKEN` to the
+  build step (carried over from L-7, which also required it). No
+  env-var provisioning work expected.
+- Vercel build environment exposes `VERCEL_ENV`,
+  `VERCEL_GIT_COMMIT_SHA`, `VERCEL_GIT_REPO_SLUG` at build time (L-7
+  already relied on these in a separate `tsx` stage; now required at
+  esbuild config-load time). WS1 acceptance criterion includes a
+  preview-push probe confirming all three are populated at the new
+  stage before WS2 wiring lands.
+
+#### L-8 Foundation Alignment
+
+Before WS1 and at each phase boundary:
+
+1. Re-read `.agent/directives/principles.md` — "no compatibility
+   layers"; "version with git, not with names"; "fix the boundary,
+   not duplicate across it".
+2. Re-read `.agent/directives/testing-strategy.md` — tests prove
+   product behaviour (build output shape and plugin invocation
+   evidence), not plugin internals.
+3. Re-read `.agent/directives/schema-first-execution.md` — plugin
+   config is schema-adjacent; use vendor types from
+   `@sentry/esbuild-plugin` and `esbuild`; no widening.
+4. Re-ask the First Question: could this be simpler without
+   compromising quality?
+
+#### L-8 Self-Test of Installed Guardrails
+
+This lane is the deliberate self-test of the six metacognition
+lessons installed in commit `4bccba71` plus the owner-beats-plan
+invariant installed in commit `363037af`:
+
+- **Build-vs-Buy Attestation** (above) — concrete survey with
+  runtime evidence for the tsup+plugin ruling-out (Sentry issues
+  608/614; tsup issue 1260). No sunk-cost phrasing.
+- **Reviewer Scheduling** (above) — plan-time reviewers scheduled
+  BEFORE ExitPlanMode. `assumptions-reviewer` is WS0, blocking
+  execution start.
+- **Friction-ratchet counter** — if 3+ friction signals accumulate
+  against the esbuild-native shape during execution,
+  `code-reviewer` escalates to `assumptions-reviewer` rather than a
+  tactical fix.
+- **Sunk-cost phrase detector** — the tsup-retention framing of
+  the prior standalone plan (2026-04-20 morning) was itself
+  sunk-cost reasoning; this lane's scope statement names it
+  explicitly as such to close the loop.
+- **ADRs state WHAT, not HOW** — WS3.1 rewrites ADR-163 §6 from
+  HOW to WHAT. Audit via `docs-adr-reviewer` close review.
+- **Solution-class challenge at dispatch frame** — WS0 framing
+  asks "should the esbuild-native shape exist?" not "is the
+  esbuild config well-structured?". If reviewers answer the
+  latter instead, that IS phase-misalignment.
+- **Owner-beats-plan invariant** — the non-goals above were
+  written from the owner's standing esbuild decision, not from
+  inherited plan text. Any future session that reads this plan
+  and finds its non-goals contradicting a newer owner directive
+  MUST resolve in favour of the owner.
+
+A graduation signal for the guardrails: if this lane lands without
+re-activating the tsup-vs-esbuild debate, the owner-beats-plan
+invariant is working as designed.
 
 ### Sibling `current/` plans in Phase 5
 

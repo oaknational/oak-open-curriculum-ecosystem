@@ -17,8 +17,15 @@
 
 ## Current task
 
-Author a clean plan for the §L-8 esbuild-native migration per
-`.agent/commands/plan.md`. No implementation this session.
+COMPLETE. §L-8 esbuild-native migration re-plan authored and folded
+into `active/sentry-observability-maximisation-mcp.plan.md`.
+Plan-time `assumptions-reviewer` dispatched against the draft,
+returned ACCEPT WITH NOTES, all four Important findings + three
+nits applied to the plan body (attestation completeness, 2.x-vs-5.x
+currency, search-CLI dormant `@sentry/cli` cleanup via new WS2.4,
+ADR-first-ordering foreclosure, WS1.2 invariant additions,
+hidden-source-map divergence note, WS0 re-labelled as process
+block).
 
 ## Blocker
 

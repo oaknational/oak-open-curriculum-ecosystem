@@ -252,19 +252,37 @@ Ordered by **evidence strength × repo readiness**, not by importance.
 - **Reject any ADR that adds a marketplace dependency** without
   evidence the bootstrap-script propagation surface is insufficient.
 
-## Top unresolved question
+## Top unresolved question — RESOLVED (2026-04-20)
 
-The single most consequential question this baseline does not answer:
+The single most consequential question this baseline did not answer:
 
 > **Is the repo's existing planning surface
 > (`agentic-engineering-enhancements/`) sized to absorb this many
 > uplift candidates without churning into low-signal work?**
 
-Eight high-impact candidates is a lot. The reviewer-systems cluster
-alone is a coherent expansion; the others are individually small but
-collectively meaningful. A scope-and-sequencing pass on the existing
-plans surface should precede picking up any of these candidates.
-**Out of scope for this session.**
+**Resolved**: yes — because 6 of 8 candidates are correctly classified
+as non-plan work (research notes, scope checks, artefact refreshes,
+or route to a different lane). Only 1 expands an existing plan's
+scope. Only 1 justifies a new plan file (in `future/`). The
+integration routing register below records the durable disposition of
+each candidate.
+
+## Integration routing register (2026-04-20)
+
+Durable record of how each uplift candidate was routed during
+plan-surface integration. Future sessions should check this register
+before re-evaluating a candidate.
+
+| # | Candidate | Disposition | Target | Trigger condition (for deferred) |
+|---|-----------|------------|--------|----------------------------------|
+| 1 | Reviewer-systems cluster (machine-readable artefact, per-team learning loop, RFC 9728 PRM audit) | **Absorbed** | `reviewer-gateway-upgrade.plan.md` — three scope expansions added 2026-04-20 | n/a (already routed) |
+| 2 | Inspect scorer comparison note | **Record and defer** | Research note in safety-evidence lane | Phase 1 hallucination-guard work begins (comparison becomes actionable context for evidence-bundle design) |
+| 3 | Vocabulary-alignment pass on continuity lane | **Routed out** | OAC Phase 4 Task 4.3 (documentation propagation) or standalone continuity session | OAC Phase 4 begins, or next continuity-focused session |
+| 4 | Cross-platform surface matrix refresh | **Absorbed** | Direct update to `cross-platform-agent-surface-matrix.md` (artefact refresh, no plan) | n/a (standalone task when owner approves) |
+| 5 | ADR-124/125 amendment scope check | **Record and defer** | Scope-check note (research) | Downstream consumer asks for plugin-marketplace install of Practice package, or ADR-124/125 review cycle surfaces the question |
+| 6 | MCP-governance deep dive | **New future plan** | `future/mcp-governance-deep-dive.plan.md` created 2026-04-20 | MCP server upgrade to `2025-11-25` enters planning surface, or second MCP governance signal requires architectural response |
+| 7 | Backstage catalog model comparison note | **Record and defer** | Research note in derived-memory lane (lowest priority) | Derived-memory lane gets dedicated research pass on graph-memory ecosystem |
+| 8 | Agent-VCS commit-attribution ADR scope check | **Record and defer** | Scope-check note (research) | Commit-attribution question arises in practice (audit trail, multi-agent attribution ambiguity), or next safety-evidence session scopes alongside dirty-file separation |
 
 ## Scope declaration
 
