@@ -74,3 +74,28 @@ asks for more, this command must not trigger:
    consolidation gate and can escalate into `jc-consolidate-docs` when
    appropriate, but ordinary sessions remain lightweight. It still must not
    smuggle in review or git actions.
+
+## OAC Pilot: New State Surfaces (OAC Phase 3 onward)
+
+When the Operational Awareness and Continuity Surface Separation lane
+([plan](../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md))
+reaches Phase 3 pilot, `session-handoff` refreshes the new repo-local
+state surfaces in this order:
+
+1. `.agent/state/repo-continuity.md` — the compact canonical
+   continuity contract (active workstreams, primary brief, repo-wide
+   invariants/non-goals, next safe step, deep-consolidation status).
+2. `.agent/state/workstreams/<slug>.md` — the relevant workstream
+   brief for this session's lane.
+3. `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md` — the
+   current tactical track card, if one exists.
+
+During the pilot, treat these surfaces as authoritative for their
+scope and update `session-continuation.prompt.md` only for read-order
+and routing changes, not state. After OAC Phase 4 rollout, the
+`Live continuity contract` section of the prompt is retired and
+`session-handoff` writes only to the new surfaces.
+
+During the pilot transition, do not maintain state in both places —
+follow the pilot scenario in `.agent/analysis/operational-awareness-pilot-evidence.md`
+for which surface is authoritative at each step.

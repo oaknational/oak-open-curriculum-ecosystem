@@ -28,6 +28,21 @@ Then read the latest `Live continuity contract` in
 surface for current objective, invariants, recent surprises, next safe step,
 and whether deep consolidation is due.
 
+### OAC Pilot: new state-surface read order (OAC Phase 3 onward)
+
+When the Operational Awareness and Continuity Surface Separation lane
+([plan](../../../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md))
+reaches Phase 3 pilot, `GO` reads the new repo-local state surfaces in this
+order BEFORE the prompt's `Live continuity contract`:
+
+1. `.agent/state/repo-continuity.md` — compact canonical contract.
+2. `.agent/state/workstreams/<slug>.md` — the relevant workstream brief.
+3. `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md` — the current
+   tactical track card, if one exists.
+
+After OAC Phase 4 rollout, the prompt's `Live continuity contract` section
+is retired and the state surfaces are the sole source of truth.
+
 If your current task is driven by a plan collection, also read the relevant
 collection `README.md` and `roadmap.md`, then:
 

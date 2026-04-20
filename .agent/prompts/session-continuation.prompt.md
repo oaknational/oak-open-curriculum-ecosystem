@@ -46,6 +46,16 @@ git log --oneline --decorate -5
 
 ## This Prompt's Role
 
+> **OAC pilot transition (2026-04-20 onward)**. This prompt is being
+> reframed as a behavioural entry surface only. Repo-local state is
+> migrating to `.agent/state/repo-continuity.md` (canonical continuity
+> contract) + `.agent/state/workstreams/<slug>.md` (workstream briefs)
+> + `.agent/runtime/tracks/*.md` (tactical track cards). See
+> [operational-awareness-and-continuity-surface-separation.plan.md](../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md).
+> During the OAC Phase 3 pilot, follow that plan's pilot evidence file
+> for which surface is authoritative per scenario. After OAC Phase 4
+> rollout, the `Live continuity contract` section below is retired.
+
 - Operational entry point only.
 - Active plans are authoritative for scope, sequencing, acceptance criteria,
   and validation.
