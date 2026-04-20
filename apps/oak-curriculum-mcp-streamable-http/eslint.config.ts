@@ -130,6 +130,11 @@ const config = defineConfig(
         'smoke-tests/**',
         'e2e-tests/**',
         'src/index.ts',
+        // Standalone build-time CLI script invoked by Vercel Build
+        // Command; process.env is the legitimate composition-root read
+        // (Vercel injects build env). No runtime coupling; documented
+        // in the file's module TSDoc. Added for ADR-163 §6 L-7.
+        'build-scripts/sentry-release-and-deploy-cli.ts',
       ],
       rules: {
         'no-restricted-syntax': [

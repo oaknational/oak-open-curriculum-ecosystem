@@ -1,3 +1,41 @@
+## 2026-04-20 — reflection on "repos as governance planes"
+
+### What Was Done
+
+- Read `.agent/research/agentic-engineering/governance-planes-and-supervision/repos-as-governance-planes.md`
+  and compared its framing against the repo's lived governance surfaces:
+  `AGENT.md`, the start-right workflow, `practice-core/index.md`,
+  `practice-index.md`, ADR-119, ADR-124, ADR-125, the cross-platform
+  agent surface matrix, and the completed observability-primitives
+  consolidation plan.
+
+### Surprise
+
+- **Expected**: the research note would mostly describe future-state
+  infrastructure that this repo only gestures toward.
+- **Actual**: this repo already behaves much more like a governance
+  plane than many "agent frameworks" do. The governance is versioned,
+  executable, portable, and layered across canonical content,
+  platform adapters, entry points, reviewer dispatch, plans, memory,
+  and validation surfaces.
+
+### Corrections / learnings
+
+- **This repo is stronger where the note says the ecosystem is weak**:
+  the note identifies a missing open standard for machine-readable
+  contribution contracts; this repo approximates one locally through
+  directives, rules, commands, skills, ADRs, plans, hooks, platform
+  matrices, and portability contracts. The contract is repo-native
+  rather than ecosystem-standard.
+- **The repo's distinctive move is portability of governance itself**:
+  ADR-124 and ADR-125 turn governance artefacts into a travelling
+  package plus local bridge, so the repo is not only governed; it can
+  propagate its governance model to other repos.
+- **The strongest evidence is closure discipline, not just file count**:
+  the completed observability-primitives plan shows governance as an
+  execution surface with reviewer routing, invariants, proof, and
+  closure evidence, not a passive documentation layer.
+
 ## 2026-04-19 — L-7 adjudication + ADR-163 authored and Accepted (post-rotation session)
 
 ### What Was Done

@@ -12,6 +12,7 @@ group them for wider synthesis.
 | Lane | Best for | Starting points |
 | --- | --- | --- |
 | [operating-model-and-platforms/README.md](./operating-model-and-platforms/README.md) | Workbench model, platform surfaces, portability context | workbench topology, surface matrix, adapter formats |
+| [governance-planes-and-supervision/README.md](./governance-planes-and-supervision/README.md) | Repo governance planes, trust boundaries, runtime supervision | governance-plane note, mechanism-gap baseline, promoted synthesis |
 | [reviewer-systems-and-discoverability/README.md](./reviewer-systems-and-discoverability/README.md) | Reviewer gateway, discoverability, onboarding path | reviewer-gateway plan, staged reviewer notes, onboarding review |
 | [safety-evidence-and-enforcement/README.md](./safety-evidence-and-enforcement/README.md) | Evidence discipline, hallucination guards, enforcement posture | augmented safety/practices, enforcement playbook |
 | [continuity-memory-and-knowledge-flow/README.md](./continuity-memory-and-knowledge-flow/README.md) | Continuity, split loops, knowledge flow | continuity practice, analysis evidence, continuity ADRs |
@@ -29,4 +30,3 @@ group them for wider synthesis.
 Start here when the question is "where is the source material for this theme?"
 Jump back to the hub when the question becomes "how do these lanes fit into the
 overall concept map?"
-
