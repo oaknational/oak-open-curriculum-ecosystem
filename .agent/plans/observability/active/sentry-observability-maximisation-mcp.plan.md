@@ -43,11 +43,13 @@ todos:
     content: "L-6 (Phase 5, MVP-deferred): add @sentry/profiling-node, wire nodeProfilingIntegration, evaluate overhead, document rollout"
     status: pending
   - id: l7-release-deploy-linkage
-    content: "L-7 (Phase 1): release + commits + deploy linkage per ADR-163 (Accepted 2026-04-19). Single orchestrator script in the Vercel Build Command: explicit `releases set-commits --commit org/repo@sha` (not --auto), `sourcemaps inject + upload --release`, `releases finalize`, `deploys new --release -e` (new CLI noun form, not legacy). Release identifier = root package.json semver; SHA = metadata; production attribution requires both VERCEL_ENV=production AND VERCEL_GIT_COMMIT_REF=main; local-dev skipped unless SENTRY_RELEASE_REGISTRATION_OVERRIDE env-pair set. Runtime contract adds VERCEL_GIT_COMMIT_REF + SENTRY_RELEASE_REGISTRATION_OVERRIDE to SentryConfigEnvironment and extends resolveSentryEnvironment with the ADR-163 §3 truth table. Implementation authorised 2026-04-19."
-    status: pending
+    content: "L-7 (Phase 1): release + commits + deploy linkage per ADR-163 (Accepted 2026-04-19). Bespoke orchestrator landed 2026-04-19/20 across three commits: 7f3b17e9 (sentry-node resolver split + git.commit.sha tag rename), 6f5acd17 (four-file TypeScript orchestrator in apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-registration/ + 21 integration tests + ADR-163 §6.0 probe amendment), ecee9801 (build:vercel script + vercel.json buildCommand wiring). Single orchestrator invoked via tsx from the Vercel Build Command."
+    status: completed
+    note: "BESPOKE BEING TORN OUT. Owner identified 2026-04-20 that @sentry/esbuild-plugin (vendor first-party bundler plugin) eliminates most of this code. Forward direction: tsup -> esbuild + @sentry/esbuild-plugin; keep resolveSentryEnvironment + resolveSentryRegistrationPolicy in @oaknational/sentry-node as vendor-agnostic policy. L-8 is the forward lane (un-dropped 2026-04-20). Migration plan authoring is task #22, using feature-workstream-template.md with Build-vs-Buy Attestation + Reviewer Scheduling sections filled in (self-test of the guardrails installed in commit 4bccba71). Bespoke commits stay in git history as signal for the build-vs-buy lesson; ADR-163 §6 prose will be amended by the migration plan to state the outcome Sentry must reach rather than the specific CLI invocations chosen."
   - id: l8-bundler-source-maps
-    content: "L-8: PARKED — bundler source-map plugin deferred. @sentry/esbuild-plugin would require replacing tsup with esbuild; the current shell-script flow is simpler, offline-capable, and auditable. Revisit only if script complexity grows or a specific driver emerges."
-    status: dropped
+    content: "L-8 (forward lane for release/commits/deploy + source-map linkage): replace bespoke L-7 orchestrator with @sentry/esbuild-plugin. Switch tsup -> esbuild in the MCP app build; wire @sentry/esbuild-plugin as the bundler plugin so release registration, sourcemap upload, commit attribution, and deploy-event emission are handled by the vendor's first-party plugin. Keep resolveSentryEnvironment + resolveSentryRegistrationPolicy in @oaknational/sentry-node (pure vendor-agnostic policy). Delete-side: four orchestrator files in build-scripts/sentry-release-registration/, 21 integration tests, build:vercel custom script, vercel.json buildCommand override, ESLint + tsconfig exceptions carried for the bespoke shape; amend ADR-163 §6 to state WHAT outcome the vendor must reach (Sentry UI state: release + commits + deploy per env) rather than HOW (specific sentry-cli argv). Authoring: task #22 uses feature-workstream-template.md with Build-vs-Buy Attestation + phase-aligned Reviewer Scheduling."
+    status: pending
+    note: "UN-DROPPED 2026-04-20. Prior rationale (commit history, superseded) claimed tsup-vs-esbuild swap made the plugin path costlier than the shell-script flow; owner identified that the bespoke orchestrator landed at ~900 lines across four files plus 21 tests plus two build-config overrides plus ADR amendments — materially more complexity than the tsup -> esbuild swap. The sunk-cost framing now visible in the prior 'PARKED' note is itself an instance of the guardrail installed in commit 4bccba71. Forward path: author task #22 migration plan, run plan-time assumptions-reviewer pass pre-ExitPlanMode per new triggering scenarios, then execute."
   - id: l9-feedback
     content: "L-9 (Phase 3): captureFeedback pipeline; optionally surface as an MCP tool"
     status: pending
@@ -107,8 +109,8 @@ isProject: true
 # Sentry Observability Maximisation — MCP Server
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
-**Last Updated**: 2026-04-19
-**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one); L-DOC initial landed (authoritative app observability doc + expanded sentry-node README + discoverability mesh; commit 9e1a26b2). Remaining Wave 1 lanes pending: L-12-prereq (extract `packages/core/telemetry-redaction-core/`), L-7 (release/deploy linkage).
+**Last Updated**: 2026-04-20
+**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one); L-DOC initial landed (authoritative app observability doc + expanded sentry-node README + discoverability mesh; commit 9e1a26b2); L-12-prereq closed by the observability-primitives-consolidation lane (2026-04-19); L-7 bespoke orchestrator landed 2026-04-19/20 (commits 7f3b17e9 + 6f5acd17 + ecee9801) then flagged 2026-04-20 for replacement by @sentry/esbuild-plugin. L-8 un-dropped 2026-04-20 as the forward lane for release/commits/deploy + source-map linkage; migration plan (task #22) pending authoring using feature-workstream-template.md with Build-vs-Buy Attestation filled in.
 **Branch**: `feat/otel_sentry_enhancements`
 **Scope**: Close every available Sentry product loop for the MCP app (server + widget) on this branch before PR. Search CLI mirrors on the next branch.
 
@@ -785,7 +787,19 @@ Authoring concept checklist (for reviewer walkthrough, not automated):
 3. Zero `@sentry/*` imports in `packages/core/telemetry-redaction-core/`.
 4. L-12 can import the core without pulling `@sentry/node` into the widget bundle.
 
-### L-7 Release + commits + deploy linkage
+### L-7 Release + commits + deploy linkage — BESPOKE LANDED, BEING TORN OUT (2026-04-20)
+
+> **Supersession note** (2026-04-20): the bespoke orchestrator described in
+> this section landed across commits `7f3b17e9` + `6f5acd17` + `ecee9801`
+> and is now being replaced by `@sentry/esbuild-plugin` (task #22, L-8 in
+> frontmatter). Owner identified in one question that the vendor's
+> first-party bundler plugin eliminates ~900 lines of bespoke code. The
+> body below is retained as historical record of the shape that was
+> built; the authoritative forward path is L-8 + task #22. ADR-163 §6
+> prose will be amended by the migration plan to state the outcome
+> Sentry must reach, not the specific CLI invocations chosen. Bespoke
+> commits stay in git history as signal for the build-vs-buy lesson
+> captured in commit `4bccba71` guardrails.
 
 **Authoritative mechanism**: see
 [ADR-163: Sentry Release Identifier, Source-Map Attachment, and Vercel
@@ -1677,26 +1691,59 @@ integration.
 behaviour change. The first real LLM tool's integration is a
 separate future lane, triggered by an actual consumer landing.
 
-### L-8 Bundler-side source maps — PARKED (2026-04-17)
+### L-8 Bundler-side source maps + release/deploy linkage (UN-DROPPED 2026-04-20 — forward lane)
 
-**Status**. Not in this plan's delivery scope.
+**Status**. Forward lane for release + commits + deploy + source-map linkage.
+Supersedes L-7 bespoke orchestrator. Authoring is task #22.
 
-**Rationale** (settled with owner 2026-04-17): `@sentry/esbuild-plugin`
-would require replacing `tsup` with direct `esbuild` — a toolchain
-swap. The current shell-script flow is:
+**Rationale** (2026-04-20): `@sentry/esbuild-plugin` is the vendor's
+first-party bundler plugin. Wiring it replaces the ~900-line bespoke
+orchestrator landed in L-7 (four orchestrator files + 21 integration
+tests + build:vercel custom script + vercel.json.buildCommand override +
+ADR-163 §6 amendment + ESLint/tsconfig exceptions) with a small plugin
+registration inside the esbuild build. The tsup → esbuild swap itself
+is cheap.
 
-- Simple (≈150 lines of bash).
-- Offline-capable (devs can `pnpm build` without `SENTRY_AUTH_TOKEN`).
-- Auditable (we own the script; Sentry plugin updates cannot break
-  our build).
-- Already working and proven on this branch.
+The prior `PARKED` rationale (2026-04-17) — "shell-script flow is
+simpler, offline-capable, auditable" — is a historical artefact and
+is now understood as the sunk-cost framing the commit `4bccba71`
+guardrails are designed to catch. Specifically:
 
-The plugin option stays parked as a **future enhancement**. Revisit
-only if (a) the shell script's complexity grows materially, (b) a
-specific operational requirement emerges, or (c) the tsup→esbuild
-swap becomes desirable for unrelated reasons.
+- "Already working and proven on this branch" was not yet true on
+  2026-04-17 (the bespoke orchestrator had not landed). The statement
+  was describing the pre-L-7 shell-script flow, not the shape L-7 was
+  about to build.
+- "Offline-capable without SENTRY_AUTH_TOKEN" is not a requirement the
+  plugin fails to meet; the plugin is a build-time concern and
+  SENTRY_AUTH_TOKEN is already required for any release registration
+  path.
+- "Auditable because we own the script" protects the shape of code we
+  chose, not the outcome Sentry must reach.
 
-No acceptance criterion — this lane is deferred, not delivered.
+**Forward work (authored in task #22, not here)**:
+
+- Switch `tsup` → `esbuild` in the MCP app build config.
+- Register `@sentry/esbuild-plugin` with release + sourcemap + deploy
+  configuration derived from `resolveSentryEnvironment` +
+  `resolveSentryRegistrationPolicy` (both in `@oaknational/sentry-node`
+  and kept as vendor-agnostic policy).
+- Delete the four L-7 orchestrator files in
+  `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-release-registration/`.
+- Delete the 21 L-7 integration tests.
+- Delete `build:vercel` custom script.
+- Revert `vercel.json.buildCommand` override to Vercel-default build.
+- Remove ESLint + tsconfig exceptions carried for the bespoke shape.
+- Amend ADR-163 §6 to state the outcome Sentry must reach (release +
+  commits + deploy-per-env in Sentry UI) rather than the specific
+  `sentry-cli` invocations chosen. ADRs state WHAT not HOW per the
+  `docs-adr-reviewer` guardrail installed in `4bccba71`.
+
+**Template**: task #22 uses `.agent/plans/templates/feature-workstream-template.md`
+with Build-vs-Buy Attestation + phase-aligned Reviewer Scheduling
+sections filled in. Plan-time `assumptions-reviewer` pass fires
+pre-ExitPlanMode per the new triggering scenarios (vendor-integration
+plan). This lane is itself the self-test of whether the installed
+guardrails produce the intended planning behaviour.
 
 ### Sibling `current/` plans in Phase 5
 
