@@ -13,7 +13,8 @@ foundational_adr: "docs/architecture/architectural-decisions/162-observability-f
 strategic_parent: "observability/future/sentry-observability-maximisation.plan.md"
 blocked_on:
   - "docs/explorations/2026-04-18-vendor-independence-conformance-test-shape.md (exploration 8; informs test-shape choices)"
-  - "observability-events-workspace.plan.md (emissions need schemas before persistence can be asserted)"
+  - "observability-events-workspace.plan.md (emissions need schemas before persistence can be asserted — 2026-04-20: events-workspace is beta-gate, which makes WS2+ (emission-persistence test) beta-gate too; WS1 carve-out (no-vendor-observability-import ESLint rule) lands in alpha scope per the maximisation plan's restructure Phase 5 carve-out)"
+release_gate: "WS1 carve-out alpha; WS2+ emission-persistence beta"
 todos:
   - id: ws1-red
     content: "WS1 (RED): emission-persistence integration test + no-vendor-observability-import RuleTester cases. Both fail initially."

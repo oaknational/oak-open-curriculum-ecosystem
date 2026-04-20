@@ -11,8 +11,9 @@ derived_from: feature-workstream-template.md
 foundational_adr: "docs/architecture/architectural-decisions/162-observability-first.md"
 strategic_parent: "observability/future/sentry-observability-maximisation.plan.md"
 blocked_on:
-  - "observability-events-workspace.plan.md (for schema definitions)"
+  - "observability-events-workspace.plan.md (for schema definitions — 2026-04-20: events-workspace is beta-gate, which makes this plan beta-gate too; does NOT block public alpha)"
   - "docs/explorations/2026-04-18-cloudflare-plus-sentry-security-observability.md (informs boundary)"
+release_gate: public-beta
 todos:
   - id: ws1-red
     content: "WS1 (RED): auth_failure + rate_limit_triggered emission-site contract tests; assert emissions conform to schemas from observability-events workspace."

@@ -13,6 +13,8 @@ foundational_adr: "docs/architecture/architectural-decisions/162-observability-f
 strategic_parent: "observability/future/sentry-observability-maximisation.plan.md"
 blocked_on:
   - "docs/explorations/2026-04-18-accessibility-observability-at-runtime.md (exploration 3; blocks the runtime-capturable set)"
+  - "observability-events-workspace.plan.md (for a11y_preference_tag + widget_session_outcome schemas — 2026-04-20: events-workspace is beta-gate, which makes this plan beta-gate too; does NOT block public alpha)"
+release_gate: public-beta
   - "observability-events-workspace.plan.md (for schemas)"
 todos:
   - id: ws1-red

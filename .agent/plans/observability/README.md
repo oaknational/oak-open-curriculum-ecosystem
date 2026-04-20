@@ -122,8 +122,12 @@ completed 2026-04-19 with all phases landed:
 
 Execution now proceeds through the five-wave MVP ordering (see
 [`high-level-observability-plan.md` §Execution Waves](./high-level-observability-plan.md#execution-waves--cross-plan-mvp-order)).
-Wave 1 is partially open as of 2026-04-19 — L-EH initial landed;
-three lanes remain (L-DOC initial, L-12-prereq, L-7).
+Wave 1 as of 2026-04-20: L-EH initial ✅, L-DOC initial ✅,
+L-12-prereq ✅ (closed by primitives-consolidation 2026-04-19).
+L-7 bespoke orchestrator landed and is being torn out by L-8
+(esbuild-native migration, re-planned 2026-04-20 per owner's
+standing decision; plan-time `assumptions-reviewer` pass complete).
+L-8 WS1 RED is the next execution step.
 
 ---
 

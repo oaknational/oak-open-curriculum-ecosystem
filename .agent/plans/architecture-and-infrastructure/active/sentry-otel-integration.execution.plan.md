@@ -462,9 +462,17 @@ closure):**
 
 5. **Operationalise and lock MCP-server-side strategy**  
    Owner: `sentry-observability-maximisation-mcp.plan.md`
-   (Phase 3 L-9/L-10/L-11/L-12 and Phase 4 L-13/L-15)
+   (Phase 5 L-15 is the strategy close-out in alpha scope; L-9 /
+   L-10 / L-11 / L-12 / L-13 are all deferred per the 2026-04-20
+   alpha-vs-beta gate decision — L-13 alerts need real signal
+   distributions, L-9 feedback needs a user-facing surface, L-12
+   widget Sentry needs host-compat evidence for agentic-client
+   runtimes, L-10/L-11 remain MVP-deferred scaffolding. See the
+   maximisation plan's §Alpha vs public-beta gates block.)
    - alerting/dashboard/runbook baseline (rule 521866 seeds this)
-   - explicit strategy selection across "other options"
+     — deferred to public beta
+   - explicit strategy selection across "other options" — L-15 in
+     alpha
 
 **Deferred to later sessions / PRs (NOT part of this PR):**
 

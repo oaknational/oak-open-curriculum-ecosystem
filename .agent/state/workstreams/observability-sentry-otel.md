@@ -61,6 +61,15 @@ Begin §L-8 WS1 RED in
 solution-class framing is already in place and the WS0 reviewer notes
 have already been applied.
 
+After §L-8 closes, alpha-gate emitters land next per the 2026-04-20
+Phase 3 re-sequencing: **Phase 3a (L-1 free-signal + L-2 delegates
+extraction + L-3 MCP request context) — all schema-independent, can
+land in parallel before the events-workspace**. That completes the
+alpha gate. Events-workspace + L-4b metrics + Phase 4 siblings
+(security/accessibility) + Phase 5 close-out lanes form the public-
+beta gate. See §Alpha vs public-beta gates in the active plan for
+the authoritative split.
+
 ## Active track links
 
 None. The stale OAC-labelled track card carrying the L-8 handoff note
