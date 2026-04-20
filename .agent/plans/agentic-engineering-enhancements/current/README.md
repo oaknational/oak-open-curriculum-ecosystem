@@ -18,7 +18,6 @@ plans when scheduled.
 | [harness-concepts-adoption.plan.md](harness-concepts-adoption.plan.md) | Adjacent: HC-0 baseline metrics | REFERENCE |
 | [reviewer-gateway-upgrade.plan.md](reviewer-gateway-upgrade.plan.md) | Adjacent: layered gateway triage, review depth selection, and coverage tracking | QUEUED |
 | [agentic-corpus-discoverability-and-deep-dive-hub.plan.md](agentic-corpus-discoverability-and-deep-dive-hub.plan.md) | Adjacent: index-only hub, named research/report lanes, selected docs cross-links, and seed deep dives | REFERENCE |
-| [operational-awareness-and-continuity-surface-separation.plan.md](operational-awareness-and-continuity-surface-separation.plan.md) | Adjacent: repo-local awareness plane, continuity surface separation, and portable-candidate extraction criteria | QUEUED |
 | [governance-concepts-and-agentic-mechanism-integration.plan.md](governance-concepts-and-agentic-mechanism-integration.plan.md) | Adjacent: abstract governance-plane concept extraction, local mechanism-gap mapping, and routing into plans, deep dives, reports, and doctrine-adjacent surfaces | REFERENCE |
 
 Strategic context: [roadmap.md](../roadmap.md)

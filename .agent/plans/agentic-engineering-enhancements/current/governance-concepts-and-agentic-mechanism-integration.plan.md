@@ -40,8 +40,8 @@ doctrine-adjacent surfaces.
 **Formal report**:
 [governance-concepts-and-integration-report.md](../../../reports/agentic-engineering/deep-dive-syntheses/governance-concepts-and-integration-report.md)
 
-**Adjacent current plans**:
-[operational-awareness-and-continuity-surface-separation.plan.md](./operational-awareness-and-continuity-surface-separation.plan.md),
+**Adjacent plans**:
+[operational-awareness-and-continuity-surface-separation.plan.md](../active/operational-awareness-and-continuity-surface-separation.plan.md) (ACTIVE, promoted 2026-04-20),
 [reviewer-gateway-upgrade.plan.md](./reviewer-gateway-upgrade.plan.md)
 
 **Adjacent future plan**:

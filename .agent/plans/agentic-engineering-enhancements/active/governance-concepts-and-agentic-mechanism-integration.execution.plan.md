@@ -77,7 +77,7 @@ Moving wording between artefacts without one of those deltas does not count.
 - `current/hallucination-and-evidence-guard-adoption.plan.md`
 - `active/phase-2-evidence-based-claims-execution.md`
 - `evidence-bundle.template.md`
-- `current/operational-awareness-and-continuity-surface-separation.plan.md`
+- `active/operational-awareness-and-continuity-surface-separation.plan.md`
 - `current/reviewer-gateway-upgrade.plan.md`
 - `future/operating-model-mechanism-taxonomy.plan.md`
 - `future/README.md`
@@ -99,7 +99,7 @@ Moving wording between artefacts without one of those deltas does not count.
 **Deterministic validation**
 
 - `rg -n "attempt|observed outcome|proven result" .agent/plans/agentic-engineering-enhancements/current/hallucination-and-evidence-guard-adoption.plan.md .agent/plans/agentic-engineering-enhancements/active/phase-2-evidence-based-claims-execution.md .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md`
-- `rg -n "supervised execution" .agent/plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md`
+- `rg -n "supervised execution" .agent/plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md`
 - `rg -n "layered-safeguard|review-signal|relationship-confidence signal" .agent/plans/agentic-engineering-enhancements/current/reviewer-gateway-upgrade.plan.md`
 - `rg -n "action-governance boundary|boundary model|signal ecology|residual-risk|governance-plane vocabulary|defer" .agent/plans/agentic-engineering-enhancements/future/operating-model-mechanism-taxonomy.plan.md`
 
@@ -256,7 +256,7 @@ Touched adjacent source/execution surfaces:
 - `current/hallucination-and-evidence-guard-adoption.plan.md`
 - `active/phase-2-evidence-based-claims-execution.md`
 - `evidence-bundle.template.md`
-- `current/operational-awareness-and-continuity-surface-separation.plan.md`
+- `active/operational-awareness-and-continuity-surface-separation.plan.md`
 - `current/reviewer-gateway-upgrade.plan.md`
 - `future/operating-model-mechanism-taxonomy.plan.md`
 - `future/README.md`

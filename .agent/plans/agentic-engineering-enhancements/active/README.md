@@ -17,6 +17,7 @@ of truth.
 | GCM | [governance-concepts-and-agentic-mechanism-integration.execution.plan.md](governance-concepts-and-agentic-mechanism-integration.execution.plan.md) | Governance-concept routing closeout, adjacent-plan reconciliation, and doctrine no-change record | ✅ Complete |
 | ES | ~~[elasticsearch-specialist-capability.execution.plan.md](../archive/completed/elasticsearch-specialist-capability.execution.plan.md)~~ | Elasticsearch reviewer + skill + rule triplet following ADR-129 | ✅ Complete (archived) |
 | PCS | [plan-collection-structural-consistency.plan.md](plan-collection-structural-consistency.plan.md) | Bring all plan collections to canonical lifecycle structure (ADR-117) | 📋 Planned (audit complete, execution deferred) |
+| OAC | [operational-awareness-and-continuity-surface-separation.plan.md](operational-awareness-and-continuity-surface-separation.plan.md) | Repo-local awareness plane: separate canonical continuity contract, workstream resumption briefs, and thread-aware tactical track cards | 🔄 ACTIVE (promoted 2026-04-20) |
 | PC | ~~practice-convergence.plan.md~~ | Align Practice Core, local surfaces, and outgoing Context so documented standards are enforced | ✅ Complete (deleted) |
 
 Strategic context: [roadmap.md](../roadmap.md)

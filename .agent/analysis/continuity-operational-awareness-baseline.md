@@ -116,3 +116,57 @@ Treat that as a **portable candidate**, not as Practice Core doctrine yet. If
 the repo-local pilot proves insufficient under real parallel-agent pressure,
 promote the adjacent sidecars plan rather than stretching the markdown surfaces
 into an accidental opaque memory system.
+
+## Addendum — 2026-04-20 (promotion context)
+
+Between the 2026-04-19 baseline capture and this plan's promotion to `active/`,
+three changes have shifted the context in which the awareness plane will land.
+The underlying diagnosis and surface classification above are unchanged; the
+addendum only records the new context.
+
+### New context affecting scope
+
+1. **L-7 bespoke orchestrator built then pivoted.** Commits `7f3b17e9`
+   + `6f5acd17` + `ecee9801` landed a ~900-line bespoke Sentry
+   release/commits/deploy orchestrator. The owner surfaced in one question that
+   `@sentry/esbuild-plugin` eliminates most of that code: the forward path is
+   `tsup` → `esbuild` with the plugin. Bespoke commits kept in history as
+   signal.
+2. **Six metacognition lessons installed as process guardrails**
+   (commit `4bccba71`) across `assumptions-reviewer`, `code-reviewer`,
+   `docs-adr-reviewer`, and three plan templates. The hard invariants added
+   — build-vs-buy attestation required pre-ExitPlanMode; friction-ratchet
+   counter; sunk-cost phrase detector; ADRs state WHAT not HOW; phase-aligned
+   reviewer scheduling — are now in effect across all vendor-integration work.
+3. **Deep consolidation is DUE but deliberately deferred** into this plan's
+   Phase 3 + Phase 4 as the natural carrier. Graduation of this session's
+   promotion-ready patterns (build-vs-buy-precedes-build-shape, reviewer-
+   tranche-inherits-caller-frame, ADR-HOW-calcifies) and PDR candidates
+   for the new guardrails lands inside this plan's documentation-propagation
+   phase, not as a separate pass.
+
+### Implications for the awareness-plane design
+
+- **The state-surface contract must accommodate the new guardrail artefacts.**
+  `workstreams/<slug>.md` briefs should carry the plan-time reviewer
+  scheduling outcome (which reviewers ran, what they found) so it is legible
+  to a resuming agent without needing to re-read the whole plan. This is a
+  field-contract addition, not a doctrine change.
+- **The continuation prompt's current bloat is a direct consequence of the
+  missing awareness plane.** This session's handoff addendum (`89bf86ab` +
+  `6967851a`) added another ~50 lines to an already 1545-line prompt. That
+  addendum is substantively the workstream-brief-for-this-lane material —
+  it will migrate into `workstreams/observability-and-continuity.md`
+  during Phase 2 rather than being deleted.
+- **Portability posture is unchanged.** Portable-candidate, not Practice Core
+  promotion by default. The guardrails installed in `4bccba71` are themselves
+  candidates for portability evaluation during Phase 4 but not a reason to
+  accelerate promotion.
+
+### Unchanged by this addendum
+
+- Current surface classification table
+- Findings (1)–(4)
+- Baseline Requirements Created by This Audit (1)–(5)
+- Recommended Direction (markdown-first, repo-local; portable-candidate)
+- Adjacent sidecars plan remains adjacent, not the default answer

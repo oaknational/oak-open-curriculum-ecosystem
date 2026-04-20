@@ -20,7 +20,7 @@ repository.
 ## Related Plans
 
 - [continuity-and-surprise-practice-adoption.plan.md](../../../plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md)
-- [operational-awareness-and-continuity-surface-separation.plan.md](../../../plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md)
+- [operational-awareness-and-continuity-surface-separation.plan.md](../../../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md)
 - [cross-vendor-session-sidecars.plan.md](../../../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
 
 ## Current Synthesis

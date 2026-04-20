@@ -7,7 +7,8 @@ overview: >
 todos:
   - id: oa-phase-0-baseline
     content: "Phase 0: Capture the baseline and lock doctrine/backlog constraints."
-    status: pending
+    status: completed
+    note: "Baseline at .agent/analysis/continuity-operational-awareness-baseline.md (2026-04-19) with 2026-04-20 addendum covering L-7 bespoke-to-plugin pivot, guardrail installation (commit 4bccba71), and deep-consolidation-due status. Validation criteria met: current surfaces classified by job/horizon/authority/expiry/concurrency; three prompt jobs named directly; repo-local vs cross-vendor sidecars separation recorded. Task 0.2 + Task 0.3 also satisfied by the plan's Design Contract + Bounded Uptake from Workbench Topology sections respectively."
   - id: oa-phase-1-design
     content: "Phase 1: Define the state-surface contract, authority order, and loop boundaries."
     status: pending
@@ -24,10 +25,17 @@ todos:
 
 # Operational Awareness and Continuity Surface Separation
 
-**Last Updated**: 2026-04-19
-**Status**: QUEUED
+**Last Updated**: 2026-04-20
+**Status**: ACTIVE
 **Scope**: Repo-local awareness plane, continuity-surface
 separation, and portable-candidate extraction criteria for later promotion.
+
+**Promoted**: 2026-04-20 — owner accepted markdown-first delivery shape; pilot
+lane is the implementation lane for this plan itself, run as two parallel
+tactical tracks (`contract-and-docs` + `workflow-and-runtime`). Phase 0
+baseline refreshed with 2026-04-20 addendum noting bespoke-orchestrator pivot,
+guardrail installation (commit `4bccba71`), and deep-consolidation-due status.
+Deep consolidation rides inside Phase 3 + Phase 4 as the natural carrier.
 
 **Baseline analysis**:
 [continuity-operational-awareness-baseline.md](../../../analysis/continuity-operational-awareness-baseline.md)
@@ -44,10 +52,8 @@ separation, and portable-candidate extraction criteria for later promotion.
 **Adjacent future plan**:
 [operating-model-mechanism-taxonomy.plan.md](../future/operating-model-mechanism-taxonomy.plan.md)
 
-**Promotion note**: promote this source plan into `active/` when the repo owner
-accepts the markdown-first delivery shape and a bounded pilot lane is chosen.
-Default pilot lane: the implementation lane for this plan itself, using two
-parallel tactical tracks.
+**Promotion note** (historical): promoted `current/` → `active/` on 2026-04-20
+per the Promoted block above.
 
 ## Context
 

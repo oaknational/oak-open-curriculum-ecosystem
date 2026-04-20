@@ -113,7 +113,7 @@ boundaries, not because they mirror wording from the compared corpus.
 
 ### Existing current plans to amend
 
-- [operational-awareness-and-continuity-surface-separation.plan.md](../../../plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md)
+- [operational-awareness-and-continuity-surface-separation.plan.md](../../../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md)
   should absorb the supervised-execution frame, awareness-plane vocabulary, and
   clearer authority/ownership language.
 - [reviewer-gateway-upgrade.plan.md](../../../plans/agentic-engineering-enhancements/current/reviewer-gateway-upgrade.plan.md)

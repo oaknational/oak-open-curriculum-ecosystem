@@ -35,7 +35,7 @@ last_updated: 2026-04-19-primitives-consolidation-landed
      — authoritative app observability guide (L-DOC initial output).
    - `packages/libs/sentry-node/README.md`
      — package-level reference for the shared Sentry-Node library.
-   - `.agent/plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md`
+   - `.agent/plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md`
      — parallel-thread follow-up; not the primary workstream here.
 5. Re-establish live branch state:
 
@@ -130,7 +130,7 @@ commit.
     closed. Plan kept in `current/` through this consolidation pass
     only; archive move + stale-link sweep happens during
     `jc-consolidate-docs` step 1–2.
-  - `.agent/plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md`
+  - `.agent/plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md`
     — parallel-thread follow-up (QUEUED, paused); not this session's
     primary.
 - **Current state**: Branch `feat/otel_sentry_enhancements` at HEAD

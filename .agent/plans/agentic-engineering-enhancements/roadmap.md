@@ -264,8 +264,8 @@ Adjacent:
 
 ### Adjacent — Operational Awareness and Continuity Surface Separation
 
-- Strategic plan:
-  [operational-awareness-and-continuity-surface-separation.plan.md](current/operational-awareness-and-continuity-surface-separation.plan.md)
+- Active plan:
+  [operational-awareness-and-continuity-surface-separation.plan.md](active/operational-awareness-and-continuity-surface-separation.plan.md)
 - Goal:
   - separate the canonical continuity contract, workstream resumption state,
     and thread-aware tactical coordination into distinct repo-local surfaces
@@ -274,7 +274,7 @@ Adjacent:
     design
   - define portability criteria without mutating Practice Core in the initial
     lane
-- Status: ⏭️ Queued reference (`current/`)
+- Status: 🔄 ACTIVE (promoted `current/` → `active/` on 2026-04-20)
 - Notes:
   - adjacent to the completed continuity-adoption lane and the future
     cross-vendor sidecars plan

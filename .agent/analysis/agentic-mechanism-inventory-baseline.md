@@ -110,7 +110,7 @@ around:
   awareness
 - **Route**:
   enhance
-  [operational-awareness-and-continuity-surface-separation.plan.md](../plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md)
+  [operational-awareness-and-continuity-surface-separation.plan.md](../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md)
   and treat it as a high-impact next-step candidate
 
 ### 5. Authority and precedence
@@ -205,7 +205,7 @@ around:
 
 ### Existing plans to enhance now
 
-- [operational-awareness-and-continuity-surface-separation.plan.md](../plans/agentic-engineering-enhancements/current/operational-awareness-and-continuity-surface-separation.plan.md)
+- [operational-awareness-and-continuity-surface-separation.plan.md](../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md)
   should explicitly absorb the work-ledger, precedence, and bounded
   signal-routing implications from the topology note.
 - [reviewer-gateway-upgrade.plan.md](../plans/agentic-engineering-enhancements/current/reviewer-gateway-upgrade.plan.md)
