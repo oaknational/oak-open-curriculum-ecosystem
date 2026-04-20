@@ -47,7 +47,7 @@ export function createSentryTags(
   readonly service: string;
   readonly environment: string;
   readonly release: string;
-  readonly git_sha?: string;
+  readonly 'git.commit.sha'?: string;
   readonly traceId?: string;
   readonly spanId?: string;
 } {
@@ -55,7 +55,7 @@ export function createSentryTags(
     service: serviceName,
     environment: config.environment,
     release: config.release,
-    ...(config.gitSha ? { git_sha: config.gitSha } : {}),
+    ...(config.gitSha ? { 'git.commit.sha': config.gitSha } : {}),
     ...(traceContext?.traceId ? { traceId: traceContext.traceId } : {}),
     ...(traceContext?.spanId ? { spanId: traceContext.spanId } : {}),
   };

@@ -1,6 +1,19 @@
 import type { CaptureContext, Log, NodeOptions } from '@sentry/node';
-import type { LogContext, LogEvent, LogSink, NormalizedError } from '@oaknational/logger';
+import type { LogContext, LogSink, NormalizedError } from '@oaknational/logger';
 import type { Result } from '@oaknational/result';
+import type { FixtureSentryStore } from './types-fixture.js';
+import type { SentryContextPayload, SentryUser } from './types-scope.js';
+
+export type {
+  FixtureSentryCapture,
+  FixtureSentryContextCapture,
+  FixtureSentryExceptionCapture,
+  FixtureSentryLogCapture,
+  FixtureSentryStore,
+  FixtureSentryTagCapture,
+  FixtureSentryUserCapture,
+} from './types-fixture.js';
+export type { SentryContextPayload, SentryPrimitiveValue, SentryUser } from './types-scope.js';
 
 export type SentryMode = 'off' | 'fixture' | 'sentry';
 export type SentryBooleanFlagName =
@@ -21,16 +34,36 @@ export interface SentryConfigEnvironment {
   readonly SENTRY_DSN?: string;
   readonly SENTRY_ENVIRONMENT_OVERRIDE?: string;
   readonly SENTRY_RELEASE_OVERRIDE?: string;
+  readonly SENTRY_RELEASE_REGISTRATION_OVERRIDE?: string;
   readonly SENTRY_TRACES_SAMPLE_RATE?: string;
   readonly SENTRY_ENABLE_LOGS?: string;
   readonly SENTRY_SEND_DEFAULT_PII?: string;
   readonly SENTRY_DEBUG?: string;
   readonly VERCEL_ENV?: string;
+  readonly VERCEL_GIT_COMMIT_REF?: string;
   readonly APP_VERSION?: string;
   readonly APP_VERSION_SOURCE?: ApplicationVersionSource;
   readonly GIT_SHA?: string;
   readonly GIT_SHA_SOURCE?: GitShaSource;
   readonly VERCEL_GIT_COMMIT_SHA?: string;
+}
+
+/**
+ * Warning codes emitted by {@link resolveSentryRegistrationPolicy}
+ * when the raw VERCEL_ENV + VERCEL_GIT_COMMIT_REF pairing diverges
+ * from the expected production shape (per ADR-163 §3).
+ */
+export type SentryEnvironmentWarning =
+  | 'production_env_with_non_main_branch'
+  | 'production_env_with_missing_branch';
+
+/**
+ * Result of deciding whether a given build should register a Sentry release
+ * (per ADR-163 §3 truth table + §4 local-override handling).
+ */
+export interface ResolvedSentryRegistrationPolicy {
+  readonly registerRelease: boolean;
+  readonly warning?: SentryEnvironmentWarning;
 }
 
 export interface ResolvedSentryEnvironment {
@@ -99,7 +132,8 @@ export type ObservabilityConfigError =
   | { readonly kind: 'invalid_sentry_dsn'; readonly value: string }
   | { readonly kind: 'invalid_traces_sample_rate'; readonly value: string }
   | { readonly kind: 'send_default_pii_forbidden' }
-  | { readonly kind: 'invalid_git_sha'; readonly value: string };
+  | { readonly kind: 'invalid_git_sha'; readonly value: string }
+  | { readonly kind: 'invalid_release_registration_override' };
 
 export interface InitialiseSentryError {
   readonly kind: 'sentry_sdk_init_failed';
@@ -114,80 +148,6 @@ export type SentryFlushError =
 export type SentryCloseError =
   | { readonly kind: 'sentry_close_timeout'; readonly timeoutMs: number }
   | { readonly kind: 'sentry_close_failed'; readonly message: string };
-
-/**
- * User identity attached to the Sentry scope.
- *
- * @remarks Narrower than Sentry's upstream `User` which has `[key: string]: any`.
- * Constrained to `id` (required, string-only) and optional `username`.
- * No PII fields (email, ip_address) to enforce `sendDefaultPii: false`.
- */
-export interface SentryUser {
-  readonly id: string;
-  readonly username?: string;
-}
-
-/** Primitive value types safe for Sentry scope and metric payloads. */
-export type SentryPrimitiveValue = string | number | boolean | undefined;
-
-/**
- * Structured context payload for {@link SentryNodeRuntime.setContext}.
- *
- * @remarks Open-keyed but value-narrowed. The key space is unbounded
- * (user-defined context names) but values are constrained to safe primitives.
- */
-export type SentryContextPayload = Readonly<Record<string, SentryPrimitiveValue>>;
-
-export interface FixtureSentryLogCapture {
-  readonly kind: 'log';
-  readonly level: LogEvent['level'];
-  readonly message: string;
-  readonly line: string;
-  readonly traceId?: string;
-  readonly spanId?: string;
-  readonly environment: string;
-  readonly release: string;
-}
-
-export interface FixtureSentryExceptionCapture {
-  readonly kind: 'exception';
-  readonly error: NormalizedError;
-  readonly context?: LogContext;
-  readonly traceId?: string;
-  readonly spanId?: string;
-  readonly environment: string;
-  readonly release: string;
-}
-
-export interface FixtureSentryUserCapture {
-  readonly kind: 'set_user';
-  readonly user: SentryUser | null;
-}
-
-export interface FixtureSentryTagCapture {
-  readonly kind: 'set_tag';
-  readonly key: string;
-  readonly value: string;
-}
-
-export interface FixtureSentryContextCapture {
-  readonly kind: 'set_context';
-  readonly name: string;
-  readonly context: SentryContextPayload | null;
-}
-
-export type FixtureSentryCapture =
-  | FixtureSentryLogCapture
-  | FixtureSentryExceptionCapture
-  | FixtureSentryUserCapture
-  | FixtureSentryTagCapture
-  | FixtureSentryContextCapture;
-
-export interface FixtureSentryStore {
-  readonly captures: readonly FixtureSentryCapture[];
-  push(capture: FixtureSentryCapture): void;
-  clear(): void;
-}
 
 export interface SentryLoggerSdk {
   trace(message: string, attributes?: Log['attributes']): void;

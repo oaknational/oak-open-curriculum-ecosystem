@@ -4,7 +4,7 @@ overview: "Measure and document the real overlap between the Oak curriculum onto
 source_research:
   - "../research/elasticsearch-neo4j-oak-ontology-synthesis.research.md"
   - "../oak-ontology-graph-opportunities.strategy.md"
-  - "../current/kg-integration-quick-wins.plan.md"
+  - "kg-integration-quick-wins.plan.md"
   - "../../../research/kg-neo4j-stardog-product-creation/kg-neo4j-stardog-product-creation-clean.md"
 todos:
   - id: phase-0-scope-lock
@@ -40,7 +40,7 @@ shape all later graph-integration work.
 ## Why This Is Active Now
 
 This plan has been promoted from
-[current/kg-integration-quick-wins.plan.md](../current/kg-integration-quick-wins.plan.md)
+[current/kg-integration-quick-wins.plan.md](kg-integration-quick-wins.plan.md)
 as the safest first graph-enablement slice.
 
 Reason for promotion:
@@ -267,7 +267,7 @@ Once the first canonical audit outputs exist, update these documents.
 1. [oak-ontology-graph-opportunities.strategy.md](../oak-ontology-graph-opportunities.strategy.md)
    - replace assumption-led language with measured overlap findings
    - mark which slices are now safe, risky, or blocked
-2. [current/kg-integration-quick-wins.plan.md](../current/kg-integration-quick-wins.plan.md)
+2. [current/kg-integration-quick-wins.plan.md](kg-integration-quick-wins.plan.md)
    - reflect that the alignment audit has been executed or partially completed
    - narrow the remaining quick wins based on real match quality
 3. [README.md](../README.md)
@@ -411,7 +411,7 @@ Success criteria:
 ## Related
 
 - Parent quick-win source:
-  [current/kg-integration-quick-wins.plan.md](../current/kg-integration-quick-wins.plan.md)
+  [current/kg-integration-quick-wins.plan.md](kg-integration-quick-wins.plan.md)
 - Research synthesis:
   [elasticsearch-neo4j-oak-ontology-synthesis.research.md](../research/elasticsearch-neo4j-oak-ontology-synthesis.research.md)
 - Strategy:

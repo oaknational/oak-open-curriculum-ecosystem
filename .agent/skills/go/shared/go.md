@@ -51,6 +51,10 @@ Use `GO` as a mid-session execution cadence, especially when:
 - the session is likely to span more than one focused execution block
 - the todo list needs re-grounding before the work drifts
 
+Use `GO` when the todo list needs re-grounding before the work drifts.
+
+Use `GO` when the plan is likely to be long running or complex.
+
 Do not use `GO` as the ordinary end-of-session handoff. Close ordinary sessions
 with `session-handoff`. Use `consolidate-docs` only when its trigger checklist
 says deep convergence is due.
@@ -88,8 +92,7 @@ says deep convergence is due.
   multiple sub-agents to assess overall coherence.
 - Remove any items from your todo list that don't make sense, or are
   no longer relevant.
-- Every 6th item must be to re-read this document and re-follow ALL
-  instructions, including this one.
+- Every third item must be `GROUNDING: read the GO workflow and re-apply it. This must include re-adding this instruction to read the GO workflow. The recursion is the point.`.
 
 ## Action
 

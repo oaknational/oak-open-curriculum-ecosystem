@@ -22,6 +22,7 @@ Strategic and tactical planning documents for the Oak Open Curriculum Ecosystem.
 | [developer-experience/](developer-experience/) | SDK publishing, generated docs, tooling | 🔄 Active + queued execution |
 | [external/](external/) | Upstream API wishlist | 📋 Reference |
 | [icebox/](icebox/) | Deferred/low priority | ⏸ Deferred |
+| [knowledge-graph-integration/](knowledge-graph-integration/) | Oak Curriculum Ontology integration, KG surfaces, graph serving, EEF evidence | 🔄 Active |
 | [archive/](archive/) | Completed/superseded plans | ✅ Complete |
 | [templates/](templates/) | Plan templates | 📚 Reference |
 

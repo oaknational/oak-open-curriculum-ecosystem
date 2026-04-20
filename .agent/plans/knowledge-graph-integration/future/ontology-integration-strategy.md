@@ -5,7 +5,7 @@ status: future
 related_plans:
   - "../active/nc-knowledge-taxonomy-surface.plan.md"
   - "../active/open-education-knowledge-surfaces.plan.md"
-  - "../../current/kg-alignment-audit.execution.plan.md"
+  - "../current/kg-alignment-audit.execution.plan.md"
 specialist_reviewer: "architecture-reviewer-betty, architecture-reviewer-barney, mcp-reviewer"
 ---
 

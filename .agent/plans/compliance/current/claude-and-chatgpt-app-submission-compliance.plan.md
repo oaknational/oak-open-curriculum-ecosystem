@@ -941,8 +941,8 @@ before code changes reference it.
 
 - [08-mcp-graph-tools.md (archived)](../../archive/semantic-search-archive-dec25/part-1-search-excellence/08-mcp-graph-tools.md) — original size analysis and filtering proposal (Dec 2025)
 - [post-merge-tidy-up.plan.md](../../sdk-and-mcp-enhancements/future/post-merge-tidy-up.plan.md) — M1-S007 snag resolved by this plan
-- [graph-resource-factory.plan.md](../../sdk-and-mcp-enhancements/active/graph-resource-factory.plan.md) — factory pattern this plan extends
-- [open-education-knowledge-surfaces.plan.md](../../sdk-and-mcp-enhancements/active/open-education-knowledge-surfaces.plan.md) — umbrella for graph surfaces; filtering applies to all factory-produced surfaces
+- [graph-resource-factory.plan.md](../../knowledge-graph-integration/active/graph-resource-factory.plan.md) — factory pattern this plan extends
+- [open-education-knowledge-surfaces.plan.md](../../knowledge-graph-integration/active/open-education-knowledge-surfaces.plan.md) — umbrella for graph surfaces; filtering applies to all factory-produced surfaces
 - [upstream-api-requests.md](upstream-api-requests.md) — companion document for the Oak API team requesting upstream changes needed for directory compliance
 
 ## Policy References

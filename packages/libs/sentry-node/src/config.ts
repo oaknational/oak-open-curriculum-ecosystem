@@ -18,7 +18,11 @@ import type {
   SentryOffConfig,
 } from './types.js';
 
-export { resolveSentryEnvironment, resolveSentryRelease } from './config-resolution.js';
+export {
+  resolveSentryEnvironment,
+  resolveSentryRegistrationPolicy,
+  resolveSentryRelease,
+} from './config-resolution.js';
 
 interface ParsedSentryBooleanFlags {
   readonly enableLogs: boolean | undefined;

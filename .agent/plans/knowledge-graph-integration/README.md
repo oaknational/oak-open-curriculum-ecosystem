@@ -8,7 +8,36 @@ pedagogy integrations.
 The EEF and pedagogy work is an important sibling lane here, but it is
 not the identity of the collection.
 
+**Active Plans**: [active/](active/)
+**Current Queue**: [current/](current/)
 **Later Plans**: [future/](future/)
+**Archive**: [archive/](archive/)
+
+## Active Execution
+
+| File | Description |
+|------|-------------|
+| [active/open-education-knowledge-surfaces.plan.md](active/open-education-knowledge-surfaces.plan.md) | Umbrella plan: three open education data sources → MCP surfaces |
+| [active/graph-resource-factory.plan.md](active/graph-resource-factory.plan.md) | WS-1: Shared graph resource factory (DONE) |
+| [active/misconception-graph-mcp-surface.plan.md](active/misconception-graph-mcp-surface.plan.md) | WS-2: Misconception graph MCP surface (DONE) |
+| [active/eef-evidence-mcp-surface.plan.md](active/eef-evidence-mcp-surface.plan.md) | WS-3: EEF evidence recommendation tool + resources |
+| [active/nc-knowledge-taxonomy-surface.plan.md](active/nc-knowledge-taxonomy-surface.plan.md) | WS-4: Oak KG knowledge taxonomy from ontology |
+| [active/agent-guidance-consolidation.plan.md](active/agent-guidance-consolidation.plan.md) | WS-5: Agent guidance consolidation |
+| [active/education-skills-mcp-surface.plan.md](active/education-skills-mcp-surface.plan.md) | WS-6: Education skills from Agent Skills ecosystem |
+
+## Current Queue
+
+| File | Description |
+|------|-------------|
+| [current/kg-alignment-audit.execution.plan.md](current/kg-alignment-audit.execution.plan.md) | First canonical overlap audit between ontology graph and search-facing records |
+| [current/kg-integration-quick-wins.plan.md](current/kg-integration-quick-wins.plan.md) | Safe projection-first graph integration opportunities |
+
+## Strategy and Research
+
+| File | Type | Description |
+|------|------|-------------|
+| [oak-ontology-graph-opportunities.strategy.md](oak-ontology-graph-opportunities.strategy.md) | Strategy | Search-adjacent graph opportunity assessment |
+| [research/elasticsearch-neo4j-oak-ontology-synthesis.research.md](research/elasticsearch-neo4j-oak-ontology-synthesis.research.md) | Research | Elasticsearch + Neo4j synthesis for Oak ontology |
 
 ## Documents
 

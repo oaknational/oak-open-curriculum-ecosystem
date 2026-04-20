@@ -70,6 +70,8 @@ export function describeConfigError(error: ObservabilityConfigError): string {
       return 'Invalid SENTRY_DSN value';
     case 'send_default_pii_forbidden':
       return 'SENTRY_SEND_DEFAULT_PII=true is not allowed';
+    case 'invalid_release_registration_override':
+      return 'SENTRY_RELEASE_REGISTRATION_OVERRIDE=1 and SENTRY_RELEASE_OVERRIDE must be set together (ADR-163 §4)';
     default: {
       const exhaustive: never = error;
       throw new Error(`Unhandled config error kind: ${String(exhaustive)}`);

@@ -182,7 +182,7 @@ retrieval methods, evaluation, ingest, or search tuning:
 - [`../../research/elasticsearch/system/semantic-search-plans-review.md`](../../../research/elasticsearch/system/semantic-search-plans-review.md)
 - [`../../research/elasticsearch/system/semantic-search-sdk-and-cli-extraction.md`](../../../research/elasticsearch/system/semantic-search-sdk-and-cli-extraction.md)
 - [`../semantic-search/research-index.md`](../../semantic-search/research-index.md)
-- [`../semantic-search/archive/elasticsearch-and-graphs.research.md`](../../semantic-search/archive/elasticsearch-and-graphs.research.md)
+- [`../knowledge-graph-integration/archive/elasticsearch-and-graphs.research.md`](../../knowledge-graph-integration/archive/elasticsearch-and-graphs.research.md)
 - [`docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md`](../../../docs/architecture/architectural-decisions/081-search-approach-evaluation-framework.md)
 - [`docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md`](../../../docs/architecture/architectural-decisions/085-ground-truth-validation-discipline.md)
 - [`docs/architecture/architectural-decisions/089-index-everything-principle.md`](../../../docs/architecture/architectural-decisions/089-index-everything-principle.md)

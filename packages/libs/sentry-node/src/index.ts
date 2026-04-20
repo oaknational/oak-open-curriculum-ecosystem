@@ -1,4 +1,9 @@
-export { createSentryConfig, resolveSentryEnvironment, resolveSentryRelease } from './config.js';
+export {
+  createSentryConfig,
+  resolveSentryEnvironment,
+  resolveSentryRegistrationPolicy,
+  resolveSentryRelease,
+} from './config.js';
 export { createFixtureSentryStore } from './fixture.js';
 export { describeConfigError, mapCloseError, mapFlushError } from './runtime-error.js';
 export {
@@ -21,7 +26,9 @@ export type {
   ObservabilityConfigError,
   ParsedSentryConfig,
   ResolvedSentryEnvironment,
+  ResolvedSentryRegistrationPolicy,
   ResolvedSentryRelease,
+  SentryEnvironmentWarning,
   SentryBreadcrumb,
   SentryCloseError,
   SentryConfigEnvironment,
