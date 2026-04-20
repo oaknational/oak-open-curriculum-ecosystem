@@ -118,10 +118,16 @@ install`" case). A bare PATH check for the vendor binary itself is
    `require_command "<cli>" "<install-url>"` PATH check is the
    correct shape. The `require_command` helper is currently
    replicated inline at the top of each script; see
-   [`apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`](../../../apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh)
-   for the pnpm-local variant and
    [`apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh`](../../../apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh)
-   for the user-global variant.
+   for the user-global variant. The historical pnpm-local variant
+   (`apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`)
+   was deleted §L-8 (2026-04-21) when the HTTP MCP server moved to
+   `@sentry/esbuild-plugin` for Vercel-build source-map upload + release
+   linkage; the equivalent fail-fast posture (preflight env, fail on
+   missing token / SHA / policy violation) is now enforced inside
+   `createSentryBuildPlugin` returning a tagged `Result` error before
+   the plugin is injected into the esbuild build options. See ADR-163
+   §6 amendment 2026-04-21.
 
 7. **Post-condition verification where symbolic correctness matters.**
    Where the CLI's "success" exit code is necessary-but-not-sufficient
@@ -249,11 +255,15 @@ pattern end-to-end):
     the search CLI project.
   - `packages/libs/sentry-node/.sentryclirc` — org + url only,
     `project` intentionally not pinned (point 5 above).
-- Source map upload script
-  ([`apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`](../../../apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh))
-  wraps the two-step `sourcemaps inject` → `sourcemaps upload`
-  flow, runs `require_command` preflights, and grep-verifies the
-  `//# debugId=` post-condition.
+- Source map upload during Vercel builds is performed by
+  [`@sentry/esbuild-plugin`](https://docs.sentry.io/platforms/javascript/sourcemaps/uploading/esbuild/)
+  inside the MCP app's esbuild composition root (see ADR-163 §6 + §7
+  amendments 2026-04-21). The earlier dedicated
+  `apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`
+  wrapper was deleted as part of §L-8; the two-step `sourcemaps inject`
+  → `sourcemaps upload` flow, the `require_command` preflights, and
+  the `//# debugId=` post-condition are now performed by the plugin
+  internally during the build.
 - Full CLI usage matrix, `.sentryclirc` composition rules, token /
   region gotchas, and troubleshooting live in
   [`docs/operations/sentry-cli-usage.md`](../../operations/sentry-cli-usage.md).

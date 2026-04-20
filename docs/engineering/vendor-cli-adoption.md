@@ -72,10 +72,14 @@ points. A worked Sentry example sits in
    pnpm (catches the "somebody skipped `pnpm install`" case). For
    **user-global interactive CLIs** (point 8), a direct `require_command
 <cli> <install-url>` PATH check is the correct shape. See
-   `apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`
-   (pnpm-local variant) and
    `apps/oak-curriculum-mcp-streamable-http/scripts/dev-widget-in-host.sh`
-   (user-global variant).
+   (user-global variant). The historical pnpm-local variant
+   (`scripts/upload-sourcemaps.sh`) was deleted §L-8 (2026-04-21) when
+   the HTTP MCP server moved to `@sentry/esbuild-plugin` for
+   build-time release/source-map automation; the same fail-fast
+   posture (preflight env, fail loudly) is now enforced by
+   `createSentryBuildPlugin` returning a tagged error result before
+   the plugin is injected.
 
 7. **Post-condition verification where symbolic correctness matters.** If
    the CLI's "success" exit code is necessary-but-not-sufficient — the

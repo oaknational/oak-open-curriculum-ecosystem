@@ -101,13 +101,20 @@ Workspace configs become 2-5 line imports from the base.
 
 - `turbo.json`: `$TURBO_ROOT$/tsup.config.base.ts` added to all
   build task input arrays to prevent stale cache hits.
-- Source map upload: `sentry-cli sourcemaps inject` then
-  `sentry-cli sourcemaps upload` post-build, separating upload
-  (deployment concern) from build (compilation). See
+- Source map upload: historical model was a post-build two-step
+  `sentry-cli sourcemaps inject` → `sentry-cli sourcemaps upload`
+  pipeline driven by a workspace shell wrapper, separating upload
+  (deployment concern) from build (compilation). The HTTP MCP server
+  superseded that model in §L-8 (2026-04-21) by replacing tsup with
+  raw esbuild and delegating Debug-ID injection + artefact-bundle
+  upload to `@sentry/esbuild-plugin` inside the build itself; see
+  ADR-163 §6 + §7 amendments 2026-04-21 and
+  [`apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`](../../../apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts).
+  Other workspaces still bundled by tsup (notably `oak-search-cli`)
+  retain the historical post-build CLI model; see
   [docs/operations/sentry-cli-usage.md](../../operations/sentry-cli-usage.md)
   for the canonical invocation, Debug ID semantics, and artefact
-  bundle model; the runnable wrapper lives at
-  [`apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`](../../../apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh).
+  bundle model.
 
 ### Review Attribution
 

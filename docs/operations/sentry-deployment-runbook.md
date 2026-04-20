@@ -6,12 +6,15 @@ How to enable live Sentry error capture and tracing for Oak runtimes.
 (PR #73, merged 2026-03-31). Rate limiting is in place (ADR-158).
 Search CLI adoption is complete (2026-04-12). Local `.env.local`
 credentials are provisioned for the HTTP MCP server (2026-04-12).
-L-7 release + commits + deploy linkage landed 2026-04-20 — the Vercel
-Build Command orchestrator (`build:vercel` →
-`build-scripts/sentry-release-and-deploy-cli.ts`) is live; no Dashboard
-UI action is required (`vercel.json.buildCommand` overrides the
-Dashboard per Vercel's official precedence rules). Set Vercel
-environment variables at
+L-7 release + commits + deploy linkage landed 2026-04-20 as a bespoke
+TypeScript orchestrator wrapping `sentry-cli`. **§L-8 (2026-04-21)
+replaces that orchestrator with the vendor's first-party
+`@sentry/esbuild-plugin`** running inside the MCP app's esbuild
+composition root; the bespoke orchestrator and its `upload-sourcemaps.sh`
+wrapper are deleted. Vercel runs the workspace's default `build` script
+(no `buildCommand` override). See ADR-163 §6 amendment 2026-04-21
+(HOW → WHAT outcomes) and §7 amendment 2026-04-21 (composition root
+replaces orchestrator). Set Vercel environment variables at
 <https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp/settings/environment-variables>.
 This runbook covers the operational steps to go from `off` to `sentry`.
 
@@ -41,12 +44,12 @@ Set the following **per app** in the deployment platform:
 
 In the [Vercel dashboard](https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp/settings/environment-variables) under Settings > Environment Variables:
 
-| Variable                    | Value                | Notes                                                                                       |
-| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------- |
-| `SENTRY_MODE`               | `sentry`             | Enables live Sentry                                                                         |
-| `SENTRY_DSN`                | `https://public@...` | HTTP server project DSN from Step 1                                                         |
-| `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                | Start at 1.0, reduce if volume is high                                                      |
-| `SENTRY_AUTH_TOKEN`         | `sntrys-...`         | Organisation auth token. Required at **build time** by the §6 orchestrator. See ADR-163 §6. |
+| Variable                    | Value                | Notes                                                                                                                 |
+| --------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `SENTRY_MODE`               | `sentry`             | Enables live Sentry                                                                                                   |
+| `SENTRY_DSN`                | `https://public@...` | HTTP server project DSN from Step 1                                                                                   |
+| `SENTRY_TRACES_SAMPLE_RATE` | `1.0`                | Start at 1.0, reduce if volume is high                                                                                |
+| `SENTRY_AUTH_TOKEN`         | `sntrys-...`         | Organisation auth token. Required at **build time** by `@sentry/esbuild-plugin`. See ADR-163 §6 (amended 2026-04-21). |
 
 Auto-resolved (no need to set on Vercel):
 
@@ -54,7 +57,7 @@ Auto-resolved (no need to set on Vercel):
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SENTRY_RELEASE`     | Root repo `package.json` semver (resolved via `APP_VERSION` in `resolveSentryRelease`). **Not** the git SHA — the SHA is metadata, attached separately. See [ADR-163](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) §1–§2.                                                                                           |
 | `SENTRY_ENVIRONMENT` | `VERCEL_ENV` **constrained by** `VERCEL_GIT_COMMIT_REF` per the [ADR-163 §3 truth table](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md#3-production-attribution-requires-both-vercel_envproduction-and-vercel_git_commit_refmain). A `VERCEL_ENV=production` build from a non-main branch is downgraded to `preview`. |
-| git SHA (Sentry tag) | `VERCEL_GIT_COMMIT_SHA` — attached to every event as the `git.commit.sha` Sentry tag, and to the release itself via `sentry-cli releases set-commits --commit $VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG@<sha>` (the orchestrator derives the slug from Vercel env vars, falling back to the monorepo literal `oaknational/oak-open-curriculum-ecosystem`).                      |
+| git SHA (Sentry tag) | `VERCEL_GIT_COMMIT_SHA` — attached to every event as the `git.commit.sha` Sentry tag, and to the release itself via `@sentry/esbuild-plugin`'s `release.setCommits.commit` field (with `repo` pinned to the monorepo literal `oaknational/oak-open-curriculum-ecosystem`).                                                                                                         |
 
 Optional:
 
@@ -84,35 +87,46 @@ deployment — credentials are set via local `.env.local` or CI env.
 ## Step 3: Verify Release and Source Maps
 
 Sentry needs source maps with embedded Debug IDs to show readable
-stack traces. The canonical upstream flow is a two-step CLI pipeline
-(`sourcemaps inject` then `sourcemaps upload`), which the wrapper
-script performs automatically. See
-[Sentry CLI Usage](./sentry-cli-usage.md) for the full CLI split,
-`.sentryclirc` composition rules, artefact-bundle-vs-release model,
-and troubleshooting.
+stack traces. As of §L-8 (2026-04-21) the canonical mechanism is the
+vendor's [`@sentry/esbuild-plugin`](https://docs.sentry.io/platforms/javascript/sourcemaps/uploading/esbuild/),
+configured by the MCP app's esbuild composition root and run inside
+the Vercel Build Command. The plugin performs Debug-ID injection and
+artefact-bundle upload as library operations during the build itself
+(no separate CLI step). See [Sentry CLI Usage](./sentry-cli-usage.md)
+for the historical CLI split, `.sentryclirc` composition rules, and
+the artefact-bundle-vs-release model that still describes the resulting
+Sentry-side state.
 
 1. Ensure `SENTRY_RELEASE` resolves to the deployed root `package.json`
    semver. The SHA is attached separately as a Sentry tag and via
    `releases set-commits`. See
    [ADR-163 §1–§2](../architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md).
-2. Run the workspace-local wrapper to inject Debug IDs and upload the
-   artefact bundle:
-   [`upload-sourcemaps.sh`](../../apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh).
-   The script fails fast if Debug ID injection did not produce at
-   least one `//# debugId=` comment in `dist/`.
+2. The MCP app's `build` script automatically invokes
+   [`esbuild.config.ts`](../../apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts),
+   which conditionally injects `@sentry/esbuild-plugin` based on the
+   ADR-163 §3 / §4 policy (resolved by
+   [`build-scripts/sentry-build-plugin.ts`](../../apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts)).
+   When the policy says "register", the plugin embeds Debug IDs into
+   each `.js` and matching `.map` under `dist/` and uploads the
+   artefact bundle keyed by those Debug IDs.
 3. Confirm in Sentry UI: **Project Settings → Source Maps → Artifact
    Bundles** — this is the authoritative Debug-ID-keyed surface and is
    the primary evidence that symbolication will resolve at event time.
    Release visibility (Releases → source maps on the release page) is
-   a secondary, convenience check — useful when `--release` is passed
-   but NOT a substitute for the Artifact Bundles listing, because the
-   match key at event time is the Debug ID, not the release string.
+   a secondary, convenience check — useful when `release.name` is
+   configured (which it is, per `createSentryBuildPlugin`) but NOT a
+   substitute for the Artifact Bundles listing, because the match key
+   at event time is the Debug ID, not the release string.
 
-Source map upload is automated for local evidence generation via
-`RELEASE=<semver> pnpm sourcemaps:upload` inside
-`apps/oak-curriculum-mcp-streamable-http`. Vercel-triggered upload is
-wired by the L-7 orchestrator (landed 2026-04-20), which invokes the
-same script from within the build-time sequence described below.
+Local evidence generation: set
+`SENTRY_RELEASE_REGISTRATION_OVERRIDE=true` plus
+`SENTRY_RELEASE_OVERRIDE=<version>` (and a valid `SENTRY_AUTH_TOKEN`)
+and run `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http
+build`. The composition root will exercise the same sequence the
+Vercel Build Command uses. Setting
+`SENTRY_RELEASE_REGISTRATION_OVERRIDE=false` (or leaving the override
+pair unset in dev) skips the plugin entirely and just produces `dist/`
+with hidden source-maps.
 
 ## Step 3b: Release → commit → deploy linkage (Vercel build-time)
 
@@ -137,48 +151,53 @@ Net effect: Vercel's production Build Command only ever runs on a
 `semantic-release` version-bump commit. Preview builds run on every
 commit pushed to a branch with an open PR.
 
-**Inside the Vercel Build Command** (L-7 scope): the workspace
-`build:vercel` npm script runs `pnpm build` followed by the
-TypeScript orchestrator `build-scripts/sentry-release-and-deploy-cli.ts`
-(invoked via `tsx`). That orchestrator runs the preflight + §6.0 probe
+**Inside the Vercel Build Command** (§L-8, 2026-04-21 onwards): Vercel
+runs the workspace's default `build` script (no `vercel.json`
+`buildCommand` override). The script invokes
+[`esbuild.config.ts`](../../apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts)
+via `tsx`. The composition root reads `process.env`, asks
+`createSentryBuildPlugin` to map ADR-163 §3 / §4 policy onto the
+plugin's input shape, and conditionally injects
+`@sentry/esbuild-plugin` into the esbuild build options. The plugin
+then performs every step listed in ADR-163 §6.0–§6.6 (release upsert,
+explicit `--commit org/repo@sha` form, Debug-ID injection, artefact
+upload, finalize, deploy event) as library calls during the build.
 
-- six-step sequence per ADR-163 §6 + §7 (see the 2026-04-20 amendment
-  for the §6.0 probe mechanism). `vercel.json.buildCommand` points at
-  `build:vercel`; no Dashboard UI action is required — per Vercel's
-  official docs, `vercel.json.buildCommand` overrides the Project
-  Settings dashboard value.
+The §6.0 idempotency posture is preserved by the plugin's release
+upsert behaviour: re-running the same release identity is a no-op and
+the original deploy's commit attribution survives Vercel manual
+redeploys (ADR-163 §5).
 
-```bash
-# Preflight (orchestrator fails non-zero on any):
-#
-#   Policy      : per ADR-163 §3/§4 via resolveSentryRegistrationPolicy
-#                 (short-circuits to exit 0 / kind=skipped in development
-#                 without the override pair — no credentials required).
-#   VERSION     : node -p "require('./package.json').version"
-#   DERIVED_ENV : per ADR-163 §3 truth table using VERCEL_ENV +
-#                 VERCEL_GIT_COMMIT_REF.
-#   requires VERCEL_GIT_COMMIT_SHA ∈ /[0-9a-f]{7,40}/i
-#   requires SENTRY_AUTH_TOKEN non-empty
-#   requires dist/ contains at least one .js.map artefact
+Plugin configuration shape (read alongside ADR-163 §6 amendment
+2026-04-21):
 
-sentry-cli releases info "$VERSION"                         # §6.0 idempotency probe
-
-# If §6.0 exits 0 (release exists) §6.1 AND §6.2 are SKIPPED to preserve
-# the original deploy's commit attribution. Re-running set-commits would
-# overwrite the SHA binding and orphan prior regression-traceability
-# (ADR-163 amendment 2026-04-20; matches §5 "one release → many deploys").
-
-sentry-cli releases new "$VERSION"                          # §6.1 abort on fail
-
-sentry-cli releases set-commits "$VERSION" \                # §6.2 warn-continue
-  --commit "$VERCEL_GIT_REPO_OWNER/$VERCEL_GIT_REPO_SLUG@$VERCEL_GIT_COMMIT_SHA"
-
-RELEASE="$VERSION" ./scripts/upload-sourcemaps.sh           # §6.3–§6.4 abort on fail
-
-sentry-cli releases finalize "$VERSION"                     # §6.5 warn-continue
-
-sentry-cli deploys new --release "$VERSION" -e "$DERIVED_ENV"  # §6.6 warn-continue
+```typescript
+sentryEsbuildPlugin({
+  org: 'oak-national-academy',
+  project: 'oak-open-curriculum-mcp',
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  release: {
+    name: VERSION, // semver from root package.json — ADR-163 §1
+    finalize: true, // §6.5
+    setCommits: {
+      auto: false, // §6.2 — explicit form, --auto rejected by ADR-163 Alt 8
+      commit: VERCEL_GIT_COMMIT_SHA,
+      repo: 'oaknational/oak-open-curriculum-ecosystem',
+    },
+    deploy: { env: DERIVED_ENV }, // §6.6 — env from resolveSentryEnvironment
+  },
+  sourcemaps: {
+    filesToDeleteAfterUpload: ['dist/**/*.js.map'], // strip .map post-upload
+  },
+  telemetry: false,
+});
 ```
+
+When the policy short-circuits (`registerRelease=false` in dev without
+the override pair), the composition root logs `[esbuild.config] Sentry
+plugin skipped: registration_disabled_by_policy` and runs `esbuild.build`
+with no plugin — the build still produces `dist/` with hidden
+source-maps.
 
 **Environment-attribution rule** (ADR-163 §3):
 
@@ -194,18 +213,19 @@ Local-dev builds skip registration unless BOTH
 `SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` AND `SENTRY_RELEASE_OVERRIDE=<version>`
 are set (ADR-163 §4).
 
-**Grepping orchestrator output in Vercel build logs**:
+**Grepping composition-root output in Vercel build logs**:
 
-The orchestrator emits five log-surface patterns (one on stdout, four on
-stderr). These form the operational contract for troubleshooting:
+The esbuild composition root emits two stdout patterns at boundary
+crossings; everything else comes from `@sentry/esbuild-plugin` itself
+on stdout/stderr (vendor-controlled format). These form the operational
+contract for troubleshooting:
 
-| Pattern                                           | Channel | Meaning                                                                                          |
-| ------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
-| `[sentry-release] skipped:`                       | stdout  | Registration policy returned `registerRelease=false` (dev without override pair). No-op.         |
-| `[sentry-release] warning: <code>`                | stderr  | Preflight emitted a §3 warning (e.g. `production_env_with_non_main_branch`). Continues.          |
-| `[sentry-release] release <ver> already exists;`  | stderr  | §6.0 probe found the release. §6.1 + §6.2 skipped to protect original commit attribution.        |
-| `[sentry-release] WARN step <id> (<reason>)`      | stderr  | §6.2 / §6.5 / §6.6 failed. Warn-and-continue posture per §6. Deploy is still live.               |
-| `[sentry-release] FAIL kind=<k> step=<id>: <why>` | stderr  | Hard abort: §6.1 (new release failed) or §6.3+6.4 (sourcemap upload failed). Deploy was blocked. |
+| Pattern                                                                            | Channel       | Meaning                                                                                                                                                        |
+| ---------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `[esbuild.config] Sentry plugin skipped: registration_disabled_by_policy`          | stdout        | `createSentryBuildPlugin` returned `kind=disabled` per ADR-163 §3 / §4 policy (dev without override pair). No-op.                                              |
+| `[esbuild.config] Sentry plugin enabled: release=<ver> env=<env>`                  | stdout        | Plugin injected with the resolved release name and environment. Vendor logs follow on stdout/stderr.                                                           |
+| `[esbuild.config] Sentry build-plugin intent error: { kind: '<k>', ... }`          | stderr        | Boundary read failed (missing `SENTRY_AUTH_TOKEN`, `SENTRY_RELEASE`, etc., or commit SHA missing in registered env). Build aborts with non-zero exit.          |
+| Vendor `@sentry/esbuild-plugin` log lines about release upsert / source-map upload | stdout/stderr | Vendor-controlled output covering the §6.0–§6.6 outcomes (release create-or-update, set-commits, debug-id injection, artefact upload, finalize, deploy event). |
 
 **Verification**:
 

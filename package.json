@@ -136,6 +136,7 @@
     },
     "onlyBuiltDependencies": [
       "@clerk/shared",
+      "@sentry/cli",
       "core-js",
       "esbuild",
       "sharp",

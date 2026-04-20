@@ -1,3 +1,56 @@
+## 2026-04-21 (open, third-half) — Sixth `inherited-framing-without-first-principles-check` instance: trusted plan-body literal without checking vendor API
+
+### Surprise
+
+**What was expected**: implementing the GREEN body for `createMcpEsbuildOptions` would mechanically translate the plan-body's listed esbuild keys into the factory return value. The plan body (and the test I authored from it) names `sourcemap: 'hidden'`.
+
+**What actually happened**: type-check failed — `'hidden'` is not a valid esbuild `sourcemap` value. The esbuild API is `boolean | 'linked' | 'inline' | 'external' | 'both'`. Sentry's docs use the *word* "hidden" to describe the security posture (`.map` written, no `sourceMappingURL` comment in `.js`), and that posture maps to esbuild's `'external'` mode. The plan's text borrowed the Sentry-doc word as if it were the esbuild value.
+
+**Why the expectation failed**: same pattern, sixth instance. I trusted the plan body's literal token for a vendor API value without checking the vendor's actual API surface. The test I authored from the plan body therefore inherited the same bad token, so it would have masked the type error if I'd written the factory body to satisfy the test's `expect(...).toBe('hidden')` first. Type-check caught it before the build ran.
+
+### Pattern instance count
+
+- **Sixth** instance of `inherited-framing-without-first-principles-check` in this two-session window.
+- Now distinct enough as a vendor-API-literal subclass to warrant its own check on the consolidation queue: when authoring tests AND implementations from a plan body that quotes vendor API values, verify those values against the vendor's current type definition before encoding them.
+
+### What behaviour should change next time
+
+Add to the one-line first-principles check a third clause: *"Does this literal token in the plan body match the vendor's current API surface, or is it a doc-level word the plan borrowed?"* The check now has three clauses (test-shape, file-naming/landing-path, vendor-API-literals).
+
+### Action this session
+
+- Replaced `sourcemap: 'hidden'` with `sourcemap: 'external'` in factory + test + TSDoc (both files), with a comment naming the Sentry-docs vs esbuild-API gap so the next reader sees the seam.
+- Verified the runtime contract: `tail -3 dist/index.js` shows no `sourceMappingURL` comment; `.map` files are on disk for plugin upload. The Sentry "hidden source map" posture is preserved exactly; only the API value is corrected.
+
+---
+
+## 2026-04-21 (open, second-half) — Fifth `inherited-framing-without-first-principles-check` instance: missed the documented RED file-naming directive
+
+### Surprise
+
+**What was expected**: with RED tests written, type-check + lint clean, and 24/24 failing for the unambiguous expected reason, `git commit` would land the RED-only commit per the spec's WS1 acceptance criteria. The standard TDD red-then-green cadence assumed.
+
+**What actually happened**: pre-commit hook (correctly) refused the commit because the new RED tests fail. Searching the directives revealed `testing-strategy.md` lines 364–369 explicitly states: *"Write RED-phase specs that specify not-yet-implemented behaviour in `*.e2e.test.ts` files, not `*.unit.test.ts`. The pre-commit hook runs only unit tests; a RED unit test blocks every commit until it goes green."* I named the files `*.unit.test.ts` because they ARE unit-shaped (pure function factories with no IO) — but that file extension carries a contract with the pre-commit hook that I didn't check before authoring.
+
+**Why the expectation failed**: same pattern, fifth instance. I inherited the framing "RED-then-GREEN as separate commits" from generic TDD literature without checking the repo's documented RED-landing protocol. The spec named the RED phase as a separate WS1 deliverable, and I assumed that meant a standalone commit. The directive says: in this repo, RED-only landing requires `*.e2e.test.ts` (CI-gated, not pre-commit-gated). RED unit tests must land **with their GREEN bodies** in a single commit.
+
+### Pattern instance count
+
+- **Fifth** instance of `inherited-framing-without-first-principles-check` across the two recent sessions.
+- Friction-ratchet threshold for assumptions-reviewer is now reached. The pattern is no longer a "graduation candidate" — it is the dominant failure mode and earns its place at the top of the consolidation queue.
+
+### What behaviour should change next time
+
+Add to the one-line first-principles check, before authoring tests prescribed by a plan body: *"Does the file extension I'm about to use carry a tooling contract (pre-commit, CI gate, lint config) that constrains how/when this file can land?"* The check now has two clauses: (1) is the test-shape right for the Oak behaviour being proven, AND (2) does the test-file naming match the landing path the plan implies.
+
+### Action this session
+
+- Surface the conflict to the owner; present landing-path options A/B/C/D.
+- Owner chose (A) go-green-atomic: land WS1 RED + WS2 GREEN + WS3.1 ADR-163 §6 amendment in one commit.
+- Capture the 5th instance in napkin BEFORE doing the GREEN work (so the metacognition isn't lost in the implementation rush).
+
+---
+
 ## 2026-04-21 (open) — Fourth `inherited-framing-without-first-principles-check` instance caught BEFORE code was written
 
 ### Surprise

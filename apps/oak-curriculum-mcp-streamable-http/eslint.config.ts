@@ -130,11 +130,14 @@ const config = defineConfig(
         'smoke-tests/**',
         'e2e-tests/**',
         'src/index.ts',
-        // Standalone build-time CLI script invoked by Vercel Build
-        // Command; process.env is the legitimate composition-root read
-        // (Vercel injects build env). No runtime coupling; documented
-        // in the file's module TSDoc. Added for ADR-163 §6 L-7.
-        'build-scripts/sentry-release-and-deploy-cli.ts',
+        // Esbuild composition root invoked by Vercel Build Command via
+        // `tsx`. process.env is the legitimate boundary-crossing read
+        // (Vercel injects build env); the typed factories it calls
+        // (`createSentryBuildPlugin`, `createMcpEsbuildOptions`) take
+        // env as a parameter so all policy logic stays test-driven.
+        // See ADR-163 §6 (amended by §L-8 WS3.1) and the file's module
+        // TSDoc for the rationale.
+        'esbuild.config.ts',
       ],
       rules: {
         'no-restricted-syntax': [
@@ -249,6 +252,21 @@ const config = defineConfig(
     {
       files: ['build-scripts/**/*.ts'],
       rules: {
+        'no-console': 'off',
+      },
+    },
+    {
+      // Esbuild composition root invoked by Vercel Build Command via `tsx`.
+      // process.env is the legitimate boundary-crossing read (Vercel
+      // injects build env), the cast onto `SentryBuildEnvironment` is the
+      // documented seam where the typed factories `createSentryBuildPlugin`
+      // and `createMcpEsbuildOptions` then take env as a typed parameter,
+      // and console.* output is how Vercel's build log sees what the
+      // composition root decided. See ADR-163 §6 (amended by §L-8 WS3.1)
+      // and the file's module TSDoc.
+      files: ['esbuild.config.ts'],
+      rules: {
+        '@typescript-eslint/consistent-type-assertions': 'off',
         'no-console': 'off',
       },
     },

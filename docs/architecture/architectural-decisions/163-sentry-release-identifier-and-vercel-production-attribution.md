@@ -171,7 +171,71 @@ of that release reaching environments. Creating a fresh release per
 environment would lose the "same code, different environment"
 relationship that regression attribution depends on.
 
-### 6. Canonical command sequence inside the Vercel build
+### 6. Canonical release-and-deploy outcomes inside the Vercel build
+
+> **Amendment 2026-04-21 (§L-8 WS3.1 — HOW → WHAT reframing)**
+>
+> The §6 mechanism specification originally listed six specific
+> `sentry-cli` invocations (§6.0–§6.6) as the build-time sequence. The
+> L-7 implementation realised that sequence as a four-file TypeScript
+> orchestrator (`build-scripts/sentry-release-and-deploy-cli.ts` and
+> friends) wrapping those CLI calls. Owner direction during L-7 close
+> (recorded in `napkin.md` 2026-04-20 entry, _ADRs that prescribe HOW
+> not WHAT foreclose alternatives_) named the framing as the cost of
+> that lane: the ADR specified six bash invocations as if they were the
+> requirement, when the actual requirement is a small set of named
+> outcomes the build must reach in Sentry.
+>
+> §L-8 replaces the bespoke orchestrator with the vendor's first-party
+> `@sentry/esbuild-plugin` running inside the MCP app's esbuild
+> composition root (`apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`
+> — see §7 amendment). The plugin performs every step listed in §6.0
+> through §6.6 as library operations during the build; the CLI is no
+> longer invoked from the Vercel Build Command.
+>
+> **The §6.0–§6.6 subsections are RETAINED as the outcome
+> specification.** Each subsection's intent (what state Sentry must
+> reach, what posture failure carries, what idempotency shape applies)
+> remains authoritative. The bash command shown in each subsection is
+> read as the canonical _description_ of the outcome, not the canonical
+> _realisation_ of it. The plugin's configuration in
+> `build-scripts/sentry-build-plugin.ts` (`createSentryBuildPlugin`)
+> and the composition root that wires the plugin instance
+> (`esbuild.config.ts`) carry the realisation; the unit test
+> `build-scripts/sentry-build-plugin.unit.test.ts` proves the policy →
+> plugin-input mapping; the Vercel preview smoke probe (§L-8 WS4/WS5)
+> proves the plugin's vendor-side effects.
+>
+> Outcomes-to-plugin-options mapping (read alongside §6.0–§6.6 below):
+>
+> | §   | Outcome                                                           | `@sentry/esbuild-plugin` realisation                                                                                              |
+> | --- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+> | 6.0 | Idempotent release identity — re-running same version is a no-op  | Plugin's `release.name` upsert semantics; commit attribution preserved on the original deploy's binding.                          |
+> | 6.1 | Release exists in Sentry under semver                             | `release.name = $VERSION` (set in `createSentryBuildPlugin`).                                                                     |
+> | 6.2 | Commit attached via explicit `org/repo@sha` form                  | `release.setCommits = { commit: $SHA, repo: 'oaknational/oak-open-curriculum-ecosystem' }` (no `auto`).                           |
+> | 6.3 | Debug IDs embedded in `.js` and `.map` under `dist/`              | Plugin injects Debug IDs as a build step (vendor default behaviour).                                                              |
+> | 6.4 | Source-map artefacts uploaded, keyed by Debug IDs, weak-linked    | Plugin uploads sourcemaps using the same Debug IDs; `sourcemaps.filesToDeleteAfterUpload` strips `.map` from `dist/` post-upload. |
+> | 6.5 | Release finalized in the Sentry timeline                          | Plugin's `release.finalize: true`.                                                                                                |
+> | 6.6 | Deploy event registered with `--release $VERSION -e $DERIVED_ENV` | `release.deploy.env = $DERIVED_ENV` (resolved from `resolveSentryEnvironment`).                                                   |
+>
+> Per-step error-handling postures (§6.0 abort, §6.1 abort, §6.2 warn,
+> §6.3 abort, §6.4 abort, §6.5 warn, §6.6 warn) are preserved as
+> _outcome severities_; the plugin surfaces step failures in its log
+> output, and the build fails if any abort-posture step fails. The
+> bespoke per-step exit-code branching is no longer needed because the
+> plugin owns the inter-step ordering and the abort decisions follow
+> from its documented behaviour rather than orchestrator code Oak
+> maintains.
+>
+> Files deleted by §L-8 WS2.3 (now historical):
+> `build-scripts/sentry-release-and-deploy.ts`,
+> `build-scripts/sentry-release-and-deploy-cli.ts`,
+> `build-scripts/sentry-release-and-deploy-preflight.ts`,
+> `build-scripts/sentry-release-and-deploy-types.ts`,
+> `build-scripts/sentry-release-and-deploy.integration.test.ts`,
+> `scripts/upload-sourcemaps.sh`. The `vercel.json` `buildCommand`
+> override is also removed; the workspace's default `build` script (now
+> `tsx esbuild.config.ts`) carries the full sequence.
 
 The L-7 scripts invoke the following sentry-cli commands, in order,
 during the Vercel build for a commit where the ignoreCommand has
@@ -304,6 +368,51 @@ release or event tagging; log a warning and continue. The build still
 succeeds, so traffic can still promote to the new deployment.
 
 ### 7. Pipeline attachment inside Vercel
+
+> **Amendment 2026-04-21 (§L-8 WS3.1)**
+>
+> The L-7 attachment shape (workspace `build:vercel` script invoking a
+> bespoke `sentry-release-and-deploy-cli.ts` orchestrator after `pnpm
+build`) is replaced by an esbuild composition root at the workspace
+> root: `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`.
+>
+> The composition root is invoked by the workspace's default `build`
+> script as `tsx esbuild.config.ts`. It reads `process.env`, asks the
+> two app-local pure factories (`createMcpEsbuildOptions` for the
+> Oak-owned build contract; `createSentryBuildPlugin` for the
+> registration intent per §3 / §4 / §6), and conditionally injects
+> `@sentry/esbuild-plugin` into the esbuild build options. The plugin
+> performs the §6.0–§6.6 outcomes during the build itself (no
+> post-build CLI step). `vercel.json` no longer carries a
+> `buildCommand` override; Vercel runs the workspace's `build` script
+> directly.
+>
+> Pipeline shape (§L-8 onwards):
+>
+> ```text
+> build command (Vercel default):
+>   pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http run build
+>
+> workspace build script:
+>   node ../../scripts/validate-root-application-version.mjs
+>     && tsx esbuild.config.ts
+> ```
+>
+> Rationale for the inversion: the `@sentry/esbuild-plugin` operates
+> inside the build, not after it, so the per-step abort-vs-continue
+> postures the bespoke orchestrator implemented are now the plugin's
+> own behaviour. There is nothing left to chain in `&&` form; the
+> co-location problem the orchestrator solved no longer exists. The
+> composition root is the documented seam where `process.env` enters
+> the build (lint exception recorded in
+> `apps/oak-curriculum-mcp-streamable-http/eslint.config.ts`); the two
+> factories the composition root calls take env as a typed parameter so
+> all policy logic stays test-driven (proven by
+> `build-scripts/sentry-build-plugin.unit.test.ts` and
+> `build-scripts/esbuild-config.unit.test.ts`).
+>
+> The pre-amendment text below is preserved as historical record of the
+> L-7 attachment shape.
 
 Vercel does not expose pre-build or post-build platform hooks; all
 steps run inside the **Build Command**. The L-7 scripts attach by
@@ -491,6 +600,8 @@ each subject to the ignoreCommand check.
 ## References
 
 - Sentry release setup: <https://docs.sentry.io/product/releases/setup/>
+- Sentry esbuild plugin (§L-8 onwards):
+  <https://docs.sentry.io/platforms/javascript/sourcemaps/uploading/esbuild/>
 - Sentry CLI — releases: <https://docs.sentry.io/cli/releases/>
 - Sentry CLI — creating deploys:
   <https://docs.sentry.io/cli/releases/#creating-deploys>
@@ -536,3 +647,31 @@ each subject to the ignoreCommand check.
   Command runs after `pnpm install`). Three-file split (types +
   preflight + orchestrator + CLI composition root) chosen for
   unit-testability under ADR-161 (no subprocess spawn in tests).
+- **2026-04-21** — Amendment during §L-8 WS3.1. §6 reframed from HOW
+  (six specific `sentry-cli` invocations §6.0–§6.6 wrapped by a
+  bespoke TypeScript orchestrator) to WHAT (named outcomes the build
+  must reach in Sentry). The realisation switches to the vendor's
+  first-party `@sentry/esbuild-plugin` running inside the MCP app's
+  esbuild composition root. The §6.0–§6.6 subsections are retained as
+  the canonical outcome description (each subsection's intent,
+  posture, and idempotency shape stays authoritative); the bash
+  invocations they show are read as outcome descriptions, not the
+  realisation. §7 amended to point at
+  `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts` as the
+  composition root and to remove the `vercel.json` `buildCommand`
+  override (Vercel now runs the workspace's default `build` script,
+  which invokes `tsx esbuild.config.ts`). Six L-7 orchestrator files
+  (~953 LOC) and the `upload-sourcemaps.sh` wrapper are deleted by
+  WS2.3. Realisation files are added: `esbuild.config.ts` (composition
+  root), `build-scripts/esbuild-config.ts` +
+  `build-scripts/esbuild-config.unit.test.ts` (Oak-owned build
+  contract; 8 unit-tested invariants), `build-scripts/sentry-build-plugin.ts`
+  - `build-scripts/sentry-build-plugin.unit.test.ts` (env →
+    registration intent; 14 unit-tested policy permutations).
+    Vendor-side effects (Debug-ID injection, source-map upload, deploy
+    events) are deferred to §L-8 WS4/WS5 Vercel preview smoke per
+    test-strategy directive (no subprocess spawn or filesystem-IO in
+    in-process tests). Amendment was authored under the
+    `inherited-framing-without-first-principles-check` lesson recorded
+    in `napkin.md` 2026-04-20 entry, which named the §6 HOW framing as
+    the cost the L-7 lane paid; §L-8 WS3.1 pays that cost back.

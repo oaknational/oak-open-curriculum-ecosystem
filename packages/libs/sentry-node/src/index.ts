@@ -4,6 +4,7 @@ export {
   resolveSentryRegistrationPolicy,
   resolveSentryRelease,
 } from './config.js';
+export { resolveGitSha } from './config-resolution.js';
 export { createFixtureSentryStore } from './fixture.js';
 export { describeConfigError, mapCloseError, mapFlushError } from './runtime-error.js';
 export {

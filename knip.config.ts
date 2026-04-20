@@ -65,10 +65,6 @@ const config: KnipConfig = {
         // Consumed via CSS @import in widget/src/index.css, not a TS/JS import.
         // Knip cannot detect CSS @import as dependency usage.
         '@oaknational/oak-design-tokens',
-        // Invoked as a binary via `pnpm exec sentry-cli ...` in
-        // scripts/upload-sourcemaps.sh; knip cannot trace CLI usage
-        // through shell scripts. See docs/operations/sentry-cli-usage.md.
-        '@sentry/cli',
       ],
     },
     'apps/oak-search-cli': {
@@ -90,10 +86,6 @@ const config: KnipConfig = {
         'vite-tsconfig-paths',
         // prettier is needed for eslint-plugin-prettier
         'prettier',
-        // Workspace-scoped Sentry CLI for ad-hoc source-map / release
-        // work; invoked via `pnpm exec sentry-cli` rather than imports.
-        // See docs/operations/sentry-cli-usage.md.
-        '@sentry/cli',
       ],
     },
     'packages/core/oak-eslint': {

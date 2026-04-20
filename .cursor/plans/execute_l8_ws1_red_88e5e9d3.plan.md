@@ -7,16 +7,16 @@ todos:
     status: completed
   - id: test-plugin-output
     content: Author plugin-build-output.integration.test.ts (Debug IDs in dist + plugin lifecycle log evidence)
-    status: in_progress
+    status: completed
   - id: test-policy
     content: Author policy-invocation.integration.test.ts (resolveSentryEnvironment + resolveSentryRegistrationPolicy invoked once per build, outputs feed plugin config)
     status: cancelled
   - id: test-equivalence
     content: "Author build-output-equivalence.integration.test.ts (contract-surface diff vs tsup baseline; sourcemap: 'hidden' divergence acknowledged)"
-    status: pending
+    status: completed
   - id: verify-red
     content: Run tests; confirm all three fail for expected reason; confirm no existing tests broken
-    status: pending
+    status: completed
   - id: vercel-probe
     content: Author + push Vercel build-env smoke probe branch; confirm VERCEL_ENV/VERCEL_GIT_COMMIT_SHA/VERCEL_GIT_REPO_SLUG populate at build stage
     status: pending
@@ -28,13 +28,13 @@ todos:
     status: completed
   - id: quality-gate
     content: Run targeted quality gates one at a time (type-check, lint:fix, format:root, scoped test runs)
-    status: pending
+    status: completed
   - id: commit-red
     content: Commit RED with message tying to §L-8 WS1 acceptance criteria
-    status: pending
+    status: cancelled
   - id: decision-point
     content: "Decide: continue to WS2 GREEN + WS3.1 atomic in this session, or stop and rewrite next-session-opener per PDR-026 unlanded-case"
-    status: pending
+    status: completed
   - id: session-close
     content: Run /jc-session-handoff; update napkin with surprises and pattern instances
     status: pending

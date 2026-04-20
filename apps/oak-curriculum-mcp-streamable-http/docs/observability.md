@@ -185,30 +185,43 @@ flushes Sentry.
 
 Production Sentry stack traces are symbolicated via source-map upload, and
 every production build registers a Sentry release + commit + deploy event,
-all inside the Vercel Build Command. Both are orchestrated by the L-7
-TypeScript orchestrator
-[`build-scripts/sentry-release-and-deploy-cli.ts`](../build-scripts/sentry-release-and-deploy-cli.ts)
-(invoked via `tsx` from the `build:vercel` npm script; wired as
-`vercel.json.buildCommand`). Landed 2026-04-20.
+all inside the Vercel Build Command.
 
-The §6.0 preflight probe (`sentry-cli releases info`) skips §6.1/§6.2 when
-the release already exists, preserving the original deploy's commit
-attribution across Vercel manual redeploys. The explicit `--commit
-org/repo@sha` form is used for `set-commits` (the `--auto` form was
-rejected in ADR-163 Alternative 8).
+**Mechanism (§L-8 onwards, 2026-04-21):** the workspace's default `build`
+script runs the esbuild composition root
+[`esbuild.config.ts`](../esbuild.config.ts), which conditionally injects
+[`@sentry/esbuild-plugin`](https://docs.sentry.io/platforms/javascript/sourcemaps/uploading/esbuild/)
+into the esbuild build options. The plugin performs every step previously
+listed as ADR-163 §6.0–§6.6 (release upsert, explicit `--commit` form,
+Debug-ID injection, sourcemap upload, finalize, deploy event) as library
+operations during the build itself. The §6.0 idempotency posture is
+preserved by the plugin's release upsert semantics: re-running the same
+release identity is a no-op and the original deploy's commit attribution
+is retained across Vercel manual redeploys.
 
-The underlying two-step Debug-ID source-map pipeline (`inject` + `upload
---release`) is invoked by
-[`scripts/upload-sourcemaps.sh`](../scripts/upload-sourcemaps.sh), which
-can also be run locally for evidence generation:
+Vercel runs this without a `buildCommand` override. The composition root
+reads `process.env` once at the boundary; the two pure factories it calls
+([`build-scripts/esbuild-config.ts`](../build-scripts/esbuild-config.ts)
+for the Oak-owned esbuild contract,
+[`build-scripts/sentry-build-plugin.ts`](../build-scripts/sentry-build-plugin.ts)
+for the env → registration intent) take env as a typed parameter so the
+ADR-163 policy logic stays test-driven.
 
-```bash
-RELEASE=$(node -p "require('../../package.json').version") pnpm sourcemaps:upload
-```
+`SENTRY_RELEASE_REGISTRATION_OVERRIDE=false` skips the plugin entirely
+(the build runs and produces `dist/` with hidden source-maps but does not
+talk to Sentry). This is the local-dev default per ADR-163 §4.
 
-The orchestrator runs only in the Vercel Build Command — never in PR-check
-CI, which remains network-free per ADR-161. Operational flow + log-grep
+The plugin runs only in the Vercel Build Command — never in PR-check CI,
+which remains network-free per ADR-161. Operational flow + log-grep
 patterns: [sentry-deployment-runbook.md § 3b](../../../docs/operations/sentry-deployment-runbook.md).
+
+Historical note: the L-7 lane (2026-04-20) used a bespoke four-file
+TypeScript orchestrator (`build-scripts/sentry-release-and-deploy-cli.ts`
+and friends) wrapping `sentry-cli` invocations, plus a
+`scripts/upload-sourcemaps.sh` wrapper. All of those files are deleted by
+§L-8 WS2.3 in favour of the vendor's first-party plugin. See ADR-163 §6
+amendment 2026-04-21 (HOW → WHAT) and §7 amendment 2026-04-21 (composition
+root replaces orchestrator script) for the full reframing.
 
 ## Release and metadata resolution
 
