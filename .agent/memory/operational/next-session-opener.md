@@ -71,9 +71,9 @@ the three reviewers first.
      to-plugin-config logic.
    - **WS2 GREEN**: canonical esbuild config in
      `apps/oak-curriculum-mcp-streamable-http/esbuild.config.mjs`
-     consuming the translator; delete bespoke orchestrator + wiring
-     + `@sentry/cli` from both apps; amend `package.json` and
-     `vercel.json` per the existing §L-8 body.
+     consuming the translator; delete bespoke orchestrator, its
+     wiring, and `@sentry/cli` from both apps; amend `package.json`
+     and `vercel.json` per the existing §L-8 body.
    - **WS4/WS5 smoke**: Vercel preview deployment produces the
      expected Sentry UI state (release registered + commits
      attached + deploy event); this is the canonical proof of the
