@@ -49,7 +49,7 @@ todos:
   - id: l8-bundler-source-maps
     content: "L-8 (forward lane for release/commits/deploy + source-map linkage): replace bespoke L-7 orchestrator with @sentry/esbuild-plugin. Switch tsup -> esbuild in the MCP app build; wire @sentry/esbuild-plugin as the bundler plugin so release registration, sourcemap upload, commit attribution, and deploy-event emission are handled by the vendor's first-party plugin. Keep resolveSentryEnvironment + resolveSentryRegistrationPolicy in @oaknational/sentry-node (pure vendor-agnostic policy). Delete-side: four orchestrator files in build-scripts/sentry-release-registration/, 21 integration tests, build:vercel custom script, vercel.json buildCommand override, ESLint + tsconfig exceptions carried for the bespoke shape; amend ADR-163 §6 to state WHAT outcome the vendor must reach (Sentry UI state: release + commits + deploy per env) rather than HOW (specific sentry-cli argv). Authoring: task #22 uses feature-workstream-template.md with Build-vs-Buy Attestation + phase-aligned Reviewer Scheduling."
     status: pending
-    note: "UN-DROPPED 2026-04-20. Prior rationale (commit history, superseded) claimed tsup-vs-esbuild swap made the plugin path costlier than the shell-script flow; owner identified that the bespoke orchestrator landed at ~900 lines across four files plus 21 tests plus two build-config overrides plus ADR amendments — materially more complexity than the tsup -> esbuild swap. The sunk-cost framing now visible in the prior 'PARKED' note is itself an instance of the guardrail installed in commit 4bccba71. Forward path: author task #22 migration plan, run plan-time assumptions-reviewer pass pre-ExitPlanMode per new triggering scenarios, then execute."
+    note: "UN-DROPPED 2026-04-20. Prior rationale (commit history, superseded) claimed tsup-vs-esbuild swap made the plugin path costlier than the shell-script flow; owner identified that the bespoke orchestrator landed at ~900 lines across four files plus 21 tests plus two build-config overrides plus ADR amendments — materially more complexity than the tsup -> esbuild swap. The sunk-cost framing now visible in the prior 'PARKED' note is itself an instance of the guardrail installed in commit 4bccba71. Forward path now lives as §L-8 in this active plan; WS0 `assumptions-reviewer` pass returned ACCEPT WITH NOTES and those notes are applied. Next execution step: WS1 RED."
   - id: l9-feedback
     content: "L-9 (Phase 3): captureFeedback pipeline; optionally surface as an MCP tool"
     status: deferred
@@ -114,7 +114,7 @@ isProject: true
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
 **Last Updated**: 2026-04-20
-**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one); L-DOC initial landed (authoritative app observability doc + expanded sentry-node README + discoverability mesh; commit 9e1a26b2); L-12-prereq closed by the observability-primitives-consolidation lane (2026-04-19); L-7 bespoke orchestrator landed 2026-04-19/20 (commits 7f3b17e9 + 6f5acd17 + ecee9801) then flagged 2026-04-20 for replacement by @sentry/esbuild-plugin. L-8 un-dropped 2026-04-20 as the forward lane for release/commits/deploy + source-map linkage; migration plan (task #22) pending authoring using feature-workstream-template.md with Build-vs-Buy Attestation filled in.
+**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one); L-DOC initial landed (authoritative app observability doc + expanded sentry-node README + discoverability mesh; commit 9e1a26b2); L-12-prereq closed by the observability-primitives-consolidation lane (2026-04-19); L-7 bespoke orchestrator landed 2026-04-19/20 (commits 7f3b17e9 + 6f5acd17 + ecee9801) then flagged 2026-04-20 for replacement by @sentry/esbuild-plugin. L-8 remains the forward lane for release/commits/deploy + source-map linkage; the corrected §L-8 body is now authored in this plan, WS0 `assumptions-reviewer` findings are applied in place, and WS1 RED is next.
 **Branch**: `feat/otel_sentry_enhancements`
 **Scope**: Close every available Sentry product loop for the MCP app (server + widget) on this branch before PR. Search CLI mirrors on the next branch.
 
@@ -334,9 +334,40 @@ opens after Phase 5 closes.
 |-----------------|---------|---------------------|---------------------------|
 | **Phase 1 — Gates & Foundation Extractions** | Land compile-time gates and extract shared workspaces before any new emission site. Every line written after Phase 1 is compile-time-gated. | L-0a, L-0b (both complete 2026-04-17); L-EH initial (ESLint built-in `preserve-caught-error` — supersedes original `require-error-cause` custom-rule plan; landed 2026-04-19); L-DOC initial; L-12-prereq (moved from old Phase 3 — extract `packages/core/telemetry-redaction-core/`); L-7 (moved from old Phase 2 — release/deploy linkage scripts unlock regression attribution for every subsequent smoke test); restructure Phase 5 carve-out (`require-observability-emission` ESLint rule + ADR-162 Proposed → Accepted; authored here rather than after emitters land) | — |
 | **Phase 2 — Schema Foundation** | Every downstream-analytics contract exists as code before any emitter consumes it. | — | [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md) WS1–WS6 (create `packages/core/observability-events/` + 7 MVP schemas + conformance helper); [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS1 carve-out (`no-vendor-observability-import` ESLint rule only; emission-persistence test deferred to Phase 5) |
-| **Phase 3 — Primary Emitters (Server)** | Server-side emission sites consume the Phase 2 schemas by import. Each lane's RED asserts schema conformance via the events-workspace helper. | L-1 (free-signal integrations); L-2 (delegates extraction); L-3 (MCP request context enrichment); L-4b (primary `Sentry.metrics.*` adapter). **Deferred to public beta**: L-9 (feedback pipeline — user-facing surface not yet defined in alpha). | — |
-| **Phase 4 — Cross-axis** | Security + a11y sibling plans emit their axis events using Phase 2 schemas. Can parallelise within-phase. **Deferred to public beta**: L-12 (widget Sentry — runtime surface is agentic clients like ChatGPT/Claude Desktop, not a standard browser; instrumentation behaviour in those hosts is unverified). | — | [`security-observability.plan.md`](../current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered`; [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome` |
+| **Phase 3a — Alpha-gate emitters (schema-independent)** | Server-side emission sites that do NOT consume Phase 2 schemas. Can land before events-workspace. This is the transition-to-useful phase — after Phase 3a, Sentry is diagnostic-grade for the MCP server (release attribution via L-8, free runtime signal via L-1, request-context attribution via L-3). | L-1 (free-signal integrations — emits Sentry-native vendor events, not Oak-authored schema); L-2 (delegates extraction — structural refactor, no event shape; unblocks Search CLI branch); L-3 (MCP request context enrichment — establishes `mcp_request` scope shape that later `tool_invoked` emitters consume; does not itself emit schema-governed events). | — |
+| **Phase 3b — Beta-gate emitters (schema-dependent)** | Emission sites that consume Phase 2 schemas by import. Gated on events-workspace existing. | L-4b (primary `Sentry.metrics.*` adapter — metric names catalogued alongside event schemas per ADR-162). **Deferred to public beta**: L-9 (feedback pipeline — user-facing surface not yet defined in alpha). | — |
+| **Phase 4 — Cross-axis** | Security + a11y sibling plans emit their axis events using Phase 2 schemas. Gated on events-workspace. **Deferred to public beta**: L-12 (widget Sentry — runtime surface is agentic clients like ChatGPT/Claude Desktop, not a standard browser; instrumentation behaviour in those hosts is unverified). | — | [`security-observability.plan.md`](../current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered`; [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome` |
 | **Phase 5 — Operations + Conformance + Close-out** | Vendor-independence conformance runs pre-launch (previously blocked by schema foundation). Strategy close-out and error-handling final land while experience is fresh. | L-15 (strategy close-out ADR); L-EH final (`prefer-result-pattern` ESLint rule + first-tranche adoption); MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11; L-8 (now UN-DROPPED — see body). **Deferred to public beta**: L-13 (alerts/dashboards/runbooks — require real signal distributions from L-1/L-3/L-4b before threshold design is meaningful); L-14 (third-party trace propagation — security-gated policy decision). | [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS2+; [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md) |
+
+### Alpha vs public-beta gates (2026-04-20 re-sequencing)
+
+Events-workspace (Phase 2) is **required for public beta**, not for
+public alpha. Owner direction 2026-04-20: *"we absolutely must create
+the events workspace, but it does not necessarily need to block public
+alpha, it absolutely does block public beta."*
+
+Consequence: Phase 3 was originally drafted as one block with all
+emitters behind Phase 2 for uniformity. In fact only L-4b has a genuine
+schema dependency; L-1 and L-3 emit Sentry-native or scope-context
+shapes, and L-2 is structural-only. Splitting Phase 3 into 3a
+(schema-independent, alpha-gate) and 3b (schema-dependent, beta-gate)
+compresses time-to-useful-Sentry from end-of-Phase-3 to end-of-Phase-3a.
+
+**Alpha gate** (what must land before public alpha ships):
+
+- Phase 1 complete (L-7 torn out by L-8; L-EH initial ✓; L-DOC initial ✓;
+  L-12-prereq ✓; restructure Phase 5 carve-out ✓; L-8 landing next)
+- Phase 3a complete (L-1 + L-2 + L-3)
+- Existing error capture, redaction barrier, ESLint gates (already in place)
+
+**Public-beta gate** (additive to alpha):
+
+- Phase 2 events-workspace (`packages/core/observability-events/`)
+- Phase 3b L-4b metrics adapter
+- Phase 4 sibling plans (security-observability, accessibility-observability)
+- Phase 5 L-15, L-EH final, vendor-independence conformance run
+- Previously-deferred lanes re-evaluated at beta (L-9 feedback, L-12
+  widget Sentry, L-13 alerts, L-14 trust-boundary trace propagation)
 
 **Docs are definition-of-done on every lane — not a separate phase.**
 The original Phase 5 "L-DOC final" lane has been dissolved (2026-04-20).
@@ -351,7 +382,7 @@ authored `prefer-result-pattern` rule + first-tranche adoption in Phase 5).
 
 **Architectural rationale for this ordering** (summary):
 
-1. **Schemas before emitters** — every L-1 / L-3 / L-4b / L-9 / L-12 fixture assertion imports from `packages/core/observability-events/`. No retrofit.
+1. **Schemas before schema-consuming emitters** — L-4b imports metric-name schemas from `packages/core/observability-events/` (and the Phase-4 sibling plans + deferred L-9/L-12 also import their Oak-authored event schemas). L-1 and L-3 do NOT import from the events-workspace (L-1 emits Sentry-native vendor events; L-3 emits scope-context shapes, not events), so they can land before Phase 2. This split is what makes Phase 3a alpha-gate-reachable without Phase 2.
 2. **Rules before code** — ESLint built-in `preserve-caught-error` (L-EH initial, supersedes `require-error-cause`), custom `require-observability-emission` (restructure Phase 5), and custom `no-vendor-observability-import` (Phase 2) all land in Phases 1–2, before any emission site is authored.
 3. **Redactor core extracted once** — L-12-prereq in Phase 1 gives server + widget + future Search CLI a shared `packages/core/telemetry-redaction-core/` they all compose.
 4. **Release linkage early** — L-7 in Phase 1 means every subsequent lane's owner-verified smoke test is tagged and attributable.

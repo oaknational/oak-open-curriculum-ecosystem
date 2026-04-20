@@ -38,9 +38,23 @@ isProject: false
 
 # Observability Events Workspace
 
-**Last Updated**: 2026-04-18
+**Last Updated**: 2026-04-20
 **Status**: 🟡 PLANNING — queued; exploration 4 blocks MVP schema shape
-**Scope**: New `packages/core/observability-events/` Zod-first workspace holding the MVP event-schema contract + conformance helper. Consumed by every emitting workspace.
+**Scope**: New `packages/core/observability-events/` Zod-first workspace holding the MVP event-schema contract + conformance helper. Consumed by every schema-dependent emitting workspace.
+
+**Release-gate posture** (2026-04-20): this workspace is **required
+for public beta**, not for public alpha. Owner direction recorded in
+`sentry-observability-maximisation-mcp.plan.md § Alpha vs public-beta
+gates`: *"we absolutely must create the events workspace, but it does
+not necessarily need to block public alpha, it absolutely does block
+public beta."* Consequence for sequencing: alpha-gate emitter lanes
+(maximisation plan L-1 free-signal and L-3 MCP request context) emit
+Sentry-native or scope-context shapes and do NOT consume this
+workspace; they can land before this workspace exists. Beta-gate
+emitter lanes (maximisation plan L-4b metrics, plus the sibling
+`security-observability` and `accessibility-observability` plans,
+plus the now-deferred L-9 feedback and L-12 widget) ARE schema-
+dependent and block on this workspace landing first.
 
 ---
 

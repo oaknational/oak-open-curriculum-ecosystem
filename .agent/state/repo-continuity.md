@@ -1,8 +1,7 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-20 (final session — metacognitive report
-revision deepening the progress-and-direction report; OAC and
-observability lanes unchanged from earlier closeout)
+**Last refreshed**: 2026-04-20 (session handoff — docs iteration
+closed; continuity surfaces re-synced to the landed L-8 plan state)
 **Status**: Authoritative for the fields below. The `Live continuity
 contract` section of `.agent/prompts/session-continuation.prompt.md` is
 retired. The prompt is now a behavioural entry surface only; state
@@ -13,35 +12,36 @@ lives in this file, `workstreams/<slug>.md`, and `../runtime/tracks/*.md`.
 - [`observability-sentry-otel`](workstreams/observability-sentry-otel.md)
   — branch-primary on `feat/otel_sentry_enhancements`.
 - [`operational-awareness-continuity`](workstreams/operational-awareness-continuity.md)
-  — parallel lane. Phase 4 rollout in progress this session.
+  — parallel lane. Phase 4 rollout remains pending as the next
+  deliberate OAC session.
 
 ## Branch-primary workstream brief
 
 [`workstreams/observability-sentry-otel.md`](workstreams/observability-sentry-otel.md).
 
 Current substantive work inside that lane is the §L-8 esbuild-native
-migration: replace the ~900-line L-7 bespoke Sentry release/commits/
-deploy orchestrator by switching the MCP app's build tool from tsup
-to raw esbuild and registering `@sentry/esbuild-plugin` directly. The
-2026-04-20 drafted `sentry-esbuild-plugin-migration` plan (commit
-`4cbc8843`) carried a tsup-retention frame that is known-broken at
-runtime (see napkin entry 2026-04-20 evening — the combination of
-`@sentry/esbuild-plugin` with `tsup` fails via open
-`sentry-javascript-bundler-plugins` issues 608 + 614 plus tsup issue
-1260). The standalone plan was deleted and an attempted
-fold under the wrong frame has been reverted. A fresh plan must be
-authored from the esbuild decision as the standing starting point.
+migration now authored directly inside
+`sentry-observability-maximisation-mcp.plan.md`: replace the ~900-line
+L-7 bespoke Sentry release/commits/deploy orchestrator by switching
+the MCP app's build tool from tsup to raw esbuild and registering
+`@sentry/esbuild-plugin` directly. The earlier standalone
+`sentry-esbuild-plugin-migration` plan was deleted after its tsup-
+retention frame was identified as wrong. The active plan now contains
+the corrected L-8 body, WS0 plan-time `assumptions-reviewer` findings
+have been applied in place, and the next execution step is WS1 RED.
 
 ## Current session focus
 
-Documentation report revision — not a registered workstream.
-This session deepened the progress-and-direction report
-([`.agent/reference/work-to-date/oak-ecosystem-progress-and-direction-2026-04-20.md`](../reference/work-to-date/oak-ecosystem-progress-and-direction-2026-04-20.md))
-via a metacognitive examination of the repo, surfacing novel
-mechanisms and underconveyed depth across all four achievement
-arenas. Quantitative search-quality claims (MRR figures) were
-replaced with qualitative descriptions per owner direction that the
-ground-truth and evaluation systems are still being refined.
+Documentation iteration and audience-calibration — not a registered
+workstream. This session produced several work-to-date artefacts while
+trying to match the owner's intended audience and shape. The final
+preferred artefact is
+([`.agent/reference/work-to-date/oak-ecosystem-work-to-date-summary-2026-04-20.md`](../reference/work-to-date/oak-ecosystem-work-to-date-summary-2026-04-20.md)),
+which returns closely to the original note's structure and folds in
+only a few high-signal additions from the longer report. The fourth,
+more audience-shaped update remains on the outward reader routes in
+`README.md` and `docs/foundation/README.md`; no reroute was requested
+in this session.
 
 No workstream lanes were advanced this session.
 
@@ -101,48 +101,35 @@ Non-goals for next session:
   WS3 task.
 - Do NOT delete bespoke orchestrator code yet; the §L-8 migration's
   WS2 task handles deletion.
-- Do NOT start §L-8 execution before the clean re-plan (authored
-  this session) has passed plan-time reviewers.
+- Do NOT reopen §L-8 planning as though WS0 were still outstanding.
+  The corrected L-8 body is already authored and the plan-time
+  `assumptions-reviewer` pass is complete; resume at WS1 RED.
 - Do NOT re-open the tsup-vs-esbuild decision. The decision is
   esbuild. Any plan non-goal that contradicts this is wrong per the
   owner-beats-plan invariant above.
 
 ## Next safe step
 
-**Begin §L-8 execution at WS1 RED** once this session's clean re-plan
-has landed and plan-time reviewers have approved it. The re-plan is
-authored this session under the esbuild-native decision; no
-implementation work happens this session.
+**Begin §L-8 execution at WS1 RED** in
+`sentry-observability-maximisation-mcp.plan.md`. The corrected L-8
+body is already authored inside the active plan, the WS0
+`assumptions-reviewer` pass returned ACCEPT WITH NOTES, and those
+notes are already applied. No separate current migration plan remains.
 
 ## Deep consolidation status
 
-**Due — partially discharged; full pass still pending.**
-Discharges so far: Fitness-pressure from the 1628-line continuation
-prompt (retired to ~145 lines behavioural-only via OAC Phase 4.1);
-documentation drift on the `docs/foundation/` boundary (timeless-only
-structure landed; ~17 active surfaces redirected); PDR-011 alignment
-(amended in OAC Phase 4.3 commit `d876506c`).
+**Due — pre-existing governance triggers still stand; this handoff
+does not bound them tightly enough to escalate.** Outstanding reasons:
 
-Outstanding triggers:
-
-- Governance change — guardrails installed `4bccba71` need PDR
+- Governance change — guardrails installed `4bccba71` still need PDR
   graduation assessment.
-- Repeated surprise pattern — the three-day tsup-vs-esbuild drift has
-  graduated the owner-beats-plan invariant into repo-continuity; still
-  to do is a PDR/rule drafting pass for the **perturbation mechanisms**
-  named in the 2026-04-20 evening napkin entry. The three candidates
-  — non-goal re-ratification ritual, standing-decision register,
-  first-principles metacognition prompt — are complements (not
-  alternatives): each fires at a different session phase and catches
-  a different failure mode. Defence in depth is appropriate here
-  because single-layer failure is costly, and variety of
-  perturbations is itself a perturbation (routinising a single
-  ritual blunts its jogging effect). Drafting all three as a bundle,
-  with a layered-model PDR plus three lightweight artefacts, is the
-  highest-value governance output of the next consolidation pass.
-- Sunk-cost detector second-instance and the tracks-gitignored /
-  menu-ification corrections from the earlier napkin.
+- Repeated surprise pattern — the three-day tsup-vs-esbuild drift
+  still points at a perturbation-mechanism bundle (non-goal
+  re-ratification, standing-decision register, first-principles
+  metacognition prompt) for the next dedicated consolidation pass.
+- Repeated corrections around document form vs intended audience have
+  now been captured in napkin entries, but are not yet clearly
+  bounded enough to graduate beyond capture.
 
-Per `session-handoff` boundary discipline, this session does not
-escalate into `jc-consolidate-docs`; the deeper loop is well-scoped
-to a dedicated governance session.
+Per `session-handoff` boundary discipline, this handoff does not
+escalate into `jc-consolidate-docs`.
