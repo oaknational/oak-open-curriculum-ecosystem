@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "node ../../scripts/validate-root-application-version.mjs && tsup",
+    "build:vercel": "command -v tsx >/dev/null 2>&1 || { echo '[build:vercel] tsx not found — build environment misconfigured (tsx must be installed; check devDependencies were not pruned)' >&2; exit 1; }; pnpm build && tsx build-scripts/sentry-release-and-deploy-cli.ts",
     "build:widget": "vite build --config widget/vite.config.ts && node scripts/embed-widget-html.js",
     "clean": "rm -rf dist .turbo .widget-build",
     "dev": "tsx operations/development/http-dev.ts dev",

@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "express",
+  "buildCommand": "pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http run build:vercel",
   "ignoreCommand": "node build-scripts/vercel-ignore-production-non-release-build.mjs"
 }

@@ -188,6 +188,12 @@ allowed the build to proceed:
 # - Verify SENTRY_AUTH_TOKEN is set.
 # - Verify dist/ exists and is non-empty.
 
+sentry-cli releases info "$VERSION"                         # §6.0 probe
+
+# If §6.0 exits 0: release already exists. Skip §6.1 AND §6.2 to
+# preserve the original commit attribution from the deploy that first
+# registered the release. (Amendment 2026-04-20.)
+
 sentry-cli releases new "$VERSION"                          # §6.1
 
 sentry-cli releases set-commits "$VERSION" \                # §6.2
@@ -204,12 +210,33 @@ sentry-cli deploys new --release "$VERSION" -e "$DERIVED_ENV"  # §6.6
 
 Each step is specified below with its exact error-handling posture.
 
-#### 6.1 `releases new` — **abort on failure**
+#### 6.0 `releases info` — **idempotency probe** (amendment 2026-04-20)
 
-Creates the release. Idempotent against Sentry (re-running returns the
-existing release). Failure modes: auth-token invalid; network
-unreachable; Sentry region mismatch. Any failure here means the
-subsequent steps have nothing to attach to; the build MUST abort.
+Probes whether the release with this version already exists in Sentry.
+If exit 0 (release exists), §6.1 and §6.2 are SKIPPED entirely — the
+release was registered by an earlier build and its commit attribution
+must not be overwritten. If non-zero (not found), the full sequence
+continues through §6.1 and §6.2. This probe supersedes the
+original "abort on failure" framing for §6.1 because Vercel manual
+redeploys of the same commit would otherwise cause a hard abort where
+the intent (per §5) is idempotence at the release identity.
+
+#### 6.1 `releases new` — **abort on failure** (skipped when §6.0 reports existing)
+
+Creates the release. Failure modes: auth-token invalid; network
+unreachable; Sentry region mismatch. If reached (i.e. §6.0 found no
+existing release), failure here means the subsequent steps have
+nothing to attach to; the build MUST abort.
+
+#### 6.2 `releases set-commits` — **skipped when §6.0 reports existing**
+
+If §6.0 found the release already exists, set-commits is SKIPPED —
+re-running it with a different `VERCEL_GIT_COMMIT_SHA` would OVERWRITE
+the existing release's commit attribution and orphan the prior SHA
+from regression traceability. The first deploy's attribution wins.
+When §6.2 does run (new release), the posture remains continue-on-
+failure (warn): losing commit attribution on a fresh release doesn't
+break symbolication or the release identifier.
 
 #### 6.2 `releases set-commits --commit` — **continue on failure (warn)**
 
@@ -291,8 +318,12 @@ build command: pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http run
 …where `build:vercel` (authored by L-7) runs the sequence:
 
 1. `pnpm build` (tsup → `dist/`).
-2. The §6 sentry-cli sequence, via a dedicated orchestrator script
-   (e.g. `scripts/sentry-release-and-deploy.sh` in the MCP workspace).
+2. The §6 sentry-cli sequence, via a TypeScript orchestrator invoked
+   with `tsx` (`build-scripts/sentry-release-and-deploy-cli.ts` in the
+   MCP workspace). Amendment 2026-04-20 — originally authored as a
+   single bash file; implemented as a three-file TypeScript module
+   (types + preflight + orchestrator + CLI composition root) for
+   unit-testability under ADR-161 (no subprocess spawn in tests).
 
 This keeps the source-map upload + release registration co-located
 with the build in a single Vercel Build-Command step, which is the
@@ -488,3 +519,20 @@ each subject to the ignoreCommand check.
   implementation authorised to proceed against the mechanism recorded
   here. No ADR edits accompanied the acceptance; the Proposed text
   stands verbatim.
+- **2026-04-20** — Amendment during L-7 implementation. Two changes:
+  (1) §6.1 split into a §6.0 `releases info` probe followed by
+  conditional §6.1/§6.2 execution — if the release already exists,
+  §6.1 AND §6.2 are skipped to preserve the original deploy's commit
+  attribution. Re-running `set-commits` on an existing release would
+  overwrite the SHA binding and orphan prior regression-traceability.
+  Amendment was surfaced by the L-7 assumptions-review as the
+  highest-blast-radius assumption in the original text. Matches the §5
+  intent ("semver is the immutable release identity; one release ↔
+  many deploys") rather than the literal §6.1 "abort on failure" wording.
+  (2) §7 path reference updated from `scripts/sentry-release-and-deploy.sh`
+  to `build-scripts/sentry-release-and-deploy-cli.ts` — the orchestrator
+  is a TypeScript module invoked by `tsx` (not bash), per repo rule that
+  scripts are TypeScript when `tsx` is available (the Vercel Build
+  Command runs after `pnpm install`). Three-file split (types +
+  preflight + orchestrator + CLI composition root) chosen for
+  unit-testability under ADR-161 (no subprocess spawn in tests).
