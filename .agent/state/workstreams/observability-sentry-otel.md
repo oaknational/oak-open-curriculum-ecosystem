@@ -72,8 +72,9 @@ starts.
 
 ## Active track links
 
-- [`tracks/observability-sentry-otel--claude-opus-4-7--feat-otel-sentry-enhancements.md`](../../runtime/tracks/observability-sentry-otel--claude-opus-4-7--feat-otel-sentry-enhancements.md)
-  — current session's tactical card (gitignored).
+None. No observability-lane work was in-flight at session close; the
+2026-04-20 session's tactical card belonged to the OAC lane (resolved
+at close).
 
 ## Promotion watchlist
 

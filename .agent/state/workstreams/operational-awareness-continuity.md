@@ -32,11 +32,22 @@ Phase 3 with explicit promote / adjust / reject decision. Then Phase
   at `.agent/state/`, `.agent/runtime/tracks/` (commit `ffcad2aa`).
   Workflow doc updates landed in `session-handoff.md`, `GO` skill,
   `session-continuation.prompt.md` with pilot-phase framing.
-- **Phase 3** (self-hosted pilot): IN PROGRESS. Pilot evidence at
-  `.agent/analysis/operational-awareness-pilot-evidence.md` (to be
-  populated this session).
-- **Phase 4** (rollout + portability + doc propagation): PENDING
-  Phase 3 decision.
+- **Phase 3** (self-hosted pilot): COMPLETE. Evidence at
+  `.agent/analysis/operational-awareness-pilot-evidence.md`.
+  Scenarios 1, 4, 5, 6 all PASS. Calibration decision: **PROMOTE**.
+  Mid-pilot owner correction inverted the gitignore decision —
+  tracks are git-tracked, not gitignored; `<workstream>--<agent>--<branch>.md`
+  filename disambiguates multi-writer collaborative tracks.
+  Scenarios 2 and 3 deferred to organic triggers (any multi-session
+  branch life naturally exercises them).
+- **Phase 4** (rollout + portability + doc propagation): PENDING —
+  next-session starter. Folds in four pilot-evidence refinements:
+  (a) rename repo-continuity "Primary workstream brief" →
+  "Branch-primary workstream brief" + add "Current session focus";
+  (b) clarify authority order as tiebreaker for same-scope conflict
+  not gating-rule for different-scope claims; (c) decide on
+  expiry-check helper (optional); (d) decide on napkin-promotion
+  helper (optional).
 - **`pnpm check`** exit 0 at session close.
 
 ## Blockers / low-confidence areas
@@ -51,14 +62,18 @@ Phase 3 with explicit promote / adjust / reject decision. Then Phase
 
 ## Next safe step
 
-Run scenarios 1, 6, 4, 5 on the new surfaces in this session.
-Document each in the pilot evidence file. Then flip Phase 3 todo and
-make the calibration decision.
+Begin Phase 4. Start with doc propagation of the four pilot-evidence
+refinements (a) and (b) — both are in-file edits to
+`repo-continuity.md`, `.agent/state/README.md`, and the OAC plan's
+Design Contract. Refinements (c) and (d) are optional and can be
+recorded as future-work candidates rather than implemented in Phase
+4. Close Phase 4 with portability-posture decision and doc
+propagation across the six surfaces named in the plan's Task 4.3.
 
 ## Active track links
 
-- [`tracks/operational-awareness-continuity--claude-opus-4-7--feat-otel-sentry-enhancements.md`](../../runtime/tracks/operational-awareness-continuity--claude-opus-4-7--feat-otel-sentry-enhancements.md)
-  — current session's tactical card (gitignored).
+None. The 2026-04-20 session's tactical card was resolved (Phase 3
+closed cleanly) and deleted at session close per the rotation rule.
 
 ## Promotion watchlist
 

@@ -511,6 +511,65 @@ commit.
   `napkin.md` is ~1400 lines (well over the 500-line rotation
   threshold).
 
+### Handoff Addendum — 2026-04-20 later session close (OAC Phase 1–3 executed; plugin-migration plan drafted; tracks-are-tracked)
+
+- **Canonical state is now `.agent/state/repo-continuity.md`** + the
+  two workstream briefs at `.agent/state/workstreams/`. If this
+  addendum and the state surfaces conflict, **the state surfaces win**
+  per OAC Phase 3 PROMOTE decision.
+- **HEAD**: `d20fc397`. Branch 19 commits ahead of origin. Working
+  tree clean modulo the handoff commit this addendum is part of.
+  `pnpm check` green.
+- **Landed this session** (11 commits `6967851a` → `d20fc397`): OAC
+  plan promoted to `active/` + Phase 0 baseline refreshed + Phase 1
+  marked complete via validation-only review + Phase 2 scaffolding +
+  Phase 3 pilot + plugin-migration plan draft (task #22) + owner
+  artefacts (work-to-date brief, ecosystem progress report, ecosystem
+  summary Cursor plan).
+- **OAC Phase 3 calibration: PROMOTE.** Four scenarios (1 ordinary
+  resume; 4 stale-card discipline; 5 tactical-insight promotion; 6
+  surface-disagreement resolution) all passed. Evidence at
+  `.agent/analysis/operational-awareness-pilot-evidence.md`. Mid-
+  pilot owner correction inverted the gitignore decision: tracks are
+  git-tracked, not gitignored; single-writer-per-card,
+  multi-card-per-collaborative-track via `<workstream>--<agent>--<branch>.md`
+  filename. Scenarios 2 and 3 now naturally exercised by multi-session
+  branch life.
+- **L-7/L-8 reconciled** (`1fb4ac66`): L-7 bespoke → `completed`; L-8
+  `dropped` → `pending` (un-dropped) as the forward lane. The L-8
+  section body in
+  `sentry-observability-maximisation-mcp.plan.md` names the prior
+  `PARKED` rationale as the sunk-cost framing the `4bccba71`
+  guardrails are designed to catch.
+- **Plugin-migration plan** at
+  `.agent/plans/observability/current/sentry-esbuild-plugin-migration.plan.md`
+  (commit `4cbc8843`). Build-vs-Buy Attestation + Reviewer Scheduling
+  filled in. WS0 dispatches `assumptions-reviewer` + `sentry-reviewer`
+  pre-ExitPlanMode; WS1–WS6 planned with deterministic validation.
+  **Plan-density-invariant tension flagged**: new file in the
+  observability directory triggers the density rule. Owner decision
+  pending: fold into maximisation §L-8 vs retain standalone with
+  pair-archive.
+- **Next-session openers** (pick one):
+  1. **Resolve plan-density-invariant tension**, then dispatch
+     plugin-migration WS0 reviewers. Unblocks real code motion.
+  2. **Begin OAC Phase 4** (rollout + portability + doc propagation)
+     with four pilot-evidence refinements folded in.
+- **Hard invariants** (additions from earlier in 2026-04-20):
+  build-vs-buy attestation required pre-ExitPlanMode for vendor-
+  integration plans; friction-ratchet counter at 3+ signals
+  escalates to `assumptions-reviewer`; ADRs state WHAT not HOW;
+  reviewer phases aligned (plan-time → mid-cycle → close).
+  **New invariant added at session close**: runtime tactical track
+  cards are git-tracked (not gitignored); multi-agent + multi-location
+  collaboration flows through git; single-writer-per-card holds.
+- **Open questions**: (a) plan-density-invariant resolution for
+  plugin-migration plan; (b) whether the two Phase 4 optional
+  helpers (expiry-check, napkin-promotion) are worth building or are
+  future-work candidates.
+- **Deep consolidation status**: **due — deferred to OAC Phase 4
+  Task 4.3 as natural carrier; not well-bounded for this closeout.**
+
 ### Handoff Addendum — 2026-04-20 end of day (L-7 bespoke landed, plugin pivot, guardrails installed)
 
 - **Current state supersedes the 2026-04-19 contract above on these fields only.** Earlier fields that are unchanged still apply.

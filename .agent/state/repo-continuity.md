@@ -1,9 +1,10 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-20 (OAC Phase 3 pilot — first population)
-**Status**: Pilot-populated. The prompt's `Live continuity contract`
-section remains the legacy surface but is superseded for the fields
-below per OAC Phase 3 scenario 1.
+**Last refreshed**: 2026-04-20 (session close, OAC Phase 3 closed)
+**Status**: Authoritative for the fields below. The prompt's `Live
+continuity contract` section is legacy as of OAC Phase 3 PROMOTE
+decision; Phase 4 formally retires that prompt section. In the
+interim, if the prompt and this file conflict, **this file wins**.
 
 ## Active workstreams
 
@@ -20,6 +21,10 @@ Current substantive work inside that lane is the
 `sentry-esbuild-plugin-migration` plan (task #22, drafted 2026-04-20
 at commit `4cbc8843`, pending plan-time reviewer dispatch before
 execution).
+
+> **Known refinement deferred to OAC Phase 4**: this field's name
+> will be renamed to "Branch-primary workstream brief" and a separate
+> "Current session focus" field added, per pilot evidence scenario 1.
 
 ## Repo-wide invariants / non-goals
 
@@ -51,30 +56,49 @@ set is additive; previous invariants still apply):
 - **Reviewer phases aligned** — plan-time (solution-class) →
   mid-cycle (solution-execution) → close (coherence). Close-only
   scheduling is the anti-pattern (installed `4bccba71`).
+- **Runtime tactical track cards are git-tracked** — not gitignored.
+  Multi-agent + multi-location collaboration flows through git.
+  Single-writer-per-card; multiple cards per collaborative track
+  disambiguate via `<workstream>--<agent>--<branch>.md` filename.
+  (Corrected 2026-04-20; initial Phase 2 design treated cards as
+  gitignored session-local state.)
 
-Non-goals for this session:
+Non-goals for next session:
 
 - Do NOT amend ADR-163 §6 prose yet; that is the sentry-esbuild-plugin
   migration plan's WS3 task.
 - Do NOT delete bespoke orchestrator code yet; the migration plan's
   WS2 task handles deletion.
-- Do NOT pilot beyond scenarios 1, 4, 5, 6 in this session;
-  scenarios 2 and 3 require actual multi-agent parallelism and are
-  deferred to organic triggers.
+- Do NOT start plugin-migration WS1 before WS0 (plan-time
+  `assumptions-reviewer` + `sentry-reviewer` dispatch) completes.
+- Do NOT start Phase 4 rollout before deciding the plan-density-
+  invariant resolution for the plugin-migration plan (fold vs
+  pair-archive).
 
 ## Next safe step
 
-Continue OAC Phase 3 pilot scenarios in order (1, 6, 4, 5). After
-pilot evidence populated with four scenarios, close with explicit
-promote / adjust / reject decision per the plan's Phase 3 Task 3.2.
-Phase 4 rollout begins after that decision.
+Pick one of two next-session openers, owner's call:
+
+1. **Resolve plan-density-invariant tension on the plugin-migration
+   plan** (fold into maximisation §L-8 vs retain standalone with
+   pair-archive), then dispatch plugin-migration WS0 reviewers
+   (`assumptions-reviewer` + `sentry-reviewer`) PRE-ExitPlanMode per
+   the `4bccba71` guardrails.
+2. **Begin OAC Phase 4** (rollout + portability decision + doc
+   propagation) with the four pilot-evidence refinements folded in.
+
+Option 1 unblocks real code motion (plugin migration execution);
+Option 2 completes the OAC lane and lifts the pilot-phase framing
+from workflow docs.
 
 ## Deep consolidation status
 
-**Due — in progress, riding OAC Phase 3 + Phase 4 as natural
-carrier.** Triggers firing: governance change (guardrails installed
-`4bccba71` need PDR graduation assessment), repeated surprise pattern
-(L-7 sunk-cost reinforces build-vs-buy lesson), fitness pressure
-(this session already committed 17 times; session-continuation
-prompt at 1545+ lines). Consolidation pass lands in OAC Phase 4 Task
-4.3 alongside doc propagation.
+**Due — deferred to OAC Phase 4 Task 4.3 as natural carrier; not
+well-bounded for this closeout.** Triggers firing: governance change
+(guardrails installed `4bccba71` need PDR graduation assessment),
+repeated surprise pattern (L-7 sunk-cost reinforced by the tracks-
+gitignored and menu-ification corrections logged in the 2026-04-20
+evening napkin entry), fitness pressure (branch at 20+ commits this
+session window; session-continuation prompt at 1545+ lines).
+Consolidation pass lands in OAC Phase 4 Task 4.3 alongside doc
+propagation.

@@ -1,3 +1,146 @@
+## 2026-04-20 (evening) — OAC Phase 1–3 executed; tracks-are-tracked correction; plugin-migration plan drafted
+
+### What Was Done
+
+- Promoted `operational-awareness-and-continuity-surface-separation.plan.md`
+  `current/` → `active/` (commit `153fc9aa`) with a 2026-04-20 addendum
+  to the Phase 0 baseline reflecting the bespoke-to-plugin pivot,
+  `4bccba71` guardrail installation, and deep-consolidation-due status.
+  Cross-references updated across 9 surfaces (collection READMEs,
+  roadmap, adjacent plans, deep-dives, analysis baseline,
+  session-continuation prompt, integration report).
+- Marked OAC Phase 1 complete (`d0cd54e2`): Design Contract +
+  operational-awareness-and-state-surfaces.md deep-dive already
+  satisfied Task 1.1 + 1.2 before promotion.
+- Reconciled L-7 and L-8 in sentry-observability-maximisation-mcp.plan.md
+  (`1fb4ac66`): L-7 bespoke → `completed`; L-8 `dropped` → `pending`
+  (un-dropped as the forward lane). L-8 section body rewritten to name
+  the prior `PARKED` rationale as the sunk-cost framing the `4bccba71`
+  guardrails are designed to catch.
+- Executed OAC Phase 2 (`ffcad2aa`): created `.agent/state/`
+  (`repo-continuity.md` + `workstreams/`) + `.agent/runtime/tracks/`
+  scaffolding, added OAC-Pilot sections to `session-handoff` + `GO` +
+  `session-continuation.prompt.md` with explicit pilot-phase framing.
+- Drafted sentry-esbuild-plugin migration plan (`4cbc8843`) as task #22
+  using the new `feature-workstream-template.md`. Build-vs-Buy
+  Attestation filled in with six surveyed integrations; Reviewer
+  Scheduling ordered plan-time → mid-cycle → close; WS0 dispatches
+  `assumptions-reviewer` + `sentry-reviewer` PRE-ExitPlanMode. Flagged
+  plan-density-invariant tension for owner decision (fold into
+  maximisation §L-8 vs pair-archive).
+- Executed OAC Phase 3 pilot (`9a973939`): ran scenarios 1, 4, 5, 6
+  deliberately; evidence at
+  `.agent/analysis/operational-awareness-pilot-evidence.md`. All four
+  pass. Calibration decision: PROMOTE.
+- Owner-authored artefacts committed: `84abfeb8` (work-to-date brief),
+  `d20fc397` (ecosystem progress report + Cursor plan pair).
+
+### Surprise — Tracks-are-tracked, not gitignored (design-shape inversion)
+
+**Expected**: tactical track cards are runtime, thread-aware,
+session-local state that shouldn't propagate across checkouts — the
+Phase 2 design treated them as gitignored with only `.gitkeep`
+preserved.
+
+**Actual**: owner correction mid-Phase-3: "multiple agents and devs in
+multiple locations could be collaborating on a track via git". The
+collaboration channel IS git; single-writer-per-card still holds;
+multiple cards per collaborative track disambiguate via the
+`<workstream>--<agent>--<branch>.md` naming convention.
+
+**Causal mechanism**: the Phase 2 design inherited "tactical
+coordination = runtime = ephemeral = local" as a tacit chain. Each
+link sounds right in isolation but the "= local" conclusion was never
+examined against the actual collaboration shape (cross-location,
+multi-agent, multi-session). This is the same class of error as the
+L-7 build-vs-buy miss: a shape decision made without checking the
+collaboration / vendor-integration assumption at the decision moment.
+
+**Pattern candidate**:
+**`collaboration-shape-is-an-unexamined-assumption-in-new-artefact-types`**
+— when introducing a new artefact type, explicitly check the
+collaboration shape (single-process / cross-process / cross-location /
+cross-agent / cross-session) before defaulting to a lifecycle
+treatment. Single-instance observation; repeats criterion is a
+second design where collaboration shape surfaced as a mid-cycle
+correction.
+
+### Surprise — Menu-ification of clear decisions
+
+**Expected**: AskUserQuestion with 3–4 options per question is the
+right shape when owner decisions are ambiguous.
+
+**Actual**: owner pushed back: "what are you talking about, we know
+exactly how to proceed". The three questions I posed were
+manufacturing optionality on decisions the owner had already made
+clearly in the previous messages.
+
+**Causal mechanism**: the plan-mode Phase 1–5 workflow encourages
+structured clarification via AskUserQuestion. But structured
+clarification becomes menu-ification when the options I list include
+paths that are not live — the owner's direction implicitly rules out
+at least one option, and posing it again signals inattention to the
+direction given.
+
+**Pattern candidate**:
+**`ask-the-minimum-not-the-maximum-when-direction-is-clear`** —
+AskUserQuestion is the right tool when decisions are genuinely open;
+it is the wrong tool for walking the owner through options they've
+already closed. When in doubt, state what I think the next action is
+and let the owner correct, rather than listing alternatives they've
+already foreclosed. Single-instance; repeats criterion is a second
+moment where a 3-option question is better served by a declarative
+"next I'll do X" statement.
+
+### Corrections / learnings
+
+- **Commitlint `subject-case`**: subjects must not be sentence/start/
+  pascal/upper-case. "OAC" in a subject line fails. Lowercase the
+  subject; use uppercase freely in the body. Watch for this in any
+  future acronym-heavy commit title.
+- **Track card rotation rule holds**: the resolve/promote/delete
+  discipline works mechanically in the scenario-4 exercise. No helper
+  needed for markdown-first; automated expiry check is a Phase 4
+  refinement candidate, not a pilot blocker.
+- **Plan-density invariant bit at the execution boundary**: authoring
+  the plugin-migration plan required a new file in the observability
+  directory, triggering the density rule. The substance was
+  un-blocked (the plan exists, drafted cleanly), but the file-count
+  invariant is in tension with "one plan per execution lane" at the
+  boundary where an un-dropped lane needs its own plan. Owner's
+  resolution pending next session: fold into maximisation §L-8 vs
+  retain standalone with pair-archive.
+
+### Key insight
+
+The two surprises name the same structural pattern at different
+layers: **a choice made without checking its implicit assumption**.
+The track-card gitignore assumption (local-only collaboration) and
+the menu-ification assumption (owner-decision-is-still-open) are
+both instances of "the shape wasn't wrong; the question that shaped
+it wasn't asked". This is the same root as the L-7 build-vs-buy
+miss. The `4bccba71` guardrails address the build-vs-buy instance
+specifically; the broader pattern — "check the implicit assumption
+at the shape-decision moment" — is worth watching for a third
+instance before promoting.
+
+### Lessons for next session
+
+- Resume from `.agent/state/repo-continuity.md`, not from
+  `.agent/prompts/session-continuation.prompt.md`'s `Live continuity
+  contract`. The prompt's contract section is legacy as of OAC Phase 3
+  PROMOTE decision; the state surfaces are authoritative.
+- Start Phase 4 by deciding the plugin-migration plan-density-
+  invariant resolution (fold vs pair-archive) — that decision is
+  blocking for plugin-migration WS0 dispatch.
+- Phase 4 folds in four pilot refinements: rename primary-brief
+  field, clarify authority-order language, decide on expiry-check
+  helper, decide on napkin-promotion helper.
+- Plugin-migration WS0 reviewers (`assumptions-reviewer` +
+  `sentry-reviewer`) fire PRE-ExitPlanMode per the new guardrails.
+
+---
+
 ## 2026-04-20 — L-7 bespoke orchestrator built then pivoted + guardrails installed
 
 ### What Was Done
