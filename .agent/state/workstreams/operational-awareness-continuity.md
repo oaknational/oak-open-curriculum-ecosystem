@@ -30,8 +30,11 @@ Phase 3 with explicit promote / adjust / reject decision. Then Phase
   contracts, loop model.
 - **Phase 2** (workflow integration): COMPLETE. Scaffolding created
   at `.agent/state/`, `.agent/runtime/tracks/` (commit `ffcad2aa`).
-  Workflow doc updates landed in `session-handoff.md`, `GO` skill,
-  `session-continuation.prompt.md` with pilot-phase framing.
+  Workflow doc updates landed in `session-handoff.md`, `GO` skill, and
+  `session-continuation.prompt.md`. Initial pilot-phase framing has
+  since been retired — as of 2026-04-20 (Phase 4.1) the state surfaces
+  are the primary continuity host and the prompt is a behavioural
+  entry surface only.
 - **Phase 3** (self-hosted pilot): COMPLETE. Evidence at
   `.agent/analysis/operational-awareness-pilot-evidence.md`.
   Scenarios 1, 4, 5, 6 all PASS. Calibration decision: **PROMOTE**.

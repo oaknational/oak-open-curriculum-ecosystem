@@ -23,25 +23,20 @@ Read
 and follow all instructions in that file and in the files it leads to (rules,
 testing strategy, schema-first execution).
 
-Then read the latest `Live continuity contract` in
-`.agent/prompts/session-continuation.prompt.md`. Treat it as the fast recovery
-surface for current objective, invariants, recent surprises, next safe step,
-and whether deep consolidation is due.
+Then read the live state surfaces in authority order:
 
-### OAC Pilot: new state-surface read order (OAC Phase 3 onward)
-
-When the Operational Awareness and Continuity Surface Separation lane
-([plan](../../../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md))
-reaches Phase 3 pilot, `GO` reads the new repo-local state surfaces in this
-order BEFORE the prompt's `Live continuity contract`:
-
-1. `.agent/state/repo-continuity.md` — compact canonical contract.
-2. `.agent/state/workstreams/<slug>.md` — the relevant workstream brief.
+1. `.agent/state/repo-continuity.md` — canonical continuity contract
+   (current objective, repo-wide invariants, next safe step, deep-consolidation
+   status).
+2. `.agent/state/workstreams/<slug>.md` — the relevant workstream brief
+   (lane-level current state, blockers, promotion watchlist).
 3. `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md` — the current
    tactical track card, if one exists.
 
-After OAC Phase 4 rollout, the prompt's `Live continuity contract` section
-is retired and the state surfaces are the sole source of truth.
+See [`.agent/state/README.md`](../../../state/README.md) and
+[`.agent/runtime/README.md`](../../../runtime/README.md) for the authority
+order and contracts. The continuation prompt is a behavioural entry surface;
+it does not host continuity state.
 
 If your current task is driven by a plan collection, also read the relevant
 collection `README.md` and `roadmap.md`, then:
@@ -55,7 +50,7 @@ discoverable.
 For MCP App work, start from these three surfaces in order:
 
 1. `start-right-quick`
-2. the latest continuity contract
+2. `.agent/state/repo-continuity.md`
 3. the active MCP App plan set
 
 ## When to Use GO

@@ -1,12 +1,12 @@
 # Repo-Local State Surfaces
 
-**Status**: Scaffolding created by OAC Phase 2 (2026-04-20). Population
-happens during OAC Phase 3 pilot and OAC Phase 4 rollout. See
+**Status**: Active (OAC Phase 4.1 rollout in progress, 2026-04-20). The
+continuation prompt has been retired as a state host; state now lives
+here and in `../runtime/tracks/`. See
 [operational-awareness-and-continuity-surface-separation.plan.md](../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md).
 
-This directory holds **tracked** repo-local state surfaces that separate
-what the continuation prompt previously did in one file into distinct
-surfaces with explicit authority, writers, readers, and expiry semantics.
+This directory holds **tracked** repo-local state surfaces with explicit
+authority, writers, readers, and expiry semantics.
 
 ## Surfaces
 
@@ -23,7 +23,11 @@ multiple single-writer cards, disambiguated by filename.
 
 ## Authority Order
 
-When surfaces disagree, the order is:
+The authority order is a **tiebreaker for same-scope conflicts**, not a
+gating rule across different-scope claims. When two surfaces disagree on
+the same field, the higher-authority surface wins. It does not mean a
+higher-authority surface must contain or override lower-authority
+surfaces' scope-specific content.
 
 1. **Plans** (`.agent/plans/*/active/*`) — scope, sequencing, acceptance
    criteria, validation.
@@ -45,11 +49,7 @@ When surfaces disagree, the order is:
   learnings. Promotable signals observed in workstream briefs or
   tactical track cards route into the existing learning loop.
 - **Runtime tactical track cards** (`.agent/runtime/tracks/*.md`) are
-  gitignored single-writer surfaces; they never outlive their track.
-
-## Pilot Status
-
-Surfaces are populated during OAC Phase 3's self-hosted parallel-track
-pilot on this lane's own implementation. After pilot calibration
-(promote / adjust / reject), OAC Phase 4 rolls the model out to the
-broader workflow set.
+  **git-tracked** single-writer surfaces; multi-agent and
+  multi-location collaboration flows through the normal git channel.
+  Cards do not persist beyond their resolution — expired cards must
+  be resolved, promoted, or deleted at session close.

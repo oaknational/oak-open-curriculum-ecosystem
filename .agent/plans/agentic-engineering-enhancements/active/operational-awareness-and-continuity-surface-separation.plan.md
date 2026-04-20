@@ -102,7 +102,10 @@ Create a repo-local state model that:
 
 - keeps one compact canonical continuity contract
 - gives each active workstream a tracked short-horizon resumption brief
-- gives each active agent or thread its own gitignored tactical track card
+- gives each active agent or thread its own git-tracked single-writer
+  tactical track card (collaborative tracks create multiple cards
+  disambiguated by the `<workstream>--<agent>--<branch>.md` filename
+  convention)
 - makes the continuation prompt a behavioural entry surface rather than the
   main mutable state host
 - routes promotable signals back into the existing learning loop rather than
@@ -167,7 +170,15 @@ conversation surfaces.
 
 ### Authority order
 
-When surfaces disagree, the order is:
+The authority order is a **tiebreaker for same-scope conflicts**, not a
+gating rule across different-scope claims. When two surfaces make
+conflicting claims about the same field (e.g. the current next safe step,
+the status of a workstream, an invariant's exact wording), the
+higher-authority surface wins. It does **not** mean a higher-authority
+surface must contain or override lower-authority surfaces' scope-specific
+content.
+
+When surfaces disagree on the same field:
 
 1. **Plans** — scope, sequencing, acceptance criteria, validation
 2. **`repo-continuity.md`** — canonical continuity contract
@@ -181,7 +192,9 @@ When surfaces disagree, the order is:
 `repo-continuity.md` must stay compact and cover only:
 
 - active workstreams
-- primary workstream brief
+- branch-primary workstream brief
+- current session focus (optional; only when distinct from the branch-primary
+  lane — e.g. a parallel agentic-engineering thread)
 - repo-wide invariants / non-goals
 - next safe step
 - deep-consolidation status
@@ -322,12 +335,14 @@ observe, refresh, hand off, redirect when needed, and close cleanly.
   - `.agent/state/repo-continuity.md`
   - `.agent/state/workstreams/README.md`
   - `.agent/runtime/README.md`
-  - `.agent/runtime/tracks/.gitkeep`
-  - gitignore rules that ignore tactical-card markdown while preserving the
-    tracked structure docs
+  - `.agent/runtime/tracks/` — git-tracked (corrected mid-Phase-3
+    2026-04-20; the initial Phase 2 scaffolding treated cards as
+    gitignored session-local state, but multi-agent and multi-location
+    collaboration requires the normal git channel)
 - Validation:
   - the later implementation can create the directories without ambiguity
-  - the ignored tactical surface remains documented and discoverable
+  - the tactical surface is documented, discoverable, and tracked so
+    collaborative tracks flow through git
 
 ## Phase 3 — Pilot and Evidence
 
@@ -390,6 +405,47 @@ observe, refresh, hand off, redirect when needed, and close cleanly.
 - Validation:
   - if the criteria are not met, record explicit no-promotion rationale and
     keep the work repo-local
+
+**Decision (2026-04-20, OAC Phase 4.2)**: **No promotion to Practice Core at
+this time. Remain a portable candidate, repo-local.**
+
+Rationale against each criterion:
+
+| Criterion | Evidence | Assessment |
+| --- | --- | --- |
+| Works across ≥2 workstream shapes | Only the self-dogfooding lane (agentic-engineering) and the observability lane's workstream brief have been populated. Both are single-writer, single-branch shapes. | **Not met.** Need evidence from a genuinely different shape — e.g. a multi-agent lane or a cross-repo consumer. |
+| Authority order stable under real parallel use | Authority order has only been exercised in sequential single-agent sessions. Scenarios 2 and 3 of the pilot are explicitly deferred to organic triggers. | **Not met.** |
+| Tactical surface does not drift into a second memory doctrine | One-session evidence is clean (one card created, claimed, and resolved correctly). The `expires_at`, resolve/promote/delete discipline is in the contract but has not been stress-tested. | **Insufficient evidence.** |
+| Markdown-first vs sidecar boundary explained | Plan's Design Contract + Risks section name the boundary (concurrent mutation at a rate that exceeds git coordination capacity routes to `cross-vendor-session-sidecars`). | **Met.** |
+
+Only one of four criteria is met. Promotion is not warranted. The lane
+stays a portable candidate; Practice Core doctrine (PDR-011) continues to
+describe the portable contract, and this repo's `.agent/state/` +
+`.agent/runtime/tracks/` is one implementation of it.
+
+**Follow-up triggers for re-evaluation**:
+
+- A second distinct workstream shape adopts the model and runs a full
+  resume-from-state-surfaces session.
+- A genuine multi-agent parallel lane exercises scenarios 2 and 3.
+- A concrete friction signal emerges (e.g. authority order collapses under
+  same-field conflict) that the portable contract should amend.
+
+**Optional helpers (refinements c and d)**: both marked as **future work,
+not built now**:
+
+- `(c)` expiry-check helper — a script that scans `.agent/runtime/tracks/`
+  for cards whose `expires_at` has passed and reports them. Value: surfaces
+  stale cards. Cost: low, but not load-bearing for Phase 4 rollout. Build
+  only if expiry drift becomes a real signal.
+- `(d)` napkin-promotion helper — a script that proposes promotion routes
+  for napkin entries tagged for graduation. Value: smoother surprise →
+  distilled flow. Cost: low, but the existing `consolidate-docs` flow
+  already covers the deeper loop. Build only if the manual route becomes
+  a friction signal in its own right.
+
+Both helpers are recorded here so they are discoverable when a trigger
+fires; neither is scheduled.
 
 ### Task 4.3: Documentation propagation and review closeout
 

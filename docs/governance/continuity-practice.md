@@ -33,8 +33,11 @@ Can the next session answer:
 Primary surfaces:
 
 - active plans
-- `session-continuation.prompt.md`
-- `session-handoff`
+- `.agent/state/repo-continuity.md` — canonical continuity contract
+- `.agent/state/workstreams/<slug>.md` — per-lane resumption brief
+- `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md` — single-writer
+  tactical coordination card
+- `session-handoff` — the workflow that refreshes the above
 
 ### 2. Epistemic continuity
 
@@ -111,23 +114,29 @@ able to continue into the deeper loop at natural convergence boundaries.
 
 ## Continuity Contract
 
-The live continuity contract belongs in
-`.agent/prompts/session-continuation.prompt.md`.
+The live continuity contract belongs in `.agent/state/repo-continuity.md`.
 
 `session-handoff` refreshes it in place using these exact fields:
 
-- `Workstream`
-- `Active plans`
-- `Current state`
-- `Current objective`
-- `Hard invariants / non-goals`
-- `Recent surprises / corrections`
-- `Open questions / low-confidence areas`
+- `Active workstreams`
+- `Branch-primary workstream brief`
+- `Current session focus` (optional; only when distinct from the
+  branch-primary lane)
+- `Repo-wide invariants / non-goals`
 - `Next safe step`
 - `Deep consolidation status`
 
-The prompt is an operational entry point only. Active plans remain
-authoritative for scope, sequencing, acceptance criteria, and validation.
+Per-lane short-horizon state is carried separately in
+`.agent/state/workstreams/<slug>.md` using the fields specified in
+`.agent/state/README.md`. Tactical coordination lives in
+`.agent/runtime/tracks/*.md`.
+
+`.agent/prompts/session-continuation.prompt.md` is a behavioural entry
+surface (grounding read order, per-session landing commitment, reviewer
+discipline, core invariants). It does not host continuity state.
+
+Active plans remain authoritative for scope, sequencing, acceptance
+criteria, and validation.
 
 ## GO
 
@@ -142,8 +151,9 @@ Use it after `start-right-quick` for longer MCP App work, especially when:
 `GO` should start from:
 
 - `start-right-quick`
-- the latest continuity contract
-- the active MCP App plan set
+- `.agent/state/repo-continuity.md` (and the relevant workstream brief +
+  track card it links to)
+- the active plan set for the current lane
 
 Close ordinary sessions with `session-handoff`. Use `jc-consolidate-docs` only
 when the trigger checklist says deep convergence is due.

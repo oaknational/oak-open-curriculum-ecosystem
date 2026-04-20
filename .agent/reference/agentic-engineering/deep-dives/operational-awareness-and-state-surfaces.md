@@ -65,7 +65,8 @@ One tracked short-horizon brief per active lane that carries:
 
 ### Tactical track-card surface
 
-One gitignored card per active agent or thread that carries:
+One **git-tracked** single-writer card per active agent or thread that
+carries:
 
 - agent or thread identity
 - branch or worktree
@@ -75,6 +76,13 @@ One gitignored card per active agent or thread that carries:
 - handoff note
 - `expires_at`
 - `promotion_needed`
+
+Cards are git-tracked so multi-agent and multi-location collaboration can
+flow through the normal git channel. A collaborative track creates
+multiple single-writer cards disambiguated by the filename convention
+`<workstream>--<agent>--<branch>.md`. Cards do not outlive their track
+— at resolution they are deleted, promoted (signal routed to the owning
+workstream brief's promotion watchlist or napkin), or otherwise removed.
 
 ### Promotion edge
 

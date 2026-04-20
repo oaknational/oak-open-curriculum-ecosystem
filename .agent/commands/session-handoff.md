@@ -26,41 +26,48 @@ asks for more, this command must not trigger:
 
 ## Steps
 
-1. **Refresh the live continuity contract.** Update the `Live continuity
-   contract` section in `.agent/prompts/session-continuation.prompt.md` using
-   these exact fields:
+1. **Refresh the canonical continuity contract.** Update
+   `.agent/state/repo-continuity.md` using its documented field set:
 
-   - `Workstream`
-   - `Active plans`
-   - `Current state`
-   - `Current objective`
-   - `Hard invariants / non-goals`
-   - `Recent surprises / corrections`
-   - `Open questions / low-confidence areas`
+   - `Active workstreams`
+   - `Branch-primary workstream brief`
+   - `Current session focus` (if distinct from the branch-primary lane)
+   - `Repo-wide invariants / non-goals`
    - `Next safe step`
    - `Deep consolidation status`
 
    Keep it compact and operational. Active plans remain authoritative for
    scope, sequencing, acceptance criteria, and validation.
 
-2. **Sync the authoritative next-action surfaces.** Update the active plan and
-   any relevant prompt sections if the session changed status, preconditions, or
-   the immediate next safe step. Do not duplicate plan authority; clarify it.
+2. **Refresh the relevant workstream brief.** Update
+   `.agent/state/workstreams/<slug>.md` for any lane that moved this session.
+   Required fields: `Owning plan(s)`, `Current objective`, `Current state`,
+   `Blockers / low-confidence areas`, `Next safe step`, `Active track links`,
+   `Promotion watchlist`.
 
-3. **Capture surprises and corrections.** Make sure any new surprises,
-   corrections, or expectation failures from this session are recorded in
+3. **Resolve, promote, or delete any tactical track cards.** Cards in
+   `.agent/runtime/tracks/` are short-horizon. At session close, each card is
+   either: resolved (deleted), promoted (signal routed into the workstream
+   brief's promotion watchlist or napkin), or deleted if no longer relevant.
+
+4. **Sync the authoritative next-action surfaces.** Update any active plan
+   whose status, preconditions, or immediate next safe step changed this
+   session. Do not duplicate plan authority; clarify it.
+
+5. **Capture surprises and corrections.** Record any new surprises,
+   corrections, or expectation failures from this session in
    `.agent/memory/napkin.md`. Use the structured surprise format from the
    napkin skill.
 
-4. **Run the consolidation gate.** Check the trigger checklist in
+6. **Run the consolidation gate.** Check the trigger checklist in
    `.agent/commands/consolidate-docs.md`.
 
    - If no trigger fires, set `Deep consolidation status` to
-     `not due — <reason>` and stop here.
+     `not due — <reason>` in `.agent/state/repo-continuity.md` and stop here.
    - If one or more triggers fire, set `Deep consolidation status` to
-     `due — <reason>` and continue to step 5.
+     `due — <reason>` and continue to step 7.
 
-5. **Escalate only when the deeper loop is clearly warranted.**
+7. **Escalate only when the deeper loop is clearly warranted.**
 
    - If the triggered work is already well-bounded and belongs to this
      closeout, continue immediately into `jc-consolidate-docs`.
@@ -70,32 +77,7 @@ asks for more, this command must not trigger:
    - If `jc-consolidate-docs` runs now, refresh `Deep consolidation status`
      to `completed this handoff — <reason>`.
 
-6. **Keep the boundary clean.** `session-handoff` now includes the
-   consolidation gate and can escalate into `jc-consolidate-docs` when
-   appropriate, but ordinary sessions remain lightweight. It still must not
-   smuggle in review or git actions.
-
-## OAC Pilot: New State Surfaces (OAC Phase 3 onward)
-
-When the Operational Awareness and Continuity Surface Separation lane
-([plan](../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md))
-reaches Phase 3 pilot, `session-handoff` refreshes the new repo-local
-state surfaces in this order:
-
-1. `.agent/state/repo-continuity.md` — the compact canonical
-   continuity contract (active workstreams, primary brief, repo-wide
-   invariants/non-goals, next safe step, deep-consolidation status).
-2. `.agent/state/workstreams/<slug>.md` — the relevant workstream
-   brief for this session's lane.
-3. `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md` — the
-   current tactical track card, if one exists.
-
-During the pilot, treat these surfaces as authoritative for their
-scope and update `session-continuation.prompt.md` only for read-order
-and routing changes, not state. After OAC Phase 4 rollout, the
-`Live continuity contract` section of the prompt is retired and
-`session-handoff` writes only to the new surfaces.
-
-During the pilot transition, do not maintain state in both places —
-follow the pilot scenario in `.agent/analysis/operational-awareness-pilot-evidence.md`
-for which surface is authoritative at each step.
+8. **Keep the boundary clean.** `session-handoff` includes the consolidation
+   gate and can escalate into `jc-consolidate-docs` when appropriate, but
+   ordinary sessions remain lightweight. It does not smuggle in review or git
+   actions.

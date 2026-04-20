@@ -4,8 +4,13 @@ pdr_kind: governance
 
 # PDR-011: Continuity Surfaces and the Surprise Pipeline
 
-**Status**: Accepted
-**Date**: 2026-04-18
+**Status**: Accepted (amended 2026-04-20)
+**Date**: 2026-04-18 (amended 2026-04-20 — contract host abstracted
+from "primary session-continuation prompt" to "canonical repo-local
+surface set"; field set split into portable minimum plus optional
+epistemic fields; host-local context updated to reflect split
+surfaces. Doctrine — capture→distil→graduate→enforce, split-loop
+model, three continuity types — unchanged.)
 **Related**:
 [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
 (new Core contract under which this PDR is authored);
@@ -14,6 +19,15 @@ pdr_kind: governance
 adapters — same architecture this PDR inherits);
 [PDR-010](PDR-010-domain-specialist-capability-pattern.md)
 (specialists that may be invoked from the continuity surface).
+
+## Amendment Log
+
+- **2026-04-20**: §"The continuity contract" host language abstracted;
+  field set restructured into a portable minimum plus optional
+  epistemic fields; §Host-local context updated to reflect the
+  state-surface split (`repo-continuity.md` + `workstreams/<slug>.md`
+  + `runtime/tracks/*.md`). The portable doctrine and the contract's
+  authority-subordinate role to active plans are unchanged.
 
 ## Context
 
@@ -140,29 +154,39 @@ natural consolidation boundary.
 
 ### The continuity contract
 
-A repo that has accepted this PDR MUST carry a named operational
-surface that hosts a **Live continuity contract** — a compact
-structured section with specified fields. The surface is typically
-the primary session-continuation prompt or equivalent canonical
-location; it is host-local which exact file carries it, but every
-repo MUST have one.
+A repo that has accepted this PDR MUST carry a named canonical
+operational surface that hosts a **Live continuity contract** — a
+compact structured section with specified fields. The canonical host
+is host-local: it may be a dedicated state file, a section of a
+primary session-continuation prompt, or any equivalent surface that
+every workflow references first. Hosts that split the contract
+across a canonical file + per-workstream briefs + single-writer
+tactical track cards remain compliant, provided the authority order
+between surfaces is explicit, each surface has a single documented
+writer, and the fields below are covered in aggregate.
 
-Required contract fields (portable — every repo carries the same
-structure):
+**Portable minimum fields** (every repo carries these, regardless of
+host shape):
 
-- **Workstream** — the currently active workstream.
-- **Active plans** — authoritative plan file paths.
-- **Current state** — compact status of the workstream.
-- **Current objective** — the next explicit step(s); may be
-  option-structured (Option A / Option B with decision criteria).
-- **Hard invariants / non-goals** — constraints carried forward.
+- **Active workstreams** — lanes currently in play.
+- **Branch-primary workstream brief** — pointer to the primary lane's
+  resumption brief (if the host splits per-lane state into a separate
+  surface) or an inline compact status block (if the host does not).
+- **Repo-wide invariants / non-goals** — constraints carried forward.
+- **Next safe step** — operational-continuity content: what the next
+  session should do first.
+- **Deep consolidation status** — whether the consolidation gate has
+  been run and what it found.
+
+**Optional (host-local placement)** — these may live on the canonical
+contract, on a per-workstream brief, or on the napkin, but they MUST
+be present somewhere the next session reads before acting:
+
+- **Current session focus** — only when distinct from the
+  branch-primary lane (e.g. a parallel thread).
 - **Recent surprises / corrections** — epistemic-continuity content.
 - **Open questions / low-confidence areas** — epistemic-continuity
   content.
-- **Next safe step** — operational-continuity content: what the next
-  session should do first.
-- **Deep consolidation status** — whether the consolidation gate
-  has been run and what it found.
 
 The contract remains **operational** only. Active plans remain
 authoritative for scope, sequencing, acceptance criteria, and
@@ -361,11 +385,19 @@ the PDR `Superseded by <Core section>` and retains it as provenance.
 
 ### Host-local context (this repo only, not part of the decision)
 
-At the time of authoring, the repo where this PDR was written
-carries:
+At the time of the 2026-04-20 amendment, the repo where this PDR was
+authored carries a **split-surface host**:
 
-- Continuity contract surface:
-  `.agent/prompts/session-continuation.prompt.md`.
+- Canonical continuity contract: `.agent/state/repo-continuity.md`
+  (portable minimum fields + "Current session focus" when distinct
+  from branch-primary).
+- Per-lane resumption briefs: `.agent/state/workstreams/<slug>.md`
+  (owning plan(s), current objective, current state, blockers, next
+  safe step, active track links, promotion watchlist).
+- Single-writer tactical track cards:
+  `.agent/runtime/tracks/<workstream>--<agent>--<branch>.md`
+  (git-tracked; collaborative tracks create multiple cards
+  disambiguated by filename).
 - Session-handoff workflow: canonical in `.agent/commands/` with
   platform adapters.
 - Consolidate-docs workflow: canonical in `.agent/commands/` with
@@ -376,6 +408,10 @@ carries:
 - Experience records: `.agent/experience/`.
 - Mid-session re-grounding: canonical `GO` skill with platform
   adapters.
+- Behavioural entry surface:
+  `.agent/prompts/session-continuation.prompt.md` — grounding order,
+  per-session landing commitment, reviewer discipline, core
+  invariants, durable guidance. Not a state host.
 
 Specific field formats, exact file locations, and the current
 state of each surface live in the host ADR record this PDR's

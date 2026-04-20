@@ -257,3 +257,133 @@ round. The plan now lives in `archive/completed/`.
 - Other ADR/docs/README updates: pending
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: pending
+
+## OAC Phase 4.3 — Continuity surface retirement & doc propagation (2026-04-20)
+
+Plan: [operational-awareness-and-continuity-surface-separation.plan.md](active/operational-awareness-and-continuity-surface-separation.plan.md).
+Driver: retire `.agent/prompts/session-continuation.prompt.md`'s `Live
+continuity contract` section in favour of the three repo-local state
+surfaces (`.agent/state/repo-continuity.md` +
+`.agent/state/workstreams/<slug>.md` + `.agent/runtime/tracks/*.md`).
+
+- Status: in progress (this session).
+- ADR update: `docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md`
+  §3 rewritten — "The continuity contract lives in a canonical repo-local
+  surface" (was: "in the MCP App continuation prompt"). Contract field list
+  updated to match the state-surface split. No supersession needed; the
+  doctrine is unchanged, only the hosting location is abstracted.
+- Governance update:
+  `docs/governance/continuity-practice.md` §Three Continuity Surfaces §1
+  and §Continuity Contract and §GO all updated to reference the three
+  state surfaces as the primary operational continuity surfaces.
+- Practice Core update:
+  `.agent/practice-core/practice-bootstrap.md` §Continuity Contract
+  abstracted: canonical host is now generic ("dedicated state file or
+  section of a continuation prompt"), with explicit acknowledgement that
+  split-surface hosts remain compliant when authority order is explicit,
+  single-writer discipline holds, and fields are covered in aggregate.
+  Minimum contract field set reduced to the portable core; epistemic-
+  continuity fields (surprises, open questions) moved to optional /
+  per-lane placement.
+- Reference / deep-dive updates:
+  `.agent/reference/agentic-engineering/deep-dives/operational-awareness-and-state-surfaces.md`
+  §Tactical track-card surface corrected from "gitignored" to "git-tracked"
+  with the `<workstream>--<agent>--<branch>.md` filename convention for
+  collaborative tracks. `continuity-and-knowledge-flow.md` no-change
+  rationale: content was already abstracted above the hosting-location
+  layer.
+- Workflow doc updates: `.agent/skills/go/shared/go.md` and
+  `.agent/commands/session-handoff.md` retired OAC-pilot framing and now
+  read/write the state surfaces directly, not the prompt section.
+  `.agent/state/README.md` corrected: line about track cards being
+  "gitignored single-writer surfaces" replaced with git-tracked model;
+  authority order re-described as a same-scope tiebreaker (refinement b).
+  `.agent/state/repo-continuity.md` field renamed "Primary workstream
+  brief" → "Branch-primary workstream brief" + added "Current session
+  focus" (refinement a).
+- Prompt retirement: `.agent/prompts/session-continuation.prompt.md`
+  shrank from 1628 lines to ~140 — all state-hosting sections removed;
+  remaining content is the behavioural entry surface only (Ground First,
+  This Prompt's Role, Per-Session Landing Commitment, Reviewer
+  Discipline, Core Invariants, Durable Guidance). Prompts README
+  description updated to match.
+- Portability decision: **No promotion to Practice Core. Remain portable
+  candidate, repo-local.** Only one of four criteria met (markdown-first
+  vs sidecar boundary explained). Other three require evidence from
+  distinct workstream shapes and real parallel use that single-session
+  dogfooding cannot generate. Recorded in OAC plan Task 4.2. Re-evaluate
+  on concrete follow-up triggers.
+- Optional helpers (c expiry-check, d napkin-promotion): marked as
+  future-work; built on trigger, not pre-built.
+- Consolidation review (`jc-consolidate-docs`): pending — this
+  documentation propagation IS the natural deep-consolidation carrier
+  flagged in the 2026-04-20 session close. Deferred to a dedicated pass
+  after plan-time reviewers land; a handoff node here keeps the boundary
+  clean.
+- Reviewers: `docs-adr-reviewer` + `assumptions-reviewer` dispatched as
+  the closeout of this phase. Both returned ACCEPT WITH NOTES. Findings
+  applied in-session:
+  - ADR-150 Rationale §"Why keep the continuity contract in the prompt"
+    rewritten to "Why a canonical repo-local surface for the contract";
+    §4 "active MCP App plan set" → "active plan set for the current
+    lane"; §Positive consequence "MCP App lane gains a durable
+    operational contract" → "repo gains a durable operational continuity
+    contract decoupled from any single workflow prompt"; amendment log
+    added to the ADR header.
+  - ADR-150 §3 specific repo paths reframed as explicitly
+    non-normative/illustrative.
+  - OAC plan §Goal (L105) and §Task 2.2 Expected surfaces (L328-340)
+    "gitignored" vestige corrected to git-tracked with
+    filename-disambiguation note.
+  - `state/repo-continuity.md` stale Status line, Option-A/B
+    next-safe-step menu, and fitness-pressure note on the retired
+    1545-line prompt all cleared.
+  - `state/workstreams/operational-awareness-continuity.md` Phase 2
+    bullet updated to reflect retired pilot-phase framing.
+  - Track card handoff note rewritten to remove
+    "Phase 4 unblocks plugin WS0" overstatement. Plugin-migration plan's
+    actual dependency is OAC Phase 2 scaffolding (landed at `ffcad2aa`).
+  - `PDR-011` amended: host language abstracted to "canonical repo-local
+    surface" that may split across canonical contract + per-workstream
+    briefs + single-writer track cards; contract field set restructured
+    into a portable minimum plus optional host-local epistemic fields;
+    §Host-local context updated to reflect this repo's split-surface
+    implementation. Doctrine unchanged. Amendment logged at PDR header.
+
+### No-change rationale (mandated Task 4.3 surfaces and required canonicals)
+
+- **`.agent/practice-core/practice.md`** — no edit. §Continuity host
+  (L242-248) already defers field specification and host options to
+  `practice-bootstrap.md §Continuity Contract` (which WAS updated this
+  pass). The deferral inherits the new doctrine automatically; editing
+  `practice.md` would duplicate the bootstrap's content and create a
+  second source of truth.
+- **`.agent/reference/agentic-engineering/README.md`** — no edit.
+  Hub-level index routes readers to ADR-150 and
+  `continuity-practice.md` by topic; both anchors were updated in this
+  pass and the hub's routing statements remain accurate. No content
+  changes at the hub layer.
+- **`.agent/reference/agentic-engineering/deep-dives/continuity-and-knowledge-flow.md`**
+  — no edit (stated above). Deep-dive content is framed at the
+  operational/epistemic/institutional layer; it never asserted a
+  specific host for the contract, so the amendment does not touch it.
+- **ADR-119 (`docs/architecture/architectural-decisions/119-agentic-engineering-practice.md`)**
+  — no edit. This required canonical describes the three-layer Practice
+  model (Philosophy / Structure / Tooling). Continuity-surface
+  separation does not change the Practice name, layer boundaries, or
+  the three-layer model itself. ADR-150 is the ADR that carries the
+  continuity doctrine; ADR-119 inherits no update responsibility from
+  this phase.
+
+### Follow-up flagged during closeout (not completed this session)
+
+- A deliberate deep consolidation pass is still due (governance change
+  guardrails `4bccba71` graduation assessment; L-7 sunk-cost + tracks-
+  gitignored + menu-ification surprise graduation). Recorded in
+  `state/repo-continuity.md §Deep consolidation status`. Scheduled for
+  explicit session rather than smuggled into the next commit.
+- Independent assumption reviewer noted that the PDR-011 amendment
+  itself would benefit from a second-pass read once settled, to verify
+  no unstated assumptions about multi-agent coordination or
+  git-as-coordination-bus were introduced. Logged here so the next
+  consolidation pass picks it up.

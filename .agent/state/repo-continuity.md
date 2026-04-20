@@ -1,19 +1,20 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-20 (session close, OAC Phase 3 closed)
-**Status**: Authoritative for the fields below. The prompt's `Live
-continuity contract` section is legacy as of OAC Phase 3 PROMOTE
-decision; Phase 4 formally retires that prompt section. In the
-interim, if the prompt and this file conflict, **this file wins**.
+**Last refreshed**: 2026-04-20 (OAC Phase 4 substantially complete —
+4.1 + 4.2 + 4.3 landed this session; reviewer findings applied)
+**Status**: Authoritative for the fields below. The `Live continuity
+contract` section of `.agent/prompts/session-continuation.prompt.md` is
+retired. The prompt is now a behavioural entry surface only; state
+lives in this file, `workstreams/<slug>.md`, and `../runtime/tracks/*.md`.
 
 ## Active workstreams
 
 - [`observability-sentry-otel`](workstreams/observability-sentry-otel.md)
-  — primary on branch `feat/otel_sentry_enhancements`.
+  — branch-primary on `feat/otel_sentry_enhancements`.
 - [`operational-awareness-continuity`](workstreams/operational-awareness-continuity.md)
-  — parallel lane. Executing in this session; Phase 3 pilot active.
+  — parallel lane. Phase 4 rollout in progress this session.
 
-## Primary workstream brief
+## Branch-primary workstream brief
 
 [`workstreams/observability-sentry-otel.md`](workstreams/observability-sentry-otel.md).
 
@@ -22,9 +23,19 @@ Current substantive work inside that lane is the
 at commit `4cbc8843`, pending plan-time reviewer dispatch before
 execution).
 
-> **Known refinement deferred to OAC Phase 4**: this field's name
-> will be renamed to "Branch-primary workstream brief" and a separate
-> "Current session focus" field added, per pilot evidence scenario 1.
+## Current session focus
+
+[`workstreams/operational-awareness-continuity.md`](workstreams/operational-awareness-continuity.md)
+— completing OAC Phase 4 (rollout + portability decision + doc
+propagation) so the continuation-prompt retirement lands cleanly.
+
+**Note on sequencing**: OAC Phase 4 is not a technical blocker for the
+sentry-esbuild-plugin migration WS0 reviewers. The plugin-migration
+plan's stated dependency is OAC Phase 2 scaffolding (already landed
+at commit `ffcad2aa`). Phase 4 is being finished first as an
+in-flight-drift-reduction choice, not because it gates downstream
+work. Owner-set order: OAC Phase 4 close → plugin migration WS0/WS1
+→ Sentry integration value.
 
 ## Repo-wide invariants / non-goals
 
@@ -71,34 +82,27 @@ Non-goals for next session:
   WS2 task handles deletion.
 - Do NOT start plugin-migration WS1 before WS0 (plan-time
   `assumptions-reviewer` + `sentry-reviewer` dispatch) completes.
-- Do NOT start Phase 4 rollout before deciding the plan-density-
-  invariant resolution for the plugin-migration plan (fold vs
-  pair-archive).
 
 ## Next safe step
 
-Pick one of two next-session openers, owner's call:
-
-1. **Resolve plan-density-invariant tension on the plugin-migration
-   plan** (fold into maximisation §L-8 vs retain standalone with
-   pair-archive), then dispatch plugin-migration WS0 reviewers
-   (`assumptions-reviewer` + `sentry-reviewer`) PRE-ExitPlanMode per
-   the `4bccba71` guardrails.
-2. **Begin OAC Phase 4** (rollout + portability decision + doc
-   propagation) with the four pilot-evidence refinements folded in.
-
-Option 1 unblocks real code motion (plugin migration execution);
-Option 2 completes the OAC lane and lifts the pilot-phase framing
-from workflow docs.
+**Resolve plan-density-invariant tension on the plugin-migration
+plan** (`.agent/plans/observability/current/sentry-esbuild-plugin-migration.plan.md`)
+— decide fold into maximisation §L-8 vs retain standalone with
+pair-archive — then dispatch plugin-migration WS0 reviewers
+(`assumptions-reviewer` + `sentry-reviewer`) PRE-ExitPlanMode per the
+`4bccba71` guardrails. OAC Phase 4 is substantially complete this
+session; only PDR-011 alignment + deep-consolidation pass remain as
+housekeeping behind the next Phase-4 closeout commit.
 
 ## Deep consolidation status
 
-**Due — deferred to OAC Phase 4 Task 4.3 as natural carrier; not
-well-bounded for this closeout.** Triggers firing: governance change
-(guardrails installed `4bccba71` need PDR graduation assessment),
-repeated surprise pattern (L-7 sunk-cost reinforced by the tracks-
-gitignored and menu-ification corrections logged in the 2026-04-20
-evening napkin entry), fitness pressure (branch at 20+ commits this
-session window; session-continuation prompt at 1545+ lines).
-Consolidation pass lands in OAC Phase 4 Task 4.3 alongside doc
-propagation.
+**Due — partially discharged by OAC Phase 4.3 doc propagation this
+session; full pass still pending.** Fitness-pressure signal from the
+1628-line continuation prompt is now discharged (prompt is ~145 lines
+behavioural-only). Remaining triggers: governance change (guardrails
+installed `4bccba71` need PDR graduation assessment), repeated surprise
+pattern (L-7 sunk-cost + the tracks-gitignored and menu-ification
+corrections from 2026-04-20 evening), and PDR-011 alignment flagged by
+`assumptions-reviewer` during this session's Phase 4.3 closeout. A
+deliberate consolidation pass should land before the plugin-migration
+WS0 gate opens, or be explicitly scheduled after.

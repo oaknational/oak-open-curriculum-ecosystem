@@ -443,18 +443,25 @@ are thin wrappers.
 Session-entry skills depend on a live continuity surface. The following
 contract defines what that surface must provide.
 
-One explicit host surface must carry the live continuity contract. Prompts
-(`.agent/prompts/session-continuation.prompt.md`) are a strong default; other
-hosts are valid if `go`, `session-handoff`, and start-right all point to the
-chosen surface. The key rule: **if any workflow references a continuity
-surface, that surface must exist on a fresh checkout.** Hydration is
-incomplete until the host surface exists and the workflows that reference it
-resolve.
+One explicit canonical host surface must carry the live continuity
+contract. Typical hosts include a dedicated state file (e.g.
+`.agent/state/repo-continuity.md`) or a section of a continuation prompt
+— the choice is host-local. Whatever the host is, `go`, `session-handoff`,
+and start-right must all point to it. The key rule: **if any workflow
+references a continuity surface, that surface must exist on a fresh
+checkout.** Hydration is incomplete until the host surface exists and
+the workflows that reference it resolve.
 
-The contract stays operational-only and carries these fields: Workstream,
-Active plans, Current state, Current objective, Hard invariants / non-goals,
-Recent surprises / corrections, Open questions / low-confidence areas, Next
-safe step, and Deep consolidation status.
+Hosts that split the contract across multiple surfaces (canonical contract
++ per-workstream brief + tactical track cards) remain compliant provided
+the authority order between them is explicit, each surface has a single
+documented writer, and the contract fields are covered in aggregate.
+
+The contract stays operational-only. The minimum field set is: active
+workstreams, branch-primary workstream brief, repo-wide invariants /
+non-goals, next safe step, and deep-consolidation status. Hosts may add
+epistemic-continuity fields (recent surprises, open questions) either
+on the canonical contract or on a per-workstream brief.
 
 Keep ordinary continuity and deep convergence separate:
 
