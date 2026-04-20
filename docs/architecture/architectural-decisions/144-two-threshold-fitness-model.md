@@ -85,8 +85,8 @@ the required remediation.
 
 1. **One scale, one vocabulary everywhere.** The four zone names (`healthy`,
    `soft`, `hard`, `critical`) are used verbatim in the validator output, in
-   `.agent/commands/consolidate-docs.md`, in `.agent/memory/active/distilled.md`, in
-   `.agent/prompts/session-continuation.prompt.md`, in the outgoing
+   `.agent/commands/consolidate-docs.md`, in `.agent/memory/active/distilled.md`,
+   in `.agent/memory/operational/repo-continuity.md`, in the outgoing
    practice-context file, and in any future fitness-related surface. One
    concept = one name (`.agent/directives/principles.md` §Code Design).
 

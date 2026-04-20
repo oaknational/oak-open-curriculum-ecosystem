@@ -249,8 +249,10 @@ architecture-and-infrastructure collection prior to 2026-04-18):
 
 **Cross-reference updates** after moves:
 
-- `.agent/prompts/session-continuation.prompt.md` — `Active executable plan` +
-  `Strategic parent brief` + `Related` paths.
+- `.agent/memory/operational/repo-continuity.md` + relevant workstream brief
+  — Active executable plan, Strategic parent brief, and Related paths
+  (the prior session-continuation prompt that hosted these has been
+  dissolved 2026-04-20; state lives in operational memory now).
 - `.agent/plans/high-level-plan.md` — any observability-plan paths.
 - `.agent/plans/architecture-and-infrastructure/active/README.md` — remove
   moved entries, add note pointing at new home.

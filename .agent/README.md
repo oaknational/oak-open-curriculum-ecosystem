@@ -86,7 +86,7 @@ docs, READMEs) via the consolidation workflow.
 
 | Directory | Purpose |
 | --- | --- |
-| `memory/` | Session learning: [`napkin.md`](memory/active/napkin.md) (observations), [`distilled.md`](memory/active/distilled.md) (hard-won rules), [`patterns/`](memory/active/patterns/README.md) (77 reusable solutions) |
+| `memory/` | Three-mode persistent content: [`active/`](memory/README.md#active----learning-loop-memory) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/README.md#operational----continuity--session-resume-memory) (continuity — repo-continuity, workstreams, tracks), [`executive/`](memory/README.md#executive----organisational--contract-memory) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |
 | `experience/` | Qualitative records of what work was like across sessions — see [experience/HUMAN.md](experience/HUMAN.md) |
 | `research/` | Research proposals and analysis |
 | `analysis/` | Technical analysis artefacts (API investigations, reranking assessments, etc.) |

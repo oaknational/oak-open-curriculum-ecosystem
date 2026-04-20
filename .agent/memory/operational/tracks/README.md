@@ -24,7 +24,7 @@ conceptual track create multiple cards, disambiguated by the
 
 | Surface | Purpose | Horizon | Writers | Authority |
 | --- | --- | --- | --- | --- |
-| [`tracks/<workstream>--<agent>--<branch>.md`](tracks/) | Single-writer tactical coordination surface | One focused task or blocker-resolution cycle | The owning agent only | Tactical coordination only; never authoritative for scope |
+| `<workstream>--<agent>--<branch>.md` | Single-writer tactical coordination surface | One focused task or blocker-resolution cycle | The owning agent only | Tactical coordination only; never authoritative for scope |
 
 ## Required Fields (tactical track cards)
 

@@ -408,10 +408,14 @@ authored carries a **split-surface host**:
 - Experience records: `.agent/experience/`.
 - Mid-session re-grounding: canonical `GO` skill with platform
   adapters.
-- Behavioural entry surface:
-  `.agent/prompts/session-continuation.prompt.md` — grounding order,
-  per-session landing commitment, reviewer discipline, core
-  invariants, durable guidance. Not a state host.
+- Behavioural entry surface: the `start-right-quick` skill
+  (`.agent/skills/start-right-quick/`) carries grounding read order
+  and the landing-target ritual at session open; `session-handoff`
+  carries the landing-evidence ritual at session close. The prior
+  `.agent/prompts/session-continuation.prompt.md` was dissolved
+  (2026-04-20); its doctrine graduated to
+  [PDR-026](PDR-026-per-session-landing-commitment.md) and its
+  layering content to `.agent/directives/orientation.md`.
 
 Specific field formats, exact file locations, and the current
 state of each surface live in the host ADR record this PDR's

@@ -134,7 +134,7 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
 
    **When nothing qualifies**: say so and move on. Not every consolidation produces Core refinement. But "nothing qualifies" is a conclusion reached by review, not by skipping review.
 
-   **Scope signal**: if a single consolidation surfaces many Core amendments (> 3), the rate of structural change is high and warrants a deliberate pause-and-stabilise posture before any further Core restructuring. This is the diagnostic signal ADR-131 §Self-Referential Property and the session-continuation prompt's "rate of structural change" note flag.
+   **Scope signal**: if a single consolidation surfaces many Core amendments (> 3), the rate of structural change is high and warrants a deliberate pause-and-stabilise posture before any further Core restructuring. This is the diagnostic signal ADR-131 §Self-Referential Property names; record the scope signal in `.agent/memory/active/napkin.md` so the pause-and-stabilise posture persists into the next session.
 
 9. **Actively manage fitness thresholds** (ADR-144 three-zone model). Run `pnpm practice:fitness` (or `pnpm practice:fitness:informational` for a non-blocking report). The validator discovers every live markdown file that declares `fitness_line_target` in YAML frontmatter, excluding archives, backups, and incoming practice boxes. Every declared metric lands in one of four zones:
 

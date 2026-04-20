@@ -54,7 +54,7 @@ packages/sdks/oak-sdk-codegen/reference/*.json
 # coordination channel the rest of the repo uses. Single-writer-per-card
 # still holds; multiple cards disambiguate multiple writers via the
 # <workstream>--<agent>--<branch>.md naming convention.
-# See .agent/runtime/README.md.
+# See .agent/memory/operational/tracks/README.md.
 
 # Logs
 *.log

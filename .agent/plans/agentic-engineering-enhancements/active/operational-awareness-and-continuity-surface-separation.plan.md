@@ -184,8 +184,10 @@ When surfaces disagree on the same field:
 2. **`repo-continuity.md`** — canonical continuity contract
 3. **`workstreams/<slug>.md`** — lane-level short-horizon state
 4. **Track cards** — tactical coordination only, never authoritative for scope
-5. **`session-continuation.prompt.md`** — read order, routing, and operating
-   instructions only
+
+Read order and routing live in
+[`.agent/directives/orientation.md`](../../../directives/orientation.md);
+they are doctrine, not an authority tier for state claims.
 
 ### Mandatory field contracts
 
@@ -312,11 +314,22 @@ observe, refresh, hand off, redirect when needed, and close cleanly.
 
 ### Task 2.1: Reframe the continuation prompt
 
-- Target surfaces for later implementation:
-  - `.agent/prompts/session-continuation.prompt.md`
-  - `.agent/commands/session-handoff.md`
-  - `.agent/skills/go/shared/go.md`
-  - start-right surfaces only if read order changes materially
+**Historical note (2026-04-20)**: this task is superseded by the
+full dissolution of the continuation prompt documented at commit
+`b637346c`. Ground First reading order now lives in
+`start-right-quick`; landing-commitment doctrine lives in
+[PDR-026](../../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md);
+layering contract lives in
+[`.agent/directives/orientation.md`](../../../directives/orientation.md).
+The original task specification is preserved below for historical
+context.
+
+- Target surfaces for later implementation (historical — now dissolved):
+  - `.agent/prompts/session-continuation.prompt.md` (deleted 2026-04-20)
+  - `.agent/commands/session-handoff.md` (updated; landing ritual added)
+  - `.agent/skills/go/shared/go.md` (updated)
+  - start-right surfaces only if read order changes materially (absorbed
+    the Ground First reading order)
 - Required future behaviour:
   - the continuation prompt becomes a behavioural entry surface only
   - `session-handoff` refreshes repo continuity and the relevant workstream

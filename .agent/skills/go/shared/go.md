@@ -35,8 +35,8 @@ Then read the live state surfaces in authority order:
 
 See [`.agent/memory/operational/README.md`](../../../memory/operational/README.md) and
 [`.agent/memory/operational/tracks/README.md`](../../../memory/operational/tracks/README.md) for the authority
-order and contracts. The continuation prompt is a behavioural entry surface;
-it does not host continuity state.
+order and contracts. Operational memory is the sole continuity-state host;
+general session entry is `start-right-quick`, not a prompt.
 
 If your current task is driven by a plan collection, also read the relevant
 collection `README.md` and `roadmap.md`, then:

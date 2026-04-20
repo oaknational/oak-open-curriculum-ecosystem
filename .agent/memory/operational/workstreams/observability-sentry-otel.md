@@ -1,16 +1,18 @@
 # Workstream Brief — Observability (Sentry + OTel)
 
-**Last refreshed**: 2026-04-20 (L-8 re-plan folded into active plan;
-WS0 assumptions-reviewer pass complete)
+**Last refreshed**: 2026-04-20 (session close — §L-8 re-plan ready
+for execution at WS1 RED; deferral decisions recorded; Phase 3a/3b
+split propagated; memory taxonomy + prompt dissolution landed
+around this workstream without advancing it)
 **Branch**: `feat/otel_sentry_enhancements`
 
 ## Owning plan(s)
 
-- [`sentry-observability-maximisation-mcp.plan.md`](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
+- [`sentry-observability-maximisation-mcp.plan.md`](../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
   — lane-level execution authority (ACTIVE).
-- [`high-level-observability-plan.md`](../../plans/observability/high-level-observability-plan.md)
+- [`high-level-observability-plan.md`](../../../plans/observability/high-level-observability-plan.md)
   — five-axis MVP framing + wave sequencing.
-- [`sentry-otel-integration.execution.plan.md`](../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
+- [`sentry-otel-integration.execution.plan.md`](../../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
   — foundation parent plan; credential/evidence authority.
 
 ## Current objective

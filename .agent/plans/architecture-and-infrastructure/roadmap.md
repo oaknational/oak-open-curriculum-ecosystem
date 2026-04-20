@@ -2,7 +2,7 @@
 
 **Status**: Active M2 blocker execution, queued cross-app standardisation, and an agreed next hardening promotion after the current improvement tranche.
 **Last Updated**: 2026-04-17
-**Session Entry**: [../../prompts/session-continuation.prompt.md](../../prompts/session-continuation.prompt.md)
+**Session Entry**: [`start-right-quick`](../../skills/start-right-quick/SKILL.md) + [`memory/operational/repo-continuity.md`](../../memory/operational/repo-continuity.md)
 
 ---
 
@@ -149,4 +149,4 @@ Phase 4: Quality/operations hardening                 📋 future
 2. [future/README.md](future/README.md)
 3. [active/README.md](active/README.md)
 4. [current/README.md](current/README.md)
-5. [../../prompts/session-continuation.prompt.md](../../prompts/session-continuation.prompt.md)
+5. [`../../memory/operational/repo-continuity.md`](../../memory/operational/repo-continuity.md) — live continuity contract

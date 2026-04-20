@@ -1,51 +1,37 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-20 (memory-taxonomy restructure + prompt
-dissolution landed; operational memory is now the sole state host)
-**Status**: Authoritative for the fields below. The continuation
-prompt has been dissolved; its doctrine moved to
-[PDR-026](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md)
-+ [`orientation.md`](../../directives/orientation.md); its rituals
-moved to `start-right-quick` and `session-handoff`. State lives in
-this file, `workstreams/<slug>.md`, and `tracks/*.md`.
+**Last refreshed**: 2026-04-20 (session close — memory taxonomy +
+prompt dissolution + §L-8 esbuild-native re-plan landed; deferrals
+recorded; wiring review applied)
+**Status**: Authoritative for the fields below. Operational memory
+is the sole continuity-state host. Session orientation doctrine lives
+in [`orientation.md`](../../directives/orientation.md); landing
+commitment doctrine lives in
+[PDR-026](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md);
+rituals live in `start-right-quick` + `session-handoff`.
 
 ## Active workstreams
 
 - [`observability-sentry-otel`](workstreams/observability-sentry-otel.md)
   — branch-primary on `feat/otel_sentry_enhancements`.
 - [`operational-awareness-continuity`](workstreams/operational-awareness-continuity.md)
-  — parallel lane. Phase 4 rollout remains pending as the next
-  deliberate OAC session.
+  — parallel agentic-engineering lane; OAC Phase 4 landed;
+  post-Phase-4 structural changes (memory taxonomy + prompt
+  dissolution) also landed this session.
 
 ## Branch-primary workstream brief
 
 [`workstreams/observability-sentry-otel.md`](workstreams/observability-sentry-otel.md).
-
-Current substantive work inside that lane is the §L-8 esbuild-native
-migration now authored directly inside
-`sentry-observability-maximisation-mcp.plan.md`: replace the ~900-line
-L-7 bespoke Sentry release/commits/deploy orchestrator by switching
-the MCP app's build tool from tsup to raw esbuild and registering
-`@sentry/esbuild-plugin` directly. The earlier standalone
-`sentry-esbuild-plugin-migration` plan was deleted after its tsup-
-retention frame was identified as wrong. The active plan now contains
-the corrected L-8 body, WS0 plan-time `assumptions-reviewer` findings
-have been applied in place, and the next execution step is WS1 RED.
+§L-8 esbuild-native migration is re-planned and ready for
+execution; next session begins at WS1 RED.
 
 ## Current session focus
 
-Documentation iteration and audience-calibration — not a registered
-workstream. This session produced several work-to-date artefacts while
-trying to match the owner's intended audience and shape. The final
-preferred artefact is
-([`.agent/reference/work-to-date/oak-ecosystem-work-to-date-summary-2026-04-20.md`](../reference/work-to-date/oak-ecosystem-work-to-date-summary-2026-04-20.md)),
-which returns closely to the original note's structure and folds in
-only a few high-signal additions from the longer report. The fourth,
-more audience-shaped update remains on the outward reader routes in
-`README.md` and `docs/foundation/README.md`; no reroute was requested
-in this session.
-
-No workstream lanes were advanced this session.
+No next-session focus held by this contract — the session has
+closed. Next-session statement lives in the handoff note at the
+bottom of this session's final commit message and in the
+[next-session opening statement](#next-session-opening-statement)
+below.
 
 ## Repo-wide invariants / non-goals
 
@@ -57,6 +43,10 @@ set is additive; previous invariants still apply):
 - **No compatibility layers, no backwards compatibility** — replace,
   don't bridge. See `.agent/directives/principles.md`.
 - **TDD at all levels** — tests first, fail-green-refactor.
+- **Tests prove product behaviour, not configuration** — never
+  assert on file structure, section headings, or field names when
+  what you need to prove is the system's observable behaviour. See
+  `.agent/directives/testing-strategy.md`.
 - **Strict boundary validation** only — product code does not read
   `process.env`; boundary validation is schema-driven.
 - **Tests never touch global state** — no `process.env` read/write
@@ -81,8 +71,7 @@ set is additive; previous invariants still apply):
   Multi-agent + multi-location collaboration flows through git.
   Single-writer-per-card; multiple cards per collaborative track
   disambiguate via `<workstream>--<agent>--<branch>.md` filename.
-  (Corrected 2026-04-20; initial Phase 2 design treated cards as
-  gitignored session-local state.)
+  Cards now live at `.agent/memory/operational/tracks/`.
 - **Owner's word beats plan. Always.** When a plan's non-goals,
   design decisions, scope, or any other drafted framing contradicts
   a statement by the owner (in conversation or recorded memory), the
@@ -90,48 +79,53 @@ set is additive; previous invariants still apply):
   they are where prior agent sessions' sunk-cost reasoning most
   often hides. Any session executing against a plan with non-goals
   MUST re-read them against recent owner direction and surface
-  contradictions before acting. (Installed 2026-04-20 after a
-  three-day drift where multiple agent sessions resisted the owner's
-  standing decision to switch from tsup to esbuild because the
-  drafted plan's non-goals ruled it out. See napkin entry of the
-  same date for the full mechanism analysis and perturbation-
-  mechanism candidates.)
+  contradictions before acting.
+- **Docs-as-definition-of-done on every lane** — no separate final-
+  docs phase. Every lane's REFACTOR gate includes per-loop TSDoc,
+  ADR index entries, runbook propagation, `docs-adr-reviewer` close
+  review, and a `documentation-sync-log.md` entry. Docs drift is
+  not permitted between lanes.
 
 Non-goals for next session:
 
 - Do NOT amend ADR-163 §6 prose yet; that is the §L-8 migration's
-  WS3 task.
+  WS3 task (atomic with WS2).
 - Do NOT delete bespoke orchestrator code yet; the §L-8 migration's
   WS2 task handles deletion.
-- Do NOT reopen §L-8 planning as though WS0 were still outstanding.
-  The corrected L-8 body is already authored and the plan-time
-  `assumptions-reviewer` pass is complete; resume at WS1 RED.
-- Do NOT re-open the tsup-vs-esbuild decision. The decision is
-  esbuild. Any plan non-goal that contradicts this is wrong per the
-  owner-beats-plan invariant above.
+- Do NOT re-open the tsup-vs-esbuild decision. Owner decision
+  stands: esbuild. Any plan non-goal that contradicts this is wrong
+  per the owner-beats-plan invariant.
 
 ## Next safe step
 
 **Begin §L-8 execution at WS1 RED** in
-`sentry-observability-maximisation-mcp.plan.md`. The corrected L-8
-body is already authored inside the active plan, the WS0
-`assumptions-reviewer` pass returned ACCEPT WITH NOTES, and those
-notes are already applied. No separate current migration plan remains.
+`observability/active/sentry-observability-maximisation-mcp.plan.md`.
+The re-plan is complete; plan-time `assumptions-reviewer` pass
+returned ACCEPT WITH NOTES and findings are applied. No separate
+migration plan exists.
+
+After §L-8 closes, the alpha-gate emitter work (Phase 3a: L-1 + L-2
++ L-3, all schema-independent, can land in parallel) brings the MCP
+server to diagnostic-grade Sentry. Events-workspace + L-4b + Phase 4
+siblings + L-15 + L-EH final remain for public-beta gate. L-9, L-12,
+L-13, L-14 are deferred to public beta with specific reopen
+conditions documented in the maximisation plan.
 
 ## Deep consolidation status
 
-**Due — pre-existing governance triggers still stand; this handoff
-does not bound them tightly enough to escalate.** Outstanding reasons:
+**Partially discharged this session; one dedicated pass remains.**
+Discharged: prompt-fitness pressure (1628 → 145 lines dissolution);
+documentation drift on the `docs/foundation/` boundary; PDR-011
+alignment; PDR-026 landing-commitment doctrine; orientation
+directive; memory taxonomy restructure; reviewer catalogue re-homed
+to executive memory.
 
-- Governance change — guardrails installed `4bccba71` still need PDR
-  graduation assessment.
-- Repeated surprise pattern — the three-day tsup-vs-esbuild drift
-  still points at a perturbation-mechanism bundle (non-goal
-  re-ratification, standing-decision register, first-principles
-  metacognition prompt) for the next dedicated consolidation pass.
-- Repeated corrections around document form vs intended audience have
-  now been captured in napkin entries, but are not yet clearly
-  bounded enough to graduate beyond capture.
+Outstanding: perturbation-mechanism PDR/rule drafting (napkin logs
+all three candidates — non-goal re-ratification, standing-decision
+register, first-principles metacognition — as complementary layers
+to land as a bundle). Next consolidation pass owns this.
 
-Per `session-handoff` boundary discipline, this handoff does not
-escalate into `jc-consolidate-docs`.
+## Next-session opening statement
+
+See the dedicated section below this file — landed as part of this
+session's close.

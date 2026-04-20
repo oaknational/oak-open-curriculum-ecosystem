@@ -43,6 +43,10 @@ Agent onboarding starts with the `start-right-quick` or
 live in `.agent/skills/start-right-*/shared/`. Platform
 adapters in `.cursor/`, `.claude/`, `.codex/` directories.
 
+For the layering contract (doctrine / memory /
+reference / plans / workflow / adapters), authority order, and
+routing rule, see [orientation.md](./orientation.md).
+
 ADRs define how the system should work and are the
 architectural source of truth. Before substantive work,
 scan the [5-ADR starter block][adr-5] and open any ADR

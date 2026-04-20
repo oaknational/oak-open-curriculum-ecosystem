@@ -361,8 +361,10 @@ Category D (cross-cutting contracts):
   Notes for the host-local rename plan).
 - Domain specialist capability pattern: validated via reviewer
   roster + triplet presence.
-- Continuity surfaces: `.agent/prompts/session-continuation.prompt.md`
-  hosts the continuity contract.
+- Continuity surfaces: `.agent/memory/operational/repo-continuity.md`
+  hosts the continuity contract (split-surface host per PDR-011;
+  prior prompt-hosted shape dissolved 2026-04-20 — see PDR-026 +
+  `.agent/directives/orientation.md`).
 - Dev tooling per ecosystem: this repo is the TypeScript leading-
   edge reference per PDR-006.
 

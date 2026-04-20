@@ -258,6 +258,88 @@ round. The plan now lives in `archive/completed/`.
 - Consolidation review (`jc-consolidate-docs`): pending
 - Notes: pending
 
+## Memory taxonomy restructure + prompt full dissolution (2026-04-20 evening)
+
+Follow-up to OAC Phase 4.3 below. Three structural moves landed in
+this pass:
+
+1. Memory taxonomy: `.agent/memory/` now splits into `active/`
+   (learning loop), `operational/` (continuity — absorbed prior
+   `.agent/state/` and `.agent/runtime/tracks/`), and `executive/`
+   (contracts — absorbed `artefact-inventory.md`,
+   `invoke-code-reviewers.md`, and `cross-platform-agent-surface-matrix.md`).
+   New READMEs at each layer plus updated memory/README.md.
+   Reference sweep via sed + manual edits across ~200 files.
+2. Prompt dissolution: `.agent/prompts/session-continuation.prompt.md`
+   deleted. Doctrine graduated to new
+   `PDR-026-per-session-landing-commitment.md` (Practice Core);
+   layering contract graduated to new
+   `.agent/directives/orientation.md`; rituals graduated to
+   `start-right-quick` (session-open) and `session-handoff`
+   (session-close landing report).
+3. Agent-tools health probe simplified from configuration-assertion
+   (specific field names) to behaviour-level (presence +
+   freshness). Testing-strategy alignment: tests prove product
+   behaviour, not configuration.
+
+Propagation (active surfaces only; archives and historical capture
+intentionally preserved):
+
+- `docs/architecture/architectural-decisions/150-…md` — ADR §3
+  amendment log already present from OAC 4.3; no additional
+  edits needed for this pass.
+- `docs/architecture/architectural-decisions/125-agent-artefact-portability.md`
+  — example citation updated (prior prompt reference replaced).
+- `docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md`
+  — vocabulary-citation surface list updated to name operational
+  memory instead of the retired prompt.
+- `.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md`
+  — §Host-local context updated to name `start-right-quick` +
+  `session-handoff` + PDR-026; prompt listed as retired.
+- `.agent/practice-core/decision-records/PDR-024-vital-integration-surfaces.md`
+  — continuity-surfaces Category B entry updated to point at
+  `repo-continuity.md` and record the dissolution.
+- `docs/governance/continuity-practice.md` §Continuity Contract
+  rewritten to describe post-dissolution shape.
+- `.agent/practice-index.md` — reviewer catalogue row moved to
+  Executive Memory framing; `.agent/memory/` row names the
+  three-mode split; session-prompts row updated.
+- `.agent/directives/AGENT.md` — §The Practice cross-links
+  `orientation.md`; pointer to artefact-inventory + reviewer
+  catalogue updated to executive-memory paths.
+- `.agent/skills/go/shared/go.md` — stale behavioural-entry-surface
+  sentence removed.
+- `.agent/commands/consolidate-docs.md` — scope-signal note
+  re-pointed from the retired prompt to the napkin.
+- `.agent/plans/observability/*` — Phase 3a/3b split + deferral
+  propagation (previous commits already covered this).
+- `.agent/plans/architecture-and-infrastructure/roadmap.md` +
+  `observability-strategy-restructure.plan.md` — Session Entry
+  pointers updated.
+- `.agent/plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md`
+  — Task 2.1 marked historical with pointer to PDR-026 + orientation;
+  authority-order table surface #5 removed (read-order doctrine
+  now lives in orientation.md).
+- `.agent/README.md` + `.gitignore` — memory-taxonomy-aware
+  comments and row descriptions.
+- `agent-tools/` — health-probe + tests rewritten to behaviour-level;
+  `REQUIRED_CONTINUITY_FIELDS` + `readPromptPracticeBoxCount`
+  removed; 44/44 tests pass after rewrite.
+
+Reviewer closeout: `docs-adr-reviewer` (independent wiring review).
+Returned ACCEPT WITH NOTES. All blocker + important findings
+applied in-session.
+
+Consolidation gate: triggered by this pass. Graduations recorded:
+PDR-026 (landing commitment doctrine), orientation directive
+(layering contract), docs-as-DoD invariant, testing-strategy
+invariant made explicit in repo-continuity.md, three-mode memory
+taxonomy as structural doctrine. Outstanding: the
+inherited-framing-without-first-principles-check pattern has three
+instances this session — graduate to
+`.agent/memory/active/patterns/` at the next consolidation pass
+(already captured in the napkin close entry).
+
 ## OAC Phase 4.3 — Continuity surface retirement & doc propagation (2026-04-20)
 
 Plan: [operational-awareness-and-continuity-surface-separation.plan.md](active/operational-awareness-and-continuity-surface-separation.plan.md).

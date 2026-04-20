@@ -1,3 +1,88 @@
+## 2026-04-20 (evening close) — Memory taxonomy, prompt dissolution, and the testing-strategy violation caught mid-flight
+
+### Surprise
+
+**What was expected**: porting a health-probe check from the legacy
+continuation prompt to the new `repo-continuity.md` would be a
+path-and-field-name rename. Mechanical.
+
+**What actually happened**: the rewrite faithfully preserved the
+*kind* of assertion the old code made — "these specific section
+headings must exist in the markdown file" — and that kind of
+assertion is a testing-strategy violation (configuration-assertion,
+not behaviour-assertion). Owner caught it mid-flight, citing
+`testing-strategy.md`: tests prove product behaviour, not
+implementation or configuration.
+
+**Why the expectation failed**: inherited-framing pattern, third
+instance this session. First: tsup-retention non-goal inherited from
+prior plan draft. Second: agent talked itself out of owner's
+three-day-standing esbuild decision. Third: agent translated old
+probe assertion shape forward without asking whether the assertion
+*kind* was right. Each time the failure mode was the same — the
+artefact in front of the agent outweighed a first-principles check
+of whether the artefact's shape was correct.
+
+### What behaviour should change next time
+
+Pattern has clarified enough to name as `inherited-framing-without-first-principles-check`.
+Applies especially to:
+
+- Non-goals in drafted plans
+- Assertion-kind in legacy tests or probes being rewritten
+- Any "translate old X to new X" exercise
+
+Countermeasure: when rewriting an existing artefact, before editing,
+ask "what is this artefact *for*? Is its current shape the right
+shape for that purpose?" Not "what did it look like before?"
+
+### Promotion candidates
+
+- Pattern graduation candidate: `inherited-framing-without-first-principles-check`
+  as a named learning-loop pattern. Already three instances in one
+  session, which passes the repeats bar. Next consolidation pass
+  extracts to `.agent/memory/active/patterns/`.
+- **Docs-as-DoD invariant landed** at `.agent/memory/operational/repo-continuity.md § Repo-wide invariants / non-goals`
+  (no separate docs phase; every lane's REFACTOR gate carries the
+  docs sub-tasks).
+- **Testing-strategy invariant made explicit** in the same block:
+  "Tests prove product behaviour, not configuration."
+- **PDR-026 Per-Session Landing Commitment** graduated to Practice Core.
+- **Orientation directive** installed; layering contract now
+  doctrine, not prompt copy.
+
+### Session work summary (for the next session's ground check)
+
+Landed this session across multiple commits:
+
+1. **OAC Phase 4 close** (`d876506c`) — continuation prompt retired
+   to 145 lines, portability posture decided (no promotion), six
+   surfaces propagated, PDR-011 amended.
+2. **Plan drift sanitisation** (`363037af`) — tsup-framed plan
+   content reverted; owner-beats-plan invariant installed.
+3. **§L-8 re-plan** (`effa6cd6`, `d771ec73`, `8945e1e6`) —
+   esbuild-native migration folded into the maximisation plan's
+   §L-8; plan-time assumptions-reviewer pass applied; Phase 3a/3b
+   alpha-vs-beta-gate split propagated.
+4. **Observability deferrals** (`62efc55c`) — L-9, L-12, L-13, L-14
+   deferred to public beta with specific reopen conditions.
+5. **Perturbation-mechanism framing** (`d50412f0`) — three
+   candidates noted as complementary layers.
+6. **Memory taxonomy restructure** (`feba4a12`) — three-mode
+   `active/operational/executive` split; ~200 reference
+   propagation.
+7. **Prompt dissolution** (`b637346c`) — session-continuation prompt
+   deleted; doctrine to PDR-026 and orientation directive; rituals
+   to start-right-quick and session-handoff.
+8. **Wiring review remediation** (this commit) — reviewer findings
+   applied to practice-index, OAC plan, roadmap, ADR-125, ADR-144,
+   consolidate-docs, go.md, AGENT.md, tracks README, .gitignore,
+   .agent/README, observability-strategy-restructure.
+
+Next session opens on Sentry integration at §L-8 WS1 RED.
+
+---
+
 ## 2026-04-20 (late) — The original note turned out to be the right structural brief
 
 ### What Was Done
