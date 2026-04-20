@@ -11,7 +11,8 @@ todos:
     note: "Baseline at .agent/analysis/continuity-operational-awareness-baseline.md (2026-04-19) with 2026-04-20 addendum covering L-7 bespoke-to-plugin pivot, guardrail installation (commit 4bccba71), and deep-consolidation-due status. Validation criteria met: current surfaces classified by job/horizon/authority/expiry/concurrency; three prompt jobs named directly; repo-local vs cross-vendor sidecars separation recorded. Task 0.2 + Task 0.3 also satisfied by the plan's Design Contract + Bounded Uptake from Workbench Topology sections respectively."
   - id: oa-phase-1-design
     content: "Phase 1: Define the state-surface contract, authority order, and loop boundaries."
-    status: pending
+    status: completed
+    note: "Design Contract section of this plan (Surface set + Authority order + Mandatory field contracts + Loop model) plus .agent/reference/agentic-engineering/deep-dives/operational-awareness-and-state-surfaces.md satisfy Task 1.1 outputs. Task 1.2's four required rules are covered: (1) one canonical continuity contract (plan + deep-dive); (2) track cards single-writer (plan §Design Contract, tactical surface); (3) expired tactical cards must be resolved/promoted/deleted (plan §Risks + deep-dive §Proposed Shape expires_at field); (4) historical tactical notes excluded from live canonical surfaces (plan §Design Contract surface purpose lines — repo-continuity.md covers contract only, not history). The later workflow checklist output named in Task 1.2 is correctly deferred to Phase 2 since it ties to session-handoff/GO/session-continuation workflow surfaces."
   - id: oa-phase-2-integration
     content: "Phase 2: Integrate repo-local state surfaces into prompts, commands, and workflow docs."
     status: pending
