@@ -49,6 +49,80 @@ live in the register at
     name a test-stability lane).
   - `reviewer-catches-plan-blind-spot` (≥2 instances).
 
+### Session 3 close (2026-04-21) — landed 6/6 under bundle rhythm; session-scoped observations
+
+**Landed**: Tasks 3.1–3.5 all landed under bundle rhythm, plus
+PDR-030 authored mid-bundle after `docs-adr-reviewer` surfaced
+OWNER-DECISION 1 (plane-tag vocabulary fragmentation risk).
+Final bundle: PDR-027 (Threads/Identity), PDR-028 (Executive-
+Memory Feedback Loop), PDR-029 (Perturbation-Mechanism Bundle
+with Family A Classes A.1 + A.2 + Family B + platform parity
+load-bearing), PDR-030 (Plane-Tag Vocabulary), PDR-011 thread-
+scope amendment, PDR-026 per-thread-per-session amendment
+(plus opportunistic Notes/Graduation-intent structural
+refactor). All six Accepted.
+
+**Surprise 1 — docs-adr-reviewer surfaced a latent risk the
+drafting did not see.** PDR-028 and PDR-029 introduced two
+different plane-aware tags (`Source plane: executive` inline
+origin tag; `cross_plane: true` frontmatter span tag) without
+noticing they shared a vocabulary that could fragment.
+Reviewer flagged it as OWNER-DECISION 1; owner directed
+immediate codification as PDR-030; PDR authored in-bundle.
+Pattern candidate — `reviewer-surfaces-vocabulary-coordination-
+across-sibling-PDRs`: dispatching a docs-adr-reviewer on a
+multi-PDR bundle catches cross-artefact vocabulary drift that
+individual PDR drafts cannot see. Single instance (this
+session). Promotion-ready on a second instance of a reviewer
+pass catching a vocabulary/convention coordination gap across
+sibling artefacts in the same bundle. Related to
+`reviewer-catches-plan-blind-spot` (already in the register;
+this is the doctrine-drafting counterpart).
+
+**Surprise 2 — two-phase self-application is the honest shape
+for tripwire-install PDRs.** PDR-029's initial self-application
+text claimed the PDR "must not reproduce the passive-guidance
+pattern on its own landing"; reviewer flagged that the claim
+overreached by one session — the PDR is genuinely passive
+guidance between ratification and the Session 4 install. The
+revised two-phase framing (ratify → install; exposure window
+known and bounded) is stronger doctrine than the
+one-phase claim. Pattern candidate —
+`tripwire-PDR-self-application-is-two-phase`: any PDR that
+names tripwire installs as mandatory MUST frame its own
+self-application as two-phase because ratification cannot
+deliver the firing cadence. Single instance (this session).
+Promotion-ready when a second tripwire-install PDR is authored.
+
+**Surprise 3 — OD-2 pre-existing structural drift in PDR-026
+was low-friction to fix under the "open up the value early"
+directive.** Owner's direction on both OD-1 and OD-2 was to
+do the extra work in-bundle rather than defer. Translating: in
+a care-and-consult bundle, if the owner is already sitting
+with the artefacts open, cheap structural normalisation is a
+net win; deferring imposes a re-context cost on a future
+session for what was ten lines here. Pattern candidate —
+`in-bundle-normalisation-is-cheaper-than-deferred-normalisation`:
+when the owner is already reviewing a bundle of related
+artefacts, nearby structural drift on the same surfaces should
+be surfaced as OWNER-DECISION items and offered for fold-in
+rather than scheduled separately. Single instance (this
+session).
+
+**Meta-observation — Session 3 landed cleanly in one sitting
+despite the context-budget flag.** Plan §Session Discipline §3
+flagged Session 3 as at-risk for the three-quarter context
+threshold alongside Session 2. In practice, bundle rhythm
+kept the artefacts tight (each PDR drafted in one pass, with
+revisions applied after reviewer findings), and the natural
+split point at Task 3.3 was never needed. Not a pattern
+candidate — just calibration: context-budget projections are
+correctly conservative; bundle rhythm is efficient enough that
+projected at-risk does not automatically translate to actual
+breach.
+
+---
+
 ### Session 2 close (2026-04-21) — landed 3/3; session-scoped observations
 
 **Landed**: Tasks 2.1–2.3 all landed. 2.1 — napkin rotated to

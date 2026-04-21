@@ -1,17 +1,19 @@
 # Next-Session Record — `memory-feedback` thread
 
 **Authored**: 2026-04-21 (metacognition + execution-plan session close).
-**Last refreshed**: 2026-04-21 (Session 2 of the staged
-doctrine-consolidation plan **LANDED 3/3 + extended scope** —
-napkin rotation + pending-graduations register schema
-formalisation + register-to-workflow binding; agent identity
-`Samwise` assigned by owner this session; agent-names registry
-captured as Infrastructure item in the register for Session 4
-consumption; onboarding-reviewer audit at close surfaced
-reliability gaps in Session 2's installs, leading to urgent
-`AGENT.md § RULES` tier-citation fix [graduated], 5 new Due
-register items, and Session 4 Tasks 4.2.a/b/c scope additions;
-next landing target for this thread is Session 3).
+**Last refreshed**: 2026-04-21 (Session 3 of the staged
+doctrine-consolidation plan **LANDED 6/6 under bundle rhythm** —
+three new portable PDRs [PDR-027 Threads/Sessions/Agent Identity,
+PDR-028 Executive-Memory Feedback Loop, PDR-029 Perturbation-
+Mechanism Bundle] + one mid-bundle portable PDR [PDR-030
+Plane-Tag Vocabulary, from docs-adr-reviewer OWNER-DECISION 1] +
+two amendments [PDR-011 thread-scope, PDR-026 per-thread-per-
+session]; all six owner-approved per PDR-003;
+`docs-adr-reviewer` ran mid-cycle on bundle + supplementary pass
+on PDR-030 + PDR-026 refactor, findings applied; Practice Core
+CHANGELOG updated; README index updated; seven Due register
+items graduated; Samwise identity row `last_session` remains
+2026-04-21; next landing target for this thread is Session 4).
 **Consumed at**: next session that picks up the `memory-feedback`
 thread (not necessarily the next session overall — the product
 thread `observability-sentry-otel` has its own next-session record
@@ -47,12 +49,95 @@ adds a row to the table; it does not overwrite, rename, or collapse
 existing rows. Same platform/model/agent_name → update
 `last_session` on the existing row; different → new row.
 
-## Landing target (per PDR-026)
+## Landing target (per PDR-026, as amended 2026-04-21)
 
-**Updated 2026-04-21 (Session 2 close)** — Session 2 of the
-staged doctrine-consolidation plan LANDED 3/3. Next landing
-target for this thread is Session 3 (doctrine bundle drafting,
-owner-gated).
+**Updated 2026-04-21 (Session 3 close)** — Session 3 of the
+staged doctrine-consolidation plan LANDED 6/6 under bundle
+rhythm. Next landing target for this thread is Session 4
+(Family A + Family B tripwire installation, now doctrinally
+grounded).
+
+### Session 3 outcome (for audit)
+
+Six artefacts landed, all owner-approved:
+
+1. ✅ **Task 3.1** — PDR-027 *Threads, Sessions, and Agent
+   Identity* (new portable PDR). Establishes threads as
+   the continuity unit, sessions as time-bounded agent
+   occurrences, identity schema, and the additive-identity
+   rule.
+2. ✅ **Task 3.2** — PDR-028 *Executive-Memory Feedback
+   Loop* (new portable PDR). Drift-detection surface
+   convention + plane-origin tag graduation channel +
+   cross-plane scan step; defines pending-graduations
+   register portably.
+3. ✅ **Task 3.3** — PDR-029 *Perturbation-Mechanism Bundle*
+   (new portable PDR). Family A (Classes A.1 + A.2) and
+   Family B tripwire design; platform-parity load-bearing;
+   self-application two-phase framing (ratify then
+   install).
+4. ✅ **Task 3.4** — PDR-011 thread-scope amendment
+   (Accepted). Continuity pipeline framed as thread-scoped
+   at upper lifecycle, session-scoped at lower; per-thread
+   next-session records permitted.
+5. ✅ **Task 3.5** — PDR-026 per-thread-per-session
+   amendment (Accepted). Landing commitment clarified;
+   cross-thread spread named anti-pattern; session-open
+   structure updated to name thread alongside target.
+   Opportunistic Notes/Graduation-intent structural
+   refactor applied.
+6. ✅ **PDR-030** *Plane-Tag Vocabulary* (new portable PDR;
+   authored mid-bundle). Unifies origin (`Source plane:`)
+   and span (`cross_plane:`) tag forms; extension discipline
+   requires PDR amendment; conditional on multi-plane
+   memory organisation.
+
+**Session-scoped decisions recorded**: bundle rhythm (owner
+choice at open); drafting order 3.1 → 3.5; mid-bundle PDR-030
+authored after `docs-adr-reviewer` OWNER-DECISION 1; OD-3 and
+OD-4 from supplementary review pass accepted as-drafted
+(frontmatter canonical; migration boundary soft).
+
+**Reviewer discipline**: `docs-adr-reviewer` mid-cycle pass on
+the five-artefact bundle (P0 index-hygiene + eight P1 + P2 nits
+applied); supplementary pass on PDR-030 and PDR-026 refactor
+(P2 applied; OD-3 and OD-4 surfaced to owner and accepted
+as-drafted).
+
+### Mid-arc checkpoint 1 (per plan §Session Discipline §2)
+
+**Question**: Do Sessions 4, 5, 6 still make sense against
+the doctrine just landed?
+
+**Review**:
+
+- **Session 4** (tripwire installs) — *more* concretely
+  grounded than before. PDR-029 names Family A and Family B
+  layers, platform-parity constraints, and the two-phase
+  install requirement; PDR-027 defines identity schema that
+  Class A.2 protects; PDR-028 defines drift-detection
+  convention that four executive-memory surfaces must adopt;
+  PDR-030 fixes the tag vocabulary that Family B Layer 2
+  consumes. Session 4 acceptance criteria already align with
+  PDR-029 requirements; the bundle closes the exposure window
+  on the passive-guidance pattern that Session 4 installs are
+  countering. **Verdict**: proceed as planned; no amendments
+  needed.
+- **Session 5** (outgoing triage per PDR-007) — unchanged;
+  the bundle did not alter PDR-007 or the outgoing triage
+  scope. **Verdict**: proceed as planned.
+- **Session 6** (holistic fitness exploration) — unchanged;
+  the bundle did not alter the fitness-as-exploration scope.
+  Worth noting: Family B meta-tripwires from PDR-029 may
+  surface taxonomy-seam questions that intersect with Session
+  6's fitness scope; this is anticipated and useful.
+  **Verdict**: proceed as planned.
+
+**Checkpoint outcome**: **Proceed**. No plan amendments.
+Owner confirmation absorbed via acceptance of the bundle
+(PDR-029's Consequences §Required names Session 4 installs as
+doctrine-mandated; accepting PDR-029 is implicit ratification
+of Session 4's scope).
 
 ### Session 2 outcome (for audit)
 
@@ -93,43 +178,90 @@ public-domain / open-data lists; no LLM-generation. Captured as
 `trigger-condition: consumed by Session 4 Task 4.2 identity-rule
 install`.
 
-### Next landing target (Session 3)
+### Next landing target (Session 4)
 
-> **Target**: close Session 3 of the staged doctrine-consolidation
+> **Target**: close Session 4 of the staged doctrine-consolidation
 > plan at
 > [`../../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md`](../../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md).
 >
-> Session 3 deliverables (three new PDRs + two amendments; see
-> plan Tasks 3.1–3.5). Each owner-gated per PDR-003:
+> Session 4 deliverables (per plan §Session 4 — now doctrinally
+> grounded by PDR-029, PDR-027, PDR-028, PDR-030, and the
+> PDR-011/PDR-026 amendments landed in Session 3):
 >
-> 1. **Task 3.1** — Draft *Threads, Sessions, and Agent Identity* PDR (portable).
-> 2. **Task 3.2** — Draft *Executive-Memory Feedback Loop* PDR (portable).
-> 3. **Task 3.3** — Draft *Perturbation-Mechanism Bundle* PDR with
->    active-tripwire design covering Family A Classes A.1 + A.2
->    (platform parity load-bearing). Absorbs the `platform-parity-
->    as-probe-prerequisite` register item.
-> 4. **Task 3.4** — Amend PDR-011 for thread-scope extension.
->    Absorbs the `workflow-scope-alignment-to-continuity-unit-
->    scope` register item.
-> 5. **Task 3.5** — Amend PDR-026 for per-thread-per-session
->    clarification.
->
-> On close: Practice Core `CHANGELOG.md` entries for each landed
-> PDR + amendment; `docs-adr-reviewer` pass on the bundle; mid-
-> arc checkpoint 1 per plan §Session Discipline §2 (review
-> Sessions 4–6 against the doctrine just landed; owner decides
-> proceed / adjust / pause).
+> 1. **Task 4.1** — Install Family A Class A.1 second layer
+>    (standing-decision register surface), update the plan-body
+>    rule's forward reference to cite PDR-029 directly, extend
+>    `start-right-quick` and `start-right-thorough` to name the
+>    standing-decision surface in their grounding order, add
+>    AGENT.md citation.
+> 2. **Task 4.2.a** — Install Family A Class A.2 session-open
+>    identity-registration rule (canonical + Claude adapter +
+>    Cursor adapter + AGENT.md citation). Consumes
+>    `start-right-quick-missing-threads-step` and
+>    `observability-thread-legacy-singular-path` register items.
+> 3. **Task 4.2.b** — Install Family A Class A.2 session-close
+>    identity-update gate in `/session-handoff`; `pnpm
+>    session-handoff:check` with structural thread enumeration
+>    from authoritative files (not agent self-reporting); unit
+>    tests. Consumes
+>    `session-handoff-check-must-enumerate-threads` register
+>    item.
+> 4. **Task 4.2.c** — Install Family A Class A.2 platform-
+>    neutral stale-identity health probe at
+>    `agent-tools/src/core/health-probe-agent-identities.ts`
+>    with six checks including active-thread ↔ next-session-file
+>    correspondence. Consumes `stale-identity-probe-sixth-check`
+>    register item.
+> 5. **Task 4.3** — Install Family B meta-tripwires
+>    (per-consolidation meta-check, accumulation-triggered seam
+>    review, orphan-item signal). Install cross-plane path
+>    rules; extend `consolidate-docs` step 5 with cross-plane
+>    scope; add `cross_plane: true` frontmatter field to
+>    `.agent/memory/active/patterns/`; apply PDR-028 drift-
+>    detection sections to three executive-memory surfaces;
+>    add `Source plane: executive` convention to napkin header;
+>    bind napkin tag to `consolidate-docs` step 7a.
+> 6. **Task 4.4** — Migrate `observability-sentry-otel` thread's
+>    next-session record from legacy singular path to `threads/`.
+>    Add distilled citation of `passive-guidance-loses-to-
+>    artefact-gravity` pattern. Roadmap sync.
+> 7. **Close** — Practice Core `CHANGELOG.md` entry for Family
+>    A + Family B installs; `portability:check` parity verified;
+>    `architecture-reviewer-barney` + `architecture-reviewer-
+>    betty` dispatched (tripwires change boundary/authority
+>    shapes per plan Reviewer Scheduling); `onboarding-reviewer`
+>    optional spot-check on the newly-installed tripwires' cold-
+>    start reliability.
 
-### Preconditions named for Session 3
+### Preconditions named for Session 4
 
-- **Owner availability for PDR-003 review.** All five drafts are
-  Core edits; owner drafts or owner-approves before writing per
-  PDR-003 care-and-consult posture. Owner is available for either
-  a bundle rhythm (all five drafts → one review sitting → apply
-  in order → sign-off) or a sequential rhythm (draft 1 → review
-  → apply → draft 2 → …). **Owner chooses the rhythm at Session
-  3 open** and the choice is recorded in the thread record as a
-  session-scoped decision.
+- **Session 3 bundle landed**: PDR-027, PDR-028, PDR-029, PDR-030,
+  PDR-011 amendment, PDR-026 amendment all Accepted. ✅
+- **Agent-names registry research.** Session 4 Task 4.2.a
+  consumes the Infrastructure register item for a ~1000-name
+  well-distributed public-domain names registry. Source
+  research (Unicode CLDR, SSA corpora, international
+  registries, historical-figure lists; no LLM-generation) is
+  pre-session prep. The registry itself does not need to land
+  in Session 4 — Session 4 Task 4.2.a installs the rule;
+  name-assignment remains owner-directed per-thread as it is
+  today.
+- **Plan forward-reference resolution.** The plan-body rule at
+  `.agent/rules/plan-body-first-principles-check.md` currently
+  carries a forward reference to "the Perturbation-Mechanism
+  Bundle PDR (pending, Session 3)". Task 4.1 resolves this to
+  "PDR-029" as a first step.
+- **Identity discipline self-application.** Per PDR-029
+  Acceptance 5, the session installing the Class A.2 rule
+  MUST itself register on the `memory-feedback` thread
+  before writing the rule file. Session 4's first edit is
+  therefore the identity row update (using the very rule it is
+  about to install).
+- **Context budget**: Session 4 is *not* currently flagged as
+  at-risk for the three-quarter threshold (PDR drafting was
+  the densest work in the arc; installs are denser per-unit
+  but fewer artefacts). Natural split points exist at Task 4.2
+  boundaries and between Families A and B if pressure emerges.
 - **Context budget watch.** Session 3 is flagged alongside
   Session 2 as at-risk for the three-quarter context threshold
   (plan §Session Discipline §3). Five PDR drafts + two amendments

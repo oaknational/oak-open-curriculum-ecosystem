@@ -4,6 +4,103 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-21 — Session 3 doctrine bundle: threads/identity, executive-memory feedback loop, perturbation-mechanism bundle, plane-tag vocabulary, and PDR-011/PDR-026 amendments
+
+Session 3 of the Staged Doctrine Consolidation and Graduation plan
+landed a coherent six-artefact doctrine bundle under bundle rhythm
+(owner-chosen at session open: author all → review all → apply in
+order → sign-off). Owner-approved per PDR-003.
+
+- **PDR-027 (new)** — *Threads, Sessions, and Agent Identity*. Names
+  the **thread** as the continuity unit (named stream of work
+  persisting across sessions, potentially touched by multiple
+  agents); names the **session** as a time-bounded agent occurrence
+  that participates in one or more threads. Specifies the identity
+  schema (`platform`, `model`, `session_id_prefix`, `agent_name`,
+  `role`, `first_session`, `last_session`) with `platform + model
+  + agent_name` as the identity key. Codifies the **additive-identity
+  rule**: joining a thread adds an identity row; never overwrites.
+  Clarifies that PDR-026's landing commitment is per-thread-per-
+  session.
+- **PDR-028 (new)** — *Executive-Memory Feedback Loop*. Closes the
+  loop gap on write-once catalogue surfaces by requiring a
+  **drift-detection** section (`Last verified accurate` +
+  `Known drift / pending update`) on each executive-memory
+  surface, with lookup-time verification and drift capture.
+  Introduces the **plane-origin tag** `Source plane: <plane>` as
+  the napkin-entry graduation channel into the pending-graduations
+  register. Extends consolidation with a **cross-plane scan**
+  step that aggregates tagged observations. Portably defines
+  the pending-graduations register as the host's graduation-
+  candidate aggregation surface. Composes with the capture →
+  distil → graduate → enforce pipeline (PDR-011) without
+  weakening graduation bars.
+- **PDR-029 (new)** — *Perturbation-Mechanism Bundle*. Promotes
+  three perturbation mechanisms (first-principles prompt,
+  standing-decision register, non-goal re-ratification) from
+  passive register entries to **active tripwires** with named
+  firing cadences per the Heath-brothers tripwire framing
+  (*Decisive* ch. 9, *Switch* ch. 8). Defines **Family A** for
+  the `passive-guidance-loses-to-artefact-gravity` failure mode
+  in two classes — Class A.1 (plan-body inherited framing; two
+  layers) and Class A.2 (agent-registration/identity discipline;
+  three layers: session-open rule + session-close gate with
+  structural thread enumeration + stale-identity health probe).
+  Defines **Family B** meta-tripwires for memory-taxonomy seams
+  (per-consolidation meta-check, accumulation-triggered seam
+  review, orphan-item signal). Makes **platform parity
+  load-bearing**: every Family A rule requires canonical +
+  Claude adapter + Cursor adapter + AGENT.md citation; every
+  Family A probe requires platform-neutral inputs or explicit
+  cross-platform parity. Self-application is explicit
+  (two-phase: ratify then install; install session closes the
+  exposure window).
+- **PDR-030 (new)** — *Plane-Tag Vocabulary*. Unifies the two
+  plane-aware tags introduced by the bundle into a small fixed
+  vocabulary with two facets: **origin** (`Source plane:
+  <plane>` inline on capture-stage entries) and **span**
+  (`cross_plane: true` frontmatter on graduation-stage
+  artefacts). Conditional on multi-plane memory organisation.
+  New plane-prefixed tags require PDR amendment — the friction
+  is the point. Authored in-bundle after the Session 3
+  docs-adr-reviewer pass surfaced the vocabulary-fragmentation
+  risk; owner directed the codification rather than deferring.
+- **PDR-011 amendment (2026-04-21)** — continuity unit named
+  explicitly as the **thread** (per PDR-027), not the session.
+  Pipeline reframed as *thread-scoped at the upper lifecycle,
+  session-scoped at the lower lifecycle*: capture within a
+  session on a thread; distil → graduate → enforce across
+  sessions within and across threads. Continuity contract
+  extended to permit per-thread next-session records. Pipeline
+  stages and split-loop model unchanged.
+- **PDR-026 amendment (2026-04-21)** — landing commitment
+  clarified as **per-thread-per-session**: a session commits to
+  landing ONE thread's target; cross-thread spread is
+  anti-pattern. Session-open structure updated to name the
+  thread alongside the landing target; non-participating
+  threads declared explicitly. Opportunistic structural fix:
+  `Host-local context` moved from top-level H2 into a `## Notes`
+  section and a `### Graduation intent` subsection added,
+  matching the convention used by sibling PDRs.
+- **README index** updated for PDR-026..PDR-030.
+- Mid-cycle review discipline: `docs-adr-reviewer` dispatched
+  on the bundle before owner review; supplementary pass
+  dispatched on PDR-030 and the PDR-026 refactor. Findings
+  applied to tighten cross-references, concept definitions
+  (pending-graduations register, standing-decision register),
+  and portability posture. Two OWNER-DECISION items surfaced
+  by the supplementary pass (OD-3: span-tag frontmatter hedge;
+  OD-4: migration-boundary mechanism) were accepted as-drafted
+  (frontmatter canonical; migration boundary soft); addressable
+  via amendment if tightening becomes load-bearing.
+
+**Host-local downstream work scheduled**: Family A Class A.1
+read-trigger surface (`standing-decisions.md`) and Class A.2
+three tripwire layers install in Session 4 of the Staged
+Doctrine Consolidation and Graduation plan. Family B layers
+install same session. PDR-028 executive-memory drift-detection
+surfaces install in Session 4 as well.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-21 — Artefact Map row for `.agent/memory/` refreshed to three-mode taxonomy
 
 - **practice.md Artefact Map** row for `.agent/memory/` rewritten

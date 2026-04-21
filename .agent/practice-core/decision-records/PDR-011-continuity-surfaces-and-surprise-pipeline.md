@@ -4,13 +4,18 @@ pdr_kind: governance
 
 # PDR-011: Continuity Surfaces and the Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20)
+**Status**: Accepted (amended 2026-04-20, amended 2026-04-21)
 **Date**: 2026-04-18 (amended 2026-04-20 — contract host abstracted
 from "primary session-continuation prompt" to "canonical repo-local
 surface set"; field set split into portable minimum plus optional
 epistemic fields; host-local context updated to reflect split
 surfaces. Doctrine — capture→distil→graduate→enforce, split-loop
-model, three continuity types — unchanged.)
+model, three continuity types — unchanged. Amended 2026-04-21 —
+pipeline and continuity surfaces framed as *thread-scoped at the
+upper lifecycle, session-scoped at the lower lifecycle*; thread ↔
+session relationship named explicitly; continuity contract
+extended to allow per-thread next-session records. Pipeline
+stages and split-loop model unchanged.)
 **Related**:
 [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
 (new Core contract under which this PDR is authored);
@@ -18,7 +23,11 @@ model, three continuity types — unchanged.)
 (continuity surfaces live as canonical artefacts with thin platform
 adapters — same architecture this PDR inherits);
 [PDR-010](PDR-010-domain-specialist-capability-pattern.md)
-(specialists that may be invoked from the continuity surface).
+(specialists that may be invoked from the continuity surface);
+[PDR-027](PDR-027-threads-sessions-and-agent-identity.md)
+(threads, sessions, and agent identity — this PDR's 2026-04-21
+amendment aligns its scope language with PDR-027's continuity
+unit).
 
 ## Amendment Log
 
@@ -28,6 +37,18 @@ adapters — same architecture this PDR inherits);
   state-surface split (`repo-continuity.md` + `workstreams/<slug>.md`
   + `memory/operational/tracks/*.md`). The portable doctrine and the contract's
   authority-subordinate role to active plans are unchanged.
+- **2026-04-21** (Accepted): continuity unit named explicitly as
+  the **thread**
+  (per PDR-027), not the session. §"Three types of continuity"
+  unchanged. §"The continuity contract" extended to permit a
+  per-thread next-session record pattern (in addition to the
+  single continuity contract). §"The surprise-to-enforcement
+  pipeline" reframed as *thread-scoped at the upper lifecycle,
+  session-scoped at the lower lifecycle*: capture happens within
+  a session on a thread; distil → graduate → enforce proceed
+  across sessions within and across threads. Pipeline stages and
+  split-loop model unchanged. Thread ↔ session relationship named
+  explicitly.
 
 ## Context
 
@@ -96,6 +117,38 @@ split-loop workflow between lightweight handoff and deep
 consolidation, and is supported by a named operational surface that
 carries live session state. Surprise and correction have an explicit
 capture-to-enforcement pipeline.**
+
+### Thread-scoped at the upper lifecycle (2026-04-21 amendment)
+
+The continuity machinery in this PDR is scoped to the **thread**
+as defined in PDR-027, not to the session. A thread is a named
+stream of work that persists across sessions; a session is a
+time-bounded agent occurrence that participates in one or more
+threads.
+
+The scope relationship:
+
+- **Capture** happens *within a session on a thread*. A surprise
+  is captured at the moment it occurs, by the session that
+  experienced it, into the active-memory surface associated with
+  the thread the session is working on.
+- **Distil → graduate → enforce** proceed *across sessions within
+  and across threads*. A distilled rule extracted from
+  capture-events in one thread may graduate into doctrine that
+  governs every thread. Consolidation is the cross-thread
+  convergence point, as the split-loop model below describes.
+- **Continuity surfaces** (next-session records, identity
+  lists, landing commitments) are scoped **per thread**. A repo
+  with multiple active threads carries one next-session record
+  per thread. The single canonical continuity contract
+  (`repo-continuity.md` or equivalent) indexes the active
+  threads; per-thread next-session records carry the
+  thread-specific landing target and identity state.
+
+Sessions are the lower lifecycle unit; threads are the upper
+lifecycle unit. Both are load-bearing, and both must be named
+in any continuity machinery that wants to survive the
+conflation-of-scope failure mode PDR-027 Context describes.
 
 ### Three types of continuity
 
@@ -192,6 +245,18 @@ The contract remains **operational** only. Active plans remain
 authoritative for scope, sequencing, acceptance criteria, and
 validation. The contract is not a duplicate of plan content — it is
 a compact resumption surface that points at the plans.
+
+**Per-thread next-session records (2026-04-21 amendment).**
+A host with multiple active threads MAY extend the continuity
+contract with **per-thread next-session records**, one per
+thread, carrying that thread's landing target and identity list
+(per PDR-027). In this shape, the canonical contract indexes the
+active threads and the per-thread records carry the
+thread-specific resumption content. The portable minimum fields
+remain covered in aggregate across the contract + per-thread
+records. Multiple next-session records are not multiple
+continuity contracts — there is still one canonical contract;
+the per-thread records are satellites scoped by thread.
 
 ### The surprise-to-enforcement pipeline
 

@@ -1,27 +1,23 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-21 (Session 2 of the staged doctrine-
-consolidation plan landed at 3/3 + extended scope — napkin rotated
-[1611 → `archive/napkin-2026-04-21.md`]; distilled merged with 5
-new entries; pending-graduations register schema formalised in
-`§ Deep consolidation status` with four status bands
-[graduated / due / pending / infrastructure] and ~36 items;
-`session-handoff` step 7 added for register refresh + thread-record
-identity update; `consolidate-docs` step 7 preamble names the
-register as a graduation-scan input; owner assigned agent name
-`Samwise` to the continuing identity on the `memory-feedback`
-thread; agent-names registry captured as
-`graduation-target: infrastructure` for Session 4 Task 4.2
-consumption. Extended scope: onboarding-reviewer audit surfaced
-discoverability gaps that would make Session 2's installs unreliable
-for a fresh agent; urgent `AGENT.md § **RULES**` amendment landed
-naming the `.agent/rules/` tier [fixes Session 1's plan-body rule
-discoverability on Codex/Gemini]; five reviewer-finding register
-items added to the register [Due band]; staged plan Session 4 Tasks
-4.2.a/b/c amended with start-right-quick + start-right-thorough
-amendments, structural thread enumeration in session-handoff:check,
-sixth probe check, legacy next-session-opener.md handling, passive-
-guidance pattern citation surface additions.)
+**Last refreshed**: 2026-04-21 (Session 3 of the staged doctrine-
+consolidation plan landed at 6/6 under bundle rhythm — three new
+portable PDRs [PDR-027 Threads/Sessions/Agent Identity;
+PDR-028 Executive-Memory Feedback Loop; PDR-029 Perturbation-
+Mechanism Bundle] + one mid-bundle portable PDR [PDR-030
+Plane-Tag Vocabulary, authored in-bundle after docs-adr-reviewer
+surfaced vocabulary-fragmentation risk and owner directed
+immediate codification] + two amendments [PDR-011 thread-scope;
+PDR-026 per-thread-per-session]. All six artefacts owner-approved
+per PDR-003. `docs-adr-reviewer` ran mid-cycle on the bundle plus
+a supplementary pass on the added PDR-030 + PDR-026 refactor;
+findings applied. Two OWNER-DECISION items [OD-3 span-tag
+frontmatter hedge; OD-4 migration-boundary mechanism] accepted
+as-drafted, addressable via amendment. Practice Core CHANGELOG
+updated; README index updated; seven Due register items moved
+to Graduated. Session 3 landing rhythm: bundle [owner-chosen at
+session open]; drafting order 3.1 → 3.5 with PDR-030 inserted
+after 3.5.)
 **Status**: Authoritative for the fields below. Operational memory
 is the sole continuity-state host. Session orientation doctrine lives
 in [`orientation.md`](../../directives/orientation.md); landing
@@ -68,13 +64,17 @@ execution; next session begins at WS1 RED.
 
 ## Current session focus
 
-Session 2 of the staged doctrine-consolidation plan closed
-cleanly at 3/3. Next-session focus is owner-directed: either
-Session 3 of the staged plan (doctrine-bundle drafting — three
-PDRs + two amendments, owner-gated per PDR-003) OR resumption
-of the `observability-sentry-otel` thread's §L-8 Vercel
-acceptance probe (branch-primary). PDR-026 landing commitment
-is per-thread-per-session; pick one per next session.
+Session 3 of the staged doctrine-consolidation plan landed at
+6/6 (three new PDRs + one mid-bundle PDR + two amendments, all
+owner-approved). Next-session focus is owner-directed: either
+Session 4 of the staged plan (Family A Classes A.1 + A.2
+tripwire installation; Family B meta-tripwires; cross-plane
+rules; roadmap sync — now doctrinally grounded by PDR-027,
+PDR-028, PDR-029, PDR-030 and the PDR-011/PDR-026 amendments)
+OR resumption of the `observability-sentry-otel` thread's §L-8
+Vercel acceptance probe (branch-primary). PDR-026 (as amended
+this session) landing commitment is per-thread-per-session;
+pick one per next session.
 
 ## Standing decisions
 
@@ -246,19 +246,27 @@ parity after owner question. Sessions 3–6 remain queued; all
 outstanding items still owned by the plan; Phase 0 owner decisions
 recorded above under Standing decisions.**
 
-**Consolidation-gate check at 2026-04-21 (Session 2 close)**:
-NOT DUE as an independent trigger. Napkin freshly rotated (60
-lines); distilled refined with 5 new entries (over hard limit by
-standing decision 3 tolerance); register formalised and refreshed
-this session; Practice-box incoming/outgoing not changed this
-session; documentation drift addressed (AGENT.md § RULES tier
-citation). Next firing: Session 3 of the staged plan (doctrine
-bundle drafting).
+**Consolidation-gate check at 2026-04-21 (Session 3 close)**:
+NOT DUE as an independent trigger. The Session 3 bundle is
+itself the consolidation pass's doctrine-landing stage
+(capture → distil → **graduate** via the Staged Doctrine
+Consolidation plan). Napkin still fresh (Session 2 rotation
+stands; Session 3 close adds one entry below); distilled
+unchanged this session; Practice Core CHANGELOG updated with
+the Session 3 bundle entry; register refreshed (seven Due items
+moved to Graduated). Next firing: Session 4 of the staged plan
+(Family A + Family B tripwire installation).
 Discharged across the 2026-04-20/21 arc: prompt-fitness pressure
 (1628 → 145 lines dissolution); documentation drift on the
-`docs/foundation/` boundary; PDR-011 alignment; PDR-026 landing-
-commitment doctrine; orientation directive; memory taxonomy
-restructure; reviewer catalogue re-homed to executive memory.
+`docs/foundation/` boundary; PDR-011 alignment (plus 2026-04-21
+thread-scope amendment); PDR-026 landing-commitment doctrine
+(plus 2026-04-21 per-thread-per-session amendment); orientation
+directive; memory taxonomy restructure; reviewer catalogue
+re-homed to executive memory; thread-as-continuity-unit
+codified as PDR-027; executive-memory feedback loop codified as
+PDR-028; perturbation-mechanism bundle with platform-parity
+load-bearing codified as PDR-029; plane-tag vocabulary codified
+as PDR-030.
 
 The overdue backlog + the new doctrine bundle are sequenced by the
 **Staged Doctrine Consolidation and Graduation** plan:
@@ -304,15 +312,18 @@ an input at `consolidate-docs` step 7 (graduation scan).
 
 - **`AGENT.md § RULES` cites the `.agent/rules/` tier** — captured-date: 2026-04-21; source-surface: onboarding-reviewer audit this session; graduation-target: other (directive amendment); trigger-condition: onboarding-reviewer flagged that Codex + Gemini agents discover `principles.md` via `AGENT.md` but not the `.agent/rules/` tier, making Session 1's landed plan-body-first-principles-check rule invisible to non-loader platforms; status: **graduated** → `.agent/directives/AGENT.md § **RULES**` now names the always-applied rule tier and explicitly instructs Codex/Gemini to read every file in `.agent/rules/` at session open.
 
-#### Due (trigger fired; awaiting action this arc)
+#### Graduated (Session 3 doctrine bundle, 2026-04-21)
 
-- **Threads, Sessions, and Agent Identity PDR** — captured-date: 2026-04-21; source-surface: napkin + [`threads/README.md`](threads/README.md) (proposed rule); graduation-target: PDR (portable per Standing decision 2); trigger-condition: Session 3 Task 3.1 drafting slot; status: due.
-- **Executive-Memory Feedback Loop PDR** — captured-date: 2026-04-20; source-surface: memory-feedback execution plan Phase 6; graduation-target: PDR (portable per Standing decision 2); trigger-condition: Session 3 Task 3.2 drafting slot; status: due.
-- **Perturbation-Mechanism Bundle PDR** (active-tripwire design covering Family A Classes A.1 + A.2) — captured-date: 2026-04-20; source-surface: napkin (perturbation mechanisms); expanded 2026-04-21 to two-class Family A; graduation-target: PDR (portable per Standing decision 2); trigger-condition: Session 3 Task 3.3 drafting slot; status: due.
-- **PDR-011 thread-scope amendment** — captured-date: 2026-04-21; source-surface: napkin (workflow-scope alignment; threads insight); graduation-target: PDR amendment; trigger-condition: Session 3 Task 3.4 drafting slot; status: due.
-- **PDR-026 per-thread-per-session amendment** — captured-date: 2026-04-21; source-surface: napkin (landing-commitment per-thread framing); graduation-target: PDR amendment; trigger-condition: Session 3 Task 3.5 drafting slot; status: due.
-- **`platform-parity-as-probe-prerequisite`** (design principle) — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: PDR (likely absorbed into Perturbation-Mechanism Bundle PDR); trigger-condition: Session 3 Task 3.3 drafting slot; status: due.
-- **`workflow-scope-alignment-to-continuity-unit-scope`** — captured-date: 2026-04-21; source-surface: napkin + distilled; `session-handoff` and `consolidate-docs` headers already carry explicit scope labels from in-flight amendments; graduation-target: PDR (absorbed into PDR-011 amendment, Session 3 Task 3.4); trigger-condition: Session 3 drafting slot; status: due.
+- **Threads, Sessions, and Agent Identity PDR** — captured-date: 2026-04-21; source-surface: napkin + [`threads/README.md`](threads/README.md) (proposed rule); graduation-target: PDR (portable per Standing decision 2); trigger-condition: Session 3 Task 3.1 drafting slot; status: **graduated** → [`../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md`](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
+- **Executive-Memory Feedback Loop PDR** — captured-date: 2026-04-20; source-surface: memory-feedback execution plan Phase 6; graduation-target: PDR (portable per Standing decision 2); trigger-condition: Session 3 Task 3.2 drafting slot; status: **graduated** → [`../../practice-core/decision-records/PDR-028-executive-memory-feedback-loop.md`](../../practice-core/decision-records/PDR-028-executive-memory-feedback-loop.md).
+- **Perturbation-Mechanism Bundle PDR** (active-tripwire design covering Family A Classes A.1 + A.2) — captured-date: 2026-04-20; source-surface: napkin (perturbation mechanisms); expanded 2026-04-21 to two-class Family A; graduation-target: PDR (portable per Standing decision 2); trigger-condition: Session 3 Task 3.3 drafting slot; status: **graduated** → [`../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md`](../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md).
+- **PDR-011 thread-scope amendment** — captured-date: 2026-04-21; source-surface: napkin (workflow-scope alignment; threads insight); graduation-target: PDR amendment; trigger-condition: Session 3 Task 3.4 drafting slot; status: **graduated** → [`../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md`](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md) (2026-04-21 entry in Amendment Log).
+- **PDR-026 per-thread-per-session amendment** — captured-date: 2026-04-21; source-surface: napkin (landing-commitment per-thread framing); graduation-target: PDR amendment; trigger-condition: Session 3 Task 3.5 drafting slot; status: **graduated** → [`../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md`](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md) (2026-04-21 entry in Amendment Log; Notes/Graduation-intent structural refactor applied in same landing).
+- **`platform-parity-as-probe-prerequisite`** (design principle) — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: PDR (absorbed into Perturbation-Mechanism Bundle PDR); trigger-condition: Session 3 Task 3.3 drafting slot; status: **graduated** → PDR-029 §Platform parity (load-bearing).
+- **`workflow-scope-alignment-to-continuity-unit-scope`** — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: PDR (absorbed into PDR-011 amendment); trigger-condition: Session 3 drafting slot; status: **graduated** → PDR-011 2026-04-21 amendment §Thread-scoped at the upper lifecycle.
+- **Plane-tag vocabulary PDR** — captured-date: 2026-04-21; source-surface: docs-adr-reviewer pass (OWNER-DECISION 1); graduation-target: PDR (portable per Standing decision 2); trigger-condition: owner decision mid-bundle to codify immediately rather than defer; status: **graduated** → [`../../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md`](../../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md).
+
+#### Due (trigger fired; awaiting action this arc)
 - **`in-place-supersession-markers-at-section-anchors`** — captured-date: 2026-04-19; source-surface: napkin-archive (2026-04-19b watchlist); graduation-target: pattern; trigger-condition: three instances reached 2026-04-19; status: due — next consolidation or standalone pattern authoring.
 - **`fork-cost-surfaces-in-doc-discipline-layer`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: three instances reached 2026-04-19; status: due.
 - **`E2E-flakiness-under-parallel-pnpm-check-load`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: ADR (test-stability-lane) or pattern; trigger-condition: three cross-session instances reached 2026-04-19; status: due — needs a test-stability-lane authoring decision.
