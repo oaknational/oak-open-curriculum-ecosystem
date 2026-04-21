@@ -153,12 +153,17 @@ prompt that asks the inherited-framing question by name.
 
 - **[`.agent/rules/plan-body-first-principles-check.md`](../../../rules/plan-body-first-principles-check.md)** —
   the first installed Family-A tripwire that cites this pattern.
-- **Session 3 Perturbation-Mechanism Bundle PDR** (PDR-NNN,
-  pending) — will retroactively govern this pattern and the
-  Family-A tripwire rule; formal PDR number replaces this
-  forward reference when the PDR lands.
-- **Session 4 Family-A tripwire installation** — the staged-plan
-  session that installs the second complementary tripwire layer.
+- **Perturbation-Mechanism Bundle PDR** — [PDR-029](../../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
+  (landed Session 3, 2026-04-21; amended twice 2026-04-21).
+  Retroactively governs this pattern and the Family-A tripwire
+  rule; names Class A.1 (plan-body inherited-framing) and the
+  required layers.
+- **Session 4 Family-A installation** — landed 2026-04-21.
+  Class A.1 Layer 1 (this pattern's plan-body rule) was already
+  in place from Session 1; Class A.1 Layer 2 is the existing
+  foundation-directive grounding (per PDR-029's second
+  2026-04-21 Amendment Log entry retracting the
+  "standing-decision register surface" prescription).
 - **Related pattern**: [`passive-guidance-loses-to-artefact-gravity.md`](passive-guidance-loses-to-artefact-gravity.md) —
   why passive guidance alone (documented-but-not-enforced) is
   insufficient when the artefact's gravity is strong.

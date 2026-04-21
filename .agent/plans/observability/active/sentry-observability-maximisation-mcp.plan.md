@@ -2430,7 +2430,7 @@ and `esbuild.config.ts` exited 1. This treats a load-bearing identity
 failure (we do not know the release name) as a build-fatal error,
 which is correct in spirit but the **opposite policy** was applied to
 optional vendor configuration: the lane's standing decision (per
-`next-session-opener.md` and the `[esbuild.config]` log-line table)
+`threads/observability-sentry-otel.next-session.md` and the `[esbuild.config]` log-line table)
 was that a missing `SENTRY_AUTH_TOKEN` should *skip* plugin
 registration so that non-release contexts (local dev, fork preview
 without secrets) can still build. The `f9d5b0d2` implementation
@@ -2520,7 +2520,7 @@ inversion.
    resolver running at the same point in the build. Two scripts is
    the bug.
 6. **Re-run** the Vercel preview acceptance probe per
-   `next-session-opener.md` § Session shape. Expected log line on
+   `threads/observability-sentry-otel.next-session.md` § Session shape. Expected log line on
    preview: `[esbuild.config] Sentry plugin enabled: release=preview-<branch-slug>-<short-sha> env=preview`.
    Expected log line on a fork preview without `SENTRY_AUTH_TOKEN`:
    `[esbuild.config] Sentry plugin skipped: SENTRY_AUTH_TOKEN not provided — release will not be registered with Sentry`.
@@ -2551,7 +2551,7 @@ Both errors are instances of patterns already named in the napkin:
   single-source-of-truth boundary discipline.
 - The fail-policy inversion is a fresh instance of
   `passive-guidance-loses-to-artefact-gravity` — the
-  `next-session-opener.md` explicitly anticipated this exact failure
+  `threads/observability-sentry-otel.next-session.md` explicitly anticipated this exact failure
   mode (the `[esbuild.config] Sentry build-plugin intent error: …`
   line in the Session-shape table is named verbatim) but the
   guardrail was documented, not enforced. The build had to fail in

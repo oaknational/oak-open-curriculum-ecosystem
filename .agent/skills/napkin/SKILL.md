@@ -82,11 +82,38 @@ When something surprises you, capture it with this shape:
 - **Actual**: what actually happened
 - **Why expectation failed**: what was wrong or incomplete in the mental model
 - **Behaviour change**: what you should do differently next time
+- **Source plane**: `active` | `operational` | `executive` (optional — see
+  Cross-Plane Origin Tag below)
 ```
 
 Use this for both negative and positive surprise. If a surprise keeps
 reappearing, it is a candidate for `distilled.md`, a reusable pattern, a
 governance update, or an ADR.
+
+### Cross-Plane Origin Tag (optional)
+
+`Source plane: <plane>` is an optional origin tag naming the memory plane
+whose content the observation is *about* (per the three-plane taxonomy in
+[`.agent/directives/orientation.md`](../../../directives/orientation.md#layers)
+and [PDR-030 Plane-Tag Vocabulary](../../../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md)).
+
+- **`Source plane: executive`** — the observation is about an
+  executive-memory surface (artefact inventory, reviewer catalogue, adapter
+  matrix, surface matrix, stable canonical paths). Routes through the
+  executive-memory feedback loop defined in
+  [PDR-028](../../../practice-core/decision-records/PDR-028-executive-memory-feedback-loop.md).
+  See [`.agent/rules/executive-memory-drift-capture.md`](../../../rules/executive-memory-drift-capture.md)
+  for when the tag is required.
+- **`Source plane: operational`** — the observation is about continuity
+  state (workstream briefs, thread records, track cards). Routes through
+  `/session-handoff` refresh of the affected surface.
+- **`Source plane: active`** — default when the observation is about
+  learning-loop content (other napkin entries, distilled, patterns). Can be
+  omitted as the napkin is itself an active-plane surface.
+
+The origin tag is consumed at `/jc-consolidate-docs` step 5 cross-plane
+scan; it does not mutate anything at capture time. Omit the field when the
+observation is purely active-plane.
 
 ## Napkin Structure
 

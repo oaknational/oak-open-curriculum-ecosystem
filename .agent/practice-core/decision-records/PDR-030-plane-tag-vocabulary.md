@@ -93,6 +93,23 @@ require PDR amendment.**
 - **Read by**: Family B accumulation signal (PDR-029);
   consolidation meta-check on taxonomy-seam correctness.
 
+**Impact** — *which higher-permanence plane does this
+lane-level work affect?* (Added 2026-04-21 for catalogue
+completeness after architecture review flagged that this tag
+was in use but un-enumerated.)
+
+- **Canonical form**: `executive-impact:` as an inline
+  workstream-brief field (typically under Required Fields in
+  the brief) listing executive-memory surfaces the lane has
+  contradicted, extended, or superseded during its current work.
+- **Applies to**: lane-level operational surfaces —
+  `.agent/memory/operational/workstreams/<slug>.md` briefs
+  recording an operational → executive cross-plane impact.
+- **Read by**: consolidation workflow's cross-plane scan step
+  (PDR-028's feedback-loop channel); routes the signal to the
+  affected executive surface for amendment at next
+  consolidation.
+
 ### Conditional applicability
 
 The vocabulary is **required** on any host whose memory

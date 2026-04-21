@@ -170,6 +170,13 @@ PDR-025.
   should test the install-session against the tripwire it just
   installed. Prevents the session from landing a rule the
   installing agent has bypassed in the process of writing it.
+- **Passive guidance loses to artefact gravity** — guardrails in
+  prose alone earn nothing; they must be environmentally enforced
+  (rules, hooks, scripts, gates) to fire under context pressure.
+  Design check at tripwire-design time: is this active (fires
+  without agent recall) or passive (depends on reading/remembering)?
+  If passive, pair with an active layer before landing. See
+  [`patterns/passive-guidance-loses-to-artefact-gravity.md`](patterns/passive-guidance-loses-to-artefact-gravity.md).
 
 ## Repo-Specific Rules
 

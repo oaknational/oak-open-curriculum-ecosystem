@@ -174,6 +174,8 @@ Institutional memory lives in `.agent/memory/`:
   approach, check the pattern library for a known solution.
 - [napkin.md](../memory/active/napkin.md) — current session observations
   (written continuously, distilled periodically).
+- [threads/](../memory/operational/threads/README.md) — thread convention,
+  identity discipline, and per-thread next-session records (PDR-027).
 
 ## Essential Links
 
@@ -261,6 +263,14 @@ pnpm fix                 # Auto-fix: format, lint, markdownlint
 pnpm doc-gen             # Generate docs from TSDoc
 pnpm check               # Canonical aggregate gate (all)
 ```
+
+### Commit Discipline
+
+Use the `jc-commit` skill for commits — canonical at
+[`.agent/commands/commit.md`](../commands/commit.md). It enumerates the live
+commitlint constraints inline at draft time and format-checks before
+`git commit`. Adapters: `.claude/commands/jc-commit.md`,
+`.cursor/commands/jc-commit.md`, `.agents/skills/jc-commit/SKILL.md`.
 
 ## Architectural Understanding
 

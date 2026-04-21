@@ -43,7 +43,6 @@ One `*.next-session.md` file per active thread. Each file contains:
 | [`../workstreams/<slug>.md`](../workstreams/) | One thread's lane state ("where are we in this lane") | Long-lived; refreshed when the lane moves |
 | [`<slug>.next-session.md`](.) (this dir) | One thread's next-session landing target | Short-horizon; delete on landing per PDR-026 |
 | [`../tracks/`](../tracks/) | Tactical per-session coordination cards | Ephemeral; resolve/delete at session close |
-| [`../next-session-opener.md`](../next-session-opener.md) | **Legacy singular opener** — transitional; currently holds the `observability-sentry-otel` thread's next-session content | Will be migrated to `observability-sentry-otel.next-session.md` at next consolidation |
 
 ## Identity schema
 

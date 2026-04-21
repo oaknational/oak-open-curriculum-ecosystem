@@ -346,19 +346,25 @@ respective docs).
 
 **Changes**:
 
-- New PDR in `.agent/practice-core/decision-records/PDR-NNN-perturbation-mechanisms.md`
-  that defines the bundle as Practice doctrine. Per PDR-019
-  reusability test, this is PDR-shaped (re-derived across repos).
+- **LANDED 2026-04-21 (Session 3)**: [PDR-029 Perturbation-Mechanism
+  Bundle](../../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
+  defines the bundle as Practice doctrine. PDR-029 was amended
+  twice on 2026-04-21: *active means markdown-ritual, not code
+  execution*; and the Class-A.1 Layer-2 register-surface
+  prescription was retracted in favour of existing foundation-
+  directive grounding. Per PDR-019 reusability test, PDR-shaped
+  (re-derived across repos).
 - Three lightweight artefacts, each a discrete file or directive
   section:
   - **Non-goal re-ratification ritual** — added to
     `session-handoff.md` or equivalent session-close surface as
     a step that re-reads plan non-goals against recent owner
     direction before accepting them.
-  - **Standing-decision register** — new file at
-    `.agent/memory/operational/standing-decisions.md` (or a
-    named section inside `repo-continuity.md` — owner decides
-    which shape is right).
+  - **Standing-decision register** — **RETRACTED 2026-04-21 (late
+    Session 4)** per PDR-029's second 2026-04-21 Amendment Log
+    entry. The category "standing decision" is not distinct from
+    ADR / PDR / rule / principle / plan-local meta-decision;
+    ratified items decompose into those proper homes instead.
   - **First-principles metacognition prompt** — added to
     `.agent/directives/metacognition.md` as a named question
     that fires at phase boundaries: *"What did I inherit here,
@@ -823,12 +829,15 @@ executive memory has feedback loops. Phase 6 names it.
 
 **Changes** (portable branch):
 
-- New PDR at `.agent/practice-core/decision-records/PDR-NNN-executive-memory-feedback-loop.md`.
+- **LANDED 2026-04-21 (Session 3)**: [PDR-028 Executive-Memory
+  Feedback Loop](../../../practice-core/decision-records/PDR-028-executive-memory-feedback-loop.md).
   Content: rationale (executive memory as write-once catalogue is
   a loop gap); loop definition (drift-detection surface →
   graduation channel via pending-graduations register → ordinary
   capture-distil-graduate); citations to ADR-131 and the three-
-  mode memory README.
+  mode memory README. Operationalised in this repo by
+  [`.agent/rules/executive-memory-drift-capture.md`](../../../rules/executive-memory-drift-capture.md)
+  (landed Session 4 Task 4.5).
 
 **Changes** (host-local branch):
 

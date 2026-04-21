@@ -4,6 +4,159 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-21 — Session 4 tripwire install + PDR-029 "active means markdown-ritual" amendment
+
+Session 4 of the Staged Doctrine Consolidation and Graduation plan landed
+the Family-A + Family-B tripwire installs across two classes, plus a
+load-bearing mid-session amendment to PDR-029 after owner metacognition
+surfaced a platform-coupling bias in the original script-based shape.
+
+- **PDR-029 Amendment Log (new 2026-04-21 entry)** — codifies that
+  "active" tripwire layers are satisfied by **a ritual-moment markdown
+  step that names the authoritative source to read**, not by code
+  execution. Code is reserved for work an agent cannot reasonably
+  perform by reading markdown. Structural enumeration is satisfied by
+  the ritual instructing the agent to read the authoritative file — the
+  file IS the structural source, the instruction prevents
+  self-reporting. Platform parity is stronger under markdown-first.
+  Class A.2 Layers 2 and 3 (gate, probe) continue to name "gate",
+  "scanner", "probe" — these terms now refer to the **pattern of
+  firing**, not to an implementation technology. Pattern candidates
+  surfaced: `active-means-ritual-moment-not-code-execution` and
+  `plan-body-framing-outlives-five-reviewers`.
+- **Family A Class A.1 installs**:
+  - Plan-body rule forward reference resolved — `.agent/rules/plan-body-first-principles-check.md`
+    `PDR-NNN, pending` updated to cite PDR-029 as the governing PDR.
+  - Standing-decision register surface authored at
+    `.agent/memory/operational/standing-decisions.md` (the second
+    complementary layer for Class A.1); `repo-continuity.md § Standing
+    decisions` rewritten as a pointer to the register (no duplication).
+  - `start-right-quick` + `start-right-thorough` extended to read the
+    standing-decision register and `threads/README.md` in the grounding
+    order.
+  - AGENT.md `Memory and Patterns` section cites both new surfaces.
+- **Family A Class A.2 installs** (documentation-first per the amendment):
+  - Session-open identity-registration rule at
+    `.agent/rules/register-identity-on-thread-join.md` with Claude +
+    Cursor adapters.
+  - Session-close identity-update gate installed as a documentation
+    walkthrough in `/session-handoff` step 7c: four-step ritual walking
+    the agent through thread enumeration from `repo-continuity.md §
+    Active threads`, identity-row verification, and a "do not
+    proceed" hard-gate clause. Step 7b extended to refresh both the
+    per-thread next-session record AND the `Active identities`
+    column at handoff.
+  - Stale-identity audit installed as a documentation walkthrough in
+    `/jc-consolidate-docs` step 7c: six-check audit (stale
+    `last_session`, orphan threads, missing fields, expired track
+    cards, duplicate rows, Active-threads ↔ next-session-file
+    correspondence).
+- **Family A platform-agnostic commit skill** (owner fold-in, Session 3
+  close option b): canonical at `.agent/commands/commit.md` (repo
+  portability-validator convention treats `jc-*` as command adapters,
+  not skills). Enumerates `@commitlint/config-conventional`
+  constraints inline at draft time (header-max-length, subject-case,
+  type-enum) and specifies a pre-`git commit` format-check pass.
+  AGENT.md Development Commands gains a "Commit Discipline" citation.
+- **Family B meta-tripwires**:
+  - `/jc-consolidate-docs` step 5 extended with a taxonomy-seam
+    meta-check and a cross-plane path scan.
+  - Pending-graduations register schema extended with an orphan-item
+    signal (items with `graduation-target: other` that persist across
+    two consecutive consolidations).
+- **Cross-plane paths installed**:
+  - `.agent/rules/executive-memory-drift-capture.md` authored with
+    Claude + Cursor adapters — the `active → executive` path rule.
+  - Pattern-library README extended with optional `cross_plane: true`
+    frontmatter field.
+  - Workstream-brief README extended with optional `executive-impact:`
+    tag.
+  - Napkin skill extended with optional `Source plane:` origin tag.
+- **Observability-thread migration**: next-session record moved from
+  legacy singular path to
+  `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`.
+  Thread identity block and Participating agent identities table added
+  (retroactive row for the `f9d5b0d2` landing; concrete attribution
+  forward from 2026-04-22). All inbound references updated. Closes the
+  `observability-thread-legacy-singular-path` register item.
+- **Distilled citation** added for
+  `passive-guidance-loses-to-artefact-gravity` pattern in
+  `distilled.md` and in `start-right-quick` Learning-loop surfaces.
+- **Standing decision added**: *"Misleading docs are blocking."* When
+  a decision, design, or doctrine amendment invalidates a passage in
+  a plan, ADR, PDR, rule, or other durable document, update it in the
+  same landing — do not defer. Stale prescriptive text is how
+  inherited framing propagates. **Provenance**: surfaced mid-session
+  by owner after the PDR-029 amendment left the plan body describing
+  the pre-amendment script shape. The new standing decision was
+  immediately self-applied — the plan body's Tasks 4.2.b/c/3 and
+  Session 4 close block were rewritten the same landing. A
+  `docs-adr-reviewer` close pass surfaced further stale prescriptions
+  (in the newly-authored identity rule and three downstream plan
+  surfaces) which were also fixed in the same landing.
+
+Session 4 journey-as-learning note: the **two** PDR-029 amendments
+arose from three owner-metacognition interventions in a single
+session. Pass 1 (mid-session): five reviewers (Barney, code-reviewer,
+test-reviewer, type-reviewer, config-reviewer) approved a TypeScript
+script shape for the Class A.2 Layer 2 gate without questioning the
+inherited "active = code" frame; all already-written code was undone
+and reshaped documentation-first. Pass 2 (docs-adr-reviewer close):
+downstream surfaces still prescribed the killed script shape;
+*"Misleading docs are blocking"* standing-decision-candidate was
+raised and self-applied against the same session's plan body. Pass 3
+(late close): `standing-decisions.md` itself was surfaced as a misc
+bucket — *"standing decision" is not a category distinct from ADR /
+PDR / rule / principle / plan-local meta-decision_*. The file was
+deleted; its contents decompose into proper artefact homes (tracked
+as Due register items for Session 5). PDR-029 Class-A.1 Layer-2
+prescription retracted in a second Amendment Log entry — A.1 Layer 2
+is the existing foundation-directive grounding (ritual-moment
+markdown-reading active layer per the first amendment), not a
+dedicated register surface. Pattern candidate
+`plan-body-framing-outlives-reviewers` now at three instances this
+session → moved from pending to due in the register.
+
+Owner framed this explicitly as valuable discovery, not wasted effort
+— the three-pass cascade is how structural misframes surface. Owner
+repeated the principle *"always choose long-term architectural
+excellence over short-term expediency"* verbally during the session;
+the repetition is signal that inline prose doctrine is insufficiently
+active (`principles.md § Architectural Excellence Over Expediency`
+was not firing) — captured as a pattern candidate.
+
+**Fourth metacognition pass at close** (2026-04-21, after the
+three that drove the PDR-029 amendments + standing-decisions
+retraction): owner asked *"are we building a valuable system or
+throwing energy into theatre?"* The question surfaced that (a)
+Session 4 produced substantial doctrine but zero empirical
+firing evidence, (b) the Session 4 agent missed the linked
+authoritative `operational-awareness-continuity.md` workstream
+brief despite the thread record citing it, and (c) the six
+pattern candidates generated this session plus the two PDR-029
+amendments together represent a doctrine-velocity signal, not
+a progress signal.
+
+**Fifth metacognition pass at close** (2026-04-21, immediately
+following pass 4): agent initially reframed Session 5 as a
+"choice point" between two postures — treating the owner's
+honest-question concern as informational optionality rather than
+as directional redirect. Owner clarified: *"there is no
+alternative thread, we need this work to be FINISHED, properly,
+carefully, fully, choosing long-term architectural excellence at
+every point."* Session 5 reframed (again, same close) as a
+**mandatory sequence**: stage 1 evaluate-and-simplify first (close
+OAC Phase 4, delete-bias simplification pass, first-principles
+check), stage 2 original Session 5 extension runs only if stage
+1 closes with budget remaining. Thread does not switch. Pattern
+candidate captured: **`treating-owner-concern-as-information-
+rather-than-direction`** — when owner surfaces concern about
+direction, they are redirecting, not offering options; framing
+the concern as a "choice point" is agent hedging rather than
+acting.
+
+Owner-approved per PDR-003 at Session 4 close.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-21 — Session 3 doctrine bundle: threads/identity, executive-memory feedback loop, perturbation-mechanism bundle, plane-tag vocabulary, and PDR-011/PDR-026 amendments
 
 Session 3 of the Staged Doctrine Consolidation and Graduation plan

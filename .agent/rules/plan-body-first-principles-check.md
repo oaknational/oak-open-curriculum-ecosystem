@@ -44,13 +44,16 @@ pattern's Heath-brothers tripwire framing.
   — definitions, six instances, clause-by-clause attribution.
 - Pattern: [`.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
   — why this must be a rule, not a watchlist entry.
-- **Forward reference**: Session 3 of the staged doctrine-consolidation plan
-  drafts the Perturbation-Mechanism Bundle PDR (PDR-NNN, pending). That PDR
-  will retroactively govern this rule; the `PDR-NNN` citation is replaced
-  with the concrete PDR number when the PDR lands. Session 4 of the same plan
-  installs at least one further complementary Family-A tripwire so no single
-  failure mode (forgot to read the rule; hook bypassed; skill not invoked)
-  leaves the agent fully exposed.
+- **Governing PDR**: [PDR-029 Perturbation-Mechanism Bundle](../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
+  (ratified 2026-04-21, amended twice 2026-04-21). This rule is the
+  Family-A Class-A.1 tripwire. Per PDR-029's second 2026-04-21 Amendment Log
+  entry, A.1's prior-decision-recall is served by the foundation-directive
+  grounding at session open (principles, ADR index, PDR tier, `.agent/rules/`
+  tier) — all of which are read-at-ritual-moment active layers per the first
+  2026-04-21 amendment. No dedicated "register surface" is required or
+  desirable; a misc bucket admits unclassified-decision debt rather than
+  enforcing classification into the proper artefact homes (ADR / PDR /
+  rule / principle / plan-local).
 - Testing-strategy doctrine: [`.agent/directives/testing-strategy.md`](../directives/testing-strategy.md)
   — the tests-prove-behaviour principle the shape clause operationalises.
 - Principles: [`.agent/directives/principles.md`](../directives/principles.md)

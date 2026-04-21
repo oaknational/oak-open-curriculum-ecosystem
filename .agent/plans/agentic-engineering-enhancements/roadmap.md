@@ -87,7 +87,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), governance-concept integration (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist operational tooling layer (ADR-137, strategic)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), governance-concept integration (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist operational tooling layer (ADR-137, strategic), External pointer-surface integration (📋)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -132,6 +132,7 @@ Adjacent:
   ACT:  Agent classification taxonomy                📋 STRATEGIC
   OMT:  Operating-model mechanism taxonomy           📋 STRATEGIC
   OPS:  Specialist operational tooling layer         📋 STRATEGIC (ADR-137)
+  EPS:  External pointer-surface integration         📋 STRATEGIC
 ```
 
 ---
@@ -368,6 +369,42 @@ Adjacent:
   - not yet queued; promote when concrete multi-vendor session ergonomics
     justify executable work
   - adjacent to adapter generation, but not blocked on it
+
+### Adjacent — External Pointer-Surface Integration (EPS)
+
+- Strategic plan:
+  [external-pointer-surface-integration.plan.md](future/external-pointer-surface-integration.plan.md)
+- Goal:
+  - treat Linear (and possibly GitHub Projects) as a peer pointer-surface to
+    the repo's authoritative thread + landing model — not a mirror, not a
+    duplicate plan store
+  - structurally honest mapping: thread → Linear label (lifetime indefinite),
+    landing → Linear issue (lifetime finite), repo → Linear project,
+    navigation map → one Linear Document
+  - infrastructure not ritual: passive Document plus active firing surface
+    in `session-handoff.md` step 7c (four-step documentation walkthrough
+    per PDR-029 as amended 2026-04-21 — *active means markdown-ritual,
+    not code execution*) plus six-check stale-identity audit walkthrough
+    in `/jc-consolidate-docs` step 7c (PDR-029 two-complementary-layers)
+  - PII stays out of version control via gitignored
+    `.agent/local/linear.local.json` with committed `.example.json` schema
+- Status: 📋 Strategic reference (`future/`) — capture-only; Phase 0
+  owner-gated decisions must ratify before promotion
+- Captured: 2026-04-21 (Session opener arc; owner-ratified directives:
+  long-term architectural excellence; threads must surface and never collapse;
+  infrastructure not ritual; capture-only this turn)
+- Notes:
+  - intentionally outside the numbered phase sequence
+  - one-way sync only: repo authoritative; Linear is derived
+  - cadence: per-session-close on landing (PDR-026 emission event), matching
+    Cursor's "visible without spam" principle
+  - GitHub Projects assessed as marginal value given the org-internal
+    visibility goal already covered by repo + Linear; deferred unless a
+    public-roadmap need surfaces
+  - PDR-027 amendment vs new external-pointer-surface PDR is a Phase 0
+    decision (recommended: amend PDR-027)
+  - register pointer:
+    [`repo-continuity.md § Pending-graduations register § Infrastructure`](../../memory/operational/repo-continuity.md)
 
 ### Adjacent — Sentry Specialist Capability
 
@@ -704,6 +741,30 @@ Adjacent:
   - adoption/rejection decision recorded for each harness concept
   - documentation sync log records updates/no-change rationale
 - Dependencies: Phase 0 complete
+
+### Adjacent — Staged Doctrine Consolidation and Graduation
+
+- Active plan:
+  [current/staged-doctrine-consolidation-and-graduation.plan.md](current/staged-doctrine-consolidation-and-graduation.plan.md)
+- Goal:
+  - graduate the overdue Practice-doctrine backlog surfaced by the
+    2026-04-21 consolidation dry-run across six staged sessions
+  - install Family-A + Family-B perturbation tripwires (per PDR-029)
+    with load-bearing platform parity
+  - close the loop on executive-memory feedback and cross-plane
+    knowledge flow (per PDR-028 and PDR-030)
+- Status: 🟡 IN PROGRESS — Sessions 1, 2, 3, 4 landed; Sessions 5
+  (outgoing triage) and 6 (holistic fitness exploration) remaining
+- Done when:
+  - all overdue Due register items graduated to durable homes
+  - Family-A Class-A.1 (plan-body), Class-A.2 (agent-registration),
+    and platform-agnostic commit skill installed with platform parity
+  - Family-B meta-tripwires installed at `/jc-consolidate-docs`
+  - cross-plane path rules + tags + conventions installed
+  - `outgoing/` contains only ephemeral exchange
+  - `pnpm practice:fitness:strict-hard` passes at Session 6 close
+  - arc archived to `archive/completed/`
+- Dependencies: none; self-contained staged execution
 
 ---
 

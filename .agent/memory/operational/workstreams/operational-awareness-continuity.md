@@ -1,8 +1,33 @@
 # Workstream Brief — Operational Awareness and Continuity
 
-**Last refreshed**: 2026-04-20 (OAC Phase 3 pilot — first population)
+**Last refreshed**: 2026-04-21 (Session 4 post-close update — Phase 4
+is STILL PENDING from 2026-04-20; refinements (a) and (b) appear to
+have landed in the 2026-04-20/21 arc via separate channels, but (c)
+expiry-check helper and (d) napkin-promotion helper remain open;
+portability-posture decision and the six-surface doc propagation
+of plan Task 4.3 remain open).
 **Branch**: `feat/otel_sentry_enhancements` (shared with observability
 lane; single-writer per track card convention applies).
+
+**Session-4-surprise observation for the promotion watchlist**
+(2026-04-21): the `workstream-brief-is-compact-state-of-resumption`
+test item at the bottom of this brief was, in effect, **FAILED in
+Session 4**. The `memory-feedback` thread's next-session record at
+[`../threads/memory-feedback.next-session.md`](../threads/memory-feedback.next-session.md)
+line 40 cites this brief explicitly as *"arguably covers [the
+memory-feedback thread] loosely"*. The Session 4 agent (Samwise) read
+that line at session open, absorbed the "(none yet — arguably covers
+loosely)" framing, and proceeded for the rest of the session without
+reading this brief. Owner surfaced the miss late in the session. The
+brief itself was compact and correct — the failure was the
+"loose-coverage" parenthetical discouraging the read, compounded by
+no explicit instruction in the thread-resume ritual to follow
+such linked-but-hedged references. Data point: current brief format
+can be **linked but not read** when the linking prose hedges. See
+also the pattern candidate `new-doctrine-lands-without-sweeping-
+indexes` in the pending-graduations register (the same session
+missed threads in the operational-memory README index and in
+orientation.md — same class of silent discoverability failure).
 
 ## Owning plan(s)
 

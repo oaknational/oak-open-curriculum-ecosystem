@@ -152,17 +152,77 @@ asks for more, this command must not trigger:
      session-scoped action here is *this session touched these
      items; update them*.
 
-   **7b. Update thread-record identity rows.** For every thread
-   this session touched
-   (`.agent/memory/operational/threads/<slug>.next-session.md`):
-   set `last_session` on the matching identity row to today's
-   date per the additive-identity rule at
-   [`threads/README.md § Proposed rule`](../memory/operational/threads/README.md).
-   If you are a new identity on the thread (different platform /
-   model / `agent_name`), add a new row instead of updating.
+   **7b. Update thread-record identity rows AND the active-agent
+   register column.** Two edits, both required:
+
+   1. **Thread next-session record** — for every thread this
+      session touched
+      (`.agent/memory/operational/threads/<slug>.next-session.md`):
+      set `last_session` on the matching identity row to today's
+      date per the additive-identity rule at
+      [`threads/README.md`](../memory/operational/threads/README.md)
+      and [PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
+      If you are a new identity on the thread (different platform /
+      model / `agent_name`), add a new row instead of updating.
+   2. **Active-agent register column** — refresh the `Active
+      identities` column for each touched thread in
+      [`repo-continuity.md § Active threads`](../memory/operational/repo-continuity.md#active-threads).
+      Summary form: `platform / model / agent_name / role /
+      last_session` per identity, comma-separated when multiple
+      identities are currently active on the thread. That column
+      IS the right-now register per PDR-029 (as amended
+      2026-04-21); it must reflect the thread record or the
+      audit in `/jc-consolidate-docs` step 7c will flag a
+      mismatch.
+
    This is the session-close counterpart to the session-open
-   registration step in `threads/README.md § Starting a session
-   on a thread`.
+   registration step in
+   [`threads/README.md § Starting a session on a thread`](../memory/operational/threads/README.md#starting-a-session-on-a-thread)
+   — together with the session-open rule at
+   [`.agent/rules/register-identity-on-thread-join.md`](../rules/register-identity-on-thread-join.md)
+   they form the Family-A Class-A.2 rule layer per PDR-029.
+
+   **7c. Verify every touched thread is updated — hard gate.** <a id="hard-gate"></a>
+   This step is a **documentation-first, platform-agnostic gate**
+   per the 2026-04-21 amendment to PDR-029 (active tripwires are
+   ritual-moment markdown steps that name authoritative sources,
+   not code). Any agent on any platform can perform it.
+
+   **Ordering assertion**: step 7b MUST have run in this session
+   before step 7c. 7b refreshes the per-thread next-session record
+   AND the `Active identities` column; 7c validates those
+   refreshes against the thread's next-session file. Running 7c
+   without 7b reads stale data and self-validates — the exact
+   passive-guidance failure mode this gate counters. If 7b has not
+   run this session, run it first, then 7c.
+
+   1. Open
+      [`.agent/memory/operational/repo-continuity.md § Active threads`](../memory/operational/repo-continuity.md#active-threads).
+      That table is the structural source — enumerate active
+      threads from it, not from memory. Self-reporting is not
+      sufficient (the very failure mode this gate exists to
+      counter per the
+      [`passive-guidance-loses-to-artefact-gravity`](../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+      pattern).
+   2. For each thread the session touched (by edit, read-and-
+      reference, or commit), open its next-session record at the
+      `Next-session record` path listed in the Active threads row
+      (canonical `threads/<slug>.next-session.md`).
+   3. Confirm the `Participating agent identities` row matching
+      your platform / model / `agent_name` has `last_session`
+      equal to today's date (per the additive-identity rule in
+      [PDR-027](../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)).
+      If you are a new identity on the thread, add a new row.
+   4. Fix any missing or outdated `last_session` values. Do not
+      proceed to step 8 until every touched thread's identity row
+      shows today's date. "Do not proceed" is the hard-gate force
+      — same authority as a script `exit(1)`, no platform
+      coupling.
+
+   The enforcement comes from **the ritual itself**, not from code:
+   the agent running `/session-handoff` reads this step, follows
+   the enumeration, and cannot honestly mark handoff complete
+   while any touched thread remains un-updated.
 
 8. **Run the consolidation gate.** Check the trigger checklist in
    `.agent/commands/consolidate-docs.md`.

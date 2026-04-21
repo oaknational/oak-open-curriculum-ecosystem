@@ -15,7 +15,10 @@ step leads to the surfaces the next step assumes.
 
 ### 1. Durable directives
 
-Read and internalise:
+Read and internalise. **This foundation-directive reading is also the
+Family-A Class-A.1 Layer-2 firing per PDR-029's second 2026-04-21
+Amendment Log entry** — the prior-decision-recall layer is the
+existing grounding read, not a dedicated "standing-decisions" surface.
 
 1. @.agent/directives/AGENT.md — operational entry point and index
 2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
@@ -33,14 +36,19 @@ workstream from the [full ADR index](../../../../docs/architecture/architectural
 
 - @.agent/memory/active/distilled.md — hard-won rules
 - @.agent/memory/active/napkin.md — current session observations
+- @.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md —
+  constraint at tripwire-design time (passive guidance needs an active
+  layer to fire under context pressure)
 
 ### 4. Live state (operational memory) — authority order
 
 Read in order; stop at whichever answers your next-step question:
 
 1. @.agent/memory/operational/repo-continuity.md — canonical continuity contract
-2. `.agent/memory/operational/workstreams/<slug>.md` — the workstream brief for the lane you are about to resume
-3. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
+2. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
+3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch
+4. `.agent/memory/operational/workstreams/<slug>.md` — the workstream brief for the lane you are about to resume
+5. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
 
 ### 5. Active plans
 

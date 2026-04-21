@@ -6,6 +6,11 @@ pdr_kind: governance
 
 **Status**: Accepted
 **Date**: 2026-04-21
+**Operationalising rule** (host-local): the `active → executive`
+path named in this PDR is operationalised in this repo by
+[`.agent/rules/executive-memory-drift-capture.md`](../../rules/executive-memory-drift-capture.md)
+(installed Session 4 Task 4.5, 2026-04-21). Portable adopters
+install the equivalent rule under their own canonical rule path.
 **Related**:
 [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md)
 (the surprise pipeline — executive-memory drift is a form of

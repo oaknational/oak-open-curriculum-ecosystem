@@ -25,6 +25,16 @@ Every brief must cover:
   any tactical coordination in progress.
 - **Promotion watchlist** — signals that may warrant graduation into
   the learning loop (`napkin` → `distilled` → permanent docs).
+- **`executive-impact:`** (optional) — lane-level observations that
+  carry **operational → executive cross-plane impact** per
+  [PDR-028 Executive-Memory Feedback Loop](../../../practice-core/decision-records/PDR-028-executive-memory-feedback-loop.md)
+  and [PDR-030 Plane-Tag Vocabulary](../../../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md).
+  Use when the workstream has surfaced a contradiction, extension,
+  or supersession against a stable executive-memory catalogue
+  (artefact inventory, reviewer catalogue, adapter matrix, surface
+  matrix). Consumed at `/jc-consolidate-docs` step 5 cross-plane
+  scan; routes the signal back to the affected executive surface
+  for amendment at the next consolidation.
 
 ## Writers and Readers
 

@@ -1,4 +1,14 @@
-# Next-Session Opener — §L-8 Vercel preview smoke + WS4/WS5 rollout
+# Next-Session Record — `observability-sentry-otel` thread
+
+**Migrated 2026-04-21 (Session 4 Task 4.5 of the staged doctrine-
+consolidation plan)**: this file was moved from the legacy singular
+path `.agent/memory/operational/next-session-opener.md` to the
+canonical per-thread path
+`.agent/memory/operational/threads/observability-sentry-otel.next-session.md`.
+This closes the `observability-thread-legacy-singular-path`
+pending-graduations register item and allows the Task 4.2.c sixth
+audit check (active thread ↔ next-session record file
+correspondence) to pass without special-casing.
 
 **Authored**: 2026-04-21 session close after the §L-8 WS1+WS2+WS3.1
 atomic landing (`f9d5b0d2 feat(mcp-http): §L-8 esbuild-native build
@@ -7,10 +17,44 @@ via @sentry/esbuild-plugin`). Three branches: 31 files changed, +1328
 orchestrator + `upload-sourcemaps.sh` + `tsup.config.ts` deleted; 24
 new tests pass; 639/639 total tests pass; type-check + lint + format
 + knip + depcruise + markdownlint clean.
-**Consumed at**: next session open.
+**Consumed at**: next session that picks up the
+`observability-sentry-otel` thread (not necessarily the next session
+overall — the `memory-feedback` thread has its own next-session
+record at
+[`memory-feedback.next-session.md`](memory-feedback.next-session.md);
+per-thread-per-session landing commitment per PDR-026).
 **Lifecycle**: delete on session close once its landing target has
 been reported (per PDR-026); rewrite if the landing target needs
 re-stating for a further session.
+
+---
+
+## Thread identity
+
+- **Thread**: `observability-sentry-otel`
+- **Thread purpose**: Product — Sentry/OTel public-alpha
+  integration; release-attribution lane for the HTTP MCP server;
+  diagnostic-grade observability on Vercel runtime.
+- **Branch**: `feat/otel_sentry_enhancements` (branch-primary).
+
+## Participating agent identities
+
+| agent_name | platform | model | session_id_prefix | role | first_session | last_session |
+| --- | --- | --- | --- | --- | --- | --- |
+| *`unattributed`* | *`unknown`* | *`unknown`* | *`unknown`* | `executor` | 2026-04-21 | 2026-04-21 |
+| `Samwise` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `migration-maintenance` | 2026-04-21 | 2026-04-21 |
+
+**Identity discipline**: per the additive-identity rule
+([PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)),
+sessions joining this thread add an identity row; they do not
+overwrite or rename existing rows. The 2026-04-21 row is retroactive
+attribution for the `f9d5b0d2` landing — owner accepted the
+attribution gap; concrete attribution starts forward from 2026-04-22
+per the Standing decisions note in
+[`repo-continuity.md`](../repo-continuity.md). The next session on
+this thread is the first session expected to register a concrete
+identity on arrival per
+[`.agent/rules/register-identity-on-thread-join.md`](../../../rules/register-identity-on-thread-join.md).
 
 ---
 

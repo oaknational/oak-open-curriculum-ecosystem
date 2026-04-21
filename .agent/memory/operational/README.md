@@ -18,13 +18,27 @@ continuity-surface split lives in
 | Surface | Purpose | Horizon | Writers | Authority |
 | --- | --- | --- | --- | --- |
 | [`repo-continuity.md`](repo-continuity.md) | Canonical repo-level continuity contract | Current session to a few sessions | `session-handoff` | Canonical for continuity contract; subordinate to active plans for scope |
-| [`workstreams/<slug>.md`](workstreams/README.md) | Short-horizon lane resumption brief (one per active workstream) | Days to weeks | `session-handoff`; optionally `GO` when a workstream boundary is crossed | Lane-level short-horizon state; subordinate to both continuity contract and plans |
+| [`threads/<slug>.next-session.md`](threads/README.md) | Continuity-unit next-session record — identity table + landing target for a named stream of work that persists across sessions | Indefinite; deleted when thread archives | `session-handoff`; each joining session adds/updates its identity row per the additive-identity rule (PDR-027) | Identity + next-session landing authoritative for the thread; subordinate to plans for scope |
+| [`workstreams/<slug>.md`](workstreams/README.md) | Short-horizon lane resumption brief (one or more per thread — a thread can span multiple lanes) | Days to weeks | `session-handoff`; optionally `GO` when a workstream boundary is crossed | Lane-level short-horizon state; subordinate to thread next-session record for identity and to plans for scope |
 | [`tracks/<workstream>--<agent>--<branch>.md`](tracks/README.md) | Single-writer tactical coordination card | One focused task or blocker-resolution cycle | The owning agent only | Tactical coordination only; never authoritative for scope |
 
 Track cards are git-tracked; multi-agent and multi-location
 collaboration flows through the normal git channel. A collaborative
 track creates multiple single-writer cards disambiguated by the
 filename convention.
+
+**Thread ↔ workstream relationship** (PDR-027): a **thread** is the
+continuity unit — a named stream of work that persists across sessions
+and agents; it carries identity and next-session landing. A
+**workstream** is a lane-level brief answering "where are we in this
+lane?" A thread contains **one or more** workstreams; a workstream
+belongs to exactly one thread. In small cases the mapping is 1:1 and
+the thread slug equals the workstream slug (e.g.
+`observability-sentry-otel`); this is permitted but nominal overlap
+should not be mistaken for identity of concern — the surfaces answer
+different questions. Whether the 1:1 empirical state warrants
+collapsing to a single surface is a Session-5 first-principles
+check (see the Deep consolidation status register).
 
 ## Authority Order
 
@@ -37,8 +51,10 @@ lower-authority surfaces' scope-specific content.
 1. **Plans** (`.agent/plans/*/active/*`) — scope, sequencing,
    acceptance criteria, validation.
 2. **`repo-continuity.md`** — canonical continuity contract.
-3. **`workstreams/<slug>.md`** — lane-level short-horizon state.
-4. **`tracks/*.md`** — tactical coordination only; never
+3. **`threads/<slug>.next-session.md`** — thread-level identity +
+   next-session landing.
+4. **`workstreams/<slug>.md`** — lane-level short-horizon state.
+5. **`tracks/*.md`** — tactical coordination only; never
    authoritative for scope.
 
 ## Relationship to Other Memory Modes

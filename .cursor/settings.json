@@ -17,6 +17,9 @@
     },
     "posthog": {
       "enabled": true
+    },
+    "linear": {
+      "enabled": true
     }
   }
 }

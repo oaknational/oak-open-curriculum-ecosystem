@@ -146,12 +146,16 @@ target.
 
 ## Forward References
 
-- **Session 3 Perturbation-Mechanism Bundle PDR** (PDR-NNN,
-  pending) — will formalise the three perturbation mechanisms
-  and explicitly require at least two environmentally-enforced
-  tripwires (Family A) plus memory-taxonomy meta-tripwires
-  (Family B). The PDR must be self-applying: it cannot land as
-  passive guidance about the danger of passive guidance.
+- **Perturbation-Mechanism Bundle PDR** — [PDR-029](../../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md)
+  (landed Session 3, 2026-04-21; amended twice on 2026-04-21 —
+  *active means markdown-ritual, not code execution*, and the
+  Class-A.1 Layer-2 "standing-decision register surface"
+  retraction). Formalises the three perturbation mechanisms,
+  requires at least two complementary layers per Family-A class,
+  plus memory-taxonomy meta-tripwires (Family B). Two-phase
+  self-application explicit: ratify (landing commit) then install
+  (Session 4). Reviewed passive-guidance instances and counters
+  live in the Amendment Log.
 - **Session 4 Family-A tripwire installation** — the staged
   plan session that installs the two complementary Family-A
   layers by default (always-applied rule + standing-decision

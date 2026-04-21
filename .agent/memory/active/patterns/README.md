@@ -79,10 +79,15 @@ barrier:
   proven_by_implementation: true
   prevents_recurring_mistake: "What mistake this prevents"
   stable: true
+cross_plane: true   # optional; see Cross-Plane Span Tag below
 ---
 ```
 
 The `use_this_when` field is the primary discovery mechanism. It describes the moment an engineer should think "I have seen this before."
+
+### Cross-Plane Span Tag (optional)
+
+`cross_plane: true` is an optional frontmatter field naming patterns whose substance genuinely spans multiple memory planes (`active/`, `operational/`, `executive/`). Added when a pattern's behaviour-change reaches beyond learning-loop (active) into continuity state (operational) or stable catalogues (executive). Defined by [PDR-030 Plane-Tag Vocabulary](../../../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md); routes through the graduation channel defined in [PDR-028 Executive-Memory Feedback Loop](../../../practice-core/decision-records/PDR-028-executive-memory-feedback-loop.md). Accumulation of `cross_plane: true` patterns in a rolling window is the Family-B Layer-2 seam-review signal per [PDR-029](../../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md). Omit the field entirely when the pattern is single-plane — do not set `cross_plane: false`.
 
 ## How Patterns Differ from Rules
 

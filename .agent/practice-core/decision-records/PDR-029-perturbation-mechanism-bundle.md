@@ -32,6 +32,150 @@ thread-identity discipline);
 `cross_plane: true` span tag consumed by the Family B Layer 2
 accumulation signal).
 
+## Amendment Log
+
+- **2026-04-21 (Accepted) — *Class-A.1 Layer-2 retraction: no "standing-
+  decision register surface" — foundation-directive grounding is the Layer
+  2.*** The initial Class-A.1 Required-layer prescription named a
+  **standing-decision register surface** as the second complementary
+  layer. Session 4 Task 4.1 implemented this faithfully by authoring
+  `.agent/memory/operational/standing-decisions.md` and collapsing
+  `repo-continuity.md § Standing decisions` into a pointer. A third owner-
+  metacognition intervention later in Session 4 surfaced that "standing
+  decision" is not a category distinct from ADR / PDR / rule / principle /
+  plan-local meta-decision — it is a default property of any ratified
+  artefact. The "register surface" was therefore a **misc bucket**: it
+  admitted unclassified-decision debt rather than enforcing proper
+  classification into durable homes.
+  - **Codified retraction**: the Class A.1 Required-layers list is
+    reduced to Layer 1 (plan-body-first-principles-check rule). The
+    intent of Layer 2 — *"owner-ratified decisions re-enter scope at
+    every session regardless of plan contents"* — is already served by
+    the **foundation-directive grounding** read at session open:
+    `.agent/directives/principles.md`, the ADR index, the PDR index,
+    and the `.agent/rules/` tier. Per this PDR's first 2026-04-21
+    amendment, those reads are ritual-moment markdown-reading active
+    layers; no dedicated surface needs to be authored to make them so.
+    The two-complementary-layers design target is met by the
+    combination of shape-entry (Layer 1, rule) + session-open
+    foundation grounding (which this amendment retrospectively names
+    as the implicit Layer 2 for A.1).
+  - **Implication for Class-A.1 installs**: the `standing-decisions.md`
+    file is deleted; its items decompose into ADR / PDR / rule /
+    principle / plan-local homes. Items already in proper homes:
+    three-plane taxonomy (PDR-028, PDR-030), staged-execution +
+    fitness-tolerance + experience-deferral + session-break-points
+    (plan body), owner-beats-plan (principles.md + repo-wide
+    invariants). Items needing new durable artefacts captured as
+    Due register entries for Session 5 / next consolidation:
+    `--no-verify` fresh-authorisation rule; build-vs-buy PDR;
+    friction-ratchet PDR; runtime-tracks-git-tracked PDR; docs-as-DoD
+    PDR; misleading-docs-are-blocking PDR.
+  - **Pattern candidate surfaced — `plan-body-framing-outlives-
+    reviewers`** (third instance this session, elevated to Due in the
+    pending-graduations register). First instance: scripts-for-
+    tripwires. Second instance: docs-as-second-class-review-target.
+    Third instance: standing-decision-category-as-distinct-from-
+    ADR/PDR/rule/principle.
+  - **Pattern candidate — `metacognition-cascade-reveals-deeper-
+    misframes-per-pass`**: within a single session, successive owner
+    metacognition interventions each surface a deeper structural
+    misframe than the previous pass. Each cascade dismantles more
+    scaffolding that prior reviewers approved. First instance (this
+    session, three passes).
+  - **Pattern candidate — `owner-repeats-principle-verbally-when-
+    written-doctrine-is-insufficient`**: owner said *"always choose
+    long-term architectural excellence over short-term expediency"*
+    twice in this session despite the principle being written in
+    `principles.md § Architectural Excellence Over Expediency`. The
+    repetition is signal that inline prose doctrine is insufficiently
+    active for the current work — the principle needs a stronger
+    firing cadence. First instance. Promotion-ready on second
+    cross-session instance.
+  - **Reviewer-coverage note**: prior to this amendment, five
+    reviewers (Barney, code-reviewer, test-reviewer, type-reviewer,
+    config-reviewer) approved the standing-decisions install inside
+    the PDR-029-as-drafted frame; a sixth reviewer (`docs-adr-
+    reviewer`) reviewed at close and did not flag the "register
+    surface" framing as problematic either. None questioned whether
+    the "standing decision" category exists. Reviewer intent-review
+    optimises inside inherited frames; it does not substitute for
+    owner first-principles metacognition *against* the frame. This
+    calibration is new. The pattern candidate `plan-body-framing-
+    outlives-reviewers` codifies the observation.
+
+- **2026-04-21 (Accepted) — *Active means markdown-ritual, not code
+  execution.*** The initial drafting of the Class A.2 Required-layer
+  language ("backed by a scanner", "a scanner that reads thread
+  identity tables") and the Tripwire-layer catalogue's "Health probe /
+  scanner" row implicitly assumed that "active" tripwire layers are
+  implemented as code. During Session 4 of the staged doctrine-
+  consolidation plan, owner intervention via `jc-metacognition`
+  surfaced that this framing is a latent platform-coupling bias: the
+  rest of the Practice infrastructure is documentation-first,
+  platform-agnostic markdown precisely so any agent on any platform
+  (Claude, Cursor, Codex, Gemini, human) can participate. A code
+  layer is a Claude-favouring artefact — it presupposes an agent with
+  shell, `pnpm`, or a particular runtime. Five reviewers (Barney,
+  code-reviewer, test-reviewer, type-reviewer, config-reviewer)
+  approved a TypeScript-based script shape for the Class A.2 Layer 2
+  gate and Layer 3 probe without once questioning the frame; the
+  framing survived intent-review because each reviewer optimised
+  *within* it.
+  - **Codified amendment**: "active" tripwire layers are satisfied
+    by **a ritual-moment markdown step that names the authoritative
+    source to read**. The enforcement force comes from the ritual's
+    *"do not proceed until X"* obligation, carrying the same
+    authority as an `exit(1)` without platform coupling. Code is
+    **one possible implementation**, reserved for work an agent
+    cannot reasonably perform by reading markdown (e.g. heavy
+    cross-repo aggregation, complex parsing beyond human
+    readability). The default for Class A.2 — and for any Family A
+    layer described as "scanner", "probe", or "gate" in this PDR —
+    is the markdown-ritual form.
+  - **Structural enumeration** (the Class A.2 Layer 2 "MUST NOT
+    rely on self-reporting" clause) is satisfied by **the ritual
+    step explicitly naming the authoritative file and instructing
+    the agent to read it**. The authoritative file IS the
+    structural source; the instruction prevents self-reporting.
+    Any agent on any platform can perform the enumeration. A
+    script that reads the file is one implementation of this
+    principle; it is not the principle.
+  - **Platform parity** (the PDR's load-bearing constraint) is
+    stronger under markdown-first: markdown is the lowest common
+    denominator every agent infrastructure can read. A markdown
+    ritual step is platform-parity by construction; a code layer
+    satisfies parity only if the code runs on every target
+    platform's runtime, which is a stricter bar.
+  - **Affected PDR passages**: the Class A.2 Layers 2 and 3
+    prescriptions continue to name "gate", "scanner", and "probe",
+    but these terms now refer to the **pattern of firing** (at
+    session close; on demand; at scheduled audit), not to an
+    implementation technology. The Tripwire-layer catalogue's
+    "Health probe / scanner" row is read as *"Named ritual step
+    that enumerates from authoritative files"* — a CLI sub-command
+    is one valid instantiation; a markdown checklist walked at the
+    ritual is another and is the default.
+  - **Affected installs**: Session 4 of the staged doctrine-
+    consolidation plan delivers the Class A.2 Layer 2 gate as a
+    documentation step in `/session-handoff` (step 7c walking the
+    agent through thread enumeration and identity-update
+    verification) and the Layer 3 stale-identity probe as a
+    documentation step in `/jc-consolidate-docs` (step 7c walking
+    the agent through six staleness checks). No script, no CLI
+    subcommand, no workspace dependency — the force is in the
+    ritual surface.
+  - **Pattern candidates surfaced**:
+    `active-means-ritual-moment-not-code-execution` (the core
+    amendment) and `plan-body-framing-outlives-five-reviewers`
+    (inherited framings propagate through reviewer intent-review
+    because each reviewer optimises within the frame rather than
+    questioning it — the plan-body-first-principles-check rule's
+    shape clause catches shape mismatches but not the frame
+    behind the shape). Captured to
+    [napkin](../../memory/active/napkin.md) Session 4 mid-session
+    entry; promotion-ready on second instance per PDR-007.
+
 ## Context
 
 Two patterns have been extracted from repeated failure modes in
@@ -171,17 +315,25 @@ spec, or inherited artefact.
    3. **Vendor-literal clause.** Does any literal token from
       the plan body match the current upstream surface, or is
       it a doc-level word the plan borrowed?
-2. **Read-trigger surface** — a **standing-decision register**
-   (a short file listing durable owner-ratified decisions, each
-   with a `recorded:` date and a `reason:` line) named
-   explicitly in the session-open grounding order
-   (`start-right-quick` / `start-right-thorough` or host
-   equivalents) so owner-ratified decisions re-enter scope at
-   every session regardless of plan contents. The
-   standing-decision register is a distinct surface from the
-   pending-graduations register defined in PDR-028 — the former
-   carries ratified decisions that govern; the latter carries
-   graduation candidates moving through the pipeline.
+2. **Foundation-directive grounding** (retrospectively named;
+   retracted from an earlier "standing-decision register surface"
+   prescription per the second 2026-04-21 Amendment Log entry)
+   — the existing session-open reading of the host's foundation
+   directives (`principles.md`, the ADR index, the PDR index, the
+   `.agent/rules/` tier) functions as the second complementary
+   layer for A.1. Per this PDR's first 2026-04-21 amendment, those
+   reads are ritual-moment markdown-reading active layers. No
+   dedicated "register surface" is needed or desirable — a
+   standalone surface for "standing decisions" is a misc bucket
+   that admits unclassified-decision debt rather than enforcing
+   classification into the proper artefact homes (ADR / PDR /
+   rule / principle / plan-local meta-decision). The host repo's
+   `start-right-quick` / `start-right-thorough` (or equivalents)
+   already name these foundation reads at Ground First step 1
+   AND explicitly annotate them as the A.1 Layer-2 firing site,
+   so the coupling is bidirectional — if the grounding order
+   restructures, the annotation points back at this PDR for
+   impact assessment.
 
 #### Class A.2 — Agent-registration / identity discipline
 
@@ -291,15 +443,18 @@ choose at least one layer from the tripwire catalogue:
   A.1 Layer 1 (always-applied rule: plan-body-first-
   principles-check). Content matches the three-clause check
   above.
-- **Standing-decision register surface** — lands as Class A.1
-  Layer 2 (read-trigger surface named by start-right-quick /
-  start-right-thorough).
-- **Non-goal re-ratification ritual** — absorbed into the
-  standing-decision register surface (decisions override
-  non-goals by construction) and the owner-beats-plan
-  invariant. Not a separate layer; the absorption eliminates
-  the duplication observed in the original three-mechanism
-  list.
+- **Standing-decision register surface** — **RETRACTED per the
+  second 2026-04-21 Amendment Log entry.** The intent
+  (owner-ratified decisions re-enter scope at every session) is
+  served by the foundation-directive grounding read at session
+  open; no dedicated register surface is authored. Items that
+  had been placed in the retracted register decompose into ADR /
+  PDR / rule / principle / plan-local homes.
+- **Non-goal re-ratification ritual** — covered by the plan-body
+  rule's shape clause (non-goals are a plan-body claim subject
+  to the first-principles check) and the owner-beats-plan
+  invariant in `principles.md` / repo-wide invariants. Not a
+  separate layer.
 
 ### Self-application requirement
 
@@ -315,10 +470,13 @@ session closes.
 To prevent the exposure window from widening: the PDR names
 Family A tripwires as mandatory installs with named firing
 cadences and mandatory platform parity; the install session
-MUST install the Family A Class A.1 second layer, the three
-Family A Class A.2 layers, and at least two Family B layers in
-a single closure. Partial installs are non-compliant; any
-install that slips the platform-parity requirement violates
+MUST install the Family A Class A.1 rule (Layer 2 is satisfied
+by existing foundation-directive grounding per the second
+2026-04-21 amendment — no additional authoring needed), the
+three Family A Class A.2 layers (as documentation walkthroughs
+per the first 2026-04-21 amendment), and at least two Family B
+layers in a single closure. Partial installs are non-compliant;
+any install that slips the platform-parity requirement violates
 the PDR, not just a plan acceptance criterion.
 
 A future Core edit that proposes relaxing any of the required
