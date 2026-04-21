@@ -94,15 +94,16 @@ asks for more, this command must not trigger:
    **6b. Surface ADR/PDR candidates.** Ask explicitly at every
    session close: *"Has this session surfaced an architectural
    decision worth an ADR? A Practice-governance decision worth a
-   PDR? An amendment to an existing ADR or PDR?"* If yes, note the
-   candidate (one-line summary + link to the session-handoff
-   context) in the pending-graduations register at
+   PDR? An amendment to an existing ADR or PDR?"* If yes, add the
+   candidate to the pending-graduations register at
    `.agent/memory/operational/repo-continuity.md § Deep
-   consolidation status`, OR as a distinct napkin entry with a
-   `candidate:` tag. This is capture only; graduation happens at
-   `consolidate-docs` step 7a. If nothing qualifies, say so and
-   move on — *"nothing qualifies"* is a valid answer reached by
-   asking, not by skipping.
+   consolidation status` per its schema (`captured-date`,
+   `source-surface`, `graduation-target`, `trigger-condition`,
+   `status`), OR as a distinct napkin entry with a `candidate:`
+   tag that the next register refresh promotes. This is capture
+   only; graduation happens at `consolidate-docs` step 7a. If
+   nothing qualifies, say so and move on — *"nothing qualifies"*
+   is a valid answer reached by asking, not by skipping.
 
    **6c. Record subjective experience (optional).** If the session
    produced a reflective surplus, capture it in
@@ -128,15 +129,50 @@ asks for more, this command must not trigger:
    technical content, and surface emergent insight across
    experiences.
 
-7. **Run the consolidation gate.** Check the trigger checklist in
+7. **Refresh cross-session coordination surfaces** (session-scoped
+   touch on cross-session artefacts the session affected).
+
+   **7a. Refresh the pending-graduations register.** Open
+   `.agent/memory/operational/repo-continuity.md § Deep
+   consolidation status` and, for each item whose state this
+   session's work affects:
+
+   - If a trigger condition fired this session (a second instance
+     observed; a drafting slot reached; a consumption point hit):
+     move the item from `pending` → `due`, or from `due` →
+     `graduated` with a cross-reference to the destination
+     artefact.
+   - If a new candidate was captured at step 6b, ensure it now
+     appears in the register per the schema (`captured-date`,
+     `source-surface`, `graduation-target`, `trigger-condition`,
+     `status`). Napkin `candidate:` entries from step 6b that
+     were not directly written to the register surface here.
+   - Do *not* review the whole register for stale items — that
+     is consolidation work (`consolidate-docs` step 7). The
+     session-scoped action here is *this session touched these
+     items; update them*.
+
+   **7b. Update thread-record identity rows.** For every thread
+   this session touched
+   (`.agent/memory/operational/threads/<slug>.next-session.md`):
+   set `last_session` on the matching identity row to today's
+   date per the additive-identity rule at
+   [`threads/README.md § Proposed rule`](../memory/operational/threads/README.md).
+   If you are a new identity on the thread (different platform /
+   model / `agent_name`), add a new row instead of updating.
+   This is the session-close counterpart to the session-open
+   registration step in `threads/README.md § Starting a session
+   on a thread`.
+
+8. **Run the consolidation gate.** Check the trigger checklist in
    `.agent/commands/consolidate-docs.md`.
 
    - If no trigger fires, set `Deep consolidation status` to
      `not due — <reason>` in `.agent/memory/operational/repo-continuity.md` and stop here.
    - If one or more triggers fire, set `Deep consolidation status` to
-     `due — <reason>` and continue to step 8.
+     `due — <reason>` and continue to step 9.
 
-8. **Escalate only when the deeper loop is clearly warranted.**
+9. **Escalate only when the deeper loop is clearly warranted.**
 
    - If the triggered work is already well-bounded and belongs to this
      closeout, continue immediately into `jc-consolidate-docs`.
@@ -146,7 +182,7 @@ asks for more, this command must not trigger:
    - If `jc-consolidate-docs` runs now, refresh `Deep consolidation status`
      to `completed this handoff — <reason>`.
 
-9. **Keep the boundary clean.** `session-handoff` includes the consolidation
-   gate and can escalate into `jc-consolidate-docs` when appropriate, but
-   ordinary sessions remain lightweight. It does not smuggle in review or git
-   actions.
+10. **Keep the boundary clean.** `session-handoff` includes the consolidation
+    gate and can escalate into `jc-consolidate-docs` when appropriate, but
+    ordinary sessions remain lightweight. It does not smuggle in review or git
+    actions.

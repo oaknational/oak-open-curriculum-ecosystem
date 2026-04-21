@@ -81,6 +81,15 @@ for the Oak Open Curriculum API.
 Read [the rules](./principles.md); reflect on them, _apply_
 them, they MUST be followed at ALL times.
 
+**Always-applied rule tier** at [`.agent/rules/`](../rules/) —
+additional rules that operationalise principles, ADRs, and PDRs
+and MUST be followed at ALL times. On Claude the tier is loaded
+automatically from `.claude/rules/*.md`; on Cursor from
+`.cursor/rules/*.mdc` with `alwaysApply: true`. On Codex, Gemini,
+and any other non-loader platform, **read every file in
+`.agent/rules/` at session open** — the canonical files are the
+source of truth and the platform adapters are thin pointers.
+
 ## Use Sub-agents
 
 Always apply your own critical thinking to your work, and

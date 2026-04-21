@@ -6,13 +6,13 @@ todos:
     content: "Session 1: Record Phase 0 decisions as standing; author two patterns (inherited-framing + passive-guidance); install first Family-A tripwire (plan-body-first-principles-check rule, front-loaded to cover Sessions 2-3); refresh practice.md Artefact Map; brief experience entry."
     status: completed
   - id: s2-napkin-rotation-distilled
-    content: "Session 2: Napkin rotation (1324 → archive); distilled merge-and-prune; Deep consolidation status refresh; pending-graduations register schema formalised."
-    status: pending
+    content: "Session 2: Napkin rotation (1611 → archive/napkin-2026-04-21.md); distilled merge-and-prune; Deep consolidation status refresh; pending-graduations register schema formalised; register bound into session-handoff (step 7) and consolidate-docs (step 7 preamble)."
+    status: completed
   - id: s3-doctrine-bundle
     content: "Session 3: Draft 3 new PDRs (Threads/Identity, Executive-Memory Feedback Loop, Perturbation-Mechanism Bundle with active-tripwire design covering BOTH plan-body inherited-framing AND agent-registration/identity discipline) and 2 amendments (PDR-011 thread-scope, PDR-026 per-thread) — each owner-reviewed per PDR-003."
     status: pending
   - id: s4-tripwires-cross-linking
-    content: "Session 4: Install Family A tripwires covering two classes — (a) plan-body inherited-framing (standing-decision register surface; plan-body rule already landed in S1) and (b) agent-registration / identity discipline (session-open identity rule; session-close de-register gate in session-handoff; platform-neutral stale-identity health probe; derivable active-agent-register view). Install Family B (memory-taxonomy meta) tripwires. Cross-plane path rules. Practice Core CHANGELOG + roadmap sync. Platform parity required: Claude + Cursor adapters + AGENT.md citation for Codex/Gemini coverage; probe inputs platform-neutral."
+    content: "Session 4: Install Family A tripwires covering two classes — (a) plan-body inherited-framing (standing-decision register surface; plan-body rule already landed in S1) and (b) agent-registration / identity discipline (session-open identity rule; session-close de-register gate in session-handoff with structural thread enumeration; platform-neutral stale-identity health probe with six checks including active-thread/next-session-file correspondence; derivable active-agent-register view). Amend start-right-quick + start-right-thorough to name threads/README.md. Migrate observability-sentry-otel next-session record from legacy singular path to threads/. Install Family B (memory-taxonomy meta) tripwires. Cross-plane path rules (incl. distilled citation of passive-guidance pattern). Practice Core CHANGELOG + roadmap sync. Platform parity required: Claude + Cursor adapters + AGENT.md citation (rules-tier citation already landed in S2 extended scope); probe inputs platform-neutral; session-handoff:check enumerates threads structurally (does not self-report)."
     status: pending
   - id: s5-outgoing-triage
     content: "Session 5: Audit the 10+ outgoing/ files per PDR-007; each file promotes to a durable home or is deleted as staging artefact."
@@ -25,8 +25,8 @@ isProject: false
 
 # Staged Doctrine Consolidation and Graduation
 
-**Last Updated**: 2026-04-21 (Session 1 landed at 6/6; Session 4 expanded to include Class A.2 agent-registration tripwires with platform parity after owner question 2026-04-21)
-**Status**: 🟢 Session 1 landed — next: Session 2 (napkin rotation + pending-graduations register schema)
+**Last Updated**: 2026-04-21 (Session 2 landed at 3/3 + extended scope: onboarding-reviewer audit surfaced discoverability gaps; AGENT.md `§ **RULES**` now cites the `.agent/rules/` tier [urgent fix, affects Session 1's landed plan-body rule on Codex/Gemini]; pending-graduations register gained 5 new items targeting Session 4; Session 4 Tasks 4.2.a/b/c amended with start-right-quick + start-right-thorough amendments, structural thread enumeration in session-handoff:check, sixth probe check for active-thread/next-session-file correspondence, legacy next-session-opener.md handling, passive-guidance pattern citation surface additions; napkin rotated to `archive/napkin-2026-04-21.md`; pending-graduations register schema formalised in `repo-continuity.md § Deep consolidation status`; register bound into `session-handoff` step 7 and `consolidate-docs` step 7 preamble; agent-names registry captured as `graduation-target: infrastructure` for Session 4 consumption per owner direction)
+**Status**: 🟢 Session 2 landed (extended) — next: Session 3 (doctrine bundle — three PDRs + two amendments, owner-gated per PDR-003)
 **Scope**: Six-session staged execution of the overdue consolidation backlog surfaced by the 2026-04-21 dry-run. Each session commits to a bounded landing target per PDR-026; context is preserved across session boundaries via operational memory.
 
 **Related artefacts**:
@@ -877,18 +877,58 @@ gravity` pattern.
   with `alwaysApply: true` (auto-loaded).
 - Codex + Gemini: rule path listed explicitly in
   `.agent/directives/AGENT.md` under Essential Links or
-  Grounding, so `AGENTS.md` / `GEMINI.md` entry points surface
-  it.
+  Grounding. `AGENT.md § **RULES**` now names the
+  `.agent/rules/` tier as a whole and instructs non-loader
+  platforms to read every file in it at session open (graduated
+  in Session 2 extended scope, 2026-04-21), so the new rule is
+  discoverable by tier membership; still list it explicitly in
+  the grounding surface for redundancy.
+
+**Discoverability amendments** (from onboarding-reviewer audit,
+Session 2 extended scope; pending-graduations register items
+`start-right-quick-missing-threads-step` and
+`observability-thread-legacy-singular-path` consumed here):
+
+- `.agent/skills/start-right-quick/shared/start-right.md` step 4
+  gains a bullet naming `.agent/memory/operational/threads/README.md`
+  as a read-at-grounding surface (alongside the existing
+  `repo-continuity.md`, `workstreams/`, `tracks/` reads).
+- `.agent/skills/start-right-thorough/shared/start-right-thorough.md`
+  gains the same amendment.
+- The rule body explicitly names the legacy singular path at
+  `.agent/memory/operational/next-session-opener.md` for the
+  `observability-sentry-otel` thread — until that record is
+  migrated to
+  `.agent/memory/operational/threads/observability-sentry-otel.next-session.md`,
+  the rule applies to both paths. The migration itself is
+  prioritised for Session 4 (or earlier if opportunity arises)
+  to close the structural gap that invisibilises the identity
+  rule on the observability thread.
+- Distilled and `start-right-quick` gain a citation pointer to
+  [`.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md`](../../memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md)
+  so the constraint surfaces at tripwire design time
+  (register item
+  `passive-guidance-pattern-citation-in-distilled-and-start-right`).
 
 **Acceptance**:
 
 1. ✅ Canonical rule file exists with the three-plane citation.
 2. ✅ Claude + Cursor adapter files exist.
-3. ✅ `.agent/directives/AGENT.md` references the rule path.
+3. ✅ `.agent/directives/AGENT.md` references the rule path
+   (within the `.agent/rules/` tier citation that already
+   landed in Session 2 extended scope).
 4. ✅ `pnpm portability:check` reports canonical/adapter parity.
 5. ✅ The rule is self-applying: the Session 4 session that
    installs it MUST itself register an identity row on the
    `memory-feedback` thread before writing the rule file.
+6. ✅ `start-right-quick` step 4 and `start-right-thorough`
+   name `threads/README.md` explicitly.
+7. ✅ Rule body handles the legacy singular path OR the
+   observability thread's next-session record is migrated to
+   `threads/` as part of Session 4 close.
+8. ✅ `distilled.md` cites
+   `passive-guidance-loses-to-artefact-gravity.md` so the
+   pattern surfaces at design time for any future rule/probe.
 
 #### 4.2.b — Session-close identity-update gate in `/session-handoff`
 
@@ -899,11 +939,26 @@ warn): for every thread the session touched, the identity row's
 update blocks session close.
 
 **Supporting tooling**: `pnpm session-handoff:check` (new
-script, repo-root) scans `.agent/memory/operational/threads/*.next-session.md`
-and the session's git-log to cross-check that touched threads
-have `last_session` updated. Exits 1 if any touched thread is
-un-updated. Platform-neutral (reads thread records + git, not
-platform-specific session stores).
+script, repo-root) **enumerates** threads structurally from
+`.agent/memory/operational/repo-continuity.md § Active threads`
+(and `.agent/memory/operational/threads/*.next-session.md`),
+then cross-checks the session's git-log against the enumerated
+set. Self-reporting by the agent is **not sufficient** — the
+probe reads the files and asserts every active thread's
+identity row either had `last_session` updated this date OR the
+agent explicitly declared non-participation per thread (with a
+recorded reason). Exits 1 if any touched thread is un-updated.
+Platform-neutral (reads thread records + git, not platform-
+specific session stores).
+
+**Enumeration requirement** (from onboarding-reviewer audit,
+Session 2 extended scope; pending-graduations register item
+`session-handoff-check-must-enumerate-threads` consumed here):
+the reviewer identified that *"for every thread this session
+touched"* is an agent-recall dependency under context pressure
+(the exact failure mode of `passive-guidance-loses-to-artefact-
+gravity`). The implementation MUST list threads from
+authoritative files, not ask the agent.
 
 **Acceptance**:
 
@@ -915,6 +970,9 @@ platform-specific session stores).
    `agent-tools/tests/session-handoff-check.unit.test.ts` with
    positive and negative fixtures (touched-thread with update
    → pass; touched-thread without update → fail).
+4. ✅ The check reads `repo-continuity.md § Active threads`
+   and `.agent/memory/operational/threads/*.next-session.md`
+   to enumerate threads; no agent-side thread list is trusted.
 
 #### 4.2.c — Platform-neutral stale-identity health probe
 
@@ -950,6 +1008,14 @@ is **not** scoped to Session 4 — do not delay this probe on it.
 5. Multiple identity rows for the same platform/model/agent_name
    on the same thread (additive-rule violation — same identity
    recorded twice instead of `last_session` update) → `warn`.
+6. **Every thread listed in
+   `repo-continuity.md § Active threads` has a corresponding
+   `.agent/memory/operational/threads/<slug>.next-session.md`
+   file** (catches the observability-thread legacy-singular-path
+   mismatch and any future Active-threads table addition without
+   a thread record) → `warn`. (From onboarding-reviewer audit,
+   Session 2 extended scope; pending-graduations register item
+   `stale-identity-probe-sixth-check` consumed here.)
 
 **Platform parity**: by construction. The probe does not crawl
 Claude / Cursor / Codex session stores. Cross-platform live-
@@ -962,14 +1028,17 @@ separate future plan if needed).
 2. ✅ Registered in `claude-agent-ops health` probe list.
 3. ✅ Unit tests at
    `agent-tools/tests/health-probe-agent-identities.unit.test.ts`
-   cover all five checks with positive and negative fixtures.
+   cover all six checks with positive and negative fixtures.
 4. ✅ `pnpm agent-tools:claude-agent-ops health` exit code
    honours the probe (currently documented: probes emit
    `pass`/`warn`/`fail`; this probe defaults to `warn`, not
    `fail`, so health-green-is-still-possible is preserved).
 5. ✅ Probe runs cleanly at Session 4 close itself (the register
    must be self-consistent as a consequence of the session's
-   own work).
+   own work) — this implies either the observability thread's
+   record migrates to `threads/` in Session 4 or check 6 is
+   configured with an explicit exemption for the legacy path
+   pending migration.
 
 ### Task 4.3 — Install active-agent-register view (derivable, operational)
 

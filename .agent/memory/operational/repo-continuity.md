@@ -1,24 +1,27 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-21 (Session 1 of the staged doctrine-
-consolidation plan landed at 6/6 — two patterns authored
-[`inherited-framing-without-first-principles-check`,
-`passive-guidance-loses-to-artefact-gravity`]; first Family-A
-tripwire rule installed at `.agent/rules/plan-body-first-
-principles-check.md` with Claude + Cursor adapters; `practice.md`
-Artefact Map refreshed for three-mode memory taxonomy;
-`repo-continuity.md § Standing decisions` extended with
-decisions 5 and 6 of the Phase 0 arc; brief experience entry
-written; the plan itself was significantly expanded for Session 4
-to add Class A.2 agent-registration / identity-discipline
-tripwires with platform parity after owner question. Earlier
-same-day refreshes covered the seven plan-authoring improvements
-including the front-loaded Family-A tripwire, the
-`session-discipline.md` template component, the "Starting a
-session on a thread" checklist, the staged plan landing itself,
-the dry-run archive, the Standing decisions section, the memory-
-feedback execution plan, and the §L-8 atomic landing at
-`f9d5b0d2`)
+**Last refreshed**: 2026-04-21 (Session 2 of the staged doctrine-
+consolidation plan landed at 3/3 + extended scope — napkin rotated
+[1611 → `archive/napkin-2026-04-21.md`]; distilled merged with 5
+new entries; pending-graduations register schema formalised in
+`§ Deep consolidation status` with four status bands
+[graduated / due / pending / infrastructure] and ~36 items;
+`session-handoff` step 7 added for register refresh + thread-record
+identity update; `consolidate-docs` step 7 preamble names the
+register as a graduation-scan input; owner assigned agent name
+`Samwise` to the continuing identity on the `memory-feedback`
+thread; agent-names registry captured as
+`graduation-target: infrastructure` for Session 4 Task 4.2
+consumption. Extended scope: onboarding-reviewer audit surfaced
+discoverability gaps that would make Session 2's installs unreliable
+for a fresh agent; urgent `AGENT.md § **RULES**` amendment landed
+naming the `.agent/rules/` tier [fixes Session 1's plan-body rule
+discoverability on Codex/Gemini]; five reviewer-finding register
+items added to the register [Due band]; staged plan Session 4 Tasks
+4.2.a/b/c amended with start-right-quick + start-right-thorough
+amendments, structural thread enumeration in session-handoff:check,
+sixth probe check, legacy next-session-opener.md handling, passive-
+guidance pattern citation surface additions.)
 **Status**: Authoritative for the fields below. Operational memory
 is the sole continuity-state host. Session orientation doctrine lives
 in [`orientation.md`](../../directives/orientation.md); landing
@@ -38,7 +41,7 @@ PDR candidate at next consolidation).
 | Thread | Purpose | Next-session record | Workstream brief | Active identities |
 | --- | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`next-session-opener.md`](next-session-opener.md) (legacy singular path; migrates to `threads/observability-sentry-otel.next-session.md` at next consolidation) | [`workstreams/observability-sentry-otel.md`](workstreams/observability-sentry-otel.md) | (identity attribution retroactive for `f9d5b0d2` is a gap; see napkin 2026-04-21 meta-surprise) |
-| `memory-feedback` | Practice — feedback loops across three-mode memory taxonomy; emergent-whole observation; doctrine landing | [`threads/memory-feedback.next-session.md`](threads/memory-feedback.next-session.md) | (none yet — arguably `workstreams/operational-awareness-continuity.md` covers it loosely; dedicated brief is a Phase 0 artefact of the memory-feedback execution plan) | `claude-code` / `claude-opus-4-7-1m` / agent-name unassigned / drafter / 2026-04-21 |
+| `memory-feedback` | Practice — feedback loops across three-mode memory taxonomy; emergent-whole observation; doctrine landing | [`threads/memory-feedback.next-session.md`](threads/memory-feedback.next-session.md) | (none yet — arguably `workstreams/operational-awareness-continuity.md` covers it loosely; dedicated brief is a Phase 0 artefact of the memory-feedback execution plan) | `claude-code` / `claude-opus-4-7-1m` / `Samwise` / drafter / 2026-04-21 |
 
 **Identity discipline**: sessions joining an active thread **add**
 identity rows to the thread's next-session record; they do not
@@ -65,13 +68,13 @@ execution; next session begins at WS1 RED.
 
 ## Current session focus
 
-Session 1 of the staged doctrine-consolidation plan closed
-cleanly at 6/6. Next-session focus is owner-directed: either
-Session 2 of the staged plan (napkin rotation + pending-
-graduations register schema) OR resumption of the
-`observability-sentry-otel` thread's §L-8 Vercel acceptance
-probe (branch-primary). PDR-026 landing commitment is per-
-thread-per-session; pick one per next session.
+Session 2 of the staged doctrine-consolidation plan closed
+cleanly at 3/3. Next-session focus is owner-directed: either
+Session 3 of the staged plan (doctrine-bundle drafting — three
+PDRs + two amendments, owner-gated per PDR-003) OR resumption
+of the `observability-sentry-otel` thread's §L-8 Vercel
+acceptance probe (branch-primary). PDR-026 landing commitment
+is per-thread-per-session; pick one per next session.
 
 ## Standing decisions
 
@@ -235,100 +238,145 @@ conditions documented in the maximisation plan.
 
 ## Deep consolidation status
 
-**Session 1 of the staged consolidation plan landed 2026-04-21 at
-6/6. Plan Session 4 scope expanded to Class A.2 agent-registration
-/ identity tripwires with platform parity after owner question.
-Sessions 2–6 remain queued; all outstanding items still owned by
-the plan; Phase 0 owner decisions recorded above under Standing
-decisions.**
+**Session 1 of the staged doctrine-consolidation plan landed
+2026-04-21 at 6/6; Session 2 in flight (napkin rotation complete;
+this register schema formalised). Plan Session 4 scope expanded
+to Class A.2 agent-registration / identity tripwires with platform
+parity after owner question. Sessions 3–6 remain queued; all
+outstanding items still owned by the plan; Phase 0 owner decisions
+recorded above under Standing decisions.**
 
-**Consolidation-gate check at 2026-04-21 (Session 1 close)**:
-NOT DUE. Napkin is above the 500-line rotation threshold but
-napkin rotation is explicitly staged to Session 2 of the owning
-plan; no other `consolidate-docs` trigger fires independently
-of the plan. Next expected gate firing: Session 2 of the staged
-plan (napkin rotation + pending-graduations register schema). Discharged across the 2026-04-20/21
-arc: prompt-fitness pressure (1628 → 145 lines dissolution);
-documentation drift on the `docs/foundation/` boundary; PDR-011
-alignment; PDR-026 landing-commitment doctrine; orientation
-directive; memory taxonomy restructure; reviewer catalogue re-homed
-to executive memory.
+**Consolidation-gate check at 2026-04-21 (Session 2 close)**:
+NOT DUE as an independent trigger. Napkin freshly rotated (60
+lines); distilled refined with 5 new entries (over hard limit by
+standing decision 3 tolerance); register formalised and refreshed
+this session; Practice-box incoming/outgoing not changed this
+session; documentation drift addressed (AGENT.md § RULES tier
+citation). Next firing: Session 3 of the staged plan (doctrine
+bundle drafting).
+Discharged across the 2026-04-20/21 arc: prompt-fitness pressure
+(1628 → 145 lines dissolution); documentation drift on the
+`docs/foundation/` boundary; PDR-011 alignment; PDR-026 landing-
+commitment doctrine; orientation directive; memory taxonomy
+restructure; reviewer catalogue re-homed to executive memory.
 
-The overdue backlog + the new doctrine bundle are now sequenced
-by the **Staged Doctrine Consolidation and Graduation** plan:
+The overdue backlog + the new doctrine bundle are sequenced by the
+**Staged Doctrine Consolidation and Graduation** plan:
 
 - Plan: [`../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md`](../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md)
 - Dry-run analysis preserved: [`../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md`](../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md)
 
-The plan stages the work across six sessions with explicit
-break points:
+### Pending-graduations register
 
-1. **Session 1 — LANDED 2026-04-21 at 6/6.** Standing decisions
-   section extended to include decisions 5 (staged execution as
-   the shape) and 6 (session break points explicit and
-   protected); two patterns authored (`inherited-framing-without-
-   first-principles-check`, `passive-guidance-loses-to-artefact-
-   gravity`); first Family-A tripwire rule installed at
-   `.agent/rules/plan-body-first-principles-check.md` with full
-   Claude + Cursor adapter parity and docs-adr-reviewer
-   well-formed verdict; `practice.md` Artefact Map refreshed for
-   three-mode memory taxonomy (owner-approved per PDR-003);
-   Practice Core CHANGELOG entry recorded; brief experience
-   entry at `.agent/experience/2026-04-21-installing-a-tripwire-
-   i-cannot-test.md`.
-2. **Session 2** — Napkin rotation (1324+ → archive); distilled
-   merge-and-prune; formalise pending-graduations register schema;
-   bind to session workflows.
-3. **Session 3** — Draft three new PDRs (Threads/Sessions/Agent
-   Identity; Executive-Memory Feedback Loop; Perturbation-Mechanism
-   Bundle *with active-tripwire design **covering both Class A.1
-   plan-body inherited-framing AND Class A.2 agent-registration /
-   identity discipline; platform parity load-bearing***); apply
-   two amendments (PDR-011 thread-scope; PDR-026 per-thread).
-   Owner-gated per PDR-003.
-4. **Session 4 (EXPANDED 2026-04-21)** — Install Family A
-   tripwires across both classes. **Class A.1**: plan-body rule
-   forward-reference cleared to concrete PDR; standing-decision
-   register surface installed. **Class A.2**: session-open
-   identity-registration rule with full platform parity (Claude +
-   Cursor adapters + AGENT.md citation); session-close identity
-   gate in `/session-handoff` (hard gate, not warn) with
-   `pnpm session-handoff:check` script and unit tests; platform-
-   neutral stale-identity health probe registered in
-   `claude-agent-ops health` with five checks and unit coverage;
-   derivable active-agent-register view as a named CLI
-   subcommand. Install Family B tripwires (memory-taxonomy meta).
-   Cross-plane path rules. Practice Core CHANGELOG; roadmap sync.
-5. **Session 5** — Outgoing triage (PDR-007 enforcement on 10+
-   files, 1481 lines); promote or delete each.
-6. **Session 6** — Holistic fitness exploration as final meta-
-   consolidation; owner-decides compress/raise/restructure/split
-   per file; `pnpm practice:fitness --strict-hard` passes.
+The register tracks candidates that have been *captured* (in
+napkin, distilled, workstream briefs, or elsewhere) and are
+awaiting *graduation* to a durable home (pattern, PDR, ADR, rule,
+Practice Core, infrastructure artefact). Schema per item:
+
+- `captured-date` (YYYY-MM-DD) — when the candidate was first recorded.
+- `source-surface` — where the candidate lives now (`napkin`,
+  `napkin-archive`, `distilled`, `workstream brief`,
+  `executive surface`, `practice-core`, `session opener`, etc.).
+- `graduation-target` — one of: `pattern | PDR | ADR | rule |
+  practice-md | infrastructure | other`.
+- `trigger-condition` — concrete signal that moves the item to `due`.
+- `status` — one of: `pending | due | overdue | graduated`.
+
+A candidate is `pending` until its trigger-condition fires
+(typically a second/third independent instance, a scheduled
+drafting slot, or explicit consumption by a plan task). On trigger
+fire, status moves to `due`. If `due` persists through a
+consolidation without action, it becomes `overdue`. On graduation,
+status moves to `graduated` and the entry records the destination.
+
+The register is reviewed and refreshed at every `/session-handoff`
+(new items added; trigger conditions re-evaluated) and is named as
+an input at `consolidate-docs` step 7 (graduation scan).
+
+#### Graduated (Session 1, 2026-04-21)
+
+- **`inherited-framing-without-first-principles-check`** — captured-date: 2026-04-20; source-surface: napkin; graduation-target: pattern; trigger-condition: six instances across 2026-04-20/21 (repeats bar reached); status: **graduated** → [`../active/patterns/inherited-framing-without-first-principles-check.md`](../active/patterns/inherited-framing-without-first-principles-check.md).
+- **`passive-guidance-loses-to-artefact-gravity`** — captured-date: 2026-04-21; source-surface: napkin; graduation-target: pattern; trigger-condition: three instances reached 2026-04-21; status: **graduated** → [`../active/patterns/passive-guidance-loses-to-artefact-gravity.md`](../active/patterns/passive-guidance-loses-to-artefact-gravity.md).
+- **Plan-body first-principles-check rule** (Family-A Class A.1, first tripwire layer) — captured-date: 2026-04-21; source-surface: napkin (via `inherited-framing` pattern); graduation-target: rule; trigger-condition: front-loaded to cover Sessions 2–3 of the staged plan; status: **graduated** → [`../../rules/plan-body-first-principles-check.md`](../../rules/plan-body-first-principles-check.md) with Claude + Cursor adapters.
+- **`practice.md` Artefact Map — three-mode memory refresh** — captured-date: 2026-04-20; source-surface: practice-core; graduation-target: practice-md; trigger-condition: memory taxonomy restructure required the Artefact Map to reflect three modes; status: **graduated** (Session 1 Task 1.5; Practice Core CHANGELOG entry recorded; owner-approved per PDR-003).
+
+#### Graduated (Session 2 extended scope, 2026-04-21)
+
+- **`AGENT.md § RULES` cites the `.agent/rules/` tier** — captured-date: 2026-04-21; source-surface: onboarding-reviewer audit this session; graduation-target: other (directive amendment); trigger-condition: onboarding-reviewer flagged that Codex + Gemini agents discover `principles.md` via `AGENT.md` but not the `.agent/rules/` tier, making Session 1's landed plan-body-first-principles-check rule invisible to non-loader platforms; status: **graduated** → `.agent/directives/AGENT.md § **RULES**` now names the always-applied rule tier and explicitly instructs Codex/Gemini to read every file in `.agent/rules/` at session open.
+
+#### Due (trigger fired; awaiting action this arc)
+
+- **Threads, Sessions, and Agent Identity PDR** — captured-date: 2026-04-21; source-surface: napkin + [`threads/README.md`](threads/README.md) (proposed rule); graduation-target: PDR (portable per Standing decision 2); trigger-condition: Session 3 Task 3.1 drafting slot; status: due.
+- **Executive-Memory Feedback Loop PDR** — captured-date: 2026-04-20; source-surface: memory-feedback execution plan Phase 6; graduation-target: PDR (portable per Standing decision 2); trigger-condition: Session 3 Task 3.2 drafting slot; status: due.
+- **Perturbation-Mechanism Bundle PDR** (active-tripwire design covering Family A Classes A.1 + A.2) — captured-date: 2026-04-20; source-surface: napkin (perturbation mechanisms); expanded 2026-04-21 to two-class Family A; graduation-target: PDR (portable per Standing decision 2); trigger-condition: Session 3 Task 3.3 drafting slot; status: due.
+- **PDR-011 thread-scope amendment** — captured-date: 2026-04-21; source-surface: napkin (workflow-scope alignment; threads insight); graduation-target: PDR amendment; trigger-condition: Session 3 Task 3.4 drafting slot; status: due.
+- **PDR-026 per-thread-per-session amendment** — captured-date: 2026-04-21; source-surface: napkin (landing-commitment per-thread framing); graduation-target: PDR amendment; trigger-condition: Session 3 Task 3.5 drafting slot; status: due.
+- **`platform-parity-as-probe-prerequisite`** (design principle) — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: PDR (likely absorbed into Perturbation-Mechanism Bundle PDR); trigger-condition: Session 3 Task 3.3 drafting slot; status: due.
+- **`workflow-scope-alignment-to-continuity-unit-scope`** — captured-date: 2026-04-21; source-surface: napkin + distilled; `session-handoff` and `consolidate-docs` headers already carry explicit scope labels from in-flight amendments; graduation-target: PDR (absorbed into PDR-011 amendment, Session 3 Task 3.4); trigger-condition: Session 3 drafting slot; status: due.
+- **`in-place-supersession-markers-at-section-anchors`** — captured-date: 2026-04-19; source-surface: napkin-archive (2026-04-19b watchlist); graduation-target: pattern; trigger-condition: three instances reached 2026-04-19; status: due — next consolidation or standalone pattern authoring.
+- **`fork-cost-surfaces-in-doc-discipline-layer`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: three instances reached 2026-04-19; status: due.
+- **`E2E-flakiness-under-parallel-pnpm-check-load`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: ADR (test-stability-lane) or pattern; trigger-condition: three cross-session instances reached 2026-04-19; status: due — needs a test-stability-lane authoring decision.
+- **`reviewer-catches-plan-blind-spot`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: ≥2 instances reached; status: due.
+- **`reviewer-findings-applied-in-close-not-deferred`** (PDR-012 amendment) — captured-date: 2026-04-19; source-surface: distilled; graduation-target: PDR amendment (PDR-012); trigger-condition: three cross-session instances reached 2026-04-19; status: due — Session 3 doctrine bundle may absorb.
+- **`start-right-quick-missing-threads-step`** — captured-date: 2026-04-21; source-surface: onboarding-reviewer audit; graduation-target: other (workflow amendment); trigger-condition: Session 4 Task 4.2.a (session-open identity rule install) — without this amendment the rule lands as one-failure-mode-wide (agent does not read the rule); status: due. Amendment: `start-right-quick` step 4 and `start-right-thorough` name `threads/README.md` as a read; `AGENT.md` cites the new identity rule path.
+- **`session-handoff-check-must-enumerate-threads`** (implementation constraint for Session 4 Task 4.2.b) — captured-date: 2026-04-21; source-surface: onboarding-reviewer audit; graduation-target: other (implementation detail); trigger-condition: Session 4 Task 4.2.b script authoring — self-reporting is not sufficient; the probe must read `repo-continuity.md § Active threads`, enumerate threads, and assert every active thread's `last_session` was updated this date OR the agent explicitly declared non-participation per thread; status: due.
+- **`observability-thread-legacy-singular-path`** — captured-date: 2026-04-21; source-surface: onboarding-reviewer audit; graduation-target: other (file migration); trigger-condition: Session 4 install of Class A.2 tripwires — the observability thread's next-session record still lives at the legacy singular path `.agent/memory/operational/next-session-opener.md` (not under `threads/`), so an agent resuming that thread bypasses `threads/README.md § Proposed rule` entirely; status: due. Option: migrate to `threads/observability-sentry-otel.next-session.md` before or during Session 4, or Session 4's session-open identity rule must handle the legacy path.
+- **`stale-identity-probe-sixth-check`** (Session 4 Task 4.2.c scope addition) — captured-date: 2026-04-21; source-surface: onboarding-reviewer audit; graduation-target: other (probe-check scope); trigger-condition: Session 4 Task 4.2.c probe authoring — sixth check needed: *"every thread in `§ Active threads` has a `*.next-session.md` file"* (catches the observability legacy-path mismatch and any future thread added to the Active threads table without a next-session file); status: due.
+
+#### Pending (single-instance; awaiting repeat for promotion)
+
+- **`durable-doctrine-states-the-why-not-only-the-what`** — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: pattern; trigger-condition: second rationale-free rule produces re-derivation drift; status: pending.
+- **`dry-run-before-recipe-against-accumulated-backlog`** — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: pattern; trigger-condition: second accumulated-backlog workflow dry-run before execution; status: pending.
+- **`self-applying-acceptance-for-tripwire-installs`** — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: pattern; trigger-condition: third instance (two already scheduled in Session 4 Tasks 4.2.a and 4.2.b); status: pending.
+- **`defer-decisions-must-live-where-the-candidate-lives`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second deferred candidate whose trigger condition was discovered missing from its home artefact; status: pending.
+- **`when-deleting-a-doc-sweep-active-plans-for-prescriptions-not-just-links`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second deletion where a prescription survived a link-only pass; status: pending.
+- **`collaboration-shape-is-an-unexamined-assumption-in-new-artefact-types`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second design where collaboration shape surfaced as mid-cycle correction; status: pending.
+- **`ask-the-minimum-not-the-maximum-when-direction-is-clear`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second moment where a 3-option question is better served by a declarative *"next I'll do X"*; status: pending.
+- **`decision-complete-adr-enumerates-implied-questions`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance where an explicit adjudication-question list left downstream decisions unnamed; status: pending.
+- **`prefer-webfetch-for-doc-citation-prefer-agent-for-judgement`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance calibrating agent-vs-WebFetch choice; status: pending.
+- **`amend-not-honour-when-simplification-surfaces-post-decision`** — captured-date: 2026-04-19; source-surface: napkin-archive (2026-04-19b); graduation-target: PDR (strong candidate on 2nd instance); trigger-condition: second instance of ADR amendment driven by broader-view simplification; status: pending.
+- **`work-stream-dissolution-via-upstream-fix`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance of upstream fix absorbing downstream work stream; status: pending.
+- **`reviewer-matrix-completeness-is-not-absolute`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern or PDR-015 addendum; trigger-condition: second session where discretionary reviewer dispatch against a plan-listed matrix was correct; status: pending.
+- **`turbo-cache-hides-prettier-drift-until-pre-commit`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern (repo-specific) or workspace README; trigger-condition: second instance of cached `format:root` false-clean; status: pending.
+- **`passive-guidance-pattern-citation-in-distilled-and-start-right`** — captured-date: 2026-04-21; source-surface: onboarding-reviewer audit; graduation-target: other (distilled entry + workflow citation); trigger-condition: next consolidation pass — the `passive-guidance-loses-to-artefact-gravity` pattern at `.agent/memory/active/patterns/` is not cited from `distilled.md` or `start-right-quick`, so future tripwire-design decisions may not encounter the constraint at design time; status: pending.
+
+Additional single-instance watchlist observations carried forward
+from the 2026-04-19 rotation (`core-tier-means-primitive-not-just-
+dependency-pure`, `safety-layers-stack-not-nest`, `git-status-is-
+a-snapshot`, `closure-principles-absorb-cardinality-changes`,
+`reviewer-as-option-cartographer-not-decision-maker`, `date-
+suffixed-frontmatter-is-a-smell`, `tier-scope-must-be-explicit-
+for-shared-vocabulary-invariants`, `code-embodied-policy-without-
+explicit-ruling-needs-tsdoc-pointer`, `forward-pointing-planning-
+references-need-planned-markers`, `convergent-direction-across-
+multiple-research-cuts-is-stronger-evidence`, `practice-five-file-
+package-is-conceptually-a-plugin`, `reviewer-systems-cluster-is-
+the-densest-uplift-cluster`, `assumptions-reviewer-pre-pass-
+shrinks-fan-out-and-tightens-fences`, `symbolication-key-vs-ui-
+association-are-separate-concerns`, `prefer-one-form-over-both-
+work-drift-avoidance`) all carry captured-date 2026-04-19, source-
+surface napkin-archive, graduation-target pattern, trigger-condition
+*"second independent instance"*, status pending. Full descriptions
+live in [`../active/archive/napkin-2026-04-19b.md`](../active/archive/napkin-2026-04-19b.md);
+promote individually to this register on first second-instance.
+
+#### Infrastructure (new artefacts scheduled for authoring)
+
+- **Agent-names registry** — captured-date: 2026-04-21; source-surface: session opener (owner direction, this session); graduation-target: infrastructure; trigger-condition: consumed by Session 4 Task 4.2 identity-rule install; status: pending. Scope: approximately 1000 well-distributed names across geography, culture, and time period; sources to be researched from multiple durable public-domain or open-data lists (Unicode CLDR, SSA corpora, international registries, historical-figure lists, etc.); no LLM-generation (distribution would skew to training-data prevalence and risk stereotyping). Source research is part of Session 4 prep.
+
+### Plan structure (for continuity)
+
+The six-session staged plan summary:
+
+1. ✅ **Session 1 — LANDED 2026-04-21 at 6/6.** Two patterns authored; first Family-A tripwire rule installed; `practice.md` Artefact Map refreshed; Standing decisions extended; brief experience entry. (Graduated items listed above.)
+2. **Session 2 — IN FLIGHT 2026-04-21.** Napkin rotation (1611 → `archive/napkin-2026-04-21.md`); distilled merge-and-prune; pending-graduations register schema formalised (this section); register-to-workflow binding.
+3. **Session 3** — Draft three new PDRs + two amendments (per Due section above). Owner-gated per PDR-003. Bundle rhythm is the default; sequential allowed if an earlier PDR materially changes a later one.
+4. **Session 4 (EXPANDED 2026-04-21)** — Install Family A tripwires across both classes. Class A.1: plan-body rule forward-reference cleared; standing-decision register surface installed. Class A.2: session-open identity-registration rule with full platform parity (Claude + Cursor + AGENT.md citation); session-close identity gate in `/session-handoff` (hard gate) with `pnpm session-handoff:check` and unit tests; platform-neutral stale-identity health probe with five checks and unit coverage; derivable active-agent-register view as a named CLI subcommand. Consumes agent-names registry (Infrastructure item above). Install Family B tripwires; cross-plane path rules; Practice Core CHANGELOG; roadmap sync.
+5. **Session 5** — Outgoing triage (PDR-007 enforcement on 10+ files, 1481 lines); promote or delete each.
+6. **Session 6** — Holistic fitness exploration as final meta-consolidation; owner-decides compress / raise / restructure / split per file; `pnpm practice:fitness --strict-hard` passes.
 
 **Deferred after arc**: experience-scan (dedicated session with
 future plan after Session 6 closes).
-
-**New 2026-04-21 PDR candidate for Session 3 of the staged plan**:
-*"Workflow-Scope Alignment to Continuity-Unit Scope"* — doctrine
-that session-scoped workflows act on session-scoped artefacts;
-thread-scoped workflows act on thread-scoped artefacts; scope is
-labelled in every workflow header and every artefact's metadata.
-Command amendments applied in-flight 2026-04-21 (`session-handoff`
-gained §6b ADR/PDR candidate surfacing and §6c subjective
-experience capture; `consolidate-docs` had its step-11 session-
-scoped capture removed; both commands carry explicit scope
-labels). PDR-011 amendment in Session 3 absorbs this work.
-
-**New 2026-04-21 pattern candidate**:
-*`durable-doctrine-states-the-why-not-only-the-what`* — doctrine
-that states rules without stating their reasons degrades to
-ritual; future sessions cannot re-derive the rule under novel
-conditions. Single instance so far (the three-reason experience-
-audit rationale, made explicit 2026-04-21 across
-`.agent/experience/README.md`, `consolidate-docs` step 4,
-`session-handoff` step 6c). Promotion-ready at Session 1 Task 1.3
-or a subsequent consolidation when a second rationale-free
-rule produces re-derivation drift.
 
 **Retroactive identity attribution for `f9d5b0d2`**: owner accepts
 the attribution gap; start forward from 2026-04-22 per the

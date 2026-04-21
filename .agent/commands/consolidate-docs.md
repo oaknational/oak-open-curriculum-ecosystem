@@ -79,7 +79,13 @@ If documentation exists ONLY in a plan, it is at risk. Extract it first, then ma
    e. **Start fresh** — create a new `.agent/memory/active/napkin.md` with a session heading documenting the distillation.
 
    Target: `distilled.md` should stay under 200 lines of high-signal content. Every entry earns its place by being specific, actionable, non-obvious, and terse. Do not distil mid-session, do not distil if the napkin is under 400 lines, and do not distil "What Was Done" sections — those are session history, not learnings.
-7. **Graduate settled content from distilled.md.** This is the "enforce" edge of the knowledge flow (ADR-131 §Interaction Points, ADR-150 §Decision §5 — capture → distil → **graduate → enforce**). Treat it as a structural step, not a pass-through.
+7. **Graduate settled content.** This is the "enforce" edge of the knowledge flow (ADR-131 §Interaction Points, ADR-150 §Decision §5 — capture → distil → **graduate → enforce**). Treat it as a structural step, not a pass-through.
+
+   **Inputs to the graduation scan**:
+
+   - `.agent/memory/active/distilled.md` — refined cross-session entries from prior napkin rotations.
+   - `.agent/memory/active/napkin.md` — recent surprises and candidate tags.
+   - **`.agent/memory/operational/repo-continuity.md § Deep consolidation status` (the pending-graduations register)** — the structured list of captured candidates with per-item `captured-date`, `source-surface`, `graduation-target`, `trigger-condition`, and `status`. Items with `status: due` or `status: overdue` are the primary graduation candidates for this pass. Items with `status: pending` are reviewed to see whether their trigger condition has fired since last consolidation.
 
    **7a. Scan for ADR-shaped and PDR-shaped doctrine** (do this *before* applying the three outcomes below). Walk every entry in `distilled.md` and every recent napkin surprise and ask two questions:
 

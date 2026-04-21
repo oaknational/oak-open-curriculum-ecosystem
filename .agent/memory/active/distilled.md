@@ -12,8 +12,8 @@ Hard-won rules extracted from napkin sessions. Read this before every session.
 Every entry earned its place by changing behaviour.
 
 **Source**: Distilled from archived napkins
-`napkin-2026-02-24.md` through `napkin-2026-04-18.md`
-(sessions 2026-02-10 to 2026-04-18).
+`napkin-2026-02-24.md` through `napkin-2026-04-21.md`
+(sessions 2026-02-10 to 2026-04-21).
 
 **Permanent documentation**: Entries graduate to permanent
 docs when stable and a natural home exists. Always graduate
@@ -116,6 +116,27 @@ context with no natural permanent home.
   consumer forces canonicalisation. Use the three-consumer pressure
   as the planning trigger for consolidation.
 
+- **Durable doctrine states the why, not only the what** — when
+  authoring rules, PDRs, READMEs, or commands, ask: could a future
+  reader re-derive this under novel conditions from what is written?
+  If not, add the reasons. Stating the *what* without the *why*
+  decays to ritual under novel conditions; the rule is followed when
+  convenient and broken under pressure.
+
+- **Workflow scope ≡ continuity-unit scope** — session-scoped
+  workflows act on session-scoped artefacts; thread-scoped workflows
+  act on thread-scoped artefacts. Label the scope explicitly in
+  every workflow's header and every artefact's metadata. Applied to
+  `session-handoff` (SESSION-SCOPED) and `consolidate-docs`
+  (THREAD-SCOPED) on 2026-04-21; PDR candidate for Session 3 of
+  the staged doctrine-consolidation plan.
+
+- **Dry-run a multi-step workflow against accumulated state before
+  committing to the recipe** — walk each step against current state
+  first. The dry-run cost is bounded; the cost of an unstaged pass
+  against accumulated backlog is a partial session or exhausted
+  context. Produces either *proceed* or *stage differently*.
+
 Practice-governance Process rules graduated to PDRs 2026-04-18 —
 see `.agent/practice-core/decision-records/` for: review-findings
 routing (PDR-012), grounding and framing (PDR-013), reviewer
@@ -138,6 +159,17 @@ PDR-025.
   `.codex/agents/*.toml` descriptions must stay identical to the
   registration text in `.codex/config.toml`; the validator checks
   string equality, not semantic similarity.
+- **Platform-neutral inputs are the default for cross-platform
+  probes** — probes that assert cross-platform claims MUST use
+  platform-neutral inputs (thread identity tables, continuity
+  surface fields, markdown artefacts) OR provide cross-platform
+  parity (Claude + Cursor + Codex minimum). Platform-specific
+  probes masquerading as cross-platform claims are forbidden.
+- **Self-applying acceptance for tripwire installs** — when a
+  session installs a tripwire, at least one acceptance criterion
+  should test the install-session against the tripwire it just
+  installed. Prevents the session from landing a rule the
+  installing agent has bypassed in the process of writing it.
 
 ## Repo-Specific Rules
 
