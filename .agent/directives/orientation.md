@@ -81,7 +81,7 @@ executive memory does not duplicate ADRs.
 When the owner's stated direction conflicts with any surface —
 including this directive — the owner wins. Non-goals and scope
 decisions in plans that contradict recent owner direction are wrong
-per the
-[owner-beats-plan invariant](../memory/operational/repo-continuity.md#repo-wide-invariants--non-goals).
+per the [owner-beats-plan
+invariant](../memory/operational/repo-continuity.md#repo-wide-invariants--non-goals).
 Any session executing against a plan with non-goals MUST re-read them
 against recent owner direction before acting.

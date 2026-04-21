@@ -485,6 +485,78 @@ PDR-026 docs-as-DoD discipline). Next firing: Session 6 close,
 where Stage 2(a) outgoing triage + reference-tier sweep + holistic
 fitness exploration may surface convergence work.
 
+**Consolidation-gate check at 2026-04-21 (post-handoff
+`/jc-consolidate-docs` invocation, Pippin / cursor-opus)**: **was
+due — three triggers fired** (settled doctrine in ephemeral
+artefacts; napkin at 1226 lines i.e. 2.4× over rotation threshold;
+≥2 surprises / corrections suggesting new rule or pattern). Walked
+all 10 steps. Findings:
+
+- **Step 1–2**: PDR-014 carries `workstream→thread` terminology
+  drift (5 references) missed in Session 5 amendment batch;
+  reference-tier sweep is significantly under-scoped (90+ files
+  outside `archive/` mention "workstream", many legitimate
+  generic-noun usage but the bound needs owner re-clarification).
+- **Step 3**: layer-set reflection (post-handoff) stays pending
+  (criteria 7b not met — hours old, not stable).
+- **Step 4 purpose (c)**: emergent observation across the five
+  2026-04-21 experience entries — **agent's installed protections
+  get their evidence loop from owner-mediated review, not agent
+  self-test**. Surfaced as `owner-mediated-evidence-loop-for-agent-
+  installed-protections` pattern candidate (1/3) in Pending band.
+- **Step 5**: 0 pattern files written; 5 candidates accumulating
+  in Pending band; no taxonomy-seam escalation.
+- **Step 6**: napkin rotation **deferred to Session 6 close**
+  with named priority trade-off (Session 6 resume material is
+  load-bearing in current napkin top entries; rotation now would
+  force archive-following at S6 open).
+- **Step 7a**: 0 ADR / 4 PDR candidates surfaced; only PDR-014
+  amendment recommended for action this pass (mechanical
+  terminology refresh).
+- **Step 7b**: distilled walked; the overdue `reviewer-findings-
+  applied-in-close-not-deferred` (Due since 2026-04-19 across S3,
+  S4, S5) re-flagged for owner attention; full compression pass
+  deferred to S6 alongside `principles.md` debt.
+- **Step 7c**: all 6 thread-register freshness checks pass.
+  Adjacent finding: `observability-sentry-otel.next-session.md`
+  line 53 references a "Standing decisions note in
+  repo-continuity.md" that no longer exists (substance lost when
+  standing-decisions surface was retracted Session 4) — surface
+  for owner home-decision (PDR-027 amendment / thread-README /
+  inline restate).
+- **Step 8**: 4 Practice Core refinement candidates (CHANGELOG
+  drift since 2026-02-28; `practice-bootstrap.md` workstream-brief
+  refs at lines 456/461/464; `patterns/` directory empty awareness;
+  PDR-014 terminology). Honest scope-signal call: 3 of 4 are
+  workstream-retirement carry-over from S5, not 4 independent
+  structural changes — pause-and-stabilise posture NOT raised;
+  S6 reference-tier sweep should expand scope.
+- **Step 9**: `--strict-hard` failed 7 hard / 8 soft. Mechanical
+  line-length wraps applied to `orientation.md` (line 85),
+  `artefact-inventory.md` (line 15), `distilled.md` (line 179),
+  `testing-strategy.md` (lines 39, 78), `continuity-practice.md`
+  (line 136). Result: **5 hard / 9 soft**. The 5 remaining hards
+  (AGENT.md 291/275 lines; principles.md 26222/24000 chars;
+  testing-strategy.md 565/550 lines + 1 prose 102/100;
+  distilled.md 307/275 lines; continuity-practice.md 219/210
+  lines) are owner-decision-grade (limit-raise per Step 9§e is
+  owner-only) and **deferred to Session 6** with named priority
+  trade-off (Session 6 is the closing-arc fitness-debt session;
+  distilled compression couples with the deferred napkin rotation).
+- **Step 10**: incoming empty; outgoing deferred to Session 6
+  Stage 2(a) per PDR-007.
+
+**Net effect of this consolidation pass**: 6 line-length wraps
+(no semantic change); 2 new pattern candidates added to Pending
+band (`anticipated-surface-installed-then-empirically-unexercised`
+already added pre-invocation; `owner-mediated-evidence-loop-for-
+agent-installed-protections` added during this pass); 0 ADR /
+0 PDR / 0 rule / 0 principle / 0 pattern files authored. **The
+consolidation closed honestly with explicit fitness debt
+acknowledged, not cleared** — this is itself the third
+data-point of `deferral-honesty-rule` being lived (deferral
+cited a named priority trade-off, not "budget").
+
 **Earlier consolidation-gate notes** (Session 3 close): NOT DUE
 as an independent trigger. The Session 3 bundle was itself the
 consolidation pass's doctrine-landing stage. Napkin remained
@@ -630,6 +702,9 @@ re-evaluation section in `napkin.md`.
 - **`deferral-honesty-rule` (protection candidate)** — captured-date: 2026-04-21 (Session 5 close); source-surface: napkin Session 5 close-attempt entry §Falsifiable protection candidate; graduation-target: rule (always-applied) OR `/session-handoff` step rubric amendment OR PDR-026 §Landing target definition amendment; trigger-condition: third instance of the parent `feel-state-of-completion-preceding-evidence-of-completion` pattern OR explicit owner direction to install at next consolidation; status: pending — drafted but not promoted (cost of close-time gate not yet weighed against benefit; relationship to Class A.1 / A.2 firing-trigger discipline needs first-principles check). Rule body: *any deferral asserted at session-handoff time MUST cite a named external constraint (clock, cost, dependency, owner veto) or named priority trade-off with explicit evidence; "budget", "next session", "for later", "out of scope" are NOT acceptable as deferral reasons; reason must be falsifiable.*
 - **`self-applying-acceptance-for-tripwire-installs`** — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: pattern; trigger-condition: third CROSS-SESSION instance (three Session-4 instances were same-session cascades under the tightened cascade-vs-independent bar — count as 1 independent instance); status: pending.
 - **`plan-body-framing-outlives-reviewers`** — captured-date: 2026-04-21 (Session 4); source-surface: napkin + PDR-029 second Amendment Log entry; graduation-target: pattern; trigger-condition: **three CROSS-SESSION instances required** (demoted Session 5 after reviewers flagged Session 4's three instances as one same-session metacognitive cascade, not three independent failures); status: pending — awaits an instance in a session other than Session 4. Evidence so far (same-session cascade, Session 4): scripts-for-tripwires; docs-as-second-class-review-target; standing-decisions-as-category.
+- **`anticipated-surface-installed-then-empirically-unexercised`** — captured-date: 2026-04-21 (Session 5 post-handoff, owner-prompted layer-set reflection); source-surface: napkin Session 5 post-handoff entry; graduation-target: pattern; trigger-condition: third independent instance of a continuity-or-doctrine surface installed for an anticipated need that fails to materialise across N consolidations; status: pending — 2 of 3 instances (workstreams collapsed Session 5; tracks installed via PDR-011 amendment Session 5 with zero exercise). Owner-prompted, not agent-noticed — flag for the gap that existing tripwires catch entry-level not layer-level symptoms.
+- **`default-retire-on-empty` (protection candidate)** — captured-date: 2026-04-21 (Session 5 post-handoff); source-surface: napkin Session 5 post-handoff entry; graduation-target: rule (always-applied) OR `/consolidate-docs` step amendment OR PDR-029 §Family-A tripwire family addition; trigger-condition: third instance of parent pattern OR explicit owner direction. Rule body sketch: *any operational-tier surface (folder + README) with zero non-README/non-archive entries across 3 consecutive consolidations retires by default unless the owner explicitly re-justifies it at the consolidation pass.* Must be weighed against the cost of premature surface deletion (chesterton-fence risk) — needs a measurement pass before promotion. Concrete near-term test bed: tracks surface (Session 6 or first-empty-consolidation after).
+- **`owner-mediated-evidence-loop-for-agent-installed-protections`** — captured-date: 2026-04-21 (consolidate-docs Step 4 cross-experience scan); source-surface: `.agent/experience/2026-04-21-*.md` chronological set + this turn's layer-set reflection; graduation-target: pattern (cross-session, agent-infrastructure category) OR PDR amendment to PDR-015 (reviewer authority/dispatch) §Evidence loop; trigger-condition: third independent instance OR explicit owner direction. Evidence (1 of 3): five 2026-04-21 experience entries name the same shape — tripwire-i-cannot-test (S1), reviewer-found-the-gaps-i-installed (S2), the-recursive-session (S3), the-why-not-the-what (S4), and this turn's owner-prompted layer-set reflection (S5+). Complementary to `anticipated-surface-installed-then-empirically-unexercised` (which is about the *gap*); this is about the *mechanism that has been compensating* for the gap. Together they suggest a structural recommendation: **install firing-rate measurement for tripwires**, not just rule bodies. Status: pending.
 - **`new-doctrine-lands-without-sweeping-indexes`** — captured-date: 2026-04-21 (Session 4 post-close); source-surface: napkin; graduation-target: pattern; trigger-condition: **three CROSS-SESSION instances required** (demoted Session 5); status: pending — awaits an instance in a session other than Session 4. Evidence so far (same-session, Session 4): PDR-029 standing-decision register (retracted); PDR-029 script-shape prescription (revised); PDR-027 threads without sweeping `operational/README.md` + `orientation.md`. Related to `misleading-docs-are-blocking` (index-layer manifestation).
 - **`defer-decisions-must-live-where-the-candidate-lives`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second deferred candidate whose trigger condition was discovered missing from its home artefact; status: pending.
 - **`when-deleting-a-doc-sweep-active-plans-for-prescriptions-not-just-links`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second deletion where a prescription survived a link-only pass; status: pending.

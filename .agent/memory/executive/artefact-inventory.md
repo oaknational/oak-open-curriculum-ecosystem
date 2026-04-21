@@ -12,7 +12,9 @@ For the full architecture, see
 [ADR-125 (Agent Artefact
 Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 For the live platform support matrix, see
-[cross-platform-agent-surface-matrix.md](../memory/executive/cross-platform-agent-surface-matrix.md).
+[cross-platform-agent-surface-matrix.md][matrix].
+
+[matrix]: ../memory/executive/cross-platform-agent-surface-matrix.md
 
 ## Canonical Content (Layer 1)
 

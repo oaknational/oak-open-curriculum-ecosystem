@@ -36,7 +36,7 @@ split_strategy: "Extract examples to a companion examples file; split by test le
 - NEVER manipulate global state in tests - no `process.env`
   mutations, no `vi.stubGlobal`, no `vi.mock`, no `vi.doMock`.
   Product code must accept configuration as parameters. See
-  [ADR-078](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md).
+  [ADR-078][adr-078].
 
 ## Rules
 
@@ -74,8 +74,10 @@ split_strategy: "Extract examples to a companion examples file; split by test le
 - **No global state manipulation** - Tests MUST NOT mutate
   `process.env`, use `vi.stubGlobal`, use `vi.mock`, or use
   `vi.doMock`. If a function needs configuration, refactor it to
-  accept config as a parameter. See
-  [ADR-078](../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md).
+  accept config as a parameter. See [ADR-078][adr-078].
+
+[adr-078]: ../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md
+
 - **No process spawning in in-process tests** - Test code MUST NOT
   spawn child processes, create test-authored workers, or
   instantiate tools that internally spawn processes (e.g.

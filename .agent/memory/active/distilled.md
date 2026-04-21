@@ -176,7 +176,9 @@ PDR-025.
   Design check at tripwire-design time: is this active (fires
   without agent recall) or passive (depends on reading/remembering)?
   If passive, pair with an active layer before landing. See
-  [`patterns/passive-guidance-loses-to-artefact-gravity.md`](patterns/passive-guidance-loses-to-artefact-gravity.md).
+  [`patterns/passive-guidance-loses-to-artefact-gravity.md`][passive-pat].
+
+[passive-pat]: patterns/passive-guidance-loses-to-artefact-gravity.md
 
 ## Repo-Specific Rules
 

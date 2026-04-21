@@ -133,10 +133,12 @@ Per-lane short-horizon state is carried separately in
 
 General session orientation is no longer prompt-hosted. The
 continuation prompt was dissolved (2026-04-20); its doctrine moved
-to [PDR-026 (Per-Session Landing Commitment)](../../.agent/practice-core/decision-records/PDR-026-per-session-landing-commitment.md)
-and [`orientation.md`](../../.agent/directives/orientation.md)
+to [PDR-026 (Per-Session Landing Commitment)][pdr-026] and
+[`orientation.md`](../../.agent/directives/orientation.md)
 (layering contract); its rituals moved to `start-right-quick`
 (session open) and `session-handoff` (session close).
+
+[pdr-026]: ../../.agent/practice-core/decision-records/PDR-026-per-session-landing-commitment.md
 
 Active plans remain authoritative for scope, sequencing, acceptance
 criteria, and validation.

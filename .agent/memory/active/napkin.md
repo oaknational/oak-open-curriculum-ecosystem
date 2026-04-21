@@ -1138,3 +1138,155 @@ end-to-end (when owner-mediated), not a new pattern. Captured
 as session-scoped reflection per `/session-handoff` step 6a.
 
 ---
+
+## 2026-04-21 Session 5 post-handoff — owner-prompted layer-set first-principles reflection (Pippin / cursor-opus)
+
+**Owner question (paraphrased)**: why do we still have threads AND tracks AND
+plans (current/active/future/archive) AND roadmaps AND collections AND
+(historically) workstreams? Where is the optimum of completeness vs complexity?
+
+**Empirical layer set (post-Session-5)**: 8 live concept layers (collection,
+roadmap, plan future-state, plan current/active-state, plan archive-state,
+phase/session-inside-plan, thread, track) + 1 retired (workstream).
+
+**Honest reading after first-principles pass** (full reasoning is in the
+in-session response — this is the load-bearing distillation):
+
+1. **Strict-irreducible at current scale**: threads (2 active),
+   plans (~50 current/active across 10 collections), collections (~13).
+   These three answer questions nothing else answers.
+
+2. **Soft (earn keep only at non-trivial collection size)**: plan
+   sub-state (future/current/archive), roadmap.md. Both are noise
+   for collections with ≤3 plans (e.g. `compliance/` has 1 plan + a
+   `roadmap.md` — pure overhead).
+
+3. **Default-retire candidates (empirically empty or duplicate)**:
+   - Tracks — surface installed Session 5 (PDR-011 amendment to
+     git-track them); empirically zero tracks ever created. **Same
+     shape as the workstream-collapse opportunity.**
+   - `active/` directories where `current/` already exists (pure
+     vocabulary-duplicate; some collections have both).
+   - Top-level `icebox/` (overlaps per-collection `future/`).
+   - Roadmap.md in single-plan collections.
+
+4. **Vocabulary that suggests a layer the doctrine does not actually
+   formalise**: "parent plan" / "child plan". This is just the
+   file-vs-section choice for phases — not a real typed layer.
+
+**The deeper structural pattern (load-bearing)**: layers are added
+when a need is anticipated, but never removed when the need fails to
+materialise. The Session 5 evaluate-and-simplify rule attacks
+symptoms _after_ the fact, one consolidation at a time. A structural
+protection would be a **default-retire-on-empty rule**: any surface
+(folder + README) that has been empirically empty across N
+consolidations retires by default. That promotes the workstream /
+track lesson into a tripwire instead of one-off remediation.
+
+**Pattern candidate (1 of 3 instances; needs 2 more)**:
+`anticipated-surface-installed-then-empirically-unexercised`. Instances
+so far: workstreams (collapsed Session 5), tracks (zero exercise after
+PDR-011 amendment landed). Needs a third independent instance before
+promotion to durable doctrine. Captured here so the bar is testable.
+
+**Rule candidate (protection)**: `default-retire-on-empty` —
+falsifiable trigger: any operational/practice-core surface (folder +
+README) with zero non-README/non-archive entries across 3 consecutive
+consolidations retires by default unless the owner explicitly
+re-justifies it. Promotion gated on the pattern hitting 3 instances OR
+explicit owner direction.
+
+**Concrete Session-6-or-beyond candidates** (for owner consideration,
+not unilateral action):
+
+- Track surface: install the empty-surface bar with Session 6 close as
+  the next checkpoint.
+- `current/` vs `active/` collision: settle on one name, repo-wide
+  migration. Likely belongs in the `plan-collection-structural-
+  consistency.plan.md` already in `agentic-engineering-enhancements/
+  active/`.
+- Roadmap-only-when-≥5-plans rule: lightweight; testable; would prune
+  ~5 single-plan-collection roadmaps.
+- Top-level `icebox/` vs per-collection `future/`: pick one.
+
+**Calibration honesty**: this reflection was owner-prompted, not
+agent-noticed. The fact that I helped land a PDR-011 amendment to
+git-track an empirically-empty surface, then needed an owner question
+to see the workstream-shape, is itself evidence the existing tripwires
+do not catch _layer-level_ symptoms — they catch _entry-level_ symptoms
+within an established layer set. This is a gap to flag, not to swap-
+in-feel-state-of-having-flagged-it.
+
+**Honest limit of this reflection**: I have not done the work of
+computing actual costs (developer time spent navigating, agent context
+consumed, drift-events caused). The optimum I named is a structural
+estimate, not a measured one. Promoting any of these candidates
+requires owner ratification and ideally one measurement pass.
+
+---
+## 2026-04-21 post-handoff `/jc-consolidate-docs` walk (Pippin / cursor-opus)
+
+**Trigger fire**: 3 of 6 (settled doctrine in ephemeral artefacts;
+napkin 1226 lines i.e. 2.4× over rotation threshold; ≥2 surprises
+suggesting new rule/pattern). Walked all 10 steps; full per-step
+output + decisions captured in `repo-continuity.md § Deep
+consolidation status` (second consolidation-gate check block, this
+date).
+
+**Key decisions exercised under the deferral-honesty discipline**
+(third data-point of the rule body being lived this session):
+
+1.  Napkin rotation **deferred to Session 6 close** — named
+    priority trade-off: Session 6 resume material is load-bearing
+    in the current top napkin entries; rotating now forces
+    archive-following at S6 open. NOT "budget consumed".
+2.  Distilled compression **deferred to Session 6** — named
+    priority trade-off: pairs naturally with the deferred napkin
+    rotation (rotation pulls entries through) and the Session 6
+    closing-arc fitness lane.
+3.  5 hard-zone fitness items **deferred to Session 6** — named
+    priority trade-off: principles.md char-debt is already a
+    Session 6 Due item; the four other hards naturally batch with
+    it; limit-raises (Step 9§e) are owner-only.
+4.  Step 7a PDR candidates 2/3/4 (PDR-015 amendment for
+    owner-mediated-evidence-loop; default-retire-on-empty rule
+    promotion; deferral-honesty rule promotion) **all deferred**
+    — named precondition: each is at 1/3 or 2/3 instances; the
+    promotion bar is "three cross-session independent instances"
+    per the Session 5 register-pruning work. NOT premature
+    deferral.
+
+**New observation (1/3 instance, surfaced in Step 4 purpose-(c)
+cross-experience scan)**: across the five 2026-04-21 experience
+files, the agent's installed protections (tripwires, rules,
+doctrine bundles) get their evidence-of-firing from owner-mediated
+review, not agent self-test. The agent writes the rule; the owner
+is the test that the rule fires. Direct evidence cited in the
+register entry. Distinct from but complementary to the Session 5
+calibration finding (which is about the *gap*; this is about the
+*mechanism that has been compensating* for the gap). Together they
+suggest a structural recommendation worth surfacing if it reaches
+the bar: **install firing-rate measurement for tripwires**, not
+just rule bodies.
+
+**Adjacent finding for owner home-decision**:
+`observability-sentry-otel.next-session.md` line 53 references a
+"Standing decisions note in `repo-continuity.md`" that no longer
+exists (substance lost when standing-decisions surface was
+retracted Session 4). Substance was: "concrete attribution starts
+forward from 2026-04-22." Owner choice between PDR-027 amendment /
+thread-README inline / repo-continuity restate. Surfaced for
+Session 6 close.
+
+**Honest reading of this consolidation pass**: 6 line-length wraps
+(no semantic change); 2 new pattern candidates added to register
+Pending band; 0 ADR / 0 PDR / 0 rule / 0 principle / 0 pattern
+files authored. The ritual was walked properly; the substantive
+work it surfaced is correctly held back for owner ratification or
+Session 6 batching. The most important output is **the
+exercise-of-the-deferral-honesty-rule itself** as a third
+cross-session data-point — moving the rule candidate from 2/3 to
+3/3 if owner accepts the count.
+
+---
+
