@@ -37,7 +37,7 @@ todos:
     status: completed
   - id: session-close
     content: Run /jc-session-handoff; update napkin with surprises and pattern instances
-    status: pending
+    status: completed
 isProject: false
 ---
 

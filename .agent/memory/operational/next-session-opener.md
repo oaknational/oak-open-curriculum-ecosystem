@@ -1,8 +1,12 @@
-# Next-Session Opener — Sentry Integration for Public Alpha
+# Next-Session Opener — §L-8 Vercel preview smoke + WS4/WS5 rollout
 
-**Authored**: 2026-04-20 session close; revised 2026-04-21 after a
-§L-8 WS1 RED pause caught a testing-strategy violation in the
-prescribed test shape before code was written.
+**Authored**: 2026-04-21 session close after the §L-8 WS1+WS2+WS3.1
+atomic landing (`f9d5b0d2 feat(mcp-http): §L-8 esbuild-native build
+via @sentry/esbuild-plugin`). Three branches: 31 files changed, +1328
+/-1376; tsup → raw esbuild + `@sentry/esbuild-plugin`; 953-line L-7
+orchestrator + `upload-sourcemaps.sh` + `tsup.config.ts` deleted; 24
+new tests pass; 639/639 total tests pass; type-check + lint + format
++ knip + depcruise + markdownlint clean.
 **Consumed at**: next session open.
 **Lifecycle**: delete on session close once its landing target has
 been reported (per PDR-026); rewrite if the landing target needs
@@ -12,129 +16,172 @@ re-stating for a further session.
 
 ## Impact (metacognition lens)
 
-The work shifts the MCP server's operational posture from *"errors
-captured without attribution"* to *"errors attributed to release,
-tool context, and request state, with runtime health visible."* This
-is the quality bar for public alpha.
+§L-8 closed the *implementation* surface for esbuild-native Sentry
+release/source-map/deploy linkage. The *operational* surface is
+still unproven — the `@sentry/esbuild-plugin` configured by
+`createSentryBuildPlugin` runs only when Vercel's build env exposes
+`VERCEL_ENV` + `VERCEL_GIT_COMMIT_SHA` + `VERCEL_GIT_REPO_SLUG` AND
+`SENTRY_AUTH_TOKEN` is wired into the Vercel project env. Until a
+preview build proves the boundary read works end-to-end, §L-8's
+contribution to "errors attributed to release, tool context, and
+request state, with runtime health visible" remains blocked.
 
-The bridge from action to impact is three lanes:
+The bridge from action to impact is two short steps:
 
-1. **§L-8** (next-session target): esbuild-native build + Sentry
-   plugin wiring + bespoke L-7 orchestrator deletion + ADR-163 §6
-   amendment. Unblocks release attribution and sourcemap linkage.
-2. **Phase 3a** (L-1 + L-2 + L-3, parallel after §L-8): free-signal
-   integrations, delegates extraction, MCP request-context
-   enrichment. Unblocks runtime-health visibility + request-level
-   attribution.
-3. **L-15** + **L-EH final** (can land during alpha): strategy
-   close-out ADR + `prefer-result-pattern` ESLint rule.
+1. **§L-8 WS1 acceptance probe** (next-session target): push the
+   landed branch to a Vercel preview, observe the build log for the
+   `[esbuild.config] Sentry plugin enabled: release=… env=…` line,
+   confirm Sentry UI surfaces the expected Artifact Bundle + release
+   + commits + deploy event for that build.
+2. **§L-8 WS4/WS5 rollout** (after probe passes): production deploy
+   on the next `semantic-release` version-bump commit; smoke-test the
+   live MCP server through the Sentry UI.
 
-After the three lanes, public-alpha Sentry integration is complete.
+After WS5, public-alpha Sentry integration's release-attribution lane
+is complete and Phase 3a (L-1 + L-2 + L-3) becomes the next forward
+lane.
 
 ## Landing target (per PDR-026)
 
 State at session open:
 
-> **Target**: reviewer findings synthesised on the simplified §L-8
-> WS1 shape, §L-8 WS1 body amended in the maximisation plan, and
-> the revised WS1 committed.
+> **Target**: §L-8 WS1 acceptance probe complete — Vercel preview
+> build of `feat/otel_sentry_enhancements` produces the
+> `[esbuild.config] Sentry plugin enabled: …` log line, AND the
+> Sentry UI for `oak-open-curriculum-mcp` shows the resulting
+> Artifact Bundle + release + commits + deploy event for that build.
 
-The 2026-04-21 napkin entry caught that the WS1 spec's three
-integration tests assert vendor / configuration behaviour (plugin
-lifecycle, build output carrying vendor-injected Debug IDs, build
-equivalence) rather than Oak-authored product behaviour — a
-testing-strategy violation. Do not author those tests. Dispatch
-the three reviewers first.
+Evidence to capture in the napkin or `repo-continuity.md` once
+landed:
+
+- Vercel preview deployment URL.
+- The exact build-log line(s) from `esbuild.config.ts` (skipped or
+  enabled, with release name + env).
+- Sentry UI screenshot or `sentry-cli releases info <version>`
+  output showing the registered release with `commit`, `deploy`,
+  and Artifact Bundle.
+- Confirmation that `dist/**/*.js.map` was deleted post-upload (per
+  the plugin's `filesToDeleteAfterUpload`); deployed `.js` carries
+  no `sourceMappingURL` comment (Sentry "hidden source-map"
+  posture).
 
 ## Session shape
 
 1. **Ground First** per `start-right-quick` steps 1–6 (directives →
    start-here ADRs → active memory → operational memory → plans →
-   branch state). Read the 2026-04-21 napkin entry (top of file)
-   before touching §L-8.
-2. **Dispatch reviewers in parallel** against the proposed
-   simplification:
-   - `test-reviewer` — is a single pure-function unit test over the
-     env-to-plugin-config translator the right level of proof?
-   - `architecture-reviewer-betty` — is the boundary (Oak policy
-     function → vendor plugin config → esbuild) canonical and the
-     smallest surface area that preserves intent?
-   - `assumptions-reviewer` — does the simplification miss any
-     Oak-authored behaviour that a richer test shape would have
-     caught?
-3. **Synthesise findings** and amend §L-8 WS1 in the maximisation
-   plan. Expected shape:
-   - **WS1 RED**: one unit test at `packages/libs/sentry-node/src/`
-     over `resolveSentryEnvironment` + `resolveSentryRegistrationPolicy`
-     composed into a pure translator that produces
-     `@sentry/esbuild-plugin` input shape. Proves Oak-authored env-
-     to-plugin-config logic.
-   - **WS2 GREEN**: canonical esbuild config in
-     `apps/oak-curriculum-mcp-streamable-http/esbuild.config.mjs`
-     consuming the translator; delete bespoke orchestrator, its
-     wiring, and `@sentry/cli` from both apps; amend `package.json`
-     and `vercel.json` per the existing §L-8 body.
-   - **WS4/WS5 smoke**: Vercel preview deployment produces the
-     expected Sentry UI state (release registered + commits
-     attached + deploy event); this is the canonical proof of the
-     plugin/config wiring, not in-process integration tests.
-   - **ADR-163 §6 amendment**: atomic with WS2 commit, per existing
-     §L-8 WS3.1.
-4. **Commit the revised WS1 body** before any implementation work.
-5. **Then execute** the revised WS1 RED, followed by WS2 GREEN
-   atomic with WS3.1 if capacity allows; otherwise stop at the
-   revised-WS1 commit and record next-session target per PDR-026.
+   branch state). Read the 2026-04-21 napkin entries (top of file —
+   four entries spanning 4th/5th/6th `inherited-framing` instances
+   plus the perturbation-mechanism activation observation) before
+   touching §L-8.
+2. **Pre-flight**: confirm `SENTRY_AUTH_TOKEN` is set on the Vercel
+   `poc-oak-open-curriculum-mcp` project for **all three**
+   environments (production, preview, development). The probe needs
+   it on preview; production deploy needs it for WS5; setting it
+   once across the three is cheaper than touching the project twice.
+   Authoritative location:
+   <https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp/settings/environment-variables>.
+3. **Push the branch** (`feat/otel_sentry_enhancements`) to the
+   remote. Vercel auto-builds the preview.
+4. **Watch the build log** for one of:
+   - `[esbuild.config] Sentry plugin enabled: release=<ver> env=preview`
+     → expected; continue.
+   - `[esbuild.config] Sentry plugin skipped: registration_disabled_by_policy`
+     → unexpected on preview; the policy resolver thinks
+     `registerRelease=false`. Inspect `VERCEL_ENV` +
+     `VERCEL_GIT_COMMIT_REF` + the override pair before debugging
+     deeper.
+   - `[esbuild.config] Sentry build-plugin intent error: { kind: '<k>', … }`
+     → boundary read failed. The `kind` discriminant tells you what
+     was missing (auth token, release, commit SHA, repo slug, etc.).
+     Fix the env var; re-push.
+5. **Verify Sentry UI state** for the resulting release name (root
+   `package.json` semver):
+   - **Project Settings → Source Maps → Artifact Bundles** lists the
+     bundle for the build commit's Debug IDs.
+   - **Releases → `<version>`** shows `commits` linked to
+     `oaknational/oak-open-curriculum-ecosystem@<sha>` and a
+     `deploys` entry with `environment: preview`.
+6. **Capture evidence** in the napkin (new entry under
+   `2026-04-21 (open) — Vercel acceptance probe…`); update
+   `repo-continuity.md § Next safe step` with the WS5 rollout
+   trigger ("merge to `main` once the next semantic-release commit
+   is ready").
+7. **Delete this file** (PDR-026 landed-case discipline).
 
 ## Standing decisions (owner-beats-plan invariant protects these)
 
-- **Build tool for the MCP app**: **raw esbuild**, NOT tsup.
-  `@sentry/esbuild-plugin` + `tsup` is known-broken at runtime.
-  Other workspaces stay on tsup.
+- **Build tool for the MCP app**: raw esbuild via
+  `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`
+  (composition root) + `build-scripts/esbuild-config.ts` (pure
+  factory). NOT tsup. NOT a bespoke wrapper. NOT an `.mjs` shape.
 - **Plugin**: `@sentry/esbuild-plugin`, first-party, ADOPTED.
-- **L-7 bespoke orchestrator** (953 lines across 5 files): DELETE
-  in WS2, atomic with WS3.1 ADR-163 §6 amendment.
-- **`@sentry/cli` devDep**: DELETE from BOTH the MCP app AND
-  `apps/oak-search-cli/` (dormant copy).
-- **Canonical, idiomatic esbuild config**: per 2026-04-21 owner
-  direction — the config itself is Sentry / esbuild canonical
-  wiring, not invented Oak machinery. Keep it simple.
+- **`vercel.json` `buildCommand` override**: REMOVED. Vercel runs
+  the workspace's default `build` script.
+- **L-7 bespoke orchestrator** (5 TS files + `upload-sourcemaps.sh`
+  + `tsup.config.ts` + `apps/oak-search-cli/.sentryclirc`): DELETED
+  by `f9d5b0d2`. Do NOT recreate.
+- **`@sentry/cli` direct devDep**: DELETED from BOTH the MCP app
+  AND `apps/oak-search-cli/`. The CLI now arrives only as a
+  transitive dep of `@sentry/esbuild-plugin`; root
+  `pnpm.onlyBuiltDependencies` allows its native build script under
+  pnpm v10.
+- **`packages/libs/sentry-node`**: re-exports `resolveGitSha` for
+  the MCP-app composition root (added by `f9d5b0d2`).
+- **ADR-163 §6 / §7**: amended 2026-04-21 from prescriptive CLI
+  commands (HOW) to outcome statements (WHAT). The plugin is the
+  mechanism; the §6.0–§6.6 outcomes are unchanged. Do NOT amend
+  the ADR back to CLI prescriptions.
 
 ## Non-goals (do not re-open)
 
-- Do NOT author the three integration tests the earlier §L-8 WS1
-  body prescribed. Their shape is a testing-strategy violation
-  (vendor/configuration assertion, not Oak product behaviour).
-- Do NOT invent a build-config wrapper (`buildMcpAppEsbuildOptions`
-  or similar) to make integration testing feel cleaner — that is
-  the "complex test setup signals architectural problem" trap.
+- Do NOT recreate the L-7 orchestrator, even if the probe surfaces a
+  plugin behaviour gap. The vendor plugin is the canonical
+  mechanism; gaps are vendor-issue work, not Oak-built workarounds.
+- Do NOT add any `vercel.json` `buildCommand` override. Vercel's
+  default `build` script invocation is load-bearing.
+- Do NOT edit the unit tests authored in `f9d5b0d2` to assert vendor
+  behaviour. Vendor proof lives in the Sentry UI screenshot from
+  the probe, not in-process.
 - Do NOT migrate any other workspace off tsup.
 - Do NOT re-open the tsup-vs-esbuild decision.
-- Do NOT defer the ADR-163 §6 rewrite (atomic with WS2).
 
 ## What's after this landing
 
-- Phase 3a in parallel: L-1, L-2, L-3 — schema-independent; three
-  small lanes that close public-alpha Sentry integration.
-- L-15 strategy close-out + L-EH final (author `prefer-result-pattern`
-  rule + first-tranche adoption).
+- **§L-8 WS5 production rollout**: triggered automatically by the
+  next `semantic-release` version-bump commit on `main` after the
+  feature branch merges. The Vercel `ignoreCommand` ensures only
+  version-bump commits run the production Build Command.
+- **Phase 3a in parallel** (L-1, L-2, L-3): schema-independent;
+  three small lanes that close public-alpha Sentry integration.
+- **L-15 strategy close-out + L-EH final**: author
+  `prefer-result-pattern` ESLint rule + first-tranche adoption.
 
-## Pattern reminder
+## Pattern reminders
 
-`inherited-framing-without-first-principles-check` has now
-surfaced four times across two sessions. Before authoring tests
-prescribed by a plan body, run the one-line first-principles check:
-*"What Oak-authored behaviour does this test prove? Could a single
-pure-function unit test prove the same thing simpler?"* If the
-answer is "no Oak behaviour, just configuration or vendor wiring,"
-the test belongs in a smoke phase against the live system, not in
-a RED phase driving in-process implementation.
+- `inherited-framing-without-first-principles-check` has now
+  surfaced **six times** across this two-session window (4th, 5th,
+  6th instances landed in the napkin on 2026-04-21). The three-clause
+  first-principles check (test-shape, file-naming-vs-landing-path,
+  vendor-API-literals) is the documented countermeasure. Run it
+  before authoring anything prescribed by a plan body.
+- **`passive-guidance-loses-to-artefact-gravity`** (new, single
+  instance, 2026-04-21): the three-mechanism perturbation register
+  installed 2026-04-20 evening did not fire on any of the 4th/5th/6th
+  instances. Documented guardrails are watchlist items; **active
+  tripwires** (rules / hooks / skills / pre-commit gates) are what
+  actually prevent drift. Exploration queued for a later
+  consolidation pass — do not pursue inline. See napkin top entry
+  for the candidate-layer table and Heath brothers (Decisive ch. 9 /
+  Switch ch. 8) framing.
 
 ## Session-close discipline reminder (PDR-026)
 
 Close by either:
 
-- **Landed**: record the commit SHA + evidence link; delete this
-  file.
-- **Unlanded**: record attempted / prevented / next-session-re-attempts
-  in `repo-continuity.md § Next safe step`; rewrite the Target
-  block above for the next session.
+- **Landed** (probe passed, evidence captured): record the
+  preview-deployment URL + Sentry UI evidence link; delete this
+  file; rewrite a fresh opener for §L-8 WS5 + Phase 3a.
+- **Unlanded** (probe failed, env var missing, plugin gap, etc.):
+  record attempted / prevented / next-session-re-attempts in
+  `repo-continuity.md § Next safe step`; rewrite the Target block
+  above for the next session with the specific failure mode named.

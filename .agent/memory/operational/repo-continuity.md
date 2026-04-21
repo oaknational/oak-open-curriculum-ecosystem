@@ -1,9 +1,10 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-21 (final handoff — after 2026-04-20
-infra landings and a 2026-04-21 §L-8 WS1 RED pause catching the
-4th instance of `inherited-framing-without-first-principles-check`
-before any test code was written)
+**Last refreshed**: 2026-04-21 (memory-feedback execution plan
+landed — metacognition file + execution plan authored in the
+`agentic-engineering-enhancements` collection; prior refresh
+covered §L-8 WS1 RED pause and §L-8 WS1+WS2+WS3.1 atomic landing
+at `f9d5b0d2`)
 **Status**: Authoritative for the fields below. Operational memory
 is the sole continuity-state host. Session orientation doctrine lives
 in [`orientation.md`](../../directives/orientation.md); landing
@@ -123,7 +124,8 @@ conditions documented in the maximisation plan.
 
 ## Deep consolidation status
 
-**Due — pattern graduation now overdue; dedicated consolidation
+**Due — pattern graduation still overdue; memory-feedback execution
+plan now queued and owner-gated at Phase 0; dedicated consolidation
 pass required.** Discharged across the 2026-04-20/21 arc: prompt-
 fitness pressure (1628 → 145 lines dissolution); documentation
 drift on the `docs/foundation/` boundary; PDR-011 alignment;
@@ -134,25 +136,48 @@ memory.
 Outstanding (must land at next consolidation pass):
 
 - **`inherited-framing-without-first-principles-check` pattern
-  extraction** to `.agent/memory/active/patterns/`. Four instances
-  now documented in napkin (three on 2026-04-20, one on
-  2026-04-21 caught before any code was written). Well past the
-  repeats bar.
+  extraction** to `.agent/memory/active/patterns/`. **Six instances
+  now documented in napkin** (three on 2026-04-20; the 4th, 5th,
+  and 6th on 2026-04-21 — caught by owner mid-flight, pre-commit
+  hook rejection, and type-check failure respectively). Well past
+  the repeats bar.
 - **Perturbation-mechanism bundle** as a PDR plus three lightweight
   artefacts: non-goal re-ratification ritual, standing-decision
   register, first-principles metacognition prompt. All three are
   complementary layers; landing them as a bundle is the design.
+  Note 2026-04-21 napkin observation: the three as currently
+  installed are *passive guidance*; none fired before the 4th, 5th,
+  or 6th inherited-framing instances. The PDR should include at
+  least one *active tripwire* layer (rule / pre-commit hook / skill)
+  alongside the passive layers — see the `passive-guidance-loses-
+  to-artefact-gravity` pattern candidate.
+- **`passive-guidance-loses-to-artefact-gravity` pattern
+  candidate** (single instance, 2026-04-21). Promotion-ready when a
+  second documented-but-not-enforced guardrail produces a third
+  missed catch. Meta-evidence also observed 2026-04-21 by the
+  memory-feedback-plan session: the authoritative
+  `next-session-opener.md` was bypassed by a chat-text opener
+  drafted from stale continuity fields. Second instance may already
+  be present; owner review at next consolidation.
 - **`practice.md` Artefact Map refresh** to reflect the three-mode
   memory taxonomy.
 - **Portability decision** on the three-mode taxonomy (portable
-  Practice doctrine via PDR, or explicitly host-local).
+  Practice doctrine via PDR, or explicitly host-local). **Now
+  load-bearing**: Phase 0.2 of the memory-feedback execution plan
+  branches on this answer.
 
 The broader gap — feedback loops across memory planes, emergent-
-whole observation, executive-memory drift detection — is captured
-as a strategic plan at
-[`agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md).
-Promotion trigger: second concrete drift instance OR owner-direct
-OR Sentry alpha-gate lands.
+whole observation, executive-memory drift detection — has been
+promoted from strategic brief to executable plan:
+
+- Strategic brief: [`agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md)
+- Metacognition (first- and second-pass): [`agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md)
+- Execution plan (queued in `current/`, owner-gated at Phase 0): [`agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md)
+
+Phase 0 of the execution plan carries two owner-gated decisions
+(ratification of the three-plane frame; portability decision).
+Phase 1 graduates the four overdue items listed above as its
+first move. The plan does not start until Phase 0 answers exist.
 
 ## Next-session opening statement
 

@@ -1,3 +1,75 @@
+## 2026-04-21 (open, memory-feedback-plan session) — Chat-text opener bypassed the authoritative next-session-opener.md
+
+### Surprise
+
+**What was expected**: when the owner asked for a "next-session opening statement" during the memory-feedback-plan session, the statement would be grounded in the authoritative `next-session-opener.md` file if it existed, or composed fresh against current operational state if it did not.
+
+**What actually happened**: I authored the chat-text opener without reading `next-session-opener.md` first. My draft targeted §L-8 WS1 RED reviewer dispatch, drawn from the pre-landing text at `repo-continuity.md § Next safe step`. The authoritative file, already authored after `f9d5b0d2` landed §L-8 WS1+WS2+WS3.1 atomically, targets the Vercel preview acceptance probe for §L-8. The two are materially different; mine was stale.
+
+**Why the expectation failed**: the operational surface has a canonical next-session-opener artefact (`next-session-opener.md`) and a stale-at-the-moment continuity text that mentions §L-8 WS1 pause. I read the continuity text and generated from it, instead of checking whether a more specific, newer artefact owned the question. The shape of this failure is the same shape the 2026-04-21 "fourth-half" napkin entry names: **passive guidance loses to the gravity of the artefact in front of the agent**. The continuity-text section was in front of me; the newer canonical opener was one `ls` call away and I did not make it.
+
+### Pattern instance linkage
+
+This is a second candidate instance of `passive-guidance-loses-to-artefact-gravity` (first: the perturbation mechanisms not firing against the 4th/5th/6th inherited-framing instances). The pattern is promotion-ready when a second *documented-but-not-enforced guardrail* produces a missed catch; this case extends the definition slightly — the "guardrail" here is *authority-order in operational memory* (per PDR-011 and the plane authority order), which I did not honour. Owner decides at next consolidation whether this counts as the second instance or a related-but-distinct pattern.
+
+### What behaviour should change next time
+
+Before authoring any operational artefact (next-session opener, continuity update, plan status note), run a named check: *"Does a canonical artefact already own this field? Is there a `next-session-opener.md`, a workstream brief, a plan status line, or an executive surface that is authoritative for this content?"* If yes, read it first; compose only against its current state, not against a different adjacent surface.
+
+### Candidate tripwire
+
+Extend the Phase 1.2 perturbation-mechanism-bundle PDR (in the memory-feedback execution plan) to include a rule: *"Before writing to any operational-memory surface or authoring session-close content, list the operational files in the relevant directory and verify no more-specific canonical surface owns the field being written."* Rule-layer tripwire per the 2026-04-21 fourth-half candidate-layer table.
+
+### Outcome this session
+
+- The chat-text opener is discarded (correctly — per PDR-011 authority order, the file wins).
+- The authoritative `next-session-opener.md` stands unchanged.
+- This napkin entry is the capture surface; the meta-pattern is added to `repo-continuity.md § Deep consolidation status` for the next consolidation pass.
+
+---
+
+## 2026-04-21 (open, fourth-half) — Perturbation mechanism is too passive; needs active tripwires
+
+### Surprise
+
+**What was expected**: the three-mechanism perturbation register installed on 2026-04-20 evening (first-principles metacognition prompt + standing-decision register + non-goal re-ratification ritual) would, by the time of the §L-8 atomic landing, have caught at least one of the three plan-body framings the agent inherited this two-session window.
+
+**What actually happened**: zero of the three mechanisms fired before the agent had committed to the inherited framing. All three pattern instances (4th, 5th, 6th) were caught by *external* friction — owner mid-flight intervention (4th), pre-commit hook rejection (5th), type-check failure (6th). The mechanisms are noted in the napkin and in `repo-continuity.md`, but they sit there as *passive guidance* the agent reads (or doesn't) at session-start. None of them is a tripwire that fires automatically on the conditions that produce the failure.
+
+**Why the expectation failed**: passive guidance loses to the gravity of the artefact in front of the agent. The plan body is concrete, present, and prescriptive; the perturbation register is abstract, ambient, and easy to read past. The Heath brothers (Decisive, ch. 9; Switch, ch. 8) name this directly: a tripwire is a pre-committed rule that converts a continuous decision (am I drifting?) into a discrete trigger event (this specific condition just fired, therefore stop and re-evaluate). Tripwires beat vigilance because they offload the watchfulness to the environment.
+
+### What behaviour should change next time
+
+Promote at least some of the three perturbation mechanisms from passive register entries to **active tripwires** — environmental triggers that fire on a named condition without requiring the agent to remember to check. Candidates spanning the available mechanism layers, ordered by cost-to-install (low → high):
+
+| Layer | Tripwire shape | Fires when |
+| --- | --- | --- |
+| **Always-applied rule** (`.cursor/rules/*.mdc` + `.agent/rules/*.md`) | "Before authoring tests prescribed by a plan body, run the three-clause first-principles check (test-shape, file-naming-vs-landing-path, vendor-API-literals) and surface any failure to the owner before writing code." | Always loaded; checks on test-authoring entry |
+| **Pre-commit hook** | "If a commit message claims to satisfy a plan body, refuse to commit until a one-line `Plan-check:` trailer naming the three clauses is present." | Every commit that touches plan-implementation files |
+| **Skill** (`.agent/skills/plan-body-tripwires/`) | Codify the three-clause check as a runnable skill that can be invoked from `start-right-thorough` and the GO loop, not just remembered. | Session start + per-WS boundary |
+| **Standing-decision register surface** | Lightweight repo-local file (`.agent/memory/operational/standing-decisions.md`) read explicitly by `start-right-quick`/`start-right-thorough`, with each entry carrying an expiry condition and a "supersedes plan non-goals" marker. | Session start, before any plan read |
+| **Owner-contradicts-plan friction-ratchet count** | Reviewer dispatch logic that increments a counter when an owner statement contradicts a plan non-goal, then forces an `assumptions-reviewer` pass when the counter passes a threshold. | Mid-session, on owner-correction events |
+| **Hook on plan-file open** | Cursor hook that, when a `.plan.md` file is opened in agent context, injects a top-of-file reminder listing the three clauses inline. | Plan file is read |
+
+Variety across layers is itself a perturbation per the existing register entry (2026-04-20 evening) — routinising a single ritual blunts its jogging effect. The right move is to install **at least two complementary tripwires** so that no single failure mode (forgot to read the rule; pre-commit hook bypassed; skill not invoked) leaves the agent fully exposed.
+
+### Pattern instance count
+
+- The 4th, 5th, and 6th instances of `inherited-framing-without-first-principles-check` all happened *after* the perturbation mechanisms were named. The mechanisms themselves are not the failure; their *passive* installation is. This observation is its own pattern candidate: **`passive-guidance-loses-to-artefact-gravity`** — when a guardrail is documented but not environmentally enforced, it does not fire under the precise conditions it was designed to catch. Single-instance observation here (the perturbation register is the artefact under test); promotion-ready when a second documented-but-not-enforced guardrail produces a third missed catch.
+
+### Promotion candidates
+
+- **EXPLORATION CANDIDATE** (next consolidation pass): *"Active tripwires for the perturbation mechanism — design the rule/hook/skill mix that converts the three perturbation mechanisms from passive register entries into environmental triggers. Reference the Heath brothers' tripwire concept (Decisive, ch. 9; Switch, ch. 8) for the underlying decision-theory framing. Sequence: pick two layers from the table above (highest cost-to-install ratio first), draft them, test against the 4th/5th/6th instance conditions, then iterate."* Owner directed this exploration to be noted; not blocking the immediate work.
+- **PRINCIPLE CANDIDATE** (`.agent/principles.md` once promoted): *"Guardrails earn their cost only when environmentally enforced. A guardrail that lives only as documented guidance is a watchlist item; a guardrail that fires on a named condition without agent recall is a tripwire."*
+
+### Action this session
+
+- Captured the observation in the napkin (this entry).
+- Added the exploration to the queue; not pursued in-flight to keep the §L-8 vercel-probe + session-close work moving per owner direction.
+- The two complementary tripwires are NOT being installed in this session — they need a deliberate design pass that surveys the existing rule/hook/skill surfaces against each candidate layer before anything is committed.
+
+---
+
 ## 2026-04-21 (open, third-half) — Sixth `inherited-framing-without-first-principles-check` instance: trusted plan-body literal without checking vendor API
 
 ### Surprise
