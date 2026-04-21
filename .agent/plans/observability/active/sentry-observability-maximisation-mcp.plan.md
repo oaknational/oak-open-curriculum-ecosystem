@@ -1775,10 +1775,18 @@ separate future lane, triggered by an actual consumer landing.
 
 ### L-8 Bundler-side source maps + release/deploy linkage (UN-DROPPED 2026-04-20 — forward lane)
 
-**Status**. 🟡 PLANNING (pre-ExitPlanMode). Forward lane for release,
-commits, deploy, and source-map linkage. Supersedes L-7 bespoke
-orchestrator. Plan-time `assumptions-reviewer` + `sentry-reviewer`
-dispatch required before WS1 begins.
+**Status**. 🟠 LANDED-WITH-CORRECTION-PENDING. WS1 (RED), WS2 (GREEN),
+and WS3.1 (ADR-163 §6/§7 amendment) landed atomically in commit
+`f9d5b0d2` (2026-04-21). The Vercel preview acceptance probe (deployment
+`dpl_8LJxuArqh68w4pon9MbfnriD5rre` on `feat/otel_sentry_enhancements`
+@ `ff91cd1c`) ran the new `esbuild.config.ts` composition root
+correctly but exited 1 with
+`[esbuild.config] Sentry build-plugin intent error: { kind: 'missing_app_version' }`.
+Two distinct errors surfaced — see [L-8 Correction (2026-04-21) —
+Version source-of-truth and fail-policy](#l-8-correction-2026-04-21--version-source-of-truth-and-fail-policy)
+at the end of this lane for the corrected design and remaining work.
+Original lane intent (release/commits/deploy/source-map linkage,
+supersession of L-7 bespoke orchestrator) is unchanged.
 
 **Scope**. Switch the MCP app's build tool from `tsup` to **raw
 esbuild** and register `@sentry/esbuild-plugin` directly. Delete the
@@ -2114,6 +2122,15 @@ config itself benefits from type-checking).
   filesToDeleteAfterUpload: ['dist/**/*.js.map'] }`, `telemetry:
   false`.
 
+> **SUPERSEDED (2026-04-21)** by [L-8 Correction (2026-04-21) —
+> Version source-of-truth and fail-policy](#l-8-correction-2026-04-21--version-source-of-truth-and-fail-policy).
+> The `release.name` resolver shipped in `f9d5b0d2` reads from a
+> different boundary than the build-time validation script, producing
+> the `missing_app_version` failure on Vercel preview. The single-
+> source-of-truth strategy and per-environment derivation rules are
+> stated in the correction subsection. Treat the bullet above as a
+> shape sketch only; the resolver contract MUST follow the correction.
+
 **Pre-edit verification**: read `resolveSentryEnvironment` and
 `resolveSentryRegistrationPolicy` return types in
 `packages/libs/sentry-node/src/`. Cross-check field names against
@@ -2365,6 +2382,186 @@ invariant installed in commit `363037af`:
 A graduation signal for the guardrails: if this lane lands without
 re-activating the tsup-vs-esbuild debate, the owner-beats-plan
 invariant is working as designed.
+
+#### L-8 Correction (2026-04-21) — Version source-of-truth and fail-policy
+
+**Status**. 🔴 PENDING. Two distinct planning + implementation errors
+surfaced when the Vercel preview build of `f9d5b0d2` ran on
+`feat/otel_sentry_enhancements` @ `ff91cd1c` (deployment
+`dpl_8LJxuArqh68w4pon9MbfnriD5rre`). Both errors must be corrected
+before WS5 (production rollout) is attempted, and before this lane is
+marked `LANDED`.
+
+**Build-log root cause**:
+
+```text
+Validated application version: 1.5.0
+[esbuild.config] Sentry build-plugin intent error: { kind: 'missing_app_version' }
+ELIFECYCLE  Command failed with exit code 1.
+```
+
+The composition root executed correctly (the new `esbuild.config.ts`
+ran, the `validate-root-application-version.mjs` pre-flight resolved
+`1.5.0` from disk), but `createSentryBuildPlugin`'s release-name
+resolver read from a different boundary and reported
+`missing_app_version`, which `esbuild.config.ts` then treated as
+fatal.
+
+##### Error 1 — Version resolution drifted from the documented strategy
+
+The lane was authored against an existing strategy stated in the L-7
+prose (root `package.json` is the single source of truth for release
+versions; `vercel-ignore-production-non-release-build.mjs` cancels
+production builds whose version has not advanced). WS2 implementation
+in `f9d5b0d2` did not preserve that single-source-of-truth boundary:
+the validation script reads version from disk (`require('./package.json').version`),
+the Sentry release-name resolver reads version from a process-env
+field (`npm_package_version` or similar) that Vercel does not populate
+at build time. The two boundary reads disagreed; the build failed.
+
+This is a **planning + implementation drift** — the strategy was
+explicit in the L-7 narrative but was not carried forward as a
+hardened contract into L-8 WS2.
+
+##### Error 2 — Fail-policy was inverted
+
+`createSentryBuildPlugin` returned a `Result.error({ kind: 'missing_app_version' })`,
+and `esbuild.config.ts` exited 1. This treats a load-bearing identity
+failure (we do not know the release name) as a build-fatal error,
+which is correct in spirit but the **opposite policy** was applied to
+optional vendor configuration: the lane's standing decision (per
+`next-session-opener.md` and the `[esbuild.config]` log-line table)
+was that a missing `SENTRY_AUTH_TOKEN` should *skip* plugin
+registration so that non-release contexts (local dev, fork preview
+without secrets) can still build. The `f9d5b0d2` implementation
+does not yet implement that skip-on-vendor-missing path; it gates
+solely on `policy.shouldRegister` from `resolveSentryRegistrationPolicy`,
+which is upstream of the auth-token check.
+
+The two errors compound: with the vendor-missing path also halting
+the build, every preview build without a Vercel-provisioned
+`SENTRY_AUTH_TOKEN` would fail too, even on commits where release
+attribution is not required.
+
+##### Corrected version-resolution strategy (single source of truth)
+
+Release-name derivation MUST follow this contract, with the rule
+selected by `VERCEL_ENV` (or its local equivalent), and the resolved
+value persisted to a build-output file so that the plugin and any
+runtime SDK initialisation read the same string:
+
+| Context (`VERCEL_ENV` or local) | Source of truth | Rule |
+|---|---|---|
+| `production` | Root `package.json` `version` | Read by `validate-root-application-version.mjs` once at the start of the build; Vercel `ignoreCommand` already guarantees production builds run only on `semantic-release` version-bump commits to `main`, so the version in `package.json` is the canonical released semver. |
+| `preview` | Branch name | Derive a version-shaped string from `VERCEL_GIT_COMMIT_REF` (e.g. `preview-<branch-slug>-<short-sha>`). The root `package.json` version is stale on preview branches and MUST NOT be used. |
+| `development` (local or `vercel dev`) | Short git SHA | `git rev-parse --short HEAD` (or `VERCEL_GIT_COMMIT_SHA` truncated to 7 chars). Do not read root `package.json` — it is stale outside the bump-commit moment. |
+
+Implementation requirements (binding):
+
+1. **Single resolver, single boundary read**. One function in
+   `packages/libs/sentry-node/` (or a new `release-identity` module)
+   takes the build context (env vars, branch, sha) as inputs and
+   returns the resolved release name. No other consumer reads the
+   raw boundary directly.
+2. **Persist once, consume many**. The resolved release name MUST be
+   written to a build-output file (e.g. `dist/build-info.json`) so
+   that runtime Sentry SDK initialisation, future tag emission, and
+   any post-build verification all read the same string the plugin
+   used. The current dual-boundary read (validation script + plugin
+   resolver) is the bug; persisting the canonical resolution to disk
+   is the structural fix, not a per-consumer patch.
+3. **Validation script convergence**. The existing
+   `validate-root-application-version.mjs` invocation either becomes
+   the canonical resolver call (preferred — one entry point) OR
+   becomes a thin wrapper that delegates to it. Two scripts that
+   independently parse `package.json` is the failure mode this lane
+   is correcting.
+4. **No env-var-based version inputs in the resolver's contract for
+   `production`**. Reading `npm_package_version` or any pnpm-injected
+   env var is the bug; `production` reads from disk via the
+   pre-flight script's resolved value, not from `process.env`.
+
+##### Corrected fail-policy (warn-vs-throw)
+
+Two distinct categories of build-time observability configuration,
+two distinct policies:
+
+| Category | Examples | Missing-config policy |
+|---|---|---|
+| **Optional vendor configuration** — third-party service hookup that is nice-to-have for the build to participate in a remote system | `SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, `SENTRY_PROJECT`, source-map upload destination | **Warn and continue.** Log a single, structured `[esbuild.config]` line naming what is missing and what consequence follows (e.g. `Sentry plugin skipped: SENTRY_AUTH_TOKEN not provided — release will not be registered with Sentry`). Build succeeds. App boots and runs. |
+| **Vital identity** — information without which the produced artefact cannot be correctly attributed, even at runtime | Resolved release name (per the strategy above), build environment (`production`/`preview`/`development`), commit SHA on production builds | **Throw with helpful error.** `esbuild.config.ts` exits non-zero. Error message names exactly what was missing, which boundary was read, and what the operator must do (e.g. *"Cannot resolve release name on production: root package.json version did not advance beyond last deployed version. Ensure semantic-release ran successfully before this build."*). |
+
+The `Result<…, IntentError>` shape returned by
+`createSentryBuildPlugin` is the right primitive but its consumer
+(`esbuild.config.ts`) MUST branch on the error `kind`, not treat
+all `IntentError` variants as build-fatal. The current `f9d5b0d2`
+behaviour treats every `IntentError` as fatal; that is the policy
+inversion.
+
+##### Work items required to land the correction
+
+1. **Author** the canonical release-name resolver per the strategy
+   above (production = disk, preview = branch, dev = short sha).
+   Single function, single boundary read per context. Pure,
+   exhaustively tested with vitest unit tests covering each context
+   row.
+2. **Persist** the resolved release name to a build-output file
+   (`dist/build-info.json` or equivalent). Document the file shape
+   in TSDoc on the resolver and in `docs/operations/sentry-deployment-runbook.md`.
+3. **Refactor** `createSentryBuildPlugin` to consume the persisted
+   release name (or call the canonical resolver), eliminating the
+   second boundary read.
+4. **Refactor** `esbuild.config.ts` to branch on `IntentError.kind`:
+   vendor-config-missing variants → log warn, omit plugin, continue
+   the build; identity-missing variants → throw with the helpful
+   message named above.
+5. **Tighten** `validate-root-application-version.mjs` to either
+   delegate to the canonical resolver or be deleted in favour of the
+   resolver running at the same point in the build. Two scripts is
+   the bug.
+6. **Re-run** the Vercel preview acceptance probe per
+   `next-session-opener.md` § Session shape. Expected log line on
+   preview: `[esbuild.config] Sentry plugin enabled: release=preview-<branch-slug>-<short-sha> env=preview`.
+   Expected log line on a fork preview without `SENTRY_AUTH_TOKEN`:
+   `[esbuild.config] Sentry plugin skipped: SENTRY_AUTH_TOKEN not provided — release will not be registered with Sentry`.
+7. **Verify** Sentry UI surfaces the preview release with branch-derived
+   name + commits + deploy event.
+8. **Amend** ADR-163 §6/§7 to record the version-resolution contract
+   explicitly (currently the ADR states the *outcome* but not the
+   *boundary discipline*; the omission is what allowed this drift).
+   Same-commit-or-same-PR rule from WS3.1 still applies.
+
+##### Risk-assessment additions (to be merged into the L-8 risk table)
+
+| Risk | Mitigation |
+|---|---|
+| The canonical release-name resolver is added but a future contributor re-introduces a second boundary read (e.g. a test helper that re-parses `package.json`) | ESLint rule or dependency-cruiser check forbidding `package.json` reads outside the canonical resolver. Schedule under L-8 WS3 (REFACTOR) of the correction. |
+| The persisted `dist/build-info.json` becomes stale during local dev (resolver runs at build-time, dev server runs after) | Resolver also runs at dev-server startup, writing to a known location consumed by runtime initialisation. Same single-boundary-read discipline. |
+| The fail-policy branching introduces a code path where vendor-config-missing silently produces a release-unattributed artefact in production | Production builds enforce identity-missing → throw via the `VERCEL_ENV === 'production'` branch, which makes both `SENTRY_AUTH_TOKEN` AND release name vital. Only `preview` and `development` apply the warn-and-continue policy to vendor config. |
+
+##### Pattern signal
+
+Both errors are instances of patterns already named in the napkin:
+
+- The drift between the L-7 prose strategy and the L-8 WS2
+  implementation is a fresh instance of
+  `inherited-framing-without-first-principles-check` — the lane
+  inherited a resolver shape from `@oaknational/sentry-node` without
+  re-checking that the shape actually implemented the documented
+  single-source-of-truth boundary discipline.
+- The fail-policy inversion is a fresh instance of
+  `passive-guidance-loses-to-artefact-gravity` — the
+  `next-session-opener.md` explicitly anticipated this exact failure
+  mode (the `[esbuild.config] Sentry build-plugin intent error: …`
+  line in the Session-shape table is named verbatim) but the
+  guardrail was documented, not enforced. The build had to fail in
+  Vercel before the policy was corrected.
+
+Both pattern instances are eligible for napkin recording at the next
+session-handoff. The lane closes the metacognitive loop by carrying
+this correction subsection rather than amending the WS2 prose in
+place — the full chain (original design → preview probe → corrected
+design) stays visible for future reference.
 
 ### Sibling `current/` plans in Phase 5
 

@@ -1,3 +1,173 @@
+## 2026-04-21 (Session 1 close, self-applying pattern in the wild) — The pattern extracted in Session 1 fired against Session 1 itself, one layer up
+
+### Surprise
+
+**What was expected**: Session 1 would extract the `inherited-framing-without-first-principles-check` and `passive-guidance-loses-to-artefact-gravity` patterns, install one Family-A tripwire against the first, and close. The patterns would enter the Practice corpus as durable doctrine. Future sessions would benefit. The immediate session would not.
+
+**What actually happened**: mid-session close, owner asked a substantive question about agent-registration — do we have a register of which agents are working on what, processes to check/register/de-register, stale-detection? The gap map matched the extracted `passive-guidance-loses-to-artefact-gravity` pattern perfectly: the thread-identity schema is present as **prose guidance** in `threads/README.md`; no firing cadence; no scanner; no de-register step. **The Session 1 pattern fired against Session 1's adjacent infrastructure, one layer up from plan-body inheritance to agent-register coordination.**
+
+**Why the expectation failed**: I had framed the pattern as specific to plan-body shape inheritance. The owner's question revealed it is **a broader failure-mode class**: any register-side primitive without a firing cadence decays to ritual. Plan-body shapes (Class A.1) and agent-registration / identity discipline (Class A.2) are two instances of the same underlying failure mode. The Perturbation-Mechanism Bundle PDR (Session 3 Task 3.3) has been amended to name this two-class framing explicitly; Session 4 now installs three Class A.2 tripwires (session-open identity rule, session-close gate in `/session-handoff`, platform-neutral stale-identity probe) plus a derivable active-agent-register view.
+
+### Pattern candidate — self-applying acceptance
+
+A second observation from this session: when amending the plan with the Class A.2 tripwires, the cleanest acceptance-criteria discipline was **self-applying** — *"the session that installs the gate must pass the gate"*. Two instances now appear in Session 4: Task 4.2.a requires the installing session to register its own identity row before writing the rule file, and Task 4.2.b requires `pnpm session-handoff:check` to pass on the Session 4 close itself. This is not unique to tripwires — any gate where the install-session is exposed to the same risk the gate addresses benefits from this discipline.
+
+**Pattern candidate**: `self-applying-acceptance-for-tripwire-installs` — when a session installs a tripwire, at least one acceptance criterion should test the session against the tripwire it just installed. This prevents the session from landing a rule the installing agent has bypassed in the process of writing it. *Two instances* (Task 4.2.a and 4.2.b). Promotion-ready if a third instance appears; otherwise park for cross-session validation. Related to `passive-guidance-loses-to-artefact-gravity` (this is one mechanism by which you prove the guidance isn't passive) and to `inherited-framing-without-first-principles-check` (this is how a Family-A rule earns its cost at install time, not just at every future session).
+
+### Platform parity as architectural prerequisite
+
+Third observation: the owner's follow-up reframed the probes themselves. The existing `claude-agent-ops` tool is Claude-specific; building new probes on top of it would replicate that Claude-only anti-pattern. The mitigation chosen in the plan: probes read **only platform-neutral inputs** (thread identity tables, tracks frontmatter, continuity surface fields). Live-session enumeration across Claude + Cursor + Codex is deferred as a separate future plan because no cross-platform primitive exists today.
+
+**Design principle candidate** (possibly elevates to PDR): *"Agent-tools probes that assert cross-platform claims MUST use platform-neutral inputs, OR provide cross-platform parity. Platform-specific inputs that masquerade as cross-platform claims are forbidden."* The Class A.2 tripwire design in Session 4 is the first surface that applies this discipline.
+
+### What behaviour should change next time
+
+When extracting a pattern or installing a tripwire, explicitly check: *"does this pattern's failure mode apply at adjacent layers? Is this instance an instance of a broader class?"* Session 1 nearly landed the two patterns as narrowly scoped to plan-body inheritance; the owner's question widened the scope to a two-class Family A. Catching this before the extraction lands is better than after; the three-clause check could be extended with a fourth clause (*"is this the narrowest frame, or are there adjacent instances?"*) — or the metacognition prompt could absorb that question.
+
+### Outcome this session
+
+- Session 1 landed at 6/6.
+- Staged plan's Session 3 Task 3.3 and Session 4 (now 4.1 through 4.6) expanded to cover both Family A classes; platform parity load-bearing throughout; measurable acceptance criteria with unit-test requirements.
+- Two pattern candidates surfaced as `candidate:` entries: `self-applying-acceptance-for-tripwire-installs` (2 instances), and the three-existing-patterns cluster *(inherited-framing, passive-guidance, durable-doctrine-states-the-why)* possibly sharing a deeper principle about written doctrine surviving contact with reality (flagged in prior napkin entry for cross-session observation).
+- Design-principle candidate for platform-parity-as-probe-prerequisite flagged for Session 3 PDR consideration or later elevation.
+
+---
+
+## 2026-04-21 (open, durable-doctrine-states-the-why) — Doctrine that names rules without naming reasons drifts silently
+
+### Surprise
+
+**What was expected**: the initial wording of `session-handoff` step 6c (subjective experience capture) encoded the rule cleanly — *"experience is for what the work was like, not what was done; applied technical content goes elsewhere"*. Owner would read the rule and the doctrine would fire.
+
+**What actually happened**: owner noted the rule was stated but the *reasons* were not. Specifically, the three distinct purposes of the `consolidate-docs` step 4 experience audit — (a) preserving the subjective purpose, (b) recovering stranded technical content, (c) surfacing emergent insight across experiences — were implicit in the step's name and invocation but nowhere articulated as a set. A future session reading the rule without those reasons would follow the rule mechanically; when a novel situation arose where the rule's application was ambiguous, there would be no re-derivation surface.
+
+**Why the expectation failed**: doctrine that states *what* without *why* is a passive-guidance-analogue at the documentation layer. The rule is present; the rationale that would let the rule be re-derived is not. When the rationale is implicit, the rule degrades to ritual — followed when convenient, broken under pressure, with no trigger to catch either drift. The failure mode is the same as `passive-guidance-loses-to-artefact-gravity` but one layer up: the doctrine itself, rather than the artefact the doctrine governs.
+
+### Pattern candidate
+
+**`durable-doctrine-states-the-why-not-only-the-what`** — *single instance this session* (the three-reason experience-audit rationale). Promotion-ready when a second documented-but-rationale-free rule produces re-derivation drift. The pattern is distinct from `passive-guidance-loses-to-artefact-gravity` (which is about surfaces failing to fire) and from `inherited-framing-without-first-principles-check` (which is about frames not being ratified). This one is about the documentation layer: the what/why split. It is the conditions under which written doctrine remains load-bearing over time versus decays to ritual.
+
+### What behaviour should change next time
+
+When authoring or amending any durable doctrine surface (PDR, ADR, rule, README, command), ask explicitly: *"If a future reader encountered this rule under a novel condition, could they re-derive it from what is written? Or have I only encoded the rule itself?"* If the second — add the reasons. The cost of stating the why is small; the benefit is the doctrine's resilience across future conditions the author cannot anticipate.
+
+### Countermeasure applied in-flight
+
+- `.agent/experience/README.md` — added explicit *"Why the audit step exists"* section naming the three reasons as a set.
+- `.agent/commands/consolidate-docs.md` step 4 — rewritten from one action to three sub-purposes (a/b/c) with specific guardrail language for the most-easily-skipped purpose (c, emergent insight).
+- `.agent/commands/session-handoff.md` step 6c — expanded to name the rule, the rationale, and the split-if-both discipline.
+
+### Doctrine implications (for next consolidation)
+
+- **Pattern candidate**: the one named above.
+- **Possible Practice-level reflection**: the emerging cluster of doctrine-layer patterns (inherited-framing, passive-guidance, durable-doctrine-states-the-why) may share a deeper principle about *how written doctrine survives contact with reality*. Premature to synthesise; flag for cross-session observation.
+
+### Outcome this session
+
+- Three surfaces amended for explicit rationale.
+- Pattern candidate added for Session 1 Task 1.3 consideration (or next-consolidation graduation scan); one instance so far.
+
+---
+
+## 2026-04-21 (open, workflow-scope alignment) — Workflows should match the continuity unit they act on
+
+### Surprise
+
+**What was expected**: `session-handoff` and `consolidate-docs`
+cleanly divide the end-of-work territory — lightweight per-session
+updates vs deep cross-session convergence — with artefacts
+naturally flowing between them.
+
+**What actually happened**: owner observed that (a) experiences
+have not been recorded recently despite numerous reflection-worthy
+sessions, and (b) ADR/PDR candidate surfacing happens only at
+consolidate-docs time, which fires rarely. Tracing each:
+subjective experience is by definition session-scoped (an agent's
+moment-in-time reflection), but the capture step lived at
+consolidate-docs step 11 — so capture only fired when consolidation
+fired, and consolidation fires thread-scoped on triggers that may
+skip many sessions. ADR/PDR candidate scanning similarly lived at
+consolidate-docs step 7a, so sessions with ADR/PDR-shaped learnings
+carried them forward only by accidental napkin mention. Both are
+instances of **workflow-scope misalignment to continuity-unit
+scope**: the artefact being captured is session-scoped; the
+workflow capturing it is thread-scoped.
+
+**Why the expectation failed**: the two workflows were written
+before the threads-vs-sessions distinction was crisp (that
+distinction landed 2026-04-21, same arc as this observation).
+When threads became the continuity unit, `session-handoff` should
+have absorbed all session-scoped capture (surprises + ADR/PDR
+candidates + subjective experience) and `consolidate-docs` should
+have been restricted to thread-scoped convergence (cross-session
+patterns, distilled graduation, napkin rotation, fitness, Practice
+Core refinement, accumulated-file audit). The scope labels on each
+workflow were implicit, not explicit, so the stratification
+drifted.
+
+### Pattern instance linkage
+
+This is the operational consequence of the *threads-vs-sessions*
+insight captured earlier 2026-04-21 in the *"Session vs thread;
+identity should be tracked and additive"* entry. That insight
+separated the continuity **surface**. This insight separates the
+continuity **workflow**. Together they form a coherent scope
+model:
+
+- Session = time-bounded agent occurrence
+  - Artefacts: napkin surprise entries; ADR/PDR candidates;
+    experience file; identity row update
+  - Workflow: `session-handoff`
+- Thread = named stream persisting across sessions
+  - Artefacts: next-session record; workstream brief;
+    pending-graduations register; patterns; doctrine
+  - Workflow: `consolidate-docs` (per thread or cross-thread)
+
+### What behaviour should change next time
+
+Every workflow and every artefact carries an explicit scope label
+(session or thread). When authoring a new workflow or artefact,
+name the scope in the first paragraph. When amending an existing
+one, add the label retroactively — ambiguity here is the failure
+mode.
+
+### Countermeasure applied in-flight
+
+- `.agent/commands/session-handoff.md` amended:
+  - Explicit **SESSION-SCOPED** label at top.
+  - Step 6 expanded to three sub-steps: 6a surprises (existing),
+    6b ADR/PDR candidate surfacing (new), 6c subjective experience
+    capture (moved from `consolidate-docs` step 11).
+- `.agent/commands/consolidate-docs.md` amended:
+  - Explicit **THREAD-SCOPED** label at top.
+  - Step 11 deprecated in-place with a cross-reference pointing
+    at `session-handoff` step 6c.
+  - Step 4 (experience-file audit) confirmed as the correct
+    thread-scoped audit home; no move needed.
+
+### Doctrine implications (for next consolidation)
+
+- **PDR candidate**: *"Workflow-Scope Alignment to Continuity-Unit
+  Scope"* — doctrine that session-scoped workflows act on session-
+  scoped artefacts; thread-scoped workflows act on thread-scoped
+  artefacts; the scope label is explicit in every workflow's
+  header and every artefact's metadata.
+- **Amendment candidate** to PDR-011 (already queued for Session 3
+  of the staged plan): the capture → distil → graduate → enforce
+  pipeline is now explicitly stratified — capture is session-
+  scoped at `session-handoff`; distil, graduate, enforce are
+  thread-scoped at `consolidate-docs`.
+
+### Outcome this session
+
+- Command amendments applied in-flight (documented above).
+- PDR candidate added to `repo-continuity.md § Deep consolidation
+  status`.
+- Session 1's session-handoff will be the first to exercise the
+  amended session-handoff flow (ADR/PDR scan + experience entry).
+
+---
+
 ## 2026-04-21 (open, post-opener-bloat catch) — Third `passive-guidance-loses-to-artefact-gravity` instance: chat-opener bloat despite durable surfaces existing
 
 ### Surprise

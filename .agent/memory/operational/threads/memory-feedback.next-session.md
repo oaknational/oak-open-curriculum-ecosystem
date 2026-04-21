@@ -1,6 +1,11 @@
 # Next-Session Record — `memory-feedback` thread
 
 **Authored**: 2026-04-21 (metacognition + execution-plan session close).
+**Last refreshed**: 2026-04-21 (Session 1 of the staged
+doctrine-consolidation plan **LANDED 6/6**; plan Session 4
+scope expanded to Class A.2 agent-registration / identity
+tripwires with platform parity after owner question 2026-04-21;
+next landing target for this thread is Session 2).
 **Consumed at**: next session that picks up the `memory-feedback`
 thread (not necessarily the next session overall — the product
 thread `observability-sentry-otel` has its own next-session record
@@ -38,40 +43,95 @@ existing rows. Same platform/model/agent_name → update
 
 ## Landing target (per PDR-026)
 
-**Updated 2026-04-21** — Phase 0 of the memory-feedback execution
-plan **landed this session**. Owner returned both answers and
-added four further standing decisions; all six live in
-`.agent/memory/operational/repo-continuity.md § Standing decisions`.
+**Updated 2026-04-21 (Session 1 close)** — Session 1 of the
+staged doctrine-consolidation plan LANDED 6/6. Next landing
+target for this thread is Session 2.
 
-State at next-session open on this thread:
+### Session 1 outcome (for audit)
 
-> **Target**: close Session 1 of the *Staged Doctrine
-> Consolidation and Graduation* plan at
+All six deliverables landed:
+
+1. ✅ **Task 1.1** — `repo-continuity.md § Standing decisions`
+   extended with decisions 5 (staged execution as the shape) and
+   6 (session break points explicit and protected); 10
+   `recorded:` lines total (≥6 required).
+2. ✅ **Task 1.2** — Pattern authored at
+   `.agent/memory/active/patterns/inherited-framing-without-first-principles-check.md`
+   (six instances; three-clause first-principles check).
+3. ✅ **Task 1.3** — Pattern authored at
+   `.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md`
+   (three instances per the updated napkin count; Heath-brothers
+   tripwire framing).
+4. ✅ **Task 1.4** — First Family-A tripwire installed at
+   `.agent/rules/plan-body-first-principles-check.md` with
+   Claude adapter at `.claude/rules/…md` and Cursor adapter at
+   `.cursor/rules/…mdc`; `pnpm portability:check` green;
+   `docs-adr-reviewer` verdict: *"Agreed: the rule is
+   well-formed"*.
+5. ✅ **Task 1.5** — `practice.md` Artefact Map row for
+   `.agent/memory/` refreshed to enumerate the three modes with
+   read triggers and refresh cadences; Practice Core
+   `CHANGELOG.md` entry added; owner-approved per PDR-003.
+6. ✅ **Task 1.6** — Experience entry at
+   `.agent/experience/2026-04-21-installing-a-tripwire-i-cannot-test.md`.
+
+**Plan amendment this session**: owner surfaced the agent-
+registration / coordination gap during Session 1 close. The
+pattern Session 1 extracted (`passive-guidance-loses-to-
+artefact-gravity`) applied directly to the gap. Staged plan's
+Session 3 Task 3.3 was amended to frame Family A as **two
+classes** (A.1 plan-body inherited-framing; A.2 agent-registration
+/ identity discipline); Session 4 was restructured with new
+Tasks 4.2 and 4.3 (and Family B / cross-plane / CHANGELOG tasks
+renumbered to 4.4–4.6) adding measurable acceptance criteria for
+three Class A.2 tripwires plus a derivable active-agent-register
+view. Platform parity is load-bearing throughout (Claude +
+Cursor adapters + AGENT.md citation; platform-neutral probe
+inputs; cross-platform or out-of-scope).
+
+### Next landing target (Session 2)
+
+> **Target**: close Session 2 of the staged doctrine-consolidation
+> plan at
 > [`../../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md`](../../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md).
 >
-> Session 1 deliverables (all six, no partial close; see plan
-> Tasks 1.1–1.6):
+> Session 2 deliverables (all three must land; see plan Tasks
+> 2.1–2.3):
 >
-> 1. Standing decisions section in `repo-continuity.md` extended
->    if anything surfaces during the session's foundation re-read
->    (Task 1.1 — largely done 2026-04-21; review only).
-> 2. Pattern authored:
->    `.agent/memory/active/patterns/inherited-framing-without-first-principles-check.md`
->    (six instances, three-clause check) (Task 1.2).
-> 3. Pattern authored:
->    `.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md`
->    (two instances, Heath-brothers framing) (Task 1.3).
-> 4. **First Family-A tripwire installed** (front-loaded per
->    improvement #1 of the plan-authoring reflection): rule at
->    `.agent/rules/plan-body-first-principles-check.md` citing
->    the pattern from deliverable 2 and forward-referencing the
->    Session 3 Perturbation Bundle PDR (Task 1.4).
-> 5. `practice.md` Artefact Map row for `.agent/memory/`
->    refreshed to describe the three modes; Practice Core
->    `CHANGELOG.md` updated; owner-approved per PDR-003
->    (Task 1.5).
-> 6. Optional brief experience entry if the session produces a
->    reflective surplus (Task 1.6).
+> 1. **Task 2.1** — Napkin rotation per `consolidate-docs` step 6.
+>    Extract Patterns / Mistakes / Insights / Lessons from current
+>    napkin (now over 1400 lines after Session 1 additions); merge
+>    into distilled (compare against existing; add new; update
+>    refined; skip duplicate; investigate contradiction); prune
+>    distilled entries already captured in permanent documentation;
+>    archive outgoing to `.agent/memory/active/archive/napkin-2026-04-21.md`
+>    (or appropriate date); fresh `napkin.md` under 100 lines with
+>    a distillation heading.
+> 2. **Task 2.2** — Formalise pending-graduations register schema.
+>    `repo-continuity.md § Deep consolidation status` rewritten
+>    from prose-plus-bullets to a structured list per schema
+>    (captured-date; source-surface; graduation-target;
+>    trigger-condition; status). Existing items recast; Session 1
+>    graduations marked `status: graduated` with cross-reference to
+>    the new pattern files.
+> 3. **Task 2.3** — Bind register to session workflows.
+>    `session-handoff.md` gains a step to review/refresh the
+>    pending-graduations register; `consolidate-docs.md` step 7
+>    preamble names the register as an input.
+
+### Preconditions named for Session 2
+
+- None beyond owner presence. Session 2 is markdown-rotation +
+  schema + workflow-binding; no owner-gated Core edits, no sub-
+  agent dispatch requirements, no parallel-thread work.
+- **Watch**: Session 2 is one of the most at-risk sessions for
+  context budget (plan §Session Discipline §3). Napkin rotation
+  involves reading 1400+ lines; distilled merge involves
+  comparison across many entries. Close at a natural boundary if
+  three-quarters of context is reached.
+- **Identity**: per the additive-identity rule, if the picking-up
+  agent is same platform/model/agent_name as the existing row,
+  update `last_session` on that row; if different, add a new row.
 
 Phase 0 resolution recorded (for historical reference):
 

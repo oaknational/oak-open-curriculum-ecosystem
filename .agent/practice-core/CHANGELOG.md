@@ -4,6 +4,19 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-21 — Artefact Map row for `.agent/memory/` refreshed to three-mode taxonomy
+
+- **practice.md Artefact Map** row for `.agent/memory/` rewritten
+  from a single-thing description to explicitly enumerate the
+  three modes (`active/` learning-loop; `operational/` continuity;
+  `executive/` organisational contract) with their read triggers
+  and refresh cadences. Cites `.agent/memory/README.md` for the
+  full specification. Landed as Task 1.5 of the Staged Doctrine
+  Consolidation and Graduation plan, Session 1; standing decision
+  from 2026-04-21 (three-plane memory taxonomy RATIFIED;
+  three-plane memory taxonomy PORTABLE) governs the frame.
+- Owner-approved per PDR-003.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-19 — PDR-025 Quality-Gate Dismissal + Compressed-Labels Principle Extended to Document-Structure Layer
 
 - **PDR-025** graduates the distilled rule "all gates blocking, no

@@ -126,7 +126,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Wire-Format-Aware Redaction** -- Use this when: telemetry redaction protects structured objects or URLs, but secrets can also travel through raw encoded strings such as `application/x-www-form-urlencoded` request bodies. → [wire-format-aware-redaction.md](wire-format-aware-redaction.md)
 - **Workaround Debt Compounds Through Rationalisation** -- Use this when: a workaround exists and someone is explaining why it's justified, especially when invoking "different purposes" or "separate concerns". → [workaround-debt-compounds-through-rationalisation.md](workaround-debt-compounds-through-rationalisation.md)
 
-### Process (26)
+### Process (27)
 
 - **ADR by Reusability, Not Diff Size** -- Use this when: closing a small implementation lane and deciding whether the decision it encoded deserves to be promoted to an ADR. → [adr-by-reusability-not-diff-size.md](adr-by-reusability-not-diff-size.md)
 
@@ -150,6 +150,7 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **Evidence Before Classification** -- Use this when: a static analysis tool reports findings and you need to treat every finding as unclassified until evidence proves otherwise. → [evidence-before-classification.md](evidence-before-classification.md)
 - **Fix at Source, Not Consumer** -- Use this when: multiple workaround attempts fail at the consumer because the producer's type/function/interface is wrong. → [fix-at-source-not-consumer.md](fix-at-source-not-consumer.md)
 - **Foundations Before Consumers in Multi-Emitter Plans** -- Use this when: sequencing a plan with N parallel consumer lanes that share a foundation (schema, ESLint rule, extracted core); the foundation must land in an earlier wave or every consumer retrofits. → [foundations-before-consumers.md](foundations-before-consumers.md)
+- **Inherited Framing Without First-Principles Check** -- Use this when: about to execute a plan body, rewrite an existing artefact, or translate an "old X to new X" — before writing code, tests, or doctrine, check whether the inherited shape is the right shape for the behaviour being proven. → [inherited-framing-without-first-principles-check.md](inherited-framing-without-first-principles-check.md)
 - **Pre-implementation Plan Review** -- Use this when: complex implementation work needs specialist review at the plan stage, not just at the code stage. → [pre-implementation-plan-review.md](pre-implementation-plan-review.md)
 - **Re-evaluate Removal Conditions on Workarounds** -- Use this when: a workaround documents its own removal conditions and conditions may be met long before anyone checks. → [re-evaluate-removal-conditions.md](re-evaluate-removal-conditions.md)
 - **Review Intentions, Not Just Code** -- Use this when: you want specialist reviewers to assess design intent before implementation. → [review-intentions-not-just-code.md](review-intentions-not-just-code.md)
@@ -165,10 +166,11 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 - **satisfies for Mock Completeness** -- Use this when: a test mock implements an interface and you need compile-time proof that all methods are present. → [satisfies-for-mock-completeness.md](satisfies-for-mock-completeness.md)
 - **Don't Test SDK Internals** -- Use this when: tests must prove product behaviour, not third-party SDK internal normalisation or compatibility logic. → [dont-test-sdk-internals.md](dont-test-sdk-internals.md)
 
-### Agent (5)
+### Agent (6)
 
 - **Agentic Surface Separation** -- Use this when: designing or refactoring agent infrastructure that spans skills, rules, commands, subagents, or platform adapters. → [agentic-surface-separation.md](agentic-surface-separation.md)
 - **Governance Claim Needs a Scanner** -- Use this when: an ADR or governance document asserts a universal property across a set of live surfaces (one vocabulary, a required citation, a mandatory field, platform-adapter parity) and prose alone is the only enforcement. → [governance-claim-needs-a-scanner.md](governance-claim-needs-a-scanner.md)
+- **Passive Guidance Loses to Artefact Gravity** -- Use this when: designing a guardrail against an agent failure mode — choose between documented-but-not-enforced guidance (passive) and an environmentally-triggered rule, hook, or read-on-entry surface (active); passive guidance alone is a watchlist item, not a guardrail. → [passive-guidance-loses-to-artefact-gravity.md](passive-guidance-loses-to-artefact-gravity.md)
 - **Reviewer Widening Is Always Wrong** -- Use this when: a sub-agent reviewer recommends replacing one type construct with a wider one; the fix widens the type, which is never the answer. → [reviewer-widening-is-always-wrong.md](reviewer-widening-is-always-wrong.md)
 - **Platform Configuration Is Infrastructure** -- Use this when: AI platform settings (permissions, hooks, plugin state) that define the agentic system contract must be tracked in version control, not gitignored. → [platform-config-is-infrastructure.md](platform-config-is-infrastructure.md)
 - **Route Reviewers by Abstraction Layer, Not File Scope** -- Use this when: dispatching specialist reviewers on a finishing pass over a mixed code + docs + ADR lane and choosing which reviewers to invoke. → [route-reviewers-by-abstraction-layer.md](route-reviewers-by-abstraction-layer.md)

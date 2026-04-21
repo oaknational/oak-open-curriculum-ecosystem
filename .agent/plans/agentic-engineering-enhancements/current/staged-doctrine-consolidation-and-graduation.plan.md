@@ -4,15 +4,15 @@ overview: "Six-session staged execution of the overdue consolidation backlog: pa
 todos:
   - id: s1-decisions-patterns-tripwire-artefactmap
     content: "Session 1: Record Phase 0 decisions as standing; author two patterns (inherited-framing + passive-guidance); install first Family-A tripwire (plan-body-first-principles-check rule, front-loaded to cover Sessions 2-3); refresh practice.md Artefact Map; brief experience entry."
-    status: pending
+    status: completed
   - id: s2-napkin-rotation-distilled
     content: "Session 2: Napkin rotation (1324 → archive); distilled merge-and-prune; Deep consolidation status refresh; pending-graduations register schema formalised."
     status: pending
   - id: s3-doctrine-bundle
-    content: "Session 3: Draft 3 new PDRs (Threads/Identity, Executive-Memory Feedback Loop, Perturbation-Mechanism Bundle with active-tripwire design) and 2 amendments (PDR-011 thread-scope, PDR-026 per-thread) — each owner-reviewed per PDR-003."
+    content: "Session 3: Draft 3 new PDRs (Threads/Identity, Executive-Memory Feedback Loop, Perturbation-Mechanism Bundle with active-tripwire design covering BOTH plan-body inherited-framing AND agent-registration/identity discipline) and 2 amendments (PDR-011 thread-scope, PDR-026 per-thread) — each owner-reviewed per PDR-003."
     status: pending
   - id: s4-tripwires-cross-linking
-    content: "Session 4: Install Family A (plan-body inherited-framing) and Family B (memory-taxonomy meta) active tripwires; new rules cite PDRs; Practice Core CHANGELOG + cross-plane path rules; roadmap sync."
+    content: "Session 4: Install Family A tripwires covering two classes — (a) plan-body inherited-framing (standing-decision register surface; plan-body rule already landed in S1) and (b) agent-registration / identity discipline (session-open identity rule; session-close de-register gate in session-handoff; platform-neutral stale-identity health probe; derivable active-agent-register view). Install Family B (memory-taxonomy meta) tripwires. Cross-plane path rules. Practice Core CHANGELOG + roadmap sync. Platform parity required: Claude + Cursor adapters + AGENT.md citation for Codex/Gemini coverage; probe inputs platform-neutral."
     status: pending
   - id: s5-outgoing-triage
     content: "Session 5: Audit the 10+ outgoing/ files per PDR-007; each file promotes to a durable home or is deleted as staging artefact."
@@ -25,8 +25,8 @@ isProject: false
 
 # Staged Doctrine Consolidation and Graduation
 
-**Last Updated**: 2026-04-21
-**Status**: 🔴 NOT STARTED — queued, owner-gated preconditions resolved
+**Last Updated**: 2026-04-21 (Session 1 landed at 6/6; Session 4 expanded to include Class A.2 agent-registration tripwires with platform parity after owner question 2026-04-21)
+**Status**: 🟢 Session 1 landed — next: Session 2 (napkin rotation + pending-graduations register schema)
 **Scope**: Six-session staged execution of the overdue consolidation backlog surfaced by the 2026-04-21 dry-run. Each session commits to a bounded landing target per PDR-026; context is preserved across session boundaries via operational memory.
 
 **Related artefacts**:
@@ -653,12 +653,39 @@ PDR-026 — likely PDR-027).
   re-ratification ritual) promoted from passive register to
   documented Practice doctrine.
 - **Active-tripwire requirement**: the bundle MUST include at
-  least two environmentally-enforced tripwires (Family A —
-  plan-body inherited-framing). The PDR NAMES the tripwire
-  layers from the Heath-brothers table in the 2026-04-21
-  fourth-half napkin entry and specifies the default install
-  picks for Session 4 (always-applied rule + standing-decision-
-  register surface file).
+  least two environmentally-enforced tripwires in each of
+  Family A's two classes. **Family A has two classes**, both
+  instances of the `passive-guidance-loses-to-artefact-gravity`
+  failure mode:
+  - **Class A.1 — Plan-body inherited-framing.** The three-
+    clause first-principles check that fires on shape-entry.
+    Session 1 landed the always-applied rule at
+    `.agent/rules/plan-body-first-principles-check.md`. Session 4
+    installs the standing-decision register surface as the
+    second complementary layer.
+  - **Class A.2 — Agent-registration / identity discipline.**
+    Tripwires that convert "agent should remember to register
+    on thread join and de-register on session close" (passive)
+    into environmentally-triggered steps (active). Three
+    complementary layers: a session-open identity-registration
+    rule; a session-close identity-update gate in
+    `/session-handoff`; a platform-neutral stale-identity
+    health probe. See Session 4 Tasks 4.2 and 4.3 for concrete
+    installs.
+  The PDR NAMES the tripwire layers from the Heath-brothers
+  table in the 2026-04-21 fourth-half napkin entry and
+  specifies the default install picks for Session 4 per class
+  above.
+- **Platform parity is load-bearing.** The PDR makes explicit
+  that any Family A rule MUST have canonical + Claude +
+  Cursor adapters AND an AGENT.md citation so Codex and Gemini
+  sessions discover the rule at session open. The PDR makes
+  explicit that any Family A probe MUST use platform-neutral
+  inputs (thread identity tables, tracks frontmatter, continuity
+  surface fields) OR, if it must consult live session state,
+  MUST provide cross-platform parity (Claude + Cursor + Codex
+  minimum). Claude-only probes that assert cross-platform
+  claims are forbidden.
 - **Meta-tripwires (Family B)** for the memory-taxonomy itself —
   periodic re-evaluation of whether the three-plane seams are
   correct, whether concepts are missing, and whether a different
@@ -731,36 +758,267 @@ and cross-thread spread in a single session is anti-pattern.
 
 ---
 
-## Session 4 — Active tripwire installation + Rule cross-linking + Roadmap sync
+## Session 4 — Active tripwire installation + Agent-identity infrastructure + Rule cross-linking + Roadmap sync
 
-**Landing target**: at least four active tripwires installed (two
-from Family A, two from Family B); rules cite their PDRs;
+**Landing target**: all required Family A tripwires installed
+across both classes (plan-body + agent-registration); Family B
+tripwires installed; platform-neutral stale-identity health probe
+operational with unit coverage; derivable active-agent-register
+view available via a named command; `/session-handoff` enforces
+identity discipline as a hard gate; rules cite their PDRs with
+full platform parity (Claude + Cursor + AGENT.md citation);
 cross-plane path rules installed; roadmap has an entry for this
 plan.
 
-**Preconditions**: Session 3's PDRs approved and landed.
+**Preconditions**: Session 3's PDRs approved and landed — in
+particular the Perturbation-Mechanism Bundle PDR with its two
+Family A classes (plan-body + agent-registration) and the
+Threads/Sessions/Agent-Identity PDR.
 
-### Task 4.1 — Install Family A tripwires (plan-body inherited-framing)
+**Doctrine-and-operations requirement.** Session 4 delivers both
+the **doctrine** that classifies these mechanisms as tripwires
+(citations into the Session 3 PDRs) AND the **reliable
+operational processes** that actually fire on the right cadence.
+Doctrine without firing cadence is the `passive-guidance-loses-
+to-artefact-gravity` failure mode; Session 4 must not reproduce
+it in its own extraction.
 
-**Defaults** (owner may override):
+### Task 4.1 — Install Family A Class A.1 tripwires (plan-body inherited-framing)
 
-- **Always-applied rule** at `.agent/rules/plan-body-first-principles-check.md`:
-  content is the three-clause first-principles check from the
-  inherited-framing pattern; cites the pattern and PDR-NNN
-  (Perturbation Bundle).
-- **Standing-decision register surface** at
-  `.agent/memory/operational/standing-decisions.md`: short file
-  with the current standing decisions (the six from this arc);
-  read explicitly by `start-right-quick` and `start-right-thorough`.
+**Class A.1 covers**: the plan-body first-principles check —
+"is the shape prescribed by the plan right for the Oak-authored
+behaviour being proven?" — and the related shape-entry failure
+modes (inherited framing, doc-level vendor literals, silent
+landing-path contracts).
+
+**Installs** (defaults; owner may override):
+
+- **Already-landed** (Session 1 Task 1.4): always-applied rule
+  at [`.agent/rules/plan-body-first-principles-check.md`](../../../rules/plan-body-first-principles-check.md).
+  Session 4 updates the rule's `PDR-NNN, pending` forward
+  reference to the concrete Perturbation Bundle PDR number from
+  Session 3. Claude and Cursor adapters already exist.
+- **New**: Standing-decision register surface at
+  `.agent/memory/operational/standing-decisions.md` — short
+  file with the current standing decisions (the six from this
+  arc plus the pre-existing Clerk / `--no-verify` / owner-beats-
+  plan / docs-as-DoD / etc.). Read explicitly by
+  `start-right-quick` and `start-right-thorough` grounding
+  orders.
 
 **Acceptance**:
 
-1. ✅ Both files exist.
-2. ✅ Rule cites the Perturbation Bundle PDR.
-3. ✅ `start-right-quick` references the standing-decision file
-   in its grounding order.
+1. ✅ Plan-body rule's forward reference is replaced with the
+   Session 3 Perturbation Bundle PDR number.
+2. ✅ Standing-decision register surface file exists.
+3. ✅ `start-right-quick` AND `start-right-thorough` reference
+   the standing-decision file in their grounding order (both
+   platforms).
+4. ✅ AGENT.md lists both the plan-body rule and the standing-
+   decision file path so Codex / Gemini see them without
+   depending on `.claude/` or `.cursor/` loaders.
 
-### Task 4.2 — Install Family B tripwires (memory-taxonomy meta)
+**Deterministic validation**:
+
+```bash
+grep -n "standing-decisions.md" .agent/skills/start-right-quick/shared/*.md
+grep -n "standing-decisions.md" .agent/skills/start-right-thorough/shared/*.md
+grep -n "plan-body-first-principles-check\|standing-decisions" .agent/directives/AGENT.md
+```
+
+### Task 4.2 — Install Family A Class A.2 tripwires (agent-registration / identity discipline)
+
+**Class A.2 covers**: the agent-registration failure mode — the
+additive-identity rule in `threads/README.md` is currently
+**passive guidance** (prose in a README, agent-recall-dependent).
+The same failure mode applies to de-registration (`last_session`
+updates) and to stale-identity detection. Class A.2 installs
+three complementary layers so no single failure mode (forgot to
+read README; forgot to run session-handoff; tooling unused)
+leaves the register silently wrong.
+
+**Motivation**: owner question 2026-04-21 — "do we have a register
+of which agents are working on what, processes to check/
+register/de-register, means of detecting stale registrations?"
+Answer at time of question: register-side primitives present as
+prose; firing cadence absent. Self-application of the pattern
+we just extracted.
+
+**Installs**:
+
+#### 4.2.a — Session-open identity-registration rule
+
+**Destination**:
+`.agent/rules/register-identity-on-thread-join.md`
+(canonical) + `.claude/rules/register-identity-on-thread-join.md`
+(thin pointer) + `.cursor/rules/register-identity-on-thread-join.mdc`
+(with `alwaysApply: true` frontmatter + crisp `description:`).
+
+**Content**:
+
+> Before any edit, list the threads this session is touching.
+> For each thread, open its next-session record
+> (`.agent/memory/operational/threads/<slug>.next-session.md`)
+> and either (a) update `last_session` on the matching identity
+> row if your platform / model / `agent_name` match an existing
+> row (per the additive-identity rule), or (b) add a new
+> identity row if you are a new identity on this thread. Do not
+> proceed until the row is written.
+
+The rule cites the Threads/Sessions/Agent-Identity PDR from
+Session 3 Task 3.1 and the `passive-guidance-loses-to-artefact-
+gravity` pattern.
+
+**Platform parity**:
+
+- Claude: `.claude/rules/register-identity-on-thread-join.md`
+  (auto-loaded).
+- Cursor: `.cursor/rules/register-identity-on-thread-join.mdc`
+  with `alwaysApply: true` (auto-loaded).
+- Codex + Gemini: rule path listed explicitly in
+  `.agent/directives/AGENT.md` under Essential Links or
+  Grounding, so `AGENTS.md` / `GEMINI.md` entry points surface
+  it.
+
+**Acceptance**:
+
+1. ✅ Canonical rule file exists with the three-plane citation.
+2. ✅ Claude + Cursor adapter files exist.
+3. ✅ `.agent/directives/AGENT.md` references the rule path.
+4. ✅ `pnpm portability:check` reports canonical/adapter parity.
+5. ✅ The rule is self-applying: the Session 4 session that
+   installs it MUST itself register an identity row on the
+   `memory-feedback` thread before writing the rule file.
+
+#### 4.2.b — Session-close identity-update gate in `/session-handoff`
+
+**Change**: `.agent/commands/session-handoff.md` gains a **hard**
+acceptance criterion (gate fails if missing, does not merely
+warn): for every thread the session touched, the identity row's
+`last_session` is updated to the session's close date. Missing
+update blocks session close.
+
+**Supporting tooling**: `pnpm session-handoff:check` (new
+script, repo-root) scans `.agent/memory/operational/threads/*.next-session.md`
+and the session's git-log to cross-check that touched threads
+have `last_session` updated. Exits 1 if any touched thread is
+un-updated. Platform-neutral (reads thread records + git, not
+platform-specific session stores).
+
+**Acceptance**:
+
+1. ✅ `session-handoff.md` names the gate as a required step.
+2. ✅ `pnpm session-handoff:check` exists and passes on the
+   Session 4 close itself (the session that installs the gate
+   must pass the gate).
+3. ✅ Unit tests for the check live at
+   `agent-tools/tests/session-handoff-check.unit.test.ts` with
+   positive and negative fixtures (touched-thread with update
+   → pass; touched-thread without update → fail).
+
+#### 4.2.c — Platform-neutral stale-identity health probe
+
+**Destination**: new probe file under
+`agent-tools/src/core/health-probe-agent-identities.ts`
+registered in `claude-agent-ops health`'s probe list.
+
+**Naming rationale**: the probe is platform-neutral by input; it
+is registered on `claude-agent-ops health` only because that is
+the current host for the health command. A follow-on in a later
+session may rename the command to `agent-ops health` so the
+platform-neutral nature is reflected in the naming. This rename
+is **not** scoped to Session 4 — do not delay this probe on it.
+
+**Inputs (platform-neutral)**:
+
+- `.agent/memory/operational/threads/*.next-session.md`
+  (identity tables).
+- `.agent/memory/operational/repo-continuity.md § Active threads`
+  (identity column).
+- `.agent/memory/operational/tracks/*.md` (`expires_at`
+  frontmatter).
+
+**Checks**:
+
+1. Rows with `last_session` older than a configurable threshold
+   (default 14 days) on still-active threads → `warn`.
+2. Active threads with zero current identities → `warn` (orphan
+   thread).
+3. Missing required identity fields (platform / model /
+   agent_name / role / first_session / last_session) → `warn`.
+4. Track cards with `expires_at` past the current date → `warn`.
+5. Multiple identity rows for the same platform/model/agent_name
+   on the same thread (additive-rule violation — same identity
+   recorded twice instead of `last_session` update) → `warn`.
+
+**Platform parity**: by construction. The probe does not crawl
+Claude / Cursor / Codex session stores. Cross-platform live-
+session enumeration is out of scope (no current infrastructure;
+separate future plan if needed).
+
+**Acceptance**:
+
+1. ✅ Probe file exists with TSDoc documentation.
+2. ✅ Registered in `claude-agent-ops health` probe list.
+3. ✅ Unit tests at
+   `agent-tools/tests/health-probe-agent-identities.unit.test.ts`
+   cover all five checks with positive and negative fixtures.
+4. ✅ `pnpm agent-tools:claude-agent-ops health` exit code
+   honours the probe (currently documented: probes emit
+   `pass`/`warn`/`fail`; this probe defaults to `warn`, not
+   `fail`, so health-green-is-still-possible is preserved).
+5. ✅ Probe runs cleanly at Session 4 close itself (the register
+   must be self-consistent as a consequence of the session's
+   own work).
+
+### Task 4.3 — Install active-agent-register view (derivable, operational)
+
+**Destination**: new CLI subcommand
+`pnpm agent-tools:claude-agent-ops agents` (or equivalent name
+in the command roster) that prints a right-now view of "which
+agents are active on which threads" by aggregating identity
+tables from `.agent/memory/operational/threads/*.next-session.md`
+and filtering by `last_session` within the stale threshold.
+
+**Rationale**: the user question 2026-04-21 asked for a register
+of "which agents are working on what". The thread records are
+the authoritative data; a view is cheaper to maintain than a
+separate file and cannot drift from the thread records. This is
+the **operational process** side of the tripwire family — the
+layer the owner uses to see the current state on demand.
+
+**Shape**:
+
+```text
+$ pnpm agent-tools:claude-agent-ops agents
+Active threads: 2
+  observability-sentry-otel
+    - claude-code / claude-opus-4-7-1m / <agent_name> / <role> (last: 2026-04-21, fresh)
+  memory-feedback
+    - claude-code / claude-opus-4-7-1m / <agent_name> / <role> (last: 2026-04-21, fresh)
+Stale identities: 0
+Orphan threads: 0
+```
+
+**Platform parity**: by construction — reads thread records,
+which carry a `platform` field on every identity row. All
+platforms represent themselves by writing into the thread
+record; the view renders all of them uniformly.
+
+**Acceptance**:
+
+1. ✅ Subcommand exists and produces the shape above.
+2. ✅ Unit tests at
+   `agent-tools/tests/agent-register-view.unit.test.ts` cover:
+   (a) happy path (two fresh identities),
+   (b) stale identity flagged,
+   (c) orphan thread flagged,
+   (d) multiple platforms rendered uniformly.
+3. ✅ `agent-tools/README.md` `claude-agent-ops quick reference`
+   lists the new subcommand.
+4. ✅ Owner can run the command and see the right-now view.
+
+### Task 4.4 — Install Family B tripwires (memory-taxonomy meta)
 
 **Defaults** (owner may override):
 
@@ -784,7 +1042,7 @@ plan.
    present.
 3. ✅ The seam-review mechanism is documented.
 
-### Task 4.3 — Cross-plane path rules (memory-feedback execution plan Phase 3 work, folded in)
+### Task 4.5 — Cross-plane path rules (memory-feedback execution plan Phase 3 work, folded in)
 
 **Rules installed**:
 
@@ -802,12 +1060,13 @@ plan.
 1. ✅ All three path mechanisms present.
 2. ✅ Each cites the Executive-Memory Feedback Loop PDR.
 
-### Task 4.4 — Practice Core CHANGELOG + Roadmap sync
+### Task 4.6 — Practice Core CHANGELOG + Roadmap sync
 
 **Changes**:
 
 - Practice Core `CHANGELOG.md` has entries for all PDRs, amendments,
-  patterns, and rules landed in Sessions 1–4.
+  patterns, and rules landed in Sessions 1–4 (including the
+  agent-registration tripwires under Class A.2).
 - Roadmap gets a brief entry for this plan in the Adjacent section.
 - Memory-feedback execution plan gets a status update: Phase 0
   closed (answers recorded in `repo-continuity.md § Standing
@@ -816,19 +1075,59 @@ plan.
   PDR.
 - Memory-feedback strategic plan in `future/` gets a closing
   note pointing to this plan as the operational consequence.
+- `.agent/memory/operational/threads/README.md` cites the
+  Threads/Sessions/Agent-Identity PDR (Session 3 Task 3.1) by
+  number, replacing the "proposed, not yet ratified" framing;
+  the identity schema and additive rule are now PDR-backed.
+- `agent-tools/README.md` documents the new `agents` subcommand
+  and the `session-handoff:check` script.
 
 **Acceptance**:
 
-1. ✅ All four surfaces updated.
-2. ✅ Cross-references consistent.
+1. ✅ All six surfaces updated (Practice Core CHANGELOG; roadmap;
+   memory-feedback execution plan; memory-feedback strategic
+   plan; threads README; agent-tools README).
+2. ✅ Cross-references consistent (the new PDR numbers replace
+   all `PDR-NNN, pending` tokens across the repo).
+
+**Deterministic validation**:
+
+```bash
+# Zero pending-PDR placeholders should remain after Session 4
+grep -rn "PDR-NNN, pending" .agent/ docs/ | grep -v archive/
+# Expected: empty or only archive files
+```
 
 ### Session 4 close
 
 - Apply session break-point discipline.
-- Thread record: Session 4 landing reported.
+- Thread record: Session 4 landing reported. Session 4 is the
+  self-applying test for Task 4.2 — the identity-on-join rule,
+  the session-close gate, and the staleness probe must all run
+  cleanly *on this session's own close*.
+- `pnpm agent-tools:claude-agent-ops health` exits 0 (the new
+  stale-identity probe emits `warn` at worst, not `fail`, on a
+  healthy register).
+- `pnpm agent-tools:claude-agent-ops agents` renders the active-
+  agent-register view for the `memory-feedback` and
+  `observability-sentry-otel` threads (or whichever threads are
+  then live).
+- `pnpm session-handoff:check` exits 0 against this session's
+  thread-touch set.
+- `pnpm portability:check` exits 0 (new rule canonical + Claude +
+  Cursor adapters counted; AGENT.md citation present).
+- `pnpm markdownlint:root` exits 0.
 - Reviewer pass: `architecture-reviewer-barney` + `architecture-
-  reviewer-betty` (cross-plane path structural review);
-  `docs-adr-reviewer` (citation coherence).
+  reviewer-betty` (cross-plane path structural review;
+  agent-register view design review);
+  `docs-adr-reviewer` (citation coherence across new PDRs, new
+  rule, amended commands);
+  `test-reviewer` (unit coverage for the three new tool scripts —
+  stale-identity probe, session-handoff check, agent-register
+  view);
+  `security-reviewer` (IF the probe or view ends up reading
+  platform-specific session stores; otherwise SKIP per the
+  platform-neutral input decision).
 
 ---
 
@@ -958,6 +1257,13 @@ changed.
 4. ✅ Any raised limits are documented (fitness frontmatter
    + rationale in the file or a note in the arc-close napkin
    entry).
+5. ✅ `pnpm agent-tools:claude-agent-ops health` exits 0 and
+   the stale-identity probe reports no `warn` for the
+   `memory-feedback` thread at arc close (the identity row
+   for this arc's final session is fresh; no orphan thread;
+   no past-due track cards).
+6. ✅ `pnpm agent-tools:claude-agent-ops agents` renders the
+   final active-agent-register state cleanly.
 
 ### Task 6.3 — Arc close
 
@@ -989,6 +1295,9 @@ changed.
 | --- | --- |
 | Pass inherits 11-step recipe without first-principles check | Session 1 authors the pattern before the work accumulates further; the plan body stages away from the routine recipe |
 | Pass reproduces `passive-guidance` by landing the Perturbation PDR without active tripwires | Session 3 Task 3.3 requires Family A + Family B tripwires named with defaults; Session 4 installs them |
+| Class A.2 tripwires installed Claude-only, replicating the platform-specific probe anti-pattern | Session 4 Task 4.2 mandates canonical + Claude + Cursor adapters AND AGENT.md citation; probes MUST be platform-neutral by input OR provide cross-platform parity; `pnpm portability:check` is an acceptance criterion |
+| Class A.2 identity-on-join rule lands as passive guidance itself (agent forgets to read it) | Three complementary layers (rule + session-handoff gate + staleness probe) — no single failure mode fully exposes the register; the rule is also self-applying at install time |
+| Stale-identity probe emits false warns and gets ignored over time | Probe defaults to `warn` not `fail`; threshold configurable; Session 6 fitness exploration reviews probe health; pattern `passive-guidance-loses-to-artefact-gravity` re-applied if drift emerges |
 | Context exhaustion within a session | Six-session shape; session break-point discipline; thread-record-first continuity |
 | Owner-approval pacing on 3 PDRs + 2 amendments in one session | Session 3 explicitly allows sub-sessions with owner-review boundaries |
 | Fitness drift into critical zone while Sessions 1–5 tolerate hard | Owner decision 3 accepts this; Session 6 is scoped to resolve |
@@ -1070,10 +1379,29 @@ fires per-commit; Family B fires per-consolidation).
 - ✅ Napkin rotated; distilled refined; pending-graduations
   register has formal schema.
 - ✅ Three new PDRs landed (Threads/Identity,
-  Executive-Memory Feedback Loop, Perturbation Bundle).
+  Executive-Memory Feedback Loop, Perturbation Bundle with
+  two-class Family A framing).
 - ✅ Two PDR amendments landed (PDR-011, PDR-026).
-- ✅ At least four active tripwires installed (Family A + Family B).
+- ✅ **Family A tripwires installed across both classes**:
+  - Class A.1 (plan-body inherited-framing): already-landed
+    plan-body rule (S1) + standing-decision register surface.
+  - Class A.2 (agent-registration / identity discipline):
+    session-open identity-registration rule with full
+    platform parity (Claude + Cursor adapters + AGENT.md
+    citation for Codex/Gemini); session-close identity-update
+    gate in `/session-handoff` with a passing
+    `pnpm session-handoff:check` script; platform-neutral
+    stale-identity health probe with unit coverage;
+    derivable active-agent-register view available as a named
+    CLI subcommand.
+- ✅ Family B tripwires installed (memory-taxonomy meta).
 - ✅ Cross-plane path rules installed.
+- ✅ **Operational processes reliable, not just documented**:
+  `claude-agent-ops agents` renders right-now state;
+  `claude-agent-ops health` surfaces staleness;
+  `session-handoff:check` gates identity discipline; all
+  three tools platform-neutral by input or cross-platform by
+  parity.
 - ✅ Outgoing directory contains only ephemeral exchange.
 - ✅ Fitness `--strict-hard` passes.
 - ✅ Roadmap synced; memory-feedback execution plan status
@@ -1081,6 +1409,9 @@ fires per-commit; Family B fires per-consolidation).
 - ✅ `documentation-sync-log.md` records the arc.
 - ✅ Plan archived to `archive/completed/`.
 - ✅ No unresolved BLOCKER findings from close-phase reviewers.
+- ✅ No `PDR-NNN, pending` placeholders remain in live surfaces
+  (all Session 1–4 forward references resolved to concrete
+  PDR numbers).
 
 ---
 

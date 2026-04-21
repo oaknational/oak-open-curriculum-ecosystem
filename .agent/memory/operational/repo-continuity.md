@@ -1,17 +1,24 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-21 (final handoff before Session 1 of
-the staged plan — applied seven plan-authoring improvements
-including a front-loaded Family-A tripwire in Session 1, the new
-`.agent/plans/templates/components/session-discipline.md`
-component, bundle-vs-sequential rhythm in Session 3, mid-arc
-checkpoints at Sessions 3 and 5, point-in-time supersession
-markers on the dry-run archive, and a "Starting a session on a
-thread" checklist in `threads/README.md` so chat openers can
-contain only session-unique signal; earlier same-day refreshes
-covered the staged plan landing, dry-run archive, Standing
-decisions section, memory-feedback execution plan, and §L-8
-atomic landing at `f9d5b0d2`)
+**Last refreshed**: 2026-04-21 (Session 1 of the staged doctrine-
+consolidation plan landed at 6/6 — two patterns authored
+[`inherited-framing-without-first-principles-check`,
+`passive-guidance-loses-to-artefact-gravity`]; first Family-A
+tripwire rule installed at `.agent/rules/plan-body-first-
+principles-check.md` with Claude + Cursor adapters; `practice.md`
+Artefact Map refreshed for three-mode memory taxonomy;
+`repo-continuity.md § Standing decisions` extended with
+decisions 5 and 6 of the Phase 0 arc; brief experience entry
+written; the plan itself was significantly expanded for Session 4
+to add Class A.2 agent-registration / identity-discipline
+tripwires with platform parity after owner question. Earlier
+same-day refreshes covered the seven plan-authoring improvements
+including the front-loaded Family-A tripwire, the
+`session-discipline.md` template component, the "Starting a
+session on a thread" checklist, the staged plan landing itself,
+the dry-run archive, the Standing decisions section, the memory-
+feedback execution plan, and the §L-8 atomic landing at
+`f9d5b0d2`)
 **Status**: Authoritative for the fields below. Operational memory
 is the sole continuity-state host. Session orientation doctrine lives
 in [`orientation.md`](../../directives/orientation.md); landing
@@ -58,11 +65,13 @@ execution; next session begins at WS1 RED.
 
 ## Current session focus
 
-No next-session focus held by this contract — the session has
-closed. Next-session statement lives in the handoff note at the
-bottom of this session's final commit message and in the
-[next-session opening statement](#next-session-opening-statement)
-below.
+Session 1 of the staged doctrine-consolidation plan closed
+cleanly at 6/6. Next-session focus is owner-directed: either
+Session 2 of the staged plan (napkin rotation + pending-
+graduations register schema) OR resumption of the
+`observability-sentry-otel` thread's §L-8 Vercel acceptance
+probe (branch-primary). PDR-026 landing commitment is per-
+thread-per-session; pick one per next session.
 
 ## Standing decisions
 
@@ -101,6 +110,23 @@ and the decision itself as a one-to-three-line statement.
   future plan after the staged consolidation closes.
   - `recorded:` 2026-04-21
   - `reason:` scale exceeds routine consolidation; owner decision
+- **Staged execution is the shape** for the overdue consolidation
+  arc. Six sessions, each landing a bounded target per PDR-026, no
+  shortcuts, no deferred-without-cause. Each session lands its
+  target fully or explicitly re-scopes in handoff.
+  - `recorded:` 2026-04-21
+  - `reason:` owner decision during dry-run; single-pass would
+    exceed context or force partial close (dry-run tier analysis)
+- **Session break points are explicit and protected.** Every
+  session ends with handoff discipline per `session-handoff.md`
+  (thread record updated, continuity surface refreshed, napkin
+  entries captured, next-session preconditions named). Context
+  budget is the primary reason; coherence is the secondary. The
+  next session starts cold from memory surfaces, not from
+  conversation continuity.
+  - `recorded:` 2026-04-21
+  - `reason:` owner decision during dry-run; protects the
+    continuity unit from drift under context pressure
 - **Clerk is canonical user-ID provider through public alpha.**
   Revisit before public beta.
   - `recorded:` prior session (see memory: `project_user_id_clerk_canonical`)
@@ -209,9 +235,19 @@ conditions documented in the maximisation plan.
 
 ## Deep consolidation status
 
-**Queued — staged consolidation plan landed; all outstanding items
-now owned by the plan; Phase 0 owner decisions recorded above
-under Standing decisions.** Discharged across the 2026-04-20/21
+**Session 1 of the staged consolidation plan landed 2026-04-21 at
+6/6. Plan Session 4 scope expanded to Class A.2 agent-registration
+/ identity tripwires with platform parity after owner question.
+Sessions 2–6 remain queued; all outstanding items still owned by
+the plan; Phase 0 owner decisions recorded above under Standing
+decisions.**
+
+**Consolidation-gate check at 2026-04-21 (Session 1 close)**:
+NOT DUE. Napkin is above the 500-line rotation threshold but
+napkin rotation is explicitly staged to Session 2 of the owning
+plan; no other `consolidate-docs` trigger fires independently
+of the plan. Next expected gate firing: Session 2 of the staged
+plan (napkin rotation + pending-graduations register schema). Discharged across the 2026-04-20/21
 arc: prompt-fitness pressure (1628 → 145 lines dissolution);
 documentation drift on the `docs/foundation/` boundary; PDR-011
 alignment; PDR-026 landing-commitment doctrine; orientation
@@ -227,23 +263,42 @@ by the **Staged Doctrine Consolidation and Graduation** plan:
 The plan stages the work across six sessions with explicit
 break points:
 
-1. **Session 1** — Record Standing decisions (partially done above);
-   author two patterns (`inherited-framing-without-first-principles-check`,
-   `passive-guidance-loses-to-artefact-gravity`); refresh
-   `practice.md` Artefact Map; brief experience entry.
-2. **Session 2** — Napkin rotation (1324 → archive); distilled
+1. **Session 1 — LANDED 2026-04-21 at 6/6.** Standing decisions
+   section extended to include decisions 5 (staged execution as
+   the shape) and 6 (session break points explicit and
+   protected); two patterns authored (`inherited-framing-without-
+   first-principles-check`, `passive-guidance-loses-to-artefact-
+   gravity`); first Family-A tripwire rule installed at
+   `.agent/rules/plan-body-first-principles-check.md` with full
+   Claude + Cursor adapter parity and docs-adr-reviewer
+   well-formed verdict; `practice.md` Artefact Map refreshed for
+   three-mode memory taxonomy (owner-approved per PDR-003);
+   Practice Core CHANGELOG entry recorded; brief experience
+   entry at `.agent/experience/2026-04-21-installing-a-tripwire-
+   i-cannot-test.md`.
+2. **Session 2** — Napkin rotation (1324+ → archive); distilled
    merge-and-prune; formalise pending-graduations register schema;
    bind to session workflows.
 3. **Session 3** — Draft three new PDRs (Threads/Sessions/Agent
    Identity; Executive-Memory Feedback Loop; Perturbation-Mechanism
-   Bundle *with active-tripwire design*); apply two amendments
-   (PDR-011 thread-scope; PDR-026 per-thread). Owner-gated per
-   PDR-003.
-4. **Session 4** — Install Family A tripwires (plan-body
-   inherited-framing: always-applied rule + standing-decision
-   register surface); install Family B tripwires (memory-taxonomy
-   meta: per-consolidation taxonomy-check + orphan-item signal);
-   cross-plane path rules; Practice Core CHANGELOG; roadmap sync.
+   Bundle *with active-tripwire design **covering both Class A.1
+   plan-body inherited-framing AND Class A.2 agent-registration /
+   identity discipline; platform parity load-bearing***); apply
+   two amendments (PDR-011 thread-scope; PDR-026 per-thread).
+   Owner-gated per PDR-003.
+4. **Session 4 (EXPANDED 2026-04-21)** — Install Family A
+   tripwires across both classes. **Class A.1**: plan-body rule
+   forward-reference cleared to concrete PDR; standing-decision
+   register surface installed. **Class A.2**: session-open
+   identity-registration rule with full platform parity (Claude +
+   Cursor adapters + AGENT.md citation); session-close identity
+   gate in `/session-handoff` (hard gate, not warn) with
+   `pnpm session-handoff:check` script and unit tests; platform-
+   neutral stale-identity health probe registered in
+   `claude-agent-ops health` with five checks and unit coverage;
+   derivable active-agent-register view as a named CLI
+   subcommand. Install Family B tripwires (memory-taxonomy meta).
+   Cross-plane path rules. Practice Core CHANGELOG; roadmap sync.
 5. **Session 5** — Outgoing triage (PDR-007 enforcement on 10+
    files, 1481 lines); promote or delete each.
 6. **Session 6** — Holistic fitness exploration as final meta-
@@ -252,6 +307,28 @@ break points:
 
 **Deferred after arc**: experience-scan (dedicated session with
 future plan after Session 6 closes).
+
+**New 2026-04-21 PDR candidate for Session 3 of the staged plan**:
+*"Workflow-Scope Alignment to Continuity-Unit Scope"* — doctrine
+that session-scoped workflows act on session-scoped artefacts;
+thread-scoped workflows act on thread-scoped artefacts; scope is
+labelled in every workflow header and every artefact's metadata.
+Command amendments applied in-flight 2026-04-21 (`session-handoff`
+gained §6b ADR/PDR candidate surfacing and §6c subjective
+experience capture; `consolidate-docs` had its step-11 session-
+scoped capture removed; both commands carry explicit scope
+labels). PDR-011 amendment in Session 3 absorbs this work.
+
+**New 2026-04-21 pattern candidate**:
+*`durable-doctrine-states-the-why-not-only-the-what`* — doctrine
+that states rules without stating their reasons degrades to
+ritual; future sessions cannot re-derive the rule under novel
+conditions. Single instance so far (the three-reason experience-
+audit rationale, made explicit 2026-04-21 across
+`.agent/experience/README.md`, `consolidate-docs` step 4,
+`session-handoff` step 6c). Promotion-ready at Session 1 Task 1.3
+or a subsequent consolidation when a second rationale-free
+rule produces re-derivation drift.
 
 **Retroactive identity attribution for `f9d5b0d2`**: owner accepts
 the attribution gap; start forward from 2026-04-22 per the
