@@ -1,3 +1,51 @@
+## 2026-04-21 (open, memory-feedback-plan session) — Session vs thread; identity should be tracked and additive
+
+### Surprise
+
+**What was expected**: the repo's operational-memory surface would cleanly separate the multiple active threads of work (product/Sentry vs Practice/memory-feedback), making it obvious which thread a "next session" targets and which agent has worked on what.
+
+**What actually happened**: owner pointed out that `repo-continuity.md` and `next-session-opener.md` are *singular* — they speak as if one thread exists, conflating "next session" with "next session on the active thread I most recently thought about." Two agents (one on Sentry/`f9d5b0d2`, one on the memory-feedback metacognition + execution-plan authoring) have worked in parallel on disjoint threads this arc, but attribution of which-agent-did-what is absent from the surface. The stale chat-text opener I produced earlier in this session is downstream of exactly this: I read cross-thread continuity state and wrote a cross-thread opener, because the surface didn't separate the threads.
+
+**Why the expectation failed**: operational memory was designed around *sessions* as the unit, not *threads*. A session is a time-bounded agent occurrence; a thread is a work stream that persists across sessions and can accumulate identities. When the two concepts are elided, the surface loses the ability to say "the next session on *this* thread targets X; the next session on *that* thread targets Y; here are the agents that have touched each."
+
+### What behaviour should change next time
+
+1. **Thread is the continuity unit.** Each named stream of work carries its own next-session record, its own workstream brief, and its own identity table. Session-handoff updates the threads it touched; sessions that don't touch a thread leave it alone.
+2. **Identity is tracked and additive.** Every session that touches a thread records `{platform, model, session_id_prefix, agent_name, role, first_session, last_session}` on that thread. Subsequent sessions either update `last_session` on an existing row (same identity resuming) or add a new row (new identity joining). Never overwrite.
+3. **Top-level continuity is an index of active threads, not a single opener.** `repo-continuity.md` summarises active threads; each thread points to its own opener.
+
+### Installed this session (lightweight, not-yet-ratified)
+
+- New directory `.agent/memory/operational/threads/` with a `README.md` documenting the thread convention and identity schema.
+- New file `.agent/memory/operational/threads/memory-feedback.next-session.md` — this session's thread-scoped record on disk for the Practice thread.
+- Amendment to `.agent/memory/operational/repo-continuity.md`:
+  - New **Active threads** section with identity-bearing table.
+  - **Active workstreams** section retained beneath it as lane-state briefs (different lifecycle).
+  - **Next-session opening statements (per thread)** section replaces the old singular block; points at the product-thread opener and the new Practice-thread opener.
+- The product thread's legacy singular opener `next-session-opener.md` is *not* renamed this session (would be risky mid-handoff); the Active threads table marks it as migrating to `threads/observability-sentry-otel.next-session.md` at next consolidation.
+
+### Doctrine implications (for next consolidation pass)
+
+- **PDR candidate**: "Threads, Sessions, and Agent Identity" — defines the thread-as-continuity-unit shape, the identity schema, and the additive-identity rule. PDR-shaped per PDR-019 (re-derived across repos if not recorded).
+- **Rule candidate** (operationalises the PDR): a `.agent/rules/*.md` rule enforcing that a session joining an active thread adds an identity rather than overwrites.
+- **Amendment candidate** to `PDR-011` (Continuity Surfaces and Surprise Pipeline): the pipeline described there is session-scoped; extend it to thread-scoped as the upper lifecycle.
+- **Amendment candidate** to `PDR-026` (Per-Session Landing Commitment): clarify that a landing commitment is per-thread-per-session, and cross-thread spread in a single session is anti-pattern.
+- **Retroactive attribution gap**: `f9d5b0d2` landed on the product thread from a session whose agent identity is not recorded. At next consolidation, owner may choose to retroactively record an approximate identity (platform + model + date window), or accept the gap and start attribution from 2026-04-22 forward.
+
+### Pattern linkage
+
+- Second candidate instance of `passive-guidance-loses-to-artefact-gravity`: the canonical `next-session-opener.md` was bypassed by my chat-text draft written against a newer-but-stale continuity field. Per the 2026-04-21 fourth-half entry, a second documented-but-not-enforced guardrail producing a missed catch is the promotion bar — this counts.
+- Light connection to `inherited-framing-without-first-principles-check`: I inherited "singular next-session opener" as the working frame without asking whether it was right for multi-thread reality. Seventh candidate instance? Owner to judge.
+
+### Promotion candidates (surfaced for next consolidation)
+
+1. **PDR — Threads, Sessions, and Agent Identity** (new PDR).
+2. **Rule — Additive thread identity** (new rule in `.agent/rules/`, cites the PDR above).
+3. **Amendment — PDR-011 thread-scope extension**.
+4. **Amendment — PDR-026 per-thread landing clarification**.
+
+---
+
 ## 2026-04-21 (open, memory-feedback-plan session) — Chat-text opener bypassed the authoritative next-session-opener.md
 
 ### Surprise

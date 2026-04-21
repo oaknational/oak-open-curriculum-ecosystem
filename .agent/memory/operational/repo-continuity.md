@@ -12,7 +12,29 @@ commitment doctrine lives in
 [PDR-026](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md);
 rituals live in `start-right-quick` + `session-handoff`.
 
-## Active workstreams
+## Active threads
+
+A **thread** is the continuity unit — a named stream of work that
+persists across sessions and agents. A *session* is a time-bounded
+agent occurrence that participates in one or more threads.
+Convention and identity schema documented at
+[`threads/README.md`](threads/README.md) (proposed 2026-04-21;
+PDR candidate at next consolidation).
+
+| Thread | Purpose | Next-session record | Workstream brief | Active identities |
+| --- | --- | --- | --- | --- |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`next-session-opener.md`](next-session-opener.md) (legacy singular path; migrates to `threads/observability-sentry-otel.next-session.md` at next consolidation) | [`workstreams/observability-sentry-otel.md`](workstreams/observability-sentry-otel.md) | (identity attribution retroactive for `f9d5b0d2` is a gap; see napkin 2026-04-21 meta-surprise) |
+| `memory-feedback` | Practice — feedback loops across three-mode memory taxonomy; emergent-whole observation; doctrine landing | [`threads/memory-feedback.next-session.md`](threads/memory-feedback.next-session.md) | (none yet — arguably `workstreams/operational-awareness-continuity.md` covers it loosely; dedicated brief is a Phase 0 artefact of the memory-feedback execution plan) | `claude-code` / `claude-opus-4-7-1m` / agent-name unassigned / drafter / 2026-04-21 |
+
+**Identity discipline**: sessions joining an active thread **add**
+identity rows to the thread's next-session record; they do not
+overwrite or rename existing ones. See
+[`threads/README.md § Proposed rule`](threads/README.md).
+
+## Active workstreams (lane-state briefs)
+
+The workstream briefs below are long-lived "where are we in this
+lane" surfaces; they remain authoritative for lane state.
 
 - [`observability-sentry-otel`](workstreams/observability-sentry-otel.md)
   — branch-primary on `feat/otel_sentry_enhancements`.
@@ -165,6 +187,21 @@ Outstanding (must land at next consolidation pass):
   Practice doctrine via PDR, or explicitly host-local). **Now
   load-bearing**: Phase 0.2 of the memory-feedback execution plan
   branches on this answer.
+- **Thread / session / identity doctrine bundle** (new, 2026-04-21
+  memory-feedback-plan session): PDR candidate *"Threads, Sessions,
+  and Agent Identity"* + rule candidate *"Additive thread
+  identity"* + amendment candidates to PDR-011 (thread-scope
+  extension) and PDR-026 (per-thread landing clarification).
+  Installed lightweight this session at
+  [`threads/`](threads/) (README + `memory-feedback.next-session.md`);
+  formal doctrine awaits ratification. See napkin entry
+  *"Session vs thread; identity should be tracked and additive"*
+  for rationale.
+- **Retroactive identity attribution gap**: the product thread's
+  `f9d5b0d2` landing has no recorded session identity. Owner
+  decides at next consolidation whether to backfill an approximate
+  identity (platform + model + date window) or to accept the gap
+  and start attribution from 2026-04-22 forward.
 
 The broader gap — feedback loops across memory planes, emergent-
 whole observation, executive-memory drift detection — has been
@@ -179,9 +216,24 @@ Phase 0 of the execution plan carries two owner-gated decisions
 Phase 1 graduates the four overdue items listed above as its
 first move. The plan does not start until Phase 0 answers exist.
 
-## Next-session opening statement
+## Next-session opening statements (per thread)
 
-See [`next-session-opener.md`](next-session-opener.md) — landing
-target is §L-8 WS1 RED (Sentry integration for public alpha);
-standing decisions (owner-beats-plan) are listed; grounding order
-and session shape specified.
+There is no single next-session opener. The continuity unit is the
+thread; each active thread holds its own next-session record. Pick
+the thread the session is picking up before reading the opener.
+
+- **`observability-sentry-otel` thread** (product): see
+  [`next-session-opener.md`](next-session-opener.md). Landing
+  target: §L-8 WS1 Vercel preview acceptance probe (per the
+  authoritative file; supersedes any earlier "WS1 RED" text on
+  this page). Standing decisions (owner-beats-plan) and session
+  shape specified in the opener.
+- **`memory-feedback` thread** (Practice): see
+  [`threads/memory-feedback.next-session.md`](threads/memory-feedback.next-session.md).
+  Landing target: Phase 0 owner-gated decisions (three-plane
+  ratification + portability). Thread-scoped identity table and
+  grounding order specified in the file.
+
+**PDR-026 landing-commitment discipline**: a single session
+commits to landing *one* thread's target, not multiple. Cross-
+thread spread in the same session is anti-pattern.

@@ -42,11 +42,11 @@
     "test:widget:a11y": "playwright test --config playwright.widget.config.ts --grep @a11y"
   },
   "dependencies": {
-    "@clerk/backend": "^3.2.7",
-    "@clerk/express": "^2.0.11",
+    "@clerk/backend": "^3.2.13",
+    "@clerk/express": "^2.1.5",
     "@clerk/mcp-tools": "~0.3.1",
     "@elastic/elasticsearch": "^9.3.4",
-    "@modelcontextprotocol/ext-apps": "^1.5.0",
+    "@modelcontextprotocol/ext-apps": "^1.6.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@oaknational/build-metadata": "workspace:*",
     "@oaknational/curriculum-sdk": "workspace:*",

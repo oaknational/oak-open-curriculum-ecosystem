@@ -143,11 +143,11 @@ importers:
   apps/oak-curriculum-mcp-streamable-http:
     dependencies:
       '@clerk/backend':
-        specifier: ^3.2.7
-        version: 3.2.8(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        specifier: ^3.2.13
+        version: 3.2.13(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@clerk/express':
-        specifier: ^2.0.11
-        version: 2.1.0(express@5.2.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        specifier: ^2.1.5
+        version: 2.1.5(express@5.2.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@clerk/mcp-tools':
         specifier: ~0.3.1
         version: 0.3.1(zod@4.3.6)
@@ -155,8 +155,8 @@ importers:
         specifier: ^9.3.4
         version: 9.3.4
       '@modelcontextprotocol/ext-apps':
-        specifier: ^1.5.0
-        version: 1.5.0(@modelcontextprotocol/sdk@1.29.0(zod@4.3.6))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(zod@4.3.6)
+        specifier: ^1.6.0
+        version: 1.6.0(@modelcontextprotocol/sdk@1.29.0(zod@4.3.6))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(zod@4.3.6)
       '@modelcontextprotocol/sdk':
         specifier: ^1.29.0
         version: 1.29.0(zod@4.3.6)
@@ -1233,12 +1233,12 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@clerk/backend@3.2.8':
-    resolution: {integrity: sha512-N9yqCQCdkn/4XpfiVnaoS6wXDeC2yQf85ioHGolOIOCWXOPwMd63fONUfRhwOZSlXGTAsgyUNZu87Ps0tcVYsg==}
+  '@clerk/backend@3.2.13':
+    resolution: {integrity: sha512-E4ir94gs9Cxh+v20SGVLXblb0coVUd2La5o1Lmz7olNOBimMEsZ7T6MpGFNJveEH1sQ+HhSf1a1uLm9pMiK/tg==}
     engines: {node: '>=20.9.0'}
 
-  '@clerk/express@2.1.0':
-    resolution: {integrity: sha512-PZl40IyJah1Ox2g9As5vaRVXYzNuHYPS5CulUUjgYrRA5DhlSn+3Hkv7FBXmar7rj2o2bxQe44JXVFs4xcqhmw==}
+  '@clerk/express@2.1.5':
+    resolution: {integrity: sha512-bL/OZntee0OvTV0uTGxQMnvC2YstZMT/UJWaQfwdFCmSz8gvMcnCFupGVwFWqU4N19MgppYBBV1fw1tYCCiTMA==}
     engines: {node: '>=20.9.0'}
     peerDependencies:
       express: ^4.17.0 || ^5.0.0
@@ -1257,8 +1257,8 @@ packages:
       redis:
         optional: true
 
-  '@clerk/shared@4.6.0':
-    resolution: {integrity: sha512-dtbsO/+xK5e+qWuOAY1ekZ8BJxsB0F0LYDpXWjRON7JSoFKSaqqaH5cwBvdjbbWaehb6jz1YUQmWVV8gBOx6Ag==}
+  '@clerk/shared@4.8.2':
+    resolution: {integrity: sha512-kBFDNeLdiNZkOHavTkOB00NMuqsmOGgVtDlzCS0/yivxsCUZXk3AT6+UsTfeSBGV7QD80YxjeFMNSrpqnSv4Gg==}
     engines: {node: '>=20.9.0'}
     peerDependencies:
       react: ^18.0.0 || ~19.0.3 || ~19.1.4 || ~19.2.3 || ~19.3.0-0
@@ -1761,8 +1761,8 @@ packages:
   '@microsoft/tsdoc@0.16.0':
     resolution: {integrity: sha512-xgAyonlVVS+q7Vc7qLW0UrJU7rSFcETRWsqdXZtjzRU8dF+6CkozTK4V4y1LwOX7j8r/vHphjDeMeGI4tNGeGA==}
 
-  '@modelcontextprotocol/ext-apps@1.5.0':
-    resolution: {integrity: sha512-q4fut89TOoP2LEPHSGfZErIf1K1xOTTzV+41h/bB2BqKw2gKb0uLKbHusOy1UtbY0puS16zBho/vFp3f5XMVbQ==}
+  '@modelcontextprotocol/ext-apps@1.6.0':
+    resolution: {integrity: sha512-j80Hv9kSALu7luR+DtoYERlRaehu6cY2wlHEjG3h36C98bbYzA/nxOEvtGhhKd2ssCwC0BG3+gdh7y3sE5m0tQ==}
     engines: {node: '>=20'}
     peerDependencies:
       '@modelcontextprotocol/sdk': ^1.29.0
@@ -7272,19 +7272,19 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@clerk/backend@3.2.8(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@clerk/backend@3.2.13(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
-      '@clerk/shared': 4.6.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@clerk/shared': 4.8.2(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       standardwebhooks: 1.0.0
       tslib: 2.8.1
     transitivePeerDependencies:
       - react
       - react-dom
 
-  '@clerk/express@2.1.0(express@5.2.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@clerk/express@2.1.5(express@5.2.1)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
-      '@clerk/backend': 3.2.8(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@clerk/shared': 4.6.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@clerk/backend': 3.2.13(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@clerk/shared': 4.8.2(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       express: 5.2.1
       tslib: 2.8.1
     transitivePeerDependencies:
@@ -7299,7 +7299,7 @@ snapshots:
       - supports-color
       - zod
 
-  '@clerk/shared@4.6.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@clerk/shared@4.8.2(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
       '@tanstack/query-core': 5.90.16
       dequal: 2.0.3
@@ -7775,7 +7775,7 @@ snapshots:
 
   '@microsoft/tsdoc@0.16.0': {}
 
-  '@modelcontextprotocol/ext-apps@1.5.0(@modelcontextprotocol/sdk@1.29.0(zod@4.3.6))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(zod@4.3.6)':
+  '@modelcontextprotocol/ext-apps@1.6.0(@modelcontextprotocol/sdk@1.29.0(zod@4.3.6))(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(zod@4.3.6)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.29.0(zod@4.3.6)
       zod: 4.3.6

@@ -1,7 +1,20 @@
 # Memory Feedback and Emergent-Learning Mechanisms — Strategic Plan
 
-**Status**: NOT STARTED
+**Status**: NOT STARTED — execution plan queued in `current/` (owner-gated at Phase 0)
 **Domain**: Agentic Engineering Enhancements
+
+> **Operational note (2026-04-21)**: An execution plan has been
+> authored at
+> [`../current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md`](../current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md),
+> with first- and second-pass reflection at
+> [`memory-feedback-and-emergent-learning-mechanisms.metacognition.md`](memory-feedback-and-emergent-learning-mechanisms.metacognition.md).
+> The execution plan supersedes this strategic brief operationally;
+> this brief remains authoritative for intent, rationale, and the
+> original promotion criteria (retained as historical context).
+> The execution plan is owner-gated at Phase 0 (three-plane
+> ratification + portability decision) and does not start until
+> both answers exist.
+
 **Related conversation**:
 [`missing-mechanisms-lack-of-wholes.md`](../../../reference/agentic-engineering/conversations/missing-mechanisms-lack-of-wholes.md)
 **Related doctrine**:
