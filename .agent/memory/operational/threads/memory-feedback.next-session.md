@@ -188,6 +188,19 @@ install`.
 > grounded by PDR-029, PDR-027, PDR-028, PDR-030, and the
 > PDR-011/PDR-026 amendments landed in Session 3):
 >
+> 0. **Task 4.0 (tooling prerequisite)** — Author platform-
+>    agnostic commit skill at `.agent/skills/jc-commit/` with
+>    Claude + Cursor + Codex adapters per PDR-009. Skill reads
+>    the repo's commitlint config at invocation time, enumerates
+>    header-length and subject-case constraints inline before
+>    the agent drafts, and offers a format-check pass before
+>    `git commit` runs. Installs under PDR-029's design
+>    principles (firing cadence first; two complementary layers
+>    target). Formal PDR-029 Class A.3 amendment deferred —
+>    install first, observe, amend if a second similar class
+>    emerges. Owner-directed fold-in 2026-04-21 (option **b**
+>    from session-3-close scheduling question). Consumes the
+>    `platform-agnostic-commit-skill` register item.
 > 1. **Task 4.1** — Install Family A Class A.1 second layer
 >    (standing-decision register surface), update the plan-body
 >    rule's forward reference to cite PDR-029 directly, extend

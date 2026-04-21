@@ -12,7 +12,7 @@ todos:
     content: "Session 3: Landed 6/6 under bundle rhythm — 4 new portable PDRs (PDR-027 Threads/Identity, PDR-028 Executive-Memory Feedback Loop, PDR-029 Perturbation-Mechanism Bundle with Family A Classes A.1 + A.2 + Family B + platform parity load-bearing, PDR-030 Plane-Tag Vocabulary authored mid-bundle from docs-adr-reviewer OWNER-DECISION 1) + 2 amendments (PDR-011 thread-scope, PDR-026 per-thread-per-session + Notes/Graduation-intent structural refactor). All owner-approved per PDR-003. Mid-arc checkpoint 1 outcome: proceed."
     status: completed
   - id: s4-tripwires-cross-linking
-    content: "Session 4: Install Family A tripwires covering two classes — (a) plan-body inherited-framing (standing-decision register surface; plan-body rule already landed in S1) and (b) agent-registration / identity discipline (session-open identity rule; session-close de-register gate in session-handoff with structural thread enumeration; platform-neutral stale-identity health probe with six checks including active-thread/next-session-file correspondence; derivable active-agent-register view). Amend start-right-quick + start-right-thorough to name threads/README.md. Migrate observability-sentry-otel next-session record from legacy singular path to threads/. Install Family B (memory-taxonomy meta) tripwires. Cross-plane path rules (incl. distilled citation of passive-guidance pattern). Practice Core CHANGELOG + roadmap sync. Platform parity required: Claude + Cursor adapters + AGENT.md citation (rules-tier citation already landed in S2 extended scope); probe inputs platform-neutral; session-handoff:check enumerates threads structurally (does not self-report)."
+    content: "Session 4 (EXPANDED 2026-04-21 owner fold-in, option b): Task 4.0 tooling prerequisite — author platform-agnostic commit skill (.agent/skills/jc-commit/) with Claude + Cursor + Codex adapters per PDR-009, reading repo's commitlint config and surfacing header-length and subject-case constraints at draft time plus format-check before git commit; installs under PDR-029 design principles without a formal Class A.3 amendment yet. Then Install Family A tripwires covering two classes — (a) plan-body inherited-framing (standing-decision register surface; plan-body rule already landed in S1) and (b) agent-registration / identity discipline (session-open identity rule; session-close de-register gate in session-handoff with structural thread enumeration; platform-neutral stale-identity health probe with six checks including active-thread/next-session-file correspondence; derivable active-agent-register view). Amend start-right-quick + start-right-thorough to name threads/README.md. Migrate observability-sentry-otel next-session record from legacy singular path to threads/. Install Family B (memory-taxonomy meta) tripwires. Cross-plane path rules (incl. distilled citation of passive-guidance pattern). Practice Core CHANGELOG + roadmap sync. Platform parity required: Claude + Cursor adapters + AGENT.md citation (rules-tier citation already landed in S2 extended scope); probe inputs platform-neutral; session-handoff:check enumerates threads structurally (does not self-report)."
     status: pending
   - id: s5-outgoing-triage
     content: "Session 5: Audit the 10+ outgoing/ files per PDR-007; each file promotes to a durable home or is deleted as staging artefact."
@@ -782,6 +782,118 @@ operational processes** that actually fire on the right cadence.
 Doctrine without firing cadence is the `passive-guidance-loses-
 to-artefact-gravity` failure mode; Session 4 must not reproduce
 it in its own extraction.
+
+### Task 4.0 — Author platform-agnostic commit skill (tooling prerequisite)
+
+**Why front-loaded**: owner-directed fold-in at Session 3 close
+(2026-04-21, option **b** from the scheduling question after
+observing *"that happens a lot, we need a platform agnostic
+commit skill that lays out the commit format requirements"*).
+Session 4 will author many new artefacts and commit them in
+tranches; having the commit skill in place first amortises
+across those commits and closes the passive-guidance exposure
+window on commit authoring at the same time Session 4 closes
+the windows on plan-body inheritance (Class A.1) and agent-
+registration (Class A.2).
+
+**Motivating failure mode**: `passive-guidance-loses-to-
+artefact-gravity` (PDR-029's motivating pattern) applied to
+commit authoring. Commitlint rules fire at commit-msg hook time
+but not at draft time. Every session hits rework: subject-case
+violations, header-length violations, missing Co-Authored-By
+footer. The hook is a tripwire, but a post-hoc one; by then
+the full message has been drafted and must be re-authored. The
+skill installs a pre-draft tripwire: constraints are enumerated
+inline BEFORE the agent drafts, not AFTER the commit-msg hook
+rejects.
+
+**Destinations**:
+
+- **Canonical**: `.agent/skills/jc-commit/shared/jc-commit.md`
+  (or equivalent canonical location per repo's skill
+  convention).
+- **Claude adapter**: `.claude/skills/jc-commit/SKILL.md`.
+- **Cursor adapter**: `.cursor/skills/jc-commit/SKILL.md`.
+- **Codex adapter**: `.agents/skills/jc-commit/SKILL.md`.
+- **AGENT.md citation**: skill path listed in
+  `.agent/directives/AGENT.md` development-commands or essential
+  skills section so non-loader platforms discover it at session
+  open.
+
+**Skill behaviour**:
+
+1. Read the repo's commitlint config at invocation time —
+   check for `commitlint.config.{js,cjs,mjs,ts}`,
+   `.commitlintrc.{json,yaml,yml}`, `package.json`
+   `commitlint` field, or `.husky/commit-msg`. Fall back
+   gracefully if none found.
+2. Enumerate the constraints inline before drafting:
+   - Header maximum length (from `header-max-length` rule).
+   - Subject-case restrictions (from `subject-case` rule —
+     typically lowercase-start, acronyms preserved).
+   - Type vocabulary (from `type-enum` rule — typically
+     `feat`/`fix`/`chore`/`docs`/`refactor`/`test`/`style`).
+   - Scope rules if configured.
+   - Required footers (Co-Authored-By when collaborating; any
+     repo-specific trailers).
+3. Offer a format-check pass before invoking `git commit` —
+   verify the drafted header against enumerated constraints;
+   if any constraint fails, surface the mismatch and the
+   agent re-drafts before hitting the hook.
+4. Provide a HEREDOC-wrapped invocation template that
+   preserves multi-line body formatting.
+
+**Platform parity requirement (load-bearing, per PDR-029)**:
+
+- Canonical skill body is the source of truth; adapters are
+  thin pointers.
+- Constraint-enumeration logic reads repo files (commitlint
+  config, husky config, package.json) — platform-neutral
+  inputs.
+- No platform-specific config-reading; every platform's
+  adapter points at the same canonical skill.
+- `pnpm portability:check` must pass on the adapter parity.
+
+**Acceptance Criteria**:
+
+1. ✅ Canonical skill file exists at
+   `.agent/skills/jc-commit/shared/jc-commit.md` (or
+   equivalent canonical location).
+2. ✅ Claude, Cursor, and Codex adapter files exist and are
+   thin pointers to the canonical.
+3. ✅ `.agent/directives/AGENT.md` cites the skill path.
+4. ✅ `pnpm portability:check` reports canonical/adapter parity.
+5. ✅ Skill reads the repo's commitlint config programmatically
+   (not hard-coded) and enumerates at least
+   `header-max-length`, `subject-case`, `type-enum`.
+6. ✅ Skill is **self-applying**: the Session 4 commit that
+   lands the skill uses the skill to draft its own message.
+7. ✅ A brief test — running the skill against this repo's
+   commitlint config — produces the observed constraints
+   (header ≤100 chars; subject-case restrictions; conventional-
+   commits type vocabulary).
+
+**Formal PDR-029 Class A.3 amendment**: DEFERRED. Install the
+skill as an instance applying PDR-029's design principles
+(firing cadence first; platform parity load-bearing; two
+complementary layers target — skill as read-trigger + format-
+check as workflow-invocation gate). If a second similar
+artefact-gravity class emerges in a future session (e.g.
+issue-title authoring, PR-body authoring), propose the formal
+PDR-029 amendment at that point with both new classes in
+scope, which is honest doctrine accumulation (second instance
+triggers promotion) rather than single-instance generalisation.
+
+**Deterministic Validation**:
+
+```bash
+ls .agent/skills/jc-commit/
+ls .claude/skills/jc-commit/SKILL.md
+ls .cursor/skills/jc-commit/SKILL.md
+ls .agents/skills/jc-commit/SKILL.md
+grep -n "jc-commit" .agent/directives/AGENT.md
+pnpm portability:check
+```
 
 ### Task 4.1 — Install Family A Class A.1 tripwires (plan-body inherited-framing)
 
