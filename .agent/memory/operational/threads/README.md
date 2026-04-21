@@ -74,3 +74,78 @@ at the top. Fields:
 
 This rule becomes a `.agent/rules/*.md` entry once ratified as a
 PDR at the next consolidation pass.
+
+## Starting a session on a thread
+
+Use this checklist when picking up a thread in a new session. A
+chat opener that invokes this checklist only needs to name what is
+unique to the session (thread name, plan reference, any
+session-specific signal); the checklist handles the rest.
+
+### Read, in order
+
+1. [`../repo-continuity.md`](../repo-continuity.md) end-to-end —
+   especially `§ Active threads`, `§ Standing decisions`, and
+   `§ Deep consolidation status`.
+2. The thread's next-session record at
+   `.agent/memory/operational/threads/<thread-slug>.next-session.md`.
+3. The plan or workstream brief referenced in the next-session
+   record's *Landing target* block.
+4. Any source surfaces the landing target names (napkin entries,
+   pattern files, existing PDRs). Follow the explicit links.
+5. Foundation directives: `principles.md`, `testing-strategy.md`,
+   `schema-first-execution.md`, `metacognition.md`,
+   `orientation.md`.
+6. If the plan references
+   [`../../../plans/templates/components/session-discipline.md`](../../../plans/templates/components/session-discipline.md),
+   read it — it defines the session-count / checkpoint /
+   context-budget / metacognition-at-open conventions.
+
+### Before any edits
+
+- **Update the identity row.** Add your row to the thread's
+  `Participating agent identities` table per the additive-identity
+  rule above. If you match an existing row's
+  platform/model/agent_name, update `last_session` on that row
+  instead. Do not proceed until the row is written.
+- **Apply metacognition at session open** (per session-discipline
+  component §4 if the plan is multi-session; always a good
+  default): *"What did I inherit here? Has it been ratified from
+  first principles? Does its shape still fit?"* Invoke
+  `/jc-metacognition` against the plan if uncertain.
+
+### During the session
+
+- Respect context-budget discipline from the session-discipline
+  component (wall-clock ~30 min / three-quarters context
+  threshold triggers close at next natural boundary).
+- Do not cross to a different thread mid-session — PDR-026 landing
+  commitment is per-thread per-session.
+- Honour the thread's standing decisions listed in
+  `repo-continuity.md § Standing decisions`.
+
+### At session close
+
+- Run `/session-handoff` per its command spec.
+- Refresh the thread record (landing outcome, identity row's
+  `last_session`, next-session preconditions).
+- Delete the thread record's `Landing target` block only when all
+  its deliverables have landed and been verified.
+
+### What a chat opener needs to contain
+
+Only the session-unique signal:
+
+- Thread name.
+- Session number and plan reference (path to the plan + which
+  session within it, if multi-session).
+- Any owner-chosen session-scoped decision (e.g. "Bundle rhythm
+  chosen for this session" per a plan's optional branches).
+- Optional: pointer to the next-session record's landing target
+  block for convenience.
+
+The chat opener should **not** restate the checklist above. If an
+opener finds itself listing grounding order, identity discipline,
+context-budget rules, or close discipline, that is passive-guidance
+drift — the surfaces already hold them. Shorten the opener; the
+checklist fires on arrival.

@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  axios: '>=1.13.5'
+  axios: '>=1.15.1'
   brace-expansion: '>=5.0.5'
   csstype: '>=3.2.3'
   file-type: '>=21.3.2'
@@ -3315,7 +3315,7 @@ packages:
   '@zodios/core@10.9.6':
     resolution: {integrity: sha512-aH4rOdb3AcezN7ws8vDgBfGboZMk2JGGzEq/DtW65MhnRxyTGRuLJRWVQ/2KxDgWvV2F5oTkAS+5pnjKbl0n+A==}
     peerDependencies:
-      axios: '>=1.13.5'
+      axios: '>=1.15.1'
       zod: ^3.x
 
   accepts@1.3.8:
@@ -3502,8 +3502,8 @@ packages:
     resolution: {integrity: sha512-byD6KPdvo72y/wj2T/4zGEvvlis+PsZsn/yPS3pEO+sFpcrqRpX/TJCxvVaEsNeMrfQbCr7w163YqoD9IYwHXw==}
     engines: {node: '>=4'}
 
-  axios@1.15.0:
-    resolution: {integrity: sha512-wWyJDlAatxk30ZJer+GeCWS209sA42X+N5jU2jy6oHTp7ufw8uzUTVFBX9+wTfAlhiJXGS0Bq7X6efruWjuK9Q==}
+  axios@1.15.1:
+    resolution: {integrity: sha512-WOG+Jj8ZOvR0a3rAn+Tuf1UQJRxw5venr6DgdbJzngJE3qG7X0kL83CZGpdHMxEm+ZK3seAbvFsw4FfOfP9vxg==}
 
   balanced-match@4.0.4:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
@@ -9335,9 +9335,9 @@ snapshots:
 
   '@zod/core@0.11.6': {}
 
-  '@zodios/core@10.9.6(axios@1.15.0)(zod@3.25.76)':
+  '@zodios/core@10.9.6(axios@1.15.1)(zod@3.25.76)':
     dependencies:
-      axios: 1.15.0
+      axios: 1.15.1
       zod: 3.25.76
 
   accepts@1.3.8:
@@ -9539,7 +9539,7 @@ snapshots:
 
   axe-core@4.11.2: {}
 
-  axios@1.15.0:
+  axios@1.15.1:
     dependencies:
       follow-redirects: 1.16.0
       form-data: 4.0.5
@@ -11836,8 +11836,8 @@ snapshots:
     dependencies:
       '@apidevtools/swagger-parser': 10.1.1(openapi-types@12.1.3)
       '@liuli-util/fs-extra': 0.1.0
-      '@zodios/core': 10.9.6(axios@1.15.0)(zod@3.25.76)
-      axios: 1.15.0
+      '@zodios/core': 10.9.6(axios@1.15.1)(zod@3.25.76)
+      axios: 1.15.1
       cac: 6.7.14
       handlebars: 4.7.9
       openapi-types: 12.1.3

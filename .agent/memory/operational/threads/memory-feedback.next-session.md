@@ -38,32 +38,54 @@ existing rows. Same platform/model/agent_name → update
 
 ## Landing target (per PDR-026)
 
+**Updated 2026-04-21** — Phase 0 of the memory-feedback execution
+plan **landed this session**. Owner returned both answers and
+added four further standing decisions; all six live in
+`.agent/memory/operational/repo-continuity.md § Standing decisions`.
+
 State at next-session open on this thread:
 
-> **Target**: Phase 0 of the memory-feedback execution plan is
-> closed — owner has returned explicit answers on both owner-gated
-> decisions:
+> **Target**: close Session 1 of the *Staged Doctrine
+> Consolidation and Graduation* plan at
+> [`../../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md`](../../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md).
 >
-> - **0.1**: ratification (or amendment) of the three-plane memory
->   taxonomy (`active/` / `operational/` / `executive/`) as the
->   working frame.
-> - **0.2**: portability decision on the taxonomy — portable
->   Practice doctrine (PDR in `practice-core/decision-records/`)
->   or host-local doctrine (file in this repo only, recorded in
->   `repo-continuity.md § Standing decisions`).
+> Session 1 deliverables (all six, no partial close; see plan
+> Tasks 1.1–1.6):
 >
-> Both answers land in `repo-continuity.md § Standing decisions`
-> (or the Phase 1.2 standing-decision-register artefact, whichever
-> exists at that time). Phase 1 (graduate overdue content) becomes
-> the immediately-following lane after Phase 0 closes.
+> 1. Standing decisions section in `repo-continuity.md` extended
+>    if anything surfaces during the session's foundation re-read
+>    (Task 1.1 — largely done 2026-04-21; review only).
+> 2. Pattern authored:
+>    `.agent/memory/active/patterns/inherited-framing-without-first-principles-check.md`
+>    (six instances, three-clause check) (Task 1.2).
+> 3. Pattern authored:
+>    `.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md`
+>    (two instances, Heath-brothers framing) (Task 1.3).
+> 4. **First Family-A tripwire installed** (front-loaded per
+>    improvement #1 of the plan-authoring reflection): rule at
+>    `.agent/rules/plan-body-first-principles-check.md` citing
+>    the pattern from deliverable 2 and forward-referencing the
+>    Session 3 Perturbation Bundle PDR (Task 1.4).
+> 5. `practice.md` Artefact Map row for `.agent/memory/`
+>    refreshed to describe the three modes; Practice Core
+>    `CHANGELOG.md` updated; owner-approved per PDR-003
+>    (Task 1.5).
+> 6. Optional brief experience entry if the session produces a
+>    reflective surplus (Task 1.6).
 
-Evidence to capture in the napkin or `repo-continuity.md` once
-Phase 0 lands:
+Phase 0 resolution recorded (for historical reference):
 
-- The exact wording of the owner's answer to each question.
-- The location the answers were recorded.
-- Any amendments to the three-plane taxonomy (if the frame was not
-  ratified as-is).
+- **Three-plane frame**: RATIFIED; meta-tripwires required
+  (Family B installs in staged plan's Session 4).
+- **Portability**: PORTABLE. All downstream doctrine lands as
+  Practice-Core PDRs.
+- **Fitness**: NOT blocking Sessions 1–5 of the staged plan;
+  Session 6 is a holistic fitness exploration.
+- **Experience scan**: separate session with its own plan, after
+  staged plan closes.
+- **Shape**: staged six sessions with explicit break points.
+- **`f9d5b0d2` identity attribution**: accept gap; attribute
+  forward from 2026-04-22.
 
 ## Session shape (when this thread is next picked up)
 

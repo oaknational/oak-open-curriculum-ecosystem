@@ -36,6 +36,7 @@ sections.
 | [`adversarial-review.md`](components/adversarial-review.md) | Post-implementation specialist review phase |
 | [`evidence-and-claims.md`](components/evidence-and-claims.md) | Claim classification and evidence/verification requirements |
 | [`documentation-propagation.md`](components/documentation-propagation.md) | Required ADR/directive/reference-doc and README update propagation |
+| [`session-discipline.md`](components/session-discipline.md) | Multi-session execution discipline: template-not-contract count, mid-arc checkpoints, context-budget thresholds, metacognition at session open |
 
 ## Document Hierarchy
 

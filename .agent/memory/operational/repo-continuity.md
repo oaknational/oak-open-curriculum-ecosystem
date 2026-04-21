@@ -1,10 +1,17 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-21 (memory-feedback execution plan
-landed — metacognition file + execution plan authored in the
-`agentic-engineering-enhancements` collection; prior refresh
-covered §L-8 WS1 RED pause and §L-8 WS1+WS2+WS3.1 atomic landing
-at `f9d5b0d2`)
+**Last refreshed**: 2026-04-21 (final handoff before Session 1 of
+the staged plan — applied seven plan-authoring improvements
+including a front-loaded Family-A tripwire in Session 1, the new
+`.agent/plans/templates/components/session-discipline.md`
+component, bundle-vs-sequential rhythm in Session 3, mid-arc
+checkpoints at Sessions 3 and 5, point-in-time supersession
+markers on the dry-run archive, and a "Starting a session on a
+thread" checklist in `threads/README.md` so chat openers can
+contain only session-unique signal; earlier same-day refreshes
+covered the staged plan landing, dry-run archive, Standing
+decisions section, memory-feedback execution plan, and §L-8
+atomic landing at `f9d5b0d2`)
 **Status**: Authoritative for the fields below. Operational memory
 is the sole continuity-state host. Session orientation doctrine lives
 in [`orientation.md`](../../directives/orientation.md); landing
@@ -56,6 +63,62 @@ closed. Next-session statement lives in the handoff note at the
 bottom of this session's final commit message and in the
 [next-session opening statement](#next-session-opening-statement)
 below.
+
+## Standing decisions
+
+Standing decisions are durable owner-ratifications that govern
+current and future sessions until explicitly superseded. They are
+the precursor surface to the formal standing-decision register
+that will land in Session 4 of the staged consolidation plan
+(see Deep consolidation status). Recording convention: each
+decision has `recorded:` (date), `reason:` (short provenance),
+and the decision itself as a one-to-three-line statement.
+
+- **Three-plane memory taxonomy RATIFIED as the working frame**,
+  with meta-tripwires required to periodically re-evaluate seam
+  correctness, missing concepts, and abstraction level. Family B
+  tripwires land in Session 4 of the staged consolidation plan.
+  - `recorded:` 2026-04-21
+  - `reason:` owner decision during dry-run of `/jc-consolidate-docs`
+    after the memory-feedback-plan session
+- **Three-plane memory taxonomy PORTABLE.** Lands as a Practice-
+  Core PDR. Downstream Executive-Memory Feedback Loop PDR and
+  Threads/Sessions/Agent-Identity PDR also land as portable PDRs.
+  - `recorded:` 2026-04-21
+  - `reason:` same owner decision as above
+- **Fitness functions NOT BLOCKING for graduation work in the
+  staged consolidation plan's Sessions 1–5.** `pnpm practice:fitness
+  --strict-hard` is tolerated to fail at Sessions 1–5 close.
+  Session 6 is scoped as a holistic fitness exploration; strict
+  closure required there.
+  - `recorded:` 2026-04-21
+  - `reason:` owner decision to avoid fitness remediation blocking
+    the overdue doctrine graduation; holistic exploration is the
+    right shape for fitness at this scale
+- **Experience scan is a separate session with its own plan.**
+  `.agent/experience/` (128 files from 2025-01 onward) is too
+  large for step 4 of a single consolidation pass. Queued as
+  future plan after the staged consolidation closes.
+  - `recorded:` 2026-04-21
+  - `reason:` scale exceeds routine consolidation; owner decision
+- **Clerk is canonical user-ID provider through public alpha.**
+  Revisit before public beta.
+  - `recorded:` prior session (see memory: `project_user_id_clerk_canonical`)
+  - `reason:` architectural decision during alpha-gate work
+- **`--no-verify` requires fresh per-commit owner authorisation.**
+  No carry-forward across commits.
+  - `recorded:` prior session
+  - `reason:` hook-skipping discipline
+- **Owner's word beats plan. Always.** When a plan's non-goals
+  or framing contradicts a statement by the owner (in conversation
+  or recorded memory), the owner wins without argument.
+  - `recorded:` 2026-04-20 (commit `363037af`)
+  - `reason:` prior-session agent drift surfaced repeatedly against
+    owner's standing decisions
+
+Standing decisions migrate to the formal standing-decision
+register artefact when Session 4 of the staged consolidation plan
+installs it.
 
 ## Repo-wide invariants / non-goals
 
@@ -146,75 +209,62 @@ conditions documented in the maximisation plan.
 
 ## Deep consolidation status
 
-**Due — pattern graduation still overdue; memory-feedback execution
-plan now queued and owner-gated at Phase 0; dedicated consolidation
-pass required.** Discharged across the 2026-04-20/21 arc: prompt-
-fitness pressure (1628 → 145 lines dissolution); documentation
-drift on the `docs/foundation/` boundary; PDR-011 alignment;
-PDR-026 landing-commitment doctrine; orientation directive; memory
-taxonomy restructure; reviewer catalogue re-homed to executive
-memory.
+**Queued — staged consolidation plan landed; all outstanding items
+now owned by the plan; Phase 0 owner decisions recorded above
+under Standing decisions.** Discharged across the 2026-04-20/21
+arc: prompt-fitness pressure (1628 → 145 lines dissolution);
+documentation drift on the `docs/foundation/` boundary; PDR-011
+alignment; PDR-026 landing-commitment doctrine; orientation
+directive; memory taxonomy restructure; reviewer catalogue re-homed
+to executive memory.
 
-Outstanding (must land at next consolidation pass):
+The overdue backlog + the new doctrine bundle are now sequenced
+by the **Staged Doctrine Consolidation and Graduation** plan:
 
-- **`inherited-framing-without-first-principles-check` pattern
-  extraction** to `.agent/memory/active/patterns/`. **Six instances
-  now documented in napkin** (three on 2026-04-20; the 4th, 5th,
-  and 6th on 2026-04-21 — caught by owner mid-flight, pre-commit
-  hook rejection, and type-check failure respectively). Well past
-  the repeats bar.
-- **Perturbation-mechanism bundle** as a PDR plus three lightweight
-  artefacts: non-goal re-ratification ritual, standing-decision
-  register, first-principles metacognition prompt. All three are
-  complementary layers; landing them as a bundle is the design.
-  Note 2026-04-21 napkin observation: the three as currently
-  installed are *passive guidance*; none fired before the 4th, 5th,
-  or 6th inherited-framing instances. The PDR should include at
-  least one *active tripwire* layer (rule / pre-commit hook / skill)
-  alongside the passive layers — see the `passive-guidance-loses-
-  to-artefact-gravity` pattern candidate.
-- **`passive-guidance-loses-to-artefact-gravity` pattern
-  candidate** (single instance, 2026-04-21). Promotion-ready when a
-  second documented-but-not-enforced guardrail produces a third
-  missed catch. Meta-evidence also observed 2026-04-21 by the
-  memory-feedback-plan session: the authoritative
-  `next-session-opener.md` was bypassed by a chat-text opener
-  drafted from stale continuity fields. Second instance may already
-  be present; owner review at next consolidation.
-- **`practice.md` Artefact Map refresh** to reflect the three-mode
-  memory taxonomy.
-- **Portability decision** on the three-mode taxonomy (portable
-  Practice doctrine via PDR, or explicitly host-local). **Now
-  load-bearing**: Phase 0.2 of the memory-feedback execution plan
-  branches on this answer.
-- **Thread / session / identity doctrine bundle** (new, 2026-04-21
-  memory-feedback-plan session): PDR candidate *"Threads, Sessions,
-  and Agent Identity"* + rule candidate *"Additive thread
-  identity"* + amendment candidates to PDR-011 (thread-scope
-  extension) and PDR-026 (per-thread landing clarification).
-  Installed lightweight this session at
-  [`threads/`](threads/) (README + `memory-feedback.next-session.md`);
-  formal doctrine awaits ratification. See napkin entry
-  *"Session vs thread; identity should be tracked and additive"*
-  for rationale.
-- **Retroactive identity attribution gap**: the product thread's
-  `f9d5b0d2` landing has no recorded session identity. Owner
-  decides at next consolidation whether to backfill an approximate
-  identity (platform + model + date window) or to accept the gap
-  and start attribution from 2026-04-22 forward.
+- Plan: [`../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md`](../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md)
+- Dry-run analysis preserved: [`../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md`](../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md)
 
-The broader gap — feedback loops across memory planes, emergent-
-whole observation, executive-memory drift detection — has been
-promoted from strategic brief to executable plan:
+The plan stages the work across six sessions with explicit
+break points:
 
-- Strategic brief: [`agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md)
-- Metacognition (first- and second-pass): [`agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md)
-- Execution plan (queued in `current/`, owner-gated at Phase 0): [`agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md)
+1. **Session 1** — Record Standing decisions (partially done above);
+   author two patterns (`inherited-framing-without-first-principles-check`,
+   `passive-guidance-loses-to-artefact-gravity`); refresh
+   `practice.md` Artefact Map; brief experience entry.
+2. **Session 2** — Napkin rotation (1324 → archive); distilled
+   merge-and-prune; formalise pending-graduations register schema;
+   bind to session workflows.
+3. **Session 3** — Draft three new PDRs (Threads/Sessions/Agent
+   Identity; Executive-Memory Feedback Loop; Perturbation-Mechanism
+   Bundle *with active-tripwire design*); apply two amendments
+   (PDR-011 thread-scope; PDR-026 per-thread). Owner-gated per
+   PDR-003.
+4. **Session 4** — Install Family A tripwires (plan-body
+   inherited-framing: always-applied rule + standing-decision
+   register surface); install Family B tripwires (memory-taxonomy
+   meta: per-consolidation taxonomy-check + orphan-item signal);
+   cross-plane path rules; Practice Core CHANGELOG; roadmap sync.
+5. **Session 5** — Outgoing triage (PDR-007 enforcement on 10+
+   files, 1481 lines); promote or delete each.
+6. **Session 6** — Holistic fitness exploration as final meta-
+   consolidation; owner-decides compress/raise/restructure/split
+   per file; `pnpm practice:fitness --strict-hard` passes.
 
-Phase 0 of the execution plan carries two owner-gated decisions
-(ratification of the three-plane frame; portability decision).
-Phase 1 graduates the four overdue items listed above as its
-first move. The plan does not start until Phase 0 answers exist.
+**Deferred after arc**: experience-scan (dedicated session with
+future plan after Session 6 closes).
+
+**Retroactive identity attribution for `f9d5b0d2`**: owner accepts
+the attribution gap; start forward from 2026-04-22 per the
+Standing decisions section above.
+
+**Related memory-feedback artefacts** (partially consumed by the
+staged plan; retained for intent and history):
+
+- Strategic brief: [`../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md)
+- Metacognition (first- and second-pass): [`../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md)
+- Execution plan (Phase 0 resolved; Phases 1–5 absorbed by the
+  staged plan; Phase 6 doctrine landing in Session 3 of the
+  staged plan): [`../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md)
 
 ## Next-session opening statements (per thread)
 
@@ -230,9 +280,12 @@ the thread the session is picking up before reading the opener.
   shape specified in the opener.
 - **`memory-feedback` thread** (Practice): see
   [`threads/memory-feedback.next-session.md`](threads/memory-feedback.next-session.md).
-  Landing target: Phase 0 owner-gated decisions (three-plane
-  ratification + portability). Thread-scoped identity table and
-  grounding order specified in the file.
+  Landing target: Session 1 of the Staged Doctrine Consolidation
+  and Graduation plan (record Standing decisions fully; author
+  two patterns; refresh `practice.md` Artefact Map; brief
+  experience entry). Phase 0 ratifications landed in the Standing
+  decisions section above on 2026-04-21. Thread-scoped identity
+  table and grounding order specified in the file.
 
 **PDR-026 landing-commitment discipline**: a single session
 commits to landing *one* thread's target, not multiple. Cross-

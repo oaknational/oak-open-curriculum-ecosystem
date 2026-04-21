@@ -91,6 +91,23 @@ Scheduling below).
 
 ---
 
+## Session Discipline (multi-session plans only)
+
+Delete this section if the plan is single-session. Otherwise
+reference the session-discipline component:
+
+> **Session discipline**: see
+> [`../templates/components/session-discipline.md`](../templates/components/session-discipline.md).
+> The four disciplines (template-not-contract count, mid-arc
+> checkpoints, context-budget thresholds, metacognition at session
+> open) apply to every session in this plan.
+
+Plan-specific amendments (tighter thresholds, specific checkpoint
+placements, forward-loading of discipline artefacts into early
+sessions) live alongside the reference.
+
+---
+
 ## Reviewer Scheduling (phase-aligned)
 
 Reviewers are scheduled in three phases, chosen by what they challenge:

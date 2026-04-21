@@ -1,3 +1,120 @@
+## 2026-04-21 (open, post-opener-bloat catch) — Third `passive-guidance-loses-to-artefact-gravity` instance: chat-opener bloat despite durable surfaces existing
+
+### Surprise
+
+**What was expected**: when the owner asked *"how would I start the next session for this thread?"*, the answer would be a minimal session-unique opener (thread name, plan reference, landing target pointer) trusting the durable surfaces (`start-right-quick`, `session-handoff`, `threads/README.md`, session-discipline component, repo-continuity Standing decisions) to carry the operational structure on arrival.
+
+**What actually happened**: I produced a massive instruction list in chat — grounding order, identity discipline, metacognition at session open, context-budget thresholds, cross-thread rule, close discipline, full standing-decisions restatement. The operational structure existed in the repo and was addressable by reference, but I restated it in chat anyway. Owner caught it immediately: *"I need to be able to paste just the parts that are unique to the next session, rather than operational structure."*
+
+**Why the expectation failed**: passive guidance loses to the gravity of the artefact being authored. The chat-text opener was the artefact in front of me; the durable surfaces (README checklists, session-discipline component, start-right-quick skill) were one `ls` call or reference away and I did not treat them as load-bearing. Exactly the pattern I was in the middle of graduating three paragraphs earlier.
+
+### Pattern instance linkage
+
+- **Third candidate instance** of `passive-guidance-loses-to-artefact-gravity`. First: perturbation mechanisms not firing on the 4th/5th/6th inherited-framing instances. Second: chat-text opener bypassing authoritative `next-session-opener.md` during the memory-feedback-plan session. Third: this — chat-text opener restating operational structure despite `start-right-quick`, `threads/README.md`, and the session-discipline component existing.
+- Three instances is well past the repeats bar. Pattern extraction in Session 1 of the staged plan (Task 1.3) should cite all three instances, not two.
+
+### What behaviour should change next time
+
+Before authoring any chat-level opener, procedural list, or operational checklist, run a named check: *"Does a durable artefact in the repo already hold this content? If yes, reference it; do not restate. If no, write it in the repo first, then reference from chat."* The test: *"Could the next agent/session learn the procedure from the repo without reading this chat?"* If yes, the chat can contain only what is unique to this session. If no, the procedure is not yet durable — land it first.
+
+This is Family-A tripwire content: a rule that fires at the boundary of "I am about to write procedural content in chat / as ephemeral output." A plan-body first-principles check is adjacent but not identical; this is an output-layer first-principles check. Possible fourth clause for the three-clause check in the inherited-framing pattern: *"Before writing operational guidance, is the durable home identified and is the chat/ephemeral version the session-unique delta only?"*
+
+### Countermeasure applied in-flight
+
+- Added "Starting a session on a thread" section to `.agent/memory/operational/threads/README.md` covering read-order, identity discipline, mid-session rules, close discipline, and an explicit *"what a chat opener needs to contain"* block that warns against restating the checklist.
+- Rewrote the chat opener as eight lines of session-unique signal only.
+
+### Promotion candidate update
+
+- `passive-guidance-loses-to-artefact-gravity` pattern now has **three** documented instances. Graduation (Session 1 Task 1.3) should reflect this count, not two. The pattern file's instance list should cite all three for concrete grounding.
+
+### Action this session
+
+- Captured the surprise in this napkin entry.
+- `threads/README.md` amended with the session-open checklist and the "what a chat opener needs to contain" block.
+- Compact opener produced (eight lines).
+- Session 1 Task 1.3 pattern extraction should now cite three instances including this one.
+
+---
+
+## 2026-04-21 (open, staged-consolidation decision) — Dry-run named the "inherit the 11-step recipe" risk before it fired
+
+### Surprise
+
+**What was expected**: owner asked for a dry-run of
+`/jc-consolidate-docs` given the accumulated backlog (pattern
+extraction, perturbation PDR, thread/identity doctrine, Artefact
+Map refresh, portability decision, outgoing defects, fitness
+pressure). Implicit assumption: the 11 steps are the working unit;
+the dry-run would confirm the pass scope and sequence.
+
+**What actually happened**: the dry-run surfaced that the 11-step
+recipe does NOT fit the current backlog. It is **three tiers of
+work stacked under one name** (routine graduation + doctrine
+bundling + backlog triage), plus five hard-zone fitness blockers
+that would prevent `--strict-hard` closure, plus two backlogs
+(outgoing 10+ files / 1481 lines; experience 128 files) outside
+the scale of a routine pass. Walking the recipe step-by-step
+against the actual state made the mismatch visible; the
+metacognition lens made the consequence visible. Owner responded
+by staging the work into six sessions with explicit break points,
+and explicitly de-scoping fitness (not blocking for Sessions 1–5;
+holistic exploration as Session 6's scope).
+
+**Why the expectation failed**: the 11-step recipe is correct for
+a *routine* consolidation. Applying it to an accumulated-backlog
+pass would have reproduced the very pattern the pass is extracting
+(`inherited-framing-without-first-principles-check`). The dry-run
+acted as an instance of the Family-A tripwire doctrine the staged
+plan is about to install — a pre-committed check that asks "is
+this recipe the right shape for this instance?" before committing
+to the recipe. The check fired; the inherited framing did not
+propagate.
+
+### What behaviour should change next time
+
+Generalise this specific dry-run pattern: **before running a
+multi-step workflow against an accumulated backlog, run a dry-run
+first that walks each step against current state**. The dry-run
+is cheap (a recon pass + a projection) and produces either
+"proceed" or "stage differently". The cost of the dry-run is
+bounded; the cost of an unstaged pass against an accumulated
+backlog is potentially an incomplete session or exhausted context.
+
+This is a pattern candidate:
+`dry-run-before-recipe-against-accumulated-backlog`. Single
+instance here (2026-04-21). Promotion-ready when a second
+accumulated-backlog workflow is dry-run against its recipe before
+execution.
+
+### Pattern linkage
+
+- This is not itself an `inherited-framing-without-first-principles-check`
+  instance — it is the opposite: the check fired correctly. The
+  staged-plan is an effective application of the pattern.
+- Adjacent to `passive-guidance-loses-to-artefact-gravity`: the
+  metacognition skill is a documented workflow; invoking it
+  *actively* (as the dry-run did) produced the catch. The skill
+  earns its cost precisely when it is actively invoked against a
+  current artefact, not when it lives as passive guidance.
+
+### Outcome this session
+
+- Staged plan authored:
+  [`../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md`](../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md).
+- Dry-run analysis preserved at
+  [`../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md`](../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md).
+- Standing decisions recorded in `repo-continuity.md`.
+- Memory-feedback execution plan's Phase 0 resolved; Phases 1–5
+  folded into the staged plan.
+
+### Promotion candidate
+
+- Pattern candidate: `dry-run-before-recipe-against-accumulated-backlog`
+  (single instance; promotion-ready after second).
+
+---
+
 ## 2026-04-21 (open, memory-feedback-plan session) — Session vs thread; identity should be tracked and additive
 
 ### Surprise
