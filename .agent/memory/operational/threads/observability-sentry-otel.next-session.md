@@ -218,6 +218,56 @@ landed:
   for the candidate-layer table and Heath brothers (Decisive ch. 9 /
   Switch ch. 8) framing.
 
+## Lane state (absorbed from retired workstream brief, 2026-04-21 Session 5)
+
+The `workstreams/observability-sentry-otel.md` brief was retired
+in Session 5 of the `memory-feedback` thread as part of the
+workstream-layer collapse (owner-ratified TIER-2 simplification;
+see [PDR-027 §2026-04-21 Session 5 Amendment](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md#amendment-log)
+and [`repo-continuity.md § Session 5 close summary`](../repo-continuity.md)).
+Load-bearing content folded in here so the thread next-session
+record carries the state previously split across two surfaces:
+
+**Owning plans**:
+
+- [`sentry-observability-maximisation-mcp.plan.md`](../../../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
+  — lane-level execution authority (ACTIVE).
+- [`high-level-observability-plan.md`](../../../../plans/observability/high-level-observability-plan.md)
+  — five-axis MVP framing + wave sequencing.
+- [`sentry-otel-integration.execution.plan.md`](../../../../plans/architecture-and-infrastructure/active/sentry-otel-integration.execution.plan.md)
+  — foundation parent plan; credential/evidence authority.
+
+**Test totals at handoff** (from the Session-4 landing gate):
+observability 58/58, sentry-node 61/61, logger 140/140,
+oak-search-sdk 262/262, oak-curriculum-mcp-streamable-http
+615/615, search-cli 1006/1006, E2E 161/161 in isolation. `pnpm
+check` exit 0 at session close.
+
+**Post-§L-8 forward path** (from the 2026-04-20 re-sequencing):
+after §L-8 closes, Phase 3a (L-1 free-signal + L-2 delegates
+extraction + L-3 MCP request context) — all schema-independent —
+can land in parallel before the events-workspace. That closes
+the alpha gate. Events-workspace + L-4b metrics + Phase 4
+siblings (security / accessibility) + Phase 5 close-out lanes
+form the public-beta gate. See `§Alpha vs public-beta gates` in
+the active plan for the authoritative split.
+
+**Active tracks**: none at handoff. The stale OAC-labelled track
+card carrying the L-8 handoff note was resolved and deleted
+during the Session-4 handoff.
+
+**Promotion watchlist** (carried from the retired brief):
+
+- **`sunk-cost-framing-in-parked-rationale`** — the L-8 `dropped`
+  rationale (2026-04-17) was itself a sunk-cost framing:
+  "shell-script is simpler" was protecting the chosen shape, not
+  measuring cost. Second instance; watch for a third.
+- **`feature-workstream-template-guardrails-self-test`** — the
+  L-8 section is the first self-test of the Build-vs-Buy
+  Attestation + Reviewer Scheduling guardrails inside a live
+  active plan body. Clean execution validates the template; any
+  friction demands template amendment.
+
 ## Session-close discipline reminder (PDR-026)
 
 Close by either:

@@ -28,9 +28,11 @@ Then read the live state surfaces in authority order:
 1. `.agent/memory/operational/repo-continuity.md` — canonical continuity contract
    (current objective, repo-wide invariants, next safe step, deep-consolidation
    status).
-2. `.agent/memory/operational/workstreams/<slug>.md` — the relevant workstream brief
-   (lane-level current state, blockers, promotion watchlist).
-3. `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md` — the current
+2. `.agent/memory/operational/threads/<thread>.next-session.md` — the relevant thread
+   next-session record (identity + landing target + lane state — read its `Lane state`
+   section for current state, blockers, promotion watchlist; workstream surface retired
+   2026-04-21 Session 5).
+3. `.agent/memory/operational/tracks/<thread>--<agent>--<branch>.md` — the current
    tactical track card, if one exists.
 
 See [`.agent/memory/operational/README.md`](../../../memory/operational/README.md) and

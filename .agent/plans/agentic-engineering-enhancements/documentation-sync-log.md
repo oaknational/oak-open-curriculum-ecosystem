@@ -316,7 +316,7 @@ intentionally preserved):
 - `.agent/plans/architecture-and-infrastructure/roadmap.md` +
   `observability-strategy-restructure.plan.md` — Session Entry
   pointers updated.
-- `.agent/plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md`
+- `.agent/plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md`
   — Task 2.1 marked historical with pointer to PDR-026 + orientation;
   authority-order table surface #5 removed (read-order doctrine
   now lives in orientation.md).
@@ -342,13 +342,13 @@ instances this session — graduate to
 
 ## OAC Phase 4.3 — Continuity surface retirement & doc propagation (2026-04-20)
 
-Plan: [operational-awareness-and-continuity-surface-separation.plan.md](active/operational-awareness-and-continuity-surface-separation.plan.md).
+Plan: [operational-awareness-and-continuity-surface-separation.plan.md](archive/completed/operational-awareness-and-continuity-surface-separation.plan.md).
 Driver: retire `.agent/prompts/session-continuation.prompt.md`'s `Live
 continuity contract` section in favour of the three repo-local state
 surfaces (`.agent/memory/operational/repo-continuity.md` +
 `.agent/memory/operational/workstreams/<slug>.md` + `.agent/memory/operational/tracks/*.md`).
 
-- Status: in progress (this session).
+- Status: completed (substantive moves 2026-04-20; bookkeeping closure 2026-04-21 Session 5 OAC Phase 4 closeout, Pippin/cursor-opus). Plan archived to `archive/completed/operational-awareness-and-continuity-surface-separation.plan.md`.
 - ADR update: `docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md`
   §3 rewritten — "The continuity contract lives in a canonical repo-local
   surface" (was: "in the MCP App continuation prompt"). Contract field list

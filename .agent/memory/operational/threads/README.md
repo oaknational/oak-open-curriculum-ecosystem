@@ -40,8 +40,7 @@ One `*.next-session.md` file per active thread. Each file contains:
 | Surface | Scope | Lifecycle |
 | --- | --- | --- |
 | [`../repo-continuity.md`](../repo-continuity.md) | All threads; invariants; active-threads index | Long-lived; refreshed per session-handoff |
-| [`../workstreams/<slug>.md`](../workstreams/) | One thread's lane state ("where are we in this lane") | Long-lived; refreshed when the lane moves |
-| [`<slug>.next-session.md`](.) (this dir) | One thread's next-session landing target | Short-horizon; delete on landing per PDR-026 |
+| [`<slug>.next-session.md`](.) (this dir) | One thread's next-session landing target **and lane state** (workstream surface retired 2026-04-21 Session 5; see [`../workstreams/README.md`](../workstreams/README.md)) | Short-horizon landing; long-lived lane state |
 | [`../tracks/`](../tracks/) | Tactical per-session coordination cards | Ephemeral; resolve/delete at session close |
 
 ## Identity schema
@@ -88,8 +87,9 @@ session-specific signal); the checklist handles the rest.
    `§ Deep consolidation status`.
 2. The thread's next-session record at
    `.agent/memory/operational/threads/<thread-slug>.next-session.md`.
-3. The plan or workstream brief referenced in the next-session
-   record's *Landing target* block.
+3. The plan referenced in the next-session record's *Landing
+   target* block (and any lane-state section in the same
+   thread record — workstream surface retired 2026-04-21).
 4. Any source surfaces the landing target names (napkin entries,
    pattern files, existing PDRs). Follow the explicit links.
 5. Foundation directives: `principles.md`, `testing-strategy.md`,

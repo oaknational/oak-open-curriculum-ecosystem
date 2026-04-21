@@ -15,10 +15,12 @@ step leads to the surfaces the next step assumes.
 
 ### 1. Durable directives
 
-Read and internalise. **This foundation-directive reading is also the
-Family-A Class-A.1 Layer-2 firing per PDR-029's second 2026-04-21
-Amendment Log entry** — the prior-decision-recall layer is the
-existing grounding read, not a dedicated "standing-decisions" surface.
+Read and internalise. **This foundation-directive reading is the
+necessary precondition for Family-A Class A.1 (per PDR-029
+§Decision; A.1 is single-layer post-2026-04-21 Session 5
+reclassification — foundation-directive grounding is background
+grounding, not an installed tripwire layer; the installed layer
+is the plan-body first-principles-check rule).**
 
 1. @.agent/directives/AGENT.md — operational entry point and index
 2. @.agent/directives/principles.md — **THE AUTHORITATIVE RULES**
@@ -46,14 +48,14 @@ Read in order; stop at whichever answers your next-step question:
 
 1. @.agent/memory/operational/repo-continuity.md — canonical continuity contract
 2. @.agent/memory/operational/threads/README.md — thread convention + identity discipline (PDR-027)
-3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch
-4. `.agent/memory/operational/workstreams/<slug>.md` — the workstream brief for the lane you are about to resume
-5. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
+3. `.agent/memory/operational/threads/<slug>.next-session.md` — the thread record for any thread the session will touch (carries identity, next-session landing, *and lane state* — workstream surface retired 2026-04-21)
+4. `.agent/memory/operational/tracks/*.md` — any relevant tactical track card(s)
 
 ### 5. Active plans
 
-Read the active plan(s) named in the workstream brief. Plans are
-authoritative for scope, sequencing, acceptance, and validation.
+Read the active plan(s) named in the thread's next-session record.
+Plans are authoritative for scope, sequencing, acceptance, and
+validation.
 
 ### 6. Live branch state
 

@@ -35,6 +35,13 @@ manifests as a real bug (wrong search results, inconsistent
 behaviour, stale configuration). The correct response is always to
 fix the boundary, not to duplicate across it.
 
+## Owner Direction Beats Plan
+
+Owner direction during a session beats the active plan. On conflict:
+follow the direction, surface the conflict, update the plan at the
+next safe checkpoint. Never silently ignore or abandon. Precedence
+rule, not a licence to abandon planning discipline (PDR-018).
+
 ## Core Rules
 
 ### Cardinal Rule of This Repository
@@ -302,6 +309,11 @@ paths, setup files) don't apply.
   product code is only used in tests, delete it. If a file is not
   used, delete it. Delete dead code. Static analysis tools (knip,
   dependency-cruiser) enforce this at scale.
+- **Misleading docs are blocking** - Docs that misstate behaviour
+  or point at retired surfaces are a quality-gate blocker. Missing
+  docs prompt verification; misleading docs are trusted and acted
+  on. Fix immediately — never defer, never TODO. Pairs with PDR-026
+  §Landing target definition.
 
 ### Compiler Time Types and Runtime Validation
 

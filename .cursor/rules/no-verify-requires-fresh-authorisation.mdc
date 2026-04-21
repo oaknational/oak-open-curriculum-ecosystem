@@ -1,0 +1,6 @@
+---
+description: --no-verify (and equivalent hook-skip flags) requires fresh per-invocation owner authorisation. Never default-skip Git hooks.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/no-verify-requires-fresh-authorisation.md`.

@@ -1,5 +1,21 @@
 # Operational Awareness and State Surfaces
 
+> **Status update — 2026-04-21 Session 5 (memory-feedback thread)**: this
+> deep-dive's "Workstream brief surface" (§Proposed Shape) was implemented
+> and then **retired** as a dedicated artefact surface. Lane-level
+> short-horizon state (owning plans, current objective, blockers, next
+> safe step, active track links, promotion watchlist) now lives in the
+> per-thread next-session record under a `Lane state` substructure
+> (`.agent/memory/operational/threads/<thread>.next-session.md`). The
+> tactical track-card filename convention has correspondingly moved from
+> `<workstream>--<agent>--<branch>.md` to
+> `<thread>--<agent>--<branch>.md`. Authoritative records:
+> [PDR-011 §Amendment Log 2026-04-21 Session 5](../../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log),
+> [PDR-027 §Amendment Log 2026-04-21 Session 5](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md#amendment-log),
+> [ADR-150 §Amendment Log 2026-04-21 Session 5](../../../../docs/architecture/architectural-decisions/150-continuity-surfaces-session-handoff-and-surprise-pipeline.md#amendment-log).
+> The body below is preserved as the original 2026-04 synthesis-at-a-time;
+> read it as historical context, not current doctrine.
+
 This deep dive covers the gap between canonical continuity doctrine and the
 short-horizon, thread-aware state that real multi-agent work creates inside the
 repository.
@@ -20,7 +36,7 @@ repository.
 ## Related Plans
 
 - [continuity-and-surprise-practice-adoption.plan.md](../../../plans/agentic-engineering-enhancements/archive/completed/continuity-and-surprise-practice-adoption.plan.md)
-- [operational-awareness-and-continuity-surface-separation.plan.md](../../../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md)
+- [operational-awareness-and-continuity-surface-separation.plan.md](../../../plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md)
 - [cross-vendor-session-sidecars.plan.md](../../../plans/agentic-engineering-enhancements/future/cross-vendor-session-sidecars.plan.md)
 
 ## Current Synthesis

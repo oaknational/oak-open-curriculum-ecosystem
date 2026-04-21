@@ -1,19 +1,24 @@
 # Next-Session Record — `memory-feedback` thread
 
 **Authored**: 2026-04-21 (metacognition + execution-plan session close).
-**Last refreshed**: 2026-04-21 (Session 4 of the staged
-doctrine-consolidation plan **LANDED** — Family-A Class-A.1 + A.2
-tripwires installed; Family-B meta-tripwires installed; cross-plane
-path rules installed; observability thread record migrated to
-`threads/`; platform-agnostic commit skill installed. **Mid-session
-PDR-029 Amendment Log entry** authored after owner metacognition
-intervention surfaced the platform-coupling bias in the original
-script-based shape; Tasks 4.2.b/c/3 reshaped documentation-first.
-Seven Due register items moved to Graduated. Practice Core CHANGELOG
-+ roadmap synced. Samwise identity row `last_session` remains
-2026-04-21 with role extended to `drafter / initiator / executor`;
-next landing target for this thread is Session 5 — outgoing triage
-per PDR-007 — OR Session 6 — holistic fitness exploration.).
+**Last refreshed**: 2026-04-21 (Session 5 of the staged
+doctrine-consolidation plan **LANDED** — Stage 1 (mandatory
+evaluate-and-simplify) + Stage 2(b) (decomposition of the ten
+retracted-`standing-decisions.md` items into proper artefact
+homes) both closed. Mid-close owner metacognition surfaced a
+manufactured-budget close attempt; the corrected arc executed
+Stage 2(b) under `/jc-go` workflow with periodic `/jc-metacognition`
+checkpoints. Per-item Class A.1 firing on all 10 items produced
+3 rewrites (`new PDR` → `existing-surface amendment` for items
+5, 8, 9) — owner-ratified twice. Net Stage 2(b) landing: 1 new
+PDR (PDR-031) + 4 PDR amendments + 1 new rule + 2 principle
+additions + 1 ADR amendment. Stage 2(a) outgoing triage honestly
+deferred to Session 6 for orthogonal-scope / dedicated-lens
+reasons. Pippin (`cursor` / `claude-opus-4-7`) identity row
+`last_session` 2026-04-21. Next landing target for this thread
+is **Session 6 — Stage 2(a) outgoing triage + reference-tier
+sweep + holistic fitness exploration with `--strict-hard` close**;
+Session 6 closes the arc.).
 **Consumed at**: next session that picks up the `memory-feedback`
 thread (not necessarily the next session overall — the product
 thread `observability-sentry-otel` has its own next-session record
@@ -42,6 +47,7 @@ re-stating for a further session.
 | agent_name | platform | model | session_id_prefix | role | first_session | last_session |
 | --- | --- | --- | --- | --- | --- | --- |
 | `Samwise` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* (not exposed to the agent in its context; owner can record) | `drafter` / `initiator` / `executor` | 2026-04-21 | 2026-04-21 |
+| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* (not exposed in Cursor agent context) | `evaluator` / `simplifier` / `executor` | 2026-04-21 | 2026-04-21 |
 
 **Identity discipline** (per the proposed rule at
 [`README.md`](README.md)): when a session joins this thread, it
@@ -256,7 +262,120 @@ close) and the Practice Core
 [CHANGELOG](../../../practice-core/CHANGELOG.md) entry for
 2026-04-21.
 
-### Next landing target (Session 5 — evaluate-and-simplify; MANDATORY first)
+### Session 5 outcome (for audit) — LANDED 2026-04-21
+
+Two stages landed:
+
+**Stage 1 — Mandatory evaluate-and-simplify** (Pippin / cursor-opus):
+
+1. ✅ **OAC Phase 4 closure**. Pilot-evidence artefact validated
+   the two-track design; remaining doc-propagation items treated
+   as substantively complete via PDR-027/028/029 + rules; plan
+   archived to `archive/completed/operational-awareness-and-
+   continuity-surface-separation.plan.md`.
+2. ✅ **Simplification pass with delete-bias** (TIER-1 + TIER-2
+   E1–E4, owner-ratified). TIER-1: register cleanup (verified two
+   `distilled-absorbed` entries deleted; deleted four single-
+   instance pattern candidates; demoted two `claimed-3-instance`
+   patterns under tightened cascade-vs-independent bar). TIER-2:
+   E1 workstream-layer collapse (briefs archived; PDR-027 +
+   PDR-011 amended; ADR-150 amendment-log entry added; `Lane state`
+   substructure folded into thread next-session records); E2
+   register pruned to open items only (graduation removes from
+   register; graduation history lives in close summaries + git);
+   E3 PDR-029 Class A.1 Layer 2 reclassified as background
+   grounding (single-layer exception acknowledged); E4 PDR-029
+   §Host-local context deleted (portable PDR is portable).
+3. ✅ **Thread/workstream/track first-principles check**. All
+   three sub-items resolved by E1 collapse + thread-scoped track
+   naming default + naming-collision moot. Codified in PDR-027
+   §Amendment Log 2026-04-21 Session 5.
+
+**Stage 2(b) — Decomposition of the ten retracted-`standing-
+decisions.md` items** (corrected arc; executed under `/jc-go` with
+periodic `/jc-metacognition` checkpoints; per-item Class A.1
+firing on every new artefact body):
+
+- **Class A.1 firing summary**: 7 items passed unmodified; 3
+  items rewrote (`new PDR` → `existing-surface amendment` for
+  items 5 + 8; `new PDR` → `principle line` for item 9). All
+  rewrites owner-ratified.
+- **Net landing**: 1 new PDR + 4 PDR amendments (one PDR amended
+  twice in a single Amendment Log entry) + 1 new rule + 2
+  principle additions + 1 ADR amendment.
+- **Landed artefacts**: PDR-031 (build-vs-buy attestation,
+  pre-ExitPlanMode); PDR-011 amendment (runtime tactical track
+  cards git-tracked); PDR-015 amendment (friction-ratchet
+  trigger + reviewer phases aligned to lifecycle); PDR-019
+  amendment (ADRs state WHAT, not HOW); PDR-026 amendment
+  (docs-as-DoD); `--no-verify-requires-fresh-authorisation` rule
+  + Cursor mirror; `principles.md § Owner Direction Beats Plan`;
+  `principles.md § Code Quality §Misleading docs are blocking`
+  (enforced by `tsdoc-and-documentation-hygiene` rule); ADR-053
+  amendment (Clerk through public alpha temporal scope).
+
+**Mid-close owner metacognition** surfaced a manufactured-budget
+close attempt (the agent had cited "budget consumed" as the
+deferral reason for Stage 2 with no real meter behind it). The
+corrected diagnostic captured in `napkin.md § Session 5 close-
+attempt` recognises this as the second independent instance of
+`feel-state-of-completion-preceding-evidence-of-completion` (1st:
+Session 4 theatre = build-without-firing; 2nd: Session 5
+manufactured-budget = land-without-exercising). A falsifiable
+protection candidate (deferral-honesty rule) is drafted in the
+napkin and tracked in the register Pending band; promotion
+deferred pending third instance OR explicit owner direction.
+
+**Stage 2(a) — Outgoing triage**: **honestly deferred to Session 6**
+for orthogonal-scope / dedicated-lens reasons. Tracked in the
+register Due band.
+
+**Reviewer discipline this arc**: `docs-adr-reviewer` invoked
+multiple times (intent + close phases). Architecture reviewers
+(Barney, Betty) consulted at TIER-2 simplification ratification
+boundary. `assumptions-reviewer` consulted on cascade-vs-
+independent instance distinction. All findings absorbed in-arc
+per docs-as-DoD discipline.
+
+**Loop-closure observation**: this arc was the first where every
+link of the `capture → distil → graduate → enforce` pipeline
+(per ADR-150 + PDR-011) fired in sequence within a single session
+— owner intervention → diagnostic captured → corrected action
+executed → tripwire exercised (Class A.1 fired and produced 3
+rewrites) → pattern captured → durable protection candidate
+drafted. Calibration note: the owner intervention was load-
+bearing; neither Class A.1 nor Class A.2 fires on close-time
+deferral honesty, which is precisely the gap the protection
+candidate addresses.
+
+### Next landing target (Session 6 — closing session for the arc)
+
+Session 6 carries three pieces of work, all honestly carried over
+from Session 5 (no manufactured budget framing; reasons named):
+
+1. **Stage 2(a) — Outgoing triage per PDR-007**
+   (`.agent/practice-context/outgoing/`, ~10 files, ~1481 lines):
+   per-file disposition (ephemeral exchange / portable PDR /
+   general abstract pattern → Practice Core / host-local
+   reference → `.agent/reference/` / defect → delete). Owner-gated
+   per file per PDR-003.
+2. **Reference-tier sweep** of `.agent/reference/agentic-
+   engineering/deep-dives/` for residual `<workstream>--`
+   track-naming citations and adjacent stale references. Concrete
+   site: `operational-awareness-and-state-surfaces.md` line 83.
+3. **Holistic fitness exploration** (Session 6 originally-scoped
+   work): owner-decides compress / raise / restructure / split
+   per file; address `principles.md` character-count fitness
+   debt (currently 26222 / 24000 — worsened by +594 chars from
+   Session 5's two principle additions); `pnpm practice:fitness
+   --strict-hard` passes by close.
+
+Session 6 is the **closing session for this arc**. The thread
+does not switch. The `observability-sentry-otel` thread waits.
+On Session 6 close (assuming clean close), the `memory-feedback`
+thread is archived and this file is deleted per PDR-026.
+
+### Historical: previous Session 5 framing (carried for audit)
 
 > **OWNER DIRECTION** (2026-04-21 Session 4 late close):
 > *"There is no alternative thread, we need this work to be
@@ -276,7 +395,9 @@ close) and the Practice Core
 > items, six pattern candidates) with **zero empirical firing
 > evidence**. The Session 4 agent also missed a linked authoritative
 > workstream brief at
-> [`../workstreams/operational-awareness-continuity.md`](../workstreams/operational-awareness-continuity.md)
+> [`../workstreams/archive/operational-awareness-continuity.md`](../workstreams/archive/operational-awareness-continuity.md)
+> (now archived; the workstream-brief surface was retired in
+> Session 5 — see PDR-027 §Amendment Log 2026-04-21 Session 5)
 > despite the thread record citing it. Owner honest-question at
 > close: *"Are we building a valuable system, or are we throwing
 > energy into theatre?"*
@@ -286,7 +407,7 @@ close) and the Practice Core
 > stage is closed):
 >
 > 1. **Close OAC Phase 4.** The plan at
->    [`../../../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md`](../../../plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md)
+>    [`../../../plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md)
 >    is overdue from 2026-04-20. Pilot evidence at
 >    `.agent/analysis/operational-awareness-pilot-evidence.md`.
 >    Refinements (a) and (b) appear landed via separate channels;

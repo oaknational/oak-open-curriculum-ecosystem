@@ -75,7 +75,7 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-050: MCP Tool Layering DAG](050-mcp-tool-layering-dag.md)
 - [ADR-051: OpenTelemetry-Compliant Single-Line JSON Logging](051-opentelemetry-compliant-logging.md) ← **Supersedes ADR-017**
 - [ADR-052: OAuth 2.1 for MCP HTTP Server Authentication](052-oauth-2.1-for-mcp-http-authentication.md)
-- [ADR-053: Clerk as Identity Provider and Authorization Server](053-clerk-as-identity-provider.md)
+- [ADR-053: Clerk as Identity Provider and Authorization Server](053-clerk-as-identity-provider.md) (amended 2026-04-21 — temporal scope named: canonical user-ID provider through public alpha)
 - [ADR-054: Tool-Level Authentication Error Interception](054-tool-level-auth-error-interception.md)
 - [ADR-055: Zod Version Boundaries](055-zod-version-boundaries.md)
 - [ADR-056: ~~Conditional Clerk Middleware for Discovery~~](056-conditional-clerk-middleware-for-discovery.md) (SUPERSEDED by ADR-113)

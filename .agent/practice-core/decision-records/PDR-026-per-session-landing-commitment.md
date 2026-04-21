@@ -4,13 +4,19 @@ pdr_kind: governance
 
 # PDR-026: Per-Session Landing Commitment
 
-**Status**: Accepted (amended 2026-04-21)
+**Status**: Accepted (amended 2026-04-21, amended 2026-04-21
+Session 5)
 **Date**: 2026-04-20 (amended 2026-04-21 — landing commitment
 clarified as **per-thread-per-session**: a session commits to
 landing one thread's target; cross-thread spread within a single
 session is anti-pattern. Underlying decision — externally-verifiable
 outcomes as the landing unit, the open-and-close structure, and
-the bounded exceptions — unchanged.)
+the bounded exceptions — unchanged. Amended 2026-04-21 Session 5
+— **docs-as-definition-of-done extension**: the landing-target
+definition is extended so that a code or doctrine change that has
+not also updated the docs the change invalidates is not yet landed.
+Doc updates compose into the landing, not into a separate later
+phase. Underlying decision unchanged.)
 **Related**:
 [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md)
 (continuity surfaces — the landing commitment composes with
@@ -39,6 +45,20 @@ continuity unit).
   bounded exceptions) is unchanged; this amendment aligns the
   commitment's scope language with PDR-027's continuity unit
   (thread).
+- **2026-04-21 Session 5** (Accepted): **docs-as-definition-of-
+  done extension** to §"Landing target definition". A code or
+  doctrine change that invalidates passages in surrounding
+  documentation (READMEs, ADRs, PDRs, plan bodies, runbooks,
+  TSDoc) is **not landed** until those docs have been updated to
+  reflect the change. Doc updates compose into the landing
+  commit, not a deferred follow-up. The principle is symmetric
+  with the `Misleading docs are blocking` principle in
+  `.agent/directives/principles.md` § Code Quality: shipping a
+  change without the doc update is shipping a misleading-doc.
+  Captured originally in the retracted standing-decisions
+  register entry `docs-as-definition-of-done-on-every-lane`;
+  graduated to this PDR amendment in 2026-04-21 Session 5 per
+  the decomposition arc.
 
 ## Context
 
@@ -135,6 +155,22 @@ A landing is **not**:
 
 Plan edits, reviews, and refinements compose toward landings; they
 are not landings themselves.
+
+**Docs-as-definition-of-done (2026-04-21 Session 5 amendment).**
+A landing is **not complete** while documentation invalidated by
+the change remains stale. Specifically: any README, ADR, PDR,
+plan body, runbook, or TSDoc passage that the change makes
+incorrect, misleading, or pointing-at-a-retired-surface MUST be
+updated as part of the landing — in the same commit (or in the
+same close-out batch when the change spans multiple commits) — not
+deferred to a later "doc sync" phase. The doc update is **part of
+the landing**, not a follow-up. A change that ships the code
+without the doc update is shipping a misleading-doc, which the
+`Misleading docs are blocking` principle (`.agent/directives/
+principles.md` § Code Quality) categorises as a quality-gate
+breach. The two surfaces are symmetric: PDR-026 says doc updates
+compose into landings; the principle says misleading docs cannot
+ship.
 
 ### Structure at session open
 
@@ -248,6 +284,9 @@ Practice Core, not in a repo-local surface.
 - Silent exception-taking: claiming at close that no landing was
   ever intended, when no such declaration was made at open.
 - Counting plan refinement or review loops as landings.
+- Reporting a change as landed while documentation invalidated by
+  the change remains stale, per the 2026-04-21 Session 5
+  docs-as-definition-of-done amendment.
 
 ### Accepted trade-offs
 

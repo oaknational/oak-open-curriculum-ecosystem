@@ -1392,7 +1392,7 @@ at every decision point: simplify before extending; delete before
 adding; prove before elaborating.
 
 1. **Close OAC Phase 4** — plan at
-   [`active/operational-awareness-and-continuity-surface-separation.plan.md`](../active/operational-awareness-and-continuity-surface-separation.plan.md).
+   [`archive/completed/operational-awareness-and-continuity-surface-separation.plan.md`](../archive/completed/operational-awareness-and-continuity-surface-separation.plan.md).
    Pilot evidence at
    `.agent/analysis/operational-awareness-pilot-evidence.md`.
    Refinements (a) and (b) appear landed via separate channels;

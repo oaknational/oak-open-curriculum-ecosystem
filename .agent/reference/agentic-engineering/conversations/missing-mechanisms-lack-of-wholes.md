@@ -1,5 +1,14 @@
 # Missing Mechanisms, Lack of Wholes
 
+> **Editor's note — 2026-04-21 Session 5**: this conversation transcript
+> is preserved verbatim as historical record. References to "workstream
+> brief's Promotion watchlist" reflect doctrine current at the time of
+> the conversation; the workstream-brief artefact surface was retired in
+> Session 5 of the `memory-feedback` thread and the promotion watchlist
+> now lives in the per-thread next-session record's `Lane state`
+> substructure. See [PDR-011 §Amendment Log 2026-04-21 Session 5](../../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log)
+> for the canonical update.
+
 are all the memory planes wired into appropriate feedback loops? Is the applied Practice learning on all fronts?     
   Does the Practice itself needs updates or PDRs around the memory enhancements? What about the new patterns, and the  
   need for pertubation mechanisms? Are there any mechanisms for emergent learnings to flow out of a memory plane, or   

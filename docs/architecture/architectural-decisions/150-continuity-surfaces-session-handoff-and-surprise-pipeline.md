@@ -1,9 +1,13 @@
 # ADR-150: Continuity Surfaces, Session Handoff, and Surprise Pipeline
 
-**Status**: Accepted (amended 2026-04-20)
+**Status**: Accepted (amended 2026-04-20, 2026-04-21)
 **Date**: 2026-04-02 (amended 2026-04-20 — §3 abstracted from
 prompt-host to canonical repo-local surface; §4 generalised; Rationale
-and Consequences language aligned to the amendment per OAC Phase 4.3)
+and Consequences language aligned to the amendment per OAC Phase 4.3;
+amended 2026-04-21 Session 5 — host-local surface set re-shaped:
+workstream-brief surface retired, lane state absorbed into per-thread
+next-session records with a `Lane state` substructure; portable
+doctrine carried forward in the parallel PDR-011 amendment)
 **Related**: [ADR-117](117-plan-templates-and-components.md),
 [ADR-119](119-agentic-engineering-practice.md),
 [ADR-124](124-practice-propagation-model.md),
@@ -20,7 +24,33 @@ and Consequences language aligned to the amendment per OAC Phase 4.3)
   Rationale and Consequences language aligned. Doctrine unchanged (three
   continuity types, split-loop model, contract field set, surprise
   pipeline all preserved). See
-  [operational-awareness-and-continuity-surface-separation.plan.md](../../../.agent/plans/agentic-engineering-enhancements/active/operational-awareness-and-continuity-surface-separation.plan.md).
+  [operational-awareness-and-continuity-surface-separation.plan.md](../../../.agent/plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md).
+- **2026-04-21 Session 5** (memory-feedback thread; Pippin / cursor-opus;
+  owner-ratified TIER-2 simplification): the host-local surface set
+  realising this ADR has been re-shaped. The per-workstream brief
+  surface (`.agent/memory/operational/workstreams/<slug>.md`) has been
+  retired as a continuity artefact and its lane-level short-horizon
+  state (current objective, blockers, promotion watchlist) absorbed
+  into per-thread next-session records under a new `Lane state`
+  substructure (`.agent/memory/operational/threads/<thread>.next-session.md`).
+  Portable minimum fields renamed accordingly: `Active workstreams`
+  → `Active threads`; `Branch-primary workstream brief` →
+  `Branch-primary thread next-session record`. Tactical track-card
+  filename convention updated to `<thread>--<agent>--<branch>.md`.
+  Doctrine unchanged (three continuity types, split-loop model,
+  field set in aggregate, surprise pipeline all preserved); only
+  the host-local surface decomposition changed. The conceptual term
+  "workstream" remains valid as a within-thread scope descriptor; only
+  the dedicated artefact home is retired. The portable PDR-011
+  amendment ([PDR-011 §Amendment Log 2026-04-21 Session 5](../../../.agent/practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log))
+  carries the same substantive change for adopting repos. Cross-PDR
+  rationale at
+  [PDR-027 §Amendment Log 2026-04-21 Session 5](../../../.agent/practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md#amendment-log).
+  Body §3 of this ADR retains the original portable-minimum field
+  list verbatim as the historical decision record; the Session-5
+  re-naming is recorded here in the Amendment Log per ADR convention
+  and reflected in the realising surface paths and field names in
+  the actual operational memory tree.
 
 ## Context
 

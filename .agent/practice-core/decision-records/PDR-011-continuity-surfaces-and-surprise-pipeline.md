@@ -34,8 +34,8 @@ unit).
 - **2026-04-20**: §"The continuity contract" host language abstracted;
   field set restructured into a portable minimum plus optional
   epistemic fields; §Host-local context updated to reflect the
-  state-surface split (`repo-continuity.md` + `workstreams/<slug>.md`
-  + `memory/operational/tracks/*.md`). The portable doctrine and the contract's
+  state-surface split (`repo-continuity.md` and `workstreams/<slug>.md`
+  and `memory/operational/tracks/*.md`). The portable doctrine and the contract's
   authority-subordinate role to active plans are unchanged.
 - **2026-04-21** (Accepted): continuity unit named explicitly as
   the **thread**
@@ -49,6 +49,50 @@ unit).
   across sessions within and across threads. Pipeline stages and
   split-loop model unchanged. Thread ↔ session relationship named
   explicitly.
+- **2026-04-21 Session 5 — workstream-brief surface retired as a
+  portable component (Pippin / cursor-opus; owner-ratified TIER-2
+  simplification of the `memory-feedback` thread).** §"The
+  continuity contract" amended: the *split-host shape* is no longer
+  described as `canonical file and per-workstream briefs and single-writer tactical track cards`; it is now `canonical file + per-thread next-session records (with a Lane state) substructure
+  for lane-level short-horizon state) + single-writer tactical
+  track cards`. **Portable minimum fields** updated: `Active
+  workstreams` → `Active threads` (with per-thread identity
+  column); `Branch-primary workstream brief` → `Branch-primary
+  thread next-session record`. **Optional (host-local placement)**
+  text updated: per-workstream brief no longer cited as a valid
+  host. §"Host-local context" updated: per-lane resumption briefs
+  bullet removed; thread next-session records named instead;
+  tracks filename convention updated to `<thread>--<agent>--
+  <branch>.md` (history note: the workstream-scoped form remains
+  declarative, not schema-enforced; lane-qualified form available
+  if a future thread exercises multi-lane scope).
+  **Conceptual term unchanged**: "workstream" remains valid as a
+  scope descriptor within a thread; only the dedicated artefact
+  surface is retired. **Re-introduction path**: if a future
+  adopter encounters a thread genuinely requiring multiple
+  concurrent lanes whose state cannot ergonomically live in the
+  thread next-session record, the workstream-brief surface may be
+  re-introduced via a fresh PDR-011 amendment grounded in
+  concrete evidence.
+  See [PDR-027 §Amendment Log 2026-04-21 Session 5](PDR-027-threads-sessions-and-agent-identity.md#amendment-log)
+  for the cross-PDR rationale.
+- **2026-04-21 Session 5 — runtime tactical track cards are
+  git-tracked as portable doctrine.** §"The continuity contract"
+  amended: tactical track cards (the per-`<thread>--<agent>--
+  <branch>` files holding immediate-execution state for a single
+  writer) MUST be git-tracked, not gitignored, in the canonical
+  shape of this PDR. Rationale: the cards are the resumption
+  surface a future session reads first; if they are gitignored
+  they are invisible across machines, branches, and worktrees,
+  and the continuity guarantee fails at the boundary the cards
+  exist to bridge. Track cards are short-lived (single-branch
+  lifetime) but each card's lifetime spans multiple sessions and
+  potentially multiple agents/machines on the same branch (e.g.
+  worktree handoff, owner inspection, cross-host hydration), and
+  git is the portable transport that preserves them. Captured
+  originally in the retracted standing-decisions register entry
+  `runtime-tactical-track-cards-git-tracked`; graduated to this
+  PDR amendment in 2026-04-21 Session 5 per the decomposition arc.
 
 ## Context
 
@@ -213,18 +257,34 @@ compact structured section with specified fields. The canonical host
 is host-local: it may be a dedicated state file, a section of a
 primary session-continuation prompt, or any equivalent surface that
 every workflow references first. Hosts that split the contract
-across a canonical file + per-workstream briefs + single-writer
-tactical track cards remain compliant, provided the authority order
-between surfaces is explicit, each surface has a single documented
-writer, and the fields below are covered in aggregate.
+across a canonical file + per-thread next-session records (with a
+`Lane state` substructure for lane-level short-horizon state) +
+single-writer tactical track cards remain compliant, provided the
+authority order between surfaces is explicit, each surface has a
+single documented writer, and the fields below are covered in
+aggregate. **Single-writer tactical track cards MUST be git-tracked**
+in the host's repository — not gitignored — so they are portable
+across machines, branches, and worktrees within their lifetime
+(per the 2026-04-21 Session 5 amendment). Track cards are short-
+lived (single-branch lifetime) but each card spans multiple
+sessions and potentially multiple agents/machines on the same
+branch; git is the portable transport that preserves them. (Per the 2026-04-21 Session 5 amendment, the prior
+split-shape — *canonical file + per-workstream briefs + tactical
+track cards* — is also accepted as a host-local variant if an
+adopter encounters multi-lane threads requiring dedicated
+brief surfaces, but is no longer the recommended default.)
 
 **Portable minimum fields** (every repo carries these, regardless of
 host shape):
 
-- **Active workstreams** — lanes currently in play.
-- **Branch-primary workstream brief** — pointer to the primary lane's
-  resumption brief (if the host splits per-lane state into a separate
-  surface) or an inline compact status block (if the host does not).
+- **Active threads** — continuity units currently in play (with
+  per-thread identity columns recording the participating
+  agents/sessions per PDR-027).
+- **Branch-primary thread next-session record** — pointer to the
+  primary thread's next-session record (containing identity,
+  landing target, and any `Lane state` substructure) or an inline
+  compact status block (if the host does not split per-thread state
+  into a separate surface).
 - **Repo-wide invariants / non-goals** — constraints carried forward.
 - **Next safe step** — operational-continuity content: what the next
   session should do first.
@@ -232,8 +292,9 @@ host shape):
   been run and what it found.
 
 **Optional (host-local placement)** — these may live on the canonical
-contract, on a per-workstream brief, or on the napkin, but they MUST
-be present somewhere the next session reads before acting:
+contract, on a per-thread next-session record (`Lane state`
+substructure), or on the napkin, but they MUST be present somewhere
+the next session reads before acting:
 
 - **Current session focus** — only when distinct from the
   branch-primary lane (e.g. a parallel thread).
@@ -262,7 +323,7 @@ the per-thread records are satellites scoped by thread.
 
 Surprise and correction follow a named pipeline:
 
-```
+```text
 capture → distil → graduate → enforce
 ```
 
@@ -456,13 +517,19 @@ authored carries a **split-surface host**:
 - Canonical continuity contract: `.agent/memory/operational/repo-continuity.md`
   (portable minimum fields + "Current session focus" when distinct
   from branch-primary).
-- Per-lane resumption briefs: `.agent/memory/operational/workstreams/<slug>.md`
-  (owning plan(s), current objective, current state, blockers, next
-  safe step, active track links, promotion watchlist).
+- Per-thread next-session records: `.agent/memory/operational/threads/<slug>.next-session.md`
+  (identity table per PDR-027 + landing target + `Lane state`
+  substructure carrying owning plan(s), current objective, current
+  state, blockers, next safe step, active track links, promotion
+  watchlist). *2026-04-21 Session 5*: this surface absorbed the
+  retired `.agent/memory/operational/workstreams/<slug>.md`
+  per-lane resumption briefs.
 - Single-writer tactical track cards:
-  `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md`
+  `.agent/memory/operational/tracks/<thread>--<agent>--<branch>.md`
   (git-tracked; collaborative tracks create multiple cards
-  disambiguated by filename).
+  disambiguated by filename; the `<scope>` token defaults to the
+  thread slug post-Session-5, with optional lane qualifier
+  `<thread>-<lane>` if the thread exercises multi-lane scope).
 - Session-handoff workflow: canonical in `.agent/commands/` with
   platform adapters.
 - Consolidate-docs workflow: canonical in `.agent/commands/` with

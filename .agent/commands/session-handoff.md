@@ -58,8 +58,9 @@ asks for more, this command must not trigger:
 2. **Refresh the canonical continuity contract.** Update
    `.agent/memory/operational/repo-continuity.md` using its documented field set:
 
-   - `Active workstreams`
-   - `Branch-primary workstream brief`
+   - `Active threads` (the per-thread summary table)
+   - `Branch-primary lane state` (pointer to the branch-primary
+     thread's next-session record)
    - `Current session focus` (if distinct from the branch-primary lane)
    - `Repo-wide invariants / non-goals`
    - `Next safe step`
@@ -68,16 +69,26 @@ asks for more, this command must not trigger:
    Keep it compact and operational. Active plans remain authoritative for
    scope, sequencing, acceptance criteria, and validation.
 
-3. **Refresh the relevant workstream brief.** Update
-   `.agent/memory/operational/workstreams/<slug>.md` for any lane that moved this session.
-   Required fields: `Owning plan(s)`, `Current objective`, `Current state`,
-   `Blockers / low-confidence areas`, `Next safe step`, `Active track links`,
-   `Promotion watchlist`.
+   *Workstream surface retired 2026-04-21 Session 5*: the
+   `Active workstreams` and `Branch-primary workstream brief`
+   fields that were previously listed here have been replaced by
+   the thread-record pointers above. Lane state now folds into
+   `.agent/memory/operational/threads/<slug>.next-session.md`.
+
+3. **Refresh the relevant thread's next-session record (lane state
+   included).** Update
+   `.agent/memory/operational/threads/<slug>.next-session.md` for
+   any thread that moved this session. The thread record carries
+   identity + next-session landing + lane state. Fields (lane state
+   section): `Owning plan(s)`, `Current objective`, `Current state`,
+   `Blockers / low-confidence areas`, `Next safe step`, `Active
+   track links`, `Promotion watchlist`.
 
 4. **Resolve, promote, or delete any tactical track cards.** Cards in
    `.agent/memory/operational/tracks/` are short-horizon. At session close, each card is
-   either: resolved (deleted), promoted (signal routed into the workstream
-   brief's promotion watchlist or napkin), or deleted if no longer relevant.
+   either: resolved (deleted), promoted (signal routed into the
+   owning thread's next-session record's lane-state promotion
+   watchlist or into the napkin), or deleted if no longer relevant.
 
 5. **Sync the authoritative next-action surfaces.** Update any active plan
    whose status, preconditions, or immediate next safe step changed this

@@ -4,8 +4,17 @@ pdr_kind: governance
 
 # PDR-015: Reviewer Authority and Dispatch Discipline
 
-**Status**: Accepted
-**Date**: 2026-04-18
+**Status**: Accepted (amended 2026-04-21)
+**Date**: 2026-04-18 (amended 2026-04-21 — dispatch discipline
+extended in two ways: (a) friction-ratchet trigger — accumulated
+friction on a single topic within a session escalates to
+`assumptions-reviewer` for solution-class review; (b) reviewer
+phase alignment — the existing design-intent + implementation
+two-stage model extended explicitly to three phases (plan-time,
+mid-cycle, close) so that reviewers fire at the lifecycle moment
+where their findings are cheapest to act on. Underlying authority
+precedence, layer-routing, widening-is-wrong, and review-intent
+substance unchanged.)
 **Related**:
 [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
 (new Core contract);
@@ -14,6 +23,41 @@ pdr_kind: governance
 [PDR-012](PDR-012-review-findings-routing-discipline.md)
 (findings routing — this PDR governs how findings are weighted
 against each other).
+
+## Amendment Log
+
+- **2026-04-21** (Accepted): two dispatch-discipline extensions
+  landed. **(a) Friction-ratchet trigger.** When three or more
+  distinct friction signals accumulate on a single topic within a
+  session (a friction signal is any of: a hook failure, a reviewer
+  rejection, an owner correction, a quality-gate breach, a
+  retracted plan-body section, a missing-evidence finding), the
+  agent MUST escalate to `assumptions-reviewer` for a
+  solution-class review of the topic, rather than continuing to
+  apply local fixes. The third signal is the trigger — at that
+  point the local-fix lens has demonstrably failed, and the
+  question is whether the underlying assumption set is wrong.
+  Counter resets at session boundary. **(b) Reviewer phases
+  aligned to lifecycle.** The existing two-stage model
+  (design-intent and implementation review) is extended explicitly
+  to three named phases: **plan-time** (reviewer fires on the plan
+  body before plan exit, against assumptions and structural
+  soundness — see also PDR-031 for the build-vs-buy attestation
+  this phase enforces); **mid-cycle** (reviewer fires at major
+  inflection points within execution — phase boundaries, surface
+  introductions, risk thresholds reached — to catch
+  framing-outlives-the-plan failures before they compound); and
+  **close** (reviewer fires on the landed change, against
+  cumulative quality and Practice fit). Each phase has a
+  characteristic reviewer set and characteristic findings; missing
+  a phase is a dispatch-discipline failure. The two-stage shape
+  remains valid for trivial work; the three-phase shape is
+  required for non-trivial work. Captured originally in the
+  retracted standing-decisions register entries
+  `friction-ratchet-counter-3-plus-signals-escalates-to-
+  assumptions-reviewer` and
+  `reviewer-phases-aligned-plan-time-mid-cycle-close`; graduated
+  to this PDR in 2026-04-21 Session 5 per the decomposition arc.
 
 ## Context
 
@@ -142,6 +186,70 @@ not a replacement for implementation review; it is a cheaper
 earlier opportunity to catch issues that would be expensive to fix
 post-code.
 
+### Reviewer phases aligned to lifecycle (2026-04-21 amendment)
+
+The two-stage model above is extended explicitly to **three named
+phases** for non-trivial work, each with characteristic reviewers
+and characteristic findings:
+
+| Phase | When it fires | Characteristic reviewers | Characteristic findings |
+|---|---|---|---|
+| **Plan-time** | Before exiting planning mode | `assumptions-reviewer`, the domain-specialist most relevant to the proposed work, structural reviewers (`architecture-reviewer-*`) | Missing assumptions, unjustified scope, missing build-vs-buy attestation (PDR-031), plan-body framing risks |
+| **Mid-cycle** | At major inflection points within execution (phase boundaries, surface introductions, risk thresholds reached, accumulated friction) | The domain-specialist for the current phase; `assumptions-reviewer` if friction-ratchet has fired | Framing-outlives-the-plan failures, drift between plan body and execution, missed mid-execution simplification opportunities |
+| **Close** | On the landed change, before the close summary | Multi-layer dispatch per §Route by abstraction layer (domain semantics, docs/ADR mesh, code/file polish, architectural boundary) | Cumulative quality issues, Practice-fit, doc-mesh integrity, missed amendments to durable surfaces |
+
+Each phase has its own dispatch decision; missing a phase is a
+dispatch-discipline failure for non-trivial work. Trivial work
+may compress into the design-intent + implementation two-stage
+shape; the three-phase shape is required when any of: the change
+crosses a workspace boundary; the change introduces a new
+durable surface (rule, PDR, ADR, principle); the change is a
+multi-session thread landing.
+
+The plan-time phase is the cheapest moment to catch
+mistakes-of-framing; the mid-cycle phase is the cheapest moment
+to catch framing-drift; the close phase is the cheapest moment
+to catch doc-mesh and Practice-fit issues. None of the three
+phases substitutes for the others.
+
+### Friction-ratchet trigger (2026-04-21 amendment)
+
+When **three or more distinct friction signals accumulate on a
+single topic within a session**, the agent MUST escalate to
+`assumptions-reviewer` for a **solution-class review** of the
+topic, rather than continuing to apply local fixes.
+
+A **friction signal** on a topic is any of:
+
+- A pre-commit, pre-push, or CI hook failure caused by work on
+  the topic.
+- A reviewer (sub-agent or owner) rejection of work on the topic.
+- An owner correction redirecting work on the topic.
+- A quality-gate breach (lint, type-check, test, fitness)
+  attributable to the topic.
+- A retracted plan-body section on the topic.
+- A reviewer-flagged missing-evidence finding on the topic.
+
+The **third** distinct signal is the trigger: at that point the
+local-fix lens has demonstrably failed, and the question is no
+longer "how do I fix this signal" but "is the assumption set
+underlying my approach to this topic wrong." `assumptions-reviewer`
+returns a solution-class assessment; the agent then either
+re-frames the topic per the reviewer's findings or surfaces the
+disagreement to the owner.
+
+Counter scope: per topic, per session. The counter resets at
+session boundary; cross-session friction accumulation is captured
+separately via the `repo-continuity.md` Due/Pending register.
+Counter granularity: signals on logically the same topic count
+together (e.g. three lint failures on the same surface = three
+signals; three failures on three independent surfaces = one each
+on three topics).
+
+The trigger is not a soft suggestion; the third signal **is** the
+escalation. Continuing to apply local fixes past the third signal
+is a dispatch-discipline failure.
+
 ## Rationale
 
 **Why domain specialists win on their domain.** Architecture
@@ -200,6 +308,12 @@ Alternatives rejected:
   being upheld (per PDR-012).
 - Non-trivial work receives design-intent review before
   implementation begins.
+- Non-trivial work receives reviewers at all three lifecycle
+  phases (plan-time, mid-cycle, close) per §Reviewer phases
+  aligned to lifecycle.
+- Three accumulated friction signals on a single topic in a
+  session escalate to `assumptions-reviewer` for solution-class
+  review per §Friction-ratchet trigger.
 
 ### Forbidden
 
@@ -212,6 +326,10 @@ Alternatives rejected:
 - Skipping design-intent review on work that introduces new data
   sources, integrations, MCP surfaces, cross-workspace boundaries,
   or significant architectural commitments.
+- Skipping the mid-cycle phase on non-trivial work; the
+  characteristic finding (framing-outlives-the-plan) is missed.
+- Continuing to apply local fixes past the third friction signal
+  on a single topic without escalating to `assumptions-reviewer`.
 
 ### Accepted cost
 

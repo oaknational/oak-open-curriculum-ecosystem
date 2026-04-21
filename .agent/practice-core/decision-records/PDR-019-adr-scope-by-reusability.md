@@ -4,12 +4,39 @@ pdr_kind: governance
 
 # PDR-019: ADR Scope by Reusability, Not Diff Size
 
-**Status**: Accepted
-**Date**: 2026-04-18
+**Status**: Accepted (amended 2026-04-21)
+**Date**: 2026-04-18 (amended 2026-04-21 — ADR contents discipline
+added: an ADR records the **WHAT** of a decision (the choice, the
+rejected alternatives, the trade-off rationale) and not the **HOW**
+of its implementation. Reusability test for ADR existence
+unchanged; this amendment governs what an ADR contains once it
+exists.)
 **Related**:
 [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
 (new Core contract — PDRs and ADRs cover different seams per
-PDR-001; this PDR governs how host-repo ADRs are scoped).
+PDR-001; this PDR governs how host-repo ADRs are scoped);
+[PDR-023](PDR-023-documentation-structure-discipline.md)
+(documentation structure — ADRs participate in the README-as-Index
+mesh; this PDR's WHAT-not-HOW amendment composes with PDR-023's
+discoverability discipline).
+
+## Amendment Log
+
+- **2026-04-21** (Accepted): ADR contents discipline added —
+  **ADRs state WHAT decisions were made, not HOW they were
+  implemented.** Implementation detail belongs in code (with TSDoc
+  for intent and trade-offs), in plan bodies (for execution
+  sequencing), or in runbooks (for operational procedure) — not in
+  ADR body sections that risk becoming maintenance burden when
+  implementation drifts. The §Decision section of an ADR records
+  the choice and its scope; the §Rationale section records why
+  this choice over the rejected alternatives; the §Consequences
+  section records the constraint propagation and accepted costs.
+  None of these sections describes step-by-step how to implement
+  the decision in code. Captured originally in the retracted
+  standing-decisions register entry `adrs-state-what-not-how`;
+  graduated to this PDR amendment in 2026-04-21 Session 5 per the
+  decomposition arc.
 
 ## Context
 
@@ -106,6 +133,43 @@ differs:
 A decision that would be re-derived across repos is a PDR; a
 decision that would be re-derived within this repo is an ADR.
 
+### ADRs state WHAT, not HOW (2026-04-21 amendment)
+
+Once an ADR exists (per the reusability test), its **contents** are
+disciplined: the ADR records the **WHAT** of the decision, not the
+**HOW** of its implementation.
+
+| Section | Records | Does NOT record |
+|---|---|---|
+| **Status** | Acceptance state, date, amendment lineage | — |
+| **Context** | The problem the decision addresses; constraints in play; the question being answered | Step-by-step background of how the team got here unless load-bearing for the trade-off |
+| **Decision** | The choice made; the scope of the choice; named rejected alternatives at the choice level | Implementation steps; code snippets longer than necessary to illustrate the choice's shape; configuration values that will drift |
+| **Rationale** | Why this choice over the rejected alternatives; trade-offs accepted | How to operate the implementation; recipes for callers |
+| **Consequences** | What the decision constrains in future work; accepted costs; mitigations at the decision level | Runbook procedure; troubleshooting steps; deployment instructions |
+
+Implementation belongs in:
+
+- **Code with TSDoc** — the canonical home for *how* a decision
+  is realised in a specific module, with intent and trade-off
+  context inline.
+- **Plan bodies** — the canonical home for *how* the decision is
+  rolled out across the codebase (sequencing, gates, rollback).
+- **Runbooks and READMEs** — the canonical home for *how* to
+  operate the implementation post-landing.
+
+The risk an ADR with HOW-content carries: when the implementation
+drifts from the ADR's HOW-section (which it will, because code
+changes faster than ADRs), the ADR becomes misleading rather than
+useful. A WHAT-only ADR remains correct as long as the underlying
+decision holds; only a decision change requires an ADR amendment.
+
+This discipline applies to **new ADRs** authored after the
+2026-04-21 amendment date. Existing ADRs with HOW-content are not
+required to be retroactively pruned; they are pruned opportunistically
+when the surrounding code changes and the HOW-section is observed
+to have drifted (per the `Misleading docs are blocking` principle
+in `.agent/directives/principles.md` § Code Quality).
+
 ## Rationale
 
 **Why reusability, not diff size.** Diff size is a local author-time
@@ -156,6 +220,11 @@ Alternatives rejected:
   decision.
 - Producing an ADR for mechanical execution work that doesn't
   encode a reusable decision.
+- Authoring **HOW-content** in new ADR bodies — implementation
+  steps, configuration values that will drift, runbook procedure,
+  caller recipes — per §"ADRs state WHAT, not HOW" (2026-04-21
+  amendment). Implementation belongs in code with TSDoc, in plan
+  bodies, or in runbooks.
 
 ### Accepted cost
 

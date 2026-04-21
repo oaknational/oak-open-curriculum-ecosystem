@@ -24,7 +24,7 @@ for the operational-memory surfaces and authority order within them.
 | **Doctrine** | Read-and-internalise; sets stance for every session | `.agent/directives/` (AGENT.md, principles, testing-strategy, schema-first-execution, metacognition, orientation) | Session open — Ground First step 1 |
 | **Portable Doctrine** | Cross-repo Practice doctrine; travels with Practice Core | `.agent/practice-core/` (trinity, PDRs, patterns) | Orientation + when Practice questions arise |
 | **Active Memory** | Learning loop — capture, distil, graduate, enforce | `.agent/memory/active/` (napkin, distilled, patterns, archive) | Session open — Ground First step 3 |
-| **Operational Memory** | Continuity / session-resume state | `.agent/memory/operational/` (repo-continuity, threads, workstreams, tracks) | Session open — Ground First step 4 |
+| **Operational Memory** | Continuity / session-resume state | `.agent/memory/operational/` (repo-continuity, threads, tracks) | Session open — Ground First step 4 |
 | **Executive Memory** | Stable organisational contracts and catalogues | `.agent/memory/executive/` (artefact inventory, reviewer catalogue, adapter matrix) | Ad-hoc lookup when taking an action the surface governs |
 | **Plans** | Scope, sequencing, acceptance criteria | `.agent/plans/*/active/*`, `.agent/plans/*/current/*` | When picking up a lane |
 | **Reference** | Library — read-to-learn about a matter | `.agent/reference/` (deep-dives, research, audits, reports, work-to-date) | When investigating a topic |
@@ -42,10 +42,9 @@ conflicts, not a gating rule across different-scope claims.
 2. **`memory/operational/repo-continuity.md`** — canonical continuity
    contract.
 3. **`memory/operational/threads/<slug>.next-session.md`** — thread-level
-   identity + next-session landing (PDR-027).
-4. **`memory/operational/workstreams/<slug>.md`** — lane-level
-   short-horizon state.
-5. **`memory/operational/tracks/*.md`** — tactical coordination only;
+   identity + next-session landing + lane state (PDR-027;
+   workstream surface retired 2026-04-21, lane state folded in).
+4. **`memory/operational/tracks/*.md`** — tactical coordination only;
    never authoritative for scope.
 
 Doctrine (directives, ADRs, PDRs) sits above these for *governance*

@@ -39,8 +39,15 @@ start reads).
 **Contents**:
 
 - [`operational/repo-continuity.md`](operational/repo-continuity.md) — canonical continuity contract.
-- [`operational/workstreams/<slug>.md`](operational/workstreams/) — per-lane resumption briefs.
-- [`operational/tracks/<workstream>--<agent>--<branch>.md`](operational/tracks/) — single-writer tactical coordination cards (ephemeral; resolved-or-deleted at session close).
+- [`operational/threads/<slug>.next-session.md`](operational/threads/) — per-thread identity + next-session landing + lane state (PDR-027).
+- [`operational/tracks/<thread>--<agent>--<branch>.md`](operational/tracks/) — single-writer tactical coordination cards (ephemeral; resolved-or-deleted at session close).
+
+*Workstream surface retired 2026-04-21 Session 5* (owner-ratified
+TIER-2 simplification): `operational/workstreams/<slug>.md` is no
+longer an active operational-memory surface. Lane state folds into
+each thread's next-session record. See
+[`operational/workstreams/README.md`](operational/workstreams/README.md)
+retirement notice.
 
 **Read trigger**: session resume (Ground First step 4 of start-right).
 
@@ -80,7 +87,7 @@ When operational surfaces disagree on the same field, the order is:
 
 1. **Plans** (`.agent/plans/*/active/*`) — scope, sequencing, acceptance.
 2. **`operational/repo-continuity.md`** — canonical continuity contract.
-3. **`operational/workstreams/<slug>.md`** — lane-level short-horizon state.
+3. **`operational/threads/<slug>.next-session.md`** — thread-level identity + next-session landing + lane state.
 4. **`operational/tracks/*.md`** — tactical coordination only; never authoritative for scope.
 
 This is a same-scope tiebreaker, not a gating rule across different

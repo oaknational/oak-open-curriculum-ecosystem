@@ -25,6 +25,50 @@ under this PDR's identity model, not thread identities themselves);
 tripwires that make the additive-identity rule environmental
 rather than passive guidance).
 
+## Amendment Log
+
+- **2026-04-21 Session 5 — workstream layer retired as an
+  operational-memory surface (Pippin / cursor-opus;
+  owner-ratified TIER-2 simplification of the `memory-feedback`
+  thread).** The Decision body says *"one thread may span
+  multiple workstreams"* and *"workstream briefs are scoped to
+  threads"* — this framing remains valid as abstract vocabulary,
+  but at current scale no active thread has exercised the 1:N
+  relationship and the workstream-brief artefact surface (files
+  under `.agent/memory/operational/workstreams/`) paid a
+  coordination cost without delivering structural value.
+  Session 5 retires the workstream-brief surface; lane state
+  folds into each thread's next-session record directly. The
+  conceptual "workstream" remains as a descriptor for scope
+  within a thread, but it no longer has a dedicated operational-
+  memory artefact. See [`.agent/memory/operational/workstreams/README.md`](../../memory/operational/workstreams/README.md)
+  for the retirement rationale and where previous brief
+  content migrated.
+
+  **Semantic position**: threads still map 1:many to workstreams
+  *in principle* (the body retains this); the change is
+  artefactual — workstreams no longer have their own operational-
+  memory files. If a future thread genuinely requires multiple
+  concurrent lanes and the thread's next-session record becomes
+  too dense to carry them, the correct response is a fresh
+  amendment to this PDR introducing a replacement surface (not
+  re-authoring files under the retired directory).
+
+  **Naming-collision resolution**: before Session 5, threads and
+  workstreams could share slugs (e.g. `observability-sentry-otel`
+  was both). Post-retirement, the workstream slug is moot —
+  only the thread slug carries operational-memory weight.
+
+  **Track-naming scope** (also raised as a Session 5
+  first-principles question): tactical track-card filenames under
+  `.agent/memory/operational/tracks/` remain `<scope>--<agent>--<branch>.md`.
+  With the workstream layer retired, `<scope>` is typically the
+  thread slug; for a thread exercising multi-lane scope, the
+  `<scope>` token may carry a lane qualifier
+  (e.g. `<thread>-<lane>`) — the format remains declarative, not
+  schema-enforced. Until a multi-lane thread surfaces, the
+  simpler `<thread>--<agent>--<branch>.md` is canonical.
+
 ## Context
 
 Agentic engineering sessions are bounded units of work
@@ -79,8 +123,12 @@ A **thread** is:
 - **Potentially touched by multiple agents over time** — different
   platforms, different models, different owner-assigned names.
 - **The continuity unit** — the surface against which continuity
-  artefacts (next-session records, workstream briefs, landing
-  commitments) are scoped.
+  artefacts (next-session records — including any `Lane state`
+  substructure — and landing commitments) are scoped.
+  (Workstream-brief artefact surface retired 2026-04-21
+  Session 5; see §Amendment Log. The conceptual term
+  "workstream" remains as a scope descriptor within a thread, but
+  it no longer has a dedicated artefact home.)
 
 A thread is **not**:
 

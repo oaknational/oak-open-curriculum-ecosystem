@@ -1,59 +1,56 @@
-# Workstream Briefs
+# Workstream Briefs — RETIRED 2026-04-21
 
-**Status**: Scaffolding created by OAC Phase 2 (2026-04-20). First
-briefs are authored during OAC Phase 3 pilot.
+**Status**: **RETIRED** as an active operational-memory surface.
+Session 5 of the `memory-feedback` thread (2026-04-21,
+owner-ratified TIER-2 simplification) collapsed the workstream
+layer into thread next-session records per
+[PDR-027 §2026-04-21 Session 5 Amendment Log entry](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md#amendment-log).
 
-Each active workstream gets one tracked brief at
-`.agent/memory/operational/workstreams/<slug>.md`. The brief is a short-horizon
-resumption surface: enough context for a freshly-resumed agent to pick
-up the workstream without reading the whole plan.
+**Rationale**: at current scale (two active threads, each with
+0 or 1 workstream) the thread↔workstream mapping was 1:1. The
+workstream brief surface paid a naming cost (two files to
+maintain per lane, coordination overhead between briefs and
+thread next-session records) without delivering structural value
+— any lane-state a workstream brief carried could live in the
+thread's next-session record. Delete-bias resolution: retire
+the surface; fold load-bearing content into thread records.
 
-## Required Fields
+**Where the content went**:
 
-Every brief must cover:
+- `observability-sentry-otel.md` (branch-primary lane state on
+  `feat/otel_sentry_enhancements`) → load-bearing content folded
+  into [`threads/observability-sentry-otel.next-session.md § Lane
+  state (absorbed from retired workstream brief)`](../threads/observability-sentry-otel.next-session.md).
+  Archived at [`archive/observability-sentry-otel.md`](archive/observability-sentry-otel.md)
+  for git provenance.
+- `operational-awareness-continuity.md` (parallel agentic-
+  engineering lane; OAC Phase 4 closed 2026-04-21) → load-bearing
+  content (Session-4 FAILED-watchlist observation + promotion
+  watchlist) already carried by
+  [`threads/memory-feedback.next-session.md`](../threads/memory-feedback.next-session.md)
+  and
+  [`repo-continuity.md § Current session focus`](../repo-continuity.md).
+  Archived at [`archive/operational-awareness-continuity.md`](archive/operational-awareness-continuity.md).
 
-- **Owning plan(s)** — link to the authoritative plan(s) in
-  `.agent/plans/*/active/` that own scope, sequencing, and acceptance.
-- **Current objective** — what the workstream is currently trying to
-  achieve.
-- **Current state** — what has landed, what is in-flight, what is
-  blocked.
-- **Blockers / low-confidence areas** — explicit; empty lists allowed.
-- **Next safe step** — the action a resuming agent can execute.
-- **Active track links** — pointers to
-  `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md` files for
-  any tactical coordination in progress.
-- **Promotion watchlist** — signals that may warrant graduation into
-  the learning loop (`napkin` → `distilled` → permanent docs).
-- **`executive-impact:`** (optional) — lane-level observations that
-  carry **operational → executive cross-plane impact** per
-  [PDR-028 Executive-Memory Feedback Loop](../../../practice-core/decision-records/PDR-028-executive-memory-feedback-loop.md)
-  and [PDR-030 Plane-Tag Vocabulary](../../../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md).
-  Use when the workstream has surfaced a contradiction, extension,
-  or supersession against a stable executive-memory catalogue
-  (artefact inventory, reviewer catalogue, adapter matrix, surface
-  matrix). Consumed at `/jc-consolidate-docs` step 5 cross-plane
-  scan; routes the signal back to the affected executive surface
-  for amendment at the next consolidation.
+**If a future thread genuinely requires multiple concurrent
+lanes** (a `1:N` thread↔workstream mapping that the current state
+does not exhibit), the correct move is to **re-introduce the
+workstream layer via a fresh PDR-027 amendment**, with the
+reintroduction grounded in concrete evidence of a multi-lane
+thread rather than speculative scaffolding. Until that evidence
+exists, threads carry their own lane state directly.
 
-## Writers and Readers
+**Do not add new workstream briefs here.** Authoring a new file
+under this directory would re-open a surface that has been
+explicitly retired. Lane state belongs in the relevant thread's
+next-session record at
+[`../threads/<slug>.next-session.md`](../threads/).
 
-- **Writer**: `session-handoff` during closeout; optionally `GO` when
-  crossing into a workstream boundary at resume time.
-- **Readers**: `GO` on resume; `session-handoff` on the next closeout.
+## History (preserved)
 
-## Expiry
-
-Workstream briefs live as long as the workstream is active. When the
-owning plan archives to `completed/`, the brief archives with it —
-content that should persist graduates into permanent docs via the
-learning loop; the rest is not preserved.
-
-## Non-Goals
-
-- Not a plan replacement. Plans remain authoritative for scope,
-  sequencing, and acceptance.
-- Not a second memory doctrine. Durable learnings route through
-  `napkin` and `distilled` as they always have.
-- Not a tactical coordination surface. That is
-  `.agent/memory/operational/tracks/*.md`.
+Previous authoring guidance for workstream briefs is preserved
+in git history (`git log -p
+.agent/memory/operational/workstreams/README.md`) and in the
+archived briefs at [`archive/`](archive/). The OAC plan that
+created this scaffold is now at
+[`archive/completed/operational-awareness-and-continuity-surface-separation.plan.md`](../../../plans/agentic-engineering-enhancements/archive/completed/operational-awareness-and-continuity-surface-separation.plan.md).
