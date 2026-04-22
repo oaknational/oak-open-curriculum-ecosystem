@@ -235,7 +235,12 @@ parseable by both AI agents and human contributors, and they provide a
 
 ### The Research Corpus
 
-Three reference documents in `.agent/reference/architecture/`:
+Three reference documents at `.agent/research/notes/architecture/`
+(relocated 2026-04-22 from `.agent/reference/architecture/` during
+the reference-tier reformation per
+[PDR-032](../../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md);
+substance unchanged, awaiting per-file disposition under the
+[rehoming plan](../../agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md)):
 
 1. **"Modern software architecture for long-term excellence"** — A portfolio
    synthesis across FOSA, Team Topologies, SRE, DORA, cloud well-architected

@@ -47,6 +47,18 @@ asks for more, this command must not trigger:
    > `<what was attempted>` — `<what prevented>` — `<what next
    > session re-attempts>`.
 
+   The `<what prevented>` field MUST satisfy the **deferral-honesty
+   discipline** per
+   [PDR-026 §Deferral-honesty discipline](../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#deferral-honesty-discipline)
+   (2026-04-22 Session 6 amendment): a named constraint (clock,
+   cost, dependency, owner veto) or a named priority trade-off,
+   plus evidence establishing it, plus falsifiability (how a
+   future agent could check whether the constraint or trade-off
+   held). Convenience phrasings — *"budget consumed"*, *"out of
+   scope"*, *"for later"*, *"next session"*, *"ran out of time"*
+   — are not acceptable; replace with the underlying constraint
+   or trade-off and the falsifiability check.
+
    If the session was a declared exception (deep consolidation,
    Core-trinity refinement, or root-cause investigation), record the
    exception's shape-specific artefact (consolidation commit,

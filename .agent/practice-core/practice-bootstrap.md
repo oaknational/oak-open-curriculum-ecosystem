@@ -76,13 +76,23 @@ Two types need no adapters — consumed directly by all platforms:
   context present). Plans can be decision-ready without being
   session-entry-ready; the gap matters because a session starting from a
   plan that lacks entry scaffolding will waste time re-deriving context.
-- **Reference** (`.agent/reference/`) — stable operational material:
-  doctrine references, setup guidance, contracts, example artefacts.
-  Content here should not age quickly.
+- **Reference** (`.agent/reference/`) — curated library tier:
+  owner-vetted, evergreen, deliberately-promoted read-to-learn
+  material. Promotion-gated per
+  [PDR-032](decision-records/PDR-032-reference-tier-as-curated-library.md)
+  (substantiate / justify / owner-vet). The default disposition for
+  fresh material is NOT `reference/` — material is promoted INTO
+  the tier from `research/`, `analysis/`, `reports/`, or active
+  memory. Content here should not age quickly; an aging gate
+  reviews retained material at each holistic-fitness pass.
 - **Research** (`.agent/research/`) — synthesis-heavy notes, surveys,
-  rationale trails, and disposition ledgers. These age differently from
-  reference material and benefit from thematic grouping. The split
-  criterion is stable contracts versus exploratory synthesis.
+  rationale trails, and disposition ledgers. The default landing
+  tier for fresh exploratory material. May contain a transient
+  `notes/` holding bay for material in transit between tiers (see
+  [`research/notes/README.md`](../research/notes/README.md) when
+  the bay exists). The split criterion vs `reference/` is curation:
+  research is exploratory synthesis; reference is owner-vetted
+  evergreen library.
 
 A thin wrapper MUST NOT contain substantive instructions or logic not in
 the canonical source. Add a portability validation script to the quality
@@ -453,15 +463,15 @@ checkout.** Hydration is incomplete until the host surface exists and
 the workflows that reference it resolve.
 
 Hosts that split the contract across multiple surfaces (canonical contract
-+ per-workstream brief + tactical track cards) remain compliant provided
-the authority order between them is explicit, each surface has a single
-documented writer, and the contract fields are covered in aggregate.
++ per-thread next-session record + tactical track cards) remain compliant
+provided the authority order between them is explicit, each surface has a
+single documented writer, and the contract fields are covered in aggregate.
 
 The contract stays operational-only. The minimum field set is: active
-workstreams, branch-primary workstream brief, repo-wide invariants /
+threads, branch-primary thread next-session record, repo-wide invariants /
 non-goals, next safe step, and deep-consolidation status. Hosts may add
 epistemic-continuity fields (recent surprises, open questions) either
-on the canonical contract or on a per-workstream brief.
+on the canonical contract or on a per-thread next-session record.
 
 Keep ordinary continuity and deep convergence separate:
 

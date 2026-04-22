@@ -4,6 +4,319 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-22 — Session 6 (reshaped close): PDR-005 source-side amendment + PDR-032 reference tier as curated library
+
+The Session 6 closing arc absorbed an owner-stipulated scope
+expansion mid-execution that reshaped the session's terminal target
+from "close the doctrine-consolidation arc" to "land the
+reference-tier reformation honestly". The doctrine-consolidation
+arc itself does NOT close at Session 6 — Phases D (holistic
+fitness exploration), E (PDR-012 most-overdue Due item), and F
+(arc close + thread archive + observability-sentry-otel
+re-activation) defer to Session 7 with named triggers. The
+deferral was applied per the
+[PDR-026 §Deferral-honesty discipline](decision-records/PDR-026-per-session-landing-commitment.md)
+landed earlier in the same session: the load-bearing target of
+Session 6 became the reformation; remaining doctrine-consolidation
+work that does not fit honestly within the budget is named-trigger
+deferred, not partially completed.
+
+- **PDR-032 (Reference Tier as Curated Library)** — new PDR
+  defining `.agent/reference/` as a curated library tier with
+  three criteria (deliberately promoted, evergreen, owner-vetted)
+  and a three-step lightweight process (substantiate / justify /
+  owner-vet). Adds subdirectory discipline (3+ documents per
+  thematic subdirectory), an aging gate at each holistic-fitness
+  pass, and a holding-bay model (`.agent/research/notes/`)
+  for material in transit between tiers. Routing per PDR-014
+  §Graduation-target routing: governance decision (defines an
+  artefact tier and its gate); load-bearing across multiple
+  surfaces; portable across the Practice network. Composes with
+  PDR-007 (outgoing material may graduate into reference under
+  PDR-032's gate) and PDR-014 (the routing pattern produces
+  reference-promotion candidates; the routing decision is not
+  itself the promotion event).
+- **PDR-005 amendment (source-side preservation and seeding)** —
+  new §Source-side preservation and seeding subsection in PDR-005
+  §Decision absorbing source-side discipline that was previously
+  carried in two outgoing-context files
+  (`cross-repo-transfer-operations.md` and
+  `seeding-protocol-guidance.md`). Substance covers material-value
+  calibration, seeding bundle priority order, bundle hygiene at
+  source, activation parity at source-expectation level,
+  three-state promotion at receiver, and the bidirectional source
+  model. The two outgoing files were defects under PDR-007 (no
+  durable home for their substance); the proper home is PDR-005
+  since source-side preservation is the counterpart of
+  destination-side transplantation already named by the PDR.
+  Source files deleted post-amendment. Class A.1 verdict: the
+  amendment body is positive-form, names genuine doctrine, and
+  composes with PDR-007 / PDR-006 / PDR-009 without restatement.
+- **Reference-tier reformation executed** — all 35 files across
+  13 subdirectories under `.agent/reference/` were relocated en
+  bloc to `.agent/research/notes/` (preserving subdirectory
+  structure) using `git mv` to preserve history. The relocation
+  was structural, not editorial — no per-file judgement was made
+  about whether each item belonged in research/ long-term. Per-file
+  disposition is tracked by the new
+  `agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md`
+  (in `future/`, not `current/`, because no SLA is imposed on the
+  holding bay). The new `.agent/reference/README.md` explains the
+  tier's three criteria, the lightweight process, the subdirectory
+  discipline, and the aging gate; the new
+  `.agent/research/notes/README.md` explains the holding-bay
+  status, the disposition-pass options, and the bay-retirement
+  condition.
+- **First three promotions under PDR-032** — three previously-outgoing
+  files passed the substantiate / justify / owner-vet gate in
+  Session 6 Phase-C Batch 2 disposition and were promoted into
+  `.agent/reference/`:
+  `design-token-governance-for-self-contained-ui.md`,
+  `starter-templates.md`, `health-probe-and-policy-spine.md`.
+  Promotion justifications are recorded in the new reference
+  README's §Current contents table. These are the inaugural
+  applications of PDR-032's gate; their next aging review is at
+  the next holistic-fitness exploration pass (Session 7).
+- **Integration into other surfaces** — the new tier definition
+  was integrated into:
+  - `practice.md` Artefact Map row for `.agent/reference/`
+    (refined from "Supporting reference material" to "Curated
+    library tier — owner-vetted, evergreen, deliberately-promoted
+    read-to-learn material; promotion-gated per PDR-032")
+  - `practice-bootstrap.md` Reference / Research definitions
+    (reference is now curated, default landing is research; the
+    holding bay is named explicitly)
+  - `directives/orientation.md` Layers table + Routing Rule
+    (Reference now distinguishes curated-library from default
+    exploratory; the routing rule names the gate)
+  - `research/README.md` (Reference row updated; Holding Bay
+    section added)
+- **Active references updated** — surfaces with broken links to
+  the relocated material were updated to point to
+  `research/notes/` paths with transitional status notes:
+  - root `README.md` (work-to-date pointer)
+  - `docs/foundation/README.md` (Agentic Engineering Hub +
+    progress update)
+  - `.agent/practice-index.md` (Agentic Corpus Hub)
+  - `.agent/skills/mcp-expert/SKILL.md` (official-mcp-app-skills)
+  - `.agent/memory/operational/repo-continuity.md` (3 references —
+    deep-dives reference-tier sweep entries closed by reformation)
+  - `.agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md`
+  - `.agent/plans/agentic-engineering-enhancements/roadmap.md`
+  - `docs/foundation/agentic-engineering-system.md` (2 references)
+  - `.agent/reports/agentic-engineering/deep-dive-syntheses/README.md`
+  - `.agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md`
+  - `docs/architecture/architectural-decisions/018-complete-biological-architecture.md`
+  - `docs/README.md` (2 references)
+- **Outgoing triage closed honestly** — Phase C completed all
+  immediately-actionable batches (Batch 1 deletes; Batch 2
+  reformation + promotion; Batch 4 PDR-005 amendment + delete);
+  Batch 3 (5 pattern-promotion candidates) deferred to Session 7
+  dedicated pattern-graduation pass per the explicit owner
+  decision. The `outgoing/README.md` was refreshed to reflect the
+  current state, the new five-substantive-homes contract (PDR-007
+  + PDR-032 composition), and the routing rule via PDR-014.
+- **Deferred to Session 7 with named triggers**:
+  - Phase D: Holistic fitness exploration (5 hard-zone items
+    per-file disposition; 9 soft-zone reviewed; coupling with
+    napkin rotation + distilled compression)
+  - Phase E: `reviewer-findings-applied-in-close-not-deferred`
+    PDR-012 amendment
+  - Phase F: doctrine-consolidation arc close, thread archive,
+    `observability-sentry-otel` re-activation, plan archival
+  - Outgoing Batch 3: 5 pattern-promotion candidates
+- **Honest deferral evidence** (per PDR-026 §Deferral-honesty
+  discipline): named priority trade-off was the reference-tier
+  reformation's load-bearing-ness given owner stipulation;
+  evidence was the scope (35 files relocated, new PDR drafted,
+  3 promotions executed, 14+ active surfaces updated);
+  falsifiability is testable — the doctrine-consolidation arc
+  did not close in Session 6, but the reformation did.
+
+## [oak-open-curriculum-ecosystem] 2026-04-22 — Session 6 (closing the doctrine-consolidation arc): PDR-014 graduation-target routing + PDR-026 deferral-honesty discipline
+
+Session 6 of the staged doctrine-consolidation arc opened with a
+meta-routing problem the prior sessions did not solve: pending
+candidates were being routed ad-hoc into rules / PDRs / commands /
+patterns by case-by-case judgement rather than by a principled
+home-selection pattern. Owner explicitly named the gap: *"we
+shouldn't be making ad-hoc decisions about rules, pdrs, commands
+etc... there should be a right place for this, and there can be
+more than one place if appropriate, but we need to establish a
+pattern for how we handle this sort of thing"*. This session
+landed the missing routing pattern, applied it to the open
+candidates, and then closed the arc.
+
+- **PDR-014 amendment (graduation-target routing pattern)** —
+  authored a new top-level §Graduation-target routing section
+  defining the surface taxonomy (pattern, PDR, rule, principle
+  line, ADR amendment, command rubric, plan-body meta-decision)
+  with what each holds and how each fires; a routing-decision tree
+  (failure-mode → pattern; novel governance → PDR; cross-cutting
+  always-on enforcement → rule; one-line invariant → principle;
+  workflow-step enforcement → command rubric; plan-local meta →
+  plan body); composition discipline for cases where a candidate
+  legitimately lands in multiple homes (pattern + PDR; PDR +
+  rule; PDR + command rubric); anti-patterns (convenience
+  routing, double-booking governance, naming a register surface
+  as a category). Class A.1 first-principles check fired on the
+  body before owner ratification; owner approved as drafted +
+  selected new-top-level placement. Composes with the
+  workstream→thread terminology refresh in this PDR (5
+  references at lines 63/71/73/76/157) — single Amendment Log
+  entry covers both.
+- **PDR-026 amendment (deferral-honesty discipline)** — first
+  application of the new routing pattern: the
+  `deferral-honesty-rule` (3/3 cross-session independent
+  instances) routed to "PDR + command rubric" composition. New
+  §Deferral-honesty discipline subsection in PDR-026 §Decision
+  defines positive requirements for an honest deferral (named
+  constraint or trade-off + evidence + falsifiability), with
+  common convenience phrases as diagnostic examples not
+  forbidden-words list. Operationalised through `/session-handoff`
+  step rubric ("Record the landed outcome" deferral justification
+  field) and `/consolidate-docs` ("Deferral-honesty discipline
+  applies throughout" prefix to all deferrals surfaced by the
+  workflow). Symmetric with PDR-026's existing docs-as-DoD
+  discipline.
+- **`/session-handoff` rubric extended** — Step 1 ("Record the
+  landed outcome") now requires `<what prevented>` for unlanded
+  cases to satisfy PDR-026's deferral-honesty discipline: name a
+  concrete blocker, named priority trade-off (with explicit
+  evidence), or external dependency. Convenience phrases ("budget
+  consumed", "out of scope", "next session") are not acceptable
+  unless tied to a named external constraint with evidence.
+- **`/consolidate-docs` rubric extended** — new top-level
+  "Deferral-honesty discipline applies throughout" section
+  before §Steps establishing that all deferrals surfaced or
+  recorded by consolidation must satisfy PDR-026's discipline
+  (with concrete examples of where this applies in steps 5, 7a,
+  7b, 9d, 9e).
+- **Lost substance re-homed** — `observability-sentry-otel`
+  thread next-session record's broken citation to `repo-continuity
+  § Standing decisions` (substance lost when the standing-decisions
+  surface was retracted Session 4) re-homed by inline restate per
+  the routing pattern's plan-local-meta-decision branch:
+  attribution-gap-acceptance is thread-local (specific to the
+  `f9d5b0d2` retroactive landing), not portable governance — does
+  not warrant PDR-027 amendment.
+- **Pending-graduations register refreshed** — `deferral-honesty-rule`
+  graduated (removed); `feel-state-of-completion-preceding-evidence-of-completion`
+  (parent pattern, 2/3) gained a falsifiability check on its
+  trigger condition + a graduation-pull note linking to the
+  landed PDR-026 discipline; `anticipated-surface-installed-then-empirically-unexercised`
+  (2/3) gained falsifiability + an in-flight-test-bed note for the
+  retired-but-not-deleted `workstreams/` folder experiment;
+  `owner-mediated-evidence-loop-for-agent-installed-protections`
+  (1/3) gained falsifiability + clarified routing-target as
+  pattern + composition candidate with PDR-015 amendment;
+  `default-retire-on-empty` clarified as command-rubric routing
+  in `/consolidate-docs` (composition with parent pattern when
+  bar fires) per the routing pattern's `pattern + rule` discipline.
+
+Owner-paced, owner-gated per-file disposition was the explicit
+session shape. Not a velocity session: the closing criterion was
+honest closure of every open item — land, defer with named
+trigger, or delete — no "partial complete".
+
+(Subsequent entries in this same Amendment Log block appended at
+the arc-close phase below.)
+
+## [oak-open-curriculum-ecosystem] 2026-04-21 — Session 5 evaluate-and-simplify (Stage 1) + standing-decisions decomposition (Stage 2(b))
+
+Session 5 of the staged doctrine-consolidation plan ran as a
+mandatory two-stage sequence after the Session-4-close honest
+question (*"are we building a valuable system or throwing energy
+into theatre?"*) and the owner clarification that there was no
+optionality (*"there is no alternative thread, we need this work
+to be FINISHED, properly, carefully, fully, choosing long-term
+architectural excellence at every point"*). Stage 1 was mandatory
+evaluate-and-simplify; Stage 2 split into 2(a) outgoing triage
+(deferred) and 2(b) standing-decisions decomposition (executed
+under owner-corrected manufactured-budget intervention).
+
+- **Stage 1 — evaluate-and-simplify (TIER-1 + TIER-2,
+  owner-ratified)**:
+  - **E1: workstream-layer collapsed** — workstream briefs
+    archived to `workstreams/archive/`; PDR-027 + PDR-011
+    amendments refactor the lane-state concept; lane state folded
+    into thread next-session records. The `workstreams/` folder
+    physically retained per owner-explicit experiment (see
+    `repo-continuity.md § Pending` register entry for
+    `anticipated-surface-installed-then-empirically-unexercised`
+    in-flight test bed).
+  - **E2: pending-graduations register pruned** to open items only
+    (deleted 6 single-instance / absorbed entries; demoted 2
+    same-session-cascade entries from Due to Pending under the
+    tightened cross-session-independent-instance bar).
+  - **E3: PDR-029 Class A.1 Layer 2 reclassified** as background
+    grounding (not a dedicated register surface).
+  - **E4: PDR-029 host-local section removed** — portable PDR is
+    portable.
+- **Stage 2(b) — standing-decisions decomposition** (10 items
+  routed to proper homes via per-item Class A.1 firing; 3
+  owner-ratified rewrites for items 5, 8, 9):
+  - **PDR-031 (new)** — *Build-vs-Buy Attestation
+    Pre-ExitPlanMode*. Codifies that any plan involving a
+    significant new dependency, framework adoption, or build-vs-
+    buy decision must record an explicit attestation in the plan
+    body before exiting plan mode.
+  - **PDR-011 amendment** — runtime tactical track cards
+    git-tracked (operational convention captured as portable
+    governance).
+  - **PDR-015 amendment** — friction-ratchet discipline added;
+    reviewer phases (intent vs close) explicitly aligned with
+    different boundary-scope concerns.
+  - **PDR-019 amendment** — *ADRs state WHAT, not HOW* (scope
+    boundary tightened; HOW belongs in plan bodies and code).
+  - **PDR-026 amendment** — *docs-as-definition-of-done*: a
+    change is not landed until documentation invalidated by the
+    change is also updated. Symmetric with the
+    misleading-docs-are-blocking principle (next entry).
+  - **New rule: `no-verify-requires-fresh-authorisation`** —
+    `--no-verify` (or any equivalent hook-skip flag) MUST NOT be
+    used without a freshly-given owner authorisation for the
+    specific commit; prior authorisation does not carry forward.
+    Canonical at `.agent/rules/no-verify-requires-fresh-
+    authorisation.md` with Claude + Cursor adapter parity.
+  - **principles.md additions** — *Owner Direction Beats Plan*
+    (when owner direction conflicts with plan body, owner
+    direction wins and the plan is updated same-session); *Misleading docs are blocking* (stale prescriptive text is
+    how inherited framing propagates; update in same landing or
+    block).
+  - **ADR-053 amendment** — Clerk through public-alpha temporal
+    scope clarified.
+  - **ADR-150 amendment** — parallel host-architecture log entry
+    added for PDR-011 (the continuity-surfaces ADR predecessor;
+    PDR-011 is the portable form, ADR-150 is the host-local
+    record).
+- **Mid-close manufactured-budget intervention** — agent declared
+  Stage 2 cancelled citing "budget consumed"; owner corrected:
+  *"the budget is made up, so, step back and judge, what is
+  _actually_ the best course of action here? Then step back
+  again."* The intervention surfaced the pattern candidate
+  `feel-state-of-completion-preceding-evidence-of-completion`
+  (now at 2/3 cross-session independent instances after
+  Session-4 theatre observation) and a falsifiable
+  `deferral-honesty-rule` protection candidate (graduated in
+  Session 6 — see entry above).
+- **Identity registration** — `Pippin` (cursor / claude-opus-4-7)
+  added to `memory-feedback` thread per additive-identity rule.
+- **Stage 2(a) honestly deferred** to Session 6 for orthogonal-
+  scope and dedicated-lens reasons (per the freshly-drafted
+  deferral-honesty discipline). Reference-tier sweep plus
+  principles.md char-count fitness debt also tracked as Due
+  register items for Session 6 closing-session work.
+- **Loop-closure observation** captured in napkin: this arc is the
+  first where every link of the `capture → distil → graduate →
+  enforce` pipeline (per ADR-150 + PDR-011) fired in sequence
+  within a single session — but every link except the final two
+  required owner intervention to surface. The loop is
+  **owner-mediated**, not autonomous; that is consistent with
+  PDR-029's two-phase self-application framing.
+
+Owner-approved per PDR-003 at Session 5 close.
+
 ## [oak-open-curriculum-ecosystem] 2026-04-21 — Session 4 tripwire install + PDR-029 "active means markdown-ritual" amendment
 
 Session 4 of the Staged Doctrine Consolidation and Graduation plan landed

@@ -47,13 +47,17 @@ re-stating for a further session.
 **Identity discipline**: per the additive-identity rule
 ([PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)),
 sessions joining this thread add an identity row; they do not
-overwrite or rename existing rows. The 2026-04-21 row is retroactive
-attribution for the `f9d5b0d2` landing — owner accepted the
-attribution gap; concrete attribution starts forward from 2026-04-22
-per the Standing decisions note in
-[`repo-continuity.md`](../repo-continuity.md). The next session on
-this thread is the first session expected to register a concrete
-identity on arrival per
+overwrite or rename existing rows. The 2026-04-21 `Samwise` row is
+retroactive attribution for the `f9d5b0d2` landing. **Thread-local
+attribution-gap decision (owner-accepted, 2026-04-21)**: the
+attribution gap for this thread's pre-2026-04-22 history (including
+the `f9d5b0d2` landing) is accepted as-is — no further retroactive
+attribution will be attempted; concrete identity attribution
+discipline applies forward from 2026-04-22 onward. This decision is
+thread-local (specific to the `observability-sentry-otel` thread's
+own history) and intentionally not promoted to portable PDR-027
+governance. The next session on this thread is the first session
+expected to register a concrete identity on arrival per
 [`.agent/rules/register-identity-on-thread-join.md`](../../../rules/register-identity-on-thread-join.md).
 
 ---

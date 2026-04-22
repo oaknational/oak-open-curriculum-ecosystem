@@ -60,7 +60,7 @@ both decision-ready and session-entry-ready.**
 
 ### Cross-session consolidation
 
-Consolidation reads the full span of recent sessions on a workstream,
+Consolidation reads the full span of recent sessions on a thread,
 not just the most-recent session's napkin. Patterns that only
 emerge across sessions (compounding debt, repeated corrections at
 different abstraction layers, drift visible only in aggregate)
@@ -68,12 +68,12 @@ require the multi-session read.
 
 Practically:
 
-- When a workstream spans multiple sessions, consolidation reviews
+- When a thread spans multiple sessions, consolidation reviews
   the rotated napkins, the distilled entries added during the
-  workstream window, the consolidation reports from prior sessions,
+  thread window, the consolidation reports from prior sessions,
   and the current napkin — as one corpus.
 - Patterns observed in a single session are candidate; patterns
-  observed across ≥2 sessions on the same workstream are stronger
+  observed across ≥2 sessions on the same thread are stronger
   candidates for graduation.
 - A consolidation report from a cross-session review is more durable
   than a single-session handoff — it captures the emergent patterns
@@ -111,6 +111,96 @@ When a review tranche settles the real next step, promotion to
 criteria. A plan pointed at by a queue surface but missing
 session-entry-readiness is worse than an empty queue — it promises
 executability and delivers confusion.
+
+## Graduation-target routing
+
+When a captured candidate (in napkin, distilled, register, plan
+body, or elsewhere) is ready to graduate, **the home is decided
+from the candidate's shape, not from convenience or proximity**.
+Multiple homes may be appropriate; composition is preferred to
+forcing a single home when a candidate has both empirical and
+governance dimensions.
+
+### Surfaces and what each holds
+
+| Surface | Holds |
+|---|---|
+| `pattern` (`.agent/memory/active/patterns/`) | Failure-mode or behaviour shape with concrete instances; recipe-shaped capture |
+| `PDR` (new) | Portable Practice-governance decision in novel scope |
+| `PDR amendment` | Extension of an existing PDR's scope (preserves provenance via Amendment Log) |
+| `ADR` (or amendment) | Architectural decision: technology, structure, boundary; see [PDR-019](PDR-019-adr-scope-by-reusability.md) for ADR↔PDR boundary |
+| `rule` (`.agent/rules/`) | Always-applied procedural step requiring per-session/per-handoff firing; platform parity required per [PDR-029](PDR-029-perturbation-mechanism-bundle.md) |
+| `principle line` (`principles.md`) | Foundation invariant; cardinal, repo-wide, short; typically composed with an operationalising rule or PDR |
+| `command rubric` (`.agent/commands/<workflow>.md`) | Operationalises a doctrine at the firing point inside a workflow step |
+| `plan-body` | Plan-local meta-decision (scope, sequencing, fitness tolerance, deferrals) — not portable beyond the plan |
+| `practice-md` (`.agent/practice-core/practice.md`) | Visible Artefact Map presence; cross-cuts other surfaces |
+| `distilled entry` (`.agent/memory/active/distilled.md`) | Hard-won single-sentence rule-of-thumb that changes behaviour |
+| `register entry` | Captured candidate awaiting trigger — not yet graduated |
+
+### Routing decision (run in order; first match wins, then check composition)
+
+1. **Failure-mode or behaviour shape with concrete instances?** →
+   `pattern` (this is the empirical-observation home; always start
+   here for behaviour-shaped candidates).
+2. **Novel portable Practice-governance decision?** → `PDR` (new) —
+   but first check: does an existing PDR's scope absorb it? If yes
+   → `PDR amendment` (default to amendment when scope-adjacent;
+   preserves provenance and avoids governance fragmentation).
+3. **Architectural decision (technology, structure, boundary)?** →
+   `ADR` or `ADR amendment` per PDR-019.
+4. **Needs to fire at every session/handoff/consolidation?** →
+   `rule` (always-applied; platform parity required per PDR-029)
+   **or** `command rubric` (operationalises at a specific workflow
+   step). Choose `rule` when the firing is independent of any
+   workflow; choose `command rubric` when the firing belongs to a
+   specific workflow step.
+5. **Reads as a foundation invariant (cardinal, always-on,
+   repo-wide)?** → `principle line` in `principles.md`; typically
+   requires composition (see below) with an operationalising rule
+   or PDR.
+6. **Applies only to one plan's local meta-decision?** →
+   `plan-body` (no portable doctrine cost; per
+   [PDR-019](PDR-019-adr-scope-by-reusability.md) §plan-local
+   meta-decisions).
+7. **Otherwise** → `register entry` (pending; trigger on
+   second/third independent instance).
+
+### Composition discipline (multiple homes may be appropriate)
+
+A candidate may legitimately need more than one home. Compose, do
+not force a single choice:
+
+| Composition | When to use | Example |
+|---|---|---|
+| `principle` + `rule` | Foundation invariant that needs active firing | *Misleading docs are blocking* + [`tsdoc-and-documentation-hygiene`](../../rules/tsdoc-and-documentation-hygiene.md) |
+| `PDR` + `command rubric` | Doctrine ratified portably; fires at a specific workflow step | [PDR-026 §Landing target definition](PDR-026-per-session-landing-commitment.md) + `/session-handoff` close ritual |
+| `pattern` + `rule` | Empirical capture + active prevention at firing point | [`inherited-framing-without-first-principles-check`](../../memory/active/patterns/inherited-framing-without-first-principles-check.md) + [`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md) |
+| `pattern` + `PDR` | Empirical observation + durable portable governance response | `passive-guidance-loses-to-artefact-gravity` + PDR-029 |
+| `principle` + `PDR amendment` | Foundation invariant + extension of existing scope | *Owner Direction Beats Plan* + future operationalisation |
+
+### Anti-patterns
+
+- **Rule without companion principle or PDR** — tripwire without
+  doctrine; agents fire the rule without understanding why.
+- **New PDR for scope already in an existing PDR** — fragments
+  governance; amend instead.
+- **Principle line without operationalising rule** — passive
+  guidance, the exact failure mode
+  `passive-guidance-loses-to-artefact-gravity` names.
+- **Pattern without a graduation path** — captures forever, never
+  converts to active prevention.
+- **Picking the surface from convenience** (the file is already
+  open / the PDR is short) rather than from shape — produces
+  ad-hoc routing the owner direction at 2026-04-22 Session 6
+  explicitly forbids.
+
+### When in doubt
+
+Default to **pattern + governance composition**. Pattern alone
+captures the empirical instance; the governance surface (PDR,
+rule, principle) makes the response durable. Choosing one
+prematurely risks either lost provenance (no pattern) or no
+active prevention (no governance).
 
 ## Rationale
 
@@ -154,7 +244,7 @@ Alternatives rejected:
 
 ### Required
 
-- Cross-workstream consolidation reads the multi-session corpus,
+- Cross-thread consolidation reads the multi-session corpus,
   not just the current session.
 - Permanent-home writes happen at full substance; fitness is
   handled editorially in step 6 of the consolidation workflow, not
@@ -202,3 +292,60 @@ Proven instances retained with `related_pdr: PDR-014`:
 - `.agent/memory/active/patterns/current-plan-promotion.md` — statistical
   roadmap review plus observational tranche promotion (2026-03-22,
   algo-experiments).
+
+## Amendment Log
+
+### 2026-04-22 — Session 6 (Merry / cursor-opus): Graduation-target routing + workstream→thread terminology refresh
+
+**Driver**. Owner direction at 2026-04-22 Session 6 open: *"we
+shouldn't be making ad-hoc decisions about rules, pdrs, commands
+etc... there should be a right place for this, and there can be
+more than one place if appropriate, but we need to establish a
+pattern for how we handle this sort of thing."* The
+`graduation-target` field exists in the pending-graduations
+register schema (PDR-028) but the routing criteria — when each
+value is correct, when composition is appropriate — were not
+codified. Ratification proceeds as a PDR-014 amendment because
+PDR-014's existing scope (consolidation and knowledge-flow
+discipline) directly enables routing, and an amendment preserves
+provenance over a new PDR per the routing pattern's own anti-
+pattern guidance.
+
+**Changes**.
+
+1. New top-level §Graduation-target routing between §Decision and
+   §Rationale: surface taxonomy, routing decision tree (run in
+   order, first-match-wins then check composition), composition
+   discipline (multiple-homes-may-be-appropriate with five
+   canonical compositions), anti-patterns, default rule (pattern
+   + governance composition).
+2. Terminology refresh: five `workstream` references in
+   §Cross-session consolidation and §Consequences §Required
+   updated to `thread` (per PDR-027 thread-as-continuity-unit;
+   the `workstreams/` operational surface was retired Session 5
+   per [PDR-027 §Amendment Log 2026-04-21](PDR-027-threads-sessions-and-agent-identity.md)).
+
+**Class A.1 firing** (plan-body first-principles check, the
+[`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md)
+always-applied rule). Three clauses passed: shape (PDR-amendment,
+not pattern/rule/distilled), landing-path (PDR-014 tooling
+contract is established; substance-first per its own §Substance
+before fitness), vendor-literal (N/A; internal vocabulary). No
+rewrite. Composition with terminology refresh in single Amendment
+Log entry preserves single-amendment honesty.
+
+**Concrete near-term firing trigger** (per PDR-029 retention
+discipline; counter-pressure to
+`anticipated-surface-installed-then-empirically-unexercised`).
+Session 6 Phase A.2 immediately following — applies the routing
+to five Pending-band candidates: `deferral-honesty-rule` (3/3),
+`manufactured-budget` (2/3),
+`anticipated-surface-installed-then-empirically-unexercised`
+(2/3),
+`owner-mediated-evidence-loop-for-agent-installed-protections`
+(1/3), `default-retire-on-empty`. Plus all subsequent Session 6
+graduation decisions (Phases B.2 lost-substance re-home, E
+PDR-012 amendment for the most-overdue Due-band item).
+
+**Reviewer**. `docs-adr-reviewer` close-pass at Session 6 close
+per plan §Reviewer discipline.

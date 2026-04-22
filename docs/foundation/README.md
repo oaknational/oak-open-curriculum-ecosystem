@@ -27,13 +27,17 @@ Adjacent surfaces (not part of this boundary):
   records.
 - [Practice Index (this repo)](../../.agent/practice-index.md) — Bridge from
   the portable Practice Core to this repository's live artefacts.
-- [Agentic Engineering Hub](../../.agent/reference/agentic-engineering/README.md)
+- [Agentic Engineering Hub](../../.agent/research/notes/agentic-engineering/README.md)
   — Optional discovery hub for canon routing, deep dives, research, evidence.
+  (Currently in transit under
+  [`research/notes/`](../../.agent/research/notes/README.md) pending
+  per-file disposition; see
+  [reference-research-notes-rehoming plan](../../.agent/plans/agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md).)
 
 ## Usage
 
 1. **Evaluating the project?** Start with [VISION.md](./VISION.md), then read
-   the latest [progress update](../../.agent/reference/work-to-date/oak-ecosystem-progress-update-2026-04-20.md)
+   the latest [progress update](../../.agent/research/notes/work-to-date/oak-ecosystem-progress-update-2026-04-20.md)
    and the live [high-level plan](../../.agent/plans/high-level-plan.md).
 2. **Contributing?** Use the root [README.md](../../README.md) for setup and
    the [CONTRIBUTING.md](../../CONTRIBUTING.md) for the development process.

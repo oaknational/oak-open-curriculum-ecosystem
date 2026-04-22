@@ -15,7 +15,7 @@ theme graduates beyond index notes and source routing.
 
 ## Promotion Rule
 
-Seed deep dives in `.agent/reference/agentic-engineering/deep-dives/` remain
+Seed deep dives in `.agent/research/notes/agentic-engineering/deep-dives/` (relocated 2026-04-22 from `.agent/reference/agentic-engineering/deep-dives/` per [PDR-032](../../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)) remain
 lightweight concept extracts. Promote a topic here only when it needs:
 
 - fuller narrative synthesis

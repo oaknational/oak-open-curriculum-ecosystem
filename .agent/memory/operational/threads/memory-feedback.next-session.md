@@ -1,24 +1,44 @@
 # Next-Session Record — `memory-feedback` thread
 
 **Authored**: 2026-04-21 (metacognition + execution-plan session close).
-**Last refreshed**: 2026-04-21 (Session 5 of the staged
-doctrine-consolidation plan **LANDED** — Stage 1 (mandatory
-evaluate-and-simplify) + Stage 2(b) (decomposition of the ten
-retracted-`standing-decisions.md` items into proper artefact
-homes) both closed. Mid-close owner metacognition surfaced a
-manufactured-budget close attempt; the corrected arc executed
-Stage 2(b) under `/jc-go` workflow with periodic `/jc-metacognition`
-checkpoints. Per-item Class A.1 firing on all 10 items produced
-3 rewrites (`new PDR` → `existing-surface amendment` for items
-5, 8, 9) — owner-ratified twice. Net Stage 2(b) landing: 1 new
-PDR (PDR-031) + 4 PDR amendments + 1 new rule + 2 principle
-additions + 1 ADR amendment. Stage 2(a) outgoing triage honestly
-deferred to Session 6 for orthogonal-scope / dedicated-lens
-reasons. Pippin (`cursor` / `claude-opus-4-7`) identity row
-`last_session` 2026-04-21. Next landing target for this thread
-is **Session 6 — Stage 2(a) outgoing triage + reference-tier
-sweep + holistic fitness exploration with `--strict-hard` close**;
-Session 6 closes the arc.).
+**Last refreshed**: 2026-04-22 (Session 6 reshaped close — the
+doctrine-consolidation arc does NOT close at Session 6;
+reformation absorbed it). Session 6 landed the routing pattern
+(PDR-014 §Graduation-target routing), the deferral-honesty
+discipline (PDR-026 amendment), the source-side preservation
+discipline (PDR-005 amendment), and the **reference-tier
+reformation** (PDR-032 + relocation of all 35 prior reference
+files to `research/notes/` + first three promotions through the
+new gate + holding-bay + rehoming plan). Owner stipulation
+mid-execution expanded Phase C Batch 2 from "move 3 files into
+reference/" to "reform reference/ as a curated artefact tier
+under definition + lightweight process + integration into other
+surfaces"; the reshape was applied per PDR-026 §Deferral-honesty
+discipline (named priority trade-off: reformation became
+load-bearing for the session; remaining doctrine-consolidation
+phases deferred to Session 7 with named triggers). Merry
+(`cursor` / `claude-opus-4-7`) identity row `last_session`
+2026-04-22. **Next landing target for this thread is Session 7
+— close the doctrine-consolidation arc**: Phase D (holistic
+fitness exploration), Phase E (PDR-012 reviewer-findings
+amendment), Phase F (arc close + thread archive +
+observability-sentry-otel re-activation), plus Phase C Batch 3
+(5 pattern-promotion candidates) and the reference-rehoming
+plan's first per-file disposition pass.
+
+POST-HANDOFF (same date, same identity): owner-prompted
+layer-set first-principles reflection captured in `napkin.md`
++ `repo-continuity.md § Pending` band with two new candidates
+(`anticipated-surface-installed-then-empirically-unexercised`
+2/3 instances; `default-retire-on-empty` rule body). User then
+invoked `/jc-consolidate-docs` — walked all 10 steps; 3 of 6
+triggers fired; six mechanical line-length wraps applied; one
+additional pattern candidate accumulated
+(`owner-mediated-evidence-loop-for-agent-installed-protections`
+1/3); 5 hard-zone fitness items deferred to Session 6 with
+named priority trade-offs; commit `0e4849ec`. Five new owner-
+decision items surfaced, listed in Session 6 §Post-handoff
+additions block below.).
 **Consumed at**: next session that picks up the `memory-feedback`
 thread (not necessarily the next session overall — the product
 thread `observability-sentry-otel` has its own next-session record
@@ -48,6 +68,7 @@ re-stating for a further session.
 | --- | --- | --- | --- | --- | --- | --- |
 | `Samwise` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* (not exposed to the agent in its context; owner can record) | `drafter` / `initiator` / `executor` | 2026-04-21 | 2026-04-21 |
 | `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* (not exposed in Cursor agent context) | `evaluator` / `simplifier` / `executor` | 2026-04-21 | 2026-04-21 |
+| `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* (not exposed in Cursor agent context) | `executor` / `closer` | 2026-04-22 | 2026-04-22 |
 
 **Identity discipline** (per the proposed rule at
 [`README.md`](README.md)): when a session joins this thread, it
@@ -348,32 +369,161 @@ bearing; neither Class A.1 nor Class A.2 fires on close-time
 deferral honesty, which is precisely the gap the protection
 candidate addresses.
 
-### Next landing target (Session 6 — closing session for the arc)
+### Session 6 outcome (for audit) — RESHAPED CLOSE 2026-04-22
 
-Session 6 carries three pieces of work, all honestly carried over
-from Session 5 (no manufactured budget framing; reasons named):
+The doctrine-consolidation arc does NOT close at Session 6.
+Mid-execution, the owner stipulated that Phase C Batch 2 (move
+3 outgoing files to `.agent/reference/`) become a full
+**reference-tier reformation** because adding new material to
+`reference/` made its catch-all status visible and untenable. The
+reshape was applied per PDR-026 §Deferral-honesty discipline
+(landed earlier in the same session): the load-bearing target of
+Session 6 became the reformation; remaining doctrine-consolidation
+work that does not fit honestly within the budget is named-trigger
+deferred, not partially completed.
 
-1. **Stage 2(a) — Outgoing triage per PDR-007**
-   (`.agent/practice-context/outgoing/`, ~10 files, ~1481 lines):
-   per-file disposition (ephemeral exchange / portable PDR /
-   general abstract pattern → Practice Core / host-local
-   reference → `.agent/reference/` / defect → delete). Owner-gated
-   per file per PDR-003.
-2. **Reference-tier sweep** of `.agent/reference/agentic-
-   engineering/deep-dives/` for residual `<workstream>--`
-   track-naming citations and adjacent stale references. Concrete
-   site: `operational-awareness-and-state-surfaces.md` line 83.
-3. **Holistic fitness exploration** (Session 6 originally-scoped
-   work): owner-decides compress / raise / restructure / split
-   per file; address `principles.md` character-count fitness
-   debt (currently 26222 / 24000 — worsened by +594 chars from
-   Session 5's two principle additions); `pnpm practice:fitness
-   --strict-hard` passes by close.
+**What landed Session 6**:
 
-Session 6 is the **closing session for this arc**. The thread
+1. ✅ **PDR-014 §Graduation-target routing** (Class A.1 fired on
+   the body; owner-ratified as drafted; new top-level placement;
+   composes with workstream→thread terminology refresh).
+2. ✅ **PDR-026 §Deferral-honesty discipline** (first application
+   of the new routing pattern; positive-form body; operationalised
+   via `/session-handoff` + `/consolidate-docs` rubric extensions).
+3. ✅ **`observability-sentry-otel` lost-substance re-home** —
+   inline restate per the routing pattern's plan-local-meta-decision
+   branch.
+4. ✅ **Practice Core CHANGELOG catch-up** (Session 4 + Session 5
+   landings + Session 6 reshape entry).
+5. ✅ **practice-bootstrap.md workstream-brief drift refresh** +
+   Reference / Research definition refresh per PDR-032.
+6. ✅ **Deep-dives reference-tier sweep** — closed by
+   reformation; status banners on relocated bodies indicate
+   supersession; in-place edits subsumed into rehoming plan.
+7. ✅ **Phase C — Outgoing triage per PDR-007** — Batches 1
+   (delete `three-dimension-fitness-functions.md` +
+   `agent-collaboration/`), 2 (reformation + 3 promotions), and 4
+   (PDR-005 amendment + delete 2 source files) closed; Batch 3
+   (5 pattern-promotion candidates) deferred to Session 7 named
+   trigger.
+8. ✅ **Reference-tier reformation** (Phase C Batch 2 expanded):
+   PDR-032 authored; all 35 prior `.agent/reference/` files
+   relocated en bloc to `.agent/research/notes/`; rehoming plan
+   authored at
+   `.agent/plans/agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md`;
+   first 3 promotions through the new gate (design-token-governance,
+   starter-templates, health-probe-and-policy-spine); integration
+   into practice.md + practice-bootstrap.md + orientation.md +
+   research/README.md + 14+ active-surface citation updates.
+9. ✅ **PDR-005 §Source-side preservation and seeding** —
+   amended in this session as part of Batch 4 disposition.
+
+**Honest deferrals to Session 7** (per PDR-026 §Deferral-honesty
+discipline):
+
+- **Phase D — Holistic fitness exploration** (5 hard-zone items
+  per-file disposition; 9 soft-zone reviewed). Named trigger:
+  Session 7 doctrine-consolidation reopen. Evidence: reformation
+  consumed Session 6 budget; fitness exploration is per-file
+  disposition work that needs dedicated lens.
+- **Phase E — `reviewer-findings-applied-in-close-not-deferred`
+  PDR-012 amendment** (most-overdue Due item, 4+ days). Named
+  trigger: Session 7 doctrine-consolidation reopen. Evidence:
+  routing per Phase A.1 pattern requires Class A.1 firing
+  on the amendment body; reformation budget consumed window for
+  that.
+- **Phase F — Arc close** (`--strict-hard` passes; staged plan
+  archive; CHANGELOG arc-close entry; thread archive;
+  `observability-sentry-otel` re-activation; pending-band
+  cleanup; reviewer dispatch). Named trigger: Session 7 closes
+  the arc and applies these activities together.
+- **Phase C Batch 3** (5 pattern-promotion candidates). Named
+  trigger: Session 7 dedicated pattern-graduation pass.
+- **Reference-rehoming plan's first per-file disposition pass**.
+  Named trigger: owner appetite signal (plan is in `future/`,
+  no SLA imposed).
+- **`principles.md` character-count fitness debt**
+  (26222 / 24000) — couples with Phase D in Session 7.
+
+### Next landing target (Session 7 — closing session for the
+doctrine-consolidation arc)
+
+Session 7 carries the deferred Session-6 work, all honestly
+carried over with named triggers (no manufactured budget
+framing):
+
+1. **Phase D — Holistic fitness exploration** (5 hard-zone items
+   per-file disposition; 9 soft-zone reviewed; coupling with
+   napkin rotation + distilled compression).
+2. **Phase E — `reviewer-findings-applied-in-close-not-deferred`
+   PDR-012 amendment** (route per PDR-014 §Graduation-target
+   routing; Class A.1 firing on amendment body).
+3. **Phase F — Arc close** (`pnpm practice:fitness --strict-hard`
+   exits 0; staged plan to `archive/completed/`; CHANGELOG
+   arc-close entry; thread archived; `observability-sentry-otel`
+   re-activated; pending-band cleanup; reviewer dispatch; commit;
+   `/jc-session-handoff`).
+4. **Phase C Batch 3 — pattern-graduation pass** (5 candidates:
+   `reviewer-gateway-operations`, `production-reviewer-scaling`,
+   `plan-lifecycle-four-stage`, `practice-maturity-framework`,
+   `two-way-merge-methodology`).
+
+Session 7 is the **closing session for this arc**. The thread
 does not switch. The `observability-sentry-otel` thread waits.
-On Session 6 close (assuming clean close), the `memory-feedback`
+On Session 7 close (assuming clean close), the `memory-feedback`
 thread is archived and this file is deleted per PDR-026.
+
+#### Post-handoff additions (Session 5 close + `/jc-consolidate-docs` walk, both 2026-04-21)
+
+These items emerged after the Session 5 landing target was
+reported and after the post-handoff layer-set reflection +
+`/jc-consolidate-docs` walk. They sit alongside (do not replace)
+the three Session 6 items above. All five are owner-decision-
+shaped — agents may surface but not auto-resolve:
+
+4. **PDR-014 workstream → thread terminology refresh** — five
+   stale `workstream` references in
+   `.agent/practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md`
+   (missed in Session 5 thread → workstream surface retirement).
+   Recommended: amendment this consolidation pass with owner
+   approval.
+5. **`observability-sentry-otel.next-session.md` line 53** —
+   references a non-existent "Standing decisions note in
+   `repo-continuity.md`"; substance lost was *"concrete
+   attribution starts forward from 2026-04-22"*. Owner choice:
+   PDR-027 amendment / thread README inline / repo-continuity
+   restate.
+6. **Practice Core CHANGELOG drift** —
+   `.agent/practice-core/CHANGELOG.md` has no entries since
+   2026-02-28 despite Sessions 4–5 substantial PDR work
+   (PDR-029 + multiple amendments + PDR-031 + new rules +
+   principle additions). Recommended: add catch-up entries.
+7. **`practice-bootstrap.md` workstream-brief drift** — three
+   references (lines 456, 461, 464) describe the retired
+   surface as canonical. Recommended: update to thread-record
+   pointer language.
+8. **Reference-tier sweep scope** — Session 6 Due item (#2 in
+   the list above) scopes only `.agent/reference/agentic-
+   engineering/deep-dives/`; 90+ files outside `archive/`
+   mention "workstream" (most are legitimate uses, but the
+   bound needs owner clarification before the sweep runs).
+
+Plus the three pattern/rule candidates currently below promotion
+threshold (held for owner ratification at Session 6 close, not
+this handoff):
+
+9. `anticipated-surface-installed-then-empirically-unexercised`
+   (2/3 instances; pattern candidate).
+10. `owner-mediated-evidence-loop-for-agent-installed-protections`
+    (1/3 instances; pattern candidate).
+11. `manufactured-budget` (2/3 instances; pattern candidate).
+12. `deferral-honesty-rule` (3/3 instances if owner accepts the
+    `/jc-consolidate-docs` deferral count as the third; rule
+    candidate; promotion gated on owner ratification of the
+    instance count, not on accumulating further evidence).
+13. `default-retire-on-empty` (rule candidate; promotion gated
+    on parent pattern reaching 3 instances OR explicit owner
+    direction).
 
 ### Historical: previous Session 5 framing (carried for audit)
 

@@ -317,7 +317,7 @@ Adjacent:
 - Source strategy:
   [agentic-corpus-discoverability-and-deep-dive-hub.plan.md](current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md)
 - Goal:
-  - add an index-only hub under `.agent/reference/agentic-engineering/`
+  - add an index-only hub under `.agent/reference/agentic-engineering/` (relocated 2026-04-22 to `.agent/research/notes/agentic-engineering/` per [PDR-032](../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md); awaiting per-file disposition under [rehoming plan](future/reference-research-notes-rehoming.plan.md))
   - create named research and reports lanes with reciprocal README links
   - make selected `/docs/**` entry points route into the wider source corpus
     without changing canon location

@@ -27,7 +27,8 @@ for the operational-memory surfaces and authority order within them.
 | **Operational Memory** | Continuity / session-resume state | `.agent/memory/operational/` (repo-continuity, threads, tracks) | Session open — Ground First step 4 |
 | **Executive Memory** | Stable organisational contracts and catalogues | `.agent/memory/executive/` (artefact inventory, reviewer catalogue, adapter matrix) | Ad-hoc lookup when taking an action the surface governs |
 | **Plans** | Scope, sequencing, acceptance criteria | `.agent/plans/*/active/*`, `.agent/plans/*/current/*` | When picking up a lane |
-| **Reference** | Library — read-to-learn about a matter | `.agent/reference/` (deep-dives, research, audits, reports, work-to-date) | When investigating a topic |
+| **Reference** | Curated library — owner-vetted evergreen read-to-learn material; promotion-gated ([PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)) | `.agent/reference/` | When consulting promoted reference material |
+| **Research** | Default exploratory-synthesis tier and holding bay for un-promoted material | `.agent/research/` (with optional transient `notes/` holding bay) | When investigating a topic, or when authoring fresh material that has not been (and may not be) promoted to reference |
 | **Workflow** | Named rituals and canonical commands | `.agent/skills/`, `.agent/commands/`, `.agent/rules/`, `.agent/sub-agents/` | On invocation or trigger |
 | **Platform Adapters** | Thin wrappers pointing back at canonical surfaces | `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/` | Platform-specific activation |
 
@@ -66,8 +67,11 @@ read-trigger and lifecycle:
   performing a specific action → executive memory.
 - If it governs **scope, sequencing, or acceptance** for a specific
   piece of work → plan.
-- If it is **reference material** read to learn about a matter →
-  reference.
+- If it is **fresh exploratory or synthesis material** (not yet
+  owner-vetted as evergreen reference) → research.
+- If it is **owner-vetted evergreen library material** read to learn
+  about a matter → reference (after promotion gate per
+  [PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)).
 - If it is a **named ritual or command** → skills / commands /
   rules.
 

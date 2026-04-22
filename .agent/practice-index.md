@@ -77,9 +77,14 @@ ADRs referenced by the Practice Core files. The full index is at `docs/architect
 
 For concept-driven routing across canon, research, evidence, plans, reflective
 sources, and deep dives, use
-[`.agent/reference/agentic-engineering/README.md`](reference/agentic-engineering/README.md).
+[`.agent/research/notes/agentic-engineering/README.md`](research/notes/agentic-engineering/README.md).
 This hub is index-only and routes back to the authoritative ADRs, Practice
-Core, `/docs/**` surfaces, and supporting source lanes.
+Core, `/docs/**` surfaces, and supporting source lanes. (Currently in
+transit under
+[`research/notes/`](research/notes/README.md) pending per-file
+disposition under the
+[reference-research-notes-rehoming plan](plans/agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md);
+the deep-dive substance is unchanged, only the tracked path moved.)
 
 ## Commands, Skills, and Prompts
 

@@ -17,7 +17,7 @@ last_reviewed: 2026-04-20
 - **Not a developer?** → [Curriculum Guide](domain/curriculum-guide.md) — Oak's curriculum structure in plain language
 - **New to the repo?** → [Root README Quick Start](../README.md#quick-start) for setup, then [CONTRIBUTING.md](../CONTRIBUTING.md) for the development process
 - **Working with AI?** → Start with the canonical [`start-right-quick` shared workflow](../.agent/skills/start-right-quick/shared/start-right.md) (or invoke it via your platform: `/jc-start-right-quick` in Cursor and Claude Code, `jc-start-right-quick` skill in Codex, `/jc-start-right-quick` in Gemini), then [AGENT.md](../.agent/directives/AGENT.md).
-- **Need an optional map of the wider agentic corpus?** → [Agentic Engineering Hub](../.agent/reference/agentic-engineering/README.md) — index-only discovery hub linking canon, deep dives, research, evidence, reports, and docs surfaces
+- **Need an optional map of the wider agentic corpus?** → [Agentic Engineering Hub](../.agent/research/notes/agentic-engineering/README.md) — index-only discovery hub linking canon, deep dives, research, evidence, reports, and docs surfaces
 - **Architecture source of truth?** → [ADR index](architecture/architectural-decisions/) — Architectural Decision Records define how the system should work
 - **Browsing by section?** → [Foundation](foundation/README.md) · [Governance](governance/README.md) · [Architecture](architecture/README.md) · [Engineering](engineering/README.md) · [Operations](operations/README.md) · [Domain](domain/README.md)
 
@@ -57,7 +57,7 @@ last_reviewed: 2026-04-20
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
 - [Continuity Practice](governance/continuity-practice.md) - Lightweight session handoff, conditional deep consolidation, and surprise capture
 - [**The Practice**](../.agent/practice-core/index.md) - Orientation and entry point for the Practice (agent-facing)
-- [Agentic Engineering Hub](../.agent/reference/agentic-engineering/README.md) - Index-only source-lanes and deep-dives map for broader corpus discovery
+- [Agentic Engineering Hub](../.agent/research/notes/agentic-engineering/README.md) - Index-only source-lanes and deep-dives map for broader corpus discovery
 
 ## Code Standards and Testing
 

@@ -12,7 +12,7 @@ last_reviewed: 2026-04-20
 
 For the wider source corpus — reference notes, concept deep dives, research
 lanes, evidence surfaces, and formal report lanes — use the
-[Agentic Engineering Hub](../../.agent/reference/agentic-engineering/README.md).
+[Agentic Engineering Hub](../../.agent/research/notes/agentic-engineering/README.md).
 
 ## What This System Does
 
@@ -116,7 +116,7 @@ The system degrades when:
 ## Further Reading
 
 - [The Practice — human-friendly introduction](../../.agent/practice-core/README.md)
-- [Agentic Engineering Hub — source lanes and deep dives](../../.agent/reference/agentic-engineering/README.md)
+- [Agentic Engineering Hub — source lanes and deep dives](../../.agent/research/notes/agentic-engineering/README.md)
 - [ADR-119 — naming, boundary, and three-layer model](../architecture/architectural-decisions/119-agentic-engineering-practice.md)
 - [ADR-131 — the improvement loop and interaction map](../architecture/architectural-decisions/131-self-reinforcing-improvement-loop.md)
 - [ADR-124 — how the Practice travels between repos](../architecture/architectural-decisions/124-practice-propagation-model.md)

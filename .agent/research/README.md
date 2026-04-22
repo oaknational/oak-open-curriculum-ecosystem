@@ -13,7 +13,7 @@
 | **Research** | `.agent/research/` | Permanent | Record discoveries, insights, analysis |
 | **Analysis** | `.agent/analysis/` | Evidence | Hold investigations, baselines, and evidence bundles |
 | **Reports** | `.agent/reports/` | Promoted | Stable audits and formal syntheses once promoted |
-| **Reference** | `.agent/reference/` | Permanent | Long-lived supporting material for agents and developers (not ADRs) |
+| **Reference** | `.agent/reference/` | Curated library | Owner-vetted, evergreen read-to-learn material — promotion-gated per [PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md) |
 | **Plans** | `.agent/plans/` | Ephemeral | Track work in progress, acceptance criteria |
 | **Prompts** | `.agent/prompts/` | Entry points | Start new sessions with context |
 | **Experience** | `.agent/experience/` | Reflections | Metacognitive learnings |
@@ -290,6 +290,18 @@ Some subdirectories have their own README files:
 - [eslint-enhancements/index.md](eslint-enhancements/index.md)
 - [ooc/README.md](ooc/README.md) (if exists)
 - [open-curriculum-concept-graph/README.md](open-curriculum-concept-graph/README.md) (if exists)
+
+## Holding Bay: `notes/`
+
+[`notes/`](notes/README.md) is a transient holding bay for material
+relocated from `.agent/reference/` during the 2026-04-22 reformation
+of `reference/` into a curated library tier
+([PDR-032](../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)).
+Material in `notes/` is awaiting per-file disposition (research
+proper, reference promotion, executive memory, archive, or delete);
+the per-file pass is tracked by
+[`reference-research-notes-rehoming.plan.md`](../plans/agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md).
+The bay is removed when empty.
 
 ---
 

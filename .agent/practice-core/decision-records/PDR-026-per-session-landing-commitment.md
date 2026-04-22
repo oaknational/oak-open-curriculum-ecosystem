@@ -5,7 +5,7 @@ pdr_kind: governance
 # PDR-026: Per-Session Landing Commitment
 
 **Status**: Accepted (amended 2026-04-21, amended 2026-04-21
-Session 5)
+Session 5, amended 2026-04-22 Session 6)
 **Date**: 2026-04-20 (amended 2026-04-21 — landing commitment
 clarified as **per-thread-per-session**: a session commits to
 landing one thread's target; cross-thread spread within a single
@@ -16,7 +16,12 @@ the bounded exceptions — unchanged. Amended 2026-04-21 Session 5
 definition is extended so that a code or doctrine change that has
 not also updated the docs the change invalidates is not yet landed.
 Doc updates compose into the landing, not into a separate later
-phase. Underlying decision unchanged.)
+phase. Underlying decision unchanged. Amended 2026-04-22 Session 6
+— **deferral-honesty discipline**: deferrals at session-handoff or
+consolidation close are honest when they satisfy three requirements
+— named constraint or trade-off, evidence, and falsifiability;
+operationalised by command rubrics in `/session-handoff` step 1
+and `/consolidate-docs`. Underlying decision unchanged.)
 **Related**:
 [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md)
 (continuity surfaces — the landing commitment composes with
@@ -59,6 +64,32 @@ continuity unit).
   register entry `docs-as-definition-of-done-on-every-lane`;
   graduated to this PDR amendment in 2026-04-21 Session 5 per
   the decomposition arc.
+- **2026-04-22 Session 6** (Accepted): **deferral-honesty
+  discipline** added as a new §Decision sub-section after
+  §Bounded exceptions. A deferral asserted at session-handoff
+  or consolidation close is *honest* when it satisfies three
+  requirements: (1) named constraint or named priority
+  trade-off, (2) evidence establishing the constraint or
+  trade-off, (3) falsifiability — a future agent can check
+  whether the constraint or trade-off held. Convenience
+  phrasings ("budget consumed", "out of scope", "for later",
+  "next session", "ran out of time") fail one or more
+  requirements. Operationalised by command-rubric additions in
+  [`/session-handoff` step 1](../../commands/session-handoff.md)
+  (the `<what prevented>` field on unlanded cases) and
+  [`/consolidate-docs`](../../commands/consolidate-docs.md)
+  (cross-cutting top-of-Steps note covering all deferrals
+  surfaced by the workflow). Routed under the new
+  [PDR-014 §Graduation-target routing](PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing)
+  as the canonical `PDR + command rubric` composition (Driver:
+  the `feel-state-of-completion-preceding-evidence-of-completion`
+  parent pattern at 2/3 cross-session instances; the
+  `deferral-honesty-rule` candidate reached 3/3 with the
+  post-handoff consolidation deferral counting as the third
+  instance per owner direction at Session 6 open). Symmetric
+  with §Landing target definition: that section sets the
+  standard for what counts as landed; this section sets the
+  standard for what counts as honest non-landing.
 
 ## Context
 
@@ -219,6 +250,51 @@ An exception must be **named at session open**, not claimed at
 close. A session that closes with no landing and no declared
 exception is indistinguishable from drift.
 
+### Deferral-honesty discipline
+
+A deferral made at session-handoff or consolidation close is
+**honest** when it satisfies three requirements:
+
+1. **Named constraint or trade-off** — cite a specific external
+   constraint (clock, cost, dependency, owner veto) or a specific
+   priority trade-off (named scope being protected, named risk
+   being avoided).
+2. **Evidence** — name the concrete observation that establishes
+   the constraint or trade-off: the meter, the deadline, the
+   missing dependency, the load-bearing target the trade-off
+   protects.
+3. **Falsifiability** — state how a future agent could check
+   whether the constraint or trade-off held: what would prove the
+   deferral was correct, what would prove it was premature.
+
+A deferral satisfying all three becomes a load-bearing handoff
+signal. The next session knows what changed (constraint resolved?
+trade-off no longer relevant?) and can act accordingly.
+
+A deferral that fails one or more requirements is an abandonment
+dressed as a deferral. Common diagnostic phrasings that signal
+failure: *"budget consumed"*, *"out of scope"*, *"for later"*,
+*"next session"*, *"ran out of time"* — these are convenience
+labels, not constraints. None can be checked later; none names
+what changed.
+
+The deferral-honesty discipline composes with §Landing target
+definition. §Landing target definition sets the standard for what
+counts as landed; deferral-honesty sets the standard for what
+counts as honest non-landing. Together they prevent
+partial-completion theatre at session boundaries.
+
+Operationalisation:
+
+- [`/session-handoff` step 1](../../commands/session-handoff.md) —
+  the `<what prevented>` field on unlanded cases must satisfy the
+  three requirements above.
+- [`/consolidate-docs`](../../commands/consolidate-docs.md) —
+  cross-cutting top-of-Steps note covering deferrals surfaced
+  anywhere in the workflow (Pending-band candidates kept rather
+  than promoted, fitness items deferred, Practice Core refinement
+  queued).
+
 ## Rationale
 
 ### Why externally-verifiable outcomes are the unit
@@ -276,6 +352,10 @@ Practice Core, not in a repo-local surface.
 - When a session closes unlanded, the next-session re-attempt
   lands in `repo-continuity.md § Next safe step` so the commitment
   persists across the boundary.
+- Every deferral asserted at session-handoff or consolidation
+  close satisfies the three requirements of the
+  2026-04-22 Session 6 deferral-honesty amendment (named
+  constraint or trade-off, evidence, falsifiability).
 
 ### Forbidden
 
@@ -287,6 +367,11 @@ Practice Core, not in a repo-local surface.
 - Reporting a change as landed while documentation invalidated by
   the change remains stale, per the 2026-04-21 Session 5
   docs-as-definition-of-done amendment.
+- Asserting a deferral with a convenience phrase ("budget
+  consumed", "out of scope", "for later", "next session", "ran
+  out of time") in place of a named constraint or trade-off with
+  evidence and falsifiability, per the 2026-04-22 Session 6
+  deferral-honesty amendment.
 
 ### Accepted trade-offs
 
