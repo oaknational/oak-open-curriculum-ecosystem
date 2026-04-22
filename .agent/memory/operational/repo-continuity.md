@@ -50,7 +50,7 @@ most recent session's identities for at-a-glance continuity.
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
 | `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21 (S4 Task 4.5 file migration; not substantive thread work) |
-| `memory-feedback` | Practice — feedback loops across three-mode memory taxonomy; emergent-whole observation; doctrine landing | [`threads/memory-feedback.next-session.md`](threads/memory-feedback.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / `Samwise` / drafter/initiator/executor / 2026-04-21; `cursor` / `claude-opus-4-7` / `Pippin` / evaluator/simplifier/executor / 2026-04-21 (Session 5 evaluate-and-simplify Stage 1 + corrected Stage 2(b) standing-decisions decomposition arc) |
+| `memory-feedback` | Practice — feedback loops across three-mode memory taxonomy; emergent-whole observation; doctrine landing | [`threads/memory-feedback.next-session.md`](threads/memory-feedback.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / `Samwise` / drafter/initiator/executor / 2026-04-21; `cursor` / `claude-opus-4-7` / `Pippin` / evaluator/simplifier/executor / 2026-04-21; `cursor` / `claude-opus-4-7` / `Merry` / executor/closer / 2026-04-22 (Session 6 reshaped close — reference-tier reformation; doctrine-consolidation arc deferred to Session 7) |
 
 **Workstream layer retired (2026-04-21 Session 5)**: the
 `.agent/memory/operational/workstreams/` surface is retired as an
@@ -507,6 +507,22 @@ is the current thread until the arc finishes.
 
 ## Deep consolidation status
 
+**Status (per `/jc-session-handoff` step 8, 2026-04-22 Session 6
+reshaped close)**: **due — napkin rotation pending (1292+ lines,
+~2.6× over rotation threshold; deferred from post-handoff
+2026-04-21 walk to Session 6 close, then deferred again from
+Session 6 to Session 7 by reformation absorbing the budget),
+distilled compression pending (couples with napkin rotation), 5
+hard-zone fitness items pending per-file disposition (Phase D),
+and 1 new pattern candidate at 1/3 instances
+(`governance-gap-invisible-until-intentional-addition`, Session 6
+napkin entry). All deferrals named-trigger and falsifiable per
+PDR-026 §Deferral-honesty discipline.** Per session-handoff step
+9: deep consolidation is due but **not well-bounded for this
+closeout** — the deferred work IS the original Session 6 Phase D
++ E + F, scheduled for Session 7 doctrine-consolidation arc
+close. Stop here; Session 7 picks it up deliberately.
+
 **Status (per `/jc-session-handoff` step 9, 2026-04-21 second
 handoff invocation)**: **completed this handoff** —
 `/jc-consolidate-docs` walked end-to-end immediately after the
@@ -772,6 +788,7 @@ re-evaluation section in `napkin.md`.
 - **`work-stream-dissolution-via-upstream-fix`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance of upstream fix absorbing downstream work stream; status: pending.
 - **`reviewer-matrix-completeness-is-not-absolute`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern or PDR-015 addendum; trigger-condition: second session where discretionary reviewer dispatch against a plan-listed matrix was correct; status: pending.
 - **`turbo-cache-hides-prettier-drift-until-pre-commit`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern (repo-specific) or workspace README; trigger-condition: second instance of cached `format:root` false-clean; status: pending.
+- **`governance-gap-invisible-until-intentional-addition`** — captured-date: 2026-04-22 (Session 6 reformation pivot); source-surface: napkin Session 6 reshaped close entry; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — pattern (cross-session, agent-infrastructure category) per routing-tree step 1; trigger-condition: second independent instance of a directory or surface accumulating items without governance until a deliberate addition forces the question. Falsifiability check: a candidate second instance must show a pre-existing surface (folder, schema, vocabulary) where governance was de-facto absent, the absence was not surfaced by passive accumulation across multiple consolidations, and the gap became visible only when intentional addition required a definition. Evidence (1 of 3): `.agent/reference/` accumulated ~35 files across 13 subdirectories without a tier definition, lightweight intake process, or aging gate; the gap surfaced at Session 6 Phase C Batch 2 only when promotion of three new files required the question. Distinct from `anticipated-surface-installed-then-empirically-unexercised` (which is about installed-but-unexercised; this is about accumulated-without-governance). Status: pending — 1/3.
 
 Additional single-instance watchlist observations carried forward
 from the 2026-04-19 rotation (`core-tier-means-primitive-not-just-

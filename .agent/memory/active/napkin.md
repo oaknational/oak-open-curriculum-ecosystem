@@ -1290,3 +1290,84 @@ cross-session data-point — moving the rule candidate from 2/3 to
 
 ---
 
+## 2026-04-22 Session 6 reshaped close — `memory-feedback` thread (Merry / cursor-claude-opus-4-7)
+
+**Landed**: PDR-014 §Graduation-target routing, PDR-026
+§Deferral-honesty discipline, PDR-005 §Source-side preservation
+and seeding, PDR-032 (NEW — Reference Tier as Curated Library),
+reference-tier reformation (35 files relocated en bloc to
+`research/notes/`, 3 promotions through new gate, rehoming plan
+authored), CHANGELOG catch-up, practice-bootstrap drift refresh,
+PDR-014 workstream→thread terminology refresh,
+observability-sentry-otel lost-substance inline restate.
+
+**Did NOT land** (honest deferrals to Session 7, named triggers):
+Phase D (holistic fitness exploration including napkin rotation +
+distilled compression + 5 hard-zone fitness items including
+principles.md char-debt), Phase E (PDR-012 reviewer-findings
+amendment — most-overdue Due item), Phase F (arc close +
+--strict-hard pass + thread archive + observability-sentry-otel
+re-activation), Phase C Batch 3 (5 pattern-graduation candidates),
+reference-rehoming first per-file disposition pass.
+
+### Session 6 surprises (capture only — 1/3 instance unless noted)
+
+1.  **Doctrine recursion: rule applied to itself within minutes
+    of landing.** PDR-026 §Deferral-honesty discipline landed in
+    Phase A.2 (~early session). Then in Phase C the owner stipulation
+    expanded Batch 2 from "move 3 files" to "reform `reference/` as
+    a curated artefact tier." The agent immediately invoked the
+    deferral-honesty rule it had just landed to honestly defer
+    Phases D–F to Session 7 with named priority trade-offs.
+    Self-test of new doctrine occurred without contrivance: the
+    session itself produced a deferral that the just-landed rule
+    governed. *Surprise dimension*: doctrine that requires its own
+    application within the session of its landing is unusually
+    self-validating; this is rare.
+
+2.  **The reference tier had been a catch-all without anyone
+    noticing — surfaced only by trying to add a new file.** Owner
+    stipulation made it visible: "When you start adding new
+    material to reference it effectively becomes a brand new
+    artefact directory and as such needs a definition, light
+    weight process, integration into the other surfaces etc." The
+    35 prior files in `.agent/reference/` had accumulated without
+    governance; the absence of a definition only became visible
+    at the moment of intentional promotion. *Surprise dimension*:
+    governance gaps in established directories can be invisible
+    until a new addition forces the question. (Watchlist: is this
+    a more general pattern? `governance-gap-surfaces-only-on-
+    intentional-addition` — 1/3 instance.)
+
+3.  **The routing pattern produced a clear answer on its first
+    non-trivial application.** PDR-014 §Graduation-target routing
+    landed in Phase A.1. Phase A.2 immediately routed five Pending
+    candidates. Two cases were genuinely novel: (a) deferral-
+    honesty-rule routed to PDR-026 amendment (not new top-level
+    rule) on `inseparable-substrate` criterion; (b) the lost
+    standing-decisions substance routed to plan-local meta
+    (inline restate in `observability-sentry-otel.next-session.md`)
+    on `repository-singleton-meta-decision-without-portable-
+    abstraction` criterion. The routing produced clear answers
+    that owner approved as drafted. *Surprise dimension*: routing
+    pattern doctrine often degenerates into "ask the owner case-
+    by-case"; the criteria here were sharp enough to drive an
+    answer.
+
+### Pattern candidate (Pending band, 1/3)
+
+- **`governance-gap-invisible-until-intentional-addition`** — a
+  catch-all directory's lack of governance is observable only at
+  the moment a deliberate addition would establish it; passive
+  accumulation does not surface the gap. Captured as candidate;
+  needs 2 more independent instances before promotion.
+
+### Session 6 hygiene note
+
+The Session 6 close is **not the doctrine-consolidation arc
+close**. The arc closes Session 7 with Phases D + E + F + Batch 3
++ rehoming-plan first pass. The reformation absorbed the budget;
+this is named and falsifiable per the deferral-honesty rule body.
+
+---
+
