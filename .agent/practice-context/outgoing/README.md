@@ -43,25 +43,71 @@ Two patterns are legitimate:
 
 ## Current Outgoing Set
 
-### Pattern-shaped candidates awaiting graduation
+No staged material currently awaits graduation. Batch 3 of the
+Phase C outgoing-triage arc (Session 7, 2026-04-22) routed the
+five remaining candidates per
+[PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing);
+results recorded under §Batch 3 below.
 
-The following files are pattern-shaped and ecosystem-agnostic;
-substance awaits frontmatter reshape for graduation to
-`practice-core/patterns/`. Until graduated, they remain here as
-staged material. **Disposition decision deferred to Session 7
-dedicated pattern-graduation pass** (named trigger captured in
-the `memory-feedback` next-session record).
+## What was removed 2026-04-22 (Session 7, Phase C Batch 3 — final batch)
 
-| File | Target | Pending |
-| ---- | ------ | ------- |
-| `reviewer-gateway-operations.md` | `practice-core/patterns/` | Pattern frontmatter; reshape to use-this-when format |
-| `production-reviewer-scaling.md` | `practice-core/patterns/` | Pattern frontmatter; reshape |
-| `plan-lifecycle-four-stage.md` | `practice-core/patterns/` | Pattern frontmatter; reshape |
-| `practice-maturity-framework.md` | `practice-core/patterns/` | Pattern frontmatter; reshape (Four-level depth-vs-scope model) |
-| `two-way-merge-methodology.md` | `practice-core/patterns/` | Pattern frontmatter; reshape (Two-way merge; ancestor tracking) |
+Routing applied per PDR-014 §Graduation-target routing. Each
+candidate was tested against the patterns README §Inclusion
+Criteria (ecosystem-agnostic + engineering-substance + ≥2
+synthesised instances) and the Practice-governance vs
+engineering-substance test.
 
-## What was removed 2026-04-22 (Session 6 closing arc, Phase C
-outgoing triage)
+### Substance absorbed; deleted
+
+- `reviewer-gateway-operations.md` — Practice-governance content
+  (reviewer gateway operating doctrine: layered triage, review
+  depth, delegation snapshot, reintegration). Substance absorbed
+  into [PDR-009 §The three-layer model](../../practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md#the-three-layer-model),
+  [PDR-010 §Agent classification taxonomy](../../practice-core/decision-records/PDR-010-domain-specialist-capability-pattern.md#agent-classification-taxonomy),
+  [PDR-010 §Three operational modes](../../practice-core/decision-records/PDR-010-domain-specialist-capability-pattern.md#three-operational-modes--domain-specialist-versions-of-the-canonical-trio),
+  [PDR-012 §The three-outcome routing rule](../../practice-core/decision-records/PDR-012-review-findings-routing-discipline.md#the-three-outcome-routing-rule),
+  the Session 7
+  [PDR-012 §Reviewer-findings disposition discipline](../../practice-core/decision-records/PDR-012-review-findings-routing-discipline.md#reviewer-findings-disposition-discipline)
+  amendment, the always-applied [`invoke-code-reviewers`](../../rules/invoke-code-reviewers.md)
+  rule, and the [`parallel-agents`](../../skills/parallel-agents/SKILL.md)
+  skill. Not pattern-shaped under
+  `practice-core/patterns/` Inclusion Criteria #2 (substance is
+  governance, not engineering).
+- `production-reviewer-scaling.md` — Practice-governance content
+  (three-layer composition: components/templates/wrappers; four
+  architecture personas Fred/Barney/Betty/Wilma). Substance fully
+  embodied in [PDR-009 §The three-layer model](../../practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md#the-three-layer-model)
+  and [PDR-010 §The four-layer capability structure](../../practice-core/decision-records/PDR-010-domain-specialist-capability-pattern.md#the-four-layer-capability-structure),
+  and operationally in `.agent/sub-agents/components/personas/`
+  alongside the four `architecture-reviewer-{barney,betty,fred,wilma}`
+  adapters in `.cursor/agents/` and `.claude/agents/`. Not
+  pattern-shaped under Inclusion Criteria #2.
+- `practice-maturity-framework.md` — Practice-governance content
+  (four-level depth model). Substance lives at
+  [`practice-lineage.md § Practice Maturity`](../../practice-core/practice-lineage.md#practice-maturity)
+  (per the doc's own "Where it lives" claim, since verified). Not
+  pattern-shaped under Inclusion Criteria #2.
+- `two-way-merge-methodology.md` — Practice-governance content
+  (Practice integration two-way merge workflow). Substance lives
+  at [`practice-lineage.md § Integration Flow`](../../practice-core/practice-lineage.md#integration-flow)
+  (the two-way merge body is inline prose within that section).
+  Not pattern-shaped under Inclusion Criteria #2.
+
+### Routed to research-tier; relocated
+
+- `plan-lifecycle-four-stage.md` →
+  [`.agent/research/notes/agentic-engineering/plan-lifecycle-four-stage.md`](../../research/notes/agentic-engineering/plan-lifecycle-four-stage.md).
+  Reference-shape content (a simpler four-stage lifecycle
+  alternative for downstream repos at POC / early-Production
+  scope; oak itself uses a richer five-state model). Not
+  pattern-shaped under Inclusion Criteria #2 (substance is
+  Practice-governance about lifecycle, not engineering); not
+  curated reference (defers PDR-032 substantiate / justify /
+  owner-vet gate). Research-notes is the default research-tier
+  landing per PDR-032; promotion to `.agent/reference/` requires
+  an owner-vet pass through the PDR-032 gate.
+
+## What was removed 2026-04-22 (Session 6 closing arc, Phase C outgoing triage)
 
 ### Batch 1 — substance absorbed elsewhere; deleted
 

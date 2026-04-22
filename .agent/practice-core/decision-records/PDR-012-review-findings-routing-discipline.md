@@ -4,8 +4,18 @@ pdr_kind: governance
 
 # PDR-012: Review-Findings Routing Discipline
 
-**Status**: Accepted
-**Date**: 2026-04-18
+**Status**: Accepted (amended 2026-04-22 Session 7)
+**Date**: 2026-04-18 (amended 2026-04-22 Session 7 —
+**reviewer-findings disposition discipline**: the closing atomic
+commit of the lane that surfaced a reviewer finding is the
+default home for actionable findings; any deferral is treated as
+a TO-ACTION outcome under §The three-outcome routing rule and
+must satisfy the PDR-026 §Deferral-honesty discipline three
+requirements (named constraint or trade-off, evidence,
+falsifiability). Composes with PDR-026's symmetric pair: §Landing
+target definition + §Deferral-honesty. Underlying decision —
+three-outcome routing, findings register, non-leading prompts,
+pre-implementation plan review, promotion triggers — unchanged.)
 **Related**:
 [PDR-007](PDR-007-promoting-pdrs-and-patterns-to-first-class-core.md)
 (new Core contract);
@@ -13,7 +23,36 @@ pdr_kind: governance
 (reviewer classification and invocation — this PDR governs what
 happens with the output);
 [PDR-011](PDR-011-continuity-surfaces-and-surprise-pipeline.md)
-(findings that become surprises enter the same pipeline).
+(findings that become surprises enter the same pipeline);
+[PDR-014 §Graduation-target routing](PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing)
+(the Session 7 amendment is the canonical `PDR amendment` shape
+for this candidate, not a new PDR);
+[PDR-026 §Deferral-honesty discipline](PDR-026-per-session-landing-commitment.md#deferral-honesty-discipline)
+(the symmetric standard the Session 7 amendment composes with
+for any TO-ACTION deferral surfaced from a reviewer pass).
+
+## Amendment Log
+
+- **2026-04-22 Session 7** (Accepted): **reviewer-findings
+  disposition discipline** added as a new §Decision sub-section
+  after §Promotion triggers for `future/` lanes. By default, a
+  reviewer finding is ACTIONED in the closing atomic commit of
+  the lane that surfaced it; the closing commit is the natural
+  home because the finding's substance, the lane's context, and
+  the cost of re-establishing both are colocated there. A
+  deferral is a TO-ACTION outcome under §The three-outcome
+  routing rule and must additionally satisfy PDR-026
+  §Deferral-honesty discipline (named constraint or trade-off,
+  evidence, falsifiability). The amendment is the most-overdue
+  Due item from the staged doctrine-consolidation arc, carried
+  through five consecutive sessions (Sessions 3-7) before
+  landing per the PDR-026 §Deferral-honesty discipline body. The
+  underlying §Decision body — three outcomes, findings register,
+  non-leading prompts, plan-stage review, promotion triggers —
+  is unchanged. Routed under [PDR-014
+  §Graduation-target routing](PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing)
+  as a `PDR amendment` shape (refines an existing decision body)
+  rather than a new PDR.
 
 ## Context
 
@@ -123,6 +162,67 @@ A `future/` plan without a trigger is a zombie backlog item. The
 trigger is what distinguishes work we are deliberately deferring
 (with criteria for resuming) from work we are hoping will go away.
 
+### Reviewer-findings disposition discipline
+
+**By default, every actionable reviewer finding is ACTIONED in
+the closing atomic commit of the lane that surfaced it.** The
+closing commit is the natural disposition home because three
+things are colocated there at minimum cost: the finding's
+substance, the lane's surrounding context (why this code, this
+plan, this decision exists), and the reviewer's framing (what
+specialism produced the finding and against what lens). Splitting
+the disposition out — applying the finding in a follow-up commit,
+a follow-up session, or a follow-up plan — pays the cost of
+re-establishing all three.
+
+The default applies to every actionable finding regardless of
+size: trivial typos, prose tightenings, missing TSDoc, structural
+suggestions that fit within the lane's scope. The closing commit
+is the right home for them. Findings that genuinely fall outside
+the lane's scope are routed via §The three-outcome routing rule:
+TO-ACTION (with named owning lane, scheduled edit, and promotion
+trigger if `future/`) or REJECTED (with written rationale).
+
+**Any TO-ACTION deferral surfaced from a reviewer pass MUST also
+satisfy [PDR-026 §Deferral-honesty discipline](PDR-026-per-session-landing-commitment.md#deferral-honesty-discipline).**
+The three requirements compose with §The three-outcome routing
+rule's TO-ACTION requirements:
+
+- §The three-outcome routing rule (PDR-012) requires: named
+  owning lane, specific scheduled edit, promotion trigger (if
+  the lane is `future/`).
+- §Deferral-honesty discipline (PDR-026) additionally requires:
+  named constraint or trade-off (why is the closing commit not
+  the home?), evidence (what concrete observation establishes
+  the constraint?), falsifiability (how can a future agent check
+  whether the constraint held?).
+
+A TO-ACTION outcome that satisfies both becomes a load-bearing
+handoff signal — the next session knows the lane, the edit, the
+trigger, the constraint that prevented in-close application, and
+how to verify the constraint still holds.
+
+A TO-ACTION outcome that satisfies §The three-outcome routing
+rule alone (lane + edit + trigger) but not §Deferral-honesty
+(missing constraint, evidence, or falsifiability) is a smuggled
+drop dressed as routing — the lane assignment looks credible but
+the deferral itself is not honest non-landing. This is the
+specific failure mode the Session 7 amendment closes.
+
+The discipline composes symmetrically with PDR-026:
+
+- PDR-026 §Landing target definition sets the standard for what
+  counts as landed (including the docs-as-definition-of-done
+  amendment).
+- PDR-026 §Deferral-honesty discipline sets the standard for
+  what counts as honest non-landing.
+- PDR-012 §Reviewer-findings disposition discipline sets the
+  standard for where reviewer findings land (default: closing
+  commit) and how to honestly defer when they cannot.
+
+The three sections together close the partial-completion theatre
+failure mode at the reviewer-pass / lane-close intersection.
+
 ## Rationale
 
 **Why no fourth outcome.** The three-outcome rule closes the
@@ -180,6 +280,15 @@ Alternatives rejected:
   plan or rejected.
 - Plans that introduce new surfaces, boundaries, or architectural
   commitments receive specialist review at plan stage.
+- Actionable reviewer findings are ACTIONED in the closing atomic
+  commit of the lane that surfaced them by default
+  (2026-04-22 Session 7 amendment).
+- Any TO-ACTION deferral surfaced from a reviewer pass satisfies
+  both §The three-outcome routing rule's TO-ACTION requirements
+  (named lane, scheduled edit, promotion trigger) and PDR-026
+  §Deferral-honesty discipline's three requirements (named
+  constraint or trade-off, evidence, falsifiability) — Session 7
+  amendment.
 
 ### Forbidden
 
@@ -187,6 +296,14 @@ Alternatives rejected:
 - "We'll come back to that" as a closure statement.
 - Leading prompts that include the proposed answer.
 - `future/` plans without a named, testable promotion trigger.
+- Splitting reviewer-finding disposition out of the closing
+  atomic commit absent a named TO-ACTION lane that satisfies
+  both PDR-012 §The three-outcome routing rule and PDR-026
+  §Deferral-honesty discipline (Session 7 amendment).
+- Asserting a TO-ACTION deferral on a reviewer finding using a
+  convenience phrase ("we'll come back", "out of scope of this
+  commit", "follow-up later") in place of a named constraint with
+  evidence and falsifiability (Session 7 amendment).
 
 ### Accepted cost
 

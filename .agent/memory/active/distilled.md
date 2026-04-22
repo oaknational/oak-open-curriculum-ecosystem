@@ -36,11 +36,9 @@ context with no natural permanent home.
 - Risk acceptance is a human decision. Agents classify severity
   and describe impact; agents do not accept risks or defer items
   on behalf of the owner.
-- Onboarding simulations must be discovery-based: start at
-  README.md only, no prescribed reading list, no access to
-  onboarding planning documents. Describe personas by motivations
-  ("anxious about looking foolish", "sceptical by default"), not
-  by focus areas.
+- Onboarding simulations are discovery-based (README-only start;
+  motivation-described personas) — see the onboarding plan for the
+  full rubric.
 
 ## Fitness Management
 
@@ -84,33 +82,6 @@ context with no natural permanent home.
   lanes**: a client-specific compat issue emerging in an active
   deployment-validation lane spins into its own follow-up plan.
   Shared preview infra ≠ shared plan ownership.
-- **Externally-verifiable-output beats internal-plan-compliance
-  for forward-motion assurance** (watchlist; single-instance
-  observation 2026-04-19, L-EH close). "Are we following the plan"
-  is internally verifiable and vulnerable to self-deception; "what
-  does the running system emit today that a stranger can observe"
-  is externally verifiable and narrows the drift surface. Every
-  lane close should produce an externally-verifiable artefact
-  (command output, test result, recorded demo, populated cell in
-  `what-the-system-emits-today.md`) — not just an "attempted" note.
-  Applies: any initiative where planning density has outpaced
-  execution density. Graduation trigger: second cross-session
-  instance of external-evidence-surfaces-a-gap-that-plan-tracking-
-  missed.
-- **Decompose precedents before reusing them** (watchlist; single
-  instance 2026-04-19, L-EH initial vs Phase 5). A precedent is
-  typically a bundle of independent decisions that happened to
-  land together — severity, scope, wiring pattern, opt-out protocol,
-  authorship venue. Reuse each only where its rationale applies in
-  the new lane. "Mirroring the precedent" as a single decision is
-  a failure mode that smuggles wrong defaults across contexts.
-  Graduation trigger: second cross-session instance of a precedent-
-  match producing a reviewer-caught wrong default.
-
-- **Reviewer findings applied in-close, not deferred** (three
-  cross-session instances 2026-04-19). The closing atomic commit
-  is the default home for actionable reviewer findings; deferral
-  requires written rationale. **Candidate for PDR-012 amendment**.
 - **Duplicate type becomes load-bearing at three consumers**. Two-
   workspace type duplication is tolerated stably; the would-be third
   consumer forces canonicalisation. Use the three-consumer pressure
@@ -124,27 +95,15 @@ context with no natural permanent home.
   convenient and broken under pressure.
 
 - **Workflow scope ≡ continuity-unit scope** — session-scoped
-  workflows act on session-scoped artefacts; thread-scoped workflows
-  act on thread-scoped artefacts. Label the scope explicitly in
-  every workflow's header and every artefact's metadata. Applied to
-  `session-handoff` (SESSION-SCOPED) and `consolidate-docs`
-  (THREAD-SCOPED) on 2026-04-21; PDR candidate for Session 3 of
-  the staged doctrine-consolidation plan.
+  workflows act on session-scoped artefacts; thread-scoped on
+  thread-scoped. Label scope in every workflow header and artefact.
+- **Dry-run multi-step workflows against accumulated state** before
+  committing to the recipe; produces *proceed* or *stage differently*.
 
-- **Dry-run a multi-step workflow against accumulated state before
-  committing to the recipe** — walk each step against current state
-  first. The dry-run cost is bounded; the cost of an unstaged pass
-  against accumulated backlog is a partial session or exhausted
-  context. Produces either *proceed* or *stage differently*.
-
-Practice-governance Process rules graduated to PDRs 2026-04-18 —
-see `.agent/practice-core/decision-records/` for: review-findings
-routing (PDR-012), grounding and framing (PDR-013), reviewer
-authority and dispatch (PDR-015), workaround hygiene (PDR-017),
-planning discipline end-goals/workflow contracts (PDR-018), ADR
-scope by reusability (PDR-019), test validity (PDR-021).
-Quality-gate dismissal discipline graduated 2026-04-19 — see
-PDR-025.
+Practice-governance Process rules graduated to PDRs — see the
+[PDR index](../../practice-core/decision-records/) for current
+canonical bodies. Watchlist items rotate to the pending-graduations
+register at `repo-continuity.md § Pending`, not back into this file.
 
 ## Architecture (Agent Infrastructure)
 

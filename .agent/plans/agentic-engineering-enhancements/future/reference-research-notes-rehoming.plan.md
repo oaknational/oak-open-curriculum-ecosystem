@@ -43,7 +43,7 @@ todos:
 
 During Session 6 of the `memory-feedback` thread (2026-04-22), the
 `.agent/reference/` directory was reformed as a curated artefact tier
-under [PDR-030](../../../practice-core/decision-records/PDR-030-reference-tier-as-curated-library.md).
+under [PDR-032](../../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md).
 At that point, `.agent/reference/` had accumulated ~35 files across 13
 subdirectories with no consistent definition of what "reference" meant
 operationally — material had landed there ad-hoc whenever it didn't
@@ -63,7 +63,7 @@ This plan finds proper homes for the relocated material.
 - This plan does NOT re-author or refresh content. Each file moves
   to a new home as-is or is archived/deleted; substantive edits are
   out of scope and would need their own plan.
-- This plan does NOT define `.agent/reference/`. PDR-030 defines the
+- This plan does NOT define `.agent/reference/`. PDR-032 defines the
   tier; this plan only decides which relocated files (if any) should
   be promoted INTO the new reference tier.
 - This plan does NOT re-validate the original landing decisions of
@@ -115,6 +115,34 @@ because no SLA is imposed on the holding bay — `research/notes/`
 can hold material indefinitely without harming the new reference
 tier's integrity. The cost of staying in the bay is modest
 discoverability degradation, not active rot.
+
+### Scheduled execution: Session 8 of the `memory-feedback` thread
+
+Per the 2026-04-22 Session 7 → Session 8 arc reshape (recorded
+under PDR-026 §Deferral-honesty discipline as a named, falsifiable
+trade-off):
+
+- **Named constraint**: this rehoming first per-file disposition
+  pass is owner-appetite-triggered with no SLA. Conflating it
+  with the Session-7 Phase D owner-paced per-file fitness
+  disposition pass would either rush both (violates owner-paced
+  cadence) or leave both partial (violates "no partial complete"
+  discipline).
+- **Trade-off**: the staged doctrine-consolidation arc closes one
+  session later in exchange for honest, owner-paced cadence on
+  each work item.
+- **Falsifiability**: a future agent can read the Session 8 close
+  and verify that the rehoming first pass landed alongside the
+  arc-close DoD criteria (`pnpm practice:fitness --strict-hard`
+  exits 0; `/jc-consolidate-docs` returns clean — zero warnings,
+  zero errors, zero unnamed deferrals; staged plan to
+  `archive/completed/`; `memory-feedback` thread archived;
+  `observability-sentry-otel` re-activated).
+
+The Session 8 next-session record at
+[`.agent/memory/operational/threads/memory-feedback.next-session.md`](../../../memory/operational/threads/memory-feedback.next-session.md)
+§"Session 8 landing target (rehoming first pass + arc close)"
+holds the bidirectional pointer back to this plan.
 
 ## Done definition
 

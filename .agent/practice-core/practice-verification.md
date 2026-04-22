@@ -220,6 +220,20 @@ consistent across operational surfaces:
 
 - `.agent/experience/` — experiential records (referenced in
   `practice.md` Artefact Map but not required for basic operation)
+- `.agent/reference/` — **curated reference tier** per
+  [PDR-032](decision-records/PDR-032-reference-tier-as-curated-library.md):
+  read-to-learn distillations of external substance (sources,
+  research notes, third-party patterns) that have passed the
+  curation gate. The tier's read-to-learn purpose is to make
+  external substance citable from active doctrine without
+  inlining it; the gate's existence — explicit promotion through
+  PDR-032's criteria from `research/notes/` (or equivalent
+  source-side staging) — is what distinguishes the curated tier
+  from raw research material. Repos may seed the tier empty;
+  uncurated material lives in `research/notes/` until it passes
+  the gate. Verification at hydration: if `.agent/reference/`
+  exists, every file under it has a recorded provenance and a
+  promotion rationale per PDR-032.
 - hooks when every platform is unsupported
 - workstream-specific plan collections
 - domain or tool specific reviewer clusters
