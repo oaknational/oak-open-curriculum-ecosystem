@@ -1371,3 +1371,28 @@ this is named and falsifiable per the deferral-honesty rule body.
 
 ---
 
+## 2026-04-22 Session 6 close — `/jc-consolidate-docs` end-to-end walk (Merry / cursor-claude-opus-4-7)
+
+Owner-directed walk after `/jc-session-handoff` had already
+recorded "deep consolidation is due but not well-bounded for this
+closeout — stop here". Walked steps 1–10 honestly. Net change: 1
+plan body refresh (staged-doctrine plan s4/s5/s6 → completed; s7
+todo added; reshape banner at top of body) + 1 status block
+appended to repo-continuity § Deep consolidation status. 0 ADR /
+0 PDR / 0 rule / 0 principle / 0 pattern files authored. Heavy
+items (napkin rotation, distilled compression, 5 hard-zone
+fitness items, PDR-012 reviewer-findings amendment, arc-close
+`--strict-hard` pass) carried to Session 7 with **named triggers
+unchanged** — no manufactured deferral framing per PDR-026
+§Deferral-honesty discipline. New surface candidate: `practice-
+verification.md` does not yet name the curated `reference/` tier
+(PDR-032 is new); deferred with named trigger (next holistic-
+fitness pass OR PDR-032 first aging-gate review). The walk
+itself is a third instance of "doctrine immediately governs the
+session of its landing" — owner-directed override of session-
+handoff guidance, executed under PDR-026 deferral-honesty body —
+texture worth noting but not yet pattern-bar (1 cross-session
+instance only; 2026-04-22 lived as one extended close).
+
+---
+

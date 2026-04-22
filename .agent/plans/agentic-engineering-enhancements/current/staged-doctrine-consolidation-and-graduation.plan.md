@@ -1,6 +1,6 @@
 ---
 name: "Staged Doctrine Consolidation and Graduation"
-overview: "Six-session staged execution of the overdue consolidation backlog: patterns, doctrine bundle, active tripwires (two families), outgoing triage, and a holistic final fitness exploration."
+overview: "Seven-session staged execution of the overdue consolidation backlog (originally six; reshaped at Session 6 owner-stipulation). Sessions 1-5 landed sequentially; Session 6 absorbed by owner-stipulated reference-tier reformation (PDR-032 + reformation execution); Session 7 closes the arc by carrying the deferred Phases D + E + F + Batch 3 + rehoming first pass."
 todos:
   - id: s1-decisions-patterns-tripwire-artefactmap
     content: "Session 1: Record Phase 0 decisions as standing; author two patterns (inherited-framing + passive-guidance); install first Family-A tripwire (plan-body-first-principles-check rule, front-loaded to cover Sessions 2-3); refresh practice.md Artefact Map; brief experience entry."
@@ -13,21 +13,45 @@ todos:
     status: completed
   - id: s4-tripwires-cross-linking
     content: "Session 4 LANDED 2026-04-21 with two mid-session revisions via PDR-029 Amendment Log: (1) 'active tripwire' = markdown-ritual step naming authoritative sources, not code; (2) Class-A.1 Layer-2 'standing-decision register surface' RETRACTED — A.1 Layer 2 is served by the existing foundation-directive grounding (principles + ADR/PDR/rules) per the first amendment. Landed: Task 4.0 platform-agnostic commit skill at canonical .agent/commands/commit.md with adapters and AGENT.md citation; Class A.1 plan-body rule forward-reference resolved to PDR-029 (no register surface authored); Class A.2 session-open identity rule at .agent/rules/register-identity-on-thread-join.md with Claude+Cursor adapters; Class A.2 session-close gate as documentation walkthrough in /session-handoff step 7c; Class A.2 stale-identity audit as documentation walkthrough in /jc-consolidate-docs step 7c; Active identities column in repo-continuity.md § Active threads formalised as THE register; Family B meta-tripwires (taxonomy-seam meta-check + cross-plane path scan + orphan-item signal); cross-plane path rules (executive-memory-drift-capture rule + cross_plane pattern frontmatter + executive-impact workstream tag + Source plane napkin tag); observability thread record migrated from legacy path to threads/ canonical location; Practice Core CHANGELOG + roadmap sync. Seven + decomposition items graduated across two close passes. New standing decision: 'Misleading docs are blocking' (also itself decomposition-pending into a PDR at Session 5). Platform parity load-bearing: canonical + Claude + Cursor + Codex adapters + AGENT.md citation for every Family A rule; documentation-first for every gate/probe/view; no code layer where markdown suffices."
-    status: pending
+    status: completed
   - id: s5-evaluate-then-extend
-    content: "Session 5 (REFRAMED 2026-04-21 Session 4 late close — owner direction: 'there is no alternative thread, we need this work to be FINISHED, properly, carefully, fully, choosing long-term architectural excellence at every point'): MANDATORY SEQUENCE, not a choice. Stage 1 evaluate-and-simplify FIRST (close OAC Phase 4 which is overdue from 2026-04-20 and has pilot-evidence artefact; simplification pass with delete-bias against Session-4 doctrine additions — thread-vs-workstream collapse, PDR-029 consolidating revision, nine pattern candidates pruning, Family-A tripwire retention, ~15 register entries each keep/merge/retire; answer thread/workstream/track first-principles check with three sub-items). Stage 2 extension (outgoing triage + ten-item decomposition) runs only if stage 1 closes cleanly with budget remaining, otherwise moves wholly to Session 6. Thread does not switch. The observability-sentry-otel thread waits."
-    status: pending
+    content: "Session 5 LANDED 2026-04-21 — Stage 1 evaluate-and-simplify executed with delete-bias and explicit register pruning (TIER-1 + TIER-2 simplifications + per-item Class A.1 firing on Stage 2(b) standing-decisions decomposition). Landings: PDR-031 (NEW) + 5 PDR amendments (PDR-011, PDR-015×2, PDR-019, PDR-026) + 1 ADR amendment (ADR-053) + 1 new rule (no-verify-requires-fresh-authorisation) + 2 principle additions (Misleading docs are blocking; Cardinal rule). Stage 2 (outgoing triage + ten-item decomposition) honestly deferred to Session 6 with named triggers per PDR-026. Thread did not switch."
+    status: completed
   - id: s6-fitness-exploration
-    content: "Session 6 (meta-consolidation): Holistic review of every fitness hard/soft-zone file; owner decides compress/raise/restructure/split per file; apply; close arc under --strict-hard."
+    content: "Session 6 RESHAPED 2026-04-22 by owner stipulation — original scope (close arc under --strict-hard via holistic fitness exploration of 5 hard / 9 soft zone items + Stage 2 outgoing triage + reference-tier sweep) was partially executed and partially deferred. Landed: PDR-014 §Graduation-target routing (NEW); PDR-026 §Deferral-honesty discipline (NEW); PDR-005 §Source-side preservation and seeding (NEW); PDR-032 (NEW — Reference Tier as Curated Library); reference-tier reformation (35 files relocated en bloc to research/notes/; rehoming plan authored; first 3 promotions through PDR-032 gate; integration into practice.md + practice-bootstrap.md + orientation.md + 14+ active-surface citations); CHANGELOG catch-up Sessions 4-5-6; PDR-014 workstream→thread terminology refresh; observability-sentry-otel lost-substance inline restate; Phase C outgoing triage Batches 1+2+4 closed (Batch 3 deferred); deep-dives reference-tier sweep closed by reformation. Phase D (holistic fitness exploration) + Phase E (PDR-012 amendment for reviewer-findings-applied-in-close-not-deferred) + Phase F (--strict-hard pass + arc close + thread archive + observability re-activation) + Phase C Batch 3 (5 pattern-graduation candidates) + reference-rehoming first per-file disposition pass all DEFERRED to Session 7 per PDR-026 §Deferral-honesty discipline (named priority trade-off: reformation became load-bearing for the session)."
+    status: completed
+  - id: s7-arc-close
+    content: "Session 7 CLOSING SESSION (NEW; carries deferred Session 6 Phases D + E + F): Phase D — Holistic fitness exploration (5 hard-zone items per-file owner-decision compress/raise/restructure/split; 9 soft-zone reviewed; couples with napkin rotation 1300+ lines and distilled compression). Phase E — Reviewer-findings-applied-in-close-not-deferred PDR-012 amendment (most-overdue Due item, route per PDR-014 §Graduation-target routing; Class A.1 firing on amendment body). Phase F — Arc close (--strict-hard exits 0; staged plan to archive/completed/; Practice Core CHANGELOG arc-close entry; memory-feedback thread archived; observability-sentry-otel re-activated; pending-band cleanup; reviewer dispatch). Phase C Batch 3 — 5 pattern-graduation candidates (reviewer-gateway-operations, production-reviewer-scaling, plan-lifecycle-four-stage, practice-maturity-framework, two-way-merge-methodology). Reference-rehoming first per-file disposition pass (no SLA; owner-appetite triggered)."
     status: pending
 isProject: false
 ---
 
 # Staged Doctrine Consolidation and Graduation
 
-**Last Updated**: 2026-04-21 (Session 4 in flight — Tasks 4.0, 4.1, 4.2.a, 4.2.b, 4.2.c, 4.3 landed; PDR-029 Amendment Log entry codifying "active means markdown-ritual, not code" landed mid-session after owner metacognition surfaced the platform-coupling bias in the original script-based shape; Tasks 4.2.b/c/3 reshaped to documentation-first; Tasks 4.4, 4.5, 4.6 remaining. Session 3 had landed at 6/6 under bundle rhythm with four new portable PDRs [PDR-027, PDR-028, PDR-029, PDR-030] + two amendments [PDR-011 thread-scope, PDR-026 per-thread-per-session].)
-**Status**: 🟡 Session 4 in flight — Tasks 4.4, 4.5, 4.6 + close remaining
-**Scope**: Six-session staged execution of the overdue consolidation backlog surfaced by the 2026-04-21 dry-run. Each session commits to a bounded landing target per PDR-026; context is preserved across session boundaries via operational memory.
+**Last Updated**: 2026-04-22 (Session 6 reshaped close — owner-stipulated reference-tier reformation absorbed Session 6 budget; Phases D + E + F + Batch 3 + rehoming first pass deferred to Session 7 with named triggers per PDR-026 §Deferral-honesty discipline. Sessions 1-5 landed sequentially; Session 6 landed PDR-014 §Graduation-target routing + PDR-026 §Deferral-honesty + PDR-005 §Source-side preservation + PDR-032 NEW + reference-tier reformation + CHANGELOG catch-up + workstream→thread refresh + outgoing triage Batches 1+2+4. Plan extended from six sessions to seven; arc closes Session 7.)
+**Status**: 🟡 Session 6 RESHAPED-CLOSED 2026-04-22 — Session 7 carries deferred arc close (Phases D + E + F + Batch 3 + rehoming first pass)
+**Scope**: Originally six-session staged execution of the overdue
+consolidation backlog surfaced by the 2026-04-21 dry-run. **Reshaped
+2026-04-22 to seven sessions** when owner stipulation at Session 6
+Phase C Batch 2 expanded a three-file move into a full reference-tier
+reformation (PDR-032 + relocation + integration); the reformation
+became load-bearing and absorbed Session 6's remaining budget; the
+arc now closes at Session 7. Each session commits to a bounded
+landing target per PDR-026; context is preserved across session
+boundaries via operational memory.
+
+> **Session-6 reshape note (2026-04-22)** — Body text below
+> describing Session 6 as the holistic-fitness-exploration arc-close
+> session reflects the **original** six-session design. The
+> reshaped reality is captured in the frontmatter `s6-fitness-exploration`
+> and `s7-arc-close` todos and in the Status line above. Phase D
+> (holistic fitness exploration), Phase E (PDR-012 amendment for
+> reviewer-findings-applied-in-close-not-deferred), Phase F
+> (`--strict-hard` + arc close), Phase C Batch 3 (5 pattern-graduation
+> candidates), and the reference-rehoming first per-file disposition
+> pass all carry to Session 7. Reading the body content below as
+> Session-7 plan-of-record requires the substitution
+> "Session 6 → Session 7" wherever it names the closing session.
 
 **Related artefacts**:
 

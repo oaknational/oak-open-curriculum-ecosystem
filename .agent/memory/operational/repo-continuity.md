@@ -507,6 +507,26 @@ is the current thread until the arc finishes.
 
 ## Deep consolidation status
 
+**Status (per `/jc-consolidate-docs` end-to-end walk, 2026-04-22
+Session 6 reshaped close — owner-directed override of the
+session-handoff step 9 "stop here" guidance)**: **walked
+end-to-end; 0 ADR / 0 PDR / 0 rule / 0 principle / 0 pattern files
+authored; net change: staged-plan body refresh (s4/s5/s6 status
+moved to completed; s7 todo added; reshape banner inserted).** All
+heavy items (napkin rotation 1392+ lines, distilled compression
+~314 lines, 5 hard-zone fitness items per-file disposition,
+PDR-012 reviewer-findings amendment, arc-close `--strict-hard`
+pass) **carried to Session 7** with the existing named triggers
+unchanged. New surface candidate: `practice-verification.md` does
+not yet name the curated `reference/` tier in its hydration
+checklist (PDR-032 is new); deferred with named trigger (next
+holistic-fitness pass OR PDR-032's first aging-gate review,
+whichever fires first). Pre-existing flag retained:
+`observability-sentry-otel` thread has two identity rows with
+`*unattributed* / *unknown* / *unknown*` placeholders from retro
+capture (not a Session 6 artefact). All deferrals named-trigger
+and falsifiable per PDR-026 §Deferral-honesty discipline.
+
 **Status (per `/jc-session-handoff` step 8, 2026-04-22 Session 6
 reshaped close)**: **due — napkin rotation pending (1292+ lines,
 ~2.6× over rotation threshold; deferred from post-handoff
@@ -521,7 +541,11 @@ PDR-026 §Deferral-honesty discipline.** Per session-handoff step
 9: deep consolidation is due but **not well-bounded for this
 closeout** — the deferred work IS the original Session 6 Phase D
 + E + F, scheduled for Session 7 doctrine-consolidation arc
-close. Stop here; Session 7 picks it up deliberately.
+close. Stop here; Session 7 picks it up deliberately. **Override
+2026-04-22**: owner directed `/jc-consolidate-docs` walk after
+this status was recorded; the walk ran honestly, deferred the
+heavy items unchanged, and refreshed the staged plan body. See
+the prior status block above for the walk outcome.
 
 **Status (per `/jc-session-handoff` step 9, 2026-04-21 second
 handoff invocation)**: **completed this handoff** —
