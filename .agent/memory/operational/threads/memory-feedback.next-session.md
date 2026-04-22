@@ -454,7 +454,14 @@ framing):
 
 1. **Phase D — Holistic fitness exploration** (5 hard-zone items
    per-file disposition; 9 soft-zone reviewed; coupling with
-   napkin rotation + distilled compression).
+   napkin rotation + distilled compression). **Owner stipulation
+   2026-04-22 (Session 6 close)**: Phase D is expected to involve
+   *both* limit-raises (where the file's role genuinely warrants
+   it; owner-only per Step 9§e) *and* compress / migrate (where
+   accumulated low-value content can be removed or routed to a
+   better home), most likely both per file. Per-file decision is
+   compress / migrate / restructure / split / raise-limit; owner
+   adjudicates each.
 2. **Phase E — `reviewer-findings-applied-in-close-not-deferred`
    PDR-012 amendment** (route per PDR-014 §Graduation-target
    routing; Class A.1 firing on amendment body).
@@ -467,6 +474,23 @@ framing):
    `reviewer-gateway-operations`, `production-reviewer-scaling`,
    `plan-lifecycle-four-stage`, `practice-maturity-framework`,
    `two-way-merge-methodology`).
+
+#### Definition of Done (Session 7 close)
+
+Owner stipulation 2026-04-22 (Session 6 close):
+**`/jc-consolidate-docs` completes without warnings or errors**
+is a load-bearing DoD element for Session 7 close. This binds
+Phase D + Phase F together — the consolidation walk's surfaces
+(napkin rotation gate at Step 6, fitness gate at Step 9, register
+freshness audit at Step 7c, practice-exchange clean state at
+Step 10) must all return clean signal at arc-close, not "due
+with named trigger". Named-trigger deferrals are valid through
+the arc but cannot persist past Session 7's close — Session 7
+either closes them, or names a fresh, falsifiable trade-off that
+explicitly extends past the arc-close boundary (and surfaces the
+extension to the owner). Falsifiability check: a future agent can
+read the post-close consolidation walk output and confirm zero
+warnings + zero errors + zero unnamed deferrals.
 
 Session 7 is the **closing session for this arc**. The thread
 does not switch. The `observability-sentry-otel` thread waits.
