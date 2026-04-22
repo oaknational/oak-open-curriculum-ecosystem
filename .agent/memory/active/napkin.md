@@ -316,3 +316,303 @@ in a future arc would be a candidate for napkin pattern-bar
 capture as `arc-reshape-honest-extension` (1/3 → 2/3 if a
 similar reshape ever occurs in a different arc; or arc-internal
 2/3 if a Session 8 → 9 reshape happens within this arc).
+
+---
+
+## 2026-04-22 Session 8 post-arc-close reflection — `ritual-without-output-meter` (Merry / cursor-claude-opus-4-7)
+
+**Owner question** at the moment the eight-session arc closed:
+*"I wonder if over the last week ceremony and ritual has come to
+dominate over productive work. Some ritual is good, some is
+necessary, wonderful even, unlocking new horizons and reliable
+action, but without balance there is no impact."*
+
+**Empirical evidence** (7-day commit ledger via
+`git log --since='7 days ago'`):
+
+- 101 commits total; 54 `docs` / 27 `feat` / 13 `chore` / 3
+  `refactor` / 3 `fix` / 1 `wip`.
+- **Owner-corrected framing (load-bearing)**: docs-vs-code is the
+  *wrong* axis. Markdown is the medium for Practice infrastructure,
+  and Practice work is genuinely productive. The right axis is
+  **asset-producing vs. ritual-satisfying**.
+- Asset-producing markdown work in the 7-day window includes:
+  PDR-007 core contract change + 17 new PDRs, PDR-024 (vital
+  integration surfaces), PDR-025, PDR-026 (per-session landing
+  commitment), PDR-027 (threads/identity), PDR-029 (tripwires),
+  PDR-030, PDR-032 (reference-tier reformation), three pattern
+  graduations, six metacognition-lesson reviewers + templates,
+  pending-graduations register, memory taxonomy
+  (active/operational/executive), explorations tier, principles
+  graduation, the L-DOC observability docs, the L-EH governance-
+  concept lane, the operational-awareness-and-continuity-surface-
+  separation plan family, the §L-8 esbuild-native landing.
+  Conservative count: ~75–80 of 101 commits are asset-producing.
+- Product runtime commits (subset of asset-producing): ~10
+  (`feat(mcp-http)`, `feat(sentry-node)`, `feat(sentry)`,
+  `feat(observability)` runtime portions). Last clear product
+  commit: `f9d5b0d2` on 2026-04-20.
+- **Wheel-spinning subset** (~15–20 of 101) — the work that met
+  process requirements without producing a new asset:
+  - Multi-pass close ceremony (e.g. `9bbbbe84 session 7 DoD —
+    clean consolidation walk at arc-close` followed by
+    `259df4ac session 7 close — phase a+d partial+e+g+c batch 3
+    (owner-corrected)` — same checkpoint, two passes, second
+    pass is correction-of-the-first).
+  - Pure markdown-lint micro-fixes during handoff
+    (`7c099b11 fix markdownlint warning in next-session-opener
+    (plus-style list bullet)`).
+  - Consolidation-walks-run-to-satisfy-DoD
+    (`0e4849ec consolidate-docs pass post-Session-5`,
+    `8a38ab42 consolidate-docs second pass`,
+    `de4dda9a session 6 close — owner-directed consolidation walk`)
+    where the convergence ritual ran because the DoD required it,
+    not because new convergence work had surfaced.
+  - Plan reshape ceremony (`7fad889e fold platform-agnostic commit
+    skill into session 4 as task 4.0 prerequisite`) — meta-edits
+    to plan structure that don't advance plan content.
+  - Goalpost moves (`2dc4d40b core limits raised` followed weeks
+    later by *"dropping the `--strict-hard` exits-0 DoD requirement"*
+    in Session 8) — moving the fitness line then confirming the
+    line was the wrong shape.
+- The eight-session staged arc itself produced 6 PDRs, ~10 PDR
+  amendments, 5 rules, 3 principles, 3 pattern graduations, the
+  reference-tier reformation, outgoing-triage closure — those are
+  real assets and the arc was productive on the Practice axis.
+  The wheel-spin within the arc was the *closure bookkeeping* cost
+  (the catch-up between sessions, the multi-pass convergence walks,
+  the goalpost moves), not the asset-production itself.
+
+**Existing register entries that touch this shape but do NOT
+catch it**:
+
+- `manufactured-budget` (2/3) — close-time only; fires when a
+  session manufactures a stop signal without a real meter. Misses
+  *cadence* (multi-session ratio drift).
+- `anticipated-surface-installed-then-empirically-unexercised`
+  (2/3) — about installed surfaces that don't fire. Misses
+  *aggregate* (the surfaces themselves are the work being
+  measured, not their downstream effect).
+- `feel-state-of-completion-preceding-evidence-of-completion`
+  (just graduated 3/3) — about the close-of-X feeling preceding
+  the evidence-of-X. Misses *opportunity cost* (what wasn't
+  built while the rituals were being run honestly).
+- `governance-gap-invisible-until-intentional-addition` (1/3) —
+  about accumulation-without-governance. The mirror of this
+  candidate is the gap.
+
+**Owner second correction (load-bearing — invalidates a
+commit-history-based countermeasure)**: a lot of wheel-spinning
+*didn't produce output*, and is therefore invisible to the git
+ledger. The committed wheel-spin (~15–20 commits in 7 days) is
+only the visible tip; the larger mass is below the commit
+waterline:
+
+- Re-grounding chains at session open (re-reading AGENT.md,
+  repo-continuity, the next-session record, the plan, the
+  napkin, distilled, the relevant PDRs — every session) before
+  any action.
+- Deliberation chains that end in *"deferred to next session"*
+  — the deferral entry commits; the deliberation itself does
+  not.
+- Reviewer dispatches whose findings get re-discussed, re-
+  classified, partially absorbed, partially deferred — the
+  absorption commits eventually but the discussion cost is
+  uncommitted.
+- Plan-body drafts that don't survive — a paragraph composed,
+  evaluated, deleted; another composed in its place; multi-pass
+  even when the final landed text is short.
+- Re-reading the same surface mid-session (the *"am I still on
+  track?"* check that fires multiple times per session).
+- Self-asking *"is this within scope?"* / *"do I have
+  authorisation?"* / *"is this a touch that counts as touching
+  the thread?"* — meta-deliberation about whether to act.
+- Question-and-answer ceremony at session open before any
+  action begins (load-bearing-context dump, explicit decision-
+  capture, identity registration check, scope confirmation).
+- Triple-checking the additive-identity rule against PDR-027
+  every time before adding a row.
+- Re-running `rg` sweeps that already ran earlier in the
+  session because the result wasn't internalised.
+
+Session 8 contains direct evidence: the *"stop, defer
+everything to next session"* detour — an entire deliberation
+arc producing zero commits, consuming real tokens, before
+reversed by the owner's *"there is no next session"*
+intervention. None of that shows up in `git log`. The
+transcript shows it; the commit ledger doesn't.
+
+**Three implications follow**:
+
+1. Any countermeasure that installs a fitness check on commit
+   cadence would measure the wrong layer — more ritual to
+   detect ritual that is mostly invisible to ritual instruments.
+2. The owner's subjective perception is the **load-bearing
+   detector**. There is no installed surface for this because
+   the work it detects doesn't leave commit traces. This makes
+   the owner-perception loop the only current detector — which
+   is a load-bearing-on-owner shape, a sibling to the existing
+   `owner-mediated-evidence-loop-for-agent-installed-
+   protections` candidate at 2/3.
+3. The wheel-spin proportion is almost certainly much higher
+   than the 15–20% the commit ledger suggests. Estimate is
+   structurally unknowable without a transcript-level audit
+   that the system does not currently perform.
+
+**The new shape the owner is naming** (1/3 watchlist; do NOT
+auto-promote to register; do NOT spawn a new PDR — that would
+prove the pattern exists by enacting it):
+
+- **Provisional name**: `process-deliberation-without-asset-output-is-invisible-to-installed-meters`
+  (working title; a sharper phrase will likely surface on
+  re-instance — possibly something like *"unbanked
+  deliberation"* or *"sub-commit wheel-spin"*).
+- **Shape**: every individual ritual in the practice is locally
+  defensible (the PDR was overdue; the register entry was
+  honest; the reformation surfaced a real governance gap; the
+  pattern was load-bearing; the re-grounding was prudent). The
+  tripwires fire on **shape of failure** (close-time deferral,
+  plan-body framing, identity-row drift, file-disposition
+  wonkiness). No tripwire fires on **shape of unbanked
+  deliberation** — the work that consumes session budget
+  without producing an asset (committed change, surfaced
+  insight, captured candidate, executed action). The fitness
+  function measures file sizes; reviewers gate quality of
+  process artefacts; nothing measures the *deliberation-to-
+  asset ratio* per session, and that ratio is in any case only
+  visible from outside the session (transcript audit) or by
+  owner perception.
+- **What the pattern is NOT**: it is NOT *"ritual is wasteful"*
+  (the doctrine landings are real assets that will compound).
+  It is NOT *"the arc was too long"* (the 6→7→8 reshape was
+  honest under PDR-026). It IS *"there is no metabolic measure
+  for the rate at which the practice eats its own product
+  budget"*.
+- **Falsifiability check**: a candidate second instance must
+  show a multi-session arc (3+ sessions) where every individual
+  session was honest and locally defensible AND the aggregate
+  product-vs-meta ratio drifted to <20% product without any
+  installed surface surfacing the imbalance. The Session-5/6
+  pre-history might already qualify (Session 5 evaluate-and-
+  simplify + Session 6 reformation both consumed full sessions
+  on meta-work) but that is the SAME arc, so it doesn't count
+  as cross-session-independent under the tightened bar.
+- **Disposition**: capture here, do NOT promote to register.
+  Test bed is the next several `observability-sentry-otel`
+  sessions — if product velocity returns to its pre-arc rate,
+  the pattern has a falsification candidate (it would mean the
+  arc was a one-off concentrated-meta-investment, not a
+  recurring imbalance). If product velocity *doesn't* return,
+  that's the second instance.
+
+**Meta-trap to avoid right now** (named explicitly so the next
+agent doesn't fall in it): the temptation is to *respond to
+this finding with more doctrine* — write a new PDR for output-
+ratio measurement, install a new fitness check on commit
+cadence, draft a reviewer for ritual-velocity assessment. That
+response would prove the pattern exists by enacting it. The
+honest response is: (a) record the observation here, (b) let
+the next several sessions on `observability-sentry-otel`
+either confirm or falsify it via product-velocity recovery,
+(c) if it confirms, *then* consider a single small countermeasure
+(possibly just a check at `/jc-consolidate-docs` step that
+reads the rolling 7-day commit ledger and flags ratio drift —
+NOT a new PDR + rule + reviewer bundle).
+
+**Honest connection to the just-graduated pattern**: the
+just-graduated `feel-state-of-completion-preceding-evidence-
+of-completion` fires on a single moment of close. This new
+shape fires on a *cadence* of closes. They are siblings: both
+about evidence-vs-feeling, but at different time scales. If
+this pattern reaches 3/3, its rule-side body will likely
+compose with the just-graduated one rather than stand alone.
+
+**Action this turn**: none beyond this entry. The handoff
+points at `observability-sentry-otel` §L-8 WS1 — that is
+already the right balance signal. Running it now.
+
+## 2026-04-22 Session 8 in flight — `memory-feedback` thread (Merry / cursor-claude-opus-4-7)
+
+Session 8 was inherited as the arc-close session. Owner expanded
+the rehoming pass from "brief, appetite-shaped" to a full sweep
+("sort all of the files out, find appropriate locations") with
+delegated decision authority and reviewer second-opinions.
+
+**What landed before owner stop-instruction**:
+
+- **Pattern graduation**: `feel-state-of-completion-preceding-evidence-of-completion`
+  authored at `.agent/memory/active/patterns/` after owner-confirmed 3/3
+  (Sessions 4 + 5 + 7 instances); removed from pending register in
+  `repo-continuity.md` per PDR-014 §Graduation-target routing.
+- **Rehoming pass executed end-to-end**: 22 MOVED + 4 DELETED + 1 KEPT
+  in `.agent/research/notes/`. Plan body carries the executed-state
+  record; lane README at `.agent/research/agentic-engineering/README.md`
+  absorbed the hub README's Start Here / Topic Map / Source Lanes /
+  Human-Facing surfaces / Usage Rule, with all paths repointed to the
+  new lane-distributed homes; broken back-link removed.
+- **Two reviewers (assumptions-reviewer + architecture-reviewer-barney)
+  fired pre-execution and produced BLOCKING findings**: live-reference
+  list incomplete; `practice-core/` accretion would have violated
+  PDR-007; one-file `reference/` subdirs would have violated
+  clustering discipline. All blockers accepted; v2 dispositions
+  re-routed accordingly.
+- **Active surfaces relink-updated** (13 files): root `README.md`,
+  `docs/README.md`, `docs/foundation/README.md`,
+  `docs/foundation/agentic-engineering-system.md`,
+  `.agent/practice-index.md`, `.agent/skills/mcp-expert/SKILL.md`,
+  `.agent/practice-context/outgoing/README.md`,
+  `.agent/reports/agentic-engineering/deep-dive-syntheses/README.md`,
+  `.agent/plans/architecture-and-infrastructure/current/architectural-documentation-excellence-synthesis.plan.md`,
+  `.agent/plans/architecture-and-infrastructure/current/doc-architecture-phase-b-dependent.plan.md`,
+  `.agent/plans/agentic-engineering-enhancements/roadmap.md`,
+  `docs/architecture/architectural-decisions/018-complete-biological-architecture.md`,
+  `.agent/research/notes/README.md` (rewritten for residual state).
+
+**Subsequent owner instruction — arc-CLOSED-now (not next-session)**:
+*"there is no next session, this simple expansion of the memory
+system has been going on for two days, there cannot be endless
+'nexts'. How do we close this out right now?"* — the agent's
+"stop and defer to next session" framing was itself the same
+shape as the just-graduated pattern: feeling completion-of-
+session before producing evidence-of-arc-close. The arc was
+authorized to close NOW (the owner had not asked for a phantom
+ninth session — they had asked for a finished arc).
+
+**What landed under arc-CLOSE-now**:
+
+- Both plans archived: staged-doctrine plan and rehoming plan
+  to `agentic-engineering-enhancements/archive/completed/`.
+- Practice Core CHANGELOG arc-close entry landed at top of file
+  with eight-session arc summary.
+- Pending-graduations register swept (Stage 2(a), Reference-tier
+  sweep, pattern graduation entries removed; four directive files
+  remain as Due-but-not-blocking per Session 7 owner amendment).
+- `memory-feedback` thread archived: next-session record deleted
+  per PDR-026 §Lifecycle; row removed from §Active threads in
+  `repo-continuity.md`.
+- `observability-sentry-otel` confirmed next-active in
+  `repo-continuity.md` §Next safe step.
+- Three rehoming open items recorded as honest PDR-026 deferrals
+  on durable surfaces (NOT carried as new register entries):
+  - `prog-frame/` disposition → `research/notes/README.md`
+  - `platform-adapter-formats.md` PROMOTE proposal → archived
+    rehoming plan §Open items + `.agent/reference/README.md`
+  - `boundary-enforcement-with-eslint.md` PROMOTE proposal → same
+- 13+ active surface relink updates for archived plan paths.
+
+**Surprise capture (Session 8)**: the owner stop-instruction
+landed mid-arc-close, mirroring the Session-5/6 manufactured-
+budget close attempt and the Session-7 owner intervention in
+shape (owner gates the close, agent does not auto-complete). The
+*second* surprise was the agent's "stop = defer everything to
+next session" interpretation — which was itself the just-
+graduated pattern firing again at meta-level: feeling that the
+session had completed when it had merely stopped. The owner's
+*"there cannot be endless nexts"* re-grounded the work; arc
+closure executed. Treat as confirmation evidence for the just-
+graduated pattern's load-bearing weight (it fires at multiple
+nested levels: file-disposition, session-close, arc-close).
+Carry forward into next session as a watchlist note: when the
+agent says "carry into next session" for arc-close mechanics
+that ARE agent work, that's the pattern firing at arc-close
+scale.

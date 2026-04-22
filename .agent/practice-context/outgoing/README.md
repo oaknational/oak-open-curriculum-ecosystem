@@ -96,7 +96,9 @@ engineering-substance test.
 ### Routed to research-tier; relocated
 
 - `plan-lifecycle-four-stage.md` →
-  [`.agent/research/notes/agentic-engineering/plan-lifecycle-four-stage.md`](../../research/notes/agentic-engineering/plan-lifecycle-four-stage.md).
+  [`.agent/research/agentic-engineering/plan-lifecycle-four-stage.md`](../../research/agentic-engineering/plan-lifecycle-four-stage.md)
+  (relocated from `research/notes/agentic-engineering/` during the Session 8
+  rehoming pass).
   Reference-shape content (a simpler four-stage lifecycle
   alternative for downstream repos at POC / early-Production
   scope; oak itself uses a richer five-state model). Not
@@ -172,13 +174,14 @@ longer live here:
 Files moved to `.agent/reference/` (host-local, not exchange) on
 2026-04-18 — these were subsequently relocated en bloc to
 `.agent/research/notes/` during the 2026-04-22 reformation of
-`reference/` per PDR-032; per-file disposition under the
-[reference-research-notes-rehoming plan](../../plans/agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md):
+`reference/` per PDR-032 and then re-homed to their final destinations
+during the Session 8 rehoming pass per the
+[reference-research-notes-rehoming plan](../../plans/agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md), archived Session 8 with execution record:
 
-- `claude-code-hook-activation.md` → `.agent/research/notes/platform-notes/`
-- `validation-scripts.md` → `.agent/research/notes/practice-validation-scripts.md`
-- `validate-practice-fitness.ts` → `.agent/research/notes/examples/validate-practice-fitness.example.ts`
-- `platform-adapter-reference.md` → `.agent/research/notes/platform-adapter-formats.md`
+- `claude-code-hook-activation.md` → `.agent/research/developer-experience/claude-code-hook-activation.md`
+- `validation-scripts.md` → `.agent/research/developer-experience/practice-validation-scripts.md`
+- `validate-practice-fitness.ts` → `.agent/research/developer-experience/examples/validate-practice-fitness.example.ts`
+- `platform-adapter-reference.md` → `.agent/research/platform-adapter-formats.md` (PROMOTE-TO-REFERENCE proposal pending owner-vet per PDR-032)
 
 File absorbed into permanent documentation:
 

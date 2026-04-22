@@ -198,8 +198,11 @@ until the next reformation pass.
   surface that must be periodically drained. If draining stalls,
   the bay accumulates and becomes its own catch-all. Mitigation:
   the rehoming plan
-  (`agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md`)
-  is the named trigger for the first drain pass.
+  (`agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md`,
+  archived 2026-04-22 Session 8 with full execution record:
+  22 MOVED + 4 DELETED + 1 KEPT, bay reduced to single residual
+  `prog-frame/` item awaiting owner disposition) executed the
+  first drain pass and is the precedent for subsequent drains.
 - **Definition ambiguity at edges**: some material is genuinely
   hard to classify (e.g., long-form how-to notes that age slowly
   but are not strictly read-to-learn). The tier's definition
@@ -243,8 +246,9 @@ This PDR is the definition + lightweight process; the integration
 into other surfaces is executed in the same session
 (practice-bootstrap.md, practice.md, AGENT.md, AGENTS.md,
 CLAUDE.md, orientation.md, executive-memory artefact inventory);
-the rehoming plan is at
-`agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md`.
+the rehoming plan was archived 2026-04-22 Session 8 at
+`agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md`
+with full execution record.
 
 ### Class A.1 firing verdict
 

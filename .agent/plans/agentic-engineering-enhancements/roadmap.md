@@ -317,7 +317,7 @@ Adjacent:
 - Source strategy:
   [agentic-corpus-discoverability-and-deep-dive-hub.plan.md](current/agentic-corpus-discoverability-and-deep-dive-hub.plan.md)
 - Goal:
-  - add an index-only hub under `.agent/reference/agentic-engineering/` (relocated 2026-04-22 to `.agent/research/notes/agentic-engineering/` per [PDR-032](../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md); awaiting per-file disposition under [rehoming plan](future/reference-research-notes-rehoming.plan.md))
+  - add an index-only hub under `.agent/reference/agentic-engineering/` (relocated 2026-04-22 to `.agent/research/notes/agentic-engineering/` per [PDR-032](../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md); merged into the lane README at `.agent/research/agentic-engineering/README.md` during the Session 8 rehoming pass per [rehoming plan](future/reference-research-notes-rehoming.plan.md))
   - create named research and reports lanes with reciprocal README links
   - make selected `/docs/**` entry points route into the wider source corpus
     without changing canon location
@@ -742,29 +742,47 @@ Adjacent:
   - documentation sync log records updates/no-change rationale
 - Dependencies: Phase 0 complete
 
-### Adjacent — Staged Doctrine Consolidation and Graduation
+### Adjacent — Staged Doctrine Consolidation and Graduation ✅ ARC CLOSED
 
-- Active plan:
-  [current/staged-doctrine-consolidation-and-graduation.plan.md](current/staged-doctrine-consolidation-and-graduation.plan.md)
-- Goal:
-  - graduate the overdue Practice-doctrine backlog surfaced by the
-    2026-04-21 consolidation dry-run across six staged sessions
-  - install Family-A + Family-B perturbation tripwires (per PDR-029)
-    with load-bearing platform parity
-  - close the loop on executive-memory feedback and cross-plane
-    knowledge flow (per PDR-028 and PDR-030)
-- Status: 🟡 IN PROGRESS — Sessions 1, 2, 3, 4 landed; Sessions 5
-  (outgoing triage) and 6 (holistic fitness exploration) remaining
-- Done when:
-  - all overdue Due register items graduated to durable homes
-  - Family-A Class-A.1 (plan-body), Class-A.2 (agent-registration),
-    and platform-agnostic commit skill installed with platform parity
-  - Family-B meta-tripwires installed at `/jc-consolidate-docs`
-  - cross-plane path rules + tags + conventions installed
-  - `outgoing/` contains only ephemeral exchange
-  - `pnpm practice:fitness:strict-hard` passes at Session 6 close
-  - arc archived to `archive/completed/`
-- Dependencies: none; self-contained staged execution
+- Archived plan:
+  [archive/completed/staged-doctrine-consolidation-and-graduation.plan.md](archive/completed/staged-doctrine-consolidation-and-graduation.plan.md)
+- Final shape: eight-session arc (originally six; reshaped 6→7 at
+  Session 6 close per PDR-026 §Deferral-honesty when reference-tier
+  reformation became load-bearing; reshaped 7→8 at Session 7 close
+  to separate rehoming from final arc-close). All 8 sessions landed.
+- Status: ✅ CLOSED 2026-04-22 Session 8 (Merry / cursor / claude-opus-4-7)
+- Landings of note across the arc:
+  - 5 new portable PDRs: PDR-027 (Threads / Sessions / Identity);
+    PDR-028 (Executive-Memory Feedback Loop); PDR-029 (Perturbation-
+    Mechanism Bundle); PDR-030 (Plane-Tag Vocabulary); PDR-031
+    (Build-vs-Buy Attestation Pre-ExitPlanMode); PDR-032 (Reference
+    Tier as Curated Library)
+  - PDR amendments: PDR-005 (source-side preservation); PDR-011
+    (continuity surfaces); PDR-012 (reviewer-findings disposition
+    discipline); PDR-014 (graduation-target routing); PDR-015 ×2
+    (friction-ratchet + reviewer phases); PDR-019 (ADRs state WHAT);
+    PDR-026 (per-session landing + deferral-honesty + landing-target
+    definition); PDR-027 (workstream-collapse amendment)
+  - ADR amendments: ADR-053; ADR-150
+  - Rules: `no-verify-requires-fresh-authorisation`;
+    `register-identity-on-thread-join`; `executive-memory-drift-capture`;
+    `plan-body-first-principles-check`; `tsdoc-and-documentation-hygiene`
+  - Principles: "Owner Direction Beats Plan"; "Misleading docs are
+    blocking"; "Cardinal rule"
+  - Reference tier reformation (PDR-032): 35 files relocated en
+    bloc; rehoming first-drain pass executed Session 8 (22 MOVED + 4
+    DELETED + 1 KEPT) — see archived
+    [reference-research-notes-rehoming.plan.md](archive/completed/reference-research-notes-rehoming.plan.md)
+  - Pattern graduations: `feel-state-of-completion-preceding-evidence-of-completion` (3/3 Sessions 4 + 5 + 7); inherited-framing-bias; passive-guidance; plus several outgoing-triage absorptions
+  - Outgoing triage closed: `practice-context/outgoing/` contains
+    only `README.md`
+- Owner amendments at close (Session 7): `pnpm practice:fitness --strict-hard`
+  exits-0 DoD requirement DROPPED for the arc; current fitness state
+  HARD (4 hard, 10 soft) explicitly accepted as not-blocking; four
+  directive files (`principles.md`, `AGENT.md`, `testing-strategy.md`,
+  `continuity-practice.md`) carried forward as Due-but-not-blocking
+  pending-graduations register entry, owner-appetite-triggered (no SLA)
+- Dependencies: none
 
 ---
 

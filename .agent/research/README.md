@@ -300,7 +300,7 @@ of `reference/` into a curated library tier
 Material in `notes/` is awaiting per-file disposition (research
 proper, reference promotion, executive memory, archive, or delete);
 the per-file pass is tracked by
-[`reference-research-notes-rehoming.plan.md`](../plans/agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md).
+[`reference-research-notes-rehoming.plan.md`](../plans/agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md) (archived 2026-04-22 Session 8 with execution record).
 The bay is removed when empty.
 
 ---

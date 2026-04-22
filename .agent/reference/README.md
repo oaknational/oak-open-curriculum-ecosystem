@@ -66,7 +66,7 @@ The tier was reformed during the `memory-feedback` Session 6
 closing arc (2026-04-22). All previous contents were relocated to
 [`research/notes/`](../research/notes/README.md) for per-file
 disposition under the
-[reference-research-notes-rehoming plan](../plans/agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md).
+[reference-research-notes-rehoming plan](../plans/agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md) (archived 2026-04-22 Session 8 with full execution record).
 The first three promotions under PDR-032 (the inaugural
 applications of the gate) populate the tier:
 
@@ -78,7 +78,39 @@ applications of the gate) populate the tier:
 
 These promotions are also the **first batch under the aging-gate
 discipline**; their next aging review is at the next
-holistic-fitness exploration pass (deferred to Session 7).
+holistic-fitness exploration pass.
+
+## Pending PROMOTE-TO-REFERENCE proposals (owner-vet required)
+
+The Session 8 rehoming first-drain pass (2026-04-22) surfaced two
+candidates that look like reference material but are not yet
+promoted because PDR-032 requires owner-vet and the candidates
+sit in single-file thematic groupings that would violate the
+tier's clustering discipline if promoted alone. Both files
+remain at their failsafe `research/notes/` homes pending owner
+decision (no SLA — owner-appetite-triggered):
+
+- **`platform-adapter-formats.md`** — pattern catalog for
+  AGENT.md adapter formats across Claude / Cursor / Codex.
+  Looks evergreen (cross-platform abstraction; not exploratory).
+  Routing tension: would need a 3+ document thematic
+  subdirectory (e.g., `reference/platform-parity/`) per PDR-032
+  clustering discipline. Current location: see archived
+  [rehoming plan execution record](../plans/agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md)
+  §Open items for full disposition trace.
+- **`boundary-enforcement-with-eslint.md`** — concrete
+  enforcement recipe for ADR-019 / PDR-007 / ADR-018 boundary
+  rules via ESLint. Looks evergreen (codifies durable boundary
+  doctrine into a tooling pattern). Same clustering tension:
+  would need a 3+ document thematic subdirectory (e.g.,
+  `reference/enforcement-patterns/`).
+
+Resolution shape: either promote alone (and accept the one-file
+subdirectory under PDR-032 clustering discipline as a transitional
+state with named refill trigger), promote with companion files
+authored to satisfy clustering discipline, leave at
+`research/notes/` indefinitely, or delete. Owner conversation
+required.
 
 ## See also
 

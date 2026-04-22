@@ -10,11 +10,11 @@ Agent support tools are MCP primitives designed to help AI agents understand the
 
 **Current resources (context-providing tool/resource pairs):**
 
-| Resource | Tool | Priority | Purpose |
-|---|---|---|---|
-| `curriculum://model` | `get-curriculum-model` | 1.0 (essential) | Combined orientation: domain model + tool guidance |
-| `curriculum://prerequisite-graph` | `get-prerequisite-graph` | 0.5 (supplementary) | Unit dependencies and prior knowledge requirements |
-| `curriculum://thread-progressions` | `get-thread-progressions` | 0.5 (supplementary) | Ordered unit sequences within curriculum threads |
+| Resource                           | Tool                      | Priority            | Purpose                                            |
+| ---------------------------------- | ------------------------- | ------------------- | -------------------------------------------------- |
+| `curriculum://model`               | `get-curriculum-model`    | 1.0 (essential)     | Combined orientation: domain model + tool guidance |
+| `curriculum://prerequisite-graph`  | `get-prerequisite-graph`  | 0.5 (supplementary) | Unit dependencies and prior knowledge requirements |
+| `curriculum://thread-progressions` | `get-thread-progressions` | 0.5 (supplementary) | Ordered unit sequences within curriculum threads   |
 
 ## Architecture Reference
 
@@ -44,7 +44,14 @@ export const AGENT_SUPPORT_TOOL_METADATA = {
   'get-curriculum-model': {
     name: 'get-curriculum-model',
     shortDescription: 'Combined orientation: domain model + tool guidance',
-    provides: ['key stages', 'subjects', 'entity hierarchy', 'tool categories', 'workflows', 'tips'],
+    provides: [
+      'key stages',
+      'subjects',
+      'entity hierarchy',
+      'tool categories',
+      'workflows',
+      'tips',
+    ],
     purpose: 'complete orientation — understand the domain AND how to use the tools',
     callOrder: 0,
     complementsTools: [],

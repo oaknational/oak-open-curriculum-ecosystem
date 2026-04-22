@@ -18,11 +18,13 @@ orchestrator + `upload-sourcemaps.sh` + `tsup.config.ts` deleted; 24
 new tests pass; 639/639 total tests pass; type-check + lint + format
 + knip + depcruise + markdownlint clean.
 **Consumed at**: next session that picks up the
-`observability-sentry-otel` thread (not necessarily the next session
-overall — the `memory-feedback` thread has its own next-session
-record at
-[`memory-feedback.next-session.md`](memory-feedback.next-session.md);
-per-thread-per-session landing commitment per PDR-026).
+`observability-sentry-otel` thread. The `memory-feedback` thread
+was archived 2026-04-22 Session 8 at the close of the
+eight-session staged doctrine-consolidation arc; this thread is
+the next-active thread per
+[`../repo-continuity.md` §Next safe step](../repo-continuity.md).
+Per-thread-per-session landing commitment still applies per
+PDR-026.
 **Lifecycle**: delete on session close once its landing target has
 been reported (per PDR-026); rewrite if the landing target needs
 re-stating for a further session.
@@ -43,6 +45,7 @@ re-stating for a further session.
 | --- | --- | --- | --- | --- | --- | --- |
 | *`unattributed`* | *`unknown`* | *`unknown`* | *`unknown`* | `executor` | 2026-04-21 | 2026-04-21 |
 | `Samwise` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `migration-maintenance` | 2026-04-21 | 2026-04-21 |
+| `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
 
 **Identity discipline**: per the additive-identity rule
 ([PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)),

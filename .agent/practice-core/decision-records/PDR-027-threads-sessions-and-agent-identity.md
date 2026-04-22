@@ -435,7 +435,8 @@ At the time of authoring:
 - The identity-registration rule (session-open) and
   identity-update gate (session-close) are scheduled for
   installation in Session 4 of the
-  [Staged Doctrine Consolidation and Graduation](../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md)
+  [Staged Doctrine Consolidation and Graduation](../../plans/agentic-engineering-enhancements/archive/completed/staged-doctrine-consolidation-and-graduation.plan.md)
+  (archived 2026-04-22 Session 8)
   plan, Tasks 4.2.a and 4.2.b.
 - The stale-identity health probe is scheduled for Session 4
   Task 4.2.c.

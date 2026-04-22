@@ -4,6 +4,158 @@ Changes to the Practice Core files, newest first. Each entry records the repo
 that made the change and what was changed. This file travels with the
 Practice Core package.
 
+## [oak-open-curriculum-ecosystem] 2026-04-22 — Session 8 (ARC CLOSE): doctrine-consolidation arc closed across eight sessions
+
+Owner instruction at session close: *"there is no next session,
+this simple expansion of the memory system has been going on for
+two days, there cannot be endless 'nexts'. How do we close this
+out right now?"* — the eight-session staged doctrine-consolidation
+arc on the `memory-feedback` thread closes here. Originally six
+sessions; reshaped 6→7 at Session 6 close per
+[PDR-026 §Deferral-honesty discipline](decision-records/PDR-026-per-session-landing-commitment.md)
+when reference-tier reformation became load-bearing; reshaped 7→8
+at Session 7 close to separate the rehoming first-drain pass from
+arc-close mechanics. The plan archives at this entry.
+
+### Session 8 landings
+
+- **Pattern graduation**: `feel-state-of-completion-preceding-evidence-of-completion`
+  promoted to `.agent/memory/active/patterns/` at owner-confirmed
+  3/3 (cross-session independent instances Sessions 4 + 5 + 7;
+  Session 7 instance was the unilateral `principles.md` 24000→27000
+  char-limit raise, owner intervention, file resets). Pattern
+  recognition: agent feels the *state* of completion (todos
+  checkmarked, plan structurally walked) and acts on that feeling
+  before producing the *evidence* of completion (per-file owner
+  conversation actually held, owner explicitly approves each
+  disposition). Removed from pending-graduations register.
+- **Reference-tier rehoming first-drain pass executed**: full
+  sweep (NOT brief — owner expanded scope at session open,
+  delegating decision authority and inviting reviewer second
+  opinions). 22 MOVED + 4 DELETED + 1 KEPT in
+  `.agent/research/notes/`; lane README absorbed the agentic-
+  engineering hub README; 13 active surfaces relink-updated; bay
+  reduced to single residual (`prog-frame/`). Reviewer second-
+  opinion gate fired pre-execution (`assumptions-reviewer` +
+  `architecture-reviewer-barney`); both produced BLOCKING findings
+  (live-reference list incomplete; `practice-core/` accretion
+  would violate PDR-007; one-file `reference/` subdirectories
+  would violate PDR-032 clustering discipline); all blockers
+  accepted; v2 dispositions table re-routed accordingly.
+- **Plan archives**: this arc plan
+  (`staged-doctrine-consolidation-and-graduation.plan.md`) and
+  the rehoming plan
+  (`reference-research-notes-rehoming.plan.md`) both moved to
+  `agentic-engineering-enhancements/archive/completed/`.
+- **`memory-feedback` thread archived**: `next-session.md` record
+  deleted per PDR-026 §Lifecycle; row removed from
+  `repo-continuity.md` §Active threads;
+  `observability-sentry-otel` resumes as next-active thread.
+- **Pending-graduations register sweep**: arc-resolved entries
+  removed (pattern graduation entry; rehoming-execution entry;
+  observability-substance-restate entry; CHANGELOG-drift entry;
+  practice-bootstrap.md drift entry; pattern-promotion-bar entry).
+  Four directive files (`principles.md`, `AGENT.md`,
+  `testing-strategy.md`, `continuity-practice.md`) carry forward
+  as the existing Due-but-not-blocking entry per Session 7 owner
+  amendment (current excesses owner-accepted; owner-appetite-
+  triggered, no SLA).
+- **Three rehoming open items** recorded as honest PDR-026
+  deferrals on durable surfaces (NOT carried as new pending-
+  graduations register entries that would block arc-close): (a)
+  `prog-frame/agentic-engineering-practice.md` disposition
+  decision — owner conversation required; recorded in
+  `.agent/research/notes/README.md`; (b) `platform-adapter-formats.md`
+  PROMOTE-TO-REFERENCE proposal — owner-vet required per PDR-032;
+  recorded in archived rehoming plan + `.agent/reference/README.md`;
+  (c) `boundary-enforcement-with-eslint.md` PROMOTE-TO-REFERENCE
+  proposal — same.
+
+### Eight-session arc summary (Sessions 1-8)
+
+The arc graduated overdue Practice doctrine surfaced by the
+2026-04-21 consolidation dry-run, installed Family-A and Family-B
+perturbation tripwires per PDR-029, and reformed the `reference/`
+artefact tier under PDR-032. Major landings across the arc:
+
+- **6 new portable PDRs**: PDR-027 (Threads / Sessions / Identity);
+  PDR-028 (Executive-Memory Feedback Loop); PDR-029 (Perturbation-
+  Mechanism Bundle with Family A Classes A.1 + A.2 + Family B);
+  PDR-030 (Plane-Tag Vocabulary); PDR-031 (Build-vs-Buy Attestation
+  Pre-ExitPlanMode); PDR-032 (Reference Tier as Curated Library)
+- **PDR amendments**: PDR-005 (source-side preservation and
+  seeding); PDR-011 ×2 (continuity surfaces); PDR-012 (reviewer-
+  findings disposition discipline — closed Session 7's most-
+  overdue Due item carried 5 sessions); PDR-014 (graduation-target
+  routing); PDR-015 ×2 (friction-ratchet trigger + reviewer phases
+  aligned to lifecycle); PDR-019 (ADRs state WHAT, not HOW);
+  PDR-026 ×2 (per-session-per-thread landing commitment +
+  Notes/Graduation-intent structural refactor + landing-target
+  definition + deferral-honesty discipline); PDR-027 (workstream-
+  collapse / Active threads as the identity register); PDR-029
+  Amendment Log ×2 (active-tripwire markdown definition; Class-A.1
+  Layer 2 retraction)
+- **ADR amendments**: ADR-053; ADR-150
+- **Rules**: `no-verify-requires-fresh-authorisation` (Session 5);
+  `register-identity-on-thread-join` + Cursor adapter (Session 4);
+  `executive-memory-drift-capture` (Session 4);
+  `plan-body-first-principles-check` (Session 1, front-loaded for
+  Sessions 2-3 coverage); `tsdoc-and-documentation-hygiene`
+  (enforces "Misleading docs are blocking")
+- **Principles**: "Owner Direction Beats Plan"; "Misleading docs
+  are blocking"; "Cardinal rule"
+- **Pattern graduations**: `inherited-framing-bias`;
+  `passive-guidance`; `feel-state-of-completion-preceding-
+  evidence-of-completion`
+- **Reference tier reformation (PDR-032)**: 35 files relocated en
+  bloc to `research/notes/` Session 6; rehoming first-drain pass
+  executed Session 8 (22 MOVED + 4 DELETED + 1 KEPT)
+- **Outgoing triage closed**: `practice-context/outgoing/` reduced
+  to `README.md` only; substance absorbed into PDR-005, PDR-009,
+  PDR-010, PDR-012, `practice-lineage.md`
+- **Continuity surfaces formalised**: `repo-continuity.md` §Active
+  threads as the identity register; per-thread next-session
+  records under `threads/`; workstream layer retired (collapsed
+  into thread next-session records); track filename convention
+  updated; lane state substructure named
+- **Tripwire installations**: Class A.1 (plan-body first-principles
+  check); Class A.2 (session-open identity registration; session-
+  close identity audit at `/jc-session-handoff` step 7c; stale-
+  identity audit at `/jc-consolidate-docs` step 7c); Family B
+  (taxonomy-seam meta-check; cross-plane path scan; orphan-item
+  signal); cross-plane path rules + workstream tags + Source plane
+  napkin tag
+- **Platform-agnostic commit skill** at canonical
+  `.agent/commands/commit.md` with Claude + Cursor + Codex
+  adapters and AGENT.md citation; platform parity load-bearing
+  for every Family A rule
+
+### Owner amendments at Session 7 close (load-bearing)
+
+- Fitness function limit excesses declared **acceptable for now**;
+  current state per `pnpm practice:fitness`: HARD result, 4 hard
+  violations, 10 soft. None of these are blocking arc-close.
+- The `pnpm practice:fitness --strict-hard` exits-0 DoD requirement
+  was **DROPPED** for both Session 7 close and Session 8 arc-close.
+- `consolidate-docs` step 9 (fitness) runs **informationally only**
+  going forward in this arc.
+
+### Surface relink updates
+
+13 active surfaces (PDRs, READMEs, plan bodies, skills,
+practice-index) relink-updated for the rehoming pass. PDR-027 +
+PDR-032 + practice-index + roadmap + multiple READMEs updated to
+point at the archived plan locations.
+
+### Falsifiability
+
+- `.agent/plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md` does NOT exist
+- `.agent/plans/agentic-engineering-enhancements/future/reference-research-notes-rehoming.plan.md` does NOT exist
+- `.agent/memory/operational/threads/memory-feedback.next-session.md` does NOT exist
+- `.agent/memory/operational/repo-continuity.md` §Active threads does NOT contain a `memory-feedback` row
+- `.agent/memory/active/patterns/feel-state-of-completion-preceding-evidence-of-completion.md` exists
+- This CHANGELOG entry exists at the top of the file
+
 ## [oak-open-curriculum-ecosystem] 2026-04-22 — Session 6 (reshaped close): PDR-005 source-side amendment + PDR-032 reference tier as curated library
 
 The Session 6 closing arc absorbed an owner-stipulated scope

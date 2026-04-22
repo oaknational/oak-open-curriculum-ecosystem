@@ -21,7 +21,7 @@ This repository is how Oak makes its openly-licensed, fully sequenced, and fully
 
 - [VISION.md](docs/foundation/VISION.md) — what this project delivers, why it matters, and the investment case
 - [Curriculum Guide](docs/domain/curriculum-guide.md) — Oak's curriculum structure explained in plain language
-- [Latest progress update](.agent/research/notes/work-to-date/oak-ecosystem-progress-update-2026-04-20.md) — what has been delivered, what is next, and why it matters
+- [Latest progress update](.agent/reports/oak-ecosystem-progress-update-2026-04-20.md) — what has been delivered, what is next, and why it matters
 
 ## Developers and AI agents
 

@@ -44,10 +44,8 @@ via `npx skills add modelcontextprotocol/ext-apps`):
 | Migrate from OpenAI Apps SDK to MCP Apps | `.agents/skills/migrate-oai-app/SKILL.md` |
 
 These are the official skills from the `modelcontextprotocol/ext-apps`
-repository. See `.agent/research/notes/official-mcp-app-skills.md` for
-installation and integration documentation. (Currently in transit
-under `research/notes/` pending per-file disposition under the
-reference-research-notes-rehoming plan; substance is unchanged.)
+repository. See [`installation-and-integration.md`](./installation-and-integration.md)
+(co-located with this skill) for installation and integration documentation.
 
 Use this skill (`mcp-expert`) for cross-cutting MCP work that does
 not fit a single narrower skill — protocol planning, transport design,
@@ -115,8 +113,8 @@ removed in favour of the upstream versions. For Oak-specific migration
 context (coupling inventory, CSP field mapping), consult the archived
 migration plans at `.agent/plans/sdk-and-mcp-enhancements/archive/completed/`.
 
-See `.agent/research/notes/official-mcp-app-skills.md` for installation
-and integration documentation.
+See [`installation-and-integration.md`](./installation-and-integration.md)
+(co-located with this skill) for installation and integration documentation.
 
 ## Required Local Reading
 

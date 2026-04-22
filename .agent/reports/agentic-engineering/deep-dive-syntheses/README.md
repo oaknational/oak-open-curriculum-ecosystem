@@ -15,7 +15,11 @@ theme graduates beyond index notes and source routing.
 
 ## Promotion Rule
 
-Seed deep dives in `.agent/research/notes/agentic-engineering/deep-dives/` (relocated 2026-04-22 from `.agent/reference/agentic-engineering/deep-dives/` per [PDR-032](../../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md)) remain
+Seed deep dives are now distributed across the lane subdirectories of
+[`.agent/research/agentic-engineering/`](../../../research/agentic-engineering/README.md)
+(originally relocated 2026-04-22 from `.agent/reference/agentic-engineering/deep-dives/`
+per [PDR-032](../../../practice-core/decision-records/PDR-032-reference-tier-as-curated-library.md),
+then re-homed by lane during the Session 8 rehoming pass). They remain
 lightweight concept extracts. Promote a topic here only when it needs:
 
 - fuller narrative synthesis
@@ -23,4 +27,4 @@ lightweight concept extracts. Promote a topic here only when it needs:
 - a stable report identity independent of the hub
 
 Back to the [agentic-engineering reports lane](../README.md) and the
-[hub README](../../../reference/agentic-engineering/README.md).
+[research lanes & hub README](../../../research/agentic-engineering/README.md).

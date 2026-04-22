@@ -32,7 +32,7 @@ isProject: false
 # Memory Feedback and Emergent-Learning Mechanisms — Execution
 
 **Last Updated**: 2026-04-21
-**Status**: 🟡 PARTIALLY SUPERSEDED — Phase 0 resolved 2026-04-21 (owner decisions in `repo-continuity.md § Standing decisions`); Phases 1–5 absorbed into the *Staged Doctrine Consolidation and Graduation* plan at [`staged-doctrine-consolidation-and-graduation.plan.md`](staged-doctrine-consolidation-and-graduation.plan.md); Phase 6 doctrine landing scheduled in that plan's Session 3; this plan's Phase 7 learning loop runs throughout. Archival at `archive/completed/` after the staged plan closes.
+**Status**: 🟡 PARTIALLY SUPERSEDED — Phase 0 resolved 2026-04-21 (owner decisions in `repo-continuity.md § Standing decisions`); Phases 1–5 absorbed into the *Staged Doctrine Consolidation and Graduation* plan, archived 2026-04-22 Session 8 at [`../archive/completed/staged-doctrine-consolidation-and-graduation.plan.md`](../archive/completed/staged-doctrine-consolidation-and-graduation.plan.md); Phase 6 doctrine landed across Sessions 1-7 of that arc; this plan's Phase 7 learning loop runs throughout (carries forward as named follow-up; this plan itself remains in `current/` only because Phase 7 is intentionally long-lived).
 **Scope**: Install feedback loops across `active/`, `operational/`, and
 `executive/` memory planes; install cross-plane paths; install
 emergent-whole observation via `jc-consolidate-docs`; graduate the
