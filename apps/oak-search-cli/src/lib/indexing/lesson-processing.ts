@@ -8,6 +8,7 @@ import type { AggregatedLesson } from './lesson-aggregation';
 import type { BulkOperations } from './bulk-operation-types';
 import type { PairBuildContext } from '../index-oak-pair-types';
 import { buildLessonDocFromAggregated } from './lesson-document-builder';
+import { ingestLogger } from '../logger';
 
 /** Adds a snippet to the rollup snippets map by unit slug. */
 function addRollupSnippet(map: Map<string, string[]>, unitSlug: string, snippet: string): void {
@@ -38,6 +39,11 @@ export async function processLessonForIndexing(
   hasVideo?: boolean,
 ): Promise<number> {
   const { client, ks, subject, unitContextMap, dataIntegrityReport } = context;
+  ingestLogger.trace('Processing lesson for indexing', {
+    lessonSlug: lesson.lessonSlug,
+    subject,
+    keyStage: ks,
+  });
   const result = await buildLessonDocFromAggregated(
     client,
     {

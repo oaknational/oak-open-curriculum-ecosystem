@@ -1,43 +1,92 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-23 (Codex / codex —
-`observability-sentry-otel` remediation execution after verified
-deploy-boundary repair and green root gates).
+**Last refreshed**: 2026-04-23 (Codex / codex — principles-reset
+handoff after owner review of the bounded follow-through, with the
+next session explicitly positioned as the final correctness/rules/build
+session).
 
 The current state is:
 
-- L-8 Correction WI 1-5 remain landed locally in `fb047f86`.
-- The real `@vercel/node` deploy contract is now verified from
-  primary evidence (Vercel Express docs + runtime source).
-- The smallest deploy-boundary repair is landed locally: dedicated
-  `src/server.ts` / `dist/server.js` deploy entry, `package.json`
-  `main` repointed, build warning gate, export-contract gate, and
-  local harness repair.
-- `pnpm check` exits 0 after the supporting root-gate fallout was
-  fixed (`.claude` portability mirror + `knip` entry update).
-- The binding repo work now lives in one operational repair plan:
+- The only branch-level success criterion is the full repo-root gate
+  sequence in [`.agent/commands/gates.md`](../../commands/gates.md).
+  Workspace-local green runs remain useful for diagnosis, but they are
+  not authoritative because inter-workspace side-effects have repeatedly
+  surfaced later in the root sequence.
+- The previous green rerun through `pnpm format:root` remains useful
+  execution evidence, but it is **not** the acceptable final branch
+  state for this lane because the follow-through that came after it
+  introduced principle-breaking changes: EYFS fallback logic, an
+  `oaksearch` wrapper, JS-specific lint overrides, a partial
+  export-surface workaround set, and clean-contract drift.
+- The active observability plan is therefore reset to first
+  principles: remove the bad decisions, define one fixed ESM-only
+  export-surface contract across internal workspaces, restore strict
+  sitemap validation with no EYFS special treatment, fix the actual
+  package/install/env problems, add one built-code-only product proof,
+  and only then rerun authoritative validation.
+- L-8 Correction WI 1-5 remain landed in `fb047f86`.
+- The real `@vercel/node` deploy contract is verified from primary
+  evidence, and the dedicated `src/server.ts` / `dist/server.js`
+  deploy boundary is landed locally with fatal esbuild-warning and
+  export-contract gates.
+- Shared Operational Step 4 foundation work is landed locally:
+  - `@oaknational/eslint-plugin-standards`: single-source plugin/rule
+    registry, typed `no-dynamic-import`, deterministic
+    `max-files-per-dir`, rationalised rule-test estate, and boundary
+    inventory moved out of the in-process test lane;
+  - `@oaknational/type-helpers`: `typeSafeFromEntries` and
+    `typeSafeOwnKeys` removed; observability/logger/SDK consumers
+    rewritten; package/docs aligned;
+  - `@oaknational/oak-curriculum-mcp-streamable-http`: spawned-process
+    built-artifact proof removed, `runtime-config.unit.test.ts`
+    deleted, smoke helper moved to static imports, harness moved back
+    onto the source DI path; local `lint`, `type-check`, and `test`
+    are green diagnostically.
+- The user-flipped `@oaknational/require-observability-emission` move
+  from `warn` to `error` remains in place across the five scoped
+  workspaces, and the former 27/14/48 backlog is now retired as
+  authoritative history.
+- The remaining consumer backlog is now cleared authoritatively across
+  `@oaknational/oak-search-sdk`, `@oaknational/sdk-codegen`, and
+  `@oaknational/search-cli`; `search-cli` no longer carries the
+  runtime-config test-boundary violations, and the generated MCP
+  execute path now threads execution logging through its
+  `@oaknational/curriculum-sdk` caller.
+- The authoritative full repo-root gate run passed
+  `pnpm secrets:scan:all`, `pnpm clean`, `pnpm test:root-scripts`,
+  `pnpm sdk-codegen`, `pnpm build`, `pnpm type-check`,
+  `pnpm doc-gen`, `pnpm lint:fix`, `pnpm test`, `pnpm test:widget`,
+  `pnpm test:e2e`, `pnpm test:ui`, `pnpm test:a11y`,
+  `pnpm test:widget:ui`, `pnpm test:widget:a11y`,
+  `pnpm smoke:dev:stub`, `pnpm subagents:check`,
+  `pnpm portability:check`, `pnpm markdownlint:root`, and
+  `pnpm format:root`.
+- The repo now has a configured-arm Sentry gate command surface, but it
+  is not yet honest: `apps/oak-curriculum-mcp-streamable-http/.env.local`
+  contains `SENTRY_AUTH_TOKEN`, yet the current
+  `build:sentry:configured` path does not load that canonical local env
+  source.
+- `@oaknational/oak-curriculum-mcp-streamable-http` lint still emits
+  the `Multiple projects found ...` diagnostic even though root
+  `pnpm lint:fix` passes; that surface still needs honest treatment.
+- `pnpm sdk-codegen` during the authoritative run reported five invalid
+  programme URLs while exiting 0.
+- Vercel builds still warn that pnpm could not create
+  `node_modules/.bin/oaksearch` because the workspace bin target
+  `@oaknational/search-cli/dist/bin/oaksearch.js` is absent at install
+  time.
+- The current repo-owned lane is now explicitly a **final corrective
+  pre-preview session**: focus on correctness, rules, and getting the
+  build working under the reset plan rather than extending the previous
+  workaround path.
+- Preview `/healthz` and preview-release/Sentry proof are manual
+  owner-directed follow-up after that repo-owned lane lands.
+- The binding repo work remains the operational repair plan:
   [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
-- Broader runtime simplification moved to the separate strategic brief
+- Broader runtime simplification remains separate future work:
   [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md).
-- Monitor creation and ongoing uptime validation are now owner-external
-  and recorded only as an archive note:
+- Monitor creation and ongoing uptime validation remain owner-external:
   [`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`](../../plans/observability/archive/superseded/synthetic-monitoring.plan.owner-externalised-2026-04-23.md).
-- The only remaining repo-owned open work is external proof on a real
-  preview deploy: boot, `/healthz`, and preview release / traffic in
-  Sentry.
-
-This refresh also reconciles the thread record, observability plan
-surfaces, and continuity guidance with that new contract. Earlier
-session detail remains available in git history and the per-thread
-record; the sections below are the authoritative current state.
-
-**Side-channel same-day session (2026-04-23, cursor-claude-opus-4-7,
-no-thread audit-and-capture)**: a separate short session ran
-`pnpm -r outdated`, analysed Clerk + MCP-related changelogs, and
-authored one queued plan:
-[`sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md`](../../plans/sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md).
-No thread joined; no commit landed; the observability thread state
-below is unchanged by that side-channel work.
 
 ## Active threads
 
@@ -58,7 +107,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-doctrine-landing-and-plan-rewrite / 2026-04-23; `codex` / *unknown* / Codex / deploy-boundary-repair-root-gate-remediation-and-predeploy-closeout / 2026-04-23 (latest — contract verified, dedicated `dist/server.js` deploy boundary landed locally, `pnpm check` green; preview `/healthz` + Sentry proof still pending push) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-doctrine-landing-and-plan-rewrite / 2026-04-23; `codex` / *unknown* / Codex / principles-reset-analysis-plan-rewrite-and-final-session-handoff / 2026-04-23 (latest — next session is intended to be the final correctness/rules/build session, not another workaround pass) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -103,25 +152,35 @@ lives in
 
 **Timeline**: §L-8 WS1 + WS2 + WS3.1 LANDED in `f9d5b0d2`
 (2026-04-21); 2026-04-22 Vercel preview probe FAILED with
-`missing_app_version`; L-8 Correction WI 1-5 LANDED LOCALLY in
-`fb047f86` (2026-04-23); the next preview reached a green build but
-the function crashed at runtime with `FUNCTION_INVOCATION_FAILED`
-because the deployed artefact did not satisfy Vercel's import
-contract; 2026-04-23 later in the same thread the contract was
-verified from primary evidence, the dedicated `dist/server.js`
-deploy-boundary repair landed locally, and `pnpm check` returned to
-green. The next step is the owner-allowed commit/push preview rerun.
+`missing_app_version`; L-8 Correction WI 1-5 LANDED in `fb047f86`
+(2026-04-23); the next preview reached a green build but the function
+crashed at runtime with `FUNCTION_INVOCATION_FAILED` because the
+deployed artefact did not satisfy Vercel's import contract; later
+2026-04-23 work verified that contract from primary evidence, landed
+the dedicated `dist/server.js` boundary, and then expanded Step 4 into
+shared strictness/test-doctrine cleanup plus a remaining cross-workspace
+observability-emission backlog. Preview proof is now gated on finishing
+that Step 4 lane, not on another immediate push.
 
 **Current execution authority**:
 [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-is now the one operational repair plan for the remaining repo work:
+is now the reset follow-through plan for the final repo-owned
+correctness/build session:
 
-1. verify the actual `@vercel/node` contract from primary evidence;
-2. land the smallest deploy-boundary repair;
-3. keep local execution honest;
-4. rerun the preview and prove `/healthz`;
-5. prove preview release / traffic in Sentry;
-6. amend ADR-163 and the parent L-8 lane.
+1. remove the principle-breaking follow-through changes already
+   introduced;
+2. define one fixed ESM-only export-surface contract across internal
+   workspaces;
+3. rerun the sitemap scrape and `pnpm sdk-codegen` under a strict
+   validator with no EYFS special treatment;
+4. fix the actual `oaksearch` package/install/build contract and the
+   MCP lint diagnostic structurally;
+5. fix the Sentry gate env-loading contract so the app-local
+   `.env.local` token source is actually loaded;
+6. add one built-code-only product proof and rerun the authoritative
+   validation sequence;
+7. only then hand off to the owner-directed preview check without
+   claiming `/healthz` or preview-release proof from the plan itself.
 
 **Separate future work**:
 [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
@@ -131,40 +190,47 @@ stable.
 **Closed repo monitoring work**:
 [`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`](../../plans/observability/archive/superseded/synthetic-monitoring.plan.owner-externalised-2026-04-23.md)
 records that monitor creation and ongoing uptime validation are
-owner-external. Repo scope ends at a healthy `/healthz` endpoint plus
-preview/Sentry proof.
+owner-external. Repo scope ends at an honest pre-preview handoff;
+manual preview `/healthz` and preview/Sentry proof remain owner-
+directed.
 
 ## Current session focus
 
-This session became the actual repair execution on
-`observability-sentry-otel`, plus the root-gate cleanup needed before
-the push-driven preview rerun.
+This latest session became a **principles-reset analysis and final
+session handoff**, not an implementation session.
 
-Landed this session:
+Attempted: critically review the previous follow-through decisions
+against the repository rules, reset the active observability plan to a
+strict correctness-first shape, and refresh the continuity surfaces so
+the next session starts as the final "correctness, rules, and getting
+the build working" session.
 
-1. Verified the real Vercel import contract from primary evidence and
-   wrote the contract note into the operational repair plan:
-   [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
-2. Landed the dedicated deploy boundary (`src/server.ts` /
-   `dist/server.js`), its lazy handler seam, and the `package.json`
-   `main` repoint.
-3. Added build-time contract gates: esbuild warnings now fail the
-   build, and the built deploy entry must default-export a function.
-4. Repaired the supporting repo-tail fallout the full root check
-   exposed: `scripts/server-harness.js`, `knip.config.ts`, and the
-   missing `.claude/rules/no-warning-toleration.md` portability
-   mirror.
-5. Reran `pnpm check` to green on the branch.
-6. Amended ADR-163 and refreshed thread/continuity surfaces so the
-   repaired local shape is now the written truth.
+Prevented: the owner explicitly redirected the session to
+"acknowledge, analyse, report, stop" and then to update the plan and
+do nothing else. No corrective code was allowed to land in this
+session. Falsifiability: the reset plan now exists at
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md),
+the continuity surfaces now describe the corrective final-session
+shape, and no new rerun from `pnpm secrets:scan:all` or corrective test
+evidence was produced after the reset.
 
-What did not land:
+Landed within that target:
 
-- the push-driven rerun preview;
-- `/healthz` preview proof;
-- preview-release / preview-traffic proof in Sentry.
+1. The active observability plan now records the owner correction
+   explicitly: no fallbacks, no wrappers, no JS overrides, one fixed
+   ESM-only export contract, strict sitemap validation, honest env
+   loading, and one built-code-only product proof.
+2. The continuity surfaces now capture that the prior green rerun is
+   useful execution evidence but not the acceptable final branch state
+   because the follow-through introduced principle-breaking changes.
+3. The local Sentry-token fact is now recorded accurately: the token is
+   present in `apps/oak-curriculum-mcp-streamable-http/.env.local`;
+   the defect is that the configured-arm build command does not load
+   that canonical local env source.
+4. The entry-point sweep reconfirmed that `AGENTS.md`, `CLAUDE.md`, and
+   `GEMINI.md` remain pointer-only and drift-free.
 
-Those remain the next execution session's landing target.
+No new ADR/PDR candidate qualified beyond the existing register items.
 
 **Three rehoming open items** are recorded as honest PDR-026
 deferrals on durable surfaces (NOT carried as new pending-
@@ -488,6 +554,10 @@ set is additive; previous invariants still apply):
   rule. Symmetric with PDR-026 §Landing target definition (above):
   the principle says misleading docs cannot ship; PDR-026 says
   doc updates compose into landings.
+- **No child-process proof in tests** — production-path-only branches
+  are covered by DI-friendly code tests plus a realistic
+  production-build gate under representative env, not by test-owned
+  subprocess proof.
 
 Non-goals for next session:
 
@@ -496,31 +566,45 @@ Non-goals for next session:
   fails.
 - Do NOT recreate a repo monitoring lane or treat monitor setup as
   in-repo acceptance work.
+- Do NOT push another preview until the reset correctness-first plan is
+  complete and the corrected validation sequence is green locally.
 - Do NOT guess the Vercel import contract before checking primary
   evidence.
 
 ## Next safe step
 
-**Resume the `observability-sentry-otel` thread at Operational Step 1
-of**
+**Resume the `observability-sentry-otel` thread at the reset
+correctness-first follow-through in**
 [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md):
-verify the actual Vercel Node serverless import contract from primary
-evidence and write that contract note into the plan **before** coding.
+make the next session the final repo-owned correctness/rules/build
+session **before** any owner-directed preview attempt.
 
 Then, in the same execution session:
 
-1. land the deploy-boundary repair (`src/server.ts`, `package.json`
-   `main`, esbuild warning hard-fail, export-contract assertion,
-   deployment docs);
-2. repair local harness/runtime drift only where the new deployed
-   boundary makes it necessary;
-3. rerun the preview and prove `/healthz`;
-4. verify the preview release and preview traffic in Sentry;
-5. amend ADR-163 and the parent L-8 lane to match the repaired shape.
+1. remove the bad decisions from the previous follow-through:
+   EYFS special treatment, the `oaksearch` wrapper, JS-specific lint
+   overrides, partial export-surface workaround logic, and any clean-
+   contract drift;
+2. define and apply one fixed ESM-only export-surface contract across
+   the relevant internal workspaces;
+3. rerun `pnpm -F @oaknational/sdk-codegen scan:sitemap` and
+   `pnpm sdk-codegen` under a strict validator with **no** EYFS
+   fallback path;
+4. fix the actual `oaksearch` package/install/build problem and the
+   `Multiple projects found ...` diagnostic structurally;
+5. fix the Sentry configured-arm build command so it loads the
+   canonical app-local env source honestly;
+6. add and run one built-code-only product proof after `pnpm build`;
+7. restart the full repo-root gate sequence from `pnpm secrets:scan:all`
+   exactly as documented in [`.agent/commands/gates.md`](../../commands/gates.md),
+   augmented by the reset plan's strict sitemap scrape, built-code
+   proof, and corrected Sentry gate;
+8. only after the corrected full validation sequence is honest and
+   green, hand back to the owner-directed preview check.
 
 Do **not** reopen canonicalisation work here, and do **not** recreate
 a repo monitoring lane. The owner will create the uptime monitor
-outside this repo once the endpoint and preview proof are real.
+outside this repo once the owner-directed preview proof is real.
 
 **Commit workflow tooling available** (refined 2026-04-23 by
 Pippin's second session into the canonical `commit` skill at
@@ -559,29 +643,32 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
-**Status (2026-04-23 Codex session-handoff closeout after plan
-rationalisation and continuity cleanup)**: **due — napkin pressure is
-still far beyond the rotation threshold, and this session touched a
-large cluster of planning/docs surfaces across observability.**
+**Status (2026-04-23 Codex session-handoff closeout after the
+principles-reset handoff)**: **due — napkin pressure remains high, this
+session rewrote the active observability plan again and refreshed the
+repo/thread/napkin continuity surfaces, but no thread-scoped
+consolidation pass was run.**
 
-The trigger did fire, but deep consolidation is **not well-bounded for
-this closeout** because the user asked for ordinary session handoff,
-not a thread-scoped convergence pass. Handoff therefore stops at
-marking `due` honestly.
+The trigger did fire, but deep consolidation is **still not
+well-bounded for this closeout** because the owner asked for ordinary
+session handoff and explicitly stopped implementation. Handoff
+therefore stops at marking `due` honestly and refreshing only the
+surfaces this session changed.
 
 Falsifiability:
 
 - `napkin.md` remains well above the ~500-line rotation threshold;
-- this session changed many continuity and planning surfaces without
-  attempting a full thread-scoped graduation pass;
+- this session changed the active observability plan plus repo/thread
+  continuity surfaces without attempting a full thread-scoped
+  graduation pass;
 - the next agent can confirm the trigger still holds by reading this
   section, checking the napkin size, and deciding deliberately whether
   to run `jc-consolidate-docs`.
 
-No **new** ADR/PDR candidate was surfaced by this closeout beyond the
-pending items already in the register below. This session mostly
-re-homed and clarified existing signals rather than creating new
-doctrine.
+This closeout explicitly asked the ADR/PDR question. Answer: **no new
+register row**. The owner correction tightened the lane, but it does
+not yet justify a distinct ADR/PDR candidate beyond the existing
+pending items below.
 
 ### Pending-graduations register additions (2026-04-23 latest plan-rewrite session)
 
@@ -600,7 +687,7 @@ One amendment-candidate surfaced in the prior 2026-04-23 session:
 
 | captured-date | source-surface | graduation-target | trigger-condition | status |
 | --- | --- | --- | --- | --- |
-| 2026-04-23 (latest) | [`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md) + [`principles.md` §Code Quality](../../directives/principles.md) + [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) §Operational Steps 2 and 5 + napkin §"acknowledged-warnings-deferred-to-the-stage-they-explode-in" pattern instance #1 (the WI-7 chain) | ADR amendment to [ADR-163 §6 / §7](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) folding three lessons together — version-resolution boundary discipline, vendor-config passthrough discipline (`turbo.json` `globalPassThroughEnv` proven 2026-04-23), and deploy-entry contract discipline (the repaired Vercel import/export shape) — with a gate-mapping table showing which build-time / runtime gate enforces each contract. | The operational repair plan lands through Step 5 and ADR-163 is amended with the three contracts plus the gate-mapping table. | pending |
+| 2026-04-23 (latest) | [`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md) + [`principles.md` §Code Quality](../../directives/principles.md) + [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) §Operational Steps 2, 4, and 5 + napkin latest Step-4 entry | ADR amendment to [ADR-163 §6 / §7](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) folding four lessons together — version-resolution boundary discipline, vendor-config passthrough discipline (`turbo.json` `globalPassThroughEnv` proven 2026-04-23), deploy-entry contract discipline (the repaired Vercel import/export shape), and the **realistic production-build gate** required for env-gated Sentry esbuild-plugin paths once child-process proof is rejected by testing doctrine — with a gate-mapping table showing which build-time / runtime gate enforces each contract. | Operational Step 4 and Step 5 land fully, including the realistic production-build gate, and ADR-163 is amended with the four contracts plus the gate-mapping table. | pending |
 
 ### Pending-graduations register additions (2026-04-23 third session)
 

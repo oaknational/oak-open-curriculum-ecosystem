@@ -70,6 +70,7 @@ export async function createAllIndexes(
   resolveIndex: IndexResolverFn,
   logger: Logger | undefined,
 ): Promise<IndexSetupResult[]> {
+  logger?.info('Creating search indexes', { totalIndexes: INDEX_DEFINITIONS.length + 1 });
   const results: IndexSetupResult[] = [];
   for (const def of INDEX_DEFINITIONS) {
     results.push(await createIndex(client, resolveIndex(def.kind), def.mapping, logger));
@@ -95,6 +96,7 @@ export async function deleteAllIndexes(
   resolveIndex: IndexResolverFn,
   logger?: Logger,
 ): Promise<Result<void, AdminError>> {
+  logger?.info('Deleting search indexes', { totalIndexes: INDEX_DEFINITIONS.length + 1 });
   for (const def of INDEX_DEFINITIONS) {
     const result = await safeDeleteIndex(client, resolveIndex(def.kind), logger);
     if (!result.ok) {

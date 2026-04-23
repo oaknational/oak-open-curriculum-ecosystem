@@ -34,18 +34,37 @@
 
 import type { BuildOptions } from 'esbuild';
 
+/** Local/importable artefacts that do not define the Vercel deploy boundary. */
+export const MCP_SUPPORT_ENTRY_POINTS = {
+  index: 'src/index.ts',
+  application: 'src/application.ts',
+} satisfies Readonly<Record<'index' | 'application', string>>;
+
+/** The single deploy-boundary artefact that Vercel imports at runtime. */
+export const MCP_DEPLOY_ENTRY_POINTS = {
+  server: 'src/server.ts',
+} satisfies Readonly<Record<'server', string>>;
+
+const MCP_ALL_ENTRY_POINTS = {
+  ...MCP_SUPPORT_ENTRY_POINTS,
+  ...MCP_DEPLOY_ENTRY_POINTS,
+} satisfies Readonly<Record<'index' | 'application' | 'server', string>>;
+
 /**
  * Return the canonical esbuild build options for the MCP HTTP app.
  *
  * @remarks Behaviour proven by `esbuild-config.unit.test.ts`.
+ *
+ * Pass an entry-point subset when the build consumer needs only one build
+ * surface. The composition root uses this to keep the Sentry plugin scoped to
+ * the deploy artefact (`server`) while still emitting the local/importable
+ * support artefacts (`index`, `application`) in the same `dist/` directory.
  */
-export function createMcpEsbuildOptions(): BuildOptions {
+export function createMcpEsbuildOptions(
+  entryPoints: Readonly<Record<string, string>> = MCP_ALL_ENTRY_POINTS,
+): BuildOptions {
   return {
-    entryPoints: {
-      index: 'src/index.ts',
-      application: 'src/application.ts',
-      server: 'src/server.ts',
-    },
+    entryPoints: { ...entryPoints },
     bundle: true,
     platform: 'node',
     format: 'esm',

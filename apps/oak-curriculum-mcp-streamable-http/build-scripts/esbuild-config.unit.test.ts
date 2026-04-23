@@ -28,7 +28,11 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { createMcpEsbuildOptions } from './esbuild-config.js';
+import {
+  MCP_DEPLOY_ENTRY_POINTS,
+  MCP_SUPPORT_ENTRY_POINTS,
+  createMcpEsbuildOptions,
+} from './esbuild-config.js';
 
 describe('createMcpEsbuildOptions — Oak-owned build contract', () => {
   it('declares the three entry points: index, application, and server', () => {
@@ -68,6 +72,34 @@ describe('createMcpEsbuildOptions — Oak-owned build contract', () => {
   it('writes to dist/', () => {
     const options = createMcpEsbuildOptions();
     expect(options.outdir).toBe('dist');
+  });
+
+  it('exposes the support entry group for local/importable artefacts', () => {
+    expect(MCP_SUPPORT_ENTRY_POINTS).toEqual({
+      index: 'src/index.ts',
+      application: 'src/application.ts',
+    });
+  });
+
+  it('exposes the deploy entry group for the Vercel boundary artefact', () => {
+    expect(MCP_DEPLOY_ENTRY_POINTS).toEqual({
+      server: 'src/server.ts',
+    });
+  });
+
+  it('can scope the build options to the support entry group', () => {
+    const options = createMcpEsbuildOptions(MCP_SUPPORT_ENTRY_POINTS);
+    expect(options.entryPoints).toEqual({
+      index: 'src/index.ts',
+      application: 'src/application.ts',
+    });
+  });
+
+  it('can scope the build options to the deploy entry group', () => {
+    const options = createMcpEsbuildOptions(MCP_DEPLOY_ENTRY_POINTS);
+    expect(options.entryPoints).toEqual({
+      server: 'src/server.ts',
+    });
   });
 });
 

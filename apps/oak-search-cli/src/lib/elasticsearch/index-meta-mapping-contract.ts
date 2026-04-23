@@ -3,6 +3,7 @@ import type { Result } from '@oaknational/result';
 import { ok, err } from '@oaknational/result';
 import type { IndexMetaError } from './index-meta-types.js';
 import { OAK_META_MAPPING } from '@oaknational/sdk-codegen/search';
+import { adminLogger } from '../logger';
 
 function hasRequiredMappingProperties(
   properties: estypes.MappingTypeMapping['properties'] | undefined,
@@ -121,6 +122,7 @@ export async function ensureIndexMetaMappingContract(
   client: Client,
   indexName: string,
 ): Promise<Result<void, IndexMetaError>> {
+  adminLogger.debug('Validating index metadata mapping contract', { indexName });
   try {
     const mappingResponse = await client.indices.getMapping({ index: indexName });
     const mapping = mappingResponse[indexName]?.mappings;

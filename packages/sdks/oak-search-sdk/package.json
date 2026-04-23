@@ -16,14 +16,17 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
       "default": "./dist/index.js"
     },
     "./read": {
       "types": "./dist/read.d.ts",
+      "development": "./src/read.ts",
       "default": "./dist/read.js"
     },
     "./admin": {
       "types": "./dist/admin.d.ts",
+      "development": "./src/admin.ts",
       "default": "./dist/admin.js"
     }
   },

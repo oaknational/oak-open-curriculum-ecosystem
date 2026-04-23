@@ -49,7 +49,7 @@ todos:
   - id: l8-bundler-source-maps
     content: "L-8 (forward lane for release/commits/deploy + source-map linkage): replace bespoke L-7 orchestrator with @sentry/esbuild-plugin. Switch tsup -> esbuild in the MCP app build; wire @sentry/esbuild-plugin as the bundler plugin so release registration, sourcemap upload, commit attribution, and deploy-event emission are handled by the vendor's first-party plugin. Keep resolveSentryEnvironment + resolveSentryRegistrationPolicy in @oaknational/sentry-node (pure vendor-agnostic policy). Delete-side: four orchestrator files in build-scripts/sentry-release-registration/, 21 integration tests, build:vercel custom script, vercel.json buildCommand override, ESLint + tsconfig exceptions carried for the bespoke shape; amend ADR-163 §6 to state WHAT outcome the vendor must reach (Sentry UI state: release + commits + deploy per env) rather than HOW (specific sentry-cli argv). Authoring: task #22 uses feature-workstream-template.md with Build-vs-Buy Attestation + phase-aligned Reviewer Scheduling."
     status: pending
-    note: "UN-DROPPED 2026-04-20. Atomic landing 2026-04-21 in f9d5b0d2 (WS1+WS2+WS3.1) then PROBE FAILED 2026-04-22 (Vercel preview exited 1 with `missing_app_version`); 8-item L-8 Correction subsection authored at end of plan body. WI 1-5 LANDED LOCALLY 2026-04-23 in commit fb047f86 (canonical resolveBuildTimeRelease in @oaknational/build-metadata + buildBuildInfo persistence + createSentryBuildPlugin refactor with `skipped` variant + esbuild.config.ts intent-kind switch + validate-script removal from MCP HTTP build; oak-search-cli left on tsup with the pre-flight script intact per scope discipline; 3 deferred follow-ons recorded in correction subsection §Deferred follow-on). Next execution step: WI 6 (push branch + Vercel preview probe)."
+    note: "UN-DROPPED 2026-04-20. Atomic landing 2026-04-21 in f9d5b0d2 (WS1+WS2+WS3.1) then PROBE FAILED 2026-04-22 (Vercel preview exited 1 with `missing_app_version`). WI 1-5 LANDED LOCALLY 2026-04-23 in commit fb047f86 (canonical resolveBuildTimeRelease in @oaknational/build-metadata + buildBuildInfo persistence + createSentryBuildPlugin refactor with `skipped` variant + esbuild.config.ts intent-kind switch + validate-script removal from MCP HTTP build; oak-search-cli left on tsup with the pre-flight script intact per scope discipline). Later 2026-04-23 work verified the real Vercel import contract, landed the dedicated `dist/server.js` deploy boundary, finished the former Step-4 consumer backlog in the affected workspaces, and reran the full repo-root gate sequence to green. Current execution authority is `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`; the remaining repo-owned gap is now the representative-env production-build gate plus honest disposition of the lingering non-fatal diagnostics before the later owner-directed preview proof."
   - id: l9-feedback
     content: "L-9 (Phase 3): captureFeedback pipeline; optionally surface as an MCP tool"
     status: deferred
@@ -113,8 +113,22 @@ isProject: true
 # Sentry Observability Maximisation — MCP Server
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
-**Last Updated**: 2026-04-20
-**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/*and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one); L-DOC initial landed (authoritative app observability doc + expanded sentry-node README + discoverability mesh; commit 9e1a26b2); L-12-prereq closed by the observability-primitives-consolidation lane (2026-04-19); L-7 bespoke orchestrator landed 2026-04-19/20 (commits 7f3b17e9 + 6f5acd17 + ecee9801) then flagged 2026-04-20 for replacement by @sentry/esbuild-plugin. L-8 remains the forward lane for release/commits/deploy + source-map linkage; the corrected §L-8 body is now authored in this plan, WS0 `assumptions-reviewer` findings are applied in place, and WS1 RED is next.
+**Last Updated**: 2026-04-23
+**Status**: 🟡 WAVE 1 STILL ACTIVE — ADR-162 Accepted; `require-observability-emission`
+is now `error` in the 5 scoped Wave-1 workspaces; the dedicated
+`dist/server.js` deploy boundary is landed locally; and the current
+execution authority for the remaining repo work is
+`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`. The former
+Step-4 backlog in `@oaknational/oak-search-sdk`,
+`@oaknational/sdk-codegen`, and `@oaknational/search-cli` is now
+retired as authoritative history because the full repo-root gate
+sequence has since passed through `pnpm format:root`. The remaining
+repo-owned gap before any owner-directed preview work is the dedicated
+realistic production-build gate for the env path that loads the Sentry
+esbuild plugin, plus honest disposition of the lingering non-fatal
+diagnostics. Preview `/healthz`, preview-release evidence, and preview
+traffic proof are now explicitly outside the current repo-owned plan
+and wait on owner direction after that narrower work lands.
 **Branch**: `feat/otel_sentry_enhancements`
 **Scope**: Close every available Sentry product loop for the MCP app (server + widget) on this branch before PR. Search CLI mirrors on the next branch.
 
@@ -337,7 +351,7 @@ opens after Phase 5 closes.
 | **Phase 3a — Alpha-gate emitters (schema-independent)** | Server-side emission sites that do NOT consume Phase 2 schemas. Can land before events-workspace. This is the transition-to-useful phase — after Phase 3a, Sentry is diagnostic-grade for the MCP server (release attribution via L-8, free runtime signal via L-1, request-context attribution via L-3). | L-1 (free-signal integrations — emits Sentry-native vendor events, not Oak-authored schema); L-2 (delegates extraction — structural refactor, no event shape; unblocks Search CLI branch); L-3 (MCP request context enrichment — establishes `mcp_request` scope shape that later `tool_invoked` emitters consume; does not itself emit schema-governed events). | — |
 | **Phase 3b — Beta-gate emitters (schema-dependent)** | Emission sites that consume Phase 2 schemas by import. Gated on events-workspace existing. | L-4b (primary `Sentry.metrics.*` adapter — metric names catalogued alongside event schemas per ADR-162). **Deferred to public beta**: L-9 (feedback pipeline — user-facing surface not yet defined in alpha). | — |
 | **Phase 4 — Cross-axis** | Security + a11y sibling plans emit their axis events using Phase 2 schemas. Gated on events-workspace. **Deferred to public beta**: L-12 (widget Sentry — runtime surface is agentic clients like ChatGPT/Claude Desktop, not a standard browser; instrumentation behaviour in those hosts is unverified). | — | [`security-observability.plan.md`](../current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered`; [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome` |
-| **Phase 5 — Operations + Conformance + Close-out** | Vendor-independence conformance runs pre-launch (previously blocked by schema foundation). Strategy close-out and error-handling final land while experience is fresh. | L-15 (strategy close-out ADR); L-EH final (`prefer-result-pattern` ESLint rule + first-tranche adoption); MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11; L-8 (now UN-DROPPED — see body). **Deferred to public beta**: L-13 (alerts/dashboards/runbooks — require real signal distributions from L-1/L-3/L-4b before threshold design is meaningful); L-14 (third-party trace propagation — security-gated policy decision). | [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS2+; [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) — deploy-boundary repair + preview/Sentry proof before owner-external uptime monitoring |
+| **Phase 5 — Operations + Conformance + Close-out** | Vendor-independence conformance runs pre-launch (previously blocked by schema foundation). Strategy close-out and error-handling final land while experience is fresh. | L-15 (strategy close-out ADR); L-EH final (`prefer-result-pattern` ESLint rule + first-tranche adoption); MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11; L-8 (now UN-DROPPED — see body). **Deferred to public beta**: L-13 (alerts/dashboards/runbooks — require real signal distributions from L-1/L-3/L-4b before threshold design is meaningful); L-14 (third-party trace propagation — security-gated policy decision). | [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS2+; [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) — bounded pre-preview follow-through before owner-directed preview validation |
 
 ### Alpha vs public-beta gates (2026-04-20 re-sequencing)
 
@@ -1036,9 +1050,11 @@ vendor-independence clause):
 - [ADR-161](../../../../docs/architecture/architectural-decisions/161-network-free-pr-check-ci-boundary.md)
   — pipeline boundary.
 - [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-  — current execution authority for restoring a bootable preview and
-  proving `/healthz` plus preview/Sentry linkage; external uptime
-  monitoring now starts outside the repo once this proof exists.
+  — current execution authority for the bounded pre-preview
+  follow-through: invalid-URL classification, lingering lint
+  disposition, and representative-env build coverage before the later
+  owner-directed preview validation; external uptime monitoring now
+  starts outside the repo once that preview proof exists.
 - [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
   — L-7 carries an explicit **release-linkage carve-out** from the
   vendor-independence clause. Release linkage is Sentry-coupled by
@@ -1128,8 +1144,12 @@ at current scope before Wave 2 opens. Raised in
 
 - [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
   WS1 carve-out — authors the `no-vendor-observability-import` ESLint
-  rule in `@oaknational/eslint-plugin-standards` at `warn` severity.
-  Forbids `@sentry/*` imports outside the allowlisted adapter +
+  rule in `@oaknational/eslint-plugin-standards`. The sibling current
+  plan owns the final severity and rollout posture; this parent plan no
+  longer assumes a `warn` staging path now that the branch's honest
+  strictness work has already moved `require-observability-emission`
+  to `error` in the five scoped workspaces. The rule forbids
+  `@sentry/*` imports outside the allowlisted adapter +
   core-observability + composition-root paths per ADR-162 Mechanism #5.
   The **emission-persistence test** (the behavioural gate) is deferred
   to Phase 5 (see §Phase 5 below).
@@ -2390,15 +2410,16 @@ invariant is working as designed.
 
 #### L-8 Correction (2026-04-21) — Version source-of-truth and fail-policy
 
-**Status**. 🟡 WI 1-5 LANDED LOCALLY (commit `fb047f86`,
-2026-04-23, Pippin / cursor-claude-opus-4-7); the next preview build
-went green but the deployed function crashed at runtime because the
-deployed artefact did not satisfy Vercel's import contract. The
-remaining repo-owned work is now governed by
+**Status**. 🟡 WI 1-5 LANDED IN `fb047f86`, and later 2026-04-23 work
+verified the deploy contract, landed the dedicated `dist/server.js`
+boundary locally, and repaired the MCP HTTP app onto the DI-friendly
+test/doctrine path. The remaining repo-owned work is now governed by
 [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md):
-verify the contract from primary evidence, land the smallest
-deploy-boundary repair, rerun the preview, prove `/healthz` and Sentry,
-then amend ADR-163. Broader runtime simplification moved to
+finish the bounded pre-preview follow-through (invalid-URL
+classification, lingering lint disposition, representative-env
+production-build gate), then hand off to the owner-directed preview
+check and later amend ADR-163 once that validation is real. Broader
+runtime simplification moved to
 [`mcp-http-runtime-canonicalisation.plan.md`](../future/mcp-http-runtime-canonicalisation.plan.md).
 
 ##### Local landing record (2026-04-23, commit `fb047f86`)
@@ -2682,13 +2703,14 @@ register entry for the follow-on lane.
 - [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
   WS2+ — emission-persistence test runs MCP server + widget + Search
   CLI in `SENTRY_MODE=off`, asserting structural event information
-  persists via stdout/err. Phase 5 escalates the
-  `no-vendor-observability-import` ESLint rule severity from `warn`
-  to `error`.
+  persists via stdout/err. If the sibling lane still requires a
+  severity-escalation step for `no-vendor-observability-import`, it
+  closes that step here under the repo's no-warning doctrine rather
+  than assuming a fixed `warn`-then-`error` sequence.
 - [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-  — operational deploy-boundary repair and preview/Sentry proof.
-  External monitor setup now happens outside the repo once this plan
-  closes.
+  — bounded pre-preview follow-through after the deploy-boundary
+  repair. External monitor setup now happens outside the repo once the
+  later owner-directed preview proof exists.
 
 ---
 
@@ -2755,7 +2777,7 @@ Phase-specific risks:
 | 1 | L-0b `satisfies` gate does NOT auto-detect new fan-out hooks added to `NodeOptions` (e.g. a future `beforeSendMetric` wiring) — it only validates that BARRIER_HOOKS entries are valid `NodeOptions` keys | Resolved by A.6 SR-5: `runtime-sdk.ts` now exports `SentryRedactionHooks` (the `Pick<NodeOptions, ...>` return of `createSentryHooks`); the test imports it and constrains `MinimalHooks` to it. Any new hook wired in `createSentryHooks` without an update to the test's `BARRIER_HOOKS` registry now fails the type-check via a set-equality assertion between the imported type's keys and the registry. Code review remains the backstop. |
 | 1 | **L-12-prereq extraction may accidentally couple the new `telemetry-redaction-core` workspace to Node-specific payload types** if the pure redactor functions' signatures leak `@sentry/node` generics | Run `architecture-reviewer-fred` + `architecture-reviewer-barney` at L-12-prereq GREEN close specifically on boundary and zero `@sentry/*` imports in the new workspace; a dedicated test asserts zero `@sentry/*` imports in `packages/core/telemetry-redaction-core/**`. |
 | 1 | **L-7 scripts run in Vercel deploy pipeline only** (ADR-161); accidental CI PR-check invocation would reintroduce network calls to PR-check runs | Explicit pipeline-attachment documentation in deployment runbook; GitHub Actions workflows grep-audited for zero `sentry-cli` references at L-7 acceptance (already named in L-7's acceptance criterion 3). |
-| 1 | **Two custom ESLint rules in quick succession** (`require-observability-emission` in Wave 1 / restructure Phase 5; `no-vendor-observability-import` in Wave 2) create authorship load | Accepted: upfront authorship cost buys compile-time-gated quality for all Phases 3–5. Rules land at `warn` severity initially so Phase 3/4 code does not block on early drafts; escalate to `error` once in-tree audit is clean per the `warning-severity-is-off-severity` pattern. L-EH initial's third authorship slot is reclaimed by ESLint built-in `preserve-caught-error` (added in 9.35.0), which supersedes the planned `require-error-cause` custom rule at a fraction of the authoring cost and with strictly-better coverage (adds destructured-parameter loss and variable shadowing). |
+| 1 | **Two custom ESLint rules in quick succession** (`require-observability-emission` in Wave 1 / restructure Phase 5; `no-vendor-observability-import` in Wave 2) create authorship load | Accepted: upfront authorship cost buys compile-time-gated quality for all Phases 3–5. The older assumption that custom rules would stage at `warn` first is no longer generally safe on this branch: `require-observability-emission` is already `error` in the five scoped workspaces, and any future `no-vendor-observability-import` rollout must satisfy the repo's no-warning doctrine based on the real audit state of the sibling lane. L-EH initial's third authorship slot is reclaimed by ESLint built-in `preserve-caught-error` (added in 9.35.0), which supersedes the planned `require-error-cause` custom rule at a fraction of the authoring cost and with strictly-better coverage (adds destructured-parameter loss and variable shadowing). |
 | 2 | **Events workspace schema drift between authoring (Phase 2) and first emission (Phase 3)** — if Phase 2 authors schemas from exploration 4 alone without a Phase 3 consumer in the loop, schemas may not match real emission shapes | Run `sentry-reviewer` + `docs-adr-reviewer` at Phase 2 close against the specific MVP event set; Phase 3 emitters import schemas by type, so any drift breaks type-check (compile-time gate). |
 | 2 | **Vendor-independence carve-out** (`no-vendor-observability-import` ESLint rule authored in Phase 2, emission-persistence test authored in Phase 5) — the ESLint rule alone does not prove the stdout-sink property; a consumer could pass the import lint while still emitting only to a vendor | Accepted: the ESLint rule is a structural gate (prevents import leakage); the emission-persistence test in Phase 5 is the behavioural gate (proves the stdout-sink property). Both are required for ADR-162 Mechanism #4 + #5 satisfaction. Phase 5 is still pre-launch, not post-launch. |
 | 3 | Integration composition changes default behaviour unexpectedly (L-1) | Behaviour-level fixture tests assert per-integration event emission (ANR / Zod / runtime-metric / etc.); SDK version pinned. Per A.2 item 9, RED is not config-shape presence on `NodeOptions`. |
@@ -2816,7 +2838,7 @@ them here gives docs-adr-reviewer a single surface to audit:
 
 - **L-0/L-0b/L-1/L-3 → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — the downstream-analytics event-schema authority. L-0b's redaction barrier gates every schema-conformant emission; L-1's free-signal integrations emit events that the workspace will catalogue; L-3's `mcp_request` context is the correlation substrate for `tool_invoked`.
 - **L-4b → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — metric-names catalog. `Sentry.metrics.*` emissions are part of the downstream-analytics schema contract per ADR-162; metric names the adapter emits (e.g. `oak.mcp.handler.request.count`, `oak.mcp.tool.duration_ms`) are catalogued alongside event schemas.
-- **L-7 → [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)** — deploy events registered by L-7 become operationally meaningful only once the current repair plan proves a bootable preview, a healthy `/healthz` endpoint, and preview traffic visible in Sentry.
+- **L-7 → [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)** — deploy events registered by L-7 become operationally meaningful only once the current follow-through plan leaves the repo in an honest pre-preview state (representative-env build coverage plus honest diagnostic disposition) for the later owner-directed preview validation.
 - **L-7 → [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)** — documents the release-linkage carve-out. Release linkage is Sentry-coupled by nature; the conformance plan's scope explicitly acknowledges this signal as one that need NOT survive `SENTRY_MODE=off`.
 - **L-9 → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — `feedback_submitted` event schema. L-9's closed-set Zod enum maps directly to the schema defined there.
 - **L-12 → [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md)** — widget-side a11y signal (preference tags, frustration proxies, incomplete-flow correlation, keyboard-only detection).

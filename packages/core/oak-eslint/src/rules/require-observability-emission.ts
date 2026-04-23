@@ -1,7 +1,6 @@
 import path from 'node:path';
 import { minimatch } from 'minimatch';
-import type { Rule, SourceCode } from 'eslint';
-import type * as ESTree from 'estree';
+import type { TSESLint, TSESTree } from '@typescript-eslint/utils';
 
 /**
  * ESLint rule requiring a structured-observability emission in newly exported
@@ -14,13 +13,6 @@ import type * as ESTree from 'estree';
  * `@oaknational/observability-events` is deferred to Wave 2, when that
  * workspace lands. Legitimate non-emission cases use the sentinel comment
  * `// observability-emission-exempt: <reason>` directly above the declaration.
- *
- * Typed as core `Rule.RuleModule` (rather than typescript-eslint's
- * `TSESLint.RuleModule`) so that the rule fits directly into
- * `Linter.Config.plugins`' `ESLint.Plugin.rules` slot without cross-toolchain
- * type friction — the richer TSESLint context shape is incompatible with the
- * core context shape by TypeScript's contravariance rules, even though both
- * refer to the same runtime object.
  *
  * The rule tracks *export declaration anchors* (ExportNamedDeclaration /
  * ExportDefaultDeclaration) rather than inner function nodes. This avoids
@@ -43,7 +35,7 @@ import type * as ESTree from 'estree';
  * // observability-emission-exempt: pure formatter, no side effects
  * export async function pureFormatter(x) { return String(x); }
  */
-/**
+/*
  * Matches absolute or repo-relative paths under an apps/* workspace's src/
  * or a packages/sdks/* workspace's src/. Uses regex (not glob) so the filter
  * is robust against ESLint's per-workspace cwd — `context.cwd` is typically
@@ -82,12 +74,12 @@ const CAPTURE_METHODS = new Set<string>([
 
 const SENTINEL_PATTERN = /observability-emission-exempt:/iu;
 
-type ExportAnchor = ESTree.ExportNamedDeclaration | ESTree.ExportDefaultDeclaration;
+type ExportAnchor = TSESTree.ExportNamedDeclaration | TSESTree.ExportDefaultDeclaration;
 
 interface RecordedExport {
   readonly anchor: ExportAnchor;
   /** Node to report on — inner function when available, anchor otherwise. */
-  readonly reportNode: ESTree.Node;
+  readonly reportNode: TSESTree.Node;
   readonly name: string;
 }
 
@@ -111,7 +103,10 @@ function isAsyncFunctionLikeType(type: string): boolean {
   );
 }
 
-function collectFromNamedExport(node: ESTree.ExportNamedDeclaration, out: RecordedExport[]): void {
+function collectFromNamedExport(
+  node: TSESTree.ExportNamedDeclaration,
+  out: RecordedExport[],
+): void {
   const decl = node.declaration;
   if (!decl) return;
   if (decl.type === 'FunctionDeclaration' && decl.async) {
@@ -140,7 +135,7 @@ function collectFromNamedExport(node: ESTree.ExportNamedDeclaration, out: Record
 }
 
 function collectFromDefaultExport(
-  node: ESTree.ExportDefaultDeclaration,
+  node: TSESTree.ExportDefaultDeclaration,
   out: RecordedExport[],
 ): void {
   const decl = node.declaration;
@@ -158,16 +153,16 @@ function collectFromDefaultExport(
   }
 }
 
-function memberFinalName(callee: ESTree.Expression): string | null {
+function memberFinalName(callee: TSESTree.CallExpression['callee']): string | null {
   if (callee.type !== 'MemberExpression') return null;
   const prop = callee.property;
   if (prop.type !== 'Identifier') return null;
   return prop.name;
 }
 
-function memberRootName(callee: ESTree.Expression): string | null {
+function memberRootName(callee: TSESTree.CallExpression['callee']): string | null {
   if (callee.type !== 'MemberExpression') return null;
-  let cursor: ESTree.Node = callee.object;
+  let cursor: TSESTree.Node = callee.object;
   while (cursor.type === 'MemberExpression') {
     cursor = cursor.object;
   }
@@ -176,7 +171,7 @@ function memberRootName(callee: ESTree.Expression): string | null {
   return null;
 }
 
-function isEmissionCall(node: ESTree.CallExpression): boolean {
+function isEmissionCall(node: TSESTree.CallExpression): boolean {
   const callee = node.callee;
 
   if (callee.type === 'Identifier' && callee.name === 'log') return true;
@@ -197,7 +192,7 @@ function isEmissionCall(node: ESTree.CallExpression): boolean {
 }
 
 function findEnclosingAnchor(
-  ancestors: readonly ESTree.Node[],
+  ancestors: readonly TSESTree.Node[],
   recorded: readonly RecordedExport[],
 ): ExportAnchor | null {
   for (let index = ancestors.length - 1; index >= 0; index -= 1) {
@@ -210,12 +205,12 @@ function findEnclosingAnchor(
   return null;
 }
 
-function hasSentinel(anchor: ESTree.Node, sourceCode: SourceCode): boolean {
+function hasSentinel(anchor: TSESTree.Node, sourceCode: Readonly<TSESLint.SourceCode>): boolean {
   const leading = sourceCode.getCommentsBefore(anchor);
   return leading.some((comment) => SENTINEL_PATTERN.test(comment.value));
 }
 
-const requireObservabilityEmissionRule: Rule.RuleModule = {
+const requireObservabilityEmissionRule: TSESLint.RuleModule<'requireEmission', []> = {
   meta: {
     type: 'suggestion',
     docs: {
@@ -228,6 +223,7 @@ const requireObservabilityEmissionRule: Rule.RuleModule = {
         'Exported async function "{{name}}" has no observability emission. Per ADR-162, every runtime capability emits structured events. Add a logger.*, Sentry.*, or delegate-pattern emission, or tag with `// observability-emission-exempt: <reason>`.',
     },
   },
+  defaultOptions: [],
   create(context) {
     const rawFilename = context.physicalFilename ?? context.filename;
     if (!rawFilename) return {};

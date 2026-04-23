@@ -4,15 +4,28 @@ import {
   typeSafeKeys,
   typeSafeValues,
   typeSafeEntries,
-  typeSafeFromEntries,
   typeSafeGet,
   typeSafeSet,
   typeSafeHas,
   typeSafeHasOwn,
-  typeSafeOwnKeys,
 } from './index.js';
 
-const sample = { a: 1, b: 'two', c: true } as const;
+const sample: Readonly<{ a: 1; b: 'two'; c: true }> = { a: 1, b: 'two', c: true };
+const hiddenKey = Symbol('hiddenKey');
+
+interface InterfaceShapedSample {
+  readonly a: 1;
+  readonly b: 'two';
+  readonly c: true;
+  readonly [hiddenKey]: 'hidden';
+}
+
+const interfaceShapedSample: InterfaceShapedSample = {
+  a: 1,
+  b: 'two',
+  c: true,
+  [hiddenKey]: 'hidden',
+};
 
 describe('typeSafeKeys', () => {
   it('returns keys preserving literal types', () => {
@@ -37,16 +50,15 @@ describe('typeSafeEntries', () => {
       ['c', true],
     ]);
   });
-});
 
-describe('typeSafeFromEntries', () => {
-  it('reconstructs an object from entries', () => {
-    const entries: readonly (readonly ['x' | 'y', number | string])[] = [
-      ['x', 42],
-      ['y', 'hello'],
-    ];
-    const result = typeSafeFromEntries(entries);
-    expect(result).toEqual({ x: 42, y: 'hello' });
+  it('supports ordinary interface-shaped objects without exposing symbol keys', () => {
+    const entries = typeSafeEntries(interfaceShapedSample);
+
+    expect(entries).toEqual([
+      ['a', 1],
+      ['b', 'two'],
+      ['c', true],
+    ]);
   });
 });
 
@@ -82,12 +94,5 @@ describe('typeSafeHasOwn', () => {
 
   it('returns false for inherited properties', () => {
     expect(typeSafeHasOwn(sample, 'toString')).toBe(false);
-  });
-});
-
-describe('typeSafeOwnKeys', () => {
-  it('returns all own keys including symbols', () => {
-    const keys = typeSafeOwnKeys(sample);
-    expect(keys).toEqual(['a', 'b', 'c']);
   });
 });

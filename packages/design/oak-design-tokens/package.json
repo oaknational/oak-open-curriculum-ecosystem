@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "clean": "rm -rf dist .turbo",
-    "build": "tsx src/build.ts",
+    "build": "node ../../../scripts/run-tsx-development.mjs src/build.ts",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run",
     "lint": "eslint .",
@@ -29,7 +29,6 @@
     "@types/node": "^25.5.2",
     "eslint": "^10.2.0",
     "globals": "^17.4.0",
-    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.1.3"
   },

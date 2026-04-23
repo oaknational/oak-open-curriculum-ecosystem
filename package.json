@@ -34,7 +34,7 @@
     "dev": "turbo run --continue dev",
     "test": "turbo run --continue test",
     "test:widget": "turbo run --continue test:widget",
-    "test:root-scripts": "vitest run --config vitest.config.ts",
+    "test:root-scripts": "vitest run --config vitest.config.ts && node scripts/run-tsx-development.mjs scripts/validate-eslint-boundaries.ts",
     "test:field-integrity": "node scripts/run-field-integrity-tests.mjs",
     "mutate": "turbo run --continue mutate",
     "test:e2e": "turbo run --continue test:e2e",

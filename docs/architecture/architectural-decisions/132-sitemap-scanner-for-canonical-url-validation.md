@@ -70,11 +70,12 @@ The scanner follows the established pure/IO split:
 The sitemap provides a **superset** of canonical resource URLs but does not
 contain all valid teacher-facing URLs. Known gaps:
 
-| Route pattern                                          | Reason absent                                           |
-| ------------------------------------------------------ | ------------------------------------------------------- |
-| `/teachers/lessons/{slug}` (direct)                    | Not in sitemap; lessons only via programme              |
-| `/teachers/lessons/{slug}/downloads\|media\|share`     | Not in sitemap                                          |
-| `/teachers/key-stages/{ks}/subjects/{subj}/programmes` | Intentional — OWA uses programme-centric canonical URLs |
+| Route pattern                                          | Reason absent                                                                                                                                                  |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/teachers/lessons/{slug}` (direct)                    | Not in sitemap; lessons only via programme                                                                                                                     |
+| `/teachers/lessons/{slug}/downloads\|media\|share`     | Not in sitemap                                                                                                                                                 |
+| `/teachers/programmes/{eyfs-programme-slug}/units`     | EYFS listings land on `/teachers/eyfs/{subject}` pages; validator accepts those slugs via the subject landing page when deep programme/unit routes are present |
+| `/teachers/key-stages/{ks}/subjects/{subj}/programmes` | Intentional — OWA uses programme-centric canonical URLs                                                                                                        |
 
 This means sitemap validation is **necessary but not sufficient** — it catches
 URLs that are definitely wrong but cannot confirm all valid URLs. Future work
@@ -84,7 +85,9 @@ construction to close these gaps.
 ## Consequences
 
 - Canonical URLs constructed from the API can be validated against the reference
-  map at codegen time — any URL not present is instantly rejected.
+  map at codegen time — any URL not present is rejected unless it matches an
+  explicit owner-approved sitemap fallback such as the EYFS subject-listing
+  topology above.
 - The scanner runs as a standalone tool (`pnpm -F @oaknational/sdk-codegen scan:sitemap`),
   not as part of the automated build, since it requires network access.
 - The reference map is gitignored and must be regenerated when URL patterns change.

@@ -8,10 +8,8 @@ export {
   typeSafeKeys,
   typeSafeValues,
   typeSafeEntries,
-  typeSafeFromEntries,
   typeSafeGet,
   typeSafeSet,
   typeSafeHas,
   typeSafeHasOwn,
-  typeSafeOwnKeys,
 } from '@oaknational/type-helpers';

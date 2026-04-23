@@ -15,9 +15,11 @@
  * @see ADR-132 for the sitemap scanner design
  */
 
-import { readFileSync } from 'node:fs';
-import { ok, err, type Result } from '@oaknational/result';
-import type { SitemapScanOutput } from '../../sitemap-scanner-types.js';
+import { ok, type Result } from '@oaknational/result';
+import { loadSitemapReference, type SitemapRefError } from './sitemap-reference.js';
+import { binarySearchSortedPaths } from './teacher-path-lookups.js';
+
+export { loadSitemapReference, type SitemapRefError };
 
 /** Result of validating a single URL against the reference map. */
 export type UrlValidationResult =
@@ -32,44 +34,6 @@ export interface ValidationSummary {
   readonly invalidUrls: readonly string[];
 }
 
-/** Typed error for `loadSitemapReference` with discriminated `kind` field. */
-export type SitemapRefError =
-  | { readonly kind: 'file_not_found'; readonly path: string; readonly cause: string }
-  | { readonly kind: 'invalid_json'; readonly path: string; readonly cause: string }
-  | { readonly kind: 'schema_mismatch'; readonly path: string }
-  | { readonly kind: 'unsorted_paths'; readonly path: string };
-
-/**
- * Binary search for a target in a sorted readonly array.
- *
- * Uses direct string comparison (`<`, `>`, `===`) to match the default
- * unicode sort order produced by `Array.prototype.sort()`. Do NOT use
- * `localeCompare` — locale-sensitive collation may diverge from unicode
- * byte order, causing silent false positives/negatives.
- *
- * @returns `true` if target is found, `false` otherwise.
- */
-function binarySearch(sorted: readonly string[], target: string): boolean {
-  let lo = 0;
-  let hi = sorted.length - 1;
-  while (lo <= hi) {
-    const mid = (lo + hi) >>> 1;
-    const entry = sorted[mid];
-    if (entry === undefined) {
-      return false;
-    }
-    if (entry === target) {
-      return true;
-    }
-    if (entry < target) {
-      lo = mid + 1;
-    } else {
-      hi = mid - 1;
-    }
-  }
-  return false;
-}
-
 /**
  * Validate a single URL path against a sorted array of known teacher paths.
  *
@@ -81,7 +45,7 @@ export function validateUrl(path: string, teacherPaths: readonly string[]): UrlV
   if (teacherPaths.length === 0) {
     return { valid: false, reason: 'Reference paths array is empty — cannot validate' };
   }
-  if (binarySearch(teacherPaths, path)) {
+  if (binarySearchSortedPaths(teacherPaths, path)) {
     return { valid: true };
   }
   return { valid: false, reason: `Path not found in sitemap reference: ${path}` };
@@ -105,9 +69,10 @@ export function validateGeneratedUrls(
     const result = validateUrl(url, teacherPaths);
     if (result.valid) {
       validCount++;
-    } else {
-      invalidUrls.push(url);
+      continue;
     }
+
+    invalidUrls.push(url);
   }
 
   return {
@@ -116,80 +81,6 @@ export function validateGeneratedUrls(
     invalidCount: invalidUrls.length,
     invalidUrls,
   };
-}
-
-/**
- * Type guard validating all fields consumed by `runSitemapValidation`.
- *
- * Checks every field actually destructured downstream, not just
- * `teacherPaths`. This prevents runtime crashes from partial JSON
- * at the external data boundary (ADR-034).
- */
-function isSitemapScanOutput(value: unknown): value is SitemapScanOutput {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-  const hasStringArray = (field: unknown): field is readonly string[] =>
-    Array.isArray(field) && Array.from(field).every((item) => typeof item === 'string');
-  return (
-    'teacherPaths' in value &&
-    hasStringArray(value.teacherPaths) &&
-    'generatedAt' in value &&
-    typeof value.generatedAt === 'string' &&
-    'sequenceSlugs' in value &&
-    hasStringArray(value.sequenceSlugs) &&
-    'programmeSlugs' in value &&
-    hasStringArray(value.programmeSlugs) &&
-    'lessonSlugs' in value &&
-    hasStringArray(value.lessonSlugs)
-  );
-}
-
-/**
- * Load and validate the sitemap reference map from disk.
- *
- * @param refPath - Absolute path to `canonical-url-map.json`
- * @returns Ok with the parsed output, or Err with a typed `SitemapRefError`
- */
-export function loadSitemapReference(refPath: string): Result<SitemapScanOutput, SitemapRefError> {
-  let raw: string;
-  try {
-    raw = readFileSync(refPath, 'utf-8');
-  } catch (e) {
-    return err({
-      kind: 'file_not_found',
-      path: refPath,
-      cause: e instanceof Error ? e.message : String(e),
-    });
-  }
-
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(raw);
-  } catch (e) {
-    return err({
-      kind: 'invalid_json',
-      path: refPath,
-      cause: e instanceof Error ? e.message : String(e),
-    });
-  }
-
-  if (!isSitemapScanOutput(parsed)) {
-    return err({ kind: 'schema_mismatch', path: refPath });
-  }
-
-  // Binary search requires sorted input — verify the invariant.
-  // An unsorted teacherPaths array would cause silent false results.
-  const paths = parsed.teacherPaths;
-  for (let i = 1; i < paths.length; i++) {
-    const prev = paths[i - 1];
-    const curr = paths[i];
-    if (prev !== undefined && curr !== undefined && prev > curr) {
-      return err({ kind: 'unsorted_paths', path: refPath });
-    }
-  }
-
-  return ok(parsed);
 }
 
 /** Full validation report from `runSitemapValidation`. */

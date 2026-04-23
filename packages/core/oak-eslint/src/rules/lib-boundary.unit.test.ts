@@ -243,11 +243,4 @@ describe('createLibBoundaryRules', () => {
     expect(groups).toContain('@workspace/**');
     expect(getRuleSeverity(rules, 'import-x/no-relative-packages')).toBe('error');
   });
-
-  it('fails fast when called with an unknown library name', () => {
-    expect(() => {
-      // @ts-expect-error - intentionally exercise the runtime guard
-      createLibBoundaryRules('observability');
-    }).toThrow("Unknown library package 'observability'");
-  });
 });

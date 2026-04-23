@@ -96,7 +96,11 @@ During `pnpm sdk-codegen`, the code-generation pipeline also runs a
 post-generation sitemap reference validation step (`runSitemapValidation`).
 This is currently a soft gate: malformed reference data still emits warnings,
 but an absent local reference file is logged as informational output with
-regeneration guidance rather than failing code generation.
+regeneration guidance rather than failing code generation. Programme listing
+validation is strict: it only validates slugs whose canonical
+`/teachers/programmes/{slug}/units` listing page exists in the sitemap
+reference. Deep programme lesson routes on their own do not create a listing
+validation target.
 
 ### `generate:clean` caveat
 

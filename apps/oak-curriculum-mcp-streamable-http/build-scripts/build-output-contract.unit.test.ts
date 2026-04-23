@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  assertBuiltServerDefaultExport,
   assertNoEsbuildWarnings,
-  assertVercelDefaultExportFunction,
 } from './build-output-contract.js';
 
 describe('assertNoEsbuildWarnings', () => {
@@ -27,26 +27,42 @@ describe('assertNoEsbuildWarnings', () => {
   });
 });
 
-describe('assertVercelDefaultExportFunction', () => {
-  it('accepts a module whose default export is a function', () => {
+describe('assertBuiltServerDefaultExport', () => {
+  it('accepts an esbuild re-exported default binding inside a multi-export list', () => {
     expect(() => {
-      assertVercelDefaultExportFunction({
-        default: () => undefined,
-      });
+      assertBuiltServerDefaultExport(
+        [
+          'function handler() { return undefined; }',
+          'var server_default = handler;',
+          'export { server_default as default, handler };',
+        ].join('\n'),
+      );
     }).not.toThrow();
   });
 
-  it('rejects a module with no default export', () => {
+  it('accepts a direct default export binding when it resolves to a function', () => {
     expect(() => {
-      assertVercelDefaultExportFunction({});
+      assertBuiltServerDefaultExport('const handler = () => undefined;\nexport default handler;');
+    }).not.toThrow();
+  });
+
+  it('accepts an inline default function export', () => {
+    expect(() => {
+      assertBuiltServerDefaultExport('export default async function serverHandler() {}');
+    }).not.toThrow();
+  });
+
+  it('rejects bundle output with no default export', () => {
+    expect(() => {
+      assertBuiltServerDefaultExport('export { handler as namedExport };');
     }).toThrow(
       'dist/server.js must default-export a function that satisfies the verified @vercel/node import contract.',
     );
   });
 
-  it('rejects a module whose default export is not a function', () => {
+  it('rejects a default export binding that resolves to a non-function value', () => {
     expect(() => {
-      assertVercelDefaultExportFunction({ default: { listen: () => undefined } });
+      assertBuiltServerDefaultExport('const handler = 123;\nexport default handler;');
     }).toThrow(
       'dist/server.js must default-export a function that satisfies the verified @vercel/node import contract.',
     );

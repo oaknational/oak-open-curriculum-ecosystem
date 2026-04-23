@@ -8,7 +8,11 @@
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import type { Result } from '@oaknational/result';
-import { formatError, type UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
+import {
+  formatError,
+  resolveUniversalToolLogger,
+  type UniversalToolExecutorDependencies,
+} from '../universal-tool-shared.js';
 import type {
   SearchRetrievalService,
   SearchLessonsParams,
@@ -159,6 +163,17 @@ export async function runSearchSdkTool(
   args: SearchSdkArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
+  const logger = resolveUniversalToolLogger(deps);
+  logger.debug('mcp-tool.search.execute', {
+    toolName: 'search',
+    query: args.query,
+    scope: args.scope,
+    subject: args.subject,
+    keyStage: args.keyStage,
+    size: args.size,
+    from: args.from,
+  });
+
   const result = await dispatchByScope(args, deps.searchRetrieval);
 
   if (!result.ok) {

@@ -1,8 +1,8 @@
-import { defineConfig } from 'eslint/config';
 import {
   configs,
   coreBoundaryRules,
   createImportResolverSettings,
+  defineConfigArray,
   ignores as globalIgnores,
   testRules,
 } from '@oaknational/eslint-plugin-standards';
@@ -22,11 +22,11 @@ for (const config of configs.strict) {
   }
 }
 
-const config = defineConfig(
+const config = defineConfigArray(
   {
     ignores: [...globalIgnores, 'dist/**', 'coverage/**', '*.log', '.turbo/**'],
   },
-  ...configs.strict,
+  configs.strict,
   {
     files: ['src/**/*.ts'],
     languageOptions: {

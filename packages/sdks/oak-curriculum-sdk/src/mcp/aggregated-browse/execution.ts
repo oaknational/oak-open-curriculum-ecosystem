@@ -10,6 +10,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import {
   formatError,
   formatToolResponse,
+  resolveUniversalToolLogger,
   type UniversalToolExecutorDependencies,
 } from '../universal-tool-shared.js';
 import type { SearchFacets } from '@oaknational/sdk-codegen/search';
@@ -37,6 +38,13 @@ export async function runBrowseTool(
   args: BrowseArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
+  const logger = resolveUniversalToolLogger(deps);
+  logger.debug('mcp-tool.browse-curriculum.execute', {
+    toolName: 'browse-curriculum',
+    subject: args.subject,
+    keyStage: args.keyStage,
+  });
+
   const result = await deps.searchRetrieval.fetchSequenceFacets({
     subject: args.subject,
     keyStage: args.keyStage,

@@ -21,6 +21,7 @@ import {
 import { extractKs4DocumentFields } from '../lib/indexing/document-transform-helpers';
 import type { SearchLessonsIndexDoc, SearchUnitsIndexDoc, SearchSubjectSlug } from '../types/oak';
 import type { Ks4DocumentFields } from '../lib/indexing/document-transform-helpers';
+import { ingestLogger } from '../lib/logger';
 
 /**
  * Result of KS4 supplementation for a document.
@@ -60,6 +61,7 @@ export async function buildKs4SupplementationContext(
   client: OakClient,
   subjectSlug: SearchSubjectSlug,
 ): Promise<Ks4SupplementationContext> {
+  ingestLogger.debug('Building KS4 supplementation context', { subjectSlug });
   // Fetch sequences for the subject
   const sequencesResult = await client.getSubjectSequences(subjectSlug);
 

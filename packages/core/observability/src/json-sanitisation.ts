@@ -2,7 +2,7 @@
  * JSON sanitisation utilities for converting arbitrary values to JSON-safe formats
  */
 
-import { typeSafeEntries, typeSafeFromEntries, typeSafeValues } from '@oaknational/type-helpers';
+import { typeSafeEntries, typeSafeValues } from '@oaknational/type-helpers';
 import {
   type PlainObject,
   type SanitiserContext,
@@ -16,6 +16,16 @@ import type { JsonValue, JsonObject } from './types.js';
 const CIRCULAR_REFERENCE_PLACEHOLDER = '[Circular]';
 const UNSERIALISABLE_PLACEHOLDER = '[unserializable]';
 
+function buildJsonObject(entries: readonly [string, JsonValue][]): JsonObject {
+  const result: Record<string, JsonValue> = {};
+
+  for (const [key, value] of entries) {
+    result[key] = value;
+  }
+
+  return result;
+}
+
 function normaliseError(error: Error): JsonObject {
   const entries: [string, JsonValue][] = [
     ['message', error.message],
@@ -26,7 +36,7 @@ function normaliseError(error: Error): JsonObject {
     entries.push(['stack', error.stack]);
   }
 
-  return typeSafeFromEntries(entries);
+  return buildJsonObject(entries);
 }
 
 function collectObjectEntries(
@@ -59,7 +69,7 @@ function sanitisePlainObjectValue(source: PlainObject, context: SanitiserContext
     source,
     context,
     () => CIRCULAR_REFERENCE_PLACEHOLDER,
-    () => typeSafeFromEntries(collectObjectEntries(source, context)),
+    () => buildJsonObject(collectObjectEntries(source, context)),
   );
 }
 
@@ -208,7 +218,7 @@ export function sanitiseObject(value: unknown): JsonObject | null {
 
   context.seen.add(value);
   try {
-    return typeSafeFromEntries(collectObjectEntries(value, context));
+    return buildJsonObject(collectObjectEntries(value, context));
   } finally {
     context.seen.delete(value);
   }

@@ -166,13 +166,13 @@ runtime ingredients with different entry commands:
    via the workspace-local `tsx` binary
 4. both runtime paths call `startConfiguredHttpServer(...)`
 5. the server listens on `PORT` when set, otherwise `3333`
-6. `pnpm prod:harness` imports `dist/server.js` and wraps the deployed handler
-   in a local `http.createServer(...)` for deploy-boundary diagnostics
+6. `pnpm prod:harness` loads an env file, then boots the same DI-friendly
+   source startup path used by `src/index.ts` for local diagnostics
 
 These paths share the same repo-owned startup logic but they do **not** share
-the same module resolver. `tsx` can tolerate import specifiers that plain Node
-ESM later rejects in built output. Production-path confidence therefore needs a
-built-artifact proof as well as the dev path.
+the same module resolver. Production-path confidence therefore comes from the
+build-output contract checks around `dist/server.js`, while runtime behaviour
+stays covered through DI-friendly source tests.
 
 **package.json**
 
@@ -467,12 +467,8 @@ node -e "import('./dist/application.js').then(m => console.log('✅ Module loads
 Should output: `✅ Module loads: function`
 
 `dist/index.js` is the local listener entry and boots the server immediately;
-it is not an importable verification seam.
-
-The repo also carries a regression-proof version of this check in
-`e2e-tests/built-artifact-import.e2e.test.ts`. That test spawns plain Node and
-imports the built `application.js` artefact so production resolver behaviour is
-verified separately from `tsx`-driven source execution.
+it is not an importable verification seam. The deploy-entry import contract is
+instead covered by `build-scripts/build-output-contract.unit.test.ts`.
 
 ### Test Server Startup
 

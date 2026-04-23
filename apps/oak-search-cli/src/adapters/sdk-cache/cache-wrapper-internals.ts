@@ -21,6 +21,7 @@ export async function tryReadCache<T>(
   key: string,
   isValid: (value: unknown) => value is T,
 ): Promise<T | null> {
+  cacheLogger.trace('Attempting typed cache read', { key });
   try {
     const cached = await ops.get(key);
     if (cached === null) {
@@ -39,6 +40,7 @@ export async function tryWriteCache(
   ttl: number,
   value: unknown,
 ): Promise<void> {
+  cacheLogger.trace('Attempting cache write', { key, ttl });
   try {
     await ops.setex(key, ttl, JSON.stringify(value));
   } catch {
@@ -60,6 +62,7 @@ async function tryWriteRaw(
 }
 
 export async function tryReadRaw(ops: CacheOperations, key: string): Promise<string | null> {
+  cacheLogger.trace('Attempting raw cache read', { key });
   try {
     return await ops.get(key);
   } catch {

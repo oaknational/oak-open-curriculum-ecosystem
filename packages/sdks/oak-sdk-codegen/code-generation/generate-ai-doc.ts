@@ -10,6 +10,11 @@ import { promises as fs } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { normalizeError } from '@oaknational/logger';
+import { PATH_OPERATIONS } from '../src/types/generated/api-schema/path-parameters.js';
+import {
+  getToolFromToolName,
+  toolNames,
+} from '../src/types/generated/api-schema/mcp-tools/index.js';
 
 import { parseTDProject, collectExports } from './lib/ai-doc-types';
 import type { TDProject, TDReflection } from './lib/ai-doc-types';
@@ -151,11 +156,6 @@ function buildConventionsSection(): string {
 async function main(): Promise<void> {
   const { docsDir, typedocJsonPath, outPath } = resolvePaths();
 
-  const [pathParamsModule, mcpToolsModule] = await Promise.all([
-    import('../src/types/generated/api-schema/path-parameters.js'),
-    import('../src/types/generated/api-schema/mcp-tools/index.js'),
-  ]);
-
   const project = await readTypedocProject(typedocJsonPath);
   // Filter out internal helper functions that aren’t useful for AI agents
   const exported = collectExports(project).filter((r) => {
@@ -164,12 +164,10 @@ async function main(): Promise<void> {
       'typeSafeKeys',
       'typeSafeValues',
       'typeSafeEntries',
-      'typeSafeFromEntries',
       'typeSafeGet',
       'typeSafeSet',
       'typeSafeHas',
       'typeSafeHasOwn',
-      'typeSafeOwnKeys',
     ]);
     if (ignoreNames.has(name)) {
       return false;
@@ -183,11 +181,8 @@ async function main(): Promise<void> {
   const grouped = groupByKind(exported);
   const quickstart = makeQuickstartSection();
   const conventions = buildConventionsSection();
-  const endpointCatalog = renderEndpointCatalog(pathParamsModule.PATH_OPERATIONS);
-  const toolCatalog = renderToolCatalog(
-    mcpToolsModule.toolNames,
-    mcpToolsModule.getToolFromToolName,
-  );
+  const endpointCatalog = renderEndpointCatalog(PATH_OPERATIONS);
+  const toolCatalog = renderToolCatalog(toolNames, getToolFromToolName);
   const content = [
     buildHeader(),
     quickstart,

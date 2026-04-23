@@ -22,6 +22,17 @@ Internal `@oaknational/*` dependencies must use the `workspace:` protocol in
 `package.json` (`workspace:*` or `workspace:^`). Do not point them at the public
 registry by semver alone.
 
+Source-executed TypeScript entrypoints are part of the workspace contract. When
+a script runs `.ts` or source-first `.js` directly, invoke it through
+`node scripts/run-tsx-development.mjs <entrypoint>` (or the package-relative
+equivalent) so Node enables the workspace `development` export condition while
+loading `tsx`. Packages that are expected to participate in that clean-state
+source execution path must publish matching `development` export entries for
+their supported subpaths instead of assuming `dist/` already exists. `clean`
+must remove build artefacts only; if generated files are committed source, keep
+them in `clean` and reserve destructive regeneration steps for explicit
+package-local commands such as `generate:clean`.
+
 `onlyBuiltDependencies` in `pnpm-workspace.yaml` is an **intentional** allowlist:
 only those packages may run install lifecycle scripts.
 

@@ -1,242 +1,446 @@
 ---
-name: "MCP Deploy-Boundary Repair + Sentry Verification"
-status: active
+name: "MCP Post-Root-Green Follow-Through"
+status: current
 status_reason: >
-  Contract verified from primary evidence; the smallest local
-  deploy-boundary repair is landed, supporting root-gate fallout is
-  repaired, and preview `/healthz` plus Sentry proof are the only
-  remaining close conditions.
+  The previous follow-through drifted away from repository principles:
+  it introduced EYFS fallback handling, a CLI wrapper, JS-specific
+  lint overrides, a partial export-surface rollout, and a relaxed clean
+  assumption. This plan is reset to first principles: no fallbacks, no
+  wrappers, no overrides, no compatibility layers, one fixed ESM-only
+  export contract across internal workspaces, strict sitemap
+  validation, honest env-loading for the Sentry gate, and one explicit
+  built-code product proof.
 overview: >
-  Single-session operational repair for
-  `apps/oak-curriculum-mcp-streamable-http`. Verify the actual Vercel import
-  contract from primary evidence, land the smallest correct deploy boundary,
-  preserve local runner behaviour unless the repair requires otherwise, repair
-  supporting tooling drift, rerun the preview probe, and close with ADR,
-  parent-plan, and continuity updates. The warnings doctrine is already landed
-  and remains binding.
+  Reset the bounded pre-preview lane after a bad implementation turn.
+  Remove the principle-breaking changes already introduced, preserve
+  deliberate clean/regeneration behaviour, define one repo-wide
+  ESM-only package export contract, keep dev scripts source-first only
+  under that uniform contract, add a single realistic built-code proof,
+  rerun the sitemap scrape under a strict validator with no EYFS
+  special treatment, fix the actual install/env/config problems at
+  source, then rerun authoritative validation. Manual preview checks,
+  `/healthz`, and owner-directed preview/Sentry proof remain outside
+  this plan.
 parent_plan: "../active/sentry-observability-maximisation-mcp.plan.md"
 related_plans:
   - "../future/mcp-http-runtime-canonicalisation.plan.md"
+supersedes:
+  - "../archive/superseded/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.pre-bounded-follow-through-2026-04-23.md"
 branch: "feat/otel_sentry_enhancements"
 depends_on:
   - "../active/sentry-observability-maximisation-mcp.plan.md"
 todos:
-  - id: warnings-doctrine
-    content: "Warnings doctrine already landed; every step below remains bound by `.agent/rules/no-warning-toleration.md`."
-    status: completed
-  - id: verify-contract-and-land-boundary
-    content: "Verify the exact `@vercel/node` package-`main` contract from primary evidence, record it inline, then land the deploy-boundary repair (`src/server.ts`, composition helper, `package.json` `main`, esbuild warnings-as-errors + export assertion, doc updates)."
-    status: completed
-  - id: repair-local-tooling
-    content: "Keep local runtime behaviour honest while the deploy boundary changes: retain vendor preload, repair local harness drift, and update only the local tooling surfaces that genuinely need the new artefact."
-    status: completed
-  - id: prove-preview-and-sentry
-    content: "Deploy a preview, prove the function boots and `/healthz` responds, and record preview/Sentry evidence sufficient to verify the release-linkage lane is actually live."
+  - id: remove-principle-breaking-follow-through
+    content: "Remove the EYFS special treatment, the `oaksearch` wrapper, the JS-specific lint override path, the partial export-surface workaround set, and any other compatibility-layer decisions introduced in this lane."
     status: pending
-  - id: close-repo-owned-follow-through
-    content: "Amend ADR-163 for the repaired deploy shape, update the parent L-8 lane, archive the repo monitoring plan, move canonicalisation into its own separate plan, and refresh thread/continuity/napkin surfaces."
-    status: completed
+    priority: next
+  - id: define-fixed-export-surface-contract
+    content: "Write and apply one fixed package export-surface contract across internal workspaces: ESM only, no CJS, `exports` authoritative, no partial/per-workspace improvisation."
+    status: pending
+    priority: next
+  - id: rerun-strict-sitemap-validation
+    content: "Rerun `pnpm -F @oaknational/sdk-codegen scan:sitemap` and `pnpm sdk-codegen` after removing fallback logic, then trace and fix the actual cause of the five invalid programme URLs with no EYFS special casing."
+    status: pending
+    priority: next
+  - id: resolve-multiple-projects-diagnostic
+    content: "Root-cause and fix the `Multiple projects found ...` lint diagnostic structurally in `@oaknational/oak-curriculum-mcp-streamable-http`."
+    status: pending
+    priority: next
+  - id: resolve-vercel-oaksearch-bin-shape
+    content: "Fix the actual package/install/build contract behind the Vercel `oaksearch` bin-link warning without wrappers, JS shim entrypoints, or compatibility layers."
+    status: pending
+    priority: next
+  - id: fix-sentry-env-loading-contract
+    content: "Fix the configured-arm Sentry build gate so it loads its canonical env source honestly; the app-local `.env.local` currently contains `SENTRY_AUTH_TOKEN`, but the command path does not load it."
+    status: pending
+    priority: next
+  - id: add-built-code-product-proof
+    content: "Add one realistic product proof that executes built artefact code only, to complement source-first dev-script execution."
+    status: pending
+    priority: next
+  - id: rerun-authoritative-validation
+    content: "Rerun the full repo-root validation sequence after the reset, plus the strict sitemap scrape and the built-code proof."
+    status: pending
+  - id: handoff-to-owner-directed-preview
+    content: "Hand off from repo-owned follow-through to owner-directed preview work without claiming preview proof from this plan."
+    status: pending
 ---
 
-# MCP Deploy-Boundary Repair + Sentry Verification
+# MCP Post-Root-Green Follow-Through
 
-**Last Updated**: 2026-04-23
-**Status**: 🟡 ACTIVE — verified contract + local repair landed; preview/Sentry proof pending push
-**Session shape**: one operational session, not a multi-session stream.
+**Last Updated**: 2026-04-23  
+**Status**: 🟡 CURRENT — reset to first principles after a bad
+implementation turn; the next session must subtract complexity before
+adding anything else  
+**Scope**: Strict repo-owned follow-through before any owner-directed
+preview work
 
-## Why this plan exists
+## Reset Context
 
-The current branch has three coupled failures:
+The previous rerun through `pnpm format:root` is still useful evidence
+about what executed, but it cannot be treated as the final handoff
+state for this lane because it depended on changes that violate the
+repository principles:
 
-1. The Vercel preview build can go green while the deployed function crashes
-   at boot because `dist/index.js` does not honour the adapter's import
+1. EYFS-specific fallback logic was added to sitemap validation.
+2. A CLI wrapper was added for `oaksearch`.
+3. JS-specific lint overrides were introduced.
+4. The package export-surface changes were partial rather than a single
+   repo-wide contract.
+5. The clean/generation assumptions drifted away from the deliberate
+   workspace behaviour.
+
+Those decisions turned real problems into compatibility-layer
+behaviour. This plan resets the lane so the next session fixes the
+actual problems instead.
+
+Two concrete facts from the previous run remain important:
+
+1. `pnpm -F @oaknational/sdk-codegen scan:sitemap` **was** rerun.
+2. `apps/oak-curriculum-mcp-streamable-http/.env.local` contains
+   `SENTRY_AUTH_TOKEN`, but
+   `pnpm -F @oaknational/oak-curriculum-mcp-streamable-http build:sentry:configured`
+   still failed because the command path did not load that env file.
+
+Per owner direction, this plan still stops at the repo-owned boundary.
+Preview deployment checks, `/healthz`, and preview/Sentry proof remain
+manual owner-directed steps after this plan leaves the repo in an
+honest pre-preview state.
+
+## Problem Statement
+
+### 1. Strict URL validation was weakened
+
+The five invalid programme URLs are still a real issue. The previous
+implementation did not fix them; it introduced EYFS-specific fallback
+handling that converted the mismatch into accepted validation.
+
+That makes the current green `pnpm sdk-codegen` result non-authoritative
+for this question, because the check was no longer strict.
+
+The next session must restore a strict validator, rerun the sitemap
+scrape, and determine the actual defect at source. No EYFS special
+treatment is allowed in the validator.
+
+### 2. The package export contract is inconsistent across workspaces
+
+The previous implementation moved towards source-first dev execution,
+but did it piecemeal. Some internal packages now expose a
+`development` condition while others follow different shapes, and there
+is no single fixed doctrine for package surfaces.
+
+This is architecturally wrong. The repo needs one constant package
+export-surface contract across internal workspaces:
+
+- ESM only
+- no CJS / no `require`
+- `exports` is the authoritative public surface
+- no workspace-by-workspace improvisation
+- no partial rollout of special conditions
+
+If source-first development resolution is part of the contract, it must
+be part of the contract everywhere relevant. If it is not, it should
+not exist anywhere.
+
+### 3. Source-first dev execution and built-code proof were conflated
+
+Making dev scripts run source code consistently is directionally good.
+What is still missing is one explicit product proof that executes built
+artefact code only.
+
+The repo needs both:
+
+1. a coherent source-first dev contract, and
+2. one realistic built-code-only proof so we know product artefacts are
+   actually sound after `pnpm build`.
+
+### 4. The `oaksearch` package/install shape is still wrong
+
+The Vercel warning is real:
+
+`ENOENT ... @oaknational/search-cli/dist/bin/oaksearch.js`
+
+The previous response added a wrapper. That is precisely the wrong type
+of fix: a compatibility layer around the actual install/build contract
+problem.
+
+The next session must fix the actual `oaksearch` package shape so that
+dev execution and built execution are each honest, with no JS shim
+entrypoint and no wrapper layer.
+
+### 5. The Sentry configured-arm gate has an env-loading defect
+
+The configured-arm Sentry gate currently fails in a shell without an
+exported token even though the app-local `.env.local` contains
+`SENTRY_AUTH_TOKEN`.
+
+That means the current command contract is incomplete. If this is a
+repo-owned local gate, it must load its canonical env source honestly
+or define an explicit invocation contract that matches reality. The
+problem is not the token's absence in the repo-local app config; the
+problem is that the script is not loading it.
+
+### 6. The MCP HTTP lint warning still needs a structural fix
+
+The `Multiple projects found ...` diagnostic still needs a truthful,
+structural resolution. This item survives unchanged from the previous
+plan shape.
+
+## Design Principles
+
+1. **No fallbacks, no wrappers, no overrides** — no EYFS special
+   treatment, no CLI wrapper, no JS lint override escape hatch, no
+   compatibility layers.
+2. **Strict validators stay strict** — if the sitemap mismatch is real,
+   the validator must surface it plainly rather than normalising it.
+3. **One export contract, everywhere** — internal workspaces need one
+   fixed ESM-only public-surface doctrine.
+4. **Deliberate clean/generation behaviour stays deliberate** — fixes
+   must work with the intended clean/regeneration contract, not by
+   weakening it.
+5. **Source-first dev and built-code proof are different concerns** —
+   support both, but do not blur them.
+6. **TS source, ESM output** — new repo-owned fixes in this lane should
+   be TypeScript source, with JavaScript only as emitted build output.
+7. **Owner-directed preview boundary is explicit** — this plan ends at
+   an honest repo-owned handoff.
+
+**Non-Goals**:
+
+- Preview deployment, `/healthz`, or any owner-directed preview check
+- Manual Sentry preview evidence capture
+- Monitor setup or uptime validation operations
+- Broader MCP HTTP runtime canonicalisation
+
+## Resolution Plan
+
+### Phase 0 — Reset the Bad Decisions
+
+#### Task 0.1 — Remove the principle-breaking follow-through changes
+
+**Acceptance Criteria**:
+
+1. EYFS fallback logic is removed.
+2. The `oaksearch` wrapper is removed.
+3. The JS-specific lint override path is removed.
+4. Any other compatibility-layer decisions introduced in this lane are
+   removed rather than extended.
+5. No replacement shims are added.
+
+**Deterministic Validation**:
+
+```bash
+rg -n "fallback|wrapper|override" \
+  packages/sdks/oak-sdk-codegen/code-generation/typegen/routing \
+  apps/oak-search-cli \
+  apps/oak-curriculum-mcp-streamable-http
+# Expected: no newly introduced compatibility-layer path remains as the
+# answer to these four bounded problems
+```
+
+### Phase 1 — Re-establish the Architecture
+
+#### Task 1.1 — Define one fixed package export-surface contract
+
+**Acceptance Criteria**:
+
+1. The repo documents one fixed export-surface doctrine for internal
+   packages.
+2. The doctrine is ESM only.
+3. `exports` is the authoritative public surface.
+4. There is no `require` / CJS branch.
+5. There is no partial rollout of special conditions across workspaces.
+6. Apps do not pretend to be libraries just to patch over local
+   execution problems.
+
+**Deterministic Validation**:
+
+```bash
+rg -n '"exports"|\"main\"|\"types\"|\"type\": \"module\"|\"require\"' \
+  packages apps -g 'package.json'
+# Expected: one deliberate, repo-wide ESM contract shape with no CJS
+# branch and no accidental per-workspace drift
+```
+
+#### Task 1.2 — Preserve the deliberate clean/regeneration contract
+
+**Acceptance Criteria**:
+
+1. The fix path works with the intended clean/regeneration behaviour.
+2. Generated-source deletion used to prevent stale artefacts is not
+   relaxed merely to make source execution easier.
+3. Any previous clean-contract drift is removed or justified against the
+   documented contract.
+
+### Phase 2 — Re-run Strict Diagnosis at Source
+
+#### Task 2.1 — Rerun the sitemap scrape under a strict validator
+
+**Acceptance Criteria**:
+
+1. `pnpm -F @oaknational/sdk-codegen scan:sitemap` is rerun after the
+   fallback code is removed.
+2. `pnpm sdk-codegen` is rerun with no EYFS special treatment.
+3. The result names the actual cause of the five invalid programme
+   URLs.
+4. The repo response fixes the actual problem at source or leaves the
+   strict mismatch visible; it does not encode an EYFS exception.
+
+**Deterministic Validation**:
+
+```bash
+pnpm -F @oaknational/sdk-codegen scan:sitemap
+pnpm sdk-codegen
+# Expected: strict output with no EYFS validation fallback path
+```
+
+#### Task 2.2 — Root-cause `Multiple projects found ...`
+
+**Acceptance Criteria**:
+
+1. The exact emitting tool/config path is named.
+2. The warning reproduces both from the workspace and from the repo
+   root.
+3. The landed fix is structural.
+4. No suppressive workaround is used unless it is itself the explicit
+   architectural contract.
+
+**Deterministic Validation**:
+
+```bash
+pnpm -F @oaknational/oak-curriculum-mcp-streamable-http lint
+pnpm lint:fix
+# Expected: both surfaces are aligned and the warning is gone for a
+# structural reason
+```
+
+#### Task 2.3 — Fix the actual `oaksearch` package/install/build contract
+
+**Acceptance Criteria**:
+
+1. The Vercel bin-link warning producer is named exactly.
+2. The fix is at the actual package/install/build boundary.
+3. No wrapper, shim, adapter, or compatibility entrypoint is used.
+4. No JS-specific source override is introduced.
+5. Dev execution and built execution are both honest under the chosen
    contract.
-2. The build currently allows the same contract break to surface as warnings
-   instead of hard failure.
-3. The branch cannot yet prove from a real preview deployment whether the
-   Sentry release-linkage lane is actually working end to end.
 
-This plan owns the repo changes required to fix those three things in one
-session.
+**Deterministic Validation**:
 
-## Scope
+```bash
+pnpm build
+test -f apps/oak-search-cli/dist/bin/oaksearch.js && echo built || echo missing
+# Expected: built product shape is correct without requiring a wrapper
+```
 
-In scope:
+#### Task 2.4 — Fix the Sentry gate env-loading contract
 
-- Verify the actual `@vercel/node` package-`main` contract from primary
-  evidence and record the answer in this plan before coding against it.
-- Land the smallest correct Vercel deploy boundary in
-  `apps/oak-curriculum-mcp-streamable-http/`.
-- Repoint the deployed artefact to that boundary and fail the build if the
-  contract is broken again.
-- Repair any local-tooling surfaces made inaccurate by the deploy-boundary
-  change.
-- Re-run the Vercel preview probe and record repo-owned evidence that:
-  - the function boots;
-  - `/healthz` returns 200;
-  - the expected preview release appears in Sentry;
-  - preview traffic can be seen in Sentry with the expected release and
-    environment linkage.
-- Amend ADR-163 and the parent L-8 lane so the repaired shape is the
-  documented truth.
+**Acceptance Criteria**:
 
-Out of scope:
+1. The configured-arm gate loads its canonical env source honestly.
+2. The app-local `.env.local` case is handled by contract rather than
+   by assuming the parent shell already exported the token.
+3. The gate still fails fast when the canonical source truly lacks the
+   required token.
+4. The gate continues to prove the configured arm and not the disabled
+   or skipped arm.
 
-- Monitor creation, registration, or alert wiring. The owner will create the
-  uptime monitor outside this repo once the endpoint and preview proof are
-  real.
-- Broader runtime canonicalisation. That work is moved to
-  [`mcp-http-runtime-canonicalisation.plan.md`](../future/mcp-http-runtime-canonicalisation.plan.md).
-- Deleting the local runner stack unless the verified contract forces a
-  smaller change to it.
+**Deterministic Validation**:
 
-## Non-Goals
+```bash
+pnpm -F @oaknational/oak-curriculum-mcp-streamable-http build:sentry:configured
+# Expected: the command sees the canonical local token source when it is
+# present, and still fails honestly when the token is genuinely absent
+```
 
-- No new monitoring plan.
-- No follow-up placeholders.
-- No speculative reshaping beyond the minimum repair that the verified
-  contract requires.
+### Phase 3 — Prove Both Execution Modes
 
-## Operational Steps
+#### Task 3.1 — Keep source-first dev execution under the fixed contract
 
-### 1. Verify the contract, then use it immediately
+**Acceptance Criteria**:
 
-Read the primary source that actually governs Vercel's Node serverless import
-shape. If the docs are ambiguous, use a disposable probe deployment and treat
-the observed behaviour as the load-bearing answer.
+1. Dev scripts use source code consistently under the repo-wide export
+   contract.
+2. The contract is the same across the relevant workspaces.
+3. The implementation does not rely on one-off workspace exceptions.
 
-Record the result directly in this plan as a short contract note before
-changing code. The repair step below must be derivable from that note without
-further guesswork.
+#### Task 3.2 — Add one built-code-only product proof
 
-**Contract note (verified 2026-04-23)**:
+**Acceptance Criteria**:
 
-- [Vercel's Express documentation](https://vercel.com/docs/frameworks/backend/express)
-  shows the ESM deployment shape as `export default app` — the deployed
-  module must default-export the Express app rather than only starting a local
-  listener.
-- The current `@vercel/node` runtime source (`@vercel/node@5.7.13`
-  `dist/bundling-handler.js`, inspected from the npm tarball during this
-  session) unwraps nested default exports and then accepts exactly three
-  handler shapes: a web-handler object (`GET`/`POST`/`fetch`), a function
-  handler, or a listened `http.Server`.
-- Therefore this app's deployed artefact must live at a dedicated
-  `dist/server.js` default export. The current `dist/index.js` shape is invalid
-  for `package.json` `main` because it exports no default handler and only
-  boots the local Node listener.
+1. One repo-owned test or smoke command executes realistic built
+   product code only.
+2. The proof uses built artefacts after `pnpm build`, not `tsx` or
+   source-first resolution.
+3. The proof is part of the authoritative validation story.
 
-### 2. Land the deploy-boundary repair
+**Deterministic Validation**:
 
-Make the deployed artefact explicit.
+```bash
+pnpm build
+# followed by one built-code-only product proof command
+```
 
-Required changes:
+### Phase 4 — Rerun Authoritative Validation and Hand Off
 
-- add `src/server.ts` with the exact export shape the verified contract
-  requires;
-- add a workspace-local composition helper if needed so Result-bearing setup is
-  unwrapped once at the boundary rather than smeared across entry points;
-- add the `server` entry to the esbuild factory and tests;
-- repoint `package.json` `main` at `dist/server.js`;
-- make the build fail on any esbuild warning;
-- make the build fail if the emitted `dist/server.js` no longer satisfies the
-  export contract;
-- update `README.md` and `docs/deployment-architecture.md` in the same landing
-  so they stop describing `dist/index.js` as the deployed artefact.
+#### Task 4.1 — Rerun authoritative validation after the reset
 
-The warnings gate and the export-contract gate are distinct and both required.
+**Acceptance Criteria**:
 
-### 3. Keep local execution honest
+1. The principle-breaking follow-through changes are gone.
+2. The export-surface contract is fixed and uniform.
+3. The sitemap scrape has been rerun under a strict validator.
+4. The `Multiple projects found ...` diagnostic is fixed structurally.
+5. The `oaksearch` install/build contract is fixed without wrappers.
+6. The configured-arm Sentry gate loads env honestly and passes.
+7. One built-code-only product proof passes.
+8. The full repo-root validation sequence passes again.
+9. Continuity surfaces point to owner-directed preview work rather than
+   claiming preview proof from this plan.
 
-Local development is not the deployed boundary. Preserve the vendor preload
-and keep the local runner path working unless the deploy repair proves it must
-move.
+**Deterministic Validation**:
 
-Repo-owned local follow-through in this session is limited to:
-
-- keeping `start-server.sh` honest;
-- updating any development contract that genuinely needs the new deployed
-  artefact;
-- repairing `scripts/server-harness.js` so it matches the real
-  `CreateAppOptions` surface;
-- keeping E2E and smoke coverage green.
-
-### 4. Prove the preview and prove Sentry
-
-After the code lands locally, deploy a preview and record all of the
-following in the plan or thread record:
-
-- preview URL;
-- `/healthz` 200 proof;
-- absence of the previous boot-time `FUNCTION_INVOCATION_FAILED` shape;
-- expected preview release identifier in Sentry;
-- preview traffic visible in Sentry with the expected release and environment
-  linkage.
-
-This is the repo-owned close condition for "can we test if Sentry is actually
-working?". Monitor creation remains owner-external.
-
-## Local landing evidence (2026-04-23)
-
-- Verified the deploy contract from both Vercel's Express docs and the
-  `@vercel/node@5.7.13` runtime source.
-- Landed a dedicated `src/server.ts` / `dist/server.js` deploy boundary,
-  with `package.json` `main` now pointing at `dist/server.js`.
-- Added two build-time contract gates: esbuild warnings now fail the build,
-  and the built deployed artefact must default-export a function.
-- Repaired supporting local surfaces made inaccurate by the new boundary:
-  `scripts/server-harness.js`, `knip.config.ts`, and the missing
-  `.claude/rules/no-warning-toleration.md` portability mirror.
-- `pnpm check` exits 0 on the branch after the repair.
-
-### 5. Close the documentation and planning fallout
-
-Land the durable follow-through in the same pass:
-
-- ADR-163 amended for the repaired deploy boundary;
-- parent L-8 lane updated to point at this operational plan as the execution
-  authority for the remaining preview/Sentry proof;
-- the repo monitoring plan closed as repo-owned work and was archived
-  because monitor setup is owner-external;
-- canonicalisation moved to its own separate plan;
-- thread record, `repo-continuity`, and napkin refreshed to match the final
-  shape.
+```bash
+pnpm secrets:scan:all
+pnpm clean
+pnpm test:root-scripts
+pnpm -F @oaknational/sdk-codegen scan:sitemap
+pnpm sdk-codegen
+pnpm build
+# plus one built-code-only product proof
+pnpm type-check
+pnpm doc-gen
+pnpm lint:fix
+pnpm test
+pnpm test:widget
+pnpm test:e2e
+pnpm test:ui
+pnpm test:a11y
+pnpm test:widget:ui
+pnpm test:widget:a11y
+pnpm smoke:dev:stub
+pnpm subagents:check
+pnpm portability:check
+pnpm markdownlint:root
+pnpm format:root
+pnpm -F @oaknational/oak-curriculum-mcp-streamable-http build:sentry:configured
+```
 
 ## Acceptance
 
-The plan is complete only when all of the following are true:
+This plan is complete only when:
 
-- `pnpm check` passes after the deploy-boundary repair.
-- The build hard-fails on esbuild warnings and on a broken deployed export
-  contract.
-- The preview deployment boots successfully.
-- `/healthz` returns 200 on the preview.
-- Sentry shows the expected preview release and preview traffic with the
-  expected release and environment linkage.
-- ADR-163, the parent L-8 lane, and the operational memory surfaces all
-  describe the same repaired architecture.
-- No repo surface still claims that monitor setup is a live repo workstream.
-
-## Validation
-
-Local:
-
-```bash
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http check
-pnpm check
-```
-
-Preview / external:
-
-- deploy a preview from `feat/otel_sentry_enhancements`;
-- hit `/healthz`;
-- inspect the Vercel runtime result;
-- inspect the Sentry release and preview traffic surfaces.
-
-External validation is manual by design. The repo only owns making the
-verification possible and recording the evidence.
-
-## Related Work Moved Elsewhere
-
-- Runtime canonicalisation:
-  [`mcp-http-runtime-canonicalisation.plan.md`](../future/mcp-http-runtime-canonicalisation.plan.md)
-- Monitor creation: owner-external, not a repo plan
+- the bad decisions from the previous follow-through have been removed;
+- the repo has one fixed ESM-only export-surface contract across
+  internal workspaces;
+- the five invalid programme URLs are rechecked under a strict
+  validator with no EYFS special treatment;
+- the MCP HTTP lint warning is fixed structurally;
+- the `oaksearch` install/build problem is fixed without wrappers or JS
+  override paths;
+- the Sentry configured-arm gate loads its canonical env source
+  honestly;
+- one built-code-only product proof passes;
+- the authoritative repo-root sequence passes again;
+- the handoff point is clear: repo-owned follow-through complete,
+  owner-directed preview validation next.

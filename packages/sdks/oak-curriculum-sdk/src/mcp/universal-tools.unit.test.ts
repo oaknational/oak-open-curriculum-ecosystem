@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { listUniversalTools } from './universal-tools/list-tools.js';
 import { isUniversalToolName } from './universal-tools/type-guards.js';
 import { AGGREGATED_TOOL_DEFS } from './universal-tools/definitions.js';
+import { ontologyData } from './ontology-data.js';
 import { typeSafeKeys } from '../types/helpers/type-helpers.js';
 import type {
   GeneratedToolRegistry,
@@ -153,8 +154,7 @@ describe('search and fetch descriptions', () => {
 });
 
 describe('ontologyData', () => {
-  it('fits context budget (<70KB) for LLM tool-calling', async () => {
-    const { ontologyData } = await import('./ontology-data.js');
+  it('fits context budget (<70KB) for LLM tool-calling', () => {
     const ontologySize = JSON.stringify(ontologyData).length;
     expect(ontologySize).toBeLessThan(70000);
   });

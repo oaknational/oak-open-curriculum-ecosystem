@@ -3,6 +3,7 @@
  */
 
 import type { estypes } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type { SearchSequenceFacetsIndexDoc, SearchFacets } from '@oaknational/sdk-codegen/search';
 import { isKeyStage } from '@oaknational/sdk-codegen';
@@ -14,6 +15,29 @@ import type { IndexResolverFn } from '../internal/index-resolver.js';
 import { toRetrievalError } from './retrieval-error.js';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
+
+function buildFacetFilters(params: FacetParams | undefined): QueryContainer[] {
+  const filters: QueryContainer[] = [];
+  if (params?.subject) {
+    filters.push({ term: { subject_slug: params.subject } });
+  }
+  if (params?.keyStage) {
+    filters.push({ term: { key_stages: params.keyStage } });
+  }
+  return filters;
+}
+
+function buildFacetRequest(
+  params: FacetParams | undefined,
+  resolveIndex: IndexResolverFn,
+): EsSearchRequest {
+  return {
+    index: resolveIndex('sequence_facets'),
+    size: 200,
+    query: { bool: { filter: buildFacetFilters(params) } },
+    sort: [{ unit_count: { order: 'desc' } }],
+  };
+}
 
 /**
  * Fetch sequence facets from the sequence_facets index.
@@ -34,24 +58,14 @@ export async function fetchSequenceFacets(
   params: FacetParams | undefined,
   search: (body: EsSearchRequest) => Promise<EsSearchResponse<SearchSequenceFacetsIndexDoc>>,
   resolveIndex: IndexResolverFn,
+  logger?: Logger,
 ): Promise<Result<SearchFacets, RetrievalError>> {
+  logger?.debug('Fetching sequence facets', {
+    subject: params?.subject,
+    keyStage: params?.keyStage,
+  });
   try {
-    const filters: QueryContainer[] = [];
-    if (params?.subject) {
-      filters.push({ term: { subject_slug: params.subject } });
-    }
-    if (params?.keyStage) {
-      filters.push({ term: { key_stages: params.keyStage } });
-    }
-
-    const request: EsSearchRequest = {
-      index: resolveIndex('sequence_facets'),
-      size: 200,
-      query: { bool: { filter: filters } },
-      sort: [{ unit_count: { order: 'desc' } }],
-    };
-
-    const res = await search(request);
+    const res = await search(buildFacetRequest(params, resolveIndex));
     const facetResult = toSequenceFacets(res.hits.hits);
     if (!facetResult.ok) {
       return facetResult;

@@ -11,6 +11,7 @@ import { isLessonSummary, isUnitSummary } from '../../types/oak';
 import { loadSandboxFixtureData, type FixtureData } from './sandbox-fixture-data';
 import { ok, err } from '@oaknational/result';
 import type { SdkNotFoundError } from '@oaknational/curriculum-sdk';
+import { ingestLogger } from '../logger';
 
 /**
  * Package of a parsed fixture dataset together with an Oak-compatible client.
@@ -24,6 +25,7 @@ interface FixtureOakClient {
  * Loads the sandbox fixture dataset from disk and returns a client wired to the parsed data.
  */
 export async function createFixtureOakClient(fixtureRoot: string): Promise<FixtureOakClient> {
+  ingestLogger.debug('Creating fixture-backed Oak client', { fixtureRoot });
   const data = await loadSandboxFixtureData(fixtureRoot);
   const client = createFixtureClient(data);
   return { client, data };

@@ -16,6 +16,7 @@ import {
 } from './hybrid-data-source';
 import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '@oaknational/oak-search-sdk/admin';
+import { ingestLogger } from '../lib/logger';
 
 /** Result of processing multiple bulk files */
 interface BatchProcessingResult {
@@ -58,6 +59,9 @@ export async function processBulkFileBatch(
   rollupIndex: string,
   config: Partial<HybridDataSourceConfig> = {},
 ): Promise<Result<BatchProcessingResult, AdminError>> {
+  ingestLogger.debug('Processing hybrid bulk file batch', {
+    bulkFileCount: bulkFiles.length,
+  });
   const sources: HybridDataSource[] = [];
   const allOps: BulkOperationEntry[] = [];
 

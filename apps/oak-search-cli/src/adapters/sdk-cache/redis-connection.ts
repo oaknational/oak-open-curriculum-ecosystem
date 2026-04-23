@@ -46,6 +46,7 @@ export async function withRedisConnection<T>(
   fallback: T,
   operation: (redis: Redis) => Promise<T>,
 ): Promise<T> {
+  cacheLogger.debug('Running Redis connection operation');
   const redis = await createRedisClient(url);
   if (!redis) {
     return fallback;

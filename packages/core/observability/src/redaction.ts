@@ -7,7 +7,7 @@
  * OAuth payloads, not just already-parsed objects.
  */
 
-import { typeSafeEntries, typeSafeFromEntries } from '@oaknational/type-helpers';
+import { typeSafeEntries } from '@oaknational/type-helpers';
 import { redactFormEncodedString } from './redaction-form.js';
 import { redactUrlString } from './redaction-url.js';
 import type { JsonObject, JsonValue } from './types.js';
@@ -148,9 +148,13 @@ function redactArray(values: readonly JsonValue[], key: string | undefined): rea
 }
 
 function redactObject(value: JsonObject): JsonObject {
-  return typeSafeFromEntries(
-    typeSafeEntries(value).map(([key, entry]) => [key, redactTelemetryValue(entry, key)]),
-  );
+  const redacted: Record<string, JsonValue> = {};
+
+  for (const [key, entry] of typeSafeEntries(value)) {
+    redacted[key] = redactTelemetryValue(entry, key);
+  }
+
+  return redacted;
 }
 
 /**
@@ -218,7 +222,11 @@ export function redactHeaderValue(
 export function redactHeaderRecord(
   headers: Readonly<Record<string, string | string[] | number | undefined>>,
 ): Record<string, string> {
-  return typeSafeFromEntries(
-    typeSafeEntries(headers).map(([key, value]) => [key, redactHeaderValue(key, value)]),
-  );
+  const redactedHeaders: Record<string, string> = {};
+
+  for (const [key, value] of typeSafeEntries(headers)) {
+    redactedHeaders[key] = redactHeaderValue(key, value);
+  }
+
+  return redactedHeaders;
 }

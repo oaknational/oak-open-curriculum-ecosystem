@@ -74,6 +74,7 @@ export async function fetchAllLessonsWithPagination(
   keyStage: KeyStage,
   subject: SearchSubjectSlug,
 ): Promise<Map<string, AggregatedLesson>> {
+  ingestLogger.debug('Fetching all lessons with pagination', { keyStage, subject });
   const allPages: LessonUnitGroup[] = [];
   const limit = 100;
   let offset = 0;
@@ -143,6 +144,11 @@ export async function fetchAllLessonsByUnit(
   subject: SearchSubjectSlug,
   unitSlugs: readonly string[],
 ): Promise<Map<string, AggregatedLesson>> {
+  ingestLogger.debug('Fetching lessons by unit', {
+    keyStage,
+    subject,
+    unitCount: unitSlugs.length,
+  });
   const allPages: LessonUnitGroup[] = [];
 
   // Fetch lessons for each unit

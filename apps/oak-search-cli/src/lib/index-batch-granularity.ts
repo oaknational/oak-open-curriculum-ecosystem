@@ -30,6 +30,11 @@ export async function* yieldCurriculumBatches(
     details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug },
   ) => void,
 ): AsyncGenerator<CurriculumBatch> {
+  ingestLogger.debug('Yielding curriculum batches', {
+    subjectCount: subjects.length,
+    keyStageCount: keyStages.length,
+    granularity: granularity.kind,
+  });
   switch (granularity.kind) {
     case 'subject-keystage':
       yield* yieldSubjectKeyStageGranularity(client, subjects, keyStages, onSequenceFacetProcessed);
@@ -195,6 +200,7 @@ export async function* yieldThreadsBatch(
   client: OakClient,
   subjects: readonly SearchSubjectSlug[],
 ): AsyncGenerator<ThreadsBatch> {
+  ingestLogger.debug('Yielding threads batch', { subjectCount: subjects.length });
   const threadOps = await buildThreadOps(client, subjects);
   yield { kind: 'threads', operations: threadOps, subjects };
 }

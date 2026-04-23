@@ -1,5 +1,6 @@
 import type { Client, estypes } from '@elastic/elasticsearch';
 import { errors } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import { OAK_META_MAPPING } from '@oaknational/sdk-codegen/search';
 import type { AdminError } from '../types/admin-types.js';
@@ -81,7 +82,9 @@ function mappingErrorFromException(error: unknown): AdminError {
 export async function ensureIndexMetaMappingContract(
   client: Client,
   indexName: string,
+  logger?: Logger,
 ): Promise<Result<void, AdminError>> {
+  logger?.debug('Checking index metadata mapping contract', { indexName });
   try {
     const response = await client.indices.getMapping({ index: indexName });
     const mapping = response[indexName]?.mappings;

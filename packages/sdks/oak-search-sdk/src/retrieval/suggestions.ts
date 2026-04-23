@@ -8,6 +8,7 @@
  */
 
 import type { SearchSuggestionItem } from '@oaknational/sdk-codegen/search';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 
 import type { SuggestParams } from '../types/retrieval-params.js';
@@ -41,8 +42,14 @@ export async function suggest(
   docSearch: BoolPrefixSearchFn,
   resolveIndex: IndexResolverFn,
   config: SearchSdkConfig,
+  logger?: Logger,
 ): Promise<Result<SuggestionResponse, RetrievalError>> {
   const prefix = params.prefix.trim();
+  logger?.debug('Fetching suggestions', {
+    scope: params.scope,
+    limit: params.limit,
+    prefixLength: prefix.length,
+  });
   if (prefix.length === 0) {
     return err({ type: 'validation_error', message: 'suggest: prefix must not be empty' });
   }
@@ -68,6 +75,7 @@ export async function suggest(
       scopeKind,
       client,
       docSearch,
+      logger,
     );
 
     return ok({
@@ -101,6 +109,7 @@ async function runDualQuery(
   scopeKind: IndexKind,
   client: SuggestClient,
   docSearch: BoolPrefixSearchFn,
+  logger?: Logger,
 ): Promise<readonly SearchSuggestionItem[]> {
   const completion = buildCompletionClause(prefix, limit, params.subject, params.keyStage);
   const completionResponse = await client.search({
@@ -122,6 +131,7 @@ async function runDualQuery(
     index,
     scopeKind,
     docSearch,
+    logger,
   );
   return mergeAndDedup(completionItems, boolPrefixItems, limit);
 }

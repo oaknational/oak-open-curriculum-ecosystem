@@ -6,11 +6,12 @@
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-import { defineConfig, globalIgnores } from 'eslint/config';
-import { parser as tseslintParser } from 'typescript-eslint';
+import { globalIgnores } from 'eslint/config';
+import { configs as tseslintConfigs, parser as tseslintParser } from 'typescript-eslint';
 import {
   configs,
   createImportResolverSettings,
+  defineConfigArray,
   ignores,
   testRules,
   appArchitectureRules,
@@ -23,11 +24,49 @@ import {
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
-const eslintConfig = defineConfig(
+function createJavaScriptRuleOverrides(): Record<string, 'off'> {
+  const overrides: Record<string, 'off'> = {};
+
+  for (const config of configs.strict) {
+    for (const ruleName in config.rules ?? {}) {
+      if (ruleName.startsWith('@typescript-eslint/')) {
+        overrides[ruleName] = 'off';
+      }
+    }
+  }
+
+  return overrides;
+}
+
+const javaScriptRuleOverrides = createJavaScriptRuleOverrides();
+
+const eslintConfig = defineConfigArray(
   globalIgnores([...ignores, 'build/**', 'bulk-downloads/**', 'scripts/**/*.mjs']),
 
   // Use the recommended config from our standards plugin (includes TS, Prettier, Import-X)
-  ...configs.strict,
+  configs.strict,
+
+  {
+    files: ['**/*.js', '**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        URL: 'readonly',
+        console: 'readonly',
+        process: 'readonly',
+      },
+      parserOptions: {
+        program: null,
+        project: false,
+        projectService: false,
+      },
+    },
+    rules: {
+      ...javaScriptRuleOverrides,
+      ...tseslintConfigs.disableTypeChecked.rules,
+    },
+  },
 
   {
     files: ['**/*.ts'],
@@ -72,20 +111,16 @@ const eslintConfig = defineConfig(
   },
   // ADR-162 observability-first: require structured emission in newly
   // exported async functions. Rule is path-scoped internally to apps/**
-  // and packages/sdks/**. Initial severity `warn`; escalates to `error`
-  // once Phase 2 of the observability restructure lands its first
-  // emission sites.
+  // and packages/sdks/**.
   {
     files: ['src/**/*.ts'],
     rules: {
-      '@oaknational/require-observability-emission': 'warn',
+      '@oaknational/require-observability-emission': 'error',
     },
   },
   // ADR-088 Result pattern + ADR-162 engineering-axis: preserve caught
-  // error context when throwing new errors inside catch blocks. Enforced
-  // at `error` severity (per `warning-severity-is-off-severity`: any
-  // rule at `warn` is effectively off — a rule either matters or
-  // doesn't). Enforcement surface matches the observability emitter
+  // error context when throwing new errors inside catch blocks.
+  //  Enforcement surface matches the observability emitter
   // surface because both are the same trust-boundary class — apps +
   // SDK runtime entry points; packages/core/* and packages/libs/* are
   // leaf layers whose error ergonomics differ. ESLint built-in rule
@@ -124,16 +159,6 @@ const eslintConfig = defineConfig(
     rules: { ...testRules },
   },
 
-  // The tests FOR loadRuntimeConfig are the subject under test; they
-  // legitimately import and call it. Disable the repo-wide
-  // no-restricted-imports rule for this allowlisted file only.
-  {
-    files: ['src/runtime-config.integration.test.ts'],
-    rules: {
-      'no-restricted-imports': 'off',
-    },
-  },
-
   // Smoke tests are explicitly permitted real IO per ADR-161 (on-demand
   // pipeline, out of CI). The hermetic-test restrictions do not apply.
   {
@@ -141,7 +166,6 @@ const eslintConfig = defineConfig(
     rules: {
       'no-restricted-syntax': 'off',
       'no-restricted-properties': 'off',
-      'no-restricted-imports': 'off',
     },
   },
 
@@ -159,7 +183,6 @@ const eslintConfig = defineConfig(
     ],
     rules: {
       'no-restricted-properties': 'off',
-      'no-restricted-imports': 'off',
     },
   },
 

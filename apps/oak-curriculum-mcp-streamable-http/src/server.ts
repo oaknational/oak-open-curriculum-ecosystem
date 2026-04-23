@@ -81,6 +81,15 @@ async function loadConfiguredApp(): Promise<NodeRequestHandler> {
   });
 }
 
-export default createDeployEntryHandler<IncomingMessage, ServerResponse>({
+const lazyDeployEntryHandler = createDeployEntryHandler<IncomingMessage, ServerResponse>({
   loadHandler: loadConfiguredApp,
 });
+
+export function deployEntryHandler(
+  request: IncomingMessage,
+  response: ServerResponse,
+): Promise<unknown> | unknown {
+  return lazyDeployEntryHandler(request, response);
+}
+
+export default deployEntryHandler;

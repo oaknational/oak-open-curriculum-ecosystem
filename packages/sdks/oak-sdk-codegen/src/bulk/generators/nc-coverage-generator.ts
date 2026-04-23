@@ -5,6 +5,7 @@
  * Generates a graph of National Curriculum statement coverage from extracted data.
  * This graph helps curriculum planners ensure NC coverage and identify gaps.
  */
+import type { Logger } from '@oaknational/logger';
 import type { ExtractedNCStatement } from '../extractors/index.js';
 import {
   serializeDatasetToJson,
@@ -224,6 +225,11 @@ export function serializeNCCoverageGraph(graph: NCCoverageGraph): string {
 export async function writeNCCoverageGraphAsJson(
   graph: NCCoverageGraph,
   outputDir: string,
+  logger?: Logger,
 ): Promise<string> {
-  return writeJsonDataset(ncCoverageGraphDescriptor, graph, outputDir);
+  logger?.info('bulk.writer.write_nc_coverage_graph', {
+    outputDir,
+    sourceVersion: graph.sourceVersion,
+  });
+  return writeJsonDataset(ncCoverageGraphDescriptor, graph, outputDir, logger);
 }

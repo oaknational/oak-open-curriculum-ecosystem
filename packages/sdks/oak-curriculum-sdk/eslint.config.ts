@@ -5,9 +5,9 @@
  * deep imports into the generation workspace (ADR-108).
  */
 
-import { defineConfig } from 'eslint/config';
 import {
   configs,
+  defineConfigArray,
   ignores,
   testRules,
   createImportResolverSettings,
@@ -19,7 +19,7 @@ import { dirname } from 'node:path';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
-const config = defineConfig(
+const config = defineConfigArray(
   {
     ignores: [
       ...ignores,
@@ -41,7 +41,7 @@ const config = defineConfig(
   },
 
   // Use recommended and strict configs from standards plugin
-  ...configs.strict,
+  configs.strict,
 
   {
     files: ['**/*.ts'],
@@ -62,20 +62,16 @@ const config = defineConfig(
   },
   // ADR-162 observability-first: require structured emission in newly
   // exported async functions. Rule is path-scoped internally to apps/**
-  // and packages/sdks/**. Initial severity `warn`; escalates to `error`
-  // once Phase 2 of the observability restructure lands its first
-  // emission sites.
+  // and packages/sdks/**.
   {
     files: ['src/**/*.ts'],
     rules: {
-      '@oaknational/require-observability-emission': 'warn',
+      '@oaknational/require-observability-emission': 'error',
     },
   },
   // ADR-088 Result pattern + ADR-162 engineering-axis: preserve caught
-  // error context when throwing new errors inside catch blocks. Enforced
-  // at `error` severity (per `warning-severity-is-off-severity`: any
-  // rule at `warn` is effectively off — a rule either matters or
-  // doesn't). Enforcement surface matches the observability emitter
+  // error context when throwing new errors inside catch blocks.
+  //  Enforcement surface matches the observability emitter
   // surface because both are the same trust-boundary class — apps +
   // SDK runtime entry points; packages/core/* and packages/libs/* are
   // leaf layers whose error ergonomics differ. ESLint built-in rule

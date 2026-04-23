@@ -10,6 +10,7 @@
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 
+import type { Logger } from '@oaknational/logger';
 import type { PriorKnowledgeGraph } from './prior-knowledge-graph-generator.js';
 import type { ThreadProgressionGraph } from './thread-progression-generator.js';
 
@@ -155,7 +156,12 @@ export function serializeThreadProgressionGraph(graph: ThreadProgressionGraph): 
 export async function writeThreadProgressionFile(
   graph: ThreadProgressionGraph,
   outputDir: string,
+  logger?: Logger,
 ): Promise<string> {
+  logger?.info('bulk.writer.write_thread_progression_graph', {
+    outputDir,
+    sourceVersion: graph.sourceVersion,
+  });
   const fileName = 'thread-progression-data.ts';
   const filePath = join(outputDir, fileName);
   const content = serializeThreadProgressionGraph(graph);
@@ -368,7 +374,12 @@ export function serializePriorKnowledgeGraph(graph: PriorKnowledgeGraph): string
 export async function writePriorKnowledgeGraphFile(
   graph: PriorKnowledgeGraph,
   outputDir: string,
+  logger?: Logger,
 ): Promise<string> {
+  logger?.info('bulk.writer.write_prior_knowledge_graph', {
+    outputDir,
+    sourceVersion: graph.sourceVersion,
+  });
   const fileName = 'prior-knowledge-graph-data.ts';
   const filePath = join(outputDir, fileName);
   const content = serializePriorKnowledgeGraph(graph);

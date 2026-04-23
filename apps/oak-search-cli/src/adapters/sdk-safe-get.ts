@@ -10,6 +10,7 @@
 import type { SdkFetchError, ResourceType } from '@oaknational/curriculum-sdk';
 import { classifyException } from '@oaknational/curriculum-sdk';
 import { ok, err, type Result } from '@oaknational/result';
+import { searchLogger } from '../lib/logger';
 
 /**
  * Safely call client.GET, catching network exceptions and returning Result.
@@ -24,6 +25,7 @@ export async function safeGet<T>(
   resource: string,
   resourceType: ResourceType,
 ): Promise<Result<T, SdkFetchError>> {
+  searchLogger.trace('Executing safe SDK GET', { resource, resourceType });
   try {
     const response = await operation();
     return ok(response);

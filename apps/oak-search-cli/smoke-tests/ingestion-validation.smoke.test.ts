@@ -22,21 +22,19 @@
 
 import { describe, it, expect } from 'vitest';
 import { Client } from '@elastic/elasticsearch';
-import { loadRuntimeConfig } from '../src/runtime-config.js';
 
-const configResult = loadRuntimeConfig({
-  processEnv: process.env,
-  startDir: import.meta.dirname,
-});
-if (!configResult.ok) {
-  throw new Error(`Environment validation failed: ${configResult.error.message}`);
+function requireEnv(name: 'ELASTICSEARCH_URL' | 'ELASTICSEARCH_API_KEY'): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Set ${name} before running ingestion validation smoke tests.`);
+  }
+  return value;
 }
-const config = configResult.value.env;
 
 // Initialize ES client
 const client = new Client({
-  node: config.ELASTICSEARCH_URL,
-  auth: { apiKey: config.ELASTICSEARCH_API_KEY },
+  node: requireEnv('ELASTICSEARCH_URL'),
+  auth: { apiKey: requireEnv('ELASTICSEARCH_API_KEY') },
 });
 
 interface UnitDoc {

@@ -8,6 +8,7 @@
  * @remarks This file is part of the schema-first execution DAG described in
  * .agent/directives/schema-first-execution.md. Do not hand-edit.
  */
+import type { Logger } from '@oaknational/logger';
 import { CallToolRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types.js';
 import { getToolEntryFromToolName, getToolFromToolName, isToolName, toolNames, type ToolDescriptorForName, type ToolName } from '../definitions.js';
 import type { ToolArgsForName, ToolClientForName, ToolResultForName } from '../aliases/types.js';
@@ -584,144 +585,173 @@ export function callTool(
   name: 'get-changelog',
   client: ToolClientForName<'get-changelog'>,
   rawArgs: ToolArgsForName<'get-changelog'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-changelog'>>;
 export function callTool(
   name: 'get-changelog-latest',
   client: ToolClientForName<'get-changelog-latest'>,
   rawArgs: ToolArgsForName<'get-changelog-latest'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-changelog-latest'>>;
 export function callTool(
   name: 'get-key-stages',
   client: ToolClientForName<'get-key-stages'>,
   rawArgs: ToolArgsForName<'get-key-stages'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-key-stages'>>;
 export function callTool(
   name: 'get-key-stages-subject-assets',
   client: ToolClientForName<'get-key-stages-subject-assets'>,
   rawArgs: ToolArgsForName<'get-key-stages-subject-assets'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-key-stages-subject-assets'>>;
 export function callTool(
   name: 'get-key-stages-subject-lessons',
   client: ToolClientForName<'get-key-stages-subject-lessons'>,
   rawArgs: ToolArgsForName<'get-key-stages-subject-lessons'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-key-stages-subject-lessons'>>;
 export function callTool(
   name: 'get-key-stages-subject-questions',
   client: ToolClientForName<'get-key-stages-subject-questions'>,
   rawArgs: ToolArgsForName<'get-key-stages-subject-questions'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-key-stages-subject-questions'>>;
 export function callTool(
   name: 'get-key-stages-subject-units',
   client: ToolClientForName<'get-key-stages-subject-units'>,
   rawArgs: ToolArgsForName<'get-key-stages-subject-units'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-key-stages-subject-units'>>;
 export function callTool(
   name: 'get-keywords',
   client: ToolClientForName<'get-keywords'>,
   rawArgs: ToolArgsForName<'get-keywords'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-keywords'>>;
 export function callTool(
   name: 'get-lessons-assets',
   client: ToolClientForName<'get-lessons-assets'>,
   rawArgs: ToolArgsForName<'get-lessons-assets'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-lessons-assets'>>;
 export function callTool(
   name: 'get-lessons-quiz',
   client: ToolClientForName<'get-lessons-quiz'>,
   rawArgs: ToolArgsForName<'get-lessons-quiz'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-lessons-quiz'>>;
 export function callTool(
   name: 'get-lessons-summary',
   client: ToolClientForName<'get-lessons-summary'>,
   rawArgs: ToolArgsForName<'get-lessons-summary'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-lessons-summary'>>;
 export function callTool(
   name: 'get-lessons-transcript',
   client: ToolClientForName<'get-lessons-transcript'>,
   rawArgs: ToolArgsForName<'get-lessons-transcript'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-lessons-transcript'>>;
 export function callTool(
   name: 'get-rate-limit',
   client: ToolClientForName<'get-rate-limit'>,
   rawArgs: ToolArgsForName<'get-rate-limit'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-rate-limit'>>;
 export function callTool(
   name: 'get-sequences-assets',
   client: ToolClientForName<'get-sequences-assets'>,
   rawArgs: ToolArgsForName<'get-sequences-assets'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-sequences-assets'>>;
 export function callTool(
   name: 'get-sequences-questions',
   client: ToolClientForName<'get-sequences-questions'>,
   rawArgs: ToolArgsForName<'get-sequences-questions'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-sequences-questions'>>;
 export function callTool(
   name: 'get-sequences-units',
   client: ToolClientForName<'get-sequences-units'>,
   rawArgs: ToolArgsForName<'get-sequences-units'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-sequences-units'>>;
 export function callTool(
   name: 'get-subject-detail',
   client: ToolClientForName<'get-subject-detail'>,
   rawArgs: ToolArgsForName<'get-subject-detail'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-subject-detail'>>;
 export function callTool(
   name: 'get-subjects',
   client: ToolClientForName<'get-subjects'>,
   rawArgs: ToolArgsForName<'get-subjects'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-subjects'>>;
 export function callTool(
   name: 'get-subjects-key-stages',
   client: ToolClientForName<'get-subjects-key-stages'>,
   rawArgs: ToolArgsForName<'get-subjects-key-stages'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-subjects-key-stages'>>;
 export function callTool(
   name: 'get-subjects-sequences',
   client: ToolClientForName<'get-subjects-sequences'>,
   rawArgs: ToolArgsForName<'get-subjects-sequences'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-subjects-sequences'>>;
 export function callTool(
   name: 'get-subjects-years',
   client: ToolClientForName<'get-subjects-years'>,
   rawArgs: ToolArgsForName<'get-subjects-years'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-subjects-years'>>;
 export function callTool(
   name: 'get-threads',
   client: ToolClientForName<'get-threads'>,
   rawArgs: ToolArgsForName<'get-threads'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-threads'>>;
 export function callTool(
   name: 'get-threads-units',
   client: ToolClientForName<'get-threads-units'>,
   rawArgs: ToolArgsForName<'get-threads-units'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-threads-units'>>;
 export function callTool(
   name: 'get-units-summary',
   client: ToolClientForName<'get-units-summary'>,
   rawArgs: ToolArgsForName<'get-units-summary'>,
+  logger?: Logger,
 ): Promise<ToolResultForName<'get-units-summary'>>;
 export function callTool(
   name: ToolName,
   client: ToolClientForName<ToolName>,
   rawArgs: unknown,
+  logger?: Logger,
 ): Promise<ToolResultForName<ToolName>>;
 
 export async function callTool<TName extends ToolName>(
   name: TName,
   client: ToolClientForName<TName>,
   rawArgs: unknown,
+  logger?: Logger,
 ): Promise<ToolResultForName<TName>> {
+  logger?.debug('mcp-tool.generated.call', { toolName: name, hasArgs: rawArgs !== undefined });
   return invokeToolByName(name, client, rawArgs);
 }
 
 export async function callToolWithValidation(
   request: CallToolRequest,
   client: ToolClientForName<ToolName>,
+  logger?: Logger,
 ): Promise<ToolResultForName<ToolName>> {
+  logger?.debug('mcp-tool.generated.validate', { hasRequest: true });
   const { params } = CallToolRequestSchema.parse(request);
   const { name, arguments: rawArgs } = params;
   if (!isToolName(name)) {
     throw new TypeError('Unknown tool: ' + String(name));
   }
-  return callTool(name, client, rawArgs);
+  return callTool(name, client, rawArgs, logger);
 }

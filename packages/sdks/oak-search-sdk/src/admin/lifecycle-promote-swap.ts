@@ -86,6 +86,10 @@ export async function promoteSwapAndCommit(
   version: string,
   previousVersion: string | null,
 ): Promise<Result<void, AdminError>> {
+  deps.logger?.info('Starting promote alias swap and metadata commit', {
+    version,
+    previousVersion,
+  });
   const swaps = buildSwapActions(currentTargets, version, deps.target);
   const swapResult = await deps.atomicAliasSwap(swaps);
   if (!swapResult.ok) {
@@ -94,38 +98,50 @@ export async function promoteSwapAndCommit(
 
   const validationResult = await validatePostSwapAliases(deps, version);
   if (!validationResult.ok) {
-    const rollbackResult = await attemptPromoteRollback(
+    return handlePromoteFailure(
       deps,
       currentTargets,
       version,
       validationResult.error.message,
       'post-swap alias validation',
+      validationResult,
     );
-    if (!rollbackResult.ok) {
-      return rollbackResult;
-    }
-    return validationResult;
   }
 
   const newMeta = buildPromoteMeta(version, previousVersion);
   const writeResult = await deps.writeIndexMeta(newMeta);
   if (!writeResult.ok) {
-    const rollbackResult = await attemptPromoteRollback(
+    return handlePromoteFailure(
       deps,
       currentTargets,
       version,
       writeResult.error.message,
       'metadata write',
+      err({
+        type: 'es_error',
+        message: `Promote metadata write failed. Aliases rolled back. Original error: ${writeResult.error.message}`,
+      }),
     );
-    if (!rollbackResult.ok) {
-      return rollbackResult;
-    }
-    return err({
-      type: 'es_error',
-      message: `Promote metadata write failed. Aliases rolled back. Original error: ${writeResult.error.message}`,
-    });
   }
   return ok(undefined);
+}
+
+async function handlePromoteFailure(
+  deps: AliasLifecycleDeps,
+  currentTargets: AliasTargetMap,
+  version: string,
+  failureMessage: string,
+  failurePhase: 'metadata write' | 'post-swap alias validation',
+  fallbackResult: Result<void, AdminError>,
+): Promise<Result<void, AdminError>> {
+  const rollbackResult = await attemptPromoteRollback(
+    deps,
+    currentTargets,
+    version,
+    failureMessage,
+    failurePhase,
+  );
+  return rollbackResult.ok ? fallbackResult : rollbackResult;
 }
 
 /**

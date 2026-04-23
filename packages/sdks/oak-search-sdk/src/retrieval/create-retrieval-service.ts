@@ -71,8 +71,8 @@ export function createRetrievalService(
     searchUnits: (params) => searchUnits(params, search, resolveIndex, logger),
     searchSequences: (params) => searchSequences(params, search, resolveIndex, logger),
     searchThreads: (params) => searchThreads(params, search, resolveIndex, logger),
-    suggest: (params) => suggest(params, esClient, search, resolveIndex, config),
-    fetchSequenceFacets: (params) => fetchSequenceFacets(params, search, resolveIndex),
+    suggest: (params) => suggest(params, esClient, search, resolveIndex, config, logger),
+    fetchSequenceFacets: (params) => fetchSequenceFacets(params, search, resolveIndex, logger),
   };
 }
 

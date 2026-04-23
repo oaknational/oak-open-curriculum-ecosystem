@@ -21,6 +21,7 @@ import { readFile } from 'fs/promises';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
+import type { Logger } from '@oaknational/logger';
 import {
   generateAnalysisReport,
   generateMinedSynonyms,
@@ -107,13 +108,14 @@ async function readSourceVersion(bulkDataPath: string): Promise<string> {
 async function generateOutputFiles(
   result: ProcessingResult,
   config: PipelineConfig,
+  logger?: Logger,
 ): Promise<string[]> {
   const outputFiles: string[] = [];
   const sourceVersion = await readSourceVersion(config.bulkDataPath);
 
   // Generate thread progression graph
   const threadGraph = generateThreadProgressionData(result.extractedData.threads, sourceVersion);
-  const threadFilePath = await writeThreadProgressionFile(threadGraph, config.outputPath);
+  const threadFilePath = await writeThreadProgressionFile(threadGraph, config.outputPath, logger);
   outputFiles.push(basename(threadFilePath));
 
   // Generate prior knowledge graph
@@ -125,18 +127,19 @@ async function generateOutputFiles(
   const priorKnowledgeDirPath = await writePriorKnowledgeGraphAsJson(
     priorKnowledgeGraph,
     config.outputPath,
+    logger,
   );
   outputFiles.push(basename(priorKnowledgeDirPath));
 
   // Generate analysis report (written to vocab-gen/reports in the SDK)
   const analysisReport = generateAnalysisReport(result.extractedData);
   const vocabGenDir = dirname(fileURLToPath(import.meta.url));
-  const analysisFilePath = await writeAnalysisReportFile(analysisReport, vocabGenDir);
+  const analysisFilePath = await writeAnalysisReportFile(analysisReport, vocabGenDir, logger);
   outputFiles.push(`reports/${basename(analysisFilePath)}`);
 
   const minedSynonyms = generateMinedSynonyms(result.extractedData.keywords);
   const synonymsDir = join(config.outputPath, 'synonyms');
-  const synonymsFilePath = await writeMinedSynonymsFile(minedSynonyms, synonymsDir);
+  const synonymsFilePath = await writeMinedSynonymsFile(minedSynonyms, synonymsDir, logger);
   outputFiles.push(`synonyms/${basename(synonymsFilePath)}`);
 
   // Generate misconception graph (JSON + typed loader)
@@ -147,12 +150,17 @@ async function generateOutputFiles(
   const misconceptionDirPath = await writeMisconceptionGraphAsJson(
     misconceptionGraph,
     config.outputPath,
+    logger,
   );
   outputFiles.push(basename(misconceptionDirPath));
 
   // Generate vocabulary graph (JSON + typed loader)
   const vocabularyGraph = generateVocabularyGraphData(result.extractedData.keywords, sourceVersion);
-  const vocabularyDirPath = await writeVocabularyGraphAsJson(vocabularyGraph, config.outputPath);
+  const vocabularyDirPath = await writeVocabularyGraphAsJson(
+    vocabularyGraph,
+    config.outputPath,
+    logger,
+  );
   outputFiles.push(basename(vocabularyDirPath));
 
   // Generate NC coverage graph (JSON + typed loader)
@@ -160,7 +168,11 @@ async function generateOutputFiles(
     result.extractedData.ncStatements,
     sourceVersion,
   );
-  const ncCoverageDirPath = await writeNCCoverageGraphAsJson(ncCoverageGraph, config.outputPath);
+  const ncCoverageDirPath = await writeNCCoverageGraphAsJson(
+    ncCoverageGraph,
+    config.outputPath,
+    logger,
+  );
   outputFiles.push(basename(ncCoverageDirPath));
 
   return outputFiles;
@@ -172,11 +184,14 @@ async function generateOutputFiles(
  * @param config - Pipeline configuration
  * @returns Pipeline result with statistics and output files
  */
-export async function runPipeline(config: PipelineConfig): Promise<PipelineResult> {
+export async function runPipeline(
+  config: PipelineConfig,
+  logger?: Logger,
+): Promise<PipelineResult> {
   const startTime = Date.now();
 
   // Read all bulk download files
-  const allFiles = await readAllBulkFiles(config.bulkDataPath);
+  const allFiles = await readAllBulkFiles(config.bulkDataPath, logger);
 
   // Transform file data to BulkDataInput format
   const bulkData: BulkDataInput[] = allFiles.map((file) => ({
@@ -190,7 +205,7 @@ export async function runPipeline(config: PipelineConfig): Promise<PipelineResul
 
   let outputFiles: string[] = [];
   if (!config.dryRun) {
-    outputFiles = await generateOutputFiles(result, config);
+    outputFiles = await generateOutputFiles(result, config, logger);
   }
 
   const durationMs = Date.now() - startTime;

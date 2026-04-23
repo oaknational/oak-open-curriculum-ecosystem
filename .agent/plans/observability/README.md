@@ -125,11 +125,14 @@ Execution now proceeds through the five-wave MVP ordering (see
 [`high-level-observability-plan.md` §Execution Waves](./high-level-observability-plan.md#execution-waves--cross-plan-mvp-order)).
 Wave 1 foundations remain in place: L-EH initial ✅, L-DOC initial ✅,
 L-12-prereq ✅ (closed by primitives-consolidation 2026-04-19). The
-current engineering blocker is the L-8 deploy-boundary repair:
-L-8 Correction WI 1-5 landed locally, and the remaining preview/Sentry
-proof now lives in
+current engineering blocker is now the bounded post-root-green
+follow-through lane: L-8 Correction WI 1-5 landed locally, and the
+remaining repo-owned pre-preview work now lives in
 [`current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](./current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
-Broader runtime simplification is tracked separately in
+That plan now owns invalid-URL classification, the lingering lint
+diagnostic, and the representative-env production-build gate. Manual
+preview `/healthz` and preview/Sentry proof happen later under owner
+direction. Broader runtime simplification is tracked separately in
 [`future/mcp-http-runtime-canonicalisation.plan.md`](./future/mcp-http-runtime-canonicalisation.plan.md).
 
 ---

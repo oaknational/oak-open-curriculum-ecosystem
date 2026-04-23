@@ -51,6 +51,11 @@ export async function buildLessonOpsForPair(
   const rollupSnippets = new Map<string, string[]>();
   let processed = 0;
   let skipped = 0;
+  ingestLogger.debug('Building lesson operations for pair', {
+    lessonCount: aggregatedLessons.size,
+    subject: context.subject,
+    keyStage: context.ks,
+  });
 
   for (const lesson of aggregatedLessons.values()) {
     const skipCount = await processLessonForIndexing(

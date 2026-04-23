@@ -1,15 +1,13 @@
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types';
-import {
-  typeSafeEntries,
-  typeSafeFromEntries,
-  typeSafeKeys,
-} from '../types/helpers/type-helpers.js';
+import type { Logger } from '@oaknational/logger';
+import { typeSafeEntries, typeSafeKeys } from '../types/helpers/type-helpers.js';
 import type { ToolName } from '@oaknational/sdk-codegen/mcp-tools';
 import type { ToolExecutionResult } from './execute-tool-call.js';
 import { McpParameterError, McpToolError } from './execute-tool-call.js';
 import { OAK_CONTEXT_HINT } from './prerequisite-guidance.js';
 import type { SearchRetrievalService } from './search-retrieval-types.js';
 import type { GeneratedToolRegistry } from './universal-tools/types.js';
+import { createNoopLogger } from './noop-logger.js';
 
 /**
  * Type for structuredContent field, derived from the MCP SDK's CallToolResult.
@@ -45,6 +43,7 @@ function isStructuredContent(value: unknown): value is StructuredContent {
  *   executeMcpTool: executeToolCall,
  *   searchRetrieval,
  *   generatedTools: generatedToolRegistry,
+ *   logger,
  *   createAssetDownloadUrl: (lesson, type) => `/api/assets/${lesson}/${type}`,
  * };
  * ```
@@ -65,6 +64,15 @@ export interface UniversalToolExecutorDependencies {
   readonly searchRetrieval: SearchRetrievalService;
 
   /**
+   * Logger for structured tool-execution emission.
+   *
+   * Repo-owned runtime wiring should provide a real logger so exported async
+   * MCP capabilities emit structured events per ADR-162. Direct callers that
+   * omit it fall back to a no-op logger for compatibility.
+   */
+  readonly logger?: Logger;
+
+  /**
    * Generated tool registry for DI of generation SDK functions.
    *
    * Provides `getToolFromToolName`, `isToolName`, and `toolNames`
@@ -83,6 +91,20 @@ export interface UniversalToolExecutorDependencies {
   readonly createAssetDownloadUrl?: (lesson: string, type: string) => string;
 }
 
+/**
+ * Resolves the execution logger for universal tool flows.
+ *
+ * @remarks
+ * This preserves backwards compatibility for callers that have not yet
+ * threaded a logger while still letting repo-owned runtime wiring provide
+ * structured emissions.
+ */
+export function resolveUniversalToolLogger(
+  deps: Pick<UniversalToolExecutorDependencies, 'logger'>,
+): Logger {
+  return deps.logger ?? createNoopLogger();
+}
+
 export function formatError(message: string): CallToolResult {
   const content: TextContent = { type: 'text', text: message };
   return { content: [content], isError: true };
@@ -96,12 +118,13 @@ export function serialiseArg(value: unknown): unknown {
     return value.map(serialiseArg);
   }
   if (typeof value === 'object' && value !== null) {
-    const entries = typeSafeEntries(value);
-    const normalisedEntries: [string, unknown][] = [];
-    for (const [key, nested] of entries) {
-      normalisedEntries.push([String(key), serialiseArg(nested)]);
+    const normalisedObject: StructuredContent = {};
+
+    for (const [key, nested] of typeSafeEntries(value)) {
+      normalisedObject[key] = serialiseArg(nested);
     }
-    return typeSafeFromEntries<string, unknown>(normalisedEntries);
+
+    return normalisedObject;
   }
   return value;
 }

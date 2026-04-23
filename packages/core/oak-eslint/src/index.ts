@@ -1,9 +1,8 @@
-import { noExportTrivialTypeAliasesRule } from './rules/no-export-trivial-type-aliases.js';
-import { noEslintDisableRule } from './rules/no-eslint-disable.js';
-import { requireObservabilityEmissionRule } from './rules/require-observability-emission.js';
 // import { boundaryRules } from './rules/boundary.js'; // We will need to wrap the boundary logic in a rule or config export
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { createNodeResolver } from 'eslint-plugin-import-x';
+import { oakPlugin, oakRuleModules } from './plugin.js';
+import type { Linter } from 'eslint';
 
 /**
  * Re-exports boundary rules and helpers from the boundary module.
@@ -21,39 +20,55 @@ export {
   appArchitectureRules,
 } from './rules/boundary.js';
 
-export const rules = {
-  'no-export-trivial-type-aliases': noExportTrivialTypeAliasesRule,
-  'no-eslint-disable': noEslintDisableRule,
-  'require-observability-emission': requireObservabilityEmissionRule,
-};
+export const rules = oakRuleModules;
 
 import { recommended } from './configs/recommended.js';
 import { strict } from './configs/strict.js';
 import { react } from './configs/react.js';
 import { next } from './configs/next.js';
 
-import type { Linter } from 'eslint';
 import type { TSESLint } from '@typescript-eslint/utils';
 
-export const configs: Record<string, Linter.Config[]> = {
-  recommended: Array.isArray(recommended) ? recommended : [recommended],
-  strict: Array.isArray(strict) ? strict : [strict],
-  react: Array.isArray(react) ? react : [react],
-  next: Array.isArray(next) ? next : [next],
+export const configs = {
+  recommended,
+  strict,
+  react,
+  next,
 };
 
 /**
  * ESLint plugin for Oak National Academy standards.
  *
- * Typed as `FlatConfig.Plugin` from typescript-eslint rather than core
- * `ESLint.Plugin` because the latter's `rules` expects `Rule.RuleModule`
- * which is structurally incompatible with typescript-eslint's `RuleModule`.
- * `FlatConfig.Plugin` uses `LooseRuleDefinition` which bridges this gap.
+ * Exported as a plain object so the shared rule inventory and bundled
+ * config arrays preserve their native inferred shapes.
  */
-const plugin: TSESLint.FlatConfig.Plugin = {
-  rules: rules,
+const plugin = {
+  ...oakPlugin,
   configs: configs,
 };
+
+type ConfigSegment = TSESLint.FlatConfig.Config | TSESLint.FlatConfig.ConfigArray;
+
+/**
+ * Flattens shared config fragments while staying in the same config type
+ * family as the bundled `@oaknational` presets.
+ */
+export function defineConfigArray(
+  ...segments: readonly ConfigSegment[]
+): TSESLint.FlatConfig.ConfigArray {
+  const flattened: TSESLint.FlatConfig.Config[] = [];
+
+  for (const segment of segments) {
+    if (Array.isArray(segment)) {
+      flattened.push(...segment);
+      continue;
+    }
+
+    flattened.push(segment);
+  }
+
+  return flattened;
+}
 
 type ImportResolverProject = string | string[];
 type NodeResolverOptions = Parameters<typeof createNodeResolver>[0];
@@ -131,17 +146,15 @@ export const ignores = [
  *
  * The rules below enforce the test-immediate-fails checklist
  * (`.agent/rules/test-immediate-fails.md`) at compile time. Zero-violation
- * patterns (process.env, process.cwd, loadRuntimeConfig and observability
- * factory imports) are `error`. The `vi.mock` family is `warn` during the
- * migration tracked by
- * `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`
- * and will be escalated to `error` once the backlog reaches zero.
+ * patterns (process.env, process.cwd, loadRuntimeConfig, observability
+ * factory imports, and vi.mock-family cache mutation) are `error`.
+ * Existing violations stay visible only through explicit workspace-local
+ * allowlists tracked by
+ * `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`.
  *
  * Workspaces that legitimately host the tests FOR `loadRuntimeConfig` or
  * `createHttpObservabilityOrThrow` (i.e. `runtime-config.*.test.ts`,
  * `http-observability.*.test.ts`) add a file-glob override disabling
- * `no-restricted-imports` for those specific files in their workspace
- * `eslint.config.ts`.
  *
  * @see ADR-078 for the dependency injection rationale behind the vi.mock ban
  * @see principles.md "No type shortcuts" — applies to test code equally

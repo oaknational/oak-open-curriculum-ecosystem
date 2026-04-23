@@ -101,7 +101,7 @@ describe('createSentryBuildPlugin — production environment, main branch', () =
 
   it('targets dist sourcemaps for post-upload deletion', () => {
     const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
-    expect(inputs.sourcemaps.filesToDeleteAfterUpload).toEqual(['dist/**/*.js.map']);
+    expect(inputs.sourcemaps.filesToDeleteAfterUpload).toEqual(['dist/server.js.map']);
   });
 
   it('passes through SENTRY_AUTH_TOKEN to the plugin inputs', () => {

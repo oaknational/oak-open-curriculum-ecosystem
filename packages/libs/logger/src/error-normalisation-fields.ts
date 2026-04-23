@@ -8,7 +8,7 @@ import {
   type JsonObject,
   type JsonValue,
 } from '@oaknational/observability';
-import { typeSafeEntries, typeSafeFromEntries, typeSafeKeys } from '@oaknational/type-helpers';
+import { typeSafeEntries, typeSafeKeys } from '@oaknational/type-helpers';
 import type { LogContext } from './types.js';
 
 const RESERVED_ERROR_KEYS = new Set([
@@ -85,10 +85,6 @@ function createContextMetadata(value: unknown): LogContext | undefined {
   return cleanMetadata(sanitisedContext ?? undefined);
 }
 
-function createMetadataEntry(key: string, value: JsonValue): readonly [string, JsonValue] {
-  return [key, value];
-}
-
 function sanitiseToJsonObject(value: unknown): JsonObject | undefined {
   const sanitisedValue = sanitiseForJson(value);
   if (!isJsonObjectValue(sanitisedValue)) {
@@ -112,20 +108,22 @@ function readStringValue(source: JsonObject | undefined, key: string): string | 
 }
 
 function createMetadataFromDescriptors(descriptors: PropertyDescriptorMap): LogContext | undefined {
-  const entries = typeSafeEntries(descriptors).flatMap(([key, descriptor]) => {
+  const metadata: Record<string, JsonValue> = {};
+
+  for (const [key, descriptor] of typeSafeEntries(descriptors)) {
     if (RESERVED_ERROR_KEYS.has(key) || !('value' in descriptor)) {
-      return [];
+      continue;
     }
 
     const descriptorValue: unknown = descriptor.value;
     if (descriptorValue === undefined) {
-      return [];
+      continue;
     }
 
-    return [createMetadataEntry(key, sanitiseForJson(descriptorValue))];
-  });
+    metadata[key] = sanitiseForJson(descriptorValue);
+  }
 
-  return cleanMetadata(typeSafeFromEntries(entries));
+  return cleanMetadata(metadata);
 }
 
 function mergeMetadata(
@@ -140,7 +138,17 @@ function mergeMetadata(
     return left;
   }
 
-  return cleanMetadata(typeSafeFromEntries([...typeSafeEntries(left), ...typeSafeEntries(right)]));
+  const merged: Record<string, JsonValue> = {};
+
+  for (const [key, value] of typeSafeEntries(left)) {
+    merged[key] = value;
+  }
+
+  for (const [key, value] of typeSafeEntries(right)) {
+    merged[key] = value;
+  }
+
+  return cleanMetadata(merged);
 }
 
 function cleanMetadata(metadata: LogContext | undefined): LogContext | undefined {

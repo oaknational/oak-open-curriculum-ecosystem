@@ -4,18 +4,14 @@ import prettierConfig from 'eslint-config-prettier';
 import { importX } from 'eslint-plugin-import-x';
 import tsdocPlugin from 'eslint-plugin-tsdoc';
 
-import type { Linter, ESLint } from 'eslint';
-
-import { noEslintDisableRule } from '../rules/no-eslint-disable.js';
-import { requireObservabilityEmissionRule } from '../rules/require-observability-emission.js';
+import { oakPlugin } from '../plugin.js';
 
 /**
- * Inline plugin registration for the `@oaknational` namespace.
+ * Shared plugin registration for the `@oaknational` namespace.
  *
- * This registers the plugin directly inside the recommended config so that
- * any consumer spreading `configs.recommended` automatically gets the
- * `@oaknational/*` rule namespace. Consumers should NOT separately register
- * the `@oaknational` plugin — the config provides it.
+ * This wires the same plugin definition that `src/index.ts` exports so the
+ * packaged rule inventory and the rules available through
+ * `configs.recommended` cannot drift apart.
  *
  * `require-observability-emission` is registered here (rule available)
  * but not activated in the recommended rule set. Per ADR-162 Phase 5
@@ -23,13 +19,6 @@ import { requireObservabilityEmissionRule } from '../rules/require-observability
  * rule at `warn` in its own flat config. Preset-level activation is
  * deliberately avoided so the rule never fires outside its intended scope.
  */
-const oakPlugin: ESLint.Plugin = {
-  rules: {
-    'no-eslint-disable': noEslintDisableRule,
-    'require-observability-emission': requireObservabilityEmissionRule,
-  },
-};
-
 /**
  * Restricted types shared between recommended and strict configs.
  *
@@ -56,7 +45,7 @@ export const RECOMMENDED_RESTRICTED_TYPES = {
   },
 } as const;
 
-export const recommended: Linter.Config[] = [
+export const recommended = tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.strict,
   ...tseslint.configs.stylistic,
@@ -128,6 +117,7 @@ export const recommended: Linter.Config[] = [
       'import-x/no-named-as-default': 'error',
 
       '@oaknational/no-eslint-disable': 'error',
+      '@oaknational/no-dynamic-import': 'error',
 
       // TSDoc
       'tsdoc/syntax': 'error',
@@ -143,4 +133,4 @@ export const recommended: Linter.Config[] = [
       ],
     },
   },
-];
+);

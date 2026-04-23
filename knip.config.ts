@@ -26,6 +26,11 @@ const config: KnipConfig = {
     'lsof',
     'ps',
   ],
+  ignoreIssues: {
+    // Deploy boundary intentionally exposes the same handler as both a named
+    // export and the Vercel-required default export.
+    'apps/oak-curriculum-mcp-streamable-http/src/server.ts': ['duplicates'],
+  },
 
   eslint: true,
   vitest: true,
@@ -42,16 +47,23 @@ const config: KnipConfig = {
     },
     'apps/oak-curriculum-mcp-streamable-http': {
       entry: [
+        'esbuild.config.ts',
         'src/index.ts',
         'src/application.ts',
         'src/server.ts',
+        'build-scripts/**/*.ts',
+        'operations/**/*.ts',
+        'scripts/**/*.js',
         'widget/src/main.tsx',
         'smoke-tests/**/*.ts',
         'e2e-tests/**/*.ts',
       ],
       project: [
         'src/**/*.ts',
+        'build-scripts/**/*.ts',
         'e2e-tests/**/*.ts',
+        'operations/**/*.ts',
+        'scripts/**/*.js',
         'tests/**/*.ts',
         'smoke-tests/**/*.ts',
         'widget/src/**/*.{ts,tsx,css}',
@@ -70,6 +82,8 @@ const config: KnipConfig = {
     },
     'apps/oak-search-cli': {
       entry: [
+        'bin/**/*.ts',
+        'operations/**/*.ts',
         'scripts/**/*.ts',
         'evaluation/**/*.ts',
         'ground-truths/generation/**/*.ts',
@@ -79,12 +93,22 @@ const config: KnipConfig = {
         'src/adapters/oak-adapter-types.ts',
         'src/adapters/sdk-guards.ts',
       ],
-      project: ['src/**/*.ts', 'ground-truths/**/*.ts', 'scripts/**/*.ts', 'evaluation/**/*.ts'],
+      project: [
+        'bin/**/*.ts',
+        'src/**/*.ts',
+        'ground-truths/**/*.ts',
+        'operations/**/*.ts',
+        'scripts/**/*.ts',
+        'evaluation/**/*.ts',
+      ],
       ignoreDependencies: [
         // Used via CLI tooling, not direct imports
         '@asteasolutions/zod-to-openapi',
         'typedoc-plugin-markdown',
         'vite-tsconfig-paths',
+        // Used via `pnpm exec tsx` pass-through execution and tsx shebangs.
+        // Knip does not detect binary/shebang usage as dependency usage.
+        'tsx',
         // prettier is needed for eslint-plugin-prettier
         'prettier',
       ],
@@ -111,6 +135,10 @@ const config: KnipConfig = {
       project: ['src/**/*.ts'],
     },
     'packages/core/type-helpers': {
+      project: ['src/**/*.ts'],
+    },
+    'packages/design/oak-design-tokens': {
+      entry: ['src/build.ts'],
       project: ['src/**/*.ts'],
     },
     'packages/libs/env-resolution': {
@@ -159,9 +187,6 @@ const config: KnipConfig = {
     'packages/sdks/oak-search-sdk': {
       // Knip cannot resolve entries through createSdkConfig() factory.
       entry: [
-        'src/index.ts',
-        'src/read.ts',
-        'src/admin.ts',
         'src/create-search-sdk.ts',
         'src/create-search-retrieval.ts',
         'src/types/**/*.ts',

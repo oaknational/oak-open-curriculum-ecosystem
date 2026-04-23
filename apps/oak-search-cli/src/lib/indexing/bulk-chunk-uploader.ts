@@ -233,6 +233,10 @@ export async function uploadAllChunks(
   docCount: number,
   config: BulkUploadConfig = {},
 ): Promise<BulkUploadResult> {
+  logger.debug('Uploading all Elasticsearch chunks', {
+    chunkCount: chunks.length,
+    docCount,
+  });
   const resolved = resolveConfig(config);
   const { totalUploaded, allFailedOperations, counts } = await uploadInitialChunks(
     es,

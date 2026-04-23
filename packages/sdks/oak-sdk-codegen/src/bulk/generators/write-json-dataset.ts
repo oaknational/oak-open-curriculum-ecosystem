@@ -16,6 +16,7 @@
  */
 import { mkdir, writeFile } from 'fs/promises';
 import { join } from 'path';
+import type { Logger } from '@oaknational/logger';
 
 /**
  * Descriptor for a JSON dataset's three-file output.
@@ -57,7 +58,12 @@ export async function writeJsonDataset(
   descriptor: JsonDatasetDescriptor,
   data: unknown,
   outputDir: string,
+  logger?: Logger,
 ): Promise<string> {
+  logger?.info('bulk.writer.write_json_dataset', {
+    directoryName: descriptor.directoryName,
+    outputDir,
+  });
   const dirPath = join(outputDir, descriptor.directoryName);
   await mkdir(dirPath, { recursive: true });
 

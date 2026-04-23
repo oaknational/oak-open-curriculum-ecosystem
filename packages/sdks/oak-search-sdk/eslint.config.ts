@@ -2,9 +2,9 @@
  * ESLint Configuration for oak-search-sdk
  */
 
-import { defineConfig } from 'eslint/config';
 import {
   configs,
+  defineConfigArray,
   ignores,
   testRules,
   createImportResolverSettings,
@@ -16,13 +16,13 @@ import { dirname } from 'node:path';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
-const config = defineConfig(
+const config = defineConfigArray(
   {
     ignores: [...ignores, 'dist/**', 'coverage/**', '*.log', '.turbo/**'],
   },
 
   // Use recommended and strict configs from standards plugin
-  ...configs.strict,
+  configs.strict,
 
   {
     files: ['**/*.ts'],
@@ -43,20 +43,18 @@ const config = defineConfig(
   },
   // ADR-162 observability-first: require structured emission in newly
   // exported async functions. Rule is path-scoped internally to apps/**
-  // and packages/sdks/**. Initial severity `warn`; escalates to `error`
+  // and packages/sdks/**.
   // once Phase 2 of the observability restructure lands its first
   // emission sites.
   {
     files: ['src/**/*.ts'],
     rules: {
-      '@oaknational/require-observability-emission': 'warn',
+      '@oaknational/require-observability-emission': 'error',
     },
   },
   // ADR-088 Result pattern + ADR-162 engineering-axis: preserve caught
-  // error context when throwing new errors inside catch blocks. Enforced
-  // at `error` severity (per `warning-severity-is-off-severity`: any
-  // rule at `warn` is effectively off — a rule either matters or
-  // doesn't). Enforcement surface matches the observability emitter
+  // error context when throwing new errors inside catch blocks.
+  //  Enforcement surface matches the observability emitter
   // surface because both are the same trust-boundary class — apps +
   // SDK runtime entry points; packages/core/* and packages/libs/* are
   // leaf layers whose error ergonomics differ. ESLint built-in rule
@@ -86,26 +84,6 @@ const config = defineConfig(
     ],
     rules: {
       ...testRules,
-    },
-  },
-
-  // Test-ceremony migration backlog — see
-  // `.agent/plans/architecture-and-infrastructure/current/test-ceremony-production-factory-audit.plan.md`.
-  // Each entry is a known vi.mock-family violation; delete as files migrate.
-  {
-    files: [
-      'src/admin/lifecycle-stage-promote.integration.test.ts',
-      'src/admin/verify-doc-counts.integration.test.ts',
-      'src/admin/lifecycle-lease-infra.unit.test.ts',
-      'src/admin/lifecycle-cleanup.integration.test.ts',
-      'src/admin/index-lifecycle-service.integration.test.ts',
-      'src/admin/lifecycle-promote-validation.integration.test.ts',
-      'src/admin/alias-operations.integration.test.ts',
-      'src/create-search-sdk.integration.test.ts',
-    ],
-    rules: {
-      'no-restricted-properties': 'off',
-      'no-restricted-imports': 'off',
     },
   },
 );

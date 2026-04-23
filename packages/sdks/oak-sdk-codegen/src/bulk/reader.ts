@@ -21,6 +21,7 @@
 import { readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 
+import type { Logger } from '@oaknational/logger';
 import { bulkDownloadFileSchema, type BulkDownloadFile } from '../types/generated/bulk/index.js';
 import { extractSubjectPhase, type SubjectPhase } from './reader-utils.js';
 
@@ -40,7 +41,11 @@ export { extractSubjectPhase, type SubjectPhase } from './reader-utils.js';
  * // Returns: ['maths-primary.json', 'maths-secondary.json', ...]
  * ```
  */
-export async function discoverBulkFiles(basePath: string): Promise<readonly string[]> {
+export async function discoverBulkFiles(
+  basePath: string,
+  logger?: Logger,
+): Promise<readonly string[]> {
+  logger?.debug('bulk.reader.discover_files', { basePath });
   const entries = await readdir(basePath);
   return entries.filter((entry) => entry.endsWith('.json'));
 }
@@ -62,7 +67,12 @@ export async function discoverBulkFiles(basePath: string): Promise<readonly stri
  * console.log(data.lessons.length); // 1072
  * ```
  */
-export async function parseBulkFile(basePath: string, filename: string): Promise<BulkDownloadFile> {
+export async function parseBulkFile(
+  basePath: string,
+  filename: string,
+  logger?: Logger,
+): Promise<BulkDownloadFile> {
+  logger?.debug('bulk.reader.parse_file', { basePath, filename });
   const filePath = join(basePath, filename);
   const content = await readFile(filePath, 'utf-8');
   const json: unknown = JSON.parse(content);
@@ -93,8 +103,12 @@ export interface BulkFileResult {
  * console.log(allData.length); // 30
  * ```
  */
-export async function readAllBulkFiles(basePath: string): Promise<readonly BulkFileResult[]> {
-  const files = await discoverBulkFiles(basePath);
+export async function readAllBulkFiles(
+  basePath: string,
+  logger?: Logger,
+): Promise<readonly BulkFileResult[]> {
+  logger?.info('bulk.reader.read_all_files', { basePath });
+  const files = await discoverBulkFiles(basePath, logger);
   const results: BulkFileResult[] = [];
 
   for (const filename of files) {
@@ -102,7 +116,7 @@ export async function readAllBulkFiles(basePath: string): Promise<readonly BulkF
     if (!subjectPhase) {
       continue;
     }
-    const data = await parseBulkFile(basePath, filename);
+    const data = await parseBulkFile(basePath, filename, logger);
     results.push({ filename, subjectPhase, data });
   }
 

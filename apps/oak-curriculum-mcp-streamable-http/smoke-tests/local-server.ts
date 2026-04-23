@@ -18,15 +18,17 @@ import {
   isValidAddress,
   buildInvalidAddressMessage,
 } from './server-lifecycle.js';
+import { createApp } from '../src/application.js';
+import { WIDGET_HTML_CONTENT } from '../src/generated/widget-html-content.js';
+import {
+  createHttpObservability,
+  describeHttpObservabilityError,
+} from '../src/observability/http-observability.js';
+import { loadRuntimeConfig } from '../src/runtime-config.js';
 
 export { getServerPort, closeSmokeServer } from './server-lifecycle.js';
 
 async function createSmokeApp() {
-  const { createApp } = await import('../src/application.js');
-  const { loadRuntimeConfig } = await import('../src/runtime-config.js');
-  const { createHttpObservability, describeHttpObservabilityError } =
-    await import('../src/observability/http-observability.js');
-  const { WIDGET_HTML_CONTENT } = await import('../src/generated/widget-html-content.js');
   const configResult = loadRuntimeConfig({ processEnv: process.env, startDir: process.cwd() });
   if (!configResult.ok) {
     throw new Error(`Failed to load runtime config: ${configResult.error.message}`);

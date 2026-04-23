@@ -1,6 +1,11 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types';
 import { z } from 'zod';
-import { formatError, formatToolResponse, toErrorMessage } from '../universal-tool-shared.js';
+import {
+  formatError,
+  formatToolResponse,
+  resolveUniversalToolLogger,
+  toErrorMessage,
+} from '../universal-tool-shared.js';
 import type { UniversalToolExecutorDependencies } from '../universal-tool-shared.js';
 import { McpParameterError, type ToolExecutionResult } from '../execute-tool-call.js';
 import { err } from '@oaknational/result';
@@ -95,6 +100,12 @@ export async function runFetchTool(
   args: FetchArgs,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
+  const logger = resolveUniversalToolLogger(deps);
+  logger.debug('mcp-tool.fetch.execute', {
+    toolName: 'fetch',
+    id: args.id,
+  });
+
   const type = detectTypeFromId(args.id);
   if (!type) {
     return formatError(`Unsupported id prefix in ${args.id}`);
@@ -106,38 +117,7 @@ export async function runFetchTool(
     return formatError(toErrorMessage(result.error));
   }
 
-  // Extract context from the API response and pass to canonical URL generation.
-  // Units and subjects require context (sequenceSlug derived from subjectSlug/phaseSlug,
-  // keyStages for subjects) to generate the correct canonical URL.
-  let context: ResponseContext;
-  try {
-    context = extractContextFromResponse(result.value.data, type);
-  } catch {
-    context = {};
-  }
-
-  let oakUrl: string | null;
-  try {
-    oakUrl = generateOakUrlWithContext(type, args.id, context);
-  } catch {
-    oakUrl = null;
-  }
-  const summary = buildFetchSummary(type, slug, oakUrl);
-
-  return formatToolResponse({
-    summary,
-    data: {
-      id: args.id,
-      type,
-      oakUrl,
-      httpStatus: result.value.status,
-      data: result.value.data,
-    },
-    status: 'success',
-    timestamp: Date.now(),
-    toolName: 'fetch',
-    annotationsTitle: 'Fetch Curriculum Resource',
-  });
+  return formatFetchSuccessResponse(args.id, type, slug, result.value.status, result.value.data);
 }
 
 /**
@@ -147,6 +127,53 @@ function buildFetchSummary(type: ContentType, slug: string, oakUrl: string | nul
   const typeName = type.charAt(0).toUpperCase() + type.slice(1);
   const urlPart = oakUrl ? ` (${oakUrl})` : '';
   return `Fetched ${typeName}: ${slug}${urlPart}`;
+}
+
+function formatFetchSuccessResponse(
+  id: string,
+  type: ContentType,
+  slug: string,
+  httpStatus: number,
+  data: unknown,
+): CallToolResult {
+  const oakUrl = deriveFetchOakUrl(id, type, data);
+  const summary = buildFetchSummary(type, slug, oakUrl);
+
+  return formatToolResponse({
+    summary,
+    data: {
+      id,
+      type,
+      oakUrl,
+      httpStatus,
+      data,
+    },
+    status: 'success',
+    timestamp: Date.now(),
+    toolName: 'fetch',
+    annotationsTitle: 'Fetch Curriculum Resource',
+  });
+}
+
+/**
+ * Derives an Oak URL from a fetch response when enough context is present.
+ */
+function deriveFetchOakUrl(id: string, type: ContentType, data: unknown): string | null {
+  const context = extractFetchResponseContext(data, type);
+
+  try {
+    return generateOakUrlWithContext(type, id, context);
+  } catch {
+    return null;
+  }
+}
+
+function extractFetchResponseContext(data: unknown, type: ContentType): ResponseContext {
+  try {
+    return extractContextFromResponse(data, type);
+  } catch {
+    return {};
+  }
 }
 
 function detectTypeFromId(id: string): ContentType | undefined {

@@ -231,6 +231,16 @@ The plugin runs only in the Vercel Build Command — never in PR-check CI,
 which remains network-free per ADR-161. Operational flow + log-grep
 patterns: [sentry-deployment-runbook.md § 3b](../../../docs/operations/sentry-deployment-runbook.md).
 
+**Repo-owned pre-preview gate:** `pnpm -F @oaknational/oak-curriculum-mcp-streamable-http build:sentry:configured`
+loads env through the canonical resolution pipeline
+(`repo .env` < `repo .env.local` < `app .env` < `app .env.local` <
+`process.env`), seeds representative preview-style Vercel env when those
+fields are absent, runs `esbuild.config.ts`, and fails unless the build logs
+show `[esbuild.config] Sentry plugin enabled:` while omitting
+`registration_disabled_by_policy` and `auth_token_missing`. This is an app-
+local proof that the configured esbuild-plugin path still wires correctly; it
+is not PR-check/CI coverage and it is not deployment or preview proof.
+
 Historical note: the L-7 lane (2026-04-20) used a bespoke four-file
 TypeScript orchestrator (`build-scripts/sentry-release-and-deploy-cli.ts`
 and friends) wrapping `sentry-cli` invocations, plus a

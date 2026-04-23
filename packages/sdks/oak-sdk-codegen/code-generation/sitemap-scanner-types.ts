@@ -44,7 +44,10 @@ export interface SitemapCategorisation {
   /** Unique lesson slugs from all contexts (direct, programme, beta) */
   readonly lessonSlugs: readonly string[];
 
-  /** Unique programme slugs from standard `/teachers/programmes/` routes */
+  /**
+   * Unique programme slugs whose canonical listing page
+   * `/teachers/programmes/{slug}/units` exists in the sitemap.
+   */
   readonly programmeSlugs: readonly string[];
 
   /** Unique curriculum sequence slugs (e.g. maths-primary, science-secondary-aqa) */

@@ -11,13 +11,41 @@
  */
 
 import type { Client, estypes } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type { AdminError } from '../types/admin-types.js';
 import type { AliasSwap, AliasTargetInfo, AliasTargetMap } from '../types/index-lifecycle-types.js';
 import type { SearchIndexKind, SearchIndexTarget } from '../internal/index.js';
-import { BASE_INDEX_NAMES, TARGET_SUFFIXES, resolveAliasName } from '../internal/index.js';
+import { BASE_INDEX_NAMES, resolveAliasName } from '../internal/index.js';
 import { typeSafeKeys } from '@oaknational/type-helpers';
 import { isNotFoundError } from './es-error-guards.js';
+export { deleteVersionedIndex, listVersionedIndexes } from './versioned-index-operations.js';
+
+function buildAliasUpdateActions(
+  swaps: readonly AliasSwap[],
+): (
+  | { remove: { index: string; alias: string; must_exist: true } }
+  | { add: { index: string; alias: string } }
+  | { remove_index: { index: string } }
+)[] {
+  const actions: (
+    | { remove: { index: string; alias: string; must_exist: true } }
+    | { add: { index: string; alias: string } }
+    | { remove_index: { index: string } }
+  )[] = [];
+
+  for (const { fromIndex, toIndex, alias, bareIndexToRemove } of swaps) {
+    if (bareIndexToRemove !== undefined) {
+      actions.push({ remove_index: { index: bareIndexToRemove } });
+    }
+    if (fromIndex !== null) {
+      actions.push({ remove: { index: fromIndex, alias, must_exist: true } });
+    }
+    actions.push({ add: { index: toIndex, alias } });
+  }
+
+  return actions;
+}
 
 /**
  * Atomically swap aliases for one or more indexes in a single ES request.
@@ -41,26 +69,12 @@ import { isNotFoundError } from './es-error-guards.js';
 export async function atomicAliasSwap(
   client: Client,
   swaps: readonly AliasSwap[],
+  logger?: Logger,
 ): Promise<Result<void, AdminError>> {
-  const actions: (
-    | { remove: { index: string; alias: string; must_exist: true } }
-    | { add: { index: string; alias: string } }
-    | { remove_index: { index: string } }
-  )[] = [];
-
-  for (const { fromIndex, toIndex, alias, bareIndexToRemove } of swaps) {
-    if (bareIndexToRemove !== undefined) {
-      actions.push({ remove_index: { index: bareIndexToRemove } });
-    }
-    if (fromIndex !== null) {
-      actions.push({ remove: { index: fromIndex, alias, must_exist: true } });
-    }
-    actions.push({ add: { index: toIndex, alias } });
-  }
-
+  logger?.info('Swapping search aliases', { swapCount: swaps.length });
   try {
     const response: estypes.AcknowledgedResponseBase = await client.indices.updateAliases({
-      actions,
+      actions: buildAliasUpdateActions(swaps),
     });
     if ('errors' in response && response.errors === true) {
       return err({
@@ -92,7 +106,9 @@ export async function atomicAliasSwap(
 export async function resolveCurrentAliasTargets(
   client: Client,
   target: SearchIndexTarget,
+  logger?: Logger,
 ): Promise<Result<AliasTargetMap, AdminError>> {
+  logger?.debug('Resolving current alias targets', { target });
   try {
     const entries = await resolveAllAliases(client, target);
     return ok(entries);
@@ -184,67 +200,5 @@ async function resolvesToConcreteIndex(client: Client, name: string): Promise<bo
       return false;
     }
     throw error;
-  }
-}
-
-/**
- * List all versioned indexes matching a base name and target.
- *
- * Filters by exact target suffix to prevent sandbox/primary interference
- * (Wilma finding #5). For primary, matches `oak_lessons_v*` but NOT
- * `oak_lessons_sandbox_v*`. For sandbox, matches `oak_lessons_sandbox_v*`.
- *
- * Uses `indices.get` with a wildcard pattern. On ES Serverless,
- * `allow_no_indices` defaults to `true`, so a no-match returns an
- * empty object rather than a 404 — the 404 catch is retained as a
- * safety net for non-default ES configurations (ES-1). The response
- * includes full index metadata; a lighter API like `resolveIndex`
- * could reduce payload size but is deferred given the small generation
- * count (ES-2).
- *
- * @param client - Elasticsearch client
- * @param baseName - Base index name (e.g. `'oak_lessons'`)
- * @param target - Index target (`'primary'` or `'sandbox'`)
- * @returns Sorted array of matching versioned index names
- */
-export async function listVersionedIndexes(
-  client: Client,
-  baseName: string,
-  target: SearchIndexTarget,
-): Promise<Result<readonly string[], AdminError>> {
-  const prefix = `${baseName}${TARGET_SUFFIXES[target]}_v`;
-
-  try {
-    const response = await client.indices.get({ index: `${prefix}*` });
-    return ok(typeSafeKeys(response).sort());
-  } catch (error: unknown) {
-    if (isNotFoundError(error)) {
-      return ok([]);
-    }
-    const message = error instanceof Error ? error.message : String(error);
-    return err({ type: 'es_error', message: `Failed to list versioned indexes: ${message}` });
-  }
-}
-
-/**
- * Delete a single versioned index. Treats 404 as success (index already gone).
- *
- * @param client - Elasticsearch client
- * @param indexName - The versioned index name to delete
- * @returns `ok` on success (including 404), `err` for other failures
- */
-export async function deleteVersionedIndex(
-  client: Client,
-  indexName: string,
-): Promise<Result<void, AdminError>> {
-  try {
-    await client.indices.delete({ index: indexName });
-    return ok(undefined);
-  } catch (error: unknown) {
-    if (isNotFoundError(error)) {
-      return ok(undefined);
-    }
-    const message = error instanceof Error ? error.message : String(error);
-    return err({ type: 'es_error', message: `Failed to delete index ${indexName}: ${message}` });
   }
 }

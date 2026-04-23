@@ -96,6 +96,13 @@ export async function createIngestHarness(options: IngestHarnessOptions): Promis
   const indexes = options.indexes ?? [];
   const es = resolveEsTransport(options.es, options.esClient);
   const granularity = options.granularity ?? { kind: 'subject-keystage' };
+  logger.info('Creating ingest harness', {
+    target,
+    granularity: granularity.kind,
+    subjectCount: subjects.length,
+    keyStageCount: keyStages.length,
+    indexCount: indexes.length,
+  });
 
   const context: BatchIngestionContext = {
     client,

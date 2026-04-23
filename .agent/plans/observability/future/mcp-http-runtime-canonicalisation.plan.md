@@ -4,16 +4,17 @@ status: strategic-brief
 overview: >
   Separate plan for the broader runtime simplification that the
   deploy-boundary repair deliberately does not attempt. Once the repaired
-  preview is stable and Sentry is verified, this plan revisits the wider
-  canonical Vercel/Express shape for the HTTP MCP workspace: deploy boundary,
+  repo-owned follow-through is complete and the later owner-directed
+  preview is stable, this plan revisits the wider canonical
+  Vercel/Express shape for the HTTP MCP workspace: deploy boundary,
   local runner, Sentry init ownership, listener/error handling, and
   artefact-set rationalisation.
 depends_on:
   - "../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md"
 promotion_trigger: >
-  The deploy-boundary repair lands, the preview boots cleanly with Sentry
-  evidence, and the owner wants runtime simplification rather than further
-  operational repair.
+  The bounded repo-owned follow-through lands, the owner-directed
+  preview boots cleanly with Sentry evidence, and the owner wants
+  runtime simplification rather than further operational repair.
 ---
 
 # MCP HTTP Runtime Canonicalisation
@@ -72,9 +73,10 @@ This plan earns execution only if it can land all of the following:
 
 When this plan is promoted, it should start from:
 
-- the contract note and outcomes recorded in
+- the contract note and repo-owned follow-through outcomes recorded in
   [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md);
-- the real preview and Sentry evidence from the repaired branch;
+- the real preview and Sentry evidence gathered after the owner-
+  directed preview check on the repaired branch;
 - the reviewer findings already surfaced during the abandoned canonical-layout
   attempt;
 - any fresh Express 5 or `@sentry/node` primary-source evidence gathered after
@@ -89,6 +91,7 @@ When this plan is promoted, it should start from:
 
 ## Promotion Trigger
 
-Promote this plan only when the deploy-boundary repair is closed and there is
-owner appetite to simplify the runtime deliberately, rather than while the
-branch is still proving that the repaired service boots and emits correctly.
+Promote this plan only when the bounded repo-owned follow-through is
+closed and there is owner appetite to simplify the runtime
+deliberately, rather than while the branch is still proving that the
+repaired service boots and emits correctly.

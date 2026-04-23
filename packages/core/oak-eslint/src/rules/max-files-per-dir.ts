@@ -1,25 +1,102 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { minimatch } from 'minimatch';
-import type { Rule } from 'eslint';
+import type { TSESLint } from '@typescript-eslint/utils';
 
-function toPosix(p: string) {
-  return p.split(path.sep).join('/');
+export interface DirectoryInventory {
+  readonly directory: string;
+  readonly files: readonly string[];
 }
 
-/**
- * Type guard for string arrays.
- * An empty array is valid - it means no ignore patterns are configured.
- */
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === 'string');
+interface MaxFilesPerDirOptions {
+  readonly pattern?: string;
+  readonly maxFiles?: number;
+  readonly ignoreDirs?: readonly string[];
+  readonly inventories?: readonly DirectoryInventory[];
 }
 
-const rule: Rule.RuleModule = {
+interface MaxFilesPerDirViolation {
+  readonly dir: string;
+  readonly actual: number;
+  readonly pattern: string;
+  readonly max: number;
+}
+
+interface EvaluateMaxFilesPerDirInput {
+  readonly filePath: string;
+  readonly pattern: string;
+  readonly maxFiles: number;
+  readonly ignoreDirs: readonly string[];
+  readonly inventories: readonly DirectoryInventory[];
+}
+
+function toPosix(value: string): string {
+  return value.split(path.sep).join('/');
+}
+
+function normaliseDirectory(value: string): string {
+  const normalised = toPosix(value).replace(/\/+$/u, '');
+
+  return normalised === '' ? '.' : normalised;
+}
+
+function findDirectoryInventory(
+  directory: string,
+  inventories: readonly DirectoryInventory[],
+): DirectoryInventory | null {
+  for (const inventory of inventories) {
+    if (normaliseDirectory(inventory.directory) === directory) {
+      return inventory;
+    }
+  }
+
+  return null;
+}
+
+export function evaluateMaxFilesPerDir({
+  filePath,
+  pattern,
+  maxFiles,
+  ignoreDirs,
+  inventories,
+}: EvaluateMaxFilesPerDirInput): MaxFilesPerDirViolation | null {
+  const normalisedFilePath = toPosix(filePath);
+  const directory = normaliseDirectory(path.posix.dirname(normalisedFilePath));
+
+  if (ignoreDirs.some((glob) => minimatch(directory, glob, { dot: true }))) {
+    return null;
+  }
+
+  const inventory = findDirectoryInventory(directory, inventories);
+  if (!inventory) {
+    return null;
+  }
+
+  const matchedFiles = [...inventory.files]
+    .filter((name) => minimatch(name, pattern, { dot: true }))
+    .sort();
+
+  if (matchedFiles.length <= maxFiles) {
+    return null;
+  }
+
+  if (path.posix.basename(normalisedFilePath) !== matchedFiles[0]) {
+    return null;
+  }
+
+  return {
+    dir: directory,
+    actual: matchedFiles.length,
+    pattern,
+    max: maxFiles,
+  };
+}
+
+const maxFilesPerDirRule: TSESLint.RuleModule<'tooManyFiles', [MaxFilesPerDirOptions]> = {
   meta: {
     type: 'suggestion',
     docs: {
-      description: 'Enforce a maximum number of files in a directory (non-recursive).',
+      description:
+        'Enforce a maximum number of files in a directory from an explicit inventory (non-recursive).',
     },
     schema: [
       {
@@ -28,6 +105,18 @@ const rule: Rule.RuleModule = {
           pattern: { type: 'string' },
           maxFiles: { type: 'integer', minimum: 1 },
           ignoreDirs: { type: 'array', items: { type: 'string' } },
+          inventories: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                directory: { type: 'string' },
+                files: { type: 'array', items: { type: 'string' } },
+              },
+              required: ['directory', 'files'],
+              additionalProperties: false,
+            },
+          },
         },
         additionalProperties: false,
       },
@@ -37,77 +126,42 @@ const rule: Rule.RuleModule = {
         '{{dir}} contains {{actual}} files matching "{{pattern}}", exceeding max {{max}}.',
     },
   },
+  defaultOptions: [{}],
 
   create(context) {
-    const [{ pattern = '*', maxFiles = 8, ignoreDirs = [] }] = context.options;
-
-    if (typeof pattern !== 'string') {
-      throw new Error('pattern must be a string');
-    }
-    if (typeof maxFiles !== 'number') {
-      throw new Error('maxFiles must be a number');
-    }
-    if (!isStringArray(ignoreDirs)) {
-      throw new Error('ignoreDirs must be an array of strings');
-    }
-
-    // Prefer physical path when processors might change virtual filenames
+    const [{ pattern = '*', maxFiles = 8, ignoreDirs = [], inventories = [] }] = context.options;
     const filePath = context.physicalFilename ?? context.filename;
-    if (!filePath) return {};
-
-    const dirPath = path.dirname(filePath);
-    const cwd = context.cwd ?? process.cwd();
-    const relDir = toPosix(path.relative(cwd, dirPath)) || '.';
-
-    // Ignore configured directories (match against repo-relative dir path)
-    if (ignoreDirs.some((glob) => minimatch(relDir, glob, { dot: true }))) {
-      return {};
-    }
-
-    // Default ignores (always active unless overridden by logic, but here we just add them to user ignores if we wanted)
-    // For now, let's stick to the user provided ignoreDirs + standard ones if we want, or just rely on user config.
-    // The plan said defaults include node_modules etc.
-    const defaultIgnores = [
-      '**/node_modules/**',
-      '**/dist/**',
-      '**/build/**',
-      '**/coverage/**',
-      '**/.git/**',
-    ];
-
-    const allIgnores = [...defaultIgnores, ...ignoreDirs];
-    if (allIgnores.some((glob) => minimatch(relDir, glob, { dot: true }))) {
+    if (!filePath) {
       return {};
     }
 
     return {
       Program(node) {
-        let entries: fs.Dirent[];
-        try {
-          entries = fs.readdirSync(dirPath, { withFileTypes: true });
-        } catch {
-          // Virtual file or directory not on disk; ignore gracefully.
+        const violation = evaluateMaxFilesPerDir({
+          filePath,
+          pattern,
+          maxFiles,
+          ignoreDirs,
+          inventories,
+        });
+
+        if (!violation) {
           return;
         }
-
-        const files = entries.filter((e) => e.isFile()).map((e) => e.name);
-        const matched = files.filter((name) => minimatch(name, pattern, { dot: true })).sort();
-
-        const actual = matched.length;
-        if (actual <= maxFiles) return;
-
-        // Report once per directory: only the alphabetically-first matched file reports
-        const base = path.basename(filePath);
-        if (base !== matched[0]) return;
 
         context.report({
           node,
           messageId: 'tooManyFiles',
-          data: { dir: relDir, actual: String(actual), pattern, max: String(maxFiles) },
+          data: {
+            dir: violation.dir,
+            actual: String(violation.actual),
+            pattern: violation.pattern,
+            max: String(violation.max),
+          },
         });
       },
     };
   },
 };
 
-export default rule;
+export { maxFilesPerDirRule };

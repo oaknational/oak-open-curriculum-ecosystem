@@ -3,6 +3,7 @@
  */
 
 import type { Client } from '@elastic/elasticsearch';
+import type { Logger } from '@oaknational/logger';
 import { ok, err, type Result } from '@oaknational/result';
 import type { IndexMetaDoc } from '@oaknational/sdk-codegen/search';
 import { IndexMetaDocSchema } from '@oaknational/sdk-codegen/search';
@@ -43,7 +44,9 @@ function toMappingError(message: string, field?: string): AdminError {
  */
 export async function readIndexMeta(
   client: Client,
+  logger?: Logger,
 ): Promise<Result<IndexMetaDoc | null, AdminError>> {
+  logger?.debug('Reading search index metadata');
   try {
     const response = await client.get({
       index: INDEX_META_INDEX,
@@ -81,8 +84,13 @@ export async function readIndexMeta(
 export async function writeIndexMeta(
   client: Client,
   meta: IndexMetaDoc,
+  logger?: Logger,
 ): Promise<Result<void, AdminError>> {
-  const mappingResult = await ensureIndexMetaMappingContract(client, INDEX_META_INDEX);
+  logger?.info('Writing search index metadata', {
+    version: meta.version,
+    previousVersion: meta.previous_version,
+  });
+  const mappingResult = await ensureIndexMetaMappingContract(client, INDEX_META_INDEX, logger);
   if (!mappingResult.ok) {
     return mappingResult;
   }

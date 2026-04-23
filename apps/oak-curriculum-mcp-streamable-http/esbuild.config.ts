@@ -38,9 +38,8 @@
  * @packageDocumentation
  */
 
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { sentryEsbuildPlugin } from '@sentry/esbuild-plugin';
 import { build, type BuildOptions, type Plugin } from 'esbuild';
 import {
@@ -49,10 +48,14 @@ import {
   type ResolvedBuildTimeRelease,
 } from '@oaknational/build-metadata';
 import {
+  assertBuiltServerDefaultExport,
   assertNoEsbuildWarnings,
-  assertVercelDefaultExportFunction,
 } from './build-scripts/build-output-contract.js';
-import { createMcpEsbuildOptions } from './build-scripts/esbuild-config.js';
+import {
+  MCP_DEPLOY_ENTRY_POINTS,
+  MCP_SUPPORT_ENTRY_POINTS,
+  createMcpEsbuildOptions,
+} from './build-scripts/esbuild-config.js';
 import {
   createSentryBuildPlugin,
   type SentryBuildEnvironment,
@@ -66,10 +69,10 @@ const IDENTITY: SentryBuildPluginIdentity = {
   repoSlug: 'oaknational/oak-open-curriculum-ecosystem',
 };
 
-// Vercel + local build env crosses the boundary here. The
-// SentryBuildEnvironment cast is the documented composition-root seam
-// — every downstream consumer takes typed input.
-const env = process.env as unknown as SentryBuildEnvironment;
+// Vercel + local build env crosses the boundary here. `process.env`
+// already satisfies the typed build-environment surface, so the
+// composition root can stay assertion-free.
+const env: SentryBuildEnvironment = process.env;
 
 const intent = createSentryBuildPlugin(env, IDENTITY);
 
@@ -85,8 +88,9 @@ if (!intent.ok) {
   );
 }
 
-const baseOptions = createMcpEsbuildOptions();
-const outdir = baseOptions.outdir ?? 'dist';
+const supportBuildOptions = createMcpEsbuildOptions(MCP_SUPPORT_ENTRY_POINTS);
+const deployBuildOptions = createMcpEsbuildOptions(MCP_DEPLOY_ENTRY_POINTS);
+const outdir = deployBuildOptions.outdir ?? supportBuildOptions.outdir ?? 'dist';
 
 async function persistBuildInfo(release: ResolvedBuildTimeRelease): Promise<void> {
   const info = buildBuildInfo({
@@ -106,7 +110,7 @@ function buildPluginArray(inputs: SentryBuildPluginInputs): Plugin[] {
   // `@sentry/esbuild-plugin@5.x`; we narrow at this seam so the
   // composition root's `plugins` array stays `Plugin[]` and the rest
   // of esbuild's option typing carries through.
-  const plugin = sentryEsbuildPlugin({
+  const plugin: Plugin = sentryEsbuildPlugin({
     org: inputs.org,
     project: inputs.project,
     authToken: inputs.authToken,
@@ -124,20 +128,26 @@ function buildPluginArray(inputs: SentryBuildPluginInputs): Plugin[] {
       filesToDeleteAfterUpload: [...inputs.sourcemaps.filesToDeleteAfterUpload],
     },
     telemetry: inputs.telemetry,
-  }) as Plugin;
+  });
   return [plugin];
 }
 
 async function assertServerEntryContract(): Promise<void> {
-  const serverModule = await import(
-    `${pathToFileURL(path.join(outdir, 'server.js')).href}?contract=${Date.now()}`
-  );
-  assertVercelDefaultExportFunction(serverModule);
+  const serverBundleSource = await readFile(path.join(outdir, 'server.js'), 'utf8');
+  assertBuiltServerDefaultExport(serverBundleSource);
 }
 
 async function buildAndAssert(options: BuildOptions): Promise<void> {
   const result = await build(options);
   assertNoEsbuildWarnings(result.warnings);
+}
+
+async function buildSupportArtefacts(): Promise<void> {
+  await buildAndAssert(supportBuildOptions);
+}
+
+async function buildDeployArtefact(options: BuildOptions): Promise<void> {
+  await buildAndAssert(options);
   await assertServerEntryContract();
 }
 
@@ -147,7 +157,8 @@ switch (intent.value.kind) {
     // release (e.g. local dev without override pair). No release was
     // resolved → no build-info to persist; no plugin to wire.
     console.log(`[esbuild.config] Sentry plugin skipped: ${intent.value.reason}`);
-    await buildAndAssert(baseOptions);
+    await buildSupportArtefacts();
+    await buildDeployArtefact(deployBuildOptions);
     break;
   }
   case 'skipped': {
@@ -161,7 +172,8 @@ switch (intent.value.kind) {
         '(non-production build proceeding without release registration; ' +
         'set SENTRY_AUTH_TOKEN to enable upload).',
     );
-    await buildAndAssert(baseOptions);
+    await buildSupportArtefacts();
+    await buildDeployArtefact(deployBuildOptions);
     break;
   }
   case 'configured': {
@@ -170,7 +182,8 @@ switch (intent.value.kind) {
     console.log(
       `[esbuild.config] Sentry plugin enabled: release=${inputs.release.name} env=${inputs.release.deploy.env}`,
     );
-    await buildAndAssert({ ...baseOptions, plugins: buildPluginArray(inputs) });
+    await buildSupportArtefacts();
+    await buildDeployArtefact({ ...deployBuildOptions, plugins: buildPluginArray(inputs) });
     break;
   }
 }

@@ -167,12 +167,10 @@ export {
   typeSafeKeys,
   typeSafeValues,
   typeSafeEntries,
-  typeSafeFromEntries,
   typeSafeGet,
   typeSafeSet,
   typeSafeHas,
   typeSafeHasOwn,
-  typeSafeOwnKeys,
 } from './types/helpers/type-helpers.js';
 
 // ============================================================================

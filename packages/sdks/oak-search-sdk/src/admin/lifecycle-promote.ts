@@ -96,6 +96,7 @@ export async function promote(
   deps: AliasLifecycleDeps,
   version: string,
 ): Promise<Result<PromoteResult, AdminError>> {
+  deps.logger?.info('Starting search index promote', { version });
   const verified = await verifyAndResolvePrevious(deps, version);
   if (!verified.ok) {
     return verified;

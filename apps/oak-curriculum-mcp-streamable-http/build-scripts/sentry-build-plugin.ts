@@ -173,7 +173,7 @@ function resolveAuthTokenIntent(
         setCommits: { commit: release.gitSha, repo: identity.repoSlug },
         deploy: { env: release.environment },
       },
-      sourcemaps: { filesToDeleteAfterUpload: ['dist/**/*.js.map'] },
+      sourcemaps: { filesToDeleteAfterUpload: ['dist/server.js.map'] },
       telemetry: false,
     },
   });

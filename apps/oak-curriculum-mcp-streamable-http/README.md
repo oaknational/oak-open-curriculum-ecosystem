@@ -343,9 +343,6 @@ This application has comprehensive test coverage across three testing layers:
 
 - **Header Redaction E2E** (`e2e-tests/header-redaction.e2e.test.ts`): full request/response cycles with sensitive headers, OAuth scenarios
 - **Tool E2E** (`e2e-tests/`): MCP tool invocation, resource listing, prompt registration, widget metadata
-- **Built-artifact startup proof** (`e2e-tests/built-artifact-import.e2e.test.ts`):
-  imports `dist/application.js` under plain Node to catch dev-loader versus
-  production-runtime resolver drift without making network requests
 
 ### Widget Tests (Playwright)
 
