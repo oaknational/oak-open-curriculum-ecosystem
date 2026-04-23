@@ -1,0 +1,10 @@
+# Commit attempt diagnostic log — TSV, append-only.
+# Columns: timestamp	outcome	elapsed_s	sha	mode	subject	note
+# outcome: ok|fail|truncated|interrupted
+# Append via: scripts/log-commit-attempt.sh OUTCOME ELAPSED SHA MODE "SUBJECT" [NOTE]
+2026-04-23T03:38:20Z	ok	34	6137c817	heredoc-fileout	docs(practice): correct napkin/distilled owner-gating framing in continuity	redirected stdout/stderr to /tmp/commit.log to dodge stream truncation
+2026-04-23T03:38:20Z	ok	35	74826914	heredoc-fileout	chore(scripts): add check-commit-message.sh helper	redirected stdout/stderr to /tmp/commit.log
+2026-04-23T03:38:20Z	truncated	33	-	heredoc-stream	docs(practice): correct napkin/distilled owner-gating framing in continuity	first attempt; Shell tool reported rc=1 after depcruise; output cut at depcruise
+2026-04-23T03:38:20Z	interrupted	47	-	heredoc-stream	docs(practice): correct napkin/distilled owner-gating framing in continuity	second attempt; user interrupted before completion
+2026-04-23T03:38:20Z	truncated	33	-	heredoc-stream	docs(practice): correct napkin/distilled owner-gating framing in continuity	third attempt; same depcruise->turbo truncation; led to file-redirect workaround
+2026-04-23T03:38:20Z	ok	-	68081856	heredoc-stream	docs(practice): observability-sentry-otel close — pippin unlanded probe + l-8 co	previous session 2026-04-22; landed after similar truncation episodes; reconstru

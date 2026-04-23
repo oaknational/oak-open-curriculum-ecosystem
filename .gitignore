@@ -61,6 +61,10 @@ packages/sdks/oak-sdk-codegen/reference/*.json
 .logs/*
 !.logs/.gitignore
 logs/
+# Operational diagnostic traces (see
+# .agent/memory/operational/diagnostics/README.md) — tracked so
+# patterns are visible across sessions and machines.
+!.agent/memory/operational/diagnostics/*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
