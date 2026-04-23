@@ -100,6 +100,51 @@ re-derive it. Felt like the right division of labour. No
 `experience/` file written — texture is too narrow, captured
 sufficiently here.
 
+### Same-session owner correction — napkin/distilled are NOT owner-gated; only `.agent/directives/` and `.agent/practice-core/` are
+
+The Step 6 finding I authored in
+[`repo-continuity.md § Deep consolidation status`](../operational/repo-continuity.md#deep-consolidation-status)
+framed napkin rotation as needing owner-conversation gating,
+citing the Session 7 lesson. The Re-fired falsifiabilities
+block extended the same framing to distilled refinement.
+**Owner correction (same session)**: napkin can always be
+rotated; distilled can always be processed; only
+`.agent/directives/` and `.agent/practice-core/` files require
+owner present. The Session 7 owner intervention was about the
+four **directive files** in Phase D scope (`principles.md`,
+`AGENT.md`, `testing-strategy.md`, `continuity-practice.md`)
+being executed without per-file conversation; the napkin
+rotation in the same session went cleanly under Merry without
+owner gating.
+
+**Shape of the misreading**: I treated *one named owner
+intervention* as establishing *a general owner-gating norm*
+across a wider category. The actual category boundary is
+substance density: directive files (the Practice's stated
+principles) and Practice Core (the Practice's design contract)
+are dense enough that destructive edits without owner present
+risk damaging substance the owner is the only authoritative
+reader for. Operational memory (napkin, distilled,
+repo-continuity, thread records, plan files outside Practice
+Core) is agent-gated by ordinary care — agents may rotate,
+refine, extend, restructure without owner conversation. The
+narrower phrasing the owner uses: *"only directives and
+Practice Core need me present"*.
+
+This is a same-session candidate observation worth watching for
+re-instances: **scope-overgeneralisation-of-owner-gating** —
+inferring "owner present required for X" from "owner present
+required for the narrower Y where X ⊃ Y". Not promoted to
+pending-graduations register at this point (1/3 instance count;
+captured here for the next consolidation walk to decide
+whether to track formally).
+
+Corrected this session in `repo-continuity.md § Deep
+consolidation status` (Step 6 finding + Re-fired
+falsifiabilities block). Next-session opener re-issued with
+the correction folded in (napkin and distilled now named as
+eligible-anytime work, not owner-gated).
+
 ---
 
 ## 2026-04-22 rotation — napkin rotated from Phase D file 1 of Session 7 (memory-feedback thread)

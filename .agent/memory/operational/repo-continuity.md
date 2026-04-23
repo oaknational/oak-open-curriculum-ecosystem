@@ -3,8 +3,11 @@
 **Last refreshed**: 2026-04-22 (`observability-sentry-otel` thread
 session close — Pippin / cursor-claude-opus-4-7 — UNLANDED probe;
 L-8 Correction subsection landed in the active plan; continuity
-surfaces refreshed). Earlier-today refresh: 2026-04-22 (Session 7
-CLOSE — owner-corrected restatement). Session 7 honest landed
+surfaces refreshed; Step 6 finding + Re-fired falsifiabilities
+block re-issued same session after owner correction —
+napkin/distilled are agent-gated, only `.agent/directives/` and
+`.agent/practice-core/` are owner-gated). Earlier-today refresh:
+2026-04-22 (Session 7 CLOSE — owner-corrected restatement). Session 7 honest landed
 state: Phase A + Phase D PARTIAL (napkin rotated + distilled
 compressed only; the four directive files in Phase D scope reset
 to HEAD per owner intervention when the agent unilaterally
@@ -603,14 +606,28 @@ gating mechanism per the Session 7 lesson). Findings (steps
    taxonomy-seam meta-check + the cross-plane path scan all
    pass-through (no new seam-review candidates; no cross-plane
    tagging required).
-6. **Step 6 (napkin rotation)**: STILL DUE; falsifiability re-fired
-   forward. Per the Session 7 owner-mediated lesson, rotation
-   needs owner-gating (the prior unilateral rotation attempt was
-   the surprise that authored
-   `installed-rule-recited-but-not-honoured-when-plan-momentum-dominates`).
-   Pippin defers rotation again; this session's commitment is
-   that the next consolidation walk MUST raise rotation as an
-   owner-conversation item before any other consolidation work.
+6. **Step 6 (napkin rotation)**: STILL DUE; deferred to a
+   deliberate consolidation pass (this session's user-defined
+   scope was unlanded-probe capture + L-8 Correction queueing,
+   not full consolidation). The Session 7 owner intervention
+   that authored
+   `installed-rule-recited-but-not-honoured-when-plan-momentum-dominates`
+   applied to the four **directive files** in Phase D scope
+   (`principles.md`, `AGENT.md`, `testing-strategy.md`,
+   `continuity-practice.md`), not to napkin or distilled — both
+   of which are agent-gated and may be rotated or refined
+   without owner present (the napkin rotation in the same
+   Session 7 went cleanly under Merry without owner gating).
+   **Owner-correction note (same session)**: an earlier draft
+   of this finding mis-framed napkin rotation as owner-gated by
+   over-generalising the Session 7 lesson; the user corrected —
+   *"napkin can always be rotated, distilled can always be
+   processed, it's only the directives and Pract Core files
+   that need me present"*. The deferral therefore persists
+   purely on the basis of session scope, not on owner-conversation
+   gating; the next agent walking a consolidation pass may
+   rotate the napkin and refine distilled per the documented
+   procedures without raising it as an owner-conversation item.
 7. **Step 7a (ADR/PDR candidates)**: two ADR candidates surfaced
    to the register below; zero PDR candidates. Both ADR
    candidates carry `status: pending` — promotion gated on (i)
@@ -662,12 +679,17 @@ session:
 
 ### Re-fired falsifiabilities carried forward
 
-- **Napkin rotation re-due**: napkin >500 lines persists; next
-  consolidation MUST raise napkin rotation as an owner-conversation
-  item (gated on owner present; non-blocking otherwise).
+- **Napkin rotation re-due**: napkin >500 lines persists;
+  eligible for the next consolidation walk (no owner-gating
+  required — napkin rotation is agent-gated per the
+  Session 7 / Pippin same-session correction; the agent walking
+  the next consolidation may rotate per the documented
+  procedure).
 - **Distilled refinement re-due**: still 272/275 in soft zone;
-  next consolidation runs distilled refinement OR distilled
-  crosses hard limit.
+  eligible for the next consolidation walk (same agent-gating
+  posture as napkin rotation); falsifiability — if not refined
+  at the next consolidation, distilled crosses hard limit and
+  is forced.
 
 The earlier-today walks are preserved below for audit (Session 8
 arc-close consolidation pass + Session 7 close walk — both
