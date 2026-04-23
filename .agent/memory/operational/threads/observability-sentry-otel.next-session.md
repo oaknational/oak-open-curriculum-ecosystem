@@ -1,9 +1,24 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Authored**: 2026-04-23 session close (Pippin / cursor /
-`claude-opus-4-7`) after the WI-7 lambda boot crash diagnosis +
+**Authored**: 2026-04-23 latest session close (Pippin / cursor /
+`claude-opus-4-7`) after a planning-only session that absorbed
+three reviewer rounds and rewrote
+`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md` from
+the previous session's nine-phase canonical refactor into a
+seven-phase scoped repair, with five legacy sections marked
+`(LEGACY — SUPERSEDED)` and a §Deferred Lanes register listing
+seven valuable improvements not landing in this branch. The plan
+status moved from `draft` → `execution-ready` after a final
+`architecture-reviewer-barney` `GO` verdict. **No code was
+written.** The previous session's authored block is retained
+below in `§Earlier landed substance still in force (2026-04-21
+/ 22 / 23)` for evidence parity; the binding next-session target
+is rewritten in §Target for the next session below.
+
+**Earlier authored** (carried for context): the original
+2026-04-23 authoring after the WI-7 lambda boot crash diagnosis +
 warnings-doctrine landing + `mcp-canonical-deploy-shape-and-
-warnings-doctrine.plan.md` authoring. WI-6 (Vercel preview probe
+warnings-doctrine.plan.md` initial authoring. WI-6 (Vercel preview probe
 for L-8 Correction) was attempted: the branch was pushed; the
 preview build went green with the `enabled`-arm Sentry plugin
 output; the runtime lambda crashed with `FUNCTION_INVOCATION_FAILED`
@@ -68,19 +83,24 @@ this commit); rewrite if a phase fails.
 | *`unattributed`* | *`unknown`* | *`unknown`* | *`unknown`* | `executor` | 2026-04-21 | 2026-04-21 |
 | `Samwise` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `migration-maintenance` | 2026-04-21 | 2026-04-21 |
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
-| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-and-doctrine-landing` | 2026-04-22 | 2026-04-23 |
+| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-and-plan-rewrite` | 2026-04-22 | 2026-04-23 |
 
 **Identity discipline**: per the additive-identity rule
 ([PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)),
 sessions joining this thread add an identity row; they do not
-overwrite or rename existing rows. The Pippin row's `role` was
-extended this session from `diagnosis-and-correction` to
-`diagnosis-correction-and-implementation` to reflect the WI 1-5
-implementation landing in `fb047f86` (additive within the same
-identity row, not a new row — same agent_name + platform +
-model). The thread-local attribution-gap decision recorded
-2026-04-21 still applies to pre-2026-04-22 history; concrete
-identity attribution discipline applies forward.
+overwrite or rename existing rows. The Pippin row's `role` has
+been extended additively across same-day sessions on the same
+identity (`agent_name + platform + model`): from
+`diagnosis-and-correction` → `diagnosis-correction-and-implementation`
+(WI 1-5 landing in `fb047f86`) → `diagnosis-correction-
+implementation-and-doctrine-landing` (WI-7 lambda crash diagnosis
+plus warnings-doctrine landing plus initial 9-phase plan authoring) →
+`diagnosis-correction-implementation-doctrine-landing-and-plan-
+rewrite` (this session's three-reviewer-round plan rewrite +
+Barney `GO` sign-off; no code written). The thread-local
+attribution-gap decision recorded 2026-04-21 still applies to
+pre-2026-04-22 history; concrete identity attribution discipline
+applies forward.
 
 ---
 
@@ -115,7 +135,122 @@ forward lane.
 
 ## Landing target (per PDR-026)
 
-### Outcome of the most recent session (2026-04-23 close — WI-7 lambda crash diagnosis + warnings-doctrine landing + new execution plan) — PARTIAL
+### Outcome of the most recent session (2026-04-23 latest — plan rewrite under three reviewer rounds; Barney GO; status promoted to EXECUTION-READY) — PLANNING-ONLY LANDED, BINDING IMPLEMENTATION TARGET DEFERRED-WITH-NAMED-CONSTRAINT
+
+Per [PDR-026 §Deferral-honesty discipline](../../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#deferral-honesty-discipline):
+
+- **Session opening landing target** (carried in from the prior
+  session record):
+  > *Phase 1 of `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`
+  > lands — `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`
+  > writes the esbuild metafile, gates on `result.warnings.length === 0`
+  > AND asserts the deployed entry's metafile contains a `default`
+  > export (Vercel Express adapter contract).*
+
+- **What attempted this session**: dispatched `assumptions-reviewer`
+  against the prior session's plan as Anchor 1; received `No-Go`
+  with seven blocking findings naming load-bearing contradictions
+  between the plan and the actual code surface. Re-drafted the
+  plan to `draft` status with all findings absorbed as §Open
+  Concerns. Dispatched `architecture-reviewer-barney`
+  (simplification-first lens) on the `draft` plan + the actual
+  code; received `ABANDON-REFACTOR` — much of the existing
+  scaffolding (`bootstrap-app.ts`, `server-runtime.ts`,
+  `--import @sentry/node/preload`, `src/index.ts` local runner)
+  has working semantics; the original 9-phase plan was about to
+  delete it on aesthetic grounds. Dispatched `assumptions-reviewer`
+  on Barney's `ABANDON-REFACTOR` report; received `AMEND` with
+  six amendments (architectural framing softened to a deploy-
+  boundary repair lane; Vercel adapter contract treated as
+  unproven; documentation blast radius understated; etc.).
+  Reconciled both reviewer outputs into a `§Reduced-Scope Rewrite
+  (BINDING CONTRACT)` section with seven phases (1: empirical
+  Vercel adapter probe; 2: deploy boundary hardening + build self-
+  assertion + doc update; 3: local continuity + tooling migration;
+  4: Sentry Uptime Monitoring lane unblock — decision record
+  only; 5: Vercel preview probe re-do; 6: ADR-163 §6/§7 amendment
+  for the reduced shape; 7: branch close + thread/napkin/repo-
+  continuity update) and a `§Deferred Lanes` section listing
+  seven valuable improvements not landing in this branch (DL-1
+  canonical Vercel Express layout; DL-2 single Sentry init seam;
+  DL-3 `bootstrap-app.ts` collapse; DL-4 `application` entry
+  retirement; DL-5 inversion-of-control split; DL-6 Sentry Uptime
+  Monitoring full implementation; DL-7 assumption-challenge
+  sequencing meta-lesson). Marked five legacy sections — `§Solution
+  Architecture`, `§Reviewer Scheduling`, `§Documentation
+  Propagation Commitment`, `§Testing Strategy`, `§Success Criteria`
+  — as `(LEGACY — SUPERSEDED)` with banners pointing to the new
+  binding contract. Dispatched `architecture-reviewer-barney` for
+  a final pass on the rewritten plan; received `AMEND` with three
+  blocking findings (stale operative metadata in legacy sections;
+  Phase 1 wording prejudging probe outcome; Phase 4 / Phase 5
+  sequencing contradiction). All three blockers resolved in-place.
+  Final Barney verdict: `GO`. Plan promoted from `draft` →
+  `execution-ready`.
+
+- **What landed this session**:
+  - **Plan rewrite to `execution-ready`**:
+    [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+    — `§Reduced-Scope Rewrite (BINDING CONTRACT)` (seven
+    phases), `§Deferred Lanes` (seven items), five `(LEGACY —
+    SUPERSEDED)` banners, `§Architecture-reviewer-barney final
+    sign-off (2026-04-23) — verdict: GO`. Preserves the full
+    reviewer trail (`§Open Concerns`, `§Barney's report`,
+    `§Assumptions-review of Barney's verdict`, `§Barney's final
+    sign-off`) for diff-legibility.
+  - **Napkin entry** §"2026-04-23 (latest, plan-rewrite session)
+    — three reviewer rounds collapsed an ambitious nine-phase
+    canonical refactor into a seven-phase scoped repair" with
+    pattern-instance candidates and the DL-7 doctrine candidate
+    written up.
+  - **Continuity surfaces refreshed**: this thread record (the
+    file you are reading); `repo-continuity.md § Active threads`
+    Pippin row plus `§Branch-primary lane state` plus `§Next safe
+    step` plus `§Deep consolidation status` plus `§Pending-
+    graduations register additions (2026-04-23 latest plan-rewrite session)`
+    with the DL-7 candidate.
+
+- **What did NOT land**: the binding implementation target —
+  Phase 1 build self-assertion in `esbuild.config.ts`. Per the
+  `§Reduced-Scope Rewrite (BINDING CONTRACT)`, this is now Phase
+  2's responsibility; Phase 1 of the new contract is an
+  **empirical Vercel adapter probe**, not the build self-assertion
+  itself. The implementation work for Phase 1 + Phase 2 remains
+  for the next session.
+
+- **Named constraint preventing implementation landing this
+  session**: design-correctness trade-off, not clock or budget.
+  Implementing the prior session's Phase 1 design as written would
+  have asserted a `default`-export contract on the deployed entry's
+  metafile, but the *semantic correctness* of that contract — what
+  `package.main` shape Vercel's Node serverless adapter actually
+  invokes at request time — was itself unproven (Fred + Betty
+  derived it from inherited framing rather than from Vercel docs
+  or an empirical probe; `assumptions-reviewer`'s No-Go pass
+  surfaced this as blocking finding #2). Implementing the gate
+  on an unproven contract would have produced a tautological
+  assertion (the build asserts the shape the agent guessed Vercel
+  wants, not the shape Vercel actually expects), giving false
+  confidence and re-instancing the
+  `acknowledged-warnings-deferred-to-the-stage-they-explode-in`
+  pattern at the gate-shape level. The session traded the
+  implementation landing for a correct-by-construction plan
+  rewrite that anchors Phase 2's gate on a Phase 1 empirical
+  probe. **Falsifiability**: a future agent can verify the trade-off
+  was load-bearing by checking (i) the new Phase 1 of the
+  binding contract is an empirical Vercel-adapter probe, not a
+  build-time gate; (ii) `assumptions-reviewer`'s second-round
+  audit on Barney's report explicitly cites *"the original Phase
+  1's metafile assertion would have asserted a default-export
+  contract whose semantic correctness is itself unproven"* in
+  amendment #2 (recorded in the plan body); (iii) Barney's
+  final `GO` verdict cites resolution of the Phase 1 contract-
+  neutrality blocker. If a less-careful Phase 1 had landed
+  instead, the future Vercel preview probe (now Phase 5) would
+  fail the same way the prior probe did and the session would
+  have bought false confidence at the cost of one more cycle.
+
+### Earlier landed substance still in force (2026-04-21 / 22 / 23 — UNCHANGED THIS SESSION)
 
 Per [PDR-026 §Deferral-honesty discipline](../../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#deferral-honesty-discipline):
 
@@ -191,7 +326,7 @@ Per [PDR-026 §Deferral-honesty discipline](../../../practice-core/decision-reco
   `pnpm check` baseline against `feat/otel_sentry_enhancements`
   HEAD.
 
-### Earlier landed substance still in force (2026-04-21 / 22 / 23)
+### Even-earlier landed substance still in force (2026-04-21 / 22)
 
 Carried unchanged from prior thread record refreshes; these are
 the standing baseline the new plan builds on top of:
@@ -285,24 +420,39 @@ the standing baseline the new plan builds on top of:
 
 ### Target for the next session
 
-> **Target**: Phase 1 of
+> **Target**: Phase 1 of the
 > [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-> lands — `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`
-> writes the esbuild metafile, gates on
-> `result.warnings.length === 0` (per the just-landed `no-
-> warning-toleration` rule), AND asserts that the deployed
-> entry point bundle exports `default` (Vercel Express adapter
-> contract). Both new gates fail the build today (the warnings
-> the doctrine names + the missing `default` export are
-> measurable on `feat/otel_sentry_enhancements` HEAD), so Phase
-> 1 is correctly RED on entry. Phase 2 (canonical layout
-> refactor) is a stretch goal for the same session if Phase 1
-> closes early — but Phase 1 is the binding landing target.
+> `§Reduced-Scope Rewrite (BINDING CONTRACT)` lands — an
+> **empirical Vercel adapter contract probe** that determines, by
+> reading current Vercel docs and running a disposable smoke
+> deploy, what `package.main` shape Vercel's Node serverless
+> adapter actually invokes at request time (default-export
+> Express app vs. handler function vs. something else). Phase 1
+> ends with a one-paragraph contract statement written into the
+> plan (not yet `src/server.ts`). Phase 2 (deploy boundary
+> hardening: add `src/server.ts` matching the Phase-1 contract +
+> wire `esbuild.config.ts` build self-assertion + update
+> `docs/deployment-architecture.md` and `README.md`) is the
+> stretch goal for the same session if Phase 1 closes early.
 
-The plan's nine phases close (in order) the WI-7 lambda crash,
-the WI-8 ADR amendment, the Sentry Uptime Monitoring lane
-unblock, and the release-readiness review. Read its §Next
-Session Entry Point subsection FIRST.
+The plan's seven phases (under the binding contract) close, in
+order: (1) Vercel adapter contract verification probe; (2)
+deploy boundary hardening + build self-assertion + doc update;
+(3) local continuity + tooling migration (retain
+`bootstrap-app.ts` / `server-runtime.ts` / `--import @sentry/
+node/preload`); (4) Sentry Uptime Monitoring lane unblock —
+**decision record only**, no monitor build-out in this branch;
+(5) Vercel preview probe re-do (re-attempts WI-6 + WI-7); (6)
+ADR-163 §6/§7 amendment for the reduced shape; (7) branch close
+plus thread/napkin/repo-continuity update plus DL-1..7 follow-up
+stubs filed. Read the plan's `§Why this plan looks the way it
+does (read this FIRST)` and `§Next Session Entry Point` and
+`§Reduced-Scope Rewrite (BINDING CONTRACT)` and `§Deferred
+Lanes` subsections FIRST. The legacy `§Solution Architecture`,
+`§Reviewer Scheduling`, `§Documentation Propagation
+Commitment`, `§Testing Strategy`, `§Success Criteria` sections
+are marked `(LEGACY — SUPERSEDED)`; treat them as evidence of
+the rewrite trail, not as instructions.
 
 Evidence to capture in the napkin or `repo-continuity.md` once
 landed:
@@ -332,21 +482,28 @@ landed:
 
 ## Session shape
 
-The next session opens against the new execution plan
-[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
-Its §Next Session Entry Point subsection enumerates the read
-order, the resume action (Phase 1 build self-assertion), and
-the three-anchor reviewer cadence (during planning / after
-each significant change / before session close) per phase.
+The next session opens against the
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+`§Why this plan looks the way it does (read this FIRST)`,
+`§Next Session Entry Point`, and `§Reduced-Scope Rewrite
+(BINDING CONTRACT)` subsections — in that order. The first
+substantive action is Phase 1 of the binding contract:
+**empirical Vercel adapter probe**, NOT writing code. Read the
+Vercel docs survey and run a disposable smoke deploy to
+determine the actual `package.main` contract; record the
+result as a one-paragraph contract statement in the plan body
+before any code lands. The three-anchor reviewer cadence per
+phase (during planning / after each significant change / before
+session close) is preserved from the original plan and applies
+to all seven phases.
 
-The §Session shape walk below is **retained for historical
-context** — it describes what Pippin's previous session
-expected to do (push → observe → verify → amend ADR). That
-walk was overtaken by the WI-7 lambda crash diagnosis: the
-push happened; the build went green; the runtime crashed; the
-reviewer convergence + new plan + warnings doctrine landed in
-its place. Treat the walk below as evidence of the inherited
-framing, not as instructions for the next session.
+The §Session shape walk below is **doubly superseded** —
+originally retained as historical context after the WI-7 lambda
+crash overtook the push → observe → verify → amend-ADR flow,
+and now superseded again by the plan rewrite which absorbs
+WI-6 and WI-7 into Phases 5 and the WI-8 ADR amendment into
+Phase 6. Treat the walk below as evidence of the inherited
+framing the plan rewrite corrected, not as instructions.
 
 **Pre-flight**:
 
@@ -501,9 +658,10 @@ fresh enough to act on cheaply.
 
 ## Standing decisions (owner-beats-plan invariant protects these)
 
-**New 2026-04-23 close (warnings + canonical Vercel layout)**:
+**Latest 2026-04-23 close (plan-rewrite session — supersedes the
+earlier-2026-04-23 canonical-Vercel-layout decision)**:
 
-- **Warnings are not deferrable, anywhere**: rule
+- **Warnings are not deferrable, anywhere** (UNCHANGED): rule
   [`.agent/rules/no-warning-toleration.md`](../../../rules/no-warning-toleration.md)
   binds every system the repo influences (build / lint /
   type-check / test / dependency graph / runtime / monitoring).
@@ -511,20 +669,39 @@ fresh enough to act on cheaply.
   build / quality-gate / monitoring config that emits warnings
   must escalate them to errors in the same commit, OR fix the
   root cause in the same commit. No "we'll fix it later".
-- **Canonical Vercel Express layout for HTTP MCP servers**:
-  three files — `src/server.ts` (default-exports the configured
-  Express app — Vercel adapter contract), `src/main.ts` (local
-  Node.js listener), `src/sentry-init.ts` (Sentry preload via
-  `--import`). The `bootstrap-app.ts` + `server-runtime.ts` +
-  combined `src/index.ts` shape is anti-pattern; Phase 2 of the
-  canonical-deploy-shape plan deletes them. Do NOT re-introduce
-  any of them.
-- **Build self-assertion is mandatory** for any deployable
-  workspace: esbuild metafile with a `default`-export contract
-  check on the deployed entry-point output, `result.warnings.
-  length > 0` → throw. Encoded in `esbuild.config.ts`. Phase 1
-  of the canonical-deploy-shape plan installs this for the MCP
-  HTTP workspace.
+- **Asymmetric deploy shape is the chosen design** (REPLACES
+  prior "canonical Vercel Express layout" decision): Vercel
+  uses a deploy entry whose contract is to be empirically
+  verified in Phase 1 of the binding contract; local Node uses
+  the existing `dist/index.js` runner stack
+  (`bootstrap-app.ts`, `server-runtime.ts`, combined
+  `src/index.ts`, `--import @sentry/node/preload`). Per
+  `architecture-reviewer-barney`'s `GO` verdict, the existing
+  scaffolding has working semantics and is not deletable on
+  aesthetic grounds. The previous "canonical layout — three
+  files; delete `bootstrap-app.ts` / `server-runtime.ts` /
+  combined `index.ts`" decision is now `Deferred Lane DL-1` in
+  the plan body; re-evaluation trigger named there.
+- **Build self-assertion remains mandatory** for any deployable
+  workspace, but the *gate shape* depends on what Phase 1's
+  empirical Vercel adapter probe proves: esbuild metafile
+  inspection with a contract check matching the proven shape
+  (whether that is `default` export, named handler export, or
+  another shape), AND `result.warnings.length > 0` → throw.
+  Encoded in `esbuild.config.ts`. Phase 2 of the binding
+  contract installs this for the MCP HTTP workspace; Phase 1
+  determines the contract that Phase 2's gate enforces. Do
+  NOT pre-empt the probe by asserting `default` export
+  unconditionally.
+- **The plan rewrite shape itself is now a standing
+  expectation**: when an architectural review's output
+  proposes design changes, dispatch `assumptions-reviewer`
+  on that output BEFORE absorbing it into a plan body. The
+  three-reviewer-rounds-collapse-an-ambitious-plan shape this
+  session demonstrates is too expensive to repeat; the cheap
+  countermeasure is the per-reviewer-output assumption-audit
+  gate. Recorded as `Deferred Lane DL-7` in the plan and as a
+  PDR-shape candidate in the §Pending-graduations register.
 - **Vendor-config passthrough discipline** (folded into ADR-163
   amendment in Phase 7): any vendor SDK config envvar bound to
   build-time behaviour MUST appear in `turbo.json`

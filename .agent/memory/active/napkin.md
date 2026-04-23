@@ -8,6 +8,109 @@ live in the register at
 
 ---
 
+## 2026-04-23 (latest, plan-rewrite session) — three reviewer rounds collapsed an ambitious nine-phase canonical refactor into a seven-phase scoped repair (Pippin / cursor / claude-opus-4-7)
+
+**Observation**: the session opened with the binding landing target
+*"Phase 1 of `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`
+lands — esbuild metafile + warnings-as-errors + `default`-export
+contract assertion in `esbuild.config.ts`"*. No code was written.
+Three reviewer rounds — `assumptions-reviewer` on the original plan
+(No-Go, 7 blocking findings), `architecture-reviewer-barney` on the
+re-drafted DRAFT plan (ABANDON-REFACTOR; simplification-first
+boundary mapping; 3-phase recommendation), `assumptions-reviewer`
+on Barney's report (AMEND, 6 amendments) — collapsed the nine
+canonical phases into a seven-phase scoped repair: keep the local
+runner stack (`bootstrap-app.ts`, `server-runtime.ts`, `--import
+@sentry/node/preload`), add `src/server.ts` with whatever shape an
+empirical Vercel adapter probe proves, defer the canonical `main.ts`
+/ `sentry-init.ts` rename and `bootstrap-app.ts` collapse to
+`§Deferred Lanes`. A final Barney pass returned `AMEND` once more
+(stale operative metadata in legacy sections; Phase 1 wording that
+prejudged its own probe outcome; Phase 4 / Phase 5 sequencing
+contradiction). All three blockers resolved in-place. Final Barney
+verdict: `GO`. Plan promoted from `draft` → `execution-ready`.
+
+**The original Phase 1 build-self-assertion gate would have
+asserted a `default`-export contract whose semantic correctness was
+itself unproven**. Implementing it as written would have produced
+not a real gate but a tautology — the build would assert the shape
+the agent guessed Vercel wants, not the shape Vercel actually
+expects from `package.main`. This is exactly the failure mode the
+new Phase 1 (empirical Vercel adapter probe — Vercel docs + a
+disposable smoke deploy) exists to prevent.
+
+### Pattern instances (cross-session)
+
+- **`inherited-framing-without-first-principles-check`** — instance
+  #8 candidate: the previous session's "Architecture-reviewer
+  convergence (Fred + Betty)" was treated as decision-complete on
+  the canonical layout proposal (`server.ts` / `main.ts` /
+  `sentry-init.ts`; delete `bootstrap-app.ts` / `server-runtime.ts`
+  / combined `index.ts`). Both reviewers operate from a
+  principles-first / long-term-cohesion lens, not a
+  simplification-first lens; their convergence is genuine within
+  that lens but does not exhaust the architectural space. Barney's
+  ABANDON-REFACTOR verdict surfaced the simplification-first lens
+  as a third perspective with materially different conclusions
+  (much of the existing scaffolding has working semantics that the
+  original plan was about to delete on aesthetic grounds). The
+  inherited framing — *"two reviewers agreed; therefore the design
+  is settled"* — survived authoring of the original 9-phase plan
+  and was caught by the assumptions-reviewer No-Go pass on the
+  *plan*, not on the design. Falsifiability: a future session that
+  receives a multi-reviewer-converged design and skips the
+  simplification-first / adversarial / assumption-audit lenses
+  earns instance #9.
+
+- **`acknowledged-warnings-deferred-to-the-stage-they-explode-in`**
+  — no new instance this session; the same pattern's first hard
+  instance from earlier today still stands as the doctrine's
+  enforcement target.
+
+### Doctrine candidate captured (DL-7 in plan, register entry below)
+
+The substantive sequencing meta-lesson: **assumption-challenge
+gates should fire on EACH reviewer output, not on the
+final-design output**. Today's run paid the cost of a full plan
+rewrite because `assumptions-reviewer` ran on the *plan body*
+twice and on the *design proposal* once, but did not run on the
+intermediate Fred + Betty convergence point — where the
+inherited-framing pattern was free to entrench. A formalised gate
+would dispatch `assumptions-reviewer` after every architectural
+review whose output proposes design changes, BEFORE that output
+is treated as planning input. This is recorded as `Deferred Lane
+DL-7` in the plan and as a pending PDR-shape candidate in
+`repo-continuity.md § Pending-graduations register additions
+(2026-04-23 latest plan-rewrite session)`. Trigger to graduate:
+≥1 second cross-session instance of an architectural review's
+output entering a plan body without an intervening assumption
+audit and producing a downstream rewrite.
+
+### Reviewer-cadence shape — three anchors collapsed to two-and-a-half
+
+The plan's three-anchor reviewer cadence (during planning / after
+significant change / before session close) held its design intent
+for the planning-anchor work this session. The "after significant
+change" and "before session close" anchors did not fire because no
+substantive code change happened — the session never crossed from
+planning into execution. The cadence held without strain; that's a
+small piece of evidence the per-phase-three-anchors design works
+for plan-rewrite sessions specifically (where only the
+planning-anchor specialists fire and the cadence devolves
+gracefully into a planning-only loop).
+
+### What this means operationally for the next session
+
+The plan is `EXECUTION-READY` with binding contract on Phase 1
+(Vercel adapter probe). The next session does NOT open by writing
+code; it opens by reading the plan's `§Reduced-Scope Rewrite →
+Phase 1` and running the empirical probe — Vercel docs survey
+plus a disposable smoke deploy to determine the precise
+`package.main` contract. Only Phase 2 (writing `src/server.ts`)
+is contract-aware; Phase 1's purpose is to make Phase 2 honest.
+
+---
+
 ## 2026-04-23 — warnings-are-not-deferrable codified + first hard instance (L-8 WI-7 lambda boot crash)
 
 **Observation**: deployment `dpl_71SfAcKiezKiXzmKMtpaUgVFxhWA` (commit

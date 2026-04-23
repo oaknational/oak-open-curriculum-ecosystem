@@ -231,7 +231,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-and-doctrine-landing / 2026-04-23 (latest session — WI-7 Vercel preview probe ATTEMPTED: branch pushed, build green with `enabled`-arm Sentry plugin output, lambda crashed with `FUNCTION_INVOCATION_FAILED` on every request; root cause established as Vercel Express adapter contract violation in `apps/oak-curriculum-mcp-streamable-http/src/index.ts`; two `import-is-undefined` esbuild build warnings named the violation at build time and were acknowledged-and-deferred — first hard cross-session instance of `acknowledged-warnings-deferred-to-the-stage-they-explode-in`. Architecture-reviewer convergence ran (Fred + Betty parallel; converged on every material finding). LANDED THIS COMMIT: `.agent/rules/no-warning-toleration.md` (full operational doctrine; alwaysApply), `.agent/directives/principles.md` §Code Quality bullet, `.agent/plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md` (nine phases; phase-aligned reviewer cadence at three anchors per phase; build-vs-buy attestation tables; Sentry Uptime Monitoring / Cron Monitors tool selection; small earlier edits in this session window: `turbo.json` `globalPassThroughEnv` + Sentry envvars; `.prettierignore` + `**/.widget-build/`). Phases 1-9 PENDING for next session — Phase 1 (build self-assertion: esbuild metafile + warnings-as-errors + `default`-export contract) is the next safe step) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-doctrine-landing-and-plan-rewrite / 2026-04-23 (latest plan-rewrite session — three reviewer rounds collapsed an ambitious nine-phase canonical refactor into a seven-phase scoped repair: `assumptions-reviewer` on the prior plan returned `No-Go` with 7 blocking findings; `architecture-reviewer-barney` on the redrafted DRAFT returned `ABANDON-REFACTOR` (simplification-first lens) — much existing scaffolding has working semantics and was about to be deleted on aesthetic grounds; `assumptions-reviewer` on Barney's report returned `AMEND` with 6 amendments. Reconciled into plan's `§Reduced-Scope Rewrite (BINDING CONTRACT)` (7 phases — 1: empirical Vercel adapter contract probe; 2: deploy boundary hardening + build self-assertion + doc update; 3: local continuity + tooling migration; 4: Sentry Uptime Monitoring lane unblock — DECISION RECORD ONLY; 5: Vercel preview probe re-do; 6: ADR-163 §6/§7 amendment; 7: branch close + thread/napkin/repo-continuity update) plus `§Deferred Lanes` (7 items DL-1..DL-7 inc. canonical Vercel Express layout, single Sentry init seam, `bootstrap-app.ts` collapse, `application` entry retirement, IoC split, Sentry Uptime Monitoring full implementation, assumption-challenge sequencing meta-lesson). 5 legacy sections marked `(LEGACY — SUPERSEDED)`. Final `architecture-reviewer-barney` pass: 3 AMEND blockers (stale operative metadata, Phase 1 wording prejudging probe, Phase 4 / Phase 5 sequencing contradiction) — all 3 resolved in-place — final verdict `GO`. Plan promoted from `draft` → `execution-ready`. NO CODE WRITTEN this session. Phase 1 implementation target from prior session DEFERRED with named design-correctness constraint: implementing the prior `default`-export gate would have asserted a contract whose semantic correctness was itself unproven, producing a tautological assertion and false confidence. Falsifiability recorded in thread record §Outcome) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -285,18 +285,29 @@ Vercel Express adapter contract violation
 default-export shape) named at build time by two
 acknowledged-and-deferred esbuild warnings.
 
-**Next session begins** at Phase 1 of
+**Next session begins** at Phase 1 of the
 [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-— build self-assertion (esbuild metafile, warnings-as-errors,
-`default`-export contract assertion). The plan absorbs the
-remaining L-8 Correction work-items (WI-7 Sentry UI
-verification → Phase 6; WI-8 ADR-163 §6/§7 amendment → Phase
-7) and unblocks the existing `synthetic-monitoring.plan.md`
-lane (Phase 5: Sentry Uptime Monitoring tool-selection
-recorded; basic 2xx-status probe is GA, response-body
-Verification is Sentry Early Adopter). Three-anchor reviewer
-cadence per phase (during planning, after each significant
-change, before session close).
+`§Reduced-Scope Rewrite (BINDING CONTRACT)` —
+**empirical Vercel adapter contract probe** (Vercel docs
+survey + disposable smoke deploy to determine the actual
+`package.main` contract Vercel's Node serverless adapter
+invokes at request time). Phase 2 (deploy boundary hardening
+— add `src/server.ts` matching the proven contract + esbuild
+metafile self-assertion + warnings-as-errors + update
+`docs/deployment-architecture.md` and `README.md`) lands only
+once Phase 1's contract is recorded in the plan body. The
+plan's seven phases close, in order: (1) probe; (2) deploy
+boundary hardening; (3) local continuity + tooling migration
+(retain existing `bootstrap-app.ts` / `server-runtime.ts` /
+`--import @sentry/node/preload` runner stack); (4) Sentry
+Uptime Monitoring lane unblock — **decision record only**, no
+monitor build-out in this branch; (5) Vercel preview probe
+re-do (re-attempts WI-6 + WI-7); (6) ADR-163 §6/§7 amendment
+for the reduced asymmetric shape; (7) branch close +
+thread/napkin/repo-continuity update + DL-1..7 follow-up
+stubs filed. Three-anchor reviewer cadence per phase (during
+planning, after each significant change, before session
+close). Status: `EXECUTION-READY` after Barney `GO` sign-off.
 
 ## Current session focus
 
@@ -679,60 +690,73 @@ Non-goals for next session:
 ## Next safe step
 
 **Resume the `observability-sentry-otel` thread at Phase 1 of
+the
 [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-— build self-assertion**. The 2026-04-23 WI-6 Vercel preview
-probe ran; the build went green; the runtime lambda crashed
-`FUNCTION_INVOCATION_FAILED` on every request. Root cause:
-`apps/oak-curriculum-mcp-streamable-http/src/index.ts` does
-not honour Vercel's documented Express adapter contract
-(no `default` export of the configured Express app). Two
-esbuild `import-is-undefined` warnings named the violation at
-build time and were acknowledged-and-deferred. This is the
-first hard cross-session instance of
-`acknowledged-warnings-deferred-to-the-stage-they-explode-in`
-and the trigger for the same-session warnings-doctrine landing
-([`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md)
+`§Reduced-Scope Rewrite (BINDING CONTRACT)` — empirical
+Vercel adapter contract probe**. The plan was rewritten this
+session under three reviewer rounds (`assumptions-reviewer` /
+`architecture-reviewer-barney` / `assumptions-reviewer` then
+final `architecture-reviewer-barney` for sign-off) and
+promoted from `draft` → `execution-ready`; status, contract,
+and reviewer trail are all in the plan body. Read the plan's
+`§Why this plan looks the way it does (read this FIRST)`,
+`§Next Session Entry Point`, and `§Reduced-Scope Rewrite
+(BINDING CONTRACT)` subsections in that order BEFORE doing
+anything else.
 
-+ `principles.md` §Code Quality bullet) and the new nine-phase
-plan above.
+**Phase 1 binding target** for the next session: an
+**empirical probe** — Vercel docs survey plus a disposable
+smoke deploy — determines what `package.main` shape Vercel's
+Node serverless adapter actually invokes at request time
+(default-export Express app vs. handler function vs. another
+shape). Phase 1 ends with a one-paragraph contract statement
+written into the plan body — NOT yet `src/server.ts`, NOT yet
+the build self-assertion gate. Phase 2 (deploy boundary
+hardening — add `src/server.ts` matching the proven contract
+plus wire `esbuild.config.ts` metafile self-assertion plus
+warnings-as-errors plus update `docs/deployment-architecture.md`
+and `README.md`) lands only once Phase 1's contract is
+recorded. Do NOT pre-empt the probe by asserting `default`
+export unconditionally — that was the prior plan's
+load-bearing failure mode and the reason for this session's
+plan rewrite.
 
-**Phase 1 binding target** for the next session:
-`apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`
-writes the esbuild metafile, gates on
-`result.warnings.length === 0`, AND asserts the `dist/server.js`
-output exports `default` (Vercel Express adapter contract).
-Phase 2 (canonical layout refactor — `server.ts` + `main.ts`
+**Reviewer cadence on resume** (preserved from the original
+plan; per owner directive 2026-04-23): each phase has three
+anchors — during planning, after each significant change,
+before session close. The legacy `§Reviewer Scheduling` table
+in the plan body is marked `(LEGACY — SUPERSEDED)`; the new
+binding cadence lives inside each phase under `§Reduced-Scope
+Rewrite (BINDING CONTRACT)`. No batching at the end. **DL-7
+amendment-candidate** captured this session: dispatch
+`assumptions-reviewer` on EACH architectural-review output
+that proposes design changes, BEFORE that output is treated
+as planning input — countermeasure to the
+inherited-framing-without-first-principles-check pattern that
+caused this session's full plan rewrite.
 
-+ `sentry-init.ts`; delete `bootstrap-app.ts` + `server-
-runtime.ts` + the combined `index.ts`) is a stretch goal.
-
-**Reviewer cadence on resume** (per owner directive
-2026-04-23): each phase has three anchors per phase — during
-planning, after each significant change, before session close.
-The plan's §Reviewer Scheduling table names the specialists
-(`assumptions-reviewer`, `code-reviewer`, `sentry-reviewer`,
-`type-reviewer`, `architecture-reviewer-fred`,
-`architecture-reviewer-betty`, `architecture-reviewer-wilma`,
-`docs-adr-reviewer`, `release-readiness-reviewer`) at each
-anchor for each phase. No batching at the end.
-
-The L-8 Correction WI 7-8 work-items are absorbed into Phases
-6-7 of the new plan (WI-7 Sentry UI verification rerun once
-the canonical layout lands; WI-8 ADR-163 §6/§7 amendment
-folds three lessons together — version-resolution boundary,
-vendor-config passthrough, entry-point boundary, plus the
-new warnings doctrine). The `synthetic-monitoring.plan.md`
-lane unblock is Phase 5 (records the Sentry Uptime Monitoring
-tool-selection; on-disk file name preserved this commit;
-rename to a Sentry-taxonomy-aligned name deferred to a separate
-documentation-housekeeping pass per the owner's correction
-that "synthetics is the wrong term in the Sentry world").
-Pre-flight: `SENTRY_AUTH_TOKEN` already set on Vercel
+The L-8 Correction WI 7-8 work-items are absorbed into the
+binding-contract Phases 5-6 of the rewritten plan (WI-7 Sentry
+UI verification re-attempted in Phase 5 Vercel preview probe
+re-do; WI-8 ADR-163 §6/§7 amendment in Phase 6 — for the
+**asymmetric** deploy shape Barney's `GO` ratifies, not the
+prior canonical-three-files shape). The
+`synthetic-monitoring.plan.md` lane unblock is Phase 4 of the
+binding contract — **decision record only** (records the
+Sentry Uptime Monitoring tool-selection in
+`synthetic-monitoring.plan.md` and removes its `blocked_on`
+entry); the actual monitor build-out is `Deferred Lane DL-6`
+and stays in `synthetic-monitoring.plan.md`'s scope, NOT this
+branch. The on-disk file name `synthetic-monitoring.plan.md`
+is preserved; rename to a Sentry-taxonomy-aligned name
+remains deferred to a separate documentation-housekeeping
+pass. Pre-flight: `SENTRY_AUTH_TOKEN` already set on Vercel
 `poc-oak-open-curriculum-mcp` (production / preview /
 development) per prior session, AND now passed through by
 TurboRepo via `globalPassThroughEnv` in `turbo.json` — the
-plugin reaches the build successfully, and the build is green;
-the failing surface is now strictly the runtime contract.
+plugin reaches the build successfully, and the build is
+green; the failing surface is now strictly the runtime
+contract that Phase 1's empirical probe will pin down.
 
 **Commit workflow tooling available** (refined 2026-04-23 by
 Pippin's second session into the canonical `commit` skill at
@@ -771,44 +795,53 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
-**Status (2026-04-23 Pippin latest session —
-`observability-sentry-otel` session-handoff closeout after WI-7
-Vercel preview probe RAN, lambda crashed `FUNCTION_INVOCATION_FAILED`,
-warnings doctrine landed, new nine-phase plan authored)**:
+**Status (2026-04-23 Pippin latest plan-rewrite session —
+`observability-sentry-otel` session-handoff closeout after a
+planning-only session that absorbed three reviewer rounds and
+rewrote the binding plan from `draft` → `execution-ready`)**:
 **not due — same-thread same-day continuation; deep
-consolidation walks already completed earlier today (Pippin's
-prior turn) and yesterday (2026-04-22 same-thread close);
-this session's substance was diagnosis (WI-7 lambda crash root
-cause established as Vercel Express adapter contract violation),
-doctrine landing
-([`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md)
-
-+ `principles.md` §Code Quality bullet + `.cursor/rules/no-
-warning-toleration.mdc`), execution-plan authoring
-([`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-nine phases with phase-aligned reviewer cadence at three
-anchors per phase + build-vs-buy attestation tables), and
-research input recording (Sentry Uptime Monitoring tool-
-selection for the existing `synthetic-monitoring.plan.md`
-lane). No consolidation trigger crossed the threshold today**
-(no pattern reached its 3rd cross-session instance — the
-`acknowledged-warnings-deferred-to-the-stage-they-explode-in`
-pattern recorded its first hard cross-session instance and is
-now the doctrine's first enforcement target, NOT a graduation
-event; the doctrine landing is a same-day artefact-side
-countermeasure to that named pattern; one new amendment-
-candidate captured below under §Pending-graduations register
-additions (2026-04-23 latest session)).
+consolidation walks already completed earlier today and
+yesterday; this session's substance was plan rewrite under
+three reviewer rounds (`assumptions-reviewer` on the prior
+plan returned `No-Go`; `architecture-reviewer-barney` on the
+DRAFT returned `ABANDON-REFACTOR`; `assumptions-reviewer` on
+Barney's report returned `AMEND`; final
+`architecture-reviewer-barney` returned `GO` after three in-
+place blocker resolutions). Plan promoted from `draft` →
+`execution-ready` with `§Reduced-Scope Rewrite (BINDING
+CONTRACT)` (7 phases) + `§Deferred Lanes` (7 items, DL-1..7).
+No new pattern reached its 3rd cross-session instance — the
+`inherited-framing-without-first-principles-check` pattern
+**candidate-instance #8** was captured (the prior session's
+Fred + Betty convergence treated as decision-complete on the
+canonical-layout proposal, then surfaced by Barney's
+simplification-first lens as missing a third architectural
+perspective); falsifiability for instance #9 named in the
+napkin entry. One PDR-shape candidate (DL-7 in the plan,
+register entry below) captured for the
+assumption-challenge-after-each-architectural-review-output
+gate.**
 
 Findings and pending-graduations register additions for today's
-latest session are appended at
-[§Pending-graduations register additions (2026-04-23 latest session)](#pending-graduations-register-additions-2026-04-23-latest-session)
+latest plan-rewrite session are appended at
+[§Pending-graduations register additions (2026-04-23 latest plan-rewrite session)](#pending-graduations-register-additions-2026-04-23-latest-plan-rewrite-session)
 below the existing 2026-04-22 + earlier 2026-04-23 walk
 records.
 
-### Pending-graduations register additions (2026-04-23 latest session)
+### Pending-graduations register additions (2026-04-23 latest plan-rewrite session)
 
-One amendment-candidate surfaced this session:
+One PDR-shape candidate surfaced this plan-rewrite session
+(captured as Deferred Lane DL-7 in the plan body and recorded
+here per the §Deep consolidation status §Pattern-extraction
+discipline):
+
+| captured-date | source-surface | graduation-target | trigger-condition | status |
+| --- | --- | --- | --- | --- |
+| 2026-04-23 (latest, plan-rewrite session) | [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md` §Deferred Lanes → DL-7](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) + [`napkin.md` § 2026-04-23 (latest, plan-rewrite session)](../active/napkin.md) — the cross-session pattern instance #8 candidate of `inherited-framing-without-first-principles-check` (Fred + Betty convergence treated as decision-complete; missed Barney's simplification-first lens until `assumptions-reviewer` No-Go pass on the plan body, by which time a full rewrite was needed) | PDR amendment to [PDR-015 (Reviewer Authority and Dispatch)](../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md) installing an **assumption-challenge gate per architectural-review output**: when an architectural review produces output that proposes design changes, dispatch `assumptions-reviewer` against that output BEFORE absorbing it into a plan body. Today the gate exists at the plan-body level (assumption audit on completed plans) but not at the architectural-review-output level (where inherited framing entrenches cheapest). | (i) ≥1 second cross-session instance of an architectural review's output entering a plan body without an intervening assumption audit and producing a downstream rewrite; OR (ii) explicit owner direction; AND (iii) the gate's marginal cost can be shown not to dominate the cost it averts (a cheap empirical check: count assumption-audit dispatches per architectural-review-output and compare to plan-rewrite-cost-incurred). | pending |
+
+### Pending-graduations register additions (2026-04-23 prior session — WI-7 lambda crash + warnings doctrine)
+
+One amendment-candidate surfaced in the prior 2026-04-23 session:
 
 | captured-date | source-surface | graduation-target | trigger-condition | status |
 | --- | --- | --- | --- | --- |
