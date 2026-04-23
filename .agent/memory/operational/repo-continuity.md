@@ -1,12 +1,16 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-22 (Session 7 CLOSE — owner-corrected
-restatement). Session 7 honest landed state: Phase A + Phase D
-PARTIAL (napkin rotated + distilled compressed only; the four
-directive files in Phase D scope reset to HEAD per owner intervention
-when the agent unilaterally executed owner-gated per-file disposition
-without conversation; only the `[adr-078]→[di]` link-label rename
-on `testing-strategy.md` survived as a narrow technical micro-fix)
+**Last refreshed**: 2026-04-22 (`observability-sentry-otel` thread
+session close — Pippin / cursor-claude-opus-4-7 — UNLANDED probe;
+L-8 Correction subsection landed in the active plan; continuity
+surfaces refreshed). Earlier-today refresh: 2026-04-22 (Session 7
+CLOSE — owner-corrected restatement). Session 7 honest landed
+state: Phase A + Phase D PARTIAL (napkin rotated + distilled
+compressed only; the four directive files in Phase D scope reset
+to HEAD per owner intervention when the agent unilaterally
+executed owner-gated per-file disposition without conversation;
+only the `[adr-078]→[di]` link-label rename on
+`testing-strategy.md` survived as a narrow technical micro-fix)
 
 - Phase E (PDR-012 amendment) + Phase G (practice-verification.md
   PDR-032 mention) + Phase C Batch 3 (4 outgoing files deleted +
@@ -71,7 +75,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | _unattributed_ / _unknown_ / _unknown_ / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21 (S4 Task 4.5 file migration; not substantive thread work); `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22 (S8 arc-close cross-reference fix only; no substantive thread work) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | _unattributed_ / _unknown_ / _unknown_ / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21 (S4 Task 4.5 file migration; not substantive thread work); `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22 (S8 arc-close cross-reference fix only; no substantive thread work); `cursor` / `claude-opus-4-7` / Pippin / diagnosis-and-correction / 2026-04-22 (Vercel probe attempted + UNLANDED; L-8 Correction subsection authored + landed in active plan; PR #87 description rewritten by owner direction) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -113,8 +117,15 @@ The `observability-sentry-otel` thread is branch-primary on
 totals, post-§L-8 forward path, active tracks, promotion watchlist)
 lives in
 [`threads/observability-sentry-otel.next-session.md § Lane state`](threads/observability-sentry-otel.next-session.md).
-§L-8 esbuild-native migration is re-planned and ready for
-execution; next session begins at WS1 RED.
+§L-8 WS1 + WS2 + WS3.1 LANDED-WITH-CORRECTION-PENDING in commit
+`f9d5b0d2` (2026-04-21 atomic landing) and the L-8 Correction
+subsection (2026-04-22 owner-directed) at the end of
+[`sentry-observability-maximisation-mcp.plan.md`](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md).
+Next session begins at L-8 Correction work-item 1 (canonical
+release-name resolver), proceeds through work-items 2–5
+(refactors, persistence, validation-script convergence), and
+ends at work-items 6–8 (probe, Sentry UI verify, ADR-163
+amendment).
 
 ## Current session focus
 
@@ -496,17 +507,29 @@ Non-goals for next session:
 
 ## Next safe step
 
-**Resume the `observability-sentry-otel` thread**. The
-eight-session staged doctrine-consolidation arc on the
-`memory-feedback` thread closed 2026-04-22 Session 8 (see
-§Current session focus above and the
-[Practice Core CHANGELOG 2026-04-22 Session 8 entry](../../practice-core/CHANGELOG.md)).
-The next session belongs to `observability-sentry-otel`; the
-named next step on that thread is the §L-8 Vercel acceptance
-probe (esbuild-native migration is re-planned and ready for
-execution; next session begins at WS1 RED). See
+**Resume the `observability-sentry-otel` thread — execute the
+L-8 Correction work-list, then re-run the Vercel acceptance
+probe**. The §L-8 atomic landing (`f9d5b0d2`) shipped esbuild-
+native build + `@sentry/esbuild-plugin` registration + L-7
+orchestrator deletion + ADR-163 §6/§7 HOW→WHAT amendment, but
+the 2026-04-22 Vercel preview probe (`dpl_8LJxuArqh68w4pon9MbfnriD5rre`)
+exited 1 with `[esbuild.config] Sentry build-plugin intent error: { kind: 'missing_app_version' }`.
+Owner-directed strategy + 8-item correction work-list now lives
+at the end of
+[`sentry-observability-maximisation-mcp.plan.md`](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
+under "L-8 Correction (2026-04-21) — Version source-of-truth
+and fail-policy". Two distinct errors to correct: (1) version-
+resolution drift (single source of truth; production = root
+`package.json`, preview = branch + short SHA, dev = short SHA;
+persist to `dist/build-info.json`); (2) fail-policy inversion
+(vendor config missing → warn; vital identity missing → throw).
+The probe at the end of the work-list is the acceptance gate.
+See
 [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md)
-for the full landing target and lane state.
+for the full landing target, session shape (numbered work-items
+1–8 mapped to the correction subsection), and updated pattern
+reminders (7th instance of `inherited-framing-without-first-principles-check`;
+2nd instance of `passive-guidance-loses-to-artefact-gravity`).
 
 **Three rehoming open items** await owner attention but do NOT
 block any thread (recorded as honest PDR-026 deferrals on
@@ -529,9 +552,132 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
-**Status (per owner-invoked walk after Session 8 handoff,
-2026-04-22 Merry / cursor / claude-opus-4-7)**: **completed
-this handoff — owner-invoked walk surfaced small genuine
+**Status (per user-invoked walk after `observability-sentry-otel`
+Pippin session close, 2026-04-22 Pippin / cursor / claude-opus-4-7)**:
+**completed this handoff — gate fired (multiple triggers); walk
+performed within the session's "no implementation work"
+constraint; no graduation actioned; pending-graduations register
+extended with two ADR candidates and two fresh pattern instance
+references**. Triggers that fired: (5) repeated surprises suggest
+new rule/pattern/ADR/governance — 7th instance of
+`inherited-framing-without-first-principles-check` + 2nd instance
+of `passive-guidance-loses-to-artefact-gravity` + 2 ADR-shaped
+substance items (version source-of-truth boundary discipline;
+build-time configuration fail-policy split); (4) napkin/distilled
+pressure persists — napkin now ~715 lines (was 618; +95 from
+this session's entry) >>500 trigger; distilled still 272/275 in
+soft zone; both deferred again with falsifiability re-fired
+forward (next consolidation opens with napkin still >500 if
+rotation not run; owner-invoked rotation conversation is the
+gating mechanism per the Session 7 lesson). Findings (steps
+1–10 walked):
+
+1. **Step 1 (docs current)**: L-8 Correction subsection landed
+   at the end of
+   [`sentry-observability-maximisation-mcp.plan.md`](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md);
+   PR #87 description rewritten; substance is plan-resident
+   (not ephemeral). ADR-163 §6/§7 boundary-discipline amendment
+   named as work-item 8 in the correction subsection (graduation
+   gated on implementation landing).
+2. **Step 2 (plans up to date)**: active Sentry plan reflects the
+   2026-04-22 owner-corrected status
+   (`LANDED-WITH-CORRECTION-PENDING`); WS2.1 bullet marked
+   `SUPERSEDED`; correction subsection is the binding next-step
+   reference.
+3. **Step 3 (ephemeral migration)**: no platform-memory migration
+   needed this session; napkin entry is the canonical capture
+   surface.
+4. **Step 4 (`.agent/experience/` audit)**: purposes (a)/(b)/(c)
+   — no new experience file written this session (texture
+   captured tersely in the napkin top entry, deemed too narrow
+   to warrant a separate file); audit otherwise pass-through (no
+   drift, no stranded technical content; cross-experience
+   emergent observation from the prior consolidation still
+   stands and is not re-walked here).
+5. **Step 5 (pattern extraction)**: two fresh instances captured
+   in the napkin top entry (7th `inherited-framing`, 2nd
+   `passive-guidance-loses-to-artefact-gravity`). Both pattern
+   files already exist; instance accumulation surfaced via
+   napkin reference and the thread record's §Pattern reminders
+   update. No new pattern file authored. Cross-session scan + the
+   taxonomy-seam meta-check + the cross-plane path scan all
+   pass-through (no new seam-review candidates; no cross-plane
+   tagging required).
+6. **Step 6 (napkin rotation)**: STILL DUE; falsifiability re-fired
+   forward. Per the Session 7 owner-mediated lesson, rotation
+   needs owner-gating (the prior unilateral rotation attempt was
+   the surprise that authored
+   `installed-rule-recited-but-not-honoured-when-plan-momentum-dominates`).
+   Pippin defers rotation again; this session's commitment is
+   that the next consolidation walk MUST raise rotation as an
+   owner-conversation item before any other consolidation work.
+7. **Step 7a (ADR/PDR candidates)**: two ADR candidates surfaced
+   to the register below; zero PDR candidates. Both ADR
+   candidates carry `status: pending` — promotion gated on (i)
+   L-8 Correction implementation landing successfully, (ii)
+   ≥1 subsequent session without contradiction, (iii) explicit
+   owner request.
+8. **Step 7b (graduation application)**: nothing stable + homed
+   enough to graduate this session. Distilled.md unchanged.
+9. **Step 7c (thread-register freshness audit — six checks)**:
+    1. Stale `last_session`: clean — `observability-sentry-otel`
+       row updated today; `memory-feedback` archived.
+    2. Orphan threads: clean.
+    3. Missing required identity fields: clean (Pippin row
+       carries all seven required fields; `session_id_prefix`
+       reads `unknown` per Cursor harness limitation, allowed by
+       schema).
+    4. Expired track cards: clean — only `tracks/README.md` is
+       present; no live cards to expire.
+    5. Duplicate identity rows: clean — Pippin and Merry share
+       platform+model but have distinct `agent_name`s,
+       intentionally split by role.
+    6. Active threads ↔ next-session record correspondence: clean
+       — `observability-sentry-otel.next-session.md` exists at
+       declared path.
+10. **Step 8 (Practice Core upstream refinement)**: no contradict /
+    extend / refine / supersede candidates surfaced this session
+    (the L-8 Correction substance lives in product/observability
+    space, not Practice Core space; two ADR candidates are
+    host-architectural, not PDR-shaped).
+11. **Step 9 (fitness)**: informational only per owner standing
+    decision (Session 7 close) — `pnpm practice:fitness
+    --strict-hard` exits-0 DoD requirement DROPPED. Not run this
+    session.
+12. **Step 10 (practice exchange)**: incoming/ does not exist;
+    outgoing/ contains only README.md (Phase C Batch 3 from
+    Session 7 already cleared the durable-substance migration).
+    Pass-through.
+
+### Pending-graduations register additions (this consolidation)
+
+Two new ADR candidates, both `status: pending`, both originating
+in the L-8 Correction subsection authored 2026-04-22 Pippin
+session:
+
+| captured-date | source-surface | graduation-target | trigger-condition | status |
+| --- | --- | --- | --- | --- |
+| 2026-04-22 | [`sentry-observability-maximisation-mcp.plan.md` § L-8 Correction](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md) | ADR amendment to ADR-163 §6/§7 OR new ADR on **build-time version source-of-truth boundary discipline** | (i) L-8 Correction implementation lands successfully (canonical resolver + persistence + refactors); (ii) ≥1 subsequent session without contradiction; (iii) explicit owner request to graduate. The L-8 Correction work-item 8 names the ADR amendment route as the default. | pending |
+| 2026-04-22 | [`sentry-observability-maximisation-mcp.plan.md` § L-8 Correction](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md) | New ADR on **build-time configuration fail-policy split (vendor-config-missing → warn; vital-identity-missing → throw)** OR amendment to whichever ADR governs Result-pattern usage at composition roots | (i) L-8 Correction implementation lands successfully (esbuild.config.ts branches on `IntentError.kind`); (ii) ≥1 subsequent session without contradiction; (iii) explicit owner request to graduate. The Result-pattern composition-root convention is the natural cross-reference home — locate before authoring. | pending |
+
+### Re-fired falsifiabilities carried forward
+
+- **Napkin rotation re-due**: napkin >500 lines persists; next
+  consolidation MUST raise napkin rotation as an owner-conversation
+  item (gated on owner present; non-blocking otherwise).
+- **Distilled refinement re-due**: still 272/275 in soft zone;
+  next consolidation runs distilled refinement OR distilled
+  crosses hard limit.
+
+The earlier-today walks are preserved below for audit (Session 8
+arc-close consolidation pass + Session 7 close walk — both
+landed earlier today).
+
+---
+
+**Earlier today — Session 8 arc-close `/jc-consolidate-docs` walk
+(preserved for audit)**:
+**completed this handoff — owner-invoked walk surfaced small genuine
 findings; nothing promoted; two emergent observations
 recorded in walk output without register entry**. Findings:
 (1) napkin rotation Due — 618 lines >500 trigger; mid-session

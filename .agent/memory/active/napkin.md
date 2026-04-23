@@ -8,6 +8,100 @@ live in the register at
 
 ---
 
+## 2026-04-22 (later) — `observability-sentry-otel` thread; L-8 Vercel probe failed; correction subsection landed (Pippin / cursor-claude-opus-4-7)
+
+**Session shape**: continuity + diagnosis only; no product-code
+implementation. The `f9d5b0d2` atomic landing from 2026-04-21 was
+pushed to Vercel preview (deployment
+`dpl_8LJxuArqh68w4pon9MbfnriD5rre`, branch
+`feat/otel_sentry_enhancements` @ `ff91cd1c`); build exit 1 with
+`[esbuild.config] Sentry build-plugin intent error: { kind: 'missing_app_version' }`
+despite the pre-flight `validate-root-application-version.mjs`
+successfully resolving `1.5.0` from disk. Diagnosis + corrected
+strategy + corrected fail-policy + 8-item work-list landed as a
+new "L-8 Correction (2026-04-21) — Version source-of-truth and
+fail-policy" subsection at the end of
+`.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`,
+plus owner-directed PR #87 title/description rewrite. All committed.
+
+### Surprise capture — fresh instances of two named patterns
+
+Two distinct planning-and-implementation errors compounded; both
+are fresh instances of patterns already named in the napkin /
+pattern library, lifting both above the previous instance counts.
+
+**Instance — `inherited-framing-without-first-principles-check`
+(7th)**: the L-7 prose strategy named root `package.json` as the
+single source of truth for release version, gated on
+`vercel-ignore-production-non-release-build.mjs`. WS2 in `f9d5b0d2`
+inherited a resolver shape from `@oaknational/sentry-node` whose
+release-name resolver reads `process.env` (`npm_package_version`
+or similar) — a *different boundary* than the validation script.
+The first-principles check would have asked: *"does the inherited
+resolver shape implement the documented single-source-of-truth
+boundary discipline?"* It did not. Drift surfaced only when Vercel
+produced the build error. Same shape as the previous six instances:
+inherited a vendor or sibling-module convention without re-checking
+that the convention preserves the documented invariant.
+
+**Instance — `passive-guidance-loses-to-artefact-gravity` (2nd)**:
+the standing decision in
+`threads/observability-sentry-otel.next-session.md § Session shape`
+explicitly anticipated this exact failure mode (the
+`[esbuild.config] Sentry build-plugin intent error: { kind: '<k>', … }`
+log-line was named verbatim in the table at point 4, with prose
+instructing the agent to "fix the env var; re-push"). The
+guardrail was prose-on-an-artefact, not enforcement. Artefact
+gravity (the WS2 implementation already shipped, the ADR amendment
+already landed, the atomic commit already cited) outweighed
+passive guidance. The build had to fail in Vercel before the
+fail-policy was corrected. This is the second clean instance and
+crosses the typical ≥2 bar for general-pattern consideration —
+already authored at `patterns/passive-guidance-loses-to-artefact-gravity.md`,
+so not a new pattern; just a fresh instance reinforcing the
+existing one.
+
+### ADR-shaped substance surfaced — captured to pending-graduations register, not graduated this session
+
+Two ADR-shaped pieces of substance are now stable (named once,
+documented in the L-8 Correction subsection, owner-ratified
+verbally) but not yet stable across sessions:
+
+1. **Version source-of-truth boundary discipline**: `production` =
+   root `package.json` (gated by Vercel `ignoreCommand`); `preview`
+   = derived from branch + short SHA; `development` = short git
+   SHA. Single resolver, single boundary read per context. Persist
+   to `dist/build-info.json` so the plugin and runtime SDK init
+   read the same string. ESLint or dependency-cruiser rule
+   forbidding `package.json` reads outside the canonical resolver.
+2. **Build-time configuration fail-policy split**: optional vendor
+   configuration (`SENTRY_AUTH_TOKEN`, `SENTRY_ORG`, etc.) → warn
+   and continue; vital identity (resolved release name, build
+   environment, commit SHA on production) → throw with helpful
+   error message. The `Result<…, IntentError>` shape is the right
+   primitive; the consumer must branch on the error `kind`, not
+   treat all variants as fatal.
+
+Both are queued as ADR candidates in the pending-graduations
+register below. Promotion gated on (a) the L-8 Correction
+implementation landing successfully so the substance is proven by
+implementation, and (b) ≥1 subsequent session without
+contradiction.
+
+### Subjective texture (brief; not promoted to `experience/`)
+
+Sequence felt clean: probe → fail → diagnose → owner provides
+strategy → codify in the right surface → no ambient drift. The
+owner-supplied strategy table (production/preview/development
+rows) was tighter than what the agent would have authored
+unprompted; the agent's job was to render that strategy as
+binding plan substance with falsifiable work items, not to
+re-derive it. Felt like the right division of labour. No
+`experience/` file written — texture is too narrow, captured
+sufficiently here.
+
+---
+
 ## 2026-04-22 rotation — napkin rotated from Phase D file 1 of Session 7 (memory-feedback thread)
 
 ### Rotation record
