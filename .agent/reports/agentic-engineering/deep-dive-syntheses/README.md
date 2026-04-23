@@ -13,6 +13,7 @@ theme graduates beyond index notes and source routing.
 
 - [governance-concepts-and-integration-report.md](./governance-concepts-and-integration-report.md)
 - [learning-loops-and-balancing-feedback-report.md](./learning-loops-and-balancing-feedback-report.md)
+- [graphify-repo-deep-dive-report.md](./graphify-repo-deep-dive-report.md)
 
 ## Promotion Rule
 

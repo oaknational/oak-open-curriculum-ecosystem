@@ -116,6 +116,22 @@ Concrete evidence from today's pass:
   fields, plan parent/sibling links, and command/read-order
   dependencies. Semantic or inferred edges come second, not first.
 
+## 2026-04-23 — Graphify fit: strongest as a derived reference architecture, weakest as an installer or self-feeding memory loop
+
+Today's local repo deep dive into `reference-local/repos/graphify`
+clarified two important things:
+
+- **Strong fit**: Graphify is a serious reference implementation for a
+  derived graph layer. The most valuable ideas are the graph report,
+  query/path/explain surfaces, evidence-labelled edges, Markdown
+  body-only caching, wiki export, and the split between cheap code-only
+  rebuilds and costlier semantic refresh.
+- **Risk boundary**: Graphify also includes a query-result memory loop
+  (`graphify-out/memory/` plus `save_query_result`) that lets derived
+  answers flow back into future graph builds. That is interesting, but
+  in this repo it would need explicit governance or exclusion at first,
+  otherwise derived memory can start teaching itself.
+
 ## 2026-04-23 — `observability-sentry-otel` L-8 Correction WI-1..5 landed locally; WI-5 scope-discipline correction by owner (Pippin / cursor-claude-opus-4-7)
 
 **Session shape**: executed the 8-item L-8 Correction work-list per

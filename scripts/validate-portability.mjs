@@ -89,6 +89,11 @@ function addIssue(message) {
 
 const CLERK_SKILL_PREFIX = 'clerk';
 const SUPERSEDED_COMMANDS = new Set(['experience']);
+// Files under .agent/commands/ that are shared workflow partials, not slash
+// commands. They are referenced by other commands but never invoked directly,
+// so they have no platform adapters by design. Each entry MUST self-declare
+// its partial status in its opening paragraph.
+const PARTIAL_COMMANDS = new Set(['ephemeral-to-permanent-homing']);
 
 // Sub-agent template names (without .md extension)
 const subagentTemplateNames = (await listFiles('.agent/sub-agents/templates', '.md')).map((f) =>
@@ -270,6 +275,7 @@ for (const ruleFile of claudeRules) {
 
 for (const cmdName of canonicalCommands) {
   if (SUPERSEDED_COMMANDS.has(cmdName)) continue;
+  if (PARTIAL_COMMANDS.has(cmdName)) continue;
 
   const hasAdapter =
     (await exists(`.cursor/commands/jc-${cmdName}.md`)) ||
