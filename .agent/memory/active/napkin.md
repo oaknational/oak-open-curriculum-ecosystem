@@ -1331,3 +1331,19 @@ The right plan shape is **clustered but bounded**:
 
 That is probably the "sweet spot" where extra effort is still buying high
 practical value rather than sophistication for its own sake.
+
+### Reviewer pressure test
+
+`code-reviewer` found four useful tightening points in the executable pilot
+plan:
+
+1. body-only cache invalidation cannot apply to frontmatter-derived metadata;
+2. optional `graph-core` extraction must still inherit the TypeScript/esbuild
+   standard for all new workspaces;
+3. the live pilot corpus needs a checked-in exact manifest, not just recursive
+   allow-list globs;
+4. the thin `agent-tools` wrapper needs explicit out-of-process E2E coverage,
+   not just in-workspace tests plus manual command runs.
+
+These are all "make the executable contract stricter" corrections, not changes
+to the pilot's intended scope.

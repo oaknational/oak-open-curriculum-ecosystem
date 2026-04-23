@@ -121,7 +121,9 @@ strategic slice rather than expanding this plan.
 
 ## Pilot Corpus
 
-The pilot corpus is explicit and intentionally high-signal:
+The pilot corpus is explicit and intentionally high-signal.
+
+The **authoring allow-list** for Phase 0 selection is:
 
 1. `README.md`
 2. `docs/README.md`
@@ -135,8 +137,14 @@ The pilot corpus is explicit and intentionally high-signal:
 10. `.agent/plans/agentic-engineering-enhancements/current/learning-loop-negative-feedback-tightening.plan.md`
 11. `.agent/plans/agentic-engineering-enhancements/future/graphify-and-graph-memory-exploration.plan.md`
 
-Anything outside this allow-list is out of scope for the pilot unless a later
-explicit follow-on expands the manifest.
+The **live pilot corpus** must then be frozen as a checked-in manifest with
+exact relative file paths, for example
+`packages/libs/practice-graph/src/corpus/pilot-corpus.manifest.ts`. Recursive
+globs are allowed only to help author the initial selection; they are **not**
+the runtime contract for this pilot.
+
+Anything outside the checked-in manifest is out of scope for the pilot unless
+a later explicit follow-on changes the manifest and corresponding RED fixtures.
 
 ---
 
@@ -152,7 +160,10 @@ Owns the Oak-specific behaviour:
 - markdown/frontmatter parsing
 - document typing and metadata extraction
 - explicit-edge extraction
-- body-aware cache strategy
+- split cache strategy:
+  - body-derived extraction may ignore frontmatter-only churn
+  - frontmatter-derived metadata/report invalidation must remain sensitive to
+    frontmatter changes
 - graph build orchestration
 - report generation
 
@@ -187,6 +198,13 @@ Forbidden contents:
 - repo-path heuristics
 - report prose generation
 - corpus manifests
+
+Standards if created:
+
+- TypeScript only
+- esbuild for `build`
+- README with explicit extraction rationale and non-goals
+- no deviation from the repo standard for new workspace build tooling
 
 **Creation gate**: only create `packages/core/graph-core/` if the extracted
 mechanism is both:
@@ -326,15 +344,19 @@ edge, and path expectations before implementation exists.
 **Acceptance Criteria**:
 
 1. A fixture corpus exists under the new graph workspace's tests directory.
-2. The fixture includes at least:
+2. A checked-in live pilot manifest with exact relative file paths exists.
+3. The live pilot manifest contains only files drawn from the authoring
+   allow-list and no recursive runtime globs.
+4. The fixture includes at least:
    - an ADR
    - a Practice Core file
    - a directive
    - the onboarding hub
    - an operational doc
-3. Expected node count, edge count, and at least three shortest-path examples
-   are asserted in tests.
-4. All new tests fail for the expected reason before implementation begins.
+5. Expected node count, edge count, and at least three shortest-path examples
+   are asserted in tests for both the fixture corpus and the checked-in live
+   pilot manifest.
+6. All new tests fail for the expected reason before implementation begins.
 
 #### Task 0.2: Prove the workspace split
 
@@ -344,8 +366,10 @@ edge, and path expectations before implementation exists.
 
 1. A written gate determines whether `packages/core/graph-core/` is created.
 2. The gate references ADR-154 directly.
-3. The decision is recorded before Phase 1 scaffolding starts.
-4. If the gate fails, the plan stays in the simpler single-library shape.
+3. If the workspace is created, the gate also confirms it will be TypeScript
+   only and use esbuild for `build`.
+4. The decision is recorded before Phase 1 scaffolding starts.
+5. If the gate fails, the plan stays in the simpler single-library shape.
 
 #### Task 0.3: Write command-surface contract tests
 
@@ -354,14 +378,17 @@ edge, and path expectations before implementation exists.
 **Acceptance Criteria**:
 
 1. Contract tests exist for `build`, `report`, `query`, and `path`.
-2. Output expectations are deterministic and fixture-backed.
-3. Tests fail before implementation.
+2. Out-of-process CLI tests exist for the thin `agent-tools` wrapper, covering
+   argument parsing, exit codes, and stdout/stderr contract.
+3. Output expectations are deterministic and fixture-backed.
+4. Tests fail before implementation.
 
 **Deterministic Validation**:
 
 ```bash
 pnpm --filter @oaknational/practice-graph test
 pnpm --filter @oaknational/agent-tools test
+pnpm --filter @oaknational/agent-tools test:e2e
 ```
 
 **Task Complete When**: the pilot corpus, workspace split, and command surface
@@ -392,8 +419,9 @@ are fixed enough that implementation cannot drift into larger scope silently.
 **Acceptance Criteria**:
 
 1. If created, the workspace contains only graph-mechanism concerns.
-2. If created, it has no markdown/frontmatter/filesystem dependencies.
-3. If not created, the no-extraction rationale is written explicitly.
+2. If created, it is TypeScript only and uses esbuild for `build`.
+3. If created, it has no markdown/frontmatter/filesystem dependencies.
+4. If not created, the no-extraction rationale is written explicitly.
 
 #### Task 1.3: Implement deterministic extraction and cache behaviour
 
@@ -403,10 +431,11 @@ are fixed enough that implementation cannot drift into larger scope silently.
 
 1. Every emitted edge is labelled as `EXTRACTED`.
 2. Only the in-scope edge kinds are emitted.
-3. Frontmatter-only changes do not invalidate markdown extraction cache
-   entries.
-4. Graph output writes only to `.agent/local/practice-graph/`.
-5. No writes occur to `.agent/memory/`, `.agent/reference/`, or plan/docs
+3. Body-derived extraction cache entries may ignore frontmatter-only changes.
+4. Frontmatter-derived metadata and report invalidation remain sensitive to
+   frontmatter changes.
+5. Graph output writes only to `.agent/local/practice-graph/`.
+6. No writes occur to `.agent/memory/`, `.agent/reference/`, or plan/docs
    surfaces.
 
 **Deterministic Validation**:
@@ -451,13 +480,16 @@ curated corpus and the workspace split remains within scope.
    `pnpm agent-tools:practice-graph`.
 3. The adapter layer in `agent-tools` stays thin and delegates to
    `practice-graph`.
-4. Query and path results are deterministic on fixture corpus and live pilot
-   corpus.
+4. Out-of-process E2E coverage exists for `practice-graph build`, `report`,
+   `query`, and `path` through the `agent-tools` command surface.
+5. Query and path results are deterministic on fixture corpus and checked-in
+   live pilot manifest.
 
 **Deterministic Validation**:
 
 ```bash
 pnpm --filter @oaknational/agent-tools test
+pnpm --filter @oaknational/agent-tools test:e2e
 pnpm agent-tools:practice-graph build
 pnpm agent-tools:practice-graph report
 pnpm agent-tools:practice-graph path --from "README.md" --to ".agent/practice-core/practice.md"
@@ -556,7 +588,7 @@ pass.
 | The pilot expands into a platform/app build instead of a navigation layer | Medium | High | Hold the stop line; defer service/UI to a follow-on plan |
 | A speculative `graph-core` split creates needless abstraction | Medium | Medium | Use the explicit extraction gate; collapse back if the seam is weak |
 | Derived outputs are mistaken for authority | Medium | High | Keep outputs local, advisory, and out of canonical memory; document the boundary in every README |
-| Cache complexity outweighs benefit | Low | Medium | Keep cache scope narrow: markdown body hash only |
+| Cache complexity outweighs benefit | Low | Medium | Split cache responsibilities: body-only optimisation for link extraction, separate invalidation for frontmatter-derived metadata/report state |
 | The curated corpus is too small or too biased to prove value | Medium | Medium | Use a mixed fixture and live corpus with Practice, ADR, onboarding, and operational surfaces |
 | CLI layering leaks logic into `agent-tools` | Medium | Medium | Enforce thin-adapter rule; all graph logic lives in the library workspace(s) |
 
@@ -581,17 +613,20 @@ This pilot is done only when all of the following are true:
 1. `packages/libs/practice-graph/` exists, is TypeScript-only, builds with
    esbuild, and has passing unit/integration tests.
 2. `packages/core/graph-core/` either exists with a justified framework-only
-   boundary, or is explicitly not created with recorded rationale.
+   boundary, is TypeScript-only, uses esbuild, and has recorded rationale, or
+   is explicitly not created with recorded rationale.
 3. `agent-tools` exposes `practice-graph build`, `report`, `query`, and
    `path`, and the root workspace exposes `pnpm agent-tools:practice-graph`.
 4. `.agent/local/practice-graph/graph.json` and `GRAPH_REPORT.md` are produced
-   deterministically from the curated corpus.
+   deterministically from the checked-in live pilot manifest.
 5. The report can answer the four measurable pilot questions materially better
    than raw search alone.
-6. No semantic inference, no write-back loop, no public MCP integration, and
+6. Out-of-process `agent-tools` E2E coverage exists for argument parsing, exit
+   codes, and stdout/stderr contract.
+7. No semantic inference, no write-back loop, no public MCP integration, and
    no dedicated service workspace were introduced.
-7. Documentation propagation and acknowledgement are complete.
-8. All quality gates pass.
+8. Documentation propagation and acknowledgement are complete.
+9. All quality gates pass.
 
 ---
 

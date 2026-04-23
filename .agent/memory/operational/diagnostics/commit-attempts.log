@@ -15,3 +15,5 @@
 2026-04-23T05:46:53Z	ok	42	408e27de	heredoc-fileout	docs(continuity): land L-8 Correction WI 1-5 evidence; rewrite handoff for WI 6-	session-handoff closeout; gates green; depcruise green
 2026-04-23T06:00:35Z	ok	36	93a824ab	heredoc-fileout	docs(continuity): promote sub-agent review cadence into thread record	promotion of net-new opener block into binding contract; FULL TURBO cache hit; b
 2026-04-23T06:20:08Z	ok	36	da7f9a6d	heredoc-fileout	chore(continuity): exempt workflow partials from canonical-command orphan check	unblocks L-8 push; folded inherited staged drift per owner direction
+2026-04-23T06:39:45Z	ok	94	216a7fd2	heredoc-fileout	fix(turbo): pass SENTRY_* env vars through to build tasks	L-8 WI-6 unblock
+2026-04-23T06:47:53Z	fail	0	-	heredoc-stream	docs(agentic): tighten practice graph pilot contract	rc=128
