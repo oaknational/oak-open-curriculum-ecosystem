@@ -3,7 +3,7 @@ name: "Statuspage Integration"
 status: strategic-brief
 overview: >
   Strategic brief for integrating Oak's existing Atlassian Statuspage with
-  the synthetic-monitoring probe and Sentry alert suite, so incidents become
+  the owner-managed uptime signal and Sentry alert suite, so incidents become
   visible to external users. Deferred for MVP per owner direction —
   operational-state publication not needed for public beta.
 foundational_adr: "docs/architecture/architectural-decisions/162-observability-first.md"
@@ -13,7 +13,7 @@ promotion_trigger: "Owner signals readiness to publish operational state to exte
 # Statuspage Integration
 
 **Status**: 🔵 Strategic (not yet executable)
-**Last Updated**: 2026-04-18
+**Last Updated**: 2026-04-23
 **Promotion trigger**: owner signals readiness to publish operational state externally.
 
 ---
@@ -31,8 +31,8 @@ wiring.
 
 **In scope**:
 
-- Automated status-component publication from synthetic-monitoring
-  probe results.
+- Automated status-component publication from owner-managed uptime
+  monitor results.
 - Incident lifecycle automation (open on probe failure, update on
   alert fire, close on resolution).
 - Component hierarchy (per axis? per capability? per environment?).
@@ -53,8 +53,9 @@ product-state signal, not a technical one.
 
 **Related**:
 
-- `observability/current/synthetic-monitoring.plan.md` — supplies the
-  probe signal that drives automated incident creation.
+- Owner-managed uptime-monitor signal against the deployed `/healthz`
+  endpoint — supplies the probe signal that drives automated incident
+  creation.
 - `observability/future/slo-and-error-budget.plan.md` — burn-rate
   alerts may feed "degraded performance" states.
 - `observability/future/customer-facing-status-page.plan.md` — builds
@@ -74,7 +75,7 @@ product-state signal, not a technical one.
 - **Statuspage API rate limits.** Mitigation: batch / debounce in the
   integration layer.
 - **Multi-region probe disagreement.** Mitigation: deferred until
-  multi-region probes exist (post-MVP for synthetic-monitoring too).
+  multi-region probes exist in the owner-managed uptime layer.
 
 ## Promotion Trigger
 
@@ -90,7 +91,7 @@ component taxonomy, rollout plan.
 
 - Statuspage API client in a new library workspace or existing
   integration surface.
-- Wire synthetic-monitoring probe result → Statuspage component state.
+- Wire owner-managed uptime-monitor result → Statuspage component state.
 - Wire Sentry alert fire → Statuspage incident creation for specific
   alert categories (not all alerts become public incidents).
 - Runbook: planned maintenance workflow.
@@ -99,4 +100,4 @@ component taxonomy, rollout plan.
 
 - ADR-162 §Five Axes Operational.
 - Session report §2.3 gap item 5 + §3.4.
-- `observability/current/synthetic-monitoring.plan.md`.
+- Owner-managed uptime monitoring against `/healthz`.

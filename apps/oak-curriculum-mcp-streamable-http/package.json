@@ -3,7 +3,7 @@
   "version": "0.0.0-development",
   "private": true,
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/server.js",
   "scripts": {
     "build": "tsx esbuild.config.ts",
     "build:widget": "vite build --config widget/vite.config.ts && node scripts/embed-widget-html.js",

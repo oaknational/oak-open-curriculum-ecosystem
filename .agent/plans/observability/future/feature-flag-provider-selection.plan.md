@@ -5,8 +5,8 @@ overview: >
   Strategic brief for selecting and wiring a feature-flag provider (Sentry
   feature-flag integration, LaunchDarkly, GrowthBook, OpenFeature + adapter)
   when the first actual use case (A/B experiment or feature gate) arrives.
-  Today's feature-flag scaffolding in L-10 is TSDoc-stub-only per A.3
-  decisions; no real flag is wired.
+  Today's feature-flag scaffolding in L-10 is TSDoc-only extension-point
+  documentation per A.3 decisions; no real flag is wired.
 foundational_adr: "docs/architecture/architectural-decisions/162-observability-first.md"
 promotion_trigger: "First A/B experiment proposed OR first feature-flag-using feature lands."
 ---
@@ -14,7 +14,7 @@ promotion_trigger: "First A/B experiment proposed OR first feature-flag-using fe
 # Feature-Flag Provider Selection
 
 **Status**: 🔵 Strategic (not yet executable)
-**Last Updated**: 2026-04-18
+**Last Updated**: 2026-04-23
 **Promotion trigger**: first A/B experiment proposed OR first feature-flag-using feature lands.
 
 ---
@@ -23,9 +23,9 @@ promotion_trigger: "First A/B experiment proposed OR first feature-flag-using fe
 
 Feature-flag integration is scaffolded in
 [`sentry-observability-maximisation-mcp.plan.md § L-10`](../active/sentry-observability-maximisation-mcp.plan.md)
-at TSDoc-stub level per Appendix A.3 decisions. The stub exists so the
-extension point is documented; no real flag is wired because there is
-no use case. This plan sits in wait.
+at TSDoc-only extension-point level per Appendix A.3 decisions. The
+extension point is documented, but no real flag is wired because there
+is no use case. This plan sits in wait.
 
 The intent is: when a real use case emerges, this plan becomes the
 decision lane for which provider to adopt, how emissions and analytics

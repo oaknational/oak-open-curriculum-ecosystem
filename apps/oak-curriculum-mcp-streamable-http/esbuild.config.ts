@@ -40,13 +40,18 @@
 
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { sentryEsbuildPlugin } from '@sentry/esbuild-plugin';
-import { build, type Plugin } from 'esbuild';
+import { build, type BuildOptions, type Plugin } from 'esbuild';
 import {
   buildBuildInfo,
   serialiseBuildInfo,
   type ResolvedBuildTimeRelease,
 } from '@oaknational/build-metadata';
+import {
+  assertNoEsbuildWarnings,
+  assertVercelDefaultExportFunction,
+} from './build-scripts/build-output-contract.js';
 import { createMcpEsbuildOptions } from './build-scripts/esbuild-config.js';
 import {
   createSentryBuildPlugin,
@@ -123,13 +128,26 @@ function buildPluginArray(inputs: SentryBuildPluginInputs): Plugin[] {
   return [plugin];
 }
 
+async function assertServerEntryContract(): Promise<void> {
+  const serverModule = await import(
+    `${pathToFileURL(path.join(outdir, 'server.js')).href}?contract=${Date.now()}`
+  );
+  assertVercelDefaultExportFunction(serverModule);
+}
+
+async function buildAndAssert(options: BuildOptions): Promise<void> {
+  const result = await build(options);
+  assertNoEsbuildWarnings(result.warnings);
+  await assertServerEntryContract();
+}
+
 switch (intent.value.kind) {
   case 'disabled': {
     // Registration policy decided this build does not register a
     // release (e.g. local dev without override pair). No release was
     // resolved → no build-info to persist; no plugin to wire.
     console.log(`[esbuild.config] Sentry plugin skipped: ${intent.value.reason}`);
-    await build(baseOptions);
+    await buildAndAssert(baseOptions);
     break;
   }
   case 'skipped': {
@@ -143,7 +161,7 @@ switch (intent.value.kind) {
         '(non-production build proceeding without release registration; ' +
         'set SENTRY_AUTH_TOKEN to enable upload).',
     );
-    await build(baseOptions);
+    await buildAndAssert(baseOptions);
     break;
   }
   case 'configured': {
@@ -152,7 +170,7 @@ switch (intent.value.kind) {
     console.log(
       `[esbuild.config] Sentry plugin enabled: release=${inputs.release.name} env=${inputs.release.deploy.env}`,
     );
-    await build({ ...baseOptions, plugins: buildPluginArray(inputs) });
+    await buildAndAssert({ ...baseOptions, plugins: buildPluginArray(inputs) });
     break;
   }
 }

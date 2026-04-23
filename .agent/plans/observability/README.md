@@ -22,7 +22,7 @@ first if the question is "are we really making progress."
 
 **No new plan in this directory lands without an existing plan
 archiving in the same pass** until Wave 2 opens. The tree currently
-carries 2 `active/` + 6 `current/` + 11 `future/` plans + 10
+carries 2 `active/` + 6 `current/` + 13 `future/` plans + 10
 explorations under `docs/explorations/`. Planning density has
 materially outpaced execution density; the forward-motion risk is
 another restructure rather than another emitter.
@@ -44,12 +44,13 @@ downstream) is in scope of the explorations directory's lifecycle,
 not this invariant.
 
 **Exploration-density brake**: explorations have their own
-lifecycle. A stub older than 90 days with no promotion-trigger
-fired and no body authored is reviewed for closure (graduate to a
-plan or ADR, supersede with newer evidence, or archive with
-rationale). Drift in exploration density is a separate concern from
-plan density and is named here only to flag that it is governed by
-a different rule, not by this invariant.
+lifecycle. A focused exploration brief older than 90 days with no
+promotion trigger fired and no substantive body growth is reviewed
+for closure (graduate to a plan or ADR, supersede with newer
+evidence, or archive with rationale). Drift in exploration density
+is a separate concern from plan density and is named here only to
+flag that it is governed by a different rule, not by this
+invariant.
 
 **Exit condition**: rule lifts when
 [`current/observability-events-workspace.plan.md`](./current/observability-events-workspace.plan.md)
@@ -113,7 +114,7 @@ completed 2026-04-19 with all phases landed:
 2. **Phase 2** ✅ — populated `high-level-observability-plan.md`, authored
    six MVP `current/` plans + eleven `future/` plans each with a named
    promotion trigger.
-3. **Phase 3** ✅ — two full explorations + six stubs under
+3. **Phase 3** ✅ — two full explorations + six focused briefs under
    [`docs/explorations/`](../../../docs/explorations/).
 4. **Phase 4** ✅ — revised `active/sentry-observability-maximisation-mcp.plan.md`
    for MVP classification and the `metrics.*` priority swap.
@@ -122,12 +123,14 @@ completed 2026-04-19 with all phases landed:
 
 Execution now proceeds through the five-wave MVP ordering (see
 [`high-level-observability-plan.md` §Execution Waves](./high-level-observability-plan.md#execution-waves--cross-plan-mvp-order)).
-Wave 1 as of 2026-04-20: L-EH initial ✅, L-DOC initial ✅,
-L-12-prereq ✅ (closed by primitives-consolidation 2026-04-19).
-L-7 bespoke orchestrator landed and is being torn out by L-8
-(esbuild-native migration, re-planned 2026-04-20 per owner's
-standing decision; plan-time `assumptions-reviewer` pass complete).
-L-8 WS1 RED is the next execution step.
+Wave 1 foundations remain in place: L-EH initial ✅, L-DOC initial ✅,
+L-12-prereq ✅ (closed by primitives-consolidation 2026-04-19). The
+current engineering blocker is the L-8 deploy-boundary repair:
+L-8 Correction WI 1-5 landed locally, and the remaining preview/Sentry
+proof now lives in
+[`current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](./current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
+Broader runtime simplification is tracked separately in
+[`future/mcp-http-runtime-canonicalisation.plan.md`](./future/mcp-http-runtime-canonicalisation.plan.md).
 
 ---
 

@@ -166,7 +166,7 @@ and the L-15 reframe in
   second-backend-evaluation plan, or to the
   feature-flag-provider-selection plan; this exploration informs
   those plans, it does not rewrite them.
-- The original §5 promotion trigger from the stub (now
+- The original §5 promotion trigger from the initial brief (now
   [§8](#8-promotion-trigger-record-update)) for full authorship of
   the exploration is preserved unchanged — it remains the
   evidence-driven trigger for the post-launch re-authoring of the
@@ -205,7 +205,7 @@ decision.
 
 ## 4. Answers to the six research questions
 
-The original §3 of the stub (now superseded by the §4 below) posed
+The original §3 of the initial brief (now superseded by the §4 below) posed
 six numbered research questions, preserved verbatim in this body's
 sub-headings. The answers below are full-form, capability-shaped, and
 draw on the overlay companion's deeper analysis in §3, §4, §5, §6,
@@ -468,7 +468,7 @@ scenarios in §4 Q6 and the capability-shaped verdicts in §3.
 ## 6. Architectural decisions decidable today vs genuinely-needs-traffic split
 
 This section replaces the original "promotion-trigger fired /
-not-fired" framing of the stub. For each strategic plan, it names
+not-fired" framing of the initial brief. For each strategic plan, it names
 what would need to land for that plan's trigger to fire, and which
 of those needs traffic versus which is decidable from existing
 doctrine. Plan-state claims in §6.x are as of 2026-04-19; re-verify
@@ -582,7 +582,7 @@ candidate cross-vendor adapter shape
 and the conformance lint extension named in §6.1.
 
 **No new decisions for L-10**: L-10 stays as the
-TSDoc-extension-point-only stub the plan-of-record specifies. The
+TSDoc-extension-point-only documentation the plan-of-record specifies. The
 OpenFeature evaluation criteria above (§6.2) belong to
 `future/feature-flag-provider-selection.plan.md`; L-10 carries the
 extension point shape, not the seam decision.
@@ -725,7 +725,7 @@ frontmatter:
   output, with evidence the gap blocks a concrete observability goal
   the warehouse + PostHog combination does not also close.
 
-The original §5 trigger from the stub (preserved verbatim below) is
+The original §5 trigger from the initial brief (preserved verbatim below) is
 **superseded by the per-sink triggers above** but retained as
 evidence of the framing this exploration started with. The
 exploration body is re-authored in full when the post-public-beta
@@ -793,7 +793,7 @@ Out-of-scope verifications (intentionally not run):
 
 ---
 
-## 10. Source citations from the original stub (preserved)
+## 10. Source citations from the original brief (preserved)
 
 - [Exploration 2](./2026-04-18-how-far-does-sentry-go-as-paas.md) —
   Sentry-as-PaaS thesis research.

@@ -22,3 +22,4 @@
 2026-04-23T07:50:09Z	ok	34	c2e3d779	heredoc-fileout	docs(plans): register clerk-mcp-tools and ext-apps dependency-bumps plan	split-1 of 2 for session handoff (resplit)
 2026-04-23T07:51:18Z	ok	33	c577cf16	heredoc-fileout	chore(observability): land no-warnings doctrine and canonical-deploy-shape plan	split-2 of 2 for session handoff
 2026-04-23T08:11:41Z	ok	38	d8ae99e1	heredoc-fileout	chore(markdownlint): scope canon surfaces and align no-warning doctrine	76 files; doctrine-gate alignment
+2026-04-23T09:59:49Z	ok	41	09401719	heredoc-fileout	docs(observability): rewrite mcp-deploy-shape plan to scoped repair after 3 revi	session-handoff close

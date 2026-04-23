@@ -300,7 +300,7 @@ Reviewer matrix:
 
 | Risk | Mitigation |
 |------|------------|
-| Exploration 4 lands late; MVP schema shape not finalisable | WS1 stubs schemas with placeholder categorical axes; WS2 finalises once exploration lands. Plan promotion to `active/` blocks on exploration 4 close. |
+| Exploration 4 lands late; MVP schema shape not finalisable | WS1 authors provisional schemas with placeholder categorical axes; WS2 finalises once exploration lands. Plan promotion to `active/` blocks on exploration 4 close. |
 | Zod 4 `.meta()` loses examples through `z.preprocess()` (distilled.md edge case) | Avoid `z.preprocess()` in schemas; if required, document the limitation per-field. |
 | Downstream consumers bypass the schema contract | Conformance helper + reviewer-matrix question (ADR-162 Mechanism #2) catches. ESLint rule #1 flags uninstrumented emission sites. |
 | Schema churn during Phase 2 | `/1` version suffix on export paths once stable; break-glass migration plan per schema. Not in MVP scope. |

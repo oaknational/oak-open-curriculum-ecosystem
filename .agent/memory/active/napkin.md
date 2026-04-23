@@ -8,106 +8,109 @@ live in the register at
 
 ---
 
-## 2026-04-23 (latest, plan-rewrite session) — three reviewer rounds collapsed an ambitious nine-phase canonical refactor into a seven-phase scoped repair (Pippin / cursor / claude-opus-4-7)
+## 2026-04-23 (latest, deploy-boundary repair + root-gate cleanup session) — verified contract, local boundary landed, root check green (Codex / codex)
 
-**Observation**: the session opened with the binding landing target
-*"Phase 1 of `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`
-lands — esbuild metafile + warnings-as-errors + `default`-export
-contract assertion in `esbuild.config.ts`"*. No code was written.
-Three reviewer rounds — `assumptions-reviewer` on the original plan
-(No-Go, 7 blocking findings), `architecture-reviewer-barney` on the
-re-drafted DRAFT plan (ABANDON-REFACTOR; simplification-first
-boundary mapping; 3-phase recommendation), `assumptions-reviewer`
-on Barney's report (AMEND, 6 amendments) — collapsed the nine
-canonical phases into a seven-phase scoped repair: keep the local
-runner stack (`bootstrap-app.ts`, `server-runtime.ts`, `--import
-@sentry/node/preload`), add `src/server.ts` with whatever shape an
-empirical Vercel adapter probe proves, defer the canonical `main.ts`
-/ `sentry-init.ts` rename and `bootstrap-app.ts` collapse to
-`§Deferred Lanes`. A final Barney pass returned `AMEND` once more
-(stale operative metadata in legacy sections; Phase 1 wording that
-prejudged its own probe outcome; Phase 4 / Phase 5 sequencing
-contradiction). All three blockers resolved in-place. Final Barney
-verdict: `GO`. Plan promoted from `draft` → `execution-ready`.
+**Observation**: once the deploy-boundary repair itself landed, the
+remaining breakage did not stay inside the workspace. The first full
+`pnpm check` surfaced two repo-tail failures that the package-local
+tests could not catch:
 
-**The original Phase 1 build-self-assertion gate would have
-asserted a `default`-export contract whose semantic correctness was
-itself unproven**. Implementing it as written would have produced
-not a real gate but a tautology — the build would assert the shape
-the agent guessed Vercel wants, not the shape Vercel actually
-expects from `package.main`. This is exactly the failure mode the
-new Phase 1 (empirical Vercel adapter probe — Vercel docs + a
-disposable smoke deploy) exists to prevent.
+- portability failed because the new always-apply warning doctrine had
+  no `.claude/rules/no-warning-toleration.md` mirror;
+- `knip` failed because the new `src/server.ts` deploy entry was not
+  listed as a workspace entry and two helper types were exported
+  without any external consumer.
+
+This session:
+
+- verified the real Vercel import contract from primary evidence
+  (Vercel Express docs + `@vercel/node@5.7.13` runtime source);
+- landed `src/server.ts` / `dist/server.js` as the explicit deploy
+  boundary, with a lazy request-handler wrapper;
+- made esbuild warnings fatal and asserted the built default-export
+  contract;
+- repaired the local harness, the portability mirror, and the `knip`
+  entry;
+- reran `pnpm check` to green.
+
+### Practical lesson
+
+After a boundary repair, the honest acceptance gate is the full root
+check, not the workspace-only check. Boundary changes create small
+repo-tail obligations — portability mirrors, config inventories, and
+diagnostic harnesses — that are easy to miss if we stop at package-local
+green.
+
+### What this means operationally for the next session
+
+There is no known local coding blocker left. The next step is
+operational: commit all current files, push
+`feat/otel_sentry_enhancements`, monitor the Vercel build, then prove
+preview `/healthz` and Sentry release / traffic.
+
+## 2026-04-23 (earlier, operational-plan rationalisation session) — one repair plan, one canonicalisation brief, monitor work externalised (Codex / codex)
+
+**Observation**: the repo's live observability surfaces were still
+carrying a shape the owner had rejected: an overgrown current plan
+mixing emergency repair with future runtime simplification, a repo
+monitoring lane that no longer belongs in the repo, and repeated
+"stub" language that kept speculative work alive after scope had
+collapsed.
+
+Owner direction sharpened the contract:
+
+- one operational plan for the material repo changes needed to stop
+  the crashing preview, hard-fail the build on the same class of
+  breakage, and prove preview `/healthz` plus Sentry;
+- one separate canonicalisation plan because that future work is
+  valuable but distinct;
+- monitor creation and ongoing uptime validation happen outside this
+  repo;
+- if future work is real it gets a real home, otherwise it is deleted.
+
+This session applied that contract directly:
+
+- rewrote
+  [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+  into a single-session operational repair plan;
+- created
+  [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
+  as the separate future home for runtime simplification;
+- archived
+  [`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`](../../plans/observability/archive/superseded/synthetic-monitoring.plan.owner-externalised-2026-04-23.md)
+  to record that monitor setup is no longer repo work;
+- rewrote the thread record and continuity surfaces to match the new
+  contract;
+- started the wider scrub of planning-stub framing from live
+  observability and planning docs.
 
 ### Pattern instances (cross-session)
 
 - **`inherited-framing-without-first-principles-check`** — instance
-  #8 candidate: the previous session's "Architecture-reviewer
-  convergence (Fred + Betty)" was treated as decision-complete on
-  the canonical layout proposal (`server.ts` / `main.ts` /
-  `sentry-init.ts`; delete `bootstrap-app.ts` / `server-runtime.ts`
-  / combined `index.ts`). Both reviewers operate from a
-  principles-first / long-term-cohesion lens, not a
-  simplification-first lens; their convergence is genuine within
-  that lens but does not exhaust the architectural space. Barney's
-  ABANDON-REFACTOR verdict surfaced the simplification-first lens
-  as a third perspective with materially different conclusions
-  (much of the existing scaffolding has working semantics that the
-  original plan was about to delete on aesthetic grounds). The
-  inherited framing — *"two reviewers agreed; therefore the design
-  is settled"* — survived authoring of the original 9-phase plan
-  and was caught by the assumptions-reviewer No-Go pass on the
-  *plan*, not on the design. Falsifiability: a future session that
-  receives a multi-reviewer-converged design and skips the
-  simplification-first / adversarial / assumption-audit lenses
-  earns instance #9.
+  #8 candidate still stands. The specific follow-through now lives in
+  governance memory rather than as a deferred lane inside the current
+  operational plan.
 
-- **`acknowledged-warnings-deferred-to-the-stage-they-explode-in`**
-  — no new instance this session; the same pattern's first hard
-  instance from earlier today still stands as the doctrine's
-  enforcement target.
+### Practical lesson
 
-### Doctrine candidate captured (DL-7 in plan, register entry below)
+The useful distinction was not "current vs future". It was
+**repo-owned proof vs owner-external validation**.
 
-The substantive sequencing meta-lesson: **assumption-challenge
-gates should fire on EACH reviewer output, not on the
-final-design output**. Today's run paid the cost of a full plan
-rewrite because `assumptions-reviewer` ran on the *plan body*
-twice and on the *design proposal* once, but did not run on the
-intermediate Fred + Betty convergence point — where the
-inherited-framing pattern was free to entrench. A formalised gate
-would dispatch `assumptions-reviewer` after every architectural
-review whose output proposes design changes, BEFORE that output
-is treated as planning input. This is recorded as `Deferred Lane
-DL-7` in the plan and as a pending PDR-shape candidate in
-`repo-continuity.md § Pending-graduations register additions
-(2026-04-23 latest plan-rewrite session)`. Trigger to graduate:
-≥1 second cross-session instance of an architectural review's
-output entering a plan body without an intervening assumption
-audit and producing a downstream rewrite.
+Once that boundary was made explicit, the shape clarified quickly:
 
-### Reviewer-cadence shape — three anchors collapsed to two-and-a-half
-
-The plan's three-anchor reviewer cadence (during planning / after
-significant change / before session close) held its design intent
-for the planning-anchor work this session. The "after significant
-change" and "before session close" anchors did not fire because no
-substantive code change happened — the session never crossed from
-planning into execution. The cadence held without strain; that's a
-small piece of evidence the per-phase-three-anchors design works
-for plan-rewrite sessions specifically (where only the
-planning-anchor specialists fire and the cadence devolves
-gracefully into a planning-only loop).
+- `/healthz` working on preview and visible Sentry preview traffic are
+  repo-owned proof;
+- creating and operating the uptime monitor is owner-external;
+- canonical runtime cleanup is future architectural work, not part of
+  the repair.
 
 ### What this means operationally for the next session
 
-The plan is `EXECUTION-READY` with binding contract on Phase 1
-(Vercel adapter probe). The next session does NOT open by writing
-code; it opens by reading the plan's `§Reduced-Scope Rewrite →
-Phase 1` and running the empirical probe — Vercel docs survey
-plus a disposable smoke deploy to determine the precise
-`package.main` contract. Only Phase 2 (writing `src/server.ts`)
-is contract-aware; Phase 1's purpose is to make Phase 2 honest.
+The next execution session opens at Operational Step 1 of
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md):
+verify the actual Vercel import contract from primary evidence, write
+the contract note into the plan, and only then code the deploy-boundary
+repair.
 
 ---
 
@@ -260,11 +263,10 @@ Owner request triggered three artefacts in one commit:
    Vercel cron route (would probe itself if hosted in the same
    lambda).
 
-**Scope-overlap discovery**: a separate plan
-`.agent/plans/observability/current/synthetic-monitoring.plan.md`
-already owns the synthetic-monitoring lane (blocked since 2026-04-18
-on a tool-selection decision), and additionally scopes a *working
-probe* (executes one MCP tool call end-to-end) per ADR-162 §5.6.
+**Scope-overlap discovery**: the then-live repo monitoring plan
+(since archived as owner-external) already owned the
+synthetic-monitoring lane and additionally scoped a *working probe*
+(executes one MCP tool call end-to-end) per ADR-162 §5.6.
 The new plan's Phase 5 was therefore refactored from "build the
 Sentry Uptime monitor" to "unblock the synthetic-monitoring lane
 by recording the tool-selection decision (Sentry Uptime for the

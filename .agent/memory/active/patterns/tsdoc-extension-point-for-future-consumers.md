@@ -11,7 +11,7 @@ proven_in: "Sentry maximisation plan L-10 (feature-flag scaffolding) and L-11 (A
 When the provider or consumer shape for a future integration has not
 been chosen yet, document the attachment point in TSDoc and the
 workspace README. **Do not pre-commit a public API surface** by
-re-exporting stubs through the library barrel.
+re-exporting placeholders through the library barrel.
 
 ## Pattern
 
@@ -31,7 +31,7 @@ provider", "when the first MCP tool calls an LLM"):
    helper, no re-export of the vendor SDK's wrapper.
 5. The first real consumer's integration becomes a separate lane
    whose scope is the public API shape — not an accretion on top of a
-   pre-committed stub.
+   pre-committed placeholder.
 
 ## Anti-Pattern
 

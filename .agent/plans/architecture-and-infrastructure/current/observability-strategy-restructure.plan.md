@@ -24,9 +24,9 @@ todos:
     status: completed
     note: "Executed 2026-04-18 (commit 231046fe). High-level plan filled: principle, five-axis MVP table, launch criteria, MVP gate summary, plan map, explorations map, vendor-independence invariants, coordination points. Five new current/ plans authored at skeleton level (exact scope fills at Phase 3 explorations). Eleven future/ plans authored each with a named testable promotion trigger. search-observability audited for MVP classification. Out-of-plan architectural fix also landed (commit 276ea9bd): tests migrated off loadRuntimeConfig/createHttpObservabilityOrThrow ceremony to hermetic helpers, root-causing a MaxListenersExceededWarning that surfaced during Phase 2 authoring. New rule .agent/rules/test-immediate-fails.md + platform adapters + ESLint gates in @oaknational/eslint-plugin-standards testRules + sibling plan test-ceremony-production-factory-audit.plan.md tracks backlog migration."
   - id: phase-3-exploration-kickoff
-    content: "Phase 3: write explorations 3 (accessibility-observability-at-runtime) and 4 (structured-event-schemas-for-curriculum-analytics) in full — blocking on MVP plan scope. Stub other six explorations (sentry-vs-posthog, sentry-as-paas, trust-boundary-propagation, cloudflare-plus-sentry, static-analysis-augmentation, vendor-independence-conformance-test-shape) with problem statement + research questions."
+    content: "Phase 3: write explorations 3 (accessibility-observability-at-runtime) and 4 (structured-event-schemas-for-curriculum-analytics) in full — blocking on MVP plan scope. Author the other six explorations (sentry-vs-posthog, sentry-as-paas, trust-boundary-propagation, cloudflare-plus-sentry, static-analysis-augmentation, vendor-independence-conformance-test-shape) as focused briefs with problem statement + research questions."
     status: completed
-    note: "Executed 2026-04-18 (commit bae86488). Two full explorations + six stubs landed per §P3.1–P3.3."
+    note: "Executed 2026-04-18 (commit bae86488). Two full explorations + six focused briefs landed per §P3.1–P3.3."
   - id: phase-4-executable-plan-revision
     content: "Phase 4: revise sentry-observability-maximisation-mcp.plan.md — swap L-4a/L-4b priorities (metrics.* primary, span-metrics transitional); mark lanes MVP vs MVP-deferred; cross-reference new MVP lanes (events workspace, synthetic, a11y, security, vendor-independence). Risk row update for metrics.* beta-API shift."
     status: completed
@@ -146,7 +146,7 @@ per phase, plus the consolidation close-out).
 |-------|-------|------------------|
 | 1 | Structural skeleton | Small — directory creation + moves + ADR-162 Proposed + cross-ref sweep |
 | 2 | MVP scope pass | Large — 1 high-level plan + 5 new current/ plans + 11 new future/ plans |
-| 3 | Exploration kickoff | Medium — 2 full explorations + 6 stubs |
+| 3 | Exploration kickoff | Medium — 2 full explorations + 6 focused briefs |
 | 4 | Executable plan revision | Small — targeted edits to the active maximisation plan |
 | 5 | ADR-162 acceptance | Small — concrete enforcement mechanics + status flip + ESLint rule landing |
 
@@ -344,11 +344,13 @@ with:
    `rate_limit_triggered`, `widget_session_outcome`, `a11y_preference_tag`.
    Depends on exploration 4 for schema-shape details.
 
-2. **`synthetic-monitoring.plan.md`** — external uptime probe + external
-   working probe (executes one MCP tool call end-to-end). Scheduled
-   cron; alerts on failure. Decision on tool: Sentry cron-monitor vs
-   third-party uptime probe vs custom Vercel cron — research needed,
-   small exploration stub sufficient for plan scope.
+2. **`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`** —
+   archive note for the repo lane that was originally authored here for
+   external uptime and working-probe monitoring. Archived 2026-04-23 as
+   owner-external work. The surviving repo-owned proof now lives in
+   `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`:
+   bootable preview, healthy `/healthz`, and verified preview/Sentry
+   linkage.
 
 3. **`security-observability.plan.md`** — application-layer `auth_failure`
    - `rate_limit_triggered` events. Schema in events workspace.
@@ -490,7 +492,7 @@ filled in as work progresses.
 compliance; clarity of informed-plan linkage.
 
 **Phase 3 commit**: single commit with subject
-`docs(observability): exploration kickoff — accessibility + event schemas in full, six stubs`.
+`docs(observability): exploration kickoff — accessibility + event schemas in full, six focused briefs`.
 
 ---
 
@@ -585,7 +587,9 @@ bodies to cross-reference:
   schema contract per ADR-162; metric names the adapter emits
   (e.g. `oak.mcp.handler.request.count`, `oak.mcp.tool.duration_ms`)
   must be catalogued alongside event schemas.
-- L-7 → `synthetic-monitoring.plan.md` for uptime/working probe.
+- L-7 → `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`
+  for deploy-boundary repair and preview proof before any external
+  uptime monitor is meaningful.
 - L-7 → `multi-sink-vendor-independence-conformance.plan.md` to
   document the release-linkage carve-out (release linkage is
   Sentry-coupled by nature; the conformance plan's scope explicitly
@@ -675,7 +679,7 @@ TO-ACTION): the rule's "schema usage" acceptance path depends on
 `@oaknational/observability-events` existing as a workspace. Wave 1
 authors the rule and its `logger.*` / `Sentry.*` detection paths;
 RuleTester cases for the schema-usage path must be either (a)
-stubbed/skipped with a named "Wave 2 unlocks" note until the
+omitted with a named "Wave 2 unlocks" note until the
 workspace exists, or (b) authored with a test-fixture workspace
 stand-in (if the existing RuleTester infra supports it). Do NOT
 author RuleTester cases that import from `@oaknational/observability-events`
@@ -746,7 +750,7 @@ the five sibling MVP `current/` plans into five **execution waves**:
 | **2. Schema Foundation** | Events workspace + vendor-independence structural lint. | Sibling `observability-events-workspace.plan.md` WS1–WS6. Sibling `multi-sink-vendor-independence-conformance.plan.md` WS1 carve-out (`no-vendor-observability-import` ESLint rule only). |
 | **3. Primary Emitters (Server)** | Server-side emission consumes Wave 2 schemas by import. | Maximisation lanes: L-1, L-2, L-3, L-4b, L-9. |
 | **4. Cross-axis & Widget** | Second emitting runtime + axis-specific emission plans. | Maximisation lane L-12; sibling `security-observability.plan.md`; sibling `accessibility-observability.plan.md`. Can parallelise within wave. |
-| **5. Operations + Conformance + Close-out** | Alerts + emission-persistence test + MVP-deferred lanes + close-out ADRs. | Maximisation lanes: L-13, L-14, L-15, L-DOC final, L-EH final; MVP-deferred (L-4a, L-5, L-6, L-10, L-11). Sibling `multi-sink-vendor-independence-conformance.plan.md` WS2+ (emission-persistence test). Sibling `synthetic-monitoring.plan.md`. |
+| **5. Operations + Conformance + Close-out** | Alerts + emission-persistence test + MVP-deferred lanes + close-out ADRs. | Maximisation lanes: L-13, L-14, L-15, L-DOC final, L-EH final; MVP-deferred (L-4a, L-5, L-6, L-10, L-11). Sibling `multi-sink-vendor-independence-conformance.plan.md` WS2+ (emission-persistence test). Current repair plan `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md` makes `/healthz` and preview/Sentry proof real; external monitor setup happens outside the repo. |
 
 **Architectural rationale**:
 
@@ -904,7 +908,7 @@ The restructure is complete when:
    landed at `warn`; reviewer-matrix question codified; conformance
    test helper + vendor-independence test named as deliverables).
 4. `docs/explorations/` exists with README + eight exploration files
-   (two full, six stubs).
+   (two full, six focused briefs).
 5. `packages/core/observability-events/` named as a deliverable of its
    owning plan (actual creation happens when that plan enters active
    lifecycle, not in this restructure).

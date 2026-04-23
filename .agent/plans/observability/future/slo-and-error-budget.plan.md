@@ -7,13 +7,13 @@ overview: >
   data post-launch to set realistic targets. Burn-rate alerts complement
   the MVP alert suite (ADR-162 §Five Axes Engineering).
 foundational_adr: "docs/architecture/architectural-decisions/162-observability-first.md"
-promotion_trigger: "≥30 days of baseline data collected post-launch (synthetic-monitoring.plan.md history + tool_invoked outcome distribution)."
+promotion_trigger: "≥30 days of baseline data collected post-launch (owner-managed uptime-monitor history + tool_invoked outcome distribution)."
 ---
 
 # SLO and Error Budget
 
 **Status**: 🔵 Strategic (not yet executable)
-**Last Updated**: 2026-04-18
+**Last Updated**: 2026-04-23
 **Promotion trigger**: ≥30 days baseline data collected post-launch.
 
 ---
@@ -49,8 +49,8 @@ pre-launch speculation.
 
 **Prerequisite**: 30 days of production data covering:
 
-- Synthetic-monitoring probe history (per
-  `observability/current/synthetic-monitoring.plan.md`).
+- Owner-managed uptime-monitor history against the deployed
+  `/healthz` endpoint.
 - `tool_invoked` outcome-class distribution (per events workspace).
 - Auth-failure baseline (per security-observability).
 - Widget-session-outcome baseline (per accessibility + usability axes).
@@ -84,10 +84,10 @@ pre-launch speculation.
 
 ## Promotion Trigger
 
-**Testable event**: 30 consecutive days of synthetic-monitoring probe
-history + `tool_invoked` emissions exist post-launch, queryable from
-the backend. The promotion author runs a baseline distribution
-analysis as the first step.
+**Testable event**: 30 consecutive days of owner-managed
+uptime-monitor history plus `tool_invoked` emissions exist
+post-launch, queryable from the backend. The promotion author runs a
+baseline distribution analysis as the first step.
 
 **When triggered**: move to `current/`. Author per-journey SLOs with
 owners; configure burn-rate alerts; runbook entries; dashboard.

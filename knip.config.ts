@@ -44,6 +44,7 @@ const config: KnipConfig = {
       entry: [
         'src/index.ts',
         'src/application.ts',
+        'src/server.ts',
         'widget/src/main.tsx',
         'smoke-tests/**/*.ts',
         'e2e-tests/**/*.ts',

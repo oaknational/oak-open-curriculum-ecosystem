@@ -225,8 +225,8 @@ Consumers compute duration and outcome by joining across the stages.
 long-running-invocation concern is addressed at the engineering axis
 via Sentry spans (which do capture start-time); the product-axis
 `tool_invoked` event is correctly single-shot. For hang detection,
-synthetic monitoring (`synthetic-monitoring.plan.md`) is the correct
-surface, not product events.
+operational uptime monitoring is the correct surface, not product
+events.
 
 **Exception**: `widget_session_outcome` is single-event-at-unload by
 construction (§4.3.6 below). `auth_failure` and `rate_limit_triggered`

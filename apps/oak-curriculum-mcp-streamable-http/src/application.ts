@@ -177,6 +177,8 @@ function logBootstrapSummary(
  * Creates and configures an Express application instance for MCP over HTTP.
  * Middleware order: base → security → rate limiters → OAuth → auth context → core → static → /mcp → auth routes → error handlers.
  */
+// observability-emission-exempt: orchestration wrapper; concrete emissions live
+// in initializeAppInstance, runBootstrapPhase, and nested setup helpers.
 export async function createApp(options: CreateAppOptions): Promise<ExpressWithAppId> {
   const log =
     options.logger ?? options.observability.createLogger({ name: 'streamable-http:app-instance' });

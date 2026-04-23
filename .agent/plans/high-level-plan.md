@@ -296,7 +296,7 @@ platform reach.
    - Collection roadmap:
      [security-and-privacy/roadmap.md](security-and-privacy/roadmap.md)
 8. **Supply chain controls** (if npm publishing is imminent)
-   - Icebox stub:
+   - Icebox note:
      [supply-chain-controls.md](icebox/supply-chain-controls.md)
 9. **Search quality stream progression** via semantic-search roadmap
 10. **Developer experience** — TSDoc overhaul, SDK publishing,

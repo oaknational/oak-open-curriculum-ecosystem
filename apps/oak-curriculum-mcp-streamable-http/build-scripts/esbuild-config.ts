@@ -44,6 +44,7 @@ export function createMcpEsbuildOptions(): BuildOptions {
     entryPoints: {
       index: 'src/index.ts',
       application: 'src/application.ts',
+      server: 'src/server.ts',
     },
     bundle: true,
     platform: 'node',

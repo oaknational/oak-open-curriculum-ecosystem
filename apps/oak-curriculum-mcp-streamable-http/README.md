@@ -308,8 +308,8 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 - **Server fails to start (OAuth metadata fetch timeout)**: If the server hangs or fails during startup when auth is enabled, ensure Clerk's `/.well-known/oauth-authorization-server` endpoint is reachable from the server's network. The auth bootstrap fetches upstream OAuth metadata at startup and will retry with exponential backoff (added in F10), but if the endpoint is unreachable the server will eventually fail. Check DNS resolution, firewall rules, and Clerk service status.
 - 500 on `/.well-known/oauth-protected-resource` or `/mcp`:
   - Ensure Vercel framework is Express and the deployed build is using
-    `dist/index.js`. This repo does not rely on a separate Vercel-only default
-    export path.
+    `dist/server.js` via `package.json` `main`. The local listener entry remains
+    `dist/index.js`, but that is not the deployed artefact.
   - Verify `ALLOWED_HOSTS` includes your alias host (e.g. `curriculum-mcp-alpha.oaknational.dev`).
   - If auth is enabled, verify `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` are set and that Clerk metadata discovery succeeds at startup.
 - 401 without `Authorization`: the client must either follow the OAuth discovery flow or send a valid Clerk-issued Bearer token. For local smoke tests, either use a real Clerk token or set `DANGEROUSLY_DISABLE_AUTH=true` and retry without the `Authorization` header.

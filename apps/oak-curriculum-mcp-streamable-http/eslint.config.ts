@@ -129,6 +129,12 @@ const config = defineConfig(
         'operations/**',
         'smoke-tests/**',
         'e2e-tests/**',
+        // Runtime composition root for Vercel's request handler import
+        // contract. Like `src/index.ts`, this boundary legitimately
+        // reads `process.env` once, then passes typed runtime config
+        // into the app factory so the rest of the codebase stays under
+        // env-library / DI policy.
+        'src/server.ts',
         'src/index.ts',
         // Esbuild composition root invoked by Vercel Build Command via
         // `tsx`. process.env is the legitimate boundary-crossing read

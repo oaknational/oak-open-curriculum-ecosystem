@@ -31,11 +31,12 @@ import { describe, expect, it } from 'vitest';
 import { createMcpEsbuildOptions } from './esbuild-config.js';
 
 describe('createMcpEsbuildOptions — Oak-owned build contract', () => {
-  it('declares both entry points: index and application', () => {
+  it('declares the three entry points: index, application, and server', () => {
     const options = createMcpEsbuildOptions();
     expect(options.entryPoints).toEqual({
       index: 'src/index.ts',
       application: 'src/application.ts',
+      server: 'src/server.ts',
     });
   });
 

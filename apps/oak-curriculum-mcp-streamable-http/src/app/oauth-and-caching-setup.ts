@@ -116,7 +116,11 @@ function registerOAuthRoutes(
   );
 }
 
-/** Sets up OAuth metadata endpoints, proxy routes, and error caching prevention. */
+/**
+ * Sets up OAuth metadata endpoints, proxy routes, and error caching prevention.
+ */
+// observability-emission-exempt: orchestration wrapper; concrete emissions live
+// in runBootstrapPhase/runAsyncBootstrapPhase and the nested route setup.
 export async function setupOAuthAndCaching(
   app: Express,
   runtimeConfig: RuntimeConfig,

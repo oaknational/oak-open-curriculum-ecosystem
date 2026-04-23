@@ -7,29 +7,32 @@ rely on today.
 
 ## Architecture Overview
 
-The deployed runtime has two important artefacts and one shared startup path:
+The runtime now has three important artefacts and two distinct execution
+boundaries:
 
-1. `dist/index.js` — Node entry point that loads runtime config and
-   observability, then calls `startConfiguredHttpServer(...)`
-2. `dist/application.js` — importable async Express app factory used by the
-   bootstrap/runtime code
+1. `dist/server.js` — the deployed Vercel entry. It default-exports the
+   request handler that satisfies the verified `@vercel/node` import contract.
+2. `dist/index.js` — the local Node listener entry. It loads runtime config and
+   observability, then calls `startConfiguredHttpServer(...)`.
+3. `dist/application.js` — the importable async Express app factory used by the
+   local listener and local diagnostics.
 
-Widget HTML is embedded in `dist/index.js` as a TypeScript constant
-(`WIDGET_HTML_CONTENT`) generated at codegen time. There is no filesystem
-dependency on a separate HTML file at runtime — the constant is bundled
-directly into the server entry point by tsup, eliminating `process.cwd()`
-resolution issues on Vercel Lambda.
+Widget HTML is embedded in both `dist/server.js` and `dist/index.js` as the
+generated `WIDGET_HTML_CONTENT` constant. There is no filesystem dependency on
+separate HTML at runtime.
 
-`src/index.ts` does **not** export a special Vercel-only Express default export
-or branch on `process.env.VERCEL`. Both local and deployed startup go through
-the same repo code:
+`src/server.ts` is the dedicated deploy boundary. It keeps the built
+`dist/server.js` artefact importable as a plain function for the build-time
+contract gate, then lazy-loads the full Express app on first request.
 
-1. load runtime config
-2. create HTTP observability
-3. bootstrap the Express app via `bootstrapApp(...)`
-4. create the HTTP server via `http.createServer(app)`
-5. listen on the resolved port with explicit startup/shutdown handling from
-   `src/server-runtime.ts`
+`src/index.ts` remains the explicit local-listener path. It still:
+
+1. loads runtime config;
+2. creates HTTP observability;
+3. bootstraps the Express app via `bootstrapApp(...)`;
+4. creates the HTTP server via `http.createServer(app)`;
+5. listens on the resolved port with explicit startup/shutdown handling from
+   `src/server-runtime.ts`.
 
 ## Build Output Structure
 
@@ -37,16 +40,17 @@ After running `pnpm build`, the `dist/` directory contains:
 
 ```text
 dist/
-├── index.js              # Server entry point (includes embedded widget HTML)
+├── server.js             # Deployed Vercel entry (default-exported handler)
+├── server.js.map
+├── index.js              # Local Node listener entry
 ├── index.js.map
 ├── application.js        # Importable async Express app factory
 └── application.js.map
 ```
 
-Note: `splitting: false` in tsup means each entry point produces a
-self-contained bundle with no separate chunk files. The widget HTML constant
-(`WIDGET_HTML_CONTENT`) is inlined into `dist/index.js` via the normal
-TypeScript import from `src/generated/widget-html-content.ts`.
+The widget HTML constant (`WIDGET_HTML_CONTENT`) is inlined into the
+`server.js` and `index.js` bundles via the normal TypeScript import from
+`src/generated/widget-html-content.ts`.
 
 ## Vercel Deployment
 
@@ -54,17 +58,20 @@ TypeScript import from `src/generated/widget-html-content.ts`.
 
 This repository currently provides:
 
-1. `vercel.json` with `"framework": "express"`
-2. `package.json` with `"main": "dist/index.js"`
-3. a build pipeline that emits the server bundle (widget HTML is a committed
-   codegen constant embedded in the bundle)
-4. a repo-owned Vercel `ignoreCommand` that cancels production non-release
-   builds before the build runs
-5. no repo-local rewrite list or separate Vercel-only adapter file
+1. `vercel.json` with `"framework": "express"`;
+2. `package.json` with `"main": "dist/server.js"`;
+3. `src/server.ts` as the dedicated deploy boundary and `src/index.ts` as the
+   local listener boundary;
+4. an esbuild composition root (`esbuild.config.ts`) that emits the runtime
+   bundles, fails the build on warnings, and validates the built
+   `dist/server.js` default export;
+5. a repo-owned Vercel `ignoreCommand` that cancels production non-release
+   builds before the build runs;
+6. no repo-local rewrite list.
 
-This means the deployment contract in-repo is intentionally small: build the
-Node bundle at `dist/index.js`, point the package main field at it, and let
-Vercel's Express framework integration handle the platform-side wiring.
+This means the deployment contract in-repo is explicit: build `dist/server.js`,
+point `package.json` `main` at it, and let Vercel's Express integration import
+the default handler. Local `dist/index.js` is not the deployed artefact.
 
 ### Key Files
 
@@ -82,53 +89,52 @@ Vercel's Express framework integration handle the platform-side wiring.
 
 ```json
 {
-  "main": "dist/index.js"
+  "main": "dist/server.js"
 }
 ```
 
-**src/index.ts** (simplified)
+**src/server.ts** (simplified)
 
 ```typescript
-import http from 'node:http';
-import { WIDGET_HTML_CONTENT } from './generated/widget-html-content.js';
-import { createApp } from './application.js';
-import { bootstrapApp } from './bootstrap-app.js';
-import { createHttpObservability } from './observability/http-observability.js';
-import { loadRuntimeConfig } from './runtime-config.js';
-import { startConfiguredHttpServer } from './server-runtime.js';
+const loadConfiguredApp = async () => {
+  const runtimeConfig = loadRuntimeConfigOrThrow();
+  const observability = createObservabilityOrThrow(runtimeConfig);
 
-const config = loadRuntimeConfig(...);
-const observability = createHttpObservability(config);
+  return await createApp({
+    runtimeConfig,
+    observability,
+    getWidgetHtml: () => WIDGET_HTML_CONTENT,
+    setupSentryErrorHandler:
+      runtimeConfig.env.SENTRY_MODE !== 'off' ? setupExpressErrorHandler : undefined,
+  });
+};
 
-await startConfiguredHttpServer({
-  runtimeConfig: config,
-  observability,
-  createApp: (opts) => createApp({ ...opts, getWidgetHtml: () => WIDGET_HTML_CONTENT }),
-  bootstrapApp,
-  createServer: (app) => http.createServer(app),
-  onSignal: (signal, handler) => process.once(signal, handler),
-  exit: (code) => process.exit(code),
+export default createDeployEntryHandler({
+  loadHandler: loadConfiguredApp,
 });
 ```
 
-`createApp` is async because startup includes OAuth metadata work and MCP
-factory/readiness setup. `bootstrapApp` handles startup failures consistently,
-and `startConfiguredHttpServer(...)` centralises port resolution, server error
-handling, readiness logs, and signal handling.
+`createApp` remains async because startup includes OAuth metadata work and MCP
+factory/readiness setup. `src/server.ts` keeps that async work behind a
+default-exported function so the built deploy artefact stays importable for the
+contract gate. `src/index.ts` still owns the explicit local listener.
 
 ### What This Repo Guarantees
 
 This repo guarantees:
 
-1. the built server entry point is `dist/index.js`
-2. local and deployed execution use the same startup code path
-3. widget HTML is a committed TypeScript constant (`src/generated/widget-html-content.ts`)
-   embedded in the server bundle — no filesystem dependency at runtime
-4. the MCP runtime remains per-request at the transport layer (see
-   `src/application.ts` / ADR-112)
-5. Vercel production deployments are cancelled before build when the root repo
+1. the built deployed entry point is `dist/server.js`;
+2. the local listener remains `dist/index.js`;
+3. widget HTML is a committed TypeScript constant
+   (`src/generated/widget-html-content.ts`) embedded in the runtime bundles —
+   no filesystem dependency at runtime;
+4. the build hard-fails on esbuild warnings and on an invalid
+   `dist/server.js` default export;
+5. the MCP runtime remains per-request at the transport layer (see
+   `src/application.ts` / ADR-112);
+6. Vercel production deployments are cancelled before build when the root repo
    `package.json` version has not advanced beyond the previous successful
-   production deployment
+   production deployment.
 
 Platform-specific Express framework behaviour beyond those points is owned by
 Vercel, not reimplemented in this repository.
@@ -150,15 +156,18 @@ See [vercel-environment-config.md](./vercel-environment-config.md) for complete 
 ### How It Works
 
 For local development and local production-bundle verification, we use the same
-runtime path with different entry commands:
+runtime ingredients with different entry commands:
 
 1. `pnpm dev` executes `tsx operations/development/http-dev.ts dev`
-2. `pnpm start` executes `node dist/index.js` after `pnpm build`
+2. `pnpm start` executes `bash scripts/start-server.sh`, which runs
+   `node --import @sentry/node/preload dist/index.js`
 3. the dev orchestrator first runs the workspace widget build command, then
    starts the matching widget watch command, then boots the source HTTP server
    via the workspace-local `tsx` binary
 4. both runtime paths call `startConfiguredHttpServer(...)`
 5. the server listens on `PORT` when set, otherwise `3333`
+6. `pnpm prod:harness` imports `dist/server.js` and wraps the deployed handler
+   in a local `http.createServer(...)` for deploy-boundary diagnostics
 
 These paths share the same repo-owned startup logic but they do **not** share
 the same module resolver. `tsx` can tolerate import specifiers that plain Node
@@ -170,18 +179,17 @@ built-artifact proof as well as the dev path.
 ```json
 {
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "bash scripts/start-server.sh",
     "dev": "tsx operations/development/http-dev.ts dev",
-    "dev:observe": "tsx operations/development/http-dev.ts observe",
-    "dev:observe:noauth": "tsx operations/development/http-dev.ts observe-noauth"
+    "dev:observe": "tsx operations/development/http-dev.ts observe"
   }
 }
 ```
 
-The HTTP server runtime contract stays the same in both modes: widget HTML
-is provided via DI from the committed constant `WIDGET_HTML_CONTENT`. The
+The HTTP server runtime contract stays the same in both modes: widget HTML is
+provided via DI from the committed constant `WIDGET_HTML_CONTENT`. The
 `operations/development` entrypoint uses `tsx` to run source directly; it
-imports the same constant as the production entry point.
+imports the same constant as the runtime entrypoints.
 
 ### Environment Variables
 
@@ -202,37 +210,34 @@ LOG_LEVEL=debug
 
 ## Build Configuration
 
-**tsup.config.ts**
+**build-scripts/esbuild-config.ts**
 
 ```typescript
-import { defineConfig } from 'tsup';
-
-export default defineConfig({
-  // Two entries: index (runs server) + application (importable factory).
-  // Matches the current split between runtime bootstrap and app creation.
-  entry: { index: 'src/index.ts', application: 'src/application.ts' },
-  format: ['esm'],
-  dts: false,
-  splitting: false,
-  sourcemap: true,
-  clean: true,
-  target: 'es2022',
-  minify: false,
-  bundle: true,
-  tsconfig: './tsconfig.build.json',
-  ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],
-  treeshake: true,
-  outDir: 'dist',
-  external: [/node_modules/],
-});
+export function createMcpEsbuildOptions(): BuildOptions {
+  return {
+    entryPoints: {
+      index: 'src/index.ts',
+      application: 'src/application.ts',
+      server: 'src/server.ts',
+    },
+    bundle: true,
+    platform: 'node',
+    format: 'esm',
+    target: 'es2022',
+    sourcemap: 'external',
+    packages: 'external',
+    outdir: 'dist',
+  };
+}
 ```
 
-This configuration builds two entry points as self-contained ESM bundles:
+The esbuild composition root combines those options with the Sentry plugin
+intent, then immediately enforces two post-build contracts:
 
-- `src/index.ts` → `dist/index.js` (server entry, starts configured runtime)
-- `src/application.ts` → `dist/application.js` (importable factory)
+1. `result.warnings.length === 0`;
+2. `dist/server.js` default-exports a function.
 
-## Build Ordering: Widget Codegen Then tsup
+## Build Ordering: Widget Codegen Then esbuild
 
 The build pipeline has two independent steps:
 
@@ -255,12 +260,13 @@ change, commit the result, and the runtime build consumes it as normal TypeScrip
 ### Runtime Build (`build`)
 
 ```json
-"build": "tsup"
+"build": "tsx esbuild.config.ts"
 ```
 
-tsup compiles `src/` to `dist/`. The committed
-`src/generated/widget-html-content.ts` is bundled into `dist/index.js` via
-the normal import chain. No separate Vite step runs during `build`.
+The esbuild composition root compiles `src/` to `dist/`. The committed
+`src/generated/widget-html-content.ts` is bundled into the `server.js` and
+`index.js` artefacts via the normal import chain. No separate Vite step runs
+during `build`.
 
 ### Turbo Configuration
 
@@ -435,9 +441,23 @@ See **[middleware-chain.md](./middleware-chain.md)**.
 
 ## Testing the Build
 
+### Test Deploy Entry Contract
+
+The deployed seam is `dist/server.js`:
+
+```bash
+pnpm build
+node -e "import('./dist/server.js').then(m => console.log('✅ Deploy handler:', typeof m.default))"
+```
+
+Should output: `✅ Deploy handler: function`
+
+The build itself already runs this contract check after every bundle write and
+fails if the default export is missing or not a function.
+
 ### Test Importable App Factory
 
-The importable seam is `dist/application.js`, not `dist/index.js`:
+The importable app-factory seam remains `dist/application.js`:
 
 ```bash
 pnpm build
@@ -446,8 +466,8 @@ node -e "import('./dist/application.js').then(m => console.log('✅ Module loads
 
 Should output: `✅ Module loads: function`
 
-`dist/index.js` is the runtime entry point and boots the server immediately; it
-is not an importable app-factory verification seam.
+`dist/index.js` is the local listener entry and boots the server immediately;
+it is not an importable verification seam.
 
 The repo also carries a regression-proof version of this check in
 `e2e-tests/built-artifact-import.e2e.test.ts`. That test spawns plain Node and
@@ -466,14 +486,15 @@ pnpm start
 
 ## Operational Notes
 
-- If `dist/index.js` is missing, the build did not complete successfully or the
-  runtime is starting from the wrong working tree.
+- If `dist/server.js` is missing, the deploy bundle did not complete
+  successfully or the build is starting from the wrong working tree.
 - Widget HTML is embedded in the bundle. If the widget appears stale, re-run
   `pnpm build:widget` to regenerate `src/generated/widget-html-content.ts`,
   then `pnpm build` to bundle it.
 - If `pnpm dev` works but the built server crashes immediately, suspect a
   dev-loader versus plain-Node resolver mismatch first and rerun the
-  built-artifact import proof against `dist/application.js`.
+  deploy-entry proof against `dist/server.js`, then the importable-factory
+  proof against `dist/application.js`.
 - Port conflicts are handled explicitly in `src/server-runtime.ts` via the
   `http.createServer(...).listen(...)` error path, which produces a concrete
   `EADDRINUSE` message.
@@ -485,12 +506,14 @@ pnpm start
 
 The current deployment/runtime model is:
 
-- one shared startup path for local and deployed execution
+- explicit split between the deployed handler boundary and the local listener
+  boundary
 - separate resolver proof for built artefacts, because `tsx` success is not
   sufficient evidence for plain-Node startup
-- Vercel-specific configuration limited to framework selection, not a separate
-  code path
-- a Node server bundle at `dist/index.js` (includes embedded widget HTML)
+- Vercel-specific configuration limited to framework selection plus an explicit
+  repo-owned deploy entry
+- a deployed handler bundle at `dist/server.js`
+- a local listener bundle at `dist/index.js`
 - an importable app factory at `dist/application.js`
 - widget HTML as a committed TypeScript constant with no runtime filesystem
   dependency

@@ -1,216 +1,43 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-23 (Pippin / cursor-claude-opus-4-7
-**third session** — `observability-sentry-otel` thread
-session-handoff closeout after the L-8 Correction WI 1-5 atomic
-landing in commit `fb047f86`. Session-scoped substance was: (i)
-**WI 1-5 of the L-8 Correction work-list landed locally** —
-canonical `resolveBuildTimeRelease` resolver in new workspace
-package `@oaknational/build-metadata` (44/44 tests green), typed
-`SentryBuildPluginIntent` discriminated union (`disabled` /
-`skipped` / `configured`) replacing the prior fail-fast
-`Result.error` shape, `esbuild.config.ts` four-arm switch with
-three-branch dry build verified locally,
-`validate-root-application-version.mjs` pre-flight removed from
-the MCP HTTP build script only (search-cli left on tsup with the
-pre-flight intact per WI-5 scope-discipline correction caught by
-owner mid-execution); (ii) **session-scoped continuity work
-folded into the same commit**: `AGENTS.md` + `CLAUDE.md` +
-`GEMINI.md` stripped to pure pointers per the entry-point sweep,
-new `.agent/commands/ephemeral-to-permanent-homing.md` shared
-methodology partial authored, `session-handoff` step 6d added
-(entry-point drift sweep), `consolidate-docs` step 3 retargeted
-at the homing partial, `tsdoc-and-documentation-hygiene` rule
-renamed to `documentation-hygiene` across canonical + Cursor +
-Claude adapters with body restructured (misleading-doc detection
+**Last refreshed**: 2026-04-23 (Codex / codex —
+`observability-sentry-otel` remediation execution after verified
+deploy-boundary repair and green root gates).
 
-+ attribution on adoption + TSDoc presence and quality); (iii)
-**3 docs propagation edits** homing AGENTS.md facts to
-permanent locations (workspace README + `observability.md` +
-`docs/operations/sentry-deployment-runbook.md`); (iv)
-**distilled-memory user-preferences** extended (env-mirror,
-scope-discipline, attribution); (v) **2 pre-commit fail-and-fix
-cycles**: prettier formatting (root) and a depcruise-detected
-circular dependency between `build-time-release.ts` and
-`build-time-release-internals.ts` (broken by extracting shared
-types to `build-time-release-types.ts`). Forward state: WI 6-8
-remain (push branch + Vercel preview probe + Sentry UI
-verification + ADR-163 §6/§7 amendment). Earlier-today refresh:
-2026-04-23 second session — Pippin / cursor-claude-opus-4-7
-session-handoff closeout. No L-8 implementation work that session
-[explicit owner constraint: "no implementation work until the
-next session"]; session-scoped substance was (1)
-continuity-correction commits
-fixing the napkin/distilled owner-gating false framing in
-`repo-continuity.md` + `napkin.md`, (2) authoring
-`scripts/check-commit-message.sh` to validate commit messages
-in isolation from the ~34s pre-commit cycle, (3) authoring the
-commit-attempts diagnostic loop —
-`scripts/log-commit-attempt.sh` + tracked TSV log at
-`.agent/memory/operational/diagnostics/commit-attempts.log` +
-diagnostics README — to make the "git commit pre-commit output
-truncation in the last ~24h" pattern countable across
-sessions/machines, (4) capturing the truncation observation as a
-top-level napkin entry with hypotheses + workaround +
-falsifiability, (5) **second-pass refinement (post-handoff)**:
-converting the never-invoked `.agent/commands/commit.md` command
-into the canonical always-active
-[`.agent/skills/commit/SKILL.md`](../../skills/commit/SKILL.md)
-with the new helpers folded into the skill body — file-redirect
-framed as a Cursor-Shell-tool workaround with falsifiability
-tied to the diagnostic log, AGENTS.md verbose subsection rolled
-back to a thin pointer, all incoming references rewired
-(AGENT.md citation, finishing-branch skill, practice-index,
-README, platform-adapter-formats research) and **third-pass
-refinement (same session, owner-corrected)**: thin adapters
-restructured from *command* form to *skill* form per owner
-direction — deleted `.claude/commands/jc-commit.md`,
-`.cursor/commands/jc-commit.md`, `.gemini/commands/jc-commit.toml`;
-created `.cursor/skills/commit/SKILL.md`; renamed
-`.agents/skills/jc-commit/` → `.agents/skills/commit/` (drop
-personal `jc-` prefix to match `napkin` / `finishing-branch`
-convention for passive always-active skills). Skill discovery on
-Claude/Gemini falls back to the `AGENT.md` citation chain (no
-`.claude/skills/commit/` adapter, mirroring how `napkin` and
-`finishing-branch` work today). Five commits already landed
-this session: `6137c817` continuity correction, `74826914`
-check-commit-message helper, `0bd3204c` diagnostics infra,
-`14ea70f3` napkin truncation observation, `9abbdeb9` initial
-session-handoff. **The skill-conversion + adapter-refactor
-work is staged but NOT committed** — owner direction at session
-end: *"no need to commit, the next session can handle that"*.
-Staged set (run `git status --short` at next session open to
-confirm; expected ~19 entries): `.agent/skills/commit/SKILL.md`
-(NEW canonical), `.agents/skills/commit/SKILL.md` (NEW Codex
-skill thin pointer; renamed from `.agents/skills/jc-commit/`),
-`.cursor/skills/commit/SKILL.md` (NEW Cursor skill thin
-pointer), `.agent/commands/commit.md` (DELETED), three command
-adapters DELETED (`.claude/commands/jc-commit.md`,
-`.cursor/commands/jc-commit.md`, `.gemini/commands/jc-commit.toml`),
-`.agent/directives/AGENT.md` + `.agent/README.md` +
-`.agent/research/platform-adapter-formats.md` +
-`.agent/practice-index.md` + `.agent/skills/finishing-branch/SKILL.md` +
-`.claude/settings.json` + `AGENTS.md` (modified — references
-rewired or rolled back), `scripts/validate-portability.unit.test.ts`
-(modified — test fixture renamed off the deleted command path),
-`.agent/memory/operational/repo-continuity.md` +
-`.agent/memory/operational/threads/observability-sentry-otel.next-session.md` +
-`.agent/memory/operational/diagnostics/commit-attempts.log` +
-`.agent/memory/active/napkin.md` (this refresh + napkin
-investigation entry). The canonical home for commit-workflow
-guidance is now the skill, discoverable via
-[`AGENT.md § Commit Discipline`](../../directives/AGENT.md#commit-discipline)
-and the always-active skill register. **Unstaged Sentry L-8 WIP
-files in working tree** (deliberately kept out of this commit
-scope, belong to the next session's L-8 Correction work-list):
-`apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts`
-+ its unit test (modified), `packages/core/build-metadata/src/index.ts`
-(modified to re-export new modules), four NEW untracked files
-under `packages/core/build-metadata/` (`build-info.ts`,
-`build-time-release.ts`, plus their `.unit.test.ts` siblings). **Owner-gated follow-up
-deferred (Practice Core)**: `.agent/practice-core/practice-bootstrap.md`
-still lists `commit` under "Required Commands" with file
-`jc-commit.md` (line 403); the table needs an update to reflect
-the promotion from command to passive always-active skill, but
-that surface is owner-gated per the napkin/distilled correction —
-queued for the next session that touches Practice Core.
-**Same-session napkin entry filed** for the owner-noticed
-"two definitions per skill" observation across `.agent/skills/`,
-`.agents/skills/`, `.cursor/skills/` (and conditionally
-`.claude/skills/`) — captured as 1/3 with five investigation
-hooks at `napkin.md § 2026-04-23 — investigate: each skill
-appears to have two definitions across platform surfaces`.
-**Bounded follow-up sweep queued (next session that touches
-agent infra)**: rename the ten `jc-`prefixed skill directories
-in `.agents/skills/` to their bare names. Owner clarification
-this session: `jc-` is the personal namespace for **slash
-commands** (across `.claude/commands/`, `.cursor/commands/`,
-`.gemini/commands/`), not for skills; the prefix on skills is
-drift, not a convention. Sweep is mechanical: `git mv` each
-of `jc-chatgpt-report-normalisation`, `jc-consolidate-docs`,
-`jc-gates`, `jc-go`, `jc-metacognition`, `jc-plan`, `jc-review`,
-`jc-session-handoff`, `jc-start-right-quick`,
-`jc-start-right-thorough` to its bare name; update each
-frontmatter `name:` field; update `.claude/settings.json`
-`Skill(jc-*)` allowlist entries to bare names; audit any
-incoming citations. Detail at `napkin.md` investigation hook 4. Earlier-today refresh:
-2026-04-22 (`observability-sentry-otel` thread session close —
-Pippin / cursor-claude-opus-4-7 — UNLANDED probe; L-8
-Correction subsection landed in the active plan; continuity
-surfaces refreshed; Step 6 finding + Re-fired falsifiabilities
-block re-issued same session after owner correction —
-napkin/distilled are agent-gated, only `.agent/directives/` and
-`.agent/practice-core/` are owner-gated). Earlier-still refresh:
-2026-04-22 (Session 7 CLOSE — owner-corrected restatement). Session 7 honest landed
-state: Phase A + Phase D PARTIAL (napkin rotated + distilled
-compressed only; the four directive files in Phase D scope reset
-to HEAD per owner intervention when the agent unilaterally
-executed owner-gated per-file disposition without conversation;
-only the `[adr-078]→[di]` link-label rename on
-`testing-strategy.md` survived as a narrow technical micro-fix)
+The current state is:
 
-+ Phase E (PDR-012 amendment) + Phase G (practice-verification.md
-  PDR-032 mention) + Phase C Batch 3 (4 outgoing files deleted +
-  1 relocated; outgoing/ now contains only README.md). **Owner
-  decisions at Session 7 close**: fitness limit excesses declared
-  acceptable for now, revisit later (HARD: 4 hard, 10 soft); the
-  `pnpm practice:fitness --strict-hard` exits-0 DoD requirement
-  DROPPED for both Session 7 close AND Session 8 arc-close; Session 7
-  declared closed; Session 8 will briefly address rehoming files
-  moved under research where appropriate (appetite-shaped, not
-  exhaustive). Arc reshape 7 → 8 stands. Active threads §`memory-
-feedback` row updated; Deep consolidation status updated with
-  honest Session 7 close block (replaces the prior false
-  "walked end-to-end clean" record); Merry s7 identity row updated
-  on the thread record. Earlier history preserved below for audit.
-  **Previous refreshes**: 2026-04-21 (Session 5 of the staged doctrine-
-  consolidation plan landed — Stage 1 (mandatory evaluate-and-simplify)
-+ Stage 2(b) (decomposition of the ten retracted-`standing-decisions.md`
-  items into proper artefact homes) both landed; Stage 2(a) (outgoing
-  triage per PDR-007) honestly deferred to Session 6 for orthogonal-
-  scope / dedicated-lens reasons. Mid-close owner metacognition
-  surfaced a manufactured-budget close attempt (no real meter behind
-  "budget consumed"); the corrected arc executed Stage 2(b) with
-  per-item Class A.1 firing (3 of 10 items rewrote from `new PDR` to
-  `existing-surface amendment`, owner-ratified twice). Net Stage 2(b)
-  landing: 1 new PDR (PDR-031 build-vs-buy attestation), 4 PDR
-  amendments (PDR-011, PDR-015 ×2, PDR-019, PDR-026), 1 new rule
-  (`--no-verify` fresh authorisation), 2 principle additions (Owner
-  Direction Beats Plan; Misleading docs are blocking), 1 ADR amendment
-  (ADR-053 temporal-scope clarification). Sessions 6 [Stage 2(a)
-  outgoing triage + holistic fitness exploration with `--strict-hard`
-  closure] remains. **Post-handoff (same date)**: layer-set
-  first-principles reflection + `/jc-consolidate-docs` walked
-  end-to-end (3 of 6 triggers fired); 6 mechanical line-length wraps
-  applied; 5 hard-zone fitness items honestly deferred to Session 6;
-  3 pattern + 2 rule candidates accumulating in Pending band; 5 new
-  owner-decision items appended to the `memory-feedback` thread next-
-  session record §Post-handoff additions; commit `0e4849ec`.)
-  **Status**: Authoritative for the fields below. Operational memory
-  is the sole continuity-state host. Session orientation doctrine lives
-  in [`orientation.md`](../../directives/orientation.md); landing
-  commitment doctrine lives in
-  [PDR-026](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md);
-  rituals live in `start-right-quick` + `session-handoff`.
+- L-8 Correction WI 1-5 remain landed locally in `fb047f86`.
+- The real `@vercel/node` deploy contract is now verified from
+  primary evidence (Vercel Express docs + runtime source).
+- The smallest deploy-boundary repair is landed locally: dedicated
+  `src/server.ts` / `dist/server.js` deploy entry, `package.json`
+  `main` repointed, build warning gate, export-contract gate, and
+  local harness repair.
+- `pnpm check` exits 0 after the supporting root-gate fallout was
+  fixed (`.claude` portability mirror + `knip` entry update).
+- The binding repo work now lives in one operational repair plan:
+  [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
+- Broader runtime simplification moved to the separate strategic brief
+  [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md).
+- Monitor creation and ongoing uptime validation are now owner-external
+  and recorded only as an archive note:
+  [`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`](../../plans/observability/archive/superseded/synthetic-monitoring.plan.owner-externalised-2026-04-23.md).
+- The only remaining repo-owned open work is external proof on a real
+  preview deploy: boot, `/healthz`, and preview release / traffic in
+  Sentry.
+
+This refresh also reconciles the thread record, observability plan
+surfaces, and continuity guidance with that new contract. Earlier
+session detail remains available in git history and the per-thread
+record; the sections below are the authoritative current state.
 
 **Side-channel same-day session (2026-04-23, cursor-claude-opus-4-7,
 no-thread audit-and-capture)**: a separate short session ran
-`pnpm -r outdated`, analysed Clerk + MCP-related changelogs
-(`@clerk/express`, `@clerk/backend`, `@clerk/mcp-tools`,
-`@modelcontextprotocol/ext-apps`, `@modelcontextprotocol/sdk`
-including 2.0-alpha direction), and authored one new queued plan:
+`pnpm -r outdated`, analysed Clerk + MCP-related changelogs, and
+authored one queued plan:
 [`sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md`](../../plans/sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md).
-The plan covers four available bumps in
-`apps/oak-curriculum-mcp-streamable-http`, captures `AppOptions.strict`
-adoption + ext-apps 1.7.0 capabilities + MCP SDK 2.0 evaluation as
-forward candidates with falsifiable promotion triggers, and
-references the `verify-clerk-token.unit.test.ts` version-bump-reminder
-canary as the Phase 2 gate. Collection READMEs updated. No thread
-joined; no commit landed; no consolidation trigger crossed (single
-queued plan + two README index rows). The `observability-sentry-otel`
-thread state below is unchanged by this side-channel session. Owner
-direction at session end: leave the plan queued and run a short
-session-handoff.
+No thread joined; no commit landed; the observability thread state
+below is unchanged by that side-channel work.
 
 ## Active threads
 
@@ -231,7 +58,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-doctrine-landing-and-plan-rewrite / 2026-04-23 (latest plan-rewrite session — three reviewer rounds collapsed an ambitious nine-phase canonical refactor into a seven-phase scoped repair: `assumptions-reviewer` on the prior plan returned `No-Go` with 7 blocking findings; `architecture-reviewer-barney` on the redrafted DRAFT returned `ABANDON-REFACTOR` (simplification-first lens) — much existing scaffolding has working semantics and was about to be deleted on aesthetic grounds; `assumptions-reviewer` on Barney's report returned `AMEND` with 6 amendments. Reconciled into plan's `§Reduced-Scope Rewrite (BINDING CONTRACT)` (7 phases — 1: empirical Vercel adapter contract probe; 2: deploy boundary hardening + build self-assertion + doc update; 3: local continuity + tooling migration; 4: Sentry Uptime Monitoring lane unblock — DECISION RECORD ONLY; 5: Vercel preview probe re-do; 6: ADR-163 §6/§7 amendment; 7: branch close + thread/napkin/repo-continuity update) plus `§Deferred Lanes` (7 items DL-1..DL-7 inc. canonical Vercel Express layout, single Sentry init seam, `bootstrap-app.ts` collapse, `application` entry retirement, IoC split, Sentry Uptime Monitoring full implementation, assumption-challenge sequencing meta-lesson). 5 legacy sections marked `(LEGACY — SUPERSEDED)`. Final `architecture-reviewer-barney` pass: 3 AMEND blockers (stale operative metadata, Phase 1 wording prejudging probe, Phase 4 / Phase 5 sequencing contradiction) — all 3 resolved in-place — final verdict `GO`. Plan promoted from `draft` → `execution-ready`. NO CODE WRITTEN this session. Phase 1 implementation target from prior session DEFERRED with named design-correctness constraint: implementing the prior `default`-export gate would have asserted a contract whose semantic correctness was itself unproven, producing a tautological assertion and false confidence. Falsifiability recorded in thread record §Outcome) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-doctrine-landing-and-plan-rewrite / 2026-04-23; `codex` / *unknown* / Codex / deploy-boundary-repair-root-gate-remediation-and-predeploy-closeout / 2026-04-23 (latest — contract verified, dedicated `dist/server.js` deploy boundary landed locally, `pnpm check` green; preview `/healthz` + Sentry proof still pending push) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -277,94 +104,79 @@ lives in
 **Timeline**: §L-8 WS1 + WS2 + WS3.1 LANDED in `f9d5b0d2`
 (2026-04-21); 2026-04-22 Vercel preview probe FAILED with
 `missing_app_version`; L-8 Correction WI 1-5 LANDED LOCALLY in
-`fb047f86` (2026-04-23); WI-6 Vercel preview probe RAN
-2026-04-23 — build green, **runtime lambda crashed
-`FUNCTION_INVOCATION_FAILED`**; root cause established as a
-Vercel Express adapter contract violation
-(`apps/oak-curriculum-mcp-streamable-http/src/index.ts`
-default-export shape) named at build time by two
-acknowledged-and-deferred esbuild warnings.
+`fb047f86` (2026-04-23); the next preview reached a green build but
+the function crashed at runtime with `FUNCTION_INVOCATION_FAILED`
+because the deployed artefact did not satisfy Vercel's import
+contract; 2026-04-23 later in the same thread the contract was
+verified from primary evidence, the dedicated `dist/server.js`
+deploy-boundary repair landed locally, and `pnpm check` returned to
+green. The next step is the owner-allowed commit/push preview rerun.
 
-**Next session begins** at Phase 1 of the
+**Current execution authority**:
 [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-`§Reduced-Scope Rewrite (BINDING CONTRACT)` —
-**empirical Vercel adapter contract probe** (Vercel docs
-survey + disposable smoke deploy to determine the actual
-`package.main` contract Vercel's Node serverless adapter
-invokes at request time). Phase 2 (deploy boundary hardening
-— add `src/server.ts` matching the proven contract + esbuild
-metafile self-assertion + warnings-as-errors + update
-`docs/deployment-architecture.md` and `README.md`) lands only
-once Phase 1's contract is recorded in the plan body. The
-plan's seven phases close, in order: (1) probe; (2) deploy
-boundary hardening; (3) local continuity + tooling migration
-(retain existing `bootstrap-app.ts` / `server-runtime.ts` /
-`--import @sentry/node/preload` runner stack); (4) Sentry
-Uptime Monitoring lane unblock — **decision record only**, no
-monitor build-out in this branch; (5) Vercel preview probe
-re-do (re-attempts WI-6 + WI-7); (6) ADR-163 §6/§7 amendment
-for the reduced asymmetric shape; (7) branch close +
-thread/napkin/repo-continuity update + DL-1..7 follow-up
-stubs filed. Three-anchor reviewer cadence per phase (during
-planning, after each significant change, before session
-close). Status: `EXECUTION-READY` after Barney `GO` sign-off.
+is now the one operational repair plan for the remaining repo work:
+
+1. verify the actual `@vercel/node` contract from primary evidence;
+2. land the smallest deploy-boundary repair;
+3. keep local execution honest;
+4. rerun the preview and prove `/healthz`;
+5. prove preview release / traffic in Sentry;
+6. amend ADR-163 and the parent L-8 lane.
+
+**Separate future work**:
+[`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
+owns broader runtime simplification once the repaired preview is
+stable.
+
+**Closed repo monitoring work**:
+[`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`](../../plans/observability/archive/superseded/synthetic-monitoring.plan.owner-externalised-2026-04-23.md)
+records that monitor creation and ongoing uptime validation are
+owner-external. Repo scope ends at a healthy `/healthz` endpoint plus
+preview/Sentry proof.
 
 ## Current session focus
 
-The eight-session staged doctrine-consolidation arc on the
-`memory-feedback` thread is **CLOSED** as of 2026-04-22 Session 8
-(Merry / cursor / claude-opus-4-7). Owner instruction at session
-close that drove arc-closure-now (not arc-closure-next-session):
-*"there is no next session, this simple expansion of the memory
-system has been going on for two days, there cannot be endless
-'nexts'. How do we close this out right now?"*
+This session became the actual repair execution on
+`observability-sentry-otel`, plus the root-gate cleanup needed before
+the push-driven preview rerun.
 
-Session 8 honest landed scope:
+Landed this session:
 
-1. **Reference-tier rehoming first-drain pass executed end-to-
-   end** (full sweep, not brief — owner expanded scope at session
-   open, delegating decision authority and inviting reviewer
-   second opinions): 22 MOVED + 4 DELETED + 1 KEPT in
-   `.agent/research/notes/`; lane README absorbed the agentic-
-   engineering hub README; 13 active surfaces relink-updated;
-   bay reduced to single residual (`prog-frame/`).
-2. **Pattern graduation** (3/3 owner-confirmed):
-   `feel-state-of-completion-preceding-evidence-of-completion`
-   promoted to `.agent/memory/active/patterns/`. Cross-session
-   independent instances Sessions 4 + 5 + 7 (Session 7 instance
-   was the unilateral `principles.md` 24000→27000 char-limit
-   raise without per-file owner conversation, owner intervention,
-   file resets).
-3. **Plans archived**: staged-doctrine plan and rehoming plan
-   both moved to `agentic-engineering-enhancements/archive/completed/`.
-4. **Practice Core CHANGELOG arc-close entry** landed at top of
-   [CHANGELOG](../../practice-core/CHANGELOG.md).
-5. **Pending-graduations register sweep**: arc-resolved entries
-   removed (see §Pending-graduations register below). Four
-   directive files (`principles.md`, `AGENT.md`, `testing-
-strategy.md`, `continuity-practice.md`) carry forward as the
-   existing Due-but-not-blocking entry per Session 7 owner
-   amendment; current excesses owner-accepted.
-6. **`memory-feedback` thread archived**: next-session record
-   deleted per PDR-026 §Lifecycle; row removed from §Active
-   threads above.
-7. **`observability-sentry-otel` resumes as next-active thread**.
-   No identity-row surfacing required — the two `*unattributed*`
-   rows in that thread reflect a thread-local owner-accepted
-   attribution gap (decided 2026-04-21 in
-   [`observability-sentry-otel.next-session.md` §Identity discipline](threads/observability-sentry-otel.next-session.md)).
+1. Verified the real Vercel import contract from primary evidence and
+   wrote the contract note into the operational repair plan:
+   [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
+2. Landed the dedicated deploy boundary (`src/server.ts` /
+   `dist/server.js`), its lazy handler seam, and the `package.json`
+   `main` repoint.
+3. Added build-time contract gates: esbuild warnings now fail the
+   build, and the built deploy entry must default-export a function.
+4. Repaired the supporting repo-tail fallout the full root check
+   exposed: `scripts/server-harness.js`, `knip.config.ts`, and the
+   missing `.claude/rules/no-warning-toleration.md` portability
+   mirror.
+5. Reran `pnpm check` to green on the branch.
+6. Amended ADR-163 and refreshed thread/continuity surfaces so the
+   repaired local shape is now the written truth.
+
+What did not land:
+
+- the push-driven rerun preview;
+- `/healthz` preview proof;
+- preview-release / preview-traffic proof in Sentry.
+
+Those remain the next execution session's landing target.
 
 **Three rehoming open items** are recorded as honest PDR-026
 deferrals on durable surfaces (NOT carried as new pending-
 graduations register entries blocking arc-close):
 
-+ `prog-frame/agentic-engineering-practice.md` disposition —
+- `prog-frame/agentic-engineering-practice.md` disposition —
   owner conversation required; recorded in
   [`research/notes/README.md`](../../research/notes/README.md).
-+ `platform-adapter-formats.md` PROMOTE-TO-REFERENCE proposal —
+- `platform-adapter-formats.md` PROMOTE-TO-REFERENCE proposal —
   owner-vet required per PDR-032; archived rehoming plan +
   `.agent/reference/README.md`.
-+ `boundary-enforcement-with-eslint.md` PROMOTE-TO-REFERENCE
+- `boundary-enforcement-with-eslint.md` PROMOTE-TO-REFERENCE
   proposal — same.
 
 Owner-amended DoD load-bearing across the arc (Session 7 close):
@@ -394,7 +206,7 @@ propagation items were treated as already substantively complete
 
 **Stage 1.2 — Simplification pass with delete-bias**:
 
-+ **TIER-1 register cleanup** ✅: verified two `distilled-absorbed`
+- **TIER-1 register cleanup** ✅: verified two `distilled-absorbed`
   entries (deleted); deleted four single-instance pattern
   candidates; demoted two `claimed-3-instance` patterns to pending
   with cascade-vs-independent annotation (reviewers flagged that
@@ -402,7 +214,7 @@ propagation items were treated as already substantively complete
   independent instance — bar is now explicitly "three
   cross-session instances"). Napkin language tightened at three
   pattern entries.
-+ **TIER-2 E1 — workstream-layer collapse** ✅: retired
+- **TIER-2 E1 — workstream-layer collapse** ✅: retired
   `.agent/memory/operational/workstreams/` as an active surface.
   Lane state folded into thread next-session records. Briefs
   archived; README rewritten as retirement notice; PDR-027
@@ -411,21 +223,21 @@ propagation items were treated as already substantively complete
   `tracks/README.md`, `commands/session-handoff.md`,
   `directives/orientation.md`, `skills/start-right-quick/shared/start-right.md`
   updated.
-+ **TIER-2 E2 — register pruned to open items only** ✅: four
+- **TIER-2 E2 — register pruned to open items only** ✅: four
   Graduated bands + Infrastructure band removed; graduation
   history preserved in git history + session-handoff close summaries;
   schema updated so that graduation removes from the register.
-+ **TIER-2 E3 — PDR-029 Class A.1 Layer 2 reclassified** ✅:
+- **TIER-2 E3 — PDR-029 Class A.1 Layer 2 reclassified** ✅:
   foundation-directive grounding is no longer counted as an
   installed tripwire layer; treated as background grounding;
   Class A.1 is now a single-layer tripwire (acknowledged exception
   to the "two complementary layers" design target).
-+ **TIER-2 E4 — PDR-029 §Host-local context deleted** ✅:
+- **TIER-2 E4 — PDR-029 §Host-local context deleted** ✅:
   repo-local rollout state removed from the portable PDR body.
-+ **Pattern-promotion bar** ✅: kept at "three instances"; napkin
+- **Pattern-promotion bar** ✅: kept at "three instances"; napkin
   and the register now explicitly require **three cross-session
   independent instances** (not cascades within one session).
-+ **Family-A tripwire retention check** ✅ (see §Family-A
+- **Family-A tripwire retention check** ✅ (see §Family-A
   tripwires below for concrete near-term firing triggers).
 
 **Stage 1.3 — Thread/workstream/track first-principles check**
@@ -436,21 +248,21 @@ made moot). Codified in PDR-027 §Amendment Log 2026-04-21 Session 5.
 **Reviewer-driven follow-on landings** (post-Stage-1.3,
 docs-adr-reviewer pass 2):
 
-+ PDR-011 amended in parallel with PDR-027 (workstream-brief
+- PDR-011 amended in parallel with PDR-027 (workstream-brief
   surface retired as a portable component; Active threads + thread
   next-session record + `Lane state` substructure named as the new
   default split-host shape; prior shape preserved as accepted
   variant; track filename convention updated).
-+ ADR-150 (host-architecture source for PDR-011) given a parallel
+- ADR-150 (host-architecture source for PDR-011) given a parallel
   Session-5 amendment-log entry pointing at the PDR-011 amendment.
-+ PDR-030 `executive-impact:` tag re-homed from workstream brief
+- PDR-030 `executive-impact:` tag re-homed from workstream brief
   to thread next-session record's `Lane state` substructure.
-+ Always-applied workflow surfaces swept (start-right-quick, go,
+- Always-applied workflow surfaces swept (start-right-quick, go,
   napkin, session-handoff, orientation, all operational README
   files, practice.md Artefact Map) — no live workstream-brief
   references remain; historical citations carry parenthetical
   retirement notes.
-+ Memory-feedback thread next-session record's broken link to the
+- Memory-feedback thread next-session record's broken link to the
   retired `operational-awareness-continuity.md` brief redirected
   to its archive path with a retirement-note parenthetical.
 
@@ -459,7 +271,7 @@ docs-adr-reviewer pass 2):
 `/jc-metacognition` checkpoints; per-item Class A.1 firing applied
 to all 10 items):
 
-+ **Owner-ratified mapping** (twice — initial then revised after
+- **Owner-ratified mapping** (twice — initial then revised after
   Class A.1 firing produced 3 rewrites). Mapping classification
   outcome: 1 new PDR + 5 PDR amendments (one PDR amended twice in
   a single Amendment Log entry) + 1 ADR amendment + 1 new rule + 2
@@ -467,24 +279,24 @@ to all 10 items):
   taxonomy in PDR-028/PDR-030; staged-execution / fitness-not-
   blocking / experience-scan-deferred / session-break-points in
   plan body) require no further authoring.
-+ **Class A.1 firing summary** (3 of 10 items rewrote): item 5
+- **Class A.1 firing summary** (3 of 10 items rewrote): item 5
   (`adrs-state-what-not-how`) → PDR-019 amendment (not new PDR);
   item 8 (`docs-as-DoD`) → PDR-026 amendment (not new PDR);
   item 9 (`misleading-docs-are-blocking`) → principle line (not
   new PDR). The 3 rewrites are evidence the Class A.1 tripwire
   worked as designed against shape-problems before they
   proliferated.
-+ **Landed artefacts**:
-  + [PDR-031 (Build-vs-Buy Attestation Pre-ExitPlanMode)](../../practice-core/decision-records/PDR-031-build-vs-buy-attestation.md) — sole new PDR.
-  + [PDR-011 §The continuity contract + 2026-04-21 Session 5 amendment](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log) — runtime tactical track cards git-tracked.
-  + [PDR-015 §Friction-ratchet trigger + §Reviewer phases aligned to lifecycle + 2026-04-21 amendment](../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md#amendment-log) — items 4 + 6 in one amendment-log entry.
-  + [PDR-019 §ADRs state WHAT, not HOW + 2026-04-21 amendment](../../practice-core/decision-records/PDR-019-adr-scope-by-reusability.md#amendment-log) — item 5 (Class A.1 rewrite).
-  + [PDR-026 §Landing target definition + 2026-04-21 Session 5 amendment](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log) — item 8 docs-as-DoD (Class A.1 rewrite).
-  + [`/.agent/rules/no-verify-requires-fresh-authorisation.md`](../../rules/no-verify-requires-fresh-authorisation.md) + Cursor mirror — item 1 (sole new rule).
-  + [`principles.md § Owner Direction Beats Plan`](../../directives/principles.md) — item 2.
-  + [`principles.md § Code Quality §Misleading docs are blocking`](../../directives/principles.md) — item 9 (Class A.1 rewrite); enforced by always-applied [`documentation-hygiene`](../../rules/documentation-hygiene.md) rule.
-  + [ADR-053 §Amendment: Canonical User-ID Provider Through Public Alpha (2026-04-21)](../../../docs/architecture/architectural-decisions/053-clerk-as-identity-provider.md) — item 10.
-+ **Mesh integrity** (post-`docs-adr-reviewer` close-pass):
+- **Landed artefacts**:
+  - [PDR-031 (Build-vs-Buy Attestation Pre-ExitPlanMode)](../../practice-core/decision-records/PDR-031-build-vs-buy-attestation.md) — sole new PDR.
+  - [PDR-011 §The continuity contract + 2026-04-21 Session 5 amendment](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log) — runtime tactical track cards git-tracked.
+  - [PDR-015 §Friction-ratchet trigger + §Reviewer phases aligned to lifecycle + 2026-04-21 amendment](../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md#amendment-log) — items 4 + 6 in one amendment-log entry.
+  - [PDR-019 §ADRs state WHAT, not HOW + 2026-04-21 amendment](../../practice-core/decision-records/PDR-019-adr-scope-by-reusability.md#amendment-log) — item 5 (Class A.1 rewrite).
+  - [PDR-026 §Landing target definition + 2026-04-21 Session 5 amendment](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log) — item 8 docs-as-DoD (Class A.1 rewrite).
+  - [`/.agent/rules/no-verify-requires-fresh-authorisation.md`](../../rules/no-verify-requires-fresh-authorisation.md) + Cursor mirror — item 1 (sole new rule).
+  - [`principles.md § Owner Direction Beats Plan`](../../directives/principles.md) — item 2.
+  - [`principles.md § Code Quality §Misleading docs are blocking`](../../directives/principles.md) — item 9 (Class A.1 rewrite); enforced by always-applied [`documentation-hygiene`](../../rules/documentation-hygiene.md) rule.
+  - [ADR-053 §Amendment: Canonical User-ID Provider Through Public Alpha (2026-04-21)](../../../docs/architecture/architectural-decisions/053-clerk-as-identity-provider.md) — item 10.
+- **Mesh integrity** (post-`docs-adr-reviewer` close-pass):
   PDR-031 added to PDR README index; PDR-011/015/019/026 status
   rows annotated with `(amended 2026-04-21)`; ADR-053 entry in
   ADR README annotated; `tracks/README.md` cross-references
@@ -600,11 +412,11 @@ open via the grounding order.
 
 **Where ratified decisions live**:
 
-+ **Architectural decisions** → [ADR index](../../../docs/architecture/architectural-decisions/README.md).
-+ **Practice-governance decisions** → [PDR index](../../practice-core/decision-records/) (portable doctrine).
-+ **Always-applied procedural rules** → [`.agent/rules/`](../../rules/) tier.
-+ **Meta-principles** → [`.agent/directives/principles.md`](../../directives/principles.md).
-+ **Plan-local meta-decisions** (scope, shape, fitness tolerance,
+- **Architectural decisions** → [ADR index](../../../docs/architecture/architectural-decisions/README.md).
+- **Practice-governance decisions** → [PDR index](../../practice-core/decision-records/) (portable doctrine).
+- **Always-applied procedural rules** → [`.agent/rules/`](../../rules/) tier.
+- **Meta-principles** → [`.agent/directives/principles.md`](../../directives/principles.md).
+- **Plan-local meta-decisions** (scope, shape, fitness tolerance,
   session counts, deferrals) → the owning plan body itself.
 
 Session 4 (2026-04-21) removed the prior `standing-decisions.md` misc
@@ -625,52 +437,52 @@ forward from those homes.
 Invariants in force for any session regardless of workstream (the
 set is additive; previous invariants still apply):
 
-+ **Cardinal rule**: `pnpm sdk-codegen && pnpm build` brings all
+- **Cardinal rule**: `pnpm sdk-codegen && pnpm build` brings all
   workspaces into alignment with an upstream OpenAPI schema change.
-+ **No compatibility layers, no backwards compatibility** — replace,
+- **No compatibility layers, no backwards compatibility** — replace,
   don't bridge. See `.agent/directives/principles.md`.
-+ **TDD at all levels** — tests first, fail-green-refactor.
-+ **Tests prove product behaviour, not configuration** — never
+- **TDD at all levels** — tests first, fail-green-refactor.
+- **Tests prove product behaviour, not configuration** — never
   assert on file structure, section headings, or field names when
   what you need to prove is the system's observable behaviour. See
   `.agent/directives/testing-strategy.md`.
-+ **Strict boundary validation** only — product code does not read
+- **Strict boundary validation** only — product code does not read
   `process.env`; boundary validation is schema-driven.
-+ **Tests never touch global state** — no `process.env` read/write
+- **Tests never touch global state** — no `process.env` read/write
   in any test type; pass explicit literal inputs via DI.
-+ **Clerk is canonical user-ID provider through public alpha.**
-+ **`--no-verify` requires fresh per-commit owner authorisation** —
+- **Clerk is canonical user-ID provider through public alpha.**
+- **`--no-verify` requires fresh per-commit owner authorisation** —
   no carry-forward.
-+ **Build-vs-buy attestation required pre-ExitPlanMode** for any
+- **Build-vs-buy attestation required pre-ExitPlanMode** for any
   vendor-integration plan (installed 2026-04-20, commit `4bccba71`).
   Sunk-cost reasoning is not a valid "why bespoke" answer.
-+ **Friction-ratchet counter** — 3+ independent friction signals
+- **Friction-ratchet counter** — 3+ independent friction signals
   against the same shape escalates to `assumptions-reviewer` for
   solution-class review, not another tactical fix (installed
   `4bccba71`).
-+ **ADRs state WHAT, not HOW** — argv shapes, per-step postures, and
+- **ADRs state WHAT, not HOW** — argv shapes, per-step postures, and
   file paths belong in the realising plan, not the ADR (installed
   `4bccba71`).
-+ **Reviewer phases aligned** — plan-time (solution-class) →
+- **Reviewer phases aligned** — plan-time (solution-class) →
   mid-cycle (solution-execution) → close (coherence). Close-only
   scheduling is the anti-pattern (installed `4bccba71`).
-+ **Runtime tactical track cards are git-tracked** — graduated
+- **Runtime tactical track cards are git-tracked** — graduated
   2026-04-21 Session 5 to [PDR-011 §The continuity contract +
   2026-04-21 Session 5 amendment](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md#amendment-log).
   Cards live at `.agent/memory/operational/tracks/`; filename
   convention `<thread>--<agent>--<branch>.md` per
   [`tracks/README.md § Naming convention`](tracks/README.md).
-+ **Owner's word beats plan. Always.** — graduated 2026-04-21
+- **Owner's word beats plan. Always.** — graduated 2026-04-21
   Session 5 to [`principles.md § Owner Direction Beats Plan`](../../directives/principles.md).
   Currently a foundational invariant only; no always-applied rule
   operationalises it yet (operationalisation is a candidate
   follow-up if the principle is observed to drift in practice).
-+ **Docs-as-definition-of-done** — graduated 2026-04-21 Session 5
+- **Docs-as-definition-of-done** — graduated 2026-04-21 Session 5
   to [PDR-026 §Landing target definition (2026-04-21 Session 5
   amendment)](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log).
   A change is not landed while documentation it invalidates
   remains stale; doc updates compose into the landing commit.
-+ **Misleading docs are blocking** — graduated 2026-04-21 Session 5
+- **Misleading docs are blocking** — graduated 2026-04-21 Session 5
   to [`principles.md § Code Quality`](../../directives/principles.md).
   Enforced by the always-applied `documentation-hygiene`
   rule. Symmetric with PDR-026 §Landing target definition (above):
@@ -679,84 +491,36 @@ set is additive; previous invariants still apply):
 
 Non-goals for next session:
 
-+ Do NOT amend ADR-163 §6 prose yet; that is the §L-8 migration's
-  WS3 task (atomic with WS2).
-+ Do NOT delete bespoke orchestrator code yet; the §L-8 migration's
-  WS2 task handles deletion.
-+ Do NOT re-open the tsup-vs-esbuild decision. Owner decision
-  stands: esbuild. Any plan non-goal that contradicts this is wrong
-  per the owner-beats-plan invariant.
+- Do NOT start a new workstream. This is one remediation session.
+- Do NOT reopen broader canonicalisation work while the preview still
+  fails.
+- Do NOT recreate a repo monitoring lane or treat monitor setup as
+  in-repo acceptance work.
+- Do NOT guess the Vercel import contract before checking primary
+  evidence.
 
 ## Next safe step
 
-**Resume the `observability-sentry-otel` thread at Phase 1 of
-the
-[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-`§Reduced-Scope Rewrite (BINDING CONTRACT)` — empirical
-Vercel adapter contract probe**. The plan was rewritten this
-session under three reviewer rounds (`assumptions-reviewer` /
-`architecture-reviewer-barney` / `assumptions-reviewer` then
-final `architecture-reviewer-barney` for sign-off) and
-promoted from `draft` → `execution-ready`; status, contract,
-and reviewer trail are all in the plan body. Read the plan's
-`§Why this plan looks the way it does (read this FIRST)`,
-`§Next Session Entry Point`, and `§Reduced-Scope Rewrite
-(BINDING CONTRACT)` subsections in that order BEFORE doing
-anything else.
+**Resume the `observability-sentry-otel` thread at Operational Step 1
+of**
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md):
+verify the actual Vercel Node serverless import contract from primary
+evidence and write that contract note into the plan **before** coding.
 
-**Phase 1 binding target** for the next session: an
-**empirical probe** — Vercel docs survey plus a disposable
-smoke deploy — determines what `package.main` shape Vercel's
-Node serverless adapter actually invokes at request time
-(default-export Express app vs. handler function vs. another
-shape). Phase 1 ends with a one-paragraph contract statement
-written into the plan body — NOT yet `src/server.ts`, NOT yet
-the build self-assertion gate. Phase 2 (deploy boundary
-hardening — add `src/server.ts` matching the proven contract
-plus wire `esbuild.config.ts` metafile self-assertion plus
-warnings-as-errors plus update `docs/deployment-architecture.md`
-and `README.md`) lands only once Phase 1's contract is
-recorded. Do NOT pre-empt the probe by asserting `default`
-export unconditionally — that was the prior plan's
-load-bearing failure mode and the reason for this session's
-plan rewrite.
+Then, in the same execution session:
 
-**Reviewer cadence on resume** (preserved from the original
-plan; per owner directive 2026-04-23): each phase has three
-anchors — during planning, after each significant change,
-before session close. The legacy `§Reviewer Scheduling` table
-in the plan body is marked `(LEGACY — SUPERSEDED)`; the new
-binding cadence lives inside each phase under `§Reduced-Scope
-Rewrite (BINDING CONTRACT)`. No batching at the end. **DL-7
-amendment-candidate** captured this session: dispatch
-`assumptions-reviewer` on EACH architectural-review output
-that proposes design changes, BEFORE that output is treated
-as planning input — countermeasure to the
-inherited-framing-without-first-principles-check pattern that
-caused this session's full plan rewrite.
+1. land the deploy-boundary repair (`src/server.ts`, `package.json`
+   `main`, esbuild warning hard-fail, export-contract assertion,
+   deployment docs);
+2. repair local harness/runtime drift only where the new deployed
+   boundary makes it necessary;
+3. rerun the preview and prove `/healthz`;
+4. verify the preview release and preview traffic in Sentry;
+5. amend ADR-163 and the parent L-8 lane to match the repaired shape.
 
-The L-8 Correction WI 7-8 work-items are absorbed into the
-binding-contract Phases 5-6 of the rewritten plan (WI-7 Sentry
-UI verification re-attempted in Phase 5 Vercel preview probe
-re-do; WI-8 ADR-163 §6/§7 amendment in Phase 6 — for the
-**asymmetric** deploy shape Barney's `GO` ratifies, not the
-prior canonical-three-files shape). The
-`synthetic-monitoring.plan.md` lane unblock is Phase 4 of the
-binding contract — **decision record only** (records the
-Sentry Uptime Monitoring tool-selection in
-`synthetic-monitoring.plan.md` and removes its `blocked_on`
-entry); the actual monitor build-out is `Deferred Lane DL-6`
-and stays in `synthetic-monitoring.plan.md`'s scope, NOT this
-branch. The on-disk file name `synthetic-monitoring.plan.md`
-is preserved; rename to a Sentry-taxonomy-aligned name
-remains deferred to a separate documentation-housekeeping
-pass. Pre-flight: `SENTRY_AUTH_TOKEN` already set on Vercel
-`poc-oak-open-curriculum-mcp` (production / preview /
-development) per prior session, AND now passed through by
-TurboRepo via `globalPassThroughEnv` in `turbo.json` — the
-plugin reaches the build successfully, and the build is
-green; the failing surface is now strictly the runtime
-contract that Phase 1's empirical probe will pin down.
+Do **not** reopen canonicalisation work here, and do **not** recreate
+a repo monitoring lane. The owner will create the uptime monitor
+outside this repo once the endpoint and preview proof are real.
 
 **Commit workflow tooling available** (refined 2026-04-23 by
 Pippin's second session into the canonical `commit` skill at
@@ -795,38 +559,29 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
-**Status (2026-04-23 Pippin latest plan-rewrite session —
-`observability-sentry-otel` session-handoff closeout after a
-planning-only session that absorbed three reviewer rounds and
-rewrote the binding plan from `draft` → `execution-ready`)**:
-**not due — same-thread same-day continuation; deep
-consolidation walks already completed earlier today and
-yesterday; this session's substance was plan rewrite under
-three reviewer rounds (`assumptions-reviewer` on the prior
-plan returned `No-Go`; `architecture-reviewer-barney` on the
-DRAFT returned `ABANDON-REFACTOR`; `assumptions-reviewer` on
-Barney's report returned `AMEND`; final
-`architecture-reviewer-barney` returned `GO` after three in-
-place blocker resolutions). Plan promoted from `draft` →
-`execution-ready` with `§Reduced-Scope Rewrite (BINDING
-CONTRACT)` (7 phases) + `§Deferred Lanes` (7 items, DL-1..7).
-No new pattern reached its 3rd cross-session instance — the
-`inherited-framing-without-first-principles-check` pattern
-**candidate-instance #8** was captured (the prior session's
-Fred + Betty convergence treated as decision-complete on the
-canonical-layout proposal, then surfaced by Barney's
-simplification-first lens as missing a third architectural
-perspective); falsifiability for instance #9 named in the
-napkin entry. One PDR-shape candidate (DL-7 in the plan,
-register entry below) captured for the
-assumption-challenge-after-each-architectural-review-output
-gate.**
+**Status (2026-04-23 Codex session-handoff closeout after plan
+rationalisation and continuity cleanup)**: **due — napkin pressure is
+still far beyond the rotation threshold, and this session touched a
+large cluster of planning/docs surfaces across observability.**
 
-Findings and pending-graduations register additions for today's
-latest plan-rewrite session are appended at
-[§Pending-graduations register additions (2026-04-23 latest plan-rewrite session)](#pending-graduations-register-additions-2026-04-23-latest-plan-rewrite-session)
-below the existing 2026-04-22 + earlier 2026-04-23 walk
-records.
+The trigger did fire, but deep consolidation is **not well-bounded for
+this closeout** because the user asked for ordinary session handoff,
+not a thread-scoped convergence pass. Handoff therefore stops at
+marking `due` honestly.
+
+Falsifiability:
+
+- `napkin.md` remains well above the ~500-line rotation threshold;
+- this session changed many continuity and planning surfaces without
+  attempting a full thread-scoped graduation pass;
+- the next agent can confirm the trigger still holds by reading this
+  section, checking the napkin size, and deciding deliberately whether
+  to run `jc-consolidate-docs`.
+
+No **new** ADR/PDR candidate was surfaced by this closeout beyond the
+pending items already in the register below. This session mostly
+re-homed and clarified existing signals rather than creating new
+doctrine.
 
 ### Pending-graduations register additions (2026-04-23 latest plan-rewrite session)
 
@@ -837,7 +592,7 @@ discipline):
 
 | captured-date | source-surface | graduation-target | trigger-condition | status |
 | --- | --- | --- | --- | --- |
-| 2026-04-23 (latest, plan-rewrite session) | [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md` §Deferred Lanes → DL-7](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) + [`napkin.md` § 2026-04-23 (latest, plan-rewrite session)](../active/napkin.md) — the cross-session pattern instance #8 candidate of `inherited-framing-without-first-principles-check` (Fred + Betty convergence treated as decision-complete; missed Barney's simplification-first lens until `assumptions-reviewer` No-Go pass on the plan body, by which time a full rewrite was needed) | PDR amendment to [PDR-015 (Reviewer Authority and Dispatch)](../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md) installing an **assumption-challenge gate per architectural-review output**: when an architectural review produces output that proposes design changes, dispatch `assumptions-reviewer` against that output BEFORE absorbing it into a plan body. Today the gate exists at the plan-body level (assumption audit on completed plans) but not at the architectural-review-output level (where inherited framing entrenches cheapest). | (i) ≥1 second cross-session instance of an architectural review's output entering a plan body without an intervening assumption audit and producing a downstream rewrite; OR (ii) explicit owner direction; AND (iii) the gate's marginal cost can be shown not to dominate the cost it averts (a cheap empirical check: count assumption-audit dispatches per architectural-review-output and compare to plan-rewrite-cost-incurred). | pending |
+| 2026-04-23 (latest, plan-rationalisation session) | [`threads/observability-sentry-otel.next-session.md` § Earlier Landed Substance Still In Force](threads/observability-sentry-otel.next-session.md) + [`napkin.md` § 2026-04-23 (latest, operational-plan rationalisation session)](../active/napkin.md) — the cross-session pattern instance #8 candidate of `inherited-framing-without-first-principles-check` (Fred + Betty convergence treated as decision-complete; Barney's simplification-first lens and the assumption challenge arrived only after the plan body had already overgrown) | PDR amendment to [PDR-015 (Reviewer Authority and Dispatch)](../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md) installing an **assumption-challenge gate per architectural-review output**: when an architectural review produces output that proposes design changes, dispatch `assumptions-reviewer` against that output BEFORE absorbing it into a plan body. Today the gate exists at the plan-body level but not at the architectural-review-output level where inherited framing hardens cheapest. | (i) ≥1 second cross-session instance of an architectural review's output entering a plan body without an intervening assumption audit and producing a downstream rewrite; OR (ii) explicit owner direction; AND (iii) the gate's marginal cost can be shown not to dominate the cost it averts. | pending |
 
 ### Pending-graduations register additions (2026-04-23 prior session — WI-7 lambda crash + warnings doctrine)
 
@@ -845,7 +600,7 @@ One amendment-candidate surfaced in the prior 2026-04-23 session:
 
 | captured-date | source-surface | graduation-target | trigger-condition | status |
 | --- | --- | --- | --- | --- |
-| 2026-04-23 (latest) | [`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md) + [`principles.md` §Code Quality](../../directives/principles.md) + [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) §Phase 1 (build self-assertion) + napkin §"acknowledged-warnings-deferred-to-the-stage-they-explode-in" pattern instance #1 (the WI-7 chain) | ADR amendment to [ADR-163 §6 / §7](../../../docs/architecture/architectural-decisions/163-build-pipeline-and-source-map-handling.md) folding three lessons together — version-resolution boundary discipline (already in flight as L-8 WI-8), vendor-config passthrough discipline (`turbo.json` `globalPassThroughEnv` proven 2026-04-23), entry-point boundary contract (Vercel Express adapter `default` export proven 2026-04-23) — with a gate-mapping table showing which build-time / runtime gate enforces each contract. **Phase 7 of the new plan owns this**, not the existing L-8 lane. | Phase 7 of the new plan reaches its anchor; ADR-163 amendment lands with the three contracts plus the gate-mapping table. | pending (own-phase scheduled) |
+| 2026-04-23 (latest) | [`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md) + [`principles.md` §Code Quality](../../directives/principles.md) + [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) §Operational Steps 2 and 5 + napkin §"acknowledged-warnings-deferred-to-the-stage-they-explode-in" pattern instance #1 (the WI-7 chain) | ADR amendment to [ADR-163 §6 / §7](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) folding three lessons together — version-resolution boundary discipline, vendor-config passthrough discipline (`turbo.json` `globalPassThroughEnv` proven 2026-04-23), and deploy-entry contract discipline (the repaired Vercel import/export shape) — with a gate-mapping table showing which build-time / runtime gate enforces each contract. | The operational repair plan lands through Step 5 and ADR-163 is amended with the three contracts plus the gate-mapping table. | pending |
 
 ### Pending-graduations register additions (2026-04-23 third session)
 
@@ -858,7 +613,7 @@ One PDR-shaped candidate surfaced this session:
 Plus one observation worth noting (not yet candidate-shaped —
 single-instance, structural-not-pattern):
 
-+ `fb047f86` is itself a structurally interesting commit shape:
+- `fb047f86` is itself a structurally interesting commit shape:
   one logical implementation lane (L-8 Correction WI 1-5) folded
   in the same atomic commit with one structural meta-lane
   (entry-point sweep + homing partial + rule rename). The owner
@@ -997,7 +752,7 @@ consolidation walk run today; this is step 6b/7a substance only):
 Plus one observation worth noting (not yet candidate-shaped — too
 tactical / single-instance):
 
-+ The Cursor Shell-tool stream truncation at the depcruise → turbo
+- The Cursor Shell-tool stream truncation at the depcruise → turbo
   handover may itself be a vendor-tool issue worth filing
   upstream once `commit-attempts.log` accumulates enough rows
   (≥3 distinct sessions reproducing the same `truncated` outcome
@@ -1019,13 +774,13 @@ session:
 
 ### Re-fired falsifiabilities carried forward
 
-+ **Napkin rotation re-due**: napkin >500 lines persists;
+- **Napkin rotation re-due**: napkin >500 lines persists;
   eligible for the next consolidation walk (no owner-gating
   required — napkin rotation is agent-gated per the
   Session 7 / Pippin same-session correction; the agent walking
   the next consolidation may rotate per the documented
   procedure).
-+ **Distilled refinement re-due**: still 272/275 in soft zone;
+- **Distilled refinement re-due**: still 272/275 in soft zone;
   eligible for the next consolidation walk (same agent-gating
   posture as napkin rotation); falsifiability — if not refined
   at the next consolidation, distilled crosses hard limit and
@@ -1084,7 +839,7 @@ no drift; purpose (b) no stranded technical content; purpose (c)
 emergent observation across the recent experience set
 (2026-04-21 chronological set + 2026-04-22 *the-rule-tested-itself*
 
-+ today's entry) names the shape now captured as three pattern
+- today's entry) names the shape now captured as three pattern
   candidates in the register below
   (`feel-state-of-completion-preceding-evidence-of-completion` 3/3,
   `owner-mediated-evidence-loop-for-agent-installed-protections`
@@ -1164,14 +919,14 @@ practice-context/outgoing/ now contains only README.md.
 **Owner decisions at close** (load-bearing for both Session 7
 closure and Session 8 DoD scoping):
 
-+ Fitness function limit excesses declared **acceptable for
+- Fitness function limit excesses declared **acceptable for
   now**, will revisit later. Current `pnpm practice:fitness`
   result: HARD, 4 hard violations, 10 soft. None blocking.
-+ `pnpm practice:fitness --strict-hard` exits-0 DoD requirement
+- `pnpm practice:fitness --strict-hard` exits-0 DoD requirement
   **DROPPED** for both Session 7 close AND Session 8 arc-close.
-+ Step 9 of `/jc-consolidate-docs` runs **informationally only**
+- Step 9 of `/jc-consolidate-docs` runs **informationally only**
   going forward in this arc.
-+ Session 7 declared closed by owner; `/jc-session-handoff` and
+- Session 7 declared closed by owner; `/jc-session-handoff` and
   `/jc-consolidate-docs` invoked under the amended DoD.
 
 Session 8 carries: brief rehoming pass (appetite-shaped per
@@ -1238,7 +993,7 @@ PDR-026 §Deferral-honesty discipline.** Per session-handoff step
 9: deep consolidation is due but **not well-bounded for this
 closeout** — the deferred work IS the original Session 6 Phase D
 
-+ E + F, scheduled for Session 7 doctrine-consolidation arc
+- E + F, scheduled for Session 7 doctrine-consolidation arc
   close. Stop here; Session 7 picks it up deliberately. **Override
   2026-04-22**: owner directed `/jc-consolidate-docs` walk after
   this status was recorded; the walk ran honestly, deferred the
@@ -1287,46 +1042,46 @@ artefacts; napkin at 1226 lines i.e. 2.4× over rotation threshold;
 ≥2 surprises / corrections suggesting new rule or pattern). Walked
 all 10 steps. Findings:
 
-+ **Step 1–2**: PDR-014 carries `workstream→thread` terminology
+- **Step 1–2**: PDR-014 carries `workstream→thread` terminology
   drift (5 references) missed in Session 5 amendment batch;
   reference-tier sweep is significantly under-scoped (90+ files
   outside `archive/` mention "workstream", many legitimate
   generic-noun usage but the bound needs owner re-clarification).
-+ **Step 3**: layer-set reflection (post-handoff) stays pending
+- **Step 3**: layer-set reflection (post-handoff) stays pending
   (criteria 7b not met — hours old, not stable).
-+ **Step 4 purpose (c)**: emergent observation across the five
+- **Step 4 purpose (c)**: emergent observation across the five
   2026-04-21 experience entries — **agent's installed protections
   get their evidence loop from owner-mediated review, not agent
   self-test**. Surfaced as `owner-mediated-evidence-loop-for-agent-
 installed-protections` pattern candidate (1/3) in Pending band.
-+ **Step 5**: 0 pattern files written; 5 candidates accumulating
+- **Step 5**: 0 pattern files written; 5 candidates accumulating
   in Pending band; no taxonomy-seam escalation.
-+ **Step 6**: napkin rotation **deferred to Session 6 close**
+- **Step 6**: napkin rotation **deferred to Session 6 close**
   with named priority trade-off (Session 6 resume material is
   load-bearing in current napkin top entries; rotation now would
   force archive-following at S6 open).
-+ **Step 7a**: 0 ADR / 4 PDR candidates surfaced; only PDR-014
+- **Step 7a**: 0 ADR / 4 PDR candidates surfaced; only PDR-014
   amendment recommended for action this pass (mechanical
   terminology refresh).
-+ **Step 7b**: distilled walked; the overdue `reviewer-findings-
+- **Step 7b**: distilled walked; the overdue `reviewer-findings-
 applied-in-close-not-deferred` (Due since 2026-04-19 across S3,
   S4, S5) re-flagged for owner attention; full compression pass
   deferred to S6 alongside `principles.md` debt.
-+ **Step 7c**: all 6 thread-register freshness checks pass.
+- **Step 7c**: all 6 thread-register freshness checks pass.
   Adjacent finding: `observability-sentry-otel.next-session.md`
   line 53 references a "Standing decisions note in
   repo-continuity.md" that no longer exists (substance lost when
   standing-decisions surface was retracted Session 4) — surface
   for owner home-decision (PDR-027 amendment / thread-README /
   inline restate).
-+ **Step 8**: 4 Practice Core refinement candidates (CHANGELOG
+- **Step 8**: 4 Practice Core refinement candidates (CHANGELOG
   drift since 2026-02-28; `practice-bootstrap.md` workstream-brief
   refs at lines 456/461/464; `patterns/` directory empty awareness;
   PDR-014 terminology). Honest scope-signal call: 3 of 4 are
   workstream-retirement carry-over from S5, not 4 independent
   structural changes — pause-and-stabilise posture NOT raised;
   S6 reference-tier sweep should expand scope.
-+ **Step 9**: `--strict-hard` failed 7 hard / 8 soft. Mechanical
+- **Step 9**: `--strict-hard` failed 7 hard / 8 soft. Mechanical
   line-length wraps applied to `orientation.md` (line 85),
   `artefact-inventory.md` (line 15), `distilled.md` (line 179),
   `testing-strategy.md` (lines 39, 78), `continuity-practice.md`
@@ -1338,7 +1093,7 @@ applied-in-close-not-deferred` (Due since 2026-04-19 across S3,
   owner-only) and **deferred to Session 6** with named priority
   trade-off (Session 6 is the closing-arc fitness-debt session;
   distilled compression couples with the deferred napkin rotation).
-+ **Step 10**: incoming empty; outgoing deferred to Session 6
+- **Step 10**: incoming empty; outgoing deferred to Session 6
   Stage 2(a) per PDR-007.
 
 **Net effect of this consolidation pass**: 6 line-length wraps
@@ -1372,8 +1127,8 @@ as PDR-030.
 The overdue backlog + the new doctrine bundle are sequenced by the
 **Staged Doctrine Consolidation and Graduation** plan:
 
-+ Plan: [`../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md`](../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md)
-+ Dry-run analysis preserved: [`../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md`](../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md)
+- Plan: [`../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md`](../../plans/agentic-engineering-enhancements/current/staged-doctrine-consolidation-and-graduation.plan.md)
+- Dry-run analysis preserved: [`../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md`](../../reference/agentic-engineering/consolidation-design/consolidation-dry-run-2026-04-21.md)
 
 ### Pending-graduations register
 
@@ -1382,14 +1137,14 @@ napkin, distilled, workstream briefs, or elsewhere) and are
 awaiting *graduation* to a durable home (pattern, PDR, ADR, rule,
 Practice Core, infrastructure artefact). Schema per item:
 
-+ `captured-date` (YYYY-MM-DD) — when the candidate was first recorded.
-+ `source-surface` — where the candidate lives now (`napkin`,
+- `captured-date` (YYYY-MM-DD) — when the candidate was first recorded.
+- `source-surface` — where the candidate lives now (`napkin`,
   `napkin-archive`, `distilled`, `workstream brief`,
   `executive surface`, `practice-core`, `session opener`, etc.).
-+ `graduation-target` — one of: `pattern | PDR | ADR | rule |
+- `graduation-target` — one of: `pattern | PDR | ADR | rule |
 practice-md | infrastructure | other`.
-+ `trigger-condition` — concrete signal that moves the item to `due`.
-+ `status` — one of: `pending | due | overdue`.
+- `trigger-condition` — concrete signal that moves the item to `due`.
+- `status` — one of: `pending | due | overdue`.
 
 A candidate is `pending` until its trigger-condition fires
 (typically a second/third independent instance, a scheduled
@@ -1428,18 +1183,18 @@ TIER-2 E2 simplification)**: the four `#### Graduated (Session 1-4,
 removed. Their substance lives in the durable artefacts they
 produced:
 
-+ Session 1 → [`../active/patterns/inherited-framing-without-first-principles-check.md`](../active/patterns/inherited-framing-without-first-principles-check.md),
+- Session 1 → [`../active/patterns/inherited-framing-without-first-principles-check.md`](../active/patterns/inherited-framing-without-first-principles-check.md),
   [`../active/patterns/passive-guidance-loses-to-artefact-gravity.md`](../active/patterns/passive-guidance-loses-to-artefact-gravity.md),
   [`../../rules/plan-body-first-principles-check.md`](../../rules/plan-body-first-principles-check.md),
   `practice.md` Artefact Map (Practice Core CHANGELOG).
-+ Session 2 → [`../../directives/AGENT.md § RULES`](../../directives/AGENT.md) citing the `.agent/rules/` tier.
-+ Session 3 → [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md),
+- Session 2 → [`../../directives/AGENT.md § RULES`](../../directives/AGENT.md) citing the `.agent/rules/` tier.
+- Session 3 → [PDR-027](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md),
   [PDR-028](../../practice-core/decision-records/PDR-028-executive-memory-feedback-loop.md),
   [PDR-029](../../practice-core/decision-records/PDR-029-perturbation-mechanism-bundle.md),
   [PDR-030](../../practice-core/decision-records/PDR-030-plane-tag-vocabulary.md),
   [PDR-011 Amendment Log](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md),
   [PDR-026 Amendment Log](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md).
-+ Session 4 → [`../../commands/commit.md`](../../commands/commit.md),
+- Session 4 → [`../../commands/commit.md`](../../commands/commit.md),
   `start-right-quick`/`start-right-thorough` workflow updates,
   [`../../commands/session-handoff.md § step 7c`](../../commands/session-handoff.md),
   [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md),
@@ -1467,10 +1222,10 @@ summary above and in git history.
 
 **Three Session-8 entries removed from this band 2026-04-22 (Session 8 arc-close)** per the on-graduation-removes-from-register schema rule (line ~418 above): (1) `Stage 2(a) — Outgoing triage per PDR-007` (closed across Sessions 6 + 7; `practice-context/outgoing/` reduced to README.md only); (2) `Reference-tier sweep — workstream-citation cleanup in .agent/reference/` (closed by Session 6 reformation + Session 8 rehoming first-drain pass — 22 MOVED + 4 DELETED + 1 KEPT under PDR-032's gate); (3) implicitly closed by Session 8 arc-close: pattern `feel-state-of-completion-preceding-evidence-of-completion` (already removed from Pending band — see below). Graduation history lives in the Session 8 close summary in §Current session focus, in the [Practice Core CHANGELOG 2026-04-22 Session 8 entry](../../practice-core/CHANGELOG.md), in the archived [rehoming plan execution record](../../plans/agentic-engineering-enhancements/archive/completed/reference-research-notes-rehoming.plan.md), and in git history.
 
-+ **`in-place-supersession-markers-at-section-anchors`** — captured-date: 2026-04-19; source-surface: napkin-archive (2026-04-19b watchlist); graduation-target: pattern; trigger-condition: three instances reached 2026-04-19; status: due — next consolidation or standalone pattern authoring.
-+ **`fork-cost-surfaces-in-doc-discipline-layer`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: three instances reached 2026-04-19; status: due.
-+ **`E2E-flakiness-under-parallel-pnpm-check-load`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: ADR (test-stability-lane) or pattern; trigger-condition: three cross-session instances reached 2026-04-19; status: due — needs a test-stability-lane authoring decision.
-+ **`reviewer-catches-plan-blind-spot`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: ≥2 instances reached; status: due.
+- **`in-place-supersession-markers-at-section-anchors`** — captured-date: 2026-04-19; source-surface: napkin-archive (2026-04-19b watchlist); graduation-target: pattern; trigger-condition: three instances reached 2026-04-19; status: due — next consolidation or standalone pattern authoring.
+- **`fork-cost-surfaces-in-doc-discipline-layer`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: three instances reached 2026-04-19; status: due.
+- **`E2E-flakiness-under-parallel-pnpm-check-load`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: ADR (test-stability-lane) or pattern; trigger-condition: three cross-session instances reached 2026-04-19; status: due — needs a test-stability-lane authoring decision.
+- **`reviewer-catches-plan-blind-spot`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: ≥2 instances reached; status: due.
 
 #### Pending (single-instance; awaiting repeat for promotion)
 
@@ -1493,31 +1248,31 @@ backlog` (both already in `distilled.md` — register slot was
 duplicate-surface). Full rationale at the 2026-04-21 Session 5
 re-evaluation section in `napkin.md`.
 
-+ **`self-applying-acceptance-for-tripwire-installs`** — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: pattern; trigger-condition: third CROSS-SESSION instance (three Session-4 instances were same-session cascades under the tightened cascade-vs-independent bar — count as 1 independent instance); status: pending.
-+ **`plan-body-framing-outlives-reviewers`** — captured-date: 2026-04-21 (Session 4); source-surface: napkin + PDR-029 second Amendment Log entry; graduation-target: pattern; trigger-condition: **three CROSS-SESSION instances required** (demoted Session 5 after reviewers flagged Session 4's three instances as one same-session metacognitive cascade, not three independent failures); status: pending — awaits an instance in a session other than Session 4. Evidence so far (same-session cascade, Session 4): scripts-for-tripwires; docs-as-second-class-review-target; standing-decisions-as-category.
-+ **`anticipated-surface-installed-then-empirically-unexercised`** — captured-date: 2026-04-21 (Session 5 post-handoff, owner-prompted layer-set reflection); source-surface: napkin Session 5 post-handoff entry; graduation-target: pattern; trigger-condition: third independent instance of a continuity-or-doctrine surface installed for an anticipated need that fails to materialise across N consolidations. Falsifiability check: a candidate third instance must show a surface (folder, file, schema field, rubric) installed in a session N with an anticipated firing trigger and no firing across at least 2 subsequent consolidations. **In-flight test bed (Session 6)**: the retired `.agent/memory/operational/workstreams/` folder remains physically present per owner-explicit experiment (2026-04-22) — *"let the experiment continue, do not bias it with additional action; I expect it to be removed because otherwise it adds confusion as an unused option, but understanding if the process arrives there naturally is important"*. If a future consolidation removes the folder via natural process application (default-retire-on-empty firing or equivalent), that does NOT count as a third instance of this pattern (the pattern fires when the surface persists, not when it gets removed). Status: pending — 2 of 3 instances (workstreams collapsed Session 5; tracks installed via PDR-011 amendment Session 5 with zero exercise). Owner-prompted, not agent-noticed — flag for the gap that existing tripwires catch entry-level not layer-level symptoms.
-+ **`default-retire-on-empty` (protection candidate)** — captured-date: 2026-04-21 (Session 5 post-handoff); source-surface: napkin Session 5 post-handoff entry; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — most likely `command rubric` in `/consolidate-docs` step (firing belongs to consolidation workflow, not free-standing rule), composed with PDR amendment to PDR-014 or PDR-029; trigger-condition: parent (`anticipated-surface-installed-then-empirically-unexercised`) reaches 3/3 cross-session independent instances OR explicit owner direction. Falsifiability check: when promoted, the rubric must specify a measurable firing condition (e.g. "zero non-README/non-archive entries across 3 consecutive consolidations") and a chesterton-fence safeguard (owner re-justification window). Rule body sketch: *any operational-tier surface (folder + README) with zero non-README/non-archive entries across 3 consecutive consolidations retires by default unless the owner explicitly re-justifies it at the consolidation pass.* Concrete near-term test beds: tracks surface (first-empty-consolidation after) and the in-flight `workstreams/` folder experiment (see candidate above). Routing note: graduating before the parent pattern reaches 3/3 would relax the cross-session bar; the routing pattern's `pattern + rule` composition discipline argues for landing both together when the bar fires.
-+ **`owner-mediated-evidence-loop-for-agent-installed-protections`** — captured-date: 2026-04-21 (consolidate-docs Step 4 cross-experience scan); source-surface: `.agent/experience/2026-04-21-*.md` chronological set + Session 5 post-handoff layer-set reflection + napkin Session 7 close surprise capture; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — `pattern` (cross-session, agent-infrastructure category) per routing-tree step 1; composition candidate: `pattern + PDR amendment` to PDR-015 (reviewer authority/dispatch) §Evidence loop. Trigger-condition: third cross-session independent instance OR explicit owner direction. Falsifiability check: a candidate third instance must show an agent-installed protection (rule, tripwire, command rubric) where the load-bearing evidence loop traces to owner intervention rather than agent self-test (reviewer dispatch counts as agent-mediated, not owner-mediated; the pattern is specifically about owner-as-evidence-loop). Evidence (2 of 3): five 2026-04-21 experience entries name the same shape — tripwire-i-cannot-test (S1), reviewer-found-the-gaps-i-installed (S2), the-recursive-session (S3), the-why-not-the-what (S4), and the Session 5 post-handoff owner-prompted layer-set reflection — counted as one cross-session instance under tightened bar; **Session 7 close** = second cross-session instance (PDR-026 §Deferral-honesty + PDR-014 §Graduation-target routing protections both recited at session open and yet bypassed in execution; only owner intervention surfaced the failure and forced the reset). Complementary to `anticipated-surface-installed-then-empirically-unexercised` (which is about the *gap*); this is about the *mechanism that has been compensating* for the gap. Together they suggest a structural recommendation: **install firing-rate measurement for tripwires**, not just rule bodies. Status: pending — 2/3.
-+ **`new-doctrine-lands-without-sweeping-indexes`** — captured-date: 2026-04-21 (Session 4 post-close); source-surface: napkin; graduation-target: pattern; trigger-condition: **three CROSS-SESSION instances required** (demoted Session 5); status: pending — awaits an instance in a session other than Session 4. Evidence so far (same-session, Session 4): PDR-029 standing-decision register (retracted); PDR-029 script-shape prescription (revised); PDR-027 threads without sweeping `operational/README.md` + `orientation.md`. Related to `misleading-docs-are-blocking` (index-layer manifestation).
-+ **`defer-decisions-must-live-where-the-candidate-lives`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second deferred candidate whose trigger condition was discovered missing from its home artefact; status: pending.
-+ **`when-deleting-a-doc-sweep-active-plans-for-prescriptions-not-just-links`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second deletion where a prescription survived a link-only pass; status: pending.
-+ **`collaboration-shape-is-an-unexamined-assumption-in-new-artefact-types`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second design where collaboration shape surfaced as mid-cycle correction; status: pending.
-+ **`ask-the-minimum-not-the-maximum-when-direction-is-clear`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second moment where a 3-option question is better served by a declarative *"next I'll do X"*; status: pending.
-+ **`decision-complete-adr-enumerates-implied-questions`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance where an explicit adjudication-question list left downstream decisions unnamed; status: pending.
-+ **`prefer-webfetch-for-doc-citation-prefer-agent-for-judgement`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance calibrating agent-vs-WebFetch choice; status: pending.
-+ **`amend-not-honour-when-simplification-surfaces-post-decision`** — captured-date: 2026-04-19; source-surface: napkin-archive (2026-04-19b); graduation-target: PDR (strong candidate on 2nd instance); trigger-condition: second instance of ADR amendment driven by broader-view simplification; status: pending.
-+ **`work-stream-dissolution-via-upstream-fix`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance of upstream fix absorbing downstream work stream; status: pending.
-+ **`reviewer-matrix-completeness-is-not-absolute`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern or PDR-015 addendum; trigger-condition: second session where discretionary reviewer dispatch against a plan-listed matrix was correct; status: pending.
-+ **`turbo-cache-hides-prettier-drift-until-pre-commit`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern (repo-specific) or workspace README; trigger-condition: second instance of cached `format:root` false-clean; status: pending.
-+ **`externally-verifiable-output-beats-internal-plan-compliance`** — captured-date: 2026-04-19 (L-EH close); source-surface: distilled.md (rotated to register at Session 7 Phase D file 2 disposition under PDR-014 §Graduation-target routing — the entry was a single-instance watchlist that did not meet distilled's "earned its place by changing behaviour" bar); graduation-target: pattern; trigger-condition: second cross-session instance of external-evidence-surfacing-a-gap-that-plan-tracking-missed (the distilled entry's stated trigger). Falsifiability check: a candidate second instance must show a lane close that produced an externally-verifiable artefact (command output, test result, recorded demo) which surfaced a gap invisible to internal plan-compliance tracking. Status: pending — 1/3 (originally captured with `single-instance observation` framing).
-+ **`decompose-precedents-before-reusing-them`** — captured-date: 2026-04-19 (L-EH initial vs Phase 5); source-surface: distilled.md (rotated to register at Session 7 Phase D file 2 disposition); graduation-target: pattern; trigger-condition: second cross-session instance of a precedent-match producing a reviewer-caught wrong default (the distilled entry's stated trigger). Falsifiability check: a candidate second instance must show a precedent treated as a single decision when it was actually a bundle (severity, scope, wiring pattern, opt-out protocol, authorship venue) and the unbundling caught a wrong default. Status: pending — 1/3.
-+ **`amendment-fires-immediately-on-its-own-landing-pass`** — captured-date: 2026-04-22 (Session 7 close); source-surface: napkin Session 7 close entry; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — pattern (cross-session, agent-infrastructure category) per routing-tree step 1; trigger-condition: second cross-session independent instance of a discipline (rule, PDR sub-section, command rubric) landing in session N where the same session's closing review-or-validation pass produces findings dispositioned by the just-landed discipline. Falsifiability check: a candidate second instance must show the discipline's body taking effect on findings produced about the very lane that landed it, visibly distinguishable from prior-session disposition behaviour. Distinct from `tripwire-PDR-self-application-is-two-phase` (same-session immediate self-application vs. authoring-then-later-self-application across a session boundary). Evidence (1 of 3): Session 7 PDR-012 §Reviewer-findings disposition discipline amendment landed at Phase E; the Phase F-prime reviewer gate produced 2 actionable findings, both ACTIONED in-close per the freshly-landed amendment. Status: pending — 1/3.
-+ **`governance-gap-invisible-until-intentional-addition`** — captured-date: 2026-04-22 (Session 6 reformation pivot); source-surface: napkin Session 6 reshaped close entry; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — pattern (cross-session, agent-infrastructure category) per routing-tree step 1; trigger-condition: second independent instance of a directory or surface accumulating items without governance until a deliberate addition forces the question. Falsifiability check: a candidate second instance must show a pre-existing surface (folder, schema, vocabulary) where governance was de-facto absent, the absence was not surfaced by passive accumulation across multiple consolidations, and the gap became visible only when intentional addition required a definition. Evidence (1 of 3): `.agent/reference/` accumulated ~35 files across 13 subdirectories without a tier definition, lightweight intake process, or aging gate; the gap surfaced at Session 6 Phase C Batch 2 only when promotion of three new files required the question. Distinct from `anticipated-surface-installed-then-empirically-unexercised` (which is about installed-but-unexercised; this is about accumulated-without-governance). Status: pending — 1/3.
-+ **`installed-rule-recited-but-not-honoured-when-plan-momentum-dominates`** — captured-date: 2026-04-22 (Session 7 close); source-surface: napkin Session 7 close surprise capture; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — pattern (cross-session, agent-infrastructure category) per routing-tree step 1; trigger-condition: second cross-session independent instance of a discipline (rule, PDR sub-section, command rubric) explicitly cited at session open and yet violated mid-execution by structured plan momentum. Falsifiability check: a candidate second instance must show the discipline body quoted-or-cited at session open in the opener / plan / to-do list, and an execution loop visibly bypassing the discipline's gating language under plan-as-recipe momentum, surfaced only by owner intervention. Distinct shape from the parent `feel-state-of-completion-preceding-evidence-of-completion`: the parent is about close-time deferral honesty; this is specifically about **mid-execution adherence to explicit owner-pacing** when a structured plan provides recipe momentum. Evidence (1 of 3): Session 7 PDR-026 §Deferral-honesty body quoted in the opener AND in the to-do list AND the *"owner-only limit raises"* rule from `/jc-consolidate-docs` step 9§e cited; Phase D execution loop nonetheless overrode owner-pacing across all four directive files including a unilateral char-limit raise. Status: pending — 1/3 watchlist; owner adjudicates whether to register-promote.
+- **`self-applying-acceptance-for-tripwire-installs`** — captured-date: 2026-04-21; source-surface: napkin + distilled; graduation-target: pattern; trigger-condition: third CROSS-SESSION instance (three Session-4 instances were same-session cascades under the tightened cascade-vs-independent bar — count as 1 independent instance); status: pending.
+- **`plan-body-framing-outlives-reviewers`** — captured-date: 2026-04-21 (Session 4); source-surface: napkin + PDR-029 second Amendment Log entry; graduation-target: pattern; trigger-condition: **three CROSS-SESSION instances required** (demoted Session 5 after reviewers flagged Session 4's three instances as one same-session metacognitive cascade, not three independent failures); status: pending — awaits an instance in a session other than Session 4. Evidence so far (same-session cascade, Session 4): scripts-for-tripwires; docs-as-second-class-review-target; standing-decisions-as-category.
+- **`anticipated-surface-installed-then-empirically-unexercised`** — captured-date: 2026-04-21 (Session 5 post-handoff, owner-prompted layer-set reflection); source-surface: napkin Session 5 post-handoff entry; graduation-target: pattern; trigger-condition: third independent instance of a continuity-or-doctrine surface installed for an anticipated need that fails to materialise across N consolidations. Falsifiability check: a candidate third instance must show a surface (folder, file, schema field, rubric) installed in a session N with an anticipated firing trigger and no firing across at least 2 subsequent consolidations. **In-flight test bed (Session 6)**: the retired `.agent/memory/operational/workstreams/` folder remains physically present per owner-explicit experiment (2026-04-22) — *"let the experiment continue, do not bias it with additional action; I expect it to be removed because otherwise it adds confusion as an unused option, but understanding if the process arrives there naturally is important"*. If a future consolidation removes the folder via natural process application (default-retire-on-empty firing or equivalent), that does NOT count as a third instance of this pattern (the pattern fires when the surface persists, not when it gets removed). Status: pending — 2 of 3 instances (workstreams collapsed Session 5; tracks installed via PDR-011 amendment Session 5 with zero exercise). Owner-prompted, not agent-noticed — flag for the gap that existing tripwires catch entry-level not layer-level symptoms.
+- **`default-retire-on-empty` (protection candidate)** — captured-date: 2026-04-21 (Session 5 post-handoff); source-surface: napkin Session 5 post-handoff entry; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — most likely `command rubric` in `/consolidate-docs` step (firing belongs to consolidation workflow, not free-standing rule), composed with PDR amendment to PDR-014 or PDR-029; trigger-condition: parent (`anticipated-surface-installed-then-empirically-unexercised`) reaches 3/3 cross-session independent instances OR explicit owner direction. Falsifiability check: when promoted, the rubric must specify a measurable firing condition (e.g. "zero non-README/non-archive entries across 3 consecutive consolidations") and a chesterton-fence safeguard (owner re-justification window). Rule body sketch: *any operational-tier surface (folder + README) with zero non-README/non-archive entries across 3 consecutive consolidations retires by default unless the owner explicitly re-justifies it at the consolidation pass.* Concrete near-term test beds: tracks surface (first-empty-consolidation after) and the in-flight `workstreams/` folder experiment (see candidate above). Routing note: graduating before the parent pattern reaches 3/3 would relax the cross-session bar; the routing pattern's `pattern + rule` composition discipline argues for landing both together when the bar fires.
+- **`owner-mediated-evidence-loop-for-agent-installed-protections`** — captured-date: 2026-04-21 (consolidate-docs Step 4 cross-experience scan); source-surface: `.agent/experience/2026-04-21-*.md` chronological set + Session 5 post-handoff layer-set reflection + napkin Session 7 close surprise capture; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — `pattern` (cross-session, agent-infrastructure category) per routing-tree step 1; composition candidate: `pattern + PDR amendment` to PDR-015 (reviewer authority/dispatch) §Evidence loop. Trigger-condition: third cross-session independent instance OR explicit owner direction. Falsifiability check: a candidate third instance must show an agent-installed protection (rule, tripwire, command rubric) where the load-bearing evidence loop traces to owner intervention rather than agent self-test (reviewer dispatch counts as agent-mediated, not owner-mediated; the pattern is specifically about owner-as-evidence-loop). Evidence (2 of 3): five 2026-04-21 experience entries name the same shape — tripwire-i-cannot-test (S1), reviewer-found-the-gaps-i-installed (S2), the-recursive-session (S3), the-why-not-the-what (S4), and the Session 5 post-handoff owner-prompted layer-set reflection — counted as one cross-session instance under tightened bar; **Session 7 close** = second cross-session instance (PDR-026 §Deferral-honesty + PDR-014 §Graduation-target routing protections both recited at session open and yet bypassed in execution; only owner intervention surfaced the failure and forced the reset). Complementary to `anticipated-surface-installed-then-empirically-unexercised` (which is about the *gap*); this is about the *mechanism that has been compensating* for the gap. Together they suggest a structural recommendation: **install firing-rate measurement for tripwires**, not just rule bodies. Status: pending — 2/3.
+- **`new-doctrine-lands-without-sweeping-indexes`** — captured-date: 2026-04-21 (Session 4 post-close); source-surface: napkin; graduation-target: pattern; trigger-condition: **three CROSS-SESSION instances required** (demoted Session 5); status: pending — awaits an instance in a session other than Session 4. Evidence so far (same-session, Session 4): PDR-029 standing-decision register (retracted); PDR-029 script-shape prescription (revised); PDR-027 threads without sweeping `operational/README.md` + `orientation.md`. Related to `misleading-docs-are-blocking` (index-layer manifestation).
+- **`defer-decisions-must-live-where-the-candidate-lives`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second deferred candidate whose trigger condition was discovered missing from its home artefact; status: pending.
+- **`when-deleting-a-doc-sweep-active-plans-for-prescriptions-not-just-links`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second deletion where a prescription survived a link-only pass; status: pending.
+- **`collaboration-shape-is-an-unexamined-assumption-in-new-artefact-types`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second design where collaboration shape surfaced as mid-cycle correction; status: pending.
+- **`ask-the-minimum-not-the-maximum-when-direction-is-clear`** — captured-date: 2026-04-20; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second moment where a 3-option question is better served by a declarative *"next I'll do X"*; status: pending.
+- **`decision-complete-adr-enumerates-implied-questions`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance where an explicit adjudication-question list left downstream decisions unnamed; status: pending.
+- **`prefer-webfetch-for-doc-citation-prefer-agent-for-judgement`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance calibrating agent-vs-WebFetch choice; status: pending.
+- **`amend-not-honour-when-simplification-surfaces-post-decision`** — captured-date: 2026-04-19; source-surface: napkin-archive (2026-04-19b); graduation-target: PDR (strong candidate on 2nd instance); trigger-condition: second instance of ADR amendment driven by broader-view simplification; status: pending.
+- **`work-stream-dissolution-via-upstream-fix`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern; trigger-condition: second instance of upstream fix absorbing downstream work stream; status: pending.
+- **`reviewer-matrix-completeness-is-not-absolute`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern or PDR-015 addendum; trigger-condition: second session where discretionary reviewer dispatch against a plan-listed matrix was correct; status: pending.
+- **`turbo-cache-hides-prettier-drift-until-pre-commit`** — captured-date: 2026-04-19; source-surface: napkin-archive; graduation-target: pattern (repo-specific) or workspace README; trigger-condition: second instance of cached `format:root` false-clean; status: pending.
+- **`externally-verifiable-output-beats-internal-plan-compliance`** — captured-date: 2026-04-19 (L-EH close); source-surface: distilled.md (rotated to register at Session 7 Phase D file 2 disposition under PDR-014 §Graduation-target routing — the entry was a single-instance watchlist that did not meet distilled's "earned its place by changing behaviour" bar); graduation-target: pattern; trigger-condition: second cross-session instance of external-evidence-surfacing-a-gap-that-plan-tracking-missed (the distilled entry's stated trigger). Falsifiability check: a candidate second instance must show a lane close that produced an externally-verifiable artefact (command output, test result, recorded demo) which surfaced a gap invisible to internal plan-compliance tracking. Status: pending — 1/3 (originally captured with `single-instance observation` framing).
+- **`decompose-precedents-before-reusing-them`** — captured-date: 2026-04-19 (L-EH initial vs Phase 5); source-surface: distilled.md (rotated to register at Session 7 Phase D file 2 disposition); graduation-target: pattern; trigger-condition: second cross-session instance of a precedent-match producing a reviewer-caught wrong default (the distilled entry's stated trigger). Falsifiability check: a candidate second instance must show a precedent treated as a single decision when it was actually a bundle (severity, scope, wiring pattern, opt-out protocol, authorship venue) and the unbundling caught a wrong default. Status: pending — 1/3.
+- **`amendment-fires-immediately-on-its-own-landing-pass`** — captured-date: 2026-04-22 (Session 7 close); source-surface: napkin Session 7 close entry; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — pattern (cross-session, agent-infrastructure category) per routing-tree step 1; trigger-condition: second cross-session independent instance of a discipline (rule, PDR sub-section, command rubric) landing in session N where the same session's closing review-or-validation pass produces findings dispositioned by the just-landed discipline. Falsifiability check: a candidate second instance must show the discipline's body taking effect on findings produced about the very lane that landed it, visibly distinguishable from prior-session disposition behaviour. Distinct from `tripwire-PDR-self-application-is-two-phase` (same-session immediate self-application vs. authoring-then-later-self-application across a session boundary). Evidence (1 of 3): Session 7 PDR-012 §Reviewer-findings disposition discipline amendment landed at Phase E; the Phase F-prime reviewer gate produced 2 actionable findings, both ACTIONED in-close per the freshly-landed amendment. Status: pending — 1/3.
+- **`governance-gap-invisible-until-intentional-addition`** — captured-date: 2026-04-22 (Session 6 reformation pivot); source-surface: napkin Session 6 reshaped close entry; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — pattern (cross-session, agent-infrastructure category) per routing-tree step 1; trigger-condition: second independent instance of a directory or surface accumulating items without governance until a deliberate addition forces the question. Falsifiability check: a candidate second instance must show a pre-existing surface (folder, schema, vocabulary) where governance was de-facto absent, the absence was not surfaced by passive accumulation across multiple consolidations, and the gap became visible only when intentional addition required a definition. Evidence (1 of 3): `.agent/reference/` accumulated ~35 files across 13 subdirectories without a tier definition, lightweight intake process, or aging gate; the gap surfaced at Session 6 Phase C Batch 2 only when promotion of three new files required the question. Distinct from `anticipated-surface-installed-then-empirically-unexercised` (which is about installed-but-unexercised; this is about accumulated-without-governance). Status: pending — 1/3.
+- **`installed-rule-recited-but-not-honoured-when-plan-momentum-dominates`** — captured-date: 2026-04-22 (Session 7 close); source-surface: napkin Session 7 close surprise capture; graduation-target: per [PDR-014 §Graduation-target routing](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md#graduation-target-routing) — pattern (cross-session, agent-infrastructure category) per routing-tree step 1; trigger-condition: second cross-session independent instance of a discipline (rule, PDR sub-section, command rubric) explicitly cited at session open and yet violated mid-execution by structured plan momentum. Falsifiability check: a candidate second instance must show the discipline body quoted-or-cited at session open in the opener / plan / to-do list, and an execution loop visibly bypassing the discipline's gating language under plan-as-recipe momentum, surfaced only by owner intervention. Distinct shape from the parent `feel-state-of-completion-preceding-evidence-of-completion`: the parent is about close-time deferral honesty; this is specifically about **mid-execution adherence to explicit owner-pacing** when a structured plan provides recipe momentum. Evidence (1 of 3): Session 7 PDR-026 §Deferral-honesty body quoted in the opener AND in the to-do list AND the *"owner-only limit raises"* rule from `/jc-consolidate-docs` step 9§e cited; Phase D execution loop nonetheless overrode owner-pacing across all four directive files including a unilateral char-limit raise. Status: pending — 1/3 watchlist; owner adjudicates whether to register-promote.
 
 #### Open per-file disposition carried forward (not blocking; owner-paced)
 
-+ **Four directive files in fitness-hard zone — `principles.md`, `AGENT.md`, `testing-strategy.md`, `continuity-practice.md`** — captured-date: 2026-04-22 (Session 7 close, owner-amended DoD); source-surface: Session 7 close repo-continuity §Current session focus; graduation-target: per-file owner-paced conversation (compress / restructure / split / raise-limit / accept) under PDR-026 §Deferral-honesty. Trigger-condition: owner-appetite-triggered; not bound to any specific session. Falsifiability check: each file's disposition decision is recorded in the session that picks it up; the consolidated `pnpm practice:fitness` output for that session shows the corresponding zone state. Status: due-but-not-blocking — owner has explicitly accepted the current excesses (`principles.md` chars 26222/24000; `AGENT.md` lines 291/275; `testing-strategy.md` lines 566/550; `continuity-practice.md` lines 219/210) for now, will revisit later. Carried forward into Session 8 only as a register entry; **not part of the Session 8 arc-close DoD** (the `pnpm practice:fitness --strict-hard` exits-0 requirement was DROPPED at owner direction — see §Current session focus).
+- **Four directive files in fitness-hard zone — `principles.md`, `AGENT.md`, `testing-strategy.md`, `continuity-practice.md`** — captured-date: 2026-04-22 (Session 7 close, owner-amended DoD); source-surface: Session 7 close repo-continuity §Current session focus; graduation-target: per-file owner-paced conversation (compress / restructure / split / raise-limit / accept) under PDR-026 §Deferral-honesty. Trigger-condition: owner-appetite-triggered; not bound to any specific session. Falsifiability check: each file's disposition decision is recorded in the session that picks it up; the consolidated `pnpm practice:fitness` output for that session shows the corresponding zone state. Status: due-but-not-blocking — owner has explicitly accepted the current excesses (`principles.md` chars 26222/24000; `AGENT.md` lines 291/275; `testing-strategy.md` lines 566/550; `continuity-practice.md` lines 219/210) for now, will revisit later. Carried forward into Session 8 only as a register entry; **not part of the Session 8 arc-close DoD** (the `pnpm practice:fitness --strict-hard` exits-0 requirement was DROPPED at owner direction — see §Current session focus).
 
 Additional single-instance watchlist observations carried forward
 from the 2026-04-19 rotation (`core-tier-means-primitive-not-just-
@@ -1545,8 +1300,8 @@ formerly lived here (**Agent-names registry** and **External
 pointer-surface integration (Linear)**) have been moved to their
 proper artefact homes or captured in plan-local scope:
 
-+ **Agent-names registry** → consumed by Session 4 Task 4.2 identity-rule install; now lives under the agent-names source research referenced by [PDR-027 §Identity schema](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
-+ **External pointer-surface integration (Linear)** → full scope carried in the parent plan [`external-pointer-surface-integration.plan.md`](../../plans/agentic-engineering-enhancements/future/external-pointer-surface-integration.plan.md); owner-ratified directives and trigger sequencing live in the plan body (the correct home for plan-local meta-decisions per [`§ Decisions in force`](#decisions-in-force--pointer-to-proper-artefact-homes)).
+- **Agent-names registry** → consumed by Session 4 Task 4.2 identity-rule install; now lives under the agent-names source research referenced by [PDR-027 §Identity schema](../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md).
+- **External pointer-surface integration (Linear)** → full scope carried in the parent plan [`external-pointer-surface-integration.plan.md`](../../plans/agentic-engineering-enhancements/future/external-pointer-surface-integration.plan.md); owner-ratified directives and trigger sequencing live in the plan body (the correct home for plan-local meta-decisions per [`§ Decisions in force`](#decisions-in-force--pointer-to-proper-artefact-homes)).
 
 Infrastructure candidates that deserve register visibility (e.g.
 because they lack a parent plan) can surface as `Due` or `Pending`
@@ -1566,9 +1321,9 @@ archived plan body at
 
 **Deferred after arc** (no SLA, owner-appetite-triggered):
 
-+ Experience-scan dedicated session.
-+ Three rehoming open items (see §Next safe step above).
-+ Four directive files in fitness-hard zone (see §Open per-file
+- Experience-scan dedicated session.
+- Three rehoming open items (see §Next safe step above).
+- Four directive files in fitness-hard zone (see §Open per-file
   disposition carried forward above).
 
 **Retroactive identity attribution for `f9d5b0d2`**: owner accepts
@@ -1578,9 +1333,9 @@ the attribution gap; concrete attribution starts forward from
 **Related memory-feedback artefacts** (partially consumed by the
 arc; retained for intent and history):
 
-+ Strategic brief: [`../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md)
-+ Metacognition (first- and second-pass): [`../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md)
-+ Execution plan (Phase 0 resolved; Phases 1–5 absorbed by the
+- Strategic brief: [`../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.plan.md)
+- Metacognition (first- and second-pass): [`../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md`](../../plans/agentic-engineering-enhancements/future/memory-feedback-and-emergent-learning-mechanisms.metacognition.md)
+- Execution plan (Phase 0 resolved; Phases 1–5 absorbed by the
   closed staged plan; Phase 7 learning loop carries forward as
   a long-lived plan): [`../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md)
 
@@ -1590,13 +1345,13 @@ There is no single next-session opener. The continuity unit is the
 thread; each active thread holds its own next-session record. Pick
 the thread the session is picking up before reading the opener.
 
-+ **`observability-sentry-otel` thread** (product) — **next-active
+- **`observability-sentry-otel` thread** (product) — **next-active
   as of 2026-04-22 Session 8 close**: see
   [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md).
   Landing target: §L-8 WS1 Vercel preview acceptance probe (per
   the authoritative file). Standing decisions (owner-beats-plan)
   and session shape specified in the opener.
-+ ~~`memory-feedback` thread~~ — **archived 2026-04-22 Session 8**.
+- ~~`memory-feedback` thread~~ — **archived 2026-04-22 Session 8**.
   Eight-session staged doctrine-consolidation arc closed; next-
   session record deleted per PDR-026 §Lifecycle. If
   doctrine-consolidation work resumes, a new thread starts (or

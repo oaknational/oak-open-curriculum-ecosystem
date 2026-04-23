@@ -117,5 +117,5 @@ fires:
 - [Exploration 6](./2026-04-18-cloudflare-plus-sentry-security-observability.md) —
   companion exploration.
 
-(External GHAS and SonarCloud URLs are un-verified at stub time;
-authoring-time verification required.)
+(External GHAS and SonarCloud URLs are un-verified at brief-authoring
+time; authoring-time verification required.)

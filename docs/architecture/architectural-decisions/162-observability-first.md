@@ -281,7 +281,8 @@ In summary:
    `multi-sink-vendor-independence-conformance` — and eleven
    post-MVP `future/` plans each with a named promotion trigger).
 3. **Phase 3** (two explorations in full: accessibility-at-runtime,
-   event-schemas-for-curriculum-analytics; six exploration stubs).
+   event-schemas-for-curriculum-analytics; six focused exploration
+   briefs).
 4. **Phase 4** (revise the maximisation executable plan for
    MVP-vs-MVP-deferred classification; `metrics.*` primary over
    span-metrics transitional).

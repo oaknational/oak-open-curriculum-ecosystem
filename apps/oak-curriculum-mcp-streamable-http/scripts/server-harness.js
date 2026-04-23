@@ -2,7 +2,7 @@
 /**
  * Production Build Server Harness
  *
- * Runs the built production bundle (dist/index.js) locally with configurable
+ * Runs the built production deploy bundle (dist/server.js) locally with configurable
  * environment to diagnose deployment issues and validate instrumentation.
  *
  * Usage:
@@ -15,6 +15,7 @@
  *   PORT - Server port (default: 3001)
  */
 
+import { createServer } from 'node:http';
 import { readFileSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -118,48 +119,36 @@ log.info('Configuration snapshot', configSnapshot);
 const startTime = Date.now();
 
 log.info('Importing production bundle', {
-  bundlePath: 'dist/application.js',
+  bundlePath: 'dist/server.js',
 });
 
 try {
-  const { createApp, loadRuntimeConfig } = await import(`${rootDir}/dist/application.js`);
+  const bundle = await import(`${rootDir}/dist/server.js`);
 
-  if (typeof createApp !== 'function') {
-    throw new Error('createApp is not a function in production bundle');
+  if (typeof bundle.default !== 'function') {
+    throw new Error('default export is not a function in production deploy bundle');
   }
+
+  const handler = bundle.default;
 
   log.info('Production bundle loaded', {
-    createAppType: typeof createApp,
+    defaultExportType: typeof handler,
     loadTimeMs: Date.now() - startTime,
-  });
-
-  // Load runtime config from process.env (loaded from ENV_FILE above)
-  const configResult = loadRuntimeConfig({
-    processEnv: process.env,
-    startDir: rootDir,
-  });
-
-  if (!configResult.ok) {
-    log.error('Failed to load runtime config', {
-      message: configResult.error.message,
-      diagnostics: configResult.error.diagnostics,
-    });
-    process.exit(1);
-  }
-
-  // Create Express app (async — fetches upstream metadata when auth is enabled)
-  const appCreationStart = Date.now();
-  const app = await createApp({ runtimeConfig: configResult.value });
-  const appCreationTime = Date.now() - appCreationStart;
-
-  log.info('Express app created', {
-    appCreationTimeMs: appCreationTime,
-    totalTimeMs: Date.now() - startTime,
   });
 
   // Start server
   const port = process.env.PORT || 3001;
-  const server = app.listen(port, () => {
+  const server = createServer((req, res) => {
+    void Promise.resolve(handler(req, res)).catch((error) => {
+      log.error('Deploy handler failed', {
+        message: error instanceof Error ? error.message : String(error),
+      });
+      res.statusCode = 500;
+      res.end('Internal Server Error');
+    });
+  });
+
+  server.listen(port, () => {
     const listenTime = Date.now() - startTime;
     log.info('Server listening', {
       port,
@@ -195,8 +184,8 @@ try {
   process.on('SIGTERM', () => shutdown('SIGTERM'));
 } catch (error) {
   log.error('Failed to start server', {
-    error: error.message,
-    stack: error.stack,
+    error: error instanceof Error ? error.message : String(error),
+    stack: error instanceof Error ? error.stack : undefined,
     totalTimeMs: Date.now() - startTime,
   });
   process.exit(1);

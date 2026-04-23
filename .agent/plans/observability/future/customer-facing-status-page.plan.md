@@ -13,7 +13,7 @@ promotion_trigger: "statuspage-integration.plan.md completes (promoted → activ
 # Customer-Facing Status Page
 
 **Status**: 🔵 Strategic (not yet executable)
-**Last Updated**: 2026-04-18
+**Last Updated**: 2026-04-23
 **Promotion trigger**: `statuspage-integration.plan.md` completes.
 
 ---
@@ -58,8 +58,8 @@ complete (in `archive/completed/` or equivalent).
 
 - `observability/future/slo-and-error-budget.plan.md` — supplies the
   historical uptime SLO data this page displays.
-- `observability/current/synthetic-monitoring.plan.md` — supplies the
-  current-state probe signal.
+- Owner-managed uptime-monitor signal against `/healthz` — supplies
+  the current-state probe signal.
 
 ## Success Signals
 

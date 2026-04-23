@@ -325,12 +325,13 @@ Embeds Debug IDs into each `.js` and its matching `.map` under
 ingestion time (Sentry docs,
 `https://docs.sentry.io/platforms/javascript/sourcemaps/troubleshooting_js/debug-ids/`).
 Without this step, uploaded source maps would have no key to match
-against runtime events and symbolication would silently fail. The
-existing wrapper script
-(`apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`)
-already performs this step and grep-checks that at least one
-`//# debugId=` comment is present in `dist/` after injection; this
-post-condition check is retained.
+against runtime events and symbolication would silently fail. Under the
+current esbuild-plugin realisation this injection happens inside the
+build itself; there is no separate wrapper script. Oak's repo-owned
+post-condition is now the combination of the build succeeding, the
+deployed artefact contract gate passing (§7/§8), and the preview smoke
+probe proving the deployed function boots and reports with the expected
+release.
 
 #### 6.4 `sourcemaps upload --release` — **abort on failure**
 
@@ -339,8 +340,8 @@ associates it with the release `$VERSION`. The `--release` flag
 creates a **weak association** that drives the Releases → Source
 Maps surface in the Sentry UI. Debug IDs are sufficient for
 symbolication without `--release`; the weak association is retained
-because it is already in the existing wrapper script and provides UI
-navigability for humans investigating a specific release. Failure
+because the plugin's release configuration still provides that UI path
+for humans investigating a specific release. Failure
 means symbolication will not work; abort.
 
 #### 6.5 `releases finalize` — **continue on failure (warn)**
@@ -387,16 +388,37 @@ build`) is replaced by an esbuild composition root at the workspace
 > `buildCommand` override; Vercel runs the workspace's `build` script
 > directly.
 >
-> Pipeline shape (§L-8 onwards):
+> **Amendment 2026-04-23 (deploy-boundary repair)**
+>
+> The build no longer treats `dist/index.js` as both the local Node
+> listener and the deployed artefact. The workspace now emits three
+> distinct bundles:
+>
+> - `dist/server.js` — the deployed Vercel entry;
+> - `dist/index.js` — the local Node listener entry;
+> - `dist/application.js` — the importable async Express app factory.
+>
+> `package.json` `main` now points at `dist/server.js`. The esbuild
+> composition root imports the built `dist/server.js` immediately after
+> build and fails if the module does not default-export a function.
+> That same root also fails the build on any esbuild warning, closing
+> the exact warning-to-runtime-crash path surfaced by the 2026-04-22
+> preview failure.
+>
+> Pipeline shape (2026-04-23 onwards):
 >
 > ```text
 > build command (Vercel default):
 >   pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http run build
 >
 > workspace build script:
->   node ../../scripts/validate-root-application-version.mjs
->     && tsx esbuild.config.ts
+>   tsx esbuild.config.ts
 > ```
+>
+> The deploy-boundary split is intentional: Vercel imports
+> `dist/server.js`; local Node starts `dist/index.js`; diagnostics use
+> `pnpm prod:harness`, which wraps `dist/server.js` in a local
+> `http.createServer(...)`.
 >
 > Rationale for the inversion: the `@sentry/esbuild-plugin` operates
 > inside the build, not after it, so the per-step abort-vs-continue
@@ -448,19 +470,28 @@ that a bash `&&` chain cannot express cleanly. The orchestrator
 script owns the per-step posture; `pnpm build` continues to mean
 "tsup build only", keeping local builds fast and side-effect-free.
 
-### 8. Runtime contract changes required
+### 8. Runtime and deploy-boundary contract changes required
 
-The L-7 implementation will add the following to
-`packages/libs/sentry-node/src/types.ts#SentryConfigEnvironment`:
+The L-7 and L-8 work together to ratify three contract changes:
 
-- `VERCEL_GIT_COMMIT_REF?: string` — consumed by a new
-  `resolveSentryEnvironment` branch-check per §3.
-- `SENTRY_RELEASE_REGISTRATION_OVERRIDE?: string` — gates the
-  local-override path in §4.
+- `packages/libs/sentry-node/src/types.ts#SentryConfigEnvironment`
+  includes `VERCEL_GIT_COMMIT_REF?: string` (for the §3 branch-check)
+  and `SENTRY_RELEASE_REGISTRATION_OVERRIDE?: string` (for the §4
+  local-override gate).
+- The deployed workspace entry is
+  `apps/oak-curriculum-mcp-streamable-http/src/server.ts`; the built
+  deployed artefact is `dist/server.js`; `package.json` `main` must
+  point at that file.
+- `dist/server.js` must default-export a function that satisfies
+  Vercel's `@vercel/node` import contract. `src/index.ts` remains the
+  local Node listener and must not be reused as the deployed `main`.
 
-`resolveSentryEnvironment` will be extended to implement the §3 truth
-table. `resolveSentryRelease` is unchanged (already returns the root
-`package.json` semver via `APP_VERSION` fallback).
+`resolveSentryEnvironment` implements the §3 truth table.
+`resolveSentryRelease` is unchanged (root semver via `APP_VERSION`
+fallback). `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`
+enforces the deployed-entry contract with two repo-owned gates:
+`assertNoEsbuildWarnings(...)` and
+`assertVercelDefaultExportFunction(...)`.
 
 ### 9. GitHub release workflow — already correctly wired
 
@@ -576,26 +607,31 @@ each subject to the ignoreCommand check.
    in the L-7 implementation): the §3 truth table is encoded as a
    parametrised test with one assertion row per table row. A future
    change to the truth table must update the test first.
-2. **Build-time preflight** in the orchestrator script (authored by
-   L-7): fail-fast refuses to run against `VERCEL_ENV=development`
-   unless the override env-pair is set. Verified against a fake
-   `sentry-cli` binary in a fixture test before landing.
+2. **Build-time contract gate** in
+   `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`:
+   fail-fast rejects esbuild warnings, imports the built
+   `dist/server.js`, and requires a default-exported function. This is
+   the local guardrail for the 2026-04-22
+   `FUNCTION_INVOCATION_FAILED` class; preview smoke still provides the
+   external proof.
 3. **Docs**:
    - `docs/operations/sentry-deployment-runbook.md` (authoritative
      deploy-time flow).
-   - `docs/operations/sentry-cli-usage.md` (command reference, release
-     linkage sequence).
-   - `apps/oak-curriculum-mcp-streamable-http/scripts/upload-sourcemaps.sh`
-     (inline `WHEN TO RUN` comment).
+   - `apps/oak-curriculum-mcp-streamable-http/docs/deployment-architecture.md`
+     (deployed vs local runtime boundary).
    - `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`
      (points at this ADR for the release/deploy model).
    - `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`
      (env-var listing + the §3 truth table).
+   - `apps/oak-curriculum-mcp-streamable-http/docs/operational-debugging.md`
+     (local deploy-boundary diagnostics via `pnpm prod:harness`).
      Drift against this ADR in any of those surfaces is caught by
      `docs-adr-reviewer` at lane close.
 4. **Cross-reference from ADR-161** — ADR-161 pipeline-boundary table
    already names the Vercel deploy pipeline as the correct home for
-   `sentry-cli` invocations. This ADR names the specific sequence.
+   the release/deploy realisation. This ADR now names the esbuild
+   composition root + deployed-entry contract that make that pipeline
+   bootable in practice.
 
 ## References
 
@@ -675,3 +711,13 @@ each subject to the ignoreCommand check.
     `inherited-framing-without-first-principles-check` lesson recorded
     in `napkin.md` 2026-04-20 entry, which named the §6 HOW framing as
     the cost the L-7 lane paid; §L-8 WS3.1 pays that cost back.
+- **2026-04-23** — Amendment during the deploy-boundary repair. §7 now
+  names the built artefact split explicitly: `dist/server.js` is the
+  deployed Vercel entry, `dist/index.js` remains the local listener,
+  and `package.json` `main` points at `dist/server.js`. §8 now records
+  the deploy-boundary contract itself, and Enforcement §2 replaces the
+  old orchestrator-preflight framing with the build-output contract
+  gate (`assertNoEsbuildWarnings` +
+  `assertVercelDefaultExportFunction`). This closes the exact
+  2026-04-22 preview failure mode where a green build could still ship
+  an unimportable deployed entry.

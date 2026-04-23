@@ -337,7 +337,7 @@ opens after Phase 5 closes.
 | **Phase 3a — Alpha-gate emitters (schema-independent)** | Server-side emission sites that do NOT consume Phase 2 schemas. Can land before events-workspace. This is the transition-to-useful phase — after Phase 3a, Sentry is diagnostic-grade for the MCP server (release attribution via L-8, free runtime signal via L-1, request-context attribution via L-3). | L-1 (free-signal integrations — emits Sentry-native vendor events, not Oak-authored schema); L-2 (delegates extraction — structural refactor, no event shape; unblocks Search CLI branch); L-3 (MCP request context enrichment — establishes `mcp_request` scope shape that later `tool_invoked` emitters consume; does not itself emit schema-governed events). | — |
 | **Phase 3b — Beta-gate emitters (schema-dependent)** | Emission sites that consume Phase 2 schemas by import. Gated on events-workspace existing. | L-4b (primary `Sentry.metrics.*` adapter — metric names catalogued alongside event schemas per ADR-162). **Deferred to public beta**: L-9 (feedback pipeline — user-facing surface not yet defined in alpha). | — |
 | **Phase 4 — Cross-axis** | Security + a11y sibling plans emit their axis events using Phase 2 schemas. Gated on events-workspace. **Deferred to public beta**: L-12 (widget Sentry — runtime surface is agentic clients like ChatGPT/Claude Desktop, not a standard browser; instrumentation behaviour in those hosts is unverified). | — | [`security-observability.plan.md`](../current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered`; [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome` |
-| **Phase 5 — Operations + Conformance + Close-out** | Vendor-independence conformance runs pre-launch (previously blocked by schema foundation). Strategy close-out and error-handling final land while experience is fresh. | L-15 (strategy close-out ADR); L-EH final (`prefer-result-pattern` ESLint rule + first-tranche adoption); MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11; L-8 (now UN-DROPPED — see body). **Deferred to public beta**: L-13 (alerts/dashboards/runbooks — require real signal distributions from L-1/L-3/L-4b before threshold design is meaningful); L-14 (third-party trace propagation — security-gated policy decision). | [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS2+; [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md) |
+| **Phase 5 — Operations + Conformance + Close-out** | Vendor-independence conformance runs pre-launch (previously blocked by schema foundation). Strategy close-out and error-handling final land while experience is fresh. | L-15 (strategy close-out ADR); L-EH final (`prefer-result-pattern` ESLint rule + first-tranche adoption); MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11; L-8 (now UN-DROPPED — see body). **Deferred to public beta**: L-13 (alerts/dashboards/runbooks — require real signal distributions from L-1/L-3/L-4b before threshold design is meaningful); L-14 (third-party trace propagation — security-gated policy decision). | [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md) WS2+; [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) — deploy-boundary repair + preview/Sentry proof before owner-external uptime monitoring |
 
 ### Alpha vs public-beta gates (2026-04-20 re-sequencing)
 
@@ -1035,10 +1035,10 @@ vendor-independence clause):
   — authoritative mechanism.
 - [ADR-161](../../../../docs/architecture/architectural-decisions/161-network-free-pr-check-ci-boundary.md)
   — pipeline boundary.
-- [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md)
-  — external uptime + working-probe lanes; deploy events registered
-  by L-7 are the reference frame against which synthetic probes
-  attribute regressions.
+- [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+  — current execution authority for restoring a bootable preview and
+  proving `/healthz` plus preview/Sentry linkage; external uptime
+  monitoring now starts outside the repo once this proof exists.
 - [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)
   — L-7 carries an explicit **release-linkage carve-out** from the
   vendor-independence clause. Release linkage is Sentry-coupled by
@@ -2391,15 +2391,15 @@ invariant is working as designed.
 #### L-8 Correction (2026-04-21) — Version source-of-truth and fail-policy
 
 **Status**. 🟡 WI 1-5 LANDED LOCALLY (commit `fb047f86`,
-2026-04-23, Pippin / cursor-claude-opus-4-7); WI 6-8 PENDING (push,
-Vercel preview probe, Sentry UI verification, ADR-163 §6/§7
-amendment). Two distinct planning + implementation errors
-surfaced when the Vercel preview build of `f9d5b0d2` ran on
-`feat/otel_sentry_enhancements` @ `ff91cd1c` (deployment
-`dpl_8LJxuArqh68w4pon9MbfnriD5rre`); the canonical resolver +
-persistence + plugin-refactor + esbuild-config branching lane
-landed locally with all gates green. The remaining WI 6-8 close
-the operational acceptance gate.
+2026-04-23, Pippin / cursor-claude-opus-4-7); the next preview build
+went green but the deployed function crashed at runtime because the
+deployed artefact did not satisfy Vercel's import contract. The
+remaining repo-owned work is now governed by
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md):
+verify the contract from primary evidence, land the smallest
+deploy-boundary repair, rerun the preview, prove `/healthz` and Sentry,
+then amend ADR-163. Broader runtime simplification moved to
+[`mcp-http-runtime-canonicalisation.plan.md`](../future/mcp-http-runtime-canonicalisation.plan.md).
 
 ##### Local landing record (2026-04-23, commit `fb047f86`)
 
@@ -2685,9 +2685,10 @@ register entry for the follow-on lane.
   persists via stdout/err. Phase 5 escalates the
   `no-vendor-observability-import` ESLint rule severity from `warn`
   to `error`.
-- [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md)
-  — external uptime + external working-probe against production;
-  alerts integrate with L-13's alert suite.
+- [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+  — operational deploy-boundary repair and preview/Sentry proof.
+  External monitor setup now happens outside the repo once this plan
+  closes.
 
 ---
 
@@ -2815,7 +2816,7 @@ them here gives docs-adr-reviewer a single surface to audit:
 
 - **L-0/L-0b/L-1/L-3 → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — the downstream-analytics event-schema authority. L-0b's redaction barrier gates every schema-conformant emission; L-1's free-signal integrations emit events that the workspace will catalogue; L-3's `mcp_request` context is the correlation substrate for `tool_invoked`.
 - **L-4b → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — metric-names catalog. `Sentry.metrics.*` emissions are part of the downstream-analytics schema contract per ADR-162; metric names the adapter emits (e.g. `oak.mcp.handler.request.count`, `oak.mcp.tool.duration_ms`) are catalogued alongside event schemas.
-- **L-7 → [`synthetic-monitoring.plan.md`](../current/synthetic-monitoring.plan.md)** — deploy events registered by L-7 are the reference frame against which synthetic probes attribute regressions.
+- **L-7 → [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)** — deploy events registered by L-7 become operationally meaningful only once the current repair plan proves a bootable preview, a healthy `/healthz` endpoint, and preview traffic visible in Sentry.
 - **L-7 → [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)** — documents the release-linkage carve-out. Release linkage is Sentry-coupled by nature; the conformance plan's scope explicitly acknowledges this signal as one that need NOT survive `SENTRY_MODE=off`.
 - **L-9 → [`observability-events-workspace.plan.md`](../current/observability-events-workspace.plan.md)** — `feedback_submitted` event schema. L-9's closed-set Zod enum maps directly to the schema defined there.
 - **L-12 → [`accessibility-observability.plan.md`](../current/accessibility-observability.plan.md)** — widget-side a11y signal (preference tags, frustration proxies, incomplete-flow correlation, keyboard-only detection).
@@ -3054,12 +3055,12 @@ re-openable framing.
 1. **PR-size posture**. **All 17 lanes land in a single PR on this
    branch.** This work is "everything at once"; future MCP-app work
    will use smaller PRs, but not this foundational observability push.
-2. **L-11 AI scaffolding**. **TSDoc extension-point stub only.** No
+2. **L-11 AI scaffolding**. **TSDoc extension-point only.** No
    re-exports from the adapter barrel. No new helpers on
    `HttpObservability`. A README section documents where LLM
    instrumentation will attach when the first Oak MCP tool calls an
    LLM. Plan text updated in §L-11 accordingly.
-3. **L-10 feature-flag scaffolding**. **TSDoc extension-point stub
+3. **L-10 feature-flag scaffolding**. **TSDoc extension-point
    only.** No `featureFlagsIntegration()` wired. No helper exported.
    README + TSDoc anchor documents the future-provider attachment
    point. Plan text updated in §L-10 accordingly.

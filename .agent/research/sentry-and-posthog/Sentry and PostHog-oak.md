@@ -426,9 +426,9 @@ decision. L-10 in the maximisation plan is intentionally
 (MVP-deferred)"*; the active provider-seam choice belongs to
 [`future/feature-flag-provider-selection.plan.md`](../../plans/observability/future/feature-flag-provider-selection.plan.md),
 which is explicitly held in wait until a real flag consumer exists
-("the stub exists so the extension point is documented; no real flag
-is wired because there is no use case … pre-committing a shape
-before a real consumer risks locking in a wrong API"). What this
+("the extension point is documented; no real flag is wired because
+there is no use case … pre-committing a shape before a real consumer
+risks locking in a wrong API"). What this
 overlay can usefully add is the *evaluation criterion* a future
 provider-seam decision should preserve, not the seam decision
 itself.
@@ -761,7 +761,7 @@ clarifies, what is now decidable, and what remains open.
 
 ### 11.0 Direct answers to the canonical exploration's six research questions
 
-The canonical exploration stub
+The canonical exploration brief
 [`docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md`](../../../docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md)
 poses six numbered research questions. The answers below are the
 parallel-commit-ready lift target for that exploration's body.
@@ -922,7 +922,8 @@ the vendor's compliance posture. See §5 + §6.
   (§6), the candidate cross-vendor adapter shape (exploration 4
   §5.7), the conformance lint (§4 last paragraph).
 - **No new decisions for L-10**: L-10 stays as the
-  TSDoc-extension-point-only stub the plan-of-record specifies.
+  TSDoc-extension-point-only documentation the plan-of-record
+  specifies.
   The OpenFeature evaluation criteria above (§11.2) belong to
   `future/feature-flag-provider-selection.plan.md`; L-10 carries
   the extension point shape, not the seam decision.
@@ -957,7 +958,7 @@ the vendor's compliance posture. See §5 + §6.
 ### 11.6 `docs/explorations/2026-04-18-sentry-vs-posthog-capability-matrix.md`
 
 - This overlay supplies the full text the canonical exploration was
-  holding open at stub. The canonical exploration is updated
+  holding open at brief stage. The canonical exploration is updated
   separately (per plan, §2–§5 replaced) and stays the single
   citable source for `future/second-backend-evaluation.plan.md`.
 
@@ -1123,10 +1124,10 @@ load-bearing issues plus several smaller ones. Dispositions below.
   decision rather than continuing to defer". This is contradicted
   by L-10 in the active maximisation plan ("Feature-flag
   scaffolding — TSDoc extension point only (MVP-deferred)") and by
-  `future/feature-flag-provider-selection.plan.md` ("the stub
-  exists so the extension point is documented; no real flag is
-  wired because there is no use case … pre-committing a shape
-  before a real consumer risks locking in a wrong API"). Both
+  `future/feature-flag-provider-selection.plan.md` ("the extension
+  point is documented; no real flag is wired because there is no use
+  case … pre-committing a shape before a real consumer risks locking
+  in a wrong API"). Both
   reviewers identified this as a masquerading-blocking move on a
   plan the owner has explicitly held in wait.
 - **Disposition**: **accepted in full**. Rewrote §7's framing
@@ -1198,7 +1199,7 @@ load-bearing issues plus several smaller ones. Dispositions below.
 
 **14.1.8 Important (docs-adr-reviewer) — missing "six research questions, answered" section**
 
-- **Finding**: the canonical exploration stub poses six numbered
+- **Finding**: the canonical exploration brief poses six numbered
   research questions in its §3. The overlay touched all six but
   did not produce a discrete section that answers them in the
   same numbering, ready to lift into the canonical exploration's
@@ -1287,7 +1288,7 @@ load-bearing issues plus several smaller ones. Dispositions below.
   separately (per plan, §2–§5 replaced)". The actual parallel-
   commit step has more work than a clean §2–§5 replacement
   because the overlay's §2–§5 are substantively different shapes
-  from the exploration stub's §2–§5.
+  from the exploration brief's §2–§5.
 - **Disposition**: **deferred to draft-exploration step**. The
   parallel-commit step itself is the right place to make the
   structural mapping explicit; rewriting §11.6 here would

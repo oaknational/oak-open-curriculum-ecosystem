@@ -520,7 +520,9 @@ Every item from §2.3's gap list has a home. Classifications below.
 ### 6.3 New in `plans/observability/current/` (MVP lanes)
 
 - `observability-events-workspace.plan.md` — the new core workspace.
-- `synthetic-monitoring.plan.md` — external uptime + working probe.
+- `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md` —
+  current repo-owned deploy-boundary repair plus preview/Sentry proof
+  before owner-external uptime monitoring is configured.
 - `security-observability.plan.md` — application-level, lightly scoped.
 - `accessibility-observability.plan.md` — best-effort + open question.
 - `multi-sink-vendor-independence-conformance.plan.md` — proves ADR-162 clause.
@@ -601,8 +603,9 @@ See companion plan. Summary:
    directory, move six plans, update cross-references.
 2. **MVP scope pass**: fill `high-level-observability-plan.md`; author six
    new `current/` plans; author eleven new `future/` plans.
-3. **Exploration kickoff**: write explorations 3 and 4 in full (blocking);
-   stub the other six with problem statement + research questions.
+3. **Exploration kickoff**: write explorations 3 and 4 in full
+   (blocking); author the other six as focused briefs with problem
+   statement + research questions.
 4. **Executable plan revision**: apply §7 edits.
 5. **ADR-162 acceptance**: after enforcement mechanisms are concrete.
 

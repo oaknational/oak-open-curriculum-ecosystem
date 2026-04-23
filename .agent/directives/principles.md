@@ -281,9 +281,8 @@ paths, setup files) don't apply.
   construction, fixtures, or test infrastructure — never exempt the
   test from the gate. The purpose of hardening is strictness; any
   exemption undermines the gate for all future code.
-- **Never prefix variables with an underscore** - This is a hack,
-  AND IT DOES NOT WORK. Figure out why the variable is unused and
-  fix the root cause. Either use the variable, or delete it.
+- **WE DON'T HEDGE** - It is worth doing or it doesn't exist. we don't
+create plan stubs, or fallbacks, or invent optionality or prefix unused variables with an underscore. We fix it, or we delete it, or we never create it in the first place.
 - **Quality gates** - Run ALL gates after changes. The gate
   taxonomy has complementary layers, each catching a different
   class of defect:

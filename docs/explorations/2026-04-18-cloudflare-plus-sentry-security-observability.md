@@ -106,7 +106,7 @@ fires:
   the capability matrix substantively different from the current
   assessment.
 
-Until then, the exploration is held open at stub status.
+Until then, the exploration remains a focused brief.
 
 ---
 
@@ -124,4 +124,4 @@ Until then, the exploration is held open at stub status.
   redaction constraints that extend to Cloudflare-sourced telemetry.
 
 (External Cloudflare and Sentry integration URLs are un-verified at
-stub time; authoring-time verification required.)
+brief-authoring time; authoring-time verification required.)

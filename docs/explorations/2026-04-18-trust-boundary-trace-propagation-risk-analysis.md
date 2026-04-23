@@ -120,5 +120,5 @@ maximisation plan's lane sequencing), or **sooner if**:
 - [ADR-161](../architecture/architectural-decisions/161-network-free-pr-check-ci-boundary.md) —
   CI-boundary constraint.
 
-(External URLs cited here are un-verified at stub time; authoring-time
-verification required.)
+(External URLs cited here are un-verified at brief-authoring time;
+authoring-time verification required.)
