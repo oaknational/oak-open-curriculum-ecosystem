@@ -104,17 +104,18 @@ In the common paired-export case, the strongest surviving layer is usually:
    them to readable markdown. The default rendering convention is **inline
    anchor links + a thematically grouped `## References` section at the end**
    of the clean file:
-   - Build an ordered map of unique URLs (after `utm_*` stripping) in
+
+- Build an ordered map of unique URLs (after `utm_*` stripping) in
      first-occurrence order; assign sequential ref numbers.
-   - Inline form is `[[N]](#ref-N)` so the same URL at three positions reuses
+- Inline form is `[[N]](#ref-N)` so the same URL at three positions reuses
      one number — the reader can see reuse.
-   - Bibliography entries are `- <a id="ref-N"></a>**[N]** <https://url/>`
+- Bibliography entries are `- <a id="ref-N"></a>**[N]** <https://url/>`
      grouped under thematic subheadings driven by source family
      (e.g. *Sentry product documentation*, *PostHog pricing*, *Third-party
      reviews & community*). Order groups so the report's primary subject leads.
-   - Do not invent titles or dates that are not present in the inputs; URLs
+- Do not invent titles or dates that are not present in the inputs; URLs
      alone are honest.
-   - If a DOCX or `pandoc` conversion attaches a recovered URL to a visible
+- If a DOCX or `pandoc` conversion attaches a recovered URL to a visible
      entity name instead of the citation-marker position, treat that inline
      link as suspect and keep the entity text plain unless the source clearly
      supports it.

@@ -4,14 +4,17 @@ Status: Transfer complete; originals removed after verification
 Date: 2026-02-25
 
 Purpose:
+
 - Preserve all original `post-sdk` documents for comparison
 - Verify each transferred document in `future/` is byte-identical
 - Record source-to-target mapping for auditability
 
 Original source files were located at:
+
 - `.agent/plans/semantic-search/post-sdk/`
 
 Removal note:
+
 - Original `post-sdk/` directory removed on 2026-02-25 after transfer verification.
 
 | Source | Target | Source SHA-256 | Target SHA-256 | Match |

@@ -220,6 +220,7 @@ propagated — no trace of old `prerequisite-graph` in running server.
 6. **Cursor plan**: `.cursor/plans/extract_mcp_protocol_types_b9d696d0.plan.md` — COMPLETED.
 
 **Tracked follow-up** (not blocking WS-3):
+
 - Consolidate `security-types.ts` with `mcp-protocol-types.ts` to
   eliminate duplicate security scheme type definitions in sdk-codegen.
 

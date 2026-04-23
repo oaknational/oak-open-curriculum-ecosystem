@@ -16,23 +16,27 @@ barrier:
 When an SDK owns a retriever builder (the Elasticsearch query shape — fields, RRF parameters, semantic config), app-layer code should **import and delegate** rather than maintaining a local copy.
 
 The app keeps:
+
 - **Filter construction** — app-specific logic (e.g., which parameters map to which ES filter clauses)
 - **Request assembly** — app-specific concerns (index resolution, pagination, source excludes)
 
 The app delegates:
+
 - **Retriever shape** — the RRF structure, field names, boost values, rank parameters, semantic field config
 
 The adapter between them is typically one line:
+
 ```typescript
 const filterClause = filters.length > 0 ? { bool: { filter: filters } } : undefined;
 ```
+
 This converts app-layer filter arrays to the SDK's single `QueryContainer | undefined` parameter.
 
 ## Anti-pattern
 
 Two implementations of the same retriever shape in different workspaces, differing only in filter parameter format. The shapes are byte-identical today but nothing prevents them diverging tomorrow.
 
-```
+```text
 WRONG:  CLI builds filters → CLI builds retriever (local copy) → CLI assembles request
 RIGHT:  CLI builds filters → CLI wraps filters → SDK builds retriever → CLI assembles request
 ```
@@ -46,11 +50,15 @@ RIGHT:  CLI builds filters → CLI wraps filters → SDK builds retriever → CL
 ## Detection
 
 Search for private retriever-building functions in app code that mirror SDK exports:
+
 ```bash
 grep -r "function create.*Retriever" apps/ --include="*.ts"
 ```
+
 Compare against SDK exports:
+
 ```bash
 grep -r "export function build.*Retriever" packages/sdks/ --include="*.ts"
 ```
+
 If both return the same RRF shape for the same index scope, the app version should be collapsed.

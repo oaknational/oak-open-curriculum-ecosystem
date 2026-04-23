@@ -83,7 +83,7 @@ split_strategy: "Extract examples to a companion examples file; split by test le
   instantiate tools that internally spawn processes (e.g.
   programmatic ESLint with TypeScript project service). This
   excludes vitest's own configured pool — the restriction is on
-  what *test code* does, not the runner. Process spawning creates
+  what _test code_ does, not the runner. Process spawning creates
   handles that prevent clean worker exit, causes CI hangs, and
   violates the principle of using the right tool for the job. Use
   the right tool: ESLint for boundary enforcement, Playwright for

@@ -49,7 +49,7 @@ governance decisions that would otherwise have no portable home.
 
 PDRs are numbered sequentially from `PDR-001`:
 
-```
+```text
 PDR-NNN-kebab-case-title.md
 ```
 

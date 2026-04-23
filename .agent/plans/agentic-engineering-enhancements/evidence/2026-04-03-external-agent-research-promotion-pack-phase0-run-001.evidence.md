@@ -44,7 +44,7 @@
 
 | Command | Result | Output Ref |
 |---|---|---|
-| `rg -n "Transfer candidates|Consensus asks|Portable lessons" .agent/research/developer-experience/novel/*.md` | pass | E-001, E-003, E-005 |
+| `rg -n "Transfer candidates\|Consensus asks\|Portable lessons" .agent/research/developer-experience/novel/*.md` | pass | E-001, E-003, E-005 |
 | `sed -n '1,260p' .agent/plans/agentic-engineering-enhancements/evidence-bundle.template.md` | pass | E-002 |
 | `sed -n '1,260p' agent-tools/src/bin/claude-agent-ops.ts` | pass | E-006 |
 

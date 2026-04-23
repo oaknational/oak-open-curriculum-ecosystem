@@ -54,7 +54,7 @@ isProject: true
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
 **Last Updated**: 2026-04-19
-**Status**: 🟢 Phases 1–5 complete (2026-04-19). ADR-162 Accepted; `require-observability-emission` landed at `warn` across all apps/* and packages/sdks/* workspaces; reviewer-matrix axis-coverage question codified. Wave 1 of the MVP execution reshape is therefore substantially closed — remaining Wave 1 items (L-EH initial, L-DOC initial, L-12-prereq, L-7) are owned by the maximisation plan.
+**Status**: 🟢 Phases 1–5 complete (2026-04-19). ADR-162 Accepted; `require-observability-emission` landed at `warn` across all apps/*and packages/sdks/* workspaces; reviewer-matrix axis-coverage question codified. Wave 1 of the MVP execution reshape is therefore substantially closed — remaining Wave 1 items (L-EH initial, L-DOC initial, L-12-prereq, L-7) are owned by the maximisation plan.
 **Branch**: `feat/otel_sentry_enhancements`
 **Session rationale**: `docs/explorations/2026-04-18-observability-strategy-and-restructure.md`
 
@@ -195,7 +195,7 @@ README.
 
 **Directory shape**:
 
-```
+```text
 .agent/plans/observability/
 ├── README.md
 ├── high-level-observability-plan.md          # skeleton; filled in Phase 2
@@ -351,7 +351,7 @@ with:
    small exploration stub sufficient for plan scope.
 
 3. **`security-observability.plan.md`** — application-layer `auth_failure`
-   + `rate_limit_triggered` events. Schema in events workspace.
+   - `rate_limit_triggered` events. Schema in events workspace.
    Explicit non-goals: transport/bot/DDoS observability (Cloudflare's
    layer). Depends on exploration 6 for Cloudflare integration scope;
    exploration 7 for static-analysis augmentation.

@@ -118,7 +118,7 @@ Example flow:
 
 **Format**: Conventional Commits
 
-```
+```text
 <type>(<scope>): <subject>
 
 <body>
@@ -142,7 +142,7 @@ Example flow:
 
 **Example**:
 
-```
+```text
 feat(mcp): add OAuth 2.1 support with Clerk integration
 
 - Implement Clerk auth middleware with JWT verification
@@ -331,7 +331,7 @@ pnpm agent-lifecycle-check --dry-run
 3. Runs quality gates: ✅ All pass
 4. Generates commit:
 
-   ```
+   ```text
    feat(auth): implement OAuth 2.1 support
 
    - Add auth middleware with JWT verification

@@ -19,7 +19,7 @@ When a module contains both pure functions and I/O functions, and other modules 
 
 ## Anti-pattern
 
-```
+```text
 lifecycle-cleanup.ts          (has pure + I/O)
   ↑
 lifecycle-orphan-detection.ts (needs pure functions)
@@ -29,7 +29,7 @@ The detection module depends "upward" into the I/O module. The dependency arrow 
 
 ## Pattern
 
-```
+```text
 lifecycle-version-identity.ts  (pure leaf — no I/O imports)
   ↑                ↑
 lifecycle-cleanup.ts    lifecycle-orphan-detection.ts

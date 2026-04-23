@@ -65,7 +65,7 @@ Certain query types cannot be solved by retrieval alone. They require **intent u
 
 ## Architecture: LLM Pre-processor
 
-```
+```text
                         ┌─────────────────────────────────────────┐
                         │         LLM Pre-processor               │
 User Query ─────────────│                                         │
@@ -225,7 +225,7 @@ to preserve methodology and benchmark comparability.
 
 Based on the roadmap dependency chain:
 
-```
+```text
 Now:       Ground Truth Review (Phase 1)
            ↓
 Next:      SDK Extraction (Phase 2)

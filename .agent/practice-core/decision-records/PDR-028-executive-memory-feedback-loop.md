@@ -140,7 +140,7 @@ register with the drift's remediation as their trigger-condition.
 From the register, the drift moves through the ordinary
 capture-distil-graduate pipeline:
 
-```
+```text
 executive-surface drift
   → napkin capture (tagged: Source plane: executive)
   → consolidation aggregation (cross-plane scan)

@@ -406,7 +406,7 @@ command — is identical to the pre-PDR-007 flow.
 The knowledge-flow ladder (napkin → distilled → patterns / ADRs /
 principles) gains one clarified step at the top:
 
-```
+```text
 napkin (ephemeral)
   → distilled (settled, local)
     → memory/patterns (repo-specific patterns)    [local pool]

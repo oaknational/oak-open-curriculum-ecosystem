@@ -37,9 +37,9 @@ See: `apps/oak-search-cli/tests/visual/responsive-baseline.spec.ts`
 
 ## References
 
-- Redoc GitHub: https://github.com/Redocly/redoc
-- Axe color-contrast rule: https://dequeuniversity.com/rules/axe/4.11/color-contrast
-- WCAG 2.1 AA requirements: https://www.w3.org/WAI/WCAG21/quickref/
+- Redoc GitHub: <https://github.com/Redocly/redoc>
+- Axe color-contrast rule: <https://dequeuniversity.com/rules/axe/4.11/color-contrast>
+- WCAG 2.1 AA requirements: <https://www.w3.org/WAI/WCAG21/quickref/>
 
 ## Decision Log
 

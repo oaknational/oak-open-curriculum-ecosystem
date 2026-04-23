@@ -25,7 +25,7 @@ factory.
 
 ## Correct approach
 
-```
+```typescript
 // App layer — provider-neutral
 interface ObservabilityUser {
   readonly id: string;

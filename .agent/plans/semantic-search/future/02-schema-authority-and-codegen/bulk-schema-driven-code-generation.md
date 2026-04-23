@@ -142,6 +142,7 @@ generator that reads the bulk JSON schema and produces Zod schemas
 directly.
 
 **Key design decisions:**
+
 - Walk the JSON Schema `$defs` and produce one Zod schema per definition
 - Map `type: ["string", "null"]` to `z.string().nullable()`
 - Map `enum` arrays to `z.enum([...])`
@@ -151,6 +152,7 @@ directly.
 - Preserve `additionalProperties: false` → `.strict()`
 
 **Acceptance criteria:**
+
 - [ ] Generated Zod schemas match or exceed the validation of current templates
 - [ ] All existing bulk ingestion tests pass without changes
 - [ ] Enum values are validated at parse time (new capability)
@@ -169,12 +171,14 @@ as typed constants across the SDK:
 - `UnitLessonState` — 3 values
 
 **Impact:**
+
 - `generate-subject-hierarchy.ts` reads from schema instead of hardcoded arrays
 - Search filter validation uses schema-derived enums
 - Bulk Zod schemas use `z.enum([...])` instead of `z.string()`
 - MCP tool input validation can use the same enums
 
 **Acceptance criteria:**
+
 - [ ] Zero hardcoded domain enum values in the sdk-codegen pipeline
 - [ ] Subject hierarchy generator reads from bulk schema
 - [ ] Search SDK filter validation uses schema-derived enums
@@ -187,6 +191,7 @@ The bulk schema's `$comment` notes a TODO for cross-referencing
 post-parse validation step in the ingestion pipeline.
 
 **Acceptance criteria:**
+
 - [ ] Published unit lessons reference existing lesson slugs
 - [ ] Lesson unit slugs reference existing sequence unit slugs
 - [ ] Violations produce clear, actionable error messages

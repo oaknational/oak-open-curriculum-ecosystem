@@ -114,7 +114,7 @@ regrouped into five execution waves:
 - **Wave 3** — Primary Emitters (L-1, L-2, L-3, L-4b, L-9 — all
   importing Wave 2 schemas at write-time).
 - **Wave 4** — Cross-axis & Widget (L-12 + security-observability
-  + accessibility-observability).
+  - accessibility-observability).
 - **Wave 5** — Operations + Conformance + Close-out.
 
 Owner-approved architectural rationale recorded in

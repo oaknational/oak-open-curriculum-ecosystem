@@ -105,7 +105,7 @@ const supportedSubjects = ['maths'];  // Only maths fully cleared
 
 ### Data Access Architecture
 
-```
+```text
 ┌─────────────────────────┐
 │     Hasura Views        │
 ├─────────────────────────┤
@@ -127,11 +127,13 @@ const supportedSubjects = ['maths'];  // Only maths fully cleared
 ### Recommended Fixes
 
 **For Materialized View Issues**:
+
 1. Audit `unitVariantLessonsView` for the 5 missing maths lessons
 2. Audit `sequenceView` for unit lesson truncation
 3. Add `totalCount` to all list responses
 
 **For Assets Endpoint**:
+
 1. **Document** the TPC filtering in OpenAPI schema (not a fix, just documentation)
 2. **Consider** a separate endpoint for video availability that bypasses TPC checks
 3. **Add** `hasVideo`/`hasTranscript` flags to lesson list responses (Item 13)
@@ -421,6 +423,7 @@ const lessons = await fetchAllLessonsByUnit(client, 'ks4', 'maths', unitSlugs);
 ```
 
 This workaround:
+
 - ✅ Returns all 436 lessons
 - ✅ Correctly handles lessons belonging to multiple units
 - ⚠️ Makes N+1 API calls (36 units = 36 calls instead of 7 pages)
@@ -521,12 +524,14 @@ Deep investigation revealed the 373 double-appearance lessons break down as:
 | **Spurious duplicates** | 163 | Lessons in ONE tier variant only, but incorrectly duplicated in `lessons[]` |
 
 **Example of spurious duplicate**:
+
 - `solving-complex-quadratic-equations-by-completing-the-square`
 - Appears in `algebraic-manipulation` unit variant 1 (higher tier, 16 lessons) ✅
 - Does NOT appear in unit variant 2 (foundation tier, 13 lessons) ❌
 - But appears TWICE in `lessons[]` array (data quality bug)
 
 **Critical Issues**:
+
 1. No tier discriminator field on any entry
 2. 163 lessons are spuriously duplicated (data quality bug)
 
@@ -692,7 +697,7 @@ The `/subjects` endpoint only lists 17 top-level subjects. The KS4 science "exam
 
 At KS4, science content is organised under **exam subjects** within sequences:
 
-```
+```text
 science (subject)
   └── science-secondary-aqa (sequence)
        └── Year 10 / Year 11
@@ -824,12 +829,14 @@ const supportedSubjects = ['maths'];
 ### Impact on Video Availability Detection
 
 The assets endpoint **cannot** be used to determine video availability across all subjects because:
+
 1. Maths lessons: ✅ Complete data (fully TPC-cleared)
 2. Other subjects: ❌ Only ~35-52% of lessons returned
 
 ### Our Workaround
 
 Implemented tri-state `hasVideo()` function:
+
 - `true`: Lesson in assets response WITH video
 - `false`: Lesson in assets response WITHOUT video
 - `undefined`: Lesson NOT in assets response (unknown — assume video exists, fetch transcript)
@@ -999,11 +1006,13 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 **Observation**: The bulk download data (dated 2025-12-07) shows **ALL 189 art-secondary lessons** have `downloadsAvailable: true` and include full transcripts. However, the live API (tested 2025-12-30) returns 404 for transcript requests on many of these same lessons.
 
 **Example**:
+
 - Lesson: `principles-of-art-volume`
 - Bulk download: Has `downloadsAvailable: true` and full transcript content
 - API `/lessons/principles-of-art-volume/transcript`: Returns 404
 
 **Questions**:
+
 1. Is the bulk download sourced from a different environment than the API?
 2. Has transcript availability changed since the bulk download was generated?
 3. Is there a TPC or other filter applied to the transcript endpoint that isn't applied during bulk download generation?
@@ -1013,11 +1022,13 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 **Observation**: Maths lessons consistently return transcripts via API, while art/other subjects frequently return 404.
 
 **Examples**:
+
 - `GET /lessons/checking-understanding-of-addition-and-subtraction-with-fractions/transcript` → 200 ✅
 - `GET /lessons/principles-of-art-volume/transcript` → 404 ❌
 - `GET /lessons/the-presence-of-nature-in-art/transcript` → 404 ❌
 
 **Questions**:
+
 1. Is maths a "special category" with different transcript availability rules?
 2. Are non-maths transcripts filtered by TPC (similar to assets)?
 3. If filtered, is this documented anywhere?
@@ -1027,6 +1038,7 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 **Observation**: Lessons in the bulk download have `downloadsAvailable: true` but the API returns 404 for assets and transcripts.
 
 **Questions**:
+
 1. What does `downloadsAvailable: true` actually indicate?
 2. Is this field accurate in the bulk download, or is it a denormalized snapshot that may be stale?
 3. Should we treat bulk download data as authoritative for initial processing and API for incremental updates?
@@ -1036,6 +1048,7 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 **Observation**: Our codebase referenced an endpoint `/search-index/video-ids` which does not exist in the OpenAPI schema and returns 404 when called.
 
 **Questions**:
+
 1. Did this endpoint ever exist? (It appears to be a hallucination from earlier development)
 2. Is there a supported way to get a list of lessons with video/transcript availability without calling each lesson individually?
 3. Would a `hasVideo`/`hasTranscript` boolean on the lessons list response be feasible? (See Item 13 in medium priority requests)
@@ -1045,6 +1058,7 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 **Observation**: The bulk download is dated 2025-12-07 but we're seeing discrepancies with live API data from 2025-12-30.
 
 **Questions**:
+
 1. How frequently is the bulk download regenerated?
 2. Is there a changelog or timestamp we can use to detect freshness?
 3. Should we document that bulk download is a "snapshot" and may differ from live API?
@@ -1052,11 +1066,13 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 ### Q6: Ingestion Strategy Validation
 
 **Current Strategy**:
+
 1. Use bulk download for initial lesson enumeration (authoritative for lesson list)
 2. Use API for per-lesson details (transcripts, summaries)
 3. Accept that non-maths subjects may have sparse transcript availability
 
 **Questions**:
+
 1. Is this a reasonable strategy given the observed discrepancies?
 2. Should we expect transcript availability to improve over time (TPC clearance in progress)?
 3. Is there a preferred ingestion pattern the Oak team recommends?
@@ -1070,15 +1086,18 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 **Request**: Extend full lesson resource availability (transcripts, assets, downloads) to all subjects, matching maths coverage.
 
 **Current State**:
+
 - Maths: **100%** lesson resource coverage via API
 - Other subjects: **~0-35%** coverage, described as "a sample" in documentation
 
 **Impact**:
+
 - Semantic search quality severely limited for non-maths subjects
 - Teachers cannot access full transcript content programmatically
 - AI-powered tools limited to maths-only full functionality
 
 **Business Case**:
+
 - The bulk download contains **near-complete transcripts for most subjects** (overall ~81.9% of lessons; MFL/PE sparse, missing often `"NULL"`)
 - API infrastructure exists — only TPC/license filtering prevents access
 - Teachers for non-maths subjects cannot benefit from transcript-based search
@@ -1086,6 +1105,7 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 **Requested Priority**: HIGH — this is the single largest blocker to cross-subject semantic search
 
 **Related Documentation**:
+
 - [Content Coverage](https://open-api.thenational.academy/docs/about-oaks-data/content-coverage)
 - Transcript Availability Analysis (`.agent/analysis/transcript-availability-analysis.md`)
 
@@ -1094,6 +1114,7 @@ See Item 15 in `05-medium-priority-requests.md` for full enhancement request.
 **Request**: Provide explicit documentation of all differences between API and bulk download data.
 
 **Current State**:
+
 - Bulk download and API return different data for the same lessons
 - No documentation exists explaining these differences
 - Consumers must discover discrepancies through trial and error
@@ -1431,7 +1452,7 @@ Fetch `/sequences/maths-secondary/units` from API to get tier assignments.
 
 **Example bundle structure**:
 
-```
+```text
 bulk-download-2025-12-30.zip
 ├── maths-primary.json
 ├── maths-secondary.json
@@ -1666,6 +1687,7 @@ GET /api/v0/subjects/{subject}/coverage
 **Current State**:
 
 The curriculum is fundamentally organized by **phase** (primary/secondary), not individual key stages:
+
 - **Primary**: KS1 + KS2 (Years 1-6)
 - **Secondary**: KS3 + KS4 (Years 7-11)
 
@@ -1679,6 +1701,7 @@ const phase = ['ks1', 'ks2'].includes(keyStage) ? 'primary' : 'secondary';
 **Key Discovery (2026-01-05)**:
 
 During ground truth creation, we discovered that per-key-stage testing is **fundamentally flawed** because:
+
 - The same lessons appear across KS1 and KS2 (they're filtered views of the same primary content)
 - Testing KS1 separately from KS2 causes false failures (slugs valid in KS2 but not KS1)
 - Search filters should operate on **phase**, not individual key stage
@@ -1688,6 +1711,7 @@ During ground truth creation, we discovered that per-key-stage testing is **fund
 Add `phaseSlug` field to:
 
 1. **Bulk download lessons**:
+
 ```json
 {
   "lessonSlug": "adding-fractions",
@@ -1698,6 +1722,7 @@ Add `phaseSlug` field to:
 ```
 
 2. **API lesson responses** (`/lessons/{lesson}/summary`):
+
 ```json
 {
   "lessonSlug": "adding-fractions",
@@ -1707,6 +1732,7 @@ Add `phaseSlug` field to:
 ```
 
 3. **Subjects endpoint** (`/subjects`):
+
 ```json
 {
   "subjectSlug": "maths",
@@ -1770,6 +1796,7 @@ Response:
 ```
 
 **Benefits**:
+
 - Single API call validates hundreds of slugs
 - Clear distinction between invalid and deprecated slugs
 - Enables efficient ground truth validation workflows
@@ -1828,6 +1855,7 @@ Response:
 **Current State**:
 
 The bulk download `manifest.json` includes filenames but no version or timestamp information. Consumers cannot determine:
+
 - When was this bulk data generated?
 - Is it current with the live API?
 - What API version does it correspond to?
@@ -1855,6 +1883,7 @@ Enhance `manifest.json`:
 ```
 
 **Benefits**:
+
 - Consumers can implement cache invalidation based on timestamps
 - Checksums enable efficient incremental updates
 - Clear expectations about data freshness

@@ -781,6 +781,7 @@ For each lesson, consumers currently need two separate API calls:
 2. `GET /lessons/{lesson}/transcript` — Video transcript
 
 For a subject like Maths KS3 with ~800 lessons, this means:
+
 - 800 summary calls
 - 800 transcript calls (or ~600 after skipping lessons without video)
 - **Total: ~1,400 API calls** per subject/keystage
@@ -934,6 +935,7 @@ HTTP 404 Not Found
 ```
 
 This makes it impossible to distinguish:
+
 - Lesson has no video → transcript doesn't exist (expected)
 - Lesson has video but transcript is missing (data issue)
 - Lesson has video with intentionally empty transcript (unlikely)

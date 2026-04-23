@@ -17,4 +17,4 @@ rg --files docs | rg -v '(^|/)archive(/|$)|(^|/)architectural-decisions(/|$)|(^|
 
 ---
 
-source	missing_target	reference_count
+source missing_target reference_count

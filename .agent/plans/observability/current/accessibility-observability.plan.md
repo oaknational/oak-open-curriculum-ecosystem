@@ -129,7 +129,7 @@ emits on first load.
 ### 1.2: Frustration proxies
 
 **Test**: `frustration-proxy.integration.test.ts` — simulates rage-click
-+ rapid-retry; asserts the corresponding event types emit with the
+and rapid-retry; asserts the corresponding event types emit with the
 correct thresholds (exact thresholds from exploration 3).
 
 ### 1.3: `widget_session_outcome`

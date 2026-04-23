@@ -85,7 +85,7 @@ are a distinct artefact type from policies, not a thin wrapper.**
 
 ### The three-layer model
 
-```
+```text
 Layer 1: Canonical Content     (.agent/ — platform-agnostic substance)
 Layer 2: Platform Adapters     (.<platform>/ — thin wrappers)
 Layer 3: Entry Points          (root-level files per platform)

@@ -318,7 +318,7 @@ pattern guidance.
    order, first-match-wins then check composition), composition
    discipline (multiple-homes-may-be-appropriate with five
    canonical compositions), anti-patterns, default rule (pattern
-   + governance composition).
+   - governance composition).
 2. Terminology refresh: five `workstream` references in
    §Cross-session consolidation and §Consequences §Required
    updated to `thread` (per PDR-027 thread-as-continuity-unit;

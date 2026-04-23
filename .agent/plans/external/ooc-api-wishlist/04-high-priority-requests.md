@@ -986,7 +986,7 @@ async function fetchAllLessons(subject: string, keyStage: string) {
 // Consumer thinks API is broken or data is missing
 ```
 
-**Effort:** 
+**Effort:**
 
 - Option A: 2-3 days (new endpoint + documentation)
 - Option B: 1 day (schema extensions)
@@ -1129,6 +1129,7 @@ Without explicit schema documentation, API consumers must:
    - TypeScript type definitions (if published)
 
 2. **Document which lesson types typically lack transcripts:**
+
    ```yaml
    transcript_sentences:
      type: string
@@ -1142,6 +1143,7 @@ Without explicit schema documentation, API consumers must:
    ```
 
 3. **Consider adding a native `has_transcript` boolean field:**
+
    ```yaml
    has_transcript:
      type: boolean

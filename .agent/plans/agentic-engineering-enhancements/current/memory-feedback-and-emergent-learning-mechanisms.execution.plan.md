@@ -147,7 +147,7 @@ Per PDR-015 and the standard schedule:
   drift is caught before any doctrine lands.
 - **Mid-cycle**: `docs-adr-reviewer` after each phase that touches
   a doctrine surface (Phases 1, 2, 5, 6); `architecture-reviewer-barney`
-  + `architecture-reviewer-betty` after Phase 3 (cross-plane paths
+  - `architecture-reviewer-betty` after Phase 3 (cross-plane paths
   are boundary changes).
 - **Close**: `assumptions-reviewer`, `docs-adr-reviewer`,
   `release-readiness-reviewer`, `onboarding-reviewer` — see

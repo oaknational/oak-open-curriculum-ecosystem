@@ -80,7 +80,7 @@ interface SearchTiming {
 
 When under pressure, shed stages in this order:
 
-```
+```text
 1. LLM preprocessing (if enabled)     ← Drop first
 2. Semantic reranking                 ← Drop second
 3. ELSER retrieval                    ← Drop third (BM25-only mode)

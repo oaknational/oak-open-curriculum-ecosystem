@@ -402,7 +402,7 @@ not the pattern shape.
 
 The graduation ladder:
 
-```
+```text
 napkin (ephemeral)
   → distilled (settled, local)
     → memory/patterns (repo-specific pattern instances)

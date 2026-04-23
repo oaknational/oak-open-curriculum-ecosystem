@@ -158,6 +158,7 @@ Files in `packages/sdks/oak-sdk-codegen/code-generation/typegen/search/`.
 → (value re-export) `es-field-overrides/index.ts` → back to overrides.
 
 **Key imports traced**:
+
 - `common.ts` imports `EsFieldMapping` from `es-field-config.ts` as
   **type-only** (`import type`)
 - `es-field-config.ts` **value re-exports** all override constants from the
@@ -288,28 +289,34 @@ Files in `apps/oak-search-cli/src/adapters/`.
 #### (a) Generated non-source — exclude (16 files)
 
 TypeDoc-generated JS assets (10 files):
+
 - `packages/sdks/oak-curriculum-sdk/docs/api/assets/{search,navigation,main,icons,hierarchy}.js`
 - `apps/oak-search-cli/docs/api/assets/{search,navigation,main,icons,hierarchy}.js`
 
 TypeDoc source shims (4 files):
+
 - `packages/sdks/oak-sdk-codegen/docs/_typedoc_src/types/{search-response-schemas,search-index}.ts`
 - `packages/sdks/oak-curriculum-sdk/docs/_typedoc_src/types/{search-response-schemas,search-index}.ts`
 
 Non-workspace stale residue (2 files):
+
 - `packages/docs/_typedoc_src/types/{search-response-schemas,search-index}.ts`
 
 #### (b) Legitimate entry points — config (21 files)
 
 SDK `src/` barrels consumed via `package.json` `exports` subpaths (5 files):
+
 - `oak-sdk-codegen/src/{zod,query-parser,observability,admin}.ts`
 - `oak-curriculum-sdk/src/types/schema-bridge.ts` (TypeDoc entry + tsup)
 
 SDK `src/types/` TypeDoc entries (2 files):
+
 - `oak-curriculum-sdk/src/types/public-types.ts`
 - `oak-curriculum-sdk/docs/_typedoc_src/types/search-response-schemas.ts`
   (listed in `typedoc.json entryPoints`)
 
 Test files — Vitest (10 files):
+
 - `oak-sdk-codegen/code-generation/typegen/search/generate-subject-hierarchy.unit.test.ts`
 - `oak-sdk-codegen/code-generation/typegen/mcp-tools/meta-examples-roundtrip.integration.test.ts`
 - `oak-sdk-codegen/code-generation/typegen/error-types/classify-http-error.unit.test.ts`
@@ -321,10 +328,12 @@ Test files — Vitest (10 files):
 - `oak-curriculum-mcp-streamable-http/src/__tests__/mcp-server-internal-access.unit.test.ts`
 
 Test files — Playwright (4 files):
+
 - `oak-curriculum-mcp-streamable-http/tests/widget/{tokens-page,oak-banner,dev-index}.spec.ts`
 - `oak-curriculum-mcp-streamable-http/tests/visual/landing-page.spec.ts`
 
 Scripts (2 files):
+
 - `oak-search-cli/operations/utilities/generate-synonyms.ts`
 - `oak-curriculum-mcp-streamable-http/scripts/run-requests.js`
 
@@ -358,7 +367,7 @@ separately.
 From `principles.md`:
 
 > "No unused code — If a function is not used, delete it."
-
+>
 > "Keep it strict — don't invent optionality, don't add fallback options."
 
 **Decision rule**: Same evidence-first approach as knip. Circular dependencies
@@ -389,7 +398,7 @@ After Phase 4, run the full `pnpm check`.
 Phases 1 and 2 are independent and can execute in parallel after Phase 0.
 Phase 3 depends on both. Phase 4 depends on Phase 3.
 
-```
+```text
 Phase 0 (complete)
   ├─→ Phase 1 (config + dead code) ──┐
   └─→ Phase 2 (cycles) ─────────────┤
@@ -416,20 +425,24 @@ and configuring legitimate entry points. Based entirely on Phase 0 evidence.
 #### Task 1.1: Exclude verified non-source content
 
 Add to `.dependency-cruiser.mjs` `exclude.path`:
+
 - `docs/api/assets/` (10 TypeDoc-generated JS files across 2 workspaces)
 - `docs/_typedoc_src/` (4 TypeDoc source shims across 2 workspaces)
 - `packages/docs/` (non-workspace directory with stale TypeDoc residue)
 
 Add to `no-orphans` `pathNot`:
+
 - `bucket-c-analysis\\.ts` (intentional non-export documentation)
 
 **Acceptance Criteria**:
+
 1. Orphan count drops by 17 (16 generated + 1 documented)
 2. No dead code masked by exclusions
 
 #### Task 1.2: Delete verified dead code
 
 Delete the 5 files classified as dead in Phase 0:
+
 1. `packages/sdks/oak-sdk-codegen/code-generation/typegen/search/es-types.ts`
 2. `packages/sdks/oak-sdk-codegen/code-generation/schema-fetcher.ts`
 3. `packages/sdks/oak-sdk-codegen/code-generation/lib/td-guards.ts`
@@ -437,6 +450,7 @@ Delete the 5 files classified as dead in Phase 0:
 5. `packages/sdks/oak-curriculum-sdk/src/types/openapi.ts` (empty)
 
 **Acceptance Criteria**:
+
 1. Orphan count drops by 5
 2. `pnpm knip` still clean
 3. `pnpm type-check` and `pnpm test` pass
@@ -448,11 +462,13 @@ default entry points. These need depcruise-level entry point configuration
 or additional `pathNot` patterns for standalone test/script files.
 
 Options:
+
 - Add test file globs to `no-orphans` `pathNot` (e.g. `\\.test\\.ts$`,
   `\\.spec\\.ts$`, `scripts/`)
 - Or configure workspace-specific entry points in depcruise options
 
 **Acceptance Criteria**:
+
 1. Orphan warning count is 0
 2. Quality gates pass
 
@@ -479,6 +495,7 @@ After fixing, re-run depcruise: SCC-C (2 errors) likely collapses because it
 shares the `types.ts` → `definitions.ts` back-edge.
 
 **Acceptance Criteria**:
+
 1. SCC-B1 errors drop from 20 to 0
 2. SCC-C likely resolved (verify; if not, fix separately)
 3. `pnpm sdk-codegen`, `pnpm knip`, `pnpm type-check`, `pnpm test` pass
@@ -490,12 +507,14 @@ leaf `es-field-types.ts`. Point `common.ts` and all override modules at the
 leaf. Keep `es-field-config.ts` re-exporting types for API continuity.
 
 **Acceptance Criteria**:
+
 1. SCC-A errors drop from 16 to 0
 2. `pnpm sdk-codegen`, `pnpm knip`, `pnpm type-check`, `pnpm test` pass
 
 #### Task 2.3: Break remaining small SCCs (B2, D, E, F, G — 5 errors)
 
 All are leaf-type extraction problems:
+
 - **B2**: Create `mcp-prompt-types.ts` for `PromptArgs`/`PromptMessage`
 - **D**: Create `otel-types.ts` for `OtelLogRecord`/`LogContext`/`NormalizedError`
 - **E**: Move `DtcgTokenTree` out of `index.ts` to leaf type file
@@ -503,6 +522,7 @@ All are leaf-type extraction problems:
 - **G**: Move `OakClient`/`CacheStats` to `oak-adapter-types.ts`
 
 **Acceptance Criteria**:
+
 1. All `no-circular` errors resolved (0 errors total)
 2. `pnpm depcruise` shows 0 errors
 3. Quality gates pass across all affected workspaces
@@ -512,11 +532,13 @@ All are leaf-type extraction problems:
 ### Phase 2.5: Reconcile After Cycle Breaks
 
 Re-run `pnpm depcruise` after all cycle breaks. Check for:
+
 - New orphan warnings from files that became unreachable after restructuring
 - Any unexpected new cycles from the refactoring
 - Orphan inventory changes that affect Phase 3 scope
 
 **Acceptance Criteria**:
+
 1. No new circular dependency errors
 2. Any new orphans classified and assigned to Phase 3
 
@@ -530,6 +552,7 @@ Handle any orphans remaining after Phases 1 and 2.5. If Phases 1 and 2
 resolved all orphans, this phase is a verification pass.
 
 **Acceptance Criteria**:
+
 1. Orphan warning count is 0
 2. No dead code masked by config exclusions
 3. Quality gates pass

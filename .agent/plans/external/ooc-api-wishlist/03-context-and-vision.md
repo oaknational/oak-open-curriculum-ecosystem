@@ -224,4 +224,3 @@ Your OpenAPI Schema
 This wish list is for the Open Curriculum API cross-functional squad (backend engineers, product, documentation). Items are prioritised by impact on AI tool capabilities and teacher value.
 
 ---
-

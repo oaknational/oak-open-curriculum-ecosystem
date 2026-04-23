@@ -68,6 +68,7 @@ These entries were removed from synonym files because they provide no search val
 Teachers search in English; these foreign language words don't appear in search queries.
 
 **French** (removed):
+
 ```typescript
 comment: ['how question']    // French "how" → English meaning
 quand: ['when question']     // French "when" → English meaning
@@ -76,6 +77,7 @@ quel: ['quelle', 'which question']  // Form variant + translation
 ```
 
 **German** (removed):
+
 ```typescript
 du: ['informal you singular']   // Definition, not synonym
 ihr: ['informal you plural']    // Definition, not synonym
@@ -83,6 +85,7 @@ sie: ['formal you', 'polite form']  // Definition, not synonym
 ```
 
 **Spanish** (removed):
+
 ```typescript
 cómo: ['como', 'how question']  // Accent variant + translation
 quién: ['quien', 'who question'] // Accent variant + translation

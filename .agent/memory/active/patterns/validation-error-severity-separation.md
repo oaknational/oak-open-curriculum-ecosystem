@@ -19,7 +19,7 @@ When a schema validator (Zod, Joi, JSON Schema, etc.) rejects input, the error m
 
 ## Anti-Pattern
 
-```
+```text
 Missing keys: A, B, C, D, E, F, G, H
 Validation errors: Invalid option for X
 ```
@@ -28,7 +28,7 @@ Here `A` through `H` are optional and absent (not errors), but `X` is the sole f
 
 ## Pattern
 
-```
+```text
 Failing keys: X
 Validation errors: Invalid option for X
 (8 optional keys not configured: A, B, C, D, E, F, G, H)

@@ -286,7 +286,7 @@ Boosts teacher-facing fields.
 
 ## Search Decision Flow
 
-```
+```text
 User Query + Filters
         │
         ▼

@@ -7,6 +7,7 @@ When data arrives from an external boundary (JSON.parse, API responses, file rea
 `as Record<string, unknown>` is widening, not narrowing — it is forbidden at boundaries just as it is everywhere else. A `typeof === 'object'` check followed by `as Record<string, unknown>` is a type assertion, not validation. It loses all type information.
 
 The correct pattern:
+
 1. Data arrives as `unknown`
 2. Validate to the exact interface (e.g. `z.object({ result: z.object({ tools: z.array(...) }) })`)
 3. Use the validated, fully-typed result from then on

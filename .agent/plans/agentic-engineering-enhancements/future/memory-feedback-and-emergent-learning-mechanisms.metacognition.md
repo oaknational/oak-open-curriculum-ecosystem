@@ -54,6 +54,7 @@ is broken.
 ### 2.2 The most shippable contents don't need the plan to promote
 
 Sketch F lists three already-captured items sitting in napkin:
+
 - the `inherited-framing-without-first-principles-check` pattern
   (three instances observed 2026-04-20),
 - the perturbation-mechanism bundle (non-goal re-ratification,

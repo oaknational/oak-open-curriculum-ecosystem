@@ -16,7 +16,7 @@ Production code exists solely because tests call it, and the tests
 exist because the production code exists. Neither serves external
 consumers. The chain:
 
-```
+```text
 dead test imports dead function
   -> dead function exists because "tests use it"
     -> dead function pulls in dependency X

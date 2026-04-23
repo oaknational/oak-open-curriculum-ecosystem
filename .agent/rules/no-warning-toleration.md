@@ -98,6 +98,41 @@ The rule is named after the mechanism it counters:
 acknowledging a diagnostic at exactly the right time and then
 time-shifting it to the stage it explodes in.
 
+## Scope discipline
+
+The doctrine binds wherever a gate runs. The gate's scope is whatever
+its configuration declares — for markdown, the set of paths NOT ignored
+by [`.markdownlintignore`](../../.markdownlintignore); for esbuild, the
+warnings the build emits at the configured strictness; for ESLint, the
+files the configured `--ext`/`--ignore-pattern` cover; and so on.
+
+Two rules follow:
+
+1. **Narrowing the gate to dodge a warning is a doctrine violation.**
+   Adding a path to an ignore-list, downgrading a rule to `warn`, or
+   moving a check out of CI in order to make a warning go away is the
+   same forbidden behaviour as suppressing the warning at source. The
+   warning has not been resolved; the diagnostic surface has been
+   disabled.
+2. **Expanding the gate to cover a surface where the doctrine should
+   bind is the normal way doctrine spreads.** Canon surfaces
+   (`.agent/directives/`, `.agent/memory/`, `.agent/plans/`,
+   `.agent/practice-context/`, `.agent/practice-core/`, `.agent/rules/`,
+   `.agent/skills/`, `.agent/commands/`, `.agent/sub-agents/`, plus
+   workspace source, configs, and shared infrastructure) belong inside
+   each relevant gate by default. Reference / synthesis / archive /
+   third-party / generated material stays outside until someone
+   deliberately moves it in. A gate-config edit that expands scope is
+   a doctrine-application act and is reviewed accordingly
+   (config-reviewer during planning, code-reviewer after fixes land).
+
+Concretely for markdown: `.markdownlintignore` is the canonical record
+of the gate's footprint. `.agent/` is no longer blanket-ignored — the
+file enumerates non-canon sub-folders explicitly so adding a new
+canon-shaped folder lints automatically, while adding a new
+reference-shaped folder requires an explicit ignore line and the
+governance act that implies.
+
 ## Scope and exceptions
 
 There are no exceptions to "fix or escalate". There is one

@@ -3,6 +3,7 @@
 Date: 2026-02-25
 
 Method:
+
 - Confirm every original `post-sdk` markdown file has a migrated `future/` counterpart
 - Confirm heading structure parity (`^#` lines) for each source-target pair
 - Preserve byte-identical transfer evidence from [TRANSFER-MANIFEST.md](TRANSFER-MANIFEST.md)

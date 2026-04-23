@@ -117,7 +117,7 @@ Before diving in, pause and ask:
 
 **Commit** to excellence in systems architecture, software engineering,
 and developer experience. Choose architectural correctness over
-short-term expediency. This requires critical and _long-term_
+short-term expediency. This requires critical and *long-term*
 thinking.
 
 ## Schema-First Nuance

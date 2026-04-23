@@ -80,62 +80,62 @@ consolidation, and transplantation close.
 
 ### Category A — Core → Repo (orientation)
 
-- **Entry-point chain**: each supported agent platform has a root
++ **Entry-point chain**: each supported agent platform has a root
   entry-point file (e.g. `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`)
   pointing at the canonical Practice directives (typically
   `.agent/directives/AGENT.md`).
-- **Practice-index bridge**: `.agent/practice-index.md` exists and
++ **Practice-index bridge**: `.agent/practice-index.md` exists and
   provides the one permitted Core → local external link; all its
   links resolve.
-- **Start-flow skills**: canonical session-start workflows exist
++ **Start-flow skills**: canonical session-start workflows exist
   (typically `start-right-quick`, `start-right-thorough`) with
   platform adapters per PDR-009.
-- **Pattern discovery skill**: canonical `patterns` skill exists
++ **Pattern discovery skill**: canonical `patterns` skill exists
   pointing at both `practice-core/patterns/` (general abstractions)
   and `memory/active/patterns/` (instances).
-- **Rule activation**: canonical rules in `.agent/rules/` have
++ **Rule activation**: canonical rules in `.agent/rules/` have
   platform-native activation triggers (per-platform per PDR-009).
 
 ### Category B — Repo → Core (feedback)
 
-- **Capture surface**: session-local observation storage (napkin or
++ **Capture surface**: session-local observation storage (napkin or
   equivalent) exists and is used.
-- **Refinement surface**: settled-rules surface (distilled.md or
++ **Refinement surface**: settled-rules surface (distilled.md or
   equivalent) exists and is read at session start.
-- **Graduation workflow**: `consolidate-docs` (or equivalent)
++ **Graduation workflow**: `consolidate-docs` (or equivalent)
   workflow exists with steps covering pattern extraction, doctrine
   scan (ADR- and PDR-shaped), graduation to permanent homes, and
   upstream Core review.
-- **Practice Box (inbound)**: `practice-core/incoming/` exists
++ **Practice Box (inbound)**: `practice-core/incoming/` exists
   (typically with `.gitkeep`) as the receiver for inbound Core
   packages.
-- **Ephemeral exchange (outbound)**: `practice-context/outgoing/`
++ **Ephemeral exchange (outbound)**: `practice-context/outgoing/`
   exists (optional) scoped to ephemeral exchange only per PDR-007.
 
 ### Category D — Cross-cutting contracts
 
-- **Canonical agent artefact architecture** (PDR-009): canonical
++ **Canonical agent artefact architecture** (PDR-009): canonical
   locations + thin adapters + entry points verified.
-- **Canonical quality-gate naming** (PDR-008): script-layer exposes
++ **Canonical quality-gate naming** (PDR-008): script-layer exposes
   the canonical set (item 9 above).
-- **Domain specialist capability pattern** (PDR-010): if specialists
++ **Domain specialist capability pattern** (PDR-010): if specialists
   are installed, each follows the triplet + optional tooling shape
   with classification and mode.
-- **Continuity surfaces** (PDR-011): named continuity contract on a
++ **Continuity surfaces** (PDR-011): named continuity contract on a
   canonical location; split-loop handoff/consolidate workflows
   present.
-- **Dev tooling per ecosystem** (PDR-006): if this repo is a
++ **Dev tooling per ecosystem** (PDR-006): if this repo is a
   leading-edge reference, `docs/dev-tooling.md` or equivalent
   documents the stack.
 
 ### Category E — Defensive
 
-- **Owner-edited foundations** (PDR-003): a host rule enforces that
++ **Owner-edited foundations** (PDR-003): a host rule enforces that
   sub-agents cannot edit Core files.
-- **Pedagogical reinforcement** (PDR-002): consolidation discipline
++ **Pedagogical reinforcement** (PDR-002): consolidation discipline
   does not mechanically deduplicate deliberate cross-document
   repetition.
-- **Explorations tier** (PDR-004): `docs/explorations/` (or host
++ **Explorations tier** (PDR-004): `docs/explorations/` (or host
   equivalent) exists for design-space work between napkin and ADR.
 
 Any absence is surfaced at consolidation per the upstream-review
@@ -218,9 +218,9 @@ and the Practice is structurally present but inert.
 These surfaces are optional, but their absence must be explicit and
 consistent across operational surfaces:
 
-- `.agent/experience/` — experiential records (referenced in
++ `.agent/experience/` — experiential records (referenced in
   `practice.md` Artefact Map but not required for basic operation)
-- `.agent/reference/` — **curated reference tier** per
++ `.agent/reference/` — **curated reference tier** per
   [PDR-032](decision-records/PDR-032-reference-tier-as-curated-library.md):
   read-to-learn distillations of external substance (sources,
   research notes, third-party patterns) that have passed the
@@ -234,9 +234,9 @@ consistent across operational surfaces:
   the gate. Verification at hydration: if `.agent/reference/`
   exists, every file under it has a recorded provenance and a
   promotion rationale per PDR-032.
-- hooks when every platform is unsupported
-- workstream-specific plan collections
-- domain or tool specific reviewer clusters
++ hooks when every platform is unsupported
++ workstream-specific plan collections
++ domain or tool specific reviewer clusters
 
 Optional never means "silently referenced but not installed."
 
@@ -245,11 +245,11 @@ Optional never means "silently referenced but not installed."
 The Health Check above tests intent; this audit tests state exhaustively.
 A surface is only operational when three states line up:
 
-- **Claimed**: what `AGENT.md`, `practice-index.md`, commands, skills,
++ **Claimed**: what `AGENT.md`, `practice-index.md`, commands, skills,
   and local docs say exists
-- **Installed**: directories and files actually present in `.agent/`,
++ **Installed**: directories and files actually present in `.agent/`,
   adapters, prompts, memory, hooks, and reference docs
-- **Activated**: platform config, validators, and runtime scripts that
++ **Activated**: platform config, validators, and runtime scripts that
   make a surface live on a fresh checkout
 
 The most dangerous failures are silent — adapters exist but permissions

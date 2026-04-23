@@ -114,7 +114,7 @@ isProject: true
 
 **Template**: Derived from `.agent/plans/templates/feature-workstream-template.md` (ADR-117).
 **Last Updated**: 2026-04-20
-**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/* and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one); L-DOC initial landed (authoritative app observability doc + expanded sentry-node README + discoverability mesh; commit 9e1a26b2); L-12-prereq closed by the observability-primitives-consolidation lane (2026-04-19); L-7 bespoke orchestrator landed 2026-04-19/20 (commits 7f3b17e9 + 6f5acd17 + ecee9801) then flagged 2026-04-20 for replacement by @sentry/esbuild-plugin. L-8 remains the forward lane for release/commits/deploy + source-map linkage; the corrected §L-8 body is now authored in this plan, WS0 `assumptions-reviewer` findings are applied in place, and WS1 RED is next.
+**Status**: 🟢 WAVE 1 OPENED — ADR-162 Accepted; `require-observability-emission` ESLint rule landed at `warn` in all apps/*and packages/sdks/* workspaces; L-EH initial landed (ESLint built-in `preserve-caught-error` at `error` in same 5 workspaces; pre-enable audit returned 0 violations in-scope, enforcing from day one); L-DOC initial landed (authoritative app observability doc + expanded sentry-node README + discoverability mesh; commit 9e1a26b2); L-12-prereq closed by the observability-primitives-consolidation lane (2026-04-19); L-7 bespoke orchestrator landed 2026-04-19/20 (commits 7f3b17e9 + 6f5acd17 + ecee9801) then flagged 2026-04-20 for replacement by @sentry/esbuild-plugin. L-8 remains the forward lane for release/commits/deploy + source-map linkage; the corrected §L-8 body is now authored in this plan, WS0 `assumptions-reviewer` findings are applied in place, and WS1 RED is next.
 **Branch**: `feat/otel_sentry_enhancements`
 **Scope**: Close every available Sentry product loop for the MCP app (server + widget) on this branch before PR. Search CLI mirrors on the next branch.
 
@@ -857,8 +857,9 @@ environments; every deploy carries the commit SHA that was built.
 the **Vercel Build Command** only, via a dedicated orchestrator
 invoked as part of the single Vercel build step. PR checks stay
 network-free per ADR-161. Local-dev builds do not register Sentry
-releases or deploys unless the `SENTRY_RELEASE_REGISTRATION_OVERRIDE=1`
-+ `SENTRY_RELEASE_OVERRIDE=<version>` env pair is set (ADR-163 §4).
+releases or deploys unless the
+`SENTRY_RELEASE_REGISTRATION_OVERRIDE=1` /
+`SENTRY_RELEASE_OVERRIDE=<version>` env pair is set (ADR-163 §4).
 
 **Preceding machinery — already wired, no L-7 work required**:
 
@@ -979,7 +980,7 @@ smoke test dependency on Sentry SDK state.
 2. Implement the branch-check in `resolveSentryEnvironment`.
 3. Add the `git.commit.sha` tag to `initialiseSentry`.
 4. Author `scripts/sentry-release-and-deploy.sh` with the preflight
-   + CLI sequence + per-step error handling.
+   - CLI sequence + per-step error handling.
 5. Author `scripts/sentry-release-and-deploy.unit.test.ts` (or `.sh`
    equivalent harness) exercising the fake-CLI paths.
 6. Add `build:vercel` to `apps/oak-curriculum-mcp-streamable-http/package.json`.
@@ -1302,6 +1303,7 @@ per ADR-162's event-schema contract — `metrics.*` emissions are part
 of the downstream-analytics contract, not a Sentry-internal concern.
 
 **Ground-truth corrections** (from sentry-reviewer, 2026-04-17):
+
 - Fixture `type: 'counter'` (not `'count'`).
 - `beforeSendMetric` is **synchronous, single-argument** `(metric) =>
   Metric | null` — model on `beforeSendLog`, not `beforeSend`.
@@ -1311,6 +1313,7 @@ of the downstream-analytics contract, not a Sentry-internal concern.
   because upstream `Metric.attributes` is `Record<string, unknown>`.
 
 **Ground-truth corrections** (from architecture-reviewer-fred):
+
 - `SentryOffConfig.enableMetrics: false` as a literal (mirror
   `enableLogs`).
 - Parameterise the metric namespace via
@@ -1326,6 +1329,7 @@ Two distinct test surfaces. Each proves a different claim, and they must NOT be 
 - **Fixture-capture integration test** (secondary — proves the **wiring**): calls `createSentryInitOptions({ mode: 'sentry', ... })` to get a `NodeOptions`, extracts `beforeSendMetric` from it, invokes the hook on a `Metric` payload, and asserts the fixture store captures the redacted envelope. No assertion on redaction policy beyond "sentinel present" — the exact policy is proved by the pure test. Fails if and only if the adapter wiring has broken.
 
 These two tests must exist as separate `it` blocks with named purpose in their titles (e.g. "`beforeSendMetric` redaction policy (pure)" and "`beforeSendMetric` fixture wiring (integration)"). A combined test that asserts both claims at once is a test-smell per `testing-strategy.md`.
+
 - **Off-mode noop test**: live `Sentry.metrics.*` calls are zero under `SENTRY_MODE=off` (verified by test-time stub on the SDK export).
 - **Fixture-mode capture test**: capture shape `{ kind: 'metric', type: 'counter' | 'gauge' | 'distribution', name, value, unit?, attributes, environment, release }` with post-redaction payload (this test proves the fixture adapter records correctly — it does NOT prove the redaction policy; that is the pure unit test above).
 - **Attribute narrowing test**: `Record<string, unknown>` inputs with non-primitive values are defensively narrowed to `SentryPrimitiveValue` at the redactor boundary.
@@ -1657,6 +1661,7 @@ attribute under the published naming scheme and narrow attribute types.
 README.
 
 **REFACTOR**: Instrument acceptance tracers:
+
 - `oak.mcp.handler.request.count` incremented at handler start.
 - `oak.mcp.tool.duration_ms` on the active tool-execution span.
 
@@ -2386,8 +2391,8 @@ invariant is working as designed.
 #### L-8 Correction (2026-04-21) — Version source-of-truth and fail-policy
 
 **Status**. 🟡 WI 1-5 LANDED LOCALLY (commit `fb047f86`,
-2026-04-23, Pippin / cursor-claude-opus-4-7); WI 6-8 PENDING (push
-+ Vercel preview probe + Sentry UI verification + ADR-163 §6/§7
+2026-04-23, Pippin / cursor-claude-opus-4-7); WI 6-8 PENDING (push,
+Vercel preview probe, Sentry UI verification, ADR-163 §6/§7
 amendment). Two distinct planning + implementation errors
 surfaced when the Vercel preview build of `f9d5b0d2` ran on
 `feat/otel_sentry_enhancements` @ `ff91cd1c` (deployment
@@ -2426,7 +2431,7 @@ WI 1-5 implementation summary:
   log + omit plugin + continue; `skipped` → log skip-reason +
   omit plugin + continue (vendor-config-missing posture);
   `configured` → register the plugin + write `dist/build-info.json`
-  + continue. Three-branch dry build (disabled, skipped,
+  - continue. Three-branch dry build (disabled, skipped,
   configured) verified green locally.
 - **WI-5** (corrected scope) `&& node ../../scripts/validate-root-application-version.mjs`
   removed from the MCP HTTP `build` script only; the script
@@ -2441,8 +2446,8 @@ WI 1-5 implementation summary:
 Quality gates at landing: `pnpm` filter-run lint + type-check +
 test for the touched workspaces all green (build-metadata 44/44,
 MCP HTTP 646/646 unit + 3-branch dry build, sentry-node 101/101,
-search-cli build sanity); root `prettier --check` + `depcruise`
-+ `markdownlint` pre-commit gates green at commit time. Both
+search-cli build sanity); root `prettier --check`, `depcruise`,
+and `markdownlint` pre-commit gates green at commit time. Both
 patterns named in the L-8 Correction §Pattern signal were
 actively countered during execution: WI-3 + WI-4 implemented
 `SentryBuildPluginIntent` as a discriminated union (not a
@@ -3131,7 +3136,7 @@ Six reviewers ran at session close: `docs-adr-reviewer`, `assumptions-reviewer`,
 | DR-4 | `packages/core/telemetry-redaction-core/README.md` listed but workspace does not yet exist | ACTIONED | Entry annotated "(created by L-12-prereq; new package)" |
 | DR-5 | Phase 1 dependency graph edge `L-12-prereq → L-DOC-initial` is spurious (crosses phases) | ACTIONED | Edge removed; replaced with `L-12-prereq → L-12` |
 | DR-6 | L-7 script-name drift between plan body (`sentry-*`-prefixed) and A.2 item 5 (unprefixed) | ACTIONED | A.2 item 5 now names the prefixed forms matching body |
-| DR-7 | Todo-status lifecycle: ADR-117 defines only `pending | completed`; `dropped` on L-8 is non-compliant (pre-existing, not session-introduced) | TO-ACTION | **Owning lane: L-8 body** (not this session). Edit: either amend ADR-117 to recognise `dropped`, or change L-8's frontmatter status to `completed` with body note documenting park status. Track via new frontmatter todo `ws-reconcile-dropped-status`. |
+| DR-7 | Todo-status lifecycle: ADR-117 defines only `pending` / `completed`; `dropped` on L-8 is non-compliant (pre-existing, not session-introduced) | TO-ACTION | **Owning lane: L-8 body** (not this session). Edit: either amend ADR-117 to recognise `dropped`, or change L-8's frontmatter status to `completed` with body note documenting park status. Track via new frontmatter todo `ws-reconcile-dropped-status`. |
 
 #### assumptions-reviewer (15 findings)
 

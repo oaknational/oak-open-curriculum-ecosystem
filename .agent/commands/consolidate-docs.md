@@ -255,10 +255,10 @@ held over).
 
    **Outgoing**: PDR-007 narrowed `.agent/practice-context/outgoing/` to **ephemeral exchange only** — transient sender→receiver notes that expire after integration. Substance with durable value has four proper homes:
 
-   - **Portable Practice governance** (review/planning/consolidation/etc. discipline) → PDR in `practice-core/decision-records/` (travels with Core; no outgoing copy needed).
-   - **General abstract patterns** (ecosystem-agnostic, ≥2 instance synthesis) → `practice-core/patterns/` (travels with Core; authored fresh via synthesis).
-   - **Host-local reference material** (platform-specific notes, ecosystem-specific examples, scripts) → `.agent/reference/` (host-local; does not travel).
-   - **Ephemeral exchange context** (framing notes, short-lived write-back packs targeted at a specific receiver) → `.agent/practice-context/outgoing/`.
+- **Portable Practice governance** (review/planning/consolidation/etc. discipline) → PDR in `practice-core/decision-records/` (travels with Core; no outgoing copy needed).
+- **General abstract patterns** (ecosystem-agnostic, ≥2 instance synthesis) → `practice-core/patterns/` (travels with Core; authored fresh via synthesis).
+- **Host-local reference material** (platform-specific notes, ecosystem-specific examples, scripts) → `.agent/reference/` (host-local; does not travel).
+- **Ephemeral exchange context** (framing notes, short-lived write-back packs targeted at a specific receiver) → `.agent/practice-context/outgoing/`.
 
    At consolidation, any `outgoing/` file whose substance exists nowhere else is a **defect** (per PDR-007): it must promote to one of the three durable homes or be deleted as a staging artefact that never graduated. New insights from completed work route to the appropriate home by substance shape, not by legacy "put it in outgoing" habit.
 

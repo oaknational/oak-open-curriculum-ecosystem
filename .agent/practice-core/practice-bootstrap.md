@@ -462,8 +462,8 @@ references a continuity surface, that surface must exist on a fresh
 checkout.** Hydration is incomplete until the host surface exists and
 the workflows that reference it resolve.
 
-Hosts that split the contract across multiple surfaces (canonical contract
-+ per-thread next-session record + tactical track cards) remain compliant
+Hosts that split the contract across multiple surfaces — canonical
+contract, per-thread next-session record, tactical track cards — remain compliant
 provided the authority order between them is explicit, each surface has a
 single documented writer, and the contract fields are covered in aggregate.
 
@@ -645,7 +645,7 @@ obvious right answers; session-internal observations (use the napkin);
 committed decisions (use an ADR); execution instructions (use a plan).
 
 **Cross-repo exchange**: explorations are typically too host-specific
-to travel verbatim, but the *shape* of explorations is portable — an
+to travel verbatim, but the _shape_ of explorations is portable — an
 outgoing broadcast describing the explorations tier (problem, home,
 frontmatter, document shape, relationship to other tiers) is a
 legitimate Practice Context contribution.

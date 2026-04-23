@@ -47,7 +47,7 @@ a prerequisite for basic hook adoption.
 
 Extend the three-layer model to hooks:
 
-```
+```text
 .agent/hooks/                           # Layer 1: Canonical hook scripts
   scripts/
     block-destructive-commands.sh        # Shared validation logic

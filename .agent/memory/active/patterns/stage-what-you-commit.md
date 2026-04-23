@@ -17,7 +17,7 @@ The git **index** is not a passive surface. It accumulates state from
 earlier edits, partial stages, and upstream workflow steps. Running
 `git commit` after `git add <file>` commits **everything already in
 the index**, not just the file you just staged. If `git status` shows
-`MM`, `M ` with whitespace, or `A ` on files unrelated to the change
+`MM`, `M` with whitespace, or `A` on files unrelated to the change
 you are about to commit, and you do not act on them first, the commit
 message will describe less than the commit contains.
 
@@ -26,13 +26,13 @@ message will describe less than the commit contains.
 Before every commit, explicitly read the index. Two proven checks:
 
 1. **Two-letter status read**: run `git status --short` and scan for
-   `MM` (modified in both index and working tree), `A ` (newly added),
-   `R ` (renamed), `D ` (deleted). Only the leftmost letter matters for
+   `MM` (modified in both index and working tree), `A` (newly added),
+   `R` (renamed), `D` (deleted). Only the leftmost letter matters for
    index state; the rightmost is working-tree-only and does not land in
    the commit.
 2. **Direct index diff**: run `git diff --cached` and confirm the staged
    content matches the commit message you intend to write. This catches
-   the case where the status code is boring (`M `) but the staged
+   the case where the status code is boring (`M`) but the staged
    content is larger than expected.
 
 If unrelated content is staged, either:
@@ -45,7 +45,7 @@ If unrelated content is staged, either:
 
 Running `git add <my-file>` then `git commit` without inspecting index
 state, under the assumption that the commit will only carry the file
-just added. When `MM` or `A ` entries exist on other files, the commit
+just added. When `MM` or `A` entries exist on other files, the commit
 silently absorbs them. The commit message describes only the intended
 change; the commit content carries more. Not destructive — but the
 commit message lies about what the commit is.

@@ -78,7 +78,7 @@ Defines **types and relationships**, but contains **no instances**.
 
 ### Target State: True Knowledge Graph
 
-```
+```text
 SCHEMA: "Lesson hasKeywords Keyword"
 INSTANCE: lesson:ks3-bio-1 → hasKeywords → keyword:photosynthesis
 ```
@@ -159,7 +159,7 @@ These features **cannot be implemented** without changes to the Open API:
 
 ## Timeline Context
 
-```
+```text
 Now:       Milestone 0 merge preparation
            ↓
 Next:      Public alpha (Milestone 1)

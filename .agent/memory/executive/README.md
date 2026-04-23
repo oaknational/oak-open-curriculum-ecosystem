@@ -32,6 +32,7 @@ behind the canonical-first pattern is in
 [ADR-125](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md)
 and the review doctrine behind the reviewer roster is in
 [ADR-114](../../../docs/architecture/architectural-decisions/114-layered-sub-agent-prompt-composition-architecture.md)
+
 + [ADR-129](../../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md).
 The executive-memory surfaces operationalise those doctrines with
 concrete catalogues and step-by-step creation procedures.

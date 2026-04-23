@@ -123,6 +123,7 @@ and data flow:
 **Recommendation**: Option B (`.strip()`), pending owner decision.
 
 ### OQ2: Should `additionalProperties: false` also be removed from
+
 JSON Schema output?
 
 If MCP clients validate tool responses against the advertised

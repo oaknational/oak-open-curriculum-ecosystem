@@ -296,10 +296,11 @@ structural decisions or choosing a rebuild strategy.
    - Summarise unresolved repair ambiguities rather than hiding uncertainty.
 
 10. Run local validation on the final markdown.
-   - Use the repo-appropriate markdown validation surface for the edited file
+
+- Use the repo-appropriate markdown validation surface for the edited file
      or files. If the target doc estate intentionally excludes markdownlint,
      use structural validation instead of forcing it.
-   - **Structural parity vs the structural baseline:** before the automated drift
+- **Structural parity vs the structural baseline:** before the automated drift
      proof, compare the **new** `*-clean.md` to the **primary structural source**.
      When a source `.md` exists, that baseline is the original markdown
      scaffold: same heading sequence and depth (ATX `#` lines), same overall
@@ -311,11 +312,11 @@ structural decisions or choosing a rebuild strategy.
      gaps obvious. Structural repair is allowed only where the baseline was
      already broken; otherwise mismatches mean content was lost or reordered and
      must be fixed before closing.
-   - Grep for leftover `cite`, `filecite`, `turn...`, and
+- Grep for leftover `cite`, `filecite`, `turn...`, and
      `utm_source=chatgpt.com` markers when the export started noisy
-   - Scan for remaining PUA characters (U+E200 to U+E2FF range) — these are
+- Scan for remaining PUA characters (U+E200 to U+E2FF range) — these are
      invisible to normal grep and the Read tool but remain in file bytes
-   - Apply the same normalisation function to both files for drift proof:
+- Apply the same normalisation function to both files for drift proof:
      `strip_citations(text)` removes PUA citation blocks/marker artefacts from
      the baseline markdown and removes `[[N]](URL)` citations from clean markdown.
      Then normalise whitespace and confirm the two texts are

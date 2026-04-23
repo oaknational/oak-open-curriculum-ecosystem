@@ -244,7 +244,7 @@ absent case.
 
 A follow-up session should consider appending a brief API reference
 line to the tool's `description` text (e.g.
-"Upstream API: GET https://open-api.thenational.academy/api/v0/subjects").
+"Upstream API: GET <https://open-api.thenational.academy/api/v0/subjects>").
 This makes the information visible to LLMs that read descriptions but
 not `_meta`. Deferred to a separate session per owner decision.
 
