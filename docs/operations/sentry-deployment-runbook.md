@@ -38,6 +38,16 @@ service.
 
 ## Step 2: Configure Environment Variables
 
+**Sensitivity note: `SENTRY_DSN` is a public identifier, not a secret.**
+Per [the Sentry DSN documentation](https://docs.sentry.io/concepts/key-terms/dsn-explainer/),
+the DSN is intentionally embeddable in client code and contains only a
+public key and a project identifier — it grants ingest-only authority,
+not read or admin access. On Vercel, set `SENTRY_DSN` as a regular
+(non-Sensitive) environment variable; the `SENTRY_AUTH_TOKEN` and any
+Slack/PagerDuty integration tokens remain Sensitive. Treating DSN as a
+secret is a documentation defect that propagates incorrect handling
+elsewhere.
+
 Set the following **per app** in the deployment platform:
 
 ### HTTP MCP server (Vercel)

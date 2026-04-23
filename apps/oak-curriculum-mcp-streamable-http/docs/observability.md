@@ -16,6 +16,22 @@ Governance:
 
 Upstream library: [`@oaknational/sentry-node`](../../../packages/libs/sentry-node/README.md).
 
+## Deployment context
+
+- **Sentry org**: `oak-national-academy`.
+- **Sentry project (this app)**: `oak-open-curriculum-mcp`.
+- **Sentry region**: `de.sentry.io` (EU). All DSNs, ingest URLs, and
+  Sentry CLI calls use the EU host; the `.com` host is wrong for this
+  project and silently produces 404s on release/commit operations.
+- **Vercel project**: `poc-oak-open-curriculum-mcp` at
+  [vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp](https://vercel.com/oak-national-academy/poc-oak-open-curriculum-mcp).
+  Environment variables, deployment logs, and the Sentry source-map
+  upload contract are all configured there.
+- **Sentry MCP server (`sentry-ooc-mcp`)**: project-scoped via URL
+  path to `oak-national-academy/oak-open-curriculum-mcp`. Agent
+  queries against this MCP server are pre-scoped to this app — no
+  cross-project leak.
+
 ## The three modes
 
 `SENTRY_MODE` controls runtime behaviour. Parsed once at startup via

@@ -316,7 +316,7 @@ they are independently good engineering.
 existing "Document Everywhere" bullet (lines 137-155, 19 lines) which
 overlaps substantially with the "Onboarding" bullet and the TSDoc
 syntax guidance — the TSDoc syntax detail could move to
-`tsdoc-and-documentation-hygiene.md` rule, recovering ~6 lines.
+`documentation-hygiene.md` rule, recovering ~6 lines.
 
 **Layer 2 — MCP-specific rule** (`.agent/rules/mcp-tool-interface-discipline.md`)
 

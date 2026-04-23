@@ -80,7 +80,7 @@ docs, READMEs) via the consolidation workflow.
 | `plans/` | Executable work plans with lifecycle management (`future/` → `current/` → `active/` → `archive/`) |
 | `milestones/` | Per-milestone summaries: audience, value delivered, and progression gates |
 | `prompts/` | Reusable prompt playbooks for common workflows |
-| `commands/` | Slash-command definitions for agent workflows (`/jc-commit`, `/jc-gates`, etc.) |
+| `commands/` | Slash-command definitions for agent workflows (`/jc-gates`, `/jc-go`, etc.). The commit workflow is an always-active skill, not a slash command — see [`skills/commit/`](skills/commit/SKILL.md) with thin pointers at `.cursor/skills/commit/` and `.agents/skills/commit/`. |
 
 ### Knowledge and learning
 

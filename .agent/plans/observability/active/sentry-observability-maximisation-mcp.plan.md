@@ -2563,6 +2563,45 @@ this correction subsection rather than amending the WS2 prose in
 place — the full chain (original design → preview probe → corrected
 design) stays visible for future reference.
 
+##### Deferred follow-on (out of scope for this correction)
+
+WI-5 was originally drafted to cover the MCP HTTP app only — that
+is the workspace where the L-8 acceptance probe runs. During WI-5
+execution (2026-04-23), an over-broad first read deleted
+`scripts/validate-root-application-version.mjs` outright and
+removed its call from `apps/oak-search-cli/`'s build script too.
+The owner caught the over-reach: removing the pre-flight from
+`oak-search-cli` *without* migrating it to esbuild + the canonical
+resolver leaves search-cli with the very `missing_app_version`-style
+drift this correction was designed to repair. Reverted both
+deletions; `oak-search-cli` stays on tsup with the validate-script
+pre-flight in place. Only the MCP HTTP build script's `&&` removal
+landed.
+
+The principled long-tail follow-on, owner-confirmed in the same
+exchange:
+
+1. **Migrate `apps/oak-search-cli/` to esbuild + the canonical
+   `resolveBuildTimeRelease`**. Search CLI needs Sentry release
+   registration for source-map-attributed error reports;
+   registration requires the canonical resolver pattern in
+   `esbuild.config.ts`; therefore search CLI needs esbuild. Once
+   migrated, drop the `validate-root-application-version.mjs`
+   call from its build script.
+2. **Converge the rest of the deployable-artefact workspaces on
+   esbuild + the canonical resolver**. The L-8 Correction's
+   single-source-of-truth doctrine only fully realises once
+   esbuild is the universal build pipeline; tsup is the legacy
+   build wrapper. Survey + plan as a separate lane.
+3. **Delete `scripts/validate-root-application-version.mjs`**
+   when (1) and (2) are complete and no consumer remains. The
+   script then has no callers and its validation contract is
+   subsumed by the canonical resolver at every composition root.
+
+These are not blocking for the L-8 acceptance probe and are not
+graduated to a plan body yet; they sit here as the standing
+register entry for the follow-on lane.
+
 ### Sibling `current/` plans in Phase 5
 
 - [`multi-sink-vendor-independence-conformance.plan.md`](../current/multi-sink-vendor-independence-conformance.plan.md)

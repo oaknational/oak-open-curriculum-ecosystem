@@ -1,6 +1,6 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; planning specialist ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
 **Last Updated**: 2026-04-20
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
@@ -87,7 +87,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), governance-concept integration (✅), incoming Practice integration (✅), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist operational tooling layer (ADR-137, strategic), External pointer-surface integration (📋)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), governance-concept integration (✅), incoming Practice integration (✅), learning-loop negative-feedback tightening (⏭️), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist operational tooling layer (ADR-137, strategic), External pointer-surface integration (📋)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -114,6 +114,7 @@ Adjacent:
   PCI:  Incoming Practice integration                ✅ COMPLETE
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 🔄 ACTIVE
+  LFT:  Learning-loop negative-feedback tightening   ⏭️ QUEUED
   MCP+: MCP specialist upgrade (triplet + ext-apps)  ✅ COMPLETE
   EXP:  Express specialist capability                📋 PLANNED
   CYB:  Cyber security specialist capability         📋 PLANNED
@@ -305,10 +306,29 @@ Adjacent:
     replacing them
   - the evidence lane now owns the attempt -> observed outcome -> proven
     result split
-  - the future mechanism-taxonomy lane now holds the remaining boundary-model,
+- the future mechanism-taxonomy lane now holds the remaining boundary-model,
     signal-ecology, residual-risk, and governance-plane abstraction debt
   - doctrine-adjacent canon was reviewed and intentionally left unchanged in
     this closeout
+
+### Adjacent — Learning-Loop Negative-Feedback Tightening
+
+- Strategic plan:
+  [learning-loop-negative-feedback-tightening.plan.md](current/learning-loop-negative-feedback-tightening.plan.md)
+- Findings report:
+  [learning-loops-and-balancing-feedback-report.md](../../reports/agentic-engineering/deep-dive-syntheses/learning-loops-and-balancing-feedback-report.md)
+- Goal:
+  - instantiate PDR-028 drift-detection sections on the three live
+    executive-memory surfaces
+  - make `consolidate-docs` step 9 record explicit memory-quality
+    dispositions for governed files outside `healthy`
+  - strengthen balancing power without new validators, new memory layers, or
+    broad Practice Core rewrites
+- Status: ⏭️ Queued
+- Notes:
+  - intentionally narrow follow-on, not a learning-loop redesign
+  - complements reference-tier curation and ADR-144 fitness without changing
+    thresholds or blocking behaviour
 
 ### Adjacent — Agentic Corpus Discoverability Hub
 
@@ -766,7 +786,7 @@ Adjacent:
   - ADR amendments: ADR-053; ADR-150
   - Rules: `no-verify-requires-fresh-authorisation`;
     `register-identity-on-thread-join`; `executive-memory-drift-capture`;
-    `plan-body-first-principles-check`; `tsdoc-and-documentation-hygiene`
+    `plan-body-first-principles-check`; `documentation-hygiene`
   - Principles: "Owner Direction Beats Plan"; "Misleading docs are
     blocking"; "Cardinal rule"
   - Reference tier reformation (PDR-032): 35 files relocated en

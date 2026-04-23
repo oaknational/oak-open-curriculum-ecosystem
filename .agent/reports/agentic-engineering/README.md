@@ -24,6 +24,10 @@ It complements, rather than replaces:
 - [governance-concepts-and-integration-report.md](./deep-dive-syntheses/governance-concepts-and-integration-report.md)
   — abstracted findings on governance planes, trust boundaries, supervised
   execution, signal ecology, and the local routing map for those concepts
+- [learning-loops-and-balancing-feedback-report.md](./deep-dive-syntheses/learning-loops-and-balancing-feedback-report.md)
+  — systems-thinking synthesis of the repo's reinforcing, refinement, and
+  balancing loops, with a narrow recommended tranche for stronger
+  negative-feedback control over memory quality
 
 ## Current Posture
 

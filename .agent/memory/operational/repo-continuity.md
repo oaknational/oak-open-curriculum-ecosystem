@@ -16,11 +16,88 @@ diagnostics README — to make the "git commit pre-commit output
 truncation in the last ~24h" pattern countable across
 sessions/machines, (4) capturing the truncation observation as a
 top-level napkin entry with hypotheses + workaround +
-falsifiability. Four commits landed: `6137c817` continuity
-correction, `74826914` check-commit-message helper, `0bd3204c`
-diagnostics infra, `14ea70f3` napkin truncation observation.
-New tooling surfaced via [`AGENTS.md § Commit workflow helpers`](../../../AGENTS.md)
-for the next L-8 Correction agent. Earlier-today refresh:
+falsifiability, (5) **second-pass refinement (post-handoff)**:
+converting the never-invoked `.agent/commands/commit.md` command
+into the canonical always-active
+[`.agent/skills/commit/SKILL.md`](../../skills/commit/SKILL.md)
+with the new helpers folded into the skill body — file-redirect
+framed as a Cursor-Shell-tool workaround with falsifiability
+tied to the diagnostic log, AGENTS.md verbose subsection rolled
+back to a thin pointer, all incoming references rewired
+(AGENT.md citation, finishing-branch skill, practice-index,
+README, platform-adapter-formats research) and **third-pass
+refinement (same session, owner-corrected)**: thin adapters
+restructured from *command* form to *skill* form per owner
+direction — deleted `.claude/commands/jc-commit.md`,
+`.cursor/commands/jc-commit.md`, `.gemini/commands/jc-commit.toml`;
+created `.cursor/skills/commit/SKILL.md`; renamed
+`.agents/skills/jc-commit/` → `.agents/skills/commit/` (drop
+personal `jc-` prefix to match `napkin` / `finishing-branch`
+convention for passive always-active skills). Skill discovery on
+Claude/Gemini falls back to the `AGENT.md` citation chain (no
+`.claude/skills/commit/` adapter, mirroring how `napkin` and
+`finishing-branch` work today). Five commits already landed
+this session: `6137c817` continuity correction, `74826914`
+check-commit-message helper, `0bd3204c` diagnostics infra,
+`14ea70f3` napkin truncation observation, `9abbdeb9` initial
+session-handoff. **The skill-conversion + adapter-refactor
+work is staged but NOT committed** — owner direction at session
+end: *"no need to commit, the next session can handle that"*.
+Staged set (run `git status --short` at next session open to
+confirm; expected ~19 entries): `.agent/skills/commit/SKILL.md`
+(NEW canonical), `.agents/skills/commit/SKILL.md` (NEW Codex
+skill thin pointer; renamed from `.agents/skills/jc-commit/`),
+`.cursor/skills/commit/SKILL.md` (NEW Cursor skill thin
+pointer), `.agent/commands/commit.md` (DELETED), three command
+adapters DELETED (`.claude/commands/jc-commit.md`,
+`.cursor/commands/jc-commit.md`, `.gemini/commands/jc-commit.toml`),
+`.agent/directives/AGENT.md` + `.agent/README.md` +
+`.agent/research/platform-adapter-formats.md` +
+`.agent/practice-index.md` + `.agent/skills/finishing-branch/SKILL.md` +
+`.claude/settings.json` + `AGENTS.md` (modified — references
+rewired or rolled back), `scripts/validate-portability.unit.test.ts`
+(modified — test fixture renamed off the deleted command path),
+`.agent/memory/operational/repo-continuity.md` +
+`.agent/memory/operational/threads/observability-sentry-otel.next-session.md` +
+`.agent/memory/operational/diagnostics/commit-attempts.log` +
+`.agent/memory/active/napkin.md` (this refresh + napkin
+investigation entry). The canonical home for commit-workflow
+guidance is now the skill, discoverable via
+[`AGENT.md § Commit Discipline`](../../directives/AGENT.md#commit-discipline)
+and the always-active skill register. **Unstaged Sentry L-8 WIP
+files in working tree** (deliberately kept out of this commit
+scope, belong to the next session's L-8 Correction work-list):
+`apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts`
++ its unit test (modified), `packages/core/build-metadata/src/index.ts`
+(modified to re-export new modules), four NEW untracked files
+under `packages/core/build-metadata/` (`build-info.ts`,
+`build-time-release.ts`, plus their `.unit.test.ts` siblings). **Owner-gated follow-up
+deferred (Practice Core)**: `.agent/practice-core/practice-bootstrap.md`
+still lists `commit` under "Required Commands" with file
+`jc-commit.md` (line 403); the table needs an update to reflect
+the promotion from command to passive always-active skill, but
+that surface is owner-gated per the napkin/distilled correction —
+queued for the next session that touches Practice Core.
+**Same-session napkin entry filed** for the owner-noticed
+"two definitions per skill" observation across `.agent/skills/`,
+`.agents/skills/`, `.cursor/skills/` (and conditionally
+`.claude/skills/`) — captured as 1/3 with five investigation
+hooks at `napkin.md § 2026-04-23 — investigate: each skill
+appears to have two definitions across platform surfaces`.
+**Bounded follow-up sweep queued (next session that touches
+agent infra)**: rename the ten `jc-`prefixed skill directories
+in `.agents/skills/` to their bare names. Owner clarification
+this session: `jc-` is the personal namespace for **slash
+commands** (across `.claude/commands/`, `.cursor/commands/`,
+`.gemini/commands/`), not for skills; the prefix on skills is
+drift, not a convention. Sweep is mechanical: `git mv` each
+of `jc-chatgpt-report-normalisation`, `jc-consolidate-docs`,
+`jc-gates`, `jc-go`, `jc-metacognition`, `jc-plan`, `jc-review`,
+`jc-session-handoff`, `jc-start-right-quick`,
+`jc-start-right-thorough` to its bare name; update each
+frontmatter `name:` field; update `.claude/settings.json`
+`Skill(jc-*)` allowlist entries to bare names; audit any
+incoming citations. Detail at `napkin.md` investigation hook 4. Earlier-today refresh:
 2026-04-22 (`observability-sentry-otel` thread session close —
 Pippin / cursor-claude-opus-4-7 — UNLANDED probe; L-8
 Correction subsection landed in the active plan; continuity
@@ -324,7 +401,7 @@ to all 10 items):
   - [PDR-026 §Landing target definition + 2026-04-21 Session 5 amendment](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md#amendment-log) — item 8 docs-as-DoD (Class A.1 rewrite).
   - [`/.agent/rules/no-verify-requires-fresh-authorisation.md`](../../rules/no-verify-requires-fresh-authorisation.md) + Cursor mirror — item 1 (sole new rule).
   - [`principles.md § Owner Direction Beats Plan`](../../directives/principles.md) — item 2.
-  - [`principles.md § Code Quality §Misleading docs are blocking`](../../directives/principles.md) — item 9 (Class A.1 rewrite); enforced by always-applied [`tsdoc-and-documentation-hygiene`](../../rules/tsdoc-and-documentation-hygiene.md) rule.
+  - [`principles.md § Code Quality §Misleading docs are blocking`](../../directives/principles.md) — item 9 (Class A.1 rewrite); enforced by always-applied [`documentation-hygiene`](../../rules/documentation-hygiene.md) rule.
   - [ADR-053 §Amendment: Canonical User-ID Provider Through Public Alpha (2026-04-21)](../../../docs/architecture/architectural-decisions/053-clerk-as-identity-provider.md) — item 10.
 - **Mesh integrity** (post-`docs-adr-reviewer` close-pass):
   PDR-031 added to PDR README index; PDR-011/015/019/026 status
@@ -514,7 +591,7 @@ set is additive; previous invariants still apply):
   remains stale; doc updates compose into the landing commit.
 - **Misleading docs are blocking** — graduated 2026-04-21 Session 5
   to [`principles.md § Code Quality`](../../directives/principles.md).
-  Enforced by the always-applied `tsdoc-and-documentation-hygiene`
+  Enforced by the always-applied `documentation-hygiene`
   rule. Symmetric with PDR-026 §Landing target definition (above):
   the principle says misleading docs cannot ship; PDR-026 says
   doc updates compose into landings.
@@ -555,20 +632,21 @@ for the full landing target, session shape (numbered work-items
 reminders (7th instance of `inherited-framing-without-first-principles-check`;
 2nd instance of `passive-guidance-loses-to-artefact-gravity`).
 
-**Commit workflow tooling available** (added 2026-04-23 by Pippin's
-second session): the L-8 Correction work-list will produce ~8+
-commits. Use the workflow standard documented in
-[`AGENTS.md § Commit workflow helpers`](../../../AGENTS.md):
-`scripts/check-commit-message.sh` for pre-validation (~1s,
-catches `header-max-length` / `body-max-line-length` before the
-~34s pre-commit cycle), `git commit -F - >/tmp/commit.log 2>&1`
-for the commit itself (workaround for the Cursor Shell-tool
-stream-truncation pattern documented in the napkin top entry,
-2026-04-23), `scripts/log-commit-attempt.sh` to append a TSV
-row to the diagnostic log
-[`.agent/memory/operational/diagnostics/commit-attempts.log`](diagnostics/commit-attempts.log)
-after every attempt (success OR failure). Do NOT pre-prime the
-turbo cache via `bash .husky/pre-commit`.
+**Commit workflow tooling available** (refined 2026-04-23 by
+Pippin's second session into the canonical `commit` skill at
+[`.agent/skills/commit/SKILL.md`](../../skills/commit/SKILL.md)):
+the L-8 Correction work-list will produce ~8+ commits. The skill
+covers live commitlint constraints, pre-`git commit` validation
+via `scripts/check-commit-message.sh` (~1s, catches
+`header-max-length` / `body-max-line-length` before the ~34s
+pre-commit cycle), the Cursor-Shell-tool stream-truncation
+workaround (file-redirect commit invocation; see the skill's
+own falsifiability discipline), and post-commit logging via
+`scripts/log-commit-attempt.sh` into the tracked diagnostic
+substrate at
+[`diagnostics/commit-attempts.log`](diagnostics/commit-attempts.log).
+Do NOT pre-prime the turbo cache via `bash .husky/pre-commit`
+(documented anti-workaround in the skill).
 
 **Three rehoming open items** await owner attention but do NOT
 block any thread (recorded as honest PDR-026 deferrals on

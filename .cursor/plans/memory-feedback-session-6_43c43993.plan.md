@@ -197,7 +197,7 @@ flowchart TD
 
 - **Plan-time**: `assumptions-reviewer` (per staged plan §Reviewer discipline — *"is the fitness exploration well-framed?"*) — invoke after this plan is ratified.
 - **Mid-cycle**: `docs-adr-reviewer` on PDR-014 amendment intent + close; `architecture-reviewer-barney` or `betty` if routing pattern shapes module boundaries.
-- **Close**: `docs-adr-reviewer` final pass; `release-readiness-reviewer` GO/GO-WITH-CONDITIONS/NO-GO; `tsdoc-and-documentation-hygiene` always-applied rule fires throughout.
+- **Close**: `docs-adr-reviewer` final pass; `release-readiness-reviewer` GO/GO-WITH-CONDITIONS/NO-GO; `documentation-hygiene` always-applied rule fires throughout.
 
 ## Learning Loop
 

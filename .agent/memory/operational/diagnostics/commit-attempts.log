@@ -10,3 +10,4 @@
 2026-04-23T03:38:20Z	ok	-	68081856	heredoc-stream	docs(practice): observability-sentry-otel close — pippin unlanded probe + l-8 co	previous session 2026-04-22; landed after similar truncation episodes; reconstru
 2026-04-23T03:40:38Z	ok	34	0bd3204c	heredoc-fileout	chore(diagnostics): add commit-attempts log + appender script	redirected to /tmp/commit.log; first commit using new log itself
 2026-04-23T03:42:46Z	ok	36	14ea70f3	heredoc-fileout	docs(napkin): record git commit pre-commit output truncation observed in last ~2	co-staged log row for prior 0bd3204c
+2026-04-23T03:49:20Z	ok	35	9abbdeb9	heredoc-fileout	docs(continuity): 2026-04-23 session-handoff — surface commit-workflow tooling	session-handoff commit; co-staged log row for prior 14ea70f3

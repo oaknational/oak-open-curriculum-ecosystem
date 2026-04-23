@@ -39,6 +39,21 @@ context with no natural permanent home.
 - Onboarding simulations are discovery-based (README-only start;
   motivation-described personas) — see the onboarding plan for the
   full rubric.
+- `.env.local` files MUST mirror the structure of `.env.example`
+  (same section headers, same ordering, same documentation
+  comments). Drift between the two is a documentation defect.
+- **Scope changes precisely.** When the user asks for "only
+  config, no code" (or any analogous boundary), respect the
+  boundary strictly. Surface follow-on work that would extend
+  scope; never silently expand scope to be helpful.
+- **Cite when adopting external concepts.** When external
+  patterns, vocabulary, or implementation techniques are adopted
+  or adapted (blog posts, papers, vendor docs, OSS, other
+  Practice-bearing repos), attribution MUST be explicit and
+  include a working link to the upstream source. Adaptations
+  must also note how the local form differs. Enforced by the
+  always-applied [`documentation-hygiene`](../../rules/documentation-hygiene.md)
+  rule §Attribution on adoption.
 
 ## Fitness Management
 

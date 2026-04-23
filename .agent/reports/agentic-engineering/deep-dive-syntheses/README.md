@@ -12,6 +12,7 @@ theme graduates beyond index notes and source routing.
 ## Current Reports
 
 - [governance-concepts-and-integration-report.md](./governance-concepts-and-integration-report.md)
+- [learning-loops-and-balancing-feedback-report.md](./learning-loops-and-balancing-feedback-report.md)
 
 ## Promotion Rule
 

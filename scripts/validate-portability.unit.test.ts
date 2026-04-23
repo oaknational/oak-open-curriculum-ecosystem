@@ -292,9 +292,9 @@ describe('getSkillPermissionIssues', () => {
   it('ignores non-Skill permissions in the allow list', () => {
     expect(
       getSkillPermissionIssues({
-        claudeCommandFiles: ['.claude/commands/jc-commit.md'],
+        claudeCommandFiles: ['.claude/commands/jc-gates.md'],
         claudeSettingsPermissions: ['WebSearch', 'Bash(git status:*)'],
       }),
-    ).toContainEqual(expect.stringContaining('jc-commit'));
+    ).toContainEqual(expect.stringContaining('jc-gates'));
   });
 });

@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "build": "node ../../scripts/validate-root-application-version.mjs && tsx esbuild.config.ts",
+    "build": "tsx esbuild.config.ts",
     "build:widget": "vite build --config widget/vite.config.ts && node scripts/embed-widget-html.js",
     "clean": "rm -rf dist .turbo .widget-build",
     "dev": "tsx operations/development/http-dev.ts dev",

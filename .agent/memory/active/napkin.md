@@ -8,6 +8,180 @@ live in the register at
 
 ---
 
+## 2026-04-23 — graph-memory opportunity: discovery spine already exists, but is textual and manually traversed
+
+**Observation**: the repo already contains a substantial **discovery and
+relationship infrastructure** for Practice and strategy material, but it
+is mostly expressed through curated markdown links, read orders, lane
+maps, and command workflow orderings rather than through a queryable
+derived graph.
+
+Concrete evidence from today's pass:
+
+- The Practice already has explicit routing and relationship surfaces:
+  `practice.md`, `practice-index.md`, `docs/README.md`,
+  `docs/foundation/agentic-engineering-system.md`,
+  `.agent/research/agentic-engineering/README.md`, the memory
+  taxonomy, and the continuity commands all encode **what connects to
+  what** and **what to read next**.
+- Onboarding is already treated as a **path through a document system**,
+  with repo entrypoints in `README.md` and `docs/README.md`, plus an
+  active onboarding status hub in
+  `.agent/plans/developer-experience/active/onboarding-simulations-public-alpha-readiness.md`.
+- Product-side graph infrastructure is real and reusable in shape:
+  ADR-059 schema-level concept map, ADR-062 SVG graph rendering,
+  ADR-157 multi-source graph integration, and
+  `packages/sdks/oak-curriculum-sdk/src/mcp/graph-resource-factory.ts`
+  already model graph surfaces as resources/tools.
+
+### Surprise
+
+- **Expected**: if graph support already existed locally, it might
+  already offer document-level traversal features such as path/query/
+  explain or subgraph filtering.
+- **Actual**: the in-repo graph machinery is currently oriented toward
+  **curriculum data graphs**, and the factory still emits whole-graph
+  resource/tool surfaces rather than document-graph navigation
+  affordances. The queued compliance plan still treats graph
+  sub-querying and summary mode as not yet landed work.
+- **Behaviour change**: if a Practice/ADR graph is explored, start from
+  the repo's existing explicit structure as seed edges:
+  markdown links, lane membership, frontmatter metadata, ADR `Related`
+  fields, plan parent/sibling links, and command/read-order
+  dependencies. Semantic or inferred edges come second, not first.
+
+## 2026-04-23 — `observability-sentry-otel` L-8 Correction WI-1..5 landed locally; WI-5 scope-discipline correction by owner (Pippin / cursor-claude-opus-4-7)
+
+**Session shape**: executed the 8-item L-8 Correction work-list per
+the thread next-session record. WI-1..5 + gates GREEN locally; pushed
+to Vercel preview = WI-6 / WI-7. ADR amendment = WI-8 still pending.
+
+**Concrete deliverables (committed at end of session)**:
+
+- `@oaknational/build-metadata` gains the canonical
+  `resolveBuildTimeRelease` (production = root `package.json`;
+  preview = `preview-<branch-slug>-<shortSha>`; development =
+  `dev-<shortSha>`; `SENTRY_RELEASE_OVERRIDE` always wins) + a
+  `BuildInfo` shape persisted to `dist/build-info.json` for
+  multi-consumer reuse. Internals split to a sibling file to stay
+  under the workspace's `max-lines: 250` budget.
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts`
+  consumes the canonical resolver, exposes a new `skipped` intent
+  variant for missing optional `SENTRY_AUTH_TOKEN` on
+  preview/development, and escalates missing token on production to
+  a vital-identity error.
+- `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts` is now
+  a four-arm switch: `disabled` / `skipped` / `configured` / err.
+  Three-branch local probe (preview/no-token = skipped, preview/fake-
+  token = configured emitting the exact landing-target log line,
+  development with no overrides = disabled) all behave as designed.
+- `validate-root-application-version.mjs` pre-flight removed from
+  the MCP HTTP build script (canonical resolver subsumes it).
+
+**WI-5 scope-discipline correction (owner-driven, mid-execution)**:
+
+Initial WI-5 read overshot — I deleted
+`scripts/validate-root-application-version.mjs` outright and
+removed the `&&` call from `apps/oak-search-cli/`'s build script
+too, on the reasoning that "if the script is gone, every consumer
+must lose the call". The owner caught the over-reach: removing the
+pre-flight from `oak-search-cli` *without* migrating it to esbuild
++ canonical resolver leaves search-cli with the original
+`missing_app_version`-style drift the L-8 Correction was designed
+to repair. The principled options are:
+
+1. Keep `oak-search-cli` on tsup → keep the validate-script
+   pre-flight in place (script + call both alive).
+2. Migrate `oak-search-cli` to esbuild + canonical resolver →
+   then drop the validate-script call (and eventually the script).
+
+The L-8 Correction work-list authorises (1) only — migration is
+out of scope for this landing's acceptance gate. Reverted both
+deletions; only the MCP HTTP build script's `&&` removal stands.
+
+**Owner-confirmed deferred follow-on (outside L-8 Correction)**:
+
+- `oak-search-cli` *needs* Sentry release registration eventually,
+  which means it *needs* esbuild + canonical resolver. Convert it
+  on a future lane.
+- More broadly: every workspace that emits a deployable artefact
+  should converge on esbuild + the canonical
+  `resolveBuildTimeRelease` boundary read; tsup is the legacy
+  build wrapper and the L-8 Correction's single-source-of-truth
+  doctrine only fully realises once it is the universal build
+  pipeline.
+
+These are tracked in the active observability plan's L-8
+Correction subsection (deferred follow-on note) and surfaced here
+for cross-thread visibility.
+
+### Pattern check (first-session warning from the thread record)
+
+The thread record warned that WI-1 was the **8th-instance trigger
+zone** for `inherited-framing-without-first-principles-check` and
+that the corrected fail-policy table was the **3rd-instance
+trigger zone** for `passive-guidance-loses-to-artefact-gravity`.
+Ran the four-clause first-principles check before authoring (test
+shape, file naming vs landing path, vendor-API literals,
+single-source-of-truth boundary discipline) and the work landed
+without re-instancing either. The WI-5 over-reach above is a
+*different* pattern — closer to "literal-reading the work-item
+title" (delete script ⇒ delete every call site) without checking
+downstream impact. Worth watching across sessions; one instance
+only, not yet pattern-bar.
+
+---
+
+## 2026-04-23 — learning-loop review: strongest negative feedback is volumetric, not value-semantic
+
+**Observation**: the repo's current balancing loops are strongest at
+detecting **memory volume / drift pressure**, but weaker at detecting
+**low-value content density** directly.
+
+Concrete evidence from today's review:
+
+- `pnpm practice:fitness:informational` still reports **HARD
+  (4 hard, 10 soft)** across governed markdown surfaces.
+- The fitness validator (`scripts/validate-practice-fitness.mjs`)
+  measures **line count**, **character count**, and **prose line
+  width** only. It can say "this file is overweight" but it cannot
+  say "these 40 lines are low-value".
+- The value-density judgement exists, but it lives in
+  `/jc-consolidate-docs` step 9 as a review question —
+  *"is the content appropriately dense, or has it accumulated
+  low-value entries?"* That is a consolidation-time reasoning step,
+  not an always-on validator.
+
+**Stronger-than-expected balancing loop**: the reformed
+`.agent/reference/` tier now has a real negative loop —
+deliberate promotion, owner-vet, an aging gate, and de-promotion
+back to `research/notes/` / archive / delete. This is the clearest
+repo-local example of "quality of memory" being governed, not just
+its size.
+
+### Surprise
+
+- **Expected**: the newer executive-memory feedback loop (PDR-028)
+  would already be visibly instantiated on live executive surfaces.
+- **Actual**: today's repo-wide search found **no live `## Drift
+  Detection` sections under `.agent/memory/executive/`**, and no
+  current-session active-memory entries tagged `Source plane:
+  executive` (only archived examples). So the loop is well-specified
+  doctrinally, but not yet materially firing as a routine lookup-time
+  correction mechanism.
+- **Why expectation failed**: I over-inferred from the clarity of the
+  PDR/rule bundle. The doctrine exists; the surface-by-surface
+  install-state is still partial.
+- **Behaviour change**: when evaluating loop health, split the
+  question into three layers:
+  1. Can the system detect **overgrowth**?
+  2. Can it detect **misrouting / drift**?
+  3. Can it detect **low-value accumulation**?
+  Today's answer looks like: (1) yes, (2) partially, (3) only via
+  consolidation-time judgement, not instrumentation.
+
+---
+
 ## 2026-04-23 — operational quirk: `git commit` pre-commit output truncation in the last ~24h
 
 **Observation**: when `git commit` is invoked from the Cursor
@@ -96,6 +270,86 @@ streamed view. Tool note for future me: **when a tool reports
 failure but the underlying command works in isolation, redirect
 output to a file before reasoning further** — the streamed view
 is itself a tool that can lie about what happened.
+
+---
+
+## 2026-04-23 — investigate: each skill appears to have two definitions across platform surfaces
+
+**Observation** (owner-noticed during the `commit` skill conversion):
+each skill name surfaces in *multiple* directories simultaneously,
+which the owner read as "two definitions per skill". Concrete
+example for `napkin`:
+
+- `.agent/skills/napkin/SKILL.md` — canonical body (substance)
+- `.agents/skills/napkin/SKILL.md` — Codex thin pointer
+- `.cursor/skills/napkin/SKILL.md` — Cursor thin pointer
+- (no `.claude/skills/napkin/`; Claude discovers via the
+  `CLAUDE.md` → `AGENT.md` chain)
+
+The platform-prefixed copies are intentional thin pointers for
+each platform's skill discovery mechanism; the canonical lives at
+`.agent/skills/`. So "two (or three) definitions" is by design —
+but the design is not legible from a casual `ls` of any one
+directory, and the duplication count varies per skill (some skills
+have Cursor + Codex pointers, some only Codex, some none — Claude
+is inconsistent).
+
+**What to investigate next** (do NOT investigate this session —
+it would derail current work):
+
+1. Is the per-platform thin-pointer design actually documented in
+   `.agent/research/platform-adapter-formats.md`? If yes, link it
+   from `.agent/skills/README.md` (if such a README exists; if
+   not, that may itself be the gap). If not, it should be.
+2. Is the duplication *complete* — i.e. does every always-active
+   skill have a thin pointer in every platform that supports
+   skills (Cursor, Codex, Claude)? Or is coverage ad-hoc? Spot
+   check suggests ad-hoc:
+   - `napkin` has Cursor + Codex pointers, no Claude pointer.
+   - `finishing-branch` has Cursor + Codex pointers, no Claude
+     pointer.
+   - `patterns` has a Claude pointer (`.claude/skills/patterns/`)
+     but the canonical at `.agent/skills/patterns/` may not exist
+     (the Claude one looks vendored from a plugin, not a thin
+     pointer). Worth confirming.
+3. Is there a fitness check that catches drift between the
+   canonical body and the thin pointer descriptions? Today there
+   is not — if `.agent/skills/commit/SKILL.md` updates its
+   description, the three pointer descriptions can silently
+   diverge. A small lint (or a `pnpm practice:fitness` rule)
+   could compare frontmatter `description` fields across
+   adapter copies and warn on drift.
+4. **Naming convention drift to clean up**: the `jc-` prefix is
+   the **personal namespace for slash commands** (owner-authored
+   commands across `.claude/commands/`, `.cursor/commands/`,
+   `.gemini/commands/`). It is NOT a skill namespace — skills are
+   workspace assets, not personal-namespaced. Yet `.agents/skills/`
+   currently contains ten `jc-`prefixed skill directories
+   (`jc-chatgpt-report-normalisation`, `jc-consolidate-docs`,
+   `jc-gates`, `jc-go`, `jc-metacognition`, `jc-plan`, `jc-review`,
+   `jc-session-handoff`, `jc-start-right-quick`,
+   `jc-start-right-thorough`). These are leaks from the slash-
+   command namespace into the skill namespace and should be
+   renamed to bare names (matching `napkin`, `finishing-branch`,
+   `commit`). Bounded sweep: ~10 `git mv` operations + update
+   each frontmatter `name:` field + audit incoming references
+   (likely `.claude/settings.json` `Skill(jc-*)` allowlist
+   entries and any AGENT.md-style citations). Queued as a
+   separate follow-up — NOT bundled with the `commit` skill
+   conversion landing.
+5. The `.gemini/` surface only has `commands/` — Gemini does not
+   have a skills directory. Always-active skills are therefore
+   not natively discoverable on Gemini; discovery falls back to
+   the `AGENT.md` citation chain. Worth deciding whether to
+   author a `.gemini/skills/` convention (if Gemini supports
+   one) or accept the fallback as the design.
+
+**Disposition**: capture only — the investigation is pure
+operational hygiene, not blocking any product work. Pick up next
+time someone is in the area (e.g. when adding a new always-active
+skill, or during a `/jc-consolidate-docs` walk). 1/3 instance —
+will graduate to a register entry if the same confusion surfaces
+again from a different reader.
 
 ---
 

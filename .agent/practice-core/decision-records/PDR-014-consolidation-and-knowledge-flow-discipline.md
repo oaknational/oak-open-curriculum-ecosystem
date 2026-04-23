@@ -172,7 +172,7 @@ not force a single choice:
 
 | Composition | When to use | Example |
 |---|---|---|
-| `principle` + `rule` | Foundation invariant that needs active firing | *Misleading docs are blocking* + [`tsdoc-and-documentation-hygiene`](../../rules/tsdoc-and-documentation-hygiene.md) |
+| `principle` + `rule` | Foundation invariant that needs active firing | *Misleading docs are blocking* + [`documentation-hygiene`](../../rules/documentation-hygiene.md) |
 | `PDR` + `command rubric` | Doctrine ratified portably; fires at a specific workflow step | [PDR-026 §Landing target definition](PDR-026-per-session-landing-commitment.md) + `/session-handoff` close ritual |
 | `pattern` + `rule` | Empirical capture + active prevention at firing point | [`inherited-framing-without-first-principles-check`](../../memory/active/patterns/inherited-framing-without-first-principles-check.md) + [`plan-body-first-principles-check`](../../rules/plan-body-first-principles-check.md) |
 | `pattern` + `PDR` | Empirical observation + durable portable governance response | `passive-guidance-loses-to-artefact-gravity` + PDR-029 |

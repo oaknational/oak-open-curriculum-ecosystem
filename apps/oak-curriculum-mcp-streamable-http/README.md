@@ -136,6 +136,16 @@ constant `WIDGET_HTML_CONTENT` (in `src/generated/widget-html-content.ts`),
 injected via DI. The dev orchestrator regenerates this constant from widget
 sources automatically before booting the server.
 
+**Production runtime serves the same constant, not a file from `dist/`.**
+The pipeline is: `pnpm build:widget` invokes Vite (which writes the
+single-file widget to `.widget-build/`), then `scripts/embed-widget-html.js`
+generates the committed `src/generated/widget-html-content.ts` constant.
+At runtime, `src/index.ts` wraps `createApp` with
+`getWidgetHtml: () => WIDGET_HTML_CONTENT` — no filesystem read happens.
+The `dist/` artefacts contain the bundled JS only; the widget HTML is
+embedded in the JS bundle via the imported constant. This keeps the
+serverless cold path filesystem-free.
+
 `dev:widget-in-host` clones `@modelcontextprotocol/ext-apps` to
 `$TMPDIR/mcp-ext-apps` on first run and reuses it subsequently. Delete
 that directory to refresh: `rm -rf /tmp/mcp-ext-apps`. Requires `bun`.

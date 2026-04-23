@@ -100,7 +100,7 @@ artefact tier under PDR-032. Major landings across the arc:
   `register-identity-on-thread-join` + Cursor adapter (Session 4);
   `executive-memory-drift-capture` (Session 4);
   `plan-body-first-principles-check` (Session 1, front-loaded for
-  Sessions 2-3 coverage); `tsdoc-and-documentation-hygiene`
+  Sessions 2-3 coverage); `documentation-hygiene`
   (enforces "Misleading docs are blocking")
 - **Principles**: "Owner Direction Beats Plan"; "Misleading docs
   are blocking"; "Cardinal rule"

@@ -157,10 +157,10 @@ Review and report only. Do not modify code.
 **Format**: Plain Markdown. The filename becomes the slash command name.
 
 ```markdown
-Read and follow `.agent/commands/commit.md`.
+Read and follow `.agent/skills/commit/SKILL.md`.
 ```
 
-Invoked as `/jc-commit` in Claude Code.
+Invoked as the slash command derived from the filename in Claude Code.
 
 ---
 
@@ -320,11 +320,11 @@ review report. Do not modify code.
 | `name` | string | Skill slug |
 | `description` | string | Brief trigger description |
 
-**Example** (command adapter):
+**Example** (skill adapter):
 
 ```markdown
 ---
-name: jc-commit
+name: commit
 description: >-
   Create a well-formed commit for current changes with conventional
   message format.
@@ -332,7 +332,7 @@ description: >-
 
 # Commit (Codex)
 
-Read and follow `.agent/commands/commit.md`.
+Read and follow `.agent/skills/commit/SKILL.md`.
 ```
 
 **Note**: Codex reviewer roles live in repo-local project-agent config

@@ -1,0 +1,7 @@
+---
+description: Canonical documentation hygiene (misleading-doc detection, attribution on adoption, TSDoc presence).
+globs: '**/*.{ts,tsx,mts}'
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/documentation-hygiene.md`.

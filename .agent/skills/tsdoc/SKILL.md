@@ -26,7 +26,7 @@ Read these before making documentation changes:
 
 ## Canonical Constraints
 
-Follow `.agent/rules/tsdoc-and-documentation-hygiene.md` for the canonical tag, syntax, and comment-style rules.
+Follow `.agent/rules/documentation-hygiene.md` for the canonical tag, syntax, and comment-style rules.
 
 ## Documentation Boundary
 

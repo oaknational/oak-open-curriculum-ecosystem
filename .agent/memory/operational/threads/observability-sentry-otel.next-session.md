@@ -182,18 +182,42 @@ active plan, NOT the original probe-only flow above. The
 correction work-items must land before the probe is meaningful;
 the probe at the end is the acceptance gate.
 
-**Commit workflow tooling available** (added 2026-04-23 by Pippin):
+**Pre-flight before any L-8 work — land the staged
+skill-conversion + adapter-refactor commit first**: a session-end
+owner instruction (2026-04-23) deliberately deferred this commit
+to the next session: *"no need to commit, the next session can
+handle that"*. Run `git status --short` at session open; expect
+~19 staged entries scoped to the `commit` skill (canonical at
+`.agent/skills/commit/SKILL.md`, Cursor adapter at
+`.cursor/skills/commit/`, Codex adapter renamed from
+`.agents/skills/jc-commit/` to `.agents/skills/commit/`, three
+command adapters DELETED at `.claude/commands/jc-commit.md` +
+`.cursor/commands/jc-commit.md` + `.gemini/commands/jc-commit.toml`,
+plus the rewired references documented in
+[`../repo-continuity.md` §Last refreshed](../repo-continuity.md)).
+Also expect Sentry L-8 WIP files in the working tree
+(unstaged — `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts`
++ unit test, `packages/core/build-metadata/src/index.ts`, plus
+four NEW untracked files at `packages/core/build-metadata/src/build-info.ts`,
+`build-time-release.ts` and their `.unit.test.ts` siblings) —
+those belong to the L-8 Correction work-list (WS1+WS2 likely);
+keep them out of the skill-conversion commit and fold them into
+the appropriate work-item commit per the work-list.
+
+**Commit workflow** (refined 2026-04-23 by Pippin into the
+always-active `commit` skill at
+[`.agent/skills/commit/SKILL.md`](../../../skills/commit/SKILL.md)):
 the L-8 Correction work-list will produce ~8+ commits (one per
-work-item plus a probe commit). To avoid the Shell-tool
-stream-truncation pattern that bit Pippin's continuity-correction
-commits on 2026-04-23, use the workflow standard documented in
-[`AGENTS.md § Commit workflow helpers`](../../../../AGENTS.md):
-`scripts/check-commit-message.sh` for pre-validation,
-`git commit -F - >/tmp/commit.log 2>&1` for the commit itself,
-`scripts/log-commit-attempt.sh` to append a TSV row to the
-diagnostic log. Do NOT pre-prime the turbo cache via
-`bash .husky/pre-commit`; the turbo cache primes itself in the
-real commit and pre-priming wastes ~30s per commit.
+work-item plus a probe commit). The skill covers live commitlint
+constraints, pre-`git commit` validation via
+`scripts/check-commit-message.sh`, the Cursor-Shell-tool
+stream-truncation workaround (file-redirect commit invocation;
+applies only when running through the Cursor Shell tool), and
+post-commit logging via `scripts/log-commit-attempt.sh` into the
+tracked diagnostic substrate at
+[`.agent/memory/operational/diagnostics/commit-attempts.log`](../diagnostics/commit-attempts.log).
+Do NOT pre-prime the turbo cache via `bash .husky/pre-commit`
+(documented anti-workaround in the skill).
 
 1. **Ground First** per `start-right-quick` steps 1–6 (directives →
    start-here ADRs → active memory → operational memory → plans →

@@ -105,6 +105,15 @@ approaches before any code is written. This is often more
 valuable than post-implementation review because it avoids
 wasted effort on the wrong approach.
 
+**Invoke reviewers repeatedly across long or multi-phase work,
+not only at the end.** On long initiatives — multi-workstream
+plans, GO-style execution cadence, lanes that cross commits —
+treat reviewer dispatch as a mid-work practice, not a closing
+ritual. Re-invoke the relevant specialist (code-reviewer,
+architecture reviewers, security, type, etc.) at each natural
+phase boundary so feedback shapes the in-flight work, not just
+the post-mortem.
+
 ### Available Sub-agents
 
 Specialist sub-agents provide targeted reviews and insights.
@@ -266,11 +275,17 @@ pnpm check               # Canonical aggregate gate (all)
 
 ### Commit Discipline
 
-Use the `jc-commit` skill for commits — canonical at
-[`.agent/commands/commit.md`](../commands/commit.md). It enumerates the live
-commitlint constraints inline at draft time and format-checks before
-`git commit`. Adapters: `.claude/commands/jc-commit.md`,
-`.cursor/commands/jc-commit.md`, `.agents/skills/jc-commit/SKILL.md`.
+Use the `commit` skill for commits — canonical at
+[`.agent/skills/commit/SKILL.md`](../skills/commit/SKILL.md). It enumerates
+the live commitlint constraints inline at draft time, validates the drafted
+message via [`scripts/check-commit-message.sh`](../../scripts/check-commit-message.sh)
+BEFORE `git commit` (catches violations in ~1s before the ~34s pre-commit
+cycle), and logs every attempt via [`scripts/log-commit-attempt.sh`](../../scripts/log-commit-attempt.sh)
+into the tracked diagnostic substrate at
+[`.agent/memory/operational/diagnostics/commit-attempts.log`](../memory/operational/diagnostics/commit-attempts.log)
+for cross-session pattern visibility. Skill adapters:
+`.cursor/skills/commit/SKILL.md` (Cursor) and `.agents/skills/commit/SKILL.md`
+(Codex). Claude and Gemini discover via this directive.
 
 ## Architectural Understanding
 

@@ -152,6 +152,37 @@ asks for more, this command must not trigger:
    technical content, and surface emergent insight across
    experiences.
 
+   **6d. Sweep platform-specific entry points for drift.** Open
+   each of the platform-specific entry-point files at the repo root
+   — `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, and any analogous
+   platform entry point present in the repo — plus any host-specific
+   adapter entry-point (`.codex/AGENTS.md`, etc.). Each MUST contain
+   ONLY a heading + a one-line pointer to
+   [`.agent/directives/AGENT.md`](../directives/AGENT.md) (or the
+   host's canonical equivalent). Anything else is **drift**: an
+   instruction, fact, preference, or operational note that an agent
+   or user added directly to the entry point instead of routing it
+   through the canonical surfaces. Entry-point drift is particularly
+   insidious because every platform reads only its own entry point
+   first; a fact that lives only in `AGENTS.md` is invisible to
+   Claude, and vice versa.
+
+   For every piece of drift found, apply the
+   [ephemeral-to-permanent-homing methodology](ephemeral-to-permanent-homing.md):
+   classify the substance shape, match to a destination, surface
+   non-trivial moves to the owner, move the content, then strip the
+   entry point back to its canonical pointer shape. Per the user's
+   standing direction codified in that partial: *all content must be
+   moved to permanent homes or, if not useful, removed* — silent
+   deletion without homing is not the default.
+
+   The sweep is session-scoped because entry-point drift accrues
+   incrementally during sessions (a "quick note added to AGENTS.md"
+   is a recurring failure mode). Catching it at session close keeps
+   the canonical surfaces authoritative and prevents the slower
+   accumulation that `consolidate-docs` would otherwise discover at
+   thread-scoped depth.
+
 7. **Refresh cross-session coordination surfaces** (session-scoped
    touch on cross-session artefacts the session affected).
 

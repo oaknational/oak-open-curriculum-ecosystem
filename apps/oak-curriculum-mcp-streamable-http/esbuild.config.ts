@@ -20,6 +20,16 @@
  * ADR-163 §6 (amended by §L-8 WS3.1: outcome statement, not bespoke
  * mechanism).
  *
+ * §L-8 Correction (2026-04-23): four-arm branch on intent kind +
+ * `dist/build-info.json` persistence + warn-vs-throw fail-policy
+ * split. The `f9d5b0d2` shape exited 1 on every error kind, treating
+ * an absent optional `SENTRY_AUTH_TOKEN` as fatal even on credential-
+ * less rehearsals (3rd-instance-pending of
+ * `passive-guidance-loses-to-artefact-gravity`). Fail-policy now:
+ * vital-identity errors throw with the resolver's helpful message;
+ * optional-vendor-config-missing logs a `Sentry plugin skipped` line
+ * and continues so artefacts still emit.
+ *
  * Runs on Vercel via `tsx esbuild.config.ts` (the `build` script in
  * `package.json`); locally too, since `tsx` is already a workspace
  * devDependency. The Sentry plugin must be the LAST plugin in the
@@ -28,13 +38,21 @@
  * @packageDocumentation
  */
 
-import { build } from 'esbuild';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import { sentryEsbuildPlugin } from '@sentry/esbuild-plugin';
+import { build, type Plugin } from 'esbuild';
+import {
+  buildBuildInfo,
+  serialiseBuildInfo,
+  type ResolvedBuildTimeRelease,
+} from '@oaknational/build-metadata';
 import { createMcpEsbuildOptions } from './build-scripts/esbuild-config.js';
 import {
   createSentryBuildPlugin,
   type SentryBuildEnvironment,
   type SentryBuildPluginIdentity,
+  type SentryBuildPluginInputs,
 } from './build-scripts/sentry-build-plugin.js';
 
 const IDENTITY: SentryBuildPluginIdentity = {
@@ -51,42 +69,90 @@ const env = process.env as unknown as SentryBuildEnvironment;
 const intent = createSentryBuildPlugin(env, IDENTITY);
 
 if (!intent.ok) {
-  console.error('[esbuild.config] Sentry build-plugin intent error:', intent.error);
-  process.exit(1);
+  // Vital-identity error per the L-8 Correction `Corrected fail-policy`
+  // table. Thrown rather than `process.exit(1)` so Vercel's build log
+  // captures the helpful message + stack from the resolver. Some error
+  // variants (the ObservabilityConfigError arm) lack a `.message`
+  // field; print the whole discriminator so the operator gets enough
+  // context to act in either case.
+  throw new Error(
+    `[esbuild.config] Sentry build-plugin intent error: ${JSON.stringify(intent.error)}`,
+  );
 }
 
 const baseOptions = createMcpEsbuildOptions();
+const outdir = baseOptions.outdir ?? 'dist';
 
-if (intent.value.kind === 'disabled') {
-  console.log(`[esbuild.config] Sentry plugin skipped: ${intent.value.reason}`);
-  await build(baseOptions);
-} else {
-  const { inputs } = intent.value;
-  console.log(
-    `[esbuild.config] Sentry plugin enabled: release=${inputs.release.name} env=${inputs.release.deploy.env}`,
-  );
-  await build({
-    ...baseOptions,
-    plugins: [
-      sentryEsbuildPlugin({
-        org: inputs.org,
-        project: inputs.project,
-        authToken: inputs.authToken,
-        release: {
-          name: inputs.release.name,
-          finalize: true,
-          setCommits: {
-            auto: false,
-            commit: inputs.release.setCommits.commit,
-            repo: inputs.release.setCommits.repo,
-          },
-          deploy: { env: inputs.release.deploy.env },
-        },
-        sourcemaps: {
-          filesToDeleteAfterUpload: [...inputs.sourcemaps.filesToDeleteAfterUpload],
-        },
-        telemetry: inputs.telemetry,
-      }),
-    ],
+async function persistBuildInfo(release: ResolvedBuildTimeRelease): Promise<void> {
+  const info = buildBuildInfo({
+    release,
+    branch: env.VERCEL_GIT_COMMIT_REF,
+    now: new Date(),
   });
+  await mkdir(outdir, { recursive: true });
+  await writeFile(path.join(outdir, 'build-info.json'), serialiseBuildInfo(info));
+  console.log(
+    `[esbuild.config] build-info written: release=${info.release} env=${info.environment} source=${info.releaseSource}`,
+  );
+}
+
+function buildPluginArray(inputs: SentryBuildPluginInputs): Plugin[] {
+  // `sentryEsbuildPlugin`'s declared return type is `any` in
+  // `@sentry/esbuild-plugin@5.x`; we narrow at this seam so the
+  // composition root's `plugins` array stays `Plugin[]` and the rest
+  // of esbuild's option typing carries through.
+  const plugin = sentryEsbuildPlugin({
+    org: inputs.org,
+    project: inputs.project,
+    authToken: inputs.authToken,
+    release: {
+      name: inputs.release.name,
+      finalize: true,
+      setCommits: {
+        auto: false,
+        commit: inputs.release.setCommits.commit,
+        repo: inputs.release.setCommits.repo,
+      },
+      deploy: { env: inputs.release.deploy.env },
+    },
+    sourcemaps: {
+      filesToDeleteAfterUpload: [...inputs.sourcemaps.filesToDeleteAfterUpload],
+    },
+    telemetry: inputs.telemetry,
+  }) as Plugin;
+  return [plugin];
+}
+
+switch (intent.value.kind) {
+  case 'disabled': {
+    // Registration policy decided this build does not register a
+    // release (e.g. local dev without override pair). No release was
+    // resolved → no build-info to persist; no plugin to wire.
+    console.log(`[esbuild.config] Sentry plugin skipped: ${intent.value.reason}`);
+    await build(baseOptions);
+    break;
+  }
+  case 'skipped': {
+    // Optional vendor config (SENTRY_AUTH_TOKEN) missing on a non-
+    // production build. Persist build-info for downstream debugging,
+    // log the warn line, omit the plugin so the build still produces
+    // an artefact.
+    await persistBuildInfo(intent.value.release);
+    console.warn(
+      `[esbuild.config] Sentry plugin skipped: ${intent.value.reason} ` +
+        '(non-production build proceeding without release registration; ' +
+        'set SENTRY_AUTH_TOKEN to enable upload).',
+    );
+    await build(baseOptions);
+    break;
+  }
+  case 'configured': {
+    await persistBuildInfo(intent.value.release);
+    const { inputs } = intent.value;
+    console.log(
+      `[esbuild.config] Sentry plugin enabled: release=${inputs.release.name} env=${inputs.release.deploy.env}`,
+    );
+    await build({ ...baseOptions, plugins: buildPluginArray(inputs) });
+    break;
+  }
 }
