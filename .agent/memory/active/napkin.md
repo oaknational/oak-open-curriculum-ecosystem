@@ -8,6 +8,120 @@ live in the register at
 
 ---
 
+## 2026-04-23 — speculative diagnosis when the artefact is paginated (L-8 WI-6 follow-up)
+
+**Observation**: while monitoring the §L-8 WS1 acceptance probe for
+deployment `dpl_5scz5r3SmEmaybHosoWEyySuabR6` (commit `c20477e8`,
+preview build of `feat/otel_sentry_enhancements`), the agent's first
+build-logs call used the MCP tool default `limit: 100`. The returned
+~53 KB / 1406-line slice did not reach the
+`@oaknational/oak-curriculum-mcp-streamable-http:build` task, so the
+expected `[esbuild.config] Sentry plugin enabled: …` line was absent
+from the slice the agent saw. The agent then leapt to a specific
+hypothesis (`SENTRY_AUTH_TOKEN` missing from the Vercel project env)
+and started reaching for `vercel env ls` to test it — without first
+pulling the rest of the artefact. Owner intervened: *"for goodness
+sake... fetch the FULL build log and filter for warning logs"*. The
+second call with `limit: 5000` returned ~2 MB / 53 830 lines; a
+filter on `"level": "warning"` immediately surfaced (a) Vercel's own
+warning naming the exact problem, (b) the `[esbuild.config] Sentry
+plugin skipped: auth_token_missing` reason from the plugin itself,
+and (c) an 1,300-line block listing every affected task and every
+affected `SENTRY_*` env var. Diagnosis: `turbo.json`
+`globalPassThroughEnv` does not include `SENTRY_*`, so Turbo's
+hash-stability rule strips the tokens before any task runs — root
+cause was in repo config, not Vercel config. Owner reading: *"for me
+the story is you were jumping around guessing instead of checking
+the logs for error messages"*.
+
+### Surprise
+
+- **Expected**: per the systematic-debugging skill that exists in
+  this repo (`.agents/skills/systematic-debugging/SKILL.md`,
+  reproduce → isolate → hypothesise → verify → fix), the agent
+  should have read the full artefact before forming a hypothesis,
+  and should have read the skill before starting the WI in the first
+  place. The build log itself names the cause in plain text and
+  links to the exact docs page.
+- **Actual**: the agent treated the head of a paginated artefact as
+  representative of the whole, formed a hypothesis from the absence
+  of the expected line rather than from the presence of any error
+  evidence, and started probing the hypothesis (Vercel env CLI)
+  before exhausting the cheaper read of the existing artefact.
+- **Behaviour change**: when an MCP tool returns log/diagnostic
+  output and is paginated or limit-bounded, the first action is to
+  re-call with a high explicit limit (or stream-to-file) and
+  filter the *full* artefact on structured signal fields
+  (`"level": "warning"`, `"level": "error"`, exit-code blocks)
+  before forming any hypothesis about cause. Speculative diagnosis
+  is only legitimate when the artefact has been read in full and
+  is silent on the question.
+
+### Implementation evidence
+
+- First call: `get_deployment_build_logs` with default `limit` →
+  `agent-tools/0c2a2125-…txt` (43 KB, 1406 lines, stops mid-way
+  through dependency builds; streamable-http task not reached).
+- Second call: `get_deployment_build_logs` with `limit: 5000` →
+  `agent-tools/117578d8-…txt` (1.97 MB, 53 830 lines, full pipeline
+  including final Turbo summary block at lines 52264–53643).
+- Filter that surfaced the answer (regex-on-structured-field, not
+  regex-on-text): `"level":\s*"(warning|error)"` with
+  `-B 15 -A 2` for context.
+- Diagnosis evidence:
+  - L52264: ` WARNING  finished with warnings`
+  - L52279: `Warning - the following environment variables are set on
+    your Vercel project, but missing from "turbo.json"…`
+  - L52308–53643: per-task `[warn] <pkg>#build` blocks listing
+    `SENTRY_MODE`, `SENTRY_DSN`, `SENTRY_TRACES_SAMPLE_RATE`,
+    `SENTRY_AUTH_TOKEN` for all 18 build tasks.
+  - L52250: `[esbuild.config] Sentry plugin skipped: auth_token_missing`
+    (the plugin's own correct fail-policy message — would on its own
+    have pointed at the build environment, not at the Vercel project
+    config).
+- Repo config hole: `turbo.json:7-16` `globalPassThroughEnv`
+  declares `OAK_API_KEY`, `LOG_LEVEL`, `OAK_API_URL`, `CLERK_*`,
+  `ELASTICSEARCH_*` — no `SENTRY_*`.
+
+### Pattern interaction
+
+- This is a fresh instance of the candidate pattern
+  `agent-falls-back-to-speculation-when-artefact-is-paginated`.
+  Distinct from `passive-guidance-loses-to-artefact-gravity`
+  (which is about *documented* guidance losing to artefact
+  gravity); this one is about the *agent itself* substituting
+  guessing for reading when reading looks expensive. First
+  observed instance — single instance, far from the 3rd-instance
+  graduation bar.
+- Adjacent to but not the same as the previously documented
+  Cursor-Shell-tool stream-handover artefact (which was about the
+  *Shell tool* truncating output): here the artefact was complete
+  on the MCP server, the agent just didn't ask for enough of it.
+- Falsifiability: if in any future session with a paginated MCP
+  artefact the agent forms a causal hypothesis from "expected line
+  absent in head of artefact" without first re-pulling at a higher
+  limit and filtering on structured signal fields, the pattern
+  recurs and earns instance #2.
+
+### Operational consequence for §L-8 WS1
+
+- WI-6 acceptance probe: split outcome. `build-info` line is
+  exactly correct (`release=preview-feat-otel-sentry-enhancements-c20477e
+  env=preview source=preview_branch_sha`) → canonical resolver works.
+  Sentry plugin took `skipped: auth_token_missing` arm, not the
+  contracted `enabled:` arm → vendor-config passthrough wiring is
+  missing.
+- WI-7 (Sentry UI verification): blocked until WI-6 produces the
+  `enabled:` arm.
+- L-8 Correction itself grew a fifth root cause (vendor-config
+  passthrough discipline) that the original L-8 enumeration
+  (version-resolution drift, fail-policy inversion + the three
+  WI 1-5 deliverables) did not capture. ADR-163 §6/§7 amendment
+  in WI-8 should include this lesson alongside the
+  version-resolution boundary.
+
+---
+
 ## 2026-04-23 — entry-point sweep born inside the same commit that landed the pattern it counters (Pippin third session)
 
 **Observation**: the entry-point sweep (`session-handoff` step 6d

@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
 **Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
-**Last Updated**: 2026-04-20
+**Last Updated**: 2026-04-23
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---

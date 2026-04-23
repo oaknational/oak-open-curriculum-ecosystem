@@ -67,6 +67,9 @@ apps/oak-search-cli/bulk-downloads/**
 **/reports/
 **/temp-secrets/
 
+# Build artefacts (gitignored, regenerated)
+**/.widget-build/
+
 # Agent artifacts
 .agent/
 .agent/cache/
