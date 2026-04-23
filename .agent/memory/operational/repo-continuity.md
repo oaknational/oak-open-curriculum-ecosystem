@@ -192,6 +192,25 @@ feedback` row updated; Deep consolidation status updated with
   [PDR-026](../../practice-core/decision-records/PDR-026-per-session-landing-commitment.md);
   rituals live in `start-right-quick` + `session-handoff`.
 
+**Side-channel same-day session (2026-04-23, cursor-claude-opus-4-7,
+no-thread audit-and-capture)**: a separate short session ran
+`pnpm -r outdated`, analysed Clerk + MCP-related changelogs
+(`@clerk/express`, `@clerk/backend`, `@clerk/mcp-tools`,
+`@modelcontextprotocol/ext-apps`, `@modelcontextprotocol/sdk`
+including 2.0-alpha direction), and authored one new queued plan:
+[`sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md`](../../plans/sdk-and-mcp-enhancements/current/clerk-mcp-tools-and-ext-apps-bumps.plan.md).
+The plan covers four available bumps in
+`apps/oak-curriculum-mcp-streamable-http`, captures `AppOptions.strict`
+adoption + ext-apps 1.7.0 capabilities + MCP SDK 2.0 evaluation as
+forward candidates with falsifiable promotion triggers, and
+references the `verify-clerk-token.unit.test.ts` version-bump-reminder
+canary as the Phase 2 gate. Collection READMEs updated. No thread
+joined; no commit landed; no consolidation trigger crossed (single
+queued plan + two README index rows). The `observability-sentry-otel`
+thread state below is unchanged by this side-channel session. Owner
+direction at session end: leave the plan queued and run a short
+session-handoff.
+
 ## Active threads
 
 A **thread** is the continuity unit — a named stream of work that
@@ -211,7 +230,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | _unattributed_ / _unknown_ / _unknown_ / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-and-implementation / 2026-04-23 (third session — L-8 Correction WI 1-5 LANDED in `fb047f86` [canonical `resolveBuildTimeRelease` in new `@oaknational/build-metadata` workspace; typed `SentryBuildPluginIntent` discriminated union; `esbuild.config.ts` four-arm switch; three-branch dry build verified; validate-script removal scope-corrected by owner to MCP HTTP only] + session-scoped continuity folded into same commit [entry-point sweep landing `AGENTS.md`/`CLAUDE.md`/`GEMINI.md` to pure pointers per new `session-handoff` §6d + `ephemeral-to-permanent-homing` shared partial + `documentation-hygiene` rule rename across canonical/Cursor/Claude adapters + 3 docs-propagation edits homing AGENTS.md facts]; WI 6-8 [push + Vercel probe + Sentry UI verify + ADR-163 amendment] PENDING for next session) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | _unattributed_ / _unknown_ / _unknown_ / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-and-doctrine-landing / 2026-04-23 (latest session — WI-7 Vercel preview probe ATTEMPTED: branch pushed, build green with `enabled`-arm Sentry plugin output, lambda crashed with `FUNCTION_INVOCATION_FAILED` on every request; root cause established as Vercel Express adapter contract violation in `apps/oak-curriculum-mcp-streamable-http/src/index.ts`; two `import-is-undefined` esbuild build warnings named the violation at build time and were acknowledged-and-deferred — first hard cross-session instance of `acknowledged-warnings-deferred-to-the-stage-they-explode-in`. Architecture-reviewer convergence ran (Fred + Betty parallel; converged on every material finding). LANDED THIS COMMIT: `.agent/rules/no-warning-toleration.md` (full operational doctrine; alwaysApply), `.agent/directives/principles.md` §Code Quality bullet, `.agent/plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md` (nine phases; phase-aligned reviewer cadence at three anchors per phase; build-vs-buy attestation tables; Sentry Uptime Monitoring / Cron Monitors tool selection; small earlier edits in this session window: `turbo.json` `globalPassThroughEnv` + Sentry envvars; `.prettierignore` + `**/.widget-build/`). Phases 1-9 PENDING for next session — Phase 1 (build self-assertion: esbuild metafile + warnings-as-errors + `default`-export contract) is the next safe step) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -253,19 +272,30 @@ The `observability-sentry-otel` thread is branch-primary on
 totals, post-§L-8 forward path, active tracks, promotion watchlist)
 lives in
 [`threads/observability-sentry-otel.next-session.md § Lane state`](threads/observability-sentry-otel.next-session.md).
-§L-8 WS1 + WS2 + WS3.1 LANDED in commit `f9d5b0d2`
+
+**Timeline**: §L-8 WS1 + WS2 + WS3.1 LANDED in `f9d5b0d2`
 (2026-04-21); 2026-04-22 Vercel preview probe FAILED with
-`missing_app_version`; L-8 Correction subsection authored
-2026-04-22 (owner-directed) at the end of
-[`sentry-observability-maximisation-mcp.plan.md`](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md);
-**WI 1-5 of the correction LANDED LOCALLY in commit `fb047f86`**
-(2026-04-23 — canonical resolver + persistence + plugin refactor
-+ esbuild.config switch + validate-script removal from MCP HTTP
-build only). Next session begins at WI 6 (push branch + Vercel
-preview probe), proceeds to WI 7 (Sentry UI verification — release
-+ commits + Artifact Bundle + deploy event), and closes at WI 8
-(ADR-163 §6/§7 amendment recording the version-resolution
-boundary discipline contract).
+`missing_app_version`; L-8 Correction WI 1-5 LANDED LOCALLY in
+`fb047f86` (2026-04-23); WI-6 Vercel preview probe RAN
+2026-04-23 — build green, **runtime lambda crashed
+`FUNCTION_INVOCATION_FAILED`**; root cause established as a
+Vercel Express adapter contract violation
+(`apps/oak-curriculum-mcp-streamable-http/src/index.ts`
+default-export shape) named at build time by two
+acknowledged-and-deferred esbuild warnings.
+
+**Next session begins** at Phase 1 of
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+— build self-assertion (esbuild metafile, warnings-as-errors,
+`default`-export contract assertion). The plan absorbs the
+remaining L-8 Correction work-items (WI-7 Sentry UI
+verification → Phase 6; WI-8 ADR-163 §6/§7 amendment → Phase
+7) and unblocks the existing `synthetic-monitoring.plan.md`
+lane (Phase 5: Sentry Uptime Monitoring tool-selection
+recorded; basic 2xx-status probe is GA, response-body
+Verification is Sentry Early Adopter). Three-anchor reviewer
+cadence per phase (during planning, after each significant
+change, before session close).
 
 ## Current session focus
 
@@ -647,35 +677,59 @@ Non-goals for next session:
 
 ## Next safe step
 
-**Resume the `observability-sentry-otel` thread — push the
-branch and run the Vercel acceptance probe (WI 6), verify the
-Sentry UI surfaces the resulting release + commits + deploy
-event (WI 7), and amend ADR-163 §6/§7 to record the
-version-resolution boundary-discipline contract (WI 8)**. WI
-1-5 of the L-8 Correction work-list LANDED LOCALLY in commit
-`fb047f86` (2026-04-23): the canonical `resolveBuildTimeRelease`
-resolver in new workspace package `@oaknational/build-metadata`,
-persistence to `dist/build-info.json`, the typed
-`SentryBuildPluginIntent` discriminated union (`disabled` /
-`skipped` / `configured`), the `esbuild.config.ts` four-arm
-switch (with the three-branch dry build verified locally), and
-the `validate-root-application-version.mjs` pre-flight removal
-from the MCP HTTP build script only (search-cli left on tsup
-with the pre-flight intact per the WI-5 owner-correction). Three
-deferred follow-ons recorded in the active plan's L-8 Correction
-§Deferred follow-on subsection (search-cli → esbuild + canonical
-resolver migration; converge remaining deployable workspaces;
-delete the validate-script when no consumer remains). See
-[`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md)
-for the full landing target, session shape (push → observe →
-verify → amend), pre-flight (`SENTRY_AUTH_TOKEN` set on Vercel
-`poc-oak-open-curriculum-mcp` for production / preview /
-development), and pattern reminders (8th potential instance of
-`inherited-framing-without-first-principles-check` AVOIDED this
-session by WI-3 + WI-4 taking the discriminated-union route over
-the inherited fail-fast Result.error shape; entry-point sweep
-landing as installed countermeasure for
-`passive-guidance-loses-to-artefact-gravity`).
+**Resume the `observability-sentry-otel` thread at Phase 1 of
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+— build self-assertion**. The 2026-04-23 WI-6 Vercel preview
+probe ran; the build went green; the runtime lambda crashed
+`FUNCTION_INVOCATION_FAILED` on every request. Root cause:
+`apps/oak-curriculum-mcp-streamable-http/src/index.ts` does
+not honour Vercel's documented Express adapter contract
+(no `default` export of the configured Express app). Two
+esbuild `import-is-undefined` warnings named the violation at
+build time and were acknowledged-and-deferred. This is the
+first hard cross-session instance of
+`acknowledged-warnings-deferred-to-the-stage-they-explode-in`
+and the trigger for the same-session warnings-doctrine landing
+([`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md)
++ `principles.md` §Code Quality bullet) and the new nine-phase
+plan above.
+
+**Phase 1 binding target** for the next session:
+`apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`
+writes the esbuild metafile, gates on
+`result.warnings.length === 0`, AND asserts the `dist/server.js`
+output exports `default` (Vercel Express adapter contract).
+Phase 2 (canonical layout refactor — `server.ts` + `main.ts`
++ `sentry-init.ts`; delete `bootstrap-app.ts` + `server-
+runtime.ts` + the combined `index.ts`) is a stretch goal.
+
+**Reviewer cadence on resume** (per owner directive
+2026-04-23): each phase has three anchors per phase — during
+planning, after each significant change, before session close.
+The plan's §Reviewer Scheduling table names the specialists
+(`assumptions-reviewer`, `code-reviewer`, `sentry-reviewer`,
+`type-reviewer`, `architecture-reviewer-fred`,
+`architecture-reviewer-betty`, `architecture-reviewer-wilma`,
+`docs-adr-reviewer`, `release-readiness-reviewer`) at each
+anchor for each phase. No batching at the end.
+
+The L-8 Correction WI 7-8 work-items are absorbed into Phases
+6-7 of the new plan (WI-7 Sentry UI verification rerun once
+the canonical layout lands; WI-8 ADR-163 §6/§7 amendment
+folds three lessons together — version-resolution boundary,
+vendor-config passthrough, entry-point boundary, plus the
+new warnings doctrine). The `synthetic-monitoring.plan.md`
+lane unblock is Phase 5 (records the Sentry Uptime Monitoring
+tool-selection; on-disk file name preserved this commit;
+rename to a Sentry-taxonomy-aligned name deferred to a separate
+documentation-housekeeping pass per the owner's correction
+that "synthetics is the wrong term in the Sentry world").
+Pre-flight: `SENTRY_AUTH_TOKEN` already set on Vercel
+`poc-oak-open-curriculum-mcp` (production / preview /
+development) per prior session, AND now passed through by
+TurboRepo via `globalPassThroughEnv` in `turbo.json` — the
+plugin reaches the build successfully, and the build is green;
+the failing surface is now strictly the runtime contract.
 
 **Commit workflow tooling available** (refined 2026-04-23 by
 Pippin's second session into the canonical `commit` skill at
@@ -714,31 +768,47 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
-**Status (2026-04-23 Pippin third session — `observability-sentry-otel`
-session-handoff closeout after L-8 Correction WI 1-5 landing)**:
-**not due — same-thread same-day continuation; deep consolidation
-walks already completed earlier today (2026-04-23 second session)
-and yesterday (2026-04-22 same-thread close); this session's
-substance was implementation landing (WI 1-5 of L-8 Correction)
-plus session-scoped continuity work folded into the same commit
-(entry-point sweep birth + homing partial + documentation-hygiene
-rule rename + 3 docs-propagation edits); no consolidation triggers
-crossed the threshold today** (no new pattern reached its 3rd
-cross-session instance; the 8th potential `inherited-framing`
-instance was AVOIDED by WI-3 + WI-4 taking the
-discriminated-union route over the inherited Result.error shape;
-the entry-point-sweep step birth is a freshly-installed
-artefact-side countermeasure to
-`passive-guidance-loses-to-artefact-gravity` rather than a
-graduation event; one new PDR-shaped candidate captured below
-under §Pending-graduations register additions (2026-04-23 third
-session); napkin grew by ~50 lines this session and the rotation
-falsifiability re-fires forward unchanged from yesterday).
+**Status (2026-04-23 Pippin latest session —
+`observability-sentry-otel` session-handoff closeout after WI-7
+Vercel preview probe RAN, lambda crashed `FUNCTION_INVOCATION_FAILED`,
+warnings doctrine landed, new nine-phase plan authored)**:
+**not due — same-thread same-day continuation; deep
+consolidation walks already completed earlier today (Pippin's
+prior turn) and yesterday (2026-04-22 same-thread close);
+this session's substance was diagnosis (WI-7 lambda crash root
+cause established as Vercel Express adapter contract violation),
+doctrine landing
+([`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md)
++ `principles.md` §Code Quality bullet + `.cursor/rules/no-
+warning-toleration.mdc`), execution-plan authoring
+([`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+nine phases with phase-aligned reviewer cadence at three
+anchors per phase + build-vs-buy attestation tables), and
+research input recording (Sentry Uptime Monitoring tool-
+selection for the existing `synthetic-monitoring.plan.md`
+lane). No consolidation trigger crossed the threshold today**
+(no pattern reached its 3rd cross-session instance — the
+`acknowledged-warnings-deferred-to-the-stage-they-explode-in`
+pattern recorded its first hard cross-session instance and is
+now the doctrine's first enforcement target, NOT a graduation
+event; the doctrine landing is a same-day artefact-side
+countermeasure to that named pattern; one new amendment-
+candidate captured below under §Pending-graduations register
+additions (2026-04-23 latest session)).
+
 Findings and pending-graduations register additions for today's
-session are appended at
-[§Pending-graduations register additions (2026-04-23 third session)](#pending-graduations-register-additions-2026-04-23-third-session)
-below the existing 2026-04-22 + 2026-04-23-second-session walk
+latest session are appended at
+[§Pending-graduations register additions (2026-04-23 latest session)](#pending-graduations-register-additions-2026-04-23-latest-session)
+below the existing 2026-04-22 + earlier 2026-04-23 walk
 records.
+
+### Pending-graduations register additions (2026-04-23 latest session)
+
+One amendment-candidate surfaced this session:
+
+| captured-date | source-surface | graduation-target | trigger-condition | status |
+| --- | --- | --- | --- | --- |
+| 2026-04-23 (latest) | [`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md) + [`principles.md` §Code Quality](../../directives/principles.md) + [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) §Phase 1 (build self-assertion) + napkin §"acknowledged-warnings-deferred-to-the-stage-they-explode-in" pattern instance #1 (the WI-7 chain) | ADR amendment to [ADR-163 §6 / §7](../../../docs/architecture/architectural-decisions/163-build-pipeline-and-source-map-handling.md) folding three lessons together — version-resolution boundary discipline (already in flight as L-8 WI-8), vendor-config passthrough discipline (`turbo.json` `globalPassThroughEnv` proven 2026-04-23), entry-point boundary contract (Vercel Express adapter `default` export proven 2026-04-23) — with a gate-mapping table showing which build-time / runtime gate enforces each contract. **Phase 7 of the new plan owns this**, not the existing L-8 lane. | Phase 7 of the new plan reaches its anchor; ADR-163 amendment lands with the three contracts plus the gate-mapping table. | pending (own-phase scheduled) |
 
 ### Pending-graduations register additions (2026-04-23 third session)
 

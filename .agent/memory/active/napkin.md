@@ -8,6 +8,177 @@ live in the register at
 
 ---
 
+## 2026-04-23 — warnings-are-not-deferrable codified + first hard instance (L-8 WI-7 lambda boot crash)
+
+**Observation**: deployment `dpl_71SfAcKiezKiXzmKMtpaUgVFxhWA` (commit
+`216a7fd2`, the deploy that flipped the Sentry esbuild plugin into
+its `enabled` arm) crashes on every request with the Vercel platform
+marker `FUNCTION_INVOCATION_FAILED`. The runtime log Body, once
+exfiltrated by the owner from the Vercel dashboard (the
+`get_runtime_logs` MCP tool's table mode truncates Body alphabetically
+behind `SpanId`), names the cause in one line: *"Invalid export found
+in module '/var/task/apps/oak-curriculum-mcp-streamable-http/dist/index.js'.
+The default export must be a function or server. Node.js process exited
+with exit status: 1."* The previous deploy (`c20477e8`, plugin in
+`skipped` arm) returned 200 from the same `dist/index.js` source.
+`src/index.ts` has not been edited since the tsup → esbuild migration
+commit `f9d5b0d2`.
+
+The `enabled`-arm bundle injects wrapper modules that import `default`
+from the entry chunks. Two esbuild warnings printed by
+`@sentry/esbuild-plugin` at build-time named the exact problem:
+
+```text
+▲ [WARNING] Import "default" will always be undefined because there is no matching export in "src/application.ts" [import-is-undefined]
+▲ [WARNING] Import "default" will always be undefined because there is no matching export in "src/index.ts" [import-is-undefined]
+```
+
+The agent observed both warnings in the WI-6 acceptance sweep, logged
+them as *"flagged for verification in WI-7"*, and proceeded. Two
+exchanges later the warnings became `FUNCTION_INVOCATION_FAILED` on
+every request.
+
+### Doctrine codified
+
+Owner reading: *"DO NOT IGNORE WARNINGS this is now repo doctrine."*
+
+Repo discipline going forward:
+
+- Build-time warnings emitted by canonical vendor plugins are not
+  deferrable. They are the cheap, early version of the runtime
+  failure they name.
+- A warning that the agent acknowledges and plans to "verify later"
+  is to be treated as a blocking failure for the current work-item;
+  the verification has to land before the WI closes, not after.
+- The L-8 vendor-config passthrough lesson and this entry-point
+  default-export lesson are two surfaces of the same boundary
+  discipline (build output → runtime contract). ADR-163 §6/§7 WI-8
+  amendment now folds in both.
+
+### Pattern instance — `acknowledged-warnings-deferred-to-the-stage-they-explode-in` (#1 hard instance)
+
+Distinct from `passive-guidance-loses-to-artefact-gravity` (which
+covers documented guidance that loses to operational artefacts) and
+from `agent-falls-back-to-speculation-when-artefact-is-paginated`
+(which covers reading too little of an existing artefact). This
+pattern covers an even cheaper failure: the agent saw the explanatory
+diagnostic at exactly the right time (build-log warning at build
+completion) and chose to time-shift it.
+
+Falsifiability: if a future session encounters a vendor build
+plugin's `[…]` warning class, acknowledges the warning, defers
+verification to a later WI, and the warning then surfaces as a
+runtime crash at the deferred WI's stage, the pattern recurs and
+earns instance #2.
+
+### Architecture-reviewer convergence
+
+Dispatched `architecture-reviewer-fred` (boundary discipline) and
+`architecture-reviewer-betty` (long-term cohesion) in parallel.
+Independent verdicts converge on every material point:
+
+- The two-entry-point split (`src/index.ts` runner + `src/application.ts`
+  factory) is accidental cohabitation, not principled cohesion. The
+  smoke harness's reach-around to `dist/application.js` is the
+  symptom: the harness cannot trust the production entry-point to be
+  importable, and Vercel imports the entry-point the harness
+  refuses.
+- `src/bootstrap-app.ts` (54 LoC + tests) deletes entirely; top-level
+  await throws produce a more informative crash on both Vercel and
+  Node than the wrapper's structured log + `process.exit(1)`.
+- `src/server-runtime.ts` (160 LoC) collapses to ~20 LoC of local-dev-
+  only listener glue (`src/main.ts`); SIGTERM/SIGINT handlers race
+  Sentry SDK's own shutdown flush rather than augmenting it.
+- The `http.createServer(app).listen(port)` wrapper for an Express 5
+  EADDRINUSE quirk is canonical-pattern-compatible already
+  (`server.on('error', …)` on the value `app.listen(port)` returns).
+- Canonical Vercel layout for this app: `src/server.ts` exports
+  `default = await createApp(…)` (the Vercel-imported artefact),
+  `src/main.ts` does the local-Node listener, `src/sentry-init.ts`
+  is loaded via `--import` for ESM auto-instrumentation (Sentry's
+  documented contract per `docs.sentry.io/platforms/javascript/guides/express/install/esm/`).
+- Smallest correct CI gate: an in-process import test
+  (`expect(typeof bundle.default).toBe('function')` against
+  `dist/server.js`), wired into the existing test stage. The
+  `server-harness.js` harness gets repointed at `dist/server.js`
+  and joins CI as a slower companion smoke gate.
+- ADR-163 §6/§7 WI-8 amendment folds in entry-point boundary
+  discipline + non-deferrable-warnings doctrine alongside the
+  existing vendor-config passthrough lesson.
+
+Net delta of the canonical refactor: ≈−272 LoC in
+`apps/oak-curriculum-mcp-streamable-http/src/{index,server-runtime,bootstrap-app}.ts`,
++~60 LoC across `src/{server,main,sentry-init}.ts`. Plus −1 deferred
+warning class. Plus the missing CI gate that turns the next
+build-pipeline shape change into a PR-time failure rather than a
+deploy-time crash.
+
+### Resolution turn — doctrine landed + execution plan written + Sentry synthetics question answered
+
+Owner request triggered three artefacts in one commit:
+
+1. **Doctrine elevated to repo level** (this commit):
+   - `.agent/rules/no-warning-toleration.md` (full operational rule
+     body covering build / lint / type-check / test / dependency
+     graph / runtime / monitoring surfaces; `alwaysApply: true`).
+   - `.cursor/rules/no-warning-toleration.mdc` (Cursor pointer with
+     `alwaysApply: true`).
+   - `.agent/directives/principles.md` §Code Quality — one new
+     bullet under disabled-checks discipline, deliberately concise
+     to avoid bloating the file ("No warning toleration, anywhere",
+     with a reference to the rule for elaboration).
+2. **Execution plan that closes every reviewer finding**:
+   `.agent/plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`
+   — nine phases (doctrine landing → build self-assertion → canonical
+   refactor → type-level satisfies clause → smoke harness repoint
+   → synthetic-monitoring lane unblock → Vercel preview probe →
+   ADR-163 §6/§7 amendment → reviewer cadence → consolidation),
+   phase-aligned reviewer schedule (assumptions-reviewer pre-execution,
+   sentry-reviewer + code-reviewer per phase, architecture-reviewer-
+   wilma at the deletion phase, type-reviewer at the satisfies
+   phase, docs-adr-reviewer + architecture-reviewer-betty at the
+   ADR phase, release-readiness-reviewer at close), build-vs-buy
+   attestation table with rejected alternatives, deterministic
+   validation commands per task. Phase 0 (doctrine landing) is
+   marked in-progress in this commit; all subsequent phases pending.
+3. **Synthetic monitoring question answered** (owner: *"does sentry
+   support synthetics? That would seem like a sensible place to
+   monitor the health endpoint"*): yes — **Sentry Uptime Monitoring**
+   (<https://docs.sentry.io/product/uptime-monitoring/>). First-party,
+   geographic HTTP probes 1-min cadence, response assertions on
+   status/headers/JSON body, alert routing through standard Sentry
+   issue triage, and `uptime.request` spans that root distributed
+   traces (so a probe failure is one click from the runtime trace
+   it caused). Free quota — uptime spans don't count against the
+   standard span quota. Rejected alternatives: GitHub Actions cron
+   (no geographic distribution, custom alert plumbing, no trace
+   correlation), UptimeRobot/Pingdom (third-party vendor surface,
+   no Sentry trace correlation, new secrets to rotate), bespoke
+   Vercel cron route (would probe itself if hosted in the same
+   lambda).
+
+**Scope-overlap discovery**: a separate plan
+`.agent/plans/observability/current/synthetic-monitoring.plan.md`
+already owns the synthetic-monitoring lane (blocked since 2026-04-18
+on a tool-selection decision), and additionally scopes a *working
+probe* (executes one MCP tool call end-to-end) per ADR-162 §5.6.
+The new plan's Phase 5 was therefore refactored from "build the
+Sentry Uptime monitor" to "unblock the synthetic-monitoring lane
+by recording the tool-selection decision (Sentry Uptime for the
+uptime layer; Sentry Cron Monitors as candidate for the working-
+probe layer)" — so neither plan duplicates the other's acceptance
+criteria.
+
+Falsifiability for this resolution: if a future session re-asks
+"how do we monitor the health endpoint" without the
+synthetic-monitoring lane having been picked up, the
+recurrence-prevention loop has not closed and the unblock was
+inert. If the next vendor-plugin warning class is acknowledged
+and deferred to the next WI, the doctrine is inert and earns
+instance #2 of the pattern.
+
+---
+
 ## 2026-04-23 — speculative diagnosis when the artefact is paginated (L-8 WI-6 follow-up)
 
 **Observation**: while monitoring the §L-8 WS1 acceptance probe for
@@ -69,7 +240,7 @@ the logs for error messages"*.
   regex-on-text): `"level":\s*"(warning|error)"` with
   `-B 15 -A 2` for context.
 - Diagnosis evidence:
-  - L52264: ` WARNING  finished with warnings`
+  - L52264: `WARNING  finished with warnings`
   - L52279: `Warning - the following environment variables are set on
     your Vercel project, but missing from "turbo.json"…`
   - L52308–53643: per-task `[warn] <pkg>#build` blocks listing
@@ -125,8 +296,8 @@ the logs for error messages"*.
 ## 2026-04-23 — entry-point sweep born inside the same commit that landed the pattern it counters (Pippin third session)
 
 **Observation**: the entry-point sweep (`session-handoff` step 6d
-+ the `ephemeral-to-permanent-homing` shared partial + the strip
-of `AGENTS.md` / `CLAUDE.md` / `GEMINI.md` to pure pointers)
+plus the `ephemeral-to-permanent-homing` shared partial plus the
+strip of `AGENTS.md` / `CLAUDE.md` / `GEMINI.md` to pure pointers)
 landed in the same atomic commit (`fb047f86`) as the L-8
 Correction WI 1-5 implementation. The structural shape: a
 ritual-moment markdown step that names an authoritative source
@@ -282,7 +453,7 @@ removed the `&&` call from `apps/oak-search-cli/`'s build script
 too, on the reasoning that "if the script is gone, every consumer
 must lose the call". The owner caught the over-reach: removing the
 pre-flight from `oak-search-cli` *without* migrating it to esbuild
-+ canonical resolver leaves search-cli with the original
+plus the canonical resolver leaves search-cli with the original
 `missing_app_version`-style drift the L-8 Correction was designed
 to repair. The principled options are:
 
@@ -945,7 +1116,7 @@ reference-rehoming first per-file disposition pass.
 
 The Session 6 close is **not the doctrine-consolidation arc
 close**. The arc closes Session 7 with Phases D + E + F + Batch 3
-+ rehoming-plan first pass. The reformation absorbed the budget;
+and the rehoming-plan first pass. The reformation absorbed the budget;
 this is named and falsifiable per the deferral-honesty rule body.
 
 ---

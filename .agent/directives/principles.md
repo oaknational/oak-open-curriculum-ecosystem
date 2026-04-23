@@ -260,6 +260,15 @@ paths, setup files) don't apply.
   disable type checks, never disable any linting, never disable
   any formatting, never disable any tests, never disable Git hooks
   (`--no-verify`)
+- **No warning toleration, anywhere** - Warnings are not deferrable
+  in any system the repo influences (build, quality gates, runtime,
+  monitoring). A warning is the cheap, early version of the failure
+  it names. Fix the root cause in the same work-item, or escalate
+  the warning to a hard error in the same commit. Acknowledged-and-
+  deferred warnings consistently explode at the next stage. See
+  `.agent/rules/no-warning-toleration.md` for the operational
+  discipline (covers esbuild/tsc/ESLint/vitest/depcruise/knip and
+  Sentry runtime/uptime surfaces).
 - **Never work around checks** - e.g. if a variable is unused,
   figure out why and fix it, delete the variable if it is not
   needed. Do not disable eslint or typescript. ALWAYS fix the root

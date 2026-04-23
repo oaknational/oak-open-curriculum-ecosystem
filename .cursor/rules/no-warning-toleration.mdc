@@ -1,0 +1,6 @@
+---
+description: Warnings are never tolerated, never deferred, never silenced — anywhere in any system the repo influences (build, quality gates, runtime, monitoring).
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/no-warning-toleration.md`.

@@ -17,3 +17,6 @@
 2026-04-23T06:20:08Z	ok	36	da7f9a6d	heredoc-fileout	chore(continuity): exempt workflow partials from canonical-command orphan check	unblocks L-8 push; folded inherited staged drift per owner direction
 2026-04-23T06:39:45Z	ok	94	216a7fd2	heredoc-fileout	fix(turbo): pass SENTRY_* env vars through to build tasks	L-8 WI-6 unblock
 2026-04-23T06:47:53Z	fail	0	-	heredoc-stream	docs(agentic): tighten practice graph pilot contract	rc=128
+2026-04-23T06:48:45Z	ok	35	d00465aa	heredoc-stream	docs(agentic): tighten practice graph pilot contract	practice graph pilot review follow-up
+2026-04-23T07:48:57Z	ok	92	201b3704	heredoc-fileout	docs(plans): register clerk-mcp-tools and ext-apps dependency-bumps plan	split-1 of 2 for session handoff
+2026-04-23T07:50:09Z	ok	34	c2e3d779	heredoc-fileout	docs(plans): register clerk-mcp-tools and ext-apps dependency-bumps plan	split-1 of 2 for session handoff (resplit)
