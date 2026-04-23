@@ -1,6 +1,6 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
 **Last Updated**: 2026-04-20
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
@@ -87,7 +87,7 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), governance-concept integration (✅), incoming Practice integration (✅), learning-loop negative-feedback tightening (⏭️), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist operational tooling layer (ADR-137, strategic), External pointer-surface integration (📋)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), governance-concept integration (✅), incoming Practice integration (✅), learning-loop negative-feedback tightening (⏭️), practice-graph payoff-peak pilot (⏭️), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist operational tooling layer (ADR-137, strategic), External pointer-surface integration (📋)
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -329,6 +329,25 @@ Adjacent:
   - intentionally narrow follow-on, not a learning-loop redesign
   - complements reference-tier curation and ADR-144 fitness without changing
     thresholds or blocking behaviour
+
+### Adjacent — Practice Graph Payoff-Peak Pilot
+
+- Source plan:
+  [practice-graph-payoff-peak-pilot.plan.md](current/practice-graph-payoff-peak-pilot.plan.md)
+- Strategic parent:
+  [graphify-and-graph-memory-exploration.plan.md](future/graphify-and-graph-memory-exploration.plan.md)
+- Goal:
+  - build the highest-value/effort first slice of a derived Practice graph
+  - keep the graph advisory, local, deterministic, and read-only
+  - land the work in repo-native shape: TypeScript only, esbuild for new
+    workspaces, thin CLI surface through `agent-tools`
+- Status: ⏭️ Queued
+- Notes:
+  - bounded to an explicit pilot corpus spanning Practice, ADRs, onboarding,
+    and selected live plans
+  - dedicated internal app/service surface is intentionally deferred
+  - Graphify remains an inspiration source with explicit acknowledgement, not
+    an adopted runtime
 
 ### Adjacent — Agentic Corpus Discoverability Hub
 

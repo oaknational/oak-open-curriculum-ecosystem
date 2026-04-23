@@ -5,6 +5,12 @@
 **Related research**:
 [graphify-oak-practice-analysis.md](../../../research/graphify-oak-practice-analysis.md)
 
+**Promoted executable slice**:
+[practice-graph-payoff-peak-pilot.plan.md](../current/practice-graph-payoff-peak-pilot.plan.md)
+— queued first pilot for the highest-value/effort derived Practice graph
+shape. This strategic brief remains the parent option-space and boundary
+document.
+
 ## Problem and Intent
 
 The repo already has canonical memory surfaces such as

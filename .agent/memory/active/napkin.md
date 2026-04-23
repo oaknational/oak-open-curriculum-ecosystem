@@ -1182,3 +1182,38 @@ Carry forward into next session as a watchlist note: when the
 agent says "carry into next session" for arc-close mechanics
 that ARE agent work, that's the pattern firing at arc-close
 scale.
+
+---
+
+## 2026-04-23 — payoff peak for graph work is a bounded local navigation layer, not a platform
+
+**Observation**: once the graph discussion is reframed from "thinnest possible"
+to "maximum usefulness for a given amount of effort", the best first slice is
+not a full Graphify clone and not a dedicated app/service. The payoff peak is a
+bounded local navigation layer over explicit Practice/ADR/onboarding structure:
+one required `practice-graph` library workspace, a conditional `graph-core`
+extraction only if ADR-154's seam proves itself, and a thin `agent-tools` CLI
+surface for `build/report/query/path`.
+
+### Why it matters
+
+- It preserves the canonical-memory boundary: derived graph output stays local,
+  advisory, and read-only under `.agent/local/practice-graph/`.
+- It maximises immediate usefulness: path queries, hub/bridge/orphan reporting,
+  and starting-point guidance over the highest-signal doc estate.
+- It avoids the steep part of the cost curve: no semantic inference, no
+  self-feeding query-memory loop, no dedicated service workspace, no HTML/UI
+  layer.
+
+### Structural consequence
+
+The right plan shape is **clustered but bounded**:
+
+1. `packages/libs/practice-graph/` — Oak-specific corpus/extraction/report
+   behaviour.
+2. `packages/core/graph-core/` — only if the framework/consumer split becomes
+   real enough to justify extraction.
+3. `agent-tools` — thin CLI wrapper only.
+
+That is probably the "sweet spot" where extra effort is still buying high
+practical value rather than sophistication for its own sake.

@@ -21,6 +21,7 @@ plans when scheduled.
 | [governance-concepts-and-agentic-mechanism-integration.plan.md](governance-concepts-and-agentic-mechanism-integration.plan.md) | Adjacent: abstract governance-plane concept extraction, local mechanism-gap mapping, and routing into plans, deep dives, reports, and doctrine-adjacent surfaces | REFERENCE |
 | [planning-specialist-capability.plan.md](planning-specialist-capability.plan.md) | Adjacent: planning reviewer, skill, and rule triplet for plan architecture, lifecycle, discoverability, and integration routing | QUEUED |
 | [learning-loop-negative-feedback-tightening.plan.md](learning-loop-negative-feedback-tightening.plan.md) | Adjacent: narrow balancing-loop tightening for executive-memory drift detection and consolidation-time memory-quality dispositions | QUEUED |
+| [practice-graph-payoff-peak-pilot.plan.md](practice-graph-payoff-peak-pilot.plan.md) | Adjacent: payoff-peak pilot for a derived Practice graph with bounded workspaces, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces | QUEUED |
 
 Strategic context: [roadmap.md](../roadmap.md)
 Archived context: [../archive/completed/](../archive/completed/)
