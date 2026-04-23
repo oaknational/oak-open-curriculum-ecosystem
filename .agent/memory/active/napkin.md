@@ -8,6 +8,97 @@ live in the register at
 
 ---
 
+## 2026-04-23 — operational quirk: `git commit` pre-commit output truncation in the last ~24h
+
+**Observation**: when `git commit` is invoked from the Cursor
+Shell tool with stdout/stderr streaming live, the pre-commit
+hook's output is consistently cut off at the `depcruise → turbo`
+handover, and the tool reports `exit 1` with no commit landing.
+Running the same hook directly via `bash .husky/pre-commit`
+exits cleanly with `rc=0` and full output. Running the same
+`git commit` invocation with stdout/stderr redirected to a file
+(`git commit -F - >/tmp/commit.log 2>&1`) also completes
+cleanly — same elapsed time (~34s), full hook output captured,
+commit lands.
+
+So: the hook is fine, the message is fine; **the failure mode is
+in the streaming stdout/stderr handover from a long-running
+sub-process up through git up through pnpm up through Husky up
+through the Shell tool** at the specific moment when one
+sub-process (depcruise) ends and another (turbo) is about to
+start.
+
+**Window**: this has only appeared in the last ~24 hours. The
+prior ~125-commit history of this branch went through the same
+hook chain without this truncation pattern. So the hypothesis
+space is something that changed recently:
+
+- A subtle Shell-tool / stream-buffering change (most likely; the
+  Shell tool is the variable that recently changed).
+- A shell expansion or quoting quirk I introduced in how I shape
+  the heredoc (less likely — the same heredoc shape works fine
+  with file redirection).
+- A piping choice quirk (turbo's stdout/stderr handling, pnpm's
+  process-tree, or Husky's hook-runner; less likely because
+  nothing in those tools has changed in the window).
+- A timing race specific to streaming where the depcruise child
+  process exits and turbo's child process starts within the
+  same scheduling slice that the Shell tool's stream consumer
+  decides to flush a buffer.
+
+**Workaround in active use**: every `git commit` invocation now
+redirects stdout/stderr to a temp file
+(`git commit -F - >/tmp/commit.log 2>&1; cat /tmp/commit.log`).
+Adds zero elapsed time, captures full hook output, dodges the
+truncation. The trade-off is losing live progress — but the
+hook is fast enough that this doesn't matter in practice.
+
+**Anti-workaround (do NOT do)**: pre-priming the turbo cache
+via `bash .husky/pre-commit` before `git commit`. It wastes
+~30s for zero diagnostic value (the cold pre-commit was never
+the actual problem) and was an instance of treating a symptom
+(slow first run) as if it were the cause (truncation).
+
+**Diagnostic loop in place**: `scripts/log-commit-attempt.sh`
+appends a TSV row to
+[`commit-attempts.log`](../operational/diagnostics/commit-attempts.log)
+after every commit attempt. Convention documented in the
+[diagnostics README](../operational/diagnostics/README.md).
+Outcome enum has `truncated` distinct from `fail` precisely so
+this pattern is countable over time, across sessions and
+machines. If `truncated` keeps occurring on this machine and
+not on others, that points at a Shell-tool variant; if it
+occurs on every machine in the same Cursor build, that points
+at a Cursor release; if it disappears after a Cursor update,
+that confirms the hypothesis.
+
+**Falsifiability**: if the next ~10 commits across this and
+other machines show zero `truncated` rows, the workaround can
+be retired and the napkin entry archived. If `truncated` keeps
+appearing, escalate — file a Cursor support ticket with the
+diagnostic log attached, or downgrade the Shell tool variant if
+that turns out to be the changed component.
+
+**Related artefacts shipped this session**:
+
+- `scripts/check-commit-message.sh` (commit `74826914`) — pre-validates
+  commit messages so we don't pay the ~34s pre-commit cycle on a
+  message that will fail commitlint.
+- `scripts/log-commit-attempt.sh` + `commit-attempts.log` +
+  diagnostics README (commit `0bd3204c`) — the diagnostic loop
+  itself.
+
+**Subjective texture**: the frustrating shape was the asymmetry
+between "hook works directly" and "hook fails through git
+commit". The asymmetry surfaced quickly once I bothered to
+capture full output to a file instead of relying on the
+streamed view. Tool note for future me: **when a tool reports
+failure but the underlying command works in isolation, redirect
+output to a file before reasoning further** — the streamed view
+is itself a tool that can lie about what happened.
+
+---
+
 ## 2026-04-22 (later) — `observability-sentry-otel` thread; L-8 Vercel probe failed; correction subsection landed (Pippin / cursor-claude-opus-4-7)
 
 **Session shape**: continuity + diagnosis only; no product-code

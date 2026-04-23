@@ -8,3 +8,4 @@
 2026-04-23T03:38:20Z	interrupted	47	-	heredoc-stream	docs(practice): correct napkin/distilled owner-gating framing in continuity	second attempt; user interrupted before completion
 2026-04-23T03:38:20Z	truncated	33	-	heredoc-stream	docs(practice): correct napkin/distilled owner-gating framing in continuity	third attempt; same depcruise->turbo truncation; led to file-redirect workaround
 2026-04-23T03:38:20Z	ok	-	68081856	heredoc-stream	docs(practice): observability-sentry-otel close — pippin unlanded probe + l-8 co	previous session 2026-04-22; landed after similar truncation episodes; reconstru
+2026-04-23T03:40:38Z	ok	34	0bd3204c	heredoc-fileout	chore(diagnostics): add commit-attempts log + appender script	redirected to /tmp/commit.log; first commit using new log itself
