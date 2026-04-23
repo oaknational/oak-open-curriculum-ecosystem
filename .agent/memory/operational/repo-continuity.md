@@ -1,88 +1,32 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-23 (Codex / codex — principles-reset
-handoff after owner review of the bounded follow-through, with the
-next session explicitly positioned as the final correctness/rules/build
-session).
+**Last refreshed**: 2026-04-23 (Codex / codex — repo-owned corrective
+lane archived complete; remaining validation stages externalised to the
+owner).
 
 The current state is:
 
-- The only branch-level success criterion is the full repo-root gate
-  sequence in [`.agent/commands/gates.md`](../../commands/gates.md).
-  Workspace-local green runs remain useful for diagnosis, but they are
-  not authoritative because inter-workspace side-effects have repeatedly
-  surfaced later in the root sequence.
-- The previous green rerun through `pnpm format:root` remains useful
-  execution evidence, but it is **not** the acceptable final branch
-  state for this lane because the follow-through that came after it
-  introduced principle-breaking changes: EYFS fallback logic, an
-  `oaksearch` wrapper, JS-specific lint overrides, a partial
-  export-surface workaround set, and clean-contract drift.
-- The active observability plan is therefore reset to first
-  principles: remove the bad decisions, define one fixed ESM-only
-  export-surface contract across internal workspaces, restore strict
-  sitemap validation with no EYFS special treatment, fix the actual
-  package/install/env problems, add one built-code-only product proof,
-  and only then rerun authoritative validation.
-- L-8 Correction WI 1-5 remain landed in `fb047f86`.
-- The real `@vercel/node` deploy contract is verified from primary
-  evidence, and the dedicated `src/server.ts` / `dist/server.js`
-  deploy boundary is landed locally with fatal esbuild-warning and
-  export-contract gates.
-- Shared Operational Step 4 foundation work is landed locally:
-  - `@oaknational/eslint-plugin-standards`: single-source plugin/rule
-    registry, typed `no-dynamic-import`, deterministic
-    `max-files-per-dir`, rationalised rule-test estate, and boundary
-    inventory moved out of the in-process test lane;
-  - `@oaknational/type-helpers`: `typeSafeFromEntries` and
-    `typeSafeOwnKeys` removed; observability/logger/SDK consumers
-    rewritten; package/docs aligned;
-  - `@oaknational/oak-curriculum-mcp-streamable-http`: spawned-process
-    built-artifact proof removed, `runtime-config.unit.test.ts`
-    deleted, smoke helper moved to static imports, harness moved back
-    onto the source DI path; local `lint`, `type-check`, and `test`
-    are green diagnostically.
-- The user-flipped `@oaknational/require-observability-emission` move
-  from `warn` to `error` remains in place across the five scoped
-  workspaces, and the former 27/14/48 backlog is now retired as
-  authoritative history.
-- The remaining consumer backlog is now cleared authoritatively across
-  `@oaknational/oak-search-sdk`, `@oaknational/sdk-codegen`, and
-  `@oaknational/search-cli`; `search-cli` no longer carries the
-  runtime-config test-boundary violations, and the generated MCP
-  execute path now threads execution logging through its
-  `@oaknational/curriculum-sdk` caller.
-- The authoritative full repo-root gate run passed
-  `pnpm secrets:scan:all`, `pnpm clean`, `pnpm test:root-scripts`,
-  `pnpm sdk-codegen`, `pnpm build`, `pnpm type-check`,
-  `pnpm doc-gen`, `pnpm lint:fix`, `pnpm test`, `pnpm test:widget`,
-  `pnpm test:e2e`, `pnpm test:ui`, `pnpm test:a11y`,
-  `pnpm test:widget:ui`, `pnpm test:widget:a11y`,
-  `pnpm smoke:dev:stub`, `pnpm subagents:check`,
-  `pnpm portability:check`, `pnpm markdownlint:root`, and
-  `pnpm format:root`.
-- The repo now has a configured-arm Sentry gate command surface, but it
-  is not yet honest: `apps/oak-curriculum-mcp-streamable-http/.env.local`
-  contains `SENTRY_AUTH_TOKEN`, yet the current
-  `build:sentry:configured` path does not load that canonical local env
-  source.
-- `@oaknational/oak-curriculum-mcp-streamable-http` lint still emits
-  the `Multiple projects found ...` diagnostic even though root
-  `pnpm lint:fix` passes; that surface still needs honest treatment.
-- `pnpm sdk-codegen` during the authoritative run reported five invalid
-  programme URLs while exiting 0.
-- Vercel builds still warn that pnpm could not create
-  `node_modules/.bin/oaksearch` because the workspace bin target
-  `@oaknational/search-cli/dist/bin/oaksearch.js` is absent at install
-  time.
-- The current repo-owned lane is now explicitly a **final corrective
-  pre-preview session**: focus on correctness, rules, and getting the
-  build working under the reset plan rather than extending the previous
-  workaround path.
-- Preview `/healthz` and preview-release/Sentry proof are manual
-  owner-directed follow-up after that repo-owned lane lands.
-- The binding repo work remains the operational repair plan:
-  [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
+- The only branch-level success criterion remains the full repo-root
+  gate sequence in [`.agent/commands/gates.md`](../../commands/gates.md).
+  Workspace-local green runs are diagnostic only.
+- The strict corrective pass that replaced the workaround-heavy
+  follow-through is now landed: strict sitemap validation is restored,
+  the `oaksearch` wrapper path is gone, the configured Sentry build
+  gate loads its canonical env source, and the bounded repo-owned lane
+  is archived complete at
+  [`archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
+- L-8 Correction WI 1-5 remain landed in `fb047f86`, the real
+  `@vercel/node` deploy contract is verified from primary evidence, and
+  the dedicated `src/server.ts` / `dist/server.js` deploy boundary
+  remains the verified deploy shape.
+- Shared Step 4 foundation work, the `require-observability-emission`
+  `warn` → `error` escalation, and the former
+  `oak-search-sdk` / `sdk-codegen` / `search-cli` backlog remain
+  retired as authoritative history after the green repo-root rerun and
+  the later strict corrective pass.
+- Manual preview `/healthz`, preview-release, preview-traffic, and
+  Sentry evidence collection are now explicitly owner-handled
+  validation stages, not active repo-plan work.
 - Broader runtime simplification remains separate future work:
   [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md).
 - Monitor creation and ongoing uptime validation remain owner-external:
@@ -107,7 +51,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-doctrine-landing-and-plan-rewrite / 2026-04-23; `codex` / *unknown* / Codex / principles-reset-analysis-plan-rewrite-and-final-session-handoff / 2026-04-23 (latest — next session is intended to be the final correctness/rules/build session, not another workaround pass) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-doctrine-landing-and-plan-rewrite / 2026-04-23; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23 (latest — the repo-owned corrective lane is archived complete; remaining validation stages are owner-handled separately) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -145,9 +89,9 @@ next-session record (full identity table) and this summary column
 ## Branch-primary lane state
 
 The `observability-sentry-otel` thread is branch-primary on
-`feat/otel_sentry_enhancements`. Lane state (owning plans, test
-totals, post-§L-8 forward path, active tracks, promotion watchlist)
-lives in
+`feat/otel_sentry_enhancements`. Lane state (owning plans, current
+objective, blockers, next safe step, active tracks, promotion
+watchlist) lives in
 [`threads/observability-sentry-otel.next-session.md § Lane state`](threads/observability-sentry-otel.next-session.md).
 
 **Timeline**: §L-8 WS1 + WS2 + WS3.1 LANDED in `f9d5b0d2`
@@ -157,99 +101,39 @@ lives in
 crashed at runtime with `FUNCTION_INVOCATION_FAILED` because the
 deployed artefact did not satisfy Vercel's import contract; later
 2026-04-23 work verified that contract from primary evidence, landed
-the dedicated `dist/server.js` boundary, and then expanded Step 4 into
-shared strictness/test-doctrine cleanup plus a remaining cross-workspace
-observability-emission backlog. Preview proof is now gated on finishing
-that Step 4 lane, not on another immediate push.
+the dedicated `dist/server.js` boundary, replaced the workaround-heavy
+follow-through with a strict corrective pass, and then archived that
+repo-owned lane as complete.
 
-**Current execution authority**:
-[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
-is now the reset follow-through plan for the final repo-owned
-correctness/build session:
-
-1. remove the principle-breaking follow-through changes already
-   introduced;
-2. define one fixed ESM-only export-surface contract across internal
-   workspaces;
-3. rerun the sitemap scrape and `pnpm sdk-codegen` under a strict
-   validator with no EYFS special treatment;
-4. fix the actual `oaksearch` package/install/build contract and the
-   MCP lint diagnostic structurally;
-5. fix the Sentry gate env-loading contract so the app-local
-   `.env.local` token source is actually loaded;
-6. add one built-code-only product proof and rerun the authoritative
-   validation sequence;
-7. only then hand off to the owner-directed preview check without
-   claiming `/healthz` or preview-release proof from the plan itself.
+**Repo-owned corrective lane closure record**:
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+is now the authoritative archive for the completed repo-owned repair
+lane. No active repo-owned follow-through plan remains on this branch.
 
 **Separate future work**:
 [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
-owns broader runtime simplification once the repaired preview is
-stable.
+owns broader runtime simplification once owner-run validation is done
+and there is appetite to simplify deliberately.
 
 **Closed repo monitoring work**:
 [`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`](../../plans/observability/archive/superseded/synthetic-monitoring.plan.owner-externalised-2026-04-23.md)
 records that monitor creation and ongoing uptime validation are
-owner-external. Repo scope ends at an honest pre-preview handoff;
-manual preview `/healthz` and preview/Sentry proof remain owner-
-directed.
+owner-external. Manual preview `/healthz` and preview/Sentry proof are
+also owner-handled validation stages.
 
 ## Current session focus
 
-This latest session became a **principles-reset analysis and final
-session handoff**, not an implementation session.
+Landed: archived the completed repo-owned observability follow-through
+plan, reconciled the live continuity surfaces to that archive path, and
+recorded that the remaining validation stages are owner-handled
+separately —
+[`archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
 
-Attempted: critically review the previous follow-through decisions
-against the repository rules, reset the active observability plan to a
-strict correctness-first shape, and refresh the continuity surfaces so
-the next session starts as the final "correctness, rules, and getting
-the build working" session.
-
-Prevented: the owner explicitly redirected the session to
-"acknowledge, analyse, report, stop" and then to update the plan and
-do nothing else. No corrective code was allowed to land in this
-session. Falsifiability: the reset plan now exists at
-[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md),
-the continuity surfaces now describe the corrective final-session
-shape, and no new rerun from `pnpm secrets:scan:all` or corrective test
-evidence was produced after the reset.
-
-Landed within that target:
-
-1. The active observability plan now records the owner correction
-   explicitly: no fallbacks, no wrappers, no JS overrides, one fixed
-   ESM-only export contract, strict sitemap validation, honest env
-   loading, and one built-code-only product proof.
-2. The continuity surfaces now capture that the prior green rerun is
-   useful execution evidence but not the acceptable final branch state
-   because the follow-through introduced principle-breaking changes.
-3. The local Sentry-token fact is now recorded accurately: the token is
-   present in `apps/oak-curriculum-mcp-streamable-http/.env.local`;
-   the defect is that the configured-arm build command does not load
-   that canonical local env source.
-4. The entry-point sweep reconfirmed that `AGENTS.md`, `CLAUDE.md`, and
-   `GEMINI.md` remain pointer-only and drift-free.
+This closeout intentionally stopped at continuity/doc-state
+reconciliation. No new product validation was run because the owner
+explicitly separated validation from this session.
 
 No new ADR/PDR candidate qualified beyond the existing register items.
-
-**Three rehoming open items** are recorded as honest PDR-026
-deferrals on durable surfaces (NOT carried as new pending-
-graduations register entries blocking arc-close):
-
-- `prog-frame/agentic-engineering-practice.md` disposition —
-  owner conversation required; recorded in
-  [`research/notes/README.md`](../../research/notes/README.md).
-- `platform-adapter-formats.md` PROMOTE-TO-REFERENCE proposal —
-  owner-vet required per PDR-032; archived rehoming plan +
-  `.agent/reference/README.md`.
-- `boundary-enforcement-with-eslint.md` PROMOTE-TO-REFERENCE
-  proposal — same.
-
-Owner-amended DoD load-bearing across the arc (Session 7 close):
-`pnpm practice:fitness --strict-hard` exits-0 requirement
-**DROPPED**; current fitness state HARD (4 hard, 10 soft)
-explicitly accepted as not-blocking; `consolidate-docs` step 9
-runs informationally only.
 
 ## Session 5 close summary (final — 2026-04-21, Pippin / cursor-opus)
 
@@ -561,50 +445,30 @@ set is additive; previous invariants still apply):
 
 Non-goals for next session:
 
-- Do NOT start a new workstream. This is one remediation session.
-- Do NOT reopen broader canonicalisation work while the preview still
-  fails.
+- Do NOT start a new repo-owned workstream unless owner-run validation
+  surfaces a fresh defect.
+- Do NOT reopen broader canonicalisation work opportunistically.
 - Do NOT recreate a repo monitoring lane or treat monitor setup as
   in-repo acceptance work.
-- Do NOT push another preview until the reset correctness-first plan is
-  complete and the corrected validation sequence is green locally.
+- Do NOT invent a replacement "one more repo session" narrative now
+  that the bounded corrective lane is archived complete.
 - Do NOT guess the Vercel import contract before checking primary
   evidence.
 
 ## Next safe step
 
-**Resume the `observability-sentry-otel` thread at the reset
-correctness-first follow-through in**
-[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md):
-make the next session the final repo-owned correctness/rules/build
-session **before** any owner-directed preview attempt.
+Wait for the owner-run validation stages. The repo-owned corrective lane
+is already archived complete in
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
 
-Then, in the same execution session:
+Then:
 
-1. remove the bad decisions from the previous follow-through:
-   EYFS special treatment, the `oaksearch` wrapper, JS-specific lint
-   overrides, partial export-surface workaround logic, and any clean-
-   contract drift;
-2. define and apply one fixed ESM-only export-surface contract across
-   the relevant internal workspaces;
-3. rerun `pnpm -F @oaknational/sdk-codegen scan:sitemap` and
-   `pnpm sdk-codegen` under a strict validator with **no** EYFS
-   fallback path;
-4. fix the actual `oaksearch` package/install/build problem and the
-   `Multiple projects found ...` diagnostic structurally;
-5. fix the Sentry configured-arm build command so it loads the
-   canonical app-local env source honestly;
-6. add and run one built-code-only product proof after `pnpm build`;
-7. restart the full repo-root gate sequence from `pnpm secrets:scan:all`
-   exactly as documented in [`.agent/commands/gates.md`](../../commands/gates.md),
-   augmented by the reset plan's strict sitemap scrape, built-code
-   proof, and corrected Sentry gate;
-8. only after the corrected full validation sequence is honest and
-   green, hand back to the owner-directed preview check.
-
-Do **not** reopen canonicalisation work here, and do **not** recreate
-a repo monitoring lane. The owner will create the uptime monitor
-outside this repo once the owner-directed preview proof is real.
+1. if owner validation returns a fresh repo defect, open the smallest
+   targeted repair lane that names that defect explicitly;
+2. if owner validation is clean and runtime simplification is wanted,
+   promote
+   [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md);
+3. otherwise, do not invent another repo-owned follow-through cycle.
 
 **Commit workflow tooling available** (refined 2026-04-23 by
 Pippin's second session into the canonical `commit` skill at
@@ -643,27 +507,21 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
-**Status (2026-04-23 Codex session-handoff closeout after the
-principles-reset handoff)**: **due — napkin pressure remains high, this
-session rewrote the active observability plan again and refreshed the
-repo/thread/napkin continuity surfaces, but no thread-scoped
-consolidation pass was run.**
-
-The trigger did fire, but deep consolidation is **still not
-well-bounded for this closeout** because the owner asked for ordinary
-session handoff and explicitly stopped implementation. Handoff
-therefore stops at marking `due` honestly and refreshing only the
-surfaces this session changed.
+**Status (2026-04-23 Codex session-handoff + consolidate-docs closeout
+after owner-declared lane completion)**: **completed this pass** —
+the completed observability follow-through plan was archived, live
+references were reconciled to the archive path, repo/thread continuity
+now reflects that manual validation stages are owner-handled
+separately, and no new ADR/PDR candidate or thread-register freshness
+finding surfaced.
 
 Falsifiability:
 
-- `napkin.md` remains well above the ~500-line rotation threshold;
-- this session changed the active observability plan plus repo/thread
-  continuity surfaces without attempting a full thread-scoped
-  graduation pass;
-- the next agent can confirm the trigger still holds by reading this
-  section, checking the napkin size, and deciding deliberately whether
-  to run `jc-consolidate-docs`.
+- the archive record exists at
+  [`archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md);
+- the repo/thread/high-level surfaces now point at that archive record
+  rather than a stale `current/` path;
+- no new pending-graduations row was added in this closeout.
 
 This closeout explicitly asked the ADR/PDR question. Answer: **no new
 register row**. The owner correction tightened the lane, but it does
@@ -687,7 +545,7 @@ One amendment-candidate surfaced in the prior 2026-04-23 session:
 
 | captured-date | source-surface | graduation-target | trigger-condition | status |
 | --- | --- | --- | --- | --- |
-| 2026-04-23 (latest) | [`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md) + [`principles.md` §Code Quality](../../directives/principles.md) + [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) §Operational Steps 2, 4, and 5 + napkin latest Step-4 entry | ADR amendment to [ADR-163 §6 / §7](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) folding four lessons together — version-resolution boundary discipline, vendor-config passthrough discipline (`turbo.json` `globalPassThroughEnv` proven 2026-04-23), deploy-entry contract discipline (the repaired Vercel import/export shape), and the **realistic production-build gate** required for env-gated Sentry esbuild-plugin paths once child-process proof is rejected by testing doctrine — with a gate-mapping table showing which build-time / runtime gate enforces each contract. | Operational Step 4 and Step 5 land fully, including the realistic production-build gate, and ADR-163 is amended with the four contracts plus the gate-mapping table. | pending |
+| 2026-04-23 (latest) | [`.agent/rules/no-warning-toleration.md`](../rules/no-warning-toleration.md) + [`principles.md` §Code Quality](../../directives/principles.md) + [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) + napkin latest Step-4 entry | ADR amendment to [ADR-163 §6 / §7](../../../docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md) folding four lessons together — version-resolution boundary discipline, vendor-config passthrough discipline (`turbo.json` `globalPassThroughEnv` proven 2026-04-23), deploy-entry contract discipline (the repaired Vercel import/export shape), and the **realistic production-build gate** required for env-gated Sentry esbuild-plugin paths once child-process proof is rejected by testing doctrine — with a gate-mapping table showing which build-time / runtime gate enforces each contract. | The archived closure record is sufficient to draft the ADR-163 amendment and the owner wants the doctrine promoted into the ADR. | pending |
 
 ### Pending-graduations register additions (2026-04-23 third session)
 

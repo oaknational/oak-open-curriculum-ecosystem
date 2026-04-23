@@ -84,6 +84,14 @@ Before archival, mine completed outcomes into permanent documentation
 
 ---
 
+## Observability
+
+| Plan | Completed | Key Outcomes | Archive |
+|------|-----------|--------------|---------|
+| MCP Post-Root-Green Follow-Through | 2026-04-23 | Closed the bounded repo-owned corrective lane after the root-green rerun: strict sitemap validation restored, wrapper/fallback drift removed, the configured Sentry build gate aligned to canonical env loading, and remaining manual validation stages explicitly externalised to the owner. | [archived plan](observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) |
+
+---
+
 ## Adding Entries
 
 When archiving a plan:

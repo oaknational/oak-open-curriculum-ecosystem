@@ -6,7 +6,7 @@ foundational_adr: "docs/architecture/architectural-decisions/162-observability-f
 direction_session: "docs/explorations/2026-04-18-observability-strategy-and-restructure.md"
 execution_plan: ".agent/plans/architecture-and-infrastructure/current/observability-strategy-restructure.plan.md"
 adr_162_status: "Accepted (2026-04-19)"
-wave_1_state: "L-EH initial ✅ + L-DOC initial ✅ + L-12-prereq ✅ (closed by primitives-consolidation 2026-04-19). L-8 Correction WI 1-5 landed locally; current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md is now the bounded pre-preview follow-through plan for invalid-URL classification, lingering-lint disposition, and representative-env build coverage."
+wave_1_state: "L-EH initial ✅ + L-DOC initial ✅ + L-12-prereq ✅ (closed by primitives-consolidation 2026-04-19). L-8 Correction WI 1-5 landed locally; the bounded repo-owned corrective lane is now archived complete at observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md, and any remaining manual validation stages are owner-handled separately."
 ---
 
 # High-Level Observability Plan
@@ -38,7 +38,7 @@ Full text: [ADR-162](../../../docs/architecture/architectural-decisions/162-obse
 
 | Axis | MVP deliverable | Owning plan | Post-MVP | Explorations informing |
 |---|---|---|---|---|
-| **Engineering** | Error capture + tracing + release linkage + free-signal integrations (ANR, event-loop delay, Zod validation failures) + widget error capture + alert suite + runbooks | [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) (core engineering lanes) + [`current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) (bounded pre-preview follow-through: invalid-URL classification, lingering lint diagnostic, representative-env build gate) | [`future/cross-system-correlated-tracing.plan.md`](future/cross-system-correlated-tracing.plan.md), [`future/deployment-impact-bisection.plan.md`](future/deployment-impact-bisection.plan.md), [`future/slo-and-error-budget.plan.md`](future/slo-and-error-budget.plan.md), [`future/mcp-http-runtime-canonicalisation.plan.md`](future/mcp-http-runtime-canonicalisation.plan.md) | Exploration 2 (Sentry-as-PaaS) |
+| **Engineering** | Error capture + tracing + release linkage + free-signal integrations (ANR, event-loop delay, Zod validation failures) + widget error capture + alert suite + runbooks | [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) (core engineering lanes) + [`archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) (closed repo-owned corrective lane; remaining manual validation is owner-handled separately) | [`future/cross-system-correlated-tracing.plan.md`](future/cross-system-correlated-tracing.plan.md), [`future/deployment-impact-bisection.plan.md`](future/deployment-impact-bisection.plan.md), [`future/slo-and-error-budget.plan.md`](future/slo-and-error-budget.plan.md), [`future/mcp-http-runtime-canonicalisation.plan.md`](future/mcp-http-runtime-canonicalisation.plan.md) | Exploration 2 (Sentry-as-PaaS) |
 | **Product** | `packages/core/observability-events/` workspace + `tool_invoked` emission + `search_query` emission + event catalog | [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md), [`current/search-observability.plan.md`](current/search-observability.plan.md) | [`future/curriculum-content-observability.plan.md`](future/curriculum-content-observability.plan.md), [`future/feature-flag-provider-selection.plan.md`](future/feature-flag-provider-selection.plan.md), [`future/ai-telemetry-wiring.plan.md`](future/ai-telemetry-wiring.plan.md), [`future/second-backend-evaluation.plan.md`](future/second-backend-evaluation.plan.md) (three-sink architecture: warehouse + PostHog) | Exploration 1 (Sentry vs PostHog), Exploration 4 (event schemas), Exploration 9 (warehouse selection), Exploration 10 (Clerk-identity downstream) |
 | **Usability** | Tool-call success/failure breakdown + feedback capture (L-9) + `widget_session_outcome` events | [`active/sentry-observability-maximisation-mcp.plan.md`](active/sentry-observability-maximisation-mcp.plan.md) (L-9 and L-12 both **deferred to public beta 2026-04-20**; L-3 scope-context for tool-level attribution lands in alpha), [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) (beta-gate) | Absorbed into SLO + accessibility-phase-2 lanes | Exploration 4 (stage vocabulary for session-outcome) |
 | **Accessibility** | `a11y_preference_tag` + frustration proxies + incomplete-flow correlation + keyboard-only boolean | [`current/accessibility-observability.plan.md`](current/accessibility-observability.plan.md) | (open question; see exploration 3) | Exploration 3 (a11y at runtime — **blocks MVP**) |
@@ -48,12 +48,12 @@ Operational concerns (deploy-boundary proof, uptime-monitor
 readiness, vendor-independence conformance) are cross-axis MVP and
 owned by:
 
-- [`current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
 - [`current/multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md)
 
-External uptime-monitor creation is now owner-external once the
-current follow-through plan leaves the repo in an honest pre-preview
-state and the owner-directed preview check has been run.
+External uptime-monitor creation is owner-external. The bounded
+repo-owned corrective lane is already closed in
+[`archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md);
+any remaining manual validation is owner-handled separately.
 
 ---
 
@@ -104,11 +104,15 @@ Concretely:
   entries for per-lane status notes.
 - [`current/observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) — without this, product/usability/a11y/security
   axes have no schema contract.
-- [`current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) — without this, the repo still carries unexplained diagnostics and lacks representative build coverage for the Sentry plugin enabled branch.
 - [`current/security-observability.plan.md`](current/security-observability.plan.md) — security-axis MVP.
 - [`current/accessibility-observability.plan.md`](current/accessibility-observability.plan.md) — accessibility-axis MVP.
 - [`current/multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) — proves ADR-162's vendor-
   independence clause programmatically.
+
+The bounded repo-owned corrective lane that had previously blocked
+preview readiness is now archived complete at
+[`archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
+Remaining manual validation stages are owner-handled separately.
 
 **Post-launch (scheduled via promotion trigger)**:
 
@@ -136,7 +140,7 @@ vendor-independence conformance runs pre-launch rather than post-hoc.
 | **3a. Primary Emitters (Server, alpha-gate, schema-independent)** | Server-side emission sites that do NOT consume Wave 2 schemas. Can land before the events-workspace. Transition-to-useful-Sentry phase. | Maximisation: L-1 (free-signal integrations with fixture envelope-observability prereq — emits Sentry-native vendor events), L-2 (delegates extraction — structural refactor, no event shape), L-3 (MCP request context enrichment — establishes mcp_request scope shape, not a schema-governed event). |
 | **3b. Primary Emitters (Server, beta-gate, schema-dependent)** | Emission sites that consume Wave 2 schemas by import. Gated on events-workspace. | Maximisation: L-4b (primary `Sentry.metrics.*` adapter — metric names catalogued in the events-workspace). **Deferred to public beta 2026-04-20**: L-9 (feedback pipeline — no user-facing collection surface in alpha). |
 | **4. Cross-axis & Widget** | Second emitting runtime + axis-specific plans. Can parallelise within wave. | Maximisation: L-12 (widget Sentry; composes the redaction primitives directly from `@oaknational/observability`; emits widget-session-outcome and a11y events). Sibling plan [`security-observability.plan.md`](current/security-observability.plan.md) — `auth_failure`, `rate_limit_triggered` events. Sibling plan [`accessibility-observability.plan.md`](current/accessibility-observability.plan.md) — `a11y_preference_tag`, frustration proxies, `widget_session_outcome`. |
-| **5. Operations + Conformance + Close-out** | Alerts can land because emission landscape is real. Vendor-independence conformance runs pre-launch. MVP-deferred lanes cluster for clean branch close. | Maximisation: L-13 (alerts + dashboards + runbooks), L-14 (trust-boundary ADR), L-15 (strategy close-out ADR), L-DOC final (per-loop TSDoc + ADR index + runbook propagation), L-EH final (`prefer-result-pattern` ESLint rule), MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11. Sibling plan [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) WS2+ — emission-persistence test runs MCP server + widget + Search CLI in `SENTRY_MODE=off`; Wave 5 escalates the ESLint rule severity to `error`. Current follow-through plan [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) — leaves the repo in an honest pre-preview state before owner-directed preview validation and owner-external uptime monitoring. |
+| **5. Operations + Conformance + Close-out** | Alerts can land because emission landscape is real. Vendor-independence conformance runs pre-launch. MVP-deferred lanes cluster for clean branch close. | Maximisation: L-13 (alerts + dashboards + runbooks), L-14 (trust-boundary ADR), L-15 (strategy close-out ADR), L-DOC final (per-loop TSDoc + ADR index + runbook propagation), L-EH final (`prefer-result-pattern` ESLint rule), MVP-deferred lanes: L-4a, L-5, L-6, L-10, L-11. Sibling plan [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) WS2+ — emission-persistence test runs MCP server + widget + Search CLI in `SENTRY_MODE=off`; Wave 5 escalates the ESLint rule severity to `error`. Archived closure record [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) — repo-owned corrective lane complete; any remaining manual validation is owner-handled separately. |
 
 **Wave close semantics** (2026-04-18 per fred-review TO-ACTION —
 cross-plan scheduling is only a real dependency if it is named):
@@ -201,11 +205,16 @@ targets.
 | Plan | One-line summary |
 |---|---|
 | [`observability-events-workspace.plan.md`](current/observability-events-workspace.plan.md) | `packages/core/observability-events/` — Zod-first schema contract |
-| [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) | Bounded pre-preview follow-through for the MCP HTTP server: invalid-URL classification, lingering lint disposition, representative-env build coverage |
 | [`security-observability.plan.md`](current/security-observability.plan.md) | App-layer auth-failure + rate-limit-triggered emission |
 | [`accessibility-observability.plan.md`](current/accessibility-observability.plan.md) | Widget-side preference tags + frustration proxies + outcomes |
 | [`multi-sink-vendor-independence-conformance.plan.md`](current/multi-sink-vendor-independence-conformance.plan.md) | Programmatic proof of ADR-162 vendor-independence clause |
 | [`search-observability.plan.md`](current/search-observability.plan.md) | Search estate observability (CLI + ES + retrieval quality); next-branch MVP |
+
+### `archive/completed/`
+
+| Plan | One-line summary |
+|---|---|
+| [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md) | Closed repo-owned corrective lane for the MCP HTTP server after the root-green rerun; manual validation remains owner-handled separately |
 
 ### `future/` (each with promotion trigger)
 

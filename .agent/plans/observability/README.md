@@ -5,7 +5,8 @@ the **five-axis** observability principle per
 [ADR-162](../../../docs/architecture/architectural-decisions/162-observability-first.md):
 engineering, product, usability, accessibility, and security.
 
-**Status**: 🔄 Active (post-2026-04-18 restructure)
+**Status**: 🔄 Active (post-2026-04-18 restructure; bounded
+corrective lane archived complete 2026-04-23)
 **Foundational ADR**: [ADR-162 Observability-First](../../../docs/architecture/architectural-decisions/162-observability-first.md)
 (**Accepted** 2026-04-19 at Phase 5 close).
 **Direction-setting session**: [`docs/explorations/2026-04-18-observability-strategy-and-restructure.md`](../../../docs/explorations/2026-04-18-observability-strategy-and-restructure.md)
@@ -22,7 +23,8 @@ first if the question is "are we really making progress."
 
 **No new plan in this directory lands without an existing plan
 archiving in the same pass** until Wave 2 opens. The tree currently
-carries 2 `active/` + 6 `current/` + 13 `future/` plans + 10
+carries 2 `active/` + 5 `current/` + 13 `future/` plans + 1
+`archive/completed/` closure record + 10
 explorations under `docs/explorations/`. Planning density has
 materially outpaced execution density; the forward-motion risk is
 another restructure rather than another emitter.
@@ -85,6 +87,7 @@ Observability plans in this directory build on that foundation.
 | [`active/`](./active/) | In-progress execution (NOW) | Plans currently being worked on this branch. |
 | [`current/`](./current/) | Queued and ready (NEXT) | Plans ready to promote to `active/` when implementation starts. |
 | [`future/`](./future/) | Strategic backlog (LATER) | Strategic briefs and post-MVP future plans with promotion triggers. |
+| [`archive/completed/`](./archive/completed/) | Completed plans | Historical record; **never updated**. |
 | [`archive/superseded/`](./archive/superseded/) | Replaced by newer plans | Historical record; **never updated**. |
 
 ---
@@ -125,14 +128,11 @@ Execution now proceeds through the five-wave MVP ordering (see
 [`high-level-observability-plan.md` §Execution Waves](./high-level-observability-plan.md#execution-waves--cross-plan-mvp-order)).
 Wave 1 foundations remain in place: L-EH initial ✅, L-DOC initial ✅,
 L-12-prereq ✅ (closed by primitives-consolidation 2026-04-19). The
-current engineering blocker is now the bounded post-root-green
-follow-through lane: L-8 Correction WI 1-5 landed locally, and the
-remaining repo-owned pre-preview work now lives in
-[`current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](./current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
-That plan now owns invalid-URL classification, the lingering lint
-diagnostic, and the representative-env production-build gate. Manual
-preview `/healthz` and preview/Sentry proof happen later under owner
-direction. Broader runtime simplification is tracked separately in
+bounded post-root-green corrective lane is now closed and archived at
+[`archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](./archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
+Manual preview `/healthz`, preview-release, preview-traffic, and
+preview/Sentry evidence are owner-handled separately. Broader runtime
+simplification is tracked separately in
 [`future/mcp-http-runtime-canonicalisation.plan.md`](./future/mcp-http-runtime-canonicalisation.plan.md).
 
 ---

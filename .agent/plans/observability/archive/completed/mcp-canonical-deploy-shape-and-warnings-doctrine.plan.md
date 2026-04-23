@@ -1,79 +1,77 @@
 ---
 name: "MCP Post-Root-Green Follow-Through"
-status: current
+status: completed
 status_reason: >
-  The previous follow-through drifted away from repository principles:
-  it introduced EYFS fallback handling, a CLI wrapper, JS-specific
-  lint overrides, a partial export-surface rollout, and a relaxed clean
-  assumption. This plan is reset to first principles: no fallbacks, no
-  wrappers, no overrides, no compatibility layers, one fixed ESM-only
-  export contract across internal workspaces, strict sitemap
-  validation, honest env-loading for the Sentry gate, and one explicit
-  built-code product proof.
+  Repo-owned corrective work for this bounded lane is complete. The
+  strict sitemap/env/package/runtime fixes landed on 2026-04-23 and the
+  remaining manual validation stages were explicitly externalised to the
+  owner, so they no longer keep this plan active.
 overview: >
-  Reset the bounded pre-preview lane after a bad implementation turn.
-  Remove the principle-breaking changes already introduced, preserve
-  deliberate clean/regeneration behaviour, define one repo-wide
-  ESM-only package export contract, keep dev scripts source-first only
-  under that uniform contract, add a single realistic built-code proof,
-  rerun the sitemap scrape under a strict validator with no EYFS
-  special treatment, fix the actual install/env/config problems at
-  source, then rerun authoritative validation. Manual preview checks,
-  `/healthz`, and owner-directed preview/Sentry proof remain outside
-  this plan.
-parent_plan: "../active/sentry-observability-maximisation-mcp.plan.md"
+  Closure record for the bounded repo-owned corrective lane that
+  followed the root-green rerun: strict sitemap validation restored,
+  wrapper/fallback drift removed, the configured Sentry build gate
+  aligned to canonical env loading, and the repo left ready for
+  owner-run validation stages that remain outside this plan.
+parent_plan: "../../active/sentry-observability-maximisation-mcp.plan.md"
 related_plans:
-  - "../future/mcp-http-runtime-canonicalisation.plan.md"
+  - "../../future/mcp-http-runtime-canonicalisation.plan.md"
 supersedes:
-  - "../archive/superseded/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.pre-bounded-follow-through-2026-04-23.md"
+  - "../superseded/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.pre-bounded-follow-through-2026-04-23.md"
 branch: "feat/otel_sentry_enhancements"
 depends_on:
-  - "../active/sentry-observability-maximisation-mcp.plan.md"
+  - "../../active/sentry-observability-maximisation-mcp.plan.md"
 todos:
   - id: remove-principle-breaking-follow-through
     content: "Remove the EYFS special treatment, the `oaksearch` wrapper, the JS-specific lint override path, the partial export-surface workaround set, and any other compatibility-layer decisions introduced in this lane."
-    status: pending
+    status: completed
     priority: next
   - id: define-fixed-export-surface-contract
     content: "Write and apply one fixed package export-surface contract across internal workspaces: ESM only, no CJS, `exports` authoritative, no partial/per-workspace improvisation."
-    status: pending
+    status: completed
     priority: next
   - id: rerun-strict-sitemap-validation
     content: "Rerun `pnpm -F @oaknational/sdk-codegen scan:sitemap` and `pnpm sdk-codegen` after removing fallback logic, then trace and fix the actual cause of the five invalid programme URLs with no EYFS special casing."
-    status: pending
+    status: completed
     priority: next
   - id: resolve-multiple-projects-diagnostic
     content: "Root-cause and fix the `Multiple projects found ...` lint diagnostic structurally in `@oaknational/oak-curriculum-mcp-streamable-http`."
-    status: pending
+    status: completed
     priority: next
   - id: resolve-vercel-oaksearch-bin-shape
     content: "Fix the actual package/install/build contract behind the Vercel `oaksearch` bin-link warning without wrappers, JS shim entrypoints, or compatibility layers."
-    status: pending
+    status: completed
     priority: next
   - id: fix-sentry-env-loading-contract
     content: "Fix the configured-arm Sentry build gate so it loads its canonical env source honestly; the app-local `.env.local` currently contains `SENTRY_AUTH_TOKEN`, but the command path does not load it."
-    status: pending
+    status: completed
     priority: next
   - id: add-built-code-product-proof
     content: "Add one realistic product proof that executes built artefact code only, to complement source-first dev-script execution."
-    status: pending
+    status: completed
     priority: next
   - id: rerun-authoritative-validation
     content: "Rerun the full repo-root validation sequence after the reset, plus the strict sitemap scrape and the built-code proof."
-    status: pending
+    status: completed
   - id: handoff-to-owner-directed-preview
-    content: "Hand off from repo-owned follow-through to owner-directed preview work without claiming preview proof from this plan."
-    status: pending
+    content: "Close the repo-owned corrective lane and hand remaining manual validation stages to the owner without claiming them from this plan."
+    status: completed
 ---
 
 # MCP Post-Root-Green Follow-Through
 
 **Last Updated**: 2026-04-23  
-**Status**: 🟡 CURRENT — reset to first principles after a bad
-implementation turn; the next session must subtract complexity before
-adding anything else  
+**Status**: 🟢 COMPLETED — the bounded repo-owned corrective lane is
+closed; manual preview/validation stages remain owner-handled  
 **Scope**: Strict repo-owned follow-through before any owner-directed
 preview work
+
+## Completion Note
+
+This plan is archived as completed because the repo-owned corrective
+work landed on 2026-04-23. The remaining preview `/healthz`,
+preview-release, and preview-traffic validation stages were then
+explicitly externalised by owner direction, so they no longer belong in
+an active repo plan.
 
 ## Reset Context
 

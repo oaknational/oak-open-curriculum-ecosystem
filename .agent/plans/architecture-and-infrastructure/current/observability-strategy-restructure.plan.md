@@ -347,8 +347,8 @@ with:
 2. **`synthetic-monitoring.plan.owner-externalised-2026-04-23.md`** —
    archive note for the repo lane that was originally authored here for
    external uptime and working-probe monitoring. Archived 2026-04-23 as
-   owner-external work. The surviving repo-owned proof now lives in
-   `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`:
+   owner-external work. The surviving repo-owned closure record now
+   lives in `archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`:
    invalid-URL classification, the lingering lint diagnostic, and the
    representative-env build gate that must land before the later
    owner-directed preview check.
@@ -588,8 +588,8 @@ bodies to cross-reference:
   schema contract per ADR-162; metric names the adapter emits
   (e.g. `oak.mcp.handler.request.count`, `oak.mcp.tool.duration_ms`)
   must be catalogued alongside event schemas.
-- L-7 → `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`
-  for deploy-boundary repair and preview proof before any external
+- L-7 → `archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`
+  for the deploy-boundary closure record before any external
   uptime monitor is meaningful.
 - L-7 → `multi-sink-vendor-independence-conformance.plan.md` to
   document the release-linkage carve-out (release linkage is
@@ -751,7 +751,7 @@ the five sibling MVP `current/` plans into five **execution waves**:
 | **2. Schema Foundation** | Events workspace + vendor-independence structural lint. | Sibling `observability-events-workspace.plan.md` WS1–WS6. Sibling `multi-sink-vendor-independence-conformance.plan.md` WS1 carve-out (`no-vendor-observability-import` ESLint rule only). |
 | **3. Primary Emitters (Server)** | Server-side emission consumes Wave 2 schemas by import. | Maximisation lanes: L-1, L-2, L-3, L-4b, L-9. |
 | **4. Cross-axis & Widget** | Second emitting runtime + axis-specific emission plans. | Maximisation lane L-12; sibling `security-observability.plan.md`; sibling `accessibility-observability.plan.md`. Can parallelise within wave. |
-| **5. Operations + Conformance + Close-out** | Alerts + emission-persistence test + MVP-deferred lanes + close-out ADRs. | Maximisation lanes: L-13, L-14, L-15, L-DOC final, L-EH final; MVP-deferred (L-4a, L-5, L-6, L-10, L-11). Sibling `multi-sink-vendor-independence-conformance.plan.md` WS2+ (emission-persistence test). Current follow-through plan `mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md` leaves the repo in an honest pre-preview state; external monitor setup happens outside the repo and preview validation is owner-directed. |
+| **5. Operations + Conformance + Close-out** | Alerts + emission-persistence test + MVP-deferred lanes + close-out ADRs. | Maximisation lanes: L-13, L-14, L-15, L-DOC final, L-EH final; MVP-deferred (L-4a, L-5, L-6, L-10, L-11). Sibling `multi-sink-vendor-independence-conformance.plan.md` WS2+ (emission-persistence test). Archived closure record `archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md` captures the bounded corrective lane; external monitor setup and remaining validation are owner-handled. |
 
 **Architectural rationale**:
 

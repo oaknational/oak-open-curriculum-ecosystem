@@ -8,6 +8,21 @@ live in the register at
 
 ---
 
+## 2026-04-23 (latest, owner-declared lane closeout) — once the owner externalises validation, keeping a repo plan active becomes fake motion (Codex / codex)
+
+**Observation**: the repo-owned corrective lane was complete, but the
+live continuity surfaces still described it as an active "one final
+session" plan. Once the owner explicitly separated validation from this
+session, the right move was to archive the plan, retarget live links to
+the archive record, and make "wait for owner validation or reopen on a
+new defect" the next safe step.
+
+### Practical lesson
+
+When the owner says a plan is complete and validation is separate,
+leave the repo in an honest archival state. Do not preserve a fake
+active plan just to keep a queue-shaped narrative alive.
+
 ## 2026-04-23 (latest, strict canonical-fix pass for sitemap + search-cli + Sentry gate) — the cleaner architectural choice was also the one that actually passed (Codex / codex)
 
 **Observation**: the owner corrected the session style before more code
@@ -442,7 +457,7 @@ Owner direction sharpened the contract:
 This session applied that contract directly:
 
 - rewrote
-  [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
+  [`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md)
   into a single-session operational repair plan;
 - created
   [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md)
@@ -478,7 +493,7 @@ Once that boundary was made explicit, the shape clarified quickly:
 ### What this means operationally for the next session
 
 The next execution session opens at Operational Step 1 of
-[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md):
+[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md):
 verify the actual Vercel import contract from primary evidence, write
 the contract note into the plan, and only then code the deploy-boundary
 repair.
@@ -605,7 +620,7 @@ Owner request triggered three artefacts in one commit:
      to avoid bloating the file ("No warning toleration, anywhere",
      with a reference to the rule for elaboration).
 2. **Execution plan that closes every reviewer finding**:
-   `.agent/plans/observability/current/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`
+   `.agent/plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`
    — nine phases (doctrine landing → build self-assertion → canonical
    refactor → type-level satisfies clause → smoke harness repoint
    → synthetic-monitoring lane unblock → Vercel preview probe →
