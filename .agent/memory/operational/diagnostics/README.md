@@ -9,20 +9,16 @@ across machines.
 
 - `commit-attempts.log` — TSV log of `git commit` attempts,
   recording timestamp, outcome, elapsed seconds, sha, invocation
-  mode, subject, and note. Appended by
+  mode, subject, and note. Historically appended by
   [`scripts/log-commit-attempt.sh`](../../../../scripts/log-commit-attempt.sh)
-  after each commit attempt. Used to diagnose hook timing,
-  output-truncation, and environment quirks over time, across
-  sessions and across machines.
+  after each commit attempt. Collection is currently paused; the
+  file is retained as historical data and the script is dormant.
 
 ## Convention
 
-After every `git commit` attempt — successful or otherwise —
-append a row:
-
-```bash
-scripts/log-commit-attempt.sh OUTCOME ELAPSED SHA MODE "SUBJECT" ["NOTE"]
-```
+Do not append new rows while commit-attempt logging is paused.
+`commit-attempts.log` remains in the repo as a historical trace from
+the period when cross-session commit diagnostics were being collected.
 
 Fields:
 
@@ -41,11 +37,9 @@ Fields:
   identifier, node/pnpm version, Shell-tool variant — anything
   that helps correlate cross-machine differences later).
 
-## Why tracked in git?
+## Why kept in git?
 
-Cross-machine and cross-agent visibility is the whole point: a
-pattern is only diagnosable if every agent in every session can
-see what other agents have seen. Pattern extraction (turning a
-log signal into a napkin observation, or a stable pattern entry)
-still happens in the napkin / pattern library; the log is the
-raw substrate that pattern-extraction reasons over.
+The file remains tracked because it is part of the repo's recent
+operational history and may be reactivated soon if commit diagnostics
+become necessary again. While paused, it should be treated as
+historical data rather than an active append-only workflow.

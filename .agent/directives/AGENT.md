@@ -280,10 +280,9 @@ Use the `commit` skill for commits — canonical at
 the live commitlint constraints inline at draft time, validates the drafted
 message via [`scripts/check-commit-message.sh`](../../scripts/check-commit-message.sh)
 BEFORE `git commit` (catches violations in ~1s before the ~34s pre-commit
-cycle), and logs every attempt via [`scripts/log-commit-attempt.sh`](../../scripts/log-commit-attempt.sh)
-into the tracked diagnostic substrate at
-[`.agent/memory/operational/diagnostics/commit-attempts.log`](../memory/operational/diagnostics/commit-attempts.log)
-for cross-session pattern visibility. Skill adapters:
+cycle). Commit-attempt logging is currently paused; the helper script and
+historical log remain in place but are not part of the active workflow.
+Skill adapters:
 `.cursor/skills/commit/SKILL.md` (Cursor) and `.agents/skills/commit/SKILL.md`
 (Codex). Claude and Gemini discover via this directive.
 

@@ -6,9 +6,7 @@ description: >-
   format. Always active, every commit, every session, no trigger required.
   Enumerates live commitlint constraints inline at draft time, validates the
   drafted message via scripts/check-commit-message.sh BEFORE invoking
-  git commit, and logs every attempt via scripts/log-commit-attempt.sh so
-  hook-timing and output-truncation patterns stay countable across sessions
-  and machines.
+  git commit.
 ---
 
 # Commit Current Work
@@ -31,7 +29,7 @@ closes that exposure window.
 
 ## Tooling
 
-Two scripts in `scripts/` make this skill actionable end-to-end:
+One active script makes this skill actionable end-to-end:
 
 - **`scripts/check-commit-message.sh`** — validates a commit message against
   this repo's commitlint config in isolation from the rest of the pre-commit /
@@ -39,14 +37,10 @@ Two scripts in `scripts/` make this skill actionable end-to-end:
   `-F`, `-F -`, stdin). Exit 0 conforms, 1 violates, 2 invalid usage. Catches
   `header-max-length`, `body-max-line-length`, and case violations in ~1s
   before the ~34s pre-commit cycle. **Use BEFORE every `git commit`.**
-- **`scripts/log-commit-attempt.sh`** — appends one TSV row to the tracked
-  diagnostic log at
-  [`.agent/memory/operational/diagnostics/commit-attempts.log`](../../memory/operational/diagnostics/commit-attempts.log)
-  recording outcome (`ok|fail|truncated|interrupted`), elapsed seconds, sha,
-  invocation mode, subject, and optional note. See
-  [`diagnostics/README.md`](../../memory/operational/diagnostics/README.md)
-  for the convention. **Use AFTER every `git commit` attempt** (success OR
-  failure) so cross-session patterns stay countable.
+
+`scripts/log-commit-attempt.sh` is retained in the repo but currently
+disabled. Do not call it unless the owner explicitly re-enables
+commit-attempt logging.
 
 ## Before You Draft — Load the Live Constraints
 
@@ -116,9 +110,7 @@ Run these steps **before** formulating the commit message.
    survives the shell. Cursor-Shell-tool users add the file-redirect
    workaround documented under "Cursor Shell tool — stream truncation
    workaround" below.
-8. **Log the attempt** via `scripts/log-commit-attempt.sh` (success OR
-   failure).
-9. **Verify**: `git status` — confirm the commit succeeded.
+8. **Verify**: `git status` — confirm the commit succeeded.
 
 ## Pre-Commit Validation (replaces the manual format-check)
 
@@ -211,67 +203,25 @@ END=$(date +%s)
 ELAPSED=$((END-START))
 tail -5 /tmp/commit.log
 SHA=$(git log -1 --format=%h)
-
-if [ $RC -eq 0 ]; then
-  scripts/log-commit-attempt.sh ok $ELAPSED $SHA heredoc-fileout \
-    "<subject>" "<note>"
-else
-  scripts/log-commit-attempt.sh fail $ELAPSED - heredoc-fileout \
-    "<subject>" "rc=$RC"
-fi
 ```
 
-**Falsifiability** (per the
-[diagnostics convention](../../memory/operational/diagnostics/README.md)):
-the workaround persists ONLY while the truncation pattern keeps
-reproducing. The diagnostic log
-[`commit-attempts.log`](../../memory/operational/diagnostics/commit-attempts.log)
-records every attempt's MODE (`heredoc-stream` vs `heredoc-fileout` vs
-others) and OUTCOME. When (i) the log shows ≥3 successive Cursor Shell
-sessions with `MODE=heredoc-stream` landing `ok` AND (ii) no `truncated`
-outcomes in the same window, the workaround should be retired in favour
-of the plain HEREDOC. The log is the substrate; pattern extraction
-remains the napkin's job.
+**Falsifiability**: keep the file-output workaround only while the
+streamed `git commit` path is genuinely unreliable in Cursor Shell
+tool sessions. If streamed commits start landing cleanly again, retire
+the file-output variant and return to the plain HEREDOC.
 
 **Anti-workaround**: do NOT pre-prime the turbo cache by running
 `bash .husky/pre-commit` separately before `git commit`. It does not
 prevent the truncation (the truncation is a stream-handover artefact,
 not a hook-timing one), and it wastes ~30s per commit.
 
-## Logging Every Attempt
+## Commit-Attempt Logging
 
-After every `git commit` attempt — successful or otherwise — append a
-row to the diagnostic log:
-
-```bash
-scripts/log-commit-attempt.sh OUTCOME ELAPSED SHA MODE "SUBJECT" ["NOTE"]
-```
-
-Field semantics (full reference in
-[`diagnostics/README.md`](../../memory/operational/diagnostics/README.md)):
-
-- **OUTCOME** — `ok` (commit landed) | `fail` (hook genuinely failed,
-  rc≠0, real error) | `truncated` (tool reports rc≠0 but no commit
-  landed AND hook output was visibly cut off; a Shell-tool /
-  stream-handover artefact, not a hook-substance failure) |
-  `interrupted` (user or tool interrupted before completion).
-- **ELAPSED** — integer seconds (or `-`).
-- **SHA** — short commit sha (or `-`).
-- **MODE** — short free-form invocation pattern, e.g. `heredoc-stream`,
-  `heredoc-fileout`, `-m-stream`, `-m-fileout`. Helps correlate
-  truncation with invocation shape.
-- **SUBJECT** — commit subject (truncated to 80 chars).
-- **NOTE** — optional free-form short note.
-
-The log is **tracked in git**: cross-machine and cross-agent visibility
-is the whole point. A pattern is only diagnosable if every agent in
-every session can see what other agents have seen. Pattern extraction
-(turning a log signal into a napkin observation, or a stable pattern
-entry) still happens in the napkin / pattern library; the log is the
-raw substrate that pattern-extraction reasons over. The log carries a
-**bounded self-referential drift**: each commit that adds a row leaves
-a trailing uncommitted row until the next commit folds it in — this is
-intended.
+Commit-attempt logging is currently paused. The helper script is still
+present in `scripts/` for quick reactivation, but the standard commit
+workflow should not append to
+[`commit-attempts.log`](../../memory/operational/diagnostics/commit-attempts.log)
+unless the owner explicitly asks for that diagnostic trace again.
 
 ## Safety Rules
 
@@ -305,12 +255,6 @@ skill installs a **pre-draft** tripwire: constraints are enumerated inline
 commitlint config *before* `git commit` is invoked. The live hook is still the
 ground truth — this skill does not replace it — but the rework loop is closed
 at draft time rather than commit-invocation time.
-
-The post-commit log (`scripts/log-commit-attempt.sh`) extends the same
-philosophy in the other direction: instead of treating each `Exit 1` as
-isolated noise, every attempt becomes a row in a tracked substrate that
-makes hook-timing and Shell-tool behaviour patterns visible across
-sessions and machines.
 
 ## Related Surfaces
 

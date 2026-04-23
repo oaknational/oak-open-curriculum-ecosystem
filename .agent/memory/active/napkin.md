@@ -293,6 +293,20 @@ command/script mix had been solved.
   outstanding. Do not let a green static-analysis gate quietly redefine
   the larger acceptance claim.
 
+## 2026-04-23 (latest, commit-diagnostics pause) — keeping a dormant helper is owner-directed workflow policy, not an active contract (Codex / codex)
+
+**Observation**: the owner no longer wants commit-attempt logging, but
+does want the helper left in place for possible near-term reuse. The
+right change is to disable the script and remove the workflow
+instructions that call it, while keeping the file and the historical
+log present but inactive.
+
+### Patterns to Remember
+
+- If a diagnostic helper is being paused, disable both the executable
+  path and the doctrine that instructs agents to invoke it; otherwise
+  the helper is "disabled" only on paper.
+
 - capabilities that matter but really belong as proper in-process
   commands (`observe purge`, evaluation commands if `oaksearch` is the
   owner);

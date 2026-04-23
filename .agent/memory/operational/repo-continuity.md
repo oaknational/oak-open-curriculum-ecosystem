@@ -615,12 +615,12 @@ via `scripts/check-commit-message.sh` (~1s, catches
 `header-max-length` / `body-max-line-length` before the ~34s
 pre-commit cycle), the Cursor-Shell-tool stream-truncation
 workaround (file-redirect commit invocation; see the skill's
-own falsifiability discipline), and post-commit logging via
-`scripts/log-commit-attempt.sh` into the tracked diagnostic
-substrate at
-[`diagnostics/commit-attempts.log`](diagnostics/commit-attempts.log).
-Do NOT pre-prime the turbo cache via `bash .husky/pre-commit`
-(documented anti-workaround in the skill).
+own falsifiability discipline). Commit-attempt logging is now
+paused; `scripts/log-commit-attempt.sh` and
+[`diagnostics/commit-attempts.log`](diagnostics/commit-attempts.log)
+remain only as dormant/historical surfaces. Do NOT pre-prime the
+turbo cache via `bash .husky/pre-commit` (documented anti-workaround
+in the skill).
 
 **Three rehoming open items** await owner attention but do NOT
 block any thread (recorded as honest PDR-026 deferrals on
