@@ -311,6 +311,55 @@ stream-truncation workaround, and post-commit logging via
    if the probe fails again, the landing is unlanded and this
    file rewrites for the next attempt.
 
+### Sub-agent review cadence (binding for this session)
+
+Three readonly review touchpoints, each with a named gate. Per
+the cadence-during-long-work refinement on
+[`AGENT.md § Use Sub-agents`](../../../directives/AGENT.md):
+do not all-at-the-end batch these. Each touchpoint catches a
+class of error the next touchpoint cannot recover from cheaply.
+
+1. **Before pushing the branch (between Session-shape steps 2
+   and 3)** — invoke
+   [`architecture-reviewer-fred`](../../../../.claude/agents/architecture-reviewer-fred.md)
+   readonly on the `fb047f86` diff plus the staged
+   diagnostics-log row. Gate: the boundary-discipline contract
+   (single canonical resolver, single boundary read of root
+   `package.json`, fail-policy split via `SentryBuildPluginIntent`)
+   is consistently applied across `@oaknational/build-metadata`,
+   `createSentryBuildPlugin`, and `esbuild.config.ts`. Last
+   cheap chance to catch a contract violation before it bakes
+   into the deploy event in Sentry.
+2. **After the build log shows enabled/skipped, before opening
+   the Sentry UI (between Session-shape steps 3 and 4)** —
+   invoke
+   [`sentry-reviewer`](../../../../.claude/agents/sentry-reviewer.md)
+   readonly on the Vercel build log plus the new
+   `dist/build-info.json` artefact. Gate: the release name,
+   commits ref, and environment values are exactly what Sentry
+   will index. Catches mis-ingestion before it becomes a "why
+   does the UI look wrong" debugging detour.
+3. **Before authoring the ADR-163 amendment (between
+   Session-shape steps 4 and 5)** — invoke
+   [`architecture-reviewer-betty`](../../../../.claude/agents/architecture-reviewer-betty.md)
+   readonly on the proposed amendment text. Gate: the
+   boundary-discipline contract has cohesion (does it actually
+   constrain future drift?) and bounded change-cost (will the
+   next maintainer understand the constraint without re-deriving
+   it?). ADRs are write-once-mostly artefacts; amendment quality
+   matters more than landing speed. Pair with a
+   [`code-reviewer`](../../../../.claude/agents/code-reviewer.md)
+   readonly pass on the same draft text — ADR amendments are
+   high-risk for boundary-discipline drift because they
+   retroactively define what the implementation was supposed to
+   be doing.
+
+If any of the three reviewers raises a blocking concern,
+**stop and address it before continuing the work-item walk** —
+do not bank the review for "after the next commit". The whole
+point of the cadence is that each review's evidence base is
+fresh enough to act on cheaply.
+
 ## Standing decisions (owner-beats-plan invariant protects these)
 
 - **Build tool for the MCP app**: raw esbuild via
