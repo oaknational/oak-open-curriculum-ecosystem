@@ -1,12 +1,33 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-22 (`observability-sentry-otel` thread
-session close — Pippin / cursor-claude-opus-4-7 — UNLANDED probe;
-L-8 Correction subsection landed in the active plan; continuity
+**Last refreshed**: 2026-04-23 (Pippin / cursor-claude-opus-4-7
+second session — `observability-sentry-otel` thread session-handoff
+closeout. No L-8 implementation work this session [explicit owner
+constraint: "no implementation work until the next session"];
+session-scoped substance was (1) continuity-correction commits
+fixing the napkin/distilled owner-gating false framing in
+`repo-continuity.md` + `napkin.md`, (2) authoring
+`scripts/check-commit-message.sh` to validate commit messages
+in isolation from the ~34s pre-commit cycle, (3) authoring the
+commit-attempts diagnostic loop —
+`scripts/log-commit-attempt.sh` + tracked TSV log at
+`.agent/memory/operational/diagnostics/commit-attempts.log` +
+diagnostics README — to make the "git commit pre-commit output
+truncation in the last ~24h" pattern countable across
+sessions/machines, (4) capturing the truncation observation as a
+top-level napkin entry with hypotheses + workaround +
+falsifiability. Four commits landed: `6137c817` continuity
+correction, `74826914` check-commit-message helper, `0bd3204c`
+diagnostics infra, `14ea70f3` napkin truncation observation.
+New tooling surfaced via [`AGENTS.md § Commit workflow helpers`](../../../AGENTS.md)
+for the next L-8 Correction agent. Earlier-today refresh:
+2026-04-22 (`observability-sentry-otel` thread session close —
+Pippin / cursor-claude-opus-4-7 — UNLANDED probe; L-8
+Correction subsection landed in the active plan; continuity
 surfaces refreshed; Step 6 finding + Re-fired falsifiabilities
 block re-issued same session after owner correction —
 napkin/distilled are agent-gated, only `.agent/directives/` and
-`.agent/practice-core/` are owner-gated). Earlier-today refresh:
+`.agent/practice-core/` are owner-gated). Earlier-still refresh:
 2026-04-22 (Session 7 CLOSE — owner-corrected restatement). Session 7 honest landed
 state: Phase A + Phase D PARTIAL (napkin rotated + distilled
 compressed only; the four directive files in Phase D scope reset
@@ -78,7 +99,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | _unattributed_ / _unknown_ / _unknown_ / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21 (S4 Task 4.5 file migration; not substantive thread work); `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22 (S8 arc-close cross-reference fix only; no substantive thread work); `cursor` / `claude-opus-4-7` / Pippin / diagnosis-and-correction / 2026-04-22 (Vercel probe attempted + UNLANDED; L-8 Correction subsection authored + landed in active plan; PR #87 description rewritten by owner direction) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | _unattributed_ / _unknown_ / _unknown_ / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21 (S4 Task 4.5 file migration; not substantive thread work); `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22 (S8 arc-close cross-reference fix only; no substantive thread work); `cursor` / `claude-opus-4-7` / Pippin / diagnosis-and-correction / 2026-04-23 (2026-04-22: Vercel probe attempted + UNLANDED + L-8 Correction subsection authored + landed in active plan + PR #87 description rewritten by owner direction; 2026-04-23: continuity-correction commits fixing napkin/distilled owner-gating false framing + authored `scripts/check-commit-message.sh` commit-message validator + authored commit-attempts diagnostic loop [`scripts/log-commit-attempt.sh` + tracked TSV log + diagnostics README] + captured the "git commit pre-commit output truncation in the last ~24h" pattern as a top-level napkin entry; no L-8 implementation work this session per explicit owner constraint) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -534,6 +555,21 @@ for the full landing target, session shape (numbered work-items
 reminders (7th instance of `inherited-framing-without-first-principles-check`;
 2nd instance of `passive-guidance-loses-to-artefact-gravity`).
 
+**Commit workflow tooling available** (added 2026-04-23 by Pippin's
+second session): the L-8 Correction work-list will produce ~8+
+commits. Use the workflow standard documented in
+[`AGENTS.md § Commit workflow helpers`](../../../AGENTS.md):
+`scripts/check-commit-message.sh` for pre-validation (~1s,
+catches `header-max-length` / `body-max-line-length` before the
+~34s pre-commit cycle), `git commit -F - >/tmp/commit.log 2>&1`
+for the commit itself (workaround for the Cursor Shell-tool
+stream-truncation pattern documented in the napkin top entry,
+2026-04-23), `scripts/log-commit-attempt.sh` to append a TSV
+row to the diagnostic log
+[`.agent/memory/operational/diagnostics/commit-attempts.log`](diagnostics/commit-attempts.log)
+after every attempt (success OR failure). Do NOT pre-prime the
+turbo cache via `bash .husky/pre-commit`.
+
 **Three rehoming open items** await owner attention but do NOT
 block any thread (recorded as honest PDR-026 deferrals on
 durable surfaces, owner-appetite-triggered, no SLA):
@@ -554,6 +590,25 @@ will be picked up when the owner has appetite. If left
 indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
+
+**Status (2026-04-23 Pippin second session — `observability-sentry-otel`
+session-handoff closeout)**: **not due — deep consolidation walk
+already completed yesterday (2026-04-22 same-thread close); this
+session's substance was a same-window continuation
+(continuity-correction commits + commit-workflow tooling);
+no consolidation triggers crossed the threshold today (no new
+pattern reached its 3rd instance; new candidates are 1 PDR-shaped
+and 1 fresh observation, both queued in the pending-graduations
+register below for the next consolidation pass; napkin grew by
+~150 lines [top-level truncation entry + the same-session
+owner-correction subsection on yesterday's entry] but the rotation
+falsifiability already fired forward yesterday and is unchanged
+in shape today)**. Findings and pending-graduations register
+additions for today's session are appended at
+[§Pending-graduations register additions (2026-04-23 handoff)](#pending-graduations-register-additions-2026-04-23-handoff)
+below the existing 2026-04-22 walk record.
+
+---
 
 **Status (per user-invoked walk after `observability-sentry-otel`
 Pippin session close, 2026-04-22 Pippin / cursor / claude-opus-4-7)**:
@@ -666,7 +721,28 @@ gating mechanism per the Session 7 lesson). Findings (steps
     Session 7 already cleared the durable-substance migration).
     Pass-through.
 
-### Pending-graduations register additions (this consolidation)
+### Pending-graduations register additions (2026-04-23 handoff)
+
+One PDR candidate captured in today's session-handoff (no full
+consolidation walk run today; this is step 6b/7a substance only):
+
+| captured-date | source-surface | graduation-target | trigger-condition | status |
+| --- | --- | --- | --- | --- |
+| 2026-04-23 | [`napkin.md` § 2026-04-23 — operational quirk: `git commit` pre-commit output truncation](../active/napkin.md) + [`diagnostics/README.md`](diagnostics/README.md) + [`scripts/log-commit-attempt.sh`](../../../scripts/log-commit-attempt.sh) | PDR amendment to [PDR-011 (Continuity Surfaces and the Surprise Pipeline)](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md) extending `capture → distil → graduate → enforce` to cover **diagnostic substrates** — high-volume operational traces (e.g. `commit-attempts.log`) tracked alongside continuity surfaces, with the same surprise-pipeline routing applied to extract patterns FROM the substrate INTO the napkin/pattern library. Today the convention is documented in the diagnostics README only; PDR-011 governs continuity surfaces but does not yet name diagnostic substrates as a distinct surface class. | (i) ≥1 second diagnostic substrate emerges (e.g. a different long-horizon operational trace) and reuses the same shape; OR (ii) the truncation pattern is countably resolved or reframed by data accumulated in `commit-attempts.log` and the loop's value is demonstrated; AND (iii) explicit owner request to graduate. | pending |
+
+Plus one observation worth noting (not yet candidate-shaped — too
+tactical / single-instance):
+
+- The Cursor Shell-tool stream truncation at the depcruise → turbo
+  handover may itself be a vendor-tool issue worth filing
+  upstream once `commit-attempts.log` accumulates enough rows
+  (≥3 distinct sessions reproducing the same `truncated` outcome
+  on the same MODE) to demonstrate the pattern is not local
+  noise. Until then, the file-redirect workaround is the
+  documented countermeasure (see
+  [`AGENTS.md § Commit workflow helpers`](../../../AGENTS.md)).
+
+### Pending-graduations register additions (2026-04-22 Pippin first session)
 
 Two new ADR candidates, both `status: pending`, both originating
 in the L-8 Correction subsection authored 2026-04-22 Pippin

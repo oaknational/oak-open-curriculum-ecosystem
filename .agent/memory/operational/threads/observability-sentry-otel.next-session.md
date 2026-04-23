@@ -46,7 +46,7 @@ re-stating for a further session.
 | *`unattributed`* | *`unknown`* | *`unknown`* | *`unknown`* | `executor` | 2026-04-21 | 2026-04-21 |
 | `Samwise` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `migration-maintenance` | 2026-04-21 | 2026-04-21 |
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
-| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-and-correction` | 2026-04-22 | 2026-04-22 |
+| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-and-correction` | 2026-04-22 | 2026-04-23 |
 
 **Identity discipline**: per the additive-identity rule
 ([PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md)),
@@ -181,6 +181,19 @@ The next session is shaped by the L-8 Correction subsection of the
 active plan, NOT the original probe-only flow above. The
 correction work-items must land before the probe is meaningful;
 the probe at the end is the acceptance gate.
+
+**Commit workflow tooling available** (added 2026-04-23 by Pippin):
+the L-8 Correction work-list will produce ~8+ commits (one per
+work-item plus a probe commit). To avoid the Shell-tool
+stream-truncation pattern that bit Pippin's continuity-correction
+commits on 2026-04-23, use the workflow standard documented in
+[`AGENTS.md § Commit workflow helpers`](../../../../AGENTS.md):
+`scripts/check-commit-message.sh` for pre-validation,
+`git commit -F - >/tmp/commit.log 2>&1` for the commit itself,
+`scripts/log-commit-attempt.sh` to append a TSV row to the
+diagnostic log. Do NOT pre-prime the turbo cache via
+`bash .husky/pre-commit`; the turbo cache primes itself in the
+real commit and pre-priming wastes ~30s per commit.
 
 1. **Ground First** per `start-right-quick` steps 1–6 (directives →
    start-here ADRs → active memory → operational memory → plans →

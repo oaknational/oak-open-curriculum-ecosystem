@@ -14,6 +14,57 @@ Primary agent workflow CLIs live in `agent-tools/` and are invoked from repo roo
 - `pnpm agent-tools:cursor-session-from-claude-session find --last-hours 2`
 - `pnpm agent-tools:codex-reviewer-resolve code-reviewer`
 
+### Commit workflow helpers (added 2026-04-23, Pippin)
+
+Two shell scripts in `scripts/` for safer commit cycles:
+
+- `scripts/check-commit-message.sh` — validate a commit message
+  against this repo's commitlint config in isolation from the rest
+  of the pre-commit / commit-msg hook chain. Mirrors `git commit`
+  message intake (`-m` repeats, `-F`, `-F -`, stdin). Exit 0
+  conforms, 1 violates, 2 invalid usage. Catches
+  `header-max-length` and `body-max-line-length` violations
+  before the ~34s pre-commit cycle. Use BEFORE every `git commit`.
+- `scripts/log-commit-attempt.sh` — append one TSV row to
+  `.agent/memory/operational/diagnostics/commit-attempts.log`
+  recording outcome (`ok|fail|truncated|interrupted`), elapsed
+  seconds, sha, invocation mode, subject, and optional note. See
+  the [diagnostics README](.agent/memory/operational/diagnostics/README.md)
+  for the convention. Use AFTER every `git commit` attempt
+  (success OR failure) so the truncation pattern stays countable.
+
+**Commit workflow standard (this branch, 2026-04-23 onward)**:
+
+```bash
+# 1. Validate the message in isolation (~1s).
+./scripts/check-commit-message.sh -F - <<'EOF'
+<your full commit message>
+EOF
+
+# 2. Stage, then commit with stdout/stderr redirected to a file
+#    (workaround for the Shell-tool stream-truncation pattern
+#    documented in the napkin top entry, 2026-04-23).
+git add <paths>
+START=$(date +%s)
+git commit -F - >/tmp/commit.log 2>&1 <<'EOF'
+<your full commit message>
+EOF
+RC=$?; END=$(date +%s); ELAPSED=$((END-START))
+tail -3 /tmp/commit.log
+SHA=$(git log -1 --format=%h)
+
+# 3. Log the attempt.
+if [ $RC -eq 0 ]; then
+  scripts/log-commit-attempt.sh ok $ELAPSED $SHA heredoc-fileout "<subject>" "<note>"
+else
+  scripts/log-commit-attempt.sh fail $ELAPSED - heredoc-fileout "<subject>" "rc=$RC"
+fi
+```
+
+Do NOT pre-prime the turbo cache via `bash .husky/pre-commit`
+before `git commit`. It wastes ~30s and confuses symptom for
+cause.
+
 ## Learned User Preferences
 
 - `.env.local` files must mirror the structure of `.env.example` (same section headers, ordering, documentation comments)
