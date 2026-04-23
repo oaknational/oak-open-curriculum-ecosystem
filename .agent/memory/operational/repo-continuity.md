@@ -1,10 +1,45 @@
 # Repo Continuity
 
 **Last refreshed**: 2026-04-23 (Pippin / cursor-claude-opus-4-7
-second session — `observability-sentry-otel` thread session-handoff
-closeout. No L-8 implementation work this session [explicit owner
-constraint: "no implementation work until the next session"];
-session-scoped substance was (1) continuity-correction commits
+**third session** — `observability-sentry-otel` thread
+session-handoff closeout after the L-8 Correction WI 1-5 atomic
+landing in commit `fb047f86`. Session-scoped substance was: (i)
+**WI 1-5 of the L-8 Correction work-list landed locally** —
+canonical `resolveBuildTimeRelease` resolver in new workspace
+package `@oaknational/build-metadata` (44/44 tests green), typed
+`SentryBuildPluginIntent` discriminated union (`disabled` /
+`skipped` / `configured`) replacing the prior fail-fast
+`Result.error` shape, `esbuild.config.ts` four-arm switch with
+three-branch dry build verified locally,
+`validate-root-application-version.mjs` pre-flight removed from
+the MCP HTTP build script only (search-cli left on tsup with the
+pre-flight intact per WI-5 scope-discipline correction caught by
+owner mid-execution); (ii) **session-scoped continuity work
+folded into the same commit**: `AGENTS.md` + `CLAUDE.md` +
+`GEMINI.md` stripped to pure pointers per the entry-point sweep,
+new `.agent/commands/ephemeral-to-permanent-homing.md` shared
+methodology partial authored, `session-handoff` step 6d added
+(entry-point drift sweep), `consolidate-docs` step 3 retargeted
+at the homing partial, `tsdoc-and-documentation-hygiene` rule
+renamed to `documentation-hygiene` across canonical + Cursor +
+Claude adapters with body restructured (misleading-doc detection
++ attribution on adoption + TSDoc presence and quality); (iii)
+**3 docs propagation edits** homing AGENTS.md facts to
+permanent locations (workspace README + `observability.md` +
+`docs/operations/sentry-deployment-runbook.md`); (iv)
+**distilled-memory user-preferences** extended (env-mirror,
+scope-discipline, attribution); (v) **2 pre-commit fail-and-fix
+cycles**: prettier formatting (root) and a depcruise-detected
+circular dependency between `build-time-release.ts` and
+`build-time-release-internals.ts` (broken by extracting shared
+types to `build-time-release-types.ts`). Forward state: WI 6-8
+remain (push branch + Vercel preview probe + Sentry UI
+verification + ADR-163 §6/§7 amendment). Earlier-today refresh:
+2026-04-23 second session — Pippin / cursor-claude-opus-4-7
+session-handoff closeout. No L-8 implementation work that session
+[explicit owner constraint: "no implementation work until the
+next session"]; session-scoped substance was (1)
+continuity-correction commits
 fixing the napkin/distilled owner-gating false framing in
 `repo-continuity.md` + `napkin.md`, (2) authoring
 `scripts/check-commit-message.sh` to validate commit messages
@@ -176,7 +211,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | _unattributed_ / _unknown_ / _unknown_ / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21 (S4 Task 4.5 file migration; not substantive thread work); `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22 (S8 arc-close cross-reference fix only; no substantive thread work); `cursor` / `claude-opus-4-7` / Pippin / diagnosis-and-correction / 2026-04-23 (2026-04-22: Vercel probe attempted + UNLANDED + L-8 Correction subsection authored + landed in active plan + PR #87 description rewritten by owner direction; 2026-04-23: continuity-correction commits fixing napkin/distilled owner-gating false framing + authored `scripts/check-commit-message.sh` commit-message validator + authored commit-attempts diagnostic loop [`scripts/log-commit-attempt.sh` + tracked TSV log + diagnostics README] + captured the "git commit pre-commit output truncation in the last ~24h" pattern as a top-level napkin entry; no L-8 implementation work this session per explicit owner constraint) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | _unattributed_ / _unknown_ / _unknown_ / executor / 2026-04-21 (retro for `f9d5b0d2`); `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-and-implementation / 2026-04-23 (third session — L-8 Correction WI 1-5 LANDED in `fb047f86` [canonical `resolveBuildTimeRelease` in new `@oaknational/build-metadata` workspace; typed `SentryBuildPluginIntent` discriminated union; `esbuild.config.ts` four-arm switch; three-branch dry build verified; validate-script removal scope-corrected by owner to MCP HTTP only] + session-scoped continuity folded into same commit [entry-point sweep landing `AGENTS.md`/`CLAUDE.md`/`GEMINI.md` to pure pointers per new `session-handoff` §6d + `ephemeral-to-permanent-homing` shared partial + `documentation-hygiene` rule rename across canonical/Cursor/Claude adapters + 3 docs-propagation edits homing AGENTS.md facts]; WI 6-8 [push + Vercel probe + Sentry UI verify + ADR-163 amendment] PENDING for next session) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -218,15 +253,19 @@ The `observability-sentry-otel` thread is branch-primary on
 totals, post-§L-8 forward path, active tracks, promotion watchlist)
 lives in
 [`threads/observability-sentry-otel.next-session.md § Lane state`](threads/observability-sentry-otel.next-session.md).
-§L-8 WS1 + WS2 + WS3.1 LANDED-WITH-CORRECTION-PENDING in commit
-`f9d5b0d2` (2026-04-21 atomic landing) and the L-8 Correction
-subsection (2026-04-22 owner-directed) at the end of
-[`sentry-observability-maximisation-mcp.plan.md`](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md).
-Next session begins at L-8 Correction work-item 1 (canonical
-release-name resolver), proceeds through work-items 2–5
-(refactors, persistence, validation-script convergence), and
-ends at work-items 6–8 (probe, Sentry UI verify, ADR-163
-amendment).
+§L-8 WS1 + WS2 + WS3.1 LANDED in commit `f9d5b0d2`
+(2026-04-21); 2026-04-22 Vercel preview probe FAILED with
+`missing_app_version`; L-8 Correction subsection authored
+2026-04-22 (owner-directed) at the end of
+[`sentry-observability-maximisation-mcp.plan.md`](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md);
+**WI 1-5 of the correction LANDED LOCALLY in commit `fb047f86`**
+(2026-04-23 — canonical resolver + persistence + plugin refactor
++ esbuild.config switch + validate-script removal from MCP HTTP
+build only). Next session begins at WI 6 (push branch + Vercel
+preview probe), proceeds to WI 7 (Sentry UI verification — release
++ commits + Artifact Bundle + deploy event), and closes at WI 8
+(ADR-163 §6/§7 amendment recording the version-resolution
+boundary discipline contract).
 
 ## Current session focus
 
@@ -608,29 +647,35 @@ Non-goals for next session:
 
 ## Next safe step
 
-**Resume the `observability-sentry-otel` thread — execute the
-L-8 Correction work-list, then re-run the Vercel acceptance
-probe**. The §L-8 atomic landing (`f9d5b0d2`) shipped esbuild-
-native build + `@sentry/esbuild-plugin` registration + L-7
-orchestrator deletion + ADR-163 §6/§7 HOW→WHAT amendment, but
-the 2026-04-22 Vercel preview probe (`dpl_8LJxuArqh68w4pon9MbfnriD5rre`)
-exited 1 with `[esbuild.config] Sentry build-plugin intent error: { kind: 'missing_app_version' }`.
-Owner-directed strategy + 8-item correction work-list now lives
-at the end of
-[`sentry-observability-maximisation-mcp.plan.md`](../../plans/observability/active/sentry-observability-maximisation-mcp.plan.md)
-under "L-8 Correction (2026-04-21) — Version source-of-truth
-and fail-policy". Two distinct errors to correct: (1) version-
-resolution drift (single source of truth; production = root
-`package.json`, preview = branch + short SHA, dev = short SHA;
-persist to `dist/build-info.json`); (2) fail-policy inversion
-(vendor config missing → warn; vital identity missing → throw).
-The probe at the end of the work-list is the acceptance gate.
-See
+**Resume the `observability-sentry-otel` thread — push the
+branch and run the Vercel acceptance probe (WI 6), verify the
+Sentry UI surfaces the resulting release + commits + deploy
+event (WI 7), and amend ADR-163 §6/§7 to record the
+version-resolution boundary-discipline contract (WI 8)**. WI
+1-5 of the L-8 Correction work-list LANDED LOCALLY in commit
+`fb047f86` (2026-04-23): the canonical `resolveBuildTimeRelease`
+resolver in new workspace package `@oaknational/build-metadata`,
+persistence to `dist/build-info.json`, the typed
+`SentryBuildPluginIntent` discriminated union (`disabled` /
+`skipped` / `configured`), the `esbuild.config.ts` four-arm
+switch (with the three-branch dry build verified locally), and
+the `validate-root-application-version.mjs` pre-flight removal
+from the MCP HTTP build script only (search-cli left on tsup
+with the pre-flight intact per the WI-5 owner-correction). Three
+deferred follow-ons recorded in the active plan's L-8 Correction
+§Deferred follow-on subsection (search-cli → esbuild + canonical
+resolver migration; converge remaining deployable workspaces;
+delete the validate-script when no consumer remains). See
 [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md)
-for the full landing target, session shape (numbered work-items
-1–8 mapped to the correction subsection), and updated pattern
-reminders (7th instance of `inherited-framing-without-first-principles-check`;
-2nd instance of `passive-guidance-loses-to-artefact-gravity`).
+for the full landing target, session shape (push → observe →
+verify → amend), pre-flight (`SENTRY_AUTH_TOKEN` set on Vercel
+`poc-oak-open-curriculum-mcp` for production / preview /
+development), and pattern reminders (8th potential instance of
+`inherited-framing-without-first-principles-check` AVOIDED this
+session by WI-3 + WI-4 taking the discriminated-union route over
+the inherited fail-fast Result.error shape; entry-point sweep
+landing as installed countermeasure for
+`passive-guidance-loses-to-artefact-gravity`).
 
 **Commit workflow tooling available** (refined 2026-04-23 by
 Pippin's second session into the canonical `commit` skill at
@@ -669,22 +714,56 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
-**Status (2026-04-23 Pippin second session — `observability-sentry-otel`
-session-handoff closeout)**: **not due — deep consolidation walk
-already completed yesterday (2026-04-22 same-thread close); this
-session's substance was a same-window continuation
-(continuity-correction commits + commit-workflow tooling);
-no consolidation triggers crossed the threshold today (no new
-pattern reached its 3rd instance; new candidates are 1 PDR-shaped
-and 1 fresh observation, both queued in the pending-graduations
-register below for the next consolidation pass; napkin grew by
-~150 lines [top-level truncation entry + the same-session
-owner-correction subsection on yesterday's entry] but the rotation
-falsifiability already fired forward yesterday and is unchanged
-in shape today)**. Findings and pending-graduations register
-additions for today's session are appended at
-[§Pending-graduations register additions (2026-04-23 handoff)](#pending-graduations-register-additions-2026-04-23-handoff)
-below the existing 2026-04-22 walk record.
+**Status (2026-04-23 Pippin third session — `observability-sentry-otel`
+session-handoff closeout after L-8 Correction WI 1-5 landing)**:
+**not due — same-thread same-day continuation; deep consolidation
+walks already completed earlier today (2026-04-23 second session)
+and yesterday (2026-04-22 same-thread close); this session's
+substance was implementation landing (WI 1-5 of L-8 Correction)
+plus session-scoped continuity work folded into the same commit
+(entry-point sweep birth + homing partial + documentation-hygiene
+rule rename + 3 docs-propagation edits); no consolidation triggers
+crossed the threshold today** (no new pattern reached its 3rd
+cross-session instance; the 8th potential `inherited-framing`
+instance was AVOIDED by WI-3 + WI-4 taking the
+discriminated-union route over the inherited Result.error shape;
+the entry-point-sweep step birth is a freshly-installed
+artefact-side countermeasure to
+`passive-guidance-loses-to-artefact-gravity` rather than a
+graduation event; one new PDR-shaped candidate captured below
+under §Pending-graduations register additions (2026-04-23 third
+session); napkin grew by ~50 lines this session and the rotation
+falsifiability re-fires forward unchanged from yesterday).
+Findings and pending-graduations register additions for today's
+session are appended at
+[§Pending-graduations register additions (2026-04-23 third session)](#pending-graduations-register-additions-2026-04-23-third-session)
+below the existing 2026-04-22 + 2026-04-23-second-session walk
+records.
+
+### Pending-graduations register additions (2026-04-23 third session)
+
+One PDR-shaped candidate surfaced this session:
+
+| captured-date | source-surface | graduation-target | trigger-condition | status |
+| --- | --- | --- | --- | --- |
+| 2026-04-23 | [`session-handoff` step 6d](../../commands/session-handoff.md) + [`ephemeral-to-permanent-homing` partial](../../commands/ephemeral-to-permanent-homing.md) + the `AGENTS.md` / `CLAUDE.md` / `GEMINI.md` strip in `fb047f86` | PDR amendment to [PDR-014 (Consolidation and Knowledge-Flow Discipline)](../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md) extending the homing methodology to **platform-specific entry points** as a distinct substance class. Today the homing partial documents this in workflow form; PDR-014 governs the homing flow at the practice-governance level but does not yet name platform-specific entry points (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.codex/AGENTS.md`, etc.) as a substance-class first-class consideration. | (i) ≥1 second session that catches and homes drift in a platform-specific entry point via the `session-handoff` step 6d sweep, demonstrating the workflow holds; (ii) ≥1 second platform-specific entry point added to the repo (e.g. `.codex/AGENTS.md`) and confirmed to follow the pure-pointer convention; (iii) explicit owner request to graduate. | pending |
+
+Plus one observation worth noting (not yet candidate-shaped —
+single-instance, structural-not-pattern):
+
+- `fb047f86` is itself a structurally interesting commit shape:
+  one logical implementation lane (L-8 Correction WI 1-5) folded
+  in the same atomic commit with one structural meta-lane
+  (entry-point sweep + homing partial + rule rename). The owner
+  direction was explicit ("just do one commit for all files,
+  we are picking up the pace here"). The shape contradicts the
+  conventional small-commits / single-concern guidance, but is
+  consistent with PDR-026's per-session landing commitment
+  applied at thread cadence rather than commit cadence. Worth
+  noting if a second instance of this shape arises and the
+  owner-cadence-vs-commit-cadence trade-off needs explicit
+  governance (would be a PDR-026 amendment candidate, not a
+  new PDR).
 
 ---
 

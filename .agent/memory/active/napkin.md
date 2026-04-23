@@ -8,6 +8,72 @@ live in the register at
 
 ---
 
+## 2026-04-23 — entry-point sweep born inside the same commit that landed the pattern it counters (Pippin third session)
+
+**Observation**: the entry-point sweep (`session-handoff` step 6d
++ the `ephemeral-to-permanent-homing` shared partial + the strip
+of `AGENTS.md` / `CLAUDE.md` / `GEMINI.md` to pure pointers)
+landed in the same atomic commit (`fb047f86`) as the L-8
+Correction WI 1-5 implementation. The structural shape: a
+ritual-moment markdown step that names an authoritative source
+(the homing partial) was installed at the same instant the
+artefact-side correction (entry points stripped) ran for the
+first time. There is no "documented anticipation → drift recurs →
+ritual installed" gap here; the gap closed in one motion.
+
+### Surprise
+
+- **Expected**: per the
+  [`passive-guidance-loses-to-artefact-gravity`](patterns/passive-guidance-loses-to-artefact-gravity.md)
+  pattern, documented anticipation typically loses to artefact
+  gravity until the failure recurs and forces a ritual layer.
+  The previous instance (2026-04-22 fail-policy inversion)
+  fits this shape exactly — the `[esbuild.config] Sentry build-plugin intent error: …`
+  log line was named verbatim in the thread record before the
+  failure ran in Vercel.
+- **Actual**: this session installed the ritual *during the
+  first artefact-side correction*, not after a recurrence.
+  Mechanism: the owner direction at second-session close
+  (*"make sure the session-handoff workflow explicitly manages
+  drift in all platform-specific entry points"*) plus the
+  same-direction *"extract the ephemeral-to-permanent docs
+  flow"* arrived together with the third direction *"just do
+  one commit for all files, we are picking up the pace"*.
+  The owner-direction-bundle compressed the
+  capture → distil → graduate → enforce pipeline into a single
+  step.
+- **Behaviour change**: when the owner bundles
+  ritual-installation + artefact-correction + cadence direction
+  in one turn, treat it as the structural-graduation moment for
+  the pattern being countered (here:
+  `passive-guidance-loses-to-artefact-gravity`). The pattern's
+  3rd-instance bar still applies for graduation, but installed
+  countermeasures count as evidence the loop is closing — not
+  as new instances themselves. Falsifiability for this
+  observation: if a future session re-introduces drift in
+  `AGENTS.md` / `CLAUDE.md` / `GEMINI.md` despite step 6d, the
+  countermeasure failed and the pattern continues; if no drift
+  recurs across ≥2 future sessions where edits to platform
+  entry points are touched, the countermeasure holds.
+
+### Implementation evidence
+
+- The depcruise pre-commit gate caught a circular dependency
+  between `build-time-release.ts` and `build-time-release-internals.ts`
+  that local lint + type-check + test runs did NOT catch. The
+  fix was extracting shared types to `build-time-release-types.ts`,
+  breaking the cycle. **Insight**: depcruise is more sensitive
+  to structural debt than the per-workspace gates; treat
+  pre-commit gate failures as evidence the local workspace
+  gates have a blind spot, not as evidence the pre-commit chain
+  is being pedantic.
+- The first commit attempt also failed on prettier formatting
+  in the same chain. Two separate fail-and-fix cycles in a
+  single commit cycle is inside the pattern named in the
+  2026-04-23 top entry on `git commit` pre-commit output
+  truncation; the file-redirect workaround held this session
+  (no truncation observed).
+
 ## 2026-04-23 — graph-memory opportunity: discovery spine already exists, but is textual and manually traversed
 
 **Observation**: the repo already contains a substantial **discovery and

@@ -49,7 +49,7 @@ todos:
   - id: l8-bundler-source-maps
     content: "L-8 (forward lane for release/commits/deploy + source-map linkage): replace bespoke L-7 orchestrator with @sentry/esbuild-plugin. Switch tsup -> esbuild in the MCP app build; wire @sentry/esbuild-plugin as the bundler plugin so release registration, sourcemap upload, commit attribution, and deploy-event emission are handled by the vendor's first-party plugin. Keep resolveSentryEnvironment + resolveSentryRegistrationPolicy in @oaknational/sentry-node (pure vendor-agnostic policy). Delete-side: four orchestrator files in build-scripts/sentry-release-registration/, 21 integration tests, build:vercel custom script, vercel.json buildCommand override, ESLint + tsconfig exceptions carried for the bespoke shape; amend ADR-163 §6 to state WHAT outcome the vendor must reach (Sentry UI state: release + commits + deploy per env) rather than HOW (specific sentry-cli argv). Authoring: task #22 uses feature-workstream-template.md with Build-vs-Buy Attestation + phase-aligned Reviewer Scheduling."
     status: pending
-    note: "UN-DROPPED 2026-04-20. Prior rationale (commit history, superseded) claimed tsup-vs-esbuild swap made the plugin path costlier than the shell-script flow; owner identified that the bespoke orchestrator landed at ~900 lines across four files plus 21 tests plus two build-config overrides plus ADR amendments — materially more complexity than the tsup -> esbuild swap. The sunk-cost framing now visible in the prior 'PARKED' note is itself an instance of the guardrail installed in commit 4bccba71. Forward path now lives as §L-8 in this active plan; WS0 `assumptions-reviewer` pass returned ACCEPT WITH NOTES and those notes are applied. Next execution step: WS1 RED."
+    note: "UN-DROPPED 2026-04-20. Atomic landing 2026-04-21 in f9d5b0d2 (WS1+WS2+WS3.1) then PROBE FAILED 2026-04-22 (Vercel preview exited 1 with `missing_app_version`); 8-item L-8 Correction subsection authored at end of plan body. WI 1-5 LANDED LOCALLY 2026-04-23 in commit fb047f86 (canonical resolveBuildTimeRelease in @oaknational/build-metadata + buildBuildInfo persistence + createSentryBuildPlugin refactor with `skipped` variant + esbuild.config.ts intent-kind switch + validate-script removal from MCP HTTP build; oak-search-cli left on tsup with the pre-flight script intact per scope discipline; 3 deferred follow-ons recorded in correction subsection §Deferred follow-on). Next execution step: WI 6 (push branch + Vercel preview probe)."
   - id: l9-feedback
     content: "L-9 (Phase 3): captureFeedback pipeline; optionally surface as an MCP tool"
     status: deferred
@@ -2385,12 +2385,82 @@ invariant is working as designed.
 
 #### L-8 Correction (2026-04-21) — Version source-of-truth and fail-policy
 
-**Status**. 🔴 PENDING. Two distinct planning + implementation errors
+**Status**. 🟡 WI 1-5 LANDED LOCALLY (commit `fb047f86`,
+2026-04-23, Pippin / cursor-claude-opus-4-7); WI 6-8 PENDING (push
++ Vercel preview probe + Sentry UI verification + ADR-163 §6/§7
+amendment). Two distinct planning + implementation errors
 surfaced when the Vercel preview build of `f9d5b0d2` ran on
 `feat/otel_sentry_enhancements` @ `ff91cd1c` (deployment
-`dpl_8LJxuArqh68w4pon9MbfnriD5rre`). Both errors must be corrected
-before WS5 (production rollout) is attempted, and before this lane is
-marked `LANDED`.
+`dpl_8LJxuArqh68w4pon9MbfnriD5rre`); the canonical resolver +
+persistence + plugin-refactor + esbuild-config branching lane
+landed locally with all gates green. The remaining WI 6-8 close
+the operational acceptance gate.
+
+##### Local landing record (2026-04-23, commit `fb047f86`)
+
+WI 1-5 implementation summary:
+
+- **WI-1** Canonical `resolveBuildTimeRelease` authored in new
+  workspace package `@oaknational/build-metadata`
+  (`packages/core/build-metadata/`). Pure function; production =
+  root `package.json` `version`; preview = `preview-<branch-slug>-<short-sha>`;
+  development = short SHA. Exhaustive vitest unit coverage
+  (44/44 green) of every context row + `SENTRY_RELEASE_OVERRIDE`
+  precedence rule + every `BuildTimeReleaseError.kind` discriminant.
+  Internal helpers extracted to `build-time-release-internals.ts`
+  to clear the `max-lines: 250` rule; shared types extracted to
+  `build-time-release-types.ts` to break a circular dependency
+  surfaced by the depcruise pre-commit gate.
+- **WI-2** `buildBuildInfo` + `serialiseBuildInfo` helpers added
+  to `@oaknational/build-metadata`; `dist/build-info.json` is now
+  the canonical persisted build identity, written exactly once
+  per build by the composition root.
+- **WI-3** `createSentryBuildPlugin` refactored to consume the
+  canonical resolver and to return a typed `SentryBuildPluginIntent`
+  union (`disabled | skipped | configured`), eliminating the
+  second boundary read. New `skipped` variant carries the
+  `auth_token_missing` kind; unit-test rewrite covers both
+  fail-policy halves and the typed intent shape.
+- **WI-4** `apps/oak-curriculum-mcp-streamable-http/esbuild.config.ts`
+  refactored to switch on `intent.value.kind`: `disabled` →
+  log + omit plugin + continue; `skipped` → log skip-reason +
+  omit plugin + continue (vendor-config-missing posture);
+  `configured` → register the plugin + write `dist/build-info.json`
+  + continue. Three-branch dry build (disabled, skipped,
+  configured) verified green locally.
+- **WI-5** (corrected scope) `&& node ../../scripts/validate-root-application-version.mjs`
+  removed from the MCP HTTP `build` script only; the script
+  itself and its call from `apps/oak-search-cli/`'s build script
+  are left untouched. Search CLI stays on tsup with the pre-flight
+  pending its own esbuild migration. Three deferred follow-ons
+  captured in §Deferred follow-on (search-cli → esbuild + canonical
+  resolver; converge remaining deployable workspaces; delete the
+  `validate-root-application-version.mjs` script when no
+  consumer remains).
+
+Quality gates at landing: `pnpm` filter-run lint + type-check +
+test for the touched workspaces all green (build-metadata 44/44,
+MCP HTTP 646/646 unit + 3-branch dry build, sentry-node 101/101,
+search-cli build sanity); root `prettier --check` + `depcruise`
++ `markdownlint` pre-commit gates green at commit time. Both
+patterns named in the L-8 Correction §Pattern signal were
+actively countered during execution: WI-3 + WI-4 implemented
+`SentryBuildPluginIntent` as a discriminated union (not a
+fail-fast `Result.error` propagation) so the fail-policy split
+is structurally enforced (countering
+`passive-guidance-loses-to-artefact-gravity`); WI-5's mid-flight
+owner-correction (over-broad first read deleted the script
+outright; reverted to MCP-HTTP-only scope) was caught before
+landing (countering `inherited-framing-without-first-principles-check`
+on the deletion-shape). Same-commit `fb047f86` also folded
+session-scoped continuity work (entry-point sweep landing
+`AGENTS.md` + `CLAUDE.md` to pure pointers per
+`session-handoff` §6d, new `ephemeral-to-permanent-homing`
+shared partial, `tsdoc-and-documentation-hygiene` rule renamed
+to `documentation-hygiene` across canonical + Cursor + Claude
+adapters with restructured body, distilled-memory pref additions,
+and three workspace-local doc edits homing the AGENTS.md/CLAUDE.md
+content per the homing partial).
 
 **Build-log root cause**:
 
