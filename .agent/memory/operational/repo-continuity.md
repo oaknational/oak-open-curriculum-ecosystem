@@ -150,114 +150,51 @@ also owner-handled validation stages.
 ## Current session focus
 
 **2026-04-24 (latest, Frodo / claude-code / claude-opus-4-7-1m)**:
-cross-cutting infrastructure session opened via `/jc-start-right-quick`
-with a primary request to wire `.remember/` plugin buffers into the
-learning systems. Five commits landed on `feat/otel_sentry_enhancements`:
+cross-cutting infrastructure session. Five commits landed on
+`feat/otel_sentry_enhancements`:
 
-- `69a87c44` `chore(sonar): integrate sonarcloud scanning and secrets hooks`
-  — sonar-project.properties, `.claude/settings.json` hooks on Read and
-  UserPromptSubmit, prompt-secrets.sh multiline JSON parsing, sonarlint
-  connected-mode VS Code config, README badges.
-- `83ec9198` `chore(agent): wire .remember/ plugin buffers into ignores
-  and capture workflows` — shared ESLint `ignores`, `.prettierignore`,
-  `.markdownlintignore`; session-open grounding in start-right-quick /
-  start-right-thorough; auxiliary capture in session-handoff step 6a;
-  capture + graduation surfaces in consolidate-docs step 3 + step 7.
-- `5fc52d86` `docs(plans): tighten sentry-release plan with shim
-  deletion and atomic test replacement` — owner-pre-staged edits
-  committed as part of "commit all files"; WS1/WS2/WS3 refinements
-  folding in shim deletion and atomic test replacement. This is the
-  incidental touch on the observability thread.
-- `76b4de50` `docs(agent): name cursor and codex memory surfaces in
-  grounding and consolidation` — extends consolidate-docs step 3
-  "Platform-specific memory" bullet and both start-right flows with
-  named Cursor and Codex memory surfaces alongside Claude Code's.
-- `d2a4815e` `chore(quality): register sonarjs plugin inactive and
-  plan activation backlog` — imports `eslint-plugin-sonarjs` in
-  `oak-eslint/recommended.ts` and wires a `{ plugins: { sonarjs } }`
-  placeholder (no rules active); removes sonarjs from the knip
-  ignore list; authors the phased activation plan at
-  `.agent/plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md`.
+- `69a87c44` `chore(sonar)`: sonarcloud + secrets-hook integration.
+- `83ec9198` `chore(agent)`: `.remember/` plugin buffers wired into
+  ignore configs and capture workflows (start-right quick/thorough
+  step 3, session-handoff step 6a, consolidate-docs step 3 + step 7).
+- `5fc52d86` `docs(plans)`: owner-pre-staged sentry-release plan
+  tightening (incidental observability-thread touch).
+- `76b4de50` `docs(agent)`: Cursor + Codex memory surfaces named
+  alongside Claude Code's in the same grounding + consolidation
+  workflows.
+- `d2a4815e` `chore(quality)`: sonarjs registered as inactive
+  placeholder in `oak-eslint/recommended.ts`; activation backlog
+  plan at
+  [`sonarjs-activation-and-sonarcloud-backlog.plan.md`](../../plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md).
 
-Mid-session, a trial activation of `sonarjs.configs.recommended`
+Mid-session a trial activation of `sonarjs.configs.recommended`
 surfaced 448+ local ESLint errors across 13 packages. SonarCloud
-remote baseline measured via the sonarqube MCP tool: 67 bugs, 1
-vulnerability, 169 security hotspots, 1,176 code smells, 99h
-technical debt, reliability D (4.0), security E (5.0). Owner and
-agent agreed a phased plan with explicit gate-outs at every phase
-boundary is the right shape rather than a single giant PR.
+remote baseline: 67 bugs, 1 vulnerability, 169 security hotspots,
+1,176 code smells, 99h technical debt, reliability D, security E.
+Owner chose a phased plan with explicit gate-outs at every phase
+boundary; the plan is queued in `current/` with no appetite signal
+yet, awaiting observability-thread completion.
 
-Owner metacognition intervention mid-session surfaced an evasion
-pattern on my part: when asked a direct verification question ("did
-you wire X?"), I responded with a 5-row table plus a self-invented
-"what I did NOT touch" hedge rather than a clean yes/no with
-evidence. Owner named it explicitly; I owned it; feedback memory
-saved at `feedback_answer_verification_questions_directly.md`;
-PDR candidate raised for the graduation register below.
+Owner called out an evasion pattern mid-session: when asked a
+direct verification question I responded with a 5-row table plus
+an invented adjacent-scope hedge rather than a clean yes/no plus
+evidence. Feedback memory saved at
+`feedback_answer_verification_questions_directly.md`; PDR
+candidate in the graduation register below.
 
-Pre-commit gates passed for every commit. Working tree clean at
-`d2a4815e` except for an unstaged observability plan modification
-the owner had pre-staged later in the session (to be picked up in
-the next session unless the owner stages it directly).
+Working tree clean at HEAD except for an unstaged observability
+plan modification the owner pre-staged later in the session.
 
-Next on `observability-sentry-otel` thread: unchanged — WS1 RED
-contract tests on the release-identifier plan (a new session
-picks it up with Pippin's or Samwise's identity, not Frodo's —
-Frodo was an incidental visitor to this thread).
+Next on `observability-sentry-otel`: unchanged — WS1 RED contract
+tests on the release-identifier plan (Pippin or Samwise picks it
+up; Frodo was an incidental visitor).
 
 Next on the new `sonarjs-activation-and-sonarcloud-backlog` plan:
-Phase 0 baseline and tranche. No owner appetite signal yet;
-awaiting the prior observability thread completion before
-scheduling.
+Phase 0 baseline and tranche, when owner appetite signals.
 
-**Prior session (2026-04-24 Pippin / cursor)**: meta-
-session sweep landed at `ffec98b0` (80 files, +12732/-3970), per
-explicit owner direction "commit all files including from other
-threads". The sweep folded together:
-
-- This thread's previously-uncommitted plan-body refinement
-  (WS3 cancellation-script rewrite + WS2 validator denylist
-  correction in
-  [`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md));
-- The 2026-04-22 meta-session's portability audit + consolidation
-  outputs (now-committed plans for portability remediation,
-  practice/process structural improvements, and aggregated-tool
-  result-type remediation);
-- Practice surface relocation (`continuity-practice.md` from
-  `docs/governance/` to `.agent/directives/`) plus principles
-  update;
-- Vendor-skills expansion (Clerk backend API, custom-ui core-2/
-  core-3 variants, orgs references and evals across `.agents/` and
-  `.claude/`); canonicalisation removed obsolete
-  `.claude-plugin/plugin.json` shells under `.agents/skills/clerk-*`;
-- Engineering-doc refreshes (ADR-078, build-system, testing-
-  patterns, typescript-gotchas, governance/MCP/oak-eslint READMEs);
-- Continuity surfaces refreshed (this file +
-  `observability-sentry-otel.next-session.md`) for the post-sweep
-  landscape.
-
-Pre-commit gates passed in 104s; working tree clean post-commit.
-
-**Prior session (2026-04-24 Pippin / cursor — earlier same date)**:
-WS0 of the release-identifier plan landed at `06bf25d7`; subsequent
-post-WS0 design discussion produced the WS3 cancellation-script
-rewrite design that was originally deferred-to-handoff and is now
-committed inside the sweep above.
-
-**Prior session (2026-04-22 `claude-code` / `claude-opus-4-6-1m`)**:
-portability audit + two consolidation passes — napkin rotated
-(2,323→65); distilled graduated (281→177, 19+ entries to permanent
-homes); repo-continuity compressed (1,355→473, fitness tracked);
-`continuity-practice.md` moved to directives; structural gap
-analysis produced two new plans. All outputs were uncommitted at
-the time and have now landed in `ffec98b0`.
-
-Next on `observability-sentry-otel` thread: WS1 RED contract tests
-(separate commit per turn-boundary discipline; no plan-authority
-debt to settle first).
-
-Next on agent infrastructure portability: implementation of the 7
-phases in the remediation plan, on a new branch.
+Prior-session summaries (2026-04-22 through 2026-04-24 Pippin meta-
+sweep) archived to
+[`archive/repo-continuity-session-history-2026-04-22.md`](archive/repo-continuity-session-history-2026-04-22.md).
 
 ## Session history
 
@@ -463,12 +400,30 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
-**Status (2026-04-24 Frodo session-handoff)**: **due — explicit
-owner request to run `/jc-consolidate-docs` immediately after
-session-handoff completes**. Trigger: owner direction at
-session-handoff open. Falsifiability: the next turn should invoke
-consolidate-docs and update this status to
-`completed this handoff — owner-directed consolidation pass`.
+**Status (2026-04-24 Frodo consolidate-docs pass)**: **completed
+this handoff — owner-directed consolidation pass with
+session-scoped hard-fitness waiver**. Owner direction mid-pass:
+*"ignore the hard limits for now / just for this session, not
+beyond"*. This repo-continuity.md remains in hard zone (539 lines
+after partial compression; still above 500-line hard limit). Three
+prior-session summaries archived to
+[`archive/repo-continuity-session-history-2026-04-22.md`](archive/repo-continuity-session-history-2026-04-22.md)
+as a partial-compression move; further compression (archive older
+Deep consolidation status entries + older pending-graduations
+register entries) deferred to next consolidation pass per owner
+scope. **Hard-fitness gate for repo-continuity.md MUST be
+re-addressed next consolidation** — this waiver does not carry
+forward. Three other hard-zone files unchanged this session
+(AGENT.md, principles.md, testing-strategy.md); not touched by
+this session's work, so inherited from prior state. Graduation
+scan surfaced 3 candidates — all routed to the pending-
+graduations register below with named trigger conditions; none
+promoted this pass (all awaiting second instance or explicit
+owner direction per their recorded triggers). Thread-register
+freshness audit: all six checks passed; only observability-
+sentry-otel thread is active, `last_session` fresh (today for
+Frodo identity row), no orphan / missing-fields / expired-tracks
+/ duplicate-identity / next-session-file-missing findings.
 
 **Status (2026-04-22 final session-handoff)**: **completed
 this pass** — two consolidation passes run. Napkin rotated

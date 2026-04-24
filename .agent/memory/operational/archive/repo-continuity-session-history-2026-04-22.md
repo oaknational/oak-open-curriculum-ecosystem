@@ -894,3 +894,53 @@ arc; retained for intent and history):
 - Execution plan (Phase 0 resolved; Phases 1–5 absorbed by the
   closed staged plan; Phase 7 learning loop carries forward as
   a long-lived plan): [`../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md`](../../plans/agentic-engineering-enhancements/current/memory-feedback-and-emergent-learning-mechanisms.execution.plan.md)
+
+---
+
+## 2026-04-24 (Pippin / cursor / claude-opus-4-7) — meta-session sweep
+
+Landed at `ffec98b0` (80 files, +12732/-3970), per explicit owner direction
+"commit all files including from other threads". The sweep folded together:
+
+- This thread's previously-uncommitted plan-body refinement (WS3
+  cancellation-script rewrite + WS2 validator denylist correction in
+  `sentry-release-identifier-single-source-of-truth.plan.md`);
+- The 2026-04-22 meta-session's portability audit + consolidation
+  outputs (now-committed plans for portability remediation, practice/
+  process structural improvements, and aggregated-tool result-type
+  remediation);
+- Practice surface relocation (`continuity-practice.md` from
+  `docs/governance/` to `.agent/directives/`) plus principles update;
+- Vendor-skills expansion (Clerk backend API, custom-ui core-2/core-3
+  variants, orgs references and evals across `.agents/` and `.claude/`);
+  canonicalisation removed obsolete `.claude-plugin/plugin.json` shells
+  under `.agents/skills/clerk-*`;
+- Engineering-doc refreshes (ADR-078, build-system, testing-patterns,
+  typescript-gotchas, governance/MCP/oak-eslint READMEs);
+- Continuity surfaces refreshed for the post-sweep landscape.
+
+Pre-commit gates passed in 104s; working tree clean post-commit.
+
+---
+
+## 2026-04-24 (Pippin / cursor / claude-opus-4-7 — earlier same date) — WS0 landing
+
+WS0 of the release-identifier plan landed at `06bf25d7`; subsequent post-WS0
+design discussion produced the WS3 cancellation-script rewrite design that
+was originally deferred-to-handoff and was later committed inside the
+meta-session sweep above.
+
+---
+
+## 2026-04-22 (claude-code / claude-opus-4-6-1m) — portability audit + dual consolidation
+
+Portability audit + two consolidation passes — napkin rotated (2,323→65);
+distilled graduated (281→177, 19+ entries to permanent homes);
+repo-continuity compressed (1,355→473, fitness tracked);
+`continuity-practice.md` moved to directives; structural gap analysis
+produced two new plans. All outputs were uncommitted at the time and
+landed in `ffec98b0`.
+
+Next on `observability-sentry-otel` thread: WS1 RED contract tests.
+Next on agent infrastructure portability: implementation of the 7 phases
+in the remediation plan, on a new branch.
