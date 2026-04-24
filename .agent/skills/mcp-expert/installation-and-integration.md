@@ -12,10 +12,9 @@ Install all 4 official MCP App skills:
 npx skills add modelcontextprotocol/ext-apps --yes
 ```
 
-This installs to `.agents/skills/` (the universal/Codex-standard
-path). The installer auto-detects supported agent platforms
-(Claude Code, Cursor, Codex, Gemini CLI, etc.) and creates
-platform-appropriate entries.
+This installs to `.agents/skills/` (the portable `.agents` adapter path).
+The installer auto-detects supported agent platforms (Claude Code, Cursor,
+Codex, Gemini CLI, etc.) and creates platform-appropriate entries.
 
 ## Installed Skills
 
@@ -34,12 +33,11 @@ This repo uses a three-layer agent artefact architecture (ADR-125):
 2. **Platform adapters** in `.cursor/`, `.claude/`, `.agents/`, etc.
 3. **Entry points** (`CLAUDE.md`, `AGENTS.md`, etc.)
 
-The official MCP App skills are installed as **upstream content** in
-`.agents/skills/`. They are NOT duplicated into `.agent/skills/` —
-instead, our routing layer (`mcp-expert` skill) points directly to
-the `.agents/skills/` path. This avoids fork drift: when the upstream
-skills are updated, re-running the installer brings the latest
-versions without needing to manually sync custom copies.
+The official MCP App skills are canonicalised into `.agent/skills/` with
+`classification: passive`, recorded in `skills-lock.json`, and exposed through
+thin wrappers in `.agents/skills/`, `.claude/skills/`, and `.cursor/skills/`.
+This keeps upstream content reviewable under the canonical-first portability
+model while preserving cross-platform activation.
 
 ### Routing
 
@@ -55,8 +53,10 @@ To update to the latest version of the official skills:
 npx skills add modelcontextprotocol/ext-apps --yes
 ```
 
-This overwrites the existing `.agents/skills/` entries with the
-latest upstream content.
+This overwrites the existing `.agents/skills/` entries with the latest upstream
+content. After updating, move the full content back into `.agent/skills/`,
+refresh `skills-lock.json`, restore thin platform wrappers, and run
+`pnpm portability:check`.
 
 ## API Documentation
 

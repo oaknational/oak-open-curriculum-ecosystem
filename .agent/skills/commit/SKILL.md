@@ -281,11 +281,10 @@ Adapters are skill-form thin pointers (no slash-command form):
 
 - **Cursor**: `.cursor/skills/commit/SKILL.md` — thin pointer to this file.
 - **Codex**: `.agents/skills/commit/SKILL.md` — thin pointer to this file.
-- **Claude**: discovered via the `CLAUDE.md` → `AGENT.md` citation chain at
+- **Claude**: `.claude/skills/commit/SKILL.md` — thin pointer to this file,
+  with always-active discovery also reinforced through the `CLAUDE.md` →
+  `AGENT.md` citation chain at
   [`.agent/directives/AGENT.md § Commit Discipline`](../../directives/AGENT.md#commit-discipline).
-  No `.claude/skills/commit/` adapter — Claude's always-active discovery
-  goes through `CLAUDE.md`, mirroring the pattern used by `napkin` and
-  `finishing-branch`.
 - **Gemini**: discovered via the same `AGENT.md` citation chain. Gemini
   does not have a native skills surface; the slash-command form
   (`.gemini/commands/jc-commit.toml`) was deliberately removed when this

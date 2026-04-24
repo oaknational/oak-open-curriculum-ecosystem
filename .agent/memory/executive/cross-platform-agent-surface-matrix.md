@@ -10,7 +10,7 @@ platform support, this file is the authoritative local source.
 | -------------- | ------------------- | ---------------------------------------------------------------- | ------------------- | ----------------- | ----------------- | ---------------------- |
 | **Skills**     | `.cursor/skills/`   | `.claude/skills/`                                                | unsupported         | unsupported       | unsupported       | `.agents/skills/`      |
 | **Commands**   | `.cursor/commands/` | `.claude/commands/`                                              | `.gemini/commands/` | unsupported       | unsupported       | `.agents/skills/jc-*/` |
-| **Rules**      | `.cursor/rules/`    | `.claude/rules/`                                                 | entry-point chain   | entry-point chain | entry-point chain | entry-point chain      |
+| **Rules**      | `.cursor/rules/`    | `.claude/rules/`                                                 | entry-point chain   | entry-point chain | entry-point chain | `.agents/rules/`       |
 | **Sub-agents** | `.cursor/agents/`   | `.claude/agents/`                                                | unsupported         | unsupported       | `.codex/`         | unsupported            |
 | **Hooks**      | unsupported         | `.claude/settings.json` (tracked project `PreToolUse`)           | unsupported         | unsupported       | unsupported       | unsupported            |
 
@@ -55,13 +55,14 @@ Failure semantics:
 | All platforms      | `.agent/directives/AGENT.md`                   |
 | Claude Code        | `CLAUDE.md` → `AGENT.md`                       |
 | GitHub Copilot     | `.github/copilot-instructions.md` → `AGENT.md` |
-| Codex / `.agents/` | `AGENTS.md` → `AGENT.md`                       |
+| Codex host         | `AGENTS.md` → `AGENT.md`                       |
 | Gemini CLI         | `GEMINI.md` → `AGENT.md`                       |
 
 ## Notes
 
-- `.agents/skills/` is a narrow portable skill and command-workflow
-  layer, not evidence for blanket `.agents/` parity with other platforms.
+- `.agents/skills/` and `.agents/rules/` are portable skill/command and
+  rule-adapter layers, not evidence for blanket `.agents/` parity with
+  every platform-native surface.
 - Tracked project platform config is part of the agentic system contract;
   local overrides are additive where the platform supports them.
 - Unsupported states are written down explicitly rather than inferred

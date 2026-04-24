@@ -1,14 +1,8 @@
 ---
 name: start-right-quick
-description: Load the shared start-right-quick grounding workflow from `.agent/skills/start-right-quick/shared/start-right.md`.
+description: Apply the repository start-right quick grounding workflow to the active session. Use when the user asks to start right, re-ground work, or explicitly apply the shared start-right-quick skill guidance and linked directives before or during task execution.
 ---
 
-# Start Right (Quick, Cursor)
+# Start Right Quick (Cursor)
 
-Use this skill at session start or when re-grounding is needed.
-
-## Steps
-
-1. Read `.agent/skills/start-right-quick/shared/start-right.md`.
-2. Read linked directives and apply the workflow commitments.
-3. Continue with the user task under the grounded constraints.
+Read and follow `.agent/skills/start-right-quick/SKILL.md`.

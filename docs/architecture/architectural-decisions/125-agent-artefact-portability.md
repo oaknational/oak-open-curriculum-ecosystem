@@ -2,7 +2,7 @@
 
 **Status**: Accepted
 **Date**: 2026-03-04
-**Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md)
+**Related**: [ADR-114 (Layered Sub-agent Prompt Composition)](114-layered-sub-agent-prompt-composition-architecture.md), [ADR-119 (Agentic Engineering Practice)](119-agentic-engineering-practice.md), [ADR-124 (Practice Propagation Model)](124-practice-propagation-model.md), [PDR-009 (Canonical-First Cross-Platform Architecture)](../../../.agent/practice-core/decision-records/PDR-009-canonical-first-cross-platform-architecture.md)
 
 ## Context
 
@@ -23,17 +23,18 @@ Extend the three-layer model from ADR-114 to all agent artefact types: skills, c
 
 All substantive workflow content lives under `.agent/`:
 
-| Artefact               | Canonical location                           | Count     | Purpose                                                             |
-| ---------------------- | -------------------------------------------- | --------- | ------------------------------------------------------------------- |
-| Skills (active)        | `.agent/skills/*/SKILL.md` and `shared/*.md` | 2         | Command-invoked workflows (start-right-quick, start-right-thorough) |
-| Skills (passive)       | `.agent/skills/*/SKILL.md`                   | 10        | Guidance consumed by workflows or linked from other artefacts       |
-| Commands               | `.agent/commands/*.md`                       | 10 active | Reusable command instructions                                       |
-| Commands (experiments) | `.agent/commands/experiments/*.md`           | 3 parked  | Experimental commands not yet hooked up                             |
-| Rules                  | `.agent/directives/*.md`                     | —         | Policies and principles                                             |
-| Sub-agent templates    | `.agent/sub-agents/templates/*.md`           | 11        | Reviewer prompts (ADR-114)                                          |
-| Sub-agent personas     | `.agent/sub-agents/components/personas/*.md` | 4         | Shared architecture reviewer identity and lens                      |
-| Sub-agent components   | `.agent/sub-agents/components/`              | —         | Reusable behaviours, principles, architecture notes                 |
-| Plan templates         | `.agent/plans/` (organised by domain)        | —         | Implementation plans, execution tracking                            |
+| Artefact               | Canonical location                           | Count                                      | Purpose                                                       |
+| ---------------------- | -------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------- |
+| Skills (active)        | `.agent/skills/*/SKILL.md` and `shared/*.md` | 12                                         | Explicitly invoked workflows and expert skills                |
+| Skills (passive)       | `.agent/skills/*/SKILL.md`                   | 24                                         | Guidance consumed by workflows or linked from other artefacts |
+| Commands               | `.agent/commands/*.md`                       | 10 adapter-backed, 1 superseded, 1 partial | Reusable command instructions                                 |
+| Commands (experiments) | `.agent/commands/experiments/*.md`           | 3 parked                                   | Experimental commands not yet hooked up                       |
+| Directives             | `.agent/directives/*.md`                     | —                                          | Policies and principles                                       |
+| Rules                  | `.agent/rules/*.md`                          | 35                                         | Always-applied operational reinforcements                     |
+| Sub-agent templates    | `.agent/sub-agents/templates/*.md`           | 19                                         | Reviewer prompts (ADR-114)                                    |
+| Sub-agent personas     | `.agent/sub-agents/components/personas/*.md` | 4                                          | Shared architecture reviewer identity and lens                |
+| Sub-agent components   | `.agent/sub-agents/components/`              | —                                          | Reusable behaviours, principles, architecture notes           |
+| Plan templates         | `.agent/plans/` (organised by domain)        | —                                          | Implementation plans, execution tracking                      |
 
 ### Layer 2: Platform Adapters (thin wrappers)
 
@@ -43,36 +44,42 @@ Each platform has thin wrappers that reference canonical content. All command ad
 
 | Location                    | Format                                                        | Count |
 | --------------------------- | ------------------------------------------------------------- | ----- |
-| `.cursor/commands/jc-*.md`  | Markdown with `@` file references                             | 9     |
-| `.cursor/rules/*.mdc`       | Markdown with `alwaysApply`/`globs`/`description` frontmatter | 17    |
-| `.cursor/skills/*/SKILL.md` | Thin wrappers -> `.agent/skills/`                             | 7     |
-| `.cursor/agents/*.md`       | Markdown with `name`/`description`/`model`/`tools`/`readonly` | 14    |
+| `.cursor/commands/jc-*.md`  | Markdown with `@` file references                             | 10    |
+| `.cursor/rules/*.mdc`       | Markdown with `alwaysApply`/`globs`/`description` frontmatter | 37    |
+| `.cursor/skills/*/SKILL.md` | Thin wrappers -> `.agent/skills/`                             | 36    |
+| `.cursor/agents/*.md`       | Markdown with `name`/`description`/`model`/`tools`/`readonly` | 22    |
 
 #### Claude Code
 
 | Location                      | Format                                                                                                                                                                                                                           | Count |
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `.claude/commands/jc-*.md`    | Markdown with YAML frontmatter (`description`, `allowed-tools`, `argument-hint`, `model`)                                                                                                                                        | 9     |
-| `.claude/rules/*.md`          | Markdown with `paths` frontmatter for glob-scoped activation                                                                                                                                                                     | 6     |
-| `.claude/agents/*.md`         | Markdown with YAML frontmatter (`name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color`). All wrappers require: explicit `model` field, `color` field, and ≥2 `<example>` blocks in `description`. | 13    |
+| `.claude/commands/jc-*.md`    | Markdown with YAML frontmatter (`description`, `allowed-tools`, `argument-hint`, `model`)                                                                                                                                        | 10    |
+| `.claude/rules/*.md`          | Thin wrappers -> `.agent/rules/`                                                                                                                                                                                                 | 35    |
+| `.claude/skills/*/SKILL.md`   | Thin wrappers -> `.agent/skills/`                                                                                                                                                                                                | 36    |
+| `.claude/agents/*.md`         | Markdown with YAML frontmatter (`name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color`). All wrappers require: explicit `model` field, `color` field, and ≥2 `<example>` blocks in `description`. | 22    |
 | `.claude/agents/archive/*.md` | Archived wrappers — superseded or retired agents. Preserved for reference. Not validated by `pnpm subagents:check`.                                                                                                              | —     |
 
 #### Gemini CLI
 
 | Location                         | Format                                                                                           | Count |
 | -------------------------------- | ------------------------------------------------------------------------------------------------ | ----- |
-| `.gemini/commands/jc-*.toml`     | TOML v1 with `prompt` (required) and `description` (optional); `{{args}}` for argument injection | 9     |
-| `.gemini/commands/review-*.toml` | TOML v1 review commands -> `.agent/sub-agents/templates/`                                        | 14    |
+| `.gemini/commands/jc-*.toml`     | TOML v1 with `prompt` (required) and `description` (optional); `{{args}}` for argument injection | 10    |
+| `.gemini/commands/review-*.toml` | TOML v1 review commands -> `.agent/sub-agents/templates/`                                        | 20    |
 
 #### Codex
 
 | Location                                    | Format                                                                   | Count |
 | ------------------------------------------- | ------------------------------------------------------------------------ | ----- |
-| `.agents/skills/jc-*/SKILL.md`              | Thin wrapper with `name`/`description` frontmatter -> `.agent/commands/` | 9     |
-| `.agents/skills/*/SKILL.md` (instructional) | Thin wrapper -> `.agent/skills/`                                         | 7     |
-| `.agents/skills/*/SKILL.md` (sub-agents)    | Thin wrapper -> `.agent/sub-agents/templates/`                           | 14    |
+| `.agents/skills/jc-*/SKILL.md`              | Thin wrapper with `name`/`description` frontmatter -> `.agent/commands/` | 10    |
+| `.agents/skills/*/SKILL.md` (instructional) | Thin wrapper -> `.agent/skills/`                                         | 36    |
+| `.agents/rules/*.md`                        | Thin wrapper -> `.agent/rules/`                                          | 35    |
+| `.agents/agents/README.md`                  | Documents intentional absence of `.agents/` sub-agent wrappers           | 1     |
+| `.codex/agents/*.toml`                      | Codex project-agent adapters -> `.agent/sub-agents/templates/`           | 22    |
 
-Codex skills are invoked with `$skill-name` syntax (e.g. `$jc-review`, `$code-reviewer`).
+Codex skills are invoked with `$skill-name` syntax (e.g. `$jc-review`,
+`$patterns`). Codex reviewer sub-agents are configured through
+`.codex/agents/*.toml`; `.agents/` remains the portable skill/rule
+surface, not a sub-agent surface.
 
 ### Layer 3: Entry Points
 
@@ -117,7 +124,7 @@ Each platform uses its native mechanism for sub-agent-equivalent functionality:
 | Cursor      | `.cursor/agents/*.md`            | `name`, `description`, `model`, `tools`, `readonly`                                   |
 | Claude Code | `.claude/agents/*.md`            | `name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `color` |
 | Gemini CLI  | `.gemini/commands/review-*.toml` | `description`, `prompt` (user-invoked review commands)                                |
-| Codex       | `.agents/skills/*/SKILL.md`      | `name`, `description` (skills as the sub-agent mechanism)                             |
+| Codex       | `.codex/agents/*.toml`           | TOML roster and developer instructions loaded from canonical templates                |
 
 Read-only reviewers on Claude Code use `permissionMode: plan` and `disallowedTools: Write, Edit` to enforce read-only behaviour at the platform level, not just via instructions.
 
@@ -166,7 +173,11 @@ canonical rules and triggers, not the number of layers.
 
 **Claude Code** has two activation mechanisms: always-on policies via the entry-point chain (`CLAUDE.md` → `AGENT.md` → `principles.md`), and path-scoped rules via `.claude/rules/*.md` with `paths` frontmatter. Path-scoped rules only load when Claude opens matching files, reducing context consumption for domain-specific policies (e.g., test rules only when editing test files). Only glob-scoped triggers have Claude rule equivalents — always-on triggers are already covered by the entry-point chain.
 
-**Gemini CLI, Codex** receive policies via the entry-point chain only: `GEMINI.md` / `AGENTS.md` → `.agent/directives/AGENT.md` → `.agent/directives/principles.md`. All policies are effectively always-on via the entry point.
+**Gemini CLI and Codex** receive policies via the entry-point chain:
+`GEMINI.md` / `AGENTS.md` -> `.agent/directives/AGENT.md` ->
+`.agent/directives/principles.md`. `.agents/rules/*.md` also provides
+a portable thin-wrapper rule surface for platforms that scan `.agents/`
+directly.
 
 **Triggers that activate skills or directives:**
 
@@ -297,13 +308,14 @@ Claude Code natively supports read-only permission modes. Using `permissionMode:
 - Skills discoverable by all agents through `AGENT.md` and platform-specific adapters.
 - Rule content canonical in `.agent/directives/`, activation policy platform-specific.
 - Adding a fifth platform requires only thin wrappers, not content duplication.
-- Architecture reviewer personas are DRY: defined once in canonical components, referenced by all 16 platform wrappers.
+- Reviewer personas are DRY: defined once in canonical components,
+  referenced by platform adapters and project-agent configuration.
 
 ### Trade-offs
 
 - Four directories per artefact type (canonical + four platform adapters) creates more files, though each adapter is small.
 - Platform-specific capabilities (Cursor `globs`, Claude `permissionMode`, Gemini `{{args}}`) require wrapper maintenance.
-- Codex uses `.agents/skills/` (plural) for discovery, while our canonical path is `.agent/skills/` (singular). Thin wrappers in `.agents/skills/` bridge the gap, consistent with the pattern used for all other platforms.
+- `.agents/skills/` and `.agents/rules/` are portable adapter layers, while canonical content remains in `.agent/`. Thin wrappers bridge those surfaces consistently with the pattern used for all other platforms.
 - Cursor is the only platform with granular rule activation (globs, agent-selected). Other platforms receive all rules at session start, which increases context consumption but ensures nothing is missed.
 - Gemini CLI lacks native sub-agent spawning; review commands serve as the user-invoked equivalent but lack automatic delegation.
 
@@ -316,9 +328,14 @@ Agents may not follow "Read and follow X" instructions in thin wrappers, skippin
 - **Cursor**: `@` file injection forces content loading — the most reliable mechanism.
 - **Claude Code / Gemini CLI / Codex**: canonical content should include guards ("If you have not read X, stop and read it now"). Minimal fallback context (up to 5 lines) in wrappers helps when the agent skips the read.
 
-### Plugin and external content in adapter directories
+### Externally installed skills
 
-Platform adapter directories may contain externally installed content (e.g., Clerk skills) alongside canonical wrappers. Validation scripts must exclude non-canonical content to avoid false positives.
+External tools may install full skill content into platform adapter
+directories, especially `.agents/skills/`. In this repository that content
+is canonicalised immediately into `.agent/skills/<name>/`, recorded in
+`skills-lock.json`, and replaced in every platform directory with a thin
+wrapper. Validation treats full content in adapter directories as drift, not
+as an exclusion.
 
 ## Amendments
 
@@ -337,11 +354,20 @@ This clarification graduated from `.agent/memory/active/distilled.md` (2026-04-1
 observation) as part of the enforce-edge tightening pass alongside
 ADR-144's three-zone model revision.
 
+### 2026-04-24 — Vendor skill canonicalisation and `.agents/rules`
+
+Portability remediation canonicalised externally installed Clerk and MCP
+Apps skills into `.agent/skills/`, replaced platform copies with thin
+wrappers, and made `.agents/rules/` a first-class thin-wrapper rule
+surface. `pnpm portability:check` now validates forward coverage,
+reverse adapter links, wrapper form, `skills-lock.json`, symlink-free
+skill adapters, and Claude tracked permission parity.
+
 ## References
 
-- `.agent/skills/` — canonical skills (12: 2 active, 10 passive)
-- `.agent/commands/` — canonical commands (10 active, 3 experiments)
-- `.agent/directives/` — canonical rules
+- `.agent/skills/` — canonical skills (36: 12 active, 24 passive)
+- `.agent/commands/` — canonical commands (10 adapter-backed, 1 superseded, 1 partial; 3 experiments)
+- `.agent/rules/` and `.agent/directives/` — canonical rules and directives
 - `.agent/sub-agents/` — canonical sub-agent prompts (ADR-114), personas, and components
-- `.cursor/`, `.claude/`, `.gemini/`, `.agents/` — platform adapters
+- `.cursor/`, `.claude/`, `.gemini/`, `.agents/`, `.codex/` — platform adapters
 - [ADR-135](135-agent-classification-taxonomy.md) — agent classification taxonomy referenced in the 2026-04-17 amendment

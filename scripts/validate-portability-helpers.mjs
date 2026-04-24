@@ -125,6 +125,7 @@ export function getClaudeHookPortabilityIssues({
 
 export function getSkillPermissionIssues({
   claudeCommandFiles,
+  claudeSkillDirs = [],
   claudeSettingsPermissions,
   claudeSettingsPath = CLAUDE_SETTINGS_PATH,
 }) {
@@ -142,6 +143,14 @@ export function getSkillPermissionIssues({
     if (!permittedSkills.has(commandName)) {
       issues.push(
         `${claudeSettingsPath}: Claude command adapter "${commandName}" has no Skill(${commandName}) entry in permissions.allow`,
+      );
+    }
+  }
+
+  for (const skillName of claudeSkillDirs) {
+    if (!permittedSkills.has(skillName)) {
+      issues.push(
+        `${claudeSettingsPath}: Claude skill adapter "${skillName}" has no Skill(${skillName}) entry in permissions.allow`,
       );
     }
   }

@@ -21,6 +21,11 @@
       "sourceType": "github",
       "computedHash": "72dcda42d3755a468049e828180b66c25fb2ac66fd99bd1514699404445924c6"
     },
+    "clerk-nextjs-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "computedHash": "8e1fc42e4d6c6acc5111165a804254fea82d2324e61513f3568ec397a58505ea"
+    },
     "clerk-orgs": {
       "source": "clerk/skills",
       "sourceType": "github",

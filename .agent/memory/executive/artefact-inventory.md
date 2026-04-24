@@ -35,7 +35,7 @@ For the live platform support matrix, see
 |---------|--------|-------------|-------|--------|
 | Skills | `.cursor/skills/*/SKILL.md` | `.claude/skills/*/SKILL.md` | `.agents/skills/*/SKILL.md` | — |
 | Commands | `.cursor/commands/*.md` | `.claude/commands/*.md` | `.agents/skills/jc-*/SKILL.md` | `.gemini/commands/*.toml` |
-| Rules | `.cursor/rules/*.mdc` | `.claude/rules/*.md` | — | — |
+| Rules | `.cursor/rules/*.mdc` | `.claude/rules/*.md` | `.agents/rules/*.md` | — |
 | Sub-agents | `.cursor/agents/*.md` | `.claude/agents/*.md` | `.codex/agents/*.toml` | — |
 
 ## How to Create New Artefacts
@@ -48,7 +48,7 @@ Run `pnpm portability:check` after adding to verify parity.
 1. **Canonical**: `.agent/skills/<name>/SKILL.md`
 2. **Cursor**: `.cursor/skills/<name>/SKILL.md`
 3. **Claude Code**: `.claude/skills/<name>/SKILL.md`
-4. **Codex**: `.agents/skills/<name>/SKILL.md`
+4. **`.agents/`**: `.agents/skills/<name>/SKILL.md`
 5. **Claude settings**: add `Skill(<name>)` to
    `.claude/settings.json` `permissions.allow`
 
@@ -61,7 +61,7 @@ Adapter (same for Cursor/Claude/Codex): YAML front-matter with
 1. **Canonical**: `.agent/commands/<name>.md`
 2. **Cursor**: `.cursor/commands/jc-<name>.md`
 3. **Claude Code**: `.claude/commands/jc-<name>.md`
-4. **Codex**: `.agents/skills/jc-<name>/SKILL.md`
+4. **`.agents/`**: `.agents/skills/jc-<name>/SKILL.md`
 5. **Gemini**: `.gemini/commands/jc-<name>.toml`
 6. **Claude settings**: add `Skill(jc-<name>)` and
    `Skill(jc-<name>:*)` to `.claude/settings.json`
@@ -70,7 +70,7 @@ Adapter bodies all delegate: `Read and follow .agent/commands/<name>.md`.
 
 - **Cursor**: plain markdown heading + `@.agent/commands/<name>.md`
 - **Claude**: YAML front-matter (`description`, `allowed-tools: Read, Bash`)
-- **Codex**: YAML front-matter (`name: jc-<name>`, `description`)
+- **`.agents/`**: YAML front-matter (`name: jc-<name>`, `description`)
 - **Gemini**: TOML (`description`, `prompt`)
 
 ### New Rule
@@ -78,11 +78,13 @@ Adapter bodies all delegate: `Read and follow .agent/commands/<name>.md`.
 1. **Canonical**: `.agent/rules/<name>.md`
 2. **Cursor**: `.cursor/rules/<name>.mdc`
 3. **Claude Code**: `.claude/rules/<name>.md`
+4. **`.agents/`**: `.agents/rules/<name>.md`
 
 - **Cursor `.mdc`**: YAML front-matter (`description`,
   `alwaysApply: true`), body = `Read and follow
   .agent/rules/<name>.md`.
 - **Claude**: plain text — `Read and follow .agent/rules/<name>.md`.
+- **`.agents/`**: same plain-text pointer as Claude.
 
 ### New Sub-agent
 

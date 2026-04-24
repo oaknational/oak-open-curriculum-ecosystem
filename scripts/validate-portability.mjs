@@ -14,6 +14,7 @@ import {
 } from './validate-portability-helpers.mjs';
 
 const repoRoot = process.cwd();
+const SKILLS_LOCK_PATH = 'skills-lock.json';
 
 // --- Shared helpers (same pattern as validate-subagents.mjs) ---
 
@@ -29,6 +30,15 @@ async function exists(relPath) {
   try {
     await fs.access(path.join(repoRoot, relPath));
     return true;
+  } catch {
+    return false;
+  }
+}
+
+async function isSymlink(relPath) {
+  try {
+    const stat = await fs.lstat(path.join(repoRoot, relPath));
+    return stat.isSymbolicLink();
   } catch {
     return false;
   }
@@ -80,6 +90,16 @@ async function listSubdirs(relDir) {
   }
 }
 
+function stripFrontmatter(content) {
+  return content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/u, '');
+}
+
+function countNonEmptyContentLines(content) {
+  return stripFrontmatter(content)
+    .split(/\r?\n/u)
+    .filter((line) => line.trim() !== '').length;
+}
+
 const issues = [];
 function addIssue(message) {
   issues.push(message);
@@ -87,7 +107,6 @@ function addIssue(message) {
 
 // --- Exclusion patterns ---
 
-const CLERK_SKILL_PREFIX = 'clerk';
 const SUPERSEDED_COMMANDS = new Set(['experience']);
 // Files under .agent/commands/ that are shared workflow partials, not slash
 // commands. They are referenced by other commands but never invoked directly,
@@ -99,22 +118,6 @@ const PARTIAL_COMMANDS = new Set(['ephemeral-to-permanent-homing']);
 const subagentTemplateNames = (await listFiles('.agent/sub-agents/templates', '.md')).map((f) =>
   path.basename(f, '.md'),
 );
-
-function isClerkSkill(name) {
-  return name.startsWith(CLERK_SKILL_PREFIX);
-}
-
-/** Vendor MCP Apps skills installed by the ext-apps Claude plugin. */
-const MCP_APPS_VENDOR_SKILLS = new Set([
-  'add-app-to-server',
-  'convert-web-app',
-  'create-mcp-app',
-  'migrate-oai-app',
-]);
-
-function isMcpAppsVendorSkill(name) {
-  return MCP_APPS_VENDOR_SKILLS.has(name);
-}
 
 function isSubagentAdapter(name) {
   // Match exact template name or persona variants (e.g., "architecture-reviewer-barney" matches "architecture-reviewer")
@@ -205,20 +208,49 @@ const canonicalSkillSet = new Set(canonicalSkillDirs);
 
 const skillAdapterPlatforms = [
   { label: 'Cursor', dir: '.cursor/skills' },
-  { label: 'Codex', dir: '.agents/skills' },
+  { label: '.agents', dir: '.agents/skills' },
+  { label: 'Claude', dir: '.claude/skills' },
 ];
 
 for (const platform of skillAdapterPlatforms) {
   const dirs = await listSubdirs(platform.dir);
   for (const dir of dirs) {
-    // Skip Clerk plugins, command adapters (jc-*), sub-agent wrappers, and vendor MCP Apps skills
-    if (isClerkSkill(dir) || dir.startsWith('jc-')) continue;
+    // Skip command adapters (jc-*) and sub-agent wrappers.
+    if (dir.startsWith('jc-')) continue;
     if (isSubagentAdapter(dir)) continue;
-    if (isMcpAppsVendorSkill(dir)) continue;
 
     if (!canonicalSkillSet.has(dir)) {
       addIssue(
         `${platform.dir}/${dir}/SKILL.md: adapter references canonical skill "${dir}" but .agent/skills/${dir}/SKILL.md does not exist`,
+      );
+    }
+  }
+}
+
+// --- Check 3b: Skill adapter thin-wrapper form ---
+
+for (const platform of skillAdapterPlatforms) {
+  const dirs = await listSubdirs(platform.dir);
+  for (const dir of dirs) {
+    if (dir.startsWith('jc-')) continue;
+    if (isSubagentAdapter(dir)) continue;
+
+    const skillPath = `${platform.dir}/${dir}/SKILL.md`;
+    if (!(await exists(skillPath))) {
+      addIssue(`${skillPath}: platform skill adapter missing SKILL.md`);
+      continue;
+    }
+
+    const content = await readText(skillPath);
+    const expectedPointer = `.agent/skills/${dir}/SKILL.md`;
+    if (!content.includes(expectedPointer)) {
+      addIssue(`${skillPath}: skill adapter must be a thin wrapper pointing to ${expectedPointer}`);
+    }
+
+    const contentLines = countNonEmptyContentLines(content);
+    if (contentLines > 15) {
+      addIssue(
+        `${skillPath}: ${contentLines} content lines exceeds thin skill wrapper maximum of 15`,
       );
     }
   }
@@ -271,6 +303,16 @@ for (const ruleFile of claudeRules) {
   }
 }
 
+const agentsRules = await listFiles('.agents/rules', '.md');
+for (const ruleFile of agentsRules) {
+  const content = await readText(ruleFile);
+  if (!CANONICAL_RULE_OR_SKILL_PATTERN.test(content)) {
+    addIssue(
+      `${ruleFile}: trigger does not reference a canonical rule (.agent/rules/) or skill (.agent/skills/)`,
+    );
+  }
+}
+
 // --- Check 6: Orphan detection — canonical with no adapters ---
 
 for (const cmdName of canonicalCommands) {
@@ -289,12 +331,19 @@ for (const cmdName of canonicalCommands) {
 }
 
 for (const skillDir of canonicalSkillDirs) {
-  const hasAdapter =
-    (await exists(`.cursor/skills/${skillDir}/SKILL.md`)) ||
-    (await exists(`.agents/skills/${skillDir}/SKILL.md`));
-
-  if (!hasAdapter) {
-    addIssue(`.agent/skills/${skillDir}/SKILL.md: canonical skill has no platform adapters`);
+  for (const platform of skillAdapterPlatforms) {
+    const adapterDir = `${platform.dir}/${skillDir}`;
+    const adapterPath = `${platform.dir}/${skillDir}/SKILL.md`;
+    if (await isSymlink(adapterDir)) {
+      addIssue(
+        `${adapterDir}: platform skill adapter must be a real thin-wrapper directory, not a symlink`,
+      );
+    }
+    if (!(await exists(adapterPath))) {
+      addIssue(
+        `.agent/skills/${skillDir}/SKILL.md: missing ${platform.label} adapter ${adapterPath}`,
+      );
+    }
   }
 }
 
@@ -326,43 +375,81 @@ for (const ruleFile of canonicalRules) {
   const ruleName = path.basename(ruleFile, '.md');
   const hasClaudeWrapper = await exists(`.claude/rules/${ruleName}.md`);
   const hasCursorTrigger = await exists(`.cursor/rules/${ruleName}.mdc`);
+  const hasAgentsWrapper = await exists(`.agents/rules/${ruleName}.md`);
 
-  if (!hasClaudeWrapper && !hasCursorTrigger) {
-    addIssue(
-      `.agent/rules/${ruleName}.md: canonical rule has no platform adapters (missing both .claude/rules/ and .cursor/rules/)`,
-    );
-  } else if (!hasClaudeWrapper) {
+  if (!hasClaudeWrapper) {
     addIssue(`.agent/rules/${ruleName}.md: missing .claude/rules/${ruleName}.md wrapper`);
-  } else if (!hasCursorTrigger) {
+  }
+  if (!hasCursorTrigger) {
     addIssue(`.agent/rules/${ruleName}.md: missing .cursor/rules/${ruleName}.mdc trigger`);
+  }
+  if (!hasAgentsWrapper) {
+    addIssue(`.agent/rules/${ruleName}.md: missing .agents/rules/${ruleName}.md wrapper`);
   }
 }
 
 // --- Check 9: Trigger content contract (≤10 content lines) ---
 
-for (const ruleFile of cursorRules) {
-  const content = await readText(ruleFile);
-  const lines = content.split('\n');
-  let inFrontmatter = false;
-  let frontmatterCount = 0;
-  let contentLines = 0;
+const ruleAdapterFiles = [...cursorRules, ...claudeRules, ...agentsRules];
 
-  for (const line of lines) {
-    if (line.trim() === '---') {
-      frontmatterCount++;
-      inFrontmatter = frontmatterCount < 2;
-      continue;
-    }
-    if (inFrontmatter) continue;
-    if (frontmatterCount >= 2 && line.trim() !== '') {
-      contentLines++;
-    }
-  }
+for (const ruleFile of ruleAdapterFiles) {
+  const content = await readText(ruleFile);
+  const contentLines = countNonEmptyContentLines(content);
 
   if (contentLines > 10) {
     addIssue(
       `${ruleFile}: ${contentLines} content lines exceeds Trigger Content Contract maximum of 10`,
     );
+  }
+}
+
+// --- Check 9b: Skills lock consistency ---
+
+if (await exists(SKILLS_LOCK_PATH)) {
+  try {
+    const skillsLock = await readJson(SKILLS_LOCK_PATH);
+    const lockedSkills =
+      skillsLock && typeof skillsLock === 'object' && skillsLock.skills
+        ? Object.entries(skillsLock.skills)
+        : [];
+
+    for (const [skillName, entry] of lockedSkills) {
+      if (!canonicalSkillSet.has(skillName)) {
+        addIssue(
+          `${SKILLS_LOCK_PATH}: locked skill "${skillName}" has no canonical .agent/skills/${skillName}/SKILL.md`,
+        );
+      }
+
+      for (const platform of skillAdapterPlatforms) {
+        const adapterDir = `${platform.dir}/${skillName}`;
+        const adapterPath = `${platform.dir}/${skillName}/SKILL.md`;
+        if (await isSymlink(adapterDir)) {
+          addIssue(
+            `${SKILLS_LOCK_PATH}: locked skill "${skillName}" adapter ${adapterDir} must not be a symlink`,
+          );
+        }
+        if (!(await exists(adapterPath))) {
+          addIssue(`${SKILLS_LOCK_PATH}: locked skill "${skillName}" missing ${adapterPath}`);
+        }
+      }
+
+      if (!entry || typeof entry !== 'object') {
+        addIssue(`${SKILLS_LOCK_PATH}: locked skill "${skillName}" entry must be an object`);
+        continue;
+      }
+      if (typeof entry.source !== 'string' || entry.source.length === 0) {
+        addIssue(`${SKILLS_LOCK_PATH}: locked skill "${skillName}" missing source`);
+      }
+      if (typeof entry.sourceType !== 'string' || entry.sourceType.length === 0) {
+        addIssue(`${SKILLS_LOCK_PATH}: locked skill "${skillName}" missing sourceType`);
+      }
+      if (typeof entry.computedHash !== 'string' || entry.computedHash.length === 0) {
+        addIssue(`${SKILLS_LOCK_PATH}: locked skill "${skillName}" missing computedHash`);
+      }
+    }
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown skills-lock failure.';
+    addIssue(`${SKILLS_LOCK_PATH}: validation failed: ${message}`);
   }
 }
 
@@ -399,8 +486,11 @@ if (await exists(CLAUDE_SETTINGS_PATH)) {
 
     const claudeCommandFiles = await listFiles('.claude/commands', '.md');
 
+    const claudeSkillDirs = await listSubdirs('.claude/skills');
+
     for (const issue of getSkillPermissionIssues({
       claudeCommandFiles,
+      claudeSkillDirs,
       claudeSettingsPermissions: permissions,
     })) {
       addIssue(issue);
@@ -421,6 +511,7 @@ const stats = [
   `${canonicalAgentNames.length} reviewer adapters`,
   `${cursorRules.length} Cursor triggers`,
   `${claudeRules.length} Claude rules`,
+  `${agentsRules.length} .agents rules`,
   `${Object.values(adapterCountsByPlatform).reduce((a, b) => a + b, 0)} command adapters across ${platformCounts.length} platforms`,
 ];
 

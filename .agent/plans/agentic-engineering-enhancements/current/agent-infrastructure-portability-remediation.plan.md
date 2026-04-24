@@ -9,29 +9,53 @@ overview: >
 todos:
   - id: phase-1-canonicalise
     content: "Canonicalise vendor skills from platform dirs to .agent/skills/"
-    status: pending
+    status: completed
   - id: phase-2-thin-wrappers
     content: "Add missing thin wrappers across all platforms"
-    status: pending
+    status: completed
   - id: phase-3-validator
     content: "Enhance portability validator with reverse and form checks"
-    status: pending
+    status: completed
   - id: phase-4-settings
     content: "Clean up .claude/settings.json vendor permissions"
-    status: pending
+    status: completed
   - id: phase-5-docs
     content: "Update ADR-125, artefact inventory, and platform matrix"
-    status: pending
+    status: completed
   - id: phase-6-workflow
-    content: "Establish post-install canonicalisation workflow"
-    status: pending
+    content: "Establish documented post-install canonicalisation workflow"
+    status: completed
   - id: phase-7-gates
     content: "Run quality gates and verify all checks pass"
-    status: pending
+    status: completed
 isProject: false
 ---
 
 # Agent Infrastructure Portability — Audit and Remediation
+
+## Completion Note (2026-04-24)
+
+This plan executed as part of the non-Planning Practice gap remediation.
+The audit counts below are retained as the pre-remediation baseline.
+Live truth is now enforced by `pnpm portability:check`, which currently
+passes with 12 canonical commands, 36 canonical skills, 35 canonical
+rules, 22 reviewer adapters, 37 Cursor triggers, 35 Claude rules, and
+35 `.agents/rules` wrappers.
+
+Resolution summary:
+
+- vendor Clerk and MCP Apps skills canonicalised into `.agent/skills/`
+  and recorded in `skills-lock.json`
+- platform skill copies replaced with real thin-wrapper directories
+  (no symlink adapters)
+- missing skill wrappers and `.agents/rules/` wrappers added
+- `.agents/agents/README.md` documents the intentional absence of
+  portable sub-agent wrappers
+- `scripts/validate-portability.mjs` now checks reverse links,
+  thin-wrapper form, lock consistency, `.agents/rules`, symlink-free
+  adapters, and Claude skill permissions
+- ADR-125, PDR-009, the artefact inventory, and the surface matrix
+  were amended with the current contract
 
 ## Source Strategy
 
@@ -663,111 +687,53 @@ accurately reflect the current architecture.
 - `.agent/memory/executive/artefact-inventory.md`
 - `.agent/memory/executive/cross-platform-agent-surface-matrix.md`
 
-## Phase 6: Vendor Skill Install/Update Tool
+## Phase 6: Post-Install Canonicalisation Workflow
 
-**Goal**: A TypeScript CLI in `agent-tools/` that wraps
-`npx skills add/update` so vendor skills are installed
-directly into the repo's three-layer model. The `npx skills`
-tool never touches tracked files.
+**Goal**: make the workflow durable enough that vendor skill
+updates cannot silently reintroduce full content in platform
+directories.
 
-### Design: Wrapper Script Approach
+### Implemented route
 
-```text
-pnpm agent-tools:install-skill clerk/skills
-  │
-  ├─ 1. npx skills add clerk/skills --copy
-  │     → .agent/tmp/.agents/skills/ (gitignored staging area)
-  │
-  ├─ 2. For each new skill in staging:
-  │     a. Copy to .agent/skills/<name>/ (canonical)
-  │     b. Add classification: passive to frontmatter
-  │     c. Create thin wrappers in .agents/, .claude/, .cursor/
-  │
-  ├─ 3. Update skills-lock.json
-  │
-  └─ 4. Clean up staging dir
-```
+This slice chose a documented workflow plus validator enforcement,
+not a new `agent-tools` CLI. That keeps the remediation scoped to
+agent infrastructure portability and avoids adding another tool
+surface before a second install/update event proves the need.
 
-For updates: `pnpm agent-tools:update-skill clerk/skills`
-does the same but diffs against existing `.agent/skills/<name>/`
-to show what changed upstream before overwriting.
+The active workflow is:
 
-### Implementation in `agent-tools/`
+1. Install or update vendor skills with the external tool.
+2. Move full content into `.agent/skills/<name>/`.
+3. Add `classification: passive`.
+4. Record the skill in `skills-lock.json`.
+5. Replace every platform copy with a thin wrapper.
+6. Run `pnpm portability:check`.
 
-`agent-tools/` is already a proper TypeScript workspace with
-build, lint, type-check, and vitest. New commands:
+ADR-125 now records the workflow, and the portability validator
+enforces the safety net: full platform content, missing wrappers,
+missing lock entries, symlink adapters, and missing Claude skill
+permissions fail the gate.
 
-- `src/bin/install-skill.ts` — install vendor skill(s) from
-  a GitHub source
-- `src/bin/update-skill.ts` — update existing vendor skill(s)
-- `src/lib/skill-canonicalise.ts` — shared logic:
-  - Parse SKILL.md frontmatter
-  - Generate thin wrapper content for each platform
-  - Create/update `skills-lock.json` entries
-  - Diff display for updates
+### Future trigger
 
-Register in `package.json`:
-
-```json
-"install-skill": "tsx src/bin/install-skill.ts",
-"update-skill": "tsx src/bin/update-skill.ts"
-```
-
-And root `package.json`:
-
-```json
-"agent-tools:install-skill": "pnpm --filter @oaknational/agent-tools install-skill",
-"agent-tools:update-skill": "pnpm --filter @oaknational/agent-tools update-skill"
-```
-
-### Gitignore entry
-
-Add `.agent/tmp/` to `.gitignore` as the staging area for
-vendor skill downloads.
-
-### Three-layer enforcement
-
-All three layers work together:
-
-1. **The tool** automates the happy path — vendor content
-   never enters tracked files as full content
-2. **ADR-125 §Externally-Installed Skills** documents the why
-   and the workflow for edge cases
-3. **Portability validator Check 14** is the active
-   enforcement layer — catches full content in platform dirs
-   if someone bypasses the tool (passive guidance loses to
-   artefact gravity)
-
-### Acceptance
-
-- `pnpm agent-tools:install-skill clerk/skills` produces a
-  compliant state (canonical + thin wrappers)
-- `pnpm agent-tools:update-skill clerk/skills` shows a diff
-  and updates canonical content
-- `pnpm portability:check` passes after install/update
-- `pnpm portability:check` FAILS if someone runs
-  `npx skills add` directly without the wrapper
-- Tests in `agent-tools/tests/` cover the canonicalisation
-  logic
-
-### Files affected
-
-- `agent-tools/src/bin/install-skill.ts` (new)
-- `agent-tools/src/bin/update-skill.ts` (new)
-- `agent-tools/src/lib/skill-canonicalise.ts` (new)
-- `agent-tools/tests/skill-canonicalise.test.ts` (new)
-- `agent-tools/package.json` (2 new scripts)
-- Root `package.json` (2 new alias scripts)
-- `.gitignore` (add `.agent/tmp/`)
+If a future session performs another vendor skill install/update and
+the manual workflow proves repetitive or error-prone, promote the
+wrapper-script design into a separate `agent-tools` plan.
 
 ## Phase 7: Quality Gates
 
 ```bash
 pnpm portability:check     # Must pass with all new checks
 pnpm subagents:check       # No sub-agent regression
-pnpm lint:fix              # Format new/changed files
+pnpm test:root-scripts     # Root validator/script coverage
+pnpm agent-tools:build     # Agent-tools compile check
+pnpm agent-tools:lint      # Agent-tools lint check
+pnpm agent-tools:test      # Agent-tools test coverage
+pnpm practice:fitness:informational # Non-blocking doctrine-size report
+pnpm practice:vocabulary   # Fitness vocabulary consistency
 pnpm format:root           # Formatting
 pnpm markdownlint:root     # Markdown linting
+git diff --check           # Whitespace check
 ```
 
 ---
@@ -778,7 +744,7 @@ pnpm markdownlint:root     # Markdown linting
 
 **Decision**: YES for rules, NO for sub-agents (with README).
 
-- `.agents/rules/` — 31 thin wrappers, one per canonical
+- `.agents/rules/` — 35 thin wrappers, one per canonical
   rule. Platforms scanning `.agents/` as their primary
   directory may look for rules there.
 - `.agents/agents/README.md` — explains that sub-agent
@@ -789,31 +755,32 @@ pnpm markdownlint:root     # Markdown linting
 
 ## D2: `npx skills update` overwrite protection
 
-**Decision**: wrapper script approach + safety net.
+**Decision**: documented canonicalisation workflow + safety net.
 
-The `pnpm agent-tools:install-skill` wrapper installs via
-`npx skills` to a gitignored staging area (`.agent/tmp/`),
-then canonicalises into `.agent/` and creates thin wrappers.
-The `npx skills` tool never touches tracked files directly.
+The first remediation slice keeps the post-install workflow
+manual and explicit: install/update upstream skills, move full
+content into `.agent/skills/`, update `skills-lock.json`, restore
+thin platform wrappers, then run `pnpm portability:check`. If a
+future vendor-skill update proves this repetitive or error-prone,
+promote wrapper tooling into a separate `agent-tools` plan.
 
-The portability validator Check 14 (thin-wrapper form
-validation) remains as an active safety net — if someone
-runs `npx skills add` directly without the wrapper, the
-quality gate blocks the commit.
+The portability validator thin-wrapper, lock, symlink, and reverse-link
+checks remain the active safety net — if someone runs `npx skills add`
+directly and leaves full content in platform adapters, the quality gate
+blocks the drift.
 
 ## D3: Canonicalisation tooling
 
-**Decision**: TypeScript CLI in `agent-tools/` workspace.
+**Decision**: defer CLI tooling until a repeated install/update event.
 
-New commands `install-skill` and `update-skill` in the
-existing `agent-tools/` TypeScript workspace, with full
-quality gate support (build, lint, type-check, vitest).
-See Phase 6 for implementation details.
+No `install-skill` or `update-skill` command is created in this
+slice. The validator and documented workflow are sufficient for
+the current remediation; tooling belongs in a future plan if the
+manual workflow proves inadequate.
 
 ## D4: PR strategy
 
-**Decision**: single PR, on a new branch (not the current
-`feat/otel_sentry_enhancements` branch).
+**Decision**: land with the non-Planning Practice remediation slice.
 
-Branch name: `feat/agent-infrastructure-portability-remediation`
-(or similar). All 7 phases land atomically.
+This work executed alongside the Practice structural remediation in
+the current workspace while preserving concurrent Sentry-session work.

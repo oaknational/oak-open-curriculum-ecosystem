@@ -136,6 +136,18 @@ canonical content describes **what** to do; the wrapper describes
 Concretely: a wrapper file longer than ~10 content lines (excluding
 frontmatter) is a red flag that substance has leaked into the wrapper.
 
+Cross-platform standard directories, such as `.agents/`, are adapter
+targets under this model, not canonical locations. A vendor tool may
+install full content there, but the Practice-bearing repo must
+canonicalise that content back into Layer 1 and replace the platform
+copy with a thin wrapper.
+
+Validation must be bidirectional: every canonical artefact has the
+required adapters, and every platform adapter points back to an
+existing canonical artefact. It must also validate wrapper form, not
+only presence. Existence-only checks allow full-content drift to hide
+inside platform directories.
+
 ### Layer 3: Entry Points
 
 Root-level files direct each platform's agent to the canonical
@@ -296,8 +308,13 @@ Layer-2 artefact types.
 - Portability validation (automated) checks: (a) every canonical
   artefact has the required adapters; (b) every adapter is thin
   (content-line count under the threshold; no substantive prose);
-  (c) every platform's tracked configuration grants the permissions
-  wrappers need to activate.
+  (c) every platform adapter points back to an existing canonical
+  artefact; (d) every platform's tracked configuration grants the
+  permissions wrappers need to activate.
+- Cross-platform probes use platform-neutral inputs by default, or
+  explicitly provide parity across the platforms they claim to verify.
+- Tripwire installs should include at least one self-applying
+  acceptance check against the installing session.
 - Canonical artefact IDs are stable across platforms. Aliases are
   forbidden; platform-native renaming is not.
 
@@ -384,8 +401,9 @@ At the time of authoring, the repo where this PDR was written carries:
 
 - Platforms: Cursor, Claude Code, Codex, Gemini CLI.
 - Canonical location: `.agent/` for all substantive content.
-- Adapter directories: `.cursor/`, `.claude/`, `.agents/` (Codex
-  convention — plural), `.gemini/`, plus `.codex/` for Codex config.
+- Adapter directories: `.cursor/`, `.claude/`, `.agents/`
+  (cross-platform skills/rules surface), `.gemini/`, plus `.codex/`
+  for Codex config.
 - Entry points: `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, plus
   `.cursor/rules/*` for Cursor's always-on mechanism.
 - Validation: `scripts/validate-portability.mjs` (wrapper presence
@@ -393,3 +411,15 @@ At the time of authoring, the repo where this PDR was written carries:
   (sub-agent adapter coverage).
 - Specific counts (artefacts, wrappers, ADR references) live in the
   host ADR record that this PDR's substance extracts from.
+
+## Amendment Log
+
+### 2026-04-24 — Cross-platform standard directories are adapters
+
+Practice-first portability remediation exposed that `.agents/skills/`
+can receive full vendor skill content from external tools. This does
+not make `.agents/` canonical in a Practice-bearing repo. The portable
+decision remains canonical-first: vendor content is moved to `.agent/`,
+platform copies become thin wrappers, and validators check forward
+coverage, reverse adapter links, wrapper form, and tracked permission
+activation.

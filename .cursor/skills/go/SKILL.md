@@ -1,14 +1,8 @@
 ---
 name: go
-description: Load the shared GO execution workflow from `.agent/skills/go/shared/go.md`.
+description: Re-ground and structure execution with ACTION/REVIEW/GROUNDING cadence. Use when the user asks to go, re-ground work mid-session, or explicitly apply the GO workflow to structure task execution with periodic self-assessment.
 ---
 
-# GO (Cursor)
+# Go (Cursor)
 
-Use this skill to re-ground and structure execution with ACTION/REVIEW/GROUNDING cadence.
-
-## Steps
-
-1. Read `.agent/skills/go/shared/go.md`.
-2. Follow the grounding step and read linked directives.
-3. Structure the todo list and begin executing.
+Read and follow `.agent/skills/go/SKILL.md`.
