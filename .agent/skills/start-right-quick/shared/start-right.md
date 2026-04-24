@@ -41,6 +41,12 @@ workstream from the [full ADR index](../../../../docs/architecture/architectural
 - @.agent/memory/active/patterns/passive-guidance-loses-to-artefact-gravity.md —
   constraint at tripwire-design time (passive guidance needs an active
   layer to fire under context pressure)
+- `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` —
+  plugin-managed capture buffers. The remember plugin owns their
+  lifecycle (rotation, archival, deletion); scan for recent observations
+  at session open. Extract any cross-session insight into `napkin.md`
+  or `distilled.md` per the standard graduation flow — do not mutate
+  the buffers directly.
 
 ### 4. Live state (operational memory) — authority order
 

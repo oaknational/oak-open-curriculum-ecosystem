@@ -130,6 +130,8 @@ export const ignores = [
   // Test results
   '**/test-results/',
   '**/coverage/',
+  // Plugin-managed ephemeral capture buffers (remember plugin owns lifecycle)
+  '.remember/',
 ];
 
 /**

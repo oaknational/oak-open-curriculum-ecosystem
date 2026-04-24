@@ -114,6 +114,16 @@ asks for more, this command must not trigger:
    session in `.agent/memory/active/napkin.md`. Use the structured
    surprise format from the napkin skill.
 
+   **Auxiliary input: plugin-managed capture buffers.** The remember
+   plugin maintains `.remember/now.md`, `.remember/today-*.md`, and
+   sibling buffers as a separate ephemeral capture surface. Scan
+   them at session close for entries that would change next-session
+   behaviour; mirror any such entry into `napkin.md` using the
+   structured surprise format. Do not rotate, archive, or delete
+   `.remember/` files — lifecycle is owned by the plugin. This
+   surface is a read-source for extraction, not a surface we
+   maintain.
+
    **6b. Surface ADR/PDR candidates.** Ask explicitly at every
    session close: *"Has this session surfaced an architectural
    decision worth an ADR? A Practice-governance decision worth a

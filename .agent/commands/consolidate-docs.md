@@ -86,6 +86,14 @@ held over).
    - **Capture surfaces**: `.agent/memory/active/napkin.md`,
      `.agent/memory/active/distilled.md` (the staging surface itself,
      not yet graduated), prompt artefacts.
+   - **Plugin-managed capture buffers**: `.remember/now.md`,
+     `.remember/today-*.md`, `.remember/recent.md`, and sibling
+     buffers authored by the remember plugin. These are a
+     session-and-daily capture surface whose lifecycle (rotation,
+     archival, deletion) is managed by the plugin — do not rotate
+     or delete them manually. Read them alongside the napkin and
+     extract any cross-session insight into `distilled.md` or a
+     permanent home per the standard graduation rules in step 7.
    - **Plan surfaces**: active and recently completed plans (per step
      1 above) — surface any content that describes how things work
      rather than what to do next.
@@ -141,6 +149,7 @@ held over).
 
    - `.agent/memory/active/distilled.md` — refined cross-session entries from prior napkin rotations.
    - `.agent/memory/active/napkin.md` — recent surprises and candidate tags.
+   - `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` — plugin-managed capture buffers. Read-only for graduation purposes; extract qualifying insight into `distilled.md` or the appropriate permanent home, then leave the buffers to the plugin's own lifecycle.
    - **`.agent/memory/operational/repo-continuity.md § Deep consolidation status` (the pending-graduations register)** — the structured list of captured candidates with per-item `captured-date`, `source-surface`, `graduation-target`, `trigger-condition`, and `status`. Items with `status: due` or `status: overdue` are the primary graduation candidates for this pass. Items with `status: pending` are reviewed to see whether their trigger condition has fired since last consolidation.
 
    **7a. Scan for ADR-shaped and PDR-shaped doctrine** (do this *before* applying the three outcomes below). Walk every entry in `distilled.md` and every recent napkin surprise and ask two questions:

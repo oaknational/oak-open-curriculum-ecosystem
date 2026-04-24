@@ -39,6 +39,9 @@ CHANGELOG.md
 **/research/**
 **/temp-secrets/**
 
+# Plugin-managed ephemeral capture buffers (remember plugin owns lifecycle)
+.remember/
+
 # Third-party dependencies
 node_modules/**
 **/node_modules/**

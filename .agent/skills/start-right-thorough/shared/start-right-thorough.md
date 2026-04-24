@@ -25,6 +25,20 @@ Read and internalise these documents:
 
 **Plans must include regularly re-reading and re-committing to these foundation documents.**
 
+## Learning-Loop Surfaces
+
+Before engaging with the work, scan the active-memory capture surfaces:
+
+- `.agent/memory/active/distilled.md` — hard-won rules across sessions
+- `.agent/memory/active/napkin.md` — current session observations
+- `.agent/memory/active/patterns/` — reusable patterns (ADR-150 §Interaction Points)
+- `.remember/now.md`, `.remember/today-*.md`, `.remember/recent.md` —
+  plugin-managed capture buffers. The remember plugin owns their
+  lifecycle (rotation, archival, deletion); scan for recent observations
+  at session open. Extract any cross-session insight into `napkin.md` or
+  `distilled.md` per the standard graduation flow — do not mutate the
+  buffers directly.
+
 ## Guiding Questions
 
 Before diving in, pause and ask:
