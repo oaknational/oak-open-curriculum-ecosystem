@@ -31,11 +31,13 @@
   },
   "dependencies": {
     "@oaknational/env": "workspace:*",
-    "@oaknational/result": "workspace:*"
+    "@oaknational/result": "workspace:*",
+    "semver": "^7.7.4"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
     "@types/node": "^25.5.2",
+    "@types/semver": "^7.7.1",
     "eslint": "^10.2.0",
     "globals": "^17.4.0",
     "tsup": "^8.5.1",

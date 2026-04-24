@@ -81,10 +81,10 @@ function createTestEnv(
     SEARCH_API_KEY: 'search-key-12345',
     SEARCH_INDEX_VERSION: 'v2026-01-01',
     SENTRY_MODE: mode,
+    SENTRY_RELEASE_OVERRIDE: 'release-123',
     ...(mode === 'sentry'
       ? {
           SENTRY_DSN: 'https://public@example.ingest.sentry.io/123456',
-          SENTRY_RELEASE_OVERRIDE: 'release-123',
           SENTRY_TRACES_SAMPLE_RATE: '1',
         }
       : {}),

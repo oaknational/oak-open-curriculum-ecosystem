@@ -14,6 +14,7 @@ type ValueConfigError = Extract<
   | { readonly kind: 'invalid_app_version' }
   | { readonly kind: 'invalid_traces_sample_rate' }
   | { readonly kind: 'invalid_git_sha' }
+  | { readonly kind: 'invalid_release_override' }
 >;
 
 /**
@@ -31,6 +32,7 @@ function isValueConfigError(error: ObservabilityConfigError): error is ValueConf
     case 'invalid_app_version':
     case 'invalid_traces_sample_rate':
     case 'invalid_git_sha':
+    case 'invalid_release_override':
       return true;
     default:
       return false;
@@ -49,6 +51,8 @@ function describeValueConfigError(error: ValueConfigError): string {
       return `Invalid SENTRY_TRACES_SAMPLE_RATE value: ${error.value}`;
     case 'invalid_git_sha':
       return `Invalid git SHA value: ${error.value}`;
+    case 'invalid_release_override':
+      return `Invalid SENTRY_RELEASE_OVERRIDE value: ${error.value}`;
     default: {
       const exhaustive: never = error;
       throw new Error(`Unhandled value config error kind: ${String(exhaustive)}`);
@@ -56,14 +60,16 @@ function describeValueConfigError(error: ValueConfigError): string {
   }
 }
 
-export function describeConfigError(error: ObservabilityConfigError): string {
-  if (isValueConfigError(error)) {
-    return describeValueConfigError(error);
-  }
+type NonValueConfigError = Exclude<ObservabilityConfigError, ValueConfigError>;
 
+function describeNonValueConfigError(error: NonValueConfigError): string {
   switch (error.kind) {
     case 'missing_app_version':
       return 'Application version is required for Sentry release resolution';
+    case 'missing_git_sha':
+      return 'Git SHA is required for Sentry release resolution but VERCEL_GIT_COMMIT_SHA is not set';
+    case 'missing_branch_url_in_preview':
+      return 'VERCEL_BRANCH_URL is required for preview-shape release resolution';
     case 'missing_sentry_dsn':
       return 'SENTRY_DSN is required when SENTRY_MODE=sentry';
     case 'invalid_sentry_dsn':
@@ -77,6 +83,12 @@ export function describeConfigError(error: ObservabilityConfigError): string {
       throw new Error(`Unhandled config error kind: ${String(exhaustive)}`);
     }
   }
+}
+
+export function describeConfigError(error: ObservabilityConfigError): string {
+  return isValueConfigError(error)
+    ? describeValueConfigError(error)
+    : describeNonValueConfigError(error);
 }
 
 export function redactLogContext(context: LogContext | undefined): LogContext | undefined {

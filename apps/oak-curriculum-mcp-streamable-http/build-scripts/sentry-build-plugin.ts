@@ -9,29 +9,24 @@
  * plugin instance. The composition root constructs the actual plugin
  * only when intent is `configured`.
  *
- * Boundary rationale (per architecture-reviewer-betty intent-review,
- * 2026-04-21): vendor coupling stays app-local. `@oaknational/sentry-node`
- * keeps its vendor-agnostic policy surface (`resolveSentryEnvironment`,
- * `resolveSentryRegistrationPolicy`); release-name resolution moves to
- * `@oaknational/build-metadata` where the other build-time boundary
- * reads (root `package.json`, `VERCEL_GIT_COMMIT_SHA`) already live —
- * see {@link resolveBuildTimeRelease}.
- *
- * §L-8 Correction (2026-04-21): the `f9d5b0d2` shape called
- * `resolveSentryRelease` from `@oaknational/sentry-node`, which reads
- * `APP_VERSION` from `process.env` (not populated by Vercel at build
- * time). The fix is single-source-of-truth boundary discipline:
- * `resolveBuildTimeRelease` is the one resolver; `dist/build-info.json`
- * is the persisted artefact every downstream consumer reads.
+ * Boundary rationale: vendor coupling stays app-local.
+ * `@oaknational/sentry-node` keeps its vendor-agnostic policy surface
+ * (`resolveSentryEnvironment`, `resolveSentryRegistrationPolicy`);
+ * release-name resolution lives in `@oaknational/build-metadata`'s
+ * canonical {@link resolveRelease}, with git-SHA provenance resolved
+ * independently via {@link resolveGitSha}.
  *
  * @packageDocumentation
  */
 
 import {
-  resolveBuildTimeRelease,
-  type BuildTimeReleaseEnvironmentInput,
-  type BuildTimeReleaseError,
-  type ResolvedBuildTimeRelease,
+  resolveGitSha,
+  resolveRelease,
+  type GitShaSource,
+  type ReleaseError,
+  type ReleaseInput,
+  type ResolvedRelease,
+  type RuntimeMetadataError,
 } from '@oaknational/build-metadata';
 import { err, ok, type Result } from '@oaknational/result';
 import {
@@ -69,19 +64,29 @@ export interface SentryBuildPluginInputs {
 }
 
 /**
+ * Git SHA + provenance resolved at build time alongside the release.
+ *
+ * @remarks Re-exported so the composition root can consume it to
+ * persist into `BuildInfo` alongside the resolved release.
+ */
+export interface ResolvedBuildTimeGitSha {
+  readonly value: string;
+  readonly source: GitShaSource;
+}
+
+/**
  * Outcome of build-time intent resolution.
  *
- * @remarks Three success variants encode the L-8 Correction
- * `Corrected fail-policy` table verbatim. `Result.error` is reserved
- * for vital-identity failures (per the same table) — the composition
- * root throws on those.
+ * @remarks Three success variants encode the §Truth Tables fail-policy
+ * verbatim. `Result.error` is reserved for vital-identity failures —
+ * the composition root throws on those.
  *
  * - `configured` — registration is enabled and every input the plugin
- *   needs is present; the composition root wires the plugin.
+ *   needs is present; the composition root wires the plugin. The
+ *   `gitSha` provenance is attached so the composition root can
+ *   persist it into `BuildInfo`.
  * - `disabled` — registration policy decided this build does not
- *   register a release (e.g. local development without the
- *   `SENTRY_RELEASE_REGISTRATION_OVERRIDE`+`SENTRY_RELEASE_OVERRIDE`
- *   pair). Plugin omitted; build proceeds.
+ *   register a release. Plugin omitted; build proceeds.
  * - `skipped` — registration policy decided this build SHOULD register
  *   a release, but optional vendor config (`SENTRY_AUTH_TOKEN`) is
  *   missing. Plugin omitted with a diagnostic warn line; build proceeds
@@ -91,26 +96,28 @@ export interface SentryBuildPluginInputs {
 export type SentryBuildPluginIntent =
   | {
       readonly kind: 'configured';
-      readonly release: ResolvedBuildTimeRelease;
+      readonly release: ResolvedRelease;
+      readonly gitSha: ResolvedBuildTimeGitSha | undefined;
       readonly inputs: SentryBuildPluginInputs;
     }
   | { readonly kind: 'disabled'; readonly reason: 'registration_disabled_by_policy' }
   | {
       readonly kind: 'skipped';
       readonly reason: 'auth_token_missing';
-      readonly release: ResolvedBuildTimeRelease;
+      readonly release: ResolvedRelease;
+      readonly gitSha: ResolvedBuildTimeGitSha | undefined;
     };
 
 /** Build-time environment surface = ADR-163 policy env + the host-injected auth token. */
 export type SentryBuildEnvironment = SentryConfigEnvironment &
-  BuildTimeReleaseEnvironmentInput & {
+  ReleaseInput & {
     readonly SENTRY_AUTH_TOKEN?: string;
   };
 
 /**
  * Vital-identity errors that short-circuit intent construction.
  *
- * @remarks Per the L-8 Correction `Corrected fail-policy` table:
+ * @remarks Per the §Truth Tables fail-policy:
  *
  * - Optional vendor config missing → `kind: 'skipped'` (NOT an error).
  * - Vital identity missing → `Result.error` here → composition root
@@ -118,11 +125,12 @@ export type SentryBuildEnvironment = SentryConfigEnvironment &
  *
  * Production-only escalation: missing `SENTRY_AUTH_TOKEN` is *vital*
  * on production but *optional* on preview/development, so it surfaces
- * here only on production via {@link missing_auth_token_on_production}.
+ * here only on production via `missing_auth_token_on_production`.
  */
 export type CreateSentryBuildPluginError =
   | ObservabilityConfigError
-  | BuildTimeReleaseError
+  | ReleaseError
+  | RuntimeMetadataError
   | { readonly kind: 'missing_commit_sha_in_registered_environment'; readonly message: string }
   | { readonly kind: 'missing_auth_token_on_production'; readonly message: string };
 
@@ -132,7 +140,8 @@ function trimToUndefined(value: string | undefined): string | undefined {
 }
 
 function resolveAuthTokenIntent(
-  release: ResolvedBuildTimeRelease,
+  release: ResolvedRelease,
+  gitSha: ResolvedBuildTimeGitSha | undefined,
   identity: SentryBuildPluginIdentity,
   env: SentryBuildEnvironment,
 ): Result<SentryBuildPluginIntent, CreateSentryBuildPluginError> {
@@ -149,10 +158,10 @@ function resolveAuthTokenIntent(
       });
     }
 
-    return ok({ kind: 'skipped', reason: 'auth_token_missing', release });
+    return ok({ kind: 'skipped', reason: 'auth_token_missing', release, gitSha });
   }
 
-  if (!release.gitSha) {
+  if (!gitSha) {
     return err({
       kind: 'missing_commit_sha_in_registered_environment',
       message:
@@ -164,13 +173,14 @@ function resolveAuthTokenIntent(
   return ok({
     kind: 'configured',
     release,
+    gitSha,
     inputs: {
       org: identity.org,
       project: identity.project,
       authToken,
       release: {
         name: release.value,
-        setCommits: { commit: release.gitSha, repo: identity.repoSlug },
+        setCommits: { commit: gitSha.value, repo: identity.repoSlug },
         deploy: { env: release.environment },
       },
       sourcemaps: { filesToDeleteAfterUpload: ['dist/server.js.map'] },
@@ -182,15 +192,17 @@ function resolveAuthTokenIntent(
 /**
  * Map build-time env + identity onto the Sentry build-plugin intent.
  *
- * @remarks Behaviour proven by `sentry-build-plugin.unit.test.ts`.
- * Composes:
+ * @remarks Composes:
  *
  * - {@link resolveSentryRegistrationPolicy} from `@oaknational/sentry-node`
  *   for the "should this build register a release at all?" gate.
- * - {@link resolveBuildTimeRelease} from `@oaknational/build-metadata`
- *   for the canonical L-8 Correction release-name derivation
- *   (production = root `package.json`; preview = branch + short SHA;
- *   development = short SHA).
+ * - {@link resolveRelease} from `@oaknational/build-metadata` for the
+ *   canonical release-name derivation (production = root
+ *   `package.json` semver; preview = `VERCEL_BRANCH_URL` host label;
+ *   development = `dev-<shortSha>`).
+ * - {@link resolveGitSha} from `@oaknational/build-metadata` for the
+ *   git-SHA provenance (used by `setCommits` and persisted into
+ *   `BuildInfo` by the composition root).
  *
  * Then the auth-token gate decides between `configured` (plugin runs),
  * `skipped` (warn + continue, preview/dev only), and
@@ -209,17 +221,22 @@ export function createSentryBuildPlugin(
     return ok({ kind: 'disabled', reason: 'registration_disabled_by_policy' });
   }
 
-  const release = resolveBuildTimeRelease(env);
+  const release = resolveRelease(env);
   if (!release.ok) {
     return release;
   }
 
-  return resolveAuthTokenIntent(release.value, identity, env);
+  const gitShaResult = resolveGitSha(env);
+  if (!gitShaResult.ok) {
+    return gitShaResult;
+  }
+
+  return resolveAuthTokenIntent(release.value, gitShaResult.value, identity, env);
 }
 
 /**
- * Re-export the resolved release record so the composition root can
- * persist it to `dist/build-info.json` alongside calling
+ * Re-export the canonical release resolver so the composition root can
+ * persist its output to `dist/build-info.json` alongside calling
  * `createSentryBuildPlugin` — single boundary read, two consumers.
  */
-export { resolveBuildTimeRelease } from '@oaknational/build-metadata';
+export { resolveRelease } from '@oaknational/build-metadata';

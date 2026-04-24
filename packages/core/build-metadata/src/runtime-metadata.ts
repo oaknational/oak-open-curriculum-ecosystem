@@ -17,34 +17,34 @@ function isValidApplicationVersion(value: string): boolean {
   return APPLICATION_VERSION_PATTERN.test(value);
 }
 
-export function resolveApplicationVersion(
-  processEnv: Readonly<Record<string, string | undefined>>,
+function resolveOverrideApplicationVersion(
+  override: string,
 ): Result<
   { readonly value: string; readonly source: ApplicationVersionSource },
   RuntimeMetadataError
 > {
-  const override = trimToUndefined(processEnv.APP_VERSION_OVERRIDE);
-
-  if (override) {
-    if (!isValidApplicationVersion(override)) {
-      return err({
-        message:
-          `Invalid APP_VERSION_OVERRIDE value "${override}". ` +
-          'Expected a semantic version such as 1.5.0.',
-        diagnostics: NO_DIAGNOSTICS,
-      });
-    }
-
-    return ok({
-      value: override,
-      source: 'APP_VERSION_OVERRIDE',
+  if (!isValidApplicationVersion(override)) {
+    return err({
+      kind: 'invalid_application_version',
+      message:
+        `Invalid APP_VERSION_OVERRIDE value "${override}". ` +
+        'Expected a semantic version such as 1.5.0.',
+      diagnostics: NO_DIAGNOSTICS,
     });
   }
 
+  return ok({ value: override, source: 'APP_VERSION_OVERRIDE' });
+}
+
+function resolveRootPackageApplicationVersion(): Result<
+  { readonly value: string; readonly source: ApplicationVersionSource },
+  RuntimeMetadataError
+> {
   const rootVersion = trimToUndefined(ROOT_PACKAGE_VERSION);
 
   if (!rootVersion) {
     return err({
+      kind: 'missing_application_version',
       message:
         'Root package.json is missing a version. ' +
         'Set APP_VERSION_OVERRIDE or restore package.json version.',
@@ -54,6 +54,7 @@ export function resolveApplicationVersion(
 
   if (!isValidApplicationVersion(rootVersion)) {
     return err({
+      kind: 'invalid_application_version',
       message:
         `Root package.json version "${rootVersion}" is invalid. ` +
         'Set APP_VERSION_OVERRIDE or fix the root package.json version.',
@@ -61,10 +62,22 @@ export function resolveApplicationVersion(
     });
   }
 
-  return ok({
-    value: rootVersion,
-    source: 'root_package_json',
-  });
+  return ok({ value: rootVersion, source: 'root_package_json' });
+}
+
+export function resolveApplicationVersion(
+  processEnv: Readonly<Record<string, string | undefined>>,
+): Result<
+  { readonly value: string; readonly source: ApplicationVersionSource },
+  RuntimeMetadataError
+> {
+  const override = trimToUndefined(processEnv.APP_VERSION_OVERRIDE);
+
+  if (override) {
+    return resolveOverrideApplicationVersion(override);
+  }
+
+  return resolveRootPackageApplicationVersion();
 }
 
 export function getDisplayHostname(env: VercelDisplayHostnameEnvironment): string | undefined {

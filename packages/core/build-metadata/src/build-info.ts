@@ -1,8 +1,4 @@
-import type {
-  BuildTimeReleaseEnvironment,
-  BuildTimeReleaseSource,
-  ResolvedBuildTimeRelease,
-} from './build-time-release.js';
+import type { ReleaseEnvironment, ReleaseSource, ResolvedRelease } from './release.js';
 
 /**
  * Persisted build-info file shape written to `dist/build-info.json`
@@ -10,10 +6,10 @@ import type {
  * runtime SDK initialisation (release tagging), and post-build
  * verification scripts.
  *
- * @remarks This is the L-8 Correction `Persist once, consume many`
- * artefact. Every consumer that needs the release name MUST read this
- * file rather than re-derive — re-derivation is what introduced the
- * `missing_app_version` drift `f9d5b0d2` shipped with.
+ * @remarks This is the `Persist once, consume many` artefact. Every
+ * consumer that needs the release name MUST read this file rather than
+ * re-derive — re-derivation is what introduced the `missing_app_version`
+ * drift `f9d5b0d2` shipped with.
  *
  * File path is fixed by convention at `<dist>/build-info.json`. The
  * dist directory is the workspace's esbuild output directory, not a
@@ -22,10 +18,10 @@ import type {
 export interface BuildInfo {
   /** Sentry release name the esbuild plugin uploaded artefacts under. */
   readonly release: string;
-  /** Provenance of the release name; see {@link BuildTimeReleaseSource}. */
-  readonly releaseSource: BuildTimeReleaseSource;
+  /** Provenance of the release name; see {@link ReleaseSource}. */
+  readonly releaseSource: ReleaseSource;
   /** Effective deployment environment for which the release was derived. */
-  readonly environment: BuildTimeReleaseEnvironment;
+  readonly environment: ReleaseEnvironment;
   /** Full git SHA at build time (Vercel `VERCEL_GIT_COMMIT_SHA` or override), if available. */
   readonly gitSha: string | undefined;
   /** Repository branch ref at build time (Vercel `VERCEL_GIT_COMMIT_REF`), if available. */
@@ -40,12 +36,17 @@ export interface BuildInfo {
  * Convert a resolved release record into the persisted
  * {@link BuildInfo} shape.
  *
- * @remarks Pure factory. Composition root passes the resolver result
- * + `VERCEL_GIT_COMMIT_REF` + `Date` so this function stays
- * test-friendly and deterministic.
+ * @remarks Pure factory. Composition root passes the resolver result,
+ * the independently-resolved `gitSha` (from `resolveGitSha`),
+ * `VERCEL_GIT_COMMIT_REF`, and `Date` so this function stays
+ * test-friendly and deterministic. `gitSha` is a separate parameter
+ * because the collapsed `ResolvedRelease` no longer carries it — git
+ * SHA provenance is an independent boundary read resolved via
+ * {@link ./git-sha.js#resolveGitSha}.
  */
 export function buildBuildInfo(input: {
-  readonly release: ResolvedBuildTimeRelease;
+  readonly release: ResolvedRelease;
+  readonly gitSha: string | undefined;
   readonly branch: string | undefined;
   readonly now: Date;
 }): BuildInfo {
@@ -53,7 +54,7 @@ export function buildBuildInfo(input: {
     release: input.release.value,
     releaseSource: input.release.source,
     environment: input.release.environment,
-    gitSha: input.release.gitSha,
+    gitSha: input.gitSha,
     branch: input.branch,
     generatedAt: input.now.toISOString(),
     schemaVersion: 1,

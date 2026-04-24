@@ -1,3 +1,4 @@
+import type { ReleaseInput, ReleaseSource } from '@oaknational/build-metadata';
 import type { CaptureContext, Log, NodeOptions } from '@sentry/node';
 import type { LogContext, LogSink, NormalizedError } from '@oaknational/logger';
 import type { Result } from '@oaknational/result';
@@ -23,29 +24,53 @@ export type SentryBooleanFlagName =
 
 export type SentryEnvironmentSource = 'SENTRY_ENVIRONMENT_OVERRIDE' | 'VERCEL_ENV' | 'development';
 
+/**
+ * Provenance of the `APP_VERSION` value fed into the resolver.
+ *
+ * @remarks Tracked separately from {@link SentryReleaseSource} because
+ * `APP_VERSION` is an observability signal that the build-time
+ * composition root computes from either `APP_VERSION_OVERRIDE` or the
+ * root `package.json`. The release identifier itself may be derived
+ * from that version (on production) OR from a branch URL / short SHA
+ * (on preview/development).
+ */
 export type ApplicationVersionSource = 'APP_VERSION_OVERRIDE' | 'root_package_json';
 
-export type SentryReleaseSource = 'SENTRY_RELEASE_OVERRIDE' | ApplicationVersionSource;
+/**
+ * Source the resolved Sentry release name was derived from.
+ *
+ * @remarks Aliased to {@link ReleaseSource} from
+ * `@oaknational/build-metadata` to reflect the collapse to a single
+ * canonical resolver — the adapter no longer re-classifies release
+ * provenance on the runtime path.
+ */
+export type SentryReleaseSource = ReleaseSource;
 
 export type GitShaSource = 'GIT_SHA_OVERRIDE' | 'VERCEL_GIT_COMMIT_SHA';
 
-export interface SentryConfigEnvironment {
+/**
+ * Environment input shape consumed by `@oaknational/sentry-node`.
+ *
+ * @remarks Extends {@link ReleaseInput} so that release-resolution
+ * divergence between build-time and runtime is impossible by
+ * construction: any caller assembling a `SentryConfigEnvironment`
+ * automatically satisfies the upstream `resolveRelease` contract.
+ * The sentry-node-specific fields below layer on top for SDK
+ * configuration (DSN, flags, mode) and observability signalling
+ * (APP_VERSION provenance, GIT_SHA provenance).
+ */
+export interface SentryConfigEnvironment extends ReleaseInput {
   readonly SENTRY_MODE?: string;
   readonly SENTRY_DSN?: string;
   readonly SENTRY_ENVIRONMENT_OVERRIDE?: string;
-  readonly SENTRY_RELEASE_OVERRIDE?: string;
   readonly SENTRY_RELEASE_REGISTRATION_OVERRIDE?: string;
   readonly SENTRY_TRACES_SAMPLE_RATE?: string;
   readonly SENTRY_ENABLE_LOGS?: string;
   readonly SENTRY_SEND_DEFAULT_PII?: string;
   readonly SENTRY_DEBUG?: string;
-  readonly VERCEL_ENV?: string;
-  readonly VERCEL_GIT_COMMIT_REF?: string;
-  readonly APP_VERSION?: string;
   readonly APP_VERSION_SOURCE?: ApplicationVersionSource;
   readonly GIT_SHA?: string;
   readonly GIT_SHA_SOURCE?: GitShaSource;
-  readonly VERCEL_GIT_COMMIT_SHA?: string;
 }
 
 /**
@@ -133,6 +158,9 @@ export type ObservabilityConfigError =
   | { readonly kind: 'invalid_traces_sample_rate'; readonly value: string }
   | { readonly kind: 'send_default_pii_forbidden' }
   | { readonly kind: 'invalid_git_sha'; readonly value: string }
+  | { readonly kind: 'missing_git_sha' }
+  | { readonly kind: 'invalid_release_override'; readonly value: string }
+  | { readonly kind: 'missing_branch_url_in_preview' }
   | { readonly kind: 'invalid_release_registration_override' };
 
 export interface InitialiseSentryError {

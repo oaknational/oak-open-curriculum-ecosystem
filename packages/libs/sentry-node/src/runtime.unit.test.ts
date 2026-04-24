@@ -12,8 +12,7 @@ import type {
   SentryNodeSdk,
   SentryPostRedactionHooks,
 } from './types.js';
-
-/** Sentry hook parameter types — derived from `NodeOptions` to avoid importing private types. */
+// Sentry hook parameter types — derived from NodeOptions to avoid importing private types.
 type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
 type SentryBreadcrumb = Parameters<NonNullable<NodeOptions['beforeBreadcrumb']>>[0];
 type SentryTransactionEvent = Parameters<NonNullable<NodeOptions['beforeSendTransaction']>>[0];
@@ -253,6 +252,7 @@ function createConfig(input: SentryConfigEnvironment): ParsedSentryConfig {
     createSentryConfig({
       APP_VERSION: '1.0.0-test',
       APP_VERSION_SOURCE: 'APP_VERSION_OVERRIDE',
+      VERCEL_GIT_COMMIT_SHA: 'c8b666485ecb08b5dc27e428737b4077c0531f57',
       ...input,
     }),
   );

@@ -8,12 +8,12 @@ export {
 } from './runtime-metadata.js';
 
 export {
-  resolveBuildTimeRelease,
-  type BuildTimeReleaseEnvironment,
-  type BuildTimeReleaseEnvironmentInput,
-  type BuildTimeReleaseError,
-  type BuildTimeReleaseSource,
-  type ResolvedBuildTimeRelease,
-} from './build-time-release.js';
+  resolveRelease,
+  type ReleaseEnvironment,
+  type ReleaseError,
+  type ReleaseInput,
+  type ReleaseSource,
+  type ResolvedRelease,
+} from './release.js';
 
 export { buildBuildInfo, serialiseBuildInfo, type BuildInfo } from './build-info.js';

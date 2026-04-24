@@ -30,6 +30,7 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@oaknational/build-metadata": "workspace:*",
     "@oaknational/logger": "workspace:*",
     "@oaknational/observability": "workspace:*",
     "@oaknational/result": "workspace:*",

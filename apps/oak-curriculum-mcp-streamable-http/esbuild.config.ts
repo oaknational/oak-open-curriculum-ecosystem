@@ -11,29 +11,15 @@
  * `build-scripts/sentry-build-plugin.unit.test.ts` and
  * `build-scripts/esbuild-config.unit.test.ts`).
  *
- * Replaces the bespoke L-7 sourcemap-injection orchestrator
- * (`build-scripts/sentry-release-and-deploy*.ts`,
- * `scripts/upload-sourcemaps.sh`) deleted in §L-8 WS2.3. The vendor's
- * first-party `@sentry/esbuild-plugin` now performs every step that
- * orchestrator wired through `sentry-cli` (release registration,
- * source-map upload, deploy event emission, Debug ID injection) per
- * ADR-163 §6 (amended by §L-8 WS3.1: outcome statement, not bespoke
- * mechanism).
+ * The Sentry plugin must be the LAST plugin in the array per Sentry
+ * docs. Runs on Vercel via `tsx esbuild.config.ts` (the `build`
+ * script in `package.json`); locally too, since `tsx` is already a
+ * workspace devDependency.
  *
- * §L-8 Correction (2026-04-23): four-arm branch on intent kind +
- * `dist/build-info.json` persistence + warn-vs-throw fail-policy
- * split. The `f9d5b0d2` shape exited 1 on every error kind, treating
- * an absent optional `SENTRY_AUTH_TOKEN` as fatal even on credential-
- * less rehearsals (3rd-instance-pending of
- * `passive-guidance-loses-to-artefact-gravity`). Fail-policy now:
- * vital-identity errors throw with the resolver's helpful message;
- * optional-vendor-config-missing logs a `Sentry plugin skipped` line
- * and continues so artefacts still emit.
- *
- * Runs on Vercel via `tsx esbuild.config.ts` (the `build` script in
- * `package.json`); locally too, since `tsx` is already a workspace
- * devDependency. The Sentry plugin must be the LAST plugin in the
- * array per Sentry docs.
+ * The composition root snapshots env-vars at the boundary (one explicit
+ * field-by-field projection per {@link SentryBuildEnvironment}) so
+ * subsequent env mutations cannot affect re-evaluation and tests
+ * remain deterministic.
  *
  * @packageDocumentation
  */
@@ -45,7 +31,7 @@ import { build, type BuildOptions, type Plugin } from 'esbuild';
 import {
   buildBuildInfo,
   serialiseBuildInfo,
-  type ResolvedBuildTimeRelease,
+  type ResolvedRelease,
 } from '@oaknational/build-metadata';
 import {
   assertBuiltServerDefaultExport,
@@ -58,6 +44,7 @@ import {
 } from './build-scripts/esbuild-config.js';
 import {
   createSentryBuildPlugin,
+  type ResolvedBuildTimeGitSha,
   type SentryBuildEnvironment,
   type SentryBuildPluginIdentity,
   type SentryBuildPluginInputs,
@@ -69,20 +56,39 @@ const IDENTITY: SentryBuildPluginIdentity = {
   repoSlug: 'oaknational/oak-open-curriculum-ecosystem',
 };
 
-// Vercel + local build env crosses the boundary here. `process.env`
-// already satisfies the typed build-environment surface, so the
-// composition root can stay assertion-free.
-const env: SentryBuildEnvironment = process.env;
+// Snapshot the build-time env at the boundary. Explicit field-by-field
+// projection preserves excess-property checking (Wilma MINOR #11) and
+// makes subsequent `process.env` mutations inert for re-evaluation.
+const env: SentryBuildEnvironment = {
+  SENTRY_MODE: process.env.SENTRY_MODE,
+  SENTRY_DSN: process.env.SENTRY_DSN,
+  SENTRY_ENVIRONMENT_OVERRIDE: process.env.SENTRY_ENVIRONMENT_OVERRIDE,
+  SENTRY_RELEASE_OVERRIDE: process.env.SENTRY_RELEASE_OVERRIDE,
+  SENTRY_RELEASE_REGISTRATION_OVERRIDE: process.env.SENTRY_RELEASE_REGISTRATION_OVERRIDE,
+  SENTRY_TRACES_SAMPLE_RATE: process.env.SENTRY_TRACES_SAMPLE_RATE,
+  SENTRY_ENABLE_LOGS: process.env.SENTRY_ENABLE_LOGS,
+  SENTRY_SEND_DEFAULT_PII: process.env.SENTRY_SEND_DEFAULT_PII,
+  SENTRY_DEBUG: process.env.SENTRY_DEBUG,
+  SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+  VERCEL_ENV: process.env.VERCEL_ENV,
+  VERCEL_BRANCH_URL: process.env.VERCEL_BRANCH_URL,
+  VERCEL_GIT_COMMIT_REF: process.env.VERCEL_GIT_COMMIT_REF,
+  VERCEL_GIT_COMMIT_SHA: process.env.VERCEL_GIT_COMMIT_SHA,
+  APP_VERSION: process.env.APP_VERSION,
+  APP_VERSION_SOURCE: undefined,
+  GIT_SHA: process.env.GIT_SHA,
+  GIT_SHA_SOURCE: undefined,
+};
 
 const intent = createSentryBuildPlugin(env, IDENTITY);
 
 if (!intent.ok) {
-  // Vital-identity error per the L-8 Correction `Corrected fail-policy`
-  // table. Thrown rather than `process.exit(1)` so Vercel's build log
-  // captures the helpful message + stack from the resolver. Some error
-  // variants (the ObservabilityConfigError arm) lack a `.message`
-  // field; print the whole discriminator so the operator gets enough
-  // context to act in either case.
+  // Vital-identity error per the §Truth Tables fail-policy.
+  // Thrown rather than `process.exit(1)` so Vercel's build log captures
+  // the helpful message + stack from the resolver. Some error variants
+  // (the ObservabilityConfigError arm) lack a `.message` field; print
+  // the whole discriminator so the operator gets enough context to act
+  // in either case.
   throw new Error(
     `[esbuild.config] Sentry build-plugin intent error: ${JSON.stringify(intent.error)}`,
   );
@@ -92,9 +98,13 @@ const supportBuildOptions = createMcpEsbuildOptions(MCP_SUPPORT_ENTRY_POINTS);
 const deployBuildOptions = createMcpEsbuildOptions(MCP_DEPLOY_ENTRY_POINTS);
 const outdir = deployBuildOptions.outdir ?? supportBuildOptions.outdir ?? 'dist';
 
-async function persistBuildInfo(release: ResolvedBuildTimeRelease): Promise<void> {
+async function persistBuildInfo(
+  release: ResolvedRelease,
+  gitSha: ResolvedBuildTimeGitSha | undefined,
+): Promise<void> {
   const info = buildBuildInfo({
     release,
+    gitSha: gitSha?.value,
     branch: env.VERCEL_GIT_COMMIT_REF,
     now: new Date(),
   });
@@ -166,7 +176,7 @@ switch (intent.value.kind) {
     // production build. Persist build-info for downstream debugging,
     // log the warn line, omit the plugin so the build still produces
     // an artefact.
-    await persistBuildInfo(intent.value.release);
+    await persistBuildInfo(intent.value.release, intent.value.gitSha);
     console.warn(
       `[esbuild.config] Sentry plugin skipped: ${intent.value.reason} ` +
         '(non-production build proceeding without release registration; ' +
@@ -177,7 +187,7 @@ switch (intent.value.kind) {
     break;
   }
   case 'configured': {
-    await persistBuildInfo(intent.value.release);
+    await persistBuildInfo(intent.value.release, intent.value.gitSha);
     const { inputs } = intent.value;
     console.log(
       `[esbuild.config] Sentry plugin enabled: release=${inputs.release.name} env=${inputs.release.deploy.env}`,

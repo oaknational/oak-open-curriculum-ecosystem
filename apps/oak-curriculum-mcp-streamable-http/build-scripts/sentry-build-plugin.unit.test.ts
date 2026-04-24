@@ -1,27 +1,17 @@
 /**
- * §L-8 Correction (2026-04-23) — sentry build-plugin intent factory.
+ * Unit tests for the Sentry build-plugin intent factory.
  *
- * @remarks
- * Proves the Oak-authored boundary between ADR-163 §3 policy
+ * @remarks Proves the Oak-authored boundary between ADR-163 §3 policy
  * (`@oaknational/sentry-node`) + the canonical release-name resolver
- * (`@oaknational/build-metadata`) and `@sentry/esbuild-plugin`. Cases
- * drive the meaningful permutations of the policy truth table, the
- * three release-derivation contexts (production / preview /
- * development), and the warn-vs-throw fail-policy split.
+ * (`@oaknational/build-metadata`'s `resolveRelease`) and
+ * `@sentry/esbuild-plugin`. Cases drive the meaningful permutations of
+ * the policy truth table, the three release-derivation contexts
+ * (production / preview / development), and the warn-vs-throw
+ * fail-policy split.
  *
- * Intentionally NOT tested (vendor or composition-root concerns):
- *
- * - whether the resulting plugin actually emits Debug IDs into dist
- * - whether `sentry-cli` upload succeeds (lives in the Vercel preview
- *   smoke proof, WS4/WS5)
- * - call counts on the policy resolvers (implementation detail)
- *
- * Rewritten in §L-8 Correction WI-3: the f9d5b0d2 test shape passed
- * `APP_VERSION` as a literal env field, encoding the very
- * single-source-of-truth violation the correction repairs. Production
- * cases now rely on `ROOT_PACKAGE_VERSION` (read by
- * `@oaknational/build-metadata` via `@oaknational/env`); preview cases
- * exercise the new `preview-<branch-slug>-<shortSha>` derivation.
+ * Post-collapse: `APP_VERSION` is supplied in the env snapshot (no
+ * more ROOT_PACKAGE_VERSION side-channel); preview uses the
+ * `VERCEL_BRANCH_URL` leftmost-host-label derivation.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -39,13 +29,15 @@ const IDENTITY: SentryBuildPluginIdentity = {
 };
 
 const COMMIT_SHA = 'abcdef1234567890abcdef1234567890abcdef12';
-const SHORT_SHA = COMMIT_SHA.slice(0, 7);
-const ROOT_PACKAGE_VERSION = '1.5.0';
+const APP_VERSION = '1.5.0';
 const AUTH_TOKEN = 'sntrys-fake-token';
+const BRANCH_URL = 'https://feat-otel-poc-oak.vercel.thenational.academy';
+const BRANCH_URL_LABEL = 'feat-otel-poc-oak';
 
 function env(overrides: Partial<SentryBuildEnvironment> = {}): SentryBuildEnvironment {
   return {
     VERCEL_GIT_COMMIT_SHA: COMMIT_SHA,
+    APP_VERSION,
     SENTRY_AUTH_TOKEN: AUTH_TOKEN,
     ...overrides,
   };
@@ -74,9 +66,9 @@ describe('createSentryBuildPlugin — production environment, main branch', () =
     expectConfigured(result);
   });
 
-  it('uses the root package.json version as the release name', () => {
+  it('uses APP_VERSION as the release name', () => {
     const inputs = expectConfigured(createSentryBuildPlugin(productionMain(), IDENTITY));
-    expect(inputs.release.name).toBe(ROOT_PACKAGE_VERSION);
+    expect(inputs.release.name).toBe(APP_VERSION);
   });
 
   it('binds setCommits.commit to VERCEL_GIT_COMMIT_SHA', () => {
@@ -125,41 +117,59 @@ describe('createSentryBuildPlugin — production environment, main branch', () =
     if (result.value.kind !== 'configured') {
       return;
     }
-    expect(result.value.release.value).toBe(ROOT_PACKAGE_VERSION);
+    expect(result.value.release.value).toBe(APP_VERSION);
     expect(result.value.release.source).toBe('application_version');
     expect(result.value.release.environment).toBe('production');
+  });
+
+  it('exposes the resolved gitSha on the configured intent for persistence', () => {
+    const result = createSentryBuildPlugin(productionMain(), IDENTITY);
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      return;
+    }
+    if (result.value.kind !== 'configured') {
+      return;
+    }
+    expect(result.value.gitSha).toEqual({
+      value: COMMIT_SHA,
+      source: 'VERCEL_GIT_COMMIT_SHA',
+    });
   });
 });
 
 describe('createSentryBuildPlugin — preview environment', () => {
-  const preview = (branch = 'feat/otel_sentry_enhancements'): SentryBuildEnvironment =>
-    env({ VERCEL_ENV: 'preview', VERCEL_GIT_COMMIT_REF: branch });
+  const preview = (): SentryBuildEnvironment =>
+    env({
+      VERCEL_ENV: 'preview',
+      VERCEL_GIT_COMMIT_REF: 'feat/otel_sentry_enhancements',
+      VERCEL_BRANCH_URL: BRANCH_URL,
+    });
 
   it('emits configured intent with deploy.env="preview"', () => {
     const inputs = expectConfigured(createSentryBuildPlugin(preview(), IDENTITY));
     expect(inputs.release.deploy.env).toBe('preview');
   });
 
-  it('derives release name as preview-<branch-slug>-<shortSha>', () => {
+  it('derives release name as the leftmost label of VERCEL_BRANCH_URL hostname', () => {
     const inputs = expectConfigured(createSentryBuildPlugin(preview(), IDENTITY));
-    expect(inputs.release.name).toBe(`preview-feat-otel-sentry-enhancements-${SHORT_SHA}`);
-  });
-
-  it('slugifies non-[a-z0-9-] characters in the branch ref', () => {
-    const inputs = expectConfigured(createSentryBuildPlugin(preview('Feat/Mixed_CASE'), IDENTITY));
-    expect(inputs.release.name).toBe(`preview-feat-mixed-case-${SHORT_SHA}`);
+    expect(inputs.release.name).toBe(BRANCH_URL_LABEL);
   });
 });
 
-describe('createSentryBuildPlugin — production env on non-main branch (downgraded by ADR-163 §3)', () => {
+describe('createSentryBuildPlugin — production env on non-main branch (downgraded)', () => {
   it('emits configured intent with deploy.env="preview" (env identity is downgraded)', () => {
     const result = createSentryBuildPlugin(
-      env({ VERCEL_ENV: 'production', VERCEL_GIT_COMMIT_REF: 'feature/x' }),
+      env({
+        VERCEL_ENV: 'production',
+        VERCEL_GIT_COMMIT_REF: 'feature/x',
+        VERCEL_BRANCH_URL: BRANCH_URL,
+      }),
       IDENTITY,
     );
     const inputs = expectConfigured(result);
     expect(inputs.release.deploy.env).toBe('preview');
-    expect(inputs.release.name).toBe(`preview-feature-x-${SHORT_SHA}`);
+    expect(inputs.release.name).toBe(BRANCH_URL_LABEL);
   });
 });
 
@@ -193,13 +203,14 @@ describe('createSentryBuildPlugin — development with override pair (ADR-163 §
   });
 });
 
-describe('createSentryBuildPlugin — fail-policy split (L-8 Correction)', () => {
+describe('createSentryBuildPlugin — fail-policy split', () => {
   it('skips on preview when SENTRY_AUTH_TOKEN is missing (warn-and-continue)', () => {
     const result = createSentryBuildPlugin(
       env({
         SENTRY_AUTH_TOKEN: undefined,
         VERCEL_ENV: 'preview',
         VERCEL_GIT_COMMIT_REF: 'feat/x',
+        VERCEL_BRANCH_URL: BRANCH_URL,
       }),
       IDENTITY,
     );
@@ -257,6 +268,7 @@ describe('createSentryBuildPlugin — fail-policy split (L-8 Correction)', () =>
         SENTRY_AUTH_TOKEN: '   ',
         VERCEL_ENV: 'preview',
         VERCEL_GIT_COMMIT_REF: 'feat/x',
+        VERCEL_BRANCH_URL: BRANCH_URL,
       }),
       IDENTITY,
     );
@@ -303,6 +315,7 @@ describe('createSentryBuildPlugin — vital-identity errors propagate from polic
         VERCEL_GIT_COMMIT_SHA: undefined,
         VERCEL_ENV: 'preview',
         VERCEL_GIT_COMMIT_REF: 'feat/x',
+        VERCEL_BRANCH_URL: BRANCH_URL,
       }),
       IDENTITY,
     );
@@ -310,6 +323,6 @@ describe('createSentryBuildPlugin — vital-identity errors propagate from polic
     if (result.ok) {
       return;
     }
-    expect(result.error.kind).toBe('missing_git_sha');
+    expect(result.error.kind).toBe('missing_commit_sha_in_registered_environment');
   });
 });

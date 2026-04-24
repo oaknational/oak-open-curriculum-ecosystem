@@ -1,3 +1,8 @@
+import {
+  resolveRelease,
+  type ReleaseError,
+  type ResolvedRelease,
+} from '@oaknational/build-metadata';
 import { err, ok, type Result } from '@oaknational/result';
 import { trimToUndefined } from './config-parsing.js';
 import type {
@@ -15,10 +20,6 @@ const ENVIRONMENT_PRECEDENCE = [
   'SENTRY_ENVIRONMENT_OVERRIDE',
   'VERCEL_ENV',
 ] as const satisfies readonly SentryEnvironmentSource[];
-
-const RELEASE_PRECEDENCE = [
-  'SENTRY_RELEASE_OVERRIDE',
-] as const satisfies readonly 'SENTRY_RELEASE_OVERRIDE'[];
 
 const GIT_SHA_PRECEDENCE = ['GIT_SHA', 'VERCEL_GIT_COMMIT_SHA'] as const;
 
@@ -133,38 +134,54 @@ export function resolveSentryRegistrationPolicy(
   return ok(basePolicy);
 }
 
-function resolveAppVersion(
-  input: SentryConfigEnvironment,
-): Result<ResolvedSentryRelease, ObservabilityConfigError> {
-  const version = trimToUndefined(input.APP_VERSION);
-
-  if (!version) {
-    return err({
-      kind: 'missing_app_version',
-    });
-  }
-
-  return ok({
-    value: version,
-    source: input.APP_VERSION_SOURCE ?? 'root_package_json',
-  });
-}
-
+/**
+ * Resolve the Sentry release identifier by delegating to the canonical
+ * {@link resolveRelease} in `@oaknational/build-metadata`.
+ *
+ * @remarks Thin adapter. The collapsed `resolveRelease` is the single
+ * source of truth for release resolution across build-time and runtime;
+ * this function adapts its {@link ResolvedRelease} / {@link ReleaseError}
+ * shape to the sentry-node-local
+ * {@link ResolvedSentryRelease} / {@link ObservabilityConfigError}
+ * shape. Since `SentryConfigEnvironment extends ReleaseInput`, no
+ * runtime re-projection of fields is needed.
+ */
 export function resolveSentryRelease(
   input: SentryConfigEnvironment,
 ): Result<ResolvedSentryRelease, ObservabilityConfigError> {
-  for (const source of RELEASE_PRECEDENCE) {
-    const value = trimToUndefined(input[source]);
+  const result = resolveRelease(input);
 
-    if (value) {
-      return ok({
-        value,
-        source,
-      });
-    }
+  if (!result.ok) {
+    return err(toObservabilityConfigError(result.error));
   }
 
-  return resolveAppVersion(input);
+  return ok(toResolvedSentryRelease(result.value));
+}
+
+function toResolvedSentryRelease(release: ResolvedRelease): ResolvedSentryRelease {
+  return {
+    value: release.value,
+    source: release.source,
+  };
+}
+
+function toObservabilityConfigError(error: ReleaseError): ObservabilityConfigError {
+  switch (error.kind) {
+    case 'invalid_release_override':
+      return { kind: 'invalid_release_override', value: error.message };
+    case 'missing_application_version':
+      return { kind: 'missing_app_version' };
+    case 'invalid_application_version':
+      return { kind: 'invalid_app_version', value: error.message };
+    case 'missing_branch_url_in_preview':
+      return { kind: 'missing_branch_url_in_preview' };
+    case 'missing_git_sha':
+      return { kind: 'missing_git_sha' };
+    default: {
+      const exhaustive: never = error.kind;
+      throw new Error(`Unhandled ReleaseError kind: ${String(exhaustive)}`);
+    }
+  }
 }
 
 function isValidGitSha(value: string): boolean {

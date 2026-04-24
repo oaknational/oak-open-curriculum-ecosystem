@@ -43,6 +43,7 @@ function createRuntimeConfig(
       DANGEROUSLY_DISABLE_AUTH: 'true',
       LOG_LEVEL: 'info',
       SENTRY_MODE: mode,
+      VERCEL_GIT_COMMIT_SHA: 'c8b666485ecb08b5dc27e428737b4077c0531f57',
       ...(mode === 'sentry'
         ? {
             SENTRY_DSN: 'https://public@example.ingest.sentry.io/123456',

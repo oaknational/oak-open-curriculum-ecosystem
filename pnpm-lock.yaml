@@ -432,6 +432,9 @@ importers:
       '@oaknational/result':
         specifier: workspace:*
         version: link:../result
+      semver:
+        specifier: ^7.7.4
+        version: 7.7.4
     devDependencies:
       '@oaknational/eslint-plugin-standards':
         specifier: workspace:*
@@ -439,6 +442,9 @@ importers:
       '@types/node':
         specifier: ^25.5.2
         version: 25.5.2
+      '@types/semver':
+        specifier: ^7.7.1
+        version: 7.7.1
       eslint:
         specifier: ^10.2.0
         version: 10.2.0(jiti@2.6.1)
@@ -826,6 +832,9 @@ importers:
 
   packages/libs/sentry-node:
     dependencies:
+      '@oaknational/build-metadata':
+        specifier: workspace:*
+        version: link:../../core/build-metadata
       '@oaknational/logger':
         specifier: workspace:*
         version: link:../logger
@@ -3008,6 +3017,9 @@ packages:
 
   '@types/react@19.2.14':
     resolution: {integrity: sha512-ilcTH/UniCkMdtexkoCN0bI7pMcJDvmQFPvuPvmEaYA/NSfFTAgdUSLAoVjaRJm7+6PvcM+q1zYOwS4wTYMF9w==}
+
+  '@types/semver@7.7.1':
+    resolution: {integrity: sha512-FmgJfu+MOcQ370SD0ev7EI8TlCAfKYU+B4m5T3yXc1CiRN94g/SZPtsCkk506aUDtlMnFZvasDwHHUcZUEaYuA==}
 
   '@types/send@1.2.1':
     resolution: {integrity: sha512-arsCikDvlU99zl1g69TcAB3mzZPpxgw0UQnaHeC1Nwb015xp8bknZv5rIfri9xTOcMuaVgvabfIRA7PSZVuZIQ==}
@@ -8997,6 +9009,8 @@ snapshots:
   '@types/react@19.2.14':
     dependencies:
       csstype: 3.2.3
+
+  '@types/semver@7.7.1': {}
 
   '@types/send@1.2.1':
     dependencies:
