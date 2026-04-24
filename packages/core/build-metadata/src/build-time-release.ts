@@ -12,7 +12,7 @@ import type {
   BuildTimeReleaseError,
   ResolvedBuildTimeRelease,
 } from './build-time-release-types.js';
-import { resolveGitSha } from './runtime-metadata.js';
+import { resolveGitSha } from './git-sha.js';
 
 export type {
   BuildTimeReleaseEnvironment,
