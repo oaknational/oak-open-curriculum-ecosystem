@@ -1,15 +1,19 @@
 # Next-Session Record — `agentic-engineering-enhancements` thread
 
-**Last refreshed**: 2026-04-24 (Codex / codex / GPT-5 — directive and
-fitness-pressure discussion handoff). The session clarified the
-knowledge-flow role model, amended PDR-014, updated the patterns
-README, and created two queued repo plans:
+**Last refreshed**: 2026-04-24 (Codex / codex / GPT-5 — session
+handoff after AGENT homing, hard-fitness clearance, and focused
+observability boundary-plan creation). The latest Codex session
+implemented:
+[`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md),
+created the Phase 0 evidence ledger, slimmed AGENT into an entrypoint, and
+cleared all hard fitness findings reported by
+`pnpm practice:fitness:informational`.
+
+The prior Codex handoff clarified the knowledge-flow role model, amended
+PDR-014, updated the patterns README, and created two queued repo plans:
 [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
 and
 [`knowledge-role-documentation-restructure.plan.md`](../../../plans/agentic-engineering-enhancements/current/knowledge-role-documentation-restructure.plan.md).
-The owner has set the next-session order: implement the AGENT entrypoint
-content-homing plan first, then continue with the remaining hard fitness
-excessions.
 
 ---
 
@@ -37,7 +41,7 @@ new sessions add rows; matching platform/model/agent_name updates
 
 ## Landing Target (per PDR-026)
 
-**This session landed as artefacts, not a commit**:
+**Prior session landed as artefacts, not a commit**:
 
 - separated continuity strategy/process from operational state:
   [`continuity-practice.md`](../../../directives/continuity-practice.md)
@@ -58,22 +62,32 @@ new sessions add rows; matching platform/model/agent_name updates
   rules, principles, scanners, and decision records;
 - created the two queued plans listed in the header.
 
-**Next session lands**:
+**Latest session landed as working-tree artefacts, not a commit**:
 
-1. Implement
-   [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md).
-2. Then address the remaining hard fitness excessions, starting with
-   whatever `pnpm practice:fitness:informational` reports after AGENT
-   homing. Known hard pressures at this handoff are
-   `.agent/directives/AGENT.md`, `.agent/directives/principles.md`, and
-   `.agent/directives/testing-strategy.md`.
+- implemented the AGENT homing plan and marked its todos complete;
+- added the AGENT source-to-target ledger under plan evidence;
+- moved durable reviewer, agent-tool, artefact, command, and commit detail to
+  their role homes and slimmed AGENT to an entrypoint;
+- cleared `principles.md` hard pressure by delegating detailed testing doctrine
+  and repo topology to their durable homes;
+- cleared `testing-strategy.md` hard pressure by moving worked TDD examples to
+  [`testing-tdd-recipes.md`](../../../../docs/engineering/testing-tdd-recipes.md);
+- aligned `no-global-state-in-tests.md` with the no-read/no-write
+  `process.env` contract.
+- review follow-up removed the remaining smoke-test `process.env` read by
+  injecting validated smoke config from `vitest.smoke.config.ts`, restored the
+  "assert effects, not constants" testing principle, and corrected the moved
+  TDD recipe examples.
+- after analysing the streamable-http `pnpm check` blocker, created
+  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
+  and removed the arbitrary observability plan-density limit that had
+  misrouted the plan on first placement.
 
-Deferral honesty: no AGENT-homing implementation was attempted in this
-session. The named priority trade-off was owner-directed sequencing:
-this session produced the discussion, role model, and plan; the owner then
-explicitly assigned implementation to the next session. Falsifiability:
-the next session can inspect this record, run the fitness report, and
-verify whether AGENT homing lands before the other hard-limit work starts.
+Deferral honesty: the AGENT and hard-fitness work has landed in the worktree.
+If this session closes without a commit, the next session should review the
+working-tree diff and gate evidence before committing or continuing. The
+local startup/release-boundary plan is deliberately unimplemented; it is a
+queued follow-up, not hidden completion.
 
 ---
 
@@ -84,11 +98,13 @@ At session open, read in order:
 1. [`repo-continuity.md`](../repo-continuity.md), especially Active Threads,
    Next Safe Step, and Deep Consolidation Status.
 2. This thread record.
-3. [`agent-entrypoint-content-homing.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md).
+3. The current plan that the owner names, or
+   [`knowledge-role-documentation-restructure.plan.md`](../../../plans/agentic-engineering-enhancements/current/knowledge-role-documentation-restructure.plan.md)
+   if continuing documentation-role work.
 4. [`PDR-014`](../../../practice-core/decision-records/PDR-014-consolidation-and-knowledge-flow-discipline.md)
    for knowledge-artefact roles.
-5. [`AGENT.md`](../../../directives/AGENT.md) and the target homes named
-   in the plan's Phase 1 table.
+5. [`AGENT.md`](../../../directives/AGENT.md) and any target homes named
+   in the active plan.
 
 Before editing, update this identity table per the additive rule and run:
 
@@ -112,32 +128,41 @@ nl -ba .agent/directives/AGENT.md
 
 ### Current Objective
 
-Restore `AGENT.md` to an entrypoint/index role without losing content or
-making any concept harder to find, then continue the remaining hard-limit
-work deliberately.
+AGENT homing and known hard-fitness remediation are complete in the worktree.
+The remaining agentic-engineering work is soft-fitness / role-architecture
+follow-up unless the owner names a new hard blocker.
 
 ### Current State
 
-- `AGENT.md` is hard because it contains durable detail that belongs in
-  role-specific homes.
-- The AGENT homing plan is queued and indexed; Phase 0 requires a
-  source-to-target ledger before content is removed.
-- Broader testing/TypeScript/development/troubleshooting restructuring is
-  queued separately in the knowledge-role plan.
+- `pnpm practice:fitness:informational` reports SOFT, with no hard files.
+- `AGENT.md`, `principles.md`, and `testing-strategy.md` are healthy.
+- Sub-agent review findings have been integrated: valid lost knowledge was
+  restored and incorrect transfer details were corrected.
+- `pnpm check` was attempted and failed only in streamable-http
+  `smoke:dev:stub`, `test:a11y`, and `test:ui` because
+  `VERCEL_GIT_COMMIT_SHA` is missing for Sentry release resolution.
+- A focused observability plan now captures that blocker:
+  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md).
+- Broader TypeScript/development/troubleshooting restructuring remains queued
+  separately in the knowledge-role plan.
 
 ### Blockers / Low-Confidence Areas
 
-- Do not remove unique AGENT content until the ledger names its durable
-  home and discovery path.
-- Several likely target homes may already be soft or hard in fitness; use
-  PDR-014 role boundaries rather than dumping displaced text into the first
-  plausible document.
+- Do not continue into soft-fitness work unless the owner asks for it.
+- Keep using PDR-014 role boundaries; do not answer soft pressure with
+  opportunistic trimming.
 
 ### Next Safe Step
 
-Run Phase 0 of the AGENT homing plan: build the source-to-target ledger
-from `AGENT.md`, confirm each durable home, then move content in small
-batches while preserving discovery parity.
+Validate and commit the current working-tree changes if this session has not
+already done so. Include the new, trackable files
+`apps/oak-search-cli/smoke-test-env.ts`,
+`apps/oak-search-cli/vitest-provided-context.d.ts`, the AGENT evidence ledger,
+`docs/engineering/testing-tdd-recipes.md`, and
+`observability/current/mcp-local-startup-release-boundary.plan.md`. If
+continuing implementation, take the next owner-named slice from the
+knowledge-role documentation restructure plan or switch to the new
+observability plan if the owner wants the `pnpm check` blocker fixed first.
 
 ### Active Track Links
 

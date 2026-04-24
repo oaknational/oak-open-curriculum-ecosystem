@@ -19,54 +19,6 @@ first if the question is "are we really making progress."
 
 ---
 
-## Plan Density Invariant
-
-**No new plan in this directory lands without an existing plan
-archiving in the same pass** until Wave 2 opens. The tree currently
-carries 2 `active/` + 5 `current/` + 13 `future/` plans + 1
-`archive/completed/` closure record + 10
-explorations under `docs/explorations/`. Planning density has
-materially outpaced execution density; the forward-motion risk is
-another restructure rather than another emitter.
-
-**Enforcement**: any author proposing a new plan in this directory
-(including future/ strategic briefs) must name an existing plan that
-closes in the same commit. If no such plan exists, the proposal is
-rejected — the substance either lands in an existing plan's body or
-goes to a napkin entry for later promotion.
-
-**Scope clarification (2026-04-19)**: this invariant governs *plans*
-in the observability directory tree. *Explorations* under
-[`docs/explorations/`](../../../docs/explorations/) are governed by
-the [explorations directory README](../../../docs/explorations/README.md);
-explorations may land freely as their purpose is to weigh options
-*before* committing plan capacity. The 2026-04-19 addition of
-explorations 9 (warehouse selection) and 10 (Clerk-identity
-downstream) is in scope of the explorations directory's lifecycle,
-not this invariant.
-
-**Exploration-density brake**: explorations have their own
-lifecycle. A focused exploration brief older than 90 days with no
-promotion trigger fired and no substantive body growth is reviewed
-for closure (graduate to a plan or ADR, supersede with newer
-evidence, or archive with rationale). Drift in exploration density
-is a separate concern from plan density and is named here only to
-flag that it is governed by a different rule, not by this
-invariant.
-
-**Exit condition**: rule lifts when
-[`current/observability-events-workspace.plan.md`](./current/observability-events-workspace.plan.md)
-moves from `current/` to `active/` (i.e. Wave 2 opens). At that
-point the events workspace is being built, not planned, and the
-ratio of execution-to-planning shifts.
-
-**Rationale**: prevents the "perfect-planning trap" — planning work
-substituting for forward motion. Pairs with the forward-motion
-evidence artefact: plans propose; `what-the-system-emits-today.md`
-observes.
-
----
-
 ## Parent Foundation
 
 The Sentry + OpenTelemetry parent foundation plan remains at its
@@ -134,6 +86,8 @@ Manual preview `/healthz`, preview-release, preview-traffic, and
 preview/Sentry evidence are owner-handled separately. Broader runtime
 simplification is tracked separately in
 [`future/mcp-http-runtime-canonicalisation.plan.md`](./future/mcp-http-runtime-canonicalisation.plan.md).
+The focused local startup/release boundary follow-up is tracked in
+[`current/mcp-local-startup-release-boundary.plan.md`](./current/mcp-local-startup-release-boundary.plan.md).
 
 ---
 

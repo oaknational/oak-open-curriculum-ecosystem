@@ -8,10 +8,9 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-24 (Codex / codex / GPT-5 — handoff for
-the directive and fitness-pressure discussion. Next session resumes
-the `agentic-engineering-enhancements` thread to implement AGENT
-entrypoint content homing, then continues remaining hard-limit work.)
+**Last refreshed**: 2026-04-24 (Codex / codex / GPT-5 — session
+handoff after AGENT entrypoint homing, hard-fitness clearance, and
+focused MCP local startup/release-boundary planning.)
 
 This file carries the repo-level active state needed to resume work.
 It is not a doctrine store, historical log, or plan substitute.
@@ -38,8 +37,8 @@ state live in each thread record; this table is the repo-level index.
 
 | Thread | Purpose | Next-session record | Active identities |
 | --- | --- | --- | --- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | Latest 2026-04-24 touches: Frodo (`claude-code`) landed `9a0f9ebc` + `a4e8facb` + `f5a009ab` (WS2 §2.1-§2.7 atomic collapse); Pippin (`cursor`) revised/audited the release-identifier plan with no code landed. Earlier identities remain in the thread record. |
-| `agentic-engineering-enhancements` | Practice — documentation roles, continuity surfaces, and fitness-pressure remediation | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | `codex` / `GPT-5` / Codex / practice-docs-consolidation / 2026-04-24 |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | `claude-code` / `claude-opus-4-7-1m` / Frodo / release-identifier-implementation / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / release-identifier-plan-review / 2026-04-24; `codex` / `GPT-5` / Codex / startup-boundary-plan-author / 2026-04-24 |
+| `agentic-engineering-enhancements` | Practice — documentation roles, continuity surfaces, and fitness-pressure remediation | [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md) | `codex` / `GPT-5` / Codex / practice-docs-consolidation / 2026-04-24; latest touch cleared AGENT/principles/testing hard fitness |
 
 The `memory-feedback` thread is archived as of 2026-04-22 Session 8.
 If doctrine-consolidation work resumes, start a new thread or revive
@@ -65,20 +64,28 @@ Current branch-primary objective:
 
 ## Current Session Focus
 
-This Codex session is a cross-cutting Practice consolidation pass,
-distinct from the branch-primary observability lane. Outcome:
+The latest Codex practice pass is distinct from the branch-primary
+observability lane. Current outcome:
 
-- make [`continuity-practice.md`](../../directives/continuity-practice.md)
-  the stable strategy/rules/process surface;
-- make this file the compact operational state register;
-- clarify the knowledge-flow role model in PDR-014 and the patterns
-  README;
-- create
-  [`agent-entrypoint-content-homing.plan.md`](../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
-  and
-  [`knowledge-role-documentation-restructure.plan.md`](../../plans/agentic-engineering-enhancements/current/knowledge-role-documentation-restructure.plan.md);
-- preserve the pending-graduations register schema required by
-  `jc-consolidate-docs`.
+- [`agent-entrypoint-content-homing.plan.md`](../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md)
+  is implemented in the worktree;
+- AGENT is now an entrypoint/index and points to durable homes for reviewer,
+  agent-tool, artefact, command, commit, and topology detail;
+- `principles.md` and `testing-strategy.md` are no longer hard;
+- [`testing-tdd-recipes.md`](../../../docs/engineering/testing-tdd-recipes.md)
+  is the new recipe home for worked Red/Green/Refactor examples;
+- sub-agent review follow-through restored valid lost information and corrected
+  broken links, stale anchors, command drift, platform-entrypoint layering, and
+  process-env doctrine;
+- `pnpm check` was attempted and failed only in streamable-http
+  `smoke:dev:stub`, `test:a11y`, and `test:ui` because
+  `VERCEL_GIT_COMMIT_SHA` is missing for Sentry release resolution;
+- [`mcp-local-startup-release-boundary.plan.md`](../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
+  now captures the focused follow-up for that failure;
+- the arbitrary observability plan-density limit was removed from
+  [`observability/README.md`](../../plans/observability/README.md);
+- the pending-graduations register schema required by `jc-consolidate-docs`
+  remains below.
 
 ## Repo-Wide Invariants / Non-Goals
 
@@ -111,40 +118,24 @@ Current branch non-goals:
 
 Expected next session, per owner direction:
 
-1. Read
-   [`threads/agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md)
+1. Read both touched thread records:
+   [`agentic-engineering-enhancements.next-session.md`](threads/agentic-engineering-enhancements.next-session.md)
    and
-   [`agent-entrypoint-content-homing.plan.md`](../../plans/agentic-engineering-enhancements/current/agent-entrypoint-content-homing.plan.md).
-2. Run Phase 0: build the source-to-target ledger for
-   [`.agent/directives/AGENT.md`](../../directives/AGENT.md).
-3. Home AGENT content into durable role surfaces, slim AGENT only after
-   each concept has a target and discovery path, then validate fitness
-   and links.
-4. Move on to the remaining hard fitness excessions reported by
-   `pnpm practice:fitness:informational`; known hard files at this
-   handoff are `principles.md` and `testing-strategy.md` after AGENT is
-   handled, plus any AGENT residue if the plan does not clear it.
-
-If resuming the branch-primary observability lane:
-
-1. Read
-   [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md)
-   and the release-identifier plan (WS3 sections).
-2. Read
-   [`napkin.md`](../active/napkin.md) §2026-04-24 entries and
-   [`experience/2026-04-24-pippin-the-spiral-i-could-not-see.md`](../../experience/2026-04-24-pippin-the-spiral-i-could-not-see.md).
-3. Run the WS3.0 pre-landing reviewer dispatch (docs-adr-reviewer
-   on the draft §3.4 amendment text; assumptions-reviewer if scope
-   warrants) before drafting the WS3 commit.
-4. Land WS3 as the plan's next commit (relocation + rewrite +
-   ADR-163 §10 second amendment).
-5. Validate deterministically:
-
-   ```bash
-   pnpm --filter oak-curriculum-mcp-streamable-http test
-   pnpm --filter @oaknational/build-metadata test
-   pnpm depcruise
-   ```
+   [`observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md).
+2. Inspect and preserve the current working-tree diff. The AGENT
+   hard-fitness work and the new observability boundary plan are
+   uncommitted working-tree artefacts.
+3. If continuing the latest owner focus, implement
+   [`mcp-local-startup-release-boundary.plan.md`](../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
+   from Phase 0. This is the focused route to clearing the
+   `pnpm check` blocker in streamable-http `smoke:dev:stub`,
+   `test:a11y`, and `test:ui`.
+4. If explicitly returning to the branch-primary release-identifier
+   lane instead, resume WS3 from
+   [`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
+   and run its WS3.0 pre-landing reviewer dispatch first.
+5. Do not continue into soft-fitness work by default. Soft pressure is a
+   signal for deliberate role routing, not opportunistic trimming.
 
 ## Open Owner-Decision Items
 
@@ -161,13 +152,14 @@ These are visible owner-appetite items, not blockers for
 
 ## Deep Consolidation Status
 
-**Status (2026-04-24 Codex handoff)**: due but deliberately queued —
-fitness pressure remains after this session, and the owner has set the
-order: implement AGENT content homing first, then handle the remaining
-hard limits. This closeout stops at capture because the next action is
-already captured in the thread record and plan. Falsifiability: a fresh
-`pnpm practice:fitness:informational` run next session should still show
-the hard files until those plans are executed.
+**Status (2026-04-24 Codex handoff)**: due — `napkin.md` is above the
+rotation threshold (`wc -l` reports 796 lines), the AGENT homing plan has
+closed as working-tree artefacts, and this session added a governance
+candidate about arbitrary plan-count limits. Not run in this handoff because
+the owner explicitly closed the session and requested the lightweight
+handoff workflow; falsifiability: the next agent can re-run `wc -l
+.agent/memory/active/napkin.md`, inspect the uncommitted diff, and decide
+whether to run `jc-consolidate-docs` before further documentation churn.
 
 Live classification decisions from this session:
 
@@ -190,6 +182,7 @@ step 7 uses this section as its primary queue.
 | 2026-04-24 | Napkin + owner direct-answer feedback memory | Practice-governance rule or PDR amendment for direct-answer discipline on verification questions. | Second cross-session observation of the same evasion shape, or explicit owner direction; enforcement cost must be proportionate. | pending |
 | 2026-04-24 | Napkin + `.remember/` wiring commits | PDR-011 amendment naming plugin-managed ephemeral capture surfaces as a first-class category distinct from napkin and platform memory. | Second plugin-managed in-repo capture surface, or explicit owner direction. | pending |
 | 2026-04-24 | Napkin + `sonarjs-activation-and-sonarcloud-backlog.plan.md` | Pattern candidate: gate-off, fix, gate-on for quality-tool activation with an existing backlog. | Second ecosystem instance, or explicit owner direction to promote first instance. | pending |
+| 2026-04-24 | Owner correction during observability plan placement | Practice-planning governance: plan placement should follow ownership and actionability, not arbitrary plan-count/density limits. Candidate home: `plan.md`, plan templates, or a PDR amendment if the rule generalises. | Second instance of a numeric plan cap steering work away from its owner, or explicit owner direction to generalise beyond observability. | pending |
 | 2026-04-23 | Thread record + napkin pattern instance for review-cascade spiral | PDR-015 amendment: assumption-challenge gate before absorbing architectural-review output into a plan body. | Trigger (i) met 2026-04-24; still needs gate-cost design or explicit owner direction. | pending |
 | 2026-04-23 | Warning-toleration rule + archived observability repair plan | ADR-163 amendment covering release/version boundary, vendor-config passthrough, deploy-entry contract, and realistic production-build gate. | Owner wants the doctrine promoted into ADR-163. | pending |
 | 2026-04-23 | `session-handoff` entry-point sweep + homing partial | PDR-014 amendment naming platform-specific entry points as a first-class homing substance class. | Second entry-point drift/homing instance, second platform-specific entry point, and explicit owner request. | pending |

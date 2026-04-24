@@ -6,30 +6,48 @@ overview: >
 todos:
   - id: phase-0-ledger
     content: "Phase 0: Build a source-to-target content ledger for AGENT.md."
-    status: pending
+    status: completed
   - id: phase-1-targets
     content: "Phase 1: Confirm durable homes and discovery paths."
-    status: pending
+    status: completed
   - id: phase-2-home-content
     content: "Phase 2: Move or merge detail into target homes."
-    status: pending
+    status: completed
   - id: phase-3-slim-entrypoint
     content: "Phase 3: Slim AGENT.md into an index/entrypoint."
-    status: pending
+    status: completed
   - id: phase-4-validate
     content: "Phase 4: Validate discovery parity, fitness, and links."
-    status: pending
+    status: completed
 isProject: false
 ---
 
 # AGENT Entrypoint Content Homing
 
 **Last Updated**: 2026-04-24  
-**Status**: QUEUED  
+**Status**: COMPLETED
 **Scope**: `.agent/directives/AGENT.md` and only the durable homes needed
 to preserve its displaced concepts.
 
 ---
+
+## Completion Notes
+
+Completed on 2026-04-24. The source-to-target ledger is stored at
+[`2026-04-24-agent-entrypoint-content-homing-phase0-run-001.evidence.md`](../evidence/2026-04-24-agent-entrypoint-content-homing-phase0-run-001.evidence.md).
+
+AGENT now acts as an entrypoint/index and is fitness-healthy. Owner direction
+expanded the execution to clear the remaining hard fitness excessions in
+`principles.md` and `testing-strategy.md`; those follow-on edits are recorded
+in the thread continuity surfaces rather than treated as original AGENT scope.
+
+Follow-up review restored valid transferred knowledge and corrected incorrect
+details before closeout: broken target-home links, stale commit-skill anchors,
+platform entrypoint layering, command catalogue drift, red-spec gate wording,
+E2E/smoke IO doctrine, and the stricter no-read/no-write `process.env` rule.
+`pnpm check` was run; it failed only in streamable-http `smoke:dev:stub`,
+`test:a11y`, and `test:ui` because `VERCEL_GIT_COMMIT_SHA` is missing for
+Sentry release resolution.
 
 ## Context
 

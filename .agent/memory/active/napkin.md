@@ -19,6 +19,53 @@ archived to `archive/napkin-2026-04-22.md`).
 
 ---
 
+## 2026-04-24 (Codex / codex / GPT-5, execution session) — AGENT homing + hard fitness clearance
+
+**Session shape**: picked up the `agentic-engineering-enhancements` thread
+after a Plan Mode pass. Owner explicitly requested implementation of the
+proposed AGENT homing and hard-fitness follow-through plan. No sub-agents were
+dispatched because the execution plan explicitly required fresh owner
+authorisation for reviewer/sub-agent dispatch, and no such authorisation was
+given in the execution turn.
+
+**What landed in the worktree**:
+
+- Created the AGENT source-to-target ledger in the plan evidence directory
+  before slimming AGENT.
+- Homed AGENT detail into reviewer, agent-tool, artefact, build-system, and
+  commit surfaces, then slimmed AGENT from hard to healthy.
+- Cleared the remaining hard files by moving detailed testing examples to a new
+  recipe surface and letting `principles.md` point at durable testing homes.
+
+### Surprise (tooling — shell quoting)
+
+- **Expected**: `rg -n "\|`Codex`\| ..."` would search the thread identity
+  row literally.
+- **Actual**: zsh interpreted the backticked Markdown code spans as command
+  substitution, attempted to run `codex`/`GPT-5`, and produced unrelated TUI
+  errors before the search failed.
+- **Why expectation failed**: Markdown code-span backticks remain shell syntax
+  inside double-quoted strings.
+- **Behaviour change**: when searching for Markdown table rows containing
+  backticks, wrap the pattern in single quotes or escape every backtick.
+
+### Observation (fitness remediation)
+
+- AGENT homing worked best when treated as role routing first and compression
+  second. The evidence ledger made deletion pressure visible: each removed
+  detail either had a durable target or was duplicate topology already present
+  in README/architecture docs.
+- The fastest safe clearance for `principles.md` was not line-by-line trimming;
+  it was removing duplicated testing doctrine that already belonged to
+  `testing-strategy.md` and the new TDD recipe surface.
+
+### Observation (test env doctrine)
+
+- Review found one live smoke test still reading `process.env`. The doctrine
+  was right: tests and setup files should receive validated config, not inspect
+  ambient env. For Vitest smoke suites, the runner config can act as the
+  composition root and pass validated config through `test.provide` / `inject`.
+
 ## 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m, fresh 1M-context session) — WS2 §2.1-§2.7 atomic landing
 
 **Session shape**: fresh session opened via `/jc-start-right-thorough`
@@ -674,3 +721,76 @@ owner-direction call, not a session-handoff call.
   `agent-entrypoint-content-homing.plan.md` first, then move to the
   remaining hard fitness excessions. Treat this as sequencing, not a
   vague backlog note.
+
+## 2026-04-24 (Codex) — AGENT homing and hard-fitness follow-through
+
+### What Was Done
+
+- Implemented AGENT content homing with a source-to-target evidence ledger,
+  moved stale-prone detail into durable homes, and restored AGENT to an
+  entrypoint/index role.
+- Cleared the known hard fitness excessions in `AGENT.md`, `principles.md`,
+  and `testing-strategy.md`; testing doctrine examples now live in
+  `docs/engineering/testing-tdd-recipes.md`.
+- Restored valid transferred knowledge and corrected incorrect doctrine found
+  by docs, onboarding, code, test, and config reviewers: broken links, stale
+  commit-skill anchors, E2E/smoke IO rules, red-spec gate wording, platform
+  entrypoint layering, and process-env read/write prohibitions.
+- Fixed the actual `process.env` test issue in oak-search-cli smoke tests:
+  smoke runner config is the composition root, test/setup files consume typed
+  injected ES-only smoke env, and the hand-authored Vitest augmentation is
+  trackable despite the repo-wide `*.d.ts` ignore.
+
+### Validation Notes
+
+- Focused checks passed: search-cli type-check, lint, tests, smoke-config
+  no-test import with only ES credentials, subagents check, markdownlint root,
+  vocabulary, diff check, and fitness informational (SOFT-only).
+- `pnpm check` ran and failed only in
+  `@oaknational/oak-curriculum-mcp-streamable-http` gates
+  `smoke:dev:stub`, `test:a11y`, and `test:ui` because
+  `VERCEL_GIT_COMMIT_SHA` is missing for Sentry release resolution.
+
+### Patterns to Remember
+
+- Treat broken onward links in delegated homes as knowledge loss.
+- A stricter doctrine change must update rules, reviewer templates, ADRs,
+  recipes, and examples; otherwise sub-agents will preserve the older rule.
+- Hand-authored `.d.ts` files need explicit `.gitignore` exceptions in this
+  repo, or type knowledge can exist locally while being absent from commits.
+
+## 2026-04-24 (Codex) — MCP local startup release-boundary plan
+
+### What Was Done
+
+- Created `observability/current/mcp-local-startup-release-boundary.plan.md`
+  as the focused follow-up for the `pnpm check` failure where HTTP MCP
+  `smoke:dev:stub`, `test:ui`, and `test:a11y` were blocked by missing
+  Vercel release metadata before reaching their intended assertions.
+- Removed the observability plan-count/density invariant from
+  `observability/README.md`; it was steering plan placement by arbitrary
+  quantity rather than ownership.
+
+### Patterns to Remember
+
+- Local quality gates should not acquire deploy-only metadata preconditions
+  accidentally through observability construction. If a gate is not proving
+  release registration, it should boot through explicit local/no-delivery
+  observability boundaries.
+- `SENTRY_MODE=off` should be treated as a semantic contract, not a string:
+  either it truly avoids release/delivery requirements, or the docs and name
+  must say which runtime identity remains required.
+
+### Surprise (planning governance)
+
+- **Expected**: the observability plan-density invariant would help choose
+  whether to add a new plan or fold the work elsewhere.
+- **Actual**: it forced the focused local-startup/release-boundary plan into
+  architecture/infrastructure even though observability clearly owned the
+  failure. Owner corrected this directly: delete the arbitrary limit.
+- **Why expectation failed**: a numeric cap measured plan count rather than
+  plan fitness, ownership, or actionability. It became governance by
+  arithmetic.
+- **Behaviour change**: plan placement follows owning boundary and next action.
+  If planning volume is a problem, address discoverability, status, or closure
+  quality directly instead of imposing a folder-level number cap.

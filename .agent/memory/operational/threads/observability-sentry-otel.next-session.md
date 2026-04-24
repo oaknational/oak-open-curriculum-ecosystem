@@ -1,6 +1,12 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Last refreshed**: 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m
+**Last refreshed**: 2026-04-24 (Codex / codex / GPT-5 — created
+[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
+after `pnpm check` exposed local smoke/UI/a11y gates blocked by
+missing Vercel release metadata; removed the arbitrary observability
+plan-density limit). The new plan is queued and unimplemented.
+
+**Prior refresh**: 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m
 — fresh 1M-context session continuing Frodo identity per PDR-027
 additive rule). **WS2 §2.1-§2.7 landed as a single atomic commit
 `f5a009ab`** (29 files, +1341/-930): unified `resolveRelease` in
@@ -199,6 +205,7 @@ rehearsal).
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
 | `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed` | 2026-04-22 | 2026-04-24 |
 | `Codex` | `codex` | *`unknown`* | *`unknown`* | `repo-owned-repair-closeout-and-doc-consolidation` | 2026-04-23 | 2026-04-23 |
+| `Codex` | `codex` | `GPT-5` | *`unknown`* | `startup-boundary-plan-author` | 2026-04-24 | 2026-04-24 |
 | `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan; then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-and-§2.1-§2.7-deferred-to-fresh-session-by-owner-direction` | 2026-04-24 | 2026-04-24 |
 
 Identity discipline remains additive per
@@ -425,6 +432,11 @@ Evidence:
 
 ### Owning plan(s)
 
+- **Focused local-startup follow-up**:
+  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
+  — queued and not started; owns the `pnpm check` blocker where
+  local smoke/UI/a11y gates require deploy-only release metadata
+  before reaching their own assertions.
 - **Next-session pickup**:
   [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
   — release-identifier alignment + ADR-163 amendment + cancellation
@@ -440,12 +452,12 @@ Evidence:
 
 ### Current objective
 
-Land the release-identifier single-source-of-truth plan WS by WS.
-WS0, WS1, AND WS2 are **landed**. Next: **WS3** — cancellation-script
-rewrite + relocation into the consuming app workspace + ADR-163 §10
-second amendment. WS3 is a separate commit boundary per the plan's
-explicit discipline. Read the plan's WS3.0 pre-landing reviewer
-dispatch step before drafting the WS3 commit.
+Resolve the latest owner-surfaced observability boundary question before
+treating `pnpm check` as a clean closure gate. The focused startup/release
+plan is queued for that defect. The branch-primary release-identifier lane
+still resumes at **WS3** — cancellation-script rewrite + relocation into the
+consuming app workspace + ADR-163 §10 second amendment — when the owner
+returns to that work.
 
 ### Current state
 
@@ -473,6 +485,13 @@ dispatch step before drafting the WS3 commit.
   tasks — 997 + 651 + other workspace tests all pass). Parallel-
   track `.agent/` and `docs/engineering/testing-patterns.md`
   modifications left unstaged (owner/parallel-agent surface).
+- **Latest Codex touch (2026-04-24)**: no runtime code changed. Created
+  [`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
+  after analysis showed streamable-http local startup/gates are coupled to
+  Sentry release resolution before `SENTRY_MODE=off` semantics can take
+  effect. Removed the plan-count/density invariant from
+  [`observability/README.md`](../../../plans/observability/README.md)
+  because it was arbitrary and misrouted the plan away from its owning lane.
 - **Prior session (2026-04-24, Frodo, earlier)**: two commits
   landed — `9a0f9ebc` (plan-revision landing as `docs(plans)`,
   5 files, +1723/-627) and `a4e8facb` (WS2 §2.0 split of
@@ -616,6 +635,10 @@ dispatch step before drafting the WS3 commit.
 - End-to-end Sentry verification (WS6) requires a fresh preview
   deploy after WS2 lands. Push a no-op commit on
   `feat/otel_sentry_enhancements` if needed to trigger the deploy.
+- `pnpm check` currently fails in streamable-http `smoke:dev:stub`,
+  `test:a11y`, and `test:ui` unless the local startup/release-boundary
+  defect is fixed or deploy metadata is supplied. Do not paper over this by
+  injecting fake Vercel SHA values into unrelated gates.
 
 ### Standing decisions
 
@@ -644,10 +667,15 @@ dispatch step before drafting the WS3 commit.
 
 ### Next safe step
 
-**Branch HEAD is `f5a009ab`** (may advance if parallel-track work
-lands further). WS2 is fully landed; WS3 is the next commit
-boundary per the plan's explicit discipline — it lands as a
-separate commit after WS2, not folded in.
+If continuing the latest owner focus, begin with
+[`mcp-local-startup-release-boundary.plan.md`](../../../plans/observability/current/mcp-local-startup-release-boundary.plan.md)
+Phase 0. That plan is the focused route to fixing the streamable-http
+`pnpm check` blocker without adding fake deploy metadata to local gates.
+
+If the owner explicitly returns to the release-identifier lane, **Branch
+HEAD is `f5a009ab`** (may advance if parallel-track work lands further).
+WS2 is fully landed; WS3 is the next commit boundary per the plan's
+explicit discipline — it lands as a separate commit after WS2, not folded in.
 
 **WS3 scope (read the plan body's WS3 for canonical detail)**:
 
