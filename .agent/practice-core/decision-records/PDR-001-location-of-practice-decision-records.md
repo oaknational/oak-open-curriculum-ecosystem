@@ -137,7 +137,7 @@ practical experience accumulates.
   including the ADRs that define Agentic Engineering Practice,
   Practice Propagation, Documentation as Foundational
   Infrastructure, Self-Referential Property of the Practice, the
-  Two-Threshold Fitness Model, and Continuity Surfaces). Migration
+  Three-Zone Fitness Model, and Continuity Surfaces). Migration
   touches rule-file cross-references and is a separate decision.
 - Concrete integration of stable PDRs into Core refinements. The
   graduation path will be defined by a subsequent PDR when the

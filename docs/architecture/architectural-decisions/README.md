@@ -163,7 +163,9 @@ New to the repo? Read these five ADRs first for the architectural foundations:
 - [ADR-141: MCP Apps Standard as Only UI Surface](141-mcp-apps-standard-primary.md)
 - [ADR-142: `@clerk/mcp-tools` Adopt-or-Explain Decision](142-clerk-mcp-tools-adopt-or-explain.md)
 - [ADR-143: Coherent Structured Fan-Out for the Sentry and OpenTelemetry Foundation](143-coherent-structured-fan-out-for-observability.md)
-- [ADR-144: Three-Zone Fitness Model](144-two-threshold-fitness-model.md) — filename retains `two-threshold-fitness-model` slug because the ADR was amended in place; see Status block in the ADR for history
+- [ADR-144: Three-Zone Fitness Model](144-two-threshold-fitness-model.md) — filename
+  retains its original ADR-144 slug because the ADR was amended in place; see
+  Status block in the ADR for history
 - [ADR-145: Oak URL Naming Collision Remediation](145-oak-url-naming-collision-remediation.md)
 - [ADR-146: Assumptions Reviewer — Meta-Level Plan Assessment](146-assumptions-reviewer-meta-level-plan-assessment.md)
 - [ADR-147: Browser Accessibility as a Blocking Quality Gate](147-browser-accessibility-as-blocking-quality-gate.md)

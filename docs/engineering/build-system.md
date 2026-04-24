@@ -188,6 +188,9 @@ stories.
 - Repo-wide claims must stay within the workspace task exports that back them.
   A workspace is only in the repo-wide `clean`, `type-check`, `lint`, or
   `test` story if it actually exports that task.
+- Package-local green is navigation, not acceptance. It helps locate a
+  problem, but it does not replace the last full repo-root gate when
+  making a repo-wide claim.
 
 ### `pnpm test:all` - All test suites
 
@@ -433,6 +436,9 @@ README.md (root, including the Quick Start section)
   the linter "fixes" back, the edit is lost mid-pipeline. Always
   verify the edited file AFTER the full `pnpm check`, not just
   after a single gate.
+- **Reviewer fixes must exist on disk**: a disposition recorded in a
+  napkin, summary, or review thread is not evidence. Open or search the
+  target file after applying the fix, especially after auto-fix gates.
 - **Never edit generated files** — edit the generators instead.
   Hand-trimming generated output causes regeneration footguns.
   When knip or depcruise flags a generated file, fix the

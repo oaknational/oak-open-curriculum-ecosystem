@@ -154,6 +154,9 @@ governance dimensions.
    step). Choose `rule` when the firing is independent of any
    workflow; choose `command rubric` when the firing belongs to a
    specific workflow step.
+   Repeated owner correction targeting the same rationalisation also
+   routes here: install a dedicated rule instead of expecting a broad
+   principle to fire indirectly.
 5. **Reads as a foundation invariant (cardinal, always-on,
    repo-wide)?** → `principle line` in `principles.md`; typically
    requires composition (see below) with an operationalising rule
@@ -187,6 +190,10 @@ not force a single choice:
 - **Principle line without operationalising rule** — passive
   guidance, the exact failure mode
   `passive-guidance-loses-to-artefact-gravity` names.
+- **Third consumer without canonicalisation** — two local copies may
+  still be proving a shape; a third consumer makes the shape
+  load-bearing and requires a canonical owner or named consolidation
+  route.
 - **Pattern without a graduation path** — captures forever, never
   converts to active prevention.
 - **Picking the surface from convenience** (the file is already

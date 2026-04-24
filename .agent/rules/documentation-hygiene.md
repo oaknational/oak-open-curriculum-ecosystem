@@ -49,3 +49,10 @@ contract, and trade-offs. Canonical TSDoc syntax and style rules live
 in that section of `principles.md` — this rule does not duplicate the
 syntax reference; it operationalises the *presence* expectation as a
 gate at edit time.
+
+## 4. Doctrine includes rationale
+
+Rules, PDRs, ADRs, commands, and READMEs must state enough "why" for a
+future reader to re-derive the rule under novel conditions. What-only
+doctrine decays into ritual: it is followed when convenient and broken
+under pressure.

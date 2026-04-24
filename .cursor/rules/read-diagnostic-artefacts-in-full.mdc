@@ -1,0 +1,6 @@
+---
+description: Read complete diagnostic output before forming hypotheses.
+alwaysApply: true
+---
+
+Read and follow `.agent/rules/read-diagnostic-artefacts-in-full.md`.

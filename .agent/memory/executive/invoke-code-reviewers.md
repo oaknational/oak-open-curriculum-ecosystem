@@ -191,4 +191,5 @@ Invoke each specialist as a read-only sub-agent, giving it specific context abou
 - For any not invoked, explicitly state `N/A` with justification.
 - Do not claim "comprehensive review" if required specialists were skipped without rationale.
 - Reviewer findings are implementation work by default: implement all findings unless explicitly rejected as incorrect, with rationale recorded in the session output.
+- Integrate reviewer dispositions before landing the artefact under review; post-landing amendments need a fresh review loop and leave wrong doctrine live in the interim.
 - Do not mark the change complete or proceed to merge until every finding is either implemented or explicitly rejected as incorrect with written rationale; triage is not deferral (`owner-triaged` means resolved or explicitly rejected with rationale, never backlog-only deferral).

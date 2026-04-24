@@ -336,12 +336,12 @@ rules are enforced via the entry-point chain. Same body
 Platform-specific notes (e.g. "In Cursor, use `ReadLints`") may appear in
 the trigger — they are activation metadata, not policy.
 
-Codex note: this repo does not use a parallel `.agents/rules/` layer. Codex
-picks up always-on behaviour through the entry-point chain (`AGENTS.md` →
-`.agent/directives/AGENT.md` → canonical rules). When a rule activates a
-command or skill, add the corresponding `.agents/skills/` wrapper. Reviewer
-roles should be configured through Codex project-agent support in `.codex/`,
-not modelled as skills.
+`.agents/` note: this repo keeps portable rule adapters in `.agents/rules/`
+alongside `.agents/skills/` wrappers. Codex still picks up always-on
+behaviour through the entry-point chain (`AGENTS.md` →
+`.agent/directives/AGENT.md` → canonical rules). Reviewer roles should be
+configured through Codex project-agent support in `.codex/`, not modelled as
+skills.
 
 ## Sub-agents: Templates and Platform Adapters
 

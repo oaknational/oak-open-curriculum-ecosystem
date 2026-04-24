@@ -96,14 +96,15 @@ Practice consists of.
 
 Platform-specific implementations follow a canonical-first model: substantive
 content lives in `.agent/`; thin adapters in platform directories point back to
-it. In Codex, `.agents/skills/` is the portable skill/command layer and
-`.codex/` holds project-agent config. Entry-point files direct each platform to
-the canonical Practice. Rules and hooks use the same split: canonical policy in
-`.agent/`, thin native activation in platform config, and repo-local runtime
-where needed. Project platform config is tracked infrastructure; local
-overrides are additive. Keep exact supported mappings in a local surface matrix
-and validate authorisation parity as well as wrapper presence. This layer
-defines _how_ the Practice is used in a specific environment.
+it. `.agents/skills/` and `.agents/rules/` are portable skill, command, and
+rule adapter layers; `.codex/` holds project-agent config. Entry-point files
+direct each platform to the canonical Practice. Rules and hooks use the same
+split: canonical policy in `.agent/`, thin native activation in platform
+config, and repo-local runtime where needed. Project platform config is
+tracked infrastructure; local overrides are additive. Keep exact supported
+mappings in a local surface matrix and validate authorisation parity as well
+as wrapper presence. This layer defines _how_ the Practice is used in a
+specific environment.
 
 ## The Knowledge Flow
 

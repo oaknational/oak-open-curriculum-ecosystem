@@ -16,6 +16,9 @@ this codebase. Read ALL of it first, then follow all instructions.
 Commit to British spelling, grammar, and date formats.
 Reflect on your current task; update your task list if
 needed.
+Apply the [collaboration directive](./collaboration.md): dialogue,
+scope discipline, human risk acceptance, direct verification,
+discovery-based onboarding, and archive discipline.
 
 ### For Planning Work Only
 
@@ -85,8 +88,9 @@ them, they MUST be followed at ALL times.
 additional rules that operationalise principles, ADRs, and PDRs
 and MUST be followed at ALL times. On Claude the tier is loaded
 automatically from `.claude/rules/*.md`; on Cursor from
-`.cursor/rules/*.mdc` with `alwaysApply: true`. On Codex, Gemini,
-and any other non-loader platform, **read every file in
+`.cursor/rules/*.mdc` with `alwaysApply: true`; and through portable
+wrappers in `.agents/rules/` where that surface is scanned. On Codex,
+Gemini, and any other non-loader platform, **read every file in
 `.agent/rules/` at session open** — the canonical files are the
 source of truth and the platform adapters are thin pointers.
 
@@ -193,6 +197,7 @@ Institutional memory lives in `.agent/memory/`:
 ### Core Practice
 
 - [Development Practice](../../docs/governance/development-practice.md) - Code standards
+- [Collaboration Practice](./collaboration.md) - Agent-human working model
 - [Testing Strategy](testing-strategy.md) - TDD/BDD approach at all levels
 - [TypeScript Practice](../../docs/governance/typescript-practice.md) - Type safety
 - [Safety and Security](../../docs/governance/safety-and-security.md) -
@@ -283,8 +288,10 @@ BEFORE `git commit` (catches violations in ~1s before the ~34s pre-commit
 cycle). Commit-attempt logging is currently paused; the helper script and
 historical log remain in place but are not part of the active workflow.
 Skill adapters:
-`.cursor/skills/commit/SKILL.md` (Cursor) and `.agents/skills/commit/SKILL.md`
-(Codex). Claude and Gemini discover via this directive.
+`.cursor/skills/commit/SKILL.md` (Cursor),
+`.claude/skills/commit/SKILL.md` (Claude Code), and
+`.agents/skills/commit/SKILL.md` (portable `.agents/`). Gemini
+discovers via this directive.
 
 ## Architectural Understanding
 

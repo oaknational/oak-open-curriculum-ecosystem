@@ -180,6 +180,10 @@ look correct but fail silently. This check is mandatory, not optional.
    is missing. Three proof modes apply: presence checks (do canonical
    files exist?), parity checks (do wrappers and permissions match?),
    and runtime smokes (can the live runtime execute?).
+9. **Architecture evidence** — green gates prove the properties those
+   gates enumerate. They do not prove that the chosen architecture is
+   correct; architecture claims still need doctrine, review, or explicit
+   acceptance evidence.
 
 ## Minimum Operational Estate
 

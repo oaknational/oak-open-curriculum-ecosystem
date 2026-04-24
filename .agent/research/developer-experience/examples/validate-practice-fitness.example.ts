@@ -12,7 +12,7 @@
  * Or adapt to plain Node:
  *   node scripts/validate-practice-fitness.mjs
  *
- * Origin: oak-mcp-ecosystem, 2026-04-01 (two-threshold model), evolved
+ * Origin: oak-mcp-ecosystem, 2026-04-01 (earlier fitness model), evolved
  * 2026-04-17 to the three-zone scale.
  * See: the three-zone fitness model for the rationale and the ADR companion.
  */

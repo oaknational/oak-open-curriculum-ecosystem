@@ -14,6 +14,7 @@ For the Practice Core files and their roles, see [practice-core/index.md](practi
 | ----------------------------------------------------------------- | --------------------------------------------------------- |
 | [AGENT.md](directives/AGENT.md)                                   | Operational entry point for agents                        |
 | [principles.md](directives/principles.md)                         | Authoritative rules — must be followed at all times       |
+| [collaboration.md](directives/collaboration.md)                   | Agent-human working model                                 |
 | [testing-strategy.md](directives/testing-strategy.md)             | TDD at all levels                                         |
 | [schema-first-execution.md](directives/schema-first-execution.md) | Types flow from the OpenAPI schema                        |
 | [metacognition.md](directives/metacognition.md)                   | Reflective thinking before planning                       |
@@ -33,9 +34,10 @@ as executive memory — it is operational reference, not doctrine.)
 
 The governance layer is larger than a single file:
 
-- **25 canonical rules** live in [`.agent/rules/`](rules/)
+- **35 canonical rules** live in [`.agent/rules/`](rules/)
 - Thin platform adapters live in [`.cursor/rules/`](../.cursor/rules/) and
-  [`.claude/rules/`](../.claude/rules/)
+  [`.claude/rules/`](../.claude/rules/) plus portable wrappers in
+  [`.agents/rules/`](../.agents/rules/)
 - The canonical hook policy lives in [`.agent/hooks/policy.json`](hooks/policy.json)
 - The narrative hook explainer lives in [`.agent/hooks/README.md`](hooks/README.md)
 - The live platform-support map lives in
@@ -46,7 +48,11 @@ Representative rules:
 | Rule                                                       | Purpose                                               |
 | ---------------------------------------------------------- | ----------------------------------------------------- |
 | [follow-the-practice.md](rules/follow-the-practice.md)     | Keep work aligned with the full Practice system       |
-| [tdd-at-all-levels.md](rules/tdd-at-all-levels.md)         | Enforce RED → GREEN → REFACTOR across test levels     |
+| [follow-collaboration-practice.md](rules/follow-collaboration-practice.md) | Follow the agent-human working model |
+| [validate-full-target-estate.md](rules/validate-full-target-estate.md) | Validate ignored or excluded estates completely |
+| [read-diagnostic-artefacts-in-full.md](rules/read-diagnostic-artefacts-in-full.md) | Read complete diagnostic output before hypothesising |
+| [consolidate-at-third-consumer.md](rules/consolidate-at-third-consumer.md) | Canonicalise duplicated shapes at the third consumer |
+| [tdd-for-refactoring.md](rules/tdd-for-refactoring.md)     | Enforce RED → GREEN → REFACTOR during refactoring     |
 | [no-type-shortcuts.md](rules/no-type-shortcuts.md)         | Prevent type-erasing shortcuts and assertion drift    |
 | [invoke-code-reviewers.md](rules/invoke-code-reviewers.md) | Require the reviewer matrix after non-trivial changes |
 
@@ -90,7 +96,7 @@ The execution surface is intentionally split by role:
 
 - **12 stable canonical commands** in [`.agent/commands/`](commands/)
 - **3 experimental commands** in [`.agent/commands/experiments/`](commands/experiments/)
-- **23 canonical skills** in [`.agent/skills/`](skills/)
+- **36 canonical skills** in [`.agent/skills/`](skills/)
 - **Prompt library** in [`.agent/prompts/`](prompts/) with the active index at
   [`.agent/prompts/README.md`](prompts/README.md)
 
@@ -125,7 +131,7 @@ and `.agents/skills/patterns/`.
 | Location                                                                                      | What lives there                                                            |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | [`.agent/practice-core/`](practice-core/)                                                     | Portable Practice Core package — trinity + entry points + CHANGELOG + provenance + `decision-records/` (PDRs) + `patterns/` (general abstractions) + `incoming/` (Practice Box) |
-| [`.agent/directives/`](directives/)                                                           | Doctrine — read-and-internalise; sets stance (AGENT.md, principles, testing-strategy, schema-first-execution, metacognition, orientation) |
+| [`.agent/directives/`](directives/)                                                           | Doctrine — read-and-internalise; sets stance (AGENT.md, principles, collaboration, testing-strategy, schema-first-execution, metacognition, orientation) |
 | [`.agent/plans/`](plans/)                                                                     | Work planning — active, paused, archived, and optional supporting templates |
 | [`.agent/memory/`](memory/)                                                                   | Three-mode memory: [`active/`](memory/active/) (learning loop — napkin, distilled, patterns, archive), [`operational/`](memory/operational/) (continuity — repo-continuity, workstreams, tracks), [`executive/`](memory/executive/) (contracts — artefact inventory, reviewer catalogue, platform-adapter matrix). See [`memory/README.md`](memory/README.md). |
 | [`.agent/experience/`](experience/)                                                           | Experiential records across sessions                                        |
@@ -140,6 +146,6 @@ and `.agents/skills/patterns/`.
 | [`.cursor/`](../.cursor/)                                                                     | Cursor platform adapters (thin wrappers)                                    |
 | [`.claude/`](../.claude/)                                                                     | Claude Code platform adapters (thin wrappers)                               |
 | [`.gemini/`](../.gemini/)                                                                     | Gemini CLI platform adapters (thin wrappers)                                |
-| [`.agents/`](../.agents/)                                                                     | Codex skill and command adapters (thin wrappers)                            |
+| [`.agents/`](../.agents/)                                                                     | Portable skill, command, and rule adapters (thin wrappers)                  |
 | [`.codex/`](../.codex/)                                                                       | Codex project-agent configuration (reviewer sub-agents)                     |
 | [`docs/architecture/architectural-decisions/`](../docs/architecture/architectural-decisions/) | Permanent architectural decision records                                    |
