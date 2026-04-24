@@ -1,8 +1,9 @@
 # Repo Continuity
 
-**Last refreshed**: 2026-04-23 (Codex / codex — repo-owned corrective
-lane archived complete; remaining validation stages externalised to the
-owner).
+**Last refreshed**: 2026-04-24 (Pippin / cursor / claude-opus-4-7 —
+landed WS0 of the Sentry release-identifier single-source-of-truth
+plan: ADR-163 §1 + §10 amendment + reviewer dispositions in
+`06bf25d7` on `feat/otel_sentry_enhancements`).
 
 The current state is:
 
@@ -51,7 +52,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `cursor` / `claude-opus-4-7` / Pippin / diagnosis-correction-implementation-doctrine-landing-and-plan-rewrite / 2026-04-23; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23 (latest — the repo-owned corrective lane is archived complete; remaining validation stages are owner-handled separately) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23; `cursor` / `claude-opus-4-7` / Pippin / WS0-ADR-163-amendment-landing-after-reviewer-pass / 2026-04-24 (latest — landed ADR-163 §1 + §10 amendment + assumptions/sentry/fred reviewer dispositions in `06bf25d7`; thread now picks up at WS1 RED contract tests) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -123,17 +124,39 @@ also owner-handled validation stages.
 
 ## Current session focus
 
-Landed: archived the completed repo-owned observability follow-through
-plan, reconciled the live continuity surfaces to that archive path, and
-recorded that the remaining validation stages are owner-handled
-separately —
-[`archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
+Landed: WS0 of
+[`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
+in commit `06bf25d7`. ADR-163 §1 rewritten with the per-environment
+release-identifier truth table (production = root `package.json`
+semver; preview/non-main-production = `VERCEL_BRANCH_URL` host's
+leftmost label; development = `dev-<shortSha>`;
+`SENTRY_RELEASE_OVERRIDE` always wins; build-time and runtime
+resolvers must produce the SAME string per env). New §10 formalises
+the production-build cancellation rule, names the canonical script
+path + workspace shim + `vercel.json` `ignoreCommand` wiring + the
+fail-open trade-off when previous-version resolution fails. §3 + §5
+cross-linked to §1's per-environment grain. Process-gap finding
+records the cross-resolver contract test as the structural
+anti-drift gate (not procedural review discipline). Reviewer
+Dispositions block records the WS0.2 reviewer pass:
+`assumptions-reviewer`, `sentry-reviewer`,
+`architecture-reviewer-fred` — all BLOCKING + IMPORTANT findings
+ACCEPTED and applied.
 
-This closeout intentionally stopped at continuity/doc-state
-reconciliation. No new product validation was run because the owner
-explicitly separated validation from this session.
+Next: WS1 RED contract tests on `feat/otel_sentry_enhancements`
+(separate commit per the user's turn-boundary instruction):
+cross-resolver contract test (libs ← core devDependency edge),
+branch-URL precedence test, cancellation-wiring integration test
+(reads `vercel.json`'s `ignoreCommand` and asserts shim → canonical
+script path resolution; does not re-test script logic).
 
-No new ADR/PDR candidate qualified beyond the existing register items.
+The release-identifier work proper (WS2 GREEN) rewrites
+`resolvePreviewRelease` (build-time) and extends `resolveSentryRelease`
+(runtime) to consume `VERCEL_BRANCH_URL` host; deletes the obsolete
+`preview-<slug>-<sha>` shape and the `slugifyBranch` helper.
+
+The pending ADR-163 amendment register item is now resolved by WS0;
+the plan's WS1+ register items remain pending.
 
 ## Session 5 close summary (final — 2026-04-21, Pippin / cursor-opus)
 
@@ -457,18 +480,18 @@ Non-goals for next session:
 
 ## Next safe step
 
-Wait for the owner-run validation stages. The repo-owned corrective lane
-is already archived complete in
-[`mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md`](../../plans/observability/archive/completed/mcp-canonical-deploy-shape-and-warnings-doctrine.plan.md).
+Pick up
+[`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
+at WS0: amend ADR-163 to record both owner-direction rules (truth
+tables included), then run the assumptions / sentry / fred reviewers
+against the proposed amendment text BEFORE landing. WS1 (RED contract
+tests) cannot start until the amendment lands.
 
-Then:
-
-1. if owner validation returns a fresh repo defect, open the smallest
-   targeted repair lane that names that defect explicitly;
-2. if owner validation is clean and runtime simplification is wanted,
-   promote
-   [`mcp-http-runtime-canonicalisation.plan.md`](../../plans/observability/future/mcp-http-runtime-canonicalisation.plan.md);
-3. otherwise, do not invent another repo-owned follow-through cycle.
+If owner-run validation of the previously-archived corrective lane
+surfaces a fresh repo defect in parallel, that takes priority — open
+the smallest targeted repair lane that names that defect explicitly.
+Otherwise, do not invent another repo-owned follow-through cycle
+beyond the queued release-identifier plan.
 
 **Commit workflow tooling available** (refined 2026-04-23 by
 Pippin's second session into the canonical `commit` skill at
@@ -507,13 +530,26 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
+**Status (2026-04-23 Pippin session-handoff after release-identifier
+plan rewrite under owner direction)**: **due — not well-bounded for
+this closeout, defer to a dedicated consolidation pass.** Standing
+triggers continue to fire: napkin still >>500 lines (the prior pass
+recorded ~1985 lines and this session adds one fresh surprise entry);
+distilled refinement remains soft-zone-due from the prior closeout.
+This session was a focused planning rewrite (~1 hour scope), not a
+consolidation pass — escalating now would exceed the closeout boundary
+per session-handoff step 10. Ratchet forward with falsifiability: next
+session opens with napkin still >500 if rotation has not happened,
+which prompts dedicated consolidation work; the queued release-
+identifier plan does not depend on consolidation landing first.
+
 **Status (2026-04-23 Codex session-handoff + consolidate-docs closeout
-after owner-declared lane completion)**: **completed this pass** —
-the completed observability follow-through plan was archived, live
-references were reconciled to the archive path, repo/thread continuity
-now reflects that manual validation stages are owner-handled
-separately, and no new ADR/PDR candidate or thread-register freshness
-finding surfaced.
+after owner-declared lane completion — preserved for audit)**:
+**completed this pass** — the completed observability follow-through
+plan was archived, live references were reconciled to the archive
+path, repo/thread continuity now reflects that manual validation
+stages are owner-handled separately, and no new ADR/PDR candidate or
+thread-register freshness finding surfaced.
 
 Falsifiability:
 

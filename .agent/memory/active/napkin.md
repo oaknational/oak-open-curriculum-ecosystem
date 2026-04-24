@@ -8,6 +8,195 @@ live in the register at
 
 ---
 
+## 2026-04-24 (latest, WS0 ADR-163 amendment landing) — repo-wide pre-commit prettier check forces working-tree formatting even when only two files are staged (Pippin / cursor / claude-opus-4-7)
+
+**Observation**: when committing the WS0 ADR amendment + plan file
+(two staged files), the pre-commit hook ran `pnpm format-check:root`
+which is repo-wide, not staged-file-aware. It found 37 files with
+formatting issues — 36 of them pre-existing drift in the user's
+working tree (`.agents/skills/clerk-*`, `.claude/skills/clerk-*`,
+etc.) plus my own ADR file, which prettier had reformatted in one
+spot. The hook failed because of the unrelated drift, even though my
+two staged files were clean. The remediation under
+`no-verify-requires-fresh-authorisation`: run `pnpm format:root` on
+the whole working tree (which formatted the 36 unrelated files in
+the working tree, not in the index, so they remained as unstaged
+drift after the commit) plus my own ADR file (which I re-staged).
+This unblocked the hook without bypassing it and without polluting
+the WS0 commit.
+
+### Surprise
+
+- **Expected**: pre-commit prettier check would only inspect the
+  staged files (the typical lint-staged pattern), so my two staged
+  files being clean would be enough.
+- **Actual**: the hook runs `prettier --check .` across the whole
+  repo. Pre-existing unrelated working-tree drift was enough to
+  block the commit.
+- **Why expectation failed**: I assumed the hook was staged-file-
+  aware without reading `.husky/pre-commit` first. Project-defined
+  pre-commit hooks vary widely between staged-only and repo-wide;
+  guessing wrong wastes the first commit attempt.
+- **Behaviour change**: when a pre-commit hook fails on files I
+  didn't touch, default response is to `cat .husky/pre-commit` and
+  see whether the failing check is staged-aware. If repo-wide,
+  format the working tree (working-tree-only, not the index) so the
+  hook passes and my commit lands without sweeping unrelated drift
+  into my staged set.
+
+### Patterns to Remember
+
+- Repo-wide pre-commit hooks treat the whole working tree as the
+  unit of validation, not the staged set. A clean staged set is not
+  sufficient when other files are dirty.
+- `pnpm format:root` modifies the working tree but not the index, so
+  running it to unblock a hook does NOT stage anything new — the
+  user's pre-existing drift remains as unstaged modifications after
+  the commit, exactly where it was before, just now formatted.
+- When prettier reformats a file I'm about to commit (not just
+  unrelated drift), I need to re-stage it before committing. The
+  `MM` git status (staged version differs from working-tree version)
+  is the tell.
+- The `no-verify-requires-fresh-authorisation` rule pushed me to fix
+  the cause rather than bypass — and the fix turned out to be
+  cheaper than the bypass would have been (one `pnpm format:root`
+  run vs writing an authorisation request). Hook bypass is rarely
+  the actual shortest path.
+
+## 2026-04-24 (WS0 ADR-163 amendment landing) — reviewer dispositions integrated pre-landing surface unstated assumptions cheaper than discovering them post-landing (Pippin / cursor / claude-opus-4-7)
+
+**Observation**: WS0.2 dispatched
+`assumptions-reviewer` + `sentry-reviewer` +
+`architecture-reviewer-fred` against the *proposed* ADR-163 amendment
+text BEFORE landing. All three returned multiple BLOCKING + IMPORTANT
+findings, three of which materially changed the ADR text rather than
+just sharpening prose:
+
+1. `assumptions-reviewer` flagged that the draft asserted
+   `VERCEL_BRANCH_URL` "is always set in preview deploys" as if it
+   were a Vercel guarantee. It is not — it is an Oak operational
+   assumption based on observed Vercel behaviour. The amendment now
+   qualifies it as such and explicitly notes the fail-fast posture
+   if unset.
+2. `sentry-reviewer` flagged that Oak's
+   `SENTRY_RELEASE_NAME_PATTERN` does not match Sentry's documented
+   release-name validation rules — Oak permits `/` (which Sentry
+   forbids) and rejects `latest` (which Sentry allows). The
+   amendment now records this divergence as a process-gap finding
+   to be investigated separately, rather than being silently
+   embedded in the rationale.
+3. `architecture-reviewer-fred` flagged that the §5 "one release →
+   many deploys" model needed an explicit reframing to operate at
+   per-environment grain (semver for production; branch-URL for
+   preview), since the §1 amendment removed the shared release
+   identifier across the preview→production boundary. Without the
+   §5 cross-link the model would have read as inconsistent with §1.
+
+### Surprise
+
+- **Expected**: reviewers would mostly catch wording / structure
+  issues; the substantive decisions in the draft were already
+  thought-through.
+- **Actual**: reviewers caught three substantive content errors
+  that would have shipped as durable doctrine if the dispositions
+  had been deferred to post-landing. The cost of integration
+  pre-landing was 30-40 minutes of careful editing; post-landing
+  cost would have been a follow-up amendment commit + likely a
+  second reviewer pass + the doctrine being authoritatively wrong
+  in the meantime.
+- **Why expectation failed**: I conflated "I have thought
+  carefully about each line" with "the assumptions I'm making are
+  shared assumptions". The reviewers' value is precisely in
+  surfacing the *unstated* assumptions — the ones I don't know I'm
+  making — not in catching things I'd already considered.
+- **Behaviour change**: when reviewers are dispatched against a
+  proposed-but-not-yet-landed artefact, integrate dispositions
+  pre-landing as a hard rule, not as an "if dispositions are
+  significant" judgement call. The judgement of significance is
+  precisely what the dispositions are challenging; the agent who
+  drafted the artefact is the wrong judge of its own assumptions.
+
+### Patterns to Remember
+
+- Reviewer dispositions surfacing unstated assumptions are
+  systematically more valuable than reviewer dispositions sharpening
+  prose. The former rewrites doctrine; the latter rewrites
+  paragraphs.
+- Pre-landing reviewer pass + pre-landing disposition integration is
+  cheaper than post-landing amendment. The cost of editing in-place
+  is small; the cost of a separate amendment commit + re-review +
+  doctrine being wrong in the interim is large.
+- Three reviewers (assumptions / domain / architecture) each catch
+  different classes of issue. Skipping one because "the other two
+  are enough" loses a class of catch — sentry-reviewer specifically
+  caught the SENTRY_RELEASE_NAME_PATTERN divergence that neither
+  assumptions-reviewer nor architecture-reviewer-fred would have
+  surfaced.
+- The `assumptions-reviewer` is the highest-leverage reviewer for
+  doctrine artefacts (ADRs, PDRs, plans) precisely because it
+  challenges the framing-by-the-author rather than the
+  implementation; the framing-by-the-author is the most
+  durable thing being landed.
+
+## 2026-04-23 (release-identifier plan rewrite under owner direction) — research the live repo before sizing the workstreams (Pippin / cursor / claude-opus-4-7)
+
+**Observation**: while drafting the Sentry release-identifier
+single-source-of-truth plan, the first draft sized a workstream
+("WS3 — implement the cancellation logic") that turned out to be
+already implemented and unit-tested. Owner direction (point #2)
+named the requirement; a 30-second `Grep` for `ignoreCommand` +
+`semantic-release` + `cancel.*build` surfaced the existing
+`vercel-ignore-production-non-release-build.mjs` + its sibling
+`.unit.test.mjs` (six branches) + the `vercel.json` wiring. The
+second-draft plan reframed WS3 as verification + ADR linkage + a
+wiring integration check, saving a workstream's worth of work and
+preventing duplicate-implementation pollution.
+
+### Surprise
+
+- **Expected**: owner direction #2 ("builds on `main` cancelled
+  unless commit advances version") would map to a fresh
+  implementation workstream, since the prior session's verification
+  showed no evidence of cancellation behaviour in the recent build
+  logs.
+- **Actual**: the script was already there, fully tested. The
+  reason no cancellation showed up in recent build logs is that
+  every recent merge to `main` HAS been a semantic-release commit
+  (advancing the version), so the script's "continue build" branch
+  fired every time. Absence of cancellation evidence ≠ absence of
+  cancellation logic.
+- **Why expectation failed**: I sized the workstream from the
+  user-stated requirement without first searching for prior
+  implementation. The owner's "stated many times" hint should have
+  been the cue to grep before sizing.
+- **Behaviour change**: when an owner-direction rule names a
+  repo-level mechanism (build cancellation, env-var policy,
+  release-id resolution), search the repo for prior implementation
+  before sizing a workstream that assumes greenfield. Particularly
+  when the owner says "stated many times" or "this should already
+  be true" — that's a signal the substance may already exist and
+  the gap is documentation / linkage / test coverage.
+
+### Patterns to Remember
+
+- Owner direction can describe both **new** and **already-installed**
+  requirements; sizing a plan against owner direction needs a research
+  pass to disambiguate.
+- A 30-second `Grep` over plausible mechanism names beats a
+  50-minute over-scoped workstream every time.
+- "Absence of cancellation evidence" requires checking BOTH the
+  cancellation logic exists AND that the cancellation branch has
+  ever fired — if every recent commit advances the version, the
+  cancellation branch never gets exercised, and a passive review
+  of build logs reads identical to "no cancellation logic".
+- Possible second-instance candidate of `inherited-framing-without-
+  first-principles-check`: the first plan draft inherited framing
+  from the prior session's verification (which observed the
+  divergence in releases) without first-principles-checking
+  whether the cancellation half of the new owner direction was
+  actually un-implemented. The first-principles check arrived only
+  during research after the draft was sized.
+
 ## 2026-04-23 (latest, owner-declared lane closeout) — once the owner externalises validation, keeping a repo plan active becomes fake motion (Codex / codex)
 
 **Observation**: the repo-owned corrective lane was complete, but the
