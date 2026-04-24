@@ -55,7 +55,7 @@ last_reviewed: 2026-04-20
 
 - [How the Agentic Engineering System Works](foundation/agentic-engineering-system.md) - The Practice explained as an integrated engineering system
 - [ADR-119](architecture/architectural-decisions/119-agentic-engineering-practice.md) - The formal architectural decision
-- [Continuity Practice](governance/continuity-practice.md) - Lightweight session handoff, conditional deep consolidation, and surprise capture
+- [Continuity Practice](../.agent/directives/continuity-practice.md) - Lightweight session handoff, conditional deep consolidation, and surprise capture (moved to directives)
 - [**The Practice**](../.agent/practice-core/index.md) - Orientation and entry point for the Practice (agent-facing)
 - [Agentic Engineering Research Lanes & Hub](../.agent/research/agentic-engineering/README.md) - Concept-and-deep-dive map for broader corpus discovery
 

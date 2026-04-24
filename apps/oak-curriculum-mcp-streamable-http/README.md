@@ -325,6 +325,40 @@ Three search tools (`search`, `browse-curriculum`, `explore-topic`) provide Elas
 - Request validation uses Zod schemas derived at compile-time from the OpenAPI spec; invalid inputs return a formatted error body (200 status, `isError: true`).
 - Successful results are SSE-wrapped JSON-RPC responses formatted with `formatStandardContent`.
 
+## Architecture Notes
+
+### Aggregated tools
+
+Aggregated tools currently return `Promise<CallToolResult>`
+directly, bypassing `ToolExecutionResult`. This is
+**architectural debt** — they miss the error handling,
+logging, and type safety that `ToolExecutionResult` provides
+to generated tools. Remediation tracked in the Practice
+improvements plan. The `AggregatedToolName` type derives from
+`keyof typeof AGGREGATED_TOOL_DEFS`.
+
+### MCP App host compatibility
+
+Tools with `_meta.ui` work in non-MCP-Apps hosts (Claude Code,
+CLI). The host ignores `_meta.ui` and the tool returns text
+content normally. No fallback code is needed — the protocol
+handles degradation.
+
+### Testing the MCP SDK
+
+`McpServer.registerTool` uses unexported generics that make
+it difficult to type-check handler functions through the
+registration surface. Test handler functions directly, not
+through `registerHandlers` → `McpServer`. When a test needs
+to reach into SDK internals, the architectural boundary is
+wrong — test at the handler level instead.
+
+### Type extraction from composition root
+
+When extracting types from this composition root, the root
+module may still need a local `import type` for its own usage
+even after the type is exported.
+
 ## Testing
 
 This application has comprehensive test coverage across three testing layers:

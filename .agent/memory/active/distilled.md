@@ -39,35 +39,16 @@ context with no natural permanent home.
 - Onboarding simulations are discovery-based (README-only start;
   motivation-described personas) — see the onboarding plan for the
   full rubric.
-- `.env.local` files MUST mirror the structure of `.env.example`
-  (same section headers, same ordering, same documentation
-  comments). Drift between the two is a documentation defect.
 - **Scope changes precisely.** When the user asks for "only
   config, no code" (or any analogous boundary), respect the
   boundary strictly. Surface follow-on work that would extend
   scope; never silently expand scope to be helpful.
-- **Cite when adopting external concepts.** When external
-  patterns, vocabulary, or implementation techniques are adopted
-  or adapted (blog posts, papers, vendor docs, OSS, other
-  Practice-bearing repos), attribution MUST be explicit and
-  include a working link to the upstream source. Adaptations
-  must also note how the local form differs. Enforced by the
-  always-applied [`documentation-hygiene`](../../rules/documentation-hygiene.md)
-  rule §Attribution on adoption.
 
 ## Fitness Management
 
-- **Char limit is the honest volume constraint** (not lines).
-  Prose wrapping inflates line count; char count tracks real
-  content volume. Use it as the primary volume metric.
 - **User feedback is the correction signal**: when user feedback
   contradicts a napkin entry, apply the feedback fully. Do not
   negotiate a compromise with the original incorrect framing.
-- **Fitness is the four-zone scale defined by
-  [ADR-144](../../docs/architecture/architectural-decisions/144-two-threshold-fitness-model.md)**
-  (`healthy`/`soft`/`hard`/`critical`). Operational rule here:
-  ask "why is it growing?" before "what can I cut?" Graduation
-  and restructuring are valid responses alongside compression.
 
 ## Process
 
@@ -87,7 +68,13 @@ context with no natural permanent home.
   the generic REST surface (`sentry api`, `clerk api`, vendor-
   equivalent) before raising any owner question about observability
   or infrastructure state. "The specialist tool doesn't surface X"
-  ≠ "X is unknowable from automation."
+  ≠ "X is unknowable from automation." **Extends to workstream
+  sizing**: when owner direction names a repo-level mechanism
+  (build cancellation, env-var policy, release resolution),
+  search the repo for prior implementation before sizing a
+  workstream. "Stated many times" or "should already be true"
+  signals the substance may exist and the gap is
+  documentation/linkage, not implementation.
 - **Validation closures: produce locally-producible evidence
   first**. For deployment validation lanes, generate every
   locally-producible proof under a session-specific release tag
@@ -114,11 +101,43 @@ context with no natural permanent home.
   thread-scoped. Label scope in every workflow header and artefact.
 - **Dry-run multi-step workflows against accumulated state** before
   committing to the recipe; produces *proceed* or *stage differently*.
+- **Pre-commit hooks are repo-wide by default**: when a
+  pre-commit hook fails on files you didn't touch, check
+  `.husky/pre-commit` for staged-aware vs repo-wide scope. If
+  repo-wide, format the working tree to unblock the hook
+  without sweeping unrelated drift into your commit.
+- **Integrate reviewer dispositions pre-landing**: when
+  reviewers are dispatched against a proposed-but-not-yet-landed
+  artefact, integrate dispositions before landing as a hard
+  rule. Post-landing amendments are costlier (amendment commit
+  - re-review + doctrine wrong in interim).
+- **Read paginated artefacts in full before forming
+  hypotheses**: when an MCP tool returns paginated log/
+  diagnostic output, re-call with explicit high limit and
+  filter the *full* artefact on structured signal fields
+  (`"level": "warning"`, `"level": "error"`) before forming
+  any diagnostic hypothesis. Speculative diagnosis is only
+  legitimate when the full artefact is silent on the question.
 
-Practice-governance Process rules graduated to PDRs — see the
-[PDR index](../../practice-core/decision-records/) for current
-canonical bodies. Watchlist items rotate to the pending-graduations
-register at `repo-continuity.md § Pending`, not back into this file.
+- **Tighten the reference model first**: when a validator is
+  drifting, tighten the reference model and rerun the
+  authoritative generation path before designing exception
+  logic. The real issue is often the model boundary, not
+  missing exception code.
+- **Package-local green is navigation, not acceptance**: under
+  root-gate doctrine, package-local checks are navigation
+  only. Until another full repo-root sequence replaces it, the
+  last full repo-root run is truth. Do not let package-local
+  green quietly redefine the larger acceptance claim.
+- **Repeated rationalisation = install a dedicated rule**: when
+  a repeated owner correction keeps targeting the same local
+  rationalisation (e.g. "bridge", "transitional", "compat
+  helper"), install a dedicated always-applied rule rather than
+  relying on a broad principle to fire indirectly.
+- **Gate-pass ≠ architectural correctness**: green
+  static-analysis gates (knip, depcruise) do not replace
+  missing acceptance gates. A minimum fix to pass a gate is
+  not evidence that the full architecture is correct.
 
 ## Architecture (Agent Infrastructure)
 
@@ -144,144 +163,15 @@ register at `repo-continuity.md § Pending`, not back into this file.
   should test the install-session against the tripwire it just
   installed. Prevents the session from landing a rule the
   installing agent has bypassed in the process of writing it.
-- **Passive guidance loses to artefact gravity** — guardrails in
-  prose alone earn nothing; they must be environmentally enforced
-  (rules, hooks, scripts, gates) to fire under context pressure.
-  Design check at tripwire-design time: is this active (fires
-  without agent recall) or passive (depends on reading/remembering)?
-  If passive, pair with an active layer before landing. See
-  [`patterns/passive-guidance-loses-to-artefact-gravity.md`][passive-pat].
-
-[passive-pat]: patterns/passive-guidance-loses-to-artefact-gravity.md
 
 ## Repo-Specific Rules
 
-- Elasticsearch: `oaksearch admin validate-aliases` proves alias **topology**
-  only; `admin count` reports true parent docs. Do not equate green alias
-  health with bulk freshness — see
-  `apps/oak-search-cli/docs/INDEXING.md` (*Operational CLI* section).
-- From `packages/sdks/oak-curriculum-sdk/`, repo root is
-  `../../../` not `../../`
 - `src/bulk/generators/` duplicates `vocab-gen/generators/` —
   update both in parallel. Decomposition plan at
   `codegen/future/sdk-codegen-workspace-decomposition.md`.
-- **No "conscious exceptions" to ADR-078 exist**: ADR-078
-  lists exactly one exception (subprocess-spawned tests). Any
-  other claimed exception is fabricated — untracked exceptions
-  are violations, not accepted trade-offs.
-- **Zod 4 `.meta({ examples })` — verified and planned**: MCP
-  SDK v1.28.0 preserves `.meta()` via `z4mini.toJSONSchema()`.
-  Plan: `ws3-off-the-shelf-mcp-sdk-adoption.plan.md`. Edge case:
-  `z.preprocess()` fields lose `.meta()` with `io='input'`
-  (3 year params only).
-
-## Testing (Domain-Specific)
-
-- `ensurePathsOnSchema` creates a new object (spread) —
-  use `toStrictEqual` not `toBe` for structural equality
-- `server.e2e.test.ts` has a hardcoded aggregated tools
-  list — must be updated when adding new aggregated tools
-- **Test pyramid gap: pieces vs composition**: unit + E2E
-  tests can all pass while the integrated product fails. For
-  features spanning multiple modules (MCP tool → SDK → host),
-  add a composition test. Materialised 2026-04-12:
-  `mcp-app-composition.e2e.test.ts` caught knip/depcruise
-  cleanup that broke the UI — the composition test IS the
-  enforcement.
-
-- **Module-level state in tests = integration, not unit**:
-  any test that touches module-level singletons with IO must
-  be `*.integration.test.ts`, even if it injects DI fakes
-  for the new behaviour.
-- **Supertest is E2E, not integration**: supertest's in-process
-  HTTP server does real socket IO. Existing
-  `error-handling.integration.test.ts` is a pre-existing
-  misclassification. For middleware tests, call Express directly
-  with mocks.
-- **Supertest E2E has a transport blind spot**: supertest
-  tests JSON-RPC but not SSE transport serialisation. For
-  MCP servers, the transport layer IS part of the product
-  contract — `_meta` fields, session lifecycle, and event
-  streaming all happen there. Use MCP client SDK
-  (`Client` + `StreamableHTTPClientTransport`) for full-
-  fidelity E2E tests alongside supertest.
-
-## Linting and Code Quality
-
-- **Any rule at `'warn'` is a rule that's off.** Warnings
-  scroll past; only `'error'` enforces. Materialised: 13 type
-  assertions accumulated silently under `'warn'` severity.
-- **`@ts-expect-error` in a test means the test is testing what
-  types already enforce.** If a test needs `@ts-expect-error` to
-  compile, the type system is already asserting the constraint;
-  the test is redundant. Delete the test, don't suppress the
-  types. (PDR-020 covers the RED-phase counterpart: never suppress
-  to hide a RED-phase type-check failure.)
-- **Self-justifying eslint-disable comments embed false
-  assumptions.** "unavoidable: bridging incompatible types"
-  rationalises the violation. Ask: WHY are the types
-  incompatible?
 
 ## Build System (Domain-Specific)
 
-- `pnpm check` is the canonical aggregate gate and includes
-  `pnpm knip` and `pnpm depcruise` (added 2026-04-12)
-- Empty directories persist after file deletion — always
-  rmdir after deleting the last file. The portability
-  validator checks for SKILL.md presence, so empty skill
-  directories without SKILL.md cause false positives.
-- **`lint:fix` can silently revert manual edits**: `pnpm check`
-  runs `lint:fix` internally. If an edit introduces code that the
-  linter "fixes" back, the edit is lost mid-pipeline. Always
-  verify the edited file AFTER the full `pnpm check`, not just
-  after a single gate.
-- **Blanket `replace_all` corrupts mixed-case code**: in files
-  containing mixed-case identifiers (e.g. code templates), never
-  use blanket substring replacement. `prerequisite` matches
-  `prerequisiteFor` and `prerequisiteGraph`, producing invalid
-  identifiers. Rewrite the file or use exact-match replacements.
 - **Verify reviewer fixes are on disk**: a fix recorded in the
   napkin or conversation summary is not a fix applied on disk.
   Always verify the file's actual content after claiming a fix.
-  Three sessions (2026-04-11d/e/f) recorded the same fix as
-  "done" before discovering it was never persisted.
-- **Knip: standalone scripts need `entry`, not just `project`**:
-  knip only traces dependency trees from `entry` points.
-  Scripts invoked via `tsx` (not imported by the main entry)
-  must be listed as entries. `project` defines the file set;
-  `entry` defines the dependency graph roots.
-- **Knip: root workspace requires `workspaces["."]`**: top-
-  level `entry`/`project` fields are ignored when `workspaces`
-  is defined. Must use `workspaces["."]` for root entries.
-- **"Never edit generated files" is load-bearing**: Phase 2
-  knip hand-trimmed generated barrel files instead of fixing
-  generators. The fix was straightforward once the correct
-  approach (edit generators, not output) was applied. This
-  principle prevents a real class of regeneration footguns.
-- **ESLint `lint:fix` can merge value+type imports**: when
-  value and type imports share a source module, auto-fix may
-  merge them into a single `import type` statement, making
-  value symbols unavailable at runtime. Use inline `type`
-  keyword on individual specifiers:
-  `import { applyTheme, type McpUiHostContext } from '...'`
-
-## Architecture (Domain-Specific)
-
-- Aggregated tools return `Promise<CallToolResult>` directly
-  — they do NOT go through `ToolExecutionResult`
-- `AggregatedToolName` type derives from
-  `keyof typeof AGGREGATED_TOOL_DEFS`
-- When removing an entry from `LIB_PACKAGES`, check ALL
-  packages that called `createLibBoundaryRules` with that
-  name — zone uses `../${otherLib}/**` relative paths
-- When splitting a core package with runtime deps: schemas
-  stay in core, runtime pipeline moves to libs
-- When extracting types from a composition root, the root
-  may still need a local `import type` for its own usage
-- **Non-UI hosts degrade gracefully**: tools with `_meta.ui`
-  still work in non-MCP-Apps hosts (Claude Code, CLI). The
-  host ignores `_meta.ui` and the tool returns text content
-  normally. No fallback code needed — the protocol handles it.
-- **MCP SDK `registerTool` uses unexported generics**: test
-  handler functions directly, not through `registerHandlers`
-  → `McpServer`.

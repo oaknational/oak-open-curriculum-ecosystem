@@ -22,7 +22,7 @@ If this is your first time here, the 5-minute reading path is:
 ## Contents
 
 - [Development Practice](./development-practice.md) — Best practices for development in this project
-- [Continuity Practice](./continuity-practice.md) — Lightweight session handoff, deep consolidation triggers, and surprise pipeline guidance
+- [Continuity Practice](../../.agent/directives/continuity-practice.md) — **MOVED**: Lightweight session handoff, deep consolidation triggers, and surprise pipeline guidance (now in directives)
 - [Safety and Security](./safety-and-security.md) — Critical safety guidelines and security considerations
 - [Testing Strategy](../../.agent/directives/testing-strategy.md) — **MOVED**: Comprehensive TDD approach at all levels (now in directives)
 - [TypeScript Practice](./typescript-practice.md) — TypeScript-specific guidelines and patterns

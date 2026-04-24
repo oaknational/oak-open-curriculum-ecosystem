@@ -1,14 +1,17 @@
 ---
 name: clerk-setup
-description: Add Clerk authentication to any project by following the official quickstart guides.
+description: Add Clerk authentication to any project by following the official quickstart
+  guides.
 license: MIT
 allowed-tools: WebFetch
 metadata:
   author: clerk
-  version: '1.0.0'
+  version: 2.3.0
 ---
 
 # Adding Clerk
+
+> **Version**: Check `package.json` for the SDK version — see `clerk` skill for the version table. Core 2 differences are noted inline with `> **Core 2 ONLY (skip if current SDK):**` callouts.
 
 This skill sets up Clerk for authentication by following the official quickstart documentation.
 
@@ -18,8 +21,10 @@ This skill sets up Clerk for authentication by following the official quickstart
 | ---------------------- | --------------------------------------------------------------------------------- |
 | 1. Detect framework    | Check `package.json` dependencies                                                 |
 | 2. Fetch quickstart    | Use WebFetch on the appropriate docs URL                                          |
-| 3. Follow instructions | Execute the steps from the official guide                                         |
+| 3. Follow instructions | Execute steps; create `proxy.ts` (Next.js <=15: `middleware.ts`)                  |
 | 4. Get API keys        | From [dashboard.clerk.com](https://dashboard.clerk.com/last-active?path=api-keys) |
+
+> If the project has `components.json` (shadcn/ui), apply the shadcn theme after setup. See `clerk-custom-ui` skill → shadcn Theme.
 
 ## Framework Detection
 
@@ -54,17 +59,13 @@ User Request: "Add Clerk" / "Add authentication"
     ├─ Read package.json
     │
     ├─ Existing auth detected?
-    │   │
-    │   ├─ YES → Audit current auth → Create migration plan
-    │   │        → See "Migrating from Another Auth Provider"
-    │   │
+    │   ├─ YES → Audit → Migration plan
     │   └─ NO → Fresh install
     │
-    ├─ Identify framework from dependencies
+    ├─ Identify framework → WebFetch quickstart → Follow instructions
+    │   └─ Next.js? → Create proxy.ts (Next.js <=15: middleware.ts)
     │
-    ├─ WebFetch the appropriate quickstart URL
-    │
-    └─ Follow the official instructions step-by-step
+    └─ components.json exists? → YES → Apply shadcn theme (see clerk-custom-ui)
 ```
 
 ## Setup Process
@@ -88,9 +89,13 @@ Execute each step from the quickstart guide:
 
 - Install the required packages
 - Set up environment variables
-- Add the provider/middleware
+- Add the provider and proxy/middleware
 - Create sign-in/sign-up routes if needed
 - Test the integration
+
+> **Next.js:** Create `proxy.ts` (Next.js <=15: `middleware.ts`). See the `clerk-nextjs-patterns` skill for middleware strategies.
+
+> **shadcn/ui detected** (`components.json` exists): ALWAYS apply the shadcn theme. See `clerk-custom-ui` skill → shadcn Theme section.
 
 ### 4. Get API Keys
 
@@ -148,6 +153,86 @@ Check `package.json` for existing auth libraries:
 
 - **Migration Overview**: https://clerk.com/docs/guides/development/migrating/overview
 
+## SDK Notes
+
+### Package Names
+
+| Package        | Install                       |
+| -------------- | ----------------------------- |
+| Next.js        | `@clerk/nextjs`               |
+| React          | `@clerk/react`                |
+| Expo           | `@clerk/expo`                 |
+| React Router   | `@clerk/react-router`         |
+| TanStack Start | `@clerk/tanstack-react-start` |
+
+> **Core 2 ONLY (skip if current SDK):** React and Expo packages have different names: `@clerk/clerk-react` and `@clerk/clerk-expo` (with `clerk-` prefix).
+
+### ClerkProvider Placement (Next.js)
+
+`ClerkProvider` must be placed **inside `<body>`**, not wrapping `<html>`:
+
+```tsx
+// root layout.tsx
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <ClerkProvider>{children}</ClerkProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+> **Core 2 ONLY (skip if current SDK):** `ClerkProvider` can wrap `<html>` directly.
+
+### Dynamic Rendering (Next.js)
+
+For dynamic rendering with auth data, use the `dynamic` prop:
+
+```tsx
+<ClerkProvider dynamic>{children}</ClerkProvider>
+```
+
+### Node.js Requirement
+
+Requires **Node.js 20.9.0** or higher.
+
+> **Core 2 ONLY (skip if current SDK):** Minimum Node.js 18.17.0.
+
+### Themes Package
+
+Themes are installed from `@clerk/ui`:
+
+```bash
+npm install @clerk/ui
+```
+
+> **Core 2 ONLY (skip if current SDK):** Themes are from `@clerk/themes` instead of `@clerk/ui`.
+
+### shadcn Theme
+
+If the project uses shadcn/ui (check for `components.json` in the project root), apply the shadcn theme so Clerk components match the app's design system:
+
+```bash
+npm install @clerk/ui
+```
+
+```tsx
+import { shadcn } from '@clerk/ui/themes';
+
+<ClerkProvider appearance={{ theme: shadcn }}>{children}</ClerkProvider>;
+```
+
+Also import the shadcn CSS in your global styles:
+
+```css
+@import 'tailwindcss';
+@import '@clerk/ui/themes/shadcn.css';
+```
+
+> **Core 2 ONLY (skip if current SDK):** Import from `@clerk/themes` and `@clerk/themes/shadcn.css` instead.
+
 ## Common Pitfalls
 
 | Level    | Issue                       | Solution                                                                |
@@ -155,18 +240,30 @@ Check `package.json` for existing auth libraries:
 | CRITICAL | Missing `await` on `auth()` | In Next.js 15+, `auth()` is async: `const { userId } = await auth()`    |
 | CRITICAL | Exposing `CLERK_SECRET_KEY` | Never use secret key in client code; only `NEXT_PUBLIC_*` keys are safe |
 | HIGH     | Missing middleware matcher  | Include API routes: `matcher: ['/((?!._\\.._                            | \_next).\*)', '/']` |
-| HIGH     | ClerkProvider not at root   | Must wrap entire app in root layout/App component                       |
+| HIGH     | ClerkProvider placement     | Must be inside `<body>` in root layout (Core 2: could wrap `<html>`)    |
 | HIGH     | Auth routes not public      | Allow `/sign-in`, `/sign-up` in middleware config                       |
 | HIGH     | Landing page requires auth  | To keep "/" public, exclude it: `matcher: ['/((?!._\\.._                | \_next              | ^/$)._)', '/api/(._)']` |
 | MEDIUM   | Wrong import path           | Server code uses `@clerk/nextjs/server`, client uses `@clerk/nextjs`    |
+| MEDIUM   | Wrong package name          | Use `@clerk/react` not `@clerk/clerk-react` (Core 2 naming)             |
 
 ## See Also
 
-- `custom-flows/` - Custom sign-in/up components
-- `syncing-users/` - Webhook → database sync
-- `managing-orgs/` - B2B multi-tenant organizations
-- `testing/` - E2E testing setup
-- `nextjs-patterns/` - Advanced Next.js patterns
+- `clerk-custom-ui` - Custom sign-in/up components
+- `clerk-nextjs-patterns` - Advanced Next.js patterns
+- `clerk-react-patterns` - React SPA patterns
+- `clerk-react-router-patterns` - React Router patterns
+- `clerk-vue-patterns` - Vue patterns
+- `clerk-nuxt-patterns` - Nuxt patterns
+- `clerk-astro-patterns` - Astro patterns
+- `clerk-tanstack-patterns` - TanStack Start patterns
+- `clerk-expo-patterns` - Expo patterns
+- `clerk-chrome-extension-patterns` - Chrome Extension patterns
+- `clerk-orgs` - B2B multi-tenant organizations
+- `clerk-webhooks` - Webhook → database sync
+- `clerk-testing` - E2E testing setup
+- `clerk-swift` - Native iOS auth
+- `clerk-android` - Native Android auth
+- `clerk-backend-api` - Backend REST API explorer
 
 ## Documentation
 

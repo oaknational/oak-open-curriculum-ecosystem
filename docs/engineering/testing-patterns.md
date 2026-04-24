@@ -68,6 +68,49 @@ Compliant tests to use as templates:
 - `apps/oak-curriculum-mcp-streamable-http/e2e-tests/web-security-selective.e2e.test.ts`
 - `apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/create-stubbed-http-app.ts`
 
+---
+
+## Test File Classification
+
+Test classification is based on what the test actually does,
+not what the author intends:
+
+- **Module-level state = integration**: any test that touches
+  module-level singletons with IO must be
+  `*.integration.test.ts`, even if it injects DI fakes for
+  the new behaviour.
+- **Supertest is E2E, not integration**: supertest's
+  in-process HTTP server does real socket IO. The existing
+  `error-handling.integration.test.ts` is a pre-existing
+  misclassification. For middleware tests, call Express
+  directly with mocks.
+
+## Composition Testing
+
+Unit + E2E tests can all pass while the integrated product
+fails. For features spanning multiple modules (MCP tool →
+SDK → host), add a **composition test** that exercises the
+integration seam.
+
+Example: `mcp-app-composition.e2e.test.ts` caught
+knip/depcruise cleanup that broke the UI — the composition
+test IS the enforcement for multi-module integration.
+
+## MCP Transport Layer Testing
+
+Supertest tests JSON-RPC but not SSE transport
+serialisation. For MCP servers, the transport layer IS part
+of the product contract — `_meta` fields, session lifecycle,
+and event streaming all happen there. Use MCP client SDK
+(`Client` + `StreamableHTTPClientTransport`) for
+full-fidelity E2E tests alongside supertest.
+
+## Structural Equality
+
+`ensurePathsOnSchema` creates a new object (spread) — use
+`toStrictEqual` not `toBe` for structural equality checks
+on spread-derived objects.
+
 ### Related
 
 - [ADR-078: Dependency Injection for Testability](../architecture/architectural-decisions/078-dependency-injection-for-testability.md)

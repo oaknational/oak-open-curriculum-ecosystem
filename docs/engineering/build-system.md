@@ -408,6 +408,36 @@ README.md (root, including the Quick Start section)
       → deep docs, ADRs, architecture docs
 ```
 
+## Knip Configuration Gotchas
+
+- **Standalone scripts need `entry`, not just `project`**: knip
+  only traces dependency trees from `entry` points. Scripts
+  invoked via `tsx` (not imported by the main entry) must be
+  listed as entries. `project` defines the file set; `entry`
+  defines the dependency graph roots.
+- **Root workspace requires `workspaces["."]`**: top-level
+  `entry`/`project` fields are ignored when `workspaces` is
+  defined. Must use `workspaces["."]` for root entries.
+
+## File Cleanup After Deletion
+
+- Empty directories persist after file deletion — always rmdir
+  after deleting the last file. The portability validator checks
+  for `SKILL.md` presence, so empty skill directories without
+  `SKILL.md` cause false positives.
+
+## Linting and Auto-Fix Safety
+
+- **`lint:fix` can silently revert manual edits**: `pnpm check`
+  runs `lint:fix` internally. If an edit introduces code that
+  the linter "fixes" back, the edit is lost mid-pipeline. Always
+  verify the edited file AFTER the full `pnpm check`, not just
+  after a single gate.
+- **Never edit generated files** — edit the generators instead.
+  Hand-trimming generated output causes regeneration footguns.
+  When knip or depcruise flags a generated file, fix the
+  generator that produced it.
+
 ## Related Documentation
 
 - [ADR 065: Turbo Task Dependencies](../architecture/architectural-decisions/065-turbo-task-dependencies.md)

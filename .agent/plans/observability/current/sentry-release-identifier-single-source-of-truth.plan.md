@@ -7,11 +7,12 @@ overview: >
   `package.json` semver; preview = the Vercel branch URL host (e.g.
   `poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements`); dev =
   the same branch-URL shape locally if available else `dev-<shortSha>`.
-  (2) Production builds on `main` MUST be cancelled unless the commit
-  advances the root `package.json` semver — i.e. only semantic-release
-  commits trigger a production deploy. The cancellation script and unit
-  tests already exist; this plan adds ADR linkage, end-to-end verification,
-  and the cross-resolver contract test.
+  (2) Builds on `main` MUST be cancelled unless the commit advances the
+  root `package.json` semver — i.e. only semantic-release commits trigger
+  a production deploy. The cancellation script exists but is over-built
+  and missing the branch gate; WS3 rewrites it (~50 lines, canonical
+  `semver` package, asymmetric current/previous input handling) and
+  re-amends ADR-163 §10 to match.
 derived_from: feature-workstream-template.md
 foundational_adr: "docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md"
 related_plans:
@@ -20,16 +21,16 @@ related_plans:
 todos:
   - id: ws0-amend-adr-and-document-direction
     content: "WS0 (DECIDE → DOCUMENT): owner direction collapses the option space (semver for prod, branch-URL for preview, build-cancellation outside semantic-release on main). Land an ADR-163 amendment that records both rules with full truth tables BEFORE WS1 begins. Run assumptions-reviewer + sentry-reviewer + architecture-reviewer-fred against the proposed amendment."
-    status: pending
-    priority: next
+    status: completed
   - id: ws1-red
     content: "WS1 (RED): write the cross-resolver contract test (build-time and runtime return identical strings for every truth-table row) and the runtime branch-URL resolver tests. Tests MUST fail because the runtime resolver does not yet read VERCEL_BRANCH_URL and the build-time preview resolver still returns preview-<slug>-<sha>."
     status: pending
+    priority: next
   - id: ws2-green
-    content: "WS2 (GREEN): rewrite resolvePreviewRelease and resolveDevelopmentRelease to consume VERCEL_BRANCH_URL host; extend resolveSentryRelease to read the same. Delete the obsolete preview-<slug>-<sha> shape. All tests pass."
+    content: "WS2 (GREEN): rewrite resolvePreviewRelease and resolveDevelopmentRelease to consume VERCEL_BRANCH_URL host; extend resolveSentryRelease to read the same. Delete the obsolete preview-<slug>-<sha> shape. Correct isValidReleaseName denylist to mirror Sentry's documented rules verbatim (accept `latest`, reject `/`). All tests pass."
     status: pending
-  - id: ws3-cancellation-verification
-    content: "WS3 (VERIFY EXISTING): confirm vercel-ignore-production-non-release-build.mjs is wired in vercel.json, its unit tests pass, and ADR-163 names it as the enforcement mechanism. Add an integration check that asserts the wiring is intact (script exists at the resolved path, vercel.json references it)."
+  - id: ws3-cancellation-rewrite
+    content: "WS3 (REWRITE): replace vercel-ignore-production-non-release-build.mjs with a ~50-line implementation that uses the npm `semver` package and the simpler `branch === main AND semver.lte(current, previous)` rule. Add the missing `VERCEL_GIT_COMMIT_REF === main` gate. Asymmetric handling of unresolvable inputs: current undefined → cancel with stderr build-error message; previous undefined → continue (treat as first build). Rewrite unit tests against the new rule. Re-amend ADR-163 §10 to match the new (simpler) truth table and drop the fail-open trade-off framing (it evaporates with the new shape). Wiring integration check from WS1.4 covers shim → canonical resolution."
     status: pending
   - id: ws4-refactor-docs
     content: "WS4 (REFACTOR): TSDoc on every changed symbol; rewrite release resolution section in observability.md and sentry-deployment-runbook.md; update napkin if a generalisable pattern emerges."
@@ -48,13 +49,16 @@ isProject: false
 
 # Sentry Release Identifier — Single Source of Truth
 
-**Last Updated**: 2026-04-23
-**Status**: 🟡 PLANNING — queued for next session
+**Last Updated**: 2026-04-24
+**Status**: 🟢 EXECUTING — WS0 landed (ADR-163 amendment + reviewer
+dispositions); WS1 RED next.
 **Scope**: Resolve the build-time/runtime release-identifier divergence per
-owner direction (semver for prod, branch-URL for preview), and link the
-already-implemented production build-cancellation script to ADR-163 as the
-enforcement mechanism for "production builds only on semantic-release
-commits."
+owner direction (semver for prod, branch-URL for preview), AND replace the
+over-built production build-cancellation script with a ~50-line
+canonical-`semver` implementation that matches the simpler rule recorded
+in ADR-163 §10. Both correctness fixes ship under one plan because they
+share the same ADR amendment surface and the same reviewer-pre-landing
+discipline.
 
 ---
 
@@ -79,19 +83,28 @@ are settled and not re-opened by this plan:
      build time and what runtime events are tagged with.
 
 2. **Production build-cancellation rule**:
-   - A production build on `main` MUST be cancelled unless the commit
+   - A build on the `main` branch MUST be cancelled unless the commit
      advances the root `package.json` semver beyond the previously-
-     deployed version. Merge commits that carry the previous version
-     number do NOT trigger a production build; only semantic-release
-     commits (which bump the version) do.
-   - Mechanism is already implemented at
+     deployed version (per `semver.lte` from the canonical npm
+     [`semver`](https://www.npmjs.com/package/semver) package — i.e.
+     cancellation fires when current ≤ previous, covering both the
+     "no bump" case and the "downgrade / revert" case). Merge commits
+     that carry the previous version do NOT trigger a production
+     deploy; only semantic-release commits (which monotonically
+     increment per Oak's single-`main`-branch model) do.
+   - Mechanism exists at
      `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`,
      wired via `apps/oak-curriculum-mcp-streamable-http/vercel.json`'s
-     `ignoreCommand`, and unit-tested at
-     `…/vercel-ignore-production-non-release-build.unit.test.mjs`.
-   - This plan's job for this requirement is ADR linkage + end-to-end
-     verification + an integration check that asserts the wiring stays
-     intact, NOT re-implementation.
+     `ignoreCommand`. The current implementation is over-built (~205
+     lines, hand-rolled semver parser/comparator, missing the
+     `VERCEL_GIT_COMMIT_REF === 'main'` gate that §1's truth table
+     requires, conflates transient git-resolution failures with
+     deterministic repo defects under a single fail-open clause).
+   - This plan's job for this requirement is **rewrite to the simpler
+     rule** (WS3 — ~50 lines using the canonical `semver` package,
+     branch-gate added, asymmetric current/previous handling) +
+     unit-test rewrite + ADR-163 §10 re-amendment to reflect the new
+     behaviour + integration check that the wiring stays intact (WS1.4).
 
 Both requirements MUST end this plan as **true and proven** — proven by
 unit tests (cross-resolver contract; cancellation logic), an integration
@@ -145,9 +158,14 @@ being re-issued by merge-commit builds.
   upload; takes `release.name` from the build-resolved value
   (`apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts`).
 - `vercel-ignore-production-non-release-build.mjs` + tests — the production
-  cancellation mechanism, ALREADY implemented per the owner direction's
-  requirement #2.
-- `vercel.json` `ignoreCommand` — already wired to the script.
+  cancellation mechanism. Wiring is correct; the script's logic and unit
+  tests are scheduled for replacement in WS3 against the simpler
+  `branch === main AND semver.lte(current, previous)` rule.
+- `vercel.json` `ignoreCommand` — already wired to the script (path
+  unchanged by the WS3 rewrite).
+- `semver` (npm) — canonical semver comparator. NOT yet a workspace
+  dependency; WS3 adds it to
+  `packages/core/build-metadata/package.json`.
 - ADR-163 — the prescriptive contract this plan amends.
 
 ---
@@ -214,20 +232,40 @@ Notes:
 
 ### Production build cancellation (owner direction #2)
 
-Already implemented; mirrored here so the plan body is the single place
-both rules live during execution.
+Mirrored here so the plan body is the single place both rules live
+during execution. WS3 lands the rewrite that matches this table; the
+existing 5-row table in ADR-163 §10 (with its fail-open last row) is
+re-amended in WS3 to mirror this one.
 
-| `VERCEL_ENV`  | `VERCEL_GIT_PREVIOUS_SHA` | Current vs previous root `package.json` version | Outcome           |
-| ------------- | ------------------------- | ----------------------------------------------- | ----------------- |
-| not `production` | (any)                  | (any)                                           | Continue build    |
-| `production`  | unset                     | (any)                                           | Continue build (first deploy) |
-| `production`  | set, resolvable           | current ≤ previous                              | **CANCEL build**  |
-| `production`  | set, resolvable           | current > previous                              | Continue build    |
-| `production`  | set, unresolvable         | (cannot compare)                                | Continue build (with stderr warning) |
+The rule, in full: **`branch === 'main' AND current ≤ previous` →
+cancel; otherwise continue**, with two asymmetric input-resolution
+cases. `current` and `previous` are root `package.json` `version`
+strings, compared by `semver.lte` from the canonical npm `semver`
+package.
 
-The "current ≤ previous" row is the critical one: a merge commit on
-`main` carries the previous semver, so the production build is cancelled.
-Only semantic-release commits (which bump the version) get through.
+| Branch (`VERCEL_GIT_COMMIT_REF`) | Current version (root `package.json`) | Previous version (`VERCEL_GIT_PREVIOUS_SHA:package.json`) | Outcome           | Reason                                                                                |
+| -------------------------------- | ------------------------------------- | --------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------- |
+| not `main`                       | (not read)                            | (not read)                                                | Continue build    | Branch gate; per §1 only `main` triggers a production identifier.                     |
+| `main`                           | resolvable                            | unresolvable / unset                                      | Continue build    | First build OR previous SHA absent / git-unreachable; treated as "no previous to beat". |
+| `main`                           | resolvable                            | resolvable, current ≤ previous                            | **CANCEL build**  | Version did not increment; this is a merge / hot-fix-on-main / accidental downgrade.  |
+| `main`                           | resolvable                            | resolvable, current > previous                            | Continue build    | Semantic-release commit advanced the version; the production identifier is fresh.     |
+| `main`                           | unresolvable                          | (not read)                                                | **CANCEL with stderr** | Build error: the current app version cannot be determined from root `package.json`. Diagnostic message printed; non-recoverable. |
+
+Asymmetry rationale (WS3 captures it in TSDoc + the ADR re-amendment):
+
+- An unresolvable **current** version is a deterministic repo defect
+  (missing/malformed `package.json`); it cannot be "first build"
+  noise. Cancel hard with a diagnostic so the failure surfaces at
+  build time, not at Sentry-ingest time.
+- An unresolvable **previous** version is dominated by transient
+  causes (first deploy, shallow clone, `VERCEL_GIT_PREVIOUS_SHA`
+  unset, fetch failure). Treat as "no previous to beat" and continue;
+  the next build with a resolvable previous will re-gate.
+- The fail-open clause documented in ADR-163 §10's first amendment
+  (the "set, unresolvable / continue with stderr warning" row) is
+  superseded by this asymmetry — git-resolution failure of `previous`
+  collapses into the second row above; there is no separate "warn and
+  continue" outcome.
 
 ---
 
@@ -434,7 +472,43 @@ pnpm --filter @oaknational/sentry-node test
 # Cross-resolver contract test must pass; resolvers return identical strings.
 ```
 
-### 2.5 Plugin wiring sanity
+### 2.5 Sentry release-name validator alignment
+
+`packages/core/build-metadata/src/build-time-release-internals.ts`
+currently exports `SENTRY_RELEASE_NAME_PATTERN` and `isValidReleaseName`
+which diverge from Sentry's documented release-name rules in two
+ways:
+
+- The regex permits `/` (forward slash), which Sentry forbids.
+- `isValidReleaseName` rejects the literal `latest`, which Sentry
+  permits (Sentry only forbids `latest` in API path positions, not
+  as a release name).
+
+Replace both with a strict denylist that mirrors
+[Sentry's release-naming rules](https://docs.sentry.io/product/releases/usage/sorting-filtering/)
+verbatim:
+
+```typescript
+export function isValidReleaseName(value: string): boolean {
+  if (value.length === 0 || value.length > 200) return false;
+  if (value === '.' || value === '..') return false;
+  if (/[\n\t\r/\\]/u.test(value)) return false;
+  if (/\s/u.test(value)) return false; // Sentry rejects whitespace
+  return true;
+}
+```
+
+Update tests in
+`packages/core/build-metadata/tests/build-time-release.unit.test.ts`
+to assert the corrected behaviour: `latest` accepted; `a/b` rejected;
+exactly the documented denylist enforced. Drop the `SENTRY_RELEASE_NAME_PATTERN`
+regex export if no other consumer remains (the function is the
+canonical predicate). This is a small but real correctness fix that
+belongs with WS2's resolver rewrite because both the build-time and
+runtime resolvers consume `isValidReleaseName` for branch-URL host
+validation.
+
+### 2.6 Plugin wiring sanity
 
 `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-build-plugin.ts`
 already feeds `release.name` from the build-time resolver output. Confirm
@@ -444,24 +518,149 @@ hard-coded assumptions about the `preview-` prefix, remove them.
 
 ---
 
-## WS3 — Cancellation: ADR linkage and verification
+## WS3 — Cancellation: rewrite to the simpler rule
 
-The script + unit tests already exist; this workstream adds the missing
-non-code linkage and the integration-level wiring proof.
+The current script (~205 lines) hand-rolls semver parsing/comparison,
+omits the `VERCEL_GIT_COMMIT_REF === 'main'` gate that §1's truth table
+requires, and treats every git-resolution failure under a single
+fail-open clause. WS3 replaces it with the canonical-rule version
+(~50 lines using the npm `semver` package), rewrites unit tests
+against the simpler rule, and re-amends ADR-163 §10 to mirror the new
+truth table.
 
-### 3.1 ADR linkage
+### 3.1 Add `semver` as a workspace dependency
 
-Confirmed via WS0.1 amendment §10. Cross-checked here: the amendment
-must name the script by path AND link to its unit-test file by path. No
-ambiguity about which file is the canonical mechanism.
+`semver` is not yet a workspace dependency. Add it to
+`packages/core/build-metadata/package.json` (runtime — the script
+imports it). Use the latest stable major; lockfile updated by
+`pnpm install`. The shim at the app workspace
+(`apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore.mjs`)
+re-exports the canonical script — no second install needed.
 
-### 3.2 Integration check
+### 3.2 Script rewrite (RED → GREEN within WS3)
 
-The wiring integration test from §1.4 lands as part of WS1 RED, passes
-in WS2 GREEN (because it validates already-correct wiring); confirmed
-green here.
+**File**:
+`packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`
 
-### 3.3 End-to-end proof on next production deploy
+Replace the implementation with the rule from §Truth Tables /
+Production build cancellation:
+
+```javascript
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import semver from 'semver';
+
+function trimToUndefined(value) { /* … */ }
+
+function safeReadCurrentVersion(readFile, packageJsonPath) {
+  try {
+    const parsed = JSON.parse(readFile(packageJsonPath, 'utf8'));
+    const version = trimToUndefined(parsed.version);
+    return version && semver.valid(version) ? version : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function safeReadPreviousVersion(executeGitCommand, repositoryRoot, previousSha) {
+  if (!previousSha) return undefined;
+  try {
+    let text;
+    try {
+      text = executeGitCommand(['show', `${previousSha}:package.json`], repositoryRoot);
+    } catch {
+      executeGitCommand(['fetch', '--depth=1', 'origin', previousSha], repositoryRoot);
+      text = executeGitCommand(['show', `${previousSha}:package.json`], repositoryRoot);
+    }
+    const parsed = JSON.parse(text);
+    const previousVersion = trimToUndefined(parsed.version);
+    return previousVersion && semver.valid(previousVersion) ? previousVersion : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+export function runVercelIgnoreCommand({ env, repositoryRoot, executeGitCommand, readFile, stdout, stderr }) {
+  if (env.VERCEL_GIT_COMMIT_REF !== 'main') {
+    stdout.write(`Branch is "${env.VERCEL_GIT_COMMIT_REF}", not main; build will continue.\n`);
+    return { exitCode: 1 };
+  }
+  const current = safeReadCurrentVersion(readFile, path.resolve(repositoryRoot, 'package.json'));
+  if (!current) {
+    stderr.write('The current app version could not be determined from the root package.json file. This is a build error; cancelling.\n');
+    return { exitCode: 0 };
+  }
+  const previous = safeReadPreviousVersion(executeGitCommand, repositoryRoot, env.VERCEL_GIT_PREVIOUS_SHA);
+  if (previous && semver.lte(current, previous)) {
+    stdout.write(`Cancelling: root package.json version ${current} did not increment beyond previous build version ${previous} (${env.VERCEL_GIT_PREVIOUS_SHA}).\n`);
+    return { exitCode: 0 };
+  }
+  stdout.write(`Continuing: current=${current}, previous=${previous ?? 'unknown (treating as first build)'}.\n`);
+  return { exitCode: 1 };
+}
+```
+
+Constraints inherited from the existing script — keep them in the
+rewrite:
+
+- `runVercelIgnoreCommand` stays the named export (the wiring
+  integration test from §1.4 imports it by name).
+- The default-export CLI shim (whatever invokes
+  `runVercelIgnoreCommand` and writes the exit code) stays in place
+  so `vercel.json`'s `ignoreCommand` keeps working without changing
+  the path.
+- Vercel `ignoreCommand` semantics are unchanged: exit `0` cancels,
+  exit `1` continues.
+
+### 3.3 Unit-test rewrite
+
+**File**:
+`packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs`
+
+Replace the existing test cases with one test per row of the §Truth
+Tables / Production build cancellation table (5 rows). Each test
+injects `env`, `executeGitCommand` (stubbed), `readFile` (stubbed),
+captured `stdout` / `stderr` streams, and asserts:
+
+1. Returned `exitCode`.
+2. The expected substring in `stdout` (continue rows) or `stderr`
+   (the unresolvable-current row).
+3. For the `branch !== 'main'` row: that `readFile` and
+   `executeGitCommand` were NEVER called (branch gate short-circuits
+   before any I/O).
+4. For the `previous unresolvable` row: that the fetch-fallback path
+   is exercised AND its failure is swallowed silently (no `stderr`).
+
+Delete the old fail-open-trade-off test cases; they describe a rule
+that no longer exists.
+
+### 3.4 Re-amend ADR-163 §10
+
+Land a second amendment block in
+`docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md`
+§10 that:
+
+1. Replaces the 5-row truth table from the first amendment with the
+   one in §Truth Tables / Production build cancellation above.
+2. Drops the "Intentionally fail-open" paragraph entirely; the
+   asymmetry rationale (current → fail-hard; previous → continue)
+   replaces it.
+3. Notes that the rule is enforced via the `semver` npm package
+   rather than hand-rolled comparison; names the canonical
+   comparator (`semver.lte`).
+4. Records the date and links to this plan's WS3 commit by hash
+   once landed.
+5. Updates the History entry accordingly.
+
+### 3.5 Wiring integration check
+
+The wiring integration test from §1.4 lands in WS1 RED and stays
+green through WS3 (the rewrite preserves the export name and file
+path). If WS3 changes either, the test fails and the change is not
+acceptable without re-evaluating the wiring contract.
+
+### 3.6 End-to-end proof on next production deploy
 
 Document the steps for the next semantic-release-driven production
 deploy (whoever runs it executes them):
@@ -582,6 +781,8 @@ rejections recorded with rationale per principles §Reviewer findings.
 | Branch URLs exceed Sentry's 200-char release-name limit on long branch names.                          | Reuse the existing `SENTRY_RELEASE_NAME_PATTERN` validation in both resolvers; fail-fast if exceeded so the diagnostic surfaces at build time, not at Sentry-ingest time.               |
 | Forking a branch (or copy-paste branches across forks) produces colliding branch-URL hosts in Sentry.  | Vercel branch URLs are per-project; collision requires same project + same branch name, which is the same logical release line. Document and accept; do not overengineer for this case. |
 | Production cancellation script regresses (file move / rename / vercel.json drift).                     | WS1.4 wiring integration test fails on any structural drift. ADR-163 amendment names the canonical path.                                                                                 |
+| WS3 rewrite changes script behaviour silently (unit-test gaps let a buggy semver comparison ship).     | One unit test per row of the §Truth Tables / Production build cancellation table; tests assert exit code AND stream output AND (for the branch-gate row) that no I/O occurred. `semver.lte` is the canonical comparator — the rewrite delegates correctness to a well-tested external package rather than re-deriving it. |
+| Adding `semver` as a workspace dependency drags in deep transitive risk.                               | `semver` is a tiny, single-purpose package maintained by the Node.js team; it is already in many transitive dep chains. Verify with `pnpm why semver` post-install; if the resolved version aligns with an existing transitive copy, deduplication is automatic.                                                |
 | Renaming/deletion of obsolete resolver branches breaks downstream consumers we have not enumerated.    | Run the full quality-gate chain (WS5) including build, type-check, lint, knip, dependency-cruiser, and tests across all workspaces.                                                      |
 | End-to-end Sentry verification (WS6) cannot be run because no fresh preview deploy has shipped post-fix. | Trigger a preview deploy explicitly (push a no-op commit on the working branch) before invoking release-readiness-reviewer; verification requires real Sentry data, not local rehearsal. |
 | Owner-direction recording happens in this plan body but not in ADR-163 promptly enough.                | WS0 lands the ADR amendment as its first artefact, in a single commit, before WS1 starts. No code changes precede the amendment.                                                         |
@@ -626,7 +827,10 @@ rejections recorded with rationale per principles §Reviewer findings.
 
 | Surface                                                                              | Update                                                                                          |
 | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
-| `docs/architecture/architectural-decisions/163-…release-identifier….md`              | Amendment block recording both owner-direction rules + truth tables + process-gap finding.      |
+| `docs/architecture/architectural-decisions/163-…release-identifier….md`              | First amendment (WS0 — landed): per-environment release identifier truth table + initial §10 cancellation rule + reviewer dispositions. Second amendment (WS3): §10 re-amendment matching the simplified rule + asymmetric input-resolution rationale + canonical-`semver` reference. |
+| `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs` | Rewrite (~205 → ~50 lines) using `semver.lte`; branch gate added; asymmetric current/previous handling. Wire-format unchanged. |
+| `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs` | Test cases rewritten one-per-truth-table-row (5 rows). Old fail-open-trade-off cases deleted.   |
+| `packages/core/build-metadata/package.json`                                          | Add `semver` runtime dependency.                                                                |
 | `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`                      | Release resolution section rewritten against amended ADR; both truth tables included.           |
 | `docs/operations/sentry-deployment-runbook.md`                                       | Example identifiers updated; cancellation rule explicit.                                        |
 | `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`          | Note that `VERCEL_BRANCH_URL` is consumed by the Sentry release resolver.                       |

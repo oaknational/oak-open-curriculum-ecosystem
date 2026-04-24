@@ -149,7 +149,7 @@ const runtimeConfig = loadRuntimeConfig(testEnv);
 const app = createApp({ runtimeConfig });
 ```
 
-**Exception**: Subprocess-spawned tests (smoke tests) may pass environment variables via spawn options because the child process has its own isolated environment.
+**Exception**: Subprocess-spawned tests (smoke tests) may pass environment variables via spawn options because the child process has its own isolated environment. **This is the only exception.** Any other claimed exception is a violation, not an accepted trade-off — untracked exceptions undermine the gate for all future code.
 
 ## Acceptance Criteria for Compliance
 

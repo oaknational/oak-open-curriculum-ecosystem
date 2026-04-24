@@ -163,6 +163,13 @@ the current understanding.
 - Keep pushed checkpoint state and local worktree state explicitly
   separate in plans/prompts/checkpoints.
 
+## Environment Configuration
+
+- `.env.local` files MUST mirror the structure of
+  `.env.example` (same section headers, same ordering, same
+  documentation comments). Drift between the two is a
+  documentation defect.
+
 ## Terminology
 
 - "Build time" is ambiguous — both codegen-time and runtime have

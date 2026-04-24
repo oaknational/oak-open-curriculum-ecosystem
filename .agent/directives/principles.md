@@ -281,8 +281,11 @@ paths, setup files) don't apply.
   construction, fixtures, or test infrastructure — never exempt the
   test from the gate. The purpose of hardening is strictness; any
   exemption undermines the gate for all future code.
-- **WE DON'T HEDGE** - It is worth doing or it doesn't exist. we don't
-create plan stubs, or fallbacks, or invent optionality or prefix unused variables with an underscore. We fix it, or we delete it, or we never create it in the first place.
+- **WE DON'T HEDGE** - It is worth doing or it doesn't exist.
+  We don't create plan stubs, or fallbacks, or invent
+  optionality or prefix unused variables with an underscore.
+  We fix it, or we delete it, or we never create it in the
+  first place.
 - **Quality gates** - Run ALL gates after changes. The gate
   taxonomy has complementary layers, each catching a different
   class of defect:

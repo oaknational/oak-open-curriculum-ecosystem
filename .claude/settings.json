@@ -38,14 +38,6 @@
       "Skill(jc-chatgpt-report-normalisation:*)",
       "Skill(patterns)",
       "Skill(patterns:*)",
-      "mcp__claude_ai_Oak_National_Academy__get-curriculum-model",
-      "mcp__claude_ai_Oak_National_Academy__get-threads-units",
-      "mcp__claude_ai_Oak_National_Academy__get-sequences-units",
-      "mcp__claude_ai_Oak_National_Academy__get-lessons-transcript",
-      "mcp__claude_ai_Oak_National_Academy__search",
-      "mcp__claude_ai_Oak_National_Academy__get-lessons-summary",
-      "mcp__oak-preview__get-subjects-sequences",
-      "mcp__oak-preview__get-sequences-units",
       "Edit(/.claude/skills/clerk/**)",
       "Edit(/.claude/skills/clerk-custom-ui/**)",
       "Edit(/.claude/skills/clerk-nextjs-patterns/**)",
@@ -63,15 +55,11 @@
       "Bash(git clone:*)",
       "WebFetch(domain:docs.sentry.io)",
       "WebFetch(domain:github.com)",
-      "mcp__sentry-ooc-mcp__whoami",
-      "mcp__sentry-ooc-mcp__find_releases",
       "WebFetch(domain:support.claude.com)",
       "WebFetch(domain:developers.openai.com)",
       "WebFetch(domain:sentry.io)",
       "Bash(echo \"Exit: $?\")",
       "Bash(echo \"type-check exit: $?\")",
-      "mcp__sentry-ooc-mcp__search_docs",
-      "mcp__sentry-ooc-mcp__get_doc",
       "Bash(chmod +x /Users/jim/code/oak/oak-open-curriculum-ecosystem/apps/oak-curriculum-mcp-streamable-http/scripts/start-server.sh)",
       "WebFetch(domain:open-api.thenational.academy)",
       "WebFetch(domain:educationendowmentfoundation.org.uk)",
@@ -115,12 +103,11 @@
     ]
   },
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": false,
-    "code-simplifier@claude-plugins-official": false,
-    "claude-md-management@claude-plugins-official": false,
-    "skill-creator@claude-plugins-official": false,
-    "claude-code-setup@claude-plugins-official": false,
     "mcp-apps@mcp-apps": true,
-    "linear@claude-plugins-official": true
+    "linear@claude-plugins-official": true,
+    "sentry@claude-plugins-official": true,
+    "remember@claude-plugins-official": true,
+    "mcp-server-dev@claude-plugins-official": true,
+    "sonarqube@claude-plugins-official": true
   }
 }

@@ -51,6 +51,7 @@ block in the ADR index:
   repo-root tooling or fixtures require them.
 - Intra‑package relative imports are allowed; avoid private/internal subpaths.
 - Dependencies flow: `core` has no monorepo dependencies outside `core` (intra-core dependencies are permitted, and external dependencies must remain minimal and provider-neutral); foundation `libs` depend on `core`, with `search-contracts` as the documented exception that may consume approved `@oaknational/sdk-codegen` subpath exports; adapter `libs` may depend on foundation `libs` plus `core`; `sdks` depend on `core`/`libs` and approved generated SDK surfaces (for example runtime/search consume `@oaknational/sdk-codegen` exports per ADR-108, not direct `oak-search-sdk` → `curriculum-sdk` imports); `apps` depend on `sdks`/`libs`/`core`.
+- **Core package decomposition principle**: when splitting a core package that has acquired runtime dependencies, schemas and type-level code stay in `core`; the runtime pipeline moves to `libs`. This preserves core's provider-neutral, minimal-dependency constraint.
 
 ### Implementation Guides
 

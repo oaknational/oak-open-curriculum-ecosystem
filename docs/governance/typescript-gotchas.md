@@ -62,6 +62,32 @@ type safety.
   binary search against `sort()`-ordered data, use
   `===`/`<`/`>`
 
+## ESLint Import Merging
+
+- `lint:fix` can merge value+type imports from the same
+  source module into a single `import type` statement,
+  making value symbols unavailable at runtime. Use inline
+  `type` keyword on individual specifiers:
+  `import { applyTheme, type McpUiHostContext } from '...'`
+
+## ESLint Suppressions
+
+- **Self-justifying `eslint-disable` comments embed false
+  assumptions.** "Unavoidable: bridging incompatible types"
+  rationalises the violation. Ask: WHY are the types
+  incompatible? The rationalisation often masks a fixable
+  type-flow break upstream.
+
+## Type Assertions in Tests
+
+- **`@ts-expect-error` in a test means the test is testing
+  what types already enforce.** If a test needs
+  `@ts-expect-error` to compile, the type system is already
+  asserting the constraint; the test is redundant. Delete
+  the test, don't suppress the types. (PDR-020 covers the
+  RED-phase counterpart: never suppress to hide a RED-phase
+  type-check failure.)
+
 ## Test Double Typing
 
 - `vi.fn()` (bare, no generics) is assignable to any
