@@ -38,6 +38,17 @@ Before engaging with the work, scan the active-memory capture surfaces:
   at session open. Extract any cross-session insight into `napkin.md` or
   `distilled.md` per the standard graduation flow — do not mutate the
   buffers directly.
+- Your own platform's per-user memory and session logs. Scan the
+  surface for the platform you are running on:
+  - Claude Code: `~/.claude/projects/<project>/memory/`
+  - Cursor: `~/.cursor/chats/`, `~/.cursor/prompt_history.json`
+  - Codex: `~/.codex/memories/`, `~/.codex/history.jsonl`
+
+  Read only the surface that matches your current platform at
+  session open. Cross-platform ingestion (reading another
+  platform's surface for insight) is a consolidation-time
+  activity, not a session-open one — see `consolidate-docs`
+  step 3.
 
 ## Guiding Questions
 

@@ -97,12 +97,25 @@ held over).
    - **Plan surfaces**: active and recently completed plans (per step
      1 above) — surface any content that describes how things work
      rather than what to do next.
-   - **Platform-specific memory**: Claude Code auto-memory
-     (`~/.claude/projects/<project>/memory/`), and any
-     platform-equivalent session logs. These are platform-specific
-     napkin analogues — insights captured there should flow into the
-     canonical napkin or distilled.md if they have cross-platform
-     value, or directly to permanent homes if stable.
+   - **Platform-specific per-user memory**: session logs and
+     curated memory outside the repo, one location per platform
+     per user. Named instances:
+     - Claude Code: `~/.claude/projects/<project>/memory/`
+       (curated auto-memory; `MEMORY.md` + per-entry files)
+     - Cursor: `~/.cursor/chats/` (per-session transcripts),
+       `~/.cursor/prompt_history.json` (accumulated prompts)
+     - Codex: `~/.codex/memories/` (curated memory files),
+       `~/.codex/history.jsonl` (rolling session history),
+       `~/.codex/archived_sessions/` (older session archives)
+
+     These are platform-specific napkin analogues. Agents
+     running on each platform should scan their own platform's
+     surface; at consolidation, insights with cross-platform
+     value flow into the canonical napkin or `distilled.md`, or
+     directly to permanent homes if stable. Do not assume one
+     platform's memory is readable to another platform's agent
+     at session open — cross-platform ingestion is a
+     consolidation-time activity, not a session-open activity.
    - **Platform-specific entry points**: `CLAUDE.md`, `AGENTS.md`,
      `GEMINI.md`, and analogous host adapters. Session-handoff
      should already have caught these; re-sweep at thread-scoped
