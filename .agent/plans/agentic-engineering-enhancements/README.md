@@ -55,7 +55,9 @@ Plans and research for hardening the agentic engineering practice through physic
 | `future/repair-workflow-wording-hazard-detection.plan.md` | Plan (Future) | Detect ambiguous wording and missing output contracts in multi-artefact repair workflows before they trigger rewrite or promotion drift |
 | `current/reviewer-gateway-upgrade.plan.md` | Plan | Upgrade code-reviewer gateway to a full Reviewer Gateway with layered triage, depth selection, and coverage tracking |
 | `current/learning-loop-negative-feedback-tightening.plan.md` | Plan | Tight incremental tranche: install live executive-memory drift detection and make consolidation-time memory-quality review explicit and auditable |
+| `current/agent-entrypoint-content-homing.plan.md` | Plan | Queued lossless homing of non-entrypoint `AGENT.md` content into durable homes while preserving discovery parity |
 | `current/practice-graph-payoff-peak-pilot.plan.md` | Plan | Queued executable pilot for the highest-value derived Practice graph slice: bounded TypeScript/esbuild workspace cluster, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces |
+| `current/knowledge-role-documentation-restructure.plan.md` | Plan | Queued repo documentation restructure around PDR-014 knowledge artefact roles: doctrine, recipe books, troubleshooting, patterns, rules, gates, decision records, and operational state |
 | `archive/completed/agent-collaboration-incoming-practice-context-integration.plan.md` | Plan (Completed) | Completed rollout for incoming `agent-collaboration` Practice Context integration, local doctrine capture, workspace-task honesty repair, and targeted write-back |
 | `future/adapter-generation.plan.md` | Plan (Future) | Manifest-driven platform adapter generation — replace 100+ manual wrapper files with a single manifest + build script |
 | `future/agent-classification-taxonomy.plan.md` | Plan (Future) | Comprehensive agent reclassification, rename, and mode composition (ADR-135) |
@@ -76,11 +78,12 @@ Plans and research for hardening the agentic engineering practice through physic
    mutation testing -> continuity/surprise adoption (archived reference) ->
    operational-awareness surface separation -> governance-concept integration
    -> Reviewer Gateway -> learning-loop negative-feedback tightening ->
-   Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade ->
-   Practice/process structural improvements -> Planning -> Express ->
-   security/privacy cluster (cyber security -> web/API security -> privacy ->
-   web/API GDPR) -> OOCE -> Graph memory exploration -> TDD -> DevX ->
-   Repair Workflow Wording Hazard Detection -> Agent infrastructure
+   AGENT entrypoint content homing -> Knowledge-role documentation
+   restructure -> Elasticsearch specialist -> Clerk specialist -> Sentry ->
+   MCP upgrade -> Practice/process structural improvements -> Planning ->
+   Express -> security/privacy cluster (cyber security -> web/API security ->
+   privacy -> web/API GDPR) -> OOCE -> Graph memory exploration -> TDD ->
+   DevX -> Repair Workflow Wording Hazard Detection -> Agent infrastructure
    portability remediation -> Adapter Generation -> Agent Classification
    Taxonomy
 6. **Research as evidence base**: augmented safety -> augmented practices ->

@@ -93,6 +93,25 @@ The `use_this_when` field is the primary discovery mechanism. It describes the m
 
 **Rules** (in [`principles.md`](../../directives/principles.md)) are principles: "never use type-erasing `as`". **Patterns** are "how to implement the principle": replace the `as` cast with a const map lookup. Rules say what; patterns say how.
 
+## Empirical-to-Normative Flow
+
+Patterns are observations from real practice before they are
+prescriptions. A pattern records that a behaviour shape or solution
+move has appeared often enough, and concretely enough, to name.
+
+Knowledge can then move in either direction:
+
+- doctrine, rules, and principles can shed examples into recipe books;
+- recipe books can reveal repeated moves that become patterns;
+- mature patterns can feed recipe books, rules, principles, scanners,
+  quality gates, ADRs, PDRs, or PDR amendments;
+- enforcement failures and owner corrections feed back into capture as
+  new evidence.
+
+PDR-014 owns the routing discipline for these moves. The pattern file
+is not necessarily the final home; it is often the empirical proof
+surface that makes later governance or enforcement honest.
+
 ## How Patterns Differ from Source Code
 
 **Source code** is concrete: a specific const map for specific HTTP status codes. **Patterns** are abstract: the principle of using const maps to replace runtime conversions that mirror compile-time type transformations. Patterns describe the shape of the solution, not the domain-specific implementation.

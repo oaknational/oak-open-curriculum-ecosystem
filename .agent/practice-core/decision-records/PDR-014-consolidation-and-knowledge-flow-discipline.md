@@ -121,6 +121,52 @@ Multiple homes may be appropriate; composition is preferred to
 forcing a single home when a candidate has both empirical and
 governance dimensions.
 
+### Bidirectional flow
+
+Knowledge does not move only from doctrine into examples. It loops.
+
+- Doctrine, rules, and principles may shed examples into recipe books
+  when examples are useful but no longer belong in the authoritative
+  surface.
+- Recipe books can reveal repeated moves. Once those moves are proven,
+  stable, and recurrence-preventing, they may graduate into patterns.
+- Patterns are empirical before they are normative: they record
+  behaviour observed in real practice. Once a pattern becomes
+  load-bearing, it may feed recipes, rules, principles, scanners,
+  quality gates, ADRs, PDRs, or PDR amendments.
+- Enforcement surfaces feed back into practice. Failures, owner
+  corrections, and surprising successes re-enter napkin/distilled as
+  new evidence.
+
+The routing decision below chooses the next durable home for a
+candidate; it does not freeze the candidate's future. Mature content
+may travel again when its shape changes.
+
+### Knowledge artefact roles
+
+These roles define the process foundation for the learning loop. They
+are content roles, not necessarily file names; one file may hold more
+than one role during transition, but settled permanent homes should
+make the primary role explicit.
+
+| Role | Purpose | Typical home |
+|---|---|---|
+| `doctrine` | Authoritative why/what: principles, obligations, and a few canonical examples | `.agent/directives/`, `docs/governance/` |
+| `recipe book` | Concrete how-to: worked examples, common implementations, migration moves | `docs/engineering/*-patterns.md`, focused recipe docs |
+| `troubleshooting` | Symptom-first diagnosis: recognise failure, isolate cause, link to durable fixes | `docs/operations/troubleshooting.md`, runbooks |
+| `pattern` | Empirical behaviour or solution shape proven by recurring practice | `.agent/memory/active/patterns/`, `.agent/practice-core/patterns/` |
+| `rule` | Always-applied obligation that must fire at a decision point | `.agent/rules/`, platform rule adapters |
+| `command rubric` | Workflow step that operationalises doctrine at a named command boundary | `.agent/commands/` |
+| `scanner or gate` | Executable enforcement for high-confidence obligations | scripts, hooks, CI, quality gates |
+| `decision record` | Durable decision, trade-off, and consequence history | ADRs for repo architecture; PDRs for Practice governance |
+| `operational state` | Current live state and next action, not settled doctrine | `.agent/memory/operational/` |
+
+When consolidating, first identify the candidate's current role, then
+ask whether that role is still correct. Over-exampled doctrine may
+shed recipes; repeated recipes may reveal patterns; mature patterns may
+produce rules or scanners; troubleshooting entries may become links
+once the durable recipe or runbook exists.
+
 ### Surfaces and what each holds
 
 | Surface | Holds |
@@ -356,3 +402,27 @@ PDR-012 amendment for the most-overdue Due-band item).
 
 **Reviewer**. `docs-adr-reviewer` close-pass at Session 6 close
 per plan §Reviewer discipline.
+
+### 2026-04-24 — Bidirectional knowledge-flow clarification
+
+**Driver**. Owner direction during directive/fitness-pressure review:
+patterns are observations from real practice before they are ideals,
+and the Practice has repeatedly refined multiple knowledge flows.
+The existing ladder and routing sections named bottom-up graduation
+and composition, but did not make the bidirectional loop vivid enough
+for agents working with doctrine, recipe books, and patterns.
+
+**Changes**.
+
+1. Added §Bidirectional flow to clarify that doctrine can shed
+   examples into recipe books, recipes can reveal patterns, patterns
+   can feed recipes and governance/enforcement surfaces, and
+   enforcement failures feed back into capture.
+2. Added §Knowledge artefact roles to define doctrine, recipe books,
+   troubleshooting, patterns, rules, command rubrics, scanners/gates,
+   decision records, and operational state as learning-loop roles.
+3. Clarified that routing chooses the next durable home, not the
+   candidate's final possible home.
+
+**Scope**. Clarification only. No new graduation target, barrier, or
+quality gate.

@@ -114,6 +114,9 @@ A specific mistake becomes a reusable pattern; a repeated correction
 becomes a rule; a structural decision becomes an ADR. Each stage serves
 a broader audience and demands a stricter bar — the progression from
 capture to graduation is the progression from instance to concept.
+PDR-014 defines the content roles in this loop: doctrine, recipe books,
+troubleshooting, patterns, rules, command rubrics, scanners/gates,
+decision records, and operational state.
 
 ### The Cycle
 

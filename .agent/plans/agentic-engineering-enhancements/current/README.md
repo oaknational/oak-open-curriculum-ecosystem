@@ -23,7 +23,9 @@ plans when scheduled.
 | [practice-and-process-structural-improvements.plan.md](practice-and-process-structural-improvements.plan.md) | Adjacent: structural Practice/process gap closure that feeds Planning discipline into the Planning expert plan and creates permanent homes for collaboration and portability doctrine | QUEUED |
 | [agent-infrastructure-portability-remediation.plan.md](agent-infrastructure-portability-remediation.plan.md) | Adjacent: portability remediation for the expanding expert/skill/rule collection; Phase 5 is the documentation dependency for portability PDR/ADR work | QUEUED |
 | [learning-loop-negative-feedback-tightening.plan.md](learning-loop-negative-feedback-tightening.plan.md) | Adjacent: narrow balancing-loop tightening for executive-memory drift detection and consolidation-time memory-quality dispositions | QUEUED |
+| [agent-entrypoint-content-homing.plan.md](agent-entrypoint-content-homing.plan.md) | Adjacent: lossless homing of non-entrypoint AGENT.md content into durable homes while preserving discovery parity | QUEUED |
 | [practice-graph-payoff-peak-pilot.plan.md](practice-graph-payoff-peak-pilot.plan.md) | Adjacent: payoff-peak pilot for a derived Practice graph with bounded workspaces, explicit-edge extraction, local graph/report outputs, and CLI build/query/path surfaces | QUEUED |
+| [knowledge-role-documentation-restructure.plan.md](knowledge-role-documentation-restructure.plan.md) | Adjacent: restructure testing, TypeScript, development, and troubleshooting docs around PDR-014 knowledge artefact roles | QUEUED |
 
 Strategic context: [roadmap.md](../roadmap.md)
 Archived context: [../archive/completed/](../archive/completed/)

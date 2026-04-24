@@ -3,7 +3,7 @@ fitness_line_target: 410
 fitness_line_limit: 550
 fitness_char_limit: 33000
 fitness_line_length: 100
-split_strategy: "Extract examples to a companion examples file; split by test level (unit/integration/E2E) if needed"
+split_strategy: "Move recipes to docs/engineering/testing-patterns.md; split by test level if needed"
 ---
 
 # Testing and Development Strategy

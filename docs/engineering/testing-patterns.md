@@ -1,8 +1,20 @@
+---
+fitness_line_target: 140
+fitness_line_limit: 200
+fitness_char_limit: 12000
+fitness_line_length: 100
+split_strategy: 'Split specialised domains into focused pattern files if this grows.'
+---
+
 # Testing Patterns
 
 Reusable testing recipes referenced by the
 [testing strategy](../../.agent/directives/testing-strategy.md) and
 [ADR-078](../architecture/architectural-decisions/078-dependency-injection-for-testability.md).
+
+`.agent/directives/testing-strategy.md` is the authoritative doctrine.
+This file is a governed recipe companion; patterns here must conform to the
+directive and to the immediate-fail rules.
 
 ---
 
@@ -24,7 +36,7 @@ import request from 'supertest';
 const testEnv: NodeJS.ProcessEnv = {
   NODE_ENV: 'test',
   DANGEROUSLY_DISABLE_AUTH: 'true',
-  OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-api-key',
+  OAK_API_KEY: 'test-api-key',
   CLERK_PUBLISHABLE_KEY: 'pk_test_...',
   CLERK_SECRET_KEY: 'sk_test_dummy',
   ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
@@ -43,10 +55,8 @@ expect(response.status).toBe(200);
 
 ### Key Rules
 
-- **Reading** `process.env.OAK_API_KEY` (to inherit a real key when
-  available) is acceptable — it is a read, not a mutation.
-- **Writing** `process.env.X = 'value'` or
-  `delete process.env.X` is forbidden in all tests.
+- Do not read or write `process.env` in tests. Build literal env
+  objects and pass them explicitly through configuration loaders.
 - For tests needing multiple configurations (e.g. auth enabled
   vs disabled), create **separate env objects** for each case.
 - Functions like `enableAuthBypass()` that mutate `process.env`
@@ -113,5 +123,8 @@ on spread-derived objects.
 
 ### Related
 
-- [ADR-078: Dependency Injection for Testability](../architecture/architectural-decisions/078-dependency-injection-for-testability.md)
-- [Testing Strategy](../../.agent/directives/testing-strategy.md)
+- [ADR-078 dependency injection decision][adr-078]
+- [Testing strategy directive][testing-strategy]
+
+[adr-078]: ../architecture/architectural-decisions/078-dependency-injection-for-testability.md
+[testing-strategy]: ../../.agent/directives/testing-strategy.md

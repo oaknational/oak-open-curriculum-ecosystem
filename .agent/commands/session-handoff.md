@@ -81,6 +81,23 @@ asks for more, this command must not trigger:
    Keep it compact and operational. Active plans remain authoritative for
    scope, sequencing, acceptance criteria, and validation.
 
+   **Role-boundary check before writing:** classify every proposed addition
+   before it enters `repo-continuity.md`.
+
+   - Repo-level active state -> `repo-continuity.md`.
+   - Per-thread identity, landing target, or lane state ->
+     `threads/<slug>.next-session.md`.
+   - Short-lived tactical coordination -> `tracks/*.md`.
+   - Continuity strategy, rules, or process ->
+     `.agent/directives/continuity-practice.md`.
+   - Settled architecture or Practice governance -> ADR / PDR / rule /
+     permanent doc.
+   - Historical closeout prose -> archive or git history, unless it still
+     changes the next safe step.
+
+   If content does not answer "what is live right now?", do not place it in
+   `repo-continuity.md`.
+
    *Workstream surface retired 2026-04-21 Session 5*: the
    `Active workstreams` and `Branch-primary workstream brief`
    fields that were previously listed here have been replaced by

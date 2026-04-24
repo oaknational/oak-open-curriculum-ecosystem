@@ -8,218 +8,157 @@ split_strategy: 'Split by workflow surface if continuity doctrine grows beyond o
 
 # Continuity Practice
 
-**Last Updated**: 2026-04-03
+**Last Updated**: 2026-04-24
 **Status**: Active guidance
 
-Continuity in this repository is an engineering property: the ability of the
-next session to recover orientation quickly and truthfully after interruption,
-handoff, compaction, or restart.
+Continuity is an engineering property: the next session can recover
+orientation quickly and truthfully after interruption, handoff,
+compaction, or restart.
 
-This is not a claim about model consciousness or internal memory. It is a
-practice design problem, so it is handled through prompts, plans, commands,
-memory layers, and permanent documentation.
+This is not a claim about model consciousness or private memory. It is
+a practice design problem handled through directives, commands,
+plans, operational memory, active memory, and permanent documentation.
 
-## Three Continuity Surfaces
+## Surface Roles
 
-### 1. Operational continuity
+Each continuity surface has one job. Do not let live state, doctrine,
+and historical explanation collapse into one file.
+
+| Surface | Role |
+| --- | --- |
+| This directive | Strategy, rules, and process for continuity |
+| `.agent/memory/operational/repo-continuity.md` | Compact repo-level active state |
+| `.agent/memory/operational/threads/<slug>.next-session.md` | Per-thread identity, landing target, and lane state |
+| `.agent/memory/operational/tracks/*.md` | Short-lived tactical coordination cards |
+| `.agent/memory/active/napkin.md` | Session observations, surprises, and corrections |
+| `.agent/memory/active/distilled.md` | Refined cross-session learning awaiting graduation |
+| Permanent docs, ADRs, PDRs, rules | Graduated doctrine and enforcement |
+
+The rule of thumb: if a claim should remain true across many sessions,
+it belongs here or in permanent doctrine. If it answers "what is live
+right now?", it belongs in operational memory.
+
+## Continuity Questions
+
+### Operational continuity
 
 Can the next session answer:
 
-- what workstream is active?
-- what plan is authoritative?
+- which thread is active?
+- which plan is authoritative?
 - what must not be violated?
 - what is the next safe step?
 
-Primary surfaces:
+### Epistemic continuity
 
-- active plans
-- `.agent/memory/operational/repo-continuity.md` — canonical continuity contract
-- `.agent/memory/operational/workstreams/<slug>.md` — per-lane resumption brief
-- `.agent/memory/operational/tracks/<workstream>--<agent>--<branch>.md` — single-writer
-  tactical coordination card
-- `session-handoff` — the workflow that refreshes the above
+Can the next session recover recent corrections, uncertainty, and
+changed understanding rather than just a task list?
 
-### 2. Epistemic continuity
+### Institutional continuity
 
-Can the next session recover recent corrections, uncertainty, and changed
-understanding rather than just a task list?
+Can learning survive beyond the current session and become shared
+repo practice?
 
-Primary surfaces:
-
-- napkin
-- distilled learnings
-- continuity contract
-
-### 3. Institutional continuity
-
-Can learning survive beyond the current session and become shared repo
-practice?
-
-Primary surfaces:
-
-- ADRs
-- governance docs
-- READMEs
-- patterns
-- practice-context outgoing notes when evidence justifies propagation
-
-## Split-Loop Model
+## Process Loops
 
 Two loops exist, and they are not the same.
 
-### Lightweight continuity loop
+### Lightweight Continuity Loop
 
 Use `session-handoff` at ordinary session end.
 
 Its responsibilities are deliberately narrow:
 
-- refresh the live continuity contract
-- sync changed next-action state in the authoritative plan/prompt surfaces
-- ensure surprises and corrections are captured in the napkin
-- run the consolidation gate and either stop or escalate into
-  `jc-consolidate-docs` when the deeper work is clearly warranted and
-  bounded
+- record landed or unlanded outcome against the landing target;
+- refresh compact active state in `repo-continuity.md`;
+- update touched thread records and tactical track cards;
+- capture surprises and corrections in the napkin;
+- run the consolidation gate.
 
-It does **not** imply:
+It does not imply full review, commit, push, or deep convergence.
 
-- full review
-- commit or push
-- deep convergence by default
+### Deep Consolidation Loop
 
-### Deep consolidation loop
+Use `jc-consolidate-docs` only when deep convergence is due.
 
-Use `jc-consolidate-docs` only when deep convergence is due, either directly
-or via the escalation gate in `session-handoff`.
+Triggers include:
 
-Triggers:
+- plan or milestone closure;
+- settled doctrine or design rationale stranded in ephemeral artefacts;
+- practice exchange that needs processing;
+- napkin, distilled, pattern, or fitness pressure that requires action;
+- repeated surprises suggesting a rule, pattern, ADR, or PDR;
+- documentation drift or stale cross-references that need graduation.
 
-- plan or milestone closure
-- settled doctrine or design rationale exists only in ephemeral artefacts
-- practice exchange needs processing
-- napkin/distilled/pattern fitness pressure requires action
-- repeated surprises or corrections suggest a new rule, pattern, ADR, or
-  governance change
-- documentation drift or stale cross-references need graduation
-
-Deep consolidation keeps its existing responsibilities:
-
-- graduation to permanent docs
-- pattern extraction
-- napkin rotation and distillation
-- fitness management
-- practice exchange management
-
-The gate exists so ordinary closeout can stay lightweight while still being
-able to continue into the deeper loop at natural convergence boundaries.
+Deep consolidation owns graduation, pattern extraction, napkin
+rotation, fitness management, and practice exchange.
 
 ## Continuity Contract
 
-The live continuity contract belongs in `.agent/memory/operational/repo-continuity.md`.
+The live continuity contract belongs in
+`.agent/memory/operational/repo-continuity.md`.
 
-`session-handoff` refreshes it in place using these exact fields:
+`session-handoff` refreshes it using these fields:
 
-- `Active workstreams`
-- `Branch-primary workstream brief`
-- `Current session focus` (optional; only when distinct from the
-  branch-primary lane)
-- `Repo-wide invariants / non-goals`
-- `Next safe step`
-- `Deep consolidation status`
+- `Active threads`;
+- `Branch-primary lane state`;
+- `Current session focus`, only when distinct from the branch-primary lane;
+- `Repo-wide invariants / non-goals`;
+- `Next safe step`;
+- `Deep consolidation status`.
 
-Per-lane short-horizon state is carried separately in
-`.agent/memory/operational/workstreams/<slug>.md` using the fields specified in
-`.agent/memory/operational/README.md`. Tactical coordination lives in
-`.agent/memory/operational/tracks/*.md`.
+Keep that file compact and operational. Active plans remain
+authoritative for scope, sequencing, acceptance criteria, and
+validation. Thread records carry per-thread identity and lane state.
+Track cards are tactical and must resolve, promote, or delete at
+session close.
 
-General session orientation is no longer prompt-hosted. The
-continuation prompt was dissolved (2026-04-20); its doctrine moved
-to [PDR-026 (Per-Session Landing Commitment)][pdr-026] and
-[`orientation.md`](../../.agent/directives/orientation.md)
-(layering contract); its rituals moved to `start-right-quick`
-(session open) and `session-handoff` (session close).
+Do not create a generic "standing decisions" bucket. Standing
+decisions live in their proper homes: ADRs, PDRs, directives, rules,
+plans, or thread records.
 
-[pdr-026]: ../../.agent/practice-core/decision-records/PDR-026-per-session-landing-commitment.md
-
-Active plans remain authoritative for scope, sequencing, acceptance
-criteria, and validation.
+The retired `workstreams/<slug>.md` surface is historical. Lane state
+now folds into `threads/<slug>.next-session.md` per PDR-027.
 
 ## GO
 
 `GO` is a complementary execution cadence, not a handoff surface.
 
-Use it after `start-right-quick` for longer MCP App work, especially when:
+Use it after `start-right-quick` when:
 
-- multiple active sub-plans are in play
-- the session is likely to span more than one focused execution block
-- the risk of drift is rising and the todo list needs re-grounding
+- the session is likely to span more than one focused execution block;
+- multiple active plan surfaces are in play;
+- the risk of drift is rising and the todo list needs re-grounding.
 
-`GO` should start from:
-
-- `start-right-quick`
-- `.agent/memory/operational/repo-continuity.md` (and the relevant workstream brief +
-  track card it links to)
-- the active plan set for the current lane
-
-Close ordinary sessions with `session-handoff`. Use `jc-consolidate-docs` only
-when the trigger checklist says deep convergence is due.
+`GO` starts from the session-start workflow, `repo-continuity.md`,
+the relevant thread record, and the active plan set. Close ordinary
+sessions with `session-handoff`. Use `jc-consolidate-docs` only when
+the trigger checklist says deep convergence is due.
 
 ## Surprise Pipeline
 
-Surprise is a useful learning signal when it changes behaviour.
+Surprise is useful when it changes behaviour.
 
 The pipeline is:
 
 `capture -> distil -> graduate -> enforce`
 
-### Capture
+- **Capture** surprises and corrections in the napkin as they happen.
+- **Distil** recurring or high-signal observations into `distilled.md`
+  or a pattern candidate.
+- **Graduate** stable understanding into an ADR, PDR, governance doc,
+  README, TSDoc, or rule.
+- **Enforce** recurring failure modes through a command boundary,
+  pattern, rule, quality gate, or amended decision record.
 
-Capture surprises and corrections in the napkin as they happen.
-
-Use this structure:
-
-1. what was expected
-2. what actually happened
-3. why the expectation failed
-4. what behaviour should change next time
-
-Both negative and positive surprise count.
-
-### Distil
-
-If the surprise would change future behaviour, it becomes a candidate for
-`distilled.md` or a reusable pattern.
-
-### Graduate
-
-If the surprise stabilises and has a natural home, graduate it into an ADR,
-governance doc, README, or pattern.
-
-### Enforce
-
-If the surprise points to a recurring failure mode, enforcement can follow:
-
-- a clearer prompt or command boundary
-- a new pattern
-- a governance rule
-- a new or amended ADR
-
-## MCP App Adoption Lane
-
-Wave 1 uses the MCP App workstream as the live evidence source.
-
-Reference artefacts:
-
-- `.agent/analysis/continuity-adoption-baseline.md`
-- `.agent/analysis/continuity-adoption-evidence.md`
-- `.agent/plans/agentic-engineering-enhancements/archive/completed/`
-  `continuity-and-surprise-practice-adoption.plan.md`
-
-Wave 1 ended with an explicit `promote` decision on 2026-04-03. Continuity now
-travels both through the outgoing support pack and the portable Practice Core.
+Use the napkin surprise shape: expected, actual, why the expectation
+failed, and behaviour change.
 
 ## Non-Goals
 
-- No new continuity reviewer or specialist in this wave
-- No giant opaque memory layer
-- No vector-memory substitute for disciplined handoff
-- No default full consolidation at every session end
+- No new continuity reviewer or specialist by default.
+- No giant opaque memory layer.
+- No vector-memory substitute for disciplined handoff.
+- No default full consolidation at every session end.
+- No operational history in this directive; history belongs in
+  archives, git, plans, or active-state records while still live.
