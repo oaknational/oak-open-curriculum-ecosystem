@@ -1,3 +1,6 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=oaknational_oak-open-curriculum-ecosystem&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=oaknational_oak-open-curriculum-ecosystem)
+[![AI Code Assurance](https://sonarcloud.io/api/project_badges/ai_code_assurance?project=oaknational_oak-open-curriculum-ecosystem)](https://sonarcloud.io/summary/new_code?id=oaknational_oak-open-curriculum-ecosystem)
+
 # Oak Open Curriculum Ecosystem
 
 Tools for building AI applications on the [Oak National Academy Open Curriculum](https://open-api.thenational.academy/), using a generated, type-safe TypeScript SDK and [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) servers, and semantic search over the curriculum data powered by Elasticsearch Serverless.
