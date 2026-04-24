@@ -1,16 +1,33 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
 **Last refreshed**: 2026-04-24 (Pippin / cursor / claude-opus-4-7)
-after a small intra-session test-relocation micro-lane landed in
-`6764457d` (see `### Current state` for context). Prior refresh
-on the same day captured the cross-cutting meta-session sweep at
-`ffec98b0` which folded this thread's previously-uncommitted
-plan-body refinement (WS3 cancellation-script rewrite + WS2
-validator denylist correction) into a larger commit alongside
-practice/process restructuring, vendor-skills expansion, and three
-new parallel plans. The release-identifier plan refinement is now
-durable; this thread picks up at WS1 RED with no commit-choice
-overhead.
+after a planning + reviewer-cycle session that did not land code.
+The session opened on WS1 RED but pivoted into a structural
+collapse decision (two resolvers → one, accepted by owner), then
+Tier 1 review (Fred + Betty + Barney + assumptions-reviewer),
+plan revision, Tier 2 review (Wilma + 2 docs-adr-reviewer
+rounds), full plan revision addressing all findings, and a
+3-layer pre-flight WS1 audit (string-pattern `rg`, import-site
+`rg` including dynamic imports, `pnpm knip` + `pnpm depcruise`).
+The plan body grew from ~700 → ~1700 lines of substantive,
+review-driven, code-shaping revisions. Plan changes remain
+**uncommitted** in the working tree (12 staged files, see
+§Current state for the full set inherited from prior sessions
+plus this session's revisions). Next session opens with the plan
+in a substantially more robust state and proceeds directly to
+WS2 GREEN execution; WS1 RED has been folded into WS2's TDD
+discipline (see §Current state). Owner intervention mid-session
+broke a review-cascade spiral and surfaced a meta-pattern
+captured in [`napkin.md`](../../active/napkin.md) and
+[`experience/2026-04-24-pippin-the-spiral-i-could-not-see.md`](../../../experience/2026-04-24-pippin-the-spiral-i-could-not-see.md).
+
+**Prior refresh** (2026-04-24, same day): captured the small
+intra-session test-relocation micro-lane that landed in
+`6764457d`; before that, captured the cross-cutting meta-session
+sweep at `ffec98b0` which folded this thread's previously-
+uncommitted plan-body refinement into a larger commit alongside
+practice/process restructuring, vendor-skills expansion, and
+three new parallel plans.
 
 **Repo-wide changes the next session must know about** (landed in
 `ffec98b0`, may affect grounding reads at session start):
@@ -142,7 +159,7 @@ rehearsal).
 | *`unattributed`* | *`unknown`* | *`unknown`* | *`unknown`* | `executor` | 2026-04-21 | 2026-04-21 |
 | `Samwise` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `migration-maintenance` | 2026-04-21 | 2026-04-21 |
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
-| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit` | 2026-04-22 | 2026-04-24 |
+| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed` | 2026-04-22 | 2026-04-24 |
 | `Codex` | `codex` | *`unknown`* | *`unknown`* | `repo-owned-repair-closeout-and-doc-consolidation` | 2026-04-23 | 2026-04-23 |
 | `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan` | 2026-04-24 | 2026-04-24 |
 
@@ -154,10 +171,56 @@ new sessions add rows; they do not rewrite older attribution.
 
 ## Landing Target (per PDR-026)
 
-**This session (meta-session sweep)**: the previously-uncommitted plan
-refinement landed inside the cross-cutting meta-session sweep at
-commit `ffec98b0` (80 files, +12732/-3970), per explicit owner
-direction "commit all files including from other threads". That
+**This session (planning + reviewer cycle, no code landed)**:
+opener was *"WS1 RED contract tests, separate commit / turn
+boundary"*. **Unlanded.** What was attempted, what prevented,
+what next session re-attempts (per PDR-026 §Deferral-honesty
+discipline):
+
+- **What was attempted**: WS1 RED contract tests on the
+  release-identifier plan.
+- **What prevented**: a named owner trade-off, not a clock or
+  budget excuse. The owner explicitly directed the sequence
+  Tier 1 review → revise → Tier 2 review → fix all → audit
+  before any code execution (selections recorded in transcript
+  `4c46c2fc-2f86-493b-8049-30c9a318fd7e`:
+  `tier1_then_review`, `revise_then_tier2`, `fix_all_then_go`).
+  Mid-cycle the architectural-collapse decision (two resolvers
+  → one core, sentry-node delegates) was accepted, which made
+  the WS1 RED tests as originally specified obsolete (the
+  cross-resolver contract test no longer makes sense once the
+  resolvers structurally cannot diverge — `SentryConfigEnvironment
+  extends ReleaseInput` makes shape divergence impossible by
+  construction).   Tier 2 review then surfaced 1 BLOCKING
+  (eager `readFileSync` at module init via `ROOT_PACKAGE_VERSION`
+  → resolved via new WS2 §2.0 module-split prerequisite),
+  plus 7 MAJOR/MINOR Wilma findings, plus 3 BLOCKING / 8 MAJOR /
+  5 MINOR/NIT docs-adr-reviewer findings that materially reshaped
+  WS1, WS2, WS3, WS3.4 (ADR-163 §10 second amendment), and the
+  Documentation Propagation table. WS1 audit (3 layers,
+  read-only) confirmed no architectural surprises blocking WS2.
+- **Falsifiability**: the owner's explicit selections are
+  preserved in the agent transcript; the plan diff
+  (`git diff --cached .agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`,
+  ~+994 lines) is the artefact of the cycle; the WS1 audit
+  outputs are reproducible by re-running the three audit layers
+  named in the plan body's WS1 section. A future agent can
+  verify whether the trade-off held (deeper plan robustness for
+  one session of zero-code) by checking whether WS2's first
+  commit advances the plan to GREEN with materially fewer
+  in-flight reviewer cycles than would have been needed without
+  this session's work.
+- **What next session re-attempts**: WS2 GREEN — the resolver
+  collapse implementation. WS1 RED as originally specified is
+  superseded; per the revised plan, RED tests are now folded
+  into WS2 step-by-step under TDD discipline (see
+  [§Next safe step](#next-safe-step) below).
+
+**Prior session (meta-session sweep — preserved for audit)**: the
+previously-uncommitted plan refinement landed inside the
+cross-cutting meta-session sweep at commit `ffec98b0` (80 files,
++12732/-3970), per explicit owner direction "commit all files
+including from other threads". That
 sweep also landed practice/process restructuring (continuity-practice
 directive relocation, principles update, napkin rotation, history
 archive split), vendor-skills expansion (Clerk backend API,
@@ -250,7 +313,51 @@ wiring integration check), then WS2 GREEN resolver rewrite.
 
 ### Current state
 
-- **Intra-session micro-lane (2026-04-24, `6764457d`)**: deleted
+- **Latest session (2026-04-24, Pippin, planning + reviewer cycle)**:
+  no commits landed; the working tree carries 12 staged files
+  including ~+994 lines of substantive plan revision to
+  [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md).
+  Architectural shape changed materially: **two resolvers
+  collapsed to one** (`resolveRelease` in
+  `@oaknational/build-metadata`; `@oaknational/sentry-node`
+  becomes a thin adapter — `SentryConfigEnvironment extends
+  ReleaseInput`). New types added to plan: `ReleaseInput`,
+  `ReleaseSource`, `ReleaseEnvironment`, `ResolvedRelease`,
+  `ReleaseError`. WS3.4 ADR-163 §10 second-amendment
+  enumeration grew to 13 items (covers §1 retraction of the
+  cross-resolver-contract-test framing, top-level Enforcement §5
+  retraction, History entry preserve-and-add discipline, ADR
+  index update per ADR-053 precedent, Disposition #4 retraction).
+  New WS3.0 step adds a pre-landing reviewer dispatch on the
+  amendment text. 1 BLOCKING (eager `readFileSync` at module
+  init via `@oaknational/env`'s `ROOT_PACKAGE_VERSION`) resolved
+  by new WS2 §2.0 prerequisite: split `resolveGitSha` into a
+  module that does NOT import `ROOT_PACKAGE_VERSION` + add a
+  structural fitness test. WS2 §2.7 added: caller-discipline
+  rule (snapshot env at boundary, never mutate). WS5 quality
+  gates updated to include `pnpm knip && pnpm depcruise`.
+  Documentation Propagation table corrected (3 wrong paths
+  fixed; 5 missing rows added; ADR index row added; CLI usage
+  doc row added). `sentry-build-plugin.ts` path corrected
+  (lives at `apps/oak-curriculum-mcp-streamable-http/build-scripts/`,
+  not `packages/libs/sentry-node/src/`).
+- **Pre-flight WS1 audit completed (this session, read-only,
+  no commits)**: 3 layers — string-pattern `rg`, import-site `rg`
+  (incl. `await import()` patterns), `pnpm knip` + `pnpm depcruise`.
+  Knip + depcruise both clean (1952 modules, 4232 deps, 0
+  violations). Audit "surprises" investigated and dissolved:
+  `oak-search-cli` consumes `resolveGitSha` (already in WS3
+  propagation scope by virtue of being in the import graph);
+  `runtime-config-support.ts` files in both apps re-export
+  `resolveGitSha` (handled by re-export rename mechanics);
+  `@oaknational/sentry-node`'s `resolveGitSha` (config-resolution.ts:174)
+  is **defensive validation of structured inputs**, not duplicate
+  resolution — misleading naming, not architectural drift, the
+  rename can be deferred to a future hygiene sweep without
+  blocking WS2; `esbuild.config.ts` imports `ResolvedBuildTimeRelease`
+  type which is handled by WS2's type-rename mechanics.
+- **Intra-session micro-lane (prior 2026-04-24 session, `6764457d`)**:
+  deleted
   `apps/oak-curriculum-mcp-streamable-http/e2e-tests/tool-examples-metadata.e2e.test.ts`
   and added
   `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch/flat-zod-schema.integration.test.ts`
@@ -341,35 +448,89 @@ wiring integration check), then WS2 GREEN resolver rewrite.
 
 ### Next safe step
 
-Open the plan file and re-read the current WS3 + WS2.5 sections —
-they are authoritative as of `ffec98b0`. No commit-choice overhead.
-Then proceed straight to WS1 of
-[`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
-— RED contract tests, separate commit/turn boundary from WS0:
+**First**: decide what to do with the staged plan revisions
+(see §Current state). They are substantive and load-bearing for
+WS2 — they include the resolver-collapse architectural shape,
+the BLOCKING `readFileSync` fix in WS2 §2.0, the WS3.4 13-item
+enumeration, and the Documentation Propagation corrections.
+Recommended posture: commit them as a single
+`docs(plans): revise sentry-release plan for resolver collapse and tier-2 reviewer findings`
+commit on the `feat/otel_sentry_enhancements` branch BEFORE
+opening WS2 code work, so the plan-authority surface that WS2
+consumes is durable. The 12-file staged set also includes prior-
+session work (Codex's expert-expansion plan reconciliation +
+Frodo's earlier touches); inspect with
+`git diff --cached --stat` and split if appropriate per the
+`commit` skill's atomic-commit discipline. If the owner prefers
+a single sweep commit per the prior session's precedent
+(`ffec98b0`), follow that direction.
 
-1. Add the cross-resolver contract test asserting that
-   `resolveBuildTimeRelease` (build-time, `packages/core/build-metadata`)
-   and `resolveSentryRelease` (runtime, `packages/libs/sentry-node`)
-   produce the SAME string for the same env inputs across the §1
-   truth-table rows. Establish the `libs ← core` devDependency edge
-   if it doesn't already exist (per ADR §1's process-gap finding).
-2. Add the branch-URL-precedence test pinning that both resolvers
-   extract the leftmost host label of `VERCEL_BRANCH_URL` for
-   preview/non-main-production (with `SENTRY_RELEASE_OVERRIDE`
-   precedence preserved).
-3. Add the cancellation-wiring integration test asserting that
-   `apps/oak-curriculum-mcp-streamable-http/vercel.json`'s
-   `ignoreCommand` resolves through the workspace shim to the
-   canonical script — catches shim deletion or path drift; does not
-   re-test script logic (already covered).
-4. Tests are RED in WS1 (build-time still emits old shape); WS2
-   makes them GREEN by rewriting `resolvePreviewRelease` and
-   extending `resolveSentryRelease`.
+**Then proceed to WS2 GREEN** of
+[`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md).
+**WS1 RED as originally specified is superseded**: the
+cross-resolver contract test no longer makes sense once both
+resolvers structurally cannot diverge (`SentryConfigEnvironment
+extends ReleaseInput` makes shape divergence impossible by
+construction). The revised plan folds RED testing into WS2
+TDD step-by-step. WS2 sequence (read the plan body for full
+detail, but at-a-glance):
+
+1. **WS2 §2.0 PREREQUISITE** (BLOCKING fix from Wilma
+   Tier 2): split `resolveGitSha` from `runtime-metadata.ts`
+   into a new `git-sha.ts` module in
+   `packages/core/build-metadata/src/` that does NOT import
+   `ROOT_PACKAGE_VERSION` (which performs eager `readFileSync`
+   at module init). Re-point
+   `packages/core/build-metadata/src/build-time-release.ts`'s
+   import. Add a structural fitness test that asserts no
+   import path from `git-sha.ts` reaches `root-package-version.ts`
+   transitively. Single commit.
+2. **WS2 §2.1-§2.6**: implement the unified `resolveRelease` in
+   `@oaknational/build-metadata` consuming `ReleaseInput`,
+   producing `ResolvedRelease | ReleaseError` (Result pattern).
+   Use `new URL()` parsing for `VERCEL_BRANCH_URL` with explicit
+   rejection of malformed cases (Wilma MAJOR #8). RED tests
+   first per TDD discipline.
+3. **WS2 §2.7**: caller-discipline rule — snapshot env at
+   boundary, never mutate `process.env` mid-process.
+4. **WS2 sentry-node delegation**: rewrite
+   `@oaknational/sentry-node`'s `resolveSentryRelease` to
+   delegate to `resolveRelease`; `SentryConfigEnvironment
+   extends ReleaseInput`. Delete the now-superseded
+   `slugifyBranch` helper from
+   `packages/core/build-metadata/src/build-time-release-internals.ts`.
+   Delete obsolete `preview-<slug>-<sha>` shape.
+5. **Validator denylist correction** (folded into WS2):
+   `isValidReleaseName` accepts `latest`, rejects `/` per
+   Sentry's documented rules.
+
+**WS3 (cancellation script rewrite + ADR-163 §10 second
+amendment)** is a separate commit boundary after WS2 GREEN.
+Read the WS3.0 step (pre-landing reviewer dispatch on the
+amendment text) before drafting the WS3 commit. Read the WS3.4
+13-item enumeration carefully — it is comprehensive and a
+14th amendment is the failure mode this plan exists to prevent.
+
+**Cancellation-wiring integration test** (originally WS1 step
+3) folds into WS3's test rewrite under the same TDD discipline
+— it remains a useful structural test (catches accidental shim
+deletion), but no longer needs to live as a separate WS1 commit.
 
 If owner-run validation of the previously-archived corrective lane
 surfaces a fresh repo defect in parallel, that takes priority — open
 the smallest targeted repair lane that names that defect explicitly,
 park the release-identifier plan briefly.
+
+**Behavioural carry-forward (read before opening WS2)**: this
+session demonstrated `inherited-framing-without-first-principles-
+check` at the reviewer-finding-consumption layer. Captured in
+detail in [`napkin.md`](../../active/napkin.md) §Surprise (pattern
+instance — second cross-session occurrence) and
+[`experience/2026-04-24-pippin-the-spiral-i-could-not-see.md`](../../../experience/2026-04-24-pippin-the-spiral-i-could-not-see.md).
+Posture for WS2 execution: code first, reviewer dispatch only at
+plan-prescribed gates (WS3.0 pre-landing, post-WS6 fidelity-vs-
+implementation), do not absorb mid-cycle audit findings into
+plan revisions unless they block the next code action.
 
 ### Active track links
 

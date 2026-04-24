@@ -8,27 +8,33 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m —
-session opened via `/jc-start-right-quick` with owner-directed primary
-scope to wire `.remember/` plugin buffers into ignore configs and
-capture workflows; scope expanded mid-session to also (a) name Cursor
-and Codex per-user memory surfaces alongside Claude Code in the same
-workflows, (b) integrate SonarCloud scanning and secrets hooks, (c)
-investigate `eslint-plugin-sonarjs`'s installed-but-unwired state and
-author an activation backlog plan after trial activation produced
-448+ local errors and a SonarCloud remote baseline of 1,244 issues;
-the observability thread was touched incidentally when the owner
-pre-staged plan-body tightening which landed in `5fc52d86` as part
-of "commit all files"; thread record refreshed to add Frodo's
-identity row and to record the incidental touch).
+**Last refreshed**: 2026-04-24 (Pippin / cursor / claude-opus-4-7
+— branch-primary observability thread session: opened on WS1 RED
+of the release-identifier plan, pivoted into a Tier 1 → revise →
+Tier 2 → fix-all → 3-layer pre-flight audit cycle per explicit
+owner direction. Architectural collapse decision accepted (two
+resolvers → one core, sentry-node thin adapter). 1 BLOCKING +
+many MAJOR/MINOR reviewer findings absorbed into the plan body
+through ~+994 lines of substantive revision. **No commits this
+session**; the plan revisions remain staged. WS1 RED as
+originally specified is superseded by the resolver collapse;
+RED testing folds into WS2 GREEN under TDD discipline. Owner
+intervention mid-session (*"stop using questions, I want a
+discussion, not a list of options"*) broke a review-cascade
+spiral; meta-pattern captured in napkin + experience file +
+pending-graduations register §note below.)
 
-**Prior refresh**: 2026-04-24 (Pippin / cursor / claude-opus-4-7 —
-meta-session sweep at `ffec98b0` landed the previously-uncommitted
-release-identifier plan-body refinement alongside cross-cutting
-practice/process restructuring, vendor-skills expansion, and three
-new parallel plans, per explicit owner direction "commit all files
-including from other threads"; thread record refreshed for the
-post-meta-session landscape).
+**Prior refresh**: 2026-04-24 (Codex / codex / GPT-5 — session
+opened via `$jc-start-right-quick`, reconciled the structural
+practice/process plan with the Planning specialist plan,
+updated expert-expansion roadmap/current/future coordination
+surfaces. Cross-cutting; did not join branch-primary
+observability thread.)
+
+**Earlier refresh**: 2026-04-24 (Frodo / claude-code /
+claude-opus-4-7-1m — cross-cutting `.remember/`, Cursor/Codex
+memory, SonarCloud, and sonarjs backlog session; incidental
+observability plan tightening landed in `5fc52d86`.)
 
 The current state is:
 
@@ -77,7 +83,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23; `cursor` / `claude-opus-4-7` / Pippin / WS0-amendment-landing-then-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit / 2026-04-24 (landed ADR-163 §1 + §10 amendment + reviewer dispositions in `06bf25d7`; later same date refined the plan body to encode WS3 cancellation-script rewrite using canonical `semver` + WS2 validator denylist correction; later same date landed the deferred plan-body refinement inside the cross-cutting meta-session sweep at `ffec98b0` per explicit owner direction; thread record refreshed); `claude-code` / `claude-opus-4-7-1m` / Frodo / incidental-touch-via-commit-of-owner-pre-staged-plan-body-tightening / 2026-04-24 (latest — committed owner's pre-staged tightening at `5fc52d86`; primary session scope was `.remember/` plugin-capture wiring and the sonarjs activation backlog plan, on cross-cutting architecture surfaces not tied to the observability thread) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23; `claude-code` / `claude-opus-4-7-1m` / Frodo / incidental-touch-via-commit-of-owner-pre-staged-plan-body-tightening / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / WS0-amendment-landing-then-post-WS0-WS3-cancellation-rewrite-design-then-meta-session-sweep-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed / 2026-04-24 (latest — opened on WS1 RED, pivoted to Tier 1 + Tier 2 reviewer cycle with architectural collapse to single resolver, comprehensive plan revision (~+994 lines, staged not committed), 3-layer pre-flight audit clean, owner intervention broke review-cascade spiral; meta-pattern captured for pending PDR-015 amendment trigger) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -149,52 +155,62 @@ also owner-handled validation stages.
 
 ## Current session focus
 
-**2026-04-24 (latest, Frodo / claude-code / claude-opus-4-7-1m)**:
-cross-cutting infrastructure session. Five commits landed on
-`feat/otel_sentry_enhancements`:
+**2026-04-24 (latest, Pippin / cursor / claude-opus-4-7)**:
+branch-primary observability thread session, planning + reviewer
+cycle (no code landed). Extensive plan revision driven by owner-
+directed Tier 1 → revise → Tier 2 → fix-all → 3-layer pre-flight
+audit cycle on
+[`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md).
+Architectural shape changed materially: the previously-planned
+two-resolver design (with cross-resolver contract test as the
+anti-drift gate) collapsed to a single `resolveRelease` in
+`@oaknational/build-metadata`, with `@oaknational/sentry-node`
+becoming a thin adapter (`SentryConfigEnvironment extends
+ReleaseInput` makes shape divergence impossible by construction).
+1 BLOCKING (eager `readFileSync` at module init via
+`ROOT_PACKAGE_VERSION`) resolved by new WS2 §2.0 module-split
+prerequisite. WS3.4 ADR-163 §10 second-amendment enumeration
+grew to 13 items including a new WS3.0 pre-landing reviewer
+dispatch step. Documentation Propagation table corrected
+(3 wrong paths, 5 missing rows, ADR index row, CLI usage row
+added). 12 files staged in working tree — includes prior
+Codex/Frodo cross-cutting work AND this session's plan
+revisions; staged set was inherited at session start, not
+created by this session.
 
-- `69a87c44` `chore(sonar)`: sonarcloud + secrets-hook integration.
-- `83ec9198` `chore(agent)`: `.remember/` plugin buffers wired into
-  ignore configs and capture workflows (start-right quick/thorough
-  step 3, session-handoff step 6a, consolidate-docs step 3 + step 7).
-- `5fc52d86` `docs(plans)`: owner-pre-staged sentry-release plan
-  tightening (incidental observability-thread touch).
-- `76b4de50` `docs(agent)`: Cursor + Codex memory surfaces named
-  alongside Claude Code's in the same grounding + consolidation
-  workflows.
-- `d2a4815e` `chore(quality)`: sonarjs registered as inactive
-  placeholder in `oak-eslint/recommended.ts`; activation backlog
-  plan at
-  [`sonarjs-activation-and-sonarcloud-backlog.plan.md`](../../plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md).
+Pre-flight WS1 audit (read-only, 3 layers — string-pattern
+`rg`, import-site `rg` incl. `await import()`, `pnpm knip` +
+`pnpm depcruise`): all clean (1952 modules, 4232 deps, 0
+violations). Audit "surprise" findings (oak-search-cli as
+unlisted resolver consumer; sentry-node parallel-looking
+`resolveGitSha`; esbuild.config.ts importing
+`ResolvedBuildTimeRelease`) investigated and dissolved as
+non-blockers — all already implicitly covered by WS2/WS3
+mechanics or were misleading-naming-not-drift.
 
-Mid-session a trial activation of `sonarjs.configs.recommended`
-surfaced 448+ local ESLint errors across 13 packages. SonarCloud
-remote baseline: 67 bugs, 1 vulnerability, 169 security hotspots,
-1,176 code smells, 99h technical debt, reliability D, security E.
-Owner chose a phased plan with explicit gate-outs at every phase
-boundary; the plan is queued in `current/` with no appetite signal
-yet, awaiting observability-thread completion.
+**Owner intervention** mid-session broke a developing
+review-cascade spiral: *"stop using questions, I want a
+discussion, not a list of options. What is the problem, why
+is it a problem, step back, what is the wider context?"* —
+captured as second cross-session instance of the
+[`inherited-framing-without-first-principles-check`](../active/patterns/inherited-framing-without-first-principles-check.md)
+pattern at the reviewer-finding-consumption layer (rather than
+the plan-body authoring layer). Trigger condition (i) of the
+pending PDR-015 amendment candidate (assumption-challenge gate
+per architectural-review output) is met by this session — see
+register §note below. Detailed reflection in
+[`napkin.md`](../active/napkin.md) §2026-04-24 (Pippin) and
+[`experience/2026-04-24-pippin-the-spiral-i-could-not-see.md`](../../experience/2026-04-24-pippin-the-spiral-i-could-not-see.md).
 
-Owner called out an evasion pattern mid-session: when asked a
-direct verification question I responded with a 5-row table plus
-an invented adjacent-scope hedge rather than a clean yes/no plus
-evidence. Feedback memory saved at
-`feedback_answer_verification_questions_directly.md`; PDR
-candidate in the graduation register below.
-
-Working tree clean at HEAD except for an unstaged observability
-plan modification the owner pre-staged later in the session.
-
-Next on `observability-sentry-otel`: unchanged — WS1 RED contract
-tests on the release-identifier plan (Pippin or Samwise picks it
-up; Frodo was an incidental visitor).
-
-Next on the new `sonarjs-activation-and-sonarcloud-backlog` plan:
-Phase 0 baseline and tranche, when owner appetite signals.
-
-Prior-session summaries (2026-04-22 through 2026-04-24 Pippin meta-
-sweep) archived to
-[`archive/repo-continuity-session-history-2026-04-22.md`](archive/repo-continuity-session-history-2026-04-22.md).
+No commits this session. Active identity row updated for
+Pippin on the `observability-sentry-otel` thread per PDR-027
+additive discipline (extended role description rather than new
+row — same agent, same platform, same model, continuation of
+2026-04-22 first session). Prior Codex / Frodo cross-cutting
+work remains represented by commits `69a87c44`, `83ec9198`,
+`5fc52d86`, `76b4de50`, `d2a4815e`, and the working-tree
+expert-expansion reconciliation. Sonarjs activation backlog
+plan remains queued for owner appetite.
 
 ## Session history
 
@@ -350,12 +366,49 @@ Non-goals for next session:
 
 ## Next safe step
 
-Pick up
-[`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
-at WS0: amend ADR-163 to record both owner-direction rules (truth
-tables included), then run the assumptions / sentry / fred reviewers
-against the proposed amendment text BEFORE landing. WS1 (RED contract
-tests) cannot start until the amendment lands.
+**Branch-primary observability**: WS1 RED as originally
+specified is **superseded** by this session's resolver-collapse
+decision (cross-resolver contract test no longer makes sense
+once `SentryConfigEnvironment extends ReleaseInput` makes shape
+divergence impossible by construction). Proceed straight to
+**WS2 GREEN** of
+[`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md);
+RED testing folds into WS2's TDD discipline. Sequence (full
+detail in the thread record's
+[§Next safe step](threads/observability-sentry-otel.next-session.md#next-safe-step)
+and the plan body):
+
+1. **First**: decide the staged-files commit posture. The 12
+   staged files include this session's substantive plan
+   revisions (~+994 lines) plus prior Codex/Frodo cross-cutting
+   work. Commit the plan-revision substance before opening WS2
+   code work so the plan-authority surface is durable.
+2. **WS2 §2.0 PREREQUISITE** (BLOCKING fix from Wilma Tier 2):
+   split `resolveGitSha` from `runtime-metadata.ts` into a new
+   `git-sha.ts` module that does NOT import
+   `ROOT_PACKAGE_VERSION` (which performs eager `readFileSync`
+   at module init). Add structural fitness test. Single commit.
+3. **WS2 §2.1-§2.7**: implement unified `resolveRelease`,
+   sentry-node delegation, validator denylist correction,
+   caller-discipline rule.
+4. **WS3 + ADR-163 §10 second amendment**: separate commit
+   boundary; read WS3.0 pre-landing reviewer dispatch step
+   before drafting.
+
+**Behavioural carry-forward**: read
+[`napkin.md`](../active/napkin.md) §2026-04-24 (Pippin) and
+[`experience/2026-04-24-pippin-the-spiral-i-could-not-see.md`](../../experience/2026-04-24-pippin-the-spiral-i-could-not-see.md)
+before opening WS2. Posture: code first, reviewer dispatch only
+at plan-prescribed gates (WS3.0 pre-landing, post-WS6 fidelity).
+Do not absorb mid-cycle audit findings into plan revisions
+unless they block the next code action.
+
+**Cross-cutting plan reconciliation** (Codex's prior work,
+still in working tree): commit when ready as a separate
+`docs(plans)` landing; do not block branch-primary
+observability work on it. Next execution is structural plan
+Phase 1 or Planning specialist Phase 0/1 after owner appetite;
+do not create a parallel `.agent/skills/planning/` surface.
 
 If owner-run validation of the previously-archived corrective lane
 surfaces a fresh repo defect in parallel, that takes priority — open
@@ -399,6 +452,38 @@ will be picked up when the owner has appetite. If left
 indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
+
+**Status (2026-04-24 Pippin session-handoff)**: **not due** for a
+deep `consolidate-docs` pass at session-handoff scope, but
+**second-instance trigger fired** for an existing pending-
+graduations register entry (see PDR-015 amendment row dated
+2026-04-23 in the §Pending-graduations register additions
+below). This session was the second cross-session instance of
+[`inherited-framing-without-first-principles-check`](../active/patterns/inherited-framing-without-first-principles-check.md)
+applied to architectural-review output — consuming Wilma + 2
+docs-adr-reviewer rounds without intervening assumption challenge,
+producing a rev1 → rev2 → rev3 plan-body inflation cycle that
+required owner intervention to break. Trigger condition (i) of
+the PDR-015 candidate is met by this session; conditions (ii) and
+(iii) remain. **Session-scoped action**: capture-only — note added
+to the register entry's status field below, full reflection
+captured in [`napkin.md`](../active/napkin.md) §2026-04-24 (Pippin)
+and
+[`experience/2026-04-24-pippin-the-spiral-i-could-not-see.md`](../../experience/2026-04-24-pippin-the-spiral-i-could-not-see.md).
+Promotion remains a `consolidate-docs` / explicit-owner-direction
+call, not a session-handoff call (per `session-handoff` step 6b
+capture-only discipline). No new candidate added — this session's
+substance maps to an existing pending entry. Inherited hard-zone
+continuity fitness issue from Frodo's owner-waived consolidation
+remains due at the next dedicated consolidation pass; this session
+added ~30 lines net to repo-continuity.md, deepening that
+hard-zone state.
+
+**Status (2026-04-24 Codex session-handoff — preserved)**: **not
+due** for a deep `consolidate-docs` pass. No plan/milestone
+closed, no settled doctrine was promoted, and no second instance
+fired for pending graduation. Session capture complete (napkin,
+`.remember`, entry points); no active thread identity row changed.
 
 **Status (2026-04-24 Frodo consolidate-docs pass)**: **completed
 this handoff — owner-directed consolidation pass with
@@ -495,7 +580,7 @@ discipline):
 
 | captured-date | source-surface | graduation-target | trigger-condition | status |
 | --- | --- | --- | --- | --- |
-| 2026-04-23 (latest, plan-rationalisation session) | [`threads/observability-sentry-otel.next-session.md` § Earlier Landed Substance Still In Force](threads/observability-sentry-otel.next-session.md) + [`napkin.md` § 2026-04-23 (latest, operational-plan rationalisation session)](../active/napkin.md) — the cross-session pattern instance #8 candidate of `inherited-framing-without-first-principles-check` (Fred + Betty convergence treated as decision-complete; Barney's simplification-first lens and the assumption challenge arrived only after the plan body had already overgrown) | PDR amendment to [PDR-015 (Reviewer Authority and Dispatch)](../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md) installing an **assumption-challenge gate per architectural-review output**: when an architectural review produces output that proposes design changes, dispatch `assumptions-reviewer` against that output BEFORE absorbing it into a plan body. Today the gate exists at the plan-body level but not at the architectural-review-output level where inherited framing hardens cheapest. | (i) ≥1 second cross-session instance of an architectural review's output entering a plan body without an intervening assumption audit and producing a downstream rewrite; OR (ii) explicit owner direction; AND (iii) the gate's marginal cost can be shown not to dominate the cost it averts. | pending |
+| 2026-04-23 (latest, plan-rationalisation session) | [`threads/observability-sentry-otel.next-session.md` § Earlier Landed Substance Still In Force](threads/observability-sentry-otel.next-session.md) + [`napkin.md` § 2026-04-23 (latest, operational-plan rationalisation session)](../active/napkin.md) — the cross-session pattern instance #8 candidate of `inherited-framing-without-first-principles-check` (Fred + Betty convergence treated as decision-complete; Barney's simplification-first lens and the assumption challenge arrived only after the plan body had already overgrown) | PDR amendment to [PDR-015 (Reviewer Authority and Dispatch)](../../practice-core/decision-records/PDR-015-reviewer-authority-and-dispatch.md) installing an **assumption-challenge gate per architectural-review output**: when an architectural review produces output that proposes design changes, dispatch `assumptions-reviewer` against that output BEFORE absorbing it into a plan body. Today the gate exists at the plan-body level but not at the architectural-review-output level where inherited framing hardens cheapest. | (i) ≥1 second cross-session instance of an architectural review's output entering a plan body without an intervening assumption audit and producing a downstream rewrite; OR (ii) explicit owner direction; AND (iii) the gate's marginal cost can be shown not to dominate the cost it averts. | **(i) trigger met 2026-04-24 (Pippin session-handoff)** — second cross-session instance: Wilma + 2 docs-adr-reviewer rounds entered the release-identifier plan body without intervening assumption challenge; produced rev1 → rev2 → rev3 inflation cycle (~+994 lines plan growth) that required owner intervention (*"stop using questions, I want a discussion, not a list of options"*) to break. The inflation happened intra-session here rather than across a session boundary, but the shape is the same. Awaiting (iii) gate-cost design work and consolidation-pass / owner-direction promotion. Detailed reflection in [`napkin.md`](../active/napkin.md) §2026-04-24 (Pippin) and [`experience/2026-04-24-pippin-the-spiral-i-could-not-see.md`](../../experience/2026-04-24-pippin-the-spiral-i-could-not-see.md). Status remains `pending` per session-handoff step 6b capture-only discipline. |
 
 ### Pending-graduations register additions (2026-04-23 prior session — WI-7 lambda crash + warnings doctrine)
 
@@ -543,9 +628,10 @@ the thread the session is picking up before reading the opener.
 - **`observability-sentry-otel` thread** (product) — **next-active
   as of 2026-04-22 Session 8 close**: see
   [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md).
-  Landing target: §L-8 WS1 Vercel preview acceptance probe (per
-  the authoritative file). Standing decisions (owner-beats-plan)
-  and session shape specified in the opener.
+  Landing target: WS1 RED contract tests in
+  [`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md);
+  WS0 is already landed in `06bf25d7`. Standing decisions
+  (owner-beats-plan) and session shape are specified in the opener.
 - ~~`memory-feedback` thread~~ — **archived 2026-04-22 Session 8**.
   Eight-session staged doctrine-consolidation arc closed; next-
   session record deleted per PDR-026 §Lifecycle. If

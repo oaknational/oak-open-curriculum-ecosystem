@@ -19,6 +19,112 @@ archived to `archive/napkin-2026-04-22.md`).
 
 ---
 
+## 2026-04-24 (Pippin / cursor / claude-opus-4-7) — release-identifier plan: Tier 1 → Tier 2 → audit cycle, owner intervention on review-cascade
+
+**Session shape**: opened as "WS1 RED contract tests on the
+release-identifier plan." Ended without a single commit. The
+working-tree plan diff (~+994 lines) is entirely review-driven
+revision — a structural collapse to a single resolver after Tier 1
+review, then comprehensive WS-section rewrites after Tier 2 review
+(Wilma + 2 docs-adr-reviewer rounds), then a 3-layer pre-flight
+audit. Code work (WS2 GREEN) deferred to a fresh session.
+
+**Observations / Surprises**:
+
+### Surprise (pattern instance — second cross-session occurrence)
+
+- **Expected**: a Tier 1 + Tier 2 reviewer pass would tighten the
+  plan and we'd land WS1 quickly afterwards.
+- **Actual**: every reviewer finding (3 BLOCKING + 8 MAJOR + 5
+  MINOR/NIT from docs-adr-reviewer; 1 BLOCKING + 7 MAJOR/MINOR
+  from Wilma) was treated as binding instruction requiring
+  in-plan addressal. The plan grew from ~700 to ~1700 lines. Then
+  a 3-layer audit surfaced "surprise" findings (`oak-search-cli`
+  as unlisted resolver consumer; a seemingly-parallel
+  `resolveGitSha` in `@oaknational/sentry-node`) which I started
+  framing as new architectural drift requiring further plan
+  revisions. Owner intervened: *"stop using questions, I want a
+  discussion, not a list of options. What is the problem, why
+  is it a problem, step back, what is the wider context?"*
+- **Why expectation failed**: the same failure mode as Pippin's
+  prior session — **inherited framing without first-principles
+  check**, but at the reviewer-finding-consumption layer. The
+  shift from "is this finding real?" to "how do I encode this
+  finding into the plan?" happened silently. Each rev1/rev2/rev3
+  felt like progress; in aggregate it was a spiral. The audit
+  surprises had the same shape — analysed for "drift" before
+  asking whether they were actually problems (the
+  `resolveGitSha` in sentry-node turned out to be defensive
+  validation of structured inputs, not duplicate resolution).
+  Misleading naming, not architectural drift.
+- **Behaviour change**: when consuming reviewer findings or
+  audit results, the first question is *"is this finding real,
+  and is it load-bearing for the next code action?"* — not
+  *"how do I revise the plan to address this?"* Findings that
+  do not block the next code action go to a deferred-review
+  log, not into the active plan body. Menu-driven option lists
+  to the owner are a scope-evasion tell; replace with a direct
+  recommendation + reasoning.
+- **Source plane**: `active` (cross-session pattern with an
+  existing register entry — see below).
+
+**Pattern-graduation signal**: this session is the second clear
+cross-session instance of `inherited-framing-without-first-
+principles-check` applied to architectural-review output. The
+existing pending-graduations register entry (2026-04-23 PDR-015
+amendment candidate — "assumption-challenge gate per
+architectural-review output") names trigger condition
+*"(i) ≥1 second cross-session instance of an architectural
+review's output entering a plan body without an intervening
+assumption audit and producing a downstream rewrite"*. Trigger
+(i) is **met by this session**. The downstream rewrites all
+happened intra-session here (rev1, rev2, rev3 of the plan body)
+rather than across a session boundary, but the shape is the
+same — and the owner intervention to break the spiral is itself
+the cost-evidence the gate exists to avoid. Register entry
+status note added; promotion remains a `consolidate-docs` /
+owner-direction call, not a session-handoff call.
+
+### Observation (decision-process meta)
+
+- **Plan-body inflation under review pressure has a measurable
+  signature**: line count growth without code change, increasing
+  enumeration depth (the WS3.4 amendment enumeration grew from
+  9 → 13 items as docs-adr findings landed), each rev doubling
+  back on the prior rev. The signature is detectable mid-spiral
+  if anyone is looking for it. None of the installed tripwires
+  (Class A.1 plan-body first-principles check; Class A.2 identity
+  registration) fire on this shape. Pre-merge divergence analysis
+  fires on PR-time, too late.
+- **Implication**: if the PDR-015 amendment graduates, its
+  enforcement surface should include a mid-cycle metric — e.g.
+  *"if a plan body grows >N lines in a single revision pass
+  without a code change, dispatch assumptions-reviewer against
+  the revision before continuing."* This is not the gate itself
+  (the gate is the assumption challenge); it's a tripwire the
+  gate could install.
+
+### Observation (process-residue)
+
+- **Audit "surprises" were largely non-surprises in retrospect**:
+  S1 (oak-search-cli as resolver consumer) — already implicitly
+  in WS3 propagation scope. S3 (sentry-node `resolveGitSha`) —
+  defensive validation pattern with a misleading name, not
+  drift. S4 (esbuild.config.ts importing `ResolvedBuildTimeRelease`)
+  — handled by the type-rename mechanics in WS2. Treating each
+  as a finding requiring plan amendment was the wrong posture;
+  the right posture was *"these confirm the WS2 scope is broader
+  than the plan summary listed, and that's already why the audit
+  exists; proceed."*
+- **Behaviour change**: an audit's job is to confirm scope and
+  surface unknowns *for the next code phase*. It is not the right
+  surface for plan-body revision — by the time WS1 audit runs,
+  the plan is the input, not the output. Audit findings worth
+  encoding into the plan are the ones that change WS2 design;
+  everything else is execution-time guidance.
+
+---
+
 ## 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m) — `.remember/` plugin wiring + sonarjs investigation + activation plan
 
 **Landings**: `.remember/` plugin buffers wired into ignore configs (ESLint shared `ignores`, `.prettierignore`, `.markdownlintignore`) and capture workflows (`start-right-quick` step 3, `start-right-thorough` learning-loop section, `session-handoff` step 6a auxiliary input, `consolidate-docs` step 3 capture surfaces + step 7 graduation inputs); commit `83ec9198`. Cursor and Codex per-user memory surfaces named explicitly in the same grounding/consolidation surfaces (parallel to the existing Claude Code auto-memory bullet); commit `76b4de50`. SonarCloud integration committed; commit `69a87c44`. Sonarjs plugin imported in oak-eslint `recommended` but registered as an inactive `{ plugins: { sonarjs } }` placeholder; activation backlog plan authored at `.agent/plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md`; commit `d2a4815e`. Owner's pre-staged observability plan-body tightening committed; commit `5fc52d86`.
@@ -223,3 +329,35 @@ archived to `archive/napkin-2026-04-22.md`).
   Owner directive received: "unstage is fine, but do not destroy
   any changes" — adopt as a per-commit reflex when the staged
   set widens unexpectedly.
+
+## 2026-04-24 (Codex) — practice/process plan reconciliation
+
+**Observation**:
+
+- A structural plan named "no planning skill / specialist exists" while a
+  queued `planning-specialist-capability.plan.md` already owned the ADR-129
+  triplet. Reconciliation pattern: when a structural gap plan appears to create
+  a new expert, first search current/future capability plans; if a capability
+  already exists, make the structural plan feed doctrine into that owner rather
+  than creating a parallel skill or reviewer path. Applied here by making
+  `planning-specialist-capability.plan.md` the sole owner of
+  `.agent/skills/planning-expert/SKILL.md` and blocking a duplicate
+  `.agent/skills/planning/SKILL.md`.
+- Session-handoff caught `repo-continuity.md` still pointing
+  observability at WS0 even though the thread record says WS0 landed and
+  WS1 RED is next. Closeout should cross-check repo-level runway text
+  against the thread record before calling continuity current; the thread
+  record is the authoritative next-action surface for active thread work.
+
+## 2026-04-24 (Codex) — collaboration doctrine slice
+
+**Observation**:
+
+- Practice/process structural improvements can land safely as doctrine-first
+  slices when ownership is explicit: collaboration now has a directive and
+  canonical rule/adapters, Planning artefacts remain owned by the Planning
+  specialist plan, and `.agents/rules` parity stays with portability
+  remediation until full coverage lands.
+- `practice:vocabulary` is now useful as a low-cost cleanup gate for stale
+  ADR-144 wording. The preserved ADR-144 filename is allowed; surrounding prose
+  should use the three-zone vocabulary.
