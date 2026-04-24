@@ -11,8 +11,13 @@ overview: >
   root `package.json` semver — i.e. only semantic-release commits trigger
   a production deploy. The cancellation script exists but is over-built
   and missing the branch gate; WS3 rewrites it (~50 lines, canonical
-  `semver` package, asymmetric current/previous input handling) and
-  re-amends ADR-163 §10 to match.
+  `semver` package, asymmetric current/previous input handling),
+  re-amends ADR-163 §10 to match, AND deletes the workspace shim by
+  re-pointing `vercel.json`'s `ignoreCommand` directly at the canonical
+  script (or relocating the canonical script into the app workspace if
+  Vercel cannot resolve the upward path) — eliminating the wiring drift
+  surface structurally rather than guarding it with a configuration test
+  that would not align with `testing-strategy.md`.
 derived_from: feature-workstream-template.md
 foundational_adr: "docs/architecture/architectural-decisions/163-sentry-release-identifier-and-vercel-production-attribution.md"
 related_plans:
@@ -23,14 +28,14 @@ todos:
     content: "WS0 (DECIDE → DOCUMENT): owner direction collapses the option space (semver for prod, branch-URL for preview, build-cancellation outside semantic-release on main). Land an ADR-163 amendment that records both rules with full truth tables BEFORE WS1 begins. Run assumptions-reviewer + sentry-reviewer + architecture-reviewer-fred against the proposed amendment."
     status: completed
   - id: ws1-red
-    content: "WS1 (RED): write the cross-resolver contract test (build-time and runtime return identical strings for every truth-table row) and the runtime branch-URL resolver tests. Tests MUST fail because the runtime resolver does not yet read VERCEL_BRANCH_URL and the build-time preview resolver still returns preview-<slug>-<sha>."
+    content: "WS1 (RED): add @oaknational/build-metadata as a devDependency on @oaknational/sentry-node (libs ← core edge per dep-cruise); add a minimal type-only field VERCEL_BRANCH_URL?: string to SentryConfigEnvironment with TSDoc naming the canonicalisation follow-up; write the cross-resolver contract test (build-time and runtime return identical strings for every truth-table row); ATOMICALLY REPLACE old-shape preview/dev assertions in build-time-release.unit.test.ts and config-resolution.unit.test.ts with branch-URL-host assertions (no dual-spec coexistence — `Replace, don't bridge`). Tests MUST fail because the runtime resolver does not yet read VERCEL_BRANCH_URL and the build-time preview resolver still returns preview-<slug>-<sha>. NO wiring integration test (the shim that creates the wiring drift surface is deleted in WS3 instead — Vercel itself is the only meaningful wiring gate)."
     status: pending
     priority: next
   - id: ws2-green
-    content: "WS2 (GREEN): rewrite resolvePreviewRelease and resolveDevelopmentRelease to consume VERCEL_BRANCH_URL host; extend resolveSentryRelease to read the same. Delete the obsolete preview-<slug>-<sha> shape. Correct isValidReleaseName denylist to mirror Sentry's documented rules verbatim (accept `latest`, reject `/`). All tests pass."
+    content: "WS2 (GREEN): rewrite resolvePreviewRelease and resolveDevelopmentRelease to consume VERCEL_BRANCH_URL host; extend resolveSentryRelease to read the same. Delete the obsolete preview-<slug>-<sha> shape and the slugifyBranch helper. Correct isValidReleaseName denylist to mirror Sentry's documented rules verbatim (accept `latest`, reject `/`). All tests pass."
     status: pending
   - id: ws3-cancellation-rewrite
-    content: "WS3 (REWRITE): replace vercel-ignore-production-non-release-build.mjs with a ~50-line implementation that uses the npm `semver` package and the simpler `branch === main AND semver.lte(current, previous)` rule. Add the missing `VERCEL_GIT_COMMIT_REF === main` gate. Asymmetric handling of unresolvable inputs: current undefined → cancel with stderr build-error message; previous undefined → continue (treat as first build). Rewrite unit tests against the new rule. Re-amend ADR-163 §10 to match the new (simpler) truth table and drop the fail-open trade-off framing (it evaporates with the new shape). Wiring integration check from WS1.4 covers shim → canonical resolution."
+    content: "WS3 (REWRITE + SHIM DELETION): (a) replace vercel-ignore-production-non-release-build.mjs with a ~50-line implementation that uses the npm `semver` package and the simpler `branch === main AND semver.lte(current, previous)` rule. Add the missing `VERCEL_GIT_COMMIT_REF === main` gate. Asymmetric handling of unresolvable inputs: current undefined → cancel with stderr build-error message; previous undefined → continue (treat as first build). Rewrite unit tests against the new rule. Re-amend ADR-163 §10 to match the new (simpler) truth table and drop the fail-open trade-off framing (it evaporates with the new shape). (b) Delete the workspace shim at apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs and re-point apps/oak-curriculum-mcp-streamable-http/vercel.json's ignoreCommand directly at the canonical script (relative path upward from the app dir). If Vercel cannot resolve the upward path under deploy probe, fallback is to relocate the canonical script + tests INTO the app workspace (single-consumer abstraction collapsed per principles). Either resolution eliminates the wiring drift surface structurally — no wiring integration test required."
     status: pending
   - id: ws4-refactor-docs
     content: "WS4 (REFACTOR): TSDoc on every changed symbol; rewrite release resolution section in observability.md and sentry-deployment-runbook.md; update napkin if a generalisable pattern emerges."
@@ -104,12 +109,17 @@ are settled and not re-opened by this plan:
      rule** (WS3 — ~50 lines using the canonical `semver` package,
      branch-gate added, asymmetric current/previous handling) +
      unit-test rewrite + ADR-163 §10 re-amendment to reflect the new
-     behaviour + integration check that the wiring stays intact (WS1.4).
+     behaviour + **deletion of the `apps/.../build-scripts/` shim** so
+     `vercel.json` invokes the canonical script directly (WS3.5 —
+     structurally eliminating the wiring drift surface rather than
+     guarding it with a configuration-parity test).
 
 Both requirements MUST end this plan as **true and proven** — proven by
-unit tests (cross-resolver contract; cancellation logic), an integration
-check (wiring intact), and end-to-end Sentry-side verification (next
-preview deploy shows events tagged with the branch-URL release).
+unit tests (cross-resolver contract; cancellation logic), structural
+elimination of indirection (no shim left to drift against), and
+end-to-end Sentry-side verification (next preview deploy shows events
+tagged with the branch-URL release; next semantic-release commit on
+`main` deploys to production while a non-release commit cancels).
 
 ---
 
@@ -330,9 +340,51 @@ commit before WS1 begins.
 
 ## WS1 — Contract tests (RED)
 
-All tests MUST FAIL at the end of WS1.
+All NEW tests MUST FAIL at the end of WS1; pre-existing tests for
+unchanged behaviour stay green.
 
 > See [TDD Phases component](../../templates/components/tdd-phases.md)
+
+### 1.0 Type-system and dependency-graph enablers
+
+Two minimal changes are required before any RED test can compile under
+strict typing (per principles §Compiler Time Types — no `as`/`unknown`
+shortcuts to bypass missing fields):
+
+1. **Add `@oaknational/build-metadata` as a `devDependency` of
+   `@oaknational/sentry-node`.** The cross-resolver contract test
+   imports `resolveBuildTimeRelease` from build-metadata; the
+   `libs ← core` direction is allowed by `.dependency-cruiser.mjs`'s
+   `no-core-to-libs` rule (forbids the reverse only). Land in the same
+   commit as the test.
+
+2. **Add a single optional field to `SentryConfigEnvironment`** in
+   `packages/libs/sentry-node/src/types.ts`:
+
+   ```typescript
+   /**
+    * Vercel branch URL host. Consumed by `resolveSentryRelease` for
+    * preview/non-main-production release identifiers from WS2 onward
+    * (currently ignored by the runtime resolver — declared here so the
+    * cross-resolver contract test compiles under strict typing without
+    * requiring a `Record<string, unknown>` cast).
+    *
+    * @remarks Same env-var subset is also declared on
+    * `BuildTimeReleaseEnvironmentInput`. The duplication is a known
+    * follow-up: a shared `ReleaseEnvironmentInput` schema should live
+    * in `@oaknational/env` (alongside `SentryEnvSchema`) so both
+    * resolvers' input types derive from a single source — see
+    * §Follow-up Work below.
+    */
+   readonly VERCEL_BRANCH_URL?: string;
+   ```
+
+   This is a type-level enabler with **no runtime behaviour change** —
+   `resolveSentryRelease` continues to ignore the field until WS2.2
+   extends `RELEASE_PRECEDENCE`. `BuildTimeReleaseEnvironmentInput`
+   already accepts the field via its open string-string index
+   signature; an explicit declaration there lands in WS2.1 alongside
+   the resolver rewrite for documentation parity.
 
 ### 1.1 Cross-resolver contract test
 
@@ -342,59 +394,81 @@ All tests MUST FAIL at the end of WS1.
 identifier table, asserts that
 `resolveBuildTimeRelease(env)` and `resolveSentryRelease(env)` return the
 **same `value`**. Lives in `sentry-node` (downstream of `build-metadata`
-in the dep graph). One test per row; one shared input fixture.
+in the dep graph). One test per row; one shared input fixture (a small
+adapter handles the `APP_VERSION` vs `APP_VERSION_OVERRIDE` field-name
+difference between the two resolver inputs).
 
 **Acceptance Criteria**:
 
-1. Test compiles and runs.
+1. Test compiles (requires §1.0 enablers) and runs.
 2. Test fails for at least the preview rows (current build resolver
    returns `preview-<slug>-<sha>`; runtime returns semver).
-3. No existing test breaks.
+3. The matched `*.contract.unit.test.ts` filename is collected by
+   sentry-node's vitest config (`tests/**/*.test.ts` glob from
+   `vitest.config.base.ts`). Confirmed by file-name pattern; no config
+   change required.
+4. No existing test breaks.
 
-### 1.2 Build-time resolver tests
+### 1.2 Build-time resolver tests — atomic contract replacement
 
-Extend `packages/core/build-metadata/tests/build-time-release.unit.test.ts`:
+In `packages/core/build-metadata/tests/build-time-release.unit.test.ts`,
+**REPLACE** (do not retain alongside) the assertions of
+`preview-<slug>-<sha>` shape with branch-URL-host assertions:
 
-- Replace assertions of `preview-<slug>-<sha>` shape with branch-URL-
-  host shape. New input row: `VERCEL_BRANCH_URL` set; assert resolver
-  returns the leftmost label.
+- Old preview-shape assertions are deleted in this commit. Per
+  principles `Replace, don't bridge` and `NEVER create compatibility
+  layers`, retaining old-contract tests alongside new-contract tests
+  during the transition would be a test-layer compatibility layer.
+  WS0 already retired the old contract in ADR-163; the tests have been
+  stale since `06bf25d7`. They die now.
+- New input row: `VERCEL_BRANCH_URL` set; assert resolver returns the
+  leftmost label as `value`, with `source: 'vercel_branch_url'`. The
+  `BuildTimeReleaseSource` union does not yet include
+  `vercel_branch_url`; tests assert on `value` only at WS1 and gain
+  `source` assertions when WS2.1 extends the union.
 - New error case: `VERCEL_BRANCH_URL` missing in preview — fail-fast
-  with a typed error (per principles §Fail FAST). The current
-  `missing_branch_in_preview` error kind extends to cover this case (or
-  a new typed error if WS0 reviewer prefers explicit naming).
+  with a typed error (per principles §Fail FAST). New typed error kind
+  `missing_branch_url_in_preview` (additive to `BuildTimeReleaseError`
+  in WS2.1; the test asserts the kind name string and goes red until
+  WS2 adds it).
 
-### 1.3 Runtime resolver tests
+### 1.3 Runtime resolver tests — atomic contract replacement
 
-Extend `packages/libs/sentry-node/tests/config-resolution.unit.test.ts`:
+In `packages/libs/sentry-node/src/config-resolution.unit.test.ts`,
+**REPLACE** any pre-existing assertions that pin the runtime resolver
+to `APP_VERSION` for preview/development environments with
+branch-URL-host assertions for those environments:
 
 - New precedence rule: after `SENTRY_RELEASE_OVERRIDE`, the runtime
   resolver consults `VERCEL_BRANCH_URL` for non-production environments
   before falling back to `APP_VERSION`/semver.
-- New tests for the branch-URL host extraction (leftmost label).
-- New error case: preview env without `VERCEL_BRANCH_URL` — fail-fast.
+- New tests for the branch-URL host extraction (leftmost label) with
+  `source: 'vercel_branch_url'` (extension of `SentryReleaseSource`
+  union lands in WS2.2).
+- New error case: preview env without `VERCEL_BRANCH_URL` —
+  fail-fast.
+- Override-precedence tests stay (they assert behaviour that does not
+  change). Production-semver tests stay (production behaviour does not
+  change).
 
-### 1.4 Cancellation wiring integration check
+### Acceptance Criteria for WS1 overall
 
-**Test**:
-`apps/oak-curriculum-mcp-streamable-http/tests/vercel-ignore-command-wiring.integration.test.ts`
-(new) — asserts:
-
-1. `vercel.json` parses, contains `ignoreCommand`, and the command
-   string resolves (relative to the workspace) to the existing script
-   file on disk.
-2. The script file is executable (or at least invokable via `node`).
-3. The script's exported `runVercelIgnoreCommand` is importable (catches
-   accidental rename / move).
-
-This protects the wiring that the existing unit tests depend on but
-which they cannot themselves observe. Fails today only if the file moves
-unexpectedly; once landed, it fails on any future regression.
-
-**Acceptance Criteria for WS1 overall**:
-
-- All new tests run and fail for the expected reason (RED).
-- No existing test breaks.
+- All new tests compile and fail for the expected reason (RED).
+- All replaced (old-contract) assertions are removed atomically in the
+  same commit — no transitional dual-spec coexistence.
+- Tests for unchanged behaviour (production semver, override
+  precedence, environment downgrade) stay green.
 - Test names clearly reference the truth-table rows they cover.
+- The `libs ← core` devDependency edge is added; `pnpm install`
+  resolves cleanly.
+- The `SentryConfigEnvironment` type addition is type-only (no
+  runtime branch reads `VERCEL_BRANCH_URL` until WS2).
+- **No wiring integration test is added.** The wiring drift surface
+  the test would have guarded is eliminated structurally in WS3 by
+  shim deletion + direct `vercel.json` re-pointing. See §WS3.5 for
+  the rationale and §Follow-up Work for the principles trail
+  (`No shims`, `Don't extract single-consumer abstractions`,
+  `Test real behaviour, not implementation details`).
 
 ---
 
@@ -533,9 +607,10 @@ truth table.
 `semver` is not yet a workspace dependency. Add it to
 `packages/core/build-metadata/package.json` (runtime — the script
 imports it). Use the latest stable major; lockfile updated by
-`pnpm install`. The shim at the app workspace
-(`apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore.mjs`)
-re-exports the canonical script — no second install needed.
+`pnpm install`. No app-side install is needed — by the end of WS3.5
+the canonical script is invoked directly by `vercel.json` (the shim
+is deleted), so `semver` resolves through the canonical script's own
+package boundary.
 
 ### 3.2 Script rewrite (RED → GREEN within WS3)
 
@@ -604,12 +679,11 @@ export function runVercelIgnoreCommand({ env, repositoryRoot, executeGitCommand,
 Constraints inherited from the existing script — keep them in the
 rewrite:
 
-- `runVercelIgnoreCommand` stays the named export (the wiring
-  integration test from §1.4 imports it by name).
-- The default-export CLI shim (whatever invokes
-  `runVercelIgnoreCommand` and writes the exit code) stays in place
-  so `vercel.json`'s `ignoreCommand` keeps working without changing
-  the path.
+- `runVercelIgnoreCommand` stays the named export so the existing
+  unit tests (rewritten in §3.3) can import it by name.
+- The default-export CLI invocation (whatever invokes
+  `runVercelIgnoreCommand` and writes the exit code) stays in place;
+  the path it lives at changes via §3.5 below.
 - Vercel `ignoreCommand` semantics are unchanged: exit `0` cancels,
   exit `1` continues.
 
@@ -653,12 +727,92 @@ Land a second amendment block in
    once landed.
 5. Updates the History entry accordingly.
 
-### 3.5 Wiring integration check
+### 3.5 Delete the workspace shim and re-point `vercel.json`
 
-The wiring integration test from §1.4 lands in WS1 RED and stays
-green through WS3 (the rewrite preserves the export name and file
-path). If WS3 changes either, the test fails and the change is not
-acceptable without re-evaluating the wiring contract.
+**Problem the shim creates.** Today
+`apps/oak-curriculum-mcp-streamable-http/vercel.json` declares:
+
+```json
+{ "ignoreCommand": "node ./build-scripts/vercel-ignore-production-non-release-build.mjs" }
+```
+
+…and that script is a thin re-export shim that loads and runs the
+canonical implementation in
+`packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`.
+
+The shim is a single-consumer abstraction with no behaviour of its
+own. It exists only to give Vercel a path it can resolve from the app
+workspace — not because the indirection adds value. It directly
+violates two principles:
+
+- `Don't extract single-consumer abstractions` (§Architectural
+  Decision Rules)
+- `No shims, no hacks, no workarounds` (§Cardinal Rule of This
+  Repository)
+
+It also creates a class of failure the script's own unit tests
+cannot detect: rename or move either side and Vercel's
+`ignoreCommand` silently misfires (no production cancellation runs;
+non-release commits deploy). The original draft of WS1 included an
+integration test to guard this. That test would be a procedural
+mitigation for an architectural smell — and it would assert
+configuration parity, not behaviour, which `testing-strategy.md`
+classes as low-value (cf. "Tests that test the test framework, not
+the application logic"). The principled fix is to remove the shim,
+not to test around it.
+
+**Action — preferred path: re-point `vercel.json` directly.**
+
+1. Update
+   `apps/oak-curriculum-mcp-streamable-http/vercel.json`'s
+   `ignoreCommand` to invoke the canonical script directly via its
+   path (relative to the app workspace, which is Vercel's
+   `rootDirectory`):
+
+   ```json
+   {
+     "ignoreCommand": "node ../../packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs"
+   }
+   ```
+
+2. Delete
+   `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+   (the shim) and any sibling `*.unit.test.mjs` it carried. The
+   canonical tests at
+   `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs`
+   stay (rewritten in §3.3).
+
+3. Run a Vercel preview deployment of the branch and confirm
+   `vercel inspect <deployment-url>` shows `ignoreCommand` resolved
+   and ran (exit 0 cancellation OR exit 1 continue, as appropriate).
+   This is the only meaningful wiring gate — Vercel itself.
+
+**Action — fallback path: relocate the canonical script into the app
+workspace.** If, and only if, the preview deployment in step 3 above
+fails because Vercel will not resolve a path that escapes the app
+`rootDirectory`:
+
+1. Move the canonical script and its unit-test file from
+   `packages/core/build-metadata/build-scripts/` into
+   `apps/oak-curriculum-mcp-streamable-http/build-scripts/`.
+2. Move the `semver` dependency declaration from
+   `packages/core/build-metadata/package.json` to
+   `apps/oak-curriculum-mcp-streamable-http/package.json`.
+3. Revert `vercel.json` to its original `./build-scripts/…` path.
+4. Update ADR-163 §10 amendment text (drafted in §3.4) to reference
+   the new canonical location.
+
+The fallback collapses the abstraction in the other direction:
+single consumer, single location. Either resolution structurally
+eliminates the wiring drift surface — there is no shim left to drift
+against.
+
+**No replacement integration test.** The combined effect of (a) the
+canonical script's behavioural unit tests + (b) Vercel's own deploy
+probe + (c) the absence of any indirection between `vercel.json` and
+the canonical implementation leaves nothing for a wiring test to
+prove. Adding one would test configuration syntax, not application
+behaviour.
 
 ### 3.6 End-to-end proof on next production deploy
 
@@ -780,7 +934,7 @@ rejections recorded with rationale per principles §Reviewer findings.
 | Branch URLs change shape if the Vercel project is renamed or migrated to a new domain.                 | Resolver extracts leftmost host label only; consistent across `*.vercel.app` and `*.vercel.thenational.academy`. Document the assumption in TSDoc and ADR amendment.                    |
 | Branch URLs exceed Sentry's 200-char release-name limit on long branch names.                          | Reuse the existing `SENTRY_RELEASE_NAME_PATTERN` validation in both resolvers; fail-fast if exceeded so the diagnostic surfaces at build time, not at Sentry-ingest time.               |
 | Forking a branch (or copy-paste branches across forks) produces colliding branch-URL hosts in Sentry.  | Vercel branch URLs are per-project; collision requires same project + same branch name, which is the same logical release line. Document and accept; do not overengineer for this case. |
-| Production cancellation script regresses (file move / rename / vercel.json drift).                     | WS1.4 wiring integration test fails on any structural drift. ADR-163 amendment names the canonical path.                                                                                 |
+| Production cancellation script regresses (file move / rename / vercel.json drift).                     | WS3.5 deletes the workspace shim and re-points `vercel.json` directly at the canonical script — no shim left to drift against. ADR-163 amendment (WS3.4) names the canonical path; the next preview deploy proves the wiring (Vercel itself is the gate). Any future move/rename is caught by Vercel's deploy probe AND by `dependency-cruiser` / `knip` if it leaves an orphaned file. |
 | WS3 rewrite changes script behaviour silently (unit-test gaps let a buggy semver comparison ship).     | One unit test per row of the §Truth Tables / Production build cancellation table; tests assert exit code AND stream output AND (for the branch-gate row) that no I/O occurred. `semver.lte` is the canonical comparator — the rewrite delegates correctness to a well-tested external package rather than re-deriving it. |
 | Adding `semver` as a workspace dependency drags in deep transitive risk.                               | `semver` is a tiny, single-purpose package maintained by the Node.js team; it is already in many transitive dep chains. Verify with `pnpm why semver` post-install; if the resolved version aligns with an existing transitive copy, deduplication is automatic.                                                |
 | Renaming/deletion of obsolete resolver branches breaks downstream consumers we have not enumerated.    | Run the full quality-gate chain (WS5) including build, type-check, lint, knip, dependency-cruiser, and tests across all workspaces.                                                      |
@@ -804,7 +958,22 @@ rejections recorded with rationale per principles §Reviewer findings.
   total per the truth tables.
 - **Replace, don't bridge** (`.agent/rules/replace-dont-bridge.md`): the
   obsolete `preview-<slug>-<sha>` shape and the `slugifyBranch` helper
-  are deleted in the same commit they stop being used.
+  are deleted in the same commit they stop being used. Old-shape test
+  assertions are atomically replaced by new-shape assertions in WS1
+  (no transitional dual-spec coexistence).
+- **No shims, no hacks, no workarounds** (`.agent/directives/principles.md`
+  §Cardinal Rule of This Repository) + **Don't extract single-consumer
+  abstractions** (§Architectural Decision Rules): WS3.5 deletes the
+  `apps/.../build-scripts/vercel-ignore-…mjs` shim and re-points
+  `vercel.json` directly at the canonical script. The shim was a
+  single-consumer indirection with no behaviour of its own; it created
+  a wiring drift surface that would otherwise need a configuration-
+  parity test. Removing it removes the surface.
+- **Test real behaviour, not implementation details**
+  (`.agent/directives/testing-strategy.md`): no wiring integration test
+  is added for the `vercel.json` → script linkage. Once the shim is
+  gone, the only meaningful gate is Vercel's own deploy probe. A
+  configuration-parity test would assert syntax, not behaviour.
 - **No warning toleration** (`.agent/rules/no-warning-toleration.md`):
   any ESLint/tsc/vitest warnings introduced by the rewrite are
   escalated and fixed in WS2/WS5.
@@ -828,9 +997,13 @@ rejections recorded with rationale per principles §Reviewer findings.
 | Surface                                                                              | Update                                                                                          |
 | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
 | `docs/architecture/architectural-decisions/163-…release-identifier….md`              | First amendment (WS0 — landed): per-environment release identifier truth table + initial §10 cancellation rule + reviewer dispositions. Second amendment (WS3): §10 re-amendment matching the simplified rule + asymmetric input-resolution rationale + canonical-`semver` reference. |
-| `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs` | Rewrite (~205 → ~50 lines) using `semver.lte`; branch gate added; asymmetric current/previous handling. Wire-format unchanged. |
+| `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs` | Rewrite (~205 → ~50 lines) using `semver.lte`; branch gate added; asymmetric current/previous handling. Wire-format unchanged. (Or, if WS3.5 fallback path is taken, file is moved into `apps/oak-curriculum-mcp-streamable-http/build-scripts/` instead — ADR amendment captures the actual landed location.) |
 | `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs` | Test cases rewritten one-per-truth-table-row (5 rows). Old fail-open-trade-off cases deleted.   |
-| `packages/core/build-metadata/package.json`                                          | Add `semver` runtime dependency.                                                                |
+| `packages/core/build-metadata/package.json`                                          | Add `semver` runtime dependency. (Moves to `apps/oak-curriculum-mcp-streamable-http/package.json` if WS3.5 fallback path is taken.) |
+| `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs` | **Deleted** in WS3.5 (shim with no behaviour of its own; collapses single-consumer abstraction per principles). Sibling `*.unit.test.mjs` (if any) deleted alongside. |
+| `apps/oak-curriculum-mcp-streamable-http/vercel.json`                                | `ignoreCommand` re-pointed to the canonical script's path (preferred: `node ../../packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`; fallback: original `./build-scripts/…` if canonical script is relocated under WS3.5 fallback). |
+| `packages/libs/sentry-node/src/types.ts`                                             | `SentryConfigEnvironment` gains `readonly VERCEL_BRANCH_URL?: string` (WS1 — type-only enabler with TSDoc naming the canonicalisation follow-up). |
+| `packages/libs/sentry-node/package.json`                                             | Add `@oaknational/build-metadata` as a `devDependency` (WS1 — `libs ← core` edge for cross-resolver contract test). |
 | `apps/oak-curriculum-mcp-streamable-http/docs/observability.md`                      | Release resolution section rewritten against amended ADR; both truth tables included.           |
 | `docs/operations/sentry-deployment-runbook.md`                                       | Example identifiers updated; cancellation rule explicit.                                        |
 | `apps/oak-curriculum-mcp-streamable-http/docs/vercel-environment-config.md`          | Note that `VERCEL_BRANCH_URL` is consumed by the Sentry release resolver.                       |
@@ -838,6 +1011,44 @@ rejections recorded with rationale per principles §Reviewer findings.
 | `.agent/plans/observability/active/sentry-observability-maximisation-mcp.plan.md`    | L-8 lane references the amended ADR section instead of restating the rule.                      |
 | `.agent/memory/active/distilled.md` + napkin                                         | Pattern recorded if WS0's process-gap finding generalises.                                      |
 | Any new directive or rule introduced to prevent ADR-vs-implementation drift recurring | Filed under `.agent/rules/` or `.agent/directives/` per its scope; named in the ADR amendment. |
+
+---
+
+## Follow-up Work (deferred — out of scope for this plan)
+
+These items are surfaced as direct architectural consequences of WS1's
+type-system enabler. They are NOT in scope for this plan (YAGNI — solve
+the canonicalisation only when there is a third consumer or a
+demonstrated drift cost), but they are recorded here so the deferral is
+visible and the trigger conditions are explicit. Per principles, no
+stub plan file is created — the trigger conditions ARE the plan.
+
+1. **Canonicalise `ReleaseEnvironmentInput` into `@oaknational/env`.**
+   Today both `BuildTimeReleaseEnvironmentInput`
+   (`packages/core/build-metadata/src/build-time-release-types.ts`)
+   and `SentryConfigEnvironment`
+   (`packages/libs/sentry-node/src/types.ts`) declare overlapping
+   subsets of release-relevant Vercel env vars (`VERCEL_ENV`,
+   `VERCEL_BRANCH_URL`, `VERCEL_GIT_COMMIT_SHA`, `APP_VERSION` /
+   `APP_VERSION_OVERRIDE`). After WS2 lands, the cross-resolver
+   contract test will be the structural guarantee of behavioural
+   parity, but the _type_ duplication remains.
+
+   - **Trigger**: a third consumer of release-resolution env-var
+     shapes is introduced, OR a drift between the two declarations is
+     observed in a code review or linter run.
+   - **Action when triggered**: extract a shared `releaseEnvSchema`
+     into `packages/core/env/src/` (alongside the existing
+     `sentryEnvSchema` etc.); have both `BuildTimeReleaseEnvironmentInput`
+     and `SentryConfigEnvironment` derive their release-env subsets
+     from it via TypeScript `Pick<>` or schema composition.
+   - **Cost of deferral**: one optional field declared in two
+     locations. Minimal as long as the cross-resolver contract test
+     passes (the test catches behavioural divergence; the duplication
+     is purely declarative).
+   - **TSDoc reference**: WS1 §1.0 adds a TSDoc note on the new
+     `VERCEL_BRANCH_URL` field naming this follow-up so any future
+     contributor reading the type sees the deferral and its trigger.
 
 ---
 
