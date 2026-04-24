@@ -8,7 +8,21 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 
 # Repo Continuity
 
-**Last refreshed**: 2026-04-24 (Pippin / cursor / claude-opus-4-7 —
+**Last refreshed**: 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m —
+session opened via `/jc-start-right-quick` with owner-directed primary
+scope to wire `.remember/` plugin buffers into ignore configs and
+capture workflows; scope expanded mid-session to also (a) name Cursor
+and Codex per-user memory surfaces alongside Claude Code in the same
+workflows, (b) integrate SonarCloud scanning and secrets hooks, (c)
+investigate `eslint-plugin-sonarjs`'s installed-but-unwired state and
+author an activation backlog plan after trial activation produced
+448+ local errors and a SonarCloud remote baseline of 1,244 issues;
+the observability thread was touched incidentally when the owner
+pre-staged plan-body tightening which landed in `5fc52d86` as part
+of "commit all files"; thread record refreshed to add Frodo's
+identity row and to record the incidental touch).
+
+**Prior refresh**: 2026-04-24 (Pippin / cursor / claude-opus-4-7 —
 meta-session sweep at `ffec98b0` landed the previously-uncommitted
 release-identifier plan-body refinement alongside cross-cutting
 practice/process restructuring, vendor-skills expansion, and three
@@ -63,7 +77,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23; `cursor` / `claude-opus-4-7` / Pippin / WS0-amendment-landing-then-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit / 2026-04-24 (latest — landed ADR-163 §1 + §10 amendment + reviewer dispositions in `06bf25d7`; later same date refined the plan body to encode WS3 cancellation-script rewrite using canonical `semver` + WS2 validator denylist correction; later same date landed the deferred plan-body refinement inside the cross-cutting meta-session sweep at `ffec98b0` per explicit owner direction; thread record refreshed — next session opens the plan, reads WS3 + WS2.5 as authoritative, proceeds straight to WS1 RED) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23; `cursor` / `claude-opus-4-7` / Pippin / WS0-amendment-landing-then-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit / 2026-04-24 (landed ADR-163 §1 + §10 amendment + reviewer dispositions in `06bf25d7`; later same date refined the plan body to encode WS3 cancellation-script rewrite using canonical `semver` + WS2 validator denylist correction; later same date landed the deferred plan-body refinement inside the cross-cutting meta-session sweep at `ffec98b0` per explicit owner direction; thread record refreshed); `claude-code` / `claude-opus-4-7-1m` / Frodo / incidental-touch-via-commit-of-owner-pre-staged-plan-body-tightening / 2026-04-24 (latest — committed owner's pre-staged tightening at `5fc52d86`; primary session scope was `.remember/` plugin-capture wiring and the sonarjs activation backlog plan, on cross-cutting architecture surfaces not tied to the observability thread) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -135,7 +149,68 @@ also owner-handled validation stages.
 
 ## Current session focus
 
-**2026-04-24 (latest, Pippin / cursor / claude-opus-4-7)**: meta-
+**2026-04-24 (latest, Frodo / claude-code / claude-opus-4-7-1m)**:
+cross-cutting infrastructure session opened via `/jc-start-right-quick`
+with a primary request to wire `.remember/` plugin buffers into the
+learning systems. Five commits landed on `feat/otel_sentry_enhancements`:
+
+- `69a87c44` `chore(sonar): integrate sonarcloud scanning and secrets hooks`
+  — sonar-project.properties, `.claude/settings.json` hooks on Read and
+  UserPromptSubmit, prompt-secrets.sh multiline JSON parsing, sonarlint
+  connected-mode VS Code config, README badges.
+- `83ec9198` `chore(agent): wire .remember/ plugin buffers into ignores
+  and capture workflows` — shared ESLint `ignores`, `.prettierignore`,
+  `.markdownlintignore`; session-open grounding in start-right-quick /
+  start-right-thorough; auxiliary capture in session-handoff step 6a;
+  capture + graduation surfaces in consolidate-docs step 3 + step 7.
+- `5fc52d86` `docs(plans): tighten sentry-release plan with shim
+  deletion and atomic test replacement` — owner-pre-staged edits
+  committed as part of "commit all files"; WS1/WS2/WS3 refinements
+  folding in shim deletion and atomic test replacement. This is the
+  incidental touch on the observability thread.
+- `76b4de50` `docs(agent): name cursor and codex memory surfaces in
+  grounding and consolidation` — extends consolidate-docs step 3
+  "Platform-specific memory" bullet and both start-right flows with
+  named Cursor and Codex memory surfaces alongside Claude Code's.
+- `d2a4815e` `chore(quality): register sonarjs plugin inactive and
+  plan activation backlog` — imports `eslint-plugin-sonarjs` in
+  `oak-eslint/recommended.ts` and wires a `{ plugins: { sonarjs } }`
+  placeholder (no rules active); removes sonarjs from the knip
+  ignore list; authors the phased activation plan at
+  `.agent/plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md`.
+
+Mid-session, a trial activation of `sonarjs.configs.recommended`
+surfaced 448+ local ESLint errors across 13 packages. SonarCloud
+remote baseline measured via the sonarqube MCP tool: 67 bugs, 1
+vulnerability, 169 security hotspots, 1,176 code smells, 99h
+technical debt, reliability D (4.0), security E (5.0). Owner and
+agent agreed a phased plan with explicit gate-outs at every phase
+boundary is the right shape rather than a single giant PR.
+
+Owner metacognition intervention mid-session surfaced an evasion
+pattern on my part: when asked a direct verification question ("did
+you wire X?"), I responded with a 5-row table plus a self-invented
+"what I did NOT touch" hedge rather than a clean yes/no with
+evidence. Owner named it explicitly; I owned it; feedback memory
+saved at `feedback_answer_verification_questions_directly.md`;
+PDR candidate raised for the graduation register below.
+
+Pre-commit gates passed for every commit. Working tree clean at
+`d2a4815e` except for an unstaged observability plan modification
+the owner had pre-staged later in the session (to be picked up in
+the next session unless the owner stages it directly).
+
+Next on `observability-sentry-otel` thread: unchanged — WS1 RED
+contract tests on the release-identifier plan (a new session
+picks it up with Pippin's or Samwise's identity, not Frodo's —
+Frodo was an incidental visitor to this thread).
+
+Next on the new `sonarjs-activation-and-sonarcloud-backlog` plan:
+Phase 0 baseline and tranche. No owner appetite signal yet;
+awaiting the prior observability thread completion before
+scheduling.
+
+**Prior session (2026-04-24 Pippin / cursor)**: meta-
 session sweep landed at `ffec98b0` (80 files, +12732/-3970), per
 explicit owner direction "commit all files including from other
 threads". The sweep folded together:
@@ -388,6 +463,13 @@ indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
 
+**Status (2026-04-24 Frodo session-handoff)**: **due — explicit
+owner request to run `/jc-consolidate-docs` immediately after
+session-handoff completes**. Trigger: owner direction at
+session-handoff open. Falsifiability: the next turn should invoke
+consolidate-docs and update this status to
+`completed this handoff — owner-directed consolidation pass`.
+
 **Status (2026-04-22 final session-handoff)**: **completed
 this pass** — two consolidation passes run. Napkin rotated
 (2,323→65); distilled graduated (281→177, 19+ entries to
@@ -436,6 +518,18 @@ This closeout explicitly asked the ADR/PDR question. Answer: **no new
 register row**. The owner correction tightened the lane, but it does
 not yet justify a distinct ADR/PDR candidate beyond the existing
 pending items below.
+
+### Pending-graduations register additions (2026-04-24 Frodo / claude-code session)
+
+Three candidates surfaced this session. All recorded with PDR-026
+deferral-honesty shape (named constraint / trade-off + evidence +
+falsifiability):
+
+| captured-date | source-surface | graduation-target | trigger-condition | status |
+| --- | --- | --- | --- | --- |
+| 2026-04-24 | [`napkin.md` § 2026-04-24 (Frodo) — Surprise (evasion pattern)](../active/napkin.md) + owner-auto-memory `feedback_answer_verification_questions_directly.md` | PDR-shape governance rule: **direct-answer discipline on verification questions**. When asked a verification question ("did you do X?"), agent answers yes/no with evidence first; invented adjacent scope and breadth-as-thoroughness tables count as evasion. Candidate PDR or amendment to an existing communication-discipline PDR if one exists; currently no Practice-governance artefact codifies this. | (i) ≥1 second cross-session observation of the same evasion shape OR explicit owner direction to promote; AND (ii) the marginal enforcement cost does not dominate the cost it averts. | pending |
+| 2026-04-24 | [`napkin.md` § 2026-04-24 (Frodo) — Observation (category distinction)](../active/napkin.md) + the `.remember/` wiring work itself (commit `83ec9198`) + the Cursor/Codex memory extension (commit `76b4de50`) | PDR amendment to [PDR-011 (Continuity Surfaces and Surprise Pipeline)](../../practice-core/decision-records/PDR-011-continuity-surfaces-and-surprise-pipeline.md) adding **plugin-managed ephemeral capture surfaces** as a first-class category in the capture→distil→graduate→enforce pipeline, distinct from the agent-authored napkin (which the practice owns lifecycle-for) and from per-user platform memory (which is scoped to one agent's platform). | (i) ≥1 second plugin of the same shape (plugin-managed in-repo capture surface) appears and the category-distinction question recurs; OR (ii) explicit owner direction to promote. | pending |
+| 2026-04-24 | [`napkin.md` § 2026-04-24 (Frodo) — Observation (pattern candidate)](../active/napkin.md) + the new plan at [`sonarjs-activation-and-sonarcloud-backlog.plan.md`](../../plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md) (commit `d2a4815e`) | Pattern candidate: **gate-off, fix, gate-on** — a named shape for quality-tool activation where the tool is installed-but-disabled, the backlog is fixed in severity-ordered tranches with explicit gate-out points at every phase boundary, and activation is a single-commit flip at the terminal phase. Destination: `.agent/memory/active/patterns/` as an engineering-instance pattern. | (i) ≥1 second ecosystem instance of the same shape (e.g. enabling a coverage threshold, a new mutation-testing gate, a new dep-audit gate with an existing backlog); OR (ii) explicit owner direction to promote on first instance. | pending |
 
 ### Pending-graduations register additions (2026-04-23 latest plan-rewrite session)
 

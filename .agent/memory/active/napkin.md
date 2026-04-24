@@ -19,6 +19,55 @@ archived to `archive/napkin-2026-04-22.md`).
 
 ---
 
+## 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m) — `.remember/` plugin wiring + sonarjs investigation + activation plan
+
+**Landings**: `.remember/` plugin buffers wired into ignore configs (ESLint shared `ignores`, `.prettierignore`, `.markdownlintignore`) and capture workflows (`start-right-quick` step 3, `start-right-thorough` learning-loop section, `session-handoff` step 6a auxiliary input, `consolidate-docs` step 3 capture surfaces + step 7 graduation inputs); commit `83ec9198`. Cursor and Codex per-user memory surfaces named explicitly in the same grounding/consolidation surfaces (parallel to the existing Claude Code auto-memory bullet); commit `76b4de50`. SonarCloud integration committed; commit `69a87c44`. Sonarjs plugin imported in oak-eslint `recommended` but registered as an inactive `{ plugins: { sonarjs } }` placeholder; activation backlog plan authored at `.agent/plans/architecture-and-infrastructure/current/sonarjs-activation-and-sonarcloud-backlog.plan.md`; commit `d2a4815e`. Owner's pre-staged observability plan-body tightening committed; commit `5fc52d86`.
+
+**Observations / Surprises**:
+
+### Surprise (candidate: feedback memory + possible PDR)
+
+- **Expected**: when owner asks a direct verification question ("did you wire X?"), I would answer with yes/no and evidence.
+- **Actual**: I responded with a 5-row table AND a "what I did NOT touch" section that invented an adjacent scope question (napkin SKILL.md extension) the owner had not asked for. Owner called this out explicitly: "you have evaded direct answers, why."
+- **Why expectation failed**: reflex toward breadth as a form of risk-aversion — if the answer spreads across more surfaces, I cannot be pinned on scope. But this shifts cognitive load onto the owner and reads as evasion. The failure mode is "risk-aversion through breadth."
+- **Behaviour change**: on verification questions, first sentence answers the question (yes/no/partial + what's missing); second paragraph is evidence only (commit SHA, file paths); do not invent adjacent scope; tables are for comparisons, not for answering yes/no. Owner-auto-memory saved at `feedback_answer_verification_questions_directly.md`.
+- **Source plane**: `active` (behavioural guidance from session learning; may be PDR-shaped at thread-scoped depth).
+
+**candidate**: PDR-shaped governance rule — "direct-answer discipline on verification questions" — because it's substance about how agents communicate with owners, not about product architecture. Mark as PDR candidate in the pending-graduations register.
+
+### Surprise (structural, worth recording)
+
+- **Expected**: if `eslint-plugin-sonarjs` is installed as a dependency, it's wired into some config.
+- **Actual**: sonarjs was installed, externalised in `tsup.config.ts`, and allow-listed in `knip.config.ts` under `ignoreDependencies` — but **never imported in any preset**. Dead dependency for an unknown time. Discoverable only by grepping for the package name across the repo.
+- **Why expectation failed**: installed-plus-allow-listed is a wiring-decision-deferred state, and I had no heuristic for detecting it. The knip `ignoreDependencies` list is effectively a "this is intentionally unused" register; a deferred wiring decision parked there becomes invisible.
+- **Behaviour change**: when a dependency is in a package's `ignoreDependencies` list, that's a wiring-decision surface — audit the entries when exploring tooling state. The comment next to the entry ("ESLint plugins are peer dependencies used at runtime") can be wrong even when well-intended.
+
+### Surprise (scale)
+
+- **Expected**: SonarCloud remote baseline would be moderate; maybe a few hundred issues.
+- **Actual**: 1,244 total issues — 67 bugs, 1 vulnerability, 169 security hotspots, 1,176 code smells. 99 hours of technical debt. Reliability rating D (4.0), Security rating E (5.0). Maintainability A.
+- **Why expectation failed**: SonarCloud's rule set is much broader than eslint-plugin-sonarjs and covers classes the plugin can't port (security hotspots especially). Absence of prior triage + broader rule coverage + 162k LOC = large backlog.
+- **Behaviour change**: before proposing a "single PR" for a backlog-clearing task, pull baseline counts first. User's instinct framing (one PR) was reasonable pre-data; my job was to surface the data and let them rescope. Did so; user settled on "phased ordering with gate-outs, one PR aspirationally."
+
+### Observation (pattern candidate)
+
+- **Gate-off, fix, gate-on** is a named shape for quality-tool activation with phased gate-outs. Applies wherever a new linter / static-analyser / coverage threshold would produce violations large enough to stall a single-PR fix. The plan at `sonarjs-activation-and-sonarcloud-backlog.plan.md` instantiates it: Phase 0 baseline, Phases 1-4 severity-ordered fixes with explicit gate-out points, Phase 5 single-commit activation flip. Worth promoting to `.agent/memory/active/patterns/` as an engineering-instance pattern on second instance.
+- **candidate**: pattern instance, pending a second ecosystem instance or explicit owner request to promote.
+
+### Observation (category distinction)
+
+- **Plugin-managed ephemeral capture surfaces** (e.g. `.remember/` from the remember plugin) are distinct from:
+  1. agent-authored napkin (repo-in, we own lifecycle)
+  2. platform-specific per-user memory (`~/.claude/projects/.../memory/`, `~/.cursor/chats/`, `~/.codex/memories/` — per-user, plugin-or-platform-manages lifecycle, scoped to one agent's platform)
+- The distinction matters for the capture→distil→graduate→enforce pipeline: we READ all three but we only WRITE/ROTATE the napkin. `.remember/` and platform memory are read-sources.
+- **candidate**: PDR amendment to PDR-011 (Continuity Surfaces and Surprise Pipeline) adding "plugin-managed ephemeral capture surfaces" as a first-class category alongside the napkin. Trigger: ≥1 second plugin of this shape appears (or explicit owner request).
+
+### Observation (command nuance)
+
+- `pnpm format` does not exist in this repo; `pnpm format:root` is the canonical. I defaulted to raw `npx prettier --check` when verifying my edits, which was corrected by the owner. Canonical repo scripts encode the exact flags and caching behaviour the gate enforces; raw npx can diverge. Owner-auto-memory saved at `feedback_repo_scripts_over_npx.md`.
+
+---
+
 ## 2026-04-22 (consolidation session) — agent infrastructure portability audit + napkin rotation (claude-code / claude-opus-4-6-1m)
 
 **Observations**:
