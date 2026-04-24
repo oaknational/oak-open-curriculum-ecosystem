@@ -38,6 +38,9 @@ collaboration.txt
 **/*.d.ts
 **/*.d.ts.map
 
+# Hand-authored Vitest provided-context augmentation.
+!apps/oak-search-cli/vitest-provided-context.d.ts
+
 # File system artifacts
 .DS_Store
 

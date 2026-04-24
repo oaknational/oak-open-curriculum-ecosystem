@@ -351,8 +351,9 @@ const eslintConfig = defineConfigArray(
       'scripts/**',
       'operations/**',
       'evaluation/**',
-      'smoke-test*.ts',
-      'smoke-tests/**',
+      // Runner config is the smoke-suite composition root; test and setup
+      // files receive injected config and must not read process.env.
+      'vitest.smoke.config.ts',
       'src/lib/elasticsearch/setup/cli.ts',
       'src/lib/elasticsearch/setup/ingest.ts',
       'src/cli/shared/pass-through.ts',

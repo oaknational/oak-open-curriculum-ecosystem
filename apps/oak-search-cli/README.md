@@ -235,6 +235,10 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
    pnpm benchmark     # Run ground truth benchmarks
    ```
 
+   `pnpm test:smoke` requires only `ELASTICSEARCH_URL` and
+   `ELASTICSEARCH_API_KEY`; ingestion and admin commands require the full CLI
+   environment above.
+
 ## Observability and maintenance
 
 - Monitor structured logs for ingestion retries, zero-hit counts, and cache version rotation.

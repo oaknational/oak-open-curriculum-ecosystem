@@ -4,9 +4,9 @@
  * Configures the test environment for unit and integration tests.
  * No network calls or external dependencies should be used in tests.
  *
- * NOTE: Per testing-strategy.md, we do NOT mutate process.env globally here.
- * Tests that need environment variables should set them in beforeEach/afterEach
- * with proper cleanup to avoid shared state pollution.
+ * NOTE: Per testing-strategy.md, tests do not read or mutate process.env.
+ * Tests that need configuration should construct explicit env-like objects and
+ * pass them through the code under test.
  */
 
 import { afterEach, vi } from 'vitest';
