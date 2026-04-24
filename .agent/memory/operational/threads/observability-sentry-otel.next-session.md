@@ -1,10 +1,12 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
 **Last refreshed**: 2026-04-24 (Pippin / cursor / claude-opus-4-7)
-after the cross-cutting meta-session sweep landed in commit
-`ffec98b0`. That sweep folded this thread's previously-uncommitted
-plan-body refinement (WS3 cancellation-script rewrite + WS2 validator
-denylist correction) into a larger commit that also landed
+after a small intra-session test-relocation micro-lane landed in
+`6764457d` (see `### Current state` for context). Prior refresh
+on the same day captured the cross-cutting meta-session sweep at
+`ffec98b0` which folded this thread's previously-uncommitted
+plan-body refinement (WS3 cancellation-script rewrite + WS2
+validator denylist correction) into a larger commit alongside
 practice/process restructuring, vendor-skills expansion, and three
 new parallel plans. The release-identifier plan refinement is now
 durable; this thread picks up at WS1 RED with no commit-choice
@@ -247,6 +249,18 @@ wiring integration check), then WS2 GREEN resolver rewrite.
 
 ### Current state
 
+- **Intra-session micro-lane (2026-04-24, `6764457d`)**: deleted
+  `apps/oak-curriculum-mcp-streamable-http/e2e-tests/tool-examples-metadata.e2e.test.ts`
+  and added
+  `packages/sdks/oak-curriculum-sdk/src/mcp/aggregated-fetch/flat-zod-schema.integration.test.ts`
+  to relocate the only assertion in the deleted file not already
+  covered at integration level (aggregated-`fetch` `id` examples).
+  Triggered by a 60s timeout on `pnpm test:e2e` under pre-push
+  concurrency; deeper analysis showed the test violated the
+  testing-strategy directive on three counts (testing upstream
+  libraries, duplicating existing proofs, asserting content at
+  E2E level). E2E suite now 22 files / 155 tests (was 23 / 159);
+  no functional code changed.
 - WS0 landed: ADR-163 amendment + plan file in `06bf25d7`; continuity
   refresh in `7b4de7a4`.
 - Plan body refined to encode the WS3 cancellation-script rewrite +

@@ -129,3 +129,48 @@ archived to `archive/napkin-2026-04-22.md`).
   directives/` changes which path agents read at session start.
   Refreshed thread record now names the new path explicitly so
   the next session does not chase a broken link.
+
+---
+
+## 2026-04-24 (intra-session, post-handoff) — tool-examples e2e relocated to integration level (Pippin / cursor / claude-opus-4-7)
+
+**Observations**:
+
+- **`tools/list includes examples for generated tools` e2e
+  timeout under pre-push concurrency surfaced a deeper testing-
+  strategy violation, not a flake**: examined the test in
+  response to a 60s timeout on push; reproduction in isolation
+  passed quickly. Investigation showed the file (i) created a
+  fresh Express app (3 rate-limit timers each) per `it` block,
+  (ii) proved a property of two upstream libraries (Zod 4
+  `.meta({ examples })` round-trip + MCP SDK's built-in
+  `tools/list` handler), (iii) duplicated proofs already present
+  in two integration tests (codegen `meta-examples-roundtrip` +
+  aggregated-search `flat-zod-schema`), and (iv) carried a
+  docstring referencing an abandoned "B3 Hybrid Approach" with
+  a `setRequestHandler` override that doesn't exist in source.
+  Decision: delete and add the one missing piece (aggregated-
+  fetch `flat-zod-schema.integration.test.ts`) at the
+  integration layer. Landed in `6764457d`.
+
+- **The 60s timeout itself is a useful diagnostic substrate
+  candidate**: e2e test files that bootstrap the full Express
+  app + middleware (3 rate limiters with dangling timers,
+  Sentry wrappers, etc.) per `it` block are at risk of starving
+  the event loop under pre-push parallel turbo execution. Pattern
+  worth distilling: "if an e2e file's per-test bootstrap cost is
+  high and it proves an upstream-library property, the test is
+  in the wrong place". Touches the testing-strategy directive's
+  rules on level-correctness and "Each proof should happen ONCE".
+
+- **Auto-staging surprise in the pre-commit window**: at
+  `git commit` time, files I had explicitly NOT staged
+  (`.claude/hooks/`, `.claude/settings.json`, `README.md`)
+  appeared in the staged set — origin not fully traced this
+  session, possibly a hook from `sonar-secrets/` setup or a
+  Cursor PostToolUse hook firing during the commit attempt.
+  Mitigation: `git restore --staged` (index-only, never touches
+  working tree) + re-confirm staged set before re-attempting.
+  Owner directive received: "unstage is fine, but do not destroy
+  any changes" — adopt as a per-commit reflex when the staged
+  set widens unexpectedly.
