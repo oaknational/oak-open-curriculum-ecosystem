@@ -203,8 +203,8 @@ Enforces TDD discipline, naming conventions, and mock simplicity.
 ## Delegation Triggers
 
 Invoke this agent when writing or modifying test files, when auditing
-test suites for skipped tests or global state mutation, or when TDD
-compliance evidence is needed.
+test suites for skipped tests or global state reads/manipulation, or
+when TDD compliance evidence is needed.
 
 ---
 
@@ -249,7 +249,7 @@ For each test file, classify:
 
 - Are mocks simple (1-3 lines)?
 - Complex mocks = code smell — flag for refactoring
-- No global state mutation (`process.env`, `vi.stubGlobal`)
+- No global state reads or mutation (`process.env`, `vi.stubGlobal`)
 - No `vi.doMock` — prefer dependency injection
 
 ### Step 4: Report
@@ -259,7 +259,7 @@ For each test file, classify:
 - [ ] Tests verify BEHAVIOUR, not implementation details
 - [ ] Test names describe the behaviour being verified
 - [ ] No skipped tests (`.skip`, `.todo` without justification)
-- [ ] No global state manipulation
+- [ ] No global state reads or manipulation
 - [ ] Mocks are simple — complex mocks indicate design problems
 - [ ] Test-first evidence is visible or explicitly noted as unavailable
 - [ ] Edge cases covered for changed behaviour

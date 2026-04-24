@@ -10,11 +10,11 @@ split_strategy: "Keep concise; this is a reference extracted from AGENT.md"
 
 For the full architecture, see
 [ADR-125 (Agent Artefact
-Portability)](../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
+Portability)](../../../docs/architecture/architectural-decisions/125-agent-artefact-portability.md).
 For the live platform support matrix, see
 [cross-platform-agent-surface-matrix.md][matrix].
 
-[matrix]: ../memory/executive/cross-platform-agent-surface-matrix.md
+[matrix]: ./cross-platform-agent-surface-matrix.md
 
 ## Canonical Content (Layer 1)
 
@@ -25,9 +25,15 @@ For the live platform support matrix, see
 | `.agent/commands/*.md` | Canonical commands |
 | `.agent/directives/*.md` | Policy documents (AGENT.md, principles.md, etc.) |
 | `.agent/sub-agents/templates/*.md` | Canonical sub-agent prompts (ADR-114) |
-| `.agent/memory/active/patterns/` | Reusable solutions ([README](../memory/active/patterns/README.md)) |
+| `.agent/memory/active/patterns/` | Reusable solutions ([README](../active/patterns/README.md)) |
 | `.agent/plans/` | Implementation plans, execution tracking |
 | `agent-tools/` | Agent workflow CLIs |
+
+## Platform Entrypoints
+
+| Location | Purpose |
+|----------|---------|
+| `AGENTS.md` / `CLAUDE.md` / `GEMINI.md` | Thin platform entrypoints that point agents into `.agent/` |
 
 ## Platform Adapters (Layer 2)
 
@@ -37,6 +43,11 @@ For the live platform support matrix, see
 | Commands | `.cursor/commands/*.md` | `.claude/commands/*.md` | `.agents/skills/jc-*/SKILL.md` | `.gemini/commands/*.toml` |
 | Rules | `.cursor/rules/*.mdc` | `.claude/rules/*.md` | `.agents/rules/*.md` | — |
 | Sub-agents | `.cursor/agents/*.md` | `.claude/agents/*.md` | `.codex/agents/*.toml` | — |
+
+Platform adapters are thin pointers. Canonical content lives under
+`.agent/`; adapters preserve platform activation semantics without copying
+substance. Claude Code keeps tracked system policy in `.claude/settings.json`;
+`.claude/settings.local.json` is gitignored user-local override state.
 
 ## How to Create New Artefacts
 

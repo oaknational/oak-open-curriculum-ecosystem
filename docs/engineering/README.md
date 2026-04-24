@@ -18,6 +18,7 @@ This directory contains engineering workflow and implementation documentation fo
 - [Troubleshooting](../operations/troubleshooting.md) - Operational issues and resolutions
 - [CI Policy](./ci-policy.md) - What runs in CI (sdk-codegen policy, build behavior)
 - [Testing Patterns](./testing-patterns.md) - Reusable test recipes (E2E DI pattern, subprocess tests)
+- [Testing TDD Recipes](./testing-tdd-recipes.md) - Worked Red/Green/Refactor examples and common TDD violations
 - [Release and Publishing](./release-and-publishing.md) - npm publishing, versioning, and release automation
 - [Milestone Release Runbook](./milestone-release-runbook.md) - Gate model, snagging protocol, and go/no-go controls for milestone releases
 - [Pre-Merge Divergence Analysis](./pre-merge-analysis.md) - Systematic process for merging significantly diverged branches safely

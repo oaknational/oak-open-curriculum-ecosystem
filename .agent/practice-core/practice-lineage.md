@@ -117,12 +117,15 @@ This process is universal. It costs nothing and prevents shallow execution.
 - Use the **correct proof layer**. Strictness in testing means proving the full
   behaviour contract tests own, not stealing type, lint, formatting, import,
   or tracked-repo concerns from the tools that should prove those instead.
-- **Unit test**: a single pure function in isolation. No mocks, no I/O. Naming convention varies by
-  ecosystem (e.g. `*.unit.test.ts` in TypeScript, `test_*.py` in Python, `*_test.go` in Go).
-- **Integration test**: units working together as code (not a running system). Simple mocks/fakes
-  injected as parameters only. No global state manipulation. Naming convention varies by ecosystem.
-- **Prohibited**: global state manipulation in tests -- environment variable mutation, global mock
-  injection, module cache manipulation, or any mechanism that creates hidden coupling between tests.
+- **Unit test**: a single pure function in isolation. No mocks, no I/O.
+  Naming convention varies by ecosystem (e.g. `*.unit.test.ts` in
+  TypeScript, `test_*.py` in Python, `*_test.go` in Go).
+- **Integration test**: units working together as code (not a running
+  system). Simple mocks/fakes injected as parameters only. No global state
+  access/manipulation. Naming convention varies by ecosystem.
+- **Prohibited**: global state access/manipulation in tests -- environment
+  variable reads/writes, global mock injection, module cache manipulation, or
+  any mechanism that creates hidden coupling between tests.
   Pass configuration as function arguments.
 - **Browser proof surfaces** (UI projects): accessibility audit (WCAG
   compliance), visual regression, responsive validation, theme/mode

@@ -7,6 +7,11 @@ required by the change profile. Until the taxonomy rename lands,
 Documentation drift (`docs-adr-reviewer`) applies whenever behaviour or
 architecture changes, even if no docs are explicitly edited.
 
+AGENT.md intentionally points here rather than carrying reviewer rosters or
+timing detail. Reviewers can review intentions before code exists, and long or
+multi-phase work should re-invoke the relevant specialist at natural phase
+boundaries so feedback shapes the work while it is still live.
+
 ## Layered Triage (First 2 Minutes)
 
 Use this order so the gateway scales with the specialist roster.
@@ -178,7 +183,7 @@ Before marking the work complete, record:
 - whether any delegated review result still needs reintegration
 - whether each new capability has an observability loop across each
   applicable axis (engineering, product, usability, accessibility,
-  security) per [ADR-162](../../docs/architecture/architectural-decisions/162-observability-first.md).
+  security) per [ADR-162](../../../docs/architecture/architectural-decisions/162-observability-first.md).
   Omission is explicit and justified, not incidental.
 
 ## Invocation

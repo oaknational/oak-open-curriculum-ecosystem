@@ -47,7 +47,7 @@ seam, extract a pure function, inject a dependency).
    test-authored worker.** Covered by `testing-strategy.md §No
    process spawning in in-process tests`.
 9. **Any test makes a real network call.** Only smoke tests may do
-   real IO; smoke tests run on-demand per
+   real network IO; smoke tests run on-demand per
    [ADR-161](../../docs/architecture/architectural-decisions/161-network-free-pr-check-ci-boundary.md).
 
 ## Mock/Stub Immediate Fails
@@ -121,7 +121,7 @@ The test-reviewer flags the symptom. The fix is usually upstream.
 ## Related Rules
 
 - `.agent/rules/no-global-state-in-tests.md` — specific prohibition
-  on `process.env` mutation, `vi.stubGlobal`, `vi.mock`,
+  on `process.env` reads/writes, `vi.stubGlobal`, `vi.mock`,
   `vi.doMock`.
 - `.agent/rules/no-skipped-tests.md` — prohibition on skip mechanisms.
 - `.agent/directives/testing-strategy.md` — full authoritative

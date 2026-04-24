@@ -52,7 +52,7 @@ server.registerTool(name, config, async (params, extra) => {
 
 - Function signatures document their dependencies
 - Tests use simple fakes passed as arguments (ADR-078)
-- No `vi.mock` or global state manipulation needed
+- No `vi.mock` or global state access/manipulation needed
 - Context leaks between requests are impossible
 - The type system proves the data is available
 

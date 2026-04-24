@@ -130,7 +130,7 @@ This is preferable to hiding the tool, as it enables discoverability and clear e
 - No API key exposure to clients
 - Time-limited URLs prevent credential accumulation
 - Schema-driven asset types (`ASSET_TYPES` from codegen) — adding a new asset type requires only an OpenAPI schema update
-- Full DI (fetch, clock, signing secret, base URL) enables comprehensive testing without global state mutation
+- Full DI (fetch, clock, signing secret, base URL) enables comprehensive testing without global state access
 
 ### Negative
 

@@ -106,7 +106,7 @@ describe('my function', () => {
 
 ### Positive
 
-1. **All functions become pure and testable** without global state manipulation
+1. **All functions become pure and testable** without global state access
 2. **Dependencies are explicit and discoverable** through function signatures
 3. **Eliminates race conditions** in parallel test execution
 4. **Follows "fail fast" principle** - missing config fails at startup, not deep in a call stack
@@ -122,8 +122,8 @@ describe('my function', () => {
 ### Neutral
 
 1. Entry points (`bin/*.ts`, `index.ts`) remain the single place to read `process.env`
-2. Subprocess-spawned tests (e.g. smoke tests) may pass env via spawn options — process isolation makes this safe
-3. In-process E2E tests that use `createApp()` directly must use DI via `loadRuntimeConfig(isolatedEnv)` — they share the test process and are subject to the same prohibition as unit/integration tests
+2. Smoke composition roots may pass env to the system under test — child-process smoke tests use spawn `env`, while Vitest smoke suites may read ambient env in the runner config and inject the validated object
+3. In-process E2E tests that use `createApp()` directly must use DI with explicit runtime-config objects or hermetic test helpers — they share the test process and are subject to the same prohibition as unit/integration tests
 
 ## Prohibited Patterns
 
@@ -131,25 +131,30 @@ The following patterns are **prohibited** in all tests (unit, integration, and i
 
 | Pattern                       | Why Prohibited                                   | Alternative                           |
 | ----------------------------- | ------------------------------------------------ | ------------------------------------- |
+| `process.env.X`               | Reads ambient global state, hiding DI seams      | Pass config as parameter              |
 | `process.env.X = 'value'`     | Mutates global state, causes race conditions     | Pass config as parameter              |
 | `vi.stubGlobal('fetch', ...)` | Mutates global object                            | Inject fetch as dependency            |
+| `vi.mock('module', ...)`      | Manipulates module cache, subtle race conditions | Inject module exports as dependencies |
 | `vi.doMock('module', ...)`    | Manipulates module cache, subtle race conditions | Inject module exports as dependencies |
 | `globalThis.X = 'value'`      | Mutates global state                             | Pass as parameter                     |
 
-**In-process E2E pattern**: Tests that create the app in-process (e.g. `createApp()` + supertest) must build an isolated env object and pass it through DI:
+**In-process E2E pattern**: Tests that create the app in-process (e.g. `createApp()` + supertest) must build an explicit runtime config and pass it through DI:
 
 ```typescript
-const testEnv: NodeJS.ProcessEnv = {
-  NODE_ENV: 'test',
-  DANGEROUSLY_DISABLE_AUTH: 'true',
-  OAK_API_KEY: 'test-key',
-  // ... other required keys
-};
-const runtimeConfig = loadRuntimeConfig(testEnv);
-const app = createApp({ runtimeConfig });
+import { createApp } from '../src/application.js';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
+
+const runtimeConfig = createMockRuntimeConfig({
+  dangerouslyDisableAuth: true,
+  env: { OAK_API_KEY: 'test-key' },
+});
+const app = await createApp({
+  runtimeConfig,
+  observability: createMockObservability(runtimeConfig),
+});
 ```
 
-**Exception**: Subprocess-spawned tests (smoke tests) may pass environment variables via spawn options because the child process has its own isolated environment. **This is the only exception.** Any other claimed exception is a violation, not an accepted trade-off — untracked exceptions undermine the gate for all future code.
+**Exception**: Smoke composition roots may provide environment variables to the system under test. Subprocess smoke tests use spawn `env`; Vitest smoke suites may load ambient env in the runner config and pass the validated object with `test.provide` / `inject`. Test files and setup files still must not read or mutate `process.env`. Any other claimed exception is a violation, not an accepted trade-off — untracked exceptions undermine the gate for all future code.
 
 ## Acceptance Criteria for Compliance
 
@@ -163,11 +168,12 @@ const app = createApp({ runtimeConfig });
 
 - All unit tests pass without `isolate: true` in vitest config
 - All integration tests pass without `pool: 'forks'` in vitest config
-- No `process.env` mutations in any test (unit, integration, or in-process E2E)
+- No `process.env` reads or mutations in any test (unit, integration, or in-process E2E)
+- No `vi.mock` in any test
 - No `vi.doMock` in any test
 - No `vi.stubGlobal` in any test
 - Simple fakes passed as constructor arguments, not complex mocks
-- In-process E2E tests use `loadRuntimeConfig(isolatedEnv)` + `createApp({ runtimeConfig })`
+- In-process E2E tests use explicit runtime-config objects and pass observability into `createApp`
 
 ## Implementation Status
 

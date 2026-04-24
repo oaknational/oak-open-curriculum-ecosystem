@@ -61,7 +61,7 @@ These ADRs define the architectural constraints you must enforce:
 | @docs/architecture/architectural-decisions/030-sdk-single-source-truth.md | SDK as Single Source | All API knowledge from SDK, never local |
 | @docs/architecture/architectural-decisions/034-system-boundaries-and-type-assertions.md | System Boundaries | Minimal assertions, only at unavoidable boundaries |
 | @docs/architecture/architectural-decisions/041-workspace-structure-option-a.md | Workspace Structure | apps/, packages/libs/, packages/sdks/ layout |
-| @docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md | DI for Testing | Simple fakes, no global state mutation |
+| @docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md | DI for Testing | Simple fakes, no global state access |
 
 ## When Invoked
 

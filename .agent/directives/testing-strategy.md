@@ -1,9 +1,9 @@
 ---
-fitness_line_target: 410
-fitness_line_limit: 550
+fitness_line_target: 380
+fitness_line_limit: 450
 fitness_char_limit: 33000
 fitness_line_length: 100
-split_strategy: "Move recipes to docs/engineering/testing-patterns.md; split by test level if needed"
+split_strategy: "Move recipes to docs/engineering/testing-patterns.md and docs/engineering/testing-tdd-recipes.md; split by test level if needed"
 ---
 
 # Testing and Development Strategy
@@ -23,7 +23,8 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md; split by 
 - Always use TDD at ALL levels (unit, integration, E2E)
 - Prefer unit tests over integration tests
 - Prefer integration tests over E2E tests
-- ALL IO MUST BE MOCKED, except in E2E tests
+- Unit and integration tests must not trigger IO. E2E and smoke tests may
+  trigger IO only under their respective constraints below.
 - NEVER create complex mocks, use simple mocks passed as arguments
   to the function under test. Complex mocks result in testing the
   mocks, and indicate that product code needs refactoring and
@@ -33,8 +34,8 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md; split by 
 - NEVER add complex logic to tests - it risks testing the test code rather than the code under test
 - Always ask what a test is proving - it should prove something useful about the code under test
 - Each proof should happen ONCE - repeated proofs are fragile and waste resources
-- NEVER manipulate global state in tests - no `process.env`
-  mutations, no `vi.stubGlobal`, no `vi.mock`, no `vi.doMock`.
+- NEVER manipulate global state in tests - no `process.env` reads
+  or mutations, no `vi.stubGlobal`, no `vi.mock`, no `vi.doMock`.
   Product code must accept configuration as parameters. See
   [ADR-078][di].
 
@@ -51,6 +52,9 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md; split by 
 - **Test to interfaces, not internals** - Tests should be written
   to the interfaces, not the internals. Closely related to test
   behaviour not implementation.
+- **Assert effects, not constants** - Test observable product
+  behaviour through the interface, not the value of internal
+  constants or configuration collections.
 - **No useless tests** - Each test must prove something useful
   about the product code. If a test is only testing the test or
   mocks, delete it.
@@ -71,10 +75,14 @@ split_strategy: "Move recipes to docs/engineering/testing-patterns.md; split by 
   a helpful error message explaining what is needed. Validation
   scripts that require external resources should be standalone
   scripts, not tests.
-- **No global state manipulation** - Tests MUST NOT mutate
+- **No ambient global state access** - Tests MUST NOT read or mutate
   `process.env`, use `vi.stubGlobal`, use `vi.mock`, or use
   `vi.doMock`. If a function needs configuration, refactor it to
   accept config as a parameter. See [ADR-078][di].
+  Smoke composition roots — the Vitest runner config or spawn
+  invocation — may read ambient env, validate it, and inject the
+  result. Test files and setup files must not read or mutate
+  `process.env`.
 
 [di]: ../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md
 
@@ -142,7 +150,7 @@ net, and may produce side effects locally and in external systems.
 - **E2E test**: A test that verifies the behaviour of a running
   system. E2E tests CAN trigger STDIO IO but NOT filesystem or
   network IO, CAN have side effects, and contain minimal mocks,
-  largely around network IO. These constrains are to allow the
+  largely around network IO. These constraints are to allow the
   E2E tests to be safely run in CI/CD.
 
 - **Smoke test**: A test that verifies the behaviour of a running
@@ -211,149 +219,12 @@ infrastructure.
 
 ## TDD at All Levels
 
-### TDD is Not Just for Unit Tests
+TDD applies to unit, integration, and E2E tests. Each level of tests
+MUST be written to specify desired behaviour before implementation at
+that level is created or changed. Worked examples live in
+[Testing TDD Recipes][tdd-recipes].
 
-**Critical Rule**: TDD applies to unit, integration, AND E2E
-tests. Each level of tests MUST be written to specify the desired
-behaviour, BEFORE the implementation is created or changed.
-
-### Unit Test TDD (Micro-level)
-
-**Cycle**: Red → Green → Refactor
-
-1. **RED**: Write a unit test for a pure function that doesn't
-   exist yet. Run the test. It MUST fail.
-2. **GREEN**: Write the minimal implementation to make the test pass. Run the test. It MUST pass.
-3. **REFACTOR**: Improve the implementation without changing behaviour. Tests MUST remain green.
-
-**Example**:
-
-```typescript
-// 1. RED - Write test first
-describe('calculateTotal', () => {
-  it('sums array of numbers', () => {
-    expect(calculateTotal([1, 2, 3])).toBe(6);
-  });
-});
-// Run test → FAILS (function doesn't exist)
-
-// 2. GREEN - Minimal implementation
-function calculateTotal(numbers: number[]): number {
-  return numbers.reduce((sum, n) => sum + n, 0);
-}
-// Run test → PASSES
-
-// 3. REFACTOR - Improve (if needed)
-// Tests remain green
-```
-
-### Integration Test TDD (Component-level)
-
-**Cycle**: Red → Green → Refactor
-
-1. **RED**: Write integration test specifying how units work together. Run test. It MUST fail.
-2. **GREEN**: Implement units and wire them together. Run test. It MUST pass.
-3. **REFACTOR**: Improve integration without changing behaviour. Tests MUST remain green.
-
-**Example**:
-
-```typescript
-// 1. RED - Write integration test first
-describe('createMcpRouter', () => {
-  it('should skip auth for discovery methods', async () => {
-    const mockAuth = vi.fn();
-    const router = createMcpRouter({ auth: mockAuth });
-    const { req, res, next } = createMocks({
-      body: { method: 'tools/list' },
-    });
-
-    await router(req, res, next);
-
-    expect(next).toHaveBeenCalled();
-    expect(mockAuth).not.toHaveBeenCalled();
-  });
-});
-// Run test → FAILS (createMcpRouter doesn't exist)
-
-// 2. GREEN - Implement router
-export function createMcpRouter(options: McpRouterOptions): RequestHandler {
-  return (req, res, next) => {
-    const method = getMethodFromBody(req.body);
-    if (method && isDiscoveryMethod(method)) {
-      next();
-      return;
-    }
-    options.auth(req, res, next);
-  };
-}
-// Run test → PASSES
-
-// 3. REFACTOR - Extract helper functions, improve clarity
-// Tests remain green
-```
-
-### E2E Test TDD (System-level)
-
-**Cycle**: Red → Green → Refactor
-
-**CRITICAL**: E2E tests are SPECIFICATIONS of system behaviour.
-When changing system behaviour, update E2E tests FIRST.
-
-1. **RED**: Write E2E test specifying desired system behaviour.
-   Run test against existing system. It MUST fail (old behaviour).
-2. **GREEN**: Modify system implementation (often involving
-   multiple units/integrations). Run test. It MUST pass (new
-   behaviour).
-3. **REFACTOR**: Improve system internals without changing external
-   behaviour. E2E tests MUST remain green.
-
-**Example - Correct TDD Sequence**:
-
-```typescript
-// SCENARIO: We want ALL MCP methods to require auth (per MCP 2025-11-25)
-
-// 1. RED - Write E2E test FIRST specifying NEW behaviour
-describe('MCP Server E2E', () => {
-  it('returns 401 for tools/list without authentication', async () => {
-    const response = await request(server).post('/mcp').send({ method: 'tools/list' });
-
-    expect(response.status).toBe(401); // NEW expected behaviour
-  });
-
-  it('returns 401 for tools/call without authentication', async () => {
-    const response = await request(server)
-      .post('/mcp')
-      .send({ method: 'tools/call', params: { name: 'get-key-stages' } });
-
-    expect(response.status).toBe(401); // Was already 401, still 401
-  });
-});
-// Run E2E test → FAILS (current system allows discovery without auth)
-
-// 2. GREEN - Now implement changes
-// - Update integration tests for createMcpRouter() (RED → GREEN)
-// - Update unit tests for shouldSkipClerkMiddleware (RED → GREEN)
-// - Remove auth bypasses from router and middleware
-// Run E2E test → PASSES (system now requires auth for all methods)
-
-// 3. REFACTOR - Delete dead code, update TSDoc
-// E2E tests remain green
-```
-
-**Example - WRONG Sequence**:
-
-```typescript
-// ❌ VIOLATION: Updated implementation first, E2E tests after
-
-// 1. Wrote new integration tests for router (good!)
-// 2. Implemented router (implementation-first, not test-first at E2E level)
-// 3. Discovered E2E tests now fail (they specified OLD behaviour)
-// 4. Need to update E2E tests (should have been step 1!)
-
-// This is NOT TDD at the E2E level
-```
-
-### TDD Rule Summary
+### Rule Summary
 
 | Test Level      | What It Specifies       | When to Write                   | RED Phase                    |
 | --------------- | ----------------------- | ------------------------------- | ---------------------------- |
@@ -365,82 +236,12 @@ describe('MCP Server E2E', () => {
 
 **File-naming for RED specs**: Write RED-phase specs that
 specify not-yet-implemented behaviour in `*.e2e.test.ts`
-files, not `*.unit.test.ts`. The pre-commit hook runs only
-unit tests; a RED unit test blocks every commit until it
-goes green. E2E specs are gated at CI, so they can stay RED
-across multiple commits during the implementation phase.
-
-## Common TDD Violations and Fixes
-
-### Violation 1: Writing Code Before Tests
-
-❌ **Wrong**:
-
-```typescript
-// Write implementation first
-function add(a: number, b: number) {
-  return a + b;
-}
-
-// Then write test
-it('adds numbers', () => expect(add(1, 2)).toBe(3));
-```
-
-✅ **Correct**:
-
-```typescript
-// Write test FIRST
-it('adds numbers', () => expect(add(1, 2)).toBe(3));
-// Run → FAILS (add doesn't exist)
-
-// Then write implementation
-function add(a: number, b: number) {
-  return a + b;
-}
-// Run → PASSES
-```
-
-### Violation 2: Updating E2E Tests After Implementation
-
-❌ **Wrong**:
-
-```typescript
-// 1. Implement new feature in code
-// 2. Run E2E tests → they fail (old spec)
-// 3. Update E2E tests to match new implementation
-```
-
-✅ **Correct**:
-
-```typescript
-// 1. Update E2E tests to specify new behaviour FIRST
-// 2. Run E2E tests → they fail (feature not implemented)
-// 3. Implement feature
-// 4. Run E2E tests → they pass
-```
-
-### Violation 3: Tests That Only Pass With Current Implementation
-
-❌ **Wrong**:
-
-```typescript
-// Test that knows too much about implementation
-it('calls internal method', () => {
-  const spy = vi.spyOn(service, '_privateMethod');
-  service.doThing();
-  expect(spy).toHaveBeenCalled(); // Breaks if we refactor
-});
-```
-
-✅ **Correct**:
-
-```typescript
-// Test that specifies behaviour
-it('produces correct result', () => {
-  const result = service.doThing();
-  expect(result).toBe(expectedValue); // Survives refactoring
-});
-```
+files, not `*.unit.test.ts`. The pre-commit hook runs
+type-check, lint, and the `test` task, so RED in-process
+specs block commits until they go green. E2E specs are
+outside pre-commit, but pre-push and CI run `test:e2e`;
+they must be green before push/merge unless the owner
+explicitly authorises staged WIP.
 
 ## Development Workflow
 
@@ -471,8 +272,9 @@ FIRST, before changing implementation.
 
 **Example**:
 
-- If discovery methods should work without auth (system behaviour change)
-- Update E2E tests to specify this (RED phase)
+- If a protected endpoint should return a new status for a
+  system-level condition
+- Update E2E tests to specify that status first (RED phase)
 - Then implement changes in code (GREEN phase)
 - Then refactor internals (REFACTOR phase, tests stay green)
 
@@ -570,3 +372,5 @@ Four browser-specific proof categories for UI-shipping workspaces:
 For MCP App HTML resources: serve content directly to Playwright
 (resource-level a11y), then verify via basic-host (integration-level).
 See ADR-147, `docs/governance/accessibility-practice.md`.
+
+[tdd-recipes]: ../../docs/engineering/testing-tdd-recipes.md

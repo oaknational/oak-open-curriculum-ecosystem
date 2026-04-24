@@ -16,7 +16,8 @@ commitlint from a post-hoc rejection surface (the `commit-msg` hook fires
 *after* a full message has been drafted) into an **active, pre-draft tripwire**:
 the constraints are enumerated inline before drafting, the message is
 validated by `scripts/check-commit-message.sh` before `git commit` is invoked,
-and every attempt is logged for cross-session diagnostics.
+and the paused commit-attempt diagnostic log is kept documented for reactivation
+only when the owner asks for that trace.
 
 **Always-on** — every commit, every session, no trigger required.
 
@@ -283,8 +284,8 @@ Adapters are skill-form thin pointers (no slash-command form):
 - **Codex**: `.agents/skills/commit/SKILL.md` — thin pointer to this file.
 - **Claude**: `.claude/skills/commit/SKILL.md` — thin pointer to this file,
   with always-active discovery also reinforced through the `CLAUDE.md` →
-  `AGENT.md` citation chain at
-  [`.agent/directives/AGENT.md § Commit Discipline`](../../directives/AGENT.md#commit-discipline).
+  `AGENT.md` entrypoint citation chain at
+  [`.agent/directives/AGENT.md`](../../directives/AGENT.md).
 - **Gemini**: discovered via the same `AGENT.md` citation chain. Gemini
   does not have a native skills surface; the slash-command form
   (`.gemini/commands/jc-commit.toml`) was deliberately removed when this

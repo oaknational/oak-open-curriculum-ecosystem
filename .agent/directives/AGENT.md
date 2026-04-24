@@ -8,311 +8,179 @@ split_strategy: "Extract detail to referenced docs; this file is an index/entry 
 
 # AGENT.md
 
-This file provides core directives for AI agents working with
-this codebase. Read ALL of it first, then follow all instructions.
+This is the operational entry point for AI agents working with this codebase.
+Read all of it first, then follow the links that match the work in front of
+you. This file is an index and stance-setter; durable detail lives in the
+referenced homes.
 
 ## Grounding
 
-Commit to British spelling, grammar, and date formats.
-Reflect on your current task; update your task list if
-needed.
-Apply the [collaboration directive](./collaboration.md): dialogue,
-scope discipline, human risk acceptance, direct verification,
-discovery-based onboarding, and archive discipline.
+Commit to British spelling, grammar, and date formats. Reflect on your current
+task; update your task list if needed. Apply the
+[collaboration directive](./collaboration.md): dialogue, scope discipline,
+human risk acceptance, direct verification, discovery-based onboarding, and
+archive discipline.
 
-### For Planning Work Only
-
-Read [metacognition.md](./metacognition.md) and follow all
-instructions.
+For planning work, read [metacognition.md](./metacognition.md) and follow its
+reflection discipline before finalising a plan.
 
 ## The Practice
 
-This file is the operational entry point to the **agentic
-engineering practice** — the self-reinforcing system of
-principles, structures, specialist reviewers, and tooling
-that governs how work happens in this repository. The
-practice teaches itself through use: follow the links from
-here and the system reveals itself. Start with
-[practice-core/index.md](../practice-core/index.md)
-(orientation), then
-[practice-index.md](../practice-index.md) (local bridge into
-this repo's live surfaces),
-[practice.md](../practice-core/practice.md) (full map), and
-[practice-lineage.md](../practice-core/practice-lineage.md)
-(cross-repo propagation and the plasmid exchange mechanism).
+This file is the front door to the **agentic engineering practice**: the
+self-reinforcing system of principles, structures, reviewers, and tooling that
+governs how work happens in this repository.
 
-Agent onboarding starts with the `start-right-quick` or
-`start-right-thorough` workflow. Shared workflow definitions
-live in `.agent/skills/start-right-*/shared/`. Platform
-adapters in `.cursor/`, `.claude/`, `.codex/` directories.
+Start with:
 
-For the layering contract (doctrine / memory /
-reference / plans / workflow / adapters), authority order, and
-routing rule, see [orientation.md](./orientation.md).
+- [practice-core/index.md](../practice-core/index.md) — portable Practice
+  orientation
+- [practice-index.md](../practice-index.md) — local bridge into this repo's
+  live surfaces
+- [practice.md](../practice-core/practice.md) — full Practice map
+- [practice-lineage.md](../practice-core/practice-lineage.md) — cross-repo
+  propagation and plasmid exchange
 
-ADRs define how the system should work and are the
-architectural source of truth. Before substantive work,
-scan the [5-ADR starter block][adr-5] and open any ADR
-that matches your current work area from the
-[ADR index][adr-index].
+Agent onboarding starts with `start-right-quick` or `start-right-thorough`.
+For the layering contract, authority order, and routing rule, see
+[orientation.md](./orientation.md).
+
+ADRs define how the system should work and are the architectural source of
+truth. Before substantive work, scan the
+[5-ADR starter block][adr-5] and open any ADR that matches your work area from
+the [ADR index][adr-index].
 
 [adr-5]: ../../docs/architecture/architectural-decisions/README.md#start-here-5-adrs-in-15-minutes
 [adr-index]: ../../docs/architecture/architectural-decisions/README.md
 
 ## First Question
 
-Always apply the first question; **Ask: could it be simpler without compromising quality?**
+Always ask: **could it be simpler without compromising quality?**
 
-## Cardinal Rule of This Repository
+## Cardinal Rule
 
-ALL static data structures, types, type guards, Zod
-schemas, Zod validators, and other type related information
-MUST flow from the Open Curriculum OpenAPI schema in the
-SDK, and be generated at build/compile time, i.e. when
-`pnpm sdk-codegen` is run. If the upstream OpenAPI schema
-changes, then running `pnpm sdk-codegen` MUST be sufficient
-to bring all workspaces into alignment with the new schema.
+ALL static data structures, types, type guards, Zod schemas, Zod validators,
+and other type-related information MUST flow from the Open Curriculum OpenAPI
+schema in the SDK and be generated at codegen time. If the upstream OpenAPI
+schema changes, then `pnpm sdk-codegen` followed by `pnpm build` MUST be
+sufficient to bring all workspaces into alignment.
+
+Use [schema-first-execution.md](./schema-first-execution.md) for the
+non-negotiable runtime and generator contract.
 
 ## Project Context
 
-**What**: Libraries, SDK, MCP servers, and Search services
-for the Oak Open Curriculum API.
-**pnpm only** (never npm/yarn). See [Commands](#development-commands).
+This repository contains libraries, SDKs, MCP servers, search services, and
+agent tooling for the Oak Open Curriculum API. Use `pnpm` only. For setup,
+package topology, and capabilities, see the [root README](../../README.md) and
+[architecture overview](../../docs/architecture/README.md).
 
-## **RULES**
+## Rules
 
-Read [the rules](./principles.md); reflect on them, _apply_
-them, they MUST be followed at ALL times.
+Read [principles.md](./principles.md); reflect on it, apply it, and follow it
+at all times.
 
-**Always-applied rule tier** at [`.agent/rules/`](../rules/) —
-additional rules that operationalise principles, ADRs, and PDRs
-and MUST be followed at ALL times. On Claude the tier is loaded
-automatically from `.claude/rules/*.md`; on Cursor from
-`.cursor/rules/*.mdc` with `alwaysApply: true`; and through portable
-wrappers in `.agents/rules/` where that surface is scanned. On Codex,
-Gemini, and any other non-loader platform, **read every file in
-`.agent/rules/` at session open** — the canonical files are the
-source of truth and the platform adapters are thin pointers.
+The always-applied rule tier lives in [`.agent/rules/`](../rules/). Rules
+operationalise principles, ADRs, and PDRs. Claude and Cursor load their adapter
+tiers automatically; Codex, Gemini, and any other non-loader platform MUST read
+every canonical `.agent/rules/*.md` file at session open.
 
-## Use Sub-agents
+## Reviewers And Tools
 
-Always apply your own critical thinking to your work, and
-then use the sub-agents to gain additional perspectives and
-insights.
+Apply your own critical thinking, then use reviewers when the platform and
+owner direction allow it. Reviewer routing, timing, roster, depth, and reporting
+requirements live in
+[invoke-code-reviewers.md](../memory/executive/invoke-code-reviewers.md).
 
-**Reviewers can review intentions, not just code.** Before
-implementing a complex change, ask a reviewer whether the
-approach is sound. Describe what you intend to do, why, and
-what alternatives you considered. The reviewer can identify
-architectural issues, missing considerations, or simpler
-approaches before any code is written. This is often more
-valuable than post-implementation review because it avoids
-wasted effort on the wrong approach.
+Agent workflow CLIs live in [agent-tools](../../agent-tools/README.md). Use
+root scripts such as `pnpm agent-tools:claude-agent-ops health` from the repo
+root.
 
-**Invoke reviewers repeatedly across long or multi-phase work,
-not only at the end.** On long initiatives — multi-workstream
-plans, GO-style execution cadence, lanes that cross commits —
-treat reviewer dispatch as a mid-work practice, not a closing
-ritual. Re-invoke the relevant specialist (code-reviewer,
-architecture reviewers, security, type, etc.) at each natural
-phase boundary so feedback shapes the in-flight work, not just
-the post-mortem.
+Agent artefacts follow ADR-125's three-layer model: canonical content in
+`.agent/`, thin platform adapters, and platform entrypoints. See
+[artefact-inventory.md](../memory/executive/artefact-inventory.md) and
+[docs/engineering/extending.md](../../docs/engineering/extending.md) before
+adding rules, skills, commands, sub-agents, adapters, or ADRs.
 
-### Available Sub-agents
+Use the [commit skill](../skills/commit/SKILL.md) for commits. It enumerates
+live commitlint constraints and validates the drafted message via
+`scripts/check-commit-message.sh` before `git commit`.
 
-Specialist sub-agents provide targeted reviews and insights.
-Use them proactively for quality assurance. For the full
-invocation matrix, timing guidance, triage checklist, and
-worked examples, see the reviewer catalogue in executive memory:
-[`invoke-code-reviewers.md`](../memory/executive/invoke-code-reviewers.md).
-
-- **Standard quality roster**: `code-reviewer` (gateway),
-  `architecture-reviewer-barney`/`-fred`/`-betty`/`-wilma`,
-  `test-reviewer`, `type-reviewer`, `config-reviewer`,
-  `security-reviewer`, `docs-adr-reviewer`.
-- **UI/frontend cluster (ADR-149)**: `accessibility-reviewer`,
-  `design-system-reviewer`, `react-component-reviewer`.
-- **Specialist on-demand**: `ground-truth-designer`,
-  `subagent-architect`, `release-readiness-reviewer`,
-  `onboarding-reviewer`, `mcp-reviewer`,
-  `elasticsearch-reviewer`, `clerk-reviewer`,
-  `sentry-reviewer`, `assumptions-reviewer`.
-
-**Cursor-specific**: Invoke via the Task tool with
-`subagent_type` parameter. Other tooling: invoke by name
-using platform-specific methods.
-
-### Agent Tools
-
-CLI tools for managing agent workflows live in
-[`agent-tools/`](../../agent-tools/README.md). Use the root
-scripts (for example
-`pnpm agent-tools:claude-agent-ops status` or
-`pnpm agent-tools:claude-agent-ops health`) to run them.
-
-Canonical commands:
-
-- `pnpm agent-tools:claude-agent-ops`
-  `<status|health|worktrees|log|diff|commit-ready|preflight|cleanup>`
-- `pnpm agent-tools:cursor-session-from-claude-session <find|inspect|takeover>`
-- `pnpm agent-tools:codex-reviewer-resolve <agent-name> [--json]`
-
-### Agent Artefact Architecture (ADR-125)
-
-All agent artefacts follow a three-layer model: canonical
-content in `.agent/`, thin platform adapters in
-`.cursor/`/`.claude/`/`.gemini/`/`.agents/`/`.codex/`, and
-entry points (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). For
-the full inventory see
-[artefact-inventory.md](../memory/executive/artefact-inventory.md) (see § Create
-New Artefacts to author a new rule, skill, command, sub-agent,
-or ADR) and
-[docs/engineering/extending.md](../../docs/engineering/extending.md).
-
-**Platform configuration split (Claude Code)**:
-`.claude/settings.json` (tracked) defines the system contract;
-`.claude/settings.local.json` (gitignored) holds user-local
-overrides. See [artefact-inventory.md](../memory/executive/artefact-inventory.md)
-for the full split policy and portability validator details.
-
-## Memory and Patterns
+## Memory And Continuity
 
 Institutional memory lives in `.agent/memory/`:
 
 - [distilled.md](../memory/active/distilled.md) — hard-won rules extracted from
-  session napkins. Read before every session.
-- [patterns/](../memory/active/patterns/README.md) — 77 abstract, reusable
-  solutions to recurring design problems across code, architecture,
-  process, testing, and agent infrastructure. Before inventing a new
-  approach, check the pattern library for a known solution.
+  session napkins
 - [napkin.md](../memory/active/napkin.md) — current session observations
-  (written continuously, distilled periodically).
+- [patterns/](../memory/active/patterns/README.md) — reusable solutions and
+  failure modes
 - [threads/](../memory/operational/threads/README.md) — thread convention,
-  identity discipline, and per-thread next-session records (PDR-027).
+  identity discipline, and next-session records
+
+Before joining an active thread, read the thread record and follow the
+additive identity rule.
 
 ## Essential Links
 
-**Important**: These documents must be read.
+Use these links by trigger:
 
-### Core Practice
+- Core practice: [Development Practice][development],
+  [Collaboration Practice](./collaboration.md),
+  [Testing Strategy](testing-strategy.md), [TypeScript Practice][typescript],
+  [Safety and Security][security]
+- Architecture and schema: [Architecture][architecture], [ADR index][adr-index],
+  [ADR-029][adr-029], [ADR-030][adr-030], [ADR-031][adr-031],
+  [Schema-First MCP Execution](./schema-first-execution.md),
+  [Semantic Search Architecture][semantic-search]
+- UI and design: [Accessibility Practice][accessibility],
+  [Design Token Practice][design-tokens], [MCP App Styling][mcp-app-styling]
+- Build and operations: [Build System][build-system],
+  [Troubleshooting][troubleshooting]
+- Vision and domain: [Vision][vision], [Curriculum Guidance][curriculum],
+  [Experience Recording](../experience/README.md)
 
-- [Development Practice](../../docs/governance/development-practice.md) - Code standards
-- [Collaboration Practice](./collaboration.md) - Agent-human working model
-- [Testing Strategy](testing-strategy.md) - TDD/BDD approach at all levels
-- [TypeScript Practice](../../docs/governance/typescript-practice.md) - Type safety
-- [Safety and Security](../../docs/governance/safety-and-security.md) -
-  API keys, PII protection, security principles
-
-### UI and Design
-
-- [Accessibility Practice](../../docs/governance/accessibility-practice.md) -
-  WCAG 2.2 AA, Playwright + axe-core
-- [Design Token Practice](../../docs/governance/design-token-practice.md) -
-  DTCG three-tier model, contrast validation
-- [MCP App Styling](../../docs/governance/mcp-app-styling.md) -
-  SDK variable bridges, font loading, CSP
-
-### Architecture and Schema
-
-- [Architecture](../../docs/architecture/README.md) - Architecture overview
-- [ADR Index](../../docs/architecture/architectural-decisions/) - Architectural source of truth
-- [ADR-029](../../docs/architecture/architectural-decisions/029-no-manual-api-data.md) -
-  No manual API data structures
-- [ADR-030](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) -
-  SDK as single source of truth
-- [ADR-031](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) -
-  Generation-time extraction
-- [Schema-First MCP Execution Directive](./schema-first-execution.md) -
-  Non-negotiable runtime/generator contract
-- [Semantic Search Architecture](../../docs/agent-guidance/semantic-search-architecture.md) -
-  Structure is the foundation, transcripts are a bonus
-
-### Vision
-
-- [Vision](../../docs/foundation/VISION.md) - Why this
-  repository exists and the impact it aims to achieve
-  (current framing; supersedes ADR-008)
-
-### Domain and Context
-
-- [Curriculum Tools, Guidance and Playbooks][curriculum] —
-  Categories, tags, playbooks, commands
-- [Experience Recording](../experience/README.md) —
-  Subjective experience across sessions
-
+[development]: ../../docs/governance/development-practice.md
+[typescript]: ../../docs/governance/typescript-practice.md
+[security]: ../../docs/governance/safety-and-security.md
+[architecture]: ../../docs/architecture/README.md
+[adr-029]: ../../docs/architecture/architectural-decisions/029-no-manual-api-data.md
+[adr-030]: ../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md
+[adr-031]: ../../docs/architecture/architectural-decisions/031-generation-time-extraction.md
+[semantic-search]: ../../docs/agent-guidance/semantic-search-architecture.md
+[accessibility]: ../../docs/governance/accessibility-practice.md
+[design-tokens]: ../../docs/governance/design-token-practice.md
+[mcp-app-styling]: ../../docs/governance/mcp-app-styling.md
+[build-system]: ../../docs/engineering/build-system.md
+[troubleshooting]: ../../docs/operations/troubleshooting.md
+[vision]: ../../docs/foundation/VISION.md
 [curriculum]: ../../docs/governance/curriculum-tools-guidance-and-playbooks.md
 
-## Development Commands
+## Commands
 
-From the repo root. Quality-gate policy: run gates one at a time
-while iterating; for canonical aggregate verification, use `pnpm check`.
+From the repo root. Run gates one at a time while iterating; use `pnpm check`
+for canonical aggregate verification. The command source of truth is
+[Build System](../../docs/engineering/build-system.md) plus root
+`package.json`.
+
+Common entrypoints:
 
 ```bash
-pnpm install             # Setup
-pnpm clean               # Clean all build products
-pnpm sdk-codegen         # Type generation
-pnpm build               # Build
-pnpm type-check          # Type check
-pnpm format:root         # Format code
-pnpm markdownlint:root   # Markdown lint (auto-fix)
-pnpm subagents:check     # Validate sub-agent standards
-pnpm portability:check   # Validate canonical/adaptor parity
-pnpm lint:fix            # Lint (auto-fix)
-pnpm test:root-scripts   # Repo-level script tests
-pnpm test                # Unit and integration tests
-pnpm test:field-integrity # Semantic-search field-integrity
-pnpm test:widget         # MCP App widget in-process tests
-pnpm test:ui             # Browser UI tests
-pnpm test:a11y           # Browser a11y tests
-pnpm test:widget:ui      # Widget Playwright visual tests
-pnpm test:widget:a11y    # Widget WCAG 2.2 AA a11y tests
-pnpm test:e2e            # E2E tests (built-server)
-pnpm smoke:dev:stub      # Local smoke tests
-pnpm practice:fitness              # Three-zone, exits 1 on critical (ADR-144)
-pnpm practice:fitness:strict-hard  # Consolidation-closure gate: exits 1 on hard or critical
-pnpm practice:fitness:informational # Four-zone report, never blocks
-pnpm practice:vocabulary           # Three-zone vocabulary consistency check
-pnpm make                # Build + lint + format + doc-gen
-pnpm fix                 # Auto-fix: format, lint, markdownlint
-pnpm doc-gen             # Generate docs from TSDoc
-pnpm check               # Canonical aggregate gate (all)
+pnpm install
+pnpm sdk-codegen
+pnpm build
+pnpm type-check
+pnpm lint:fix
+pnpm format:root
+pnpm markdownlint:root
+pnpm test
+pnpm practice:fitness:informational
+pnpm practice:vocabulary
+pnpm check
 ```
-
-### Commit Discipline
-
-Use the `commit` skill for commits — canonical at
-[`.agent/skills/commit/SKILL.md`](../skills/commit/SKILL.md). It enumerates
-the live commitlint constraints inline at draft time, validates the drafted
-message via [`scripts/check-commit-message.sh`](../../scripts/check-commit-message.sh)
-BEFORE `git commit` (catches violations in ~1s before the ~34s pre-commit
-cycle). Commit-attempt logging is currently paused; the helper script and
-historical log remain in place but are not part of the active workflow.
-Skill adapters:
-`.cursor/skills/commit/SKILL.md` (Cursor),
-`.claude/skills/commit/SKILL.md` (Claude Code), and
-`.agents/skills/commit/SKILL.md` (portable `.agents/`). Gemini
-discovers via this directive.
-
-## Architectural Understanding
-
-This pnpm + Turborepo monorepo is organised along standard lines:
-
-### Structure
-
-- `apps/` – runnable apps that provide services to users
-- `agent-tools/` – agent workflow CLIs (`@oaknational/agent-tools`)
-- `packages/libs/` – libraries (logger, env-resolution,
-  search-contracts, sentry-node)
-- `packages/sdks/` – SDKs (curriculum-sdk, oak-search-sdk,
-  sdk-codegen)
-- `packages/core/` – shared low-level code (eslint-plugin,
-  type-helpers, result, env, observability)
-- `packages/design/` – design tokens (core, oak)
 
 ## Remember
 
 1. Periodically re-ground using [GO](../skills/go/shared/go.md)
    (ACTION/REVIEW/GROUNDING cadence).
-2. When in doubt, **make it simpler**. Think in layers (functions →
-   modules → packages) and step back to ask: is this the simplest
-   approach?
+2. When in doubt, make it simpler without compromising quality. Think in
+   layers: functions, modules, packages.

@@ -138,6 +138,10 @@ tests, a11y tests, and fix-mode commands. See ADR-121 for the full rationale.
 
 ## Quality Gate Commands
 
+This document is the command source of truth that AGENT.md links to. Root
+`package.json` remains the executable source of truth for script names; update
+this file in the same change whenever command names or gate membership change.
+
 ### `pnpm make` - Build and fix
 
 Prepares the codebase by building, checking, and auto-fixing issues:
@@ -194,10 +198,29 @@ stories.
 
 ### `pnpm test:all` - All test suites
 
-Runs all test types sequentially:
+Runs all test surfaces declared in the root `package.json` script. The script
+currently covers `test`, `test:widget`, `test:e2e`, `test:ui`, `test:a11y`,
+`test:widget:ui`, `test:widget:a11y`, and `smoke:dev:stub`.
 
 ```bash
-pnpm test && pnpm test:widget && pnpm test:e2e && pnpm test:ui && pnpm test:a11y && pnpm smoke:dev:stub
+pnpm test:all
+```
+
+### `pnpm test:field-integrity` - Field integrity checks
+
+Runs the root field-integrity harness:
+
+```bash
+pnpm test:field-integrity
+```
+
+### Practice health commands
+
+```bash
+pnpm practice:fitness              # Three-zone, exits 1 on critical
+pnpm practice:fitness:strict-hard  # Consolidation closure: exits 1 on hard
+pnpm practice:fitness:informational # Four-zone report, always exits 0
+pnpm practice:vocabulary           # Vocabulary consistency check
 ```
 
 ### `pnpm fix` - Auto-fix only

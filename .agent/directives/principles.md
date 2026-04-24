@@ -384,114 +384,32 @@ paths, setup files) don't apply.
 
 ### Testing
 
-For further information, see the [Testing Strategy][testing] and
+Tests prove runtime behaviour. TypeScript proves types; ESLint and
+static analysis prove structural rules. For full definitions, examples,
+and recipes, see [Testing Strategy][testing],
+[Testing TDD Recipes][tdd-recipes], and
 [ADR-078: Dependency Injection for Testability][di].
 
 [testing]: testing-strategy.md
+[tdd-recipes]: ../../docs/engineering/testing-tdd-recipes.md
 [di]: ../../docs/architecture/architectural-decisions/078-dependency-injection-for-testability.md
 
-#### Test Types
+Universal testing principles:
 
-Tests prove the correctness of runtime logic. If you want to
-validate types, use TypeScript, if you want to validate
-architectural structure, use ESLint.
-
-- **In-process tests**: Tests that validate **code imported into
-  the test process**. The code under test runs in the same process
-  as the test runner. They are fast, specific, and do not produce
-  side effects. These tests are about testing CODE, not testing
-  RUNNING SYSTEMS.
-  - **Unit test**: A test that verifies the behaviour of a single
-    PURE function in isolation. Unit tests DO NOT trigger IO,
-    have NO side effects, and contain NO MOCKS. Unit tests are
-    automatically run in CI/CD. Must be named `*.unit.test.ts`.
-  - **Integration test**: A test that verifies the behaviour of a
-    collection of units **working together as code**, NOT a
-    running system. Integration tests still import and test code
-    directly within the test process. They DO NOT trigger IO,
-    have NO side effects and can contain SIMPLE mocks which must
-    be injected as arguments to the function under test.
-    Integration tests are automatically run in CI/CD and include
-    MCP protocol compliance testing. Must be named
-    `*.integration.test.ts`. **Important**: Integration tests are
-    NOT about testing a deployed or running system - they test
-    how multiple code units integrate when imported and called
-    directly.
-- **Out-of-process tests**: Tests that validate a running
-  _system_, the tests and the system run in _separate processes_.
-  They are slower, are less specific in the causes of issues but
-  cast a wider net, and may produce side effects locally and in
-  external systems.
-  - **E2E test**: A test that verifies the behaviour of a running
-    system. E2E tests DO trigger IO, have side effects, and DO
-    NOT contain mocks in many cases. E2E tests are NOT
-    automatically run, because they produce side effects, and
-    because they can induce costs. Must be named
-    `*.e2e.test.ts`.
-
-#### Dependency Injection for Testability
-
-**Environment variables MUST be read once at the entry point**,
-then passed as configuration through the call stack. Product code
-MUST NOT read `process.env` directly—it must accept configuration
-as parameters.
-
-**Prohibited in ALL tests (unit, integration, AND E2E)**:
-
-- `process.env.X = 'value'` - mutates global state, causes race
-  conditions
-- `vi.stubGlobal('fetch', ...)` - mutates global objects
-- `vi.mock('module', ...)` - manipulates module cache at the
-  module level, leaks between test files
-- `vi.doMock('module', ...)` - manipulates module cache, subtle
-  race conditions
-
-**Required pattern**: Pass configuration as explicit function
-parameters. Simple fakes injected as constructor arguments, not
-complex mocks.
-
-#### Universal Testing Rules
-
-- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests.
-  Write tests **FIRST**. Red (run the test to _prove it fails_),
-  Green (run the test to prove it passes, _because product code
-  exists now_), Refactor (improve the product code implementation,
-  know that the _behaviour_ at the interface will remain proven by
-  the test)
-- **Test real behaviour, not implementation details** - We should
-  be able to change _how_ something works without breaking the
-  test that proves _that_ it works.
-- **Test to interfaces, not internals** - Tests should be written
-  to the interfaces, not the internals. Closely related to test
-  behaviour not implementation.
-- **No useless tests** - Each test must prove something useful
-  about the product code. If a test is only testing the test or
-  mocks, delete it.
-- **Do not test types** - Tests are for logic, types are explored
-  through creating tests, but types cannot be tested. If test only
-  tests types, delete it.
-- **KISS: No complex logic in tests** - Complexity in tests is a
-  signal that we need to step back and simplify, the code and the
-  test.
-- **KISS: No complex mocks** - Mocks should be simple and focused,
-  no complex logic in mocks, or we risk testing the mocks rather
-  than the code. Complex mocks are a signal that we need to step
-  back and simplify the code or our approach.
-- **No skipped tests** - Fix it or delete it
-- **Dead tests are worse than no tests** — If a test file naming
-  convention excludes it from the test runner's include pattern,
-  it creates false confidence. Always verify new naming conventions
-  against the vitest config.
-- **Assert effects, not constants** — Test observable product
-  behaviour through the interface, not the value of internal
-  constants. "At least one tool has property X" survives
-  refactoring; `TOOL_SET.size > 0` tests configuration.
-- **No process spawning in in-process tests** - Test code MUST NOT
-  spawn child processes, create test-authored workers, or
-  instantiate tools that internally spawn processes (e.g.
-  programmatic ESLint with TypeScript project service). Use the
-  right tool: ESLint for boundary enforcement, Playwright for
-  browser testing, vitest for runtime logic.
+- use TDD at every affected test level;
+- test behaviour through public interfaces, not implementation details;
+- assert effects, not internal constants or configuration collections;
+- each proof happens once and must prove product code;
+- unit tests are pure, in-process, and mock-free;
+- integration tests import code directly and use only simple DI fakes;
+- E2E tests prove running-system behaviour;
+- tests must not read or mutate `process.env`, global objects, module cache,
+  ambient env files, or `process.cwd()`;
+- smoke composition roots — the Vitest runner config or spawn invocation — may
+  read ambient env, validate it, and inject the result. Test files and setup
+  files must not read or mutate `process.env`;
+- no skipped tests, complex mocks, complex test logic, or process spawning in
+  in-process tests.
 
 ### Developer Experience
 
@@ -503,16 +421,11 @@ complex mocks.
 
 ### Architectural Model
 
-Use conventional monorepo structure in active code and docs:
+Use the conventional monorepo topology documented in the
+[architecture overview][architecture]. Architectural boundaries are
+enforced by custom ESLint rules.
 
-- `apps/` – runnable apps that provide services to users
-- `packages/sdks/` – SDKs (Curriculum SDK, Search SDK, SDK Codegen)
-- `packages/core/` – shared low-level code (ESLint plugin,
-  type-helpers, result, env schemas)
-- `packages/libs/` – shared libraries (logger, env-resolution)
-
-See [AGENT.md](./AGENT.md#structure) for the full package listing.
-Architectural boundaries are enforced by custom ESLint rules.
+[architecture]: ../../docs/architecture/README.md
 
 ### Layer Role Topology
 

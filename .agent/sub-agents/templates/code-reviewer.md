@@ -128,7 +128,7 @@ For each issue:
 - [ ] Tests do NOT verify types or data shape (that's the compiler's job)
 - [ ] Edge cases covered
 - [ ] Mocks are simple (complex mocks = code smell)
-- [ ] No global state manipulation (`process.env`, `vi.stubGlobal`, `vi.doMock`)
+- [ ] No global state reads or manipulation (`process.env`, `vi.stubGlobal`, `vi.mock`, `vi.doMock`)
 - [ ] Evidence supports a test-first sequence for changed behaviour at the appropriate test level
 - [ ] Evidence supports Red -> Green -> Refactor progression for behavioural changes
 

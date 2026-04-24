@@ -16,49 +16,53 @@ Reusable testing recipes referenced by the
 This file is a governed recipe companion; patterns here must conform to the
 directive and to the immediate-fail rules.
 
+For worked Red/Green/Refactor examples, see
+[Testing TDD Recipes](./testing-tdd-recipes.md).
+
 ---
 
 ## In-Process E2E Tests with Dependency Injection
 
 E2E tests that create the application in-process (via `createApp()`)
-must configure it through dependency injection, never by mutating
-`process.env`. This rule applies to **all** tests — unit,
-integration, and E2E (see `principles.md`).
+must configure it through dependency injection with explicit runtime-config
+objects or hermetic test helpers, never by reading or mutating `process.env`.
+Do not import production config loaders unless the test is directly proving
+the loader; they may read `.env` files as part of the production pipeline.
+Supertest is classified as E2E because it uses loopback socket IO; see
+[Test File Classification](#test-file-classification).
 
 ### The Pattern
 
 ```typescript
-import { loadRuntimeConfig } from '../src/runtime-config.js';
 import { createApp } from '../src/application.js';
 import request from 'supertest';
+import { createMockObservability, createMockRuntimeConfig } from './helpers/test-config.js';
 
-// 1. Create an ISOLATED env object — never mutate process.env
-const testEnv: NodeJS.ProcessEnv = {
-  NODE_ENV: 'test',
-  DANGEROUSLY_DISABLE_AUTH: 'true',
-  OAK_API_KEY: 'test-api-key',
-  CLERK_PUBLISHABLE_KEY: 'pk_test_...',
-  CLERK_SECRET_KEY: 'sk_test_dummy',
-  ALLOWED_HOSTS: 'localhost,127.0.0.1,::1',
-};
+// 1. Build an explicit runtime config — never read or mutate process.env
+const runtimeConfig = createMockRuntimeConfig({
+  dangerouslyDisableAuth: true,
+  env: { OAK_API_KEY: 'test-api-key' },
+});
 
-// 2. Pass through loadRuntimeConfig (validates and structures)
-const runtimeConfig = loadRuntimeConfig(testEnv);
+// 2. Create the app with DI — zero global side effects
+const app = await createApp({
+  runtimeConfig,
+  observability: createMockObservability(runtimeConfig),
+});
 
-// 3. Create the app with DI — zero global side effects
-const app = createApp({ runtimeConfig });
-
-// 4. Test with supertest — zero network IO
+// 3. Test with supertest — no external network IO
 const response = await request(app).get('/healthz');
 expect(response.status).toBe(200);
 ```
 
 ### Key Rules
 
-- Do not read or write `process.env` in tests. Build literal env
-  objects and pass them explicitly through configuration loaders.
+- Do not read or write `process.env` in tests. Build literal runtime
+  config objects or use hermetic test helpers that do not read disk.
+- Do not import `loadRuntimeConfig` into E2E tests unless the runtime
+  config loader is the direct unit under test.
 - For tests needing multiple configurations (e.g. auth enabled
-  vs disabled), create **separate env objects** for each case.
+  vs disabled), create **separate config objects** for each case.
 - Functions like `enableAuthBypass()` that mutate `process.env`
   must not exist. Use the isolated env pattern instead.
 
@@ -69,6 +73,11 @@ smoke tests using `spawn('node', [entryPoint], { env })`) may pass
 environment variables via the spawn `env` option. This is safe
 because the variables are scoped to the child process and cannot
 leak into the test runner.
+
+Vitest smoke suites may load ambient environment in the runner config
+composition root, validate it, and pass the resulting object through
+`test.provide` / `inject`. Test files and setup files must consume the
+injected object; they must not read or write `process.env`.
 
 ### Reference Implementations
 

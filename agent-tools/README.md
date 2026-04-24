@@ -1,6 +1,7 @@
 # agent-tools workspace
 
 This workspace is the TypeScript home for agent operational CLIs.
+AGENT.md links here for the CLI catalogue instead of repeating the commands.
 
 It provides three operator tools:
 
