@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell
 name: ground-truth-designer
-model: gpt-5.4
+model: gpt-5.5
 description: Specialist for designing ground truth queries for the Oak semantic search service. Use when creating new ground truths, redesigning existing queries, reviewing existing queries, or exploring curriculum content for GT development. Understands teacher search behaviour and known-answer-first methodology.
 readonly: true
 ---

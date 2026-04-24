@@ -1,7 +1,7 @@
 ---
 tools: Read, Glob, Grep, LS, Shell, ReadLints
 name: onboarding-reviewer
-model: gpt-5.4
+model: gpt-5.5
 description: Onboarding documentation quality specialist. Use proactively when onboarding paths change, new contributors join, or documentation drift is suspected. Reviews accuracy, efficacy, readability, style consistency, stale information, and gaps across human and AI-agent flows.
 readonly: true
 ---
