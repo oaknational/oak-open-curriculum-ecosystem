@@ -361,3 +361,48 @@ owner-direction call, not a session-handoff call.
 - `practice:vocabulary` is now useful as a low-cost cleanup gate for stale
   ADR-144 wording. The preserved ADR-144 filename is allowed; surrounding prose
   should use the three-zone vocabulary.
+
+## 2026-04-24 (Codex) — non-Planning Practice portability remediation
+
+### What Was Done
+
+- Implemented the non-Planning Practice gap remediation: collaboration and
+  operational rules, vendor-skill canonicalisation into `.agent/skills/`,
+  full `.agents/rules/` coverage, portability-validator strengthening, and
+  PDR-009 / ADR-125 / artefact-inventory / surface-matrix reconciliation.
+- Kept Planning specialist work and bulk/codegen DRY remediation out of this
+  slice; routed them to their owning plans.
+- Fixed an `agent-tools:test` warning properly: the unreadable-session fixture
+  was intentionally exercising stderr, but the test leaked the diagnostic
+  instead of asserting it. The test now spies on `process.stderr.write`,
+  asserts the expected message, and restores the spy.
+
+### Mistakes Made
+
+- I initially treated the `practice:fitness:informational` hard-zone report as
+  an invitation to trim `AGENT.md`. Owner correction: never simply trim an area
+  because a number is exceeded. Fitness compression must be careful,
+  holistic, and run in a fresh session. Behaviour change: analyse and route
+  fitness pressure during unrelated closeout work; do not compress doctrine
+  opportunistically.
+
+### Patterns to Remember
+
+- Warnings in green test output are still work. If a test intentionally emits
+  stderr, assert the diagnostic and suppress it in the fixture; otherwise the
+  suite trains agents to ignore warnings.
+- Root format/markdown gates can be run in a concurrent-worktree session, but
+  immediately check `git diff --name-only` and `git diff --cached --name-only`
+  for parallel-session surfaces before claiming preservation.
+- When vendor skills are canonicalised into `.agent/skills/`, markdownlint
+  becomes responsible for upstream code fences too. Default untyped examples to
+  `text` rather than weakening lint rules.
+
+## 2026-04-24 (Codex) — commit grouping closeout
+
+### Patterns to Remember
+
+- Portability validators can prove structural presence while canonical skill
+  docs still carry stale adapter prose. After a validator-driven adapter sweep,
+  search canonical artefacts for old negative claims such as "no Claude
+  adapter" before committing.
