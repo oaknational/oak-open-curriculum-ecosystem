@@ -2,6 +2,7 @@ import tseslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 import prettierConfig from 'eslint-config-prettier';
 import { importX } from 'eslint-plugin-import-x';
+import sonarjs from 'eslint-plugin-sonarjs';
 import tsdocPlugin from 'eslint-plugin-tsdoc';
 
 import { oakPlugin } from '../plugin.js';
@@ -51,6 +52,13 @@ export const recommended = tseslint.config(
   ...tseslint.configs.stylistic,
   importX.flatConfigs.recommended,
   importX.flatConfigs.typescript,
+  // sonarjs plugin is registered but no rules are currently activated.
+  // Full `sonarjs.configs.recommended` activation is tracked by the
+  // sonarjs-activation-and-sonarcloud-backlog plan in
+  // .agent/plans/architecture-and-infrastructure/current/ — flip the
+  // entry below back to `sonarjs.configs.recommended` when the plan is
+  // in its GREEN phase.
+  { plugins: { sonarjs } },
   prettierConfig,
   {
     plugins: {
