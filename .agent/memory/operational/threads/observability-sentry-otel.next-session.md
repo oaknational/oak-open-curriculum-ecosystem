@@ -1,20 +1,42 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
 **Last refreshed**: 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m
-— 1M-context session continuing Frodo identity per PDR-027 additive
-rule). Landed two commits against the release-identifier plan:
-`9a0f9ebc` (docs(plans) landing of Pippin's plan-revision substance
-plus observability thread carry-forward) and `a4e8facb` (WS2 §2.0
-BLOCKING fix: `resolveGitSha` split from `runtime-metadata.ts` into
-a new `git-sha.ts` module decoupled from `@oaknational/env` +
-structural fitness test). WS2 §2.1-§2.7 deferred to a fresh session
-at owner direction (see §Landing Target for the trade-off
-rationale). Session opened with `/jc-start-right-thorough` wrapping
-`/jc-metacognition` and a long directive payload; the metacognition
-artefact at `/Users/jim/.claude/plans/jc-metacognition-analyse-the-
-following-adaptive-flame.md` was approved before execution and
-captured the payload's behavioural-containment shape (derived from
-Pippin's spiral-session experience file).
+— fresh 1M-context session continuing Frodo identity per PDR-027
+additive rule). **WS2 §2.1-§2.7 landed as a single atomic commit
+`f5a009ab`** (29 files, +1341/-930): unified `resolveRelease` in
+`@oaknational/build-metadata`, `@oaknational/sentry-node` thin
+adapter via `SentryConfigEnvironment extends ReleaseInput`,
+`ResolvedRelease` drops `gitSha` field, `preview_branch_sha` deleted,
+preview derivation now uses `VERCEL_BRANCH_URL` host via `new URL()`
+with IP-literal rejection, production semver validation via
+`semver.valid()` + pre-release rejection, `isValidReleaseName`
+matches Sentry docs denylist exactly, `slugifyBranch` deleted,
+`RuntimeMetadataError` gains discriminated `kind`, all test
+fixtures rewritten with no old-shape regression guards retained,
+`esbuild.config.ts` snapshots env field-by-field per §2.7, lockfile
+refreshed for new `semver` + `@types/semver` + `@oaknational/build-
+metadata ← sentry-node` edges. All gates green: build, type-check,
+lint, depcruise (1954 modules / 0 violations), full repo test
+suite (36 tasks). **Voluntary-stop prediction from Frodo's prior
+session confirmed held** — the fresh-session atomic landing worked
+as predicted. **WS3 is next**: cancellation-script rewrite +
+relocation into the consuming app workspace + ADR-163 §10 second
+amendment, as a separate commit boundary per plan discipline.
+
+**Prior refresh**: 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m
+— earlier session in the same day). Landed two commits against the
+release-identifier plan: `9a0f9ebc` (docs(plans) landing of Pippin's
+plan-revision substance plus observability thread carry-forward) and
+`a4e8facb` (WS2 §2.0 BLOCKING fix: `resolveGitSha` split from
+`runtime-metadata.ts` into a new `git-sha.ts` module decoupled from
+`@oaknational/env` + structural fitness test). WS2 §2.1-§2.7 deferred
+to a fresh session at owner direction; this later session
+(above) consumed that deferral. Session opened with
+`/jc-start-right-thorough` wrapping `/jc-metacognition` and a long
+directive payload; the metacognition artefact in Claude Code's
+user-local plan storage was approved before execution and captured
+the payload's behavioural-containment shape (derived from Pippin's
+spiral-session experience file).
 
 **Prior refresh**: 2026-04-24 (Pippin / cursor / claude-opus-4-7)
 after a planning + reviewer-cycle session that did not land code.
@@ -419,29 +441,49 @@ Evidence:
 ### Current objective
 
 Land the release-identifier single-source-of-truth plan WS by WS.
-WS0 is **landed** (`06bf25d7`). Next: WS1 RED contract tests
-(cross-resolver contract + branch-URL precedence + cancellation
-wiring integration check), then WS2 GREEN resolver rewrite.
+WS0, WS1, AND WS2 are **landed**. Next: **WS3** — cancellation-script
+rewrite + relocation into the consuming app workspace + ADR-163 §10
+second amendment. WS3 is a separate commit boundary per the plan's
+explicit discipline. Read the plan's WS3.0 pre-landing reviewer
+dispatch step before drafting the WS3 commit.
 
 ### Current state
 
 - **Latest session (2026-04-24, Frodo / claude-code / claude-opus-4-7-1m,
-  release-identifier landing + WS2 §2.0 BLOCKING fix, §2.1-§2.7
-  deferred)**: two commits landed on `feat/otel_sentry_enhancements`
-  — `9a0f9ebc` (plan-revision landing as `docs(plans)`, 5 files,
-  +1723/-627) and `a4e8facb` (WS2 §2.0 split of `resolveGitSha`
-  into new `packages/core/build-metadata/src/git-sha.ts`, 6 files,
-  +129/-111). Codex subsequently landed a parallel-track
+  WS2 §2.1-§2.7 atomic landing)**: single commit `f5a009ab` on
+  `feat/otel_sentry_enhancements` (29 files, +1341/-930). Landed
+  the architectural collapse: unified `resolveRelease` in
+  `@oaknational/build-metadata` (new files `release.ts`,
+  `release-types.ts`, `release-internals.ts`, `release-branch-url.ts`;
+  deleted `build-time-release.ts`, `build-time-release-types.ts`,
+  `build-time-release-internals.ts`); `@oaknational/sentry-node`
+  `resolveSentryRelease` delegates via pure total error/result
+  mappers; `SentryConfigEnvironment extends ReleaseInput`;
+  `ResolvedRelease` drops `gitSha` field (composed separately into
+  `BuildInfo` from `resolveGitSha` at the composition root);
+  `ObservabilityConfigError` extended with
+  `invalid_release_override`, `missing_branch_url_in_preview`,
+  `missing_git_sha` kinds; `RuntimeMetadataError` becomes
+  discriminated union with `kind`. Tests rewritten to new shape
+  (no old-shape regression guards). Lockfile refreshed: `semver`
+  `^7.7.4` + `@types/semver` `^7.7.1` added to build-metadata;
+  `@oaknational/build-metadata` added as workspace dep of
+  sentry-node. All gates green: build, type-check, lint,
+  depcruise (1954 modules / 0 violations), `pnpm test` (36
+  tasks — 997 + 651 + other workspace tests all pass). Parallel-
+  track `.agent/` and `docs/engineering/testing-patterns.md`
+  modifications left unstaged (owner/parallel-agent surface).
+- **Prior session (2026-04-24, Frodo, earlier)**: two commits
+  landed — `9a0f9ebc` (plan-revision landing as `docs(plans)`,
+  5 files, +1723/-627) and `a4e8facb` (WS2 §2.0 split of
+  `resolveGitSha` into new `packages/core/build-metadata/src/git-sha.ts`,
+  6 files, +129/-111). Codex subsequently landed a parallel-track
   practice-remediation commit sequence (`b40bc994`, `d2acdefb`,
   `991c552c`, `f6fd524e`, `69fd4f8c`) on top of the observability
-  commits; branch HEAD at handoff time is `69fd4f8c`. The
-  practice-track commits do NOT modify observability substance —
-  they add collaboration directive + rules, canonicalise portable
-  skill adapters, land plan coordination, etc. The fresh session
-  opens from whatever branch HEAD is at that time (HEAD may
-  advance further via continued parallel-track work); the
-  observability substance (`resolveGitSha` split, plan revisions)
-  remains intact either way. Working tree retains the practice-enhancement parallel
+  commits. The practice-track commits do NOT modify observability
+  substance — they add collaboration directive + rules,
+  canonicalise portable skill adapters, land plan coordination,
+  etc. Working tree retains the practice-enhancement parallel
   track's staged/unstaged state untouched — `.agent/directives/
   AGENT.md` (staged collaboration-reference), the
   `.agent/plans/agentic-engineering-enhancements/` staged set,
@@ -463,13 +505,10 @@ wiring integration check), then WS2 GREEN resolver rewrite.
   defensive validation of structured inputs (not a parallel
   implementation of the same resolver), per Pippin's audit
   note.
-- **WS2 §2.1-§2.7 remains open** with full scope per the plan
-  body: new `resolveRelease` unified resolver in
-  `@oaknational/build-metadata`, thin-adapter delegation from
-  `@oaknational/sentry-node`, validator alignment with Sentry's
-  documented denylist, caller-discipline snapshot pattern.
-  Cascading type renames are known and enumerated in the plan.
-  See §Next safe step for concrete sequence.
+- **WS2 §2.1-§2.7 is LANDED** as `f5a009ab` (see above for
+  highlights). **WS3 (cancellation-script rewrite + relocate +
+  ADR-163 §10 second amendment) is the next commit boundary.**
+  See §Next safe step for the concrete WS3 sequence.
 - **Prior session (2026-04-24, Pippin, planning + reviewer cycle)**:
   no commits landed; the working tree carried 12 staged files
   including ~+994 lines of substantive plan revision to
@@ -605,186 +644,78 @@ wiring integration check), then WS2 GREEN resolver rewrite.
 
 ### Next safe step
 
-**Branch HEAD is `a4e8facb`**. WS2 §2.0 is landed; the remaining
-WS2 §2.1-§2.7 is a single atomic commit per the plan's explicit
-"WS2 ... in one commit" discipline. Full scope (read the plan
-body's WS2 §2.1-§2.7 for canonical detail):
+**Branch HEAD is `f5a009ab`** (may advance if parallel-track work
+lands further). WS2 is fully landed; WS3 is the next commit
+boundary per the plan's explicit discipline — it lands as a
+separate commit after WS2, not folded in.
 
-1. **§2.1 Define unified types** in
-   `packages/core/build-metadata/src/build-time-release-types.ts`:
-   - `ReleaseInput` — drop the `[key: string]: string | undefined`
-     index signature (Wilma MINOR #11). Fields: `SENTRY_RELEASE_OVERRIDE?`,
-     `VERCEL_ENV?`, `VERCEL_BRANCH_URL?`, `VERCEL_GIT_COMMIT_REF?`,
-     `VERCEL_GIT_COMMIT_SHA?`, `APP_VERSION?`.
-   - `ReleaseSource` = `'SENTRY_RELEASE_OVERRIDE' | 'application_version'
-     | 'vercel_branch_url' | 'development_short_sha'` — **delete
-     `preview_branch_sha`**.
-   - `ReleaseEnvironment` = `'production' | 'preview' | 'development'`
-     (unchanged shape, renamed).
-   - `ResolvedRelease` = `{ value, source, environment }` —
-     **drop the `gitSha` field** from the old
-     `ResolvedBuildTimeRelease`. Check callers for `.gitSha` use
-     (`build-info.ts`, `persistBuildInfo` in `esbuild.config.ts`)
-     and either re-resolve via `resolveGitSha` at the call site
-     or thread gitSha separately; do NOT silently widen the type.
-   - `ReleaseError.kind` variants: rename `missing_branch_in_preview`
-     → `missing_branch_url_in_preview`; drop `invalid_git_sha`
-     if no longer emitted. The final enum per the plan:
-     `'invalid_release_override' | 'missing_application_version' |
-     'invalid_application_version' | 'missing_branch_url_in_preview' |
-     'missing_git_sha'`.
-   - Retain legacy type aliases (`BuildTimeReleaseEnvironmentInput`,
-     `BuildTimeReleaseSource`, etc.) only if external callers
-     require them; the WS1 audit identified only internal
-     consumers + the `sentry-build-plugin.ts` / `esbuild.config.ts`
-     in `oak-curriculum-mcp-streamable-http`, so aliases likely
-     unnecessary — remove cleanly.
+**WS3 scope (read the plan body's WS3 for canonical detail)**:
 
-2. **§2.2 Implement `resolveRelease`** in
-   `build-time-release.ts` (keep file name; rename the exported
-   function; retain `resolveBuildTimeRelease` as a trivial alias
-   export to avoid a cascading rename of the
-   `sentry-build-plugin.ts` + `esbuild.config.ts` call sites —
-   or rename there too and drop the alias, owner's call). Logic
-   per plan §2.2: `SENTRY_RELEASE_OVERRIDE` → override
-   (validated via new §2.5 `isValidReleaseName`); effective
-   environment derivation; production → `APP_VERSION` validated
-   via `semver.valid()` (add `semver` as dependency to
-   `packages/core/build-metadata/package.json` if not already
-   present — note WS3 also needs `semver`, may already land
-   earlier); preview → `new URL(input.VERCEL_BRANCH_URL)` with
-   explicit rejection of malformed URL, empty hostname, IPv4/
-   IPv6 literal, or host-label failing `isValidReleaseName`;
-   development → `dev-<shortSha>` from `VERCEL_GIT_COMMIT_SHA`.
+1. **§3.0 Pre-landing reviewer dispatch** (MUST run before drafting
+   the WS3 commit): dispatch `docs-adr-reviewer` on the draft §3.4
+   amendment text; dispatch `assumptions-reviewer` if scope warrants.
+   Same discipline as WS0.2.
+2. **§3.1 Relocate** the canonical script and its unit-test file
+   from `packages/core/build-metadata/build-scripts/` into
+   `apps/oak-curriculum-mcp-streamable-http/build-scripts/`, delete
+   the existing thin `.mjs` + `.d.ts` shim. Add `semver` as a
+   `devDependency` of the app workspace (NOT a runtime dep of
+   build-metadata — build-time tooling only). `vercel.json`'s
+   existing `ignoreCommand` path already resolves to the new
+   canonical location; no change required.
+3. **§3.2 Rewrite** the script body as ~50 lines using the canonical
+   npm `semver` package (`semver.lte` for the comparison; drop the
+   hand-rolled regex parser). Add the missing
+   `VERCEL_GIT_COMMIT_REF === 'main'` branch gate. Asymmetric
+   input-resolution: `current` undefined → SKIP DEPLOYMENT (Vercel
+   `ignoreCommand` exit 0 = skip; with loud stderr); `previous`
+   undefined → continue (first build or unresolvable previous SHA).
+4. **§3.3 Unit-test rewrite**: one test per truth-table row (5 rows).
+   Preserve coverage of fetch-fallback recovery on resolvable
+   `previous` SHA where applicable.
+5. **§3.4 Re-amend ADR-163 §10** with the full 13-item retraction
+   enumeration per plan. A 14th amendment is the failure mode this
+   plan exists to prevent — read the enumeration carefully before
+   editing the ADR.
+6. **§3.5 Confirm shim elimination is structural** — no further
+   action; the relocate step in §3.1 handles it by replacement.
+7. **§3.6 End-to-end proof on next production deploy** — owner-run
+   validation; out of scope for the commit itself.
 
-3. **§2.3 sentry-node thin adapter**:
-   - `packages/libs/sentry-node/package.json` — add
-     `@oaknational/build-metadata: workspace:*` as runtime
-     `dependency`. Confirm `libs ← core` edge is permitted in
-     `.dependency-cruiser.mjs` (it is; `no-core-to-libs`
-     forbids the reverse only).
-   - `packages/libs/sentry-node/src/types.ts` — make
-     `SentryConfigEnvironment extends ReleaseInput` (import
-     from `@oaknational/build-metadata`). Drop any fields
-     duplicated in `ReleaseInput`.
-   - `packages/libs/sentry-node/src/config-resolution.ts` —
-     rewrite `resolveSentryRelease` body to delegate:
-
-     ```typescript
-     const result = resolveRelease(input);
-     if (!result.ok) return err(toObservabilityConfigError(result.error));
-     return ok(toResolvedSentryRelease(result.value));
-     ```
-
-     `toObservabilityConfigError` and `toResolvedSentryRelease`
-     are pure total mappers.
-
-4. **§2.4 Atomic replacement**:
-   - Delete `slugifyBranch` from
-     `build-time-release-internals.ts` (no consumers remain).
-   - Delete `resolvePreviewRelease`'s old body; rewrite to
-     use URL-parse logic or inline into `resolveRelease` body.
-   - Update `build-time-release.unit.test.ts` — replace all
-     `preview-<slug>-<sha>` assertions with
-     `VERCEL_BRANCH_URL`-host assertions; update fixtures to
-     supply `VERCEL_BRANCH_URL`.
-   - Update
-     `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-configured-build-gate.unit.test.ts`
-     log-line assertions to match the new release-shape.
-   - Update any other tests the `rg 'preview-'` audit in §Acceptance
-     Criteria surfaces.
-
-5. **§2.5 Validator alignment**: replace `isValidReleaseName`
-   in `build-time-release-internals.ts` (or wherever it ends
-   up post-collapse) with the Sentry-documented denylist
-   exactly:
-
-   ```typescript
-   export function isValidReleaseName(value: string): boolean {
-     if (value.length === 0 || value.length > 200) return false;
-     if (value === '.' || value === '..') return false;
-     if (value === ' ') return false;
-     if (/[\n\t/\\]/u.test(value)) return false;
-     return true;
-   }
-   ```
-
-   Drop `SENTRY_RELEASE_NAME_PATTERN` if no consumer remains.
-   Accept `latest`, reject `/`. Record any Oak-local tightening
-   beyond Sentry's rules in TSDoc as
-   *"Oak-local tightening — not Sentry-required"*.
-
-6. **§2.6 Plugin wiring sanity** (likely no code change):
-   confirm `apps/oak-curriculum-mcp-streamable-http/build-scripts/
-   sentry-build-plugin.ts` sees the new resolver output
-   transparently via its existing `release.name` feed — no
-   hard-coded `preview-` prefix assumptions remain post-§2.4.
-
-7. **§2.7 Caller discipline**: at every call site of
-   `resolveRelease` / `resolveSentryRelease`, pass an explicit
-   object-literal snapshot of the required env fields rather
-   than `process.env` by reference. Call sites to update:
-   - `apps/oak-curriculum-mcp-streamable-http/build-scripts/
-     sentry-build-plugin.ts` (build-time)
-   - `apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`
-     (runtime)
-   - `apps/oak-search-cli/src/runtime-config.ts` (runtime)
-   - `packages/libs/sentry-node/src/config.ts` and
-     `config-resolution.ts` (internal)
-   - Any test fixtures that currently pass a spread of
-     `process.env` — replace with explicit literals.
-
-**Deterministic validation (per plan §WS2 Acceptance)**:
+**Deterministic validation (per plan §WS3 Acceptance)**:
 
 ```bash
-pnpm --filter @oaknational/build-metadata test
-pnpm --filter @oaknational/sentry-node test
 pnpm --filter oak-curriculum-mcp-streamable-http test
+pnpm --filter @oaknational/build-metadata test
 pnpm depcruise
 ```
 
-Plus the pre-commit hook's full 74-task turbo run.
+Plus the pre-commit hook's full turbo run.
 
 **Commit message hint** (subject under 100 chars):
-`refactor(build-metadata): unify release resolver in resolveRelease, sentry-node as thin adapter`
-or similar. Body explains the collapse, the shape change on
-`ResolvedRelease` (drops `gitSha`), the validator rewrite, and
-the URL-parse preview path.
+`refactor(mcp-http,build-metadata): relocate and simplify production cancellation script (WS3)`
+or similar. Body explains the relocation + simplification + branch
+gate addition + asymmetric input handling, and references the
+ADR-163 §10 second amendment landing in the same commit.
 
-**WS3 (cancellation script rewrite + ADR-163 §10 second amendment)**
-is a separate commit boundary AFTER WS2 §2.1-§2.7 GREEN. Read
-the plan's WS3.0 pre-landing reviewer dispatch step before
-drafting the WS3 commit. The WS3.4 13-item amendment enumeration
-is comprehensive; a 14th amendment is the failure mode the plan
-exists to prevent.
+**Post-WS3 sequence**: WS4 (docs), WS5 (quality gates), WS6
+(adversarial review), WS7 (doc propagation).
 
-**WS3 (cancellation script rewrite + ADR-163 §10 second
-amendment)** is a separate commit boundary after WS2 GREEN.
-Read the WS3.0 step (pre-landing reviewer dispatch on the
-amendment text) before drafting the WS3 commit. Read the WS3.4
-13-item enumeration carefully — it is comprehensive and a
-14th amendment is the failure mode this plan exists to prevent.
-
-**Cancellation-wiring integration test** (originally WS1 step
-3) folds into WS3's test rewrite under the same TDD discipline
-— it remains a useful structural test (catches accidental shim
-deletion), but no longer needs to live as a separate WS1 commit.
+**Behavioural carry-forward** (read before opening WS3 in a fresh
+session): the WS2 §2.1-§2.7 atomic landing confirmed Frodo's
+voluntary-stop-prediction from the prior session — the fresh-session
+approach worked. For WS3, the metacognition experiences from Pippin
+(spiral) and Frodo (same-shape-smaller-scale) remain load-bearing:
+the pre-landing reviewer dispatch in §3.0 is the plan-prescribed
+reviewer gate; do NOT dispatch additional reviewers mid-cycle
+absorbing findings unless they block the next code action. The
+§3.4 13-item amendment enumeration is the single authoritative
+source — do not re-plan it.
 
 If owner-run validation of the previously-archived corrective lane
 surfaces a fresh repo defect in parallel, that takes priority — open
 the smallest targeted repair lane that names that defect explicitly,
 park the release-identifier plan briefly.
-
-**Behavioural carry-forward (read before opening WS2)**: this
-session demonstrated `inherited-framing-without-first-principles-
-check` at the reviewer-finding-consumption layer. Captured in
-detail in [`napkin.md`](../../active/napkin.md) §Surprise (pattern
-instance — second cross-session occurrence) and
-[`experience/2026-04-24-pippin-the-spiral-i-could-not-see.md`](../../../experience/2026-04-24-pippin-the-spiral-i-could-not-see.md).
-Posture for WS2 execution: code first, reviewer dispatch only at
-plan-prescribed gates (WS3.0 pre-landing, post-WS6 fidelity-vs-
-implementation), do not absorb mid-cycle audit findings into
-plan revisions unless they block the next code action.
 
 ### Active track links
 

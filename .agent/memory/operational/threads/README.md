@@ -14,10 +14,15 @@ sessions and may be touched by multiple agents over time. Threads
 are the continuity unit. A *session* is a time-bounded agent
 occurrence that participates in one or more threads.
 
-Currently active threads (2026-04-21):
+Currently active threads (2026-04-24):
 
 - `observability-sentry-otel` — product thread; Sentry/OTel public-
   alpha integration on branch `feat/otel_sentry_enhancements`.
+- `agentic-engineering-enhancements` — Practice thread; documentation
+  roles, continuity surfaces, and fitness-pressure remediation.
+
+Archived threads:
+
 - `memory-feedback` — Practice thread; feedback loops across the
   three-mode memory taxonomy, emergent-whole observation, pending-
   graduations register, executive-memory drift detection.
@@ -83,8 +88,8 @@ session-specific signal); the checklist handles the rest.
 ### Read, in order
 
 1. [`../repo-continuity.md`](../repo-continuity.md) end-to-end —
-   especially `§ Active threads`, `§ Standing decisions`, and
-   `§ Deep consolidation status`.
+   especially `§ Active Threads`, `§ Repo-Wide Invariants / Non-Goals`,
+   and `§ Deep Consolidation Status`.
 2. The thread's next-session record at
    `.agent/memory/operational/threads/<thread-slug>.next-session.md`.
 3. The plan referenced in the next-session record's *Landing
@@ -120,8 +125,7 @@ session-specific signal); the checklist handles the rest.
   threshold triggers close at next natural boundary).
 - Do not cross to a different thread mid-session — PDR-026 landing
   commitment is per-thread per-session.
-- Honour the thread's standing decisions listed in
-  `repo-continuity.md § Standing decisions`.
+- Honour the repo-wide invariants and the thread's own standing decisions.
 
 ### At session close
 

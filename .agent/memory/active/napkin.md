@@ -19,15 +19,146 @@ archived to `archive/napkin-2026-04-22.md`).
 
 ---
 
+## 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m, fresh 1M-context session) — WS2 §2.1-§2.7 atomic landing
+
+**Session shape**: fresh session opened via `/jc-start-right-thorough`
+wrapping `/jc-metacognition` with a long owner-authored payload. Four
+"do NOT" directives (do NOT re-open settled architecture; do NOT
+absorb audit findings into plan revisions; do NOT dispatch reviewers
+outside plan-prescribed gates; do NOT offer option menus). Consumed
+the deferral from the prior Frodo session (same day, earlier) that
+stopped at the §2.0/§2.1 boundary. Metacognition artefact written
+before any execution, approved, then straight to code. Plan-mode
+phase used ONE focused Explore agent (not the 3-agent max) to verify
+ground-state facts the payload named, explicitly refusing the
+"broader survey" temptation that would have mirrored Pippin's spiral
+shape. Landed WS2 §2.1-§2.7 as single atomic commit `f5a009ab` (29
+files, +1341/-930).
+
+**Observations / Surprises**:
+
+### Observation (behavioural — voluntary-stop prediction held)
+
+- Frodo's prior-session experience file recorded a falsifiable
+  prediction: *"fresh session opens with clean context to land
+  §2.1-§2.7 atomically; if it doesn't, the deferral trade-off is
+  refuted"*. This session instantiated the prediction. The atomic
+  landing happened in a single session with full test suite green
+  and no mid-cycle spirals. The voluntary-stop discipline at the
+  §2.0/§2.1 boundary was load-bearing — the fresh context was
+  what made the 29-file cascading type rename executable without
+  attention fatigue. Behavioural recording of the prediction held
+  across the session boundary and the experience file transmission
+  did what experience files are meant to do.
+- **Behaviour change for future similar calls**: when facing a
+  large atomic commit scope under accumulated context, volunteering
+  a stop with an explicit falsifiable prediction is a durable
+  scaffold — both branches of the prediction are productive (held
+  = validates the pause; refuted = surfaces the actual bottleneck).
+
+### Surprise (scope expansion — payload numbers were conservative)
+
+- **Expected**: payload listed 3 `.gitSha` consumers
+  (`build-info.ts`, `build.config.ts`, `sentry-build-plugin.ts`).
+- **Actual**: ground-state verification surfaced 6 files accessing
+  `.gitSha`, but 4 of them were `ParsedSentryConfig.gitSha`
+  consumers (sentry-node internal, unaffected by the
+  `ResolvedRelease.gitSha` drop). The real consumer count was **2**:
+  `build-info.ts:56` and `sentry-build-plugin.ts:155,173`. Smaller
+  scope than even the payload anticipated.
+- **Why expectation failed in two directions**: initial grep
+  surfaced 6 hits, which looks wider than the payload's 3. Applying
+  the field-owner distinction (`ResolvedRelease.gitSha` vs
+  `ParsedSentryConfig.gitSha`) narrowed the actual consumer set
+  below the payload's count.
+- **Behaviour change**: grep for a field name and then classify
+  by owning type. A naive "X accesses .gitSha" count overcounts
+  when the field name is shared across distinct types.
+
+### Surprise (type-compatibility regression from narrowing)
+
+- **Expected**: narrowing `ReleaseInput` to drop the
+  `[key: string]: string | undefined` index signature (per Wilma
+  MINOR #11) would only affect the resolver's input type.
+- **Actual**: `resolveGitSha(env)` callsite in sentry-build-plugin
+  stopped compiling because `SentryBuildEnvironment` (now
+  extending narrow `ReleaseInput`) no longer satisfied
+  `Readonly<Record<string, string | undefined>>` — which is what
+  `resolveGitSha` declared its parameter as. The resolver chain
+  has a cross-module structural-compatibility constraint that
+  the index-signature removal exposed.
+- **Fix applied**: narrowed `resolveGitSha`'s parameter type to
+  a new `ResolveGitShaInput` interface with only the two relevant
+  optional fields (`GIT_SHA_OVERRIDE?`, `VERCEL_GIT_COMMIT_SHA?`).
+- **Behaviour change**: when removing an index signature from a
+  structurally-typed input, check every function that consumes
+  objects of that shape via a `Record<string, string | undefined>`
+  parameter. Those parameters need to be narrowed in lockstep to
+  preserve structural assignability.
+
+### Observation (lint-gate cascade post-refactor)
+
+- A large refactor triggered multiple lint-gate errors in sequence
+  across separate runs: `max-lines` (304 > 250) on
+  `release-internals.ts`, `max-lines-per-function` (52 > 50) on
+  `resolveApplicationVersion`, `max-lines` (701 > 700) on
+  `runtime.unit.test.ts`, `complexity` (9 > 8) on
+  `describeConfigError`, `consistent-return` on the new
+  `toObservabilityConfigError` mapper, TSDoc syntax (multi-line
+  code spans not allowed), `import-x/no-named-as-default-member`
+  warnings on `semver.valid()` / `semver.prerelease()`. Each is
+  its own small extraction — not blocking individually but
+  meaningful in aggregate: the architectural simplification
+  (collapsing two resolvers into one) had lint-gate downstream
+  consequences that needed careful per-file attention to remediate.
+- **Behaviour change**: after a large refactor, don't just run
+  `pnpm test` — also run `pnpm lint` early to surface the cascade
+  before sinking time into next-phase work. The lint errors are
+  mechanical but accumulate.
+
+### Observation (parallel-track pre-commit coupling — prediction held)
+
+- **Prior session recorded**: "full-repo pre-commit gates couple
+  commits across parallel tracks; if you hit a format-check failure
+  on a file you have not touched, the correct move is to ask, not
+  to fix or bypass."
+- **This session**: pre-commit `prettier --check .` flagged
+  `docs/engineering/testing-patterns.md` (parallel-track WIP not
+  mine) alongside two of my own files. My files I formatted with
+  `npx prettier --write <my-files>`; the parallel-track file I
+  left alone. On the retry, the parallel-track file had been
+  formatted by another process in the meantime and the commit
+  went through cleanly.
+- **Reinforces**: the discipline holds. Don't auto-format someone
+  else's WIP, don't bypass with `--no-verify`, retry after the
+  parallel track's pre-commit run catches up. If it's still
+  blocked after a reasonable wait, ask.
+
+### Surprise (knip orphan-export check is post-commit)
+
+- **Expected**: exporting helpers for future consumer reuse is
+  safe hygiene.
+- **Actual**: `pnpm knip` (part of the pre-commit gate chain)
+  flagged `isValidReleaseName` and `trimToUndefined` as unused
+  exports immediately — they were exported for "potential
+  cross-file use" that doesn't exist yet. Exports must prove
+  their consumers now, not speculatively.
+- **Behaviour change**: prefer non-exported helpers by default in
+  new files. Export only when an external consumer exists at
+  commit time. Knip is the enforcement gate, not a post-hoc
+  cleanup.
+
+---
+
 ## 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m, 1M-context continuing session) — release-identifier plan landing + WS2 §2.0 BLOCKING fix, §2.1-§2.7 deferred to fresh session
 
 **Session shape**: opened via `/jc-start-right-thorough` wrapping
 `/jc-metacognition` with a long owner-authored payload that
 explicitly said "code first" and enumerated four do-NOT directives
 derived from Pippin's prior-session spiral. Metacognition artefact
-written to `/Users/jim/.claude/plans/jc-metacognition-analyse-the-
-following-adaptive-flame.md` before any execution, approved, then
-straight to execution. Landed two commits: `9a0f9ebc`
+written in Claude Code's user-local plan storage before any
+execution, approved, then straight to execution. Landed two
+commits: `9a0f9ebc`
 (`docs(plans)` release-identifier substance + carry-forward) and
 `a4e8facb` (WS2 §2.0 `resolveGitSha` split decoupled from
 `@oaknational/env`). At the WS2 §2.0 / §2.1 boundary, volunteered
@@ -508,3 +639,38 @@ owner-direction call, not a session-handoff call.
   docs still carry stale adapter prose. After a validator-driven adapter sweep,
   search canonical artefacts for old negative claims such as "no Claude
   adapter" before committing.
+
+## 2026-04-24 (Codex) — directive and fitness-pressure discussion
+
+### Session Shape
+
+- No-landing discussion-led consolidation session. Owner wants to inspect soft
+  and hard fitness pressure in directives and other governed files, then decide
+  which content should graduate, transform, compress, split, or retire.
+
+### Patterns to Remember
+
+- Fitness pressure is a classification prompt before it is an editing prompt:
+  identify whether content is entry-point index material, doctrine, examples,
+  operational history, or already-homed duplicate before cutting lines.
+- For testing docs, keep the directive as doctrine and
+  `docs/engineering/testing-patterns.md` as the governed recipe companion. A
+  recipe that contradicts `.agent/rules/test-immediate-fails.md` is stale even
+  if it still matches an older ADR nuance.
+- Emerging nuance: patterns are observations from real practice before they
+  are prescriptions. Information should flow both ways: doctrine can shed
+  examples into recipes, while repeated patterns can feed recipes, rules,
+  principles, scanners, or decision records when the observed practice matures.
+- Created `knowledge-role-documentation-restructure.plan.md` to make the
+  PDR-014 role model executable across testing, TypeScript, development,
+  troubleshooting, recipe, rule, and ADR surfaces.
+- Created `agent-entrypoint-content-homing.plan.md` with explicit lossless
+  source-to-target ledger and discovery-parity constraints for slimming
+  `AGENT.md` without losing concepts.
+
+### Handoff Notes
+
+- Owner-directed next-session order: implement
+  `agent-entrypoint-content-homing.plan.md` first, then move to the
+  remaining hard fitness excessions. Treat this as sequencing, not a
+  vague backlog note.
