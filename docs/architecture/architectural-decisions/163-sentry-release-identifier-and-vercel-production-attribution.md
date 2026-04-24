@@ -60,7 +60,133 @@ the ADR.
 
 ## Decision
 
-### 1. Sentry release identifier = root `package.json` semver
+### 1. Sentry release identifier — per environment
+
+> **Amendment 2026-04-24 (release identifier per environment)**
+>
+> The §1 mechanism originally specified "release identifier = root
+> `package.json` semver, everywhere". L-8 implementation diverged from
+> that wording without amending the ADR: the build-time resolver
+> (`resolveBuildTimeRelease` in
+> `packages/core/build-metadata/src/build-time-release.ts`) returned
+> `preview-<branch-slug>-<shortSha>` for preview / non-`main`-production
+> builds, while the runtime resolver (`resolveSentryRelease` in
+> `packages/libs/sentry-node/src/config-resolution.ts`) continued to
+> return semver via `APP_VERSION` for every environment. The Sentry MCP
+> integration verification (transcript
+> [Sentry MCP integration verification](11729e08-3046-448d-af80-d00b790279a6),
+> 2026-04-23) surfaced the divergence as a real attribution failure:
+> preview Sentry releases were registered under one identifier and the
+> events that landed against them were tagged with another, so
+> event-to-release attribution did not survive ingest.
+>
+> Owner direction (recorded 2026-04-23, applied here 2026-04-24)
+> collapses the option space: the release identifier is **per
+> environment**, not "semver everywhere". Both resolvers MUST produce
+> the **same string** for the **same environment input** — no
+> divergence between what is registered at build time and what runtime
+> events are tagged with.
+>
+> **Per-environment release-identifier truth table**:
+>
+> | `VERCEL_ENV`  | `VERCEL_GIT_COMMIT_REF` | `VERCEL_BRANCH_URL` (host)            | Build-time AND runtime release | Source                    |
+> | ------------- | ----------------------- | ------------------------------------- | ------------------------------ | ------------------------- |
+> | `production`  | `main`                  | (not consulted on this row)           | root `package.json` semver     | `application_version`     |
+> | `production`  | non-`main`              | `poc-…-git-<branch>` host             | branch-URL host                | `vercel_branch_url`       |
+> | `preview`     | any                     | `poc-…-git-<branch>` host             | branch-URL host                | `vercel_branch_url`       |
+> | `development` | any                     | unset (typical local)                 | `dev-<shortSha>`               | `development_short_sha`   |
+> | any           | any                     | (any) — `SENTRY_RELEASE_OVERRIDE` set | override value                 | `SENTRY_RELEASE_OVERRIDE` |
+>
+> Notes:
+>
+> - Row 2 (`production` / non-`main`) exists because Vercel allows
+>   `vercel --prod` from any branch; §3 below already downgrades the
+>   Sentry **environment** to `preview` in that case, and the release
+>   identifier follows the same downgrade — branch-URL-host shape.
+> - The release identifier for preview / non-`main`-production is the
+>   **leftmost host label** of `VERCEL_BRANCH_URL` (everything before
+>   the first `.`), e.g.
+>   `poc-oak-open-curriculum-mcp-git-feat-otelsentryenhancements`. The
+>   full host (e.g. `…-git-feat-otelsentryenhancements.vercel.thenational.academy`)
+>   is NOT used directly so that a future custom-domain change does not
+>   invalidate prior release identifiers, and so the value remains
+>   compact in the Sentry UI. Oak relies on the branch-stable
+>   identifier being encoded in the leftmost host label of its
+>   generated branch URL — this is an **Oak operational assumption**
+>   about the current Vercel-generated host shape, not a vendor-
+>   guaranteed contract; if Vercel changes that host shape, this
+>   amendment must be revisited.
+> - Oak relies on `VERCEL_BRANCH_URL` for preview / non-`main`-
+>   production release resolution when Vercel system environment
+>   variables are enabled; if it is absent on those rows, release
+>   resolution **fails fast** rather than silently falling back to
+>   another shape (per `.agent/directives/principles.md` §Fail FAST and
+>   `.agent/rules/replace-dont-bridge.md`).
+> - All five rows MUST validate against Sentry's documented release-
+>   name rule before being passed to the Sentry SDK / CLI / plugin:
+>   ≤200 chars; no newlines, tabs, `/`, or `\`; not `.`, `..`, or a
+>   single space (Sentry docs,
+>   `https://docs.sentry.io/product/releases/naming-releases/`). The
+>   existing Oak-local `SENTRY_RELEASE_NAME_PATTERN` in
+>   `packages/core/build-metadata/src/build-time-release-internals.ts`
+>   (currently `/^[\w.\-+/=:@~]{1,200}$/u`) is **close to** but not
+>   byte-equivalent to the vendor rule — it permits `/` (which Sentry
+>   forbids) and rejects characters Sentry would accept. Aligning the
+>   Oak validator with the vendor rule is in scope for the WS2
+>   implementation of the release-identifier plan; the new shapes
+>   (semver, branch-URL host, `dev-<shortSha>`) do not contain `/` so
+>   the misalignment does not bite the new shapes in practice, but the
+>   override path could submit `/`-bearing strings and should be
+>   tightened.
+> - `SENTRY_RELEASE_OVERRIDE` (row 5) wins over every other row, in
+>   every environment. This preserves the §4 UAT override pair and the
+>   one-off rehearsal hook.
+>
+> **Rationale for branch-URL host over `preview-<slug>-<sha>`**:
+> Sentry release-health metrics (crash-free sessions / users) are keyed
+> by release identifier (Sentry docs,
+> `https://docs.sentry.io/product/releases/health/`). With `<sha>`
+> baked in, every commit on a preview branch produces a fresh release
+> and release-health metrics are fragmented into single-deploy
+> aggregations. With the branch-URL host (no `<sha>`), every commit on
+> the same branch contributes to the same release-health aggregation —
+> the right granularity for "is this branch healthier or sicker than
+> the others?". The branch-URL host is also discoverable from the
+> Sentry event back to the matching Vercel preview deployment URL: an
+> investigator can open the deployment that produced an event by URL.
+> §5 ("one release → many deploys") still applies, but at the
+> per-environment grain rather than the per-version grain — see the §5
+> cross-link below.
+>
+> **Process-gap finding (recorded for the lineage)**: §1 (as written)
+> and the L-8 implementation diverged for ~four months without an ADR
+> amendment. Code review and reviewer dispatch on the L-8 lane did not
+> detect the divergence because no test asserted cross-resolver shape
+> equivalence — both resolvers' unit tests passed because each was
+> internally consistent. The vendor failure mode this drift produced
+> is **split-release pollution**, not ingest rejection: Sentry will
+> auto-create a release the first time it sees an event tagged with an
+> unknown identifier (Sentry docs,
+> `https://docs.sentry.io/platforms/javascript/guides/node/configuration/releases/`),
+> so the build-time `releases new` registered release A and the
+> runtime events landed on auto-created release B, fragmenting
+> commit / deploy / release-health data across two release entities
+> for the same logical preview deployment. The fix is **structural**,
+> not procedural: a new cross-resolver contract test
+> (`packages/libs/sentry-node/tests/release-identifier-cross-resolver.contract.unit.test.ts`,
+> added in WS1.1 of the release-identifier plan) asserts byte-identical
+> output from `resolveBuildTimeRelease` and `resolveSentryRelease` for
+> every row of the truth table above. The test runs in `pnpm test`;
+> any future shape divergence fails the build, not Sentry's
+> regression-attribution surface. This is the **primary anti-drift
+> gate for release-identifier equivalence** that this amendment names;
+> it does NOT close every possible resolver drift mode (e.g. source-
+> provenance or error-shape drift in fields the equality test does not
+> compare) — those gaps remain the responsibility of each resolver's
+> own unit tests. Mirrored in Enforcement §5 below.
+>
+> **The §1 text below is preserved as historical record of the
+> L-7/L-8 mechanism specification before this amendment.**
 
 The Sentry release identifier is the **semantic version** declared in
 the repo root `package.json` (e.g. `1.5.0`), resolved at build time
@@ -103,6 +229,13 @@ Correlation-by-SHA is a filtering operation, so the value must be a
 tag.
 
 ### 3. Production attribution requires BOTH `VERCEL_ENV=production` AND `VERCEL_GIT_COMMIT_REF=main`
+
+> **Cross-link 2026-04-24**: per the §1 amendment above, the release
+> identifier on each row of the truth table below is taken from §1's
+> per-environment release-identifier table — the `production` /
+> non-`main` and `production` / unset rows here are tagged with the
+> branch-URL host (or `dev-<shortSha>` if `VERCEL_BRANCH_URL` is
+> unset), not with semver, mirroring the environment downgrade.
 
 A build is considered "production" for the purpose of Sentry release +
 deploy registration if and only if **both**:
@@ -153,6 +286,21 @@ the regression signal. The override exists so UAT can still exercise
 the full deploy-time path when needed.
 
 ### 5. One release → many deploys
+
+> **Cross-link 2026-04-24**: per the §1 amendment above, the "one
+> release" referenced in this section is the per-environment release
+> identifier from §1's truth table — semver for production-on-`main`,
+> branch-URL host for preview / non-`main`-production. The
+> "one release → many deploys" relationship now operates **at the
+> per-environment grain**: one semver release carries the production
+> deploy(s) for that semver; one branch-URL release carries the
+> multiple preview deploys for that branch. The preview→production
+> "same code, different environment" relationship is **no longer
+> modelled by a shared release identifier**; it is modelled by the
+> matching commits being captured on the production release via
+> `set-commits` (§2 / §6.2). The §5 text below is preserved as
+> historical record of the pre-amendment "single release identifier
+> per release line" framing.
 
 A single release (semver) is expected to carry multiple Sentry deploy
 events across its lifetime: typically one or more `preview` deploys
@@ -512,6 +660,107 @@ The `concurrency: release` guard in `release.yml` (with
 in parallel. Successive bump commits are processed serially by Vercel,
 each subject to the ignoreCommand check.
 
+### 10. Production builds require a semantic-release commit
+
+> **Amendment 2026-04-24 (production cancellation rule)**
+>
+> ADR-163 §9 names
+> `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+> as the script that cancels non-version-bump production builds, but
+> the **cancellation rule itself** was never stated as a numbered ADR
+> decision. The rule lived only in the script and its tests; the ADR
+> referenced the consequence ("only the version-bump commit reaches
+> production") without recording the rule that produces it. This new
+> §10 makes the rule a numbered decision, co-equal with the §1
+> release-identifier rule, because §1 is keepable only if production
+> deploys correspond exactly to semantic-release commits.
+
+A production build on `main` MUST be cancelled unless the commit
+advances the root `package.json` semver beyond the previously-deployed
+version. Merge commits (which carry the previous semver) do not
+trigger a production deploy; only semantic-release commits (which
+bump the semver) do.
+
+**Cancellation truth table**:
+
+| `VERCEL_ENV`     | `VERCEL_GIT_PREVIOUS_SHA` | Current vs previous root `package.json` version | Outcome                              |
+| ---------------- | ------------------------- | ----------------------------------------------- | ------------------------------------ |
+| not `production` | (any)                     | (any)                                           | Continue build                       |
+| `production`     | unset                     | (any)                                           | Continue build (first deploy)        |
+| `production`     | set, resolvable           | current ≤ previous                              | **CANCEL build**                     |
+| `production`     | set, resolvable           | current > previous                              | Continue build                       |
+| `production`     | set, unresolvable         | (cannot compare)                                | Continue build (with stderr warning) |
+
+Mapping to Vercel `ignoreCommand` exit codes: exit 0 = "ignore this
+build" (Vercel cancels), exit 1 = "do not ignore" (Vercel proceeds).
+The script returns exit 0 only for the "current ≤ previous" row.
+
+The "set, unresolvable / continue with stderr warning" row is
+intentionally **fail-open**: Oak prefers an accidental extra production
+build (which is itself bounded by the existing `semantic-release`
+serialisation in §9) over a false cancellation when prior-deployment
+state cannot be resolved. The stderr diagnostic is the structured
+operator-visible signal per `.agent/rules/no-warning-toleration.md` §3
+(Vercel build logs are the structured-signal capture surface; the
+script does not silently swallow the diagnostic).
+
+**Enforcement mechanism** (already in place; this amendment names it):
+
+- **Canonical implementation**:
+  `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`
+  exports the pure `runVercelIgnoreCommand` function. All decision
+  logic (current-vs-previous semver comparison, exit-code mapping,
+  warning emission) lives here. Unit-tested in the same directory.
+- **Workspace invocation shim**:
+  `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+  is a thin `#!/usr/bin/env node` wrapper that imports
+  `runVercelIgnoreCommand` from the canonical implementation, supplies
+  `repositoryRoot` and `process.env`, and propagates the exit code.
+  Current wiring uses a canonical implementation plus a thin workspace
+  shim because Vercel `ignoreCommand` is invoked from the app
+  workspace cwd; the split keeps `vercel.json` free of relative-
+  package paths and keeps decision logic in one place. Other shapes
+  (e.g. inlining the script in the app workspace, or invoking the
+  canonical script directly from `vercel.json` via a relative path)
+  remain available if the workspace topology changes.
+- **Wiring**: `apps/oak-curriculum-mcp-streamable-http/vercel.json`
+  `ignoreCommand` field is
+  `node build-scripts/vercel-ignore-production-non-release-build.mjs`
+  (workspace-relative; the shim above). Vercel runs the shim before
+  every build and uses its exit code to decide whether to proceed.
+- **Wiring integration test**:
+  `apps/oak-curriculum-mcp-streamable-http/tests/vercel-ignore-command-wiring.integration.test.ts`
+  (added in WS1.4 of the release-identifier plan) asserts that
+  `vercel.json` parses, contains `ignoreCommand`, and the command
+  resolves to the workspace shim on disk. Renaming, moving, or
+  removing either the shim or the canonical implementation fails this
+  test. Mirrored in Enforcement §6 below.
+- **Unit tests**:
+  `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.unit.test.mjs`
+  covers all rows of the truth table above and is the proof for the
+  rule itself. The shim has no decision logic and therefore needs no
+  separate unit test (the wiring integration test covers its existence
+  and import resolution).
+
+Rationale: the §1 release identifier is meaningful only if production
+deploys correspond exactly to semantic-release commits. Without this
+rule, a merge commit on `main` would deploy under a stale semver
+(because `package.json` has not yet been bumped by `semantic-release`),
+and Sentry's release model would react in a specifically painful way:
+Sentry would not refuse the build and would not create a second
+release with the same identifier — it would **reuse the existing
+org-global semver release** and append more deploy / event / session
+data to it (Sentry docs,
+`https://docs.sentry.io/cli/releases/#creating-deploys`,
+`https://docs.sentry.io/product/releases/health/`). That contaminates
+release-health metrics and regression-attribution semantics for that
+semver: a regression introduced by the merge commit would be
+attributed to the previously-released semver, hiding it from the
+release-introduced-by view. The script enforces "production = bumped
+version" structurally, so the §1 promise (release identifier per
+environment) is keepable and Sentry's release-health attribution stays
+intact.
+
 ## Consequences
 
 ### Positive
@@ -599,6 +848,30 @@ each subject to the ignoreCommand check.
     gate.** Rejected: introduces a parallel release flow with its own
     drift surface. The bump-the-patch-and-merge discipline covers the
     hotfix use case without a separate path.
+11. **Keep both resolvers on their pre-amendment shapes (semver
+    runtime, `preview-<slug>-<sha>` build-time).** Rejected (see §1
+    amendment 2026-04-24): Sentry releases registered at build time
+    under one identifier and runtime events tagged with a different
+    identifier break event-to-release attribution outright. The
+    2026-04-23 verification surfaced the divergence as a real
+    attribution failure, not a cosmetic one.
+12. **Make both resolvers return semver everywhere (the original §1
+    intent).** Rejected (see §1 amendment 2026-04-24): preview
+    branches share the same semver across builds, but the same code
+    is _not_ in two preview deployments — Sentry release-health
+    metrics would conflate genuinely different deployments under one
+    release. The branch-URL host gives one release per branch, which
+    is the right granularity for preview attribution.
+13. **Use the full `VERCEL_BRANCH_URL` (host + path) as the preview
+    release identifier.** Rejected: the leftmost host label alone is
+    unique per branch and well under Sentry's 200-char release-name
+    limit; including the rest of the host adds drift surface (custom
+    domain or routing changes) without information.
+14. **Promote the production cancellation rule to its own ADR.**
+    Rejected (see §10 amendment 2026-04-24): the cancellation rule
+    exists only because the §1 release identifier requires
+    "production = bumped semver" to be meaningful. Co-locating both
+    rules in this ADR keeps the dependency visible.
 
 ## Enforcement
 
@@ -632,6 +905,31 @@ each subject to the ignoreCommand check.
    the release/deploy realisation. This ADR now names the esbuild
    composition root + deployed-entry contract that make that pipeline
    bootable in practice.
+5. **Cross-resolver contract test** (added by the §1 amendment
+   2026-04-24) in
+   `packages/libs/sentry-node/tests/release-identifier-cross-resolver.contract.unit.test.ts`:
+   asserts that `resolveBuildTimeRelease` and `resolveSentryRelease`
+   return the **same release identifier string** for every row of the
+   §1 per-environment truth table. Lives in `sentry-node` (downstream
+   of `build-metadata` in the dep graph) and runs in `pnpm test`.
+   WS1.1 of the release-identifier plan adds `@oaknational/build-metadata`
+   as a devDependency of `@oaknational/sentry-node` to enable this
+   import (`libs ← core` direction; no boundary violation). This is
+   the **primary anti-drift gate for release-identifier equivalence**:
+   any future divergence between build-time and runtime release
+   identifiers fails the build, not Sentry's regression-attribution
+   surface. It does NOT close every possible resolver drift mode —
+   each resolver's own unit tests still cover source-provenance and
+   error-shape invariants.
+6. **Production cancellation wiring integration test** (added by the
+   §10 amendment 2026-04-24) in
+   `apps/oak-curriculum-mcp-streamable-http/tests/vercel-ignore-command-wiring.integration.test.ts`:
+   asserts that `vercel.json` parses, contains `ignoreCommand`, and
+   the command resolves to the canonical workspace shim that delegates
+   to
+   `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`.
+   Catches structural drift (file moved, file renamed, `vercel.json`
+   key removed) that the script's own unit tests cannot observe.
 
 ## References
 
@@ -721,3 +1019,163 @@ each subject to the ignoreCommand check.
   `assertVercelDefaultExportFunction`). This closes the exact
   2026-04-22 preview failure mode where a green build could still ship
   an unimportable deployed entry.
+- **2026-04-24** — Two co-equal amendments recording owner direction
+  (recorded 2026-04-23 during the Sentry MCP integration verification
+  follow-through). (1) §1 release-identifier mechanism becomes
+  **per environment**: semver for production-on-`main`,
+  `VERCEL_BRANCH_URL` host for preview / non-`main`-production,
+  `dev-<shortSha>` for development, `SENTRY_RELEASE_OVERRIDE` always
+  wins. Both build-time and runtime resolvers MUST produce the same
+  string for the same input — proven by a new cross-resolver contract
+  test (Enforcement §5). The pre-amendment §1 text is preserved as
+  historical record. (2) New §10 records the production cancellation
+  rule (production builds on `main` are cancelled unless the commit
+  advances root `package.json` semver), naming
+  `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`
+  as the canonical implementation and the workspace shim +
+  `vercel.json` `ignoreCommand` as the wiring. Wiring integrity
+  proven by a new wiring integration test (Enforcement §6); rule
+  itself proven by the existing six-row unit-test file.
+  Process-gap finding: ADR-vs-implementation drift went undetected on
+  the L-8 lane because no test asserted cross-resolver shape
+  equivalence — the §1 amendment names the new contract test as the
+  structural fix, not a procedural review-discipline change.
+  Amendment landed by WS0 of
+  `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`.
+  Reviewer dispositions: see the
+  `Reviewer Dispositions (2026-04-24 amendment)` block at the bottom
+  of this file.
+
+## Reviewer Dispositions (2026-04-24 amendment)
+
+Per the WS0.2 step of
+`.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`,
+the §1 + §10 amendments above were dispatched to three reviewers
+**before landing**. Reviewer findings are action items per principles
+§Reviewer findings; acceptances and rejections are recorded inline
+below with rationale.
+
+### `assumptions-reviewer`
+
+**Recommendation**: BLOCK ON FINDINGS #1, #2 (factual / assumption
+precision). Other findings: IMPORTANT #3, #4, #6; SUGGESTION #5.
+
+**Dispositions**:
+
+1. **Finding #1 (BLOCKING — `VERCEL_BRANCH_URL` overstated as Vercel
+   guarantee)** — **ACCEPTED**. §1 amendment text changed: removed
+   "Vercel preview builds always populate this" framing and replaced
+   with explicit fail-fast posture ("Oak relies on `VERCEL_BRANCH_URL`
+   for preview / non-`main`-production release resolution when Vercel
+   system environment variables are enabled; if it is absent on those
+   rows, release resolution **fails fast** rather than silently
+   falling back to another shape").
+2. **Finding #2 (BLOCKING — production row's "(typically the project
+   production URL host)" conflates `VERCEL_BRANCH_URL` with
+   `VERCEL_PROJECT_PRODUCTION_URL`)** — **ACCEPTED**. §1 truth-table
+   production-on-`main` row's host cell changed to "(not consulted on
+   this row)". The host is not the governing input on that row anyway
+   (source = `application_version`), so the cell now states that
+   exactly.
+3. **Finding #3 (IMPORTANT — leftmost-host-label uniqueness as Oak
+   operational assumption, not vendor guarantee)** — **ACCEPTED**.
+   §1 notes section now explicitly frames the leftmost-host-label
+   assumption as Oak operational, with the trigger condition for
+   revisiting the amendment ("if Vercel changes that host shape, this
+   amendment must be revisited") spelled out.
+4. **Finding #4 (IMPORTANT — §10 unresolvable row as fail-open
+   trade-off)** — **ACCEPTED**. §10 now states the trade-off
+   explicitly ("intentionally fail-open: Oak prefers an accidental
+   extra production build … over a false cancellation when prior-
+   deployment state cannot be resolved") and additionally notes the
+   bound is the `semantic-release` serialisation already named in §9.
+5. **Finding #5 (SUGGESTION — soften two-file shim explanation)** —
+   **ACCEPTED**. §10 wiring text now reads "current wiring uses a
+   canonical implementation plus a thin workspace shim because …";
+   alternative wirings are noted as available if the workspace
+   topology changes.
+6. **Finding #6 (IMPORTANT — tighten anti-drift gate claim)** —
+   **ACCEPTED**. §1 amendment now describes the cross-resolver
+   contract test as the **"primary anti-drift gate for release-
+   identifier equivalence"** and explicitly notes residual drift
+   modes (source-provenance, error-shape) remain the responsibility
+   of each resolver's own unit tests. Mirrored in Enforcement §5.
+
+### `sentry-reviewer`
+
+**Recommendation**: BLOCK ON FINDINGS #1, #2 (vendor-canonical
+corrections). Other findings: SUGGESTION #3, #4.
+
+**Dispositions**:
+
+1. **Finding #1 (BLOCKING — `SENTRY_RELEASE_NAME_PATTERN` not
+   Sentry-canonical; in particular it permits `/` which Sentry
+   forbids; `latest` is not vendor-forbidden)** — **ACCEPTED**. §1
+   amendment now states Sentry's documented rule verbatim with
+   citation to
+   `https://docs.sentry.io/product/releases/naming-releases/`, and
+   labels the existing Oak-local pattern as **"close to but not byte-
+   equivalent to the vendor rule"** with the specific gap named (it
+   permits `/`). The amendment scopes "align Oak validator with
+   vendor rule" into WS2 implementation work of the release-identifier
+   plan; it does not change the regex in WS0. The new shapes (semver,
+   branch-URL host, `dev-<shortSha>`) do not contain `/` so the gap
+   does not bite the new shapes in practice; the override path is
+   noted as the residual surface to tighten.
+2. **Finding #2 (BLOCKING — divergence framing as ingest rejection
+   is wrong; Sentry auto-creates a second release)** — **ACCEPTED**.
+   §1 amendment process-gap finding now correctly describes the
+   vendor failure mode as **split-release pollution**, with citation
+   to Sentry's auto-create-on-first-event behaviour
+   (`https://docs.sentry.io/platforms/javascript/guides/node/configuration/releases/`)
+   and explicit description of how data fragments across two release
+   entities for the same logical preview deployment.
+3. **Finding #3 (SUGGESTION — preview branch-host rationale framed
+   as aggregation trade-off, not response to hidden hard limits)** —
+   **ACCEPTED**. §1 rationale section rewritten around Sentry release-
+   health metrics being keyed by release identifier (with vendor
+   citation `https://docs.sentry.io/product/releases/health/`),
+   removing implicit suggestions of hidden Sentry length / cardinality
+   ceilings.
+4. **Finding #4 (SUGGESTION — §10 should describe consequence
+   precisely: Sentry reuses existing release, contaminates release-
+   health and regression semantics)** — **ACCEPTED**. §10 rationale
+   now describes the violation consequence with vendor citations
+   (`https://docs.sentry.io/cli/releases/#creating-deploys`,
+   `https://docs.sentry.io/product/releases/health/`) — Sentry would
+   reuse the existing semver release and append more deploy / event /
+   session data to it, hiding regressions introduced by the merge
+   commit from the release-introduced-by view.
+
+### `architecture-reviewer-fred`
+
+**Recommendation**: ACCEPT WITH SUGGESTED EDITS — block on Finding #1,
+suggested follow-ups for Findings #2 and #3. Findings #4–#10 are
+positive notes (no action).
+
+**Dispositions**:
+
+1. **Finding #1 (IMPORTANT — §5 not cross-linked / amended; current
+   text contradicts the per-environment grain shift)** — **ACCEPTED**.
+   §5 now carries a Cross-link 2026-04-24 blockquote at its top,
+   reframing "one release → many deploys" at the per-environment
+   grain (one semver release for production deploys; one branch-URL
+   release for preview deploys per branch), explicitly noting that
+   the preview→production "same code, different environment" relation
+   is no longer modelled by a shared release identifier and is now
+   carried by `set-commits` (§2 / §6.2). Pre-amendment §5 text is
+   preserved as historical record per ADR amendment precedent.
+2. **Finding #2 (SUGGESTION — cite `no-warning-toleration` §3 for
+   §10 stderr-warning row)** — **ACCEPTED**. §10 now explicitly cites
+   `.agent/rules/no-warning-toleration.md` §3 and names Vercel build
+   logs as the structured-signal capture surface.
+3. **Finding #3 (SUGGESTION — note new `sentry-node → build-metadata`
+   devDep edge introduced by the cross-resolver contract test)** —
+   **ACCEPTED**. Enforcement §5 now flags the new devDep edge with
+   the dep direction explicit (`libs ← core`, no boundary violation),
+   so WS1.1 of the release-identifier plan implements it deliberately.
+4. **Findings #4–#10 (POSITIVE NOTES)** — acknowledged. Boundary
+   discipline (cross-resolver test placement, wiring integration test
+   placement), §10 co-equality framing, process-gap wording, replace-
+   don't-bridge compliance, cardinal rule non-invocation, and ADR
+   structural hygiene all pass principles review. No action required.
