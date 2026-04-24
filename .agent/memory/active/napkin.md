@@ -19,6 +19,108 @@ archived to `archive/napkin-2026-04-22.md`).
 
 ---
 
+## 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m, 1M-context continuing session) — release-identifier plan landing + WS2 §2.0 BLOCKING fix, §2.1-§2.7 deferred to fresh session
+
+**Session shape**: opened via `/jc-start-right-thorough` wrapping
+`/jc-metacognition` with a long owner-authored payload that
+explicitly said "code first" and enumerated four do-NOT directives
+derived from Pippin's prior-session spiral. Metacognition artefact
+written to `/Users/jim/.claude/plans/jc-metacognition-analyse-the-
+following-adaptive-flame.md` before any execution, approved, then
+straight to execution. Landed two commits: `9a0f9ebc`
+(`docs(plans)` release-identifier substance + carry-forward) and
+`a4e8facb` (WS2 §2.0 `resolveGitSha` split decoupled from
+`@oaknational/env`). At the WS2 §2.0 / §2.1 boundary, volunteered
+the observation that §2.1-§2.7 is a single atomic commit
+(3 packages × ~15 files with cascading type renames) and that
+~60+ turn context depth plus accumulated reflection made a clean
+atomic landing risky; direct-recommendation to hand off; owner
+accepted.
+
+**Observations / Surprises**:
+
+### Observation (behavioural — what worked)
+
+- **Pre-execution metacognition as a felt-sense gate**. Reading
+  Pippin's experience file before any action made the opening
+  impulse ("survey the plan; confirm the WS1 supersession claim")
+  legibly visible AS the impulse to avoid — not as historical
+  reading. This is the intended mechanism of the experience-file
+  convention (the subjective-texture transmission), working
+  correctly. The "frightens me a little" line in Pippin's file
+  landed as a body signal, not intellectual content.
+- **Payload-authored do-NOT directives as pre-placed tripwires
+  worked**. The four directives (*do NOT re-open*, *do NOT start
+  at WS1*, *do NOT absorb audits*, *do NOT offer option menus*)
+  were legible as a single rule once reflected on:
+  *when something tempts re-deliberation instead of execution,
+  name the temptation and stay with code*.
+
+### Surprise (micro-scale — parallel-track boundary)
+
+- **Expected**: the 12 staged files at session open would be a
+  single coherent set to commit as one `docs(plans)` landing per
+  the payload's direct recommendation.
+- **Actual**: the set was heterogeneous (release-identifier
+  substance + practice-enhancement parallel-track work). The
+  payload itself flagged this (*"mix of this session's plan
+  revisions and prior Codex/Frodo cross-cutting work"*), and the
+  owner sent a mid-session note — *"Practice enhancement work is
+  ongoing in parallel"* — that sharpened the commit boundary:
+  release-identifier files go in, practice-enhancement files
+  stay staged/untracked untouched for the parallel agent.
+- **Why expectation partially failed**: I had glossed "mix" as
+  minor variation. The mid-work note was the correction.
+  Behaviour change — the resolution was use of `git commit --
+  <pathspec>` with the explicit release-identifier paths,
+  avoiding any `git add -A` or `git reset` that would have
+  interfered with parallel staging state. Preserved the parallel
+  track's working-tree discipline as an invariant.
+
+### Observation (scope-assessment at commit-boundary)
+
+- **Named the trade-off at the §2.0/§2.1 boundary explicitly**:
+  single-atomic-commit plan discipline vs accumulating session
+  context depth. Declined to push through. Direct recommendation
+  to owner with reasoning + falsifiability (*"fresh session opens
+  with clean context to land §2.1-§2.7 atomically; if it doesn't,
+  the deferral trade-off is refuted"*). Owner accepted with brief
+  direction to run handoff. No option menu was offered — a single
+  direct recommendation with stated reasoning.
+- This is the inverse move to Pippin's spiral: Pippin's session
+  kept going past the point where marginal review-finding
+  absorption produced diminishing returns; this session
+  *volunteered the stop* at a point where marginal push-through
+  would have produced rising risk of a bad atomic commit. Both
+  are the same underlying rule applied at different scales:
+  *recognise when continuing has turned from additive to
+  subtractive, and say so*.
+
+### Surprise (pre-commit gate)
+
+- **Expected**: my first commit attempt would pass pre-commit
+  gates cleanly — my staged files were clean and the message
+  validated via `check-commit-message.sh` before invocation.
+- **Actual**: pre-commit `prettier --check .` failed on
+  `scripts/validate-portability.mjs`, a parallel-track WIP file
+  with +111/-49 unstaged changes I had NOT touched. Full-repo
+  format-check catches unstaged work-in-progress in other agents'
+  files. Blocked commit without an available non-destructive
+  resolution — running `pnpm format:root` or
+  `prettier --write <file>` would modify someone else's WIP.
+- **Behaviour**: asked for `--no-verify` fresh authorisation per
+  `.agent/rules/no-verify-requires-fresh-authorisation.md`;
+  owner responded "the issues are resolved, please try again
+  without the bypass" — parallel track had fixed their file in
+  the meantime. Retried, clean. **Behaviour change for future
+  sessions**: full-repo pre-commit gates couple commits across
+  parallel tracks; if you hit a format-check failure on a file
+  you have not touched, the correct move is to ask, not to fix
+  or bypass. Coordinating via owner is the parallel-track-aware
+  discipline.
+
+---
+
 ## 2026-04-24 (Pippin / cursor / claude-opus-4-7) — release-identifier plan: Tier 1 → Tier 2 → audit cycle, owner intervention on review-cascade
 
 **Session shape**: opened as "WS1 RED contract tests on the

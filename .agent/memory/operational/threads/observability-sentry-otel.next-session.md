@@ -1,6 +1,22 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Last refreshed**: 2026-04-24 (Pippin / cursor / claude-opus-4-7)
+**Last refreshed**: 2026-04-24 (Frodo / claude-code / claude-opus-4-7-1m
+— 1M-context session continuing Frodo identity per PDR-027 additive
+rule). Landed two commits against the release-identifier plan:
+`9a0f9ebc` (docs(plans) landing of Pippin's plan-revision substance
+plus observability thread carry-forward) and `a4e8facb` (WS2 §2.0
+BLOCKING fix: `resolveGitSha` split from `runtime-metadata.ts` into
+a new `git-sha.ts` module decoupled from `@oaknational/env` +
+structural fitness test). WS2 §2.1-§2.7 deferred to a fresh session
+at owner direction (see §Landing Target for the trade-off
+rationale). Session opened with `/jc-start-right-thorough` wrapping
+`/jc-metacognition` and a long directive payload; the metacognition
+artefact at `/Users/jim/.claude/plans/jc-metacognition-analyse-the-
+following-adaptive-flame.md` was approved before execution and
+captured the payload's behavioural-containment shape (derived from
+Pippin's spiral-session experience file).
+
+**Prior refresh**: 2026-04-24 (Pippin / cursor / claude-opus-4-7)
 after a planning + reviewer-cycle session that did not land code.
 The session opened on WS1 RED but pivoted into a structural
 collapse decision (two resolvers → one, accepted by owner), then
@@ -161,7 +177,7 @@ rehearsal).
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
 | `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed` | 2026-04-22 | 2026-04-24 |
 | `Codex` | `codex` | *`unknown`* | *`unknown`* | `repo-owned-repair-closeout-and-doc-consolidation` | 2026-04-23 | 2026-04-23 |
-| `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan` | 2026-04-24 | 2026-04-24 |
+| `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan; then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-and-§2.1-§2.7-deferred-to-fresh-session-by-owner-direction` | 2026-04-24 | 2026-04-24 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):
@@ -171,7 +187,103 @@ new sessions add rows; they do not rewrite older attribution.
 
 ## Landing Target (per PDR-026)
 
-**This session (planning + reviewer cycle, no code landed)**:
+**This session (release-identifier plan landing + WS2 §2.0 BLOCKING fix,
+WS2 §2.1-§2.7 deferred)**: opener was the owner-authored payload
+inside `/jc-start-right-thorough`: (1) commit the plan-revision
+substance as a single `docs(plans)` landing; (2) WS2 §2.0 split of
+`resolveGitSha` decoupled from `ROOT_PACKAGE_VERSION` as a single
+commit; (3) WS2 §2.1-§2.7 unified `resolveRelease` + sentry-node
+adapter + validator + caller-discipline. **Landed 1 and 2; 3
+deferred.** Deferral-honesty discipline (per PDR-026):
+
+- **What was attempted**: full payload sequence 1 → 2 → 3.
+- **What landed**:
+  - `9a0f9ebc` — `docs(plans): land release-identifier plan
+    revisions + observability thread carry-forward`. 5 files,
+    +1723/-627. Release-identifier substance only; practice-
+    enhancement staged files (agentic-engineering-enhancements
+    plan set, AGENT.md collaboration-reference, untracked
+    collaboration directive + rule files) were left staged/
+    untracked by explicit pathspec commit, not unstaged, per the
+    "do not interfere with the parallel track's staging state"
+    discipline the owner's mid-session note sharpened.
+  - `a4e8facb` — `refactor(build-metadata): split resolveGitSha
+    into git-sha.ts, decouple from @oaknational/env`. 6 files,
+    +129/-111. WS2 §2.0 prerequisite: `resolveGitSha`,
+    `GitShaSource`, `trimToUndefined`, `RuntimeMetadataError`,
+    and `NO_DIAGNOSTICS` moved to
+    `packages/core/build-metadata/src/git-sha.ts`;
+    `runtime-metadata.ts` imports shared helpers back from
+    `git-sha.ts`; `build-time-release.ts:15` re-points import;
+    `index.ts` re-exports re-pointed. 3 `resolveGitSha` unit
+    tests moved to new `tests/git-sha.unit.test.ts` alongside
+    the new structural fitness test (asserts `git-sha.ts`
+    source contains no reference to `@oaknational/env`).
+    External app consumers (`oak-search-cli`,
+    `oak-curriculum-mcp-streamable-http`) unchanged — they
+    import via the package public API. 45 build-metadata tests
+    pass; full pre-commit gates green (format, markdownlint,
+    knip, depcruise clean at 1954 modules / 0 violations, 74
+    turbo tasks).
+- **What prevented WS2 §2.1-§2.7**: named priority trade-off —
+  *single-atomic-commit discipline vs session context depth*.
+  The plan explicitly mandates WS2 §2.1-§2.7 as one atomic
+  commit (WS2 overall is one commit per the plan's stated
+  discipline; §2.0 was split off by the payload as a separate
+  commit because it is structurally independent). The remaining
+  §2.1-§2.7 scope: type rename cascade (`BuildTimeRelease*` →
+  `Release*` across types file, build-info.ts, index.ts,
+  esbuild.config.ts, sentry-build-plugin.ts), shape change
+  (`ResolvedRelease` drops the `gitSha` field), new
+  `resolveRelease` implementation with `new URL()` preview
+  parsing, sentry-node thin-adapter (dep add + types extends
+  `ReleaseInput` + config-resolution delegation), atomic
+  replacement (delete `slugifyBranch`, rewrite `preview-<slug>-<sha>`
+  fixtures in `build-time-release.unit.test.ts` and
+  `sentry-configured-build-gate.unit.test.ts`),
+  `isValidReleaseName` rewrite per Sentry's documented denylist,
+  caller-discipline snapshot at ~5 call sites. Scope estimate:
+  3 packages × ~15 files with cascading type renames + test-
+  fixture updates. Session at the decision point was ~60+
+  turns deep with accumulated context from metacognition,
+  reflective reading, and two substantive commits. Direct
+  recommendation to owner: hand off to fresh session rather
+  than push through under attention/context pressure; owner
+  accepted (*"we will continue in a fresh session, run the
+  session handoff process please"*).
+- **Falsifiability**: a future agent opens a fresh session,
+  reads the plan's WS2 §2.1-§2.7 sections, and lands the single
+  atomic commit with all gates green. If that fresh session
+  encounters material blockers not foreseen in the plan body
+  (true unknown-unknowns, not cascading type-rename mechanics),
+  the trade-off is refuted — a fresh session wasn't the missing
+  ingredient. If they land cleanly in one commit, the trade-off
+  held.
+- **What next session re-attempts**: WS2 §2.1-§2.7 as a single
+  atomic commit per the plan body, starting from branch HEAD
+  `a4e8facb`. Plan authority is durable; `git-sha.ts` is
+  stable; type shape changes now cascade from a known clean
+  foundation. See §Next safe step for the step-by-step
+  sequence.
+
+**Behavioural note**: the session-opening metacognition artefact
+(reviewed and approved before execution began) was the load-
+bearing scaffold that held the payload's discipline. Reading
+Pippin's `experience/2026-04-24-pippin-the-spiral-i-could-not-
+see.md` as a felt-sense signal (not as intellectual history)
+prevented the opening impulse to survey the plan or confirm
+the WS1 supersession claim. The pause-and-handoff decision at
+the WS2 §2.0/§2.1 boundary was an instance of the same
+restraint applied at a different scale — recognising that
+attempting a large atomic refactor under accumulating session
+context is a variant of the Pippin spiral shape, and
+volunteering the hand-off earned the clean commit boundary.
+Captured in napkin + (possibly) an experience file at session
+close.
+
+---
+
+**Prior session (planning + reviewer cycle, no code landed)**:
 opener was *"WS1 RED contract tests, separate commit / turn
 boundary"*. **Unlanded.** What was attempted, what prevented,
 what next session re-attempts (per PDR-026 §Deferral-honesty
@@ -313,8 +425,53 @@ wiring integration check), then WS2 GREEN resolver rewrite.
 
 ### Current state
 
-- **Latest session (2026-04-24, Pippin, planning + reviewer cycle)**:
-  no commits landed; the working tree carries 12 staged files
+- **Latest session (2026-04-24, Frodo / claude-code / claude-opus-4-7-1m,
+  release-identifier landing + WS2 §2.0 BLOCKING fix, §2.1-§2.7
+  deferred)**: two commits landed on `feat/otel_sentry_enhancements`
+  — `9a0f9ebc` (plan-revision landing as `docs(plans)`, 5 files,
+  +1723/-627) and `a4e8facb` (WS2 §2.0 split of `resolveGitSha`
+  into new `packages/core/build-metadata/src/git-sha.ts`, 6 files,
+  +129/-111). Codex subsequently landed a parallel-track
+  practice-remediation commit sequence (`b40bc994`, `d2acdefb`,
+  `991c552c`, `f6fd524e`, `69fd4f8c`) on top of the observability
+  commits; branch HEAD at handoff time is `69fd4f8c`. The
+  practice-track commits do NOT modify observability substance —
+  they add collaboration directive + rules, canonicalise portable
+  skill adapters, land plan coordination, etc. The fresh session
+  opens from whatever branch HEAD is at that time (HEAD may
+  advance further via continued parallel-track work); the
+  observability substance (`resolveGitSha` split, plan revisions)
+  remains intact either way. Working tree retains the practice-enhancement parallel
+  track's staged/unstaged state untouched — `.agent/directives/
+  AGENT.md` (staged collaboration-reference), the
+  `.agent/plans/agentic-engineering-enhancements/` staged set,
+  untracked `collaboration.md` + `follow-collaboration-practice.*`
+  files, plus a wide set of unstaged modifications under
+  `.agents/skills/` and adjacent surfaces (parallel-track WIP).
+  **Architectural state post-§2.0**: `resolveGitSha` no longer
+  transitively imports `@oaknational/env`; structural fitness test
+  is the durable regression guard. `runtime-metadata.ts` keeps
+  `resolveApplicationVersion` + `getDisplayHostname` and imports
+  `trimToUndefined` / `RuntimeMetadataError` / `NO_DIAGNOSTICS`
+  back from `git-sha.ts` (edge runtime-metadata → git-sha is
+  clean; the env-dep'd module imports from the non-env-dep'd
+  module, no cycle). External app consumers (`oak-search-cli`,
+  `oak-curriculum-mcp-streamable-http`) import
+  `resolveGitSha` via the package public API and needed no
+  changes. `@oaknational/sentry-node`'s internal `resolveGitSha`
+  (in `config-resolution.ts:174`) remains unchanged — it is
+  defensive validation of structured inputs (not a parallel
+  implementation of the same resolver), per Pippin's audit
+  note.
+- **WS2 §2.1-§2.7 remains open** with full scope per the plan
+  body: new `resolveRelease` unified resolver in
+  `@oaknational/build-metadata`, thin-adapter delegation from
+  `@oaknational/sentry-node`, validator alignment with Sentry's
+  documented denylist, caller-discipline snapshot pattern.
+  Cascading type renames are known and enumerated in the plan.
+  See §Next safe step for concrete sequence.
+- **Prior session (2026-04-24, Pippin, planning + reviewer cycle)**:
+  no commits landed; the working tree carried 12 staged files
   including ~+994 lines of substantive plan revision to
   [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md).
   Architectural shape changed materially: **two resolvers
@@ -448,61 +605,158 @@ wiring integration check), then WS2 GREEN resolver rewrite.
 
 ### Next safe step
 
-**First**: decide what to do with the staged plan revisions
-(see §Current state). They are substantive and load-bearing for
-WS2 — they include the resolver-collapse architectural shape,
-the BLOCKING `readFileSync` fix in WS2 §2.0, the WS3.4 13-item
-enumeration, and the Documentation Propagation corrections.
-Recommended posture: commit them as a single
-`docs(plans): revise sentry-release plan for resolver collapse and tier-2 reviewer findings`
-commit on the `feat/otel_sentry_enhancements` branch BEFORE
-opening WS2 code work, so the plan-authority surface that WS2
-consumes is durable. The 12-file staged set also includes prior-
-session work (Codex's expert-expansion plan reconciliation +
-Frodo's earlier touches); inspect with
-`git diff --cached --stat` and split if appropriate per the
-`commit` skill's atomic-commit discipline. If the owner prefers
-a single sweep commit per the prior session's precedent
-(`ffec98b0`), follow that direction.
+**Branch HEAD is `a4e8facb`**. WS2 §2.0 is landed; the remaining
+WS2 §2.1-§2.7 is a single atomic commit per the plan's explicit
+"WS2 ... in one commit" discipline. Full scope (read the plan
+body's WS2 §2.1-§2.7 for canonical detail):
 
-**Then proceed to WS2 GREEN** of
-[`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md).
-**WS1 RED as originally specified is superseded**: the
-cross-resolver contract test no longer makes sense once both
-resolvers structurally cannot diverge (`SentryConfigEnvironment
-extends ReleaseInput` makes shape divergence impossible by
-construction). The revised plan folds RED testing into WS2
-TDD step-by-step. WS2 sequence (read the plan body for full
-detail, but at-a-glance):
+1. **§2.1 Define unified types** in
+   `packages/core/build-metadata/src/build-time-release-types.ts`:
+   - `ReleaseInput` — drop the `[key: string]: string | undefined`
+     index signature (Wilma MINOR #11). Fields: `SENTRY_RELEASE_OVERRIDE?`,
+     `VERCEL_ENV?`, `VERCEL_BRANCH_URL?`, `VERCEL_GIT_COMMIT_REF?`,
+     `VERCEL_GIT_COMMIT_SHA?`, `APP_VERSION?`.
+   - `ReleaseSource` = `'SENTRY_RELEASE_OVERRIDE' | 'application_version'
+     | 'vercel_branch_url' | 'development_short_sha'` — **delete
+     `preview_branch_sha`**.
+   - `ReleaseEnvironment` = `'production' | 'preview' | 'development'`
+     (unchanged shape, renamed).
+   - `ResolvedRelease` = `{ value, source, environment }` —
+     **drop the `gitSha` field** from the old
+     `ResolvedBuildTimeRelease`. Check callers for `.gitSha` use
+     (`build-info.ts`, `persistBuildInfo` in `esbuild.config.ts`)
+     and either re-resolve via `resolveGitSha` at the call site
+     or thread gitSha separately; do NOT silently widen the type.
+   - `ReleaseError.kind` variants: rename `missing_branch_in_preview`
+     → `missing_branch_url_in_preview`; drop `invalid_git_sha`
+     if no longer emitted. The final enum per the plan:
+     `'invalid_release_override' | 'missing_application_version' |
+     'invalid_application_version' | 'missing_branch_url_in_preview' |
+     'missing_git_sha'`.
+   - Retain legacy type aliases (`BuildTimeReleaseEnvironmentInput`,
+     `BuildTimeReleaseSource`, etc.) only if external callers
+     require them; the WS1 audit identified only internal
+     consumers + the `sentry-build-plugin.ts` / `esbuild.config.ts`
+     in `oak-curriculum-mcp-streamable-http`, so aliases likely
+     unnecessary — remove cleanly.
 
-1. **WS2 §2.0 PREREQUISITE** (BLOCKING fix from Wilma
-   Tier 2): split `resolveGitSha` from `runtime-metadata.ts`
-   into a new `git-sha.ts` module in
-   `packages/core/build-metadata/src/` that does NOT import
-   `ROOT_PACKAGE_VERSION` (which performs eager `readFileSync`
-   at module init). Re-point
-   `packages/core/build-metadata/src/build-time-release.ts`'s
-   import. Add a structural fitness test that asserts no
-   import path from `git-sha.ts` reaches `root-package-version.ts`
-   transitively. Single commit.
-2. **WS2 §2.1-§2.6**: implement the unified `resolveRelease` in
-   `@oaknational/build-metadata` consuming `ReleaseInput`,
-   producing `ResolvedRelease | ReleaseError` (Result pattern).
-   Use `new URL()` parsing for `VERCEL_BRANCH_URL` with explicit
-   rejection of malformed cases (Wilma MAJOR #8). RED tests
-   first per TDD discipline.
-3. **WS2 §2.7**: caller-discipline rule — snapshot env at
-   boundary, never mutate `process.env` mid-process.
-4. **WS2 sentry-node delegation**: rewrite
-   `@oaknational/sentry-node`'s `resolveSentryRelease` to
-   delegate to `resolveRelease`; `SentryConfigEnvironment
-   extends ReleaseInput`. Delete the now-superseded
-   `slugifyBranch` helper from
-   `packages/core/build-metadata/src/build-time-release-internals.ts`.
-   Delete obsolete `preview-<slug>-<sha>` shape.
-5. **Validator denylist correction** (folded into WS2):
-   `isValidReleaseName` accepts `latest`, rejects `/` per
-   Sentry's documented rules.
+2. **§2.2 Implement `resolveRelease`** in
+   `build-time-release.ts` (keep file name; rename the exported
+   function; retain `resolveBuildTimeRelease` as a trivial alias
+   export to avoid a cascading rename of the
+   `sentry-build-plugin.ts` + `esbuild.config.ts` call sites —
+   or rename there too and drop the alias, owner's call). Logic
+   per plan §2.2: `SENTRY_RELEASE_OVERRIDE` → override
+   (validated via new §2.5 `isValidReleaseName`); effective
+   environment derivation; production → `APP_VERSION` validated
+   via `semver.valid()` (add `semver` as dependency to
+   `packages/core/build-metadata/package.json` if not already
+   present — note WS3 also needs `semver`, may already land
+   earlier); preview → `new URL(input.VERCEL_BRANCH_URL)` with
+   explicit rejection of malformed URL, empty hostname, IPv4/
+   IPv6 literal, or host-label failing `isValidReleaseName`;
+   development → `dev-<shortSha>` from `VERCEL_GIT_COMMIT_SHA`.
+
+3. **§2.3 sentry-node thin adapter**:
+   - `packages/libs/sentry-node/package.json` — add
+     `@oaknational/build-metadata: workspace:*` as runtime
+     `dependency`. Confirm `libs ← core` edge is permitted in
+     `.dependency-cruiser.mjs` (it is; `no-core-to-libs`
+     forbids the reverse only).
+   - `packages/libs/sentry-node/src/types.ts` — make
+     `SentryConfigEnvironment extends ReleaseInput` (import
+     from `@oaknational/build-metadata`). Drop any fields
+     duplicated in `ReleaseInput`.
+   - `packages/libs/sentry-node/src/config-resolution.ts` —
+     rewrite `resolveSentryRelease` body to delegate:
+
+     ```typescript
+     const result = resolveRelease(input);
+     if (!result.ok) return err(toObservabilityConfigError(result.error));
+     return ok(toResolvedSentryRelease(result.value));
+     ```
+
+     `toObservabilityConfigError` and `toResolvedSentryRelease`
+     are pure total mappers.
+
+4. **§2.4 Atomic replacement**:
+   - Delete `slugifyBranch` from
+     `build-time-release-internals.ts` (no consumers remain).
+   - Delete `resolvePreviewRelease`'s old body; rewrite to
+     use URL-parse logic or inline into `resolveRelease` body.
+   - Update `build-time-release.unit.test.ts` — replace all
+     `preview-<slug>-<sha>` assertions with
+     `VERCEL_BRANCH_URL`-host assertions; update fixtures to
+     supply `VERCEL_BRANCH_URL`.
+   - Update
+     `apps/oak-curriculum-mcp-streamable-http/build-scripts/sentry-configured-build-gate.unit.test.ts`
+     log-line assertions to match the new release-shape.
+   - Update any other tests the `rg 'preview-'` audit in §Acceptance
+     Criteria surfaces.
+
+5. **§2.5 Validator alignment**: replace `isValidReleaseName`
+   in `build-time-release-internals.ts` (or wherever it ends
+   up post-collapse) with the Sentry-documented denylist
+   exactly:
+
+   ```typescript
+   export function isValidReleaseName(value: string): boolean {
+     if (value.length === 0 || value.length > 200) return false;
+     if (value === '.' || value === '..') return false;
+     if (value === ' ') return false;
+     if (/[\n\t/\\]/u.test(value)) return false;
+     return true;
+   }
+   ```
+
+   Drop `SENTRY_RELEASE_NAME_PATTERN` if no consumer remains.
+   Accept `latest`, reject `/`. Record any Oak-local tightening
+   beyond Sentry's rules in TSDoc as
+   *"Oak-local tightening — not Sentry-required"*.
+
+6. **§2.6 Plugin wiring sanity** (likely no code change):
+   confirm `apps/oak-curriculum-mcp-streamable-http/build-scripts/
+   sentry-build-plugin.ts` sees the new resolver output
+   transparently via its existing `release.name` feed — no
+   hard-coded `preview-` prefix assumptions remain post-§2.4.
+
+7. **§2.7 Caller discipline**: at every call site of
+   `resolveRelease` / `resolveSentryRelease`, pass an explicit
+   object-literal snapshot of the required env fields rather
+   than `process.env` by reference. Call sites to update:
+   - `apps/oak-curriculum-mcp-streamable-http/build-scripts/
+     sentry-build-plugin.ts` (build-time)
+   - `apps/oak-curriculum-mcp-streamable-http/src/runtime-config.ts`
+     (runtime)
+   - `apps/oak-search-cli/src/runtime-config.ts` (runtime)
+   - `packages/libs/sentry-node/src/config.ts` and
+     `config-resolution.ts` (internal)
+   - Any test fixtures that currently pass a spread of
+     `process.env` — replace with explicit literals.
+
+**Deterministic validation (per plan §WS2 Acceptance)**:
+
+```bash
+pnpm --filter @oaknational/build-metadata test
+pnpm --filter @oaknational/sentry-node test
+pnpm --filter oak-curriculum-mcp-streamable-http test
+pnpm depcruise
+```
+
+Plus the pre-commit hook's full 74-task turbo run.
+
+**Commit message hint** (subject under 100 chars):
+`refactor(build-metadata): unify release resolver in resolveRelease, sentry-node as thin adapter`
+or similar. Body explains the collapse, the shape change on
+`ResolvedRelease` (drops `gitSha`), the validator rewrite, and
+the URL-parse preview path.
+
+**WS3 (cancellation script rewrite + ADR-163 §10 second amendment)**
+is a separate commit boundary AFTER WS2 §2.1-§2.7 GREEN. Read
+the plan's WS3.0 pre-landing reviewer dispatch step before
+drafting the WS3 commit. The WS3.4 13-item amendment enumeration
+is comprehensive; a 14th amendment is the failure mode the plan
+exists to prevent.
 
 **WS3 (cancellation script rewrite + ADR-163 §10 second
 amendment)** is a separate commit boundary after WS2 GREEN.

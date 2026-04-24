@@ -21,14 +21,24 @@ own owners, and then committed the work in sensible groups:
 continuity update is the final closeout surface for that commit
 pass.)
 
-**Prior refresh**: 2026-04-24 (Pippin / cursor /
+**Prior refresh**: 2026-04-24 (Frodo / claude-code /
+claude-opus-4-7-1m, 1M-context continuing session — branch-primary
+observability thread: landed Pippin's plan-revision substance as
+`docs(plans)` commit `9a0f9ebc` and the WS2 §2.0 BLOCKING fix as
+`refactor(build-metadata)` commit `a4e8facb`
+(`resolveGitSha` split into new `git-sha.ts` module decoupled from
+`@oaknational/env`, with structural fitness test). WS2 §2.1-§2.7
+deferred to a fresh session at owner direction; deferral-honesty
+rationale captured in the thread record's §Landing Target.)
+
+**Earlier refresh**: 2026-04-24 (Pippin / cursor /
 claude-opus-4-7 — branch-primary observability thread session:
 opened on WS1 RED of the release-identifier plan, pivoted into
 a Tier 1 → revise → Tier 2 → fix-all → 3-layer pre-flight audit
 cycle per explicit owner direction. Architectural collapse
 decision accepted; no code landed.)
 
-**Earlier refresh**: 2026-04-24 (Frodo / claude-code /
+**Still earlier refresh**: 2026-04-24 (Frodo / claude-code /
 claude-opus-4-7-1m — cross-cutting `.remember/`, Cursor/Codex
 memory, SonarCloud, and sonarjs backlog session; incidental
 observability plan tightening landed in `5fc52d86`.)
@@ -80,7 +90,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23; `claude-code` / `claude-opus-4-7-1m` / Frodo / incidental-touch-via-commit-of-owner-pre-staged-plan-body-tightening / 2026-04-24; `cursor` / `claude-opus-4-7` / Pippin / WS0-amendment-landing-then-post-WS0-WS3-cancellation-rewrite-design-then-meta-session-sweep-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed / 2026-04-24 (latest — opened on WS1 RED, pivoted to Tier 1 + Tier 2 reviewer cycle with architectural collapse to single resolver, comprehensive plan revision (~+994 lines, staged not committed), 3-layer pre-flight audit clean, owner intervention broke review-cascade spiral; meta-pattern captured for pending PDR-015 amendment trigger) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23; `claude-code` / `claude-opus-4-7-1m` / Frodo / incidental-touch-via-commit-of-owner-pre-staged-plan-body-tightening-then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-§2.1-§2.7-deferred-to-fresh-session / 2026-04-24 (latest on this thread — landed `9a0f9ebc` + `a4e8facb`; branch HEAD `a4e8facb`; WS2 §2.1-§2.7 next); `cursor` / `claude-opus-4-7` / Pippin / WS0-amendment-landing-then-post-WS0-WS3-cancellation-rewrite-design-then-meta-session-sweep-then-tier1-collapse-then-tier2-revisions-then-WS1-pre-flight-audit-no-code-landed / 2026-04-24 (opened on WS1 RED, pivoted to Tier 1 + Tier 2 reviewer cycle with architectural collapse to single resolver, comprehensive plan revision (~+994 lines, staged not committed by this session), 3-layer pre-flight audit clean, owner intervention broke review-cascade spiral; meta-pattern captured for pending PDR-015 amendment trigger) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -184,6 +194,30 @@ handoff/consolidation pass.
 Parallel Sentry/build-metadata work was not owned by this
 Practice commit pass; the branch already carries the separate
 build-metadata commit `a4e8facb`.
+
+**Also 2026-04-24 (parallel branch-primary session, Frodo /
+claude-code / claude-opus-4-7-1m continuing)**: landed the
+release-identifier plan-revision substance (Pippin's staged
+~+994 lines of plan revision plus observability thread carry-
+forward) as `docs(plans)` commit `9a0f9ebc`, then landed the
+WS2 §2.0 BLOCKING fix as `refactor(build-metadata)` commit
+`a4e8facb`. Session opened via `/jc-start-right-thorough`
+wrapping `/jc-metacognition` with a payload that carried the
+behavioural-containment shape from Pippin's prior spiral
+session (see
+[`experience/2026-04-24-pippin-the-spiral-i-could-not-see.md`](../../experience/2026-04-24-pippin-the-spiral-i-could-not-see.md)).
+At the WS2 §2.0 / §2.1 commit boundary, the remaining WS2
+§2.1-§2.7 work was deferred to a fresh session at owner
+direction — rationale captured in the thread record under
+[§Landing Target](threads/observability-sentry-otel.next-session.md#landing-target-per-pdr-026):
+single-atomic-commit plan discipline against accumulating
+session context depth; owner accepted the direct recommendation.
+Commit pathspec discipline kept the practice-enhancement
+parallel-track staged state (Codex / Frodo earlier sessions)
+untouched by the release-identifier commits. Pre-commit gates
+green on both commits (format, markdownlint, knip, depcruise
+at 1954 modules / 0 violations, 74-task turbo); 45 build-
+metadata tests pass post-§2.0.
 
 ## Session history
 
@@ -339,34 +373,35 @@ Non-goals for next session:
 
 ## Next safe step
 
-**Branch-primary observability**: WS1 RED as originally
-specified is **superseded** by this session's resolver-collapse
-decision (cross-resolver contract test no longer makes sense
-once `SentryConfigEnvironment extends ReleaseInput` makes shape
-divergence impossible by construction). Proceed straight to
-**WS2 GREEN** of
-[`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md);
-RED testing folds into WS2's TDD discipline. Sequence (full
-detail in the thread record's
+**Branch-primary observability**: observability commits
+landed at `9a0f9ebc` (plan-revision) and `a4e8facb` (WS2 §2.0
+`resolveGitSha` split); parallel-track practice commits
+(`b40bc994` → `69fd4f8c`) subsequently landed on top but do
+not modify observability substance; current branch HEAD at
+handoff time is `69fd4f8c` (may advance further via continued
+parallel work before the fresh session opens). Next
+observability work is **WS2 §2.1-§2.7 as a single atomic
+commit** per the plan's "WS2 ... in one commit"
+discipline. Full sequence in the thread record's
 [§Next safe step](threads/observability-sentry-otel.next-session.md#next-safe-step)
-and the plan body):
+(concrete step-by-step across §2.1 types, §2.2 resolveRelease,
+§2.3 sentry-node thin adapter, §2.4 atomic replacement, §2.5
+validator, §2.6 plugin sanity, §2.7 caller-discipline
+snapshot). Deterministic validation is:
 
-1. **First**: decide the staged-files commit posture. The 12
-   staged files include this session's substantive plan
-   revisions (~+994 lines) plus prior Codex/Frodo cross-cutting
-   work. Commit the plan-revision substance before opening WS2
-   code work so the plan-authority surface is durable.
-2. **WS2 §2.0 PREREQUISITE** (BLOCKING fix from Wilma Tier 2):
-   split `resolveGitSha` from `runtime-metadata.ts` into a new
-   `git-sha.ts` module that does NOT import
-   `ROOT_PACKAGE_VERSION` (which performs eager `readFileSync`
-   at module init). Add structural fitness test. Single commit.
-3. **WS2 §2.1-§2.7**: implement unified `resolveRelease`,
-   sentry-node delegation, validator denylist correction,
-   caller-discipline rule.
-4. **WS3 + ADR-163 §10 second amendment**: separate commit
-   boundary; read WS3.0 pre-landing reviewer dispatch step
-   before drafting.
+```bash
+pnpm --filter @oaknational/build-metadata test
+pnpm --filter @oaknational/sentry-node test
+pnpm --filter oak-curriculum-mcp-streamable-http test
+pnpm depcruise
+```
+
+plus the pre-commit hook's full 74-task turbo run.
+
+**After WS2 §2.1-§2.7 GREEN**: WS3 (cancellation script
+rewrite) + ADR-163 §10 second amendment as a separate commit
+boundary; read the plan's WS3.0 pre-landing reviewer dispatch
+step before drafting.
 
 **Behavioural carry-forward**: read
 [`napkin.md`](../active/napkin.md) §2026-04-24 (Pippin) and
@@ -427,6 +462,23 @@ will be picked up when the owner has appetite. If left
 indefinitely, they remain visible in the surfaces above.
 
 ## Deep consolidation status
+
+**Status (2026-04-24 Frodo session-handoff — branch-primary
+observability continuing-session after release-identifier
+landing plus WS2 §2.0)**: **not due** for a deep
+`consolidate-docs` pass.
+No new candidate surfaced: the session's behavioural shape
+(metacognition-artefact-before-execution + direct-recommendation-
+at-scope-pause-boundary + parallel-track-commit-pathspec-discipline)
+maps to existing memory surfaces (Pippin's experience file for the
+spiral-avoidance felt-sense; `feedback_answer_verification_questions_directly.md`
+for direct-answer discipline; commit skill's explicit
+"don't-destroy-changes" rule for pathspec discipline). No new
+instance fired for an existing pending graduation beyond what
+Pippin's prior session already recorded. Inherited hard-zone
+fitness issue on repo-continuity.md remains (lines added this
+pass); due at the next dedicated consolidation pass per the
+earlier Frodo waiver's "does not carry forward" language.
 
 **Status (2026-04-24 Codex session-handoff + consolidate-docs)**:
 **completed this handoff — owner-requested session handoff plus
