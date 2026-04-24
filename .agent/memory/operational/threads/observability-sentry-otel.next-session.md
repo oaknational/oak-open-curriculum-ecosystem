@@ -1,29 +1,64 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
 **Last refreshed**: 2026-04-24 (Pippin / cursor / claude-opus-4-7)
-after a focused post-WS0 plan-body refinement session that recorded the
-agreed WS3 cancellation-script rewrite directly into
-[`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md).
-Plan-body refinement is **uncommitted** — the modification is in the
-working tree only; the next session commits it (either standalone or
-folded into the WS1 RED commit, agent's call).
+after the cross-cutting meta-session sweep landed in commit
+`ffec98b0`. That sweep folded this thread's previously-uncommitted
+plan-body refinement (WS3 cancellation-script rewrite + WS2 validator
+denylist correction) into a larger commit that also landed
+practice/process restructuring, vendor-skills expansion, and three
+new parallel plans. The release-identifier plan refinement is now
+durable; this thread picks up at WS1 RED with no commit-choice
+overhead.
 
-WS0 (decide → document) remains **landed** at `06bf25d7`. The thread
-still picks up at WS1 (RED contract tests). The WS3 scope in the plan
-has shifted from "verify existing script" to **"rewrite to the simpler
-rule using the canonical `semver` package"** after a careful re-read
-of `vercel-ignore-production-non-release-build.mjs` post-WS0 surfaced
-three substantive defects: missing `VERCEL_GIT_COMMIT_REF === 'main'`
-branch gate; hand-rolled major.minor.patch parser instead of canonical
-`semver`; fail-open clause conflating transient git-resolution failure
-with deterministic repo defects. WS3 now lands a ~50-line rewrite plus
-unit-test rewrite plus a second ADR-163 §10 amendment.
+**Repo-wide changes the next session must know about** (landed in
+`ffec98b0`, may affect grounding reads at session start):
 
-WS2 also picked up a small validator denylist correction:
-`isValidReleaseName` permits `/` (Sentry forbids) and rejects the
-literal `latest` (Sentry permits) — both diverge from Sentry's
-documented rules and ride alongside the resolver rewrite because both
-resolvers consume that predicate for branch-URL host validation.
+1. **Practice surface relocation** — `continuity-practice.md` moved
+   from `docs/governance/` to
+   [`.agent/directives/continuity-practice.md`](../../../directives/continuity-practice.md).
+   Any directive-grounding read should hit the new location. The
+   `docs/governance/` README and `.agent/directives/principles.md`
+   were updated alongside.
+2. **Napkin rotated** — the prior session's pattern-instance entry
+   (WS3-as-verify framing surprise; second instance of
+   `inherited-framing-without-first-principles-check`) is preserved
+   in
+   [`archive/napkin-2026-04-22b.md`](../../active/archive/napkin-2026-04-22b.md)
+   and contributes to the permanent pattern file at
+   [`patterns/inherited-framing-without-first-principles-check.md`](../../active/patterns/inherited-framing-without-first-principles-check.md).
+   The PDR-015-amendment candidate (assumption-challenge gate per
+   architectural-review output) remains in the pending-graduations
+   register at
+   [`repo-continuity.md § Deep consolidation status`](../repo-continuity.md#deep-consolidation-status)
+   — trigger condition (i) is met, awaiting (ii) or (iii).
+3. **Three new parallel plans** are active alongside this thread —
+   none block release-identifier work, but the next session should
+   know they exist so cross-plan coordination is deliberate:
+   - [`agent-infrastructure-portability-remediation.plan.md`](../../../plans/agentic-engineering-enhancements/current/agent-infrastructure-portability-remediation.plan.md)
+     — three-layer artefact-model audit + remediation. Touches
+     `.agents/skills/`, `.claude/skills/`, ADR-125, vendor skill
+     installations. **Coordination flag**: this plan's Phase 1
+     canonicalisation pass already removed `.claude-plugin/plugin.json`
+     shells across `.agents/skills/clerk-*/`. Future vendor-skill
+     installs touched by observability work should read its current
+     state before installing.
+   - [`practice-and-process-structural-improvements.plan.md`](../../../plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md)
+     — fills structural gaps in the Practice (behavioural directive,
+     planning skill, portability PDR/ADR). **Coordination flag**:
+     when this plan lands `.agent/directives/collaboration.md`, the
+     directive-grounding read at session start changes shape.
+   - [`aggregated-tool-result-type-remediation.plan.md`](../../../plans/sdk-and-mcp-enhancements/aggregated-tool-result-type-remediation.plan.md)
+     — composed-tool result-type pipeline. Eventually meets the MCP
+     HTTP runtime work this thread covers; not blocking now.
+
+Otherwise nothing about the release-identifier plan changed: WS0
+remains landed at `06bf25d7`; WS1 RED (cross-resolver contract +
+branch-URL precedence + cancellation wiring integration check) is
+the next workstream; WS2 GREEN includes the resolver rewrite plus
+the small `isValidReleaseName` denylist correction; WS3 is the
+cancellation-script rewrite (~50 lines, canonical `semver` package,
+branch gate added, asymmetric current/previous handling) + unit-test
+rewrite + ADR-163 §10 re-amendment.
 
 Owner-direction rules captured in the plan body's §Owner Direction
 block (settled, not re-opened):
@@ -80,7 +115,8 @@ shared Step 4 foundation work and the former
 authoritative history after the green repo-root rerun and the later
 strict corrective pass.
 
-**Consumed at**: WS0 ADR-163 amendment lands.
+**Consumed at**: WS0 ADR-163 amendment lands (done — `06bf25d7`).
+Subsequent header rewrites refresh as workstreams land.
 **Lifecycle**: rewrite as the plan moves through workstreams; delete
 when the plan completes (WS7 doc propagation done, both rules proven
 via Sentry MCP `find_releases` + the cancellation rule's existing
@@ -104,7 +140,7 @@ rehearsal).
 | *`unattributed`* | *`unknown`* | *`unknown`* | *`unknown`* | `executor` | 2026-04-21 | 2026-04-21 |
 | `Samwise` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `migration-maintenance` | 2026-04-21 | 2026-04-21 |
 | `Merry` | `cursor` | `claude-opus-4-7` | *`unknown`* | `cleanup-only` | 2026-04-22 | 2026-04-22 |
-| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-and-post-WS0-WS3-cancellation-rewrite-design-into-plan-body` | 2026-04-22 | 2026-04-24 |
+| `Pippin` | `cursor` | `claude-opus-4-7` | *`unknown`* | `diagnosis-correction-implementation-doctrine-landing-plan-rewrite-release-identifier-plan-queueing-WS0-amendment-landing-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit` | 2026-04-22 | 2026-04-24 |
 | `Codex` | `codex` | *`unknown`* | *`unknown`* | `repo-owned-repair-closeout-and-doc-consolidation` | 2026-04-23 | 2026-04-23 |
 
 Identity discipline remains additive per
@@ -115,26 +151,31 @@ new sessions add rows; they do not rewrite older attribution.
 
 ## Landing Target (per PDR-026)
 
-**This session (post-WS0 plan-body refinement)**: refined the plan
-body to encode the agreed WS3 cancellation-script rewrite (~50 lines,
-canonical `semver` package, branch gate, asymmetric current/previous
-handling) + folded the validator denylist correction into WS2.
-**Landing**: working-tree modification of
-`.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`,
-**not committed** this session.
+**This session (meta-session sweep)**: the previously-uncommitted plan
+refinement landed inside the cross-cutting meta-session sweep at
+commit `ffec98b0` (80 files, +12732/-3970), per explicit owner
+direction "commit all files including from other threads". That
+sweep also landed practice/process restructuring (continuity-practice
+directive relocation, principles update, napkin rotation, history
+archive split), vendor-skills expansion (Clerk backend API,
+custom-ui core-2/core-3, orgs references), three new parallel plans
+(portability remediation, practice/process structural improvements,
+aggregated-tool result-type remediation), and engineering-doc
+updates (ADR-078, build-system, testing-patterns, typescript-gotchas).
 
-What prevented committing: explicit owner direction to handoff before
-committing ("let's continue in a new session, for now please run
-/jc-session-handoff"). Named owner-direction trade-off; evidence is
-the user's session-handoff invocation message; falsifiability — the
-prior assistant turn ended with "Ready when you want to commit it"
-and the next user message asked for handoff, not commit.
+Pre-commit gates passed in 104s; HEAD = `ffec98b0`; working tree
+clean. The commit-choice complexity flagged in the prior handoff
+("Option A standalone vs Option B fold into WS1 RED") is resolved by
+this sweep — WS1 RED now lands as a clean separate commit with no
+plan-authority debt to settle first.
 
-Next session re-attempts: open the plan file, re-read the WS3
-section, and either (a) commit the plan refinement standalone with a
-`docs(plan)` message or (b) fold it into the WS1 RED commit so plan
-authority and tests land together. Either ordering is honest; agent
-chooses based on context at session start.
+**Prior session (post-WS0 plan-body refinement — preserved for
+audit)**: refined the plan body to encode the agreed WS3
+cancellation-script rewrite (~50 lines, canonical `semver` package,
+branch gate, asymmetric current/previous handling) + folded the
+validator denylist correction into WS2. Landing was deferred at
+owner direction to a session-handoff; the deferred commit folded
+into the meta-session sweep above.
 
 **Prior session (WS0 amendment landing — preserved for audit)**: WS0
 of
@@ -208,11 +249,12 @@ wiring integration check), then WS2 GREEN resolver rewrite.
 
 - WS0 landed: ADR-163 amendment + plan file in `06bf25d7`; continuity
   refresh in `7b4de7a4`.
-- Plan body refined this session to encode the WS3 cancellation-script
-  rewrite + WS2 validator denylist correction; the modification is in
-  the working tree at
-  `.agent/plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md`
-  but **not committed**. Next session commits it.
+- Plan body refined to encode the WS3 cancellation-script rewrite +
+  WS2 validator denylist correction; **landed in the meta-session
+  sweep at `ffec98b0`** alongside cross-cutting practice/portability/
+  sdk-mcp work. Plan authority is now durable; next session opens
+  the plan, reads the current WS3 + WS2.5 sections as authoritative,
+  and proceeds straight to WS1 RED.
 - Cancellation script at
   `packages/core/build-metadata/build-scripts/vercel-ignore-production-non-release-build.mjs`
   is over-built (~205 lines, hand-rolled semver parser/comparator,
@@ -284,21 +326,9 @@ wiring integration check), then WS2 GREEN resolver rewrite.
 
 ### Next safe step
 
-Open the plan file first; the WS3 rewrite design from this session is
-in the working tree but uncommitted. Commit choice (agent's call at
-session start):
-
-- **Option A** (cleaner history): commit the plan refinement
-  standalone with a `docs(plan)` message, then proceed to WS1 RED
-  in a separate commit.
-- **Option B** (lockstep): fold the plan refinement into the WS1 RED
-  commit so the plan-body authority and the failing tests it
-  authorises land together.
-
-Either ordering satisfies turn-boundary discipline; Option A is
-slightly more orthodox (plan-as-decision lands before plan-as-test).
-
-Then proceed to WS1 of
+Open the plan file and re-read the current WS3 + WS2.5 sections —
+they are authoritative as of `ffec98b0`. No commit-choice overhead.
+Then proceed straight to WS1 of
 [`sentry-release-identifier-single-source-of-truth.plan.md`](../../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
 — RED contract tests, separate commit/turn boundary from WS0:
 

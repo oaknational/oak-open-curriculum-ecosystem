@@ -98,3 +98,34 @@ archived to `archive/napkin-2026-04-22.md`).
   canonicalisation step is needed. This interaction is now
   documented in the portability remediation plan at
   `.agent/plans/agentic-engineering-enhancements/current/agent-infrastructure-portability-remediation.plan.md`.
+
+---
+
+## 2026-04-24 (latest, post-meta-session sweep) — cross-cutting commit + thread-record refresh (Pippin / cursor / claude-opus-4-7)
+
+**Observations**:
+
+- **Cross-thread commit sweep is a useful cadence after a meta-
+  session**: the 2026-04-22 portability/consolidation outputs and
+  this thread's deferred plan-body refinement both sat uncommitted
+  for ~2 days before owner direction collected them into a single
+  `docs(practice)` commit (`ffec98b0`, 80 files). One commit is
+  honest about the multi-stream nature; turn-boundary discipline
+  for individual workstreams resumes from the now-clean tree.
+
+- **"Commit choice" overhead in handoff records is symptom, not
+  signal**: the prior handoff carried Option-A-vs-Option-B
+  framing for the next session because the plan-body refinement
+  was uncommitted. Owner direction collapsed the choice. The
+  generalisation: when a thread record carries commit-choice
+  overhead across a session boundary, the next session's first
+  question should be "is the committing actually deferred for a
+  reason, or is it residue?" — and if residue, propose collapsing
+  rather than executing the choice mechanically.
+
+- **Practice surface relocation is a directive-grounding hazard
+  worth flagging in the next-session record**: `continuity-
+  practice.md` moving from `docs/governance/` to `.agent/
+  directives/` changes which path agents read at session start.
+  Refreshed thread record now names the new path explicitly so
+  the next session does not chase a broken link.

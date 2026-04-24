@@ -9,10 +9,12 @@ split_strategy: "Archive historical session-close summaries to a companion archi
 # Repo Continuity
 
 **Last refreshed**: 2026-04-24 (Pippin / cursor / claude-opus-4-7 —
-post-WS0 plan-body refinement encoding the agreed WS3 cancellation-
-script rewrite + WS2 validator denylist correction into the active
-release-identifier plan; refinement is in the working tree and **not
-committed** this session — next session commits it).
+meta-session sweep at `ffec98b0` landed the previously-uncommitted
+release-identifier plan-body refinement alongside cross-cutting
+practice/process restructuring, vendor-skills expansion, and three
+new parallel plans, per explicit owner direction "commit all files
+including from other threads"; thread record refreshed for the
+post-meta-session landscape).
 
 The current state is:
 
@@ -61,7 +63,7 @@ most recent session's identities for at-a-glance continuity.
 
 | Thread                      | Purpose                                        | Next-session record                                                                                      | Active identities                                                                                                                                                                                                                                                                                                                                                          |
 | --------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23; `cursor` / `claude-opus-4-7` / Pippin / WS0-amendment-landing-then-post-WS0-WS3-cancellation-rewrite-design-into-plan-body / 2026-04-24 (latest — landed ADR-163 §1 + §10 amendment + reviewer dispositions in `06bf25d7`; later same date refined the plan body to encode WS3 cancellation-script rewrite using canonical `semver` + WS2 validator denylist correction; plan-body refinement uncommitted — next session commits before/alongside WS1 RED) |
+| `observability-sentry-otel` | Product — Sentry/OTel public-alpha integration | [`threads/observability-sentry-otel.next-session.md`](threads/observability-sentry-otel.next-session.md) | *unattributed* / *unknown* / *unknown* / executor / 2026-04-21; `claude-code` / `claude-opus-4-7-1m` / Samwise / migration-maintenance / 2026-04-21; `cursor` / `claude-opus-4-7` / Merry / cleanup-only / 2026-04-22; `codex` / *unknown* / Codex / repo-owned-repair-closeout-and-doc-consolidation / 2026-04-23; `cursor` / `claude-opus-4-7` / Pippin / WS0-amendment-landing-then-post-WS0-WS3-cancellation-rewrite-design-into-plan-body-and-meta-session-sweep-commit / 2026-04-24 (latest — landed ADR-163 §1 + §10 amendment + reviewer dispositions in `06bf25d7`; later same date refined the plan body to encode WS3 cancellation-script rewrite using canonical `semver` + WS2 validator denylist correction; later same date landed the deferred plan-body refinement inside the cross-cutting meta-session sweep at `ffec98b0` per explicit owner direction; thread record refreshed — next session opens the plan, reads WS3 + WS2.5 as authoritative, proceeds straight to WS1 RED) |
 
 The `memory-feedback` thread is **archived** as of 2026-04-22
 Session 8 (Merry / cursor / claude-opus-4-7) following the close
@@ -133,31 +135,51 @@ also owner-handled validation stages.
 
 ## Current session focus
 
-**2026-04-22 (latest)**: portability audit + consolidation
-(`claude-code` / `claude-opus-4-6-1m`). Cross-thread work.
+**2026-04-24 (latest, Pippin / cursor / claude-opus-4-7)**: meta-
+session sweep landed at `ffec98b0` (80 files, +12732/-3970), per
+explicit owner direction "commit all files including from other
+threads". The sweep folded together:
 
-Phase 1 — decision-complete remediation plan at
-[`agent-infrastructure-portability-remediation.plan.md`](../../plans/agentic-engineering-enhancements/current/agent-infrastructure-portability-remediation.plan.md)
-(uncommitted). 7 phases, 4 resolved decisions. Implementation
-on a new branch per D4.
+- This thread's previously-uncommitted plan-body refinement
+  (WS3 cancellation-script rewrite + WS2 validator denylist
+  correction in
+  [`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md));
+- The 2026-04-22 meta-session's portability audit + consolidation
+  outputs (now-committed plans for portability remediation,
+  practice/process structural improvements, and aggregated-tool
+  result-type remediation);
+- Practice surface relocation (`continuity-practice.md` from
+  `docs/governance/` to `.agent/directives/`) plus principles
+  update;
+- Vendor-skills expansion (Clerk backend API, custom-ui core-2/
+  core-3 variants, orgs references and evals across `.agents/` and
+  `.claude/`); canonicalisation removed obsolete
+  `.claude-plugin/plugin.json` shells under `.agents/skills/clerk-*`;
+- Engineering-doc refreshes (ADR-078, build-system, testing-
+  patterns, typescript-gotchas, governance/MCP/oak-eslint READMEs);
+- Continuity surfaces refreshed (this file +
+  `observability-sentry-otel.next-session.md`) for the post-sweep
+  landscape.
 
-Phase 2 — two consolidation passes: napkin rotated
-(2,323→65); distilled graduated (281→177, 19+ entries to
-permanent homes); repo-continuity compressed (1,355→473,
-fitness tracked); `continuity-practice.md` moved to
-directives. Structural gap analysis produced
-[`practice-and-process-structural-improvements.plan.md`](../../plans/agentic-engineering-enhancements/current/practice-and-process-structural-improvements.plan.md)
-(4 phases) and
-[`aggregated-tool-result-type-remediation.plan.md`](../../plans/sdk-and-mcp-enhancements/aggregated-tool-result-type-remediation.plan.md)
-(split out as independent MCP work).
+Pre-commit gates passed in 104s; working tree clean post-commit.
 
-**Prior session (2026-04-24 Pippin / cursor)**: WS0 of
-[`sentry-release-identifier-single-source-of-truth.plan.md`](../../plans/observability/current/sentry-release-identifier-single-source-of-truth.plan.md)
-landed in commit `06bf25d7`. Plan-body refinement for WS3
-cancellation-script rewrite is uncommitted in the working tree.
+**Prior session (2026-04-24 Pippin / cursor — earlier same date)**:
+WS0 of the release-identifier plan landed at `06bf25d7`; subsequent
+post-WS0 design discussion produced the WS3 cancellation-script
+rewrite design that was originally deferred-to-handoff and is now
+committed inside the sweep above.
+
+**Prior session (2026-04-22 `claude-code` / `claude-opus-4-6-1m`)**:
+portability audit + two consolidation passes — napkin rotated
+(2,323→65); distilled graduated (281→177, 19+ entries to permanent
+homes); repo-continuity compressed (1,355→473, fitness tracked);
+`continuity-practice.md` moved to directives; structural gap
+analysis produced two new plans. All outputs were uncommitted at
+the time and have now landed in `ffec98b0`.
 
 Next on `observability-sentry-otel` thread: WS1 RED contract tests
-(separate commit per the user's turn-boundary instruction).
+(separate commit per turn-boundary discipline; no plan-authority
+debt to settle first).
 
 Next on agent infrastructure portability: implementation of the 7
 phases in the remediation plan, on a new branch.
