@@ -1,7 +1,7 @@
 # Agentic Engineering Enhancements Roadmap
 
-**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
-**Last Updated**: 2026-04-23
+**Status**: ✅ Phase 0 complete; ES specialist ✅ complete; Sentry specialist 🔄 active; MCP specialist ✅ complete; continuity adoption ✅ complete; operational-awareness separation 🔄 active; governance-concept integration ✅ complete; incoming Practice integration ✅ complete; reviewer gateway ⏭️ queued; learning-loop negative-feedback tightening ⏭️ queued; planning specialist ⏭️ queued; practice/process structural improvements ⏭️ queued; agent infrastructure portability remediation ⏭️ queued; practice-graph payoff-peak pilot ⏭️ queued; agentic corpus discoverability ✅ complete; Codex parity ✅ complete; Practice convergence ✅ complete; graph-memory exploration 📋 strategic; operating-model mechanism taxonomy 📋 strategic; MCP governance deep dive 📋 future; Phase 1 ready to start
+**Last Updated**: 2026-04-24
 **Session Entry**: [start-right-quick.md](../../commands/start-right-quick.md)
 
 ---
@@ -87,7 +87,25 @@ This roadmap aligns to:
 - **Milestone 2**: hallucination/evidence guards, architectural enforcement,
   cross-agent standardisation
 - **Milestone 3**: mutation testing rollout and optimisation
-- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist (✅), Sentry specialist (🔄), continuity adoption (✅), operational-awareness separation (⏭️), governance-concept integration (✅), incoming Practice integration (✅), learning-loop negative-feedback tightening (⏭️), practice-graph payoff-peak pilot (⏭️), MCP upgrade (📋), Express specialist (📋), Cyber security specialist (📋), Web/API security specialist (📋), Privacy specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem specialist (📋), Graph memory exploration (📋), Planning specialist (📋), TDD specialist (📋), Developer experience specialist (📋), Repair workflow wording hazard detection (📋), Reviewer gateway upgrade (📋), Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model mechanism taxonomy (📋), specialist operational tooling layer (ADR-137, strategic), External pointer-surface integration (📋)
+- **Adjacent capability work**: Elasticsearch specialist (✅), Clerk specialist
+  (✅), Sentry specialist (🔄), MCP upgrade (✅), continuity adoption (✅),
+  operational-awareness separation (⏭️), governance-concept integration (✅),
+  incoming Practice integration (✅), learning-loop negative-feedback tightening
+  (⏭️), practice/process structural improvements (⏭️), agent infrastructure
+  portability remediation (⏭️), practice-graph payoff-peak pilot (⏭️), Reviewer
+  Gateway upgrade (⏭️), Planning specialist (⏭️), Express specialist (📋),
+  Cyber security specialist (📋), Web/API security specialist (📋), Privacy
+  specialist (📋), Web/API GDPR specialist (📋), Oak Open Curriculum Ecosystem
+  specialist (📋), Graph memory exploration (📋), TDD specialist (📋), Developer
+  experience specialist (📋), Repair workflow wording hazard detection (📋),
+  Cross-vendor session sidecars (📋), Adapter generation (📋), operating-model
+  mechanism taxonomy (📋), specialist operational tooling layer (ADR-137,
+  strategic), External pointer-surface integration (📋)
+- **Expert expansion coordination**: Planning specialist owns the Planning
+  reviewer/skill/rule triplet; practice/process structural improvements feeds
+  planning discipline and other permanent-home gaps into the right doctrine
+  surfaces; agent infrastructure portability remediation keeps the growing
+  expert/skill/rule estate portable and validated.
 
 See [high-level-plan.md](../high-level-plan.md) for cross-collection context.
 
@@ -115,6 +133,8 @@ Adjacent:
   PC:   Practice convergence closeout                ✅ COMPLETE
   SNT:  Sentry specialist capability                 🔄 ACTIVE
   LFT:  Learning-loop negative-feedback tightening   ⏭️ QUEUED
+  PPS:  Practice/process structural improvements     ⏭️ QUEUED
+  APR:  Agent infrastructure portability remediation ⏭️ QUEUED
   MCP+: MCP specialist upgrade (triplet + ext-apps)  ✅ COMPLETE
   EXP:  Express specialist capability                📋 PLANNED
   CYB:  Cyber security specialist capability         📋 PLANNED
@@ -329,6 +349,51 @@ Adjacent:
   - intentionally narrow follow-on, not a learning-loop redesign
   - complements reference-tier curation and ADR-144 fitness without changing
     thresholds or blocking behaviour
+
+### Adjacent — Practice and Process Structural Improvements
+
+- Strategic plan:
+  [practice-and-process-structural-improvements.plan.md](current/practice-and-process-structural-improvements.plan.md)
+- Goal:
+  - create permanent homes for process knowledge currently stranded in
+    `distilled.md`
+  - add a collaboration directive for the agent-human working model, scope
+    discipline, risk classification, feedback, onboarding, and archive
+    discipline
+  - feed Planning discipline into the dedicated Planning specialist capability
+    plan instead of creating a duplicate generic planning skill
+  - author portability PDR/ADR doctrine after, or in parallel with, the ADR-125
+    documentation work in the portability remediation plan
+  - graduate remaining distilled entries only after the destination surfaces
+    exist
+- Status: ⏭️ Queued (`current/`)
+- Notes:
+  - this is a structural doctrine plan, not another expert-capability plan
+  - Phase 2 is the reconciliation point with the Planning specialist capability
+  - Phase 3 depends on
+    [agent-infrastructure-portability-remediation.plan.md](current/agent-infrastructure-portability-remediation.plan.md)
+    Phase 5
+
+### Adjacent — Agent Infrastructure Portability Remediation
+
+- Strategic plan:
+  [agent-infrastructure-portability-remediation.plan.md](current/agent-infrastructure-portability-remediation.plan.md)
+- Goal:
+  - canonicalise vendor-installed skills into `.agent/skills/`
+  - add missing thin wrappers across `.agents/`, `.claude/`, and `.cursor/`
+  - harden `pnpm portability:check` with reverse validation and thin-wrapper
+    form checks
+  - update ADR-125, the artefact inventory, and the cross-platform matrix so
+    the expanding expert/skill/rule estate has accurate creation guidance
+  - add a repo-owned skill install/update workflow so external skill updates do
+    not overwrite tracked platform adapters
+- Status: ⏭️ Queued (`current/`)
+- Notes:
+  - this plan is the adapter and validator scaling prerequisite for a larger
+    expert collection
+  - its Phase 5 documentation update is the direct dependency for the
+    portability PDR/ADR work in the structural-improvements plan
+  - it should be considered before adding further manual specialist adapters
 
 ### Adjacent — Practice Graph Payoff-Peak Pilot
 
@@ -890,7 +955,13 @@ specialists, not deferred.
 
 **Practice/process specialists (invoked on methodology signal):**
 
-- planning specialist 📋, tdd specialist 📋, devx specialist 📋
+- planning specialist ⏭️, tdd specialist 📋, devx specialist 📋
+
+**Expansion support lanes (scale and coherence for the roster):**
+
+- reviewer gateway upgrade ⏭️, practice/process structural improvements ⏭️,
+  agent infrastructure portability remediation ⏭️, adapter generation 📋,
+  agent classification taxonomy 📋
 
 **Situational (on-demand, not tied to change profile):**
 

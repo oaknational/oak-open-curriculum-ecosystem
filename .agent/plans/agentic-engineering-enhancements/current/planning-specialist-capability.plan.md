@@ -5,6 +5,12 @@
 **Pattern**: [ADR-129 (Domain Specialist Capability Pattern)](../../../../docs/architecture/architectural-decisions/129-domain-specialist-capability-pattern.md)
 **Promoted**: 2026-04-20 — owner approved promotion after plan-surface
 integration session demonstrated specialist-level plan-routing complexity
+**Reconciled**: 2026-04-24 with
+[Practice and Process — Structural Improvements](practice-and-process-structural-improvements.plan.md).
+This plan is the canonical owner for the Planning expert triplet;
+the structural-improvements plan supplies process-discipline
+content and does not create a parallel `.agent/skills/planning/`
+skill.
 
 ## Problem and Intent
 
@@ -35,12 +41,17 @@ frequently:
 - Milestone alignment and dependency tracking
 - The `jc-consolidate-docs` workflow and when/how to apply it
 - Evidence bundle requirements for non-trivial claims
+- Process discipline captured from distilled learning: discoverability plus
+  actionability, narrative-first sequencing, narrative drift checks,
+  parent-child reconciliation, CLI-first enumeration, local proof before owner
+  asks, client-compatibility split-out, and dry-run workflow staging
 
 ### Out of scope
 
 - Content of plans (architecture reviewers, domain specialists own correctness)
 - Code quality within plan-driven work (code-reviewer owns this)
 - ADR content and format (docs-adr-reviewer owns this)
+- Creating a second generic planning skill at `.agent/skills/planning/`
 
 ## Doctrine Hierarchy
 
@@ -62,6 +73,10 @@ frequently:
 4. Platform adapters (Claude, Cursor, Codex)
 5. Discoverability updates
 6. Validation
+
+The skill in item 2 is the only canonical Planning skill. It absorbs the
+planning-discipline content listed below and is the surface templates should
+reference when they need active planning guidance.
 
 ## Review Checklist (Draft)
 
@@ -115,6 +130,38 @@ should cover:
     promptly? Are their README entries updated?
 14. **Backlog health**: Is the `future/` queue growing faster than items
     are being promoted or pruned?
+
+## Planning Discipline Scope Expansion
+
+The structural-improvements plan identified planning discipline as a permanent
+home gap in the Practice. This capability absorbs that content into the
+Planning expert triplet:
+
+- **Discoverable and actionable plans**: plans must be linked from the
+  collection README, roadmap, and relevant session entry surface, and must carry
+  status tracking, completion checklists, and deterministic validation.
+- **Narrative-first sequencing**: on multi-workstream initiatives, write the
+  ADR/README/narrative before the factory/infrastructure lane, then add
+  consumers.
+- **Narrative drift checks**: inspect body status prose, decision tables, and
+  current-state descriptions, not just frontmatter todos and checkbox state.
+- **Parent-child reconciliation**: if a child plan changes runtime truth,
+  reconcile the parent plan and closure proof in the same session.
+- **CLI-first enumeration**: when workstream sizing depends on repo-level
+  mechanisms, search the repo and generic CLI surfaces before asking owner
+  questions.
+- **Local proof before owner asks**: produce locally reproducible evidence
+  before requiring owner action for deployment or external validation lanes.
+- **Split compatibility from validation**: client-specific compatibility issues
+  discovered during deployment validation spin into their own follow-up plan.
+- **Dry-run accumulated workflows**: run multi-step workflow recipes against the
+  current accumulated state before committing to a staging order.
+
+Boundary with `assumptions-reviewer`: assumptions review challenges
+proportionality, blocking relationships, and whether a plan should exist in its
+chosen shape. Planning review challenges lifecycle fit, discoverability,
+template compliance, integration routing, and whether planning knowledge is in
+the right permanent home. A complex plan may need both.
 
 ## Next Execution Trigger
 

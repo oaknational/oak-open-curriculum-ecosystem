@@ -26,6 +26,21 @@ It must stay compatible with the wider taxonomy direction: **agents are not
 synonymous with reviewers** — other agents may advise, research, or enable
 process.
 
+## Coordination With Expert Expansion
+
+This plan is the routing/scaling counterpart to the expanding expert roster.
+It does not create new experts itself. It must track:
+
+- [planning-specialist-capability.plan.md](planning-specialist-capability.plan.md)
+  as the canonical owner for the Planning expert triplet.
+- [practice-and-process-structural-improvements.plan.md](practice-and-process-structural-improvements.plan.md)
+  as the source of process-discipline and collaboration-doctrine homes that
+  may create new review signals.
+- [agent-infrastructure-portability-remediation.plan.md](agent-infrastructure-portability-remediation.plan.md)
+  as the platform-adapter and validator scaling lane for the expert estate.
+- [agent-classification-taxonomy.plan.md](../future/agent-classification-taxonomy.plan.md)
+  as the naming/tier/mode contract that will eventually reshape gateway output.
+
 ## What Changes
 
 ### Identity

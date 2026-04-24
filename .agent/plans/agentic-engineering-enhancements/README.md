@@ -48,6 +48,8 @@ Plans and research for hardening the agentic engineering practice through physic
 | `future/web-api-gdpr-specialist-capability.plan.md` | Plan (Future) | Narrow-remit web/API GDPR capability — personal-data obligations, consent, deletion/export, and retention semantics at API boundaries |
 | `future/ooce-specialist-capability.plan.md` | Plan (Future) | Oak Open Curriculum Ecosystem specialist — the repo's own avatar; internal library contracts, composition patterns, workspace usage |
 | `current/planning-specialist-capability.plan.md` | Plan | Planning specialist — plan architecture, lifecycle, discoverability, integration routing, and documentation sync (promoted from future/ 2026-04-20) |
+| `current/practice-and-process-structural-improvements.plan.md` | Plan | Structural Practice/process gap closure — collaboration directive, Planning discipline reconciliation, portability PDR/ADR, and final distilled graduation |
+| `current/agent-infrastructure-portability-remediation.plan.md` | Plan | Agent artefact portability remediation — vendor skill canonicalisation, thin-wrapper parity, validator hardening, and ADR-125 documentation updates |
 | `future/tdd-specialist-capability.plan.md` | Plan (Future) | TDD specialist — multi-level TDD guidance scaled to task size; refined test level definitions |
 | `future/devx-specialist-capability.plan.md` | Plan (Future) | Developer experience specialist — code, repo, SDK, and CLI ergonomics and friction |
 | `future/repair-workflow-wording-hazard-detection.plan.md` | Plan (Future) | Detect ambiguous wording and missing output contracts in multi-artefact repair workflows before they trigger rewrite or promotion drift |
@@ -74,10 +76,13 @@ Plans and research for hardening the agentic engineering practice through physic
    mutation testing -> continuity/surprise adoption (archived reference) ->
    operational-awareness surface separation -> governance-concept integration
    -> Reviewer Gateway -> learning-loop negative-feedback tightening ->
-   Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade -> Express -> security/privacy cluster (cyber
-   security -> web/API security -> privacy -> web/API GDPR) -> OOCE -> Graph
-   memory exploration -> Planning -> TDD -> DevX -> Repair Workflow Wording
-   Hazard Detection -> Adapter Generation -> Agent Classification Taxonomy
+   Elasticsearch specialist -> Clerk specialist -> Sentry -> MCP upgrade ->
+   Practice/process structural improvements -> Planning -> Express ->
+   security/privacy cluster (cyber security -> web/API security -> privacy ->
+   web/API GDPR) -> OOCE -> Graph memory exploration -> TDD -> DevX ->
+   Repair Workflow Wording Hazard Detection -> Agent infrastructure
+   portability remediation -> Adapter Generation -> Agent Classification
+   Taxonomy
 6. **Research as evidence base**: augmented safety -> augmented practices ->
    standardisation landscape
 

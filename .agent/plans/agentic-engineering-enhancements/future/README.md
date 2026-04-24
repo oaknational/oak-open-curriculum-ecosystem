@@ -6,6 +6,22 @@ in this collection.
 Promote an item to `../current/` when prerequisites, ownership, and the next
 execution slice are clear.
 
+## Expert Capability Queue Notes
+
+The expanding expert collection is coordinated through current plans before
+more future specialists are promoted:
+
+- [planning-specialist-capability.plan.md](../current/planning-specialist-capability.plan.md)
+  is the canonical owner for the Planning reviewer / skill / rule triplet.
+- [practice-and-process-structural-improvements.plan.md](../current/practice-and-process-structural-improvements.plan.md)
+  supplies process-discipline doctrine to the Planning specialist and creates
+  permanent homes for collaboration and portability guidance.
+- [agent-infrastructure-portability-remediation.plan.md](../current/agent-infrastructure-portability-remediation.plan.md)
+  must keep the platform adapter and validator model healthy as the roster
+  grows.
+- Future expert plans below should not create bespoke adapter or taxonomy
+  patterns that conflict with those current coordination plans.
+
 | Horizon | Plan | Scope | Prerequisites |
 | --- | --- | --- | --- |
 | Later | [graphify-and-graph-memory-exploration.plan.md](graphify-and-graph-memory-exploration.plan.md) | Explore external-tool, code-adoption, concept-adoption, hybrid, or no-action paths for Graphify-inspired graph memory over canonical Practice artefacts | Agree a first pilot question/corpus and the boundary between canonical memory and derived graph memory |

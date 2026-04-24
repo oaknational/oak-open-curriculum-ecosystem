@@ -24,6 +24,24 @@ But one important dimension still remains mostly implicit in surrounding docs:
 conflated with review depth. A narrow-remit specialist may still need a deep
 review.
 
+## Coordination With Current Expert-Expansion Plans
+
+This taxonomy work should execute after the current coordination lanes have
+settled enough to avoid renaming unstable surfaces:
+
+- [practice-and-process-structural-improvements.plan.md](../current/practice-and-process-structural-improvements.plan.md)
+  decides where collaboration, planning discipline, and portability doctrine
+  live permanently.
+- [planning-specialist-capability.plan.md](../current/planning-specialist-capability.plan.md)
+  owns the Planning expert triplet; the taxonomy rename must treat it as an
+  existing capability, not recreate it.
+- [agent-infrastructure-portability-remediation.plan.md](../current/agent-infrastructure-portability-remediation.plan.md)
+  hardens adapter parity and validation before the taxonomy plan rewrites
+  names across platforms.
+- [adapter-generation.plan.md](adapter-generation.plan.md) remains the preferred
+  optimisation before any large rename, because generated adapters turn the
+  multi-platform rename into a manifest update plus regeneration.
+
 ## Platform Sub-Agent Invocation Capabilities
 
 Critical constraint for the tier model and orchestration design:
