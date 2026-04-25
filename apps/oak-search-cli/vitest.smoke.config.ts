@@ -9,6 +9,13 @@
  * - "Smoke tests DO have side effects"
  * - "Smoke tests DO NOT contain mocks"
  *
+ * Validation timing: env validation is deferred to `smoke-test.setup.ts`
+ * rather than thrown at module load. Static-analysis tools (knip, IDE
+ * indexing) load this config to discover entry points but do NOT run
+ * the smoke tests, so they should not be required to provide
+ * Elasticsearch credentials. The setup file runs only when smoke tests
+ * actually execute, where the credentials are required and the
+ * fail-fast error must surface.
  */
 
 import process from 'node:process';
@@ -16,7 +23,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mergeConfig } from 'vitest/config';
 import { baseE2EConfig } from '../../vitest.e2e.config.base';
-import { loadSmokeTestEnv } from './smoke-test-env.js';
+import { loadSmokeTestEnv, type SearchCliSmokeEnv } from './smoke-test-env.js';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const envResult = loadSmokeTestEnv({
@@ -24,14 +31,20 @@ const envResult = loadSmokeTestEnv({
   startDir: thisDir,
 });
 
-if (!envResult.ok) {
-  throw new Error(`Smoke test environment validation failed: ${envResult.error.message}`);
-}
+// On validation failure, propagate the error through `provide` so the setup
+// file can re-check and throw with a clear message during actual test runs.
+// The sentinel satisfies the typed `provide` contract for static-analysis
+// loads; if anything bypassed the setup-file gate, the empty URL would fail
+// fast at the first Elasticsearch client call.
+const SENTINEL_ENV: SearchCliSmokeEnv = { ELASTICSEARCH_URL: '', ELASTICSEARCH_API_KEY: '' };
+const providedEnv: SearchCliSmokeEnv = envResult.ok ? envResult.value : SENTINEL_ENV;
+const providedError: string | undefined = envResult.ok ? undefined : envResult.error.message;
 
 export default mergeConfig(baseE2EConfig, {
   test: {
     provide: {
-      searchCliSmokeEnv: envResult.value,
+      searchCliSmokeEnv: providedEnv,
+      searchCliSmokeEnvLoadError: providedError,
     },
     setupFiles: ['./smoke-test.setup.ts'],
     include: ['smoke-tests/**/*.smoke.test.ts'],

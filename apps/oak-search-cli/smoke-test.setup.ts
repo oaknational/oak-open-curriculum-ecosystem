@@ -20,6 +20,15 @@ type GlobalWithFetch = typeof globalThis & {
   __WITH_FETCH_BLOCKING__?: true;
 };
 
+// Re-check env validation deferred from `vitest.smoke.config.ts`. The config
+// loads without throwing so static-analysis tools (knip, IDE indexing) work in
+// CI; this setup runs only during actual test execution, where missing
+// Elasticsearch credentials must fail the run with a clear error.
+const loadError = inject('searchCliSmokeEnvLoadError');
+if (loadError !== undefined) {
+  throw new Error(`Smoke test environment validation failed: ${loadError}`);
+}
+
 // Smoke tests allow real network IO; undo the E2E fetch guard if present.
 const g: GlobalWithFetch = globalThis;
 if (g.__WITH_FETCH_BLOCKING__ && typeof g.__ORIGINAL_FETCH__ === 'function') {
