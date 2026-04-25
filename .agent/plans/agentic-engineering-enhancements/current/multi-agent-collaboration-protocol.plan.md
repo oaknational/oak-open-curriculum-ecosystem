@@ -17,7 +17,8 @@ todos:
     status: pending
   - id: ws2-collaboration-memory
     content: WS2 — Create .agent/memory/collaboration/ memory class for durable collaboration lessons; graduate the parallel-track-pre-commit-gate-coupling pattern from the napkin as the founding entry.
-    status: pending
+    status: completed
+    landed_on: 2026-04-25
   - id: ws3-conversation-and-sidebar
     content: WS3 — Add conversation file with versioned JSON schema (messages, claim updates, sidebar requests, sidebar messages, resolutions); install sidebar protocol with timeout fallbacks and owner-as-tiebreaker escalation.
     status: pending

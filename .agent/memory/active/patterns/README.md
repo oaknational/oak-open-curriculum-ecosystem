@@ -14,6 +14,14 @@ are authored through synthesis from multiple instances. Patterns
 describing Practice-governance (review, planning, consolidation,
 etc.) live as PDRs in `.agent/practice-core/decision-records/`.
 
+## Sibling memory classes
+
+Cross-agent collaboration patterns (multi-agent coordination
+substance, distinct from single-agent engineering substance) live
+in [`.agent/memory/collaboration/`](../../collaboration/README.md).
+Same lifecycle and graduation bar; different substance. Founding
+entry: `parallel-track-pre-commit-gate-coupling`.
+
 An instance here may have a `related_pdr: PDR-NNN` or
 `related_pattern: <name>` frontmatter pointer linking it to the
 general form. The instance stays in place regardless: instance-

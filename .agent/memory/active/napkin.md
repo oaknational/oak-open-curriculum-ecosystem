@@ -44,10 +44,13 @@ Pattern candidates retained in the pending-graduations register at
 - *tripwire-rules-need-observable-artefacts* (new this rotation,
   surfaced by `assumptions-reviewer` on `respect-active-agent-claims`
   during WS0 landing).
-- *parallel-track-pre-commit-gate-coupling* — founding pattern named
-  in the multi-agent collaboration plan as the WS2 graduating
-  pattern; founding instances 2026-04-24 / 2026-04-25 preserved in
-  the archived napkin.
+- *parallel-track-pre-commit-gate-coupling* — **graduated 2026-04-25**
+  to [`.agent/memory/collaboration/parallel-track-pre-commit-gate-coupling.md`](../collaboration/parallel-track-pre-commit-gate-coupling.md)
+  as the founding entry of the new collaboration-patterns memory
+  class (WS2 of the multi-agent collaboration protocol). Three
+  instances (Frodo prettier 2026-04-24, Pippin auto-staging
+  2026-04-24, Jazzy knip 2026-04-25) preserved in the archived
+  napkin.
 
 Prior rotations: 2026-04-22 (sessions 2026-04-22 through 2026-04-24,
 archived to `archive/napkin-2026-04-22b.md`); 2026-04-22 (sessions

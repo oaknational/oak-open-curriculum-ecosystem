@@ -216,6 +216,20 @@ is responsible for detecting and resolving these cases at consolidation.
 A hostile-agent threat model — claim integrity, signed entries, tamper
 detection — is a future PDR if the trust assumption breaks down.
 
+## Founding Pattern
+
+The motivating evidence for this entire directive is captured at
+[`parallel-track-pre-commit-gate-coupling`][founding-pattern] in the
+collaboration-patterns memory class. Three cross-session instances
+within a 48-hour window (Frodo prettier 2026-04-24, Pippin auto-staging
+2026-04-24, Jazzy knip 2026-04-25) demonstrated that full-repo
+pre-commit gates couple parallel agent sessions. The pattern documents
+the failure shape, the discipline ("surface, don't bypass, route to
+owner"), and names this directive's structural fix as the corrective
+work. New instances of the pattern surface in
+[`napkin.md`][napkin] and feed
+[WS5's seed harvest][p].
+
 ## Foundation Alignment
 
 This directive operationalises:
@@ -256,3 +270,5 @@ This directive operationalises:
 [p]: ../plans/agentic-engineering-enhancements/current/multi-agent-collaboration-protocol.plan.md
 [channels-card]: ../memory/executive/agent-collaboration-channels.md
 [threads-readme]: ../memory/operational/threads/README.md
+[founding-pattern]: ../memory/collaboration/parallel-track-pre-commit-gate-coupling.md
+[napkin]: ../memory/active/napkin.md
