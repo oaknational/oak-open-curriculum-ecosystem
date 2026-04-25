@@ -521,14 +521,218 @@ accept-with-rationale. If no, pin the absolute path or extract via
 **Task Complete When**: decision recorded; Phase 4's PATH-safety
 work executes per the recorded outcome.
 
-#### Phase 0 findings (populated during execution)
+#### Phase 0 findings (populated 2026-04-25 by Keen Dahl)
 
-```text
-Task 0.1 finding: [TODO populate during execution]
-Task 0.2 rule policy: [TODO populate during execution]
-Task 0.3 extraction home: [TODO populate during execution]
-Task 0.4 PATH safety: [TODO populate during execution]
-```
+##### Task 0.1 — OAuth metadata rate-limit coverage
+
+**REAL GAP.** Re-reading `auth-routes.ts` lines 77, 78, 80, 92:
+
+| Route | Rate-limiter applied? |
+|---|---|
+| `/.well-known/oauth-protected-resource` (line 77) | **No** |
+| `/.well-known/oauth-protected-resource/mcp` (line 78) | **No** |
+| `/.well-known/oauth-authorization-server` (line 80) | **No** |
+| `/.well-known/mcp-stub-mode` (line 92) | **No** |
+
+Confirmed via `rg "RateLimit" apps/oak-curriculum-mcp-streamable-http/src/`:
+`oauthRateLimiter` is wired only in `oauth-proxy-routes.ts` (paths
+`/oauth/authorize`, `/oauth/token`, `/oauth/callback`); `mcpRateLimiter`
+is wired only on `/mcp` POST/GET. No path-prefix `app.use(...)` middleware
+covers the `.well-known/*` paths.
+
+CodeQL alerts #70 and #71 are **correct**. The actual line citations
+(`auth-routes.ts:187, :193`) point inside `setupAuthRoutes`'s control flow
+rather than the route registrations; this is a CodeQL line-attribution
+artefact, not a misclassification of the underlying issue.
+
+**Decision (recorded; implementation in Phase 3 Task 3.2)**: apply
+`oauthRateLimiter` (already-defined 30 req/15min/IP profile) to the four
+`.well-known/*` handlers via route-level attach
+(`app.get('/.well-known/...', oauthRateLimiter, servePrm)`), not via path-prefix
+`app.use(...)`. Route-level attach preserves the existing middleware
+ordering invariant in `setupGlobalAuthContext` (Clerk middleware is
+conditional and these endpoints are registered before Clerk).
+
+Phase 3 also gains: an integration test pinning that the rate-limit
+profile applies to the metadata routes (per Phase 3 acceptance criterion).
+
+##### Task 0.2 — Stylistic-rule policy for ~47 MINOR Sonar findings
+
+**DISABLE-path availability**: `.sonarcloud.properties` does NOT exist;
+`sonar-project.properties` exists with only project key, organization, host
+URL — no `sonar.issue.ignore.multicriteria` block, no quality-profile
+override. The DISABLE path is achievable by appending the standard
+multicriteria block to `sonar-project.properties`, OR by per-issue
+dismissal via SonarCloud UI/API.
+
+The Phase 5 acceptance criterion 0 (DISABLE-path verification) is
+**satisfied at the project-config level**: appending to
+`sonar-project.properties` is achievable; no org-admin block.
+
+**Per-rule recommendation table (owner confirmation gate at Phase 0 close, NOT Phase 5 — corrected per assumptions-reviewer MAJOR-B):**
+
+| Rule | Count | Recommendation | Rationale |
+|---|---|---|---|
+| `S7763` (`export … from`) | 12 | **ACCEPT** *(flipped from DISABLE per assumptions-reviewer MAJOR-C)* | 12 mechanical edits; consistency over "both forms tolerated"; principles.md §Consistent Naming. |
+| `S6594` (`RegExp.exec()` over `String.match()`) | 4 | DISABLE | Micro-optimisation; non-hot paths in our use sites. |
+| `S6644` (conditional default-assign) | 4 | DISABLE | Style preference; existing `if (x === undefined) x = …` is explicit. |
+| `S7780` (`String.raw` for backslashes) | 5 | ACCEPT | Improves regex readability; mechanical fix. |
+| `S6353` (`\d` over `[0-9]`) | 3 | ACCEPT | Standard convention; mechanical fix. |
+| `S6653` (`Object.hasOwn`) | 2 | ACCEPT | Real safety improvement over `hasOwnProperty`. |
+| `S7748` (zero-fraction) | 2 | DISABLE | Style; `0.0` reads as float-intent in some sites. |
+| `S7786` (`new TypeError()`) | 1 | ACCEPT | Real fix. |
+| `S6606` (`??=`) | 1 | ACCEPT | Real conciseness improvement. |
+| `S7735` (negated condition) | 3 | **ACCEPT** *(per-site, flipped from blanket DISABLE per assumptions-reviewer MAJOR-C)* | 3 sites is small; per-site judgement, not blanket-disable. |
+
+S6571 (`unknown` overrides union ×3) was already reclassified to Phase 2
+Task 2.5 per code-reviewer MAJOR-6 disposition.
+
+**Owner-gate timing (corrected per assumptions-reviewer MAJOR-B)**:
+the DISABLE entries for S6594, S6644, S7748 add a
+`sonar.issue.ignore.multicriteria` block to `sonar-project.properties`.
+**Owner approval gates Phase 1 entry, not Phase 5 commit.** This honours
+the plan body's own framing (line 387: "surface every decision that
+would change the fix shape BEFORE mechanical work").
+
+**Default-to-ACCEPT fallback**: if the owner is unavailable when Phase 1
+is ready to start, default-to-ACCEPT for any DISABLE entry not yet
+confirmed — Phase 5 mechanics fix the rule rather than wait. The cost of
+default-ACCEPT is mechanical edits for rules we'd preferred to disable;
+the cost of waiting at Phase 5 close is blocking PR mergeability when
+context is thinnest.
+
+ACCEPT entries (now S7763, S7780, S6353, S6653, S7786, S6606, S7735)
+need no owner gate — Phase 5 mechanics are deterministic.
+
+##### Task 0.3 — Semver extraction home
+
+**Confirmed**: `packages/core/build-metadata/src/semver.ts` is the right
+home. Verification:
+
+- `packages/core/build-metadata/` exists with `src/`, `tests/`,
+  `package.json`, `tsconfig.json`, `tsconfig.build.json`,
+  `eslint.config.ts`, `dist/`.
+- `package.json` already declares `semver: ^7.7.4` as a runtime dep
+  and `@types/semver: ^7.7.1` as a dev dep (lifted in by WS2's
+  `resolveRelease` consolidation).
+- Existing module `release-internals.ts:14` already imports
+  `prerelease, valid` from the npm `semver` package.
+
+**Phase 1 implementation (corrected per assumptions-reviewer MAJOR-A)**:
+the new canonical `semver.ts` module **uses the npm `semver` package**,
+consistent with the sibling `release-internals.ts` consumer in the same
+package. This avoids creating a new drift surface inside one package
+(npm-backed regex elsewhere vs hand-written regex in `semver.ts`) — the
+exact failure mode the consolidation is meant to prevent.
+
+**Two consumers stay inline; their parity is tested**:
+
+- `apps/oak-curriculum-mcp-streamable-http/build-scripts/vercel-ignore-production-non-release-build.mjs`
+  — Vercel runs `ignoreCommand` BEFORE `pnpm install`, so it cannot
+  import the npm `semver` package OR
+  `@oaknational/build-metadata`. The inline copy stays; adds a `@see`
+  TSDoc pointer per Task 1.4.
+- `scripts/validate-root-application-version.mjs` — per
+  code-reviewer BLOCKING-1 disposition, runs as a pre-build step where
+  `dist/` may not be populated. The inline copy stays; adds a `@see`
+  TSDoc pointer per Task 1.3.
+
+**Phase 1 acceptance criterion (added per assumptions-reviewer MAJOR-A)**:
+add a **parity test** under `packages/core/build-metadata/tests/` that
+runs the same fixture (~20 cases covering semver §2 strict X.Y.Z,
+prerelease forms, build-metadata, §11 precedence, and the rejection
+cases the canonical regex enforces) against:
+
+1. The npm-backed `semver.ts` module helpers.
+2. The inline regex helpers as plain functions imported from the
+   ignoreCommand script and the validate-root-application-version script
+   (or copies of them inside the test file if importing the script
+   modules has side effects).
+
+The test asserts both implementations agree on every case. A
+divergence is an immediate test failure — the parity-test is the
+anti-drift gate. Without it, the inline copies and the canonical
+home are still vulnerable to silent skew.
+
+This corrective shape converts "two byte-equivalent regex copies that
+must stay in sync" into "one canonical (npm-backed) + two
+constrained-context inlines that are parity-tested" — strictly weaker
+drift surface.
+
+##### Task 0.4 — Vercel build-environment PATH safety (Sonar S4036)
+
+**Decision**: ACCEPT-with-rationale.
+
+The Vercel Build Step documentation (publicly documented at
+`vercel.com/docs/builds/build-image`) names a fixed build image with
+standard Unix tools at predictable paths (`/usr/bin/git`,
+`/usr/bin/node`, etc.). The build PATH is owned by Vercel, not by the
+deployed application or its dependencies. A PATH-hijack on a Vercel
+build box would require attacker write access to Vercel's build image,
+which is outside this repo's threat model.
+
+The PATH-pin alternative (`execFileSync('/usr/bin/git', …)`) introduces
+fragility:
+
+- If Vercel migrates the build image (e.g. Alpine vs Debian base) and
+  the path changes (`/usr/bin/git` vs `/usr/local/bin/git`), the
+  build silently breaks.
+- It does not raise the security floor: Vercel still owns the
+  filesystem at the pinned path.
+
+**Recorded action (Phase 4)**: add a TSDoc `@remarks` block on
+`runGitCommand` (line 143 of `vercel-ignore-production-non-release-build.mjs`)
+citing the Vercel build-environment PATH-ownership rationale. Sonar
+hotspot `javascript:S4036` will be dismissed-with-rationale on the next
+SonarCloud scan.
+
+**Wording precision (per assumptions-reviewer MINOR-B)**: the TSDoc
+rationale must cite the specific Vercel docs page accessed and a
+date-stamp ("accessed 2026-04-25 at `vercel.com/docs/builds/build-image`")
+rather than "publicly documented". Concrete attestation supports the
+dismissal note.
+
+##### Phase 0 findings summary
+
+All four Phase 0 tasks have decisions recorded; both close-gate reviewers
+ran (`code-reviewer` 2026-04-25 commit `0c04e7d5`; `assumptions-reviewer`
+2026-04-25, dispositions table below):
+
+| Task | Outcome |
+|---|---|
+| 0.1 OAuth rate-limit | REAL GAP — fix in Phase 3 Task 3.2 (route-level attach). |
+| 0.2 stylistic policy | DISABLE-path achievable; per-rule table above (S7763 + S7735 flipped to ACCEPT per MAJOR-C); owner confirmation gates Phase 1 entry, not Phase 5 (corrected per MAJOR-B); default-to-ACCEPT fallback if owner unavailable. |
+| 0.3 extraction home | `packages/core/build-metadata/src/semver.ts` using **npm `semver` package** (corrected per MAJOR-A); Path A keeps vercel-ignore + validate-root-application-version inline; Phase 1 adds parity test as anti-drift gate. |
+| 0.4 PATH safety | ACCEPT-with-rationale; date-stamped Vercel docs citation added in Phase 4 (per MINOR-B). |
+
+---
+
+#### Reviewer Dispositions (2026-04-25 assumptions-reviewer pre-execution gate)
+
+`assumptions-reviewer` ran on the plan body's Phase 0 findings block
+above. Findings absorbed into the plan body (this revision); both
+Phase 0 close gates are now satisfied. Phase 1 is unblocked subject to
+the owner-gate items called out below.
+
+| Finding | Severity | Disposition |
+|---|---|---|
+| A. Task 0.3 "Node built-ins only" home creates a new drift problem (sibling `release-internals.ts:14` already uses npm `semver` package) | MAJOR | **Absorbed**. Canonical `semver.ts` now uses npm `semver` package; inline copies in vercel-ignore + validate-root-application-version retained for their pre-`pnpm install` / pre-`dist/` constraints; Phase 1 acceptance gains a **parity test** asserting npm-backed and inline implementations agree on the shared fixture. |
+| B. Task 0.2 owner-confirmation gate placed at Phase 5 commit, not Phase 0 close — violates the plan's own "decisions before mechanics" framing | MAJOR | **Absorbed**. Owner gate moves to Phase 0 close (gates Phase 1 entry, not Phase 5). Default-to-ACCEPT fallback added for unavailable-owner case. |
+| C. Two DISABLE recommendations need to flip to ACCEPT: S7763 (`export … from`, 12 sites — consistency benefit, mechanical sweep); S7735 (negated condition, 3 sites — per-site judgement, not blanket-disable) | MAJOR | **Absorbed**. Per-rule table updated; S7763 → ACCEPT, S7735 → ACCEPT (per-site). DISABLE list now S6594, S6644, S7748 (3 rules, 10 instances). |
+| D. Task 0.1 real-finding conclusion correct; route-level attach is the right shape; no path-prefix middleware further up the stack | MINOR (positive) | Acknowledged; preserved as-is. |
+| E. Task 0.4 ACCEPT-with-rationale defensible; cite specific Vercel docs page snapshot with date-stamp rather than just "publicly documented" | MINOR | **Absorbed**. Phase 4 TSDoc now requires date-stamped citation. |
+| F. Phase 0 close-gate framing (`code-reviewer` + `assumptions-reviewer`) is right; adding `architecture-reviewer-fred` would be duplicative — Fred's scope is covered by post-Phase-1 invocation | POSITIVE | Acknowledged; preserved. |
+| G. Open questions for plan author — (1) reason for built-ins-only constraint, (2) owner reachability, (3) S7763 merge-conflict risk | — | (1) confirmed conflation per MAJOR-A absorption; (2) owner-async-only is the operating assumption — default-to-ACCEPT covers it; (3) `export … from` sweep is unlikely to merge-conflict with parallel work — single-line edits across 12 files; if conflicts surface, route via embryo log. |
+
+**Owner-gate items surfaced for Phase 1 entry**:
+
+1. **DISABLE list confirmation** (Task 0.2): three rules → 10 instances
+   would be added to `sonar-project.properties` `sonar.issue.ignore.multicriteria`.
+   Owner confirms or rejects. Default-to-ACCEPT applies if no response.
+2. **Phase 1 RED→GREEN sequencing with parity test** (Task 0.3 amended):
+   Phase 1 now lands the parity test alongside the canonical `semver.ts`
+   module + the two inline `@see` pointer edits. The parity test is the
+   anti-drift gate; without it, MAJOR-A is not closed.
 
 #### Phase 0 Acceptance Criteria
 

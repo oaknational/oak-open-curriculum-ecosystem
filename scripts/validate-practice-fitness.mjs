@@ -216,6 +216,17 @@ function classifyLines(content) {
       return { text, kind: 'table', lineNumber: index + 1 };
     }
 
+    // Markdown reference-link declarations are link metadata, not prose.
+    // Form: `[label]: url "optional title"`. The URL alone may exceed
+    // line-width budgets when the target is a deep file path (e.g. a
+    // long ADR slug). Treating these as prose forces aliasing
+    // gymnastics that obscure the link semantics. See PDR-018 §Plan
+    // placement amendment for the discipline this exemption serves:
+    // line-width pressure should not steer link-reference shape.
+    if (/^\[[\w.-]+\]:\s/.test(text.trim())) {
+      return { text, kind: 'link-reference', lineNumber: index + 1 };
+    }
+
     return { text, kind: 'prose', lineNumber: index + 1 };
   });
 }

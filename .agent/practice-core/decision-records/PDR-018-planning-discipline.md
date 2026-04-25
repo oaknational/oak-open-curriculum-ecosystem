@@ -16,6 +16,23 @@ PDR-012);
 (plans that promote to `current/` follow both-readiness-criteria
 discipline from PDR-014).
 
+## Amendment Log
+
+- **2026-04-25 amendment — plan placement follows ownership and
+  actionability, not numerical density caps (Fresh Prince /
+  claude-code / claude-opus-4-7-1m; agentic-engineering-enhancements
+  thread; owner-ratified during pending-graduations promotion pass).**
+  Plan placement (which lifecycle directory under which collection
+  a plan file lives in) is determined by **ownership** (which lane
+  the plan serves) and **actionability** (active / current / future
+  per the lifecycle), not by arbitrary numerical caps on plan count
+  per directory. The corrective instance (2026-04-24, observability
+  lane) was an owner correction when a plan was misrouted to a
+  lower-density directory rather than its natural home; the
+  numerical-cap heuristic was a false economy. New §Plan placement
+  follows ownership section in the Decision area names the
+  principle.
+
 ## Context
 
 Plans and workflows structure work. Two planning failure modes
@@ -81,6 +98,38 @@ removed export reduces the surface of latent breakage
   what changed for the user.
 - Follow-up plans cite "we did X but then had to do Y" — X was
   means without end; Y is the real work surfacing after.
+
+### Plan placement follows ownership and actionability (2026-04-25 amendment)
+
+**Plan files live in the lifecycle directory of their natural
+ownership lane**, not the directory whose plan-count is currently
+lowest. Numerical density caps on a directory ("only N plans per
+collection") are a false economy: a plan placed against its
+ownership produces friction at every cross-reference and at every
+re-reading; a plan placed with ownership reads cleanly and the
+directory size grows or shrinks honestly with the work the lane
+carries.
+
+The placement decision is:
+
+1. **Which lane owns this work?** Identify the collection
+   (`agentic-engineering-enhancements`, `observability`, etc.)
+   that the plan serves.
+2. **What is its actionability?** Active (executing now) →
+   `active/`; queued and ready → `current/`; strategic backlog
+   → `future/`.
+3. **Place at lane × actionability**, regardless of how many
+   other plans currently sit there. If the resulting directory
+   feels crowded, the response is *split the collection* or
+   *archive completed plans*, not *redirect the new plan to a
+   thinner directory*.
+
+A plan misrouted by density-cap heuristic produces silent
+friction: cross-references confuse readers about ownership,
+roadmap entries miss the new plan, and the next agent picks up
+the misrouting as evidence the lane has shifted. The corrective
+direction is owner-led re-placement; the prevention is to choose
+ownership first and density-not-at-all.
 
 ### Workflow contract clarity
 

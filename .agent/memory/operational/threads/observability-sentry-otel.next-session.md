@@ -1,28 +1,40 @@
 # Next-Session Record — `observability-sentry-otel` thread
 
-**Last refreshed**: 2026-04-25 (Jiggly Pebble / claude-code /
-claude-opus-4-7-1m — PR #87 quality-finding analysis + plan
-authoring. Pulled all PR comments (3 bot status comments + 10
-CodeQL review threads + SonarCloud quality-gate detail with 76
-OPEN issues + 4 Security Hotspots TO_REVIEW); validated each
-finding against current code; authored the executable resolution
-plan at
-[`.agent/plans/observability/current/pr-87-quality-finding-resolution.plan.md`](../../../plans/observability/current/pr-87-quality-finding-resolution.plan.md).
-Plan structure: 7 phases, decisions-before-mechanics. Highest-
-leverage move identified: a single semver-validation DRY
-consolidation closes 3 CodeQL alerts plus 2 Sonar Security Hotspots
-and contributes to the 5.2% duplication metric. Three named Phase 0
-decisions surface for owner: (a) verify OAuth metadata route
-rate-limiting coverage; (b) stylistic-rule policy for ~47 MINOR
-Sonar findings (fix vs disable at quality-profile level); (c)
-confirm semver extraction home (`@oaknational/build-metadata` vs
-new lib). Plan body names `assumptions-reviewer` and
-`code-reviewer` as the Phase 0 close gate before Phase 1
-execution. Local commit `2484066b` (CI/Vercel fix) is still
-unpushed and is a precondition for observing Phase 6's PR
-re-run state. Owner-directed session close: this session ends
-after handoff; the next observability-thread session implements
-the quality fixes.)
+**Last refreshed**: 2026-04-25 (Keen Dahl / claude-code /
+claude-opus-4-7-1m — Phase 0 walk + assumptions-reviewer close.
+Eight unpushed commits (`b0c565b4 … 2484066b`) pushed at session
+open; remote moved `d318b8bd..b0c565b4` after pre-push hook
+ran clean (84 tasks, all green; one local cache miss on
+Playwright browsers fixed mid-flight). PR #87's CI test job is
+re-running against new HEAD; CodeQL combined and SonarCloud
+Quality Gate still fail until Phase 1+ work lands. Phase 0
+findings populated for all four tasks: 0.1 OAuth metadata
+rate-limit (REAL GAP — fix in Phase 3 Task 3.2 via route-level
+attach); 0.2 stylistic-rule policy (per-rule ACCEPT/DISABLE
+table; owner gate now at Phase 0 close per assumptions-reviewer
+MAJOR-B; default-to-ACCEPT fallback); 0.3 semver extraction
+home (`packages/core/build-metadata/src/semver.ts` using **npm
+`semver` package** per assumptions-reviewer MAJOR-A — sibling
+`release-internals.ts:14` already imports from npm `semver`;
+two inline copies retained with a parity-test anti-drift gate);
+0.4 Vercel PATH safety (ACCEPT-with-rationale; date-stamped
+docs citation per MINOR-B). `assumptions-reviewer` ran 18:53Z
+post-Task-0.4: three MAJOR + one MINOR + one POSITIVE absorbed
+into a new Reviewer Dispositions table in the plan body. Both
+Phase 0 close gates (`code-reviewer` 2026-04-25 commit `0c04e7d5`,
+`assumptions-reviewer` 2026-04-25 this session) satisfied.
+**Phase 1 entry is unblocked subject to two owner-gate items**:
+DISABLE-list confirmation for S6594/S6644/S7748 (default-to-ACCEPT
+applies if owner is async-only); Phase 1's RED→GREEN sequencing
+landing the parity test alongside the canonical module + two
+inline `@see` pointer edits. Coordination with parallel agent
+Fresh Prince on the `agentic-engineering-enhancements` thread
+(register-promotion pass): clean parallel-proceed via embryo-log
+ping at 18:46Z and ack at 18:54Z; I dropped `repo-continuity.md`
+from my touch-set to avoid whole-file collision; my session
+summary is captured here in the next-session record instead.
+This session is plan-edit + reviewer-dispatch only — no
+observability runtime code moved.)
 
 **Prior refresh**: 2026-04-25 (Codex / codex / GPT-5 — session handoff after
 reviewer-finding reintegration packaged as `d9cb54e8` and owner push.
@@ -287,6 +299,7 @@ rehearsal).
 | `Frodo` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `commit-owner-pre-staged-plan-body-tightening-incidental-to-primary-session-work-on-plugin-capture-surface-wiring-and-sonarjs-plan; then-release-identifier-plan-revision-landing-and-WS2-§2.0-module-split-with-structural-fitness-test-and-§2.1-§2.7-deferred-to-fresh-session-by-owner-direction` | 2026-04-24 | 2026-04-24 |
 | `Jazzy` | `claude-code` | `claude-sonnet-4-6` | *`unknown`* | `release-identifier-WS3-drafting-§3.0-reviewer-gate-amendment-application-paused-at-pre-commit-knip-gate-on-parallel-track-coupling-staged-not-committed` | 2026-04-25 | 2026-04-25 |
 | `Jiggly Pebble` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-comment-analysis; pr-87-quality-finding-resolution-plan-authored` | 2026-04-25 | 2026-04-25 |
+| `Keen Dahl` | `claude-code` | `claude-opus-4-7-1m` | *`unknown`* | `pr-87-phase-0-walk-and-assumptions-reviewer-close` | 2026-04-25 | 2026-04-25 |
 
 Identity discipline remains additive per
 [PDR-027](../../../practice-core/decision-records/PDR-027-threads-sessions-and-agent-identity.md):

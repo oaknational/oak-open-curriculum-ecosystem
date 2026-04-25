@@ -26,6 +26,46 @@ against each other).
 
 ## Amendment Log
 
+- **2026-04-25 amendment — assumption-challenge / discussion-before-
+  absorption gate (Fresh Prince / claude-code / claude-opus-4-7-1m;
+  agentic-engineering-enhancements thread; owner-ratified during
+  pending-graduations promotion pass after WS0+WS1+WS2 of the
+  multi-agent collaboration protocol landed).** When an adversarial-
+  class reviewer (Wilma family, `assumptions-reviewer`, or any
+  reviewer whose lens is "what is wrong with this design" rather
+  than "how can this design be improved") surfaces BLOCKING
+  findings on a plan body or design, the agent MUST dispatch an
+  **owner-led discussion about whether the design's central claim
+  is right** BEFORE mechanically absorbing each finding as a
+  binding work item. Some findings dissolve under reframing rather
+  than requiring hardening; some are false because the reviewer's
+  assumed frame does not match the actual frame; and absorbing
+  every BLOCKING finding mechanically can produce a worse outcome
+  than reframing the design.
+
+  Two recorded instances:
+  1. 2026-04-23 review-cascade spiral — three reviewers escalating
+     against a plan body without claim-level assumption challenge;
+     the eventual fix was a re-framing of the central claim, not
+     the absorption of any individual reviewer finding.
+  2. 2026-04-25 Wilma adversarial review of the multi-agent
+     collaboration plan — BLOCKING findings about
+     "lock"/"refusal"/"enforcement" dissolved when the central
+     claim was reframed from enforcement to advisory. Mechanically
+     absorbing the findings would have produced an enforcement-
+     shaped protocol; the reframe replaced them with a
+     fundamentally different design.
+
+  New §Assumption-challenge gate before absorbing adversarial-
+  review findings section in the Decision area names the gate.
+  Cross-references PDR-029 v2 amendment (advisory firing, not
+  mechanical enforcement) which lands in the same pass: the
+  assumption-challenge gate is a reviewer-discipline statement of
+  the same broader principle that PDR-029's tripwire-firing
+  doctrine names mechanism-side. Together they describe a
+  Practice that prefers reframing to mechanical hardening when
+  the underlying claim may be wrong.
+
 - **2026-04-21** (Accepted): two dispatch-discipline extensions
   landed. **(a) Friction-ratchet trigger.** When three or more
   distinct friction signals accumulate on a single topic within a
@@ -249,6 +289,56 @@ on three topics).
 The trigger is not a soft suggestion; the third signal **is** the
 escalation. Continuing to apply local fixes past the third signal
 is a dispatch-discipline failure.
+
+### Assumption-challenge gate before absorbing adversarial-review findings (2026-04-25 amendment)
+
+When an **adversarial-class reviewer** (Wilma family,
+`assumptions-reviewer`, or any reviewer whose lens is *"what is
+wrong with this design"* rather than *"how can this design be
+improved"*) surfaces **BLOCKING findings** on a plan body or
+design, the agent MUST run an **assumption-challenge gate**
+before mechanically absorbing each finding as a binding work
+item.
+
+The gate has two steps:
+
+1. **Re-state the central claim of the design in one sentence.**
+   The claim is the load-bearing assertion the design exists to
+   prove or to enable.
+2. **Dispatch an owner-led discussion**: do the BLOCKING
+   findings hold against the central claim as stated, or do they
+   hold only against a different framing the reviewer assumed?
+   If the latter, the design needs a reframe, not a finding-by-
+   finding absorption.
+
+Three outcomes:
+
+- **Findings hold under the claim** — absorb them as binding
+  work items per the existing reviewer-finding-routing
+  discipline (PDR-012); the design's central claim is sound and
+  the findings represent genuine gaps.
+- **Findings hold only under a different framing** — reframe
+  the design and discard the findings whose force was
+  framing-dependent; the reframe is the absorption.
+- **Discussion does not converge** — escalate to owner via the
+  named owner-question channel (`AskUserQuestion`); the owner
+  is the final tiebreaker on which framing the design should
+  carry.
+
+The gate fires per adversarial-class review, not per finding.
+Friendly-class reviewers (`docs-adr-reviewer`,
+`code-reviewer`, etc.) whose lens is improvement-not-rejection
+do not require the gate; their findings absorb directly.
+
+Why the gate exists: adversarial reviews surface findings that
+are *correct against an assumed frame* but where the assumed
+frame is contestable. Mechanically absorbing every BLOCKING
+finding can produce a hardened version of a design whose central
+claim was wrong — *the-frame-was-the-fix* pattern, in PDR-015's
+territory rather than at design-time. The gate names the
+reviewer-discipline statement of the same principle that PDR-029
+v2 names mechanism-side: the Practice prefers reframing to
+mechanical hardening when the underlying claim may be wrong.
 
 ## Rationale
 

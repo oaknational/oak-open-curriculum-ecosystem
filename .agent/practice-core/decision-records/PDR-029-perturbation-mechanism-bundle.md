@@ -37,6 +37,59 @@ accumulation signal).
 
 ## Amendment Log
 
+- **2026-04-25 v2 amendment — tripwire-observability +
+  advisory-firing (Fresh Prince / claude-code / claude-opus-4-7-1m;
+  agentic-engineering-enhancements thread; owner-ratified during
+  pending-graduations promotion pass after WS0+WS1+WS2 of the
+  multi-agent collaboration protocol landed).** Two design
+  principles promoted from observed evidence into PDR-029
+  doctrine, both implicit in the existing PDR but now explicit so
+  future tripwire installs honour them by default rather than by
+  rediscovery:
+
+  1. **Observable-artefact requirement** — every tripwire (rule
+     OR ritual) must leave an artefact when it fires. A rule that
+     says "consult and decide X" without specifying the
+     consultation artefact is post-hoc indistinguishable from a
+     rule that was never read. Three instances in evidence:
+     - 2026-04-25 WS0 landing: `assumptions-reviewer` flagged
+       `respect-active-agent-claims.md` for unobservable firing;
+       absorbed by adding a "log your decision" clause.
+     - 2026-04-25 WS1 landing: same reviewer applied the same
+       diagnosis to `register-active-areas-at-session-open.md`
+       (no-overlap branch); absorbed by mandating a `notes`-field
+       artefact on every claim entry.
+     - PDR-029's existing Class A.2 Layer 2 already requires that
+       its ritual "MUST NOT rely on self-reporting … naming the
+       authoritative file prevents self-reporting." The principle
+       generalises: applies to rule-form tripwires as well as
+       ritual-form gates.
+     New §Observable-artefact requirement section in the Decision
+     area names the principle. Existing tripwires conform after
+     WS1 absorption.
+  2. **Advisory firing, not mechanical enforcement** — tripwire
+     firing is **consult-and-decide**, not **refuse-or-allow**.
+     The agent IS the decision-maker; the surface IS the source
+     of consultation. Mechanical refusal would invite
+     routing-around at the cost of architectural excellence.
+     Three instances of evidence: (a) Jazzy's owner-settled
+     reframe of the multi-agent collaboration plan from
+     enforcement to advisory (2026-04-25); (b) Jiggly Pebble's
+     WS0 landing under self-application of the same principle;
+     (c) Fresh Prince's WS1 landing where the parallel Jiggly
+     Pebble session honoured the advisory surface without any
+     mechanical gate. The principle is not new to the Practice
+     (the `--no-verify` per-commit authorisation invariant already
+     encodes it for hooks); it is now named for tripwires
+     generally. New §Advisory firing, not mechanical enforcement
+     section in the Decision area.
+
+  No semantic weakening of any existing rule or ritual; both
+  amendments codify what the WS0+WS1+WS2 evidence already
+  demonstrated. Cross-references added to PDR-015 (which gains
+  the assumption-challenge / discussion-before-absorption gate
+  in a parallel amendment landing in the same pass).
+
 - **2026-04-21 Session 5 — consolidating rewrite (Pippin /
   cursor-opus; owner-ratified, TIER-2 "evaluate-and-simplify
   first" stage of the `memory-feedback` thread).** Three
@@ -219,6 +272,79 @@ platform-parity by construction; a code layer satisfies parity
 only if the code runs on every target platform's runtime —
 which is a stricter bar than the typical Node.js / Claude Code
 assumption admits.
+
+### Observable-artefact requirement (load-bearing)
+
+**Every tripwire — rule OR ritual — MUST leave an observable
+artefact when it fires.** A tripwire whose firing condition is
+*"decide X"* or *"consult and judge"* without a specified
+artefact is post-hoc indistinguishable from a tripwire that was
+never read. The agent who skipped the consultation leaves the
+same trace as the agent who consulted and concluded "no action
+needed." The Practice cannot then audit whether the tripwire
+fired in real cases, cannot grow evidence about its
+effectiveness, and cannot detect drift.
+
+The artefact discipline:
+
+- **Ritual-form tripwires** (gates, walkthroughs in commands)
+  satisfy this requirement structurally — the named
+  authoritative file IS the artefact, and the agent's
+  read/write of it is the firing record. Class A.2 Layer 2
+  already encodes this with *"MUST NOT rely on self-reporting"*.
+- **Rule-form tripwires** (always-applied `.agent/rules/*.md`
+  entries) MUST specify, in the rule body, **what artefact the
+  firing leaves behind**. Examples:
+  - `register-identity-on-thread-join.md`: artefact is the
+    `last_session` row update (or new row); the row IS the
+    consultation record.
+  - `register-active-areas-at-session-open.md`: artefact is the
+    claim entry's `notes` field plus the registered claim
+    itself; "no overlap" is logged as `"scanned registry: <N>
+    active claims, no overlap with my areas"`; "overlap"
+    decisions cite the other agent's `claim_id`.
+  - `respect-active-agent-claims.md`: artefact is the embryo-log
+    entry naming the consultation, OR the claim's `notes`
+    field with the decision recorded.
+- **Decide-X rules without an artefact clause** are deficient
+  by construction and must be amended to specify their artefact.
+
+The principle is **observable-artefact-or-it-didn't-fire**. New
+tripwire rules drafted under this PDR must state their artefact
+in the rule body before merging.
+
+### Advisory firing, not mechanical enforcement
+
+**Tripwire firing is consult-and-decide, not refuse-or-allow.**
+The agent IS the decision-maker; the named surface IS the
+source of consultation. Mechanical refusal — a rule that
+says *"do not enter if a claim exists"* or *"halt if X is
+true"* — invites routing-around at the cost of architectural
+excellence. Agents will find ways to bypass the gate, producing
+a worse outcome than honest agent judgement informed by shared
+knowledge.
+
+The advisory framing applies to **every tripwire installed
+under this PDR**:
+
+- **Family A** rules fire as *"do not proceed until you have
+  consulted the surface and decided"*, not *"refuse to
+  proceed if condition Y is true"*. The substance of the
+  decision is agent judgement.
+- **Family B** meta-tripwires fire as named ritual steps that
+  surface findings, not as build-failure gates.
+
+This is consistent with the Practice's existing
+`--no-verify`-requires-fresh-authorisation invariant: the
+Practice declines to install bypass-able mechanical gates and
+instead trusts agent judgement under explicit owner direction.
+The advisory framing is the same discipline, applied to
+tripwires generally.
+
+**The two principles compose**: observable-artefact ensures
+post-hoc auditability; advisory-firing ensures real-time
+agent-judgement. Together they describe a tripwire system that
+informs without coercing and is auditable without enforcing.
 
 ### Tripwire layer catalogue (from the Heath-brothers table)
 
